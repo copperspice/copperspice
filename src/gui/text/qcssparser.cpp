@@ -1295,8 +1295,9 @@ static bool setFontSizeFromValue(QCss::Value value, QFont *font, int *fontSizeAd
    }
 
    bool valid = false;
-   QString s = value.variant.toString();
-   if (s.endsWith(QLatin1String("pt"), Qt::CaseInsensitive)) {
+   QString s  = value.variant.toString();
+
+   if (s.endsWith("pt", Qt::CaseInsensitive)) {
       s.chop(2);
       value.variant = s;
       if (value.variant.convert((QVariant::Type)qMetaTypeId<qreal>())) {

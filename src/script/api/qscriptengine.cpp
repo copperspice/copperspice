@@ -787,12 +787,11 @@ QScriptEnginePrivate::QScriptEnginePrivate()
    qMetaTypeId<QScriptValue>();
    qMetaTypeId<QList<int>>();
    qMetaTypeId<QObjectList>();
-
-
-   if (!QCoreApplication::instance()) {
+   if (! QCoreApplication::instance()) {
       qFatal("QScriptEngine: Must construct a Q(Core)Application before a QScriptEngine");
       return;
    }
+
    JSC::initializeThreading();
    JSC::IdentifierTable *oldTable = JSC::currentIdentifierTable();
    globalData = JSC::JSGlobalData::create().releaseRef();
@@ -1384,7 +1383,7 @@ JSC::JSValue QScriptEnginePrivate::newQObject(QObject *object, QScriptEngine::Va
 
    result->setDelegate(new QScript::QObjectDelegate(object, ownership, options));
 
-   /*if (setDefaultPrototype)*/
+   // if (setDefaultPrototype)
    {
       const QMetaObject *meta = object->metaObject();
 
@@ -1412,12 +1411,14 @@ JSC::JSValue QScriptEnginePrivate::newQObject(QObject *object, QScriptEngine::Va
 JSC::JSValue QScriptEnginePrivate::newQMetaObject(
    const QMetaObject *metaObject, JSC::JSValue ctor)
 {
-   if (!metaObject) {
+   if (! metaObject) {
       return JSC::jsNull();
    }
+
    JSC::ExecState *exec = currentFrame;
    QScript::QMetaObjectWrapperObject *result = new (exec) QScript::QMetaObjectWrapperObject(exec, metaObject, ctor,
       qmetaobjectWrapperObjectStructure);
+
    return result;
 }
 
@@ -1429,17 +1430,17 @@ bool QScriptEnginePrivate::convertToNativeQObject(JSC::ExecState *exec, JSC::JSV
    }
 
    if (QObject *qobject = toQObject(exec, value)) {
+
       int start = targetType.startsWith("const ") ? 6 : 0;
       QString className = targetType.mid(start, targetType.size() - start - 1);
 
-      /*  BROOM (script)
+
+      /*  emerald (script, hold)
          if (void *instance = qobject->qt_metacast(className)) {
             *result = instance;
             return true;
           }
       */
-
-
    }
 
    return false;
@@ -1449,6 +1450,7 @@ QScript::QObjectData *QScriptEnginePrivate::qobjectData(QObject *object)
 {
    QHash<QObject *, QScript::QObjectData *>::const_iterator it;
    it = m_qobjectData.constFind(object);
+
    if (it != m_qobjectData.constEnd()) {
       return it.value();
    }
@@ -1456,14 +1458,15 @@ QScript::QObjectData *QScriptEnginePrivate::qobjectData(QObject *object)
    QScript::QObjectData *data = new QScript::QObjectData(this);
    m_qobjectData.insert(object, data);
    QObject::connect(object, SIGNAL(destroyed(QObject *)), q_func(), SLOT(_q_objectDestroyed(QObject *)));
+
    return data;
 }
 
 void QScriptEnginePrivate::_q_objectDestroyed(QObject *object)
 {
    QHash<QObject *, QScript::QObjectData *>::iterator it;
-
    it = m_qobjectData.find(object);
+
    Q_ASSERT(it != m_qobjectData.end());
 
    QScript::QObjectData *data = it.value();
@@ -2238,20 +2241,6 @@ QScriptValue QScriptEngine::newObject()
    return d->scriptValueFromJSCValue(d->newObject());
 }
 
-/*!
-  \since 4.4
-  \overload
-
-  Creates a QtScript Object of the given class, \a scriptClass.
-
-  The prototype of the created object will be the Object
-  prototype object.
-
-  \a data, if specified, is set as the internal data of the
-  new object (using QScriptValue::setData()).
-
-  \sa QScriptValue::scriptClass(), reportAdditionalMemoryCost()
-*/
 QScriptValue QScriptEngine::newObject(QScriptClass *scriptClass,
    const QScriptValue &data)
 {
@@ -2279,49 +2268,6 @@ QScriptValue QScriptEngine::newActivationObject()
    return QScriptValue();
 }
 
-/*!
-  Creates a QScriptValue that wraps a native (C++) function. \a fun
-  must be a C++ function with signature QScriptEngine::FunctionSignature.  \a
-  length is the number of arguments that \a fun expects; this becomes
-  the \c{length} property of the created QScriptValue.
-
-  Note that \a length only gives an indication of the number of
-  arguments that the function expects; an actual invocation of a
-  function can include any number of arguments. You can check the
-  \l{QScriptContext::argumentCount()}{argumentCount()} of the
-  QScriptContext associated with the invocation to determine the
-  actual number of arguments passed.
-
-  A \c{prototype} property is automatically created for the resulting
-  function object, to provide for the possibility that the function
-  will be used as a constructor.
-
-  By combining newFunction() and the property flags
-  QScriptValue::PropertyGetter and QScriptValue::PropertySetter, you
-  can create script object properties that behave like normal
-  properties in script code, but are in fact accessed through
-  functions (analogous to how properties work in \l{Qt's Property
-  System}). Example:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 11
-
-  When the property \c{foo} of the script object is subsequently
-  accessed in script code, \c{getSetFoo()} will be invoked to handle
-  the access.  In this particular case, we chose to store the "real"
-  value of \c{foo} as a property of the accessor function itself; you
-  are of course free to do whatever you like in this function.
-
-  In the above example, a single native function was used to handle
-  both reads and writes to the property; the argument count is used to
-  determine if we are handling a read or write. You can also use two
-  separate functions; just specify the relevant flag
-  (QScriptValue::PropertyGetter or QScriptValue::PropertySetter) when
-  setting the property, e.g.:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 12
-
-  \sa QScriptValue::call()
-*/
 QScriptValue QScriptEngine::newFunction(QScriptEngine::FunctionSignature fun, int length)
 {
    Q_D(QScriptEngine);
@@ -2565,36 +2511,6 @@ QScriptSyntaxCheckResult QScriptEnginePrivate::checkSyntax(const QString &progra
    return QScriptSyntaxCheckResult(p);
 }
 
-
-
-/*!
-  Evaluates \a program, using \a lineNumber as the base line number,
-  and returns the result of the evaluation.
-
-  The script code will be evaluated in the current context.
-
-  The evaluation of \a program can cause an exception in the
-  engine; in this case the return value will be the exception
-  that was thrown (typically an \c{Error} object). You can call
-  hasUncaughtException() to determine if an exception occurred in
-  the last call to evaluate().
-
-  \a lineNumber is used to specify a starting line number for \a
-  program; line number information reported by the engine that pertain
-  to this evaluation (e.g. uncaughtExceptionLineNumber()) will be
-  based on this argument. For example, if \a program consists of two
-  lines of code, and the statement on the second line causes a script
-  exception, uncaughtExceptionLineNumber() would return the given \a
-  lineNumber plus one. When no starting line number is specified, line
-  numbers will be 1-based.
-
-  \a fileName is used for error reporting. For example in error objects
-  the file name is accessible through the "fileName" property if it's
-  provided with this function.
-
-  \sa canEvaluate(), hasUncaughtException(), isEvaluating(), abortEvaluation()
-*/
-
 QScriptValue QScriptEngine::evaluate(const QString &program, const QString &fileName, int lineNumber)
 {
    Q_D(QScriptEngine);
@@ -2649,31 +2565,6 @@ QScriptContext *QScriptEngine::currentContext() const
    return const_cast<QScriptEnginePrivate *>(d)->contextForFrame(d->currentFrame);
 }
 
-/*!
-  Enters a new execution context and returns the associated
-  QScriptContext object.
-
-  Once you are done with the context, you should call popContext() to
-  restore the old context.
-
-  By default, the `this' object of the new context is the Global Object.
-  The context's \l{QScriptContext::callee()}{callee}() will be invalid.
-
-  This function is useful when you want to evaluate script code
-  as if it were the body of a function. You can use the context's
-  \l{QScriptContext::activationObject()}{activationObject}() to initialize
-  local variables that will be available to scripts. Example:
-
-  \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 19
-
-  In the above example, the new variable "tmp" defined in the script
-  will be local to the context; in other words, the script doesn't
-  have any effect on the global environment.
-
-  Returns 0 in case of stack overflow
-
-  \sa popContext()
-*/
 QScriptContext *QScriptEngine::pushContext()
 {
    Q_D(QScriptEngine);
@@ -2726,6 +2617,7 @@ JSC::CallFrame *QScriptEnginePrivate::pushContext(JSC::CallFrame *exec, JSC::JSV
 
    //build a frame
    JSC::CallFrame *newCallFrame = exec;
+
    if (callee == 0 //called from  public QScriptEngine::pushContext
       || exec->returnPC() == 0 || (contextFlags(exec) & NativeContext) //called from native-native call
       || (exec->codeBlock() && exec->callee() != callee)) { //the interpreter did not build a frame for us.
@@ -2734,9 +2626,11 @@ JSC::CallFrame *QScriptEnginePrivate::pushContext(JSC::CallFrame *exec, JSC::JSV
       JSC::Register *oldEnd = interp->registerFile().end();
       int argc = args.size() + 1; //add "this"
       JSC::Register *newEnd = oldEnd + argc + JSC::RegisterFile::CallFrameHeaderSize;
+
       if (!interp->registerFile().grow(newEnd)) {
          return 0;   //### Stack overflow
       }
+
       newCallFrame = JSC::CallFrame::create(oldEnd);
       newCallFrame[0] = thisObject;
 
@@ -2908,65 +2802,12 @@ QScriptValue QScriptEngine::defaultPrototype(int metaTypeId) const
    return const_cast<QScriptEnginePrivate *>(d)->scriptValueFromJSCValue(d->defaultPrototype(metaTypeId));
 }
 
-/*!
-  Sets the default prototype of the C++ type identified by the given
-  \a metaTypeId to \a prototype.
-
-  The default prototype provides a script interface for values of
-  type \a metaTypeId when a value of that type is accessed from script
-  code.  Whenever the script engine (implicitly or explicitly) creates
-  a QScriptValue from a value of type \a metaTypeId, the default
-  prototype will be set as the QScriptValue's prototype.
-
-  The \a prototype object itself may be constructed using one of two
-  principal techniques; the simplest is to subclass QScriptable, which
-  enables you to define the scripting API of the type through QObject
-  properties and slots.  Another possibility is to create a script
-  object by calling newObject(), and populate the object with the
-  desired properties (e.g. native functions wrapped with
-  newFunction()).
-
-  \sa defaultPrototype(), qScriptRegisterMetaType(), QScriptable, {Default Prototypes Example}
-*/
 void QScriptEngine::setDefaultPrototype(int metaTypeId, const QScriptValue &prototype)
 {
    Q_D(QScriptEngine);
    d->setDefaultPrototype(metaTypeId, d->scriptValueToJSCValue(prototype));
 }
 
-/*!
-  \typedef QScriptEngine::FunctionSignature
-  \relates QScriptEngine
-
-  The function signature \c{QScriptValue f(QScriptContext *, QScriptEngine *)}.
-
-  A function with such a signature can be passed to
-  QScriptEngine::newFunction() to wrap the function.
-*/
-
-/*!
-  \typedef QScriptEngine::FunctionWithArgSignature
-  \relates QScriptEngine
-
-  The function signature \c{QScriptValue f(QScriptContext *, QScriptEngine *, void *)}.
-
-  A function with such a signature can be passed to
-  QScriptEngine::newFunction() to wrap the function.
-*/
-
-/*!
-    \typedef QScriptEngine::MarshalFunction
-    \internal
-*/
-
-/*!
-    \typedef QScriptEngine::DemarshalFunction
-    \internal
-*/
-
-/*!
-    \internal
-*/
 QScriptValue QScriptEngine::create(int type, const void *ptr)
 {
    Q_D(QScriptEngine);
@@ -3491,38 +3332,20 @@ void QScriptEngine::registerCustomType(int type, MarshalFunction mf,
    const QScriptValue &prototype)
 {
    Q_D(QScriptEngine);
+
    QScript::APIShim shim(d);
    QScriptTypeInfo *info = d->m_typeInfos.value(type);
+
    if (!info) {
       info = new QScriptTypeInfo();
       d->m_typeInfos.insert(type, info);
    }
+
    info->marshal = mf;
    info->demarshal = df;
    info->prototype = d->scriptValueToJSCValue(prototype);
 }
 
-/*!
-  \since 4.5
-
-  Installs translator functions on the given \a object, or on the Global
-  Object if no object is specified.
-
-  The relation between Qt Script translator functions and C++ translator
-  functions is described in the following table:
-
-    \table
-    \header \o Script Function \o Corresponding C++ Function
-    \row    \o qsTr()       \o QObject::tr()
-    \row    \o QT_TR_NOOP() \o QT_TR_NOOP()
-    \row    \o qsTranslate() \o QCoreApplication::translate()
-    \row    \o QT_TRANSLATE_NOOP() \o QT_TRANSLATE_NOOP()
-    \row    \o qsTrId() (since 4.7) \o qtTrId()
-    \row    \o QT_TRID_NOOP() (since 4.7) \o QT_TRID_NOOP()
-    \endtable
-
-  \sa {Internationalization with Qt}
-*/
 void QScriptEngine::installTranslatorFunctions(const QScriptValue &object)
 {
    Q_D(QScriptEngine);
@@ -3745,15 +3568,6 @@ QScriptValue QScriptEngine::importExtension(const QString &extension)
    return undefinedValue();
 }
 
-/*!
-    \since 4.4
-
-    Returns a list naming the available extensions that can be
-    imported using the importExtension() function. This list includes
-    extensions that have been imported.
-
-    \sa importExtension(), importedExtensions()
-*/
 QStringList QScriptEngine::availableExtensions() const
 {
 #if defined(QT_NO_SETTINGS)
@@ -3826,14 +3640,6 @@ QStringList QScriptEngine::availableExtensions() const
 #endif
 }
 
-/*!
-    \since 4.4
-
-    Returns a list naming the extensions that have been imported
-    using the importExtension() function.
-
-    \sa availableExtensions()
-*/
 QStringList QScriptEngine::importedExtensions() const
 {
    Q_D(const QScriptEngine);
@@ -3842,305 +3648,18 @@ QStringList QScriptEngine::importedExtensions() const
    return lst;
 }
 
-/*! \fn QScriptValue QScriptEngine::toScriptValue(const T &value)
-
-    Creates a QScriptValue with the given \a value.
-
-    Note that the template type \c{T} must be known to QMetaType.
-
-    See \l{Conversion Between QtScript and C++ Types} for a
-    description of the built-in type conversion provided by
-    QtScript. By default, the types that are not specially handled by
-    QtScript are represented as QVariants (e.g. the \a value is passed
-    to newVariant()); you can change this behavior by installing your
-    own type conversion functions with qScriptRegisterMetaType().
-
-    \sa fromScriptValue(), qScriptRegisterMetaType()
-*/
-
-/*! \fn T QScriptEngine::fromScriptValue(const QScriptValue &value)
-
-    Returns the given \a value converted to the template type \c{T}.
-
-    Note that \c{T} must be known to QMetaType.
-
-    See \l{Conversion Between QtScript and C++ Types} for a
-    description of the built-in type conversion provided by
-    QtScript.
-
-    \sa toScriptValue(), qScriptRegisterMetaType()
-*/
-
-/*!
-    \fn QScriptValue qScriptValueFromValue(QScriptEngine *engine, const T &value)
-    \since 4.3
-    \relates QScriptEngine
-    \obsolete
-
-    Creates a QScriptValue using the given \a engine with the given \a
-    value of template type \c{T}.
-
-    This function is equivalent to QScriptEngine::toScriptValue().
-
-    \note This function was provided as a workaround for MSVC 6
-    which did not support member template functions. It is advised
-    to use the other form in new code.
-
-    \sa QScriptEngine::toScriptValue(), qscriptvalue_cast()
-*/
-
-/*!
-    \fn T qScriptValueToValue(const QScriptValue &value)
-    \since 4.3
-    \relates QScriptEngine
-    \obsolete
-
-    Returns the given \a value converted to the template type \c{T}.
-
-    This function is equivalent to QScriptEngine::fromScriptValue().
-
-    \note This function was provided as a workaround for MSVC 6
-    which did not support member template functions. It is advised
-    to use the other form in new code.
-
-    \sa QScriptEngine::fromScriptValue()
-*/
-
-/*!
-    \fn QScriptValue qScriptValueFromSequence(QScriptEngine *engine, const Container &container)
-    \since 4.3
-    \relates QScriptEngine
-
-    Creates an array in the form of a QScriptValue using the given \a engine
-    with the given \a container of template type \c{Container}.
-
-    The \c Container type must provide a \c const_iterator class to enable the
-    contents of the container to be copied into the array.
-
-    Additionally, the type of each element in the sequence should be
-    suitable for conversion to a QScriptValue.  See
-    \l{Conversion Between QtScript and C++ Types} for more information
-    about the restrictions on types that can be used with QScriptValue.
-
-    \sa QScriptEngine::fromScriptValue()
-*/
-
-/*!
-    \fn void qScriptValueToSequence(const QScriptValue &value, Container &container)
-    \since 4.3
-    \relates QScriptEngine
-
-    Copies the elements in the sequence specified by \a value to the given
-    \a container of template type \c{Container}.
-
-    The \a value used is typically an array, but any container can be copied
-    as long as it provides a \c length property describing how many elements
-    it contains.
-
-    Additionally, the type of each element in the sequence must be
-    suitable for conversion to a C++ type from a QScriptValue.  See
-    \l{Conversion Between QtScript and C++ Types} for more information
-    about the restrictions on types that can be used with
-    QScriptValue.
-
-    \sa qscriptvalue_cast()
-*/
-
-/*!
-    \fn T qscriptvalue_cast(const QScriptValue &value)
-    \since 4.3
-    \relates QScriptValue
-
-    Returns the given \a value converted to the template type \c{T}.
-
-    \sa qScriptRegisterMetaType(), QScriptEngine::toScriptValue()
-*/
-
-/*! \fn int qScriptRegisterMetaType(
-            QScriptEngine *engine,
-            QScriptValue (*toScriptValue)(QScriptEngine *, const T &t),
-            void (*fromScriptValue)(const QScriptValue &, T &t),
-            const QScriptValue &prototype = QScriptValue())
-    \relates QScriptEngine
-
-    Registers the type \c{T} in the given \a engine. \a toScriptValue must
-    be a function that will convert from a value of type \c{T} to a
-    QScriptValue, and \a fromScriptValue a function that does the
-    opposite. \a prototype, if valid, is the prototype that's set on
-    QScriptValues returned by \a toScriptValue.
-
-    Returns the internal ID used by QMetaType.
-
-    You only need to call this function if you want to provide custom
-    conversion of values of type \c{T}, i.e. if the default
-    QVariant-based representation and conversion is not
-    appropriate. (Note that custom QObject-derived types also fall in
-    this category; e.g. for a QObject-derived class called MyObject,
-    you probably want to define conversion functions for MyObject*
-    that utilize QScriptEngine::newQObject() and
-    QScriptValue::toQObject().)
-
-    If you only want to define a common script interface for values of
-    type \c{T}, and don't care how those values are represented
-    (i.e. storing them in QVariants is fine), use
-    \l{QScriptEngine::setDefaultPrototype()}{setDefaultPrototype}()
-    instead; this will minimize conversion costs.
-
-    You need to declare the custom type first with
-    Q_DECLARE_METATYPE().
-
-    After a type has been registered, you can convert from a
-    QScriptValue to that type using
-    \l{QScriptEngine::fromScriptValue()}{fromScriptValue}(), and
-    create a QScriptValue from a value of that type using
-    \l{QScriptEngine::toScriptValue()}{toScriptValue}(). The engine
-    will take care of calling the proper conversion function when
-    calling C++ slots, and when getting or setting a C++ property;
-    i.e. the custom type may be used seamlessly on both the C++ side
-    and the script side.
-
-    The following is an example of how to use this function. We will
-    specify custom conversion of our type \c{MyStruct}. Here's the C++
-    type:
-
-    \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 20
-
-    We must declare it so that the type will be known to QMetaType:
-
-    \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 21
-
-    Next, the \c{MyStruct} conversion functions. We represent the
-    \c{MyStruct} value as a script object and just copy the properties:
-
-    \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 22
-
-    Now we can register \c{MyStruct} with the engine:
-    \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 23
-
-    Working with \c{MyStruct} values is now easy:
-    \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 24
-
-    If you want to be able to construct values of your custom type
-    from script code, you have to register a constructor function for
-    the type. For example:
-
-    \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 25
-
-    \sa qScriptRegisterSequenceMetaType(), qRegisterMetaType()
-*/
-
-/*!
-    \macro Q_SCRIPT_DECLARE_QMETAOBJECT(QMetaObject, ArgType)
-    \since 4.3
-    \relates QScriptEngine
-
-    Declares the given \a QMetaObject. Used in combination with
-    QScriptEngine::scriptValueFromQMetaObject() to make enums and
-    instantiation of \a QMetaObject available to script code. The
-    constructor generated by this macro takes a single argument of
-    type \a ArgType; typically the argument is the parent type of the
-    new instance, in which case \a ArgType is \c{QWidget*} or
-    \c{QObject*}. Objects created by the constructor will have
-    QScriptEngine::AutoOwnership ownership.
-*/
-
-/*! \fn int qScriptRegisterSequenceMetaType(
-            QScriptEngine *engine,
-            const QScriptValue &prototype = QScriptValue())
-    \relates QScriptEngine
-
-    Registers the sequence type \c{T} in the given \a engine. This
-    function provides conversion functions that convert between \c{T}
-    and Qt Script \c{Array} objects. \c{T} must provide a
-    const_iterator class and begin(), end() and push_back()
-    functions. If \a prototype is valid, it will be set as the
-    prototype of \c{Array} objects due to conversion from \c{T};
-    otherwise, the standard \c{Array} prototype will be used.
-
-    Returns the internal ID used by QMetaType.
-
-    You need to declare the container type first with
-    Q_DECLARE_METATYPE(). If the element type isn't a standard Qt/C++
-    type, it must be declared using Q_DECLARE_METATYPE() as well.
-    Example:
-
-    \snippet doc/src/snippets/code/src_script_qscriptengine.cpp 26
-
-    \sa qScriptRegisterMetaType()
-*/
-
-/*!
-  Runs the garbage collector.
-
-  The garbage collector will attempt to reclaim memory by locating and
-  disposing of objects that are no longer reachable in the script
-  environment.
-
-  Normally you don't need to call this function; the garbage collector
-  will automatically be invoked when the QScriptEngine decides that
-  it's wise to do so (i.e. when a certain number of new objects have
-  been created). However, you can call this function to explicitly
-  request that garbage collection should be performed as soon as
-  possible.
-
-  \sa reportAdditionalMemoryCost()
-*/
 void QScriptEngine::collectGarbage()
 {
    Q_D(QScriptEngine);
    d->collectGarbage();
 }
 
-/*!
-  \since 4.7
-
-  Reports an additional memory cost of the given \a size, measured in
-  bytes, to the garbage collector.
-
-  This function can be called to indicate that a Qt Script object has
-  memory associated with it that isn't managed by Qt Script itself.
-  Reporting the additional cost makes it more likely that the garbage
-  collector will be triggered.
-
-  Note that if the additional memory is shared with objects outside
-  the scripting environment, the cost should not be reported, since
-  collecting the Qt Script object would not cause the memory to be
-  freed anyway.
-
-  Negative \a size values are ignored, i.e. this function can't be
-  used to report that the additional memory has been deallocated.
-
-  \sa collectGarbage()
-*/
 void QScriptEngine::reportAdditionalMemoryCost(int size)
 {
    Q_D(QScriptEngine);
    d->reportAdditionalMemoryCost(size);
 }
 
-/*!
-
-  Sets the interval between calls to QCoreApplication::processEvents
-  to \a interval milliseconds.
-
-  While the interpreter is running, all event processing is by default
-  blocked. This means for instance that the gui will not be updated
-  and timers will not be fired. To allow event processing during
-  interpreter execution one can specify the processing interval to be
-  a positive value, indicating the number of milliseconds between each
-  time QCoreApplication::processEvents() is called.
-
-  The default value is -1, which disables event processing during
-  interpreter execution.
-
-  You can use QCoreApplication::postEvent() to post an event that
-  performs custom processing at the next interval. For example, you
-  could keep track of the total running time of the script and call
-  abortEvaluation() when you detect that the script has been running
-  for a long time without completing.
-
-  \sa processEventsInterval()
-*/
 void QScriptEngine::setProcessEventsInterval(int interval)
 {
    Q_D(QScriptEngine);
@@ -4153,49 +3672,18 @@ void QScriptEngine::setProcessEventsInterval(int interval)
    d->timeoutChecker()->setShouldProcessEvents(interval > 0);
 }
 
-/*!
-
-  Returns the interval in milliseconds between calls to
-  QCoreApplication::processEvents() while the interpreter is running.
-
-  \sa setProcessEventsInterval()
-*/
 int QScriptEngine::processEventsInterval() const
 {
    Q_D(const QScriptEngine);
    return d->processEventsInterval;
 }
 
-/*!
-  \since 4.4
-
-  Returns true if this engine is currently evaluating a script,
-  otherwise returns false.
-
-  \sa evaluate(), abortEvaluation()
-*/
 bool QScriptEngine::isEvaluating() const
 {
    Q_D(const QScriptEngine);
    return (d->currentFrame != d->globalExec()) || d->inEval;
 }
 
-/*!
-  \since 4.4
-
-  Aborts any script evaluation currently taking place in this engine.
-  The given \a result is passed back as the result of the evaluation
-  (i.e. it is returned from the call to evaluate() being aborted).
-
-  If the engine isn't evaluating a script (i.e. isEvaluating() returns
-  false), this function does nothing.
-
-  Call this function if you need to abort a running script for some
-  reason, e.g.  when you have detected that the script has been
-  running for several seconds without completing.
-
-  \sa evaluate(), isEvaluating(), setProcessEventsInterval()
-*/
 void QScriptEngine::abortEvaluation(const QScriptValue &result)
 {
    Q_D(QScriptEngine);
@@ -4208,17 +3696,6 @@ void QScriptEngine::abortEvaluation(const QScriptValue &result)
          d->currentFrame));
 }
 
-/*!
-  \since 4.4
-  \relates QScriptEngine
-
-  Creates a connection from the \a signal in the \a sender to the
-  given \a function. If \a receiver is an object, it will act as the
-  `this' object when the signal handler function is invoked. Returns
-  true if the connection succeeds; otherwise returns false.
-
-  \sa qScriptDisconnect(), QScriptEngine::signalHandlerException()
-*/
 bool qScriptConnect(QObject *sender, const QString &signal, const QScriptValue &receiver, const QScriptValue &function)
 {
    if (! sender || signal.isEmpty()) {
@@ -4241,16 +3718,6 @@ bool qScriptConnect(QObject *sender, const QString &signal, const QScriptValue &
    return engine->scriptConnect(sender, signal, jscReceiver, jscFunction, Qt::AutoConnection);
 }
 
-/*!
-  \since 4.4
-  \relates QScriptEngine
-
-  Disconnects the \a signal in the \a sender from the given (\a
-  receiver, \a function) pair. Returns true if the connection is
-  successfully broken; otherwise returns false.
-
-  \sa qScriptConnect()
-*/
 bool qScriptDisconnect(QObject *sender, const QString &signal, const QScriptValue &receiver, const QScriptValue &function)
 {
    if (! sender || signal.isEmpty()) {
@@ -4294,30 +3761,12 @@ void QScriptEngine::setAgent(QScriptEngineAgent *agent)
    }
 }
 
-/*!
-  \since 4.4
-
-  Returns the agent currently installed on this engine, or 0 if no
-  agent is installed.
-
-  \sa setAgent()
-*/
 QScriptEngineAgent *QScriptEngine::agent() const
 {
    Q_D(const QScriptEngine);
    return d->activeAgent;
 }
 
-/*!
-  \since 4.4
-
-  Returns a handle that represents the given string, \a str.
-
-  QScriptString can be used to quickly look up properties, and
-  compare property names, of script objects.
-
-  \sa QScriptValue::property()
-*/
 QScriptString QScriptEngine::toStringHandle(const QString &str)
 {
    Q_D(QScriptEngine);
@@ -4325,25 +3774,6 @@ QScriptString QScriptEngine::toStringHandle(const QString &str)
    return d->toStringHandle(JSC::Identifier(d->currentFrame, str));
 }
 
-/*!
-  \since 4.5
-
-  Converts the given \a value to an object, if such a conversion is
-  possible; otherwise returns an invalid QScriptValue. The conversion
-  is performed according to the following table:
-
-    \table
-    \header \o Input Type \o Result
-    \row    \o Undefined  \o An invalid QScriptValue.
-    \row    \o Null       \o An invalid QScriptValue.
-    \row    \o Boolean    \o A new Boolean object whose internal value is set to the value of the boolean.
-    \row    \o Number     \o A new Number object whose internal value is set to the value of the number.
-    \row    \o String     \o A new String object whose internal value is set to the value of the string.
-    \row    \o Object     \o The result is the object itself (no conversion).
-    \endtable
-
-    \sa newObject()
-*/
 QScriptValue QScriptEngine::toObject(const QScriptValue &value)
 {
    Q_D(QScriptEngine);
@@ -4372,32 +3802,6 @@ QScriptValue QScriptEngine::objectById(qint64 id) const
    return const_cast<QScriptEnginePrivate *>(d)->scriptValueFromJSCValue((JSC::JSCell *)id);
 }
 
-/*!
-  \since 4.5
-  \class QScriptSyntaxCheckResult
-
-  \brief The QScriptSyntaxCheckResult class provides the result of a script syntax check.
-
-  \ingroup script
-  \mainclass
-
-  QScriptSyntaxCheckResult is returned by QScriptEngine::checkSyntax() to
-  provide information about the syntactical (in)correctness of a script.
-*/
-
-/*!
-    \enum QScriptSyntaxCheckResult::State
-
-    This enum specifies the state of a syntax check.
-
-    \value Error The program contains a syntax error.
-    \value Intermediate The program is incomplete.
-    \value Valid The program is a syntactically correct Qt Script program.
-*/
-
-/*!
-  Constructs a new QScriptSyntaxCheckResult from the \a other result.
-*/
 QScriptSyntaxCheckResult::QScriptSyntaxCheckResult(const QScriptSyntaxCheckResult &other)
    : d_ptr(other.d_ptr)
 {
@@ -4419,16 +3823,10 @@ QScriptSyntaxCheckResult::QScriptSyntaxCheckResult()
 {
 }
 
-/*!
-  Destroys this QScriptSyntaxCheckResult.
-*/
 QScriptSyntaxCheckResult::~QScriptSyntaxCheckResult()
 {
 }
 
-/*!
-  Returns the state of this QScriptSyntaxCheckResult.
-*/
 QScriptSyntaxCheckResult::State QScriptSyntaxCheckResult::state() const
 {
    Q_D(const QScriptSyntaxCheckResult);
@@ -4438,12 +3836,6 @@ QScriptSyntaxCheckResult::State QScriptSyntaxCheckResult::state() const
    return d->state;
 }
 
-/*!
-  Returns the error line number of this QScriptSyntaxCheckResult, or -1 if
-  there is no error.
-
-  \sa state(), errorMessage()
-*/
 int QScriptSyntaxCheckResult::errorLineNumber() const
 {
    Q_D(const QScriptSyntaxCheckResult);
@@ -4453,12 +3845,6 @@ int QScriptSyntaxCheckResult::errorLineNumber() const
    return d->errorLineNumber;
 }
 
-/*!
-  Returns the error column number of this QScriptSyntaxCheckResult, or -1 if
-  there is no error.
-
-  \sa state(), errorLineNumber()
-*/
 int QScriptSyntaxCheckResult::errorColumnNumber() const
 {
    Q_D(const QScriptSyntaxCheckResult);
@@ -4468,12 +3854,6 @@ int QScriptSyntaxCheckResult::errorColumnNumber() const
    return d->errorColumnNumber;
 }
 
-/*!
-  Returns the error message of this QScriptSyntaxCheckResult, or an empty
-  string if there is no error.
-
-  \sa state(), errorLineNumber()
-*/
 QString QScriptSyntaxCheckResult::errorMessage() const
 {
    Q_D(const QScriptSyntaxCheckResult);
@@ -4483,10 +3863,6 @@ QString QScriptSyntaxCheckResult::errorMessage() const
    return d->errorMessage;
 }
 
-/*!
-  Assigns the \a other result to this QScriptSyntaxCheckResult, and returns a
-  reference to this QScriptSyntaxCheckResult.
-*/
 QScriptSyntaxCheckResult &QScriptSyntaxCheckResult::operator=(const QScriptSyntaxCheckResult &other)
 {
    d_ptr = other.d_ptr;
@@ -4503,6 +3879,3 @@ QScriptEnginePrivate *QScriptEnginePrivate::cs_getPrivate(QScriptEngine *object)
 {
    return object->d_ptr.data();
 }
-
-
-

@@ -326,6 +326,7 @@ void QMYSQLResultPrivate::bindBlobs()
 
    for (i = 0; i < fields.count(); ++i) {
       fieldInfo = fields.at(i).myField;
+
       if (qIsBlob(inBinds[i].buffer_type) && meta && fieldInfo) {
          bind = &inBinds[i];
          bind->buffer_length = fieldInfo->max_length;
@@ -342,10 +343,11 @@ bool QMYSQLResultPrivate::bindInValues()
    char *field;
    int i = 0;
 
-   if (!meta) {
+   if (! meta) {
       meta = mysql_stmt_result_metadata(stmt);
    }
-   if (!meta) {
+
+   if (! meta) {
       return false;
    }
 
@@ -406,7 +408,6 @@ QMYSQLResult::~QMYSQLResult()
 
 QVariant QMYSQLResult::handle() const
 {
-
    if (d->preparedQuery) {
       return d->meta ? QVariant::fromValue(d->meta) : QVariant::fromValue(d->stmt);
 
@@ -608,8 +609,7 @@ bool QMYSQLResult::fetchFirst()
 
 QVariant QMYSQLResult::data(int field)
 {
-
-   if (!isSelect() || field >= d->fields.count()) {
+   if (! isSelect() || field >= d->fields.count()) {
       qWarning("QMYSQLResult::data: column %d out of range", field);
       return QVariant();
    }
@@ -619,6 +619,7 @@ QVariant QMYSQLResult::data(int field)
    }
 
    int fieldLength = 0;
+
    const QMYSQLResultPrivate::QMyField &f = d->fields.at(field);
    QString val;
 
@@ -647,6 +648,7 @@ QVariant QMYSQLResult::data(int field)
          // NULL value
          return QVariant(f.type);
       }
+
       fieldLength = mysql_fetch_lengths(d->result)[field];
       if (f.type != QVariant::ByteArray) {
          val = toUnicode(d->driver->d_func()->tc, d->row[field], fieldLength);
@@ -673,7 +675,8 @@ QVariant QMYSQLResult::data(int field)
 
       case QVariant::Double: {
          QVariant v;
-         bool ok = false;
+
+         bool ok    = false;
          double dbl = val.toDouble(&ok);
 
          switch (numericalPrecisionPolicy()) {
@@ -702,14 +705,18 @@ QVariant QMYSQLResult::data(int field)
             return QVariant();
          }
       }
+
       return QVariant(val.toDouble());
 
       case QVariant::Date:
          return qDateFromString(val);
+
       case QVariant::Time:
          return qTimeFromString(val);
+
       case QVariant::DateTime:
          return qDateTimeFromString(val);
+
       case QVariant::ByteArray: {
 
          QByteArray ba;
@@ -720,12 +727,14 @@ QVariant QMYSQLResult::data(int field)
          }
          return QVariant(ba);
       }
-      default:
+
       case QVariant::String:
+      default:
          return QVariant(val);
    }
 
    qWarning("QMYSQLResult::data: unknown data type");
+
    return QVariant();
 }
 

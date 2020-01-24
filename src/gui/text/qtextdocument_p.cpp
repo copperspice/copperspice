@@ -1120,7 +1120,8 @@ void QTextDocumentPrivate::appendUndoItem(const QTextUndoCommand &c)
       clearUndoRedoStacks(QTextDocument::RedoStack);
    }
 
-   if (editBlock != 0 && editBlockCursorPosition >= 0) { // we had a beginEditBlock() with a cursor position
+   if (editBlock != 0 && editBlockCursorPosition >= 0) {
+      // had a beginEditBlock() with a cursor position
 
       if (c.pos != editBlockCursorPosition) {
          // and that cursor position is different from the command

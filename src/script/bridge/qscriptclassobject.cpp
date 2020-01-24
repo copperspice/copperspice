@@ -305,7 +305,8 @@ bool ClassObjectDelegate::hasInstance(QScriptObject *object, JSC::ExecState *exe
    if (! scriptClass()->supportsExtension(QScriptClass::HasInstance)) {
       return QScriptObjectDelegate::hasInstance(object, exec, value, proto);
    }
-   QScriptValueList args;
+
+   QList<QScriptValue> args;
    QScriptEnginePrivate *eng_p = scriptEngineFromExec(exec);
 
    QScript::SaveFrameHelper saveFrame(eng_p, exec);

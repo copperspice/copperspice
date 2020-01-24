@@ -81,24 +81,6 @@ QWin32PrintEngine::QWin32PrintEngine(QPrinter::PrinterMode mode)
    d->initialize();
 }
 
-static QByteArray msgBeginFailed(const char *function, const DOCINFO &d)
-{
-   QString result;
-   QTextStream str(&result);
-   str << "QWin32PrintEngine::begin: " << function << " failed";
-
-   if (d.lpszDocName && d.lpszDocName[0]) {
-      std::wstring tmp = d.lpszDocName;
-      str << ", document \"" << QString::fromStdWString(tmp) << '"';
-   }
-
-   if (d.lpszOutput && d.lpszOutput[0]) {
-         std::wstring tmp = d.lpszOutput;
-      str << ", file \"" << QString::fromStdWString(tmp) << '"';
-   }
-
-   return result.toUtf8();
-}
 bool QWin32PrintEngine::begin(QPaintDevice *pdev)
 {
    Q_D(QWin32PrintEngine);

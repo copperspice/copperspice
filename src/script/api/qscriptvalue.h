@@ -39,8 +39,7 @@ class QDateTime;
 class QMetaObject;
 
 typedef QList<QScriptValue> QScriptValueList;
-
-typedef double qsreal;
+using qsreal = double;
 
 class QScriptValuePrivate;
 class QScriptEnginePrivate;
@@ -168,10 +167,11 @@ class Q_SCRIPT_EXPORT QScriptValue
       const QScriptString &name, const ResolveFlags &mode = ResolvePrototype) const;
 
    QScriptValue call(const QScriptValue &thisObject = QScriptValue(),
-      const QScriptValueList &args = QScriptValueList());
-   QScriptValue call(const QScriptValue &thisObject,
-      const QScriptValue &arguments);
-   QScriptValue construct(const QScriptValueList &args = QScriptValueList());
+      const QList<QScriptValue> &args = QList<QScriptValue>());
+
+   QScriptValue call(const QScriptValue &thisObject, const QScriptValue &arguments);
+
+   QScriptValue construct(const QList<QScriptValue> &args = QList<QScriptValue>());
    QScriptValue construct(const QScriptValue &arguments);
 
    QScriptValue data() const;

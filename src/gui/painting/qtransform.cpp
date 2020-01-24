@@ -1747,7 +1747,7 @@ QTransform::TransformationType QTransform::type() const
 
    switch (static_cast<TransformationType>(m_dirty)) {
       case TxProject:
-         if (!qFuzzyIsNull(m_13) || !qFuzzyIsNull(m_23) || !qFuzzyIsNull(m_33 - 1)) {
+         if (! qFuzzyIsNull(m_13) || ! qFuzzyIsNull(m_23) || ! qFuzzyIsNull(m_33 - 1)) {
             m_type = TxProject;
             break;
          }
@@ -1755,7 +1755,7 @@ QTransform::TransformationType QTransform::type() const
 
       case TxShear:
       case TxRotate:
-         if (!qFuzzyIsNull(affine._m12) || !qFuzzyIsNull(affine._m21)) {
+         if (! qFuzzyIsNull(affine._m12) || ! qFuzzyIsNull(affine._m21)) {
             const qreal dot = affine._m11 * affine._m12 + affine._m21 * affine._m22;
             if (qFuzzyIsNull(dot)) {
                m_type = TxRotate;
@@ -1789,20 +1789,15 @@ QTransform::TransformationType QTransform::type() const
    return static_cast<TransformationType>(m_type);
 }
 
-/*!
-
-    Returns the transform as a QVariant.
-*/
 QTransform::operator QVariant() const
 {
    return QVariant(QVariant::Transform, this);
 }
 
-
-
 // returns true if the transform is uniformly scaling
 // (same scale in x and y direction)
 // scale is set to the max of x and y scaling factors
+
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale)
 {
    const QTransform::TransformationType type = transform.type();

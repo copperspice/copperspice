@@ -87,16 +87,16 @@ class QContiguousCache
    explicit QContiguousCache(int capacity = 0);
    QContiguousCache(const QContiguousCache<T> &v) : d(v.d) {
       d->ref.ref();
-      if (!d->sharable) {
+      if (! d->sharable) {
          detach_helper();
       }
    }
 
    inline ~QContiguousCache() {
-      if (!d) {
+      if (! d) {
          return;
       }
-      if (!d->ref.deref()) {
+      if (! d->ref.deref()) {
          free(p);
       }
    }
@@ -112,7 +112,7 @@ class QContiguousCache
    }
 
    inline void setSharable(bool sharable) {
-      if (!sharable) {
+      if (! sharable) {
          detach();
       }
       d->sharable = sharable;
@@ -244,15 +244,15 @@ void QContiguousCache<T>::detach_helper()
 
    x.d = malloc(d->alloc);
    x.d->ref.store(1);
-   x.d->count = d->count;
-   x.d->start = d->start;
-   x.d->offset = d->offset;
-   x.d->alloc = d->alloc;
+   x.d->count    = d->count;
+   x.d->start    = d->start;
+   x.d->offset   = d->offset;
+   x.d->alloc    = d->alloc;
    x.d->sharable = true;
    x.d->reserved = 0;
 
    T *dest = x.p->array + x.d->start;
-   T *src = p->array + d->start;
+   T *src  = p->array + d->start;
    int oldcount = x.d->count;
 
    while (oldcount--) {
@@ -290,10 +290,12 @@ void QContiguousCache<T>::setCapacity(int asize)
       QContiguousCacheData *d;
       QContiguousCacheTypedData<T> *p;
    } x;
+
    x.d = malloc(asize);
    x.d->alloc = asize;
    x.d->count = qMin(d->count, asize);
    x.d->offset = d->offset + d->count - x.d->count;
+
    if (asize) {
       x.d->start = x.d->offset % x.d->alloc;
    } else {
@@ -324,6 +326,7 @@ void QContiguousCache<T>::setCapacity(int asize)
          src--;
       }
    }
+
    /* free old */
    free(p);
    d = x.d;
@@ -435,10 +438,11 @@ void QContiguousCache<T>::free(Data *x)
    }
    x->free(x);
 }
+
 template <typename T>
 void QContiguousCache<T>::append(const T &value)
 {
-   if (!d->alloc) {
+   if (! d->alloc) {
       return;   // zero capacity
    }
 
@@ -470,7 +474,9 @@ void QContiguousCache<T>::prepend(const T &value)
    if (!d->alloc) {
       return;   // zero capacity
    }
+
    detach();
+
    if (d->start) {
       d->start--;
    } else {
@@ -495,7 +501,8 @@ template<typename T>
 void QContiguousCache<T>::insert(int pos, const T &value)
 {
    Q_ASSERT_X(pos >= 0 && pos < INT_MAX, "QContiguousCache<T>::insert", "index out of range");
-   if (!d->alloc) {
+
+   if (! d->alloc) {
       return;   // zero capacity
    }
 
@@ -519,8 +526,8 @@ void QContiguousCache<T>::insert(int pos, const T &value)
       // we do not leave gaps
       clear();
       d->offset = pos;
-      d->start = pos % d->alloc;
-      d->count = 1;
+      d->start  = pos % d->alloc;
+      d->count  = 1;
 
       if (std::is_trivially_constructible_v<T>) {
          p->array[d->start] = value;
@@ -586,6 +593,7 @@ inline T QContiguousCache<T>::takeFirst()
 {
    T t = first();
    removeFirst();
+
    return t;
 }
 

@@ -210,8 +210,6 @@ class Q_SCRIPT_EXPORT QScriptEngine
 
    QScriptValue objectById(qint64 id) const;
 
-
- public:
    SCRIPT_CS_SIGNAL_1(Public, void signalHandlerException(const QScriptValue &exception))
    SCRIPT_CS_SIGNAL_2(signalHandlerException, exception)
 
@@ -243,9 +241,7 @@ class Q_SCRIPT_EXPORT QScriptEngine
 
  protected:
    QScopedPointer<QScriptEnginePrivate> d_ptr;
-
 };
-
 
 #define Q_SCRIPT_DECLARE_QMETAOBJECT(T, _Arg1) \
 template<> inline QScriptValue qscriptQMetaObjectConstructor<T>(QScriptContext *ctx, QScriptEngine *eng, T *) \
@@ -263,13 +259,14 @@ template <class T> QScriptValue QScriptEngine::scriptValueFromQMetaObject()
 {
    typedef QScriptValue(*ConstructPtr)(QScriptContext *, QScriptEngine *, T *);
    ConstructPtr cptr = qscriptQMetaObjectConstructor<T>;
+
    return newQMetaObject(&T::staticMetaObject,
          newFunction(reinterpret_cast<FunctionWithArgSignature>(cptr), 0));
 }
 
 inline QScriptValue qScriptValueFromValue_helper(QScriptEngine *engine, int type, const void *ptr)
 {
-   if (!engine) {
+   if (! engine) {
       return QScriptValue();
    }
 
@@ -329,8 +326,7 @@ int qScriptRegisterMetaType(QScriptEngine *eng, QScriptValue (*toScriptValue)(QS
 
    qScriptRegisterMetaType_helper(
       eng, id, reinterpret_cast<QScriptEngine::MarshalFunction>(toScriptValue),
-      reinterpret_cast<QScriptEngine::DemarshalFunction>(fromScriptValue),
-      prototype);
+      reinterpret_cast<QScriptEngine::DemarshalFunction>(fromScriptValue), prototype);
 
    return id;
 }
@@ -339,10 +335,13 @@ template <class Container>
 QScriptValue qScriptValueFromSequence(QScriptEngine *eng, const Container &cont)
 {
    QScriptValue a = eng->newArray();
+
    typename Container::const_iterator begin = cont.begin();
    typename Container::const_iterator end = cont.end();
    typename Container::const_iterator it;
+
    quint32 i;
+
    for (it = begin, i = 0; it != end; ++it, ++i) {
       a.setProperty(i, eng->toScriptValue(*it));
    }
@@ -352,7 +351,8 @@ QScriptValue qScriptValueFromSequence(QScriptEngine *eng, const Container &cont)
 template <class Container>
 void qScriptValueToSequence(const QScriptValue &value, Container &cont)
 {
-   quint32 len = value.property(QLatin1String("length")).toUInt32();
+   quint32 len = value.property(QString("length")).toUInt32();
+
    for (quint32 i = 0; i < len; ++i) {
       QScriptValue item = value.property(i);
       cont.push_back(qscriptvalue_cast<typename Container::value_type>(item));

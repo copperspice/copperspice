@@ -604,21 +604,17 @@ QString QScriptContext::toString() const
    return result;
 }
 
-/*!
-  \internal
-  \since 4.5
-
-  Returns the scope chain of this QScriptContext.
-*/
-QScriptValueList QScriptContext::scopeChain() const
+QList<QScriptValue> QScriptContext::scopeChain() const
 {
    activationObject(); //ensure the creation of the normal scope for native context
    const JSC::CallFrame *frame = QScriptEnginePrivate::frameForContext(this);
    QScriptEnginePrivate *engine = QScript::scriptEngineFromExec(frame);
    QScript::APIShim shim(engine);
-   QScriptValueList result;
+
+   QList<QScriptValue> result;
    JSC::ScopeChainNode *node = frame->scopeChain();
    JSC::ScopeChainIterator it(node);
+
    for (it = node->begin(); it != node->end(); ++it) {
       JSC::JSObject *object = *it;
       if (!object) {

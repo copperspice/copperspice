@@ -3370,8 +3370,7 @@ void QTextDocumentLayoutPrivate::ensureLayouted(QFixed y) const
       layoutStep();
    }
 
-   while (currentLazyLayoutPosition != -1
-      && checkPoints.last().y < y) {
+   while (currentLazyLayoutPosition != -1 && checkPoints.last().y < y) {
       layoutStep();
    }
 }

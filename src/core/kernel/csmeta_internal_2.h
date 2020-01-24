@@ -24,7 +24,7 @@
 #ifndef CSMETA_INTERNAL_2_H
 #define CSMETA_INTERNAL_2_H
 
-#include <QVariant>
+#include <qvariant.h>
 
 // **
 // template<class T, class=void, class=typename std::enable_if<!std::is_constructible<QVariant, T>::value>::type>
@@ -55,12 +55,12 @@ std::pair<T, bool> convertFromQVariant(QVariant)
 template<class T, class unused_1, class unused_2>
 std::pair<T, bool> convertFromQVariant(QVariant data)
 {
-   // T is not an enum, not a flag   T is only a built in data type
+   // T is not an enum, not a flag  T is only a built in data type
    return std::make_pair(data.value<T>(), true);
 }
 
 // template<class T, class=typename std::enable_if<is_enum_or_flag<T>::value>::type>
-template<class T, class usused_1>
+template<class T, class unused_1>
 std::pair<T, bool> convertFromQVariant(QVariant data)
 {
    // T is an enum or a flag
@@ -77,7 +77,7 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
       // supported integer types
       temp = data.value<intType>();
 
-   } else if (dataType == QVariant::String)   {
+   } else if (dataType == QVariant::String) {
       // enum or flag
 
       QMetaEnum obj = QMetaObject::findEnum<T>();
