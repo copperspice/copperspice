@@ -35,14 +35,13 @@ class QSocketNotifier;
 #ifdef Q_OS_WIN
 class QWinEventNotifier;
 #endif
+
 class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
 {
    CORE_CS_OBJECT(QAbstractEventDispatcher)
    Q_DECLARE_PRIVATE(QAbstractEventDispatcher)
 
  public:
-   using TimerInfo = CS_Internal_TimerInfo;
-
    explicit QAbstractEventDispatcher(QObject *parent = nullptr);
    ~QAbstractEventDispatcher();
 
@@ -60,13 +59,15 @@ class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
    virtual void registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object) = 0;
    virtual bool unregisterTimer(int timerId) = 0;
    virtual bool unregisterTimers(QObject *object) = 0;
-   virtual QList<TimerInfo> registeredTimers(QObject *object) const = 0;
+   virtual QList<QTimerInfo> registeredTimers(QObject *object) const = 0;
 
     virtual int remainingTime(int timerId) = 0;
+
 #ifdef Q_OS_WIN
     virtual bool registerEventNotifier(QWinEventNotifier *notifier) = 0;
     virtual void unregisterEventNotifier(QWinEventNotifier *notifier) = 0;
 #endif
+
    virtual void wakeUp() = 0;
    virtual void interrupt() = 0;
    virtual void flush() = 0;
@@ -77,7 +78,6 @@ class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
    void installNativeEventFilter(QAbstractNativeEventFilter *filterObj);
    void removeNativeEventFilter(QAbstractNativeEventFilter *filterObj);
    bool filterNativeEvent(const QByteArray &eventType, void *message, long *result);
-
 
    CORE_CS_SIGNAL_1(Public, void aboutToBlock())
    CORE_CS_SIGNAL_2(aboutToBlock)

@@ -55,7 +55,7 @@ class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
    void registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object) override;
    bool unregisterTimer(int timerId) override;
    bool unregisterTimers(QObject *object) override;
-   QList<TimerInfo> registeredTimers(QObject *object) const override;
+   QList<QTimerInfo> registeredTimers(QObject *object) const override;
 
    bool registerEventNotifier(QWinEventNotifier *notifier);
    void unregisterEventNotifier(QWinEventNotifier *notifier);

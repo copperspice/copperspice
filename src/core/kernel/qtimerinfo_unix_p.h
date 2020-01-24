@@ -24,29 +24,29 @@
 #ifndef QTIMERINFO_UNIX_P_H
 #define QTIMERINFO_UNIX_P_H
 
-// #define QTIMERINFO_DEBUG
-
 #include <qabstracteventdispatcher.h>
 
-#include <sys/time.h> // struct timeval
+#include <sys/time.h>
+
+// #define QTIMERINFO_UNIX_DEBUG
 
 // internal timer info
-struct QTimerInfo {
-    int id;                        // timer identifier
-    int interval;                  // timer interval in milliseconds
-    Qt::TimerType timerType;       // timer type
-    timespec timeout;              // when to actually fire
-    QObject *obj;                  // object to receive event
-    QTimerInfo **activateRef;      // ref from activateTimers
+struct QTimerInfo_Unix {
+    int id;                           // timer identifier
+    int interval;                     // timer interval in milliseconds
+    Qt::TimerType timerType;          // timer type
+    timespec timeout;                 // when to actually fire
+    QObject *obj;                     // object to receive event
+    QTimerInfo_Unix **activateRef;    // ref from activateTimers
 
-#ifdef QTIMERINFO_DEBUG
-    timeval expected;              // when timer is expected to fire
+#ifdef QTIMERINFO_UNIX_DEBUG
+    timeval expected;                 // when timer is expected to fire
     float cumulativeError;
     uint count;
 #endif
 };
 
-class Q_CORE_EXPORT QTimerInfoList : public QList<QTimerInfo*>
+class Q_CORE_EXPORT QTimerInfoList : public QList<QTimerInfo_Unix *>
 {
 #if (_POSIX_MONOTONIC_CLOCK-0 <= 0) && ! defined(Q_OS_DARWIN)
     timespec previousTime;
@@ -59,7 +59,7 @@ class Q_CORE_EXPORT QTimerInfoList : public QList<QTimerInfo*>
 #endif
 
     // state variables used by activateTimers()
-    QTimerInfo *firstTimerInfo;
+    QTimerInfo_Unix *firstTimerInfo;
 
 public:
     QTimerInfoList();
@@ -71,14 +71,14 @@ public:
     void repairTimersIfNeeded();
 
     bool timerWait(timespec &);
-    void timerInsert(QTimerInfo *);
+    void timerInsert(QTimerInfo_Unix *);
 
     int timerRemainingTime(int timerId);
 
     void registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object);
     bool unregisterTimer(int timerId);
     bool unregisterTimers(QObject *object);
-    QList<QAbstractEventDispatcher::TimerInfo> registeredTimers(QObject *object) const;
+    QList<QTimerInfo> registeredTimers(QObject *object) const;
 
     int activateTimers();
 };

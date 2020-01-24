@@ -252,7 +252,7 @@ void CSInternalEvents::decr_PostedEvents(QObject *object)
 }
 
 // private slot
-void QObject::internal_reregisterTimers(QList<QAbstractEventDispatcher::TimerInfo> timerList)
+void QObject::internal_reregisterTimers(QList<QTimerInfo> timerList)
 {
    QAbstractEventDispatcher *eventDispatcher = m_threadData.load()->eventDispatcher.load();
 
@@ -263,6 +263,8 @@ void QObject::internal_reregisterTimers(QList<QAbstractEventDispatcher::TimerInf
 
 // ** macros defined in csmeta.h
 
+// added for invokable, properties CsCore
+CS_REGISTER_CLASS(QTimerInfo)
 // classes
 CS_REGISTER_CLASS(QAbstractState)
 CS_REGISTER_CLASS(QChar32)
@@ -328,7 +330,6 @@ CS_REGISTER_CLASS(QVariant)
 CS_REGISTER_CLASS(QVector2D)
 CS_REGISTER_CLASS(QVector3D)
 CS_REGISTER_CLASS(QVector4D)
-CS_REGISTER_CLASS(CS_Internal_TimerInfo)
 
 CS_REGISTER_TYPEDEF(QRegularExpression8)
 CS_REGISTER_TYPEDEF(QRegularExpression16)

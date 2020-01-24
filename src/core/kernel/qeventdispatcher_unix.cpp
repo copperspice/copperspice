@@ -38,6 +38,7 @@
 #ifdef HAVE_SYS_EVENTFD_H
 #  include <sys/eventfd.h>
 #endif
+
 #if (_POSIX_MONOTONIC_CLOCK-0 <= 0)
 #  include <sys/times.h>
 #endif
@@ -305,11 +306,12 @@ bool QEventDispatcherUNIX::unregisterTimer(int timerId)
 bool QEventDispatcherUNIX::unregisterTimers(QObject *object)
 {
 #ifndef QT_NO_DEBUG
-   if (!object) {
+   if (! object) {
       qWarning("QEventDispatcherUNIX::unregisterTimers: invalid argument");
       return false;
+
    } else if (object->thread() != thread() || thread() != QThread::currentThread()) {
-      qWarning("QObject::killTimers: timers cannot be stopped from another thread");
+      qWarning("QObject::killTimers: timers can not be stopped from another thread");
       return false;
    }
 #endif
@@ -318,15 +320,15 @@ bool QEventDispatcherUNIX::unregisterTimers(QObject *object)
    return d->timerList.unregisterTimers(object);
 }
 
-QList<QEventDispatcherUNIX::TimerInfo>
-QEventDispatcherUNIX::registeredTimers(QObject *object) const
+QList<QTimerInfo> QEventDispatcherUNIX::registeredTimers(QObject *object) const
 {
-   if (!object) {
+   if (! object) {
       qWarning("QEventDispatcherUNIX:registeredTimers: invalid argument");
-      return QList<TimerInfo>();
+      return QList<QTimerInfo>();
    }
 
    Q_D(const QEventDispatcherUNIX);
+
    return d->timerList.registeredTimers(object);
 }
 

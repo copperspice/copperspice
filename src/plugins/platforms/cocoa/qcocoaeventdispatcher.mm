@@ -185,9 +185,10 @@ bool QCocoaEventDispatcher::unregisterTimer(int timerId)
 bool QCocoaEventDispatcher::unregisterTimers(QObject *obj)
 {
 #ifndef QT_NO_DEBUG
-   if (!obj) {
+   if (! obj) {
       qWarning("QCocoaEventDispatcher::unregisterTimers: invalid argument");
       return false;
+
    } else if (obj->thread() != thread() || thread() != QThread::currentThread()) {
       qWarning("QObject::killTimers: timers can not be stopped from another thread");
       return false;
@@ -206,12 +207,12 @@ bool QCocoaEventDispatcher::unregisterTimers(QObject *obj)
    return returnValue;
 }
 
-QList<QCocoaEventDispatcher::TimerInfo> QCocoaEventDispatcher::registeredTimers(QObject *object) const
+QList<QTimerInfo> QCocoaEventDispatcher::registeredTimers(QObject *object) const
 {
 #ifndef QT_NO_DEBUG
-   if (!object) {
+   if (! object) {
       qWarning("QCocoaEventDispatcher:registeredTimers: invalid argument");
-      return QList<TimerInfo>();
+      return QList<QTimerInfo>();
    }
 #endif
 

@@ -70,7 +70,7 @@ class QCocoaEventDispatcher : public QAbstractEventDispatcher
    bool unregisterTimer(int timerId) override;
    bool unregisterTimers(QObject *object) override;
 
-   QList<TimerInfo> registeredTimers(QObject *object) const override;
+   QList<QTimerInfo> registeredTimers(QObject *object) const override;
 
    int remainingTime(int timerId) override;
 

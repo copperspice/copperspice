@@ -65,14 +65,14 @@ class QTimerEvent;
 class QThread;
 class QThreadData;
 
-class CS_Internal_TimerInfo
+class QTimerInfo
 {
  public:
    int timerId;
    int interval;
    Qt::TimerType timerType;
 
-   CS_Internal_TimerInfo(int id, int i, Qt::TimerType t)
+   QTimerInfo(int id, int i, Qt::TimerType t)
       : timerId(id), interval(i), timerType(t)
    { }
 };
@@ -285,7 +285,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    void findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list,
                   Qt::FindChildOptions options) const;
 
-   CORE_CS_SLOT_1(Private, void internal_reregisterTimers(QList<CS_Internal_TimerInfo> timerList))
+   CORE_CS_SLOT_1(Private, void internal_reregisterTimers(QList<QTimerInfo> timerList))
    CORE_CS_SLOT_2(internal_reregisterTimers)
 
    friend QMetaObject;

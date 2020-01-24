@@ -947,22 +947,21 @@ bool QEventDispatcherWin32::unregisterTimers(QObject *object)
    return true;
 }
 
-QList<QEventDispatcherWin32::TimerInfo>
-QEventDispatcherWin32::registeredTimers(QObject *object) const
+QList<QTimerInfo> QEventDispatcherWin32::registeredTimers(QObject *object) const
 {
    if (! object) {
       qWarning("QEventDispatcherWin32:registeredTimers: invalid argument");
-      return QList<TimerInfo>();
+      return QList<QTimerInfo>();
    }
 
    Q_D(const QEventDispatcherWin32);
-   QList<TimerInfo> list;
+   QList<QTimerInfo> list;
 
    for (int i = 0; i < d->timerVec.size(); ++i) {
       const WinTimerInfo *t = d->timerVec.at(i);
 
       if (t && t->obj == object) {
-            list << TimerInfo(t->timerId, t->interval, t->timerType);
+            list << QTimerInfo(t->timerId, t->interval, t->timerType);
       }
    }
 

@@ -561,11 +561,11 @@ bool QEventDispatcherGlib::unregisterTimers(QObject *object)
    return d->timerSource->timerList.unregisterTimers(object);
 }
 
-QList<QEventDispatcherGlib::TimerInfo> QEventDispatcherGlib::registeredTimers(QObject *object) const
+QList<QTimerInfo> QEventDispatcherGlib::registeredTimers(QObject *object) const
 {
    if (! object) {
       qWarning("QEventDispatcherUNIX:registeredTimers: invalid argument");
-      return QList<TimerInfo>();
+      return QList<QTimerInfo>();
    }
 
    Q_D(const QEventDispatcherGlib);

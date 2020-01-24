@@ -157,7 +157,7 @@ public:
     void registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object) override;
     bool unregisterTimer(int timerId) override;
     bool unregisterTimers(QObject *object) override;
-    QList<QAbstractEventDispatcher::TimerInfo> registeredTimers(QObject *object) const override;
+    QList<QTimerInfo> registeredTimers(QObject *object) const override;
 
     int remainingTime(int timerId) override;
 

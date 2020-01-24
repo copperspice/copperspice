@@ -615,7 +615,7 @@ bool QObject::event(QEvent *e)
          QAbstractEventDispatcher *eventDispatcher = threadData->eventDispatcher.load();
 
          if (eventDispatcher) {
-            QList<QAbstractEventDispatcher::TimerInfo> timers = eventDispatcher->registeredTimers(this);
+            QList<QTimerInfo> timers = eventDispatcher->registeredTimers(this);
 
             if (! timers.isEmpty()) {
                // set m_inThreadChangeEvent to true tells the dispatcher not to release timer
@@ -627,7 +627,7 @@ bool QObject::event(QEvent *e)
 
                // using csArgument directly since the datatype contains a comma
                QMetaObject::invokeMethod(this, "internal_reregisterTimers", Qt::QueuedConnection,
-                                         CSArgument<QList<QAbstractEventDispatcher::TimerInfo>> (timers) );
+                                         CSArgument<QList<QTimerInfo>> (timers) );
             }
          }
 

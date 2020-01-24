@@ -527,6 +527,8 @@ class QDeclarativeListProperty;
 
 // declare here, register in csobject_private.cpp
 CS_DECLARE_CLASS(QAbstractState)
+// added for invokable, properties CsCore
+CS_DECLARE_CLASS(QTimerInfo)
 CS_DECLARE_CLASS(QChar32)
 CS_DECLARE_CLASS(QColor)
 CS_DECLARE_CLASS(QCursor)
@@ -590,7 +592,6 @@ CS_DECLARE_CLASS(QVariant)
 CS_DECLARE_CLASS(QVector2D)
 CS_DECLARE_CLASS(QVector3D)
 CS_DECLARE_CLASS(QVector4D)
-CS_DECLARE_CLASS(CS_Internal_TimerInfo)
 
 CS_DECLARE_TYPEDEF(QRegularExpression8)
 CS_DECLARE_TYPEDEF(QRegularExpression16)

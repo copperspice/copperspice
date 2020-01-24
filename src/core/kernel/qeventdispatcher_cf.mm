@@ -551,7 +551,7 @@ bool QEventDispatcherCoreFoundation::unregisterTimers(QObject *object)
     return returnValue;
 }
 
-QList<QAbstractEventDispatcher::TimerInfo> QEventDispatcherCoreFoundation::registeredTimers(QObject *object) const
+QList<QTimerInfo> QEventDispatcherCoreFoundation::registeredTimers(QObject *object) const
 {
     Q_ASSERT(object);
     return m_timerInfoList.registeredTimers(object);
