@@ -28,6 +28,8 @@
 #include <qset.h>
 #include <qmultihash.h>
 
+#include <optional>
+
 class QPersistentModelIndexData
 {
  public:
@@ -45,9 +47,11 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
    Q_DECLARE_PUBLIC(QAbstractItemModel)
 
  public:
-   QAbstractItemModelPrivate() : supportedDragActions(-1), roleNames(defaultRoleNames()) {}
-   virtual ~QAbstractItemModelPrivate();
+   QAbstractItemModelPrivate()
+      : roleNames(defaultRoleNames())
+   {}
 
+   virtual ~QAbstractItemModelPrivate();
 
    void removePersistentIndexData(QPersistentModelIndexData *data);
    void movePersistentIndexes(const QVector<QPersistentModelIndexData *> &indexes, int change,
@@ -143,7 +147,7 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
       void insertMultiAtEnd(const QModelIndex &key, QPersistentModelIndexData *data);
    } persistent;
 
-   Qt::DropActions supportedDragActions;
+   std::optional<Qt::DropActions> supportedDragActions;
 
    QMultiHash<int, QString> roleNames;
    static const QMultiHash<int, QString> &defaultRoleNames();

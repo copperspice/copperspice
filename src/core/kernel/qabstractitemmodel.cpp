@@ -399,8 +399,10 @@ bool QAbstractItemModelPrivate::variantLessThan(const QVariant &v1, const QVaria
    switch (qMax(typeOfVariant(v1), typeOfVariant(v2))) {
       case 0: //integer type
          return v1.toLongLong() < v2.toLongLong();
+
       case 1: //floating point
          return v1.toReal() < v2.toReal();
+
       default:
          return v1.toString().localeAwareCompare(v2.toString()) < 0;
    }
@@ -1000,11 +1002,7 @@ Qt::DropActions QAbstractItemModel::supportedDragActions() const
 {
    Q_D(const QAbstractItemModel);
 
-   if (d->supportedDragActions != -1) {
-      return d->supportedDragActions;
-   }
-
-   return supportedDropActions();
+   return d->supportedDragActions.value_or(supportedDropActions());
 }
 
 void QAbstractItemModel::doSetSupportedDragActions(Qt::DropActions actions)
@@ -1028,7 +1026,6 @@ bool QAbstractItemModel::removeRows(int, int, const QModelIndex &)
 {
    return false;
 }
-
 
 bool QAbstractItemModel::removeColumns(int, int, const QModelIndex &)
 {
