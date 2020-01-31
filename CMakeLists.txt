@@ -150,7 +150,7 @@ else()
 endif()
 
 string(TIMESTAMP BUILD_DATE "%Y-%m-%d")
-add_definitions(-DQT_SHARED -DBUILD_DATE="${BUILD_DATE}")
+add_definitions(-DQT_SHARED)
 
 check_include_file(dlfcn.h       HAVE_DLFCN_H)
 check_include_file(dirent.h      HAVE_DIRENT_H)

@@ -56,6 +56,11 @@ list(APPEND CORE_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric_p.h
 )
 
+target_compile_definitions(CsCore
+   PRIVATE
+   -DBUILD_DATE="${BUILD_DATE}"
+)
+
 target_sources(CsCore
    PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qassert.cpp
@@ -67,3 +72,4 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnamespace.cpp
 )
+
