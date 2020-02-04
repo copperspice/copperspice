@@ -26,15 +26,16 @@
 
 #include <qexport.h>
 
-inline void qt_noop(void) {}
+constexpr static inline void cs_do_nothing(void)
+{ }
 
 Q_CORE_EXPORT void qt_assert(const char *assertion, const char *file, int line);
 
 #if ! defined(Q_ASSERT)
 #  ifndef QT_NO_DEBUG
-#    define Q_ASSERT(cond) ((!(cond)) ? qt_assert(#cond,__FILE__,__LINE__) : qt_noop())
+#    define Q_ASSERT(cond) ((!(cond)) ? qt_assert(#cond,__FILE__,__LINE__) : cs_do_nothing())
 #  else
-#    define Q_ASSERT(cond) qt_noop()
+#    define Q_ASSERT(cond) cs_do_nothing()
 #  endif
 #endif
 
@@ -42,9 +43,9 @@ Q_CORE_EXPORT void qt_assert_x(const char *where, const char *what, const char *
 
 #if ! defined(Q_ASSERT_X)
 #  ifndef QT_NO_DEBUG
-#    define Q_ASSERT_X(cond, where, what) ((!(cond)) ? qt_assert_x(where, what,__FILE__,__LINE__) : qt_noop())
+#    define Q_ASSERT_X(cond, where, what) ((!(cond)) ? qt_assert_x(where, what,__FILE__,__LINE__) : cs_do_nothing())
 #  else
-#    define Q_ASSERT_X(cond, where, what) qt_noop()
+#    define Q_ASSERT_X(cond, where, what) cs_do_nothing()
 #  endif
 #endif
 
