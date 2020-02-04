@@ -402,7 +402,7 @@ HRESULT VideoSurfaceFilter::QueryPinInfo(PIN_INFO *pInfo)
       pInfo->dir = PINDIR_INPUT;
 
       std::wstring tmp = m_pinId.toStdWString();
-      const int bytes = qMin(MAX_FILTER_NAME, (tmp.size() + 1) * 2);
+      const int bytes = qMin(static_cast<std::wstring::size_type>(MAX_FILTER_NAME), (tmp.size() + 1) * 2);
 
       memcpy(pInfo->achName, tmp.data(), bytes);
 

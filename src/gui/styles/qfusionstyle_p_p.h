@@ -65,7 +65,10 @@ class QFusionStylePrivate : public QCommonStylePrivate
          pal.color(QPalette::Normal, QPalette::HighlightedText)) {
          return true;
       }
+#else
+   (void) pal;
 #endif
+
       return false;
    }
 

@@ -559,7 +559,6 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
    int nameLength = 0;
 
    exec->clearException();
-   QScriptEnginePrivate *engine = QScript::scriptEngineFromExec(exec);
 
    QString tempSignature;
    QString initialMethodSignature;

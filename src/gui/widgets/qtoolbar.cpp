@@ -788,6 +788,7 @@ bool QToolBar::event(QEvent *event)
       case QEvent::Timer:
          if (d->waitForPopupTimer.timerId() == static_cast<QTimerEvent *>(event)->timerId()) {
             QWidget *w = QApplication::activePopupWidget();
+
             if (!waitForPopup(this, w)) {
                d->waitForPopupTimer.stop();
                if (!this->underMouse()) {
@@ -798,11 +799,10 @@ bool QToolBar::event(QEvent *event)
          break;
 
       case QEvent::Hide:
-         if (!isHidden()) {
+         if (! isHidden()) {
             break;
          }
-
-      // fallthrough intended
+         [[fallthrough]];
 
       case QEvent::Show:
          d->toggleViewAction->setChecked(event->type() == QEvent::Show);
@@ -831,7 +831,7 @@ bool QToolBar::event(QEvent *event)
 
       case QEvent::HoverEnter:
       case QEvent::HoverLeave:
-         // there's nothing special to do here and we don't want to update the whole widget
+         // there is nothing special to do here and we do not want to update the whole widget
          return true;
 
       case QEvent::HoverMove: {

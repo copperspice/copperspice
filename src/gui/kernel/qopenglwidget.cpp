@@ -836,29 +836,38 @@ QPaintEngine *QOpenGLWidget::paintEngine() const
 bool QOpenGLWidget::event(QEvent *e)
 {
     Q_D(QOpenGLWidget);
+
     switch (e->type()) {
-    case QEvent::WindowChangeInternal:
-        if (qGuiApp->testAttribute(Qt::AA_ShareOpenGLContexts))
-            break;
-        if (d->initialized)
-            d->reset();
-        // FALLTHROUGH
-    case QEvent::Show: // reparenting may not lead to a resize so reinitalize on Show too
-        if (!d->initialized && !size().isEmpty() && window() && window()->windowHandle()) {
-            d->initialize();
-            if (d->initialized)
-                d->recreateFbo();
-        }
-        break;
-    case QEvent::ScreenChangeInternal:
-        if (d->initialized && d->paintDevice->devicePixelRatioF() != devicePixelRatioF())
-            d->recreateFbo();
-        break;
-    default:
-        break;
+       case QEvent::WindowChangeInternal:
+           if (qGuiApp->testAttribute(Qt::AA_ShareOpenGLContexts)) {
+               break;
+           }
+
+           if (d->initialized) {
+               d->reset();
+           }
+           [[fallthrough]];
+
+       case QEvent::Show: // reparenting may not lead to a resize so reinitalize on Show too
+           if (! d->initialized && !size().isEmpty() && window() && window()->windowHandle()) {
+               d->initialize();
+
+               if (d->initialized) {
+                   d->recreateFbo();
+               }
+           }
+           break;
+
+       case QEvent::ScreenChangeInternal:
+           if (d->initialized && d->paintDevice->devicePixelRatioF() != devicePixelRatioF()) {
+               d->recreateFbo();
+           }
+           break;
+
+       default:
+           break;
     }
+
     return QWidget::event(e);
 }
-
-
 

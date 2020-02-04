@@ -1123,7 +1123,7 @@ void QTextDocumentPrivate::appendUndoItem(const QTextUndoCommand &c)
    if (editBlock != 0 && editBlockCursorPosition >= 0) {
       // had a beginEditBlock() with a cursor position
 
-      if (c.pos != editBlockCursorPosition) {
+      if (c.pos != static_cast<quint32>(editBlockCursorPosition)) {
          // and that cursor position is different from the command
          // generate a CursorMoved undo item
 

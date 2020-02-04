@@ -403,20 +403,25 @@ GLuint QPlatformBackingStore::toTexture(const QRegion &dirtyRegion, QSize *textu
 
    bool needsConversion = false;
    *flags = 0;
+
    switch (image.format()) {
       case QImage::Format_ARGB32_Premultiplied:
          *flags |= TexturePremultiplied;
-      // no break
+         [[fallthrough]];
+
       case QImage::Format_RGB32:
       case QImage::Format_ARGB32:
          *flags |= TextureSwizzle;
          break;
+
       case QImage::Format_RGBA8888_Premultiplied:
          *flags |= TexturePremultiplied;
-      // no break
+         [[fallthrough]];
+
       case QImage::Format_RGBX8888:
       case QImage::Format_RGBA8888:
          break;
+
       case QImage::Format_BGR30:
       case QImage::Format_A2BGR30_Premultiplied:
          if (!ctx->isOpenGLES() || ctx->format().majorVersion() >= 3) {
@@ -427,6 +432,7 @@ GLuint QPlatformBackingStore::toTexture(const QRegion &dirtyRegion, QSize *textu
             needsConversion = true;
          }
          break;
+
       case QImage::Format_RGB30:
       case QImage::Format_A2RGB30_Premultiplied:
          if (!ctx->isOpenGLES() || ctx->format().majorVersion() >= 3) {
@@ -437,6 +443,7 @@ GLuint QPlatformBackingStore::toTexture(const QRegion &dirtyRegion, QSize *textu
             needsConversion = true;
          }
          break;
+
       default:
          needsConversion = true;
          break;
@@ -561,6 +568,10 @@ QPlatformGraphicsBuffer *QPlatformBackingStore::graphicsBuffer() const
 
 bool QPlatformBackingStore::scroll(const QRegion &area, int dx, int dy)
 {
+   (void) area;
+   (void) dx;
+   (void) dy;
+
    return false;
 }
 

@@ -213,7 +213,7 @@ bool QWidgetWindow::event(QEvent *event)
       // are sent by QApplicationPrivate::notifyActiveWindowChange()
       case QEvent::FocusIn:
          handleFocusInEvent(static_cast<QFocusEvent *>(event));
-      // Fallthrough
+         [[fallthrough]];
 
       case QEvent::FocusOut: {
 #ifndef QT_NO_ACCESSIBILITY

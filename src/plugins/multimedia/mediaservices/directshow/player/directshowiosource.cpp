@@ -328,6 +328,8 @@ HRESULT DirectShowIOSource::QueryFilterInfo(FILTER_INFO *pInfo)
 
 HRESULT DirectShowIOSource::QueryVendorInfo(LPWSTR *pVendorInfo)
 {
+   (void) pVendorInfo;
+
    return E_NOTIMPL;
 }
 
@@ -428,7 +430,10 @@ HRESULT DirectShowIOSource::Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt)
 
 HRESULT DirectShowIOSource::ReceiveConnection(IPin *pConnector, const AM_MEDIA_TYPE *pmt)
 {
-   // Output pin.
+   (void) pConnector;
+   (void) pmt;
+
+   // Output pin
    return E_NOTIMPL;
 }
 
@@ -484,6 +489,7 @@ HRESULT DirectShowIOSource::ConnectionMediaType(AM_MEDIA_TYPE *pmt)
 {
    if (!pmt) {
       return E_POINTER;
+
    } else {
       QMutexLocker locker(&m_mutex);
 
@@ -500,8 +506,9 @@ HRESULT DirectShowIOSource::ConnectionMediaType(AM_MEDIA_TYPE *pmt)
 
 HRESULT DirectShowIOSource::QueryPinInfo(PIN_INFO *pInfo)
 {
-   if (!pInfo) {
+   if (! pInfo) {
       return E_POINTER;
+
    } else {
       AddRef();
 
@@ -510,7 +517,7 @@ HRESULT DirectShowIOSource::QueryPinInfo(PIN_INFO *pInfo)
 
       std::wstring tmp = m_pinId.toStdWString();
 
-      const int bytes = qMin(MAX_FILTER_NAME, (tmp.size() + 1) * 2);
+      const int bytes = qMin(static_cast<std::wstring::size_type>(MAX_FILTER_NAME), (tmp.size() + 1) * 2);
       memcpy(pInfo->achName, tmp.data(), bytes);
 
       return S_OK;
@@ -519,7 +526,7 @@ HRESULT DirectShowIOSource::QueryPinInfo(PIN_INFO *pInfo)
 
 HRESULT DirectShowIOSource::QueryId(LPWSTR *Id)
 {
-   if (!Id) {
+   if (! Id) {
       return E_POINTER;
 
    } else {

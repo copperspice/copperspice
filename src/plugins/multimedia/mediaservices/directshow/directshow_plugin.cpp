@@ -113,13 +113,17 @@ QMediaServiceProviderHint::Features DSServicePlugin::supportedFeatures(const QSt
 
 QString DSServicePlugin::defaultDevice(const QString &service) const
 {
+
 #ifdef QMEDIA_DIRECTSHOW_CAMERA
    if (service == Q_MEDIASERVICE_CAMERA) {
+
       const QList<DSVideoDeviceInfo> &devs = DSVideoDeviceControl::availableDevices();
-      if (!devs.isEmpty()) {
+      if (! devs.isEmpty()) {
          return devs.first().first;
       }
    }
+#else
+   (void) service;
 #endif
 
    return QString ();
@@ -137,6 +141,8 @@ QList<QString> DSServicePlugin::devices(const QString &service) const
          result.append(info.first);
       }
    }
+#else
+   (void) service;
 #endif
 
    return result;
@@ -154,6 +160,9 @@ QString DSServicePlugin::deviceDescription(const QString &service, const QString
          }
       }
    }
+#else
+   (void) service;
+   (void) device;
 #endif
 
    return QString();

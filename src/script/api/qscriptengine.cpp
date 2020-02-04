@@ -1434,6 +1434,8 @@ bool QScriptEnginePrivate::convertToNativeQObject(JSC::ExecState *exec, JSC::JSV
       int start = targetType.startsWith("const ") ? 6 : 0;
       QString className = targetType.mid(start, targetType.size() - start - 1);
 
+      (void) qobject;
+      (void) result;
 
       /*  emerald (script, hold)
          if (void *instance = qobject->qt_metacast(className)) {
@@ -3064,7 +3066,7 @@ bool QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value
          return true;
 
       default:
-         ;
+         break;
    }
 
    QString name = QMetaType::typeName(type);

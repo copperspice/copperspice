@@ -1600,9 +1600,10 @@ GLuint QGLContext::bindTexture(const QString &fileName)
    QGLTexture texture(this);
    QSize size = texture.bindCompressedTexture(fileName);
 
-   if (!size.isValid()) {
+   if (! size.isValid()) {
       return 0;
    }
+
    return texture.id;
 }
 
@@ -1722,8 +1723,9 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 {
    Q_Q(QGLContext);
 
-   const qint64 key = image.cacheKey();
+   const qint64 key    = image.cacheKey();
    QGLTexture *texture = textureCacheLookup(key, target);
+
    if (texture) {
       if (image.paintingActive()) {
          // A QPainter is active on the image - take the safe route and replace the texture.
@@ -1735,11 +1737,11 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       }
    }
 
-   if (!texture) {
+   if (! texture) {
       texture = bindTexture(image, target, format, key, options);
    }
 
-   // NOTE: bindTexture(const QImage&, GLenum, GLint, const qint64, bool) should never return null
+   // bindTexture(const QImage&, GLenum, GLint, const qint64, bool) should never return null
    Q_ASSERT(texture);
 
    // Enable the cleanup hooks for this image so that the texture cache entry is removed when the
@@ -2029,15 +2031,14 @@ QGLTexture *QGLContextPrivate::textureCacheLookup(const qint64 key, GLenum targe
    return 0;
 }
 
-/*! \internal */
+// internal
 QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target, GLint format, QGLContext::BindOptions options)
 {
    Q_Q(QGLContext);
 
-   QPlatformPixmap *pd = pixmap.handle();
-
    const qint64 key = pixmap.cacheKey();
    QGLTexture *texture = textureCacheLookup(key, target);
+
    if (texture) {
       if (pixmap.paintingActive()) {
          // A QPainter is active on the pixmap - take the safe route and replace the texture.
@@ -2052,11 +2053,14 @@ QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target,
    if (! texture) {
       QImage image;
       QPaintEngine *paintEngine = pixmap.paintEngine();
-      if (!paintEngine || paintEngine->type() != QPaintEngine::Raster) {
+
+      if (! paintEngine || paintEngine->type() != QPaintEngine::Raster) {
          image = pixmap.toImage();
+
       } else {
          // QRasterPixmapData::toImage() will deep-copy the backing QImage if there's an active QPainter on it.
          // For performance reasons, we don't want that here, so we temporarily redirect the paint engine.
+
          QPaintDevice *currentPaintDevice = paintEngine->paintDevice();
          paintEngine->setPaintDevice(0);
          image = pixmap.toImage();
@@ -2073,7 +2077,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target,
       texture = bindTexture(image, target, format, key, options);
    }
 
-   // NOTE: bindTexture(const QImage&, GLenum, GLint, const qint64, bool) should never return null
+   // bindTexture(const QImage&, GLenum, GLint, const qint64, bool)  should never return null
    Q_ASSERT(texture);
 
    if (texture->id > 0) {
@@ -2083,7 +2087,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target,
    return texture;
 }
 
-/*! \internal */
+//
 int QGLContextPrivate::maxTextureSize()
 {
    if (max_texture_size != -1) {
@@ -2274,7 +2278,12 @@ static void qDrawTextureRect(const QRectF &target, GLint textureWidth, GLint tex
    GLfloat tx = 1.0f;
    GLfloat ty = 1.0f;
 
-#ifndef QT_OPENGL_ES
+#ifdef QT_OPENGL_ES
+    (void) textureWidth;
+    (void) textureHeight;
+    (void) textureTarget;
+
+#else
    if (textureTarget != GL_TEXTURE_2D && !QOpenGLContext::currentContext()->isOpenGLES()) {
       if (textureWidth == -1 || textureHeight == -1) {
          QOpenGLFunctions_1_1 *gl1funcs = qgl1_functions();
@@ -2381,6 +2390,9 @@ void QGLContext::drawTexture(const QRectF &target, GLuint textureId, GLenum text
    }
 
 #else
+   (void) target;
+   (void) textureId;
+   (void) textureTarget;
 #endif
 
    qWarning("drawTexture() with OpenGL ES 2.0 requires an active OpenGL2 paint engine");
@@ -2410,8 +2422,12 @@ void QGLContext::drawTexture(const QRectF &target, GLuint textureId, GLenum text
 */
 void QGLContext::drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget)
 {
-#ifndef QT_OPENGL_ES
+#ifdef QT_OPENGL_ES
+   (void) point;
+   (void) textureId;
+   (void) textureTarget;
 
+#else
    if (! contextHandle()->isOpenGLES()) {
       QOpenGLFunctions *funcs = qgl_functions();
       const bool wasEnabled = funcs->glIsEnabled(GL_TEXTURE_2D);
@@ -3374,8 +3390,8 @@ void QGLWidget::qglColor(const QColor &c) const
 
 #ifdef QT_OPENGL_ES
    qgl_functions()->glColor4f(c.redF(), c.greenF(), c.blueF(), c.alphaF());
-#else
 
+#else
    Q_D(const QGLWidget);
    const QGLContext *ctx = QGLContext::currentContext();
 
@@ -3394,6 +3410,9 @@ void QGLWidget::qglColor(const QColor &c) const
    }
 
 #endif
+
+#else
+   (void) c;
 
 #endif //QT_OPENGL_ES_2
 }
@@ -3569,7 +3588,15 @@ void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font)
 
       return;
    }
+
+#else
+   (void) x;
+   (void) y;
+   (void) str;
+   (void) font;
+
 #endif
+
    qWarning("QGLWidget::renderText is not supported under OpenGL/ES");
 
 }
@@ -3656,6 +3683,13 @@ void QGLWidget::renderText(double x, double y, double z, const QString &str, con
 
       return;
    }
+
+#else
+   (void) x;
+   (void) y;
+   (void) z;
+   (void) str;
+   (void) font;
 #endif
 
    qWarning("QGLWidget::renderText is not supported under OpenGL/ES");

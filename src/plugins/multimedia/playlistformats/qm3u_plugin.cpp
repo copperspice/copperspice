@@ -195,16 +195,19 @@ bool QM3uPlaylistPlugin::canWrite(QIODevice *device, const QByteArray &format) c
 
 QMediaPlaylistReader *QM3uPlaylistPlugin::createReader(QIODevice *device, const QByteArray &format)
 {
+   (void) format;
    return new QM3uPlaylistReader(device);
 }
 
 QMediaPlaylistReader *QM3uPlaylistPlugin::createReader(const QUrl &location, const QByteArray &format)
 {
+   (void) format;
    return new QM3uPlaylistReader(location);
 }
 
 QMediaPlaylistWriter *QM3uPlaylistPlugin::createWriter(QIODevice *device, const QByteArray &format)
 {
+   (void) format;
    return new QM3uPlaylistWriter(device);
 }
 

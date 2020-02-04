@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qwindowsprintersupport.h"
-#include "qwindowsprintdevice.h"
+#include <qwindowsprintersupport.h>
 
+#include <qwindowsprintdevice.h>
 #include <qstringlist.h>
 
 #include <qprintengine_win_p.h>
@@ -45,6 +45,7 @@ QPrintEngine *QWindowsPrinterSupport::createNativePrintEngine(QPrinter::PrinterM
 
 QPaintEngine *QWindowsPrinterSupport::createPaintEngine(QPrintEngine *engine, QPrinter::PrinterMode printerMode)
 {
+   (void) printerMode;
    return static_cast<QWin32PrintEngine *>(engine);
 }
 

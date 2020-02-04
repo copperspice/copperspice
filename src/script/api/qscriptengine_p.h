@@ -1112,7 +1112,7 @@ inline QObject *QScriptEnginePrivate::toQObject(JSC::ExecState *exec, JSC::JSVal
       return toQObject(exec, proxy->delegate());
    }
 
-   return 0;
+   return nullptr;
 }
 
 inline const QMetaObject *QScriptEnginePrivate::toQMetaObject(JSC::ExecState *, JSC::JSValue value)

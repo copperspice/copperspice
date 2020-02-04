@@ -1059,6 +1059,8 @@ void DirectShowPlayerService::setAudioOutput(IBaseFilter *filter)
 
 void DirectShowPlayerService::doReleaseAudioOutput(QMutexLocker *locker)
 {
+   (void) locker;
+
    m_pendingTasks |= m_executedTasks & (Play | Pause);
 
    if (IMediaControl *control = com_cast<IMediaControl>(m_graph, IID_IMediaControl)) {
@@ -1087,7 +1089,6 @@ void DirectShowPlayerService::doReleaseAudioOutput(QMutexLocker *locker)
    decoder->Release();
 
    m_executedTasks &= ~SetAudioOutput;
-
    m_loop->wake();
 }
 

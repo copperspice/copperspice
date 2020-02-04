@@ -118,15 +118,19 @@ void QPdfPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
       case PPK_CollateCopies:
          d->collate = value.toBool();
          break;
+
       case PPK_ColorMode:
          d->grayscale = (QPrinter::ColorMode(value.toInt()) == QPrinter::GrayScale);
          break;
+
       case PPK_Creator:
          d->creator = value.toString();
          break;
+
       case PPK_DocumentName:
          d->title = value.toString();
          break;
+
       case PPK_FullPage:
          if (value.toBool()) {
             d->m_pageLayout.setMode(QPageLayout::FullPageMode);
@@ -134,19 +138,24 @@ void QPdfPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
             d->m_pageLayout.setMode(QPageLayout::StandardMode);
          }
          break;
-      case PPK_CopyCount: // fallthrough
+
+      case PPK_CopyCount:
       case PPK_NumberOfCopies:
          d->copies = value.toInt();
          break;
+
       case PPK_Orientation:
          d->m_pageLayout.setOrientation(QPageLayout::Orientation(value.toInt()));
          break;
+
       case PPK_OutputFileName:
          d->outputFileName = value.toString();
          break;
+
       case PPK_PageOrder:
          d->pageOrder = QPrinter::PageOrder(value.toInt());
          break;
+
       case PPK_PageSize: {
          QPageSize pageSize = QPageSize(QPageSize::PageSizeId(value.toInt()));
          if (pageSize.isValid()) {
@@ -154,6 +163,7 @@ void QPdfPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
          }
          break;
       }
+
       case PPK_PaperName: {
          QString name = value.toString();
          for (int i = 0; i <= QPageSize::LastPageSize; ++i) {
@@ -165,6 +175,7 @@ void QPdfPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
          }
          break;
       }
+
       case PPK_WindowsPageSize:
          d->m_pageLayout.setPageSize(QPageSize(QPageSize::id(value.toInt())));
          break;
