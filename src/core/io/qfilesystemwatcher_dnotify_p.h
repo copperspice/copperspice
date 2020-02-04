@@ -57,11 +57,6 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 
    struct Directory {
       Directory() : fd(0), parentFd(0), isMonitored(false) {}
-      Directory(const Directory &o) : path(o.path),
-         fd(o.fd),
-         parentFd(o.parentFd),
-         isMonitored(o.isMonitored),
-         files(o.files) {}
       QString path;
       int fd;
       int parentFd;

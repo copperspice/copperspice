@@ -63,6 +63,11 @@ class QStringList : public QList<QString>
    void Q_CORE_EXPORT sort();
 
    // operators
+   QStringList &operator=(const QStringList &other) {
+      QList<QString>::operator=(other);
+      return *this;
+   }
+
    QStringList operator+(const QStringList &other) const {
       QStringList n = *this;
       n += other;

@@ -387,6 +387,10 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
          : CsString::CsChar(static_cast<char32_t>(c))
       { }
 
+      QChar32(const QChar32 &other)
+         : CsString::CsChar(other)
+      { }
+
       ~QChar32() = default;
 
       // methods

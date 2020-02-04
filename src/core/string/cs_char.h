@@ -69,6 +69,9 @@ class CsChar
          : m_char(c)
       {
       }
+      CsChar(const CsChar &other)
+         : m_char(other.m_char)
+      { }
 
       bool operator!=(const CsChar &other) const;
       bool operator==(const CsChar &other) const;

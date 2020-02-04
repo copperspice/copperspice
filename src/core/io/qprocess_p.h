@@ -80,9 +80,6 @@ class QProcEnvKey
    QProcEnvKey() : hash(0) {}
    explicit QProcEnvKey(const QByteArray &other) : key(other), hash(qHash(key)) {}
 
-   QProcEnvKey(const QProcEnvKey &other) {
-      *this = other;
-   }
 
    bool operator==(const QProcEnvKey &other) const {
       return key == other.key;
@@ -100,9 +97,6 @@ class QProcEnvValue
 {
  public:
    QProcEnvValue() {}
-   QProcEnvValue(const QProcEnvValue &other) {
-      *this = other;
-   }
 
    explicit QProcEnvValue(const QString &value) : stringValue(value) {}
    explicit QProcEnvValue(const QByteArray &value) : byteValue(value) {}

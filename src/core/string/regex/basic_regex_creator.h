@@ -50,6 +50,12 @@ struct digraph : public std::pair<charT, charT> {
    digraph(const digraph<charT> &d) : std::pair<charT, charT>(d.first, d.second)
    {}
 
+   digraph &operator=(const digraph<charT> &d)  {
+      this->first  = d.first;
+      this->second = d.second;
+      return *this;
+   }
+
    template <class Seq>
    digraph(const Seq &s) : std::pair<charT, charT>() {
       assert(s.size() <= 2);
