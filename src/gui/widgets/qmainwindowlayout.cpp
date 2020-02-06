@@ -823,7 +823,7 @@ QLayoutItem *QMainWindowLayoutState::unplug(const QList<int> &path, QMainWindowL
    int i = path.first();
 
 #ifdef QT_NO_TOOLBAR
-   Q_UNUSED(other);
+   (void) other;
 #else
    if (i == 0) {
       return toolBarAreaLayout.unplug(path.mid(1), other ? &other->toolBarAreaLayout : 0);
@@ -1392,7 +1392,7 @@ void QMainWindowLayout::setDocumentMode(bool enabled)
 void QMainWindowLayout::setVerticalTabsEnabled(bool enabled)
 {
 #ifdef QT_NO_TABBAR
-   Q_UNUSED(enabled);
+   (void) enabled;
 #else
    if (verticalTabsEnabled == enabled) {
       return;
@@ -1947,8 +1947,8 @@ static void fixToolBarOrientation(QLayoutItem *item, int dockPos)
    }
 
 #else
-   Q_UNUSED(item);
-   Q_UNUSED(dockPos);
+   (void) item;
+   (void) dockPos;
 #endif
 }
 
@@ -2659,7 +2659,7 @@ bool QMainWindowLayout::restoreState(QDataStream &stream)
 
 bool QMainWindowLayout::usesHIToolBar(QToolBar *toolbar) const
 {
-
+   (void) toolbar;
    return false;
 }
 

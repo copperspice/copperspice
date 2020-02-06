@@ -2947,6 +2947,8 @@ void QStyleSheetStyle::repolish(QWidget *w)
 
 void QStyleSheetStyle::repolish(QApplication *app)
 {
+   (void) app;
+
    const QList<const QObject *> allObjects = styleSheetCaches->styleRulesCache.keys();
 
    styleSheetCaches->styleSheetCache.remove(qApp);
@@ -4531,6 +4533,7 @@ void QStyleSheetStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *op
             }
             break;
          }
+
 #ifndef QT_NO_SCROLLAREA
          if (const QAbstractScrollArea *sa = qobject_cast<const QAbstractScrollArea *>(w)) {
             const QAbstractScrollAreaPrivate *sap = sa->d_func();
@@ -4547,7 +4550,8 @@ void QStyleSheetStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *op
             break;
          }
 #endif
-      //fall tghought
+      [[fallthrough]];
+
       case PE_PanelMenu:
       case PE_PanelStatusBar:
          if (rule.hasDrawable()) {

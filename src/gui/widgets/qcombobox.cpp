@@ -787,8 +787,9 @@ void QComboBoxPrivateContainer::mousePressEvent(QMouseEvent *e)
 
 void QComboBoxPrivateContainer::mouseReleaseEvent(QMouseEvent *e)
 {
-   Q_UNUSED(e);
-   if (!blockMouseReleaseTimer.isActive()) {
+   (void) e;
+
+   if (! blockMouseReleaseTimer.isActive()) {
       combo->hidePopup();
       emit resetButton();
    }
@@ -2795,6 +2796,7 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
          if (e->modifiers() & Qt::ControlModifier) {
             break;   // pass to line edit for auto completion
          }
+         [[fallthrough]];
 
       case Qt::Key_PageUp:
 #ifdef QT_KEYPAD_NAVIGATION
@@ -2896,9 +2898,12 @@ void QComboBox::keyPressEvent(QKeyEvent *e)
 
    if (move != NoMove) {
       e->accept();
+
       switch (move) {
          case MoveFirst:
             newIndex = -1;
+            [[fallthrough]];
+
          case MoveDown:
             newIndex++;
             while ((newIndex < count()) && !(d->model->flags(d->model->index(newIndex, d->modelColumn, d->root)) & Qt::ItemIsEnabled)) {

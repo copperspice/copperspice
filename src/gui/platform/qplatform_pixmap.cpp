@@ -132,6 +132,10 @@ void QPlatformPixmap::copy(const QPlatformPixmap *data, const QRect &rect)
 
 bool QPlatformPixmap::scroll(int dx, int dy, const QRect &rect)
 {
+   (void) dx;
+   (void) dy;
+   (void) rect;
+
    return false;
 }
 
@@ -161,7 +165,7 @@ QImage QPlatformPixmap::toImage(const QRect &rect) const
 
 QImage *QPlatformPixmap::buffer()
 {
-   return 0;
+   return nullptr;
 }
 
 

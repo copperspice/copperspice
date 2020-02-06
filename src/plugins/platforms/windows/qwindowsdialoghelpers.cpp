@@ -1645,6 +1645,7 @@ class QWindowsFileDialogHelper : public QWindowsDialogHelperBase<QPlatformFileDi
    QWindowsFileDialogHelper() {}
 
    virtual bool supportsNonModalDialog(const QWindow *parent = nullptr) const override {
+      (void) parent;
       return false;
    }
 
@@ -1988,8 +1989,6 @@ void QWindowsXpNativeFileDialog::populateOpenFileName(OPENFILENAME *ofn, HWND ow
 
    QList<FilterSpec> specs =
          filterSpecs(m_options->nameFilters(), m_options->options() & QFileDialogOptions::HideNameFilterDetails, &totalStringLength);
-
-   const int size = specs.size();
 
    for (const FilterSpec &spec : specs) {
       fileData.filter.append(spec.description.toStdWString());

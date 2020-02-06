@@ -567,7 +567,7 @@ QString getEnglishName(const QString &familyName)
    memset(&lf, 0, sizeof(LOGFONT));
 
    std::wstring tmp = familyName.toStdWString();
-   memcpy(lf.lfFaceName, tmp.data(), sizeof(wchar_t) * qMin(LF_FACESIZE - 1, tmp.size()));
+   memcpy(lf.lfFaceName, tmp.data(), sizeof(wchar_t) * qMin(static_cast<std::wstring::size_type>(LF_FACESIZE - 1), tmp.size()));
 
    lf.lfCharSet = DEFAULT_CHARSET;
    HFONT hfont = CreateFontIndirect(&lf);
@@ -893,6 +893,8 @@ QFontEngineMulti *QWindowsFontDatabase::fontEngineMulti(QFontEngine *fontEngine,
 
 QFontEngine *QWindowsFontDatabase::fontEngine(const QFontDef &fontDef, void *handle)
 {
+   (void) handle;
+
    QFontEngine *fe = QWindowsFontDatabase::createEngine(fontDef,
          QWindowsContext::instance()->defaultDPI(), sharedFontData());
 
@@ -1120,7 +1122,7 @@ QStringList QWindowsFontDatabase::addApplicationFont(const QByteArray &fontData,
          memset(&lf, 0, sizeof(LOGFONT));
 
          std::wstring tmp = familyName.toStdWString();
-         memcpy(lf.lfFaceName, tmp.data(), sizeof(wchar_t) * qMin(LF_FACESIZE - 1, tmp.size()));
+         memcpy(lf.lfFaceName, tmp.data(), sizeof(wchar_t) * qMin(static_cast<std::wstring::size_type>(LF_FACESIZE) - 1, tmp.size()));
 
          lf.lfCharSet   = DEFAULT_CHARSET;
          HFONT hfont    = CreateFontIndirect(&lf);
@@ -1182,6 +1184,7 @@ void QWindowsFontDatabase::removeApplicationFonts()
 
 void QWindowsFontDatabase::releaseHandle(void *handle)
 {
+   (void) handle;
 }
 
 QString QWindowsFontDatabase::fontDir() const

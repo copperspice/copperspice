@@ -1192,7 +1192,7 @@ void QAbstractScrollArea::setSizeAdjustPolicy(SizeAdjustPolicy policy)
 
 void QAbstractScrollArea::setupViewport(QWidget *viewport)
 {
-   Q_UNUSED(viewport);
+   (void) viewport;
 }
 
 void QAbstractScrollArea::_q_hslide(int un_named_arg1)

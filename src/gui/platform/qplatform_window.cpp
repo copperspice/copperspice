@@ -86,6 +86,7 @@ QMargins QPlatformWindow::frameMargins() const
 }
 void QPlatformWindow::setVisible(bool visible)
 {
+   (void) visible;
 
    QRect rect(QPoint(), geometry().size());
    QWindowSystemInterface::handleExposeEvent(window(), rect);
@@ -94,6 +95,7 @@ void QPlatformWindow::setVisible(bool visible)
 
 void QPlatformWindow::setWindowFlags(Qt::WindowFlags flags)
 {
+   (void) flags;
 }
 bool QPlatformWindow::isExposed() const
 {
@@ -106,6 +108,7 @@ bool QPlatformWindow::isActive() const
 
 bool QPlatformWindow::isEmbedded(const QPlatformWindow *parentWindow) const
 {
+   (void) parentWindow;
    return false;
 }
 
@@ -146,19 +149,23 @@ WId QPlatformWindow::winId() const
 
 void QPlatformWindow::setParent(const QPlatformWindow *parent)
 {
+   (void) parent;
    qWarning("This plugin does not support setParent");
 }
 
 void QPlatformWindow::setWindowTitle(const QString &title)
 {
+   (void) title;
 }
 
 void QPlatformWindow::setWindowFilePath(const QString &filePath)
 {
+   (void) filePath;
 }
 
 void QPlatformWindow::setWindowIcon(const QIcon &icon)
 {
+   (void) icon;
 }
 
 void QPlatformWindow::raise()
@@ -177,12 +184,13 @@ void QPlatformWindow::propagateSizeHints()
 
 void QPlatformWindow::setOpacity(qreal level)
 {
+   (void) level;
    qWarning("This plugin does not support setting window opacity");
 }
 
 void QPlatformWindow::setMask(const QRegion &region)
 {
-
+   (void) region;
    qWarning("This plugin does not support setting window masks");
 }
 
@@ -193,7 +201,9 @@ void QPlatformWindow::requestActivateWindow()
 
 void QPlatformWindow::handleContentOrientationChange(Qt::ScreenOrientation orientation)
 {
+   (void) orientation;
 }
+
 qreal QPlatformWindow::devicePixelRatio() const
 {
    return 1.0;
@@ -201,32 +211,40 @@ qreal QPlatformWindow::devicePixelRatio() const
 
 bool QPlatformWindow::setKeyboardGrabEnabled(bool grab)
 {
+   (void) grab;
+
    qWarning("This plugin does not support grabbing the keyboard");
    return false;
 }
 
 bool QPlatformWindow::setMouseGrabEnabled(bool grab)
 {
+   (void) grab;
+
    qWarning("This plugin does not support grabbing the mouse");
    return false;
 }
 
 bool QPlatformWindow::setWindowModified(bool modified)
 {
+   (void) modified;
    return false;
 }
+
 void QPlatformWindow::windowEvent(QEvent *event)
 {
-
+   (void) event;
 }
+
 bool QPlatformWindow::startSystemResize(const QPoint &pos, Qt::Corner corner)
 {
-
+   (void) pos;
+   (void) corner;
    return false;
 }
 void QPlatformWindow::setFrameStrutEventsEnabled(bool enabled)
 {
-   Q_UNUSED(enabled) // Do not warn as widgets enable it by default causing warnings with XCB.
+   (void) enabled;       // Do not warn as widgets enable it by default causing warnings with XCB.
 }
 bool QPlatformWindow::frameStrutEventsEnabled() const
 {
@@ -278,7 +296,7 @@ QSize QPlatformWindow::constrainWindowSize(const QSize &size)
 }
 void QPlatformWindow::setAlertState(bool enable)
 {
-   Q_UNUSED(enable)
+   (void) enable;
 }
 bool QPlatformWindow::isAlertState() const
 {

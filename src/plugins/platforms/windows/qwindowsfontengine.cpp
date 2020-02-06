@@ -1237,7 +1237,7 @@ QFontEngine *QWindowsMultiFontEngine::loadEngine(int at)
    const QString fam = fallbackFamilyAt(at - 1);
 
    std::wstring tmp = fam.toStdWString();
-   const int faceNameLength = qMin(tmp.size(), LF_FACESIZE - 1);
+   const int faceNameLength = qMin(tmp.size(), static_cast<std::wstring::size_type>(LF_FACESIZE - 1));
 
    memcpy(lf.lfFaceName, tmp.data(), faceNameLength * sizeof(wchar_t));
 

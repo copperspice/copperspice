@@ -1517,7 +1517,6 @@ void QWindowsWindow::setGeometry_sys(const QRect &rect) const
       << "New frame =" << frameGeometry;
 #endif
 
-   bool result = false;
 
    WINDOWPLACEMENT windowPlacement;
    windowPlacement.length = sizeof(WINDOWPLACEMENT);
@@ -1532,11 +1531,11 @@ void QWindowsWindow::setGeometry_sys(const QRect &rect) const
                   RECTfromQRect(frameGeometry.translated(-windowPlacementOffset(m_data.hwnd, frameGeometry.topLeft())));
 
       windowPlacement.showCmd = windowPlacement.showCmd == SW_SHOWMINIMIZED ? SW_SHOWMINIMIZED : SW_HIDE;
-      result = SetWindowPlacement(m_data.hwnd, &windowPlacement);
+      SetWindowPlacement(m_data.hwnd, &windowPlacement);
 
    } else {
-      result = MoveWindow(m_data.hwnd, frameGeometry.x(), frameGeometry.y(),
-            frameGeometry.width(), frameGeometry.height(), true);
+      MoveWindow(m_data.hwnd, frameGeometry.x(), frameGeometry.y(),
+                  frameGeometry.width(), frameGeometry.height(), true);
    }
 }
 

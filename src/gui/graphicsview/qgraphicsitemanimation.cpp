@@ -540,7 +540,7 @@ void QGraphicsItemAnimation::reset()
 */
 void QGraphicsItemAnimation::beforeAnimationStep(qreal step)
 {
-   Q_UNUSED(step);
+   (void) step;
 }
 
 /*!
@@ -553,7 +553,7 @@ void QGraphicsItemAnimation::beforeAnimationStep(qreal step)
 */
 void QGraphicsItemAnimation::afterAnimationStep(qreal step)
 {
-   Q_UNUSED(step);
+   (void) step;
 }
 
 QT_END_NAMESPACE

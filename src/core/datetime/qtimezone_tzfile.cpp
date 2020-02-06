@@ -794,11 +794,17 @@ QString QTzTimeZonePrivate::comment() const
 
 QString QTzTimeZonePrivate::displayName(qint64 atMSecsSinceEpoch, QTimeZone::NameType nameType, const QLocale &locale) const
 {
+   (void) nameType;
+   (void) locale;
+
    return abbreviation(atMSecsSinceEpoch);
 }
 
 QString QTzTimeZonePrivate::displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType, const QLocale &locale) const
 {
+   (void) nameType;
+   (void) locale;
+
    // If no ICU available then have to use abbreviations instead
    // Abbreviations don't have GenericTime
    if (timeType == QTimeZone::GenericTime) {

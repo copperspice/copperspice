@@ -347,8 +347,9 @@ void QWidgetResizeHandler::mouseMoveEvent(QMouseEvent *e)
 void QWidgetResizeHandler::setMouseCursor(MousePosition m)
 {
 #ifdef QT_NO_CURSOR
-   Q_UNUSED(m);
+   (void) m;
 #else
+
    QObjectList children = widget->children();
    for (int i = 0; i < children.size(); ++i) {
       if (QWidget *w = qobject_cast<QWidget *>(children.at(i))) {

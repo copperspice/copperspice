@@ -546,7 +546,6 @@ QIcon QToolBox::itemIcon(int index) const
 }
 
 #ifndef QT_NO_TOOLTIP
-
 QString QToolBox::itemToolTip(int index) const
 {
    Q_D(const QToolBox);
@@ -571,10 +570,12 @@ void QToolBox::changeEvent(QEvent *ev)
 
 void QToolBox::itemInserted(int index)
 {
+   (void) index;
 }
 
 void QToolBox::itemRemoved(int index)
 {
+   (void) index;
 }
 
 bool QToolBox::event(QEvent *e)

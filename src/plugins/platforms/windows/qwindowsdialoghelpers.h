@@ -59,6 +59,7 @@ class QWindowsDialogHelperBase : public BaseClass
    void hide() override;
 
    virtual bool supportsNonModalDialog(const QWindow *parent = nullptr) const {
+      (void) parent;
       return true;
    }
 

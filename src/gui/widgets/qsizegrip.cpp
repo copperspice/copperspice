@@ -181,7 +181,8 @@ QSize QSizeGrip::sizeHint() const
 
 void QSizeGrip::paintEvent(QPaintEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
+
    Q_D(QSizeGrip);
    QPainter painter(this);
    QStyleOptionSizeGrip opt;

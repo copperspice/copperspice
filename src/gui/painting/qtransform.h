@@ -56,6 +56,10 @@ class Q_GUI_EXPORT QTransform
       qreal h22, qreal dx, qreal dy);
    explicit QTransform(const QMatrix &mtx);
 
+   QTransform(const QTransform &other) {
+      *this = other;
+   }
+
    inline bool isAffine() const;
    inline bool isIdentity() const;
    inline bool isInvertible() const;

@@ -210,10 +210,11 @@ bool QPlatformGraphicsBufferHelper::bindSWToTexture(const QPlatformGraphicsBuffe
    return true;
 
 #else
-   Q_UNUSED(graphicsBuffer)
-   Q_UNUSED(swizzleRandB)
-   Q_UNUSED(premultipliedB)
-   Q_UNUSED(subRect)
+   (void) graphicsBuffer;
+   (void) swizzleRandB;
+   (void) premultipliedB;
+   (void) subRect;
+
    return false;
 
 #endif // QT_NO_OPENGL

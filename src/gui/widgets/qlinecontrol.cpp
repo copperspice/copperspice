@@ -629,6 +629,7 @@ void QLineControl::selectWordAtPos(int cursor)
 */
 bool QLineControl::finishChange(int validateFromState, bool update, bool edited)
 {
+   (void) update;
 
    if (m_textDirty) {
       // do validation
@@ -983,8 +984,11 @@ void QLineControl::parseInputMask(const QString &maskFields)
             case 'b':
                s = false;
                break;
+
             case '\\':
                escape = true;
+               [[fallthrough]];
+
             default:
                s = true;
                break;

@@ -34,11 +34,17 @@ QPlatformIntegrationPlugin::~QPlatformIntegrationPlugin()
 
 QPlatformIntegration *QPlatformIntegrationPlugin::create(const QString &key, const QStringList &paramList)
 {
-    return 0;
+   (void) key;
+   (void) paramList;
+
+   return nullptr;
 }
 
 QPlatformIntegration *QPlatformIntegrationPlugin::create(const QString &key, const QStringList &paramList, int &argc, char **argv)
 {
-    return create(key, paramList); // Fallback for platform plugins that do not implement the argc/argv version.
+   (void) argc;
+   (void) argv;
+
+   return create(key, paramList); // Fallback for platform plugins that do not implement the argc/argv version.
 }
 

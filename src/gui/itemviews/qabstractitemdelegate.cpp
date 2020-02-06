@@ -70,6 +70,8 @@ QWidget *QAbstractItemDelegate::createEditor(QWidget *,
 
 void QAbstractItemDelegate::destroyEditor(QWidget *editor, const QModelIndex &index) const
 {
+  (void) index;
+
    editor->deleteLater();
 }
 

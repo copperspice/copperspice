@@ -353,6 +353,7 @@ QGesture *QFlickGestureRecognizer::create(QObject *target)
  */
 QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, QObject *watched, QEvent *event)
 {
+   (void) watched;
     static QElapsedTimer monotonicTimer;
 
     if (!monotonicTimer.isValid())

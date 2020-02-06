@@ -444,8 +444,11 @@ qreal QPlainTextEditPrivate::verticalOffset(int topBlock, int topLine) const
       QTextBlock currentBlock = doc->findBlockByNumber(topBlock);
       QPlainTextDocumentLayout *documentLayout = qobject_cast<QPlainTextDocumentLayout *>(doc->documentLayout());
       Q_ASSERT(documentLayout);
+
+      // emerald - investigate if there is a side effect
       QRectF r = documentLayout->blockBoundingRect(currentBlock);
-      Q_UNUSED(r);
+      (void) r;
+
       QTextLayout *layout = currentBlock.layout();
       if (layout && topLine <= layout->lineCount()) {
          QTextLine line = layout->lineAt(topLine - 1);
@@ -1471,6 +1474,9 @@ void QPlainTextEdit::keyReleaseEvent(QKeyEvent *e)
 
 QVariant QPlainTextEdit::loadResource(int type, const QUrl &name)
 {
+   (void) type;
+   (void) name;
+
    return QVariant();
 }
 

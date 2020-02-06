@@ -54,6 +54,10 @@ QPlatformScreen::~QPlatformScreen()
 
 QPixmap QPlatformScreen::grabWindow(WId window, int x, int y, int width, int height) const
 {
+   (void) x;
+   (void) y;
+   (void) width;
+   (void) height;
    return QPixmap();
 }
 
@@ -139,6 +143,7 @@ Qt::ScreenOrientation QPlatformScreen::orientation() const
 
 void QPlatformScreen::setOrientationUpdateMask(Qt::ScreenOrientations mask)
 {
+   (void) mask;
 }
 
 QPlatformScreen *QPlatformScreen::platformScreenForWindow(const QWindow *window)
@@ -326,5 +331,6 @@ QPlatformScreen::PowerState QPlatformScreen::powerState() const
 
 void QPlatformScreen::setPowerState(PowerState state)
 {
+   (void) state;
 }
 

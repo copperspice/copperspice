@@ -95,6 +95,8 @@ QPlatformPixmap *QPlatformIntegration::createPlatformPixmap(QPlatformPixmap::Pix
 #ifndef QT_NO_OPENGL
 QPlatformOpenGLContext *QPlatformIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
 {
+   (void) context;
+
    qWarning("This plugin does not support createPlatformOpenGLContext");
    return nullptr;
 }
@@ -108,6 +110,8 @@ QPlatformSharedGraphicsCache *QPlatformIntegration::createPlatformSharedGraphics
 
 QPaintEngine *QPlatformIntegration::createImagePaintEngine(QPaintDevice *paintDevice) const
 {
+   (void) paintDevice;
+
    return nullptr;
 }
 
@@ -127,7 +131,7 @@ QPlatformInputContext *QPlatformIntegration::inputContext() const
 #ifndef QT_NO_ACCESSIBILITY
 QPlatformAccessibility *QPlatformIntegration::accessibility() const
 {
-   return 0;
+   return nullptr;
 }
 #endif
 
@@ -257,12 +261,14 @@ QStringList QPlatformIntegration::themeNames() const
 
 class QPlatformTheme *QPlatformIntegration::createPlatformTheme(const QString &name) const
 {
+   (void) name;
    return new QPlatformTheme;
 }
 
 QPlatformOffscreenSurface *QPlatformIntegration::createPlatformOffscreenSurface(QOffscreenSurface *surface) const
 {
-   return 0;
+   (void) surface;
+   return nullptr;
 }
 
 #ifndef QT_NO_SESSIONMANAGER
@@ -286,4 +292,5 @@ QOpenGLContext::OpenGLModuleType QPlatformIntegration::openGLModuleType()
 
 void QPlatformIntegration::setApplicationIcon(const QIcon &icon) const
 {
+   (void) icon;
 }

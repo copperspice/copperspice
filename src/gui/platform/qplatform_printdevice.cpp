@@ -256,9 +256,10 @@ QMarginsF QPlatformPrintDevice::printableMargins(const QPageSize &pageSize,
                                                  QPageLayout::Orientation orientation,
                                                  int resolution) const
 {
-    Q_UNUSED(pageSize)
-    Q_UNUSED(orientation)
-    Q_UNUSED(resolution)
+    (void) pageSize;
+    (void) orientation;
+    (void) resolution;
+
     return QMarginsF(0, 0, 0, 0);
 }
 

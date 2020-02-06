@@ -3129,12 +3129,15 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          break;
       }
 #endif
+
 #ifndef QT_NO_ITEMVIEWS
       case SE_ItemViewItemCheckIndicator:
          if (!qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             r = subElementRect(SE_CheckBoxIndicator, opt, widget);
             break;
          }
+         [[fallthrough]];
+
       case SE_ItemViewItemDecoration:
       case SE_ItemViewItemText:
       case SE_ItemViewItemFocusRect:
@@ -3156,7 +3159,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             }
          }
          break;
-#endif //QT_NO_ITEMVIEWS
+#endif
 
 #ifndef QT_NO_TOOLBAR
       case SE_ToolBarHandle:

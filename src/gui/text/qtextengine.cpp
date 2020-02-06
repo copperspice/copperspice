@@ -652,6 +652,7 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                      } else {
                         eor = current;
                      }
+
                      status.eor = QChar::DirEN;
                      dir = QChar::DirAN;
                      break;
@@ -662,6 +663,7 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                         eor = current;
                         break;
                      }
+                     [[fallthrough]];
 
                   case QChar::DirBN:
                   case QChar::DirB:
@@ -701,19 +703,23 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                }
                break;
             }
+            [[fallthrough]];
 
          case QChar::DirAN:
             hasBidi = true;
             dirCurrent = QChar::DirAN;
+
             if (dir == QChar::DirON) {
                dir = QChar::DirAN;
             }
+
             switch (status.last) {
                case QChar::DirL:
                case QChar::DirAN:
                   eor = current;
                   status.eor = QChar::DirAN;
                   break;
+
                case QChar::DirR:
                case QChar::DirAL:
                case QChar::DirEN:
@@ -725,11 +731,14 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                   dir = QChar::DirAN;
                   status.eor = QChar::DirAN;
                   break;
+
                case QChar::DirCS:
                   if (status.eor == QChar::DirAN) {
                      eor = current;
                      break;
                   }
+                  [[fallthrough]];
+
                case QChar::DirES:
                case QChar::DirET:
                case QChar::DirBN:
@@ -764,6 +773,7 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                         status.eor = dirCurrent;
                      }
                   }
+
                default:
                   break;
             }

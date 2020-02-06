@@ -53,6 +53,8 @@ class QFileIconEngine : public QPixmapIconEngine
    { }
 
    QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override {
+      (void) mode;
+      (void) state;
 
       QPixmap pixmap;
 
@@ -91,6 +93,8 @@ class QFileIconEngine : public QPixmapIconEngine
    }
 
    QList<QSize> availableSizes(QIcon::Mode mode = QIcon::Normal, QIcon::State state = QIcon::Off) const override {
+      (void) mode;
+      (void) state;
 
       static QList<QSize> sizes;
       static QPlatformTheme *theme = 0;

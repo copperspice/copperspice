@@ -255,11 +255,13 @@ QPlatformTheme::~QPlatformTheme()
 
 bool QPlatformTheme::usePlatformNativeDialog(DialogType type) const
 {
+   (void) type;
    return false;
 }
 
 QPlatformDialogHelper *QPlatformTheme::createPlatformDialogHelper(DialogType type) const
 {
+   (void) type;
    return 0;
 }
 
@@ -277,12 +279,15 @@ const QPalette *QPlatformTheme::palette(Palette type) const
 
 const QFont *QPlatformTheme::font(Font type) const
 {
-   Q_UNUSED(type)
-   return 0;
+   (void) type;
+   return nullptr;
 }
 
 QPixmap QPlatformTheme::standardPixmap(StandardPixmap sp, const QSizeF &size) const
 {
+   (void) sp;
+   (void) size;
+
    // TODO Should return QCommonStyle pixmaps?
    return QPixmap();
 }
@@ -290,6 +295,10 @@ QPixmap QPlatformTheme::standardPixmap(StandardPixmap sp, const QSizeF &size) co
 QPixmap QPlatformTheme::fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size,
    QPlatformTheme::IconOptions iconOptions) const
 {
+   (void) fileInfo;
+   (void) size;
+   (void) iconOptions;
+
    // TODO Should return QCommonStyle pixmaps?
    return QPixmap();
 }

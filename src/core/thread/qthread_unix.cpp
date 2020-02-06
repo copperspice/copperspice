@@ -267,6 +267,8 @@ void QThreadPrivate::createEventDispatcher(QThreadData *data)
 
 static void setCurrentThreadName(pthread_t threadId, const QString &name)
 {
+   (void) threadId;
+
 #if defined(Q_OS_LINUX) && ! defined(QT_LINUXBASE)
    prctl(PR_SET_NAME, (unsigned long)name.constData(), 0, 0, 0);
 

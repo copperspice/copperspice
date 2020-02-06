@@ -2809,6 +2809,8 @@ void QAbstractItemView::rowsAboutToBeRemoved(const QModelIndex &parent, int star
 
 void QAbstractItemViewPrivate::_q_rowsRemoved(const QModelIndex &index, int start, int end)
 {
+  (void) index;
+
    Q_Q(QAbstractItemView);
 
    if (q->isVisible()) {
@@ -2896,7 +2898,7 @@ void QAbstractItemViewPrivate::_q_columnsAboutToBeRemoved(const QModelIndex &par
 */
 void QAbstractItemViewPrivate::_q_columnsRemoved(const QModelIndex &index, int start, int end)
 {
-
+  (void) index;
 
    Q_Q(QAbstractItemView);
    if (q->isVisible()) {
@@ -2925,6 +2927,7 @@ void QAbstractItemViewPrivate::_q_columnsRemoved(const QModelIndex &index, int s
 */
 void QAbstractItemViewPrivate::_q_rowsInserted(const QModelIndex &index, int start, int end)
 {
+  (void) index;
 
 #ifndef QT_NO_ACCESSIBILITY
 
@@ -2947,9 +2950,10 @@ void QAbstractItemViewPrivate::_q_rowsInserted(const QModelIndex &index, int sta
 */
 void QAbstractItemViewPrivate::_q_columnsInserted(const QModelIndex &index, int start, int end)
 {
-
+  (void) index;
 
    Q_Q(QAbstractItemView);
+
    if (q->isVisible()) {
       q->updateEditorGeometries();
    }

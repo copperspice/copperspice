@@ -42,6 +42,7 @@ QPlatformGraphicsBuffer::~QPlatformGraphicsBuffer()
 
 bool QPlatformGraphicsBuffer::bindToTexture(const QRect &rect) const
 {
+   (void) rect;
    return false;
 }
 

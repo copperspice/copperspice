@@ -252,6 +252,7 @@ QWindowsOleDropSource::~QWindowsOleDropSource()
 
 QDebug operator<<(QDebug d, const QWindowsOleDropSource::CursorEntry &e)
 {
+   (void) e;
 
 #if defined(CS_SHOW_DEBUG)
    d << "QWindowsOleDropSource: CursorEntry = " << e.pixmap.size() << '#' << e.cacheKey

@@ -234,6 +234,7 @@ void QPlatformFontDatabase::populateFontDatabase()
 
 void QPlatformFontDatabase::populateFamily(const QString &familyName)
 {
+   (void) familyName;
 }
 
 void QPlatformFontDatabase::invalidate()
@@ -256,12 +257,19 @@ QFontEngine *QPlatformFontDatabase::fontEngine(const QFontDef &fontDef, void *ha
 QFontEngine *QPlatformFontDatabase::fontEngine(const QByteArray &fontData, qreal pixelSize,
    QFont::HintingPreference hintingPreference)
 {
+   (void) fontData;
+   (void) pixelSize;
+   (void) hintingPreference;
+
    qWarning("Plugin does not support font engines created directly from font data");
    return nullptr;
 }
 
 QStringList QPlatformFontDatabase::addApplicationFont(const QByteArray &fontData, const QString &fileName)
 {
+   (void) fontData;
+   (void) fileName;
+
    qWarning("Plugin does not support application fonts");
    return QStringList();
 }
@@ -289,6 +297,8 @@ QString QPlatformFontDatabase::fontDir() const
 
 bool QPlatformFontDatabase::isPrivateFontFamily(const QString &family) const
 {
+   (void) family;
+
    return false;
 }
 

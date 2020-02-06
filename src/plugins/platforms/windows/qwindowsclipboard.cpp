@@ -38,6 +38,7 @@
 
 #include <qwindowsguieventdispatcher_p.h>
 
+#if defined(CS_SHOW_DEBUG)
 static QDebug operator<<(QDebug d, const QMimeData *mimeData)
 {
    QDebugStateSaver saver(d);
@@ -73,6 +74,7 @@ static QDebug operator<<(QDebug d, const QMimeData *mimeData)
 
    return d;
 }
+#endif
 
 IDataObject *QWindowsClipboardRetrievalMimeData::retrieveDataObject() const
 {

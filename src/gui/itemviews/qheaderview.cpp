@@ -1339,7 +1339,9 @@ void QHeaderView::sectionsInserted(const QModelIndex &parent,
 
 void QHeaderView::sectionsAboutToBeRemoved(const QModelIndex &parent, int logicalFirst, int logicalLast)
 {
-
+  (void) parent;
+  (void) logicalFirst;
+  (void) logicalLast;
 }
 
 void QHeaderViewPrivate::updateHiddenSections(int logicalFirst, int logicalLast)
@@ -2417,6 +2419,8 @@ void QHeaderView::scrollContentsBy(int dx, int dy)
 */
 void QHeaderView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
+  (void) roles;
+
    Q_D(QHeaderView);
 
    d->invalidateCachedSizeHint();

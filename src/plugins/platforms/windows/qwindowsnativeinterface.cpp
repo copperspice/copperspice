@@ -92,6 +92,7 @@ void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resourc
          break;
 
       case QWindow::OpenGLSurface:
+      case QWindow::VulkanSurface:
          break;
    }
 

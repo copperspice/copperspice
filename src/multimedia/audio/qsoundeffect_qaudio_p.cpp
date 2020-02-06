@@ -424,6 +424,7 @@ qint64 PrivateSoundSource::readData( char *data, qint64 len)
 
          periodsFree--;
       }
+
       return bytesWritten;
    }
 
@@ -432,5 +433,8 @@ qint64 PrivateSoundSource::readData( char *data, qint64 len)
 
 qint64 PrivateSoundSource::writeData(const char *data, qint64 len)
 {
+   (void) data;
+   (void) len;
+
    return 0;
 }

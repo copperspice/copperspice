@@ -272,6 +272,8 @@ class QPluginServiceProvider : public QMediaServiceProvider
             }
             break;
 
+            case QMediaServiceProviderHint::CameraPosition:
+               break;
 
             /* emerald
 
@@ -618,32 +620,49 @@ QPluginServiceProvider *pluginProvider() {
 
 QMediaServiceProviderHint::Features QMediaServiceProvider::supportedFeatures(const QMediaService *service) const
 {
+   (void) service;
+
    return QMediaServiceProviderHint::Features(0);
 }
 
 QMultimedia::SupportEstimate QMediaServiceProvider::hasSupport(const QString &serviceType,
    const QString &mimeType, const QStringList &codecs, int flags) const
 {
+   (void) serviceType;
+   (void) mimeType;
+   (void) codecs;
+   (void) flags;
+
    return QMultimedia::MaybeSupported;
 }
 
 QStringList QMediaServiceProvider::supportedMimeTypes(const QString &serviceType, int flags) const
 {
+   (void) serviceType;
+   (void) flags;
+
    return QStringList();
 }
 
 QString QMediaServiceProvider::defaultDevice(const QString &serviceType) const
 {
+   (void) serviceType;
+
    return QString();
 }
 
 QList<QString> QMediaServiceProvider::devices(const QString &service) const
 {
+   (void) service;
+
    return QList<QString>();
 }
 
 QString QMediaServiceProvider::deviceDescription(const QString &serviceType, const QString &device)
 {
+   (void) serviceType;
+   (void) device;
+
    return QString();
 }
 

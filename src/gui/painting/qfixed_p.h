@@ -415,7 +415,6 @@ inline bool operator>(int i, const QFixed &f)
    return (i << 6) > f.value();
 }
 
-
 inline QDebug &operator<<(QDebug &dbg, const QFixed &f)
 {
    return dbg << f.toReal();
@@ -425,10 +424,10 @@ struct QFixedPoint {
    QFixed x;
    QFixed y;
 
-   QFixedPoint()
-   {}
+   QFixedPoint() = default;
 
-   QFixedPoint(const QFixed &_x, const QFixed &_y) : x(_x), y(_y)
+   QFixedPoint(const QFixed &_x, const QFixed &_y)
+      : x(_x), y(_y)
    {}
 
    QPointF toPointF() const {

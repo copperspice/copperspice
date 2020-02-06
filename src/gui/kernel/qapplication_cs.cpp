@@ -275,9 +275,10 @@ void QApplicationPrivate::process_cmdline()
 
 void qt_init(QApplicationPrivate *priv, int type)
 {
+   (void) priv;
+   (void) type;
 
    QColormap::initialize();
-
    qt_init_tooltip_palette();
 
    QApplicationPrivate::initializeWidgetFontHash();
@@ -1214,7 +1215,10 @@ QWidget *qt_tlw_for_window(QWindow *wnd)
 
 void QApplicationPrivate::notifyActiveWindowChange(QWindow *previous)
 {
+   (void) previous;
+
    QWindow *wnd = QGuiApplicationPrivate::focus_window;
+
    if (inPopupMode()) {
       // some delayed focus event to ignore
       return;
@@ -3567,6 +3571,8 @@ void QApplicationPrivate::translateTouchCancel(QTouchDevice *device, ulong times
 #ifndef QT_NO_DRAGANDDROP
 void QApplicationPrivate::notifyDragStarted(const QDrag *drag)
 {
+   (void) drag;
+
    // Prevent pickMouseReceiver() from using the widget where the drag was started after a drag operation.
    qt_button_down = 0;
 }

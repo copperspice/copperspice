@@ -68,6 +68,8 @@ class PageItem : public QGraphicsItem
 
 void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+   (void) widget;
+
    QRectF paperRect(0, 0, paperSize.width(), paperSize.height());
 
    // Draw shadow

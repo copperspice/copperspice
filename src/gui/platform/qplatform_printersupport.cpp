@@ -42,22 +42,27 @@ QPlatformPrinterSupport::~QPlatformPrinterSupport()
 
 QPrintEngine *QPlatformPrinterSupport::createNativePrintEngine(QPrinter::PrinterMode mode)
 {
-    return nullptr;
+   (void) mode;
+   return nullptr;
 }
 
 QPaintEngine *QPlatformPrinterSupport::createPaintEngine(QPrintEngine *engine, QPrinter::PrinterMode mode)
 {
-    return nullptr;
+   (void) engine;
+   (void) mode;
+   return nullptr;
 }
 
 QPrintDevice QPlatformPrinterSupport::createPrintDevice(QPlatformPrintDevice *device)
 {
-    return QPrintDevice(device);
+   (void) device;
+   return QPrintDevice(device);
 }
 
 QPrintDevice QPlatformPrinterSupport::createPrintDevice(const QString &id)
 {
-    return QPrintDevice();
+   (void) id;
+   return QPrintDevice();
 }
 
 QPrintDevice QPlatformPrinterSupport::createDefaultPrintDevice()
@@ -77,7 +82,10 @@ QString QPlatformPrinterSupport::defaultPrintDeviceId() const
 
 QPageSize QPlatformPrinterSupport::createPageSize(const QString &id, QSize size, const QString &localizedName)
 {
-    return QPageSize();
+   (void) id;
+   (void) size;
+   (void) localizedName;
+   return QPageSize();
 }
 
 #endif // QT_NO_PRINTER

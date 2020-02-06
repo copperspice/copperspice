@@ -1335,6 +1335,8 @@ void QDockWidget::closeEvent(QCloseEvent *event)
 /*! \reimp */
 void QDockWidget::paintEvent(QPaintEvent *event)
 {
+   (void) event;
+
    QDockWidgetLayout *layout = qobject_cast<QDockWidgetLayout *>(this->layout());
    bool customTitleBar = layout->widgetForRole(QDockWidgetLayout::TitleBar) != 0;
    bool nativeDeco = layout->nativeWindowDeco();

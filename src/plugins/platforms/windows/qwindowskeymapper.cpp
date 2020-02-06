@@ -1026,9 +1026,16 @@ bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &ms
          case Qt::Key_7:
          case Qt::Key_8:
          case Qt::Key_9:
-            state |= ((msg.wParam >= '0' && msg.wParam <= '9')
-                  || (msg.wParam >= VK_OEM_PLUS && msg.wParam <= VK_OEM_3))
-               ? 0 : int(Qt::KeypadModifier);
+
+            if ((msg.wParam >= '0' && msg.wParam <= '9') || (msg.wParam >= VK_OEM_PLUS && msg.wParam <= VK_OEM_3)) {
+               // do nothing
+
+            } else {
+               state |= int(Qt::KeypadModifier);
+            }
+
+            [[fallthrough]];
+
          default:
             if (uint(msg.lParam) == 0x004c0001 || uint(msg.lParam) == 0xc04c0001) {
                state |= Qt::KeypadModifier;

@@ -763,8 +763,9 @@ void QMainWindow::tabifyDockWidget(QDockWidget *first, QDockWidget *second)
 QList<QDockWidget *> QMainWindow::tabifiedDockWidgets(QDockWidget *dockwidget) const
 {
    QList<QDockWidget *> ret;
+
 #if defined(QT_NO_TABBAR)
-   Q_UNUSED(dockwidget);
+   (void) dockwidget;
 #else
    const QDockAreaLayoutInfo *info = d_func()->layout->layoutState.dockAreaLayout.info(dockwidget);
    if (info && info->tabbed && info->tabBar) {
@@ -1105,6 +1106,8 @@ void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
       (reinterpret_cast<SetContentBorderEnabledFunction>(function))(window()->windowHandle(), set);
       update();
    }
+#else
+   (void) set;
 #endif
 
 
@@ -1130,7 +1133,7 @@ bool QMainWindow::isSeparator(const QPoint &pos) const
    Q_D(const QMainWindow);
    return !d->layout->layoutState.dockAreaLayout.findSeparator(pos).isEmpty();
 #else
-   Q_UNUSED(pos);
+   (void) pos;
    return false;
 #endif
 }

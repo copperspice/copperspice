@@ -231,13 +231,21 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetTypeInfo(unsigned int, unsi
 
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetIDsOfNames(const _GUID &, wchar_t **rgszNames, unsigned int, unsigned long, long *rgdispid)
 {
-#if ! defined(Q_CC_GNU)
+#if defined(Q_CC_GNU)
+   (void) rgszNames;
+   (void) rgdispid;
+
+   return DISP_E_MEMBERNOTFOUND;
+
+#else
     // PROPERTIES:  Hierarchical
 
     if (_bstr_t(rgszNames[0]) == _bstr_t(L"accParent"))
         rgdispid[0] = DISPID_ACC_PARENT;
+
     else if (_bstr_t(rgszNames[0]) == _bstr_t(L"accChildCount"))
         rgdispid[0] = DISPID_ACC_CHILDCOUNT;
+
     else if (_bstr_t(rgszNames[0]) == _bstr_t(L"accChild"))
         rgdispid[0] = DISPID_ACC_CHILD;
 
@@ -280,8 +288,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetIDsOfNames(const _GUID &, w
         return DISP_E_UNKNOWNINTERFACE;
 
     return S_OK;
-#else
-    return DISP_E_MEMBERNOTFOUND;
 #endif
 }
 

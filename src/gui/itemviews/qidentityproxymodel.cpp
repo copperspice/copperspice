@@ -519,6 +519,7 @@ void QIdentityProxyModelPrivate::_q_sourceRowsMoved(const QModelIndex &sourcePar
 {
    (void) sourceStart;
    (void) sourceEnd;
+   (void) dest;
 
    Q_ASSERT(sourceParent.isValid() ? sourceParent.model() == model : true);
    Q_ASSERT(destParent.isValid() ? destParent.model() == model : true);
@@ -530,6 +531,9 @@ void QIdentityProxyModelPrivate::_q_sourceRowsMoved(const QModelIndex &sourcePar
 
 void QIdentityProxyModelPrivate::_q_sourceRowsRemoved(const QModelIndex &parent, int start, int end)
 {
+   (void) start;
+   (void) end;
+
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
    Q_Q(QIdentityProxyModel);
 

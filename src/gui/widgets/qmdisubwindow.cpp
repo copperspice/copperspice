@@ -280,7 +280,8 @@ class ControlLabel : public QWidget
 ControlLabel::ControlLabel(QMdiSubWindow *subWindow, QWidget *parent)
    : QWidget(parent), isPressed(false)
 {
-   Q_UNUSED(subWindow);
+   (void) subWindow;
+
    setFocusPolicy(Qt::NoFocus);
    updateWindowIcon();
    setFixedSize(label.size());
@@ -882,7 +883,8 @@ void QMdiSubWindowPrivate::_q_enterInteractiveMode()
 */
 void QMdiSubWindowPrivate::_q_processFocusChanged(QWidget *old, QWidget *now)
 {
-   Q_UNUSED(old);
+   (void) old;
+
    Q_Q(QMdiSubWindow);
    if (now && (now == q || q->isAncestorOf(now))) {
       if (now == q && !isInInteractiveMode) {

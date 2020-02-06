@@ -3623,6 +3623,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                   if (tb->titleBarFlags & Qt::WindowContextHelpButtonHint) {
                      offset += delta;
                   }
+                  [[fallthrough]];
 
                case SC_TitleBarMinButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
@@ -3630,6 +3631,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                   } else if (sc == SC_TitleBarMinButton) {
                      break;
                   }
+                  [[fallthrough]];
 
                case SC_TitleBarNormalButton:
                   if (isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
@@ -3639,6 +3641,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                   } else if (sc == SC_TitleBarNormalButton) {
                      break;
                   }
+                  [[fallthrough]];
 
                case SC_TitleBarMaxButton:
                   if (!isMaximized && (tb->titleBarFlags & Qt::WindowMaximizeButtonHint)) {
@@ -3646,6 +3649,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                   } else if (sc == SC_TitleBarMaxButton) {
                      break;
                   }
+                  [[fallthrough]];
 
                case SC_TitleBarShadeButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowShadeButtonHint)) {
@@ -3653,6 +3657,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                   } else if (sc == SC_TitleBarShadeButton) {
                      break;
                   }
+                  [[fallthrough]];
 
                case SC_TitleBarUnshadeButton:
                   if (isMinimized && (tb->titleBarFlags & Qt::WindowShadeButtonHint)) {
@@ -3660,6 +3665,7 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
                   } else if (sc == SC_TitleBarUnshadeButton) {
                      break;
                   }
+                  [[fallthrough]];
 
                case SC_TitleBarCloseButton:
                   if (tb->titleBarFlags & Qt::WindowSystemMenuHint) {

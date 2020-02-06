@@ -136,6 +136,8 @@ void QMediaRecorderPrivate::_q_applySettings()
 
 void QMediaRecorderPrivate::_q_availabilityChanged(QMultimedia::AvailabilityStatus availability)
 {
+   (void) availability;
+
    Q_Q(QMediaRecorder);
 
    // should not always emit, but we can not tell from here (isAvailable may not have changed,
@@ -531,9 +533,10 @@ QVideoEncoderSettings QMediaRecorder::videoSettings() const
 
 void QMediaRecorder::setAudioSettings(const QAudioEncoderSettings &settings)
 {
-   Q_D(QMediaRecorder);
+   (void) settings;
 
 /*  emerald
+   Q_D(QMediaRecorder);
 
    //restart camera if it can't apply new settings in the Active state
    d->restartCamera();
@@ -548,11 +551,10 @@ void QMediaRecorder::setAudioSettings(const QAudioEncoderSettings &settings)
 
 void QMediaRecorder::setVideoSettings(const QVideoEncoderSettings &settings)
 {
-   Q_D(QMediaRecorder);
-
+   (void) settings;
 
 /*  emerald
-
+   Q_D(QMediaRecorder);
    d->restartCamera();
 
    if (d->videoControl) {
@@ -565,9 +567,10 @@ void QMediaRecorder::setVideoSettings(const QVideoEncoderSettings &settings)
 
 void QMediaRecorder::setContainerFormat(const QString &container)
 {
-   Q_D(QMediaRecorder);
+   (void) container;
 
 /*  emerald
+   Q_D(QMediaRecorder);
    d->restartCamera();
 
    if (d->formatControl) {
@@ -581,11 +584,13 @@ void QMediaRecorder::setContainerFormat(const QString &container)
 void QMediaRecorder::setEncodingSettings(const QAudioEncoderSettings &audio,
          const QVideoEncoderSettings &video, const QString &container)
 {
-   Q_D(QMediaRecorder);
-
+   (void) audio;
+   (void) video;
+   (void) container;
 
 /*  emerald
 
+   Q_D(QMediaRecorder);
    d->restartCamera();
 
    if (d->audioControl) {

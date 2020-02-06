@@ -1265,7 +1265,8 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
    } else if (len >= 2 && name[1] == ':') {
       // ignore the drive letter
       prefix = (len > 2 && name[2] == '/') ? 3 : 2;
-
+#else
+   (void) len;
 #endif
 
    } else if (name.startsWith('/')) {

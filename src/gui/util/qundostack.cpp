@@ -62,6 +62,7 @@ int QUndoCommand::id() const
 
 bool QUndoCommand::mergeWith(const QUndoCommand *command)
 {
+   (void) command;
    return false;
 }
 

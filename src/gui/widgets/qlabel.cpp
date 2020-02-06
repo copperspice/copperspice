@@ -585,7 +585,7 @@ void QLabel::mouseReleaseEvent(QMouseEvent *ev)
 void QLabel::contextMenuEvent(QContextMenuEvent *ev)
 {
 #ifdef QT_NO_CONTEXTMENU
-   Q_UNUSED(ev);
+   (void) ev;
 #else
    Q_D(QLabel);
    if (!d->isTextLabel) {

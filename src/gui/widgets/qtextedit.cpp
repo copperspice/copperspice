@@ -984,8 +984,9 @@ void QTextEdit::keyReleaseEvent(QKeyEvent *e)
 */
 QVariant QTextEdit::loadResource(int type, const QUrl &name)
 {
-   Q_UNUSED(type);
-   Q_UNUSED(name);
+   (void) type;
+   (void) name;
+
    return QVariant();
 }
 

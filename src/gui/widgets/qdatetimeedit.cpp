@@ -809,6 +809,8 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
                   && !(event->modifiers() & ~(Qt::ShiftModifier | Qt::KeypadModifier));
             break;
          }
+         [[fallthrough]];
+
       case Qt::Key_Left:
       case Qt::Key_Right:
          if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) {
@@ -822,7 +824,8 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
                break;
             }
          }
-      // else fall through
+         [[fallthrough]];
+
       case Qt::Key_Backtab:
       case Qt::Key_Tab: {
          event->accept();
@@ -1373,11 +1376,23 @@ int QDateTimeEditPrivate::sectionAt(int pos) const
 int QDateTimeEditPrivate::closestSection(int pos, bool forward) const
 {
    Q_ASSERT(pos >= 0);
+
    if (pos < separators.first().size()) {
-      return forward ? 0 : FirstSectionIndex;
+      if (forward) {
+         return 0;
+      } else {
+         return FirstSectionIndex;
+      }
+
    } else if (displayText().size() - pos < separators.last().size() + 1) {
-      return forward ? LastSectionIndex : sectionNodes.size() - 1;
+
+      if (forward) {
+         return LastSectionIndex;
+      } else {
+         return sectionNodes.size() - 1;
+      }
    }
+
    updateCache(value, displayText());
    for (int i = 0; i < sectionNodes.size(); ++i) {
       const int tmp = sectionPos(sectionNodes.at(i));
@@ -1409,9 +1424,20 @@ int QDateTimeEditPrivate::nextPrevSection(int current, bool forward) const
 
    switch (current) {
       case FirstSectionIndex:
-         return forward ? 0 : FirstSectionIndex;
+         if (forward) {
+            return 0;
+         } else {
+            return FirstSectionIndex;
+         }
+
       case LastSectionIndex:
-         return (forward ? LastSectionIndex : sectionNodes.size() - 1);
+         if (forward) {
+            return LastSectionIndex;
+
+         } else {
+            return sectionNodes.size() - 1;
+         }
+
       case NoSectionIndex:
          return FirstSectionIndex;
       default:

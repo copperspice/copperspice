@@ -150,6 +150,7 @@ static inline WindowsScreenDataList monitorData()
    return result;
 }
 
+#if defined(CS_SHOW_DEBUG)
 static QDebug operator<<(QDebug dbg, const QWindowsScreenData &d)
 {
    QDebugStateSaver saver(dbg);
@@ -181,7 +182,7 @@ static QDebug operator<<(QDebug dbg, const QWindowsScreenData &d)
 
    return dbg;
 }
-
+#endif
 
 QWindowsScreen::QWindowsScreen(const QWindowsScreenData &data) :
    m_data(data)

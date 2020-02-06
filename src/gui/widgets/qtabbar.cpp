@@ -59,8 +59,11 @@ void QMovableTabWidget::setPixmap(const QPixmap &pixmap)
    m_pixmap = pixmap;
    update();
 }
+
 void QMovableTabWidget::paintEvent(QPaintEvent *e)
 {
+   (void) e;
+
    QPainter p(this);
    p.drawPixmap(0, 0, m_pixmap);
 }
@@ -1389,7 +1392,7 @@ QSize QTabBar::tabSizeHint(int index) const
  */
 void QTabBar::tabInserted(int index)
 {
-   Q_UNUSED(index)
+   (void) index;
 }
 
 /*!
@@ -1400,7 +1403,7 @@ void QTabBar::tabInserted(int index)
  */
 void QTabBar::tabRemoved(int index)
 {
-   Q_UNUSED(index)
+   (void) index;
 }
 
 /*!

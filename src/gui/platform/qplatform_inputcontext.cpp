@@ -47,8 +47,11 @@ bool QPlatformInputContext::isValid() const
 
 bool QPlatformInputContext::hasCapability(Capability capability) const
 {
+   (void) capability;
+
    return true;
 }
+
 void QPlatformInputContext::reset()
 {
 }
@@ -57,13 +60,14 @@ void QPlatformInputContext::commit()
 {
 }
 
-
 void QPlatformInputContext::update(Qt::InputMethodQueries)
 {
 }
 
 void QPlatformInputContext::invokeAction(QInputMethod::Action action, int cursorPosition)
 {
+   (void) cursorPosition;
+
    // Default behavior for simple ephemeral input contexts. Some
    // complex input contexts should not be reset here.
    if (action == QInputMethod::Click) {
@@ -73,6 +77,8 @@ void QPlatformInputContext::invokeAction(QInputMethod::Action action, int cursor
 
 bool QPlatformInputContext::filterEvent(const QEvent *event)
 {
+   (void) event;
+
    return false;
 }
 
@@ -85,7 +91,6 @@ void QPlatformInputContext::emitKeyboardRectChanged()
 {
    emit QGuiApplication::inputMethod()->keyboardRectangleChanged();
 }
-
 
 bool QPlatformInputContext::isAnimating() const
 {
@@ -100,7 +105,6 @@ void QPlatformInputContext::emitAnimatingChanged()
 void QPlatformInputContext::showInputPanel()
 {
 }
-
 
 void QPlatformInputContext::hideInputPanel()
 {
@@ -138,6 +142,7 @@ void QPlatformInputContext::emitInputDirectionChanged(Qt::LayoutDirection newDir
 
 void QPlatformInputContext::setFocusObject(QObject *object)
 {
+   (void) object;
 }
 
 bool QPlatformInputContext::inputMethodAccepted() const

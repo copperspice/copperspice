@@ -2494,7 +2494,7 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             sz.setWidth(w);
          }
          break;
-#endif // QT_NO_MENU
+#endif
 
 #ifndef QT_NO_MENUBAR
       case CT_MenuBarItem:
@@ -2503,16 +2503,17 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
          }
          break;
 #endif
-      // Otherwise, fall through
+
       case CT_ToolButton:
          if (qstyleoption_cast<const QStyleOptionToolButton *>(opt)) {
             return sz += QSize(7, 6);
          }
-      // Otherwise, fall through
+         [[fallthrough]];
 
       default:
          sz = QCommonStyle::sizeFromContents(ct, opt, csz, widget);
    }
+
    return sz;
 }
 

@@ -260,7 +260,7 @@ static void calculateCoarseTimerTimeout(QTimerInfo_Unix *t, timespec currentTime
       }
 
    } else {
-      uint min = qMax<int>(0, msec - absMaxRounding);
+      uint min = qMax(0, msec - static_cast<int>(absMaxRounding));
       uint max = qMin(1000u, msec + absMaxRounding);
 
       // find the boundary that we want, according to the rules above

@@ -193,7 +193,9 @@ class QScrollTimer : public QAbstractAnimation
 
  protected:
    void updateCurrentTime(int currentTime) override {
-      if (!ignoreUpdate) {
+      (void) currentTime;
+
+      if (! ignoreUpdate) {
          if (++skip >= d->frameRateSkip()) {
             skip = 0;
             d->timerTick();

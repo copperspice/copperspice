@@ -100,6 +100,9 @@ int QPageSetupDialog::exec()
       case QPageSize::Unit::Cicero:
          layout.setUnits(QLocale::system().measurementSystem() == QLocale::MetricSystem ? QPageSize::Unit::Millimeter : QPageSize::Unit::Inch);
          break;
+
+      case QPageSize::Unit::DevicePixel:
+         break;
    }
 
    qreal multiplier = 1.0;

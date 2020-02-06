@@ -946,6 +946,8 @@ in bytes). Charset used is mostly utf8, but can be different, ie. we have to loo
 */
 QVariant QWindowsMimeHtml::convertToMime(const QString &mime, IDataObject *pDataObj, QVariant::Type preferredType) const
 {
+   (void) preferredType;
+
    QVariant result;
 
    if (canConvertToMime(mime, pDataObj)) {
@@ -1148,8 +1150,10 @@ bool QWindowsMimeImage::hasOriginalDIBV5(IDataObject *pDataObj) const
    bool isSynthesized = true;
    IEnumFORMATETC *pEnum = NULL;
    HRESULT res = pDataObj->EnumFormatEtc(1, &pEnum);
+
    if (res == S_OK && pEnum) {
       FORMATETC fc;
+
       while ((res = pEnum->Next(1, &fc, 0)) == S_OK) {
          if (fc.ptd) {
             CoTaskMemFree(fc.ptd);
@@ -1163,11 +1167,14 @@ bool QWindowsMimeImage::hasOriginalDIBV5(IDataObject *pDataObj) const
       }
       pEnum->Release();
    }
+
    return !isSynthesized;
 }
 
 QVariant QWindowsMimeImage::convertToMime(const QString &mimeType, IDataObject *pDataObj, QVariant::Type preferredType) const
 {
+   (void) preferredType;
+
    QVariant result;
 
    if (mimeType != "application/x-qt-image") {
@@ -1491,6 +1498,8 @@ bool QLastResortMimes::canConvertToMime(const QString &mimeType, IDataObject *pD
 
 QVariant QLastResortMimes::convertToMime(const QString &mimeType, IDataObject *pDataObj, QVariant::Type preferredType) const
 {
+   (void) preferredType;
+
    QVariant retval;
 
    if (canConvertToMime(mimeType, pDataObj)) {

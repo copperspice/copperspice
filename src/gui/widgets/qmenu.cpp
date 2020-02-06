@@ -1584,7 +1584,7 @@ QAction *QMenu::addAction(const QString &text, const QObject *receiver, const QS
    QAction *action = new QAction(text, this);
 
 #ifdef QT_NO_SHORTCUT
-   Q_UNUSED(shortcut);
+   (void) shortcut;
 #else
    action->setShortcut(shortcut);
 #endif
@@ -1600,7 +1600,7 @@ QAction *QMenu::addAction(const QIcon &icon, const QString &text, const QObject 
    QAction *action = new QAction(icon, text, this);
 
 #ifdef QT_NO_SHORTCUT
-   Q_UNUSED(shortcut);
+   (void) shortcut;
 #else
    action->setShortcut(shortcut);
 #endif
@@ -2744,7 +2744,8 @@ void QMenu::keyPressEvent(QKeyEvent *e)
             key_consumed = true;
             break;
          }
-      //FALL THROUGH
+         [[fallthrough]];
+
       case Qt::Key_Left: {
          if (d->currentAction && !d->scroll) {
             QAction *nextAction = 0;
@@ -2795,7 +2796,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
          if (!style()->styleHint(QStyle::SH_Menu_SpaceActivatesItem, 0, this)) {
             break;
          }
-         // for motif, fall through
+         [[fallthrough]];
 
 #ifdef QT_KEYPAD_NAVIGATION
       case Qt::Key_Select:
@@ -2901,7 +2902,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
                QAction *act = d->actions.at(i);
                QKeySequence sequence = QKeySequence::mnemonic(act->text());
 
-               int key = sequence[0] & 0xffff;
+               char32_t key = sequence[0];
 
                if (key == c.unicode()) {
                   clashCount++;

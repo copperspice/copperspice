@@ -1122,7 +1122,8 @@ bool QXmlStreamReaderPrivate::parse()
                   } else {
                      break;
                   }
-               // fall through
+                  [[fallthrough]];
+
                case '\0': {
                   token = EOF_SYMBOL;
                   if (!tagsDone && ! inParseEntity) {
@@ -1135,9 +1136,12 @@ bool QXmlStreamReaderPrivate::parse()
 
                }
                break;
+
                case '\n':
                   ++lineNumber;
                   lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
+                  [[fallthrough]];
+
                case ' ':
                case '\t':
                   token = SPACE;

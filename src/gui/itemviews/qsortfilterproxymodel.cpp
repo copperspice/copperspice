@@ -1474,6 +1474,8 @@ void QSortFilterProxyModelPrivate::_q_sourceRowsAboutToBeMoved(const QModelIndex
    int sourceEnd, const QModelIndex &destParent, int dest)
 {
    (void) sourceStart;
+   (void) sourceEnd;
+   (void) dest;
 
    Q_Q(QSortFilterProxyModel);
 
@@ -1499,9 +1501,14 @@ void QSortFilterProxyModelPrivate::_q_sourceRowsAboutToBeMoved(const QModelIndex
 
    saved_persistent_indexes = store_persistent_indexes();
 }
+
 void QSortFilterProxyModelPrivate::_q_sourceRowsMoved(const QModelIndex &sourceParent, int sourceStart,
    int sourceEnd, const QModelIndex &destParent, int dest)
 {
+   (void) sourceStart;
+   (void) sourceEnd;
+   (void) dest;
+
    Q_Q(QSortFilterProxyModel);
 
    // Optimize: We only need to clear and update the persistent indexes which are children of
@@ -1527,11 +1534,15 @@ void QSortFilterProxyModelPrivate::_q_sourceRowsMoved(const QModelIndex &sourceP
 
    emit q->layoutChanged(parents);
 }
+
 void QSortFilterProxyModelPrivate::_q_sourceColumnsAboutToBeInserted(
    const QModelIndex &source_parent, int start, int end)
 {
-   //Force the creation of a mapping now, even if its empty.
-   //We need it because the proxy can be acessed at the moment it emits columnsAboutToBeInserted in insert_source_items
+   (void) start;
+   (void) end;
+
+   // Force the creation of a mapping now, even if its empty.
+   // We need it because the proxy can be acessed at the moment it emits columnsAboutToBeInserted in insert_source_items
 
    if (can_create_mapping(source_parent)) {
       create_mapping(source_parent);

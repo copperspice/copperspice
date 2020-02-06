@@ -71,8 +71,9 @@ class Q_GUI_EXPORT QPlatformMenuItem : public QObject
    virtual void setShortcut(const QKeySequence &shortcut) = 0;
    virtual void setEnabled(bool enabled) = 0;
    virtual void setIconSize(int size) = 0;
+
    virtual void setNativeContents(WId item) {
-      Q_UNUSED(item);
+      (void) item;
    }
 
    GUI_CS_SIGNAL_1(Public, void activated())
@@ -107,13 +108,13 @@ class Q_GUI_EXPORT QPlatformMenu : public QObject
    }
    virtual void setVisible(bool visible) = 0;
    virtual void setMinimumWidth(int width) {
-      Q_UNUSED(width);
+      (void) width;
    }
    virtual void setFont(const QFont &font) {
-      Q_UNUSED(font);
+      (void) font;
    }
    virtual void setMenuType(MenuType type) {
-      Q_UNUSED(type);
+      (void) type;
    }
 
    virtual void showPopup(const QWindow *parentWindow, const QRect &targetRect, const QPlatformMenuItem *item) {

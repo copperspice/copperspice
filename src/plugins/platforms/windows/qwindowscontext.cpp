@@ -303,6 +303,7 @@ bool QWindowsContext::initTouch(unsigned integrationOptions)
 
 void QWindowsContext::setTabletAbsoluteRange(int a)
 {
+   (void) a;
 }
 
 int QWindowsContext::processDpiAwareness()
@@ -907,10 +908,12 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
          return false;
 #endif
       case QtWindows::DisplayChangedEvent:
-         return d->m_screenManager.handleDisplayChange(wParam, lParam);
          if (QWindowsTheme *t = QWindowsTheme::instance()) {
             t->displayChanged();
          }
+
+         return d->m_screenManager.handleDisplayChange(wParam, lParam);
+
       case QtWindows::SettingChangedEvent:
          return d->m_screenManager.handleScreenChanges();
       default:
@@ -966,6 +969,8 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
          if (QWindowsInputContext *wic = windowsInputContext()) {
             wic->handleInputLanguageChanged(wParam, lParam);   // fallthrough intended.
          }
+         [[fallthrough]];
+
       case QtWindows::KeyDownEvent:
       case QtWindows::KeyEvent:
       case QtWindows::InputMethodKeyEvent:
