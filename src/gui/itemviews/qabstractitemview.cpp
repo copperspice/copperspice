@@ -2672,6 +2672,8 @@ void QAbstractItemView::update(const QModelIndex &index)
 */
 void QAbstractItemView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
+   (void) roles;
+
    // Single item changed
    Q_D(QAbstractItemView);
 

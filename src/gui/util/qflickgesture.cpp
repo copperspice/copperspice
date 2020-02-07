@@ -522,15 +522,18 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
          break;
 #endif
 
-    case QEvent::TouchBegin:
-        inputType = QScroller::InputPress;
-        // fall through
-    case QEvent::TouchEnd:
-        if (!inputType)
+      case QEvent::TouchBegin:
+         inputType = QScroller::InputPress;
+         [[fallthrough]];
+
+      case QEvent::TouchEnd:
+         if (!inputType) {
             inputType = QScroller::InputRelease;
-        // fallthrough
-    case QEvent::TouchUpdate:
-        if (!inputType)
+         }
+         [[fallthrough]];
+
+      case QEvent::TouchUpdate:
+         if (!inputType)
             inputType = QScroller::InputMove;
 
          if (te->device()->type() == QTouchDevice::TouchPad) {
@@ -640,8 +643,9 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
                   event->accept();
                }
             }
-            // fall through
-        case QEvent::TouchBegin:
+            [[fallthrough]];
+
+         case QEvent::TouchBegin:
             q->setHotSpot(globalPos);
             result |= scrollerIsActive ? TriggerGesture : MayBeGesture;
             break;
@@ -651,9 +655,10 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
          case QEvent::GraphicsSceneMouseMove:
 #endif
             if (PressDelayHandler::instance()->isDelaying())
-                result |= ConsumeEventHint;
-            // fall through
-        case QEvent::TouchUpdate:
+               result |= ConsumeEventHint;
+            [[fallthrough]];
+
+         case QEvent::TouchUpdate:
             result |= scrollerIsActive ? TriggerGesture : Ignore;
             break;
 
@@ -662,9 +667,10 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
 #endif
          case QEvent::MouseButtonRelease:
             if (PressDelayHandler::instance()->released(event, scrollerWasDragging || scrollerWasScrolling, scrollerIsActive))
-                result |= ConsumeEventHint;
-            // fall through
-        case QEvent::TouchEnd:
+               result |= ConsumeEventHint;
+            [[fallthrough]];
+
+         case QEvent::TouchEnd:
             result |= scrollerIsActive ? FinishGesture : CancelGesture;
             break;
 

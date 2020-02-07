@@ -124,9 +124,10 @@ GLuint QOpenGLTextureCache::bindTexture(QOpenGLContext *context, const QPixmap &
     // A QPainter is active on the image - take the safe route and replace the texture.
     if (! pixmap.paintingActive()) {
         QOpenGLCachedTexture *entry = m_cache.object(key);
-        if (entry && entry->options() == options) {
-            context->functions()->glBindTexture(GL_TEXTURE_2D, entry->id());
-            return entry->id();
+
+        if (entry != nullptr && entry->options() == static_cast<int>(options)) {
+           context->functions()->glBindTexture(GL_TEXTURE_2D, entry->id());
+           return entry->id();
         }
     }
 

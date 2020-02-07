@@ -774,12 +774,12 @@ QString QTabWidget::tabWhatsThis(int index) const
 
 void QTabWidget::tabInserted(int index)
 {
-
+   (void) index;
 }
 
 void QTabWidget::tabRemoved(int index)
 {
-
+   (void) index;
 }
 
 void QTabWidget::paintEvent(QPaintEvent *)

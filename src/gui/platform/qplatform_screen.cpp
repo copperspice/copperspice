@@ -54,10 +54,12 @@ QPlatformScreen::~QPlatformScreen()
 
 QPixmap QPlatformScreen::grabWindow(WId window, int x, int y, int width, int height) const
 {
+   (void) window;
    (void) x;
    (void) y;
    (void) width;
    (void) height;
+
    return QPixmap();
 }
 
