@@ -28,6 +28,7 @@
 #include <qstringlist.h>
 #include <qhash.h>
 #include <qshareddata.h>
+
 #include <qringbuffer_p.h>
 #include <qiodevice_p.h>
 
@@ -72,14 +73,19 @@ inline uint qHash(const QProcEnvKey &key)
    return qHash(key.toCaseFolded());
 }
 
-typedef QString QProcEnvValue;
+using QProcEnvValue = QString;
+
 #else
 class QProcEnvKey
 {
  public:
-   QProcEnvKey() : hash(0) {}
-   explicit QProcEnvKey(const QByteArray &other) : key(other), hash(qHash(key)) {}
+   QProcEnvKey()
+      : hash(0)
+   {}
 
+   explicit QProcEnvKey(const QByteArray &other)
+      : key(other), hash(qHash(key))
+   {}
 
    bool operator==(const QProcEnvKey &other) const {
       return key == other.key;
@@ -88,6 +94,7 @@ class QProcEnvKey
    QByteArray key;
    uint hash;
 };
+
 inline uint qHash(const QProcEnvKey &key)
 {
    return key.hash;
@@ -96,15 +103,20 @@ inline uint qHash(const QProcEnvKey &key)
 class QProcEnvValue
 {
  public:
-   QProcEnvValue() {}
+   QProcEnvValue()
+   {}
 
-   explicit QProcEnvValue(const QString &value) : stringValue(value) {}
-   explicit QProcEnvValue(const QByteArray &value) : byteValue(value) {}
+   explicit QProcEnvValue(const QString &value)
+      : stringValue(value)
+   {}
+
+   explicit QProcEnvValue(const QByteArray &value)
+      : byteValue(value)
+   {}
 
    bool operator==(const QProcEnvValue &other) const {
       return byteValue.isEmpty() && other.byteValue.isEmpty()
-             ? stringValue == other.stringValue
-             : bytes() == other.bytes();
+             ? stringValue == other.stringValue : bytes() == other.bytes();
    }
 
    QByteArray bytes() const {

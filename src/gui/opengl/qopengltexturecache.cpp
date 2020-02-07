@@ -104,8 +104,7 @@ void QOpenGLTextureCacheWrapper::cleanupTexturesForPixmapData(QPlatformPixmap *p
 }
 
 QOpenGLTextureCache::QOpenGLTextureCache(QOpenGLContext *ctx)
-    : QOpenGLSharedResource(ctx->shareGroup())
-    , m_cache(64 * 1024) // 64 MB cache
+    : QOpenGLSharedResource(ctx->shareGroup()), m_cache(64 * 1024) // 64 MB cache
 {
 }
 
@@ -115,13 +114,15 @@ QOpenGLTextureCache::~QOpenGLTextureCache()
 
 GLuint QOpenGLTextureCache::bindTexture(QOpenGLContext *context, const QPixmap &pixmap, BindOptions options)
 {
-    if (pixmap.isNull())
+    if (pixmap.isNull()) {
         return 0;
+    }
+
     QMutexLocker locker(&m_mutex);
     qint64 key = pixmap.cacheKey();
 
     // A QPainter is active on the image - take the safe route and replace the texture.
-    if (!pixmap.paintingActive()) {
+    if (! pixmap.paintingActive()) {
         QOpenGLCachedTexture *entry = m_cache.object(key);
         if (entry && entry->options() == options) {
             context->functions()->glBindTexture(GL_TEXTURE_2D, entry->id());
@@ -130,21 +131,25 @@ GLuint QOpenGLTextureCache::bindTexture(QOpenGLContext *context, const QPixmap &
     }
 
     GLuint id = bindTexture(context, key, pixmap.toImage(), options);
-    if (id > 0)
-        QImagePixmapCleanupHooks::enableCleanupHooks(pixmap);
+
+    if (id > 0) {
+       QImagePixmapCleanupHooks::enableCleanupHooks(pixmap);
+    }
 
     return id;
 }
 
 GLuint QOpenGLTextureCache::bindTexture(QOpenGLContext *context, const QImage &image, BindOptions options)
 {
-    if (image.isNull())
+    if (image.isNull()) {
         return 0;
+    }
+
     QMutexLocker locker(&m_mutex);
     qint64 key = image.cacheKey();
 
     // A QPainter is active on the image - take the safe route and replace the texture.
-    if (!image.paintingActive()) {
+    if (! image.paintingActive()) {
         QOpenGLCachedTexture *entry = m_cache.object(key);
         if (entry && entry->options() == options) {
             context->functions()->glBindTexture(GL_TEXTURE_2D, entry->id());

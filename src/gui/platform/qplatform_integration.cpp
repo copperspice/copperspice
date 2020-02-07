@@ -53,7 +53,7 @@ QPlatformClipboard *QPlatformIntegration::clipboard() const
 {
    static QPlatformClipboard *clipboard = nullptr;
 
-   if (!clipboard) {
+   if (! clipboard) {
       clipboard = new QPlatformClipboard;
    }
 
@@ -64,10 +64,12 @@ QPlatformClipboard *QPlatformIntegration::clipboard() const
 #ifndef QT_NO_DRAGANDDROP
 QPlatformDrag *QPlatformIntegration::drag() const
 {
-   static QSimpleDrag *drag = 0;
-   if (!drag) {
+   static QSimpleDrag *drag = nullptr;
+
+   if (! drag) {
       drag = new QSimpleDrag;
    }
+
    return drag;
 }
 #endif

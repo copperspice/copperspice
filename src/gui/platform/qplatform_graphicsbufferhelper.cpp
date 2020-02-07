@@ -39,57 +39,38 @@
 #endif
 
 bool QPlatformGraphicsBufferHelper::lockAndBindToTexture(QPlatformGraphicsBuffer *graphicsBuffer,
-   bool *swizzle, bool *premultiplied,
-   const QRect &rect)
+   bool *swizzle, bool *premultiplied, const QRect &rect)
 {
    if (graphicsBuffer->lock(QPlatformGraphicsBuffer::TextureAccess)) {
-      if (!graphicsBuffer->bindToTexture(rect)) {
+      if (! graphicsBuffer->bindToTexture(rect)) {
          qWarning("Failed to bind %sgraphicsbuffer to texture", "");
          return false;
       }
+
       if (swizzle) {
          *swizzle = false;
       }
+
       if (premultiplied) {
          *premultiplied = false;
       }
+
    } else if (graphicsBuffer->lock(QPlatformGraphicsBuffer::SWReadAccess)) {
-      if (!bindSWToTexture(graphicsBuffer, swizzle, premultiplied, rect)) {
+      if (! bindSWToTexture(graphicsBuffer, swizzle, premultiplied, rect)) {
          qWarning("Failed to bind %sgraphicsbuffer to texture", "SW ");
          return false;
       }
+
    } else {
       qWarning("Failed to lock");
       return false;
    }
+
    return true;
 }
 
-/*!
-    Convenience function that uploads the current raster content to the currently bound texture.
-
-    \a swizzleRandB is suppose to be used by the caller to figure out if the Red and
-    Blue color channels need to be swizzled when rendering. This is an
-    optimization. Qt often renders to software buffers interpreting pixels as
-    unsigned ints. When these buffers are uploaded to textures and each color
-    channel per pixel is interpreted as a byte (read sequentially), then the
-    Red and Blue channels are swapped. Conveniently the Alpha buffer will be
-    correct since Qt historically has had the alpha channel as the first
-    channel, while OpenGL typically expects the alpha channel to be the last
-    channel.
-
-    \a subRect is the subrect which is desired to be bounded to the texture. This
-    argument has a no less than semantic, meaning more (if not all) of the buffer
-    can be bounded to the texture. An empty QRect is interpreted as entire buffer
-    should be bound.
-
-    This function fails for buffers not capable of locking to SWAccess.
-
-    Returns true on success, otherwise false.
-*/
 bool QPlatformGraphicsBufferHelper::bindSWToTexture(const QPlatformGraphicsBuffer *graphicsBuffer,
-   bool *swizzleRandB, bool *premultipliedB,
-   const QRect &subRect)
+   bool *swizzleRandB, bool *premultipliedB, const QRect &subRect)
 {
 #ifndef QT_NO_OPENGL
    QOpenGLContext *ctx = QOpenGLContext::currentContext();
@@ -200,9 +181,11 @@ bool QPlatformGraphicsBufferHelper::bindSWToTexture(const QPlatformGraphicsBuffe
          }
       }
    }
+
    if (swizzleRandB) {
       *swizzleRandB = swizzle;
    }
+
    if (premultipliedB) {
       *premultipliedB = premultiplied;
    }

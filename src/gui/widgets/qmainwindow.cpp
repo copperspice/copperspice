@@ -21,7 +21,6 @@
 *
 ***********************************************************************/
 
-//#define QT_EXPERIMENTAL_CLIENT_DECORATIONS
 #include <qmainwindow.h>
 #include <qmainwindowlayout_p.h>
 
@@ -39,6 +38,9 @@
 #include <qwidget_p.h>
 #include <qtoolbar_p.h>
 #include <qwidgetanimator_p.h>
+
+// #define QT_EXPERIMENTAL_CLIENT_DECORATIONS
+
 #ifdef Q_OS_DARWIN
 #include <qplatform_nativeinterface.h>
 #endif
@@ -367,12 +369,7 @@ QWidget *QMainWindow::takeCentralWidget()
 }
 
 #ifndef QT_NO_DOCKWIDGET
-/*!
-    Sets the given dock widget \a area to occupy the specified \a
-    corner.
 
-    \sa corner()
-*/
 void QMainWindow::setCorner(Qt::Corner corner, Qt::DockWidgetArea area)
 {
    bool valid = false;
@@ -659,9 +656,6 @@ void QMainWindow::setTabPosition(Qt::DockWidgetAreas areas, QTabWidget::TabPosit
 }
 #endif // QT_NO_TABWIDGET
 
-/*!
-    Adds the given \a dockwidget to the specified \a area.
-*/
 void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget)
 {
    if (!checkDockWidgetArea(area, "QMainWindow::addDockWidget")) {
@@ -682,23 +676,11 @@ void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget
 
 }
 
-/*!
-    Restores the state of \a dockwidget if it is created after the call
-    to restoreState(). Returns true if the state was restored; otherwise
-    returns false.
-
-    \sa restoreState(), saveState()
-*/
-
 bool QMainWindow::restoreDockWidget(QDockWidget *dockwidget)
 {
    return d_func()->layout->restoreDockWidget(dockwidget);
 }
 
-/*!
-    Adds \a dockwidget into the given \a area in the direction
-    specified by the \a orientation.
-*/
 void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget,
    Qt::Orientation orientation)
 {
@@ -710,55 +692,16 @@ void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget
    d_func()->layout->addDockWidget(area, dockwidget, orientation);
 }
 
-/*!
-    \fn void QMainWindow::splitDockWidget(QDockWidget *first, QDockWidget *second, Qt::Orientation orientation)
-
-    Splits the space covered by the \a first dock widget into two parts,
-    moves the \a first dock widget into the first part, and moves the
-    \a second dock widget into the second part.
-
-    The \a orientation specifies how the space is divided: A Qt::Horizontal
-    split places the second dock widget to the right of the first; a
-    Qt::Vertical split places the second dock widget below the first.
-
-    \e Note: if \a first is currently in a tabbed docked area, \a second will
-    be added as a new tab, not as a neighbor of \a first. This is because a
-    single tab can contain only one dock widget.
-
-    \e Note: The Qt::LayoutDirection influences the order of the dock widgets
-    in the two parts of the divided area. When right-to-left layout direction
-    is enabled, the placing of the dock widgets will be reversed.
-
-    \sa tabifyDockWidget(), addDockWidget(), removeDockWidget()
-*/
 void QMainWindow::splitDockWidget(QDockWidget *after, QDockWidget *dockwidget,
    Qt::Orientation orientation)
 {
    d_func()->layout->splitDockWidget(after, dockwidget, orientation);
 }
 
-/*!
-    \fn void QMainWindow::tabifyDockWidget(QDockWidget *first, QDockWidget *second)
-
-    Moves \a second dock widget on top of \a first dock widget, creating a tabbed
-    docked area in the main window.
-
-    \sa tabifiedDockWidgets()
-*/
 void QMainWindow::tabifyDockWidget(QDockWidget *first, QDockWidget *second)
 {
    d_func()->layout->tabifyDockWidget(first, second);
 }
-
-
-/*!
-    \fn QList<QDockWidget*> QMainWindow::tabifiedDockWidgets(QDockWidget *dockwidget) const
-
-    Returns the dock widgets that are tabified together with \a dockwidget.
-
-    \since 4.5
-    \sa tabifyDockWidget()
-*/
 
 QList<QDockWidget *> QMainWindow::tabifiedDockWidgets(QDockWidget *dockwidget) const
 {
@@ -784,11 +727,6 @@ QList<QDockWidget *> QMainWindow::tabifiedDockWidgets(QDockWidget *dockwidget) c
    return ret;
 }
 
-
-/*!
-    Removes the \a dockwidget from the main window layout and hides
-    it. Note that the \a dockwidget is \e not deleted.
-*/
 void QMainWindow::removeDockWidget(QDockWidget *dockwidget)
 {
    if (dockwidget) {
@@ -797,13 +735,6 @@ void QMainWindow::removeDockWidget(QDockWidget *dockwidget)
    }
 }
 
-/*!
-    Returns the Qt::DockWidgetArea for \a dockwidget. If \a dockwidget
-    has not been added to the main window, this function returns \c
-    Qt::NoDockWidgetArea.
-
-    \sa addDockWidget() splitDockWidget() Qt::DockWidgetArea
-*/
 Qt::DockWidgetArea QMainWindow::dockWidgetArea(QDockWidget *dockwidget) const
 {
    return d_func()->layout->dockWidgetArea(dockwidget);
@@ -818,25 +749,6 @@ void QMainWindow::resizeDocks(const QList<QDockWidget *> &docks,
 
 #endif // QT_NO_DOCKWIDGET
 
-/*!
-    Saves the current state of this mainwindow's toolbars and
-    dockwidgets. The \a version number is stored as part of the data.
-
-    The \link QObject::objectName objectName\endlink property is used
-    to identify each QToolBar and QDockWidget.  You should make sure
-    that this property is unique for each QToolBar and QDockWidget you
-    add to the QMainWindow
-
-    To restore the saved state, pass the return value and \a version
-    number to restoreState().
-
-    To save the geometry when the window closes, you can
-    implement a close event like this:
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qmainwindow.cpp 0
-
-    \sa restoreState(), QWidget::saveGeometry(), QWidget::restoreGeometry()
-*/
 QByteArray QMainWindow::saveState(int version) const
 {
    QByteArray data;
@@ -847,21 +759,6 @@ QByteArray QMainWindow::saveState(int version) const
    return data;
 }
 
-/*!
-    Restores the \a state of this mainwindow's toolbars and
-    dockwidgets. The \a version number is compared with that stored
-    in \a state. If they do not match, the mainwindow's state is left
-    unchanged, and this function returns \c false; otherwise, the state
-    is restored, and this function returns \c true.
-
-    To restore geometry saved using QSettings, you can use code like
-    this:
-
-    \snippet doc/src/snippets/code/src_gui_widgets_qmainwindow.cpp 1
-
-    \sa saveState(), QWidget::saveGeometry(),
-    QWidget::restoreGeometry(), restoreDockWidget()
-*/
 bool QMainWindow::restoreState(const QByteArray &state, int version)
 {
    if (state.isEmpty()) {
@@ -1110,7 +1007,6 @@ void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
    (void) set;
 #endif
 
-
 }
 
 bool QMainWindow::unifiedTitleAndToolBarOnMac() const
@@ -1124,9 +1020,6 @@ bool QMainWindow::unifiedTitleAndToolBarOnMac() const
 
 #endif
 
-/*!
-    \internal
-*/
 bool QMainWindow::isSeparator(const QPoint &pos) const
 {
 #ifndef QT_NO_DOCKWIDGET
@@ -1139,9 +1032,7 @@ bool QMainWindow::isSeparator(const QPoint &pos) const
 }
 
 #ifndef QT_NO_CONTEXTMENU
-/*!
-    \reimp
-*/
+
 void QMainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
    event->ignore();
@@ -1157,6 +1048,7 @@ void QMainWindow::contextMenuEvent(QContextMenuEvent *event)
          break;
       }
 #endif
+
 #ifndef QT_NO_DOCKWIDGET
       if (QDockWidget *dw = qobject_cast<QDockWidget *>(child)) {
          if (dw->parentWidget() != this) {
@@ -1169,7 +1061,8 @@ void QMainWindow::contextMenuEvent(QContextMenuEvent *event)
          }
          break;
       }
-#endif // QT_NO_DOCKWIDGET
+#endif
+
 #ifndef QT_NO_TOOLBAR
       if (QToolBar *tb = qobject_cast<QToolBar *>(child)) {
          if (tb->parentWidget() != this) {
@@ -1180,12 +1073,14 @@ void QMainWindow::contextMenuEvent(QContextMenuEvent *event)
 #endif
       child = child->parentWidget();
    }
+
    if (child == this) {
       return;
    }
 
 #ifndef QT_NO_MENU
    QMenu *popup = createPopupMenu();
+
    if (popup) {
       if (!popup->isEmpty()) {
          popup->setAttribute(Qt::WA_DeleteOnClose);
@@ -1200,25 +1095,13 @@ void QMainWindow::contextMenuEvent(QContextMenuEvent *event)
 #endif // QT_NO_CONTEXTMENU
 
 #ifndef QT_NO_MENU
-/*!
-    Returns a popup menu containing checkable entries for the toolbars and
-    dock widgets present in the main window. If  there are no toolbars and
-    dock widgets present, this function returns a null pointer.
 
-    By default, this function is called by the main window when the user
-    activates a context menu, typically by right-clicking on a toolbar or a dock
-    widget.
-
-    If you want to create a custom popup menu, reimplement this function and
-    return a newly-created popup menu. Ownership of the popup menu is transferred
-    to the caller.
-
-    \sa addDockWidget(), addToolBar(), menuBar()
-*/
 QMenu *QMainWindow::createPopupMenu()
 {
    Q_D(QMainWindow);
-   QMenu *menu = 0;
+
+   QMenu *menu = nullptr;
+
 #ifndef QT_NO_DOCKWIDGET
    QList<QDockWidget *> dockwidgets = findChildren<QDockWidget *>();
    if (dockwidgets.size()) {
@@ -1245,7 +1128,8 @@ QMenu *QMainWindow::createPopupMenu()
       }
       menu->addSeparator();
    }
-#endif // QT_NO_DOCKWIDGET
+#endif
+
 #ifndef QT_NO_TOOLBAR
    QList<QToolBar *> toolbars = findChildren<QToolBar *>();
    if (toolbars.size()) {
@@ -1266,7 +1150,5 @@ QMenu *QMainWindow::createPopupMenu()
    return menu;
 }
 #endif // QT_NO_MENU
-
-
 
 #endif // QT_NO_MAINWINDOW

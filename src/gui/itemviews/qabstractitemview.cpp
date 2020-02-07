@@ -2622,11 +2622,6 @@ void QAbstractItemView::setIndexWidget(const QModelIndex &index, QWidget *widget
    }
 }
 
-/*!
-    \since 4.1
-
-    Returns the widget for the item at the given \a index.
-*/
 QWidget *QAbstractItemView::indexWidget(const QModelIndex &index) const
 {
    Q_D(const QAbstractItemView);
@@ -2638,25 +2633,11 @@ QWidget *QAbstractItemView::indexWidget(const QModelIndex &index) const
    return 0;
 }
 
-/*!
-    \since 4.1
-
-    Scrolls the view to the top.
-
-    \sa scrollTo(), scrollToBottom()
-*/
 void QAbstractItemView::scrollToTop()
 {
    verticalScrollBar()->setValue(verticalScrollBar()->minimum());
 }
 
-/*!
-    \since 4.1
-
-    Scrolls the view to the bottom.
-
-    \sa scrollTo(), scrollToTop()
-*/
 void QAbstractItemView::scrollToBottom()
 {
    Q_D(QAbstractItemView);
@@ -2669,12 +2650,6 @@ void QAbstractItemView::scrollToBottom()
    verticalScrollBar()->setValue(verticalScrollBar()->maximum());
 }
 
-/*!
-    \since 4.3
-
-    Updates the area occupied by the given \a index.
-
-*/
 void QAbstractItemView::update(const QModelIndex &index)
 {
    Q_D(QAbstractItemView);
@@ -2827,6 +2802,7 @@ void QAbstractItemViewPrivate::_q_rowsRemoved(const QModelIndex &index, int star
       QAccessible::updateAccessibility(&accessibleEvent);
    }
 #endif
+
    updateGeometry();
 }
 
@@ -2919,12 +2895,7 @@ void QAbstractItemViewPrivate::_q_columnsRemoved(const QModelIndex &index, int s
    updateGeometry();
 }
 
-
-/*!
-    \internal
-
-    This slot is called when rows have been inserted.
-*/
+// internal
 void QAbstractItemViewPrivate::_q_rowsInserted(const QModelIndex &index, int start, int end)
 {
   (void) index;
@@ -2940,14 +2911,11 @@ void QAbstractItemViewPrivate::_q_rowsInserted(const QModelIndex &index, int sta
       QAccessible::updateAccessibility(&accessibleEvent);
    }
 #endif
+
    updateGeometry();
 }
 
-/*!
-    \internal
-
-    This slot is called when columns have been inserted.
-*/
+// internal
 void QAbstractItemViewPrivate::_q_columnsInserted(const QModelIndex &index, int start, int end)
 {
   (void) index;
@@ -2970,20 +2938,14 @@ void QAbstractItemViewPrivate::_q_columnsInserted(const QModelIndex &index, int 
    updateGeometry();
 }
 
-/*!
-    \internal
-*/
+// internal
 void QAbstractItemViewPrivate::_q_modelDestroyed()
 {
    model = QAbstractItemModelPrivate::staticEmptyModel();
    doDelayedReset();
 }
 
-/*!
-    \internal
-
-    This slot is called when the layout is changed.
-*/
+// internal
 void QAbstractItemViewPrivate::_q_layoutChanged()
 {
    doDelayedItemsLayout();
@@ -3007,13 +2969,6 @@ void QAbstractItemViewPrivate::_q_columnsMoved(const QModelIndex &, int, int, co
    _q_layoutChanged();
 }
 
-/*!
-    This slot is called when the selection is changed. The previous
-    selection (which may be empty), is specified by \a deselected, and the
-    new selection by \a selected.
-
-    \sa setSelection()
-*/
 void QAbstractItemView::selectionChanged(const QItemSelection &selected,
    const QItemSelection &deselected)
 {
@@ -3023,14 +2978,6 @@ void QAbstractItemView::selectionChanged(const QItemSelection &selected,
    }
 }
 
-/*!
-    This slot is called when a new item becomes the current item.
-    The previous current item is specified by the \a previous index, and the new
-    item by the \a current index.
-
-    If you want to know about changes to items see the
-    dataChanged() signal.
-*/
 void QAbstractItemView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
    Q_D(QAbstractItemView);

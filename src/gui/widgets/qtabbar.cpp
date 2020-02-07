@@ -21,11 +21,14 @@
 *
 ***********************************************************************/
 
+#include <qtabbar_p.h>
+
 #include <qlayoutengine_p.h>
 #include <qabstractitemdelegate.h>
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qcursor.h>
+#include <qdebug.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qstyle.h>
@@ -44,11 +47,7 @@
 #include <qplatform_nativeinterface.h>
 #endif
 
-#include <qdebug.h>
-#include <qtabbar_p.h>
-
 #ifndef QT_NO_TABBAR
-
 
 QMovableTabWidget::QMovableTabWidget(QWidget *parent)
    : QWidget(parent)
@@ -952,10 +951,6 @@ bool QTabBar::isTabEnabled(int index) const
    return false;
 }
 
-/*!
-    If \a enabled is true then the tab at position \a index is
-    enabled; otherwise the item at position \a index is disabled.
-*/
 void QTabBar::setTabEnabled(int index, bool enabled)
 {
    Q_D(QTabBar);
@@ -1384,54 +1379,35 @@ QSize QTabBar::tabSizeHint(int index) const
    return QSize();
 }
 
-/*!
-  This virtual handler is called after a new tab was added or
-  inserted at position \a index.
-
-  \sa tabRemoved()
- */
 void QTabBar::tabInserted(int index)
 {
    (void) index;
 }
 
-/*!
-  This virtual handler is called after a tab was removed from
-  position \a index.
-
-  \sa tabInserted()
- */
 void QTabBar::tabRemoved(int index)
 {
    (void) index;
 }
 
-/*!
-  This virtual handler is called whenever the tab layout changes.
-
-  \sa tabRect()
- */
 void QTabBar::tabLayoutChange()
 {
 }
 
-
-/*!\reimp
- */
 void QTabBar::showEvent(QShowEvent *)
 {
    Q_D(QTabBar);
+
    if (d->layoutDirty) {
       d->refresh();
    }
+
    if (!d->validIndex(d->currentIndex)) {
       setCurrentIndex(0);
    }
+
    d->updateMacBorderMetrics();
 }
 
-/*!\reimp
- */
 void QTabBar::hideEvent(QHideEvent *)
 {
    Q_D(QTabBar);

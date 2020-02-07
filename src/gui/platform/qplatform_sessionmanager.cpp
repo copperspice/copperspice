@@ -27,8 +27,7 @@
 #ifndef QT_NO_SESSIONMANAGER
 
 QPlatformSessionManager::QPlatformSessionManager(const QString &id, const QString &key)
-   : m_sessionId(id),
-     m_sessionKey(key),
+   : m_sessionId(id), m_sessionKey(key),
      m_restartHint(QSessionManager::RestartIfRunning)
 {
 }

@@ -450,15 +450,18 @@ qreal QPlainTextEditPrivate::verticalOffset(int topBlock, int topLine) const
       (void) r;
 
       QTextLayout *layout = currentBlock.layout();
+
       if (layout && topLine <= layout->lineCount()) {
          QTextLine line = layout->lineAt(topLine - 1);
          const QRectF lr = line.naturalTextRect();
          offset = lr.bottom();
       }
    }
+
    if (topBlock == 0 && topLine == 0) {
       offset -= doc->documentMargin();   // top margin
    }
+
    return offset;
 }
 
@@ -1447,6 +1450,7 @@ void QPlainTextEdit::keyReleaseEvent(QKeyEvent *e)
 {
 #ifdef QT_KEYPAD_NAVIGATION
    Q_D(QPlainTextEdit);
+
    if (QApplication::keypadNavigationEnabled()) {
       if (!e->isAutoRepeat() && e->key() == Qt::Key_Back
          && d->deleteAllTimer.isActive()) {
@@ -1480,8 +1484,6 @@ QVariant QPlainTextEdit::loadResource(int type, const QUrl &name)
    return QVariant();
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::resizeEvent(QResizeEvent *e)
 {
    Q_D(QPlainTextEdit);

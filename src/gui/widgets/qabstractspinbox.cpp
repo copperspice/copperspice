@@ -608,6 +608,7 @@ void QAbstractSpinBox::paintEvent(QPaintEvent *)
 {
    QStyleOptionSpinBox opt;
    initStyleOption(&opt);
+
    QStylePainter p(this);
    p.drawComplexControl(QStyle::CC_SpinBox, opt);
 }
@@ -662,12 +663,14 @@ void QAbstractSpinBox::keyPressEvent(QKeyEvent *event)
                d->updateState(up, true);
             }
          }
+
 #ifndef QT_NO_ACCESSIBILITY
          QAccessibleValueChangeEvent event(this, d->value);
          QAccessible::updateAccessibility(&event);
 #endif
          return;
       }
+
 #ifdef QT_KEYPAD_NAVIGATION
       case Qt::Key_Left:
       case Qt::Key_Right:
@@ -676,6 +679,7 @@ void QAbstractSpinBox::keyPressEvent(QKeyEvent *event)
             return;
          }
          break;
+
       case Qt::Key_Back:
          if (QApplication::keypadNavigationEnabled() && !hasEditFocus()) {
             event->ignore();
@@ -1805,6 +1809,7 @@ int QAbstractSpinBoxPrivate::variantCompare(const QVariant &arg1, const QVariant
          } else {
             return 1;
          }
+
       case QVariant::Int:
          if (arg1.toInt() == arg2.toInt()) {
             return 0;

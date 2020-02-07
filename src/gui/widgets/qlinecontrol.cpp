@@ -590,13 +590,6 @@ void QLineControl::draw(QPainter *painter, const QPoint &offset, const QRect &cl
    }
 }
 
-/*!
-    \internal
-
-    Sets the selection to cover the word at the given cursor position.
-    The word boundaries are defined by the behavior of QTextLayout::SkipWords
-    cursor mode.
-*/
 void QLineControl::selectWordAtPos(int cursor)
 {
    int next = cursor + 1;
@@ -615,18 +608,6 @@ void QLineControl::selectWordAtPos(int cursor)
    moveCursor(end, true);
 }
 
-/*!
-    \internal
-
-    Completes a change to the line control text.  If the change is not valid
-    will undo the line control state back to the given \a validateFromState.
-
-    If \a edited is true and the change is valid, will emit textEdited() in
-    addition to textChanged().  Otherwise only emits textChanged() on a valid
-    change.
-
-    The \a update value is currently unused.
-*/
 bool QLineControl::finishChange(int validateFromState, bool update, bool edited)
 {
    (void) update;
@@ -959,12 +940,16 @@ void QLineControl::parseInputMask(const QString &maskFields)
          m_maskData[index].caseMode = m;
          index++;
          escape = false;
+
       } else if (c == QLatin1Char('<')) {
          m = MaskInputData::Lower;
+
       } else if (c == QLatin1Char('>')) {
          m = MaskInputData::Upper;
+
       } else if (c == QLatin1Char('!')) {
          m = MaskInputData::NoCaseMode;
+
       } else if (c != QLatin1Char('{') && c != QLatin1Char('}') && c != QLatin1Char('[') && c != QLatin1Char(']')) {
          switch (c.unicode()) {
             case 'A':
@@ -994,7 +979,7 @@ void QLineControl::parseInputMask(const QString &maskFields)
                break;
          }
 
-         if (!escape) {
+         if (! escape) {
             m_maskData[index].maskChar = c;
             m_maskData[index].separator = s;
             m_maskData[index].caseMode = m;

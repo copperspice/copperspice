@@ -1329,14 +1329,6 @@ void QHeaderView::sectionsInserted(const QModelIndex &parent,
    }
 }
 
-/*!
-    This slot is called when sections are removed from the \a parent.
-    \a logicalFirst and \a logicalLast signify where the sections were removed.
-
-    If only one section is removed, \a logicalFirst and \a logicalLast will
-    be the same.
-*/
-
 void QHeaderView::sectionsAboutToBeRemoved(const QModelIndex &parent, int logicalFirst, int logicalLast)
 {
   (void) parent;

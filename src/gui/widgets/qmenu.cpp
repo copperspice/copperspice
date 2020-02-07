@@ -288,62 +288,69 @@ void QMenuPrivate::updateActionRects() const
 void QMenuPrivate::updateActionRects(const QRect &screen) const
 {
    Q_Q(const QMenu);
-   if (!itemsDirty) {
+   if (! itemsDirty) {
       return;
    }
 
    q->ensurePolished();
 
-   //let's reinitialize the buffer
+   // reinitialize the buffer
    actionRects.resize(actions.count());
    actionRects.fill(QRect());
 
    int lastVisibleAction = getLastVisibleAction();
 
-   int max_column_width = 0,
-       dh = screen.height(),
-       y = 0;
+   int max_column_width = 0;
+   int dh = screen.height();
+   int y  = 0;
+
    QStyle *style = q->style();
    QStyleOption opt;
    opt.init(q);
-   const int hmargin = style->pixelMetric(QStyle::PM_MenuHMargin, &opt, q),
-             vmargin = style->pixelMetric(QStyle::PM_MenuVMargin, &opt, q),
-             icone = style->pixelMetric(QStyle::PM_SmallIconSize, &opt, q);
-   const int fw = style->pixelMetric(QStyle::PM_MenuPanelWidth, &opt, q);
-   const int deskFw = style->pixelMetric(QStyle::PM_MenuDesktopFrameWidth, &opt, q);
+
+   const int hmargin = style->pixelMetric(QStyle::PM_MenuHMargin, &opt, q);
+   const int vmargin = style->pixelMetric(QStyle::PM_MenuVMargin, &opt, q);
+   const int icone   = style->pixelMetric(QStyle::PM_SmallIconSize, &opt, q);
+
+   const int fw      = style->pixelMetric(QStyle::PM_MenuPanelWidth, &opt, q);
+   const int deskFw  = style->pixelMetric(QStyle::PM_MenuDesktopFrameWidth, &opt, q);
    const int tearoffHeight = tearoff ? style->pixelMetric(QStyle::PM_MenuTearoffHeight, &opt, q) : 0;
 
-   //for compatibility now - will have to refactor this away
-   tabWidth = 0;
+   // for compatibility - will have to refactor this away
+   tabWidth     = 0;
    maxIconWidth = 0;
    hasCheckableItems = false;
    ncols = 1;
 
    for (int i = 0; i < actions.count(); ++i) {
       QAction *action = actions.at(i);
-      if (action->isSeparator() || !action->isVisible() || widgetItems.contains(action)) {
+
+      if (action->isSeparator() || ! action->isVisible() || widgetItems.contains(action)) {
          continue;
       }
-      //..and some members
+
+      // some members
       hasCheckableItems |= action->isCheckable();
-      QIcon is = action->icon();
-      if (!is.isNull()) {
+      QIcon t_icon = action->icon();
+
+      if (! t_icon.isNull()) {
          maxIconWidth = qMax(maxIconWidth, icone + 4);
       }
    }
 
-   //calculate size
+   // calculate size
    QFontMetrics qfm = q->fontMetrics();
    bool previousWasSeparator = true; // this is true to allow removing the leading separators
+
    for (int i = 0; i <= lastVisibleAction; i++) {
       QAction *action = actions.at(i);
 
-      const bool isSection = action->isSeparator() && (!action->text().isEmpty() || !action->icon().isNull());
+      const bool isSection = action->isSeparator() && (!action->text().isEmpty() || ! action->icon().isNull());
       const bool isPlainSeparator = (isSection && !q->style()->styleHint(QStyle::SH_Menu_SupportsSections))
-         || (action->isSeparator() && !isSection);
+         || (action->isSeparator() && ! isSection);
 
-      if (!action->isVisible() ||
-         (collapsibleSeparators && previousWasSeparator && isPlainSeparator))  {
+      if (! action->isVisible() ||
+               (collapsibleSeparators && previousWasSeparator && isPlainSeparator))  {
          continue;   // we continue, this action will get an empty QRect
       }
 
@@ -357,10 +364,13 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
       QSize sz;
       if (QWidget *w = widgetItems.value(action)) {
          sz = w->sizeHint().expandedTo(w->minimumSize()).expandedTo(w->minimumSizeHint()).boundedTo(w->maximumSize());
+
       } else {
-         //calc what I think the size is..
+         // calc what I think the size is
+
          if (action->isSeparator()) {
             sz = QSize(2, 2);
+
          } else {
             QString s = action->text();
             int t = s.indexOf(QLatin1Char('\t'));
@@ -382,26 +392,29 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
             sz.setWidth(fm.boundingRect(QRect(), Qt::TextSingleLine | Qt::TextShowMnemonic, s).width());
             sz.setHeight(qMax(fm.height(), qfm.height()));
 
-            QIcon is = action->icon();
-            if (!is.isNull()) {
-               QSize is_sz = QSize(icone, icone);
-               if (is_sz.height() > sz.height()) {
-                  sz.setHeight(is_sz.height());
+            QIcon t_icon = action->icon();
+
+            if (! t_icon.isNull()) {
+               QSize iconSize = QSize(icone, icone);
+
+               if (iconSize.height() > sz.height()) {
+                  sz.setHeight(iconSize.height());
                }
             }
          }
+
          sz = style->sizeFromContents(QStyle::CT_MenuItem, &opt, sz, q);
       }
 
+      if (! sz.isEmpty()) {
 
-      if (!sz.isEmpty()) {
          max_column_width = qMax(max_column_width, sz.width());
          //wrapping
-         if (!scroll &&
-            y + sz.height() + vmargin > dh - (deskFw * 2)) {
+         if (!scroll && y + sz.height() + vmargin > dh - (deskFw * 2)) {
             ncols++;
             y = vmargin;
          }
+
          y += sz.height();
          //update the item
          actionRects[i] = QRect(0, 0, sz.width(), sz.height());
@@ -409,33 +422,33 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
    }
 
    max_column_width += tabWidth; //finally add in the tab width
-   const int sfcMargin = style->sizeFromContents(QStyle::CT_Menu, &opt, QApplication::globalStrut(),
-         q).width() - QApplication::globalStrut().width();
+   const int sfcMargin = style->sizeFromContents(QStyle::CT_Menu, &opt,
+                  QApplication::globalStrut(), q).width() - QApplication::globalStrut().width();
 
    const int min_column_width = q->minimumWidth() - (sfcMargin + leftmargin + rightmargin + 2 * (fw + hmargin));
    max_column_width = qMax(min_column_width, max_column_width);
 
    //calculate position
-   const int base_y = vmargin + fw + topmargin +
-      (scroll ? scroll->scrollOffset : 0) +
-      tearoffHeight;
+   const int base_y = vmargin + fw + topmargin + (scroll ? scroll->scrollOffset : 0) + tearoffHeight;
    int x = hmargin + fw + leftmargin;
-   y = base_y;
+   y     = base_y;
 
    for (int i = 0; i < actions.count(); i++) {
       QRect &rect = actionRects[i];
       if (rect.isNull()) {
          continue;
       }
+
       if (!scroll &&
          y + rect.height() > dh - deskFw * 2) {
          x += max_column_width + hmargin;
          y = base_y;
       }
-      rect.translate(x, y);                        //move
-      rect.setWidth(max_column_width); //uniform width
 
-      //we need to update the widgets geometry
+      rect.translate(x, y);             // move
+      rect.setWidth(max_column_width);  // uniform width
+
+      // we need to update the widgets geometry
       if (QWidget *widget = widgetItems.value(actions.at(i))) {
          widget->setGeometry(rect);
          widget->setVisible(actions.at(i)->isVisible());
@@ -443,37 +456,42 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
 
       y += rect.height();
    }
+
    itemsDirty = 0;
 }
 
 QSize QMenuPrivate::adjustMenuSizeForScreen(const QRect &screen)
 {
    Q_Q(QMenu);
+
    QSize ret = screen.size();
    itemsDirty = true;
    updateActionRects(screen);
    const int fw = q->style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, q);
    ret.setWidth(actionRects.at(getLastVisibleAction()).right() + fw);
+
    return ret;
 }
 
 int QMenuPrivate::getLastVisibleAction() const
 {
-   //let's try to get the last visible action
+   // let's try to get the last visible action
    int lastVisibleAction = actions.count() - 1;
+
    for (; lastVisibleAction >= 0; --lastVisibleAction) {
       const QAction *action = actions.at(lastVisibleAction);
+
       if (action->isVisible()) {
-         //removing trailing separators
+         // removing trailing separators
          if (action->isSeparator() && collapsibleSeparators) {
             continue;
          }
          break;
       }
    }
+
    return lastVisibleAction;
 }
-
 
 QRect QMenuPrivate::actionRect(QAction *act) const
 {
@@ -491,10 +509,13 @@ QRect QMenuPrivate::actionRect(QAction *act) const
 void QMenuPrivate::hideUpToMenuBar()
 {
    Q_Q(QMenu);
+
    bool fadeMenus = q->style()->styleHint(QStyle::SH_Menu_FadeOutOnHide);
+
    if (!tornoff) {
       QWidget *caused = causedPopup.widget;
-      hideMenu(q); //hide after getting causedPopup
+      hideMenu(q); // hide after getting causedPopup
+
       while (caused) {
 #ifndef QT_NO_MENUBAR
          if (QMenuBar *mb = qobject_cast<QMenuBar *>(caused)) {
@@ -2765,6 +2786,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
                key_consumed = true;
             }
          }
+
          if (!key_consumed && key == Qt::Key_Left && qobject_cast<QMenu *>(d->causedPopup.widget)) {
             QPointer<QWidget> caused = d->causedPopup.widget;
             d->hideMenu(this);
@@ -2793,7 +2815,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
          break;
 
       case Qt::Key_Space:
-         if (!style()->styleHint(QStyle::SH_Menu_SpaceActivatesItem, 0, this)) {
+         if (! style()->styleHint(QStyle::SH_Menu_SpaceActivatesItem, 0, this)) {
             break;
          }
          [[fallthrough]];
@@ -2820,6 +2842,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
          key_consumed = true;
          break;
       }
+
 #ifndef QT_NO_WHATSTHIS
       case Qt::Key_F1:
          if (!d->currentAction || d->currentAction->whatsThis().isEmpty()) {
@@ -2829,6 +2852,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
          d->activateAction(d->currentAction, QAction::Trigger);
          return;
 #endif
+
       default:
          key_consumed = false;
    }
@@ -2891,7 +2915,10 @@ void QMenu::keyPressEvent(QKeyEvent *e)
          else {
             int clashCount = 0;
 
-            QAction *first = 0, *currentSelected = 0, *firstAfterCurrent = 0;
+            QAction *first = nullptr;
+            QAction *currentSelected   = nullptr;
+            QAction *firstAfterCurrent = nullptr;
+
             QChar c = e->text().at(0).toUpper()[0];
 
             for (int i = 0; i < d->actions.size(); ++i) {
@@ -2906,19 +2933,23 @@ void QMenu::keyPressEvent(QKeyEvent *e)
 
                if (key == c.unicode()) {
                   clashCount++;
-                  if (!first) {
+
+                  if (! first) {
                      first = act;
                   }
+
                   if (act == d->currentAction) {
                      currentSelected = act;
-                  } else if (!firstAfterCurrent && currentSelected) {
+                  } else if (! firstAfterCurrent && currentSelected) {
                      firstAfterCurrent = act;
                   }
                }
             }
+
             if (clashCount == 1) {
                activateAction = true;
             }
+
             if (clashCount >= 1) {
                if (clashCount == 1 || !currentSelected || !firstAfterCurrent) {
                   nextAction = first;
@@ -2933,13 +2964,16 @@ void QMenu::keyPressEvent(QKeyEvent *e)
             if (d->scroll) {
                d->scrollMenu(nextAction, QMenuPrivate::QMenuScroller::ScrollCenter, false);
             }
+
             d->setCurrentAction(nextAction, 0, QMenuPrivate::SelectedFromElsewhere, true);
+
             if (!nextAction->menu() && activateAction) {
                d->setSyncAction();
                d->activateAction(nextAction, QAction::Trigger);
             }
          }
       }
+
       if (!key_consumed) {
 #ifndef QT_NO_MENUBAR
          if (QMenuBar *mb = qobject_cast<QMenuBar *>(d->topCausedWidget())) {
@@ -2956,8 +2990,9 @@ void QMenu::keyPressEvent(QKeyEvent *e)
       if (key_consumed && (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift || e->key() == Qt::Key_Meta)) {
          QApplication::beep();
       }
-#endif // Q_OS_WIN32
+#endif
    }
+
    if (key_consumed) {
       e->accept();
    } else {

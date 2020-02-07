@@ -26,14 +26,13 @@
 #ifndef QT_NO_GRAPHICSVIEW
 
 #include <qgraphicsitem.h>
-#include <QtCore/qtimeline.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qpointer.h>
-#include <QtCore/qpair.h>
-#include <QtGui/qmatrix.h>
+#include <qtimeline.h>
+#include <qpoint.h>
+#include <qpointer.h>
+#include <qpair.h>
+#include <qmatrix.h>
 
 #include <algorithm>
-
 
 static inline bool check_step_valid(qreal step, const char *method)
 {
@@ -43,6 +42,7 @@ static inline bool check_step_valid(qreal step, const char *method)
    }
    return true;
 }
+
 class QGraphicsItemAnimationPrivate
 {
  public:
@@ -119,7 +119,7 @@ qreal QGraphicsItemAnimationPrivate::linearValueForStep(qreal step, QVector<Pair
 
 void QGraphicsItemAnimationPrivate::insertUniquePair(qreal step, qreal value, QVector<Pair> *binList, const char *method)
 {
-   if (!check_step_valid(step, method)) {
+   if (! check_step_valid(step, method)) {
       return;
    }
 
@@ -134,61 +134,33 @@ void QGraphicsItemAnimationPrivate::insertUniquePair(qreal step, qreal value, QV
 
 }
 
-/*!
-  Constructs an animation object with the given \a parent.
-*/
 QGraphicsItemAnimation::QGraphicsItemAnimation(QObject *parent)
    : QObject(parent), d(new QGraphicsItemAnimationPrivate)
 {
    d->q = this;
 }
 
-/*!
-  Destroys the animation object.
-*/
 QGraphicsItemAnimation::~QGraphicsItemAnimation()
 {
    delete d;
 }
 
-/*!
-  Returns the item on which the animation object operates.
-
-  \sa setItem()
-*/
 QGraphicsItem *QGraphicsItemAnimation::item() const
 {
    return d->item;
 }
 
-/*!
-  Sets the specified \a item to be used in the animation.
-
-  \sa item()
-*/
 void QGraphicsItemAnimation::setItem(QGraphicsItem *item)
 {
    d->item = item;
    d->startPos = d->item->pos();
 }
 
-/*!
-  Returns the timeline object used to control the rate at which the animation
-  occurs.
-
-  \sa setTimeLine()
-*/
 QTimeLine *QGraphicsItemAnimation::timeLine() const
 {
    return d->timeLine;
 }
 
-/*!
-  Sets the timeline object used to control the rate of animation to the \a timeLine
-  specified.
-
-  \sa timeLine()
-*/
 void QGraphicsItemAnimation::setTimeLine(QTimeLine *timeLine)
 {
    if (d->timeLine == timeLine) {
@@ -204,11 +176,6 @@ void QGraphicsItemAnimation::setTimeLine(QTimeLine *timeLine)
    connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(setStep(qreal)));
 }
 
-/*!
-  Returns the position of the item at the given \a step value.
-
-  \sa setPosAt()
-*/
 QPointF QGraphicsItemAnimation::posAt(qreal step) const
 {
 
@@ -217,24 +184,12 @@ QPointF QGraphicsItemAnimation::posAt(qreal step) const
          d->linearValueForStep(step, &d->yPosition, d->startPos.y()));
 }
 
-/*!
-  \fn void QGraphicsItemAnimation::setPosAt(qreal step, const QPointF &point)
-
-  Sets the position of the item at the given \a step value to the \a point specified.
-
-  \sa posAt()
-*/
 void QGraphicsItemAnimation::setPosAt(qreal step, const QPointF &pos)
 {
    d->insertUniquePair(step, pos.x(), &d->xPosition, "setPosAt");
    d->insertUniquePair(step, pos.y(), &d->yPosition, "setPosAt");
 }
 
-/*!
-  Returns all explicitly inserted positions.
-
-  \sa posAt(), setPosAt()
-*/
 QList<QPair<qreal, QPointF>> QGraphicsItemAnimation::posList() const
 {
    QList<QPair<qreal, QPointF>> list;
@@ -247,9 +202,6 @@ QList<QPair<qreal, QPointF>> QGraphicsItemAnimation::posList() const
    return list;
 }
 
-/*!
-  Returns the matrix used to transform the item at the specified \a step value.
-*/
 QMatrix QGraphicsItemAnimation::matrixAt(qreal step) const
 {
    check_step_valid(step, "matrixAt");
@@ -270,11 +222,6 @@ QMatrix QGraphicsItemAnimation::matrixAt(qreal step) const
    return matrix;
 }
 
-/*!
-  Returns the angle at which the item is rotated at the specified \a step value.
-
-  \sa setRotationAt()
-*/
 qreal QGraphicsItemAnimation::rotationAt(qreal step) const
 {
 
@@ -282,21 +229,11 @@ qreal QGraphicsItemAnimation::rotationAt(qreal step) const
    return d->linearValueForStep(step, &d->rotation);
 }
 
-/*!
-  Sets the rotation of the item at the given \a step value to the \a angle specified.
-
-  \sa rotationAt()
-*/
 void QGraphicsItemAnimation::setRotationAt(qreal step, qreal angle)
 {
    d->insertUniquePair(step, angle, &d->rotation, "setRotationAt");
 }
 
-/*!
-  Returns all explicitly inserted rotations.
-
-  \sa rotationAt(), setRotationAt()
-*/
 QList<QPair<qreal, qreal>> QGraphicsItemAnimation::rotationList() const
 {
    QList<QPair<qreal, qreal>> list;
@@ -308,45 +245,24 @@ QList<QPair<qreal, qreal>> QGraphicsItemAnimation::rotationList() const
    return list;
 }
 
-/*!
-  Returns the horizontal translation of the item at the specified \a step value.
-
-  \sa setTranslationAt()
-*/
 qreal QGraphicsItemAnimation::xTranslationAt(qreal step) const
 {
    check_step_valid(step, "xTranslationAt");
    return d->linearValueForStep(step, &d->xTranslation);
 }
 
-/*!
-  Returns the vertical translation of the item at the specified \a step value.
-
-  \sa setTranslationAt()
-*/
 qreal QGraphicsItemAnimation::yTranslationAt(qreal step) const
 {
    check_step_valid(step, "yTranslationAt");
    return d->linearValueForStep(step, &d->yTranslation);
 }
 
-/*!
-  Sets the translation of the item at the given \a step value using the horizontal
-  and vertical coordinates specified by \a dx and \a dy.
-
-  \sa xTranslationAt(), yTranslationAt()
-*/
 void QGraphicsItemAnimation::setTranslationAt(qreal step, qreal dx, qreal dy)
 {
    d->insertUniquePair(step, dx, &d->xTranslation, "setTranslationAt");
    d->insertUniquePair(step, dy, &d->yTranslation, "setTranslationAt");
 }
 
-/*!
-  Returns all explicitly inserted translations.
-
-  \sa xTranslationAt(), yTranslationAt(), setTranslationAt()
-*/
 QList<QPair<qreal, QPointF>> QGraphicsItemAnimation::translationList() const
 {
    QList<QPair<qreal, QPointF>> list;
@@ -359,11 +275,6 @@ QList<QPair<qreal, QPointF>> QGraphicsItemAnimation::translationList() const
    return list;
 }
 
-/*!
-  Returns the vertical scale for the item at the specified \a step value.
-
-  \sa setScaleAt()
-*/
 qreal QGraphicsItemAnimation::verticalScaleAt(qreal step) const
 {
    check_step_valid(step, "verticalScaleAt");
@@ -371,34 +282,18 @@ qreal QGraphicsItemAnimation::verticalScaleAt(qreal step) const
    return d->linearValueForStep(step, &d->verticalScale, 1);
 }
 
-/*!
-  Returns the horizontal scale for the item at the specified \a step value.
-
-  \sa setScaleAt()
-*/
 qreal QGraphicsItemAnimation::horizontalScaleAt(qreal step) const
 {
    check_step_valid(step, "horizontalScaleAt");
    return d->linearValueForStep(step, &d->horizontalScale, 1);
 }
 
-/*!
-  Sets the scale of the item at the given \a step value using the horizontal and
-  vertical scale factors specified by \a sx and \a sy.
-
-  \sa verticalScaleAt(), horizontalScaleAt()
-*/
 void QGraphicsItemAnimation::setScaleAt(qreal step, qreal sx, qreal sy)
 {
    d->insertUniquePair(step, sx, &d->horizontalScale, "setScaleAt");
    d->insertUniquePair(step, sy, &d->verticalScale, "setScaleAt");
 }
 
-/*!
-  Returns all explicitly inserted scales.
-
-  \sa verticalScaleAt(), horizontalScaleAt(), setScaleAt()
-*/
 QList<QPair<qreal, QPointF>> QGraphicsItemAnimation::scaleList() const
 {
    QList<QPair<qreal, QPointF>> list;
@@ -411,45 +306,24 @@ QList<QPair<qreal, QPointF>> QGraphicsItemAnimation::scaleList() const
    return list;
 }
 
-/*!
-  Returns the vertical shear for the item at the specified \a step value.
-
-  \sa setShearAt()
-*/
 qreal QGraphicsItemAnimation::verticalShearAt(qreal step) const
 {
    check_step_valid(step, "verticalShearAt");
    return d->linearValueForStep(step, &d->verticalShear, 0);
 }
 
-/*!
-  Returns the horizontal shear for the item at the specified \a step value.
-
-  \sa setShearAt()
-*/
 qreal QGraphicsItemAnimation::horizontalShearAt(qreal step) const
 {
    check_step_valid(step, "horizontalShearAt");
    return d->linearValueForStep(step, &d->horizontalShear, 0);
 }
 
-/*!
-  Sets the shear of the item at the given \a step value using the horizontal and
-  vertical shear factors specified by \a sh and \a sv.
-
-  \sa verticalShearAt(), horizontalShearAt()
-*/
 void QGraphicsItemAnimation::setShearAt(qreal step, qreal sh, qreal sv)
 {
    d->insertUniquePair(step, sh, &d->horizontalShear, "setShearAt");
    d->insertUniquePair(step, sv, &d->verticalShear, "setShearAt");
 }
 
-/*!
-  Returns all explicitly inserted shears.
-
-  \sa verticalShearAt(), horizontalShearAt(), setShearAt()
-*/
 QList<QPair<qreal, QPointF>> QGraphicsItemAnimation::shearList() const
 {
    QList<QPair<qreal, QPointF>> list;
@@ -463,10 +337,6 @@ QList<QPair<qreal, QPointF>> QGraphicsItemAnimation::shearList() const
    return list;
 }
 
-/*!
-  Clears the scheduled transformations used for the animation, but
-  retains the item and timeline.
-*/
 void QGraphicsItemAnimation::clear()
 {
    d->xPosition.clear();
@@ -480,12 +350,6 @@ void QGraphicsItemAnimation::clear()
    d->yTranslation.clear();
 }
 
-/*!
-  \fn void QGraphicsItemAnimation::setStep(qreal step)
-
-  Sets the current \a step value for the animation, causing the
-  transformations scheduled at this step to be performed.
-*/
 void QGraphicsItemAnimation::setStep(qreal step)
 {
    if (!check_step_valid(step, "setStep"))  {
@@ -514,48 +378,24 @@ void QGraphicsItemAnimation::setStep(qreal step)
    afterAnimationStep(step);
 }
 
-/*!
-    Resets the item to its starting position and transformation.
-
-    \obsolete
-
-    You can call setStep(0) instead.
-*/
 void QGraphicsItemAnimation::reset()
 {
-   if (!d->item) {
+   if (! d->item) {
       return;
    }
+
    d->startPos = d->item->pos();
    d->startMatrix = d->item->matrix();
 }
 
-/*!
-  \fn void QGraphicsItemAnimation::beforeAnimationStep(qreal step)
-
-  This method is meant to be overridden by subclassed that needs to
-  execute additional code before a new step takes place. The
-  animation \a step is provided for use in cases where the action
-  depends on its value.
-*/
 void QGraphicsItemAnimation::beforeAnimationStep(qreal step)
 {
    (void) step;
 }
 
-/*!
-  \fn void QGraphicsItemAnimation::afterAnimationStep(qreal step)
-
-  This method is meant to be overridden in subclasses that need to
-  execute additional code after a new step has taken place. The
-  animation \a step is provided for use in cases where the action
-  depends on its value.
-*/
 void QGraphicsItemAnimation::afterAnimationStep(qreal step)
 {
    (void) step;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_GRAPHICSVIEW

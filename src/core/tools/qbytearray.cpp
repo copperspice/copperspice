@@ -382,16 +382,18 @@ QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel)
 
 QByteArray qUncompress(const uchar *data, int nbytes)
 {
-   if (!data) {
-      qWarning("qUncompress: Data is null");
+   if (! data) {
+      qWarning("qUncompress(): Data is null");
       return QByteArray();
    }
+
    if (nbytes <= 4) {
       if (nbytes < 4 || (data[0] != 0 || data[1] != 0 || data[2] != 0 || data[3] != 0)) {
-         qWarning("qUncompress: Input data is corrupted");
+         qWarning("qUncompress(): Input data is corrupted");
       }
       return QByteArray();
    }
+
    ulong expectedSize = (data[0] << 24) | (data[1] << 16) |
                         (data[2] <<  8) | (data[3]      );
    ulong len = qMax(expectedSize, 1ul);
@@ -401,14 +403,17 @@ QByteArray qUncompress(const uchar *data, int nbytes)
       ulong alloc = len;
       if (len  >= (1u << 31u) - sizeof(QByteArray::Data))
       {
-         //QByteArray does not support that huge size anyway.
-         qWarning("qUncompress: Input data is corrupted");
+         // QByteArray does not support that huge size anyway.
+         qWarning("qUncompress(): Input data is corrupted");
          return QByteArray();
       }
+
+      // emerald - review code
       QByteArray::Data *p = static_cast<QByteArray::Data *>(::realloc(d.data(), sizeof(QByteArray::Data) + alloc + 1));
-      if (!p) {
-         // Qt5 - throw an exception
-         qWarning("qUncompress: could not allocate enough memory to uncompress data");
+
+      if (p == nullptr) {
+         // may want to throw an exception
+         qWarning("qUncompress(): Unable to not allocate enough memory to uncompress data");
          return QByteArray();
       }
 
@@ -430,14 +435,16 @@ QByteArray qUncompress(const uchar *data, int nbytes)
                }
 
                QByteArray::Data *p = static_cast<QByteArray::Data *>(::realloc(d.data(), sizeof(QByteArray::Data) + len + 1));
-               if (!p) {
-                  // Qt5 - throw an exception
+                if (p == nullptr) {
+                  // may want to throw an exception
                   qWarning("qUncompress: could not allocate enough memory to uncompress data");
                   return QByteArray();
                }
+
                d.take(); // realloc was successful
                d.reset(p);
             }
+
             d->ref.initializeOwned();
             d->size = len;
             d->alloc = uint(len) + 1u;
@@ -451,7 +458,7 @@ QByteArray qUncompress(const uchar *data, int nbytes)
             }
 
          case Z_MEM_ERROR:
-            qWarning("qUncompress: Z_MEM_ERROR: Not enough memory");
+            qWarning("qUncompress(): Z_MEM_ERROR: Not enough memory");
             return QByteArray();
 
          case Z_BUF_ERROR:
@@ -459,7 +466,7 @@ QByteArray qUncompress(const uchar *data, int nbytes)
             continue;
 
          case Z_DATA_ERROR:
-            qWarning("qUncompress: Z_DATA_ERROR: Input data is corrupted");
+            qWarning("qUncompress(): Z_DATA_ERROR: Input data is corrupted");
             return QByteArray();
       }
    }

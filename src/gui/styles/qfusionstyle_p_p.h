@@ -54,15 +54,17 @@ class QFusionStylePrivate : public QCommonStylePrivate
       return QColor(255, 255, 255, 30);
    }
 
-   // On mac we want a standard blue color used when the system palette is used
+   // want a standard blue color used when the system palette is used
    bool isMacSystemPalette(const QPalette &pal) const {
 
 #if defined(Q_OS_DARWIN)
       const QPalette *themePalette = QGuiApplicationPrivate::platformTheme()->palette();
+
       if (themePalette && themePalette->color(QPalette::Normal, QPalette::Highlight) ==
-         pal.color(QPalette::Normal, QPalette::Highlight) &&
+                  pal.color(QPalette::Normal, QPalette::Highlight) &&
          themePalette->color(QPalette::Normal, QPalette::HighlightedText) ==
-         pal.color(QPalette::Normal, QPalette::HighlightedText)) {
+                  pal.color(QPalette::Normal, QPalette::HighlightedText)) {
+
          return true;
       }
 #else

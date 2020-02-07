@@ -168,7 +168,8 @@ struct QGlyphLayout {
       + sizeof(QGlyphAttributes) + sizeof(QGlyphJustification);
 
    inline QGlyphLayout()
-      : numGlyphs(0) {}
+      : numGlyphs(0)
+   {}
 
    inline explicit QGlyphLayout(char *address, int totalGlyphs) {
       offsets    = reinterpret_cast<QFixedPoint *>(address);

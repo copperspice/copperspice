@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qplatform_window.h>
-#include <qplatform_window_p.h>
 
 #include <qguiapplication_p.h>
 #include <qplatform_screen.h>
@@ -31,6 +30,7 @@
 #include <qscreen.h>
 
 #include <qhighdpiscaling_p.h>
+#include <qplatform_window_p.h>
 #include <qwindow_p.h>
 
 QPlatformWindow::QPlatformWindow(QWindow *window)
@@ -64,6 +64,7 @@ QSurfaceFormat QPlatformWindow::format() const
 {
    return QSurfaceFormat();
 }
+
 void QPlatformWindow::setGeometry(const QRect &rect)
 {
    Q_D(QPlatformWindow);
@@ -80,10 +81,12 @@ QRect QPlatformWindow::normalGeometry() const
 {
    return QRect();
 }
+
 QMargins QPlatformWindow::frameMargins() const
 {
    return QMargins();
 }
+
 void QPlatformWindow::setVisible(bool visible)
 {
    (void) visible;
@@ -97,10 +100,12 @@ void QPlatformWindow::setWindowFlags(Qt::WindowFlags flags)
 {
    (void) flags;
 }
+
 bool QPlatformWindow::isExposed() const
 {
    return window()->isVisible();
 }
+
 bool QPlatformWindow::isActive() const
 {
    return false;
@@ -116,10 +121,12 @@ QPoint QPlatformWindow::mapToGlobal(const QPoint &pos) const
 {
    const QPlatformWindow *p = this;
    QPoint result = pos;
+
    while (p) {
       result += p->geometry().topLeft();
       p = p->parent();
    }
+
    return result;
 }
 
@@ -127,11 +134,13 @@ QPoint QPlatformWindow::mapFromGlobal(const QPoint &pos) const
 {
    const QPlatformWindow *p = this;
    QPoint result = pos;
+
    while (p) {
       result -= p->geometry().topLeft();
       p = p->parent();
    }
    return result;
+
 }
 
 void QPlatformWindow::setWindowState(Qt::WindowState)
@@ -172,6 +181,7 @@ void QPlatformWindow::raise()
 {
    qWarning("This plugin does not support raise()");
 }
+
 void QPlatformWindow::lower()
 {
    qWarning("This plugin does not support lower()");
@@ -242,14 +252,17 @@ bool QPlatformWindow::startSystemResize(const QPoint &pos, Qt::Corner corner)
    (void) corner;
    return false;
 }
+
 void QPlatformWindow::setFrameStrutEventsEnabled(bool enabled)
 {
    (void) enabled;       // Do not warn as widgets enable it by default causing warnings with XCB.
 }
+
 bool QPlatformWindow::frameStrutEventsEnabled() const
 {
    return false;
 }
+
 QString QPlatformWindow::formatWindowTitle(const QString &title, const QString &separator)
 {
    QString fullTitle = title;
@@ -258,6 +271,7 @@ QString QPlatformWindow::formatWindowTitle(const QString &title, const QString &
       if (!fullTitle.isEmpty()) {
          fullTitle += separator;
       }
+
       fullTitle += *QGuiApplicationPrivate::displayName;
 
    } else if (fullTitle.isEmpty()) {
@@ -290,18 +304,22 @@ QPlatformScreen *QPlatformWindow::screenForGeometry(const QRect &newGeometry) co
    }
    return fallback;
 }
+
 QSize QPlatformWindow::constrainWindowSize(const QSize &size)
 {
    return size.expandedTo(QSize(0, 0)).boundedTo(QSize(QWINDOWSIZE_MAX, QWINDOWSIZE_MAX));
 }
+
 void QPlatformWindow::setAlertState(bool enable)
 {
    (void) enable;
 }
+
 bool QPlatformWindow::isAlertState() const
 {
    return false;
 }
+
 static inline const QScreen *effectiveScreen(const QWindow *window)
 {
    if (!window) {
@@ -326,9 +344,11 @@ static inline const QScreen *effectiveScreen(const QWindow *window)
 #endif
    return screen;
 }
+
 void QPlatformWindow::invalidateSurface()
 {
 }
+
 static QSize fixInitialSize(QSize size, const QWindow *w,
    int defaultWidth, int defaultHeight)
 {
@@ -336,6 +356,7 @@ static QSize fixInitialSize(QSize size, const QWindow *w,
       const int minWidth = w->minimumWidth();
       size.setWidth(minWidth > 0 ? minWidth : defaultWidth);
    }
+
    if (size.height() == 0) {
       const int minHeight = w->minimumHeight();
       size.setHeight(minHeight > 0 ? minHeight : defaultHeight);
@@ -352,10 +373,12 @@ QRect QPlatformWindow::initialGeometry(const QWindow *w,
             w, defaultWidth, defaultHeight);
       return QRect(initialGeometry.topLeft(), QHighDpi::toNative(size, factor));
    }
+
    const QScreen *screen = effectiveScreen(w);
    if (!screen) {
       return initialGeometry;
    }
+
    QRect rect(QHighDpi::fromNativePixels(initialGeometry, w));
    rect.setSize(fixInitialSize(rect.size(), w, defaultWidth, defaultHeight));
    if (qt_window_private(const_cast<QWindow *>(w))->positionAutomatic
@@ -426,10 +449,12 @@ QRect QPlatformWindow::windowGeometry() const
 {
    return QHighDpi::toNativePixels(window()->geometry(), window());
 }
+
 QRect QPlatformWindow::windowFrameGeometry() const
 {
    return QHighDpi::toNativePixels(window()->frameGeometry(), window());
 }
+
 QRectF QPlatformWindow::closestAcceptableGeometry(const QWindow *qWindow, const QRectF &nativeRect)
 {
    const QRectF rectF = QHighDpi::fromNativePixels(nativeRect, qWindow);
@@ -437,6 +462,7 @@ QRectF QPlatformWindow::closestAcceptableGeometry(const QWindow *qWindow, const 
    return !correctedGeometryF.isEmpty() && rectF != correctedGeometryF
       ? QHighDpi::toNativePixels(correctedGeometryF, qWindow) : nativeRect;
 }
+
 QRectF QPlatformWindow::windowClosestAcceptableGeometry(const QRectF &nativeRect) const
 {
    return QPlatformWindow::closestAcceptableGeometry(window(), nativeRect);

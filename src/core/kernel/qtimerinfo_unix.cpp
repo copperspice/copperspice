@@ -235,7 +235,7 @@ static void calculateCoarseTimerTimeout(QTimerInfo_Unix *t, timespec currentTime
    // The objective is to make most timers wake up at the same time, thereby reducing CPU wakeups.
 
    uint interval = uint(t->interval);
-   uint msec = uint(t->timeout.tv_nsec) / 1000 / 1000;
+   uint msec     = uint(t->timeout.tv_nsec) / 1000 / 1000;
    Q_ASSERT(interval >= 20);
 
    // Calculate how much we can round and still keep within 5% error
@@ -243,6 +243,7 @@ static void calculateCoarseTimerTimeout(QTimerInfo_Unix *t, timespec currentTime
 
    if (interval < 100 && interval != 25 && interval != 50 && interval != 75) {
       // special mode for timers of less than 100 ms
+
       if (interval < 50) {
          // round to even
          // round towards multiples of 50 ms
@@ -250,6 +251,7 @@ static void calculateCoarseTimerTimeout(QTimerInfo_Unix *t, timespec currentTime
          msec >>= 1;
          msec |= uint(roundUp);
          msec <<= 1;
+
       } else {
          // round to multiple of 4
          // round towards multiples of 100 ms
@@ -263,12 +265,12 @@ static void calculateCoarseTimerTimeout(QTimerInfo_Unix *t, timespec currentTime
       uint min = qMax(0, msec - static_cast<int>(absMaxRounding));
       uint max = qMin(1000u, msec + absMaxRounding);
 
-      // find the boundary that we want, according to the rules above
-      // extra rules:
+      // find the boundary that we want, according to the rules above extra rules:
       // 1) whatever the interval, we'll take any round-to-the-second timeout
       if (min == 0) {
          msec = 0;
          goto recalculate;
+
       } else if (max == 1000) {
          msec = 1000;
          goto recalculate;
@@ -284,6 +286,7 @@ static void calculateCoarseTimerTimeout(QTimerInfo_Unix *t, timespec currentTime
          if (interval >= 5000) {
             msec = msec >= 500 ? max : min;
             goto recalculate;
+
          } else {
             wantedBoundaryMultiple = 500;
          }

@@ -1113,12 +1113,14 @@ bool QXmlStreamReaderPrivate::parse()
 
                case '\r':
                   token = SPACE;
+
                   if (cu == '\r') {
                      if ((token_char = filterCarriageReturn())) {
                         ++lineNumber;
                         lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
                         break;
                      }
+
                   } else {
                      break;
                   }
@@ -1146,75 +1148,97 @@ bool QXmlStreamReaderPrivate::parse()
                case '\t':
                   token = SPACE;
                   break;
+
                case '&':
                   token = AMPERSAND;
                   break;
+
                case '#':
                   token = HASH;
                   break;
+
                case '\'':
                   token = QUOTE;
                   break;
+
                case '\"':
                   token = DBLQUOTE;
                   break;
+
                case '<':
                   token = LANGLE;
                   break;
+
                case '>':
                   token = RANGLE;
                   break;
+
                case '[':
                   token = LBRACK;
                   break;
+
                case ']':
                   token = RBRACK;
                   break;
+
                case '(':
                   token = LPAREN;
                   break;
+
                case ')':
                   token = RPAREN;
                   break;
+
                case '|':
                   token = PIPE;
                   break;
                case '=':
                   token = EQ;
                   break;
+
                case '%':
                   token = PERCENT;
                   break;
+
                case '/':
                   token = SLASH;
                   break;
+
                case ':':
                   token = COLON;
                   break;
                case ';':
                   token = SEMICOLON;
                   break;
+
                case ',':
                   token = COMMA;
                   break;
+
                case '-':
                   token = DASH;
                   break;
+
                case '+':
                   token = PLUS;
                   break;
+
                case '*':
                   token = STAR;
                   break;
+
                case '.':
                   token = DOT;
                   break;
+
                case '?':
                   token = QUESTIONMARK;
                   break;
+
                case '!':
                   token = BANG;
                   break;
+
                case '0':
                case '1':
                case '2':
@@ -1227,6 +1251,7 @@ bool QXmlStreamReaderPrivate::parse()
                case '9':
                   token = DIGIT;
                   break;
+
                default:
                   if (cu < 0x20) {
                      token = NOTOKEN;

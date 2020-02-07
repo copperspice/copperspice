@@ -1239,17 +1239,17 @@ void QApplicationPrivate::notifyActiveWindowChange(QWindow *previous)
    }
 }
 
-/*!internal
+/*! internal
  * Helper function that returns the new focus widget, but does not set the focus reason.
  * Returns 0 if a new focus widget could not be found.
  * Shared with QGraphicsProxyWidgetPrivate::findFocusChild()
 */
-QWidget *QApplicationPrivate::focusNextPrevChild_helper(QWidget *toplevel, bool next,
-   bool *wrappingOccurred)
+QWidget *QApplicationPrivate::focusNextPrevChild_helper(QWidget *toplevel, bool next, bool *wrappingOccurred)
 {
    uint focus_flag = qt_tab_all_widgets() ? Qt::TabFocus : Qt::StrongFocus;
 
    QWidget *f = toplevel->focusWidget();
+
    if (!f) {
       f = toplevel;
    }
@@ -1258,6 +1258,7 @@ QWidget *QApplicationPrivate::focusNextPrevChild_helper(QWidget *toplevel, bool 
    QWidget *test = f->d_func()->focus_next;
    bool seenWindow = false;
    bool focusWidgetAfterWindow = false;
+
    while (test && test != f) {
       if (test->isWindow()) {
          seenWindow = true;
@@ -3556,6 +3557,7 @@ void QApplicationPrivate::translateTouchCancel(QTouchDevice *device, ulong times
       if (widget) {
          widgetsNeedingCancel.insert(widget);
       }
+
       ++it;
    }
 

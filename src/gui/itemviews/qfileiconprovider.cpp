@@ -58,12 +58,12 @@ class QFileIconEngine : public QPixmapIconEngine
 
       QPixmap pixmap;
 
-      if (!size.isValid()) {
+      if (! size.isValid()) {
          return pixmap;
       }
 
       const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme();
-      if (!theme) {
+      if (! theme) {
          return pixmap;
       }
 

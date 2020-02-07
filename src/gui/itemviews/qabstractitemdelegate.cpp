@@ -80,8 +80,7 @@ void QAbstractItemDelegate::setEditorData(QWidget *, const QModelIndex &) const
    // does nothing
 }
 
-void QAbstractItemDelegate::setModelData(QWidget *,
-   QAbstractItemModel *, const QModelIndex &) const
+void QAbstractItemDelegate::setModelData(QWidget *, QAbstractItemModel *, const QModelIndex &) const
 {
    // does nothing
 }

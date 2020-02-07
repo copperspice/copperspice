@@ -572,16 +572,12 @@ void QLabel::mouseMoveEvent(QMouseEvent *ev)
    d->sendControlEvent(ev);
 }
 
-/*!\reimp
-*/
 void QLabel::mouseReleaseEvent(QMouseEvent *ev)
 {
    Q_D(QLabel);
    d->sendControlEvent(ev);
 }
 
-/*!\reimp
-*/
 void QLabel::contextMenuEvent(QContextMenuEvent *ev)
 {
 #ifdef QT_NO_CONTEXTMENU

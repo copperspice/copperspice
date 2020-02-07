@@ -241,16 +241,15 @@ void QPlatformThemePrivate::initializeSystemPalette()
 QPlatformTheme::QPlatformTheme()
    : d_ptr(new QPlatformThemePrivate)
 {
-
 }
 
 QPlatformTheme::QPlatformTheme(QPlatformThemePrivate *priv)
    : d_ptr(priv)
-{ }
+{
+}
 
 QPlatformTheme::~QPlatformTheme()
 {
-
 }
 
 bool QPlatformTheme::usePlatformNativeDialog(DialogType type) const
@@ -268,12 +267,14 @@ QPlatformDialogHelper *QPlatformTheme::createPlatformDialogHelper(DialogType typ
 const QPalette *QPlatformTheme::palette(Palette type) const
 {
    Q_D(const QPlatformTheme);
+
    if (type == QPlatformTheme::SystemPalette) {
       if (!d->systemPalette) {
          const_cast<QPlatformTheme *>(this)->d_ptr->initializeSystemPalette();
       }
       return d->systemPalette;
    }
+
    return 0;
 }
 
@@ -309,29 +310,41 @@ QVariant QPlatformTheme::themeHint(ThemeHint hint) const
    // the platform integration. The base QPlatformIntegration::styleHint()
    // function will in turn query QPlatformTheme::defaultThemeHint() if there
    // is no custom value.
+
    switch (hint) {
       case QPlatformTheme::CursorFlashTime:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::CursorFlashTime);
+
       case QPlatformTheme::KeyboardInputInterval:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::KeyboardInputInterval);
+
       case QPlatformTheme::KeyboardAutoRepeatRate:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::KeyboardAutoRepeatRate);
+
       case QPlatformTheme::MouseDoubleClickInterval:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::MouseDoubleClickInterval);
+
       case QPlatformTheme::StartDragDistance:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::StartDragDistance);
+
       case QPlatformTheme::StartDragTime:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::StartDragTime);
+
       case QPlatformTheme::StartDragVelocity:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::StartDragVelocity);
+
       case QPlatformTheme::PasswordMaskDelay:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::PasswordMaskDelay);
+
       case QPlatformTheme::PasswordMaskCharacter:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::PasswordMaskCharacter);
+
       case QPlatformTheme::MousePressAndHoldInterval:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::MousePressAndHoldInterval);
+
       case QPlatformTheme::ItemViewActivateItemOnSingleClick:
          return QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::ItemViewActivateItemOnSingleClick);
+
       default:
          return QPlatformTheme::defaultThemeHint(hint);
    }

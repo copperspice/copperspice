@@ -975,13 +975,6 @@ void QTextEdit::keyReleaseEvent(QKeyEvent *e)
    e->ignore();
 }
 
-/*!
-    Loads the resource specified by the given \a type and \a name.
-
-    This function is an extension of QTextDocument::loadResource().
-
-    \sa QTextDocument::loadResource()
-*/
 QVariant QTextEdit::loadResource(int type, const QUrl &name)
 {
    (void) type;
@@ -990,8 +983,6 @@ QVariant QTextEdit::loadResource(int type, const QUrl &name)
    return QVariant();
 }
 
-/*! \reimp
-*/
 void QTextEdit::resizeEvent(QResizeEvent *e)
 {
    Q_D(QTextEdit);

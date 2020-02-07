@@ -47,9 +47,7 @@ class CsChar
    public:
       CsChar()
          : m_char(0)
-      {
-
-      }
+      { }
 
       template <typename T = int>
       CsChar(char c)
@@ -62,13 +60,12 @@ class CsChar
 
       CsChar(char32_t c)
          : m_char(c)
-      {
-      }
+      { }
 
       CsChar(int c)
          : m_char(c)
-      {
-      }
+      { }
+
       CsChar(const CsChar &other)
          : m_char(other.m_char)
       { }

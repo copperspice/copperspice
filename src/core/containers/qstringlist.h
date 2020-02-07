@@ -35,20 +35,24 @@ using QMutableStringListIterator = QMutableListIterator<QString>;
 class QStringList : public QList<QString>
 {
  public:
-   QStringList() { }
+   QStringList()
+   { }
 
    explicit QStringList(const QString &value) {
       append(value);
    }
 
    QStringList(const QStringList &other)
-      : QList<QString>(other) { }
+      : QList<QString>(other)
+   { }
 
    QStringList(const QList<QString> &other)
-      : QList<QString>(other) { }
+      : QList<QString>(other)
+   { }
 
    QStringList(std::initializer_list<QString> args)
-      : QList<QString>(args) { }
+      : QList<QString>(args)
+   { }
 
    // methods
    bool Q_CORE_EXPORT contains(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
@@ -58,7 +62,8 @@ class QStringList : public QList<QString>
    QString Q_CORE_EXPORT join(const QString &sep) const;
 
    int Q_CORE_EXPORT removeDuplicates();
-   Q_CORE_EXPORT QStringList &replaceInStrings(const QString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+   Q_CORE_EXPORT QStringList &replaceInStrings(const QString &before, const QString &after,
+                  Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
    void Q_CORE_EXPORT sort();
 

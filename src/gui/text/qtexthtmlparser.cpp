@@ -2040,6 +2040,7 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
    QVector<QCss::Declaration> decls;
    QCss::Declaration decl;
    QCss::Value val;
+
    switch (node.id) {
       case Html_a:
       case Html_u: {
@@ -2061,6 +2062,7 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
                }
             }
          }
+
          if (needsUnderline) {
             decl = QCss::Declaration();
             decl.d->property = QLatin1String("text-decoration");
@@ -2073,6 +2075,7 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
          }
          break;
       }
+
       case Html_b:
       case Html_strong:
       case Html_h1:
@@ -2140,6 +2143,7 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
          decl.d->inheritable = true;
          decls << decl;
          break;
+
       case Html_s:
          decl = QCss::Declaration();
          decl.d->property = QLatin1String("text-decoration");
@@ -2150,6 +2154,7 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
          decl.d->inheritable = true;
          decls << decl;
          break;
+
       case Html_em:
       case Html_i:
       case Html_cite:
@@ -2165,6 +2170,7 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
          decl.d->inheritable = true;
          decls << decl;
          break;
+
       case Html_sub:
       case Html_sup:
          decl = QCss::Declaration();
@@ -2176,6 +2182,7 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
          decl.d->inheritable = true;
          decls << decl;
          break;
+
       case Html_ul:
       case Html_ol:
          decl = QCss::Declaration();
@@ -2187,6 +2194,7 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
          decl.d->inheritable = true;
          decls << decl;
          break;
+
       case Html_code:
       case Html_tt:
       case Html_kbd:
@@ -2232,9 +2240,11 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
          decl.d->inheritable = true;
          decls << decl;
          break;
+
       default:
          break;
    }
+
    return decls;
 }
 

@@ -295,9 +295,6 @@ QSize ControlLabel::sizeHint() const
    return label.size();
 }
 
-/*
-    \internal
-*/
 bool ControlLabel::event(QEvent *event)
 {
    if (event->type() == QEvent::WindowIconChange) {
@@ -316,18 +313,12 @@ bool ControlLabel::event(QEvent *event)
    return QWidget::event(event);
 }
 
-/*
-    \internal
-*/
 void ControlLabel::paintEvent(QPaintEvent * /*paintEvent*/)
 {
    QPainter painter(this);
    painter.drawPixmap(0, 0, label);
 }
 
-/*
-    \internal
-*/
 void ControlLabel::mousePressEvent(QMouseEvent *mouseEvent)
 {
    if (mouseEvent->button() != Qt::LeftButton) {
@@ -337,9 +328,6 @@ void ControlLabel::mousePressEvent(QMouseEvent *mouseEvent)
    isPressed = true;
 }
 
-/*
-    \internal
-*/
 void ControlLabel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 {
    if (mouseEvent->button() != Qt::LeftButton) {
@@ -350,9 +338,6 @@ void ControlLabel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
    emit _q_doubleClicked();
 }
 
-/*
-    \internal
-*/
 void ControlLabel::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
    if (mouseEvent->button() != Qt::LeftButton) {
@@ -365,9 +350,6 @@ void ControlLabel::mouseReleaseEvent(QMouseEvent *mouseEvent)
    }
 }
 
-/*
-    \internal
-*/
 void ControlLabel::updateWindowIcon()
 {
    QIcon menuIcon = windowIcon();
@@ -379,10 +361,7 @@ void ControlLabel::updateWindowIcon()
 }
 
 namespace QMdi {
-/*
-    \class ControllerWidget
-    \internal
-*/
+
 class ControllerWidget : public QWidget
 {
    GUI_CS_OBJECT(ControllerWidget)
@@ -407,7 +386,6 @@ class ControllerWidget : public QWidget
    GUI_CS_SIGNAL_1(Public, void _q_close())
    GUI_CS_SIGNAL_2(_q_close)
 
-
  protected:
    void paintEvent(QPaintEvent *event) override;
    void mousePressEvent(QMouseEvent *event) override;
@@ -431,9 +409,6 @@ class ControllerWidget : public QWidget
 };
 } // namespace QMdi
 
-/*
-    \internal
-*/
 ControllerWidget::ControllerWidget(QMdiSubWindow *subWindow, QWidget *parent)
    : QWidget(parent),
      activeControl(QStyle::SC_None),
@@ -450,9 +425,6 @@ ControllerWidget::ControllerWidget(QMdiSubWindow *subWindow, QWidget *parent)
    setMouseTracking(true);
 }
 
-/*
-    \internal
-*/
 QSize ControllerWidget::sizeHint() const
 {
    ensurePolished();
@@ -486,9 +458,6 @@ void ControllerWidget::setControlVisible(QMdiSubWindowPrivate::WindowStateAction
    }
 }
 
-/*
-    \internal
-*/
 void ControllerWidget::paintEvent(QPaintEvent * /*paintEvent*/)
 {
    QStyleOptionComplex opt;
@@ -507,9 +476,6 @@ void ControllerWidget::paintEvent(QPaintEvent * /*paintEvent*/)
    style()->drawComplexControl(QStyle::CC_MdiControls, &opt, &painter, mdiArea);
 }
 
-/*
-    \internal
-*/
 void ControllerWidget::mousePressEvent(QMouseEvent *event)
 {
    if (event->button() != Qt::LeftButton) {
@@ -520,9 +486,6 @@ void ControllerWidget::mousePressEvent(QMouseEvent *event)
    update();
 }
 
-/*
-    \internal
-*/
 void ControllerWidget::mouseReleaseEvent(QMouseEvent *event)
 {
    if (event->button() != Qt::LeftButton) {
@@ -551,9 +514,6 @@ void ControllerWidget::mouseReleaseEvent(QMouseEvent *event)
    update();
 }
 
-/*
-    \internal
-*/
 void ControllerWidget::mouseMoveEvent(QMouseEvent *event)
 {
    QStyle::SubControl under_mouse = getSubControl(event->pos());
@@ -564,18 +524,12 @@ void ControllerWidget::mouseMoveEvent(QMouseEvent *event)
    }
 }
 
-/*
-    \internal
-*/
 void ControllerWidget::leaveEvent(QEvent * /*event*/)
 {
    hoverControl = QStyle::SC_None;
    update();
 }
 
-/*
-    \internal
-*/
 bool ControllerWidget::event(QEvent *event)
 {
 #ifndef QT_NO_TOOLTIP
@@ -585,13 +539,11 @@ bool ControllerWidget::event(QEvent *event)
       QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
       showToolTip(helpEvent, this, opt, QStyle::CC_MdiControls, getSubControl(helpEvent->pos()));
    }
-#endif // QT_NO_TOOLTIP
+#endif
+
    return QWidget::event(event);
 }
 
-/*
-    \internal
-*/
 void ControllerWidget::initStyleOption(QStyleOptionComplex *option) const
 {
    option->initFrom(this);
@@ -599,13 +551,8 @@ void ControllerWidget::initStyleOption(QStyleOptionComplex *option) const
    option->activeSubControls = QStyle::SC_None;
 }
 
-/*
-    \internal
-*/
 ControlContainer::ControlContainer(QMdiSubWindow *mdiChild)
-   : QObject(mdiChild),
-     previousLeft(0),
-     previousRight(0),
+   : QObject(mdiChild), previousLeft(0), previousRight(0),
 #ifndef QT_NO_MENUBAR
      m_menuBar(0),
 #endif
@@ -620,10 +567,12 @@ ControlContainer::ControlContainer(QMdiSubWindow *mdiChild)
 
    m_menuLabel = new ControlElement<ControlLabel>(mdiChild);
    m_menuLabel->setWindowIcon(mdiChild->windowIcon());
+
 #ifndef QT_NO_MENU
    connect(m_menuLabel, SIGNAL(_q_clicked()), mdiChild, SLOT(showSystemMenu()));
 #endif
    connect(m_menuLabel, SIGNAL(_q_doubleClicked()), mdiChild, SLOT(close()));
+
 }
 
 ControlContainer::~ControlContainer()
@@ -631,6 +580,7 @@ ControlContainer::~ControlContainer()
 #ifndef QT_NO_MENUBAR
    removeButtonsFromMenuBar();
 #endif
+
    delete m_menuLabel;
    m_menuLabel = 0;
    delete m_controllerWidget;
@@ -638,9 +588,7 @@ ControlContainer::~ControlContainer()
 }
 
 #ifndef QT_NO_MENUBAR
-/*
-    \internal
-*/
+
 QMenuBar *QMdiSubWindowPrivate::menuBar() const
 {
 #if defined(QT_NO_MAINWINDOW)
@@ -811,9 +759,6 @@ QMdiSubWindowPrivate::QMdiSubWindowPrivate()
    initOperationMap();
 }
 
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::_q_updateStaysOnTopHint()
 {
 #ifndef QT_NO_ACTION
@@ -831,9 +776,6 @@ void QMdiSubWindowPrivate::_q_updateStaysOnTopHint()
 #endif
 }
 
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::_q_enterInteractiveMode()
 {
 #ifndef QT_NO_ACTION
@@ -858,29 +800,29 @@ void QMdiSubWindowPrivate::_q_enterInteractiveMode()
    }
 
    updateCursor();
+
 #ifndef QT_NO_CURSOR
    q->cursor().setPos(q->mapToGlobal(pressPos));
 #endif
+
    mousePressPosition = q->mapToParent(pressPos);
    oldGeometry = q->geometry();
    isInInteractiveMode = true;
    q->setFocus();
+
 #ifndef QT_NO_RUBBERBAND
    if ((q->testOption(QMdiSubWindow::RubberBandResize)
          && (currentOperation == BottomRightResize || currentOperation == BottomLeftResize))
       || (q->testOption(QMdiSubWindow::RubberBandMove) && currentOperation == Move)) {
       enterRubberBandMode();
    } else
-#endif // QT_NO_RUBBERBAND
+#endif
    {
       q->grabMouse();
    }
 #endif // QT_NO_ACTION
 }
 
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::_q_processFocusChanged(QWidget *old, QWidget *now)
 {
    (void) old;
@@ -893,19 +835,17 @@ void QMdiSubWindowPrivate::_q_processFocusChanged(QWidget *old, QWidget *now)
       setActive(true);
    }
 }
-
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::leaveInteractiveMode()
 {
    Q_Q(QMdiSubWindow);
+
 #ifndef QT_NO_RUBBERBAND
    if (isInRubberBandMode) {
       leaveRubberBandMode();
    } else
 #endif
       q->releaseMouse();
+
    isInInteractiveMode = false;
    currentOperation = None;
    updateDirtyRegions();

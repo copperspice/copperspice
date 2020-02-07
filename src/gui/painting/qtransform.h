@@ -24,14 +24,14 @@
 #ifndef QTRANSFORM_H
 #define QTRANSFORM_H
 
-#include <QtGui/qmatrix.h>
-#include <QtGui/qpainterpath.h>
-#include <QtGui/qpolygon.h>
-#include <QtGui/qregion.h>
-#include <QtGui/qwindowdefs.h>
-#include <QtCore/qline.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qrect.h>
+#include <qmatrix.h>
+#include <qpainterpath.h>
+#include <qpolygon.h>
+#include <qregion.h>
+#include <qwindowdefs.h>
+#include <qline.h>
+#include <qpoint.h>
+#include <qrect.h>
 
 class QVariant;
 
@@ -47,13 +47,17 @@ class Q_GUI_EXPORT QTransform
       TxProject   = 0x10
    };
 
-   inline explicit QTransform(Qt::Initialization) : affine(Qt::Uninitialized) {}
    QTransform();
-   QTransform(qreal h11, qreal h12, qreal h13,
-      qreal h21, qreal h22, qreal h23,
-      qreal h31, qreal h32, qreal h33 = 1.0);
-   QTransform(qreal h11, qreal h12, qreal h21,
-      qreal h22, qreal dx, qreal dy);
+
+   inline explicit QTransform(Qt::Initialization)
+      : affine(Qt::Uninitialized)
+   {}
+
+   QTransform(qreal h11, qreal h12, qreal h13, qreal h21, qreal h22, qreal h23,
+                  qreal h31, qreal h32, qreal h33 = 1.0);
+
+   QTransform(qreal h11, qreal h12, qreal h21, qreal h22, qreal dx, qreal dy);
+
    explicit QTransform(const QMatrix &mtx);
 
    QTransform(const QTransform &other) {
@@ -85,7 +89,8 @@ class Q_GUI_EXPORT QTransform
    inline qreal dx() const;
    inline qreal dy() const;
 
-   void setMatrix(qreal m11, qreal m12, qreal m13, qreal m21, qreal m22, qreal m23, qreal m31, qreal m32, qreal m33);
+   void setMatrix(qreal m11, qreal m12, qreal m13, qreal m21, qreal m22, qreal m23,
+                  qreal m31, qreal m32, qreal m33);
 
    QTransform inverted(bool *invertible = nullptr) const;
    QTransform adjoint() const;
@@ -101,17 +106,8 @@ class Q_GUI_EXPORT QTransform
    static bool quadToSquare(const QPolygonF &quad, QTransform &result);
    static bool quadToQuad(const QPolygonF &one, const QPolygonF &two, QTransform &result);
 
-   bool operator==(const QTransform &) const;
-   bool operator!=(const QTransform &) const;
-
-   QTransform &operator*=(const QTransform &);
-   QTransform operator*(const QTransform &o) const;
-
-   QTransform &operator=(const QTransform &);
-
-   operator QVariant() const;
-
    void reset();
+
    QPoint       map(const QPoint &p) const;
    QPointF      map(const QPointF &p) const;
    QLine        map(const QLine &l) const;
@@ -121,41 +117,52 @@ class Q_GUI_EXPORT QTransform
    QRegion      map(const QRegion &r) const;
    QPainterPath map(const QPainterPath &p) const;
    QPolygon     mapToPolygon(const QRect &r) const;
+
    QRect mapRect(const QRect &) const;
    QRectF mapRect(const QRectF &) const;
+
    void map(int x, int y, int *tx, int *ty) const;
    void map(qreal x, qreal y, qreal *tx, qreal *ty) const;
 
    const QMatrix &toAffine() const;
+
+   static QTransform fromTranslate(qreal dx, qreal dy);
+   static QTransform fromScale(qreal dx, qreal dy);
+
+   // operators
+   operator QVariant() const;      // emerald - review design
+
+   bool operator==(const QTransform &) const;
+   bool operator!=(const QTransform &) const;
+
+   QTransform &operator*=(const QTransform &);
+   QTransform operator*(const QTransform &o) const;
+
+   QTransform &operator=(const QTransform &);
 
    inline QTransform &operator*=(qreal div);
    inline QTransform &operator/=(qreal div);
    inline QTransform &operator+=(qreal div);
    inline QTransform &operator-=(qreal div);
 
-   static QTransform fromTranslate(qreal dx, qreal dy);
-   static QTransform fromScale(qreal dx, qreal dy);
-
  private:
-   inline QTransform(qreal h11, qreal h12, qreal h13, qreal h21, qreal h22, qreal h23, qreal h31, qreal h32, qreal h33, bool)
-      : affine(h11, h12, h21, h22, h31, h32, true)
-      , m_13(h13), m_23(h23), m_33(h33)
-      , m_type(TxNone)
-      , m_dirty(TxProject), d(nullptr)
-   {  }
+   inline QTransform(qreal h11, qreal h12, qreal h13, qreal h21, qreal h22, qreal h23,
+                  qreal h31, qreal h32, qreal h33, bool)
+      : affine(h11, h12, h21, h22, h31, h32, true), m_13(h13), m_23(h23), m_33(h33)
+      , m_type(TxNone), m_dirty(TxProject), d(nullptr)
+   { }
+
    inline QTransform(bool)
-      : affine(true)
-      , m_13(0), m_23(0), m_33(1)
-      , m_type(TxNone)
-      , m_dirty(TxNone), d(nullptr)
-   {  }
+      : affine(true), m_13(0), m_23(0), m_33(1), m_type(TxNone), m_dirty(TxNone), d(nullptr)
+   { }
+
    inline TransformationType inline_type() const;
    QMatrix affine;
    qreal   m_13;
    qreal   m_23;
    qreal   m_33;
 
-   mutable uint m_type : 5;
+   mutable uint m_type  : 5;
    mutable uint m_dirty : 5;
 
    class Private;
@@ -207,30 +214,37 @@ inline qreal QTransform::determinant() const
    return affine._m11 * (m_33 * affine._m22 - affine._dy * m_23) -
       affine._m21 * (m_33 * affine._m12 - affine._dy * m_13) + affine._dx * (m_23 * affine._m12 - affine._m22 * m_13);
 }
+
 inline qreal QTransform::det() const
 {
    return determinant();
 }
+
 inline qreal QTransform::m11() const
 {
    return affine._m11;
 }
+
 inline qreal QTransform::m12() const
 {
    return affine._m12;
 }
+
 inline qreal QTransform::m13() const
 {
    return m_13;
 }
+
 inline qreal QTransform::m21() const
 {
    return affine._m21;
 }
+
 inline qreal QTransform::m22() const
 {
    return affine._m22;
 }
+
 inline qreal QTransform::m23() const
 {
    return m_23;
@@ -243,14 +257,17 @@ inline qreal QTransform::m32() const
 {
    return affine._dy;
 }
+
 inline qreal QTransform::m33() const
 {
    return m_33;
 }
+
 inline qreal QTransform::dx() const
 {
    return affine._dx;
 }
+
 inline qreal QTransform::dy() const
 {
    return affine._dy;
@@ -338,11 +355,8 @@ inline bool qFuzzyCompare(const QTransform &t1, const QTransform &t2)
       && qFuzzyCompare(t1.m33(), t2.m33());
 }
 
-
-
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTransform &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTransform &);
-
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTransform &);
 
@@ -366,12 +380,12 @@ inline QLine operator*(const QLine &l, const QTransform &m)
    return m.map(l);
 }
 
-inline QPolygon operator *(const QPolygon &a, const QTransform &m)
+inline QPolygon operator*(const QPolygon &a, const QTransform &m)
 {
    return m.map(a);
 }
 
-inline QPolygonF operator *(const QPolygonF &a, const QTransform &m)
+inline QPolygonF operator*(const QPolygonF &a, const QTransform &m)
 {
    return m.map(a);
 }
@@ -381,38 +395,37 @@ inline QRegion operator *(const QRegion &r, const QTransform &m)
    return m.map(r);
 }
 
-inline QPainterPath operator *(const QPainterPath &p, const QTransform &m)
+inline QPainterPath operator*(const QPainterPath &p, const QTransform &m)
 {
    return m.map(p);
 }
 
-inline QTransform operator *(const QTransform &a, qreal n)
+inline QTransform operator*(const QTransform &a, qreal n)
 {
    QTransform t(a);
    t *= n;
    return t;
 }
 
-inline QTransform operator /(const QTransform &a, qreal n)
+inline QTransform operator/(const QTransform &a, qreal n)
 {
    QTransform t(a);
    t /= n;
    return t;
 }
 
-inline QTransform operator +(const QTransform &a, qreal n)
+inline QTransform operator+(const QTransform &a, qreal n)
 {
    QTransform t(a);
    t += n;
    return t;
 }
 
-inline QTransform operator -(const QTransform &a, qreal n)
+inline QTransform operator-(const QTransform &a, qreal n)
 {
    QTransform t(a);
    t -= n;
    return t;
 }
-
 
 #endif

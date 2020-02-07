@@ -784,6 +784,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
          }
          return;
 #endif
+
       case Qt::Key_Enter:
       case Qt::Key_Return:
          d->interpret(AlwaysEmit);
@@ -791,22 +792,23 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
          event->ignore();
          emit editingFinished();
          return;
+
       default:
 #ifdef QT_KEYPAD_NAVIGATION
          if (QApplication::keypadNavigationEnabled() && !hasEditFocus()
             && !event->text().isEmpty() && event->text().at(0).isLetterOrNumber()) {
             setEditFocus(true);
 
-            //hide cursor
+            // hide cursor
             d->edit->d_func()->setCursorVisible(false);
             d->edit->d_func()->control->setCursorBlinkPeriod(0);
             d->setSelected(0);
             oldCurrent = 0;
          }
 #endif
-         if (!d->isSeparatorKey(event)) {
-            inserted = select = !event->text().isEmpty() && event->text().at(0).isPrint()
-                  && !(event->modifiers() & ~(Qt::ShiftModifier | Qt::KeypadModifier));
+         if (! d->isSeparatorKey(event)) {
+            inserted = select = ! event->text().isEmpty() && event->text().at(0).isPrint()
+                  && ! (event->modifiers() & ~(Qt::ShiftModifier | Qt::KeypadModifier));
             break;
          }
          [[fallthrough]];
@@ -814,12 +816,13 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
       case Qt::Key_Left:
       case Qt::Key_Right:
          if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) {
-            if (
+
 #ifdef QT_KEYPAD_NAVIGATION
-               QApplication::keypadNavigationEnabled() && !hasEditFocus()
-               || !QApplication::keypadNavigationEnabled() &&
+            if (QApplication::keypadNavigationEnabled() && ! hasEditFocus()
+                  || ! QApplication::keypadNavigationEnabled() && ! (event->modifiers() & Qt::ControlModifier)) {
+#else
+            if (! (event->modifiers() & Qt::ControlModifier)) {
 #endif
-               !(event->modifiers() & Qt::ControlModifier)) {
                select = false;
                break;
             }
@@ -829,14 +832,18 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
       case Qt::Key_Backtab:
       case Qt::Key_Tab: {
          event->accept();
+
          if (d->specialValue()) {
             d->edit->setSelection(d->edit->cursorPosition(), 0);
             return;
          }
+
          const bool forward = event->key() != Qt::Key_Left && event->key() != Qt::Key_Backtab
             && (event->key() != Qt::Key_Tab || !(event->modifiers() & Qt::ShiftModifier));
+
 #ifdef QT_KEYPAD_NAVIGATION
          int newSection = d->nextPrevSection(d->currentSectionIndex, forward);
+
          if (QApplication::keypadNavigationEnabled()) {
             if (d->focusOnButton) {
                newSection = forward ? 0 : d->sectionNodes.size() - 1;
@@ -849,6 +856,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
                return;
             }
          }
+
          // only allow date/time sections to be selected.
          if (newSection & ~(QDateTimeParser::TimeSectionMask | QDateTimeParser::DateSectionMask)) {
             return;
@@ -862,11 +870,14 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
          return;
       }
    }
+
    QAbstractSpinBox::keyPressEvent(event);
+
    if (select && !d->edit->hasSelectedText()) {
       if (inserted && d->sectionAt(d->edit->cursorPosition()) == QDateTimeParser::NoSectionIndex) {
          QString str = d->displayText();
          int pos = d->edit->cursorPosition();
+
          if (validate(str, pos) == QValidator::Acceptable
             && (d->sectionNodes.at(oldCurrent).count != 1
                || d->sectionMaxSize(oldCurrent) == d->sectionSize(oldCurrent)
@@ -880,10 +891,12 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
             }
          }
       }
+
       if (d->currentSectionIndex != oldCurrent) {
          d->setSelected(d->currentSectionIndex);
       }
    }
+
    if (d->specialValue()) {
       d->edit->setSelection(d->edit->cursorPosition(), 0);
    }
@@ -1308,21 +1321,17 @@ void QDateTimeEditPrivate::updateEdit()
    edit->blockSignals(sb);
 }
 
-
-/*!
-  \internal
-
-  Selects the section \a s. If \a forward is false selects backwards.
-*/
-
 void QDateTimeEditPrivate::setSelected(int sectionIndex, bool forward)
 {
    if (specialValue()
+
 #ifdef QT_KEYPAD_NAVIGATION
       || (QApplication::keypadNavigationEnabled() && !edit->hasEditFocus())
 #endif
+
    ) {
       edit->selectAll();
+
    } else {
       const SectionNode &node = sectionNode(sectionIndex);
       if (node.type == NoSection || node.type == LastSection || node.type == FirstSection) {
@@ -1338,12 +1347,6 @@ void QDateTimeEditPrivate::setSelected(int sectionIndex, bool forward)
       }
    }
 }
-
-/*!
-  \internal
-
-  Returns the section at index \a index or NoSection if there are no sections there.
-*/
 
 int QDateTimeEditPrivate::sectionAt(int pos) const
 {
@@ -1372,7 +1375,6 @@ int QDateTimeEditPrivate::sectionAt(int pos) const
   Returns the closest section of index \a index. Searches forward
   for a section if \a forward is true. Otherwise searches backwards.
 */
-
 int QDateTimeEditPrivate::closestSection(int pos, bool forward) const
 {
    Q_ASSERT(pos >= 0);
@@ -1394,13 +1396,17 @@ int QDateTimeEditPrivate::closestSection(int pos, bool forward) const
    }
 
    updateCache(value, displayText());
+
    for (int i = 0; i < sectionNodes.size(); ++i) {
       const int tmp = sectionPos(sectionNodes.at(i));
+
       if (pos < tmp + sectionSize(i)) {
-         if (pos < tmp && !forward) {
+         if (pos < tmp && ! forward) {
             return i - 1;
          }
+
          return i;
+
       } else if (i == sectionNodes.size() - 1 && pos > tmp) {
          return i;
       }
@@ -1409,15 +1415,10 @@ int QDateTimeEditPrivate::closestSection(int pos, bool forward) const
    return NoSectionIndex;
 }
 
-/*!
-  \internal
-
-  Returns a copy of the section that is before or after \a current, depending on \a forward.
-*/
-
 int QDateTimeEditPrivate::nextPrevSection(int current, bool forward) const
 {
    Q_Q(const QDateTimeEdit);
+
    if (q->isRightToLeft()) {
       forward = !forward;
    }
@@ -1440,12 +1441,14 @@ int QDateTimeEditPrivate::nextPrevSection(int current, bool forward) const
 
       case NoSectionIndex:
          return FirstSectionIndex;
+
       default:
          break;
    }
    Q_ASSERT(current >= 0 && current < sectionNodes.size());
 
    current += (forward ? 1 : -1);
+
    if (current >= sectionNodes.size()) {
       return LastSectionIndex;
    } else if (current < 0) {
@@ -1454,12 +1457,6 @@ int QDateTimeEditPrivate::nextPrevSection(int current, bool forward) const
 
    return current;
 }
-
-/*!
-  \internal
-
-  Clears the text of section \a s.
-*/
 
 void QDateTimeEditPrivate::clearSection(int index)
 {

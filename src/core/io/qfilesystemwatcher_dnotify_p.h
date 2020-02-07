@@ -33,8 +33,6 @@
 #include <qdatetime.h>
 #include <qfile.h>
 
-QT_BEGIN_NAMESPACE
-
 class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
    CORE_CS_OBJECT(QDnotifyFileSystemWatcherEngine)
@@ -51,34 +49,36 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 
    void stop() override;
 
- private :
+ private:
    CORE_CS_SLOT_1(Private, void refresh(int un_named_arg1))
    CORE_CS_SLOT_2(refresh)
 
    struct Directory {
-      Directory() : fd(0), parentFd(0), isMonitored(false) {}
-      QString path;
-      int fd;
-      int parentFd;
-      bool isMonitored;
+      Directory()
+         : fd(0), parentFd(0), isMonitored(false)
+      {}
 
       struct File {
-         File() : ownerId(0u), groupId(0u), permissions(0u) { }
-         File(const File &o) : path(o.path),
-            ownerId(o.ownerId),
-            groupId(o.groupId),
-            permissions(o.permissions),
-            lastWrite(o.lastWrite) {}
+         File()
+            : ownerId(0u), groupId(0u), permissions(0u)
+         { }
+
+         File(const File &o) : path(o.path), ownerId(o.ownerId),
+            groupId(o.groupId), permissions(o.permissions), lastWrite(o.lastWrite)
+         {}
+
          QString path;
-
          bool updateInfo();
-
          uint ownerId;
          uint groupId;
          QFile::Permissions permissions;
          QDateTime lastWrite;
       };
 
+      QString path;
+      int fd;
+      int parentFd;
+      bool isMonitored;
       QList<File> files;
    };
 
@@ -90,8 +90,6 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
    QHash<int, int> parentToFD;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_FILESYSTEMWATCHER
 
-#endif // QFILESYSTEMWATCHER_DNOTIFY_P_H
+#endif

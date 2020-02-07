@@ -26,11 +26,11 @@
 #ifndef QT_NO_PRINTDIALOG
 
 #include <qapplication.h>
+#include <qprinter.h>
+#include <qplatform_nativeinterface.h>
 
 #include <qprintengine_win_p.h>
 #include <qpagesetupdialog_p.h>
-#include <qprinter.h>
-#include <qplatform_nativeinterface.h>
 
 QPageSetupDialog::QPageSetupDialog(QPrinter *printer, QWidget *parent)
    : QDialog(*(new QPageSetupDialogPrivate(printer)), parent)
@@ -84,6 +84,7 @@ int QPageSetupDialog::exec()
    QWidget *parent = parentWidget();
    parent = parent ? parent->window() : QApplication::activeWindow();
    Q_ASSERT(!parent || parent->testAttribute(Qt::WA_WState_Created));
+
    QWindow *parentWindow = parent ? parent->windowHandle() : 0;
    psd.hwndOwner = parentWindow ? (HWND)QGuiApplication::platformNativeInterface()->nativeResourceForWindow("handle", parentWindow) : 0;
 
@@ -94,6 +95,7 @@ int QPageSetupDialog::exec()
       case QPageSize::Unit::Millimeter:
       case QPageSize::Unit::Inch:
          break;
+
       case QPageSize::Unit::Point:
       case QPageSize::Unit::Pica:
       case QPageSize::Unit::Didot:
@@ -111,7 +113,7 @@ int QPageSetupDialog::exec()
       multiplier = 100.0;
 
    } else {
-      //QPageSize::Unit::Inch)
+      // QPageSize::Unit::Inch)
 
       psd.Flags |= PSD_INTHOUSANDTHSOFINCHES;
       multiplier = 1000.0;

@@ -223,8 +223,7 @@ QDockAreaLayoutInfo::QDockAreaLayoutInfo()
 }
 
 QDockAreaLayoutInfo::QDockAreaLayoutInfo(const int *_sep, QInternal::DockPosition _dockPos,
-   Qt::Orientation _o, int tbshape,
-   QMainWindow *window)
+   Qt::Orientation _o, int tbshape, QMainWindow *window)
    : sep(_sep), dockPos(_dockPos), o(_o), mainWindow(window)
 #ifndef QT_NO_TABBAR
    , tabbed(false), tabBar(0), tabBarShape(static_cast<QTabBar::Shape>(tbshape))

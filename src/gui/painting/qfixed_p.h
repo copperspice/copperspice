@@ -24,10 +24,9 @@
 #ifndef QFIXED_P_H
 #define QFIXED_P_H
 
-#include <QtCore/qdebug.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qsize.h>
-
+#include <qdebug.h>
+#include <qpoint.h>
+#include <qsize.h>
 
 struct QFixed {
  public:

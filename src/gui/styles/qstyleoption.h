@@ -24,19 +24,19 @@
 #ifndef QSTYLEOPTION_H
 #define QSTYLEOPTION_H
 
-#include <QtCore/qvariant.h>
-#include <QtGui/qabstractspinbox.h>
-#include <QtGui/qicon.h>
-#include <QtGui/qmatrix.h>
-#include <QtGui/qslider.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qtabbar.h>
-#include <QtGui/qtabwidget.h>
-#include <QtGui/qrubberband.h>
-#include <QtGui/qframe.h>
+#include <qvariant.h>
+#include <qabstractspinbox.h>
+#include <qicon.h>
+#include <qmatrix.h>
+#include <qslider.h>
+#include <qstyle.h>
+#include <qtabbar.h>
+#include <qtabwidget.h>
+#include <qrubberband.h>
+#include <qframe.h>
 
 #ifndef QT_NO_ITEMVIEWS
-#   include <QtCore/qabstractitemmodel.h>
+#   include <qabstractitemmodel.h>
 #endif
 
 class QDebug;
@@ -61,15 +61,6 @@ class Q_GUI_EXPORT QStyleOption
    enum StyleOptionType { Type = SO_Default };
    enum StyleOptionVersion { Version = 1 };
 
-   int version;
-   int type;
-   QStyle::State state;
-   Qt::LayoutDirection direction;
-   QRect rect;
-   QFontMetrics fontMetrics;
-   QPalette palette;
-   QObject *styleObject;
-
    QStyleOption(int version = QStyleOption::Version, int type = SO_Default);
    QStyleOption(const QStyleOption &other);
    ~QStyleOption();
@@ -80,6 +71,15 @@ class Q_GUI_EXPORT QStyleOption
    }
 
    QStyleOption &operator=(const QStyleOption &other);
+
+   int version;
+   int type;
+   QStyle::State state;
+   Qt::LayoutDirection direction;
+   QRect rect;
+   QFontMetrics fontMetrics;
+   QPalette palette;
+   QObject *styleObject;
 };
 
 class Q_GUI_EXPORT QStyleOptionFocusRect : public QStyleOption
@@ -88,14 +88,17 @@ class Q_GUI_EXPORT QStyleOptionFocusRect : public QStyleOption
    enum StyleOptionType { Type = SO_FocusRect };
    enum StyleOptionVersion { Version = 1 };
 
-   QColor backgroundColor;
-
    QStyleOptionFocusRect();
-   QStyleOptionFocusRect(const QStyleOptionFocusRect &other) : QStyleOption(Version, Type) {
+
+   QStyleOptionFocusRect(const QStyleOptionFocusRect &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
       *this = other;
    }
 
    QStyleOptionFocusRect &operator=(const QStyleOptionFocusRect &other) = default;
+
+   QColor backgroundColor;
+
  protected:
    QStyleOptionFocusRect(int version);
 };
@@ -113,26 +116,25 @@ class Q_GUI_EXPORT QStyleOptionFrame : public QStyleOption
    };
    using FrameFeatures = QFlags<FrameFeature>;
 
+   QStyleOptionFrame();
+   QStyleOptionFrame(const QStyleOptionFrame &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionFrame &operator=(const QStyleOptionFrame &other) = default;
+
    int lineWidth;
    int midLineWidth;
 
    FrameFeatures features;
    QFrame::Shape frameShape;
 
-   QStyleOptionFrame();
-   QStyleOptionFrame(const QStyleOptionFrame &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
-
  protected:
    QStyleOptionFrame(int version);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionFrame::FrameFeatures)
-
-
-
 
 #ifndef QT_NO_TABWIDGET
 class Q_GUI_EXPORT QStyleOptionTabWidgetFrame : public QStyleOption
@@ -141,7 +143,14 @@ class Q_GUI_EXPORT QStyleOptionTabWidgetFrame : public QStyleOption
    enum StyleOptionType { Type = SO_TabWidgetFrame };
    enum StyleOptionVersion { Version = 2 };
 
+   QStyleOptionTabWidgetFrame();
+   inline QStyleOptionTabWidgetFrame(const QStyleOptionTabWidgetFrame &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionTabWidgetFrame &operator=(const QStyleOptionTabWidgetFrame &other) = default;
+
    int lineWidth;
    int midLineWidth;
 
@@ -152,18 +161,11 @@ class Q_GUI_EXPORT QStyleOptionTabWidgetFrame : public QStyleOption
    QRect tabBarRect;
    QRect selectedTabRect;
 
-   QStyleOptionTabWidgetFrame();
-   inline QStyleOptionTabWidgetFrame(const QStyleOptionTabWidgetFrame &other)
-      : QStyleOption(Version, Type) {
-      *this = other;
-   }
-
  protected:
    QStyleOptionTabWidgetFrame(int version);
 };
 
 #endif
-
 
 #ifndef QT_NO_TABBAR
 class Q_GUI_EXPORT QStyleOptionTabBarBase : public QStyleOption
@@ -172,21 +174,22 @@ class Q_GUI_EXPORT QStyleOptionTabBarBase : public QStyleOption
    enum StyleOptionType { Type = SO_TabBarBase };
    enum StyleOptionVersion { Version = 1 };
 
+   QStyleOptionTabBarBase();
+   QStyleOptionTabBarBase(const QStyleOptionTabBarBase &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionTabBarBase &operator=(const QStyleOptionTabBarBase &other) = default;
+
    QTabBar::Shape shape;
    QRect tabBarRect;
    QRect selectedTabRect;
    bool documentMode;
 
-   QStyleOptionTabBarBase();
-   QStyleOptionTabBarBase(const QStyleOptionTabBarBase &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
-
  protected:
    QStyleOptionTabBarBase(int version);
 };
-
 
 #endif
 
@@ -202,7 +205,14 @@ class Q_GUI_EXPORT QStyleOptionHeader : public QStyleOption
    };
    enum SortIndicator { None, SortUp, SortDown };
 
+   QStyleOptionHeader();
+   QStyleOptionHeader(const QStyleOptionHeader &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionHeader &operator=(const QStyleOptionHeader &other) = default;
+
    int section;
    QString text;
    Qt::Alignment textAlignment;
@@ -212,11 +222,6 @@ class Q_GUI_EXPORT QStyleOptionHeader : public QStyleOption
    SelectedPosition selectedPosition;
    SortIndicator sortIndicator;
    Qt::Orientation orientation;
-
-   QStyleOptionHeader();
-   QStyleOptionHeader(const QStyleOptionHeader &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionHeader(int version);
@@ -233,17 +238,18 @@ class Q_GUI_EXPORT QStyleOptionButton : public QStyleOption
    };
    using ButtonFeatures = QFlags<ButtonFeature>;
 
+   QStyleOptionButton();
+   QStyleOptionButton(const QStyleOptionButton &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionButton &operator=(const QStyleOptionButton &other) = default;
 
    ButtonFeatures features;
    QString text;
    QIcon icon;
    QSize iconSize;
-
-   QStyleOptionButton();
-   QStyleOptionButton(const QStyleOptionButton &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionButton(int version);
@@ -268,6 +274,12 @@ class Q_GUI_EXPORT QStyleOptionTab : public QStyleOption
    enum TabFeature { None = 0x00, HasFrame = 0x01 };
    using TabFeatures = QFlags<TabFeature>;
 
+   QStyleOptionTab();
+   QStyleOptionTab(const QStyleOptionTab &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionTab &operator=(const QStyleOptionTab &other) = default;
 
    QTabBar::Shape shape;
@@ -285,11 +297,6 @@ class Q_GUI_EXPORT QStyleOptionTab : public QStyleOption
    QSize rightButtonSize;
    TabFeatures features;
 
-   QStyleOptionTab();
-   QStyleOptionTab(const QStyleOptionTab &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
-
  protected:
    QStyleOptionTab(int version);
 };
@@ -297,7 +304,6 @@ class Q_GUI_EXPORT QStyleOptionTab : public QStyleOption
 Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionTab::CornerWidgets)
 
 #endif // QT_NO_TABBAR
-
 
 #ifndef QT_NO_TOOLBAR
 
@@ -310,18 +316,20 @@ class Q_GUI_EXPORT QStyleOptionToolBar : public QStyleOption
    enum ToolBarFeature     { None = 0x0, Movable = 0x1 };
    using ToolBarFeatures = QFlags<ToolBarFeature>;
 
+   QStyleOptionToolBar();
+   QStyleOptionToolBar(const QStyleOptionToolBar &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionToolBar &operator=(const QStyleOptionToolBar &other) = default;
-   ToolBarPosition positionOfLine; // The toolbar line position
-   ToolBarPosition positionWithinLine; // The position within a toolbar
-   Qt::ToolBarArea toolBarArea; // The toolbar docking area
+
+   ToolBarPosition positionOfLine;       // toolbar line position
+   ToolBarPosition positionWithinLine;   // position within a toolbar
+   Qt::ToolBarArea toolBarArea;          // toolbar docking area
    ToolBarFeatures features;
    int lineWidth;
    int midLineWidth;
-
-   QStyleOptionToolBar();
-   QStyleOptionToolBar(const QStyleOptionToolBar &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionToolBar(int version);
@@ -337,7 +345,14 @@ class Q_GUI_EXPORT QStyleOptionProgressBar : public QStyleOption
    enum StyleOptionType { Type = SO_ProgressBar };
    enum StyleOptionVersion { Version = 2 };
 
+   QStyleOptionProgressBar();
+   QStyleOptionProgressBar(const QStyleOptionProgressBar &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionProgressBar &operator=(const QStyleOptionProgressBar &other) = default;
+
    int minimum;
    int maximum;
    int progress;
@@ -348,11 +363,6 @@ class Q_GUI_EXPORT QStyleOptionProgressBar : public QStyleOption
    Qt::Orientation orientation;
    bool invertedAppearance;
    bool bottomToTop;
-
-   QStyleOptionProgressBar();
-   QStyleOptionProgressBar(const QStyleOptionProgressBar &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionProgressBar(int version);
@@ -369,7 +379,14 @@ class Q_GUI_EXPORT QStyleOptionMenuItem : public QStyleOption
    };
    enum CheckType { NotCheckable, Exclusive, NonExclusive };
 
+   QStyleOptionMenuItem();
+   QStyleOptionMenuItem(const QStyleOptionMenuItem &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionMenuItem &operator=(const QStyleOptionMenuItem &other) = default;
+
    MenuItemType menuItemType;
    CheckType checkType;
    bool checked;
@@ -381,11 +398,6 @@ class Q_GUI_EXPORT QStyleOptionMenuItem : public QStyleOption
    int tabWidth;
    QFont font;
 
-   QStyleOptionMenuItem();
-   QStyleOptionMenuItem(const QStyleOptionMenuItem &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
-
  protected:
    QStyleOptionMenuItem(int version);
 };
@@ -396,17 +408,19 @@ class Q_GUI_EXPORT QStyleOptionDockWidget : public QStyleOption
    enum StyleOptionType { Type = SO_DockWidget };
    enum StyleOptionVersion { Version = 2 };
 
+   QStyleOptionDockWidget();
+   QStyleOptionDockWidget(const QStyleOptionDockWidget &other)
+      : QStyleOption(Version, Type) {
+      *this = other;
+   }
+
    QStyleOptionDockWidget &operator=(const QStyleOptionDockWidget &other) = default;
+
    QString title;
    bool closable;
    bool movable;
    bool floatable;
    bool verticalTitleBar;
-
-   QStyleOptionDockWidget();
-   QStyleOptionDockWidget(const QStyleOptionDockWidget &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionDockWidget(int version);
@@ -440,7 +454,14 @@ class Q_GUI_EXPORT QStyleOptionViewItem : public QStyleOption
    };
    using ViewItemFeatures = QFlags<ViewItemFeature>;
 
+   QStyleOptionViewItem();
+   QStyleOptionViewItem(const QStyleOptionViewItem &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionViewItem &operator=(const QStyleOptionViewItem &other) = default;
+
    ViewItemFeatures features;
 
    QLocale locale;
@@ -454,14 +475,10 @@ class Q_GUI_EXPORT QStyleOptionViewItem : public QStyleOption
    ViewItemPosition viewItemPosition;
    QBrush backgroundBrush;
 
-   QStyleOptionViewItem();
-   QStyleOptionViewItem(const QStyleOptionViewItem &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
-
  protected:
    QStyleOptionViewItem(int version);
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionViewItem::ViewItemFeatures)
 #endif
 
@@ -477,15 +494,17 @@ class Q_GUI_EXPORT QStyleOptionToolBox : public QStyleOption
    enum TabPosition { Beginning, Middle, End, OnlyOneTab };
    enum SelectedPosition { NotAdjacent, NextIsSelected, PreviousIsSelected };
 
-   TabPosition position;
-   SelectedPosition selectedPosition;
-
    QStyleOptionToolBox();
-   QStyleOptionToolBox(const QStyleOptionToolBox &other) : QStyleOption(Version, Type) {
+   QStyleOptionToolBox(const QStyleOptionToolBox &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
       *this = other;
    }
 
    QStyleOptionToolBox &operator=(const QStyleOptionToolBox &other) = default;
+
+   TabPosition position;
+   SelectedPosition selectedPosition;
+
  protected:
    QStyleOptionToolBox(int version);
 };
@@ -497,15 +516,17 @@ class Q_GUI_EXPORT QStyleOptionRubberBand : public QStyleOption
    enum StyleOptionType { Type = SO_RubberBand };
    enum StyleOptionVersion { Version = 1 };
 
-   QRubberBand::Shape shape;
-   bool opaque;
-
    QStyleOptionRubberBand();
-   QStyleOptionRubberBand(const QStyleOptionRubberBand &other) : QStyleOption(Version, Type) {
+   QStyleOptionRubberBand(const QStyleOptionRubberBand &other)
+       : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
       *this = other;
    }
 
    QStyleOptionRubberBand &operator=(const QStyleOptionRubberBand &other) = default;
+
+   QRubberBand::Shape shape;
+   bool opaque;
+
  protected:
    QStyleOptionRubberBand(int version);
 };
@@ -522,9 +543,11 @@ class Q_GUI_EXPORT QStyleOptionComplex : public QStyleOption
    QStyle::SubControls activeSubControls;
 
    QStyleOptionComplex(int version = QStyleOptionComplex::Version, int type = SO_Complex);
-   QStyleOptionComplex(const QStyleOptionComplex &other) : QStyleOption(Version, Type) {
+   QStyleOptionComplex(const QStyleOptionComplex &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
       *this = other;
    }
+
    QStyleOptionComplex &operator=(const QStyleOptionComplex &other) = default;
 };
 
@@ -534,6 +557,12 @@ class Q_GUI_EXPORT QStyleOptionSlider : public QStyleOptionComplex
  public:
    enum StyleOptionType { Type = SO_Slider };
    enum StyleOptionVersion { Version = 1 };
+
+   QStyleOptionSlider();
+   QStyleOptionSlider(const QStyleOptionSlider &other)
+      : QStyleOptionComplex(Version, Type) {
+      *this = other;
+   }
 
    QStyleOptionSlider &operator=(const QStyleOptionSlider &other) = default;
 
@@ -550,11 +579,6 @@ class Q_GUI_EXPORT QStyleOptionSlider : public QStyleOptionComplex
    qreal notchTarget;
    bool dialWrapping;
 
-   QStyleOptionSlider();
-   QStyleOptionSlider(const QStyleOptionSlider &other) : QStyleOptionComplex(Version, Type) {
-      *this = other;
-   }
-
  protected:
    QStyleOptionSlider(int version);
 };
@@ -567,17 +591,19 @@ class Q_GUI_EXPORT QStyleOptionSpinBox : public QStyleOptionComplex
    enum StyleOptionType { Type = SO_SpinBox };
    enum StyleOptionVersion { Version = 1 };
 
-   QAbstractSpinBox::ButtonSymbols buttonSymbols;
-   QAbstractSpinBox::StepEnabled stepEnabled;
-   bool frame;
-
    QStyleOptionSpinBox();
-   QStyleOptionSpinBox(const QStyleOptionSpinBox &other) : QStyleOptionComplex(Version, Type) {
+   QStyleOptionSpinBox(const QStyleOptionSpinBox &other)
+      : QStyleOptionComplex(StyleOptionVersion::Version, StyleOptionType::Type) {
       *this = other;
    }
 
    QStyleOptionSpinBox &operator=(const QStyleOptionSpinBox &other) = default;
- protected:
+
+   QAbstractSpinBox::ButtonSymbols buttonSymbols;
+   QAbstractSpinBox::StepEnabled stepEnabled;
+   bool frame;
+
+  protected:
    QStyleOptionSpinBox(int version);
 };
 #endif
@@ -593,7 +619,14 @@ class Q_GUI_EXPORT QStyleOptionToolButton : public QStyleOptionComplex
    };
    using ToolButtonFeatures = QFlags<ToolButtonFeature>;
 
+   QStyleOptionToolButton();
+   QStyleOptionToolButton(const QStyleOptionToolButton &other)
+      : QStyleOptionComplex(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionToolButton &operator=(const QStyleOptionToolButton &other) = default;
+
    ToolButtonFeatures features;
    QIcon icon;
    QSize iconSize;
@@ -602,11 +635,6 @@ class Q_GUI_EXPORT QStyleOptionToolButton : public QStyleOptionComplex
    Qt::ToolButtonStyle toolButtonStyle;
    QPoint pos;
    QFont font;
-
-   QStyleOptionToolButton();
-   QStyleOptionToolButton(const QStyleOptionToolButton &other) : QStyleOptionComplex(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionToolButton(int version);
@@ -620,18 +648,20 @@ class Q_GUI_EXPORT QStyleOptionComboBox : public QStyleOptionComplex
    enum StyleOptionType { Type = SO_ComboBox };
    enum StyleOptionVersion { Version = 1 };
 
+   QStyleOptionComboBox();
+   QStyleOptionComboBox(const QStyleOptionComboBox &other)
+      : QStyleOptionComplex(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionComboBox &operator=(const QStyleOptionComboBox &other) = default;
+
    bool editable;
    QRect popupRect;
    bool frame;
    QString currentText;
    QIcon currentIcon;
    QSize iconSize;
-
-   QStyleOptionComboBox();
-   QStyleOptionComboBox(const QStyleOptionComboBox &other) : QStyleOptionComplex(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionComboBox(int version);
@@ -643,16 +673,18 @@ class Q_GUI_EXPORT QStyleOptionTitleBar : public QStyleOptionComplex
    enum StyleOptionType { Type = SO_TitleBar };
    enum StyleOptionVersion { Version = 1 };
 
+   QStyleOptionTitleBar();
+   QStyleOptionTitleBar(const QStyleOptionTitleBar &other)
+      : QStyleOptionComplex(Version, Type) {
+      *this = other;
+   }
+
    QStyleOptionTitleBar &operator=(const QStyleOptionTitleBar &other) = default;
+
    QString text;
    QIcon icon;
    int titleBarState;
    Qt::WindowFlags titleBarFlags;
-
-   QStyleOptionTitleBar();
-   QStyleOptionTitleBar(const QStyleOptionTitleBar &other) : QStyleOptionComplex(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionTitleBar(int version);
@@ -664,18 +696,20 @@ class Q_GUI_EXPORT QStyleOptionGroupBox : public QStyleOptionComplex
    enum StyleOptionType { Type = SO_GroupBox };
    enum StyleOptionVersion { Version = 1 };
 
+   QStyleOptionGroupBox();
+   QStyleOptionGroupBox(const QStyleOptionGroupBox &other)
+      : QStyleOptionComplex(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
    QStyleOptionGroupBox &operator=(const QStyleOptionGroupBox &other) = default;
+
    QStyleOptionFrame::FrameFeatures features;
    QString text;
    Qt::Alignment textAlignment;
    QColor textColor;
    int lineWidth;
    int midLineWidth;
-
-   QStyleOptionGroupBox();
-   QStyleOptionGroupBox(const QStyleOptionGroupBox &other) : QStyleOptionComplex(Version, Type) {
-      *this = other;
-   }
 
  protected:
    QStyleOptionGroupBox(int version);
@@ -687,13 +721,16 @@ class Q_GUI_EXPORT QStyleOptionSizeGrip : public QStyleOptionComplex
    enum StyleOptionType { Type = SO_SizeGrip };
    enum StyleOptionVersion { Version = 1 };
 
-   Qt::Corner corner;
-
    QStyleOptionSizeGrip();
-   QStyleOptionSizeGrip(const QStyleOptionSizeGrip &other) : QStyleOptionComplex(Version, Type) {
+   QStyleOptionSizeGrip(const QStyleOptionSizeGrip &other)
+      : QStyleOptionComplex(StyleOptionVersion::Version, StyleOptionType::Type) {
       *this = other;
    }
+
    QStyleOptionSizeGrip &operator=(const QStyleOptionSizeGrip &other) = default;
+
+   Qt::Corner corner;
+
  protected:
    QStyleOptionSizeGrip(int version);
 };
@@ -704,16 +741,20 @@ class Q_GUI_EXPORT QStyleOptionGraphicsItem : public QStyleOption
    enum StyleOptionType { Type = SO_GraphicsItem };
    enum StyleOptionVersion { Version = 1 };
 
+   QStyleOptionGraphicsItem();
+   QStyleOptionGraphicsItem(const QStyleOptionGraphicsItem &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+      *this = other;
+   }
+
+   QStyleOptionGraphicsItem &operator=(const QStyleOptionGraphicsItem &other) = default;
+
+   static qreal levelOfDetailFromTransform(const QTransform &worldTransform);
+
    QRectF exposedRect;
    QMatrix matrix;
    qreal levelOfDetail;
 
-   QStyleOptionGraphicsItem();
-   QStyleOptionGraphicsItem(const QStyleOptionGraphicsItem &other) : QStyleOption(Version, Type) {
-      *this = other;
-   }
-   QStyleOptionGraphicsItem &operator=(const QStyleOptionGraphicsItem &other) = default;
-   static qreal levelOfDetailFromTransform(const QTransform &worldTransform);
  protected:
    QStyleOptionGraphicsItem(int version);
 };
@@ -729,7 +770,6 @@ T qstyleoption_cast(const QStyleOption *opt)
             && opt->type > QStyleOption::SO_Complex))) {
       return static_cast<T>(opt);
    }
-
 
    return nullptr;
 }
@@ -818,5 +858,4 @@ T qstyleoption_cast(QStyleHintReturn *hint)
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QStyleOption &option);
 
-
-#endif // QSTYLEOPTION_H
+#endif
