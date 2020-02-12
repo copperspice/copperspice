@@ -259,7 +259,6 @@ void *QLibraryHandle::resolve_sys(const QString &symbol)
 
    if (! address) {
       errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2:%3").formatArg(symbol).formatArg(fileName).formatArg(qdlerror());
-
    } else {
       errorString.clear();
    }

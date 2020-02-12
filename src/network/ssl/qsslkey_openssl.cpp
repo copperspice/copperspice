@@ -72,27 +72,46 @@ void QSslKeyPrivate::clear(bool deep)
 
 bool QSslKeyPrivate::fromEVP_PKEY(EVP_PKEY *pkey)
 {
-   if (pkey->type == EVP_PKEY_RSA) {
+   int pkey_type;
+#if OPENSSL_VERSION_NUMBER > 0x10100000L
+   pkey_type = q_EVP_PKEY_base_id(pkey);
+#else
+   pkey_type = pkey->type;
+#endif
+
+   if (pkey_type == EVP_PKEY_RSA) {
       isNull = false;
       algorithm = QSsl::Rsa;
       type = QSsl::PrivateKey;
 
+#if OPENSSL_VERSION_NUMBER > 0x10100000L
+      // Using the _get1_ version of this function means we have to also free
+      // the struct using the apropriate functions. This is done in clear().
+      rsa = q_EVP_PKEY_get1_RSA(pkey);
+#else
       rsa = q_RSA_new();
       memcpy(rsa, q_EVP_PKEY_get1_RSA(pkey), sizeof(RSA));
+#endif
 
       return true;
-   } else if (pkey->type == EVP_PKEY_DSA) {
+   } else if (pkey_type == EVP_PKEY_DSA) {
       isNull = false;
       algorithm = QSsl::Dsa;
       type = QSsl::PrivateKey;
 
+#if OPENSSL_VERSION_NUMBER > 0x10100000L
+      // Using the _get1_ version of this function means we have to also free
+      // the struct using the apropriate functions. This is done in clear().
+      dsa = q_EVP_PKEY_get1_DSA(pkey);
+#else
       dsa = q_DSA_new();
       memcpy(dsa, q_EVP_PKEY_get1_DSA(pkey), sizeof(DSA));
+#endif
 
       return true;
    }
 #ifndef OPENSSL_NO_EC
-   else if (pkey->type == EVP_PKEY_EC) {
+   else if (pkey_type == EVP_PKEY_EC) {
       isNull = false;
       algorithm = QSsl::Ec;
       type = QSsl::PrivateKey;
@@ -175,10 +194,18 @@ int QSslKeyPrivate::length() const
 
    switch (algorithm) {
       case QSsl::Rsa:
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+         return q_RSA_size(rsa) * std::numeric_limits<uint8_t>::digits;
+#else
          return q_BN_num_bits(rsa->n);
+#endif
 
       case QSsl::Dsa:
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+         return q_DSA_bits(dsa);
+#else
          return q_BN_num_bits(dsa->p);
+#endif
 
 #ifndef OPENSSL_NO_EC
       case QSsl::Ec:
@@ -288,7 +315,15 @@ Qt::HANDLE QSslKeyPrivate::handle() const
 
 static QByteArray doCrypt(QSslKeyPrivate::Cipher cipher, const QByteArray &data, const QByteArray &key, const QByteArray &iv, int enc)
 {
-   EVP_CIPHER_CTX ctx;
+   EVP_CIPHER_CTX* ctx;
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+   ctx = q_EVP_CIPHER_CTX_new();
+#else
+   EVP_CIPHER_CTX local_ctx;
+   ctx = &local_ctx;
+#endif
+
    const EVP_CIPHER *type = 0;
    int i = 0, len = 0;
 
@@ -307,24 +342,32 @@ static QByteArray doCrypt(QSslKeyPrivate::Cipher cipher, const QByteArray &data,
    QByteArray output;
    output.resize(data.size() + EVP_MAX_BLOCK_LENGTH);
 
-   q_EVP_CIPHER_CTX_init(&ctx);
-   q_EVP_CipherInit(&ctx, type, NULL, NULL, enc);
-   q_EVP_CIPHER_CTX_set_key_length(&ctx, key.size());
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+   q_EVP_CIPHER_CTX_reset(ctx);
+#else
+   q_EVP_CIPHER_CTX_init(ctx);
+#endif
+   q_EVP_CipherInit(ctx, type, NULL, NULL, enc);
+   q_EVP_CIPHER_CTX_set_key_length(ctx, key.size());
 
    if (cipher == QSslKeyPrivate::Rc2Cbc) {
-      q_EVP_CIPHER_CTX_ctrl(&ctx, EVP_CTRL_SET_RC2_KEY_BITS, 8 * key.size(), NULL);
+      q_EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_SET_RC2_KEY_BITS, 8 * key.size(), NULL);
    }
 
-   q_EVP_CipherInit(&ctx, NULL, reinterpret_cast<const unsigned char *>(key.constData()),
+   q_EVP_CipherInit(ctx, NULL, reinterpret_cast<const unsigned char *>(key.constData()),
                     reinterpret_cast<const unsigned char *>(iv.constData()), enc);
 
-   q_EVP_CipherUpdate(&ctx, reinterpret_cast<unsigned char *>(output.data()), &len,
+   q_EVP_CipherUpdate(ctx, reinterpret_cast<unsigned char *>(output.data()), &len,
                       reinterpret_cast<const unsigned char *>(data.constData()), data.size());
 
-   q_EVP_CipherFinal(&ctx, reinterpret_cast<unsigned char *>(output.data()) + len, &i);
+   q_EVP_CipherFinal(ctx, reinterpret_cast<unsigned char *>(output.data()) + len, &i);
 
    len += i;
-   q_EVP_CIPHER_CTX_cleanup(&ctx);
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+   q_EVP_CIPHER_CTX_reset(ctx);
+#else
+   q_EVP_CIPHER_CTX_cleanup(ctx);
+#endif
 
    return output.left(len);
 }

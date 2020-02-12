@@ -209,7 +209,7 @@ message("")
 message("Configuring CMake for CopperSpice\n\n")
 message("Search for required Packages\n")
 
-find_package(OpenSSL 1.0 EXACT)
+find_package(OpenSSL 1.0)
 set_package_properties(OpenSSL PROPERTIES
    PURPOSE "Required for HTTPS support"
    DESCRIPTION "Support for SSL and TLS"

@@ -93,7 +93,13 @@ init_context:
 
       case QSsl::SslV2:
 #ifndef OPENSSL_NO_SSL2
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
          sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv2_client_method() : q_SSLv2_server_method());
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+         sslContext->ctx = q_SSL_CTX_new(client ? q_TLS_client_method() : q_TLS_server_method());
+#endif
+
 #else
          // SSL 2 not supported by the system, but chosen deliberately -> error
          sslContext->ctx = 0;
@@ -103,7 +109,13 @@ init_context:
 
       case QSsl::SslV3:
 #ifndef OPENSSL_NO_SSL3_METHOD
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
          sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv3_client_method() : q_SSLv3_server_method());
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+         sslContext->ctx = q_SSL_CTX_new(client ? q_TLS_client_method() : q_TLS_server_method());
+#endif
+
 #else
          // SSL 3 not supported by the system, but chosen deliberately -> error
          sslContext->ctx = 0;
@@ -121,7 +133,11 @@ init_context:
       case QSsl::AnyProtocol:
 
       default:
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
          sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
+#else
+         sslContext->ctx = q_SSL_CTX_new(client ? q_TLS_client_method() : q_TLS_server_method());
+#endif
          break;
 
       case QSsl::TlsV1_0:
@@ -149,15 +165,21 @@ init_context:
          break;
 
       case QSsl::TlsV1_0_OrLater:
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
          // Specific protocols will be specified via SSL options.
          sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
+#else
+         sslContext->ctx = q_SSL_CTX_new(client ? q_TLS_client_method() : q_TLS_server_method());
+#endif
          break;
 
       case QSsl::TlsV1_1_OrLater:
       case QSsl::TlsV1_2_OrLater:
-#if OPENSSL_VERSION_NUMBER >= 0x10001000L
+#if OPENSSL_VERSION_NUMBER >= 0x10001000L && OPENSSL_VERSION_NUMBER < 0x10100000L
          // Specific protocols will be specified via SSL options.
          sslContext->ctx = q_SSL_CTX_new(client ? q_SSLv23_client_method() : q_SSLv23_server_method());
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+         sslContext->ctx = q_SSL_CTX_new(client ? q_TLS_client_method() : q_TLS_server_method());
 #else
          // TLS 1.1/1.2 not supported by the system, but chosen deliberately -> error
          sslContext->ctx = 0;
@@ -172,7 +194,11 @@ init_context:
       if (!reinitialized) {
          reinitialized = true;
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
          if (q_SSL_library_init() == 1) {
+#else
+         if (q_OPENSSL_init_ssl(0, nullptr) == 1 && q_OPENSSL_init_crypto(0, nullptr) == 1) {
+#endif
             goto init_context;
          }
       }
@@ -345,7 +371,8 @@ init_context:
 
 #ifndef OPENSSL_NO_EC
 
-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
+// ECDH is enabled by default since 1.1.0: https://github.com/openssl/openssl/issues/1437
+#if OPENSSL_VERSION_NUMBER >= 0x10002000L && OPENSSL_VERSION_NUMBER <= 0x10100000L
    if (q_SSLeay() >= 0x10002000L) {
       q_SSL_CTX_ctrl(sslContext->ctx, SSL_CTRL_SET_ECDH_AUTO, 1, NULL);
 
@@ -513,7 +540,11 @@ bool QSslContext::cacheSession(SSL *ssl)
             qWarning("Could not store persistent version of SSL session");
          }
 
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+         m_sessionTicketLifeTimeHint = q_SSL_SESSION_get_ticket_lifetime_hint(session);
+#else
          m_sessionTicketLifeTimeHint = session->tlsext_tick_lifetime_hint;
+#endif
       }
    }
 

@@ -188,9 +188,13 @@ int q_BN_num_bits(const BIGNUM *a);
 const EC_GROUP* q_EC_KEY_get0_group(const EC_KEY* k);
 int q_EC_GROUP_get_degree(const EC_GROUP* g);
 #endif
+
+#if OPENSSL_VERSION < 0x10100000L
 int q_CRYPTO_num_locks();
 void q_CRYPTO_set_locking_callback(void (*a)(int, int, const char *, int));
 void q_CRYPTO_set_id_callback(unsigned long (*a)());
+#endif
+
 void q_CRYPTO_free(void *a);
 DSA *q_DSA_new();
 void q_DSA_free(DSA *a);
@@ -202,8 +206,21 @@ X509 *q_d2i_X509(X509 **a, const unsigned char **b, long c);
 char *q_ERR_error_string(unsigned long a, char *b);
 unsigned long q_ERR_get_error();
 void q_ERR_free_strings();
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+// This is the only one currently in use, others could be useful, but are left
+// out for now.
+const EVP_MD* q_EVP_sha1();
+#endif
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 void q_EVP_CIPHER_CTX_cleanup(EVP_CIPHER_CTX *a);
 void q_EVP_CIPHER_CTX_init(EVP_CIPHER_CTX *a);
+#else
+void q_EVP_CIPHER_CTX_reset(EVP_CIPHER_CTX *a);
+#endif
+
+EVP_CIPHER_CTX* q_EVP_CIPHER_CTX_new();
 int q_EVP_CIPHER_CTX_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr);
 int q_EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *x, int keylen);
 int q_EVP_CipherInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, const unsigned char *key, const unsigned char *iv, int enc);
@@ -270,13 +287,30 @@ void q_RAND_seed(const void *a, int b);
 int q_RAND_status();
 RSA *q_RSA_new();
 void q_RSA_free(RSA *a);
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+int q_RSA_size(const RSA *rsa);
+int q_DSA_bits(const DSA *rsa);
+#endif
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 int q_sk_num(STACK *a);
 void q_sk_pop_free(STACK *a, void (*b)(void *));
-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+#else
+int q_OPENSSL_sk_num(STACK *a);
+void q_OPENSSL_sk_pop_free(STACK *a, void (*b)(void *));
+#endif
+
+#if OPENSSL_VERSION_NUMBER >= 0x10000000L && OPENSSL_VERSION_NUMBER < 0x10100000L
 _STACK *q_sk_new_null();
 void q_sk_push(_STACK *st, void *data);
 void q_sk_free(_STACK *a);
 void *q_sk_value(STACK *a, int b);
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+_STACK *q_OPENSSL_sk_new_null();
+void q_OPENSSL_sk_push(_STACK *st, void *data);
+void q_OPENSSL_sk_free(_STACK *a);
+void *q_OPENSSL_sk_value(STACK *a, int b);
 #else
 STACK *q_sk_new_null();
 void q_sk_push(STACK *st, char *data);
@@ -295,6 +329,7 @@ void q_SSL_CTX_free(SSL_CTX *a);
 
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
 SSL_CTX *q_SSL_CTX_new(const SSL_METHOD *a);
+int q_SSL_session_reused(SSL *a);
 #else
 SSL_CTX *q_SSL_CTX_new(SSL_METHOD *a);
 #endif
@@ -325,8 +360,14 @@ X509 *q_SSL_get_peer_certificate(SSL *a);
 
 long q_SSL_get_verify_result(const SSL *a);
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 int q_SSL_library_init();
 void q_SSL_load_error_strings();
+#else
+int q_OPENSSL_init_crypto(uint64_t, const OPENSSL_INIT_SETTINGS*);
+int q_OPENSSL_init_ssl(uint64_t, const OPENSSL_INIT_SETTINGS*);
+#endif
+
 SSL *q_SSL_new(SSL_CTX *a);
 long q_SSL_ctrl(SSL *ssl,int cmd, long larg, void *parg);
 
@@ -339,8 +380,18 @@ int q_SSL_set_session(SSL *to, SSL_SESSION *session);
 void q_SSL_SESSION_free(SSL_SESSION *ses);
 SSL_SESSION *q_SSL_get1_session(SSL *ssl);
 SSL_SESSION *q_SSL_get_session(const SSL *ssl);
-#if OPENSSL_VERSION_NUMBER >= 0x10001000L
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+unsigned long q_SSL_SESSION_get_ticket_lifetime_hint(const SSL_SESSION *s);
+#endif
+
+#if OPENSSL_VERSION_NUMBER >= 0x10001000L && OPENSSL_VERSION_NUMBER < 0x10100000L
 int q_SSL_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func, CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+int q_CRYPTO_get_ex_new_index(int class_index, long argl, void *argp, CRYPTO_EX_new *new_func, CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
+#endif
+
+#if OPENSSL_VERSION_NUMBER >= 0x10001000L
 int q_SSL_set_ex_data(SSL *ssl, int idx, void *arg);
 void *q_SSL_get_ex_data(const SSL *ssl, int idx);
 #endif
@@ -351,56 +402,75 @@ void q_SSL_set_psk_client_callback(SSL *ssl, q_psk_client_callback_t callback);
 #endif // OPENSSL_NO_PSK
 
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
+
 #ifndef OPENSSL_NO_SSL2
 const SSL_METHOD *q_SSLv2_client_method();
-#endif
+#endif // OPENSSL_NO_SSL2
 
 #ifndef OPENSSL_NO_SSL3_METHOD
 const SSL_METHOD *q_SSLv3_client_method();
-#endif
+#endif // OPENSSL_NO_SSL3_METHOD
 
+const SSL_METHOD *q_TLS_client_method();
 const SSL_METHOD *q_SSLv23_client_method();
 const SSL_METHOD *q_TLSv1_client_method();
 const SSL_METHOD *q_TLSv1_1_client_method();
 const SSL_METHOD *q_TLSv1_2_client_method();
+
 #ifndef OPENSSL_NO_SSL2
 const SSL_METHOD *q_SSLv2_server_method();
-#endif
+#endif // OPENSSL_NO_SSL2
 
 #ifndef OPENSSL_NO_SSL3_METHOD
 const SSL_METHOD *q_SSLv3_server_method();
-#endif
+#endif // OPENSSL_NO_SSL3_METHOD
 
+const SSL_METHOD *q_TLS_server_method();
 const SSL_METHOD *q_SSLv23_server_method();
 const SSL_METHOD *q_TLSv1_server_method();
 const SSL_METHOD *q_TLSv1_1_server_method();
 const SSL_METHOD *q_TLSv1_2_server_method();
-#else
+
+#else // OPENSSL_VERSION_NUMBER >= 0x10000000L
+
 #ifndef OPENSSL_NO_SSL2
 SSL_METHOD *q_SSLv2_client_method();
-#endif
+#endif // OPENSSL_NO_SSL2
 
 #ifndef OPENSSL_NO_SSL3_METHOD
 SSL_METHOD *q_SSLv3_client_method();
-#endif
+#endif // OPENSSL_NO_SSL3_METHOD
 
-SSL_METHOD *q_SSLv23_client_method();
+SSL_METHOD *q_TLS_client_method();
 SSL_METHOD *q_TLSv1_client_method();
 SSL_METHOD *q_TLSv1_1_client_method();
 SSL_METHOD *q_TLSv1_2_client_method();
+
 #ifndef OPENSSL_NO_SSL2
 SSL_METHOD *q_SSLv2_server_method();
-#endif
+#endif // OPENSSL_NO_SSL2
+
 #ifndef OPENSSL_NO_SSL3_METHOD
 SSL_METHOD *q_SSLv3_server_method();
-#endif
+#endif // OPENSSL_NO_SSL3_METHOD
+
+SSL_METHOD *q_TLS_server_method();
 SSL_METHOD *q_SSLv23_server_method();
 SSL_METHOD *q_TLSv1_server_method();
 SSL_METHOD *q_TLSv1_1_server_method();
 SSL_METHOD *q_TLSv1_2_server_method();
-#endif
+
+#endif // OPENSSL_VERSION_NUMBER >= 0x10000000L
+
 int q_SSL_write(SSL *a, const void *b, int c);
 int q_X509_cmp(X509 *a, X509 *b);
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+long q_X509_get_version(const X509*);
+ASN1_INTEGER *q_X509_get_serialNumber(X509 *x);
+EVP_PKEY *q_X509_get_pubkey(X509 *x);
+int q_EVP_PKEY_base_id(const EVP_PKEY *pkey);
+#endif
 
 #ifdef SSLEAY_MACROS
 void *q_ASN1_dup(i2d_of_void *i2d, d2i_of_void *d2i, char *x);
@@ -426,6 +496,10 @@ void q_AUTHORITY_KEYID_free(AUTHORITY_KEYID *a);
 int q_ASN1_STRING_print(BIO *a, const ASN1_STRING *b);
 #else
 int q_ASN1_STRING_print(BIO *a, ASN1_STRING *b);
+#endif
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+int q_X509_digest(X509* a, const EVP_MD* digest, unsigned char* md, unsigned int* n);
 #endif
 
 int q_X509_check_issued(X509 *a, X509 *b);
@@ -500,10 +574,21 @@ DSA *q_d2i_DSAPrivateKey(DSA **a, unsigned char **pp, long length);
                       bp,(char *)x,enc,kstr,klen,cb,u)
 #endif
 
-#define q_SSL_CTX_set_options(ctx,op) q_SSL_CTX_ctrl((ctx),SSL_CTRL_OPTIONS,(op),NULL)
 #define q_SSL_CTX_set_mode(ctx,op) q_SSL_CTX_ctrl((ctx),SSL_CTRL_MODE,(op),NULL)
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#define q_SSL_CTX_set_options(ctx,op) q_SSL_CTX_ctrl((ctx),SSL_CTRL_OPTIONS,(op),NULL)
+#else
+long q_SSL_CTX_set_options(SSL_CTX *ctx, long options);
+#endif
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 #define q_SKM_sk_num(type, st) ((int (*)(const STACK_OF(type) *))q_sk_num)(st)
 #define q_SKM_sk_value(type, st,i) ((type * (*)(const STACK_OF(type) *, int))q_sk_value)(st, i)
+#else
+#define q_SKM_sk_num(type, st) ((int (*)(const STACK_OF(type) *))q_OPENSSL_sk_num)(st)
+#define q_SKM_sk_value(type, st,i) ((type * (*)(const STACK_OF(type) *, int))q_OPENSSL_sk_value)(st, i)
+#endif
+
 #define q_sk_GENERAL_NAME_num(st) q_SKM_sk_num(GENERAL_NAME, (st))
 #define q_sk_GENERAL_NAME_value(st, i) q_SKM_sk_value(GENERAL_NAME, (st), (i))
 #define q_sk_X509_num(st) q_SKM_sk_num(X509, (st))
@@ -523,8 +608,11 @@ DSA *q_d2i_DSAPrivateKey(DSA **a, unsigned char **pp, long length);
 #define q_OpenSSL_add_all_algorithms() q_OPENSSL_add_all_algorithms_conf()
 
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 void q_OPENSSL_add_all_algorithms_noconf();
 void q_OPENSSL_add_all_algorithms_conf();
+#endif
+
 int q_SSL_CTX_load_verify_locations(SSL_CTX *ctx, const char *CAfile, const char *CApath);
 long q_SSLeay();
 const char *q_SSLeay_version(int type);
