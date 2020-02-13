@@ -74,9 +74,6 @@ function(cs_copy_plugins LIB_NAME)
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_m3u1.6.so DESTINATION ${APP_INSTALL_DIR}/playlistformats)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
-#        get_target_property(DIRECTSHOW_LIB  CopperSpice::CsMultimedia_DirectShow LOCATION)
-#        install(FILES  ${DIRECTSHOW_LIB}  DESTINATION ${APP_INSTALL_DIR}/mediaservices)
-
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_DirectShow1.6.dll DESTINATION ${APP_INSTALL_DIR}/mediaservices)
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_m3u1.6.dll DESTINATION ${APP_INSTALL_DIR}/playlistformats)
 
@@ -100,15 +97,22 @@ function(cs_copy_plugins LIB_NAME)
    if(LIB_NAME STREQUAL "CsPrinterDriver")
 
       if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-         install(FILES ${CS_PLUGIN_DIR}/CsPrinterDriverCups1.6.so DESTINATION ${APP_INSTALL_DIR}/printerdrivers)
+         set(file ${CS_PLUGIN_DIR}/CsPrinterDriverCups1.6.so)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
-         install(FILES ${CS_PLUGIN_DIR}/CsPrinterDriverCups1.6.so DESTINATION ${APP_INSTALL_DIR}/printerdrivers)
+         set(file ${CS_PLUGIN_DIR}/CsPrinterDriverCups1.6.so)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
-         install(FILES ${CS_PLUGIN_DIR}/CsPrinterDriverWin1.6.dll DESTINATION ${APP_INSTALL_DIR}/printerdrivers)
+         set(file ${CS_PLUGIN_DIR}/CsPrinterDriverWin1.6.dll)
 
       endif()
+
+      if(NOT EXISTS ${file})
+         message(FATAL_ERROR " \n ** CopperSpice plugin: ${file} \n ** appears to be missing, please verify your installation\n")
+      endif()
+
+      install(FILES ${file} DESTINATION ${APP_INSTALL_DIR}/printerdrivers)
+
    endif()
 
 endfunction()
