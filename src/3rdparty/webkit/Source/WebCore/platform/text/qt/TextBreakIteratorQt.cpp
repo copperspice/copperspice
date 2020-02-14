@@ -38,19 +38,15 @@ class TextBreakIterator : public QTextBoundaryFinder {
 
   public:
      TextBreakIterator(QTextBoundaryFinder::BoundaryType type, QString str)
-         : m_string(std::move(str))
-     {
-        this->QTextBoundaryFinder::operator=(QTextBoundaryFinder(type, m_string));
-     }
+         : QTextBoundaryFinder(type, std::move(str))
+     { }
 
      TextBreakIterator()
          : QTextBoundaryFinder()
      { }
-
-     QString m_string;
 };
 
-TextBreakIterator* setUpIterator(TextBreakIterator& iterator, QTextBoundaryFinder::BoundaryType type, const UChar *characters, int length)
+TextBreakIterator * setUpIterator(TextBreakIterator& iterator, QTextBoundaryFinder::BoundaryType type, const UChar *characters, int length)
 {
   if (! characters || ! length) {
       return 0;
@@ -69,29 +65,30 @@ TextBreakIterator* setUpIterator(TextBreakIterator& iterator, QTextBoundaryFinde
   }
 
   iterator = TextBreakIterator(type, tmp);
+
   return &iterator;
 }
 
-TextBreakIterator* wordBreakIterator(const UChar* string, int length)
+TextBreakIterator * wordBreakIterator(const UChar* string, int length)
 {
   static TextBreakIterator staticWordBreakIterator;
   return setUpIterator(staticWordBreakIterator, QTextBoundaryFinder::Word, string, length);
 }
 
-TextBreakIterator* characterBreakIterator(const UChar* string, int length)
+TextBreakIterator * characterBreakIterator(const UChar* string, int length)
 {
   static TextBreakIterator staticCharacterBreakIterator;
   return setUpIterator(staticCharacterBreakIterator, QTextBoundaryFinder::Grapheme, string, length);
 }
 
-TextBreakIterator* cursorMovementIterator(const UChar* string, int length)
+TextBreakIterator * cursorMovementIterator(const UChar* string, int length)
 {
   return characterBreakIterator(string, length);
 }
 
 static TextBreakIterator* staticLineBreakIterator;
 
-TextBreakIterator* acquireLineBreakIterator(const UChar * string, int length)
+TextBreakIterator * acquireLineBreakIterator(const UChar * string, int length)
 {
   TextBreakIterator * lineBreakIterator = nullptr;
 
