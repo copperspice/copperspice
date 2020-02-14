@@ -82,7 +82,7 @@ static void init(QTextBoundaryFinder::BoundaryType type, const QString &str, QCh
 }
 
 QTextBoundaryFinder::QTextBoundaryFinder()
-    : m_type(Grapheme), m_valid(false), freePrivate(true), d(nullptr)
+    : m_type(Grapheme), iter_pos(m_str.begin()), m_valid(false), freePrivate(true), d(nullptr)
 {
 }
 
@@ -100,9 +100,11 @@ QTextBoundaryFinder::QTextBoundaryFinder(BoundaryType type, const QString &str)
 }
 
 QTextBoundaryFinder::QTextBoundaryFinder(const QTextBoundaryFinder &other)
-    : m_type(other.m_type), m_str(other.m_str), iter_pos(other.iter_pos), m_valid(other.m_valid), freePrivate(true), d(nullptr)
+    : m_type(other.m_type), m_str(other.m_str), m_valid(other.m_valid), freePrivate(true), d(nullptr)
 {
-   if (other.d) {
+   iter_pos = m_str.begin() + (other.iter_pos - other.m_str.begin());
+
+   if (other.d != nullptr) {
       auto length = m_str.size();
 
       Q_ASSERT(length > 0);
@@ -113,49 +115,73 @@ QTextBoundaryFinder::QTextBoundaryFinder(const QTextBoundaryFinder &other)
    }
 }
 
+QTextBoundaryFinder::QTextBoundaryFinder(QTextBoundaryFinder &&other)
+{
+   *this = std::move(other);
+}
+
 QTextBoundaryFinder &QTextBoundaryFinder::operator=(const QTextBoundaryFinder &other)
 {
     if (&other == this) {
        return *this;
     }
 
-    auto length = other.m_str.size();
-
-    if (other.d) {
-        Q_ASSERT(length > 0);
-
-        uint newCapacity = (length + 1) * sizeof(QCharAttributes);
-        QTextBoundaryFinderPrivate *newD = (QTextBoundaryFinderPrivate *) realloc(freePrivate ? d : nullptr, newCapacity);
-
-        Q_CHECK_PTR(newD);
-        freePrivate = true;
-        d           = newD;
-    }
-
     m_type   = other.m_type;
     m_str    = other.m_str;
-    iter_pos = other.iter_pos;
+    iter_pos = m_str.begin() + (other.iter_pos - other.m_str.begin());
     m_valid  = other.m_valid;
 
-    if (other.d) {
-        memcpy(d, other.d, (length + 1) * sizeof(QCharAttributes));
+    auto length = other.m_str.size();
 
-    } else {
-        if (freePrivate) {
-           free(d);
-        }
+    if (other.d == nullptr) {
 
-        d = nullptr;
+      if (freePrivate) {
+         free(d);
+      }
+
+      d = nullptr;
+
+   } else {
+       Q_ASSERT(length > 0);
+
+       uint newCapacity = (length + 1) * sizeof(QCharAttributes);
+       QTextBoundaryFinderPrivate *newD = (QTextBoundaryFinderPrivate *) realloc(freePrivate ? d : nullptr, newCapacity);
+
+       Q_CHECK_PTR(newD);
+       freePrivate = true;
+       d           = newD;
+
+       memcpy(d, other.d, (length + 1) * sizeof(QCharAttributes));
     }
 
     return *this;
 }
 
+QTextBoundaryFinder & QTextBoundaryFinder::operator=(QTextBoundaryFinder &&other)
+{
+   m_type      = other.m_type;
+   m_str       = std::move(other.m_str);
+   iter_pos    = std::move(other.iter_pos);
+   m_valid     = other.m_valid;
+
+   if (freePrivate) {
+       free(d);
+   }
+
+   freePrivate       = other.freePrivate;
+   other.freePrivate = false;
+
+   d       = other.d;
+   other.d = nullptr;
+
+   return *this;
+}
+
 QTextBoundaryFinder::~QTextBoundaryFinder()
 {
-    if (freePrivate) {
-       free(d);
-    }
+   if (freePrivate) {
+      free(d);
+   }
 }
 
 void QTextBoundaryFinder::toStart()

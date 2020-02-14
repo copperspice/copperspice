@@ -53,9 +53,12 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    QTextBoundaryFinder(const QTextBoundaryFinder &other);
    QTextBoundaryFinder(BoundaryType type, const QString &str);
 
+   QTextBoundaryFinder(QTextBoundaryFinder &&other);
+
    ~QTextBoundaryFinder();
 
    QTextBoundaryFinder &operator=(const QTextBoundaryFinder &other);
+   QTextBoundaryFinder &operator=(QTextBoundaryFinder &&other);
 
    inline bool isValid() const {
       return d;
