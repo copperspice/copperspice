@@ -1864,16 +1864,6 @@ QList<QMdiSubWindow *> QMdiArea::subWindowList(WindowOrder order) const
    return d->subWindowList(order, false);
 }
 
-/*!
-    Closes all subwindows by sending a QCloseEvent to each window.
-    You may receive subWindowActivated() signals from subwindows
-    before they are closed (if the MDI area activates the subwindow
-    when another is closing).
-
-    Subwindows that ignore the close event will remain open.
-
-    \sa closeActiveSubWindow()
-*/
 void QMdiArea::closeAllSubWindows()
 {
    Q_D(QMdiArea);
@@ -1883,11 +1873,18 @@ void QMdiArea::closeAllSubWindows()
    }
 
    d->isSubWindowsTiled = false;
-   for (QMdiSubWindow *child : d->childWindows) {
-      if (!sanityCheck(child, "QMdiArea::closeAllSubWindows")) {
-         continue;
+
+   {
+      // walk elements in tmpWindows, side effect of close() deletes element in d->childWindows
+      auto tmpWindows = d->childWindows;
+
+      for (QMdiSubWindow *child : tmpWindows) {
+         if (! sanityCheck(child, "QMdiArea::closeAllSubWindows")) {
+            continue;
+         }
+
+         child->close();
       }
-      child->close();
    }
 
    d->updateScrollBars();
