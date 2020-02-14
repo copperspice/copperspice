@@ -30,7 +30,7 @@
 #endif
 
 #ifdef QT_SECURETRANSPORT
-#include "qsslsocket_mac_p.h"
+#include <qsslsocket_mac_p.h>
 #endif
 
 #include <qsslconfiguration_p.h>
@@ -1140,8 +1140,8 @@ void QSslSocketPrivate::createPlainSocket(QIODevice::OpenMode openMode)
    q->connect(plainSocket, SIGNAL(bytesWritten(qint64)), q, SLOT(_q_bytesWrittenSlot(qint64)), Qt::DirectConnection);
 
 #ifndef QT_NO_NETWORKPROXY
-   q->connect(plainSocket, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *)),
-              q, SLOT(proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *)));
+   q->connect(plainSocket, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
+              q, SLOT(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)));
 #endif
 
    buffer.clear();
@@ -1173,12 +1173,14 @@ bool QSslSocketPrivate::isPaused() const
 {
    return paused;
 }
+
 bool QSslSocketPrivate::bind(const QHostAddress &address, quint16 port, QAbstractSocket::BindMode mode)
 {
-   // this function is called from QAbstractSocket::bind
+   // called from QAbstractSocket::bind
    if (!initialized) {
       init();
    }
+
    initialized = false;
 
 #ifdef QSSLSOCKET_DEBUG
