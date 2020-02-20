@@ -23,74 +23,6 @@
 
 #include <qtconcurrentexception.h>
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QtConcurrent::Exception
-    \brief The Exception class provides a base class for exceptions that can transferred across threads.
-    \since 4.4
-
-    Qt Concurrent supports throwing and catching exceptions across thread
-    boundaries, provided that the exception inherit from QtConcurrent::Exception
-    and implement two helper functions:
-
-    \snippet doc/src/snippets/code/src_corelib_concurrent_qtconcurrentexception.cpp 0
-
-    QtConcurrent::Exception subclasses must be thrown by value and
-    caught by reference:
-
-    \snippet doc/src/snippets/code/src_corelib_concurrent_qtconcurrentexception.cpp 1
-
-    If you throw an exception that is not a subclass of QtConcurrent::Exception,
-    the Qt Concurrent functions will throw a QtConcurrent::UnhandledException
-    in the receiver thread.
-
-    When using QFuture, transferred exceptions will be thrown when calling the following functions:
-    \list
-    \o QFuture::waitForFinished()
-    \o QFuture::result()
-    \o QFuture::resultAt()
-    \o QFuture::results()
-    \endlist
-*/
-
-/*!
-    \fn QtConcurrent::Exception::raise() const
-    In your QtConcurrent::Exception subclass, reimplement raise() like this:
-
-    \snippet doc/src/snippets/code/src_corelib_concurrent_qtconcurrentexception.cpp 2
-*/
-
-/*!
-    \fn QtConcurrent::Exception::clone() const
-    In your QtConcurrent::Exception subclass, reimplement clone() like this:
-
-    \snippet doc/src/snippets/code/src_corelib_concurrent_qtconcurrentexception.cpp 3
-*/
-
-/*!
-    \class QtConcurrent::UnhandledException
-
-    \brief The UnhandledException class represents an unhandled exception in a worker thread.
-    \since 4.4
-
-    If a worker thread throws an exception that is not a subclass of QtConcurrent::Exception,
-    the Qt Concurrent functions will throw a QtConcurrent::UnhandledException
-    on the receiver thread side.
-
-    Inheriting from this class is not supported.
-*/
-
-/*!
-    \fn QtConcurrent::UnhandledException::raise() const
-    \internal
-*/
-
-/*!
-    \fn QtConcurrent::UnhandledException::clone() const
-    \internal
-*/
-
 namespace QtConcurrent {
 
 void Exception::raise() const
@@ -115,14 +47,15 @@ Exception *UnhandledException::clone() const
    return new UnhandledException(*this);
 }
 
-
 namespace internal {
 
 class Base
 {
  public:
    Base(Exception *exception)
-      : exception(exception), refCount(1), hasThrown(false) { }
+      : exception(exception), refCount(1), hasThrown(false)
+   { }
+
    ~Base() {
       delete exception;
    }
@@ -133,7 +66,8 @@ class Base
 };
 
 ExceptionHolder::ExceptionHolder(Exception *exception)
-   : base(new Base(exception)) {}
+   : base(new Base(exception))
+{ }
 
 ExceptionHolder::ExceptionHolder(const ExceptionHolder &other)
    : base(other.base)
@@ -157,7 +91,7 @@ void ExceptionHolder::operator=(const ExceptionHolder &other)
 
 ExceptionHolder::~ExceptionHolder()
 {
-   if (base->refCount.deref() == 0) {
+   if (base->refCount.deref() == false) {
       delete base;
    }
 }
@@ -202,4 +136,3 @@ bool ExceptionStore::hasThrown() const
 
 } // namespace QtConcurrent
 
-QT_END_NAMESPACE
