@@ -30,54 +30,62 @@
 
 class Q_GUI_EXPORT QVertexIndexVector
 {
-public:
-    enum Type {
-        UnsignedInt,
-        UnsignedShort
-    };
+ public:
+   enum Type {
+      UnsignedInt,
+      UnsignedShort
+   };
 
-    inline Type type() const { return t; }
+   QVertexIndexVector() = default;
 
-    inline void setDataUint(const QVector<quint32> &data)
-    {
-        t = UnsignedInt;
-        indices32 = data;
-    }
+   QVertexIndexVector(const QVertexIndexVector &other) {
+      *this = other;
+   }
 
-    inline void setDataUshort(const QVector<quint16> &data)
-    {
-        t = UnsignedShort;
-        indices16 = data;
-    }
+   Type type() const {
+      return t;
+   }
 
-    inline const void* data() const
-    {
-        if (t == UnsignedInt)
-            return indices32.data();
-        return indices16.data();
-    }
+   void setDataUint(const QVector<quint32> &data) {
+      t = UnsignedInt;
+      indices32 = data;
+   }
 
-    inline int size() const
-    {
-        if (t == UnsignedInt)
-            return indices32.size();
-        return indices16.size();
-    }
+   void setDataUshort(const QVector<quint16> &data) {
+      t = UnsignedShort;
+      indices16 = data;
+   }
 
-    inline QVertexIndexVector &operator = (const QVertexIndexVector &other)
-    {
-         if (t == UnsignedInt)
-           indices32 = other.indices32;
-         else
-           indices16 = other.indices16;
+   const void * data() const {
+      if (t == UnsignedInt) {
+         return indices32.data();
+      }
 
-         return *this;
-    }
+      return indices16.data();
+   }
 
-private:
-    Type t;
-    QVector<quint32> indices32;
-    QVector<quint16> indices16;
+   int size() const {
+      if (t == UnsignedInt) {
+         return indices32.size();
+      }
+
+      return indices16.size();
+   }
+
+   QVertexIndexVector &operator=(const QVertexIndexVector &other) {
+      if (t == UnsignedInt) {
+        indices32 = other.indices32;
+      } else {
+        indices16 = other.indices16;
+      }
+
+      return *this;
+   }
+
+ private:
+   Type t;
+   QVector<quint32> indices32;
+   QVector<quint16> indices16;
 };
 
 struct Q_GUI_EXPORT QTriangleSet
