@@ -115,12 +115,14 @@ TokenLookup::hash (const char *str, unsigned int len)
    switch (hval) {
       default:
          hval += asso_values[(unsigned char)str[2]];
-      /*FALLTHROUGH*/
+         [[fallthrough]];
+
       case 2:
       case 1:
          hval += asso_values[(unsigned char)str[0]];
          break;
    }
+
    return hval + asso_values[(unsigned char)str[len - 1]];
 }
 

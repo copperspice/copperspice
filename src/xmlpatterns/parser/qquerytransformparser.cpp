@@ -840,11 +840,11 @@ static Expression::Ptr pushVariable(const QXmlName name,
 
    switch (type) {
       case VariableDeclaration::FunctionArgument:
-      /* Fallthrough. */
       case VariableDeclaration::ExpressionVariable: {
          slot = parseInfo->allocateExpressionSlot();
          break;
       }
+
       case VariableDeclaration::GlobalVariable: {
          slot = parseInfo->allocateGlobalVariableSlot();
          break;

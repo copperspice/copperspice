@@ -334,7 +334,7 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
       QIcon t_icon = action->icon();
 
       if (! t_icon.isNull()) {
-         maxIconWidth = qMax(maxIconWidth, icone + 4);
+         maxIconWidth = qMax(maxIconWidth, static_cast<uint>(icone + 4));
       }
    }
 

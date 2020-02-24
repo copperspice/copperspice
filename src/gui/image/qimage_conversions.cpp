@@ -1108,7 +1108,7 @@ static void mask_alpha_converter_RGBx(QImageData *dest, const QImageData *src, Q
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
    return mask_alpha_converter(dest, src, flags);
 #else
-   Q_UNUSED(flags);
+   (void) flags;
    Q_ASSERT(src->width == dest->width);
    Q_ASSERT(src->height == dest->height);
 
@@ -1135,7 +1135,7 @@ static bool mask_alpha_converter_rgbx_inplace(QImageData *data, Qt::ImageConvers
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
    return mask_alpha_converter_inplace<QImage::Format_RGBX8888>(data, flags);
 #else
-   Q_UNUSED(flags);
+   (void) flags;
 
    const int pad = (data->bytes_per_line >> 2) - data->width;
    QRgb *rgb_data = (QRgb *) data->data;

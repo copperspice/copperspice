@@ -122,7 +122,7 @@ class QMessageBoxDetailsText : public QWidget
          menu->setAttribute(Qt::WA_DeleteOnClose);
          menu->popup(e->globalPos());
 #else
-         Q_UNUSED(e);
+         (void) e;
 #endif
       }
    };
@@ -1570,7 +1570,7 @@ void QMessageBox::setWindowTitle(const QString &title)
 #ifndef Q_OS_DARWIN
    QDialog::setWindowTitle(title);
 #else
-   Q_UNUSED(title);
+   (void) title;
 #endif
 }
 

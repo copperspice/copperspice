@@ -87,8 +87,9 @@ Item::Iterator::Ptr EvaluationCache<IsForGlobal>::evaluateSequence(const Dynamic
          cell.inUse = true;
          cell.sourceIterator = m_operand->evaluateSequence(IsForGlobal ? topFocusContext(context) : context);
          cell.cacheState = ItemSequenceCacheCell::PartiallyPopulated;
-         /* Fallthrough. */
       }
+      [[fallthrough]];
+
       case ItemSequenceCacheCell::PartiallyPopulated: {
          cell.inUse = false;
          Q_ASSERT_X(cells.at(m_varSlot).sourceIterator, Q_FUNC_INFO,

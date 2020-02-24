@@ -338,11 +338,11 @@ void AbstractDateTime::copyTimeSpec(const QDateTime &from,
 {
    switch (from.timeSpec()) {
       case Qt::UTC:
-      /* Fallthrough. */
       case Qt::LocalTime: {
          to.setTimeSpec(from.timeSpec());
          return;
       }
+
       case Qt::OffsetFromUTC: {
          to.setOffsetFromUtc(from.offsetFromUtc());
          Q_ASSERT(to.timeSpec() == Qt::OffsetFromUTC);

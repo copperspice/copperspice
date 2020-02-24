@@ -512,7 +512,7 @@ QSize QIconLoaderEngine::actualSize(const QSize &size, QIcon::Mode mode, QIcon::
 
 QPixmap PixmapEntry::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state)
 {
-   Q_UNUSED(state);
+   (void) state;
 
    // Ensure that basePixmap is lazily initialized before generating the
    // key, otherwise the cache key is not unique

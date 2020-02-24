@@ -1260,7 +1260,7 @@ bool QScrollerPrivate::scrollingSegmentsValid(Qt::Orientation orientation)
 */
 void QScrollerPrivate::createScrollToSegments(qreal v, qreal deltaTime, qreal endPos, Qt::Orientation orientation, ScrollType type)
 {
-   Q_UNUSED(v);
+   (void) v;
 
    if (orientation == Qt::Horizontal) {
       xSegments.clear();

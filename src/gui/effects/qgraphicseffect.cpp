@@ -499,7 +499,7 @@ void QGraphicsEffect::updateBoundingRect()
 */
 void QGraphicsEffect::sourceChanged(ChangeFlags flags)
 {
-   Q_UNUSED(flags);
+   (void) flags;
 }
 
 /*!

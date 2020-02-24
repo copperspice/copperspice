@@ -100,7 +100,8 @@ int QPageSetupDialog::exec()
       case QPageSize::Unit::Pica:
       case QPageSize::Unit::Didot:
       case QPageSize::Unit::Cicero:
-         layout.setUnits(QLocale::system().measurementSystem() == QLocale::MetricSystem ? QPageSize::Unit::Millimeter : QPageSize::Unit::Inch);
+         layout.setUnits(QLocale::system().measurementSystem() == QLocale::MetricSystem ?
+                  QPageSize::Unit::Millimeter : QPageSize::Unit::Inch);
          break;
 
       case QPageSize::Unit::DevicePixel:

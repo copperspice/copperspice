@@ -1155,24 +1155,26 @@ void XSLTTokenizer::insideChoose(TokenSource::Queue *const to)
             }
             break;
          }
+
          case QXmlStreamReader::Comment:
-         /* Fallthrough. */
          case QXmlStreamReader::ProcessingInstruction:
             continue;
+
          case QXmlStreamReader::Characters: {
             /* We ignore regardless of what xml:space says, see step 4 in
              * 4.2 Stripping Whitespace from the Stylesheet. */
             if (isWhitespace()) {
                continue;
             }
-            /* Fallthrough. */
          }
+         [[fallthrough]];
+
          default:
-            /* Fallthrough. */
             unexpectedContent();
             break;
       }
    }
+
    checkForParseError();
 }
 
@@ -2005,6 +2007,8 @@ void XSLTTokenizer::queueWithParams(const XSLTTokenLookup::NodeName parentName,
                unexpectedContent();
             }
          }
+         [[fallthrough]];
+
          case QXmlStreamReader::EndElement: {
             if (isElement(parentName)) {
                return;
@@ -2012,10 +2016,11 @@ void XSLTTokenizer::queueWithParams(const XSLTTokenLookup::NodeName parentName,
                continue;
             }
          }
+
          case QXmlStreamReader::ProcessingInstruction:
-         /* Fallthrough. */
          case QXmlStreamReader::Comment:
             continue;
+
          case QXmlStreamReader::Characters:
             if (whitespaceToSkip()) {
                continue;

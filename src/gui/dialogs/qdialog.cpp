@@ -370,7 +370,8 @@ bool QDialog::eventFilter(QObject *o, QEvent *e)
 void QDialog::contextMenuEvent(QContextMenuEvent *e)
 {
 #if defined(QT_NO_WHATSTHIS) || defined(QT_NO_MENU)
-   Q_UNUSED(e);
+   (void) e;
+
 #else
    QWidget *w = childAt(e->pos());
    if (!w) {

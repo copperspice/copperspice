@@ -42,13 +42,14 @@ DocumentProjector::DocumentProjector(const ProjectedExpression::Vector &paths,
 
 void DocumentProjector::startElement(const QXmlName name)
 {
-   Q_UNUSED(name);
+   (void) name;
 
    switch (m_action) {
       case ProjectedExpression::KeepSubtree: {
          m_receiver->startElement(name);
-         /* Fallthrough. */
       }
+      [[fallthrough]];
+
       case ProjectedExpression::Skip: {
          ++m_nodesInProcess;
          return;

@@ -506,9 +506,10 @@ bool QPixmap::doImageIO(QImageWriter *writer, int quality) const
 
 void QPixmap::fill(const QPaintDevice *device, const QPoint &p)
 {
-   Q_UNUSED(device)
-   Q_UNUSED(p)
-   qWarning("this function is deprecated, ignored");
+   (void) device;
+   (void) p;
+
+   qWarning("This method has been deprecated.");
 }
 
 void QPixmap::fill(const QColor &color)

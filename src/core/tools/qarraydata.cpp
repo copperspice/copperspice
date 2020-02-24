@@ -121,7 +121,9 @@ void QArrayData::deallocate(QArrayData *data, size_t objectSize, size_t alignmen
 {
    // Alignment is a power of two
    Q_ASSERT(alignment >= Q_ALIGNOF(QArrayData) && ! (alignment & (alignment - 1)));
-   Q_UNUSED(objectSize) Q_UNUSED(alignment)
+
+   (void) objectSize;
+   (void) alignment;
 
    if (data == &qt_array_unsharable_empty())  {
       return;

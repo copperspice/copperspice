@@ -1131,7 +1131,8 @@ void QColorShowLabel::mousePressEvent(QMouseEvent *e)
 void QColorShowLabel::mouseMoveEvent(QMouseEvent *e)
 {
 #ifdef QT_NO_DRAGANDDROP
-   Q_UNUSED(e);
+   (void) e;
+
 #else
    if (!mousePressed) {
       return;

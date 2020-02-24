@@ -73,6 +73,8 @@ void QFileInfoGatherer::setResolveSymlinks(bool enable)
 {
 #ifdef Q_OS_WIN
    m_resolveSymlinks = enable;
+#else
+   (void) enable;
 #endif
 }
 

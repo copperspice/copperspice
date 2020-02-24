@@ -855,9 +855,9 @@ QString decodeMSG(const MSG &msg)
          long lKeyData    = (long)lParam;
          int repCount     = (lKeyData & 0xffff);        // Bit 0-15
          int scanCode     = (lKeyData & 0xf0000) >> 16; // Bit 16-23
-         bool contextCode = (lKeyData && 0x20000000);   // Bit 29
-         bool prevState   = (lKeyData && 0x40000000);   // Bit 30
-         bool transState  = (lKeyData && 0x80000000);   // Bit 31
+         bool contextCode = (lKeyData & 0x20000000);    // Bit 29
+         bool prevState   = (lKeyData & 0x40000000);    // Bit 30
+         bool transState  = (lKeyData & 0x80000000);    // Bit 31
 
          parameters = QString("Virtual-key(0x%1) Scancode(%2) Rep(%3) Contextcode(%4), Prev state(%5), Trans state(%6)")
                   .formatArg(nVirtKey, 0, 16).formatArg(scanCode).formatArg(repCount).formatArg(contextCode)

@@ -722,7 +722,8 @@ void QGraphicsWidgetPrivate::windowFrameHoverMoveEvent(QGraphicsSceneHoverEvent 
 
 void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
+
    Q_Q(QGraphicsWidget);
    if (hasDecoration()) {
       // ### restore the cursor, don't override it

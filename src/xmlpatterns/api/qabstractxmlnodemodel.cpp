@@ -284,25 +284,21 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex:
          if (nextFromSimpleAxis(Parent, ni).isNull()) {
             switch (kind(ni)) {
                case QXmlNodeModelIndex::Comment:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::ProcessingInstruction:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::Element:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::Text:
                   return makeSingletonIterator(ni);
+
                case QXmlNodeModelIndex::Attribute:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::Document:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::Namespace:
-                  /* Do nothing. */
+                  // do nothing
                   ;
             }
          }
-
-         /* Else, fallthrough to AxisChild. */
       }
+      [[fallthrough]];
+
       case QXmlNodeModelIndex::AxisChild: {
          QList<QXmlNodeModelIndex> children;
          QXmlNodeModelIndex child = nextFromSimpleAxis(FirstChild, ni);
@@ -323,15 +319,16 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex:
          if (kind(ni) == QXmlNodeModelIndex::Attribute && nextFromSimpleAxis(Parent, ni).isNull()) {
             return makeSingletonIterator(ni);
          }
-
-         /* Else, fallthrough to AxisAttribute. */
       }
+      [[fallthrough]];
+
       case QXmlNodeModelIndex::AxisAttribute:
          return makeVectorIterator(attributes(ni));
+
       case QXmlNodeModelIndex::AxisDescendantOrSelf:
          return mergeIterators(ni, iterate(ni, QXmlNodeModelIndex::AxisDescendant));
+
       case QXmlNodeModelIndex::AxisFollowing:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::AxisPreceding: {
          /* We walk up along the ancestors, and for each parent, we grab its preceding/following
           * siblings, and evaluate the descendant axis. The descendant axes gets added
@@ -468,9 +465,9 @@ bool QAbstractXmlNodeModel::isDeepEqual(const QXmlNodeModelIndex &n1, const QXml
 
             node = atts1->next();
          }
-
-         /* Fallthrough, so we check the children. */
       }
+      [[fallthrough]];
+
       case QXmlNodeModelIndex::Document: {
          QXmlNodeModelIndexIteratorPointer itn1(n1.iterate(QXmlNodeModelIndex::AxisChild));
          QXmlNodeModelIndexIteratorPointer itn2(n2.iterate(QXmlNodeModelIndex::AxisChild));
@@ -500,14 +497,8 @@ bool QAbstractXmlNodeModel::isDeepEqual(const QXmlNodeModelIndex &n1, const QXml
       }
 
       case QXmlNodeModelIndex::Attribute:
-
-      /* Fallthrough */
       case QXmlNodeModelIndex::ProcessingInstruction:
-
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Text:
-
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Comment:
          return n1.stringValue() == n2.stringValue();
 
@@ -802,9 +793,9 @@ bool QXmlNodeModelIndex::operator!=(const QXmlNodeModelIndex &other) const
 void QAbstractXmlNodeModel::copyNodeTo(const QXmlNodeModelIndex &node,
                   QAbstractXmlReceiver *const receiver, const NodeCopySettings &copySettings) const
 {
-   Q_UNUSED(node);
-   Q_UNUSED(receiver);
-   Q_UNUSED(copySettings);
+   (void) node;
+   (void) receiver;
+   (void) copySettings;
 
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
 }

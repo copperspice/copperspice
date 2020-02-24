@@ -1123,6 +1123,8 @@ QVariant QTextDocument::resource(int type, const QUrl &name) const
 
 void QTextDocument::addResource(int type, const QUrl &name, const QVariant &resource)
 {
+   (void) type;
+
    Q_D(QTextDocument);
    d->resources.insert(name, resource);
 }

@@ -63,9 +63,9 @@ const QChar XQueryTokenizer::current() const
    }
 }
 
-char XQueryTokenizer::peekCurrent() const
+QChar XQueryTokenizer::peekCurrent() const
 {
-   return current().toLatin1();
+   return current();
 }
 
 int XQueryTokenizer::peekForColonColon() const
@@ -75,8 +75,8 @@ int XQueryTokenizer::peekForColonColon() const
    int pos = m_pos;
 
    while (pos < m_length) {
-      switch (m_data.at(pos).toLatin1()) {
-         /* Fallthrough these four. */
+      switch (m_data.at(pos).unicode()) {
+
          case ' ':
          case '\t':
          case '\n':
@@ -86,8 +86,9 @@ int XQueryTokenizer::peekForColonColon() const
             if (peekAhead((pos - m_pos) + 1) == ':') {
                return pos - m_pos;
             }
-            /* Fallthrough. */
          }
+         [[fallthrough]];
+
          default:
             return -1;
       }
@@ -136,8 +137,9 @@ QString XQueryTokenizer::normalizeEOL(const QString &input, const CharacterSkips
                ++i;
             }
 
-            /* Else, fallthrough. */
          }
+         [[fallthrough]];
+
          case '\n': {
             result.append(QLatin1Char('\n'));
             continue;
@@ -156,7 +158,7 @@ Tokenizer::TokenType XQueryTokenizer::consumeComment()
    /* Below, we return ERROR instead of END_OF_FILE such that the parser
     * sees an invalid comment. */
    while (m_pos < m_length) {
-      switch (peekCurrent()) {
+      switch (peekCurrent().unicode()) {
          case ':': {
             ++m_pos; /* Consume ':' */
             if (atEnd()) {
@@ -186,8 +188,8 @@ Tokenizer::TokenType XQueryTokenizer::consumeComment()
             }
             break;
          }
+
          case '\n':
-         /* Fallthrough. */
          case '\r': {
             /* We want to count \r\n as a single line break. */
             if (peekAhead() == '\n') {
@@ -209,7 +211,7 @@ Tokenizer::TokenType XQueryTokenizer::consumeComment()
 bool XQueryTokenizer::consumeRawWhitespace()
 {
    while (m_pos < m_length) {
-      switch (peekCurrent()) {
+      switch (peekCurrent().unicode()) {
          case ' ':
          case '\t':
             break;
@@ -235,7 +237,7 @@ bool XQueryTokenizer::consumeRawWhitespace()
 Tokenizer::TokenType XQueryTokenizer::consumeWhitespace()
 {
    while (m_pos < m_length) {
-      switch (peekCurrent()) {
+      switch (peekCurrent().unicode()) {
          case ' ':
          case '\t':
             break;
@@ -263,6 +265,8 @@ Tokenizer::TokenType XQueryTokenizer::consumeWhitespace()
                }
             }
          }
+         [[fallthrough]];
+
          default:
             return SUCCESS;
       }
@@ -272,10 +276,10 @@ Tokenizer::TokenType XQueryTokenizer::consumeWhitespace()
    return END_OF_FILE;
 }
 
-char XQueryTokenizer::peekAhead(const int length) const
+QChar XQueryTokenizer::peekAhead(const int length) const
 {
    if (m_pos + length < m_length) {
-      return m_data.at(m_pos + length).toLatin1();
+      return m_data.at(m_pos + length);
    } else {
       return 0;
    }
@@ -339,7 +343,6 @@ bool XQueryTokenizer::isNCNameBody(const QChar ch)
 bool XQueryTokenizer::isPhraseKeyword(const TokenType code)
 {
    switch (code) {
-      /* Fallthrough all these. */
       case CASTABLE:
       case CAST:
       case COPY_NAMESPACES:
@@ -362,7 +365,6 @@ bool XQueryTokenizer::isPhraseKeyword(const TokenType code)
 bool XQueryTokenizer::isOperatorKeyword(const TokenType code)
 {
    switch (code) {
-      /* Fallthrough all these. */
       case AS:
       case ASCENDING:
       case AT:
@@ -402,7 +404,6 @@ bool XQueryTokenizer::isOperatorKeyword(const TokenType code)
 bool XQueryTokenizer::isTypeToken(const TokenType t)
 {
    switch (t) {
-      /* Fallthrough all these. */
       case ATTRIBUTE:
       case COMMENT:
       case DOCUMENT:
@@ -705,13 +706,12 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
    switch (state()) {
       case XMLSpaceDecl:
-      /* Fallthrough. */
       case NamespaceKeyword: {
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case ',':
                return tokenAndAdvance(COMMA);
+
             case '"':
-            /* Fallthrough. */
             case '\'': {
                setState(NamespaceDecl);
                return tokenizeStringLiteral();
@@ -728,19 +728,18 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          if (keyword) {
             switch (keyword->token) {
                case INHERIT:
-               /* Fallthrough. */
                case NO_INHERIT: {
                   setState(Default);
                   break;
                }
+
                case NAMESPACE: {
                   setState(NamespaceDecl);
                   break;
                }
+
                case ORDERED:
-               /* Fallthrough. */
                case UNORDERED:
-               /* Fallthrough. */
                case STRIP: {
                   setState(Default);
                   break;
@@ -758,17 +757,17 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          } else {
             return id;
          }
-
-         Q_ASSERT(false);
       }
+
       case NamespaceDecl: {
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case '=':
                return tokenAndAdvance(G_EQ);
+
             case ';':
                return tokenAndChangeState(SEMI_COLON, Default);
+
             case '\'':
-            /* Fallthrough. */
             case '\"':
                return tokenizeStringLiteral();
          }
@@ -777,7 +776,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
          handleWhitespace();
 
-         const char pc = peekCurrent();
+         const QChar pc = peekCurrent();
          const TokenMap *const t = lookupKeyword(nc.value);
 
          if (pc == '\'' || (pc == '"' && t)) {
@@ -785,27 +784,28 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          } else {
             return nc;
          }
-
-         Q_ASSERT(false);
       }
+
       case Axis: {
          if (peekCurrent() == ':') {
             Q_ASSERT(peekAhead() == ':');
+
             m_pos += 2;
             setState(AfterAxisSeparator);
             return Token(COLONCOLON);
          }
-         /* Fallthrough. */
       }
+      [[fallthrough]];
+
       case AfterAxisSeparator:
-      /* Fallthrough. */
       case Default:
       /* State Operator and state Default have a lot of tokens in common except
        * for minor differences. So we treat them the same way, and sprinkles logic
        * here and there to handle the small differences. */
-      /* Fallthrough. */
+      [[fallthrough]];
+
       case Operator: {
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case '=':
                return tokenAndChangeState(G_EQ, Default);
             case '-':
@@ -830,7 +830,6 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return tokenAndChangeState(RPAREN, Operator);
             case '@':
                return tokenAndChangeState(AT_SIGN, Default);
-            /* Fallthrough all these. */
             case '1':
             case '2':
             case '3':
@@ -843,21 +842,23 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             case '0':
                return tokenizeNumberLiteral();
             case '.': {
-               const char next = peekAhead();
+               const QChar next = peekAhead();
+
                if (next == '.') {
                   return tokenAndChangeState(DOTDOT, Operator, 2);
-               }
-               /* .5 is allowed, as short form for 0.5:
-                * <tt>[142]     DecimalLiteral     ::=     ("." Digits) | (Digits "." [0-9]*)</tt>
-                */
-               else if (isDigit(next)) {
+
+               } else if (next.isDigit()) {
+                  // .5 is allowed, as short form for 0.5:
+                  // <tt>[142]     DecimalLiteral     ::=     ("." Digits) | (Digits "." [0-9]*)</tt>
+
                   return tokenizeNumberLiteral();
+
                } else {
                   return tokenAndChangeState(DOT, Operator);
                }
             }
+
             case '\'':
-            /* Fallthrough. */
             case '"': {
                setState(Operator);
                return tokenizeStringLiteral();
@@ -885,7 +886,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                }
             }
             case ':': {
-               switch (peekAhead()) {
+               switch (peekAhead().unicode()) {
                   case '=':
                      return tokenAndChangeState(ASSIGN, Default, 2);
                   case ':':
@@ -902,7 +903,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                }
             }
             case '<': {
-               switch (peekAhead()) {
+               switch (peekAhead().unicode()) {
                   case '=':
                      return tokenAndChangeState(G_LE, Default, 2);
                   case '<':
@@ -917,8 +918,10 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                         pushState(Operator);
                         return tokenAndChangeState(COMMENT_START, XMLComment);
                      }
-                     /* Fallthrough. It's a syntax error, and this is a good way to report it. */
+                     // a syntax error
                   }
+                  [[fallthrough]];
+
                   default: {
                      if ((m_pos + 1) < m_length && isNCNameStart(m_data.at(m_pos + 1))) {
                         /* We assume it's an element constructor. */
@@ -930,7 +933,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                }
             }
             case '>': {
-               switch (peekAhead()) {
+               switch (peekAhead().unicode()) {
                   case '=':
                      return tokenAndChangeState(G_GE, Default, 2);
                   case '>':
@@ -1042,7 +1045,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
          /* Handle name tests. */
          if (peekCurrent() == ':') {
-            switch (peekAhead()) {
+            switch (peekAhead().unicode()) {
                case '=':
                   return id;
                case '*': {
@@ -1093,7 +1096,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                keyword->token == ORDERED ||
                keyword->token == UNORDERED ||
                keyword->token == IF) {
-            switch (peekCurrent()) {
+
+            switch (peekCurrent().unicode()) {
                case '(': {
                   // TODO See if we can remove DOCUMENT from isTypeToken.
                   if (isTypeToken(keyword->token) && keyword->token != DOCUMENT) {
@@ -1186,7 +1190,6 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             case DECLARE: {
                switch (keyword2->token) {
                   case VARIABLE:
-                  /* Fallthrough. */
                   case FUNCTION: {
                      m_tokenStack.push(Token(keyword2->token));
                      setState(Default);
@@ -1198,7 +1201,6 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      return Token(keyword->token);
                   }
                   case COPY_NAMESPACES:
-                  /* Fallthrough. */
                   case ORDERING: {
                      m_tokenStack.push(Token(keyword2->token));
                      setState(NamespaceKeyword);
@@ -1211,7 +1213,6 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      return Token(keyword->token);
                   }
                   case NAMESPACE:
-                  /* Fallthrough. */
                   case BASEURI: {
                      m_tokenStack.push(Token(keyword2->token));
                      setState(NamespaceDecl);
@@ -1277,7 +1278,6 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
                switch (keyword2->token) {
                   case SCHEMA:
-                  /* Fallthrough. */
                   case MODULE: {
                      setState(NamespaceKeyword);
                      return Token(keyword->token);
@@ -1309,10 +1309,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return id;
             }
          }
-
-         Q_ASSERT(false);
-
       }
+
       case VarName: {
          if (peekCurrent() == '$') {
             return tokenAndAdvance(DOLLAR);
@@ -1320,10 +1318,10 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
          setState(Operator);
          return tokenizeNCNameOrQName();
-         Q_ASSERT(false);
       }
+
       case ItemType: {
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case '(':
                return tokenAndChangeState(LPAREN, KindTest);
             case '$':
@@ -1350,10 +1348,10 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return name;
             }
          }
-         Q_ASSERT(false);
       }
+
       case KindTest: {
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case ')': {
                popState();
                return tokenAndAdvance(RPAREN);
@@ -1366,8 +1364,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return tokenAndAdvance(STAR);
             case '?':
                return tokenAndAdvance(QUESTION);
+
             case '\'':
-            /* Fallthrough. */
             case '"':
                return tokenizeStringLiteral();
          }
@@ -1393,25 +1391,25 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          } else {
             return nc;
          }
-         Q_ASSERT(false);
       }
+
       case KindTestForPI: {
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case ')': {
                popState();
                return tokenAndAdvance(RPAREN);
             }
+
             case '\'':
-            /* Fallthrough. */
             case '"':
                return tokenizeStringLiteral();
             default:
                return tokenizeNCName();
          }
-         Q_ASSERT(false);
       }
+
       case OccurrenceIndicator: {
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case '?':
                return tokenAndChangeState(QUESTION, Operator);
             case '*':
@@ -1423,12 +1421,11 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return nextToken();
             }
          }
-         Q_ASSERT(false);
       }
+
       case XQueryVersion: {
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case '\'':
-            /* Fallthrough. */
             case '"':
                return tokenizeStringLiteral();
             case ';':
@@ -1447,7 +1444,6 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          } else {
             return id;
          }
-         Q_ASSERT(false);
       }
       case StartTag: {
          if (peekAhead(-1) == '<') {
@@ -1460,7 +1456,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             }
          }
 
-         switch (peekCurrent()) {
+         switch (peekCurrent().unicode()) {
             case '/': {
                if (peekAhead() == '>') {
                   m_pos += 2;
@@ -1491,13 +1487,12 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             default:
                return tokenizeNCNameOrQName();
          }
-         Q_ASSERT(false);
+
       }
 
       case AposAttributeContent:
-      /* Fallthrough. */
       case QuotAttributeContent: {
-         const QChar sep(state() == AposAttributeContent ? QLatin1Char('\'') : QLatin1Char('"'));
+         const QChar sep(state() == AposAttributeContent ? QChar('\'') : QChar('"'));
          QString result;
 
          if (m_scanOnly) {
@@ -1596,8 +1591,9 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                         break;
                      }
                   }
+                  [[fallthrough]];
+
                   case 0xA:
-                  /* Fallthrough. */
                   case 0x9: {
                      result.append(QLatin1Char(' '));
                      break;
@@ -1609,8 +1605,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
             ++m_pos;
          }
-         Q_ASSERT(false);
       }
+
       case ElementContent: {
          QString result;
 
@@ -1625,7 +1621,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return Token(END_OF_FILE);
             }
 
-            switch (peekCurrent()) {
+            switch (peekCurrent().unicode()) {
                case '<': {
                   if (!result.isEmpty() && peekAhead(2) != '[') {
                      /* We encountered the end, and it was not a CDATA section. */
@@ -1725,8 +1721,9 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   if (peekAhead(-1) == '\r') {
                      break;
                   }
-                  /* else, fallthrough. */
                }
+               [[fallthrough]];
+
                case '\r': {
                   result.append(QLatin1Char('\n'));
                   break;
@@ -1738,8 +1735,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             }
             ++m_pos;
          }
-         Q_ASSERT(false);
       }
+
       case ProcessingInstructionName: {
          const int start = m_pos;
 
@@ -1755,8 +1752,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                                           ProcessingInstructionContent);
             }
          }
-         Q_ASSERT(false);
       }
+
       case ProcessingInstructionContent: {
          /* Consume whitespace between the name and the content. */
          if (consumeRawWhitespace()) {
@@ -1773,8 +1770,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             popState();
             return Token(PI_CONTENT, normalizeEOL(m_data.mid(start, len), CharacterSkips()));
          }
-         Q_ASSERT(false);
       }
+
       case EndTag: {
          if (consumeRawWhitespace()) {
             return END_OF_FILE;
@@ -1786,8 +1783,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          } else {
             return tokenizeNCNameOrQName();
          }
-         Q_ASSERT(false);
       }
+
       case XMLComment: {
          const int start = m_pos;
          const int len = scanUntil("--");
@@ -1805,8 +1802,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return error();
             }
          }
-         Q_ASSERT(false);
       }
+
       case Pragma: {
          /* Consume whitespace. */
          if (consumeRawWhitespace()) {
@@ -1841,11 +1838,9 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          }
 
          return Token(STRING_LITERAL, m_data.mid(start, len));
-         Q_ASSERT(false);
       }
    }
 
-   Q_ASSERT(false);
    return error();
 }
 
@@ -1863,14 +1858,14 @@ Tokenizer::Token XQueryTokenizer::attributeAsRaw(const QChar sep,
          return END_OF_FILE;
       }
 
-      if (peekCurrent() == sep.unicode()) {
+      if (peekCurrent() == sep) {
          if (inLiteral) {
             inLiteral = false;
          } else {
             inLiteral = true;
          }
 
-         if (peekAhead() == sep.unicode()) {
+         if (peekAhead() == sep) {
             /* The quoting mechanism was used. */
             result.append(current());
             m_pos += 2;
@@ -1963,19 +1958,18 @@ Tokenizer::Token XQueryTokenizer::nextToken(YYLTYPE *const sourceLocator)
 
       switch (retval.type) {
          case MODULE:
-         /* Fallthrough.*/
          case SCHEMA:
-         /* Fallthrough.*/
          case COPY_NAMESPACES: {
             setState(NamespaceKeyword);
             break;
          }
+
          case VERSION: {
             setState(XQueryVersion);
             break;
          }
+
          case AS:
-         /* Fallthrough. */
          case OF: {
             setState(ItemType);
             break;

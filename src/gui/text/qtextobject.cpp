@@ -313,7 +313,8 @@ void QTextFramePrivate::fragmentAdded(QChar type, uint fragment)
 
 void QTextFramePrivate::fragmentRemoved(QChar type, uint fragment)
 {
-   Q_UNUSED(fragment); // --release warning
+   (void) fragment;
+
    if (type == QTextBeginningOfFrame) {
       Q_ASSERT(fragment_start == fragment);
       fragment_start = 0;

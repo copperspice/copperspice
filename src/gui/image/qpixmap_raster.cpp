@@ -130,10 +130,11 @@ void QRasterPlatformPixmap::fromImageInPlace(QImage &sourceImage,
 {
    createPixmapForImage(sourceImage, flags, /* inplace = */true);
 }
+
 void QRasterPlatformPixmap::fromImageReader(QImageReader *imageReader,
    Qt::ImageConversionFlags flags)
 {
-   Q_UNUSED(flags);
+   (void) flags;
    QImage image = imageReader->read();
 
    if (image.isNull()) {

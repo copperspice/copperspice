@@ -34,9 +34,9 @@ AtomicTypeVisitorResult::Ptr                                                    
 ownerClass##MathematicianLocator::visit(const visitor *, const qint16 op,               \
                                         const SourceLocationReflection *const r) const  \
 {                                                                                       \
-    Q_UNUSED(r)                                                                         \
+    (void) r;                                                                           \
     /* Note the extra paranteses around validOps. */                                    \
-    if(((validOps) & AtomicMathematician::Operator(op)) == op)                                                         \
+    if(((validOps) & AtomicMathematician::Operator(op)) == AtomicMathematician::Operator(op))  \
         return AtomicTypeVisitorResult::Ptr(new mather());                              \
     else                                                                                \
         return AtomicTypeVisitorResult::Ptr();                                          \
@@ -48,7 +48,7 @@ ownerClass##MathematicianLocator::visit(const visitor *, const qint16 op,       
                                         const SourceLocationReflection *const r) const  \
 {                                                                                       \
     /* Note the extra paranteses around validOps. */                                    \
-    if(((validOps) & AtomicMathematician::Operator(op)) == op)                                                         \
+    if(((validOps) & AtomicMathematician::Operator(op)) == AtomicMathematician::Operator(op))   \
         return AtomicTypeVisitorResult::Ptr(new mather(r));                             \
     else                                                                                \
         return AtomicTypeVisitorResult::Ptr();                                          \
@@ -60,7 +60,7 @@ ownerClass##MathematicianLocator::visit(const visitor *, const qint16 op,       
                                         const SourceLocationReflection *const r) const  \
 {                                                                                       \
     /* Note the extra paranteses around validOps. */                                    \
-    if(((validOps) & AtomicMathematician::Operator(op)) == op)                                                         \
+    if(((validOps) & AtomicMathematician::Operator(op)) == AtomicMathematician::Operator(op)) \
         return AtomicTypeVisitorResult::Ptr(new OperandSwitcherMathematician(           \
                                             AtomicMathematician::Ptr(new mather(r))));  \
     else                                                                                \

@@ -92,8 +92,8 @@ static inline QString jobHoldToString(const QCUPSSupport::JobHoldUntil jobHold, 
             localDateTime.setTime(holdUntilTime);
             return localDateTime.toUTC().time().toString("HH:mm");
          }
+         [[fallthrough]];
 
-      // else fall through:
       case QCUPSSupport::NoHold:
          return QString();
    }

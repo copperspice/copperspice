@@ -77,7 +77,7 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 - (void)printPanelDidEnd: (NSPrintPanel *)printPanel
               returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
-   Q_UNUSED(printPanel);
+    (void) printPanel;
 
     QPrintDialog *dialog = static_cast<QPrintDialog *>(contextInfo);
     QPrinter *printer = dialog->printer();
@@ -174,7 +174,6 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
    dialog->done((returnCode == NSModalResponseOK) ? QDialog::Accepted : QDialog::Rejected);
 }
 @end
-
 
 void QPrintDialogPrivate::openCocoaPrintPanel(Qt::WindowModality modality)
 {

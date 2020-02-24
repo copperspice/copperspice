@@ -316,6 +316,8 @@ QRectF QGraphicsVideoItem::boundingRect() const
 void QGraphicsVideoItem::paint(
    QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+   (void) option;
+
    Q_D(QGraphicsVideoItem);
 
    if (d->surface && d->updatePaintDevice) {

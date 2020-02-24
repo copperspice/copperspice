@@ -83,8 +83,6 @@ private:
 struct Q_GUI_EXPORT QTriangleSet
 {
     inline QTriangleSet() { }
-    inline QTriangleSet(const QTriangleSet &other) : vertices(other.vertices), indices(other.indices) { }
-    QTriangleSet &operator = (const QTriangleSet &other) {vertices = other.vertices; indices = other.indices; return *this;}
 
     // The vertices of a triangle are given by: (x[i[n]], y[i[n]]), (x[j[n]], y[j[n]]), (x[k[n]], y[k[n]]), n = 0, 1, ...
     QVector<qreal> vertices; // [x[0], y[0], x[1], y[1], x[2], ...]
@@ -94,8 +92,6 @@ struct Q_GUI_EXPORT QTriangleSet
 struct Q_GUI_EXPORT QPolylineSet
 {
     inline QPolylineSet() { }
-    inline QPolylineSet(const QPolylineSet &other) : vertices(other.vertices), indices(other.indices) { }
-    QPolylineSet &operator = (const QPolylineSet &other) {vertices = other.vertices; indices = other.indices; return *this;}
 
     QVector<qreal> vertices; // [x[0], y[0], x[1], y[1], x[2], ...]
     QVertexIndexVector indices; // End of polyline is marked with -1.

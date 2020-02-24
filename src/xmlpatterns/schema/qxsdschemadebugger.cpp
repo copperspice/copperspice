@@ -125,7 +125,7 @@ void XsdSchemaDebugger::dumpType(const SchemaType::Ptr &type)
       }
 
       const XsdAttributeUse::List uses = complexType->attributeUses();
-      qDebug("   %ld attributes", uses.count());
+      qDebug("   %zd attributes", uses.count());
 
       for (int i = 0; i < uses.count(); ++i) {
          qDebug("      attr: %s", qPrintable(uses.at(i)->attribute()->displayName(m_namePool)));

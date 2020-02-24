@@ -2644,7 +2644,7 @@ void QGraphicsView::dropEvent(QDropEvent *event)
    d->lastDragDropEvent = 0;
 
 #else
-   Q_UNUSED(event)
+   (void) event;
 #endif
 }
 
@@ -2718,7 +2718,7 @@ void QGraphicsView::dragLeaveEvent(QDragLeaveEvent *event)
       event->setAccepted(true);
    }
 #else
-   Q_UNUSED(event)
+   (void) event;
 #endif
 }
 

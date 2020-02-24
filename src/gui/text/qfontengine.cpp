@@ -71,6 +71,13 @@ static inline bool qSafeFromBigEndian(const uchar *source, const uchar *end, T *
 
 int QFontEngine::getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed *xpos, QFixed *ypos, quint32 *nPoints)
 {
+   (void) glyph;
+   (void) flags;
+   (void) point;
+   (void) xpos;
+   (void) ypos;
+   (void) nPoints;
+
    // not valid at the base class, returns Err_Not_Covered in harfbuzz
    return -1;
 }
@@ -697,6 +704,8 @@ void QFontEngine::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int n
 
 QImage QFontEngine::alphaMapForGlyph(glyph_t glyph, QFixed subPixelPosition)
 {
+   (void) subPixelPosition;
+
    // For font engines, do not support subpixel positioning
    return alphaMapForGlyph(glyph);
 }
@@ -731,6 +740,8 @@ QImage QFontEngine::alphaMapForGlyph(glyph_t glyph, QFixed subPixelPosition, con
 
 QImage QFontEngine::alphaRGBMapForGlyph(glyph_t glyph, QFixed subPixelPosition, const QTransform &t)
 {
+   (void) subPixelPosition;
+
    const QImage alphaMask = alphaMapForGlyph(glyph, t);
    QImage rgbMask(alphaMask.width(), alphaMask.height(), QImage::Format_RGB32);
 
@@ -749,6 +760,8 @@ QImage QFontEngine::alphaRGBMapForGlyph(glyph_t glyph, QFixed subPixelPosition, 
 
 QImage QFontEngine::bitmapForGlyph(glyph_t, QFixed subPixelPosition, const QTransform &)
 {
+   (void) subPixelPosition;
+
    return QImage();
 }
 
@@ -880,6 +893,10 @@ void QFontEngine::getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_metr
 
 bool QFontEngine::getSfntTableData(uint tag, uchar *buffer, uint *length) const
 {
+   (void) tag;
+   (void) buffer;
+   (void) length;
+
    return false;
 }
 
@@ -1527,6 +1544,7 @@ QFontEngineBox::~QFontEngineBox()
 
 glyph_t QFontEngineBox::glyphIndex(char32_t ch) const
 {
+   (void) ch;
    return 0;
 }
 
@@ -1652,6 +1670,7 @@ qreal QFontEngineBox::maxCharWidth() const
 
 bool QFontEngineBox::canRender(QStringView str) const
 {
+   (void) str;
    return true;
 }
 
@@ -1904,6 +1923,9 @@ bool QFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *
 
 bool QFontEngineMulti::shouldLoadFontEngineForCharacter(int at, char32_t ch) const
 {
+   (void) at;
+   (void) ch;
+
    return true;
 }
 

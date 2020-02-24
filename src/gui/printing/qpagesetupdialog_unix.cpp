@@ -406,10 +406,12 @@ void QPageSetupWidget::updateWidget()
       case QPageSize::Unit::Cicero:
          suffix = tr("CC");
          break;
+
+      case QPageSize::Unit::DevicePixel:
+         break;
    }
 
    m_ui.unitCombo->setCurrentIndex(m_ui.unitCombo->findData(QVariant::fromValue(m_units)));
-
    m_ui.pageSizeCombo->setCurrentIndex(m_ui.pageSizeCombo->findData(QVariant::fromValue(m_pageLayout.pageSize().id())));
 
    QMarginsF min;

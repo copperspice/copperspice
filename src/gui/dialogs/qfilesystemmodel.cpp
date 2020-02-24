@@ -183,7 +183,6 @@ static QString qt_GetLongPathName(const QString &strShortPath)
 QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QString &path, bool fetch) const
 {
    Q_Q(const QFileSystemModel);
-   Q_UNUSED(q);
 
    if (path.isEmpty() || path == myComputer() || path.startsWith(':')) {
       return const_cast<QFileSystemModelPrivate::QFileSystemNode *>(&root);
@@ -1230,8 +1229,8 @@ QMimeData *QFileSystemModel::mimeData(const QModelIndexList &indexes) const
 bool QFileSystemModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
    int row, int column, const QModelIndex &parent)
 {
-   Q_UNUSED(row);
-   Q_UNUSED(column);
+   (void) row;
+   (void) column;
 
    if (!parent.isValid() || isReadOnly()) {
       return false;
@@ -1301,7 +1300,7 @@ QString QFileSystemModel::filePath(const QModelIndex &index) const
 QString QFileSystemModelPrivate::filePath(const QModelIndex &index) const
 {
    Q_Q(const QFileSystemModel);
-   Q_UNUSED(q);
+   (void) q;
 
    if (!index.isValid()) {
       return QString();

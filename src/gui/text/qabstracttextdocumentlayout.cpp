@@ -133,12 +133,16 @@ void QAbstractTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int
 void QAbstractTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posInDocument,
    const QTextFormat &format)
 {
+   (void) item;
+   (void) posInDocument;
+   (void) format;
 }
 
 void QAbstractTextDocumentLayout::drawInlineObject(QPainter *p, const QRectF &rect, QTextInlineObject item,
    int posInDocument, const QTextFormat &format)
 {
-   Q_UNUSED(item);
+   (void) item;
+
    Q_D(QAbstractTextDocumentLayout);
 
    QTextCharFormat f = format.toCharFormat();

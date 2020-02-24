@@ -35,17 +35,16 @@ static const AtomicComparator::Operators AllCompOperators(AtomicComparator::Oper
       AtomicComparator::OperatorLessThanNaNLeast    |
       AtomicComparator::OperatorLessThanNaNGreatest);
 /* --------------------------------------------------------------- */
-#define addVisitor(owner, type, comp, validOps)                                 \
-AtomicTypeVisitorResult::Ptr                                                    \
-owner##ComparatorLocator::visit(const type *,                                   \
-                                const qint16 op,                                \
-                                const SourceLocationReflection *const) const    \
-{                                                                               \
-    /* Note the extra paranteses around validOps. */                            \
-    if(((validOps) & AtomicComparator::Operator(op)) == op)                     \
-        return AtomicTypeVisitorResult::Ptr(new comp());                        \
-    else                                                                        \
-        return AtomicTypeVisitorResult::Ptr();                                  \
+#define addVisitor(owner, type, comp, validOps)                                \
+AtomicTypeVisitorResult::Ptr                                                   \
+owner##ComparatorLocator::visit(const type *,                                  \
+                                const qint16 op,                               \
+                                const SourceLocationReflection *const) const   \
+{                                                                              \
+    if(( (validOps) & AtomicComparator::Operator(op) ) == AtomicComparator::Operator(op)) \
+        return AtomicTypeVisitorResult::Ptr(new comp());                       \
+    else                                                                       \
+        return AtomicTypeVisitorResult::Ptr();                                 \
 }
 /* --------------------------------------------------------------- */
 #define visitorForDouble(owner, type)                                                                                           \
@@ -56,7 +55,7 @@ owner##ComparatorLocator::visit(const type *,                                   
 {                                                                                                                               \
     if(((AtomicComparator::OperatorNotEqual        |                                                                            \
          AtomicComparator::OperatorGreaterOrEqual  |                                                                            \
-         AtomicComparator::OperatorLessOrEqual) & AtomicComparator::Operator(op)) == op)                                        \
+         AtomicComparator::OperatorLessOrEqual) & AtomicComparator::Operator(op)) == AtomicComparator::Operator(op))            \
         return AtomicTypeVisitorResult::Ptr(new AbstractFloatComparator());                                                     \
     else if(op == AtomicComparator::OperatorLessThanNaNLeast)                                                                   \
         return AtomicTypeVisitorResult::Ptr(new AbstractFloatSortComparator<AtomicComparator::OperatorLessThanNaNLeast>());     \

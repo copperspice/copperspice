@@ -507,7 +507,6 @@ class DerivedInteger : public Numeric
 
    bool isSigned() const override {
       switch (DerivedType) {
-         /* Fallthrough all these. */
          case TypeByte:
          case TypeInt:
          case TypeLong:
@@ -517,7 +516,7 @@ class DerivedInteger : public Numeric
          case TypePositiveInteger:
          case TypeShort:
             return true;
-         /* Fallthrough all these. */
+
          case TypeUnsignedByte:
          case TypeUnsignedInt:
          case TypeUnsignedLong:

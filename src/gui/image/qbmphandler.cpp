@@ -928,8 +928,8 @@ QVariant QBmpHandler::option(ImageOption option) const
 
 void QBmpHandler::setOption(ImageOption option, const QVariant &value)
 {
-   Q_UNUSED(option);
-   Q_UNUSED(value);
+   (void) option;
+   (void) value;
 }
 
 QByteArray QBmpHandler::name() const

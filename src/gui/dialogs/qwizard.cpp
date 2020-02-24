@@ -745,7 +745,8 @@ class QWizardPrivate : public QDialogPrivate
 static QString buttonDefaultText(int wstyle, int which, const QWizardPrivate *wizardPrivate)
 {
 #if defined(QT_NO_STYLE_WINDOWSVISTA)
-   Q_UNUSED(wizardPrivate);
+   (void) wizardPrivate;
+
 #endif
    const bool macStyle = (wstyle == QWizard::MacStyle);
    switch (which) {
@@ -2787,8 +2788,11 @@ void QWizard::paintEvent(QPaintEvent *event)
          QColor color = d->vistaHelper->basicWindowFrameColor();
          painter.fillRect(0, 0, width(), QVistaHelper::topOffset(), color);
       }
+
       d->vistaHelper->paintEvent(event);
    }
+#else
+   (void) event;
 #endif
 }
 

@@ -151,12 +151,10 @@ QUrl AccelTree::baseUri(const QXmlNodeModelIndex &ni) const
             return par.baseUri();
          }
       }
+
       case QXmlNodeModelIndex::ProcessingInstruction:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Comment:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Attribute:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Text: {
          const QXmlNodeModelIndex par(ni.iterate(QXmlNodeModelIndex::AxisParent)->next());
          if (par.isNull()) {
@@ -232,24 +230,21 @@ QXmlNodeModelIndex::Iterator::Ptr AccelTree::iterate(const QXmlNodeModelIndex &n
          if (!hasParent(preNumber)) {
             switch (kind(preNumber)) {
                case QXmlNodeModelIndex::Comment:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::ProcessingInstruction:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::Element:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::Text:
                   return makeSingletonIterator(ni);
+
                case QXmlNodeModelIndex::Attribute:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::Document:
-               /* Fallthrough. */
                case QXmlNodeModelIndex::Namespace:
-                  /* Do nothing. */
+                  // do nothing
                   ;
             }
          }
-         /* Else, fallthrough to AxisChild. */
       }
+      [[fallthrough]];
+
       case QXmlNodeModelIndex::AxisChild: {
          if (hasChildren(preNumber)) {
             return QXmlNodeModelIndex::Iterator::Ptr(new ChildIterator(this, preNumber));
@@ -293,8 +288,9 @@ QXmlNodeModelIndex::Iterator::Ptr AccelTree::iterate(const QXmlNodeModelIndex &n
          if (!hasParent(preNumber) && kind(preNumber) == QXmlNodeModelIndex::Attribute) {
             return makeSingletonIterator(ni);
          }
-         /* Else, falthrough to AxisAttribute. */
       }
+      [[fallthrough]];
+
       case QXmlNodeModelIndex::AxisAttribute: {
          if (hasChildren(preNumber) && kind(preNumber + 1) == QXmlNodeModelIndex::Attribute) {
             return QXmlNodeModelIndex::Iterator::Ptr(new AttributeIterator(this, preNumber));
@@ -490,14 +486,14 @@ QString AccelTree::stringValue(const QXmlNodeModelIndex &ni) const
          if (isCompressed(preNumber)) {
             return CompressedWhitespace::decompress(data.value(preNumber));
          }
-         /* Else, fallthrough. It's not compressed so use it as it is. */
       }
+      [[fallthrough]];
+
       case QXmlNodeModelIndex::Attribute:
-      /* Fallthrough */
       case QXmlNodeModelIndex::ProcessingInstruction:
-      /* Fallthrough */
       case QXmlNodeModelIndex::Comment:
          return data.value(preNumber);
+
       case QXmlNodeModelIndex::Document: {
          /* Concatenate all text nodes in the whole document. */
 

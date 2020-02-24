@@ -171,8 +171,8 @@ QWidget *QAccessiblePlainTextEdit::viewport() const
 void QAccessiblePlainTextEdit::scrollToSubstring(int startIndex, int endIndex)
 {
    //TODO: Not implemented
-   Q_UNUSED(startIndex);
-   Q_UNUSED(endIndex);
+   (void) startIndex;
+   (void) endIndex;
 }
 
 

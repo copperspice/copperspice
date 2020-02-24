@@ -203,6 +203,7 @@ static QSize getImageSize(QTextDocument *doc, const QTextImageFormat &format)
 
    qreal scale = 1.0;
    QPaintDevice *pdev = doc->documentLayout()->paintDevice();
+
    if (pdev) {
       if (image.isNull()) {
          image = getImage(doc, format);
@@ -223,6 +224,8 @@ QTextImageHandler::QTextImageHandler(QObject *parent)
 
 QSizeF QTextImageHandler::intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format)
 {
+   (void) posInDocument;
+
    const QTextImageFormat imageFormat = format.toImageFormat();
 
    if (QCoreApplication::instance()->thread() != QThread::currentThread()) {
@@ -241,7 +244,7 @@ QImage QTextImageHandler::image(QTextDocument *doc, const QTextImageFormat &imag
 
 void QTextImageHandler::drawObject(QPainter *p, const QRectF &rect, QTextDocument *doc, int posInDocument, const QTextFormat &format)
 {
-   Q_UNUSED(posInDocument)
+   (void) posInDocument;
    const QTextImageFormat imageFormat = format.toImageFormat();
 
    if (QCoreApplication::instance()->thread() != QThread::currentThread()) {

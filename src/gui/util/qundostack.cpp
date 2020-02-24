@@ -664,7 +664,7 @@ int QUndoStack::undoLimit() const
 void QUndoStack::setActive(bool active)
 {
 #ifdef QT_NO_UNDOGROUP
-   Q_UNUSED(active);
+   (void) active;
 #else
    Q_D(QUndoStack);
 

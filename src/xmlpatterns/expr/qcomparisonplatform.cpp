@@ -82,17 +82,20 @@ compare(const Item &oand1,
          return comp->equals(oand1, oand2);
       case AtomicComparator::OperatorNotEqual:
          return !comp->equals(oand1, oand2);
+
       case AtomicComparator::OperatorLessThanNaNLeast:
       case AtomicComparator::OperatorLessThanNaNGreatest:
-      /* Fallthrough. */
       case AtomicComparator::OperatorLessThan:
          return comp->compare(oand1, op, oand2) == AtomicComparator::LessThan;
+
       case AtomicComparator::OperatorGreaterThan:
          return comp->compare(oand1, op, oand2) == AtomicComparator::GreaterThan;
+
       case AtomicComparator::OperatorLessOrEqual: {
          const AtomicComparator::ComparisonResult ret = comp->compare(oand1, op, oand2);
          return ret == AtomicComparator::LessThan || ret == AtomicComparator::Equal;
       }
+
       case (AtomicComparator::OperatorGreaterOrEqual): {
          const AtomicComparator::ComparisonResult ret = comp->compare(oand1, op, oand2);
          return ret == AtomicComparator::GreaterThan || ret == AtomicComparator::Equal;

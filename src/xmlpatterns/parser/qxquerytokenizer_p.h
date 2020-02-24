@@ -110,7 +110,7 @@ class XQueryTokenizer : public Tokenizer
     * @returns the character @p length characters from the current
     * position.
     */
-   inline char peekAhead(const int length = 1) const;
+   inline QChar peekAhead(const int length = 1) const;
 
    /**
     * @returns whether the stream, starting from @p offset from the
@@ -127,7 +127,7 @@ class XQueryTokenizer : public Tokenizer
    static inline Token error();
    inline TokenType consumeWhitespace();
 
-   inline char peekCurrent() const;
+   inline QChar peekCurrent() const;
 
    /**
     * Disregarding encoding conversion, equivalent to calling:

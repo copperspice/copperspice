@@ -3087,7 +3087,8 @@ void QGraphicsScene::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 */
 void QGraphicsScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
+
    Q_D(QGraphicsScene);
    if (d->dragDropItem) {
       // Drop on the last drag drop item
@@ -3168,7 +3169,7 @@ void QGraphicsScene::focusOutEvent(QFocusEvent *focusEvent)
 void QGraphicsScene::helpEvent(QGraphicsSceneHelpEvent *helpEvent)
 {
 #ifdef QT_NO_TOOLTIP
-   Q_UNUSED(helpEvent);
+   (void) helpEvent;
 #else
    // Find the first item that does tooltips
    Q_D(QGraphicsScene);
@@ -4829,7 +4830,7 @@ void QGraphicsScene::drawItems(QPainter *painter,
 
    const qreal opacity = painter->opacity();
    QTransform viewTransform = painter->worldTransform();
-   Q_UNUSED(options);
+   (void) options;
 
    // Determine view, expose and flags.
    QGraphicsView *view = widget ? qobject_cast<QGraphicsView *>(widget->parentWidget()) : 0;

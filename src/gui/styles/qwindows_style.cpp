@@ -302,7 +302,11 @@ int QWindowsStylePrivate::pixelMetricFromSystemDp(QStyle::PixelMetric pm, const 
          break;
    }
 
+#else
+   (void) pm;
+   (void) widget;
 #endif
+
    return QWindowsStylePrivate::InvalidMetric;
 }
 
@@ -1701,7 +1705,9 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                      default:
                         break;
                   }
-               case Qt::TopToolBarArea :
+                  [[fallthrough]];
+
+               case Qt::TopToolBarArea:
                   switch (toolbar->positionWithinLine) {
                      case QStyleOptionToolBar::Beginning:
                         paintLeftBorder = false;

@@ -60,12 +60,12 @@ QString AtomicComparator::displayName(const AtomicComparator::Operator op,
             return QLatin1String("<");
          case OperatorLessOrEqual:
             return QLatin1String(">=");
+
          case OperatorLessThanNaNLeast:
-         /* Fallthrough. */
          case OperatorLessThanNaNGreatest:
-         /* Fallthrough. */
          case OperatorLessThan:
             return QLatin1String(">");
+
          case OperatorNotEqual:
             return QLatin1String("!=");
       }
@@ -80,12 +80,12 @@ QString AtomicComparator::displayName(const AtomicComparator::Operator op,
          return QLatin1String("gt");
       case OperatorLessOrEqual:
          return QLatin1String("le");
+
       case OperatorLessThanNaNLeast:
-      /* Fallthrough. */
       case OperatorLessThanNaNGreatest:
-      /* Fallthrough. */
       case OperatorLessThan:
          return QLatin1String("lt");
+
       case OperatorNotEqual:
          return QLatin1String("ne");
    }
