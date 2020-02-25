@@ -25,14 +25,12 @@
 #ifndef QOPENGLVERSIONFUNCTIONS_1_3_H
 #define QOPENGLVERSIONFUNCTIONS_1_3_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_2)
 
-#include <QtGui/QOpenGLVersionFunctions>
-#include <QtGui/qopenglcontext.h>
-
-QT_BEGIN_NAMESPACE
+#include <qopengl_versionfunctions.h>
+#include <qopenglcontext.h>
 
 class Q_GUI_EXPORT QOpenGLFunctions_1_3 : public QAbstractOpenGLFunctions
 {
@@ -2608,10 +2606,6 @@ inline void QOpenGLFunctions_1_3::glClientActiveTexture(GLenum texture)
 {
     d_1_3_Deprecated->ClientActiveTexture(texture);
 }
-
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_OPENGL && !QT_OPENGL_ES_2
 

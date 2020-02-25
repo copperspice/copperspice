@@ -25,14 +25,12 @@
 #ifndef QOPENGLVERSIONFUNCTIONS_1_4_H
 #define QOPENGLVERSIONFUNCTIONS_1_4_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
-#if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_2)
+#if ! defined(QT_NO_OPENGL) && ! defined(QT_OPENGL_ES_2)
 
-#include <QtGui/QOpenGLVersionFunctions>
-#include <QtGui/qopenglcontext.h>
-
-QT_BEGIN_NAMESPACE
+#include <qopengl_versionfunctions.h>
+#include <qopenglcontext.h>
 
 class Q_GUI_EXPORT QOpenGLFunctions_1_4 : public QAbstractOpenGLFunctions
 {
@@ -2888,10 +2886,6 @@ inline void QOpenGLFunctions_1_4::glFogCoordf(GLfloat coord)
 {
     d_1_4_Deprecated->FogCoordf(coord);
 }
-
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_OPENGL && !QT_OPENGL_ES_2
 

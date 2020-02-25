@@ -25,10 +25,10 @@
 
 #include <qapplication.h>
 #include <qoffscreensurface.h>
-#include <QOpenGLContext>
-#include <QOpenGLFramebufferObject>
-#include <QOpenGLFunctions>
-#include <QOpenGLPaintDevice>
+#include <qopengl_framebufferobject.h>
+#include <qopengl_paintdevice.h>
+#include <qopenglcontext.h>
+#include <qopenglfunctions.h>
 #include <qscreen.h>
 #include <qwindow.h>
 
@@ -36,9 +36,9 @@
 #include <qplatform_integration.h>
 
 #include <qguiapplication_p.h>
-#include <qopenglextensions_p.h>
 #include <qfont_p.h>
-#include <qopenglpaintdevice_p.h>
+#include <qopengl_extensions_p.h>
+#include <qopengl_paintdevice_p.h>
 #include <qopenglcontext_p.h>
 #include <qwidget_p.h>
 

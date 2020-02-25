@@ -37,7 +37,7 @@
 
 #include <qwidget_p.h>
 #include <qopenglcontext_p.h>
-#include <qopenglextensions_p.h>
+#include <qopengl_extensions_p.h>
 #include <qglpaintdevice_p.h>
 
 class QGLContext;

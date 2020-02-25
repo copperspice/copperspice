@@ -36,9 +36,9 @@
 #include <qapplication_p.h>
 #include <qopengl_p.h>
 #include <qwindow_p.h>
-#include <qopenglextensions_p.h>
-#include <qopenglversion_functions_p.h>
-#include <qopengltexturehelper_p.h>
+#include <qopengl_extensions_p.h>
+#include <qopengl_version_functions_p.h>
+#include <qopengl_texturehelper_p.h>
 
 #include <QDebug>
 

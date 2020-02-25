@@ -22,24 +22,8 @@
 *
 ***********************************************************************/
 
-#include "qopenglfunctions_2_0.h"
-#include "qopenglcontext.h"
-
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QOpenGLFunctions_2_0
-    \inmodule QtGui
-    \since 5.1
-    \wrapper
-    \brief The QOpenGLFunctions_2_0 class provides all functions for OpenGL 2.0 specification.
-
-    This class is a wrapper for functions from OpenGL 2.0 specification.
-    See reference pages on \l {http://www.opengl.org/sdk/docs/}{opengl.org}
-    for function documentation.
-
-    \sa QAbstractOpenGLFunctions
-*/
+#include <qopenglfunctions_2_0.h>
+#include <qopenglcontext.h>
 
 QOpenGLFunctions_2_0::QOpenGLFunctions_2_0()
  : QAbstractOpenGLFunctions()
@@ -247,5 +231,3 @@ QOpenGLVersionProfile QOpenGLFunctions_2_0::versionProfile()
     v.setVersion(2, 0);
     return v;
 }
-
-QT_END_NAMESPACE

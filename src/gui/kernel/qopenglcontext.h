@@ -31,7 +31,7 @@
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qopengl.h>
-#include <qopenglversionfunctions.h>
+#include <qopengl_versionfunctions.h>
 #include <qhashfunc.h>
 #include <qpair.h>
 #include <qscopedpointer.h>

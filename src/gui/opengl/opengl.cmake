@@ -1,9 +1,15 @@
 list(APPEND GUI_PUBLIC_INCLUDES
    QOpenGL
-   QOpenGLBuffer
-   QOpenGLDebugMessage
-   QOpenGLExtraFunctions
-   QOpenGLFramebufferObject
+   QOpenGL_Buffer
+   QOpenGL_DebugMessage
+   QOpenGL_ExtraFunctions
+   QOpenGL_FramebufferObject
+   QOpenGL_PaintDevice
+   QOpenGL_Shader
+   QOpenGL_ShaderProgram
+   QOpenGL_Texture
+   QOpenGL_VertexArrayObject
+   QOpenGL_VersionFunctions
    QOpenGLFunctions
    QOpenGLFunctions_1_0
    QOpenGLFunctions_2_0
@@ -16,30 +22,24 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QOpenGLFunctions_4_3_Core
    QOpenGLFunctions_4_4_Core
    QOpenGLFunctions_4_5_Core
-   QOpenGLPaintDevice
-   QOpenGLShader
-   QOpenGLShaderProgram
-   QOpenGLTexture
-   QOpenGLVertexArrayObject
-   QOpenGLVersionFunctions
 )
 
 list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengles2ext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglbuffer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengldebug.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengldebugmessage.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglextrafunctions.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglframebufferobject.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglpaintdevice.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglpixeltransferoptions.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglshader.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglshaderprogram.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltexture.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglversionfunctions.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglvertexarrayobject.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_es2ext.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_buffer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_debug.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_debugmessage.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_ext.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_extrafunctions.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_framebufferobject.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_paintdevice.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_pixeltransferoptions.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_shader.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_shaderprogram.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_texture.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_versionfunctions.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_vertexarrayobject.h
 
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglfunctions.h
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglfunctions_1_0.h
@@ -73,23 +73,23 @@ list(APPEND GUI_INCLUDES
 
 list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglframebufferobject_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglpaintdevice_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglextensions_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglgradientcache_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltexturecache_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglengineshadermanager_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl2pexvertexarray_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglpaintengine_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglengineshadersource_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglcustomshaderstage_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltextureglyphcache_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglshadercache_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltextureblitter_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltexture_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltexturehelper_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglversion_functions_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglvertexarrayobject_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_framebufferobject_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_paintdevice_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_extensions_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_gradientcache_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_texturecache_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_engineshadermanager_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_2pexvertexarray_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_paintengine_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_engineshadersource_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_customshaderstage_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_textureglyphcache_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_shadercache_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_textureblitter_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_texture_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_texturehelper_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_version_functions_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_vertexarrayobject_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qtriangulator_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qtriangulatingstroker_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qrbtree_p.h
@@ -98,28 +98,29 @@ list(APPEND GUI_PRIVATE_INCLUDES
 target_sources(CsGui
    PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglbuffer.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengldebug.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglframebufferobject.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglgradientcache.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglpaintdevice.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglshaderprogram.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltexturecache.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglengineshadermanager.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl2pexvertexarray.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglpaintengine.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglcustomshaderstage.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_buffer.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_debug.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_framebufferobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_gradientcache.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_paintdevice.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_shaderprogram.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_texturecache.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_engineshadermanager.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_2pexvertexarray.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_paintengine.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_customshaderstage.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_textureglyphcache.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_textureblitter.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_texture.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_texturehelper.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_pixeltransferoptions.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_versionfunctions.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_version_functions1.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_version_functions2.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengl_vertexarrayobject.cpp
+
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qtriangulatingstroker.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltextureglyphcache.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qtriangulator.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltextureblitter.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltexture.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopengltexturehelper.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglpixeltransferoptions.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglversionfunctions.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglversion_functions1.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglversion_functions2.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglvertexarrayobject.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglfunctions.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/qopenglfunctions_1_0.cpp

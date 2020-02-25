@@ -22,21 +22,20 @@
 *
 ***********************************************************************/
 
-#include "qopengl.h"
-#include "qopengl_p.h"
+#include <qopengl.h>
+#include <qopengl_p.h>
 
-#include "qopenglcontext.h"
-#include "qopenglfunctions.h"
-#include "qoffscreensurface.h"
-
-#include <QtCore/QDebug>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonValue>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
-#include <QtCore/QTextStream>
-#include <QtCore/QFile>
-#include <QtCore/QDir>
+#include <qopenglcontext.h>
+#include <qopenglfunctions.h>
+#include <qoffscreensurface.h>
+#include <qdebug.h>
+#include <qjsondocument.h>
+#include <qjsonvalue.h>
+#include <qjsonobject.h>
+#include <qjsonarray.h>
+#include <qtextstream.h>
+#include <qfile.h>
+#include <qdir.h>
 
 #include <set>
 

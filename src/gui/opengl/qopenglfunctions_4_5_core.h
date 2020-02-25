@@ -25,14 +25,12 @@
 #ifndef QOPENGLVERSIONFUNCTIONS_4_5_CORE_H
 #define QOPENGLVERSIONFUNCTIONS_4_5_CORE_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
-#if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_2)
+#if ! defined(QT_NO_OPENGL) && ! defined(QT_OPENGL_ES_2)
 
-#include <QtGui/QOpenGLVersionFunctions>
-#include <QtGui/qopenglcontext.h>
-
-QT_BEGIN_NAMESPACE
+#include <qopengl_versionfunctions.h>
+#include <qopenglcontext.h>
 
 class Q_GUI_EXPORT QOpenGLFunctions_4_5_Core : public QAbstractOpenGLFunctions
 {
@@ -4026,10 +4024,6 @@ inline void QOpenGLFunctions_4_5_Core::glClipControl(GLenum origin, GLenum depth
 {
     d_4_5_Core->ClipControl(origin, depth);
 }
-
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_OPENGL && !QT_OPENGL_ES_2
 

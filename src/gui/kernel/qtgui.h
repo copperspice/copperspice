@@ -125,20 +125,22 @@
 #include <qoffscreensurface.h>
 
 #include <qopengl.h>
-#include <qopenglbuffer.h>
-#include <qopenglcontext.h>
-#include <qopengldebug.h>
-#include <qopenglextrafunctions.h>
-#include <qopenglframebufferobject.h>
+#include <qopengl_buffer.h>
+#include <qopengl_debug.h>
+#include <qopengl_extrafunctions.h>
+#include <qopengl_framebufferobject.h>
+#include <qopengl_paintdevice.h>
+#include <qopengl_pixeltransferoptions.h>
+#include <qopengl_shaderprogram.h>
+#include <qopengl_texture.h>
+#include <qopengl_versionfunctions.h>
+#include <qopengl_vertexarrayobject.h>
+
+//   #include <qopengltimerquery.h>
+
 #include <qopenglfunctions.h>
-#include <qopenglpaintdevice.h>
-#include <qopenglpixeltransferoptions.h>
-#include <qopenglshaderprogram.h>
-#include <qopengltexture.h>
-//    #include <qopengltimerquery.h>
-#include <qopenglversionfunctions.h>
-#include <qopenglvertexarrayobject.h>
-//    #include <qopenglwidget.h>
+#include <qopenglcontext.h>
+#include <qopenglwidget.h>
 #include <qopenglwindow.h>
 
 #include <qpagedpaintdevice.h>

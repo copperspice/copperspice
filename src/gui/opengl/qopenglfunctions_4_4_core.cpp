@@ -25,8 +25,6 @@
 #include "qopenglfunctions_4_4_core.h"
 #include "qopenglcontext.h"
 
-QT_BEGIN_NAMESPACE
-
 /*!
     \class QOpenGLFunctions_4_4_Core
     \inmodule QtGui
@@ -310,4 +308,3 @@ QOpenGLVersionProfile QOpenGLFunctions_4_4_Core::versionProfile()
     return v;
 }
 
-QT_END_NAMESPACE

@@ -109,7 +109,7 @@ typedef void* GLeglImageOES;
 */
 typedef char GLchar;
 
-#  include <qopengles2ext.h>
+#  include <qopengl_es2ext.h>
 # endif // Q_OS_DARWIN
 
 #else // non-ES2 platforms
@@ -134,7 +134,7 @@ typedef char GLchar;
 #  else
 #   include <GL/gl.h>
 #  endif
-#  include <qopenglext.h>
+#  include <qopengl_ext.h>
 # endif // Q_OS_DARWIN
 
 #endif // QT_OPENGL_ES_2

@@ -47,7 +47,6 @@
 #include <qpaintengineex_opengl2_p.h>
 #include <qglpixelbuffer.h>
 #include <qglframebufferobject.h>
-#include <qopenglextensions_p.h>
 
 #ifndef QT_OPENGL_ES_2
 #include <qopenglfunctions_1_1.h>

@@ -21,14 +21,13 @@
 *
 ***********************************************************************/
 
-#include <qopenglextensions_p.h>
-
 #include <qimage.h>
 #include <qglobal.h>
-#include <qopenglframebufferobject.h>
+#include <qopengl_framebufferobject.h>
 #include <qglframebufferobject.h>
 #include <qglpixelbuffer.h>
 
+#include <qopengl_extensions_p.h>
 #include <qpaintengineex_opengl2_p.h>
 #include <qglpixelbuffer_p.h>
 #include <qfont_p.h>

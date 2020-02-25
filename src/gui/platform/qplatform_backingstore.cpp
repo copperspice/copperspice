@@ -32,15 +32,14 @@
 
 #include <qopengl.h>
 #include <qopenglcontext.h>
-#include <QMatrix4x4>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
+#include <qmatrix4x4.h>
+#include <qopengl_shaderprogram.h>
+#include <qopenglcontext.h>
+#include <qopenglfunctions.h>
 
 #ifndef QT_NO_OPENGL
-#include <qopengltextureblitter_p.h>
+#include <qopengl_textureblitter_p.h>
 #endif
-
 
 #ifndef GL_TEXTURE_BASE_LEVEL
 #define GL_TEXTURE_BASE_LEVEL             0x813C

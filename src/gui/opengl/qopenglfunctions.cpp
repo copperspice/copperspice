@@ -23,12 +23,14 @@
 ***********************************************************************/
 
 #include <qopenglfunctions.h>
-#include <qopenglextrafunctions.h>
-#include <qopenglextensions_p.h>
+
 #include <qdebug.h>
-#include <qopenglcontext_p.h>
-#include <qopengl_p.h>
+
 #include <qapplication_p.h>
+#include <qopengl_extrafunctions.h>
+#include <qopengl_extensions_p.h>
+#include <qopengl_p.h>
+#include <qopenglcontext_p.h>
 #include <qplatform_integration.h>
 
 #ifdef Q_OS_IOS
@@ -7465,4 +7467,3 @@ void QOpenGLExtensions::flushShared()
         glFinish();
 }
 
-QT_END_NAMESPACE

@@ -24,6 +24,7 @@
 
 #include <qtriangulator_p.h>
 
+#include <qalgorithms.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qpainterpath.h>
@@ -34,10 +35,9 @@
 #include <qqueue.h>
 #include <qglobal.h>
 #include <qpoint.h>
-#include <qalgorithms.h>
 
+#include <qopengl_extensions_p.h>
 #include <qopenglcontext_p.h>
-#include <qopenglextensions_p.h>
 #include <qrbtree_p.h>
 
 //#define Q_TRIANGULATOR_DEBUG

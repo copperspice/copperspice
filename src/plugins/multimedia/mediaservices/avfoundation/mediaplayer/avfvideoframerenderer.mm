@@ -24,8 +24,8 @@
 #include <avfvideoframerenderer.h>
 
 #include <qabstractvideosurface.h>
-#include <QOpenGLFramebufferObject>
-#include <QWindow>
+#include <qopengl_framebufferobject.h>
+#include <qwindow.h>
 
 #ifdef QT_DEBUG_AVF
 #include <qdebug.h>
@@ -35,8 +35,8 @@
 #import <AVFoundation/AVFoundation.h>
 
 AVFVideoFrameRenderer::AVFVideoFrameRenderer(QAbstractVideoSurface *surface, QObject *parent)
-   : QObject(parent), m_videoLayerRenderer(0), m_surface(surface), m_offscreenSurface(0)
-   , m_glContext(0), m_currentBuffer(1), m_isContextShared(true)
+   : QObject(parent), m_videoLayerRenderer(0), m_surface(surface), m_offscreenSurface(0),
+     m_glContext(0), m_currentBuffer(1), m_isContextShared(true)
 {
    m_fbo[0] = 0;
    m_fbo[1] = 0;

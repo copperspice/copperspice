@@ -25,13 +25,12 @@
 #ifndef QOPENGLVERSIONFUNCTIONS_ES2_H
 #define QOPENGLVERSIONFUNCTIONS_ES2_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if defined(QT_OPENGL_ES_2)
 
-#include <QOpenGLVersionFunctions>
+#include <qopengl_versionfunctions.h>
 #include <qopenglcontext.h>
-
 
 class QOpenGLFunctions_ES2Private;
 

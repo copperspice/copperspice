@@ -25,14 +25,12 @@
 #ifndef QOPENGLVERSIONFUNCTIONS_4_2_COMPATIBILITY_H
 #define QOPENGLVERSIONFUNCTIONS_4_2_COMPATIBILITY_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
-#if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_2)
+#if ! defined(QT_NO_OPENGL) && ! defined(QT_OPENGL_ES_2)
 
-#include <QtGui/QOpenGLVersionFunctions>
-#include <QtGui/qopenglcontext.h>
-
-QT_BEGIN_NAMESPACE
+#include <qopengl_versionfunctions.h>
+#include <qopenglcontext.h>
 
 class Q_GUI_EXPORT QOpenGLFunctions_4_2_Compatibility : public QAbstractOpenGLFunctions
 {
@@ -5604,8 +5602,6 @@ inline void QOpenGLFunctions_4_2_Compatibility::glVertexAttribI1i(GLuint index, 
 
 // OpenGL 4.2 deprecated functions
 
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_OPENGL && !QT_OPENGL_ES_2
 

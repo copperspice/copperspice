@@ -28,8 +28,9 @@
 #include <qvarlengtharray.h>
 #include <qvector.h>
 
-#include <qopenglextensions_p.h>
 #include <qgl_p.h>
+
+#include <qopengl_extensions_p.h>
 
 #ifndef GL_FRAGMENT_SHADER
 #define GL_FRAGMENT_SHADER 0x8B30

@@ -24,14 +24,15 @@
 #include <qopenglwindow.h>
 #include <qpaintdevicewindow_p.h>
 
-#include <qopenglframebufferobject.h>
-#include <qopenglpaintdevice.h>
+#include <qopengl_framebufferobject.h>
+#include <qopengl_paintdevice.h>
 #include <qopenglfunctions.h>
-#include <qopengltextureblitter_p.h>
-#include <qopenglextensions_p.h>
-#include <qopenglcontext_p.h>
 #include <qmatrix4x4.h>
 #include <qoffscreensurface.h>
+
+#include <qopengl_textureblitter_p.h>
+#include <qopengl_extensions_p.h>
+#include <qopenglcontext_p.h>
 
 // GLES2 builds won't have these constants with the suffixless names
 #ifndef GL_READ_FRAMEBUFFER

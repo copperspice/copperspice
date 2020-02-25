@@ -33,7 +33,7 @@
 #include <qfontengine_p.h>
 #include <qdatabuffer_p.h>
 #include <qtriangulatingstroker_p.h>
-#include <qopenglextensions_p.h>
+#include <qopengl_extensions_p.h>
 
 enum EngineMode {
    ImageDrawingMode,

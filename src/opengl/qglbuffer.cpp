@@ -22,12 +22,11 @@
 ***********************************************************************/
 
 #include <qgl.h>
-#include <qgl_p.h>
-#include <qopenglextensions_p.h>
 #include <qatomic.h>
 #include <qglbuffer.h>
 
-
+#include <qgl_p.h>
+#include <qopengl_extensions_p.h>
 
 class QGLBufferPrivate
 {

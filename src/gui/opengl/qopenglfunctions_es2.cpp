@@ -22,8 +22,8 @@
 *
 ***********************************************************************/
 
-#include "qopenglfunctions_es2.h"
-#include "qopenglcontext.h"
+#include <qopenglfunctions_es2.h>
+#include <qopenglcontext.h>
 
 #if defined(QT_OPENGL_ES_2)
 
