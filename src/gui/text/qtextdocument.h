@@ -113,7 +113,6 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    GUI_CS_PROPERTY_READ(documentMargin, documentMargin)
    GUI_CS_PROPERTY_WRITE(documentMargin, setDocumentMargin)
 
-   // following 2 were qdoc_property 1/5/2014
    GUI_CS_PROPERTY_READ(defaultTextOption, defaultTextOption)
    GUI_CS_PROPERTY_WRITE(defaultTextOption, setDefaultTextOption)
 

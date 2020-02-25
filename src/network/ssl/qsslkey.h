@@ -24,13 +24,11 @@
 #ifndef QSSLKEY_H
 #define QSSLKEY_H
 
-#include <QtCore/qnamespace.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qsharedpointer.h>
-#include <QtNetwork/qssl.h>
+#include <qnamespace.h>
+#include <qbytearray.h>
+#include <qsharedpointer.h>
+#include <qssl.h>
 #include <qcontainerfwd.h>
-
-QT_BEGIN_NAMESPACE
 
 #ifdef QT_SSL
 
@@ -91,7 +89,5 @@ class Q_NETWORK_EXPORT QSslKey
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslKey &key);
 
 #endif
-
-QT_END_NAMESPACE
 
 #endif

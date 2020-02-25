@@ -21,7 +21,8 @@
 *
 ***********************************************************************/
 
-#include <QVector>
+#include <qvector.h>
+#include <qabstractxmlnodemodel.h>
 
 #include "qabstractxmlnodemodel_p.h"
 #include "qabstractxmlreceiver.h"
@@ -32,10 +33,6 @@
 #include "qnamespaceresolver_p.h"
 #include "qsequencemappingiterator_p.h"
 #include "qsingletoniterator_p.h"
-
-#include "qabstractxmlnodemodel.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -269,6 +266,7 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex:
 
          return makeListIterator(preceding);
       }
+
       case QXmlNodeModelIndex::AxisFollowingSibling: {
          QList<QXmlNodeModelIndex> preceding;
          QXmlNodeModelIndex sibling = nextFromSimpleAxis(NextSibling, ni);
@@ -280,6 +278,7 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex:
 
          return makeListIterator(preceding);
       }
+
       case QXmlNodeModelIndex::AxisChildOrTop: {
          if (nextFromSimpleAxis(Parent, ni).isNull()) {
             switch (kind(ni)) {
@@ -310,11 +309,13 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex:
 
          return makeListIterator(children);
       }
+
       case QXmlNodeModelIndex::AxisDescendant: {
          return makeSequenceMappingIterator<QXmlNodeModelIndex>(this,
                 ni.iterate(QXmlNodeModelIndex::AxisChild),
                 DynamicContext::Ptr());
       }
+
       case QXmlNodeModelIndex::AxisAttributeOrTop: {
          if (kind(ni) == QXmlNodeModelIndex::Attribute && nextFromSimpleAxis(Parent, ni).isNull()) {
             return makeSingletonIterator(ni);
@@ -336,6 +337,7 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex:
          QVector<QXmlNodeModelIndexIteratorPointer> descendantIterators;
 
          QXmlNodeModelIndex current(ni);
+
          while (!current.isNull()) {
             QXmlNodeModelIndex candidate(nextFromSimpleAxis(axis == QXmlNodeModelIndex::AxisPreceding ? PreviousSibling :
                                          NextSibling, current));
@@ -356,6 +358,7 @@ QAbstractXmlNodeModel::iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex:
    }
 
    Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown axis, internal error.");
+
    return makeEmptyIterator<QXmlNodeModelIndex>();
 }
 
@@ -385,9 +388,6 @@ QPatternist::ItemIteratorPtr QAbstractXmlNodeModel::sequencedTypedValue(const QX
    }
 }
 
-/*!
- \internal
- */
 QExplicitlySharedDataPointer<QPatternist::ItemType> QAbstractXmlNodeModel::type(const QXmlNodeModelIndex &) const
 {
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function is internal, unsupported, and should never be called.");
@@ -552,19 +552,10 @@ QXmlItem::QXmlItem(const QVariant &atomicValue)
    }
 }
 
-/*!
-  Constructs a node QXmlItem that is a copy of \a node.
-
-  \sa isNode()
- */
 QXmlItem::QXmlItem(const QXmlNodeModelIndex &node) : m_node(node.m_storage)
 {
 }
 
-
-/*!
-  Destructor.
- */
 QXmlItem::~QXmlItem()
 {
    if (internalIsAtomicValue() && !m_atomicValue->ref.deref()) {
@@ -579,9 +570,6 @@ bool QPatternist::NodeIndexStorage::operator!=(const NodeIndexStorage &other) co
           || model != other.model;
 }
 
-/*!
-  Assigns \a other to \c this.
- */
 QXmlItem &QXmlItem::operator=(const QXmlItem &other)
 {
    if (m_node != other.m_node) {
@@ -599,37 +587,16 @@ QXmlItem &QXmlItem::operator=(const QXmlItem &other)
    return *this;
 }
 
-/*!
-  Returns true if this item is a Node. Returns false if it
-  is an atomic value or null.
-
-  \sa isNull(), isAtomicValue()
- */
 bool QXmlItem::isNode() const
 {
    return QPatternist::Item::fromPublic(*this).isNode();
 }
 
-/*!
-  Returns true if this item is an atomic value. Returns false
-  if it is a node or null.
-
-  \sa isNull(), isNode()
- */
 bool QXmlItem::isAtomicValue() const
 {
    return internalIsAtomicValue();
 }
 
-/*!
-  If this QXmlItem represents an atomic value, it is converted
-  to an appropriate QVariant and returned. If this QXmlItem is
-  not an atomic value, the return value is a default constructed
-  QVariant. You can call isAtomicValue() to test whether the
-  item is an atomic value.
-
- \sa isAtomicValue()
- */
 QVariant QXmlItem::toAtomicValue() const
 {
    if (isAtomicValue()) {
@@ -639,14 +606,6 @@ QVariant QXmlItem::toAtomicValue() const
    }
 }
 
-/*!
-  If this QXmlItem represents a node, it returns the item as a
-  QXmlNodeModelIndex. If this QXmlItem is not a node, the return
-  value is undefined. You can call isNode() to test whether the
-  item is a node.
-
- \sa isNode()
- */
 QXmlNodeModelIndex QXmlItem::toNodeModelIndex() const
 {
    if (isNode()) {
@@ -656,135 +615,21 @@ QXmlNodeModelIndex QXmlItem::toNodeModelIndex() const
    }
 }
 
-/*!
-  Returns true if this QXmlItem is neither a node nor an
-  atomic value. Default constructed instances of QXmlItem
-  are null.
- */
 bool QXmlItem::isNull() const
 {
    return !m_node.model;
 }
 
-/*!
-  \class QXmlNodeModelIndex
-  \brief The QXmlNodeModelIndex class identifies a node in an XML node model subclassed from QAbstractXmlNodeModel.
-  \reentrant
-  \since 4.4
-  \ingroup xml-tools
-
-  QXmlNodeModelIndex is an index into an \l{QAbstractXmlNodeModel}
-  {XML node model}. It contains:
-
-  \list
-    \o A pointer to an \l{QAbstractXmlNodeModel} {XML node model},
-    which is returned by model(), and
-    \o Some data, which is returned by data(), internalPointer(),
-    and additionalData().
-  \endlist
-
-  Because QXmlNodeModelIndex is intentionally a simple class, it
-  doesn't have member functions for accessing the properties of
-  nodes. For example, it doesn't have functions for getting a
-  node's name or its list of attributes or child nodes. If you find
-  that you need to retrieve this kind of information from your
-  query results, there are two ways to proceed.
-
-  \list
-
-  \o Send the output of your XQuery to an \l{QAbstractXmlReceiver}
-  {XML receiver}, or
-
-  \o Let your XQuery do all the work to produce the desired result.
-
-  \endlist
-
-  The second case is explained by example. Suppose you want to
-  populate a list widget with the values of certain attributes from a
-  set of result elements. You could write an XQuery to return the set
-  of elements, and then you would write the code to iterate over the
-  result elements, get their attributes, and extract the desired
-  string values. But the simpler way is to just augment your XQuery to
-  finding the desired attribute values. Then all you have to do is
-  evaluate the XQuery using the version of QXmlQuery::evaluateTo()
-  that populates a QStringList, which you can send directly to your
-  widget.
-
-  QXmlNodeModelIndex doesn't impose any restrictions on the \c data
-  value an QXmlNodeModelIndex should contain. The meaning of the data
-  left to the associated \l {QAbstractXmlNodeModel} {node model}.
-  Because QXmlNodeModelIndex depends on a particular subclass of
-  QAbstractXmlNodeModel for its existence, the only way you can create
-  an instance of QXmlNodeModelIndex is by asking the node model to
-  create one for you with QAbstractXmlNodeModel::createIndex(). Since
-  that function is protected, it is usually a good idea to write a
-  public function that creates a QXmlNodeModelIndex from arguments that
-  are appropriate for your particular node model.
-
-  A default constructed node index is said to be null, i.e., isNull()
-  returns true.
-
-  QXmlNodeModelIndex and QAbstractXmlNodeModel follow the same design
-  pattern used for QModelIndex and QAbstractItemModel.
- */
-
-/*!
-  \since 4.4
-  \relates QHash
-
-  Computes a hash key from the QXmlNodeModelIndex \a index, and
-  returns it. This function would be used by QHash if you wanted
-  to build a hash table for instances of QXmlNodeModelIndex.
-
-  The hash is computed on QXmlNodeModelIndex::data(),
-  QXmlNodeModelIndex::additionalData(), and
-  QXmlNodeModelIndex::model(). This means the hash key can be used for
-  node indexes from different node models.
- */
 uint qHash(const QXmlNodeModelIndex &index)
 {
    return uint(index.data() + index.additionalData() + quintptr(index.model()));
 }
 
-/*!
-  \enum QXmlNodeModelIndex::NodeKind
-
-  Identifies a kind of node.
-
-  \value Attribute Identifies an attribute node
-  \value Text Identifies a text node
-  \value Comment Identifies a comment node
-  \value Document Identifies a document node
-  \value Element Identifies an element node
-  \value Namespace Identifies a namespace node
-  \value ProcessingInstruction Identifies a processing instruction.
-
-  Note that the optional XML declaration at very beginning of the XML
-  document is not a processing instruction
-
-  \sa QAbstractXmlNodeModel::kind()
-*/
-
-/*!
- \typedef QXmlNodeModelIndex::List
-
- Typedef for QList<QXmlNodeModelIndex>.
- */
-
-/*!
-  Returns true if this node is the same as \a other. This operator
-  does not compare values, children, or names of nodes. It compares
-  node identities, i.e., whether two nodes are from the same document
-  and are found at the exact same place.
- */
 bool QXmlNodeModelIndex::operator==(const QXmlNodeModelIndex &other) const
 {
    return !(m_storage != other.m_storage);
 }
 
-/*!
-  Returns true if \a other is the same node as this.
- */
 bool QXmlNodeModelIndex::operator!=(const QXmlNodeModelIndex &other) const
 {
    return !(operator==(other));
@@ -810,5 +655,3 @@ QSourceLocation QAbstractXmlNodeModel::sourceLocation(const QXmlNodeModelIndex &
       return QSourceLocation();
    }
 }
-
-QT_END_NAMESPACE

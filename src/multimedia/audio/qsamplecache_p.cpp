@@ -32,12 +32,8 @@
 //#define QT_SAMPLECACHE_DEBUG
 
 QSampleCache::QSampleCache(QObject *parent)
-   : QObject(parent)
-   , m_networkAccessManager(0)
-   , m_mutex(QMutex::Recursive)
-   , m_capacity(0)
-   , m_usage(0)
-   , m_loadingRefCount(0)
+   : QObject(parent), m_networkAccessManager(0), m_mutex(QMutex::Recursive),
+     m_capacity(0), m_usage(0), m_loadingRefCount(0)
 {
    m_loadingThread.setObjectName(QLatin1String("QSampleCache::LoadingThread"));
    connect(&m_loadingThread, SIGNAL(finished()), this, SLOT(isLoadingChanged()));
@@ -49,6 +45,7 @@ QNetworkAccessManager &QSampleCache::networkAccessManager()
    if (!m_networkAccessManager) {
       m_networkAccessManager = new QNetworkAccessManager();
    }
+
    return *m_networkAccessManager;
 }
 
@@ -76,7 +73,8 @@ QSampleCache::~QSampleCache()
 void QSampleCache::loadingRelease()
 {
    QMutexLocker locker(&m_loadingMutex);
-   m_loadingRefCount--;
+   --m_loadingRefCount;
+
    if (m_loadingRefCount == 0) {
       if (m_loadingThread.isRunning()) {
          m_loadingThread.exit();

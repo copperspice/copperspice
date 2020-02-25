@@ -90,19 +90,21 @@ class Q_GUI_EXPORT QVertexIndexVector
 
 struct Q_GUI_EXPORT QTriangleSet
 {
-    inline QTriangleSet() { }
+   QTriangleSet()
+   { }
 
-    // The vertices of a triangle are given by: (x[i[n]], y[i[n]]), (x[j[n]], y[j[n]]), (x[k[n]], y[k[n]]), n = 0, 1, ...
-    QVector<qreal> vertices; // [x[0], y[0], x[1], y[1], x[2], ...]
-    QVertexIndexVector indices; // [i[0], j[0], k[0], i[1], j[1], k[1], i[2], ...]
+   // vertices of a triangle are given by: (x[i[n]], y[i[n]]), (x[j[n]], y[j[n]]), (x[k[n]], y[k[n]]), n = 0, 1, ...
+   QVector<qreal> vertices;         // [x[0], y[0], x[1], y[1], x[2], ...]
+   QVertexIndexVector indices;      // [i[0], j[0], k[0], i[1], j[1], k[1], i[2], ...]
 };
 
 struct Q_GUI_EXPORT QPolylineSet
 {
-    inline QPolylineSet() { }
+   QPolylineSet()
+   { }
 
-    QVector<qreal> vertices; // [x[0], y[0], x[1], y[1], x[2], ...]
-    QVertexIndexVector indices; // End of polyline is marked with -1.
+   QVector<qreal> vertices;          // [x[0], y[0], x[1], y[1], x[2], ...]
+   QVertexIndexVector indices;       // End of polyline is marked with -1.
 };
 
 // The vertex coordinates of the returned triangle set will be rounded to a grid with a mesh size
@@ -110,7 +112,10 @@ struct Q_GUI_EXPORT QPolylineSet
 // integers, the polygon is triangulated, and then scaled back by 1/32.
 // 'hint' should be a combination of QVectorPath::Hints.
 // 'lod' is the level of detail. Default is 1. Curves are split into more lines when 'lod' is higher.
-QTriangleSet Q_GUI_EXPORT qTriangulate(const qreal *polygon, int count, uint hint = QVectorPath::PolygonHint | QVectorPath::OddEvenFill, const QTransform &matrix = QTransform());
+
+QTriangleSet Q_GUI_EXPORT qTriangulate(const qreal *polygon, int count, uint hint = QVectorPath::PolygonHint | QVectorPath::OddEvenFill,
+                  const QTransform &matrix = QTransform());
+
 QTriangleSet Q_GUI_EXPORT qTriangulate(const QVectorPath &path, const QTransform &matrix = QTransform(), qreal lod = 1);
 QTriangleSet Q_GUI_EXPORT qTriangulate(const QPainterPath &path, const QTransform &matrix = QTransform(), qreal lod = 1);
 QPolylineSet qPolyline(const QVectorPath &path, const QTransform &matrix = QTransform(), qreal lod = 1);

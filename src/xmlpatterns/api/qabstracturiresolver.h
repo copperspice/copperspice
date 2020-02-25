@@ -24,9 +24,7 @@
 #ifndef QABSTRACTURIRESOLVER_H
 #define QABSTRACTURIRESOLVER_H
 
-#include <QtCore/QObject>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
 
 class QUrl;
 
@@ -43,7 +41,5 @@ class Q_XMLPATTERNS_EXPORT QAbstractUriResolver : public QObject
  private:
    Q_DISABLE_COPY(QAbstractUriResolver)
 };
-
-QT_END_NAMESPACE
 
 #endif

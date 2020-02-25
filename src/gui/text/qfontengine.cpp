@@ -91,9 +91,9 @@ static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, 
 #define kBearingNotInitialized std::numeric_limits<qreal>::max()
 
 QFontEngine::QFontEngine(Type type)
-   : ref(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr), face_destroy_func_ptr(nullptr),
-     m_type(type),
-     m_minLeftBearing(kBearingNotInitialized), m_minRightBearing(kBearingNotInitialized)
+   : ref(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr),
+     face_destroy_func_ptr(nullptr), m_type(type), m_minLeftBearing(kBearingNotInitialized),
+     m_minRightBearing(kBearingNotInitialized)
 {
    faceData.user_data = this;
    faceData.font_table_func_ptr = qt_get_font_table_default;
@@ -1507,6 +1507,7 @@ QFixed QFontEngine::lastRightBearing(const QGlyphLayout &glyphs, bool round)
 
    return 0;
 }
+
 QFontEngine::GlyphCacheEntry::GlyphCacheEntry()
 {
 }
@@ -2005,7 +2006,8 @@ void QFontEngineMulti::getGlyphBearings(glyph_t glyph, qreal *leftBearing, qreal
    engine(which)->getGlyphBearings(stripped(glyph), leftBearing, rightBearing);
 }
 
-void QFontEngineMulti::addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs, QPainterPath *path, QTextItem::RenderFlags flags)
+void QFontEngineMulti::addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs,
+                  QPainterPath *path, QTextItem::RenderFlags flags)
 {
    if (glyphs.numGlyphs <= 0) {
       return;

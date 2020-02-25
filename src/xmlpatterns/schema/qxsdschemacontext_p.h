@@ -35,7 +35,6 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtXmlPatterns/QAbstractMessageHandler>
 
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -138,7 +137,5 @@ class XsdSchemaContext : public ReportContext
    QAbstractMessageHandler                      *m_messageHandler;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -24,17 +24,16 @@
 #ifndef QNETWORKINTERFACE_P_H
 #define QNETWORKINTERFACE_P_H
 
-#include <QtCore/qatomic.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qreadwritelock.h>
-#include <QtCore/qstring.h>
-#include <QtNetwork/qhostaddress.h>
-#include <QtNetwork/qabstractsocket.h>
+#include <qatomic.h>
+#include <qlist.h>
+#include <qreadwritelock.h>
+#include <qstring.h>
+#include <qhostaddress.h>
+#include <qabstractsocket.h>
+
 #include <qhostaddress_p.h>
 
 #ifndef QT_NO_NETWORKINTERFACE
-
-QT_BEGIN_NAMESPACE
 
 class QNetworkAddressEntryPrivate
 {
@@ -80,14 +79,12 @@ class QNetworkInterfaceManager
    QSharedDataPointer<QNetworkInterfacePrivate> interfaceFromIndex(int index);
    QList<QSharedDataPointer<QNetworkInterfacePrivate> > allInterfaces();
 
-   // convenience:
+   // convenience
    QSharedDataPointer<QNetworkInterfacePrivate> empty;
 
  private:
    QList<QNetworkInterfacePrivate *> scan();
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_NETWORKINTERFACE
 

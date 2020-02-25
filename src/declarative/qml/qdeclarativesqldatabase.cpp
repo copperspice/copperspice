@@ -331,14 +331,12 @@ static QScriptValue qmlsqldatabase_transaction(QScriptContext *context, QScriptE
 {
    return qmlsqldatabase_transaction_shared(context, engine, false);
 }
+
 static QScriptValue qmlsqldatabase_read_transaction(QScriptContext *context, QScriptEngine *engine)
 {
    return qmlsqldatabase_transaction_shared(context, engine, true);
 }
 
-/*
-    Currently documented in doc/src/declarative/globalobject.qdoc
-*/
 static QScriptValue qmlsqldatabase_open_sync(QScriptContext *context, QScriptEngine *engine)
 {
 #ifndef QT_NO_SETTINGS

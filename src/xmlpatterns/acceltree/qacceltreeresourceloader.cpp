@@ -204,6 +204,7 @@ bool AccelTreeResourceLoader::streamToReceiver(QIODevice *const dev, AccelTreeBu
             /* We just ignore any DTD and entity references. */
             continue;
          }
+
          case QXmlStreamReader::Invalid: {
             if (context) {
                context->error(escape(reader.errorString()), ReportContext::FODC0002, QSourceLocation(uri, reader.lineNumber(),

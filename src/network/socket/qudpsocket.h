@@ -24,10 +24,8 @@
 #ifndef QUDPSOCKET_H
 #define QUDPSOCKET_H
 
-#include <QtNetwork/qabstractsocket.h>
-#include <QtNetwork/qhostaddress.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractsocket.h>
+#include <qhostaddress.h>
 
 #ifndef QT_NO_UDPSOCKET
 
@@ -41,7 +39,6 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
  public:
    explicit QUdpSocket(QObject *parent = nullptr);
    virtual ~QUdpSocket();
-
 
 #ifndef QT_NO_NETWORKINTERFACE
    bool joinMulticastGroup(const QHostAddress &groupAddress);
@@ -68,7 +65,5 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
 };
 
 #endif // QT_NO_UDPSOCKET
-
-QT_END_NAMESPACE
 
 #endif // QUDPSOCKET_H

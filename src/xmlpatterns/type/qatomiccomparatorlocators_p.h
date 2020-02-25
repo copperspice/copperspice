@@ -26,8 +26,6 @@
 
 #include <qatomiccomparatorlocator_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class DoubleComparatorLocator : public AtomicComparatorLocator
@@ -76,7 +74,7 @@ class DecimalComparatorLocator : public AtomicComparatorLocator
 class IntegerComparatorLocator : public AtomicComparatorLocator
 {
    using AtomicComparatorLocator::visit;
-  
+
    AtomicTypeVisitorResult::Ptr visit(const DoubleType *,
          const qint16 op, const SourceLocationReflection *const) const override;
    AtomicTypeVisitorResult::Ptr visit(const FloatType *,
@@ -246,7 +244,5 @@ class YearMonthDurationComparatorLocator : public AtomicComparatorLocator
          const qint16 op, const SourceLocationReflection *const) const override;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

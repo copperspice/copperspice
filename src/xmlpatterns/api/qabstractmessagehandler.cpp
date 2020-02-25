@@ -21,10 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QMutex>
-#include "qabstractmessagehandler.h"
+#include <qabstractmessagehandler.h>
 
-QT_BEGIN_NAMESPACE
+#include <qmutex.h>
 
 class QAbstractMessageHandlerPrivate
 {
@@ -32,29 +31,20 @@ class QAbstractMessageHandlerPrivate
    QMutex mutex;
 };
 
-
 QAbstractMessageHandler::QAbstractMessageHandler(QObject *parent)
    : QObject(parent), d_ptr(new QAbstractMessageHandlerPrivate)
 {
 }
 
-/*!
-  Destructs this QAbstractMessageHandler.
- */
 QAbstractMessageHandler::~QAbstractMessageHandler()
 {
 }
 
-void QAbstractMessageHandler::message(QtMsgType type,
-                                      const QString &description,
-                                      const QUrl &identifier,
-                                      const QSourceLocation &sourceLocation)
+void QAbstractMessageHandler::message(QtMsgType type, const QString &description,
+            const QUrl &identifier, const QSourceLocation &sourceLocation)
 {
    Q_D(QAbstractMessageHandler);
    QMutexLocker(&d->mutex);
    handleMessage(type, description, identifier, sourceLocation);
 }
-
-
-QT_END_NAMESPACE
 

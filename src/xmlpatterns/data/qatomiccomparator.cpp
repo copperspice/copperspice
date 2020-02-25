@@ -25,29 +25,22 @@
 
 #include "qatomiccomparator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicComparator::AtomicComparator()
-{
-}
+{ }
 
 AtomicComparator::~AtomicComparator()
-{
-}
+{ }
 
 AtomicComparator::ComparisonResult
-AtomicComparator::compare(const Item &,
-                          const AtomicComparator::Operator,
-                          const Item &) const
+AtomicComparator::compare(const Item &, const AtomicComparator::Operator, const Item &) const
 {
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return LessThan;
 }
 
-QString AtomicComparator::displayName(const AtomicComparator::Operator op,
-                                      const ComparisonType type)
+QString AtomicComparator::displayName(const AtomicComparator::Operator op, const ComparisonType type)
 {
    Q_ASSERT(type == AsGeneralComparison || type == AsValueComparison);
    if (type == AsGeneralComparison) {
@@ -94,4 +87,3 @@ QString AtomicComparator::displayName(const AtomicComparator::Operator op,
    return QString(); /* GCC unbarfer. */
 }
 
-QT_END_NAMESPACE

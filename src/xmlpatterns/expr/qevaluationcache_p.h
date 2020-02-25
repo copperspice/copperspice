@@ -31,9 +31,8 @@
 #include <qsinglecontainer_p.h>
 #include <qvariabledeclaration_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 template<bool IsForGlobal>
 class EvaluationCache : public SingleContainer
 {
@@ -78,7 +77,5 @@ class EvaluationCache : public SingleContainer
 
 #include "qevaluationcache.cpp"
 }
-
-QT_END_NAMESPACE
 
 #endif

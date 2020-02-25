@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qatomiccomparators_p.h"
+#include <qatomiccomparators_p.h>
 
-#include "qatomiccomparatorlocators_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qatomiccomparatorlocators_p.h>
 
 using namespace QPatternist;
 
@@ -34,6 +32,7 @@ static const AtomicComparator::Operators AllCompOperators(AtomicComparator::Oper
       AtomicComparator::OperatorLessOrEqual         |
       AtomicComparator::OperatorLessThanNaNLeast    |
       AtomicComparator::OperatorLessThanNaNGreatest);
+
 /* --------------------------------------------------------------- */
 #define addVisitor(owner, type, comp, validOps)                                \
 AtomicTypeVisitorResult::Ptr                                                   \
@@ -46,6 +45,7 @@ owner##ComparatorLocator::visit(const type *,                                  \
     else                                                                       \
         return AtomicTypeVisitorResult::Ptr();                                 \
 }
+
 /* --------------------------------------------------------------- */
 #define visitorForDouble(owner, type)                                                                                           \
 AtomicTypeVisitorResult::Ptr                                                                                                    \
@@ -209,5 +209,3 @@ addVisitor(YearMonthDuration,   YearMonthDurationType,  AbstractDurationComparat
            AllCompOperators)
 /* --------------------------------------------------------------- */
 #undef addVisitor
-
-QT_END_NAMESPACE

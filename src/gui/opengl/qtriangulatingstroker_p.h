@@ -34,7 +34,7 @@
 
 class Q_GUI_EXPORT QTriangulatingStroker
 {
-public:
+ public:
     QTriangulatingStroker() : m_vertices(0), m_cx(0), m_cy(0), m_nvx(0), m_nvy(0), m_width(1), m_miter_limit(2),
         m_roundness(0), m_sin_theta(0), m_cos_theta(0), m_inv_scale(1), m_curvyness_mul(1), m_curvyness_add(0),
         m_join_style(Qt::BevelJoin), m_cap_style(Qt::SquareCap) {}
@@ -46,7 +46,7 @@ public:
 
     inline void setInvScale(qreal invScale) { m_inv_scale = invScale; }
 
-private:
+ private:
     inline void emitLineSegment(float x, float y, float nx, float ny);
     void moveTo(const qreal *pts);
     inline void lineTo(const qreal *pts);
@@ -56,7 +56,6 @@ private:
     void endCap(const qreal *pts);
     void arcPoints(float cx, float cy, float fromX, float fromY, float toX, float toY, QVarLengthArray<float> &points);
     void endCapOrJoinClosed(const qreal *start, const qreal *cur, bool implicitClose, bool endsAtStart);
-
 
     QDataBuffer<float> m_vertices;
 
@@ -78,7 +77,7 @@ private:
 
 class Q_GUI_EXPORT QDashedStrokeProcessor
 {
-public:
+ public:
     QDashedStrokeProcessor();
 
     void process(const QVectorPath &path, const QPen &pen, const QRectF &clip, QPainter::RenderHints hints);
@@ -95,7 +94,7 @@ public:
 
     inline void setInvScale(qreal invScale) { m_inv_scale = invScale; }
 
-private:
+ private:
     QDataBuffer<qreal> m_points;
     QDataBuffer<QPainterPath::ElementType> m_types;
     QDashStroker m_dash_stroker;

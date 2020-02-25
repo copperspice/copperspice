@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <QFile>
-#include <QHash>
-#include <QTextCodec>
+#include <qfile.h>
+#include <qhash.h>
+#include <qtextcodec.h>
 
-#include "qcoloroutput_p.h"
+#include <qcoloroutput_p.h>
 
 // TODO: rename insertMapping() to insertColorMapping()
 // TODO: Use a smart pointer for managing ColorOutputPrivate *d;
@@ -38,8 +38,6 @@
 #ifndef Q_OS_WIN
 #include <unistd.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -205,17 +203,8 @@ QString ColorOutput::colorify(const QString &message, int colorID) const
    }
 }
 
-/*!
-  Adds a color mapping from \a colorID to \a colorCode, for this ColorOutput instance.
-
-  This is a convenience function for creating a ColorOutput::ColorMapping instance and
-  calling setColorMapping().
-
-  \sa colorMapping(), setColorMapping()
- */
 void ColorOutput::insertMapping(int colorID, const ColorCode colorCode)
 {
    d->colorMapping.insert(colorID, colorCode);
 }
 
-QT_END_NAMESPACE

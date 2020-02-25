@@ -28,17 +28,15 @@
 #include <qnetworksession.h>
 #include <qnetworkconfigmanager.h>
 
-#include <QtCore/qobject.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qsharedpointer.h>
-#include <QtCore/qmutex.h>
+#include <qobject.h>
+#include <qglobal.h>
+#include <qlist.h>
+#include <qstring.h>
+#include <qhash.h>
+#include <qsharedpointer.h>
+#include <qmutex.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
-
-QT_BEGIN_NAMESPACE
 
 class QNetworkConfiguration;
 
@@ -85,8 +83,6 @@ class Q_NETWORK_EXPORT QBearerEngine : public QObject
 
    mutable QMutex mutex;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_BEARERMANAGEMENT
 

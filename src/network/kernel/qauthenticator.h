@@ -24,10 +24,8 @@
 #ifndef QAUTHENTICATOR_H
 #define QAUTHENTICATOR_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qvariant.h>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qvariant.h>
 
 class QAuthenticatorPrivate;
 class QUrl;
@@ -66,7 +64,5 @@ class Q_NETWORK_EXPORT QAuthenticator
    friend class QAuthenticatorPrivate;
    QAuthenticatorPrivate *d;
 };
-
-QT_END_NAMESPACE
 
 #endif

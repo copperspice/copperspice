@@ -25,7 +25,7 @@
 #ifndef QRBTREE_P_H
 #define QRBTREE_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 template <class T>
 struct QRBTree

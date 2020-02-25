@@ -825,8 +825,8 @@ QString qt_resolveFontFamilyAlias(const QString &alias)
    return alias;
 }
 
-QStringList QPlatformFontDatabase::fallbacksForFamily(const QString &family, QFont::Style style, QFont::StyleHint styleHint,
-   QChar::Script script) const
+QStringList QPlatformFontDatabase::fallbacksForFamily(const QString &family, QFont::Style style,
+            QFont::StyleHint styleHint, QChar::Script script) const
 {
    (void) family;
    (void) styleHint;
@@ -1542,6 +1542,7 @@ QStringList QFontDatabase::styles(const QString &family) const
    }
 
    QtFontFoundry allStyles(foundryName);
+
    for (int j = 0; j < f->count; j++) {
       QtFontFoundry *foundry = f->foundries[j];
 

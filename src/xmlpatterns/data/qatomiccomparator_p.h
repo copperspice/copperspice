@@ -24,12 +24,11 @@
 #ifndef QAtomicComparator_P_H
 #define QAtomicComparator_P_H
 
-#include <QFlags>
+#include <qflags.h>
 #include <qitem_p.h>
-#include <qatomictypedispatch_p.h>
 #include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
+#include <qatomictypedispatch_p.h>
 
 namespace QPatternist {
 class AtomicComparator : public AtomicTypeVisitorResult
@@ -160,9 +159,10 @@ class AtomicComparator : public AtomicTypeVisitorResult
                               const ComparisonType type);
 
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(AtomicComparator::Operators)
 }
 
-QT_END_NAMESPACE
+
 
 #endif

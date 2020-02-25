@@ -35,7 +35,6 @@
 #include <QtCore/QSharedData>
 #include <QtNetwork/QNetworkAccessManager>
 
-QT_BEGIN_NAMESPACE
 
 class QXmlSchemaPrivate : public QSharedData
 {
@@ -69,7 +68,5 @@ class QXmlSchemaPrivate : public QSharedData
    bool                                                             m_schemaIsValid;
    QUrl                                                             m_documentUri;
 };
-
-QT_END_NAMESPACE
 
 #endif

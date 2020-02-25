@@ -749,6 +749,7 @@ static QString buttonDefaultText(int wstyle, int which, const QWizardPrivate *wi
 
 #endif
    const bool macStyle = (wstyle == QWizard::MacStyle);
+
    switch (which) {
       case QWizard::BackButton:
          return macStyle ? QWizard::tr("Go Back") : QWizard::tr("< &Back");
@@ -2740,15 +2741,12 @@ bool QWizard::event(QEvent *event)
    return QDialog::event(event);
 }
 
-/*!
-    \reimp
-*/
 void QWizard::resizeEvent(QResizeEvent *event)
 {
    Q_D(QWizard);
    int heightOffset = 0;
 
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
    if (d->isVistaThemeEnabled()) {
       heightOffset = d->vistaHelper->topOffset();
       if (d->isVistaThemeEnabled(QVistaHelper::VistaAero)) {
@@ -2756,21 +2754,22 @@ void QWizard::resizeEvent(QResizeEvent *event)
       }
    }
 #endif
+
    d->antiFlickerWidget->resize(event->size().width(), event->size().height() - heightOffset);
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
    if (d->isVistaThemeEnabled()) {
       d->vistaHelper->resizeEvent(event);
    }
 #endif
+
    QDialog::resizeEvent(event);
 }
 
-/*!
-    \reimp
-*/
 void QWizard::paintEvent(QPaintEvent *event)
 {
    Q_D(QWizard);
+
    if (d->wizStyle == MacStyle && currentPage()) {
       QPixmap backgroundPixmap = currentPage()->pixmap(BackgroundPixmap);
       if (backgroundPixmap.isNull()) {
@@ -2781,7 +2780,7 @@ void QWizard::paintEvent(QPaintEvent *event)
       painter.drawPixmap(0, (height() - backgroundPixmap.height()) / 2, backgroundPixmap);
    }
 
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
    else if (d->isVistaThemeEnabled()) {
       if (d->isVistaThemeEnabled(QVistaHelper::VistaBasic)) {
          QPainter painter(this);
@@ -2797,12 +2796,10 @@ void QWizard::paintEvent(QPaintEvent *event)
 }
 
 #if defined(Q_OS_WIN)
-/*!
-    \reimp
-*/
+
 bool QWizard::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
    Q_D(QWizard);
 
    if (d->isVistaThemeEnabled() && eventType == "windows_generic_MSG") {
@@ -2827,20 +2824,20 @@ bool QWizard::nativeEvent(const QByteArray &eventType, void *message, long *resu
 }
 #endif
 
-/*!
-    \reimp
-*/
 void QWizard::done(int result)
 {
    Q_D(QWizard);
    // canceling leaves the wizard in a known state
+
    if (result == Rejected) {
       d->reset();
+
    } else {
       if (!validateCurrentPage()) {
          return;
       }
    }
+
    QDialog::done(result);
 }
 
@@ -2935,15 +2932,6 @@ void QWizardPage::setPixmap(QWizard::WizardPixmap which, const QPixmap &pixmap)
    }
 }
 
-/*!
-    Returns the pixmap set for role \a which.
-
-    Pixmaps can also be set for the entire wizard using
-    QWizard::setPixmap(), in which case they apply for all pages that
-    don't specify a pixmap.
-
-    \sa QWizard::pixmap(), {Elements of a Wizard Page}
-*/
 QPixmap QWizardPage::pixmap(QWizard::WizardPixmap which) const
 {
    Q_D(const QWizardPage);
@@ -3032,18 +3020,6 @@ void QWizardPage::setFinalPage(bool finalPage)
    }
 }
 
-/*!
-    This function is called by QWizard to determine whether the \gui
-    Finish button should be shown for this page or not.
-
-    By default, it returns true if there is no next page
-    (i.e., nextId() returns -1); otherwise, it returns false.
-
-    By explicitly calling setFinalPage(true), you can let the user perform an
-    "early finish".
-
-    \sa isComplete(), QWizard::HaveFinishButtonOnEarlyPages
-*/
 bool QWizardPage::isFinalPage() const
 {
    Q_D(const QWizardPage);
@@ -3060,24 +3036,23 @@ bool QWizardPage::isFinalPage() const
    }
 }
 
-
 void QWizardPage::setCommitPage(bool commitPage)
 {
    Q_D(QWizardPage);
+
    d->commit = commitPage;
    QWizard *wizard = this->wizard();
+
    if (wizard && wizard->currentPage() == this) {
       wizard->d_func()->updateCurrentPage();
    }
 }
-
 
 bool QWizardPage::isCommitPage() const
 {
    Q_D(const QWizardPage);
    return d->commit;
 }
-
 
 void QWizardPage::setButtonText(QWizard::WizardButton which, const QString &text)
 {
@@ -3088,19 +3063,6 @@ void QWizardPage::setButtonText(QWizard::WizardButton which, const QString &text
    }
 }
 
-/*!
-    Returns the text on button \a which on this page.
-
-    If a text has ben set using setButtonText(), this text is returned.
-    Otherwise, if a text has been set using QWizard::setButtonText(),
-    this text is returned.
-
-    By default, the text on buttons depends on the QWizard::wizardStyle.
-    For example, on Mac OS X, the \gui Next button is called \gui
-    Continue.
-
-    \sa setButtonText(), QWizard::buttonText(), QWizard::setButtonText()
-*/
 QString QWizardPage::buttonText(QWizard::WizardButton which) const
 {
    Q_D(const QWizardPage);
@@ -3116,22 +3078,6 @@ QString QWizardPage::buttonText(QWizard::WizardButton which) const
    return QString();
 }
 
-/*!
-    This virtual function is called by QWizard::nextId() to find
-    out which page to show when the user clicks the \gui Next button.
-
-    The return value is the ID of the next page, or -1 if no page follows.
-
-    By default, this function returns the lowest ID greater than the ID
-    of the current page, or -1 if there is no such ID.
-
-    By reimplementing this function, you can specify a dynamic page
-    order. For example:
-
-    \snippet examples/dialogs/licensewizard/licensewizard.cpp 18
-
-    \sa QWizard::nextId()
-*/
 int QWizardPage::nextId() const
 {
    Q_D(const QWizardPage);
@@ -3153,6 +3099,7 @@ int QWizardPage::nextId() const
          return i.key();
       }
    }
+
    return -1;
 }
 
@@ -3223,6 +3170,5 @@ void QWizardPage::_q_updateCachedCompleteState()
    Q_D(QWizardPage);
    d->_q_updateCachedCompleteState();
 }
-
 
 #endif // QT_NO_WIZARD

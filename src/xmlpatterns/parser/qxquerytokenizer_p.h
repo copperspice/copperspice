@@ -32,8 +32,6 @@
 
 #include <qtokenizer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 struct TokenMap;
 
@@ -238,11 +236,8 @@ class XQueryTokenizer : public Tokenizer
     *
     * @see commenceScanOnly(), resumeTokenizationFrom()
     */
-   Token attributeAsRaw(const QChar separator,
-                        int &stack,
-                        const int startPos,
-                        const bool inLiteral,
-                        QString &result);
+   Token attributeAsRaw(const QChar separator, int &stack, const int startPos,
+                  const bool inLiteral, QString &result);
 
    const QString           m_data;
    const int               m_length;
@@ -275,6 +270,5 @@ class XQueryTokenizer : public Tokenizer
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

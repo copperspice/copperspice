@@ -27,12 +27,12 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qtextedit.h>
-#include "qtextdocument.h"
-#include "qtextobject.h"
-#include "qplaintextedit.h"
-#include "qtextboundaryfinder.h"
-#include "qscrollbar.h"
-#include "qdebug.h"
+#include <qtextdocument.h>
+#include <qtextobject.h>
+#include <qplaintextedit.h>
+#include <qtextboundaryfinder.h>
+#include <qscrollbar.h>
+#include <qdebug.h>
 #include <QApplication>
 #include <QStackedWidget>
 #include <QToolBox>
@@ -175,25 +175,12 @@ void QAccessiblePlainTextEdit::scrollToSubstring(int startIndex, int endIndex)
    (void) endIndex;
 }
 
-
-/*!
-  \class QAccessibleTextEdit
-  \brief The QAccessibleTextEdit class implements the QAccessibleInterface for richtext editors.
-  \internal
-*/
-
-/*!
-  \fn QAccessibleTextEdit::QAccessibleTextEdit(QWidget *widget)
-
-  Constructs a QAccessibleTextEdit object for a \a widget.
-*/
 QAccessibleTextEdit::QAccessibleTextEdit(QWidget *o)
    : QAccessibleTextWidget(o, QAccessible::EditableText)
 {
    Q_ASSERT(widget()->inherits("QTextEdit"));
 }
 
-/*! Returns the text edit. */
 QTextEdit *QAccessibleTextEdit::textEdit() const
 {
    return static_cast<QTextEdit *>(widget());
@@ -257,6 +244,7 @@ QAccessible::State QAccessibleTextEdit::state() const
    } else {
       st.editable = true;
    }
+
    return st;
 }
 
@@ -267,6 +255,7 @@ void *QAccessibleTextEdit::interface_cast(QAccessible::InterfaceType t)
    } else if (t == QAccessible::EditableTextInterface) {
       return static_cast<QAccessibleEditableTextInterface *>(this);
    }
+
    return QAccessibleWidget::interface_cast(t);
 }
 
@@ -291,7 +280,7 @@ void QAccessibleTextEdit::scrollToSubstring(int startIndex, int endIndex)
 #endif // QT_NO_TEXTEDIT && QT_NO_CURSOR
 
 #ifndef QT_NO_STACKEDWIDGET
-// ======================= QAccessibleStackedWidget ======================
+
 QAccessibleStackedWidget::QAccessibleStackedWidget(QWidget *widget)
    : QAccessibleWidget(widget, QAccessible::LayeredPane)
 {
@@ -300,18 +289,21 @@ QAccessibleStackedWidget::QAccessibleStackedWidget(QWidget *widget)
 
 QAccessibleInterface *QAccessibleStackedWidget::childAt(int x, int y) const
 {
-   if (!stackedWidget()->isVisible()) {
-      return 0;
+   if (! stackedWidget()->isVisible()) {
+      return nullptr;
    }
+
    QWidget *currentWidget = stackedWidget()->currentWidget();
-   if (!currentWidget) {
-      return 0;
+   if (! currentWidget) {
+      return nullptr;
    }
+
    QPoint position = currentWidget->mapFromGlobal(QPoint(x, y));
    if (currentWidget->rect().contains(position)) {
       return child(stackedWidget()->currentIndex());
    }
-   return 0;
+
+   return nullptr;
 }
 
 int QAccessibleStackedWidget::childCount() const
@@ -344,7 +336,7 @@ QStackedWidget *QAccessibleStackedWidget::stackedWidget() const
 #endif // QT_NO_STACKEDWIDGET
 
 #ifndef QT_NO_TOOLBOX
-// ======================= QAccessibleToolBox ======================
+
 QAccessibleToolBox::QAccessibleToolBox(QWidget *widget)
    : QAccessibleWidget(widget, QAccessible::LayeredPane)
 {
@@ -357,7 +349,6 @@ QToolBox *QAccessibleToolBox::toolBox() const
 }
 #endif // QT_NO_TOOLBOX
 
-// ======================= QAccessibleMdiArea ======================
 #ifndef QT_NO_MDIAREA
 QAccessibleMdiArea::QAccessibleMdiArea(QWidget *widget)
    : QAccessibleWidget(widget, QAccessible::LayeredPane)
@@ -373,13 +364,14 @@ int QAccessibleMdiArea::childCount() const
 QAccessibleInterface *QAccessibleMdiArea::child(int index) const
 {
    QList<QMdiSubWindow *> subWindows = mdiArea()->subWindowList();
+
    QWidget *targetObject = subWindows.value(index);
    if (!targetObject) {
       return 0;
    }
+
    return QAccessible::queryAccessibleInterface(targetObject);
 }
-
 
 int QAccessibleMdiArea::indexOfChild(const QAccessibleInterface *child) const
 {
@@ -397,7 +389,6 @@ QMdiArea *QAccessibleMdiArea::mdiArea() const
    return static_cast<QMdiArea *>(object());
 }
 
-// ======================= QAccessibleMdiSubWindow ======================
 QAccessibleMdiSubWindow::QAccessibleMdiSubWindow(QWidget *widget)
    : QAccessibleWidget(widget, QAccessible::Window)
 {
@@ -516,7 +507,7 @@ QAccessible::Role QAccessibleTextBrowser::role() const
 #endif // QT_NO_TEXTBROWSER && QT_NO_CURSOR
 
 #ifndef QT_NO_CALENDARWIDGET
-// ===================== QAccessibleCalendarWidget ========================
+
 QAccessibleCalendarWidget::QAccessibleCalendarWidget(QWidget *widget)
    : QAccessibleWidget(widget, QAccessible::Table)
 {
@@ -670,7 +661,6 @@ QString QAccessibleDockWidget::text(QAccessible::Text t) const
 QAccessibleTextWidget::QAccessibleTextWidget(QWidget *o, QAccessible::Role r, const QString &name):
    QAccessibleWidget(o, r, name)
 {
-
 }
 
 QAccessible::State QAccessibleTextWidget::state() const
@@ -842,29 +832,38 @@ QString QAccessibleTextWidget::attributes(int offset, int *startOffset, int *end
    switch (underlineStyle) {
       case QTextCharFormat::NoUnderline:
          break;
+
       case QTextCharFormat::SingleUnderline:
          underlineStyleValue = "solid";
          break;
+
       case QTextCharFormat::DashUnderline:
          underlineStyleValue = "dash";
          break;
+
       case QTextCharFormat::DotLine:
          underlineStyleValue = "dash";
          break;
+
       case QTextCharFormat::DashDotLine:
          underlineStyleValue = "dot-dash";
          break;
+
       case QTextCharFormat::DashDotDotLine:
          underlineStyleValue = "dot-dot-dash";
          break;
+
       case QTextCharFormat::WaveUnderline:
          underlineStyleValue = "wave";
          break;
+
       case QTextCharFormat::SpellCheckUnderline:
-         underlineStyleValue = "wave";                     // this is not correct, but provides good approximation at least
+         // this is not correct, but provides good approximation at least
+         underlineStyleValue = "wave";
          break;
+
       default:
-         qWarning() << "Unknown QTextCharFormat::​UnderlineStyle value " << underlineStyle <<
+         qWarning() << "Unknown QTextCharFormat::UnderlineStyle value " << underlineStyle <<
             " could not be translated to IAccessible2 value";
          break;
    }
@@ -894,14 +893,14 @@ QString QAccessibleTextWidget::attributes(int offset, int *startOffset, int *end
 
    QBrush background = charFormat.background();
    if (background.style() == Qt::SolidPattern) {
-      attrs["background-color"] = QString("rgb(%1,%2,%3)").formatArg(background.color().red()).formatArg(
-            background.color().green()).formatArg(background.color().blue());
+      attrs["background-color"] = QString("rgb(%1,%2,%3)").formatArg(background.color().red())
+                  .formatArg(background.color().green()).formatArg(background.color().blue());
    }
 
    QBrush foreground = charFormat.foreground();
    if (foreground.style() == Qt::SolidPattern) {
-      attrs["color"] = QString("rgb(%1,%2,%3)").formatArg(foreground.color().red()).formatArg(foreground.color().green()).formatArg(
-            foreground.color().blue());
+      attrs["color"] = QString("rgb(%1,%2,%3)").formatArg(foreground.color().red())
+                  .formatArg(foreground.color().green()).formatArg(foreground.color().blue());
    }
 
    switch (blockFormat.alignment() & (Qt::AlignLeft | Qt::AlignRight | Qt::AlignHCenter | Qt::AlignJustify)) {

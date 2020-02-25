@@ -29,7 +29,6 @@
 #include "qnamepool_p.h"
 #include "qvariableloader_p.h"
 
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 class URILoader : public QNetworkAccessManager
@@ -46,7 +45,5 @@ class URILoader : public QNetworkAccessManager
 
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

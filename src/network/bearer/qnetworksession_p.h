@@ -26,11 +26,9 @@
 
 #include <qnetworksession.h>
 #include <qnetworkconfiguration_p.h>
-#include <QtCore/qsharedpointer.h>
+#include <qsharedpointer.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
-
-QT_BEGIN_NAMESPACE
 
 class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
 {
@@ -55,6 +53,7 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
 #ifndef QT_NO_NETWORKINTERFACE
    virtual QNetworkInterface currentInterface() const = 0;
 #endif
+
    virtual QVariant sessionProperty(const QString &key) const = 0;
    virtual void setSessionProperty(const QString &key, const QVariant &value) = 0;
 
@@ -130,8 +129,6 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
 
    QMutex mutex;
 };
-
-
 
 #endif // QT_NO_BEARERMANAGEMENT
 

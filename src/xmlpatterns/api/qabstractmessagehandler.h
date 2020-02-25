@@ -24,11 +24,9 @@
 #ifndef QABSTRACTMESSAGEHANDLER_H
 #define QABSTRACTMESSAGEHANDLER_H
 
-#include <QtXmlPatterns/QSourceLocation>
-#include <QtCore/QObject>
-#include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qsourcelocation.h>
+#include <qobject.h>
+#include <qscopedpointer.h>
 
 class QAbstractMessageHandlerPrivate;
 
@@ -58,7 +56,5 @@ class Q_XMLPATTERNS_EXPORT QAbstractMessageHandler : public QObject
 
 
 };
-
-QT_END_NAMESPACE
 
 #endif

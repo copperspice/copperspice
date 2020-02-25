@@ -24,10 +24,8 @@
 #ifndef QTCPSOCKET_H
 #define QTCPSOCKET_H
 
-#include <QtNetwork/qabstractsocket.h>
-#include <QtCore/qvariant.h>
-
-
+#include <qabstractsocket.h>
+#include <qvariant.h>
 
 class QTcpSocketPrivate;
 
@@ -47,7 +45,5 @@ class Q_NETWORK_EXPORT QTcpSocket : public QAbstractSocket
    Q_DISABLE_COPY(QTcpSocket)
    Q_DECLARE_PRIVATE(QTcpSocket)
 };
-
-
 
 #endif // QTCPSOCKET_H

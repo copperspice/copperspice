@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifdef QT_OPENSSL
 #include <qsslsocket_openssl_symbols_p.h>

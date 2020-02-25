@@ -842,9 +842,9 @@ bool QWindowsGeometryHint::handleCalculateSize(const QMargins &customMargins, co
    *result = DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
    NCCALCSIZE_PARAMS *ncp = reinterpret_cast<NCCALCSIZE_PARAMS *>(msg.lParam);
 
-   ncp->rgrc[0].left += customMargins.left();
-   ncp->rgrc[0].top += customMargins.top();
-   ncp->rgrc[0].right -= customMargins.right();
+   ncp->rgrc[0].left   += customMargins.left();
+   ncp->rgrc[0].top    += customMargins.top();
+   ncp->rgrc[0].right  -= customMargins.right();
    ncp->rgrc[0].bottom -= customMargins.bottom();
    result = 0;
 

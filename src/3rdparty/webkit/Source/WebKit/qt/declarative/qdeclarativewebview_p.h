@@ -31,9 +31,6 @@
 
 class QWebHistory;
 class QWebSettings;
-
-QT_BEGIN_NAMESPACE
-
 class QDeclarativeWebSettings;
 class QDeclarativeWebViewPrivate;
 class QNetworkRequest;
@@ -74,7 +71,7 @@ protected:
 
 public:
     WEB_CS_SIGNAL_1(Public, void doubleClick(int clickX,int clickY))
-    WEB_CS_SIGNAL_2(doubleClick,clickX,clickY) 
+    WEB_CS_SIGNAL_2(doubleClick,clickX,clickY)
 
 private:
     QDeclarativeWebView *parent;
@@ -170,7 +167,7 @@ public:
     void setUrl(const QUrl &);
 
     QString title() const;
-    QPixmap icon() const; 
+    QPixmap icon() const;
 
     WEB_CS_INVOKABLE_METHOD_1(Public, bool heuristicZoom(int clickX, int clickY, qreal maxzoom))
     WEB_CS_INVOKABLE_METHOD_2(heuristicZoom)
@@ -231,88 +228,88 @@ public:
 
     void setContentsScale(qreal scale);
     qreal contentsScale() const;
-     
+
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor&);
 
     WEB_CS_SIGNAL_1(Public, void preferredWidthChanged())
-    WEB_CS_SIGNAL_2(preferredWidthChanged) 
+    WEB_CS_SIGNAL_2(preferredWidthChanged)
     WEB_CS_SIGNAL_1(Public, void preferredHeightChanged())
-    WEB_CS_SIGNAL_2(preferredHeightChanged) 
+    WEB_CS_SIGNAL_2(preferredHeightChanged)
     WEB_CS_SIGNAL_1(Public, void urlChanged())
-    WEB_CS_SIGNAL_2(urlChanged) 
+    WEB_CS_SIGNAL_2(urlChanged)
     WEB_CS_SIGNAL_1(Public, void progressChanged())
-    WEB_CS_SIGNAL_2(progressChanged) 
+    WEB_CS_SIGNAL_2(progressChanged)
     WEB_CS_SIGNAL_1(Public, void statusChanged(Status un_named_arg1))
-    WEB_CS_SIGNAL_2(statusChanged,un_named_arg1) 
+    WEB_CS_SIGNAL_2(statusChanged,un_named_arg1)
     WEB_CS_SIGNAL_1(Public, void titleChanged(const QString & un_named_arg1))
-    WEB_CS_SIGNAL_2(titleChanged,un_named_arg1) 
+    WEB_CS_SIGNAL_2(titleChanged,un_named_arg1)
     WEB_CS_SIGNAL_1(Public, void iconChanged())
-    WEB_CS_SIGNAL_2(iconChanged) 
+    WEB_CS_SIGNAL_2(iconChanged)
     WEB_CS_SIGNAL_1(Public, void statusTextChanged())
-    WEB_CS_SIGNAL_2(statusTextChanged) 
+    WEB_CS_SIGNAL_2(statusTextChanged)
     WEB_CS_SIGNAL_1(Public, void htmlChanged())
-    WEB_CS_SIGNAL_2(htmlChanged) 
+    WEB_CS_SIGNAL_2(htmlChanged)
     WEB_CS_SIGNAL_1(Public, void pressGrabTimeChanged())
-    WEB_CS_SIGNAL_2(pressGrabTimeChanged) 
+    WEB_CS_SIGNAL_2(pressGrabTimeChanged)
     WEB_CS_SIGNAL_1(Public, void newWindowComponentChanged())
-    WEB_CS_SIGNAL_2(newWindowComponentChanged) 
+    WEB_CS_SIGNAL_2(newWindowComponentChanged)
     WEB_CS_SIGNAL_1(Public, void newWindowParentChanged())
-    WEB_CS_SIGNAL_2(newWindowParentChanged) 
+    WEB_CS_SIGNAL_2(newWindowParentChanged)
     WEB_CS_SIGNAL_1(Public, void renderingEnabledChanged())
-    WEB_CS_SIGNAL_2(renderingEnabledChanged) 
+    WEB_CS_SIGNAL_2(renderingEnabledChanged)
     WEB_CS_SIGNAL_1(Public, void contentsSizeChanged(const QSize & un_named_arg1))
-    WEB_CS_SIGNAL_2(contentsSizeChanged,un_named_arg1) 
+    WEB_CS_SIGNAL_2(contentsSizeChanged,un_named_arg1)
     WEB_CS_SIGNAL_1(Public, void contentsScaleChanged())
-    WEB_CS_SIGNAL_2(contentsScaleChanged) 
+    WEB_CS_SIGNAL_2(contentsScaleChanged)
 
     WEB_CS_SIGNAL_1(Public, void backgroundColorChanged())
-    WEB_CS_SIGNAL_2(backgroundColorChanged) 
+    WEB_CS_SIGNAL_2(backgroundColorChanged)
 
     WEB_CS_SIGNAL_1(Public, void loadStarted())
-    WEB_CS_SIGNAL_2(loadStarted) 
+    WEB_CS_SIGNAL_2(loadStarted)
 
     WEB_CS_SIGNAL_1(Public, void loadFinished())
-    WEB_CS_SIGNAL_2(loadFinished) 
+    WEB_CS_SIGNAL_2(loadFinished)
 
     WEB_CS_SIGNAL_1(Public, void loadFailed())
-    WEB_CS_SIGNAL_2(loadFailed) 
+    WEB_CS_SIGNAL_2(loadFailed)
 
     WEB_CS_SIGNAL_1(Public, void doubleClick(int clickX,int clickY))
-    WEB_CS_SIGNAL_2(doubleClick,clickX,clickY) 
+    WEB_CS_SIGNAL_2(doubleClick,clickX,clickY)
 
     WEB_CS_SIGNAL_1(Public, void zoomTo(qreal zoom,int centerX,int centerY))
-    WEB_CS_SIGNAL_2(zoomTo,zoom,centerX,centerY) 
+    WEB_CS_SIGNAL_2(zoomTo,zoom,centerX,centerY)
 
     WEB_CS_SIGNAL_1(Public, void alert(const QString & message))
-    WEB_CS_SIGNAL_2(alert,message) 
+    WEB_CS_SIGNAL_2(alert,message)
 
     WEB_CS_SLOT_1(Public, QVariant evaluateJavaScript(const QString & un_named_arg1))
-    WEB_CS_SLOT_2(evaluateJavaScript) 
+    WEB_CS_SLOT_2(evaluateJavaScript)
 
 private :
     WEB_CS_SLOT_1(Private, void doLoadStarted())
-    WEB_CS_SLOT_2(doLoadStarted) 
+    WEB_CS_SLOT_2(doLoadStarted)
     WEB_CS_SLOT_1(Private, void doLoadProgress(int p))
-    WEB_CS_SLOT_2(doLoadProgress) 
+    WEB_CS_SLOT_2(doLoadProgress)
     WEB_CS_SLOT_1(Private, void doLoadFinished(bool ok))
-    WEB_CS_SLOT_2(doLoadFinished) 
+    WEB_CS_SLOT_2(doLoadFinished)
     WEB_CS_SLOT_1(Private, void setStatusText(const QString & un_named_arg1))
-    WEB_CS_SLOT_2(setStatusText) 
+    WEB_CS_SLOT_2(setStatusText)
     WEB_CS_SLOT_1(Private, void windowObjectCleared())
-    WEB_CS_SLOT_2(windowObjectCleared) 
+    WEB_CS_SLOT_2(windowObjectCleared)
     WEB_CS_SLOT_1(Private, void pageUrlChanged())
-    WEB_CS_SLOT_2(pageUrlChanged) 
+    WEB_CS_SLOT_2(pageUrlChanged)
     WEB_CS_SLOT_1(Private, void initialLayout())
-    WEB_CS_SLOT_2(initialLayout) 
+    WEB_CS_SLOT_2(initialLayout)
 
     WEB_CS_SLOT_1(Private, void updateDeclarativeWebViewSize())
-    WEB_CS_SLOT_2(updateDeclarativeWebViewSize) 
+    WEB_CS_SLOT_2(updateDeclarativeWebViewSize)
 
     WEB_CS_SLOT_1(Private, virtual void geometryChanged(const QRectF & newGeometry,const QRectF & oldGeometry))
-    WEB_CS_SLOT_2(geometryChanged) 
+    WEB_CS_SLOT_2(geometryChanged)
     WEB_CS_SLOT_1(Private, QDeclarativeWebView* createWindow(QWebPage::WebWindowType type))
-    WEB_CS_SLOT_2(createWindow) 
+    WEB_CS_SLOT_2(createWindow)
 
     void updateContentsSize();
     void init();
@@ -326,7 +323,7 @@ private :
 
 class QDeclarativeWebViewAttached : public QObject {
     WEB_CS_OBJECT(QDeclarativeWebViewAttached)
-    
+
     WEB_CS_PROPERTY_READ(windowObjectName, windowObjectName)
     WEB_CS_PROPERTY_WRITE(windowObjectName, setWindowObjectName)
 
@@ -465,11 +462,8 @@ public:
     QWebSettings *s;
 };
 
-QT_END_NAMESPACE
-
 QML_DECLARE_TYPE(QDeclarativeWebView)
 QML_DECLARE_TYPE(QDeclarativeWebSettings)
 QML_DECLARE_TYPEINFO(QDeclarativeWebView, QML_HAS_ATTACHED_PROPERTIES)
-
 
 #endif

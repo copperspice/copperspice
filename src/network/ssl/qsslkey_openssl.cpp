@@ -32,7 +32,7 @@
 #include <qiodevice.h>
 
 #ifndef QT_NO_DEBUG_STREAM
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 #endif
 
 void QSslKeyPrivate::clear(bool deep)
@@ -347,6 +347,7 @@ static QByteArray doCrypt(QSslKeyPrivate::Cipher cipher, const QByteArray &data,
 #else
    q_EVP_CIPHER_CTX_init(ctx);
 #endif
+
    q_EVP_CipherInit(ctx, type, NULL, NULL, enc);
    q_EVP_CIPHER_CTX_set_key_length(ctx, key.size());
 
@@ -358,11 +359,12 @@ static QByteArray doCrypt(QSslKeyPrivate::Cipher cipher, const QByteArray &data,
                     reinterpret_cast<const unsigned char *>(iv.constData()), enc);
 
    q_EVP_CipherUpdate(ctx, reinterpret_cast<unsigned char *>(output.data()), &len,
-                      reinterpret_cast<const unsigned char *>(data.constData()), data.size());
+                    reinterpret_cast<const unsigned char *>(data.constData()), data.size());
 
    q_EVP_CipherFinal(ctx, reinterpret_cast<unsigned char *>(output.data()) + len, &i);
 
    len += i;
+
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
    q_EVP_CIPHER_CTX_reset(ctx);
 #else

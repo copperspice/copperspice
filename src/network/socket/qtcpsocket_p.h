@@ -24,16 +24,12 @@
 #ifndef QTCPSOCKET_P_H
 #define QTCPSOCKET_P_H
 
-#include <QtNetwork/qtcpsocket.h>
+#include <qtcpsocket.h>
 #include <qabstractsocket_p.h>
-
-QT_BEGIN_NAMESPACE
 
 class QTcpSocketPrivate : public QAbstractSocketPrivate
 {
    Q_DECLARE_PUBLIC(QTcpSocket)
 };
-
-QT_END_NAMESPACE
 
 #endif

@@ -24,10 +24,8 @@
 #ifndef QABSTRACTXMLNODEMODEL_P_H
 #define QABSTRACTXMLNODEMODEL_P_H
 
-#include "qabstractxmlnodemodel.h"
-#include "qsourcelocation.h"
-
-QT_BEGIN_NAMESPACE
+#include <qabstractxmlnodemodel.h>
+#include <qsourcelocation.h>
 
 class QAbstractXmlNodeModelPrivate
 {
@@ -41,7 +39,5 @@ class QAbstractXmlNodeModelPrivate
       return QSourceLocation();
    }
 };
-
-QT_END_NAMESPACE
 
 #endif

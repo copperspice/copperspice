@@ -23,10 +23,10 @@
 
 #include <qplatform_graphicsbuffer.h>
 
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
+#include <qopenglcontext.h>
+#include <qopenglfunctions.h>
 #include <qopengl.h>
-#include <QDebug>
+#include <qdebug.h>
 
 QPlatformGraphicsBuffer::QPlatformGraphicsBuffer(const QSize &size, const QPixelFormat &format)
    : m_size(size), m_format(format)

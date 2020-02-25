@@ -23,8 +23,8 @@
 
 #include <qnetworkproxy.h>
 
-#include <QtCore/QByteArray>
-#include <QtCore/QUrl>
+#include <QByteArray>
+#include <QUrl>
 
 #ifndef QT_NO_NETWORKPROXY
 
@@ -32,8 +32,6 @@
  * Construct a proxy from the environment variable http_proxy.
  * Or no system proxy. Just return a list with NoProxy.
  */
-
-QT_BEGIN_NAMESPACE
 
 static bool ignoreProxyFor(const QNetworkProxyQuery &query)
 {
@@ -98,7 +96,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
       proxy_env = qgetenv("http_proxy");
    }
 
-   if (!proxy_env.isEmpty()) {
+   if (! proxy_env.isEmpty()) {
       QUrl url = QUrl(QString::fromUtf8(proxy_env));
 
       if (url.scheme() == QLatin1String("socks5")) {
@@ -129,7 +127,5 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
 
    return proxyList;
 }
-
-QT_END_NAMESPACE
 
 #endif

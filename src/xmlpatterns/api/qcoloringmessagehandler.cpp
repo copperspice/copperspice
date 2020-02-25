@@ -21,12 +21,10 @@
 *
 ***********************************************************************/
 
-#include <QXmlStreamReader>
+#include <qxmlstreamreader.h>
 
-#include "qcoloringmessagehandler_p.h"
-#include "qxmlpatternistcli_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qcoloringmessagehandler_p.h>
+#include <qxmlpatternistcli_p.h>
 
 using namespace QPatternist;
 
@@ -163,4 +161,3 @@ QString ColoringMessageHandler::colorifyDescription(const QString &in) const
    return result;
 }
 
-QT_END_NAMESPACE

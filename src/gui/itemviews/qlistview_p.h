@@ -33,8 +33,6 @@
 
 #ifndef QT_NO_LISTVIEW
 
-
-
 class QListView;
 class QListViewPrivate;
 
@@ -46,12 +44,13 @@ class QListViewItem
 
  public:
    inline QListViewItem()
-      : x(-1), y(-1), w(0), h(0), indexHint(-1), visited(0xffff) {}
-
+      : x(-1), y(-1), w(0), h(0), indexHint(-1), visited(0xffff)
+   { }
 
    inline QListViewItem(QRect r, int i)
       : x(r.x()), y(r.y()), w(qMin(r.width(), SHRT_MAX)), h(qMin(r.height(), SHRT_MAX)),
-        indexHint(i), visited(0xffff) {}
+        indexHint(i), visited(0xffff)
+   { }
 
    inline bool operator==(const QListViewItem &other) const {
       return (x == other.x && y == other.y && w == other.w && h == other.h && indexHint == other.indexHint);
@@ -95,8 +94,10 @@ class QListViewItem
       return QRect(x, y, w, h);
    }
 
-   int x, y;
-   short w, h;
+   int x;
+   int y;
+   short w;
+   short h;
    mutable int indexHint;
    uint visited;
 };

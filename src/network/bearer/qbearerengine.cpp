@@ -25,8 +25,6 @@
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-QT_BEGIN_NAMESPACE
-
 QBearerEngine::QBearerEngine(QObject *parent)
    : QObject(parent), mutex(QMutex::Recursive)
 {
@@ -101,5 +99,3 @@ bool QBearerEngine::configurationsInUse() const
 }
 
 #endif // QT_NO_BEARERMANAGEMENT
-
-QT_END_NAMESPACE

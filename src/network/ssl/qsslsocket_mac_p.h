@@ -24,17 +24,15 @@
 #ifndef QSSLSOCKET_MAC_P_H
 #define QSSLSOCKET_MAC_P_H
 
-#include <qabstractsocket.h>
-#include <qsslsocket_p.h>
-
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 #include <qstring.h>
 #include <qlist.h>
 
+#include <qabstractsocket.h>
+#include <qsslsocket_p.h>
+
 #include <Security/Security.h>
 #include <Security/SecureTransport.h>
-
-
 
 class QSecureTransportContext
 {
@@ -94,7 +92,5 @@ class QSslSocketBackendPrivate : public QSslSocketPrivate
 
     Q_DISABLE_COPY(QSslSocketBackendPrivate)
 };
-
-
 
 #endif

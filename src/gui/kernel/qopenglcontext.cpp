@@ -23,12 +23,12 @@
 
 #include <qopenglcontext.h>
 #include <qopenglcontext_p.h>
+
+#include <qdebug.h>
 #include <qwindow.h>
 #include <qscreen.h>
-
-#include <QThreadStorage>
-#include <QThread>
-
+#include <qthreadstorage.h>
+#include <qthread.h>
 #include <qplatform_nativeinterface.h>
 #include <qplatform_openglcontext.h>
 #include <qplatform_integration.h>
@@ -39,8 +39,6 @@
 #include <qopengl_extensions_p.h>
 #include <qopengl_version_functions_p.h>
 #include <qopengl_texturehelper_p.h>
-
-#include <QDebug>
 
 #ifndef QT_OPENGL_ES_2
 #include <QOpenGLFunctions_1_0>
@@ -671,17 +669,6 @@ bool QOpenGLContext::isValid() const
    return d->platformGLContext && d->platformGLContext->isValid();
 }
 
-/*!
-    Get the QOpenGLFunctions instance for this context.
-
-    QOpenGLContext offers this as a convenient way to access QOpenGLFunctions
-    without having to manage it manually.
-
-    The context or a sharing context must be current.
-
-    The returned QOpenGLFunctions instance is ready to be used and it
-    does not need initializeOpenGLFunctions() to be called.
-*/
 QOpenGLFunctions *QOpenGLContext::functions() const
 {
    Q_D(const QOpenGLContext);
@@ -691,23 +678,6 @@ QOpenGLFunctions *QOpenGLContext::functions() const
    return d->functions;
 }
 
-/*!
-    Get the QOpenGLExtraFunctions instance for this context.
-
-    QOpenGLContext offers this as a convenient way to access QOpenGLExtraFunctions
-    without having to manage it manually.
-
-    The context or a sharing context must be current.
-
-    The returned QOpenGLExtraFunctions instance is ready to be used and it
-    does not need initializeOpenGLFunctions() to be called.
-
-    \note QOpenGLExtraFunctions contains functionality that is not guaranteed to
-    be available at runtime. Runtime availability depends on the platform,
-    graphics driver, and the OpenGL version requested by the application.
-
-    \sa QOpenGLFunctions, QOpenGLExtraFunctions
-*/
 QOpenGLExtraFunctions *QOpenGLContext::extraFunctions() const
 {
    return static_cast<QOpenGLExtraFunctions *>(functions());

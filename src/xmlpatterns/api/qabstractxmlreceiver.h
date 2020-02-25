@@ -24,12 +24,10 @@
 #ifndef QABSTRACTXMLRECEIVER_H
 #define QABSTRACTXMLRECEIVER_H
 
-#include <QtCore/QVariant>
-#include <QtCore/QScopedPointer>
-#include <QtXmlPatterns/QXmlNodeModelIndex>
+#include <qvariant.h>
+#include <qscopedpointer.h>
+#include <qxmlnodemodelindex.h>
 #include <qstringfwd.h>
-
-QT_BEGIN_NAMESPACE
 
 class QAbstractXmlReceiverPrivate;
 class QXmlName;
@@ -75,7 +73,5 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlReceiver
    void sendFromAxis(const QXmlNodeModelIndex &node);
    Q_DISABLE_COPY(QAbstractXmlReceiver)
 };
-
-QT_END_NAMESPACE
 
 #endif

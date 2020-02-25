@@ -21,26 +21,15 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
+#include <qabstracturiresolver.h>
 
-#include "qabstracturiresolver.h"
+#include <qurl.h>
 
-QT_BEGIN_NAMESPACE
-
-
-/*!
-  Constructs a QAbstractUriResolver with the specified \a parent.
- */
 QAbstractUriResolver::QAbstractUriResolver(QObject *parent) : QObject(parent)
 {
 }
 
-/*!
-  Destructor.
- */
 QAbstractUriResolver::~QAbstractUriResolver()
 {
 }
-
-QT_END_NAMESPACE
 

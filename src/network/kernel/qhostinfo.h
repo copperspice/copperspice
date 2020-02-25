@@ -24,11 +24,9 @@
 #ifndef QHOSTINFO_H
 #define QHOSTINFO_H
 
-#include <QtCore/qlist.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtNetwork/qhostaddress.h>
-
-QT_BEGIN_NAMESPACE
+#include <qlist.h>
+#include <qscopedpointer.h>
+#include <qhostaddress.h>
 
 class QObject;
 class QHostInfoPrivate;
@@ -73,7 +71,5 @@ class Q_NETWORK_EXPORT QHostInfo
  private:
    QScopedPointer<QHostInfoPrivate> d;
 };
-
-QT_END_NAMESPACE
 
 #endif // QHOSTINFO_H

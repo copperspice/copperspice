@@ -24,15 +24,11 @@
 #ifndef QABSTRACTXMLRECEIVER_P_H
 #define QABSTRACTXMLRECEIVER_P_H
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractXmlReceiverPrivate
 {
  public:
    virtual ~QAbstractXmlReceiverPrivate() {
    }
 };
-
-QT_END_NAMESPACE
 
 #endif

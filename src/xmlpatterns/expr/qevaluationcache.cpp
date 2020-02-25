@@ -23,10 +23,8 @@
 
 template<bool IsForGlobal>
 EvaluationCache<IsForGlobal>::EvaluationCache(const Expression::Ptr &op,
-      const VariableDeclaration *varDecl,
-      const VariableSlotID aSlot) : SingleContainer(op)
-   , m_declarationUsedByMany(varDecl->usedByMany())
-   , m_varSlot(aSlot)
+            const VariableDeclaration *varDecl, const VariableSlotID aSlot)
+   : SingleContainer(op), m_declarationUsedByMany(varDecl->usedByMany()), m_varSlot(aSlot)
 {
    Q_ASSERT(m_varSlot > -1);
 }
@@ -83,6 +81,7 @@ Item::Iterator::Ptr EvaluationCache<IsForGlobal>::evaluateSequence(const Dynamic
           */
          return Item::Iterator::Ptr(new ListIterator<Item, Item::List>(cell.cachedItems));
       }
+
       case ItemSequenceCacheCell::Empty: {
          cell.inUse = true;
          cell.sourceIterator = m_operand->evaluateSequence(IsForGlobal ? topFocusContext(context) : context);
@@ -96,6 +95,7 @@ Item::Iterator::Ptr EvaluationCache<IsForGlobal>::evaluateSequence(const Dynamic
                     "This trigger for a cache bug which hasn't yet been analyzed.");
          return Item::Iterator::Ptr(new CachingIterator(cells, m_varSlot, IsForGlobal ? topFocusContext(context) : context));
       }
+
       default: {
          Q_ASSERT_X(false, Q_FUNC_INFO, "This path is not supposed to be run.");
          return Item::Iterator::Ptr();

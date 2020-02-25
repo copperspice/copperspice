@@ -281,17 +281,13 @@ QTextFrameLayoutData *QTextFrame::layoutData() const
    return d->layoutData;
 }
 
-/*!
-  \internal
-*/
+
 void QTextFrame::setLayoutData(QTextFrameLayoutData *data)
 {
    Q_D(QTextFrame);
    delete d->layoutData;
    d->layoutData = data;
 }
-
-
 
 void QTextFramePrivate::fragmentAdded(QChar type, uint fragment)
 {

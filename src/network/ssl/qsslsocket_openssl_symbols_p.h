@@ -27,8 +27,6 @@
 #include <qsslsocket_openssl_p.h>
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 #define DUMMYARG
 
 #if !defined QT_LINKED_OPENSSL
@@ -636,7 +634,5 @@ void q_SSL_get0_next_proto_negotiated(const SSL *s, const unsigned char **data,
 // Helper function
 class QDateTime;
 QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime);
-
-QT_END_NAMESPACE
 
 #endif

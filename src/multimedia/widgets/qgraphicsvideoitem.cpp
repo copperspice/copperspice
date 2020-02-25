@@ -32,7 +32,6 @@
 
 #include <qpaintervideosurface_p.h>
 
-
 #if ! defined(QT_NO_OPENGL) && ! defined(QT_OPENGL_ES_1_CL) && ! defined(QT_OPENGL_ES_1)
 #include <QtOpenGL/qgl.h>
 #endif
@@ -41,14 +40,8 @@ class QGraphicsVideoItemPrivate
 {
  public:
    QGraphicsVideoItemPrivate()
-      : q_ptr(0)
-      , surface(0)
-      , mediaObject(0)
-      , service(0)
-      , rendererControl(0)
-      , aspectRatioMode(Qt::KeepAspectRatio)
-      , updatePaintDevice(true)
-      , rect(0.0, 0.0, 320, 240) {
+      : q_ptr(0), surface(0), mediaObject(0), service(0), rendererControl(0)
+      , aspectRatioMode(Qt::KeepAspectRatio), updatePaintDevice(true), rect(0.0, 0.0, 320, 240) {
    }
 
    QGraphicsVideoItem *q_ptr;
@@ -178,9 +171,6 @@ QMediaObject *QGraphicsVideoItem::mediaObject() const
    return d_func()->mediaObject;
 }
 
-/*!
-  \internal
-*/
 bool QGraphicsVideoItem::setMediaObject(QMediaObject *object)
 {
    Q_D(QGraphicsVideoItem);
@@ -296,25 +286,11 @@ QSizeF QGraphicsVideoItem::nativeSize() const
    return d_func()->nativeSize;
 }
 
-/*!
-    \fn QGraphicsVideoItem::nativeSizeChanged(const QSizeF &size)
-
-    Signals that the native \a size of the video has changed.
-*/
-
-/*!
-    \reimp
-*/
 QRectF QGraphicsVideoItem::boundingRect() const
 {
    return d_func()->boundingRect;
 }
-
-/*!
-    \reimp
-*/
-void QGraphicsVideoItem::paint(
-   QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void QGraphicsVideoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
    (void) option;
 
@@ -329,8 +305,10 @@ void QGraphicsVideoItem::paint(
       }
 
       d->surface->setGLContext(const_cast<QGLContext *>(QGLContext::currentContext()));
+
       if (d->surface->supportedShaderTypes() & QPainterVideoSurface::GlslShader) {
          d->surface->setShaderType(QPainterVideoSurface::GlslShader);
+
       } else {
          d->surface->setShaderType(QPainterVideoSurface::FragmentProgramShader);
       }
@@ -347,17 +325,11 @@ void QGraphicsVideoItem::paint(
    }
 }
 
-/*!
-    \internal
-*/
 QVariant QGraphicsVideoItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
    return QGraphicsItem::itemChange(change, value);
 }
 
-/*!
-  \internal
-*/
 void QGraphicsVideoItem::timerEvent(QTimerEvent *event)
 {
    QGraphicsObject::timerEvent(event);

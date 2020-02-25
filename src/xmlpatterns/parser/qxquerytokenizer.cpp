@@ -21,35 +21,25 @@
 *
 ***********************************************************************/
 
-#include <QByteArray>
+#include <qbytearray.h>
 
 #include "qquerytransformparser_p.h"
-
 #include "qxquerytokenizer_p.h"
 
 #include "qtokenlookup.cpp"
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
 #define handleWhitespace()                      \
 {                                               \
     const TokenType t = consumeWhitespace();    \
-    if(t != SUCCESS)                            \
+    if (t != SUCCESS)                           \
         return Token(t);                        \
 }
 
-XQueryTokenizer::XQueryTokenizer(const QString &query,
-                                 const QUrl &location,
-                                 const State startingState) : Tokenizer(location)
-   , m_data(query)
-   , m_length(query.length())
-   , m_state(startingState)
-   , m_pos(0)
-   , m_line(1)
-   , m_columnOffset(0)
-   , m_scanOnly(false)
+XQueryTokenizer::XQueryTokenizer(const QString &query, const QUrl &location, const State startingState)
+   : Tokenizer(location), m_data(query) , m_length(query.length()), m_state(startingState)
+   , m_pos(0), m_line(1), m_columnOffset(0), m_scanOnly(false)
 {
    Q_ASSERT(location.isValid() || location.isEmpty());
 }
@@ -70,8 +60,7 @@ QChar XQueryTokenizer::peekCurrent() const
 
 int XQueryTokenizer::peekForColonColon() const
 {
-   /* Note, we don't modify m_pos in this function, so we need to do offset
-    * calculations. */
+   // Note, we do not modify m_pos in this function, so we need to do offset  calculations.
    int pos = m_pos;
 
    while (pos < m_length) {
@@ -82,6 +71,7 @@ int XQueryTokenizer::peekForColonColon() const
          case '\n':
          case '\r':
             break;
+
          case ':': {
             if (peekAhead((pos - m_pos) + 1) == ':') {
                return pos - m_pos;
@@ -133,17 +123,17 @@ QString XQueryTokenizer::normalizeEOL(const QString &input, const CharacterSkips
       }
       switch (input.at(i).unicode()) {
          case '\r': {
-            if (i + 1 < len && input.at(i + 1) == QLatin1Char('\n')) {
+            if (i + 1 < len && input.at(i + 1) == QChar('\n')) {
                ++i;
             }
-
          }
          [[fallthrough]];
 
          case '\n': {
-            result.append(QLatin1Char('\n'));
+            result.append(QChar('\n'));
             continue;
          }
+
          default: {
             result.append(at);
          }
@@ -157,6 +147,7 @@ Tokenizer::TokenType XQueryTokenizer::consumeComment()
 {
    /* Below, we return ERROR instead of END_OF_FILE such that the parser
     * sees an invalid comment. */
+
    while (m_pos < m_length) {
       switch (peekCurrent().unicode()) {
          case ':': {
@@ -171,15 +162,18 @@ Tokenizer::TokenType XQueryTokenizer::consumeComment()
             }
             continue; /* We don't want to increment m_pos twice. */
          }
+
          case '(': {
             /* It looks like the start of a comment. */
             ++m_pos;
 
             if (atEnd()) {
                return END_OF_FILE;
+
             } else if (peekCurrent() == ':') {
                /* And it is a nested comment -- parse it. */
                const TokenType retval = consumeComment();
+
                if (retval == SUCCESS) {
                   continue;   /* Continue with our "own" comment. */
                } else {
@@ -202,6 +196,7 @@ Tokenizer::TokenType XQueryTokenizer::consumeComment()
             break;
          }
       }
+
       ++m_pos;
    }
 
@@ -215,6 +210,7 @@ bool XQueryTokenizer::consumeRawWhitespace()
          case ' ':
          case '\t':
             break;
+
          case '\n':
          case '\r': {
             if (peekAhead() == '\n') {
@@ -253,6 +249,7 @@ Tokenizer::TokenType XQueryTokenizer::consumeWhitespace()
 
             break;
          }
+
          case '(': {
             if (peekAhead() == ':') {
                m_pos += 2; /* Consume "(:" */
@@ -270,6 +267,7 @@ Tokenizer::TokenType XQueryTokenizer::consumeWhitespace()
          default:
             return SUCCESS;
       }
+
       ++m_pos;
    }
 
@@ -298,7 +296,7 @@ bool XQueryTokenizer::isDigit(const char ch)
 /* Replace with function in QXmlUtils. Write test cases for this. */
 bool XQueryTokenizer::isNCNameStart(const QChar ch)
 {
-   if (ch == QLatin1Char('_')) {
+   if (ch == QChar('_')) {
       return true;
    }
 
@@ -357,6 +355,7 @@ bool XQueryTokenizer::isPhraseKeyword(const TokenType code)
       case STABLE:
       case TREAT:
          return true;
+
       default:
          return false;
    }
@@ -396,6 +395,7 @@ bool XQueryTokenizer::isOperatorKeyword(const TokenType code)
       case TO:
       case TREAT:
          return true;
+
       default:
          return false;
    };
@@ -416,6 +416,7 @@ bool XQueryTokenizer::isTypeToken(const TokenType t)
       case SCHEMA_ELEMENT:
       case TEXT:
          return true;
+
       default:
          return false;
    }
@@ -493,7 +494,7 @@ QString XQueryTokenizer::tokenizeCharacterReference()
 {
    Q_ASSERT(peekCurrent() == '&');
 
-   const int theEnd = m_data.indexOf(QLatin1Char(';'), m_pos + 1);
+   const int theEnd = m_data.indexOf(QChar(';'), m_pos + 1);
 
    if (theEnd == -1) { /* No ';' found, a syntax error. i18n. */
       return QString();
@@ -507,7 +508,7 @@ QString XQueryTokenizer::tokenizeCharacterReference()
    if (! charRef.isNull()) {
       return charRef;
 
-   } else if (content.startsWith(QLatin1Char('#'))) {
+   } else if (content.startsWith(QChar('#'))) {
       int base;
 
       /* It is only '#' or '#x'. */
@@ -516,7 +517,7 @@ QString XQueryTokenizer::tokenizeCharacterReference()
       }
 
       /* We got a hex number if it starts with 'x', otherwise it's a decimal. */
-      if (content.at(1) == QLatin1Char('x')) {
+      if (content.at(1) == QChar('x')) {
          base = 16;
          content = content.mid(2); /* Remove "#x". */
       } else {
@@ -542,7 +543,7 @@ QString XQueryTokenizer::tokenizeCharacterReference()
 
 int XQueryTokenizer::scanUntil(const char *const content)
 {
-   const int end = m_data.indexOf(QString::fromLatin1(content), m_pos);
+   const int end = m_data.indexOf(QString::fromUtf8(content), m_pos);
 
    if (end == -1) {
       return -1;
@@ -558,11 +559,11 @@ QChar XQueryTokenizer::charForReference(const QString &reference)
    if (m_charRefs.isEmpty()) {
       /* Initialize. */
       m_charRefs.reserve(5);
-      m_charRefs.insert(QLatin1String("lt"),     QLatin1Char('<'));
-      m_charRefs.insert(QLatin1String("gt"),     QLatin1Char('>'));
-      m_charRefs.insert(QLatin1String("amp"),    QLatin1Char('&'));
-      m_charRefs.insert(QLatin1String("quot"),   QLatin1Char('"'));
-      m_charRefs.insert(QLatin1String("apos"),   QLatin1Char('\''));
+      m_charRefs.insert(QString("lt"),     QChar('<'));
+      m_charRefs.insert(QString("gt"),     QChar('>'));
+      m_charRefs.insert(QString("amp"),    QChar('&'));
+      m_charRefs.insert(QString("quot"),   QChar('"'));
+      m_charRefs.insert(QString("apos"),   QChar('\''));
    }
 
    return m_charRefs.value(reference);
@@ -582,7 +583,7 @@ Tokenizer::Token XQueryTokenizer::tokenizeStringLiteral()
    for (; m_pos < m_length; ++m_pos) {
       const QChar c(current());
 
-      if (c == QLatin1Char('&')) {
+      if (c == QChar('&')) {
          const QString charRef(tokenizeCharacterReference());
 
          if (charRef.isEmpty()) {
@@ -630,9 +631,7 @@ Tokenizer::Token XQueryTokenizer::tokenizeNCName()
    }
 }
 
-bool XQueryTokenizer::aheadEquals(const char *const chs,
-                                  const int len,
-                                  const int offset) const
+bool XQueryTokenizer::aheadEquals(const char *const chs, const int len, const int offset) const
 {
    Q_ASSERT(len > 0);
    Q_ASSERT(qstrlen(chs) == uint(len));
@@ -687,8 +686,8 @@ void XQueryTokenizer::popState()
 Tokenizer::Token XQueryTokenizer::nextToken()
 {
    switch (state()) {
-      /* We want to skip or do special whitespace handling for these
-       * states. So fallthrough all of the following. */
+      // skip or do special whitespace handling for these states.
+
       case AposAttributeContent:
       case Axis:
       case ElementContent:
@@ -700,6 +699,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
       case StartTag:
       case XMLComment:
          break;
+
       default:
          handleWhitespace();
    }
@@ -725,6 +725,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          }
 
          const TokenMap *const keyword = lookupKeyword(id.value);
+
          if (keyword) {
             switch (keyword->token) {
                case INHERIT:
@@ -744,16 +745,19 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   setState(Default);
                   break;
                }
+
                case PRESERVE: {
                   if (state() != NamespaceKeyword) {
                      setState(Default);
                   }
                }
+
                default:
                   break;
             }
 
             return Token(keyword->token);
+
          } else {
             return id;
          }
@@ -818,18 +822,25 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return tokenAndChangeState(RBRACKET, Operator);
             case ',':
                return tokenAndChangeState(COMMA, Default);
+
             case ';':
                return tokenAndChangeState(SEMI_COLON, Default);
+
             case '$':
                return tokenAndChangeState(DOLLAR, VarName);
+
             case '|':
                return tokenAndChangeState(BAR, Default);
+
             case '?':
                return tokenAndChangeState(QUESTION, Operator);
+
             case ')':
                return tokenAndChangeState(RPAREN, Operator);
+
             case '@':
                return tokenAndChangeState(AT_SIGN, Default);
+
             case '1':
             case '2':
             case '3':
@@ -841,6 +852,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             case '9':
             case '0':
                return tokenizeNumberLiteral();
+
             case '.': {
                const QChar next = peekAhead();
 
@@ -864,6 +876,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                return tokenizeStringLiteral();
 
             }
+
             case '(': {
                if (peekAhead() == '#') {
                   return tokenAndChangeState(PRAGMA_START, Pragma, 2);
@@ -871,6 +884,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   return tokenAndChangeState(LPAREN, Default);
                }
             }
+
             case '*': {
                if (peekAhead() == ':') {
                   m_pos += 2; /* Consume *:. */
@@ -885,6 +899,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   return tokenAndChangeState(STAR, state() == Default ? Operator : Default);
                }
             }
+
             case ':': {
                switch (peekAhead().unicode()) {
                   case '=':
@@ -895,6 +910,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      return error();
                }
             }
+
             case '!': {
                if (peekAhead() == '=') {
                   return tokenAndChangeState(G_NE, Default, 2);
@@ -902,16 +918,20 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   return error();
                }
             }
+
             case '<': {
                switch (peekAhead().unicode()) {
                   case '=':
                      return tokenAndChangeState(G_LE, Default, 2);
+
                   case '<':
                      return tokenAndChangeState(PRECEDES, Default, 2);
+
                   case '?': {
                      pushState(Operator);
                      return tokenAndChangeState(PI_START, ProcessingInstructionName, 2);
                   }
+
                   case '!': {
                      if (aheadEquals("!--", 3)) {
                         m_pos += 3; /* Consume "!--". */
@@ -932,6 +952,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   }
                }
             }
+
             case '>': {
                switch (peekAhead().unicode()) {
                   case '=':
@@ -942,6 +963,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      return tokenAndChangeState(G_GT, Default);
                }
             }
+
             case '/': {
                if (peekAhead() == '/') {
                   return tokenAndChangeState(SLASHSLASH, Default, 2);
@@ -949,10 +971,12 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   return tokenAndChangeState(SLASH, Default);
                }
             }
+
             case '{': {
                pushState(Operator);
                return tokenAndChangeState(CURLY_LBRACE, Default);
             }
+
             case '}': {
                popState();
 
@@ -1048,6 +1072,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             switch (peekAhead().unicode()) {
                case '=':
                   return id;
+
                case '*': {
                   m_pos += 2;
                   return tokenAndChangeState(ANY_LOCAL_NAME, id.value, Operator);
@@ -1091,11 +1116,8 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          }
 
          /* Let the if-body apply for constructors, and node type tests. */
-         if (isTypeToken(keyword->token) ||
-               keyword->token == TYPESWITCH ||
-               keyword->token == ORDERED ||
-               keyword->token == UNORDERED ||
-               keyword->token == IF) {
+         if (isTypeToken(keyword->token) || keyword->token == TYPESWITCH ||
+               keyword->token == ORDERED || keyword->token == UNORDERED || keyword->token == IF) {
 
             switch (peekCurrent().unicode()) {
                case '(': {
@@ -1195,34 +1217,40 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      setState(Default);
                      return Token(keyword->token);
                   }
+
                   case OPTION: {
                      m_tokenStack.push(Token(keyword2->token));
                      setState(Default);
                      return Token(keyword->token);
                   }
+
                   case COPY_NAMESPACES:
                   case ORDERING: {
                      m_tokenStack.push(Token(keyword2->token));
                      setState(NamespaceKeyword);
                      return Token(keyword->token);
                   }
+
                   case CONSTRUCTION: {
                      // TODO identical to CONSTRUCTION?
                      m_tokenStack.push(Token(keyword2->token));
                      setState(Operator);
                      return Token(keyword->token);
                   }
+
                   case NAMESPACE:
                   case BASEURI: {
                      m_tokenStack.push(Token(keyword2->token));
                      setState(NamespaceDecl);
                      return Token(keyword->token);
                   }
+
                   case BOUNDARY_SPACE: {
                      m_tokenStack.push(Token(keyword2->token));
                      setState(XMLSpaceDecl);
                      return Token(keyword->token);
                   }
+
                   case DEFAULT: {
                      m_tokenStack.push(Token(keyword2->token));
 
@@ -1240,7 +1268,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      }
 
                      const TokenMap *const keyword3 = lookupKeyword(id3.value);
-                     if (!keyword3) {
+                     if (! keyword3) {
                         m_tokenStack.prepend(id3);
                         return Token(keyword->token);
                      } else {
@@ -1255,6 +1283,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
                      return Token(keyword->token);
                   }
+
                   default: {
                      m_tokenStack.push(Token(keyword2->token));
                      setState(Default);
@@ -1273,6 +1302,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   return id;
                }
             }
+
             case IMPORT: {
                m_tokenStack.push(Token(keyword2->token));
 
@@ -1282,12 +1312,14 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      setState(NamespaceKeyword);
                      return Token(keyword->token);
                   }
+
                   default: {
                      setState(Operator);
                      return id;
                   }
                }
             }
+
             case VALIDATE: {
                m_tokenStack.push(Token(keyword2->token));
 
@@ -1297,12 +1329,14 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      pushState(Operator);
                      return Token(keyword->token);
                   }
+
                   default: {
                      setState(Operator);
                      return id;
                   }
                }
             }
+
             default: {
                m_tokenStack.push(Token(keyword2->token));
                setState(Operator);
@@ -1332,11 +1366,11 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
          if (name.hasError()) {
             return error();
-         }
 
-         else if (name.type == QNAME) {
+         } else if (name.type == QNAME) {
             setState(OccurrenceIndicator);
             return name;
+
          } else {
             const TokenMap *const keyword = lookupKeyword(name.value);
 
@@ -1382,12 +1416,14 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
          if (peekCurrent() == '(') {
             const TokenMap *const keyword = lookupKeyword(nc.value);
+
             if (keyword) {
                pushState(KindTest);
                return Token(keyword->token);
             } else {
                return nc;
             }
+
          } else {
             return nc;
          }
@@ -1403,6 +1439,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             case '\'':
             case '"':
                return tokenizeStringLiteral();
+
             default:
                return tokenizeNCName();
          }
@@ -1412,10 +1449,13 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          switch (peekCurrent().unicode()) {
             case '?':
                return tokenAndChangeState(QUESTION, Operator);
+
             case '*':
                return tokenAndChangeState(STAR, Operator);
+
             case '+':
                return tokenAndChangeState(PLUS, Operator);
+
             default: {
                setState(Operator);
                return nextToken();
@@ -1428,6 +1468,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             case '\'':
             case '"':
                return tokenizeStringLiteral();
+
             case ';':
                return tokenAndChangeState(SEMI_COLON, Default);
          }
@@ -1445,11 +1486,13 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             return id;
          }
       }
+
       case StartTag: {
          if (peekAhead(-1) == '<') {
             if (current().isSpace()) {
                return Token(ERROR);
             }
+
          } else {
             if (consumeRawWhitespace()) {
                return Token(END_OF_FILE);
@@ -1471,6 +1514,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   return error();
                }
             }
+
             case '>': {
                if (m_scanOnly) {
                   return tokenAndChangeState(POSITION_SET, StartTag);
@@ -1478,12 +1522,16 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   return tokenAndChangeState(G_GT, ElementContent);
                }
             }
+
             case '=':
                return tokenAndAdvance(G_EQ);
+
             case '\'':
                return tokenAndChangeState(APOS, AposAttributeContent);
+
             case '"':
                return tokenAndChangeState(QUOTE, QuotAttributeContent);
+
             default:
                return tokenizeNCNameOrQName();
          }
@@ -1501,6 +1549,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          }
 
          Q_ASSERT(!m_scanOnly);
+
          while (true) {
             if (atEnd()) {
                /* In the case that the XSL-T tokenizer invokes us with
@@ -1529,11 +1578,12 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                }
 
                const QChar next(m_data.at(m_pos + 1));
-               if (!next.isSpace() && next != QLatin1Char('/') && next != QLatin1Char('>')) {
+               if (!next.isSpace() && next != QChar('/') && next != QChar('>')) {
                   return Token(ERROR);   // i18n Space must separate attributes
+
                } else if (result.isEmpty()) {
-                  return tokenAndChangeState(state() == AposAttributeContent ? APOS : QUOTE,
-                                             StartTag, 1);
+                  return tokenAndChangeState(state() == AposAttributeContent ? APOS : QUOTE, StartTag, 1);
+
                } else {
                   /* Don't consume the sep, but leave it so we next time return a token for it. */
                   return Token(STRING_LITERAL, result);
@@ -1541,12 +1591,15 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
                ++m_pos;
                continue;
-            } else if (curr == QLatin1Char('{')) {
+
+            } else if (curr == QChar('{')) {
                if (m_pos + 1 == m_length) {
                   return Token(END_OF_FILE);
+
                } else if (peekAhead() == '{') {
                   ++m_pos;
-                  result.append(QLatin1Char('{'));
+                  result.append(QChar('{'));
+
                } else {
                   if (result.isEmpty()) {
                      /* The Attribute Value Template appeared directly in the attribute. */
@@ -1557,26 +1610,28 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      return Token(STRING_LITERAL, result);
                   }
                }
-            } else if (curr == QLatin1Char('}')) {
+            } else if (curr == QChar('}')) {
                if (m_pos + 1 == m_length) {
                   return Token(END_OF_FILE);
                } else if (peekAhead() == '}') {
                   ++m_pos;
-                  result.append(QLatin1Char('}'));
+                  result.append(QChar('}'));
                } else {
                   return Token(ERROR);
                }
 
-            } else if (curr == QLatin1Char('&')) {
+            } else if (curr == QChar('&')) {
                const QString ret(tokenizeCharacterReference());
+
                if (ret.isEmpty()) {
                   return Token(ERROR);
                } else {
                   result.append(ret);
                }
 
-            } else if (curr == QLatin1Char('<')) {
+            } else if (curr == QChar('<')) {
                return Token(STRING_LITERAL, result);
+
             } else {
                /* See Extensible Markup Language (XML) 1.0 (Fourth Edition),
                 * 3.3.3 Attribute-Value Normalization.
@@ -1586,7 +1641,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                switch (curr.unicode()) {
                   case 0xD: {
                      if (peekAhead() == '\n') {
-                        result.append(QLatin1Char(' '));
+                        result.append(QChar(' '));
                         ++m_pos;
                         break;
                      }
@@ -1595,9 +1650,10 @@ Tokenizer::Token XQueryTokenizer::nextToken()
 
                   case 0xA:
                   case 0x9: {
-                     result.append(QLatin1Char(' '));
+                     result.append(QChar(' '));
                      break;
                   }
+
                   default:
                      result.append(curr);
                }
@@ -1637,7 +1693,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   const QChar ahead(current());
                   if (ahead.isSpace()) {
                      return error();
-                  } else if (ahead == QLatin1Char('/')) {
+                  } else if (ahead == QChar('/')) {
                      if (m_pos + 1 == m_length) {
                         return Token(END_OF_FILE);
                      } else if (m_data.at(m_pos + 1).isSpace()) {
@@ -1665,7 +1721,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      m_pos += 2; /* Consume "]]>". Note that m_pos is on '!'. */
                      result.append(m_data.mid(start, len));
                      break;
-                  } else if (ahead == QLatin1Char('?')) {
+                  } else if (ahead == QChar('?')) {
                      pushState();
                      return tokenAndChangeState(PI_START, ProcessingInstructionName);
                   } else {
@@ -1691,7 +1747,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      return Token(END_OF_FILE);
                   } else if (peekAhead() == '{') {
                      ++m_pos;
-                     result.append(QLatin1Char('{'));
+                     result.append(QChar('{'));
                   } else {
                      if (result.isEmpty()) {
                         pushState();
@@ -1708,7 +1764,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                      return Token(END_OF_FILE);
                   } else if (peekAhead() == '}') {
                      ++m_pos;
-                     result.append(QLatin1Char('}'));
+                     result.append(QChar('}'));
                   } else {
                      /* This is a parse error, and the grammar won't be able
                       * to reduce this CURLY_RBRACE. */
@@ -1716,6 +1772,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                   }
                   break;
                }
+
                case '\n': {
                   /* We want to translate \r\n into \n. */
                   if (peekAhead(-1) == '\r') {
@@ -1725,9 +1782,10 @@ Tokenizer::Token XQueryTokenizer::nextToken()
                [[fallthrough]];
 
                case '\r': {
-                  result.append(QLatin1Char('\n'));
+                  result.append(QChar('\n'));
                   break;
                }
+
                default: {
                   result.append(current());
                   break;
@@ -1747,7 +1805,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
             }
 
             const QChar next(current());
-            if (next.isSpace() || next == QLatin1Char('?')) {
+            if (next.isSpace() || next == QChar('?')) {
                return tokenAndChangeState(PI_TARGET, m_data.mid(start, m_pos - start),
                                           ProcessingInstructionContent);
             }
@@ -1813,6 +1871,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          setState(PragmaContent);
          return tokenizeNCNameOrQName();
       }
+
       case PragmaContent: {
          QString result;
 
@@ -1826,6 +1885,7 @@ Tokenizer::Token XQueryTokenizer::nextToken()
          if (peekCurrent() == '#' && peekAhead() == ')') {
             /* We reached the end, and there's no pragma content. */
             return tokenAndChangeState(PRAGMA_END, Default, 2);
+
          } else if (!hasWS) {
             /* A separating space is required if there's pragma content. */
             return error(); /* i18n */
@@ -1844,14 +1904,11 @@ Tokenizer::Token XQueryTokenizer::nextToken()
    return error();
 }
 
-Tokenizer::Token XQueryTokenizer::attributeAsRaw(const QChar sep,
-      int &sepStack,
-      const int startPos,
-      const bool aInLiteral,
-      QString &result)
+Tokenizer::Token XQueryTokenizer::attributeAsRaw(const QChar sep, int &sepStack,
+      const int startPos, const bool aInLiteral, QString &result)
 {
    bool inLiteral = aInLiteral;
-   const char otherSep = (sep == QLatin1Char('"') ? '\'' : '"');
+   const char otherSep = (sep == QChar('"') ? '\'' : '"');
 
    while (true) {
       if (atEnd()) {
@@ -1870,13 +1927,14 @@ Tokenizer::Token XQueryTokenizer::attributeAsRaw(const QChar sep,
             result.append(current());
             m_pos += 2;
             continue;
+
          } else {
             /* Don't consume the separator, such that we
              * return a token for it next time. */
             if (m_pos == startPos) {
                ++m_pos;
                setState(StartTag);
-               return Token(sep == QLatin1Char('"') ? QUOTE : APOS);
+               return Token(sep == QChar('"') ? QUOTE : APOS);
             }
 
 
@@ -1888,6 +1946,7 @@ Tokenizer::Token XQueryTokenizer::attributeAsRaw(const QChar sep,
                continue;
             }
          }
+
       } else if (peekCurrent() == '&') {
          const QString ret(tokenizeCharacterReference());
 
@@ -1953,6 +2012,7 @@ Tokenizer::Token XQueryTokenizer::nextToken(YYLTYPE *const sourceLocator)
 
    if (m_tokenStack.isEmpty()) {
       return nextToken();
+
    } else {
       const Token retval(m_tokenStack.pop());
 
@@ -1974,6 +2034,7 @@ Tokenizer::Token XQueryTokenizer::nextToken(YYLTYPE *const sourceLocator)
             setState(ItemType);
             break;
          }
+
          default: {
             if (isOperatorKeyword(retval.type)) {
                setState(Default);
@@ -2007,4 +2068,3 @@ void XQueryTokenizer::setParserContext(const ParserContext::Ptr &)
 
 } // namespace QPatternist
 
-QT_END_NAMESPACE
