@@ -69,7 +69,11 @@ set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(VERSION     "${PACKAGE_VERSION}")
 set(prefix      "${CMAKE_INSTALL_PREFIX}")
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
+if(MSVC)
+   enable_language(ASM_MASM)
+   set(target "MSVC")
+
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
    execute_process(
       COMMAND ${CMAKE_CXX_COMPILER} -dumpmachine
       OUTPUT_VARIABLE DUMPMACHINE_OUTPUT
@@ -82,10 +86,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
    endif()
 
    set(target "${DUMPMACHINE_OUTPUT}")
-
-elseif(MSVC)
-   enable_language(ASM_MASM)
-   set(target "MSVC")
 
 else()
    message(WARNING
