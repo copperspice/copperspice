@@ -1,7 +1,7 @@
 list(APPEND NETWORK_PUBLIC_INCLUDES
     QSsl
     QSslCertificate
-    QSslCertificateExtension
+    QSslCertificate_Extension
     QSslConfiguration
     QSslCipher
     QSslEllipticCurve
@@ -14,7 +14,7 @@ list(APPEND NETWORK_PUBLIC_INCLUDES
 list(APPEND NETWORK_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qssl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificateextension.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_extension.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslconfiguration.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcipher.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslellipticcurve.h
@@ -27,7 +27,7 @@ list(APPEND NETWORK_INCLUDES
 list(APPEND NETWORK_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qssl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificateextension_p.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_extension_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslconfiguration_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcontext_openssl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcipher_p.h
@@ -53,7 +53,7 @@ if(OPENSSL_FOUND OR SECURETRANSPORT_FOUND)
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslerror.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslpresharedkeyauthenticator.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificateextension.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_extension.cpp
    )
 endif()
 

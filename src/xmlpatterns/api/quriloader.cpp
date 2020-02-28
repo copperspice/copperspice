@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <qnetworkrequest.h>
-#include <qnetworkreply.h>
+#include <qnetwork_request.h>
+#include <qnetwork_reply.h>
 
 #include <qiodevicedelegate_p.h>
 #include <quriloader_p.h>

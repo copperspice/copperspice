@@ -19,11 +19,10 @@
 #ifndef QNetworkReplyHandler_h
 #define QNetworkReplyHandler_h
 
-#include <QObject>
-
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
+#include <qobject.h>
+#include <qaccess_manager.h>
+#include <qnetwork_reply.h>
+#include <qnetwork_request.h>
 
 #include "FormData.h"
 #include "QtMIMETypeSniffer.h"

@@ -32,9 +32,8 @@
 #include "qxsdschemaparser_p.h"
 #include "qxsdschemaparsercontext_p.h"
 
-#include <QtCore/QSharedData>
-#include <QtNetwork/QNetworkAccessManager>
-
+#include <qshareddata.h>
+#include <qaccess_manager.h>
 
 class QXmlSchemaPrivate : public QSharedData
 {

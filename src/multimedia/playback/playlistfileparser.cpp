@@ -25,8 +25,8 @@
 
 #include <qfileinfo.h>
 #include <qdebug.h>
-#include <qnetworkreply.h>
-#include <qnetworkrequest.h>
+#include <qnetwork_reply.h>
+#include <qnetwork_request.h>
 #include <qmediametadata.h>
 
 #include <qmediaobject_p.h>

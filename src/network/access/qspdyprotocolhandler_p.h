@@ -24,10 +24,11 @@
 #ifndef QSPDYPROTOCOLHANDLER_H
 #define QSPDYPROTOCOLHANDLER_H
 
-#include <qabstractprotocolhandler_p.h>
+#include <qnetwork_reply.h>
+
 #include <qbytedata_p.h>
-#include <qhttpnetworkrequest_p.h>
-#include <qnetworkreply.h>
+#include <qabstract_protocolhandler_p.h>
+#include <qhttp_networkrequest_p.h>
 
 #include <zlib.h>
 

@@ -26,7 +26,7 @@
 #include <qendian.h>
 
 #include <qnoncontiguousbytedevice_p.h>
-#include <qhttpnetworkconnectionchannel_p.h>
+#include <qhttp_networkconnectionchannel_p.h>
 
 #ifdef QT_SSL
 

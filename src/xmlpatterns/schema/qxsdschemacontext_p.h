@@ -31,10 +31,9 @@
 #include <qxsdschema_p.h>
 #include <qxsdschemachecker_p.h>
 #include <qxsdschemaresolver_p.h>
-#include <QtCore/QUrl>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtXmlPatterns/QAbstractMessageHandler>
-
+#include <qurl.h>
+#include <qaccess_manager.h>
+#include <qabstractmessagehandler.h>
 
 namespace QPatternist {
 

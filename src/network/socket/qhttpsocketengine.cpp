@@ -22,13 +22,15 @@
 ***********************************************************************/
 
 #include <qhttpsocketengine_p.h>
-#include <qhttpnetworkreply_p.h>
+
 #include <qtcpsocket.h>
 #include <qhostaddress.h>
 #include <qnetworkinterface.h>
 #include <qelapsedtimer.h>
 #include <qiodevice_p.h>
 #include <qurl.h>
+
+#include <qhttp_networkreply_p.h>
 
 #if ! defined(QT_NO_NETWORKPROXY)
 

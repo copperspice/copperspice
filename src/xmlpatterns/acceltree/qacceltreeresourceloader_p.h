@@ -24,8 +24,8 @@
 #ifndef QAccelTreeResourceLoader_P_H
 #define QAccelTreeResourceLoader_P_H
 
-#include <QtCore/QEventLoop>
-#include <QtNetwork/QNetworkReply>
+#include <qeventloop.h>
+#include <qnetwork_reply.h>
 
 #include "qabstractxmlreceiver.h"
 #include "qacceltree_p.h"

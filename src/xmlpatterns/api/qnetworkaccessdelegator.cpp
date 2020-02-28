@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
-#include <QNetworkAccessManager>
-#include "qnetworkaccessdelegator_p.h"
+#include <qurl.h>
+#include <qaccess_manager.h>
+
+#include <qnetworkaccessdelegator_p.h>
 
 using namespace QPatternist;
 

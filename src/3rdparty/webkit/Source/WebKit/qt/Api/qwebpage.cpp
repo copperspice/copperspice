@@ -125,7 +125,7 @@
 #include "runtime/InitializeThreading.h"
 #include "wtf/Threading.h"
 
-#include <qhttpheader_p.h>
+#include <qhttp_header_p.h>
 
 #include <QApplication>
 #include <QBasicTimer>
@@ -150,8 +150,8 @@
 #include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTouchEvent>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
+#include <qaccess_manager.h>
+#include <qnetwork_request.h>
 
 #if USE(QT_MOBILITY_SYSTEMINFO)
 #include <qsysteminfo.h>

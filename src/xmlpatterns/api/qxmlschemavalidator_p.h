@@ -31,8 +31,7 @@
 #include "qxmlschema_p.h"
 #include "qxsdschemacontext_p.h"
 #include "qxsdschema_p.h"
-#include <QtNetwork/QNetworkAccessManager>
-
+#include <qaccess_manager.h>
 
 class QXmlSchemaValidatorPrivate
 {

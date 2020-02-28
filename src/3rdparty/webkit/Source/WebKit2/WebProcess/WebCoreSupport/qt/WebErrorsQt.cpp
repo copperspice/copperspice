@@ -30,8 +30,8 @@
 #include <WebCore/ResourceRequest.h>
 #include <WebCore/ResourceResponse.h>
 
-#include <QCoreApplication>
-#include <QNetworkReply>
+#include <qcoreapplication.h>
+#include <qnetwork_reply.h>
 
 using namespace WebCore;
 

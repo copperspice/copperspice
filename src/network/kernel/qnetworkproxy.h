@@ -25,7 +25,7 @@
 #define QNETWORKPROXY_H
 
 #include <qhostaddress.h>
-#include <qnetworkrequest.h>
+#include <qnetwork_request.h>
 #include <qshareddata.h>
 
 #ifndef QT_NO_NETWORKPROXY

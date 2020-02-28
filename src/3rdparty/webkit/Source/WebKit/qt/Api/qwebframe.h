@@ -27,8 +27,8 @@
 #include <qurl.h>
 #include <qvariant.h>
 #include <qicon.h>
-#include <QtScript/qscriptengine.h>
-#include <qnetworkaccessmanager.h>
+#include <qscriptengine.h>
+#include <qaccess_manager.h>
 #include <qwebkitglobal.h>
 
 class QRect;

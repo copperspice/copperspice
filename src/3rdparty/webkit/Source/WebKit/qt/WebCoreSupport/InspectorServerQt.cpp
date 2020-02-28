@@ -28,8 +28,10 @@
 #include "MD5.h"
 #include "Page.h"
 #include "qwebpage.h"
+
 #include "qwebpage_p.h"
-#include <qhttpheader_p.h>
+#include <qhttp_header_p.h>
+
 #include <QFile>
 #include <QString>
 #include <QStringList>

@@ -27,7 +27,7 @@
 #include <qobject.h>
 #include <qurl.h>
 #include <qwidget.h>
-#include <qnetworkrequest.h>
+#include <qnetwork_request.h>
 
 class QNetworkProxy;
 class QUndoStack;

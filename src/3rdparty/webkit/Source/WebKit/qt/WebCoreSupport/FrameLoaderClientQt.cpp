@@ -92,8 +92,8 @@
 #include <QFileInfo>
 #include <QGraphicsScene>
 #include <QGraphicsWidget>
-#include <QNetworkReply>
-#include <QNetworkRequest>
+#include <QNetwork_Reply>
+#include <QNetwork_Request>
 #include <QStringList>
 #include <wtf/OwnPtr.h>
 

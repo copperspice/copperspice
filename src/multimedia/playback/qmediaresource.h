@@ -27,7 +27,7 @@
 #include <qmap.h>
 #include <qmetatype.h>
 #include <qstring.h>
-#include <qnetworkrequest.h>
+#include <qnetwork_request.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaResource
 {

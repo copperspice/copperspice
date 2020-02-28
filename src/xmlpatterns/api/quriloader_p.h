@@ -24,11 +24,11 @@
 #ifndef QURILOADER_P_H
 #define QURILOADER_P_H
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtXmlPatterns/QXmlName>
-#include "qnamepool_p.h"
-#include "qvariableloader_p.h"
+#include <qaccess_manager.h>
+#include <qxmlname.h>
 
+#include <qnamepool_p.h>
+#include <qvariableloader_p.h>
 
 namespace QPatternist {
 class URILoader : public QNetworkAccessManager

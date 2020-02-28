@@ -26,7 +26,7 @@
 
 #include <qobject.h>
 #include <qmutex.h>
-#include <qnetworkrequest.h>
+#include <qnetwork_request.h>
 #include <qgstreamerplayercontrol.h>
 
 #include <qmediaplayer.h>

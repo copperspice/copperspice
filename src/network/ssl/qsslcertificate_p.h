@@ -25,7 +25,7 @@
 #define QSSLCERTIFICATE_P_H
 
 #include <qsslsocket_p.h>
-#include <qsslcertificateextension.h>
+#include <qsslcertificate_extension.h>
 #include <qdatetime.h>
 #include <qmultimap.h>
 

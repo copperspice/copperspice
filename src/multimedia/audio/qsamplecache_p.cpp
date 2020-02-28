@@ -22,13 +22,13 @@
 ***********************************************************************/
 
 #include <qsamplecache_p.h>
+
+#include <qaccess_manager.h>
+#include <qnetwork_reply.h>
+#include <qnetwork_request.h>
+#include <qdebug.h>
+
 #include <qwavedecoder_p.h>
-
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-
-#include <QDebug>
 //#define QT_SAMPLECACHE_DEBUG
 
 QSampleCache::QSampleCache(QObject *parent)

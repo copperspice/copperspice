@@ -21,9 +21,8 @@
 #include "ResourceRequest.h"
 
 #include <qglobal.h>
-
-#include <QNetworkRequest>
-#include <QUrl>
+#include <qnetwork_request.h>
+#include <qurl.h>
 
 namespace WebCore {
 

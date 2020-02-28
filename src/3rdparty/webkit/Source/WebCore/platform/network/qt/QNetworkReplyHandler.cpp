@@ -29,18 +29,17 @@
 #include "ResourceResponse.h"
 #include "ResourceRequest.h"
 
-#include <QDateTime>
-#include <QFile>
-#include <QFileInfo>
-#include <QNetworkReply>
-#include <QNetworkCookie>
+#include <qdatetime.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qnetwork_reply.h>
+#include <qnetwork_cookie.h>
 #include <qwebframe.h>
 #include <qwebpage.h>
+#include <qdebug.h>
+#include <qcoreapplication.h>
 
 #include <wtf/text/CString.h>
-
-#include <QDebug>
-#include <QCoreApplication>
 
 // In Qt 4.8, the attribute for sending a request synchronously will be made public,
 // for now, use this hackish solution for setting the internal attribute.

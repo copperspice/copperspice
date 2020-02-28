@@ -21,8 +21,9 @@
 #include "QtMIMETypeSniffer.h"
 
 #include "MIMESniffing.h"
-#include <QCoreApplication>
-#include <QNetworkReply>
+
+#include <qcoreapplication.h>
+#include <qnetwork_reply.h>
 
 QtMIMETypeSniffer::QtMIMETypeSniffer(QNetworkReply* reply, const QString& advertisedMimeType, bool isSupportedImageType)
     : QObject(0)

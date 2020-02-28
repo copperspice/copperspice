@@ -42,12 +42,12 @@
 #include "ResourceHandleInternal.h"
 #include "SharedBuffer.h"
 
-#include <QAbstractNetworkCache>
-#include <QCoreApplication>
-#include <QUrl>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
+#include <qcoreapplication.h>
+#include <qurl.h>
+#include <qabstract_networkcache.h>
+#include <qaccess_manager.h>
+#include <qnetwork_request.h>
+#include <qnetwork_reply.h>
 
 namespace WebCore {
 

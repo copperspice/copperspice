@@ -24,9 +24,8 @@
 #ifndef QIODEVICEDELEGATE_P_H
 #define QIODEVICEDELEGATE_P_H
 
-#include <QtCore/QTimer>
-#include <QtNetwork/QNetworkReply>
-
+#include <qtimer.h>
+#include <qnetwork_reply.h>
 
 namespace QPatternist {
 /**

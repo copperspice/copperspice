@@ -24,7 +24,7 @@
 #ifndef PLAYLISTFILEPARSER_P_H
 #define PLAYLISTFILEPARSER_P_H
 
-#include <qnetworkrequest.h>
+#include <qnetwork_request.h>
 
 class QPlaylistFileParserPrivate;
 

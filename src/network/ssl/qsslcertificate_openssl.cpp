@@ -25,7 +25,7 @@
 #include <qsslsocket_openssl_symbols_p.h>
 #include <qsslcertificate_p.h>
 #include <qsslkey_p.h>
-#include <qsslcertificateextension_p.h>
+#include <qsslcertificate_extension_p.h>
 #include <qmutexpool_p.h>
 
 // forward declaration

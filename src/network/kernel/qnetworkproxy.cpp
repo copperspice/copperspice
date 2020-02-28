@@ -25,18 +25,19 @@
 
 #ifndef QT_NO_NETWORKPROXY
 
-#include <qnetworkproxy_p.h>
-#include <qnetworkrequest_p.h>
-#include <qsocks5socketengine_p.h>
-#include <qhttpsocketengine_p.h>
 #include <qauthenticator.h>
 #include <qdebug.h>
 #include <qmutex.h>
 #include <qstringlist.h>
 #include <qurl.h>
 
+#include <qnetworkproxy_p.h>
+#include <qnetwork_request_p.h>
+#include <qsocks5socketengine_p.h>
+#include <qhttpsocketengine_p.h>
+
 #ifndef QT_NO_BEARERMANAGEMENT
-#include <QtNetwork/QNetworkConfiguration>
+#include <qnetworkconfiguration.h>
 #endif
 
 class QSocks5SocketEngineHandler;

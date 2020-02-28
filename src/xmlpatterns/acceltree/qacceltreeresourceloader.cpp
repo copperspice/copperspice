@@ -24,7 +24,7 @@
 #include <qfile.h>
 #include <qtextcodec.h>
 #include <qtimer.h>
-#include <qnetworkrequest.h>
+#include <qnetwork_request.h>
 #include <qxmlstreamreader.h>
 
 #include <qatomicstring_p.h>

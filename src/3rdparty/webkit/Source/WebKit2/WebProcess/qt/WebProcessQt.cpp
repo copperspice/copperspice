@@ -28,7 +28,7 @@
 
 #include "WebProcessCreationParameters.h"
 #include <WebCore/RuntimeEnabledFeatures.h>
-#include <QNetworkAccessManager>
+#include <qaccess_manager.h>
 
 namespace WebKit {
 

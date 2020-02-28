@@ -27,7 +27,7 @@
 #include <qgraphicswidget.h>
 #include <qicon.h>
 #include <qpainter.h>
-#include <qnetworkaccessmanager.h>
+#include <qaccess_manager.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 

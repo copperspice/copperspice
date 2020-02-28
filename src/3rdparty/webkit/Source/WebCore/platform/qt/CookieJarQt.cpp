@@ -35,10 +35,10 @@
 #include "PlatformString.h"
 #include "qwebframe.h"
 #include "qwebpage.h"
-#include <QNetworkAccessManager>
-#include <QNetworkCookie>
-#include <QNetworkCookieJar>
-#include <QStringList>
+#include <qaccess_manager.h>
+#include <qnetwork_cookie.h>
+#include <qnetwork_cookiejar.h>
+#include <qstringlist.h>
 
 namespace WebCore {
 
