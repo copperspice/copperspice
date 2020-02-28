@@ -2363,7 +2363,7 @@ void QOpenGL2PaintEngineExPrivate::writeClip(const QVectorPath &path, uint value
       fillStencilWithVertexArray(vertexCoordinateArray, path.hasWindingFill());
    }
 
-    funcs.glColorMask(false, false, false, false);
+   funcs.glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
    funcs.glEnable(GL_STENCIL_TEST);
    useSimpleShader();
 
@@ -2395,7 +2395,7 @@ void QOpenGL2PaintEngineExPrivate::writeClip(const QVectorPath &path, uint value
    funcs.glStencilFunc(GL_LEQUAL, value, ~GL_STENCIL_HIGH_BIT);
    funcs.glStencilMask(0);
 
-    funcs.glColorMask(true, true, true, true);
+   funcs.glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 }
 
 void QOpenGL2PaintEngineEx::clip(const QVectorPath &path, Qt::ClipOperation op)
