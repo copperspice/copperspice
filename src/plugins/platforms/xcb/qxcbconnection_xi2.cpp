@@ -1205,7 +1205,7 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
    // Synthesize mouse events since otherwise there are no mouse events from
    // the pen on the XI 2.2+ path.
    if (xi2MouseEvents() && eventListener) {
-      eventListener->handleXIMouseEvent(reinterpret_cast<xcb_ge_event_t *>(event), Qt::MouseEventSynthesizedByQt);
+      eventListener->handleXIMouseEvent(reinterpret_cast<xcb_ge_event_t *>(event), Qt::MouseEventSynthesizedByCS);
    }
 #else
    Q_UNUSED(eventListener);

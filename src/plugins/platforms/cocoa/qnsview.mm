@@ -805,7 +805,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 
    Qt::KeyboardModifiers keyboardModifiers = [QNSView convertKeyModifiers: [theEvent modifierFlags]];
    QWindowSystemInterface::handleMouseEvent(targetView->m_window, timestamp, qtWindowPoint, qtScreenPoint, m_buttons, keyboardModifiers,
-      isTabletEvent ? Qt::MouseEventSynthesizedByQt : Qt::MouseEventNotSynthesized);
+      isTabletEvent ? Qt::MouseEventSynthesizedByCS : Qt::MouseEventNotSynthesized);
 }
 
 - (void)handleFrameStrutMouseEvent: (NSEvent *)theEvent

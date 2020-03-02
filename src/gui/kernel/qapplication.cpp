@@ -2186,7 +2186,7 @@ void QGuiApplicationPrivate::processTouchEvent(QWindowSystemInterfacePrivate::To
                synthIt->screenPos,
                buttons & ~Qt::LeftButton,
                e->modifiers,
-               Qt::MouseEventSynthesizedByQt);
+               Qt::MouseEventSynthesizedByCS);
             fake.flags |= QWindowSystemInterfacePrivate::WindowSystemEvent::Synthetic;
             processMouseEvent(&fake);
          }
@@ -2406,7 +2406,7 @@ void QGuiApplicationPrivate::processTouchEvent(QWindowSystemInterfacePrivate::To
                      touchPoint.screenPos(),
                      b | (buttons & ~Qt::LeftButton),
                      e->modifiers,
-                     Qt::MouseEventSynthesizedByQt);
+                     Qt::MouseEventSynthesizedByCS);
 
                   fake.flags |= QWindowSystemInterfacePrivate::WindowSystemEvent::Synthetic;
                   processMouseEvent(&fake);

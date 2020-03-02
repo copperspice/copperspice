@@ -90,7 +90,7 @@ class Q_CORE_EXPORT Qt
       };
       using KeyboardModifiers = QFlags<KeyboardModifier>;
 
-   //shorter names for shortcuts
+   // shorter names for shortcuts
    // The use of all-caps identifiers has the potential for clashing with
    // user-defined or third-party macros. More so when the identifiers are not
    // "namespace"-prefixed. This is considered bad practice and is why
@@ -1132,6 +1132,7 @@ class Q_CORE_EXPORT Qt
       NoDockWidgetArea = 0
    };
 
+   // internal
    enum DockWidgetAreaSizes {
       NDockWidgetAreas = 4
    };
@@ -1149,14 +1150,15 @@ class Q_CORE_EXPORT Qt
       NoToolBarArea = 0
    };
 
+   using ToolBarAreas = QFlags<ToolBarArea>;
+
+   // internal
    enum ToolBarAreaSizes {
       NToolBarAreas = 4
    };
 
-   using ToolBarAreas = QFlags<ToolBarArea>;
-
    enum DateFormat {
-      TextDate,                      // default Qt
+      TextDate,                      // default
       ISODate,                       // ISO 8601
       SystemLocaleDate,              // deprecated
       LocalDate = SystemLocaleDate,  // deprecated
@@ -1508,6 +1510,7 @@ class Q_CORE_EXPORT Qt
       TitleBarArea                // For move
    };
 
+   // internal
    enum class Initialization {
       Uninitialized
    };
@@ -1584,7 +1587,6 @@ class Q_CORE_EXPORT Qt
       VisualMoveStyle
    };
 
-
    enum TimerType {
       PreciseTimer,
       CoarseTimer,
@@ -1592,7 +1594,7 @@ class Q_CORE_EXPORT Qt
    };
 
    enum ScrollPhase {
-      NoScrollPhase = 0, // Make public in 5.7 or asap
+      NoScrollPhase = 0,
       ScrollBegin,
       ScrollUpdate,
       ScrollEnd
@@ -1601,7 +1603,7 @@ class Q_CORE_EXPORT Qt
    enum MouseEventSource {
       MouseEventNotSynthesized,
       MouseEventSynthesizedBySystem,
-      MouseEventSynthesizedByQt,
+      MouseEventSynthesizedByCS,
       MouseEventSynthesizedByApplication
    };
 
