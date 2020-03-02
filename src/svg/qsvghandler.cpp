@@ -1132,12 +1132,12 @@ static QMatrix parseTransformationMatrix(QStringView value)
 
    QMatrix matrix;
 
-   QString::const_iterator str = value.begin();
-   QString::const_iterator end = value.end();
+   QString::const_iterator iter = value.begin();
+   QString::const_iterator end  = value.end();
 
-   while (str != end) {
-      if (str->isSpace() || *str == QLatin1Char(',')) {
-         ++str;
+   while (iter != end) {
+      if (iter->isSpace() || *iter == ',') {
+         ++iter;
          continue;
       }
 
@@ -1150,87 +1150,81 @@ static QMatrix parseTransformationMatrix(QStringView value)
          SkewY
       };
 
+      QStringView nextWord = QStringView(iter + 1, end);
+
       State state = Matrix;
 
-      if (*str == QLatin1Char('m')) {  // matrix
-         const char *ident = "atrix";
+      if (*iter == 'm') {
+         // matrix
 
-         for (int i = 0; i < 5; ++i) {
-            if (*(++str) != QLatin1Char(ident[i])) {
-               goto error;
-            }
-         }
-
-         ++str;
-         state = Matrix;
-
-      } else if (*str == QLatin1Char('t')) { //translate
-         const char *ident = "ranslate";
-         for (int i = 0; i < 8; ++i)
-            if (*(++str) != QLatin1Char(ident[i])) {
-               goto error;
-            }
-         ++str;
-         state = Translate;
-      } else if (*str == QLatin1Char('r')) { //rotate
-         const char *ident = "otate";
-         for (int i = 0; i < 5; ++i)
-            if (*(++str) != QLatin1Char(ident[i])) {
-               goto error;
-            }
-         ++str;
-         state = Rotate;
-      } else if (*str == QLatin1Char('s')) { //scale, skewX, skewY
-         ++str;
-         if (*str == QLatin1Char('c')) {
-            const char *ident = "ale";
-            for (int i = 0; i < 3; ++i)
-               if (*(++str) != QLatin1Char(ident[i])) {
-                  goto error;
-               }
-            ++str;
-            state = Scale;
-         } else if (*str == QLatin1Char('k')) {
-            if (*(++str) != QLatin1Char('e')) {
-               goto error;
-            }
-            if (*(++str) != QLatin1Char('w')) {
-               goto error;
-            }
-            ++str;
-            if (*str == QLatin1Char('X')) {
-               state = SkewX;
-            } else if (*str == QLatin1Char('Y')) {
-               state = SkewY;
-            } else {
-               goto error;
-            }
-            ++str;
+         if (nextWord.startsWith("atrix")) {
+            iter += 5;
+            state = Matrix;
          } else {
             goto error;
          }
+
+      } else if (*iter == 't') {
+         // translate
+
+         if (nextWord.startsWith("ranslate")) {
+            iter += 8;
+            state = Translate;
+         } else {
+            goto error;
+         }
+
+      } else if (*iter == 'r') {
+         // rotate
+
+         if (nextWord.startsWith("otate")) {
+            iter += 5;
+            state = Rotate;
+         } else {
+            goto error;
+         }
+
+      } else if (*iter == 's') {
+         // scale, skewX, skewY
+
+         if (nextWord.startsWith("cale")) {
+            iter += 4;
+            state = Scale;
+
+         } else if (nextWord.startsWith("kewX")) {
+            iter += 4;
+            state = SkewX;
+
+         } else if (nextWord.startsWith("kewY")) {
+            iter += 4;
+            state = SkewY;
+
+         } else {
+            goto error;
+
+         }
+
       } else {
          goto error;
       }
 
-
-      while (str < end && str->isSpace()) {
-         ++str;
+      while (iter != end && iter->isSpace()) {
+         ++iter;
       }
 
-      if (*str != '(') {
+      if (*iter != '(') {
          goto error;
       }
 
-      ++str;
+      ++iter;
 
       QVarLengthArray<qreal, 8> points;
-      parseNumbersArray(points, str, end);
+      parseNumbersArray(points, iter, end);
 
-      if (*str != ')') {
+      if (*iter != ')') {
          goto error;
       }
-      ++str;
+      ++iter;
 
       if (state == Matrix) {
          if (points.count() != 6) {
