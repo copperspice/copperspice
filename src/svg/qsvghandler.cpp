@@ -593,7 +593,7 @@ class QSvgStyleSelector : public QCss::StyleSelector
    }
 
    void freeNode(NodePtr node) const override {
-      Q_UNUSED(node);
+      (void) node;
    }
 };
 
@@ -2425,6 +2425,8 @@ static bool parseStyle(QSvgNode *node, const QXmlStreamAttributes &attrs, QSvgHa
 
 static bool parseAnchorNode(QSvgNode *parent, const QXmlStreamAttributes &attributes, QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2432,6 +2434,8 @@ static bool parseAnimateNode(QSvgNode *parent,
                              const QXmlStreamAttributes &attributes,
                              QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2506,6 +2510,8 @@ static bool parseAimateMotionNode(QSvgNode *parent,
                                   const QXmlStreamAttributes &attributes,
                                   QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2662,13 +2668,17 @@ static QSvgNode *createAnimationNode(QSvgNode *parent,
                                      const QXmlStreamAttributes &attributes,
                                      QSvgHandler *)
 {
-   return 0;
+   (void) parent;
+   (void) attributes;
+   return nullptr;
 }
 
 static bool parseAudioNode(QSvgNode *parent,
                            const QXmlStreamAttributes &attributes,
                            QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2692,8 +2702,9 @@ static QSvgNode *createDefsNode(QSvgNode *parent,
                                 const QXmlStreamAttributes &attributes,
                                 QSvgHandler *)
 {
-   Q_UNUSED(attributes);
+   (void) attributes;
    QSvgDefs *defs = new QSvgDefs(parent);
+
    return defs;
 }
 
@@ -2701,6 +2712,8 @@ static bool parseDescNode(QSvgNode *parent,
                           const QXmlStreamAttributes &attributes,
                           QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2708,6 +2721,8 @@ static bool parseDiscardNode(QSvgNode *parent,
                              const QXmlStreamAttributes &attributes,
                              QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2815,6 +2830,8 @@ static bool parseFontFaceSrcNode(QSvgStyleProperty *parent,
                                  const QXmlStreamAttributes &attributes,
                                  QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2822,6 +2839,8 @@ static bool parseFontFaceUriNode(QSvgStyleProperty *parent,
                                  const QXmlStreamAttributes &attributes,
                                  QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2829,6 +2848,8 @@ static bool parseForeignObjectNode(QSvgNode *parent,
                                    const QXmlStreamAttributes &attributes,
                                    QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2836,8 +2857,9 @@ static QSvgNode *createGNode(QSvgNode *parent,
                              const QXmlStreamAttributes &attributes,
                              QSvgHandler *)
 {
-   Q_UNUSED(attributes);
+   (void) attributes;
    QSvgG *node = new QSvgG(parent);
+
    return node;
 }
 
@@ -2859,6 +2881,8 @@ static bool parseHandlerNode(QSvgNode *parent,
                              const QXmlStreamAttributes &attributes,
                              QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -2866,6 +2890,8 @@ static bool parseHkernNode(QSvgNode *parent,
                            const QXmlStreamAttributes &attributes,
                            QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -3060,6 +3086,8 @@ static QSvgStyleProperty *createLinearGradientNode(QSvgNode *node,
 
 static bool parseMetadataNode(QSvgNode *parent, const QXmlStreamAttributes &attributes, QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -3081,6 +3109,8 @@ static bool parseMpathNode(QSvgNode *parent,
                            const QXmlStreamAttributes &attributes,
                            QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -3139,6 +3169,8 @@ static QSvgNode *createPolylineNode(QSvgNode *parent, const QXmlStreamAttributes
 
 static bool parsePrefetchNode(QSvgNode *parent, const QXmlStreamAttributes &attributes, QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -3238,6 +3270,8 @@ static bool parseScriptNode(QSvgNode *parent,
                             const QXmlStreamAttributes &attributes,
                             QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -3245,6 +3279,8 @@ static bool parseSetNode(QSvgNode *parent,
                          const QXmlStreamAttributes &attributes,
                          QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -3252,6 +3288,7 @@ static QSvgStyleProperty *createSolidColorNode(QSvgNode *parent,
       const QXmlStreamAttributes &attributes,
       QSvgHandler *handler)
 {
+   (void) parent;
    QStringView solidColorStr = attributes.value(QLatin1String("solid-color"));
    QStringView solidOpacityStr = attributes.value(QLatin1String("solid-opacity"));
 
@@ -3366,6 +3403,8 @@ static bool parseStopNode(QSvgStyleProperty *parent,
 
 static bool parseStyleNode(QSvgNode *parent, const QXmlStreamAttributes &attributes, QSvgHandler *handler)
 {
+   (void) parent;
+
 #ifndef QT_NO_CSSPARSER
    QString type = attributes.value("type");
    type = type.toLower();
@@ -3380,6 +3419,8 @@ static bool parseStyleNode(QSvgNode *parent, const QXmlStreamAttributes &attribu
 
 static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &attributes, QSvgHandler *handler)
 {
+   (void) parent;
+
    QString baseProfile = attributes.value(QLatin1String("baseProfile")).toString();
 
    QSvgTinyDocument *node = new QSvgTinyDocument();
@@ -3446,8 +3487,9 @@ static QSvgNode *createSwitchNode(QSvgNode *parent,
                                   const QXmlStreamAttributes &attributes,
                                   QSvgHandler *)
 {
-   Q_UNUSED(attributes);
+   (void) attributes;
    QSvgSwitch *node = new QSvgSwitch(parent);
+
    return node;
 }
 
@@ -3502,6 +3544,8 @@ static bool parseTitleNode(QSvgNode *parent,
                            const QXmlStreamAttributes &attributes,
                            QSvgHandler *)
 {
+   (void) parent;
+   (void) attributes;
    return true;
 }
 
@@ -3562,7 +3606,9 @@ static QSvgNode *createVideoNode(QSvgNode *parent,
                                  const QXmlStreamAttributes &attributes,
                                  QSvgHandler *)
 {
-   return 0;
+   (void) parent;
+   (void) attributes;
+   return nullptr;
 }
 
 typedef QSvgNode *(*FactoryMethod)(QSvgNode *, const QXmlStreamAttributes &, QSvgHandler *);
@@ -4307,6 +4353,8 @@ bool QSvgHandler::processingInstruction(const QString &target, const QString &da
 
 void QSvgHandler::setAnimPeriod(int start, int end)
 {
+   (void) start;
+
    m_animEnd = qMax(end, m_animEnd);
 }
 

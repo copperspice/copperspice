@@ -64,7 +64,7 @@ void QSvgFillStyleProperty::revert(QPainter *, QSvgExtraStates &)
 
 QSvgQualityStyle::QSvgQualityStyle(int color)
 {
-
+   (void) color;
 }
 
 void QSvgQualityStyle::apply(QPainter *, const QSvgNode *, QSvgExtraStates &)
@@ -656,6 +656,7 @@ QSvgAnimateTransform::QSvgAnimateTransform(int startMs, int endMs, int byMs )
       m_repeatCount(-1.),
       m_transformApplied(false)
 {
+   (void) byMs;
 }
 
 void QSvgAnimateTransform::setArgs(TransformType type, Additive additive, const QVector<qreal> &args)
@@ -831,6 +832,7 @@ QSvgAnimateColor::QSvgAnimateColor(int startMs, int endMs, int byMs)
       m_freeze(false),
       m_repeatCount(-1.)
 {
+   (void) byMs;
 }
 
 void QSvgAnimateColor::setArgs(bool fill, const QList<QColor> &colors)

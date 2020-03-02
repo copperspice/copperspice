@@ -96,7 +96,7 @@ class AbstractFloatSortComparator : public AbstractFloatComparator
                  "Can only be instantiated with those two.");
 
       Q_ASSERT(op == t_op);
-      Q_UNUSED(op); /* Needed when building in release mode. */
+      (void) op;
 
       const xsDouble v1 = o1.template as<Numeric>()->toDouble();
       const xsDouble v2 = o2.template as<Numeric>()->toDouble();

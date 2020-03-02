@@ -203,7 +203,7 @@ typename XsdStateMachine<TransitionType>::StateId XsdStateMachine<TransitionType
 template <typename TransitionType>
 QString XsdStateMachine<TransitionType>::transitionTypeToString(TransitionType type) const
 {
-   Q_UNUSED(type)
+   (void) type;
 
    return QString();
 }

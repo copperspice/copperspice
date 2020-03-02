@@ -76,7 +76,7 @@ ConstructorFunctionsFactory::ConstructorFunctionsFactory(const NamePool::Ptr &np
 Expression::Ptr ConstructorFunctionsFactory::retrieveExpression(const QXmlName name,
                   const Expression::List &args, const FunctionSignature::Ptr &sign) const
 {
-   Q_UNUSED(sign);
+   (void) sign;
 
    /* This function is only called if the callsite is valid, so createSchemaType() will always
     * return an AtomicType. */
@@ -88,7 +88,7 @@ Expression::Ptr ConstructorFunctionsFactory::retrieveExpression(const QXmlName n
 FunctionSignature::Ptr ConstructorFunctionsFactory::retrieveFunctionSignature(const NamePool::Ptr &np,
                   const QXmlName name)
 {
-   Q_UNUSED(np);
+   (void) np;
    return functionSignatures().value(name);
 }
 

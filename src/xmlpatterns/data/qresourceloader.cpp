@@ -39,8 +39,10 @@ bool ResourceLoader::isUnparsedTextAvailable(const QUrl &uri,
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
-   Q_UNUSED(encoding);
+
+   (void) uri;
+   (void) encoding;
+
    return false;
 }
 
@@ -48,7 +50,9 @@ ItemType::Ptr ResourceLoader::announceUnparsedText(const QUrl &uri)
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
+
+   (void) uri;
+
    return ItemType::Ptr();
 }
 
@@ -59,10 +63,12 @@ Item ResourceLoader::openUnparsedText(const QUrl &uri,
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
-   Q_UNUSED(encoding);
-   Q_UNUSED(context);
-   Q_UNUSED(where);
+
+   (void) uri;
+   (void) encoding;
+   (void) context;
+   (void) where;
+
    return Item();
 }
 
@@ -71,8 +77,10 @@ Item ResourceLoader::openDocument(const QUrl &uri,
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
-   Q_UNUSED(context); /* Needed when compiling in release mode. */
+
+   (void) uri;
+   (void) context;
+
    return Item();
 }
 
@@ -80,7 +88,9 @@ SequenceType::Ptr ResourceLoader::announceDocument(const QUrl &uri, const Usage)
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
+
+   (void) uri;
+
    return SequenceType::Ptr();
 }
 
@@ -88,7 +98,9 @@ bool ResourceLoader::isDocumentAvailable(const QUrl &uri)
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
+
+   (void) uri;
+
    return false;
 }
 
@@ -96,7 +108,9 @@ Item::Iterator::Ptr ResourceLoader::openCollection(const QUrl &uri)
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
+
+   (void) uri;
+
    return Item::Iterator::Ptr();
 }
 
@@ -104,13 +118,15 @@ SequenceType::Ptr ResourceLoader::announceCollection(const QUrl &uri)
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
+
+   (void) uri;
+
    return SequenceType::Ptr();
 }
 
 void ResourceLoader::clear(const QUrl &uri)
 {
-   Q_UNUSED(uri);
+   (void) uri;
 }
 
 QT_END_NAMESPACE

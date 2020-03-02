@@ -1298,13 +1298,6 @@ typedef short int yytype_int16;
 # endif
 #endif
 
-/* Suppress unused-variable warnings by "using" E.  */
-#if ! defined lint || defined __GNUC__
-# define YYUSE(e) ((void) (e))
-#else
-# define YYUSE(e) /* empty */
-#endif
-
 /* Identity function, used to suppress warnings about constant conditions.  */
 #ifndef lint
 # define YYID(n) (n)
@@ -2863,18 +2856,23 @@ YYSTYPE const *const yyvaluep;
 YYLTYPE const *const yylocationp;
 ParserContext *const parseInfo;
 #endif
+
 {
    if (!yyvaluep) {
       return;
    }
-   YYUSE (yylocationp);
-   YYUSE (parseInfo);
+
+   (void) yylocationp;
+   (void) parseInfo;
+
 # ifdef YYPRINT
    if (yytype < YYNTOKENS) {
       YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
    }
+
 # else
-   YYUSE (yyoutput);
+   (void) yyoutput;
+
 # endif
    switch (yytype) {
       default:
@@ -3234,9 +3232,9 @@ YYLTYPE *yylocationp;
 ParserContext *const parseInfo;
 #endif
 {
-   YYUSE (yyvaluep);
-   YYUSE (yylocationp);
-   YYUSE (parseInfo);
+   (void) yyvaluep;
+   (void) yylocationp;
+   (void) parseInfo;
 
    if (!yymsg) {
       yymsg = "Deleting";

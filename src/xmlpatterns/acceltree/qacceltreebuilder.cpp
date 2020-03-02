@@ -343,7 +343,7 @@ void AccelTreeBuilder<FromDocument>::endDocument()
 template <bool FromDocument>
 void AccelTreeBuilder<FromDocument>::atomicValue(const QVariant &value)
 {
-   Q_UNUSED(value);
+   (void) value;
    // TODO
 }
 
@@ -360,7 +360,7 @@ QAbstractXmlNodeModel::Ptr AccelTreeBuilder<FromDocument>::builtDocument()
 template <bool FromDocument>
 NodeBuilder::Ptr AccelTreeBuilder<FromDocument>::create(const QUrl &baseURI) const
 {
-   Q_UNUSED(baseURI);
+   (void) baseURI;
    return NodeBuilder::Ptr(new AccelTreeBuilder(QUrl(), baseURI, m_namePool, m_context));
 }
 

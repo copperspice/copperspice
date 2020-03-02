@@ -262,7 +262,8 @@ SequenceType::Ptr AccelTreeResourceLoader::announceDocument(const QUrl &uri, con
    // TODO deal with the usage thingy
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
-   Q_UNUSED(uri); /* Needed when compiling in release mode. */
+
+   (void) uri;
 
    return CommonSequenceTypes::ZeroOrOneDocumentNode;
 }
@@ -386,7 +387,8 @@ void AccelTreeResourceLoader::clear(const QUrl &uri)
 
 void QPatternist::NetworkLoop::error(QNetworkReply::NetworkError code)
 {
-   Q_UNUSED(code);
+   (void) code;
+
    m_hasReceivedError = true;
    exit(1);
 }

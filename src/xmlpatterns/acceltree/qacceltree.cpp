@@ -350,7 +350,8 @@ QXmlNodeModelIndex AccelTree::nextFromSimpleAxis(QAbstractXmlNodeModel::SimpleAx
 QVector<QXmlNodeModelIndex> AccelTree::attributes(const QXmlNodeModelIndex &element) const
 {
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
-   Q_UNUSED(element);
+   (void) element;
+
    return QVector<QXmlNodeModelIndex>();
 }
 

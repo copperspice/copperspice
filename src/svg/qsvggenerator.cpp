@@ -817,8 +817,9 @@ void QSvgPaintEngine::drawImage(const QRectF &r, const QImage &image,
 {
    //Q_D(QSvgPaintEngine);
 
-   Q_UNUSED(sr);
-   Q_UNUSED(flags);
+   (void) sr;
+   (void) flags;
+
    stream() << "<image ";
    stream() << "x=\"" << r.x() << "\" "
             "y=\"" << r.y() << "\" "

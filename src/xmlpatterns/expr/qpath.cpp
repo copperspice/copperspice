@@ -52,7 +52,8 @@ Item::Iterator::Ptr Path::mapToSequence(const Item &item,
     * we don't use it, since the context item is accessed through
     * DynamicContext::focusIterator() and friends. */
    Q_ASSERT(item);
-   Q_UNUSED(item); /* Needed when compiling in release mode. */
+   (void) item;
+
    return m_operand2->evaluateSequence(context);
 }
 

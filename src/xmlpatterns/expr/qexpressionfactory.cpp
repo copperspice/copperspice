@@ -130,10 +130,8 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
 
    const int bisonRetval = XPathparse(info.data());
 
-   Q_ASSERT_X(bisonRetval == 0, Q_FUNC_INFO,
-              "We shouldn't be able to get an error, because we throw exceptions.");
-   Q_UNUSED(bisonRetval); /* Needed when not compiled in debug mode, since bisonRetval won't
-                            * be used in the Q_ASSERT_X above. */
+   Q_ASSERT_X(bisonRetval == 0, Q_FUNC_INFO, "Internal error in XML Parsing");
+   (void) bisonRetval;
 
    Expression::Ptr result(info->queryBody);
 
@@ -418,19 +416,19 @@ void ExpressionFactory::processTemplateRule(const Expression::Ptr &body,
       const QXmlName &mode,
       const TemplateCompilationStage stage)
 {
-   Q_UNUSED(body);
-   Q_UNUSED(pattern);
-   Q_UNUSED(mode);
-   Q_UNUSED(stage);
+   (void) body;
+   (void) pattern;
+   (void) mode;
+   (void) stage;
 }
 
 void ExpressionFactory::processNamedTemplate(const QXmlName &name,
       const Expression::Ptr &tree,
       const TemplateCompilationStage stage)
 {
-   Q_UNUSED(name);
-   Q_UNUSED(tree);
-   Q_UNUSED(stage);
+   (void) name;
+   (void) tree;
+   (void) stage;
 }
 
 } // namespace QPatternist

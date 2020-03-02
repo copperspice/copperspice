@@ -177,8 +177,7 @@ static void qt_graphicsItem_highlightSelected(
 void QGraphicsSvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                              QWidget *widget)
 {
-   //    Q_UNUSED(option);
-   Q_UNUSED(widget);
+   (void) widget;
 
    Q_D(QGraphicsSvgItem);
    if (!d->renderer->isValid()) {

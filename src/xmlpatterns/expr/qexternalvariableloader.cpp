@@ -41,8 +41,9 @@ SequenceType::Ptr ExternalVariableLoader::announceExternalVariable(const QXmlNam
 {
    Q_ASSERT(!name.isNull());
    Q_ASSERT(declaredType);
-   Q_UNUSED(name); /* Needed when compiling in release mode. */
-   Q_UNUSED(declaredType); /* Needed when compiling in release mode. */
+
+   (void) name;
+   (void) declaredType;
 
    return SequenceType::Ptr();
 }
