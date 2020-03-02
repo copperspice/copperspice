@@ -17,7 +17,6 @@
 #include <qlocalserver.h>
 #include <qlocalsocket.h>
 #include <qaccess_manager.h>
-#include <qnetwork_addressentry.h>
 #include <qnetwork_cachemetadata.h>
 #include <qnetworkconfigmanager.h>
 #include <qnetworkconfiguration.h>
@@ -25,7 +24,7 @@
 #include <qnetwork_cookie.h>
 #include <qnetwork_cookiejar.h>
 #include <qnetwork_diskcache.h>
-#include <qnetwork_interface.h>
+#include <qnetworkinterface.h>
 #include <qnetworkproxy.h>
 #include <qnetworkproxyfactory.h>
 #include <qnetworkproxyquery.h>
