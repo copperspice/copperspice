@@ -195,8 +195,8 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    QColor pixelColor(int x, int y) const;
    QColor pixelColor(const QPoint &pt) const;
 
-   void setPixelColor(int x, int y, const QColor &c);
-   void setPixelColor(const QPoint &pt, const QColor &c);
+   void setPixelColor(int x, int y, const QColor &color);
+   void setPixelColor(const QPoint &pt, const QColor &color);
    QVector<QRgb> colorTable() const;
    void setColorTable(const QVector<QRgb> &colors);
 
@@ -206,7 +206,6 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    void fill(uint pixel);
    void fill(const QColor &color);
    void fill(Qt::GlobalColor color);
-
 
    bool hasAlphaChannel() const;
    void setAlphaChannel(const QImage &alphaChannel);

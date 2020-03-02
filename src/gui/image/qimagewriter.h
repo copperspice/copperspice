@@ -76,9 +76,11 @@ class Q_GUI_EXPORT QImageWriter
    void setProgressiveScanWrite(bool progressive);
    bool progressiveScanWrite() const;
    QImageIOHandler::Transformations transformation() const;
-   void setTransformation(QImageIOHandler::Transformations orientation);
+   void setTransformation(QImageIOHandler::Transformations transform);
+
    // Obsolete as of 4.1
    void setDescription(const QString &description);
+
    QString description() const;
 
    void setText(const QString &key, const QString &text);

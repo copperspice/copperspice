@@ -285,9 +285,9 @@ class Q_CORE_EXPORT QUrl
       setFragment(fromEncodedComponent_helper(fragment));
    }
 
-   static QString fromAce(const QString &);
-   static QString fromAce(const QByteArray &);
-   static QByteArray toAce(const QString &);
+   static QString fromAce(const QString &domain);
+   static QString fromAce(const QByteArray &doamin);
+   static QByteArray toAce(const QString &domain);
 
    static QStringList idnWhitelist();
    static QStringList toStringList(const QList<QUrl> &urls, FormattingOptions options = FormattingOptions(PrettyDecoded));

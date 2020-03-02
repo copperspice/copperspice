@@ -169,7 +169,7 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator>>(quint64 &i);
    QTextStream &operator>>(float &f);
    QTextStream &operator>>(double &f);
-   QTextStream &operator>>(QString &s);
+   QTextStream &operator>>(QString &str);
    QTextStream &operator>>(QByteArray &array);
 
    QTextStream &operator<<(bool b);
@@ -186,14 +186,14 @@ class Q_CORE_EXPORT QTextStream
    QTextStream &operator<<(float f);
    QTextStream &operator<<(double f);
 
-   QTextStream &operator<<(const QString &s);
-   QTextStream &operator<<(const QStringView &s);
+   QTextStream &operator<<(const QString &str);
+   QTextStream &operator<<(const QStringView &str);
    QTextStream &operator<<(const QByteArray &array);
 
    QTextStream &operator<<(const void *ptr);
 
-   QTextStream &operator<<(const char *s) {
-      return *this << QString::fromLatin1(s);
+   QTextStream &operator<<(const char *str) {
+      return *this << QString::fromLatin1(str);
    }
 
  protected:

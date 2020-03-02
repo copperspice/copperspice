@@ -327,7 +327,7 @@ class Q_CORE_EXPORT QXmlStreamReader
    TokenType tokenType() const;
    QString tokenString() const;
 
-   void setNamespaceProcessing(bool);
+   void setNamespaceProcessing(bool enable);
    bool namespaceProcessing() const;
 
    inline bool isStartDocument() const {

@@ -67,17 +67,17 @@ static void qt_polygon_isect_line(const QPointF &p1, const QPointF &p2, const QP
    }
 }
 
-
-
-QPolygon::QPolygon(const QRect &r, bool closed)
+QPolygon::QPolygon(const QRect &rectangle, bool closed)
 {
    reserve(closed ? 5 : 4);
-   *this << QPoint(r.x(), r.y())
-      << QPoint(r.x() + r.width(), r.y())
-      << QPoint(r.x() + r.width(), r.y() + r.height())
-      << QPoint(r.x(), r.y() + r.height());
+
+   *this << QPoint(rectangle.x(), rectangle.y())
+      << QPoint(rectangle.x() + rectangle.width(), rectangle.y())
+      << QPoint(rectangle.x() + rectangle.width(), rectangle.y() + rectangle.height())
+      << QPoint(rectangle.x(), rectangle.y() + rectangle.height());
+
    if (closed) {
-      *this << QPoint(r.left(), r.top());
+      *this << QPoint(rectangle.left(), rectangle.top());
    }
 }
 
@@ -289,22 +289,23 @@ QDebug operator<<(QDebug dbg, const QPolygon &a)
    return dbg;
 }
 
-QPolygonF::QPolygonF(const QRectF &r)
+QPolygonF::QPolygonF(const QRectF &rectangle)
 {
    reserve(5);
-   append(QPointF(r.x(), r.y()));
-   append(QPointF(r.x() + r.width(), r.y()));
-   append(QPointF(r.x() + r.width(), r.y() + r.height()));
-   append(QPointF(r.x(), r.y() + r.height()));
-   append(QPointF(r.x(), r.y()));
+
+   append(QPointF(rectangle.x(), rectangle.y()));
+   append(QPointF(rectangle.x() + rectangle.width(), rectangle.y()));
+   append(QPointF(rectangle.x() + rectangle.width(), rectangle.y() + rectangle.height()));
+   append(QPointF(rectangle.x(), rectangle.y() + rectangle.height()));
+   append(QPointF(rectangle.x(), rectangle.y()));
 }
 
-
-QPolygonF::QPolygonF(const QPolygon &a)
+QPolygonF::QPolygonF(const QPolygon &polygon)
 {
-   reserve(a.size());
-   for (int i = 0; i < a.size(); ++i) {
-      append(a.at(i));
+   reserve(polygon.size());
+
+   for (int i = 0; i < polygon.size(); ++i) {
+      append(polygon.at(i));
    }
 }
 
@@ -382,53 +383,55 @@ QPolygon::operator QVariant() const
    return QVariant(QVariant::Polygon, this);
 }
 
-QDataStream &operator<<(QDataStream &s, const QPolygon &a)
+QDataStream &operator<<(QDataStream &s, const QPolygon &polygon)
 {
-   const QVector<QPoint> &v = a;
+   const QVector<QPoint> &v = polygon;
    return s << v;
 }
 
-
-QDataStream &operator>>(QDataStream &s, QPolygon &a)
+QDataStream &operator>>(QDataStream &s, QPolygon &polygon)
 {
-   QVector<QPoint> &v = a;
-   return s >> v;
+   QVector<QPoint> &tmp = polygon;
+   return s >> tmp;
 }
 
-QDataStream &operator<<(QDataStream &s, const QPolygonF &a)
+QDataStream &operator<<(QDataStream &s, const QPolygonF &polygon)
 {
-   quint32 len = a.size();
+   quint32 len = polygon.size();
    uint i;
 
    s << len;
    for (i = 0; i < len; ++i) {
-      s << a.at(i);
+      s << polygon.at(i);
    }
+
    return s;
 }
 
-QDataStream &operator>>(QDataStream &s, QPolygonF &a)
+QDataStream &operator>>(QDataStream &s, QPolygonF &polygon)
 {
    quint32 len;
    uint i;
 
    s >> len;
-   a.reserve(a.size() + (int)len);
+   polygon.reserve(polygon.size() + (int)len);
    QPointF p;
+
    for (i = 0; i < len; ++i) {
       s >> p;
-      a.insert(i, p);
+      polygon.insert(i, p);
    }
+
    return s;
 }
 
-QDebug operator<<(QDebug dbg, const QPolygonF &a)
+QDebug operator<<(QDebug dbg, const QPolygonF &polygon)
 {
    QDebugStateSaver saver(dbg);
    dbg.nospace() << "QPolygonF(";
 
-   for (int i = 0; i < a.count(); ++i) {
-      dbg.nospace() << a.at(i);
+   for (int i = 0; i < polygon.count(); ++i) {
+      dbg.nospace() << polygon.at(i);
    }
    dbg.nospace() << ')';
 
@@ -505,13 +508,13 @@ bool QPolygon::containsPoint(const QPoint &pt, Qt::FillRule fillRule) const
     \sa intersected(), subtracted()
 */
 
-QPolygon QPolygon::united(const QPolygon &r) const
+QPolygon QPolygon::united(const QPolygon &rectangle) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
 
    QPainterPath clip;
-   clip.addPolygon(r);
+   clip.addPolygon(rectangle);
 
    return subject.united(clip).toFillPolygon().toPolygon();
 }
@@ -530,46 +533,46 @@ QPolygon QPolygon::intersected(const QPolygon &r) const
    return subject.intersected(clip).toFillPolygon().toPolygon();
 }
 
-QPolygon QPolygon::subtracted(const QPolygon &r) const
+QPolygon QPolygon::subtracted(const QPolygon &rectangle) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
 
    QPainterPath clip;
-   clip.addPolygon(r);
+   clip.addPolygon(rectangle);
 
    return subject.subtracted(clip).toFillPolygon().toPolygon();
 }
 
-QPolygonF QPolygonF::united(const QPolygonF &r) const
+QPolygonF QPolygonF::united(const QPolygonF &rectangle) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
 
    QPainterPath clip;
-   clip.addPolygon(r);
+   clip.addPolygon(rectangle);
 
    return subject.united(clip).toFillPolygon();
 }
 
-QPolygonF QPolygonF::intersected(const QPolygonF &r) const
+QPolygonF QPolygonF::intersected(const QPolygonF &rectangle) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
 
    QPainterPath clip;
-   clip.addPolygon(r);
+   clip.addPolygon(rectangle);
 
    return subject.intersected(clip).toFillPolygon();
 }
 
-QPolygonF QPolygonF::subtracted(const QPolygonF &r) const
+QPolygonF QPolygonF::subtracted(const QPolygonF &rectangle) const
 {
    QPainterPath subject;
    subject.addPolygon(*this);
 
    QPainterPath clip;
-   clip.addPolygon(r);
+   clip.addPolygon(rectangle);
    return subject.subtracted(clip).toFillPolygon();
 }
 

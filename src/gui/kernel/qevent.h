@@ -213,25 +213,33 @@ class Q_GUI_EXPORT QWheelEvent : public QInputEvent
 {
  public:
    enum { DefaultDeltasPerStep = 120 };
+
    QWheelEvent(const QPointF &pos, int delta,
       Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
       Qt::Orientation orient = Qt::Vertical);
-   QWheelEvent(const QPointF &pos, const QPointF &globalPos, int delta,
+
+   QWheelEvent(const QPointF &pos, const QPointF &globalPosition, int delta,
       Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
       Qt::Orientation orient = Qt::Vertical);
-   QWheelEvent(const QPointF &pos, const QPointF &globalPos,
+
+   QWheelEvent(const QPointF &pos, const QPointF &globalPosition,
       QPoint pixelDelta, QPoint angleDelta, int qt4Delta, Qt::Orientation qt4Orientation,
       Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers);
-   QWheelEvent(const QPointF &pos, const QPointF &globalPos,
+
+   QWheelEvent(const QPointF &pos, const QPointF &globalPosition,
       QPoint pixelDelta, QPoint angleDelta, int qt4Delta, Qt::Orientation qt4Orientation,
       Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase);
-   QWheelEvent(const QPointF &pos, const QPointF &globalPos, QPoint pixelDelta, QPoint angleDelta,
+
+   QWheelEvent(const QPointF &pos, const QPointF &globalPosition, QPoint pixelDelta, QPoint angleDelta,
       int qt4Delta, Qt::Orientation qt4Orientation, Qt::MouseButtons buttons,
       Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase, Qt::MouseEventSource source);
+
    ~QWheelEvent();
+
    inline QPoint pixelDelta() const {
       return pixelD;
    }
+
    inline QPoint angleDelta() const {
       return angleD;
    }
@@ -312,12 +320,12 @@ class Q_GUI_EXPORT QTabletEvent : public QInputEvent
    };
 
    enum PointerType { UnknownPointer, Pen, Cursor, Eraser };
-   QTabletEvent(Type t, const QPointF &pos, const QPointF &globalPos,
+   QTabletEvent(Type t, const QPointF &pos, const QPointF &globalPosition,
       int device, int pointerType, qreal pressure, int xTilt, int yTilt,
       qreal tangentialPressure, qreal rotation, int z,
       Qt::KeyboardModifiers keyState, qint64 uniqueID);
 
-   QTabletEvent(Type t, const QPointF &pos, const QPointF &globalPos,
+   QTabletEvent(Type t, const QPointF &pos, const QPointF &globalPosition,
       int device, int pointerType, qreal pressure, int xTilt, int yTilt,
       qreal tangentialPressure, qreal rotation, int z,
       Qt::KeyboardModifiers keyState, qint64 uniqueID,
@@ -661,10 +669,12 @@ class Q_GUI_EXPORT QContextMenuEvent : public QInputEvent
  public:
    enum Reason { Mouse, Keyboard, Other };
 
-   QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos,
+   QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPosition,
       Qt::KeyboardModifiers modifiers);
-   QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos);
+
+   QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPosition);
    QContextMenuEvent(Reason reason, const QPoint &pos);
+
    ~QContextMenuEvent();
 
    inline int x() const {
@@ -890,7 +900,7 @@ class Q_GUI_EXPORT QDragLeaveEvent : public QEvent
 class Q_GUI_EXPORT QHelpEvent : public QEvent
 {
  public:
-   QHelpEvent(Type type, const QPoint &pos, const QPoint &globalPos);
+   QHelpEvent(Type type, const QPoint &pos, const QPoint &globalPosition);
    ~QHelpEvent();
 
    inline int x() const {
@@ -928,6 +938,7 @@ class Q_GUI_EXPORT QStatusTipEvent : public QEvent
    inline QString tip() const {
       return s;
    }
+
  private:
    QString s;
 };
