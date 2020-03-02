@@ -27,14 +27,11 @@
 
 #include "qexternalvariableloader_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ExternalVariableLoader::~ExternalVariableLoader()
 {
 }
-
 
 SequenceType::Ptr ExternalVariableLoader::announceExternalVariable(const QXmlName name,
       const SequenceType::Ptr &declaredType)
@@ -75,4 +72,3 @@ bool ExternalVariableLoader::evaluateEBV(const QXmlName name,
    return Boolean::evaluateEBV(evaluateSequence(name, context), context);
 }
 
-QT_END_NAMESPACE

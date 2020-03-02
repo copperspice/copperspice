@@ -21,6 +21,8 @@
 *
 ***********************************************************************/
 
+#include "qconstructorfunctionsfactory_p.h"
+
 #include "qatomictype_p.h"
 #include "qbuiltintypes_p.h"
 #include "qcastas_p.h"
@@ -31,10 +33,6 @@
 #include "qgenericsequencetype_p.h"
 #include "qschematype_p.h"
 #include "qschematypefactory_p.h"
-
-#include "qconstructorfunctionsfactory_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -91,5 +89,3 @@ FunctionSignature::Ptr ConstructorFunctionsFactory::retrieveFunctionSignature(co
    (void) np;
    return functionSignatures().value(name);
 }
-
-QT_END_NAMESPACE

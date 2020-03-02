@@ -23,10 +23,7 @@
 
 #include <QUrl>
 
-
-#include "qresourceloader_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qresourceloader_p.h>
 
 using namespace QPatternist;
 
@@ -72,8 +69,7 @@ Item ResourceLoader::openUnparsedText(const QUrl &uri,
    return Item();
 }
 
-Item ResourceLoader::openDocument(const QUrl &uri,
-                                  const ReportContext::Ptr &context)
+Item ResourceLoader::openDocument(const QUrl &uri, const ReportContext::Ptr &context)
 {
    Q_ASSERT(uri.isValid());
    Q_ASSERT(!uri.isRelative());
@@ -129,4 +125,3 @@ void ResourceLoader::clear(const QUrl &uri)
    (void) uri;
 }
 
-QT_END_NAMESPACE

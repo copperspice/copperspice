@@ -119,7 +119,8 @@ class Q_CORE_EXPORT QXmlStreamAttribute
 class Q_CORE_EXPORT QXmlStreamAttributes : public QVector<QXmlStreamAttribute>
 {
  public:
-   inline QXmlStreamAttributes() {}
+   QXmlStreamAttributes()
+   { }
 
    QStringView value(const QString &namespaceUri, const QString &name) const;
    QStringView value(const QString &qualifiedName) const;

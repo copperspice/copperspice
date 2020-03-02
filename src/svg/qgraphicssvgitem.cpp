@@ -23,15 +23,14 @@
 
 #include "qgraphicssvgitem.h"
 
-#if !defined(QT_NO_GRAPHICSVIEW) && ! defined(QT_NO_SVGWIDGET)
+#if ! defined(QT_NO_GRAPHICSVIEW) && ! defined(QT_NO_SVGWIDGET)
 
 #include <qpainter.h>
 #include <qstyleoption.h>
 #include <qsvgrenderer.h>
 #include <qdebug.h>
+
 #include <qgraphicsitem_p.h>
-
-
 
 class QGraphicsSvgItemPrivate : public QGraphicsItemPrivate
 {
@@ -171,11 +170,7 @@ static void qt_graphicsItem_highlightSelected(
    painter->drawRect(item->boundingRect().adjusted(pad, pad, -pad, -pad));
 }
 
-/*!
-    \reimp
-*/
-void QGraphicsSvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                             QWidget *widget)
+void QGraphicsSvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
    (void) widget;
 
@@ -195,9 +190,6 @@ void QGraphicsSvgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
    }
 }
 
-/*!
-    \reimp
-*/
 int QGraphicsSvgItem::type() const
 {
    return Type;

@@ -35,8 +35,6 @@
 
 class QUrl;
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template<typename TokenLookupClass, typename LookupKey = typename TokenLookupClass::NodeName>
@@ -53,7 +51,6 @@ template<typename TokenLookupClass, typename LookupKey = typename TokenLookupCla
 class MaintainingReader : public QXmlStreamReader, protected TokenLookupClass
 {
  protected:
-
    MaintainingReader(const typename ElementDescription<TokenLookupClass, LookupKey>::Hash &elementDescriptions,
                      const QSet<typename TokenLookupClass::NodeName> &standardAttributes,
                      const ReportContext::Ptr &context, QIODevice *const queryDevice);
@@ -62,110 +59,37 @@ class MaintainingReader : public QXmlStreamReader, protected TokenLookupClass
 
    QXmlStreamReader::TokenType readNext();
 
-   /**
-    * Returns the name of the current element.
-    */
    inline typename TokenLookupClass::NodeName currentElementName() const;
-
-   /**
-    * @short Convenience function for calling ReportContext::error().
-    */
    void error(const QString &message, const ReportContext::ErrorCode code) const;
-
-   /**
-    * @short Convenience function for calling ReportContext::warning().
-    */
    void warning(const QString &message) const;
 
-   /**
-    * @short Returns the location of the document that MaintainingReader
-    * is parsing. Used for error reporting
-    */
    virtual QUrl documentURI() const = 0;
-
-   /**
-    * @short Returns @c true, if any attribute is allowed on the
-    * element currently being validated.
-    */
    virtual bool isAnyAttributeAllowed() const = 0;
 
-   /**
-    * QXmlStreamReader::isWhitespace() returns true for whitespace that is
-    * not expressed as character references, while XSL-T operatates ontop
-    * of the XDM, which means we needs to return true for those too.
-    *
-    * @see <a href="http://www.w3.org/TR/xslt20/#data-model">4 Data Model</a>
-    */
    bool isWhitespace() const;
-
-   /**
-    * This function is not merged with handleStandardAttributes() because
-    * handleStandardAttributes() needs to be called for all elements,
-    * while validateElement() only applies to XSL-T elements.
-    *
-    * @see handleStandardAttributes()
-    */
    void validateElement(const LookupKey name) const;
-
-   QXmlStreamAttributes                                                    m_currentAttributes;
-
-   bool                                                                    m_hasHandledStandardAttributes;
-
-   /**
-    * This stack mirrors the depth of elements in the parsed document. If
-    * no @c xml:space is present on the current element, MaintainingReader
-    * simply pushes the current top(). However, it never sets the value
-    * depending on @c xml:space's value.
-    */
-   QStack<bool>                                                            m_stripWhitespace;
-
-   /**
-    * @short Returns the value for attribute by name \a name.
-    *
-    * If it doesn't exist, an error is raised.
-    *
-    * It is assumed that m_reader's current state is
-    * QXmlStreamReader::StartElement.
-    */
-   QString readAttribute(const QString &localName,
-                         const QString &namespaceURI = QString()) const;
-
-   /**
-    * @short Returns @c true if the current element has an attribute whose
-    * name is @p namespaceURI and local name is @p localName.
-    */
+   QString readAttribute(const QString &localName, const QString &namespaceURI = QString()) const;
    bool hasAttribute(const QString &namespaceURI, const QString &localName) const;
-
-   /**
-    * @short Returns @c true if the current element has an attribute whose
-    * local name is @p localName and namespace URI is null.
-    */
    inline bool hasAttribute(const QString &localName) const;
 
+   QXmlStreamAttributes m_currentAttributes;
+   bool m_hasHandledStandardAttributes;
+   QStack<bool> m_stripWhitespace;
+
  private:
-   typename TokenLookupClass::NodeName                                     m_currentElementName;
+   Q_DISABLE_COPY(MaintainingReader)
 
-   /**
-    * This member is private, see the error() and warning() functions in
-    * this class.
-    */
-   const ReportContext::Ptr                                                m_context;
-
-   /**
-    * Returns the current location that QXmlStreamReader has.
-    */
    inline QSourceLocation currentLocation() const;
 
-   const typename ElementDescription<TokenLookupClass, LookupKey>::Hash    m_elementDescriptions;
-   const QSet<typename TokenLookupClass::NodeName>                         m_standardAttributes;
-   Q_DISABLE_COPY(MaintainingReader)
+   typename TokenLookupClass::NodeName m_currentElementName;
+   const ReportContext::Ptr m_context;
+   const typename ElementDescription<TokenLookupClass, LookupKey>::Hash m_elementDescriptions;
+   const QSet<typename TokenLookupClass::NodeName> m_standardAttributes;
 };
 
 #include "qmaintainingreader.cpp"
 
 }
-
-QT_END_NAMESPACE
 
 #endif
 

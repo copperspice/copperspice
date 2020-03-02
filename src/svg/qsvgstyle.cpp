@@ -21,30 +21,23 @@
 *
 ***********************************************************************/
 
-#include "qsvgstyle_p.h"
+#include <qsvgstyle_p.h>
 
-#include "qsvgfont_p.h"
-#include "qsvggraphics_p.h"
-#include "qsvgnode_p.h"
-#include "qsvgtinydocument_p.h"
+#include <qpainter.h>
+#include <qpair.h>
+#include <qcolor.h>
+#include <qdebug.h>
+#include <qmath.h>
+#include <qnumeric.h>
 
-#include "qpainter.h"
-#include "qpair.h"
-#include "qcolor.h"
-#include "qdebug.h"
-#include "qmath.h"
-#include "qnumeric.h"
-
+#include <qsvgtinydocument_p.h>
+#include <qsvgfont_p.h>
+#include <qsvggraphics_p.h>
+#include <qsvgnode_p.h>
 
 QSvgExtraStates::QSvgExtraStates()
-   : fillOpacity(1.0)
-   , strokeOpacity(1.0)
-   , svgFont(0)
-   , textAnchor(Qt::AlignLeft)
-   , fontWeight(400)
-   , fillRule(Qt::WindingFill)
-   , strokeDashOffset(0)
-   , vectorEffect(false)
+   : fillOpacity(1.0), strokeOpacity(1.0), svgFont(0), textAnchor(Qt::AlignLeft), fontWeight(400)
+   , fillRule(Qt::WindingFill), strokeDashOffset(0), vectorEffect(false)
 {
 }
 
@@ -54,12 +47,12 @@ QSvgStyleProperty::~QSvgStyleProperty()
 
 void QSvgFillStyleProperty::apply(QPainter *, const QSvgNode *, QSvgExtraStates &)
 {
-   Q_ASSERT(!"This should not be called!");
+   Q_ASSERT(! "This method should not be called");
 }
 
 void QSvgFillStyleProperty::revert(QPainter *, QSvgExtraStates &)
 {
-   Q_ASSERT(!"This should not be called!");
+   Q_ASSERT(! "This method should not be called");
 }
 
 QSvgQualityStyle::QSvgQualityStyle(int color)
@@ -69,23 +62,16 @@ QSvgQualityStyle::QSvgQualityStyle(int color)
 
 void QSvgQualityStyle::apply(QPainter *, const QSvgNode *, QSvgExtraStates &)
 {
-
 }
+
 void QSvgQualityStyle::revert(QPainter *, QSvgExtraStates &)
 {
 
 }
 
 QSvgFillStyle::QSvgFillStyle()
-   : m_style(0)
-   , m_fillRule(Qt::WindingFill)
-   , m_oldFillRule(Qt::WindingFill)
-   , m_fillOpacity(1.0)
-   , m_oldFillOpacity(0)
-   , m_gradientResolved(1)
-   , m_fillRuleSet(0)
-   , m_fillOpacitySet(0)
-   , m_fillSet(0)
+   : m_style(0), m_fillRule(Qt::WindingFill), m_oldFillRule(Qt::WindingFill), m_fillOpacity(1.0)
+   , m_oldFillOpacity(0), m_gradientResolved(1), m_fillRuleSet(0), m_fillOpacitySet(0), m_fillSet(0)
 {
 }
 
@@ -123,14 +109,14 @@ void QSvgFillStyle::apply(QPainter *p, const QSvgNode *, QSvgExtraStates &states
    if (m_fillRuleSet) {
       states.fillRule = m_fillRule;
    }
+
    if (m_fillSet) {
       if (m_style) {
          p->setBrush(m_style->brush(p, states));
       } else {
          p->setBrush(m_fill);
       }
-   }
-   if (m_fillOpacitySet) {
+   }   if (m_fillOpacitySet) {
       states.fillOpacity = m_fillOpacity;
    }
 }
@@ -165,26 +151,14 @@ void QSvgViewportFillStyle::revert(QPainter *p, QSvgExtraStates &)
 }
 
 QSvgFontStyle::QSvgFontStyle(QSvgFont *font, QSvgTinyDocument *doc)
-   : m_svgFont(font)
-   , m_doc(doc)
-   , m_familySet(0)
-   , m_sizeSet(0)
-   , m_styleSet(0)
-   , m_variantSet(0)
-   , m_weightSet(0)
-   , m_textAnchorSet(0)
+   : m_svgFont(font), m_doc(doc), m_familySet(0), m_sizeSet(0), m_styleSet(0)
+   , m_variantSet(0), m_weightSet(0), m_textAnchorSet(0)
 {
 }
 
 QSvgFontStyle::QSvgFontStyle()
-   : m_svgFont(0)
-   , m_doc(0)
-   , m_familySet(0)
-   , m_sizeSet(0)
-   , m_styleSet(0)
-   , m_variantSet(0)
-   , m_weightSet(0)
-   , m_textAnchorSet(0)
+   : m_svgFont(0), m_doc(0), m_familySet(0), m_sizeSet(0), m_styleSet(0)
+   , m_variantSet(0), m_weightSet(0), m_textAnchorSet(0)
 {
 }
 
@@ -194,18 +168,23 @@ int QSvgFontStyle::SVGToQtWeight(int weight)
       case 100:
       case 200:
          return QFont::Light;
+
       case 300:
       case 400:
          return QFont::Normal;
+
       case 500:
       case 600:
          return QFont::DemiBold;
+
       case 700:
       case 800:
          return QFont::Bold;
+
       case 900:
          return QFont::Black;
    }
+
    return QFont::Normal;
 }
 
@@ -261,23 +240,10 @@ void QSvgFontStyle::revert(QPainter *p, QSvgExtraStates &states)
 }
 
 QSvgStrokeStyle::QSvgStrokeStyle()
-   : m_strokeOpacity(1.0)
-   , m_oldStrokeOpacity(0.0)
-   , m_strokeDashOffset(0)
-   , m_oldStrokeDashOffset(0)
-   , m_style(0)
-   , m_gradientResolved(1)
-   , m_vectorEffect(0)
-   , m_oldVectorEffect(0)
-   , m_strokeSet(0)
-   , m_strokeDashArraySet(0)
-   , m_strokeDashOffsetSet(0)
-   , m_strokeLineCapSet(0)
-   , m_strokeLineJoinSet(0)
-   , m_strokeMiterLimitSet(0)
-   , m_strokeOpacitySet(0)
-   , m_strokeWidthSet(0)
-   , m_vectorEffectSet(0)
+   : m_strokeOpacity(1.0), m_oldStrokeOpacity(0.0), m_strokeDashOffset(0), m_oldStrokeDashOffset(0)
+   , m_style(0), m_gradientResolved(1), m_vectorEffect(0), m_oldVectorEffect(0), m_strokeSet(0)
+   , m_strokeDashArraySet(0), m_strokeDashOffsetSet(0), m_strokeLineCapSet(0), m_strokeLineJoinSet(0)
+   , m_strokeMiterLimitSet(0), m_strokeOpacitySet(0), m_strokeWidthSet(0), m_vectorEffectSet(0)
 {
 }
 
@@ -343,6 +309,7 @@ void QSvgStrokeStyle::apply(QPainter *p, const QSvgNode *, QSvgExtraStates &stat
          pen.setDashPattern(dashes);
          setDashOffsetNeeded = true;
       }
+
    } else if (m_strokeWidthSet && pen.style() != Qt::SolidLine && scale != 1) {
       // If the width was set, but not the dash array, the old dash array must be scaled with respect to the new width.
       QVector<qreal> dashes = pen.dashPattern();
@@ -398,9 +365,11 @@ void QSvgStrokeStyle::setDashArray(const QVector<qreal> &dashes)
          }
       }
       m_stroke.setDashPattern(d);
+
    } else {
       m_stroke.setDashPattern(dashes);
    }
+
    m_strokeDashArraySet = 1;
 }
 
@@ -416,7 +385,7 @@ QSvgGradientStyle::QSvgGradientStyle(QGradient *grad)
 
 QBrush QSvgGradientStyle::brush(QPainter *, QSvgExtraStates &)
 {
-   if (!m_link.isEmpty()) {
+   if (! m_link.isEmpty()) {
       resolveStops();
    }
 
@@ -554,7 +523,7 @@ void QSvgStyle::apply(QPainter *p, const QSvgNode *node, QSvgExtraStates &states
 
    //animated transforms have to be applied
    //_after_ the original object transformations
-   if (!animateTransforms.isEmpty()) {
+   if (! animateTransforms.isEmpty()) {
       qreal totalTimeElapsed = node->document()->currentElapsed();
       // Find the last animateTransform with additive="replace", since this will override all
       // previous animateTransforms.
@@ -644,17 +613,10 @@ void QSvgStyle::revert(QPainter *p, QSvgExtraStates &states)
    }
 }
 
-QSvgAnimateTransform::QSvgAnimateTransform(int startMs, int endMs, int byMs )
-   : QSvgStyleProperty(),
-      m_from(startMs),
-      m_totalRunningTime(endMs - startMs),
-      m_type(Empty),
-      m_additive(Replace),
-      m_count(0),
-      m_finished(false),
-      m_freeze(false),
-      m_repeatCount(-1.),
-      m_transformApplied(false)
+QSvgAnimateTransform::QSvgAnimateTransform(int startMs, int endMs, int byMs)
+   : QSvgStyleProperty(), m_from(startMs),m_totalRunningTime(endMs - startMs), m_type(Empty),
+      m_additive(Replace), m_count(0), m_finished(false), m_freeze(false),
+      m_repeatCount(-1.), m_transformApplied(false)
 {
    (void) byMs;
 }
@@ -824,20 +786,15 @@ void QSvgAnimateTransform::setRepeatCount(qreal repeatCount)
 }
 
 QSvgAnimateColor::QSvgAnimateColor(int startMs, int endMs, int byMs)
-   : QSvgStyleProperty(),
-      m_from(startMs),
-      m_totalRunningTime(endMs - startMs),
-      m_fill(false),
-      m_finished(false),
-      m_freeze(false),
-      m_repeatCount(-1.)
+   : QSvgStyleProperty(), m_from(startMs), m_totalRunningTime(endMs - startMs),
+      m_fill(false), m_finished(false), m_freeze(false), m_repeatCount(-1.)
 {
    (void) byMs;
 }
 
 void QSvgAnimateColor::setArgs(bool fill, const QList<QColor> &colors)
 {
-   m_fill = fill;
+   m_fill   = fill;
    m_colors = colors;
 }
 

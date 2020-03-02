@@ -35,13 +35,9 @@ QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
-Path::Path(const Expression::Ptr &operand1,
-           const Expression::Ptr &operand2,
-           const Kind kind) : PairContainer(operand1, operand2)
-   , m_hasCreatedSorter(kind != RegularPath)
-   , m_isLast(false)
-   , m_checkXPTY0018(kind == RegularPath)
-   , m_kind(kind)
+Path::Path(const Expression::Ptr &operand1, const Expression::Ptr &operand2, const Kind kind)
+   : PairContainer(operand1, operand2), m_hasCreatedSorter(kind != RegularPath),
+     m_isLast(false), m_checkXPTY0018(kind == RegularPath), m_kind(kind)
 {
 }
 
