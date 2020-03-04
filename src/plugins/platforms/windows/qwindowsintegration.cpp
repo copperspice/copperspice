@@ -280,7 +280,7 @@ QPlatformWindow *QWindowsIntegration::createPlatformWindow(QWindow *window) cons
    const QVariant customMarginsV = window->property("_q_windowsCustomMargins");
 
    if (customMarginsV.isValid()) {
-      requested.customMargins = qvariant_cast<QMargins>(customMarginsV);
+      requested.customMargins = customMarginsV.value<QMargins>();
    }
 
    QWindowsWindowData obtained = QWindowsWindowData::create(window, requested, window->title());

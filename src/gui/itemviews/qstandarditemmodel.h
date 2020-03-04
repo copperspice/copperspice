@@ -52,73 +52,75 @@ class Q_GUI_EXPORT QStandardItem
    virtual void setData(const QVariant &value, int role = Qt::UserRole + 1);
 
    inline QString text() const {
-      return qvariant_cast<QString>(data(Qt::DisplayRole));
+      return (data(Qt::DisplayRole)).value<QString>();
    }
+
    inline void setText(const QString &text);
 
    inline QIcon icon() const {
-      return qvariant_cast<QIcon>(data(Qt::DecorationRole));
+      return (data(Qt::DecorationRole)).value<QIcon>();
    }
+
    inline void setIcon(const QIcon &icon);
 
 #ifndef QT_NO_TOOLTIP
    inline QString toolTip() const {
-      return qvariant_cast<QString>(data(Qt::ToolTipRole));
+      return (data(Qt::ToolTipRole)).value<QString>();
    }
    inline void setToolTip(const QString &toolTip);
 #endif
 
 #ifndef QT_NO_STATUSTIP
    inline QString statusTip() const {
-      return qvariant_cast<QString>(data(Qt::StatusTipRole));
+      return (data(Qt::StatusTipRole)).value<QString>();
    }
    inline void setStatusTip(const QString &statusTip);
 #endif
 
 #ifndef QT_NO_WHATSTHIS
    inline QString whatsThis() const {
-      return qvariant_cast<QString>(data(Qt::WhatsThisRole));
+      return (data(Qt::WhatsThisRole)).value<QString>();
    }
    inline void setWhatsThis(const QString &whatsThis);
 #endif
 
    inline QSize sizeHint() const {
-      return qvariant_cast<QSize>(data(Qt::SizeHintRole));
+      return (data(Qt::SizeHintRole)).value<QSize>();
    }
    inline void setSizeHint(const QSize &sizeHint);
 
    inline QFont font() const {
-      return qvariant_cast<QFont>(data(Qt::FontRole));
+      return (data(Qt::FontRole)).value<QFont>();
    }
    inline void setFont(const QFont &font);
 
    inline Qt::Alignment textAlignment() const {
-      return Qt::Alignment(qvariant_cast<int>(data(Qt::TextAlignmentRole)));
+      return Qt::Alignment((data(Qt::TextAlignmentRole)).value<int>());
    }
    inline void setTextAlignment(Qt::Alignment textAlignment);
 
    inline QBrush background() const {
-      return qvariant_cast<QBrush>(data(Qt::BackgroundRole));
+      return (data(Qt::BackgroundRole)).value<QBrush>();
    }
    inline void setBackground(const QBrush &brush);
 
    inline QBrush foreground() const {
-      return qvariant_cast<QBrush>(data(Qt::ForegroundRole));
+      return (data(Qt::ForegroundRole)).value<QBrush>();
    }
    inline void setForeground(const QBrush &brush);
 
    inline Qt::CheckState checkState() const {
-      return Qt::CheckState(qvariant_cast<int>(data(Qt::CheckStateRole)));
+      return Qt::CheckState((data(Qt::CheckStateRole)).value<int>());
    }
    inline void setCheckState(Qt::CheckState checkState);
 
    inline QString accessibleText() const {
-      return qvariant_cast<QString>(data(Qt::AccessibleTextRole));
+      return (data(Qt::AccessibleTextRole)).value<QString>();
    }
    inline void setAccessibleText(const QString &accessibleText);
 
    inline QString accessibleDescription() const {
-      return qvariant_cast<QString>(data(Qt::AccessibleDescriptionRole));
+      return (data(Qt::AccessibleDescriptionRole)).value<QString>();
    }
    inline void setAccessibleDescription(const QString &accessibleDescription);
 

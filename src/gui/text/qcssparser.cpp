@@ -418,13 +418,16 @@ static int lengthValueFromData(const LengthData &data, const QFont &f)
 int ValueExtractor::lengthValue(const Declaration &decl)
 {
    if (decl.d->parsed.isValid()) {
-      return  lengthValueFromData(qvariant_cast<LengthData>(decl.d->parsed), f);
+      return lengthValueFromData((decl.d->parsed).value<LengthData>(), f);
    }
+
    if (decl.d->values.count() < 1) {
       return 0;
    }
+
    LengthData data = lengthValue(decl.d->values.at(0));
    decl.d->parsed = QVariant::fromValue<LengthData>(data);
+
    return lengthValueFromData(data, f);
 }
 
@@ -433,7 +436,7 @@ void ValueExtractor::lengthValues(const Declaration &decl, int *m)
    if (decl.d->parsed.isValid()) {
       QList<QVariant> v = decl.d->parsed.toList();
       for (int i = 0; i < 4; i++) {
-         m[i] = lengthValueFromData(qvariant_cast<LengthData>(v.at(i)), f);
+         m[i] = lengthValueFromData(v.at(i).value<LengthData>(), f);
       }
       return;
    }
@@ -609,8 +612,9 @@ QSize ValueExtractor::sizeValue(const Declaration &decl)
 {
    if (decl.d->parsed.isValid()) {
       QList<QVariant> v = decl.d->parsed.toList();
-      return QSize(lengthValueFromData(qvariant_cast<LengthData>(v.at(0)), f),
-            lengthValueFromData(qvariant_cast<LengthData>(v.at(1)), f));
+
+      return QSize(lengthValueFromData((v.at(0)).value<LengthData>(), f),
+            lengthValueFromData((v.at(1)).value<LengthData>(), f));
    }
 
    LengthData x[2] = { {0, LengthData::None }, {0, LengthData::None} };
@@ -839,7 +843,7 @@ static ColorData parseColorValue(QCss::Value v)
    }
 
    if (v.type == Value::Color) {
-      return qvariant_cast<QColor>(v.variant);
+      return v.variant.value<QColor>();
    }
 
    if (v.type == Value::KnownIdentifier && v.variant.toInt() == Value_Transparent) {
@@ -1095,10 +1099,11 @@ static BorderStyle parseStyleValue(QCss::Value v)
 void ValueExtractor::borderValue(const Declaration &decl, int *width, QCss::BorderStyle *style, QBrush *color)
 {
    if (decl.d->parsed.isValid()) {
-      BorderData data = qvariant_cast<BorderData>(decl.d->parsed);
+      BorderData data = (decl.d->parsed).value<BorderData>();
       *width = lengthValueFromData(data.width, f);
       *style = data.style;
       *color = data.color.type != BrushData::Invalid ? brushFromData(data.color, pal) : QBrush(QColor());
+
       return;
    }
 
@@ -1230,7 +1235,7 @@ bool ValueExtractor::extractBackground(QBrush *brush, QString *image, Repeat *re
             break;
          case Background:
             if (decl.d->parsed.isValid()) {
-               BackgroundData data = qvariant_cast<BackgroundData>(decl.d->parsed);
+               BackgroundData data = (decl.d->parsed).value<BackgroundData>();
                *brush = brushFromData(data.brush, pal);
                *image = data.image;
                *repeat = data.repeat;
@@ -1618,7 +1623,7 @@ QColor Declaration::colorValue(const QPalette &pal) const
 
    if (d->parsed.isValid()) {
       if (d->parsed.type() == QVariant::Color) {
-         return qvariant_cast<QColor>(d->parsed);
+         return (d->parsed).value<QColor>();
       }
       if (d->parsed.type() == QVariant::Int) {
          return pal.color((QPalette::ColorRole)(d->parsed.toInt()));
@@ -1643,7 +1648,7 @@ QBrush Declaration::brushValue(const QPalette &pal) const
 
    if (d->parsed.isValid()) {
       if (d->parsed.type() == QVariant::Brush) {
-         return qvariant_cast<QBrush>(d->parsed);
+         return (d->parsed).value<QBrush>();
       }
       if (d->parsed.type() == QVariant::Int) {
          return pal.color((QPalette::ColorRole)(d->parsed.toInt()));
@@ -1675,9 +1680,11 @@ void Declaration::brushValues(QBrush *c, const QPalette &pal) const
 
       for (i = 0; i < qMin(v.count(), 4); i++) {
          if (v.at(i).type() == QVariant::Brush) {
-            c[i] = qvariant_cast<QBrush>(v.at(i));
+            c[i] = (v.at(i)).value<QBrush>();
+
          } else if (v.at(i).type() == QVariant::Int) {
             c[i] = pal.color((QPalette::ColorRole)(v.at(i).toInt()));
+
          } else {
             needParse |= (1 << i);
          }
@@ -1781,7 +1788,7 @@ bool Declaration::intValue(int *i, const char *unit) const
 QSize Declaration::sizeValue() const
 {
    if (d->parsed.isValid()) {
-      return qvariant_cast<QSize>(d->parsed);
+      return (d->parsed).value<QSize>();
    }
 
    int x[2] = { 0, 0 };
@@ -1805,7 +1812,7 @@ QRect Declaration::rectValue() const
    }
 
    if (d->parsed.isValid()) {
-      return qvariant_cast<QRect>(d->parsed);
+      return (d->parsed).value<QRect>();
    }
 
    const QCss::Value &v = d->values.at(0);
@@ -1834,13 +1841,15 @@ void Declaration::colorValues(QColor *c, const QPalette &pal) const
    int i;
    if (d->parsed.isValid()) {
       QList<QVariant> v = d->parsed.toList();
+
       for (i = 0; i < qMin(d->values.count(), 4); i++) {
          if (v.at(i).type() == QVariant::Color) {
-            c[i] = qvariant_cast<QColor>(v.at(i));
+            c[i] = (v.at(i)).value<QColor>();
          } else {
             c[i] = pal.color((QPalette::ColorRole)(v.at(i).toInt()));
          }
       }
+
    } else {
       QList<QVariant> v;
       for (i = 0; i < qMin(d->values.count(), 4); i++) {
@@ -2039,18 +2048,21 @@ void Declaration::borderImageValue(QString *image, int *cuts, TileMode *h, TileM
 QIcon Declaration::iconValue() const
 {
    if (d->parsed.isValid()) {
-      return qvariant_cast<QIcon>(d->parsed);
+      return (d->parsed).value<QIcon>();
    }
 
    QIcon icon;
    for (int i = 0; i < d->values.count();) {
       const Value &value = d->values.at(i++);
+
       if (value.type != Value::Uri) {
          break;
       }
+
       QString uri = value.variant.toString();
       QIcon::Mode mode = QIcon::Normal;
       QIcon::State state = QIcon::Off;
+
       for (int j = 0; j < 2; j++) {
          if (i != d->values.count() && d->values.at(i).type == Value::KnownIdentifier) {
             switch (d->values.at(i).variant.toInt()) {
@@ -3378,6 +3390,5 @@ bool Parser::testTokenAndEndsWith(QCss::TokenType t, QStringView str)
 
    return true;
 }
-
 
 #endif // QT_NO_CSSPARSER

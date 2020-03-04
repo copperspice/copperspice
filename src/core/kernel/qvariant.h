@@ -300,6 +300,8 @@ class Q_CORE_EXPORT QVariant
    QJsonArray toJsonArray() const;
    QJsonDocument toJsonDocument() const;
 
+   template<typename T>
+   T value() const;
    void load(QDataStream &ds);
    void save(QDataStream &ds) const;
 
@@ -318,10 +320,6 @@ class Q_CORE_EXPORT QVariant
 
    inline void setValue(const QVariant &value);
 
-   template<typename T>
-   inline T value() const {
-      return qvariant_cast<T>(*this);
-   }
 
    template<typename T>
    static inline QVariant fromValue(const T &value) {
@@ -520,18 +518,22 @@ inline bool operator!=(const QVariant &v1, const QVariantComparisonHelper &v2)
    return !operator==(v1, v2);
 }
 
-template<typename T>
-inline T qvariant_cast(const QVariant &v)
-{
-   const int vid = qMetaTypeId<T>(static_cast<T *>(0));
 
-   if (vid == v.userType()) {
-      return *reinterpret_cast<const T *>(v.constData());
+
+
+template<typename T>
+T QVariant::value() const
+{
+   const int id = qMetaTypeId<T>(static_cast<T *>(0));
+
+   if (id == userType()) {
+      return *reinterpret_cast<const T *>(this->constData());
    }
 
-   if (vid < int(QMetaType::User)) {
+   if (id < int(QMetaType::User)) {
       T t;
-      if (qvariant_cast_helper(v, QVariant::Type(vid), &t)) {
+
+      if (qvariant_cast_helper(*this, QVariant::Type(id), &t)) {
          return t;
       }
    }
@@ -539,13 +541,14 @@ inline T qvariant_cast(const QVariant &v)
    return T();
 }
 
-template<>
-inline QVariant qvariant_cast<QVariant>(const QVariant &v)
+
+template<typename T>
+T qvariant_cast(const QVariant &x)
 {
-   if (v.userType() == QMetaType::QVariant) {
-      return *reinterpret_cast<const QVariant *>(v.constData());
-   }
-   return v;
+   (void) x;
+   static_assert(! std::is_same_v<T, T>, "qvariant_cast<T>(x) obsolete, use x.value<T>()");
+
+   return T();
 }
 
 Q_DECLARE_SHARED(QVariant)

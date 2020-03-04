@@ -317,7 +317,8 @@ QByteArray QInternalMimeData::renderDataHelper(const QString &mimeType, const QM
       */
       ba.resize(8);
       ushort *colBuf = (ushort *)ba.data();
-      QColor c = qvariant_cast<QColor>(data->colorData());
+      QColor c = data->colorData().value<QColor>();
+
       colBuf[0] = ushort(c.redF() * 0xFFFF);
       colBuf[1] = ushort(c.greenF() * 0xFFFF);
       colBuf[2] = ushort(c.blueF() * 0xFFFF);
@@ -326,14 +327,15 @@ QByteArray QInternalMimeData::renderDataHelper(const QString &mimeType, const QM
       ba = data->data(mimeType);
       if (ba.isEmpty()) {
          if (mimeType == QLatin1String("application/x-qt-image") && data->hasImage()) {
-            QImage image = qvariant_cast<QImage>(data->imageData());
+            QImage image = data->imageData().value<QImage>();
+
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
             // would there not be PNG ??
             image.save(&buf, "PNG");
 
          } else if (mimeType.startsWith(QLatin1String("image/")) && data->hasImage()) {
-            QImage image = qvariant_cast<QImage>(data->imageData());
+            QImage image = data->imageData().value<QImage>();
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
             image.save(&buf, mimeType.mid(mimeType.indexOf('/') + 1).toLatin1().toUpper().constData());

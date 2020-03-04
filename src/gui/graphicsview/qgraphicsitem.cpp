@@ -975,7 +975,9 @@ void QGraphicsItem::setParentItem(QGraphicsItem *newParent)
 
    const QVariant newParentVariant(itemChange(QGraphicsItem::ItemParentChange,
          QVariant::fromValue<QGraphicsItem *>(newParent)));
-   newParent = qvariant_cast<QGraphicsItem *>(newParentVariant);
+
+   newParent = newParentVariant.value<QGraphicsItem *>();
+
    if (newParent == d_ptr->parent) {
       return;
    }
@@ -1338,13 +1340,15 @@ void QGraphicsItem::setToolTip(const QString &toolTip)
 #ifndef QT_NO_CURSOR
 QCursor QGraphicsItem::cursor() const
 {
-   return qvariant_cast<QCursor>(d_ptr->extra(QGraphicsItemPrivate::ExtraCursor));
+   QVariant variant = d_ptr->extra(QGraphicsItemPrivate::ExtraCursor);
+
+   return variant.value<QCursor>();
 }
 
 void QGraphicsItem::setCursor(const QCursor &cursor)
 {
    const QVariant cursorVariant(itemChange(ItemCursorChange, QVariant::fromValue<QCursor>(cursor)));
-   d_ptr->setExtra(QGraphicsItemPrivate::ExtraCursor, qvariant_cast<QCursor>(cursorVariant));
+   d_ptr->setExtra(QGraphicsItemPrivate::ExtraCursor, cursorVariant.value<QCursor>());
    d_ptr->hasCursor = 1;
 
    if (d_ptr->scene) {
@@ -1468,7 +1472,9 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
 
    // Schedule redrawing
    if (update) {
-      QGraphicsItemCache *c = (QGraphicsItemCache *)qvariant_cast<void *>(extra(ExtraCacheData));
+
+      QGraphicsItemCache *c = (QGraphicsItemCache *)(extra(ExtraCacheData)).value<void *>();
+
       if (c) {
          c->purge();
       }
@@ -3321,7 +3327,9 @@ void QGraphicsItem::setMatrix(const QMatrix &matrix, bool combine)
 
    // Notify the item that the transformation matrix is changing.
    const QVariant newMatrixVariant = QVariant::fromValue<QMatrix>(newTransform.toAffine());
-   newTransform = QTransform(qvariant_cast<QMatrix>(itemChange(ItemMatrixChange, newMatrixVariant)));
+
+   newTransform = QTransform( (itemChange(ItemMatrixChange, newMatrixVariant)).value<QMatrix>());
+
    if (d_ptr->transformData->transform == newTransform) {
       return;
    }
@@ -3377,7 +3385,9 @@ void QGraphicsItem::setTransform(const QTransform &matrix, bool combine)
    // Notify the item that the transformation matrix is changing.
    const QVariant newTransformVariant(itemChange(ItemTransformChange,
          QVariant::fromValue<QTransform>(newTransform)));
-   newTransform = qvariant_cast<QTransform>(newTransformVariant);
+
+   newTransform = newTransformVariant.value<QTransform>();
+
    if (d_ptr->transformData->transform == newTransform) {
       return;
    }
@@ -3877,9 +3887,12 @@ QRegion QGraphicsItem::boundingRegion(const QTransform &itemToDeviceTransform) c
 */
 qreal QGraphicsItem::boundingRegionGranularity() const
 {
-   return d_ptr->hasBoundingRegionGranularity
-      ? qvariant_cast<qreal>(d_ptr->extra(QGraphicsItemPrivate::ExtraBoundingRegionGranularity))
-      : 0;
+   if (d_ptr->hasBoundingRegionGranularity) {
+      return (d_ptr->extra(QGraphicsItemPrivate::ExtraBoundingRegionGranularity)).value<qreal>();
+
+   } else {
+      return 0;
+   }
 }
 
 /*!
@@ -4065,26 +4078,27 @@ void QGraphicsItemPrivate::removeChild(QGraphicsItem *child)
 // internal
 QGraphicsItemCache *QGraphicsItemPrivate::maybeExtraItemCache() const
 {
-   return (QGraphicsItemCache *)qvariant_cast<void *>(extra(ExtraCacheData));
+   return (QGraphicsItemCache *)(extra(ExtraCacheData)).value<void *>();
 }
 
 // internal
 QGraphicsItemCache *QGraphicsItemPrivate::extraItemCache() const
 {
-   QGraphicsItemCache *c = (QGraphicsItemCache *)qvariant_cast<void *>(extra(ExtraCacheData));
+   QGraphicsItemCache *c = (QGraphicsItemCache *)(extra(ExtraCacheData)).value<void *>();
+
    if (!c) {
       QGraphicsItemPrivate *that = const_cast<QGraphicsItemPrivate *>(this);
       c = new QGraphicsItemCache;
       that->setExtra(ExtraCacheData, QVariant::fromValue<void *>(c));
    }
-   return c;
 
+   return c;
 }
 
 // internal
 void QGraphicsItemPrivate::removeExtraItemCache()
 {
-   QGraphicsItemCache *c = (QGraphicsItemCache *)qvariant_cast<void *>(extra(ExtraCacheData));
+   QGraphicsItemCache *c = (QGraphicsItemCache *)(extra(ExtraCacheData)).value<void *>();
    if (c) {
       c->purge();
       delete c;

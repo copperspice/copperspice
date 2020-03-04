@@ -169,7 +169,7 @@ inline QString QFileSystemModel::fileName(const QModelIndex &aindex) const
 
 inline QIcon QFileSystemModel::fileIcon(const QModelIndex &aindex) const
 {
-   return qvariant_cast<QIcon>(aindex.data(Qt::DecorationRole));
+   return (aindex.data(Qt::DecorationRole)).value<QIcon>();
 }
 
 #endif // QT_NO_FILESYSTEMMODEL

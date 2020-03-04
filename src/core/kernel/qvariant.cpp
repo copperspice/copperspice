@@ -1424,7 +1424,7 @@ static void streamDebug(QDebug dbg, const QVariant &v)
          dbg.nospace() << v.toFloat();
          break;
       case QMetaType::QObjectStar:
-         dbg.nospace() << qvariant_cast<QObject *>(v);
+         dbg.nospace() << v.value<QObject *>();
          break;
       case QVariant::Double:
          dbg.nospace() << v.toDouble();

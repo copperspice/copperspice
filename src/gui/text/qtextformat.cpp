@@ -185,22 +185,22 @@ static inline uint variantHash(const QVariant &variant)
          return 0x811890 + variant.toInt();
 
       case QVariant::Brush:
-         return 0x01010101 + hash(qvariant_cast<QBrush>(variant));
+         return 0x01010101 + hash(variant.value<QBrush>());
 
       case QVariant::Bool:
          return 0x371818 + variant.toBool();
 
       case QVariant::Pen:
-         return 0x02020202 + hash(qvariant_cast<QPen>(variant));
+         return 0x02020202 + hash(variant.value<QPen>());
 
       case QVariant::List:
-         return 0x8377 + qvariant_cast<QVariantList>(variant).count();
+         return 0x8377 + variant.value<QVariantList>().count();
 
       case QVariant::Color:
-         return hash(qvariant_cast<QColor>(variant));
+         return hash(variant.value<QColor>());
 
       case QVariant::TextLength:
-         return 0x377 + hash(qvariant_cast<QTextLength>(variant).rawValue());
+         return 0x377 + hash(variant.value<QTextLength>().rawValue());
 
       case QMetaType::Float:
          return qHash(variant.toFloat());
@@ -582,7 +582,8 @@ qreal QTextFormat::doubleProperty(int propertyId) const
    if (prop.userType() != QVariant::Double && prop.userType() != QMetaType::Float) {
       return 0.;
    }
-   return qvariant_cast<qreal>(prop);
+
+   return prop.value<qreal>();
 }
 
 QString QTextFormat::stringProperty(int propertyId) const
@@ -608,7 +609,7 @@ QColor QTextFormat::colorProperty(int propertyId) const
       return QColor();
    }
 
-   return qvariant_cast<QColor>(prop);
+   return prop.value<QColor>();
 }
 
 QPen QTextFormat::penProperty(int propertyId) const
@@ -620,7 +621,8 @@ QPen QTextFormat::penProperty(int propertyId) const
    if (prop.userType() != QVariant::Pen) {
       return QPen(Qt::NoPen);
    }
-   return qvariant_cast<QPen>(prop);
+
+   return prop.value<QPen>();
 }
 
 /*!
@@ -639,7 +641,7 @@ QBrush QTextFormat::brushProperty(int propertyId) const
    if (prop.userType() != QVariant::Brush) {
       return QBrush(Qt::NoBrush);
    }
-   return qvariant_cast<QBrush>(prop);
+   return prop.value<QBrush>();
 }
 
 /*!
@@ -652,9 +654,9 @@ QTextLength QTextFormat::lengthProperty(int propertyId) const
    if (!d) {
       return QTextLength();
    }
-   return qvariant_cast<QTextLength>(d->property(propertyId));
-}
 
+   return (d->property(propertyId)).value<QTextLength>();
+}
 /*!
     Returns the value of the property given by \a propertyId. If the
     property isn't of QTextFormat::LengthVector type, an empty length
@@ -677,7 +679,7 @@ QVector<QTextLength> QTextFormat::lengthVectorProperty(int propertyId) const
    for (int i = 0; i < propertyList.size(); ++i) {
       QVariant var = propertyList.at(i);
       if (var.userType() == QVariant::TextLength) {
-         vector.append(qvariant_cast<QTextLength>(var));
+         vector.append(var.value<QTextLength>());
       }
    }
 
@@ -1055,11 +1057,11 @@ QList<QTextOption::Tab> QTextBlockFormat::tabPositions() const
    }
 
    QList<QTextOption::Tab> answer;
-   QList<QVariant> variantsList = qvariant_cast<QList<QVariant>>(variant);
+   QList<QVariant> variantsList   = variant.value<QList<QVariant>>();
    QList<QVariant>::iterator iter = variantsList.begin();
 
    while (iter != variantsList.end()) {
-      answer.append( qvariant_cast<QTextOption::Tab>(*iter));
+      answer.append( iter->value<QTextOption::Tab>() );
       ++iter;
    }
 

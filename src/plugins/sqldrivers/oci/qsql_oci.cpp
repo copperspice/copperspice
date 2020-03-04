@@ -307,21 +307,25 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
                sizeof(double),
                SQLT_FLT, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
          break;
+
       case QVariant::UserType:
          if (val.canConvert<QOCIRowIdPointer>() && !isOutValue(pos)) {
             // use a const pointer to prevent a detach
-            const QOCIRowIdPointer rptr = qvariant_cast<QOCIRowIdPointer>(val);
+            const QOCIRowIdPointer rptr = val.value<QOCIRowIdPointer>();
+
             r = OCIBindByPos(sql, hbnd, err,
                   pos + 1,
                   // it's an IN value, so const_cast is ok
                   const_cast<OCIRowid **>(&rptr->id),
                   -1,
                   SQLT_RDD, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
+
          } else {
             qWarning("Unknown bind variable");
             r = OCI_ERROR;
          }
          break;
+
       case QVariant::String: {
          const QString s = val.toString();
          if (isBinaryValue(pos)) {
@@ -1454,13 +1458,15 @@ bool QOCICols::execBatch(QOCIResultPrivate *d, QVector<QVariant> &boundValues, b
                   memcpy(dataPtr, s.utf16(), columns[i].lengths[row]);
                   break;
                }
+
                case QVariant::UserType:
                   if (val.canConvert<QOCIRowIdPointer>()) {
-                     const QOCIRowIdPointer rptr = qvariant_cast<QOCIRowIdPointer>(val);
+                     const QOCIRowIdPointer rptr = val.value<QOCIRowIdPointer>();
                      *reinterpret_cast<OCIRowid **>(dataPtr) = rptr->id;
                      columns[i].lengths[row] = 0;
                      break;
                   }
+
                case QVariant::ByteArray:
                default: {
                   const QByteArray ba = val.toByteArray();

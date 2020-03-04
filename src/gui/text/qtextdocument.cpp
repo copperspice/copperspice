@@ -2086,14 +2086,15 @@ QString QTextHtmlExporter::findUrlForImage(const QTextDocument *doc, qint64 cach
       for (; it != priv->cachedResources.constEnd(); ++it) {
 
          const QVariant &v = it.value();
-         if (v.type() == QVariant::Image && !isPixmap) {
-            if (qvariant_cast<QImage>(v).cacheKey() == cacheKey) {
+
+         if (v.type() == QVariant::Image && ! isPixmap) {
+            if (v.value<QImage>().cacheKey() == cacheKey) {
                break;
             }
          }
 
          if (v.type() == QVariant::Pixmap && isPixmap) {
-            if (qvariant_cast<QPixmap>(v).cacheKey() == cacheKey) {
+            if (v.value<QPixmap>().cacheKey() == cacheKey) {
                break;
             }
          }

@@ -286,9 +286,9 @@ JSC::JSObject *ClassObjectDelegate::construct(JSC::ExecState *exec, JSC::JSObjec
    QScriptContext *ctx = eng_p->contextForFrame(eng_p->currentFrame);
 
    QScriptValue defaultObject = ctx->thisObject();
-   QScriptValue result = qvariant_cast<QScriptValue>(scriptClass->extension(QScriptClass::Callable,
-            QVariant::fromValue(ctx)));
 
+   QVariant variant = scriptClass->extension(QScriptClass::Callable, QVariant::fromValue(ctx));
+   QScriptValue result = variant.value<QScriptValue>();
    if (!result.isObject()) {
       result = defaultObject;
    }

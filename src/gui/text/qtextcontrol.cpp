@@ -2151,7 +2151,7 @@ void QTextControlPrivate::inputMethodEvent(QInputMethodEvent *e)
          hideCursor = !a.length;
 
       } else if (a.type == QInputMethodEvent::TextFormat) {
-         QTextCharFormat f = qvariant_cast<QTextFormat>(a.value).toCharFormat();
+         QTextCharFormat f = (a.value).value<QTextFormat>().toCharFormat();
 
          if (f.isValid()) {
             QTextLayout::FormatRange o;
@@ -3391,13 +3391,17 @@ QAbstractTextDocumentLayout::PaintContext QTextControl::getPaintContext(QWidget 
          if (d->cursorIsFocusIndicator) {
             QStyleOption opt;
             opt.palette = ctx.palette;
+
             QStyleHintReturnVariant ret;
             QStyle *style = QApplication::style();
+
             if (widget) {
                style = widget->style();
             }
+
             style->styleHint(QStyle::SH_TextControl_FocusIndicatorTextCharFormat, &opt, widget, &ret);
-            selection.format = qvariant_cast<QTextFormat>(ret.variant).toCharFormat();
+            selection.format = ret.variant.value<QTextFormat>().toCharFormat();
+
          } else {
             QPalette::ColorGroup cg = d->hasFocus ? QPalette::Active : QPalette::Inactive;
             selection.format.setBackground(ctx.palette.brush(cg, QPalette::Highlight));

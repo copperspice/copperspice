@@ -97,7 +97,8 @@ void DragClientQt::startDrag(DragImageRef dragImage, const IntPoint&, const IntP
         if (dragImage)
             drag->setPixmap(*dragImage);
         else if (clipboardData && clipboardData->hasImage())
-            drag->setPixmap(qvariant_cast<QPixmap>(clipboardData->imageData()));
+            drag->setPixmap((clipboardData->imageData()).value<QPixmap>());
+
         DragOperation dragOperationMask = clipboard->sourceOperation();
         drag->setMimeData(clipboardData);
         Qt::DropAction actualDropAction = drag->exec(dragOperationsToDropActions(dragOperationMask));

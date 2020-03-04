@@ -299,7 +299,7 @@ T qscriptvalue_cast(const QScriptValue &value)
    if (qscriptvalue_cast_helper(value, id, &t)) {
       return t;
    } else if (value.isVariant()) {
-      return qvariant_cast<T>(value.toVariant());
+      return (value.toVariant()).value<T>();
    }
 
    return T();

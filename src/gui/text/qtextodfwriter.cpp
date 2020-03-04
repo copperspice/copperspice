@@ -402,7 +402,8 @@ void QTextOdfWriter::writeInlineCharacter(QXmlStreamWriter &writer, const QTextF
       QUrl url = QUrl::fromEncoded(name.toUtf8());
       const QVariant data = m_document->resource(QTextDocument::ImageResource, url);
       if (data.type() == QVariant::Image) {
-         image = qvariant_cast<QImage>(data);
+         image = data.value<QImage>();
+
       } else if (data.type() == QVariant::ByteArray) {
          image.loadFromData(data.toByteArray());
       }

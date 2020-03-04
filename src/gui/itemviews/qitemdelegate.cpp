@@ -206,7 +206,7 @@ void QItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
       pixmap = decoration(opt, value);
 
       if (value.type() == QVariant::Icon) {
-         d->tmp.icon = qvariant_cast<QIcon>(value);
+         d->tmp.icon  = value.value<QIcon>();
          d->tmp.mode = d->iconMode(option.state);
          d->tmp.state = d->iconState(option.state);
 
@@ -260,7 +260,7 @@ QSize QItemDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
    QVariant value = index.data(Qt::SizeHintRole);
    if (value.isValid()) {
-      return qvariant_cast<QSize>(value);
+      return value.value<QSize>();
    }
    QRect decorationRect = rect(option, index, Qt::DecorationRole);
    QRect displayRect = rect(option, index, Qt::DisplayRole);
@@ -541,7 +541,7 @@ void QItemDelegate::drawBackground(QPainter *painter, const QStyleOptionViewItem
       if (value.canConvert<QBrush>()) {
          QPointF oldBO = painter->brushOrigin();
          painter->setBrushOrigin(option.rect.topLeft());
-         painter->fillRect(option.rect, qvariant_cast<QBrush>(value));
+         painter->fillRect(option.rect, value.value<QBrush>());
          painter->setBrushOrigin(oldBO);
       }
    }
@@ -702,18 +702,20 @@ QPixmap QItemDelegate::decoration(const QStyleOptionViewItem &option, const QVar
       case QVariant::Icon: {
          QIcon::Mode mode = d->iconMode(option.state);
          QIcon::State state = d->iconState(option.state);
-         return qvariant_cast<QIcon>(variant).pixmap(option.decorationSize, mode, state);
+         return variant.value<QIcon>().pixmap(option.decorationSize, mode, state);
       }
+
       case QVariant::Color: {
          static QPixmap pixmap(option.decorationSize);
-         pixmap.fill(qvariant_cast<QColor>(variant));
+         pixmap.fill(variant.value<QColor>());
          return pixmap;
       }
+
       default:
          break;
    }
 
-   return qvariant_cast<QPixmap>(variant);
+   return variant.value<QPixmap>();
 }
 
 // hacky but faster version of "QString::sprintf("%d-%d", i, enabled)"
@@ -782,19 +784,19 @@ QRect QItemDelegate::rect(const QStyleOptionViewItem &option,
             break;
 
          case QVariant::Pixmap: {
-            const QPixmap &pixmap = qvariant_cast<QPixmap>(value);
+            const QPixmap &pixmap = value.value<QPixmap>();
             return QRect(QPoint(0, 0), pixmap.size() / pixmap.devicePixelRatio() );
          }
 
          case QVariant::Image: {
-            const QImage &image = qvariant_cast<QImage>(value);
+            const QImage &image = value.value<QImage>();
             return QRect(QPoint(0, 0), image.size() /  image.devicePixelRatio() );
          }
 
          case QVariant::Icon: {
             QIcon::Mode mode = d->iconMode(option.state);
             QIcon::State state = d->iconState(option.state);
-            QIcon icon = qvariant_cast<QIcon>(value);
+            QIcon icon = value.value<QIcon>();
             QSize size = icon.actualSize(option.decorationSize, mode, state);
             return QRect(QPoint(0, 0), size);
          }
@@ -806,7 +808,7 @@ QRect QItemDelegate::rect(const QStyleOptionViewItem &option,
          default: {
             const QString text = d->valueToText(value, option);
             value = index.data(Qt::FontRole);
-            QFont fnt = qvariant_cast<QFont>(value).resolve(option.font);
+            QFont fnt = value.value<QFont>().resolve(option.font);
             return textRectangle(0, d->textLayoutBounds(option), fnt, text);
          }
       }
@@ -924,7 +926,7 @@ QStyleOptionViewItem QItemDelegate::setOptions(const QModelIndex &index,
    // set font
    QVariant value = index.data(Qt::FontRole);
    if (value.isValid()) {
-      opt.font = qvariant_cast<QFont>(value).resolve(opt.font);
+      opt.font = value.value<QFont>().resolve(opt.font);
       opt.fontMetrics = QFontMetrics(opt.font);
    }
 
@@ -937,7 +939,7 @@ QStyleOptionViewItem QItemDelegate::setOptions(const QModelIndex &index,
    // set foreground brush
    value = index.data(Qt::ForegroundRole);
    if (value.canConvert<QBrush>()) {
-      opt.palette.setBrush(QPalette::Text, qvariant_cast<QBrush>(value));
+      opt.palette.setBrush(QPalette::Text, value.value<QBrush>());
    }
 
    // disable style animations for checkboxes etc. within itemviews (QTBUG-30146)

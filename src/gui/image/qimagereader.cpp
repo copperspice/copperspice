@@ -783,7 +783,7 @@ QColor QImageReader::backgroundColor() const
    }
 
    if (d->handler->supportsOption(QImageIOHandler::BackgroundColor)) {
-      return qvariant_cast<QColor>(d->handler->option(QImageIOHandler::BackgroundColor));
+      return (d->handler->option(QImageIOHandler::BackgroundColor)).value<QColor>();
    }
    return QColor();
 }

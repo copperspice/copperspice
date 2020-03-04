@@ -97,11 +97,11 @@ SequenceType::Ptr VariableLoader::announceExternalVariable(const QXmlName name,
    } else if (variant.userType() == qMetaTypeId<QIODevice *>()) {
       return CommonSequenceTypes::ExactlyOneAnyURI;
    } else if (variant.userType() == qMetaTypeId<QXmlQuery>()) {
-      const QXmlQuery variableQuery(qvariant_cast<QXmlQuery>(variant));
+      const QXmlQuery variableQuery(variant.value<QXmlQuery>());
       return variableQuery.d->expression()->staticType();
    } else {
-      return makeGenericSequenceType(AtomicValue::qtToXDMType(qvariant_cast<QXmlItem>(variant)),
-                                     Cardinality::exactlyOne());
+      return makeGenericSequenceType(AtomicValue::qtToXDMType(
+               variant.value<QXmlItem>()), Cardinality::exactlyOne());
    }
 }
 
@@ -117,13 +117,13 @@ Item::Iterator::Ptr VariableLoader::evaluateSequence(const QXmlName name,
    if (variant.userType() == qMetaTypeId<QIODevice *>()) {
       return makeSingletonIterator(itemForName(name));
    } else if (variant.userType() == qMetaTypeId<QXmlQuery>()) {
-      const QXmlQuery variableQuery(qvariant_cast<QXmlQuery>(variant));
+      const QXmlQuery variableQuery(variant.value<QXmlQuery>());
 
       return variableQuery.d->expression()->evaluateSequence(DynamicContext::Ptr(new TemporaryTreesRedirectingContext(
                 variableQuery.d->dynamicContext(), context)));
    }
 
-   const QVariant v(qvariant_cast<QXmlItem>(variant).toAtomicValue());
+   const QVariant v(variant.value<QXmlItem>().toAtomicValue());
 
    switch (v.type()) {
       case QVariant::StringList:
@@ -147,7 +147,7 @@ Item VariableLoader::itemForName(const QXmlName &name) const
                   m_namePool->stringForLocalName(name.localName()) ));
    }
 
-   const QXmlItem item(qvariant_cast<QXmlItem>(variant));
+   const QXmlItem item(variant.value<QXmlItem>());
 
    if (item.isNode()) {
       return Item::fromPublic(item);
@@ -181,8 +181,8 @@ bool VariableLoader::isSameType(const QVariant &v1, const QVariant &v2) const
    }
 
    /* Ok, we have two QXmlItems. */
-   const QXmlItem i1(qvariant_cast<QXmlItem>(v1));
-   const QXmlItem i2(qvariant_cast<QXmlItem>(v2));
+   const QXmlItem i1(v1.value<QXmlItem>());
+   const QXmlItem i2(v2.value<QXmlItem>());
 
    if (i1.isNode()) {
       Q_ASSERT(false);

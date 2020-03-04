@@ -1252,7 +1252,9 @@ void QRenderRule::configurePalette(QPalette *p, QPalette::ColorGroup cg, const Q
 static inline QObject *parentObject(const QObject *obj)
 {
    if (qobject_cast<const QLabel *>(obj) && (obj->metaObject()->className() == "QTipLabel")) {
-      QObject *p = qvariant_cast<QObject *>(obj->property("_q_stylesheet_parent"));
+
+      QVariant variant = obj->property("_q_stylesheet_parent");
+      QObject *p = variant.value<QObject *>();
 
       if (p) {
          return p;
@@ -2715,7 +2717,7 @@ void QStyleSheetStyle::unsetPalette(QWidget *w)
    }
    QVariant oldFont = w->property("_q_styleSheetWidgetFont");
    if (oldFont.isValid()) {
-      w->setFont(qvariant_cast<QFont>(oldFont));
+      w->setFont(oldFont.value<QFont>());
    }
    if (styleSheetCaches->autoFillDisabledWidgets.contains(w)) {
       embeddedWidget(w)->setAutoFillBackground(true);
@@ -5473,7 +5475,7 @@ QIcon QStyleSheetStyle::standardIcon(StandardPixmap standardIcon, const QStyleOp
    if (!s.isEmpty()) {
       QRenderRule rule = renderRule(w, opt);
       if (rule.hasStyleHint(s)) {
-         return qvariant_cast<QIcon>(rule.styleHint(s));
+         return rule.styleHint(s).value<QIcon>();
       }
    }
    return baseStyle()->standardIcon(standardIcon, opt, w);
@@ -5492,8 +5494,8 @@ QPixmap QStyleSheetStyle::standardPixmap(StandardPixmap standardPixmap, const QS
    if (!s.isEmpty()) {
       QRenderRule rule = renderRule(w, opt);
       if (rule.hasStyleHint(s)) {
-         QIcon icon = qvariant_cast<QIcon>(rule.styleHint(s));
-         return icon.pixmap(16, 16); // ###: unhard-code this if someone complains
+         QIcon icon = rule.styleHint(s).value<QIcon>();
+         return icon.pixmap(16, 16); // ### hard-codeed, may want to fix this
       }
    }
    return baseStyle()->standardPixmap(standardPixmap, opt, w);

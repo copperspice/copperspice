@@ -2224,7 +2224,8 @@ void QNetworkReplyHttpImplPrivate::_q_metaDataChanged()
              (request.attribute(QNetworkRequest::CookieSaveControlAttribute,
                                 QNetworkRequest::Automatic).toInt()) == QNetworkRequest::Automatic)) {
       QList<QNetworkCookie> cookies =
-         qvariant_cast<QList<QNetworkCookie> >(cookedHeaders.value(QNetworkRequest::SetCookieHeader));
+         (cookedHeaders.value(QNetworkRequest::SetCookieHeader)).value<QList<QNetworkCookie>>();
+
       QNetworkCookieJar *jar = manager->cookieJar();
       if (jar) {
          jar->setCookiesFromUrl(cookies, url);

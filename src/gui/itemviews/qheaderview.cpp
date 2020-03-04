@@ -316,7 +316,7 @@ int QHeaderView::sectionSizeHint(int logicalIndex) const
    QVariant value = d->model->headerData(logicalIndex, d->orientation, Qt::SizeHintRole);
 
    if (value.isValid()) {
-      size = qvariant_cast<QSize>(value);
+      size = value.value<QSize>();
    } else {
       size = sectionSizeFromContents(logicalIndex);
    }
@@ -1784,7 +1784,7 @@ void QHeaderView::paintEvent(QPaintEvent *e)
       QVariant variant = d->model->headerData(logical, d->orientation, Qt::FontRole);
 
       if (variant.isValid() && variant.canConvert<QFont>()) {
-         QFont sectionFont = qvariant_cast<QFont>(variant);
+         QFont sectionFont = variant.value<QFont>();
          painter.setFont(sectionFont);
       }
 
@@ -2247,23 +2247,23 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
    }
 
    QVariant variant = d->model->headerData(logicalIndex, d->orientation, Qt::DecorationRole);
-   opt.icon = qvariant_cast<QIcon>(variant);
+   opt.icon = variant.value<QIcon>();
 
    if (opt.icon.isNull()) {
-      opt.icon = qvariant_cast<QPixmap>(variant);
+      opt.icon = variant.value<QPixmap>();
    }
    QVariant foregroundBrush = d->model->headerData(logicalIndex, d->orientation,
          Qt::ForegroundRole);
    if (foregroundBrush.canConvert<QBrush>()) {
-      opt.palette.setBrush(QPalette::ButtonText, qvariant_cast<QBrush>(foregroundBrush));
+      opt.palette.setBrush(QPalette::ButtonText, foregroundBrush.value<QBrush>());
    }
 
    QPointF oldBO = painter->brushOrigin();
    QVariant backgroundBrush = d->model->headerData(logicalIndex, d->orientation,
          Qt::BackgroundRole);
    if (backgroundBrush.canConvert<QBrush>()) {
-      opt.palette.setBrush(QPalette::Button, qvariant_cast<QBrush>(backgroundBrush));
-      opt.palette.setBrush(QPalette::Window, qvariant_cast<QBrush>(backgroundBrush));
+      opt.palette.setBrush(QPalette::Button, foregroundBrush.value<QBrush>());
+      opt.palette.setBrush(QPalette::Window, backgroundBrush.value<QBrush>());
       painter->setBrushOrigin(opt.rect.topLeft());
    }
 
@@ -2321,7 +2321,7 @@ QSize QHeaderView::sectionSizeFromContents(int logicalIndex) const
    // use SizeHintRole
    QVariant variant = d->model->headerData(logicalIndex, d->orientation, Qt::SizeHintRole);
    if (variant.isValid()) {
-      return qvariant_cast<QSize>(variant);
+      return variant.value<QSize>();
    }
 
    // otherwise use the contents
@@ -2332,7 +2332,7 @@ QSize QHeaderView::sectionSizeFromContents(int logicalIndex) const
    QFont fnt;
 
    if (var.isValid() && var.canConvert<QFont>()) {
-      fnt = qvariant_cast<QFont>(var);
+      fnt = var.value<QFont>();
    } else {
       fnt = font();
    }
@@ -2341,9 +2341,9 @@ QSize QHeaderView::sectionSizeFromContents(int logicalIndex) const
    opt.text = d->model->headerData(logicalIndex, d->orientation,
          Qt::DisplayRole).toString();
    variant = d->model->headerData(logicalIndex, d->orientation, Qt::DecorationRole);
-   opt.icon = qvariant_cast<QIcon>(variant);
+   opt.icon = variant.value<QIcon>();
    if (opt.icon.isNull()) {
-      opt.icon = qvariant_cast<QPixmap>(variant);
+      opt.icon = variant.value<QPixmap>();
    }
 
    if (isSortIndicatorShown()) {

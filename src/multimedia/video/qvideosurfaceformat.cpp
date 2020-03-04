@@ -465,7 +465,7 @@ void QVideoSurfaceFormat::setProperty(QStringView name, const QVariant &value)
 
    } else if (name == "frameSize") {
       if (value.canConvert<QSize>()) {
-         d->frameSize = qvariant_cast<QSize>(value);
+         d->frameSize = value.value<QSize>();
          d->viewport = QRect(QPoint(0, 0), d->frameSize);
       }
 
@@ -477,22 +477,22 @@ void QVideoSurfaceFormat::setProperty(QStringView name, const QVariant &value)
 
    } else if (name == "viewport") {
       if (value.canConvert<QRect>()) {
-         d->viewport = qvariant_cast<QRect>(value);
+         d->viewport = value.value<QRect>();
       }
 
    } else if (name == "scanLineDirection") {
       if (value.canConvert<Direction>()) {
-         d->scanLineDirection = qvariant_cast<Direction>(value);
+         d->scanLineDirection = value.value<Direction>();
       }
 
    } else if (name == "frameRate") {
       if (value.canConvert<qreal>()) {
-         d->frameRate = qvariant_cast<qreal>(value);
+         d->frameRate = value.value<qreal>();
       }
 
    } else if (name == "pixelAspectRatio") {
       if (value.canConvert<QSize>()) {
-         d->pixelAspectRatio = qvariant_cast<QSize>(value);
+         d->pixelAspectRatio = value.value<QSize>();
       }
 
    } else if (name == "sizeHint") {
@@ -500,12 +500,12 @@ void QVideoSurfaceFormat::setProperty(QStringView name, const QVariant &value)
 
    } else if (name == "yCbCrColorSpace") {
       if (value.canConvert<YCbCrColorSpace>()) {
-         d->ycbcrColorSpace = qvariant_cast<YCbCrColorSpace>(value);
+         d->ycbcrColorSpace = value.value<YCbCrColorSpace>();
       }
 
    } else if (name == "mirrored") {
       if (value.canConvert<bool>()) {
-         d->mirrored = qvariant_cast<bool>(value);
+         d->mirrored = value.value<bool>();
       }
 
    } else {
@@ -535,6 +535,7 @@ QDebug operator<<(QDebug dbg, QVideoSurfaceFormat::YCbCrColorSpace cs)
 {
    QDebugStateSaver saver(dbg);
    dbg.nospace();
+
    switch (cs) {
       case QVideoSurfaceFormat::YCbCr_BT601:
          dbg << "YCbCr_BT601";
@@ -593,5 +594,4 @@ QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
 
    return dbg;
 }
-
 

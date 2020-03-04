@@ -1517,26 +1517,31 @@ bool QAbstractSocket::waitForConnected(int msecs)
    stopWatch.start();
 
    if (d->state == HostLookupState) {
+
 #if defined (QABSTRACTSOCKET_DEBUG)
       qDebug("QAbstractSocket::waitForConnected(%i) doing host name lookup", msecs);
 #endif
+
       QHostInfo::abortHostLookup(d->hostLookupId);
       d->hostLookupId = -1;
 
 #ifndef QT_NO_BEARERMANAGEMENT
       QSharedPointer<QNetworkSession> networkSession;
       QVariant v(property("_q_networksession"));
+
       if (v.isValid()) {
-         networkSession = qvariant_cast< QSharedPointer<QNetworkSession> >(v);
+         networkSession = v.value<QSharedPointer<QNetworkSession>>();
          d->_q_startConnecting(QHostInfoPrivate::fromName(d->hostName, networkSession));
       } else
 #endif
+
       {
          QHostAddress temp;
          if (temp.setAddress(d->hostName)) {
             QHostInfo info;
             info.setAddresses(QList<QHostAddress>() << temp);
             d->_q_startConnecting(info);
+
          } else {
             d->_q_startConnecting(QHostInfo::fromName(d->hostName));
          }

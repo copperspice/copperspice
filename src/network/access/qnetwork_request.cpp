@@ -292,10 +292,10 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
          }
 
       case QNetworkRequest::CookieHeader: {
-         QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie>>(value);
+         QList<QNetworkCookie> cookies = value.value<QList<QNetworkCookie>>();
 
          if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>()) {
-            cookies << qvariant_cast<QNetworkCookie>(value);
+            cookies << value.value<QNetworkCookie>();
          }
 
          QByteArray result;
@@ -312,10 +312,10 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
       }
 
       case QNetworkRequest::SetCookieHeader: {
-         QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(value);
+         QList<QNetworkCookie> cookies = value.value<QList<QNetworkCookie> >();
 
          if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>()) {
-            cookies << qvariant_cast<QNetworkCookie>(value);
+            cookies << value.value<QNetworkCookie>();
          }
 
          QByteArray result;
