@@ -96,7 +96,7 @@ bool QSignalTransition::eventTest(QEvent *event)
 
 void QSignalTransition::onTransition(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 bool QSignalTransition::event(QEvent *e)

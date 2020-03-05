@@ -104,6 +104,8 @@ bool QScriptStaticScopeObject::getOwnPropertyDescriptor(JSC::ExecState *, const 
 void QScriptStaticScopeObject::putWithAttributes(JSC::ExecState *exec, const JSC::Identifier &propertyName,
    JSC::JSValue value, unsigned attributes)
 {
+   (void) exec;
+
    if (symbolTablePutWithAttributes(propertyName, value, attributes)) {
       return;
    }
@@ -114,6 +116,8 @@ void QScriptStaticScopeObject::putWithAttributes(JSC::ExecState *exec, const JSC
 void QScriptStaticScopeObject::put(JSC::ExecState *exec, const JSC::Identifier &propertyName, JSC::JSValue value,
    JSC::PutPropertySlot &)
 {
+   (void) exec;
+
    if (symbolTablePut(propertyName, value)) {
       return;
    }

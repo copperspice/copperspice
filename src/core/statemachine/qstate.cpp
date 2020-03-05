@@ -290,12 +290,12 @@ QList<QAbstractTransition *> QState::transitions() const
 
 void QState::onEntry(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QState::onExit(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 QAbstractState *QState::initialState() const

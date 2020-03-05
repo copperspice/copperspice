@@ -109,6 +109,7 @@ bool DragData::containsCompatibleContent() const
 
 bool DragData::containsURL(Frame*, FilenameConversionPolicy filenamePolicy) const
 {
+    (void) filenamePolicy;
     // FIXME: Use filenamePolicy.
     if (!m_platformDragData)
         return false;
@@ -117,6 +118,7 @@ bool DragData::containsURL(Frame*, FilenameConversionPolicy filenamePolicy) cons
 
 String DragData::asURL(Frame*, FilenameConversionPolicy filenamePolicy, String*) const
 {
+    (void) filenamePolicy;
     // FIXME: Use filenamePolicy.
     if (!m_platformDragData)
         return String();

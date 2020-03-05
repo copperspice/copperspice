@@ -116,7 +116,7 @@ void QHistoryState::setHistoryType(HistoryType type)
 */
 void QHistoryState::onEntry(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 /*!
@@ -124,7 +124,7 @@ void QHistoryState::onEntry(QEvent *event)
 */
 void QHistoryState::onExit(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 /*!
