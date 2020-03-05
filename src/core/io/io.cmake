@@ -1,5 +1,4 @@
 list(APPEND CORE_PUBLIC_INCLUDES
-   Q_PID
    QAbstractFileEngine
    QAbstractFileEngineHandler
    QAbstractFileEngineIterator
@@ -23,11 +22,8 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QSaveFile
    QSettings
    QStandardPaths
-   QTS
    QTemporaryDir
    QTemporaryFile
-   QTextIStream
-   QTextOStream
    QTextStream
    QTextStreamFunction
    QTextStreamManipulator
@@ -36,7 +32,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
 )
 
 list(APPEND CORE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/io/q_pid.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qabstractfileengine.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qabstractfileenginehandler.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qabstractfileengineiterator.h
@@ -62,12 +57,9 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qstandardpaths.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporarydir.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporaryfile.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/io/qtextistream.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/io/qtextostream.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtextstream.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtextstreamfunction.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtextstreammanipulator.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/io/qts.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurlquery.h
 )
