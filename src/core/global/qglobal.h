@@ -788,17 +788,19 @@ inline void qSwap(T &value1, T &value2)
    swap(value1, value2);
 }
 
-#define Q_DECLARE_SHARED_STL(TYPE) \
-namespace std { \
-    template<> inline void swap<QT_PREPEND_NAMESPACE(TYPE)>(QT_PREPEND_NAMESPACE(TYPE) &value1, QT_PREPEND_NAMESPACE(TYPE) &value2) \
-    { swap(value1.data_ptr(), value2.data_ptr()); } \
+// used in QBitArray, QByteArray, QUrl, QUrlQuery, QVariant
+#define Q_DECLARE_SHARED(TYPE)                        \
+template <>                                           \
+inline void qSwap<TYPE>(TYPE &value1, TYPE &value2)   \
+{                                                     \
+   qSwap(value1.data_ptr(), value2.data_ptr());       \
+}                                                     \
+                                                      \
+inline void swap(TYPE &value1, TYPE &value2)          \
+{                                                     \
+   using std::swap;                                   \
+   swap(value1.data_ptr(), value2.data_ptr());        \
 }
-
-#define Q_DECLARE_SHARED(TYPE)    \
-template <>                       \
-inline void qSwap<TYPE>(TYPE &value1, TYPE &value2) \
-{ qSwap(value1.data_ptr(), value2.data_ptr()); } \
-Q_DECLARE_SHARED_STL(TYPE)
 
 Q_CORE_EXPORT void *qMalloc(size_t size);
 Q_CORE_EXPORT void *qRealloc(void *ptr, size_t size);
