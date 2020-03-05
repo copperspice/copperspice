@@ -111,7 +111,7 @@ class QSet
    }
 
    QSet<T> &intersect(const QSet<T> &other);
-   bool intersects(const QSet<T> &other);
+   bool intersects(const QSet<T> &other) const;
 
    bool remove(const T &value) {
       return m_data.erase(value) != 0;
@@ -321,7 +321,7 @@ inline QSet<T> &QSet<T>::intersect(const QSet<T> &other)
 }
 
 template <class T>
-inline bool QSet<T>::intersects(const QSet<T> &other)
+inline bool QSet<T>::intersects(const QSet<T> &other) const
 {
    for (const auto &item : m_data) {
       if (other.contains(item)) {
