@@ -32,9 +32,6 @@
 
 #include <ocidl.h>
 
-// Originally QVariantToVARIANT copied from ActiveQt, renamed to avoid conflicts in static builds
-bool QVariant2VARIANT(const QVariant &var, VARIANT &arg, const QByteArray &typeName, bool out);
-
 inline BSTR QStringToBSTR(const QString &str)
 {
    std::wstring tmp = str.toStdWString();
