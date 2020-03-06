@@ -39,99 +39,106 @@
 
 class QCFString;
 
-/*
-    Loads and instantiates the main app menu from the menu nib file(s).
-
-    The main app menu contains the Quit, Hide  About, Preferences entries, and
-    The reason for having the nib file is that those can not be created
-    programmatically. To ease deployment the nib files are stored in resources
-    and written to QDir::temp() before loading.
-*/
-void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
-{
-   // Create qt_menu.nib dir in temp
-   QDir temp = QDir::temp();
-   temp.mkdir("qt_menu.nib");
-
-   QString nibDir = temp.canonicalPath() + "/qt_menu.nib/";
-
-   if (! QDir(nibDir).exists()) {
-      qWarning("qt_mac_loadMenuNib: Could not create nib directory in temp");
-      return;
-   }
-
-   // Copy nib files from resources to temp
-   QDir nibResource(":/copperspice/mac/qt_menu.nib/");
-
-   if (! nibResource.exists()) {
-      qWarning("qt_mac_loadMenuNib: Unable to load nib from resources");
-      return;
-   }
-
-   for (const QFileInfo &file : nibResource.entryInfoList()) {
-      QFileInfo destinationFile(nibDir + "/" + file.fileName());
-
-      if (destinationFile.exists() && destinationFile.size() != file.size()) {
-         QFile::remove(destinationFile.absoluteFilePath());
-      }
-
-      QFile::copy(file.absoluteFilePath(), destinationFile.absoluteFilePath());
-   }
-
-   // Load and instantiate nib file from temp
-   NSURL *nibUrl = [NSURL fileURLWithPath: QCFString::toNSString(nibDir)];
-   NSNib *nib    = [[NSNib alloc] initWithContentsOfURL: nibUrl];
-   [nib autorelease];
-
-   if (! nib) {
-      qWarning("qt_mac_loadMenuNib: Unable to load nib from temp");
-      return;
-   }
-
-   bool ok = [nib instantiateNibWithOwner: qtMenuLoader topLevelObjects: nil];
-
-   if (! ok) {
-      qWarning("qt_mac_loadMenuNib: Unable to instantiate nib");
-   }
-}
-
 @implementation QCocoaMenuLoader
 
-- (void)awakeFromNib
+- (instancetype)init
 {
-   servicesItem = [[appMenu itemWithTitle: @"Services"] retain];
-   hideAllOthersItem = [[appMenu itemWithTitle: @"Hide Others"] retain];
-   showAllItem = [[appMenu itemWithTitle: @"Show All"] retain];
+   if ((self = [super init])) {
+     NSString *appName = qt_mac_applicationName().toNSString();
 
-   // Get the names in the nib to match the app name set by CS
-   const NSString *appName = qt_mac_applicationName().toNSString();
+     // Menubar as menu.
+     theMenu = [[NSMenu alloc] initWithTitle:@"Main Menu"];
 
-   [quitItem setTitle: [[quitItem title] stringByReplacingOccurrencesOfString: @"NewApplication"
-                  withString: const_cast<NSString *>(appName)]];
-   [hideItem setTitle: [[hideItem title] stringByReplacingOccurrencesOfString: @"NewApplication"
-                  withString: const_cast<NSString *>(appName)]];
-   [aboutItem setTitle: [[aboutItem title] stringByReplacingOccurrencesOfString: @"NewApplication"
-                   withString: const_cast<NSString *>(appName)]];
+     // Application menu. first menu is always the application menu.
+     NSMenuItem *appItem = [[[NSMenuItem alloc] init] autorelease];
+     appItem.title   = appName;
+     [theMenu addItem:appItem];
+     appMenu = [[NSMenu alloc] initWithTitle:appName];
+     appItem.submenu = appMenu;
 
-   // Disable the items that do not do anything. If someone associates a QAction with them
-   // they should get synced back in.
+     // About Application
+     aboutItem = [[NSMenuItem alloc] initWithTitle:[@"About " stringByAppendingString:appName]
+                                            action:@selector(orderFrontStandardAboutPanel:)
+                                     keyEquivalent:@""];
+     aboutItem.target = self;
 
-   [preferencesItem setEnabled: NO];
-   [preferencesItem setHidden: YES];
+     // Disable until there is a QAction
+     aboutItem.enabled = NO;
+     aboutItem.hidden  = YES;
+     [appMenu addItem:aboutItem];
 
-   // should set this in the NIB
-   [preferencesItem setTarget: self];
-   [preferencesItem setAction: @selector(qtDispatcherToQPAMenuItem:)];
+     aboutCsItem = [[NSMenuItem alloc] init];
+     aboutCsItem.title = @"About CS";
 
-   [aboutItem setEnabled: NO];
-   [aboutItem setHidden: YES];
+     // Disable until there is a QAction
+     aboutCsItem.enabled = NO;
+     aboutCsItem.hidden  = YES;
+     [appMenu addItem:aboutCsItem];
+
+     [appMenu addItem:[NSMenuItem separatorItem]];
+
+     // Preferences
+     preferencesItem = [[NSMenuItem alloc] initWithTitle:@"Preferences"
+                                                  action:@selector(qtDispatcherToQPAMenuItem:)
+                                           keyEquivalent:@","];
+     preferencesItem.target = self;
+
+     // Disable until there is a QAction
+     preferencesItem.enabled = NO;
+     preferencesItem.hidden  = YES;
+     [appMenu addItem:preferencesItem];
+
+     [appMenu addItem:[NSMenuItem separatorItem]];
+
+     // Services item and menu
+     servicesItem = [[NSMenuItem alloc] init];
+     servicesItem.title = @"Services";
+     NSApplication *app = [NSApplication sharedApplication];
+     app.servicesMenu   = [[[NSMenu alloc] initWithTitle:@"Services"] autorelease];
+     servicesItem.submenu = app.servicesMenu;
+     [appMenu addItem:servicesItem];
+
+     [appMenu addItem:[NSMenuItem separatorItem]];
+
+     // Hide Application
+     hideItem = [[NSMenuItem alloc] initWithTitle:[@"Hide " stringByAppendingString:appName]
+                                           action:@selector(hide:)
+                                    keyEquivalent:@"h"];
+     hideItem.target = self;
+     [appMenu addItem:hideItem];
+
+     // Hide Others
+     hideAllOthersItem = [[NSMenuItem alloc] initWithTitle:@"Hide Others"
+                                                    action:@selector(hideOtherApplications:)
+                                             keyEquivalent:@"h"];
+     hideAllOthersItem.target = self;
+     hideAllOthersItem.keyEquivalentModifierMask = NSCommandKeyMask | NSAlternateKeyMask;
+     [appMenu addItem:hideAllOthersItem];
+
+     // Show All
+     showAllItem = [[NSMenuItem alloc] initWithTitle:@"Show All"
+                                              action:@selector(unhideAllApplications:)
+                                       keyEquivalent:@""];
+     showAllItem.target = self;
+     [appMenu addItem:showAllItem];
+
+     [appMenu addItem:[NSMenuItem separatorItem]];
+
+     // Quit Application
+     quitItem = [[NSMenuItem alloc] initWithTitle:[@"Quit " stringByAppendingString:appName]
+                                           action:@selector(terminate:)
+                                    keyEquivalent:@"q"];
+     quitItem.target = self;
+     [appMenu addItem:quitItem];
+   }
+
+   return self;
 }
-
 - (void)ensureAppMenuInMenu: (NSMenu *)menu
 {
-   // The application menu is the menu in the menu bar that contains the
-   // 'Quit' item. When changing menu bar (e.g when switching between
-   // windows with different menu bars), we never recreate this menu, but
+   // application menu is the menu in the menu bar that contains 'Quit'
+   // When changing menu bar (e.g when switching between
+   // windows with different menu bars), never recreate this menu,
    // instead pull it out the current menu bar and place into the new one
 
    NSMenu *mainMenu = [NSApp mainMenu];
@@ -176,13 +183,19 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
 
 - (void)dealloc
 {
-   [servicesItem release];
-   [hideAllOthersItem release];
-   [showAllItem release];
-
-   [lastAppSpecificItem release];
    [theMenu release];
    [appMenu release];
+   [aboutItem release];
+   [aboutCsItem release];
+   [preferencesItem release];
+   [servicesItem release];
+   [hideItem release];
+   [hideAllOthersItem release];
+   [showAllItem release];
+   [quitItem release];
+
+   [lastAppSpecificItem release];
+
    [super dealloc];
 }
 
@@ -241,6 +254,7 @@ void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader)
       location = [appMenu indexOfItem: lastAppSpecificItem];
       [lastAppSpecificItem release];
    }
+
    lastAppSpecificItem = item;  // Keep track of this for later (i.e., don't release it)
    [appMenu insertItem: item atIndex: location + 1];
 

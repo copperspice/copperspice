@@ -327,10 +327,7 @@ QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
       }
    }
 
-   // ### For AA_MacPluginApplication we do not want to load the menu nib.
-   // prior versions did not set the application delegate so that behavior is matched here.
-
-   if (!QCoreApplication::testAttribute(Qt::AA_MacPluginApplication)) {
+   if (! QCoreApplication::testAttribute(Qt::AA_MacPluginApplication)) {
 
       // Set app delegate, link to the current delegate (if any)
       QCocoaApplicationDelegate *newDelegate = [QCocoaApplicationDelegate sharedDelegate];
@@ -339,7 +336,6 @@ QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
 
       // Load the application menu. This menu contains Preferences, Hide, Quit.
       QCocoaMenuLoader *qtMenuLoader = [[QCocoaMenuLoader alloc] init];
-      qt_mac_loadMenuNib(qtMenuLoader);
       [cocoaApplication setMenu: [qtMenuLoader menu]];
       [newDelegate setMenuLoader: qtMenuLoader];
    }

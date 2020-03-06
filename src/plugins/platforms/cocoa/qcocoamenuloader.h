@@ -42,6 +42,7 @@
    NSMenuItem *hideAllOthersItem;
    NSMenuItem *showAllItem;
 }
+- (instancetype)init;
 - (void)ensureAppMenuInMenu: (NSMenu *)menu;
 - (void)removeActionsFromAppMenu;
 - (NSMenu *)applicationMenu;
@@ -63,7 +64,5 @@
 - (void)qtTranslateApplicationMenu;
 - (NSArray *)mergeable;
 @end
-
-void qt_mac_loadMenuNib(QCocoaMenuLoader *qtMenuLoader);
 
 #endif
