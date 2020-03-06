@@ -24,11 +24,9 @@
 #ifndef QABSTRACTTRANSITION_H
 #define QABSTRACTTRANSITION_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qlist.h>
+#include <qobject.h>
+#include <qlist.h>
 #include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -91,7 +89,5 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
 };
 
 #endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
 
 #endif

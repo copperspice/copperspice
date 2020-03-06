@@ -25,17 +25,15 @@
 #define QSTATEMACHINE_P_H
 
 #include <qstate_p.h>
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qmultihash.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qset.h>
-#include <QtCore/qvector.h>
-
-QT_BEGIN_NAMESPACE
-
+#include <qcoreevent.h>
+#include <qhash.h>
+#include <qlist.h>
+#include <qmultihash.h>
+#include <qmutex.h>
+#include <qpair.h>
+#include <qpointer.h>
+#include <qset.h>
+#include <qvector.h>
 class QEvent;
 
 #ifndef QT_NO_STATEMACHINE_EVENTFILTER
@@ -65,10 +63,12 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
       Starting,
       Running
    };
+
    enum EventProcessingMode {
       DirectProcessing,
       QueuedProcessing
    };
+
    enum StopProcessingReason {
       EventQueueEmpty,
       Finished,
@@ -143,7 +143,7 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
 
    void unregisterTransition(QAbstractTransition *transition);
    void unregisterAllTransitions();
-   void handleTransitionSignal(QObject *sender, int sender_signalIndex);      // , const TeaCupAbstract &data);
+   void handleTransitionSignal(QObject *sender, int sender_signalIndex);      // CS , const TeaCupAbstract &data);
 
    void postInternalEvent(QEvent *e);
    void postExternalEvent(QEvent *e);
@@ -169,7 +169,9 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
    bool processing;
    bool processingScheduled;
    bool stop;
+
    StopProcessingReason stopProcessingReason;
+
    QSet<QAbstractState *> configuration;
    QList<QEvent *> internalEventQueue;
    QList<QEvent *> externalEventQueue;
@@ -218,7 +220,5 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
 };
 
 Q_CORE_EXPORT const QStateMachinePrivate::Handler *qcoreStateMachineHandler();
-
-QT_END_NAMESPACE
 
 #endif

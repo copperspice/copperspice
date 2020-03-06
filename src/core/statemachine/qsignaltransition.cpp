@@ -31,8 +31,6 @@
 #include <qstatemachine_p.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
 void QSignalTransition::unregister()
 {
    if (! m_signalBento || ! machine()) {
@@ -108,7 +106,5 @@ void QSignalTransition::callOnTransition(QEvent *e)
 {
    onTransition(e);
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_STATEMACHINE

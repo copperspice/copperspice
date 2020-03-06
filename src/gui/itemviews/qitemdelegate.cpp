@@ -262,9 +262,10 @@ QSize QItemDelegate::sizeHint(const QStyleOptionViewItem &option,
    if (value.isValid()) {
       return qvariant_cast<QSize>(value);
    }
+
    QRect decorationRect = rect(option, index, Qt::DecorationRole);
-   QRect displayRect = rect(option, index, Qt::DisplayRole);
-   QRect checkRect = rect(option, index, Qt::CheckStateRole);
+   QRect displayRect    = rect(option, index, Qt::DisplayRole);
+   QRect checkRect      = rect(option, index, Qt::CheckStateRole);
 
    doLayout(option, &checkRect, &decorationRect, &displayRect, true);
 
@@ -698,6 +699,7 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
 QPixmap QItemDelegate::decoration(const QStyleOptionViewItem &option, const QVariant &variant) const
 {
    Q_D(const QItemDelegate);
+
    switch (variant.type()) {
       case QVariant::Icon: {
          QIcon::Mode mode = d->iconMode(option.state);
@@ -733,10 +735,6 @@ static QString cs_internal_PixmapSerial(quint64 i, bool enabled)
    return QString(ptr, std::end(arr));
 }
 
-/*!
-  Returns the selected version of the given pixmap using the given palette.
-  The enabled argument decides whether the normal or disabled highlight color of the palette is used.
-*/
 QPixmap *QItemDelegate::selected(const QPixmap &pixmap, const QPalette &palette, bool enabled) const
 {
    QString key = cs_internal_PixmapSerial(pixmap.cacheKey(), enabled);
@@ -816,7 +814,7 @@ QRect QItemDelegate::rect(const QStyleOptionViewItem &option,
 }
 
 QRect QItemDelegate::doCheck(const QStyleOptionViewItem &option,
-   const QRect &bounding, const QVariant &value) const
+            const QRect &bounding, const QVariant &value) const
 {
    if (value.isValid()) {
       Q_D(const QItemDelegate);

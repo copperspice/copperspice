@@ -38,34 +38,33 @@
 #include <qgraphicsscenebsptreeindex_p.h>
 #include <qgraphicsscenelinearindex_p.h>
 
-#include <QtCore/qdebug.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qmath.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qset.h>
-#include <QtCore/qstack.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/QMetaMethod>
-#include <QtGui/qapplication.h>
-#include <QtGui/qdesktopwidget.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qgraphicslayout.h>
-#include <QtGui/qgraphicsproxywidget.h>
-#include <QtGui/qgraphicswidget.h>
-#include <QtGui/qmatrix.h>
-#include <QtGui/qpaintengine.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qpixmapcache.h>
-#include <QtGui/qpolygon.h>
-#include <QtGui/qstyleoption.h>
-#include <QtGui/qtooltip.h>
-#include <QtGui/qtransform.h>
-#include <QtGui/qinputmethod.h>
-#include <QtGui/qgraphicseffect.h>
+#include <qdebug.h>
+#include <qlist.h>
+#include <qmath.h>
+#include <qrect.h>
+#include <qset.h>
+#include <qstack.h>
+#include <qtimer.h>
+#include <qvarlengtharray.h>
+#include <QMetaMethod>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qgraphicslayout.h>
+#include <qgraphicsproxywidget.h>
+#include <qgraphicswidget.h>
+#include <qmatrix.h>
+#include <qpaintengine.h>
+#include <qpainter.h>
+#include <qpixmapcache.h>
+#include <qpolygon.h>
+#include <qstyleoption.h>
+#include <qtooltip.h>
+#include <qtransform.h>
+#include <qinputmethod.h>
+#include <qgraphicseffect.h>
 
 #include <qapplication_p.h>
-
 #include <qgraphicseffect_p.h>
 #include <qgesturemanager_p.h>
 #include <qpathclipper_p.h>
@@ -2071,6 +2070,7 @@ void QGraphicsScene::addItem(QGraphicsItem *item)
       if (targetScene && item->d_ptr->scene != targetScene) {
          targetScene->addItem(item);
       }
+
       return;
    }
 
@@ -2324,8 +2324,7 @@ void QGraphicsScene::removeItem(QGraphicsItem *item)
       return;
    }
 
-   // Notify the item that it's scene is changing to 0, allowing the item to
-   // react.
+   // Notify the item that it's scene is changing to 0, allowing the item to react
    const QVariant newSceneVariant(item->itemChange(QGraphicsItem::ItemSceneChange,
          QVariant::fromValue<QGraphicsScene *>(0)));
    QGraphicsScene *targetScene = qvariant_cast<QGraphicsScene *>(newSceneVariant);
@@ -4816,10 +4815,8 @@ void QGraphicsScenePrivate::processDirtyItemsRecursive(QGraphicsItem *item, bool
 
     \sa drawBackground(), drawForeground()
 */
-void QGraphicsScene::drawItems(QPainter *painter,
-   int numItems,
-   QGraphicsItem *items[],
-   const QStyleOptionGraphicsItem options[], QWidget *widget)
+void QGraphicsScene::drawItems(QPainter *painter, int numItems,
+            QGraphicsItem *items[], const QStyleOptionGraphicsItem options[], QWidget *widget)
 {
    Q_D(QGraphicsScene);
    // Make sure we do not have unpolished items before we draw.
@@ -4834,8 +4831,9 @@ void QGraphicsScene::drawItems(QPainter *painter,
 
    // Determine view, expose and flags.
    QGraphicsView *view = widget ? qobject_cast<QGraphicsView *>(widget->parentWidget()) : 0;
-   QRegion *expose = 0;
+   QRegion *expose = nullptr;
    const quint32 oldRectAdjust = d->rectAdjust;
+
    if (view) {
       d->updateAll = false;
       expose = &view->d_func()->exposedRegion;

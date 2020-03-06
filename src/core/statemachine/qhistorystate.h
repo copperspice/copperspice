@@ -24,9 +24,7 @@
 #ifndef QHISTORYSTATE_H
 #define QHISTORYSTATE_H
 
-#include <QtCore/qabstractstate.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractstate.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -49,8 +47,8 @@ class Q_CORE_EXPORT QHistoryState : public QAbstractState
 
    CORE_CS_ENUM(HistoryType)
 
-   QHistoryState(QState *parent = 0);
-   QHistoryState(HistoryType type, QState *parent = 0);
+   QHistoryState(QState *parent = nullptr);
+   QHistoryState(HistoryType type, QState *parent = nullptr);
    ~QHistoryState();
 
    QAbstractState *defaultState() const;
@@ -71,7 +69,5 @@ class Q_CORE_EXPORT QHistoryState : public QAbstractState
 };
 
 #endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
 
 #endif

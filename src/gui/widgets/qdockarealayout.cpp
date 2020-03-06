@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <QtGui/qapplication.h>
-#include <QtGui/qwidget.h>
-#include <QtGui/qtabbar.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qdesktopwidget.h>
+#include <qapplication.h>
+#include <qwidget.h>
+#include <qtabbar.h>
+#include <qstyle.h>
+#include <qdesktopwidget.h>
 #include <qvariant.h>
 #include <qdockarealayout_p.h>
 #include <qdockwidget.h>
@@ -37,7 +37,6 @@
 #include <qmainwindowlayout_p.h>
 #include <qdockwidget_p.h>
 #include <qlayoutengine_p.h>
-
 
 #ifndef QT_NO_DOCKWIDGET
 
@@ -2242,10 +2241,11 @@ bool QDockAreaLayoutInfo::updateTabBar() const
 
       QDockWidget *dw = qobject_cast<QDockWidget *>(item.widgetItem->widget());
       QString title = dw->d_func()->fixedWindowTitle;
-      quintptr id = tabId(item);
+      quintptr id   = tabId(item);
 
       if (tab_idx == tabBar->count()) {
          tabBar->insertTab(tab_idx, title);
+
 #ifndef QT_NO_TOOLTIP
          tabBar->setTabToolTip(tab_idx, title);
 #endif
@@ -2265,6 +2265,7 @@ bool QDockAreaLayoutInfo::updateTabBar() const
 
       if (title != tabBar->tabText(tab_idx)) {
          tabBar->setTabText(tab_idx, title);
+
 #ifndef QT_NO_TOOLTIP
          tabBar->setTabToolTip(tab_idx, title);
 #endif

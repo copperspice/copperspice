@@ -24,10 +24,8 @@
 #ifndef QABSTRACTSTATE_H
 #define QABSTRACTSTATE_H
 
-#include <QtCore/qobject.h>
-#include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -52,7 +50,7 @@ class Q_CORE_EXPORT QAbstractState : public QObject
    CORE_CS_SIGNAL_2(exited)
 
  protected:
-   QAbstractState(QState *parent = 0);
+   QAbstractState(QState *parent = nullptr);
 
    virtual void onEntry(QEvent *event) = 0;
    virtual void onExit(QEvent *event) = 0;
@@ -65,11 +63,8 @@ class Q_CORE_EXPORT QAbstractState : public QObject
  private:
    Q_DISABLE_COPY(QAbstractState)
    Q_DECLARE_PRIVATE(QAbstractState)
-  
 };
 
 #endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
 
 #endif

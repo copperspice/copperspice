@@ -25,11 +25,9 @@
 #define QHISTORYSTATE_P_H
 
 #include <qabstractstate_p.h>
-#include <QtCore/qlist.h>
-
-QT_BEGIN_NAMESPACE
 
 class QHistoryState;
+#include <qlist.h>
 
 class QHistoryStatePrivate : public QAbstractStatePrivate
 {
@@ -45,6 +43,5 @@ class QHistoryStatePrivate : public QAbstractStatePrivate
    QList<QAbstractState *> configuration;
 };
 
-QT_END_NAMESPACE
 
 #endif

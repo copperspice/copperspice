@@ -34,23 +34,23 @@
 #include <qgraphicswidget.h>
 #include <qgraphicsproxywidget.h>
 
-#include <QtCore/qbitarray.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qstack.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/qnumeric.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qbitmap.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qpainterpath.h>
-#include <QtGui/qpixmapcache.h>
-#include <QtGui/qstyleoption.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qinputmethod.h>
-#include <QtGui/qgraphicseffect.h>
+#include <qbitarray.h>
+#include <qdebug.h>
+#include <qpoint.h>
+#include <qstack.h>
+#include <qtimer.h>
+#include <qvariant.h>
+#include <qvarlengtharray.h>
+#include <qnumeric.h>
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qpainter.h>
+#include <qpainterpath.h>
+#include <qpixmapcache.h>
+#include <qstyleoption.h>
+#include <qevent.h>
+#include <qinputmethod.h>
+#include <qgraphicseffect.h>
 
 #include <qgraphicsitem_p.h>
 #include <qgraphicswidget_p.h>
@@ -63,21 +63,20 @@
 #include <qdebug_p.h>
 #include <qgraphicsscenebsptreeindex_p.h>
 
-
 static inline void _q_adjustRect(QRect *rect)
 {
    Q_ASSERT(rect);
-   if (!rect->width()) {
+
+   if ( !rect->width()) {
       rect->adjust(0, 0, 1, 0);
    }
+
    if (!rect->height()) {
       rect->adjust(0, 0, 0, 1);
    }
 }
 
-/*
-    ### Move this into QGraphicsItemPrivate
- */
+// ### Move this into QGraphicsItemPrivate
 class QGraphicsItemCustomDataStore
 {
  public:
@@ -404,7 +403,6 @@ void QGraphicsItemPrivate::updateSceneTransformFromParent()
    }
    dirtySceneTransform = 0;
 }
-
 
 /*!
     \internal
@@ -771,14 +769,6 @@ QGraphicsItem::QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent)
    setParentItem(parent);
 }
 
-/*!
-    Destroys the QGraphicsItem and all its children. If this item is currently
-    associated with a scene, the item will be removed from the scene before it
-    is deleted.
-
-    \note It is more efficient to remove the item from the QGraphicsScene before
-    destroying the item.
-*/
 QGraphicsItem::~QGraphicsItem()
 {
    if (d_ptr->isObject) {
@@ -814,6 +804,7 @@ QGraphicsItem::~QGraphicsItem()
 
    // Update focus scope item ptr.
    QGraphicsItem *p = d_ptr->parent;
+
    while (p) {
       if (p->flags() & ItemIsFocusScope) {
          if (p->d_ptr->focusScopeItem == this) {
@@ -840,7 +831,8 @@ QGraphicsItem::~QGraphicsItem()
 
 #ifndef QT_NO_GRAPHICSEFFECT
    delete d_ptr->graphicsEffect;
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
+
    if (d_ptr->transformData) {
       for (int i = 0; i < d_ptr->transformData->graphicsTransforms.size(); ++i) {
          QGraphicsTransform *t = d_ptr->transformData->graphicsTransforms.at(i);
@@ -848,6 +840,7 @@ QGraphicsItem::~QGraphicsItem()
          delete t;
       }
    }
+
    delete d_ptr->transformData;
 
    if (QGraphicsItemCustomDataStore *dataStore = qt_dataStore()) {
@@ -855,36 +848,28 @@ QGraphicsItem::~QGraphicsItem()
    }
 }
 
-/*!
-    Returns the current scene for the item, or 0 if the item is not stored in
-    a scene.
-
-    To add or move an item to a scene, call QGraphicsScene::addItem().
-*/
 QGraphicsScene *QGraphicsItem::scene() const
 {
    return d_ptr->scene;
 }
 
-/*!
-    Returns a pointer to this item's item group, or 0 if this item is not
-    member of a group.
-
-    \sa QGraphicsItemGroup, QGraphicsScene::createItemGroup()
-*/
 QGraphicsItemGroup *QGraphicsItem::group() const
 {
-   if (!d_ptr->isMemberOfGroup) {
+   if (! d_ptr->isMemberOfGroup) {
       return 0;
    }
+
    QGraphicsItem *parent = const_cast<QGraphicsItem *>(this);
+
    while ((parent = parent->d_ptr->parent)) {
       if (QGraphicsItemGroup *group = qgraphicsitem_cast<QGraphicsItemGroup *>(parent)) {
          return group;
       }
    }
+
    // Unreachable; if d_ptr->isMemberOfGroup is != 0, then one parent of this
    // item is a group item.
+
    return 0;
 }
 
@@ -1326,14 +1311,13 @@ QString QGraphicsItem::toolTip() const
    return d_ptr->extra(QGraphicsItemPrivate::ExtraToolTip).toString();
 }
 
-
 void QGraphicsItem::setToolTip(const QString &toolTip)
 {
    const QVariant toolTipVariant(itemChange(ItemToolTipChange, toolTip));
    d_ptr->setExtra(QGraphicsItemPrivate::ExtraToolTip, toolTipVariant.toString());
    itemChange(ItemToolTipHasChanged, toolTipVariant);
 }
-#endif // QT_NO_TOOLTIP
+#endif
 
 #ifndef QT_NO_CURSOR
 QCursor QGraphicsItem::cursor() const
@@ -1369,27 +1353,14 @@ void QGraphicsItem::setCursor(const QCursor &cursor)
    itemChange(ItemCursorHasChanged, cursorVariant);
 }
 
-/*!
-    Returns true if this item has a cursor set; otherwise, false is returned.
-
-    By default, items don't have any cursor set. cursor() will return a
-    standard pointing arrow cursor.
-
-    \sa unsetCursor()
-*/
 bool QGraphicsItem::hasCursor() const
 {
    return d_ptr->hasCursor;
 }
 
-/*!
-    Clears the cursor from this item.
-
-    \sa hasCursor(), setCursor()
-*/
 void QGraphicsItem::unsetCursor()
 {
-   if (!d_ptr->hasCursor) {
+   if (! d_ptr->hasCursor) {
       return;
    }
 
@@ -1404,9 +1375,7 @@ void QGraphicsItem::unsetCursor()
       }
    }
 }
-
 #endif // QT_NO_CURSOR
-
 
 bool QGraphicsItem::isVisible() const
 {
@@ -1460,7 +1429,9 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
    // Modify the property.
    const QVariant newVisibleVariant(q_ptr->itemChange(QGraphicsItem::ItemVisibleChange,
          quint32(newVisible)));
+
    newVisible = newVisibleVariant.toBool();
+
    if (visible == quint32(newVisible)) {
       return;
    }
@@ -1472,10 +1443,12 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
       if (c) {
          c->purge();
       }
+
       if (scene) {
 #ifndef QT_NO_GRAPHICSEFFECT
          invalidateParentGraphicsEffectsRecursively();
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
+
          scene->d_func()->markDirty(q_ptr, QRectF(), /*invalidateChildren=*/false, /*force=*/true);
       }
    }
@@ -1841,12 +1814,14 @@ void QGraphicsItem::setOpacity(qreal opacity)
 
    // Update.
    if (d_ptr->scene) {
+
 #ifndef QT_NO_GRAPHICSEFFECT
       d_ptr->invalidateParentGraphicsEffectsRecursively();
       if (!(d_ptr->flags & ItemDoesntPropagateOpacityToChildren)) {
          d_ptr->invalidateChildGraphicsEffectsRecursively(QGraphicsItemPrivate::OpacityChanged);
       }
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
+
       d_ptr->scene->d_func()->markDirty(this, QRectF(),
          /*invalidateChildren=*/true,
          /*force=*/false,
@@ -1861,31 +1836,11 @@ void QGraphicsItem::setOpacity(qreal opacity)
    }
 }
 
-/*!
-    Returns a pointer to this item's effect if it has one; otherwise 0.
-
-    \since 4.6
-*/
 #ifndef QT_NO_GRAPHICSEFFECT
 QGraphicsEffect *QGraphicsItem::graphicsEffect() const
 {
    return d_ptr->graphicsEffect;
 }
-
-/*!
-    Sets \a effect as the item's effect. If there already is an effect installed
-    on this item, QGraphicsItem will delete the existing effect before installing
-    the new \a effect.
-
-    If \a effect is the installed on a different item, setGraphicsEffect() will remove
-    the effect from the item and install it on this item.
-
-    QGraphicsItem takes ownership of \a effect.
-
-    \note This function will apply the effect on itself and all its children.
-
-    \since 4.6
-*/
 void QGraphicsItem::setGraphicsEffect(QGraphicsEffect *effect)
 {
    if (d_ptr->graphicsEffect == effect) {
@@ -1908,7 +1863,7 @@ void QGraphicsItem::setGraphicsEffect(QGraphicsEffect *effect)
       prepareGeometryChange();
    }
 }
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
 
 void QGraphicsItemPrivate::updateChildWithGraphicsEffectFlagRecursively()
 {
@@ -1954,7 +1909,8 @@ QRectF QGraphicsItemPrivate::effectiveBoundingRect(const QRectF &rect) const
       }
       return q->mapRectFromScene(sceneEffectRect);
    }
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
+
    return rect;
 }
 
@@ -1972,6 +1928,7 @@ QRectF QGraphicsItemPrivate::effectiveBoundingRect(QGraphicsItem *topMostEffectI
 {
 #ifndef QT_NO_GRAPHICSEFFECT
    Q_Q(const QGraphicsItem);
+
    QRectF brect = effectiveBoundingRect(q_ptr->boundingRect());
 
    if (ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
@@ -1997,9 +1954,11 @@ QRectF QGraphicsItemPrivate::effectiveBoundingRect(QGraphicsItem *topMostEffectI
    }
 
    return brect;
-#else //QT_NO_GRAPHICSEFFECT
+
+#else
    return q_ptr->boundingRect();
-#endif //QT_NO_GRAPHICSEFFECT
+
+#endif
 
 }
 
@@ -2034,61 +1993,21 @@ QRectF QGraphicsItemPrivate::sceneEffectiveBoundingRect() const
    return !parentItem ? br : parentItem->sceneTransform().mapRect(br);
 }
 
-/*!
-   Returns true if this item can accept drag and drop events; otherwise,
-   returns false. By default, items do not accept drag and drop events; items
-   are transparent to drag and drop.
-
-   \sa setAcceptDrops()
-*/
 bool QGraphicsItem::acceptDrops() const
 {
    return d_ptr->acceptDrops;
 }
 
-/*!
-    If \a on is true, this item will accept drag and drop events; otherwise,
-    it is transparent for drag and drop events. By default, items do not
-    accept drag and drop events.
-
-    \sa acceptDrops()
-*/
 void QGraphicsItem::setAcceptDrops(bool on)
 {
    d_ptr->acceptDrops = on;
 }
 
-/*!
-    Returns the mouse buttons that this item accepts mouse events for.  By
-    default, all mouse buttons are accepted.
-
-    If an item accepts a mouse button, it will become the mouse
-    grabber item when a mouse press event is delivered for that mouse
-    button. However, if the item does not accept the button,
-    QGraphicsScene will forward the mouse events to the first item
-    beneath it that does.
-
-    \sa setAcceptedMouseButtons(), mousePressEvent()
-*/
 Qt::MouseButtons QGraphicsItem::acceptedMouseButtons() const
 {
    return Qt::MouseButtons(d_ptr->acceptedMouseButtons);
 }
 
-/*!
-    Sets the mouse \a buttons that this item accepts mouse events for.
-
-    By default, all mouse buttons are accepted. If an item accepts a
-    mouse button, it will become the mouse grabber item when a mouse
-    press event is delivered for that button. However, if the item
-    does not accept the mouse button, QGraphicsScene will forward the
-    mouse events to the first item beneath it that does.
-
-    To disable mouse events for an item (i.e., make it transparent for mouse
-    events), call setAcceptedMouseButtons(0).
-
-    \sa acceptedMouseButtons(), mousePressEvent()
-*/
 void QGraphicsItem::setAcceptedMouseButtons(Qt::MouseButtons buttons)
 {
    if (Qt::MouseButtons(d_ptr->acceptedMouseButtons) != buttons) {
@@ -2099,56 +2018,30 @@ void QGraphicsItem::setAcceptedMouseButtons(Qt::MouseButtons buttons)
       d_ptr->acceptedMouseButtons = quint32(buttons);
    }
 }
-
-/*!
-    \since 4.4
-
-    Returns true if an item accepts hover events
-    (QGraphicsSceneHoverEvent); otherwise, returns false. By default,
-    items do not accept hover events.
-
-    \sa setAcceptedMouseButtons()
-*/
 bool QGraphicsItem::acceptHoverEvents() const
 {
    return d_ptr->acceptsHover;
 }
-
-
 
 void QGraphicsItem::setAcceptHoverEvents(bool enabled)
 {
    if (d_ptr->acceptsHover == quint32(enabled)) {
       return;
    }
+
    d_ptr->acceptsHover = quint32(enabled);
+
    if (d_ptr->acceptsHover && d_ptr->scene && d_ptr->scene->d_func()->allItemsIgnoreHoverEvents) {
       d_ptr->scene->d_func()->allItemsIgnoreHoverEvents = false;
       d_ptr->scene->d_func()->enableMouseTrackingOnViews();
    }
 }
 
-
-
-/*! \since 4.6
-
-    Returns true if an item accepts \l{QTouchEvent}{touch events};
-    otherwise, returns false. By default, items do not accept touch events.
-
-    \sa setAcceptTouchEvents()
-*/
 bool QGraphicsItem::acceptTouchEvents() const
 {
    return d_ptr->acceptTouchEvents;
 }
 
-/*!
-    \since 4.6
-
-    If \a enabled is true, this item will accept \l{QTouchEvent}{touch events};
-    otherwise, it will ignore them. By default, items do not accept
-    touch events.
-*/
 void QGraphicsItem::setAcceptTouchEvents(bool enabled)
 {
    if (d_ptr->acceptTouchEvents == quint32(enabled)) {
@@ -2161,33 +2054,11 @@ void QGraphicsItem::setAcceptTouchEvents(bool enabled)
    }
 }
 
-/*!
-    \since 4.6
-
-    Returns true if this item filters child events (i.e., all events
-    intended for any of its children are instead sent to this item);
-    otherwise, false is returned.
-
-    The default value is false; child events are not filtered.
-
-    \sa setFiltersChildEvents()
-*/
 bool QGraphicsItem::filtersChildEvents() const
 {
    return d_ptr->filtersDescendantEvents;
 }
 
-/*!
-    \since 4.6
-
-    If \a enabled is true, this item is set to filter all events for
-    all its children (i.e., all events intented for any of its
-    children are instead sent to this item); otherwise, if \a enabled
-    is false, this item will only handle its own events. The default
-    value is false.
-
-    \sa filtersChildEvents()
-*/
 void QGraphicsItem::setFiltersChildEvents(bool enabled)
 {
    if (d_ptr->filtersDescendantEvents == enabled) {
@@ -2249,21 +2120,7 @@ void QGraphicsItem::setHandlesChildEvents(bool enabled)
    d_ptr->handlesChildEvents = enabled;
    d_ptr->updateAncestorFlag(QGraphicsItem::GraphicsItemFlag(-1));
 }
-/*!
-    \since 4.6
-    Returns true if this item is active; otherwise returns false.
 
-    An item can only be active if the scene is active. An item is active
-    if it is, or is a descendent of, an active panel. Items in non-active
-    panels are not active.
-
-    Items that are not part of a panel follow scene activation when the
-    scene has no active panel.
-
-    Only active items can gain input focus.
-
-    \sa QGraphicsScene::isActive(), QGraphicsScene::activePanel(), panel(), isPanel()
-*/
 bool QGraphicsItem::isActive() const
 {
    if (!d_ptr->scene || !d_ptr->scene->isActive()) {
@@ -2272,28 +2129,16 @@ bool QGraphicsItem::isActive() const
    return panel() == d_ptr->scene->activePanel();
 }
 
-/*!
-    \since 4.6
-
-    If \a active is true, and the scene is active, this item's panel will be
-    activated. Otherwise, the panel is deactivated.
-
-    If the item is not part of an active scene, \a active will decide what
-    happens to the panel when the scene becomes active or the item is added to
-    the scene. If true, the item's panel will be activated when the item is
-    either added to the scene or the scene is activated. Otherwise, the item
-    will stay inactive independent of the scene's activated state.
-
-    \sa isPanel(), QGraphicsScene::setActivePanel(), QGraphicsScene::isActive()
-*/
 void QGraphicsItem::setActive(bool active)
 {
    d_ptr->explicitActivate = 1;
    d_ptr->wantsActive = active;
+
    if (d_ptr->scene) {
       if (active) {
          // Activate this item.
          d_ptr->scene->setActivePanel(this);
+
       } else {
          QGraphicsItem *activePanel = d_ptr->scene->activePanel();
          QGraphicsItem *thisPanel = panel();
@@ -2316,12 +2161,6 @@ void QGraphicsItem::setActive(bool active)
    }
 }
 
-/*!
-    Returns true if this item is active, and it or its \l{focusProxy()}{focus
-    proxy} has keyboard input focus; otherwise, returns false.
-
-    \sa focusItem(), setFocus(), QGraphicsScene::setFocusItem(), isActive()
-*/
 bool QGraphicsItem::hasFocus() const
 {
    if (!d_ptr->scene || !d_ptr->scene->isActive()) {
@@ -2339,26 +2178,6 @@ bool QGraphicsItem::hasFocus() const
    return panel() == d_ptr->scene->d_func()->activePanel;
 }
 
-/*!
-    Gives keyboard input focus to this item. The \a focusReason argument will
-    be passed into any \l{QFocusEvent}{focus event} generated by this function;
-    it is used to give an explanation of what caused the item to get focus.
-
-    Only enabled items that set the ItemIsFocusable flag can accept keyboard
-    focus.
-
-    If this item is not visible, not active, or not associated with a scene,
-    it will not gain immediate input focus. However, it will be registered as
-    the preferred focus item for its subtree of items, should it later become
-    visible.
-
-    As a result of calling this function, this item will receive a
-    \l{focusInEvent()}{focus in event} with \a focusReason. If another item
-    already has focus, that item will first receive a \l{focusOutEvent()}
-    {focus out event} indicating that it has lost input focus.
-
-    \sa clearFocus(), hasFocus(), focusItem(), focusProxy()
-*/
 void QGraphicsItem::setFocus(Qt::FocusReason focusReason)
 {
    d_ptr->setFocusHelper(focusReason, /* climb = */ true, /* focusFromHide = */ false);
@@ -2433,17 +2252,6 @@ void QGraphicsItemPrivate::setFocusHelper(Qt::FocusReason focusReason, bool clim
    }
 }
 
-/*!
-    Takes keyboard input focus from the item.
-
-    If it has focus, a \l{focusOutEvent()}{focus out event} is sent to this
-    item to tell it that it is about to lose the focus.
-
-    Only items that set the ItemIsFocusable flag, or widgets that set an
-    appropriate focus policy, can accept keyboard focus.
-
-    \sa setFocus(), hasFocus(), QGraphicsWidget::focusPolicy
-*/
 void QGraphicsItem::clearFocus()
 {
    d_ptr->clearFocusHelper(true, false);
@@ -2494,38 +2302,11 @@ void QGraphicsItemPrivate::clearFocusHelper(bool giveFocusToParent, bool hiddenB
    }
 }
 
-/*!
-    \since 4.6
-
-    Returns this item's focus proxy, or 0 if this item has no
-    focus proxy.
-
-    \sa setFocusProxy(), setFocus(), hasFocus()
-*/
 QGraphicsItem *QGraphicsItem::focusProxy() const
 {
    return d_ptr->focusProxy;
 }
 
-/*!
-    \since 4.6
-
-    Sets the item's focus proxy to \a item.
-
-    If an item has a focus proxy, the focus proxy will receive
-    input focus when the item gains input focus. The item itself
-    will still have focus (i.e., hasFocus() will return true),
-    but only the focus proxy will receive the keyboard input.
-
-    A focus proxy can itself have a focus proxy, and so on. In
-    such case, keyboard input will be handled by the outermost
-    focus proxy.
-
-    The focus proxy \a item must belong to the same scene as
-    this item.
-
-    \sa focusProxy(), setFocus(), hasFocus()
-*/
 void QGraphicsItem::setFocusProxy(QGraphicsItem *item)
 {
    if (item == d_ptr->focusProxy) {
@@ -2558,15 +2339,6 @@ void QGraphicsItem::setFocusProxy(QGraphicsItem *item)
    }
 }
 
-/*!
-    \since 4.6
-
-    If this item, a child or descendant of this item currently has input
-    focus, this function will return a pointer to that item. If
-    no descendant has input focus, 0 is returned.
-
-    \sa hasFocus(), setFocus(), QWidget::focusWidget()
-*/
 QGraphicsItem *QGraphicsItem::focusItem() const
 {
    return d_ptr->subFocusItem;
@@ -2582,40 +2354,6 @@ QGraphicsItem *QGraphicsItem::focusScopeItem() const
    return d_ptr->focusScopeItem;
 }
 
-/*!
-    \since 4.4
-    Grabs the mouse input.
-
-    This item will receive all mouse events for the scene until any of the
-    following events occurs:
-
-    \list
-    \o The item becomes invisible
-    \o The item is removed from the scene
-    \o The item is deleted
-    \o The item call ungrabMouse()
-    \o Another item calls grabMouse(); the item will regain the mouse grab
-    when the other item calls ungrabMouse().
-    \endlist
-
-    When an item gains the mouse grab, it receives a QEvent::GrabMouse
-    event. When it loses the mouse grab, it receives a QEvent::UngrabMouse
-    event. These events can be used to detect when your item gains or loses
-    the mouse grab through other means than receiving mouse button events.
-
-    It is almost never necessary to explicitly grab the mouse in Qt, as Qt
-    grabs and releases it sensibly. In particular, Qt grabs the mouse when you
-    press a mouse button, and keeps the mouse grabbed until you release the
-    last mouse button. Also, Qt::Popup widgets implicitly call grabMouse()
-    when shown, and ungrabMouse() when hidden.
-
-    Note that only visible items can grab mouse input. Calling grabMouse() on
-    an invisible item has no effect.
-
-    Keyboard events are not affected.
-
-    \sa QGraphicsScene::mouseGrabberItem(), ungrabMouse(), grabKeyboard()
-*/
 void QGraphicsItem::grabMouse()
 {
    if (!d_ptr->scene) {
@@ -2629,12 +2367,6 @@ void QGraphicsItem::grabMouse()
    d_ptr->scene->d_func()->grabMouse(this);
 }
 
-/*!
-    \since 4.4
-    Releases the mouse grab.
-
-    \sa grabMouse(), ungrabKeyboard()
-*/
 void QGraphicsItem::ungrabMouse()
 {
    if (!d_ptr->scene) {
@@ -2644,40 +2376,6 @@ void QGraphicsItem::ungrabMouse()
    d_ptr->scene->d_func()->ungrabMouse(this);
 }
 
-/*!
-    \since 4.4
-    Grabs the keyboard input.
-
-    The item will receive all keyboard input to the scene until one of the
-    following events occur:
-
-    \list
-    \o The item becomes invisible
-    \o The item is removed from the scene
-    \o The item is deleted
-    \o The item calls ungrabKeyboard()
-    \o Another item calls grabKeyboard(); the item will regain the keyboard grab
-    when the other item calls ungrabKeyboard().
-    \endlist
-
-    When an item gains the keyboard grab, it receives a QEvent::GrabKeyboard
-    event. When it loses the keyboard grab, it receives a
-    QEvent::UngrabKeyboard event. These events can be used to detect when your
-    item gains or loses the keyboard grab through other means than gaining
-    input focus.
-
-    It is almost never necessary to explicitly grab the keyboard in Qt, as Qt
-    grabs and releases it sensibly. In particular, Qt grabs the keyboard when
-    your item gains input focus, and releases it when your item loses input
-    focus, or when the item is hidden.
-
-    Note that only visible items can grab keyboard input. Calling
-    grabKeyboard() on an invisible item has no effect.
-
-    Keyboard events are not affected.
-
-    \sa ungrabKeyboard(), grabMouse(), setFocus()
-*/
 void QGraphicsItem::grabKeyboard()
 {
    if (!d_ptr->scene) {
@@ -2691,12 +2389,6 @@ void QGraphicsItem::grabKeyboard()
    d_ptr->scene->d_func()->grabKeyboard(this);
 }
 
-/*!
-    \since 4.4
-    Releases the keyboard grab.
-
-    \sa grabKeyboard(), ungrabMouse()
-*/
 void QGraphicsItem::ungrabKeyboard()
 {
    if (!d_ptr->scene) {
@@ -2947,22 +2639,6 @@ void QGraphicsItem::setScale(qreal factor)
    d_ptr->transformChanged();
 }
 
-
-/*!
-    \since 4.6
-
-    Returns a list of graphics transforms that currently apply to this item.
-
-    QGraphicsTransform is for applying and controlling a chain of individual
-    transformation operations on an item. It's particularly useful in
-    animations, where each transform operation needs to be interpolated
-    independently, or differently.
-
-    The transformations are combined with the item's rotation(), scale() and
-    transform() to map the item's coordinate system to the parent item.
-
-    \sa scale(), rotation(), transformOriginPoint(), {Transformations}
-*/
 QList<QGraphicsTransform *> QGraphicsItem::transformations() const
 {
    if (!d_ptr->transformData) {
@@ -2971,26 +2647,6 @@ QList<QGraphicsTransform *> QGraphicsItem::transformations() const
    return d_ptr->transformData->graphicsTransforms;
 }
 
-/*!
-    \since 4.6
-
-    Sets a list of graphics \a transformations (QGraphicsTransform) that
-    currently apply to this item.
-
-    If all you want is to rotate or scale an item, you should call setRotation()
-    or setScale() instead. If you want to set an arbitrary transformation on
-    an item, you can call setTransform().
-
-    QGraphicsTransform is for applying and controlling a chain of individual
-    transformation operations on an item. It's particularly useful in
-    animations, where each transform operation needs to be interpolated
-    independently, or differently.
-
-    The transformations are combined with the item's rotation(), scale() and
-    transform() to map the item's coordinate system to the parent item.
-
-    \sa scale(), setTransformOriginPoint(), {Transformations}
-*/
 void QGraphicsItem::setTransformations(const QList<QGraphicsTransform *> &transformations)
 {
    prepareGeometryChange();
@@ -3044,15 +2700,6 @@ void QGraphicsItemPrivate::appendGraphicsTransform(QGraphicsTransform *t)
    transformChanged();
 }
 
-/*!
-    \since 4.6
-
-    Returns the origin point for the transformation in item coordinates.
-
-    The default is QPointF(0,0).
-
-    \sa setTransformOriginPoint(), {Transformations}
-*/
 QPointF QGraphicsItem::transformOriginPoint() const
 {
    if (!d_ptr->transformData) {
@@ -3061,13 +2708,6 @@ QPointF QGraphicsItem::transformOriginPoint() const
    return QPointF(d_ptr->transformData->xOrigin, d_ptr->transformData->yOrigin);
 }
 
-/*!
-    \since 4.6
-
-    Sets the \a origin point for the transformation in item coordinates.
-
-    \sa transformOriginPoint(), {Transformations}
-*/
 void QGraphicsItem::setTransformOriginPoint(const QPointF &origin)
 {
    prepareGeometryChange();
@@ -3166,23 +2806,6 @@ QTransform QGraphicsItem::deviceTransform(const QTransform &viewportTransform) c
    return matrix;
 }
 
-/*!
-    \since 4.5
-
-    Returns a QTransform that maps coordinates from this item to \a other. If
-    \a ok is not null, and if there is no such transform, the boolean pointed
-    to by \a ok will be set to false; otherwise it will be set to true.
-
-    This transform provides an alternative to the mapToItem() or mapFromItem()
-    functions, by returning the appropriate transform so that you can map
-    shapes and coordinates yourself. It also helps you write more efficient
-    code when repeatedly mapping between the same two items.
-
-    \note In rare circumstances, there is no transform that maps between two
-    items.
-
-    \sa mapToItem(), mapFromItem(), deviceTransform()
-*/
 QTransform QGraphicsItem::itemTransform(const QGraphicsItem *other, bool *ok) const
 {
    // Catch simple cases first.
@@ -3333,27 +2956,6 @@ void QGraphicsItem::setMatrix(const QMatrix &matrix, bool combine)
    itemChange(ItemTransformHasChanged, QVariant::fromValue<QTransform>(newTransform));
 }
 
-/*!
-    \since 4.3
-
-    Sets the item's current transformation matrix to \a matrix.
-
-    If \a combine is true, then \a matrix is combined with the current matrix;
-    otherwise, \a matrix \e replaces the current matrix. \a combine is false
-    by default.
-
-    To simplify interation with items using a transformed view, QGraphicsItem
-    provides mapTo... and mapFrom... functions that can translate between
-    items' and the scene's coordinates. For example, you can call mapToScene()
-    to map an item coordiate to a scene coordinate, or mapFromScene() to map
-    from scene coordinates to item coordinates.
-
-    The transformation matrix is combined with the item's rotation(), scale()
-    and transformations() into a combined transformation that maps the item's
-    coordinate system to its parent.
-
-    \sa transform(), setRotation(), setScale(), setTransformOriginPoint(), {The Graphics View Coordinate System}, {Transformations}
-*/
 void QGraphicsItem::setTransform(const QTransform &matrix, bool combine)
 {
    if (!d_ptr->transformData) {
@@ -3544,7 +3146,6 @@ void QGraphicsItem::stackBefore(const QGraphicsItem *sibling)
    }
 }
 
-
 QRectF QGraphicsItem::childrenBoundingRect() const
 {
    if (!d_ptr->dirtyChildrenBoundingRect) {
@@ -3687,20 +3288,6 @@ bool QGraphicsItem::collidesWithItem(const QGraphicsItem *other, Qt::ItemSelecti
    return collidesWithPath(mapFromItem(other, otherShape), mode);
 }
 
-/*!
-    Returns true if this item collides with \a path.
-
-    The collision is determined by \a mode. The default value for \a mode is
-    Qt::IntersectsItemShape; \a path collides with this item if it either
-    intersects, contains, or is contained by this item's shape.
-
-    Note that this function checks whether the item's shape or
-    bounding rectangle (depending on \a mode) is contained within \a
-    path, and not whether \a path is contained within the items shape
-    or bounding rectangle.
-
-    \sa collidesWithItem(), contains(), shape()
-*/
 bool QGraphicsItem::collidesWithPath(const QPainterPath &path, Qt::ItemSelectionMode mode) const
 {
    if (path.isEmpty()) {
@@ -3738,16 +3325,6 @@ bool QGraphicsItem::collidesWithPath(const QPainterPath &path, Qt::ItemSelection
    return path.contains(thisShape);
 }
 
-/*!
-    Returns a list of all items that collide with this item.
-
-    The way collisions are detected is determined by applying \a mode
-    to items that are compared to this item, i.e., each item's shape
-    or bounding rectangle is checked against this item's shape. The
-    default value for \a mode is Qt::IntersectsItemShape.
-
-    \sa collidesWithItem()
-*/
 QList<QGraphicsItem *> QGraphicsItem::collidingItems(Qt::ItemSelectionMode mode) const
 {
    if (d_ptr->scene) {
@@ -3755,8 +3332,6 @@ QList<QGraphicsItem *> QGraphicsItem::collidingItems(Qt::ItemSelectionMode mode)
    }
    return QList<QGraphicsItem *>();
 }
-
-
 
 /*!
     \internal
@@ -3862,19 +3437,6 @@ QRegion QGraphicsItem::boundingRegion(const QTransform &itemToDeviceTransform) c
    return r;
 }
 
-/*!
-    \since 4.4
-
-    Returns the item's bounding region granularity; a value between and
-    including 0 and 1. The default value is 0 (i.e., the lowest granularity,
-    where the bounding region corresponds to the item's bounding rectangle).
-
-\omit
-### NOTE
-\endomit
-
-    \sa setBoundingRegionGranularity()
-*/
 qreal QGraphicsItem::boundingRegionGranularity() const
 {
    return d_ptr->hasBoundingRegionGranularity
@@ -3882,25 +3444,6 @@ qreal QGraphicsItem::boundingRegionGranularity() const
       : 0;
 }
 
-/*!
-    \since 4.4
-    Sets the bounding region granularity to \a granularity; a value between
-    and including 0 and 1. The default value is 0 (i.e., the lowest
-    granularity, where the bounding region corresponds to the item's bounding
-    rectangle).
-
-    The granularity is used by boundingRegion() to calculate how fine the
-    bounding region of the item should be. The highest achievable granularity
-    is 1, where boundingRegion() will return the finest outline possible for
-    the respective device (e.g., for a QGraphicsView viewport, this gives you
-    a pixel-perfect bounding region). The lowest possible granularity is
-    0. The value of \a granularity describes the ratio between device
-    resolution and the resolution of the bounding region (e.g., a value of
-    0.25 will provide a region where each chunk corresponds to 4x4 device
-    units / pixels).
-
-    \sa boundingRegionGranularity()
-*/
 void QGraphicsItem::setBoundingRegionGranularity(qreal granularity)
 {
    if (granularity < 0.0 || granularity > 1.0) {
@@ -3954,8 +3497,10 @@ void QGraphicsItemPrivate::invalidateParentGraphicsEffectsRecursively()
    do {
       if (itemPrivate->graphicsEffect) {
          itemPrivate->notifyInvalidated = 1;
-         if (!itemPrivate->updateDueToGraphicsEffect) {
-            static_cast<QGraphicsItemEffectSourcePrivate *>(itemPrivate->graphicsEffect->d_func()->source->d_func())->invalidateCache();
+
+         if (! itemPrivate->updateDueToGraphicsEffect) {
+            static_cast<QGraphicsItemEffectSourcePrivate *>
+                  (itemPrivate->graphicsEffect->d_func()->source->d_func())->invalidateCache();
          }
       }
    } while ((itemPrivate = itemPrivate->parent ? itemPrivate->parent->d_ptr.data() : 0));

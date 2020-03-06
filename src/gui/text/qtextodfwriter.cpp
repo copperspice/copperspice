@@ -40,21 +40,21 @@
 #include <qtextimagehandler_p.h>
 #include <qzipwriter_p.h>
 
-
-
-
-/// Convert pixels to postscript point units
+// Convert pixels to postscript point units
 static QString pixelToPoint(qreal pixels)
 {
    // we hardcode 96 DPI, we do the same in the ODF importer to have a perfect roundtrip.
-   return QString::number(pixels * 72 / 96) + QString::fromLatin1("pt");
+   return QString::number(pixels * 72 / 96) + "pt";
 }
 
 // strategies
 class QOutputStrategy
 {
  public:
-   QOutputStrategy() : contentStream(0), counter(1) { }
+   QOutputStrategy()
+      : contentStream(0), counter(1)
+   { }
+
    virtual ~QOutputStrategy() {}
    virtual void addFile(const QString &fileName, const QString &mimeType, const QByteArray &bytes) = 0;
 
@@ -88,8 +88,7 @@ class QZipStreamStrategy : public QOutputStrategy
 {
  public:
    QZipStreamStrategy(QIODevice *device)
-      : zip(device),
-        manifestWriter(&manifest) {
+      : zip(device), manifestWriter(&manifest) {
       QByteArray mime("application/vnd.oasis.opendocument.text");
       zip.setCompressionPolicy(QZipWriter::NeverCompress);
       zip.addFile(QString::fromLatin1("mimetype"), mime); // for mime-magick
@@ -144,22 +143,30 @@ static QString bulletChar(QTextListFormat::Style style)
    switch (style) {
       case QTextListFormat::ListDisc:
          return QChar(0x25cf); // bullet character
+
       case QTextListFormat::ListCircle:
          return QChar(0x25cb); // white circle
+
       case QTextListFormat::ListSquare:
          return QChar(0x25a1); // white square
+
       case QTextListFormat::ListDecimal:
          return QString::fromLatin1("1");
+
       case QTextListFormat::ListLowerAlpha:
          return QString::fromLatin1("a");
+
       case QTextListFormat::ListUpperAlpha:
          return QString::fromLatin1("A");
+
       case QTextListFormat::ListLowerRoman:
          return QString::fromLatin1("i");
+
       case QTextListFormat::ListUpperRoman:
          return QString::fromLatin1("I");
-      default:
+
       case QTextListFormat::ListStyleUndefined:
+      default:
          return QString();
    }
 }
@@ -173,6 +180,7 @@ void QTextOdfWriter::writeFrame(QXmlStreamWriter &writer, const QTextFrame *fram
       writer.writeStartElement(tableNS, QString::fromLatin1("table"));
       writer.writeEmptyElement(tableNS, QString::fromLatin1("table-column"));
       writer.writeAttribute(tableNS, QString::fromLatin1("number-columns-repeated"), QString::number(table->columns()));
+
    } else if (frame->document() && frame->document()->rootFrame() != frame) { // start a section
       writer.writeStartElement(textNS, QString::fromLatin1("section"));
    }
@@ -239,7 +247,8 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
       const int listLevel = block.textList()->format().indent();
 
       if (m_listStack.isEmpty() || m_listStack.top() != block.textList()) {
-         // not the same list we were in.
+         // not the same list we were in
+
          while (m_listStack.count() >= listLevel && ! m_listStack.isEmpty() &&
             m_listStack.top() != block.textList() ) {
             // we need to close tags
@@ -268,6 +277,7 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
          }
       }
       writer.writeStartElement(textNS, QString::fromLatin1("list-item"));
+
    } else {
       while (! m_listStack.isEmpty()) {
          m_listStack.pop();
@@ -387,22 +397,28 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
 void QTextOdfWriter::writeInlineCharacter(QXmlStreamWriter &writer, const QTextFragment &fragment) const
 {
    writer.writeStartElement(drawNS, QString::fromLatin1("frame"));
+
    if (m_strategy == 0) {
-      // don't do anything.
+      // don't do anything
+
    } else if (fragment.charFormat().isImageFormat()) {
       QTextImageFormat imageFormat = fragment.charFormat().toImageFormat();
       writer.writeAttribute(drawNS, QString::fromLatin1("name"), imageFormat.name());
 
       QImage image;
       QString name = imageFormat.name();
-      if (name.startsWith(QLatin1String(":/"))) { // auto-detect resources
-         name.prepend(QLatin1String("qrc"));
+
+      if (name.startsWith(":/")) {
+         // auto-detect resources
+         name.prepend(QString("qrc"));
       }
 
       QUrl url = QUrl::fromEncoded(name.toUtf8());
+
       const QVariant data = m_document->resource(QTextDocument::ImageResource, url);
       if (data.type() == QVariant::Image) {
          image = qvariant_cast<QImage>(data);
+
       } else if (data.type() == QVariant::ByteArray) {
          image.loadFromData(data.toByteArray());
       }
@@ -410,7 +426,8 @@ void QTextOdfWriter::writeInlineCharacter(QXmlStreamWriter &writer, const QTextF
       if (image.isNull()) {
          QString context;
 
-         if (image.isNull()) { // try direct loading
+         if (image.isNull()) {
+            // try direct loading
             name = imageFormat.name(); // remove qrc:/ prefix again
             image.load(name);
          }
@@ -443,9 +460,11 @@ void QTextOdfWriter::writeFormats(QXmlStreamWriter &writer, const QSet<int> &for
    writer.writeStartElement(officeNS, QString::fromLatin1("automatic-styles"));
    QVector<QTextFormat> allStyles = m_document->allFormats();
    QSetIterator<int> formatId(formats);
+
    while (formatId.hasNext()) {
       int formatIndex = formatId.next();
       QTextFormat textFormat = allStyles.at(formatIndex);
+
       switch (textFormat.type()) {
          case QTextFormat::CharFormat:
             if (textFormat.isTableCellFormat()) {
@@ -861,16 +880,20 @@ void QTextOdfWriter::writeTableCellFormat(QXmlStreamWriter &writer, QTextTableCe
 
    if (format.hasProperty(QTextFormat::TextVerticalAlignment)) {
       QString pos;
+
       switch (format.verticalAlignment()) {
          case QTextCharFormat::AlignMiddle:
             pos = QString::fromLatin1("middle");
             break;
+
          case QTextCharFormat::AlignTop:
             pos = QString::fromLatin1("top");
             break;
+
          case QTextCharFormat::AlignBottom:
             pos = QString::fromLatin1("bottom");
             break;
+
          default:
             pos = QString::fromLatin1("automatic");
             break;
@@ -888,19 +911,15 @@ void QTextOdfWriter::writeTableCellFormat(QXmlStreamWriter &writer, QTextTableCe
 }
 
 QTextOdfWriter::QTextOdfWriter(const QTextDocument &document, QIODevice *device)
-   : officeNS (QLatin1String("urn:oasis:names:tc:opendocument:xmlns:office:1.0")),
-     textNS (QLatin1String("urn:oasis:names:tc:opendocument:xmlns:text:1.0")),
-     styleNS (QLatin1String("urn:oasis:names:tc:opendocument:xmlns:style:1.0")),
-     foNS (QLatin1String("urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0")),
-     tableNS (QLatin1String("urn:oasis:names:tc:opendocument:xmlns:table:1.0")),
-     drawNS (QLatin1String("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0")),
-     xlinkNS (QLatin1String("http://www.w3.org/1999/xlink")),
-     svgNS (QLatin1String("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0")),
-     m_document(&document),
-     m_device(device),
-     m_strategy(0),
-     m_codec(0),
-     m_createArchive(true)
+   : officeNS("urn:oasis:names:tc:opendocument:xmlns:office:1.0"),
+     textNS("urn:oasis:names:tc:opendocument:xmlns:text:1.0"),
+     styleNS("urn:oasis:names:tc:opendocument:xmlns:style:1.0"),
+     foNS("urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"),
+     tableNS("urn:oasis:names:tc:opendocument:xmlns:table:1.0"),
+     drawNS("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"),
+     xlinkNS("http://www.w3.org/1999/xlink"),
+     svgNS("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"),
+     m_document(&document), m_device(device), m_strategy(0), m_codec(0), m_createArchive(true)
 {
 }
 
@@ -912,10 +931,11 @@ bool QTextOdfWriter::writeAll()
       m_strategy = new QXmlStreamStrategy(m_device);
    }
 
-   if (!m_device->isWritable() && ! m_device->open(QIODevice::WriteOnly)) {
+   if (! m_device->isWritable() && ! m_device->open(QIODevice::WriteOnly)) {
       qWarning() << "QTextOdfWriter::writeAll: the device can not be opened for writing";
       return false;
    }
+
    QXmlStreamWriter writer(m_strategy->contentStream);
 
 #ifndef QT_NO_TEXTCODEC
@@ -928,20 +948,21 @@ bool QTextOdfWriter::writeAll()
    writer.setAutoFormatting(true);
    writer.setAutoFormattingIndent(2);
 
-   writer.writeNamespace(officeNS, QString::fromLatin1("office"));
-   writer.writeNamespace(textNS, QString::fromLatin1("text"));
-   writer.writeNamespace(styleNS, QString::fromLatin1("style"));
-   writer.writeNamespace(foNS, QString::fromLatin1("fo"));
-   writer.writeNamespace(tableNS, QString::fromLatin1("table"));
-   writer.writeNamespace(drawNS, QString::fromLatin1("draw"));
-   writer.writeNamespace(xlinkNS, QString::fromLatin1("xlink"));
-   writer.writeNamespace(svgNS, QString::fromLatin1("svg"));
+   writer.writeNamespace(officeNS, "office");
+   writer.writeNamespace(textNS,   "text");
+   writer.writeNamespace(styleNS,  "style");
+   writer.writeNamespace(foNS,     "fo");
+   writer.writeNamespace(tableNS,  "table");
+   writer.writeNamespace(drawNS,   "draw");
+   writer.writeNamespace(xlinkNS,  "xlink");
+   writer.writeNamespace(svgNS,    "svg");
    writer.writeStartDocument();
-   writer.writeStartElement(officeNS, QString::fromLatin1("document-content"));
-   writer.writeAttribute(officeNS, QString::fromLatin1("version"), QString::fromLatin1("1.2"));
+   writer.writeStartElement(officeNS, "document-content");
+   writer.writeAttribute(officeNS,    "version", "1.2");
 
    // add fragments. (for character formats)
    QTextDocumentPrivate::FragmentIterator fragIt = m_document->docHandle()->begin();
+
    QSet<int> formats;
    while (fragIt != m_document->docHandle()->end()) {
       const QTextFragmentData *const frag = fragIt.value();

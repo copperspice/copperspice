@@ -24,10 +24,10 @@
 #ifndef QSTANDARDITEMMODEL_H
 #define QSTANDARDITEMMODEL_H
 
-#include <QtCore/qabstractitemmodel.h>
-#include <QtGui/qbrush.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qicon.h>
+#include <qabstractitemmodel.h>
+#include <qbrush.h>
+#include <qfont.h>
+#include <qicon.h>
 #include <qdatastream.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL

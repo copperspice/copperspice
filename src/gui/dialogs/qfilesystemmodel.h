@@ -24,13 +24,11 @@
 #ifndef QFILESYSTEMMODEL_H
 #define QFILESYSTEMMODEL_H
 
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qdir.h>
-#include <QtGui/qicon.h>
-#include <QtCore/qdiriterator.h>
-
-
+#include <qabstractitemmodel.h>
+#include <qpair.h>
+#include <qdir.h>
+#include <qicon.h>
+#include <qdiriterator.h>
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
@@ -173,8 +171,6 @@ inline QIcon QFileSystemModel::fileIcon(const QModelIndex &aindex) const
 }
 
 #endif // QT_NO_FILESYSTEMMODEL
-
-
 
 #endif
 

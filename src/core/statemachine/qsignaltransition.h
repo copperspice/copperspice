@@ -24,9 +24,7 @@
 #ifndef QSIGNALTRANSITION_H
 #define QSIGNALTRANSITION_H
 
-#include <QtCore/qabstracttransition.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstracttransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -80,6 +78,5 @@ QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal
 
 #endif //QT_NO_STATEMACHINE
 
-QT_END_NAMESPACE
 
 #endif

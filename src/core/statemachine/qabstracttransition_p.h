@@ -27,8 +27,6 @@
 #include <qlist.h>
 #include <qsharedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractState;
 class QState;
 class QStateMachine;
@@ -40,12 +38,15 @@ class Q_CORE_EXPORT QAbstractTransitionPrivate
 
  public:
    QAbstractTransitionPrivate();
-   virtual ~QAbstractTransitionPrivate() {}
+
+   virtual ~QAbstractTransitionPrivate()
+   { }
 
    static QAbstractTransitionPrivate *get(QAbstractTransition *q);
 
    bool callEventTest(QEvent *e);
    virtual void callOnTransition(QEvent *e);
+
    QState *sourceState() const;
    QStateMachine *machine() const;
    void emitTriggered();
@@ -59,7 +60,5 @@ class Q_CORE_EXPORT QAbstractTransitionPrivate
  protected:
    QAbstractTransition *q_ptr;
 };
-
-QT_END_NAMESPACE
 
 #endif

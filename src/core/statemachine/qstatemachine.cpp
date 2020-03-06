@@ -23,25 +23,24 @@
 
 #include <qstatemachine.h>
 
-#include <algorithm>
-
 #ifndef QT_NO_STATEMACHINE
 
 #include <qstate.h>
 #include <qabstracttransition.h>
 #include <qmetaobject.h>
 #include <qdebug.h>
+#include <qalgorithms.h>
+#include <qfinalstate.h>
+#include <qabstractstate.h>
+#include <qhistorystate.h>
+#include <qsignaltransition.h>
+#include <qvarlengtharray.h>
 
 #include <qstate_p.h>
 #include <qabstracttransition_p.h>
-#include <qabstractstate.h>
 #include <qabstractstate_p.h>
-#include <qalgorithms.h>
-#include <qfinalstate.h>
-#include <qhistorystate.h>
 #include <qhistorystate_p.h>
 #include <qstatemachine_p.h>
-#include <qsignaltransition.h>
 #include <qsignaleventgenerator_p.h>
 #include <qthread_p.h>
 
@@ -55,6 +54,8 @@
 #include <qanimationgroup.h>
 #include <qvariantanimation_p.h>
 #endif
+
+#include <algorithm>
 
 // messages not required  #define QSTATEMACHINE_DEBUG
 
@@ -88,11 +89,11 @@ QStateMachinePrivate::~QStateMachinePrivate()
 
 QStateMachinePrivate *QStateMachinePrivate::get(QStateMachine *q)
 {
-   if (q) {
+   if (q != nullptr) {
       return q->d_func();
    }
 
-   return 0;
+   return nullptr;
 }
 
 QState *QStateMachinePrivate::rootState() const
@@ -105,12 +106,15 @@ static QEvent *cloneEvent(QEvent *e)
    switch (e->type()) {
       case QEvent::None:
          return new QEvent(*e);
+
       case QEvent::Timer:
          return new QTimerEvent(*static_cast<QTimerEvent *>(e));
+
       default:
          Q_ASSERT_X(false, "cloneEvent()", "not implemented");
          break;
    }
+
    return 0;
 }
 
@@ -864,7 +868,8 @@ QState *QStateMachinePrivate::toStandardState(QAbstractState *state)
    if (state && (QAbstractStatePrivate::get(state)->stateType == QAbstractStatePrivate::StandardState)) {
       return static_cast<QState *>(state);
    }
-   return 0;
+
+   return nullptr;
 }
 
 const QState *QStateMachinePrivate::toStandardState(const QAbstractState *state)
@@ -872,7 +877,8 @@ const QState *QStateMachinePrivate::toStandardState(const QAbstractState *state)
    if (state && (QAbstractStatePrivate::get(state)->stateType == QAbstractStatePrivate::StandardState)) {
       return static_cast<const QState *>(state);
    }
-   return 0;
+
+   return nullptr;
 }
 
 QFinalState *QStateMachinePrivate::toFinalState(QAbstractState *state)
@@ -880,7 +886,8 @@ QFinalState *QStateMachinePrivate::toFinalState(QAbstractState *state)
    if (state && (QAbstractStatePrivate::get(state)->stateType == QAbstractStatePrivate::FinalState)) {
       return static_cast<QFinalState *>(state);
    }
-   return 0;
+
+   return nullptr;
 }
 
 QHistoryState *QStateMachinePrivate::toHistoryState(QAbstractState *state)
@@ -888,7 +895,8 @@ QHistoryState *QStateMachinePrivate::toHistoryState(QAbstractState *state)
    if (state && (QAbstractStatePrivate::get(state)->stateType == QAbstractStatePrivate::HistoryState)) {
       return static_cast<QHistoryState *>(state);
    }
-   return 0;
+
+   return nullptr;
 }
 
 bool QStateMachinePrivate::isInFinalState(QAbstractState *s) const
@@ -896,6 +904,7 @@ bool QStateMachinePrivate::isInFinalState(QAbstractState *s) const
    if (isCompound(s)) {
       QState *grp = toStandardState(s);
       QList<QAbstractState *> lst = QStatePrivate::get(grp)->childStates();
+
       for (int i = 0; i < lst.size(); ++i) {
          QAbstractState *cs = lst.at(i);
          if (isFinal(cs) && configuration.contains(cs)) {
@@ -903,15 +912,19 @@ bool QStateMachinePrivate::isInFinalState(QAbstractState *s) const
          }
       }
       return false;
+
    } else if (isParallel(s)) {
       QState *grp = toStandardState(s);
       QList<QAbstractState *> lst = QStatePrivate::get(grp)->childStates();
+
       for (int i = 0; i < lst.size(); ++i) {
          QAbstractState *cs = lst.at(i);
+
          if (!isInFinalState(cs)) {
             return false;
          }
       }
+
       return true;
    } else {
       return false;
@@ -940,10 +953,6 @@ QList<QPropertyAssignment> QStateMachinePrivate::restorablesToPropertyList(const
    return result;
 }
 
-/*!
-   \internal
-   Returns true if the variable with the given \a id has been registered for restoration.
-*/
 bool QStateMachinePrivate::hasRestorable(QObject *object, const QByteArray &propertyName) const
 {
    return registeredRestorables.contains(RestorableId(object, propertyName));
@@ -955,10 +964,6 @@ QVariant QStateMachinePrivate::restorableValue(QObject *object, const QByteArray
 }
 
 
-/*!
-   \internal
-    Unregisters the variable identified by \a id
-*/
 void QStateMachinePrivate::unregisterRestorable(QObject *object, const QByteArray &propertyName)
 {
    //  qDebug() << "unregisterRestorable(" << object << propertyName << ')';
@@ -1716,79 +1721,13 @@ QStateMachine::~QStateMachine()
 {
 }
 
-/*!
-  \enum QStateMachine::EventPriority
 
-  This enum type specifies the priority of an event posted to the state
-  machine using postEvent().
-
-  Events of high priority are processed before events of normal priority.
-
-  \value NormalPriority The event has normal priority.
-  \value HighPriority The event has high priority.
-*/
-
-/*! \enum QStateMachine::Error
-
-    This enum type defines errors that can occur in the state machine at run time. When the state
-    machine encounters an unrecoverable error at run time, it will set the error code returned
-    by error(), the error message returned by errorString(), and enter an error state based on
-    the context of the error.
-
-    \value NoError No error has occurred.
-    \value NoInitialStateError The machine has entered a QState with children which does not have an
-           initial state set. The context of this error is the state which is missing an initial
-           state.
-    \value NoDefaultStateInHistoryStateError The machine has entered a QHistoryState which does not have
-           a default state set. The context of this error is the QHistoryState which is missing a
-           default state.
-    \value NoCommonAncestorForTransitionError The machine has selected a transition whose source
-           and targets are not part of the same tree of states, and thus are not part of the same
-           state machine. Commonly, this could mean that one of the states has not been given
-           any parent or added to any machine. The context of this error is the source state of
-           the transition.
-
-    \sa setErrorState()
-*/
-
-/*!
-   \enum QStateMachine::RestorePolicy
-
-   This enum specifies the restore policy type. The restore policy
-   takes effect when the machine enters a state which sets one or more
-   properties. If the restore policy is set to RestoreProperties,
-   the state machine will save the original value of the property before the
-   new value is set.
-
-   Later, when the machine either enters a state which does not set
-   a value for the given property, the property will automatically be restored
-   to its initial value.
-
-   Only one initial value will be saved for any given property. If a value for a property has
-   already been saved by the state machine, it will not be overwritten until the property has been
-   successfully restored.
-
-   \value DontRestoreProperties The state machine should not save the initial values of properties
-          and restore them later.
-   \value RestoreProperties The state machine should save the initial values of properties
-          and restore them later.
-
-   \sa QStateMachine::globalRestorePolicy QState::assignProperty()
-*/
-
-
-/*!
-  Returns the error code of the last error that occurred in the state machine.
-*/
 QStateMachine::Error QStateMachine::error() const
 {
    Q_D(const QStateMachine);
    return d->error;
 }
 
-/*!
-  Returns the error string of the last error that occurred in the state machine.
-*/
 QString QStateMachine::errorString() const
 {
    Q_D(const QStateMachine);
@@ -1991,6 +1930,7 @@ bool QStateMachine::event(QEvent *e)
          d->postExternalEvent(ee);
          d->processEvents(QStateMachinePrivate::DirectProcessing);
          return true;
+
       } else {
          d->delayedEventsMutex.unlock();
       }
@@ -2029,10 +1969,6 @@ void QStateMachine::endMicrostep(QEvent *event)
    (void) event;
 }
 
-/*!
-  \reimp
-    This function will call start() to start the state machine.
-*/
 void QStateMachine::onEntry(QEvent *event)
 {
    start();

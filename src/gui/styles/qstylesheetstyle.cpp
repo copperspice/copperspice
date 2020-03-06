@@ -87,11 +87,13 @@ static QStyleSheetStyleCaches *styleSheetCaches = 0;
  * will notice the globalStyleSheetStyle is not istelf and call its base style directly.
  */
 static const QStyleSheetStyle *globalStyleSheetStyle = 0;
+
 class QStyleSheetStyleRecursionGuard
 {
  public:
    QStyleSheetStyleRecursionGuard(const QStyleSheetStyle *that)
       :  guarded(globalStyleSheetStyle == 0) {
+
       if (guarded) {
          globalStyleSheetStyle = that;
       }
@@ -102,6 +104,7 @@ class QStyleSheetStyleRecursionGuard
          globalStyleSheetStyle = 0;
       }
    }
+
    bool guarded;
 };
 
@@ -2713,10 +2716,12 @@ void QStyleSheetStyle::unsetPalette(QWidget *w)
       }
       styleSheetCaches->customPaletteWidgets.remove(w);
    }
+
    QVariant oldFont = w->property("_q_styleSheetWidgetFont");
    if (oldFont.isValid()) {
       w->setFont(qvariant_cast<QFont>(oldFont));
    }
+
    if (styleSheetCaches->autoFillDisabledWidgets.contains(w)) {
       embeddedWidget(w)->setAutoFillBackground(true);
       styleSheetCaches->autoFillDisabledWidgets.remove(w);
@@ -5470,8 +5475,9 @@ QIcon QStyleSheetStyle::standardIcon(StandardPixmap standardIcon, const QStyleOp
    RECURSION_GUARD(return baseStyle()->standardIcon(standardIcon, opt, w))
    QString s = propertyNameForStandardPixmap(standardIcon);
 
-   if (!s.isEmpty()) {
+   if (! s.isEmpty()) {
       QRenderRule rule = renderRule(w, opt);
+
       if (rule.hasStyleHint(s)) {
          return qvariant_cast<QIcon>(rule.styleHint(s));
       }
@@ -5488,9 +5494,12 @@ QPixmap QStyleSheetStyle::standardPixmap(StandardPixmap standardPixmap, const QS
    const QWidget *w) const
 {
    RECURSION_GUARD(return baseStyle()->standardPixmap(standardPixmap, opt, w))
+
    QString s = propertyNameForStandardPixmap(standardPixmap);
-   if (!s.isEmpty()) {
+
+   if (! s.isEmpty()) {
       QRenderRule rule = renderRule(w, opt);
+
       if (rule.hasStyleHint(s)) {
          QIcon icon = qvariant_cast<QIcon>(rule.styleHint(s));
          return icon.pixmap(16, 16); // ###: unhard-code this if someone complains
@@ -5500,18 +5509,19 @@ QPixmap QStyleSheetStyle::standardPixmap(StandardPixmap standardPixmap, const QS
 }
 
 int QStyleSheetStyle::layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
-   Qt::Orientation orientation, const QStyleOption *option,
-   const QWidget *widget) const
+            Qt::Orientation orientation, const QStyleOption *option, const QWidget *widget) const
 {
    return baseStyle()->layoutSpacing(control1, control2, orientation, option, widget);
 }
 
 int QStyleSheetStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget *w,
-   QStyleHintReturn *shret) const
+            QStyleHintReturn *shret) const
 {
    RECURSION_GUARD(return baseStyle()->styleHint(sh, opt, w, shret))
+
    // Prevent endless loop if somebody use isActiveWindow property as selector.
    // QWidget::isActiveWindow uses this styleHint to determine if the window is active or not
+
    if (sh == SH_Widget_ShareActivation) {
       return baseStyle()->styleHint(sh, opt, w, shret);
    }

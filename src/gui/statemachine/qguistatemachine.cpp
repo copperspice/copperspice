@@ -25,9 +25,10 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qstatemachine_p.h>
-#include <QtGui/qevent.h>
+#include <qevent.h>
 #include <qgraphicssceneevent.h>
+
+#include <qstatemachine_p.h>
 
 Q_CORE_EXPORT const QStateMachinePrivate::Handler *qcoreStateMachineHandler();
 

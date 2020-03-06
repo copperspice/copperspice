@@ -24,12 +24,14 @@
 #ifndef QSTATE_P_H
 #define QSTATE_P_H
 
-#include <qabstractstate_p.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qvariant.h>
+#include <qstate.h>
+#include <qlist.h>
+#include <qbytearray.h>
+#include <qpointer.h>
+#include <qvariant.h>
 
-QT_BEGIN_NAMESPACE
+#include <qabstractstate_p.h>
+
 
 struct QPropertyAssignment {
    QPropertyAssignment()
@@ -59,10 +61,11 @@ class QStatePrivate : public QAbstractStatePrivate
    ~QStatePrivate();
 
    static QStatePrivate *get(QState *q) {
-      return q ? q->d_func() : 0;
+      return q ? q->d_func() : nullptr;
    }
+
    static const QStatePrivate *get(const QState *q) {
-      return q ? q->d_func() : 0;
+      return q ? q->d_func() : nullptr;
    }
 
    QList<QAbstractState *> childStates() const;
@@ -83,6 +86,5 @@ class QStatePrivate : public QAbstractStatePrivate
    QList<QPropertyAssignment> propertyAssignments;
 };
 
-QT_END_NAMESPACE
 
 #endif

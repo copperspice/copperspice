@@ -102,7 +102,7 @@ class Q_CORE_EXPORT QUrl
       other.d = nullptr;
    }
 
-   QUrl &operator =(const QUrl &other);
+   QUrl &operator=(const QUrl &other);
 
    QUrl &operator=(QUrl &&other) {
       qSwap(d, other.d);
@@ -193,9 +193,9 @@ class Q_CORE_EXPORT QUrl
    QString fragment(FormattingOptions options = PrettyDecoded) const;
 
    // operators
-   bool operator <(const QUrl &url) const;
-   bool operator ==(const QUrl &url) const;
-   bool operator !=(const QUrl &url) const;
+   bool operator<(const QUrl &url) const;
+   bool operator==(const QUrl &url) const;
+   bool operator!=(const QUrl &url) const;
 
 # ifdef Q_OS_DARWIN
    static QUrl fromCFURL(CFURLRef url);

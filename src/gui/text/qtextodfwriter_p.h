@@ -57,9 +57,11 @@ class QTextOdfWriter
    void setCodec(QTextCodec *codec) {
       m_codec = codec;
    }
+
    void setCreateArchive(bool on) {
       m_createArchive = on;
    }
+
    bool createArchive() const {
       return m_createArchive;
    }
@@ -74,7 +76,14 @@ class QTextOdfWriter
    void writeFrame(QXmlStreamWriter &writer, const QTextFrame *frame);
    void writeInlineCharacter(QXmlStreamWriter &writer, const QTextFragment &fragment) const;
 
-   const QString officeNS, textNS, styleNS, foNS, tableNS, drawNS, xlinkNS, svgNS;
+   const QString officeNS;
+   const QString textNS;
+   const QString styleNS;
+   const QString foNS;
+   const QString tableNS;
+   const QString drawNS;
+   const QString xlinkNS;
+   const QString svgNS;
 
  private:
    const QTextDocument *m_document;

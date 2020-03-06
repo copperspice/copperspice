@@ -110,6 +110,9 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    bool connect(const QObject *sender, const QString &signalMethod, const QString &location,
                   const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
+   bool connect(const QObject *sender, const QString &signalMethod, const QString &slotMethod,
+                  Qt::ConnectionType type = Qt::AutoConnection);
+
    static bool connect(const QObject *sender, const QString &signalMethod, const QString &location,
                   const QObject *receiver, const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
@@ -120,8 +123,12 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    static bool connect(const QObject *sender, const QMetaMethod &signalMethod,
                   const QObject *receiver, const QMetaMethod &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
-   bool connect(const QObject *sender, const QString &signalMethod, const QString &slotMethod,
-                  Qt::ConnectionType type = Qt::AutoConnection);
+   bool disconnect(const QString &signalMethod = QString(), const QObject *receiver = nullptr, const QString &slotMethod = QString()) const;
+
+   bool disconnect(const QString &signalMethod, const QString &lineNumber, const QObject *receiver = nullptr,
+                   const QString &slotMethod = QString()) const;
+
+   bool disconnect(const QObject *receiver, const QString &slotMethod = QString()) const;
 
    static bool disconnect(const QObject *sender, const QString &signalMethod,
                   const QObject *receiver, const QString &slotMethod );
@@ -131,13 +138,6 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    static bool disconnect(const QObject *sender, const QString &signalMethod, const QString &location,
                   const QObject *receiver, const QString &slotMethod );
-
-   bool disconnect(const QString &signalMethod = QString(), const QObject *receiver = nullptr, const QString &slotMethod = QString()) const;
-
-   bool disconnect(const QString &signalMethod, const QString &lineNumber, const QObject *receiver = nullptr,
-                   const QString &slotMethod = QString()) const;
-
-   bool disconnect(const QObject *receiver, const QString &slotMethod = QString()) const;
 
    void dumpObjectTree();
    void dumpObjectInfo();

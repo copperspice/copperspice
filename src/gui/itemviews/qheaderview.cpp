@@ -44,8 +44,6 @@
 
 #include <qdatastream.h>
 
-
-
 QDataStream &operator<<(QDataStream &out, const QHeaderViewPrivate::SectionItem &section)
 {
    section.write(out);
@@ -57,7 +55,6 @@ QDataStream &operator>>(QDataStream &in, QHeaderViewPrivate::SectionItem &sectio
    section.read(in);
    return in;
 }
-
 
 static const int maxSizeSection = 1048575; // since section size is in a bitfield (uint 20). See qheaderview_p.h
 
@@ -2259,8 +2256,8 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
    }
 
    QPointF oldBO = painter->brushOrigin();
-   QVariant backgroundBrush = d->model->headerData(logicalIndex, d->orientation,
-         Qt::BackgroundRole);
+   QVariant backgroundBrush = d->model->headerData(logicalIndex, d->orientation, Qt::BackgroundRole);
+
    if (backgroundBrush.canConvert<QBrush>()) {
       opt.palette.setBrush(QPalette::Button, qvariant_cast<QBrush>(backgroundBrush));
       opt.palette.setBrush(QPalette::Window, qvariant_cast<QBrush>(backgroundBrush));
@@ -2336,12 +2333,14 @@ QSize QHeaderView::sectionSizeFromContents(int logicalIndex) const
    } else {
       fnt = font();
    }
+
    fnt.setBold(true);
    opt.fontMetrics = QFontMetrics(fnt);
    opt.text = d->model->headerData(logicalIndex, d->orientation,
          Qt::DisplayRole).toString();
    variant = d->model->headerData(logicalIndex, d->orientation, Qt::DecorationRole);
    opt.icon = qvariant_cast<QIcon>(variant);
+
    if (opt.icon.isNull()) {
       opt.icon = qvariant_cast<QPixmap>(variant);
    }
@@ -2352,8 +2351,6 @@ QSize QHeaderView::sectionSizeFromContents(int logicalIndex) const
 
    return style()->sizeFromContents(QStyle::CT_HeaderSection, &opt, QSize(), this);
 }
-
-
 
 int QHeaderView::horizontalOffset() const
 {

@@ -24,9 +24,9 @@
 #ifndef QPOLYGON_H
 #define QPOLYGON_H
 
-#include <QtCore/qvector.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qrect.h>
+#include <qvector.h>
+#include <qpoint.h>
+#include <qrect.h>
 
 class QMatrix;
 class QTransform;
@@ -37,11 +37,18 @@ class QRectF;
 class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
 {
  public:
-   inline QPolygon() {}
+   QPolygon()
+   { }
+
    inline explicit QPolygon(int size);
 
-   QPolygon(const QPolygon &other) : QVector<QPoint>(other)
-   {}
+   QPolygon(const QPolygon &other)
+      : QVector<QPoint>(other)
+   { }
+
+   QPolygon(QPolygon &&other)
+      : QVector<QPoint>(std::move(other))
+   { }
 
    QPolygon(const QVector<QPoint> &points)
       : QVector<QPoint>(points)
@@ -54,14 +61,17 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    QPolygon(const QRect &rectangle, bool closed = false);
    QPolygon(int nPoints, const int *points);
 
-   inline ~QPolygon() {}
+   ~QPolygon()
+   { }
 
    void swap(QPolygon &other) {
       QVector<QPoint>::swap(other);
    }
 
-   QPolygon(QPolygon &&other) : QVector<QPoint>(std::move(other))
-   { }
+   QPolygon &operator=(const QPolygon &other) {
+      QVector<QPoint>::operator=(other);
+      return *this;
+   }
 
    QPolygon &operator=(QPolygon &&other)  {
       swap(other);
@@ -137,14 +147,16 @@ class Q_GUI_EXPORT QPolygonF : public QVector<QPointF>
 
    inline explicit QPolygonF(int size);
 
-   QPolygonF(const QPolygonF &other) : QVector<QPointF>(other)
+   QPolygonF(const QPolygonF &other)
+      : QVector<QPointF>(other)
+   { }
+
+   QPolygonF(QPolygonF &&other)
+      : QVector<QPointF>(std::move(other))
    { }
 
    QPolygonF(const QVector<QPointF> &points)
       : QVector<QPointF>(points)
-   { }
-
-   QPolygonF(QPolygonF &&other) : QVector<QPointF>(std::move(other))
    { }
 
    QPolygonF(QVector<QPointF> &&points)
@@ -154,8 +166,12 @@ class Q_GUI_EXPORT QPolygonF : public QVector<QPointF>
    QPolygonF(const QRectF &rectangle);
    QPolygonF(const QPolygon &polygon);      // not in QPolygon
 
+   ~QPolygonF()
+   { }
 
-   ~QPolygonF() {}
+   void swap(QPolygonF &other) {
+      QVector<QPointF>::swap(other);
+   }
 
    QPolygonF &operator=(const QPolygonF &other) {
       QVector<QPointF>::operator=(other);
@@ -165,10 +181,6 @@ class Q_GUI_EXPORT QPolygonF : public QVector<QPointF>
    QPolygonF &operator=(QPolygonF &&other) {
       swap(other);
       return *this;
-   }
-
-   void swap(QPolygonF &other) {
-      QVector<QPointF>::swap(other);
    }
 
    operator QVariant() const;
@@ -212,8 +224,5 @@ inline QPolygonF QPolygonF::translated(qreal dx, qreal dy) const
 {
    return translated(QPointF(dx, dy));
 }
-
-
-
 
 #endif

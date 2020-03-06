@@ -155,7 +155,7 @@ GLuint QOpenGLTextureCache::bindTexture(QOpenGLContext *context, const QImage &i
     if (! image.paintingActive()) {
         QOpenGLCachedTexture *entry = m_cache.object(key);
 
-        if (entry && entry->options() == options) {
+        if (entry != nullptr && entry->options() == options) {
             context->functions()->glBindTexture(GL_TEXTURE_2D, entry->id());
             return entry->id();
         }
@@ -349,9 +349,9 @@ GLuint QOpenGLTextureCache::bindTexture(QOpenGLContext *context, qint64 key, con
    }
 
    if (image.format() != targetFormat) {
-        tx = image.convertToFormat(targetFormat);
+      tx = image.convertToFormat(targetFormat);
    } else {
-        tx = image;
+      tx = image;
    }
 
    funcs->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, tx.width(), tx.height(), 0, externalFormat,
@@ -385,7 +385,8 @@ static void freeTexture(QOpenGLFunctions *funcs, GLuint id)
 }
 
 QOpenGLCachedTexture::QOpenGLCachedTexture(GLuint id, QOpenGLTextureCache::BindOptions options,
-            QOpenGLContext *context) : m_options(options)
+            QOpenGLContext *context)
+   : m_options(options)
 {
     m_resource = new QOpenGLSharedResourceGuard(context, id, freeTexture);
 }

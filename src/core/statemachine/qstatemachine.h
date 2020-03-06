@@ -24,14 +24,12 @@
 #ifndef QSTATEMACHINE_H
 #define QSTATEMACHINE_H
 
-#include <QtCore/qstate.h>
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qset.h>
-#include <QtCore/qvariant.h>
-
-QT_BEGIN_NAMESPACE
+#include <qcoreevent.h>
+#include <qlist.h>
+#include <qobject.h>
+#include <qstate.h>
+#include <qset.h>
+#include <qvariant.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -41,8 +39,9 @@ class QAbstractAnimation;
 class Q_CORE_EXPORT QStateMachine : public QState
 {
    CORE_CS_OBJECT(QStateMachine)
-  
+
    CORE_CS_PROPERTY_READ(errorString, errorString)
+
    CORE_CS_PROPERTY_READ(globalRestorePolicy, globalRestorePolicy)
    CORE_CS_PROPERTY_WRITE(globalRestorePolicy, setGlobalRestorePolicy)
 
@@ -59,13 +58,15 @@ class Q_CORE_EXPORT QStateMachine : public QState
       SignalEvent(QObject *sender, int signalIndex, const QList<QVariant> &arguments);
       ~SignalEvent();
 
-      inline QObject *sender() const {
+      QObject *sender() const {
          return m_sender;
       }
-      inline int signalIndex() const {
+
+      int signalIndex() const {
          return m_signalIndex;
       }
-      inline QList<QVariant> arguments() const {
+
+      QList<QVariant> arguments() const {
          return m_arguments;
       }
 
@@ -83,10 +84,11 @@ class Q_CORE_EXPORT QStateMachine : public QState
       WrappedEvent(QObject *object, QEvent *event);
       ~WrappedEvent();
 
-      inline QObject *object() const {
+      QObject *object() const {
          return m_object;
       }
-      inline QEvent *event() const {
+
+      QEvent *event() const {
          return m_event;
       }
 
@@ -192,7 +194,5 @@ class Q_CORE_EXPORT QStateMachine : public QState
 };
 
 #endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
 
 #endif

@@ -25,16 +25,15 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qstate_p.h>
 #include <qhistorystate.h>
-#include <qhistorystate_p.h>
 #include <qabstracttransition.h>
-#include <qabstracttransition_p.h>
 #include <qsignaltransition.h>
 #include <qstatemachine.h>
-#include <qstatemachine_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qstate_p.h>
+#include <qabstracttransition_p.h>
+#include <qhistorystate_p.h>
+#include <qstatemachine_p.h>
 
 QStatePrivate::QStatePrivate()
    : QAbstractStatePrivate(StandardState),
@@ -103,6 +102,7 @@ QList<QAbstractState *> QStatePrivate::childStates() const
       }
       childStatesListNeedsRefresh = false;
    }
+
    return childStatesList;
 }
 
@@ -221,6 +221,7 @@ void QState::addTransition(QAbstractTransition *transition)
    }
 }
 
+
 namespace {
 
 // ### Make public?
@@ -231,6 +232,7 @@ class UnconditionalTransition : public QAbstractTransition
       : QAbstractTransition() {
       setTargetState(target);
    }
+
  protected:
    void onTransition(QEvent *) override {}
    bool eventTest(QEvent *) override {
@@ -240,38 +242,31 @@ class UnconditionalTransition : public QAbstractTransition
 
 } // namespace
 
-/*!
-  Adds an unconditional transition from this state to the given \a target
-  state, and returns then new transition object.
-*/
 QAbstractTransition *QState::addTransition(QAbstractState *target)
 {
-   if (!target) {
+   if (target == nullptr) {
       qWarning("QState::addTransition(): Can not add transition to null state");
-      return 0;
+      return nullptr;
    }
+
    UnconditionalTransition *trans = new UnconditionalTransition(target);
    addTransition(trans);
+
    return trans;
 }
 
-/*!
-  Removes the given \a transition from this state.  The state releases
-  ownership of the transition.
-
-  \sa addTransition()
-*/
 void QState::removeTransition(QAbstractTransition *transition)
 {
    Q_D(QState);
-   if (!transition) {
+
+   if (transition == nullptr) {
       qWarning("QState::removeTransition(): Can not remove null transition");
       return;
    }
 
    if (transition->sourceState() != this) {
       qWarning("QState::removeTransition(): Transition %p's source state (%p)"
-               " is different from this state (%p)", transition, transition->sourceState(), this);
+         " is different from this state (%p)", transition, transition->sourceState(), this);
       return;
    }
 
@@ -279,6 +274,7 @@ void QState::removeTransition(QAbstractTransition *transition)
    if (mach) {
       mach->unregisterTransition(transition);
    }
+
    transition->setParent(0);
 }
 
@@ -307,40 +303,32 @@ QAbstractState *QState::initialState() const
 void QState::setInitialState(QAbstractState *state)
 {
    Q_D(QState);
+
    if (d->childMode == QState::ParallelStates) {
       qWarning("QState::setInitialState: ignoring attempt to set initial state "
-               "of parallel state group %p", this);
+         "of parallel state group %p", this);
       return;
    }
+
    if (state && (state->parentState() != this)) {
-      qWarning("QState::setInitialState: state %p is not a child of this state (%p)",
-               state, this);
+      qWarning("QState::setInitialState: state %p is not a child of this state (%p)", state, this);
       return;
    }
    d->initialState = state;
 }
 
-/*!
-  Returns the child mode of this state.
-*/
 QState::ChildMode QState::childMode() const
 {
    Q_D(const QState);
    return d->childMode;
 }
 
-/*!
-  Sets the child \a mode of this state.
-*/
 void QState::setChildMode(ChildMode mode)
 {
    Q_D(QState);
    d->childMode = mode;
 }
 
-/*!
-  \reimp
-*/
 bool QState::event(QEvent *e)
 {
    Q_D(QState);
@@ -348,9 +336,8 @@ bool QState::event(QEvent *e)
       d->childStatesListNeedsRefresh = true;
       d->transitionsListNeedsRefresh = true;
    }
+
    return QAbstractState::event(e);
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_STATEMACHINE

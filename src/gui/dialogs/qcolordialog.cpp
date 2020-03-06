@@ -656,7 +656,7 @@ void QColorWell::dropEvent(QDropEvent *e)
 
 void QColorWell::mouseReleaseEvent(QMouseEvent *e)
 {
-   if (!mousePressed) {
+   if (! mousePressed) {
       return;
    }
    QWellArray::mouseReleaseEvent(e);

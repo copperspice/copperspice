@@ -2162,13 +2162,7 @@ QByteArray QUrl::toAce(const QString &domain)
    return result.toLatin1();
 }
 
-/*!
-    \internal
-
-    Returns \c true if this URL is "less than" the given \a url. This
-    provides a means of ordering URLs.
-*/
-bool QUrl::operator <(const QUrl &url) const
+bool QUrl::operator<(const QUrl &url) const
 {
    if (!d || !url.d) {
       bool thisIsEmpty = !d || d->isEmpty();
@@ -2225,11 +2219,7 @@ bool QUrl::operator <(const QUrl &url) const
    return cmp < 0;
 }
 
-/*!
-    Returns \c true if this URL and the given \a url are equal;
-    otherwise returns \c false.
-*/
-bool QUrl::operator ==(const QUrl &url) const
+bool QUrl::operator==(const QUrl &url) const
 {
    if (!d && !url.d) {
       return true;
@@ -2344,19 +2334,12 @@ bool QUrl::matches(const QUrl &url, FormattingOptions options) const
    return path1 == path2;
 }
 
-/*!
-    Returns \c true if this URL and the given \a url are not equal;
-    otherwise returns \c false.
-*/
-bool QUrl::operator !=(const QUrl &url) const
+bool QUrl::operator!=(const QUrl &url) const
 {
    return !(*this == url);
 }
 
-/*!
-    Assigns the specified \a url to this object.
-*/
-QUrl &QUrl::operator =(const QUrl &url)
+QUrl &QUrl::operator=(const QUrl &url)
 {
    if (!d) {
       if (url.d) {
@@ -2382,9 +2365,7 @@ void QUrl::detach()
    }
 }
 
-/*!
-    \internal
-*/
+// internal
 bool QUrl::isDetached() const
 {
    return !d || d->ref.load() == 1;

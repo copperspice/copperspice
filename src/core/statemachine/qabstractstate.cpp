@@ -26,12 +26,12 @@
 #ifndef QT_NO_STATEMACHINE
 
 #include <qabstractstate_p.h>
-#include <qstate.h>
-#include <qstate_p.h>
-#include <qstatemachine.h>
-#include <qstatemachine_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qstate.h>
+#include <qstatemachine.h>
+
+#include <qstate_p.h>
+#include <qstatemachine_p.h>
 
 QAbstractStatePrivate::QAbstractStatePrivate(StateType type)
    : stateType(type), isMachine(false), parentState(0)
@@ -51,15 +51,17 @@ const QAbstractStatePrivate *QAbstractStatePrivate::get(const QAbstractState *q)
 QStateMachine *QAbstractStatePrivate::machine() const
 {
    Q_Q(const QAbstractState);
+
    QObject *par = q->parent();
 
-   while (par != 0) {
-      if (QStateMachine *mach = qobject_cast<QStateMachine *>(par)) {
+   while (par != nullptr) {
+      if (QStateMachine *mach = dynamic_cast<QStateMachine *>(par)) {
          return mach;
       }
       par = par->parent();
    }
-   return 0;
+
+   return nullptr;
 }
 
 void QAbstractStatePrivate::callOnEntry(QEvent *e)
@@ -86,91 +88,44 @@ void QAbstractStatePrivate::emitExited()
    emit q->exited();
 }
 
-/*!
-  Constructs a new state with the given \a parent state.
-*/
 QAbstractState::QAbstractState(QState *parent)
    : QObject(parent), d_ptr(new QAbstractStatePrivate(QAbstractStatePrivate::AbstractState))
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-  \internal
-*/
+
 QAbstractState::QAbstractState(QAbstractStatePrivate &dd, QState *parent)
    : QObject(parent), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-  Destroys this state.
-*/
 QAbstractState::~QAbstractState()
 {
 }
 
-/*!
-  Returns this state's parent state, or 0 if the state has no parent state.
-*/
 QState *QAbstractState::parentState() const
 {
    Q_D(const QAbstractState);
+
    if (d->parentState != parent()) {
       d->parentState = qobject_cast<QState *>(parent());
    }
+
    return d->parentState;
 }
 
-/*!
-  Returns the state machine that this state is part of, or 0 if the state is
-  not part of a state machine.
-*/
 QStateMachine *QAbstractState::machine() const
 {
    Q_D(const QAbstractState);
    return d->machine();
 }
 
-/*!
-  \fn QAbstractState::onExit(QEvent *event)
 
-  This function is called when the state is exited. The given \a event is what
-  caused the state to be exited. Reimplement this function to perform custom
-  processing when the state is exited.
-*/
-
-/*!
-  \fn QAbstractState::onEntry(QEvent *event)
-
-  This function is called when the state is entered. The given \a event is
-  what caused the state to be entered. Reimplement this function to perform
-  custom processing when the state is entered.
-*/
-
-/*!
-  \fn QAbstractState::entered()
-
-  This signal is emitted when the state has been entered (after onEntry() has
-  been called).
-*/
-
-/*!
-  \fn QAbstractState::exited()
-
-  This signal is emitted when the state has been exited (after onExit() has
-  been called).
-*/
-
-/*!
-  \reimp
-*/
 bool QAbstractState::event(QEvent *e)
 {
    return QObject::event(e);
 }
 
-QT_END_NAMESPACE
-
-#endif //QT_NO_STATEMACHINE
+#endif

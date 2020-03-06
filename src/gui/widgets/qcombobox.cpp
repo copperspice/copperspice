@@ -44,13 +44,13 @@
 #include <qmetaobject.h>
 #include <qabstractproxymodel.h>
 #include <qstylehints.h>
-#include <qguiapplication_p.h>
+#include <qdebug.h>
 
+#include <qguiapplication_p.h>
 #include <qapplication_p.h>
 #include <qcombobox_p.h>
 #include <qabstractitemmodel_p.h>
 #include <qabstractscrollarea_p.h>
-#include <qdebug.h>
 
 #ifndef QT_NO_EFFECTS
 # include <qeffects_p.h>
@@ -149,8 +149,9 @@ QStyleOptionMenuItem QComboMenuDelegate::getStyleOption(const QStyleOptionViewIt
       menuOption.palette.setBrush(QPalette::All, QPalette::Background,
          qvariant_cast<QBrush>(index.data(Qt::BackgroundRole)));
    }
-   menuOption.text = index.model()->data(index, Qt::DisplayRole).toString()
-      .replace(QLatin1Char('&'), QLatin1String("&&"));
+
+   menuOption.text = index.model()->data(index, Qt::DisplayRole).toString().replace(QChar('&'), QString("&&"));
+
    menuOption.tabWidth = 0;
    menuOption.maxIconWidth =  option.decorationSize.width() + 4;
    menuOption.menuRect = option.rect;
@@ -162,6 +163,7 @@ QStyleOptionMenuItem QComboMenuDelegate::getStyleOption(const QStyleOptionViewIt
       || mCombo->testAttribute(Qt::WA_MacMiniSize)
       || mCombo->font() != cs_app_fonts_hash()->value("QComboBox", QFont())) {
       menuOption.font = mCombo->font();
+
    } else {
       QVariant fontRoleData = index.data(Qt::FontRole);
       if (fontRoleData.isValid()) {

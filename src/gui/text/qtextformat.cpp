@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qtextformat.h>
-#include <qtextformat_p.h>
 
 #include <qvariant.h>
 #include <qdatastream.h>
@@ -30,11 +29,12 @@
 #include <qmap.h>
 #include <qhashfunc.h>
 
+#include <qtextformat_p.h>
+
 QTextLength::operator QVariant() const
 {
    return QVariant(QVariant::TextLength, this);
 }
-
 
 QDataStream &operator<<(QDataStream &stream, const QTextLength &length)
 {
@@ -48,9 +48,9 @@ QDataStream &operator>>(QDataStream &stream, QTextLength &length)
    stream >> type >> fixedValueOrPercentage;
    length.fixedValueOrPercentage = fixedValueOrPercentage;
    length.lengthType = QTextLength::Type(type);
+
    return stream;
 }
-
 
 class QTextFormatPrivate : public QSharedData
 {
@@ -575,9 +575,10 @@ int QTextFormat::intProperty(int propertyId) const
 
 qreal QTextFormat::doubleProperty(int propertyId) const
 {
-   if (!d) {
+   if (! d) {
       return 0.;
    }
+
    const QVariant prop = d->property(propertyId);
    if (prop.userType() != QVariant::Double && prop.userType() != QMetaType::Float) {
       return 0.;
@@ -616,6 +617,7 @@ QPen QTextFormat::penProperty(int propertyId) const
    if (!d) {
       return QPen(Qt::NoPen);
    }
+
    const QVariant prop = d->property(propertyId);
    if (prop.userType() != QVariant::Pen) {
       return QPen(Qt::NoPen);
@@ -642,26 +644,14 @@ QBrush QTextFormat::brushProperty(int propertyId) const
    return qvariant_cast<QBrush>(prop);
 }
 
-/*!
-    Returns the value of the property given by \a propertyId.
-
-    \sa setProperty() boolProperty() intProperty() doubleProperty() stringProperty() colorProperty() lengthVectorProperty() Property
-*/
 QTextLength QTextFormat::lengthProperty(int propertyId) const
 {
-   if (!d) {
+   if (! d) {
       return QTextLength();
    }
    return qvariant_cast<QTextLength>(d->property(propertyId));
 }
 
-/*!
-    Returns the value of the property given by \a propertyId. If the
-    property isn't of QTextFormat::LengthVector type, an empty length
-    vector is returned instead.
-
-    \sa setProperty() boolProperty() intProperty() doubleProperty() stringProperty() colorProperty() lengthProperty() Property
-*/
 QVector<QTextLength> QTextFormat::lengthVectorProperty(int propertyId) const
 {
    QVector<QTextLength> vector;
@@ -674,6 +664,7 @@ QVector<QTextLength> QTextFormat::lengthVectorProperty(int propertyId) const
    }
 
    QList<QVariant> propertyList = prop.toList();
+
    for (int i = 0; i < propertyList.size(); ++i) {
       QVariant var = propertyList.at(i);
       if (var.userType() == QVariant::TextLength) {
@@ -858,18 +849,11 @@ bool QTextFormat::operator==(const QTextFormat &rhs) const
 
 QTextCharFormat::QTextCharFormat() : QTextFormat(CharFormat) {}
 
-/*!
-    \internal
-    \fn QTextCharFormat::QTextCharFormat(const QTextFormat &other)
-
-    Creates a new character format with the same attributes as the \a given
-    text format.
-*/
+// internal (cs)
 QTextCharFormat::QTextCharFormat(const QTextFormat &fmt)
    : QTextFormat(fmt)
 {
 }
-
 
 bool QTextCharFormat::fontUnderline() const
 {
@@ -879,29 +863,13 @@ bool QTextCharFormat::fontUnderline() const
    return boolProperty(FontUnderline);
 }
 
-/*!
-    \fn UnderlineStyle QTextCharFormat::underlineStyle() const
-    \since 4.2
-
-    Returns the style of underlining the text.
-*/
-
-/*!
-    \fn void QTextCharFormat::setUnderlineStyle(UnderlineStyle style)
-    \since 4.2
-
-    Sets the style of underlining the text to \a style.
-*/
 void QTextCharFormat::setUnderlineStyle(UnderlineStyle style)
 {
    setProperty(TextUnderlineStyle, style);
+
    // for compatibility
    setProperty(FontUnderline, style == SingleUnderline);
 }
-
-
-
-
 
 QString QTextCharFormat::anchorName() const
 {
@@ -914,14 +882,6 @@ QString QTextCharFormat::anchorName() const
    return prop.toString();
 }
 
-/*!
-    \fn QStringList QTextCharFormat::anchorNames() const
-    \since 4.3
-
-    Returns the anchor names associated with this text format, or an empty
-    string list if none has been set. If the anchor names are set, text with this
-    format can be the destination of a hypertext link.
-*/
 QStringList QTextCharFormat::anchorNames() const
 {
    QVariant prop = property(AnchorName);
@@ -934,7 +894,6 @@ QStringList QTextCharFormat::anchorNames() const
 
    return QStringList(prop.toString());
 }
-
 
 void QTextCharFormat::setFont(const QFont &font)
 {
@@ -1006,34 +965,19 @@ void QTextCharFormat::setFont(const QFont &font, FontPropertiesInheritanceBehavi
    }
 }
 
-
 QFont QTextCharFormat::font() const
 {
    return d ? d->font() : QFont();
 }
 
-
 QTextBlockFormat::QTextBlockFormat() : QTextFormat(BlockFormat) {}
 
-/*!
-    \internal
-    \fn QTextBlockFormat::QTextBlockFormat(const QTextFormat &other)
-
-    Creates a new block format with the same attributes as the \a given
-    text format.
-*/
+// internal (cs)
 QTextBlockFormat::QTextBlockFormat(const QTextFormat &fmt)
    : QTextFormat(fmt)
 {
 }
 
-/*!
-    \since 4.4
-    Sets the tab positions for the text block to those specified by
-    \a tabs.
-
-    \sa tabPositions()
-*/
 void QTextBlockFormat::setTabPositions(const QList<QTextOption::Tab> &tabs)
 {
    QList<QVariant> list;
@@ -1044,6 +988,7 @@ void QTextBlockFormat::setTabPositions(const QList<QTextOption::Tab> &tabs)
       list.append(v);
       ++iter;
    }
+
    setProperty(TabPositions, list);
 }
 
@@ -1072,18 +1017,11 @@ QTextListFormat::QTextListFormat()
    setIndent(1);
 }
 
-/*!
-    \internal
-    \fn QTextListFormat::QTextListFormat(const QTextFormat &other)
-
-    Creates a new list format with the same attributes as the \a given
-    text format.
-*/
+// internal (cs)
 QTextListFormat::QTextListFormat(const QTextFormat &fmt)
    : QTextFormat(fmt)
 {
 }
-
 
 QTextFrameFormat::QTextFrameFormat() : QTextFormat(FrameFormat)
 {
@@ -1091,13 +1029,7 @@ QTextFrameFormat::QTextFrameFormat() : QTextFormat(FrameFormat)
    setBorderBrush(Qt::darkGray);
 }
 
-/*!
-    \internal
-    \fn QTextFrameFormat::QTextFrameFormat(const QTextFormat &other)
-
-    Creates a new frame format with the same attributes as the \a given
-    text format.
-*/
+// internal (cs)
 QTextFrameFormat::QTextFrameFormat(const QTextFormat &fmt)
    : QTextFormat(fmt)
 {
@@ -1119,7 +1051,6 @@ qreal QTextFrameFormat::topMargin() const
    }
    return doubleProperty(FrameTopMargin);
 }
-
 
 qreal QTextFrameFormat::bottomMargin() const
 {
@@ -1153,6 +1084,8 @@ QTextTableFormat::QTextTableFormat()
    setBorder(1);
 }
 
+
+// internal (cs)
 QTextTableFormat::QTextTableFormat(const QTextFormat &fmt)
    : QTextFrameFormat(fmt)
 {
@@ -1162,6 +1095,8 @@ QTextImageFormat::QTextImageFormat() : QTextCharFormat()
 {
    setObjectType(ImageObject);
 }
+
+// internal (cs)
 QTextImageFormat::QTextImageFormat(const QTextFormat &fmt)
    : QTextCharFormat(fmt)
 {
@@ -1173,13 +1108,11 @@ QTextTableCellFormat::QTextTableCellFormat()
    setObjectType(TableCellObject);
 }
 
-
+// internal (cs)
 QTextTableCellFormat::QTextTableCellFormat(const QTextFormat &fmt)
    : QTextCharFormat(fmt)
 {
 }
-
-
 
 QTextFormatCollection::QTextFormatCollection(const QTextFormatCollection &rhs)
 {

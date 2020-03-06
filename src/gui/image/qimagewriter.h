@@ -24,11 +24,10 @@
 #ifndef QIMAGEWRITER_H
 #define QIMAGEWRITER_H
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qlist.h>
-#include <QtGui/qimageiohandler.h>
-
+#include <qbytearray.h>
+#include <qcoreapplication.h>
+#include <qlist.h>
+#include <qimageiohandler.h>
 
 class QIODevice;
 class QImage;

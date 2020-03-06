@@ -224,6 +224,7 @@ class QSortFilterProxyModelPrivate : public QAbstractProxyModelPrivate
 
    void sort();
    bool update_source_sort_column();
+
    void sort_source_rows(QVector<int> &source_rows,
       const QModelIndex &source_parent) const;
    QVector<QPair<int, QVector<int >>> proxy_intervals_for_source_items_to_add(
@@ -2375,11 +2376,6 @@ void QSortFilterProxyModel::setFilterRole(int role)
    d->filter_changed();
 }
 
-/*!
-    \obsolete
-
-    This function is obsolete. Use invalidate() instead.
-*/
 void QSortFilterProxyModel::clear()
 {
    Q_D(QSortFilterProxyModel);
@@ -2392,32 +2388,17 @@ void QSortFilterProxyModel::clear()
 void QSortFilterProxyModel::invalidate()
 {
    Q_D(QSortFilterProxyModel);
+
    emit layoutAboutToBeChanged();
    d->_q_clearMapping();
    emit layoutChanged();
 }
 
-/*!
-   \obsolete
-
-    This function is obsolete. Use invalidateFilter() instead.
-*/
 void QSortFilterProxyModel::filterChanged()
 {
    Q_D(QSortFilterProxyModel);
    d->filter_changed();
 }
-
-/*!
-   \since 4.3
-
-   Invalidates the current filtering.
-
-   This function should be called if you are implementing custom filtering
-   (e.g. filterAcceptsRow()), and your filter parameters have changed.
-
-   \sa invalidate()
-*/
 void QSortFilterProxyModel::invalidateFilter()
 {
    Q_D(QSortFilterProxyModel);

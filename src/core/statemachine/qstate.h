@@ -24,11 +24,9 @@
 #ifndef QSTATE_H
 #define QSTATE_H
 
-#include <QtCore/qabstractstate.h>
-#include <QtCore/qlist.h>
-#include <QSignalTransition>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractstate.h>
+#include <qlist.h>
+#include <qsignaltransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -53,11 +51,11 @@ class Q_CORE_EXPORT QState : public QAbstractState
       ExclusiveStates,
       ParallelStates
    };
-
    CORE_CS_ENUM(ChildMode)
 
-   QState(QState *parent = 0);
-   QState(ChildMode childMode, QState *parent = 0);
+
+   QState(QState *parent = nullptr);
+   QState(ChildMode childMode, QState *parent = nullptr);
    ~QState();
 
    void addTransition(QAbstractTransition *transition);
@@ -105,19 +103,21 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
 template<class SignalClass, class ...SignalArgs>
 QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...),
-      QAbstractState *target)
+   QAbstractState *target)
 {
    if (! sender) {
       qWarning("QState::addTransition: No sender specified");
-      return 0;
+      return nullptr;
    }
+
    if (! signal) {
       qWarning("QState::addTransition: No signal specified");
-      return 0;
+      return nullptr;
    }
+
    if (! target) {
       qWarning("QState::addTransition: No target specified");
-      return 0;
+      return nullptr;
    }
 
    QSignalTransition *trans = new QSignalTransition(sender, signal);
@@ -128,7 +128,5 @@ QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*si
 }
 
 #endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
 
 #endif
