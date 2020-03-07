@@ -226,10 +226,12 @@ void ClassObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecSt
 
 JSC::CallType ClassObjectDelegate::getCallData(QScriptObject *, JSC::CallData &callData)
 {
-   if (!m_scriptClass->supportsExtension(QScriptClass::Callable)) {
+   if (! m_scriptClass->supportsExtension(QScriptClass::Callable)) {
       return JSC::CallTypeNone;
    }
+
    callData.native.function = call;
+
    return JSC::CallTypeHost;
 }
 
@@ -289,7 +291,7 @@ JSC::JSObject *ClassObjectDelegate::construct(JSC::ExecState *exec, JSC::JSObjec
    QScriptValue result = qvariant_cast<QScriptValue>(scriptClass->extension(QScriptClass::Callable,
             QVariant::fromValue(ctx)));
 
-   if (!result.isObject()) {
+   if (! result.isObject()) {
       result = defaultObject;
    }
 

@@ -32,8 +32,6 @@
 #include "qsimplexmlnodemodel.h"
 #include "qsingletoniterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 class QSimpleXmlNodeModelPrivate : public QAbstractXmlNodeModelPrivate
@@ -116,7 +114,4 @@ QVector<QXmlNodeModelIndex> QSimpleXmlNodeModel::nodesByIdref(const QXmlName &id
    Q_UNUSED(idref);
    return QVector<QXmlNodeModelIndex>();
 }
-
-QT_END_NAMESPACE
-
 

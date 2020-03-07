@@ -22,13 +22,16 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptcontext.h"
 
-#include "qscriptcontext_p.h"
-#include "qscriptcontextinfo.h"
-#include "qscriptengine.h"
-#include "qscriptengine_p.h"
-#include "../bridge/qscriptactivationobject_p.h"
+#include <qscriptcontext.h>
+
+#include <qscriptengine.h>
+#include <qscriptcontextinfo.h>
+#include <qstringlist.h>
+
+#include <qscriptcontext_p.h>
+#include <qscriptengine_p.h>
+#include <qscriptactivationobject_p.h>
 
 #include "Arguments.h"
 #include "CodeBlock.h"
@@ -36,8 +39,6 @@
 #include "JSFunction.h"
 #include "JSObject.h"
 #include "JSGlobalObject.h"
-
-#include <QtCore/qstringlist.h>
 
 QScriptContext::QScriptContext()
 {

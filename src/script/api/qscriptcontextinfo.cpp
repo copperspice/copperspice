@@ -22,15 +22,18 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptcontextinfo.h"
 
-#include "qscriptcontext_p.h"
-#include "qscriptengine.h"
-#include "qscriptengine_p.h"
-#include "../bridge/qscriptqobject_p.h"
+#include <qscriptcontextinfo.h>
+
+#include <qscriptengine.h>
 #include <qdatastream.h>
 #include <qmetaobject.h>
 #include <qshareddata.h>
+
+#include <qscriptengine_p.h>
+#include <qscriptcontext_p.h>
+#include <qscriptqobject_p.h>
+
 #include "CodeBlock.h"
 #include "JSFunction.h"
 

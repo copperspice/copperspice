@@ -834,8 +834,8 @@ QMargins QWindowsGeometryHint::frame(DWORD style, DWORD exStyle)
 
 bool QWindowsGeometryHint::handleCalculateSize(const QMargins &customMargins, const MSG &msg, LRESULT *result)
 {
-   // NCCALCSIZE_PARAMS structure if wParam==TRUE
-   if (!msg.wParam || customMargins.isNull()) {
+   // NCCALCSIZE_PARAMS structure if wParam == TRUE
+   if (! msg.wParam || customMargins.isNull()) {
       return false;
    }
 

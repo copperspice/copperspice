@@ -28,7 +28,7 @@
 
 void *QWindowsGdiNativeInterface::nativeResourceForBackingStore(const QByteArray &resource, QBackingStore *bs)
 {
-   if (!bs || !bs->handle()) {
+   if (! bs || ! bs->handle()) {
       qWarning("%s: '%s' requested for null backingstore or backingstore without handle.", __FUNCTION__, resource.constData());
       return 0;
    }

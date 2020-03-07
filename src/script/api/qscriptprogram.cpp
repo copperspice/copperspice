@@ -22,37 +22,17 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptprogram.h"
-#include "qscriptprogram_p.h"
-#include "qscriptengine.h"
-#include "qscriptengine_p.h"
+
+#include <qscriptprogram.h>
+#include <qscriptengine.h>
+
+#include <qscriptprogram_p.h>
+#include <qscriptengine_p.h>
 
 #include "SamplingTool.h"
 #include "Executable.h"
 
-
-/*!
-  \since 4.7
-  \class QScriptProgram
-
-  \brief The QScriptProgram class encapsulates a Qt Script program.
-
-  \ingroup script
-
-  QScriptProgram retains the compiled representation of the script if
-  possible. Thus, QScriptProgram can be used to evaluate the same
-  script multiple times more efficiently.
-
-  \code
-  QScriptEngine engine;
-  QScriptProgram program("1 + 2");
-  QScriptValue result = engine.evaluate(program);
-  \endcode
-*/
-
-QScriptProgramPrivate::QScriptProgramPrivate(const QString &src,
-   const QString &fn,
-   int ln)
+QScriptProgramPrivate::QScriptProgramPrivate(const QString &src, const QString &fn, int ln)
    : sourceCode(src), fileName(fn), firstLineNumber(ln),
      engine(0), _executable(0), sourceId(-1), isCompiled(false)
 {
@@ -79,11 +59,13 @@ JSC::EvalExecutable *QScriptProgramPrivate::executable(JSC::ExecState *exec,
       if (eng == engine) {
          return _executable.get();
       }
+
       // "Migrating" to another engine; clean up old state
       QScript::APIShim shim(engine);
       _executable.clear();
       engine->unregisterScriptProgram(this);
    }
+
    WTF::PassRefPtr<QScript::UStringSourceProviderWithFeedback> provider
       = QScript::UStringSourceProviderWithFeedback::create(sourceCode, fileName, firstLineNumber, eng);
    sourceId = provider->asID();
@@ -103,18 +85,11 @@ void QScriptProgramPrivate::detachFromEngine()
    engine = 0;
 }
 
-/*!
-  Constructs a null QScriptProgram.
-*/
 QScriptProgram::QScriptProgram()
    : d_ptr(0)
 {
 }
 
-/*!
-  Constructs a new QScriptProgram with the given \a sourceCode, \a
-  fileName and \a firstLineNumber.
-*/
 QScriptProgram::QScriptProgram(const QString &sourceCode,
    const QString fileName,
    int firstLineNumber)
@@ -122,34 +97,21 @@ QScriptProgram::QScriptProgram(const QString &sourceCode,
 {
 }
 
-/*!
-  Constructs a new QScriptProgram that is a copy of \a other.
-*/
 QScriptProgram::QScriptProgram(const QScriptProgram &other)
    : d_ptr(other.d_ptr)
 {
 }
 
-/*!
-  Destroys this QScriptProgram.
-*/
 QScriptProgram::~QScriptProgram()
 {
 }
 
-/*!
-  Assigns the \a other value to this QScriptProgram.
-*/
 QScriptProgram &QScriptProgram::operator=(const QScriptProgram &other)
 {
    d_ptr = other.d_ptr;
    return *this;
 }
 
-/*!
-  Returns true if this QScriptProgram is null; otherwise
-  returns false.
-*/
 bool QScriptProgram::isNull() const
 {
    Q_D(const QScriptProgram);

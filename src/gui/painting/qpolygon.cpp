@@ -502,6 +502,6 @@ QPolygonF QPolygonF::subtracted(const QPolygonF &rectangle) const
 
 QPolygonF::operator QVariant() const
 {
-   return QVariant(QMetaType::QPolygonF, this);
+   return QVariant(QVariant::PolygonF, this);
 }
 

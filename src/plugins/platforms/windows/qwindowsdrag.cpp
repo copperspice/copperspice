@@ -29,12 +29,12 @@
 #  include "qwindowsclipboard.h"
 #endif
 
-#include "qwindowsintegration.h"
-#include "qwindowsole.h"
-#include "qtwindows_additional.h"
-#include "qwindowswindow.h"
-#include "qwindowsmousehandler.h"
-#include "qwindowscursor.h"
+#include <qwindowsintegration.h>
+#include <qwindowsole.h>
+#include <qtwindows_additional.h>
+#include <qwindowswindow.h>
+#include <qwindowsmousehandler.h>
+#include <qwindowscursor.h>
 #include <qdebug.h>
 #include <qbuffer.h>
 #include <qpoint.h>
@@ -261,7 +261,6 @@ QDebug operator<<(QDebug d, const QWindowsOleDropSource::CursorEntry &e)
 
    return d;
 }
-
 
 void QWindowsOleDropSource::createCursors()
 {

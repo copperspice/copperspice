@@ -21,15 +21,16 @@
 *
 ***********************************************************************/
 
+#include "qabstractxmlnodemodel.h"
+
 #include <qvector.h>
-#include <qabstractxmlnodemodel.h>
+#include "qabstractxmlreceiver.h"
+#include "qitem_p.h"
 
 #include "qabstractxmlnodemodel_p.h"
-#include "qabstractxmlreceiver.h"
 #include "qcommonvalues_p.h"
 #include "qemptyiterator_p.h"
 #include "qitemmappingiterator_p.h"
-#include "qitem_p.h"
 #include "qnamespaceresolver_p.h"
 #include "qsequencemappingiterator_p.h"
 #include "qsingletoniterator_p.h"
@@ -49,39 +50,23 @@ bool QAbstractXmlNodeModel::isIgnorableInDeepEqual(const QXmlNodeModelIndex &n)
 
 using namespace QPatternist;
 
-/*!
-  Default constructor.
- */
 QAbstractXmlNodeModel::QAbstractXmlNodeModel() : d_ptr(0)
 {
 }
 
-/*!
- \internal
-
- Takes the d-pointer.
-
- */
 QAbstractXmlNodeModel::QAbstractXmlNodeModel(QAbstractXmlNodeModelPrivate *d) : d_ptr(d)
 {
 }
 
-/*!
-  Destructor.
- */
 QAbstractXmlNodeModel::~QAbstractXmlNodeModel()
 {
 }
 
 /*
 ### Qt5:
-
-Add the function:
-
-    virtual QSourceLocation sourceLocation(const QXmlNodeModelIndex &nodeIndex) const = 0;
-
+Add : virtual QSourceLocation sourceLocation(const QXmlNodeModelIndex &nodeIndex) const = 0;
 Such that the data model can communicate back source locations.
- */
+*/
 
 namespace QPatternist {
 class MergeIterator
@@ -153,13 +138,6 @@ QAbstractXmlNodeModel::mapToSequence(const QXmlNodeModelIndex &ni, const Dynamic
                          ni.iterate(QXmlNodeModelIndex::AxisChild),
                          DynamicContext::Ptr()));
 }
-
-/*!
-  \fn QVector<QXmlNodeModelIndex> QAbstractXmlNodeModel::attributes(const QXmlNodeModelIndex &element) const
-
-  Returns the attributes of \a element. The caller guarantees
-  that \a element is an element in this node model.
- */
 
 /*!
   \internal

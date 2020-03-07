@@ -31,29 +31,28 @@
 #include "qwindowswindow.h"
 #include "qwindowsintegration.h"
 #include "qwindowstheme.h"
+#include "qtwindows_additional.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QColor>
-#include <QtCore/QDebug>
-#include <QtCore/QTimer>
-#include <QtCore/QDir>
-#include <QtCore/QScopedArrayPointer>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QObject>
-#include <QtCore/QThread>
-#include <QtCore/QSysInfo>
-#include <QtCore/QSharedData>
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
-#include <QtCore/QUuid>
-#include <QRegularExpression>
+#include <qapplication.h>
+#include <qcolor.h>
+#include <qdebug.h>
+#include <qtimer.h>
+#include <qdir.h>
+#include <qscopedarraypointer.h>
+#include <qsharedpointer.h>
+#include <qobject.h>
+#include <qthread.h>
+#include <qsysinfo.h>
+#include <qshareddata.h>
+#include <qexplicitlyshareddatapointer.h>
+#include <qmutex.h>
+#include <qmutexlocker.h>
+#include <quuid.h>
+#include <qregularexpression.h>
 
 #include <qsystemlibrary_p.h>
 
 #include <algorithm>
-
-#include "qtwindows_additional.h"
 
 // #define USE_NATIVE_COLOR_DIALOG /* Testing purposes only */
 

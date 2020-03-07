@@ -28,24 +28,6 @@ namespace JSC {
 ASSERT_CLASS_FITS_IN_CELL(QT_PREPEND_NAMESPACE(QScriptStaticScopeObject));
 }
 
-QT_BEGIN_NAMESPACE
-
-/*!
-  \class QScriptStaticScopeObject
-  \internal
-
-    Represents a static scope object.
-
-    This class allows the VM to determine at JS script compile time whether
-    the object has a given property or not. If the object has the property,
-    a fast, index-based read/write operation will be used. If the object
-    doesn't have the property, the compiler knows it can safely skip this
-    object when dynamically resolving the property. Either way, this can
-    greatly improve performance.
-
-  \sa QScriptContext::pushScope()
-*/
-
 const JSC::ClassInfo QScriptStaticScopeObject::info = { "QScriptStaticScopeObject", 0, 0, 0 };
 
 /*!
@@ -109,6 +91,7 @@ void QScriptStaticScopeObject::putWithAttributes(JSC::ExecState *exec, const JSC
    if (symbolTablePutWithAttributes(propertyName, value, attributes)) {
       return;
    }
+
    Q_ASSERT(d_ptr()->canGrow);
    addSymbolTableProperty(propertyName, value, attributes);
 }
@@ -121,6 +104,7 @@ void QScriptStaticScopeObject::put(JSC::ExecState *exec, const JSC::Identifier &
    if (symbolTablePut(propertyName, value)) {
       return;
    }
+
    Q_ASSERT(d_ptr()->canGrow);
    addSymbolTableProperty(propertyName, value, /*attributes=*/0);
 }
@@ -166,4 +150,3 @@ int QScriptStaticScopeObject::growRegisterArray(int count)
    return -oldSize - 1;
 }
 
-QT_END_NAMESPACE

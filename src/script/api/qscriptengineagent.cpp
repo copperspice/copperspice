@@ -22,10 +22,12 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptengineagent.h"
-#include "qscriptengineagent_p.h"
-#include "qscriptengine.h"
-#include "qscriptengine_p.h"
+
+#include <qscriptengineagent.h>
+#include <qscriptengine.h>
+
+#include <qscriptengineagent_p.h>
+#include <qscriptengine_p.h>
 
 #include "CodeBlock.h"
 #include "Instruction.h"
