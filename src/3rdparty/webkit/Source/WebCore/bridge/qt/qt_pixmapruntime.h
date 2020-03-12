@@ -44,8 +44,8 @@ public:
     QImage toImage();
     RuntimeObject* newRuntimeObject(ExecState* exec);
     static JSObject* createPixmapRuntimeObject(ExecState*, PassRefPtr<RootObject>, const QVariant&);
-    static QVariant variantFromObject(JSObject*, QMetaType::Type hint);
-    static bool canHandle(QMetaType::Type hint);
+    static QVariant variantFromObject(JSObject*, QVariant::Type hint);
+    static bool canHandle(QVariant::Type hint);
 };
 
 }

@@ -374,15 +374,17 @@ static uint typeOfVariant(const QVariant &value)
       case QVariant::LongLong:
       case QVariant::ULongLong:
       case QVariant::Char:
-      case QMetaType::Short:
-      case QMetaType::UShort:
-      case QMetaType::UChar:
-      case QMetaType::ULong:
-      case QMetaType::Long:
+      case QVariant::Short:
+      case QVariant::UShort:
+      case QVariant::UChar:
+      case QVariant::ULong:
+      case QVariant::Long:
          return 0;
+
       case QVariant::Double:
-      case QMetaType::Float:
+      case QVariant::Float:
          return 1;
+
       default:
          return 2;
    }

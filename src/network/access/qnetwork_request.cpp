@@ -273,7 +273,8 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
       case QNetworkRequest::LocationHeader:
          switch (value.userType()) {
-            case QMetaType::QUrl:
+
+            case QVariant::Url:
                return value.toUrl().toEncoded();
 
             default:
@@ -282,8 +283,9 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
       case QNetworkRequest::LastModifiedHeader:
          switch (value.userType()) {
-            case QMetaType::QDate:
-            case QMetaType::QDateTime:
+
+            case QVariant::Date:
+            case QVariant::DateTime:
                // generate RFC 1123/822 dates:
                return QNetworkHeadersPrivate::toHttpDate(value.toDateTime());
 

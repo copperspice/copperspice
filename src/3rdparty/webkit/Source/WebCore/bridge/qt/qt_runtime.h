@@ -101,7 +101,7 @@ private:
 template <typename T> class QtArray : public Array
 {
 public:
-    QtArray(QList<T> list, QMetaType::Type type, PassRefPtr<RootObject>);
+    QtArray(QList<T> list, QVariant::Type type, PassRefPtr<RootObject>);
     virtual ~QtArray();
 
     RootObject* rootObject() const;
@@ -113,7 +113,7 @@ public:
 private:
     mutable QList<T> m_list; // setValueAt is const!
     unsigned int m_length;
-    QMetaType::Type m_type;
+    QVariant::Type m_type;
 };
 
 // Based on RuntimeMethod
@@ -239,7 +239,7 @@ private:
     Strong<JSObject> m_funcObject;
 };
 
-QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type hint, int *distance);
+QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type hint, int *distance);
 JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, const QVariant& variant);
 
 } // namespace Bindings

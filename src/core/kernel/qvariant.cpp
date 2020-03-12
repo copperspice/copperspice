@@ -710,7 +710,6 @@ static qint64 qConvertToNumber(const QVariant::Private *d, bool *ok)
       case QMetaType::Short:
       case QMetaType::Long:
       case QMetaType::Float:
-      case QMetaType::LongLong:
          return qMetaTypeNumber(d);
 
       case QVariant::ULongLong:
@@ -757,7 +756,6 @@ static quint64 qConvertToUnsignedNumber(const QVariant::Private *d, bool *ok)
       case QMetaType::Short:
       case QMetaType::Long:
       case QMetaType::Float:
-      case QMetaType::LongLong:
          return quint64(qMetaTypeNumber(d));
 
       case QVariant::ULongLong:
@@ -1704,11 +1702,11 @@ QVariant::QVariant(const QString16 &val)
    v_construct<QString16>(&d, val);
 }
 
-QVariant::QVariant(const QChar &val)
+QVariant::QVariant(const ::QChar &val)
 {
    d.is_null = false;
    d.type = Char;
-   v_construct<QChar>(&d, val);
+   v_construct<::QChar>(&d, val);
 }
 
 QVariant::QVariant(const QStringList &val)
@@ -2297,7 +2295,7 @@ QJsonDocument QVariant::toJsonDocument() const
 
 QChar QVariant::toChar() const
 {
-   return qVariantToHelper<QChar>(d, Char, handler);
+   return qVariantToHelper<::QChar>(d, Char, handler);
 }
 
 QBitArray QVariant::toBitArray() const

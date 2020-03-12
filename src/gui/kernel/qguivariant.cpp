@@ -160,6 +160,9 @@ static void construct(QVariant::Private *x, const void *copy)
          v_construct<QCursor>(x, copy);
          break;
 #endif
+
+/* comment out, pending removal
+
       case 62: {
          // small 'trick' to let a QVariant(Qt::blue) create a variant
          // of type QColor
@@ -168,6 +171,7 @@ static void construct(QVariant::Private *x, const void *copy)
          v_construct<QColor>(x, &color);
          break;
       }
+*/
 
 #ifndef QT_NO_MATRIX4X4
       case QVariant::Matrix4x4:

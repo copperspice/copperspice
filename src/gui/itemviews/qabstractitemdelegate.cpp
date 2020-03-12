@@ -297,7 +297,7 @@ QString QAbstractItemDelegatePrivate::textForRole(Qt::ItemDataRole role, const Q
    QString text;
 
    switch (value.userType()) {
-      case QMetaType::Float:
+      case QVariant::Float:
          text = locale.toString(value.toFloat());
          break;
 

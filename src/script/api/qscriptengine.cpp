@@ -1393,7 +1393,7 @@ JSC::JSValue QScriptEnginePrivate::newQObject(QObject *object, QScriptEngine::Va
 
          int typeId = QMetaType::type(typeString);
 
-         if (typeId != 0) {
+         if (typeId != QVariant::Invalid) {
             JSC::JSValue proto = defaultPrototype(typeId);
 
             if (proto) {

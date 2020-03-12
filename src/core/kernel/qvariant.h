@@ -69,91 +69,115 @@ inline T qvariant_cast(const QVariant &);
 class Q_CORE_EXPORT QVariant
 {
  public:
+
    enum Type {
-      Invalid    = QMetaType::UnknownType,
+      Invalid,
 
-      Bool       = QMetaType::Bool,
-      Int        = QMetaType::Int,
-      UInt       = QMetaType::UInt,
-      LongLong   = QMetaType::LongLong,
-      ULongLong  = QMetaType::ULongLong,
-      Double     = QMetaType::Double,
+      Bool,
+      Short,
+      UShort,
+      Int,
+      UInt,
+      Long,
+      ULong,
+      LongLong,
+      ULongLong,
+      Double,
+      Float,
 
-      // used for range checking
-      FirstConstructedType = QMetaType::QByteArray,
+      QChar,
+      Char,
+      SChar,
+      UChar,
+      Char8_t,
+      Char16_t,
+      Char32_t,
 
-      ByteArray  = QMetaType::QByteArray,
-      BitArray   = QMetaType::QBitArray,
+      ByteArray,
+      BitArray,
+      String,
+      String8       = String,
+      String16,
+      StringList,
+      StringView,
+      RegularExpression,
 
-      Char       = QMetaType::QChar,
-      Char32     = QMetaType::QChar32,
+      Date,
+      Time,
+      DateTime,
+      Locale,
 
-      String     = QMetaType::QString,
-      String8    = QMetaType::QString8,
-      String16   = QMetaType::QString16,
+      JsonValue,
+      JsonArray,
+      JsonObject,
+      JsonDocument,
 
-      RegularExpression = QMetaType::QRegularExpression,
-      StringView        = QMetaType::QStringView,
+      Line,
+      LineF,
+      Point,
+      PointF,
+      Polygon,
+      PolygonF,
+      Rect,
+      RectF,
+      Size,
+      SizeF,
 
-      StringList   = QMetaType::QStringList,
-      List         = QMetaType::QVariantList,
-      Map          = QMetaType::QVariantMap,
-      MultiMap     = QMetaType::QVariantMultiMap,
-      Hash         = QMetaType::QVariantHash,
-      MultiHash    = QMetaType::QVariantMultiHash,
+      Variant,
+      List,
+      Map,
+      Hash,
+      MultiMap,
+      MultiHash,
 
-      Date         = QMetaType::QDate,
-      Time         = QMetaType::QTime,
-      DateTime     = QMetaType::QDateTime,
-      Url          = QMetaType::QUrl,
-      Locale       = QMetaType::QLocale,
+      Void,
+      VoidStar,
+      ObjectStar,
+      WidgetStar,
 
-      Rect         = QMetaType::QRect,
-      RectF        = QMetaType::QRectF,
-      Size         = QMetaType::QSize,
-      SizeF        = QMetaType::QSizeF,
-      Line         = QMetaType::QLine,
-      LineF        = QMetaType::QLineF,
-      Point        = QMetaType::QPoint,
-      PointF       = QMetaType::QPointF,
-      EasingCurve  = QMetaType::QEasingCurve,
-      Uuid         = QMetaType::QUuid,
-      ModelIndex   = QMetaType::QModelIndex,
+      // core
+      EasingCurve,
+      Margins,
+      ModelIndex,
+      PersistentModelIndex,
+      Url,
+      Uuid,
 
-      JsonValue    = QMetaType::QJsonValue,
-      JsonArray    = QMetaType::QJsonArray,
-      JsonObject   = QMetaType::QJsonObject,
-      JsonDocument = QMetaType::QJsonDocument,
+      // gui
+      Bitmap,
+      Brush,
+      Color,
+      Cursor,
+      Font,
+      Icon,
+      Image,
+      KeySequence,
+      Matrix,
+      Matrix4x4,
+      Palette,
+      Pen,
+      Pixmap,
+      Quaternion,
+      Region,
+      SizePolicy,
+      TextLength,
+      TextFormat,
+      Transform,
+      Vector2D,
+      Vector3D,
+      Vector4D,
 
-      Font = QMetaType::QFont,
-      Pixmap = QMetaType::QPixmap,
-      Brush = QMetaType::QBrush,
-      Color = QMetaType::QColor,
-      Palette = QMetaType::QPalette,
-      Icon = QMetaType::QIcon,
-      Image = QMetaType::QImage,
-      Polygon = QMetaType::QPolygon,
-      Region = QMetaType::QRegion,
-      Bitmap = QMetaType::QBitmap,
-      Cursor = QMetaType::QCursor,
-      SizePolicy = QMetaType::QSizePolicy,
-      KeySequence = QMetaType::QKeySequence,
-      Pen = QMetaType::QPen,
-      TextLength = QMetaType::QTextLength,
-      TextFormat = QMetaType::QTextFormat,
-      Matrix = QMetaType::QMatrix,
-      Transform = QMetaType::QTransform,
-      Matrix4x4 = QMetaType::QMatrix4x4,
-      Vector2D = QMetaType::QVector2D,
-      Vector3D = QMetaType::QVector3D,
-      Vector4D = QMetaType::QVector4D,
-      Quaternion = QMetaType::QQuaternion,
-      PolygonF = QMetaType::QPolygonF,
 
-      // the UserType must always be after all declared types
-      UserType = QMetaType::User,
+      // temporary code, delete after transistion
+      Char32               = QChar,
+      FirstConstructedType = QChar,
 
-      LastType = 0xffffffff    // need this so that gcc >= 3.4 allocates 32 bits for Type
+
+      // must always be after all declared types
+      UserType   = 256,
+
+      // force compiler to allocate 32 bits
+      LastType   = 0xffffffff
    };
 
    QVariant();
@@ -459,25 +483,10 @@ inline bool QVariant::isValid() const
 template<typename T>
 inline void QVariant::setValue(const T &v)
 {
-   // reuse the current QVariant private if possible
+   // optimize when std::any is added
+
    const uint type = qMetaTypeId<T>(static_cast<T *>(nullptr));
-
-   if (isDetached() && (type == d.type || (type < uint(QVariant::FirstConstructedType) &&
-                  d.type < uint(QVariant::FirstConstructedType)))) {
-
-      d.type    = type;
-      d.is_null = false;
-      T *old    = reinterpret_cast<T *>(d.is_shared ? d.data.shared->ptr : &d.data.ptr);
-
-      if (! std::is_trivially_destructible_v<T>) {
-         old->~T();
-      }
-      new (old) T(v);  // call the copy constructor
-
-   } else {
-       *this = QVariant(type, &v, std::is_pointer_v<T>);
-   }
-
+   *this = QVariant(type, &v, std::is_pointer_v<T>);
 }
 
 inline void QVariant::setValue(const QVariant &v)

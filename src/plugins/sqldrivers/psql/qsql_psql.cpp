@@ -1608,7 +1608,7 @@ QString QPSQLDriver::formatValue(const QSqlField &field, bool trimStrings) const
             break;
          }
 
-         case QMetaType::Float:
+         case QVariant::Float:
             assignSpecialPsqlFloatValue(field.value().toFloat(), &r);
             if (r.isEmpty()) {
                r = QSqlDriver::formatValue(field, trimStrings);

@@ -312,10 +312,10 @@ static bool qIsBlob(int t)
 
 static bool qIsInteger(int t)
 {
-   return t == QMetaType::Char  || t == QMetaType::UChar
-      || t == QMetaType::Short || t == QMetaType::UShort
-      || t == QMetaType::Int   || t == QMetaType::UInt
-      || t == QMetaType::LongLong || t == QMetaType::ULongLong;
+   return t == QVariant::Char  || t == QVariant::UChar
+      || t == QVariant::Short  || t == QVariant::UShort
+      || t == QVariant::Int    || t == QVariant::UInt
+      || t == QVariant::LongLong || t == QVariant::ULongLong;
 }
 
 void QMYSQLResultPrivate::bindBlobs()
@@ -630,9 +630,11 @@ QVariant QMYSQLResult::data(int field)
 
       if (qIsInteger(f.type)) {
          QVariant variant(f.type, f.outField);
-         if (static_cast<int>(f.type) == QMetaType::UChar) {
+
+         if (f.type == QVariant::UChar) {
             return variant.toUInt();
-         } else if (static_cast<int>(f.type) == QMetaType::Char) {
+
+         } else if (f.type == QVariant::Char) {
             return variant.toInt();
          }
 
@@ -656,20 +658,21 @@ QVariant QMYSQLResult::data(int field)
 
    }
 
-   switch (static_cast<int>(f.type)) {
+   switch (f.type) {
+
       case QVariant::LongLong:
          return QVariant(val.toInteger<long long>());
 
       case QVariant::ULongLong:
          return QVariant(val.toInteger<unsigned long long>());
 
-      case QMetaType::Char:
-      case QMetaType::Short:
+      case QVariant::Char:
+      case QVariant::Short:
       case QVariant::Int:
          return QVariant(val.toInteger<int>());
 
-      case QMetaType::UChar:
-      case QMetaType::UShort:
+      case QVariant::UChar:
+      case QVariant::UShort:
       case QVariant::UInt:
          return QVariant(val.toInteger<unsigned int>());
 

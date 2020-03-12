@@ -1305,7 +1305,8 @@ static bool setFontSizeFromValue(QCss::Value value, QFont *font, int *fontSizeAd
    if (s.endsWith("pt", Qt::CaseInsensitive)) {
       s.chop(2);
       value.variant = s;
-      if (value.variant.convert((QVariant::Type)qMetaTypeId<qreal>())) {
+
+      if (value.variant.convert(QVariant::Double))  {
          font->setPointSizeF(value.variant.toReal());
          valid = true;
       }

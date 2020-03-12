@@ -202,7 +202,7 @@ static inline uint variantHash(const QVariant &variant)
       case QVariant::TextLength:
          return 0x377 + hash(variant.value<QTextLength>().rawValue());
 
-      case QMetaType::Float:
+      case QVariant::Float:
          return qHash(variant.toFloat());
 
       case QVariant::Invalid:
@@ -579,8 +579,8 @@ qreal QTextFormat::doubleProperty(int propertyId) const
       return 0.;
    }
    const QVariant prop = d->property(propertyId);
-   if (prop.userType() != QVariant::Double && prop.userType() != QMetaType::Float) {
-      return 0.;
+   if (prop.userType() != QVariant::Double && prop.userType() != QVariant::Float) {
+      return 0.0;
    }
 
    return prop.value<qreal>();
