@@ -76,14 +76,7 @@ class Q_CORE_EXPORT QMetaType
       UShort = 133, UChar = 134, Float = 135, QObjectStar = 136,
       QWidgetStar = 137, QVariant = 138,
 
-      // must match both files:  qmetatype.h & qglobal.h
-#if defined(QT_COORD_TYPE)
-      QReal = 0,
-#elif defined(QT_NO_FPU) || defined(QT_ARCH_ARM)
-      QReal = Float,
-#else
       QReal = Double,
-#endif
 
       User = 256
    };

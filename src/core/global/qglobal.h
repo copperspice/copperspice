@@ -462,21 +462,8 @@ using ulong     = unsigned long;
 #  define QT_WIN_CALLBACK CALLBACK             QT_ENSURE_STACK_ALIGNED_FOR_SSE
 #endif
 
-#if defined(QT_ARCH_ARM) || defined(QT_ARCH_ARMV6) || defined(QT_ARCH_AVR32) ||  \
-     defined(QT_ARCH_SH) || defined(QT_ARCH_SH4A) || (defined(QT_ARCH_MIPS))
-
-#define QT_NO_FPU
-#endif
-
-// keep these files in sync: qmetatype.h & qglobal.h
-#if defined(QT_COORD_TYPE)
-   using qreal = QT_COORD_TYPE;
-
-#else
-   using qreal = double;
-
-#endif
-
+//
+using qreal = double;
 
 // utility macros and inline functions
 template <typename T>
