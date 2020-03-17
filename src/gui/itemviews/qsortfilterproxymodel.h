@@ -116,9 +116,6 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    GUI_CS_SLOT_1(Public, void setFilterFixedString(const QString &pattern))
    GUI_CS_SLOT_2(setFilterFixedString)
 
-   GUI_CS_SLOT_1(Public, void clear())
-   GUI_CS_SLOT_2(clear)
-
    GUI_CS_SLOT_1(Public, void invalidate())
    GUI_CS_SLOT_2(invalidate)
 
@@ -166,7 +163,6 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    virtual bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const;
    virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
-   void filterChanged();
    void invalidateFilter();
 
  private:
@@ -238,7 +234,6 @@ void QSortFilterProxyModel::cs_setFilterRegExp(const QRegularExpression &regExp)
 {
    setFilterRegExp(regExp);
 }
-
 
 #endif // QT_NO_SORTFILTERPROXYMODEL
 

@@ -2376,15 +2376,6 @@ void QSortFilterProxyModel::setFilterRole(int role)
    d->filter_changed();
 }
 
-void QSortFilterProxyModel::clear()
-{
-   Q_D(QSortFilterProxyModel);
-
-   emit layoutAboutToBeChanged();
-   d->_q_clearMapping();
-   emit layoutChanged();
-}
-
 void QSortFilterProxyModel::invalidate()
 {
    Q_D(QSortFilterProxyModel);
@@ -2394,11 +2385,6 @@ void QSortFilterProxyModel::invalidate()
    emit layoutChanged();
 }
 
-void QSortFilterProxyModel::filterChanged()
-{
-   Q_D(QSortFilterProxyModel);
-   d->filter_changed();
-}
 void QSortFilterProxyModel::invalidateFilter()
 {
    Q_D(QSortFilterProxyModel);
