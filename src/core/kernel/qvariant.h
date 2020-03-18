@@ -27,12 +27,15 @@
 #ifndef QVARIANT_H
 #define QVARIANT_H
 
+#include <csmetafwd.h>
+
 #include <qatomic.h>
 #include <qbytearray.h>
 #include <qlist.h>
 #include <qmap.h>
 #include <qmetatype.h>
 #include <qnamespace.h>
+#include <qvector.h>
 #include <qcontainerfwd.h>
 
 // can not include qstring.h since it includes qstringparser.h, which then includes qlocale.h (circular dependency)
@@ -180,6 +183,11 @@ class Q_CORE_EXPORT QVariant
       LastType   = 0xffffffff
    };
 
+   struct NamesAndTypes {
+      const char *meta_typeName;
+      uint meta_typeId;
+      std::type_index meta_typeT;
+   };
    QVariant();
    ~QVariant();
 
@@ -358,6 +366,21 @@ class Q_CORE_EXPORT QVariant
    bool canConvert() const {
       return canConvert(Type(qMetaTypeId<T>()));
    }
+   template<typename T>
+   static uint typeToTypeId()
+   {
+      // typeid() part of RTTI, core language
+      uint retval = QVariant::getTypeId(typeid(T *));
+
+      if (retval == QVariant::Invalid) {
+         // T is a user defined data type
+
+         // auto register and generate a type id for the given T
+         retval = QVariant::registerType<T>();
+      }
+
+      return retval;
+   };
 
    //
    struct PrivateShared {
@@ -439,6 +462,9 @@ class Q_CORE_EXPORT QVariant
    friend int qUnregisterGuiVariant();
    friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &);
    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
+   //
+   template <typename T>
+   static uint registerType();
 
    Private d;
 
@@ -450,6 +476,12 @@ class Q_CORE_EXPORT QVariant
  private:
    bool clearRequired() const;
 
+   static uint getTypeId(const std::type_index &index);
+   static uint getTypeId(QString name);
+
+   static std::atomic<uint> &currentUserType();
+
+   static QVector<NamesAndTypes> m_userTypes;
    // force compile error, prevent QVariant(QVariant::Type, int) to be called
    QVariant(bool, int) = delete;
 };
@@ -559,6 +591,28 @@ T qvariant_cast(const QVariant &x)
 
    return T();
 }
+
+template <typename T>
+uint QVariant::registerType()
+{
+   static std::atomic<uint> userId = QVariant::Invalid;
+
+   if (userId.load(std::memory_order_relaxed) == QVariant::Invalid) {
+      uint newId = QVariant::currentUserType().fetch_add(1, std::memory_order_relaxed);
+      uint oldId = QVariant::Invalid;
+
+      if (userId.compare_exchange_strong(oldId, newId, std::memory_order_release, std::memory_order_acquire))  {
+         static QString typeName = cs_typeName<T>();
+         m_userTypes.append(QVariant::NamesAndTypes{typeName.constData(), newId, typeid(T *)});
+
+      } else {
+         // already registered, maybe on a different thread
+         return oldId;
+      }
+   }
+
+   return userId.load(std::memory_order_acquire);
+};
 
 Q_DECLARE_SHARED(QVariant)
 

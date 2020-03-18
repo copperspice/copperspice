@@ -93,6 +93,7 @@ list(APPEND CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwineventnotifier.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatype.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmetafwd.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_callevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_internal_1.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_internal_2.h
