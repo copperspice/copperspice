@@ -29,45 +29,50 @@
 
 #include <csmetafwd.h>
 
+// can not include qstring.h since it includes qstringparser.h, which then includes qlocale.h (circular dependency)
+#include <qstring8.h>
+
 #include <qatomic.h>
 #include <qbytearray.h>
+#include <qcontainerfwd.h>
 #include <qlist.h>
 #include <qmap.h>
 #include <qmetatype.h>
 #include <qnamespace.h>
 #include <qvector.h>
-#include <qcontainerfwd.h>
 
-// can not include qstring.h since it includes qstringparser.h, which then includes qlocale.h (circular dependency)
-#include <qstring8.h>
+
+class QDataStream;
+class QDebug;
+class QVariant;
 
 class QBitArray;
-class QDataStream;
+class QStringList;
+
 class QDate;
 class QDateTime;
-class QDebug;
-class QEasingCurve;
+class QTime;
+class QLocale;
 class QLine;
 class QLineF;
-class QLocale;
-class QMatrix;
-class QTransform;
-class QStringList;
-class QTime;
 class QPoint;
 class QPointF;
-class QSize;
-class QSizeF;
 class QRect;
 class QRectF;
+class QSize;
+class QSizeF;
+
+// core
+class QEasingCurve;
+class QUrl;
+
+// gui
+class QMatrix;
 class QTextFormat;
 class QTextLength;
-class QUrl;
-class QVariant;
+class QTransform;
 class QVariantComparisonHelper;
 
-template<typename T>
-inline T qvariant_cast(const QVariant &);
 
 class Q_CORE_EXPORT QVariant
 {
@@ -191,22 +196,23 @@ class Q_CORE_EXPORT QVariant
    QVariant();
    ~QVariant();
 
-   // force compile error, prevent QVariant(bool) to be called
-   QVariant(const char *) = delete;
-   QVariant(void *) = delete;
 
-   QVariant(Type type);
+   // force compile error
+   QVariant(const char *)    = delete;
+   QVariant(void *)          = delete;
    QVariant(int typeOrUserType, const void *copy);
    QVariant(int typeOrUserType, const void *copy, uint flags);
-   QVariant(const QVariant &other);
 
+   QVariant(const QVariant &other);
    QVariant(QDataStream &stream);
 
+   QVariant(Type type);
+
+   QVariant(bool value);
    QVariant(int value);
    QVariant(uint value);
    QVariant(qint64 value);
    QVariant(quint64 value);
-   QVariant(bool value);
    QVariant(double value);
 
    QVariant(float value) {
@@ -283,14 +289,14 @@ class Q_CORE_EXPORT QVariant
    void detach();
    inline bool isDetached() const;
 
-   int toInt(bool *ok = 0) const;
-   uint toUInt(bool *ok = 0) const;
-   qint64 toLongLong(bool *ok = 0) const;
-   quint64 toULongLong(bool *ok = 0) const;
    bool toBool() const;
-   double toDouble(bool *ok = 0) const;
-   float toFloat(bool *ok = 0) const;
-   qreal toReal(bool *ok = 0) const;
+   int toInt(bool *ok = nullptr) const;
+   uint toUInt(bool *ok = nullptr) const;
+   qint64 toLongLong(bool *ok = nullptr) const;
+   quint64 toULongLong(bool *ok = nullptr) const;
+   double toDouble(bool *ok = nullptr) const;
+   float toFloat(bool *ok = nullptr) const;
+   qreal toReal(bool *ok = nullptr) const;
 
    QByteArray toByteArray() const;
    QBitArray toBitArray() const;
@@ -299,15 +305,20 @@ class Q_CORE_EXPORT QVariant
    QString8 toString() const;
    QString16 toString16() const;
 
-   QList<QVariant> toList() const;
    QStringList toStringList() const;
-
    QRegularExpression8 toRegularExpression() const;
 
    QDate toDate() const;
    QTime toTime() const;
    QDateTime toDateTime() const;
+   QLocale toLocale() const;
 
+   QJsonValue toJsonValue() const;
+   QJsonObject toJsonObject() const;
+   QJsonArray toJsonArray() const;
+   QJsonDocument toJsonDocument() const;
+
+   QList<QVariant> toList() const;
    QMap<QString, QVariant> toMap() const;
    QHash<QString, QVariant> toHash() const;
    QMultiMap<QString, QVariant> toMultiMap() const;
@@ -322,15 +333,10 @@ class Q_CORE_EXPORT QVariant
    QLineF toLineF() const;
    QRectF toRectF() const;
 
-   QLocale toLocale() const;
-   QUrl toUrl() const;
    QEasingCurve toEasingCurve() const;
-   QUuid toUuid() const;
    QModelIndex toModelIndex() const;
-   QJsonValue toJsonValue() const;
-   QJsonObject toJsonObject() const;
-   QJsonArray toJsonArray() const;
-   QJsonDocument toJsonDocument() const;
+   QUrl toUrl() const;
+   QUuid toUuid() const;
 
    template<typename T>
    T value() const;
@@ -486,12 +492,16 @@ class Q_CORE_EXPORT QVariant
    QVariant(bool, int) = delete;
 };
 
-typedef QList<QVariant> QVariantList;
+using QVariantList      = QList<QVariant>;
+using QVariantMap       = QMap<QString, QVariant>;
+using QVariantHash      = QHash<QString, QVariant>;
+using QVariantMultiMap  = QMultiMap<QString, QVariant>;
+using QVariantMultiHash = QMultiHash<QString, QVariant>;
 
-typedef QMap<QString, QVariant> QVariantMap;
-typedef QHash<QString, QVariant> QVariantHash;
-typedef QMultiMap<QString, QVariant> QVariantMultiMap;
-typedef QMultiHash<QString, QVariant> QVariantMultiHash;
+Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant &p);
+Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant &p);
+Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant::Type &p);
+Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant::Type p);
 
 inline bool qvariant_cast_helper(const QVariant &v, QVariant::Type tp, void *ptr)
 {
@@ -526,10 +536,6 @@ inline void QVariant::setValue(const QVariant &v)
    *this = v;
 }
 
-Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant &p);
-Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant &p);
-Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant::Type &p);
-Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant::Type p);
 
 inline bool QVariant::isDetached() const
 {
@@ -582,12 +588,11 @@ T QVariant::value() const
    return T();
 }
 
-
 template<typename T>
 T qvariant_cast(const QVariant &x)
 {
    (void) x;
-   static_assert(! std::is_same_v<T, T>, "qvariant_cast<T>(x) obsolete, use x.value<T>()");
+   static_assert(! std::is_same_v<T, T>, "qvariant_cast<T>(x) is obsolete, use x.value<T>()");
 
    return T();
 }
