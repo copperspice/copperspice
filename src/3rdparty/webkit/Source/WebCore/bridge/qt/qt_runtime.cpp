@@ -727,8 +727,8 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
 
         default:
             // Non const type ids
-            if (hint == (QMetaType::Type) qMetaTypeId<QObjectList>())
-            {
+            if (hint == QVariant::typeToTypeId<QObjectList>()) {
+
                 if (type == RTArray) {
                     RuntimeArray* rtarray = static_cast<RuntimeArray*>(object);
 
@@ -780,7 +780,9 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
                     }
                 }
                 break;
-            } else if (hint == (QMetaType::Type) qMetaTypeId<QList<int> >()) {
+
+            } else if (hint == QVariant::typeToTypeId<QList<int>>()) {
+
                 if (type == RTArray) {
                     RuntimeArray* rtarray = static_cast<RuntimeArray*>(object);
 
@@ -849,7 +851,8 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
                     ret = QVariant::fromValue<QWebElement>(QtWebElementRuntime::create((static_cast<JSDocument*>(object))->impl()->documentElement()));
                 } else
                     ret = QVariant::fromValue<QWebElement>(QWebElement());
-            } else if (hint == (QMetaType::Type) qMetaTypeId<QDRTNode>()) {
+
+            } else if (hint == QVariant::typeToTypeId<QDRTNode>()) {
                 if (object && object->inherits(&JSNode::s_info))
                     ret = QVariant::fromValue<QDRTNode>(QtDRTNodeRuntime::create((static_cast<JSNode*>(object))->impl()));
 
@@ -999,8 +1002,8 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         return QtPixmapInstance::createPixmapRuntimeObject(exec, root, variant);
     }
 
-    if (type == qMetaTypeId<QWebElement>()) {
-        if (!root->globalObject()->inherits(&JSDOMWindow::s_info))
+    if (type == QVariant::typeToTypeId<QWebElement>()) {
+        if (! root->globalObject()->inherits(&JSDOMWindow::s_info))
             return jsUndefined();
 
         Document* document = (static_cast<JSDOMWindow*>(root->globalObject()))->impl()->document();
@@ -1010,7 +1013,7 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         return toJS(exec, toJSDOMGlobalObject(document, exec), QtWebElementRuntime::get(variant.value<QWebElement>()));
     }
 
-    if (type == qMetaTypeId<QDRTNode>()) {
+    if (type == QVariant::typeToTypeId<QDRTNode>()) {
         if (!root->globalObject()->inherits(&JSDOMWindow::s_info))
             return jsUndefined();
 
@@ -1050,11 +1053,11 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         QStringList sl = variant.value<QStringList>();
         return new (exec) RuntimeArray(exec, new QtArray<QString>(sl, QVariant::String, root));
 
-    } else if (type == (QMetaType::Type) qMetaTypeId<QObjectList>()) {
+    } else if (type == QVariant::typeToTypeId<QObjectList>()) {
         QObjectList ol= variant.value<QObjectList>();
         return new (exec) RuntimeArray(exec, new QtArray<QObject*>(ol, QVariant::ObjectStar, root));
 
-    } else if (type == (QMetaType::Type)qMetaTypeId<QList<int> >()) {
+    } else if (type == QVariant::typeToTypeId<QList<int> >()) {
         QList<int> il= variant.value<QList<int> >();
         return new (exec) RuntimeArray(exec, new QtArray<int>(il, QVariant::Int, root));
 

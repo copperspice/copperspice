@@ -284,6 +284,8 @@ private:
     QExplicitlySharedDataPointer<QWebElementCollectionPrivate> d;
 };
 
+CS_DECLARE_METATYPE(QWebElement)
 Q_DECLARE_METATYPE(QWebElement)
+
 
 #endif // QWEBELEMENT_H

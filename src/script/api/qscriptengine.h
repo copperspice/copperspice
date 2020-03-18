@@ -276,7 +276,7 @@ inline QScriptValue qScriptValueFromValue_helper(QScriptEngine *engine, int type
 template <typename T>
 inline QScriptValue qScriptValueFromValue(QScriptEngine *engine, const T &t)
 {
-   return qScriptValueFromValue_helper(engine, qMetaTypeId<T>(), &t);
+   return qScriptValueFromValue_helper(engine, QVariant::typeToTypeId<T>(), &t);
 }
 
 template <>
@@ -294,7 +294,7 @@ template<typename T>
 T qscriptvalue_cast(const QScriptValue &value)
 {
    T t;
-   const int id = qMetaTypeId<T>();
+   const int id = QVariant::typeToTypeId<T>();
 
    if (qscriptvalue_cast_helper(value, id, &t)) {
       return t;

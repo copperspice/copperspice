@@ -614,6 +614,12 @@ uint QVariant::registerType()
    return userId.load(std::memory_order_acquire);
 };
 
+#define CS_DECLARE_METATYPE(TYPE)                  \
+   template<>                                      \
+   inline const QString &cs_typeName<TYPE>() {     \
+      static const QString retval = #TYPE;         \
+      return retval;                               \
+   }
 Q_DECLARE_SHARED(QVariant)
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);

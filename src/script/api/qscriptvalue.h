@@ -198,6 +198,8 @@ class Q_SCRIPT_EXPORT QScriptValue
    friend class QScriptEnginePrivate;
 };
 
+CS_DECLARE_METATYPE(QScriptValue)
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptValue::ResolveFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptValue::PropertyFlags)
 

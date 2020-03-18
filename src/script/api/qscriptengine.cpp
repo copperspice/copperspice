@@ -78,7 +78,6 @@
 
 #include <stdlib.h>
 
-Q_DECLARE_METATYPE(QScriptValue)
 Q_DECLARE_METATYPE(QObjectList)
 
 class QScriptSyntaxCheckResultPrivate : public QSharedData
@@ -784,9 +783,6 @@ QScriptEnginePrivate::QScriptEnginePrivate()
      registeredScriptStrings(0), processEventsInterval(-1), inEval(false),
      uncaughtExceptionLineNumber(-1)
 {
-   qMetaTypeId<QScriptValue>();
-   qMetaTypeId<QList<int>>();
-   qMetaTypeId<QObjectList>();
    if (! QCoreApplication::instance()) {
       qFatal("QScriptEngine: Must construct a Q(Core)Application before a QScriptEngine");
       return;
@@ -2897,19 +2893,17 @@ JSC::JSValue QScriptEnginePrivate::create(JSC::ExecState *exec, int type, const 
                result = eng->newQObject(*reinterpret_cast<QObject *const *>(ptr));
                break;
             }
-            if (type == qMetaTypeId<QScriptValue>()) {
+            if (type == QVariant::typeToTypeId<QScriptValue>()) {
                result = eng->scriptValueToJSCValue(*reinterpret_cast<const QScriptValue *>(ptr));
                if (!result) {
                   return JSC::jsUndefined();
                }
-            }
-            // lazy registration of some common list types
-            else if (type == qMetaTypeId<QObjectList>()) {
+
+            } else if (type == QVariant::typeToTypeId<QObjectList>()) {
                qScriptRegisterSequenceMetaType<QObjectList>(eng->q_func());
                return create(exec, type, ptr);
-            }
 
-            else if (type == qMetaTypeId<QList<int>>()) {
+            } else if (type == QVariant::typeToTypeId<QList<int>>()) {
                qScriptRegisterSequenceMetaType<QList<int>>(eng->q_func());
                return create(exec, type, ptr);
             }
@@ -3124,27 +3118,24 @@ bool QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value
       *reinterpret_cast<void **>(ptr) = 0;
       return true;
 
-   } else if (type == qMetaTypeId<QScriptValue>()) {
+   } else if (type == QVariant::typeToTypeId<QScriptValue>()) {
       if (!eng) {
          return false;
       }
 
       *reinterpret_cast<QScriptValue *>(ptr) = eng->scriptValueFromJSCValue(value);
       return true;
-   }
 
-   // lazy registration of some common list types
 
-   else if (type == qMetaTypeId<QObjectList>()) {
+   } else if (type == QVariant::typeToTypeId<QList<QObject *>>()) {
       if (!eng) {
          return false;
       }
 
       qScriptRegisterSequenceMetaType<QObjectList>(eng->q_func());
       return convertValue(exec, value, type, ptr);
-   }
+   } else if (type == QVariant::typeToTypeId<QList<int>>()) {
 
-   else if (type == qMetaTypeId<QList<int>>()) {
       if (!eng) {
          return false;
       }

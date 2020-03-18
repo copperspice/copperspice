@@ -162,7 +162,7 @@ Item AtomicValue::toXDM(const QVariant &value)
          return Item(Double::fromValue(value.toDouble()));
 
       default: {
-         if (value.userType() == qMetaTypeId<float>()) {
+         if (value.userType() == QVariant::typeToTypeId<float>()) {
             return Item(Float::fromValue(value.value<float>()));
 
          } else {

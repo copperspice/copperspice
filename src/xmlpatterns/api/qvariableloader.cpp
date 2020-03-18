@@ -94,9 +94,11 @@ SequenceType::Ptr VariableLoader::announceExternalVariable(const QXmlName name,
 
    if (variant.isNull()) {
       return SequenceType::Ptr();
-   } else if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+
+   } else if (variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
       return CommonSequenceTypes::ExactlyOneAnyURI;
-   } else if (variant.userType() == qMetaTypeId<QXmlQuery>()) {
+
+   } else if (variant.userType() == QVariant::typeToTypeId<QXmlQuery>()) {
       const QXmlQuery variableQuery(variant.value<QXmlQuery>());
       return variableQuery.d->expression()->staticType();
    } else {
@@ -114,9 +116,10 @@ Item::Iterator::Ptr VariableLoader::evaluateSequence(const QXmlName name,
               "We assume that we have a binding.");
 
    /* Same code as in the default clause below. */
-   if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+   if (variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
       return makeSingletonIterator(itemForName(name));
-   } else if (variant.userType() == qMetaTypeId<QXmlQuery>()) {
+
+   } else if (variant.userType() == QVariant::typeToTypeId<QXmlQuery>()) {
       const QXmlQuery variableQuery(variant.value<QXmlQuery>());
 
       return variableQuery.d->expression()->evaluateSequence(DynamicContext::Ptr(new TemporaryTreesRedirectingContext(
@@ -141,7 +144,7 @@ Item VariableLoader::itemForName(const QXmlName &name) const
 {
    const QVariant &variant = m_bindingHash.value(name);
 
-   if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+   if (variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
 
       return Item(AnyURI::fromValue("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:" +
                   m_namePool->stringForLocalName(name.localName()) ));
@@ -176,7 +179,8 @@ Item VariableLoader::evaluateSingleton(const QXmlName name, const DynamicContext
 bool VariableLoader::isSameType(const QVariant &v1, const QVariant &v2) const
 {
    /* Are both of type QIODevice *? */
-   if (v1.userType() == qMetaTypeId<QIODevice *>() && v1.userType() == v2.userType()) {
+
+   if (v1.userType() == QVariant::typeToTypeId<QIODevice *>() && v1.userType() == v2.userType()) {
       return true;
    }
 

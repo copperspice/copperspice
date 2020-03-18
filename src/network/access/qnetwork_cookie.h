@@ -99,6 +99,7 @@ class Q_NETWORK_EXPORT QNetworkCookie
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QNetworkCookie &);
 
+CS_DECLARE_METATYPE(QNetworkCookie)
 Q_DECLARE_METATYPE(QNetworkCookie)
 Q_DECLARE_METATYPE(QList<QNetworkCookie>)
 

@@ -44,7 +44,7 @@ QNetworkReply *URILoader::createRequest(Operation op, const QNetworkRequest &req
 
    const QVariant variant(m_variableLoader->valueFor(m_namePool->allocateQName(QString(), name, QString())));
 
-   if (!variant.isNull() && variant.userType() == qMetaTypeId<QIODevice *>()) {
+   if (!variant.isNull() && variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
       return new QIODeviceDelegate(variant.value<QIODevice *>());
 
    } else {
