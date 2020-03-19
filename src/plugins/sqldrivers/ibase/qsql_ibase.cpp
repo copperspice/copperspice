@@ -1424,7 +1424,7 @@ QSqlRecord QIBaseResult::record() const
 
 QVariant QIBaseResult::handle() const
 {
-   return QVariant(qRegisterMetaType<isc_stmt_handle>("isc_stmt_handle"), &d->stmt);
+   return QVariant::fromValue<isc_stmt_handle>(d->stmt);
 }
 
 /*********************************/
@@ -1803,7 +1803,7 @@ QString QIBaseDriver::formatValue(const QSqlField &field, bool trimStrings) cons
 
 QVariant QIBaseDriver::handle() const
 {
-   return QVariant(qRegisterMetaType<isc_db_handle>("isc_db_handle"), &d->ibase);
+   return QVariant::fromValue<isc_db_handle>(d->ibase);
 }
 
 #if defined(FB_API_VER) && FB_API_VER >= 20
