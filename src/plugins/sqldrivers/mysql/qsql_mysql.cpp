@@ -222,20 +222,20 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
    QVariant::Type type;
 
    switch (mysqltype) {
-      case FIELD_TYPE_TINY :
-         type = static_cast<QVariant::Type>((flags & UNSIGNED_FLAG) ? QMetaType::UChar : QMetaType::Char);
+      case FIELD_TYPE_TINY:
+         type = (flags & UNSIGNED_FLAG) ? QVariant::UChar : QVariant::Char;
          break;
 
-      case FIELD_TYPE_SHORT :
-         type = static_cast<QVariant::Type>((flags & UNSIGNED_FLAG) ? QMetaType::UShort : QMetaType::Short);
+      case FIELD_TYPE_SHORT:
+         type = flags & UNSIGNED_FLAG) ? QVariant::UShort : QVariant::Short;
          break;
 
-      case FIELD_TYPE_LONG :
-      case FIELD_TYPE_INT24 :
+      case FIELD_TYPE_LONG:
+      case FIELD_TYPE_INT24:
          type = (flags & UNSIGNED_FLAG) ? QVariant::UInt : QVariant::Int;
          break;
 
-      case FIELD_TYPE_YEAR :
+      case FIELD_TYPE_YEAR:
          type = QVariant::Int;
          break;
 
@@ -243,9 +243,9 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
          type = (flags & UNSIGNED_FLAG) ? QVariant::ULongLong : QVariant::LongLong;
          break;
 
-      case FIELD_TYPE_FLOAT :
-      case FIELD_TYPE_DOUBLE :
-      case FIELD_TYPE_DECIMAL :
+      case FIELD_TYPE_FLOAT:
+      case FIELD_TYPE_DOUBLE:
+      case FIELD_TYPE_DECIMAL:
 #if defined(FIELD_TYPE_NEWDECIMAL)
       case FIELD_TYPE_NEWDECIMAL:
 #endif
@@ -255,6 +255,7 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
       case FIELD_TYPE_DATE :
          type = QVariant::Date;
          break;
+
       case FIELD_TYPE_TIME :
          type = QVariant::Time;
          break;
@@ -279,6 +280,7 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
          type = QVariant::String;
          break;
    }
+
    return type;
 }
 
@@ -655,7 +657,6 @@ QVariant QMYSQLResult::data(int field)
       if (f.type != QVariant::ByteArray) {
          val = toUnicode(d->driver->d_func()->tc, d->row[field], fieldLength);
       }
-
    }
 
    switch (f.type) {
