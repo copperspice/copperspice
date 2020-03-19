@@ -66,9 +66,12 @@ bool QVariant2VARIANT(const QVariant &var, VARIANT &arg, const QByteArray &typeN
 {
     QVariant qvar = var;
 
-    // "type" is the expected type, so coerce if necessary
+    uint proptype = QVariant::Invalid;
 
-    QVariant::Type proptype = typeName.isEmpty() ? QVariant::Invalid : QVariant::nameToType(typeName);
+    if (! typeName.isEmpty()) {
+      proptype = QVariant::nameToType(typeName);
+    }
+
     if (proptype == QVariant::UserType && !typeName.isEmpty()) {
         if (typeName == "short" || typeName == "char")
             proptype = QVariant::Int;
@@ -233,11 +236,12 @@ bool QVariant2VARIANT(const QVariant &var, VARIANT &arg, const QByteArray &typeN
         break;
     case QVariant::Color:
         if (out && arg.vt == (VT_COLOR|VT_BYREF)) {
+            *arg.plVal = QColorToOLEColor(qvar.value<QColor>());
 
-            *arg.plVal = QColorToOLEColor(qvariant_cast<QColor>(qvar));
         } else {
             arg.vt = VT_COLOR;
-            arg.lVal = QColorToOLEColor(qvariant_cast<QColor>(qvar));
+            arg.lVal = QColorToOLEColor(qvar.value<QColor>());
+
             if (out) {
                 arg.plVal = new long(arg.lVal);
                 arg.vt |= VT_BYREF;

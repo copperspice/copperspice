@@ -292,8 +292,10 @@ void QConnmanEngine::propertyChangedContext(const QString &path,const QString &i
 
     QMutexLocker locker(&mutex);
     if(item == "Services") {
-        QDBusArgument arg = qvariant_cast<QDBusArgument>(value.variant());
-        QStringList list = qdbus_cast<QStringList>(arg);
+        QVariant variant  = value.variant();
+        QDBusArgument arg = variant.value<QDBusArgument>();
+
+        QStringList list  = qdbus_cast<QStringList>(arg);
 
         if(list.count() > accessPointConfigurations.count()) {
             for(const QString service : list) {
@@ -303,8 +305,12 @@ void QConnmanEngine::propertyChangedContext(const QString &path,const QString &i
     }
 
     if(item == "Technologies") {
-        QDBusArgument arg = qvariant_cast<QDBusArgument>(value.variant());
+
+        QVariant variant  = value.variant();
+        QDBusArgument arg = variant.value<QDBusArgument>();
+
         QStringList newlist = qdbus_cast<QStringList>(arg);
+
         if(newlist.count() > 0) {
             QMap<QString,QConnmanTechnologyInterface *> oldtech = technologies;
 
@@ -319,8 +325,9 @@ void QConnmanEngine::propertyChangedContext(const QString &path,const QString &i
             }
         }
     }
+
     if(item == "State") {
-// qDebug() << value.variant();
+       // qDebug() << value.variant();
     }
 }
 
