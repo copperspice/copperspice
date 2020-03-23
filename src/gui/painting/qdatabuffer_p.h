@@ -26,15 +26,16 @@
 
 #include <qbytearray.h>
 
-template <typename Type> class QDataBuffer
+template <typename Type>
+class QDataBuffer
 {
-   Q_DISABLE_COPY(QDataBuffer)
-
  public:
-   QDataBuffer(int res) {
-      m_capacity = res;
+   using size_type = std::ptrdiff_t;
 
-      if (res) {
+   QDataBuffer(size_type capacity) {
+      m_capacity = capacity;
+
+      if (m_capacity != 0) {
          m_buffer = (Type *) malloc(m_capacity * sizeof(Type));
       } else {
          m_buffer = 0;
@@ -57,7 +58,7 @@ template <typename Type> class QDataBuffer
       return m_size == 0;
    }
 
-   inline int size() const {
+   inline size_type size() const {
       return m_size;
    }
 
@@ -65,12 +66,12 @@ template <typename Type> class QDataBuffer
       return m_buffer;
    }
 
-   inline Type &at(int i) {
+   inline Type &at(size_type i) {
       Q_ASSERT(i >= 0 && i < m_size);
       return m_buffer[i];
    }
 
-   inline const Type &at(int i) const {
+   inline const Type &at(size_type i) const {
       Q_ASSERT(i >= 0 && i < m_size);
       return m_buffer[i];
    }
@@ -95,9 +96,9 @@ template <typename Type> class QDataBuffer
       return m_buffer[0];
    }
 
-   inline void add(const Type &t) {
+   inline void add(const Type &data) {
       reserve(m_size + 1);
-      m_buffer[m_size] = t;
+      m_buffer[m_size] = data;
       ++m_size;
    }
 
@@ -106,12 +107,12 @@ template <typename Type> class QDataBuffer
       --m_size;
    }
 
-   inline void resize(int size) {
+   inline void resize(size_type size) {
       reserve(size);
       m_size = size;
    }
 
-   inline void reserve(int size) {
+   inline void reserve(size_type size) {
       if (size > m_capacity) {
          if (m_capacity == 0) {
             m_capacity = 1;
@@ -125,7 +126,7 @@ template <typename Type> class QDataBuffer
       }
    }
 
-   inline void shrink(int size) {
+   inline void shrink(size_type size) {
       m_capacity = size;
       if (size) {
          m_buffer = (Type *) realloc(m_buffer, m_capacity * sizeof(Type));
@@ -142,14 +143,16 @@ template <typename Type> class QDataBuffer
       qSwap(m_buffer, other.m_buffer);
    }
 
-   inline QDataBuffer &operator<<(const Type &t) {
-      add(t);
+   inline QDataBuffer &operator<<(const Type &data) {
+      add(data);
       return *this;
    }
 
  private:
-   int m_capacity;
-   int m_size;
+   QDataBuffer (const QDataBuffer &) = delete;
+
+   size_type m_capacity;
+   size_type m_size;
    Type *m_buffer;
 };
 
