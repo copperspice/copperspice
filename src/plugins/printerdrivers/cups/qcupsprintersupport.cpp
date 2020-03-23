@@ -53,6 +53,8 @@ QPrintEngine *QCupsPrinterSupport::createNativePrintEngine(QPrinter::PrinterMode
 
 QPaintEngine *QCupsPrinterSupport::createPaintEngine(QPrintEngine *engine, QPrinter::PrinterMode printerMode)
 {
+   (void) printerMode;
+
    return static_cast<QCupsPrintEngine *>(engine);
 }
 

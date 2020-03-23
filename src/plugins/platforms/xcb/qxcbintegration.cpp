@@ -294,6 +294,8 @@ void QXcbIntegration::initialize()
 
 void QXcbIntegration::moveToScreen(QWindow *window, int screen)
 {
+   (void) window;
+   (void) screen;
 }
 
 QPlatformFontDatabase *QXcbIntegration::fontDatabase() const

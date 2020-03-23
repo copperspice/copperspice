@@ -40,6 +40,7 @@ static inline uint qwcsnlen(const wchar_t *str, uint maxlen)
          length++;
       }
    }
+
    return length;
 }
 
@@ -185,18 +186,18 @@ void QWindowsPrintDevice::loadPageSizes() const
    // Get the number of paper sizes and check all 3 attributes have same count
    DWORD paperCount = DeviceCapabilities(tmp.data(), NULL, DC_PAPERNAMES, NULL, NULL);
 
-   if ( static_cast<int>(paperCount) > 0
-         && DeviceCapabilities(tmp.data(), NULL, DC_PAPERSIZE, NULL, NULL) == static_cast<int>(paperCount)
-         && DeviceCapabilities(tmp.data(), NULL, DC_PAPERS, NULL, NULL) == static_cast<int>(paperCount)) {
+   if ( int(paperCount) > 0
+         && DeviceCapabilities(tmp.data(), NULL, DC_PAPERSIZE, NULL, NULL) == int(paperCount)
+         && DeviceCapabilities(tmp.data(), NULL, DC_PAPERS, NULL, NULL) == int(paperCount) ) {
 
       QScopedArrayPointer<wchar_t> paperNames(new wchar_t[paperCount * 64]);
-      QScopedArrayPointer<POINT> winSizes(new POINT[paperCount * sizeof(POINT)]);
+      QScopedArrayPointer<POINT>   winSizes(new POINT[paperCount * sizeof(POINT)]);
       QScopedArrayPointer<wchar_t> papers(new wchar_t[paperCount]);
 
       // Get the details and match the default paper size
-      if (DeviceCapabilities(tmp.data(), NULL, DC_PAPERNAMES, paperNames.data(), NULL) == static_cast<int>(paperCount)
-            && DeviceCapabilities(tmp.data(), NULL, DC_PAPERSIZE, (wchar_t *)winSizes.data(), NULL) == static_cast<int>(paperCount)
-            && DeviceCapabilities(tmp.data(), NULL, DC_PAPERS, papers.data(), NULL) == static_cast<int>(paperCount)) {
+      if (DeviceCapabilities(tmp.data(), NULL, DC_PAPERNAMES, paperNames.data(), NULL) == int(paperCount)
+         && DeviceCapabilities(tmp.data(), NULL, DC_PAPERSIZE, (wchar_t *)winSizes.data(), NULL) == int(paperCount)
+         && DeviceCapabilities(tmp.data(), NULL, DC_PAPERS, papers.data(), NULL) == int(paperCount) ) {
 
          // Returned size is in tenths of a millimeter
          const qreal multiplier = qt_pointMultiplier(QPageSize::Millimeter);
@@ -225,7 +226,6 @@ QPageSize QWindowsPrintDevice::defaultPageSize() const
 
    if (LPDEVMODE pDevMode = getDevmode(m_hPrinter, m_id)) {
       // Get the default paper size
-
       if (pDevMode->dmFields & DM_PAPERSIZE) {
          // Find the supported page size that matches, in theory default should be one of them
          for (const QPageSize &ps : m_pageSizes) {
@@ -340,9 +340,11 @@ int QWindowsPrintDevice::defaultResolution() const
             resolution = pDevMode->dmYResolution;
          }
       }
+
       // Clean-up
       free(pDevMode);
    }
+
    return resolution;
 }
 
@@ -390,6 +392,7 @@ QPrint::InputSlot QWindowsPrintDevice::defaultInputSlot() const
             }
          }
       }
+
       // Clean-up
       free(pDevMode);
    }

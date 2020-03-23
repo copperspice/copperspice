@@ -134,9 +134,11 @@ QGstreamerPlayerSession::QGstreamerPlayerSession(QObject *parent)
 {
    gboolean result = gst_type_find_register(0, "playlist", GST_RANK_MARGINAL, playlistTypeFindFunction, 0, 0, this, 0);
    Q_ASSERT(result == TRUE);
-   Q_UNUSED(result);
+
+   (void) result;
 
    m_playbin = gst_element_factory_make(QT_GSTREAMER_PLAYBIN_ELEMENT_NAME, NULL);
+
    if (m_playbin) {
       //GST_PLAY_FLAG_NATIVE_VIDEO omits configuration of ffmpegcolorspace and videoscale,
       //since those elements are included in the video output bin when necessary.
@@ -146,6 +148,7 @@ QGstreamerPlayerSession::QGstreamerPlayerSession(QObject *parent)
 #else
       int flags = GST_PLAY_FLAG_VIDEO | GST_PLAY_FLAG_AUDIO;
       QByteArray envFlags = qgetenv("QT_GSTREAMER_PLAYBIN_FLAGS");
+
       if (!envFlags.isEmpty()) {
          flags |= envFlags.toInt();
 #if !GST_CHECK_VERSION(1,0,0)
@@ -287,9 +290,11 @@ void QGstreamerPlayerSession::configureAppSrcElement(GObject *object, GObject *o
 void QGstreamerPlayerSession::loadFromStream(const QNetworkRequest &request, QIODevice *appSrcStream)
 {
 #if defined(HAVE_GST_APPSRC)
+
 #ifdef DEBUG_PLAYBIN
    qDebug() << Q_FUNC_INFO;
 #endif
+
    m_request = request;
    m_duration = -1;
    m_lastPosition = 0;
@@ -313,6 +318,10 @@ void QGstreamerPlayerSession::loadFromStream(const QNetworkRequest &request, QIO
          emit streamsChanged();
       }
    }
+
+#else
+   (void) request;
+   (void) appSrcStream;
 #endif
 }
 

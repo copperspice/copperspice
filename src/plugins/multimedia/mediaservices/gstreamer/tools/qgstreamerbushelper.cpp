@@ -82,6 +82,7 @@ class QGstreamerBusHelperPrivate : public QObject
    }
 
    static gboolean busCallback(GstBus *bus, GstMessage *message, gpointer data) {
+      (void) bus;
       reinterpret_cast<QGstreamerBusHelperPrivate *>(data)->queueMessage(message);
 
       return TRUE;
@@ -123,6 +124,8 @@ void QGstreamerBusHelperPrivate::interval()
 
 static GstBusSyncReply syncGstBusFilter(GstBus *bus, GstMessage *message, QGstreamerBusHelperPrivate *d)
 {
+   (void) bus;
+
    QMutexLocker lock(&d->filterMutex);
 
    for (QGstreamerSyncMessageFilter *filter : d->syncFilters) {

@@ -27,7 +27,6 @@
 #include <qsocketnotifier.h>
 #include <qurl.h>
 #include <qdebug.h>
-
 #include <qgstreamerplayersession.h>
 
 #include <qmediaplaylistnavigator_p.h>
@@ -367,9 +366,7 @@ void QGstreamerPlayerControl::setMedia(const QMediaContent &content, QIODevice *
       request = content.canonicalRequest();
    }
 
-#if !defined(HAVE_GST_APPSRC)
-   m_session->loadFromUri(request);
-#else
+#if defined(HAVE_GST_APPSRC)
    if (m_stream) {
       if (userStreamValid) {
          m_session->loadFromStream(request, m_stream);
@@ -388,6 +385,10 @@ void QGstreamerPlayerControl::setMedia(const QMediaContent &content, QIODevice *
    } else {
       m_session->loadFromUri(request);
    }
+
+#else
+   (void) userStreamValid;
+   m_session->loadFromUri(request);
 #endif
 
 #if defined(HAVE_GST_APPSRC)
@@ -395,8 +396,10 @@ void QGstreamerPlayerControl::setMedia(const QMediaContent &content, QIODevice *
 #else
    if (!request.url().isEmpty()) {
 #endif
+
       m_mediaStatus = QMediaPlayer::LoadingMedia;
       m_session->pause();
+
    } else {
       m_mediaStatus = QMediaPlayer::NoMedia;
       setBufferProgress(0);

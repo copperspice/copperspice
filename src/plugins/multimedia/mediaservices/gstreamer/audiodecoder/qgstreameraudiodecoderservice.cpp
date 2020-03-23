@@ -45,11 +45,12 @@ QMediaControl *QGstreamerAudioDecoderService::requestControl(const QString &name
       return m_control;
    }
 
-   return 0;
+   return nullptr;
 }
 
 void QGstreamerAudioDecoderService::releaseControl(QMediaControl *control)
 {
+   (void) control;
 }
 
 

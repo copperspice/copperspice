@@ -1084,23 +1084,27 @@ void QSoundEffectPrivate::stream_adjust_prebuffer_callback(pa_stream *s, int suc
 
 void QSoundEffectPrivate::stream_underrun_callback(pa_stream *s, void *userdata)
 {
-    QSoundEffectPrivate *self = reinterpret_cast<QSoundEffectPrivate*>(userdata);
+   (void) s;
+
+   QSoundEffectPrivate *self = reinterpret_cast<QSoundEffectPrivate*>(userdata);
 
 #ifdef QT_PA_DEBUG
-    qDebug() << self << "stream_underrun_callback";
+   qDebug() << self << "stream_underrun_callback";
 #endif
 
-    if (self->m_runningCount == 0 && !self->m_playQueued)
-        QMetaObject::invokeMethod(self, "underRun", Qt::QueuedConnection);
+   if (self->m_runningCount == 0 && !self->m_playQueued)
+      QMetaObject::invokeMethod(self, "underRun", Qt::QueuedConnection);
 
 #ifdef QT_PA_DEBUG
-    else
-        qDebug() << "underun corked =" << pa_stream_is_corked(s);
+   else
+      qDebug() << "underun corked =" << pa_stream_is_corked(s);
 #endif
 }
 
 void QSoundEffectPrivate::stream_cork_callback(pa_stream *s, int success, void *userdata)
 {
+   (void) s;
+
 #ifdef QT_PA_DEBUG
     qDebug() << "stream_cork_callback";
 #endif
@@ -1160,9 +1164,9 @@ void QSoundEffectPrivate::stream_flush_reload_callback(pa_stream *s, int success
 
 void QSoundEffectPrivate::stream_write_done_callback(void *p)
 {
+   (void) p;
 
 #ifdef QT_PA_DEBUG
     qDebug() << "stream_write_done_callback";
 #endif
-
 }
