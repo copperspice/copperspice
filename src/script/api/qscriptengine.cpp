@@ -78,8 +78,6 @@
 
 #include <stdlib.h>
 
-Q_DECLARE_METATYPE(QObjectList)
-
 class QScriptSyntaxCheckResultPrivate : public QSharedData
 {
  public:

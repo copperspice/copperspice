@@ -147,9 +147,6 @@ class Q_MULTIMEDIA_EXPORT cs_typeName_internal<QMediaPlaylist, void>
    static const QString &typeName();
 };
 
-Q_DECLARE_METATYPE(QMediaPlaylist::PlaybackMode)
-Q_DECLARE_METATYPE(QMediaPlaylist::Error)
-
 Q_MEDIA_ENUM_DEBUG(QMediaPlaylist, PlaybackMode)
 Q_MEDIA_ENUM_DEBUG(QMediaPlaylist, Error)
 

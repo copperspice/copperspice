@@ -72,8 +72,6 @@
 
 #include <algorithm>
 
-Q_DECLARE_METATYPE(QList<QByteArray>)
-
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QImageIOHandlerInterface_ID, "/imageformats"))
 
 struct cs_BuiltInFormatStruct {

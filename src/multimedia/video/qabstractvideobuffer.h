@@ -97,9 +97,4 @@ class Q_MULTIMEDIA_EXPORT QAbstractPlanarVideoBuffer : public QAbstractVideoBuff
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QAbstractVideoBuffer::HandleType);
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QAbstractVideoBuffer::MapMode);
 
-
-Q_DECLARE_METATYPE(QAbstractVideoBuffer::HandleType)
-Q_DECLARE_METATYPE(QAbstractVideoBuffer::MapMode)
-
-
 #endif

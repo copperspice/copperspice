@@ -391,13 +391,4 @@ QDataStream &operator>>(QDataStream &stream, QGenericMatrix<N, M, T> &matrix)
    return stream;
 }
 
-Q_DECLARE_METATYPE(QMatrix2x2)
-Q_DECLARE_METATYPE(QMatrix2x3)
-Q_DECLARE_METATYPE(QMatrix2x4)
-Q_DECLARE_METATYPE(QMatrix3x2)
-Q_DECLARE_METATYPE(QMatrix3x3)
-Q_DECLARE_METATYPE(QMatrix3x4)
-Q_DECLARE_METATYPE(QMatrix4x2)
-Q_DECLARE_METATYPE(QMatrix4x3)
-
 #endif

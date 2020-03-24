@@ -76,7 +76,6 @@ class Q_MULTIMEDIA_EXPORT QMediaResource
    void setResolution(const QSize &resolution);
    void setResolution(int width, int height);
 
-
  private:
    enum Property {
       Url,
@@ -96,8 +95,5 @@ class Q_MULTIMEDIA_EXPORT QMediaResource
 };
 
 typedef QList<QMediaResource> QMediaResourceList;
-
-Q_DECLARE_METATYPE(QMediaResource)
-Q_DECLARE_METATYPE(QMediaResourceList)
 
 #endif

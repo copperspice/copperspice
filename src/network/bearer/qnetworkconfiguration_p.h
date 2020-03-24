@@ -66,6 +66,4 @@ class QNetworkConfigurationPrivate : public QSharedData
    Q_DISABLE_COPY(QNetworkConfigurationPrivate)
 };
 
-Q_DECLARE_METATYPE(QNetworkConfigurationPrivatePointer)
-
 #endif

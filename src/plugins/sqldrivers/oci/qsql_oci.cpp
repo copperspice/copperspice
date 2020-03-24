@@ -64,9 +64,6 @@
 
 //#define QOCI_DEBUG
 
-Q_DECLARE_METATYPE(OCIEnv *)
-Q_DECLARE_METATYPE(OCIStmt *)
-
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
 enum { QOCIEncoding = 2002 }; // AL16UTF16LE
 #else
@@ -131,9 +128,6 @@ QOCIRowId::~QOCIRowId()
       OCIDescriptorFree(id, OCI_DTYPE_ROWID);
    }
 }
-
-typedef QSharedDataPointer<QOCIRowId> QOCIRowIdPointer;
-Q_DECLARE_METATYPE(QOCIRowIdPointer)
 
 class QOCICols;
 

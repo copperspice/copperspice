@@ -445,5 +445,4 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QWindow *);
 
-Q_DECLARE_METATYPE(QWindow *);
 #endif

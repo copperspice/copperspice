@@ -327,7 +327,5 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QItemSelectionRange &);
 
 #endif // QT_NO_ITEMVIEWS
 
-Q_DECLARE_METATYPE(QItemSelectionRange)
-Q_DECLARE_METATYPE(QItemSelection)
 
 #endif

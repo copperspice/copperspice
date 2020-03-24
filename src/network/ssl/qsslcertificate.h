@@ -138,8 +138,6 @@ private:
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCertificate &certificate);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo info);
 
-Q_DECLARE_METATYPE(QSslCertificate)
-
 #endif
 
 #endif

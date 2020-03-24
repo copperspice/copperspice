@@ -375,6 +375,4 @@ void QGraphicsScene::cs_setSceneRect(const QRectF &rect)
 
 #endif // QT_NO_GRAPHICSVIEW
 
-Q_DECLARE_METATYPE(QGraphicsScene *)
-
 #endif

@@ -122,6 +122,4 @@ class QNetworkAccessCache : public QObject
    bool emitEntryReady(Node *node, QObject *target, const QString &member);
 };
 
-Q_DECLARE_METATYPE(QNetworkAccessCache::CacheableObject *)
-
 #endif

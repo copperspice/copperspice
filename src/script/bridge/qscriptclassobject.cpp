@@ -32,9 +32,6 @@
 
 #include <qscriptengine_p.h>
 #include <qscriptcontext_p.h>
-Q_DECLARE_METATYPE(QScriptContext *)
-Q_DECLARE_METATYPE(QScriptValue)
-Q_DECLARE_METATYPE(QScriptValueList)
 
 #include "Error.h"
 #include "PropertyNameArray.h"

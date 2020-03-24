@@ -42,7 +42,6 @@
 
 #ifndef QT_NO_GESTURES
 
-Q_DECLARE_METATYPE(Qt::GestureState);
 #if ! defined(Q_OS_DARWIN)
 static inline int panTouchPoints()
 {

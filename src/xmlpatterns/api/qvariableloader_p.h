@@ -76,9 +76,6 @@ class VariableLoader : public ExternalVariableLoader
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(QIODevice *)
-Q_DECLARE_METATYPE(QXmlQuery)
-
 CS_DECLARE_METATYPE(QXmlQuery)
 
 #endif

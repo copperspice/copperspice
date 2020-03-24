@@ -60,10 +60,6 @@
 #include <runtime_object.h>
 #include <qstring16.h>
 
-// QtScript has these
-Q_DECLARE_METATYPE(QObjectList);
-Q_DECLARE_METATYPE(QVariant);
-
 using namespace WebCore;
 
 namespace JSC {

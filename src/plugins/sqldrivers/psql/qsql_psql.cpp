@@ -121,9 +121,6 @@ inline void PQfreemem(T *t, int = 0)
    free(t);
 }
 
-Q_DECLARE_METATYPE(PGconn *)
-Q_DECLARE_METATYPE(PGresult *)
-
 inline void qPQfreemem(void *buffer)
 {
    PQfreemem(buffer);

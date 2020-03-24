@@ -182,6 +182,4 @@ inline bool operator!=(const QVersionNumber &lhs, const QVersionNumber &rhs)
    return QVersionNumber::compare(lhs, rhs) != 0;
 }
 
-Q_DECLARE_METATYPE(QVersionNumber)
-
 #endif

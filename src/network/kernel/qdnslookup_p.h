@@ -178,6 +178,4 @@ class QDnsTextRecordPrivate : public QDnsRecordPrivate
     QList<QByteArray> values;
 };
 
-Q_DECLARE_METATYPE(QDnsLookupReply)
-
 #endif

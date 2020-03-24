@@ -45,6 +45,4 @@ class QGstreamerMessage
    GstMessage *m_message;
 };
 
-Q_DECLARE_METATYPE(QGstreamerMessage);
-
 #endif

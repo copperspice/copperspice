@@ -224,6 +224,4 @@ class QDisabledNetworkReply : public QNetworkReply
 };
 #endif
 
-Q_DECLARE_METATYPE(QSharedPointer<char>)
-
 #endif

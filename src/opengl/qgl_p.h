@@ -320,7 +320,6 @@ class Q_OPENGL_EXPORT QGLShareContextScope
    QGLContext *m_ctx;
 };
 
-Q_DECLARE_METATYPE(GLuint)
 class Q_OPENGL_EXPORT QGLTextureDestroyer
 {
  public:

@@ -53,13 +53,16 @@ class QTextOption;
 class QTextCursor;
 
 namespace CsText {
+
 Q_GUI_EXPORT bool mightBeRichText(const QString &);
 Q_GUI_EXPORT QString convertFromPlainText(const QString &plain, Qt::WhiteSpaceMode mode = Qt::WhiteSpacePre);
 
 #ifndef QT_NO_TEXTCODEC
 Q_GUI_EXPORT QTextCodec *codecForHtml(const QByteArray &ba);
 #endif
+
 }  // namespace
+
 class Q_GUI_EXPORT QAbstractUndoItem
 {
 
@@ -316,10 +319,8 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    Q_DISABLE_COPY(QTextDocument)
    Q_DECLARE_PRIVATE(QTextDocument)
    friend class QTextObjectPrivate;
-
 };
 
-Q_DECLARE_METATYPE(QTextDocument *)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextDocument::FindFlags)
 
 #endif

@@ -36,9 +36,6 @@
 #include "Error.h"
 #include "PropertyNameArray.h"
 
-Q_DECLARE_METATYPE(QScriptContext *)
-Q_DECLARE_METATYPE(QScriptValue)
-Q_DECLARE_METATYPE(QScriptValueList)
 namespace QScript {
 
 DeclarativeObjectDelegate::DeclarativeObjectDelegate(QScriptDeclarativeClass *c,

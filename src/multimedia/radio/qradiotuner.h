@@ -173,12 +173,6 @@ private:
     Q_DECLARE_PRIVATE(QRadioTuner)
 };
 
-Q_DECLARE_METATYPE(QRadioTuner::State)
-Q_DECLARE_METATYPE(QRadioTuner::Band)
-Q_DECLARE_METATYPE(QRadioTuner::Error)
-Q_DECLARE_METATYPE(QRadioTuner::StereoMode)
-Q_DECLARE_METATYPE(QRadioTuner::SearchMode)
-
 Q_MEDIA_ENUM_DEBUG(QRadioTuner, State)
 Q_MEDIA_ENUM_DEBUG(QRadioTuner, Band)
 Q_MEDIA_ENUM_DEBUG(QRadioTuner, Error)

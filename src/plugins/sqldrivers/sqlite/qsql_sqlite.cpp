@@ -47,9 +47,6 @@
 
 class QSQLiteResultPrivate;
 
-Q_DECLARE_METATYPE(sqlite3 *)
-Q_DECLARE_METATYPE(sqlite3_stmt *)
-
 static QString _q_escapeIdentifier(const QString &identifier)
 {
    QString res = identifier;

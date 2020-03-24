@@ -46,9 +46,6 @@
 
 #include <limits.h>
 
-Q_DECLARE_METATYPE(HFONT)
-Q_DECLARE_METATYPE(LOGFONT)
-
 Q_GUI_EXPORT HBITMAP qt_pixmapToWinHBITMAP(const QPixmap &p, int hbitmapFormat = 0);
 extern QPainterPath qt_regionToPath(const QRegion &region);
 extern QMarginsF qt_convertMargins(const QMarginsF &margins, QPageLayout::Unit fromUnits, QPageLayout::Unit toUnits);

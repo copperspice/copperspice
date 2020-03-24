@@ -635,7 +635,6 @@ CS_REGISTER_TEMPLATE(qMapCompare)
 CS_REGISTER_TEMPLATE(std::tuple)
 CS_REGISTER_TEMPLATE(std::pair)
 
-Q_DECLARE_METATYPE(QList<int>)
 
 // **
 template<class T>

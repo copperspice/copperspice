@@ -1225,9 +1225,6 @@ Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemChange c
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlag flag);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags);
 
-Q_DECLARE_METATYPE(QGraphicsItem *)
-
 #endif // QT_NO_GRAPHICSVIEW
-
 
 #endif

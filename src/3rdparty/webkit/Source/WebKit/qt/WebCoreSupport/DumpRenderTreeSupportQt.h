@@ -81,15 +81,12 @@ private:
 };
 
 CS_DECLARE_METATYPE(QDRTNode)
-Q_DECLARE_METATYPE(QDRTNode)
 
 class QWEBKIT_EXPORT DumpRenderTreeSupportQt {
 
 public:
-
     DumpRenderTreeSupportQt();
     ~DumpRenderTreeSupportQt();
-
 
     static void executeCoreCommandByName(QWebPage* page, const QString& name, const QString& value);
     static bool isCommandEnabled(QWebPage* page, const QString& name);

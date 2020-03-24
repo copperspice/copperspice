@@ -104,7 +104,5 @@ class Q_GUI_EXPORT QScrollerProperties
    friend class QScrollerPrivate;
 };
 
-Q_DECLARE_METATYPE(QScrollerProperties::OvershootPolicy)
-Q_DECLARE_METATYPE(QScrollerProperties::FrameRates)
 
 #endif // QSCROLLERPROPERTIES_H

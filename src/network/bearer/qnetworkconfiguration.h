@@ -119,6 +119,4 @@ class Q_NETWORK_EXPORT QNetworkConfiguration
    QExplicitlySharedDataPointer<QNetworkConfigurationPrivate> d;
 };
 
-Q_DECLARE_METATYPE(QNetworkConfiguration)
-
 #endif
