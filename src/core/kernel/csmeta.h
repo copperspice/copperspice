@@ -317,72 +317,34 @@ class Q_CORE_EXPORT cs_typeName_internal
 };
 
 
-// cs_typeName_internal<dataType,void>::typeName is a method belonging to a specialization of a templated class
 #define CS_REGISTER_CLASS(dataType) \
-   class dataType; \
-   Q_CORE_EXPORT const QString &cs_typeName_internal<dataType, void>::typeName() \
-   { \
-      static QString retval(#dataType); \
-      return retval; \
+   class dataType;                  \
+   CS_REGISTER_TYPE(dataType)
+
+// specialization of a templated function
+#define CS_REGISTER_TYPE(dataType)                       \
+   template <>                                           \
+   inline const QString &cs_typeName<dataType>()         \
+   {                                                     \
+      static const QString retval(#dataType);            \
+      return retval;                                     \
    }
 
-// cs_typeName_internal<dataType> is specialization of a templated class
-#define CS_DECLARE_CLASS(dataType) \
-   class dataType; \
-   template <>  \
-   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
-   { \
-      public: \
-         static const QString &typeName(); \
-   };
-
-
-// cs_typeName_internal<dataType,void>::typeName is a method belonging to a specialization of a templated class
-#define CS_REGISTER_TYPEDEF(dataType) \
-   Q_CORE_EXPORT const QString &cs_typeName_internal<dataType, void>::typeName() \
-   { \
-      static QString retval(#dataType); \
-      return retval; \
+// specialization of a templated class
+#define CS_REGISTER_TEMPLATE(dataType)                   \
+   template<class... Ts>                                 \
+   class cs_typeName_internal<dataType<Ts...>>           \
+   {                                                     \
+      public:                                            \
+         static const QString &typeName();               \
+   };                                                    \
+   template<class... Ts>                                 \
+   const QString &cs_typeName_internal< dataType<Ts...> >::typeName()                     \
+   {                                                                                      \
+      static const QString retval(QString(#dataType) + "<" + cs_typeName<Ts...>() + ">"); \
+      return retval;                                                                      \
    }
 
-// cs_typeName_internal<dataType> is specialization of a templated class
-#define CS_DECLARE_TYPEDEF(dataType) \
-   template <>  \
-   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
-   { \
-      public: \
-         static const QString &typeName(); \
-   };
-
-#define CS_REGISTER_TYPE(dataType) \
-   Q_CORE_EXPORT const QString &cs_typeName_internal<dataType,void>::typeName() \
-   { \
-      static QString retval(#dataType); \
-      return retval; \
-   }
-
-#define CS_DECLARE_TYPE(dataType) \
-   template <>  \
-   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
-   { \
-      public: \
-         static const QString &typeName(); \
-   };
-
-
-#define CS_REGISTER_TEMPLATE(dataType) \
-   template<class... Ts> \
-   class cs_typeName_internal< dataType<Ts...> >  \
-   { \
-      public:  \
-         static const QString &typeName();  \
-   };  \
-   template<class... Ts> \
-   const QString &cs_typeName_internal< dataType<Ts...> >::typeName() \
-   { \
-      static QString retval(QString(#dataType) + "<" + cs_typeName<Ts...>() + ">");  \
-      return retval; \
-   }
 
 // methods for these 2 class, located in csmeta_internal2.h around line 117
 template<class E>
