@@ -167,7 +167,7 @@ class QWindowsMultiFontEngine : public QFontEngineMulti
    QFontEngine *loadEngine(int at) override;
 };
 
-Q_DECLARE_METATYPE(LOGFONT)
+CS_DECLARE_METATYPE(LOGFONT)
 
 #endif
 

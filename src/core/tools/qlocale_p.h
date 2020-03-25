@@ -376,7 +376,7 @@ constexpr inline bool ascii_isspace(uchar c)
 }
 
 #ifndef QT_NO_SYSTEMLOCALE
-Q_DECLARE_METATYPE(QSystemLocale::CurrencyToStringArgument)
+   CS_DECLARE_METATYPE(QSystemLocale::CurrencyToStringArgument)
 #endif
 
 #endif

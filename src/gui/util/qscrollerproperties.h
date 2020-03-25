@@ -104,5 +104,6 @@ class Q_GUI_EXPORT QScrollerProperties
    friend class QScrollerPrivate;
 };
 
+CS_DECLARE_METATYPE(QScrollerProperties)
 
-#endif // QSCROLLERPROPERTIES_H
+#endif

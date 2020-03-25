@@ -147,6 +147,6 @@ class Q_NETWORK_EXPORT QNetworkRequest
    friend class QNetworkRequestPrivate;
 };
 
-Q_DECLARE_METATYPE(QNetworkRequest)
+CS_DECLARE_METATYPE(QNetworkRequest)
 
 #endif

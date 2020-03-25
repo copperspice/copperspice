@@ -268,21 +268,6 @@ inline int qRegisterMetaTypeStreamOperators()
    return id;
 }
 
-#define Q_DECLARE_METATYPE(TYPE)                                      \
-   template <>                                                        \
-   struct QMetaTypeId<TYPE>                                           \
-   {                                                                  \
-       static constexpr const int Defined = 1;                        \
-       static int qt_metatype_id()                                    \
-       {                                                              \
-          static QAtomicInt metatype_id = QAtomicInt{ 0 };            \
-          if (! metatype_id.load()) {                                 \
-             metatype_id.storeRelease(qRegisterMetaType< TYPE >(QString(#TYPE),reinterpret_cast< TYPE *>(quintptr(-1)))); \
-          }                                                           \
-          return metatype_id.loadAcquire();                           \
-       }                                                              \
-   };
-
 #define Q_DECLARE_BUILTIN_METATYPE(TYPE, NAME)                        \
    template<> struct QMetaTypeId2<TYPE>                               \
    {                                                                  \

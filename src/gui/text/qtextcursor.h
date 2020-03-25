@@ -224,5 +224,6 @@ class Q_GUI_EXPORT QTextCursor
    friend class QTextControlPrivate;
 };
 
+CS_DECLARE_METATYPE(QTextCursor)
 
 #endif

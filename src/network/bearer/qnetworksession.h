@@ -144,6 +144,7 @@ class Q_NETWORK_EXPORT QNetworkSession : public QObject
    QNetworkSessionPrivate *d;
 };
 
+CS_DECLARE_METATYPE(QNetworkSession)
 
 #endif // QT_NO_BEARERMANAGEMENT
 

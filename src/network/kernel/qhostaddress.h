@@ -34,7 +34,6 @@ struct sockaddr;
 class QHostAddressPrivate;
 class QHostAddress;
 
-
 Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed = 0);
 
 class Q_NETWORK_EXPORT QIPv6Address
@@ -142,5 +141,7 @@ Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QHostAddress &);
 
 Q_NETWORK_EXPORT QDataStream &operator<<(QDataStream &, const QHostAddress &);
 Q_NETWORK_EXPORT QDataStream &operator>>(QDataStream &, QHostAddress &);
+
+CS_DECLARE_METATYPE(QHostAddress)
 
 #endif

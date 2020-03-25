@@ -121,7 +121,6 @@ inline bool operator!=(const QPageLayout &lhs, const QPageLayout &rhs)
 
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QPageLayout &pageLayout);
 
-Q_DECLARE_METATYPE(QPageLayout)
-
+CS_DECLARE_METATYPE(QPageLayout)
 
 #endif

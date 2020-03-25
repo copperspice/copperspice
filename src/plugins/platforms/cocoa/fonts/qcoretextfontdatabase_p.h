@@ -37,9 +37,6 @@
 #include <CoreGraphics/CoreGraphics.h>
 #endif
 
-Q_DECLARE_METATYPE(QCFType<CGFontRef>);
-Q_DECLARE_METATYPE(QCFType<CFURLRef>);
-
 class QCoreTextFontDatabase : public QPlatformFontDatabase
 {
  public:

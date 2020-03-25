@@ -1740,5 +1740,6 @@ void QWin32PrintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem
             SelectObject(hdc, old_font);
          }
 
+CS_DECLARE_METATYPE(LOGFONT)
 
 #endif // QT_NO_PRINTER

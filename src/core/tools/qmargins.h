@@ -452,5 +452,9 @@ inline QMargins QMarginsF::toMargins() const
 {
     return QMargins(qRound(m_left), qRound(m_top), qRound(m_right), qRound(m_bottom));
 }
+
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QMarginsF &);
+
+CS_DECLARE_METATYPE(QMarginsF)
+
 #endif

@@ -105,6 +105,6 @@ class Q_XMLPATTERNS_EXPORT QXmlName
    Code m_qNameCode;
 };
 
-Q_DECLARE_METATYPE(QXmlName) /* This macro must appear after QT_END_NAMESPACE. */
+CS_DECLARE_METATYPE(QXmlName)
 
 #endif

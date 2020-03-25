@@ -70,7 +70,6 @@ class Q_MULTIMEDIA_EXPORT cs_typeName_internal<QMediaContent, void>
  public:
    static const QString &typeName();
 };
-
-Q_DECLARE_METATYPE(QMediaContent)
+CS_DECLARE_METATYPE(QMediaContent)
 
 #endif

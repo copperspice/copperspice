@@ -382,7 +382,6 @@ inline bool qIsForwardIteratorEnd(const QXmlItem &item)
    return item.isNull();
 }
 
-
-Q_DECLARE_METATYPE(QXmlItem) /* This macro must appear after QT_END_NAMESPACE. */
+CS_DECLARE_METATYPE(QXmlItem)
 
 #endif
