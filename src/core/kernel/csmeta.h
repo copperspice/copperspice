@@ -535,68 +535,61 @@ CS_REGISTER_CLASS(QTimerInfo)
 CS_REGISTER_TEMPLATE(QSharedPointer)
 CS_REGISTER_TEMPLATE(std::pair)
 
-
-// 3   specialization for const pointers  (template classes)
-template<class T>
-class CS_ReturnType<const T *>
+// next 8 function are specializations for containers to omit the Compare template when it is not specified
+template<class Key, class Value>
+class CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>
 {
    public:
       static const QString &getName();
 };
 
-template<class T>
-const QString &CS_ReturnType<const T *>::getName()
+template<class Key, class Value>
+const QString &CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>::getName()
 {
-   static const QString tmp = "const " + cs_typeName<T>() + "*";
-   return tmp;
+   static QString retval("QMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+   return retval;
 }
 
-
-// 4   specialization for references  (template classes)
-template<class T>
-class CS_ReturnType<T &>
+template<class Key, class Value>
+class CS_ReturnType< QMultiMap<Key, Value, qMapCompare<Key> >>
 {
    public:
       static const QString &getName();
 };
 
-template<class T>
-const QString &CS_ReturnType<T &>::getName()
+template<class Key, class Value>
+const QString &CS_ReturnType<QMultiMap<Key, Value, qMapCompare<Key> >>::getName()
 {
-   static const QString tmp = cs_typeName<T>() + "&";
-   return tmp;
+   static QString retval("QMultiMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+   return retval;
 }
 
-
-// 5   specialization for const references  (template classes)
-template<class T>
-class CS_ReturnType<const T &>
+template<class Key, class Value>
+class CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
 {
    public:
       static const QString &getName();
 };
 
-template<class T>
-const QString &CS_ReturnType<const T &>::getName()
+template<class Key, class Value>
+const QString &CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>::getName()
 {
-   static const QString tmp = "const " + cs_typeName<T>() + "&";
-   return tmp;
+   static QString retval("QHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+   return retval;
 }
 
-
-// 6   specialization for const  (template classes)
-template<class T>
-class CS_ReturnType<const T>
+template<class Key, class Value>
+class CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
 {
    public:
       static const QString &getName();
 };
 
-template<class T>
-const QString &CS_ReturnType<const T>::getName()
+template<class Key, class Value>
+const QString &CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>::getName()
 {
-   static const QString tmp = "const " + cs_typeName<T>();
-   return tmp;
+   static QString retval("QMultiHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+   return retval;
 }
 
 
