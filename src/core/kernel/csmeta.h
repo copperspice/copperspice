@@ -308,9 +308,9 @@ template <class T, class = void>
 class Q_CORE_EXPORT CS_ReturnType
 {
    public:
-      static const QString &typeName() {
+      static const QString &getName() {
          static_assert(! std::is_same<T, T>::value, "Requested type name has not been registered.");
-         static QString retval = QString("");
+         static const QString retval;
          return retval;
       }
 };
@@ -335,10 +335,10 @@ class Q_CORE_EXPORT CS_ReturnType
    class CS_ReturnType<dataType<Ts...>>                  \
    {                                                     \
       public:                                            \
-         static const QString &typeName();               \
+         static const QString &getName();                \
    };                                                    \
    template<class... Ts>                                 \
-   const QString &CS_ReturnType< dataType<Ts...> >::typeName()                            \
+   const QString &CS_ReturnType< dataType<Ts...> >::getName()                               \
    {                                                                                      \
       static const QString retval(QString(#dataType) + "<" + cs_typeName<Ts...>() + ">"); \
       return retval;                                                                      \
@@ -350,14 +350,14 @@ template<class E>
 class CS_ReturnType<E, typename std::enable_if<std::is_enum<E>::value>::type>
 {
  public:
-   static const QString &typeName();
+   static const QString &getName();
 };
 
 template<class E>
 class CS_ReturnType<QFlags<E>>
 {
  public:
-   static const QString &typeName();
+   static const QString &getName();
 };
 
 
@@ -367,12 +367,12 @@ class CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject,
    typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
 {
  public:
-   static const QString &typeName();
+   static const QString &getName();
 };
 
 template<class T>
 const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject ,
-       typename std::remove_reference<decltype(T::staticMetaObject() )>::type>::value>::type>::typeName()
+       typename std::remove_reference<decltype(T::staticMetaObject() )>::type>::value>::type>::getName()
 {
    return T::staticMetaObject().className();
 }
@@ -390,14 +390,14 @@ const QString &cs_typeName()
 
    } else {
       // uses the class which was set up in the cs_register_template macro
-      return CS_ReturnType<T1>::typeName();
+      return CS_ReturnType<T1>::getName();
    }
 }
 
 template<class T1, class T2, class ...Ts>
 const QString &cs_typeName()
 {
-   static const QString tmp = CS_ReturnType<T1>::typeName() + "," + cs_typeName<T2, Ts...>();
+   static const QString tmp = CS_ReturnType<T1>::getName() + "," + cs_typeName<T2, Ts...>();
    return tmp;
 }
 
@@ -407,11 +407,11 @@ template<class T>
 class CS_ReturnType<T *>
 {
  public:
-   static const QString &typeName();
+   static const QString &getName();
 };
 
 template<class T>
-const QString &CS_ReturnType<T *>::typeName()
+const QString &CS_ReturnType<T *>::getName()
 {
    static const QString tmp = cs_typeName<T>() + "*";
    return tmp;
@@ -523,12 +523,12 @@ CS_REGISTER_TEMPLATE(std::pair)
 template<class T>
 class CS_ReturnType<const T *>
 {
- public:
-   static const QString &typeName();
+   public:
+      static const QString &getName();
 };
 
 template<class T>
-const QString &CS_ReturnType<const T *>::typeName()
+const QString &CS_ReturnType<const T *>::getName()
 {
    static const QString tmp = "const " + cs_typeName<T>() + "*";
    return tmp;
@@ -539,13 +539,12 @@ const QString &CS_ReturnType<const T *>::typeName()
 template<class T>
 class CS_ReturnType<T &>
 {
- public:
-   static const QString &typeName();
-   \
+   public:
+      static const QString &getName();
 };
 
 template<class T>
-const QString &CS_ReturnType<T &>::typeName()
+const QString &CS_ReturnType<T &>::getName()
 {
    static const QString tmp = cs_typeName<T>() + "&";
    return tmp;
@@ -556,13 +555,12 @@ const QString &CS_ReturnType<T &>::typeName()
 template<class T>
 class CS_ReturnType<const T &>
 {
- public:
-   static const QString &typeName();
-   \
+   public:
+      static const QString &getName();
 };
 
 template<class T>
-const QString &CS_ReturnType<const T &>::typeName()
+const QString &CS_ReturnType<const T &>::getName()
 {
    static const QString tmp = "const " + cs_typeName<T>() + "&";
    return tmp;
@@ -573,13 +571,12 @@ const QString &CS_ReturnType<const T &>::typeName()
 template<class T>
 class CS_ReturnType<const T>
 {
- public:
-   static const QString &typeName();
-   \
+   public:
+      static const QString &getName();
 };
 
 template<class T>
-const QString &CS_ReturnType<const T>::typeName()
+const QString &CS_ReturnType<const T>::getName()
 {
    static const QString tmp = "const " + cs_typeName<T>();
    return tmp;
