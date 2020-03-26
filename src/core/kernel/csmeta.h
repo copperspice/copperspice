@@ -24,6 +24,7 @@
 #ifndef CSMETA_H
 #define CSMETA_H
 
+#include <csmetafwd.h>
 #include <csmeta_internal_1.h>
 
 #include <qlist.h>
@@ -386,33 +387,51 @@ const QString &cs_typeToName()
       static const QString retval("");
       return retval;
 
+   } else if constexpr (std::is_const_v<T1> && std::is_pointer_v<T1>) {
+      static const QString retval = "const " + cs_typeToName<T1>() + "*";
+      return retval;
+
+   } else if constexpr (std::is_pointer_v<T1>) {
+      static const QString retval = cs_typeToName<T1>() + "*";
+      return retval;
+
+   } else if constexpr (std::is_const_v<T1> && std::is_lvalue_reference_v<T1>) {
+      static const QString retval = "const " + cs_typeToName<T1>() + "&";
+      return retval;
+
+   } else if constexpr (std::is_lvalue_reference_v<T1>) {
+      static const QString retval = cs_typeToName<T1>() + "&";
+      return retval;
+
+   } else if constexpr (std::is_rvalue_reference_v<T1>) {
+      static const QString retval = cs_typeToName<T1>() + "&&";
+      return retval;
+
+   } else if constexpr (std::is_base_of_v<QObject, T1>) {
+      // T1 inherits from QObject
+      return T1::staticMetaObject().className();
+
    } else {
       // uses the class which was set up in the cs_register_template macro
       return CS_ReturnType<T1>::getName();
    }
 }
 
-template<class T1, class T2, class ...Ts>
-const QString &cs_typeName()
+template<class T>
+const QString &cs_typeToName_fold()
 {
-   static const QString tmp = CS_ReturnType<T1>::getName() + "," + cs_typeName<T2, Ts...>();
-   return tmp;
+   static const QString retval = "," + cs_typeToName<T>();
+
+   return retval;
 }
 
-
-// 2   specialization for pointers  (template classes)
-template<class T>
-class CS_ReturnType<T *>
+template<class T1, class T2, class ...Ts>
+const QString &cs_typeToName()
 {
- public:
-   static const QString &getName();
-};
+   // fold expression
+   static const QString retval = ((cs_typeToName<T1>() + "," + cs_typeToName<T2>()) + ... + cs_typeToName_fold<Ts>());
 
-template<class T>
-const QString &CS_ReturnType<T *>::getName()
-{
-   static const QString tmp = cs_typeName<T>() + "*";
-   return tmp;
+   return retval;
 }
 
 // register names of all types which are used in QVariant
