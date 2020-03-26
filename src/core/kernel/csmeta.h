@@ -323,7 +323,7 @@ class Q_CORE_EXPORT CS_ReturnType
 // specialization of a templated function
 #define CS_REGISTER_TYPE(dataType)                       \
    template <>                                           \
-   inline const QString &cs_typeName<dataType>()         \
+   inline const QString &cs_typeToName<dataType>()       \
    {                                                     \
       static const QString retval(#dataType);            \
       return retval;                                     \
@@ -339,9 +339,9 @@ class Q_CORE_EXPORT CS_ReturnType
    };                                                    \
    template<class... Ts>                                 \
    const QString &CS_ReturnType< dataType<Ts...> >::getName()                               \
-   {                                                                                      \
-      static const QString retval(QString(#dataType) + "<" + cs_typeName<Ts...>() + ">"); \
-      return retval;                                                                      \
+   {                                                                                        \
+      static const QString retval(QString(#dataType) + "<" + cs_typeToName<Ts...>() + ">"); \
+      return retval;                                                                        \
    }
 
 
@@ -378,11 +378,9 @@ const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaO
 }
 
 
-// 1   standard template functions
-class cs_internalEmpty;
-
-template<class T1 = cs_internalEmpty>
-const QString &cs_typeName()
+// standard template function   ( class T1 = cs_internalEmpty )
+template<class T1>
+const QString &cs_typeToName()
 {
    if constexpr (std::is_same<T1, cs_internalEmpty>::value) {
       static const QString retval("");

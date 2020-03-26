@@ -607,7 +607,7 @@ uint QVariant::registerType()
       uint oldId = QVariant::Invalid;
 
       if (userId.compare_exchange_strong(oldId, newId, std::memory_order_release, std::memory_order_acquire))  {
-         static QString typeName = cs_typeName<T>();
+         static QString typeName = cs_typeToName<T>();
          m_userTypes.append(QVariant::NamesAndTypes{typeName.constData(), newId, typeid(T *)});
 
       } else {
@@ -621,7 +621,7 @@ uint QVariant::registerType()
 
 #define CS_DECLARE_METATYPE(TYPE)                  \
    template<>                                      \
-   inline const QString &cs_typeName<TYPE>() {     \
+   inline const QString &cs_typeToName<TYPE>() {   \
       static const QString retval = #TYPE;         \
       return retval;                               \
    }

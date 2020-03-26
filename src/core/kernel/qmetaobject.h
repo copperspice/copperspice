@@ -189,7 +189,7 @@ QObject *QMetaObject::newInstance(Ts... Vs) const
 
    // signature of the method being invoked
    constructorSig += "(";
-   constructorSig += cs_typeName<Ts...>();
+   constructorSig += cs_typeToName<Ts...>();
    constructorSig += ")";
 
    int index = this->indexOfConstructor(constructorSig);

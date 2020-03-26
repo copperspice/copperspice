@@ -40,7 +40,7 @@ class QObject;
 class QMetaObject;
 
 template<class T1>
-const QString &cs_typeName();
+const QString &cs_typeToName();
 
 // csArgument
 template <typename T>
@@ -60,7 +60,7 @@ class CSArgument
 
 template <typename T>
 CSArgument<T>::CSArgument(const T &data)
-   : m_data(data), m_typeName(cs_typeName<T>())
+   : m_data(data), m_typeName(cs_typeToName<T>())
 {
 }
 
