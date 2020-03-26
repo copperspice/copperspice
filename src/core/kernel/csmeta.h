@@ -304,9 +304,8 @@ bool QMetaMethod::invoke(QObject *object, Ts &&...Vs) const
 }
 
 // **
-// cs_typeName_internal is a templated class
 template <class T, class = void>
-class Q_CORE_EXPORT cs_typeName_internal
+class Q_CORE_EXPORT CS_ReturnType
 {
    public:
       static const QString &typeName() {
@@ -333,13 +332,13 @@ class Q_CORE_EXPORT cs_typeName_internal
 // specialization of a templated class
 #define CS_REGISTER_TEMPLATE(dataType)                   \
    template<class... Ts>                                 \
-   class cs_typeName_internal<dataType<Ts...>>           \
+   class CS_ReturnType<dataType<Ts...>>                  \
    {                                                     \
       public:                                            \
          static const QString &typeName();               \
    };                                                    \
    template<class... Ts>                                 \
-   const QString &cs_typeName_internal< dataType<Ts...> >::typeName()                     \
+   const QString &CS_ReturnType< dataType<Ts...> >::typeName()                            \
    {                                                                                      \
       static const QString retval(QString(#dataType) + "<" + cs_typeName<Ts...>() + ">"); \
       return retval;                                                                      \
@@ -348,14 +347,14 @@ class Q_CORE_EXPORT cs_typeName_internal
 
 // methods for these 2 class, located in csmeta_internal2.h around line 117
 template<class E>
-class cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type>
+class CS_ReturnType<E, typename std::enable_if<std::is_enum<E>::value>::type>
 {
  public:
    static const QString &typeName();
 };
 
 template<class E>
-class cs_typeName_internal< QFlags<E> >
+class CS_ReturnType<QFlags<E>>
 {
  public:
    static const QString &typeName();
@@ -364,7 +363,7 @@ class cs_typeName_internal< QFlags<E> >
 
 // QObject and children
 template<class T>
-class cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObject,
+class CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject,
    typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
 {
  public:
@@ -372,8 +371,8 @@ class cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObj
 };
 
 template<class T>
-const QString &cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObject ,
-       typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >::typeName()
+const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject ,
+       typename std::remove_reference<decltype(T::staticMetaObject() )>::type>::value>::type>::typeName()
 {
    return T::staticMetaObject().className();
 }
@@ -390,28 +389,29 @@ const QString &cs_typeName()
       return retval;
 
    } else {
-      return cs_typeName_internal<T1>::typeName();
+      // uses the class which was set up in the cs_register_template macro
+      return CS_ReturnType<T1>::typeName();
    }
 }
 
 template<class T1, class T2, class ...Ts>
 const QString &cs_typeName()
 {
-   static const QString tmp = cs_typeName_internal<T1>::typeName() + "," + cs_typeName<T2, Ts...>();
+   static const QString tmp = CS_ReturnType<T1>::typeName() + "," + cs_typeName<T2, Ts...>();
    return tmp;
 }
 
 
 // 2   specialization for pointers  (template classes)
 template<class T>
-class cs_typeName_internal<T *>
+class CS_ReturnType<T *>
 {
  public:
    static const QString &typeName();
 };
 
 template<class T>
-const QString &cs_typeName_internal<T *>::typeName()
+const QString &CS_ReturnType<T *>::typeName()
 {
    static const QString tmp = cs_typeName<T>() + "*";
    return tmp;
@@ -521,14 +521,14 @@ CS_REGISTER_TEMPLATE(std::pair)
 
 // 3   specialization for const pointers  (template classes)
 template<class T>
-class cs_typeName_internal<const T *>
+class CS_ReturnType<const T *>
 {
  public:
    static const QString &typeName();
 };
 
 template<class T>
-const QString &cs_typeName_internal<const T *>::typeName()
+const QString &CS_ReturnType<const T *>::typeName()
 {
    static const QString tmp = "const " + cs_typeName<T>() + "*";
    return tmp;
@@ -537,7 +537,7 @@ const QString &cs_typeName_internal<const T *>::typeName()
 
 // 4   specialization for references  (template classes)
 template<class T>
-class cs_typeName_internal<T &>
+class CS_ReturnType<T &>
 {
  public:
    static const QString &typeName();
@@ -545,7 +545,7 @@ class cs_typeName_internal<T &>
 };
 
 template<class T>
-const QString &cs_typeName_internal<T &>::typeName()
+const QString &CS_ReturnType<T &>::typeName()
 {
    static const QString tmp = cs_typeName<T>() + "&";
    return tmp;
@@ -554,7 +554,7 @@ const QString &cs_typeName_internal<T &>::typeName()
 
 // 5   specialization for const references  (template classes)
 template<class T>
-class cs_typeName_internal<const T &>
+class CS_ReturnType<const T &>
 {
  public:
    static const QString &typeName();
@@ -562,7 +562,7 @@ class cs_typeName_internal<const T &>
 };
 
 template<class T>
-const QString &cs_typeName_internal<const T &>::typeName()
+const QString &CS_ReturnType<const T &>::typeName()
 {
    static const QString tmp = "const " + cs_typeName<T>() + "&";
    return tmp;
@@ -571,7 +571,7 @@ const QString &cs_typeName_internal<const T &>::typeName()
 
 // 6   specialization for const  (template classes)
 template<class T>
-class cs_typeName_internal<const T>
+class CS_ReturnType<const T>
 {
  public:
    static const QString &typeName();
@@ -579,7 +579,7 @@ class cs_typeName_internal<const T>
 };
 
 template<class T>
-const QString &cs_typeName_internal<const T>::typeName()
+const QString &CS_ReturnType<const T>::typeName()
 {
    static const QString tmp = "const " + cs_typeName<T>();
    return tmp;

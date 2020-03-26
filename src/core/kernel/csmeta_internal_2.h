@@ -114,7 +114,7 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
 
 // classes for these 2 methods, located in csmeta.h around line 405
 template<class E>
-const QString &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
+const QString &CS_ReturnType<E, typename std::enable_if<std::is_enum<E>::value>::type>::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<E>();
 
@@ -130,7 +130,7 @@ const QString &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::
 }
 
 template<class E>
-const QString &cs_typeName_internal< QFlags<E> >::typeName()
+const QString &CS_ReturnType<QFlags<E> >::typeName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<QFlags<E>>();
 
@@ -149,7 +149,6 @@ void cs_namespace_register_enum(const char *name, std::type_index id, const char
 {
    const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_enum(QString::fromUtf8(name), id, QString::fromUtf8(scope));
 }
-
 
 // ** flags
 template<class T>
