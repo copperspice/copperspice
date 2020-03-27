@@ -65,7 +65,6 @@ class QAbstractStatePrivate
 
  protected:
    QAbstractState *q_ptr;
-
 };
 
 #endif

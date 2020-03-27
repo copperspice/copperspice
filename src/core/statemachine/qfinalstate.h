@@ -24,9 +24,7 @@
 #ifndef QFINALSTATE_H
 #define QFINALSTATE_H
 
-#include <QtCore/qabstractstate.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractstate.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -37,7 +35,7 @@ class Q_CORE_EXPORT QFinalState : public QAbstractState
    CORE_CS_OBJECT(QFinalState)
 
  public:
-   QFinalState(QState *parent = 0);
+   QFinalState(QState *parent = nullptr);
    ~QFinalState();
 
  protected:
@@ -52,7 +50,5 @@ class Q_CORE_EXPORT QFinalState : public QAbstractState
 };
 
 #endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
 
 #endif

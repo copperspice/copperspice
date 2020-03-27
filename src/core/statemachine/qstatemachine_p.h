@@ -35,6 +35,7 @@
 #include <qset.h>
 #include <qvector.h>
 #include <qfreelist_p.h>
+
 class QEvent;
 
 #ifndef QT_NO_STATEMACHINE_EVENTFILTER

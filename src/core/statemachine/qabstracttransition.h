@@ -26,7 +26,7 @@
 
 #include <qobject.h>
 #include <qlist.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -57,7 +57,6 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
    CORE_CS_PROPERTY_READ(transitionType,      transitionType)
    CORE_CS_PROPERTY_WRITE(transitionType,     setTransitionType)
    CORE_CS_PROPERTY_REVISION(transitionType,  1)
-
 
  public:
    enum TransitionType {
@@ -97,7 +96,6 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
 
  protected:
    virtual bool eventTest(QEvent *event) = 0;
-
    virtual void onTransition(QEvent *event) = 0;
 
    bool event(QEvent *e) override;
@@ -109,7 +107,6 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
  private:
    Q_DISABLE_COPY(QAbstractTransition)
    Q_DECLARE_PRIVATE(QAbstractTransition)
-
 };
 
 #endif //QT_NO_STATEMACHINE

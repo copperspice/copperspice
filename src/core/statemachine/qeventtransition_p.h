@@ -26,8 +26,6 @@
 
 #include <qabstracttransition_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QEventTransition;
 
 class Q_CORE_EXPORT QEventTransitionPrivate : public QAbstractTransitionPrivate
@@ -46,7 +44,5 @@ class Q_CORE_EXPORT QEventTransitionPrivate : public QAbstractTransitionPrivate
    QObject *object;
    QEvent::Type eventType;
 };
-
-QT_END_NAMESPACE
 
 #endif

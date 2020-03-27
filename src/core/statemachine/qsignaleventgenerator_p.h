@@ -26,8 +26,6 @@
 
 #include <qobject.h>
 
-QT_BEGIN_NAMESPACE
-
 class QStateMachine;
 
 class QSignalEventGenerator : public QObject
@@ -44,7 +42,5 @@ class QSignalEventGenerator : public QObject
  private:
    Q_DISABLE_COPY(QSignalEventGenerator)
 };
-
-QT_END_NAMESPACE
 
 #endif
