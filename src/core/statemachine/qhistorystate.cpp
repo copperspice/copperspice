@@ -28,9 +28,15 @@
 #include <qhistorystate_p.h>
 
 QHistoryStatePrivate::QHistoryStatePrivate()
-   : QAbstractStatePrivate(HistoryState),
-     defaultState(0), historyType(QHistoryState::ShallowHistory)
+   : QAbstractStatePrivate(HistoryState), defaultTransition(0), historyType(QHistoryState::ShallowHistory)
 {
+}
+
+DefaultStateTransition::DefaultStateTransition(QHistoryState *source, QAbstractState *target)
+   : QAbstractTransition()
+{
+   setParent(source);
+   setTargetState(target);
 }
 
 QHistoryStatePrivate *QHistoryStatePrivate::get(QHistoryState *q)
@@ -54,22 +60,52 @@ QHistoryState::~QHistoryState()
 {
 }
 
+QAbstractTransition *QHistoryState::defaultTransition() const
+{
+   Q_D(const QHistoryState);
+   return d->defaultTransition;
+}
+
+void QHistoryState::setDefaultTransition(QAbstractTransition *transition)
+{
+   Q_D(QHistoryState);
+
+   if (d->defaultTransition != transition) {
+      d->defaultTransition = transition;
+      transition->setParent(this);
+      emit defaultTransitionChanged();
+   }
+}
+
 QAbstractState *QHistoryState::defaultState() const
 {
    Q_D(const QHistoryState);
-   return d->defaultState;
+   return d->defaultTransition ? d->defaultTransition->targetState() : nullptr;
 }
-
 
 void QHistoryState::setDefaultState(QAbstractState *state)
 {
    Q_D(QHistoryState);
+
    if (state && state->parentState() != parentState()) {
-      qWarning("QHistoryState::setDefaultState: state %p does not belong "
-               "to this history state's group (%p)", state, parentState());
+      qWarning("QHistoryState::setDefaultState: State %p does not belong "
+         "to this history state's group (%p)", state, parentState());
       return;
    }
-   d->defaultState = state;
+
+   if (! d->defaultTransition || d->defaultTransition->targetStates().size() != 1
+      || d->defaultTransition->targetStates().first() != state) {
+
+      if (! d->defaultTransition || ! dynamic_cast<DefaultStateTransition *>(d->defaultTransition)) {
+         d->defaultTransition = new DefaultStateTransition(this, state);
+         emit defaultTransitionChanged();
+
+      } else {
+         d->defaultTransition->setTargetState(state);
+      }
+
+      emit defaultStateChanged();
+   }
 }
 
 QHistoryState::HistoryType QHistoryState::historyType() const
@@ -81,7 +117,11 @@ QHistoryState::HistoryType QHistoryState::historyType() const
 void QHistoryState::setHistoryType(HistoryType type)
 {
    Q_D(QHistoryState);
-   d->historyType = type;
+
+   if (d->historyType != type) {
+      d->historyType = type;
+      emit historyTypeChanged();
+   }
 }
 
 void QHistoryState::onEntry(QEvent *event)

@@ -25,6 +25,7 @@
 #define QABSTRACTTRANSITION_P_H
 
 #include <qlist.h>
+#include <qvector.h>
 #include <qsharedpointer.h>
 
 class QAbstractState;
@@ -51,7 +52,8 @@ class Q_CORE_EXPORT QAbstractTransitionPrivate
    QStateMachine *machine() const;
    void emitTriggered();
 
-   QList<QWeakPointer<QAbstractState> > targetStates;
+   QVector<QPointer<QAbstractState>> targetStates;
+   QAbstractTransition::TransitionType transitionType;
 
 #ifndef QT_NO_ANIMATION
    QList<QAbstractAnimation *> animations;

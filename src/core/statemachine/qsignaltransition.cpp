@@ -50,7 +50,7 @@ void QSignalTransition::maybeRegister()
 }
 
 QSignalTransition::QSignalTransition(QState *sourceState)
-   : QAbstractTransition(sourceState)
+   : QAbstractTransition(*new QSignalTransitionPrivate, sourceState)
 {
    m_sender = nullptr;
 }
@@ -59,12 +59,12 @@ QSignalTransition::~QSignalTransition()
 {
 }
 
-QObject *QSignalTransition::senderObject() const
+const QObject *QSignalTransition::senderObject() const
 {
    return m_sender;
 }
 
-void QSignalTransition::setSenderObject(QObject *sender)
+void QSignalTransition::setSenderObject(const QObject *sender)
 {
    if (sender == m_sender) {
       return;
@@ -102,9 +102,10 @@ bool QSignalTransition::event(QEvent *e)
    return QAbstractTransition::event(e);
 }
 
-void QSignalTransition::callOnTransition(QEvent *e)
+void QSignalTransitionPrivate::callOnTransition(QEvent *e)
 {
-   onTransition(e);
+   Q_Q(QSignalTransition);
+   q->onTransition(e);
 }
 
 #endif //QT_NO_STATEMACHINE

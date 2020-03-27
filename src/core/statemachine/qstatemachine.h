@@ -45,6 +45,10 @@ class Q_CORE_EXPORT QStateMachine : public QState
    CORE_CS_PROPERTY_READ(globalRestorePolicy, globalRestorePolicy)
    CORE_CS_PROPERTY_WRITE(globalRestorePolicy, setGlobalRestorePolicy)
 
+   CORE_CS_PROPERTY_READ(running, isRunning)
+   CORE_CS_PROPERTY_WRITE(running, setRunning)
+   CORE_CS_PROPERTY_NOTIFY(running, runningChanged)
+
 #ifndef QT_NO_ANIMATION
    CORE_CS_PROPERTY_READ(animated, isAnimated)
    CORE_CS_PROPERTY_WRITE(animated, setAnimated)
@@ -102,11 +106,6 @@ class Q_CORE_EXPORT QStateMachine : public QState
       HighPriority
    };
 
-   enum RestorePolicy {
-      DontRestoreProperties,
-      RestoreProperties
-   };
-
    enum Error {
       NoError,
       NoInitialStateError,
@@ -114,9 +113,9 @@ class Q_CORE_EXPORT QStateMachine : public QState
       NoCommonAncestorForTransitionError
    };
 
-   CORE_CS_ENUM(RestorePolicy)
+   explicit QStateMachine(QObject *parent = nullptr);
+   explicit QStateMachine(QState::ChildMode childMode, QObject *parent = nullptr);
 
-   QStateMachine(QObject *parent = nullptr);
    ~QStateMachine();
 
    void addState(QAbstractState *state);
@@ -137,8 +136,8 @@ class Q_CORE_EXPORT QStateMachine : public QState
    void removeDefaultAnimation(QAbstractAnimation *animation);
 #endif
 
-   QStateMachine::RestorePolicy globalRestorePolicy() const;
-   void setGlobalRestorePolicy(QStateMachine::RestorePolicy restorePolicy);
+   QState::RestorePolicy globalRestorePolicy() const;
+   void setGlobalRestorePolicy(QState::RestorePolicy restorePolicy);
 
    void postEvent(QEvent *event, EventPriority priority = NormalPriority);
    int postDelayedEvent(QEvent *event, int delay);
@@ -150,17 +149,23 @@ class Q_CORE_EXPORT QStateMachine : public QState
    bool eventFilter(QObject *watched, QEvent *event) override;
 #endif
 
+   CORE_CS_SIGNAL_1(Public, void started())
+   CORE_CS_SIGNAL_2(started)
+
+   CORE_CS_SIGNAL_1(Public, void stopped())
+   CORE_CS_SIGNAL_2(stopped)
+
+   CORE_CS_SIGNAL_1(Public, void runningChanged(bool running))
+   CORE_CS_SIGNAL_2(runningChanged, running)
+
    CORE_CS_SLOT_1(Public, void start())
    CORE_CS_SLOT_2(start)
 
    CORE_CS_SLOT_1(Public, void stop())
    CORE_CS_SLOT_2(stop)
 
-   CORE_CS_SIGNAL_1(Public, void started())
-   CORE_CS_SIGNAL_2(started)
-
-   CORE_CS_SIGNAL_1(Public, void stopped())
-   CORE_CS_SIGNAL_2(stopped)
+   CORE_CS_SLOT_1(Public, void setRunning(bool running))
+   CORE_CS_SLOT_2(setRunning)
 
  protected:
    void onEntry(QEvent *event) override;
@@ -191,6 +196,11 @@ class Q_CORE_EXPORT QStateMachine : public QState
    CORE_CS_SLOT_2(_q_animationFinished)
 #endif
 
+   CORE_CS_SLOT_1(Private, void _q_startDelayedEventTimer(int, int))
+   CORE_CS_SLOT_2(_q_startDelayedEventTimer)
+
+   CORE_CS_SLOT_1(Private, void _q_killDelayedEventTimer(int, int))
+   CORE_CS_SLOT_2(_q_killDelayedEventTimer)
 };
 
 #endif //QT_NO_STATEMACHINE

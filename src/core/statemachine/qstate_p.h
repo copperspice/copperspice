@@ -32,27 +32,40 @@
 
 #include <qabstractstate_p.h>
 
+class QAbstractTransition;
+class QHistoryState;
+class QState;
+
+#ifndef QT_NO_STATEMACHINE
 
 struct QPropertyAssignment {
    QPropertyAssignment()
       : object(0), explicitlySet(true) {}
 
-   QPropertyAssignment(QObject *o, const QByteArray &n,
-                       const QVariant &v, bool es = true)
-      : object(o), propertyName(n), value(v), explicitlySet(es) {
+   QPropertyAssignment(QObject *o, const QByteArray &n, const QVariant &v, bool es = true)
+      : object(o), propertyName(n), value(v), explicitlySet(es)
+   { }
+
+   bool objectDeleted() const {
+      return !object;
    }
 
-   QObject *object;
+   void write() const {
+      Q_ASSERT(object != 0);
+      object->setProperty(propertyName, value);
+   }
+
+   bool hasTarget(QObject *o, const QByteArray &pn) const {
+      return object == o && propertyName == pn;
+   }
+
+   QPointer<QObject> object;
    QByteArray propertyName;
    QVariant value;
    bool explicitlySet;
 };
 
-class QAbstractTransition;
-class QHistoryState;
-class QState;
-
-class QStatePrivate : public QAbstractStatePrivate
+class Q_CORE_EXPORT QStatePrivate : public QAbstractStatePrivate
 {
    Q_DECLARE_PUBLIC(QState)
 
@@ -78,13 +91,15 @@ class QStatePrivate : public QAbstractStatePrivate
    QAbstractState *errorState;
    QAbstractState *initialState;
    QState::ChildMode childMode;
+
    mutable bool childStatesListNeedsRefresh;
-   mutable QList<QAbstractState *> childStatesList;
    mutable bool transitionsListNeedsRefresh;
+   mutable QList<QAbstractState *> childStatesList;
    mutable QList<QAbstractTransition *> transitionsList;
 
-   QList<QPropertyAssignment> propertyAssignments;
+   QVector<QPropertyAssignment> propertyAssignments;
 };
 
+#endif // QT_NO_STATEMACHINE
 
 #endif

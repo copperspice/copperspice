@@ -45,13 +45,29 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
    CORE_CS_OBJECT(QAbstractTransition)
 
    CORE_CS_PROPERTY_READ(sourceState, sourceState)
-   CORE_CS_PROPERTY_READ(targetState, targetState)
-   CORE_CS_PROPERTY_WRITE(targetState, setTargetState)
-   CORE_CS_PROPERTY_READ(targetStates, targetStates)
-   CORE_CS_PROPERTY_WRITE(targetStates, setTargetStates)
+
+   CORE_CS_PROPERTY_READ(targetState,   targetState)
+   CORE_CS_PROPERTY_WRITE(targetState,  setTargetState)
+   CORE_CS_PROPERTY_NOTIFY(targetState, targetStateChanged)
+
+   CORE_CS_PROPERTY_READ(targetStates,   targetStates)
+   CORE_CS_PROPERTY_WRITE(targetStates,  setTargetStates)
+   CORE_CS_PROPERTY_NOTIFY(targetStates, targetStatesChanged)
+
+   CORE_CS_PROPERTY_READ(transitionType,      transitionType)
+   CORE_CS_PROPERTY_WRITE(transitionType,     setTransitionType)
+   CORE_CS_PROPERTY_REVISION(transitionType,  1)
+
 
  public:
-   QAbstractTransition(QState *sourceState = 0);
+   enum TransitionType {
+      ExternalTransition,
+      InternalTransition
+   };
+
+   CORE_CS_ENUM(TransitionType)
+
+   QAbstractTransition(QState *sourceState = nullptr);
    virtual ~QAbstractTransition();
 
    QState *sourceState() const;
@@ -60,6 +76,8 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
    QList<QAbstractState *> targetStates() const;
    void setTargetStates(const QList<QAbstractState *> &targets);
 
+   TransitionType transitionType() const;
+   void setTransitionType(TransitionType type);
    QStateMachine *machine() const;
 
 #ifndef QT_NO_ANIMATION
@@ -70,6 +88,12 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
 
    CORE_CS_SIGNAL_1(Public, void triggered())
    CORE_CS_SIGNAL_2(triggered)
+
+   CORE_CS_SIGNAL_1(Public, void targetStateChanged())
+   CORE_CS_SIGNAL_2(targetStateChanged)
+
+   CORE_CS_SIGNAL_1(Public, void targetStatesChanged())
+   CORE_CS_SIGNAL_2(targetStatesChanged)
 
  protected:
    virtual bool eventTest(QEvent *event) = 0;

@@ -28,17 +28,25 @@
 
 #ifndef QT_NO_STATEMACHINE
 
+class QAbstractTransition;
 class QHistoryStatePrivate;
 
 class Q_CORE_EXPORT QHistoryState : public QAbstractState
 {
    CORE_CS_OBJECT(QHistoryState)
 
-   CORE_CS_PROPERTY_READ(defaultState, defaultState)
-   CORE_CS_PROPERTY_WRITE(defaultState, setDefaultState)
-   CORE_CS_PROPERTY_READ(historyType, historyType)
-   CORE_CS_PROPERTY_WRITE(historyType, setHistoryType)
-   
+   CORE_CS_PROPERTY_READ(defaultState,   defaultState)
+   CORE_CS_PROPERTY_WRITE(defaultState,  setDefaultState)
+   CORE_CS_PROPERTY_NOTIFY(defaultState, defaultStateChanged)
+
+   CORE_CS_PROPERTY_READ(defaultTransition,   defaultTransition)
+   CORE_CS_PROPERTY_WRITE(defaultTransition,  setDefaultTransition)
+   CORE_CS_PROPERTY_NOTIFY(defaultTransition, defaultTransitionChanged)
+
+   CORE_CS_PROPERTY_READ(historyType,   historyType)
+   CORE_CS_PROPERTY_WRITE(historyType,  setHistoryType)
+   CORE_CS_PROPERTY_NOTIFY(historyType, historyTypeChanged)
+
  public:
    enum HistoryType {
       ShallowHistory,
@@ -54,8 +62,20 @@ class Q_CORE_EXPORT QHistoryState : public QAbstractState
    QAbstractState *defaultState() const;
    void setDefaultState(QAbstractState *state);
 
+   QAbstractTransition *defaultTransition() const;
+   void setDefaultTransition(QAbstractTransition *transition);
+
    HistoryType historyType() const;
    void setHistoryType(HistoryType type);
+
+   CORE_CS_SIGNAL_1(Public, void defaultTransitionChanged())
+   CORE_CS_SIGNAL_2(defaultTransitionChanged)
+
+   CORE_CS_SIGNAL_1(Public, void defaultStateChanged())
+   CORE_CS_SIGNAL_2(defaultStateChanged)
+
+   CORE_CS_SIGNAL_1(Public, void historyTypeChanged())
+   CORE_CS_SIGNAL_2(historyTypeChanged)
 
  protected:
    void onEntry(QEvent *event) override;

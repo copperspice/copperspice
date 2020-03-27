@@ -57,8 +57,9 @@ class QAbstractStatePrivate
    void emitEntered();
    void emitExited();
 
-   uint stateType: 31;
+   uint stateType: 30;
    uint isMachine: 1;
+   bool active: 1;
 
    mutable QState *parentState;
 

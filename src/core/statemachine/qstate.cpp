@@ -160,7 +160,7 @@ void QState::assignProperty(QObject *object, const char *name, const QVariant &v
    for (int i = 0; i < d->propertyAssignments.size(); ++i) {
       QPropertyAssignment &assn = d->propertyAssignments[i];
 
-      if ((assn.object == object) && (assn.propertyName == name)) {
+      if (assn.hasTarget(object, name)) {
          assn.value = value;
          return;
       }
@@ -190,7 +190,10 @@ void QState::setErrorState(QAbstractState *state)
       return;
    }
 
-   d->errorState = state;
+   if (d->errorState != state) {
+      d->errorState = state;
+      emit errorStateChanged();
+   }
 }
 
 void QState::addTransition(QAbstractTransition *transition)
@@ -203,21 +206,23 @@ void QState::addTransition(QAbstractTransition *transition)
    }
 
    transition->setParent(this);
-   const QList<QWeakPointer<QAbstractState> > &targets = QAbstractTransitionPrivate::get(transition)->targetStates;
+   const QVector<QPointer<QAbstractState>> &targets = QAbstractTransitionPrivate::get(transition)->targetStates;
+
    for (int i = 0; i < targets.size(); ++i) {
       QAbstractState *t = targets.at(i).data();
+
       if (!t) {
          qWarning("QState::addTransition(): Can not add transition to null state");
          return ;
       }
       if ((QAbstractStatePrivate::get(t)->machine() != d->machine())
-            && QAbstractStatePrivate::get(t)->machine() && d->machine()) {
+         && QAbstractStatePrivate::get(t)->machine() && d->machine()) {
          qWarning("QState::addTransition(): Can not add transition to a state in a different state machine");
          return ;
       }
    }
-   if (machine() != 0 && machine()->configuration().contains(this)) {
-      QStateMachinePrivate::get(machine())->registerTransitions(this);
+   if (QStateMachine *mach = machine()) {
+      QStateMachinePrivate::get(mach)->maybeRegisterTransition(transition);
    }
 }
 
@@ -314,7 +319,11 @@ void QState::setInitialState(QAbstractState *state)
       qWarning("QState::setInitialState: state %p is not a child of this state (%p)", state, this);
       return;
    }
-   d->initialState = state;
+
+   if (d->initialState != state) {
+      d->initialState = state;
+      emit initialStateChanged();
+   }
 }
 
 QState::ChildMode QState::childMode() const
@@ -326,15 +335,32 @@ QState::ChildMode QState::childMode() const
 void QState::setChildMode(ChildMode mode)
 {
    Q_D(QState);
-   d->childMode = mode;
+
+   if (mode == QState::ParallelStates && d->initialState) {
+      qWarning("QState::setChildMode: setting the child-mode of state %p to "
+         "parallel removes the initial state", this);
+
+      d->initialState = nullptr;
+      emit initialStateChanged();
+   }
+
+   if (d->childMode != mode) {
+      d->childMode = mode;
+      emit childModeChanged();
+   }
 }
 
 bool QState::event(QEvent *e)
 {
    Q_D(QState);
+
    if ((e->type() == QEvent::ChildAdded) || (e->type() == QEvent::ChildRemoved)) {
       d->childStatesListNeedsRefresh = true;
       d->transitionsListNeedsRefresh = true;
+
+      if ((e->type() == QEvent::ChildRemoved) && (static_cast<QChildEvent *>(e)->child() == d->initialState)) {
+         d->initialState = 0;
+      }
    }
 
    return QAbstractState::event(e);

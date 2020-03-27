@@ -39,13 +39,16 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    CORE_CS_PROPERTY_READ(initialState, initialState)
    CORE_CS_PROPERTY_WRITE(initialState, setInitialState)
+   CORE_CS_PROPERTY_NOTIFY(initialState, initialStateChanged)
 
    CORE_CS_PROPERTY_READ(errorState, errorState)
    CORE_CS_PROPERTY_WRITE(errorState, setErrorState)
+   CORE_CS_PROPERTY_NOTIFY(errorState, errorStateChanged)
 
    CORE_CS_PROPERTY_READ(childMode, childMode)
    CORE_CS_PROPERTY_WRITE(childMode, setChildMode)
- 
+   CORE_CS_PROPERTY_NOTIFY(childMode, childModeChanged)
+
  public:
    enum ChildMode {
       ExclusiveStates,
@@ -53,6 +56,11 @@ class Q_CORE_EXPORT QState : public QAbstractState
    };
    CORE_CS_ENUM(ChildMode)
 
+   enum RestorePolicy {
+      DontRestoreProperties,
+      RestoreProperties
+   };
+   CORE_CS_ENUM(RestorePolicy)
 
    QState(QState *parent = nullptr);
    QState(ChildMode childMode, QState *parent = nullptr);
@@ -77,9 +85,7 @@ class Q_CORE_EXPORT QState : public QAbstractState
    QAbstractState *errorState() const;
    void setErrorState(QAbstractState *state);
 
-#ifndef QT_NO_PROPERTIES
    void assignProperty(QObject *object, const char *name, const QVariant &value);
-#endif
 
  public:
    CORE_CS_SIGNAL_1(Public, void finished())
@@ -87,6 +93,15 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    CORE_CS_SIGNAL_1(Public, void propertiesAssigned())
    CORE_CS_SIGNAL_2(propertiesAssigned)
+
+   CORE_CS_SIGNAL_1(Public, void childModeChanged())
+   CORE_CS_SIGNAL_2(childModeChanged)
+
+   CORE_CS_SIGNAL_1(Public, void initialStateChanged())
+   CORE_CS_SIGNAL_2(initialStateChanged)
+
+   CORE_CS_SIGNAL_1(Public, void errorStateChanged())
+   CORE_CS_SIGNAL_2(errorStateChanged)
 
  protected:
    void onEntry(QEvent *event) override;

@@ -33,6 +33,7 @@
 #include <qstatemachine.h>
 
 QAbstractTransitionPrivate::QAbstractTransitionPrivate()
+   : transitionType(QAbstractTransition::ExternalTransition)
 {
 }
 
@@ -43,11 +44,17 @@ QAbstractTransitionPrivate *QAbstractTransitionPrivate::get(QAbstractTransition 
 
 QStateMachine *QAbstractTransitionPrivate::machine() const
 {
-   QState *source = sourceState();
-   if (!source) {
-      return 0;
+   if (QState *source = sourceState()) {
+      return source->machine();
    }
-   return source->machine();
+
+   Q_Q(const QAbstractTransition);
+
+   if (QHistoryState *parent = dynamic_cast<QHistoryState *>(q->parent())) {
+      return parent->machine();
+   }
+
+   return 0;
 }
 
 bool QAbstractTransitionPrivate::callEventTest(QEvent *e)
@@ -96,7 +103,6 @@ QState *QAbstractTransition::sourceState() const
    return d->sourceState();
 }
 
-
 QAbstractState *QAbstractTransition::targetState() const
 {
    Q_D(const QAbstractTransition);
@@ -111,11 +117,19 @@ QAbstractState *QAbstractTransition::targetState() const
 void QAbstractTransition::setTargetState(QAbstractState *target)
 {
    Q_D(QAbstractTransition);
-   if (!target) {
+
+   if ((d->targetStates.size() == 1 && target == d->targetStates.at(0).data()) ||
+      (d->targetStates.isEmpty() && target == 0)) {
+      return;
+   }
+
+   if (! target) {
       d->targetStates.clear();
    } else {
       setTargetStates(QList<QAbstractState *>() << target);
    }
+
+   emit targetStateChanged();
 }
 
 QList<QAbstractState *> QAbstractTransition::targetStates() const
@@ -140,23 +154,72 @@ void QAbstractTransition::setTargetStates(const QList<QAbstractState *> &targets
    Q_D(QAbstractTransition);
 
    for (int i = 0; i < targets.size(); ++i) {
-      QAbstractState *target = targets.at(i);
-      if (!target) {
+
+      if (targets.at(i) == nullptr) {
          qWarning("QAbstractTransition::setTargetStates: target state(s) cannot be null");
          return;
       }
    }
 
-   d->targetStates.clear();
-   for (int i = 0; i < targets.size(); ++i) {
-      d->targetStates.append(targets.at(i));
+   // First clean out any target states that got destroyed, but for which we still have a QPointer
+   // around.
+   for (int i = 0; i < d->targetStates.size(); ) {
+      if (d->targetStates.at(i).isNull()) {
+         d->targetStates.remove(i);
+      } else {
+         ++i;
+      }
    }
+
+   // Easy check: if both lists are empty, we're done.
+   if (targets.isEmpty() && d->targetStates.isEmpty()) {
+      return;
+   }
+
+   bool sameList = true;
+
+   if (targets.size() != d->targetStates.size()) {
+      // If the sizes of the lists are different, we don't need to be smart: they're different. So
+      // we can just set the new list as the targetStates.
+      sameList = false;
+
+   } else {
+      QVector<QPointer<QAbstractState>> copy(d->targetStates);
+
+      for (int i = 0; i < targets.size(); ++i) {
+         sameList &= copy.removeOne(targets.at(i));
+         if (!sameList) {
+            break;   // we now know the lists are not the same, so stop the loop
+         }
+      }
+
+      sameList &= copy.isEmpty();
+   }
+
+   if (sameList) {
+      return;
+   }
+
+   d->targetStates.resize(targets.size());
+   for (int i = 0; i < targets.size(); ++i) {
+      d->targetStates[i] = targets.at(i);
+   }
+
+   emit targetStatesChanged();
 }
 
-/*!
-  Returns the state machine that this transition is part of, or 0 if the
-  transition is not part of a state machine.
-*/
+QAbstractTransition::TransitionType QAbstractTransition::transitionType() const
+{
+   Q_D(const QAbstractTransition);
+   return d->transitionType;
+}
+
+void QAbstractTransition::setTransitionType(TransitionType type)
+{
+   Q_D(QAbstractTransition);
+   d->transitionType = type;
+}
+
 QStateMachine *QAbstractTransition::machine() const
 {
    Q_D(const QAbstractTransition);
@@ -175,17 +238,17 @@ void QAbstractTransition::addAnimation(QAbstractAnimation *animation)
    d->animations.append(animation);
 }
 
-
 void QAbstractTransition::removeAnimation(QAbstractAnimation *animation)
 {
    Q_D(QAbstractTransition);
-   if (!animation) {
+
+   if (! animation) {
       qWarning("QAbstractTransition::removeAnimation: cannot remove null animation");
       return;
    }
+
    d->animations.removeOne(animation);
 }
-
 
 QList<QAbstractAnimation *> QAbstractTransition::animations() const
 {
@@ -194,8 +257,6 @@ QList<QAbstractAnimation *> QAbstractTransition::animations() const
 }
 
 #endif
-
-
 
 bool QAbstractTransition::event(QEvent *e)
 {
