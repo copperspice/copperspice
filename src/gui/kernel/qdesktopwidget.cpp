@@ -110,6 +110,7 @@ void QDesktopWidgetPrivate::_q_updateScreens()
    // Create new screen widgets as necessary. While iterating, keep the old list in place so
    // that widgetForScreen works.
    // Furthermore, we note which screens have changed, and compute the overall virtual geometry.
+
    QList<QDesktopScreenWidget *> newScreens;
    QList<int> changedScreens;
    QRegion virtualGeometry;
@@ -173,7 +174,7 @@ void QDesktopWidgetPrivate::_q_availableGeometryChanged()
 {
    Q_Q(QDesktopWidget);
 
-   if (QScreen *screen = qobject_cast<QScreen *>(q->sender())) {
+   if (QScreen *screen = dynamic_cast<QScreen *>(q->sender())) {
       emit q->workAreaResized(QGuiApplication::screens().indexOf(screen));
    }
 }

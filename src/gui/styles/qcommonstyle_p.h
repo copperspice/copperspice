@@ -37,11 +37,13 @@ class QCommonStylePrivate : public QStylePrivate
    Q_DECLARE_PUBLIC(QCommonStyle)
 
  public:
-   inline QCommonStylePrivate() :
+   QCommonStylePrivate()
+
 #ifndef QT_NO_ITEMVIEWS
-      cachedOption(0),
+      : cachedOption(0), animationFps(30)
+#else
+      : animationFps(30)
 #endif
-      animationFps(30)
    { }
 
    ~QCommonStylePrivate() {

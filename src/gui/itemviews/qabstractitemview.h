@@ -464,7 +464,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 #endif
 
    friend class QTreeView;
-   friend class QTreeViewPrivate;       // needed to compile with MSVC
+   friend class QTreeViewPrivate;
    friend class QListModeViewBase;
    friend class QListViewPrivate;
 };
@@ -472,6 +472,5 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemView::EditTriggers)
 
 #endif // QT_NO_ITEMVIEWS
-
 
 #endif

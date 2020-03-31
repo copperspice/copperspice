@@ -2277,16 +2277,11 @@ void QAbstractItemView::commitData(QWidget *editor)
    d->currentlyCommittingEditor = 0;
 }
 
-/*!
-    This function is called when the given \a editor has been destroyed.
-
-    \sa closeEditor()
-*/
 void QAbstractItemView::editorDestroyed(QObject *editor)
 {
    Q_D(QAbstractItemView);
 
-   QWidget *w = qobject_cast<QWidget *>(editor);
+   QWidget *w = dynamic_cast<QWidget *>(editor);
    d->removeEditor(w);
    d->persistent.remove(w);
 
@@ -2300,8 +2295,7 @@ void QAbstractItemView::editorDestroyed(QObject *editor)
 */
 void QAbstractItemView::setHorizontalStepsPerItem(int steps)
 {
-   Q_UNUSED(steps)
-   // do nothing
+   (void) steps;
 }
 
 /*!
@@ -2314,53 +2308,35 @@ int QAbstractItemView::horizontalStepsPerItem() const
 
 /*!
     \obsolete
-    Sets the vertical scroll bar's steps per item to \a steps.
-
-    This is the number of steps used by the vertical scroll bar to
-    represent the height of an item.
-
-    Note that if the view has a vertical header, the item steps
-    will be ignored and the header section size will be used instead.
-
-    \sa verticalStepsPerItem() setHorizontalStepsPerItem()
 */
 void QAbstractItemView::setVerticalStepsPerItem(int steps)
 {
-   Q_UNUSED(steps)
-   // do nothing
+   (void) steps;
 }
 
 /*!
     \obsolete
-    Returns the vertical scroll bar's steps per item.
-
-    \sa setVerticalStepsPerItem() horizontalStepsPerItem()
 */
 int QAbstractItemView::verticalStepsPerItem() const
 {
    return 1;
 }
 
-/*!
-    Moves to and selects the item best matching the string \a search.
-    If no item is found nothing happens.
-
-    In the default implementation, the search is reset if \a search is empty, or
-    the time interval since the last search has exceeded
-    QApplication::keyboardInputInterval().
-*/
 void QAbstractItemView::keyboardSearch(const QString &search)
 {
    Q_D(QAbstractItemView);
+
    if (!d->model->rowCount(d->root) || !d->model->columnCount(d->root)) {
       return;
    }
 
    QModelIndex start = currentIndex().isValid() ? currentIndex()
       : d->model->index(0, 0, d->root);
+
    bool skipRow = false;
    bool keyboardTimeWasValid = d->keyboardInputTime.isValid();
    qint64 keyboardInputTimeElapsed;
+
    if (keyboardTimeWasValid) {
       keyboardInputTimeElapsed = d->keyboardInputTime.restart();
    } else {

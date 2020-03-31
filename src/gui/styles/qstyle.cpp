@@ -341,10 +341,8 @@ int QStyle::combinedLayoutSpacing(QSizePolicy::ControlTypes controls1,
    return result;
 }
 
-
 QDebug operator<<(QDebug debug, QStyle::State state)
 {
-
    return operator<< <QStyle::StateFlag>(debug, state);
 }
 
@@ -353,7 +351,6 @@ const QStyle *QStyle::proxy() const
    Q_D(const QStyle);
    return d->proxyStyle;
 }
-
 
 void QStyle::setProxy(QStyle *style)
 {

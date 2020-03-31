@@ -922,12 +922,6 @@ QWidget::~QWidget()
 
    d->data.in_destructor = true;
 
-#if defined (QT_CHECK_STATE)
-   if (paintingActive()) {
-      qWarning("QWidget: %s (%s) deleted while being painted", className(), name());
-   }
-#endif
-
 #ifndef QT_NO_GESTURES
    for (Qt::GestureType type : d->gestureContext.keys()) {
       ungrabGesture(type);

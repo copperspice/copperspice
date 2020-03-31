@@ -112,6 +112,7 @@ class QToolBoxPrivate : public QFramePrivate
    inline QToolBoxPrivate()
       : currentPage(0) {
    }
+
    void _q_buttonClicked();
    void _q_widgetDestroyed(QObject *);
 
@@ -285,6 +286,7 @@ int QToolBox::insertItem(int index, QWidget *widget, const QIcon &icon, const QS
    c.widget = widget;
    c.button = new QToolBoxButton(this);
    c.button->setObjectName(QLatin1String("qt_toolbox_toolboxbutton"));
+
    connect(c.button, SIGNAL(clicked()), this, SLOT(_q_buttonClicked()));
 
    c.sv = new QScrollArea(this);

@@ -1424,14 +1424,17 @@ void QFusionStyle::drawControl(ControlElement element, const QStyleOption *optio
                painter->setPen(QColor(255, 255, 255, 50));
                painter->drawRoundedRect(progressBar.adjusted(1, 1, -1, -1), 1, 1);
 
-               if (!indeterminate) {
+               if (! indeterminate) {
+
 #ifndef QT_NO_ANIMATION
                   (const_cast<QFusionStylePrivate *>(d))->stopAnimation(option->styleObject);
 #endif
+
                } else {
                   highlightedGradientStartColor.setAlpha(120);
                   painter->setPen(QPen(highlightedGradientStartColor, 9.0));
                   painter->setClipRect(progressBar.adjusted(1, 1, -1, -1));
+
 #ifndef QT_NO_ANIMATION
                   if (QProgressStyleAnimation *animation = qobject_cast<QProgressStyleAnimation *>(d->animation(option->styleObject))) {
                      step = animation->animationStep() % 22;
@@ -1439,14 +1442,17 @@ void QFusionStyle::drawControl(ControlElement element, const QStyleOption *optio
                      (const_cast<QFusionStylePrivate *>(d))->startAnimation(new QProgressStyleAnimation(d->animationFps, option->styleObject));
                   }
 #endif
+
                   for (int x = progressBar.left() - rect.height(); x < rect.right() ; x += 22)
                      painter->drawLine(x + step, progressBar.bottom() + 1,
                         x + rect.height() + step, progressBar.top() - 2);
                }
             }
          }
+
          painter->restore();
          break;
+
       case CE_ProgressBarLabel:
          if (const QStyleOptionProgressBar *bar = qstyleoption_cast<const QStyleOptionProgressBar *>(option)) {
             QRect leftRect;
@@ -2491,18 +2497,21 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
 #ifndef QT_NO_ANIMATION
                   QScrollbarStyleAnimation *anim  = qobject_cast<QScrollbarStyleAnimation *>(d->animation(styleObject));
                   if (transient) {
-                     if (! anim) {
+                     if (anim == nullptr) {
                         anim = new QScrollbarStyleAnimation(QScrollbarStyleAnimation::Deactivating, styleObject);
                         d->startAnimation(anim);
+
                      } else if (anim->mode() == QScrollbarStyleAnimation::Deactivating) {
                         // the scrollbar was already fading out while the
                         // state changed -> restart the fade out animation
                         anim->setCurrentTime(0);
                      }
+
                   } else if (anim && anim->mode() == QScrollbarStyleAnimation::Deactivating) {
                      d->stopAnimation(styleObject);
                   }
-#endif // !QT_NO_ANIMATION
+
+#endif
                }
 
 #ifndef QT_NO_ANIMATION
@@ -2515,7 +2524,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                   }
 
                   wasActive = anim->wasActive();
-                  opacity = anim->currentValue();
+                  opacity   = anim->currentValue();
                }
 
                shouldExpand = (option->activeSubControls || wasActive);
@@ -2525,6 +2534,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                      anim = new QScrollbarStyleAnimation(QScrollbarStyleAnimation::Activating, styleObject);
                      d->startAnimation(anim);
                   }
+
                   if (anim && anim->mode() == QScrollbarStyleAnimation::Activating) {
                      expandScale = 1.0 + (maxExpandScale - 1.0) * anim->currentValue();
                      expandOffset = 5.5 * anim->currentValue() - 1;
@@ -2534,6 +2544,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                      expandOffset = 4.5;
                   }
                }
+
                painter->setOpacity(opacity);
 #endif
             }

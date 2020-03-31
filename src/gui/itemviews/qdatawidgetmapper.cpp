@@ -636,6 +636,4 @@ void QDataWidgetMapper::_q_modelDestroyed()
    d->_q_modelDestroyed();
 }
 
-
-
 #endif

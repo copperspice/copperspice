@@ -124,8 +124,8 @@ void QUndoModel::stackDestroyed(QObject *obj)
    if (obj != m_stack) {
       return;
    }
-   m_stack = 0;
 
+   m_stack = 0;
    stackChanged();
 }
 

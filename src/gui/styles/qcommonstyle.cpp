@@ -87,12 +87,14 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
    const QWidget *widget) const
 {
    Q_D(const QCommonStyle);
+
    switch (pe) {
       case PE_FrameButtonBevel:
       case PE_FrameButtonTool:
          qDrawShadeRect(p, opt->rect, opt->palette,
             opt->state & (State_Sunken | State_On), 1, 0);
          break;
+
       case PE_PanelButtonCommand:
       case PE_PanelButtonBevel:
       case PE_PanelButtonTool:
@@ -101,9 +103,11 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             opt->state & (State_Sunken | State_On), 1,
             &opt->palette.brush(QPalette::Button));
          break;
+
       case PE_IndicatorViewItemCheck:
          proxy()->drawPrimitive(PE_IndicatorCheckBox, opt, p, widget);
          break;
+
       case PE_IndicatorCheckBox:
          if (opt->state & State_NoChange) {
             p->setPen(opt->palette.foreground().color());
@@ -116,6 +120,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
                &opt->palette.brush(QPalette::Button));
          }
          break;
+
       case PE_IndicatorRadioButton: {
          QRect ir = opt->rect;
          p->setPen(opt->palette.dark().color());
@@ -195,6 +200,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             }
          }
          break;
+
 #ifndef QT_NO_TOOLBAR
       case PE_PanelMenuBar:
          if (widget && qobject_cast<QToolBar *>(widget->parentWidget())) {
@@ -214,7 +220,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          break;
       case PE_PanelToolBar:
          break;
-#endif // QT_NO_TOOLBAR
+#endif
 
 #ifndef QT_NO_PROGRESSBAR
       case PE_IndicatorProgressChunk: {
@@ -232,7 +238,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
       }
       break;
-#endif // QT_NO_PROGRESSBAR
+#endif
 
       case PE_IndicatorBranch: {
          static const int decoration_size = 9;
@@ -384,11 +390,13 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          proxy()->drawItemPixmap(p, opt->rect, Qt::AlignCenter, pixmap);
          break;
       }
-#endif // QT_NO_TABBAR
+#endif
+
       case PE_FrameTabWidget:
       case PE_FrameWindow:
          qDrawWinPanel(p, opt->rect, opt->palette, false, 0);
          break;
+
       case PE_FrameLineEdit:
          proxy()->drawPrimitive(PE_Frame, opt, p, widget);
          break;
@@ -410,7 +418,8 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             }
          }
          break;
-#endif // QT_NO_GROUPBOX
+#endif
+
 #ifndef QT_NO_DOCKWIDGET
       case PE_FrameDockWidget:
          if (const QStyleOptionFrame *frame = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
@@ -463,7 +472,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          qDrawShadeLine(p, p1, p2, opt->palette, 1, 1, 0);
          break;
       }
-#endif // QT_NO_TOOLBAR
+#endif
 
 #ifndef QT_NO_SPINBOX
       case PE_IndicatorSpinPlus:
@@ -530,7 +539,8 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          break;
       }
 
-#endif // QT_NO_SPINBOX
+#endif
+
       case PE_PanelTipLabel: {
          QBrush oldBrush = p->brush();
          QPen oldPen = p->pen();
@@ -564,7 +574,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             p->drawPath(path);
          }
          break;
-#endif // QT_NO_TABBAR
+#endif
 
 #ifndef QT_NO_LINEEDIT
       case PE_PanelLineEdit:
@@ -577,7 +587,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             }
          }
          break;
-#endif // QT_NO_LINEEDIT
+#endif
 
 #ifndef QT_NO_COLUMNVIEW
       case PE_IndicatorColumnViewArrow: {
@@ -634,7 +644,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
          break;
       }
-#endif //QT_NO_COLUMNVIEW
+#endif
 
       case PE_IndicatorItemViewItemDrop: {
          QRect rect = opt->rect;
@@ -692,7 +702,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             }
          }
          break;
-#endif //QT_NO_ITEMVIEWS
+#endif
 
       case PE_PanelScrollAreaCorner: {
          const QBrush brush(opt->palette.brush(QPalette::Window));
@@ -807,7 +817,7 @@ static void drawArrow(const QStyle *style, const QStyleOptionToolButton *toolbut
 
    style->drawPrimitive(pe, &arrowOpt, painter, widget);
 }
-#endif // QT_NO_TOOLBUTTON
+#endif
 
 #ifndef QT_NO_ITEMVIEWS
 
@@ -971,13 +981,14 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
    *textRect = QRect(QPoint(0, 0), viewItemSize(opt, Qt::DisplayRole));
    *checkRect = QRect(QPoint(0, 0), viewItemSize(opt, Qt::CheckStateRole));
 
-   const QWidget *widget = opt->widget;
-   const bool hasCheck = checkRect->isValid();
-   const bool hasPixmap = pixmapRect->isValid();
-   const bool hasText = textRect->isValid();
-   const int textMargin = hasText ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
+   const QWidget *widget  = opt->widget;
+   const bool hasCheck    = checkRect->isValid();
+   const bool hasPixmap   = pixmapRect->isValid();
+   const bool hasText     = textRect->isValid();
+   const int textMargin   = hasText ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
    const int pixmapMargin = hasPixmap ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
-   const int checkMargin = hasCheck ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
+   const int checkMargin  = hasCheck ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
+
    int x = opt->rect.left();
    int y = opt->rect.top();
    int w, h;
@@ -992,6 +1003,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
       pm = pixmapRect->size();
       pm.rwidth() += 2 * pixmapMargin;
    }
+
    if (sizehint) {
       h = qMax(checkRect->height(), qMax(textRect->height(), pm.height()));
       if (opt->decorationPosition == QStyleOptionViewItem::Left
@@ -1021,6 +1033,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
 
    QRect display;
    QRect decoration;
+
    switch (opt->decorationPosition) {
       case QStyleOptionViewItem::Top: {
          if (hasPixmap) {
@@ -1119,6 +1132,7 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTab *opt, const QWidget *w
       || opt->shape == QTabBar::RoundedWest
       || opt->shape == QTabBar::TriangularEast
       || opt->shape == QTabBar::TriangularWest;
+
    if (verticalTabs) {
       tr.setRect(0, 0, tr.height(), tr.width());   //0, 0 as we will have a translate transform
    }
@@ -1130,6 +1144,7 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTab *opt, const QWidget *w
    if (opt->shape == QTabBar::RoundedSouth || opt->shape == QTabBar::TriangularSouth) {
       verticalShift = -verticalShift;
    }
+
    tr.adjust(hpadding, verticalShift - vpadding, horizontalShift - hpadding, vpadding);
    bool selected = opt->state & QStyle::State_Selected;
    if (selected) {
@@ -1142,6 +1157,7 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTab *opt, const QWidget *w
       tr.setLeft(tr.left() + 4 +
          (verticalTabs ? opt->leftButtonSize.height() : opt->leftButtonSize.width()));
    }
+
    // right widget
    if (!opt->rightButtonSize.isEmpty()) {
       tr.setRight(tr.right() - 4 -
@@ -1155,6 +1171,7 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTab *opt, const QWidget *w
          int iconExtent = proxyStyle->pixelMetric(QStyle::PM_SmallIconSize);
          iconSize = QSize(iconExtent, iconExtent);
       }
+
       QSize tabIconSize = opt->icon.actualSize(iconSize,
             (opt->state & QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled,
             (opt->state & QStyle::State_Selected) ? QIcon::On : QIcon::Off  );
@@ -1164,19 +1181,21 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTab *opt, const QWidget *w
 
       *iconRect = QRect(tr.left(), tr.center().y() - tabIconSize.height() / 2,
             tabIconSize.width(), tabIconSize .height());
+
       if (!verticalTabs) {
          *iconRect = proxyStyle->visualRect(opt->direction, opt->rect, *iconRect);
       }
+
       tr.setLeft(tr.left() + tabIconSize.width() + 4);
    }
 
-   if (!verticalTabs) {
+   if (! verticalTabs) {
       tr = proxyStyle->visualRect(opt->direction, opt->rect, tr);
    }
 
    *textRect = tr;
 }
-#endif //QT_NO_TABBAR
+#endif
 
 #ifndef QT_NO_ANIMATION
 QList<const QObject *> QCommonStylePrivate::animationTargets() const
@@ -1187,6 +1206,7 @@ QStyleAnimation *QCommonStylePrivate::animation(const QObject *target) const
 {
    return animations.value(target);
 }
+
 void QCommonStylePrivate::startAnimation(QStyleAnimation *animation) const
 {
    Q_Q(const QCommonStyle);
@@ -1202,7 +1222,8 @@ void QCommonStylePrivate::startAnimation(QStyleAnimation *animation) const
 void QCommonStylePrivate::stopAnimation(const QObject *target) const
 {
    QStyleAnimation *animation = animations.take(target);
-   if (animation) {
+
+   if (animation != nullptr) {
       animation->stop();
       delete animation;
    }
@@ -1219,15 +1240,12 @@ void QCommonStylePrivate::_q_removeAnimation()
 }
 #endif
 
-/*!
-  \reimp
-*/
 void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
-   QPainter *p, const QWidget *widget) const
+            QPainter *p, const QWidget *widget) const
 {
    Q_D(const QCommonStyle);
-   switch (element) {
 
+   switch (element) {
       case CE_PushButton:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
             proxy()->drawControl(CE_PushButtonBevel, btn, p, widget);
@@ -1244,6 +1262,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             }
          }
          break;
+
       case CE_PushButtonBevel:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
             QRect br = btn->rect;
@@ -1270,6 +1289,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             }
          }
          break;
+
       case CE_PushButtonLabel:
          if (const QStyleOptionButton *button = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
             QRect textRect = button->rect;
@@ -1342,6 +1362,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                button->text, QPalette::ButtonText);
          }
          break;
+
       case CE_RadioButton:
       case CE_CheckBox:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
@@ -1363,6 +1384,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             }
          }
          break;
+
       case CE_RadioButtonLabel:
       case CE_CheckBoxLabel:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
@@ -1415,7 +1437,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          p->drawLine(opt->rect.x() + 2, opt->rect.y() + opt->rect.height() / 2,
             opt->rect.x() + opt->rect.width() - 4, opt->rect.y() + opt->rect.height() / 2);
          break;
-#endif // QT_NO_MENU
+#endif
 
 #ifndef QT_NO_MENUBAR
       case CE_MenuBarItem:
@@ -1446,7 +1468,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             p->eraseRect(opt->rect);
          }
          break;
-#endif // QT_NO_MENUBAR
+#endif
 
 #ifndef QT_NO_PROGRESSBAR
       case CE_ProgressBar:
@@ -1482,13 +1504,16 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                   //Draw text shadow, This will increase readability when the background of same color
                   QRect shadowRect(pb->rect);
                   shadowRect.translate(1, 1);
+
                   QColor shadowColor = (pb->palette.color(textRole).value() <= 128)
                      ? QColor(255, 255, 255, 160) : QColor(0, 0, 0, 160);
+
                   QPalette shadowPalette = pb->palette;
                   shadowPalette.setColor(textRole, shadowColor);
                   proxy()->drawItemText(p, shadowRect, Qt::AlignCenter | Qt::TextSingleLine, shadowPalette,
                      pb->state & State_Enabled, pb->text, textRole);
                }
+
                proxy()->drawItemText(p, pb->rect, Qt::AlignCenter | Qt::TextSingleLine, pb->palette,
                   pb->state & State_Enabled, pb->text, textRole);
             }
@@ -1595,7 +1620,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             }
          }
          break;
-#endif // QT_NO_PROGRESSBAR
+#endif
 
       case CE_HeaderLabel:
          if (const QStyleOptionHeader *header = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
@@ -6505,11 +6530,13 @@ QPixmap QCommonStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &p
          int green = bg.green();
          int blue = bg.blue();
          uchar reds[256], greens[256], blues[256];
+
          for (int i = 0; i < 128; ++i) {
             reds[i]   = uchar((red   * (i << 1)) >> 8);
             greens[i] = uchar((green * (i << 1)) >> 8);
             blues[i]  = uchar((blue  * (i << 1)) >> 8);
          }
+
          for (int i = 0; i < 128; ++i) {
             reds[i + 128]   = uchar(qMin(red   + (i << 1), 255));
             greens[i + 128] = uchar(qMin(green + (i << 1), 255));
@@ -6544,6 +6571,7 @@ QPixmap QCommonStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &p
 
          return QPixmap::fromImage(im);
       }
+
       case QIcon::Selected: {
          QImage img = pixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
          QColor color = opt->palette.color(QPalette::Normal, QPalette::Highlight);
@@ -6554,20 +6582,23 @@ QPixmap QCommonStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &p
          painter.end();
          return QPixmap::fromImage(img);
       }
+
       case QIcon::Active:
          return pixmap;
+
       default:
          break;
    }
+
    return pixmap;
 }
 
 int QCommonStyle::layoutSpacing(QSizePolicy::ControlType /* control1 */, QSizePolicy::ControlType /* control2 */,
-   Qt::Orientation /* orientation */, const QStyleOption * /* option */,
-   const QWidget * /* widget */) const
+   Qt::Orientation /* orientation */, const QStyleOption * /* option */, const QWidget * /* widget */) const
 {
    return -1;
 }
+
 void QCommonStyle::polish(QPalette &pal)
 {
    QStyle::polish(pal);

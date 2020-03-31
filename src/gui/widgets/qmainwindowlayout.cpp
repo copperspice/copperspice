@@ -1638,7 +1638,8 @@ bool QMainWindowTabBar::event(QEvent *e)
 
 QTabBar *QMainWindowLayout::getTabBar()
 {
-   QTabBar *result = 0;
+   QTabBar *result = nullptr;
+
    if (!unusedTabBars.isEmpty()) {
       result = unusedTabBars.takeLast();
    } else {
@@ -1659,7 +1660,8 @@ QTabBar *QMainWindowLayout::getTabBar()
 // Allocates a new separator widget if needed
 QWidget *QMainWindowLayout::getSeparatorWidget()
 {
-   QWidget *result = 0;
+   QWidget *result = nullptr;
+
    if (!unusedSeparatorWidgets.isEmpty()) {
       result = unusedSeparatorWidgets.takeLast();
    } else {
@@ -2181,8 +2183,9 @@ void QMainWindowLayout::animationFinished(QWidget *widget)
 #endif
    }
 
-   if (!widgetAnimator.animating()) {
+   if (! widgetAnimator.animating()) {
       //all animations are finished
+
 #ifndef QT_NO_DOCKWIDGET
       parentWidget()->update(layoutState.dockAreaLayout.separatorRegion());
 
@@ -2411,17 +2414,20 @@ QLayoutItem *QMainWindowLayout::unplug(QWidget *widget, bool group)
 void QMainWindowLayout::updateGapIndicator()
 {
 #ifndef QT_NO_RUBBERBAND
-   if ((!widgetAnimator.animating() && !currentGapPos.isEmpty()) || currentHoveredFloat) {
+   if ((! widgetAnimator.animating() && ! currentGapPos.isEmpty()) || currentHoveredFloat) {
       QWidget *expectedParent = currentHoveredFloat ? currentHoveredFloat.data() : parentWidget();
-      if (!gapIndicator) {
+
+      if (! gapIndicator) {
          gapIndicator = new QRubberBand(QRubberBand::Rectangle, expectedParent);
          gapIndicator->setObjectName(QLatin1String("qt_rubberband"));
       } else if (gapIndicator->parent() != expectedParent) {
          gapIndicator->setParent(expectedParent);
       }
+
       gapIndicator->setGeometry(currentHoveredFloat ? currentHoveredFloat->rect() : currentGapRect);
       gapIndicator->show();
       gapIndicator->raise();
+
    } else if (gapIndicator) {
       gapIndicator->hide();
    }
@@ -2458,6 +2464,7 @@ void QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mousePos)
          if (w != widget && w->isTopLevel() && w->isVisible() && !w->isMinimized()) {
             candidates << w;
          }
+
          if (QDockWidgetGroupWindow *group = qobject_cast<QDockWidgetGroupWindow *>(w)) {
             // Sometimes, there are floating QDockWidget that have a QDockWidgetGroupWindow as a parent.
             for (QObject *c : group->children()) {

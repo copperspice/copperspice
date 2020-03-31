@@ -26,11 +26,11 @@
 
 #ifndef QT_NO_COMPLETER
 
-#include <QtGui/qtreeview.h>
-#include <QtGui/qabstractproxymodel.h>
+#include <qtreeview.h>
+#include <qabstractproxymodel.h>
 #include <qcompleter.h>
-#include <QtGui/qitemdelegate.h>
-#include <QtGui/qpainter.h>
+#include <qitemdelegate.h>
+#include <qpainter.h>
 #include <qabstractproxymodel_p.h>
 
 class QCompletionModel;
@@ -240,8 +240,8 @@ class QCompletionModel : public QAbstractProxyModel
    QModelIndex currentIndex(bool) const;
 
    QModelIndex index(int row, int column, const QModelIndex & = QModelIndex()) const override;
-   int rowCount(const QModelIndex &index = QModelIndex()) const override;
-   int columnCount(const QModelIndex &index = QModelIndex()) const override;
+   int rowCount(const QModelIndex &index      = QModelIndex()) const override;
+   int columnCount(const QModelIndex &index   = QModelIndex()) const override;
    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
 
    QModelIndex parent(const QModelIndex & = QModelIndex()) const override {

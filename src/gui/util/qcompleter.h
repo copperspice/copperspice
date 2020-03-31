@@ -24,13 +24,13 @@
 #ifndef QCOMPLETER_H
 #define QCOMPLETER_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qrect.h>
+#include <qobject.h>
+#include <qpoint.h>
+#include <qstring.h>
+#include <qabstractitemmodel.h>
+#include <qrect.h>
 #include <qitemselection.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_COMPLETER
 

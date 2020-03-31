@@ -24,11 +24,10 @@
 #ifndef QSCRIPTCLASS_H
 #define QSCRIPTCLASS_H
 
-#include <QtCore/qstring.h>
-
-#include <QtCore/qvariant.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtScript/qscriptvalue.h>
+#include <qstring.h>
+#include <qvariant.h>
+#include <qscopedpointer.h>
+#include <qscriptvalue.h>
 
 class QScriptString;
 class QScriptClassPropertyIterator;
@@ -38,7 +37,7 @@ class Q_SCRIPT_EXPORT QScriptClass
 {
  public:
    enum QueryFlag {
-      HandlesReadAccess = 0x01,
+      HandlesReadAccess  = 0x01,
       HandlesWriteAccess = 0x02
    };
    using QueryFlags = QFlags<QueryFlag>;

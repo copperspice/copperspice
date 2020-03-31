@@ -75,7 +75,7 @@ class QStyleSheetStylePrivate : public QWindowsStylePrivate
    QStyleSheetStylePrivate() { }
 };
 
-static QStyleSheetStyleCaches *styleSheetCaches = 0;
+static QStyleSheetStyleCaches *styleSheetCaches = nullptr;
 
 /* RECURSION_GUARD:
  * the QStyleSheetStyle is a proxy. If used with others proxy style, we may end up with something like:
@@ -2981,6 +2981,7 @@ void QStyleSheetStyle::unpolish(QWidget *w)
    w->setProperty("_q_stylesheet_maxw", QVariant());
    w->setProperty("_q_stylesheet_maxh", QVariant());
    w->setAttribute(Qt::WA_StyleSheet, false);
+
    QObject::disconnect(w, 0, this, 0);
 
 #ifndef QT_NO_SCROLLAREA
