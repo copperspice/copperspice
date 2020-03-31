@@ -26,7 +26,6 @@
 
 #include <qabstracttransition.h>
 
-#include <qabstracttransition_p.h>
 #ifndef QT_NO_STATEMACHINE
 
 class QSignalTransitionPrivate;
@@ -35,8 +34,9 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
 {
    CORE_CS_OBJECT(QSignalTransition)
 
-   CORE_CS_PROPERTY_READ(senderObject,  senderObject)
-   CORE_CS_PROPERTY_WRITE(senderObject, setSenderObject)
+   CORE_CS_PROPERTY_READ(senderObject,   senderObject)
+   CORE_CS_PROPERTY_WRITE(senderObject,  setSenderObject)
+   CORE_CS_PROPERTY_NOTIFY(senderObject, senderObjectChanged)
 
  public:
    QSignalTransition(QState *sourceState = nullptr);
@@ -53,6 +53,9 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
 
    void unregister();
    void maybeRegister();
+
+   CORE_CS_SIGNAL_1(Public, void senderObjectChanged())
+   CORE_CS_SIGNAL_2(senderObjectChanged)
 
  protected:
    bool eventTest(QEvent *event) override;
@@ -78,15 +81,6 @@ template<class SignalClass, class ...SignalArgs> QSignalTransition::QSignalTrans
    m_signalBento.reset(new CSBento<void (SignalClass::*)(SignalArgs...)> {signal});
 }
 
-// minimized class
-class QSignalTransitionPrivate : public QAbstractTransitionPrivate
-{
-   Q_DECLARE_PUBLIC(QSignalTransition)
-
- public:
-   void callOnTransition(QEvent *e) override;
-};
-
-#endif //QT_NO_STATEMACHINE
+#endif // QT_NO_STATEMACHINE
 
 #endif

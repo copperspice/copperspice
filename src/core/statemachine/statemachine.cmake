@@ -26,6 +26,7 @@ list(APPEND CORE_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine/qeventtransition_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine/qhistorystate_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine/qsignaleventgenerator_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/statemachine/qsignaltransition_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine/qstate_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine/qstatemachine_p.h
 )

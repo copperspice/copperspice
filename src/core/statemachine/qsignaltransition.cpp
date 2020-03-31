@@ -28,8 +28,10 @@
 #include <qstate.h>
 #include <qstate_p.h>
 #include <qstatemachine.h>
-#include <qstatemachine_p.h>
 #include <qdebug.h>
+
+#include <qstatemachine_p.h>
+#include <qsignaltransition_p.h>
 
 void QSignalTransition::unregister()
 {
