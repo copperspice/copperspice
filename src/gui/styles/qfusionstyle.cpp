@@ -1436,7 +1436,9 @@ void QFusionStyle::drawControl(ControlElement element, const QStyleOption *optio
                   painter->setClipRect(progressBar.adjusted(1, 1, -1, -1));
 
 #ifndef QT_NO_ANIMATION
-                  if (QProgressStyleAnimation *animation = qobject_cast<QProgressStyleAnimation *>(d->animation(option->styleObject))) {
+                  QProgressStyleAnimation *animation = dynamic_cast<QProgressStyleAnimation *>(d->animationValue(option->styleObject));
+
+                  if (animation) {
                      step = animation->animationStep() % 22;
                   } else {
                      (const_cast<QFusionStylePrivate *>(d))->startAnimation(new QProgressStyleAnimation(d->animationFps, option->styleObject));
@@ -2495,7 +2497,8 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                   styleObject->setProperty("_q_stylecontrols", static_cast<uint>(scrollBar->activeSubControls));
 
 #ifndef QT_NO_ANIMATION
-                  QScrollbarStyleAnimation *anim  = qobject_cast<QScrollbarStyleAnimation *>(d->animation(styleObject));
+                  QScrollbarStyleAnimation *anim  = dynamic_cast<QScrollbarStyleAnimation *>(d->animationValue(styleObject));
+
                   if (transient) {
                      if (anim == nullptr) {
                         anim = new QScrollbarStyleAnimation(QScrollbarStyleAnimation::Deactivating, styleObject);
@@ -2515,7 +2518,8 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                }
 
 #ifndef QT_NO_ANIMATION
-               QScrollbarStyleAnimation *anim = qobject_cast<QScrollbarStyleAnimation *>(d->animation(styleObject));
+               QScrollbarStyleAnimation *anim = dynamic_cast<QScrollbarStyleAnimation *>(d->animationValue(styleObject));
+
                if (anim && anim->mode() == QScrollbarStyleAnimation::Deactivating) {
                   // once a scrollbar was active (hovered/pressed), it retains
                   // the active look even if it's no longer active while fading out

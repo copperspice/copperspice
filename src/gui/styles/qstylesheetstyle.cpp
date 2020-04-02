@@ -4075,11 +4075,13 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                if (pb->minimum == 0 && pb->maximum == 0) {
                   int chunkCount = fillWidth / chunkWidth;
                   int offset = 0;
-                  if (QProgressStyleAnimation *animation = qobject_cast<QProgressStyleAnimation *>(d->animation(opt->styleObject))) {
+
+                  if (QProgressStyleAnimation *animation = dynamic_cast<QProgressStyleAnimation *>(d->animationValue(opt->styleObject))) {
                      offset = animation->animationStep() * 8 % rect.width();
                   } else {
                      d->startAnimation(new QProgressStyleAnimation(d->animationFps, opt->styleObject));
                   }
+
                   int x = reverse ? r.left() + r.width() - offset - chunkWidth : r.x() + offset;
                   while (chunkCount > 0) {
                      r.setRect(x, rect.y(), chunkWidth, rect.height());

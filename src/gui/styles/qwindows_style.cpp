@@ -1841,11 +1841,13 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
 
                int step = 0;
                int chunkCount = w / unit_width + 1;
-               if (QProgressStyleAnimation *animation = qobject_cast<QProgressStyleAnimation *>(d->animation(opt->styleObject))) {
+
+               if (QProgressStyleAnimation *animation = dynamic_cast<QProgressStyleAnimation *>(d->animationValue(opt->styleObject))) {
                   step = (animation->animationStep() / 3) % chunkCount;
                } else {
                   d->startAnimation(new QProgressStyleAnimation(d->animationFps, opt->styleObject));
                }
+
                int chunksInRow = 5;
                int myY = pbBits.rect.y();
                int myHeight = pbBits.rect.height();

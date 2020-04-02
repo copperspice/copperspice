@@ -1198,13 +1198,14 @@ void QCommonStylePrivate::tabLayout(const QStyleOptionTab *opt, const QWidget *w
 #endif
 
 #ifndef QT_NO_ANIMATION
-QList<const QObject *> QCommonStylePrivate::animationTargets() const
+QList<const QObject *> QCommonStylePrivate::animationKeys() const
 {
    return animations.keys();
 }
-QStyleAnimation *QCommonStylePrivate::animation(const QObject *target) const
+
+QStyleAnimation *QCommonStylePrivate::animationValue(const QObject *target) const
 {
-   return animations.value(target);
+   return animations.value(target, nullptr);
 }
 
 void QCommonStylePrivate::startAnimation(QStyleAnimation *animation) const

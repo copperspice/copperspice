@@ -3710,7 +3710,7 @@ void QGtkStyle::drawControl(ControlElement element,
                int step = 0;
 
 #ifndef QT_NO_ANIMATION
-               if (QProgressStyleAnimation *animation = qobject_cast<QProgressStyleAnimation *>(d->animation(option->styleObject))) {
+               if (QProgressStyleAnimation *animation = dynamic_cast<QProgressStyleAnimation *>(d->animationValue(option->styleObject))) {
                   step = animation->progressStep(slideWidth);
                } else {
                   d->startAnimation(new QProgressStyleAnimation(d->animationFps, option->styleObject));
