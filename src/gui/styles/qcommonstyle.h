@@ -26,7 +26,6 @@
 
 #include <qstyle.h>
 
-
 class QCommonStylePrivate;
 
 class Q_GUI_EXPORT QCommonStyle: public QStyle
@@ -79,8 +78,7 @@ class Q_GUI_EXPORT QCommonStyle: public QStyle
    Q_DISABLE_COPY(QCommonStyle)
 
 #ifndef QT_NO_ANIMATION
-   GUI_CS_SLOT_1(Private, void _q_removeAnimation())
-   GUI_CS_SLOT_2(_q_removeAnimation)
+   void _q_removeAnimation(QObject *obj);
 #endif
 };
 

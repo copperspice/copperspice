@@ -91,7 +91,7 @@ class QCommonStylePrivate : public QStylePrivate
    int animationFps;
 
 #ifndef QT_NO_ANIMATION
-   void _q_removeAnimation();
+   void _q_removeAnimation(QObject *obj);
 
    QList<const QObject *> animationTargets() const;
    QStyleAnimation *animation(const QObject *target) const;

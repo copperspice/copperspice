@@ -1213,7 +1213,7 @@ void QCommonStylePrivate::startAnimation(QStyleAnimation *animation) const
    stopAnimation(animation->target());
 
    QCommonStyle *obj = const_cast<QCommonStyle *>(q);
-   q->connect(animation, SIGNAL(destroyed()), obj, SLOT(_q_removeAnimation()), Qt::UniqueConnection);
+   q->connect(animation, &QStyleAnimation::destroyed, obj, &QCommonStyle::_q_removeAnimation, Qt::UniqueConnection);
 
    animations.insert(animation->target(), animation);
    animation->start();
@@ -1229,13 +1229,10 @@ void QCommonStylePrivate::stopAnimation(const QObject *target) const
    }
 }
 
-void QCommonStylePrivate::_q_removeAnimation()
+void QCommonStylePrivate::_q_removeAnimation(QObject *obj)
 {
-   Q_Q(QCommonStyle);
-   QObject *animation = q->sender();
-
-   if (animation) {
-      animations.remove(animation->parent());
+   if (obj != nullptr) {
+      animations.remove(obj->parent());
    }
 }
 #endif
@@ -6627,10 +6624,9 @@ void QCommonStyle::unpolish(QApplication *application)
 }
 
 #ifndef QT_NO_ANIMATION
-void QCommonStyle::_q_removeAnimation()
+void QCommonStyle::_q_removeAnimation(QObject *obj)
 {
    Q_D(QCommonStyle);
-   d->_q_removeAnimation();
+   d->_q_removeAnimation(obj);
 }
-
 #endif
