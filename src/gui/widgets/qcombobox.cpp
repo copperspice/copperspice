@@ -544,7 +544,7 @@ void QComboBoxPrivateContainer::setItemView(QAbstractItemView *itemView)
       disconnect(view->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateScrollers()));
 #endif
 
-      disconnect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
+      disconnect(view, &QObject::destroyed, this, &QComboBoxPrivateContainer::viewDestroyed);
 
       delete view;
       view = 0;
@@ -582,7 +582,7 @@ void QComboBoxPrivateContainer::setItemView(QAbstractItemView *itemView)
    connect(view->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateScrollers()));
 #endif
 
-   connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
+   connect(view, &QObject::destroyed, this, &QComboBoxPrivateContainer::viewDestroyed);
 }
 
 int QComboBoxPrivateContainer::topMargin() const
@@ -1220,7 +1220,7 @@ QComboBox::~QComboBox()
    Q_D(QComboBox);
 
    try {
-      disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_modelDestroyed()));
+      disconnect(d->model, &QAbstractItemModel::destroyed, this, &QComboBox::_q_modelDestroyed);
 
    } catch(...) {
       ;

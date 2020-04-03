@@ -1439,8 +1439,8 @@ QVector<QCss::StyleRule> QStyleSheetStyle::styleRules(const QObject *obj) const
       QStyle *bs = baseStyle();
       styleSheetCaches->styleSheetCache.insert(bs, defaultSs);
 
-      QObject::connect(bs, SIGNAL(destroyed(QObject *)), styleSheetCaches, SLOT(styleDestroyed(QObject *)),
-         Qt::UniqueConnection);
+      QObject::connect(bs, &QObject::destroyed, styleSheetCaches, &QStyleSheetStyleCaches::styleDestroyed, Qt::UniqueConnection);
+
    } else {
       defaultSs = defaultCacheIt.value();
    }
@@ -2825,8 +2825,7 @@ bool QStyleSheetStyle::initObject(const QObject *obj) const
       const_cast<QWidget *>(w)->setAttribute(Qt::WA_StyleSheet, true);
    }
 
-   QObject::connect(obj, SIGNAL(destroyed(QObject *)), styleSheetCaches, SLOT(objectDestroyed(QObject *)),
-      Qt::UniqueConnection);
+   QObject::connect(obj, &QObject::destroyed, styleSheetCaches, &QStyleSheetStyleCaches::objectDestroyed, Qt::UniqueConnection);
 
    return true;
 }

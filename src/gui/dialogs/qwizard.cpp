@@ -871,7 +871,7 @@ void QWizardPrivate::addField(const QWizardField &field)
       QObject::connect(myField.object, myField.changedSignal, myField.page, SLOT(_q_maybeEmitCompleteChanged()));
    }
 
-   QObject::connect(myField.object, SIGNAL(destroyed(QObject *)), q, SLOT(_q_handleFieldObjectDestroyed(QObject *)));
+   QObject::connect(myField.object, &QObject::destroyed, q, &QWizard::_q_handleFieldObjectDestroyed);
 }
 
 void QWizardPrivate::removeFieldAt(int index)
@@ -885,7 +885,7 @@ void QWizardPrivate::removeFieldAt(int index)
       QObject::disconnect(field.object, field.changedSignal, field.page, SLOT(_q_maybeEmitCompleteChanged()));
    }
 
-   QObject::disconnect(field.object, SIGNAL(destroyed(QObject *)), q, SLOT(_q_handleFieldObjectDestroyed(QObject *)));
+   QObject::disconnect(field.object, &QObject::destroyed, q, &QWizard::_q_handleFieldObjectDestroyed);
    fields.remove(index);
 }
 
@@ -3157,10 +3157,10 @@ void QWizard::_q_updateButtonStates()
    d->_q_updateButtonStates();
 }
 
-void QWizard::_q_handleFieldObjectDestroyed(QObject *un_named_arg1)
+void QWizard::_q_handleFieldObjectDestroyed(QObject *obj)
 {
    Q_D(QWizard);
-   d->_q_handleFieldObjectDestroyed(un_named_arg1);
+   d->_q_handleFieldObjectDestroyed(obj);
 }
 
 void QWizardPage::_q_maybeEmitCompleteChanged()

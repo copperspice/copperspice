@@ -61,12 +61,12 @@ void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 
    if (sourceModel != d->model) {
       if (d->model) {
-         disconnect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
+         disconnect(d->model, &QObject::destroyed, this, &QAbstractProxyModel::_q_sourceModelDestroyed);
       }
 
       if (sourceModel) {
          d->model = sourceModel;
-         connect(d->model, SIGNAL(destroyed()), this, SLOT(_q_sourceModelDestroyed()));
+         connect(d->model, &QObject::destroyed, this, &QAbstractProxyModel::_q_sourceModelDestroyed);
       } else {
          d->model = QAbstractItemModelPrivate::staticEmptyModel();
       }

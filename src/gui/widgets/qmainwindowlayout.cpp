@@ -1903,15 +1903,13 @@ void QMainWindowLayout::setCurrentHoveredFloat(QWidget *w)
 {
    if (currentHoveredFloat != w) {
       if (currentHoveredFloat) {
-         disconnect(currentHoveredFloat.data(), &QObject::destroyed,
-            this, &QMainWindowLayout::updateGapIndicator);
+         disconnect(currentHoveredFloat.data(), &QObject::destroyed, this, &QMainWindowLayout::updateGapIndicator);
       }
 
       currentHoveredFloat = w;
 
       if (w) {
-         connect(w, &QObject::destroyed,
-            this, &QMainWindowLayout::updateGapIndicator, Qt::UniqueConnection);
+         connect(w, &QObject::destroyed, this, &QMainWindowLayout::updateGapIndicator, Qt::UniqueConnection);
       }
 
       updateGapIndicator();

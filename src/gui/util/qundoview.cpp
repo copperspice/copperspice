@@ -63,11 +63,9 @@ class QUndoModel : public QAbstractItemModel
    GUI_CS_SLOT_1(Private, void stackChanged())
    GUI_CS_SLOT_2(stackChanged)
 
-   GUI_CS_SLOT_1(Private, void stackDestroyed(QObject *obj))
-   GUI_CS_SLOT_2(stackDestroyed)
-
-   GUI_CS_SLOT_1(Private, void setStackCurrentIndex(const QModelIndex &index))
-   GUI_CS_SLOT_2(setStackCurrentIndex)
+   // slots
+   void stackDestroyed(QObject *obj);
+   void setStackCurrentIndex(const QModelIndex &index);
 
    QUndoStack *m_stack;
    QItemSelectionModel *m_sel_model;

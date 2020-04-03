@@ -212,8 +212,7 @@ class Q_GUI_EXPORT QWizard : public QDialog
    GUI_CS_SLOT_1(Private, void _q_updateButtonStates())
    GUI_CS_SLOT_2(_q_updateButtonStates)
 
-   GUI_CS_SLOT_1(Private, void _q_handleFieldObjectDestroyed(QObject *un_named_arg1))
-   GUI_CS_SLOT_2(_q_handleFieldObjectDestroyed)
+   void _q_handleFieldObjectDestroyed(QObject *obj);
 
    friend class QWizardPage;
 };

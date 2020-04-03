@@ -57,8 +57,8 @@ class Q_GUI_EXPORT QAccessibleCache : public QObject
 #endif
 
  private:
-   GUI_CS_SLOT_1(Private, void objectDestroyed(QObject *obj))
-   GUI_CS_SLOT_2(objectDestroyed)
+   // slot
+   void objectDestroyed(QObject *obj);
 
    QAccessible::Id acquireId() const;
 

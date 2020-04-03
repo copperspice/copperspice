@@ -258,18 +258,13 @@ class QCompletionModel : public QAbstractProxyModel
    QScopedPointer<QCompletionEngine> engine;
    bool showAll;
 
-
    GUI_CS_SIGNAL_1(Public, void rowsAdded())
    GUI_CS_SIGNAL_2(rowsAdded)
 
-   GUI_CS_SLOT_1(Public, void invalidate())
-   GUI_CS_SLOT_2(invalidate)
-
-   GUI_CS_SLOT_1(Public, void rowsInserted())
-   GUI_CS_SLOT_2(rowsInserted)
-
-   GUI_CS_SLOT_1(Public, void modelDestroyed())
-   GUI_CS_SLOT_2(modelDestroyed)
+   // slots
+   void invalidate();
+   void rowsInserted();
+   void modelDestroyed();
 };
 
 class QCompletionModelPrivate : public QAbstractProxyModelPrivate

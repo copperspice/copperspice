@@ -449,14 +449,9 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
                   const QModelIndex &un_named_arg4, int un_named_arg5))
    GUI_CS_SLOT_2(_q_rowsMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_modelDestroyed())
-   GUI_CS_SLOT_2(_q_modelDestroyed)
-
-   GUI_CS_SLOT_1(Private, void _q_layoutChanged())
-   GUI_CS_SLOT_2(_q_layoutChanged)
-
-   GUI_CS_SLOT_1(Private, void _q_headerDataChanged())
-   GUI_CS_SLOT_2(_q_headerDataChanged)
+   void _q_modelDestroyed();
+   void _q_layoutChanged();
+   void _q_headerDataChanged();
 
 #ifndef QT_NO_GESTURES
    GUI_CS_SLOT_1(Private, void _q_scrollerStateChanged())
