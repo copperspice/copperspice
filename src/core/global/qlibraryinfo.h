@@ -37,7 +37,9 @@ class Q_CORE_EXPORT QLibraryInfo
 #ifndef QT_NO_DATESTRING
     static QDate buildDate();
 #endif
+
    enum LibraryLocation {
+      PrefixPath,
       PluginsPath,
       ImportsPath,
       Qml2ImportsPath,
@@ -46,8 +48,8 @@ class Q_CORE_EXPORT QLibraryInfo
    };
 
    static QString location(LibraryLocation);
-
    static QStringList platformPluginArguments(const QString &platformName);
+
  private:
    QLibraryInfo();
 
