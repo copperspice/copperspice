@@ -29,8 +29,6 @@
 
 #ifndef QT_NO_TOOLBUTTON
 
-
-
 QToolBarExtension::QToolBarExtension(QWidget *parent)
    : QToolButton(parent)
 {
@@ -44,7 +42,8 @@ QToolBarExtension::QToolBarExtension(QWidget *parent)
 void QToolBarExtension::setOrientation(Qt::Orientation o)
 {
    QStyleOption opt;
-   opt.init(this);
+   opt.initFrom(this);
+
    if (o == Qt::Horizontal) {
       setIcon(style()->standardIcon(QStyle::SP_ToolBarHorizontalExtensionButton, &opt));
    } else {

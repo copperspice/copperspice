@@ -205,7 +205,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 #endif
       ) {
          QStyleOption opt;
-         opt.init(q_func());
+         opt.initFrom(q_func());
          opt.rect = dropIndicatorRect;
          q_func()->style()->drawPrimitive(QStyle::PE_IndicatorItemViewItemDrop, &opt, painter, q_func());
       }

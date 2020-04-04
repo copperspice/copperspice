@@ -1781,7 +1781,7 @@ void QHeaderView::paintEvent(QPaintEvent *e)
    }
 
    QStyleOption opt;
-   opt.init(this);
+   opt.initFrom(this);
 
    // Paint the area beyond where there are indexes
 

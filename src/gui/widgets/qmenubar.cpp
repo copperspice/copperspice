@@ -1617,7 +1617,7 @@ int QMenuBar::heightForWidth(int) const
 
    if (as_gui_menubar) {
       QStyleOptionMenuItem opt;
-      opt.init(this);
+      opt.initFrom(this);
       opt.menuRect = rect();
       opt.state = QStyle::State_None;
       opt.menuItemType = QStyleOptionMenuItem::Normal;

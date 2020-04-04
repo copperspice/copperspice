@@ -163,7 +163,7 @@ class QComboBoxPrivateScroller : public QWidget
    void paintEvent(QPaintEvent *) override {
       QPainter p(this);
       QStyleOptionMenuItem menuOpt;
-      menuOpt.init(this);
+      menuOpt.initFrom(this);
       menuOpt.checkType = QStyleOptionMenuItem::NotCheckable;
       menuOpt.menuRect = rect();
       menuOpt.maxIconWidth = 0;

@@ -43,7 +43,6 @@ class QDebug;
 
 class Q_GUI_EXPORT QStyleOption
 {
-
  public:
    enum OptionType {
       SO_Default, SO_FocusRect, SO_Button, SO_Tab, SO_MenuItem,
@@ -65,10 +64,7 @@ class Q_GUI_EXPORT QStyleOption
    QStyleOption(const QStyleOption &other);
    ~QStyleOption();
 
-   void init(const QWidget *w);
-   inline void initFrom(const QWidget *w) {
-      init(w);
-   }
+   void initFrom(const QWidget *w);
 
    QStyleOption &operator=(const QStyleOption &other);
 

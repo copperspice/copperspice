@@ -1829,7 +1829,7 @@ void QTabBar::mousePressEvent(QMouseEvent *event)
 
    if (d->validIndex(d->pressedIndex)) {
       QStyleOptionTabBarBase optTabBase;
-      optTabBase.init(this);
+      optTabBase.initFrom(this);
       optTabBase.documentMode = d->documentMode;
 
       if (event->type() == style()->styleHint(QStyle::SH_TabBar_SelectMouseType, &optTabBase, this)) {
@@ -1925,7 +1925,7 @@ void QTabBar::mouseMoveEvent(QMouseEvent *event)
    }
 
    QStyleOptionTabBarBase optTabBase;
-   optTabBase.init(this);
+   optTabBase.initFrom(this);
    optTabBase.documentMode = d->documentMode;
 }
 
@@ -2401,9 +2401,9 @@ void CloseButton::leaveEvent(QEvent *event)
 void CloseButton::paintEvent(QPaintEvent *)
 {
    QPainter p(this);
-   QStyleOption opt;
 
-   opt.init(this);
+   QStyleOption opt;
+   opt.initFrom(this);
    opt.state |= QStyle::State_AutoRaise;
 
    if (isEnabled() && underMouse() && !isChecked() && !isDown()) {

@@ -941,25 +941,31 @@ void QDateTimeEdit::focusInEvent(QFocusEvent *event)
          }
       }
    }
+
    const bool oldHasHadFocus = d->hasHadFocus;
    d->hasHadFocus = true;
    bool first = true;
+
    switch (event->reason()) {
       case Qt::BacktabFocusReason:
          first = false;
          break;
+
       case Qt::MouseFocusReason:
       case Qt::PopupFocusReason:
          return;
+
       case Qt::ActiveWindowFocusReason:
          if (oldHasHadFocus) {
             return;
          }
+
       case Qt::ShortcutFocusReason:
       case Qt::TabFocusReason:
       default:
          break;
    }
+
    if (isRightToLeft()) {
       first = !first;
    }
@@ -1947,8 +1953,7 @@ void QDateTimeEdit::paintEvent(QPaintEvent *event)
    initStyleOption(&opt);
 
    QStyleOptionComboBox optCombo;
-
-   optCombo.init(this);
+   optCombo.initFrom(this);
    optCombo.editable = true;
    optCombo.frame = opt.frame;
    optCombo.subControls = opt.subControls;
@@ -2122,10 +2127,11 @@ QStyle::SubControl QDateTimeEditPrivate::newHoverControl(const QPoint &pos)
    Q_Q(QDateTimeEdit);
 
    QStyleOptionComboBox optCombo;
-   optCombo.init(q);
+   optCombo.initFrom(q);
    optCombo.editable = true;
    optCombo.subControls = QStyle::SC_All;
    hoverControl = q->style()->hitTestComplexControl(QStyle::CC_ComboBox, &optCombo, pos, q);
+
    return hoverControl;
 }
 
@@ -2139,7 +2145,7 @@ void QDateTimeEditPrivate::updateEditFieldGeometry()
    Q_Q(QDateTimeEdit);
 
    QStyleOptionComboBox optCombo;
-   optCombo.init(q);
+   optCombo.initFrom(q);
    optCombo.editable = true;
    optCombo.subControls = QStyle::SC_ComboBoxEditField;
    edit->setGeometry(q->style()->subControlRect(QStyle::CC_ComboBox, &optCombo,
@@ -2325,9 +2331,11 @@ void QCalendarPopup::setDateRange(const QDate &min, const QDate &max)
 void QCalendarPopup::mousePressEvent(QMouseEvent *event)
 {
    QDateTimeEdit *dateTime = qobject_cast<QDateTimeEdit *>(parentWidget());
+
    if (dateTime) {
       QStyleOptionComboBox opt;
-      opt.init(dateTime);
+      opt.initFrom(dateTime);
+
       QRect arrowRect = dateTime->style()->subControlRect(QStyle::CC_ComboBox, &opt,
             QStyle::SC_ComboBoxArrow, dateTime);
       arrowRect.moveTo(dateTime->mapToGlobal(arrowRect .topLeft()));
@@ -2382,7 +2390,5 @@ void  QDateTimeEdit::_q_resetButton()
    Q_D( QDateTimeEdit);
    d->_q_resetButton();
 }
-
-
 
 #endif // QT_NO_DATETIMEEDIT

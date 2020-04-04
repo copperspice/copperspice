@@ -41,10 +41,11 @@ QStyleOption::~QStyleOption()
 {
 }
 
-void QStyleOption::init(const QWidget *widget)
+void QStyleOption::initFrom(const QWidget *widget)
 {
    QWidget *window = widget->window();
    state = QStyle::State_None;
+
    if (widget->isEnabled()) {
       state |= QStyle::State_Enabled;
    }
@@ -63,7 +64,6 @@ void QStyleOption::init(const QWidget *widget)
    if (widget->isWindow()) {
       state |= QStyle::State_Window;
    }
-
 
 #if defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)
    switch (QMacStyle::widgetSizePolicy(widget)) {

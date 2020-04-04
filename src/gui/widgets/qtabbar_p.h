@@ -231,7 +231,7 @@ class QTabBarPrivate  : public QWidgetPrivate
       int overlap = tabbar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap, tabbar);
       QWidget *theParent = tabbar->parentWidget();
 
-      optTabBase->init(tabbar);
+      optTabBase->initFrom(tabbar);
       optTabBase->shape = tabbar->shape();
       optTabBase->documentMode = tabbar->documentMode();
 

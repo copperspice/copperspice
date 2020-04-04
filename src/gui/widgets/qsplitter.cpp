@@ -121,7 +121,8 @@ QSize QSplitterHandle::sizeHint() const
    Q_D(const QSplitterHandle);
    int hw = d->s->handleWidth();
    QStyleOption opt(0);
-   opt.init(d->s);
+   opt.initFrom(d->s);
+
    opt.state = QStyle::State_None;
 
    return parentWidget()->style()->sizeFromContents(QStyle::CT_Splitter, &opt, QSize(hw, hw), d->s)
@@ -239,6 +240,7 @@ void QSplitterHandle::paintEvent(QPaintEvent *)
 {
    Q_D(QSplitterHandle);
    QPainter p(this);
+
    QStyleOption opt(0);
    opt.rect = contentsRect();
    opt.palette = palette();

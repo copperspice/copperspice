@@ -159,7 +159,7 @@ QSizeGrip::~QSizeGrip()
 QSize QSizeGrip::sizeHint() const
 {
    QStyleOption opt(0);
-   opt.init(this);
+   opt.initFrom(this);
 
    return (style()->sizeFromContents(QStyle::CT_SizeGrip, &opt, QSize(13, 13), this).
          expandedTo(QApplication::globalStrut()));
@@ -172,8 +172,9 @@ void QSizeGrip::paintEvent(QPaintEvent *event)
    Q_D(QSizeGrip);
 
    QPainter painter(this);
+
    QStyleOptionSizeGrip opt;
-   opt.init(this);
+   opt.initFrom(this);
    opt.corner = d->m_corner;
    style()->drawControl(QStyle::CE_SizeGrip, &opt, &painter, this);
 }
