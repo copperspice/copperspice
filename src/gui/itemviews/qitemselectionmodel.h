@@ -37,6 +37,8 @@
 class QItemSelection;
 class QItemSelectionModelPrivate;
 
+CS_DECLARE_METATYPE(QItemSelection)
+
 class Q_GUI_EXPORT QItemSelectionRange
 {
  public:
@@ -223,7 +225,7 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
    QModelIndexList selectedIndexes() const;
    QModelIndexList selectedRows(int column = 0) const;
    QModelIndexList selectedColumns(int row = 0) const;
-   const QItemSelection selection() const;
+   QItemSelection selection() const;
 
    const QAbstractItemModel *model() const;
    void setModel(QAbstractItemModel *model);
