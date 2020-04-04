@@ -276,8 +276,4 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
    MULTI_CS_SLOT_2(_q_handlePlaylistLoadFailed)
 };
 
-Q_MEDIA_ENUM_DEBUG(QMediaPlayer, State)
-Q_MEDIA_ENUM_DEBUG(QMediaPlayer, MediaStatus)
-Q_MEDIA_ENUM_DEBUG(QMediaPlayer, Error)
-
 #endif

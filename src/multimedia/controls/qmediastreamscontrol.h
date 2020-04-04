@@ -61,6 +61,4 @@ class Q_MULTIMEDIA_EXPORT QMediaStreamsControl : public QMediaControl
 #define QMediaStreamsControl_iid "com.copperspice.CS.mediaStreamsControl/1.0"
 CS_DECLARE_INTERFACE(QMediaStreamsControl, QMediaStreamsControl_iid)
 
-Q_MEDIA_ENUM_DEBUG(QMediaStreamsControl, StreamType)
-
 #endif

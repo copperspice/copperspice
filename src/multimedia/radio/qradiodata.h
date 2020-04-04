@@ -130,8 +130,5 @@ private:
    MULTI_CS_SLOT_2(_q_serviceDestroyed)
 };
 
-Q_MEDIA_ENUM_DEBUG(QRadioData, Error)
-Q_MEDIA_ENUM_DEBUG(QRadioData, ProgramType)
-
 #endif
 

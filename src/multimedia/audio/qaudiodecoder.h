@@ -131,7 +131,4 @@ class Q_MULTIMEDIA_EXPORT QAudioDecoder : public QMediaObject
    MULTI_CS_SLOT_2(_q_error)
 };
 
-Q_MEDIA_ENUM_DEBUG(QAudioDecoder, State)
-Q_MEDIA_ENUM_DEBUG(QAudioDecoder, Error)
-
 #endif

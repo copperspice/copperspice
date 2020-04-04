@@ -173,10 +173,4 @@ private:
     Q_DECLARE_PRIVATE(QRadioTuner)
 };
 
-Q_MEDIA_ENUM_DEBUG(QRadioTuner, State)
-Q_MEDIA_ENUM_DEBUG(QRadioTuner, Band)
-Q_MEDIA_ENUM_DEBUG(QRadioTuner, Error)
-Q_MEDIA_ENUM_DEBUG(QRadioTuner, StereoMode)
-Q_MEDIA_ENUM_DEBUG(QRadioTuner, SearchMode)
-
 #endif

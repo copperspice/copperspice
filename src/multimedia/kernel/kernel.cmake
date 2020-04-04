@@ -12,7 +12,6 @@ list(APPEND MULTIMEDIA_PUBLIC_INCLUDES
 list(APPEND MULTIMEDIA_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediabindableinterface.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediacontrol.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaenumdebug.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaobject.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediametadata.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaservice.h
