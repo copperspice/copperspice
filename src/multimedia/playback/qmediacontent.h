@@ -64,12 +64,6 @@ class Q_MULTIMEDIA_EXPORT QMediaContent
    QSharedDataPointer<QMediaContentPrivate> d;
 };
 
-template<>
-class Q_MULTIMEDIA_EXPORT cs_typeName_internal<QMediaContent, void>
-{
- public:
-   static const QString &typeName();
-};
 CS_DECLARE_METATYPE(QMediaContent)
 
 #endif

@@ -39,13 +39,6 @@
 
 #include <qfactoryloader_p.h>
 
-// register by hand
-Q_MULTIMEDIA_EXPORT const QString &cs_typeName_internal<QMediaPlaylist, void>::typeName()
-{
-   static QString retval("QMediaPlaylist");
-   return retval;
-}
-
 static QFactoryLoader *loader()
 {
    static QFactoryLoader retval(QMediaPlaylistInterface_ID, "/playlistformats", Qt::CaseInsensitive);

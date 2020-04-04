@@ -140,13 +140,6 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindable
    MULTI_CS_SLOT_2(_q_loadFailed)
 };
 
-template<>
-class Q_MULTIMEDIA_EXPORT cs_typeName_internal<QMediaPlaylist, void>
-{
- public:
-   static const QString &typeName();
-};
-
 Q_MEDIA_ENUM_DEBUG(QMediaPlaylist, PlaybackMode)
 Q_MEDIA_ENUM_DEBUG(QMediaPlaylist, Error)
 

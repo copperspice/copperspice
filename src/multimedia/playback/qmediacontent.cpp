@@ -28,13 +28,6 @@
 #include <qmediaplaylist.h>
 #include <qmediacontent.h>
 
-// register by hand
-Q_MULTIMEDIA_EXPORT const QString &cs_typeName_internal<QMediaContent, void>::typeName()
-{
-   static QString retval("QMediaContent");
-   return retval;
-}
-
 class QMediaContentPrivate : public QSharedData
 {
  public:
