@@ -510,15 +510,15 @@ void QDockWidgetLayout::setGeometry(const QRect &geometry)
 
       if (QLayoutItem *item = item_list[TitleBar]) {
          item->setGeometry(_titleArea);
+
       } else {
          QStyleOptionDockWidget opt;
          q->initStyleOption(&opt);
 
          if (QLayoutItem *item = item_list[CloseButton]) {
             if (!item->isEmpty()) {
-               QRect r = q->style()
-                  ->subElementRect(QStyle::SE_DockWidgetCloseButton,
-                     &opt, q);
+               QRect r = q->style()->subElementRect(QStyle::SE_DockWidgetCloseButton, &opt, q);
+
                if (!r.isNull()) {
                   item->setGeometry(r);
                }
@@ -527,9 +527,7 @@ void QDockWidgetLayout::setGeometry(const QRect &geometry)
 
          if (QLayoutItem *item = item_list[FloatButton]) {
             if (!item->isEmpty()) {
-               QRect r = q->style()
-                  ->subElementRect(QStyle::SE_DockWidgetFloatButton,
-                     &opt, q);
+               QRect r = q->style()->subElementRect(QStyle::SE_DockWidgetFloatButton,&opt, q);
                if (!r.isNull()) {
                   item->setGeometry(r);
                }
@@ -1255,15 +1253,6 @@ void QDockWidget::setFloating(bool floating)
    }
 }
 
-/*!
-    \property QDockWidget::allowedAreas
-    \brief areas where the dock widget may be placed
-
-    The default is Qt::AllDockWidgetAreas.
-
-    \sa Qt::DockWidgetArea
-*/
-
 void QDockWidget::setAllowedAreas(Qt::DockWidgetAreas areas)
 {
    Q_D(QDockWidget);
@@ -1280,13 +1269,6 @@ Qt::DockWidgetAreas QDockWidget::allowedAreas() const
    Q_D(const QDockWidget);
    return d->allowedAreas;
 }
-
-/*!
-    \fn bool QDockWidget::isAreaAllowed(Qt::DockWidgetArea area) const
-
-    Returns true if this dock widget can be placed in the given \a area;
-    otherwise returns false.
-*/
 
 /*! \reimp */
 void QDockWidget::changeEvent(QEvent *event)

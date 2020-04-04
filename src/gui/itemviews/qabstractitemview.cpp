@@ -210,32 +210,20 @@ void QAbstractItemViewPrivate::_q_scrollerStateChanged()
 }
 
 #endif // QT_NO_GESTURES
-/*!
-    \fn void QAbstractItemView::update()
-    \internal
-*/
 
-/*!
-    Constructs an abstract item view with the given \a parent.
-*/
 QAbstractItemView::QAbstractItemView(QWidget *parent)
    : QAbstractScrollArea(*(new QAbstractItemViewPrivate), parent)
 {
    d_func()->init();
 }
 
-/*!
-    \internal
-*/
+// internal
 QAbstractItemView::QAbstractItemView(QAbstractItemViewPrivate &dd, QWidget *parent)
    : QAbstractScrollArea(dd, parent)
 {
    d_func()->init();
 }
 
-/*!
-    Destroys the view.
-*/
 QAbstractItemView::~QAbstractItemView()
 {
    Q_D(QAbstractItemView);
@@ -587,7 +575,6 @@ void QAbstractItemView::selectAll()
    } else if (mode != SingleSelection) {
       d->selectAll(selectionCommand(d->model->index(0, 0, d->root)));
    }
-
 }
 
 void QAbstractItemView::edit(const QModelIndex &index)
@@ -682,20 +669,6 @@ bool QAbstractItemView::dragDropOverwriteMode() const
 }
 #endif
 
-/*!
-    \property QAbstractItemView::autoScroll
-    \brief whether autoscrolling in drag move events is enabled
-
-    If this property is set to true (the default), the
-    QAbstractItemView automatically scrolls the contents of the view
-    if the user drags within 16 pixels of the viewport edge. If the current
-    item changes, then the view will scroll automatically to ensure that the
-    current item is fully visible.
-
-    This property only works if the viewport accepts drops. Autoscroll is
-    switched off by setting this property to false.
-*/
-
 void QAbstractItemView::setAutoScroll(bool enable)
 {
    Q_D(QAbstractItemView);
@@ -708,14 +681,6 @@ bool QAbstractItemView::hasAutoScroll() const
    return d->autoScroll;
 }
 
-/*!
-    \since 4.4
-    \property QAbstractItemView::autoScrollMargin
-    \brief the size of the area when auto scrolling is triggered
-
-    This property controls the size of the area at the edge of the viewport that
-    triggers autoscrolling. The default value is 16 pixels.
-*/
 void QAbstractItemView::setAutoScrollMargin(int margin)
 {
    Q_D(QAbstractItemView);
@@ -727,11 +692,6 @@ int QAbstractItemView::autoScrollMargin() const
    Q_D(const QAbstractItemView);
    return d->autoScrollMargin;
 }
-
-/*!
-  \property QAbstractItemView::tabKeyNavigation
-  \brief whether item navigation with tab and backtab is enabled.
-*/
 
 void QAbstractItemView::setTabKeyNavigation(bool enable)
 {
@@ -749,13 +709,8 @@ QSize QAbstractItemView::viewportSizeHint() const
 {
    return QAbstractScrollArea::viewportSizeHint();
 }
-#ifndef QT_NO_DRAGANDDROP
-/*!
-    \property QAbstractItemView::showDropIndicator
-    \brief whether the drop indicator is shown when dragging items and dropping.
 
-    \sa dragEnabled DragDropMode dragDropOverwriteMode acceptDrops
-*/
+#ifndef QT_NO_DRAGANDDROP
 
 void QAbstractItemView::setDropIndicatorShown(bool enable)
 {
@@ -769,13 +724,6 @@ bool QAbstractItemView::showDropIndicator() const
    return d->showDropIndicator;
 }
 
-/*!
-    \property QAbstractItemView::dragEnabled
-    \brief whether the view supports dragging of its own items
-
-    \sa showDropIndicator DragDropMode dragDropOverwriteMode acceptDrops
-*/
-
 void QAbstractItemView::setDragEnabled(bool enable)
 {
    Q_D(QAbstractItemView);
@@ -788,33 +736,6 @@ bool QAbstractItemView::dragEnabled() const
    return d->dragEnabled;
 }
 
-/*!
-    \since 4.2
-    \enum QAbstractItemView::DragDropMode
-
-    Describes the various drag and drop events the view can act upon.
-    By default the view does not support dragging or dropping (\c
-    NoDragDrop).
-
-    \value NoDragDrop Does not support dragging or dropping.
-    \value DragOnly The view supports dragging of its own items
-    \value DropOnly The view accepts drops
-    \value DragDrop The view supports both dragging and dropping
-    \value InternalMove The view accepts move (\bold{not copy}) operations only
-           from itself.
-
-    Note that the model used needs to provide support for drag and drop operations.
-
-    \sa setDragDropMode() {Using drag and drop with item views}
-*/
-
-/*!
-    \property QAbstractItemView::dragDropMode
-    \brief the drag and drop event the view will act upon
-
-    \since 4.2
-    \sa showDropIndicator dragDropOverwriteMode
-*/
 void QAbstractItemView::setDragDropMode(DragDropMode behavior)
 {
    Q_D(QAbstractItemView);
@@ -850,16 +771,6 @@ QAbstractItemView::DragDropMode QAbstractItemView::dragDropMode() const
    return NoDragDrop;
 }
 
-/*!
-    \property QAbstractItemView::defaultDropAction
-    \brief the drop action that will be used by default in QAbstractItemView::drag()
-
-    If the property is not set, the drop action is CopyAction when the supported
-    actions support CopyAction.
-
-    \since 4.6
-    \sa showDropIndicator dragDropOverwriteMode
-*/
 void QAbstractItemView::setDefaultDropAction(Qt::DropAction dropAction)
 {
    Q_D(QAbstractItemView);
@@ -874,16 +785,6 @@ Qt::DropAction QAbstractItemView::defaultDropAction() const
 
 #endif // QT_NO_DRAGANDDROP
 
-/*!
-    \property QAbstractItemView::alternatingRowColors
-    \brief whether to draw the background using alternating colors
-
-    If this property is true, the item background will be drawn using
-    QPalette::Base and QPalette::AlternateBase; otherwise the background
-    will be drawn using the QPalette::Base color.
-
-    By default, this property is false.
-*/
 void QAbstractItemView::setAlternatingRowColors(bool enable)
 {
    Q_D(QAbstractItemView);
@@ -899,13 +800,6 @@ bool QAbstractItemView::alternatingRowColors() const
    return d->alternatingColors;
 }
 
-/*!
-    \property QAbstractItemView::iconSize
-    \brief the size of items' icons
-
-    Setting this property when the view is visible will cause the
-    items to be laid out again.
-*/
 void QAbstractItemView::setIconSize(const QSize &size)
 {
    Q_D(QAbstractItemView);
@@ -926,13 +820,6 @@ QSize QAbstractItemView::iconSize() const
    return d->iconSize;
 }
 
-/*!
-    \property QAbstractItemView::textElideMode
-
-    \brief the position of the "..." in elided text.
-
-    The default value for all item views is Qt::ElideRight.
-*/
 void QAbstractItemView::setTextElideMode(Qt::TextElideMode mode)
 {
    Q_D(QAbstractItemView);
@@ -1076,7 +963,8 @@ bool QAbstractItemView::viewportEvent(QEvent *event)
          executeDelayedItemsLayout();
 
 #ifndef QT_NO_GESTURES
-         connect(QScroller::scroller(d->viewport), &QScroller::stateChanged, this, &QAbstractItemView::_q_scrollerStateChanged, Qt::UniqueConnection);
+         connect(QScroller::scroller(d->viewport), &QScroller::stateChanged, this,
+                  &QAbstractItemView::_q_scrollerStateChanged, Qt::UniqueConnection);
 #endif
          break;
 
@@ -1337,14 +1225,6 @@ void QAbstractItemView::dragEnterEvent(QDragEnterEvent *event)
    }
 }
 
-/*!
-    This function is called continuously with the given \a event during a drag and
-    drop operation over the widget. It can cause the view to scroll if, for example,
-    the user drags a selection to view's right or bottom edge. In this case, the
-    event will be accepted; otherwise it will be ignored.
-
-    \sa dropEvent() startDrag()
-*/
 void QAbstractItemView::dragMoveEvent(QDragMoveEvent *event)
 {
    Q_D(QAbstractItemView);
@@ -1396,6 +1276,7 @@ void QAbstractItemView::dragMoveEvent(QDragMoveEvent *event)
                }
                break;
          }
+
       } else {
          d->dropIndicatorRect = QRect();
          d->dropIndicatorPosition = OnViewport;
@@ -1438,12 +1319,6 @@ bool QAbstractItemViewPrivate::droppingOnItself(QDropEvent *event, const QModelI
    return false;
 }
 
-/*!
-    \fn void QAbstractItemView::dragLeaveEvent(QDragLeaveEvent *event)
-
-    This function is called when the item being dragged leaves the view.
-    The \a event describes the state of the drag and drop operation.
-*/
 void QAbstractItemView::dragLeaveEvent(QDragLeaveEvent *)
 {
    Q_D(QAbstractItemView);
@@ -1453,13 +1328,6 @@ void QAbstractItemView::dragLeaveEvent(QDragLeaveEvent *)
    d->viewport->update();
 }
 
-/*!
-    This function is called with the given \a event when a drop event occurs over
-    the widget. If the model accepts the even position the drop event is accepted;
-    otherwise it is ignored.
-
-    \sa startDrag()
-*/
 void QAbstractItemView::dropEvent(QDropEvent *event)
 {
    Q_D(QAbstractItemView);
@@ -1580,12 +1448,6 @@ QAbstractItemView::DropIndicatorPosition QAbstractItemViewPrivate::position(cons
 
 #endif // QT_NO_DRAGANDDROP
 
-/*!
-    This function is called with the given \a event when the widget obtains the focus.
-    By default, the event is ignored.
-
-    \sa setFocus(), focusOutEvent()
-*/
 void QAbstractItemView::focusInEvent(QFocusEvent *event)
 {
    Q_D(QAbstractItemView);
@@ -2401,12 +2263,6 @@ void QAbstractItemView::keyboardSearch(const QString &search)
    } while (current != start && firstMatch.isValid());
 }
 
-/*!
-    Returns the size hint for the item with the specified \a index or
-    an invalid size for invalid indexes.
-
-    \sa sizeHintForRow(), sizeHintForColumn()
-*/
 QSize QAbstractItemView::sizeHintForIndex(const QModelIndex &index) const
 {
    Q_D(const QAbstractItemView);
@@ -2418,22 +2274,6 @@ QSize QAbstractItemView::sizeHintForIndex(const QModelIndex &index) const
    return d->delegateForIndex(index)->sizeHint(d->viewOptions(), index);
 }
 
-/*!
-    Returns the height size hint for the specified \a row or -1 if
-    there is no model.
-
-    The returned height is calculated using the size hints of the
-    given \a row's items, i.e. the returned value is the maximum
-    height among the items. Note that to control the height of a row,
-    you must reimplement the QAbstractItemDelegate::sizeHint()
-    function.
-
-    This function is used in views with a vertical header to find the
-    size hint for a header section based on the contents of the given
-    \a row.
-
-    \sa sizeHintForColumn()
-*/
 int QAbstractItemView::sizeHintForRow(int row) const
 {
    Q_D(const QAbstractItemView);
@@ -2448,16 +2288,14 @@ int QAbstractItemView::sizeHintForRow(int row) const
    int height   = 0;
    int colCount = d->model->columnCount(d->root);
 
-
    for (int c = 0; c < colCount; ++c) {
       const QModelIndex index = d->model->index(row, c, d->root);
 
       if (QWidget *editor = d->editorForIndex(index).widget.data()) {
          height = qMax(height, editor->height());
       }
-      if (const QAbstractItemDelegate *delegate = d->delegateForIndex(index))
 
-      {
+      if (const QAbstractItemDelegate *delegate = d->delegateForIndex(index)) {
          height = qMax(height, delegate->sizeHint(option, index).height());
       }
    }
@@ -2465,14 +2303,6 @@ int QAbstractItemView::sizeHintForRow(int row) const
    return height;
 }
 
-/*!
-    Returns the width size hint for the specified \a column or -1 if there is no model.
-
-    This function is used in views with a horizontal header to find the size hint for
-    a header section based on the contents of the given \a column.
-
-    \sa sizeHintForRow()
-*/
 int QAbstractItemView::sizeHintForColumn(int column) const
 {
    Q_D(const QAbstractItemView);
@@ -3045,12 +2875,9 @@ QStyleOptionViewItem QAbstractItemView::viewOptions() const
    option.state &= ~QStyle::State_MouseOver;
    option.font = font();
 
-
-
    if (! hasFocus()) {
       option.state &= ~QStyle::State_Active;
    }
-
 
    option.state &= ~QStyle::State_HasFocus;
    if (d->iconSize.isValid()) {
@@ -3071,6 +2898,7 @@ QStyleOptionViewItem QAbstractItemView::viewOptions() const
    option.locale = locale();
    option.locale.setNumberOptions(QLocale::OmitGroupSeparator);
    option.widget = this;
+
    return option;
 }
 

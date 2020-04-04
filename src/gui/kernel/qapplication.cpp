@@ -1222,11 +1222,10 @@ void QGuiApplicationPrivate::init()
 
 #ifdef Q_OS_DARWIN
       } else if (arg.startsWith("-psn_")) {
-         // consume "-psn_xxxx" on Mac, which is passed when starting an app from Finder.
-         // special hack to change working directory (for an app bundle) when running from finder
+         // consume "-psn_xxxx" on Mac, which is passed when starting an app from Finder
+         // used to change the working directory (for an app bundle) when running from finder
 
          if (QDir::currentPath() == "/") {
-
             QCFType<CFURLRef> bundleURL(CFBundleCopyBundleURL(CFBundleGetMainBundle()));
             QString qbundlePath = QCFString(CFURLCopyFileSystemPath(bundleURL, kCFURLPOSIXPathStyle));
 

@@ -4113,6 +4113,7 @@ QSize QWindowsXPStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt
    }
 
    QSize sz(contentsSize);
+
    switch (ct) {
       case CT_LineEdit:
       case CT_ComboBox: {
@@ -4133,6 +4134,7 @@ QSize QWindowsXPStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt
          }
       }
       break;
+
       case CT_SpinBox: {
          //Spinbox adds frame twice
          sz = QWindowsStyle::sizeFromContents(ct, option, contentsSize, widget);

@@ -2447,27 +2447,29 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
    const QSize &csz, const QWidget *widget) const
 {
    QSize sz(csz);
+
    switch (ct) {
       case CT_PushButton:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
             sz = QCommonStyle::sizeFromContents(ct, opt, csz, widget);
-            int w = sz.width(),
-                h = sz.height();
+            int w = sz.width();
+            int h = sz.height();
+
             int defwidth = 0;
             if (btn->features & QStyleOptionButton::AutoDefaultButton) {
                defwidth = 2 * proxy()->pixelMetric(PM_ButtonDefaultIndicator, btn, widget);
             }
-            int minwidth = int(QStyleHelper::dpiScaled(75.));
+
+            int minwidth  = int(QStyleHelper::dpiScaled(75.));
             int minheight = int(QStyleHelper::dpiScaled(23.));
 
-#ifndef QT_QWS_SMALL_PUSHBUTTON
             if (w < minwidth + defwidth && !btn->text.isEmpty()) {
                w = minwidth + defwidth;
             }
             if (h < minheight + defwidth) {
                h = minheight + defwidth;
             }
-#endif
+
             sz = QSize(w, h);
          }
          break;

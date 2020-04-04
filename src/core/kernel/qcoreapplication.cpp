@@ -315,7 +315,7 @@ uint QCoreApplicationPrivate::attribs;
 
 struct QCoreApplicationData {
    QCoreApplicationData() {
-      app_libpaths = 0;
+      app_libpaths = nullptr;
    }
 
    ~QCoreApplicationData() {
@@ -338,7 +338,11 @@ struct QCoreApplicationData {
    QStringList *app_libpaths;
 };
 
-Q_GLOBAL_STATIC(QCoreApplicationData, coreappdata)
+static QCoreApplicationData *coreappdata()
+{
+   static QCoreApplicationData retval;
+   return &retval;
+}
 
 static bool quitLockRefEnabled = true;
 
@@ -447,7 +451,6 @@ QThread *QCoreApplicationPrivate::mainThread()
    Q_ASSERT(theMainThread != 0);
    return theMainThread;
 }
-
 
 void QCoreApplicationPrivate::checkReceiverThread(QObject *receiver)
 {
@@ -620,7 +623,7 @@ QCoreApplication::~QCoreApplication()
    QCoreApplicationPrivate::eventDispatcher = 0;
 
    delete coreappdata()->app_libpaths;
-   coreappdata()->app_libpaths = 0;
+   coreappdata()->app_libpaths = nullptr;
 }
 
 void QCoreApplication::setSetuidAllowed(bool allow)
@@ -1471,7 +1474,7 @@ QString QCoreApplication::applicationFilePath()
 #elif defined(Q_OS_DARWIN)
    QString qAppFileName_str = qAppFileName();
 
-   if (!qAppFileName_str.isEmpty()) {
+   if (! qAppFileName_str.isEmpty()) {
       QFileInfo fi(qAppFileName_str);
       d->cachedApplicationFilePath = fi.exists() ? fi.canonicalFilePath() : QString();
       return d->cachedApplicationFilePath;
@@ -1480,7 +1483,7 @@ QString QCoreApplication::applicationFilePath()
 
 #if defined( Q_OS_UNIX )
 
-#  ifdef Q_OS_LINUX
+#ifdef Q_OS_LINUX
    // Try looking for a /proc/<pid>/exe symlink first which points to the absolute path of the executable
    QFileInfo pfi(QString::fromLatin1("/proc/%1/exe").formatArg(getpid()));
 
@@ -1488,17 +1491,17 @@ QString QCoreApplication::applicationFilePath()
       d->cachedApplicationFilePath = pfi.canonicalFilePath();
       return d->cachedApplicationFilePath;
    }
-#  endif
+#endif
 
    QString argv0 = arguments().at(0);
 
    QString absPath;
 
-   if (! argv0.isEmpty() && argv0.at(0) == QChar('/')) {
+   if (! argv0.isEmpty() && argv0.at(0) == '/') {
       // If argv0 starts with a slash, it is already an absolute file path.
       absPath = argv0;
 
-   } else if (argv0.contains(QChar('/'))) {
+   } else if (argv0.contains('/')) {
       // If argv0 contains one or more slashes, it is a file path relative to the current directory.
       absPath = QDir::current().absoluteFilePath(argv0);
 
@@ -1644,27 +1647,31 @@ QStringList QCoreApplication::libraryPaths()
 {
    QMutexLocker locker(libraryPathMutex());
 
-   if (!coreappdata()->app_libpaths) {
-      QStringList *app_libpaths = coreappdata()->app_libpaths = new QStringList;
-      QString installPathPlugins =  QLibraryInfo::location(QLibraryInfo::PluginsPath);
+   if (! coreappdata()->app_libpaths) {
+      QStringList *app_libpaths   = new QStringList;
+      coreappdata()->app_libpaths = app_libpaths;
+
+      // retrives the plugins path from cs.conf
+      QString installPathPlugins = QLibraryInfo::location(QLibraryInfo::PluginsPath);
 
       if (QFile::exists(installPathPlugins)) {
-         // Make sure we convert from backslashes to slashes.
-
+         // make sure we convert from backslashes to slashes
          installPathPlugins = QDir(installPathPlugins).canonicalPath();
-         if (!app_libpaths->contains(installPathPlugins)) {
+
+         if (! app_libpaths->contains(installPathPlugins)) {
             app_libpaths->append(installPathPlugins);
          }
       }
 
-      // If QCoreApplication is not yet instantiated,
-      // make sure we add the application path when we construct the QCoreApplication
+      // if QCoreApplication is not yet instantiated, make sure we add the
+      // application path when we construct the QCoreApplication
       if (self) {
          self->d_func()->appendApplicationPathToLibraryPaths();
       }
 
       const QByteArray libPathEnv = qgetenv("QT_PLUGIN_PATH");
-      if (!libPathEnv.isEmpty()) {
+
+      if (! libPathEnv.isEmpty()) {
 
 #if defined(Q_OS_WIN)
          QChar pathSep(';');

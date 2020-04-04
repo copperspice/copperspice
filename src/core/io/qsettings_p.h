@@ -164,7 +164,7 @@ class QConfFile
 
    QConfFile(const QString &name, bool _userPerms);
 
-   friend class QConfFile_createsItself; // silences compiler warning
+   friend class QConfFile_createsItself;
 };
 
 class QSettingsPrivate

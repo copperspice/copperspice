@@ -23,17 +23,17 @@
 
 #include "translator.h"
 
-#include <QCoreApplication>
-#include <QTranslator>
-#include <QDebug>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
+#include <qcoreapplication.h>
+#include <qtranslator.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 #include <qregularexpression.h>
 #include <qstring.h>
-#include <QStringList>
-#include <QTextStream>
-#include <QLibraryInfo>
+#include <qstringlist.h>
+#include <qtextstream.h>
+#include <qlibraryinfo.h>
 
 class LR
 {

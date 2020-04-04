@@ -63,9 +63,6 @@
 #define CSIDL_APPDATA      0x001a      // <username>\Application Data
 #endif
 
-// ************************************************************************
-// QConfFile
-
 /*
     QConfFile objects are explicitly shared within the application.
     This ensures that modification to the settings done through one
@@ -100,7 +97,7 @@ inline bool qt_isEvilFsTypeName(const char *name)
            || qstrncmp(name, "cachefs", 7) == 0);
 }
 
-#if defined(Q_OS_BSD4) && !defined(Q_OS_NETBSD)
+#if defined(Q_OS_BSD4) && ! defined(Q_OS_NETBSD)
 
 # include <sys/param.h>
 # include <sys/mount.h>
@@ -146,10 +143,9 @@ static bool qIsLikelyToBeNfs(int handle)
           || buf.f_type == AUTOFSNG_SUPER_MAGIC;
 }
 
-#elif defined(Q_OS_SOLARIS) || defined(Q_OS_HPUX) || defined(Q_OS_UNIXWARE)  || defined(Q_OS_NETBSD)
+#elif defined(Q_OS_UNIXWARE)  || defined(Q_OS_NETBSD)
 
 # include <sys/statvfs.h>
-
 
 static bool qIsLikelyToBeNfs(int handle)
 {
@@ -227,8 +223,10 @@ bool QConfFile::isWritable() const
 #ifndef QT_NO_TEMPORARYFILE
    if (fileInfo.exists()) {
 #endif
+
       QFile file(name);
       return file.open(QFile::ReadWrite);
+
 #ifndef QT_NO_TEMPORARYFILE
    } else {
       // Create the directories to the file.
@@ -261,6 +259,7 @@ QConfFile *QConfFile::fromName(const QString &fileName, bool _userPerms)
          usedHash->insert(absPath, confFile);
       }
    }
+
    if (confFile) {
       confFile->ref.ref();
       return confFile;
@@ -351,7 +350,7 @@ QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format, QSettings::
 }
 #endif
 
-#if !defined(Q_OS_WIN)
+#if ! defined(Q_OS_WIN)
 QSettingsPrivate *QSettingsPrivate::create(const QString &fileName, QSettings::Format format)
 {
    return new QConfFileSettingsPrivate(fileName, format);
@@ -361,11 +360,13 @@ QSettingsPrivate *QSettingsPrivate::create(const QString &fileName, QSettings::F
 void QSettingsPrivate::processChild(QString key, ChildSpec spec, QMap<QString, QString> &result)
 {
    if (spec != AllKeys) {
-      int slashPos = key.indexOf(QLatin1Char('/'));
+      int slashPos = key.indexOf(QChar('/'));
+
       if (slashPos == -1) {
          if (spec != ChildKeys) {
             return;
          }
+
       } else {
          if (spec != ChildGroups) {
             return;
@@ -1097,10 +1098,10 @@ static void initDefaultPaths(QMutexLocker *locker)
 
    /*
       QLibraryInfo::location() uses QSettings, so in order to
-      avoid a dead-lock, we can't hold the global mutex while calling it.
+      avoid a dead lock, we can not hold the global mutex while calling it
    */
    systemPath = QLibraryInfo::location(QLibraryInfo::SettingsPath);
-   systemPath += QLatin1Char('/');
+   systemPath += '/';
 
    locker->relock();
 
@@ -2076,49 +2077,12 @@ QSettings::QSettings(const QString &organization, const QString &application, QO
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Constructs a QSettings object for accessing settings of the
-    application called \a application from the organization called \a
-    organization, and with parent \a parent.
-
-    If \a scope is QSettings::UserScope, the QSettings object searches
-    user-specific settings first, before it searches system-wide
-    settings as a fallback. If \a scope is QSettings::SystemScope, the
-    QSettings object ignores user-specific settings and provides
-    access to system-wide settings.
-
-    The storage format is set to QSettings::NativeFormat (i.e. calling
-    setDefaultFormat() before calling this constructor has no effect).
-
-    If no application name is given, the QSettings object will
-    only access the organization-wide \l{Fallback Mechanism}{locations}.
-
-    \sa setDefaultFormat()
-*/
 QSettings::QSettings(Scope scope, const QString &organization, const QString &application, QObject *parent)
    : QObject(parent), d_ptr(QSettingsPrivate::create(NativeFormat, scope, organization, application))
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Constructs a QSettings object for accessing settings of the
-    application called \a application from the organization called
-    \a organization, and with parent \a parent.
-
-    If \a scope is QSettings::UserScope, the QSettings object searches
-    user-specific settings first, before it searches system-wide
-    settings as a fallback. If \a scope is
-    QSettings::SystemScope, the QSettings object ignores user-specific
-    settings and provides access to system-wide settings.
-
-    If \a format is QSettings::NativeFormat, the native API is used for
-    storing settings. If \a format is QSettings::IniFormat, the INI format
-    is used.
-
-    If no application name is given, the QSettings object will
-    only access the organization-wide \l{Fallback Mechanism}{locations}.
-*/
 QSettings::QSettings(Format format, Scope scope, const QString &organization,
                      const QString &application, QObject *parent)
    : QObject(parent), d_ptr(QSettingsPrivate::create(format, scope, organization, application))
@@ -2126,88 +2090,24 @@ QSettings::QSettings(Format format, Scope scope, const QString &organization,
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Constructs a QSettings object for accessing the settings
-    stored in the file called \a fileName, with parent \a parent. If
-    the file doesn't already exist, it is created.
-
-    If \a format is QSettings::NativeFormat, the meaning of \a
-    fileName depends on the platform. On Unix, \a fileName is the
-    name of an INI file. On Mac OS X, \a fileName is the name of a
-    \c .plist file. On Windows, \a fileName is a path in the system
-    registry.
-
-    If \a format is QSettings::IniFormat, \a fileName is the name of an INI
-    file.
-
-    \warning This function is provided for convenience. It works well for
-    accessing INI or \c .plist files generated by Qt, but might fail on some
-    syntaxes found in such files originated by other programs. In particular,
-    be aware of the following limitations:
-
-    \list
-    \o QSettings provides no way of reading INI "path" entries, i.e., entries
-       with unescaped slash characters. (This is because these entries are
-       ambiguous and cannot be resolved automatically.)
-    \o In INI files, QSettings uses the \c @ character as a metacharacter in some
-       contexts, to encode Qt-specific data types (e.g., \c @Rect), and might
-       therefore misinterpret it when it occurs in pure INI files.
-    \endlist
-
-    \sa fileName()
-*/
 QSettings::QSettings(const QString &fileName, Format format, QObject *parent)
    : QObject(parent), d_ptr(QSettingsPrivate::create(fileName, format))
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Constructs a QSettings object for accessing settings of the
-    application and organization set previously with a call to
-    QCoreApplication::setOrganizationName(),
-    QCoreApplication::setOrganizationDomain(), and
-    QCoreApplication::setApplicationName().
-
-    The scope is QSettings::UserScope and the format is
-    defaultFormat() (QSettings::NativeFormat by default).
-    Use setDefaultFormat() before calling this constructor
-    to change the default format used by this constructor.
-
-    The code
-
-    \snippet doc/src/snippets/code/src_corelib_io_qsettings.cpp 11
-
-    is equivalent to
-
-    \snippet doc/src/snippets/code/src_corelib_io_qsettings.cpp 12
-
-    If QCoreApplication::setOrganizationName() and
-    QCoreApplication::setApplicationName() has not been previously
-    called, the QSettings object will not be able to read or write
-    any settings, and status() will return AccessError.
-
-    On Mac OS X, if both a name and an Internet domain are specified
-    for the organization, the domain is preferred over the name. On
-    other platforms, the name is preferred over the domain.
-
-    \sa QCoreApplication::setOrganizationName(),
-        QCoreApplication::setOrganizationDomain(),
-        QCoreApplication::setApplicationName(),
-        setDefaultFormat()
-*/
 QSettings::QSettings(QObject *parent)
    : QObject(parent), d_ptr(QSettingsPrivate::create(globalDefaultFormat, UserScope,
 
 #ifdef Q_OS_DARWIN
-                            QCoreApplication::organizationDomain().isEmpty() ? QCoreApplication::organizationName()
-                            : QCoreApplication::organizationDomain(),
+     QCoreApplication::organizationDomain().isEmpty() ? QCoreApplication::organizationName()
+        : QCoreApplication::organizationDomain(),
 #else
-                            QCoreApplication::organizationName().isEmpty() ? QCoreApplication::organizationDomain()
-                            : QCoreApplication::organizationName(),
+     QCoreApplication::organizationName().isEmpty() ? QCoreApplication::organizationDomain()
+        : QCoreApplication::organizationName(),
 #endif
 
-                            QCoreApplication::applicationName() ))
+     QCoreApplication::applicationName() ))
 {
    d_ptr->q_ptr = this;
 }
@@ -2215,6 +2115,7 @@ QSettings::QSettings(QObject *parent)
 QSettings::~QSettings()
 {
    Q_D(QSettings);
+
    if (d->pendingChanges) {
       QT_TRY {
          d->flush();

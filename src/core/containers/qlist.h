@@ -269,7 +269,7 @@ class QList
    }
 
    void swap(QList<T> &other) {
-      qSwap(m_data, other.m_data);
+            qSwap(m_data, other.m_data);
    }
 
    void swap(size_type i, size_type j);

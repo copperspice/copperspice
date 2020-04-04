@@ -70,7 +70,7 @@ QPlatformIntegration *QPlatformIntegrationFactory::create(const QString &platfor
         }
     }
 
-    // try loading using the defualt path
+    // try loading using the default path or the path in cs.conf
     if (QPlatformIntegration *retval = loadIntegration(loader(), platform, paramList, argc, argv)) {
         return retval;
     }

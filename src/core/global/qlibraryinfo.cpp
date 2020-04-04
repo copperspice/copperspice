@@ -33,7 +33,7 @@
 #include <cs_build_info.h>
 
 #ifdef Q_OS_DARWIN
-#  include "qcore_mac_p.h"
+#  include <qcore_mac_p.h>
 #endif
 
 #ifndef QT_NO_SETTINGS
@@ -47,14 +47,19 @@ struct QLibrarySettings
 
     QScopedPointer<QSettings> settings;
     bool reloadOnQAppAvailable;
-
 };
-Q_GLOBAL_STATIC(QLibrarySettings, qt_library_settings)
+
+static QLibrarySettings *qt_library_settings()
+{
+   static QLibrarySettings retval;
+   return &retval;
+}
 
 class QLibraryInfoPrivate
 {
 public:
     static QSettings *findConfiguration();
+
     static QSettings *configuration()
     {
         QLibrarySettings *ls = qt_library_settings();
@@ -133,10 +138,11 @@ QSettings *QLibraryInfoPrivate::findConfiguration()
    }
 
    if (QFile::exists(qtconfig)) {
-      return new QSettings(qtconfig, QSettings::IniFormat);
+      QSettings *tmp = new QSettings(qtconfig, QSettings::IniFormat);
+      return tmp;
    }
 
-   return 0;     // no luck
+   return nullptr;     // no luck
 }
 
 #endif // QT_NO_SETTINGS
@@ -168,7 +174,6 @@ QString QLibraryInfo::licensedProducts()
 QString QLibraryInfo::location(LibraryLocation loc)
 {
    QString retval;
-
    QSettings *config = nullptr;
 
 #if ! defined(QT_NO_SETTINGS)
