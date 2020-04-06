@@ -945,8 +945,8 @@ void QMessageBox::changeEvent(QEvent *ev)
          if (d->informativeLabel) {
             d->informativeLabel->setTextInteractionFlags(flags);
          }
-         // intentional fall through
       }
+      [[fallthrough]];
 
       case QEvent::FontChange:
       case QEvent::ApplicationFontChange:

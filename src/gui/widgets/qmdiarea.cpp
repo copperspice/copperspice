@@ -2567,7 +2567,8 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
          }
 #endif
 
-      // fall through
+         [[fallthrough]];
+
       case QEvent::Hide:
          d->isSubWindowsTiled = false;
          break;

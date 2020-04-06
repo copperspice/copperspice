@@ -199,7 +199,7 @@ void QAbstractItemViewPrivate::_q_scrollerStateChanged()
                q->selectionModel()->select(oldSelection, QItemSelectionModel::ClearAndSelect);
                q->selectionModel()->setCurrentIndex(oldCurrent, QItemSelectionModel::NoUpdate);
             }
-         // fall through
+            [[fallthrough]];
 
          default:
             oldSelection = QItemSelection();

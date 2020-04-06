@@ -389,7 +389,8 @@ bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
             Qt::ForbiddenCursor : Qt::WhatsThisCursor);
 #endif
       }
-      // fall through
+      [[fallthrough]];
+
       case QEvent::MouseButtonRelease:
       case QEvent::MouseButtonDblClick:
          if (leaveOnMouseRelease && e->type() == QEvent::MouseButtonRelease) {

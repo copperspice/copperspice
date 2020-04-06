@@ -155,15 +155,6 @@ static bool releaseTsFile(const QString &tsFileName, ConversionData &cd, bool re
    return releaseTranslator(tor, qmFileName, cd, removeIdentical);
 }
 
-static void print(const QString &fileName, int lineNo, const QString &msg)
-{
-   if (lineNo) {
-      printErr(QString("%2(%1): %3").formatArg(lineNo).formatArg(fileName).formatArg(msg));
-   } else {
-      printErr(msg);
-   }
-}
-
 int main(int argc, char **argv)
 {
    QCoreApplication app(argc, argv);

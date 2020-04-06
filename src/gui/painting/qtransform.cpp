@@ -260,7 +260,8 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
          break;
       case TxProject:
          m_33 += dx * m_13 + dy * m_23;
-      // Fall through
+         [[fallthrough]];
+
       case TxShear:
       case TxRotate:
          affine._dx += dx * affine._m11 + dy * affine._m21;
@@ -326,12 +327,14 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
       case TxProject:
          m_13 *= sx;
          m_23 *= sy;
-      // fall through
+         [[fallthrough]];
+
       case TxRotate:
       case TxShear:
          affine._m12 *= sx;
          affine._m21 *= sy;
-      // fall through
+        [[fallthrough]];
+
       case TxScale:
          affine._m11 *= sx;
          affine._m22 *= sy;
@@ -402,7 +405,8 @@ QTransform &QTransform::shear(qreal sh, qreal sv)
          m_13 += tm13;
          m_23 += tm23;
       }
-      // fall through
+      [[fallthrough]];
+
       case TxRotate:
       case TxShear: {
          qreal tm11 = sv * affine._m21;

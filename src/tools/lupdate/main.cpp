@@ -229,15 +229,6 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
    }
 }
 
-static void print(const QString &fileName, int lineNo, const QString &msg)
-{
-   if (lineNo) {
-      printErr(QString::fromLatin1("%2(%1): %3").formatArg(lineNo).formatArgs(fileName, msg));
-   } else {
-      printErr(msg);
-   }
-}
-
 static void processSources(Translator &fetchedTor, const QStringList &sourceFiles, ConversionData &cd)
 {
    QStringList sourceFilesCpp;
@@ -245,13 +236,16 @@ static void processSources(Translator &fetchedTor, const QStringList &sourceFile
    for (QStringList::const_iterator it = sourceFiles.begin(); it != sourceFiles.end(); ++it) {
       if (it->endsWith(QLatin1String(".java"), Qt::CaseInsensitive)) {
          loadJava(fetchedTor, *it, cd);
+
       } else if (it->endsWith(QLatin1String(".ui"), Qt::CaseInsensitive)
          || it->endsWith(QLatin1String(".jui"), Qt::CaseInsensitive)) {
          loadUI(fetchedTor, *it, cd);
+
       } else if (it->endsWith(QLatin1String(".js"), Qt::CaseInsensitive)
          || it->endsWith(QLatin1String(".qs"), Qt::CaseInsensitive)) {
          loadQScript(fetchedTor, *it, cd);
       }
+
 #ifdef NEVER
       else if (it->endsWith(QLatin1String(".qml"), Qt::CaseInsensitive)) {
          loadQml(fetchedTor, *it, cd);
@@ -261,7 +255,9 @@ static void processSources(Translator &fetchedTor, const QStringList &sourceFile
          sourceFilesCpp << *it;
       }
    }
+
    loadCPP(fetchedTor, sourceFilesCpp, cd);
+
    if (!cd.error().isEmpty()) {
       printErr(cd.error());
    }

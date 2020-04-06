@@ -39,6 +39,8 @@ class LC
 
 static int usage(const QStringList &args)
 {
+   (void) args;
+
    QString loaders;
    QString line("    %1 - %2\n");
 

@@ -319,10 +319,14 @@ QString QAccessibleComboBox::text(QAccessible::Text t) const
 
    switch (t) {
       case QAccessible::Name:
-#ifndef Q_OS_UNIX // on Linux we use relations for this, name is text (fall through to Value)
+#ifdef Q_OS_UNIX
+         // on Linux we use relations for this, name is text (fall through to Value)
+        [[fallthrough]];
+#else
          str = QAccessibleWidget::text(t);
          break;
 #endif
+
       case QAccessible::Value:
          if (comboBox()->isEditable()) {
             str = comboBox()->lineEdit()->text();

@@ -2094,7 +2094,7 @@ bool QHeaderView::viewportEvent(QEvent *e)
       case QEvent::FontChange:
       case QEvent::StyleChange:
          d->invalidateCachedSizeHint();
-      // Fall through
+         [[fallthrough]];
 
       case QEvent::Hide:
       case QEvent::Show: {
