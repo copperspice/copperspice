@@ -965,20 +965,22 @@ QWidget::~QWidget()
       d->focus_next = d->focus_prev = 0;
    }
 
-   QT_TRY {
+   try {
 #ifndef QT_NO_GRAPHICSVIEW
       const QWidget *w = this;
       while (w->d_func()->extra && w->d_func()->extra->focus_proxy)
       {
          w = w->d_func()->extra->focus_proxy;
       }
+
       QWidget *window = w->window();
-      QWExtra *e = window ? window->d_func()->extra : 0;
+      QWExtra *e = window ? window->d_func()->extra : nullptr;
+
       if (!e || !e->proxyWidget || (w->parentWidget() && w->parentWidget()->d_func()->focus_child == this))
 #endif
          clearFocus();
 
-   } QT_CATCH(...) {
+   } catch (...) {
       // ignore this problem because we are in a destructor
    }
 
@@ -1024,11 +1026,13 @@ QWidget::~QWidget()
 
    QApplication::removePostedEvents(this);
 
-   QT_TRY {
-      destroy();                                        // platform-dependent cleanup
-   } QT_CATCH(...) {
+   try {
+      destroy();    // platform-dependent cleanup
+
+   } catch (...) {
       // if this fails we can not do anything
    }
+
    --QWidgetPrivate::instanceCounter;
 
    // might have been deleted by ~QApplication
@@ -1036,11 +1040,11 @@ QWidget::~QWidget()
       QWidgetPrivate::allWidgets->remove(this);
    }
 
-   QT_TRY {
+   try {
       QEvent e(QEvent::Destroy);
       QCoreApplication::sendEvent(this, &e);
 
-   } QT_CATCH(const std::exception &) {
+   } catch (const std::exception &) {
       // if this fails we ca not do anything
    }
 }
@@ -7571,7 +7575,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    if (f & Qt::Window) { // Frame geometry likely changes, refresh.
       d->data.fstrut_dirty = true;
    }
-   QWidget *desktopWidget = 0;
+   QWidget *desktopWidget = nullptr;
 
    if (parent && parent->windowType() == Qt::Desktop) {
       desktopWidget = parent;
@@ -7618,7 +7622,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    }
 
    if (desktopWidget) {
-      parent = 0;
+      parent = nullptr;
    }
 
 #ifndef QT_NO_OPENGL
@@ -7645,7 +7649,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    d->reparentFocusWidgets(oldtlw);
    setAttribute(Qt::WA_Resized, resized);
 
-   if (!testAttribute(Qt::WA_StyleSheet) && (!parent || !parent->testAttribute(Qt::WA_StyleSheet))) {
+   if (! testAttribute(Qt::WA_StyleSheet) && (! parent || ! parent->testAttribute(Qt::WA_StyleSheet))) {
       d->resolveFont();
       d->resolvePalette();
    }
@@ -7665,11 +7669,11 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    ) {
       // propagate enabled updates enabled state to non-windows
       if (! isWindow()) {
-         if (!testAttribute(Qt::WA_ForceDisabled)) {
+         if (! testAttribute(Qt::WA_ForceDisabled)) {
             d->setEnabled_helper(parent ? parent->isEnabled() : true);
          }
 
-         if (!testAttribute(Qt::WA_ForceUpdatesDisabled)) {
+         if (! testAttribute(Qt::WA_ForceUpdatesDisabled)) {
             d->setUpdatesEnabled_helper(parent ? parent->updatesEnabled() : true);
          }
       }
@@ -7683,14 +7687,9 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
          QApplication::sendEvent(parent, &e);
       }
 
-      //### already hidden above ---> must probably do something smart on the mac
-      // #ifdef Q_OS_DARWIN
-      //             extern bool qt_mac_is_macdrawer(const QWidget *); //qwidget_mac.cpp
-      //             if(!qt_mac_is_macdrawer(q)) //special case
-      //                 q->setAttribute(Qt::WA_WState_Hidden);
-      // #else
-      //             q->setAttribute(Qt::WA_WState_Hidden);
-      // #endif
+      //### already hidden above, may want to so something different on mac
+      // q->setAttribute(Qt::WA_WState_Hidden);
+
 
       sendChildEvents = CSInternalEvents::get_m_sendChildEvents(this);
 
@@ -7704,7 +7703,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    }
 
 #ifndef QT_NO_OPENGL
-   //renderToTexture widgets also need to know when their top-level window changes
+   // renderToTexture widgets also need to know when their top-level window changes
    if (d->textureChildSeen && oldtlw != window()) {
       sendWindowChangeToTextureChildrenRecursively(this);
    }

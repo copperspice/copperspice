@@ -42,10 +42,11 @@
 
 Q_GUI_EXPORT extern bool qt_tab_all_widgets();
 
-QWidget *qt_button_down = 0; // widget got last button-down
+QWidget *qt_button_down = nullptr;    // widget got last button-down
 
 // popup control
-QWidget *qt_popup_down = 0; // popup that contains the pressed widget
+QWidget *qt_popup_down = nullptr;
+
 extern int openPopupCount;
 bool qt_replay_popup_mouse_event = false;
 extern bool qt_try_modal(QWidget *widget, QEvent::Type type);
@@ -62,6 +63,7 @@ class QWidgetWindowPrivate : public QWindowPrivate
       while (w->parent() && qobject_cast<QWidgetWindow *>(w) && qobject_cast<QWidgetWindow *>(w->parent())) {
          w = w->parent();
       }
+
       return w;
    }
 
@@ -118,19 +120,20 @@ QRectF QWidgetWindowPrivate::closestAcceptableGeometry(const QRectF &rect) const
 }
 
 QWidgetWindow::QWidgetWindow(QWidget *widget)
-   : QWindow(*new QWidgetWindowPrivate(), 0), m_widget(widget)
+   : QWindow(*new QWidgetWindowPrivate(), nullptr), m_widget(widget)
 {
    updateObjectName();
+
    // Enable QOpenGLWidget/QQuickWidget children if the platform plugin supports it,
    // and the application developer has not explicitly disabled it.
 
    if (QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)
-      && !QApplication::testAttribute(Qt::AA_ForceRasterWidgets)) {
+            && ! QApplication::testAttribute(Qt::AA_ForceRasterWidgets)) {
       setSurfaceType(QSurface::RasterGLSurface);
    }
 
-   connect(widget, &QObject::objectNameChanged, this, &QWidgetWindow::updateObjectName);
-   connect(this, SIGNAL(screenChanged(QScreen *)), this, SLOT(handleScreenChange()));
+   connect(widget, &QObject::objectNameChanged,  this, &QWidgetWindow::updateObjectName);
+   connect(this,  &QWidgetWindow::screenChanged, this, &QWidgetWindow::handleScreenChange);
 }
 
 QWidgetWindow::~QWidgetWindow()
@@ -143,14 +146,15 @@ QAccessibleInterface *QWidgetWindow::accessibleRoot() const
    if (m_widget) {
       return QAccessible::queryAccessibleInterface(m_widget);
    }
-   return 0;
+
+   return nullptr;
 }
 #endif
 
 QObject *QWidgetWindow::focusObject() const
 {
    QWidget *windowWidget = m_widget;
-   if (!windowWidget) {
+   if (! windowWidget) {
       return nullptr;
    }
 
@@ -179,6 +183,7 @@ static inline bool shouldBePropagatedToWidget(QEvent *event)
       case QEvent::ChildAdded:
       case QEvent::ChildRemoved:
          return false;
+
       default:
          return true;
    }
@@ -191,7 +196,7 @@ bool QWidgetWindow::event(QEvent *event)
    }
 
    if (m_widget->testAttribute(Qt::WA_DontShowOnScreen)) {
-      // \a event is uninteresting for QWidgetWindow, the event was probably
+      // event is uninteresting for QWidgetWindow, the event was probably
       // generated before WA_DontShowOnScreen was set
       if (! shouldBePropagatedToWidget(event)) {
          return true;
@@ -401,6 +406,7 @@ void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
       QWidget *child = m_widget->childAt(ee->pos());
       QWidget *receiver = child ? child : m_widget.data();
       QWidget *leave = nullptr;
+
       if (QApplicationPrivate::inPopupMode() && receiver == m_widget
          && qt_last_mouse_receiver != m_widget) {
          // This allows to deliver the leave event to the native widget
@@ -437,7 +443,8 @@ QWidget *QWidgetWindow::getFocusWidget(FocusWidgets fw)
 
 void QWidgetWindow::handleFocusInEvent(QFocusEvent *e)
 {
-   QWidget *focusWidget = 0;
+   QWidget *focusWidget = nullptr;
+
    if (e->reason() == Qt::BacktabFocusReason) {
       focusWidget = getFocusWidget(LastFocusWidget);
    } else if (e->reason() == Qt::TabFocusReason) {
@@ -457,11 +464,13 @@ void QWidgetWindow::handleNonClientAreaMouseEvent(QMouseEvent *e)
 void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
 {
    static const QEvent::Type contextMenuTrigger =
-      QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::ContextMenuOnMouseRelease).toBool() ?
-      QEvent::MouseButtonRelease : QEvent::MouseButtonPress;
+      QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::ContextMenuOnMouseRelease).toBool()
+      ? QEvent::MouseButtonRelease : QEvent::MouseButtonPress;
+
    if (qApp->d_func()->inPopupMode()) {
       QWidget *activePopupWidget = qApp->activePopupWidget();
       QPoint mapped = event->pos();
+
       if (activePopupWidget != m_widget) {
          mapped = activePopupWidget->mapFromGlobal(event->globalPos());
       }
@@ -479,9 +488,11 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
             qt_button_down = popupChild;
             qt_popup_down = activePopupWidget;
             break;
+
          case QEvent::MouseButtonRelease:
             releaseAfter = true;
             break;
+
          default:
             break; // nothing for mouse move
       }
@@ -505,6 +516,7 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
 #if !defined(Q_OS_DARWIN) && !defined(Q_OS_IOS) // Cocoa tracks popups
          const bool reallyUnderMouse = activePopupWidget->rect().contains(mapped);
          const bool underMouse = activePopupWidget->underMouse();
+
          if (underMouse != reallyUnderMouse) {
             if (reallyUnderMouse) {
                const QPoint receiverMapped = receiver->mapFromGlobal(event->screenPos().toPoint());
@@ -525,8 +537,10 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
          QMouseEvent e(event->type(), widgetPos, event->windowPos(), event->screenPos(),
             event->button(), event->buttons(), event->modifiers(), event->source());
          e.setTimestamp(event->timestamp());
-         QApplicationPrivate::sendMouseEvent(receiver, &e, receiver, receiver->window(), &qt_button_down, qt_last_mouse_receiver);
+         QApplicationPrivate::sendMouseEvent(receiver, &e, receiver, receiver->window(),
+                  &qt_button_down, qt_last_mouse_receiver);
          qt_last_mouse_receiver = receiver;
+
       } else {
          // close disabled popups when a mouse button is pressed or released
          switch (event->type()) {
@@ -535,17 +549,20 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
             case QEvent::MouseButtonRelease:
                activePopupWidget->close();
                break;
+
             default:
                break;
          }
       }
 
-      if (qApp->activePopupWidget() != activePopupWidget
-         && qt_replay_popup_mouse_event
-         && QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::ReplayMousePressOutsidePopup).toBool()) {
+      if (qApp->activePopupWidget() != activePopupWidget && qt_replay_popup_mouse_event
+               && QGuiApplicationPrivate::platformIntegration()->styleHint(
+                     QPlatformIntegration::ReplayMousePressOutsidePopup).toBool()) {
+
          if (m_widget->windowType() != Qt::Popup) {
             qt_button_down = 0;
          }
+
          if (event->type() == QEvent::MouseButtonPress) {
             // the popup disappeared, replay the mouse press event
             QWidget *w = QApplication::widgetAt(event->globalPos());
@@ -577,16 +594,19 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
             }
          }
          qt_replay_popup_mouse_event = false;
+
 #ifndef QT_NO_CONTEXTMENU
       } else if (event->type() == contextMenuTrigger
          && event->button() == Qt::RightButton
          && (openPopupCount == oldOpenPopupCount)) {
          QWidget *popupEvent = activePopupWidget;
+
          if (qt_button_down) {
             popupEvent = qt_button_down;
          } else if (popupChild) {
             popupEvent = popupChild;
          }
+
          QContextMenuEvent e(QContextMenuEvent::Mouse, mapped, event->globalPos(), event->modifiers());
          QApplication::sendSpontaneousEvent(popupEvent, &e);
 #endif
@@ -600,7 +620,7 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
    }
 
    // modal event handling
-   if (QApplicationPrivate::instance()->modalState() && !qt_try_modal(m_widget, event->type())) {
+   if (QApplicationPrivate::instance()->modalState() && ! qt_try_modal(m_widget, event->type())) {
       return;
    }
 
@@ -652,10 +672,12 @@ void QWidgetWindow::handleTouchEvent(QTouchEvent *event)
    if (event->type() == QEvent::TouchCancel) {
       QApplicationPrivate::translateTouchCancel(event->device(), event->timestamp());
       event->accept();
+
    } else if (qApp->d_func()->inPopupMode()) {
       // Ignore touch events for popups. This will cause QGuiApplication to synthesise mouse
       // events instead, which QWidgetWindow::handleMouseEvent will forward correctly:
       event->ignore();
+
    } else {
       event->setAccepted(QApplicationPrivate::translateRawTouchEvent(m_widget, event->device(), event->touchPoints(), event->timestamp()));
    }
@@ -744,7 +766,7 @@ void QWidgetWindow::handleScreenChange()
 
 void QWidgetWindow::repaintWindow()
 {
-   if (!m_widget->isVisible() || !m_widget->updatesEnabled() || !m_widget->rect().isValid()) {
+   if (! m_widget->isVisible() || !m_widget->updatesEnabled() || !m_widget->rect().isValid()) {
       return;
    }
 
@@ -760,7 +782,7 @@ Qt::WindowState effectiveState(Qt::WindowStates state);
 void QWidgetWindow::updateNormalGeometry()
 {
    QTLWExtra *tle = m_widget->d_func()->maybeTopData();
-   if (!tle) {
+   if (! tle) {
       return;
    }
    // Ask platform window, default to widget geometry.
@@ -1073,17 +1095,20 @@ void QWidgetWindow::handleContextMenuEvent(QContextMenuEvent *e)
    }
 
    QWidget *fw = QWidget::keyboardGrabber();
-   if (!fw) {
+
+   if (! fw) {
       if (QApplication::activePopupWidget()) {
          fw = (QApplication::activePopupWidget()->focusWidget()
                ? QApplication::activePopupWidget()->focusWidget()
                : QApplication::activePopupWidget());
       } else if (QApplication::focusWidget()) {
          fw = QApplication::focusWidget();
+
       } else {
          fw = m_widget;
       }
    }
+
    if (fw && fw->isEnabled()) {
       QPoint pos = fw->inputMethodQuery(Qt::ImMicroFocus).toRect().center();
       QContextMenuEvent widgetEvent(QContextMenuEvent::Keyboard, pos, fw->mapToGlobal(pos),

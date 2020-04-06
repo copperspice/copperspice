@@ -3701,12 +3701,13 @@ void QClipData::initialize()
    }
 
    Q_CHECK_PTR(m_clipLines);
-   QT_TRY {
+
+   try {
       m_spans = (QSpan *)malloc(clipSpanHeight * sizeof(QSpan));
       allocated = clipSpanHeight;
       Q_CHECK_PTR(m_spans);
 
-      QT_TRY {
+      try {
          if (hasRectClip)
          {
             int y = 0;
@@ -3754,6 +3755,7 @@ void QClipData::initialize()
             int y = 0;
             int firstInBand = 0;
             count = 0;
+
             while (firstInBand < numRects) {
                const int currMinY = rects.at(firstInBand).y();
                const int currMaxY = currMinY + rects.at(firstInBand).height();
@@ -3799,16 +3801,16 @@ void QClipData::initialize()
 
          }
 
-      } QT_CATCH(...) {
+      } catch (...) {
          free(m_spans); // have to free m_spans again or someone might think that we were successfully initialized.
          m_spans = 0;
-         QT_RETHROW;
+         throw;
       }
 
-   } QT_CATCH(...) {
+   } catch (...) {
       free(m_clipLines); // same for clipLines
       m_clipLines = 0;
-      QT_RETHROW;
+      throw;
    }
 }
 

@@ -1146,7 +1146,7 @@ int QTextFormatCollection::indexForFormat(const QTextFormat &format)
    int idx = formats.size();
    formats.append(format);
 
-   QT_TRY {
+   try {
       QTextFormat &f = formats.last();
       if (!f.d)
       {
@@ -1159,10 +1159,11 @@ int QTextFormatCollection::indexForFormat(const QTextFormat &format)
          hashes.insert(hash, idx);
       }
 
-   } QT_CATCH(...) {
+   } catch (...) {
       formats.pop_back();
-      QT_RETHROW;
+      throw;
    }
+
    return idx;
 }
 

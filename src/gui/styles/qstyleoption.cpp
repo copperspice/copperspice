@@ -70,11 +70,13 @@ void QStyleOption::initFrom(const QWidget *widget)
       case QMacStyle::SizeSmall:
          state |= QStyle::State_Small;
          break;
+
       case QMacStyle::SizeMini:
          state |= QStyle::State_Mini;
          break;
+
       default:
-         ;
+         break;
    }
 #endif
 
@@ -84,9 +86,9 @@ void QStyleOption::initFrom(const QWidget *widget)
    }
 #endif
 
-   direction = widget->layoutDirection();
-   rect = widget->rect();
-   palette = widget->palette();
+   direction   = widget->layoutDirection();
+   rect        = widget->rect();
+   palette     = widget->palette();
    fontMetrics = widget->fontMetrics();
    styleObject = const_cast<QWidget *>(widget);
 }
@@ -137,7 +139,6 @@ QStyleOptionGroupBox::QStyleOptionGroupBox()
      textAlignment(Qt::AlignLeft), lineWidth(0), midLineWidth(0)
 {
 }
-
 
 QStyleOptionGroupBox::QStyleOptionGroupBox(int version)
    : QStyleOptionComplex(version, Type), features(QStyleOptionFrame::None),

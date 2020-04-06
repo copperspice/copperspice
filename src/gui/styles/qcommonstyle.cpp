@@ -340,6 +340,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
                   p->setPen(QPen(tbb->palette.light(), 0));
                   p->drawLine(tbb->rect.topLeft(), tbb->rect.bottomLeft());
                   break;
+
                case QTabBar::RoundedSouth:
                case QTabBar::TriangularSouth:
                   p->setPen(QPen(tbb->palette.shadow(), 0));
@@ -349,6 +350,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
                   p->drawLine(tbb->rect.left(), tbb->rect.bottom() - 1,
                      tbb->rect.right() - 1, tbb->rect.bottom() - 1);
                   break;
+
                case QTabBar::RoundedEast:
                case QTabBar::TriangularEast:
                   p->setPen(QPen(tbb->palette.dark(), 0));
@@ -823,26 +825,34 @@ static void drawArrow(const QStyle *style, const QStyleOptionToolButton *toolbut
 
 static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
 {
-   qreal height = 0;
+   qreal height    = 0;
    qreal widthUsed = 0;
+
    textLayout.beginLayout();
+
    while (true) {
       QTextLine line = textLayout.createLine();
-      if (!line.isValid()) {
+
+      if (! line.isValid()) {
          break;
       }
+
       line.setLineWidth(lineWidth);
       line.setPosition(QPointF(0, height));
+
       height += line.height();
       widthUsed = qMax(widthUsed, line.naturalTextWidth());
    }
+
    textLayout.endLayout();
+
    return QSizeF(widthUsed, height);
 }
 
 QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItem *option, int role) const
 {
    const QWidget *widget = option->widget;
+
    switch (role) {
       case Qt::CheckStateRole:
          if (option->features & QStyleOptionViewItem::HasCheckIndicator)
@@ -854,17 +864,21 @@ QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItem *option, int 
          if (option->features & QStyleOptionViewItem::HasDisplay) {
             QTextOption textOption;
             textOption.setWrapMode(QTextOption::WordWrap);
+
             QTextLayout textLayout(option->text, option->font);
             textLayout.setTextOption(textOption);
 
-            const bool wrapText = option->features & QStyleOptionViewItem::WrapText;
+            const bool wrapText  = option->features & QStyleOptionViewItem::WrapText;
             const int textMargin = proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, option, widget) + 1;
+
             QRect bounds = option->rect;
+
             switch (option->decorationPosition) {
                case QStyleOptionViewItem::Left:
                case QStyleOptionViewItem::Right:
                   bounds.setWidth(wrapText && bounds.isValid() ? bounds.width() - 2 * textMargin : QFIXED_MAX);
                   break;
+
                case QStyleOptionViewItem::Top:
                case QStyleOptionViewItem::Bottom:
                   if (wrapText) {
@@ -873,12 +887,14 @@ QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItem *option, int 
                      bounds.setWidth(QFIXED_MAX);
                   }
                   break;
+
                default:
                   break;
             }
 
             const int lineWidth = bounds.width();
             const QSizeF size = viewItemTextLayout(textLayout, lineWidth);
+
             return QSize(qCeil(size.width()) + 2 * textMargin, qCeil(size.height()));
          }
          break;
@@ -888,6 +904,7 @@ QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItem *option, int 
             return option->decorationSize;
          }
          break;
+
       default:
          break;
    }
@@ -969,7 +986,7 @@ void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewIt
     compute the position for the different component of an item (pixmap, text, checkbox)
 
     Set sizehint to false to layout the elements inside opt->rect. Set sizehint to true to ignore
-   opt->rect and return rectangles in infinite space
+    opt->rect and return rectangles in infinite space
 
     Code duplicated in QItemDelegate::doLayout
 */
@@ -977,24 +994,24 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
    QRect *pixmapRect, QRect *textRect, bool sizehint) const
 {
    Q_ASSERT(checkRect && pixmapRect && textRect);
+   *checkRect  = QRect(QPoint(0, 0), viewItemSize(opt, Qt::CheckStateRole));
    *pixmapRect = QRect(QPoint(0, 0), viewItemSize(opt, Qt::DecorationRole));
-   *textRect = QRect(QPoint(0, 0), viewItemSize(opt, Qt::DisplayRole));
-   *checkRect = QRect(QPoint(0, 0), viewItemSize(opt, Qt::CheckStateRole));
-
+   *textRect   = QRect(QPoint(0, 0), viewItemSize(opt, Qt::DisplayRole));
    const QWidget *widget  = opt->widget;
    const bool hasCheck    = checkRect->isValid();
    const bool hasPixmap   = pixmapRect->isValid();
    const bool hasText     = textRect->isValid();
-   const int textMargin   = hasText ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
+   const int textMargin   = hasText   ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
    const int pixmapMargin = hasPixmap ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
-   const int checkMargin  = hasCheck ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
+   const int checkMargin  = hasCheck  ? proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, opt, widget) + 1 : 0;
 
    int x = opt->rect.left();
    int y = opt->rect.top();
-   int w, h;
+   int w;
+   int h;
 
-   if (textRect->height() == 0 && (!hasPixmap || !sizehint)) {
-      //if there is no text, we still want to have a decent height for the item sizeHint and the editor size
+   if (textRect->height() == 0 && (! hasPixmap || !sizehint)) {
+      // if there is no text, we still want to have a decent height for the item sizeHint and the editor size
       textRect->setHeight(opt->fontMetrics.height());
    }
 
@@ -1006,12 +1023,15 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
 
    if (sizehint) {
       h = qMax(checkRect->height(), qMax(textRect->height(), pm.height()));
+
       if (opt->decorationPosition == QStyleOptionViewItem::Left
          || opt->decorationPosition == QStyleOptionViewItem::Right) {
          w = textRect->width() + pm.width();
+
       } else {
          w = qMax(textRect->width(), pm.width());
       }
+
    } else {
       w = opt->rect.width();
       h = opt->rect.height();
@@ -1019,11 +1039,13 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
 
    int cw = 0;
    QRect check;
+
    if (hasCheck) {
       cw = checkRect->width() + 2 * checkMargin;
       if (sizehint) {
          w += cw;
       }
+
       if (opt->direction == Qt::RightToLeft) {
          check.setRect(x + w - cw, y, cw, h);
       } else {
@@ -1090,29 +1112,35 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
       }
 
       default:
-         qWarning("doLayout: decoration position is invalid");
+         qWarning("doLayout: Decoration position is invalid");
          decoration = *pixmapRect;
          break;
    }
 
-   if (!sizehint) { // we only need to do the internal layout if we are going to paint
+   if (! sizehint) {
+      // we only need to do the internal layout if we are going to paint
+
       *checkRect = QStyle::alignedRect(opt->direction, Qt::AlignCenter,
             checkRect->size(), check);
+
       *pixmapRect = QStyle::alignedRect(opt->direction, opt->decorationAlignment,
             pixmapRect->size(), decoration);
+
       // the text takes up all available space, unless the decoration is not shown as selected
       if (opt->showDecorationSelected) {
          *textRect = display;
-      } else
+      } else {
          *textRect = QStyle::alignedRect(opt->direction, opt->displayAlignment,
                textRect->size().boundedTo(display.size()), display);
+      }
+
    } else {
-      *checkRect = check;
+      *checkRect  = check;
       *pixmapRect = decoration;
-      *textRect = display;
+      *textRect   = display;
    }
 }
-#endif // QT_NO_ITEMVIEWS
+#endif
 
 
 #ifndef QT_NO_TABBAR
@@ -2457,6 +2485,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 {
    Q_D(const QCommonStyle);
    QRect r;
+
    switch (sr) {
       case SE_PushButtonContents:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
@@ -2947,6 +2976,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 
          break;
 #endif // QT_NO_TABWIDGET
+
 #ifndef QT_NO_TABBAR
       case SE_TabBarTearIndicator:
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
@@ -2973,12 +3003,14 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
       case SE_TreeViewDisclosureItem:
          r = opt->rect;
          break;
+
       case SE_LineEditContents:
          if (const QStyleOptionFrame *f = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             r = f->rect.adjusted(f->lineWidth, f->lineWidth, -f->lineWidth, -f->lineWidth);
             r = visualRect(opt->direction, opt->rect, r);
          }
          break;
+
       case SE_FrameContents:
          if (const QStyleOptionFrame *f = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             int fw = proxy()->pixelMetric(PM_DefaultFrameWidth, f, widget);
@@ -2986,6 +3018,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             r = visualRect(opt->direction, opt->rect, r);
          }
          break;
+
       case SE_ShapedFrameContents:
          if (const QStyleOptionFrame *f = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             int frameShape  = f->frameShape;
@@ -4646,19 +4679,23 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
          if (const QStyleOptionTitleBar *tb = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
             if ((tb->titleBarFlags & Qt::WindowType_Mask) == Qt::Tool) {
                ret = qMax(widget ? widget->fontMetrics().height() : opt->fontMetrics.height(), 16);
+
 #ifndef QT_NO_DOCKWIDGET
             } else if (qobject_cast<const QDockWidget *>(widget)) {
                ret = qMax(widget->fontMetrics().height(), int(QStyleHelper::dpiScaled(13)));
 #endif
+
             } else {
                ret = qMax(widget ? widget->fontMetrics().height() : opt->fontMetrics.height(), 18);
             }
+
          } else {
             ret = int(QStyleHelper::dpiScaled(18.));
          }
 
          break;
       }
+
       case PM_ScrollBarSliderMin:
          ret = int(QStyleHelper::dpiScaled(9.));
          break;
@@ -4876,21 +4913,27 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
       case PM_HeaderMargin:
          ret = int(QStyleHelper::dpiScaled(4.));
          break;
+
       case PM_HeaderMarkSize:
          ret = int(QStyleHelper::dpiScaled(16.));
          break;
+
       case PM_HeaderGripMargin:
          ret = int(QStyleHelper::dpiScaled(4.));
          break;
+
       case PM_HeaderDefaultSectionSizeHorizontal:
          ret = int(QStyleHelper::dpiScaled(100.));
          break;
+
       case PM_HeaderDefaultSectionSizeVertical:
          ret = int(QStyleHelper::dpiScaled(30.));
          break;
+
       case PM_TabBarScrollButtonWidth:
          ret = int(QStyleHelper::dpiScaled(16.));
          break;
+
       case PM_LayoutLeftMargin:
       case PM_LayoutTopMargin:
       case PM_LayoutRightMargin:
@@ -4904,6 +4947,7 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
          ret = proxy()->pixelMetric(isWindow ? PM_DefaultTopLevelMargin : PM_DefaultChildMargin);
       }
       break;
+
       case PM_LayoutHorizontalSpacing:
       case PM_LayoutVerticalSpacing:
          ret = proxy()->pixelMetric(PM_DefaultLayoutSpacing);
@@ -5004,6 +5048,7 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 {
    Q_D(const QCommonStyle);
    QSize sz(csz);
+
    switch (ct) {
       case CT_PushButton:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
@@ -5021,6 +5066,7 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             sz = QSize(w, h);
          }
          break;
+
       case CT_RadioButton:
       case CT_CheckBox:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(opt)) {
@@ -5040,6 +5086,7 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             sz.setHeight(qMax(sz.height(), h));
          }
          break;
+
 #ifndef QT_NO_MENU
       case CT_MenuItem:
          if (const QStyleOptionMenuItem *mi = qstyleoption_cast<const QStyleOptionMenuItem *>(opt)) {
@@ -5138,6 +5185,7 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
          }
          break;
 #endif
+
       case CT_MdiControls:
          if (const QStyleOptionComplex *styleOpt = qstyleoption_cast<const QStyleOptionComplex *>(opt)) {
             int width = 1;
@@ -5159,7 +5207,11 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 #ifndef QT_NO_ITEMVIEWS
       case CT_ItemViewItem:
          if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
-            QRect decorationRect, displayRect, checkRect;
+
+            QRect decorationRect;
+            QRect displayRect;
+            QRect checkRect;
+
             d->viewItemLayout(vopt, &checkRect, &decorationRect, &displayRect, true);
             sz = (decorationRect | displayRect | checkRect).size();
          }
@@ -5192,7 +5244,6 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 
    return sz;
 }
-
 
 /*! \reimp */
 int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget *widget,

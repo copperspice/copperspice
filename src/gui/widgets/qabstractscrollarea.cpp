@@ -53,13 +53,13 @@ QAbstractScrollAreaPrivate::QAbstractScrollAreaPrivate()
      shownOnce(false), inResize(false), sizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored),
      viewport(0), cornerWidget(0), left(0), top(0), right(0), bottom(0),
      xoffset(0), yoffset(0), viewportFilter(0)
-
 {
 }
 
 QAbstractScrollAreaPrivate::~QAbstractScrollAreaPrivate()
 {
 }
+
 QAbstractScrollAreaScrollBarContainer::QAbstractScrollAreaScrollBarContainer(Qt::Orientation orientation,
    QWidget *parent)
    : QWidget(parent), scrollBar(new QScrollBar(orientation, this)),
@@ -84,6 +84,7 @@ void QAbstractScrollAreaScrollBarContainer::addWidget(QWidget *widget, LogicalPo
    } else {
       policy.setVerticalPolicy(QSizePolicy::Ignored);
    }
+
    widget->setSizePolicy(policy);
    widget->setParent(this);
 
@@ -124,11 +125,13 @@ QWidgetList QAbstractScrollAreaScrollBarContainer::widgets(LogicalPosition posit
 int QAbstractScrollAreaScrollBarContainer::scrollBarLayoutIndex() const
 {
    const int layoutItemCount = layout->count();
+
    for (int i = 0; i < layoutItemCount; ++i) {
-      if (qobject_cast<QScrollBar *>(layout->itemAt(i)->widget())) {
+      if (dynamic_cast<QScrollBar *>(layout->itemAt(i)->widget())) {
          return i;
       }
    }
+
    return -1;
 }
 
@@ -165,6 +168,7 @@ void QAbstractScrollAreaPrivate::replaceScrollBar(QScrollBar *scrollBar, Qt::Ori
    scrollBar->setValue(oldBar->value());
    scrollBar->installEventFilter(q);
    oldBar->removeEventFilter(q);
+
    delete oldBar;
 
    if (horizontal) {
@@ -184,9 +188,10 @@ void QAbstractScrollAreaPrivate::init()
    Q_Q(QAbstractScrollArea);
 
    viewport = new QWidget(q);
-   viewport->setObjectName(QLatin1String("qt_scrollarea_viewport"));
+   viewport->setObjectName("qt_scrollarea_viewport");
    viewport->setBackgroundRole(QPalette::Base);
    viewport->setAutoFillBackground(true);
+
    scrollBarContainers[Qt::Horizontal] = new QAbstractScrollAreaScrollBarContainer(Qt::Horizontal, q);
    scrollBarContainers[Qt::Horizontal]->setObjectName(QLatin1String("qt_scrollarea_hcontainer"));
    hbar = scrollBarContainers[Qt::Horizontal]->scrollBar;
@@ -208,15 +213,15 @@ void QAbstractScrollAreaPrivate::init()
    viewportFilter.reset(new QAbstractScrollAreaFilter(this));
    viewport->installEventFilter(viewportFilter.data());
    viewport->setFocusProxy(q);
+
    q->setFocusPolicy(Qt::StrongFocus);
    q->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
    q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
    layoutChildren();
 
-#ifndef Q_OS_DARWIN
-#  ifndef QT_NO_GESTURES
+#if ! defined(Q_OS_DARWIN) && ! defined(QT_NO_GESTURES)
    viewport->grabGesture(Qt::PanGesture);
-#  endif
 #endif
 }
 
@@ -243,15 +248,12 @@ void QAbstractScrollAreaPrivate::layoutChildren()
 
    const int hsbExt = hbar->sizeHint().height();
    const int vsbExt = vbar->sizeHint().width();
+
    const QPoint extPoint(vsbExt, hsbExt);
    const QSize extSize(vsbExt, hsbExt);
-
    const QRect widgetRect = q->rect();
 
    const bool hasCornerWidget = (cornerWidget != 0);
-
-   // If the scroll bars are at the very right and bottom of the window we
-   // move their positions to be aligned with the size grip.
 
    QPoint cornerOffset((needv && vscrollOverlap == 0) ? vsbExt : 0, (needh && hscrollOverlap == 0) ? hsbExt : 0);
    QRect controlsRect;
@@ -264,6 +266,7 @@ void QAbstractScrollAreaPrivate::layoutChildren()
       controlsRect = widgetRect;
       const int spacing = q->style()->pixelMetric(QStyle::PM_ScrollView_ScrollBarSpacing, &opt, q);
       const QPoint cornerExtra(needv ? spacing + vscrollOverlap : 0, needh ? spacing + hscrollOverlap : 0);
+
       QRect frameRect = widgetRect;
       frameRect.adjust(0, 0, -cornerOffset.x() - cornerExtra.x(), -cornerOffset.y() - cornerExtra.y());
       q->setFrameRect(QStyle::visualRect(opt.direction, opt.rect, frameRect));
@@ -280,6 +283,7 @@ void QAbstractScrollAreaPrivate::layoutChildren()
    }
 
    cornerOffset = QPoint(needv ? vsbExt : 0, needh ? hsbExt : 0);
+
    // If we have a corner widget and are only showing one scroll bar, we need to move it
    // to make room for the corner widget.
    if (hasCornerWidget && ((needv && vscrollOverlap == 0) || (needh && hscrollOverlap == 0))) {
@@ -313,8 +317,8 @@ void QAbstractScrollAreaPrivate::layoutChildren()
             const QRect geo = header->geometry();
 
             if (header->orientation() == Qt::Vertical && header->isVisible() &&
-               QStyle::visualRect(opt.direction, opt.rect, geo).left() <= opt.rect.width() / 2) {
-               vHeaderRight = QStyle::visualRect(opt.direction, opt.rect, geo).right();
+                  QStyle::visualRect(opt.direction, opt.rect, geo).left() <= opt.rect.width() / 2) {
+                  vHeaderRight = QStyle::visualRect(opt.direction, opt.rect, geo).right();
             } else if (header->orientation() == Qt::Horizontal && header->isVisible() && geo.top() <= q->frameWidth()) {
                hHeaderBottom = geo.bottom();
             }
@@ -339,8 +343,6 @@ void QAbstractScrollAreaPrivate::layoutChildren()
             cornerPoint.y() - 1));
 
       if (! hasCornerWidget && vtransient) {
-
-
          verticalScrollBarRect.adjust(0, 0, 0, cornerOffset.y());
       }
 
@@ -370,36 +372,36 @@ QAbstractScrollArea::QAbstractScrollArea(QAbstractScrollAreaPrivate &dd, QWidget
 {
    Q_D(QAbstractScrollArea);
 
-   QT_TRY {
+   try {
       d->init();
 
-   } QT_CATCH(...) {
+   } catch (...) {
       d->viewportFilter.reset();
-      QT_RETHROW;
+      throw;
    }
 }
-
 
 QAbstractScrollArea::QAbstractScrollArea(QWidget *parent)
    : QFrame(*new QAbstractScrollAreaPrivate, parent)
 {
    Q_D(QAbstractScrollArea);
-   QT_TRY {
+
+   try {
       d->init();
-   } QT_CATCH(...) {
+
+   } catch(...) {
       d->viewportFilter.reset();
-      QT_RETHROW;
+      throw;
    }
 }
-
 
 QAbstractScrollArea::~QAbstractScrollArea()
 {
    Q_D(QAbstractScrollArea);
+
    // reset it here, otherwise we'll have a dangling pointer in ~QWidget
    d->viewportFilter.reset();
 }
-
 
 void QAbstractScrollArea::setViewport(QWidget *widget)
 {
@@ -479,8 +481,6 @@ void QAbstractScrollArea::setVerticalScrollBarPolicy(Qt::ScrollBarPolicy policy)
    }
 }
 
-
-
 QScrollBar *QAbstractScrollArea::verticalScrollBar() const
 {
    Q_D(const QAbstractScrollArea);
@@ -499,15 +499,6 @@ void QAbstractScrollArea::setVerticalScrollBar(QScrollBar *scrollBar)
    d->replaceScrollBar(scrollBar, Qt::Vertical);
 }
 
-/*!
-    \property QAbstractScrollArea::horizontalScrollBarPolicy
-    \brief the policy for the horizontal scroll bar
-
-    The default policy is Qt::ScrollBarAsNeeded.
-
-    \sa verticalScrollBarPolicy
-*/
-
 Qt::ScrollBarPolicy QAbstractScrollArea::horizontalScrollBarPolicy() const
 {
    Q_D(const QAbstractScrollArea);
@@ -517,8 +508,10 @@ Qt::ScrollBarPolicy QAbstractScrollArea::horizontalScrollBarPolicy() const
 void QAbstractScrollArea::setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy policy)
 {
    Q_D(QAbstractScrollArea);
+
    const Qt::ScrollBarPolicy oldPolicy = d->hbarpolicy;
    d->hbarpolicy = policy;
+
    if (isVisible()) {
       d->layoutChildren();
    }
@@ -527,29 +520,22 @@ void QAbstractScrollArea::setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy polic
    }
 }
 
-/*!
-  Returns the horizontal scroll bar.
-
-  \sa horizontalScrollBarPolicy, verticalScrollBar()
- */
 QScrollBar *QAbstractScrollArea::horizontalScrollBar() const
 {
    Q_D(const QAbstractScrollArea);
    return d->hbar;
 }
 
-
 void QAbstractScrollArea::setHorizontalScrollBar(QScrollBar *scrollBar)
 {
    Q_D(QAbstractScrollArea);
    if (!scrollBar) {
-      qWarning("QAbstractScrollArea::setHorizontalScrollBar: Cannot set a null scroll bar");
+      qWarning("QAbstractScrollArea::setHorizontalScrollBar: Can not set a null scroll bar");
       return;
    }
 
    d->replaceScrollBar(scrollBar, Qt::Horizontal);
 }
-
 
 QWidget *QAbstractScrollArea::cornerWidget() const
 {
@@ -575,6 +561,7 @@ void QAbstractScrollArea::setCornerWidget(QWidget *widget)
       if (widget) {
          widget->show();
       }
+
    } else {
       d->cornerWidget = widget;
       d->layoutChildren();
@@ -591,11 +578,14 @@ void QAbstractScrollArea::addScrollBarWidget(QWidget *widget, Qt::Alignment alig
 
    const Qt::Orientation scrollBarOrientation
       = ((alignment & Qt::AlignLeft) || (alignment & Qt::AlignRight)) ? Qt::Horizontal : Qt::Vertical;
+
    const QAbstractScrollAreaScrollBarContainer::LogicalPosition position
       = ((alignment & Qt::AlignRight) || (alignment & Qt::AlignBottom))
          ? QAbstractScrollAreaScrollBarContainer::LogicalRight : QAbstractScrollAreaScrollBarContainer::LogicalLeft;
+
    d->scrollBarContainers[scrollBarOrientation]->addWidget(widget, position);
    d->layoutChildren();
+
    if (isHidden() == false) {
       widget->show();
    }
@@ -622,7 +612,6 @@ QWidgetList QAbstractScrollArea::scrollBarWidgets(Qt::Alignment alignment)
 
    return list;
 }
-
 
 void QAbstractScrollArea::setViewportMargins(int left, int top, int right, int bottom)
 {

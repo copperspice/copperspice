@@ -945,7 +945,7 @@ QPainter::~QPainter()
 {
    d_ptr->inDestructor = true;
 
-   QT_TRY {
+   try {
       if (isActive())
       {
          end();
@@ -954,7 +954,7 @@ QPainter::~QPainter()
          d_ptr->detachPainterPrivate(this);
       }
 
-   } QT_CATCH(...) {
+   } catch (...) {
       // don't throw anything in the destructor.
    }
 

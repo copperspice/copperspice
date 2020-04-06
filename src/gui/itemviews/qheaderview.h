@@ -47,8 +47,9 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    GUI_CS_PROPERTY_READ(cascadingSectionResizes, cascadingSectionResizes)
    GUI_CS_PROPERTY_WRITE(cascadingSectionResizes, setCascadingSectionResizes)
 
-   GUI_CS_PROPERTY_READ(defaultSectionSize, defaultSectionSize)
+   GUI_CS_PROPERTY_READ(defaultSectionSize,  defaultSectionSize)
    GUI_CS_PROPERTY_WRITE(defaultSectionSize, setDefaultSectionSize)
+   GUI_CS_PROPERTY_RESET(defaultSectionSize, resetDefaultSectionSize)
 
    GUI_CS_PROPERTY_READ(minimumSectionSize, minimumSectionSize)
    GUI_CS_PROPERTY_WRITE(minimumSectionSize, setMinimumSectionSize)

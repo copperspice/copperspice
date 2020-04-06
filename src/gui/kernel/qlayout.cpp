@@ -91,11 +91,12 @@ QLayout::QLayout(QLayoutPrivate &dd, QLayout *lay, QWidget *w)
          d->topLevel = true;
          w->d_func()->layout = this;
 
-         QT_TRY {
+         try {
             invalidate();
-         } QT_CATCH(...) {
+
+         } catch (...) {
             w->d_func()->layout = 0;
-            QT_RETHROW;
+            throw;
          }
       }
    }
@@ -115,6 +116,7 @@ void QLayoutPrivate::getMargin(int *result, int userMargin, QStyle::PixelMetric 
    }
 
    Q_Q(const QLayout);
+
    if (userMargin >= 0) {
       *result = userMargin;
    } else if (!topLevel) {
@@ -179,6 +181,7 @@ bool QLayout::setAlignment(QLayout *l, Qt::Alignment alignment)
 {
    int i = 0;
    QLayoutItem *item = itemAt(i);
+
    while (item) {
       if (item->layout() == l) {
          item->setAlignment(alignment);
@@ -195,6 +198,7 @@ int QLayout::margin() const
 {
    int left, top, right, bottom;
    getContentsMargins(&left, &top, &right, &bottom);
+
    if (left == top && top == right && right == bottom) {
       return left;
    } else {
@@ -206,12 +210,16 @@ int QLayout::spacing() const
 {
    if (const QBoxLayout *boxlayout = qobject_cast<const QBoxLayout *>(this)) {
       return boxlayout->spacing();
+
    } else if (const QGridLayout *gridlayout = qobject_cast<const QGridLayout *>(this)) {
       return gridlayout->spacing();
+
    } else if (const QFormLayout *formlayout = qobject_cast<const QFormLayout *>(this)) {
       return formlayout->spacing();
+
    } else {
       Q_D(const QLayout);
+
       if (d->insideSpacing >= 0) {
          return d->insideSpacing;
       } else {
@@ -233,10 +241,13 @@ void QLayout::setSpacing(int spacing)
 {
    if (QBoxLayout *boxlayout = qobject_cast<QBoxLayout *>(this)) {
       boxlayout->setSpacing(spacing);
+
    } else if (QGridLayout *gridlayout = qobject_cast<QGridLayout *>(this)) {
       gridlayout->setSpacing(spacing);
+
    } else if (QFormLayout *formlayout = qobject_cast<QFormLayout *>(this)) {
       formlayout->setSpacing(spacing);
+
    } else {
       Q_D(QLayout);
       d->insideSpacing = spacing;
@@ -260,22 +271,19 @@ void QLayout::setContentsMargins(int left, int top, int right, int bottom)
    invalidate();
 }
 
-
 void QLayout::setContentsMargins(const QMargins &margins)
 {
    setContentsMargins(margins.left(), margins.top(), margins.right(), margins.bottom());
 }
 
-
 void QLayout::getContentsMargins(int *left, int *top, int *right, int *bottom) const
 {
    Q_D(const QLayout);
-   d->getMargin(left, d->userLeftMargin, QStyle::PM_LayoutLeftMargin);
-   d->getMargin(top, d->userTopMargin, QStyle::PM_LayoutTopMargin);
-   d->getMargin(right, d->userRightMargin, QStyle::PM_LayoutRightMargin);
+   d->getMargin(left,   d->userLeftMargin,   QStyle::PM_LayoutLeftMargin);
+   d->getMargin(top,    d->userTopMargin,    QStyle::PM_LayoutTopMargin);
+   d->getMargin(right,  d->userRightMargin,  QStyle::PM_LayoutRightMargin);
    d->getMargin(bottom, d->userBottomMargin, QStyle::PM_LayoutBottomMargin);
 }
-
 
 QMargins QLayout::contentsMargins() const
 {
@@ -338,6 +346,7 @@ bool QLayout::isEmpty() const
 
    return true;
 }
+
 QSizePolicy::ControlTypes QLayout::controlTypes() const
 {
    if (count() == 0) {
@@ -402,7 +411,6 @@ static bool removeWidgetRecursively(QLayoutItem *li, QObject *w)
    return false;
 }
 
-
 void QLayoutPrivate::doResize(const QSize &r)
 {
    Q_Q(QLayout);
@@ -410,8 +418,7 @@ void QLayoutPrivate::doResize(const QSize &r)
    int mbh = menuBarHeightForWidth(menubar, r.width());
 
    QWidget *mw = q->parentWidget();
-
-   QRect rect = mw->testAttribute(Qt::WA_LayoutOnEntireRect) ? mw->rect() : mw->contentsRect();
+   QRect rect  = mw->testAttribute(Qt::WA_LayoutOnEntireRect) ? mw->rect() : mw->contentsRect();
 
    const int mbTop = rect.top();
    rect.setTop(rect.top() + mbh);
@@ -422,7 +429,6 @@ void QLayoutPrivate::doResize(const QSize &r)
    if (menubar) {
       menubar->setGeometry(rect.left(), mbTop, r.width(), mbh);
    }
-
 #endif
 }
 
@@ -518,7 +524,9 @@ int QLayout::totalHeightForWidth(int w) const
       side += wd->leftmargin + wd->rightmargin;
       top += wd->topmargin + wd->bottommargin;
    }
+
    int h = heightForWidth(w - side) + top;
+
 #ifndef QT_NO_MENUBAR
    h += menuBarHeightForWidth(d->menubar, w);
 #endif
@@ -533,18 +541,21 @@ QSize QLayout::totalMinimumSize() const
 {
    Q_D(const QLayout);
    int side = 0, top = 0;
+
    if (d->topLevel) {
       QWidget *pw = parentWidget();
       pw->ensurePolished();
       QWidgetPrivate *wd = pw->d_func();
       side += wd->leftmargin + wd->rightmargin;
-      top += wd->topmargin + wd->bottommargin;
+      top  += wd->topmargin + wd->bottommargin;
    }
 
    QSize s = minimumSize();
+
 #ifndef QT_NO_MENUBAR
    top += menuBarHeightForWidth(d->menubar, s.width() + side);
 #endif
+
    return s + QSize(side, top);
 }
 
@@ -556,6 +567,7 @@ QSize QLayout::totalSizeHint() const
 {
    Q_D(const QLayout);
    int side = 0, top = 0;
+
    if (d->topLevel) {
       QWidget *pw = parentWidget();
       pw->ensurePolished();
@@ -582,6 +594,7 @@ QSize QLayout::totalSizeHint() const
 QSize QLayout::totalMaximumSize() const
 {
    Q_D(const QLayout);
+
    int side = 0, top = 0;
    if (d->topLevel) {
       QWidget *pw = parentWidget();
@@ -592,6 +605,7 @@ QSize QLayout::totalMaximumSize() const
    }
 
    QSize s = maximumSize();
+
 #ifndef QT_NO_MENUBAR
    top += menuBarHeightForWidth(d->menubar, s.width());
 #endif

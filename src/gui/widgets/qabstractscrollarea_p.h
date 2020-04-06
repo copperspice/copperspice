@@ -27,8 +27,6 @@
 #include <qframe_p.h>
 #include <qabstractscrollarea.h>
 
-
-
 #ifndef QT_NO_SCROLLAREA
 
 class QScrollBar;
@@ -46,7 +44,8 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
    void replaceScrollBar(QScrollBar *scrollBar, Qt::Orientation orientation);
 
    QAbstractScrollAreaScrollBarContainer *scrollBarContainers[Qt::Vertical + 1];
-   QScrollBar *hbar, *vbar;
+   QScrollBar *hbar;
+   QScrollBar *vbar;
    Qt::ScrollBarPolicy vbarpolicy, hbarpolicy;
 
    bool shownOnce;
@@ -56,7 +55,6 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
    QWidget *viewport;
    QWidget *cornerWidget;
    QRect cornerPaintingRect;
-
 
    int left, top, right, bottom; // viewport margin
 
@@ -82,8 +80,6 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
    }
 
    QScopedPointer<QObject> viewportFilter;
-
-
 };
 
 class QAbstractScrollAreaFilter : public QObject
@@ -123,7 +119,5 @@ class QAbstractScrollAreaScrollBarContainer : public QWidget
 };
 
 #endif // QT_NO_SCROLLAREA
-
-
 
 #endif
