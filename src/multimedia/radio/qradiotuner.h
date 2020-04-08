@@ -27,7 +27,6 @@
 #include <qobject.h>
 #include <qpair.h>
 #include <qmediaobject.h>
-#include <qmediaenumdebug.h>
 #include <qradiodata.h>
 
 class QRadioTunerPrivate;

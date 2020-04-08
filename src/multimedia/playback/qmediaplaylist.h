@@ -28,7 +28,6 @@
 #include <qmediacontent.h>
 #include <qmediaobject.h>
 #include <qmediabindableinterface.h>
-#include <qmediaenumdebug.h>
 
 class QMediaPlaylistProvider;
 class QMediaPlaylistPrivate;

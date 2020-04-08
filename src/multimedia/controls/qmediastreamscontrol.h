@@ -28,7 +28,6 @@
 
 #include <qmediacontrol.h>
 #include <qmultimedia.h>
-#include <qmediaenumdebug.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaStreamsControl : public QMediaControl
 {

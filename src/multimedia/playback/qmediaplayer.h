@@ -28,7 +28,6 @@
 #include <qmediaobject.h>
 #include <qmediacontent.h>
 #include <qmediaplaylist.h>
-#include <qmediaenumdebug.h>
 #include <qnetworkconfiguration.h>
 
 class QAbstractVideoSurface;

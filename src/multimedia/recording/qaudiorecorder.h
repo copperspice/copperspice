@@ -29,7 +29,6 @@
 #include <qmediarecorder.h>
 #include <qmediaobject.h>
 #include <qmediaencodersettings.h>
-#include <qmediaenumdebug.h>
 
 class QSize;
 class QAudioFormat;

@@ -30,7 +30,6 @@
 #include <qmediaobject.h>
 #include <qmediaencodersettings.h>
 #include <qmediabindableinterface.h>
-#include <qmediaenumdebug.h>
 
 class QSize;
 class QAudioFormat;

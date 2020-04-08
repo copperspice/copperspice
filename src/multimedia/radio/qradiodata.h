@@ -27,7 +27,6 @@
 #include <qobject.h>
 #include <qmediaobject.h>
 #include <qmediabindableinterface.h>
-#include <qmediaenumdebug.h>
 
 class QRadioDataPrivate;
 
