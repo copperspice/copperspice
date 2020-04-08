@@ -114,7 +114,6 @@ QXcbIntegration::QXcbIntegration(const QStringList &parameters, int &argc, char 
 {
    m_instance = this;
 
-   qRegisterMetaType<QXcbWindow *>();
 #ifdef XCB_USE_XLIB
    XInitThreads();
 #endif

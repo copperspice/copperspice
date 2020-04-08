@@ -24,27 +24,11 @@
 #include <qaudio.h>
 #include <qdebug.h>
 
-namespace QAudio {
-
-class RegisterMetaTypes
-{
- public:
-   RegisterMetaTypes() {
-      qRegisterMetaType<QAudio::Error>();
-      qRegisterMetaType<QAudio::State>();
-      qRegisterMetaType<QAudio::Mode>();
-      qRegisterMetaType<QAudio::Role>();
-   }
-
-} _register;
-
-}
-
-
 QDebug operator<<(QDebug dbg, QAudio::Error error)
 {
    QDebugStateSaver saver(dbg);
    dbg.nospace();
+
    switch (error) {
       case QAudio::NoError:
          dbg << "NoError";

@@ -27,14 +27,6 @@
 #include <qobject.h>
 #include <qdebug.h>
 
-static int qRegisterAudioBufferMetaTypes()
-{
-   qRegisterMetaType<QAudioBuffer>();
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterAudioBufferMetaTypes)
-
 class QAudioBufferPrivate : public QSharedData
 {
  public:

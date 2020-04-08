@@ -41,17 +41,8 @@
 
 #include <qmediaobject_p.h>
 #include <qmediarecorder_p.h>
-static int qRegisterMediaRecorderMetaTypes()
-{
-   qRegisterMetaType<QMediaRecorder::State>("QMediaRecorder::State");
-   qRegisterMetaType<QMediaRecorder::Status>("QMediaRecorder::Status");
-   qRegisterMetaType<QMediaRecorder::Error>("QMediaRecorder::Error");
-
-   return 0;
-}
 
 #define ENUM_NAME(c,e,v) (c::staticMetaObject.enumerator(c::staticMetaObject.indexOfEnumerator(e)).valueToKey((v)))
-Q_CONSTRUCTOR_FUNCTION(qRegisterMediaRecorderMetaTypes)
 
 QMediaRecorderPrivate::QMediaRecorderPrivate()
    : mediaObject(0), control(0), formatControl(0), audioControl(0),

@@ -190,7 +190,6 @@ typedef int (*x11ErrorHandler)(Display *, XErrorEvent *);
 
 static void gtkStyleSetCallback(GtkWidget *)
 {
-   qRegisterMetaType<QGtkStylePrivate *>();
    // We have to let this function return and complete the event
    // loop to ensure that all gtk widgets have been styled before updating
    QMetaObject::invokeMethod(styleScheduler(), "updateTheme", Qt::QueuedConnection);

@@ -204,12 +204,10 @@ class QCustomTypeInfo
  public:
 
    QCustomTypeInfo()
-      : typeName(), constr(0), destr(0), saveOp(0), loadOp(0) {
+      : typeName(), saveOp(0), loadOp(0) {
    }
 
    QString8 typeName;
-   QMetaType::Constructor constr;
-   QMetaType::Destructor destr;
 
    QMetaType::SaveOperator saveOp;
    QMetaType::LoadOperator loadOp;
@@ -288,75 +286,6 @@ static int qMetaTypeCustomType_unlocked(const QString8 &typeName)
    }
 
    return 0;
-}
-
-// internal
-int QMetaType::registerType(const NS::QString8 &typeName, Destructor destructor, Constructor constructor)
-{
-   QVector<QCustomTypeInfo> *ct = customTypes();
-
-   if (! ct || typeName.isEmpty() || ! destructor || ! constructor)  {
-      return -1;
-   }
-
-   NS::QString8 normalizedTypeName = QMetaObject::normalizedType(typeName);
-   int idx = qMetaTypeStaticType(normalizedTypeName);
-
-   if (! idx) {
-      QWriteLocker locker(customTypesLock());
-      idx = qMetaTypeCustomType_unlocked(normalizedTypeName);
-
-      if (! idx) {
-         QCustomTypeInfo inf;
-
-         inf.typeName = normalizedTypeName;
-         inf.constr   = constructor;
-         inf.destr    = destructor;
-         inf.alias    = -1;
-
-         idx = ct->size() + User;
-         ct->append(inf);
-      }
-   }
-
-   return idx;
-}
-
-// internal
-int QMetaType::registerTypedef(const NS::QString8 &typeName, int aliasId)
-{
-   QVector<QCustomTypeInfo> *ct = customTypes();
-
-   if (! ct || typeName.isEmpty()) {
-      return -1;
-   }
-
-   NS::QString8 normalizedTypeName = QMetaObject::normalizedType(typeName);
-
-   int idx = qMetaTypeStaticType(normalizedTypeName);
-
-   if (idx != QMetaType::UnknownType) {
-      Q_ASSERT(idx == aliasId);
-      return idx;
-   }
-
-   QWriteLocker locker(customTypesLock());
-   idx = qMetaTypeCustomType_unlocked(normalizedTypeName);
-
-   if (idx)  {
-      return idx;
-   }
-
-   QCustomTypeInfo inf;
-
-   inf.typeName = normalizedTypeName;
-   inf.alias    = aliasId;
-   inf.constr   = 0;
-   inf.destr    = 0;
-
-   ct->append(inf);
-
-   return aliasId;
 }
 
 void *QMetaType::construct(int type, const void *copy)
@@ -646,8 +575,6 @@ void *QMetaType::construct(int type, const void *copy)
    const QMap<Type, const QMetaTypeGuiHelper *> &temp = QMetaType::dataTypes_Gui();
 
    if (temp.contains(Type(type)))  {
-      // assigns constr to a function pointer
-      constr = temp.value(Type(type))->constr;
 
    } else {
       const QVector<QCustomTypeInfo> *ct = customTypes();
@@ -660,7 +587,6 @@ void *QMetaType::construct(int type, const void *copy)
       if (ct->at(type - User).typeName.isEmpty()) {
          return 0;
       }
-      constr = ct->at(type - User).constr;
    }
 
    return constr(copy);
@@ -856,8 +782,6 @@ void QMetaType::destroy(int type, void *data)
          const QMap<Type, const QMetaTypeGuiHelper *> &temp = QMetaType::dataTypes_Gui();
 
          if (temp.contains(Type(type)))  {
-            // assigns destr to a function pointer
-            destr = temp.value(Type(type))->destr;
 
          } else {
             QReadLocker locker(customTypesLock());
@@ -870,7 +794,6 @@ void QMetaType::destroy(int type, void *data)
                break;
             }
 
-            destr = ct->at(type - User).destr;
          }
 
          destr(data);

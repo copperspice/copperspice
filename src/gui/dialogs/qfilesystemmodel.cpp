@@ -1909,8 +1909,6 @@ void QFileSystemModelPrivate::init()
 {
    Q_Q(QFileSystemModel);
 
-   qRegisterMetaType<QVector<QPair<QString, QFileInfo>>>("QVector<QPair<QString,QFileInfo>>");
-
 #ifndef QT_NO_FILESYSTEMWATCHER
    q->connect(&fileInfoGatherer, &QFileInfoGatherer::newListOfFiles,  q, &QFileSystemModel::_q_directoryChanged);
    q->connect(&fileInfoGatherer, &QFileInfoGatherer::updates,         q, &QFileSystemModel::_q_fileSystemChanged);

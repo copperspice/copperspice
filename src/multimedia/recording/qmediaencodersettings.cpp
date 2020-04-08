@@ -23,17 +23,6 @@
 
 #include <qmediaencodersettings.h>
 
-static int qRegisterEncoderSettingsMetaTypes()
-{
-   qRegisterMetaType<QAudioEncoderSettings>();
-   qRegisterMetaType<QVideoEncoderSettings>();
-   qRegisterMetaType<QImageEncoderSettings>();
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterEncoderSettingsMetaTypes)
-
 class QAudioEncoderSettingsPrivate  : public QSharedData
 {
  public:

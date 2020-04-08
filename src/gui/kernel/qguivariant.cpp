@@ -727,15 +727,11 @@ const QVariant::Handler qt_gui_variant_handler = {
 #ifdef QT_NO_DATASTREAM
 #  define Q_DECL_METATYPE_HELPER(TYPE) \
      typedef void *(*QConstruct##TYPE)(const TYPE *); \
-     static const QConstruct##TYPE qConstruct##TYPE = qMetaTypeConstructHelper<TYPE>; \
-     typedef void (*QDestruct##TYPE)(TYPE *); \
-     static const QDestruct##TYPE qDestruct##TYPE = qMetaTypeDeleteHelper<TYPE>;
+     typedef void (*QDestruct##TYPE)(TYPE *);
 #else
 #  define Q_DECL_METATYPE_HELPER(TYPE) \
      typedef void *(*QConstruct##TYPE)(const TYPE *); \
-     static const QConstruct##TYPE qConstruct##TYPE = qMetaTypeConstructHelper<TYPE>; \
      typedef void (*QDestruct##TYPE)(TYPE *); \
-     static const QDestruct##TYPE qDestruct##TYPE = qMetaTypeDeleteHelper<TYPE>; \
      typedef void (*QSave##TYPE)(QDataStream &, const TYPE *); \
      static const QSave##TYPE qSave##TYPE = qMetaTypeSaveHelper<TYPE>; \
      typedef void (*QLoad##TYPE)(QDataStream &, TYPE *); \
@@ -799,8 +795,6 @@ Q_DECL_METATYPE_HELPER(QQuaternion)
 #define Q_IMPL_METATYPE_HELPER(TYPE) \
      {                                                             \
        QMetaType::TYPE,                                            \
-       reinterpret_cast<QMetaType::Constructor>(qConstruct##TYPE), \
-       reinterpret_cast<QMetaType::Destructor>(qDestruct##TYPE),   \
        reinterpret_cast<QMetaType::SaveOperator>(qSave##TYPE),     \
        reinterpret_cast<QMetaType::LoadOperator>(qLoad##TYPE)      \
      }
@@ -808,8 +802,6 @@ Q_DECL_METATYPE_HELPER(QQuaternion)
 #define Q_IMPL_METATYPE_HELPER(TYPE) \
      {                                                             \
        QMetaType::TYPE,                                            \
-       reinterpret_cast<QMetaType::Constructor>(qConstruct##TYPE), \
-       reinterpret_cast<QMetaType::Destructor>(qDestruct##TYPE)    \
      }
 
 #endif
@@ -865,9 +857,9 @@ static const QMetaTypeGuiHelper qVariantGuiHelper[] = {
 
    // this must be the last entry!
 #ifndef QT_NO_DATASTREAM
-   { QMetaType::UnknownType, 0, 0, 0, 0 }
-#else
    { QMetaType::UnknownType, 0, 0 }
+#else
+   { QMetaType::UnknownType }
 #endif
 
 };
@@ -892,5 +884,4 @@ int qUnregisterGuiVariant()
    return 1;
 }
 Q_DESTRUCTOR_FUNCTION(qUnregisterGuiVariant)
-
 

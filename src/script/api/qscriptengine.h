@@ -322,7 +322,8 @@ int qScriptRegisterMetaType(QScriptEngine *eng, QScriptValue (*toScriptValue)(QS
    void (*fromScriptValue)(const QScriptValue &, T &t),
    const QScriptValue &prototype = QScriptValue(), T * /* dummy */ = 0  )
 {
-   const int id = qRegisterMetaType<T>(); // make sure it's registered
+   const int id = QVariant::Invalid;
+
 
    qScriptRegisterMetaType_helper(
       eng, id, reinterpret_cast<QScriptEngine::MarshalFunction>(toScriptValue),

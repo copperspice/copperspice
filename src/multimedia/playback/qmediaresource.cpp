@@ -27,16 +27,6 @@
 #include <qurl.h>
 #include <qvariant.h>
 
-static int qRegisterMediaResourceMetaTypes()
-{
-   qRegisterMetaType<QMediaResource>();
-   qRegisterMetaType<QMediaResourceList>();
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterMediaResourceMetaTypes)
-
 QMediaResource::QMediaResource()
 {
 }

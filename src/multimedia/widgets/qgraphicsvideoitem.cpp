@@ -147,9 +147,6 @@ QGraphicsVideoItem::QGraphicsVideoItem(QGraphicsItem *parent)
 {
    d_ptr->q_ptr = this;
    d_ptr->surface = new QPainterVideoSurface;
-
-   qRegisterMetaType<QVideoSurfaceFormat>();
-
    connect(d_ptr->surface, SIGNAL(frameChanged()), this, SLOT(_q_present()));
    connect(d_ptr->surface, SIGNAL(surfaceFormatChanged(QVideoSurfaceFormat)),
       this, SLOT(_q_updateNativeSize()), Qt::QueuedConnection);

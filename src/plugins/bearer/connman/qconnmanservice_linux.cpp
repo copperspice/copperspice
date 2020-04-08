@@ -67,7 +67,6 @@ QConnmanManagerInterface::QConnmanManagerInterface( QObject *parent)
 {
     qDBusRegisterMetaType<ConnmanMap>();
     qDBusRegisterMetaType<ConnmanMapList>();
-    qRegisterMetaType<ConnmanMapList>("ConnmanMapList");
 }
 
 QConnmanManagerInterface::~QConnmanManagerInterface()

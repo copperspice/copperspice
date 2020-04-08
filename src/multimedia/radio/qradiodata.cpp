@@ -30,16 +30,6 @@
 #include <qmediaobject_p.h>
 #include <qmediaserviceprovider_p.h>
 
-static int qRegisterRadioDataMetaTypes()
-{
-   qRegisterMetaType<QRadioData::Error>();
-   qRegisterMetaType<QRadioData::ProgramType>();
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterRadioDataMetaTypes)
-
 class QRadioDataPrivate
 {
     Q_DECLARE_NON_CONST_PUBLIC(QRadioData)

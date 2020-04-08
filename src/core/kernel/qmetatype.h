@@ -95,8 +95,6 @@ class Q_CORE_EXPORT QMetaType
    static void registerStreamOperators(const QString &typeName, SaveOperator saveOp, LoadOperator loadOp);
    static void registerStreamOperators(int type, SaveOperator saveOp, LoadOperator loadOp);
 
-   static int registerType(const QString &typeName, Destructor destructor, Constructor constructor);
-   static int registerTypedef(const QString &typeName, int aliasId);
    static int type(const QString &typeName);
    static const QString &typeName(int type);
    static bool isRegistered(int type);
@@ -118,28 +116,10 @@ class Q_CORE_EXPORT QMetaType
 
 struct QMetaTypeGuiHelper {
    QMetaType::Type typeId;
-   QMetaType::Constructor constr;
-   QMetaType::Destructor destr;
    QMetaType::SaveOperator saveOp;
    QMetaType::LoadOperator loadOp;
 
 };
-
-template <typename T>
-void qMetaTypeDeleteHelper(T *v)
-{
-   delete v;
-}
-
-template <typename T>
-void *qMetaTypeConstructHelper(const T *v)
-{
-   if (! v) {
-      return new T();
-   }
-
-   return new T(*static_cast<const T *>(v));
-}
 
 template <typename T>
 void qMetaTypeSaveHelper(QDataStream &stream, const T *v)
@@ -154,69 +134,20 @@ void qMetaTypeLoadHelper(QDataStream &stream, T *v)
 }
 
 template <typename T>
-struct QMetaTypeId {
-   enum { Defined = 0 };
-};
-
-template <typename T>
 struct QMetaTypeId2 {
-   enum { Defined = QMetaTypeId<T>::Defined };
+   enum { Defined = 0 };
    static inline int qt_metatype_id() {
-      return QMetaTypeId<T>::qt_metatype_id();
+      return QMetaType::UnknownType;
    }
 };
-
-namespace QtPrivate {
-
-template <typename T, bool Defined = QMetaTypeId2<T>::Defined>
-struct QMetaTypeIdHelper {
-   static inline int qt_metatype_id() {
-      return QMetaTypeId2<T>::qt_metatype_id();
-   }
-};
-
-template <typename T>
-struct QMetaTypeIdHelper<T, false> {
-   static inline int qt_metatype_id() {
-      return -1;
-   }
-};
-
-}
-
-template <typename T>
-int qRegisterMetaType(const QString &typeName, T *v = nullptr)
-{
-   if (v == nullptr) {
-      int typedefOf = QtPrivate::QMetaTypeIdHelper<T>::qt_metatype_id();
-      return QMetaType::registerTypedef(typeName, typedefOf);
-   }
-
-   typedef void *(*ConstructPtr)(const T *);
-   ConstructPtr cptr = qMetaTypeConstructHelper<T>;
-
-   typedef void(*DeletePtr)(T *);
-   DeletePtr dptr = qMetaTypeDeleteHelper<T>;
-
-   return QMetaType::registerType(typeName, reinterpret_cast<QMetaType::Destructor>(dptr),
-                  reinterpret_cast<QMetaType::Constructor>(cptr));
-}
 
 template <typename T>
 inline int qMetaTypeId(T * = nullptr)
 {
-   return QMetaTypeId2<T>::qt_metatype_id();
+   return QMetaType::UnknownType;
 }
 
-// note, the following is located in QVariant.h
-//   template <typename T>
-//   inline QVariant::Type qMetaTypeVariant(T * = nullptr)
 
-template <typename T>
-inline int qRegisterMetaType(T *v = nullptr)
-{
-   return qMetaTypeId(v);
-}
 
 template <typename T, bool = QMetaTypeId2<T>::Defined>
 struct csTypeQuery {
@@ -247,7 +178,6 @@ void qRegisterMetaTypeStreamOperators(const QString &typeName, T * = nullptr )
    SavePtr sptr = qMetaTypeSaveHelper<T>;
    LoadPtr lptr = qMetaTypeLoadHelper<T>;
 
-   qRegisterMetaType<T>(typeName);
    QMetaType::registerStreamOperators(typeName, reinterpret_cast<QMetaType::SaveOperator>(sptr),
                   reinterpret_cast<QMetaType::LoadOperator>(lptr));
 }

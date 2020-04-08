@@ -25,9 +25,6 @@
 
 #include <gst/gst.h>
 
-static int wuchi = qRegisterMetaType<QGstreamerMessage>();
-
-
 QGstreamerMessage::QGstreamerMessage()
    : m_message(0)
 {
@@ -44,7 +41,6 @@ QGstreamerMessage::QGstreamerMessage(QGstreamerMessage const &m):
 {
    gst_message_ref(m_message);
 }
-
 
 QGstreamerMessage::~QGstreamerMessage()
 {

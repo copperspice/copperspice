@@ -31,19 +31,6 @@
 #include <qmediaobject_p.h>
 #include <qmediaserviceprovider_p.h>
 
-static int qRegisterRadioTunerMetaTypes()
-{
-   qRegisterMetaType<QRadioTuner::Band>();
-   qRegisterMetaType<QRadioTuner::Error>();
-   qRegisterMetaType<QRadioTuner::SearchMode>();
-   qRegisterMetaType<QRadioTuner::State>();
-   qRegisterMetaType<QRadioTuner::StereoMode>();
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterRadioTunerMetaTypes)
-
 class QRadioTunerPrivate : public QMediaObjectPrivate
 {
 public:

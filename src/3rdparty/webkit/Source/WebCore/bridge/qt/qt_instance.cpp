@@ -84,8 +84,6 @@ QtRuntimeObject::QtRuntimeObject(ExecState* exec, JSGlobalObject* globalObject, 
 QtInstance::QtInstance(QObject* o, PassRefPtr<RootObject> rootObject, QScriptEngine::ValueOwnership ownership)
     : Instance(rootObject), m_class(0), m_object(o), m_hashkey(o), m_ownership(ownership)
 {
-    // good place to register Qt metatypes in QtWebKit, as this is class will initialize if we have a QObject bridge.
-    qRegisterMetaType<QWebElement>();
 }
 
 QtInstance::~QtInstance()

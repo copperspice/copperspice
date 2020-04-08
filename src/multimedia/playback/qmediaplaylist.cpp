@@ -45,16 +45,6 @@ static QFactoryLoader *loader()
    return &retval;
 }
 
-static int qRegisterMediaPlaylistMetaTypes()
-{
-   qRegisterMetaType<QMediaPlaylist::Error>();
-   qRegisterMetaType<QMediaPlaylist::PlaybackMode>();
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterMediaPlaylistMetaTypes)
-
 QMediaPlaylist::QMediaPlaylist(QObject *parent)
    : QObject(parent), d_ptr(new QMediaPlaylistPrivate)
 {
