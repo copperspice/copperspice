@@ -177,9 +177,6 @@ types[] = {
    QT_ADD_STATIC_METATYPE("QHash<QString,QVariant>",      QMetaType::QVariantHash),
    QT_ADD_STATIC_METATYPE("QMultiHash<QString,QVariant>", QMetaType::QVariantMultiHash),
 
-   // let QMetaTypeId2 figure out the type at compile time
-   QT_ADD_STATIC_METATYPE("qreal", QMetaTypeId2<qreal>::MetaType),
-
    // default or unrecognized type
    {QString8(""), QMetaType::UnknownType}
 };

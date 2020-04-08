@@ -44,6 +44,7 @@
 
 class QDataStream;
 class QDebug;
+class QObject;
 class QVariant;
 
 class QBitArray;
@@ -53,6 +54,12 @@ class QDate;
 class QDateTime;
 class QTime;
 class QLocale;
+
+class QJsonArray;
+class QJsonDocument;
+class QJsonObject;
+class QJsonValue;
+
 class QLine;
 class QLineF;
 class QPoint;
@@ -64,6 +71,9 @@ class QSizeF;
 
 // core
 class QEasingCurve;
+class QModelIndex;
+class QPersistentModelIndex;
+class QUuid;
 class QUrl;
 
 // gui
@@ -72,6 +82,7 @@ class QTextFormat;
 class QTextLength;
 class QTransform;
 class QVariantComparisonHelper;
+class QWidget;
 
 
 class Q_CORE_EXPORT QVariant
@@ -629,9 +640,5 @@ Q_DECLARE_SHARED(QVariant)
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
-
-Q_DECLARE_BUILTIN_METATYPE(QVariantList, QVariantList)
-Q_DECLARE_BUILTIN_METATYPE(QVariantMap,  QVariantMap)
-Q_DECLARE_BUILTIN_METATYPE(QVariantHash, QVariantHash)
 
 #endif
