@@ -39,18 +39,16 @@ namespace Bindings {
 class QtInstance;
 
 class QtField : public Field {
-public:
 
-    typedef enum {
+public:
+    enum QtFieldType {
         MetaProperty,
-#ifndef QT_NO_PROPERTIES
         DynamicProperty,
-#endif
         ChildObject
-    } QtFieldType;
+    };
 
     QtField(const QMetaProperty &p)
-        : m_type(MetaProperty), m_property(p)
+        : m_type(QtFieldType::MetaProperty), m_property(p)
         {}
 
 #ifndef QT_NO_PROPERTIES

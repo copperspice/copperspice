@@ -327,7 +327,7 @@ QVariant convertValueToQVariant(ExecState*, JSValue, QVariant::Type hint, int *d
 
 QString QtField::name() const
 {
-    if (m_type == MetaProperty) {
+    if (m_type == QtFieldType::MetaProperty) {
         return m_property.name();
     }
 
@@ -353,7 +353,7 @@ JSValue QtField::valueFromInstance(ExecState* exec, const Instance* inst) const
     if (obj) {
         QVariant val;
 
-        if (m_type == MetaProperty) {
+        if (m_type == QtFieldType::MetaProperty) {
 
             if (m_property.isReadable())
                 val = m_property.read(obj);
@@ -390,7 +390,7 @@ void QtField::setValueToInstance(ExecState* exec, const Instance* inst, JSValue 
         // dynamic properties just get any QVariant
         QVariant val = convertValueToQVariant(exec, aValue, static_cast<QVariant::Type>(argtype), 0);
 
-        if (m_type == MetaProperty) {
+        if (m_type == QtFieldType::MetaProperty) {
             if (m_property.isWritable())
                 m_property.write(obj, val);
         }
