@@ -55,13 +55,14 @@ Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextLength &);
+
 class Q_GUI_EXPORT QTextLength
 {
-
  public:
    enum Type { VariableLength = 0, FixedLength, PercentageLength };
 
-   QTextLength() : lengthType(VariableLength), fixedValueOrPercentage(0)
+   QTextLength()
+      : lengthType(VariableLength), fixedValueOrPercentage(0)
    {}
 
    explicit QTextLength(Type type, qreal value);
@@ -74,11 +75,14 @@ class Q_GUI_EXPORT QTextLength
       switch (lengthType) {
          case FixedLength:
             return fixedValueOrPercentage;
+
          case VariableLength:
             return maximumLength;
+
          case PercentageLength:
             return fixedValueOrPercentage * maximumLength / qreal(100);
       }
+
       return -1;
    }
 
@@ -106,12 +110,11 @@ class Q_GUI_EXPORT QTextLength
 inline QTextLength::QTextLength(Type atype, qreal avalue)
    : lengthType(atype), fixedValueOrPercentage(avalue) {}
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextFormat &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
-#endif
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextFormat &);
+
 class Q_GUI_EXPORT QTextFormat
 {
    GUI_CS_GADGET(QTextFormat)
@@ -597,6 +600,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    inline void setVerticalAlignment(VerticalAlignment alignment) {
       setProperty(TextVerticalAlignment, alignment);
    }
+
    inline VerticalAlignment verticalAlignment() const {
       return static_cast<VerticalAlignment>(intProperty(TextVerticalAlignment));
    }
@@ -604,6 +608,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    inline void setTextOutline(const QPen &pen) {
       setProperty(TextOutline, pen);
    }
+
    inline QPen textOutline() const {
       return penProperty(TextOutline);
    }
@@ -611,6 +616,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    inline void setToolTip(const QString &tip) {
       setProperty(TextToolTip, tip);
    }
+
    inline QString toolTip() const {
       return stringProperty(TextToolTip);
    }

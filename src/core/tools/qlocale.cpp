@@ -680,14 +680,14 @@ void QLocalePrivate::updateSystemPrivate()
 
    if (! res.isNull()) {
       system_data->m_language_id = res.toInt();
-      system_data->m_script_id = QLocale::AnyScript; // default for compatibility
+      system_data->m_script_id   = QLocale::AnyScript;       // default for compatibility
    }
 
    res = sys_locale->query(QSystemLocale::CountryId, QVariant());
 
    if (! res.isNull()) {
       system_data->m_country_id = res.toInt();
-      system_data->m_script_id = QLocale::AnyScript; // default for compatibility
+      system_data->m_script_id  = QLocale::AnyScript;        // default for compatibility
    }
 
    res = sys_locale->query(QSystemLocale::ScriptId, QVariant());
@@ -907,18 +907,18 @@ QString QLocale::quoteString(QStringView str, QuotationStyle style) const
 {
 #ifndef QT_NO_SYSTEMLOCALE
    if (d->m_data == systemData()) {
-      QVariant res;
+      QVariant retval;
 
       if (style == QLocale::AlternateQuotation) {
-         res = systemLocale()->query(QSystemLocale::StringToAlternateQuotation, QVariant::fromValue(str));
+         retval = systemLocale()->query(QSystemLocale::StringToAlternateQuotation, QVariant::fromValue(str));
       }
 
-      if (res.isNull() || style == QLocale::StandardQuotation) {
-         res = systemLocale()->query(QSystemLocale::StringToStandardQuotation, QVariant::fromValue(str));
+      if (! retval.isValid() || style == QLocale::StandardQuotation) {
+         retval = systemLocale()->query(QSystemLocale::StringToStandardQuotation, QVariant::fromValue(str));
       }
 
-      if (! res.isNull()) {
-         return res.toString();
+      if (retval.isValid()) {
+         return retval.toString();
       }
    }
 #endif

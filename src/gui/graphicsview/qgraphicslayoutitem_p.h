@@ -24,10 +24,8 @@
 #ifndef QGRAPHICSLAYOUTITEM_P_H
 #define QGRAPHICSLAYOUTITEM_P_H
 
-#include <QtCore/QSizeF>
+#include <QSizeF>
 #include <QSizePolicy>
-
-QT_BEGIN_NAMESPACE
 
 class QGraphicsLayoutItem;
 class QGraphicsLayoutItemPrivate
@@ -36,10 +34,12 @@ class QGraphicsLayoutItemPrivate
 
  public:
    virtual ~QGraphicsLayoutItemPrivate();
+
    QGraphicsLayoutItemPrivate(QGraphicsLayoutItem *parent, bool isLayout);
    static QGraphicsLayoutItemPrivate *get(QGraphicsLayoutItem *q) {
       return q->d_func();
    }
+
    static const QGraphicsLayoutItemPrivate *get(const QGraphicsLayoutItem *q) {
       return q->d_func();
    }
@@ -73,6 +73,5 @@ class QGraphicsLayoutItemPrivate
    QGraphicsItem *graphicsItem;
 };
 
-
-#endif //QGRAPHICSLAYOUTITEM_P_H
+#endif
 

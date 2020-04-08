@@ -927,8 +927,7 @@ void QNetworkReplyImplPrivate::error(QNetworkReplyImpl::NetworkError code, const
    q->setErrorString(errorMessage);
 
    // note: might not be a good idea, since users could decide to delete us
-   // which would delete the backend too...
-   // maybe we should protect the backend
+   // which would delete the backend too, maybe we should protect the backend
    emit q->error(code);
 }
 
@@ -938,18 +937,21 @@ void QNetworkReplyImplPrivate::metaDataChanged()
    // 1. do we have cookies?
    // 2. are we allowed to set them?
 
-   if (cookedHeaders.contains(QNetworkRequest::SetCookieHeader) && !manager.isNull()
+   if (cookedHeaders.contains(QNetworkRequest::SetCookieHeader) && ! manager.isNull()
          && (static_cast<QNetworkRequest::LoadControl>
              (request.attribute(QNetworkRequest::CookieSaveControlAttribute,
-                                QNetworkRequest::Automatic).toInt()) == QNetworkRequest::Automatic)) {
+             QNetworkRequest::Automatic).toInt()) == QNetworkRequest::Automatic)) {
+
       QList<QNetworkCookie> cookies =
          (cookedHeaders.value(QNetworkRequest::SetCookieHeader)).value<QList<QNetworkCookie>>();
 
       QNetworkCookieJar *jar = manager->cookieJar();
+
       if (jar) {
          jar->setCookiesFromUrl(cookies, url);
       }
    }
+
    emit q->metaDataChanged();
 }
 

@@ -22,6 +22,8 @@
 ***********************************************************************/
 
 #include "config.h"
+#include "Error.h"
+#include "PropertyNameArray.h"
 
 #include <qscriptclassobject_p.h>
 
@@ -32,9 +34,6 @@
 
 #include <qscriptengine_p.h>
 #include <qscriptcontext_p.h>
-
-#include "Error.h"
-#include "PropertyNameArray.h"
 
 namespace QScript {
 
@@ -223,10 +222,12 @@ void ClassObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecSt
 
 JSC::CallType ClassObjectDelegate::getCallData(QScriptObject *, JSC::CallData &callData)
 {
-   if (!m_scriptClass->supportsExtension(QScriptClass::Callable)) {
+   if (! m_scriptClass->supportsExtension(QScriptClass::Callable)) {
       return JSC::CallTypeNone;
    }
+
    callData.native.function = call;
+
    return JSC::CallTypeHost;
 }
 
@@ -284,9 +285,10 @@ JSC::JSObject *ClassObjectDelegate::construct(JSC::ExecState *exec, JSC::JSObjec
 
    QScriptValue defaultObject = ctx->thisObject();
 
-   QVariant variant = scriptClass->extension(QScriptClass::Callable, QVariant::fromValue(ctx));
+   QVariant variant    = scriptClass->extension(QScriptClass::Callable, QVariant::fromValue(ctx));
    QScriptValue result = variant.value<QScriptValue>();
-   if (!result.isObject()) {
+
+   if (! result.isObject()) {
       result = defaultObject;
    }
 

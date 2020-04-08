@@ -282,7 +282,7 @@ void QMetaProperty::setTypeName(const QString &typeName)
 QVariant::Type QMetaProperty::type() const
 {
    QVariant::Type retval = QVariant::UserType;
-   QMetaEnum enumObj = this->enumerator();
+   QMetaEnum enumObj     = this->enumerator();
 
    if (enumObj.isValid()) {
       // process enum
@@ -290,7 +290,7 @@ QVariant::Type QMetaProperty::type() const
 
       int enumMetaTypeId = QMetaType::type(enumName);
 
-      if (enumMetaTypeId == 0) {
+      if (enumMetaTypeId == QVariant::Invalid) {
          retval = QVariant::Int;
       }
 
@@ -347,7 +347,7 @@ void QMetaProperty::setReadMethod(const QString &typeName, JarReadAbstract *jarR
    // typeName is the return type
    this->setTypeName(typeName);
 
-   // method is a ptr to the property READ method,store in a SpiceJarRead
+   // method is a ptr to the property READ method, store in a SpiceJarRead
    m_readJar    = jarRead;
    m_read_able  = true;
 }

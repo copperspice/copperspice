@@ -36,7 +36,6 @@
 #include <qmemoryvideobuffer_p.h>
 #include <qvideoframeconversionhelper_p.h>
 
-
 class QVideoFramePrivate : public QSharedData
 {
  public:
@@ -545,11 +544,11 @@ void QVideoFrame::setEndTime(qint64 time)
    d->endTime = time;
 }
 
-
 QVariantMap QVideoFrame::availableMetaData() const
 {
    return d->metadata;
 }
+
 QVariant QVideoFrame::metaData(const QString &key) const
 {
    return d->metadata.value(key);
@@ -694,6 +693,7 @@ static VideoFrameConvertFunc qConvertFuncs[QVideoFrame::NPixelFormats] = {
    /* Format_CameraRaw */              nullptr,
    /* Format_AdobeDng */               nullptr
 };
+
 static void qInitConvertFuncsAsm()
 {
 #ifdef QT_COMPILER_SUPPORTS_SSE2
@@ -704,6 +704,7 @@ static void qInitConvertFuncsAsm()
       qConvertFuncs[QVideoFrame::Format_BGR32] = qt_convert_BGRA32_to_ARGB32_sse2;
    }
 #endif
+
 #ifdef QT_COMPILER_SUPPORTS_SSSE3
    extern void qt_convert_BGRA32_to_ARGB32_ssse3(const QVideoFrame &, uchar *);
    if (qCpuHasFeature(SSSE3)) {
@@ -712,6 +713,7 @@ static void qInitConvertFuncsAsm()
       qConvertFuncs[QVideoFrame::Format_BGR32] = qt_convert_BGRA32_to_ARGB32_ssse3;
    }
 #endif
+
 #ifdef QT_COMPILER_SUPPORTS_AVX2
    extern void qt_convert_BGRA32_to_ARGB32_avx2(const QVideoFrame &, uchar *);
    if (qCpuHasFeature(AVX2)) {

@@ -67,7 +67,7 @@ void CSInternalChildren::set_mParent(QObject *object, QObject *value)
 CSAbstractDeclarativeData *CSInternalDeclarativeData::get_m_declarativeData(const QObject *object)
 {
    if (! object) {
-      return 0;
+      return nullptr;
    }
 
    return object->m_declarativeData;
@@ -84,11 +84,10 @@ void CSInternalDeclarativeData::set_m_declarativeData(QObject *object, CSAbstrac
 
 
 // **
-
 bool CSInternalEvents::get_m_sendChildEvents(const QObject *object)
 {
    if (! object) {
-      return 0;
+      return false;
    }
 
    return object->m_sendChildEvents;
@@ -97,7 +96,7 @@ bool CSInternalEvents::get_m_sendChildEvents(const QObject *object)
 bool CSInternalEvents::get_m_receiveChildEvents(const QObject *object)
 {
    if (! object) {
-      return 0;
+      return false;
    }
 
    return object->m_receiveChildEvents;
@@ -115,7 +114,7 @@ int CSInternalEvents::get_m_PostedEvents(const QObject *object)
 QList<QPointer<QObject> > &CSInternalEvents::get_m_EventFilters(QObject *object)
 {
    if (! object) {
-      static QList<QPointer<QObject> > emptyList;
+      static QList<QPointer<QObject>> emptyList;
       return emptyList;
    }
 

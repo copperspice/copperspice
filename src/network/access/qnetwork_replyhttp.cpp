@@ -2214,23 +2214,28 @@ void QNetworkReplyHttpImplPrivate::error(QNetworkReplyImpl::NetworkError code, c
 
 void QNetworkReplyHttpImplPrivate::_q_metaDataChanged()
 {
-   // FIXME merge this with replyDownloadMetaData(); ?
+   // FIXME merge this with replyDownloadMetaData();
 
    Q_Q(QNetworkReplyHttpImpl);
+
    // 1. do we have cookies?
    // 2. are we allowed to set them?
+
    if (cookedHeaders.contains(QNetworkRequest::SetCookieHeader) && manager
          && (static_cast<QNetworkRequest::LoadControl>
              (request.attribute(QNetworkRequest::CookieSaveControlAttribute,
-                                QNetworkRequest::Automatic).toInt()) == QNetworkRequest::Automatic)) {
+             QNetworkRequest::Automatic).toInt()) == QNetworkRequest::Automatic)) {
+
       QList<QNetworkCookie> cookies =
          (cookedHeaders.value(QNetworkRequest::SetCookieHeader)).value<QList<QNetworkCookie>>();
 
       QNetworkCookieJar *jar = manager->cookieJar();
+
       if (jar) {
          jar->setCookiesFromUrl(cookies, url);
       }
    }
+
    emit q->metaDataChanged();
 }
 
@@ -2248,7 +2253,7 @@ bool QNetworkReplyHttpImplPrivate::migrateBackend()
    }
 
    // Backend does not support resuming download.
-   if (!canResume()) {
+   if (! canResume()) {
       return false;
    }
 

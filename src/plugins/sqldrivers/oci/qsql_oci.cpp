@@ -38,11 +38,12 @@
 #include <qvector.h>
 #include <qdebug.h>
 
+class QOCICols;
+
 // This is needed for oracle oci when compiling with mingw-w64 headers
 #if defined(__MINGW64_VERSION_MAJOR) && defined(_WIN64)
 #define _int64 __int64
 #endif
-
 
 #include <oci.h>
 #ifdef max
@@ -128,8 +129,6 @@ QOCIRowId::~QOCIRowId()
       OCIDescriptorFree(id, OCI_DTYPE_ROWID);
    }
 }
-
-class QOCICols;
 
 struct QOCIResultPrivate {
    QOCIResultPrivate(QOCIResult *result, const QOCIDriverPrivate *driver);

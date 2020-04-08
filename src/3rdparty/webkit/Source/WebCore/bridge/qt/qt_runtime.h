@@ -51,11 +51,9 @@ public:
         : m_type(QtFieldType::MetaProperty), m_property(p)
         {}
 
-#ifndef QT_NO_PROPERTIES
     QtField(const QString &b)
         : m_type(DynamicProperty), m_dynamicProperty(b)
         {}
-#endif
 
     QtField(QObject *child)
         : m_type(ChildObject), m_childObject(child)

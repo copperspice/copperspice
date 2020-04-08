@@ -1188,13 +1188,16 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
 
    if (!r.isNull()) {
       if (type == ImageResource && r.type() == QVariant::ByteArray) {
+
          if (qApp->thread() != QThread::currentThread()) {
             // must use images in non-GUI threads
             QImage image;
             image.loadFromData(r.toByteArray());
+
             if (!image.isNull()) {
                r = image;
             }
+
          } else {
             QPixmap pm;
             pm.loadFromData(r.toByteArray());
@@ -1203,8 +1206,10 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
             }
          }
       }
+
       d->cachedResources.insert(name, r);
    }
+
    return r;
 }
 
@@ -2072,7 +2077,7 @@ extern bool qHasPixmapTexture(const QBrush &brush);
 QString QTextHtmlExporter::findUrlForImage(const QTextDocument *doc, qint64 cacheKey, bool isPixmap)
 {
    QString url;
-   if (!doc) {
+   if (! doc) {
       return url;
    }
 
@@ -2083,8 +2088,8 @@ QString QTextHtmlExporter::findUrlForImage(const QTextDocument *doc, qint64 cach
    if (doc && doc->docHandle()) {
       QTextDocumentPrivate *priv = doc->docHandle();
       QMap<QUrl, QVariant>::const_iterator it = priv->cachedResources.constBegin();
-      for (; it != priv->cachedResources.constEnd(); ++it) {
 
+      for (; it != priv->cachedResources.constEnd(); ++it) {
          const QVariant &v = it.value();
 
          if (v.type() == QVariant::Image && ! isPixmap) {

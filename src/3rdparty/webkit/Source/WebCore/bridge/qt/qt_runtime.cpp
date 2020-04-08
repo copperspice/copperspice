@@ -839,12 +839,14 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
                     visitedObjects->remove(object);
                     break;
                 }
+
                 if (object && object->inherits(&JSDocument::s_info)) {
                     // To support LayoutTestControllerQt::nodesFromRect(), used in DRT, we do an implicit
                     // conversion from 'document' to the QWebElement representing the 'document.documentElement'.
                     // We can't simply use a QVariantMap in nodesFromRect() because it currently times out
                     // when serializing DOMMimeType and DOMPlugin, even if we limit the recursion.
-                    ret = QVariant::fromValue<QWebElement>(QtWebElementRuntime::create((static_cast<JSDocument*>(object))->impl()->documentElement()));
+                    ret = QVariant::fromValue<QWebElement>(
+                           QtWebElementRuntime::create((static_cast<JSDocument*>(object))->impl()->documentElement()));
                 } else
                     ret = QVariant::fromValue<QWebElement>(QWebElement());
 
@@ -1025,6 +1027,7 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         JSObject* ret = constructEmptyObject(exec);
         QVariantMap map = variant.value<QVariantMap>();
         QVariantMap::const_iterator i = map.constBegin();
+
         while (i != map.constEnd()) {
             QString s = i.key();
             JSValue val = convertQVariantToValue(exec, root.get(), i.value());
@@ -1056,7 +1059,6 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
     } else if (type == QVariant::typeToTypeId<QList<int> >()) {
         QList<int> il= variant.value<QList<int> >();
         return new (exec) RuntimeArray(exec, new QtArray<int>(il, QVariant::Int, root));
-
     }
 
     if (type == QVariant::Variant) {
@@ -1564,12 +1566,11 @@ void QtRuntimeMetaMethod::visitChildren(SlotVisitor& visitor)
 
 EncodedJSValue QtRuntimeMetaMethod::call(ExecState* exec)
 {
-   // BROOM (on hold, ok)
+   // emerald (webkit, hold)
    qWarning("(CopperSpice) QtRuntimeMetaMethod::call, Not implemented");
 
 
-/*  CopperSpice Test 03/21/2014
-
+/*
     QtRuntimeMetaMethodData* d = static_cast<QtRuntimeMetaMethod *>(exec->callee())->d_func();
 
     // limted to 10 args
@@ -1923,8 +1924,8 @@ QtConnectionObject::~QtConnectionObject()
 
 void QtConnectionObject::execute(void **argv)
 {
-    // BROOM (execute, on hold, ok)
-    qDebug("CopperSpice / WebKit:   execute()");
+    // emerald (webkit, hold)
+    qDebug("CopperSpice CsWebKit: execute method not implemented");
 
 /*
     QObject *obj = m_instance->getObject();
@@ -1991,7 +1992,7 @@ void QtConnectionObject::execute(void **argv)
         }
 
     } else {
-        // strange place to be, deleted object emitted a signal here
+        // unsure, deleted object emitted a signal
         qWarning() << "sender deleted, can not deliver signal";
     }
 

@@ -302,6 +302,7 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
          QByteArray result;
          bool first = true;
+
          for (const QNetworkCookie &cookie : cookies) {
             if (!first) {
                result += "; ";
@@ -322,13 +323,16 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
          QByteArray result;
          bool first = true;
+
          for (const QNetworkCookie &cookie : cookies) {
             if (!first) {
                result += ", ";
             }
+
             first = false;
             result += cookie.toRawForm(QNetworkCookie::Full);
          }
+
          return result;
       }
    }

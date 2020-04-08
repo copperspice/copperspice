@@ -25,10 +25,10 @@
 #define QWINDOWSGLCONTEXT_H
 
 #include "array.h"
-#include "qtwindows_additional.h"
-#include "qwindowsopenglcontext.h"
 
-#include <QOpenGLContext>
+#include <qtwindows_additional.h>
+#include <qwindowsopenglcontext.h>
+#include <qopenglcontext.h>
 
 class QDebug;
 
@@ -41,8 +41,10 @@ enum QWindowsGLFormatFlags {
 
 // Additional format information for Windows.
 struct QWindowsOpenGLAdditionalFormat {
-   QWindowsOpenGLAdditionalFormat(unsigned formatFlagsIn = 0, unsigned pixmapDepthIn = 0) :
-      formatFlags(formatFlagsIn), pixmapDepth(pixmapDepthIn) { }
+   QWindowsOpenGLAdditionalFormat(unsigned formatFlagsIn = 0, unsigned pixmapDepthIn = 0)
+      : formatFlags(formatFlagsIn), pixmapDepth(pixmapDepthIn)
+   { }
+
    unsigned formatFlags; // QWindowsGLFormatFlags.
    unsigned pixmapDepth; // for QWindowsGLRenderToPixmap
 };

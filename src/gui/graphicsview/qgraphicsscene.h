@@ -34,10 +34,10 @@
 #include <QtGui/qpen.h>
 #include <QScopedPointer>
 
-
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-template<typename T> class QList;
+#include <qcontainerfwd.h>
+
 class QFocusEvent;
 class QFont;
 class QFontMetrics;

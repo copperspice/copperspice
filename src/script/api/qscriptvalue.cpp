@@ -22,12 +22,17 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptvalue.h"
 
-#include "qscriptvalue_p.h"
-#include "qscriptengine.h"
-#include "qscriptengine_p.h"
-#include "qscriptstring_p.h"
+#include <qscriptvalue.h>
+
+#include <qvariant.h>
+#include <qvarlengtharray.h>
+#include <qnumeric.h>
+#include <qscriptengine.h>
+
+#include <qscriptvalue_p.h>
+#include <qscriptengine_p.h>
+#include <qscriptstring_p.h>
 
 #include "JSGlobalObject.h"
 #include "JSImmediate.h"
@@ -37,10 +42,6 @@
 #include "Identifier.h"
 #include "Operations.h"
 #include "Arguments.h"
-
-#include <qvariant.h>
-#include <qvarlengtharray.h>
-#include <qnumeric.h>
 
 void QScriptValuePrivate::detachFromEngine()
 {
@@ -1355,8 +1356,7 @@ QScriptValue QScriptValue::call(const QScriptValue &thisObject,
    return d->engine->scriptValueFromJSCValue(result);
 }
 
-QScriptValue QScriptValue::call(const QScriptValue &thisObject,
-   const QScriptValue &arguments)
+QScriptValue QScriptValue::call(const QScriptValue &thisObject, const QScriptValue &arguments)
 {
    Q_D(QScriptValue);
 

@@ -177,7 +177,7 @@ QString QMediaResource::audioCodec() const
 */
 void QMediaResource::setAudioCodec(const QString &codec)
 {
-   if (!codec.isEmpty()) {
+   if (! codec.isEmpty()) {
       values.insert(AudioCodec, codec);
    } else {
       values.remove(AudioCodec);

@@ -338,8 +338,7 @@ inline void QGraphicsDropShadowEffect::cs_setOffset(const QPointF &ofs)
    setOffset(ofs);
 }
 
-
 #endif //QT_NO_GRAPHICSEFFECT
 
-#endif // QGRAPHICSEFFECT_H
+#endif
 

@@ -543,8 +543,8 @@ static QMetaMethod metaMethod(const QMetaObject *meta, QMetaMethod::MethodType t
 
 template <class Delegate>
 static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodType callType,
-   const JSC::ArgList &scriptArgs, const QMetaObject *meta,
-   int initialIndex, bool maybeOverloaded, Delegate &delegate)
+                  const JSC::ArgList &scriptArgs, const QMetaObject *meta,
+                  int initialIndex, bool maybeOverloaded, Delegate &delegate)
 {
    QScriptMetaMethod chosenMethod;
    int chosenIndex = -1;
@@ -622,6 +622,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
          } else if (atype == QMetaType::QVariant) {
             typesData[1 + i] = QScriptMetaType::variant();
+
          } else {
             typesData[1 + i] = QScriptMetaType::metaType(atype, argTypeName);
          }
@@ -635,7 +636,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
       }
 
       if (! mtd.fullyResolved()) {
-         // remember it so we can give an error message later, if necessary
+         // remember it so we can give an error message later if necessary
          unresolved.append(QScriptMetaArguments(INT_MAX, index, mtd, QVarLengthArray<QVariant, 9>()));
 
          if (mtd.hasUnresolvedReturnType()) {
@@ -648,10 +649,10 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
       }
 
       QScriptMetaType retType = mtd.returnType();
-      args[0] = QVariant(retType.typeId(), (void *)0); // the result
+      args[0] = QVariant(retType.typeId(), (void *)0);    // the result
 
       // try to convert arguments
-      bool converted = true;
+      bool converted    = true;
       int matchDistance = 0;
 
       for (int i = 0; converted && i < mtd.argumentCount(); ++i) {
@@ -712,18 +713,21 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                      matchDistance += 10;
                   }
                }
+
             } else if (actual.isNumber() || actual.isString()) {
-               // see if it's an enum value
+               // is it an enum value
                QMetaEnum m;
 
                if (argType.isMetaEnum()) {
                   m = meta->enumerator(argType.enumeratorIndex());
+
                } else {
                   int mi = indexOfMetaEnum(meta, argType.name());
                   if (mi != -1) {
                      m = meta->enumerator(mi);
                   }
                }
+
                if (m.isValid()) {
                   if (actual.isNumber()) {
                      int ival = QScriptEnginePrivate::toInt32(exec, actual);
@@ -777,15 +781,18 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                   case QMetaType::UChar:
                      matchDistance += 6;
                      break;
+
                   default:
                      matchDistance += 10;
                      break;
                }
+
             } else if (actual.isString()) {
                switch (tid) {
                   case QMetaType::QString:
                      // perfect
                      break;
+
                   default:
                      matchDistance += 10;
                      break;
@@ -795,10 +802,12 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                   case QMetaType::Bool:
                      // perfect
                      break;
+
                   default:
                      matchDistance += 10;
                      break;
                }
+
             } else if (QScriptEnginePrivate::isDate(actual)) {
                switch (tid) {
                   case QMetaType::QDateTime:
@@ -827,6 +836,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                      matchDistance += 10;
                      break;
                }
+
             } else if (QScriptEnginePrivate::isVariant(actual)) {
                if (argType.isVariant()
                   || (QScriptEnginePrivate::toVariant(exec, actual).userType() == tid)) {
@@ -834,6 +844,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                } else {
                   matchDistance += 10;
                }
+
             } else if (QScriptEnginePrivate::isArray(actual)) {
                switch (tid) {
                   case QMetaType::QStringList:
@@ -1034,6 +1045,7 @@ struct QtMethodCaller {
       int chosenIndex, const QVarLengthArray<QVariant, 9> &args) {
       JSC::JSValue result;
 
+      (void) chosenIndex;
 
       QVarLengthArray<void *, 9> array(args.count());
       void **params = array.data();
@@ -1069,11 +1081,6 @@ struct QtMethodCaller {
          oldEngine = QScriptablePrivate::get(scriptable)->engine;
          QScriptablePrivate::get(scriptable)->engine = QScriptEnginePrivate::get(engine);
       }
-
-      // ### fixme
-      //#ifndef Q_SCRIPT_NO_EVENT_NOTIFY
-      //            engine->notifyFunctionEntry(context);
-      //#endif
 
       if (callType == QMetaMethod::Constructor) {
          Q_ASSERT(meta != 0);
@@ -2431,7 +2438,7 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
 
          actual = JSC::jsUndefined();
 
-      } else if (argType == QMetaType::QVariant) {
+      } else if (argType == QVariant::Variant) {
          actual = QScriptEnginePrivate::jscValueFromVariant(exec, *reinterpret_cast<QVariant *>(arg));
 
       } else {
@@ -2527,7 +2534,6 @@ bool QObjectConnectionManager::addSignalHandler(QObject *sender, int signalIndex
    }
 
    QVector<QObjectConnection> &cs = connections[signalIndex];
-   int absSlotIndex = slotCounter + metaObject()->methodOffset();
 
    (void) sender;
    (void) type;

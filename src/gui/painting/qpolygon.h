@@ -24,9 +24,9 @@
 #ifndef QPOLYGON_H
 #define QPOLYGON_H
 
-#include <QtCore/qvector.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qrect.h>
+#include <qvector.h>
+#include <qpoint.h>
+#include <qrect.h>
 
 class QMatrix;
 class QTransform;

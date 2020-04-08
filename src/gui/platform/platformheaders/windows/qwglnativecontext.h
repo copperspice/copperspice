@@ -24,7 +24,7 @@
 #ifndef QWGLNATIVECONTEXT_H
 #define QWGLNATIVECONTEXT_H
 
-#include <QMetaType>
+#include <qmetatype.h>
 
 #include <wingdi.h>
 #include <GL/gl.h>

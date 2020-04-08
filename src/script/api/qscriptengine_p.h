@@ -620,35 +620,41 @@ inline JSC::JSValue QScriptEnginePrivate::jscValueFromVariant(JSC::ExecState *ex
 {
    JSC::JSValue result = create(exec, v.userType(), v.data());
    Q_ASSERT(result);
+
    return result;
 }
 
 inline QScriptValue QScriptEnginePrivate::scriptValueFromJSCValue(JSC::JSValue value)
 {
-   if (!value) {
+   if (! value) {
       return QScriptValue();
    }
 
    QScriptValuePrivate *p_value = new (this)QScriptValuePrivate(this);
    p_value->initFrom(value);
+
    return QScriptValuePrivate::toPublic(p_value);
 }
 
 inline JSC::JSValue QScriptEnginePrivate::scriptValueToJSCValue(const QScriptValue &value)
 {
    QScriptValuePrivate *vv = QScriptValuePrivate::get(value);
+
    if (!vv) {
       return JSC::JSValue();
    }
+
    if (vv->type != QScriptValuePrivate::JavaScriptCore) {
       Q_ASSERT(!vv->engine || vv->engine == this);
       vv->engine = this;
+
       if (vv->type == QScriptValuePrivate::Number) {
          vv->initFrom(JSC::jsNumber(currentFrame, vv->numberValue));
       } else { //QScriptValuePrivate::String
          vv->initFrom(JSC::jsString(currentFrame, vv->stringValue));
       }
    }
+
    return vv->jscValue;
 }
 
@@ -942,7 +948,7 @@ inline bool QScriptEnginePrivate::isRegExp(JSC::JSValue value)
 
 inline bool QScriptEnginePrivate::isVariant(JSC::JSValue value)
 {
-   if (!isObject(value) || !value.inherits(&QScriptObject::info)) {
+   if (! isObject(value) || ! value.inherits(&QScriptObject::info)) {
       return false;
    }
 
@@ -972,6 +978,7 @@ inline bool QScriptEnginePrivate::isQObject(JSC::JSValue value)
 
    QScriptObject *object = static_cast<QScriptObject *>(JSC::asObject(value));
    QScriptObjectDelegate *delegate = object->delegate();
+
    if (delegate) {
       if (delegate->type() == QScriptObjectDelegate::QtObject
          || (delegate->type() == QScriptObjectDelegate::DeclarativeClassObject
@@ -988,13 +995,13 @@ inline bool QScriptEnginePrivate::isQObject(JSC::JSValue value)
          }
       }
    }
+
    return false;
 }
 
 inline bool QScriptEnginePrivate::isQMetaObject(JSC::JSValue value)
 {
    return isObject(value) && JSC::asObject(value)->inherits(&QScript::QMetaObjectWrapperObject::info);
-
 }
 
 inline bool QScriptEnginePrivate::toBool(JSC::ExecState *exec, JSC::JSValue value)
@@ -1003,6 +1010,7 @@ inline bool QScriptEnginePrivate::toBool(JSC::ExecState *exec, JSC::JSValue valu
    saveException(exec, &savedException);
    bool result = value.toBoolean(exec);
    restoreException(exec, savedException);
+
    return result;
 }
 
@@ -1085,7 +1093,7 @@ inline QObject *QScriptEnginePrivate::toQObject(JSC::ExecState *exec, JSC::JSVal
       QScriptObject *object = static_cast<QScriptObject *>(JSC::asObject(value));
       QScriptObjectDelegate *delegate = object->delegate();
 
-      if (!delegate) {
+      if (! delegate) {
          return 0;
       }
 

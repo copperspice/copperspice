@@ -1977,105 +1977,104 @@ void QMetaObject_X::register_tag(const QString &name, const QString &method)
 }
 
 // ** internal properties
-int QMetaObject_X::register_property_read(const QString &name, const QString &dataType, JarReadAbstract *readJar)
+void QMetaObject_X::register_property_read(const QString &name, const QString &dataType, JarReadAbstract *readJar)
 {
    if (name.isEmpty() ) {
-      return 0;
+      return;
    }
 
-   QMetaProperty data;
-   auto item = m_properties.find(name);
+   auto iter = m_properties.find(name);
 
-   if ( item == m_properties.end() )  {
-      // entry not found in QMap, construct new obj then insert
+   if (iter == m_properties.end())  {
+      // entry not found, construct new obj then add to container
 
-      data = QMetaProperty {name, this};
-      m_properties.insert(name, data);
+      QMetaProperty data = QMetaProperty{name, this};
+      data.setReadMethod(dataType, readJar);
+
+      m_properties.insert(name, std::move(data));
 
    } else {
-      // retrieve existing obj
-      data = item.value();
+      // update QMetaProperty in the container
+      iter->setReadMethod(dataType, readJar);
 
    }
 
-   //
-   data.setReadMethod(dataType, readJar);
-
-   // update QMetaProperty
-   m_properties.insert(name, data);
-
-   return 0;
+   return;
 }
 
-int QMetaObject_X::register_property_write(const QString &name, JarWriteAbstract *method)
+void QMetaObject_X::register_property_write(const QString &name, JarWriteAbstract *method)
 {
    if (name.isEmpty()) {
-      return 0;
+      return;
    }
 
-   QMetaProperty data;
-   auto item = m_properties.find(name);
+   auto iter = m_properties.find(name);
 
-   if ( item == m_properties.end() )  {
-      // entry not found in QMap, construct new obj then insert
+   if (iter == m_properties.end())  {
+      // entry not found, construct new obj then add to container
 
-      data = QMetaProperty {name, this};
+      QMetaProperty data = QMetaProperty {name, this};
+      data.setWriteMethod(method);
+
       m_properties.insert(name, data);
 
    } else {
-      // retrieve existing obj
-      data = item.value();
+      // update QMetaProperty in the container
+      iter->setWriteMethod(method);
 
    }
 
-   //
-   data.setWriteMethod(method);
-
-   // update QMetaProperty
-   m_properties.insert(name, data);
-
-   return 0;
+   return;
 }
 
-int QMetaObject_X::register_property_bool(const QString &name, JarReadAbstract *method, QMetaProperty::Kind kind)
+void QMetaObject_X::register_property_bool(const QString &name, JarReadAbstract *method, QMetaProperty::Kind kind)
 {
    if (name.isEmpty()) {
-      return 0;
+      return;
    }
 
-   QMetaProperty data;
-   auto item = m_properties.find(name);
+   auto iter = m_properties.find(name);
 
-   if ( item == m_properties.end() )  {
-      // entry not found in QMap, construct new obj then insert
+   if (iter == m_properties.end())  {
+      // entry not found, construct new obj then add to container
 
-      data = QMetaProperty {name, this};
+      QMetaProperty data = QMetaProperty {name, this};
+
+      if (kind == QMetaProperty::DESIGNABLE) {
+         data.setDesignable(method);
+
+      } else if (kind == QMetaProperty::SCRIPTABLE) {
+         data.setScriptable(method);
+
+      } else if (kind == QMetaProperty::STORED) {
+         data.setStored(method);
+
+      } else if (kind == QMetaProperty::USER) {
+         data.setUser(method);
+
+      }
+
       m_properties.insert(name, data);
 
    } else {
-      // retrieve existing obj
-      data = item.value();
+      // update QMetaProperty in the container
 
+      if (kind == QMetaProperty::DESIGNABLE) {
+         iter->setDesignable(method);
+
+      } else if (kind == QMetaProperty::SCRIPTABLE) {
+         iter->setScriptable(method);
+
+      } else if (kind == QMetaProperty::STORED) {
+         iter->setStored(method);
+
+      } else if (kind == QMetaProperty::USER) {
+         iter->setUser(method);
+
+      }
    }
 
-   if (kind == QMetaProperty::DESIGNABLE) {
-      data.setDesignable(method);
-
-   } else if (kind == QMetaProperty::SCRIPTABLE) {
-      data.setScriptable(method);
-
-   } else if (kind == QMetaProperty::STORED) {
-      data.setStored(method);
-
-   } else if (kind == QMetaProperty::USER) {
-      data.setUser(method);
-
-   }
-
-   // update QMetaProperty
-   m_properties.insert(name, data);
-
-   return 0;
+   return;
 }
 
 void QMetaObject_X::register_property_int(const QString &name, int value, QMetaProperty::Kind kind)
@@ -2088,7 +2087,7 @@ void QMetaObject_X::register_property_int(const QString &name, int value, QMetaP
    auto item = m_properties.find(name);
 
    if ( item == m_properties.end() )  {
-      // entry not found in QMap, construct new obj then insert
+      // entry not found, construct new obj then add to container
 
       data = QMetaProperty {name, this};
       m_properties.insert(name, data);
@@ -2099,7 +2098,6 @@ void QMetaObject_X::register_property_int(const QString &name, int value, QMetaP
 
    }
 
-   //
    if (kind == QMetaProperty::REVISION) {
       // int value
       data.setRevision(value);
@@ -2114,7 +2112,7 @@ void QMetaObject_X::register_property_int(const QString &name, int value, QMetaP
 
    }
 
-   // update QMetaProperty
+   // update QMetaProperty in the container
    m_properties.insert(name, data);
 }
 
