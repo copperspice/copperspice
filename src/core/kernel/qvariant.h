@@ -112,8 +112,8 @@ class Q_CORE_EXPORT QVariant
       Char16_t,
       Char32_t,
 
-      ByteArray,
       BitArray,
+      ByteArray,
       String,
       String8       = String,
       String16,
@@ -143,11 +143,11 @@ class Q_CORE_EXPORT QVariant
       SizeF,
 
       Variant,
+      Hash,
       List,
       Map,
-      Hash,
-      MultiMap,
       MultiHash,
+      MultiMap,
 
       Void,
       VoidStar,
@@ -205,7 +205,6 @@ class Q_CORE_EXPORT QVariant
       std::type_index meta_typeT;
    };
    QVariant();
-   ~QVariant();
 
 
    // force compile error
@@ -225,13 +224,16 @@ class Q_CORE_EXPORT QVariant
    QVariant(qint64 value);
    QVariant(quint64 value);
    QVariant(double value);
+   ~QVariant();
 
+   void clear();
    QVariant(float value) {
       d.is_null = false;
       d.type = QMetaType::Float;
       d.data.f = value;
    }
 
+   bool convert(Type t);
    QVariant(const QByteArray &bytearray);
    QVariant(const QBitArray &bitarray);
 
@@ -285,17 +287,19 @@ class Q_CORE_EXPORT QVariant
       qSwap(d, other.d);
    }
 
-   Type type() const;
+   void load(QDataStream &ds);
+   void save(QDataStream &ds) const;
    int userType() const;
    const QString &typeName() const;
 
    bool canConvert(Type t) const;
-   bool convert(Type t);
+   template<typename T>
+   void setValue(const T &value);
 
+   void setValue(const QVariant &value);
    inline bool isValid() const;
    bool isNull() const;
 
-   void clear();
 
    void detach();
    inline bool isDetached() const;
@@ -351,8 +355,6 @@ class Q_CORE_EXPORT QVariant
 
    template<typename T>
    T value() const;
-   void load(QDataStream &ds);
-   void save(QDataStream &ds) const;
 
    static const QString &typeToName(Type type);
    static Type nameToType(const QString &name);
@@ -360,15 +362,10 @@ class Q_CORE_EXPORT QVariant
    void *data();
    const void *constData() const;
 
+   Type type() const;
    inline const void *data() const {
       return constData();
    }
-
-   template<typename T>
-   inline void setValue(const T &value);
-
-   inline void setValue(const QVariant &value);
-
 
    template<typename T>
    static inline QVariant fromValue(const T &value) {
