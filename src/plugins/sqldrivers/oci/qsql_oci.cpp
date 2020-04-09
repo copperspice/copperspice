@@ -302,9 +302,9 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
          break;
 
       case QVariant::UserType:
-         if (val.canConvert<QOCIRowIdPointer>() && !isOutValue(pos)) {
+         if (val.canConvert<QSharedDataPointer<QOCIRowId>>() && !isOutValue(pos)) {
             // use a const pointer to prevent a detach
-            const QOCIRowIdPointer rptr = val.value<QOCIRowIdPointer>();
+            const QSharedDataPointer<QOCIRowId> rptr = val.value<QSharedDataPointer<QOCIRowId>>();
 
             r = OCIBindByPos(sql, hbnd, err,
                   pos + 1,
@@ -1453,8 +1453,8 @@ bool QOCICols::execBatch(QOCIResultPrivate *d, QVector<QVariant> &boundValues, b
                }
 
                case QVariant::UserType:
-                  if (val.canConvert<QOCIRowIdPointer>()) {
-                     const QOCIRowIdPointer rptr = val.value<QOCIRowIdPointer>();
+                  if (val.canConvert<QSharedDataPointer<QOCIRowId>>()) {
+                     const QSharedDataPointer<QOCIRowId> rptr = val.value<QSharedDataPointer<QOCIRowId>>();
                      *reinterpret_cast<OCIRowid **>(dataPtr) = rptr->id;
                      columns[i].lengths[row] = 0;
                      break;
@@ -2055,7 +2055,7 @@ QSqlRecord QOCIResult::record() const
 QVariant QOCIResult::lastInsertId() const
 {
    if (isActive()) {
-      QOCIRowIdPointer ptr(new QOCIRowId(d->env));
+      QSharedDataPointer<QOCIRowId> ptr(new QOCIRowId(d->env));
 
       int r = OCIAttrGet(d->sql, OCI_HTYPE_STMT, ptr.constData()->id,
             0, OCI_ATTR_ROWID, d->err);
