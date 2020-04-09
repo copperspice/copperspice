@@ -39,7 +39,7 @@ class Q_MULTIMEDIA_EXPORT QMediaContent
    QMediaContent(const QUrl &contentUrl);
    QMediaContent(const QNetworkRequest &contentRequest);
    QMediaContent(const QMediaResource &contentResource);
-   QMediaContent(const QMediaResourceList &resources);
+   QMediaContent(const QList<QMediaResource> &resources);
    QMediaContent(const QMediaContent &other);
    QMediaContent(QMediaPlaylist *playlist, const QUrl &contentUrl = QUrl(), bool takeOwnership = false);
 
@@ -56,7 +56,7 @@ class Q_MULTIMEDIA_EXPORT QMediaContent
    QNetworkRequest canonicalRequest() const;
    QMediaResource canonicalResource() const;
 
-   QMediaResourceList resources() const;
+   QList<QMediaResource> resources() const;
 
    QMediaPlaylist *playlist() const;
 

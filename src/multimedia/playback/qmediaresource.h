@@ -94,6 +94,4 @@ class Q_MULTIMEDIA_EXPORT QMediaResource
    QMap<int, QVariant> values;
 };
 
-typedef QList<QMediaResource> QMediaResourceList;
-
 #endif

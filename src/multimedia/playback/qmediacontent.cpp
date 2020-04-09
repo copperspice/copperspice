@@ -35,7 +35,7 @@ class QMediaContentPrivate : public QSharedData
       : isPlaylistOwned(false)
    {}
 
-   QMediaContentPrivate(const QMediaResourceList &r)
+   QMediaContentPrivate(const QList<QMediaResource> &r)
       : resources(r), isPlaylistOwned(false)
    {}
 
@@ -59,7 +59,7 @@ class QMediaContentPrivate : public QSharedData
       return resources == other.resources && playlist == other.playlist;
    }
 
-   QMediaResourceList resources;
+   QList<QMediaResource> resources;
 
    QPointer<QMediaPlaylist> playlist;
    bool isPlaylistOwned;
@@ -91,7 +91,7 @@ QMediaContent::QMediaContent(const QMediaResource &resource)
    d->resources << resource;
 }
 
-QMediaContent::QMediaContent(const QMediaResourceList &resources)
+QMediaContent::QMediaContent(const QList<QMediaResource> &resources)
    : d(new QMediaContentPrivate(resources))
 {
 }
@@ -148,7 +148,7 @@ QMediaResource QMediaContent::canonicalResource() const
    return d.constData() != nullptr ?  d->resources.value(0) : QMediaResource();
 }
 
-QMediaResourceList QMediaContent::resources() const
+QList<QMediaResource> QMediaContent::resources() const
 {
    return d.constData() != nullptr ? d->resources : QList<QMediaResource>();
 }
