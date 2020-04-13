@@ -40,11 +40,14 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
 
    GUI_CS_ENUM(SizeAdjustPolicy)
 
-   GUI_CS_PROPERTY_READ(verticalScrollBarPolicy, verticalScrollBarPolicy)
+   GUI_CS_PROPERTY_READ(verticalScrollBarPolicy,  verticalScrollBarPolicy)
    GUI_CS_PROPERTY_WRITE(verticalScrollBarPolicy, setVerticalScrollBarPolicy)
 
-   GUI_CS_PROPERTY_READ(horizontalScrollBarPolicy, horizontalScrollBarPolicy)
+   GUI_CS_PROPERTY_READ(horizontalScrollBarPolicy,  horizontalScrollBarPolicy)
    GUI_CS_PROPERTY_WRITE(horizontalScrollBarPolicy, setHorizontalScrollBarPolicy)
+
+   GUI_CS_PROPERTY_READ(sizeAdjustPolicy,  sizeAdjustPolicy)
+   GUI_CS_PROPERTY_WRITE(sizeAdjustPolicy, setSizeAdjustPolicy)
 
  public:
    explicit QAbstractScrollArea(QWidget *parent = nullptr);
