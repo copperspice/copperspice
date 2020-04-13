@@ -243,22 +243,31 @@ QSize QHeaderView::sizeHint() const
    const int sectionCount = count();
 
    // get size hint for the first n sections
-   int i = 0;
-   for (int checked = 0; checked < 100 && i < sectionCount; ++i) {
+   int checked   = 0;
+   int lastIndex = 0;
+
+   for (int i = 0; checked < 100 && i < sectionCount; ++i) {
       if (isSectionHidden(i)) {
          continue;
       }
-      checked++;
+
+      ++checked;
+      lastIndex = i;
+
       QSize hint = sectionSizeFromContents(i);
       d->cachedSizeHint = d->cachedSizeHint.expandedTo(hint);
    }
+
    // get size hint for the last n sections
-   i = qMax(i, sectionCount - 100 );
-   for (int j = sectionCount - 1, checked = 0; j >= i && checked < 100; --j) {
+   checked = 0;
+
+   for (int j = sectionCount - 1; j > lastIndex && checked < 100; --j) {
       if (isSectionHidden(j)) {
          continue;
       }
-      checked++;
+
+      ++checked;
+
       QSize hint = sectionSizeFromContents(j);
       d->cachedSizeHint = d->cachedSizeHint.expandedTo(hint);
    }
