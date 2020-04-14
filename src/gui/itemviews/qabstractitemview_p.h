@@ -214,12 +214,13 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 #endif
 
    virtual QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
+
    // reimplemented in subclasses
    virtual void adjustViewOptionsForIndex(QStyleOptionViewItem *, const QModelIndex &) const {}
 
    inline void releaseEditor(QWidget *editor, const QModelIndex &index = QModelIndex()) const {
       if (editor) {
-         QObject::disconnect(editor, SIGNAL(destroyed(QObject *)), q_func(), SLOT(editorDestroyed(QObject *)));
+         QObject::disconnect(editor, &QObject::destroyed, q_func(), &QAbstractItemView::editorDestroyed);
 
          editor->removeEventFilter(itemDelegate);
          editor->hide();

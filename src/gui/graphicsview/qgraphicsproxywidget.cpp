@@ -387,7 +387,7 @@ QGraphicsProxyWidget::~QGraphicsProxyWidget()
 
    if (d->widget) {
       d->widget->removeEventFilter(this);
-      QObject::disconnect(d->widget, SIGNAL(destroyed()), this, SLOT(_q_removeWidgetSlot()));
+      QObject::disconnect(d->widget.data(), &QObject::destroyed, this, &QGraphicsProxyWidget::_q_removeWidgetSlot);
       delete d->widget;
    }
 }
@@ -407,10 +407,12 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
    }
 
    if (widget) {
-      QObject::disconnect(widget, SIGNAL(destroyed()), q, SLOT(_q_removeWidgetSlot()));
+      QObject::disconnect(widget.data(), &QObject::destroyed, q, &QGraphicsProxyWidget::_q_removeWidgetSlot);
+
       widget->removeEventFilter(q);
       widget->setAttribute(Qt::WA_DontShowOnScreen, false);
       widget->d_func()->extra->proxyWidget = 0;
+
       resolveFont(inheritedFontResolveMask);
       resolvePalette(inheritedPaletteResolveMask);
       widget->update();
@@ -461,6 +463,7 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
       newWidget->d_func()->createExtra();
       extra = newWidget->d_func()->extra;
    }
+
    QGraphicsProxyWidget **proxyWidget = &extra->proxyWidget;
    if (*proxyWidget) {
       if (*proxyWidget != q) {
@@ -537,7 +540,7 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
 
    // Hook up the event filter to keep the state up to date.
    newWidget->installEventFilter(q);
-   QObject::connect(newWidget, SIGNAL(destroyed()), q, SLOT(_q_removeWidgetSlot()));
+   QObject::connect(newWidget, &QObject::destroyed, q, &QGraphicsProxyWidget::_q_removeWidgetSlot);
 
    // Changes no longer go only from the widget to the proxy.
    enabledChangeMode = QGraphicsProxyWidgetPrivate::NoMode;

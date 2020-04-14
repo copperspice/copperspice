@@ -169,11 +169,11 @@ void QGraphicsItemAnimation::setTimeLine(QTimeLine *timeLine)
    if (d->timeLine) {
       delete d->timeLine;
    }
-   if (!timeLine) {
+   if (! timeLine) {
       return;
    }
    d->timeLine = timeLine;
-   connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(setStep(qreal)));
+   connect(timeLine, &QTimeLine::valueChanged, this, &QGraphicsItemAnimation::setStep);
 }
 
 QPointF QGraphicsItemAnimation::posAt(qreal step) const

@@ -113,10 +113,10 @@ void QAbstractItemViewPrivate::init()
    vbar->setRange(0, 0);
    hbar->setRange(0, 0);
 
-   QObject::connect(vbar, SIGNAL(actionTriggered(int)),  q, SLOT(verticalScrollbarAction(int)));
-   QObject::connect(hbar, SIGNAL(actionTriggered(int)),  q, SLOT(horizontalScrollbarAction(int)));
-   QObject::connect(vbar, SIGNAL(valueChanged(int)),     q, SLOT(verticalScrollbarValueChanged(int)));
-   QObject::connect(hbar, SIGNAL(valueChanged(int)),     q, SLOT(horizontalScrollbarValueChanged(int)));
+   QObject::connect(vbar, &QScrollBar::actionTriggered,  q, &QAbstractItemView::verticalScrollbarAction);
+   QObject::connect(hbar, &QScrollBar::actionTriggered,  q, &QAbstractItemView::horizontalScrollbarAction);
+   QObject::connect(vbar, &QScrollBar::valueChanged,     q, &QAbstractItemView::verticalScrollbarValueChanged);
+   QObject::connect(hbar, &QScrollBar::valueChanged,     q, &QAbstractItemView::horizontalScrollbarValueChanged);
 
    viewport->setBackgroundRole(QPalette::Base);
 

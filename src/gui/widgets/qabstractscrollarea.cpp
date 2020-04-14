@@ -172,15 +172,15 @@ void QAbstractScrollAreaPrivate::replaceScrollBar(QScrollBar *scrollBar, Qt::Ori
    delete oldBar;
 
    if (horizontal) {
-      QObject::connect(scrollBar, SIGNAL(valueChanged(int)), q, SLOT(_q_hslide(int)));
+      QObject::connect(scrollBar, &QScrollBar::valueChanged, q, &QAbstractScrollArea::_q_hslide);
 
    } else {
-      QObject::connect(scrollBar, SIGNAL(valueChanged(int)), q, SLOT(_q_vslide(int)));
+      QObject::connect(scrollBar, &QScrollBar::valueChanged, q, &QAbstractScrollArea::_q_vslide);
 
    }
 
-   QObject::connect(scrollBar, SIGNAL(rangeChanged(int, int)),
-      q, SLOT(_q_showOrHideScrollBars()), Qt::QueuedConnection);
+   QObject::connect(scrollBar, &QScrollBar::rangeChanged, q,
+                  &QAbstractScrollArea::_q_showOrHideScrollBars, Qt::QueuedConnection);
 }
 
 void QAbstractScrollAreaPrivate::init()
@@ -199,8 +199,10 @@ void QAbstractScrollAreaPrivate::init()
 
    scrollBarContainers[Qt::Horizontal]->setVisible(false);
    hbar->installEventFilter(q);
-   QObject::connect(hbar, SIGNAL(valueChanged(int)), q, SLOT(_q_hslide(int)));
-   QObject::connect(hbar, SIGNAL(rangeChanged(int, int)), q, SLOT(_q_showOrHideScrollBars()), Qt::QueuedConnection);
+
+   QObject::connect(hbar, &QScrollBar::valueChanged, q, &QAbstractScrollArea::_q_hslide);
+   QObject::connect(hbar, &QScrollBar::rangeChanged, q, &QAbstractScrollArea::_q_showOrHideScrollBars, Qt::QueuedConnection);
+
    scrollBarContainers[Qt::Vertical] = new QAbstractScrollAreaScrollBarContainer(Qt::Vertical, q);
    scrollBarContainers[Qt::Vertical]->setObjectName(QLatin1String("qt_scrollarea_vcontainer"));
    vbar = scrollBarContainers[Qt::Vertical]->scrollBar;
@@ -208,8 +210,10 @@ void QAbstractScrollAreaPrivate::init()
 
    scrollBarContainers[Qt::Vertical]->setVisible(false);
    vbar->installEventFilter(q);
-   QObject::connect(vbar, SIGNAL(valueChanged(int)), q, SLOT(_q_vslide(int)));
-   QObject::connect(vbar, SIGNAL(rangeChanged(int, int)), q, SLOT(_q_showOrHideScrollBars()), Qt::QueuedConnection);
+
+   QObject::connect(vbar, &QScrollBar::valueChanged, q, &QAbstractScrollArea::_q_vslide);
+   QObject::connect(vbar, &QScrollBar::rangeChanged, q, &QAbstractScrollArea::_q_showOrHideScrollBars, Qt::QueuedConnection);
+
    viewportFilter.reset(new QAbstractScrollAreaFilter(this));
    viewport->installEventFilter(viewportFilter.data());
    viewport->setFocusProxy(q);
