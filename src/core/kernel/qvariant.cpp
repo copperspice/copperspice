@@ -43,7 +43,6 @@
 #include <qjsonobject.h>
 #include <qjsonarray.h>
 #include <qjsondocument.h>
-#include <qvariant_p.h>
 #include <qsize.h>
 #include <qpoint.h>
 #include <qrect.h>

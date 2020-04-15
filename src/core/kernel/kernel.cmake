@@ -123,7 +123,6 @@ list(APPEND CORE_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtimerinfo_unix_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant_p.h
 )
 
 target_sources(CsCore

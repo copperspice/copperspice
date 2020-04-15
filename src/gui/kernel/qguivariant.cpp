@@ -73,7 +73,6 @@
 #include <qline.h>
 #endif
 
-#include <qvariant_p.h>
 
 Q_CORE_EXPORT const QVariant::Handler *qcoreVariantHandler();
 
