@@ -387,24 +387,24 @@ const QString &cs_typeToName()
       static const QString retval("");
       return retval;
 
-   } else if constexpr (std::is_const_v<T1> && std::is_pointer_v<T1>) {
-      static const QString retval = "const " + cs_typeToName<T1>() + "*";
+   } else if constexpr (std::is_const_v<std::remove_pointer_t<T1>> && std::is_pointer_v<T1>) {
+      static const QString retval = "const " + cs_typeToName<std::remove_const_t<std::remove_pointer_t<T1>>>() + "*";
       return retval;
 
    } else if constexpr (std::is_pointer_v<T1>) {
-      static const QString retval = cs_typeToName<T1>() + "*";
+      static const QString retval = cs_typeToName<std::remove_pointer_t<T1>>() + "*";
       return retval;
 
-   } else if constexpr (std::is_const_v<T1> && std::is_lvalue_reference_v<T1>) {
-      static const QString retval = "const " + cs_typeToName<T1>() + "&";
+   } else if constexpr (std::is_const_v<std::remove_reference_t<T1>> && std::is_lvalue_reference_v<T1>) {
+      static const QString retval = "const " + cs_typeToName<std::remove_const_t<std::remove_reference_t<T1>>>() + "&";
       return retval;
 
    } else if constexpr (std::is_lvalue_reference_v<T1>) {
-      static const QString retval = cs_typeToName<T1>() + "&";
+      static const QString retval = cs_typeToName<std::remove_reference_t<T1>>() + "&";
       return retval;
 
    } else if constexpr (std::is_rvalue_reference_v<T1>) {
-      static const QString retval = cs_typeToName<T1>() + "&&";
+      static const QString retval = cs_typeToName<std::remove_reference_t<T1>>() + "&&";
       return retval;
 
    } else if constexpr (std::is_base_of_v<QObject, T1>) {
