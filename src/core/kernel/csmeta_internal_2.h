@@ -45,12 +45,8 @@ QVariant cs_convertToQVariant(T data)
 template<class T>
 std::pair<T, bool> convertFromQVariant(QVariant data)
 {
-   if constexpr (! cs_is_enum_or_flag<T>::value) {
-      // T is not an enum or a flag, T is a builtin type
-      return std::make_pair(data.value<T>(), true);
-
-   } else {
-      // T is an enum or a flag
+   if constexpr (cs_is_enum_or_flag<T>::value) {
+      // T is an enum or  flag
       using intType = typename cs_underlying_type<T>::type;
 
       intType retval = 0;
