@@ -137,4 +137,7 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
    friend class QPSQLResultPrivate;
 };
 
+CS_DECLARE_METATYPE(pg_conn)
+CS_DECLARE_METATYPE(pg_result)
+
 #endif
