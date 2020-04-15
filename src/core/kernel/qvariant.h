@@ -634,6 +634,8 @@ uint QVariant::registerType()
    }
 Q_DECLARE_SHARED(QVariant)
 
+#define Q_DECLARE_METATYPE(TYPE)                   \
+   static_assert(false, "Macro Q_DECLARE_METATYPE(TYPE) is obsolete, use CS_DECLARE_METATYPE(TYPE)")
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
 
