@@ -156,7 +156,6 @@ class Q_CORE_EXPORT QVariant
 
       // core
       EasingCurve,
-      Margins,
       ModelIndex,
       PersistentModelIndex,
       Url,

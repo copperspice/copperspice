@@ -130,7 +130,6 @@ static const QVariant::NamesAndTypes builtinTypes[] = {
 
    // core
    { "QEasingCurve",           QVariant::EasingCurve,          typeid(QEasingCurve *) },
-   { "QMargins",               QVariant::Margins,              typeid(QMargins *) },
    { "QModelIndex",            QVariant::ModelIndex,           typeid(QModelIndex *) },
    { "QPersistentModelIndex",  QVariant::PersistentModelIndex, typeid(QPersistentModelIndex *) },
    { "QUuid",                  QVariant::Uuid,                 typeid(QUuid *) },
