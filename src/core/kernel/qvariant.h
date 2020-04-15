@@ -81,7 +81,6 @@ class QMatrix;
 class QTextFormat;
 class QTextLength;
 class QTransform;
-class QVariantComparisonHelper;
 class QWidget;
 
 
@@ -300,9 +299,6 @@ class Q_CORE_EXPORT QVariant
    bool isNull() const;
 
 
-   void detach();
-   inline bool isDetached() const;
-
    bool toBool() const;
    int toInt(bool *ok = nullptr) const;
    uint toUInt(bool *ok = nullptr) const;
@@ -395,66 +391,13 @@ class Q_CORE_EXPORT QVariant
       return retval;
    };
 
-   //
-   struct PrivateShared {
-      inline PrivateShared(void *v) : ptr(v), ref(1) { }
-      void *ptr;
-      QAtomicInt ref;
-   };
 
-   struct Private {
-      inline Private(): type(Invalid), is_shared(false), is_null(true), is_ptr(false) {
-         data.ptr = 0;
-      }
 
-      inline Private(const Private &other)
-         : data(other.data), type(other.type), is_shared(other.is_shared), is_null(other.is_null), is_ptr(other.is_ptr) {
-      }
 
-      union Data {
-         char c;
-         int i;
-         uint u;
-         bool b;
-         double d;
-         float f;
-         qreal real;
-         qint64 ll;
-         quint64 ull;
-         QObject *o;
-         void *ptr;
-         PrivateShared *shared;
-      } data;
 
-      uint type      : 30;
-      uint is_shared : 1;
-      uint is_null   : 1;
-      uint is_ptr    : 1;
-   };
 
-   typedef void (*f_construct)(Private *, const void *);
-   typedef void (*f_clear)(Private *);
-   typedef bool (*f_null)(const Private *);
 
-   typedef void (*f_load)(Private *, QDataStream &);
-   typedef void (*f_save)(const Private *, QDataStream &);
 
-   typedef bool (*f_compare)(const Private *, const Private *);
-   typedef bool (*f_convert)(const QVariant::Private *d, Type t, void *, bool *);
-   typedef bool (*f_canConvert)(const QVariant::Private *d, Type t);
-   typedef void (*f_debugStream)(QDebug, const QVariant &);
-
-   struct Handler {
-      f_construct construct;
-      f_clear clear;
-      f_null isNull;
-      f_load load;
-      f_save save;
-      f_compare compare;
-      f_convert convert;
-      f_canConvert canConvert;
-      f_debugStream debugStream;
-   };
 
    inline bool operator==(const QVariant &other) const {
       return cmp(other);
@@ -464,24 +407,16 @@ class Q_CORE_EXPORT QVariant
       return ! cmp(other);
    }
 
-   typedef Private DataPtr;
-   inline DataPtr &data_ptr() {
-      return d;
-   }
 
  protected:
-   friend inline bool qvariant_cast_helper(const QVariant &, QVariant::Type, void *);
    friend int qRegisterGuiVariant();
    friend int qUnregisterGuiVariant();
-   friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &);
    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
    //
    template <typename T>
    static uint registerType();
 
-   Private d;
 
-   static const Handler *handler;
 
    void create(int type, const void *copy);
    bool cmp(const QVariant &other) const;
@@ -510,10 +445,6 @@ Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant &p);
 Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant::Type &p);
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant::Type p);
 
-inline bool qvariant_cast_helper(const QVariant &v, QVariant::Type tp, void *ptr)
-{
-   return QVariant::handler->convert(&v.d, tp, ptr, 0);
-}
 
 template <typename T>
 QVariant::Type qMetaTypeVariant(T * = nullptr)
@@ -544,33 +475,9 @@ inline void QVariant::setValue(const QVariant &v)
 }
 
 
-inline bool QVariant::isDetached() const
-{
-   return !d.is_shared || d.data.shared->ref.load() == 1;
-}
 
 
-// Helper class to add one more level of indirection to prevent implicit casts
-class QVariantComparisonHelper
-{
- public:
-   inline QVariantComparisonHelper(const QVariant &var)
-      : v(&var) {}
 
- private:
-   friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &);
-   const QVariant *v;
-};
-
-inline bool operator==(const QVariant &v1, const QVariantComparisonHelper &v2)
-{
-   return v1.cmp(*v2.v);
-}
-
-inline bool operator!=(const QVariant &v1, const QVariantComparisonHelper &v2)
-{
-   return !operator==(v1, v2);
-}
 
 
 
@@ -632,7 +539,6 @@ uint QVariant::registerType()
       static const QString retval = #TYPE;         \
       return retval;                               \
    }
-Q_DECLARE_SHARED(QVariant)
 
 #define Q_DECLARE_METATYPE(TYPE)                   \
    static_assert(false, "Macro Q_DECLARE_METATYPE(TYPE) is obsolete, use CS_DECLARE_METATYPE(TYPE)")

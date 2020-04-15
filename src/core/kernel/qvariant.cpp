@@ -1626,25 +1626,9 @@ static void streamDebug(QDebug dbg, const QVariant &v)
    }
 }
 
-const QVariant::Handler qt_kernel_variant_handler = {
-   construct,
-   clear,
-   isNull,
-   0,
-   0,
-   compare,
-   convert,
-   0,
-   streamDebug
 
-};
 
-Q_CORE_EXPORT const QVariant::Handler *qcoreVariantHandler()
-{
-   return &qt_kernel_variant_handler;
-}
 
-const QVariant::Handler *QVariant::handler = &qt_kernel_variant_handler;
 
 void QVariant::create(int type, const void *copy)
 {
@@ -2031,24 +2015,6 @@ QVariant &QVariant::operator=(const QVariant &variant)
    return *this;
 }
 
-// internal
-void QVariant::detach()
-{
-   if (! d.is_shared || d.data.shared->ref.load() == 1)  {
-      return;
-   }
-
-   Private dd;
-   dd.type = d.type;
-   handler->construct(&dd, constData());
-
-   if (!d.data.shared->ref.deref()) {
-      handler->clear(&d);
-   }
-
-   d.data.shared = dd.data.shared;
-}
-
 const QString8 &QVariant::typeName() const
 {
    return typeToName(Type(d.type));
@@ -2104,47 +2070,6 @@ QVariant::Type QVariant::nameToType(const QString8 &name)
 
    return Type(metaType);
 }
-
-enum { MapFromThreeCount = 36 };
-
-static const ushort map_from_three[MapFromThreeCount] = {
-   QVariant::Invalid,
-   QVariant::Map,
-   QVariant::List,
-   QVariant::String,
-   QVariant::StringList,
-   QVariant::Font,
-   QVariant::Pixmap,
-   QVariant::Brush,
-   QVariant::Rect,
-   QVariant::Size,
-   QVariant::Color,
-   QVariant::Palette,
-   63, // ColorGroup
-   QVariant::Icon,
-   QVariant::Point,
-   QVariant::Image,
-   QVariant::Int,
-   QVariant::UInt,
-   QVariant::Bool,
-   QVariant::Double,
-   QVariant::ByteArray,
-   QVariant::Polygon,
-   QVariant::Region,
-   QVariant::Bitmap,
-   QVariant::Cursor,
-   QVariant::SizePolicy,
-   QVariant::Date,
-   QVariant::Time,
-   QVariant::DateTime,
-   QVariant::ByteArray,
-   QVariant::BitArray,
-   QVariant::KeySequence,
-   QVariant::Pen,
-   QVariant::LongLong,
-   QVariant::ULongLong,
-   QVariant::EasingCurve
-};
 
 // private method
 uint QVariant::getTypeId(const std::type_index &index)
