@@ -112,12 +112,15 @@ struct QObjectConnection {
       if (senderWrapper) {
          markStack.append(senderWrapper);
       }
+
       if (receiver) {
          markStack.append(receiver);
       }
+
       if (slot) {
          markStack.append(slot);
       }
+
       marked = true;
    }
 };
@@ -168,13 +171,14 @@ static bool isEnumerableMetaProperty(const QMetaProperty &prop, const QMetaObjec
       && (mo->indexOfProperty(prop.name()) == index);
 }
 
-// do not delete next three functions (copperspice)
+// do not delete next two functions (copperspice)
 static inline int methodNameLength(const QMetaMethod &method)
 {
    const QString &tmpSignature = method.methodSignature();
 
    return tmpSignature.indexOf("(");
 }
+
 static inline bool methodNameEquals(const QMetaMethod &method, const QString &signature, int nameLength)
 {
    const QString &tmpSignature = method.methodSignature();
@@ -274,6 +278,7 @@ void QtFunction::markChildren(JSC::MarkStack &markStack)
    if (data->object) {
       markStack.append(data->object);
    }
+
    JSC::InternalFunction::markChildren(markStack);
 }
 
@@ -294,9 +299,10 @@ QObject *QtFunction::qobject() const
 const QMetaObject *QtFunction::metaObject() const
 {
    QObject *qobj = qobject();
-   if (!qobj) {
-      return 0;
+   if (! qobj) {
+      return nullptr;
    }
+
    return qobj->metaObject();
 }
 
@@ -313,20 +319,24 @@ bool QtFunction::maybeOverloaded() const
 int QtFunction::mostGeneralMethod(QMetaMethod *out) const
 {
    const QMetaObject *meta = metaObject();
-   if (!meta) {
+   if (! meta) {
       return -1;
    }
+
    int index = initialIndex();
    QMetaMethod method = meta->method(index);
+
    if (maybeOverloaded() && (method.attributes() & QMetaMethod::Cloned)) {
       // find the most general method
       do {
          method = meta->method(--index);
       } while (method.attributes() & QMetaMethod::Cloned);
    }
+
    if (out) {
       *out = method;
    }
+
    return index;
 }
 
@@ -347,6 +357,7 @@ QList<int> QScript::QtFunction::overloadedIndexes() const
          result.append(index);
       }
    }
+
    return result;
 }
 
@@ -468,7 +479,7 @@ class QScriptMetaMethod
    }
 
    inline bool isValid() const {
-      return !m_types.isEmpty();
+      return ! m_types.isEmpty();
    }
 
    inline QScriptMetaType returnType() const {
@@ -536,6 +547,7 @@ static QMetaMethod metaMethod(const QMetaObject *meta, QMetaMethod::MethodType t
 {
    if (type != QMetaMethod::Constructor) {
       return meta->method(index);
+
    } else {
       return meta->constructor(index);
    }
@@ -585,7 +597,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
       QString returnTypeName = method.typeName();
       int rtype = QMetaType::type(returnTypeName);
 
-      if ((rtype == QMetaType::UnknownType) && ! returnTypeName.isEmpty()) {
+      if ((rtype == QVariant::Invalid) && ! returnTypeName.isEmpty()) {
          int enumIndex = indexOfMetaEnum(meta, returnTypeName);
 
          if (enumIndex != -1) {
@@ -596,9 +608,9 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
       } else {
          if (callType == QMetaMethod::Constructor) {
-            typesData[0] = QScriptMetaType::metaType(QMetaType::QObjectStar, "QObject*");
+            typesData[0] = QScriptMetaType::metaType(QVariant::ObjectStar, "QObject*");
 
-         } else if (rtype == QMetaType::QVariant) {
+         } else if (rtype == QVariant::Variant) {
             typesData[0] = QScriptMetaType::variant();
 
          } else {
@@ -611,7 +623,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
          QString argTypeName = parameterTypeNames.at(i);
          int atype = QMetaType::type(argTypeName);
 
-         if (atype == QMetaType::UnknownType) {
+         if (atype == QVariant::Invalid) {
             int enumIndex = indexOfMetaEnum(meta, argTypeName);
 
             if (enumIndex != -1) {
@@ -620,7 +632,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                typesData[1 + i] = QScriptMetaType::unresolved(argTypeName);
             }
 
-         } else if (atype == QMetaType::QVariant) {
+         } else if (atype == QVariant::Variant) {
             typesData[1 + i] = QScriptMetaType::variant();
 
          } else {
@@ -693,14 +705,16 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
          if (! converted) {
             if (QScriptEnginePrivate::isVariant(actual)) {
-               if (tid == -1) {
+               if (tid == QVariant::Invalid) {
                   tid = argType.typeId();
                }
 
                QVariant vv = QScriptEnginePrivate::variantValue(actual);
+
                if (vv.canConvert(QVariant::Type(tid))) {
                   v = vv;
                   converted = v.convert(QVariant::Type(tid));
+
                   if (converted && (vv.userType() != tid)) {
                      matchDistance += 10;
                   }
@@ -755,30 +769,36 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
             // determine how well the conversion matched
             if (actual.isNumber()) {
                switch (tid) {
-                  case QMetaType::Double:
+                  case QVariant::Double:
                      // perfect
                      break;
-                  case QMetaType::Float:
+
+                  case QVariant::Float:
                      matchDistance += 1;
                      break;
-                  case QMetaType::LongLong:
-                  case QMetaType::ULongLong:
+
+                  case QVariant::LongLong:
+                  case QVariant::ULongLong:
                      matchDistance += 2;
                      break;
-                  case QMetaType::Long:
-                  case QMetaType::ULong:
+
+                  case QVariant::Long:
+                  case QVariant::ULong:
                      matchDistance += 3;
                      break;
-                  case QMetaType::Int:
-                  case QMetaType::UInt:
+
+                  case QVariant::Int:
+                  case QVariant::UInt:
                      matchDistance += 4;
                      break;
-                  case QMetaType::Short:
-                  case QMetaType::UShort:
+
+                  case QVariant::Short:
+                  case QVariant::UShort:
                      matchDistance += 5;
                      break;
-                  case QMetaType::Char:
-                  case QMetaType::UChar:
+
+                  case QVariant::Char:
+                  case QVariant::UChar:
                      matchDistance += 6;
                      break;
 
@@ -789,7 +809,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
             } else if (actual.isString()) {
                switch (tid) {
-                  case QMetaType::QString:
+                  case QVariant::String:
                      // perfect
                      break;
 
@@ -797,9 +817,10 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                      matchDistance += 10;
                      break;
                }
+
             } else if (actual.isBoolean()) {
                switch (tid) {
-                  case QMetaType::Bool:
+                  case QVariant::Bool:
                      // perfect
                      break;
 
@@ -810,15 +831,15 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
             } else if (QScriptEnginePrivate::isDate(actual)) {
                switch (tid) {
-                  case QMetaType::QDateTime:
+                  case QVariant::DateTime:
                      // perfect
                      break;
 
-                  case QMetaType::QDate:
+                  case QVariant::Date:
                      matchDistance += 1;
                      break;
 
-                  case QMetaType::QTime:
+                  case QVariant::Time:
                      matchDistance += 2;
                      break;
 
@@ -829,17 +850,17 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
             } else if (QScriptEnginePrivate::isRegExp(actual)) {
                switch (tid) {
-                  case QMetaType::QRegularExpression:
+                  case QVariant::RegularExpression:
                      // perfect
                      break;
+
                   default:
                      matchDistance += 10;
                      break;
                }
 
             } else if (QScriptEnginePrivate::isVariant(actual)) {
-               if (argType.isVariant()
-                  || (QScriptEnginePrivate::toVariant(exec, actual).userType() == tid)) {
+               if (argType.isVariant() || (QScriptEnginePrivate::toVariant(exec, actual).userType() == tid)) {
                   // perfect
                } else {
                   matchDistance += 10;
@@ -847,18 +868,20 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
             } else if (QScriptEnginePrivate::isArray(actual)) {
                switch (tid) {
-                  case QMetaType::QStringList:
-                  case QMetaType::QVariantList:
+                  case QVariant::StringList:
+                  case QVariant::List:
                      matchDistance += 5;
                      break;
+
                   default:
                      matchDistance += 10;
                      break;
                }
+
             } else if (QScriptEnginePrivate::isQObject(actual)) {
                switch (tid) {
-                  case QMetaType::QObjectStar:
-                  case QMetaType::QWidgetStar:
+                  case QVariant::ObjectStar:
+                  case QVariant::WidgetStar:
                      // perfect
                      break;
 
@@ -869,11 +892,12 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
                      break;
                }
+
             } else if (actual.isNull()) {
                switch (tid) {
-                  case QMetaType::VoidStar:
-                  case QMetaType::QObjectStar:
-                  case QMetaType::QWidgetStar:
+                  case QVariant::VoidStar:
+                  case QVariant::ObjectStar:
+                  case QVariant::WidgetStar:
                      // perfect
                      break;
 
@@ -938,7 +962,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
          conversionFailed.append(index);
       }
 
-      if (!maybeOverloaded) {
+      if (! maybeOverloaded) {
          break;
       }
    }
@@ -1005,7 +1029,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
          if ((candidates.size() > 1) && (metaArgs.args.count() == candidates.at(1).args.count())
             && (metaArgs.matchDistance == candidates.at(1).matchDistance)) {
 
-            // foun ambiguous call
+            // found ambiguous call
             QString funName = initialMethodSignature.left(nameLength);
             QString message = QString("Ambiguous call of overloaded function %0(); candidates were\n").formatArg(funName);
 
@@ -1149,7 +1173,7 @@ JSC::JSValue QtFunction::execute(JSC::ExecState *exec, JSC::JSValue thisValue,
 
    QObject *qobj = static_cast<QScript::QObjectDelegate *>(delegate)->value();
 
-   if (!qobj) {
+   if (! qobj) {
       return JSC::throwError(exec, JSC::GeneralError, QString("Can not call function of deleted QObject"));
    }
 

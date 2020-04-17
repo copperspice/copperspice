@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-// do not move include, if qvarient.h is included directly forward declarations are not sufficient 12/30/2013
+// do not move include, if qvarient.h is included directly forward declarations are not sufficient
 #include <qobject.h>
 
 #ifndef QVARIANT_H
@@ -114,7 +114,7 @@ class Q_CORE_EXPORT QVariant
       BitArray,
       ByteArray,
       String,
-      String8       = String,
+      String8 = String,
       String16,
       StringList,
       StringView,
@@ -141,7 +141,6 @@ class Q_CORE_EXPORT QVariant
       Size,
       SizeF,
 
-      Variant,
       Hash,
       List,
       Map,
@@ -184,11 +183,11 @@ class Q_CORE_EXPORT QVariant
       Vector3D,
       Vector4D,
 
-
       // temporary code, delete after transistion
       Char32               = QChar,
       FirstConstructedType = QChar,
-
+      // used in QMetaProperty
+      Variant,
 
       // must always be after all declared types
       UserType   = 256,

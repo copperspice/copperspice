@@ -1308,7 +1308,7 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
         QString returnTypeName = method.typeName();
         int rtype = QMetaType::type(returnTypeName);
 
-        if ((rtype == 0) && !returnTypeName.isEmpty()) {
+        if ((rtype == 0) && ! returnTypeName.isEmpty()) {
             if (returnTypeName == "QVariant") {
                 types.append(QtMethodMatchType::variant());
 
@@ -1517,7 +1517,8 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
         /* Copy the stuff over */
         int i;
         vars.resize(args.count());
-        for (i=0; i < args.count(); i++) {
+
+        for (i = 0; i < args.count(); i++) {
             vars[i] = args[i];
             vvars[i] = vars[i].data();
         }

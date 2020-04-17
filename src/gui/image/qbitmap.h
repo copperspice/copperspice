@@ -25,25 +25,24 @@
 #define QBITMAP_H
 
 #include <qpixmap.h>
-
-
-class QVariant;
+#include <qvariant.h>
 
 class Q_GUI_EXPORT QBitmap : public QPixmap
 {
-
  public:
    QBitmap();
    QBitmap(const QPixmap &);
    QBitmap(int w, int h);
    explicit QBitmap(const QSize &);
    explicit QBitmap(const QString &fileName, const char *format = nullptr);
+
    ~QBitmap();
 
    QBitmap &operator=(const QPixmap &);
    inline void swap(QBitmap &other) {
       QPixmap::swap(other);   // prevent QBitmap<->QPixmap swaps
    }
+
    operator QVariant() const;
 
    inline void clear() {

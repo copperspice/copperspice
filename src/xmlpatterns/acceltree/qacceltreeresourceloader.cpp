@@ -81,14 +81,11 @@ QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri,
       const NetworkAccessDelegator::Ptr &networkDelegator,
       const ReportContext::Ptr &context, ErrorHandling errorHandling)
 {
-   return load(uri,
-               networkDelegator->managerFor(uri),
-               context, errorHandling);
+   return load(uri, networkDelegator->managerFor(uri), context, errorHandling);
 }
 
 QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri, QNetworkAccessManager *const networkManager,
       const ReportContext::Ptr &context, ErrorHandling errorHandling)
-
 {
    Q_ASSERT(networkManager);
    Q_ASSERT(uri.isValid());
@@ -100,12 +97,13 @@ QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri, QNetworkAccessMana
 
    networkLoop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &networkLoop,
                        SLOT(error(QNetworkReply::NetworkError)));
+
    networkLoop.connect(reply, SIGNAL(finished()), &networkLoop, SLOT(finished()));
 
    if (networkLoop.exec(QEventLoop::ExcludeUserInputEvents)) {
       const QString errorMessage(escape(reply->errorString()));
 
-      /* Note, we delete reply before we exit this function with error(). */
+      // delete reply before exiting  this function with error()
       delete reply;
 
       const QSourceLocation location(uri);
@@ -114,7 +112,8 @@ QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri, QNetworkAccessMana
          context->error(errorMessage, ReportContext::FODC0002, location);
       }
 
-      return 0;
+      return nullptr;
+
    } else {
       return reply;
    }

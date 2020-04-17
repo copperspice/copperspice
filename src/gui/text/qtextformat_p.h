@@ -28,7 +28,6 @@
 #include <qmultihash.h>
 #include <qvector.h>
 
-
 class Q_GUI_EXPORT QTextFormatCollection
 {
  public:

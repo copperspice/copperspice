@@ -25,9 +25,10 @@
 #define QICON_H
 
 #include <qglobal.h>
-#include <qsize.h>
 #include <qlist.h>
+#include <qsize.h>
 #include <qpixmap.h>
+#include <qvariant.h>
 
 class QIconPrivate;
 class QIconEngine;

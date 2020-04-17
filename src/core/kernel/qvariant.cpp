@@ -22,6 +22,8 @@
 ***********************************************************************/
 
 #include <qvariant.h>
+
+#include <qabstractitemmodel.h>
 #include <qbitarray.h>
 #include <qbytearray.h>
 #include <qdatastream.h>
@@ -34,23 +36,20 @@
 #include <qstring8.h>
 #include <qstring16.h>
 #include <qstringlist.h>
-#include <qurl.h>
 #include <qlocale.h>
-#include <quuid.h>
-
-#include <qabstractitemmodel.h>
 #include <qjsonvalue.h>
 #include <qjsonobject.h>
 #include <qjsonarray.h>
 #include <qjsondocument.h>
-#include <qsize.h>
 #include <qpoint.h>
+#include <qsize.h>
 #include <qrect.h>
 #include <qline.h>
+#include <quuid.h>
+#include <qurl.h>
 
 #include <float.h>
 
-QT_BEGIN_NAMESPACE
 QVector<QVariant::NamesAndTypes> QVariant::m_userTypes;
 
 #ifndef DBL_DIG
@@ -2757,5 +2756,3 @@ QDebug operator<<(QDebug dbg, const QVariant::Type p)
    dbg.nospace() << "QVariant::" << QVariant::typeToName(p);
    return dbg.space();
 }
-
-QT_END_NAMESPACE

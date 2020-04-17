@@ -87,7 +87,7 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
             retval = *tmp;
 
          } else  {
-            // unable to convert, type mismatch
+            // type mismatch
             ok = false;
          }
       }

@@ -158,7 +158,8 @@ LRESULT QT_WIN_CALLBACK qt_internal_proc(HWND hwnd, UINT message, WPARAM wp, LPA
         if (message == WM_TIMER)
             KillTimer(hwnd, wp);
         return 0;
-    } else if (dispatcher->filterNativeEvent(QByteArrayLiteral("windows_dispatcher_MSG"), &msg, &result)) {
+
+    } else if (dispatcher->filterNativeEvent("windows_dispatcher_MSG", &msg, &result)) {
         return result;
     }
 
@@ -542,7 +543,8 @@ QEventDispatcherWin32::QEventDispatcherWin32(QObject *parent)
 
 QEventDispatcherWin32::QEventDispatcherWin32(QEventDispatcherWin32Private &dd, QObject *parent)
     : QAbstractEventDispatcher(dd, parent)
-{ }
+{
+}
 
 QEventDispatcherWin32::~QEventDispatcherWin32()
 {

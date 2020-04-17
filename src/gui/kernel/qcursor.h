@@ -25,9 +25,10 @@
 #define QCURSOR_H
 
 #include <qpoint.h>
+#include <qvariant.h>
 #include <qwindowdefs.h>
 
-class QVariant;
+// class QVariant;
 class QScreen;
 
 #ifdef QT_NO_CURSOR
@@ -105,11 +106,11 @@ class Q_GUI_EXPORT QCursor
    inline static void setPos(QScreen *screen, const QPoint &p) {
       setPos(screen, p.x(), p.y());
    }
+
  private:
    QCursorData *d;
 
 };
-
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &outS, const QCursor &cursor);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &inS, QCursor &cursor);

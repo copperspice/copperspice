@@ -35,7 +35,6 @@ QTextLength::operator QVariant() const
    return QVariant(QVariant::TextLength, this);
 }
 
-
 QDataStream &operator<<(QDataStream &stream, const QTextLength &length)
 {
    return stream << qint32(length.lengthType) << double(length.fixedValueOrPercentage);
@@ -50,7 +49,6 @@ QDataStream &operator>>(QDataStream &stream, QTextLength &length)
    length.lengthType = QTextLength::Type(type);
    return stream;
 }
-
 
 class QTextFormatPrivate : public QSharedData
 {
@@ -67,6 +65,7 @@ class QTextFormatPrivate : public QSharedData
       inline bool operator==(const Property &other) const {
          return key == other.key && value == other.value;
       }
+
       inline bool operator!=(const Property &other) const {
          return key != other.key || value != other.value;
       }
@@ -89,14 +88,18 @@ class QTextFormatPrivate : public QSharedData
 
    inline void insertProperty(qint32 key, const QVariant &value) {
       hashDirty = true;
+
       if (key >= QTextFormat::FirstFontProperty && key <= QTextFormat::LastFontProperty) {
          fontDirty = true;
       }
-      for (int i = 0; i < props.count(); ++i)
+
+      for (int i = 0; i < props.count(); ++i) {
          if (props.at(i).key == key) {
             props[i].value = value;
             return;
          }
+      }
+
       props.append(Property(key, value));
    }
 
@@ -104,19 +107,24 @@ class QTextFormatPrivate : public QSharedData
       for (int i = 0; i < props.count(); ++i)
          if (props.at(i).key == key) {
             hashDirty = true;
+
             if (key >= QTextFormat::FirstFontProperty && key <= QTextFormat::LastFontProperty) {
                fontDirty = true;
             }
+
             props.remove(i);
+
             return;
          }
    }
 
    inline int propertyIndex(qint32 key) const {
-      for (int i = 0; i < props.count(); ++i)
+      for (int i = 0; i < props.count(); ++i) {
          if (props.at(i).key == key) {
             return i;
          }
+      }
+
       return -1;
    }
 
@@ -125,6 +133,7 @@ class QTextFormatPrivate : public QSharedData
       if (idx < 0) {
          return QVariant();
       }
+
       return props.at(idx).value;
    }
 
@@ -138,12 +147,13 @@ class QTextFormatPrivate : public QSharedData
       if (fontDirty) {
          recalcFont();
       }
+
       return fnt;
    }
 
    QVector<Property> props;
- private:
 
+ private:
    uint recalcHash() const;
    void recalcFont() const;
 
@@ -174,7 +184,9 @@ static inline uint hash(const QBrush &brush)
 static inline uint variantHash(const QVariant &variant)
 {
    // simple and fast hash functions to differentiate between type and value
-   switch (variant.userType()) { // sorted by occurrence frequency
+   // sorted by occurrence frequency
+
+   switch (variant.userType()) {
       case QVariant::String:
          return qHash(variant.toString());
 
@@ -447,12 +459,12 @@ void QTextFormat::merge(const QTextFormat &other)
       return;
    }
 
-   if (!d) {
+   if (! d) {
       d = other.d;
       return;
    }
 
-   if (!other.d) {
+   if (! other.d) {
       return;
    }
 
@@ -460,6 +472,7 @@ void QTextFormat::merge(const QTextFormat &other)
 
    const QVector<QTextFormatPrivate::Property> &otherProps = other.d->props;
    d->props.reserve(d->props.size() + otherProps.size());
+
    for (int i = 0; i < otherProps.count(); ++i) {
       const QTextFormatPrivate::Property &p = otherProps.at(i);
       d->insertProperty(p.key, p.value);
@@ -637,10 +650,12 @@ QBrush QTextFormat::brushProperty(int propertyId) const
    if (!d) {
       return QBrush(Qt::NoBrush);
    }
+
    const QVariant prop = d->property(propertyId);
    if (prop.userType() != QVariant::Brush) {
       return QBrush(Qt::NoBrush);
    }
+
    return prop.value<QBrush>();
 }
 
@@ -706,6 +721,7 @@ void QTextFormat::setProperty(int propertyId, const QVariant &value)
    if (!d) {
       d = new QTextFormatPrivate;
    }
+
    if (!value.isValid()) {
       clearProperty(propertyId);
    } else {
@@ -774,7 +790,7 @@ void QTextFormat::setObjectIndex(int o)
       if (!d) {
          d = new QTextFormatPrivate;
       }
-      // ### type
+
       d->insertProperty(ObjectIndex, o);
    }
 }

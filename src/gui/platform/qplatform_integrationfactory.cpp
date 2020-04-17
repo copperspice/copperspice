@@ -46,16 +46,16 @@ static inline QPlatformIntegration *loadIntegration(QFactoryLoader *loader, cons
                   const QStringList &parameters, int &argc, char ** argv)
 {
    if (loader->keySet().contains(key)) {
-      if (QPlatformIntegrationPlugin *factory = qobject_cast<QPlatformIntegrationPlugin *>(loader->instance(key))) {
+
+      if (QPlatformIntegrationPlugin *factory = dynamic_cast<QPlatformIntegrationPlugin *>(loader->instance(key))) {
 
          if (QPlatformIntegration *result = factory->create(key, parameters, argc, argv)) {
             return result;
          }
-
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 QPlatformIntegration *QPlatformIntegrationFactory::create(const QString &platform, const QStringList &paramList,
@@ -63,6 +63,7 @@ QPlatformIntegration *QPlatformIntegrationFactory::create(const QString &platfor
 {
     // try loading the plugin from the passed value of platformPluginPath
     if (! platformPluginPath.isEmpty()) {
+
         QCoreApplication::addLibraryPath(platformPluginPath);
 
         if (QPlatformIntegration *retval = loadIntegration(directLoader(), platform, paramList, argc, argv)) {

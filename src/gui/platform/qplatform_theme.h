@@ -244,6 +244,8 @@ class Q_GUI_EXPORT QPlatformTheme
    using IconOptions = QFlags<IconOption>;
 
    explicit QPlatformTheme();
+   QPlatformTheme(const QPlatformTheme &) = delete;
+
    virtual ~QPlatformTheme();
 
    virtual QPlatformMenuItem *createPlatformMenuItem() const;
@@ -280,9 +282,6 @@ class Q_GUI_EXPORT QPlatformTheme
  protected:
    explicit QPlatformTheme(QPlatformThemePrivate *priv);
    QScopedPointer<QPlatformThemePrivate> d_ptr;
-
- private:
-   Q_DISABLE_COPY(QPlatformTheme)
 };
 
 #endif

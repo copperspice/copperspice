@@ -59,14 +59,13 @@ void QNetworkReplyImplPrivate::_q_startOperation()
       qDebug("QNetworkReplyImpl::_q_startOperation was called more than once");
       return;
    }
+
    state = ReplyState::Working;
 
-   // note: if that method is called directly, it cannot happen that the backend is 0,
-   // because we just checked via a qobject_cast that we got a http backend (see
-   // QNetworkReplyImplPrivate::setup())
-   if (!backend) {
+   if (! backend) {
       error(QNetworkReplyImpl::ProtocolUnknownError,
-            QCoreApplication::translate("QNetworkReply", "Protocol \"%1\" is unknown").formatArg(url.scheme())); // not really true!;
+            QCoreApplication::translate("QNetworkReply", "Unknown network protocol: %1").formatArg(url.scheme()));
+
       finished();
       return;
    }
@@ -360,6 +359,7 @@ void QNetworkReplyImplPrivate::_q_networkSessionFailed()
       finished();
    }
 }
+
 void QNetworkReplyImplPrivate::_q_networkSessionUsagePoliciesChanged(QNetworkSession::UsagePolicies newPolicies)
 {
    if (backend->request().attribute(QNetworkRequest::BackgroundRequestAttribute).toBool()) {
@@ -700,9 +700,11 @@ void QNetworkReplyImplPrivate::appendDownstreamDataSignalEmissions()
    }
 
    pauseNotificationHandling();
+
    // important: At the point of this readyRead(), the data parameter list must be empty,
    // else implicit sharing will trigger memcpy when the user is reading data!
    emit q->readyRead();
+
    // emit readyRead before downloadProgress incase this will cause events to be
    // processed and we get into a recursive call (as in QProgressDialog).
 
@@ -917,7 +919,8 @@ void QNetworkReplyImplPrivate::finished()
 void QNetworkReplyImplPrivate::error(QNetworkReplyImpl::NetworkError code, const QString &errorMessage)
 {
    Q_Q(QNetworkReplyImpl);
-   // Can't set and emit multiple errors.
+
+   // unable to set and emit multiple errors
    if (errorCode != QNetworkReply::NoError) {
       qWarning("QNetworkReplyImplPrivate::error: Internal problem, this method must only be called once.");
       return;
@@ -926,14 +929,13 @@ void QNetworkReplyImplPrivate::error(QNetworkReplyImpl::NetworkError code, const
    errorCode = code;
    q->setErrorString(errorMessage);
 
-   // note: might not be a good idea, since users could decide to delete us
-   // which would delete the backend too, maybe we should protect the backend
    emit q->error(code);
 }
 
 void QNetworkReplyImplPrivate::metaDataChanged()
 {
    Q_Q(QNetworkReplyImpl);
+
    // 1. do we have cookies?
    // 2. are we allowed to set them?
 
@@ -967,6 +969,7 @@ void QNetworkReplyImplPrivate::encrypted()
    emit q->encrypted();
 #endif
 }
+
 void QNetworkReplyImplPrivate::sslErrors(const QList<QSslError> &errors)
 {
 #ifdef QT_SSL

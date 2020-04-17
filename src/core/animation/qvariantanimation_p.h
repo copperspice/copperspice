@@ -24,8 +24,8 @@
 #ifndef QVariantAnimation_P_H
 #define QVariantAnimation_P_H
 
-#include <qvariantanimation.h>
 #include <qeasingcurve.h>
+#include <qvariantanimation.h>
 #include <qvector.h>
 
 #include <qabstractanimation_p.h>
@@ -34,8 +34,6 @@
 
 class QVariantAnimationPrivate : public QAbstractAnimationPrivate
 {
-   Q_DECLARE_PUBLIC(QVariantAnimation)
-
  public:
    QVariantAnimationPrivate();
 
@@ -48,7 +46,7 @@ class QVariantAnimationPrivate : public QAbstractAnimationPrivate
    QVariant currentValue;
    QVariant defaultStartEndValue;
 
-   // used to keep track of the KeyValue interval in which we currently are
+   // keeps track of the current interval
    struct {
       QVariantAnimation::KeyValue start, end;
    } currentInterval;
@@ -66,11 +64,11 @@ class QVariantAnimationPrivate : public QAbstractAnimationPrivate
 
    void updateInterpolator();
 
-   // XXX this is needed by dui
+ private:
+   Q_DECLARE_PUBLIC(QVariantAnimation)
    static Q_CORE_EXPORT QVariantAnimation::Interpolator getInterpolator(int interpolationType);
 };
 
-// this should make the interpolation faster
 template<typename T>
 inline T _q_interpolate(const T &f, const T &t, qreal progress)
 {

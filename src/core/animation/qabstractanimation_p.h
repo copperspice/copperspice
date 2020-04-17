@@ -36,8 +36,6 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 class QAnimationGroup;
 class QAbstractAnimation;
 class QUnifiedTimer;
@@ -125,7 +123,7 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
    QUnifiedTimer();
 
  public:
-   //XXX this is needed by dui
+   // may be required for declarative
    static QUnifiedTimer *instance();
    static QUnifiedTimer *instance(bool create);
 
@@ -215,8 +213,6 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
    int closestPauseAnimationTimeToFinish();
 };
 
-QT_END_NAMESPACE
-
 #endif //QT_NO_ANIMATION
 
-#endif //QABSTRACTANIMATION_P_H
+#endif

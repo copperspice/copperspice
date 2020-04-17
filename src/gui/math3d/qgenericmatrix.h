@@ -25,8 +25,8 @@
 #define QGENERICMATRIX_H
 
 #include <QtCore/qmetatype.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qdatastream.h>
+#include <qdebug.h>
+#include <qdatastream.h>
 
 template <int N, int M, typename T>
 class QGenericMatrix

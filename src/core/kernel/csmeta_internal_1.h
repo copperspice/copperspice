@@ -343,7 +343,7 @@ bool SpiceJarWrite<T, V>::runV(QObject *obj, QVariant data) const
    // strip away const and & if they exist
    using bareType = typename std::remove_const<typename std::remove_reference<V>::type>::type;
 
-   // convert data to type V
+   // convert data to type bareType
    std::pair<bareType, bool> retval = convertFromQVariant<bareType>(data);
 
    if (retval.second) {

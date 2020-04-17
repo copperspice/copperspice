@@ -24,11 +24,12 @@
 #ifndef QXMLNAME_H
 #define QXMLNAME_H
 
-#include <QtCore/QString>
+#include <qstring.h>
 #include <QtCore/QMetaType>
 
 class QXmlName;
 class QXmlNamePool;
+
 Q_XMLPATTERNS_EXPORT uint qHash(const QXmlName &name);
 
 class Q_XMLPATTERNS_EXPORT QXmlName

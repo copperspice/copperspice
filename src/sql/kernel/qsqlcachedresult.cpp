@@ -27,8 +27,6 @@
 #include <qdatetime.h>
 #include <qvector.h>
 
-
-
 static const uint initial_cache_size = 128;
 
 class QSqlCachedResultPrivate
@@ -239,6 +237,7 @@ QVariant QSqlCachedResult::data(int i)
 bool QSqlCachedResult::isNull(int i)
 {
    int idx = d->forwardOnly ? i : at() * d->colCount + i;
+
    if (i >= d->colCount || i < 0 || at() < 0 || idx >= d->rowCacheEnd) {
       return true;
    }

@@ -76,16 +76,19 @@ void QNetworkSessionPrivateImpl::syncStateWithInterface()
     lastError = QNetworkSession::UnknownSessionError;
 
     switch (publicConfig.type()) {
-    case QNetworkConfiguration::InternetAccessPoint:
-        activeConfig = publicConfig;
-        engine = getEngineFromId(activeConfig.identifier());
-        if (engine) {
-                    this, SLOT(configurationChanged(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
 
-            connect(engine, SIGNAL(connectionError(QString,QBearerEngineImpl::ConnectionError)),
-                    this, SLOT(connectionError(QString,QBearerEngineImpl::ConnectionError)), Qt::QueuedConnection);
-        }
-        break;
+       case QNetworkConfiguration::InternetAccessPoint:
+           activeConfig = publicConfig;
+           engine = getEngineFromId(activeConfig.identifier());
+
+           if (engine) {
+               connect(engine, SIGNAL(configurationChanged(QNetworkConfigurationPrivatePointer)),
+                       this, SLOT(configurationChanged(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
+
+               connect(engine, SIGNAL(connectionError(QString,QBearerEngineImpl::ConnectionError)),
+                       this, SLOT(connectionError(QString,QBearerEngineImpl::ConnectionError)), Qt::QueuedConnection);
+           }
+           break;
 
        case QNetworkConfiguration::ServiceNetwork:
            serviceConfig = publicConfig;

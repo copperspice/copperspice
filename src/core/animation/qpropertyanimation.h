@@ -24,9 +24,7 @@
 #ifndef QPROPERTYANIMATION_H
 #define QPROPERTYANIMATION_H
 
-#include <QtCore/qvariantanimation.h>
-
-QT_BEGIN_NAMESPACE
+#include <qvariantanimation.h>
 
 #ifndef QT_NO_ANIMATION
 
@@ -64,7 +62,5 @@ class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
 };
 
 #endif //QT_NO_ANIMATION
-
-QT_END_NAMESPACE
 
 #endif // QPROPERTYANIMATION_H

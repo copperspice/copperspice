@@ -26,11 +26,9 @@
 
 #include <qfontengine_p.h>
 
-#include <QImage>
-#include <QSharedPointer>
-#include <QMetaType>
-
-#include "qtwindows_additional.h"
+#include <qimage.h>
+#include <qsharedpointer.h>
+#include <qtwindows_additional.h>
 
 class QWindowsNativeImage;
 class QWindowsFontEngineData;

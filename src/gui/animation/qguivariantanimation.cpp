@@ -32,8 +32,6 @@
 #include <qvector4d.h>
 #include <qquaternion.h>
 
-// emerald - may need review
-
 template<>
 inline QColor _q_interpolate(const QColor &f, const QColor &t, qreal progress)
 {
@@ -83,5 +81,4 @@ static int qUnregisterGuiGetInterpolator()
 }
 Q_DESTRUCTOR_FUNCTION(qUnregisterGuiGetInterpolator)
 
-
-#endif //QT_NO_ANIMATION
+#endif

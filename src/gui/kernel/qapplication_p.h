@@ -432,8 +432,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    static HWND getHWNDForWidget(const QWidget *widget) {
       if (QWindow *window = windowForWidget(widget)) {
          if (window->handle()) {
-            return static_cast<HWND> (QApplication::platformNativeInterface()->
-                  nativeResourceForWindow(QByteArrayLiteral("handle"), window));
+            return static_cast<HWND> (QApplication::platformNativeInterface()->nativeResourceForWindow("handle", window));
          }
       }
 

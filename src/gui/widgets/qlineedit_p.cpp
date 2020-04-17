@@ -32,7 +32,6 @@
 #include <qpropertyanimation.h>
 #include <qmimedata.h>
 #include <qvariant.h>
-
 #include <qwidgetaction.h>
 
 #ifndef QT_NO_ACCESSIBILITY
@@ -67,6 +66,7 @@ bool QLineEditPrivate::inSelection(int x) const
    x -= adjustedContentsRect().x() - hscroll + horizontalMargin;
    return control->inSelection(x);
 }
+
 QRect QLineEditPrivate::cursorRect() const
 {
    return adjustedControlRect(control->cursorRect());
@@ -313,9 +313,9 @@ void QLineEditPrivate::drag()
 }
 
 #endif // QT_NO_DRAGANDDROP
+
 QLineEditIconButton::QLineEditIconButton(QWidget *parent)
-   : QToolButton(parent)
-   , m_opacity(0)
+   : QToolButton(parent), m_opacity(0)
 {
    setFocusPolicy(Qt::NoFocus);
 }
@@ -325,6 +325,7 @@ QLineEditPrivate *QLineEditIconButton::lineEditPrivate() const
    QLineEdit *le = qobject_cast<QLineEdit *>(parentWidget());
    return le ? static_cast<QLineEditPrivate *>(qt_widget_private(le)) : nullptr;
 }
+
 void QLineEditIconButton::paintEvent(QPaintEvent *)
 {
    QPainter painter(this);
@@ -349,6 +350,7 @@ void QLineEditIconButton::paintEvent(QPaintEvent *)
    painter.setOpacity(m_opacity);
    painter.drawPixmap(pixmapRect, iconPixmap);
 }
+
 void QLineEditIconButton::actionEvent(QActionEvent *e)
 {
    switch (e->type()) {
@@ -365,8 +367,10 @@ void QLineEditIconButton::actionEvent(QActionEvent *e)
       default:
          break;
    }
+
    QToolButton::actionEvent(e);
 }
+
 void QLineEditIconButton::setOpacity(qreal value)
 {
    if (!qFuzzyCompare(m_opacity, value)) {
@@ -379,12 +383,13 @@ void QLineEditIconButton::setOpacity(qreal value)
 #ifndef QT_NO_ANIMATION
 void QLineEditIconButton::startOpacityAnimation(qreal endValue)
 {
-   QPropertyAnimation *animation = new QPropertyAnimation(this, QByteArrayLiteral("opacity"));
+   QPropertyAnimation *animation = new QPropertyAnimation(this, "opacity");
    animation->setDuration(160);
    animation->setEndValue(endValue);
    animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 #endif
+
 void QLineEditIconButton::updateCursor()
 {
 #ifndef QT_NO_CURSOR

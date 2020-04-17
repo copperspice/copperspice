@@ -27,8 +27,8 @@
 #include <qabstractanimation.h>
 #include <qeasingcurve.h>
 #include <qpair.h>
-#include <qvector.h>
 #include <qvariant.h>
+#include <qvector.h>
 
 #ifndef QT_NO_ANIMATION
 
@@ -54,6 +54,8 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    typedef QVector<KeyValue> KeyValues;
 
    QVariantAnimation(QObject *parent = nullptr);
+   QVariantAnimation (const QVariantAnimation & ) = delete;
+
    ~QVariantAnimation();
 
    QVariant startValue() const;
@@ -95,7 +97,6 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    template <typename T> friend void qRegisterAnimationInterpolator(QVariant (*func)(const T &, const T &, qreal));
    static void registerInterpolator(Interpolator func, int interpolationType);
 
-   Q_DISABLE_COPY(QVariantAnimation)
    Q_DECLARE_PRIVATE(QVariantAnimation)
 };
 
@@ -105,6 +106,6 @@ void qRegisterAnimationInterpolator(QVariant (*func)(const T &from, const T &to,
    QVariantAnimation::registerInterpolator(reinterpret_cast<QVariantAnimation::Interpolator>(func), qMetaTypeId<T>());
 }
 
-#endif //QT_NO_ANIMATION
+#endif // QT_NO_ANIMATION
 
 #endif

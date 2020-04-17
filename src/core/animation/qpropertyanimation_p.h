@@ -29,8 +29,6 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 class QPropertyAnimationPrivate : public QVariantAnimationPrivate
 {
    Q_DECLARE_PUBLIC(QPropertyAnimation)
@@ -40,21 +38,21 @@ class QPropertyAnimationPrivate : public QVariantAnimationPrivate
       : targetValue(0), propertyType(0), propertyIndex(-1) {
    }
 
+   void updateProperty(const QVariant &);
+   void updateMetaProperty();
+
    QWeakPointer<QObject> target;
-   //we use targetValue to be able to unregister the target from the global hash
+
+   //use targetValue to be able to unregister the target from the global hash
    QObject *targetValue;
 
-   //for the QProperty
+   // for the QProperty
    int propertyType;
    int propertyIndex;
 
    QByteArray propertyName;
-   void updateProperty(const QVariant &);
-   void updateMetaProperty();
 };
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_ANIMATION
 
-#endif //QPROPERTYANIMATION_P_H
+#endif

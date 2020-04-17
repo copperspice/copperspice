@@ -336,21 +336,27 @@ void QPlaylistFileParserPrivate::processLine(int startIndex, int length)
 void QPlaylistFileParserPrivate::_q_handleData()
 {
    Q_Q(QPlaylistFileParser);
+
    while (m_source->bytesAvailable()) {
       int expectedBytes = qMin(READ_LIMIT, int(qMin(m_source->bytesAvailable(),
                   qint64(LINE_LIMIT - m_buffer.size()))));
+
       m_buffer.push_back(m_source->read(expectedBytes));
       int processedBytes = 0;
+
       while (m_scanIndex < m_buffer.length()) {
          char s = m_buffer[m_scanIndex];
+
          if (s == '\r' || s == '\n') {
             int l = m_scanIndex - processedBytes;
             if (l > 0) {
                processLine(processedBytes, l);
             }
+
             processedBytes = m_scanIndex + 1;
-            if (!m_source) {
-               //some error happened, so exit parsing
+
+            if (! m_source) {
+               // error happened, exit parsing
                return;
             }
          }
@@ -382,6 +388,7 @@ void QPlaylistFileParserPrivate::_q_handleData()
       } else {
          m_buffer.clear();
       }
+
       m_scanIndex = 0;
    }
 

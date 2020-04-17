@@ -153,19 +153,18 @@ int QApplicationPrivate::app_cspec = QApplication::NormalColor;
 QPalette *QApplicationPrivate::sys_pal = 0;             // default system palette
 QPalette *QApplicationPrivate::set_pal = 0;             // default palette set by programmer
 
-QFont *QApplicationPrivate::sys_font = 0;               // default system font
-QFont *QApplicationPrivate::set_font = 0;               // default font set by programmer
+QFont *QApplicationPrivate::sys_font              = nullptr;   // default system font
+QFont *QApplicationPrivate::set_font              = nullptr;   // default font set by programmer
 
-QWidget *QApplicationPrivate::main_widget = 0;          // main application widget
-QWidget *QApplicationPrivate::focus_widget = 0;         // has keyboard input focus
-QWidget *QApplicationPrivate::hidden_focus_widget = 0;  // will get keyboard input focus after show()
-QWidget *QApplicationPrivate::active_window = 0;        // toplevel with keyboard focus
+QWidget *QApplicationPrivate::main_widget         = nullptr;   // main application widget
+QWidget *QApplicationPrivate::focus_widget        = nullptr;   // has keyboard input focus
+QWidget *QApplicationPrivate::hidden_focus_widget = nullptr;   // will get keyboard input focus after show()
+QWidget *QApplicationPrivate::active_window       = nullptr;   // toplevel with keyboard focus
 
-QWidgetList *QApplicationPrivate::popupWidgets = 0;     // has keyboard input focus
-
+QWidgetList *QApplicationPrivate::popupWidgets    = nullptr;   // has keyboard input focus
 
 #ifndef QT_NO_WHEELEVENT
-int QApplicationPrivate::wheel_scroll_lines;            // number of lines to scroll
+int QApplicationPrivate::wheel_scroll_lines;                   // number of lines to scroll
 QPointer<QWidget> QApplicationPrivate::wheel_widget;
 #endif
 
@@ -324,7 +323,7 @@ void QApplicationPrivate::initialize()
       initializeMultitouch();
    }
 
-   if (QApplication::desktopSettingsAware())
+   if (QApplication::desktopSettingsAware()) {
       if (const QPlatformTheme *theme = QApplicationPrivate::platformTheme()) {
          QApplicationPrivate::enabledAnimations = theme->themeHint(QPlatformTheme::UiEffects).toInt();
 
@@ -332,8 +331,9 @@ void QApplicationPrivate::initialize()
          QApplicationPrivate::wheel_scroll_lines = theme->themeHint(QPlatformTheme::WheelScrollLines).toInt();
 #endif
       }
+   }
 
-   is_app_running = true; // no longer starting up
+   is_app_running = true;    // no longer starting up
 }
 
 static void setPossiblePalette(const QPalette *palette, const QString &className)
@@ -685,7 +685,6 @@ QPalette QApplication::palette(const QWidget *w)
    return palette();
 }
 
-
 QPalette QApplication::palette(const QString &className)
 {
    if (!QApplicationPrivate::app_pal) {
@@ -705,7 +704,6 @@ QPalette QApplication::palette(const QString &className)
    return *QApplicationPrivate::app_pal;
 }
 
-
 void QApplication::setPalette(const QPalette &palette, const QString &className)
 {
    QApplicationPrivate::setPalette_helper(palette, className, true);
@@ -718,6 +716,7 @@ void QApplicationPrivate::setSystemPalette(const QPalette &pal)
 #if 0
    // adjust the system palette to avoid dithering
    QColormap cmap = QColormap::instance();
+
    if (cmap.depths() > 4 && cmap.depths() < 24) {
       for (int g = 0; g < QPalette::NColorGroups; g++)
          for (int i = 0; i < QPalette::NColorRoles; i++) {
@@ -741,8 +740,6 @@ void QApplicationPrivate::setSystemPalette(const QPalette &pal)
       QApplication::setPalette(*sys_pal);
    }
 }
-
-
 
 QFont QApplication::font(const QWidget *widget)
 {
