@@ -201,19 +201,12 @@ class Q_CORE_EXPORT QVariant
       uint meta_typeId;
       std::type_index meta_typeT;
    };
-   QVariant();
 
 
-   // force compile error
-   QVariant(const char *)    = delete;
-   QVariant(void *)          = delete;
-   QVariant(int typeOrUserType, const void *copy);
-   QVariant(int typeOrUserType, const void *copy, uint flags);
 
    QVariant(const QVariant &other);
    QVariant(QDataStream &stream);
 
-   QVariant(Type type);
 
    QVariant(bool value);
    QVariant(int value);
@@ -224,81 +217,24 @@ class Q_CORE_EXPORT QVariant
    ~QVariant();
 
    void clear();
-   QVariant(float value) {
-      d.is_null = false;
-      d.type = QMetaType::Float;
-      d.data.f = value;
-   }
 
-   bool convert(Type t);
-   QVariant(const QByteArray &bytearray);
-   QVariant(const QBitArray &bitarray);
 
-   QVariant(const QChar32 &ch);
-   QVariant(const QString8 &string);
-   QVariant(const QString16 &string);
 
-   QVariant(const QRegularExpression8 &regExp);
 
-   QVariant(const QDate &date);
-   QVariant(const QTime &time);
-   QVariant(const QDateTime &datetime);
 
-   QVariant(const QList<QVariant> &list);
-   QVariant(const QStringList &stringList);
 
-   QVariant(const QMap<QString, QVariant> &map);
-   QVariant(const QHash<QString, QVariant> &hash);
-   QVariant(const QMultiMap<QString, QVariant> &map);
-   QVariant(const QMultiHash<QString, QVariant> &hash);
 
-   QVariant(const QSize &size);
-   QVariant(const QSizeF &size);
-   QVariant(const QPoint &point);
-   QVariant(const QPointF &point);
-   QVariant(const QLine &line);
-   QVariant(const QLineF &line);
-   QVariant(const QRect &rect);
-   QVariant(const QRectF &rect);
 
-   QVariant(const QLocale &locale);
 
-   QVariant(const QUrl &url);
-   QVariant(const QEasingCurve &easing);
-   QVariant(const QUuid &uuid);
-   QVariant(const QModelIndex &modelIndex);
-   QVariant(const QJsonValue &jsonValue);
-   QVariant(const QJsonObject &jsonObject);
-   QVariant(const QJsonArray &jsonArray);
-   QVariant(const QJsonDocument &jsonDocument);
 
-   QVariant &operator=(const QVariant &other);
-   QVariant(Qt::GlobalColor color);
 
-   inline QVariant &operator=(QVariant && other) {
-      qSwap(d, other.d);
-      return *this;
-   }
 
-   inline void swap(QVariant &other) {
-      qSwap(d, other.d);
-   }
-
-   void load(QDataStream &ds);
-   void save(QDataStream &ds) const;
-   int userType() const;
-   const QString &typeName() const;
-
-   bool canConvert(Type t) const;
    template<typename T>
    void setValue(const T &value);
 
    void setValue(const QVariant &value);
-   inline bool isValid() const;
-   bool isNull() const;
 
 
-   bool toBool() const;
    int toInt(bool *ok = nullptr) const;
    uint toUInt(bool *ok = nullptr) const;
    qint64 toLongLong(bool *ok = nullptr) const;
@@ -347,33 +283,12 @@ class Q_CORE_EXPORT QVariant
    QUrl toUrl() const;
    QUuid toUuid() const;
 
-   template<typename T>
-   T value() const;
 
-   static const QString &typeToName(Type type);
-   static Type nameToType(const QString &name);
 
-   void *data();
-   const void *constData() const;
 
    Type type() const;
-   inline const void *data() const {
-      return constData();
-   }
 
-   template<typename T>
-   static inline QVariant fromValue(const T &value) {
-      return QVariant(qMetaTypeId<T>(static_cast<T *>(nullptr)), &value, std::is_pointer_v<T>);
-   }
 
-   static inline QVariant fromValue(const QVariant &value) {
-      return value;
-   }
-
-   template<typename T>
-   bool canConvert() const {
-      return canConvert(Type(qMetaTypeId<T>()));
-   }
    template<typename T>
    static uint typeToTypeId()
    {
@@ -398,39 +313,24 @@ class Q_CORE_EXPORT QVariant
 
 
 
-   inline bool operator==(const QVariant &other) const {
-      return cmp(other);
-   }
 
-   inline bool operator!=(const QVariant &other) const {
-      return ! cmp(other);
-   }
 
 
  protected:
    friend int qRegisterGuiVariant();
    friend int qUnregisterGuiVariant();
    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
-   //
-   template <typename T>
-   static uint registerType();
 
 
 
-   void create(int type, const void *copy);
-   bool cmp(const QVariant &other) const;
 
  private:
-   bool clearRequired() const;
 
    static uint getTypeId(const std::type_index &index);
    static uint getTypeId(QString name);
 
    static std::atomic<uint> &currentUserType();
 
-   static QVector<NamesAndTypes> m_userTypes;
-   // force compile error, prevent QVariant(QVariant::Type, int) to be called
-   QVariant(bool, int) = delete;
 };
 
 using QVariantList      = QList<QVariant>;
@@ -445,92 +345,7 @@ Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant::Type &p);
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant::Type p);
 
 
-template <typename T>
-QVariant::Type qMetaTypeVariant(T * = nullptr)
-{
-   return static_cast<QVariant::Type>(QMetaTypeId2<T>::qt_metatype_id());
-}
 
-//
-inline QVariant::QVariant() {}
-
-inline bool QVariant::isValid() const
-{
-   return d.type != Invalid;
-}
-
-template<typename T>
-inline void QVariant::setValue(const T &v)
-{
-   // optimize when std::any is added
-
-   const uint type = qMetaTypeId<T>(static_cast<T *>(nullptr));
-   *this = QVariant(type, &v, std::is_pointer_v<T>);
-}
-
-inline void QVariant::setValue(const QVariant &v)
-{
-   *this = v;
-}
-
-
-
-
-
-
-
-
-
-template<typename T>
-T QVariant::value() const
-{
-   const int id = qMetaTypeId<T>(static_cast<T *>(0));
-
-   if (id == userType()) {
-      return *reinterpret_cast<const T *>(this->constData());
-   }
-
-   if (id < int(QMetaType::User)) {
-      T t;
-
-      if (qvariant_cast_helper(*this, QVariant::Type(id), &t)) {
-         return t;
-      }
-   }
-
-   return T();
-}
-
-template<typename T>
-T qvariant_cast(const QVariant &x)
-{
-   (void) x;
-   static_assert(! std::is_same_v<T, T>, "qvariant_cast<T>(x) is obsolete, use x.value<T>()");
-
-   return T();
-}
-
-template <typename T>
-uint QVariant::registerType()
-{
-   static std::atomic<uint> userId = QVariant::Invalid;
-
-   if (userId.load(std::memory_order_relaxed) == QVariant::Invalid) {
-      uint newId = QVariant::currentUserType().fetch_add(1, std::memory_order_relaxed);
-      uint oldId = QVariant::Invalid;
-
-      if (userId.compare_exchange_strong(oldId, newId, std::memory_order_release, std::memory_order_acquire))  {
-         static QString typeName = cs_typeToName<T>();
-         m_userTypes.append(QVariant::NamesAndTypes{typeName.constData(), newId, typeid(T *)});
-
-      } else {
-         // already registered, maybe on a different thread
-         return oldId;
-      }
-   }
-
-   return userId.load(std::memory_order_acquire);
-};
 
 #define CS_DECLARE_METATYPE(TYPE)                  \
    template<>                                      \
