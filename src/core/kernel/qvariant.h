@@ -79,10 +79,30 @@ class QUuid;
 class QUrl;
 
 // gui
+class QBitmap;
+class QBrush;
+class QColor;
+class QCursor;
+class QFont;
+class QIcon;
+class QImage;
+class QKeySequence;
 class QMatrix;
+class QMatrix4x4;
+class QPalette;
+class QPen;
+class QPixmap;
+class QPolygon;
+class QPolygonF;
+class QQuaternion;
+class QRegion;
+class QSizePolicy;
 class QTextFormat;
 class QTextLength;
 class QTransform;
+class QVector2D;
+class QVector3D;
+class QVector4D;
 class QWidget;
 
 
@@ -204,11 +224,27 @@ class Q_CORE_EXPORT QVariant
       std::type_index meta_typeT;
    };
 
+   QVariant()
+   { }
 
+   QVariant(const char *)    = delete;      // prevents storing a "string literal"
+   QVariant(void *)          = delete;      // prevents storing a "pointer" as a bool
+   QVariant(bool, int)       = delete;      // prevents issue when using 2 parameter QVariant constructor
+
+   QVariant(Qt::GlobalColor) = delete;
+   QVariant(Qt::BrushStyle)  = delete;
+   QVariant(Qt::PenStyle)    = delete;
+   QVariant(Qt::CursorShape) = delete;
+
+   QVariant(Type type);
+   QVariant(uint typeId, const void *copy);
 
    QVariant(const QVariant &other);
    QVariant(QDataStream &stream);
 
+   QVariant(QVariant &&other)
+      : m_data(std::move(other.m_data))
+   { }
 
    QVariant(bool value);
    QVariant(int value);
@@ -216,6 +252,48 @@ class Q_CORE_EXPORT QVariant
    QVariant(qint64 value);
    QVariant(quint64 value);
    QVariant(double value);
+   QVariant(float value);
+
+   QVariant(QChar32 value);
+   QVariant(QString value);
+
+   QVariant(QByteArray value);
+   QVariant(QBitArray value);
+   QVariant(QString16 value);
+   QVariant(QStringList value);
+   QVariant(QRegularExpression8 value);
+
+   QVariant(QDate value);
+   QVariant(QTime value);
+   QVariant(QDateTime value);
+   QVariant(QLocale value);
+
+   QVariant(QList<QVariant> value);
+   QVariant(QMap<QString, QVariant> value);
+   QVariant(QHash<QString, QVariant> value);
+   QVariant(QMultiMap<QString, QVariant> value);
+   QVariant(QMultiHash<QString, QVariant> value);
+
+   QVariant(QJsonValue value);
+   QVariant(QJsonObject value);
+   QVariant(QJsonArray value);
+   QVariant(QJsonDocument value);
+
+   QVariant(QRect value);
+   QVariant(QRectF value);
+   QVariant(QSize value);
+   QVariant(QSizeF value);
+   QVariant(QLine value);
+   QVariant(QLineF value);
+   QVariant(QPoint value);
+   QVariant(QPointF value);
+
+   QVariant(QEasingCurve value);
+   QVariant(QModelIndex value);
+   QVariant(QPersistentModelIndex value);
+   QVariant(QUuid value);
+   QVariant(QUrl value);
+
    ~QVariant();
 
    void clear();

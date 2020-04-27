@@ -25,14 +25,10 @@
 
 #include <qabstractitemmodel.h>
 #include <qbitarray.h>
-#include <qbytearray.h>
 #include <qdatastream.h>
 #include <qdebug.h>
-#include <qmap.h>
-#include <qmultihash.h>
 #include <qdatetime.h>
 #include <qeasingcurve.h>
-#include <qlist.h>
 #include <qstring8.h>
 #include <qstring16.h>
 #include <qstringlist.h>
@@ -48,7 +44,7 @@
 #include <quuid.h>
 #include <qurl.h>
 
-#include <float.h>
+#include <limits>
 
 QVector<QVariant::NamesAndTypes> QVariant::m_userTypes;
 
@@ -159,3 +155,227 @@ static const QVariant::NamesAndTypes builtinTypes[] = {
 };
 
 
+// constructors
+QVariant::QVariant(const QVariant &other)
+   : m_data(other.m_data)
+{
+}
+
+QVariant::QVariant(QDataStream &s)
+{
+   s >> *this;
+}
+
+QVariant::QVariant(QVariant::Type type)
+{
+   cs_internal_create(static_cast<uint>(type), nullptr);
+}
+
+QVariant::QVariant(uint typeId, const void *copy)
+{
+   cs_internal_create(typeId, copy);
+}
+
+QVariant::QVariant(bool value)
+   : m_data(value)
+{
+}
+
+QVariant::QVariant(int value)
+   : m_data(value)
+{
+}
+
+QVariant::QVariant(uint value)
+   : m_data(value)
+{
+}
+
+QVariant::QVariant(qint64 value)
+   : m_data(value)
+{
+}
+
+QVariant::QVariant(quint64 value)
+   : m_data(value)
+{
+}
+
+QVariant::QVariant(double value)
+   : m_data(value)
+{
+}
+
+QVariant::QVariant(float value)
+   : m_data(value)
+{
+}
+
+QVariant::QVariant(const QChar32 value)
+   : m_data(value)
+{
+}
+
+QVariant::QVariant(QString value)
+   : m_data(std::move(value))
+{
+}
+
+QVariant::QVariant(QByteArray value)
+{
+   m_data = std::make_shared<CustomType_T<QByteArray>>(std::move(value));
+}
+
+QVariant::QVariant(QBitArray value)
+{
+   m_data = std::make_shared<CustomType_T<QBitArray>>(std::move(value));
+}
+
+QVariant::QVariant(QString16 value)
+{
+   m_data = std::make_shared<CustomType_T<QString16>>(std::move(value));
+}
+
+QVariant::QVariant(QStringList value)
+{
+   m_data = std::make_shared<CustomType_T<QStringList>>(std::move(value));
+}
+
+QVariant::QVariant(QDate value)
+{
+   m_data = std::make_shared<CustomType_T<QDate>>(std::move(value));
+}
+
+QVariant::QVariant(QTime value)
+{
+   m_data = std::make_shared<CustomType_T<QTime>>(std::move(value));
+}
+
+QVariant::QVariant(QDateTime value)
+{
+   m_data = std::make_shared<CustomType_T<QDateTime>>(std::move(value));
+}
+
+QVariant::QVariant(QEasingCurve value)
+{
+   m_data = std::make_shared<CustomType_T<QEasingCurve>>(std::move(value));
+}
+
+QVariant::QVariant(QList<QVariant> value)
+{
+   m_data = std::make_shared<CustomType_T<QList<QVariant>>>(std::move(value));
+}
+
+QVariant::QVariant(QMap<QString, QVariant> value)
+{
+   m_data = std::make_shared<CustomType_T<QMap<QString, QVariant>>>(std::move(value));
+}
+
+QVariant::QVariant(QMultiMap<QString, QVariant> value)
+{
+   m_data = std::make_shared<CustomType_T<QMultiMap<QString, QVariant>>>(std::move(value));;
+}
+
+QVariant::QVariant(QHash<QString, QVariant> value)
+{
+   m_data = std::make_shared<CustomType_T<QHash<QString, QVariant>>>(std::move(value));
+}
+
+QVariant::QVariant(QMultiHash<QString, QVariant> value)
+{
+   m_data = std::make_shared<CustomType_T<QMultiHash<QString, QVariant>>>(std::move(value));
+}
+
+QVariant::QVariant(QPoint value)
+{
+   m_data = std::make_shared<CustomType_T<QPoint>>(std::move(value));
+}
+
+QVariant::QVariant(QPointF value)
+{
+   m_data = std::make_shared<CustomType_T<QPointF>>(std::move(value));
+}
+
+QVariant::QVariant(QRect value)
+{
+   m_data = std::make_shared<CustomType_T<QRect>>(std::move(value));
+}
+
+QVariant::QVariant(QRectF value)
+{
+   m_data = std::make_shared<CustomType_T<QRectF>>(std::move(value));
+}
+
+QVariant::QVariant(QLine value)
+{
+   m_data = std::make_shared<CustomType_T<QLine>>(std::move(value));
+}
+
+QVariant::QVariant(QLineF value)
+{
+   m_data = std::make_shared<CustomType_T<QLineF>>(std::move(value));
+}
+
+QVariant::QVariant(QSize value)
+{
+   m_data = std::make_shared<CustomType_T<QSize>>(std::move(value));
+}
+
+QVariant::QVariant(QSizeF value)
+{
+   m_data = std::make_shared<CustomType_T<QSizeF>>(std::move(value));
+}
+
+QVariant::QVariant(QUrl value)
+{
+   m_data = std::make_shared<CustomType_T<QUrl>>(std::move(value));
+}
+
+QVariant::QVariant(QLocale value)
+{
+   m_data = std::make_shared<CustomType_T<QLocale>>(std::move(value));
+}
+
+QVariant::QVariant(QRegularExpression8 value)
+{
+   m_data = std::make_shared<CustomType_T<QRegularExpression8>>(std::move(value));
+}
+
+QVariant::QVariant(QUuid value)
+{
+   m_data = std::make_shared<CustomType_T<QUuid>>(std::move(value));
+}
+
+QVariant::QVariant(QModelIndex value)
+{
+   m_data = std::make_shared<CustomType_T<QModelIndex>>(std::move(value));
+}
+
+QVariant::QVariant(QPersistentModelIndex value)
+{
+   m_data = std::make_shared<CustomType_T<QPersistentModelIndex>>(std::move(value));
+}
+
+QVariant::QVariant(QJsonValue value)
+{
+   m_data = std::make_shared<CustomType_T<QJsonValue>>(std::move(value));
+}
+
+QVariant::QVariant(QJsonArray value)
+{
+   m_data = std::make_shared<CustomType_T<QJsonArray>>(std::move(value));
+}
+
+QVariant::QVariant(QJsonObject value)
+{
+   m_data = std::make_shared<CustomType_T<QJsonObject>>(std::move(value));
+}
+
+QVariant::QVariant(QJsonDocument value)
+{
+   m_data = std::make_shared<CustomType_T<QJsonDocument>>(std::move(value));
+}
+
+QVariant::~QVariant()
+{
+}
