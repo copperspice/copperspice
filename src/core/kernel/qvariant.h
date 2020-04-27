@@ -298,22 +298,52 @@ class Q_CORE_EXPORT QVariant
 
    void clear();
 
+   bool canConvert(uint newType) const;
 
+   template<typename T>
+   bool canConvert() const {
+      return canConvert( QVariant::typeToTypeId<T>() );
+   }
 
+   bool convert(uint newType);
 
+   template<typename T>
+   bool convert() {
+      return convert( QVariant::typeToTypeId<T>() );
+   }
 
+   std::optional<QVariant> maybeConvert(uint requested_type) const;
 
+   template<typename T>
+   static QVariant fromValue(const T &value) {
+      QVariant retval;
+      retval.setValue<T>(value);
 
+      return retval;
+   }
 
+   static QVariant fromValue(const QVariant &value) {
+      return value;
+   }
 
+   template<typename T>
+   T getData() const;
 
+   template<typename T>
+   std::optional<T> getDataOr() const;
 
+   bool isValid() const {
+      return ! std::holds_alternative<std::monostate>(m_data);
+   }
 
    template<typename T>
    void setValue(const T &value);
 
    void setValue(const QVariant &value);
 
+   void swap(QVariant &other) {
+      std::swap(m_data, other.m_data);
+   }
 
    int toInt(bool *ok = nullptr) const;
    uint toUInt(bool *ok = nullptr) const;
@@ -363,11 +393,18 @@ class Q_CORE_EXPORT QVariant
    QUrl toUrl() const;
    QUuid toUuid() const;
 
+   template<typename Requested>
+   Requested value() const;
 
 
+   // ** next 6 are a group
+   QString typeName() const;
 
    Type type() const;
+   uint userType() const;
 
+   static uint nameToType(const QString &name);
+   static QString typeToName(uint typeId);
 
    template<typename T>
    static uint typeToTypeId()
@@ -385,7 +422,13 @@ class Q_CORE_EXPORT QVariant
       return retval;
    };
 
+   // **
+   QVariant &operator=(const QVariant &other);
 
+   QVariant &operator=(QVariant && other) {
+      swap(other);
+      return *this;
+   }
 
 
 
@@ -403,24 +446,35 @@ class Q_CORE_EXPORT QVariant
          virtual void loadFromStream() = 0;
    };
 
+   //
+   template <typename T>
+   static uint registerType();
 
 
 
  protected:
+   static bool compareValues(const QVariant &a, const QVariant &b);
    friend int qRegisterGuiVariant();
    friend int qUnregisterGuiVariant();
    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
 
  private:
+   bool cs_internal_convert(uint current_userType, uint new_userType);
+   void cs_internal_create(uint typeId, const void *other);
+   bool cs_internal_compare(const QVariant &other) const;
 
 
 
+   template <typename T>
+   T cs_internal_VariantToType(QVariant::Type type, bool *ok = nullptr) const;
 
    static uint getTypeId(const std::type_index &index);
    static uint getTypeId(QString name);
 
+   static QString getTypeName(uint typeId);
    static std::atomic<uint> &currentUserType();
 
+   static QVector<NamesAndTypes>  m_userTypes;
 
    std::variant <std::monostate, bool, char, int, uint, qint64, quint64, double, float,
                  QChar32, QString, QObject *, void *, std::shared_ptr<CustomType> > m_data;
@@ -510,6 +564,148 @@ constexpr bool isType_Simple()
    return false;
 }
 
+template<typename T>
+T QVariant::getData() const
+{
+   std::optional<T> retval = getDataOr<T>();
+
+   if (retval.has_value()) {
+      return retval.value();
+
+   } else {
+      return T();
+   }
+}
+
+template<typename T>
+std::optional<T> QVariant::getDataOr() const
+{
+   if constexpr(isType_Simple<T>())  {
+
+      if (std::holds_alternative<T>(m_data)) {
+         return std::get<T>(m_data);
+
+      } else {
+         // variant is empty or T is not the type in the variant
+         printf("\n  BROOM  getDataOr(1)    T = %s   variant holds = %s",
+                  typeid(T).name(), csPrintable(typeName()) );
+
+      }
+
+   } else {
+      // custom type
+      auto ptr = std::get_if<std::shared_ptr<CustomType>>(&m_data);
+
+      if (ptr == nullptr) {
+         // T is not the data type in the variant
+
+      } else {
+         auto newPtr = std::dynamic_pointer_cast<CustomType_T<T>>(*ptr);
+
+         if (newPtr == nullptr) {
+            // T is the wrong custom type
+            printf("\n  BROOM  getDataOr(3)   T = %s   variant holds = %s",
+                  typeid(T).name(), typeid(**ptr).name() );
+
+         } else {
+            return newPtr->get();
+
+         }
+      }
+   }
+
+   return std::optional<T>();
+}
+
+template <typename T>
+void QVariant::setValue(const T &value)
+{
+   if constexpr(isType_Simple<T>())  {
+      m_data = value;
+
+   } else {
+      m_data = std::make_shared<CustomType_T<T>>(value);
+   }
+}
+
+inline void QVariant::setValue(const QVariant &value)
+{
+   *this = value;
+}
+
+template<typename Requested>
+Requested QVariant::value() const
+{
+   if constexpr(isType_Simple<Requested>())  {
+
+      if (std::holds_alternative<Requested>(m_data)) {
+         return std::get<Requested>(m_data);
+
+      } else {
+         // variant is empty or Requested is not the type in the variant
+
+      }
+
+   } else {
+      // custom type
+      auto ptr = std::get_if<std::shared_ptr<CustomType>>(&m_data);
+
+      if (ptr == nullptr) {
+         // variant is empty or a simple type
+
+      } else {
+         auto newPtr = std::dynamic_pointer_cast<CustomType_T<Requested>>(*ptr);
+
+         if (newPtr == nullptr) {
+            // variant and Requested are not the same custom type
+
+         } else {
+            return newPtr->get();
+
+         }
+      }
+   }
+
+   uint requested_type = typeToTypeId<Requested>();
+   std::optional<QVariant> tmp = maybeConvert(requested_type);
+
+   if (tmp.has_value()) {
+      return tmp->getData<Requested>();
+   }
+
+   return Requested();
+}
+
+template<typename T>
+T qvariant_cast(const QVariant &x)
+{
+   (void) x;
+   static_assert(! std::is_same_v<T, T>, "qvariant_cast<T>(x) is obsolete, use x.value<T>()");
+
+   return T();
+}
+
+template <typename T>
+uint QVariant::registerType()
+{
+   static std::atomic<uint> userId = QVariant::Invalid;
+
+   if (userId.load(std::memory_order_relaxed) == QVariant::Invalid) {
+      uint newId = QVariant::currentUserType().fetch_add(1, std::memory_order_relaxed);
+      uint oldId = QVariant::Invalid;
+
+      if (userId.compare_exchange_strong(oldId, newId, std::memory_order_release, std::memory_order_acquire))  {
+         static QString typeName = cs_typeToName<T>();
+         m_userTypes.append(QVariant::NamesAndTypes{typeName.constData(), newId, typeid(T *)});
+
+      } else {
+         // already registered, maybe on a different thread
+         return oldId;
+      }
+   }
+
+   return userId.load(std::memory_order_acquire);
+};
 
 #define CS_DECLARE_METATYPE(TYPE)                  \
    template<>                                      \
