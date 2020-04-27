@@ -41,6 +41,8 @@
 #include <qnamespace.h>
 #include <qvector.h>
 
+#include <optional>
+#include <variant>
 
 class QDataStream;
 class QDebug;
@@ -309,9 +311,19 @@ class Q_CORE_EXPORT QVariant
 
 
 
+   class CustomType {
+      public:
+         virtual ~CustomType()
+         { }
 
+         virtual std::shared_ptr<CustomType> clone() const = 0;
 
+         virtual bool compare(const CustomType &other) const = 0;
+         virtual uint userType() const = 0;
 
+         virtual void saveToStream()   = 0;
+         virtual void loadFromStream() = 0;
+   };
 
 
 
@@ -321,16 +333,19 @@ class Q_CORE_EXPORT QVariant
    friend int qUnregisterGuiVariant();
    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
 
-
-
-
  private:
+
+
+
 
    static uint getTypeId(const std::type_index &index);
    static uint getTypeId(QString name);
 
    static std::atomic<uint> &currentUserType();
 
+
+   std::variant <std::monostate, bool, char, int, uint, qint64, quint64, double, float,
+                 QChar32, QString, QObject *, void *, std::shared_ptr<CustomType> > m_data;
 };
 
 using QVariantList      = QList<QVariant>;
@@ -343,8 +358,79 @@ Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant &p);
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant &p);
 Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant::Type &p);
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant::Type p);
+//
+template <typename T>
+class CustomType_T : public QVariant::CustomType
+{
+ public:
+   CustomType_T(const T &value)
+      : m_value(value)
+   {
+   }
 
+   CustomType_T(T && value)
+      : m_value(std::move(value))
+   {
+   }
 
+   std::shared_ptr<CustomType> clone() const {
+      return std::make_shared<CustomType_T<T>>(m_value);
+   }
+
+   const T &get() const {
+      return m_value;
+   }
+
+   bool compare(const CustomType &other) const override {
+
+      if constexpr(std::is_invocable_v<compare_test, T>) {
+         auto ptr = dynamic_cast<const CustomType_T<T>*>(&other);
+
+         if (ptr != nullptr) {
+            return (m_value == ptr->m_value);
+         }
+      }
+
+      return false;
+   }
+
+   uint userType() const override {
+      return QVariant::typeToTypeId<T>();
+   }
+
+   void saveToStream() override {
+      // emerald, might add this
+   }
+
+   void loadFromStream() override {
+      // emerald, might add this
+   }
+
+ private:
+   T m_value;
+
+   struct compare_test {
+      template <typename U>
+      auto operator()(const U &value) -> decltype(value == value);
+   };
+};
+
+template <typename T>
+constexpr bool isType_Simple()
+{
+   if constexpr(std::is_same_v<T, std::monostate>  ||
+         std::is_same_v<T, bool>      || std::is_same_v<T, char>    ||
+         std::is_same_v<T, int>       || std::is_same_v<T, uint>    ||
+         std::is_same_v<T, qint64>    || std::is_same_v<T, quint64> ||
+         std::is_same_v<T, double>    || std::is_same_v<T, float>   ||
+         std::is_same_v<T, QChar>     || std::is_same_v<T, QString> ||
+         std::is_same_v<T, QObject *> || std::is_same_v<T, void *>)  {
+
+      return true;
+   }
+
+   return false;
+}
 
 
 #define CS_DECLARE_METATYPE(TYPE)                  \
