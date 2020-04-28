@@ -114,12 +114,12 @@ int QMetaMethod::parameterCount() const
    return m_paramNames.size();
 }
 
-int QMetaMethod::parameterType(int index) const
+uint QMetaMethod::parameterType(int index) const
 {
    QList<QString> types = parameterTypes();
-   QString typeName = types[index];
+   QString typeName     = types[index];
 
-   int retval = QMetaType::type(typeName);
+   uint retval = QVariant::nameToType(typeName);
 
    return retval;
 }

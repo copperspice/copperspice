@@ -115,7 +115,7 @@ class Q_CORE_EXPORT QMetaMethod
    QList<QString> parameterTypes() const;
 
    int parameterCount() const;
-   int parameterType(int index) const;
+   uint parameterType(int index) const;
 
    const QString &methodSignature() const;
    const QString &typeName() const;
@@ -224,7 +224,7 @@ class Q_CORE_EXPORT QMetaProperty
 
    const QString &typeName() const;
    QVariant::Type type() const;
-   int userType() const;
+   uint userType() const;
    bool write(QObject *obj, const QVariant &value) const;
 
    // properties

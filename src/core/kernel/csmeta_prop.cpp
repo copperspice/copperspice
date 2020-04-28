@@ -286,17 +286,19 @@ QVariant::Type QMetaProperty::type() const
 
    if (enumObj.isValid()) {
       // process enum
-      QString enumName = enumObj.scope() + "::" + enumObj.name();
-
-      int enumMetaTypeId = QMetaType::type(enumName);
+      QString enumName    = enumObj.scope() + "::" + enumObj.name();
+      uint enumMetaTypeId = QVariant::nameToType(enumName);
 
       if (enumMetaTypeId == QVariant::Invalid) {
          retval = QVariant::Int;
       }
 
    } else if (! m_typeName.isEmpty()) {
-      retval = QVariant::nameToType(m_typeName);
+      uint enumMetaTypeId = QVariant::nameToType(m_typeName);
 
+      if (enumMetaTypeId < QVariant::UserType) {
+         retval = static_cast<QVariant::Type>(enumMetaTypeId);
+      }
    }
 
    return retval;
@@ -307,22 +309,18 @@ const QString &QMetaProperty::typeName() const
    return m_typeName;
 }
 
-int QMetaProperty::userType() const
+uint QMetaProperty::userType() const
 {
-   int retval = QVariant::UserType;
+   uint retval = QVariant::UserType;
    QMetaEnum enumObj = this->enumerator();
 
    if (enumObj.isValid()) {
       // process enum
       QString enumName = enumObj.scope() + "::" + enumObj.name();
-      retval = QMetaType::type(enumName);
+      retval = QVariant::nameToType(enumName);
 
    } else if (! m_typeName.isEmpty()) {
       retval = QVariant::nameToType(m_typeName);
-
-      if (retval == QVariant::UserType) {
-         retval = QMetaType::type(m_typeName);
-      }
    }
 
    return retval;
