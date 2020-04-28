@@ -79,8 +79,8 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
          }
 
       } else {
-         // not a string or an int
-         std::optional<T> tmp;
+         // T is something other than a string or an int
+         std::optional<T> tmp = data.getDataOr<T>();
 
          if (tmp.has_value()) {
             // emerald: replace with "tmp.value()" when OS X 10.13 is dropped
@@ -89,10 +89,23 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
          } else  {
             // type mismatch
             ok = false;
+
+            if (data.convert<T>()) {
+               tmp = data.getDataOr<T>();
+
+               if (tmp.has_value()) {
+                  retval = *tmp;
+                  ok = true;
+               }
+            }
          }
       }
 
       return std::make_pair(static_cast<T>(retval), ok);
+
+   } else {
+      // T is not an enum or flag
+      return std::make_pair(data.value<T>(), true);
    }
 }
 
