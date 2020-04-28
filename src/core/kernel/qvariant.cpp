@@ -3177,6 +3177,206 @@ uint QVariant::nameToType(const QString &name)
    return retval;
 }
 
+//
+bool QVariant::toBool(bool *ok) const
+{
+   return cs_internal_VariantToType<bool>(QVariant::Bool, ok);
+}
+
+int QVariant::toInt(bool *ok) const
+{
+   return cs_internal_VariantToType<int>(QVariant::Int, ok);
+}
+
+uint QVariant::toUInt(bool *ok) const
+{
+   return cs_internal_VariantToType<uint>(QVariant::UInt, ok);
+}
+
+qint64 QVariant::toLongLong(bool *ok) const
+{
+   return cs_internal_VariantToType<qint64>(QVariant::LongLong, ok);
+}
+
+quint64 QVariant::toULongLong(bool *ok) const
+{
+   return cs_internal_VariantToType<quint64>(QVariant::ULongLong, ok);
+}
+
+double QVariant::toDouble(bool *ok) const
+{
+   return cs_internal_VariantToType<double>(QVariant::Double, ok);
+}
+
+float QVariant::toFloat(bool *ok) const
+{
+   return cs_internal_VariantToType<float>(QVariant::Float, ok);
+}
+
+qreal QVariant::toReal(bool *ok) const
+{
+   return cs_internal_VariantToType<double>(QVariant::Double, ok);
+}
+
+QChar32 QVariant::toChar() const
+{
+   return cs_internal_VariantToType<QChar32>(QVariant::QChar);
+}
+
+QString QVariant::toString() const
+{
+   return cs_internal_VariantToType<QString>(QVariant::String);
+}
+
+QByteArray QVariant::toByteArray() const
+{
+   return cs_internal_VariantToType<QByteArray>(QVariant::ByteArray);
+}
+
+QBitArray QVariant::toBitArray() const
+{
+   return cs_internal_VariantToType<QBitArray>(QVariant::BitArray);
+}
+
+QStringList QVariant::toStringList() const
+{
+   return cs_internal_VariantToType<QStringList>(QVariant::StringList);
+}
+
+QRegularExpression8 QVariant::toRegularExpression() const
+{
+   return cs_internal_VariantToType<QRegularExpression8>(QVariant::RegularExpression);
+}
+
+QDate QVariant::toDate() const
+{
+   return cs_internal_VariantToType<QDate>(QVariant::Date);
+}
+
+QTime QVariant::toTime() const
+{
+   return cs_internal_VariantToType<QTime>(QVariant::Time);
+}
+
+QDateTime QVariant::toDateTime() const
+{
+   return cs_internal_VariantToType<QDateTime>(QVariant::DateTime);
+}
+
+QLocale QVariant::toLocale() const
+{
+   return cs_internal_VariantToType<QLocale>(QVariant::Locale);
+}
+
+QVariantList QVariant::toList() const
+{
+   return cs_internal_VariantToType<QVariantList>(QVariant::List);
+}
+
+QVariantMap QVariant::toMap() const
+{
+   return cs_internal_VariantToType<QVariantMap>(QVariant::Map);
+}
+
+QVariantMultiMap QVariant::toMultiMap() const
+{
+   return cs_internal_VariantToType<QVariantMultiMap>(QVariant::MultiMap);
+}
+
+QVariantHash QVariant::toHash() const
+{
+   return cs_internal_VariantToType<QVariantHash>(QVariant::Hash);
+}
+
+QVariantMultiHash QVariant::toMultiHash() const
+{
+   return cs_internal_VariantToType<QVariantMultiHash>(QVariant::MultiHash);
+}
+
+QJsonValue QVariant::toJsonValue() const
+{
+   return cs_internal_VariantToType<QJsonValue>(QVariant::JsonValue);
+}
+
+QJsonObject QVariant::toJsonObject() const
+{
+   return cs_internal_VariantToType<QJsonObject>(QVariant::JsonObject);
+}
+
+QJsonArray QVariant::toJsonArray() const
+{
+   return cs_internal_VariantToType<QJsonArray>(JsonArray);
+}
+
+QJsonDocument QVariant::toJsonDocument() const
+{
+   return cs_internal_VariantToType<QJsonDocument>(QVariant::JsonDocument);
+}
+
+QPoint QVariant::toPoint() const
+{
+   return cs_internal_VariantToType<QPoint>(QVariant::Point);
+}
+
+QPointF QVariant::toPointF() const
+{
+   return cs_internal_VariantToType<QPointF>(QVariant::PointF);
+}
+
+QRect QVariant::toRect() const
+{
+   return cs_internal_VariantToType<QRect>(QVariant::Rect);
+}
+
+QRectF QVariant::toRectF() const
+{
+   return cs_internal_VariantToType<QRectF>(QVariant::RectF);
+}
+
+QSize QVariant::toSize() const
+{
+   return cs_internal_VariantToType<QSize>(QVariant::Size);
+}
+
+QSizeF QVariant::toSizeF() const
+{
+   return cs_internal_VariantToType<QSizeF>(QVariant::SizeF);
+}
+
+QLine QVariant::toLine() const
+{
+   return cs_internal_VariantToType<QLine>(QVariant::Line);
+}
+
+QLineF QVariant::toLineF() const
+{
+   return cs_internal_VariantToType<QLineF>(QVariant::LineF);
+}
+
+QEasingCurve QVariant::toEasingCurve() const
+{
+   return cs_internal_VariantToType<QEasingCurve>(QVariant::EasingCurve);
+}
+
+QModelIndex QVariant::toModelIndex() const
+{
+   return cs_internal_VariantToType<QModelIndex>(QVariant::ModelIndex);
+}
+
+QPersistentModelIndex QVariant::toPersistentModelIndex() const
+{
+   return cs_internal_VariantToType<QPersistentModelIndex>(QVariant::PersistentModelIndex);
+}
+
+QUrl QVariant::toUrl() const
+{
+   return cs_internal_VariantToType<QUrl>(QVariant::Url);
+}
+
+QUuid QVariant::toUuid() const
+{
+   return cs_internal_VariantToType<QUuid>(QVariant::Uuid);
+}
 QVariant::Type QVariant::type() const
 {
    return std::visit([](const auto &arg) {

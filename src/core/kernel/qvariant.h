@@ -345,6 +345,7 @@ class Q_CORE_EXPORT QVariant
       std::swap(m_data, other.m_data);
    }
 
+   bool toBool(bool *ok = nullptr) const;
    int toInt(bool *ok = nullptr) const;
    uint toUInt(bool *ok = nullptr) const;
    qint64 toLongLong(bool *ok = nullptr) const;
@@ -390,6 +391,7 @@ class Q_CORE_EXPORT QVariant
 
    QEasingCurve toEasingCurve() const;
    QModelIndex toModelIndex() const;
+   QPersistentModelIndex toPersistentModelIndex() const;
    QUrl toUrl() const;
    QUuid toUuid() const;
 
