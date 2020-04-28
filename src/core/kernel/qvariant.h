@@ -432,7 +432,13 @@ class Q_CORE_EXPORT QVariant
       return *this;
    }
 
+   bool operator==(const QVariant &other) const {
+      return cs_internal_compare(other);
+   }
 
+   bool operator!=(const QVariant &other) const {
+      return ! cs_internal_compare(other);
+   }
 
    class CustomType {
       public:
