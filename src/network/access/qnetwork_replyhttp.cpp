@@ -2160,8 +2160,10 @@ void QNetworkReplyHttpImplPrivate::finished()
 #endif
    }
 
-   // if we don't know the total size of or we received everything save the cache
-   if (totalSize.isNull() || totalSize == -1 || bytesDownloaded == totalSize) {
+   qint64 totalSizeNum = totalSize.toLongLong();
+
+   // if we do not know the total size of or we received everything save the cache
+   if (! totalSize.isValid() || totalSizeNum == -1 || bytesDownloaded == totalSizeNum) {
       completeCacheSave();
    }
 
@@ -2174,10 +2176,10 @@ void QNetworkReplyHttpImplPrivate::finished()
    state = Finished;
    q->setFinished(true);
 
-   if (totalSize.isNull() || totalSize == -1) {
+   if (! totalSize.isValid() || totalSizeNum == -1) {
       emit q->downloadProgress(bytesDownloaded, bytesDownloaded);
    } else {
-      emit q->downloadProgress(bytesDownloaded, totalSize.toLongLong());
+      emit q->downloadProgress(bytesDownloaded, totalSizeNum);
    }
 
    if (bytesUploaded == -1 && (outgoingData || outgoingDataBuffer)) {

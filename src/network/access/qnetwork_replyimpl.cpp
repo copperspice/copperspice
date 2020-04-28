@@ -890,10 +890,13 @@ void QNetworkReplyImplPrivate::finished()
    pendingNotifications.clear();
 
    pauseNotificationHandling();
-   if (totalSize.isNull() || totalSize == -1) {
+
+   qint64 totalSizeNum = totalSize.toLongLong();
+
+   if (! totalSize.isValid() || totalSizeNum == -1) {
       emit q->downloadProgress(bytesDownloaded, bytesDownloaded);
    } else {
-      emit q->downloadProgress(bytesDownloaded, totalSize.toLongLong());
+      emit q->downloadProgress(bytesDownloaded, totalSizeNum);
    }
 
    if (bytesUploaded == -1 && (outgoingData || outgoingDataBuffer)) {
@@ -902,8 +905,8 @@ void QNetworkReplyImplPrivate::finished()
 
    resumeNotificationHandling();
 
-   // if we don't know the total size of or we received everything save the cache
-   if (totalSize.isNull() || totalSize == -1 || bytesDownloaded == totalSize) {
+   // if we do not know the total size of or we received everything save the cache
+   if (! totalSize.isValid() || totalSizeNum == -1 || bytesDownloaded == totalSizeNum) {
       completeCacheSave();
    }
 
