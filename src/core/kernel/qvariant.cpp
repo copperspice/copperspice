@@ -3511,3 +3511,33 @@ uint QVariant::userType() const
 
    }, m_data);
 }
+QDataStream &operator>>(QDataStream &streamIn, QVariant &data)
+{
+   data.load(streamIn);
+   return streamIn;
+}
+
+QDataStream &operator>>(QDataStream &streamIn, QVariant::Type &typeId)
+{
+   quint32 tmp;
+
+   // load an enum value
+   streamIn >> tmp;
+   typeId = static_cast<QVariant::Type>(tmp);
+
+   return streamIn;
+}
+
+QDataStream &operator<<(QDataStream &streamOut, const QVariant &data)
+{
+   data.save(streamOut);
+   return streamOut;
+}
+
+QDataStream &operator<<(QDataStream &streamOut, const QVariant::Type typeId)
+{
+   // save an enum value
+   streamOut << static_cast<quint32>(typeId);
+
+   return streamOut;
+}
