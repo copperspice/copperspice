@@ -3511,6 +3511,31 @@ uint QVariant::userType() const
 
    }, m_data);
 }
+
+QVariant &QVariant::operator=(const QVariant &other)
+{
+   if (this == &other) {
+      return *this;
+   }
+
+   // get a ptr to the requested alternative
+   auto ptr = std::get_if<std::shared_ptr<CustomType>>(&(other.m_data));
+
+   if (ptr == nullptr) {
+      // simple type
+      m_data = other.m_data;
+
+   } else {
+      // Custom type
+
+      // ptr is a raw pointer to the shared pointer in the other Variant
+      // clone() needs to do a deep copy
+      m_data = (*ptr)->clone();
+   }
+
+   return *this;
+}
+
 QDataStream &operator>>(QDataStream &streamIn, QVariant &data)
 {
    data.load(streamIn);
