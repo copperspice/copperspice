@@ -50,7 +50,7 @@ class QPropertyAnimationPrivate : public QVariantAnimationPrivate
    int propertyType;
    int propertyIndex;
 
-   QByteArray propertyName;
+   QString propertyName;
 };
 
 #endif //QT_NO_ANIMATION

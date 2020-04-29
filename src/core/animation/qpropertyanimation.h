@@ -42,14 +42,14 @@ class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
 
  public:
    QPropertyAnimation(QObject *parent = nullptr);
-   QPropertyAnimation(QObject *target, const QByteArray &propertyName, QObject *parent = nullptr);
+   QPropertyAnimation(QObject *target, const QString &propertyName, QObject *parent = nullptr);
    ~QPropertyAnimation();
 
    QObject *targetObject() const;
    void setTargetObject(QObject *target);
 
-   QByteArray propertyName() const;
-   void setPropertyName(const QByteArray &propertyName);
+   QString propertyName() const;
+   void setPropertyName(const QString &propertyName);
 
  protected:
    bool event(QEvent *event) override;

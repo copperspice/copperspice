@@ -80,7 +80,7 @@ QPropertyAnimation::QPropertyAnimation(QObject *parent)
 {
 }
 
-QPropertyAnimation::QPropertyAnimation(QObject *target, const QByteArray &propertyName, QObject *parent)
+QPropertyAnimation::QPropertyAnimation(QObject *target, const QString &propertyName, QObject *parent)
    : QVariantAnimation(*new QPropertyAnimationPrivate, parent)
 {
    setTargetObject(target);
@@ -115,13 +115,13 @@ void QPropertyAnimation::setTargetObject(QObject *target)
    d->updateMetaProperty();
 }
 
-QByteArray QPropertyAnimation::propertyName() const
+QString QPropertyAnimation::propertyName() const
 {
    Q_D(const QPropertyAnimation);
    return d->propertyName;
 }
 
-void QPropertyAnimation::setPropertyName(const QByteArray &propertyName)
+void QPropertyAnimation::setPropertyName(const QString &propertyName)
 {
    Q_D(QPropertyAnimation);
 
@@ -163,8 +163,8 @@ void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstra
    {
       QMutexLocker locker(QMutexPool::globalInstanceGet( &staticMetaObject() ));
 
-      typedef QPair<QObject *, QByteArray> QPropertyAnimationPair;
-      typedef QHash<QPropertyAnimationPair, QPropertyAnimation *> QPropertyAnimationHash;
+      using QPropertyAnimationPair = QPair<QObject *, QString>;
+      using QPropertyAnimationHash = QHash<QPropertyAnimationPair, QPropertyAnimation *>;
 
       static QPropertyAnimationHash hash;
       QPropertyAnimationPair key(d->targetValue, d->propertyName);
@@ -181,15 +181,15 @@ void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstra
             // if startValue is not defined, current property value is used as the initial value for the animation
             d->setDefaultStartEndValue(d->targetValue->property(d->propertyName));
 
-            // check if we have a start value and an end value
-            if (! startValue().isValid() && (d->direction == Backward || !d->defaultStartEndValue.isValid())) {
+            // check if start and end values exist
+            if (! startValue().isValid() && (d->direction == Backward || ! d->m_defaultValue.isValid())) {
 
                qWarning("QPropertyAnimation::updateState (%s, %s, %s): Trying to start an animation, no start value available",
                         csPrintable(d->propertyName), csPrintable(d->target.data()->metaObject()->className()),
                         csPrintable(d->target.data()->objectName()));
             }
 
-            if (!endValue().isValid() && (d->direction == Forward || !d->defaultStartEndValue.isValid())) {
+            if (! endValue().isValid() && (d->direction == Forward || ! d->m_defaultValue.isValid())) {
 
                qWarning("QPropertyAnimation::updateState (%s, %s, %s): Trying to start an animation, no end value available",
                         csPrintable(d->propertyName), csPrintable(d->target.data()->metaObject()->className()),

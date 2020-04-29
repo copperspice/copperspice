@@ -26,9 +26,12 @@
 
 #include <qabstractanimation.h>
 #include <qeasingcurve.h>
+#include <qhash.h>
 #include <qpair.h>
 #include <qvariant.h>
 #include <qvector.h>
+
+#include <shared_guarded.hpp>
 
 #ifndef QT_NO_ANIMATION
 
@@ -40,18 +43,21 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
 
    CORE_CS_PROPERTY_READ(startValue, startValue)
    CORE_CS_PROPERTY_WRITE(startValue, setStartValue)
+
    CORE_CS_PROPERTY_READ(endValue, endValue)
    CORE_CS_PROPERTY_WRITE(endValue, setEndValue)
+
    CORE_CS_PROPERTY_READ(currentValue, currentValue)
    CORE_CS_PROPERTY_NOTIFY(currentValue, valueChanged)
+
    CORE_CS_PROPERTY_READ(duration, duration)
    CORE_CS_PROPERTY_WRITE(duration, setDuration)
+
    CORE_CS_PROPERTY_READ(easingCurve, easingCurve)
    CORE_CS_PROPERTY_WRITE(easingCurve, setEasingCurve)
 
  public:
-   typedef QPair<qreal, QVariant> KeyValue;
-   typedef QVector<KeyValue> KeyValues;
+   using ValuePair = QPair<double, QVariant>;
 
    QVariantAnimation(QObject *parent = nullptr);
    QVariantAnimation (const QVariantAnimation & ) = delete;
@@ -67,8 +73,8 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    QVariant keyValueAt(qreal step) const;
    void setKeyValueAt(qreal step, const QVariant &value);
 
-   KeyValues keyValues() const;
-   void setKeyValues(const KeyValues &values);
+   QVector<QVariantAnimation::ValuePair> keyValues() const;
+   void setKeyValues(const QVector<QVariantAnimation::ValuePair> &values);
 
    QVariant currentValue() const;
 
@@ -78,7 +84,10 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    QEasingCurve easingCurve() const;
    void setEasingCurve(const QEasingCurve &easing);
 
-   typedef QVariant (*Interpolator)(const void *from, const void *to, qreal progress);
+   using CustomFormula = std::function<QVariant (const QVariant &, const QVariant &, double)>;
+
+   template <typename T>
+   static void cs_addCustomType(CustomFormula callback);
 
    CORE_CS_SIGNAL_1(Public, void valueChanged(const QVariant &value))
    CORE_CS_SIGNAL_2(valueChanged, value)
@@ -94,16 +103,28 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    virtual QVariant interpolated(const QVariant &from, const QVariant &to, qreal progress) const;
 
  private:
-   template <typename T> friend void qRegisterAnimationInterpolator(QVariant (*func)(const T &, const T &, qreal));
-   static void registerInterpolator(Interpolator func, int interpolationType);
+   static libguarded::shared_guarded<QHash<uint, QVariantAnimation::CustomFormula>> &getFormulas();
 
    Q_DECLARE_PRIVATE(QVariantAnimation)
 };
 
 template <typename T>
-void qRegisterAnimationInterpolator(QVariant (*func)(const T &from, const T &to, qreal progress))
+void QVariantAnimation::cs_addCustomType(CustomFormula callback)
 {
-   QVariantAnimation::registerInterpolator(reinterpret_cast<QVariantAnimation::Interpolator>(func), qMetaTypeId<T>());
+   // add a custom formula for a given T, this must occur before any annimation which uses this T is constructed
+   // to remove and use the default formula, pass nulptr for func, overrides any existing formula
+
+   uint typeId = QVariant::typeToTypeId<T>();
+
+   libguarded::shared_guarded<QHash<uint, QVariantAnimation::CustomFormula>>::handle hash = getFormulas().lock();
+
+   if (callback) {
+      hash->insert(typeId, callback);
+
+   } else {
+      // std::function is empty
+      hash->remove(typeId);
+   }
 }
 
 #endif // QT_NO_ANIMATION
