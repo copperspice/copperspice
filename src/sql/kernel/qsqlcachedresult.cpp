@@ -242,7 +242,7 @@ bool QSqlCachedResult::isNull(int i)
       return true;
    }
 
-   return d->cache.at(idx).isNull();
+   return ! d->cache.at(idx).isValid();
 }
 
 void QSqlCachedResult::cleanup()

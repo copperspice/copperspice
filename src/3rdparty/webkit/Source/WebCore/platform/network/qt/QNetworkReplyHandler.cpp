@@ -486,7 +486,7 @@ void QNetworkReplyHandler::sendResponseIfNeeded()
     }
 
 
-    if (m_replyWrapper->reply()->error() && m_replyWrapper->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).isNull())
+    if (m_replyWrapper->reply()->error() && ! m_replyWrapper->reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).isValid())
         return;
 
     ResourceHandleClient* client = m_resourceHandle->client();

@@ -463,7 +463,7 @@ bool QSQLiteResult::exec()
          res = SQLITE_OK;
          const QVariant value = values.at(i);
 
-         if (value.isNull()) {
+         if (! value.isValid()) {
             res = sqlite3_bind_null(d->stmt, i + 1);
 
          } else {

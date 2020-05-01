@@ -92,7 +92,7 @@ SequenceType::Ptr VariableLoader::announceExternalVariable(const QXmlName name,
 
    const QVariant &variant = m_bindingHash.value(name);
 
-   if (variant.isNull()) {
+   if (! variant.isValid()) {
       return SequenceType::Ptr();
 
    } else if (variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
@@ -101,6 +101,7 @@ SequenceType::Ptr VariableLoader::announceExternalVariable(const QXmlName name,
    } else if (variant.userType() == QVariant::typeToTypeId<QXmlQuery>()) {
       const QXmlQuery variableQuery(variant.value<QXmlQuery>());
       return variableQuery.d->expression()->staticType();
+
    } else {
       return makeGenericSequenceType(AtomicValue::qtToXDMType(
                variant.value<QXmlItem>()), Cardinality::exactlyOne());
@@ -112,8 +113,7 @@ Item::Iterator::Ptr VariableLoader::evaluateSequence(const QXmlName name,
 {
 
    const QVariant &variant = m_bindingHash.value(name);
-   Q_ASSERT_X(!variant.isNull(), Q_FUNC_INFO,
-              "We assume that we have a binding.");
+   Q_ASSERT_X(variant.isValid(), Q_FUNC_INFO, "There was no binding.");
 
    /* Same code as in the default clause below. */
    if (variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
@@ -162,7 +162,7 @@ Item VariableLoader::itemForName(const QXmlName &name) const
        * be a QIODevice, since Patternist guarantees to only ask for variables that announceExternalVariable()
        * has accepted. */
 
-      if (atomicValue.isNull()) {
+      if (! atomicValue.isValid()) {
          return Item(AnyURI::fromValue("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:" +
                                        m_namePool->stringForLocalName(name.localName())));
       } else {
@@ -231,5 +231,4 @@ bool VariableLoader::invalidationRequired(const QXmlName &name, const QVariant &
 {
    return hasBinding(name) && !isSameType(valueFor(name), variant);
 }
-
 

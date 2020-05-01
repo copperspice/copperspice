@@ -516,7 +516,7 @@ void QVideoSurfaceFormat::setProperty(QStringView name, const QVariant &value)
       }
 
       if (id < d->propertyValues.count()) {
-         if (value.isNull()) {
+         if (! value.isValid()) {
             d->propertyNames.removeAt(id);
             d->propertyValues.removeAt(id);
 
@@ -524,7 +524,7 @@ void QVideoSurfaceFormat::setProperty(QStringView name, const QVariant &value)
             d->propertyValues[id] = value;
          }
 
-      } else if (!value.isNull()) {
+      } else if (value.isValid()) {
          d->propertyNames.append(name);
          d->propertyValues.append(value);
       }

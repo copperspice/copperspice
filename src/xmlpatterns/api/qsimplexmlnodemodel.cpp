@@ -60,7 +60,8 @@ QString QSimpleXmlNodeModel::stringValue(const QXmlNodeModelIndex &node) const
 
    if (k == QXmlNodeModelIndex::Element || k == QXmlNodeModelIndex::Attribute) {
       const QVariant &candidate = typedValue(node);
-      if (candidate.isNull()) {
+
+      if (! candidate.isValid()) {
          return QString();
       } else {
          return AtomicValue::toXDM(candidate).stringValue();

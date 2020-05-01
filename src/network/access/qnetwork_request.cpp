@@ -535,7 +535,7 @@ void QNetworkHeadersPrivate::setCookedHeader(QNetworkRequest::KnownHeaders heade
       return;
    }
 
-   if (value.isNull()) {
+   if (! value.isValid()) {
       setRawHeaderInternal(name, QByteArray());
       cookedHeaders.remove(header);
 

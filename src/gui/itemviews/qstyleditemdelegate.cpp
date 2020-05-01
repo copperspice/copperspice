@@ -101,13 +101,13 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
 {
    QVariant value = index.data(Qt::FontRole);
 
-   if (value.isValid() && ! value.isNull()) {
+   if (value.isValid()) {
       option->font = value.value<QFont>().resolve(option->font);
       option->fontMetrics = QFontMetrics(option->font);
    }
 
    value = index.data(Qt::TextAlignmentRole);
-   if (value.isValid() && !value.isNull()) {
+   if (value.isValid()) {
       option->displayAlignment = Qt::Alignment(value.toInt());
    }
 
@@ -118,14 +118,14 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
 
    option->index = index;
    value = index.data(Qt::CheckStateRole);
-   if (value.isValid() && !value.isNull()) {
+   if (value.isValid()) {
       option->features |= QStyleOptionViewItem::HasCheckIndicator;
       option->checkState = static_cast<Qt::CheckState>(value.toInt());
    }
 
    value = index.data(Qt::DecorationRole);
 
-   if (value.isValid() && ! value.isNull()) {
+   if (value.isValid()) {
       option->features |= QStyleOptionViewItem::HasDecoration;
 
       switch (value.type()) {
@@ -179,7 +179,7 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
 
    value = index.data(Qt::DisplayRole);
 
-   if (value.isValid() && ! value.isNull()) {
+   if (value.isValid()) {
       option->features |= QStyleOptionViewItem::HasDisplay;
       option->text = displayText(value, option->locale);
    }

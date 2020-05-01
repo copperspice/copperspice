@@ -227,7 +227,7 @@ void QItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
    QRect displayRect;
    value = index.data(Qt::DisplayRole);
 
-   if (value.isValid() && ! value.isNull()) {
+   if (value.isValid()) {
       text = d->valueToText(value, opt);
       displayRect = textRectangle(painter, d->textLayoutBounds(opt), opt.font, text);
    }
@@ -377,6 +377,7 @@ void QItemDelegate::drawDisplay(QPainter *painter, const QStyleOptionViewItem &o
    if (option.state & QStyle::State_Selected) {
       painter->fillRect(rect, option.palette.brush(cg, QPalette::Highlight));
       painter->setPen(option.palette.color(cg, QPalette::HighlightedText));
+
    } else {
       painter->setPen(option.palette.color(cg, QPalette::Text));
    }
@@ -778,7 +779,7 @@ QRect QItemDelegate::rect(const QStyleOptionViewItem &option,
       return doCheck(option, option.rect, value);
    }
 
-   if (value.isValid() && !value.isNull()) {
+   if (value.isValid()) {
       switch (value.type()) {
          case QVariant::Invalid:
             break;

@@ -1097,7 +1097,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
    if (downloadProgressSignalChoke.elapsed() >= progressSignalInterval) {
       downloadProgressSignalChoke.restart();
       emit q->downloadProgress(bytesDownloaded,
-                               totalSize.isNull() ? Q_INT64_C(-1) : totalSize.toLongLong());
+                               ! totalSize.isValid() ? Q_INT64_C(-1) : totalSize.toLongLong());
    }
 
 }
@@ -1892,7 +1892,7 @@ void QNetworkReplyHttpImplPrivate::_q_cacheLoadReadyRead()
       if (downloadProgressSignalChoke.elapsed() >= progressSignalInterval) {
          downloadProgressSignalChoke.restart();
          emit q->downloadProgress(bytesDownloaded,
-                                  totalSize.isNull() ? Q_INT64_C(-1) : totalSize.toLongLong());
+                                  ! totalSize.isValid() ? Q_INT64_C(-1) : totalSize.toLongLong());
       }
    }
    // If there are still bytes available in the cacheLoadDevice then the user did not read
@@ -2143,13 +2143,16 @@ void QNetworkReplyHttpImplPrivate::finished()
       if (session && session->state() == QNetworkSession::Roaming &&
             state == Working && errorCode != QNetworkReply::OperationCanceledError) {
          // only content with a known size will fail with a temporary network failure error
-         if (!totalSize.isNull()) {
+
+         if (totalSize.isValid()) {
             if (bytesDownloaded != totalSize.toLongLong()) {
+
                if (migrateBackend()) {
                   // either we are migrating or the request is finished/aborted
                   if (state == Reconnecting || state == WaitingForSession) {
                      return; // exit early if we are migrating.
                   }
+
                } else {
                   error(QNetworkReply::TemporaryNetworkFailureError,
                         QNetworkReply::tr("Temporary network failure."));

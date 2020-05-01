@@ -556,7 +556,7 @@ QVariant QVideoFrame::metaData(const QString &key) const
 
 void QVideoFrame::setMetaData(const QString &key, const QVariant &value)
 {
-   if (!value.isNull()) {
+   if (value.isValid()) {
       d->metadata.insert(key, value);
    } else {
       d->metadata.remove(key);

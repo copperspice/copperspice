@@ -415,7 +415,8 @@ bool QSqlResult::exec()
          }
          QVariant var = d->values.value(idx);
          QSqlField f(QLatin1String(""), var.type());
-         if (var.isNull()) {
+
+         if (! var.isValid()) {
             f.clear();
          } else {
             f.setValue(var);

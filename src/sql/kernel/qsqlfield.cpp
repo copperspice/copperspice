@@ -265,7 +265,7 @@ bool QSqlField::isReadOnly() const
 
 bool QSqlField::isNull() const
 {
-   return val.isNull();
+   return ! val.isValid();
 }
 
 void QSqlField::detach()
@@ -330,7 +330,7 @@ QDebug operator<<(QDebug dbg, const QSqlField &f)
       dbg.nospace() << ", typeID: " << f.typeID();
    }
 
-   if (!f.defaultValue().isNull()) {
+   if (f.defaultValue().isValid()) {
       dbg.nospace() << ", auto-value: \"" << f.defaultValue() << '\"';
    }
 

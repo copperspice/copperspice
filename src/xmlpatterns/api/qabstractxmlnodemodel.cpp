@@ -381,7 +381,8 @@ void QAbstractXmlNodeModel::sendNamespaces(const QXmlNodeModelIndex &n, QAbstrac
 QPatternist::ItemIteratorPtr QAbstractXmlNodeModel::sequencedTypedValue(const QXmlNodeModelIndex &ni) const
 {
    const QVariant &candidate = typedValue(ni);
-   if (candidate.isNull()) {
+
+   if (! candidate.isValid()) {
       return QPatternist::CommonValues::emptyIterator;
    } else {
       return makeSingletonIterator(AtomicValue::toXDM(candidate));
@@ -531,7 +532,7 @@ QXmlItem::QXmlItem(const QXmlItem &other) : m_node(other.m_node)
 QXmlItem::QXmlItem(const QVariant &atomicValue)
 {
    m_node.reset();
-   if (atomicValue.isNull()) {
+   if (! atomicValue.isValid()) {
       /* Then we behave just like the default constructor. */
       return;
    }

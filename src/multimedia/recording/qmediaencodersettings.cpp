@@ -303,7 +303,8 @@ QVariantMap QAudioEncoderSettings::encodingOptions() const
 void QAudioEncoderSettings::setEncodingOption(const QString &option, const QVariant &value)
 {
    d->isNull = false;
-   if (value.isNull()) {
+
+   if (! value.isValid()) {
       d->encodingOptions.remove(option);
    } else {
       d->encodingOptions.insert(option, value);
@@ -613,7 +614,8 @@ QVariantMap QVideoEncoderSettings::encodingOptions() const
 void QVideoEncoderSettings::setEncodingOption(const QString &option, const QVariant &value)
 {
    d->isNull = false;
-   if (value.isNull()) {
+
+   if (! value.isValid()) {
       d->encodingOptions.remove(option);
    } else {
       d->encodingOptions.insert(option, value);
@@ -803,7 +805,8 @@ QVariantMap QImageEncoderSettings::encodingOptions() const
 void QImageEncoderSettings::setEncodingOption(const QString &option, const QVariant &value)
 {
    d->isNull = false;
-   if (value.isNull()) {
+
+   if (! value.isValid()) {
       d->encodingOptions.remove(option);
    } else {
       d->encodingOptions.insert(option, value);

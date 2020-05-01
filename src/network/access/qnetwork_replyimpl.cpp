@@ -218,7 +218,7 @@ void QNetworkReplyImplPrivate::_q_copyReadyRead()
       downloadProgressSignalChoke.restart();
 
       emit q->downloadProgress(bytesDownloaded,
-                               totalSize.isNull() ? Q_INT64_C(-1) : totalSize.toLongLong());
+                               ! totalSize.isValid() ? Q_INT64_C(-1) : totalSize.toLongLong());
    }
 
    resumeNotificationHandling();
@@ -712,7 +712,7 @@ void QNetworkReplyImplPrivate::appendDownstreamDataSignalEmissions()
       downloadProgressSignalChoke.restart();
 
       emit q->downloadProgress(bytesDownloaded,
-                               totalSize.isNull() ? Q_INT64_C(-1) : totalSize.toLongLong());
+                               ! totalSize.isValid() ? Q_INT64_C(-1) : totalSize.toLongLong());
    }
 
    resumeNotificationHandling();
@@ -861,7 +861,7 @@ void QNetworkReplyImplPrivate::finished()
             state == ReplyState::Working && errorCode != QNetworkReply::OperationCanceledError) {
 
          // only content with a known size will fail with a temporary network failure error
-         if (!totalSize.isNull()) {
+         if (totalSize.isValid()) {
 
             if (bytesDownloaded != totalSize.toLongLong()) {
 

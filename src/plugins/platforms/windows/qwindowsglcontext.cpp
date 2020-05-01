@@ -1142,7 +1142,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
    }
 
    QVariant nativeHandle = context->nativeHandle();
-   if (!nativeHandle.isNull()) {
+   if (nativeHandle.isValid()) {
       // Adopt and existing context.
       if (!nativeHandle.canConvert<QWGLNativeContext>()) {
          qWarning("QWindowsGLContext: Requires a QWGLNativeContext");

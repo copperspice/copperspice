@@ -671,7 +671,7 @@ static QString qCreateParamString(const QVector<QVariant> &boundValues, const QS
 
       f.setType(val.type());
 
-      if (val.isNull()) {
+      if (! val.isValid()) {
          f.clear();
       } else {
          f.setValue(val);
