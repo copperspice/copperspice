@@ -345,15 +345,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       TYPE REQUIRED
    )
 
-   if(NOT CMAKE_SYSTEM_NAME MATCHES "Linux")
-      find_package(Iconv)
-      set_package_properties(Iconv PROPERTIES
-         PURPOSE "Iconv support"
-         DESCRIPTION "For use on systems which do not have Iconv or lack Unicode support"
-         URL "http://www.gnu.org/software/libiconv/"
-         TYPE REQUIRED
-      )
-   endif()
+   find_package(Iconv)
+   set_package_properties(Iconv PROPERTIES
+      PURPOSE "Iconv support"
+      DESCRIPTION "For use on systems which do not have Iconv or lack Unicode support"
+      URL "http://www.gnu.org/software/libiconv/"
+      TYPE REQUIRED
+   )
 
    if(WITH_GUI)
       find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender)
