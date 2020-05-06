@@ -47,6 +47,7 @@
 #include <limits>
 
 QVector<QVariant::NamesAndTypes> QVariant::m_userTypes;
+QVector<QVariantBase *> QVariant::m_variantClients;
 
 #ifndef DBL_DIG
 #  define DBL_DIG 10
