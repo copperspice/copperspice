@@ -49,13 +49,6 @@
 QVector<QVariant::NamesAndTypes> QVariant::m_userTypes;
 QVector<QVariantBase *> QVariant::m_variantClients;
 
-#ifndef DBL_DIG
-#  define DBL_DIG 10
-#endif
-
-#ifndef FLT_DIG
-#  define FLT_DIG 6
-#endif
 namespace {
 
 template <typename T>
