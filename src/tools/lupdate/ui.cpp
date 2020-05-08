@@ -115,6 +115,9 @@ bool UiReader::startElement(const QString &namespaceURI,
 bool UiReader::endElement(const QString &namespaceURI,
                   const QString &localName, const QString &qName)
 {
+   (void) namespaceURI;
+   (void) localName;
+
    m_accum.replace("\r\n", "\n");
 
    if (qName == "class") {
