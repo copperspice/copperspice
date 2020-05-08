@@ -31,8 +31,8 @@
 #include "cs_internal.h"
 #include "cs_macro.h"
 #include "cs_slot.h"
-#include "rcu_guarded.hpp"
-#include "rcu_list.hpp"
+#include "cs_rcu_guarded.h"
+#include "cs_rcu_list.h"
 
 namespace CsSignal {
 

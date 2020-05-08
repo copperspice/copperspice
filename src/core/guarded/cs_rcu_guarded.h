@@ -15,15 +15,15 @@
 *
 ***********************************************************************/
 
-#ifndef LIBGUARDED_RCU_GUARDED_HPP
-#define LIBGUARDED_RCU_GUARDED_HPP
+#ifndef CSLIBGUARDED_RCU_GUARDED_H
+#define CSLIBGUARDED_RCU_GUARDED_H
 
 #include <memory>
 
 namespace libguarded
 {
 /**
-   \headerfile rcu_guarded.hpp <libguarded/rcu_guarded.hpp>
+   \headerfile cs_rcu_guarded.h <CsLibGuarded/cs_rcu_guarded.h>
 
    This templated class implements a mechanism which controls access
    to an RCU data structure. The only way to access the underlying

@@ -26,8 +26,8 @@
 #include <vector>
 
 #include "cs_macro.h"
-#include "rcu_guarded.hpp"
-#include "rcu_list.hpp"
+#include "cs_rcu_guarded.h"
+#include "cs_rcu_list.h"
 
 namespace CsSignal {
 

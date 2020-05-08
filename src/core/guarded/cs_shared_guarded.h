@@ -15,8 +15,8 @@
 *
 ***********************************************************************/
 
-#ifndef LIBGUARDED_SHARED_GUARDED_HPP
-#define LIBGUARDED_SHARED_GUARDED_HPP
+#ifndef CSLIBGUARDED_SHARED_GUARDED_H
+#define CSLIBGUARDED_SHARED_GUARDED_H
 
 #include <memory>
 #include <shared_mutex>
@@ -25,7 +25,7 @@ namespace libguarded
 {
 
 /**
-   \headerfile shared_guarded.hpp <libguarded/shared_guarded.hpp>
+   \headerfile cs_shared_guarded.h <CsLibGuarded/cs_shared_guarded.h>
 
    This templated class wraps an object and allows only one thread at
    a time to modify the protected object.
