@@ -133,5 +133,16 @@ Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QIcon &);
 Q_GUI_EXPORT QString qt_findAtNxFile(const QString &baseFileName, qreal targetDevicePixelRatio,
    qreal *sourceDevicePixelRatio = nullptr);
 
+template<>
+inline bool CustomType_T<QIcon>::compare(const CustomType &other) const {
+
+   auto ptr = dynamic_cast<const CustomType_T<QIcon>*>(&other);
+
+   if (ptr != nullptr) {
+      return m_value.cacheKey() == (ptr->m_value).cacheKey();
+   }
+
+   return false;
+}
 
 #endif

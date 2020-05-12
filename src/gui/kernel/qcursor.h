@@ -115,8 +115,19 @@ class Q_GUI_EXPORT QCursor
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &outS, const QCursor &cursor);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &inS, QCursor &cursor);
 
+template<>
+inline bool CustomType_T<QCursor>::compare(const CustomType &other) const {
+   auto ptr = dynamic_cast<const CustomType_T<QCursor>*>(&other);
+
+   if (ptr != nullptr) {
+      printf("\n BROOM  compare CURSOR, ptr is not NULLPTR");
+
+      return m_value.shape() == (ptr->m_value).shape();
+   }
+
+   return false;
+}
+
 #endif // QT_NO_CURSOR
-
-
 
 #endif
