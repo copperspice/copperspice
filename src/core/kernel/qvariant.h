@@ -595,7 +595,13 @@ T QVariant::getData() const
    std::optional<T> retval = getDataOr<T>();
 
    if (retval.has_value()) {
+
+#if defined(Q_OS_DARWIN)
+      // emerald: remove when OS X 10.13 is dropped
+      return *retval;
+#else
       return retval.value();
+#endif
 
    } else {
       return T();
@@ -608,7 +614,13 @@ std::optional<T> QVariant::getDataOr() const
    if constexpr(isType_Simple<T>())  {
 
       if (std::holds_alternative<T>(m_data)) {
+
+#if defined(Q_OS_DARWIN)
+         // emerald: remove when OS X 10.13 is dropped
+         return *(std::get_if<T>(&m_data));
+#else
          return std::get<T>(m_data);
+#endif
 
       } else {
          // variant is empty or T is not the type in the variant
@@ -664,7 +676,13 @@ Requested QVariant::value() const
    if constexpr(isType_Simple<Requested>())  {
 
       if (std::holds_alternative<Requested>(m_data)) {
+
+#if defined(Q_OS_DARWIN)
+         // emerald: remove when OS X 10.13 is dropped
+         return *(std::get_if<Requested>(&m_data));
+#else
          return std::get<Requested>(m_data);
+#endif
 
       } else {
          // variant is empty or Requested is not the type in the variant
