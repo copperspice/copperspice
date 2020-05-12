@@ -589,7 +589,7 @@ QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
       << ')';
 
    for (const QString &propertyName : f.propertyNames()) {
-      dbg << "\n    " << propertyName << " = " << f.property(propertyName);
+      dbg << "\n    " << propertyName << " = " << f.property(propertyName).toString();
    }
 
    return dbg;

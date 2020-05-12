@@ -331,7 +331,7 @@ QDebug operator<<(QDebug dbg, const QSqlField &f)
    }
 
    if (f.defaultValue().isValid()) {
-      dbg.nospace() << ", auto-value: \"" << f.defaultValue() << '\"';
+      dbg.nospace() << ", auto-value: \"" << f.defaultValue().toString() << '\"';
    }
 
    dbg.nospace() << ')';

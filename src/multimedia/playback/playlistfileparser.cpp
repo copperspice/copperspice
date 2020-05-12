@@ -364,7 +364,7 @@ void QPlaylistFileParserPrivate::_q_handleData()
       }
 
       if (m_buffer.length() - processedBytes >= LINE_LIMIT) {
-         qWarning() << "error parsing playlist[" << m_root << "] with line content >= 4096 bytes.";
+         qWarning() << "error parsing playlist[" << m_root.toString() << "] with line content >= 4096 bytes.";
          emit q->error(QPlaylistFileParser::FormatError, QPlaylistFileParser::tr("invalid line in playlist file"));
          q->stop();
          return;

@@ -430,9 +430,13 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropSource::QueryContinu
    } while (false);
 
    if (QWindowsContext::verbose > 1 || hr != S_OK) {
-      qDebug() << __FUNCTION__ << "fEscapePressed =" << fEscapePressed
-         << "GrfKeyState =" << grfKeyState << "Buttons =" << m_currentButtons
-         << "returns 0x" << hex << int(hr) << dec;
+
+#if defined(CS_SHOW_DEBUG)
+      qDebug() << "QWindowsOleDropSource::QueryContinueDrag fEscapePressed =" << fEscapePressed
+               << "GrfKeyState =" << grfKeyState << "Buttons =" << m_currentButtons
+               << "returns 0x" << hex << int(hr) << dec;
+#endif
+
    }
 
    return hr;

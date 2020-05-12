@@ -41,7 +41,6 @@ QWindowsOleDataObject::QWindowsOleDataObject(QMimeData *mimeData) :
    CF_PERFORMEDDROPEFFECT(RegisterClipboardFormat(CFSTR_PERFORMEDDROPEFFECT)),
    performedEffect(DROPEFFECT_NONE)
 {
-   qDebug() << __FUNCTION__ << mimeData->formats();
 }
 
 QWindowsOleDataObject::~QWindowsOleDataObject()
@@ -108,7 +107,7 @@ STDMETHODIMP QWindowsOleDataObject::GetData(LPFORMATETC pformatetc, LPSTGMEDIUM 
    }
 
    if (QWindowsContext::verbose > 1) {
-      qDebug() << __FUNCTION__ << *pformatetc << "returns" << hex << showbase << quint64(hr);
+      qDebug() << __FUNCTION__ << *pformatetc << "returns: " << hex << showbase << quint64(hr);
    }
 
    return hr;

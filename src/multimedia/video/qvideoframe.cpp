@@ -941,7 +941,11 @@ QDebug operator<<(QDebug dbg, const QVideoFrame &f)
       << qFormatTimeStamps(f.startTime(), f.endTime());
 
    if (f.availableMetaData().count()) {
-      dbg << ", metaData: " << f.availableMetaData();
+      auto iter_end = f.availableMetaData().constEnd();
+
+      for (auto iter = f.availableMetaData().constBegin(); iter != iter_end; f.availableMetaData() ) {
+         dbg << ", metaData: " << iter.key() << iter.value().toString();
+      }
    }
 
    dbg << ')';

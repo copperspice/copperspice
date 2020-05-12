@@ -663,7 +663,7 @@ static inline void formatInputMethodEvent(QDebug d, const QInputMethodEvent *e)
          }
 
          d << "[type= " << at.type << ", start=" << at.start << ", length=" << at.length
-            << ", value=" << at.value << ']';
+           << ", value=" << at.value.toString() << ']';
       }
 
       d << '}';
@@ -682,7 +682,7 @@ static inline void formatInputMethodQueryEvent(QDebug d, const QInputMethodQuery
          const QVariant value = e->value(static_cast<Qt::InputMethodQuery>(mask));
 
          if (value.isValid()) {
-            d << '[' << showbase << hex << mask <<  noshowbase << dec << '=' << value << "],";
+            d << '[' << showbase << hex << mask <<  noshowbase << dec << '=' << value.toString() << "],";
          }
       }
    }
