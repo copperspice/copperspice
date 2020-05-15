@@ -302,7 +302,7 @@ class Q_CORE_EXPORT QVariant
    QVariant(QUuid value);
    QVariant(QUrl value);
 
-   ~QVariant();
+   ~QVariant() = default;
 
    void clear();
 

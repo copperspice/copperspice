@@ -394,10 +394,6 @@ QVariant::QVariant(QJsonDocument value)
    m_data = std::make_shared<CustomType_T<QJsonDocument>>(std::move(value));
 }
 
-QVariant::~QVariant()
-{
-}
-
 static bool cs_internal_isNumericType(uint type)
 {
    return (type == QVariant::Int       || type == QVariant::UInt ||
