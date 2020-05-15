@@ -209,6 +209,9 @@ Q_CORE_EXPORT void qt_call_post_routines();
 
 #endif
 
+// set up for variant system, animations
+void cs_addGuiFormulas();
+
 static bool qt_detectRTLLanguage()
 {
    return force_reverse ^
@@ -1309,6 +1312,8 @@ void QGuiApplicationPrivate::init()
    // trigger registering of animation interpolators
    qRegisterGuiGetInterpolator();
 #endif
+   // set up for variant system, animations
+   cs_addGuiFormulas();
 
 // set a global share context when enabled unless there is already one
 #ifndef QT_NO_OPENGL
