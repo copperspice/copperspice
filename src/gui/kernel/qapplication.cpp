@@ -135,10 +135,6 @@ Qt::MouseButton  QApplicationPrivate::mousePressButton = Qt::NoButton;
 bool  QApplicationPrivate::scrollNoPhaseAllowed        = false;
 bool  QApplicationPrivate::obey_desktop_settings       = true;
 bool  QApplicationPrivate::highDpiScalingUpdated       = false;
-#if ! defined(QT_NO_STATEMACHINE)
-int qRegisterGuiStateMachine();
-int qUnregisterGuiStateMachine();
-#endif
 
 PaletteHash *cs_app_palettes_hash();
 FontHash *cs_app_fonts_hash();
@@ -174,10 +170,6 @@ QPlatformTheme         *QApplicationPrivate::platform_theme       = nullptr;
 QStyleHints            *QApplicationPrivate::styleHints           = nullptr;
 QTouchDevice           *QApplicationPrivate::m_fakeTouchDevice    = nullptr;
 
-#ifndef QT_NO_ANIMATION
-extern int qRegisterGuiGetInterpolator();
-#endif
-
 #ifndef QT_NO_CLIPBOARD
    QClipboard *QApplicationPrivate::qt_clipboard = nullptr;
 #endif
@@ -204,10 +196,12 @@ void qt_init(QApplicationPrivate *priv, int type);
 void qt_init_tooltip_palette();
 void qt_cleanupFontDatabase();
 void qt_cleanup();
-#ifndef QT_NO_ANIMATION
-extern int qRegisterGuiGetInterpolator();
+
 Q_CORE_EXPORT void qt_call_post_routines();
 
+#if ! defined(QT_NO_STATEMACHINE)
+   int qRegisterGuiStateMachine();
+   int qUnregisterGuiStateMachine();
 #endif
 
 // set up for variant system, animations
@@ -1313,10 +1307,6 @@ void QGuiApplicationPrivate::init()
    static QVariantGui objVariant;
    QVariant::registerClient(&objVariant);
 
-#ifndef QT_NO_ANIMATION
-   // trigger registering of animation interpolators
-   qRegisterGuiGetInterpolator();
-#endif
    // set up for variant system, animations
    cs_addGuiFormulas();
 
