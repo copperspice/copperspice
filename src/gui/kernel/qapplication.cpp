@@ -84,6 +84,7 @@
 #include <qevent_p.h>
 #include <qfont_p.h>
 #include <qgesturemanager_p.h>
+#include <qguivariant_p.h>
 #include <qinputdevicemanager_p.h>
 #include <qkeymapper_p.h>
 #include <qopenglcontext_p.h>
@@ -1307,6 +1308,10 @@ void QGuiApplicationPrivate::init()
 #ifndef QT_NO_CURSOR
    QCursorData::initialize();
 #endif
+
+   // add gui to the variant system
+   static QVariantGui objVariant;
+   QVariant::registerClient(&objVariant);
 
 #ifndef QT_NO_ANIMATION
    // trigger registering of animation interpolators
