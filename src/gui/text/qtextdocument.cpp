@@ -1147,12 +1147,12 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
    }
 
    // handle data: URLs
-   if (r.isNull() && name.scheme().compare("data", Qt::CaseInsensitive) == 0) {
+   if (! r.isValid() && name.scheme().compare("data", Qt::CaseInsensitive) == 0) {
       r = qDecodeDataUrl(name).second;
    }
 
    // if resource was not loaded try to load it here
-   if (! qobject_cast<QTextDocument *>(p) && r.isNull()) {
+   if (! qobject_cast<QTextDocument *>(p) && ! r.isValid()) {
       QUrl resourceUrl = name;
 
       if (name.isRelative()) {
@@ -1186,7 +1186,7 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
       }
    }
 
-   if (!r.isNull()) {
+   if (r.isValid()) {
       if (type == ImageResource && r.type() == QVariant::ByteArray) {
 
          if (qApp->thread() != QThread::currentThread()) {

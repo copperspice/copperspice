@@ -1068,7 +1068,8 @@ void QTextBlockFormat::setTabPositions(const QList<QTextOption::Tab> &tabs)
 QList<QTextOption::Tab> QTextBlockFormat::tabPositions() const
 {
    QVariant variant = property(TabPositions);
-   if (variant.isNull()) {
+
+   if (! variant.isValid()) {
       return QList<QTextOption::Tab>();
    }
 

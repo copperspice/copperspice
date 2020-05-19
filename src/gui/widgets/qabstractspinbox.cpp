@@ -1330,7 +1330,8 @@ void QAbstractSpinBox::initStyleOption(QStyleOptionSpinBox *option) const
 QVariant QAbstractSpinBoxPrivate::bound(const QVariant &val, const QVariant &old, int steps) const
 {
    QVariant v = val;
-   if (!wrapping || steps == 0 || old.isNull()) {
+
+   if (! wrapping || steps == 0 || ! old.isValid()) {
       if (variantCompare(v, minimum) < 0) {
          v = wrapping ? maximum : minimum;
       }
