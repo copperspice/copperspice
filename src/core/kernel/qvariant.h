@@ -466,12 +466,18 @@ class Q_CORE_EXPORT QVariant
    template <typename T>
    static uint registerType();
 
+   static void registerClient(QVariantBase *ptr) {
+      if (! m_variantClients.contains(ptr)) {
+         m_variantClients.append(ptr);
+      }
+   }
 
+   static void unRegisterClient(QVariantBase *ptr) {
+      m_variantClients.removeOne(ptr);
+   }
 
  protected:
    static bool compareValues(const QVariant &a, const QVariant &b);
-   friend int qRegisterGuiVariant();
-   friend int qUnregisterGuiVariant();
 
  private:
    bool cs_internal_convert(uint current_userType, uint new_userType);
