@@ -225,6 +225,7 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsimpledrag_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantgui_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetwindow_p.h
