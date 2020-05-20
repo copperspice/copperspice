@@ -64,10 +64,6 @@
 #include <qurl.h>
 #include <quuid.h>
 
-
-
-Q_CORE_EXPORT const QVariant::Handler *qcoreVariantHandler();
-
 extern Q_CORE_EXPORT const QMetaTypeGuiHelper *qMetaTypeGuiHelper;
 
 static void construct(QVariant::Private *x, const void *copy)
@@ -701,17 +697,6 @@ static void streamDebug(QDebug dbg, const QVariant &v)
 }
 
 
-const QVariant::Handler qt_gui_variant_handler = {
-   construct,
-   clear,
-   isNull,
-   0,
-   0,
-   compare,
-   convert,
-   0,
-   streamDebug
-};
 
 
 
@@ -855,24 +840,4 @@ static const QMetaTypeGuiHelper qVariantGuiHelper[] = {
 
 };
 
-static const QVariant::Handler *qt_guivariant_last_handler = 0;
-
-int qRegisterGuiVariant()
-{
-   qt_guivariant_last_handler = QVariant::handler;
-
-   QVariant::handler  = &qt_gui_variant_handler;
-   qMetaTypeGuiHelper = qVariantGuiHelper;
-
-   return 1;
-}
-Q_CONSTRUCTOR_FUNCTION(qRegisterGuiVariant)
-
-int qUnregisterGuiVariant()
-{
-   QVariant::handler  = qt_guivariant_last_handler;
-   qMetaTypeGuiHelper = 0;
-   return 1;
-}
-Q_DESTRUCTOR_FUNCTION(qUnregisterGuiVariant)
 
