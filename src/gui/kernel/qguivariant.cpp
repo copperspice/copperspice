@@ -21,57 +21,49 @@
 *
 ***********************************************************************/
 
+#include <qvariantgui_p.h>
+
+#include <qbitarray.h>
 #include <qbitmap.h>
+#include <qbytearray.h>
 #include <qbrush.h>
 #include <qcolor.h>
 #include <qcursor.h>
-
-// may not be requied
-#include <qsizepolicy.h>
-#include <qvariant.h>
 #include <qdatastream.h>
+#include <qdatetime.h>
 #include <qdebug.h>
-
+#include <qeasingcurve.h>
 #include <qfont.h>
 #include <qicon.h>
 #include <qimage.h>
 #include <qkeysequence.h>
-#include <qtransform.h>
+#include <qline.h>
+#include <qlist.h>
+#include <qlocale.h>
+#include <qmap.h>
 #include <qmatrix.h>
-#include <qpalette.h>
-#include <qpen.h>
-#include <qpixmap.h>
-#include <qpolygon.h>
-#include <qregion.h>
-
-#include <qtextformat.h>
 #include <qmatrix4x4.h>
+#include <qpen.h>
+#include <qpalette.h>
+#include <qpixmap.h>
+#include <qpoint.h>
+#include <qpolygon.h>
+#include <qquaternion.h>
+#include <qrect.h>
+#include <qregion.h>
+#include <qsize.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qsizepolicy.h>
+#include <qtextformat.h>
+#include <qtransform.h>
+#include <qvariant.h>
 #include <qvector2d.h>
 #include <qvector3d.h>
 #include <qvector4d.h>
-#include <qquaternion.h>
-
-#include <qbitarray.h>
-#include <qbytearray.h>
-#include <qdatastream.h>
-#include <qdebug.h>
-#include <qmap.h>
-#include <qdatetime.h>
-#include <qeasingcurve.h>
-#include <qlist.h>
-#include <qstring.h>
-#include <qstringlist.h>
 #include <qurl.h>
-#include <qlocale.h>
 #include <quuid.h>
-#include <qvariant.h>
 
-#ifndef QT_NO_GEOM_VARIANT
-#include <qsize.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qline.h>
-#endif
 
 
 Q_CORE_EXPORT const QVariant::Handler *qcoreVariantHandler();
