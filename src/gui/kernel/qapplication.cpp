@@ -84,7 +84,6 @@
 #include <qevent_p.h>
 #include <qfont_p.h>
 #include <qgesturemanager_p.h>
-#include <qguivariant_p.h>
 #include <qinputdevicemanager_p.h>
 #include <qkeymapper_p.h>
 #include <qopenglcontext_p.h>
@@ -95,6 +94,7 @@
 #include <qplatform_integrationfactory_p.h>
 #include <qplatform_themefactory_p.h>
 #include <qthread_p.h>
+#include <qvariantgui_p.h>
 #include <qwidget_p.h>
 #include <qwindowsysteminterface_p.h>
 #include <qwindow_p.h>
