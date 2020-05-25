@@ -63,4 +63,3 @@
 #include <qvector4d.h>
 #include <qurl.h>
 #include <quuid.h>
-
