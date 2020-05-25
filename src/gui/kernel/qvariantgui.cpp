@@ -474,3 +474,316 @@ bool QVariantGui::cs_internal_create(uint newUserType, const void *other, QVaria
 
    return true;
 }
+
+bool QVariantGui::cs_internal_load(QDataStream &stream, uint type, QVariant &self) const
+{
+   bool retval = true;
+
+   switch (type) {
+      case QVariant::Bitmap: {
+         QBitmap tmp;
+         stream >> tmp;
+
+         self.setValue<QBitmap>(tmp);
+         break;
+      }
+
+      case QVariant::Brush: {
+         QBrush tmp;
+         stream >> tmp;
+
+         self.setValue<QBrush>(tmp);
+         break;
+      }
+
+      case QVariant::Color: {
+         QColor tmp;
+         stream >> tmp;
+
+         self.setValue<QColor>(tmp);
+         break;
+      }
+
+      case QVariant::Cursor: {
+         QCursor tmp;
+         stream >> tmp;
+
+         self.setValue<QCursor>(tmp);
+         break;
+      }
+
+      case QVariant::Font: {
+         QFont tmp;
+         stream >> tmp;
+
+         self.setValue<QFont>(tmp);
+         break;
+      }
+
+      case QVariant::Icon: {
+         QIcon tmp;
+         stream >> tmp;
+
+         self.setValue<QIcon>(tmp);
+         break;
+      }
+
+      case QVariant::Image: {
+         QImage tmp;
+         stream >> tmp;
+
+         self.setValue<QImage>(tmp);
+         break;
+      }
+
+      case QVariant::KeySequence: {
+         QKeySequence tmp;
+         stream >> tmp;
+
+         self.setValue<QKeySequence>(tmp);
+         break;
+      }
+
+      case QVariant::Matrix: {
+         QMatrix tmp;
+         stream >> tmp;
+
+         self.setValue<QMatrix>(tmp);
+         break;
+      }
+
+      case QVariant::Matrix4x4:  {
+         QMatrix4x4 tmp;
+         stream >> tmp;
+
+         self.setValue<QMatrix4x4>(tmp);
+         break;
+      }
+
+      case QVariant::Pen:  {
+         QPen tmp;
+         stream >> tmp;
+
+         self.setValue<QPen>(tmp);
+         break;
+      }
+
+      case QVariant::Polygon:  {
+         QPolygon tmp;
+         stream >> tmp;
+
+         self.setValue<QPolygon>(tmp);
+         break;
+      }
+
+      case QVariant::PolygonF:  {
+         QPolygonF tmp;
+         stream >> tmp;
+
+         self.setValue<QPolygonF>(tmp);
+         break;
+      }
+
+      case QVariant::Pixmap:  {
+         QPixmap tmp;
+         stream >> tmp;
+
+         self.setValue<QPixmap>(tmp);
+         break;
+      }
+
+      case QVariant::Palette:  {
+         QPalette tmp;
+         stream >> tmp;
+
+         self.setValue<QPalette>(tmp);
+         break;
+      }
+
+      case QVariant::Quaternion:  {
+         QQuaternion tmp;
+         stream >> tmp;
+
+         self.setValue<QQuaternion>(tmp);
+         break;
+      }
+
+      case QVariant::Region:  {
+         QRegion tmp;
+         stream >> tmp;
+
+         self.setValue<QRegion>(tmp);
+         break;
+      }
+
+      case QVariant::SizePolicy:  {
+         QSizePolicy tmp;
+         stream >> tmp;
+
+         self.setValue<QSizePolicy>(tmp);
+         break;
+      }
+
+      case QVariant::TextLength:  {
+         QTextLength tmp;
+         stream >> tmp;
+
+         self.setValue<QTextLength>(tmp);
+         break;
+      }
+
+      case QVariant::TextFormat:  {
+         QTextFormat tmp;
+         stream >> tmp;
+
+         self.setValue<QTextFormat>(tmp);
+         break;
+      }
+
+      case QVariant::Transform:  {
+         QTransform tmp;
+         stream >> tmp;
+
+         self.setValue<QTransform>(tmp);
+         break;
+      }
+
+      case QVariant::Vector2D:  {
+         QVector2D tmp;
+         stream >> tmp;
+
+         self.setValue<QVector2D>(tmp);
+         break;
+      }
+
+      case QVariant::Vector3D:  {
+         QVector3D tmp;
+         stream >> tmp;
+
+         self.setValue<QVector3D>(tmp);
+         break;
+      }
+
+      case QVariant::Vector4D:  {
+         QVector4D tmp;
+         stream >> tmp;
+
+         self.setValue<QVector4D>(tmp);
+         break;
+      }
+
+      default:
+         retval = false;
+   }
+
+   return retval;
+}
+
+bool QVariantGui::cs_internal_save(QDataStream &stream, uint type, const QVariant &self) const
+{
+   bool retval = true;
+
+   switch (type) {
+      case QVariant::Bitmap:
+         stream << static_cast<QBitmap>(self.getData<QBitmap>());
+         break;
+
+      case QVariant::Brush:
+         stream << static_cast<QBrush>(self.getData<QBrush>());
+         break;
+
+      case QVariant::Color:
+         stream << static_cast<QColor>(self.getData<QColor>());
+         break;
+
+      case QVariant::Cursor:
+         stream << static_cast<QCursor>(self.getData<QCursor>());
+         break;
+
+      case QVariant::Font:
+         stream << static_cast<QFont>(self.getData<QFont>());
+         break;
+
+      case QVariant::Icon:
+         stream << static_cast<QIcon>(self.getData<QIcon>());
+         break;
+
+      case QVariant::Image:
+         stream << static_cast<QImage>(self.getData<QImage>());
+         break;
+
+      case QVariant::KeySequence:
+         stream << static_cast<QKeySequence>(self.getData<QKeySequence>());
+         break;
+
+      case QVariant::Matrix:
+         stream << static_cast<QMatrix>(self.getData<QMatrix>());
+         break;
+
+      case QVariant::Matrix4x4:
+         stream << static_cast<QMatrix4x4>(self.getData<QMatrix4x4>());
+         break;
+
+      case QVariant::Pen:
+         stream << static_cast<QPen>(self.getData<QPen>());
+         break;
+
+      case QVariant::Polygon:
+         stream << static_cast<QPolygon>(self.getData<QPolygon>());
+         break;
+
+      case QVariant::PolygonF:
+         stream << static_cast<QPolygonF>(self.getData<QPolygonF>());
+         break;
+
+      case QVariant::Pixmap:
+         stream << static_cast<QBitmap>(self.getData<QBitmap>());
+         break;
+
+      case QVariant::Palette:
+         stream << static_cast<QPalette>(self.getData<QPalette>());
+         break;
+
+      case QVariant::Quaternion:
+         stream << static_cast<QQuaternion>(self.getData<QQuaternion>());
+         break;
+
+      case QVariant::Region:
+         stream << static_cast<QRegion>(self.getData<QRegion>());
+         break;
+
+      case QVariant::SizePolicy:
+         stream << static_cast<QSizePolicy>(self.getData<QSizePolicy>());
+         break;
+
+      case QVariant::TextLength:
+         stream << static_cast<QTextLength>(self.getData<QTextLength>());
+         break;
+
+      case QVariant::TextFormat:
+         stream << static_cast<QTextFormat>(self.getData<QTextFormat>());
+         break;
+
+      case QVariant::Transform:
+         stream << static_cast<QTransform>(self.getData<QTransform>());
+         break;
+
+      case QVariant::Vector2D:
+         stream << static_cast<QVector2D>(self.getData<QVector2D>());
+         break;
+
+      case QVariant::Vector3D:
+         stream << static_cast<QVector3D>(self.getData<QVector3D>());
+         break;
+
+      case QVariant::Vector4D:
+         stream << static_cast<QVector4D>(self.getData<QVector4D>());
+         break;
+
+      default:
+         retval = false;
+
+   }
+
+   return retval;
+}
