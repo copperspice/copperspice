@@ -264,9 +264,9 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    static QClipboard *qt_clipboard;
 #endif
 
-   static QPalette *app_pal;
-   static QPalette *sys_pal;
-   static QPalette *set_pal;
+   static QPalette *app_palette;
+   static QPalette *sys_palette;
+   static QPalette *set_palette;
    static QFont *sys_font;
    static QFont *set_font;
 

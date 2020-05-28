@@ -150,8 +150,8 @@ QPointer<QWidget> QApplicationPrivate::leaveAfterRelease = 0;
 
 int QApplicationPrivate::app_cspec = QApplication::NormalColor;
 
-QPalette *QApplicationPrivate::sys_pal = 0;             // default system palette
-QPalette *QApplicationPrivate::set_pal = 0;             // default palette set by programmer
+QPalette *QApplicationPrivate::sys_palette        = nullptr;   // default system palette
+QPalette *QApplicationPrivate::set_palette        = nullptr;   // default palette set by programmer
 
 QFont *QApplicationPrivate::sys_font              = nullptr;   // default system font
 QFont *QApplicationPrivate::set_font              = nullptr;   // default font set by programmer
@@ -687,7 +687,7 @@ QPalette QApplication::palette(const QWidget *w)
 
 QPalette QApplication::palette(const QString &className)
 {
-   if (!QApplicationPrivate::app_pal) {
+   if (! QApplicationPrivate::app_palette) {
       palette();
    }
 
@@ -701,7 +701,7 @@ QPalette QApplication::palette(const QString &className)
       }
    }
 
-   return *QApplicationPrivate::app_pal;
+   return *QApplicationPrivate::app_palette;
 }
 
 void QApplication::setPalette(const QPalette &palette, const QString &className)
@@ -729,15 +729,14 @@ void QApplicationPrivate::setSystemPalette(const QPalette &pal)
    adjusted = pal;
 #endif
 
-   if (!sys_pal) {
-      sys_pal = new QPalette(adjusted);
+   if (! sys_palette) {
+      sys_palette = new QPalette(adjusted);
    } else {
-      *sys_pal = adjusted;
+      *sys_palette = adjusted;
    }
 
-
-   if (!QApplicationPrivate::set_pal) {
-      QApplication::setPalette(*sys_pal);
+   if (! QApplicationPrivate::set_palette) {
+      QApplication::setPalette(*sys_palette);
    }
 }
 

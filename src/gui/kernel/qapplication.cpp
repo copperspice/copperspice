@@ -135,9 +135,6 @@ bool  QApplicationPrivate::scrollNoPhaseAllowed        = false;
 bool  QApplicationPrivate::obey_desktop_settings       = true;
 bool  QApplicationPrivate::highDpiScalingUpdated       = false;
 
-PaletteHash *cs_app_palettes_hash();
-FontHash *cs_app_fonts_hash();
-
 int   QApplicationPrivate::mousePressX                 = 0;
 int   QApplicationPrivate::mousePressY                 = 0;
 int   QApplicationPrivate::mouse_double_click_distance = -1;
@@ -156,7 +153,7 @@ QFont    *QApplicationPrivate::app_font                = nullptr;
 QString  *QApplicationPrivate::platform_name           = nullptr;
 QString  *QApplicationPrivate::displayName             = nullptr;
 QIcon    *QApplicationPrivate::app_icon                = nullptr;
-QPalette *QApplicationPrivate::app_pal                 = nullptr;        // default application palette
+QPalette *QApplicationPrivate::app_palette             = nullptr;
 QWindow  *QApplicationPrivate::tabletPressTarget       = nullptr;
 QWindow  *QApplicationPrivate::currentMouseWindow      = nullptr;
 QWindow  *QApplicationPrivate::currentMousePressWindow = nullptr;
@@ -203,6 +200,9 @@ Q_CORE_EXPORT void qt_call_post_routines();
    int qUnregisterGuiStateMachine();
 #endif
 
+PaletteHash *cs_app_palettes_hash();
+FontHash *cs_app_fonts_hash();
+
 // set up for variant system, animations
 void cs_addGuiFormulas();
 
@@ -217,14 +217,14 @@ static bool qt_detectRTLLanguage()
 
 static void initPalette()
 {
-   if (!QGuiApplicationPrivate::app_pal) {
+   if (! QGuiApplicationPrivate::app_palette) {
       if (const QPalette *themePalette = QGuiApplicationPrivate::platformTheme()->palette()) {
-         QGuiApplicationPrivate::app_pal = new QPalette(*themePalette);
+         QGuiApplicationPrivate::app_palette = new QPalette(*themePalette);
       }
    }
 
-   if (!QGuiApplicationPrivate::app_pal) {
-      QGuiApplicationPrivate::app_pal = new QPalette(Qt::gray);
+   if (! QGuiApplicationPrivate::app_palette) {
+      QGuiApplicationPrivate::app_palette = new QPalette(Qt::gray);
    }
 }
 
@@ -236,7 +236,7 @@ static void initResources()
 
 static void initSystemPalette()
 {
-   if (!QApplicationPrivate::sys_pal) {
+   if (! QApplicationPrivate::sys_palette) {
       QPalette defaultPlatte;
       if (QApplicationPrivate::app_style) {
          defaultPlatte = QApplicationPrivate::app_style->standardPalette();
@@ -253,14 +253,14 @@ static void initSystemPalette()
 
 static void clearPalette()
 {
-   delete QGuiApplicationPrivate::app_pal;
-   QGuiApplicationPrivate::app_pal = 0;
+   delete QGuiApplicationPrivate::app_palette;
+   QGuiApplicationPrivate::app_palette = nullptr;
 }
 
 static void clearSystemPalette()
 {
-   delete QApplicationPrivate::sys_pal;
-   QApplicationPrivate::sys_pal = 0;
+   delete QApplicationPrivate::sys_palette;
+   QApplicationPrivate::sys_palette = nullptr;
 }
 
 static void initFontUnlocked()
@@ -479,21 +479,23 @@ QApplication::~QApplication()
    delete qt_desktopWidget;
    qt_desktopWidget = nullptr;
 
-   delete QApplicationPrivate::app_pal;
-   QApplicationPrivate::app_pal = 0;
+   delete QApplicationPrivate::app_palette;
+   QApplicationPrivate::app_palette = nullptr;
    clearSystemPalette();
-   delete QApplicationPrivate::set_pal;
-   QApplicationPrivate::set_pal = 0;
+
+   delete QApplicationPrivate::set_palette;
+   QApplicationPrivate::set_palette = nullptr;
    cs_app_palettes_hash()->clear();
 
    delete QApplicationPrivate::sys_font;
-   QApplicationPrivate::sys_font = 0;
+   QApplicationPrivate::sys_font = nullptr;
+
    delete QApplicationPrivate::set_font;
-   QApplicationPrivate::set_font = 0;
+   QApplicationPrivate::set_font = nullptr;
    cs_app_fonts_hash()->clear();
 
    delete QApplicationPrivate::app_style;
-   QApplicationPrivate::app_style = 0;
+   QApplicationPrivate::app_style = nullptr;
 
 #ifndef QT_NO_DRAGANDDROP
    if (cs_isRealGuiApp()) {
@@ -2684,7 +2686,7 @@ QClipboard *QApplication::clipboard()
 QPalette QApplication::palette()
 {
    initPalette();
-   return *QGuiApplicationPrivate::app_pal;
+   return *QGuiApplicationPrivate::app_palette;
 }
 
 void QGuiApplicationPrivate::applyWindowGeometrySpecificationTo(QWindow *window)
@@ -3145,9 +3147,9 @@ QStyle *QApplication::style()
 
    initSystemPalette();
 
-   if (QApplicationPrivate::set_pal) {
+   if (QApplicationPrivate::set_palette) {
       // repolish set palette with the new style
-      QApplication::setPalette(*QApplicationPrivate::set_pal);
+      QApplication::setPalette(*QApplicationPrivate::set_palette);
    }
 
 #ifndef QT_NO_STYLE_STYLESHEET
@@ -3208,18 +3210,18 @@ void QApplication::setStyle(QStyle *style)
    // must be done before polishing the application since the style
    // might call QApplication::setPalette() itself
 
-   if (QApplicationPrivate::set_pal) {
-      QApplication::setPalette(*QApplicationPrivate::set_pal);
+   if (QApplicationPrivate::set_palette) {
+      QApplication::setPalette(*QApplicationPrivate::set_palette);
 
-   } else if (QApplicationPrivate::sys_pal) {
+   } else if (QApplicationPrivate::sys_palette) {
       clearSystemPalette();
       initSystemPalette();
       QApplicationPrivate::initializeWidgetPaletteHash();
       QApplicationPrivate::initializeWidgetFontHash();
-      QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_pal, 0,  false);
+      QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_palette, 0,  false);
 
-   } else if (!QApplicationPrivate::sys_pal) {
-      // Initialize the sys_pal if it has not happened yet
+   } else if (!QApplicationPrivate::sys_palette) {
+      // Initialize the sys_palette if it has not happened yet
       QApplicationPrivate::setSystemPalette(QApplicationPrivate::app_style->standardPalette());
    }
 
@@ -3311,14 +3313,14 @@ void QApplicationPrivate::setPalette_helper(const QPalette &palette, const QStri
    PaletteHash *hash = cs_app_palettes_hash();
 
    if (className.isEmpty()) {
-      if (QApplicationPrivate::app_pal && pal.isCopyOf(*QApplicationPrivate::app_pal)) {
+      if (QApplicationPrivate::app_palette && pal.isCopyOf(*QApplicationPrivate::app_palette)) {
          return;
       }
 
-      if (! QApplicationPrivate::app_pal) {
-         QApplicationPrivate::app_pal = new QPalette(pal);
+      if (! QApplicationPrivate::app_palette) {
+         QApplicationPrivate::app_palette = new QPalette(pal);
       } else {
-         *QApplicationPrivate::app_pal = pal;
+         *QApplicationPrivate::app_palette = pal;
       }
 
       if (hash && hash->size()) {
@@ -3359,17 +3361,17 @@ void QApplicationPrivate::setPalette_helper(const QPalette &palette, const QStri
 
    }
 
-   if (className.isEmpty() && (! QApplicationPrivate::sys_pal || ! palette.isCopyOf(*QApplicationPrivate::sys_pal))) {
-      if (! QApplicationPrivate::set_pal) {
-         QApplicationPrivate::set_pal = new QPalette(palette);
+   if (className.isEmpty() && (! QApplicationPrivate::sys_palette || ! palette.isCopyOf(*QApplicationPrivate::sys_palette))) {
+      if (! QApplicationPrivate::set_palette) {
+         QApplicationPrivate::set_palette = new QPalette(palette);
       } else {
-         *QApplicationPrivate::set_pal = palette;
+         *QApplicationPrivate::set_palette = palette;
       }
 
       applicationResourceFlags |= ApplicationPaletteExplicitlySet;
       QCoreApplication::setAttribute(Qt::AA_SetPalette);
 
-      emit qGuiApp->paletteChanged(*QGuiApplicationPrivate::app_pal);
+      emit qGuiApp->paletteChanged(*QGuiApplicationPrivate::app_palette);
    }
 }
 
