@@ -125,7 +125,6 @@
 
 Qt::ApplicationState  QApplicationPrivate::applicationState  = Qt::ApplicationInactive;
 Qt::KeyboardModifiers QApplicationPrivate::modifier_buttons  = Qt::NoModifier;
-Q_GUI_EXPORT  bool qt_is_gui_used = true;
 
 Qt::MouseButtons QApplicationPrivate::tabletState      = Qt::NoButton;
 Qt::MouseButtons QApplicationPrivate::buttons          = Qt::NoButton;
@@ -497,7 +496,7 @@ QApplication::~QApplication()
    QApplicationPrivate::app_style = 0;
 
 #ifndef QT_NO_DRAGANDDROP
-   if (qt_is_gui_used) {
+   if (cs_isRealGuiApp()) {
       delete QDragManager::self();
    }
 #endif
@@ -1342,8 +1341,6 @@ void QGuiApplicationPrivate::init()
    scrollNoPhaseAllowed = ! qgetenv("QT_ENABLE_MOUSE_WHEEL_TRACKING").isEmpty();
 
    initResources();
-
-   qt_is_gui_used = (application_type != QApplicationPrivate::Tty);
    process_cmdline();
 
    // must be called before initialize()

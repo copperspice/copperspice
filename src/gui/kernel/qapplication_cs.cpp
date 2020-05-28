@@ -220,8 +220,8 @@ void QApplicationPrivate::process_cmdline()
       }
    }
 
-   // process platform-indep command line
-   if (! qt_is_gui_used || ! argc) {
+   // process platform independent command line
+   if (application_type == QApplicationPrivate::Tty || ! argc ) {
       return;
    }
 
@@ -319,7 +319,7 @@ void QApplicationPrivate::initialize()
    QApplicationPrivate::wheel_scroll_lines = 3;
 #endif
 
-   if (qt_is_gui_used) {
+   if (application_type != QApplicationPrivate::Tty) {
       initializeMultitouch();
    }
 

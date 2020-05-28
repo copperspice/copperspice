@@ -148,6 +148,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    void removeNativeEventFilter(QAbstractNativeEventFilter *filterObj);
 
    void cs_internal_maybeQuit();
+   bool cs_isRealGuiApp();
 
    static bool isQuitLockEnabled();
    static void setQuitLockEnabled(bool enabled);

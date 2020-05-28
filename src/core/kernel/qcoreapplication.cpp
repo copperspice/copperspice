@@ -1295,6 +1295,12 @@ void QCoreApplication::cs_internal_maybeQuit()
    d->maybeQuit();
 }
 
+bool QCoreApplication::cs_isRealGuiApp() {
+
+   Q_D(QCoreApplication);
+   return d->application_type == QCoreApplicationPrivate::Type::Gui;
+}
+
 void QCoreApplicationPrivate::maybeQuit()
 {
    if (quitLockRef.load() == 0 && in_exec && quitLockRefEnabled && shouldQuit()) {

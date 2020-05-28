@@ -70,8 +70,6 @@ class QGestureManager;
 class QDrag;
 #endif
 
-extern Q_GUI_EXPORT bool qt_is_gui_used;
-
 #ifndef QT_NO_CLIPBOARD
 extern QClipboard *qt_clipboard;
 #endif
