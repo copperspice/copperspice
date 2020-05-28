@@ -505,8 +505,8 @@ class Q_CORE_EXPORT QVariant
    std::variant <std::monostate, bool, char, int, uint, qint64, quint64, double, float,
                  QChar32, QString, QObject *, void *, std::shared_ptr<CustomType> > m_data;
 
-   friend QDataStream &operator>> (QDataStream &streamIn, QVariant &data);
-   friend QDataStream &operator<< (QDataStream &streamOut, const QVariant &data);
+   friend Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant &data);
+   friend Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant &data);
 };
 
 using QVariantList      = QList<QVariant>;

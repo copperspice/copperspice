@@ -533,6 +533,7 @@ CS_REGISTER_TEMPLATE(QMultiMap)
 // added for invokable or property return types
 CS_REGISTER_CLASS(QTimerInfo)
 CS_REGISTER_TEMPLATE(QSharedPointer)
+CS_REGISTER_TEMPLATE(QWeakPointer)
 CS_REGISTER_TEMPLATE(std::pair)
 
 // next 8 function are specializations for containers to omit the Compare template when it is not specified
