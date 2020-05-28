@@ -211,6 +211,12 @@ class Q_CORE_EXPORT QMetaProperty
 
    QVariant read(const QObject *obj) const;
 
+   // Note: Doxypress docs must currently be located here due to the overload with similar signatures
+
+   //! \brief .
+   //!
+   //! Reads the property's value from the given \a obj. Returns the property value if
+   //! valid, otherwise returns a default constructed T.
    template<class T>
    T read(const QObject *obj) const;
 
@@ -316,6 +322,7 @@ class Q_CORE_EXPORT CS_ReturnType
       }
 };
 
+#if ! defined (CS_DOXYPRESS)
 
 #define CS_REGISTER_CLASS(dataType) \
    class dataType;                  \
@@ -345,6 +352,7 @@ class Q_CORE_EXPORT CS_ReturnType
       return retval;                                                                        \
    }
 
+#endif
 
 // methods for these 2 class, located in csmeta_internal2.h around line 117
 template<class E>
