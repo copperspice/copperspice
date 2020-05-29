@@ -1693,10 +1693,10 @@ void QStateMachinePrivate::handleTransitionSignal(QObject *sender, int signalInd
 }
 
 QStateMachine::QStateMachine(QObject *parent)
-   : QState(*new QStateMachinePrivate, /*parentState=*/0)
+   : QState(*new QStateMachinePrivate, nullptr)
 {
-   // Can't pass the parent to the QState constructor, as it expects a QState
-   // But this works as expected regardless of whether parent is a QState or not
+   // unable to pass the parent to the QState constructor, expects a QState
+   // calling setParent works as expected, regardless of the data type
    setParent(parent);
 }
 
@@ -1709,86 +1709,16 @@ QStateMachine::QStateMachine(QStateMachinePrivate &dd, QObject *parent)
    setParent(parent);
 }
 
-/*!
-  Destroys this state machine.
-*/
 QStateMachine::~QStateMachine()
 {
 }
 
-/*!
-  \enum QStateMachine::EventPriority
-
-  This enum type specifies the priority of an event posted to the state
-  machine using postEvent().
-
-  Events of high priority are processed before events of normal priority.
-
-  \value NormalPriority The event has normal priority.
-  \value HighPriority The event has high priority.
-*/
-
-/*! \enum QStateMachine::Error
-
-    This enum type defines errors that can occur in the state machine at run time. When the state
-    machine encounters an unrecoverable error at run time, it will set the error code returned
-    by error(), the error message returned by errorString(), and enter an error state based on
-    the context of the error.
-
-    \value NoError No error has occurred.
-    \value NoInitialStateError The machine has entered a QState with children which does not have an
-           initial state set. The context of this error is the state which is missing an initial
-           state.
-    \value NoDefaultStateInHistoryStateError The machine has entered a QHistoryState which does not have
-           a default state set. The context of this error is the QHistoryState which is missing a
-           default state.
-    \value NoCommonAncestorForTransitionError The machine has selected a transition whose source
-           and targets are not part of the same tree of states, and thus are not part of the same
-           state machine. Commonly, this could mean that one of the states has not been given
-           any parent or added to any machine. The context of this error is the source state of
-           the transition.
-
-    \sa setErrorState()
-*/
-
-/*!
-   \enum QStateMachine::RestorePolicy
-
-   This enum specifies the restore policy type. The restore policy
-   takes effect when the machine enters a state which sets one or more
-   properties. If the restore policy is set to RestoreProperties,
-   the state machine will save the original value of the property before the
-   new value is set.
-
-   Later, when the machine either enters a state which does not set
-   a value for the given property, the property will automatically be restored
-   to its initial value.
-
-   Only one initial value will be saved for any given property. If a value for a property has
-   already been saved by the state machine, it will not be overwritten until the property has been
-   successfully restored.
-
-   \value DontRestoreProperties The state machine should not save the initial values of properties
-          and restore them later.
-   \value RestoreProperties The state machine should save the initial values of properties
-          and restore them later.
-
-   \sa QStateMachine::globalRestorePolicy QState::assignProperty()
-*/
-
-
-/*!
-  Returns the error code of the last error that occurred in the state machine.
-*/
 QStateMachine::Error QStateMachine::error() const
 {
    Q_D(const QStateMachine);
    return d->error;
 }
 
-/*!
-  Returns the error string of the last error that occurred in the state machine.
-*/
 QString QStateMachine::errorString() const
 {
    Q_D(const QStateMachine);

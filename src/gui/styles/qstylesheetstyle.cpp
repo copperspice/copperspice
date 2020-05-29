@@ -5495,7 +5495,7 @@ QPixmap QStyleSheetStyle::standardPixmap(StandardPixmap standardPixmap, const QS
       QRenderRule rule = renderRule(w, opt);
       if (rule.hasStyleHint(s)) {
          QIcon icon = rule.styleHint(s).value<QIcon>();
-         return icon.pixmap(16, 16); // ### hard-codeed, may want to fix this
+         return icon.pixmap(16, 16); // ### hard-coded, may want to fix this
       }
    }
    return baseStyle()->standardPixmap(standardPixmap, opt, w);

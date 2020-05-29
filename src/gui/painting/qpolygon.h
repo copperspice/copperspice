@@ -37,11 +37,18 @@ class QRectF;
 class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
 {
  public:
-   inline QPolygon() {}
+   QPolygon()
+   { }
+
    inline explicit QPolygon(int size);
 
-   QPolygon(const QPolygon &other) : QVector<QPoint>(other)
-   {}
+   QPolygon(const QPolygon &other)
+      : QVector<QPoint>(other)
+   { }
+
+   QPolygon(QPolygon &&other)
+      : QVector<QPoint>(std::move(other))
+   { }
 
    QPolygon(const QVector<QPoint> &points)
       : QVector<QPoint>(points)
@@ -54,14 +61,9 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    QPolygon(const QRect &rectangle, bool closed = false);
    QPolygon(int nPoints, const int *points);
 
-   inline ~QPolygon() {}
-
-   void swap(QPolygon &other) {
-      QVector<QPoint>::swap(other);
-   }
-
-   QPolygon(QPolygon &&other) : QVector<QPoint>(std::move(other))
+   ~QPolygon()
    { }
+
    QPolygon &operator=(const QPolygon &other)  {
       QVector<QPoint>::operator=(other);
       return *this;
@@ -70,6 +72,10 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    QPolygon &operator=(QPolygon &&other)  {
       swap(other);
       return *this;
+   }
+
+   void swap(QPolygon &other) {
+      QVector<QPoint>::swap(other);
    }
 
    operator QVariant() const;
@@ -141,14 +147,16 @@ class Q_GUI_EXPORT QPolygonF : public QVector<QPointF>
 
    inline explicit QPolygonF(int size);
 
-   QPolygonF(const QPolygonF &other) : QVector<QPointF>(other)
+   QPolygonF(const QPolygonF &other)
+      : QVector<QPointF>(other)
+   { }
+
+   QPolygonF(QPolygonF &&other)
+      : QVector<QPointF>(std::move(other))
    { }
 
    QPolygonF(const QVector<QPointF> &points)
       : QVector<QPointF>(points)
-   { }
-
-   QPolygonF(QPolygonF &&other) : QVector<QPointF>(std::move(other))
    { }
 
    QPolygonF(QVector<QPointF> &&points)
@@ -156,10 +164,10 @@ class Q_GUI_EXPORT QPolygonF : public QVector<QPointF>
    { }
 
    QPolygonF(const QRectF &rectangle);
-   QPolygonF(const QPolygon &polygon);      // not in QPolygon
+   QPolygonF(const QPolygon &polygon);   // not a copy constructor
 
-
-   ~QPolygonF() {}
+   ~QPolygonF()
+   { }
 
    QPolygonF &operator=(const QPolygonF &other) {
       QVector<QPointF>::operator=(other);
