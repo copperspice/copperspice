@@ -78,6 +78,31 @@ QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal
    m_signalBento.reset(new CSBento<void (SignalClass::*)(SignalArgs...)> {signal});
 }
 
+template<class SignalClass, class ...SignalArgs>
+QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...),
+      QAbstractState *target)
+{
+   if (! sender) {
+      qWarning("QState::addTransition: No sender was specified");
+      return nullptr;
+   }
+
+   if (! signal) {
+      qWarning("QState::addTransition: No signal was specified");
+      return nullptr;
+   }
+
+   if (! target) {
+      qWarning("QState::addTransition: No target was specified");
+      return nullptr;
+   }
+
+   QSignalTransition *trans = new QSignalTransition(sender, signal);
+   trans->setTargetState(target);
+   addTransition(trans);
+
+   return trans;
+}
 #endif //QT_NO_STATEMACHINE
 
 QT_END_NAMESPACE

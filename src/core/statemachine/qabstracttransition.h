@@ -24,17 +24,17 @@
 #ifndef QABSTRACTTRANSITION_H
 #define QABSTRACTTRANSITION_H
 
+#include <qabstractstate.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qlist.h>
 #include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
+#include <qstate.h>
 
 #ifndef QT_NO_STATEMACHINE
 
 class QEvent;
-class QAbstractState;
-class QState;
 class QStateMachine;
 class QAbstractTransitionPrivate;
 

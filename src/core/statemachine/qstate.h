@@ -26,13 +26,13 @@
 
 #include <QtCore/qabstractstate.h>
 #include <QtCore/qlist.h>
-#include <QSignalTransition>
 
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_STATEMACHINE
 
 class QAbstractTransition;
+class QSignalTransition;
 class QStatePrivate;
 
 class Q_CORE_EXPORT QState : public QAbstractState
@@ -102,30 +102,6 @@ class Q_CORE_EXPORT QState : public QAbstractState
    Q_DISABLE_COPY(QState)
    Q_DECLARE_PRIVATE(QState)
 };
-
-template<class SignalClass, class ...SignalArgs>
-QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...),
-      QAbstractState *target)
-{
-   if (! sender) {
-      qWarning("QState::addTransition: No sender specified");
-      return 0;
-   }
-   if (! signal) {
-      qWarning("QState::addTransition: No signal specified");
-      return 0;
-   }
-   if (! target) {
-      qWarning("QState::addTransition: No target specified");
-      return 0;
-   }
-
-   QSignalTransition *trans = new QSignalTransition(sender, signal);
-   trans->setTargetState(target);
-   addTransition(trans);
-
-   return trans;
-}
 
 #endif //QT_NO_STATEMACHINE
 
