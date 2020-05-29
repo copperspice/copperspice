@@ -83,8 +83,7 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
          std::optional<T> tmp = data.getDataOr<T>();
 
          if (tmp.has_value()) {
-            // emerald: remove when OS X 10.13 is dropped, replace with "tmp.value()"
-            retval = *tmp;
+            retval = tmp.value();
 
          } else  {
             // type mismatch
