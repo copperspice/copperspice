@@ -62,6 +62,10 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
 
    QPolygon(QPolygon &&other) : QVector<QPoint>(std::move(other))
    { }
+   QPolygon &operator=(const QPolygon &other)  {
+      QVector<QPoint>::operator=(other);
+      return *this;
+   }
 
    QPolygon &operator=(QPolygon &&other)  {
       swap(other);
