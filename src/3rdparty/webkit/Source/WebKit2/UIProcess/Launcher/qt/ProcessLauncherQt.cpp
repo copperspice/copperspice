@@ -34,7 +34,6 @@
 #include <QDebug>
 #include <QFile>
 #include <QLocalServer>
-#include <QMetaType>
 #include <QProcess>
 #include <QString>
 #include <qglobal.h>

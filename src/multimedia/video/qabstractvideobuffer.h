@@ -25,7 +25,6 @@
 #define QABSTRACTVIDEOBUFFER_H
 
 #include <qmultimedia.h>
-#include <qmetatype.h>
 #include <qstring.h>
 
 class QVariant;

@@ -25,7 +25,6 @@
 #define QGSTREAMERMESSAGE_P_H
 
 #include <qstring.h>
-#include <qmetatype.h>
 
 #include <gst/gst.h>
 

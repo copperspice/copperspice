@@ -25,7 +25,6 @@
 #define QXMLNAME_H
 
 #include <qstring.h>
-#include <QtCore/QMetaType>
 
 class QXmlName;
 class QXmlNamePool;

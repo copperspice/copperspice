@@ -28,7 +28,6 @@
 #include <qdatetime.h>
 #include <qevent.h>
 #include <qlist.h>
-#include <qmetatype.h>
 #include <qpoint.h>
 #include <qrect.h>
 

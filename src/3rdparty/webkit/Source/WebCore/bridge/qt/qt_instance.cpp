@@ -39,7 +39,6 @@
 #include <qhash.h>
 #include <qmultihash.h>
 #include <qmetaobject.h>
-#include <qmetatype.h>
 #include <qwebelement.h>
 
 namespace JSC {

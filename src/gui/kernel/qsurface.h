@@ -26,7 +26,6 @@
 
 #include <qnamespace.h>
 #include <qsurfaceformat.h>
-#include <qmetatype.h>
 #include <qsize.h>
 
 class QPlatformSurface;

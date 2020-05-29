@@ -25,7 +25,6 @@
 #define QMEDIARESOURCE_H
 
 #include <qmap.h>
-#include <qmetatype.h>
 #include <qstring.h>
 #include <qnetwork_request.h>
 

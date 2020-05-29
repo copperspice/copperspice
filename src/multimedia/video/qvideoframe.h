@@ -24,7 +24,6 @@
 #ifndef QVIDEOFRAME_H
 #define QVIDEOFRAME_H
 
-#include <qmetatype.h>
 #include <qshareddata.h>
 #include <qimage.h>
 #include <qabstractvideobuffer.h>

@@ -25,7 +25,6 @@
 #define QNETWORKCOOKIE_H
 
 #include <qlist.h>
-#include <qmetatype.h>
 #include <qobject.h>
 #include <qshareddatapointer.h>
 #include <qstring.h>

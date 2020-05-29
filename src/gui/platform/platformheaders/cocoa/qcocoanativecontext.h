@@ -24,7 +24,6 @@
 #ifndef QCOCOANATIVECONTEXT_H
 #define QCOCOANATIVECONTEXT_H
 
-#include <QtCore/QMetaType>
 #include <AppKit/NSOpenGL.h>
 
 struct QCocoaNativeContext

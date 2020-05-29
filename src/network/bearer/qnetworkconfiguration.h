@@ -25,7 +25,6 @@
 #define QNETWORKCONFIGURATION_H
 
 #include <qglobal.h>
-#include <qmetatype.h>
 #include <qshareddata.h>
 #include <qstring.h>
 #include <qlist.h>

@@ -28,7 +28,6 @@
 #include <qcontainerfwd.h>
 #include <qcryptographichash.h>
 #include <qdatetime.h>
-#include <qmetatype.h>
 #include <qnamespace.h>
 #include <qregularexpression.h>
 #include <qsharedpointer.h>

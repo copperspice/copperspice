@@ -25,7 +25,6 @@
 #define QMULTIMEDIA_H
 
 #include <qpair.h>
-#include <qmetatype.h>
 #include <qstring.h>
 
 namespace QMultimedia {

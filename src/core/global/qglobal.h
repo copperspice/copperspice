@@ -393,7 +393,7 @@
    do { extern int QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) ();    \
    QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (0)
 
-// make sure to update QMetaType when changing the following
+// make sure to update QVariant when changing the following
 
 typedef int8_t               qint8;
 typedef uint8_t              quint8;

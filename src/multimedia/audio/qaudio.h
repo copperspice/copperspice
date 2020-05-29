@@ -26,7 +26,6 @@
 
 #include <qmultimedia.h>
 #include <qglobal.h>
-#include <qmetatype.h>
 #include <qstring.h>
 
 namespace QAudio {

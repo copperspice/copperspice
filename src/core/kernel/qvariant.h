@@ -37,7 +37,6 @@
 #include <qcontainerfwd.h>
 #include <qlist.h>
 #include <qmap.h>
-#include <qmetatype.h>
 #include <qnamespace.h>
 #include <qvector.h>
 

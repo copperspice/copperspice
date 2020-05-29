@@ -27,7 +27,6 @@
 // include first, do not move
 #include <qstring8.h>
 
-#include <qmetatype.h>
 #include <qvariant.h>
 
 #include <initializer_list>

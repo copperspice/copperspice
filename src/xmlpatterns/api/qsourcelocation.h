@@ -24,7 +24,6 @@
 #ifndef QSOURCELOCATION_H
 #define QSOURCELOCATION_H
 
-#include <QMetaType>
 #include <qurl.h>
 
 class QSourceLocationPrivate;

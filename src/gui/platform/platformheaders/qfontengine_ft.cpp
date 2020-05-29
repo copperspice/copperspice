@@ -25,7 +25,6 @@
 
 #include <qalgorithms.h>
 #include <qdir.h>
-#include <qmetatype.h>
 #include <qtextstream.h>
 #include <qvariant.h>
 #include <qimage_p.h>

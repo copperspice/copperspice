@@ -26,7 +26,6 @@
 
 #include <qglobal.h>
 #include <qstring.h>
-#include <qmetatype.h>
 #include <qhashfunc.h>
 
 class QDebug;

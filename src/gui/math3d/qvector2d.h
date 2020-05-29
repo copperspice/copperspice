@@ -25,7 +25,6 @@
 #define QVECTOR2D_H
 
 #include <qpoint.h>
-#include <qmetatype.h>
 
 class QVector3D;
 class QVector4D;

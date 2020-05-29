@@ -24,7 +24,6 @@
 #ifndef QPLATFORM_SCREEN_H
 #define QPLATFORM_SCREEN_H
 
-#include <qmetatype.h>
 #include <qnamespace.h>
 #include <qcoreevent.h>
 #include <qvariant.h>

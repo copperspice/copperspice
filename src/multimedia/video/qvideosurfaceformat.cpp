@@ -24,7 +24,6 @@
 #include <qvideosurfaceformat.h>
 
 #include <qdebug.h>
-#include <qmetatype.h>
 #include <qpair.h>
 #include <qvariant.h>
 #include <qvector.h>

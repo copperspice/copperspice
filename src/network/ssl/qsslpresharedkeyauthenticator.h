@@ -27,7 +27,6 @@
 #include <qglobal.h>
 #include <qstring.h>
 #include <qshareddatapointer.h>
-#include <qmetatype.h>
 
 class QSslPreSharedKeyAuthenticatorPrivate;
 

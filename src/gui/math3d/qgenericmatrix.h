@@ -24,7 +24,6 @@
 #ifndef QGENERICMATRIX_H
 #define QGENERICMATRIX_H
 
-#include <QtCore/qmetatype.h>
 #include <qdebug.h>
 #include <qdatastream.h>
 

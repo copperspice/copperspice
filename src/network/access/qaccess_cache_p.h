@@ -29,7 +29,6 @@
 #include <qbytearray.h>
 #include <qdatetime.h>
 #include <qhash.h>
-#include <qmetatype.h>
 #include <qqueue.h>
 
 class QNetworkRequest;

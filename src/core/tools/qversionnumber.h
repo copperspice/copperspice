@@ -27,7 +27,6 @@
 #include <qnamespace.h>
 #include <qstring.h>
 #include <qvector.h>
-#include <qmetatype.h>
 
 class QVersionNumber;
 

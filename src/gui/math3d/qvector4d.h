@@ -25,7 +25,6 @@
 #define QVECTOR4D_H
 
 #include <qpoint.h>
-#include <qmetatype.h>
 #include <qvariant.h>
 
 class QMatrix4x4;

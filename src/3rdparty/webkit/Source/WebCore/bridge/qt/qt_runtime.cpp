@@ -47,7 +47,6 @@
 #include "qdatetime.h"
 #include "qdebug.h"
 #include "qmetaobject.h"
-#include "qmetatype.h"
 #include "qobject.h"
 #include "qstringlist.h"
 #include "qt_instance.h"

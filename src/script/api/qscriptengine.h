@@ -24,7 +24,6 @@
 #ifndef QSCRIPTENGINE_H
 #define QSCRIPTENGINE_H
 
-#include <qmetatype.h>
 #include <qvariant.h>
 #include <qsharedpointer.h>
 #include <qobject.h>

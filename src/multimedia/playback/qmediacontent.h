@@ -24,7 +24,6 @@
 #ifndef QMEDIACONTENT_H
 #define QMEDIACONTENT_H
 
-#include <qmetatype.h>
 #include <qshareddata.h>
 #include <qmediaresource.h>
 

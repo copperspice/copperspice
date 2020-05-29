@@ -24,7 +24,6 @@
 #ifndef QGRAPHICSVIEW_H
 #define QGRAPHICSVIEW_H
 
-#include <QtCore/qmetatype.h>
 #include <qpainter.h>
 #include <qscrollarea.h>
 #include <qgraphicsscene.h>

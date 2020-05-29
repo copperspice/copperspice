@@ -29,7 +29,6 @@
 #include <qplatform_printplugin.h>
 #include <qplatform_printersupport.h>
 #include <qplatform_pixmap.h>
-#include <QMetaType>
 #include <qt_windows.h>
 
 #include <qbitmap.h>

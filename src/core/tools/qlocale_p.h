@@ -27,7 +27,6 @@
 #include <cmath>
 
 #include <qvarlengtharray.h>
-#include <qmetatype.h>
 #include <qlocale.h>
 
 #ifndef QT_NO_SYSTEMLOCALE
