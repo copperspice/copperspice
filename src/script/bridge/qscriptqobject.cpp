@@ -350,7 +350,7 @@ class QScriptMetaType
       return m_kind;
    }
 
-   int typeId() const;
+   uint typeId() const;
 
    inline bool isValid() const {
       return (m_kind != Invalid);
@@ -387,7 +387,7 @@ class QScriptMetaType
       return QScriptMetaType(Variant);
    }
 
-   static inline QScriptMetaType metaType(int typeId, const QString &name) {
+   static inline QScriptMetaType metaType(uint typeId, const QString &name) {
       return QScriptMetaType(MetaType, typeId, name);
    }
 
@@ -400,21 +400,29 @@ class QScriptMetaType
    }
 
  private:
-   inline QScriptMetaType(Kind kind, int typeId = 0, const QString &name = QString())
+   inline QScriptMetaType(Kind kind, uint typeId = QVariant::Invalid, const QString &name = QString())
       : m_kind(kind), m_typeId(typeId), m_name(name) { }
 
    Kind m_kind;
-   int m_typeId;
+   uint m_typeId;
    QString m_name;
 };
 
-int QScriptMetaType::typeId() const
+uint QScriptMetaType::typeId() const
 {
+   uint retval;
+
    if (isVariant()) {
-      return QMetaType::QVariant;
+      retval = QVariant::Variant;
+
+   } else if (isMetaEnum()) {
+      retval = QVariant::Int;
+
+   } else {
+      retval = m_typeId;
    }
 
-   return isMetaEnum() ? QMetaType::Int : m_typeId;
+   return retval;
 }
 
 QString QScriptMetaType::name() const
@@ -422,12 +430,12 @@ QString QScriptMetaType::name() const
    if (! m_name.isEmpty()) {
       return m_name;
 
-   } else if (m_kind == Variant) {
+   } else if (m_kind == QScriptMetaType::Kind::Variant) {
       return QString("QVariant");
 
    }
 
-   return QMetaType::typeName(typeId());
+   return QVariant::typeToName(typeId());
 }
 
 class QScriptMetaMethod
@@ -566,7 +574,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
       // resolve return type
       QString returnTypeName = method.typeName();
-      int rtype = QMetaType::type(returnTypeName);
+      uint rtype = QVariant::nameToType(returnTypeName);
 
       if ((rtype == QVariant::Invalid) && ! returnTypeName.isEmpty()) {
          int enumIndex = indexOfMetaEnum(meta, returnTypeName);
@@ -592,7 +600,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
       // resolve argument types
       for (int i = 0; i < parameterTypeNames.count(); ++i) {
          QString argTypeName = parameterTypeNames.at(i);
-         int atype = QMetaType::type(argTypeName);
+         uint atype = QVariant::nameToType(argTypeName);
 
          if (atype == QVariant::Invalid) {
             int enumIndex = indexOfMetaEnum(meta, argTypeName);
@@ -648,13 +656,18 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
          }
 
          QScriptMetaType argType = mtd.argumentType(i);
-         int tid = -1;
+
+         uint tid = QVariant::Invalid;
          QVariant v;
 
          if (argType.isUnresolved()) {
-            v = QVariant(QMetaType::QObjectStar, (void *)0);
-            converted = QScriptEnginePrivate::convertToNativeQObject(
-                  exec, actual, argType.name(), reinterpret_cast<void **>(v.data()));
+            v = QVariant(QVariant::ObjectStar, (void *)nullptr);
+
+            /* emerald (script, hold)
+               converted = QScriptEnginePrivate::convertToNativeQObject(
+                     exec, actual, argType.name(), reinterpret_cast<void **>(v.data()));
+            */
+            converted = false;
 
          } else if (argType.isVariant()) {
             if (QScriptEnginePrivate::isVariant(actual)) {
@@ -667,8 +680,10 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
 
          } else {
             tid = argType.typeId();
-            v = QVariant(tid, (void *)0);
-            converted = QScriptEnginePrivate::convertValue(exec, actual, tid, v.data());
+
+            v   = QScriptEnginePrivate::convertValue(exec, actual, tid);
+            converted = v.isValid();
+
             if (exec->hadException()) {
                return exec->exception();
             }
@@ -691,11 +706,20 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                   }
 
                } else {
-                  QString vvTypeName = vv.typeName();
-                  if (vvTypeName.endsWith('*') && (vvTypeName.left(vvTypeName.size() - 1) == argType.name())) {
-                     v = QVariant(tid, *reinterpret_cast<void **>(vv.data()));
-                     converted = true;
-                     matchDistance += 10;
+                  QString newTypeName = vv.typeName();
+
+                  if (newTypeName.endsWith('*')) {
+                     newTypeName.chop(1);
+                     uint newId = QVariant::nameToType(newTypeName);
+
+                     if (newId == tid) {
+                        // variant was Widget *, user wanted Widget
+
+                        converted = false;
+                        matchDistance += 10;
+
+                        v = QVariant();
+                     }
                   }
                }
 
@@ -1056,7 +1080,12 @@ struct QtMethodCaller {
             case QScriptMetaType::MetaType:
             case QScriptMetaType::MetaEnum:
             case QScriptMetaType::Unresolved:
-               params[i] = const_cast<void *>(v.constData());
+
+               /* emerald (script, hold)
+                  params[i] = const_cast<void *>(v.constData());
+               */
+               params[i] = nullptr;
+
                break;
 
             default:
@@ -1104,10 +1133,13 @@ struct QtMethodCaller {
          if (retType.isVariant()) {
             result = QScriptEnginePrivate::jscValueFromVariant(exec, *(QVariant *)params[0]);
 
-         } else if (retType.typeId() != QMetaType::Void) {
-            result = QScriptEnginePrivate::create(exec, retType.typeId(), params[0]);
-            if (!result) {
-               result = engine->newVariant(QVariant(retType.typeId(), params[0]));
+         } else if (retType.typeId() != QVariant::Void) {
+
+            QVariant tmp = QVariant(retType.typeId(), params[0]);
+            result = QScriptEnginePrivate::create(exec, tmp);
+
+            if (! result) {
+               result = engine->newVariant(tmp);
             }
 
          } else {
@@ -2399,17 +2431,6 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
       return;
    }
 
-#if 0
-   QScriptFunction *fun = engine->convertToNativeFunction(slot);
-   if (fun == 0) {
-      // the signal handler has been GC'ed. This can only happen when
-      // a QObject is owned by the engine, the engine is destroyed, and
-      // there is a script function connected to the destroyed() signal
-      Q_ASSERT(signalIndex <= 1); // destroyed(QObject*)
-      return;
-   }
-#endif
-
    const QMetaObject *meta  = sender()->metaObject();
    const QMetaMethod method = meta->method(signalIndex);
 
@@ -2424,9 +2445,9 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
       void *arg = argv[i + 1];
 
       QString typeName = parameterTypes.at(i);
-      int argType = QMetaType::type(parameterTypes.at(i));
+      uint argType = QVariant::nameToType(parameterTypes.at(i));
 
-      if (! argType) {
+      if (argType == QVariant::Invalid) {
          qWarning("QScriptEngine: Unable to handle unregistered datatype '%s' "
             "when invoking handler of signal %s::%s",
             csPrintable(typeName), csPrintable(meta->className()), csPrintable(method.methodSignature()));
@@ -2437,7 +2458,7 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
          actual = QScriptEnginePrivate::jscValueFromVariant(exec, *reinterpret_cast<QVariant *>(arg));
 
       } else {
-         actual = QScriptEnginePrivate::create(exec, argType, arg);
+         actual = QScriptEnginePrivate::create(exec, QVariant(argType, arg));
       }
 
       argsVector[i] = actual;
