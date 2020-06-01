@@ -1295,8 +1295,7 @@ QScriptValue::PropertyFlags QScriptValue::propertyFlags(const QScriptString &nam
    return d->propertyFlags(name.d_ptr->identifier, mode);
 }
 
-QScriptValue QScriptValue::call(const QScriptValue &thisObject,
-   const QScriptValueList &args)
+QScriptValue QScriptValue::call(const QScriptValue &thisObject, const QList<QScriptValue> &args)
 {
    Q_D(const QScriptValue);
 
@@ -1436,7 +1435,7 @@ QScriptValue QScriptValue::call(const QScriptValue &thisObject, const QScriptVal
 
   \sa call(), QScriptEngine::newObject()
 */
-QScriptValue QScriptValue::construct(const QScriptValueList &args)
+QScriptValue QScriptValue::construct(const QList<QScriptValue> &args)
 {
    Q_D(const QScriptValue);
 

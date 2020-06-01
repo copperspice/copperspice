@@ -38,7 +38,6 @@ class QDateTime;
 
 class QMetaObject;
 
-typedef QList<QScriptValue> QScriptValueList;
 using qsreal = double;
 
 class QScriptValuePrivate;
