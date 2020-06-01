@@ -181,6 +181,8 @@ class Q_SCRIPT_EXPORT QScriptValue
 
    qint64 objectId() const;
 
+   bool operator==(const QScriptValue &other) const;
+
  private:
    // force compile error, prevent QScriptValue(bool) to be called
    QScriptValue(void *);

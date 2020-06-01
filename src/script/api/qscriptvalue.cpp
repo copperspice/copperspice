@@ -1855,3 +1855,32 @@ qint64 QScriptValue::objectId() const
 {
    return d_ptr ? d_ptr->objectId() : -1;
 }
+
+bool QScriptValue::operator==(const QScriptValue &other) const
+{
+   bool retval = true;
+
+   if (this->d_ptr == other.d_ptr) {
+      retval = true;
+
+   } else if (this->d_ptr->type != other.d_ptr->type) {
+      retval = false;
+
+   } else if (this->d_ptr->type == QScriptValuePrivate::JavaScriptCore) {
+      if (this->d_ptr->jscValue != other.d_ptr->jscValue) {
+         retval = false;
+      }
+
+   } else if (this->d_ptr->type == QScriptValuePrivate::Number) {
+      if (this->d_ptr->numberValue != other.d_ptr->numberValue) {
+         retval = false;
+      }
+
+   } else if (this->d_ptr->type == QScriptValuePrivate::String) {
+      if (this->d_ptr->stringValue != other.d_ptr->stringValue) {
+         retval = false;
+      }
+   }
+
+   return retval;
+}
