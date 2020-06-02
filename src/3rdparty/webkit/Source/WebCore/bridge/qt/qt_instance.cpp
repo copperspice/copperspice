@@ -383,6 +383,9 @@ void QtField::setValueToInstance(ExecState* exec, const Instance* inst, JSValue 
     if (obj) {
         uint argtype = QVariant::Void;
 
+        if (m_type == QtFieldType::MetaProperty) {
+            argtype = QVariant::nameToType(m_property.typeName());
+        }
 
         // dynamic properties just get any QVariant
         QVariant val = convertValueToQVariant(exec, aValue, static_cast<QVariant::Type>(argtype), 0);

@@ -830,6 +830,10 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
                 }
                 break;
 
+            } else if (QtPixmapInstance::canHandle(hint)) {
+                ret = QtPixmapInstance::variantFromObject(object, hint);
+
+            } else if (hint == QVariant::typeToTypeId<QWebElement>()) {
                 if (object && object->inherits(&JSElement::s_info)) {
                     ret = QVariant::fromValue<QWebElement>(QtWebElementRuntime::create((static_cast<JSElement*>(object))->impl()));
                     dist = 0;
@@ -895,14 +899,14 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
 {
     // Variants with QObject * can be isNull but not a null pointer
     // An empty QString variant is also null
-    QMetaType::Type type = (QMetaType::Type) variant.userType();
+    QVariant::Type type = variant.type();
 
-    qConvDebug() << "convertQVariantToValue: metatype:" << type << ", isnull: " << variant.isNull();
-    if (variant.isNull() &&
-        type != QMetaType::QObjectStar &&
-        type != QMetaType::VoidStar &&
-        type != QMetaType::QWidgetStar &&
-        type != QMetaType::QString) {
+    qConvDebug() << "convertQVariantToValue: Variant:" << type << ", is not valid";
+    if (! variant.isValid() &&
+        type != QVariant::ObjectStar &&
+        type != QVariant::VoidStar &&
+        type != QVariant::WidgetStar &&
+        type != QVariant::String) {
         return jsNull();
     }
 
@@ -1258,7 +1262,7 @@ static int indexOfMetaEnum(const QMetaObject *meta, const QString &str)
 // Helper function for resolving methods
 // Largely based on code in QtScript for compatibility reasons
 static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QString &signature, bool allowPrivate,
-                  QVarLengthArray<QVariant, 10> &vars, void **vvars, JSObject **pError)
+                  QVarLengthArray<QVariant, 10> &vars, void **ptrToVoids, JSObject **pError)
 {
     QList<int> matchingIndices;
 
@@ -1305,7 +1309,7 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
 
         // resolve return type
         QString returnTypeName = method.typeName();
-        int rtype = QMetaType::type(returnTypeName);
+        uint rtype = QVariant::nameToType(returnTypeName);
 
         if ((rtype == 0) && ! returnTypeName.isEmpty()) {
             if (returnTypeName == "QVariant") {
@@ -1337,7 +1341,7 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
 
         for (int i = 0; i < parameterTypeNames.count(); ++i) {
             QString argTypeName = parameterTypeNames.at(i);
-            int atype = QMetaType::type(argTypeName);
+            uint atype = QVariant::nameToType(argTypeName);
 
             if (atype == 0) {
                 if (argTypeName == "QVariant") {
@@ -1519,7 +1523,7 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
 
         for (i = 0; i < args.count(); i++) {
             vars[i] = args[i];
-            vvars[i] = vars[i].data();
+            // emerald (webkit, ok) ptrToVoids[i] = vars[i].data();
         }
     }
 
