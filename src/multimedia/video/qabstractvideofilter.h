@@ -57,7 +57,7 @@ public:
     ~QAbstractVideoFilter();
 
     bool isActive() const;
-    void setActive(bool v);
+    void setActive(bool value);
 
     virtual QVideoFilterRunnable *createFilterRunnable() = 0;
 
