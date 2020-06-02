@@ -28,7 +28,6 @@
 #include <qvariant.h>
 #include <qwindowdefs.h>
 
-// class QVariant;
 class QScreen;
 
 #ifdef QT_NO_CURSOR
@@ -120,8 +119,6 @@ inline bool CustomType_T<QCursor>::compare(const CustomType &other) const {
    auto ptr = dynamic_cast<const CustomType_T<QCursor>*>(&other);
 
    if (ptr != nullptr) {
-      printf("\n BROOM  compare CURSOR, ptr is not NULLPTR");
-
       return m_value.shape() == (ptr->m_value).shape();
    }
 

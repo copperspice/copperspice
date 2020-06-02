@@ -25,18 +25,16 @@
 #define QABSTRACTTRANSITION_H
 
 #include <qabstractstate.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qlist.h>
-#include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qlist.h>
+#include <qscopedpointer.h>
 #include <qstate.h>
 
 #ifndef QT_NO_STATEMACHINE
 
+class QAbstractTransitionPrivate;
 class QEvent;
 class QStateMachine;
-class QAbstractTransitionPrivate;
 
 #ifndef QT_NO_ANIMATION
 class QAbstractAnimation;
@@ -47,13 +45,15 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
    CORE_CS_OBJECT(QAbstractTransition)
 
    CORE_CS_PROPERTY_READ(sourceState, sourceState)
+
    CORE_CS_PROPERTY_READ(targetState, targetState)
    CORE_CS_PROPERTY_WRITE(targetState, setTargetState)
+
    CORE_CS_PROPERTY_READ(targetStates, targetStates)
    CORE_CS_PROPERTY_WRITE(targetStates, setTargetStates)
 
  public:
-   QAbstractTransition(QState *sourceState = 0);
+   QAbstractTransition(QState *sourceState = nullptr);
    virtual ~QAbstractTransition();
 
    QState *sourceState() const;
@@ -75,7 +75,6 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
 
  protected:
    virtual bool eventTest(QEvent *event) = 0;
-
    virtual void onTransition(QEvent *event) = 0;
 
    bool event(QEvent *e) override;
@@ -87,11 +86,8 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
  private:
    Q_DISABLE_COPY(QAbstractTransition)
    Q_DECLARE_PRIVATE(QAbstractTransition)
-
 };
 
-#endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
+#endif // QT_NO_STATEMACHINE
 
 #endif

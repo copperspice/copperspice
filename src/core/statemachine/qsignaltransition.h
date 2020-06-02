@@ -24,9 +24,7 @@
 #ifndef QSIGNALTRANSITION_H
 #define QSIGNALTRANSITION_H
 
-#include <QtCore/qabstracttransition.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstracttransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -38,10 +36,10 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
    CORE_CS_PROPERTY_WRITE(senderObject, setSenderObject)
 
  public:
-   QSignalTransition(QState *sourceState = 0);
+   QSignalTransition(QState *sourceState = nullptr);
 
    template<class SignalClass, class ...SignalArgs>
-   QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState = 0);
+   QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState = nullptr);
 
    ~QSignalTransition();
 
@@ -66,7 +64,6 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
    QObject *m_sender;
    QScopedPointer<CsSignal::Internal::BentoAbstract> m_signalBento;
 };
-
 
 template<class SignalClass, class ...SignalArgs>
 QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState)
@@ -103,8 +100,7 @@ QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*si
 
    return trans;
 }
-#endif //QT_NO_STATEMACHINE
 
-QT_END_NAMESPACE
+#endif // QT_NO_STATEMACHINE
 
 #endif

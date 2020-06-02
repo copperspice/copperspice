@@ -24,10 +24,8 @@
 #ifndef QSTATE_H
 #define QSTATE_H
 
-#include <QtCore/qabstractstate.h>
-#include <QtCore/qlist.h>
-
-QT_BEGIN_NAMESPACE
+#include <qabstractstate.h>
+#include <qlist.h>
 
 #ifndef QT_NO_STATEMACHINE
 
@@ -47,7 +45,7 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    CORE_CS_PROPERTY_READ(childMode, childMode)
    CORE_CS_PROPERTY_WRITE(childMode, setChildMode)
- 
+
  public:
    enum ChildMode {
       ExclusiveStates,
@@ -56,13 +54,12 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    CORE_CS_ENUM(ChildMode)
 
-   QState(QState *parent = 0);
-   QState(ChildMode childMode, QState *parent = 0);
+   QState(QState *parent = nullptr);
+   QState(ChildMode childMode, QState *parent = nullptr);
    ~QState();
 
    void addTransition(QAbstractTransition *transition);
 
-   // CopperSpice - second parameter changed from a string to a method pointer
    template<class SignalClass, class ...SignalArgs>
    QSignalTransition *addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QAbstractState *target);
 
@@ -103,8 +100,6 @@ class Q_CORE_EXPORT QState : public QAbstractState
    Q_DECLARE_PRIVATE(QState)
 };
 
-#endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
+#endif // QT_NO_STATEMACHINE
 
 #endif
