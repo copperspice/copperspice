@@ -1669,7 +1669,7 @@ QStringList QCoreApplication::libraryPaths()
          self->d_func()->appendApplicationPathToLibraryPaths();
       }
 
-      const QByteArray libPathEnv = qgetenv("QT_PLUGIN_PATH");
+      const QByteArray libPathEnv = qgetenv("CS_PLUGIN_PATH");
 
       if (! libPathEnv.isEmpty()) {
 
