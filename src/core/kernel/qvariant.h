@@ -120,7 +120,7 @@ class Q_CORE_EXPORT QVariant
 {
  public:
 
-   enum Type {
+   enum Type : uint {
       Invalid,
 
       Bool,
@@ -219,10 +219,7 @@ class Q_CORE_EXPORT QVariant
       Variant,
 
       // must always be after all declared types
-      UserType   = 256,
-
-      // forces the compiler to allocate 32 bits for the enum
-      DoNotUse   = 0xffffffff
+      UserType   = 256
    };
 
    struct NamesAndTypes {
