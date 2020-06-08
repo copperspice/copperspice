@@ -179,6 +179,7 @@ QVariant::QVariant(const QVariant &other)
 {
 }
 
+// constructors
 QVariant::QVariant(QDataStream &s)
 {
    s >> *this;
@@ -2193,8 +2194,6 @@ bool QVariant::canConvert(uint newType) const
 
          break;
 
-      // can_convert()
-
       case QVariant::Map:
 
          if (current_userType == QVariant::JsonObject) {
@@ -2344,7 +2343,7 @@ bool QVariant::compareValues(const QVariant &a, const QVariant &b)
       auto a_ptr = std::get_if<std::shared_ptr<CustomType>>(&a.m_data);
       auto b_ptr = std::get_if<std::shared_ptr<CustomType>>(&b.m_data);
 
-      // b_ptr is a raw pointer to a shared poiinter to a CustomType
+      // b_ptr is a raw pointer to a shared pointer to a CustomType
       // **b_ptr is a value of type CustomType
       return (*a_ptr)->compare(**b_ptr);
 
@@ -3367,6 +3366,7 @@ QUuid QVariant::toUuid() const
 {
    return cs_internal_VariantToType<QUuid>(QVariant::Uuid);
 }
+
 QVariant::Type QVariant::type() const
 {
    return std::visit([](const auto &arg) {

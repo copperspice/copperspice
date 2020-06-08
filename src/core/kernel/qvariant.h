@@ -229,7 +229,8 @@ class Q_CORE_EXPORT QVariant
    };
 
    QVariant()
-   { }
+   {
+   }
 
    QVariant(const char *)    = delete;      // prevents storing a "string literal"
    QVariant(void *)          = delete;      // prevents storing a "pointer" as a bool
@@ -244,7 +245,6 @@ class Q_CORE_EXPORT QVariant
    QVariant(uint typeId, const void *copy);
 
    QVariant(const QVariant &other);
-   QVariant(QDataStream &stream);
 
    QVariant(QVariant &&other)
       : m_data(std::move(other.m_data))
@@ -298,6 +298,8 @@ class Q_CORE_EXPORT QVariant
    QVariant(QUuid value);
    QVariant(QUrl value);
 
+   QVariant(QDataStream &stream);
+
    ~QVariant() = default;
 
    void clear();
@@ -315,8 +317,6 @@ class Q_CORE_EXPORT QVariant
    bool convert() {
       return convert( QVariant::typeToTypeId<T>() );
    }
-
-   std::optional<QVariant> maybeConvert(uint requested_type) const;
 
    template<typename T>
    static QVariant fromValue(const T &value) {
@@ -339,6 +339,8 @@ class Q_CORE_EXPORT QVariant
    bool isValid() const {
       return ! std::holds_alternative<std::monostate>(m_data);
    }
+
+   std::optional<QVariant> maybeConvert(uint requested_type) const;
 
    template<typename T>
    void setValue(const T &value);
@@ -402,7 +404,6 @@ class Q_CORE_EXPORT QVariant
    template<typename Requested>
    Requested value() const;
 
-
    // ** next 6 are a group
    QString typeName() const;
 
@@ -447,15 +448,16 @@ class Q_CORE_EXPORT QVariant
    class CustomType {
       public:
          virtual ~CustomType()
-         { }
+         {
+         }
 
          virtual std::shared_ptr<CustomType> clone() const = 0;
-
          virtual bool compare(const CustomType &other) const = 0;
-         virtual uint userType() const = 0;
 
-         virtual void saveToStream()   = 0;
          virtual void loadFromStream() = 0;
+         virtual void saveToStream()   = 0;
+
+         virtual uint userType() const = 0;
    };
 
    //
@@ -553,16 +555,16 @@ class CustomType_T : public QVariant::CustomType
       return false;
    }
 
-   uint userType() const override {
-      return QVariant::typeToTypeId<T>();
+   void loadFromStream() override {
+      // emerald, might add this
    }
 
    void saveToStream() override {
       // emerald, might add this
    }
 
-   void loadFromStream() override {
-      // emerald, might add this
+   uint userType() const override {
+      return QVariant::typeToTypeId<T>();
    }
 
  private:
