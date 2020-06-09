@@ -1001,4 +1001,5 @@ QFontEngine *QCoreTextFontDatabase::freeTypeFontEngine(const QFontDef &fontDef, 
 }
 #endif
 
-
+CS_DECLARE_METATYPE(QCFType<CGFontRef>)
+CS_DECLARE_METATYPE(QCFType<CFURLRef>)

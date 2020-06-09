@@ -110,7 +110,7 @@ QCocoaGLContext::QCocoaGLContext(const QSurfaceFormat &format, QPlatformOpenGLCo
      m_shareContext(nil),
      m_format(format)
 {
-   if (!nativeHandle.isNull()) {
+   if (nativeHandle.isValid()) {
       if (!nativeHandle.canConvert<QCocoaNativeContext>()) {
          qWarning("QCocoaGLContext: Requires a QCocoaNativeContext");
          return;

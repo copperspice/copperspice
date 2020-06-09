@@ -42,4 +42,6 @@ private:
     NSOpenGLContext *m_context;
 };
 
+CS_DECLARE_METATYPE(QCocoaNativeContext)
+
 #endif
