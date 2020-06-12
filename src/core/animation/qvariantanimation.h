@@ -70,8 +70,8 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    QVariant endValue() const;
    void setEndValue(const QVariant &value);
 
-   QVariant keyValueAt(qreal step) const;
-   void setKeyValueAt(qreal step, const QVariant &value);
+   QVariant keyValueAt(double step) const;
+   void setKeyValueAt(double step, const QVariant &value);
 
    QVector<QVariantAnimation::ValuePair> keyValues() const;
    void setKeyValues(const QVector<QVariantAnimation::ValuePair> &values);
@@ -100,7 +100,7 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState) override;
 
    virtual void updateCurrentValue(const QVariant &value) = 0;
-   virtual QVariant interpolated(const QVariant &from, const QVariant &to, qreal progress) const;
+   virtual QVariant interpolated(const QVariant &from, const QVariant &to, double progress) const;
 
  private:
    static libguarded::shared_guarded<QHash<uint, QVariantAnimation::CustomFormula>> &getFormulas();

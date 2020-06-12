@@ -145,7 +145,7 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
    void setSlowModeEnabled(bool enabled) {
       slowMode = enabled;
    }
-   void setSlowdownFactor(qreal factor) {
+   void setSlowdownFactor(double factor) {
       slowdownFactor = factor;
    }
 
@@ -196,7 +196,7 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
    // This factor will be used to divide the DEFAULT_TIMER_INTERVAL at each tick
    // when slowMode is enabled. Setting it to 0 or higher than DEFAULT_TIMER_INTERVAL (16)
    // stops all animations.
-   qreal slowdownFactor;
+   double slowdownFactor;
 
    // bool to indicate that only pause animations are active
    bool isPauseTimerActive;
