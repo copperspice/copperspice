@@ -387,7 +387,7 @@ const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaO
 }
 
 
-// standard template function   ( class T1 = cs_internalEmpty )
+// standard template function   ( class T1 = cs_internalEmpty, default value located in csmetafwd.h )
 template<class T1>
 const QString &cs_typeToName()
 {

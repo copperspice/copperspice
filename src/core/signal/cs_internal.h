@@ -56,8 +56,8 @@ class cs_check_connect_args<void (*)(ArgsX...), void (*)()>
 //  slot is a func ptr, signal has the same number of parms as the slot, types mismatch
 template<class ...ArgsX, class ...ArgsY>
 class cs_check_connect_args < void (*)(ArgsX...), void (*)(ArgsY...),
-   typename std::enable_if < sizeof...(ArgsX) == sizeof...(ArgsY) &&
-   ! std::is_same<std::tuple<ArgsX...>, std::tuple<ArgsY...>>::value >::type >
+   typename std::enable_if< sizeof...(ArgsX) == sizeof...(ArgsY) &&
+      ! std::is_same<std::tuple<ArgsX...>, std::tuple<ArgsY...>>::value >::type>
          : public std::integral_constant<bool, false>
 {
 };

@@ -414,8 +414,7 @@ class Q_CORE_EXPORT QVariant
    static QString typeToName(uint typeId);
 
    template<typename T>
-   static uint typeToTypeId()
-   {
+   static uint typeToTypeId() {
       // typeid() part of RTTI, core language
       uint retval = QVariant::getTypeId(typeid(T *));
 
@@ -616,8 +615,8 @@ std::optional<T> QVariant::getDataOr() const
 
       } else {
          // variant is empty or T is not the type in the variant
-         printf("\n  BROOM  getDataOr(1)    T = %s   variant holds = %s",
-                  typeid(T).name(), csPrintable(typeName()) );
+         // printf("\n QVariant::getDataOr  requested T = %s  variant holds = %s",
+         //    typeid(T).name(), csPrintable(typeName()) );
 
       }
 
@@ -633,8 +632,8 @@ std::optional<T> QVariant::getDataOr() const
 
          if (newPtr == nullptr) {
             // T is the wrong custom type
-            printf("\n  BROOM  getDataOr(3)   T = %s   variant holds = %s",
-                  typeid(T).name(), typeid(**ptr).name() );
+            // printf("\n QVariant::getDataOr  requested T = %s  variant holds = %s",
+            //    typeid(T).name(), typeid(**ptr).name() );
 
          } else {
             return newPtr->get();

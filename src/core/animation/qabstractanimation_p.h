@@ -141,7 +141,7 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
       consistentTiming = consistent;
    }
 
-   //these facilitate fine-tuning of complex animations
+   // these facilitate fine-tuning of complex animations
    void setSlowModeEnabled(bool enabled) {
       slowMode = enabled;
    }

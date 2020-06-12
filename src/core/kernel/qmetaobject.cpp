@@ -1998,8 +1998,6 @@ void QMetaObject_X::register_property_read(const QString &name, const QString &d
       iter->setReadMethod(dataType, readJar);
 
    }
-
-   return;
 }
 
 void QMetaObject_X::register_property_write(const QString &name, JarWriteAbstract *method)
@@ -2023,8 +2021,6 @@ void QMetaObject_X::register_property_write(const QString &name, JarWriteAbstrac
       iter->setWriteMethod(method);
 
    }
-
-   return;
 }
 
 void QMetaObject_X::register_property_bool(const QString &name, JarReadAbstract *method, QMetaProperty::Kind kind)
