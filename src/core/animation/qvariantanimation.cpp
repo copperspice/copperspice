@@ -186,11 +186,12 @@ void QVariantAnimationPrivate::setCurrentValueForProgress(const double progress)
 {
    Q_Q(QVariantAnimation);
 
-   const double startProgress = m_currentInterval.start.first;
-   const double endProgress   = m_currentInterval.end.first;
-   const double localProgress = (progress - startProgress) / (endProgress - startProgress);
+   const auto & [startProgress, startValue] = m_currentInterval.start;
+   const auto & [endProgress, endValue]     = m_currentInterval.end;
 
-   QVariant retval = q->interpolated(m_currentInterval.start.second, m_currentInterval.end.second, localProgress);
+   const double localProgress = (progress - startProgress) / (endProgress - startProgress);
+   QVariant retval = q->interpolated(startValue, endValue, localProgress);
+
    qSwap(m_currentValue, retval);
    q->updateCurrentValue(m_currentValue);
 
