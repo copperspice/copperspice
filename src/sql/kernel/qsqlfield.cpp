@@ -75,7 +75,7 @@ class QSqlFieldPrivate
 QSqlField::QSqlField(const QString &fieldName, QVariant::Type type)
 {
    d = new QSqlFieldPrivate(fieldName, type);
-   val = QVariant(type);
+   val = QVariant();
 }
 
 QSqlField::QSqlField(const QSqlField &other)
@@ -217,7 +217,7 @@ void QSqlField::clear()
    if (isReadOnly()) {
       return;
    }
-   val = QVariant(type());
+   val = QVariant();
 }
 
 /*!
@@ -254,7 +254,7 @@ void QSqlField::setType(QVariant::Type type)
    detach();
    d->type = type;
    if (!val.isValid()) {
-      val = QVariant(type);
+      val = QVariant();
    }
 }
 

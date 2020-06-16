@@ -426,7 +426,7 @@ QVariant QPSQLResult::data(int i)
    const char *val = PQgetvalue(d->result, at(), i);
 
    if (PQgetisnull(d->result, at(), i)) {
-      return QVariant(type);
+      return QVariant();
    }
 
    switch (type) {

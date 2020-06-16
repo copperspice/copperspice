@@ -6403,7 +6403,7 @@ void QStyleSheetStyle::saveWidgetFont(QWidget *w, const QFont &font) const
 
 void QStyleSheetStyle::clearWidgetFont(QWidget *w) const
 {
-   w->setProperty("_q_styleSheetWidgetFont", QVariant(QVariant::Invalid));
+   w->setProperty("_q_styleSheetWidgetFont", QVariant());
 }
 
 // Polish palette that should be used for a particular widget, with particular states

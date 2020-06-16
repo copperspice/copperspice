@@ -241,7 +241,7 @@ class Q_CORE_EXPORT QVariant
    QVariant(Qt::PenStyle)    = delete;
    QVariant(Qt::CursorShape) = delete;
 
-   QVariant(Type type);
+   [[deprecated]] QVariant(Type type);
    QVariant(uint typeId, const void *copy);
 
    QVariant(const QVariant &other);
