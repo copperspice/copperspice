@@ -316,7 +316,7 @@ class Q_CORE_EXPORT CS_ReturnType
 {
    public:
       static const QString &getName() {
-         static_assert(! std::is_same<T, T>::value, "Requested type name has not been registered.");
+         static_assert(! std::is_same_v<T, T>, "Requested type name has not been registered.");
          static const QString retval;
          return retval;
       }
@@ -391,7 +391,7 @@ const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaO
 template<class T1>
 const QString &cs_typeToName()
 {
-   if constexpr (std::is_same<T1, cs_internalEmpty>::value) {
+   if constexpr (std::is_same_v<T1, cs_internalEmpty>) {
       static const QString retval("");
       return retval;
 

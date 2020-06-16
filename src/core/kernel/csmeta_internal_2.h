@@ -33,7 +33,7 @@ QVariant cs_convertToQVariant(T data)
       // used to avoid implicitly converting an enum to an int
       return QVariant::fromValue(data);
 
-   } else if constexpr (std::is_constructible<QVariant, T>::value) {
+   } else if constexpr (std::is_constructible_v<QVariant, T>) {
       return QVariant(data);
 
    } else {
