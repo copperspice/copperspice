@@ -549,58 +549,41 @@ template<class Key, class Value>
 class CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>
 {
    public:
-      static const QString &getName();
+      static const QString &getName() {
+         static QString retval("QMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+         return retval;
+      }
 };
 
 template<class Key, class Value>
-const QString &CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>::getName()
-{
-   static QString retval("QMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
-   return retval;
-}
-
-template<class Key, class Value>
-class CS_ReturnType< QMultiMap<Key, Value, qMapCompare<Key> >>
+class CS_ReturnType<QMultiMap<Key, Value, qMapCompare<Key> >>
 {
    public:
-      static const QString &getName();
+      static const QString &getName() {
+         static const QString retval("QMultiMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+         return retval;
+      }
 };
-
-template<class Key, class Value>
-const QString &CS_ReturnType<QMultiMap<Key, Value, qMapCompare<Key> >>::getName()
-{
-   static QString retval("QMultiMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
-   return retval;
-}
 
 template<class Key, class Value>
 class CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
 {
    public:
-      static const QString &getName();
+      static const QString &getName() {
+         static const QString retval("QHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+         return retval;
+      }
 };
-
-template<class Key, class Value>
-const QString &CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>::getName()
-{
-   static QString retval("QHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
-   return retval;
-}
 
 template<class Key, class Value>
 class CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
 {
    public:
-      static const QString &getName();
+      static const QString &getName() {
+         static const QString retval("QMultiHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+         return retval;
+      }
 };
-
-template<class Key, class Value>
-const QString &CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>::getName()
-{
-   static QString retval("QMultiHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
-   return retval;
-}
-
 
 // **
 template<class T>
