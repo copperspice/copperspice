@@ -76,6 +76,10 @@ T safe_cast(qint64 data, bool *ok)
 
 std::atomic<uint> &QVariant::currentUserType()
 {
+   // use case if this was not atomic
+   //   uint & tmp = currentUserType();
+   //   auto id = ++tmp;
+
    static std::atomic<uint> retval = QVariant::UserType;
    return retval;
 }

@@ -719,7 +719,10 @@ uint QVariant::registerType()
    static std::atomic<uint> userId = QVariant::Invalid;
 
    if (userId.load(std::memory_order_relaxed) == QVariant::Invalid) {
-      uint newId = QVariant::currentUserType().fetch_add(1, std::memory_order_relaxed);
+
+      std::atomic<uint> &currentId = QVariant::currentUserType();
+
+      uint newId = currentId.fetch_add(1, std::memory_order_relaxed);
       uint oldId = QVariant::Invalid;
 
       if (userId.compare_exchange_strong(oldId, newId, std::memory_order_release, std::memory_order_acquire))  {
