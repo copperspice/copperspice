@@ -246,9 +246,7 @@ class Q_CORE_EXPORT QVariant
 
    QVariant(const QVariant &other);
 
-   QVariant(QVariant &&other)
-      : m_data(std::move(other.m_data))
-   { }
+   QVariant(QVariant &&other) = default;
 
    QVariant(bool value);
    QVariant(int value);
