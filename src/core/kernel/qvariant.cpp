@@ -583,50 +583,98 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
          break;
 
       case QVariant::Int: {
-         int tmp = safe_cast<int>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         int data     = 0;
+
+         if (retval) {
+            data = safe_cast<int>(tmp, &retval);
+         }
+
+         setValue(data);
          break;
       }
 
       case QVariant::UInt: {
-         uint tmp = safe_cast<uint>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         uint data    = 0;
+
+         if (retval) {
+            data = safe_cast<uint>(tmp, &retval);
+         }
+
+         setValue(data);
          break;
       }
 
       case QVariant::Short: {
-         short tmp = safe_cast<short>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
-         break;
-      }
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         short data  = 0;
 
-      case QVariant::Long: {
-         long tmp = safe_cast<long>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
-         break;
-      }
+         if (retval) {
+            data = safe_cast<short>(tmp, &retval);
+         }
 
-      case QVariant::ULong: {
-         ulong tmp = safe_cast<ulong>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
+         setValue(data);
          break;
       }
 
       case QVariant::UShort: {
-         ushort tmp = safe_cast<ushort>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         ushort data  = 0;
+
+         if (retval) {
+            data = safe_cast<ushort>(tmp, &retval);
+         }
+
+         setValue(data);
+         break;
+      }
+
+      case QVariant::Long: {
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         long data    = 0;
+
+         if (retval) {
+            data = safe_cast<long>(tmp, &retval);
+         }
+
+         setValue(data);
+         break;
+      }
+
+      case QVariant::ULong: {
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         ulong data   = 0;
+
+         if (retval) {
+            data = safe_cast<ulong>(tmp, &retval);
+         }
+
+         setValue(data);
          break;
       }
 
       case QVariant::LongLong:  {
-         qint64 tmp = safe_cast<qint64>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         qint64 data  = 0;
+
+         if (retval) {
+            data = safe_cast<qint64>(tmp, &retval);
+         }
+
+         setValue(data);
          break;
       }
 
       case QVariant::ULongLong: {
-         quint64 tmp = safe_cast<quint64>(cs_internal_convertToNumber(*this, &retval), &retval);;
-         setValue(tmp);
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         quint64 data = 0;
+
+         if (retval) {
+            data = safe_cast<quint64>(tmp, &retval);
+         }
+
+         setValue(data);
          break;
       }
 
@@ -668,8 +716,14 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::ULongLong:
             case QVariant::Char:
             case QVariant::UChar: {
-               double tmp = safe_cast<double>(cs_internal_convertToNumber(*this, &retval), &retval);
-               setValue(tmp);
+               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+               double data  = 0;
+
+               if (retval) {
+                  data = safe_cast<double>(tmp, &retval);
+               }
+
+               setValue(data);
                break;
             }
 
@@ -733,8 +787,14 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::ULongLong:
             case QVariant::Char:
             case QVariant::UChar:  {
-               float tmp = safe_cast<double>(cs_internal_convertToNumber(*this, &retval), &retval);
-               setValue(tmp);
+               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+               float data  = 0;
+
+               if (retval) {
+                  data = safe_cast<double>(tmp, &retval);
+               }
+
+               setValue(data);
                break;
             }
 
@@ -761,14 +821,26 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::Char:  {
-         char tmp = safe_cast<char>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         char data    = 0;
+
+         if (retval) {
+            data = safe_cast<char>(tmp, &retval);
+         }
+
+         setValue(data);
          break;
       }
 
       case QVariant::UChar: {
-         uchar tmp = safe_cast<uchar>(cs_internal_convertToNumber(*this, &retval), &retval);
-         setValue(tmp);
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         uchar data   = 0;
+
+         if (retval) {
+            data = safe_cast<uchar>(tmp, &retval);
+         }
+
+         setValue(data);
          break;
       }
 
@@ -787,9 +859,14 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::Double:
             case QVariant::Char:
             case QVariant::UChar: {
-               QChar32 tmp = safe_cast<char32_t>(cs_internal_convertToNumber(*this, &retval), &retval);
-               setValue(tmp);
+               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+               QChar32 data = 0;
 
+               if (retval) {
+                  data = safe_cast<char32_t>(tmp, &retval);
+               }
+
+               setValue(data);
                break;
             }
 
