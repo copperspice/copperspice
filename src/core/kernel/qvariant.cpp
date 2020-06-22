@@ -1796,20 +1796,24 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::LongLong || current_userType == QVariant::ULongLong) {
             return true;
 
-         } else if (current_userType == QVariant::Double) {
+         } else if (current_userType == QVariant::Double || current_userType == QVariant::Float) {
             return true;
 
-         } else if (current_userType == QVariant::QChar || current_userType == QVariant::Char) {
+         } else if (current_userType == QVariant::Char || current_userType == QVariant::QChar) {
+            return true;
+
+         } else if (current_userType == QVariant::SChar || current_userType == QVariant::UChar) {
             return true;
 
          } else if (current_userType == QVariant::ByteArray) {
             return true;
 
-         } else if (current_userType == QVariant::String) {
+         } else if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
             return true;
 
          } else if (current_userType == QVariant::JsonValue) {
             return true;
+
          }
 
          break;
@@ -1837,13 +1841,13 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::SChar || current_userType == QVariant::UChar) {
             return true;
 
-         } else if (current_userType == QVariant::Double) {
+         } else if (current_userType == QVariant::Double || current_userType == QVariant::Float) {
             return true;
 
          } else if (current_userType == QVariant::ByteArray) {
             return true;
 
-         } else if (current_userType == QVariant::String) {
+         } else if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
             return true;
 
          } else if (current_userType == QVariant::KeySequence) {
@@ -1851,6 +1855,7 @@ bool QVariant::canConvert(uint newType) const
 
          } else if (current_userType == QVariant::JsonValue) {
             return true;
+
          }
 
          break;
@@ -1863,7 +1868,13 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::Int) {
             return true;
 
+         } else if (current_userType == QVariant::Long || current_userType == QVariant::ULong) {
+            return true;
+
          } else if (current_userType == QVariant::LongLong || current_userType == QVariant::ULongLong) {
+            return true;
+
+         } else if (current_userType == QVariant::Short || current_userType == QVariant::UShort) {
             return true;
 
          } else if (current_userType == QVariant::Char  || current_userType == QVariant::QChar) {
@@ -1875,10 +1886,10 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::ByteArray) {
             return true;
 
-         } else if (current_userType == QVariant::Double) {
+         } else if (current_userType == QVariant::Double || current_userType == QVariant::Float) {
             return true;
 
-         } else if (current_userType == QVariant::String) {
+         } else if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
             return true;
 
          } else if (current_userType == QVariant::JsonValue) {
