@@ -2171,18 +2171,32 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::Int || current_userType == QVariant::UInt) {
             return true;
 
+         } else if (current_userType == QVariant::Long || current_userType == QVariant::ULong) {
+            return true;
+
          } else if (current_userType == QVariant::LongLong || current_userType == QVariant::ULongLong) {
             return true;
 
-         } else if (current_userType == QVariant::Double) {
+         } else if (current_userType == QVariant::Short || current_userType == QVariant::UShort) {
             return true;
 
-         } else if (current_userType == QVariant::String) {
+         } else if (current_userType == QVariant::Double || current_userType == QVariant::Float) {
+            return true;
+
+         } else if (current_userType == QVariant::Char || current_userType == QVariant::QChar) {
+            return true;
+
+         } else if (current_userType == QVariant::SChar || current_userType == QVariant::UChar) {
+            return true;
+
+         } else if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
             return true;
 
          } else if (current_userType == QVariant::Color) {
             return true;
 
+         } else if (current_userType == QVariant::Uuid) {
+            return true;
          }
 
          break;
@@ -2196,10 +2210,16 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::Int || current_userType == QVariant::UInt) {
             return true;
 
+         } else if (current_userType == QVariant::Long || current_userType == QVariant::ULong) {
+            return true;
+
          } else if (current_userType == QVariant::LongLong || current_userType == QVariant::ULongLong) {
             return true;
 
-         } else if (current_userType == QVariant::Double) {
+         } else if (current_userType == QVariant::Short || current_userType == QVariant::UShort) {
+            return true;
+
+         } else if (current_userType == QVariant::Double || current_userType == QVariant::Float) {
             return true;
 
          } else if (current_userType == QVariant::QChar) {
@@ -2211,34 +2231,45 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::StringList) {
             return true;
 
-         } else if (current_userType == QVariant::Color) {
-            return true;
-
-        } else if (current_userType == QVariant::Date) {
+         } else if (current_userType == QVariant::Date || current_userType == QVariant::DateTime) {
              return true;
-
-         } else if (current_userType == QVariant::DateTime) {
-            return true;
 
          } else if (current_userType == QVariant::Time) {
             return true;
 
-         } else if (current_userType == QVariant::KeySequence) {
+         } else if (current_userType == QVariant::JsonValue) {
+            return true;
+
+         } else if (current_userType == QVariant::Color) {
             return true;
 
          } else if (current_userType == QVariant::Font) {
             return true;
 
+         } else if (current_userType == QVariant::KeySequence) {
+            return true;
+
          } else if (current_userType == QVariant::Url) {
             return true;
 
-         } else if (current_userType == QVariant::JsonValue) {
+         } else if (current_userType == QVariant::Uuid) {
+            return true;
+
+         }
+
+         break;
+
+      case QVariant::StringList:
+
+         if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
+            return true;
+
+         } else if (current_userType == QVariant::List) {
             return true;
          }
 
          break;
 
-      //
       case QVariant::Image:
 
          if (current_userType == QVariant::Pixmap || current_userType == QVariant::Bitmap) {
@@ -2302,14 +2333,6 @@ bool QVariant::canConvert(uint newType) const
       case QVariant::Brush:
 
          if (current_userType == QVariant::Color || current_userType == QVariant::Pixmap) {
-            return true;
-         }
-
-         break;
-
-      case QVariant::StringList:
-
-         if (current_userType == QVariant::String || current_userType == QVariant::List) {
             return true;
          }
 
