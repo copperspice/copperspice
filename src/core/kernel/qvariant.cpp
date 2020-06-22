@@ -2250,24 +2250,24 @@ bool QVariant::canConvert(uint newType) const
          break;
 
       case QVariant::Date:
-
-         if (current_userType == QVariant::String || current_userType == QVariant::DateTime) {
-            return true;
-         }
-
-         break;
-
       case QVariant::Time:
 
-         if (current_userType == QVariant::String || current_userType == QVariant::DateTime) {
+         if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
+            return true;
+
+         } else if (current_userType == QVariant::DateTime) {
             return true;
          }
 
          break;
+
 
       case QVariant::DateTime:
 
-         if (current_userType == QVariant::String || current_userType == QVariant::Date) {
+         if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
+            return true;
+
+         } else if (current_userType == QVariant::Date) {
             return true;
          }
 
