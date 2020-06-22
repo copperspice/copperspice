@@ -2290,18 +2290,25 @@ bool QVariant::canConvert(uint newType) const
 
       case QVariant::Map:
 
-         if (current_userType == QVariant::JsonObject) {
+         if (current_userType == QVariant::Hash) {
+            return true;
+
+         } else if (current_userType == QVariant::JsonObject) {
             return true;
 
          } else if (current_userType == QVariant::JsonValue) {
             return true;
+
          }
 
          break;
 
       case QVariant::Hash:
 
-         if (current_userType == QVariant::JsonObject) {
+         if (current_userType == QVariant::Map) {
+            return true;
+
+         } else if (current_userType == QVariant::JsonObject) {
             return true;
 
          } else if (current_userType == QVariant::JsonValue) {
