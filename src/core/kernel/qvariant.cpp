@@ -2302,15 +2302,19 @@ bool QVariant::canConvert(uint newType) const
 
       case QVariant::KeySequence:
 
-         if (current_userType == QVariant::String || current_userType == QVariant::Int) {
+         if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
             return true;
+
+         } else if (current_userType == QVariant::Int) {
+            return true;
+
          }
 
          break;
 
       case QVariant::Font:
 
-         if (current_userType == QVariant::String) {
+         if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
             return true;
          }
 
@@ -2318,7 +2322,7 @@ bool QVariant::canConvert(uint newType) const
 
       case QVariant::Color:
 
-         if (current_userType == QVariant::String) {
+         if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
             return true;
 
          } else if (current_userType == QVariant::ByteArray) {
@@ -2326,6 +2330,7 @@ bool QVariant::canConvert(uint newType) const
 
          } else if (current_userType == QVariant::Brush) {
             return true;
+
          }
 
          break;
@@ -2425,7 +2430,7 @@ bool QVariant::canConvert(uint newType) const
 
       case QVariant::Rect:
 
-         if ( current_userType == QVariant::RectF) {
+         if (current_userType == QVariant::RectF) {
             return true;
          }
 
@@ -2471,9 +2476,17 @@ bool QVariant::canConvert(uint newType) const
 
          break;
 
-      case QVariant::Uuid:
+      case QVariant::ModelIndex:
 
-         if (current_userType == QVariant::String) {
+         if (current_userType == QVariant::PersistentModelIndex) {
+            return true;
+         }
+
+         break;
+
+      case QVariant::PersistentModelIndex:
+
+         if (current_userType == QVariant::ModelIndex) {
             return true;
          }
 
@@ -2481,7 +2494,15 @@ bool QVariant::canConvert(uint newType) const
 
       case QVariant::Url:
 
-         if (current_userType == QVariant::String) {
+         if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
+            return true;
+         }
+
+         break;
+
+      case QVariant::Uuid:
+
+         if (current_userType == QVariant::String8 || current_userType == QVariant::String16) {
             return true;
          }
 
