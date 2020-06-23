@@ -3633,7 +3633,7 @@ QVariant::Type QVariant::type() const
          }
 
       } else {
-         static_assert(! std::is_same<T, T>::value, "QVariant::type() Unsupported data type");
+         static_assert(! std::is_same_v<T, T>, "QVariant::type() Unsupported data type");
       }
 
    }, m_data);
@@ -3707,7 +3707,7 @@ uint QVariant::userType() const
          return tmp;
 
       } else {
-         static_assert(! std::is_same<T, T>::value, "QVariant::userType() Unsupported data type");
+         static_assert(! std::is_same_v<T, T>, "QVariant::userType() Unsupported data type");
       }
 
    }, m_data);
