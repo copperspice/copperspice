@@ -26,7 +26,6 @@
 
 #include <qmultimedia.h>
 #include <qglobal.h>
-#include <qmetatype.h>
 #include <qstring.h>
 
 namespace QAudio {
@@ -51,9 +50,5 @@ Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug dbg, QAudio::Error error);
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug dbg, QAudio::State state);
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug dbg, QAudio::Mode mode);
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug dbg, QAudio::Role role);
-Q_DECLARE_METATYPE(QAudio::Error)
-Q_DECLARE_METATYPE(QAudio::State)
-Q_DECLARE_METATYPE(QAudio::Mode)
-Q_DECLARE_METATYPE(QAudio::Role)
 
 #endif

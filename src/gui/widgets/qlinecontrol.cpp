@@ -493,6 +493,7 @@ void QLineControl::processInputMethodEvent(QInputMethodEvent *event)
          cursorPositionChanged = true;
       }
    }
+
 #ifndef QT_NO_IM
    setPreeditArea(m_cursor, event->preeditString());
 #endif
@@ -509,8 +510,9 @@ void QLineControl::processInputMethodEvent(QInputMethodEvent *event)
       if (a.type == QInputMethodEvent::Cursor) {
          m_preeditCursor = a.start;
          m_hideCursor = !a.length;
+
       } else if (a.type == QInputMethodEvent::TextFormat) {
-         QTextCharFormat f = qvariant_cast<QTextFormat>(a.value).toCharFormat();
+         QTextCharFormat f = (a.value).value<QTextFormat>().toCharFormat();
 
          if (f.isValid()) {
             QTextLayout::FormatRange o;

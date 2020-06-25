@@ -283,8 +283,7 @@ inline bool operator!=(const QPageSize &lhs, const QPageSize &rhs)
 
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QPageSize &pageSize);
 
-Q_DECLARE_METATYPE(QPageSize)
-Q_DECLARE_METATYPE(QPageSize::Unit)
-Q_DECLARE_METATYPE(QPageSize::PageSizeId)
+CS_DECLARE_METATYPE(QPageSize)
+CS_DECLARE_METATYPE(QPageSize::Unit)
 
 #endif

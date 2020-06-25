@@ -27,7 +27,6 @@
 // include first, do not move
 #include <qstring8.h>
 
-#include <qmetatype.h>
 #include <qvariant.h>
 
 #include <initializer_list>
@@ -40,7 +39,7 @@ class QObject;
 class QMetaObject;
 
 template<class T1>
-const QString &cs_typeName();
+const QString &cs_typeToName();
 
 // csArgument
 template <typename T>
@@ -60,7 +59,7 @@ class CSArgument
 
 template <typename T>
 CSArgument<T>::CSArgument(const T &data)
-   : m_data(data), m_typeName(cs_typeName<T>())
+   : m_data(data), m_typeName(cs_typeToName<T>())
 {
 }
 
@@ -162,39 +161,29 @@ inline void CSReturnArgument<void>::setData(CsSignal::Internal::CSVoidReturn)
 
 // registration of enums and flags
 template<class T>
-struct is_enum_or_flag: public std::is_enum<T> {
+struct cs_is_enum_or_flag : public std::is_enum<T> {
 };
 
 template<class T>
-struct is_enum_or_flag<QFlags<T>>: public std::integral_constant<bool, true> {
+struct cs_is_enum_or_flag<QFlags<T>>
+   : public std::integral_constant<bool, true> {
 };
 
 template<class T>
-struct cs_underlying_type: public std::underlying_type<T> {
+struct cs_underlying_type
+   : public std::underlying_type<T> {
 };
 
 template<class T>
-struct cs_underlying_type<QFlags<T>>: public std::underlying_type<T> {
+struct cs_underlying_type<QFlags<T>>
+   : public std::underlying_type<T> {
 };
 
-// QVarient
-template < class T, class = void, class = typename std::enable_if < !std::is_constructible<QVariant, T>::value >::type >
+template<class T>
 QVariant cs_convertToQVariant(T data);
 
-template<class T, class = typename std::enable_if<std::is_constructible<QVariant, T>::value>::type>
-QVariant cs_convertToQVariant(T data);
-
-template < class T, class = void, class = void, class = typename std::enable_if < (! is_enum_or_flag<T>::value) &&
-           ! QMetaTypeId2<T>::Defined >::type >
+template <class T>
 std::pair<T, bool> convertFromQVariant(QVariant data);
-
-template < class T, class = void, class = typename std::enable_if < (! is_enum_or_flag<T>::value) &&
-           QMetaTypeId2<T>::Defined >::type >
-std::pair<T, bool> convertFromQVariant(QVariant data);
-
-template<class T, class = typename std::enable_if<is_enum_or_flag<T>::value>::type>
-std::pair<T, bool> convertFromQVariant(QVariant data);
-
 
 
 // ***********
@@ -353,7 +342,7 @@ bool SpiceJarWrite<T, V>::runV(QObject *obj, QVariant data) const
    // strip away const and & if they exist
    using bareType = typename std::remove_const<typename std::remove_reference<V>::type>::type;
 
-   // convert data to type V
+   // convert data to type bareType
    std::pair<bareType, bool> retval = convertFromQVariant<bareType>(data);
 
    if (retval.second) {

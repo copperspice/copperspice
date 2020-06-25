@@ -24,7 +24,6 @@
 #ifndef QMEDIACONTENT_H
 #define QMEDIACONTENT_H
 
-#include <qmetatype.h>
 #include <qshareddata.h>
 #include <qmediaresource.h>
 
@@ -39,7 +38,7 @@ class Q_MULTIMEDIA_EXPORT QMediaContent
    QMediaContent(const QUrl &contentUrl);
    QMediaContent(const QNetworkRequest &contentRequest);
    QMediaContent(const QMediaResource &contentResource);
-   QMediaContent(const QMediaResourceList &resources);
+   QMediaContent(const QList<QMediaResource> &resources);
    QMediaContent(const QMediaContent &other);
    QMediaContent(QMediaPlaylist *playlist, const QUrl &contentUrl = QUrl(), bool takeOwnership = false);
 
@@ -56,7 +55,7 @@ class Q_MULTIMEDIA_EXPORT QMediaContent
    QNetworkRequest canonicalRequest() const;
    QMediaResource canonicalResource() const;
 
-   QMediaResourceList resources() const;
+   QList<QMediaResource> resources() const;
 
    QMediaPlaylist *playlist() const;
 
@@ -64,13 +63,6 @@ class Q_MULTIMEDIA_EXPORT QMediaContent
    QSharedDataPointer<QMediaContentPrivate> d;
 };
 
-template<>
-class Q_MULTIMEDIA_EXPORT cs_typeName_internal<QMediaContent, void>
-{
- public:
-   static const QString &typeName();
-};
-
-Q_DECLARE_METATYPE(QMediaContent)
+CS_DECLARE_METATYPE(QMediaContent)
 
 #endif

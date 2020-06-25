@@ -154,14 +154,15 @@ Item AtomicValue::toXDM(const QVariant &value)
 
       case QVariant::DateTime:
          return DateTime::fromDateTime(value.toDateTime());
-      case QMetaType::Float:
+
+      case QVariant::Float:
          return Item(Double::fromValue(value.toFloat()));
 
       case QVariant::Double:
          return Item(Double::fromValue(value.toDouble()));
 
       default: {
-         if (value.userType() == qMetaTypeId<float>()) {
+         if (value.userType() == QVariant::typeToTypeId<float>()) {
             return Item(Float::fromValue(value.value<float>()));
 
          } else {
@@ -222,7 +223,8 @@ ItemType::Ptr AtomicValue::qtToXDMType(const QXmlItem &item)
 
       case QVariant::Time:
          return BuiltinTypes::xsDateTime;
-      case QMetaType::Float:
+
+      case QVariant::Float:
          return BuiltinTypes::xsFloat;
 
       case QVariant::Double:

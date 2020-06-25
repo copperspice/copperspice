@@ -277,6 +277,4 @@ class Q_XCB_EXPORT QXcbWindow : public QObject, public QXcbObject, public QXcbWi
    xcb_cursor_t m_currentBitmapCursor;
 };
 
-Q_DECLARE_METATYPE(QXcbWindow *)
-
 #endif

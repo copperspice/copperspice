@@ -70,7 +70,7 @@
 #include <qtooltip.h>
 #include <qtranslator.h>
 #include <qvariant.h>
-#include <QWhatsThis>
+#include <qwhatsthis.h>
 #include <qwidget.h>
 #include <qwindowsysteminterface.h>
 
@@ -94,6 +94,7 @@
 #include <qplatform_integrationfactory_p.h>
 #include <qplatform_themefactory_p.h>
 #include <qthread_p.h>
+#include <qvariantgui_p.h>
 #include <qwidget_p.h>
 #include <qwindowsysteminterface_p.h>
 #include <qwindow_p.h>
@@ -104,16 +105,17 @@
 #endif
 
 #if defined(Q_OS_DARWIN)
-#  include <qcore_mac_p.h>
+#include <qcore_mac_p.h>
 
 #elif defined(Q_OS_WIN)
-#  include <qt_windows.h>
+#include <qt_windows.h>
+
 #endif
 
 #include <ctype.h>
 #include <stdlib.h>
 
-// Helper macro for static functions to check on the existence of the application class.
+// helper macro for static functions to check on the existence of the application class.
 #define CHECK_QAPP_INSTANCE(...) \
     if (QCoreApplication::instance()) { \
     } else { \
@@ -121,42 +123,26 @@
         return __VA_ARGS__; \
     }
 
-Q_CORE_EXPORT void qt_call_post_routines();
-Q_GUI_EXPORT  bool qt_is_gui_used = true;
-
-extern        void qt_cleanupFontDatabase();
-
-QDesktopWidget *qt_desktopWidget = nullptr;       // root window widgets
-
-void qt_init(QApplicationPrivate *priv, int type);
-void qt_init_tooltip_palette();
-void qt_cleanup();
-
-#if ! defined(QT_NO_STATEMACHINE)
-int qRegisterGuiStateMachine();
-int qUnregisterGuiStateMachine();
-#endif
-
-PaletteHash *cs_app_palettes_hash();
-FontHash *cs_app_fonts_hash();
-
 Qt::ApplicationState  QApplicationPrivate::applicationState  = Qt::ApplicationInactive;
 Qt::KeyboardModifiers QApplicationPrivate::modifier_buttons  = Qt::NoModifier;
-Qt::MouseButtons QApplicationPrivate::tabletState            = Qt::NoButton;
-Qt::MouseButtons QApplicationPrivate::buttons                = Qt::NoButton;
-Qt::MouseButtons QApplicationPrivate::mouse_buttons          = Qt::NoButton;
-Qt::MouseButton  QApplicationPrivate::mousePressButton       = Qt::NoButton;
 
-bool  QApplicationPrivate::scrollNoPhaseAllowed  = false;
-bool  QApplicationPrivate::obey_desktop_settings = true;
-bool  QApplicationPrivate::highDpiScalingUpdated = false;
-int   QApplicationPrivate::mousePressX = 0;
-int   QApplicationPrivate::mousePressY = 0;
+Qt::MouseButtons QApplicationPrivate::tabletState      = Qt::NoButton;
+Qt::MouseButtons QApplicationPrivate::buttons          = Qt::NoButton;
+Qt::MouseButtons QApplicationPrivate::mouse_buttons    = Qt::NoButton;
+Qt::MouseButton  QApplicationPrivate::mousePressButton = Qt::NoButton;
+
+bool  QApplicationPrivate::scrollNoPhaseAllowed        = false;
+bool  QApplicationPrivate::obey_desktop_settings       = true;
+bool  QApplicationPrivate::highDpiScalingUpdated       = false;
+
+int   QApplicationPrivate::mousePressX                 = 0;
+int   QApplicationPrivate::mousePressY                 = 0;
 int   QApplicationPrivate::mouse_double_click_distance = -1;
 int   QApplicationPrivate::m_fakeMouseSourcePointId    = 0;
 ulong QApplicationPrivate::mousePressTime              = 0;
 
-QPointF     QApplicationPrivate::lastCursorPosition(qInf(), qInf());
+QPointF     QApplicationPrivate::lastCursorPosition    = QPointF(qInf(), qInf());
+
 QString     QApplicationPrivate::styleOverride;
 QWindowList QApplicationPrivate::window_list;
 
@@ -167,7 +153,7 @@ QFont    *QApplicationPrivate::app_font                = nullptr;
 QString  *QApplicationPrivate::platform_name           = nullptr;
 QString  *QApplicationPrivate::displayName             = nullptr;
 QIcon    *QApplicationPrivate::app_icon                = nullptr;
-QPalette *QApplicationPrivate::app_pal                 = nullptr;        // default application palette
+QPalette *QApplicationPrivate::app_palette             = nullptr;
 QWindow  *QApplicationPrivate::tabletPressTarget       = nullptr;
 QWindow  *QApplicationPrivate::currentMouseWindow      = nullptr;
 QWindow  *QApplicationPrivate::currentMousePressWindow = nullptr;
@@ -180,17 +166,15 @@ QPlatformTheme         *QApplicationPrivate::platform_theme       = nullptr;
 QStyleHints            *QApplicationPrivate::styleHints           = nullptr;
 QTouchDevice           *QApplicationPrivate::m_fakeTouchDevice    = nullptr;
 
-#ifndef QT_NO_ANIMATION
-extern int qRegisterGuiGetInterpolator();
-#endif
-
 #ifndef QT_NO_CLIPBOARD
-QClipboard *QApplicationPrivate::qt_clipboard = 0;
+   QClipboard *QApplicationPrivate::qt_clipboard = nullptr;
 #endif
 
 #ifndef QT_NO_SESSIONMANAGER
-bool QApplicationPrivate::is_fallback_session_management_enabled = true;
+   bool QApplicationPrivate::is_fallback_session_management_enabled = true;
 #endif
+
+QDesktopWidget *qt_desktopWidget  = nullptr;       // root window widgets
 
 enum ApplicationResourceFlags {
    ApplicationPaletteExplicitlySet = 0x1,
@@ -204,9 +188,23 @@ static qreal fontSmoothingGamma          = 1.7;
 static QBasicMutex applicationFontMutex;
 static Qt::LayoutDirection layout_direction = Qt::LayoutDirectionAuto;
 
-#ifndef QT_NO_ANIMATION
-extern int qRegisterGuiGetInterpolator();
+void qt_init(QApplicationPrivate *priv, int type);
+void qt_init_tooltip_palette();
+void qt_cleanupFontDatabase();
+void qt_cleanup();
+
+Q_CORE_EXPORT void qt_call_post_routines();
+
+#if ! defined(QT_NO_STATEMACHINE)
+   int qRegisterGuiStateMachine();
+   int qUnregisterGuiStateMachine();
 #endif
+
+PaletteHash *cs_app_palettes_hash();
+FontHash *cs_app_fonts_hash();
+
+// set up for variant system, animations
+void cs_addGuiFormulas();
 
 static bool qt_detectRTLLanguage()
 {
@@ -219,14 +217,14 @@ static bool qt_detectRTLLanguage()
 
 static void initPalette()
 {
-   if (!QGuiApplicationPrivate::app_pal) {
+   if (! QGuiApplicationPrivate::app_palette) {
       if (const QPalette *themePalette = QGuiApplicationPrivate::platformTheme()->palette()) {
-         QGuiApplicationPrivate::app_pal = new QPalette(*themePalette);
+         QGuiApplicationPrivate::app_palette = new QPalette(*themePalette);
       }
    }
 
-   if (!QGuiApplicationPrivate::app_pal) {
-      QGuiApplicationPrivate::app_pal = new QPalette(Qt::gray);
+   if (! QGuiApplicationPrivate::app_palette) {
+      QGuiApplicationPrivate::app_palette = new QPalette(Qt::gray);
    }
 }
 
@@ -238,7 +236,7 @@ static void initResources()
 
 static void initSystemPalette()
 {
-   if (!QApplicationPrivate::sys_pal) {
+   if (! QApplicationPrivate::sys_palette) {
       QPalette defaultPlatte;
       if (QApplicationPrivate::app_style) {
          defaultPlatte = QApplicationPrivate::app_style->standardPalette();
@@ -255,27 +253,29 @@ static void initSystemPalette()
 
 static void clearPalette()
 {
-   delete QGuiApplicationPrivate::app_pal;
-   QGuiApplicationPrivate::app_pal = 0;
+   delete QGuiApplicationPrivate::app_palette;
+   QGuiApplicationPrivate::app_palette = nullptr;
 }
 
 static void clearSystemPalette()
 {
-   delete QApplicationPrivate::sys_pal;
-   QApplicationPrivate::sys_pal = 0;
+   delete QApplicationPrivate::sys_palette;
+   QApplicationPrivate::sys_palette = nullptr;
 }
 
 static void initFontUnlocked()
 {
-   if (!QGuiApplicationPrivate::app_font) {
+   if (! QGuiApplicationPrivate::app_font) {
       if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme())
          if (const QFont *font = theme->font(QPlatformTheme::SystemFont)) {
             QGuiApplicationPrivate::app_font = new QFont(*font);
          }
    }
-   if (!QGuiApplicationPrivate::app_font)
+
+   if (! QGuiApplicationPrivate::app_font) {
       QGuiApplicationPrivate::app_font =
          new QFont(QGuiApplicationPrivate::platformIntegration()->fontDatabase()->defaultFont());
+   }
 }
 
 static inline void clearFontUnlocked()
@@ -428,11 +428,11 @@ void QWindowGeometrySpecification::applyTo(QWindow *window) const
 static QWindowGeometrySpecification windowGeometrySpecification = Q_WINDOW_GEOMETRY_SPECIFICATION_INITIALIZER;
 
 
-
 QApplication::QApplication(int &argc, char **argv, int flags)
    : QCoreApplication(*new QGuiApplicationPrivate(argc, argv, flags))
 {
    Q_D(QApplication);
+
    d->init();
    QCoreApplicationPrivate::eventDispatcher->startingUp();
 }
@@ -462,44 +462,48 @@ QApplication::~QApplication()
    // delete all widgets
    if (QWidgetPrivate::allWidgets) {
       QWidgetSet *mySet = QWidgetPrivate::allWidgets;
-      QWidgetPrivate::allWidgets = 0;
+      QWidgetPrivate::allWidgets = nullptr;
+
       for (QWidgetSet::const_iterator it = mySet->constBegin(), cend = mySet->constEnd(); it != cend; ++it) {
 
          QWidget *w = *it;
-         if (!w->parent()) {                      // window
+
+         if (! w->parent()) {
             w->destroy(true, true);
          }
       }
+
       delete mySet;
    }
 
    delete qt_desktopWidget;
-   qt_desktopWidget = 0;
+   qt_desktopWidget = nullptr;
 
-   delete QApplicationPrivate::app_pal;
-   QApplicationPrivate::app_pal = 0;
+   delete QApplicationPrivate::app_palette;
+   QApplicationPrivate::app_palette = nullptr;
    clearSystemPalette();
-   delete QApplicationPrivate::set_pal;
-   QApplicationPrivate::set_pal = 0;
+
+   delete QApplicationPrivate::set_palette;
+   QApplicationPrivate::set_palette = nullptr;
    cs_app_palettes_hash()->clear();
 
    delete QApplicationPrivate::sys_font;
-   QApplicationPrivate::sys_font = 0;
+   QApplicationPrivate::sys_font = nullptr;
+
    delete QApplicationPrivate::set_font;
-   QApplicationPrivate::set_font = 0;
+   QApplicationPrivate::set_font = nullptr;
    cs_app_fonts_hash()->clear();
 
    delete QApplicationPrivate::app_style;
-   QApplicationPrivate::app_style = 0;
+   QApplicationPrivate::app_style = nullptr;
 
 #ifndef QT_NO_DRAGANDDROP
-   if (qt_is_gui_used) {
+   if (cs_isRealGuiApp()) {
       delete QDragManager::self();
    }
 #endif
 
    d->cleanupMultitouch();
-
    qt_cleanup();
 
    if (QApplicationPrivate::widgetCount) {
@@ -955,9 +959,9 @@ static void init_platform(const QString &pluginArgument, const QString &platform
 
    // Create the platform theme:
 
-   // (1) Fetch the platform name from the environment if present.
+   // (1) Fetch the platform name from the environment if present
    QStringList themeNames;
-   if (!platformThemeName.isEmpty()) {
+   if (! platformThemeName.isEmpty()) {
       themeNames.append(platformThemeName);
    }
 
@@ -973,18 +977,22 @@ static void init_platform(const QString &pluginArgument, const QString &platform
       }
    }
 
-   // 4) If no theme plugin was found ask the platform integration to create a theme
+   // (4) If no theme plugin was found ask the platform integration to create a theme
    if (! QGuiApplicationPrivate::platform_theme) {
+
       for (const QString &themeName : themeNames) {
-         QGuiApplicationPrivate::platform_theme = QGuiApplicationPrivate::platform_integration->createPlatformTheme(themeName);
+         QGuiApplicationPrivate::platform_theme =
+                  QGuiApplicationPrivate::platform_integration->createPlatformTheme(themeName);
+
          if (QGuiApplicationPrivate::platform_theme) {
             break;
          }
       }
-      // No error message; not having a theme plugin is allowed.
+
+      // No error message, not having a theme plugin is allowed
    }
 
-   // 5) Fall back on the built-in "null" platform theme.
+   // (5) Fall back on the built-in "null" platform theme.
    if (! QGuiApplicationPrivate::platform_theme) {
       QGuiApplicationPrivate::platform_theme = new QPlatformTheme;
    }
@@ -1140,7 +1148,7 @@ void QGuiApplicationPrivate::createEventDispatcher()
 {
    Q_ASSERT(! eventDispatcher);
 
-   if (platform_integration == 0) {
+   if (platform_integration == nullptr) {
       createPlatformIntegration();
    }
 
@@ -1152,7 +1160,7 @@ void QGuiApplicationPrivate::createEventDispatcher()
 
 void QGuiApplicationPrivate::eventDispatcherReady()
 {
-   if (platform_integration == 0) {
+   if (platform_integration == nullptr) {
       createPlatformIntegration();
    }
 
@@ -1168,8 +1176,8 @@ void QGuiApplicationPrivate::eventDispatcherReady()
 void QGuiApplicationPrivate::init()
 {
    QCoreApplicationPrivate::init();
-   QCoreApplicationPrivate::is_app_running = false;
 
+   QCoreApplicationPrivate::is_app_running = false;
    QList<QString> pluginList;
 
    // Get command line params
@@ -1295,17 +1303,20 @@ void QGuiApplicationPrivate::init()
    QCursorData::initialize();
 #endif
 
-#ifndef QT_NO_ANIMATION
-   // trigger registering of animation interpolators
-   qRegisterGuiGetInterpolator();
-#endif
+   // add gui to the variant system
+   static QVariantGui objVariant;
+   QVariant::registerClient(&objVariant);
 
-   // set a global share context when enabled unless there is already one
+   // set up for variant system, animations
+   cs_addGuiFormulas();
+
+// set a global share context when enabled unless there is already one
 #ifndef QT_NO_OPENGL
-   if (qApp->testAttribute(Qt::AA_ShareOpenGLContexts) && !qt_gl_global_share_context()) {
+   if (qApp->testAttribute(Qt::AA_ShareOpenGLContexts) && ! qt_gl_global_share_context()) {
       QOpenGLContext *ctx = new QOpenGLContext;
       ctx->setFormat(QSurfaceFormat::defaultFormat());
       ctx->create();
+
       qt_gl_set_global_share_context(ctx);
       ownGlobalShareContext = true;
    }
@@ -1331,11 +1342,9 @@ void QGuiApplicationPrivate::init()
    scrollNoPhaseAllowed = ! qgetenv("QT_ENABLE_MOUSE_WHEEL_TRACKING").isEmpty();
 
    initResources();
-
-   qt_is_gui_used = (application_type != QApplicationPrivate::Tty);
    process_cmdline();
 
-   // Must be called before initialize()
+   // must be called before initialize()
    qt_init(this, application_type);
    initialize();
    eventDispatcher->startingUp();
@@ -2676,9 +2685,8 @@ QClipboard *QApplication::clipboard()
 QPalette QApplication::palette()
 {
    initPalette();
-   return *QGuiApplicationPrivate::app_pal;
+   return *QGuiApplicationPrivate::app_palette;
 }
-
 
 void QGuiApplicationPrivate::applyWindowGeometrySpecificationTo(QWindow *window)
 {
@@ -3138,9 +3146,9 @@ QStyle *QApplication::style()
 
    initSystemPalette();
 
-   if (QApplicationPrivate::set_pal) {
+   if (QApplicationPrivate::set_palette) {
       // repolish set palette with the new style
-      QApplication::setPalette(*QApplicationPrivate::set_pal);
+      QApplication::setPalette(*QApplicationPrivate::set_palette);
    }
 
 #ifndef QT_NO_STYLE_STYLESHEET
@@ -3201,18 +3209,18 @@ void QApplication::setStyle(QStyle *style)
    // must be done before polishing the application since the style
    // might call QApplication::setPalette() itself
 
-   if (QApplicationPrivate::set_pal) {
-      QApplication::setPalette(*QApplicationPrivate::set_pal);
+   if (QApplicationPrivate::set_palette) {
+      QApplication::setPalette(*QApplicationPrivate::set_palette);
 
-   } else if (QApplicationPrivate::sys_pal) {
+   } else if (QApplicationPrivate::sys_palette) {
       clearSystemPalette();
       initSystemPalette();
       QApplicationPrivate::initializeWidgetPaletteHash();
       QApplicationPrivate::initializeWidgetFontHash();
-      QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_pal, 0,  false);
+      QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_palette, 0,  false);
 
-   } else if (!QApplicationPrivate::sys_pal) {
-      // Initialize the sys_pal if it has not happened yet
+   } else if (!QApplicationPrivate::sys_palette) {
+      // Initialize the sys_palette if it has not happened yet
       QApplicationPrivate::setSystemPalette(QApplicationPrivate::app_style->standardPalette());
    }
 
@@ -3304,14 +3312,14 @@ void QApplicationPrivate::setPalette_helper(const QPalette &palette, const QStri
    PaletteHash *hash = cs_app_palettes_hash();
 
    if (className.isEmpty()) {
-      if (QApplicationPrivate::app_pal && pal.isCopyOf(*QApplicationPrivate::app_pal)) {
+      if (QApplicationPrivate::app_palette && pal.isCopyOf(*QApplicationPrivate::app_palette)) {
          return;
       }
 
-      if (! QApplicationPrivate::app_pal) {
-         QApplicationPrivate::app_pal = new QPalette(pal);
+      if (! QApplicationPrivate::app_palette) {
+         QApplicationPrivate::app_palette = new QPalette(pal);
       } else {
-         *QApplicationPrivate::app_pal = pal;
+         *QApplicationPrivate::app_palette = pal;
       }
 
       if (hash && hash->size()) {
@@ -3352,17 +3360,17 @@ void QApplicationPrivate::setPalette_helper(const QPalette &palette, const QStri
 
    }
 
-   if (className.isEmpty() && (! QApplicationPrivate::sys_pal || ! palette.isCopyOf(*QApplicationPrivate::sys_pal))) {
-      if (! QApplicationPrivate::set_pal) {
-         QApplicationPrivate::set_pal = new QPalette(palette);
+   if (className.isEmpty() && (! QApplicationPrivate::sys_palette || ! palette.isCopyOf(*QApplicationPrivate::sys_palette))) {
+      if (! QApplicationPrivate::set_palette) {
+         QApplicationPrivate::set_palette = new QPalette(palette);
       } else {
-         *QApplicationPrivate::set_pal = palette;
+         *QApplicationPrivate::set_palette = palette;
       }
 
       applicationResourceFlags |= ApplicationPaletteExplicitlySet;
       QCoreApplication::setAttribute(Qt::AA_SetPalette);
 
-      emit qGuiApp->paletteChanged(*QGuiApplicationPrivate::app_pal);
+      emit qGuiApp->paletteChanged(*QGuiApplicationPrivate::app_palette);
    }
 }
 

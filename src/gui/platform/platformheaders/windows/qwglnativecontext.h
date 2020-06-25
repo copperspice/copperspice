@@ -24,8 +24,6 @@
 #ifndef QWGLNATIVECONTEXT_H
 #define QWGLNATIVECONTEXT_H
 
-#include <QMetaType>
-
 #include <wingdi.h>
 #include <GL/gl.h>
 
@@ -50,6 +48,6 @@ private:
     HWND m_window;
 };
 
-Q_DECLARE_METATYPE(QWGLNativeContext)
+CS_DECLARE_METATYPE(QWGLNativeContext)
 
 #endif

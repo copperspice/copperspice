@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include "config.h"
+
 #include <qscriptdeclarativeobject_p.h>
 
 #include <qscriptengine.h>
@@ -36,9 +37,6 @@
 #include "Error.h"
 #include "PropertyNameArray.h"
 
-Q_DECLARE_METATYPE(QScriptContext *)
-Q_DECLARE_METATYPE(QScriptValue)
-Q_DECLARE_METATYPE(QScriptValueList)
 namespace QScript {
 
 DeclarativeObjectDelegate::DeclarativeObjectDelegate(QScriptDeclarativeClass *c,
@@ -57,17 +55,16 @@ QScriptObjectDelegate::Type DeclarativeObjectDelegate::type() const
    return DeclarativeClassObject;
 }
 
-bool DeclarativeObjectDelegate::getOwnPropertySlot(QScriptObject *object,
-   JSC::ExecState *exec,
-   const JSC::Identifier &propertyName,
-   JSC::PropertySlot &slot)
+bool DeclarativeObjectDelegate::getOwnPropertySlot(QScriptObject *object, JSC::ExecState *exec,
+            const JSC::Identifier &propertyName, JSC::PropertySlot &slot)
 {
    QScriptDeclarativeClass::Identifier identifier = (void *)propertyName.ustring().rep();
 
    QScriptDeclarativeClassPrivate *p = QScriptDeclarativeClassPrivate::get(m_class);
    p->context = reinterpret_cast<QScriptContext *>(exec);
-   QScriptClass::QueryFlags flags =
-      m_class->queryProperty(m_object, identifier, QScriptClass::HandlesReadAccess);
+
+   QScriptClass::QueryFlags flags = m_class->queryProperty(m_object, identifier, QScriptClass::HandlesReadAccess);
+
    if (flags & QScriptClass::HandlesReadAccess) {
       QScriptDeclarativeClass::Value val = m_class->property(m_object, identifier);
       p->context = 0;
@@ -80,8 +77,7 @@ bool DeclarativeObjectDelegate::getOwnPropertySlot(QScriptObject *object,
 }
 
 void DeclarativeObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
-   const JSC::Identifier &propertyName,
-   JSC::JSValue value, JSC::PutPropertySlot &slot)
+            const JSC::Identifier &propertyName, JSC::JSValue value, JSC::PutPropertySlot &slot)
 {
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
    QScript::SaveFrameHelper saveFrame(engine, exec);
@@ -89,8 +85,8 @@ void DeclarativeObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
 
    QScriptDeclarativeClassPrivate *p = QScriptDeclarativeClassPrivate::get(m_class);
    p->context = reinterpret_cast<QScriptContext *>(exec);
-   QScriptClass::QueryFlags flags =
-      m_class->queryProperty(m_object, identifier, QScriptClass::HandlesWriteAccess);
+   QScriptClass::QueryFlags flags = m_class->queryProperty(m_object, identifier, QScriptClass::HandlesWriteAccess);
+
    if (flags & QScriptClass::HandlesWriteAccess) {
       m_class->setProperty(m_object, identifier, engine->scriptValueFromJSCValue(value));
       p->context = 0;
@@ -102,14 +98,13 @@ void DeclarativeObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
 }
 
 bool DeclarativeObjectDelegate::deleteProperty(QScriptObject *object, JSC::ExecState *exec,
-   const JSC::Identifier &propertyName)
+            const JSC::Identifier &propertyName)
 {
    return QScriptObjectDelegate::deleteProperty(object, exec, propertyName);
 }
 
 void DeclarativeObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::ExecState *exec,
-   JSC::PropertyNameArray &propertyNames,
-   JSC::EnumerationMode mode)
+            JSC::PropertyNameArray &propertyNames, JSC::EnumerationMode mode)
 {
    QStringList properties = m_class->propertyNames(m_object);
    for (int ii = 0; ii < properties.count(); ++ii) {
@@ -122,21 +117,27 @@ void DeclarativeObjectDelegate::getOwnPropertyNames(QScriptObject *object, JSC::
 
 JSC::CallType DeclarativeObjectDelegate::getCallData(QScriptObject *object, JSC::CallData &callData)
 {
-   if (!QScriptDeclarativeClassPrivate::get(m_class)->supportsCall) {
+   (void) object;
+
+   if (! QScriptDeclarativeClassPrivate::get(m_class)->supportsCall) {
       return JSC::CallTypeNone;
    }
+
    callData.native.function = call;
+
    return JSC::CallTypeHost;
 }
 
 JSC::JSValue DeclarativeObjectDelegate::call(JSC::ExecState *exec, JSC::JSObject *callee,
-   JSC::JSValue thisValue, const JSC::ArgList &args)
+            JSC::JSValue thisValue, const JSC::ArgList &args)
 {
    if (!callee->inherits(&QScriptObject::info)) {
       return JSC::throwError(exec, JSC::TypeError, "callee is not a DeclarativeObject object");
    }
+
    QScriptObject *obj = static_cast<QScriptObject *>(callee);
    QScriptObjectDelegate *delegate = obj->delegate();
+
    if (!delegate || (delegate->type() != QScriptObjectDelegate::DeclarativeClassObject)) {
       return JSC::throwError(exec, JSC::TypeError, "callee is not a DeclarativeObject object");
    }
@@ -153,6 +154,7 @@ JSC::JSValue DeclarativeObjectDelegate::call(JSC::ExecState *exec, JSC::JSObject
       scriptClass->call(static_cast<DeclarativeObjectDelegate *>(delegate)->m_object, ctxt);
 
    eng_p->popContext();
+
    return (JSC::JSValue &)(result);
 }
 
@@ -169,7 +171,10 @@ bool DeclarativeObjectDelegate::hasInstance(QScriptObject *object, JSC::ExecStat
 
 bool DeclarativeObjectDelegate::compareToObject(QScriptObject *o, JSC::ExecState *exec, JSC::JSObject *o2)
 {
-   if (!o2->inherits(&QScriptObject::info)) {
+   (void) o;
+   (void) exec;
+
+   if (! o2->inherits(&QScriptObject::info)) {
       return false;
    }
 

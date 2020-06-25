@@ -27,8 +27,6 @@
 #include <qelapsedtimer.h>
 #include <qthread_p.h>
 
-
-
 class QEventLoopPrivate
 {
    Q_DECLARE_PUBLIC(QEventLoop)
@@ -45,9 +43,6 @@ class QEventLoopPrivate
 
 };
 
-/*!
-    Constructs an event loop object with the given \a parent.
-*/
 QEventLoop::QEventLoop(QObject *parent)
    : QObject(parent), d_ptr(new QEventLoopPrivate)
 {
@@ -125,7 +120,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
 
       QEventLoop *eventLoop = threadData->eventLoops.pop();
       Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
-      Q_UNUSED(eventLoop); // --release warning
+      Q_UNUSED(eventLoop);
 
       d->inExec = false;
       --threadData->loopLevel;
@@ -138,7 +133,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
 
    QEventLoop *eventLoop = threadData->eventLoops.pop();
    Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
-   Q_UNUSED(eventLoop); // --release warning
+   Q_UNUSED(eventLoop);
 
    d->inExec = false;
    --threadData->loopLevel;

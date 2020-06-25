@@ -282,21 +282,23 @@ void QMetaProperty::setTypeName(const QString &typeName)
 QVariant::Type QMetaProperty::type() const
 {
    QVariant::Type retval = QVariant::UserType;
-   QMetaEnum enumObj = this->enumerator();
+   QMetaEnum enumObj     = this->enumerator();
 
    if (enumObj.isValid()) {
       // process enum
-      QString enumName = enumObj.scope() + "::" + enumObj.name();
+      QString enumName    = enumObj.scope() + "::" + enumObj.name();
+      uint enumMetaTypeId = QVariant::nameToType(enumName);
 
-      int enumMetaTypeId = QMetaType::type(enumName);
-
-      if (enumMetaTypeId == 0) {
+      if (enumMetaTypeId == QVariant::Invalid) {
          retval = QVariant::Int;
       }
 
    } else if (! m_typeName.isEmpty()) {
-      retval = QVariant::nameToType(m_typeName);
+      uint enumMetaTypeId = QVariant::nameToType(m_typeName);
 
+      if (enumMetaTypeId < QVariant::UserType) {
+         retval = static_cast<QVariant::Type>(enumMetaTypeId);
+      }
    }
 
    return retval;
@@ -307,22 +309,18 @@ const QString &QMetaProperty::typeName() const
    return m_typeName;
 }
 
-int QMetaProperty::userType() const
+uint QMetaProperty::userType() const
 {
-   int retval = QVariant::UserType;
+   uint retval = QVariant::UserType;
    QMetaEnum enumObj = this->enumerator();
 
    if (enumObj.isValid()) {
       // process enum
       QString enumName = enumObj.scope() + "::" + enumObj.name();
-      retval = QMetaType::type(enumName);
+      retval = QVariant::nameToType(enumName);
 
    } else if (! m_typeName.isEmpty()) {
       retval = QVariant::nameToType(m_typeName);
-
-      if (retval == QVariant::UserType) {
-         retval = QMetaType::type(m_typeName);
-      }
    }
 
    return retval;
@@ -347,7 +345,7 @@ void QMetaProperty::setReadMethod(const QString &typeName, JarReadAbstract *jarR
    // typeName is the return type
    this->setTypeName(typeName);
 
-   // method is a ptr to the property READ method,store in a SpiceJarRead
+   // method is a ptr to the property READ method, store in a SpiceJarRead
    m_readJar    = jarRead;
    m_read_able  = true;
 }

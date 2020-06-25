@@ -63,8 +63,6 @@
 
 #include <algorithm>
 
-Q_DECLARE_METATYPE(QList<QByteArray>)
-
 static QFactoryLoader *loader()
 {
    static QFactoryLoader retval(QImageIOHandlerInterface_ID, "/imageformats");

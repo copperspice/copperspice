@@ -25,7 +25,6 @@
 #define QNETWORKCOOKIE_H
 
 #include <qlist.h>
-#include <qmetatype.h>
 #include <qobject.h>
 #include <qshareddatapointer.h>
 #include <qstring.h>
@@ -99,7 +98,6 @@ class Q_NETWORK_EXPORT QNetworkCookie
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QNetworkCookie &);
 
-Q_DECLARE_METATYPE(QNetworkCookie)
-Q_DECLARE_METATYPE(QList<QNetworkCookie>)
+CS_DECLARE_METATYPE(QNetworkCookie)
 
 #endif

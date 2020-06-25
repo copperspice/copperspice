@@ -160,12 +160,12 @@ Field * QtClass::fieldNamed(const Identifier& identifier, Instance* instance) co
     if (obj) {
         if (f) {
             // only cache real metaproperties, but we do store the  other types so we can delete them later
-            if (f->fieldType() == QtField::MetaProperty) {
+            if (f->fieldType() == QtField::QtFieldType::MetaProperty) {
                 return f;
             }
 
 #ifndef QT_NO_PROPERTIES
-            if (f->fieldType() == QtField::DynamicProperty) {
+            if (f->fieldType() == QtField::QtFieldType::DynamicProperty) {
 
                 if (obj->dynamicPropertyNames().indexOf(name) >= 0) {
                     return f;

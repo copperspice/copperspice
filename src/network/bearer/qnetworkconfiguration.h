@@ -25,7 +25,6 @@
 #define QNETWORKCONFIGURATION_H
 
 #include <qglobal.h>
-#include <qmetatype.h>
 #include <qshareddata.h>
 #include <qstring.h>
 #include <qlist.h>
@@ -118,7 +117,5 @@ class Q_NETWORK_EXPORT QNetworkConfiguration
 
    QExplicitlySharedDataPointer<QNetworkConfigurationPrivate> d;
 };
-
-Q_DECLARE_METATYPE(QNetworkConfiguration)
 
 #endif

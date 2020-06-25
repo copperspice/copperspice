@@ -26,11 +26,9 @@
 
 #include <qfontengine_p.h>
 
-#include <QImage>
-#include <QSharedPointer>
-#include <QMetaType>
-
-#include "qtwindows_additional.h"
+#include <qimage.h>
+#include <qsharedpointer.h>
+#include <qtwindows_additional.h>
 
 class QWindowsNativeImage;
 class QWindowsFontEngineData;
@@ -167,8 +165,7 @@ class QWindowsMultiFontEngine : public QFontEngineMulti
    QFontEngine *loadEngine(int at) override;
 };
 
-Q_DECLARE_METATYPE(HFONT)
-Q_DECLARE_METATYPE(LOGFONT)
+CS_DECLARE_METATYPE(LOGFONT)
 
 #endif
 

@@ -148,6 +148,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    void removeNativeEventFilter(QAbstractNativeEventFilter *filterObj);
 
    void cs_internal_maybeQuit();
+   bool cs_isRealGuiApp();
 
    static bool isQuitLockEnabled();
    static void setQuitLockEnabled(bool enabled);
@@ -162,8 +163,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    CORE_CS_SIGNAL_1(Public, void aboutToQuit())
    CORE_CS_SIGNAL_2(aboutToQuit)
 
-   CORE_CS_SIGNAL_1(Public, void unixSignal(int un_named_arg1))
-   CORE_CS_SIGNAL_2(unixSignal, un_named_arg1)
+   CORE_CS_SIGNAL_1(Public, void unixSignal(int signalId))
+   CORE_CS_SIGNAL_2(unixSignal, signalId)
 
  protected:
    bool event(QEvent *) override;

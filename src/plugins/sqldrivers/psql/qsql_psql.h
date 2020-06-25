@@ -33,8 +33,8 @@
 #define Q_EXPORT_SQLDRIVER_PSQL Q_SQL_EXPORT
 #endif
 
-typedef struct pg_conn PGconn;
-typedef struct pg_result PGresult;
+using PGconn   = struct pg_conn;
+using PGresult = struct pg_result;
 
 class QPSQLResultPrivate;
 class QPSQLDriverPrivate;
@@ -136,5 +136,8 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
 
    friend class QPSQLResultPrivate;
 };
+
+CS_DECLARE_METATYPE(pg_conn)
+CS_DECLARE_METATYPE(pg_result)
 
 #endif

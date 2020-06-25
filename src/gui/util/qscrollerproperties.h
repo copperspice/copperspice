@@ -25,7 +25,6 @@
 #define QSCROLLERPROPERTIES_H
 
 #include <qscopedpointer.h>
-#include <qmetatype.h>
 #include <qvariant.h>
 
 class QScroller;
@@ -104,7 +103,6 @@ class Q_GUI_EXPORT QScrollerProperties
    friend class QScrollerPrivate;
 };
 
-Q_DECLARE_METATYPE(QScrollerProperties::OvershootPolicy)
-Q_DECLARE_METATYPE(QScrollerProperties::FrameRates)
+CS_DECLARE_METATYPE(QScrollerProperties)
 
-#endif // QSCROLLERPROPERTIES_H
+#endif

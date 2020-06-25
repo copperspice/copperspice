@@ -185,7 +185,7 @@ class DirectShowPlayerService : public QMediaService
    bool m_dontCacheNextSeekResult;
    QMediaTimeRange m_playbackRange;
    QUrl m_url;
-   QMediaResourceList m_resources;
+   QList<QMediaResource> m_resources;
    QString m_errorString;
    QMutex m_mutex;
 

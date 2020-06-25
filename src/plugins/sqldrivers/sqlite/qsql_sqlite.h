@@ -28,13 +28,13 @@
 #include <qsqlresult.h>
 
 struct sqlite3;
+struct sqlite3_stmt;
 
 #ifdef QT_PLUGIN
 #define Q_EXPORT_SQLDRIVER_SQLITE
 #else
 #define Q_EXPORT_SQLDRIVER_SQLITE Q_SQL_EXPORT
 #endif
-
 
 class QSQLiteDriverPrivate;
 class QSQLiteDriver;
@@ -71,5 +71,7 @@ class Q_EXPORT_SQLDRIVER_SQLITE QSQLiteDriver : public QSqlDriver
 
 };
 
+CS_DECLARE_METATYPE(sqlite3)
+CS_DECLARE_METATYPE(sqlite3_stmt)
 
-#endif // QSQL_SQLITE_H
+#endif

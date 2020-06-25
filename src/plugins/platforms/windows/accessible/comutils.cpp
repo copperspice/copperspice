@@ -34,4 +34,3 @@ inline uint QColorToOLEColor(const QColor &col)
 {
    return qRgba(col.blue(), col.green(), col.red(), 0x00);
 }
-

@@ -1097,7 +1097,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
    if (downloadProgressSignalChoke.elapsed() >= progressSignalInterval) {
       downloadProgressSignalChoke.restart();
       emit q->downloadProgress(bytesDownloaded,
-                               totalSize.isNull() ? Q_INT64_C(-1) : totalSize.toLongLong());
+                               ! totalSize.isValid() ? Q_INT64_C(-1) : totalSize.toLongLong());
    }
 
 }
@@ -1892,7 +1892,7 @@ void QNetworkReplyHttpImplPrivate::_q_cacheLoadReadyRead()
       if (downloadProgressSignalChoke.elapsed() >= progressSignalInterval) {
          downloadProgressSignalChoke.restart();
          emit q->downloadProgress(bytesDownloaded,
-                                  totalSize.isNull() ? Q_INT64_C(-1) : totalSize.toLongLong());
+                                  ! totalSize.isValid() ? Q_INT64_C(-1) : totalSize.toLongLong());
       }
    }
    // If there are still bytes available in the cacheLoadDevice then the user did not read
@@ -2143,13 +2143,16 @@ void QNetworkReplyHttpImplPrivate::finished()
       if (session && session->state() == QNetworkSession::Roaming &&
             state == Working && errorCode != QNetworkReply::OperationCanceledError) {
          // only content with a known size will fail with a temporary network failure error
-         if (!totalSize.isNull()) {
+
+         if (totalSize.isValid()) {
             if (bytesDownloaded != totalSize.toLongLong()) {
+
                if (migrateBackend()) {
                   // either we are migrating or the request is finished/aborted
                   if (state == Reconnecting || state == WaitingForSession) {
                      return; // exit early if we are migrating.
                   }
+
                } else {
                   error(QNetworkReply::TemporaryNetworkFailureError,
                         QNetworkReply::tr("Temporary network failure."));
@@ -2160,8 +2163,10 @@ void QNetworkReplyHttpImplPrivate::finished()
 #endif
    }
 
-   // if we don't know the total size of or we received everything save the cache
-   if (totalSize.isNull() || totalSize == -1 || bytesDownloaded == totalSize) {
+   qint64 totalSizeNum = totalSize.toLongLong();
+
+   // if we do not know the total size of or we received everything save the cache
+   if (! totalSize.isValid() || totalSizeNum == -1 || bytesDownloaded == totalSizeNum) {
       completeCacheSave();
    }
 
@@ -2174,10 +2179,10 @@ void QNetworkReplyHttpImplPrivate::finished()
    state = Finished;
    q->setFinished(true);
 
-   if (totalSize.isNull() || totalSize == -1) {
+   if (! totalSize.isValid() || totalSizeNum == -1) {
       emit q->downloadProgress(bytesDownloaded, bytesDownloaded);
    } else {
-      emit q->downloadProgress(bytesDownloaded, totalSize.toLongLong());
+      emit q->downloadProgress(bytesDownloaded, totalSizeNum);
    }
 
    if (bytesUploaded == -1 && (outgoingData || outgoingDataBuffer)) {
@@ -2214,22 +2219,28 @@ void QNetworkReplyHttpImplPrivate::error(QNetworkReplyImpl::NetworkError code, c
 
 void QNetworkReplyHttpImplPrivate::_q_metaDataChanged()
 {
-   // FIXME merge this with replyDownloadMetaData(); ?
+   // FIXME merge this with replyDownloadMetaData();
 
    Q_Q(QNetworkReplyHttpImpl);
+
    // 1. do we have cookies?
    // 2. are we allowed to set them?
+
    if (cookedHeaders.contains(QNetworkRequest::SetCookieHeader) && manager
          && (static_cast<QNetworkRequest::LoadControl>
              (request.attribute(QNetworkRequest::CookieSaveControlAttribute,
-                                QNetworkRequest::Automatic).toInt()) == QNetworkRequest::Automatic)) {
+             QNetworkRequest::Automatic).toInt()) == QNetworkRequest::Automatic)) {
+
       QList<QNetworkCookie> cookies =
-         qvariant_cast<QList<QNetworkCookie> >(cookedHeaders.value(QNetworkRequest::SetCookieHeader));
+         (cookedHeaders.value(QNetworkRequest::SetCookieHeader)).value<QList<QNetworkCookie>>();
+
       QNetworkCookieJar *jar = manager->cookieJar();
+
       if (jar) {
          jar->setCookiesFromUrl(cookies, url);
       }
    }
+
    emit q->metaDataChanged();
 }
 
@@ -2247,7 +2258,7 @@ bool QNetworkReplyHttpImplPrivate::migrateBackend()
    }
 
    // Backend does not support resuming download.
-   if (!canResume()) {
+   if (! canResume()) {
       return false;
    }
 

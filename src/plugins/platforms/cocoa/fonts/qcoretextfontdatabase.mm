@@ -954,12 +954,12 @@ void QCoreTextFontDatabase::removeApplicationFonts()
       if (&CTFontManagerUnregisterGraphicsFont && &CTFontManagerUnregisterFontsForURL) {
          CFErrorRef error;
 
-         if (font.canConvert(qMetaTypeVariant<QCFType<CGFontRef>>())) {
-
+         if (font.canConvert<QCFType<CGFontRef>>()) {
             CTFontManagerUnregisterGraphicsFont(font.value<QCFType<CGFontRef>>(), &error);
 
-         } else if (font.canConvert(qMetaTypeVariant<QCFType<CFURLRef>>())) {
+         } else if (font.canConvert<QCFType<CFURLRef>>()) {
             CTFontManagerUnregisterFontsForURL(font.value<QCFType<CFURLRef>>(), kCTFontManagerScopeProcess, &error);
+
          }
       }
    }
@@ -1001,4 +1001,5 @@ QFontEngine *QCoreTextFontDatabase::freeTypeFontEngine(const QFontDef &fontDef, 
 }
 #endif
 
-
+CS_DECLARE_METATYPE(QCFType<CGFontRef>)
+CS_DECLARE_METATYPE(QCFType<CFURLRef>)

@@ -1522,7 +1522,7 @@ void QTextHtmlParserNode::applyBackgroundImage(const QString &url, const QTextDo
          // must use images in non-GUI threads
 
          if (val.type() == QVariant::Image) {
-            QImage image = qvariant_cast<QImage>(val);
+            QImage image = val.value<QImage>();
             charFormat.setBackground(image);
 
          } else if (val.type() == QVariant::ByteArray) {
@@ -1534,7 +1534,7 @@ void QTextHtmlParserNode::applyBackgroundImage(const QString &url, const QTextDo
 
       } else {
          if (val.type() == QVariant::Image || val.type() == QVariant::Pixmap) {
-            charFormat.setBackground(qvariant_cast<QPixmap>(val));
+            charFormat.setBackground(val.value<QPixmap>());
          } else if (val.type() == QVariant::ByteArray) {
             QPixmap pm;
             if (pm.loadFromData(val.toByteArray())) {

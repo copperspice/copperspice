@@ -34,10 +34,9 @@
 #include <QDebug>
 #include <QFile>
 #include <QLocalServer>
-#include <QMetaType>
 #include <QProcess>
 #include <QString>
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 #include <WebCore/NotImplemented.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -50,6 +49,7 @@
 #include <wtf/PassRefPtr.h>
 #include <wtf/Threading.h>
 #include <wtf/text/WTFString.h>
+
 #if defined Q_OS_LINUX
 #include <sys/prctl.h>
 #include <signal.h>

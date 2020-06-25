@@ -39,9 +39,6 @@
 QNetworkCookie::QNetworkCookie(const QByteArray &name, const QByteArray &value)
    : d(new QNetworkCookiePrivate)
 {
-   qRegisterMetaType<QNetworkCookie>();
-   qRegisterMetaType<QList<QNetworkCookie> >();
-
    d->name = name;
    d->value = value;
 }

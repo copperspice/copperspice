@@ -24,7 +24,6 @@
 #ifndef QPLATFORM_SESSIONMANAGER_H
 #define QPLATFORM_SESSIONMANAGER_H
 
-#include <qmetatype.h>
 #include <qnamespace.h>
 #include <qsessionmanager.h>
 

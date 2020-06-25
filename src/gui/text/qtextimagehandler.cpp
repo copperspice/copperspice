@@ -75,7 +75,8 @@ static QPixmap getPixmap(QTextDocument *doc, const QTextImageFormat &format, con
    const QVariant data = doc->resource(QTextDocument::ImageResource, url);
 
    if (data.type() == QVariant::Pixmap || data.type() == QVariant::Image) {
-      pm = qvariant_cast<QPixmap>(data);
+      pm = data.value<QPixmap>();
+
    } else if (data.type() == QVariant::ByteArray) {
       pm.loadFromData(data.toByteArray());
    }
@@ -159,7 +160,7 @@ static QImage getImage(QTextDocument *doc, const QTextImageFormat &format, const
    const QVariant data = doc->resource(QTextDocument::ImageResource, url);
 
    if (data.type() == QVariant::Image) {
-      image = qvariant_cast<QImage>(data);
+      image = data.value<QImage>();
 
    } else if (data.type() == QVariant::ByteArray) {
       image.loadFromData(data.toByteArray());

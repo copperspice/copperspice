@@ -46,10 +46,6 @@
 # define Q_NO_MYSQL_EMBEDDED
 #endif
 
-Q_DECLARE_METATYPE(MYSQL_RES *)
-Q_DECLARE_METATYPE(MYSQL *)
-Q_DECLARE_METATYPE(MYSQL_STMT *)
-
 #define Q_CLIENT_MULTI_STATEMENTS CLIENT_MULTI_STATEMENTS
 
 class QMYSQLDriverPrivate : public QSqlDriverPrivate
@@ -222,20 +218,20 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
    QVariant::Type type;
 
    switch (mysqltype) {
-      case FIELD_TYPE_TINY :
-         type = static_cast<QVariant::Type>((flags & UNSIGNED_FLAG) ? QMetaType::UChar : QMetaType::Char);
+      case FIELD_TYPE_TINY:
+         type = (flags & UNSIGNED_FLAG) ? QVariant::UChar : QVariant::Char;
          break;
 
-      case FIELD_TYPE_SHORT :
-         type = static_cast<QVariant::Type>((flags & UNSIGNED_FLAG) ? QMetaType::UShort : QMetaType::Short);
+      case FIELD_TYPE_SHORT:
+         type = flags & UNSIGNED_FLAG) ? QVariant::UShort : QVariant::Short;
          break;
 
-      case FIELD_TYPE_LONG :
-      case FIELD_TYPE_INT24 :
+      case FIELD_TYPE_LONG:
+      case FIELD_TYPE_INT24:
          type = (flags & UNSIGNED_FLAG) ? QVariant::UInt : QVariant::Int;
          break;
 
-      case FIELD_TYPE_YEAR :
+      case FIELD_TYPE_YEAR:
          type = QVariant::Int;
          break;
 
@@ -243,9 +239,9 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
          type = (flags & UNSIGNED_FLAG) ? QVariant::ULongLong : QVariant::LongLong;
          break;
 
-      case FIELD_TYPE_FLOAT :
-      case FIELD_TYPE_DOUBLE :
-      case FIELD_TYPE_DECIMAL :
+      case FIELD_TYPE_FLOAT:
+      case FIELD_TYPE_DOUBLE:
+      case FIELD_TYPE_DECIMAL:
 #if defined(FIELD_TYPE_NEWDECIMAL)
       case FIELD_TYPE_NEWDECIMAL:
 #endif
@@ -255,6 +251,7 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
       case FIELD_TYPE_DATE :
          type = QVariant::Date;
          break;
+
       case FIELD_TYPE_TIME :
          type = QVariant::Time;
          break;
@@ -279,6 +276,7 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
          type = QVariant::String;
          break;
    }
+
    return type;
 }
 
@@ -312,10 +310,10 @@ static bool qIsBlob(int t)
 
 static bool qIsInteger(int t)
 {
-   return t == QMetaType::Char  || t == QMetaType::UChar
-      || t == QMetaType::Short || t == QMetaType::UShort
-      || t == QMetaType::Int   || t == QMetaType::UInt
-      || t == QMetaType::LongLong || t == QMetaType::ULongLong;
+   return t == QVariant::Char  || t == QVariant::UChar
+      || t == QVariant::Short  || t == QVariant::UShort
+      || t == QVariant::Int    || t == QVariant::UInt
+      || t == QVariant::LongLong || t == QVariant::ULongLong;
 }
 
 void QMYSQLResultPrivate::bindBlobs()
@@ -630,9 +628,11 @@ QVariant QMYSQLResult::data(int field)
 
       if (qIsInteger(f.type)) {
          QVariant variant(f.type, f.outField);
-         if (static_cast<int>(f.type) == QMetaType::UChar) {
+
+         if (f.type == QVariant::UChar) {
             return variant.toUInt();
-         } else if (static_cast<int>(f.type) == QMetaType::Char) {
+
+         } else if (f.type == QVariant::Char) {
             return variant.toInt();
          }
 
@@ -653,23 +653,23 @@ QVariant QMYSQLResult::data(int field)
       if (f.type != QVariant::ByteArray) {
          val = toUnicode(d->driver->d_func()->tc, d->row[field], fieldLength);
       }
-
    }
 
-   switch (static_cast<int>(f.type)) {
+   switch (f.type) {
+
       case QVariant::LongLong:
          return QVariant(val.toInteger<long long>());
 
       case QVariant::ULongLong:
          return QVariant(val.toInteger<unsigned long long>());
 
-      case QMetaType::Char:
-      case QMetaType::Short:
+      case QVariant::Char:
+      case QVariant::Short:
       case QVariant::Int:
          return QVariant(val.toInteger<int>());
 
-      case QMetaType::UChar:
-      case QMetaType::UShort:
+      case QVariant::UChar:
+      case QVariant::UShort:
       case QVariant::UInt:
          return QVariant(val.toInteger<unsigned int>());
 

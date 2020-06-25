@@ -27,7 +27,6 @@
 #include <qobject.h>
 #include <qmediaobject.h>
 #include <qmediabindableinterface.h>
-#include <qmediaenumdebug.h>
 
 class QRadioDataPrivate;
 
@@ -129,12 +128,6 @@ private:
    MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())
    MULTI_CS_SLOT_2(_q_serviceDestroyed)
 };
-
-Q_DECLARE_METATYPE(QRadioData::Error)
-Q_DECLARE_METATYPE(QRadioData::ProgramType)
-
-Q_MEDIA_ENUM_DEBUG(QRadioData, Error)
-Q_MEDIA_ENUM_DEBUG(QRadioData, ProgramType)
 
 #endif
 

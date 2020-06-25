@@ -1169,8 +1169,10 @@ QTextCharFormat QCalendarModel::formatForCell(int row, int col) const
 {
    QPalette pal;
    QPalette::ColorGroup cg = QPalette::Active;
+
    if (m_view) {
       pal = m_view->palette();
+
       if (!m_view->isEnabled()) {
          cg = QPalette::Disabled;
       } else if (!m_view->isActiveWindow()) {
@@ -1180,31 +1182,39 @@ QTextCharFormat QCalendarModel::formatForCell(int row, int col) const
 
    QTextCharFormat format;
    format.setFont(m_view->font());
+
    bool header = (m_weekNumbersShown && col == HeaderColumn)
       || (m_horizontalHeaderFormat != QCalendarWidget::NoHorizontalHeader && row == HeaderRow);
+
    format.setBackground(pal.brush(cg, header ? QPalette::AlternateBase : QPalette::Base));
    format.setForeground(pal.brush(cg, QPalette::Text));
+
    if (header) {
       format.merge(m_headerFormat);
    }
 
    if (col >= m_firstColumn && col < m_firstColumn + ColumnCount) {
       Qt::DayOfWeek dayOfWeek = dayOfWeekForColumn(col);
+
       if (m_dayFormats.contains(dayOfWeek)) {
          format.merge(m_dayFormats.value(dayOfWeek));
       }
    }
 
-   if (!header) {
+   if (! header) {
       QDate date = dateForCell(row, col);
+
       format.merge(m_dateFormats.value(date));
+
       if (date < m_minimumDate || date > m_maximumDate) {
          format.setBackground(pal.brush(cg, QPalette::Window));
       }
+
       if (m_shownMonth != date.month()) {
          format.setForeground(pal.brush(QPalette::Disabled, QPalette::Text));
       }
    }
+
    return format;
 }
 

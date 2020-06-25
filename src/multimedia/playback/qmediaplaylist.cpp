@@ -39,28 +39,11 @@
 
 #include <qfactoryloader_p.h>
 
-// register by hand
-Q_MULTIMEDIA_EXPORT const QString &cs_typeName_internal<QMediaPlaylist, void>::typeName()
-{
-   static QString retval("QMediaPlaylist");
-   return retval;
-}
-
 static QFactoryLoader *loader()
 {
    static QFactoryLoader retval(QMediaPlaylistInterface_ID, "/playlistformats", Qt::CaseInsensitive);
    return &retval;
 }
-
-static int qRegisterMediaPlaylistMetaTypes()
-{
-   qRegisterMetaType<QMediaPlaylist::Error>();
-   qRegisterMetaType<QMediaPlaylist::PlaybackMode>();
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterMediaPlaylistMetaTypes)
 
 QMediaPlaylist::QMediaPlaylist(QObject *parent)
    : QObject(parent), d_ptr(new QMediaPlaylistPrivate)

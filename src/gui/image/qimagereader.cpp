@@ -72,8 +72,6 @@
 
 #include <algorithm>
 
-Q_DECLARE_METATYPE(QList<QByteArray>)
-
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QImageIOHandlerInterface_ID, "/imageformats"))
 
 struct cs_BuiltInFormatStruct {
@@ -783,7 +781,7 @@ QColor QImageReader::backgroundColor() const
    }
 
    if (d->handler->supportsOption(QImageIOHandler::BackgroundColor)) {
-      return qvariant_cast<QColor>(d->handler->option(QImageIOHandler::BackgroundColor));
+      return (d->handler->option(QImageIOHandler::BackgroundColor)).value<QColor>();
    }
    return QColor();
 }

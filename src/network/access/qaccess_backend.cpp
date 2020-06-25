@@ -398,7 +398,7 @@ bool QNetworkAccessBackend::start()
       // The active configuration tells us what IAP is in use
       QVariant v = session->sessionProperty(QLatin1String("ActiveConfiguration"));
       if (v.isValid()) {
-         config = configManager.configurationFromIdentifier(qvariant_cast<QString>(v));
+         config = configManager.configurationFromIdentifier(v.value<QString>());
       }
 
       // Fallback to using the configuration if no active configuration

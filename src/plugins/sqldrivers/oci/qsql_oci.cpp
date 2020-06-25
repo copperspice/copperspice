@@ -26,7 +26,6 @@
 #include <qcoreapplication.h>
 #include <qvariant.h>
 #include <qdatetime.h>
-#include <qmetatype.h>
 #include <qregularexpression.h>
 #include <qshareddata.h>
 #include <qsqlerror.h>
@@ -38,11 +37,12 @@
 #include <qvector.h>
 #include <qdebug.h>
 
+class QOCICols;
+
 // This is needed for oracle oci when compiling with mingw-w64 headers
 #if defined(__MINGW64_VERSION_MAJOR) && defined(_WIN64)
 #define _int64 __int64
 #endif
-
 
 #include <oci.h>
 #ifdef max
@@ -63,9 +63,6 @@
 #define QOCI_THREADED
 
 //#define QOCI_DEBUG
-
-Q_DECLARE_METATYPE(OCIEnv *)
-Q_DECLARE_METATYPE(OCIStmt *)
 
 #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
 enum { QOCIEncoding = 2002 }; // AL16UTF16LE
@@ -131,11 +128,6 @@ QOCIRowId::~QOCIRowId()
       OCIDescriptorFree(id, OCI_DTYPE_ROWID);
    }
 }
-
-typedef QSharedDataPointer<QOCIRowId> QOCIRowIdPointer;
-Q_DECLARE_METATYPE(QOCIRowIdPointer)
-
-class QOCICols;
 
 struct QOCIResultPrivate {
    QOCIResultPrivate(QOCIResult *result, const QOCIDriverPrivate *driver);
@@ -307,21 +299,25 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
                sizeof(double),
                SQLT_FLT, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
          break;
+
       case QVariant::UserType:
-         if (val.canConvert<QOCIRowIdPointer>() && !isOutValue(pos)) {
+         if (val.canConvert<QSharedDataPointer<QOCIRowId>>() && !isOutValue(pos)) {
             // use a const pointer to prevent a detach
-            const QOCIRowIdPointer rptr = qvariant_cast<QOCIRowIdPointer>(val);
+            const QSharedDataPointer<QOCIRowId> rptr = val.value<QSharedDataPointer<QOCIRowId>>();
+
             r = OCIBindByPos(sql, hbnd, err,
                   pos + 1,
                   // it's an IN value, so const_cast is ok
                   const_cast<OCIRowid **>(&rptr->id),
                   -1,
                   SQLT_RDD, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
+
          } else {
             qWarning("Unknown bind variable");
             r = OCI_ERROR;
          }
          break;
+
       case QVariant::String: {
          const QString s = val.toString();
          if (isBinaryValue(pos)) {
@@ -1454,13 +1450,15 @@ bool QOCICols::execBatch(QOCIResultPrivate *d, QVector<QVariant> &boundValues, b
                   memcpy(dataPtr, s.utf16(), columns[i].lengths[row]);
                   break;
                }
+
                case QVariant::UserType:
-                  if (val.canConvert<QOCIRowIdPointer>()) {
-                     const QOCIRowIdPointer rptr = qvariant_cast<QOCIRowIdPointer>(val);
+                  if (val.canConvert<QSharedDataPointer<QOCIRowId>>()) {
+                     const QSharedDataPointer<QOCIRowId> rptr = val.value<QSharedDataPointer<QOCIRowId>>();
                      *reinterpret_cast<OCIRowid **>(dataPtr) = rptr->id;
                      columns[i].lengths[row] = 0;
                      break;
                   }
+
                case QVariant::ByteArray:
                default: {
                   const QByteArray ba = val.toByteArray();
@@ -2056,7 +2054,7 @@ QSqlRecord QOCIResult::record() const
 QVariant QOCIResult::lastInsertId() const
 {
    if (isActive()) {
-      QOCIRowIdPointer ptr(new QOCIRowId(d->env));
+      QSharedDataPointer<QOCIRowId> ptr(new QOCIRowId(d->env));
 
       int r = OCIAttrGet(d->sql, OCI_HTYPE_STMT, ptr.constData()->id,
             0, OCI_ATTR_ROWID, d->err);

@@ -132,6 +132,4 @@ template <> struct QAudioBuffer::StereoFrameDefault<unsigned short> {
    enum { Default = 32768 };
 };
 
-Q_DECLARE_METATYPE(QAudioBuffer)
-
 #endif

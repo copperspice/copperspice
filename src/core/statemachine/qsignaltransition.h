@@ -41,8 +41,8 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
  public:
    QSignalTransition(QState *sourceState = nullptr);
 
-   template<class SignalClass, class ...SignalArgs> QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...),
-      QState *sourceState = nullptr);
+   template<class SignalClass, class ...SignalArgs>
+   QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState = nullptr);
 
    ~QSignalTransition();
 
@@ -71,14 +71,40 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
 };
 
 
-template<class SignalClass, class ...SignalArgs> QSignalTransition::QSignalTransition(QObject *sender,
-   void (SignalClass::*signal)(SignalArgs...), QState *sourceState)
+template<class SignalClass, class ...SignalArgs>
+QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState)
    : QAbstractTransition(sourceState)
 {
    m_sender = sender;
 
    // store the signal method pointer in a CSBento
    m_signalBento.reset(new CSBento<void (SignalClass::*)(SignalArgs...)> {signal});
+}
+
+template<class SignalClass, class ...SignalArgs>
+QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...),
+      QAbstractState *target)
+{
+   if (! sender) {
+      qWarning("QState::addTransition: No sender was specified");
+      return nullptr;
+   }
+
+   if (! signal) {
+      qWarning("QState::addTransition: No signal was specified");
+      return nullptr;
+   }
+
+   if (! target) {
+      qWarning("QState::addTransition: No target was specified");
+      return nullptr;
+   }
+
+   QSignalTransition *trans = new QSignalTransition(sender, signal);
+   trans->setTargetState(target);
+   addTransition(trans);
+
+   return trans;
 }
 
 #endif // QT_NO_STATEMACHINE

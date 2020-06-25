@@ -29,12 +29,10 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 void QPropertyAnimationPrivate::updateMetaProperty()
 {
    if (! target || propertyName.isEmpty()) {
-      propertyType = QVariant::Invalid;
+      propertyType  = QVariant::Invalid;
       propertyIndex = -1;
       return;
    }
@@ -50,16 +48,15 @@ void QPropertyAnimationPrivate::updateMetaProperty()
    }
 
    if (propertyIndex == -1) {
-      //there is no Q_PROPERTY on the object
+      // there is no PROPERTY on the object
       propertyType = QVariant::Invalid;
-      if (!targetValue->dynamicPropertyNames().contains(propertyName)) {
-         qWarning("QPropertyAnimation: Trying to animate a non-existant property %s",
-                  propertyName.constData());
+
+      if (! targetValue->dynamicPropertyNames().contains(propertyName)) {
+         qWarning("QPropertyAnimation: Trying to animate a non existent property %s", csPrintable(propertyName));
       }
 
-   } else if (!targetValue->metaObject()->property(propertyIndex).isWritable()) {
-      qWarning("QPropertyAnimation: Trying to animate a read only property %s",
-               propertyName.constData());
+   } else if (! targetValue->metaObject()->property(propertyIndex).isWritable()) {
+      qWarning("QPropertyAnimation: Trying to animate a read only property %s", csPrintable(propertyName));
    }
 }
 
@@ -69,51 +66,33 @@ void QPropertyAnimationPrivate::updateProperty(const QVariant &newValue)
       return;
    }
 
-   if (!target) {
-      q_func()->stop(); //the target was destroyed we need to stop the animation
+   if (! target) {
+      // target was destroyed, need to stop the animation
+      q_func()->stop();
       return;
    }
 
    targetValue->setProperty(propertyName, newValue);
 }
 
-/*!
-    Construct a QPropertyAnimation object. \a parent is passed to QObject's
-    constructor.
-*/
 QPropertyAnimation::QPropertyAnimation(QObject *parent)
    : QVariantAnimation(*new QPropertyAnimationPrivate, parent)
 {
 }
 
-/*!
-    Construct a QPropertyAnimation object. \a parent is passed to QObject's
-    constructor. The animation changes the property \a propertyName on \a
-    target. The default duration is 250ms.
-
-    \sa targetObject, propertyName
-*/
-QPropertyAnimation::QPropertyAnimation(QObject *target, const QByteArray &propertyName, QObject *parent)
+QPropertyAnimation::QPropertyAnimation(QObject *target, const QString &propertyName, QObject *parent)
    : QVariantAnimation(*new QPropertyAnimationPrivate, parent)
 {
    setTargetObject(target);
    setPropertyName(propertyName);
 }
 
-/*!
-    Destroys the QPropertyAnimation instance.
- */
+
 QPropertyAnimation::~QPropertyAnimation()
 {
    stop();
 }
 
-/*!
-    \property QPropertyAnimation::targetObject
-    \brief the target QObject for this animation.
-
-    This property defines the target QObject for this animation.
- */
 QObject *QPropertyAnimation::targetObject() const
 {
    return d_func()->target.data();
@@ -122,12 +101,13 @@ QObject *QPropertyAnimation::targetObject() const
 void QPropertyAnimation::setTargetObject(QObject *target)
 {
    Q_D(QPropertyAnimation);
+
    if (d->targetValue == target) {
       return;
    }
 
    if (d->state != QAbstractAnimation::Stopped) {
-      qWarning("QPropertyAnimation::setTargetObject: you can't change the target of a running animation");
+      qWarning("QPropertyAnimation::setTargetObject: Not allowed to change the target of a running animation");
       return;
    }
 
@@ -135,24 +115,18 @@ void QPropertyAnimation::setTargetObject(QObject *target)
    d->updateMetaProperty();
 }
 
-/*!
-    \property QPropertyAnimation::propertyName
-    \brief the target property name for this animation
-
-    This property defines the target property name for this animation. The
-    property name is required for the animation to operate.
- */
-QByteArray QPropertyAnimation::propertyName() const
+QString QPropertyAnimation::propertyName() const
 {
    Q_D(const QPropertyAnimation);
    return d->propertyName;
 }
 
-void QPropertyAnimation::setPropertyName(const QByteArray &propertyName)
+void QPropertyAnimation::setPropertyName(const QString &propertyName)
 {
    Q_D(QPropertyAnimation);
+
    if (d->state != QAbstractAnimation::Stopped) {
-      qWarning("QPropertyAnimation::setPropertyName: you can't change the property name of a running animation");
+      qWarning("QPropertyAnimation::setPropertyName: Not allowed to change the property name of a running animation");
       return;
    }
 
@@ -160,99 +134,85 @@ void QPropertyAnimation::setPropertyName(const QByteArray &propertyName)
    d->updateMetaProperty();
 }
 
-
-/*!
-    \reimp
- */
+// reimp
 bool QPropertyAnimation::event(QEvent *event)
 {
    return QVariantAnimation::event(event);
 }
 
-/*!
-    This virtual function is called by QVariantAnimation whenever the current value
-    changes. \a value is the new, updated value. It updates the current value
-    of the property on the target object.
-
-    \sa currentValue, currentTime
- */
 void QPropertyAnimation::updateCurrentValue(const QVariant &value)
 {
    Q_D(QPropertyAnimation);
    d->updateProperty(value);
 }
 
-/*!
-    \reimp
-
-    If the startValue is not defined when the state of the animation changes from Stopped to Running,
-    the current property value is used as the initial value for the animation.
-*/
+// reimp
 void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
    Q_D(QPropertyAnimation);
 
-   if (!d->target && oldState == Stopped) {
+   if (! d->target && oldState == Stopped) {
       qWarning("QPropertyAnimation::updateState (%s): Changing state of an animation without target",
                d->propertyName.constData());
       return;
    }
 
    QVariantAnimation::updateState(newState, oldState);
+   QPropertyAnimation *animToStop = nullptr;
 
-   QPropertyAnimation *animToStop = 0;
    {
       QMutexLocker locker(QMutexPool::globalInstanceGet( &staticMetaObject() ));
 
-      typedef QPair<QObject *, QByteArray> QPropertyAnimationPair;
-      typedef QHash<QPropertyAnimationPair, QPropertyAnimation *> QPropertyAnimationHash;
+      using QPropertyAnimationPair = QPair<QObject *, QString>;
+      using QPropertyAnimationHash = QHash<QPropertyAnimationPair, QPropertyAnimation *>;
 
       static QPropertyAnimationHash hash;
-
-      //here we need to use value because we need to know to which pointer
-      //the animation was referring in case stopped because the target was destroyed
-
       QPropertyAnimationPair key(d->targetValue, d->propertyName);
+
       if (newState == Running) {
          d->updateMetaProperty();
-         animToStop = hash.value(key, 0);
+
+         animToStop = hash.value(key, nullptr);
          hash.insert(key, this);
 
          // update the default start value
          if (oldState == Stopped) {
+
+            // if startValue is not defined, current property value is used as the initial value for the animation
             d->setDefaultStartEndValue(d->targetValue->property(d->propertyName));
 
-            // check if we have a start value and an end value
-            if (! startValue().isValid() && (d->direction == Backward || !d->defaultStartEndValue.isValid())) {
+            // check if start and end values exist
+            if (! startValue().isValid() && (d->direction == Backward || ! d->m_defaultValue.isValid())) {
 
-               qWarning("QPropertyAnimation::updateState (%s, %s, %s): starting an animation without start value",
-                        d->propertyName.constData(), csPrintable(d->target.data()->metaObject()->className()),
+               qWarning("QPropertyAnimation::updateState (%s, %s, %s): Trying to start an animation, no start value available",
+                        csPrintable(d->propertyName), csPrintable(d->target.data()->metaObject()->className()),
                         csPrintable(d->target.data()->objectName()));
             }
 
-            if (!endValue().isValid() && (d->direction == Forward || !d->defaultStartEndValue.isValid())) {
+            if (! endValue().isValid() && (d->direction == Forward || ! d->m_defaultValue.isValid())) {
 
-               qWarning("QPropertyAnimation::updateState (%s, %s, %s): starting an animation without end value",
-                        d->propertyName.constData(), csPrintable(d->target.data()->metaObject()->className()),
+               qWarning("QPropertyAnimation::updateState (%s, %s, %s): Trying to start an animation, no end value available",
+                        csPrintable(d->propertyName), csPrintable(d->target.data()->metaObject()->className()),
                         csPrintable(d->target.data()->objectName()));
             }
          }
+
       } else if (hash.value(key) == this) {
          hash.remove(key);
       }
    }
 
-   //we need to do that after the mutex was unlocked
+   // need to do after the mutex is unlocked
    if (animToStop) {
       // try to stop the top level group
       QAbstractAnimation *current = animToStop;
+
       while (current->group() && current->state() != Stopped) {
          current = current->group();
       }
+
       current->stop();
    }
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_ANIMATION

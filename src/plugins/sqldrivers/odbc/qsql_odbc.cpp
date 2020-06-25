@@ -1733,7 +1733,7 @@ QSqlRecord QODBCResult::record() const
 
 QVariant QODBCResult::handle() const
 {
-   return QVariant(qRegisterMetaType<SQLHANDLE>("SQLHANDLE"), &d->hStmt);
+   return QVariant::fromValue<SQLHANDLE>(d->hStmt);
 }
 
 bool QODBCResult::nextResult()
@@ -2660,7 +2660,7 @@ QString QODBCDriver::formatValue(const QSqlField &field,
 
 QVariant QODBCDriver::handle() const
 {
-   return QVariant(qRegisterMetaType<SQLHANDLE>("SQLHANDLE"), &d->hDbc);
+   return QVariant::fromValue<SQLHANDLE>(d->hDbc);
 }
 
 QString QODBCDriver::escapeIdentifier(const QString &identifier, IdentifierType) const

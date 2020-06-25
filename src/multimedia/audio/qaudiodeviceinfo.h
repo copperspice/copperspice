@@ -79,6 +79,4 @@ class Q_MULTIMEDIA_EXPORT QAudioDeviceInfo
    QSharedDataPointer<QAudioDeviceInfoPrivate> d;
 };
 
-Q_DECLARE_METATYPE(QAudioDeviceInfo)
-
-#endif // QAUDIODEVICEINFO_H
+#endif

@@ -29,16 +29,8 @@
 #include <qlineedit.h>
 #include <qlocale.h>
 #include <qvalidator.h>
-#include <qdebug.h>
 
 #include <float.h>
-
-//#define QSPINBOX_QSBDEBUG
-#ifdef QSPINBOX_QSBDEBUG
-#  define QSBDEBUG qDebug
-#else
-#  define QSBDEBUG if (false) qDebug
-#endif
 
 class QSpinBoxPrivate : public QAbstractSpinBoxPrivate
 {
@@ -57,6 +49,7 @@ class QSpinBoxPrivate : public QAbstractSpinBoxPrivate
       q->setInputMethodHints(Qt::ImhDigitsOnly);
       setLayoutItemMargins(QStyle::SE_SpinBoxLayoutItem);
    }
+
    int displayIntegerBase;
 };
 
@@ -108,7 +101,6 @@ void QSpinBox::setValue(int value)
    d->setValue(QVariant(value), EmitIfChanged);
 }
 
-
 QString QSpinBox::prefix() const
 {
    Q_D(const QSpinBox);
@@ -126,8 +118,6 @@ void QSpinBox::setPrefix(const QString &prefix)
    d->cachedMinimumSizeHint = QSize(); // minimumSizeHint cares about the prefix
    updateGeometry();
 }
-
-
 
 QString QSpinBox::suffix() const
 {
@@ -147,14 +137,12 @@ void QSpinBox::setSuffix(const QString &suffix)
    updateGeometry();
 }
 
-
 QString QSpinBox::cleanText() const
 {
    Q_D(const QSpinBox);
 
    return d->stripped(d->edit->displayText());
 }
-
 
 
 int QSpinBox::singleStep() const
@@ -167,12 +155,12 @@ int QSpinBox::singleStep() const
 void QSpinBox::setSingleStep(int value)
 {
    Q_D(QSpinBox);
+
    if (value >= 0) {
       d->singleStep = QVariant(value);
       d->updateEdit();
    }
 }
-
 
 int QSpinBox::minimum() const
 {
@@ -217,10 +205,12 @@ int QSpinBox::displayIntegerBase() const
 void QSpinBox::setDisplayIntegerBase(int base)
 {
    Q_D(QSpinBox);
+
    if (base < 2 || base > 36) {
       qWarning("QSpinBox::setDisplayIntegerBase: Invalid base (%d)", base);
       base = 10;
    }
+
    if (base != d->displayIntegerBase) {
       d->displayIntegerBase = base;
       d->updateEdit();
@@ -237,6 +227,7 @@ QString QSpinBox::textFromValue(int value) const
       if (value < 0) {
          str.prepend('-');
       }
+
    } else {
       str = locale().toString(value);
       if (!d->showGroupSeparator && (qAbs(value) >= 1000 || value == INT_MIN)) {
@@ -269,7 +260,6 @@ QValidator::State QSpinBox::validate(QString &text, int &pos) const
    return state;
 }
 
-
 /*!
   \reimp
 */
@@ -288,7 +278,9 @@ QDoubleSpinBox::QDoubleSpinBox(QWidget *parent)
 }
 
 QDoubleSpinBox::~QDoubleSpinBox()
-{}
+{
+}
+
 double QDoubleSpinBox::value() const
 {
    Q_D(const QDoubleSpinBox);
@@ -302,7 +294,6 @@ void QDoubleSpinBox::setValue(double value)
    QVariant v(d->round(value));
    d->setValue(v, EmitIfChanged);
 }
-
 
 QString QDoubleSpinBox::prefix() const
 {
@@ -318,7 +309,6 @@ void QDoubleSpinBox::setPrefix(const QString &prefix)
    d->prefix = prefix;
    d->updateEdit();
 }
-
 
 QString QDoubleSpinBox::suffix() const
 {
@@ -337,7 +327,6 @@ void QDoubleSpinBox::setSuffix(const QString &suffix)
    d->cachedSizeHint = QSize();
    updateGeometry();
 }
-
 
 QString QDoubleSpinBox::cleanText() const
 {
@@ -362,7 +351,6 @@ void QDoubleSpinBox::setSingleStep(double value)
       d->updateEdit();
    }
 }
-
 
 double QDoubleSpinBox::minimum() const
 {
@@ -393,7 +381,6 @@ void QDoubleSpinBox::setMaximum(double maximum)
    const QVariant m(d->round(maximum));
    d->setRange((d->variantCompare(d->minimum, m) < 0 ? d->minimum : m), m);
 }
-
 
 void QDoubleSpinBox::setRange(double minimum, double maximum)
 {
@@ -453,7 +440,6 @@ QValidator::State QDoubleSpinBox::validate(QString &text, int &pos) const
    return state;
 }
 
-
 /*!
   \reimp
 */
@@ -461,13 +447,6 @@ void QDoubleSpinBox::fixup(QString &input) const
 {
    input.remove(locale().groupSeparator());
 }
-
-// --- QSpinBoxPrivate ---
-
-/*!
-    \internal
-    Constructs a QSpinBoxPrivate object
-*/
 
 QSpinBoxPrivate::QSpinBoxPrivate()
 {
@@ -480,15 +459,15 @@ QSpinBoxPrivate::QSpinBoxPrivate()
 }
 
 /*!
-    \internal
     \reimp
 */
-
 void QSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
 {
    Q_Q(QSpinBox);
+
    if (ep != NeverEmit) {
       pendingEmit = false;
+
       if (ep == AlwaysEmit || value != old) {
          emit q->valueChanged(edit->displayText());
          emit q->valueChanged(value.toInt());
@@ -497,20 +476,16 @@ void QSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
 }
 
 /*!
-    \internal
     \reimp
 */
-
 QString QSpinBoxPrivate::textFromValue(const QVariant &value) const
 {
    Q_Q(const QSpinBox);
    return q->textFromValue(value.toInt());
 }
 /*!
-    \internal
     \reimp
 */
-
 QVariant QSpinBoxPrivate::valueFromText(const QString &text) const
 {
    Q_Q(const QSpinBox);
@@ -518,32 +493,29 @@ QVariant QSpinBoxPrivate::valueFromText(const QString &text) const
    return QVariant(q->valueFromText(text));
 }
 
-
 QVariant QSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
    QValidator::State &state) const
 {
    if (cachedText == input && !input.isEmpty()) {
       state = cachedState;
-      QSBDEBUG() << "cachedText was '" << cachedText << "' state was "
-         << state << " and value was " << cachedValue;
-
       return cachedValue;
    }
+
    const int max = maximum.toInt();
    const int min = minimum.toInt();
 
    QString copy = stripped(input, &pos);
-   QSBDEBUG() << "input" << input << "copy" << copy;
-   state = QValidator::Acceptable;
+
+   state   = QValidator::Acceptable;
    int num = min;
 
-   if (max != min && (copy.isEmpty()
-         || (min < 0 && copy  == "-") || (max >= 0 && copy == "+"))) {
+   if (max != min && (copy.isEmpty() || (min < 0 && copy  == "-") || (max >= 0 && copy == "+"))) {
       state = QValidator::Intermediate;
-      QSBDEBUG() << __FILE__ << __LINE__ << "num is set to" << num;
 
-   } else if (copy.startsWith(QLatin1Char('-')) && min >= 0) {
-      state = QValidator::Invalid; // special-case -0 will be interpreted as 0 and thus not be invalid with a range from 0-100
+   } else if (copy.startsWith('-') && min >= 0) {
+      // special-case -0 will be interpreted as 0 and thus not be invalid with a range from 0-100
+      state = QValidator::Invalid;
+
    } else {
       bool ok = false;
 
@@ -560,43 +532,37 @@ QVariant QSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
          }
       }
 
-      QSBDEBUG() << __FILE__ << __LINE__ << "num is set to" << num;
-
       if (!ok) {
          state = QValidator::Invalid;
+
       } else if (num >= min && num <= max) {
          state = QValidator::Acceptable;
+
       } else if (max == min) {
          state = QValidator::Invalid;
+
       } else {
          if ((num >= 0 && num > max) || (num < 0 && num < min)) {
             state = QValidator::Invalid;
-            QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
+
          } else {
             state = QValidator::Intermediate;
-            QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Intermediate";
+
          }
       }
    }
+
    if (state != QValidator::Acceptable) {
       num = max > 0 ? min : max;
    }
+
    input = prefix + copy + suffix;
-   cachedText = input;
+   cachedText  = input;
    cachedState = state;
    cachedValue = QVariant((int)num);
 
-   QSBDEBUG() << "cachedText is set to '" << cachedText << "' state is set to "
-      << state << " and value is set to " << cachedValue;
    return cachedValue;
 }
-
-// --- QDoubleSpinBoxPrivate ---
-
-/*!
-    \internal
-    Constructs a QSpinBoxPrivate object
-*/
 
 QDoubleSpinBoxPrivate::QDoubleSpinBoxPrivate()
 {
@@ -614,7 +580,6 @@ QDoubleSpinBoxPrivate::QDoubleSpinBoxPrivate()
     \internal
     \reimp
 */
-
 void QDoubleSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
 {
    Q_Q(QDoubleSpinBox);
@@ -644,8 +609,7 @@ QVariant QDoubleSpinBoxPrivate::valueFromText(const QString &f) const
     E.g. // decimals = 2
 
     round(5.555) => 5.56
-    */
-
+*/
 double QDoubleSpinBoxPrivate::round(double value) const
 {
    QString tmp = QString::number(value, 'f', decimals);
@@ -657,62 +621,66 @@ QVariant QDoubleSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
 {
    if (cachedText == input && !input.isEmpty()) {
       state = cachedState;
-      QSBDEBUG() << "cachedText was '" << cachedText << "' state was "
-         << state << " and value was " << cachedValue;
+
       return cachedValue;
    }
    const double max = maximum.toDouble();
    const double min = minimum.toDouble();
 
    QString copy = stripped(input, &pos);
-   QSBDEBUG() << "input" << input << "copy" << copy;
-   int len = copy.size();
+
+   int len    = copy.size();
    double num = min;
-   const bool plus = max >= 0;
+
+   const bool plus  = max >= 0;
    const bool minus = min <= 0;
 
    switch (len) {
       case 0:
          state = max != min ? QValidator::Intermediate : QValidator::Invalid;
          goto end;
+
       case 1:
-         if (copy.at(0) == locale.decimalPoint()
-            || (plus && copy.at(0) == QLatin1Char('+'))
-            || (minus && copy.at(0) == QLatin1Char('-'))) {
+         if (copy.at(0) == locale.decimalPoint() || (plus && copy.at(0) == '+') || (minus && copy.at(0) == '-')) {
             state = QValidator::Intermediate;
             goto end;
          }
          break;
+
       case 2:
          if (copy.at(1) == locale.decimalPoint()
-            && ((plus && copy.at(0) == QLatin1Char('+')) || (minus && copy.at(0) == QLatin1Char('-')))) {
+               && ((plus && copy.at(0) == QLatin1Char('+')) || (minus && copy.at(0) == QLatin1Char('-')))) {
             state = QValidator::Intermediate;
             goto end;
          }
          break;
+
       default:
          break;
    }
 
    if (copy.at(0) == locale.groupSeparator()) {
-      QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
       state = QValidator::Invalid;
       goto end;
+
    } else if (len > 1) {
       const int dec = copy.indexOf(locale.decimalPoint());
+
       if (dec != -1) {
+
+         // typing a delimiter when on the delimiter should be treated as typing right arrow
          if (dec + 1 < copy.size() && copy.at(dec + 1) == locale.decimalPoint() && pos == dec + 1) {
-            copy.remove(dec + 1, 1); // typing a delimiter when you are on the delimiter
-         } // should be treated as typing right arrow
+            copy.remove(dec + 1, 1);
+         }
 
          if (copy.size() - dec > decimals + 1) {
-            QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
             state = QValidator::Invalid;
             goto end;
          }
+
          for (int i = dec + 1; i < copy.size(); ++i) {
             if (copy.at(i).isSpace() || copy.at(i) == locale.groupSeparator()) {
-               QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
+
                state = QValidator::Invalid;
                goto end;
             }
@@ -722,13 +690,13 @@ QVariant QDoubleSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
          const QChar secondLast = copy.at(len - 2);
 
          if ((last == locale.groupSeparator() || last.isSpace())
-            && (secondLast == locale.groupSeparator() || secondLast.isSpace())) {
+               && (secondLast == locale.groupSeparator() || secondLast.isSpace())) {
             state = QValidator::Invalid;
-            QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
+
             goto end;
+
          } else if (last.isSpace() && (!locale.groupSeparator().isSpace() || secondLast.isSpace())) {
             state = QValidator::Invalid;
-            QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
             goto end;
          }
       }
@@ -737,20 +705,17 @@ QVariant QDoubleSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
    {
       bool ok = false;
       num = locale.toDouble(copy, &ok);
-      QSBDEBUG() << __FILE__ << __LINE__ << locale << copy << num << ok;
 
       if (!ok) {
          if (locale.groupSeparator().isPrint()) {
             if (max < 1000 && min > -1000 && copy.contains(locale.groupSeparator())) {
                state = QValidator::Invalid;
-               QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
                goto end;
             }
 
             const int len = copy.size();
             for (int i = 0; i < len - 1; ++i) {
                if (copy.at(i) == locale.groupSeparator() && copy.at(i + 1) == locale.groupSeparator()) {
-                  QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
                   state = QValidator::Invalid;
                   goto end;
                }
@@ -759,11 +724,9 @@ QVariant QDoubleSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
             QString copy2 = copy;
             copy2.remove(locale.groupSeparator());
             num = locale.toDouble(copy2, &ok);
-            QSBDEBUG() << locale.groupSeparator() << num << copy2 << ok;
 
             if (!ok) {
                state = QValidator::Invalid;
-               QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
                goto end;
             }
          }
@@ -771,20 +734,20 @@ QVariant QDoubleSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
 
       if (!ok) {
          state = QValidator::Invalid;
-         QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
+
       } else if (num >= min && num <= max) {
          state = QValidator::Acceptable;
-         QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Acceptable";
+
       } else if (max == min) { // when max and min is the same the only non-Invalid input is max (or min)
          state = QValidator::Invalid;
-         QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
+
       } else {
          if ((num >= 0 && num > max) || (num < 0 && num < min)) {
             state = QValidator::Invalid;
-            QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Invalid";
+
          } else {
             state = QValidator::Intermediate;
-            QSBDEBUG() << __FILE__ << __LINE__ << "state is set to Intermediate";
+
          }
       }
    }
@@ -794,10 +757,11 @@ end:
       num = max > 0 ? min : max;
    }
 
-   input = prefix + copy + suffix;
-   cachedText = input;
+   input       = prefix + copy + suffix;
+   cachedText  = input;
    cachedState = state;
    cachedValue = QVariant(num);
+
    return QVariant(num);
 }
 
@@ -805,7 +769,6 @@ end:
     \internal
     \reimp
 */
-
 QString QDoubleSpinBoxPrivate::textFromValue(const QVariant &f) const
 {
    Q_Q(const QDoubleSpinBox);
@@ -817,14 +780,16 @@ bool QSpinBox::event(QEvent *event)
 {
    Q_D(QSpinBox);
 
-   if (event->type() == QEvent::StyleChange
-
 #ifdef Q_OS_DARWIN
-      || event->type() == QEvent::MacSizeChange
+   if (event->type() == QEvent::StyleChange || event->type() == QEvent::MacSizeChange) {
+
+#else
+   if (event->type() == QEvent::StyleChange) {
+
 #endif
-   ) {
       d->setLayoutItemMargins(QStyle::SE_SpinBoxLayoutItem);
    }
+
    return QAbstractSpinBox::event(event);
 }
 

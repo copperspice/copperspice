@@ -545,9 +545,8 @@ bool QSqlTableModel::setData(const QModelIndex &index, const QVariant &value, in
    }
 
    const QVariant oldValue = QSqlTableModel::data(index, role);
-   if (value == oldValue
-      && value.isNull() == oldValue.isNull()
-      && d->cache.value(index.row()).op() != QSqlTableModelPrivate::Insert) {
+
+   if (value == oldValue && d->cache.value(index.row()).op() != QSqlTableModelPrivate::Insert) {
       return true;
    }
 

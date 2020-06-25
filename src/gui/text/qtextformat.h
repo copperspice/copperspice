@@ -27,27 +27,26 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qshareddata.h>
-#include <qvector.h>
-#include <qvariant.h>
 #include <qpen.h>
 #include <qbrush.h>
 #include <qtextoption.h>
 #include <qstringfwd.h>
+#include <qvector.h>
+#include <qvariant.h>
 
-class QVariant;
-class QFont;
+class QTextCursor;
+class QTextFormat;
 class QTextFormatCollection;
+class QTextFrameFormat;
 class QTextFormatPrivate;
 class QTextBlockFormat;
 class QTextCharFormat;
 class QTextListFormat;
 class QTextTableFormat;
-class QTextFrameFormat;
+
 class QTextImageFormat;
 class QTextTableCellFormat;
-class QTextFormat;
 class QTextObject;
-class QTextCursor;
 class QTextDocument;
 class QTextLength;
 
@@ -55,13 +54,14 @@ Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextLength &);
+
 class Q_GUI_EXPORT QTextLength
 {
-
  public:
    enum Type { VariableLength = 0, FixedLength, PercentageLength };
 
-   QTextLength() : lengthType(VariableLength), fixedValueOrPercentage(0)
+   QTextLength()
+      : lengthType(VariableLength), fixedValueOrPercentage(0)
    {}
 
    explicit QTextLength(Type type, qreal value);
@@ -74,11 +74,14 @@ class Q_GUI_EXPORT QTextLength
       switch (lengthType) {
          case FixedLength:
             return fixedValueOrPercentage;
+
          case VariableLength:
             return maximumLength;
+
          case PercentageLength:
             return fixedValueOrPercentage * maximumLength / qreal(100);
       }
+
       return -1;
    }
 
@@ -94,11 +97,13 @@ class Q_GUI_EXPORT QTextLength
       return lengthType != other.lengthType
          || !qFuzzyCompare(fixedValueOrPercentage, other.fixedValueOrPercentage);
    }
+
    operator QVariant() const;
 
  private:
    Type lengthType;
    qreal fixedValueOrPercentage;
+
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
 };
@@ -106,12 +111,11 @@ class Q_GUI_EXPORT QTextLength
 inline QTextLength::QTextLength(Type atype, qreal avalue)
    : lengthType(atype), fixedValueOrPercentage(avalue) {}
 
-#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextFormat &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
-#endif
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextFormat &);
+
 class Q_GUI_EXPORT QTextFormat
 {
    GUI_CS_GADGET(QTextFormat)
@@ -133,120 +137,123 @@ class Q_GUI_EXPORT QTextFormat
    };
 
    enum Property {
-      ObjectIndex = 0x0,
+      ObjectIndex            = 0x0,
 
       // paragraph and char
-      CssFloat = 0x0800,
-      LayoutDirection = 0x0801,
+      CssFloat               = 0x0800,
+      LayoutDirection        = 0x0801,
 
-      OutlinePen = 0x810,
-      BackgroundBrush = 0x820,
-      ForegroundBrush = 0x821,
-      // Internal to qtextlayout.cpp: ObjectSelectionBrush = 0x822
-      BackgroundImageUrl = 0x823,
+      OutlinePen             = 0x810,
+      BackgroundBrush        = 0x820,
+      ForegroundBrush        = 0x821,
+
+      // internal, used in qtextlayout.cpp
+      // ObjectSelectionBrush = 0x822,
+
+      BackgroundImageUrl     = 0x823,
 
       // paragraph
-      BlockAlignment = 0x1010,
-      BlockTopMargin = 0x1030,
-      BlockBottomMargin = 0x1031,
-      BlockLeftMargin = 0x1032,
-      BlockRightMargin = 0x1033,
-      TextIndent = 0x1034,
-      TabPositions = 0x1035,
-      BlockIndent = 0x1040,
-      LineHeight = 0x1048,
-      LineHeightType = 0x1049,
+      BlockAlignment         = 0x1010,
+      BlockTopMargin         = 0x1030,
+      BlockBottomMargin      = 0x1031,
+      BlockLeftMargin        = 0x1032,
+      BlockRightMargin       = 0x1033,
+      TextIndent             = 0x1034,
+      TabPositions           = 0x1035,
+      BlockIndent            = 0x1040,
+      LineHeight             = 0x1048,
+      LineHeightType         = 0x1049,
       BlockNonBreakableLines = 0x1050,
       BlockTrailingHorizontalRulerWidth = 0x1060,
 
       // character properties
-      FirstFontProperty = 0x1FE0,
-      FontCapitalization = FirstFontProperty,
-      FontLetterSpacingType = 0x2033,
-      FontLetterSpacing = 0x1FE1,
-      FontWordSpacing = 0x1FE2,
-      FontStretch = 0x2034,
-      FontStyleHint = 0x1FE3,
-      FontStyleStrategy = 0x1FE4,
-      FontKerning = 0x1FE5,
-      FontHintingPreference = 0x1FE6,
-      FontFamily = 0x2000,
-      FontPointSize = 0x2001,
-      FontSizeAdjustment = 0x2002,
-      FontSizeIncrement = FontSizeAdjustment, // old name, compat
-      FontWeight = 0x2003,
-      FontItalic = 0x2004,
-      FontUnderline = 0x2005, // deprecated, use TextUnderlineStyle instead
-      FontOverline = 0x2006,
-      FontStrikeOut = 0x2007,
-      FontFixedPitch = 0x2008,
-      FontPixelSize = 0x2009,
-      LastFontProperty = FontPixelSize,
+      FirstFontProperty      = 0x1FE0,
+      FontCapitalization     = FirstFontProperty,
+      FontLetterSpacingType  = 0x2033,
+      FontLetterSpacing      = 0x1FE1,
+      FontWordSpacing        = 0x1FE2,
+      FontStretch            = 0x2034,
+      FontStyleHint          = 0x1FE3,
+      FontStyleStrategy      = 0x1FE4,
+      FontKerning            = 0x1FE5,
+      FontHintingPreference  = 0x1FE6,
+      FontFamily             = 0x2000,
+      FontPointSize          = 0x2001,
+      FontSizeAdjustment     = 0x2002,
+      FontSizeIncrement      = FontSizeAdjustment,    // old name, compat
+      FontWeight             = 0x2003,
+      FontItalic             = 0x2004,
+      FontUnderline          = 0x2005,                // deprecated, use TextUnderlineStyle instead
+      FontOverline           = 0x2006,
+      FontStrikeOut          = 0x2007,
+      FontFixedPitch         = 0x2008,
+      FontPixelSize          = 0x2009,
+      LastFontProperty       = FontPixelSize,
 
-      TextUnderlineColor = 0x2010,
-      TextVerticalAlignment = 0x2021,
-      TextOutline = 0x2022,
-      TextUnderlineStyle = 0x2023,
-      TextToolTip = 0x2024,
+      TextUnderlineColor     = 0x2010,
+      TextVerticalAlignment  = 0x2021,
+      TextOutline            = 0x2022,
+      TextUnderlineStyle     = 0x2023,
+      TextToolTip            = 0x2024,
 
-      IsAnchor = 0x2030,
-      AnchorHref = 0x2031,
-      AnchorName = 0x2032,
-      ObjectType = 0x2f00,
+      IsAnchor               = 0x2030,
+      AnchorHref             = 0x2031,
+      AnchorName             = 0x2032,
+      ObjectType             = 0x2f00,
 
       // list properties
-      ListStyle = 0x3000,
-      ListIndent = 0x3001,
-      ListNumberPrefix = 0x3002,
-      ListNumberSuffix = 0x3003,
+      ListStyle              = 0x3000,
+      ListIndent             = 0x3001,
+      ListNumberPrefix       = 0x3002,
+      ListNumberSuffix       = 0x3003,
 
       // table and frame properties
-      FrameBorder = 0x4000,
-      FrameMargin = 0x4001,
-      FramePadding = 0x4002,
-      FrameWidth = 0x4003,
-      FrameHeight = 0x4004,
-      FrameTopMargin    = 0x4005,
-      FrameBottomMargin = 0x4006,
-      FrameLeftMargin   = 0x4007,
-      FrameRightMargin  = 0x4008,
-      FrameBorderBrush = 0x4009,
-      FrameBorderStyle = 0x4010,
+      FrameBorder            = 0x4000,
+      FrameMargin            = 0x4001,
+      FramePadding           = 0x4002,
+      FrameWidth             = 0x4003,
+      FrameHeight            = 0x4004,
+      FrameTopMargin         = 0x4005,
+      FrameBottomMargin      = 0x4006,
+      FrameLeftMargin        = 0x4007,
+      FrameRightMargin       = 0x4008,
+      FrameBorderBrush       = 0x4009,
+      FrameBorderStyle       = 0x4010,
 
-      TableColumns = 0x4100,
+      TableColumns           = 0x4100,
       TableColumnWidthConstraints = 0x4101,
-      TableCellSpacing = 0x4102,
-      TableCellPadding = 0x4103,
-      TableHeaderRowCount = 0x4104,
+      TableCellSpacing       = 0x4102,
+      TableCellPadding       = 0x4103,
+      TableHeaderRowCount    = 0x4104,
 
       // table cell properties
-      TableCellRowSpan = 0x4810,
-      TableCellColumnSpan = 0x4811,
+      TableCellRowSpan       = 0x4810,
+      TableCellColumnSpan    = 0x4811,
 
-      TableCellTopPadding = 0x4812,
+      TableCellTopPadding    = 0x4812,
       TableCellBottomPadding = 0x4813,
-      TableCellLeftPadding = 0x4814,
-      TableCellRightPadding = 0x4815,
+      TableCellLeftPadding   = 0x4814,
+      TableCellRightPadding  = 0x4815,
 
       // image properties
-      ImageName = 0x5000,
-      ImageWidth = 0x5010,
-      ImageHeight = 0x5011,
+      ImageName              = 0x5000,
+      ImageWidth             = 0x5010,
+      ImageHeight            = 0x5011,
 
       // internal
       /*
-         SuppressText = 0x5012,
-         SuppressBackground = 0x513
+         SuppressText        = 0x5012,
+         SuppressBackground  = 0x513,
       */
 
       // selection properties
-      FullWidthSelection = 0x06000,
+      FullWidthSelection     = 0x06000,
 
       // page break properties
-      PageBreakPolicy = 0x7000,
+      PageBreakPolicy        = 0x7000,
 
-      // --
-      UserProperty = 0x100000
+      //
+      UserProperty           = 0x100000
    };
 
    enum ObjectTypes {
@@ -259,10 +266,10 @@ class Q_GUI_EXPORT QTextFormat
    };
 
    enum PageBreakFlag {
-      PageBreak_Auto = 0,
-      PageBreak_AlwaysBefore = 0x001,
-      PageBreak_AlwaysAfter  = 0x010
-         // PageBreak_AlwaysInside = 0x100
+      PageBreak_Auto            = 0,
+      PageBreak_AlwaysBefore    = 0x001,
+      PageBreak_AlwaysAfter     = 0x010
+      // PageBreak_AlwaysInside = 0x100
    };
    using PageBreakFlags = QFlags<PageBreakFlag>;
 
@@ -289,10 +296,12 @@ class Q_GUI_EXPORT QTextFormat
    int objectIndex() const;
    void setObjectIndex(int object);
 
-   QVariant property(int propertyId) const;
-   void setProperty(int propertyId, const QVariant &value);
    void clearProperty(int propertyId);
    bool hasProperty(int propertyId) const;
+
+   QVariant property(int propertyId) const;
+   void setProperty(int propertyId, const QVariant &value);
+   void setProperty(int propertyId, const QVector<QTextLength> &lengths);
 
    bool boolProperty(int propertyId) const;
    int intProperty(int propertyId) const;
@@ -301,10 +310,9 @@ class Q_GUI_EXPORT QTextFormat
    QColor colorProperty(int propertyId) const;
    QPen penProperty(int propertyId) const;
    QBrush brushProperty(int propertyId) const;
+
    QTextLength lengthProperty(int propertyId) const;
    QVector<QTextLength> lengthVectorProperty(int propertyId) const;
-
-   void setProperty(int propertyId, const QVector<QTextLength> &lengths);
 
    QMap<int, QVariant> properties() const;
    int propertyCount() const;
@@ -597,6 +605,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    inline void setVerticalAlignment(VerticalAlignment alignment) {
       setProperty(TextVerticalAlignment, alignment);
    }
+
    inline VerticalAlignment verticalAlignment() const {
       return static_cast<VerticalAlignment>(intProperty(TextVerticalAlignment));
    }
@@ -604,6 +613,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    inline void setTextOutline(const QPen &pen) {
       setProperty(TextOutline, pen);
    }
+
    inline QPen textOutline() const {
       return penProperty(TextOutline);
    }
@@ -611,6 +621,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    inline void setToolTip(const QString &tip) {
       setProperty(TextToolTip, tip);
    }
+
    inline QString toolTip() const {
       return stringProperty(TextToolTip);
    }

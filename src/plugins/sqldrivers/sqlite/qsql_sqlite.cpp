@@ -47,9 +47,6 @@
 
 class QSQLiteResultPrivate;
 
-Q_DECLARE_METATYPE(sqlite3 *)
-Q_DECLARE_METATYPE(sqlite3_stmt *)
-
 static QString _q_escapeIdentifier(const QString &identifier)
 {
    QString res = identifier;
@@ -297,7 +294,7 @@ bool QSQLiteResultPrivate::fetchNext(QSqlCachedResult::ValueCache &values, int i
                   break;
 
                case SQLITE_NULL:
-                  values[i + idx] = QVariant(QVariant::String);
+                  values[i + idx] = QVariant();
                   break;
 
                default:
@@ -466,15 +463,15 @@ bool QSQLiteResult::exec()
          res = SQLITE_OK;
          const QVariant value = values.at(i);
 
-         if (value.isNull()) {
+         if (! value.isValid()) {
             res = sqlite3_bind_null(d->stmt, i + 1);
 
          } else {
             switch (value.type()) {
 
                case QVariant::ByteArray: {
-                  const QByteArray *ba = static_cast<const QByteArray *>(value.constData());
-                  res = sqlite3_bind_blob(d->stmt, i + 1, ba->constData(), ba->size(), SQLITE_STATIC);
+                  const QByteArray ba = value.getData<QByteArray>();
+                  res = sqlite3_bind_blob(d->stmt, i + 1, ba.constData(), ba.size(), SQLITE_STATIC);
                   break;
                }
 
@@ -506,8 +503,8 @@ bool QSQLiteResult::exec()
                }
                case QVariant::String: {
                   // lifetime of string == lifetime of its qvariant
-                  const QString *str = static_cast<const QString *>(value.constData());
-                  res = sqlite3_bind_text64(d->stmt, i + 1, str->constData(), str->size_storage(), SQLITE_STATIC, SQLITE_UTF8);
+                  const QString str = value.getData<QString>();
+                  res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_STATIC, SQLITE_UTF8);
                   break;
                }
 

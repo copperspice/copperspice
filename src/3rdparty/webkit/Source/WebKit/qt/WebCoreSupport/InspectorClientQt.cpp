@@ -130,7 +130,8 @@ public:
         QString storedValueType = qsettings.value(settingKey + settingStorageTypeSuffix).toString();
         QVariant storedValue    = qsettings.value(settingKey);
 
-        storedValue.convert(QVariant::nameToType(storedValueType));
+        QVariant::Type tmp = static_cast<QVariant::Type>(QVariant::nameToType(storedValueType));
+        storedValue.convert(tmp);
 
         return variantToSetting(storedValue);
 

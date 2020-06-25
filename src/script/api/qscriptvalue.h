@@ -38,7 +38,6 @@ class QDateTime;
 
 class QMetaObject;
 
-typedef QList<QScriptValue> QScriptValueList;
 using qsreal = double;
 
 class QScriptValuePrivate;
@@ -182,6 +181,8 @@ class Q_SCRIPT_EXPORT QScriptValue
 
    qint64 objectId() const;
 
+   bool operator==(const QScriptValue &other) const;
+
  private:
    // force compile error, prevent QScriptValue(bool) to be called
    QScriptValue(void *);
@@ -200,5 +201,7 @@ class Q_SCRIPT_EXPORT QScriptValue
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptValue::ResolveFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptValue::PropertyFlags)
+
+CS_DECLARE_METATYPE(QScriptValue)
 
 #endif

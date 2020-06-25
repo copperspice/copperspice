@@ -235,8 +235,7 @@ void QCocoaEventDispatcher::unregisterSocketNotifier(QSocketNotifier *notifier)
 bool QCocoaEventDispatcher::hasPendingEvents()
 {
    extern uint qGlobalPostedEventsCount();
-   extern bool qt_is_gui_used; //qapplication.cpp
-   return qGlobalPostedEventsCount() || (qt_is_gui_used && GetNumEventsInQueue(GetMainEventQueue()));
+   return qGlobalPostedEventsCount() || ( qApp->cs_isRealGuiApp() && GetNumEventsInQueue(GetMainEventQueue()));
 }
 
 static bool IsMouseOrKeyEvent( NSEvent *event )

@@ -546,17 +546,25 @@ bool QWindowsInputContext::handleIME_Request(WPARAM wParam,
 void QWindowsInputContext::handleInputLanguageChanged(WPARAM wparam, LPARAM lparam)
 {
    const LCID newLanguageId = languageIdFromLocaleId(WORD(lparam));
+
    if (newLanguageId == m_languageId) {
       return;
    }
+
    const LCID oldLanguageId = m_languageId;
    m_languageId = newLanguageId;
    m_locale = qt_localeFromLCID(m_languageId);
    emitLocaleChanged();
 
+#if defined(CS_SHOW_DEBUG)
    qDebug() << __FUNCTION__ << hex << showbase
       << oldLanguageId  << "->" << newLanguageId << "Character set:"
-      << DWORD(wparam) << dec << noshowbase << m_locale;
+      << DWORD(wparam) << dec << noshowbase << m_locale.name() ;
+#else
+   (void) wparam;
+   (void) oldLanguageId;
+#endif
+
 }
 
 /*!

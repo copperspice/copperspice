@@ -479,7 +479,8 @@ QString QSettingsPrivate::variantToString(const QVariant &v)
       }
 
       case QVariant::Rect: {
-         QRect r = qvariant_cast<QRect>(v);
+         QRect r = v.value<QRect>();
+
          result += QLatin1String("@Rect(");
          result += QString::number(r.x());
          result += QLatin1Char(' ');
@@ -491,8 +492,10 @@ QString QSettingsPrivate::variantToString(const QVariant &v)
          result += QLatin1Char(')');
          break;
       }
+
       case QVariant::Size: {
-         QSize s = qvariant_cast<QSize>(v);
+         QSize s = v.value<QSize>();
+
          result += QLatin1String("@Size(");
          result += QString::number(s.width());
          result += QLatin1Char(' ');
@@ -501,7 +504,8 @@ QString QSettingsPrivate::variantToString(const QVariant &v)
          break;
       }
       case QVariant::Point: {
-         QPoint p = qvariant_cast<QPoint>(v);
+         QPoint p = v.value<QPoint>();
+
          result += QLatin1String("@Point(");
          result += QString::number(p.x());
          result += QLatin1Char(' ');

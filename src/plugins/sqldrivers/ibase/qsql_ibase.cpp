@@ -631,10 +631,12 @@ static char *fillList(char *buffer, const QList<QVariant> &list, T * = 0)
 {
    for (int i = 0; i < list.size(); ++i) {
       T val;
-      val = qvariant_cast<T>(list.at(i));
+      val = (list.at(i)).value<T>();
+
       memcpy(buffer, &val, sizeof(T));
       buffer += sizeof(T);
    }
+
    return buffer;
 }
 
@@ -644,11 +646,14 @@ char *fillList<float>(char *buffer, const QList<QVariant> &list, float *)
    for (int i = 0; i < list.size(); ++i) {
       double val;
       float val2 = 0;
-      val = qvariant_cast<double>(list.at(i));
+
+      val  = (list.at(i)).value<double>();
       val2 = (float)val;
+
       memcpy(buffer, &val2, sizeof(float));
       buffer += sizeof(float);
    }
+
    return buffer;
 }
 
@@ -1419,7 +1424,7 @@ QSqlRecord QIBaseResult::record() const
 
 QVariant QIBaseResult::handle() const
 {
-   return QVariant(qRegisterMetaType<isc_stmt_handle>("isc_stmt_handle"), &d->stmt);
+   return QVariant::fromValue<isc_stmt_handle>(d->stmt);
 }
 
 /*********************************/
@@ -1798,7 +1803,7 @@ QString QIBaseDriver::formatValue(const QSqlField &field, bool trimStrings) cons
 
 QVariant QIBaseDriver::handle() const
 {
-   return QVariant(qRegisterMetaType<isc_db_handle>("isc_db_handle"), &d->ibase);
+   return QVariant::fromValue<isc_db_handle>(d->ibase);
 }
 
 #if defined(FB_API_VER) && FB_API_VER >= 20

@@ -144,10 +144,7 @@ class Q_NETWORK_EXPORT QNetworkSession : public QObject
    QNetworkSessionPrivate *d;
 };
 
-Q_DECLARE_METATYPE(QSharedPointer<QNetworkSession>)
-Q_DECLARE_METATYPE(QNetworkSession::State)
-Q_DECLARE_METATYPE(QNetworkSession::SessionError)
-Q_DECLARE_METATYPE(QNetworkSession::UsagePolicies)
+CS_DECLARE_METATYPE(QNetworkSession)
 
 #endif // QT_NO_BEARERMANAGEMENT
 

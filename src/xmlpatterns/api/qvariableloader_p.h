@@ -31,9 +31,8 @@
 #include <qdynamiccontext_p.h>
 #include <qexternalvariableloader_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class VariableLoader : public ExternalVariableLoader
 {
  public:
@@ -74,9 +73,6 @@ class VariableLoader : public ExternalVariableLoader
 };
 }
 
-QT_END_NAMESPACE
-
-Q_DECLARE_METATYPE(QIODevice *)
-Q_DECLARE_METATYPE(QXmlQuery)
+CS_DECLARE_METATYPE(QXmlQuery)
 
 #endif

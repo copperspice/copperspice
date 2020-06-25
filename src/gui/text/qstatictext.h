@@ -24,14 +24,11 @@
 #ifndef QSTATICTEXT_H
 #define QSTATICTEXT_H
 
-#include <QtCore/qsize.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qmetatype.h>
-#include <QtGui/qtransform.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qtextoption.h>
-
-
+#include <qsize.h>
+#include <qstring.h>
+#include <qtransform.h>
+#include <qfont.h>
+#include <qtextoption.h>
 
 class QStaticTextPrivate;
 

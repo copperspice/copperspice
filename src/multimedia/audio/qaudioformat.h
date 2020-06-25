@@ -75,6 +75,7 @@ class Q_MULTIMEDIA_EXPORT QAudioFormat
    qint64 durationForFrames(qint32 frameCount) const;
 
    int bytesPerFrame() const;
+
  private:
    QSharedDataPointer<QAudioFormatPrivate> d;
 };
@@ -82,9 +83,5 @@ class Q_MULTIMEDIA_EXPORT QAudioFormat
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, const QAudioFormat &);
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QAudioFormat::SampleType);
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QAudioFormat::Endian);
-
-Q_DECLARE_METATYPE(QAudioFormat)
-Q_DECLARE_METATYPE(QAudioFormat::SampleType)
-Q_DECLARE_METATYPE(QAudioFormat::Endian)
 
 #endif

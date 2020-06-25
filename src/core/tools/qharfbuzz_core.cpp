@@ -335,6 +335,8 @@ static hb_bool_t cs_decompose(hb_unicode_funcs_t *, hb_codepoint_t ab, hb_codepo
    return true;
 }
 
+/* not used right now
+
 static unsigned int cs_decompose_compatibility(hb_unicode_funcs_t *, hb_codepoint_t u,
    hb_codepoint_t *decomposed, void *)
 {
@@ -349,6 +351,8 @@ static unsigned int cs_decompose_compatibility(hb_unicode_funcs_t *, hb_codepoin
 
    return outlen;
 }
+
+*/
 
 struct cs_hb_unicode_funcs_t {
 

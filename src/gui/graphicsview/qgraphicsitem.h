@@ -505,9 +505,6 @@ class Q_GUI_EXPORT QGraphicsItem
    friend bool qt_closestItemFirst(const QGraphicsItem *, const QGraphicsItem *);
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsItem::GraphicsItemFlags)
-CS_DECLARE_INTERFACE(QGraphicsItem, "com.copperspice.QGraphicsItem")
-
 inline void QGraphicsItem::setPos(qreal ax, qreal ay)
 {
    setPos(QPointF(ax, ay));
@@ -1225,9 +1222,11 @@ Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemChange c
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlag flag);
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags);
 
-Q_DECLARE_METATYPE(QGraphicsItem *)
+Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsItem::GraphicsItemFlags)
+CS_DECLARE_INTERFACE(QGraphicsItem, "com.copperspice.QGraphicsItem")
+
+CS_DECLARE_METATYPE(QGraphicsItem)
 
 #endif // QT_NO_GRAPHICSVIEW
-
 
 #endif

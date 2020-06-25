@@ -126,7 +126,7 @@ Q_GUI_EXPORT int qt_defaultDpiX()
       return 96;
    }
 
-   if (! qt_is_gui_used) {
+   if (! qApp->cs_isRealGuiApp()) {
       return 75;
    }
 
@@ -144,7 +144,7 @@ Q_GUI_EXPORT int qt_defaultDpiY()
       return 96;
    }
 
-   if (! qt_is_gui_used) {
+   if (! qApp->cs_isRealGuiApp()) {
       return 75;
    }
 

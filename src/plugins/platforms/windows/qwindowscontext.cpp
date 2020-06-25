@@ -244,17 +244,20 @@ QWindowsContextPrivate::QWindowsContextPrivate()
 
    m_displayContext = GetDC(0);
    m_defaultDPI = GetDeviceCaps(m_displayContext, LOGPIXELSY);
+
    if (useRTL_Extensions(ver)) {
       m_systemInfo |= QWindowsContext::SI_RTL_Extensions;
       m_keyMapper.setUseRTLExtensions(true);
    }
+
    if (FAILED(m_oleInitializeResult)) {
       qWarning() << "QWindowsContext: OleInitialize() failed: "
          << QWindowsContext::comErrorString(m_oleInitializeResult);
    }
 }
 
-QWindowsContext::QWindowsContext() : d(new QWindowsContextPrivate)
+QWindowsContext::QWindowsContext()
+   : d(new QWindowsContextPrivate)
 {
    m_instance = this;
 }

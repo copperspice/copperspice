@@ -86,9 +86,11 @@ struct QWindowsIntegrationPrivate {
 
 #ifndef QT_NO_CLIPBOARD
    QWindowsClipboard m_clipboard;
+
 #ifndef QT_NO_DRAGANDDROP
    QWindowsDrag m_drag;
 #endif
+
 #endif
 
 #ifndef QT_NO_OPENGL
@@ -111,7 +113,7 @@ bool parseIntOption(const QString &parameter, const QLatin1String &option,
 {
    const int valueLength = parameter.size() - option.size() - 1;
 
-   if (valueLength < 1 || !parameter.startsWith(option) || parameter.at(option.size()) != '=') {
+   if (valueLength < 1 || ! parameter.startsWith(option) || parameter.at(option.size()) != '=') {
       return false;
    }
 
@@ -154,6 +156,7 @@ static inline unsigned parseOptions(const QStringList &paramList,
          } else if (param.endsWith(QLatin1String("none"))) {
             options |= QWindowsIntegration::NoNativeDialogs;
          }
+
       } else if (param == QLatin1String("gl=gdi")) {
          options |= QWindowsIntegration::DisableArb;
 
@@ -172,7 +175,7 @@ static inline unsigned parseOptions(const QStringList &paramList,
 }
 
 QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramList)
-   : m_options(0), m_fontDatabase(0)
+   : m_options(0), m_fontDatabase(nullptr)
 {
    static bool dpiAwarenessSet = false;
    int tabletAbsoluteRange = -1;
@@ -204,14 +207,15 @@ QWindowsIntegrationPrivate::~QWindowsIntegrationPrivate()
 
 QWindowsIntegration *QWindowsIntegration::m_instance = nullptr;
 
-QWindowsIntegration::QWindowsIntegration(const QStringList &paramList) :
-   d(new QWindowsIntegrationPrivate(paramList))
+QWindowsIntegration::QWindowsIntegration(const QStringList &paramList)
+   : d(new QWindowsIntegrationPrivate(paramList))
 {
    m_instance = this;
 
 #ifndef QT_NO_CLIPBOARD
    d->m_clipboard.registerViewer();
 #endif
+
    d->m_context.screenManager().handleScreenChanges();
 }
 
@@ -280,7 +284,7 @@ QPlatformWindow *QWindowsIntegration::createPlatformWindow(QWindow *window) cons
    const QVariant customMarginsV = window->property("_q_windowsCustomMargins");
 
    if (customMarginsV.isValid()) {
-      requested.customMargins = qvariant_cast<QMargins>(customMarginsV);
+      requested.customMargins = customMarginsV.value<QMargins>();
    }
 
    QWindowsWindowData obtained = QWindowsWindowData::create(window, requested, window->title());
@@ -525,13 +529,15 @@ QPlatformClipboard *QWindowsIntegration::clipboard() const
 {
    return &d->m_clipboard;
 }
-#  ifndef QT_NO_DRAGANDDROP
+
+#ifndef QT_NO_DRAGANDDROP
 QPlatformDrag *QWindowsIntegration::drag() const
 {
    return &d->m_drag;
 }
-#  endif // !QT_NO_DRAGANDDROP
-#endif // !QT_NO_CLIPBOARD
+#endif
+
+#endif
 
 QPlatformInputContext *QWindowsIntegration::inputContext() const
 {

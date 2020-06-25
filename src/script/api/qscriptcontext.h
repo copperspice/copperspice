@@ -89,5 +89,6 @@ class Q_SCRIPT_EXPORT QScriptContext
    Q_DISABLE_COPY(QScriptContext)
 };
 
+CS_DECLARE_METATYPE(QScriptContext)
 
 #endif

@@ -1147,12 +1147,12 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
    }
 
    // handle data: URLs
-   if (r.isNull() && name.scheme().compare("data", Qt::CaseInsensitive) == 0) {
+   if (! r.isValid() && name.scheme().compare("data", Qt::CaseInsensitive) == 0) {
       r = qDecodeDataUrl(name).second;
    }
 
    // if resource was not loaded try to load it here
-   if (! qobject_cast<QTextDocument *>(p) && r.isNull()) {
+   if (! qobject_cast<QTextDocument *>(p) && ! r.isValid()) {
       QUrl resourceUrl = name;
 
       if (name.isRelative()) {
@@ -1186,15 +1186,18 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
       }
    }
 
-   if (!r.isNull()) {
+   if (r.isValid()) {
       if (type == ImageResource && r.type() == QVariant::ByteArray) {
+
          if (qApp->thread() != QThread::currentThread()) {
             // must use images in non-GUI threads
             QImage image;
             image.loadFromData(r.toByteArray());
+
             if (!image.isNull()) {
                r = image;
             }
+
          } else {
             QPixmap pm;
             pm.loadFromData(r.toByteArray());
@@ -1203,8 +1206,10 @@ QVariant QTextDocument::loadResource(int type, const QUrl &name)
             }
          }
       }
+
       d->cachedResources.insert(name, r);
    }
+
    return r;
 }
 
@@ -2072,7 +2077,7 @@ extern bool qHasPixmapTexture(const QBrush &brush);
 QString QTextHtmlExporter::findUrlForImage(const QTextDocument *doc, qint64 cacheKey, bool isPixmap)
 {
    QString url;
-   if (!doc) {
+   if (! doc) {
       return url;
    }
 
@@ -2083,17 +2088,18 @@ QString QTextHtmlExporter::findUrlForImage(const QTextDocument *doc, qint64 cach
    if (doc && doc->docHandle()) {
       QTextDocumentPrivate *priv = doc->docHandle();
       QMap<QUrl, QVariant>::const_iterator it = priv->cachedResources.constBegin();
-      for (; it != priv->cachedResources.constEnd(); ++it) {
 
+      for (; it != priv->cachedResources.constEnd(); ++it) {
          const QVariant &v = it.value();
-         if (v.type() == QVariant::Image && !isPixmap) {
-            if (qvariant_cast<QImage>(v).cacheKey() == cacheKey) {
+
+         if (v.type() == QVariant::Image && ! isPixmap) {
+            if (v.value<QImage>().cacheKey() == cacheKey) {
                break;
             }
          }
 
          if (v.type() == QVariant::Pixmap && isPixmap) {
-            if (qvariant_cast<QPixmap>(v).cacheKey() == cacheKey) {
+            if (v.value<QPixmap>().cacheKey() == cacheKey) {
                break;
             }
          }

@@ -152,8 +152,4 @@ class Q_MULTIMEDIA_EXPORT QImageEncoderSettings
    QSharedDataPointer<QImageEncoderSettingsPrivate> d;
 };
 
-Q_DECLARE_METATYPE(QAudioEncoderSettings)
-Q_DECLARE_METATYPE(QVideoEncoderSettings)
-Q_DECLARE_METATYPE(QImageEncoderSettings)
-
 #endif

@@ -44,7 +44,6 @@ String WebContext::applicationCacheDirectory()
 
 void WebContext::platformInitializeWebProcess(WebProcessCreationParameters&)
 {
-    qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
 }
 
 void WebContext::platformInvalidateContext()

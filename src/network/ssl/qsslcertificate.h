@@ -28,7 +28,6 @@
 #include <qcontainerfwd.h>
 #include <qcryptographichash.h>
 #include <qdatetime.h>
-#include <qmetatype.h>
 #include <qnamespace.h>
 #include <qregularexpression.h>
 #include <qsharedpointer.h>
@@ -137,8 +136,6 @@ private:
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCertificate &certificate);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QSslCertificate::SubjectInfo info);
-
-Q_DECLARE_METATYPE(QSslCertificate)
 
 #endif
 

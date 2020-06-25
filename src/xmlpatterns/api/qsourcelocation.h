@@ -24,8 +24,7 @@
 #ifndef QSOURCELOCATION_H
 #define QSOURCELOCATION_H
 
-#include <QMetaType>
-#include <QUrl>
+#include <qurl.h>
 
 class QSourceLocationPrivate;
 
@@ -61,8 +60,5 @@ class Q_XMLPATTERNS_EXPORT QSourceLocation
 
 Q_XMLPATTERNS_EXPORT uint qHash(const QSourceLocation &location);
 Q_XMLPATTERNS_EXPORT QDebug operator<<(QDebug debug, const QSourceLocation &sourceLocation);
-
-Q_DECLARE_METATYPE(QSourceLocation) /* This macro must appear after QT_END_NAMESPACE. */
-
 
 #endif

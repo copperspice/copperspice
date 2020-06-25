@@ -185,10 +185,11 @@ class QTextTableData : public QTextFrameData
 
    inline QFixed paddingProperty(const QTextFormat &format, QTextFormat::Property property) const {
       QVariant v = format.property(property);
-      if (v.isNull()) {
+
+      if (! v.isValid()) {
          return cellPadding;
       } else {
-         Q_ASSERT(v.userType() == QVariant::Double || v.userType() == QMetaType::Float);
+         Q_ASSERT(v.userType() == QVariant::Double || v.userType() == QVariant::Float);
          return QFixed::fromReal(v.toReal() * deviceScale);
       }
    }

@@ -25,10 +25,10 @@
 #define QMULTIMEDIA_H
 
 #include <qpair.h>
-#include <qmetatype.h>
 #include <qstring.h>
 
 namespace QMultimedia {
+
 enum SupportEstimate {
    NotSupported,
    MaybeSupported,
@@ -57,11 +57,7 @@ enum AvailabilityStatus {
    Busy,
    ResourceError
 };
-}
 
-Q_DECLARE_METATYPE(QMultimedia::AvailabilityStatus)
-Q_DECLARE_METATYPE(QMultimedia::SupportEstimate)
-Q_DECLARE_METATYPE(QMultimedia::EncodingMode)
-Q_DECLARE_METATYPE(QMultimedia::EncodingQuality)
+} // namespace
 
 #endif

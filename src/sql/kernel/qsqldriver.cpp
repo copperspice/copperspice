@@ -259,7 +259,7 @@ QString QSqlDriver::formatValue(const QSqlField &field, bool trimStrings) const
    const QString nullTxt("NULL");
 
    QString r;
-   if (field.isNull()) {
+   if (! field.isValid()) {
       r = nullTxt;
 
    } else {

@@ -129,7 +129,7 @@ void AVFMediaPlayerMetaDataControl::updateTags()
          if (! value.isEmpty()) {
             m_tags.insert(key, value);
 
-            if (value != oldTags.value(key)) {
+            if (value != oldTags.value(key).toString()) {
                changed = true;
                metaDataChanged(key, value);
             }

@@ -76,6 +76,4 @@ class Q_GUI_EXPORT QInputDeviceManagerPrivate
    QInputDeviceManager *q_ptr;
 };
 
-Q_DECLARE_METATYPE(QInputDeviceManager::DeviceType)
-
 #endif

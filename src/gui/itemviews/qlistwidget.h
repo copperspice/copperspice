@@ -75,7 +75,7 @@ class Q_GUI_EXPORT QListWidgetItem
    inline void setText(const QString &text);
 
    inline QIcon icon() const {
-      return qvariant_cast<QIcon>(data(Qt::DecorationRole));
+      return data(Qt::DecorationRole).value<QIcon>();
    }
    inline void setIcon(const QIcon &icon);
 
@@ -99,8 +99,9 @@ class Q_GUI_EXPORT QListWidgetItem
 #endif
 
    inline QFont font() const {
-      return qvariant_cast<QFont>(data(Qt::FontRole));
+      return data(Qt::FontRole).value<QFont>();
    }
+
    inline void setFont(const QFont &font);
 
    inline int textAlignment() const {
@@ -111,29 +112,33 @@ class Q_GUI_EXPORT QListWidgetItem
    }
 
    inline QColor backgroundColor() const {
-      return qvariant_cast<QColor>(data(Qt::BackgroundColorRole));
+      return data(Qt::BackgroundColorRole).value<QColor>();
    }
+
    virtual void setBackgroundColor(const QColor &color) {
       setData(Qt::BackgroundColorRole, color);
    }
 
    inline QBrush background() const {
-      return qvariant_cast<QBrush>(data(Qt::BackgroundRole));
+      return data(Qt::BackgroundRole).value<QBrush>();
    }
+
    inline void setBackground(const QBrush &brush) {
       setData(Qt::BackgroundRole, brush);
    }
 
    inline QColor textColor() const {
-      return qvariant_cast<QColor>(data(Qt::TextColorRole));
+      return data(Qt::TextColorRole).value<QColor>();
    }
+
    inline void setTextColor(const QColor &color) {
       setData(Qt::TextColorRole, color);
    }
 
    inline QBrush foreground() const {
-      return qvariant_cast<QBrush>(data(Qt::ForegroundRole));
+      return data(Qt::ForegroundRole).value<QBrush>();
    }
+
    inline void setForeground(const QBrush &brush) {
       setData(Qt::ForegroundRole, brush);
    }
@@ -146,8 +151,9 @@ class Q_GUI_EXPORT QListWidgetItem
    }
 
    inline QSize sizeHint() const {
-      return qvariant_cast<QSize>(data(Qt::SizeHintRole));
+      return data(Qt::SizeHintRole).value<QSize>();
    }
+
    inline void setSizeHint(const QSize &size) {
       setData(Qt::SizeHintRole, size);
    }

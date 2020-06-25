@@ -66,7 +66,7 @@ class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
 };
 
 CS_DECLARE_INTERFACE(QGraphicsLayout, "com.copperspice.QGraphicsLayout")
-
+CS_DECLARE_METATYPE(QGraphicsLayout)
 
 #endif
 

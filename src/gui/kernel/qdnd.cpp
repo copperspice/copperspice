@@ -218,18 +218,22 @@ QStringList QInternalMimeData::formats() const
 QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type type) const
 {
    QVariant data = retrieveData_sys(mimeType, type);
+
    if (mimeType == QLatin1String("application/x-qt-image")) {
-      if (data.isNull() || (data.type() == QVariant::ByteArray && data.toByteArray().isEmpty())) {
+      if (! data.isValid() || (data.type() == QVariant::ByteArray && data.toByteArray().isEmpty())) {
          // try to find an image
          QStringList imageFormats = imageReadMimeFormats();
+
          for (int i = 0; i < imageFormats.size(); ++i) {
             data = retrieveData_sys(imageFormats.at(i), type);
-            if (data.isNull() || (data.type() == QVariant::ByteArray && data.toByteArray().isEmpty())) {
+
+            if (! data.isValid() || (data.type() == QVariant::ByteArray && data.toByteArray().isEmpty())) {
                continue;
             }
             break;
          }
       }
+
       // we wanted some image type, but all we got was a byte array. Convert it to an image.
       if (data.type() == QVariant::ByteArray
          && (type == QVariant::Image || type == QVariant::Pixmap || type == QVariant::Bitmap)) {
@@ -315,25 +319,29 @@ QByteArray QInternalMimeData::renderDataHelper(const QString &mimeType, const QM
          data[2]: blue
          data[3]: opacity
       */
+
       ba.resize(8);
       ushort *colBuf = (ushort *)ba.data();
-      QColor c = qvariant_cast<QColor>(data->colorData());
+      QColor c = data->colorData().value<QColor>();
+
       colBuf[0] = ushort(c.redF() * 0xFFFF);
       colBuf[1] = ushort(c.greenF() * 0xFFFF);
       colBuf[2] = ushort(c.blueF() * 0xFFFF);
       colBuf[3] = ushort(c.alphaF() * 0xFFFF);
+
    } else {
       ba = data->data(mimeType);
       if (ba.isEmpty()) {
          if (mimeType == QLatin1String("application/x-qt-image") && data->hasImage()) {
-            QImage image = qvariant_cast<QImage>(data->imageData());
+            QImage image = data->imageData().value<QImage>();
+
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
             // would there not be PNG ??
             image.save(&buf, "PNG");
 
          } else if (mimeType.startsWith(QLatin1String("image/")) && data->hasImage()) {
-            QImage image = qvariant_cast<QImage>(data->imageData());
+            QImage image = data->imageData().value<QImage>();
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
             image.save(&buf, mimeType.mid(mimeType.indexOf('/') + 1).toLatin1().toUpper().constData());

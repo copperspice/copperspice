@@ -22,12 +22,17 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptvalue.h"
 
-#include "qscriptvalue_p.h"
-#include "qscriptengine.h"
-#include "qscriptengine_p.h"
-#include "qscriptstring_p.h"
+#include <qscriptvalue.h>
+
+#include <qvariant.h>
+#include <qvarlengtharray.h>
+#include <qnumeric.h>
+#include <qscriptengine.h>
+
+#include <qscriptvalue_p.h>
+#include <qscriptengine_p.h>
+#include <qscriptstring_p.h>
 
 #include "JSGlobalObject.h"
 #include "JSImmediate.h"
@@ -37,10 +42,6 @@
 #include "Identifier.h"
 #include "Operations.h"
 #include "Arguments.h"
-
-#include <qvariant.h>
-#include <qvarlengtharray.h>
-#include <qnumeric.h>
 
 void QScriptValuePrivate::detachFromEngine()
 {
@@ -1294,8 +1295,7 @@ QScriptValue::PropertyFlags QScriptValue::propertyFlags(const QScriptString &nam
    return d->propertyFlags(name.d_ptr->identifier, mode);
 }
 
-QScriptValue QScriptValue::call(const QScriptValue &thisObject,
-   const QScriptValueList &args)
+QScriptValue QScriptValue::call(const QScriptValue &thisObject, const QList<QScriptValue> &args)
 {
    Q_D(const QScriptValue);
 
@@ -1355,8 +1355,7 @@ QScriptValue QScriptValue::call(const QScriptValue &thisObject,
    return d->engine->scriptValueFromJSCValue(result);
 }
 
-QScriptValue QScriptValue::call(const QScriptValue &thisObject,
-   const QScriptValue &arguments)
+QScriptValue QScriptValue::call(const QScriptValue &thisObject, const QScriptValue &arguments)
 {
    Q_D(QScriptValue);
 
@@ -1436,7 +1435,7 @@ QScriptValue QScriptValue::call(const QScriptValue &thisObject,
 
   \sa call(), QScriptEngine::newObject()
 */
-QScriptValue QScriptValue::construct(const QScriptValueList &args)
+QScriptValue QScriptValue::construct(const QList<QScriptValue> &args)
 {
    Q_D(const QScriptValue);
 
@@ -1855,4 +1854,33 @@ void QScriptValue::setScriptClass(QScriptClass *scriptClass)
 qint64 QScriptValue::objectId() const
 {
    return d_ptr ? d_ptr->objectId() : -1;
+}
+
+bool QScriptValue::operator==(const QScriptValue &other) const
+{
+   bool retval = true;
+
+   if (this->d_ptr == other.d_ptr) {
+      retval = true;
+
+   } else if (this->d_ptr->type != other.d_ptr->type) {
+      retval = false;
+
+   } else if (this->d_ptr->type == QScriptValuePrivate::JavaScriptCore) {
+      if (this->d_ptr->jscValue != other.d_ptr->jscValue) {
+         retval = false;
+      }
+
+   } else if (this->d_ptr->type == QScriptValuePrivate::Number) {
+      if (this->d_ptr->numberValue != other.d_ptr->numberValue) {
+         retval = false;
+      }
+
+   } else if (this->d_ptr->type == QScriptValuePrivate::String) {
+      if (this->d_ptr->stringValue != other.d_ptr->stringValue) {
+         retval = false;
+      }
+   }
+
+   return retval;
 }

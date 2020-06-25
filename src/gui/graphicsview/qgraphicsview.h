@@ -24,14 +24,11 @@
 #ifndef QGRAPHICSVIEW_H
 #define QGRAPHICSVIEW_H
 
-#include <QtCore/qmetatype.h>
-#include <QtGui/qpainter.h>
+#include <qpainter.h>
 #include <qscrollarea.h>
 #include <qgraphicsscene.h>
 
-
-
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsItem;
 class QPainterPath;

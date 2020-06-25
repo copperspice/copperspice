@@ -165,6 +165,7 @@ inline void QTextOption::setTabStop(qreal atabStop)
    tab = atabStop;
 }
 
-Q_DECLARE_METATYPE( QTextOption::Tab )
+CS_DECLARE_METATYPE(QTextOption)
+CS_DECLARE_METATYPE(QTextOption::Tab)
 
 #endif

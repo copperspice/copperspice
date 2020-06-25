@@ -99,7 +99,7 @@ Color DragData::asColor() const
         return Color();
     }
 
-    return qvariant_cast<QColor>(m_platformDragData->colorData());
+    return (m_platformDragData->colorData()).value<QColor>();
 }
 
 bool DragData::containsCompatibleContent() const

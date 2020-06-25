@@ -400,12 +400,12 @@ inline QMarginsF operator/(const QMarginsF &lhs, qreal divisor)
                      lhs.right() / divisor, lhs.bottom() / divisor);
 }
 
- inline QMarginsF &QMarginsF::operator+=(const QMarginsF &margins)
+inline QMarginsF &QMarginsF::operator+=(const QMarginsF &margins)
 {
     return *this = *this + margins;
 }
 
- inline QMarginsF &QMarginsF::operator-=(const QMarginsF &margins)
+inline QMarginsF &QMarginsF::operator-=(const QMarginsF &margins)
 {
     return *this = *this - margins;
 }
@@ -419,7 +419,7 @@ inline QMarginsF operator/(const QMarginsF &lhs, qreal divisor)
     return *this;
 }
 
- inline QMarginsF &QMarginsF::operator-=(qreal subtrahend)
+inline QMarginsF &QMarginsF::operator-=(qreal subtrahend)
 {
     m_left -= subtrahend;
     m_top -= subtrahend;
@@ -428,12 +428,12 @@ inline QMarginsF operator/(const QMarginsF &lhs, qreal divisor)
     return *this;
 }
 
- inline QMarginsF &QMarginsF::operator*=(qreal factor)
+inline QMarginsF &QMarginsF::operator*=(qreal factor)
 {
     return *this = *this * factor;
 }
 
- inline QMarginsF &QMarginsF::operator/=(qreal divisor)
+inline QMarginsF &QMarginsF::operator/=(qreal divisor)
 {
     return *this = *this / divisor;
 }
@@ -452,5 +452,9 @@ inline QMargins QMarginsF::toMargins() const
 {
     return QMargins(qRound(m_left), qRound(m_top), qRound(m_right), qRound(m_bottom));
 }
+
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QMarginsF &);
+
+CS_DECLARE_METATYPE(QMarginsF)
+
 #endif

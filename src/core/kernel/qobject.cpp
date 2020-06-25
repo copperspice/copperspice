@@ -1145,7 +1145,6 @@ bool QObject::setProperty(const QString8 &name, const QVariant &value)
                   csPrintable(name));
    }
 
-   //
    bool retval = p.write(this, value);
 
    if (! retval) {

@@ -64,10 +64,6 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    ~QPolygon()
    { }
 
-   void swap(QPolygon &other) {
-      QVector<QPoint>::swap(other);
-   }
-
    QPolygon &operator=(const QPolygon &other) {
       QVector<QPoint>::operator=(other);
       return *this;
@@ -76,6 +72,10 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    QPolygon &operator=(QPolygon &&other)  {
       swap(other);
       return *this;
+   }
+
+   void swap(QPolygon &other) {
+      QVector<QPoint>::swap(other);
    }
 
    operator QVariant() const;
@@ -164,7 +164,7 @@ class Q_GUI_EXPORT QPolygonF : public QVector<QPointF>
    { }
 
    QPolygonF(const QRectF &rectangle);
-   QPolygonF(const QPolygon &polygon);      // not in QPolygon
+   QPolygonF(const QPolygon &polygon);   // not a copy constructor
 
    ~QPolygonF()
    { }

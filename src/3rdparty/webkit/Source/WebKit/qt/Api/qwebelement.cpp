@@ -730,7 +730,8 @@ QVariant QWebElement::evaluateJavaScript(const QString& scriptSource)
         return QVariant();
 
     int distance = 0;
-    return JSC::Bindings::convertValueToQVariant(state, result, QMetaType::Void, &distance);
+    return JSC::Bindings::convertValueToQVariant(state, result, QVariant::Void, &distance);
+
 #elif USE(V8)
     notImplemented();
     return QVariant();

@@ -26,11 +26,11 @@
 
 #include <qabstractstate.h>
 #include <qlist.h>
-#include <qsignaltransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
 class QAbstractTransition;
+class QSignalTransition;
 class QStatePrivate;
 
 class Q_CORE_EXPORT QState : public QAbstractState
@@ -68,7 +68,6 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    void addTransition(QAbstractTransition *transition);
 
-   // CopperSpice - second parameter changed from a string to a method pointer
    template<class SignalClass, class ...SignalArgs>
    QSignalTransition *addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QAbstractState *target);
 
@@ -116,32 +115,6 @@ class Q_CORE_EXPORT QState : public QAbstractState
    Q_DECLARE_PRIVATE(QState)
 };
 
-template<class SignalClass, class ...SignalArgs>
-QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...),
-   QAbstractState *target)
-{
-   if (! sender) {
-      qWarning("QState::addTransition: No sender specified");
-      return nullptr;
-   }
-
-   if (! signal) {
-      qWarning("QState::addTransition: No signal specified");
-      return nullptr;
-   }
-
-   if (! target) {
-      qWarning("QState::addTransition: No target specified");
-      return nullptr;
-   }
-
-   QSignalTransition *trans = new QSignalTransition(sender, signal);
-   trans->setTargetState(target);
-   addTransition(trans);
-
-   return trans;
-}
-
-#endif //QT_NO_STATEMACHINE
+#endif // QT_NO_STATEMACHINE
 
 #endif

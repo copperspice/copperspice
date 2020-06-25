@@ -35,11 +35,10 @@
 #include <qsharedpointer.h>
 #include <qimage.h>
 #include <qtransform.h>
+#include <qvariant.h>
 
 class QImageWriter;
 class QImageReader;
-class QColor;
-class QVariant;
 class QPlatformPixmap;
 
 enum QPlatformPixmap_ClassId : int;
@@ -211,5 +210,17 @@ inline bool QPixmap::loadFromData(const QByteArray &buf, const char *format, Qt:
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPixmap &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPixmap &);
+
+template<>
+inline bool CustomType_T<QPixmap>::compare(const CustomType &other) const {
+
+   auto ptr = dynamic_cast<const CustomType_T<QPixmap>*>(&other);
+
+   if (ptr != nullptr) {
+      return m_value.cacheKey() == (ptr->m_value).cacheKey();
+   }
+
+   return false;
+}
 
 #endif

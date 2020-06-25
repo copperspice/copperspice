@@ -44,8 +44,8 @@ QNetworkReply *URILoader::createRequest(Operation op, const QNetworkRequest &req
 
    const QVariant variant(m_variableLoader->valueFor(m_namePool->allocateQName(QString(), name, QString())));
 
-   if (!variant.isNull() && variant.userType() == qMetaTypeId<QIODevice *>()) {
-      return new QIODeviceDelegate(qvariant_cast<QIODevice *>(variant));
+   if (variant.isValid() && variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
+      return new QIODeviceDelegate(variant.value<QIODevice *>());
 
    } else {
       /* If we are entering this code path, the variable URI identified a variable

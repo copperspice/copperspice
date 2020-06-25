@@ -47,7 +47,6 @@
 #include "qdatetime.h"
 #include "qdebug.h"
 #include "qmetaobject.h"
-#include "qmetatype.h"
 #include "qobject.h"
 #include "qstringlist.h"
 #include "qt_instance.h"
@@ -59,10 +58,6 @@
 #include <runtime_array.h>
 #include <runtime_object.h>
 #include <qstring16.h>
-
-// QtScript has these
-Q_DECLARE_METATYPE(QObjectList);
-Q_DECLARE_METATYPE(QVariant);
 
 using namespace WebCore;
 
@@ -194,7 +189,7 @@ static JSRealType valueRealType(ExecState* exec, JSValue val)
     return String; // I don't know.
 }
 
-QVariant convertValueToQVariant(ExecState*, JSValue, QMetaType::Type, int*, HashSet<JSObject*>*, int);
+QVariant convertValueToQVariant(ExecState*, JSValue, QVariant::Type, int*, HashSet<JSObject*>*, int);
 
 static QVariantMap convertValueToQVariantMap(ExecState* exec, JSObject* object, HashSet<JSObject*>* visitedObjects, int recursionLimit)
 {
@@ -213,7 +208,7 @@ static QVariantMap convertValueToQVariantMap(ExecState* exec, JSObject* object, 
             if (exec->hadException())
                 exec->clearException();
             else {
-                QVariant v = convertValueToQVariant(exec, val, QMetaType::Void, &objdist, visitedObjects, recursionLimit);
+                QVariant v = convertValueToQVariant(exec, val, QVariant::Void, &objdist, visitedObjects, recursionLimit);
                 if (objdist >= 0) {
                     UString ustring = (*it).ustring();
                     QString id = QString((const QChar*)ustring.impl()->characters(), ustring.length());
@@ -226,7 +221,7 @@ static QVariantMap convertValueToQVariantMap(ExecState* exec, JSObject* object, 
     return result;
 }
 
-QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type hint, int *distance,
+QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type hint, int *distance,
                   HashSet<JSObject*>* visitedObjects, int recursionLimit)
 {
     --recursionLimit;
@@ -244,7 +239,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
     }
 
     // check magic pointer values before dereferencing value
-    if (value == jsNaN() || (value == jsUndefined() && hint != QMetaType::QString && hint != (QMetaType::Type) qMetaTypeId<QVariant>())) {
+    if (value == jsNaN() || (value == jsUndefined() && hint != QVariant::String && hint != QVariant::Variant)) {
 
         if (distance) {
             *distance = -1;
@@ -256,52 +251,52 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
     JSLock lock(SilenceAssertionsOnly);
     JSRealType type = valueRealType(exec, value);
 
-    if (hint == QMetaType::Void) {
+    if (hint == QVariant::Void) {
         switch(type) {
             case Number:
-                hint = QMetaType::Double;
+                hint = QVariant::Double;
                 break;
 
             case Boolean:
-                hint = QMetaType::Bool;
+                hint = QVariant::Bool;
                 break;
 
             case String:
             default:
-                hint = QMetaType::QString;
+                hint = QVariant::String;
                 break;
 
             case Date:
-                hint = QMetaType::QDateTime;
+                hint = QVariant::DateTime;
                 break;
 
             case RegExp:
-                hint = QMetaType::QRegularExpression;
+                hint = QVariant::RegularExpression;
                 break;
 
             case Object:
                 if (object->inherits(&NumberObject::s_info))
-                    hint = QMetaType::Double;
+                    hint = QVariant::Double;
 
                 else if (object->inherits(&BooleanObject::s_info))
-                    hint = QMetaType::Bool;
+                    hint = QVariant::Bool;
 
                 else
-                    hint = QMetaType::QVariantMap;
+                    hint = QVariant::Map;
 
                 break;
 
             case QObj:
-                hint = QMetaType::QObjectStar;
+                hint = QVariant::ObjectStar;
                 break;
 
             case JSByteArray:
-                hint = QMetaType::QByteArray;
+                hint = QVariant::ByteArray;
                 break;
 
             case Array:
             case RTArray:
-                hint = QMetaType::QVariantList;
+                hint = QVariant::List;
                 break;
         }
     }
@@ -309,19 +304,22 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
     qConvDebug() << "convertValueToQVariant: jstype is " << type << ", hint is" << hint;
 
     if (value == jsNull()
-        && hint != QMetaType::QObjectStar
-        && hint != QMetaType::VoidStar
-        && hint != QMetaType::QString
-        && hint != (QMetaType::Type) qMetaTypeId<QVariant>()) {
-        if (distance)
+        && hint != QVariant::ObjectStar
+        && hint != QVariant::VoidStar
+        && hint != QVariant::String
+        && hint != QVariant::Variant) {
+        if (distance) {
             *distance = -1;
+        }
+
         return QVariant();
     }
 
     QVariant ret;
     int dist = -1;
+
     switch (hint) {
-        case QMetaType::Bool:
+        case QVariant::Bool:
             if (type == Object && object->inherits(&BooleanObject::s_info))
                 ret = QVariant(asBooleanObject(value)->internalValue().toBoolean(exec));
             else
@@ -332,40 +330,44 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                 dist = 10;
             break;
 
-        case QMetaType::Int:
-        case QMetaType::UInt:
-        case QMetaType::Long:
-        case QMetaType::ULong:
-        case QMetaType::LongLong:
-        case QMetaType::ULongLong:
-        case QMetaType::Short:
-        case QMetaType::UShort:
-        case QMetaType::Float:
-        case QMetaType::Double:
+        case QVariant::Int:
+        case QVariant::UInt:
+        case QVariant::Long:
+        case QVariant::ULong:
+        case QVariant::LongLong:
+        case QVariant::ULongLong:
+        case QVariant::Short:
+        case QVariant::UShort:
+        case QVariant::Float:
+        case QVariant::Double:
             ret = QVariant(value.toNumber(exec));
-            ret.convert((QVariant::Type)hint);
+            ret.convert(hint);
+
             if (type == Number) {
                 switch (hint) {
-                case QMetaType::Double:
+                case QVariant::Double:
                     dist = 0;
                     break;
-                case QMetaType::Float:
+
+                case QVariant::Float:
                     dist = 1;
                     break;
-                case QMetaType::LongLong:
-                case QMetaType::ULongLong:
+
+                case QVariant::LongLong:
+                case QVariant::ULongLong:
                     dist = 2;
                     break;
-                case QMetaType::Long:
-                case QMetaType::ULong:
+
+                case QVariant::Long:
+                case QVariant::ULong:
                     dist = 3;
                     break;
-                case QMetaType::Int:
-                case QMetaType::UInt:
+                case QVariant::Int:
+                case QVariant::UInt:
                     dist = 4;
                     break;
-                case QMetaType::Short:
-                case QMetaType::UShort:
+                case QVariant::Short:
+                case QVariant::UShort:
                     dist = 5;
                     break;
                     break;
@@ -378,7 +380,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             }
             break;
 
-        case QMetaType::QChar:
+        case QVariant::QChar:
             if (type == Number || type == Boolean) {
                 ret = QVariant(QChar((ushort)value.toNumber(exec)));
                 if (type == Boolean)
@@ -395,7 +397,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             }
             break;
 
-        case QMetaType::QString: {
+        case QVariant::String: {
             if (value.isUndefinedOrNull()) {
                 if (distance)
                     *distance = 1;
@@ -411,7 +413,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             break;
         }
 
-        case QMetaType::QVariantMap:
+        case QVariant::Map:
             if (type == Object || type == Array || type == RTArray) {
                 ret = QVariant(convertValueToQVariantMap(exec, object, visitedObjects, recursionLimit));
                 // Those types can still have perfect matches, e.g. 'bool' if value is a Boolean Object.
@@ -419,7 +421,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             }
             break;
 
-        case QMetaType::QVariantList:
+        case QVariant::List:
             if (type == RTArray) {
                 RuntimeArray* rtarray = static_cast<RuntimeArray*>(object);
 
@@ -429,7 +431,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                 qConvDebug() << "converting a " << len << " length Array";
                 for (int i = 0; i < len; ++i) {
                     JSValue val = rtarray->getConcreteArray()->valueAt(exec, i);
-                    result.append(convertValueToQVariant(exec, val, QMetaType::Void, &objdist, visitedObjects, recursionLimit));
+                    result.append(convertValueToQVariant(exec, val, QVariant::Void, &objdist, visitedObjects, recursionLimit));
                     if (objdist == -1) {
                         qConvDebug() << "Failed converting element at index " << i;
                         break; // Failed converting a list entry, so fail the array
@@ -439,6 +441,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     dist = 5;
                     ret = QVariant(result);
                 }
+
             } else if (type == Array) {
                 JSArray* array = static_cast<JSArray*>(object);
 
@@ -448,7 +451,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                 qConvDebug() << "converting a " << len << " length Array";
                 for (int i = 0; i < len; ++i) {
                     JSValue val = array->get(exec, i);
-                    result.append(convertValueToQVariant(exec, val, QMetaType::Void, &objdist, visitedObjects, recursionLimit));
+                    result.append(convertValueToQVariant(exec, val, QVariant::Void, &objdist, visitedObjects, recursionLimit));
                     if (objdist == -1) {
                         qConvDebug() << "Failed converting element at index " << i;
                         break; // Failed converting a list entry, so fail the array
@@ -458,11 +461,12 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     dist = 5;
                     ret = QVariant(result);
                 }
+
             } else {
                 // Make a single length array
                 int objdist;
                 qConvDebug() << "making a single length variantlist";
-                QVariant var = convertValueToQVariant(exec, value, QMetaType::Void, &objdist, visitedObjects, recursionLimit);
+                QVariant var = convertValueToQVariant(exec, value, QVariant::Void, &objdist, visitedObjects, recursionLimit);
                 if (objdist != -1) {
                     QVariantList result;
                     result << var;
@@ -474,7 +478,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             }
             break;
 
-        case QMetaType::QStringList: {
+        case QVariant::StringList: {
             if (type == RTArray) {
                 RuntimeArray* rtarray = static_cast<RuntimeArray*>(object);
 
@@ -489,6 +493,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                 }
                 dist = 5;
                 ret = QVariant(result);
+
             } else if (type == Array) {
                 JSArray* array = static_cast<JSArray*>(object);
 
@@ -503,6 +508,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                 }
                 dist = 5;
                 ret = QVariant(result);
+
             } else {
                 // Make a single length array
                 UString ustring = value.toString(exec);
@@ -515,7 +521,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             break;
         }
 
-        case QMetaType::QByteArray: {
+        case QVariant::ByteArray: {
             if (type == JSByteArray) {
                 WTF::ByteArray* arr = asByteArray(value)->storage();
                 ret = QVariant(QByteArray(reinterpret_cast<const char*>(arr->data()), arr->length()));
@@ -531,44 +537,50 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             break;
         }
 
-        case QMetaType::QDateTime:
-        case QMetaType::QDate:
-        case QMetaType::QTime:
+        case QVariant::DateTime:
+        case QVariant::Date:
+        case QVariant::Time:
             if (type == Date) {
                 DateInstance* date = static_cast<DateInstance*>(object);
                 GregorianDateTime gdt;
                 msToGregorianDateTime(exec, date->internalNumber(), true, gdt);
-                if (hint == QMetaType::QDateTime) {
+
+                if (hint == QVariant::DateTime) {
                     ret = QDateTime(QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay), QTime(gdt.hour, gdt.minute, gdt.second), Qt::UTC);
                     dist = 0;
-                } else if (hint == QMetaType::QDate) {
+
+                } else if (hint == QVariant::Date) {
                     ret = QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay);
                     dist = 1;
                 } else {
                     ret = QTime(gdt.hour + 1900, gdt.minute, gdt.second);
                     dist = 2;
                 }
+
             } else if (type == Number) {
                 double b = value.toNumber(exec);
                 GregorianDateTime gdt;
                 msToGregorianDateTime(exec, b, true, gdt);
-                if (hint == QMetaType::QDateTime) {
+
+                if (hint == QVariant::DateTime) {
                     ret = QDateTime(QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay), QTime(gdt.hour, gdt.minute, gdt.second), Qt::UTC);
                     dist = 6;
-                } else if (hint == QMetaType::QDate) {
+                } else if (hint == QVariant::Date) {
                     ret = QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay);
                     dist = 8;
                 } else {
                     ret = QTime(gdt.hour, gdt.minute, gdt.second);
                     dist = 10;
                 }
+
 #ifndef QT_NO_DATESTRING
             } else if (type == String) {
                 UString ustring = value.toString(exec);
                 QString qstring = QString((const QChar*)ustring.impl()->characters(), ustring.length());
 
-                if (hint == QMetaType::QDateTime) {
+                if (hint == QVariant::DateTime) {
                     QDateTime dt = QDateTime::fromString(qstring, Qt::ISODate);
+
                     if (!dt.isValid())
                         dt = QDateTime::fromString(qstring, Qt::TextDate);
                     if (!dt.isValid())
@@ -579,8 +591,10 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                         ret = dt;
                         dist = 2;
                     }
-                } else if (hint == QMetaType::QDate) {
+
+                } else if (hint == QVariant::Date) {
                     QDate dt = QDate::fromString(qstring, Qt::ISODate);
+
                     if (!dt.isValid())
                         dt = QDate::fromString(qstring, Qt::TextDate);
                     if (!dt.isValid())
@@ -593,6 +607,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     }
                 } else {
                     QTime dt = QTime::fromString(qstring, Qt::ISODate);
+
                     if (!dt.isValid())
                         dt = QTime::fromString(qstring, Qt::TextDate);
                     if (!dt.isValid())
@@ -609,7 +624,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             }
             break;
 
-        case QMetaType::QRegularExpression:
+        case QVariant::RegularExpression:
             if (type == RegExp) {
 
                 // Attempt to convert.. a bit risky
@@ -650,7 +665,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
 
             break;
 
-        case QMetaType::QObjectStar:
+        case QVariant::ObjectStar:
             if (type == QObj) {
                 QtInstance* qtinst = QtInstance::getInstance(object);
 
@@ -678,7 +693,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
             }
             break;
 
-        case QMetaType::VoidStar:
+        case QVariant::VoidStar:
             if (type == QObj) {
                 QtInstance* qtinst = QtInstance::getInstance(object);
                 if (qtinst) {
@@ -707,8 +722,8 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
 
         default:
             // Non const type ids
-            if (hint == (QMetaType::Type) qMetaTypeId<QObjectList>())
-            {
+            if (hint == QVariant::typeToTypeId<QObjectList>()) {
+
                 if (type == RTArray) {
                     RuntimeArray* rtarray = static_cast<RuntimeArray*>(object);
 
@@ -717,7 +732,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     for (int i = 0; i < len; ++i) {
                         JSValue val = rtarray->getConcreteArray()->valueAt(exec, i);
                         int itemdist = -1;
-                        QVariant item = convertValueToQVariant(exec, val, QMetaType::QObjectStar, &itemdist, visitedObjects, recursionLimit);
+                        QVariant item = convertValueToQVariant(exec, val, QVariant::ObjectStar, &itemdist, visitedObjects, recursionLimit);
                         if (itemdist >= 0)
                             result.append(item.value<QObject*>());
                         else
@@ -728,6 +743,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                         dist = 5;
                         ret = QVariant::fromValue(result);
                     }
+
                 } else if (type == Array) {
                     JSObject* object = value.toObject(exec);
                     JSArray* array = static_cast<JSArray *>(object);
@@ -736,7 +752,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     for (int i = 0; i < len; ++i) {
                         JSValue val = array->get(exec, i);
                         int itemdist = -1;
-                        QVariant item = convertValueToQVariant(exec, val, QMetaType::QObjectStar, &itemdist, visitedObjects, recursionLimit);
+                        QVariant item = convertValueToQVariant(exec, val, QVariant::ObjectStar, &itemdist, visitedObjects, recursionLimit);
                         if (itemdist >= 0)
                             result.append(item.value<QObject*>());
                         else
@@ -751,7 +767,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     // Make a single length array
                     QObjectList result;
                     int itemdist = -1;
-                    QVariant item = convertValueToQVariant(exec, value, QMetaType::QObjectStar, &itemdist, visitedObjects, recursionLimit);
+                    QVariant item = convertValueToQVariant(exec, value, QVariant::ObjectStar, &itemdist, visitedObjects, recursionLimit);
                     if (itemdist >= 0) {
                         result.append(item.value<QObject*>());
                         dist = 10;
@@ -759,16 +775,19 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     }
                 }
                 break;
-            } else if (hint == (QMetaType::Type) qMetaTypeId<QList<int> >()) {
+
+            } else if (hint == QVariant::typeToTypeId<QList<int>>()) {
+
                 if (type == RTArray) {
                     RuntimeArray* rtarray = static_cast<RuntimeArray*>(object);
 
                     QList<int> result;
                     int len = rtarray->getLength();
+
                     for (int i = 0; i < len; ++i) {
                         JSValue val = rtarray->getConcreteArray()->valueAt(exec, i);
                         int itemdist = -1;
-                        QVariant item = convertValueToQVariant(exec, val, QMetaType::Int, &itemdist, visitedObjects, recursionLimit);
+                        QVariant item = convertValueToQVariant(exec, val, QVariant::Int, &itemdist, visitedObjects, recursionLimit);
                         if (itemdist >= 0)
                             result.append(item.value<int>());
                         else
@@ -787,7 +806,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     for (int i = 0; i < len; ++i) {
                         JSValue val = array->get(exec, i);
                         int itemdist = -1;
-                        QVariant item = convertValueToQVariant(exec, val, QMetaType::Int, &itemdist, visitedObjects, recursionLimit);
+                        QVariant item = convertValueToQVariant(exec, val, QVariant::Int, &itemdist, visitedObjects, recursionLimit);
                         if (itemdist >= 0)
                             result.append(item.value<int>());
                         else
@@ -802,7 +821,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     // Make a single length array
                     QList<int> result;
                     int itemdist = -1;
-                    QVariant item = convertValueToQVariant(exec, value, QMetaType::Int, &itemdist, visitedObjects, recursionLimit);
+                    QVariant item = convertValueToQVariant(exec, value, QVariant::Int, &itemdist, visitedObjects, recursionLimit);
                     if (itemdist >= 0) {
                         result.append(item.value<int>());
                         dist = 10;
@@ -810,9 +829,11 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     }
                 }
                 break;
-            } else if (QtPixmapInstance::canHandle(static_cast<QMetaType::Type>(hint))) {
-                ret = QtPixmapInstance::variantFromObject(object, static_cast<QMetaType::Type>(hint));
-            } else if (hint == (QMetaType::Type) qMetaTypeId<QWebElement>()) {
+
+            } else if (QtPixmapInstance::canHandle(hint)) {
+                ret = QtPixmapInstance::variantFromObject(object, hint);
+
+            } else if (hint == QVariant::typeToTypeId<QWebElement>()) {
                 if (object && object->inherits(&JSElement::s_info)) {
                     ret = QVariant::fromValue<QWebElement>(QtWebElementRuntime::create((static_cast<JSElement*>(object))->impl()));
                     dist = 0;
@@ -821,22 +842,27 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     visitedObjects->remove(object);
                     break;
                 }
+
                 if (object && object->inherits(&JSDocument::s_info)) {
                     // To support LayoutTestControllerQt::nodesFromRect(), used in DRT, we do an implicit
                     // conversion from 'document' to the QWebElement representing the 'document.documentElement'.
                     // We can't simply use a QVariantMap in nodesFromRect() because it currently times out
                     // when serializing DOMMimeType and DOMPlugin, even if we limit the recursion.
-                    ret = QVariant::fromValue<QWebElement>(QtWebElementRuntime::create((static_cast<JSDocument*>(object))->impl()->documentElement()));
+                    ret = QVariant::fromValue<QWebElement>(
+                           QtWebElementRuntime::create((static_cast<JSDocument*>(object))->impl()->documentElement()));
                 } else
                     ret = QVariant::fromValue<QWebElement>(QWebElement());
-            } else if (hint == (QMetaType::Type) qMetaTypeId<QDRTNode>()) {
+
+            } else if (hint == QVariant::typeToTypeId<QDRTNode>()) {
                 if (object && object->inherits(&JSNode::s_info))
                     ret = QVariant::fromValue<QDRTNode>(QtDRTNodeRuntime::create((static_cast<JSNode*>(object))->impl()));
-            } else if (hint == (QMetaType::Type) qMetaTypeId<QVariant>()) {
+
+            } else if (hint == QVariant::Variant) {
                 if (value.isUndefinedOrNull()) {
                     if (distance)
                         *distance = 1;
                     return QVariant();
+
                 } else {
                     if (type == Object) {
                         // Since we haven't really visited this object yet, we remove it
@@ -844,7 +870,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
                     }
 
                     // And then recurse with the autodetect flag
-                    ret = convertValueToQVariant(exec, value, QMetaType::Void, distance, visitedObjects, recursionLimit);
+                    ret = convertValueToQVariant(exec, value, QVariant::Void, distance, visitedObjects, recursionLimit);
                     dist = 10;
                 }
                 break;
@@ -862,7 +888,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type 
     return ret;
 }
 
-QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type hint, int *distance)
+QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type hint, int *distance)
 {
     const int recursionLimit = 200;
     HashSet<JSObject*> visitedObjects;
@@ -873,35 +899,37 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
 {
     // Variants with QObject * can be isNull but not a null pointer
     // An empty QString variant is also null
-    QMetaType::Type type = (QMetaType::Type) variant.userType();
+    QVariant::Type type = variant.type();
 
-    qConvDebug() << "convertQVariantToValue: metatype:" << type << ", isnull: " << variant.isNull();
-    if (variant.isNull() &&
-        type != QMetaType::QObjectStar &&
-        type != QMetaType::VoidStar &&
-        type != QMetaType::QWidgetStar &&
-        type != QMetaType::QString) {
+    qConvDebug() << "convertQVariantToValue: Variant:" << type << ", is not valid";
+    if (! variant.isValid() &&
+        type != QVariant::ObjectStar &&
+        type != QVariant::VoidStar &&
+        type != QVariant::WidgetStar &&
+        type != QVariant::String) {
         return jsNull();
     }
 
     JSLock lock(SilenceAssertionsOnly);
 
-    if (type == QMetaType::Bool)
+    if (type == QVariant::Bool) {
         return jsBoolean(variant.toBool());
+    }
 
-    if (type == QMetaType::Int ||
-        type == QMetaType::UInt ||
-        type == QMetaType::Long ||
-        type == QMetaType::ULong ||
-        type == QMetaType::LongLong ||
-        type == QMetaType::ULongLong ||
-        type == QMetaType::Short ||
-        type == QMetaType::UShort ||
-        type == QMetaType::Float ||
-        type == QMetaType::Double)
+    if (type == QVariant::Int ||
+        type == QVariant::UInt ||
+        type == QVariant::Long ||
+        type == QVariant::ULong ||
+        type == QVariant::LongLong ||
+        type == QVariant::ULongLong ||
+        type == QVariant::Short ||
+        type == QVariant::UShort ||
+        type == QVariant::Float ||
+        type == QVariant::Double) {
         return jsNumber(variant.toDouble());
+    }
 
-    if (type == QMetaType::QRegularExpression) {
+    if (type == QVariant::RegularExpression) {
         QRegularExpression re = variant.value<QRegularExpression>();
 
         if (re.isValid()) {
@@ -924,15 +952,15 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         }
     }
 
-    if (type == QMetaType::QDateTime || type == QMetaType::QDate || type == QMetaType::QTime) {
+    if (type == QVariant::DateTime || type == QVariant::Date || type == QVariant::Time) {
 
         QDate date = QDate::currentDate();
         QTime time(0,0,0); // midnight
 
-        if (type == QMetaType::QDate)
+        if (type == QVariant::Date)
             date = variant.value<QDate>();
 
-        else if (type == QMetaType::QTime)
+        else if (type == QVariant::Time)
             time = variant.value<QTime>();
 
         else {
@@ -955,25 +983,28 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         return new (exec) DateInstance(exec, exec->lexicalGlobalObject()->dateStructure(), trunc(ms));
     }
 
-    if (type == QMetaType::QByteArray) {
+    if (type == QVariant::ByteArray) {
         QByteArray qtByteArray = variant.value<QByteArray>();
         WTF::RefPtr<WTF::ByteArray> wtfByteArray = WTF::ByteArray::create(qtByteArray.length());
         memcpy(wtfByteArray->data(), qtByteArray.constData(), qtByteArray.length());
         return new (exec) JSC::JSByteArray(exec, JSC::JSByteArray::createStructure(exec->globalData(), jsNull()), wtfByteArray.get());
     }
 
-    if (type == QMetaType::QObjectStar || type == QMetaType::QWidgetStar) {
+    if (type == QVariant::ObjectStar || type == QVariant::WidgetStar) {
         QObject* obj = variant.value<QObject*>();
+
         if (!obj)
             return jsNull();
+
         return QtInstance::getQtInstance(obj, root, QScriptEngine::QtOwnership)->createRuntimeObject(exec);
     }
 
-    if (QtPixmapInstance::canHandle(static_cast<QMetaType::Type>(variant.type())))
+    if (QtPixmapInstance::canHandle(variant.type())) {
         return QtPixmapInstance::createPixmapRuntimeObject(exec, root, variant);
+    }
 
-    if (type == qMetaTypeId<QWebElement>()) {
-        if (!root->globalObject()->inherits(&JSDOMWindow::s_info))
+    if (type == QVariant::typeToTypeId<QWebElement>()) {
+        if (! root->globalObject()->inherits(&JSDOMWindow::s_info))
             return jsUndefined();
 
         Document* document = (static_cast<JSDOMWindow*>(root->globalObject()))->impl()->document();
@@ -983,7 +1014,7 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         return toJS(exec, toJSDOMGlobalObject(document, exec), QtWebElementRuntime::get(variant.value<QWebElement>()));
     }
 
-    if (type == qMetaTypeId<QDRTNode>()) {
+    if (type == QVariant::typeToTypeId<QDRTNode>()) {
         if (!root->globalObject()->inherits(&JSDOMWindow::s_info))
             return jsUndefined();
 
@@ -994,11 +1025,12 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         return toJS(exec, toJSDOMGlobalObject(document, exec), QtDRTNodeRuntime::get(variant.value<QDRTNode>()));
     }
 
-    if (type == QMetaType::QVariantMap) {
+    if (type == QVariant::Map) {
         // create a new object, and stuff properties into it
         JSObject* ret = constructEmptyObject(exec);
         QVariantMap map = variant.value<QVariantMap>();
         QVariantMap::const_iterator i = map.constBegin();
+
         while (i != map.constEnd()) {
             QString s = i.key();
             JSValue val = convertQVariantToValue(exec, root.get(), i.value());
@@ -1014,24 +1046,28 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
     }
 
     // List types
-    if (type == QMetaType::QVariantList) {
+    if (type == QVariant::List) {
         QVariantList vl = variant.toList();
         qConvDebug() << "got a " << vl.count() << " length list:" << vl;
-        return new (exec) RuntimeArray(exec, new QtArray<QVariant>(vl, QMetaType::Void, root));
-    } else if (type == QMetaType::QStringList) {
+        return new (exec) RuntimeArray(exec, new QtArray<QVariant>(vl, QVariant::Void, root));
+
+    } else if (type == QVariant::StringList) {
         QStringList sl = variant.value<QStringList>();
-        return new (exec) RuntimeArray(exec, new QtArray<QString>(sl, QMetaType::QString, root));
-    } else if (type == (QMetaType::Type) qMetaTypeId<QObjectList>()) {
+        return new (exec) RuntimeArray(exec, new QtArray<QString>(sl, QVariant::String, root));
+
+    } else if (type == QVariant::typeToTypeId<QObjectList>()) {
         QObjectList ol= variant.value<QObjectList>();
-        return new (exec) RuntimeArray(exec, new QtArray<QObject*>(ol, QMetaType::QObjectStar, root));
-    } else if (type == (QMetaType::Type)qMetaTypeId<QList<int> >()) {
+        return new (exec) RuntimeArray(exec, new QtArray<QObject*>(ol, QVariant::ObjectStar, root));
+
+    } else if (type == QVariant::typeToTypeId<QList<int> >()) {
         QList<int> il= variant.value<QList<int> >();
-        return new (exec) RuntimeArray(exec, new QtArray<int>(il, QMetaType::Int, root));
+        return new (exec) RuntimeArray(exec, new QtArray<int>(il, QVariant::Int, root));
     }
 
-    if (type == (QMetaType::Type)qMetaTypeId<QVariant>()) {
+    if (type == QVariant::Variant) {
         QVariant real = variant.value<QVariant>();
         qConvDebug() << "real variant is:" << real;
+
         return convertQVariantToValue(exec, root, real);
     }
 
@@ -1045,7 +1081,6 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
 
 // ===============
 
-// Qt-like macros
 #define QW_D(Class) Class##Data* d = d_func()
 #define QW_DS(Class,Instance) Class##Data* d = Instance->d_func()
 
@@ -1102,7 +1137,7 @@ public:
     Kind kind() const
     { return m_kind; }
 
-    QMetaType::Type typeId() const;
+    QVariant::Type typeId() const;
 
     bool isValid() const
     { return (m_kind != Invalid); }
@@ -1145,12 +1180,21 @@ private:
     QString m_name;
 };
 
-QMetaType::Type QtMethodMatchType::typeId() const
+QVariant::Type QtMethodMatchType::typeId() const
 {
-    if (isVariant())
-        return (QMetaType::Type) QMetaType::type("QVariant");
+   if (isVariant()) {
+      return QVariant::Variant;
+   }
 
-    return (QMetaType::Type) (isMetaEnum() ? QMetaType::Int : m_typeId);
+   QVariant::Type retval;
+
+   if (isMetaEnum()) {
+      retval = QVariant::Int;
+   } else {
+      retval = static_cast<QVariant::Type>(m_typeId);
+   }
+
+   return retval;
 }
 
 QString QtMethodMatchType::name() const
@@ -1218,7 +1262,7 @@ static int indexOfMetaEnum(const QMetaObject *meta, const QString &str)
 // Helper function for resolving methods
 // Largely based on code in QtScript for compatibility reasons
 static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QString &signature, bool allowPrivate,
-                  QVarLengthArray<QVariant, 10> &vars, void **vvars, JSObject **pError)
+                  QVarLengthArray<QVariant, 10> &vars, void **ptrToVoids, JSObject **pError)
 {
     QList<int> matchingIndices;
 
@@ -1265,14 +1309,14 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
 
         // resolve return type
         QString returnTypeName = method.typeName();
-        int rtype = QMetaType::type(returnTypeName);
+        uint rtype = QVariant::nameToType(returnTypeName);
 
-        if ((rtype == 0) && !returnTypeName.isEmpty()) {
+        if ((rtype == 0) && ! returnTypeName.isEmpty()) {
             if (returnTypeName == "QVariant") {
                 types.append(QtMethodMatchType::variant());
 
             } else if (returnTypeName.endsWith('*')) {
-                types.append(QtMethodMatchType::metaType(QMetaType::VoidStar, returnTypeName));
+                types.append(QtMethodMatchType::metaType(QVariant::VoidStar, returnTypeName));
 
             } else {
                 int enumIndex = indexOfMetaEnum(meta, returnTypeName);
@@ -1297,7 +1341,7 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
 
         for (int i = 0; i < parameterTypeNames.count(); ++i) {
             QString argTypeName = parameterTypeNames.at(i);
-            int atype = QMetaType::type(argTypeName);
+            uint atype = QVariant::nameToType(argTypeName);
 
             if (atype == 0) {
                 if (argTypeName == "QVariant") {
@@ -1357,7 +1401,6 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
                 matchDistance += argdistance;
                 args[i+1] = v;
             } else {
-                qMatchDebug() << "failed to convert argument " << i << "type" << types.at(i+1).typeId() << QMetaType::typeName(types.at(i+1).typeId());
                 converted = false;
             }
         }
@@ -1477,9 +1520,10 @@ static int findMethodIndex(ExecState* exec, const QMetaObject *meta, const QStri
         /* Copy the stuff over */
         int i;
         vars.resize(args.count());
-        for (i=0; i < args.count(); i++) {
+
+        for (i = 0; i < args.count(); i++) {
             vars[i] = args[i];
-            vvars[i] = vars[i].data();
+            // emerald (webkit, ok) ptrToVoids[i] = vars[i].data();
         }
     }
 
@@ -1526,12 +1570,11 @@ void QtRuntimeMetaMethod::visitChildren(SlotVisitor& visitor)
 
 EncodedJSValue QtRuntimeMetaMethod::call(ExecState* exec)
 {
-   // BROOM (on hold, ok)
+   // emerald (webkit, hold)
    qWarning("(CopperSpice) QtRuntimeMetaMethod::call, Not implemented");
 
 
-/*  CopperSpice Test 03/21/2014
-
+/*
     QtRuntimeMetaMethodData* d = static_cast<QtRuntimeMetaMethod *>(exec->callee())->d_func();
 
     // limted to 10 args
@@ -1885,8 +1928,8 @@ QtConnectionObject::~QtConnectionObject()
 
 void QtConnectionObject::execute(void **argv)
 {
-    // BROOM (execute, on hold, ok)
-    qDebug("CopperSpice / WebKit:   execute()");
+    // emerald (webkit, hold)
+    qDebug("CopperSpice CsWebKit: execute method not implemented");
 
 /*
     QObject *obj = m_instance->getObject();
@@ -1920,7 +1963,7 @@ void QtConnectionObject::execute(void **argv)
 
                     for(int i=0; i < argTotal; i++) {
                         if (i < argc) {
-                            int argType = QMetaType::type(parameterTypes.at(i));
+                            int argType = QVariant::type(parameterTypes.at(i));
                             l.append(convertQVariantToValue(exec, ro, QVariant(argType, argv[i+1])));
                         } else {
                             l.append(jsUndefined());
@@ -1953,7 +1996,7 @@ void QtConnectionObject::execute(void **argv)
         }
 
     } else {
-        // strange place to be, deleted object emitted a signal here
+        // unsure, deleted object emitted a signal
         qWarning() << "sender deleted, can not deliver signal";
     }
 
@@ -1969,9 +2012,7 @@ bool QtConnectionObject::match(QObject* sender, int signalIndex, JSObject* thisO
     return false;
 }
 
-// ===============
-
-template <typename T> QtArray<T>::QtArray(QList<T> list, QMetaType::Type type, PassRefPtr<RootObject> rootObject)
+template <typename T> QtArray<T>::QtArray(QList<T> list, QVariant::Type type, PassRefPtr<RootObject> rootObject)
     : Array(rootObject)
     , m_list(list)
     , m_type(type)

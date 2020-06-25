@@ -21,244 +21,342 @@
 *
 ***********************************************************************/
 
-// do not move include, if qvarient.h is included directly forward declarations are not sufficient 12/30/2013
+// do not move include, if qvarient.h is included directly forward declarations are not sufficient
 #include <qobject.h>
 
 #ifndef QVARIANT_H
 #define QVARIANT_H
 
-#include <qatomic.h>
-#include <qbytearray.h>
-#include <qlist.h>
-#include <qmap.h>
-#include <qmetatype.h>
-#include <qnamespace.h>
-#include <qcontainerfwd.h>
+#include <csmetafwd.h>
 
 // can not include qstring.h since it includes qstringparser.h, which then includes qlocale.h (circular dependency)
 #include <qstring8.h>
 
-class QBitArray;
+#include <qatomic.h>
+#include <qbytearray.h>
+#include <qcontainerfwd.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qnamespace.h>
+#include <qvector.h>
+
+#include <optional>
+#include <variant>
+
 class QDataStream;
+class QDebug;
+class QObject;
+class QVariant;
+
+class QBitArray;
+class QStringList;
+
 class QDate;
 class QDateTime;
-class QDebug;
-class QEasingCurve;
+class QTime;
+class QLocale;
+
+class QJsonArray;
+class QJsonDocument;
+class QJsonObject;
+class QJsonValue;
+
 class QLine;
 class QLineF;
-class QLocale;
-class QMatrix;
-class QTransform;
-class QStringList;
-class QTime;
 class QPoint;
 class QPointF;
-class QSize;
-class QSizeF;
 class QRect;
 class QRectF;
+class QSize;
+class QSizeF;
+
+// core
+class QEasingCurve;
+class QModelIndex;
+class QPersistentModelIndex;
+class QUuid;
+class QUrl;
+
+// gui
+class QBitmap;
+class QBrush;
+class QColor;
+class QCursor;
+class QFont;
+class QIcon;
+class QImage;
+class QKeySequence;
+class QMatrix;
+class QMatrix4x4;
+class QPalette;
+class QPen;
+class QPixmap;
+class QPolygon;
+class QPolygonF;
+class QQuaternion;
+class QRegion;
+class QSizePolicy;
 class QTextFormat;
 class QTextLength;
-class QUrl;
-class QVariant;
-class QVariantComparisonHelper;
+class QTransform;
+class QVector2D;
+class QVector3D;
+class QVector4D;
+class QWidget;
 
-template<typename T>
-inline T qvariant_cast(const QVariant &);
+class QVariantBase
+{
+   public:
+      virtual ~QVariantBase()
+      { }
+
+      virtual bool cs_internal_convert(uint current_userType, uint new_userType, QVariant &self) const = 0;
+      virtual bool cs_internal_create(uint typeId, const void *other, QVariant &self) const = 0;
+      virtual bool cs_internal_load(QDataStream &stream, uint type, QVariant &self) const = 0;
+      virtual bool cs_internal_save(QDataStream &stream, uint type, const QVariant &self) const = 0;
+};
 
 class Q_CORE_EXPORT QVariant
 {
  public:
-   enum Type {
-      Invalid    = QMetaType::UnknownType,
 
-      Bool       = QMetaType::Bool,
-      Int        = QMetaType::Int,
-      UInt       = QMetaType::UInt,
-      LongLong   = QMetaType::LongLong,
-      ULongLong  = QMetaType::ULongLong,
-      Double     = QMetaType::Double,
+   enum Type : uint {
+      Invalid,
 
-      // used for range checking
-      FirstConstructedType = QMetaType::QByteArray,
+      Bool,
+      Short,
+      UShort,
+      Int,
+      UInt,
+      Long,
+      ULong,
+      LongLong,
+      ULongLong,
+      Double,
+      Float,
 
-      ByteArray  = QMetaType::QByteArray,
-      BitArray   = QMetaType::QBitArray,
+      QChar,
+      Char,
+      SChar,
+      UChar,
+      Char8_t,
+      Char16_t,
+      Char32_t,
 
-      Char       = QMetaType::QChar,
-      Char32     = QMetaType::QChar32,
+      BitArray,
+      ByteArray,
+      String,
+      String8 = String,
+      String16,
+      StringList,
+      StringView,
+      RegularExpression,
 
-      String     = QMetaType::QString,
-      String8    = QMetaType::QString8,
-      String16   = QMetaType::QString16,
+      Date,
+      Time,
+      DateTime,
+      Locale,
 
-      RegularExpression = QMetaType::QRegularExpression,
-      StringView        = QMetaType::QStringView,
+      JsonValue,
+      JsonArray,
+      JsonObject,
+      JsonDocument,
 
-      StringList   = QMetaType::QStringList,
-      List         = QMetaType::QVariantList,
-      Map          = QMetaType::QVariantMap,
-      MultiMap     = QMetaType::QVariantMultiMap,
-      Hash         = QMetaType::QVariantHash,
-      MultiHash    = QMetaType::QVariantMultiHash,
+      Line,
+      LineF,
+      Point,
+      PointF,
+      Polygon,
+      PolygonF,
+      Rect,
+      RectF,
+      Size,
+      SizeF,
 
-      Date         = QMetaType::QDate,
-      Time         = QMetaType::QTime,
-      DateTime     = QMetaType::QDateTime,
-      Url          = QMetaType::QUrl,
-      Locale       = QMetaType::QLocale,
+      Hash,
+      List,
+      Map,
+      MultiHash,
+      MultiMap,
 
-      Rect         = QMetaType::QRect,
-      RectF        = QMetaType::QRectF,
-      Size         = QMetaType::QSize,
-      SizeF        = QMetaType::QSizeF,
-      Line         = QMetaType::QLine,
-      LineF        = QMetaType::QLineF,
-      Point        = QMetaType::QPoint,
-      PointF       = QMetaType::QPointF,
-      EasingCurve  = QMetaType::QEasingCurve,
-      Uuid         = QMetaType::QUuid,
-      ModelIndex   = QMetaType::QModelIndex,
+      Void,
+      VoidStar,
+      ObjectStar,
+      WidgetStar,
 
-      JsonValue    = QMetaType::QJsonValue,
-      JsonArray    = QMetaType::QJsonArray,
-      JsonObject   = QMetaType::QJsonObject,
-      JsonDocument = QMetaType::QJsonDocument,
+      // core
+      EasingCurve,
+      ModelIndex,
+      PersistentModelIndex,
+      Url,
+      Uuid,
 
-      Font = QMetaType::QFont,
-      Pixmap = QMetaType::QPixmap,
-      Brush = QMetaType::QBrush,
-      Color = QMetaType::QColor,
-      Palette = QMetaType::QPalette,
-      Icon = QMetaType::QIcon,
-      Image = QMetaType::QImage,
-      Polygon = QMetaType::QPolygon,
-      Region = QMetaType::QRegion,
-      Bitmap = QMetaType::QBitmap,
-      Cursor = QMetaType::QCursor,
-      SizePolicy = QMetaType::QSizePolicy,
-      KeySequence = QMetaType::QKeySequence,
-      Pen = QMetaType::QPen,
-      TextLength = QMetaType::QTextLength,
-      TextFormat = QMetaType::QTextFormat,
-      Matrix = QMetaType::QMatrix,
-      Transform = QMetaType::QTransform,
-      Matrix4x4 = QMetaType::QMatrix4x4,
-      Vector2D = QMetaType::QVector2D,
-      Vector3D = QMetaType::QVector3D,
-      Vector4D = QMetaType::QVector4D,
-      Quaternion = QMetaType::QQuaternion,
-      PolygonF = QMetaType::QPolygonF,
+      // gui
+      Bitmap,
+      Brush,
+      Color,
+      Cursor,
+      Font,
+      Icon,
+      Image,
+      KeySequence,
+      Matrix,
+      Matrix4x4,
+      Palette,
+      Pen,
+      Pixmap,
+      Quaternion,
+      Region,
+      SizePolicy,
+      TextLength,
+      TextFormat,
+      Transform,
+      Vector2D,
+      Vector3D,
+      Vector4D,
 
-      // the UserType must always be after all declared types
-      UserType = QMetaType::User,
+      // used in QMetaProperty
+      Variant,
 
-      LastType = 0xffffffff    // need this so that gcc >= 3.4 allocates 32 bits for Type
+      // must always be after all declared types
+      UserType   = 256
    };
 
-   QVariant();
-   ~QVariant();
+   struct NamesAndTypes {
+      const char *meta_typeName;
+      uint meta_typeId;
+      std::type_index meta_typeT;
+   };
 
-   // force compile error, prevent QVariant(bool) to be called
-   QVariant(const char *) = delete;
-   QVariant(void *) = delete;
+   QVariant()
+   {
+   }
 
-   QVariant(Type type);
-   QVariant(int typeOrUserType, const void *copy);
-   QVariant(int typeOrUserType, const void *copy, uint flags);
+   QVariant(const char *)    = delete;      // prevents storing a "string literal"
+   QVariant(void *)          = delete;      // prevents storing a "pointer" as a bool
+   QVariant(bool, int)       = delete;      // prevents issue when using 2 parameter QVariant constructor
+
+   QVariant(Qt::GlobalColor) = delete;
+   QVariant(Qt::BrushStyle)  = delete;
+   QVariant(Qt::PenStyle)    = delete;
+   QVariant(Qt::CursorShape) = delete;
+
+   [[deprecated]] QVariant(Type type);
+   QVariant(uint typeId, const void *copy);
+
    QVariant(const QVariant &other);
 
-   QVariant(QDataStream &stream);
+   QVariant(QVariant &&other) = default;
 
+   QVariant(bool value);
    QVariant(int value);
    QVariant(uint value);
    QVariant(qint64 value);
    QVariant(quint64 value);
-   QVariant(bool value);
    QVariant(double value);
+   QVariant(float value);
 
-   QVariant(float value) {
-      d.is_null = false;
-      d.type = QMetaType::Float;
-      d.data.f = value;
-   }
+   QVariant(QChar32 value);
+   QVariant(QString value);
 
-   QVariant(const QByteArray &bytearray);
-   QVariant(const QBitArray &bitarray);
+   QVariant(QByteArray value);
+   QVariant(QBitArray value);
+   QVariant(QString16 value);
+   QVariant(QStringList value);
+   QVariant(QRegularExpression8 value);
 
-   QVariant(const QChar32 &ch);
-   QVariant(const QString8 &string);
-   QVariant(const QString16 &string);
+   QVariant(QDate value);
+   QVariant(QTime value);
+   QVariant(QDateTime value);
+   QVariant(QLocale value);
 
-   QVariant(const QRegularExpression8 &regExp);
+   QVariant(QList<QVariant> value);
+   QVariant(QMap<QString, QVariant> value);
+   QVariant(QHash<QString, QVariant> value);
+   QVariant(QMultiMap<QString, QVariant> value);
+   QVariant(QMultiHash<QString, QVariant> value);
 
-   QVariant(const QDate &date);
-   QVariant(const QTime &time);
-   QVariant(const QDateTime &datetime);
+   QVariant(QJsonValue value);
+   QVariant(QJsonObject value);
+   QVariant(QJsonArray value);
+   QVariant(QJsonDocument value);
 
-   QVariant(const QList<QVariant> &list);
-   QVariant(const QStringList &stringList);
+   QVariant(QRect value);
+   QVariant(QRectF value);
+   QVariant(QSize value);
+   QVariant(QSizeF value);
+   QVariant(QLine value);
+   QVariant(QLineF value);
+   QVariant(QPoint value);
+   QVariant(QPointF value);
 
-   QVariant(const QMap<QString, QVariant> &map);
-   QVariant(const QHash<QString, QVariant> &hash);
-   QVariant(const QMultiMap<QString, QVariant> &map);
-   QVariant(const QMultiHash<QString, QVariant> &hash);
+   QVariant(QEasingCurve value);
+   QVariant(QModelIndex value);
+   QVariant(QPersistentModelIndex value);
+   QVariant(QUuid value);
+   QVariant(QUrl value);
 
-   QVariant(const QSize &size);
-   QVariant(const QSizeF &size);
-   QVariant(const QPoint &point);
-   QVariant(const QPointF &point);
-   QVariant(const QLine &line);
-   QVariant(const QLineF &line);
-   QVariant(const QRect &rect);
-   QVariant(const QRectF &rect);
+   QVariant(QDataStream &stream);
 
-   QVariant(const QLocale &locale);
-
-   QVariant(const QUrl &url);
-   QVariant(const QEasingCurve &easing);
-   QVariant(const QUuid &uuid);
-   QVariant(const QModelIndex &modelIndex);
-   QVariant(const QJsonValue &jsonValue);
-   QVariant(const QJsonObject &jsonObject);
-   QVariant(const QJsonArray &jsonArray);
-   QVariant(const QJsonDocument &jsonDocument);
-
-   QVariant &operator=(const QVariant &other);
-   QVariant(Qt::GlobalColor color);
-
-   inline QVariant &operator=(QVariant && other) {
-      qSwap(d, other.d);
-      return *this;
-   }
-
-   inline void swap(QVariant &other) {
-      qSwap(d, other.d);
-   }
-
-   Type type() const;
-   int userType() const;
-   const QString &typeName() const;
-
-   bool canConvert(Type t) const;
-   bool convert(Type t);
-
-   inline bool isValid() const;
-   bool isNull() const;
+   ~QVariant() = default;
 
    void clear();
 
-   void detach();
-   inline bool isDetached() const;
+   bool canConvert(uint newType) const;
 
-   int toInt(bool *ok = 0) const;
-   uint toUInt(bool *ok = 0) const;
-   qint64 toLongLong(bool *ok = 0) const;
-   quint64 toULongLong(bool *ok = 0) const;
-   bool toBool() const;
-   double toDouble(bool *ok = 0) const;
-   float toFloat(bool *ok = 0) const;
-   qreal toReal(bool *ok = 0) const;
+   template<typename T>
+   bool canConvert() const {
+      return canConvert( QVariant::typeToTypeId<T>() );
+   }
+
+   bool convert(uint newType);
+
+   template<typename T>
+   bool convert() {
+      return convert( QVariant::typeToTypeId<T>() );
+   }
+
+   template<typename T>
+   static QVariant fromValue(const T &value) {
+      QVariant retval;
+      retval.setValue<T>(value);
+
+      return retval;
+   }
+
+   static QVariant fromValue(const QVariant &value) {
+      return value;
+   }
+
+   template<typename T>
+   T getData() const;
+
+   template<typename T>
+   std::optional<T> getDataOr() const;
+
+   bool isValid() const {
+      return ! std::holds_alternative<std::monostate>(m_data);
+   }
+
+   std::optional<QVariant> maybeConvert(uint requested_type) const;
+
+   template<typename T>
+   void setValue(const T &value);
+
+   void setValue(const QVariant &value);
+
+   void swap(QVariant &other) {
+      std::swap(m_data, other.m_data);
+   }
+
+   bool toBool(bool *ok = nullptr) const;
+   int toInt(bool *ok = nullptr) const;
+   uint toUInt(bool *ok = nullptr) const;
+   qint64 toLongLong(bool *ok = nullptr) const;
+   quint64 toULongLong(bool *ok = nullptr) const;
+   double toDouble(bool *ok = nullptr) const;
+   float toFloat(bool *ok = nullptr) const;
+   qreal toReal(bool *ok = nullptr) const;
 
    QByteArray toByteArray() const;
    QBitArray toBitArray() const;
@@ -267,15 +365,20 @@ class Q_CORE_EXPORT QVariant
    QString8 toString() const;
    QString16 toString16() const;
 
-   QList<QVariant> toList() const;
    QStringList toStringList() const;
-
    QRegularExpression8 toRegularExpression() const;
 
    QDate toDate() const;
    QTime toTime() const;
    QDateTime toDateTime() const;
+   QLocale toLocale() const;
 
+   QJsonValue toJsonValue() const;
+   QJsonObject toJsonObject() const;
+   QJsonArray toJsonArray() const;
+   QJsonDocument toJsonDocument() const;
+
+   QList<QVariant> toList() const;
    QMap<QString, QVariant> toMap() const;
    QHash<QString, QVariant> toHash() const;
    QMultiMap<QString, QVariant> toMultiMap() const;
@@ -290,271 +393,357 @@ class Q_CORE_EXPORT QVariant
    QLineF toLineF() const;
    QRectF toRectF() const;
 
-   QLocale toLocale() const;
-   QUrl toUrl() const;
    QEasingCurve toEasingCurve() const;
-   QUuid toUuid() const;
    QModelIndex toModelIndex() const;
-   QJsonValue toJsonValue() const;
-   QJsonObject toJsonObject() const;
-   QJsonArray toJsonArray() const;
-   QJsonDocument toJsonDocument() const;
+   QPersistentModelIndex toPersistentModelIndex() const;
+   QUrl toUrl() const;
+   QUuid toUuid() const;
 
-   void load(QDataStream &ds);
-   void save(QDataStream &ds) const;
+   template<typename Requested>
+   Requested value() const;
 
-   static const QString &typeToName(Type type);
-   static Type nameToType(const QString &name);
+   // ** next 6 are a group
+   QString typeName() const;
 
-   void *data();
-   const void *constData() const;
+   Type type() const;
+   uint userType() const;
 
-   inline const void *data() const {
-      return constData();
-   }
+   static uint nameToType(const QString &name);
+   static QString typeToName(uint typeId);
 
    template<typename T>
-   inline void setValue(const T &value);
+   static uint typeToTypeId() {
+      // typeid() part of RTTI, core language
+      uint retval = QVariant::getTypeId(typeid(T *));
 
-   inline void setValue(const QVariant &value);
+      if (retval == QVariant::Invalid) {
+         // T is a user defined data type
 
-   template<typename T>
-   inline T value() const {
-      return qvariant_cast<T>(*this);
+         // auto register and generate a type id for the given T
+         retval = QVariant::registerType<T>();
+      }
+
+      return retval;
+   };
+
+   // **
+   QVariant &operator=(const QVariant &other);
+
+   QVariant &operator=(QVariant && other) {
+      swap(other);
+      return *this;
    }
 
-   template<typename T>
-   static inline QVariant fromValue(const T &value) {
-      return QVariant(qMetaTypeId<T>(static_cast<T *>(nullptr)), &value, std::is_pointer_v<T>);
+   bool operator==(const QVariant &other) const {
+      return cs_internal_compare(other);
    }
 
-   static inline QVariant fromValue(const QVariant &value) {
-      return value;
+   bool operator!=(const QVariant &other) const {
+      return ! cs_internal_compare(other);
    }
 
-   template<typename T>
-   bool canConvert() const {
-      return canConvert(Type(qMetaTypeId<T>()));
-   }
+   class CustomType {
+      public:
+         virtual ~CustomType()
+         {
+         }
+
+         virtual std::shared_ptr<CustomType> clone() const = 0;
+         virtual bool compare(const CustomType &other) const = 0;
+
+         virtual void loadFromStream() = 0;
+         virtual void saveToStream()   = 0;
+
+         virtual uint userType() const = 0;
+   };
 
    //
-   struct PrivateShared {
-      inline PrivateShared(void *v) : ptr(v), ref(1) { }
-      void *ptr;
-      QAtomicInt ref;
-   };
+   template <typename T>
+   static uint registerType();
 
-   struct Private {
-      inline Private(): type(Invalid), is_shared(false), is_null(true), is_ptr(false) {
-         data.ptr = 0;
+   static void registerClient(QVariantBase *ptr) {
+      if (! m_variantClients.contains(ptr)) {
+         m_variantClients.append(ptr);
       }
-
-      inline Private(const Private &other)
-         : data(other.data), type(other.type), is_shared(other.is_shared), is_null(other.is_null), is_ptr(other.is_ptr) {
-      }
-
-      union Data {
-         char c;
-         int i;
-         uint u;
-         bool b;
-         double d;
-         float f;
-         qreal real;
-         qint64 ll;
-         quint64 ull;
-         QObject *o;
-         void *ptr;
-         PrivateShared *shared;
-      } data;
-
-      uint type      : 30;
-      uint is_shared : 1;
-      uint is_null   : 1;
-      uint is_ptr    : 1;
-   };
-
-   typedef void (*f_construct)(Private *, const void *);
-   typedef void (*f_clear)(Private *);
-   typedef bool (*f_null)(const Private *);
-
-   typedef void (*f_load)(Private *, QDataStream &);
-   typedef void (*f_save)(const Private *, QDataStream &);
-
-   typedef bool (*f_compare)(const Private *, const Private *);
-   typedef bool (*f_convert)(const QVariant::Private *d, Type t, void *, bool *);
-   typedef bool (*f_canConvert)(const QVariant::Private *d, Type t);
-   typedef void (*f_debugStream)(QDebug, const QVariant &);
-
-   struct Handler {
-      f_construct construct;
-      f_clear clear;
-      f_null isNull;
-      f_load load;
-      f_save save;
-      f_compare compare;
-      f_convert convert;
-      f_canConvert canConvert;
-      f_debugStream debugStream;
-   };
-
-   inline bool operator==(const QVariant &other) const {
-      return cmp(other);
    }
 
-   inline bool operator!=(const QVariant &other) const {
-      return ! cmp(other);
-   }
-
-   typedef Private DataPtr;
-   inline DataPtr &data_ptr() {
-      return d;
+   static void unRegisterClient(QVariantBase *ptr) {
+      m_variantClients.removeOne(ptr);
    }
 
  protected:
-   friend inline bool qvariant_cast_helper(const QVariant &, QVariant::Type, void *);
-   friend int qRegisterGuiVariant();
-   friend int qUnregisterGuiVariant();
-   friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &);
-   friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
-
-   Private d;
-
-   static const Handler *handler;
-
-   void create(int type, const void *copy);
-   bool cmp(const QVariant &other) const;
+   static bool compareValues(const QVariant &a, const QVariant &b);
 
  private:
-   bool clearRequired() const;
+   bool cs_internal_convert(uint current_userType, uint new_userType);
+   void cs_internal_create(uint typeId, const void *other);
+   bool cs_internal_compare(const QVariant &other) const;
 
-   // force compile error, prevent QVariant(QVariant::Type, int) to be called
-   QVariant(bool, int) = delete;
+   void load(QDataStream &streamIn);
+   void save(QDataStream &streamOut) const;
+
+   bool cs_internal_load(QDataStream &stream, uint type);
+   bool cs_internal_save(QDataStream &stream, uint type) const;
+
+   template <typename T>
+   T cs_internal_VariantToType(QVariant::Type type, bool *ok = nullptr) const;
+
+   static uint getTypeId(const std::type_index &index);
+   static uint getTypeId(QString name);
+
+   static QString getTypeName(uint typeId);
+   static std::atomic<uint> &currentUserType();
+
+   static QVector<NamesAndTypes>  m_userTypes;
+   static QVector<QVariantBase *> m_variantClients;
+
+   std::variant <std::monostate, bool, char, int, uint, qint64, quint64, double, float,
+                 QChar32, QString, QObject *, void *, std::shared_ptr<CustomType> > m_data;
+
+   friend Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant &data);
+   friend Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant &data);
 };
 
-typedef QList<QVariant> QVariantList;
+using QVariantList      = QList<QVariant>;
+using QVariantMap       = QMap<QString, QVariant>;
+using QVariantHash      = QHash<QString, QVariant>;
+using QVariantMultiMap  = QMultiMap<QString, QVariant>;
+using QVariantMultiHash = QMultiHash<QString, QVariant>;
 
-typedef QMap<QString, QVariant> QVariantMap;
-typedef QHash<QString, QVariant> QVariantHash;
-typedef QMultiMap<QString, QVariant> QVariantMultiMap;
-typedef QMultiHash<QString, QVariant> QVariantMultiHash;
+Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant &data);
+Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant::Type &typeId);
 
-inline bool qvariant_cast_helper(const QVariant &v, QVariant::Type tp, void *ptr)
+Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant &data);
+Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant::Type typeId);
+
+//
+template <typename T>
+class CustomType_T : public QVariant::CustomType
 {
-   return QVariant::handler->convert(&v.d, tp, ptr, 0);
+ public:
+   CustomType_T(const T &value)
+      : m_value(value)
+   {
+   }
+
+   CustomType_T(T && value)
+      : m_value(std::move(value))
+   {
+   }
+
+   std::shared_ptr<CustomType> clone() const {
+      return std::make_shared<CustomType_T<T>>(m_value);
+   }
+
+   const T &get() const {
+      return m_value;
+   }
+
+   bool compare(const CustomType &other) const override {
+
+      if constexpr(std::is_invocable_v<compare_test, T>) {
+         auto ptr = dynamic_cast<const CustomType_T<T>*>(&other);
+
+         if (ptr != nullptr) {
+            return (m_value == ptr->m_value);
+         }
+      }
+
+      return false;
+   }
+
+   void loadFromStream() override {
+      // emerald, might add this
+   }
+
+   void saveToStream() override {
+      // emerald, might add this
+   }
+
+   uint userType() const override {
+      return QVariant::typeToTypeId<T>();
+   }
+
+ private:
+   T m_value;
+
+   struct compare_test {
+      template <typename U>
+      auto operator()(const U &value) -> decltype(value == value);
+   };
+};
+
+template <typename T>
+constexpr bool isType_Simple()
+{
+   if constexpr(std::is_same_v<T, std::monostate>  ||
+         std::is_same_v<T, bool>      || std::is_same_v<T, char>    ||
+         std::is_same_v<T, int>       || std::is_same_v<T, uint>    ||
+         std::is_same_v<T, qint64>    || std::is_same_v<T, quint64> ||
+         std::is_same_v<T, double>    || std::is_same_v<T, float>   ||
+         std::is_same_v<T, QChar>     || std::is_same_v<T, QString> ||
+         std::is_same_v<T, QObject *> || std::is_same_v<T, void *>)  {
+
+      return true;
+   }
+
+   return false;
+}
+
+template<typename T>
+T QVariant::getData() const
+{
+   std::optional<T> retval = getDataOr<T>();
+
+   if (retval.has_value()) {
+      return retval.value();
+
+   } else {
+      return T();
+   }
+}
+
+template<typename T>
+std::optional<T> QVariant::getDataOr() const
+{
+   if constexpr(isType_Simple<T>())  {
+
+      if (std::holds_alternative<T>(m_data)) {
+         return std::get<T>(m_data);
+
+      } else {
+         // variant is empty or T is not the type in the variant
+         // printf("\n QVariant::getDataOr  requested T = %s  variant holds = %s",
+         //    typeid(T).name(), csPrintable(typeName()) );
+
+      }
+
+   } else {
+      // custom type
+      auto ptr = std::get_if<std::shared_ptr<CustomType>>(&m_data);
+
+      if (ptr == nullptr) {
+         // T is not the data type in the variant
+
+      } else {
+         auto newPtr = std::dynamic_pointer_cast<CustomType_T<T>>(*ptr);
+
+         if (newPtr == nullptr) {
+            // T is the wrong custom type
+            // printf("\n QVariant::getDataOr  requested T = %s  variant holds = %s",
+            //    typeid(T).name(), typeid(**ptr).name() );
+
+         } else {
+            return newPtr->get();
+
+         }
+      }
+   }
+
+   return std::optional<T>();
 }
 
 template <typename T>
-QVariant::Type qMetaTypeVariant(T * = nullptr)
+void QVariant::setValue(const T &value)
 {
-   return static_cast<QVariant::Type>(QMetaTypeId2<T>::qt_metatype_id());
-}
-
-//
-inline QVariant::QVariant() {}
-
-inline bool QVariant::isValid() const
-{
-   return d.type != Invalid;
-}
-
-template<typename T>
-inline void QVariant::setValue(const T &v)
-{
-   // reuse the current QVariant private if possible
-   const uint type = qMetaTypeId<T>(static_cast<T *>(nullptr));
-
-   if (isDetached() && (type == d.type || (type < uint(QVariant::FirstConstructedType) &&
-                  d.type < uint(QVariant::FirstConstructedType)))) {
-
-      d.type    = type;
-      d.is_null = false;
-      T *old    = reinterpret_cast<T *>(d.is_shared ? d.data.shared->ptr : &d.data.ptr);
-
-      if (! std::is_trivially_destructible_v<T>) {
-         old->~T();
-      }
-      new (old) T(v);  // call the copy constructor
+   if constexpr(isType_Simple<T>())  {
+      m_data = value;
 
    } else {
-       *this = QVariant(type, &v, std::is_pointer_v<T>);
+      m_data = std::make_shared<CustomType_T<T>>(value);
+   }
+}
+
+inline void QVariant::setValue(const QVariant &value)
+{
+   *this = value;
+}
+
+template<typename Requested>
+Requested QVariant::value() const
+{
+   if constexpr(isType_Simple<Requested>())  {
+
+      if (std::holds_alternative<Requested>(m_data)) {
+         return std::get<Requested>(m_data);
+
+      } else {
+         // variant is empty or Requested is not the type in the variant
+
+      }
+
+   } else {
+      // custom type
+      auto ptr = std::get_if<std::shared_ptr<CustomType>>(&m_data);
+
+      if (ptr == nullptr) {
+         // variant is empty or a simple type
+
+      } else {
+         auto newPtr = std::dynamic_pointer_cast<CustomType_T<Requested>>(*ptr);
+
+         if (newPtr == nullptr) {
+            // variant and Requested are not the same custom type
+
+         } else {
+            return newPtr->get();
+
+         }
+      }
    }
 
-}
+   uint requested_type = typeToTypeId<Requested>();
+   std::optional<QVariant> tmp = maybeConvert(requested_type);
 
-inline void QVariant::setValue(const QVariant &v)
-{
-   *this = v;
-}
+   if (tmp.has_value()) {
+      return tmp->getData<Requested>();
+   }
 
-Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant &p);
-Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant &p);
-Q_CORE_EXPORT QDataStream &operator>> (QDataStream &s, QVariant::Type &p);
-Q_CORE_EXPORT QDataStream &operator<< (QDataStream &s, const QVariant::Type p);
-
-inline bool QVariant::isDetached() const
-{
-   return !d.is_shared || d.data.shared->ref.load() == 1;
-}
-
-
-// Helper class to add one more level of indirection to prevent implicit casts
-class QVariantComparisonHelper
-{
- public:
-   inline QVariantComparisonHelper(const QVariant &var)
-      : v(&var) {}
-
- private:
-   friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &);
-   const QVariant *v;
-};
-
-inline bool operator==(const QVariant &v1, const QVariantComparisonHelper &v2)
-{
-   return v1.cmp(*v2.v);
-}
-
-inline bool operator!=(const QVariant &v1, const QVariantComparisonHelper &v2)
-{
-   return !operator==(v1, v2);
+   return Requested();
 }
 
 template<typename T>
-inline T qvariant_cast(const QVariant &v)
+T qvariant_cast(const QVariant &x)
 {
-   const int vid = qMetaTypeId<T>(static_cast<T *>(0));
-
-   if (vid == v.userType()) {
-      return *reinterpret_cast<const T *>(v.constData());
-   }
-
-   if (vid < int(QMetaType::User)) {
-      T t;
-      if (qvariant_cast_helper(v, QVariant::Type(vid), &t)) {
-         return t;
-      }
-   }
+   (void) x;
+   static_assert(! std::is_same_v<T, T>, "qvariant_cast<T>(x) is obsolete, use x.value<T>()");
 
    return T();
 }
 
-template<>
-inline QVariant qvariant_cast<QVariant>(const QVariant &v)
+template <typename T>
+uint QVariant::registerType()
 {
-   if (v.userType() == QMetaType::QVariant) {
-      return *reinterpret_cast<const QVariant *>(v.constData());
+   static std::atomic<uint> userId = QVariant::Invalid;
+
+   if (userId.load(std::memory_order_relaxed) == QVariant::Invalid) {
+
+      std::atomic<uint> &currentId = QVariant::currentUserType();
+
+      uint newId = currentId.fetch_add(1, std::memory_order_relaxed);
+      uint oldId = QVariant::Invalid;
+
+      if (userId.compare_exchange_strong(oldId, newId, std::memory_order_release, std::memory_order_acquire))  {
+         static QString typeName = cs_typeToName<T>();
+         m_userTypes.append(QVariant::NamesAndTypes{typeName.constData(), newId, typeid(T *)});
+
+      } else {
+         // already registered, maybe on a different thread
+         return oldId;
+      }
    }
-   return v;
-}
 
-Q_DECLARE_SHARED(QVariant)
+   return userId.load(std::memory_order_acquire);
+};
 
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
+#define CS_DECLARE_METATYPE(TYPE)                  \
+   template<>                                      \
+   inline const QString &cs_typeToName<TYPE>() {   \
+      static const QString retval = #TYPE;         \
+      return retval;                               \
+   }
 
-Q_DECLARE_BUILTIN_METATYPE(QVariantList, QVariantList)
-Q_DECLARE_BUILTIN_METATYPE(QVariantMap,  QVariantMap)
-Q_DECLARE_BUILTIN_METATYPE(QVariantHash, QVariantHash)
+#define Q_DECLARE_METATYPE(TYPE)                   \
+   static_assert(false, "Macro Q_DECLARE_METATYPE(TYPE) is obsolete, use CS_DECLARE_METATYPE(TYPE)")
 
 #endif

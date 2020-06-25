@@ -25,7 +25,6 @@
 #define QMEDIARESOURCE_H
 
 #include <qmap.h>
-#include <qmetatype.h>
 #include <qstring.h>
 #include <qnetwork_request.h>
 
@@ -76,7 +75,6 @@ class Q_MULTIMEDIA_EXPORT QMediaResource
    void setResolution(const QSize &resolution);
    void setResolution(int width, int height);
 
-
  private:
    enum Property {
       Url,
@@ -94,10 +92,5 @@ class Q_MULTIMEDIA_EXPORT QMediaResource
    };
    QMap<int, QVariant> values;
 };
-
-typedef QList<QMediaResource> QMediaResourceList;
-
-Q_DECLARE_METATYPE(QMediaResource)
-Q_DECLARE_METATYPE(QMediaResourceList)
 
 #endif

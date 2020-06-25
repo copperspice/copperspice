@@ -24,7 +24,6 @@
 #ifndef QVIDEOFRAME_H
 #define QVIDEOFRAME_H
 
-#include <qmetatype.h>
 #include <qshareddata.h>
 #include <qimage.h>
 #include <qabstractvideobuffer.h>
@@ -147,11 +146,6 @@ class Q_MULTIMEDIA_EXPORT QVideoFrame
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, const QVideoFrame &);
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QVideoFrame::FieldType);
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, QVideoFrame::PixelFormat);
-
-
-Q_DECLARE_METATYPE(QVideoFrame)
-Q_DECLARE_METATYPE(QVideoFrame::FieldType)
-Q_DECLARE_METATYPE(QVideoFrame::PixelFormat)
 
 #endif
 

@@ -24,8 +24,8 @@
 #ifndef QVariantAnimation_P_H
 #define QVariantAnimation_P_H
 
-#include <qvariantanimation.h>
 #include <qeasingcurve.h>
+#include <qvariantanimation.h>
 #include <qvector.h>
 
 #include <qabstractanimation_p.h>
@@ -34,53 +34,57 @@
 
 class QVariantAnimationPrivate : public QAbstractAnimationPrivate
 {
-   Q_DECLARE_PUBLIC(QVariantAnimation)
-
  public:
    QVariantAnimationPrivate();
+
+   void cs_updateCustomType();
+
+   // might be used in declarative, add Q_CORE_EXPORT
+   static QVariantAnimation::CustomFormula cs_getCustomType(uint typeId);
+
+   void convertValues(uint typeId);
 
    static QVariantAnimationPrivate *get(QVariantAnimation *q) {
       return q->d_func();
    }
 
+   void setValueAt(double, const QVariant &);
    void setDefaultStartEndValue(const QVariant &value);
-
-   QVariant currentValue;
-   QVariant defaultStartEndValue;
-
-   // used to keep track of the KeyValue interval in which we currently are
-   struct {
-      QVariantAnimation::KeyValue start, end;
-   } currentInterval;
-
-   QEasingCurve easing;
-   int duration;
-   QVariantAnimation::KeyValues keyValues;
-   QVariantAnimation::Interpolator interpolator;
-
-   void setCurrentValueForProgress(const qreal progress);
+   void setCurrentValueForProgress(const double progress);
    void recalculateCurrentInterval(bool force = false);
-   void setValueAt(qreal, const QVariant &);
-   QVariant valueAt(qreal step) const;
-   void convertValues(int t);
 
-   void updateInterpolator();
+   QVariant valueAt(double step) const;
 
-   // XXX this is needed by dui
-   static Q_CORE_EXPORT QVariantAnimation::Interpolator getInterpolator(int interpolationType);
+   // keeps track of the current interval
+   struct {
+      QVariantAnimation::ValuePair start;
+      QVariantAnimation::ValuePair end;
+
+   } m_currentInterval;
+
+   QVariant m_currentValue;
+   QVariant m_defaultValue;
+
+   int m_duration;
+   QEasingCurve m_easing;
+
+   QVector<QVariantAnimation::ValuePair> m_keyValues;
+   QVariantAnimation::CustomFormula m_callBack;
+
+ private:
+   Q_DECLARE_PUBLIC(QVariantAnimation)
 };
 
-// this should make the interpolation faster
 template<typename T>
-inline T _q_interpolate(const T &f, const T &t, qreal progress)
+T cs_genericFormula(const T &from, const T &to, double progress)
 {
-   return T(f + (t - f) * progress);
+   return T(from + (to - from) * progress);
 }
 
 template<typename T>
-inline QVariant _q_interpolateVariant(const T &from, const T &to, qreal progress)
+QVariant cs_variantFormula(const QVariant &from, const QVariant &to, double progress)
 {
-   return _q_interpolate(from, to, progress);
+   return cs_genericFormula(from.getData<T>(), to.getData<T>(), progress);
 }
 
 #endif // QT_NO_ANIMATION

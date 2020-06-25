@@ -28,13 +28,6 @@
 #include <qmediaplaylist.h>
 #include <qmediacontent.h>
 
-// register by hand
-Q_MULTIMEDIA_EXPORT const QString &cs_typeName_internal<QMediaContent, void>::typeName()
-{
-   static QString retval("QMediaContent");
-   return retval;
-}
-
 class QMediaContentPrivate : public QSharedData
 {
  public:
@@ -42,7 +35,7 @@ class QMediaContentPrivate : public QSharedData
       : isPlaylistOwned(false)
    {}
 
-   QMediaContentPrivate(const QMediaResourceList &r)
+   QMediaContentPrivate(const QList<QMediaResource> &r)
       : resources(r), isPlaylistOwned(false)
    {}
 
@@ -66,7 +59,7 @@ class QMediaContentPrivate : public QSharedData
       return resources == other.resources && playlist == other.playlist;
    }
 
-   QMediaResourceList resources;
+   QList<QMediaResource> resources;
 
    QPointer<QMediaPlaylist> playlist;
    bool isPlaylistOwned;
@@ -98,7 +91,7 @@ QMediaContent::QMediaContent(const QMediaResource &resource)
    d->resources << resource;
 }
 
-QMediaContent::QMediaContent(const QMediaResourceList &resources)
+QMediaContent::QMediaContent(const QList<QMediaResource> &resources)
    : d(new QMediaContentPrivate(resources))
 {
 }
@@ -125,9 +118,9 @@ QMediaContent &QMediaContent::operator=(const QMediaContent &other)
 
 bool QMediaContent::operator==(const QMediaContent &other) const
 {
-   return (d.constData() == 0 && other.d.constData() == 0) ||
-      (d.constData() != 0 && other.d.constData() != 0 &&
-         *d.constData() == *other.d.constData());
+   return (d.constData() == nullptr && other.d.constData() == nullptr) ||
+      (d.constData() != nullptr && other.d.constData() != nullptr &&
+      *d.constData() == *other.d.constData());
 }
 
 bool QMediaContent::operator!=(const QMediaContent &other) const
@@ -137,7 +130,7 @@ bool QMediaContent::operator!=(const QMediaContent &other) const
 
 bool QMediaContent::isNull() const
 {
-   return d.constData() == 0;
+   return d.constData() == nullptr;
 }
 
 QUrl QMediaContent::canonicalUrl() const
@@ -152,16 +145,16 @@ QNetworkRequest QMediaContent::canonicalRequest() const
 
 QMediaResource QMediaContent::canonicalResource() const
 {
-   return d.constData() != 0 ?  d->resources.value(0) : QMediaResource();
+   return d.constData() != nullptr ?  d->resources.value(0) : QMediaResource();
 }
 
-QMediaResourceList QMediaContent::resources() const
+QList<QMediaResource> QMediaContent::resources() const
 {
-   return d.constData() != 0 ? d->resources : QMediaResourceList();
+   return d.constData() != nullptr ? d->resources : QList<QMediaResource>();
 }
 
 QMediaPlaylist *QMediaContent::playlist() const
 {
-   return d.constData() != 0 ? d->playlist.data() : 0;
+   return d.constData() != nullptr ? d->playlist.data() : nullptr;
 }
 

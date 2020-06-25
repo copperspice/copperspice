@@ -30,7 +30,6 @@
 #include <qmediaobject.h>
 #include <qmediaencodersettings.h>
 #include <qmediabindableinterface.h>
-#include <qmediaenumdebug.h>
 
 class QSize;
 class QAudioFormat;
@@ -247,16 +246,7 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
 
    CS_SLOT_1(Private, void _q_availabilityChanged(QMultimedia::AvailabilityStatus un_named_arg1))
    CS_SLOT_2(_q_availabilityChanged)
-
 };
-
-Q_DECLARE_METATYPE(QMediaRecorder::State)
-Q_DECLARE_METATYPE(QMediaRecorder::Status)
-Q_DECLARE_METATYPE(QMediaRecorder::Error)
-
-Q_MEDIA_ENUM_DEBUG(QMediaRecorder, State)
-Q_MEDIA_ENUM_DEBUG(QMediaRecorder, Status)
-Q_MEDIA_ENUM_DEBUG(QMediaRecorder, Error)
 
 #endif
 

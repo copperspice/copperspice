@@ -128,7 +128,7 @@ void QWindowsNativeInterface::setWindowProperty(QPlatformWindow *window, const Q
    QWindowsWindow *platformWindow = static_cast<QWindowsWindow *>(window);
 
    if (name == customMarginPropertyC) {
-      platformWindow->setCustomMargins(qvariant_cast<QMargins>(value));
+      platformWindow->setCustomMargins(value.value<QMargins>());
    }
 }
 

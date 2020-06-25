@@ -19,7 +19,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
     QMetaObjectAccessor
     QMetaObjectExtraData
     QMetaProperty
-    QMetaType
     QMimeData
     QModelIndex
     QModelIndexList
@@ -68,7 +67,6 @@ list(APPEND CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobjectaccessor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobjectextradata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaproperty.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatype.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmimedata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmodelindex.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmodelindexlist.h
@@ -91,8 +89,8 @@ list(APPEND CORE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwineventnotifier.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatype.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmetafwd.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_callevent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_internal_1.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/csmeta_internal_2.h
@@ -122,7 +120,6 @@ list(APPEND CORE_PRIVATE_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtimerinfo_unix_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator_p.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant_p.h
 )
 
 target_sources(CsCore
@@ -137,7 +134,6 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventloop.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmath.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobject.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetatype.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmimedata.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qobject.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qobjectcleanuphandler.cpp

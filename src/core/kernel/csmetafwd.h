@@ -21,49 +21,15 @@
 *
 ***********************************************************************/
 
-#ifndef QSURFACE_H
-#define QSURFACE_H
+#ifndef CSMETAFWD_H
+#define CSMETAFWD_H
 
-#include <qnamespace.h>
-#include <qsurfaceformat.h>
-#include <qsize.h>
+class cs_internalEmpty;
 
-class QPlatformSurface;
-class QSurfacePrivate;
+template<class T1 = cs_internalEmpty>
+const QString &cs_typeToName();
 
-class Q_GUI_EXPORT QSurface
-{
- public:
-   enum SurfaceClass {
-      Window,
-      Offscreen
-   };
-
-   enum SurfaceType {
-      RasterSurface,
-      OpenGLSurface,
-      RasterGLSurface,
-      VulkanSurface
-   };
-
-   virtual ~QSurface();
-
-   SurfaceClass surfaceClass() const;
-
-   virtual QSurfaceFormat format() const = 0;
-   virtual QPlatformSurface *surfaceHandle() const = 0;
-
-   virtual SurfaceType surfaceType() const = 0;
-   bool supportsOpenGL() const;
-
-   virtual QSize size() const = 0;
-
- protected:
-   explicit QSurface(SurfaceClass type);
-
-   SurfaceClass m_type;
-
-   QSurfacePrivate *m_reserved;
-};
+template<class T1, class T2, class ...Ts>
+const QString &cs_typeToName();
 
 #endif

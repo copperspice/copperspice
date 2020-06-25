@@ -28,7 +28,6 @@
 
 #include <qmediacontrol.h>
 #include <qmultimedia.h>
-#include <qmediaenumdebug.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaStreamsControl : public QMediaControl
 {
@@ -60,8 +59,5 @@ class Q_MULTIMEDIA_EXPORT QMediaStreamsControl : public QMediaControl
 
 #define QMediaStreamsControl_iid "com.copperspice.CS.mediaStreamsControl/1.0"
 CS_DECLARE_INTERFACE(QMediaStreamsControl, QMediaStreamsControl_iid)
-
-Q_DECLARE_METATYPE(QMediaStreamsControl::StreamType)
-Q_MEDIA_ENUM_DEBUG(QMediaStreamsControl, StreamType)
 
 #endif

@@ -21,19 +21,18 @@
 *
 ***********************************************************************/
 
-#ifndef QMEDIAENUMDEBUG_H
-#define QMEDIAENUMDEBUG_H
+#ifndef QVARIANTGUI_P_H
+#define QVARIANTGUI_P_H
 
-#include <qmetaobject.h>
-#include <qdebug.h>
+#include <qvariant.h>
 
-#define Q_MEDIA_ENUM_DEBUG(Class,Enum) \
-inline QDebug operator<<(QDebug dbg, Class::Enum value) \
-{ \
-    int index = Class::staticMetaObject().indexOfEnumerator(#Enum); \
-    dbg.nospace() << #Class << "::" << Class::staticMetaObject().enumerator(index).valueToKey(value); \
-    return dbg.space(); \
-}
+class QVariantGui : public QVariantBase
+{
+ public:
+   bool cs_internal_convert(uint current_userType, uint new_userType, QVariant &self) const override;
+   bool cs_internal_create(uint newUserType, const void *other, QVariant &self) const override;
+   bool cs_internal_load(QDataStream &stream, uint type, QVariant &self) const override;
+   bool cs_internal_save(QDataStream &stream, uint type, const QVariant &self) const override;
+};
 
 #endif
-

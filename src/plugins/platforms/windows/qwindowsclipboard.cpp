@@ -57,10 +57,10 @@ static QDebug operator<<(QDebug d, const QMimeData *mimeData)
          d << ", html =" << mimeData->html();
       }
       if (mimeData->hasColor()) {
-         d << ", colorData =" << qvariant_cast<QColor>(mimeData->colorData());
+         d << ", colorData =" << (mimeData->colorData()).value<QColor>();
       }
       if (mimeData->hasImage()) {
-         d << ", imageData =" << qvariant_cast<QImage>(mimeData->imageData());
+         d << ", imageData =" << (mimeData->imageData()).value<QImage>();
       }
       if (mimeData->hasUrls()) {
          d << ", urls =" << mimeData->urls();

@@ -65,7 +65,6 @@
 #include <qmath.h>
 #include <qmessageauthenticationcode.h>
 #include <qmetaobject.h>
-#include <qmetatype.h>
 #include <qmimedata.h>
 #include <qmutex.h>
 #include <qnamespace.h>

@@ -1261,3 +1261,5 @@ bool QWindowsFontEngine::supportsTransformation(const QTransform &transform) con
    // Support all transformations for ttf files, and translations for raster fonts
    return ttf || transform.type() <= QTransform::TxTranslate;
 }
+
+CS_DECLARE_METATYPE(HFONT)

@@ -226,8 +226,6 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    friend class QPageSetupWidget;
 };
 
-Q_DECLARE_METATYPE(QPrinter::Orientation)
-
 #endif // QT_NO_PRINTER
 
 #endif

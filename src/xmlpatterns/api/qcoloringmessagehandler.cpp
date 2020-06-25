@@ -97,21 +97,25 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
          }
 
          if (hasLine) {
-            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2, at line %3, column %4: %5").formatArgs(colorify(errorId, ErrorCode),
-                           colorify(location, Location),
-                           colorify(QString::number(sourceLocation.line()), Location),
-                           colorify(QString::number(sourceLocation.column()), Location),
-                           colorifyDescription(description)));
+            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2, at line %3, column %4 \n   Description: %5")
+                  .formatArgs(colorify(errorId, ErrorCode),
+                  colorify(location, Location),
+                  colorify(QString::number(sourceLocation.line()), Location),
+                  colorify(QString::number(sourceLocation.column()), Location),
+                  colorifyDescription(description)));
+
          } else {
-            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2: %3")
-                           .formatArgs(colorify(errorId, ErrorCode), colorify(location, Location), colorifyDescription(description)));
+            writeUncolored(QXmlPatternistCLI::tr("Error %1 in \"%2\" \n   Description: %3")
+                  .formatArgs(colorify(errorId, ErrorCode), colorify(location, Location),
+                  colorifyDescription(description)));
          }
+
          break;
       }
 
       case QtCriticalMsg:
       case QtDebugMsg: {
-         Q_ASSERT_X(false, Q_FUNC_INFO, "CriticalMsg or DebugMsg are not supported.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "CriticalMsg or DebugMsg not supported.");
          return;
       }
    }

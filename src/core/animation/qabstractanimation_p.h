@@ -36,8 +36,6 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 class QAnimationGroup;
 class QAbstractAnimation;
 class QUnifiedTimer;
@@ -125,7 +123,7 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
    QUnifiedTimer();
 
  public:
-   //XXX this is needed by dui
+   // may be required for declarative
    static QUnifiedTimer *instance();
    static QUnifiedTimer *instance(bool create);
 
@@ -143,11 +141,11 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
       consistentTiming = consistent;
    }
 
-   //these facilitate fine-tuning of complex animations
+   // these facilitate fine-tuning of complex animations
    void setSlowModeEnabled(bool enabled) {
       slowMode = enabled;
    }
-   void setSlowdownFactor(qreal factor) {
+   void setSlowdownFactor(double factor) {
       slowdownFactor = factor;
    }
 
@@ -198,7 +196,7 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
    // This factor will be used to divide the DEFAULT_TIMER_INTERVAL at each tick
    // when slowMode is enabled. Setting it to 0 or higher than DEFAULT_TIMER_INTERVAL (16)
    // stops all animations.
-   qreal slowdownFactor;
+   double slowdownFactor;
 
    // bool to indicate that only pause animations are active
    bool isPauseTimerActive;
@@ -215,8 +213,6 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
    int closestPauseAnimationTimeToFinish();
 };
 
-QT_END_NAMESPACE
-
 #endif //QT_NO_ANIMATION
 
-#endif //QABSTRACTANIMATION_P_H
+#endif

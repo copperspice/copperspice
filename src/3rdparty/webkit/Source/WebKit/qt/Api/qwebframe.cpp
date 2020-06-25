@@ -1521,7 +1521,7 @@ QVariant QWebFrame::evaluateJavaScript(const QString& scriptSource)
         int distance = 0;
         JSC::JSValue v = d->frame->script()->executeScript(ScriptSourceCode(scriptSource)).jsValue();
 
-        rc = JSC::Bindings::convertValueToQVariant(proxy->globalObject(mainThreadNormalWorld())->globalExec(), v, QMetaType::Void, &distance);
+        rc = JSC::Bindings::convertValueToQVariant(proxy->globalObject(mainThreadNormalWorld())->globalExec(), v, QVariant::Void, &distance);
 #elif USE(V8)
         QScriptEngine* engine = d->frame->script()->qtScriptEngine();
         if (!engine)
@@ -1939,7 +1939,7 @@ QWebFrame *QWebHitTestResult::frame() const
 }
 
 void QWebFrame::_q_orientationChanged()
-{	
+{
 	d->_q_orientationChanged();
 }
 

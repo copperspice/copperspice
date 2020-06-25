@@ -2065,7 +2065,8 @@ void QGraphicsScene::addItem(QGraphicsItem *item)
    const QVariant newSceneVariant(item->itemChange(QGraphicsItem::ItemSceneChange,
          QVariant::fromValue<QGraphicsScene *>(this)));
 
-   QGraphicsScene *targetScene = qvariant_cast<QGraphicsScene *>(newSceneVariant);
+   QGraphicsScene *targetScene = newSceneVariant.value<QGraphicsScene *>();
+
    if (targetScene != this) {
       if (targetScene && item->d_ptr->scene != targetScene) {
          targetScene->addItem(item);
@@ -2327,7 +2328,9 @@ void QGraphicsScene::removeItem(QGraphicsItem *item)
    // Notify the item that it's scene is changing to 0, allowing the item to react
    const QVariant newSceneVariant(item->itemChange(QGraphicsItem::ItemSceneChange,
          QVariant::fromValue<QGraphicsScene *>(0)));
-   QGraphicsScene *targetScene = qvariant_cast<QGraphicsScene *>(newSceneVariant);
+
+   QGraphicsScene *targetScene = newSceneVariant.value<QGraphicsScene *>();
+
    if (targetScene != 0 && targetScene != this) {
       targetScene->addItem(item);
       return;

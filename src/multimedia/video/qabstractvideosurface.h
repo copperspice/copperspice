@@ -93,7 +93,4 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 
 Q_MULTIMEDIA_EXPORT QDebug operator<<(QDebug, const QAbstractVideoSurface::Error &);
 
-Q_DECLARE_METATYPE(QAbstractVideoSurface *)
-Q_DECLARE_METATYPE(QAbstractVideoSurface::Error)
-
 #endif

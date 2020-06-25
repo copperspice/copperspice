@@ -96,8 +96,9 @@ class Q_GUI_EXPORT QTreeWidgetItem
    inline void setText(int column, const QString &text);
 
    inline QIcon icon(int column) const {
-      return qvariant_cast<QIcon>(data(column, Qt::DecorationRole));
+      return data(column, Qt::DecorationRole).value<QIcon>();
    }
+
    inline void setIcon(int column, const QIcon &icon);
 
    inline QString statusTip(int column) const {
@@ -122,7 +123,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
 #endif
 
    inline QFont font(int column) const {
-      return qvariant_cast<QFont>(data(column, Qt::FontRole));
+      return data(column, Qt::FontRole).value<QFont>();
    }
 
    inline void setFont(int column, const QFont &font);
@@ -136,7 +137,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    }
 
    inline QColor backgroundColor(int column) const {
-      return qvariant_cast<QColor>(data(column, Qt::BackgroundColorRole));
+      return data(column, Qt::BackgroundColorRole).value<QColor>();
    }
 
    inline void setBackgroundColor(int column, const QColor &color) {
@@ -144,7 +145,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    }
 
    inline QBrush background(int column) const {
-      return qvariant_cast<QBrush>(data(column, Qt::BackgroundRole));
+      return data(column, Qt::BackgroundRole).value<QBrush>();
    }
 
    inline void setBackground(int column, const QBrush &brush) {
@@ -152,7 +153,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    }
 
    inline QColor textColor(int column) const {
-      return qvariant_cast<QColor>(data(column, Qt::TextColorRole));
+      return data(column, Qt::TextColorRole).value<QColor>();
    }
 
    inline void setTextColor(int column, const QColor &color) {
@@ -160,7 +161,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    }
 
    inline QBrush foreground(int column) const {
-      return qvariant_cast<QBrush>(data(column, Qt::ForegroundRole));
+      return data(column, Qt::ForegroundRole).value<QBrush>();
    }
 
    inline void setForeground(int column, const QBrush &brush) {
@@ -176,7 +177,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    }
 
    inline QSize sizeHint(int column) const {
-      return qvariant_cast<QSize>(data(column, Qt::SizeHintRole));
+      return data(column, Qt::SizeHintRole).value<QSize>();
    }
 
    inline void setSizeHint(int column, const QSize &size) {

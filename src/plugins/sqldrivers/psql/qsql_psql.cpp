@@ -121,9 +121,6 @@ inline void PQfreemem(T *t, int = 0)
    free(t);
 }
 
-Q_DECLARE_METATYPE(PGconn *)
-Q_DECLARE_METATYPE(PGresult *)
-
 inline void qPQfreemem(void *buffer)
 {
    PQfreemem(buffer);
@@ -429,7 +426,7 @@ QVariant QPSQLResult::data(int i)
    const char *val = PQgetvalue(d->result, at(), i);
 
    if (PQgetisnull(d->result, at(), i)) {
-      return QVariant(type);
+      return QVariant();
    }
 
    switch (type) {
@@ -674,7 +671,7 @@ static QString qCreateParamString(const QVector<QVariant> &boundValues, const QS
 
       f.setType(val.type());
 
-      if (val.isNull()) {
+      if (! val.isValid()) {
          f.clear();
       } else {
          f.setValue(val);
@@ -1608,7 +1605,7 @@ QString QPSQLDriver::formatValue(const QSqlField &field, bool trimStrings) const
             break;
          }
 
-         case QMetaType::Float:
+         case QVariant::Float:
             assignSpecialPsqlFloatValue(field.value().toFloat(), &r);
             if (r.isEmpty()) {
                r = QSqlDriver::formatValue(field, trimStrings);

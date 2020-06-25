@@ -39,7 +39,6 @@
 #include <qhash.h>
 #include <qmultihash.h>
 #include <qmetaobject.h>
-#include <qmetatype.h>
 #include <qwebelement.h>
 
 namespace JSC {
@@ -84,8 +83,6 @@ QtRuntimeObject::QtRuntimeObject(ExecState* exec, JSGlobalObject* globalObject, 
 QtInstance::QtInstance(QObject* o, PassRefPtr<RootObject> rootObject, QScriptEngine::ValueOwnership ownership)
     : Instance(rootObject), m_class(0), m_object(o), m_hashkey(o), m_ownership(ownership)
 {
-    // good place to register Qt metatypes in QtWebKit, as this is class will initialize if we have a QObject bridge.
-    qRegisterMetaType<QWebElement>();
 }
 
 QtInstance::~QtInstance()
@@ -323,11 +320,11 @@ JSValue QtInstance::valueOf(ExecState* exec) const
 
 // In qt_runtime.cpp
 JSValue convertQVariantToValue(ExecState*, PassRefPtr<RootObject> root, const QVariant& variant);
-QVariant convertValueToQVariant(ExecState*, JSValue, QMetaType::Type hint, int *distance);
+QVariant convertValueToQVariant(ExecState*, JSValue, QVariant::Type hint, int *distance);
 
 QString QtField::name() const
 {
-    if (m_type == MetaProperty) {
+    if (m_type == QtFieldType::MetaProperty) {
         return m_property.name();
     }
 
@@ -353,7 +350,7 @@ JSValue QtField::valueFromInstance(ExecState* exec, const Instance* inst) const
     if (obj) {
         QVariant val;
 
-        if (m_type == MetaProperty) {
+        if (m_type == QtFieldType::MetaProperty) {
 
             if (m_property.isReadable())
                 val = m_property.read(obj);
@@ -384,14 +381,16 @@ void QtField::setValueToInstance(ExecState* exec, const Instance* inst, JSValue 
     QObject* obj = instance->getObject();
 
     if (obj) {
-        QMetaType::Type argtype = QMetaType::Void;
-        if (m_type == MetaProperty)
-            argtype = (QMetaType::Type) QMetaType::type(m_property.typeName());
+        uint argtype = QVariant::Void;
+
+        if (m_type == QtFieldType::MetaProperty) {
+            argtype = QVariant::nameToType(m_property.typeName());
+        }
 
         // dynamic properties just get any QVariant
-        QVariant val = convertValueToQVariant(exec, aValue, argtype, 0);
+        QVariant val = convertValueToQVariant(exec, aValue, static_cast<QVariant::Type>(argtype), 0);
 
-        if (m_type == MetaProperty) {
+        if (m_type == QtFieldType::MetaProperty) {
             if (m_property.isWritable())
                 m_property.write(obj, val);
         }

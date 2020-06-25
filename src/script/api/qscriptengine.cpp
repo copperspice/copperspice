@@ -78,9 +78,6 @@
 
 #include <stdlib.h>
 
-Q_DECLARE_METATYPE(QScriptValue)
-Q_DECLARE_METATYPE(QObjectList)
-
 class QScriptSyntaxCheckResultPrivate : public QSharedData
 {
  public:
@@ -784,9 +781,6 @@ QScriptEnginePrivate::QScriptEnginePrivate()
      registeredScriptStrings(0), processEventsInterval(-1), inEval(false),
      uncaughtExceptionLineNumber(-1)
 {
-   qMetaTypeId<QScriptValue>();
-   qMetaTypeId<QList<int>>();
-   qMetaTypeId<QObjectList>();
    if (! QCoreApplication::instance()) {
       qFatal("QScriptEngine: Must construct a Q(Core)Application before a QScriptEngine");
       return;
@@ -874,32 +868,24 @@ QScriptEnginePrivate::~QScriptEnginePrivate()
    }
 }
 
-QVariant QScriptEnginePrivate::jscValueToVariant(JSC::ExecState *exec, JSC::JSValue value, int targetType)
+QVariant QScriptEnginePrivate::jscValueToVariant(JSC::ExecState *exec, JSC::JSValue value, uint targetType)
 {
-   if (targetType == QMetaType::QVariant || uint(targetType) == QVariant::LastType) {
+   if (targetType == QVariant::Variant) {
       return toVariant(exec, value);
    }
-   QVariant v(targetType, (void *)0);
 
-   if (convertValue(exec, value, targetType, v.data())) {
-      return v;
-   }
+   QVariant newValue = convertValue(exec, value, targetType);
 
-   if (uint(targetType) == QVariant::LastType) {
-      return toVariant(exec, value);
+   if (newValue.isValid()) {
+      return newValue;
    }
 
    if (isVariant(value)) {
-      v = variantValue(value);
+      newValue = variantValue(value);
 
-      if (v.canConvert(QVariant::Type(targetType))) {
-         v.convert(QVariant::Type(targetType));
-         return v;
-      }
-
-      QString typeName = v.typeName();
-      if (typeName.endsWith('*') && (QMetaType::type(typeName.left(typeName.size() - 1)) == targetType)) {
-         return QVariant(targetType, *reinterpret_cast<void **>(v.data()));
+      if (newValue.canConvert(QVariant::Type(targetType))) {
+         newValue.convert(QVariant::Type(targetType));
+         return newValue;
       }
    }
 
@@ -912,6 +898,7 @@ JSC::JSValue QScriptEnginePrivate::arrayFromStringList(JSC::ExecState *exec, con
    for (int i = 0; i < lst.size(); ++i) {
       setProperty(exec, arr, i, JSC::jsString(exec, lst.at(i)));
    }
+
    return arr;
 }
 
@@ -1391,9 +1378,9 @@ JSC::JSValue QScriptEnginePrivate::newQObject(QObject *object, QScriptEngine::Va
          QString typeString = meta->className();
          typeString.append('*');
 
-         int typeId = QMetaType::type(typeString);
+         uint typeId = QVariant::nameToType(typeString);
 
-         if (typeId != 0) {
+         if (typeId != QVariant::Invalid) {
             JSC::JSValue proto = defaultPrototype(typeId);
 
             if (proto) {
@@ -2810,278 +2797,321 @@ void QScriptEngine::setDefaultPrototype(int metaTypeId, const QScriptValue &prot
    d->setDefaultPrototype(metaTypeId, d->scriptValueToJSCValue(prototype));
 }
 
-QScriptValue QScriptEngine::create(int type, const void *ptr)
+QScriptValue QScriptEngine::create(const QVariant &data)
 {
    Q_D(QScriptEngine);
    QScript::APIShim shim(d);
-   return d->scriptValueFromJSCValue(d->create(d->currentFrame, type, ptr));
+
+   return d->scriptValueFromJSCValue(d->create(d->currentFrame, data));
 }
 
-JSC::JSValue QScriptEnginePrivate::create(JSC::ExecState *exec, int type, const void *ptr)
+JSC::JSValue QScriptEnginePrivate::create(JSC::ExecState *exec, const QVariant &data)
 {
-   Q_ASSERT(ptr != 0);
+   uint type = data.userType();
+
    JSC::JSValue result;
-   QScriptEnginePrivate *eng = exec ? QScript::scriptEngineFromExec(exec) : 0;
-   QScriptTypeInfo *info = eng ? eng->m_typeInfos.value(type) : 0;
+   QScriptEnginePrivate *eng = exec ? QScript::scriptEngineFromExec(exec) : nullptr;
+   QScriptTypeInfo *info     = eng ? eng->m_typeInfos.value(type) : nullptr;
+
    if (info && info->marshal) {
-      result = eng->scriptValueToJSCValue(info->marshal(eng->q_func(), ptr));
+      result = eng->scriptValueToJSCValue(info->marshal(eng->q_func(), data));
+
    } else {
-      // check if it's one of the types we know
-      switch (QMetaType::Type(type)) {
-         case QMetaType::UnknownType:
-         case QMetaType::Void:
+      switch (type) {
+
+         case QVariant::Invalid:
+         case QVariant::Void:
             return JSC::jsUndefined();
-         case QMetaType::Bool:
-            return JSC::jsBoolean(*reinterpret_cast<const bool *>(ptr));
-         case QMetaType::Int:
-            return JSC::jsNumber(exec, *reinterpret_cast<const int *>(ptr));
-         case QMetaType::UInt:
-            return JSC::jsNumber(exec, *reinterpret_cast<const uint *>(ptr));
 
-         case QMetaType::Long:
-            return JSC::jsNumber(exec, *reinterpret_cast<const long *>(ptr));
-         case QMetaType::ULong:
-            return JSC::jsNumber(exec, *reinterpret_cast<const ulong *>(ptr));
-         case QMetaType::LongLong:
-            return JSC::jsNumber(exec, qsreal(*reinterpret_cast<const qint64 *>(ptr)));
-         case QMetaType::ULongLong:
-            return JSC::jsNumber(exec, qsreal(*reinterpret_cast<const quint64 *>(ptr)));
+         case QVariant::Bool:
+            return JSC::jsBoolean(data.getData<bool>());
 
-         case QMetaType::Double:
-            return JSC::jsNumber(exec, qsreal(*reinterpret_cast<const double *>(ptr)));
-         case QMetaType::QString:
-            return JSC::jsString(exec, *reinterpret_cast<const QString *>(ptr));
-         case QMetaType::Float:
-            return JSC::jsNumber(exec, *reinterpret_cast<const float *>(ptr));
-         case QMetaType::Short:
-            return JSC::jsNumber(exec, *reinterpret_cast<const short *>(ptr));
-         case QMetaType::UShort:
-            return JSC::jsNumber(exec, *reinterpret_cast<const unsigned short *>(ptr));
-         case QMetaType::Char:
-            return JSC::jsNumber(exec, *reinterpret_cast<const char *>(ptr));
-         case QMetaType::UChar:
-            return JSC::jsNumber(exec, *reinterpret_cast<const unsigned char *>(ptr));
-         case QMetaType::QChar:
-            return JSC::jsNumber(exec, (*reinterpret_cast<const QChar *>(ptr)).unicode());
-         case QMetaType::QStringList:
-            result = arrayFromStringList(exec, *reinterpret_cast<const QStringList *>(ptr));
-            break;
-         case QMetaType::QVariantList:
-            result = arrayFromVariantList(exec, *reinterpret_cast<const QVariantList *>(ptr));
-            break;
-         case QMetaType::QVariantMap:
-            result = objectFromVariantMap(exec, *reinterpret_cast<const QVariantMap *>(ptr));
-            break;
-         case QMetaType::QDateTime:
-            result = newDate(exec, *reinterpret_cast<const QDateTime *>(ptr));
-            break;
-         case QMetaType::QDate:
-            result = newDate(exec, QDateTime(*reinterpret_cast<const QDate *>(ptr)));
-            break;
+         case QVariant::Int:
+            return JSC::jsNumber(exec, data.getData<int>());
 
-         case QMetaType::QRegularExpression:
-            result = newRegExp(exec, *reinterpret_cast<const QRegularExpression *>(ptr));
-            break;
+         case QVariant::UInt:
+            return JSC::jsNumber(exec, data.getData<uint>());
 
-         case QMetaType::QObjectStar:
-         case QMetaType::QWidgetStar:
-            result = eng->newQObject(*reinterpret_cast<QObject *const *>(ptr));
+         case QVariant::Short:
+            return JSC::jsNumber(exec, data.getData<short>());
+
+         case QVariant::UShort:
+            return JSC::jsNumber(exec, data.getData<ushort>());
+
+         case QVariant::Long:
+            return JSC::jsNumber(exec, data.getData<long>());
+
+         case QVariant::ULong:
+            return JSC::jsNumber(exec, data.getData<ulong>());
+
+         case QVariant::LongLong:
+            return JSC::jsNumber(exec, qsreal(data.getData<qint64>()));
+
+         case QVariant::ULongLong:
+            return JSC::jsNumber(exec, qsreal(data.getData<quint64>()));
+
+         case QVariant::Double:
+            return JSC::jsNumber(exec, qsreal(data.getData<double>()));
+
+         case QVariant::Float:
+            return JSC::jsNumber(exec, data.getData<float>());
+
+         case QVariant::Char:
+            return JSC::jsNumber(exec, data.getData<char>());
+
+         case QVariant::UChar:
+            return JSC::jsNumber(exec, data.getData<uchar>());
+
+         case QVariant::QChar:
+            return JSC::jsNumber(exec, data.getData<QChar32>().unicode());
+
+         case QVariant::String:
+            return JSC::jsString(exec, data.getData<QString>());
+
+         //
+         case QVariant::StringList:
+            result = arrayFromStringList(exec, data.getData<QStringList>());
             break;
 
-         case QMetaType::QVariant:
-            result = eng->newVariant(*reinterpret_cast<const QVariant *>(ptr));
+         case QVariant::List:
+            result = arrayFromVariantList(exec, data.getData<QVariantList>());
+            break;
+
+         case QVariant::Map:
+            result = objectFromVariantMap(exec, data.getData<QVariantMap>());
+            break;
+
+         case QVariant::DateTime:
+            result = newDate(exec, data.getData<QDateTime>());
+            break;
+
+         case QVariant::Date:
+            result = newDate(exec, QDateTime(data.getData<QDate>()));
+            break;
+
+         case QVariant::RegularExpression:
+            result = newRegExp(exec, data.getData<QRegularExpression>());
+            break;
+
+         case QVariant::ObjectStar:
+         case QVariant::WidgetStar:
+            result = eng->newQObject(data.getData<QObject *>());
             break;
 
          default:
             if (isPtr2QObject(type)) {
-               result = eng->newQObject(*reinterpret_cast<QObject *const *>(ptr));
+               result = eng->newQObject(data.getData<QObject *>());
                break;
             }
-            if (type == qMetaTypeId<QScriptValue>()) {
-               result = eng->scriptValueToJSCValue(*reinterpret_cast<const QScriptValue *>(ptr));
-               if (!result) {
+
+            if (type == QVariant::typeToTypeId<QScriptValue>()) {
+               result = eng->scriptValueToJSCValue(data.getData<QScriptValue>());
+
+               if (! result) {
                   return JSC::jsUndefined();
                }
-            }
-            // lazy registration of some common list types
-            else if (type == qMetaTypeId<QObjectList>()) {
+
+            } else if (type == QVariant::typeToTypeId<QObjectList>()) {
                qScriptRegisterSequenceMetaType<QObjectList>(eng->q_func());
-               return create(exec, type, ptr);
-            }
+               return create(exec, data);
 
-            else if (type == qMetaTypeId<QList<int>>()) {
+            } else if (type == QVariant::typeToTypeId<QList<int>>()) {
                qScriptRegisterSequenceMetaType<QList<int>>(eng->q_func());
-               return create(exec, type, ptr);
-            }
+               return create(exec, data);
 
-            else {
-               QString typeName = QMetaType::typeName(type);
+            } else {
+               QString typeName = QVariant::typeToName(type);
 
-               if (typeName.endsWith('*') && !*reinterpret_cast<void *const *>(ptr)) {
+               if (typeName.endsWith('*')) {
                   return JSC::jsNull();
+
                } else {
-                  result = eng->newVariant(QVariant(type, ptr));
+                  result = eng->newVariant(data);
                }
             }
       }
    }
+
    if (result && result.isObject() && info && info->prototype
-      && JSC::JSValue::strictEqual(exec, JSC::asObject(result)->prototype(),
-         eng->originalGlobalObject()->objectPrototype())) {
+               && JSC::JSValue::strictEqual(exec, JSC::asObject(result)->prototype(),
+               eng->originalGlobalObject()->objectPrototype())) {
       JSC::asObject(result)->setPrototype(info->prototype);
    }
+
    return result;
 }
 
-bool QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value,
-   int type, void *ptr)
+QVariant QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value, uint type)
 {
-   QScriptEnginePrivate *eng = exec ? QScript::scriptEngineFromExec(exec) : 0;
+   QVariant retval;
+
+   QScriptEnginePrivate *eng = exec ? QScript::scriptEngineFromExec(exec) : nullptr;
+
    if (eng) {
       QScriptTypeInfo *info = eng->m_typeInfos.value(type);
+
       if (info && info->demarshal) {
-         info->demarshal(eng->scriptValueFromJSCValue(value), ptr);
-         return true;
+         retval = info->demarshal(eng->scriptValueFromJSCValue(value));
+         return retval;
       }
    }
 
-   // check if it's one of the types we know
-   switch (QMetaType::Type(type)) {
-      case QMetaType::Bool:
-         *reinterpret_cast<bool *>(ptr) = toBool(exec, value);
-         return true;
-      case QMetaType::Int:
-         *reinterpret_cast<int *>(ptr) = toInt32(exec, value);
-         return true;
-      case QMetaType::UInt:
-         *reinterpret_cast<uint *>(ptr) = toUInt32(exec, value);
-         return true;
+   switch (type) {
+      case QVariant::Bool:
+         retval.setValue<bool>(toBool(exec, value));
+         return retval;
 
-      case QMetaType::Long:
-         *reinterpret_cast<long *>(ptr) = long(toInteger(exec, value));
-         return true;
-      case QMetaType::ULong:
-         *reinterpret_cast<ulong *>(ptr) = ulong(toInteger(exec, value));
-         return true;
-      case QMetaType::LongLong:
-         *reinterpret_cast<qint64 *>(ptr) = qint64(toInteger(exec, value));
-         return true;
-      case QMetaType::ULongLong:
-         *reinterpret_cast<quint64 *>(ptr) = quint64(toInteger(exec, value));
-         return true;
+      case QVariant::Int:
+         retval.setValue<int>(toInt32(exec, value));
+         return retval;
 
-      case QMetaType::Double:
-         *reinterpret_cast<double *>(ptr) = toNumber(exec, value);
-         return true;
-      case QMetaType::QString:
-         if (value.isUndefined() || value.isNull()) {
-            *reinterpret_cast<QString *>(ptr) = QString();
-         } else {
-            *reinterpret_cast<QString *>(ptr) = toString(exec, value);
-         }
-         return true;
-      case QMetaType::Float:
-         *reinterpret_cast<float *>(ptr) = toNumber(exec, value);
-         return true;
-      case QMetaType::Short:
-         *reinterpret_cast<short *>(ptr) = short(toInt32(exec, value));
-         return true;
-      case QMetaType::UShort:
-         *reinterpret_cast<unsigned short *>(ptr) = QScript::ToUInt16(toNumber(exec, value));
-         return true;
-      case QMetaType::Char:
-         *reinterpret_cast<char *>(ptr) = char(toInt32(exec, value));
-         return true;
+      case QVariant::UInt:
+         retval.setValue<uint>(toUInt32(exec, value));
+         return retval;
 
-      case QMetaType::UChar:
-         *reinterpret_cast<unsigned char *>(ptr) = (unsigned char)(toInt32(exec, value));
-         return true;
+      case QVariant::Long:
+         retval.setValue<long>(long(toInteger(exec, value)));
+         return retval;
 
-      case QMetaType::QChar:
+      case QVariant::ULong:
+         retval.setValue<ulong>(ulong(toInteger(exec, value)));
+         return retval;
+
+      case QVariant::LongLong:
+         retval.setValue<qint64>(qint64(toInteger(exec, value)));
+         return retval;
+
+      case QVariant::ULongLong:
+         retval.setValue<quint64>(quint64(toInteger(exec, value)));
+         return retval;
+
+      case QVariant::Double:
+         retval.setValue<double>(toNumber(exec, value));
+         return retval;
+
+      case QVariant::Float:
+         retval.setValue<float>(toNumber(exec, value));
+         return retval;
+
+      case QVariant::Short:
+         retval.setValue<short>(short(toInt32(exec, value)));
+         return retval;
+
+      case QVariant::UShort:
+         retval.setValue<unsigned short>(QScript::ToUInt16(toNumber(exec, value)));
+         return retval;
+
+      case QVariant::Char:
+         retval.setValue<char>(char(toInt32(exec, value)));
+         return retval;
+
+      case QVariant::UChar:
+         retval.setValue<unsigned char>((unsigned char)(toInt32(exec, value)));
+         return retval;
+
+      case QVariant::QChar:
          if (value.isString()) {
             QString str = toString(exec, value);
-            *reinterpret_cast<QChar *>(ptr) = str.isEmpty() ? QChar() : str.at(0);
+            retval.setValue<QChar>(str.isEmpty() ? QChar() : str.at(0));
          } else {
-            *reinterpret_cast<QChar *>(ptr) = QChar(QScript::ToUInt16(toNumber(exec, value)));
+            retval.setValue<QChar>(char32_t(QScript::ToUInt32(toNumber(exec, value))));
          }
-         return true;
+         return retval;
 
-      case QMetaType::QDateTime:
-         if (isDate(value)) {
-            *reinterpret_cast<QDateTime *>(ptr) = toDateTime(exec, value);
-            return true;
+      case QVariant::String:
+         if (value.isUndefined() || value.isNull()) {
+            retval.setValue<QString>(QString());
+         } else {
+            retval.setValue<QString>(toString(exec, value));
          }
-         break;
-      case QMetaType::QDate:
-         if (isDate(value)) {
-            *reinterpret_cast<QDate *>(ptr) = toDateTime(exec, value).date();
-            return true;
-         }
-         break;
+         return retval;
 
-      case QMetaType::QRegularExpression:
+      case QVariant::RegularExpression:
          if (isRegExp(value)) {
-            *reinterpret_cast<QRegularExpression *>(ptr) = toRegExp(exec, value);
-            return true;
+            retval.setValue<QRegularExpression>(toRegExp(exec, value));
+            return retval;
          }
          break;
 
-      case QMetaType::QObjectStar:
-         if (isQObject(value) || value.isNull()) {
-            *reinterpret_cast<QObject **>(ptr) = toQObject(exec, value);
-            return true;
-         }
-         break;
-
-      case QMetaType::QWidgetStar:
-         if (isQObject(value) || value.isNull()) {
-            QObject *qo = toQObject(exec, value);
-            if (!qo || qo->isWidgetType()) {
-               *reinterpret_cast<QWidget **>(ptr) = reinterpret_cast<QWidget *>(qo);
-               return true;
-            }
-         }
-         break;
-
-      case QMetaType::QStringList:
+      case QVariant::StringList:
          if (isArray(value)) {
-            *reinterpret_cast<QStringList *>(ptr) = stringListFromArray(exec, value);
-            return true;
+            retval.setValue<QStringList>(stringListFromArray(exec, value));
+            return retval;
          }
          break;
-      case QMetaType::QVariantList:
+
+      case QVariant::DateTime:
+         if (isDate(value)) {
+            retval.setValue<QDateTime>(toDateTime(exec, value));
+            return retval;
+         }
+         break;
+
+      case QVariant::Date:
+         if (isDate(value)) {
+            retval.setValue<QDate>(toDateTime(exec, value).date());
+            return retval;
+         }
+         break;
+
+      case QVariant::ObjectStar:
+         if (isQObject(value)) {
+            retval.setValue<QObject *>(toQObject(exec, value));
+            return retval;
+         }
+         break;
+
+      case QVariant::WidgetStar:
+         if (isQObject(value)) {
+
+            /* emerald (script, hold)
+               QObject *tmp = toQObject(exec, value);
+
+               if (! tmp || tmp->isWidgetType()) {
+                  retval.setValue<QWidget *>(reinterpret_cast<QWidget *>(tmp));
+                  return retval;
+               }
+            */
+
+            return retval;
+
+         }
+         break;
+
+      case QVariant::List:
          if (isArray(value)) {
-            *reinterpret_cast<QVariantList *>(ptr) = variantListFromArray(exec, JSC::asArray(value));
-            return true;
+            retval.setValue<QVariantList>(variantListFromArray(exec, JSC::asArray(value)));
+            return retval;
          }
          break;
-      case QMetaType::QVariantMap:
+
+      case QVariant::Map:
          if (isObject(value)) {
-            *reinterpret_cast<QVariantMap *>(ptr) = variantMapFromObject(exec, JSC::asObject(value));
-            return true;
+            retval.setValue<QVariantMap>(variantMapFromObject(exec, JSC::asObject(value)));
+            return retval;
          }
          break;
-      case QMetaType::QVariant:
-         *reinterpret_cast<QVariant *>(ptr) = toVariant(exec, value);
-         return true;
+
+      case QVariant::Variant:
+         retval.setValue<QVariant>(toVariant(exec, value));
+         return retval;
 
       default:
          break;
    }
 
-   QString name = QMetaType::typeName(type);
-
-   if (convertToNativeQObject(exec, value, name, reinterpret_cast<void **>(ptr))) {
-      return true;
-   }
+   QString name = QVariant::typeToName(type);
 
    if (isVariant(value) && name.endsWith('*')) {
-      int valueType = QMetaType::type(name.left(name.size() - 1));
-      QVariant &var = variantValue(value);
+
+      name.chop(1);
+      uint valueType = QVariant::nameToType(name);
+
+      QVariant &var  = variantValue(value);
 
       if (valueType == var.userType()) {
-         *reinterpret_cast<void **>(ptr) = var.data();
-         return true;
+         // variant was Widget *, user wanted Widget
+         return QVariant();
 
       } else {
          // look in the prototype chain
@@ -3093,181 +3123,201 @@ bool QScriptEnginePrivate::convertValue(JSC::ExecState *exec, JSC::JSValue value
             if (isVariant(proto)) {
                canCast = (type == variantValue(proto).userType())
                   || (valueType && (valueType == variantValue(proto).userType()));
-            }
 
-            else if (isQObject(proto)) {
-               QString className = name.left(name.size() - 1);
+            } else if (isQObject(proto)) {
 
-               /*  BROOM (script)
+               /*  emerald (script, hold)
                       if (QObject *qobject = toQObject(exec, proto)) {
-                        canCast = qobject->qt_metacast(className) != 0;
+                        canCast = qobject->qt_metacast(name) != 0;
                       }
                */
-
             }
 
             if (canCast) {
-               QString varTypeName = QMetaType::typeName(var.userType());
+               QString varTypeName = QVariant::typeToName(var.userType());
 
                if (varTypeName.endsWith('*')) {
-                  *reinterpret_cast<void **>(ptr) = *reinterpret_cast<void **>(var.data());
+                  // variant was Widget *, user wanted Widget
+                  return QVariant();
+
                } else {
-                  *reinterpret_cast<void **>(ptr) = var.data();
+                  return var;
+
                }
-               return true;
             }
+
             proto = JSC::asObject(proto)->prototype();
          }
       }
 
-   } else if (value.isNull() && name.endsWith('*')) {
-      *reinterpret_cast<void **>(ptr) = 0;
-      return true;
-
-   } else if (type == qMetaTypeId<QScriptValue>()) {
-      if (!eng) {
-         return false;
+   } else if (type == QVariant::typeToTypeId<QScriptValue>()) {
+      if (eng) {
+         retval.setValue<QScriptValue>(eng->scriptValueFromJSCValue(value));
       }
 
-      *reinterpret_cast<QScriptValue *>(ptr) = eng->scriptValueFromJSCValue(value);
-      return true;
-   }
-
-   // lazy registration of some common list types
-
-   else if (type == qMetaTypeId<QObjectList>()) {
-      if (!eng) {
-         return false;
+   } else if (type == QVariant::typeToTypeId<QList<QObject *>>()) {
+      if (eng) {
+         qScriptRegisterSequenceMetaType<QList<QObject *>>(eng->q_func());
+         retval = convertValue(exec, value, type);
       }
 
-      qScriptRegisterSequenceMetaType<QObjectList>(eng->q_func());
-      return convertValue(exec, value, type, ptr);
-   }
-
-   else if (type == qMetaTypeId<QList<int>>()) {
-      if (!eng) {
-         return false;
+   } else if (type == QVariant::typeToTypeId<QList<int>>()) {
+      if (eng) {
+         qScriptRegisterSequenceMetaType<QList<int>>(eng->q_func());
+         retval = convertValue(exec, value, type);
       }
-      qScriptRegisterSequenceMetaType<QList<int>>(eng->q_func());
-      return convertValue(exec, value, type, ptr);
    }
 
-   return false;
+   return retval;
 }
 
-bool QScriptEnginePrivate::convertNumber(qsreal value, int type, void *ptr)
+QVariant QScriptEnginePrivate::convertNumber(qsreal value, uint type)
 {
-   switch (QMetaType::Type(type)) {
-      case QMetaType::Bool:
-         *reinterpret_cast<bool *>(ptr) = QScript::ToBool(value);
-         return true;
-      case QMetaType::Int:
-         *reinterpret_cast<int *>(ptr) = QScript::ToInt32(value);
-         return true;
-      case QMetaType::UInt:
-         *reinterpret_cast<uint *>(ptr) = QScript::ToUInt32(value);
-         return true;
+   QVariant retval;
 
-      case QMetaType::Long:
-         *reinterpret_cast<long *>(ptr) = long(QScript::ToInteger(value));
-         return true;
-      case QMetaType::ULong:
-         *reinterpret_cast<ulong *>(ptr) = ulong(QScript::ToInteger(value));
-         return true;
-      case QMetaType::LongLong:
-         *reinterpret_cast<qint64 *>(ptr) = qint64(QScript::ToInteger(value));
-         return true;
-      case QMetaType::ULongLong:
-         *reinterpret_cast<quint64 *>(ptr) = quint64(QScript::ToInteger(value));
-         return true;
+   switch (type) {
 
-      case QMetaType::Double:
-         *reinterpret_cast<double *>(ptr) = value;
-         return true;
-      case QMetaType::QString:
-         *reinterpret_cast<QString *>(ptr) = QScript::ToString(value);
-         return true;
-      case QMetaType::Float:
-         *reinterpret_cast<float *>(ptr) = value;
-         return true;
-      case QMetaType::Short:
-         *reinterpret_cast<short *>(ptr) = short(QScript::ToInt32(value));
-         return true;
-      case QMetaType::UShort:
-         *reinterpret_cast<unsigned short *>(ptr) = QScript::ToUInt16(value);
-         return true;
-      case QMetaType::Char:
-         *reinterpret_cast<char *>(ptr) = char(QScript::ToInt32(value));
-         return true;
-      case QMetaType::UChar:
-         *reinterpret_cast<unsigned char *>(ptr) = (unsigned char)(QScript::ToInt32(value));
-         return true;
-      case QMetaType::QChar:
-         *reinterpret_cast<QChar *>(ptr) = QChar(QScript::ToUInt16(value));
-         return true;
+      case QVariant::Bool:
+         retval.setValue<bool>(QScript::ToBool(value));
+         break;
+
+      case QVariant::Int:
+         retval.setValue<int>(QScript::ToInt32(value));
+         break;
+
+      case QVariant::UInt:
+         retval.setValue<uint>(QScript::ToUInt32(value));
+         break;
+
+      case QVariant::Long:
+         retval.setValue<long>(long(QScript::ToInteger(value)));
+         break;
+
+      case QVariant::ULong:
+         retval.setValue<ulong>(ulong(QScript::ToInteger(value)));
+         break;
+
+      case QVariant::LongLong:
+         retval.setValue<qint64>(qint64(QScript::ToInteger(value)));
+         break;
+
+      case QVariant::ULongLong:
+         retval.setValue<quint64>(quint64(QScript::ToInteger(value)));
+         break;
+
+      case QVariant::Double:
+         retval.setValue<double>(value);
+         break;
+
+      case QVariant::String:
+         retval.setValue<QString>(QScript::ToString(value));
+         break;
+
+      case QVariant::Float:
+         retval.setValue<float>(value);
+         break;
+
+      case QVariant::Short:
+         retval.setValue<short>(short(QScript::ToInt32(value)));
+         break;
+
+      case QVariant::UShort:
+         retval.setValue<unsigned short>(QScript::ToUInt16(value));
+         break;
+
+      case QVariant::Char:
+         retval.setValue<char>(char(QScript::ToInt32(value)));
+         break;
+
+      case QVariant::UChar:
+         retval.setValue<unsigned char>((unsigned char)(QScript::ToInt32(value)));
+         break;
+
+      case QVariant::QChar:
+         retval.setValue<QChar>(QChar(QScript::ToUInt16(value)));
+         break;
+
       default:
          break;
    }
-   return false;
+
+   return retval;
 }
 
-bool QScriptEnginePrivate::convertString(const QString &value, int type, void *ptr)
+QVariant QScriptEnginePrivate::convertString(const QString &value, uint type)
 {
-   switch (QMetaType::Type(type)) {
-      case QMetaType::Bool:
-         *reinterpret_cast<bool *>(ptr) = QScript::ToBool(value);
-         return true;
-      case QMetaType::Int:
-         *reinterpret_cast<int *>(ptr) = QScript::ToInt32(value);
-         return true;
-      case QMetaType::UInt:
-         *reinterpret_cast<uint *>(ptr) = QScript::ToUInt32(value);
-         return true;
+   QVariant retval;
 
-      case QMetaType::Long:
-         *reinterpret_cast<long *>(ptr) = long(QScript::ToInteger(value));
-         return true;
-      case QMetaType::ULong:
-         *reinterpret_cast<ulong *>(ptr) = ulong(QScript::ToInteger(value));
-         return true;
-      case QMetaType::LongLong:
-         *reinterpret_cast<qint64 *>(ptr) = qint64(QScript::ToInteger(value));
-         return true;
-      case QMetaType::ULongLong:
-         *reinterpret_cast<quint64 *>(ptr) = quint64(QScript::ToInteger(value));
-         return true;
+   switch (type) {
 
-      case QMetaType::Double:
-         *reinterpret_cast<double *>(ptr) = QScript::ToNumber(value);
-         return true;
-      case QMetaType::QString:
-         *reinterpret_cast<QString *>(ptr) = value;
-         return true;
-      case QMetaType::Float:
-         *reinterpret_cast<float *>(ptr) = QScript::ToNumber(value);
-         return true;
-      case QMetaType::Short:
-         *reinterpret_cast<short *>(ptr) = short(QScript::ToInt32(value));
-         return true;
-      case QMetaType::UShort:
-         *reinterpret_cast<unsigned short *>(ptr) = QScript::ToUInt16(value);
-         return true;
-      case QMetaType::Char:
-         *reinterpret_cast<char *>(ptr) = char(QScript::ToInt32(value));
-         return true;
-      case QMetaType::UChar:
-         *reinterpret_cast<unsigned char *>(ptr) = (unsigned char)(QScript::ToInt32(value));
-         return true;
-      case QMetaType::QChar:
-         *reinterpret_cast<QChar *>(ptr) = QChar(QScript::ToUInt16(value));
-         return true;
+      case QVariant::Bool:
+         retval.setValue<bool>(QScript::ToBool(value));
+         break;
+
+      case QVariant::Int:
+         retval.setValue<int>(QScript::ToInt32(value));
+         break;
+
+      case QVariant::UInt:
+         retval.setValue<uint>(QScript::ToUInt32(value));
+         break;
+
+      case QVariant::Long:
+         retval.setValue<long>(long(QScript::ToInteger(value)));
+         break;
+
+      case QVariant::ULong:
+         retval.setValue<ulong>(ulong(QScript::ToInteger(value)));
+         break;
+
+      case QVariant::LongLong:
+         retval.setValue<qint64>(qint64(QScript::ToInteger(value)));
+         break;
+
+      case QVariant::ULongLong:
+         retval.setValue<quint64>(quint64(QScript::ToInteger(value)));
+         break;
+
+      case QVariant::Double:
+         retval.setValue<double>(QScript::ToNumber(value));
+         break;
+
+      case QVariant::String:
+         retval.setValue<QString>(value);
+         break;
+
+      case QVariant::Float:
+         retval.setValue<float>(QScript::ToNumber(value));
+         break;
+
+      case QVariant::Short:
+         retval.setValue<short>(short(QScript::ToInt32(value)));
+         break;
+
+      case QVariant::UShort:
+         retval.setValue<unsigned short>(QScript::ToUInt16(value));
+         break;
+
+      case QVariant::Char:
+         retval.setValue<char>(char(QScript::ToInt32(value)));
+         break;
+
+      case QVariant::UChar:
+         retval.setValue<unsigned char>((unsigned char)(QScript::ToInt32(value)));
+         break;
+
+      case QVariant::QChar:
+         retval.setValue<QChar>(QChar(QScript::ToUInt16(value)));
+         break;
+
       default:
          break;
    }
-   return false;
+
+   return retval;
 }
 
-bool QScriptEnginePrivate::hasDemarshalFunction(int type) const
+bool QScriptEnginePrivate::hasDemarshalFunction(uint type) const
 {
    QScriptTypeInfo *info = m_typeInfos.value(type);
    return info && (info->demarshal != 0);
@@ -3291,47 +3341,46 @@ JSC::UString QScriptEnginePrivate::translationContextFromUrl(const JSC::UString 
    return cachedTranslationContext;
 }
 
-/*!
-    \internal
-*/
-bool QScriptEngine::convert(const QScriptValue &value, int type, void *ptr)
+// internal (cs)
+QVariant QScriptEngine::convert(const QScriptValue &value, uint type)
 {
    Q_D(QScriptEngine);
    QScript::APIShim shim(d);
-   return QScriptEnginePrivate::convertValue(d->currentFrame, d->scriptValueToJSCValue(value), type, ptr);
+
+   return QScriptEnginePrivate::convertValue(d->currentFrame, d->scriptValueToJSCValue(value), type);
 }
 
-/*!
-    \internal
-*/
-bool QScriptEngine::convertV2(const QScriptValue &value, int type, void *ptr)
+// internal (cs)
+QVariant QScriptEngine::convertV2(const QScriptValue &value, uint type)
 {
    QScriptValuePrivate *vp = QScriptValuePrivate::get(value);
+
    if (vp) {
       switch (vp->type) {
          case QScriptValuePrivate::JavaScriptCore: {
             if (vp->engine) {
                QScript::APIShim shim(vp->engine);
-               return QScriptEnginePrivate::convertValue(vp->engine->currentFrame, vp->jscValue, type, ptr);
+               return QScriptEnginePrivate::convertValue(vp->engine->currentFrame, vp->jscValue, type);
+
             } else {
-               return QScriptEnginePrivate::convertValue(0, vp->jscValue, type, ptr);
+               return QScriptEnginePrivate::convertValue(0, vp->jscValue, type);
             }
          }
+
          case QScriptValuePrivate::Number:
-            return QScriptEnginePrivate::convertNumber(vp->numberValue, type, ptr);
+            return QScriptEnginePrivate::convertNumber(vp->numberValue, type);
+
          case QScriptValuePrivate::String:
-            return QScriptEnginePrivate::convertString(vp->stringValue, type, ptr);
+            return QScriptEnginePrivate::convertString(vp->stringValue, type);
       }
    }
-   return false;
+
+   return QVariant();
 }
 
-/*!
-    \internal
-*/
-void QScriptEngine::registerCustomType(int type, MarshalFunction mf,
-   DemarshalFunction df,
-   const QScriptValue &prototype)
+// internal (cs)
+void QScriptEngine::registerCustomType(uint type, MarshalFunction mf,
+   DemarshalFunction df, const QScriptValue &prototype)
 {
    Q_D(QScriptEngine);
 

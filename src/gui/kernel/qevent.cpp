@@ -636,12 +636,13 @@ static void formatUnicodeString(QDebug d, const QString &s)
 static inline void formatInputMethodEvent(QDebug d, const QInputMethodEvent *e)
 {
    d << "QInputMethodEvent(";
-   if (!e->preeditString().isEmpty()) {
+
+   if (! e->preeditString().isEmpty()) {
       d << "preedit=";
       formatUnicodeString(d, e->preeditString());
    }
 
-   if (!e->commitString().isEmpty()) {
+   if (! e->commitString().isEmpty()) {
       d << ", commit=";
       formatUnicodeString(d, e->commitString());
    }
@@ -653,13 +654,16 @@ static inline void formatInputMethodEvent(QDebug d, const QInputMethodEvent *e)
 
    if (const int attributeCount = e->attributes().size()) {
       d << ", attributes= {";
+
       for (int a = 0; a < attributeCount; ++a) {
          const QInputMethodEvent::Attribute &at = e->attributes().at(a);
+
          if (a) {
             d << ',';
          }
+
          d << "[type= " << at.type << ", start=" << at.start << ", length=" << at.length
-            << ", value=" << at.value << ']';
+           << ", value=" << at.value.toString() << ']';
       }
 
       d << '}';
@@ -671,13 +675,14 @@ static inline void formatInputMethodQueryEvent(QDebug d, const QInputMethodQuery
 {
    const Qt::InputMethodQueries queries = e->queries();
    d << "QInputMethodQueryEvent(queries=" << showbase << hex << int(queries)
-      << noshowbase << dec << ", {";
+     << noshowbase << dec << ", {";
 
    for (unsigned mask = 1; mask <= Qt::ImTextAfterCursor; mask <<= 1) {
       if (queries & mask) {
          const QVariant value = e->value(static_cast<Qt::InputMethodQuery>(mask));
+
          if (value.isValid()) {
-            d << '[' << showbase << hex << mask <<  noshowbase << dec << '=' << value << "],";
+            d << '[' << showbase << hex << mask <<  noshowbase << dec << '=' << value.toString() << "],";
          }
       }
    }

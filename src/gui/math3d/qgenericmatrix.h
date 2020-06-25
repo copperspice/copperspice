@@ -24,9 +24,8 @@
 #ifndef QGENERICMATRIX_H
 #define QGENERICMATRIX_H
 
-#include <QtCore/qmetatype.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qdatastream.h>
+#include <qdebug.h>
+#include <qdatastream.h>
 
 template <int N, int M, typename T>
 class QGenericMatrix
@@ -390,14 +389,5 @@ QDataStream &operator>>(QDataStream &stream, QGenericMatrix<N, M, T> &matrix)
    }
    return stream;
 }
-
-Q_DECLARE_METATYPE(QMatrix2x2)
-Q_DECLARE_METATYPE(QMatrix2x3)
-Q_DECLARE_METATYPE(QMatrix2x4)
-Q_DECLARE_METATYPE(QMatrix3x2)
-Q_DECLARE_METATYPE(QMatrix3x3)
-Q_DECLARE_METATYPE(QMatrix3x4)
-Q_DECLARE_METATYPE(QMatrix4x2)
-Q_DECLARE_METATYPE(QMatrix4x3)
 
 #endif

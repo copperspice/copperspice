@@ -273,7 +273,8 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
       case QNetworkRequest::LocationHeader:
          switch (value.userType()) {
-            case QMetaType::QUrl:
+
+            case QVariant::Url:
                return value.toUrl().toEncoded();
 
             default:
@@ -282,8 +283,9 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
 
       case QNetworkRequest::LastModifiedHeader:
          switch (value.userType()) {
-            case QMetaType::QDate:
-            case QMetaType::QDateTime:
+
+            case QVariant::Date:
+            case QVariant::DateTime:
                // generate RFC 1123/822 dates:
                return QNetworkHeadersPrivate::toHttpDate(value.toDateTime());
 
@@ -292,14 +294,15 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
          }
 
       case QNetworkRequest::CookieHeader: {
-         QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie>>(value);
+         QList<QNetworkCookie> cookies = value.value<QList<QNetworkCookie>>();
 
-         if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>()) {
-            cookies << qvariant_cast<QNetworkCookie>(value);
+         if (cookies.isEmpty() && value.userType() == QVariant::typeToTypeId<QNetworkCookie>()) {
+            cookies << value.value<QNetworkCookie>();
          }
 
          QByteArray result;
          bool first = true;
+
          for (const QNetworkCookie &cookie : cookies) {
             if (!first) {
                result += "; ";
@@ -312,21 +315,24 @@ static QByteArray headerValue(QNetworkRequest::KnownHeaders header, const QVaria
       }
 
       case QNetworkRequest::SetCookieHeader: {
-         QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(value);
+         QList<QNetworkCookie> cookies = value.value<QList<QNetworkCookie> >();
 
-         if (cookies.isEmpty() && value.userType() == qMetaTypeId<QNetworkCookie>()) {
-            cookies << qvariant_cast<QNetworkCookie>(value);
+         if (cookies.isEmpty() && value.userType() == QVariant::typeToTypeId<QNetworkCookie>()) {
+            cookies << value.value<QNetworkCookie>();
          }
 
          QByteArray result;
          bool first = true;
+
          for (const QNetworkCookie &cookie : cookies) {
             if (!first) {
                result += ", ";
             }
+
             first = false;
             result += cookie.toRawForm(QNetworkCookie::Full);
          }
+
          return result;
       }
    }
@@ -529,7 +535,7 @@ void QNetworkHeadersPrivate::setCookedHeader(QNetworkRequest::KnownHeaders heade
       return;
    }
 
-   if (value.isNull()) {
+   if (! value.isValid()) {
       setRawHeaderInternal(name, QByteArray());
       cookedHeaders.remove(header);
 

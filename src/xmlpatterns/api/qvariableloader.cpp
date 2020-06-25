@@ -92,16 +92,19 @@ SequenceType::Ptr VariableLoader::announceExternalVariable(const QXmlName name,
 
    const QVariant &variant = m_bindingHash.value(name);
 
-   if (variant.isNull()) {
+   if (! variant.isValid()) {
       return SequenceType::Ptr();
-   } else if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+
+   } else if (variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
       return CommonSequenceTypes::ExactlyOneAnyURI;
-   } else if (variant.userType() == qMetaTypeId<QXmlQuery>()) {
-      const QXmlQuery variableQuery(qvariant_cast<QXmlQuery>(variant));
+
+   } else if (variant.userType() == QVariant::typeToTypeId<QXmlQuery>()) {
+      const QXmlQuery variableQuery(variant.value<QXmlQuery>());
       return variableQuery.d->expression()->staticType();
+
    } else {
-      return makeGenericSequenceType(AtomicValue::qtToXDMType(qvariant_cast<QXmlItem>(variant)),
-                                     Cardinality::exactlyOne());
+      return makeGenericSequenceType(AtomicValue::qtToXDMType(
+               variant.value<QXmlItem>()), Cardinality::exactlyOne());
    }
 }
 
@@ -110,20 +113,20 @@ Item::Iterator::Ptr VariableLoader::evaluateSequence(const QXmlName name,
 {
 
    const QVariant &variant = m_bindingHash.value(name);
-   Q_ASSERT_X(!variant.isNull(), Q_FUNC_INFO,
-              "We assume that we have a binding.");
+   Q_ASSERT_X(variant.isValid(), Q_FUNC_INFO, "There was no binding.");
 
    /* Same code as in the default clause below. */
-   if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+   if (variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
       return makeSingletonIterator(itemForName(name));
-   } else if (variant.userType() == qMetaTypeId<QXmlQuery>()) {
-      const QXmlQuery variableQuery(qvariant_cast<QXmlQuery>(variant));
+
+   } else if (variant.userType() == QVariant::typeToTypeId<QXmlQuery>()) {
+      const QXmlQuery variableQuery(variant.value<QXmlQuery>());
 
       return variableQuery.d->expression()->evaluateSequence(DynamicContext::Ptr(new TemporaryTreesRedirectingContext(
                 variableQuery.d->dynamicContext(), context)));
    }
 
-   const QVariant v(qvariant_cast<QXmlItem>(variant).toAtomicValue());
+   const QVariant v(variant.value<QXmlItem>().toAtomicValue());
 
    switch (v.type()) {
       case QVariant::StringList:
@@ -141,13 +144,13 @@ Item VariableLoader::itemForName(const QXmlName &name) const
 {
    const QVariant &variant = m_bindingHash.value(name);
 
-   if (variant.userType() == qMetaTypeId<QIODevice *>()) {
+   if (variant.userType() == QVariant::typeToTypeId<QIODevice *>()) {
 
       return Item(AnyURI::fromValue("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:" +
                   m_namePool->stringForLocalName(name.localName()) ));
    }
 
-   const QXmlItem item(qvariant_cast<QXmlItem>(variant));
+   const QXmlItem item(variant.value<QXmlItem>());
 
    if (item.isNode()) {
       return Item::fromPublic(item);
@@ -159,7 +162,7 @@ Item VariableLoader::itemForName(const QXmlName &name) const
        * be a QIODevice, since Patternist guarantees to only ask for variables that announceExternalVariable()
        * has accepted. */
 
-      if (atomicValue.isNull()) {
+      if (! atomicValue.isValid()) {
          return Item(AnyURI::fromValue("tag:copperspice.com,2007:QtXmlPatterns:QIODeviceVariable:" +
                                        m_namePool->stringForLocalName(name.localName())));
       } else {
@@ -176,13 +179,14 @@ Item VariableLoader::evaluateSingleton(const QXmlName name, const DynamicContext
 bool VariableLoader::isSameType(const QVariant &v1, const QVariant &v2) const
 {
    /* Are both of type QIODevice *? */
-   if (v1.userType() == qMetaTypeId<QIODevice *>() && v1.userType() == v2.userType()) {
+
+   if (v1.userType() == QVariant::typeToTypeId<QIODevice *>() && v1.userType() == v2.userType()) {
       return true;
    }
 
    /* Ok, we have two QXmlItems. */
-   const QXmlItem i1(qvariant_cast<QXmlItem>(v1));
-   const QXmlItem i2(qvariant_cast<QXmlItem>(v2));
+   const QXmlItem i1(v1.value<QXmlItem>());
+   const QXmlItem i2(v2.value<QXmlItem>());
 
    if (i1.isNode()) {
       Q_ASSERT(false);
@@ -227,5 +231,4 @@ bool VariableLoader::invalidationRequired(const QXmlName &name, const QVariant &
 {
    return hasBinding(name) && !isSameType(valueFor(name), variant);
 }
-
 

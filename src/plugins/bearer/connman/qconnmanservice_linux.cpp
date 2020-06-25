@@ -61,14 +61,12 @@ static QDBusConnection dbusConnection = QDBusConnection::systemBus();
 
 
 QConnmanManagerInterface::QConnmanManagerInterface( QObject *parent)
-        : QDBusAbstractInterface(QLatin1String(CONNMAN_SERVICE),
-                                 QLatin1String(CONNMAN_MANAGER_PATH),
-                                 CONNMAN_MANAGER_INTERFACE,
-                                 QDBusConnection::systemBus(), parent)
+   : QDBusAbstractInterface(QLatin1String(CONNMAN_SERVICE),
+     QString(CONNMAN_MANAGER_PATH),
+     CONNMAN_MANAGER_INTERFACE, QDBusConnection::systemBus(), parent)
 {
     qDBusRegisterMetaType<ConnmanMap>();
     qDBusRegisterMetaType<ConnmanMapList>();
-    qRegisterMetaType<ConnmanMapList>("ConnmanMapList");
 }
 
 QConnmanManagerInterface::~QConnmanManagerInterface()

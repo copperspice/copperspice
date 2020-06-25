@@ -225,6 +225,7 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsimpledrag_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantgui_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetwindow_p.h
@@ -255,7 +256,6 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturerecognizer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturemanager.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgridlayout.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguivariant.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputdevicemanager.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethod.cpp
@@ -285,6 +285,7 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsurfaceformat.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtooltip.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantgui.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwhatsthis.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction.cpp

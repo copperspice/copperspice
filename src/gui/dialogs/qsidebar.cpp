@@ -42,7 +42,7 @@ void QSideBarDelegate::initStyleOption(QStyleOptionViewItem *option, const QMode
 
    if (value.isValid()) {
       // if the bookmark/entry is not enabled then we paint it in gray
-      if (!qvariant_cast<bool>(value)) {
+      if (! value.value<bool>()) {
          option->state &= ~QStyle::State_Enabled;
       }
    }
@@ -74,7 +74,7 @@ Qt::ItemFlags QUrlModel::flags(const QModelIndex &index) const
       flags &= ~Qt::ItemIsDropEnabled;
    }
 
-   if (index.data(Qt::DecorationRole).isNull()) {
+   if (! index.data(Qt::DecorationRole).isValid()) {
       flags &= ~Qt::ItemIsEnabled;
    }
 
@@ -186,7 +186,7 @@ void QUrlModel::setUrl(const QModelIndex &index, const QUrl &url, const QModelIn
          newName = dirIndex.data().toString();
       }
 
-      QIcon newIcon = qvariant_cast<QIcon>(dirIndex.data(Qt::DecorationRole));
+      QIcon newIcon = (dirIndex.data(Qt::DecorationRole)).value<QIcon>();
       if (!dirIndex.isValid()) {
          const QFileIconProvider *provider = fileSystemModel->iconProvider();
          if (provider) {
@@ -216,7 +216,8 @@ void QUrlModel::setUrl(const QModelIndex &index, const QUrl &url, const QModelIn
       if (index.data().toString() != newName) {
          setData(index, newName);
       }
-      QIcon oldIcon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
+
+      QIcon oldIcon = (index.data(Qt::DecorationRole)).value<QIcon>();
       if (oldIcon.cacheKey() != newIcon.cacheKey()) {
          setData(index, newIcon, Qt::DecorationRole);
       }

@@ -24,17 +24,17 @@
 #ifndef QABSTRACTTRANSITION_H
 #define QABSTRACTTRANSITION_H
 
+#include <qabstractstate.h>
 #include <qobject.h>
 #include <qlist.h>
 #include <qscopedpointer.h>
+#include <qstate.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-class QEvent;
-class QAbstractState;
-class QState;
-class QStateMachine;
 class QAbstractTransitionPrivate;
+class QEvent;
+class QStateMachine;
 
 #ifndef QT_NO_ANIMATION
 class QAbstractAnimation;
@@ -109,6 +109,6 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
    Q_DECLARE_PRIVATE(QAbstractTransition)
 };
 
-#endif //QT_NO_STATEMACHINE
+#endif // QT_NO_STATEMACHINE
 
 #endif

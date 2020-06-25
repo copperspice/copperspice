@@ -1171,7 +1171,8 @@ bool QStandardItem::operator<(const QStandardItem &other) const
 
       case QVariant::ULongLong:
          return l.toULongLong() < r.toULongLong();
-      case QMetaType::Float:
+
+      case QVariant::Float:
          return l.toFloat() < r.toFloat();
 
       case QVariant::Double:

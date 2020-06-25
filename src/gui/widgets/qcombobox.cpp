@@ -104,11 +104,13 @@ QStyleOptionMenuItem QComboMenuDelegate::getStyleOption(const QStyleOptionViewIt
 
    QPalette resolvedpalette = option.palette.resolve(QApplication::palette("QMenu"));
    QVariant value = index.data(Qt::ForegroundRole);
+
    if (value.canConvert<QBrush>()) {
-      resolvedpalette.setBrush(QPalette::WindowText, qvariant_cast<QBrush>(value));
-      resolvedpalette.setBrush(QPalette::ButtonText, qvariant_cast<QBrush>(value));
-      resolvedpalette.setBrush(QPalette::Text, qvariant_cast<QBrush>(value));
+      resolvedpalette.setBrush(QPalette::WindowText, value.value<QBrush>());
+      resolvedpalette.setBrush(QPalette::ButtonText, value.value<QBrush>());
+      resolvedpalette.setBrush(QPalette::Text,       value.value<QBrush>());
    }
+
    menuOption.palette = resolvedpalette;
    menuOption.state = QStyle::State_None;
    if (mCombo->window()->isActiveWindow()) {
@@ -133,21 +135,23 @@ QStyleOptionMenuItem QComboMenuDelegate::getStyleOption(const QStyleOptionViewIt
    QVariant variant = index.model()->data(index, Qt::DecorationRole);
    switch (variant.type()) {
       case QVariant::Icon:
-         menuOption.icon = qvariant_cast<QIcon>(variant);
+         menuOption.icon = variant.value<QIcon>();
          break;
+
       case QVariant::Color: {
          static QPixmap pixmap(option.decorationSize);
-         pixmap.fill(qvariant_cast<QColor>(variant));
+         pixmap.fill(variant.value<QColor>());
          menuOption.icon = pixmap;
          break;
       }
+
       default:
-         menuOption.icon = qvariant_cast<QPixmap>(variant);
+         menuOption.icon = variant.value<QPixmap>();
          break;
    }
+
    if (index.data(Qt::BackgroundRole).canConvert<QBrush>()) {
-      menuOption.palette.setBrush(QPalette::All, QPalette::Background,
-         qvariant_cast<QBrush>(index.data(Qt::BackgroundRole)));
+      menuOption.palette.setBrush(QPalette::All, QPalette::Background, index.data(Qt::BackgroundRole).value<QBrush>());
    }
 
    menuOption.text = index.model()->data(index, Qt::DisplayRole).toString().replace(QChar('&'), QString("&&"));
@@ -1486,9 +1490,9 @@ QIcon QComboBoxPrivate::itemIcon(const QModelIndex &index) const
 {
    QVariant decoration = model->data(index, Qt::DecorationRole);
    if (decoration.type() == QVariant::Pixmap) {
-      return QIcon(qvariant_cast<QPixmap>(decoration));
+      return QIcon(decoration.value<QPixmap>());
    } else {
-      return qvariant_cast<QIcon>(decoration);
+      return decoration.value<QIcon>();
    }
 }
 

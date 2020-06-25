@@ -24,11 +24,11 @@
 #ifndef QXMLNAME_H
 #define QXMLNAME_H
 
-#include <QtCore/QString>
-#include <QtCore/QMetaType>
+#include <qstring.h>
 
 class QXmlName;
 class QXmlNamePool;
+
 Q_XMLPATTERNS_EXPORT uint qHash(const QXmlName &name);
 
 class Q_XMLPATTERNS_EXPORT QXmlName
@@ -105,6 +105,6 @@ class Q_XMLPATTERNS_EXPORT QXmlName
    Code m_qNameCode;
 };
 
-Q_DECLARE_METATYPE(QXmlName) /* This macro must appear after QT_END_NAMESPACE. */
+CS_DECLARE_METATYPE(QXmlName)
 
 #endif

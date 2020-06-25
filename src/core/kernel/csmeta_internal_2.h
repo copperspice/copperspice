@@ -26,95 +26,91 @@
 
 #include <qvariant.h>
 
-// **
-// template<class T, class=void, class=typename std::enable_if<!std::is_constructible<QVariant, T>::value>::type>
-template<class T, class unused_1, class unused_2>
-QVariant cs_convertToQVariant(T)
-{
-   return QVariant();
-}
-
-// template<class T, class=typename std::enable_if<std::is_constructible<QVariant, T>::value>::type>
-template<class T, class unused_1>
+template<class T>
 QVariant cs_convertToQVariant(T data)
 {
-   return QVariant(data);
+   if constexpr (cs_is_enum_or_flag<T>::value) {
+      // used to avoid implicitly converting an enum to an int
+      return QVariant::fromValue(data);
+
+   } else if constexpr (std::is_constructible_v<QVariant, T>) {
+      return QVariant(data);
+
+   } else {
+     return QVariant::fromValue(data);
+
+   }
 }
 
-
-// **
-// template<class T, class=void, class=void, class=typename std::enable_if< (! is_enum_or_flag<T>::value) && ! QMetaTypeId2<T>::Defined>::type>
-template<class T, class unused_1, class unused_2, class unused_3>
-std::pair<T, bool> convertFromQVariant(QVariant)
-{
-   // T is not an enum, flag, or built in data type
-   return std::make_pair(T {}, false);
-}
-
-// template<class T, class=void, class=typename std::enable_if< (! is_enum_or_flag<T>::value) && QMetaTypeId2<T>::Defined>::type>
-template<class T, class unused_1, class unused_2>
+template<class T>
 std::pair<T, bool> convertFromQVariant(QVariant data)
 {
-   // T is not an enum, not a flag  T is only a built in data type
-   return std::make_pair(data.value<T>(), true);
-}
+   if constexpr (cs_is_enum_or_flag<T>::value) {
+      // T is an enum or  flag
+      using intType = typename cs_underlying_type<T>::type;
 
-// template<class T, class=typename std::enable_if<is_enum_or_flag<T>::value>::type>
-template<class T, class unused_1>
-std::pair<T, bool> convertFromQVariant(QVariant data)
-{
-   // T is an enum or a flag
-   using intType = typename cs_underlying_type<T>::type;
+      intType retval = 0;
+      bool ok = true;
 
-   intType temp = 0;
-   bool retval  = true;
+      QVariant::Type dataType = data.type();
 
-   QVariant::Type dataType = data.type();
+      if (dataType == QVariant::Int  || dataType == QVariant::LongLong ||
+            dataType == QVariant::UInt || dataType == QVariant::ULongLong) {
 
-   if (dataType == QVariant::Int  || dataType == QVariant::LongLong ||
-         dataType == QVariant::UInt || dataType == QVariant::ULongLong) {
+         // supported integer types
+         retval = data.value<intType>();
 
-      // supported integer types
-      temp = data.value<intType>();
+      } else if (dataType == QVariant::String) {
+         // enum or flag
 
-   } else if (dataType == QVariant::String) {
-      // enum or flag
+         QMetaEnum obj = QMetaObject::findEnum<T>();
 
-      QMetaEnum obj = QMetaObject::findEnum<T>();
+         if (obj.isValid()) {
 
-      if (obj.isValid()) {
+            if (obj.isFlag()) {
+               retval = obj.keysToValue(data.toString());
+            } else {
+               retval = obj.keyToValue(data.toString());
+            }
 
-         if (obj.isFlag()) {
-            temp = obj.keysToValue(data.toString());
          } else {
-            temp = obj.keyToValue(data.toString());
+            ok = false;
+
          }
 
       } else {
-         retval = false;
+         // T is something other than a string or an int
+         std::optional<T> tmp = data.getDataOr<T>();
 
+         if (tmp.has_value()) {
+            retval = tmp.value();
+
+         } else  {
+            // type mismatch
+            ok = false;
+
+            if (data.convert<T>()) {
+               tmp = data.getDataOr<T>();
+
+               if (tmp.has_value()) {
+                  retval = *tmp;
+                  ok = true;
+               }
+            }
+         }
       }
+
+      return std::make_pair(static_cast<T>(retval), ok);
 
    } else {
-      // not a string or an int
-      int enumMetaTypeId = qMetaTypeId_Query<T>();
-
-      if ((enumMetaTypeId == 0) || (data.userType() != enumMetaTypeId) || ! data.constData())  {
-         // unable to convert, type mismatch
-         retval = false;
-
-      } else  {
-         temp = *reinterpret_cast<const intType *>(data.constData()) ;
-
-      }
+      // T is not an enum or flag
+      return std::make_pair(data.value<T>(), true);
    }
-
-   return std::make_pair( static_cast<T>(temp), retval);
 }
 
 // classes for these 2 methods, located in csmeta.h around line 405
 template<class E>
-const QString &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type  >::typeName()
+const QString &CS_ReturnType<E, typename std::enable_if<std::is_enum<E>::value>::type>::getName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<E>();
 
@@ -130,7 +126,7 @@ const QString &cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::
 }
 
 template<class E>
-const QString &cs_typeName_internal< QFlags<E> >::typeName()
+const QString &CS_ReturnType<QFlags<E> >::getName()
 {
    static QMetaEnum obj = QMetaObject::findEnum<QFlags<E>>();
 
@@ -149,7 +145,6 @@ void cs_namespace_register_enum(const char *name, std::type_index id, const char
 {
    const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_enum(QString::fromUtf8(name), id, QString::fromUtf8(scope));
 }
-
 
 // ** flags
 template<class T>

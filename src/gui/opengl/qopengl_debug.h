@@ -33,7 +33,6 @@
 #include <qflags.h>
 #include <qlist.h>
 #include <qvector.h>
-#include <qmetatype.h>
 #include <qdebug.h>
 #include <qopenglcontext.h>
 

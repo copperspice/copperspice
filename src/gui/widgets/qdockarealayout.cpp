@@ -1155,7 +1155,7 @@ quintptr QDockAreaLayoutInfo::currentTabId() const
       return 0;
    }
 
-   return qvariant_cast<quintptr>(tabBar->tabData(index));
+   return (tabBar->tabData(index)).value<quintptr>();
 }
 
 void QDockAreaLayoutInfo::setCurrentTab(QWidget *widget)
@@ -1170,7 +1170,9 @@ void QDockAreaLayoutInfo::setCurrentTabId(quintptr id)
    }
 
    for (int i = 0; i < tabBar->count(); ++i) {
-      if (qvariant_cast<quintptr>(tabBar->tabData(i)) == id) {
+      QVariant variant = tabBar->tabData(i);
+
+      if (variant.value<quintptr>() == id) {
          tabBar->setCurrentIndex(i);
          return;
       }
@@ -2249,13 +2251,24 @@ bool QDockAreaLayoutInfo::updateTabBar() const
 #ifndef QT_NO_TOOLTIP
          tabBar->setTabToolTip(tab_idx, title);
 #endif
+
          tabBar->setTabData(tab_idx, id);
-      } else if (qvariant_cast<quintptr>(tabBar->tabData(tab_idx)) != id) {
-         if (tab_idx + 1 < tabBar->count()
-            && qvariant_cast<quintptr>(tabBar->tabData(tab_idx + 1)) == id) {
-            tabBar->removeTab(tab_idx);
-         } else {
+
+      } else if (tabBar->tabData(tab_idx).value<quintptr>() != id ) {
+         bool doMore = true;
+
+         if (tab_idx + 1 < tabBar->count()) {
+            QVariant variant = tabBar->tabData(tab_idx + 1);
+
+            if (variant.value<quintptr>() == id) {
+               tabBar->removeTab(tab_idx);
+               doMore = false;
+            }
+         }
+
+         if (doMore) {
             tabBar->insertTab(tab_idx, title);
+
 #ifndef QT_NO_TOOLTIP
             tabBar->setTabToolTip(tab_idx, title);
 #endif
@@ -2408,7 +2421,9 @@ QRect QDockAreaLayoutInfo::tabContentRect() const
 int QDockAreaLayoutInfo::tabIndexToListIndex(int tabIndex) const
 {
    Q_ASSERT(tabbed && tabBar);
-   quintptr data = qvariant_cast<quintptr>(tabBar->tabData(tabIndex));
+
+   quintptr data = (tabBar->tabData(tabIndex)).value<quintptr>();
+
    for (int i = 0; i < item_list.count(); ++i) {
       if (tabId(item_list.at(i)) == data) {
          return i;

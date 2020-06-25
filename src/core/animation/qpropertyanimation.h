@@ -24,9 +24,7 @@
 #ifndef QPROPERTYANIMATION_H
 #define QPROPERTYANIMATION_H
 
-#include <QtCore/qvariantanimation.h>
-
-QT_BEGIN_NAMESPACE
+#include <qvariantanimation.h>
 
 #ifndef QT_NO_ANIMATION
 
@@ -44,14 +42,14 @@ class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
 
  public:
    QPropertyAnimation(QObject *parent = nullptr);
-   QPropertyAnimation(QObject *target, const QByteArray &propertyName, QObject *parent = nullptr);
+   QPropertyAnimation(QObject *target, const QString &propertyName, QObject *parent = nullptr);
    ~QPropertyAnimation();
 
    QObject *targetObject() const;
    void setTargetObject(QObject *target);
 
-   QByteArray propertyName() const;
-   void setPropertyName(const QByteArray &propertyName);
+   QString propertyName() const;
+   void setPropertyName(const QString &propertyName);
 
  protected:
    bool event(QEvent *event) override;
@@ -64,7 +62,5 @@ class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
 };
 
 #endif //QT_NO_ANIMATION
-
-QT_END_NAMESPACE
 
 #endif // QPROPERTYANIMATION_H

@@ -189,18 +189,19 @@ class QScriptEnginePrivate
    static inline QScriptValue::PropertyFlags propertyFlags(JSC::ExecState *, JSC::JSValue value,
       const JSC::UString &name, const QScriptValue::ResolveFlags &mode);
 
-   static bool convertValue(JSC::ExecState *, JSC::JSValue value, int type, void *ptr);
-   static bool convertNumber(qsreal, int type, void *ptr);
-   static bool convertString(const QString &, int type, void *ptr);
-   static JSC::JSValue create(JSC::ExecState *, int type, const void *ptr);
-   bool hasDemarshalFunction(int type) const;
+   static QVariant convertValue(JSC::ExecState *, JSC::JSValue value, uint type);
+   static QVariant convertNumber(qsreal, uint type);
+   static QVariant convertString(const QString &, uint type);
+
+   static JSC::JSValue create(JSC::ExecState *, const QVariant &data);
+   bool hasDemarshalFunction(uint type) const;
 
    inline QScriptValue scriptValueFromJSCValue(JSC::JSValue value);
    inline JSC::JSValue scriptValueToJSCValue(const QScriptValue &value);
    static inline unsigned propertyFlagsToJSCAttributes(const QScriptValue::PropertyFlags &flags);
 
    static inline JSC::JSValue jscValueFromVariant(JSC::ExecState *, const QVariant &value);
-   static QVariant jscValueToVariant(JSC::ExecState *, JSC::JSValue value, int targetType);
+   static QVariant jscValueToVariant(JSC::ExecState *, JSC::JSValue value, uint targetType);
    static inline QVariant &variantValue(JSC::JSValue value);
    static inline void setVariantValue(JSC::JSValue objectValue, const QVariant &value);
 
@@ -616,39 +617,45 @@ inline void QScriptEnginePrivate::unregisterScriptValue(QScriptValuePrivate *val
    value->next = 0;
 }
 
-inline JSC::JSValue QScriptEnginePrivate::jscValueFromVariant(JSC::ExecState *exec, const QVariant &v)
+inline JSC::JSValue QScriptEnginePrivate::jscValueFromVariant(JSC::ExecState *exec, const QVariant &data)
 {
-   JSC::JSValue result = create(exec, v.userType(), v.data());
+   JSC::JSValue result = create(exec, data);
    Q_ASSERT(result);
+
    return result;
 }
 
 inline QScriptValue QScriptEnginePrivate::scriptValueFromJSCValue(JSC::JSValue value)
 {
-   if (!value) {
+   if (! value) {
       return QScriptValue();
    }
 
    QScriptValuePrivate *p_value = new (this)QScriptValuePrivate(this);
    p_value->initFrom(value);
+
    return QScriptValuePrivate::toPublic(p_value);
 }
 
 inline JSC::JSValue QScriptEnginePrivate::scriptValueToJSCValue(const QScriptValue &value)
 {
    QScriptValuePrivate *vv = QScriptValuePrivate::get(value);
+
    if (!vv) {
       return JSC::JSValue();
    }
+
    if (vv->type != QScriptValuePrivate::JavaScriptCore) {
       Q_ASSERT(!vv->engine || vv->engine == this);
       vv->engine = this;
+
       if (vv->type == QScriptValuePrivate::Number) {
          vv->initFrom(JSC::jsNumber(currentFrame, vv->numberValue));
       } else { //QScriptValuePrivate::String
          vv->initFrom(JSC::jsString(currentFrame, vv->stringValue));
       }
    }
+
    return vv->jscValue;
 }
 
@@ -942,7 +949,7 @@ inline bool QScriptEnginePrivate::isRegExp(JSC::JSValue value)
 
 inline bool QScriptEnginePrivate::isVariant(JSC::JSValue value)
 {
-   if (!isObject(value) || !value.inherits(&QScriptObject::info)) {
+   if (! isObject(value) || ! value.inherits(&QScriptObject::info)) {
       return false;
    }
 
@@ -952,12 +959,12 @@ inline bool QScriptEnginePrivate::isVariant(JSC::JSValue value)
    return (delegate && (delegate->type() == QScriptObjectDelegate::Variant));
 }
 
-static bool isPtr2QObject(int type)
+static bool isPtr2QObject(uint type)
 {
    //  emerald - adjust after meta system update
    //  if ((QMetaType::typeFlags(type) & QMetaType::PointerToQObject)) {
 
-   if (type == QMetaType::QObjectStar || type == QMetaType::QWidgetStar) {
+   if (type == QVariant::ObjectStar || type == QVariant::WidgetStar) {
       return true;
    } else {
       return false;
@@ -972,6 +979,7 @@ inline bool QScriptEnginePrivate::isQObject(JSC::JSValue value)
 
    QScriptObject *object = static_cast<QScriptObject *>(JSC::asObject(value));
    QScriptObjectDelegate *delegate = object->delegate();
+
    if (delegate) {
       if (delegate->type() == QScriptObjectDelegate::QtObject
          || (delegate->type() == QScriptObjectDelegate::DeclarativeClassObject
@@ -981,20 +989,20 @@ inline bool QScriptEnginePrivate::isQObject(JSC::JSValue value)
 
       if (delegate->type() == QScriptObjectDelegate::Variant) {
          QVariant var = variantValue(value);
-         int type     = var.userType();
+         uint type    = var.userType();
 
          if (isPtr2QObject(type)) {
             return true;
          }
       }
    }
+
    return false;
 }
 
 inline bool QScriptEnginePrivate::isQMetaObject(JSC::JSValue value)
 {
    return isObject(value) && JSC::asObject(value)->inherits(&QScript::QMetaObjectWrapperObject::info);
-
 }
 
 inline bool QScriptEnginePrivate::toBool(JSC::ExecState *exec, JSC::JSValue value)
@@ -1003,6 +1011,7 @@ inline bool QScriptEnginePrivate::toBool(JSC::ExecState *exec, JSC::JSValue valu
    saveException(exec, &savedException);
    bool result = value.toBoolean(exec);
    restoreException(exec, savedException);
+
    return result;
 }
 
@@ -1085,7 +1094,7 @@ inline QObject *QScriptEnginePrivate::toQObject(JSC::ExecState *exec, JSC::JSVal
       QScriptObject *object = static_cast<QScriptObject *>(JSC::asObject(value));
       QScriptObjectDelegate *delegate = object->delegate();
 
-      if (!delegate) {
+      if (! delegate) {
          return 0;
       }
 
@@ -1099,10 +1108,10 @@ inline QObject *QScriptEnginePrivate::toQObject(JSC::ExecState *exec, JSC::JSVal
 
       if (delegate->type() == QScriptObjectDelegate::Variant) {
          QVariant var = variantValue(value);
-         int type = var.userType();
+         uint type    = var.userType();
 
          if (isPtr2QObject(type)) {
-            return *reinterpret_cast<QObject *const *>(var.constData());
+            return var.getData<QObject *>();
          }
       }
 

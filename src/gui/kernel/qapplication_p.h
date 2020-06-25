@@ -70,8 +70,6 @@ class QGestureManager;
 class QDrag;
 #endif
 
-extern Q_GUI_EXPORT bool qt_is_gui_used;
-
 #ifndef QT_NO_CLIPBOARD
 extern QClipboard *qt_clipboard;
 #endif
@@ -266,9 +264,9 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    static QClipboard *qt_clipboard;
 #endif
 
-   static QPalette *app_pal;
-   static QPalette *sys_pal;
-   static QPalette *set_pal;
+   static QPalette *app_palette;
+   static QPalette *sys_palette;
+   static QPalette *set_palette;
    static QFont *sys_font;
    static QFont *set_font;
 
@@ -432,8 +430,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    static HWND getHWNDForWidget(const QWidget *widget) {
       if (QWindow *window = windowForWidget(widget)) {
          if (window->handle()) {
-            return static_cast<HWND> (QApplication::platformNativeInterface()->
-                  nativeResourceForWindow(QByteArrayLiteral("handle"), window));
+            return static_cast<HWND> (QApplication::platformNativeInterface()->nativeResourceForWindow("handle", window));
          }
       }
 

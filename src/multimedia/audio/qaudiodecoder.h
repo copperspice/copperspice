@@ -25,7 +25,6 @@
 #define QAUDIODECODER_H
 
 #include <qmediaobject.h>
-#include <qmediaenumdebug.h>
 #include <qaudiobuffer.h>
 
 class QAudioDecoderPrivate;
@@ -130,11 +129,5 @@ class Q_MULTIMEDIA_EXPORT QAudioDecoder : public QMediaObject
    MULTI_CS_SLOT_1(Private, void _q_error(int un_named_arg1, const QString &un_named_arg2))
    MULTI_CS_SLOT_2(_q_error)
 };
-
-Q_DECLARE_METATYPE(QAudioDecoder::State)
-Q_DECLARE_METATYPE(QAudioDecoder::Error)
-
-Q_MEDIA_ENUM_DEBUG(QAudioDecoder, State)
-Q_MEDIA_ENUM_DEBUG(QAudioDecoder, Error)
 
 #endif

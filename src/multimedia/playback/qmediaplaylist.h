@@ -28,7 +28,6 @@
 #include <qmediacontent.h>
 #include <qmediaobject.h>
 #include <qmediabindableinterface.h>
-#include <qmediaenumdebug.h>
 
 class QMediaPlaylistProvider;
 class QMediaPlaylistPrivate;
@@ -139,19 +138,6 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindable
    MULTI_CS_SLOT_1(Private, void _q_loadFailed(QMediaPlaylist::Error un_named_arg1, const QString &un_named_arg2))
    MULTI_CS_SLOT_2(_q_loadFailed)
 };
-
-template<>
-class Q_MULTIMEDIA_EXPORT cs_typeName_internal<QMediaPlaylist, void>
-{
- public:
-   static const QString &typeName();
-};
-
-Q_DECLARE_METATYPE(QMediaPlaylist::PlaybackMode)
-Q_DECLARE_METATYPE(QMediaPlaylist::Error)
-
-Q_MEDIA_ENUM_DEBUG(QMediaPlaylist, PlaybackMode)
-Q_MEDIA_ENUM_DEBUG(QMediaPlaylist, Error)
 
 #endif
 

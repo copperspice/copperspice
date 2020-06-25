@@ -387,6 +387,4 @@ inline bool QWindowsWindow::isLayered() const
    return GetWindowLongPtr(m_data.hwnd, GWL_EXSTYLE) & WS_EX_LAYERED;
 }
 
-Q_DECLARE_METATYPE(QMargins)
-
 #endif

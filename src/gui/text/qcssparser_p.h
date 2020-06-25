@@ -884,9 +884,10 @@ struct Q_GUI_EXPORT ValueExtractor {
 };
 } // namespace QCss
 
-Q_DECLARE_METATYPE( QCss::BackgroundData )
-Q_DECLARE_METATYPE( QCss::LengthData )
-Q_DECLARE_METATYPE( QCss::BorderData )
+CS_DECLARE_METATYPE(QCss::BackgroundData)
+CS_DECLARE_METATYPE(QCss::LengthData)
+CS_DECLARE_METATYPE(QCss::BorderData)
+
 #endif // QT_NO_CSSPARSER
 
 #endif

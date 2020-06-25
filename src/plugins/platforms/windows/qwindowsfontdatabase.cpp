@@ -867,10 +867,6 @@ extern Q_GUI_EXPORT bool qt_needs_a8_gamma_correction;
 
 QWindowsFontDatabase::QWindowsFontDatabase()
 {
-   // Properties accessed by QWin32PrintEngine (Print Support)
-   static const int hfontMetaTypeId   = qRegisterMetaType<HFONT>();
-   static const int logFontMetaTypeId = qRegisterMetaType<LOGFONT>();
-
    const QWindowsFontEngineDataPtr data = sharedFontData();
 
 #if defined(CS_SHOW_DEBUG)

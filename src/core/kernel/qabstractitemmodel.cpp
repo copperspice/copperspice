@@ -36,6 +36,12 @@
 
 #include <limits.h>
 
+enum SortType {
+   Type_Int,
+   Type_Float,
+   Type_Other
+};
+
 QPersistentModelIndexData *QPersistentModelIndexData::create(const QModelIndex &index)
 {
    Q_ASSERT(index.isValid());          // we will _never_ insert an invalid index in the list
@@ -364,9 +370,8 @@ const QMultiHash<int, QString> &QAbstractItemModelPrivate::defaultRoleNames()
    return *qDefaultRoleNames();
 }
 
-static uint typeOfVariant(const QVariant &value)
+static SortType typeOfVariant(const QVariant &value)
 {
-   //return 0 for integer, 1 for floating point and 2 for other
    switch (value.userType()) {
       case QVariant::Bool:
       case QVariant::Int:
@@ -374,37 +379,41 @@ static uint typeOfVariant(const QVariant &value)
       case QVariant::LongLong:
       case QVariant::ULongLong:
       case QVariant::Char:
-      case QMetaType::Short:
-      case QMetaType::UShort:
-      case QMetaType::UChar:
-      case QMetaType::ULong:
-      case QMetaType::Long:
-         return 0;
+      case QVariant::Short:
+      case QVariant::UShort:
+      case QVariant::UChar:
+      case QVariant::ULong:
+      case QVariant::Long:
+         return SortType::Type_Int;
+
       case QVariant::Double:
-      case QMetaType::Float:
-         return 1;
+      case QVariant::Float:
+         return SortType::Type_Float;
+
       default:
-         return 2;
+         return SortType::Type_Other;
    }
 }
 
-/*!
-    \internal
-    return true if \a value contains a numerical type
 
-    This function is used by our Q{Tree,Widget,Table}WidgetModel classes to sort.
-*/
+// internal
+// called from QTreeWidgetItem, QListWidgetItem, QTableWidgetItem for sorting
+
 bool QAbstractItemModelPrivate::variantLessThan(const QVariant &v1, const QVariant &v2)
 {
-   switch (qMax(typeOfVariant(v1), typeOfVariant(v2))) {
-      case 0: //integer type
-         return v1.toLongLong() < v2.toLongLong();
+   SortType type1 = typeOfVariant(v1);
+   SortType type2 = typeOfVariant(v2);
 
-      case 1: //floating point
-         return v1.toReal() < v2.toReal();
+   if (type1 == SortType::Type_Int && type2 == SortType::Type_Int) {
+      // integer
+      return v1.toLongLong() < v2.toLongLong();
 
-      default:
-         return v1.toString().localeAwareCompare(v2.toString()) < 0;
+   } else if (type1 <= SortType::Type_Float && type2 <= SortType::Type_Float)  {
+      // floating point
+      return v1.toReal() < v2.toReal();
+
+   } else {
+      return v1.toString().localeAwareCompare(v2.toString()) < 0;
    }
 }
 

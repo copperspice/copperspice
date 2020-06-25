@@ -1466,14 +1466,17 @@ QModelIndexList QItemSelectionModel::selectedColumns(int row) const
 /*!
     Returns the selection ranges stored in the selection model.
 */
-const QItemSelection QItemSelectionModel::selection() const
+QItemSelection QItemSelectionModel::selection() const
 {
    Q_D(const QItemSelectionModel);
    QItemSelection selected = d->ranges;
    selected.merge(d->currentSelection, d->currentCommand);
+
    int i = 0;
+
    // make sure we have no invalid ranges
-   // ###  should probably be handled more generic somewhere else
+   // should probably be handled more generic somewhere else
+
    while (i < selected.count()) {
       if (selected.at(i).isValid()) {
          ++i;
@@ -1481,6 +1484,7 @@ const QItemSelection QItemSelectionModel::selection() const
          (selected.removeAt(i));
       }
    }
+
    return selected;
 }
 

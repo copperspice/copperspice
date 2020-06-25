@@ -27,16 +27,6 @@
 #include <qurl.h>
 #include <qvariant.h>
 
-static int qRegisterMediaResourceMetaTypes()
-{
-   qRegisterMetaType<QMediaResource>();
-   qRegisterMetaType<QMediaResourceList>();
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterMediaResourceMetaTypes)
-
 QMediaResource::QMediaResource()
 {
 }
@@ -114,7 +104,7 @@ bool QMediaResource::isNull() const
 */
 QUrl QMediaResource::url() const
 {
-   return qvariant_cast<QUrl>(values.value(Url));
+   return (values.value(Url)).value<QUrl>();
 }
 
 /*!
@@ -123,7 +113,7 @@ QUrl QMediaResource::url() const
 QNetworkRequest QMediaResource::request() const
 {
    if (values.contains(Request)) {
-      return qvariant_cast<QNetworkRequest>(values.value(Request));
+      return (values.value(Request)).value<QNetworkRequest>();
    }
 
    return QNetworkRequest(url());
@@ -136,7 +126,7 @@ QNetworkRequest QMediaResource::request() const
 */
 QString QMediaResource::mimeType() const
 {
-   return qvariant_cast<QString>(values.value(MimeType));
+   return (values.value(MimeType)).value<QString>();
 }
 
 /*!
@@ -146,7 +136,7 @@ QString QMediaResource::mimeType() const
 */
 QString QMediaResource::language() const
 {
-   return qvariant_cast<QString>(values.value(Language));
+   return (values.value(Language)).value<QString>();
 }
 
 /*!
@@ -169,7 +159,7 @@ void QMediaResource::setLanguage(const QString &language)
 */
 QString QMediaResource::audioCodec() const
 {
-   return qvariant_cast<QString>(values.value(AudioCodec));
+   return (values.value(AudioCodec)).value<QString>();
 }
 
 /*!
@@ -177,7 +167,7 @@ QString QMediaResource::audioCodec() const
 */
 void QMediaResource::setAudioCodec(const QString &codec)
 {
-   if (!codec.isEmpty()) {
+   if (! codec.isEmpty()) {
       values.insert(AudioCodec, codec);
    } else {
       values.remove(AudioCodec);
@@ -192,7 +182,7 @@ void QMediaResource::setAudioCodec(const QString &codec)
 */
 QString QMediaResource::videoCodec() const
 {
-   return qvariant_cast<QString>(values.value(VideoCodec));
+   return (values.value(VideoCodec)).value<QString>();
 }
 
 /*!
@@ -214,7 +204,7 @@ void QMediaResource::setVideoCodec(const QString &codec)
 */
 qint64 QMediaResource::dataSize() const
 {
-   return qvariant_cast<qint64>(values.value(DataSize));
+   return (values.value(DataSize)).value<qint64>();
 }
 
 /*!
@@ -258,7 +248,7 @@ void QMediaResource::setAudioBitRate(int rate)
 */
 int QMediaResource::sampleRate() const
 {
-   return qvariant_cast<int>(values.value(SampleRate));
+   return (values.value(SampleRate)).value<int>();
 }
 
 /*!
@@ -280,7 +270,7 @@ void QMediaResource::setSampleRate(int sampleRate)
 */
 int QMediaResource::channelCount() const
 {
-   return qvariant_cast<int>(values.value(ChannelCount));
+   return (values.value(ChannelCount)).value<int>();
 }
 
 /*!
@@ -325,7 +315,7 @@ void QMediaResource::setVideoBitRate(int rate)
 */
 QSize QMediaResource::resolution() const
 {
-   return qvariant_cast<QSize>(values.value(Resolution));
+   return (values.value(Resolution)).value<QSize>();
 }
 
 /*!

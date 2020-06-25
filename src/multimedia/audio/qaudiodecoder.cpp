@@ -34,16 +34,6 @@
 #include <qmediaobject_p.h>
 #include <qmediaserviceprovider_p.h>
 
-static int qRegisterAudioDecoderMetaTypes()
-{
-   qRegisterMetaType<QAudioDecoder::State>("QAudioDecoder::State");
-   qRegisterMetaType<QAudioDecoder::Error>("QAudioDecoder::Error");
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterAudioDecoderMetaTypes)
-
 class QAudioDecoderPrivate : public QMediaObjectPrivate
 {
    Q_DECLARE_NON_CONST_PUBLIC(QAudioDecoder)

@@ -434,7 +434,7 @@ void QCoreApplicationPrivate::createEventDispatcher()
    eventDispatcher = new QEventDispatcherWin32(q);
 
 #else
-#  error "QEventDispatcher not yet ported to this platform"
+#error "QEventDispatcher has not been ported to this platform."
 
 #endif
 
@@ -568,7 +568,7 @@ void QCoreApplicationPrivate::init()
    }
 
    // otherwise we create one
-   if (! eventDispatcher) {
+   if (eventDispatcher == nullptr) {
       createEventDispatcher();
    }
    Q_ASSERT(eventDispatcher != nullptr);
@@ -1298,6 +1298,12 @@ void QCoreApplication::cs_internal_maybeQuit()
    d->maybeQuit();
 }
 
+bool QCoreApplication::cs_isRealGuiApp() {
+
+   Q_D(QCoreApplication);
+   return d->application_type == QCoreApplicationPrivate::Type::Gui;
+}
+
 void QCoreApplicationPrivate::maybeQuit()
 {
    if (quitLockRef.load() == 0 && in_exec && quitLockRefEnabled && shouldQuit()) {
@@ -1565,10 +1571,12 @@ QStringList QCoreApplication::arguments()
 
          if (l1arg == "-qdevel" || l1arg == "-qdebug" || l1arg == "-reverse" ||
                   l1arg == "-stylesheet" || l1arg == "-widgetcount")  {
-            ;
+
+            // no code here
 
          } else if (l1arg.startsWith("-style=") || l1arg.startsWith("-qmljsdebugger=")) {
-            ;
+
+            // no code here
 
          } else if (l1arg == "-style" || l1arg == "-qmljsdebugger" || l1arg == "-session" ||
                   l1arg == "-graphicssystem" || l1arg == "-testability") {

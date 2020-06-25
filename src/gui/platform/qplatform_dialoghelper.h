@@ -456,7 +456,4 @@ class Q_GUI_EXPORT QPlatformMessageDialogHelper : public QPlatformDialogHelper
    QSharedPointer<QMessageDialogOptions> m_options;
 };
 
-Q_DECLARE_METATYPE(QPlatformDialogHelper::StandardButton)
-Q_DECLARE_METATYPE(QPlatformDialogHelper::ButtonRole)
-
 #endif

@@ -27,7 +27,6 @@
 #include <cmath>
 
 #include <qvarlengtharray.h>
-#include <qmetatype.h>
 #include <qlocale.h>
 
 #ifndef QT_NO_SYSTEMLOCALE
@@ -374,10 +373,9 @@ constexpr inline bool ascii_isspace(uchar c)
 {
    return c >= 1U && c <= 32U && (uint(AsciiSpaceMask) >> uint(c - 1)) & 1U;
 }
-Q_DECLARE_METATYPE(QList<Qt::DayOfWeek>)
 
 #ifndef QT_NO_SYSTEMLOCALE
-Q_DECLARE_METATYPE(QSystemLocale::CurrencyToStringArgument)
+   CS_DECLARE_METATYPE(QSystemLocale::CurrencyToStringArgument)
 #endif
 
 #endif

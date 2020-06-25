@@ -80,15 +80,13 @@ private:
     WebCore::Node* m_node;
 };
 
-Q_DECLARE_METATYPE(QDRTNode)
+CS_DECLARE_METATYPE(QDRTNode)
 
 class QWEBKIT_EXPORT DumpRenderTreeSupportQt {
 
 public:
-
     DumpRenderTreeSupportQt();
     ~DumpRenderTreeSupportQt();
-
 
     static void executeCoreCommandByName(QWebPage* page, const QString& name, const QString& value);
     static bool isCommandEnabled(QWebPage* page, const QString& name);

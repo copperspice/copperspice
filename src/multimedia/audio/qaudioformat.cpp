@@ -24,16 +24,6 @@
 #include <QDebug>
 #include <qaudioformat.h>
 
-static int qRegisterAudioFormatMetaTypes()
-{
-   qRegisterMetaType<QAudioFormat>();
-   qRegisterMetaType<QAudioFormat::SampleType>();
-   qRegisterMetaType<QAudioFormat::Endian>();
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterAudioFormatMetaTypes)
 class QAudioFormatPrivate : public QSharedData
 {
  public:

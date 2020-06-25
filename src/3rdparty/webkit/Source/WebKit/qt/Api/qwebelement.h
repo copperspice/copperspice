@@ -280,10 +280,11 @@ public:
 
     inline iterator begin() { return iterator(this, 0); }
     inline iterator end()  { return iterator(this, count()); }
+
 private:
     QExplicitlySharedDataPointer<QWebElementCollectionPrivate> d;
 };
 
-Q_DECLARE_METATYPE(QWebElement)
+CS_DECLARE_METATYPE(QWebElement)
 
-#endif // QWEBELEMENT_H
+#endif

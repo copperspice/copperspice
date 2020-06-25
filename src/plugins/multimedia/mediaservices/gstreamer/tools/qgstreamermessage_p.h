@@ -25,7 +25,6 @@
 #define QGSTREAMERMESSAGE_P_H
 
 #include <qstring.h>
-#include <qmetatype.h>
 
 #include <gst/gst.h>
 
@@ -44,7 +43,5 @@ class QGstreamerMessage
  private:
    GstMessage *m_message;
 };
-
-Q_DECLARE_METATYPE(QGstreamerMessage);
 
 #endif

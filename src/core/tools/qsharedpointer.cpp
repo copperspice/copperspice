@@ -74,12 +74,12 @@ QtSharedPointer::ExternalRefCountData *QtSharedPointer::ExternalRefCountData::ge
 
 QSharedPointer<QObject> QtSharedPointer::sharedPointerFromVariant_internal(const QVariant &variant)
 {
-   return *reinterpret_cast<const QSharedPointer<QObject>*>(variant.constData());
+   return variant.getData<QSharedPointer<QObject>>();
 }
 
 QWeakPointer<QObject> QtSharedPointer::weakPointerFromVariant_internal(const QVariant &variant)
 {
-   return *reinterpret_cast<const QWeakPointer<QObject>*>(variant.constData());
+   return variant.getData<QWeakPointer<QObject>>();
 }
 
 //#  define QT_SHARED_POINTER_BACKTRACE_SUPPORT

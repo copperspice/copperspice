@@ -2314,8 +2314,8 @@ void QStateMachinePrivate::handleTransitionSignal(QObject *sender, int signalInd
 QStateMachine::QStateMachine(QObject *parent)
    : QState(*new QStateMachinePrivate, nullptr)
 {
-   // Can't pass the parent to the QState constructor, as it expects a QState
-   // But this works as expected regardless of whether parent is a QState or not
+   // unable to pass the parent to the QState constructor, expects a QState
+   // calling setParent works as expected, regardless of the data type
    setParent(parent);
 }
 
@@ -2337,7 +2337,6 @@ QStateMachine::QStateMachine(QStateMachinePrivate &dd, QObject *parent)
 QStateMachine::~QStateMachine()
 {
 }
-
 
 QStateMachine::Error QStateMachine::error() const
 {

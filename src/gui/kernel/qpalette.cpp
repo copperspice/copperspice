@@ -83,8 +83,8 @@ QPalette::QPalette()
    // This makes it possible to instantiate QPalette outside QGuiApplication,
    // for example in the platform plugins.
 
-   if (QGuiApplicationPrivate::app_pal) {
-      d = QGuiApplicationPrivate::app_pal->d;
+   if (QGuiApplicationPrivate::app_palette) {
+      d = QGuiApplicationPrivate::app_palette->d;
       d->ref.ref();
 
    } else {

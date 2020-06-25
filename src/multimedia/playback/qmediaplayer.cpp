@@ -44,17 +44,6 @@
 #include <qmediaplaylistcontrol_p.h>
 #include <qmediaplaylistsourcecontrol_p.h>
 
-static int qRegisterMediaPlayerMetaTypes()
-{
-   qRegisterMetaType<QMediaPlayer::State>("QMediaPlayer::State");
-   qRegisterMetaType<QMediaPlayer::MediaStatus>("QMediaPlayer::MediaStatus");
-   qRegisterMetaType<QMediaPlayer::Error>("QMediaPlayer::Error");
-
-   return 0;
-}
-
-Q_CONSTRUCTOR_FUNCTION(qRegisterMediaPlayerMetaTypes)
-
 #define MAX_NESTED_PLAYLISTS 16
 
 class QMediaPlayerPrivate : public QMediaObjectPrivate

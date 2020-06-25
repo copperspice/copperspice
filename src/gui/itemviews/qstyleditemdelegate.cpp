@@ -101,36 +101,36 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
 {
    QVariant value = index.data(Qt::FontRole);
 
-   if (value.isValid() && ! value.isNull()) {
-      option->font = qvariant_cast<QFont>(value).resolve(option->font);
+   if (value.isValid()) {
+      option->font = value.value<QFont>().resolve(option->font);
       option->fontMetrics = QFontMetrics(option->font);
    }
 
    value = index.data(Qt::TextAlignmentRole);
-   if (value.isValid() && !value.isNull()) {
+   if (value.isValid()) {
       option->displayAlignment = Qt::Alignment(value.toInt());
    }
 
    value = index.data(Qt::ForegroundRole);
    if (value.canConvert<QBrush>()) {
-      option->palette.setBrush(QPalette::Text, qvariant_cast<QBrush>(value));
+      option->palette.setBrush(QPalette::Text, value.value<QBrush>());
    }
 
    option->index = index;
    value = index.data(Qt::CheckStateRole);
-   if (value.isValid() && !value.isNull()) {
+   if (value.isValid()) {
       option->features |= QStyleOptionViewItem::HasCheckIndicator;
       option->checkState = static_cast<Qt::CheckState>(value.toInt());
    }
 
    value = index.data(Qt::DecorationRole);
 
-   if (value.isValid() && ! value.isNull()) {
+   if (value.isValid()) {
       option->features |= QStyleOptionViewItem::HasDecoration;
 
       switch (value.type()) {
          case QVariant::Icon: {
-            option->icon = qvariant_cast<QIcon>(value);
+            option->icon = value.value<QIcon>();
             QIcon::Mode mode;
 
             if (! (option->state & QStyle::State_Enabled)) {
@@ -154,20 +154,20 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
 
          case QVariant::Color: {
             QPixmap pixmap(option->decorationSize);
-            pixmap.fill(qvariant_cast<QColor>(value));
+            pixmap.fill(value.value<QColor>());
             option->icon = QIcon(pixmap);
             break;
          }
 
          case QVariant::Image: {
-            QImage image = qvariant_cast<QImage>(value);
+            QImage image = value.value<QImage>();
             option->icon = QIcon(QPixmap::fromImage(image));
             option->decorationSize = image.size() / image.devicePixelRatio();
             break;
          }
 
          case QVariant::Pixmap: {
-            QPixmap pixmap = qvariant_cast<QPixmap>(value);
+            QPixmap pixmap = value.value<QPixmap>();
             option->icon = QIcon(pixmap);
             option->decorationSize = pixmap.size() / pixmap.devicePixelRatio();
             break;
@@ -179,12 +179,12 @@ void QStyledItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QM
 
    value = index.data(Qt::DisplayRole);
 
-   if (value.isValid() && ! value.isNull()) {
+   if (value.isValid()) {
       option->features |= QStyleOptionViewItem::HasDisplay;
       option->text = displayText(value, option->locale);
    }
 
-   option->backgroundBrush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
+   option->backgroundBrush = (index.data(Qt::BackgroundRole)).value<QBrush>();
 
    // disable style animations for checkboxes etc. within itemviews (QTBUG-30146)
    option->styleObject = 0;
@@ -208,7 +208,7 @@ QSize QStyledItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QM
    QVariant value = index.data(Qt::SizeHintRole);
 
    if (value.isValid()) {
-      return qvariant_cast<QSize>(value);
+      return value.value<QSize>();
    }
 
    QStyleOptionViewItem opt = option;

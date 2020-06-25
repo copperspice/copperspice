@@ -87,5 +87,6 @@ class QDeclarativeListProperty
    }
 };
 
+CS_REGISTER_TEMPLATE(QDeclarativeListProperty)
 
 #endif

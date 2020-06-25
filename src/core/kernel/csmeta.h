@@ -24,6 +24,7 @@
 #ifndef CSMETA_H
 #define CSMETA_H
 
+#include <csmetafwd.h>
 #include <csmeta_internal_1.h>
 
 #include <qlist.h>
@@ -114,7 +115,7 @@ class Q_CORE_EXPORT QMetaMethod
    QList<QString> parameterTypes() const;
 
    int parameterCount() const;
-   int parameterType(int index) const;
+   uint parameterType(int index) const;
 
    const QString &methodSignature() const;
    const QString &typeName() const;
@@ -210,6 +211,12 @@ class Q_CORE_EXPORT QMetaProperty
 
    QVariant read(const QObject *obj) const;
 
+   // Note: Doxypress docs must currently be located here due to the overload with similar signatures
+
+   //! \brief .
+   //!
+   //! Reads the property's value from the given \a obj. Returns the property value if
+   //! valid, otherwise returns a default constructed T.
    template<class T>
    T read(const QObject *obj) const;
 
@@ -223,7 +230,7 @@ class Q_CORE_EXPORT QMetaProperty
 
    const QString &typeName() const;
    QVariant::Type type() const;
-   int userType() const;
+   uint userType() const;
    bool write(QObject *obj, const QVariant &value) const;
 
    // properties
@@ -304,338 +311,279 @@ bool QMetaMethod::invoke(QObject *object, Ts &&...Vs) const
 }
 
 // **
-// cs_typeName_internal is a templated class
 template <class T, class = void>
-class Q_CORE_EXPORT cs_typeName_internal
+class Q_CORE_EXPORT CS_ReturnType
 {
    public:
-      static const QString &typeName() {
-         static_assert(! std::is_same<T, T>::value, "Requested type name has not been registered.");
-         static QString retval = QString("");
+      static const QString &getName() {
+         static_assert(! std::is_same_v<T, T>, "Requested type name has not been registered.");
+         static const QString retval;
          return retval;
       }
 };
 
+#if ! defined (CS_DOXYPRESS)
 
-// cs_typeName_internal<dataType,void>::typeName is a method belonging to a specialization of a templated class
 #define CS_REGISTER_CLASS(dataType) \
-   class dataType; \
-   Q_CORE_EXPORT const QString &cs_typeName_internal<dataType, void>::typeName() \
-   { \
-      static QString retval(#dataType); \
-      return retval; \
+   class dataType;                  \
+   CS_REGISTER_TYPE(dataType)
+
+// specialization of a templated function
+#define CS_REGISTER_TYPE(dataType)                       \
+   template <>                                           \
+   inline const QString &cs_typeToName<dataType>()       \
+   {                                                     \
+      static const QString retval(#dataType);            \
+      return retval;                                     \
    }
 
-// cs_typeName_internal<dataType> is specialization of a templated class
-#define CS_DECLARE_CLASS(dataType) \
-   class dataType; \
-   template <>  \
-   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
-   { \
-      public: \
-         static const QString &typeName(); \
-   };
-
-
-// cs_typeName_internal<dataType,void>::typeName is a method belonging to a specialization of a templated class
-#define CS_REGISTER_TYPEDEF(dataType) \
-   Q_CORE_EXPORT const QString &cs_typeName_internal<dataType, void>::typeName() \
-   { \
-      static QString retval(#dataType); \
-      return retval; \
+// specialization of a templated class
+#define CS_REGISTER_TEMPLATE(dataType)                   \
+   template<class... Ts>                                 \
+   class CS_ReturnType<dataType<Ts...>>                  \
+   {                                                     \
+      public:                                            \
+         static const QString &getName();                \
+   };                                                    \
+   template<class... Ts>                                 \
+   const QString &CS_ReturnType< dataType<Ts...> >::getName()                               \
+   {                                                                                        \
+      static const QString retval(QString(#dataType) + "<" + cs_typeToName<Ts...>() + ">"); \
+      return retval;                                                                        \
    }
 
-// cs_typeName_internal<dataType> is specialization of a templated class
-#define CS_DECLARE_TYPEDEF(dataType) \
-   template <>  \
-   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
-   { \
-      public: \
-         static const QString &typeName(); \
-   };
-
-#define CS_REGISTER_TYPE(dataType) \
-   Q_CORE_EXPORT const QString &cs_typeName_internal<dataType,void>::typeName() \
-   { \
-      static QString retval(#dataType); \
-      return retval; \
-   }
-
-#define CS_DECLARE_TYPE(dataType) \
-   template <>  \
-   class Q_CORE_EXPORT cs_typeName_internal<dataType,void>  \
-   { \
-      public: \
-         static const QString &typeName(); \
-   };
-
-
-#define CS_REGISTER_TEMPLATE(dataType) \
-   template<class... Ts> \
-   class cs_typeName_internal< dataType<Ts...> >  \
-   { \
-      public:  \
-         static const QString &typeName();  \
-   };  \
-   template<class... Ts> \
-   const QString &cs_typeName_internal< dataType<Ts...> >::typeName() \
-   { \
-      static QString retval(QString(#dataType) + "<" + cs_typeName<Ts...>() + ">");  \
-      return retval; \
-   }
+#endif
 
 // methods for these 2 class, located in csmeta_internal2.h around line 117
 template<class E>
-class cs_typeName_internal<E, typename std::enable_if<std::is_enum<E>::value>::type>
+class CS_ReturnType<E, typename std::enable_if<std::is_enum<E>::value>::type>
 {
  public:
-   static const QString &typeName();
+   static const QString &getName();
 };
 
 template<class E>
-class cs_typeName_internal< QFlags<E> >
+class CS_ReturnType<QFlags<E>>
 {
  public:
-   static const QString &typeName();
+   static const QString &getName();
 };
 
 
 // QObject and children
 template<class T>
-class cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObject,
+class CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject,
    typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
 {
  public:
-   static const QString &typeName();
+   static const QString &getName();
 };
 
 template<class T>
-const QString &cs_typeName_internal<T, typename std::enable_if< std::is_base_of< QMetaObject ,
-       typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >::typeName()
+const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject ,
+       typename std::remove_reference<decltype(T::staticMetaObject() )>::type>::value>::type>::getName()
 {
    return T::staticMetaObject().className();
 }
 
 
-// 1   standard template functions
-class cs_internalEmpty;
-
-template<class T1 = cs_internalEmpty>
-const QString &cs_typeName()
+// standard template function   ( class T1 = cs_internalEmpty, default value located in csmetafwd.h )
+template<class T1>
+const QString &cs_typeToName()
 {
-   if constexpr (std::is_same<T1, cs_internalEmpty>::value) {
+   if constexpr (std::is_same_v<T1, cs_internalEmpty>) {
       static const QString retval("");
       return retval;
 
+   } else if constexpr (std::is_const_v<std::remove_pointer_t<T1>> && std::is_pointer_v<T1>) {
+      static const QString retval = "const " + cs_typeToName<std::remove_const_t<std::remove_pointer_t<T1>>>() + "*";
+      return retval;
+
+   } else if constexpr (std::is_pointer_v<T1>) {
+      static const QString retval = cs_typeToName<std::remove_pointer_t<T1>>() + "*";
+      return retval;
+
+   } else if constexpr (std::is_const_v<std::remove_reference_t<T1>> && std::is_lvalue_reference_v<T1>) {
+      static const QString retval = "const " + cs_typeToName<std::remove_const_t<std::remove_reference_t<T1>>>() + "&";
+      return retval;
+
+   } else if constexpr (std::is_lvalue_reference_v<T1>) {
+      static const QString retval = cs_typeToName<std::remove_reference_t<T1>>() + "&";
+      return retval;
+
+   } else if constexpr (std::is_rvalue_reference_v<T1>) {
+      static const QString retval = cs_typeToName<std::remove_reference_t<T1>>() + "&&";
+      return retval;
+
+   } else if constexpr (std::is_base_of_v<QObject, T1>) {
+      // T1 inherits from QObject
+      return T1::staticMetaObject().className();
+
    } else {
-      return cs_typeName_internal<T1>::typeName();
+      // uses the class which was set up in the cs_register_template macro
+      return CS_ReturnType<T1>::getName();
    }
 }
 
+template<class T>
+const QString &cs_typeToName_fold()
+{
+   static const QString retval = "," + cs_typeToName<T>();
+
+   return retval;
+}
+
 template<class T1, class T2, class ...Ts>
-const QString &cs_typeName()
+const QString &cs_typeToName()
 {
-   static const QString tmp = cs_typeName_internal<T1>::typeName() + "," + cs_typeName<T2, Ts...>();
-   return tmp;
+   // fold expression
+   static const QString retval = ((cs_typeToName<T1>() + "," + cs_typeToName<T2>()) + ... + cs_typeToName_fold<Ts>());
+
+   return retval;
 }
 
-
-// 2   specialization for pointers  (template classes)
-template<class T>
-class cs_typeName_internal<T *>
-{
- public:
-   static const QString &typeName();
-};
-
-template<class T>
-const QString &cs_typeName_internal<T *>::typeName()
-{
-   static const QString tmp = cs_typeName<T>() + "*";
-   return tmp;
-}
-
-
-// 3   specialization for const pointers  (template classes)
-template<class T>
-class cs_typeName_internal<const T *>
-{
- public:
-   static const QString &typeName();
-};
-
-template<class T>
-const QString &cs_typeName_internal<const T *>::typeName()
-{
-   static const QString tmp = "const " + cs_typeName<T>() + "*";
-   return tmp;
-}
-
-
-// 4   specialization for references  (template classes)
-template<class T>
-class cs_typeName_internal<T &>
-{
- public:
-   static const QString &typeName();
-   \
-};
-
-template<class T>
-const QString &cs_typeName_internal<T &>::typeName()
-{
-   static const QString tmp = cs_typeName<T>() + "&";
-   return tmp;
-}
-
-
-// 5   specialization for const references  (template classes)
-template<class T>
-class cs_typeName_internal<const T &>
-{
- public:
-   static const QString &typeName();
-   \
-};
-
-template<class T>
-const QString &cs_typeName_internal<const T &>::typeName()
-{
-   static const QString tmp = "const " + cs_typeName<T>() + "&";
-   return tmp;
-}
-
-
-// 6   specialization for const  (template classes)
-template<class T>
-class cs_typeName_internal<const T>
-{
- public:
-   static const QString &typeName();
-   \
-};
-
-template<class T>
-const QString &cs_typeName_internal<const T>::typeName()
-{
-   static const QString tmp = "const " + cs_typeName<T>();
-   return tmp;
-}
-
-template<class T1>
-class QDeclarativeListProperty;
-
-// declare here, register in csobject_private.cpp
-CS_DECLARE_CLASS(QAbstractState)
-// added for invokable, properties CsCore
-CS_DECLARE_CLASS(QTimerInfo)
-CS_DECLARE_CLASS(QChar32)
-CS_DECLARE_CLASS(QColor)
-CS_DECLARE_CLASS(QCursor)
-CS_DECLARE_CLASS(QBitmap)
-CS_DECLARE_CLASS(QBrush)
-CS_DECLARE_CLASS(QBitArray)
-CS_DECLARE_CLASS(QByteArray)
-CS_DECLARE_CLASS(QDate)
-CS_DECLARE_CLASS(QDateTime)
-CS_DECLARE_CLASS(QEasingCurve)
-CS_DECLARE_CLASS(QFont)
-CS_DECLARE_CLASS(QGraphicsEffect)
-CS_DECLARE_CLASS(QGraphicsLayout)
-CS_DECLARE_CLASS(QHostAddress)
-CS_DECLARE_CLASS(QIcon)
-CS_DECLARE_CLASS(QImage)
-CS_DECLARE_CLASS(QItemSelection)
-CS_DECLARE_CLASS(QJsonValue)
-CS_DECLARE_CLASS(QJsonObject)
-CS_DECLARE_CLASS(QJsonArray)
-CS_DECLARE_CLASS(QJsonDocument)
-CS_DECLARE_CLASS(QKeySequence)
-CS_DECLARE_CLASS(QLine)
-CS_DECLARE_CLASS(QLineF)
-CS_DECLARE_CLASS(QLocale)
-CS_DECLARE_CLASS(QMargins)
-CS_DECLARE_CLASS(QMatrix)
-CS_DECLARE_CLASS(QMatrix4x4)
-CS_DECLARE_CLASS(QModelIndex)
-CS_DECLARE_CLASS(QPalette)
-CS_DECLARE_CLASS(QPen)
-CS_DECLARE_CLASS(QPoint)
-CS_DECLARE_CLASS(QPointF)
-CS_DECLARE_CLASS(QPolygon)
-CS_DECLARE_CLASS(QPolygonF)
-CS_DECLARE_CLASS(QPixmap)
-CS_DECLARE_CLASS(QRect)
-CS_DECLARE_CLASS(QRectF)
-CS_DECLARE_CLASS(QRegion)
-CS_DECLARE_CLASS(QScrollerProperties)
-CS_DECLARE_CLASS(QScreen)
-CS_DECLARE_CLASS(QSize)
-CS_DECLARE_CLASS(QSizeF)
-CS_DECLARE_CLASS(QSizePolicy)
-CS_DECLARE_CLASS(QState)
-CS_DECLARE_CLASS(QString8)
-CS_DECLARE_CLASS(QString16)
-CS_DECLARE_CLASS(QStringList)
-CS_DECLARE_CLASS(QStyleOption)
-CS_DECLARE_CLASS(QStyleOptionViewItem)
-CS_DECLARE_CLASS(QTextCursor)
-CS_DECLARE_CLASS(QTextFormat)
-CS_DECLARE_CLASS(QTextLength)
-CS_DECLARE_CLASS(QTextOption)
-CS_DECLARE_CLASS(QTime)
-CS_DECLARE_CLASS(QTransform)
-CS_DECLARE_CLASS(QQuaternion)
-CS_DECLARE_CLASS(QUrl)
-CS_DECLARE_CLASS(QUuid)
-CS_DECLARE_CLASS(QVariant)
-CS_DECLARE_CLASS(QVector2D)
-CS_DECLARE_CLASS(QVector3D)
-CS_DECLARE_CLASS(QVector4D)
-
-CS_DECLARE_TYPEDEF(QRegularExpression8)
-CS_DECLARE_TYPEDEF(QRegularExpression16)
-CS_DECLARE_TYPEDEF(QStringView8)
-CS_DECLARE_TYPEDEF(QStringView16)
+// register names of all types which are used in QVariant
 
 // primitive
-CS_DECLARE_TYPE(bool)
-CS_DECLARE_TYPE(char)
-CS_DECLARE_TYPE(signed char)
-CS_DECLARE_TYPE(unsigned char)
-CS_DECLARE_TYPE(double)
-CS_DECLARE_TYPE(long double)
-CS_DECLARE_TYPE(float)
-CS_DECLARE_TYPE(int)
-CS_DECLARE_TYPE(unsigned int)
-CS_DECLARE_TYPE(long)
-CS_DECLARE_TYPE(unsigned long)
-CS_DECLARE_TYPE(long long)
-CS_DECLARE_TYPE(unsigned long long)
-CS_DECLARE_TYPE(short)
-CS_DECLARE_TYPE(unsigned short)
-CS_DECLARE_TYPE(void)
+CS_REGISTER_TYPE(bool)
+CS_REGISTER_TYPE(short)
+CS_REGISTER_TYPE(unsigned short)
+CS_REGISTER_TYPE(int)
+CS_REGISTER_TYPE(unsigned int)
+CS_REGISTER_TYPE(long)
+CS_REGISTER_TYPE(unsigned long)
+CS_REGISTER_TYPE(long long)
+CS_REGISTER_TYPE(unsigned long long)
+CS_REGISTER_TYPE(double)
+CS_REGISTER_TYPE(long double)
+CS_REGISTER_TYPE(float)
 
-//
-CS_REGISTER_TEMPLATE(QFlatMap)
+CS_REGISTER_TYPE(char)
+CS_REGISTER_TYPE(signed char)
+CS_REGISTER_TYPE(unsigned char)
+//  CS_REGISTER_TYPE(char8_t)          // add with C++20
+CS_REGISTER_TYPE(char16_t)
+CS_REGISTER_TYPE(char32_t)
+CS_REGISTER_TYPE(void)
+
+CS_REGISTER_CLASS(QBitArray)
+CS_REGISTER_CLASS(QByteArray)
+CS_REGISTER_CLASS(QChar32)
+CS_REGISTER_CLASS(QString8)
+CS_REGISTER_CLASS(QString16)
+CS_REGISTER_CLASS(QStringList)
+
+CS_REGISTER_CLASS(QDate)
+CS_REGISTER_CLASS(QDateTime)
+CS_REGISTER_CLASS(QTime)
+CS_REGISTER_CLASS(QLocale)
+
+CS_REGISTER_CLASS(QJsonValue)
+CS_REGISTER_CLASS(QJsonObject)
+CS_REGISTER_CLASS(QJsonArray)
+CS_REGISTER_CLASS(QJsonDocument)
+
+CS_REGISTER_CLASS(QLine)
+CS_REGISTER_CLASS(QLineF)
+CS_REGISTER_CLASS(QPoint)
+CS_REGISTER_CLASS(QPointF)
+CS_REGISTER_CLASS(QPolygon)
+CS_REGISTER_CLASS(QPolygonF)
+CS_REGISTER_CLASS(QRect)
+CS_REGISTER_CLASS(QRectF)
+CS_REGISTER_CLASS(QSize)
+CS_REGISTER_CLASS(QSizeF)
+
+// core
+CS_REGISTER_CLASS(QEasingCurve)
+CS_REGISTER_CLASS(QMargins)
+CS_REGISTER_CLASS(QModelIndex)
+CS_REGISTER_CLASS(QPersistentModelIndex)
+CS_REGISTER_CLASS(QUrl)
+CS_REGISTER_CLASS(QUuid)
+CS_REGISTER_CLASS(QVariant)
+
+// gui
+CS_REGISTER_CLASS(QBitmap)
+CS_REGISTER_CLASS(QBrush)
+CS_REGISTER_CLASS(QColor)
+CS_REGISTER_CLASS(QCursor)
+CS_REGISTER_CLASS(QFont)
+CS_REGISTER_CLASS(QIcon)
+CS_REGISTER_CLASS(QImage)
+CS_REGISTER_CLASS(QKeySequence)
+CS_REGISTER_CLASS(QMatrix)
+CS_REGISTER_CLASS(QMatrix4x4)
+CS_REGISTER_CLASS(QPalette)
+CS_REGISTER_CLASS(QPen)
+CS_REGISTER_CLASS(QPixmap)
+CS_REGISTER_CLASS(QQuaternion)
+CS_REGISTER_CLASS(QRegion)
+CS_REGISTER_CLASS(QSizePolicy)
+CS_REGISTER_CLASS(QTextLength)
+CS_REGISTER_CLASS(QTextFormat)
+CS_REGISTER_CLASS(QTransform)
+CS_REGISTER_CLASS(QVector2D)
+CS_REGISTER_CLASS(QVector3D)
+CS_REGISTER_CLASS(QVector4D)
+
+CS_REGISTER_TYPE(QRegularExpression8)
+CS_REGISTER_TYPE(QRegularExpression16)
+CS_REGISTER_TYPE(QStringView8)
+CS_REGISTER_TYPE(QStringView16)
+
 CS_REGISTER_TEMPLATE(QHash)
 CS_REGISTER_TEMPLATE(QList)
-CS_REGISTER_TEMPLATE(QLinkedList)
-
 CS_REGISTER_TEMPLATE(QMap)
 CS_REGISTER_TEMPLATE(QMultiHash)
 CS_REGISTER_TEMPLATE(QMultiMap)
-CS_REGISTER_TEMPLATE(QQueue)
-CS_REGISTER_TEMPLATE(QSet)
-CS_REGISTER_TEMPLATE(QStack)
-CS_REGISTER_TEMPLATE(QVector)
-CS_REGISTER_TEMPLATE(QDeclarativeListProperty)
+
+// added for invokable or property return types
+CS_REGISTER_CLASS(QTimerInfo)
 CS_REGISTER_TEMPLATE(QSharedPointer)
-CS_REGISTER_TEMPLATE(qMapCompare)
-CS_REGISTER_TEMPLATE(std::tuple)
+CS_REGISTER_TEMPLATE(QWeakPointer)
 CS_REGISTER_TEMPLATE(std::pair)
 
-Q_DECLARE_METATYPE(QList<int>)
+// next 8 function are specializations for containers to omit the Compare template when it is not specified
+template<class Key, class Value>
+class CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>
+{
+   public:
+      static const QString &getName() {
+         static QString retval("QMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+         return retval;
+      }
+};
+
+template<class Key, class Value>
+class CS_ReturnType<QMultiMap<Key, Value, qMapCompare<Key> >>
+{
+   public:
+      static const QString &getName() {
+         static const QString retval("QMultiMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+         return retval;
+      }
+};
+
+template<class Key, class Value>
+class CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
+{
+   public:
+      static const QString &getName() {
+         static const QString retval("QHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+         return retval;
+      }
+};
+
+template<class Key, class Value>
+class CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
+{
+   public:
+      static const QString &getName() {
+         static const QString retval("QMultiHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+         return retval;
+      }
+};
 
 // **
 template<class T>

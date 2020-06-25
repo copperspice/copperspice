@@ -39,25 +39,21 @@ namespace Bindings {
 class QtInstance;
 
 class QtField : public Field {
-public:
 
-    typedef enum {
+public:
+    enum QtFieldType {
         MetaProperty,
-#ifndef QT_NO_PROPERTIES
         DynamicProperty,
-#endif
         ChildObject
-    } QtFieldType;
+    };
 
     QtField(const QMetaProperty &p)
-        : m_type(MetaProperty), m_property(p)
+        : m_type(QtFieldType::MetaProperty), m_property(p)
         {}
 
-#ifndef QT_NO_PROPERTIES
     QtField(const QString &b)
         : m_type(DynamicProperty), m_dynamicProperty(b)
         {}
-#endif
 
     QtField(QObject *child)
         : m_type(ChildObject), m_childObject(child)
@@ -101,7 +97,7 @@ private:
 template <typename T> class QtArray : public Array
 {
 public:
-    QtArray(QList<T> list, QMetaType::Type type, PassRefPtr<RootObject>);
+    QtArray(QList<T> list, QVariant::Type type, PassRefPtr<RootObject>);
     virtual ~QtArray();
 
     RootObject* rootObject() const;
@@ -113,7 +109,7 @@ public:
 private:
     mutable QList<T> m_list; // setValueAt is const!
     unsigned int m_length;
-    QMetaType::Type m_type;
+    QVariant::Type m_type;
 };
 
 // Based on RuntimeMethod
@@ -239,7 +235,7 @@ private:
     Strong<JSObject> m_funcObject;
 };
 
-QVariant convertValueToQVariant(ExecState* exec, JSValue value, QMetaType::Type hint, int *distance);
+QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type hint, int *distance);
 JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, const QVariant& variant);
 
 } // namespace Bindings

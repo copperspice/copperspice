@@ -75,33 +75,32 @@ void QNetworkSessionPrivateImpl::syncStateWithInterface()
     state  = QNetworkSession::Invalid;
     lastError = QNetworkSession::UnknownSessionError;
 
-    qRegisterMetaType<QBearerEngineImpl::ConnectionError>("QBearerEngineImpl::ConnectionError");
-
     switch (publicConfig.type()) {
-    case QNetworkConfiguration::InternetAccessPoint:
-        activeConfig = publicConfig;
-        engine = getEngineFromId(activeConfig.identifier());
-        if (engine) {
-            qRegisterMetaType<QNetworkConfigurationPrivatePointer>("QNetworkConfigurationPrivatePointer");
-            connect(engine, SIGNAL(configurationChanged(QNetworkConfigurationPrivatePointer)),
-                    this, SLOT(configurationChanged(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
 
-            connect(engine, SIGNAL(connectionError(QString,QBearerEngineImpl::ConnectionError)),
-                    this, SLOT(connectionError(QString,QBearerEngineImpl::ConnectionError)), Qt::QueuedConnection);
-        }
-        break;
+       case QNetworkConfiguration::InternetAccessPoint:
+           activeConfig = publicConfig;
+           engine = getEngineFromId(activeConfig.identifier());
 
-    case QNetworkConfiguration::ServiceNetwork:
-        serviceConfig = publicConfig;
-        // Defer setting engine and signals until open().
-        // fall through
+           if (engine) {
+               connect(engine, SIGNAL(configurationChanged(QNetworkConfigurationPrivatePointer)),
+                       this, SLOT(configurationChanged(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
 
-    case QNetworkConfiguration::UserChoice:
-        // Defer setting serviceConfig and activeConfig until open().
-        // fall through
+               connect(engine, SIGNAL(connectionError(QString,QBearerEngineImpl::ConnectionError)),
+                       this, SLOT(connectionError(QString,QBearerEngineImpl::ConnectionError)), Qt::QueuedConnection);
+           }
+           break;
 
-    default:
-        engine = 0;
+       case QNetworkConfiguration::ServiceNetwork:
+           serviceConfig = publicConfig;
+           // Defer setting engine and signals until open().
+           [[fallthrough]];
+
+       case QNetworkConfiguration::UserChoice:
+           // Defer setting serviceConfig and activeConfig until open().
+           [[fallthrough]];
+
+       default:
+           engine = 0;
     }
 
     networkConfigurationsChanged();

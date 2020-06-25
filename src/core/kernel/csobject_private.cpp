@@ -67,7 +67,7 @@ void CSInternalChildren::set_mParent(QObject *object, QObject *value)
 CSAbstractDeclarativeData *CSInternalDeclarativeData::get_m_declarativeData(const QObject *object)
 {
    if (! object) {
-      return 0;
+      return nullptr;
    }
 
    return object->m_declarativeData;
@@ -84,11 +84,10 @@ void CSInternalDeclarativeData::set_m_declarativeData(QObject *object, CSAbstrac
 
 
 // **
-
 bool CSInternalEvents::get_m_sendChildEvents(const QObject *object)
 {
    if (! object) {
-      return 0;
+      return false;
    }
 
    return object->m_sendChildEvents;
@@ -97,7 +96,7 @@ bool CSInternalEvents::get_m_sendChildEvents(const QObject *object)
 bool CSInternalEvents::get_m_receiveChildEvents(const QObject *object)
 {
    if (! object) {
-      return 0;
+      return false;
    }
 
    return object->m_receiveChildEvents;
@@ -115,7 +114,7 @@ int CSInternalEvents::get_m_PostedEvents(const QObject *object)
 QList<QPointer<QObject> > &CSInternalEvents::get_m_EventFilters(QObject *object)
 {
    if (! object) {
-      static QList<QPointer<QObject> > emptyList;
+      static QList<QPointer<QObject>> emptyList;
       return emptyList;
    }
 
@@ -260,97 +259,3 @@ void QObject::internal_reregisterTimers(QList<QTimerInfo> timerList)
       eventDispatcher->registerTimer(item.interval, item.timerType, this);
    }
 }
-
-// ** macros defined in csmeta.h
-
-// added for invokable, properties CsCore
-CS_REGISTER_CLASS(QTimerInfo)
-// classes
-CS_REGISTER_CLASS(QAbstractState)
-CS_REGISTER_CLASS(QChar32)
-CS_REGISTER_CLASS(QColor)
-CS_REGISTER_CLASS(QCursor)
-CS_REGISTER_CLASS(QBitmap)
-CS_REGISTER_CLASS(QBrush)
-CS_REGISTER_CLASS(QBitArray)
-CS_REGISTER_CLASS(QByteArray)
-CS_REGISTER_CLASS(QDate)
-CS_REGISTER_CLASS(QDateTime)
-CS_REGISTER_CLASS(QEasingCurve)
-CS_REGISTER_CLASS(QFont)
-CS_REGISTER_CLASS(QGraphicsEffect)
-CS_REGISTER_CLASS(QGraphicsLayout)
-CS_REGISTER_CLASS(QHostAddress)
-CS_REGISTER_CLASS(QIcon)
-CS_REGISTER_CLASS(QImage)
-CS_REGISTER_CLASS(QItemSelection)
-CS_REGISTER_CLASS(QJsonValue)
-CS_REGISTER_CLASS(QJsonObject)
-CS_REGISTER_CLASS(QJsonArray)
-CS_REGISTER_CLASS(QJsonDocument)
-CS_REGISTER_CLASS(QKeySequence)
-CS_REGISTER_CLASS(QLine)
-CS_REGISTER_CLASS(QLineF)
-CS_REGISTER_CLASS(QLocale)
-CS_REGISTER_CLASS(QMargins)
-CS_REGISTER_CLASS(QMatrix)
-CS_REGISTER_CLASS(QMatrix4x4)
-CS_REGISTER_CLASS(QModelIndex)
-CS_REGISTER_CLASS(QPalette)
-CS_REGISTER_CLASS(QPen)
-CS_REGISTER_CLASS(QPoint)
-CS_REGISTER_CLASS(QPointF)
-CS_REGISTER_CLASS(QPolygon)
-CS_REGISTER_CLASS(QPolygonF)
-CS_REGISTER_CLASS(QPixmap)
-CS_REGISTER_CLASS(QRect)
-CS_REGISTER_CLASS(QRectF)
-CS_REGISTER_CLASS(QRegion)
-CS_REGISTER_CLASS(QScrollerProperties)
-CS_REGISTER_CLASS(QScreen)
-CS_REGISTER_CLASS(QSize)
-CS_REGISTER_CLASS(QSizeF)
-CS_REGISTER_CLASS(QSizePolicy)
-CS_REGISTER_CLASS(QState)
-CS_REGISTER_CLASS(QString8)
-CS_REGISTER_CLASS(QString16)
-CS_REGISTER_CLASS(QStringList)
-CS_REGISTER_CLASS(QStyleOption)
-CS_REGISTER_CLASS(QStyleOptionViewItem)
-CS_REGISTER_CLASS(QTextCursor)
-CS_REGISTER_CLASS(QTextFormat)
-CS_REGISTER_CLASS(QTextLength)
-CS_REGISTER_CLASS(QTextOption)
-CS_REGISTER_CLASS(QTime)
-CS_REGISTER_CLASS(QTransform)
-CS_REGISTER_CLASS(QQuaternion)
-CS_REGISTER_CLASS(QUrl)
-CS_REGISTER_CLASS(QUuid)
-CS_REGISTER_CLASS(QVariant)
-CS_REGISTER_CLASS(QVector2D)
-CS_REGISTER_CLASS(QVector3D)
-CS_REGISTER_CLASS(QVector4D)
-
-CS_REGISTER_TYPEDEF(QRegularExpression8)
-CS_REGISTER_TYPEDEF(QRegularExpression16)
-CS_REGISTER_TYPEDEF(QStringView8)
-CS_REGISTER_TYPEDEF(QStringView16)
-
-// primitive
-CS_REGISTER_TYPE(bool)
-CS_REGISTER_TYPE(char)
-CS_REGISTER_TYPE(signed char)
-CS_REGISTER_TYPE(unsigned char)
-CS_REGISTER_TYPE(double)
-CS_REGISTER_TYPE(long double)
-CS_REGISTER_TYPE(float)
-CS_REGISTER_TYPE(int)
-CS_REGISTER_TYPE(unsigned int)
-CS_REGISTER_TYPE(long)
-CS_REGISTER_TYPE(unsigned long)
-CS_REGISTER_TYPE(long long)
-CS_REGISTER_TYPE(unsigned long long)
-CS_REGISTER_TYPE(short)
-CS_REGISTER_TYPE(unsigned short)
-CS_REGISTER_TYPE(void)
-
