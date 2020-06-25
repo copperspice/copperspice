@@ -31,7 +31,7 @@
 #include <qvariant.h>
 #include <qvector.h>
 
-#include <shared_guarded.hpp>
+#include <cs_shared_guarded.h>
 
 #ifndef QT_NO_ANIMATION
 
