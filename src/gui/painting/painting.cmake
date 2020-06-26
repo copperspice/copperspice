@@ -68,7 +68,6 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcolor_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcosmeticstroker_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qcssutil_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdatabuffer_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_neon_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_x86_p.h
