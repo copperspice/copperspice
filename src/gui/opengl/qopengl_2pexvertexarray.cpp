@@ -28,8 +28,8 @@
 
 void QOpenGL2PEXVertexArray::clear()
 {
-    vertexArray.reset();
-    vertexArrayStops.reset();
+    vertexArray.clear();
+    vertexArrayStops.clear();
     boundingRectDirty = true;
 }
 
@@ -45,7 +45,7 @@ void QOpenGL2PEXVertexArray::addClosingLine(int index)
 {
     QPointF point(vertexArray.at(index));
     if (point != QPointF(vertexArray.last()))
-        vertexArray.add(point);
+        vertexArray.append(point);
 }
 
 void QOpenGL2PEXVertexArray::addCentroid(const QVectorPath &path, int subPathIndex)
@@ -62,7 +62,7 @@ void QOpenGL2PEXVertexArray::addCentroid(const QVectorPath &path, int subPathInd
     }
 
     const QPointF centroid = sum / qreal(count);
-    vertexArray.add(centroid);
+    vertexArray.append(centroid);
 }
 
 void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseScale, bool outline)
@@ -80,7 +80,7 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
         addCentroid(path, 0);
 
     int lastMoveTo = vertexArray.size();
-    vertexArray.add(points[0]); // The first element is always a moveTo
+    vertexArray.append(points[0]); // The first element is always a moveTo
 
     do {
         if (!elements) {
@@ -100,7 +100,7 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
                 if (!outline)
                     addClosingLine(lastMoveTo);
 //                qDebug("element[%d] is a MoveToElement", i);
-                vertexArrayStops.add(vertexArray.size());
+                vertexArrayStops.append(vertexArray.size());
                 if (!outline) {
                     if (!path.isConvex()) addCentroid(path, i);
                     lastMoveTo = vertexArray.size();
@@ -135,12 +135,12 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
 
     if (!outline)
         addClosingLine(lastMoveTo);
-    vertexArrayStops.add(vertexArray.size());
+    vertexArrayStops.append(vertexArray.size());
 }
 
 void QOpenGL2PEXVertexArray::lineToArray(const GLfloat x, const GLfloat y)
 {
-    vertexArray.add(QOpenGLPoint(x, y));
+    vertexArray.append(QOpenGLPoint(x, y));
 
     if (x > maxX)
         maxX = x;

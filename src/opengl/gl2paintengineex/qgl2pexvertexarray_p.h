@@ -25,7 +25,7 @@
 #define QGL2PEXVERTEXARRAY_P_H
 
 #include <QRectF>
-#include <qdatabuffer_p.h>
+#include <qvector.h>
 #include <qvectorpath_p.h>
 #include <qgl_p.h>
 
@@ -75,7 +75,6 @@ class QGL2PEXVertexArray
 {
  public:
    QGL2PEXVertexArray() :
-      vertexArray(0), vertexArrayStops(0),
       maxX(-2e10), maxY(-2e10), minX(2e10), minY(2e10),
       boundingRectDirty(true) {
    }
@@ -108,17 +107,17 @@ class QGL2PEXVertexArray
    }
 
    inline void addVertex(const GLfloat x, const GLfloat y) {
-      vertexArray.add(QGLPoint(x, y));
+      vertexArray.append(QGLPoint(x, y));
    }
 
    void addPath(const QVectorPath &path, GLfloat curveInverseScale, bool outline = true);
    void clear();
 
-   QGLPoint        *data() {
+   QGLPoint *data() {
       return vertexArray.data();
    }
 
-   int *stops() const {
+   const int *stops() const {
       return vertexArrayStops.data();
    }
 
@@ -135,8 +134,8 @@ class QGL2PEXVertexArray
    void lineToArray(const GLfloat x, const GLfloat y);
 
  private:
-   QDataBuffer<QGLPoint> vertexArray;
-   QDataBuffer<int>      vertexArrayStops;
+   QVector<QGLPoint> vertexArray;
+   QVector<int>      vertexArrayStops;
 
    GLfloat     maxX;
    GLfloat     maxY;

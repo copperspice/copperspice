@@ -33,7 +33,7 @@
 class QSubpathForwardIterator
 {
  public:
-   QSubpathForwardIterator(const QDataBuffer<QStrokerOps::Element> *path)
+   QSubpathForwardIterator(const QVector<QStrokerOps::Element> *path)
       : m_path(path), m_pos(0) { }
 
    int position() const {
@@ -50,14 +50,14 @@ class QSubpathForwardIterator
    }
 
  private:
-   const QDataBuffer<QStrokerOps::Element> *m_path;
+   const QVector<QStrokerOps::Element> *m_path;
    int m_pos;
 };
 
 class QSubpathBackwardIterator
 {
  public:
-   QSubpathBackwardIterator(const QDataBuffer<QStrokerOps::Element> *path)
+   QSubpathBackwardIterator(const QVector<QStrokerOps::Element> *path)
       : m_path(path), m_pos(path->size() - 1) { }
 
    inline int position() const {
@@ -106,14 +106,14 @@ class QSubpathBackwardIterator
    }
 
  private:
-   const QDataBuffer<QStrokerOps::Element> *m_path;
+   const QVector<QStrokerOps::Element> *m_path;
    int m_pos;
 };
 
 class QSubpathFlatIterator
 {
  public:
-   QSubpathFlatIterator(const QDataBuffer<QStrokerOps::Element> *path, qreal threshold)
+   QSubpathFlatIterator(const QVector<QStrokerOps::Element> *path, qreal threshold)
       : m_path(path), m_pos(0), m_curve_index(-1), m_curve_threshold(threshold) { }
 
    bool hasNext() const {
@@ -160,7 +160,7 @@ class QSubpathFlatIterator
    }
 
  private:
-   const QDataBuffer<QStrokerOps::Element> *m_path;
+   const QVector<QStrokerOps::Element> *m_path;
    int m_pos;
    QPolygonF m_curve;
    int m_curve_index;
@@ -201,7 +201,7 @@ QStrokerOps::~QStrokerOps()
 void QStrokerOps::begin(void *customData)
 {
    m_customData = customData;
-   m_elements.reset();
+   m_elements.clear();
 }
 
 

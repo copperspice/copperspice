@@ -138,7 +138,7 @@ void QBezier::addToPolygon(QPolygonF *polygon, qreal bezier_flattening_threshold
    }
 }
 
-void QBezier::addToPolygon(QDataBuffer<QPointF> &polygon, qreal bezier_flattening_threshold) const
+void QBezier::addToPolygon(QVector<QPointF> &polygon, qreal bezier_flattening_threshold) const
 {
    QBezier beziers[10];
    int levels[10];
@@ -163,7 +163,7 @@ void QBezier::addToPolygon(QDataBuffer<QPointF> &polygon, qreal bezier_flattenin
       }
       if (d < bezier_flattening_threshold * l || *lvl == 0) {
          // good enough, we pop it off and add the endpoint
-         polygon.add(QPointF(b->x4, b->y4));
+         polygon.append(QPointF(b->x4, b->y4));
          --b;
          --lvl;
       } else {

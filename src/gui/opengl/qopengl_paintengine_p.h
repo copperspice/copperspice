@@ -26,12 +26,11 @@
 #define QOPENGLPAINTENGINE_P_H
 
 #include <qdebug.h>
-
 #include <qopengl_paintdevice.h>
+#include <qvector.h>
 
 #include <qpaintengineex_p.h>
 #include <qfontengine_p.h>
-#include <qdatabuffer_p.h>
 #include <qtriangulatingstroker_p.h>
 #include <qopengl_engineshadermanager_p.h>
 #include <qopengl_2pexvertexarray_p.h>
@@ -195,7 +194,7 @@ public:
     inline void setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *pointer);
 
     // draws whatever is in the vertex array:
-    void drawVertexArrays(const float *data, int *stops, int stopCount, GLenum primitive);
+    void drawVertexArrays(const float *data, const int *stops, int stopCount, GLenum primitive);
     void drawVertexArrays(QOpenGL2PEXVertexArray &vertexArray, GLenum primitive) {
         drawVertexArrays((const float *) vertexArray.data(), vertexArray.stops(), vertexArray.stopCount(), primitive);
     }
@@ -204,11 +203,12 @@ public:
     void composite(const QOpenGLRect& boundingRect);
 
     // Calls drawVertexArrays to render into stencil buffer:
-    void fillStencilWithVertexArray(const float *data, int count, int *stops, int stopCount, const QOpenGLRect &bounds, StencilFillMode mode);
+    void fillStencilWithVertexArray(const float *data, int count, const int *stops, int stopCount, const QOpenGLRect &bounds, 
+                  StencilFillMode mode);
+
     void fillStencilWithVertexArray(QOpenGL2PEXVertexArray& vertexArray, bool useWindingFill) {
         fillStencilWithVertexArray((const float *) vertexArray.data(), 0, vertexArray.stops(), vertexArray.stopCount(),
-                                   vertexArray.boundingRect(),
-                                   useWindingFill ? WindingFillMode : OddEvenFillMode);
+                  vertexArray.boundingRect(), useWindingFill ? WindingFillMode : OddEvenFillMode);
     }
 
     void setBrush(const QBrush& brush);
@@ -271,7 +271,7 @@ public:
     QOpenGL2PEXVertexArray textureCoordinateArray;
     QVector<GLushort> elementIndices;
     GLuint elementIndicesVBOId;
-    QDataBuffer<GLfloat> opacityArray;
+    QVector<GLfloat> opacityArray;
     GLfloat staticVertexCoordinateArray[8];
     GLfloat staticTextureCoordinateArray[8];
 

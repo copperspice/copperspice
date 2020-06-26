@@ -130,8 +130,8 @@ QDebug Q_GUI_EXPORT &operator<<(QDebug &s, const QVectorPath &path)
 
 struct StrokeHandler {
    StrokeHandler(int reserve) : pts(reserve), types(reserve) {}
-   QDataBuffer<qreal> pts;
-   QDataBuffer<QPainterPath::ElementType> types;
+   QVector<qreal> pts;
+   QVector<QPainterPath::ElementType> types;
 };
 
 
@@ -311,31 +311,31 @@ static const QPainterPath::ElementType qpaintengineex_roundedrect_types[] = {
 
 static void qpaintengineex_moveTo(qreal x, qreal y, void *data)
 {
-   ((StrokeHandler *) data)->pts.add(x);
-   ((StrokeHandler *) data)->pts.add(y);
-   ((StrokeHandler *) data)->types.add(QPainterPath::MoveToElement);
+   ((StrokeHandler *) data)->pts.append(x);
+   ((StrokeHandler *) data)->pts.append(y);
+   ((StrokeHandler *) data)->types.append(QPainterPath::MoveToElement);
 }
 
 static void qpaintengineex_lineTo(qreal x, qreal y, void *data)
 {
-   ((StrokeHandler *) data)->pts.add(x);
-   ((StrokeHandler *) data)->pts.add(y);
-   ((StrokeHandler *) data)->types.add(QPainterPath::LineToElement);
+   ((StrokeHandler *) data)->pts.append(x);
+   ((StrokeHandler *) data)->pts.append(y);
+   ((StrokeHandler *) data)->types.append(QPainterPath::LineToElement);
 }
 
 static void qpaintengineex_cubicTo(qreal c1x, qreal c1y, qreal c2x, qreal c2y, qreal ex, qreal ey, void *data)
 {
-   ((StrokeHandler *) data)->pts.add(c1x);
-   ((StrokeHandler *) data)->pts.add(c1y);
-   ((StrokeHandler *) data)->types.add(QPainterPath::CurveToElement);
+   ((StrokeHandler *) data)->pts.append(c1x);
+   ((StrokeHandler *) data)->pts.append(c1y);
+   ((StrokeHandler *) data)->types.append(QPainterPath::CurveToElement);
 
-   ((StrokeHandler *) data)->pts.add(c2x);
-   ((StrokeHandler *) data)->pts.add(c2y);
-   ((StrokeHandler *) data)->types.add(QPainterPath::CurveToDataElement);
+   ((StrokeHandler *) data)->pts.append(c2x);
+   ((StrokeHandler *) data)->pts.append(c2y);
+   ((StrokeHandler *) data)->types.append(QPainterPath::CurveToDataElement);
 
-   ((StrokeHandler *) data)->pts.add(ex);
-   ((StrokeHandler *) data)->pts.add(ey);
-   ((StrokeHandler *) data)->types.add(QPainterPath::CurveToDataElement);
+   ((StrokeHandler *) data)->pts.append(ex);
+   ((StrokeHandler *) data)->pts.append(ey);
+   ((StrokeHandler *) data)->types.append(QPainterPath::CurveToDataElement);
 }
 
 QPaintEngineEx::QPaintEngineEx()
@@ -423,8 +423,8 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
 
    const qreal *lastPoint = points + (pointCount << 1);
 
-   d->strokeHandler->types.reset();
-   d->strokeHandler->pts.reset();
+   d->strokeHandler->types.clear();
+   d->strokeHandler->pts.clear();
 
    // Some engines might decide to optimize for the non-shape hint later on...
    uint flags = QVectorPath::WindingFill;

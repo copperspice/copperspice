@@ -39,15 +39,14 @@ void QTriangulatingStroker::endCapOrJoinClosed(const qreal *start, const qreal *
     } else {
         endCap(cur);
     }
+
     int count = m_vertices.size();
 
-    // Copy the (x, y) values because QDataBuffer::add(const float& t)
-    // may resize the buffer, which will leave t pointing at the
-    // previous buffer's memory region if we don't copy first.
     float x = m_vertices.at(count-2);
     float y = m_vertices.at(count-1);
-    m_vertices.add(x);
-    m_vertices.add(y);
+
+    m_vertices.append(x);
+    m_vertices.append(y);
 }
 
 static inline void skipDuplicatePoints(const qreal **pts, const qreal *endPts)
@@ -80,7 +79,7 @@ void QTriangulatingStroker::process(const QVectorPath &path, const QPen &pen, co
 
     m_join_style = qpen_joinStyle(pen);
     m_cap_style = qpen_capStyle(pen);
-    m_vertices.reset();
+    m_vertices.clear();
     m_miter_limit = pen.miterLimit() * qpen_widthf(pen);
 
     // The curvyness is based on the notion that I originally wanted
@@ -249,16 +248,16 @@ void QTriangulatingStroker::moveTo(const qreal *pts)
     switch (m_cap_style) {
     case Qt::FlatCap:
         if (invisibleJump) {
-            m_vertices.add(m_cx + m_nvx);
-            m_vertices.add(m_cy + m_nvy);
+            m_vertices.append(m_cx + m_nvx);
+            m_vertices.append(m_cy + m_nvy);
         }
         break;
     case Qt::SquareCap: {
         float sx = m_cx - m_nvy;
         float sy = m_cy + m_nvx;
         if (invisibleJump) {
-            m_vertices.add(sx + m_nvx);
-            m_vertices.add(sy + m_nvy);
+            m_vertices.append(sx + m_nvx);
+            m_vertices.append(sy + m_nvy);
         }
         emitLineSegment(sx, sy, m_nvx, m_nvy);
         break; }
@@ -270,19 +269,19 @@ void QTriangulatingStroker::moveTo(const qreal *pts)
         int front = 0;
         int end = points.size() / 2;
         while (front != end) {
-            m_vertices.at(--count) = points[2 * end - 1];
-            m_vertices.at(--count) = points[2 * end - 2];
+            m_vertices[--count] = points[2 * end - 1];
+            m_vertices[--count] = points[2 * end - 2];
             --end;
             if (front == end)
                 break;
-            m_vertices.at(--count) = points[2 * front + 1];
-            m_vertices.at(--count) = points[2 * front + 0];
+            m_vertices[--count] = points[2 * front + 1];
+            m_vertices[--count] = points[2 * front + 0];
             ++front;
         }
 
         if (invisibleJump) {
-            m_vertices.at(count - 1) = m_vertices.at(count + 1);
-            m_vertices.at(count - 2) = m_vertices.at(count + 0);
+            m_vertices[count - 1] = m_vertices.at(count + 1);
+            m_vertices[count - 2] = m_vertices.at(count + 0);
         }
         break; }
     default: break; // ssssh gcc...
@@ -369,10 +368,10 @@ void QTriangulatingStroker::join(const qreal *pts)
 
         // Check that the distance to the intersection point is less than the miter limit.
         if ((ix - px) * (ix - px) + (iy - py) * (iy - py) <= m_miter_limit * m_miter_limit) {
-            m_vertices.add(ix);
-            m_vertices.add(iy);
-            m_vertices.add(ix);
-            m_vertices.add(iy);
+            m_vertices.append(ix);
+            m_vertices.append(iy);
+            m_vertices.append(ix);
+            m_vertices.append(iy);
         }
         // else
         // Do a plain bevel join if the miter limit is exceeded or if
@@ -417,13 +416,13 @@ void QTriangulatingStroker::endCap(const qreal *)
         int front = 0;
         int end = points.size() / 2;
         while (front != end) {
-            m_vertices.add(points[2 * end - 2]);
-            m_vertices.add(points[2 * end - 1]);
+            m_vertices.append(points[2 * end - 2]);
+            m_vertices.append(points[2 * end - 1]);
             --end;
             if (front == end)
                 break;
-            m_vertices.add(points[2 * front + 0]);
-            m_vertices.add(points[2 * front + 1]);
+            m_vertices.append(points[2 * front + 0]);
+            m_vertices.append(points[2 * front + 1]);
             ++front;
         }
         break; }
@@ -506,8 +505,9 @@ void QDashedStrokeProcessor::process(const QVectorPath &path, const QPen &pen, c
 
     bool cosmetic = qt_pen_is_cosmetic(pen, hints);
 
-    m_points.reset();
-    m_types.reset();
+    m_points.clear();
+    m_types.clear();
+
     m_points.reserve(path.elementCount());
     m_types.reserve(path.elementCount());
 

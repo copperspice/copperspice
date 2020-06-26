@@ -27,8 +27,8 @@
 
 void QGL2PEXVertexArray::clear()
 {
-   vertexArray.reset();
-   vertexArrayStops.reset();
+   vertexArray.clear();
+   vertexArrayStops.clear();
    boundingRectDirty = true;
 }
 
@@ -45,7 +45,7 @@ void QGL2PEXVertexArray::addClosingLine(int index)
 {
    QPointF point(vertexArray.at(index));
    if (point != QPointF(vertexArray.last())) {
-      vertexArray.add(point);
+      vertexArray.append(point);
    }
 }
 
@@ -64,7 +64,7 @@ void QGL2PEXVertexArray::addCentroid(const QVectorPath &path, int subPathIndex)
    }
 
    const QPointF centroid = sum / qreal(count);
-   vertexArray.add(centroid);
+   vertexArray.append(centroid);
 }
 
 void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseScale, bool outline)
@@ -83,7 +83,7 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
    }
 
    int lastMoveTo = vertexArray.size();
-   vertexArray.add(points[0]); // The first element is always a moveTo
+   vertexArray.append(points[0]); // The first element is always a moveTo
 
    do {
       if (!elements) {
@@ -107,7 +107,7 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
 
                //  qDebug("element[%d] is a MoveToElement", i);
 
-               vertexArrayStops.add(vertexArray.size());
+               vertexArrayStops.append(vertexArray.size());
 
                if (!outline) {
                   if (!path.isConvex()) {
@@ -156,12 +156,12 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
       addClosingLine(lastMoveTo);
    }
 
-   vertexArrayStops.add(vertexArray.size());
+   vertexArrayStops.append(vertexArray.size());
 }
 
 void QGL2PEXVertexArray::lineToArray(const GLfloat x, const GLfloat y)
 {
-   vertexArray.add(QGLPoint(x, y));
+   vertexArray.append(QGLPoint(x, y));
 
    if (x > maxX) {
       maxX = x;

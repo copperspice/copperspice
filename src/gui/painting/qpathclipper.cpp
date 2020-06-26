@@ -23,7 +23,7 @@
 
 #include <qpathclipper_p.h>
 #include <qbezier_p.h>
-#include <qdatabuffer_p.h>
+#include <qvector.h>
 #include <qdebug.h>
 #include <qnumeric_p.h>
 #include <qmath.h>
@@ -257,7 +257,7 @@ class SegmentTree
 
    void produceIntersectionsLeaf(const TreeNode &node, int segment);
    void produceIntersections(const TreeNode &node, int segment, const RectF &segmentBounds, const RectF &nodeBounds, int axis);
-   void intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<QIntersection> &intersections);
+   void intersectLines(const QLineF &a, const QLineF &b, QVector<QIntersection> &intersections);
 
    QPathSegments &m_segments;
    QVector<int> m_index;
@@ -265,7 +265,7 @@ class SegmentTree
    RectF m_bounds;
 
    QVector<TreeNode> m_tree;
-   QDataBuffer<QIntersection> m_intersections;
+   QVector<QIntersection> m_intersections;
 };
 
 SegmentTree::SegmentTree(QPathSegments &segments)
@@ -386,7 +386,7 @@ TreeNode SegmentTree::buildTree(int first, int last, int depth, const RectF &bou
    return node;
 }
 
-void SegmentTree::intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<QIntersection> &intersections)
+void SegmentTree::intersectLines(const QLineF &a, const QLineF &b, QVector<QIntersection> &intersections)
 {
    const QPointF p1 = a.p1();
    const QPointF p2 = a.p2();
@@ -432,7 +432,7 @@ void SegmentTree::intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<Q
             intersection.alphaA = tq1;
             intersection.alphaB = 0;
             intersection.pos = q1;
-            intersections.add(intersection);
+            intersections.append(intersection);
          }
 
          if (tq2 > 0 && tq2 < 1) {
@@ -440,7 +440,7 @@ void SegmentTree::intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<Q
             intersection.alphaA = tq2;
             intersection.alphaB = 1;
             intersection.pos = q2;
-            intersections.add(intersection);
+            intersections.append(intersection);
          }
 
          const qreal invDq = 1 / dot(qDelta, qDelta);
@@ -453,7 +453,7 @@ void SegmentTree::intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<Q
             intersection.alphaA = 0;
             intersection.alphaB = tp1;
             intersection.pos = p1;
-            intersections.add(intersection);
+            intersections.append(intersection);
          }
 
          if (tp2 > 0 && tp2 < 1) {
@@ -461,7 +461,7 @@ void SegmentTree::intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<Q
             intersection.alphaA = 1;
             intersection.alphaB = tp2;
             intersection.pos = p2;
-            intersections.add(intersection);
+            intersections.append(intersection);
          }
       }
 
@@ -511,7 +511,7 @@ void SegmentTree::intersectLines(const QLineF &a, const QLineF &b, QDataBuffer<Q
    intersection.alphaA = tp;
    intersection.alphaB = tq;
    intersection.pos = pt;
-   intersections.add(intersection);
+   intersections.append(intersection);
 }
 
 void SegmentTree::produceIntersections(int segment)
@@ -547,7 +547,7 @@ void SegmentTree::produceIntersectionsLeaf(const TreeNode &node, int segment)
          continue;
       }
 
-      m_intersections.reset();
+      m_intersections.clear();
 
       const QLineF lineB = m_segments.lineAt(other);
 
@@ -628,8 +628,8 @@ class QKdPointTree
       m_nodes.resize(m_segments->points());
 
       for (int i = 0; i < m_nodes.size(); ++i) {
-         m_nodes.at(i).point = i;
-         m_nodes.at(i).id = -1;
+         m_nodes[i].point = i;
+         m_nodes[i].id = -1;
       }
 
       m_rootNode = build(0, m_nodes.size());
@@ -638,7 +638,7 @@ class QKdPointTree
    int build(int begin, int end, int depth = 0);
 
    Node *rootNode() {
-      return &m_nodes.at(m_rootNode);
+      return &m_nodes[m_rootNode];
    }
 
    inline int nextId() {
@@ -647,7 +647,7 @@ class QKdPointTree
 
  private:
    const QPathSegments *m_segments;
-   QDataBuffer<Node> m_nodes;
+   QVector<Node> m_nodes;
 
    int m_rootNode;
    int m_id;
@@ -692,23 +692,23 @@ int QKdPointTree::build(int begin, int end, int depth)
       if (value < pivot) {
          ++first;
       } else {
-         qSwap(m_nodes.at(first), m_nodes.at(last));
+         qSwap(m_nodes[first], m_nodes[last]);
          --last;
       }
    }
 
-   qSwap(m_nodes.at(last), m_nodes.at(begin));
+   qSwap(m_nodes[last], m_nodes[begin]);
 
    if (last > begin) {
-      m_nodes.at(last).left = &m_nodes.at(build(begin, last, depth + 1));
+      m_nodes[last].left = &m_nodes[build(begin, last, depth + 1)];
    } else {
-      m_nodes.at(last).left = 0;
+      m_nodes[last].left = 0;
    }
 
    if (last + 1 < end) {
-      m_nodes.at(last).right = &m_nodes.at(build(last + 1, end, depth + 1));
+      m_nodes[last].right = &m_nodes[build(last + 1, end, depth + 1)];
    } else {
-      m_nodes.at(last).right = 0;
+      m_nodes[last].right = 0;
    }
 
    return last;
@@ -775,8 +775,8 @@ void QPathSegments::mergePoints()
    QKdPointTree tree(*this);
 
    if (tree.rootNode()) {
-      QDataBuffer<QPointF> mergedPoints(points());
-      QDataBuffer<int> pointIndices(points());
+      QVector<QPointF> mergedPoints(points());
+      QVector<int> pointIndices(points());
 
       for (int i = 0; i < points(); ++i) {
          QKdPointFinder finder(i, *this, tree);
@@ -792,12 +792,12 @@ void QPathSegments::mergePoints()
       }
 
       for (int i = 0; i < m_segments.size(); ++i) {
-         m_segments.at(i).va = pointIndices.at(m_segments.at(i).va);
-         m_segments.at(i).vb = pointIndices.at(m_segments.at(i).vb);
+         m_segments[i].va = pointIndices.at(m_segments.at(i).va);
+         m_segments[i].vb = pointIndices.at(m_segments.at(i).vb);
       }
 
       for (int i = 0; i < m_intersections.size(); ++i) {
-         m_intersections.at(i).vertex = pointIndices.at(m_intersections.at(i).vertex);
+         m_intersections[i].vertex = pointIndices.at(m_intersections.at(i).vertex);
       }
 
       m_points.swap(mergedPoints);
@@ -815,9 +815,9 @@ void QWingedEdge::intersectAndAdd()
       addVertex(m_segments.pointAt(i));
    }
 
-   QDataBuffer<QPathSegments::Intersection> intersections(m_segments.segments());
+   QVector<QPathSegments::Intersection> intersections(m_segments.segments());
    for (int i = 0; i < m_segments.segments(); ++i) {
-      intersections.reset();
+      intersections.clear();
 
       int pathId = m_segments.pathId(i);
 
@@ -926,9 +926,9 @@ static bool isLine(const QBezier &bezier)
 
 void QPathSegments::setPath(const QPainterPath &path)
 {
-   m_points.reset();
-   m_intersections.reset();
-   m_segments.reset();
+   m_points.clear();
+   m_intersections.clear();
+   m_segments.clear();
 
    m_pathId = 0;
 
@@ -1027,7 +1027,7 @@ void QPathSegments::addPath(const QPainterPath &path)
          qSwap(y1, y2);
       }
 
-      m_segments.at(i).bounds = QRectF(x1, y1, x2 - x1, y2 - y1);
+      m_segments[i].bounds = QRectF(x1, y1, x2 - x1, y2 - y1);
    }
 
    ++m_pathId;

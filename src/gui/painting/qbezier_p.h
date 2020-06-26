@@ -32,9 +32,6 @@
 #include <QtCore/qpair.h>
 #include <QtGui/qtransform.h>
 
-#include <qdatabuffer_p.h>
-
-
 class QPolygonF;
 
 class Q_GUI_EXPORT QBezier
@@ -52,7 +49,7 @@ class Q_GUI_EXPORT QBezier
 
    QPolygonF toPolygon(qreal bezier_flattening_threshold = 0.5) const;
    void addToPolygon(QPolygonF *p, qreal bezier_flattening_threshold = 0.5) const;
-   void addToPolygon(QDataBuffer<QPointF> &polygon, qreal bezier_flattening_threshold) const;
+   void addToPolygon(QVector<QPointF> &polygon, qreal bezier_flattening_threshold) const;
 
    QRectF bounds() const;
    qreal length(qreal error = 0.01) const;

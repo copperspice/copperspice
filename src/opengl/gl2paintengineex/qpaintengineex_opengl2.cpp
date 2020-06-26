@@ -50,10 +50,10 @@
 
 #include <QPaintEngine>
 #include <QDebug>
+#include <qvector.h>
 
 #include <qpainter_p.h>
 #include <qfontengine_p.h>
-#include <qdatabuffer_p.h>
 #include <qstatictext_p.h>
 #include <qtriangulator_p.h>
 
@@ -998,7 +998,7 @@ void QGL2PaintEngineExPrivate::fill(const QVectorPath &path)
 
 void QGL2PaintEngineExPrivate::fillStencilWithVertexArray(const float *data,
       int count,
-      int *stops,
+      const int *stops,
       int stopCount,
       const QGLRect &bounds,
       StencilFillMode mode)
@@ -1225,7 +1225,7 @@ void QGL2PaintEngineExPrivate::composite(const QGLRect &boundingRect)
 }
 
 // Draws the vertex array as a set of <vertexArrayStops.size()> triangle fans.
-void QGL2PaintEngineExPrivate::drawVertexArrays(const float *data, int *stops, int stopCount,
+void QGL2PaintEngineExPrivate::drawVertexArrays(const float *data, const int *stops, int stopCount,
       GLenum primitive)
 {
    // Now setup the pointer to the vertex array:
@@ -1963,7 +1963,7 @@ void QGL2PaintEngineExPrivate::drawPixmapFragments(const QPainter::PixmapFragmen
 
    vertexCoordinateArray.clear();
    textureCoordinateArray.clear();
-   opacityArray.reset();
+   opacityArray.clear();
 
    if (snapToPixelGrid) {
       snapToPixelGrid = false;

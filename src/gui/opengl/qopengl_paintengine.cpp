@@ -48,6 +48,7 @@
 #include <qdebug.h>
 #include <qpaintengine.h>
 #include <qmath.h>
+#include <qvector.h>
 
 #include <qopengl_gradientcache_p.h>
 #include <qopengl_texturecache_p.h>
@@ -63,7 +64,6 @@
 #include <qpaintengineex_p.h>
 #include <qpainter_p.h>
 #include <qfontengine_p.h>
-#include <qdatabuffer_p.h>
 #include <qstatictext_p.h>
 #include <qtriangulator_p.h>
 
@@ -1036,7 +1036,7 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath &path)
 }
 
 void QOpenGL2PaintEngineExPrivate::fillStencilWithVertexArray(const float *data, int count,
-                  int *stops, int stopCount, const QOpenGLRect &bounds, StencilFillMode mode)
+                  const int *stops, int stopCount, const QOpenGLRect &bounds, StencilFillMode mode)
 {
    Q_ASSERT(count || stops);
 
@@ -1259,7 +1259,7 @@ void QOpenGL2PaintEngineExPrivate::composite(const QOpenGLRect &boundingRect)
 }
 
 // Draws the vertex array as a set of <vertexArrayStops.size()> triangle fans.
-void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, int *stops, int stopCount, GLenum primitive)
+void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, const int *stops, int stopCount, GLenum primitive)
 {
    // Now setup the pointer to the vertex array:
    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data);
@@ -2046,7 +2046,7 @@ void QOpenGL2PaintEngineExPrivate::drawPixmapFragments(const QPainter::PixmapFra
 
    vertexCoordinateArray.clear();
    textureCoordinateArray.clear();
-   opacityArray.reset();
+   opacityArray.clear();
 
    if (snapToPixelGrid) {
       snapToPixelGrid = false;

@@ -24,10 +24,10 @@
 #ifndef QPAINTENGINE_RASTER_P_H
 #define QPAINTENGINE_RASTER_P_H
 
-#include <qpaintengineex_p.h>
-
 #include <qpainterpath.h>
-#include <qdatabuffer_p.h>
+#include <qvector.h>
+
+#include <qpaintengineex_p.h>
 #include <qdrawhelper_p.h>
 #include <qpaintengine_p.h>
 #include <qrasterizer_p.h>
@@ -310,7 +310,7 @@ class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
 
    QScopedPointer<QT_FT_Raster> grayRaster;
 
-   QDataBuffer<QLineF> cachedLines;
+   QVector<QLineF> cachedLines;
    QSpanData image_filler;
    QSpanData image_filler_xform;
    QSpanData solid_color_filler;
