@@ -51,10 +51,6 @@ QAbstractProxyModel::QAbstractProxyModel(QAbstractProxyModelPrivate &dd, QObject
    setSourceModel(QAbstractItemModelPrivate::staticEmptyModel());
 }
 
-QAbstractProxyModel::~QAbstractProxyModel()
-{
-}
-
 void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 {
    Q_D(QAbstractProxyModel);

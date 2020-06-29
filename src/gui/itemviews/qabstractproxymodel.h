@@ -41,7 +41,11 @@ class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
 
  public:
    explicit QAbstractProxyModel(QObject *parent = nullptr);
-   ~QAbstractProxyModel();
+
+   QAbstractProxyModel(const QAbstractProxyModel & other) = delete;
+   QAbstractProxyModel & operator=(const QAbstractProxyModel & other) = delete;
+
+   ~QAbstractProxyModel() = default;
 
    virtual void setSourceModel(QAbstractItemModel *sourceModel);
    QAbstractItemModel *sourceModel() const;
@@ -94,7 +98,6 @@ class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
 
  private:
    Q_DECLARE_PRIVATE(QAbstractProxyModel)
-   Q_DISABLE_COPY(QAbstractProxyModel)
 
    GUI_CS_SLOT_1(Private, void _q_sourceModelDestroyed())
    GUI_CS_SLOT_2(_q_sourceModelDestroyed)
@@ -102,6 +105,4 @@ class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
 
 #endif // QT_NO_PROXYMODEL
 
-
-
-#endif // QABSTRACTPROXYMODEL_H
+#endif

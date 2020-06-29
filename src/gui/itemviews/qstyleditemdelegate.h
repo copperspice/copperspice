@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
 
  public:
    explicit QStyledItemDelegate(QObject *parent = nullptr);
-   ~QStyledItemDelegate();
+   ~QStyledItemDelegate() = default;
 
    // painting
    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
@@ -74,4 +74,4 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
 
 #endif // QT_NO_ITEMVIEWS
 
-#endif // QSTYLEDITEMDELEGATE_H
+#endif

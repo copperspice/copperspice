@@ -88,10 +88,6 @@ QStyledItemDelegate::QStyledItemDelegate(QObject *parent)
 {
 }
 
-QStyledItemDelegate::~QStyledItemDelegate()
-{
-}
-
 QString QStyledItemDelegate::displayText(const QVariant &value, const QLocale &locale) const
 {
    return d_func()->textForRole(Qt::DisplayRole, value, locale);

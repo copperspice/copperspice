@@ -33,7 +33,8 @@ class QAbstractItemDelegatePrivate
    Q_DECLARE_PUBLIC(QAbstractItemDelegate)
 
  public:
-   explicit QAbstractItemDelegatePrivate();
+   QAbstractItemDelegatePrivate();
+   virtual ~QAbstractItemDelegatePrivate() = default;
 
    bool editorEventFilter(QObject *object, QEvent *event);
    bool tryFixup(QWidget *editor);
@@ -42,7 +43,6 @@ class QAbstractItemDelegatePrivate
 
  protected:
    QAbstractItemDelegate *q_ptr;
-
 };
 
 #endif // QT_NO_ITEMVIEWS
