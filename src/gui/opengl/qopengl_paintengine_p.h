@@ -158,7 +158,6 @@ public:
             ctx(0),
             useSystemClip(true),
             elementIndicesVBOId(0),
-            opacityArray(0),
             snapToPixelGrid(false),
             nativePaintingActive(false),
             inverseScale(1),

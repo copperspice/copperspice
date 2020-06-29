@@ -369,13 +369,17 @@ template <class T>
 class QMaxHeap
 {
 public:
-    QMaxHeap() : m_data(0) {}
+    QMaxHeap()
+    {
+    }
+
     inline int size() const {return m_data.size();}
     inline bool empty() const {return m_data.isEmpty();}
     inline bool isEmpty() const {return m_data.isEmpty();}
     void push(const T &x);
     T pop();
     inline const T &top() const {return m_data.first();}
+
 private:
     static inline int parent(int i) {return (i - 1) / 2;}
     static inline int left(int i) {return 2 * i + 1;}
@@ -404,6 +408,7 @@ T QMaxHeap<T>::pop()
     T result = m_data.first();
     T back = m_data.last();
     m_data.pop_back();
+
     if (!m_data.isEmpty()) {
         int current = 0;
         for (;;) {
@@ -572,9 +577,13 @@ public:
     class ComplexToSimple
     {
     public:
-        inline ComplexToSimple(QTriangulator<T> *parent) : m_parent(parent),
-            m_edges(0), m_events(0), m_splits(0) { }
+        inline ComplexToSimple(QTriangulator<T> *parent)
+           : m_parent(parent)
+        {
+        }
+
         void decompose();
+
     private:
         struct Edge
         {
@@ -676,8 +685,13 @@ public:
     class SimpleToMonotone
     {
     public:
-        inline SimpleToMonotone(QTriangulator<T> *parent) : m_parent(parent), m_edges(0), m_upperVertex(0) { }
+        inline SimpleToMonotone(QTriangulator<T> *parent)
+           : m_parent(parent)
+        {
+        }
+
         void decompose();
+
     private:
         enum VertexType {MergeVertex, EndVertex, RegularVertex, StartVertex, SplitVertex};
 
@@ -732,8 +746,13 @@ public:
     class MonotoneToTriangles
     {
     public:
-        inline MonotoneToTriangles(QTriangulator<T> *parent) : m_parent(parent) { }
+        inline MonotoneToTriangles(QTriangulator<T> *parent)
+           : m_parent(parent)
+        {
+        }
+
         void decompose();
+
     private:
         inline T indices(int index) const {return m_parent->m_indices.at(index + m_first);}
         inline int next(int index) const {return (index + 1) % m_length;}
@@ -750,7 +769,9 @@ public:
         int m_length;
     };
 
-    inline QTriangulator() : m_vertices(0) { }
+    inline QTriangulator()
+    {
+    }
 
     // Call this only once.
     void initialize(const qreal *polygon, int count, uint hint, const QTransform &matrix);
@@ -761,6 +782,7 @@ public:
     // Call either triangulate() or polyline() only once.
     QVertexSet<T> triangulate();
     QVertexSet<T> polyline();
+
 private:
     QVector<QPodPoint> m_vertices;
     QVector<T> m_indices;
@@ -1276,6 +1298,7 @@ void QTriangulator<T>::ComplexToSimple::fillPriorityQueue()
 {
     m_events.clear();
     m_events.reserve(m_edges.size() * 2);
+
     for (int i = 0; i < m_edges.size(); ++i) {
         Q_ASSERT(m_edges.at(i).previous == -1 && m_edges.at(i).next == -1);
         Q_ASSERT(m_edges.at(i).node == 0);
@@ -1586,14 +1609,17 @@ void QTriangulator<T>::ComplexToSimple::removeUnwantedEdgesAndConnect()
 template <typename T>
 void QTriangulator<T>::ComplexToSimple::removeUnusedPoints() {
     QBitArray used(m_parent->m_vertices.size(), false);
+
     for (int i = 0; i < m_edges.size(); ++i) {
         Q_ASSERT((m_edges.at(i).previous == -1) == (m_edges.at(i).next == -1));
         if (m_edges.at(i).next != -1)
             used.setBit(m_edges.at(i).from);
     }
-    QVector<quint32> newMapping(m_parent->m_vertices.size());
+
+    QVector<quint32> newMapping;
     newMapping.resize(m_parent->m_vertices.size());
     int count = 0;
+
     for (int i = 0; i < m_parent->m_vertices.size(); ++i) {
         if (used.at(i)) {
             m_parent->m_vertices[count] = m_parent->m_vertices[i];
@@ -1820,9 +1846,10 @@ void QTriangulator<T>::SimpleToMonotone::removeZeroLengthEdges()
         }
     }
 
-    QVector<int> newMapping(m_edges.size());
+    QVector<int> newMapping;
     newMapping.resize(m_edges.size());
     int count = 0;
+
     for (int i = 0; i < m_edges.size(); ++i) {
         if (m_edges[i].next != -1) {
             m_edges[count] = m_edges[i];
@@ -2019,15 +2046,17 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
         return;
 
     Q_ASSERT(!m_edgeList.root);
-    QVector<QPair<int, int> > diagonals(m_upperVertex.size());
+    QVector<QPair<int, int> > diagonals;
 
     int i = 0;
     for (int index = 1; index < m_edges.size(); ++index) {
         if (m_parent->m_vertices.at(m_edges.at(index).from) < m_parent->m_vertices.at(m_edges.at(i).from))
             i = index;
     }
+
     Q_ASSERT(i < m_edges.size());
     int j = m_edges.at(i).previous;
+
     Q_ASSERT(j < m_edges.size());
     m_clockwiseOrder = qPointIsLeftOfLine(m_parent->m_vertices.at((quint32)m_edges.at(i).from),
         m_parent->m_vertices.at((quint32)m_edges.at(j).from), m_parent->m_vertices.at((quint32)m_edges.at(i).to));
@@ -2164,7 +2193,7 @@ template <typename T>
 void QTriangulator<T>::MonotoneToTriangles::decompose()
 {
     QVector<T> result;
-    QVector<int> stack(m_parent->m_indices.size());
+    QVector<int> stack;
 
     m_first = 0;
 

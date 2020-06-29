@@ -154,19 +154,10 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
       TriStripStrokeFillMode
    };
 
-   QGL2PaintEngineExPrivate(QGL2PaintEngineEx *q_ptr) :
-      q(q_ptr),
-      shaderManager(0),
-      width(0), height(0),
-      ctx(0),
-      useSystemClip(true),
-      elementIndicesVBOId(0),
-      opacityArray(0),
-      snapToPixelGrid(false),
-      nativePaintingActive(false),
-      inverseScale(1),
-      lastMaskTextureUsed(0),
-      translateZ(0)
+   QGL2PaintEngineExPrivate(QGL2PaintEngineEx *q_ptr)
+      : q(q_ptr), shaderManager(0), width(0), height(0), ctx(0), useSystemClip(true),
+        elementIndicesVBOId(0), snapToPixelGrid(false), nativePaintingActive(false),
+        inverseScale(1), lastMaskTextureUsed(0), translateZ(0)
     { }
 
    ~QGL2PaintEngineExPrivate();

@@ -269,8 +269,7 @@ class SegmentTree
 };
 
 SegmentTree::SegmentTree(QPathSegments &segments)
-   : m_segments(segments),
-     m_intersections(0)
+   : m_segments(segments)
 {
    m_bounds.x1 = qt_inf();
    m_bounds.y1 = qt_inf();
@@ -622,9 +621,8 @@ class QKdPointTree
    };
 
    QKdPointTree(const QPathSegments &segments)
-      : m_segments(&segments)
-      , m_nodes(m_segments->points())
-      , m_id(0) {
+      : m_segments(&segments), m_id(0)
+   {
       m_nodes.resize(m_segments->points());
 
       for (int i = 0; i < m_nodes.size(); ++i) {
@@ -775,8 +773,8 @@ void QPathSegments::mergePoints()
    QKdPointTree tree(*this);
 
    if (tree.rootNode()) {
-      QVector<QPointF> mergedPoints(points());
-      QVector<int> pointIndices(points());
+      QVector<QPointF> mergedPoints;
+      QVector<int> pointIndices;
 
       for (int i = 0; i < points(); ++i) {
          QKdPointFinder finder(i, *this, tree);
@@ -815,7 +813,8 @@ void QWingedEdge::intersectAndAdd()
       addVertex(m_segments.pointAt(i));
    }
 
-   QVector<QPathSegments::Intersection> intersections(m_segments.segments());
+   QVector<QPathSegments::Intersection> intersections;
+
    for (int i = 0; i < m_segments.segments(); ++i) {
       intersections.clear();
 
@@ -868,17 +867,13 @@ void QWingedEdge::intersectAndAdd()
    }
 }
 
-QWingedEdge::QWingedEdge() :
-   m_edges(0),
-   m_vertices(0),
-   m_segments(0)
+QWingedEdge::QWingedEdge()
+   : m_segments(0)
 {
 }
 
-QWingedEdge::QWingedEdge(const QPainterPath &subject, const QPainterPath &clip) :
-   m_edges(subject.elementCount()),
-   m_vertices(subject.elementCount()),
-   m_segments(subject.elementCount())
+QWingedEdge::QWingedEdge(const QPainterPath &subject, const QPainterPath &clip)
+   : m_segments(subject.elementCount())
 {
    m_segments.setPath(subject);
    m_segments.addPath(clip);

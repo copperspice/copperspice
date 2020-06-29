@@ -31,8 +31,8 @@
 template <typename InType, typename OutType, typename CastType> class QPolygonClipper
 {
  public:
-   QPolygonClipper() :
-      buffer1(0), buffer2(0) {
+   QPolygonClipper()
+   {
       x1 = y1 = x2 = y2 = 0;
    }
 

@@ -27,14 +27,12 @@
 #include <qgrayraster_p.h>
 #include <qpainterpath.h>
 #include <qdebug.h>
-
 #include <qbitmap.h>
 #include <qmath.h>
 
 #include <qtextengine_p.h>
 #include <qfontengine_p.h>
 #include <qpixmap_raster_p.h>
-
 #include <qimage_p.h>
 #include <qstatictext_p.h>
 #include <qcosmeticstroker_p.h>
@@ -215,10 +213,8 @@ static void qt_ft_outline_cubic_to(qfixed c1x, qfixed c1y,
       QPointF(qt_fixed_to_real(ex), qt_fixed_to_real(ey)));
 }
 
-
-QRasterPaintEnginePrivate::QRasterPaintEnginePrivate() :
-   QPaintEngineExPrivate(),
-   cachedLines(0)
+QRasterPaintEnginePrivate::QRasterPaintEnginePrivate()
+   : QPaintEngineExPrivate()
 {
 }
 

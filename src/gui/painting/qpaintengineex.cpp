@@ -129,7 +129,10 @@ QDebug Q_GUI_EXPORT &operator<<(QDebug &s, const QVectorPath &path)
 }
 
 struct StrokeHandler {
-   StrokeHandler(int reserve) : pts(reserve), types(reserve) {}
+   StrokeHandler(int reserve)
+   {
+   }
+
    QVector<qreal> pts;
    QVector<QPainterPath::ElementType> types;
 };

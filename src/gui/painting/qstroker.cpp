@@ -184,13 +184,8 @@ static inline qreal adapted_angle_on_x(const QLineF &line)
 }
 
 QStrokerOps::QStrokerOps()
-   : m_elements(0)
-   , m_curveThreshold(qt_real_to_fixed(0.25))
-   , m_dashThreshold(qt_real_to_fixed(0.25))
-   , m_customData(0)
-   , m_moveTo(0)
-   , m_lineTo(0)
-   , m_cubicTo(0)
+   : m_curveThreshold(qt_real_to_fixed(0.25)), m_dashThreshold(qt_real_to_fixed(0.25))
+   , m_customData(0), m_moveTo(0), m_lineTo(0), m_cubicTo(0)
 {
 }
 
@@ -203,7 +198,6 @@ void QStrokerOps::begin(void *customData)
    m_customData = customData;
    m_elements.clear();
 }
-
 
 void QStrokerOps::end()
 {
@@ -1023,6 +1017,7 @@ QDashStroker::QDashStroker(QStroker *stroker)
       setCubicToHook(qdashstroker_cubicTo);
    }
 }
+
 QDashStroker::~QDashStroker()
 {
 }

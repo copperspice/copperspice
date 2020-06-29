@@ -186,11 +186,7 @@ class QRasterizerPrivate
 };
 
 QScanConverter::QScanConverter()
-   : m_lines(0)
-   , m_alloc(0)
-   , m_size(0)
-   , m_intersections(0)
-   , m_active(0)
+   : m_alloc(0), m_size(0), m_intersections(0)
 {
 }
 
