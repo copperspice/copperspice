@@ -28,7 +28,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#define QT_TYPENAME typename
 
 namespace QtPrivate {
 
