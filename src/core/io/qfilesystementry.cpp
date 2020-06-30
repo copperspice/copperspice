@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qfilesystementry_p.h>
-#include <QtCore/qdir.h>
-#include <QtCore/qfile.h>
+
+#include <qdir.h>
+#include <qfile.h>
+
 #include <qfsfileengine_p.h>
 
 #ifdef Q_OS_WIN

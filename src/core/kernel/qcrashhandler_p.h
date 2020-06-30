@@ -24,7 +24,7 @@
 #ifndef QCRASHHANDLER_P_H
 #define QCRASHHANDLER_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_CRASHHANDLER
 

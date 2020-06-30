@@ -24,12 +24,12 @@
 #ifndef QTCONCURRENTITERATEKERNEL_H
 #define QTCONCURRENTITERATEKERNEL_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qatomic.h>
-#include <QtCore/qtconcurrentmedian.h>
-#include <QtCore/qtconcurrentthreadengine.h>
-#include <iterator>
+#include <qglobal.h>
+#include <qatomic.h>
+#include <qtconcurrentmedian.h>
+#include <qtconcurrentthreadengine.h>
 
+#include <iterator>
 QT_BEGIN_NAMESPACE
 
 namespace QtConcurrent {

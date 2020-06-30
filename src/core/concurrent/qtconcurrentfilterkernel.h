@@ -24,10 +24,10 @@
 #ifndef QTCONCURRENTFILTERKERNEL_H
 #define QTCONCURRENTFILTERKERNEL_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qtconcurrentiteratekernel.h>
-#include <QtCore/qtconcurrentmapkernel.h>
-#include <QtCore/qtconcurrentreducekernel.h>
+#include <qglobal.h>
+#include <qtconcurrentiteratekernel.h>
+#include <qtconcurrentmapkernel.h>
+#include <qtconcurrentreducekernel.h>
 
 QT_BEGIN_NAMESPACE
 

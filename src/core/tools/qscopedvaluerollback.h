@@ -24,7 +24,7 @@
 #ifndef QSCOPEDVALUEROLLBACK_H
 #define QSCOPEDVALUEROLLBACK_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 template <typename T>
 class QScopedValueRollback

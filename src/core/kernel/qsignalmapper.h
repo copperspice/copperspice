@@ -24,8 +24,8 @@
 #ifndef QSIGNALMAPPER_H
 #define QSIGNALMAPPER_H
 
-#include <QtCore/qobject.h>
-#include <QScopedPointer>
+#include <qobject.h>
+#include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -24,10 +24,10 @@
 #ifndef QMUTEX_P_H
 #define QMUTEX_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qnamespace.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qatomic.h>
+#include <qglobal.h>
+#include <qnamespace.h>
+#include <qmutex.h>
+#include <qatomic.h>
 
 #if defined(Q_OS_DARWIN)
 # include <mach/semaphore.h>

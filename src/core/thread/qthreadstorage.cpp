@@ -24,11 +24,10 @@
 #include <qthreadstorage.h>
 
 #include <qthread.h>
-#include <qthread_p.h>
 #include <qmutex.h>
-
 #include <string.h>
 
+#include <qthread_p.h>
 QT_BEGIN_NAMESPACE
 
 

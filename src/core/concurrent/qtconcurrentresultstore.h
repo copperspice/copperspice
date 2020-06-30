@@ -24,9 +24,9 @@
 #ifndef QTCONCURRENTRESULTSTORE_H
 #define QTCONCURRENTRESULTSTORE_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qdebug.h>
+#include <qglobal.h>
+#include <qmap.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

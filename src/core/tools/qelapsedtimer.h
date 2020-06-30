@@ -24,8 +24,7 @@
 #ifndef QElapsedTimer_H
 #define QElapsedTimer_H
 
-#include <QtCore/qglobal.h>
-
+#include <qglobal.h>
 QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QElapsedTimer

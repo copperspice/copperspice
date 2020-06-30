@@ -24,8 +24,8 @@
 #include <qsignalmapper.h>
 
 #ifndef QT_NO_SIGNALMAPPER
-#include <qhash.h>
 
+#include <qhash.h>
 QT_BEGIN_NAMESPACE
 
 class QSignalMapperPrivate

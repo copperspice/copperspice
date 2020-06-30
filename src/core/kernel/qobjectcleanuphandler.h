@@ -24,7 +24,7 @@
 #ifndef QOBJECTCLEANUPHANDLER_H
 #define QOBJECTCLEANUPHANDLER_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 
 QT_BEGIN_NAMESPACE
 

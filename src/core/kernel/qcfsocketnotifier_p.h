@@ -24,9 +24,8 @@
 #ifndef QCFSOCKETNOTIFIER_P_H
 #define QCFSOCKETNOTIFIER_P_H
 
-
-#include <QtCore/qabstracteventdispatcher.h>
-#include <QtCore/qhash.h>
+#include <qabstracteventdispatcher.h>
+#include <qhash.h>
 
 #include <CoreFoundation/CoreFoundation.h>
 

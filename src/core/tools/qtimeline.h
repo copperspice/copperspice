@@ -24,9 +24,9 @@
 #ifndef QTIMELINE_H
 #define QTIMELINE_H
 
-#include <QtCore/qeasingcurve.h>
-#include <QtCore/qobject.h>
-#include <QScopedPointer>
+#include <qeasingcurve.h>
+#include <qobject.h>
+#include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qcfsocketnotifier_p.h"
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qsocketnotifier.h>
-#include <QtCore/qthread.h>
+#include <qcfsocketnotifier_p.h>
+#include <qcoreapplication.h>
+#include <qsocketnotifier.h>
+#include <qthread.h>
 
 QT_BEGIN_NAMESPACE
 

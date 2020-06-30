@@ -24,10 +24,10 @@
 #ifndef QFUNCTIONS_P_H
 #define QFUNCTIONS_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if defined(Q_OS_NACL)
-#  include <QtCore/qfunctions_nacl.h>
+#include <qfunctions_nacl.h>
 #endif
 
 #endif

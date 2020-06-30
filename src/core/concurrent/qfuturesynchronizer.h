@@ -24,7 +24,7 @@
 #ifndef QFutureSynchronizer_H
 #define QFutureSynchronizer_H
 
-#include <QtCore/qfuture.h>
+#include <qfuture.h>
 
 QT_BEGIN_NAMESPACE
 

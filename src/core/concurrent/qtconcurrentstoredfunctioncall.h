@@ -26,8 +26,8 @@
 #ifndef QTCONCURRENTSTOREDFUNCTIONCALL_H
 #define QTCONCURRENTSTOREDFUNCTIONCALL_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qtconcurrentrunbase.h>
+#include <qglobal.h>
+#include <qtconcurrentrunbase.h>
 
 QT_BEGIN_NAMESPACE
 

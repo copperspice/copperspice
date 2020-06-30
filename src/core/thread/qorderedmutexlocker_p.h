@@ -24,7 +24,7 @@
 #ifndef QORDEREDMUTEXLOCKER_P_H
 #define QORDEREDMUTEXLOCKER_P_H
 
-#include <QtCore/qmutex.h>
+#include <qmutex.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -24,14 +24,14 @@
 #ifndef QTCONCURRENTREDUCEKERNEL_H
 #define QTCONCURRENTREDUCEKERNEL_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qatomic.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qthreadpool.h>
-#include <QtCore/qvector.h>
+#include <qglobal.h>
+#include <qatomic.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qmutex.h>
+#include <qthread.h>
+#include <qthreadpool.h>
+#include <qvector.h>
 
 QT_BEGIN_NAMESPACE
 

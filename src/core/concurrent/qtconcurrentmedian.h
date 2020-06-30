@@ -24,11 +24,10 @@
 #ifndef QTCONCURRENTMEDIAN_H
 #define QTCONCURRENTMEDIAN_H
 
+#include <qglobal.h>
+#include <qvector.h>
+
 #include <algorithm>
-
-#include <QtCore/qglobal.h>
-#include <QtCore/qvector.h>
-
 QT_BEGIN_NAMESPACE
 
 namespace QtConcurrent {

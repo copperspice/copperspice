@@ -24,7 +24,7 @@
 #ifndef QUTFCODEC_P_H
 #define QUTFCODEC_P_H
 
-#include <QtCore/qtextcodec.h>
+#include <qtextcodec.h>
 #include <qtextcodec_p.h>
 
 enum DataEndianness {

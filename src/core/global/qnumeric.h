@@ -24,7 +24,7 @@
 #ifndef QNUMERIC_H
 #define QNUMERIC_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

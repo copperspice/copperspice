@@ -24,10 +24,10 @@
 #ifndef QTCONCURRENTRUNBASE_H
 #define QTCONCURRENTRUNBASE_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qfuture.h>
-#include <QtCore/qrunnable.h>
-#include <QtCore/qthreadpool.h>
+#include <qglobal.h>
+#include <qfuture.h>
+#include <qrunnable.h>
+#include <qthreadpool.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -25,9 +25,11 @@
 #include <qmutex.h>
 
 #ifndef QT_NO_THREAD
+
 #include <qatomic.h>
-#include <qmutex_p.h>
 #include <qelapsedtimer.h>
+
+#include <qmutex_p.h>
 
 #include <linux/futex.h>
 #include <sys/syscall.h>

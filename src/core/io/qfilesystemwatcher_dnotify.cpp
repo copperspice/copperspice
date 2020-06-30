@@ -35,13 +35,15 @@
 #include <qmutex.h>
 #include <dirent.h>
 #include <qdir.h>
+
+#include <qcore_unix_p.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <signal.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
-#include <qcore_unix_p.h>
 
 #ifdef QT_LINUXBASE
 

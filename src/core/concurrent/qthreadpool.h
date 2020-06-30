@@ -24,11 +24,10 @@
 #ifndef QTHREADPOOL_H
 #define QTHREADPOOL_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qrunnable.h>
-#include <QScopedPointer>
-
+#include <qglobal.h>
+#include <qthread.h>
+#include <qrunnable.h>
+#include <qscopedpointer.h>
 
 class QThreadPoolPrivate;
 

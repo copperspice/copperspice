@@ -29,13 +29,13 @@
 #ifndef QT_NO_FILESYSTEMWATCHER
 
 #include <qt_windows.h>
-#include <QtCore/qdatetime.h>
-#include <QtCore/qfile.h>
-#include <QtCore/qfileinfo.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qvector.h>
 
+#include <qdatetime.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qhash.h>
+#include <qmutex.h>
+#include <qvector.h>
 QT_BEGIN_NAMESPACE
 
 class QWindowsFileSystemWatcherEngineThread;

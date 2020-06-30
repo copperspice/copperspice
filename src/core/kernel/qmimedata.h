@@ -24,9 +24,9 @@
 #ifndef QMIMEDATA_H
 #define QMIMEDATA_H
 
-#include <QtCore/qvariant.h>
-#include <QtCore/qobject.h>
-#include <QScopedPointer>
+#include <qvariant.h>
+#include <qobject.h>
+#include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

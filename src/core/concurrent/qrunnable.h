@@ -24,7 +24,7 @@
 #ifndef QRUNNABLE_H
 #define QRUNNABLE_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

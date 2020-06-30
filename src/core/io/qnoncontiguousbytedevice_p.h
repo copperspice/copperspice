@@ -24,11 +24,11 @@
 #ifndef QNONCONTIGUOUSBYTEDEVICE_P_H
 #define QNONCONTIGUOUSBYTEDEVICE_P_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qbuffer.h>
-#include <QtCore/qiodevice.h>
-#include <QtCore/QSharedPointer>
+#include <qobject.h>
+#include <qbytearray.h>
+#include <qbuffer.h>
+#include <qiodevice.h>
+#include <qsharedpointer.h>
 #include <qringbuffer_p.h>
 
 QT_BEGIN_NAMESPACE

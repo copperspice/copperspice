@@ -24,11 +24,11 @@
 #ifndef QTCONCURRENTMAP_H
 #define QTCONCURRENTMAP_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qtconcurrentmapkernel.h>
-#include <QtCore/qtconcurrentreducekernel.h>
-#include <QtCore/qtconcurrentfunctionwrappers.h>
-#include <QtCore/qstringlist.h>
+#include <qglobal.h>
+#include <qtconcurrentmapkernel.h>
+#include <qtconcurrentreducekernel.h>
+#include <qtconcurrentfunctionwrappers.h>
+#include <qstringlist.h>
 
 QT_BEGIN_NAMESPACE
 

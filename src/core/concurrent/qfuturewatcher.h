@@ -24,9 +24,9 @@
 #ifndef QFUTUREWATCHER_H
 #define QFUTUREWATCHER_H
 
-#include <QtCore/qfuture.h>
-#include <QtCore/qobject.h>
-#include <QScopedPointer>
+#include <qfuture.h>
+#include <qobject.h>
+#include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

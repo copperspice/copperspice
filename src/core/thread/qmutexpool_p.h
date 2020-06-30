@@ -24,9 +24,9 @@
 #ifndef QMUTEXPOOL_P_H
 #define QMUTEXPOOL_P_H
 
-#include <QtCore/qatomic.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qvarlengtharray.h>
+#include <qatomic.h>
+#include <qmutex.h>
+#include <qvarlengtharray.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -24,7 +24,7 @@
 #ifndef QFSFILEENGINE_H
 #define QFSFILEENGINE_H
 
-#include <QtCore/qabstractfileengine.h>
+#include <qabstractfileengine.h>
 
 #ifndef QT_NO_FSFILEENGINE
 

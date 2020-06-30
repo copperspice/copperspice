@@ -24,7 +24,7 @@
 #ifndef QABSTRACTEVENTDISPATCHER_P_H
 #define QABSTRACTEVENTDISPATCHER_P_H
 
-#include <QtCore/qabstracteventdispatcher.h>
+#include <qabstracteventdispatcher.h>
 
 Q_CORE_EXPORT uint qGlobalPostedEventsCount();
 

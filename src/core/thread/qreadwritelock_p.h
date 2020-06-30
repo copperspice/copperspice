@@ -24,8 +24,8 @@
 #ifndef QREADWRITELOCK_P_H
 #define QREADWRITELOCK_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qhash.h>
+#include <qglobal.h>
+#include <qhash.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -28,8 +28,8 @@
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include <QtCore/qstringlist.h>
-#include <QtCore/qthread.h>
+#include <qstringlist.h>
+#include <qthread.h>
 
 QT_BEGIN_NAMESPACE
 

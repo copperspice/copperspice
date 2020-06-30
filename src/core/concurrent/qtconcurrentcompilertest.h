@@ -24,10 +24,10 @@
 #ifndef QTCONCURRENTCOMPILERTEST_H
 #define QTCONCURRENTCOMPILERTEST_H
 
-#include <QtCore/qglobal.h>
 
 QT_BEGIN_NAMESPACE
 
+#include <qglobal.h>
 
 namespace QtPrivate {
 

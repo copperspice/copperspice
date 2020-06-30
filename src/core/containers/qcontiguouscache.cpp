@@ -23,7 +23,7 @@
 
 #include <qcontiguouscache.h>
 #ifdef QT_QCONTIGUOUSCACHE_DEBUG
-#include <QDebug>
+#include <qdebug.h>
 #endif
 
 QT_BEGIN_NAMESPACE

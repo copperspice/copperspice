@@ -25,7 +25,7 @@
 #define QFSFILEENGINE_P_H
 
 #include <qplatformdefs.h>
-#include <QtCore/qfsfileengine.h>
+#include <qfsfileengine.h>
 #include <qabstractfileengine_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>

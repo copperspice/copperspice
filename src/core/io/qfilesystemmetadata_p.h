@@ -25,9 +25,9 @@
 #define QFILESYSTEMMETADATA_P_H
 
 #include <qplatformdefs.h>
-#include <QtCore/qglobal.h>
-#include <QtCore/qdatetime.h>
-#include <QtCore/qabstractfileengine.h>
+#include <qglobal.h>
+#include <qdatetime.h>
+#include <qabstractfileengine.h>
 
 // Platform-specific includes
 #if defined(Q_OS_WIN)

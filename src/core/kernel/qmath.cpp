@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qmath.h>
+#include <qmath.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -24,7 +24,7 @@
 #ifndef QTCONCURRENTFUNCTIONWRAPPERS_H
 #define QTCONCURRENTFUNCTIONWRAPPERS_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 #include <qtconcurrentcompilertest.h>
 #include <qstringlist.h>
 

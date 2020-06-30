@@ -24,10 +24,10 @@
 #ifndef QTHREADPOOL_P_H
 #define QTHREADPOOL_P_H
 
-#include <QtCore/qmutex.h>
-#include <QtCore/qwaitcondition.h>
-#include <QtCore/qset.h>
-#include <QtCore/qqueue.h>
+#include <qmutex.h>
+#include <qwaitcondition.h>
+#include <qset.h>
+#include <qqueue.h>
 
 class QThreadPoolThread;
 

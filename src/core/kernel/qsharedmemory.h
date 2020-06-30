@@ -24,8 +24,8 @@
 #ifndef QSHAREDMEMORY_H
 #define QSHAREDMEMORY_H
 
-#include <QtCore/qobject.h>
-#include <QScopedPointer>
+#include <qobject.h>
+#include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

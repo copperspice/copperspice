@@ -25,7 +25,7 @@
 #define QANIMATIONGROUP_P_H
 
 #include <qanimationgroup.h>
-#include <QtCore/qlist.h>
+#include <qlist.h>
 #include <qabstractanimation_p.h>
 
 #ifndef QT_NO_ANIMATION

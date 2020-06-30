@@ -24,7 +24,7 @@
 #ifndef QSEQUENTIALANIMATIONGROUP_H
 #define QSEQUENTIALANIMATIONGROUP_H
 
-#include <QtCore/qanimationgroup.h>
+#include <qanimationgroup.h>
 
 QT_BEGIN_NAMESPACE
 

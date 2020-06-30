@@ -22,11 +22,11 @@
 ***********************************************************************/
 
 #include <qelapsedtimer.h>
+#include <qcore_unix_p.h>
+
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
-
-#include "qcore_unix_p.h"
 
 #if defined(QT_NO_CLOCK_MONOTONIC)
 // turn off the monotonic clock

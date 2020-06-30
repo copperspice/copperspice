@@ -24,10 +24,9 @@
 #ifndef QTCONCURRENTMAPKERNEL_H
 #define QTCONCURRENTMAPKERNEL_H
 
-#include <QtCore/qglobal.h>
-
-#include <QtCore/qtconcurrentiteratekernel.h>
-#include <QtCore/qtconcurrentreducekernel.h>
+#include <qglobal.h>
+#include <qtconcurrentiteratekernel.h>
+#include <qtconcurrentreducekernel.h>
 
 QT_BEGIN_NAMESPACE
 

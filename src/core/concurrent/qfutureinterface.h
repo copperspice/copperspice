@@ -24,11 +24,11 @@
 #ifndef QFUTUREINTERFACE_H
 #define QFUTUREINTERFACE_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qrunnable.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qtconcurrentexception.h>
-#include <QtCore/qtconcurrentresultstore.h>
+#include <qglobal.h>
+#include <qrunnable.h>
+#include <qmutex.h>
+#include <qtconcurrentexception.h>
+#include <qtconcurrentresultstore.h>
 
 QT_BEGIN_NAMESPACE
 

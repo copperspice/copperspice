@@ -24,8 +24,7 @@
 #ifndef QABSTRACTNATIVEEVENTFILTER_H
 #define QABSTRACTNATIVEEVENTFILTER_H
 
-#include <QtCore/qnamespace.h>
-
+#include <qnamespace.h>
 
 class QAbstractNativeEventFilterPrivate;
 

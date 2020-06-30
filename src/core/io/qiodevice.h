@@ -26,7 +26,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #ifdef open
 #error qiodevice.h must be included before any header file that defines open

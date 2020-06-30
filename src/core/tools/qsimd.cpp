@@ -22,7 +22,7 @@
 ***********************************************************************/
 
 #include <qsimd_p.h>
-#include <QByteArray>
+#include <qbytearray.h>
 
 #include <stdio.h>
 

@@ -24,9 +24,8 @@
 #ifndef QABSTRACTANIMATION_H
 #define QABSTRACTANIMATION_H
 
-#include <QtCore/qobject.h>
-#include <QScopedPointer>
-
+#include <qobject.h>
+#include <qscopedpointer.h>
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_ANIMATION

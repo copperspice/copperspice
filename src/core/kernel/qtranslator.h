@@ -24,9 +24,9 @@
 #ifndef QTRANSLATOR_H
 #define QTRANSLATOR_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qbytearray.h>
-#include <QScopedPointer>
+#include <qobject.h>
+#include <qbytearray.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_TRANSLATION
 

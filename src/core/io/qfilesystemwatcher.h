@@ -24,8 +24,8 @@
 #ifndef QFILESYSTEMWATCHER_H
 #define QFILESYSTEMWATCHER_H
 
-#include <QtCore/qobject.h>
-#include <QScopedPointer>
+#include <qobject.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 

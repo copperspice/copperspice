@@ -24,9 +24,9 @@
 #ifndef QCOREGLOBALDATA_P_H
 #define QCOREGLOBALDATA_P_H
 
-#include <QtCore/qmap.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qreadwritelock.h>
+#include <qmap.h>
+#include <qstringlist.h>
+#include <qreadwritelock.h>
 
 QT_BEGIN_NAMESPACE
 

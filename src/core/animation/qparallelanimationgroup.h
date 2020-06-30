@@ -24,7 +24,7 @@
 #ifndef QPARALLELANIMATIONGROUP_H
 #define QPARALLELANIMATIONGROUP_H
 
-#include <QtCore/qanimationgroup.h>
+#include <qanimationgroup.h>
 
 QT_BEGIN_NAMESPACE
 

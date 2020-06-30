@@ -24,7 +24,7 @@
 #ifndef QPODLIST_P_H
 #define QPODLIST_P_H
 
-#include <QtCore/qvarlengtharray.h>
+#include <qvarlengtharray.h>
 
 QT_BEGIN_NAMESPACE
 

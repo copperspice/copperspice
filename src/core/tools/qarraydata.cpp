@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qarraydata.h>
+#include <qarraydata.h>
 #include <qtools_p.h>
 
 QT_BEGIN_NAMESPACE

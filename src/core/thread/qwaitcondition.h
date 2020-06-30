@@ -24,7 +24,7 @@
 #ifndef QWAITCONDITION_H
 #define QWAITCONDITION_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 #include <limits.h>
 
 QT_BEGIN_NAMESPACE

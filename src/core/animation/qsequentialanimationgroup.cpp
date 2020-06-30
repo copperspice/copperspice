@@ -24,7 +24,7 @@
 #include <qsequentialanimationgroup.h>
 #include <qsequentialanimationgroup_p.h>
 #include <qpauseanimation.h>
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_ANIMATION
 

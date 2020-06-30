@@ -24,7 +24,7 @@
 #ifndef QALGORITHMS_H
 #define QALGORITHMS_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 template <typename ForwardIterator>
 void qDeleteAll(ForwardIterator begin, ForwardIterator end)
@@ -40,7 +40,6 @@ inline void qDeleteAll(const Container &c)
 {
    qDeleteAll(c.begin(), c.end());
 }
-
 
 // Use __builtin_popcount on gcc.
 // clang claims to be gcc but has a bug where __builtin_popcount is not marked as constexpr.

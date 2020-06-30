@@ -25,10 +25,10 @@
 #define QFILESYSTEMWATCHER_KQUEUE_P_H
 
 #include <qfilesystemwatcher_p.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qvector.h>
+#include <qhash.h>
+#include <qmutex.h>
+#include <qthread.h>
+#include <qvector.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 struct kevent;

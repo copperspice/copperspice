@@ -24,10 +24,10 @@
 #ifndef QABSTRACTANIMATION_P_H
 #define QABSTRACTANIMATION_P_H
 
-#include <QtCore/qbasictimer.h>
-#include <QtCore/qdatetime.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qelapsedtimer.h>
+#include <qbasictimer.h>
+#include <qdatetime.h>
+#include <qtimer.h>
+#include <qelapsedtimer.h>
 #include <qabstractanimation.h>
 
 #ifdef Q_OS_WIN

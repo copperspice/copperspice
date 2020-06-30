@@ -24,9 +24,9 @@
 #ifndef QTCONCURRENTFILTER_H
 #define QTCONCURRENTFILTER_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qtconcurrentfilterkernel.h>
-#include <QtCore/qtconcurrentfunctionwrappers.h>
+#include <qglobal.h>
+#include <qtconcurrentfilterkernel.h>
+#include <qtconcurrentfunctionwrappers.h>
 
 QT_BEGIN_NAMESPACE
 

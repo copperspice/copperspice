@@ -27,7 +27,8 @@
 #ifndef QTHREAD_H
 #define QTHREAD_H
 
-#include <QScopedPointer>
+#include <qscopedpointer.h>
+
 #include <limits.h>
 
 class QThreadData;

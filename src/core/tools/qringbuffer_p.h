@@ -24,8 +24,8 @@
 #ifndef QRINGBUFFER_P_H
 #define QRINGBUFFER_P_H
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qlist.h>
+#include <qbytearray.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 

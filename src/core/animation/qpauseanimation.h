@@ -24,7 +24,7 @@
 #ifndef QPAUSEANIMATION_H
 #define QPAUSEANIMATION_H
 
-#include <QtCore/qanimationgroup.h>
+#include <qanimationgroup.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -24,7 +24,7 @@
 #ifndef QANIMATIONGROUP_H
 #define QANIMATIONGROUP_H
 
-#include <QtCore/qabstractanimation.h>
+#include <qabstractanimation.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -24,8 +24,8 @@
 #ifndef QTEMPORARYDIR_H
 #define QTEMPORARYDIR_H
 
-#include <QtCore/qdir.h>
-#include <QtCore/QScopedPointer>
+#include <qdir.h>
+#include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,9 +23,9 @@
 
 #include <qtimeline.h>
 
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qmath.h>
-#include <QtCore/qelapsedtimer.h>
+#include <qcoreevent.h>
+#include <qmath.h>
+#include <qelapsedtimer.h>
 
 QT_BEGIN_NAMESPACE
 

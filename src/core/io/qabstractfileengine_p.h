@@ -24,9 +24,8 @@
 #ifndef QABSTRACTFILEENGINE_P_H
 #define QABSTRACTFILEENGINE_P_H
 
-#include <QtCore/qabstractfileengine.h>
-#include <QtCore/qfile.h>
-
+#include <qabstractfileengine.h>
+#include <qfile.h>
 QT_BEGIN_NAMESPACE
 
 class QAbstractFileEnginePrivate

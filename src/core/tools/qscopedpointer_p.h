@@ -24,7 +24,7 @@
 #ifndef QSCOPEDPOINTER_P_H
 #define QSCOPEDPOINTER_P_H
 
-#include <QtCore/qscopedpointer.h>
+#include <qscopedpointer.h>
 
 QT_BEGIN_NAMESPACE
 

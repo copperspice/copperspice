@@ -24,7 +24,7 @@
 #ifndef QSTANDARDPATHS_H
 #define QSTANDARDPATHS_H
 
-#include <QtCore/qstringlist.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_STANDARDPATHS
 

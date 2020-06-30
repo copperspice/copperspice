@@ -24,13 +24,13 @@
 #ifndef QEVENTDISPATCHER_UNIX_P_H
 #define QEVENTDISPATCHER_UNIX_P_H
 
-#include <QtCore/qabstracteventdispatcher.h>
+#include <qabstracteventdispatcher.h>
+#include <qlist.h>
+#include <qvarlengtharray.h>
 
-#include <QtCore/qlist.h>
 #include <qabstracteventdispatcher_p.h>
 #include <qcore_unix_p.h>
 #include <qpodlist_p.h>
-#include <qvarlengtharray.h>
 #include <qtimerinfo_unix_p.h>
 
 #include <sys/time.h>

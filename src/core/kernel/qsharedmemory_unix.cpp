@@ -23,11 +23,15 @@
 
 #include <qplatformdefs.h>
 #include <qsharedmemory.h>
-#include <qsharedmemory_p.h>
 #include <qdebug.h>
 #include <qfile.h>
 
+#include <errno.h>
+#include <qcore_unix_p.h>
+#include <qsharedmemory_p.h>
+
 #ifndef QT_NO_SHAREDMEMORY
+
 #include <sys/types.h>
 #include <sys/ipc.h>
 
@@ -41,9 +45,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #endif
-
-#include <errno.h>
-#include <qcore_unix_p.h>
 
 #ifndef QT_NO_SHAREDMEMORY
 //#define QSHAREDMEMORY_DEBUG

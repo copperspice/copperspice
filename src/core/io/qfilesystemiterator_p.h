@@ -24,7 +24,7 @@
 #ifndef QFILESYSTEMITERATOR_P_H
 #define QFILESYSTEMITERATOR_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_FILESYSTEMITERATOR
 
@@ -37,7 +37,7 @@
 // Platform-specific headers
 #if defined(Q_OS_WIN)
 #else
-#include <QtCore/qscopedpointer.h>
+#include <qscopedpointer.h>
 #endif
 
 QT_BEGIN_NAMESPACE
