@@ -250,6 +250,8 @@ class Q_CORE_EXPORT QIODevicePrivate
    virtual qint64 peek(char *data, qint64 maxSize);
    virtual QByteArray peek(qint64 maxSize);
 
+   bool check_readable() const;
+
  protected:
    QIODevice *q_ptr;
 

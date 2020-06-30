@@ -71,8 +71,6 @@ void debugBinaryString(const char *data, qint64 maxlen)
 }
 #endif
 
-#define Q_VOID
-
 #define CHECK_MAXLEN(function, returnType) \
     do { \
         if (maxSize < 0) { \
@@ -91,18 +89,21 @@ void debugBinaryString(const char *data, qint64 maxlen)
        } \
    } while (0)
 
-#define CHECK_READABLE(function, returnType) \
-   do { \
-       if ((d->openMode & ReadOnly) == 0) { \
-           if (d->openMode == NotOpen) \
-               return returnType; \
-           qWarning("QIODevice::"#function": WriteOnly device"); \
-           return returnType; \
-       } \
-   } while (0)
 
-/*! \internal
- */
+bool QIODevicePrivate::check_readable() const
+{
+   if ((openMode & QIODevice::OpenModeFlag::ReadOnly) == 0) {
+      if (openMode == QIODevice::OpenModeFlag::NotOpen) {
+         return false;
+      }
+
+      qWarning("QIODevice::check_readable() WriteOnly device");
+      return false;
+   }
+
+   return true;
+}
+
 QIODevicePrivate::QIODevicePrivate()
    : openMode(QIODevice::NotOpen), buffer(QIODEVICE_BUFFERSIZE),
      pos(0), devicePos(0), seqDumpPos(0),
@@ -547,9 +548,13 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
 
       } else {
          if (d->firstRead) {
-            // this is the first time the file has been read, check it's valid and set up pos pointers
-            // for fast pos updates.
-            CHECK_READABLE(read, qint64(-1));
+            // first time file has been read, check if valid
+
+            if (! d->check_readable()) {
+               return qint64(-1);
+            }
+
+            // set up pos pointers
             d->firstRead = false;
 
             if (d->isSequential()) {
@@ -1110,7 +1115,10 @@ qint64 QIODevice::write(const char *data)
 void QIODevice::ungetChar(char c)
 {
    Q_D(QIODevice);
-   CHECK_READABLE(read, Q_VOID);
+
+   if (! d->check_readable()) {
+      return;
+   }
 
 #if defined QIODEVICE_DEBUG
    printf("%p QIODevice::ungetChar(0x%hhx '%c')\n", this, c, isprint(c) ? c : '?');
