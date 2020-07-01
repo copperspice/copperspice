@@ -89,6 +89,10 @@ class QList
       m_data.push_back(value);
    }
 
+   void append(T &&value) {
+      m_data.push_back(std::move(value));
+   }
+
    void append(const QList<T> &other) {
       if (this != &other) {
         m_data.insert(m_data.end(), other.m_data.begin(), other.m_data.end());
@@ -98,6 +102,22 @@ class QList
       auto numElements = this->size();
       for (QList<T>::size_type i = 0; i < numElements; ++i) {
           m_data.push_back(m_data[i]);
+      }
+   }
+
+   void append(QList<T> &&other) {
+      if (this != &other) {
+
+        for (auto &item : other) {
+           m_data.push_back(std::move(item));
+        }
+
+        return;
+      }
+
+      auto numElements = this->size();
+      for (QList<T>::size_type i = 0; i < numElements; ++i) {
+          m_data.push_back(std::move(m_data[i]));
       }
    }
 
