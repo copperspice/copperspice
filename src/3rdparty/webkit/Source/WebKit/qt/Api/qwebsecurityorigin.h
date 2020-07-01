@@ -20,8 +20,8 @@
 #ifndef _WEBSECURITYORIGIN_H_
 #define _WEBSECURITYORIGIN_H_
 
-#include <QtCore/qurl.h>
-#include <QtCore/qshareddata.h>
+#include <qurl.h>
+#include <qshareddata.h>
 
 #include "qwebkitglobal.h"
 

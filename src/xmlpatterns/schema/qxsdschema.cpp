@@ -23,8 +23,8 @@
 
 #include "qxsdschema_p.h"
 
-#include <QtCore/QReadLocker>
-#include <QtCore/QWriteLocker>
+#include <QReadLocker>
+#include <QWriteLocker>
 
 QT_BEGIN_NAMESPACE
 

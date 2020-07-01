@@ -24,7 +24,7 @@
 #ifndef QSCRIPTSTRING_P_H
 #define QSCRIPTSTRING_P_H
 
-#include <QtCore/qshareddata.h>
+#include <qshareddata.h>
 #include "Identifier.h"
 
 class QScriptEnginePrivate;

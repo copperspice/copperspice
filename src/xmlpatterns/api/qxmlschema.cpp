@@ -24,8 +24,8 @@
 #include "qxmlschema.h"
 #include "qxmlschema_p.h"
 
-#include <QtCore/QIODevice>
-#include <QtCore/QUrl>
+#include <QIODevice>
+#include <QUrl>
 
 QT_BEGIN_NAMESPACE
 

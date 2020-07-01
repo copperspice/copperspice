@@ -29,9 +29,9 @@
 #if defined(WTF_USE_QT_MULTIMEDIA) && WTF_USE_QT_MULTIMEDIA
 #include <QMediaPlayer>
 #endif
-#include <QtCore/QObject>
-#include <QtCore/QUrl>
-#include <QtGui/QColor>
+#include <QObject>
+#include <QUrl>
+#include <QColor>
 
 class QWebSelectData {
 public:

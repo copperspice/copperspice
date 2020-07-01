@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include <QtCore/qmap.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qabstracteventdispatcher.h>
-#include <QtCore/qcoreapplication.h>
+#include <qmap.h>
+#include <qtimer.h>
+#include <qmutex.h>
+#include <qlist.h>
+#include <qabstracteventdispatcher.h>
+#include <qcoreapplication.h>
 
 #include <qgstreamerbushelper_p.h>
 

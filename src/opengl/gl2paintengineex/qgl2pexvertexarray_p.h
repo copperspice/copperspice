@@ -24,8 +24,9 @@
 #ifndef QGL2PEXVERTEXARRAY_P_H
 #define QGL2PEXVERTEXARRAY_P_H
 
-#include <QRectF>
+#include <qrectf.h>
 #include <qvector.h>
+
 #include <qvectorpath_p.h>
 #include <qgl_p.h>
 

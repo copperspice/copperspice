@@ -27,9 +27,9 @@
 #include <qnetworksession_impl.h>
 
 #include <qnetworkconfiguration_p.h>
-#include <QtNetwork/qnetworksession.h>
+#include <qnetworksession.h>
 
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 
 #include <QtDBus/QtDBus>
 #include <QtDBus/QDBusConnection>

@@ -25,7 +25,7 @@
 
 #include "BridgeJSC.h"
 #include "runtime_root.h"
-#include <QtScript/qscriptengine.h>
+#include <qscriptengine.h>
 #include <qhash.h>
 #include <qpointer.h>
 #include <qset.h>

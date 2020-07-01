@@ -44,10 +44,10 @@
 #include "qwebpage.h"
 #include "qwebpage_p.h"
 #include "qwebview.h"
-#include <QtCore/QCoreApplication>
-#include <QtCore/QFile>
-#include <QtCore/QSettings>
-#include <QtCore/QVariant>
+#include <QCoreApplication>
+#include <QFile>
+#include <QSettings>
+#include <QVariant>
 
 namespace WebCore {
 

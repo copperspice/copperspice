@@ -24,7 +24,7 @@
 #ifndef QXsdSchemaTypesFactory_P_H
 #define QXsdSchemaTypesFactory_P_H
 
-#include <QtCore/QHash>
+#include <QHash>
 #include <qschematypefactory_p.h>
 
 QT_BEGIN_NAMESPACE

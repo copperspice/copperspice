@@ -20,11 +20,11 @@
 #ifndef QWEBHISTORY_H
 #define QWEBHISTORY_H
 
-#include <QtCore/qurl.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qicon.h>
-#include <QtCore/qdatetime.h>
-#include <QtCore/qshareddata.h>
+#include <qurl.h>
+#include <qstring.h>
+#include <qicon.h>
+#include <qdatetime.h>
+#include <qshareddata.h>
 
 #include "qwebkitglobal.h"
 

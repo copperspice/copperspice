@@ -25,7 +25,7 @@
 #define QXsdWildcard_P_H
 
 #include <qxsdterm_p.h>
-#include <QtCore/QSet>
+#include <QSet>
 
 QT_BEGIN_NAMESPACE
 

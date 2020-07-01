@@ -25,7 +25,7 @@
 #define QNATIVEWIFIENGINE_P_H
 
 #include "../qbearerengine_impl.h"
-#include <QtCore/qtimer.h>
+#include <qtimer.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

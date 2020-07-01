@@ -25,7 +25,7 @@
 #define QXsdReference_P_H
 
 #include <qxsdterm_p.h>
-#include <QtXmlPatterns/QSourceLocation>
+#include <QSourceLocation>
 
 QT_BEGIN_NAMESPACE
 

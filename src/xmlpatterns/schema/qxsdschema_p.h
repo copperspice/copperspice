@@ -35,8 +35,8 @@
 #include <qxsdnotation_p.h>
 #include <qxsdsimpletype_p.h>
 
-#include <QtCore/QHash>
-#include <QtCore/QReadWriteLock>
+#include <QHash>
+#include <QReadWriteLock>
 
 QT_BEGIN_NAMESPACE
 

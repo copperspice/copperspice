@@ -23,10 +23,10 @@
 
 #include <qgstreameraudiodecodercontrol.h>
 
-#include <QtCore/qdir.h>
-#include <QtCore/qsocketnotifier.h>
-#include <QtCore/qurl.h>
-#include <QtCore/qdebug.h>
+#include <qdir.h>
+#include <qsocketnotifier.h>
+#include <qurl.h>
+#include <qdebug.h>
 
 #include <qgstreameraudiodecodersession.h>
 

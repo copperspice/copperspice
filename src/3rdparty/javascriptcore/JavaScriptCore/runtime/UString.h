@@ -37,7 +37,7 @@
 #include <wtf/unicode/Unicode.h>
 
 #if PLATFORM(QT)
-#include <QtCore/qstring.h>
+#include <qstring.h>
 #endif
 
 namespace JSC {

@@ -26,7 +26,7 @@
 
 #include <qnamedschemacomponent_p.h>
 #include <qxsdterm_p.h>
-#include <QtCore/QList>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 

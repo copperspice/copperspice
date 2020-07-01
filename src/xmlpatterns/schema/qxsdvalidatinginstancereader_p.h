@@ -28,7 +28,7 @@
 #include <qxsdinstancereader_p.h>
 #include <qxsdstatemachine_p.h>
 #include <qxsdvalidatedxmlnodemodel_p.h>
-#include <QtCore/QStack>
+#include <QStack>
 
 QT_BEGIN_NAMESPACE
 

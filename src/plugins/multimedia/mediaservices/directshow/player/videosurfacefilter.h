@@ -29,12 +29,12 @@
 #include "directshowsamplescheduler.h"
 #include "directshowmediatype.h"
 
-#include <QtCore/qbasictimer.h>
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qsemaphore.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qwaitcondition.h>
+#include <qbasictimer.h>
+#include <qcoreevent.h>
+#include <qmutex.h>
+#include <qsemaphore.h>
+#include <qstring.h>
+#include <qwaitcondition.h>
 
 #include <dshow.h>
 

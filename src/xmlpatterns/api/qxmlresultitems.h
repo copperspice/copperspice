@@ -24,8 +24,8 @@
 #ifndef QXMLRESULTITEMS_H
 #define QXMLRESULTITEMS_H
 
-#include <QtCore/QString>
-#include <QtCore/QScopedPointer>
+#include <QString>
+#include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
 

@@ -27,7 +27,7 @@
 #include <qanysimpletype_p.h>
 #include <qxsdfacet_p.h>
 #include <qxsduserschematype_p.h>
-#include <QtCore/QSet>
+#include <QSet>
 
 QT_BEGIN_NAMESPACE
 

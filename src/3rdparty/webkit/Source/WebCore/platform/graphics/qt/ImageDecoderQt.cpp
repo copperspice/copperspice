@@ -29,10 +29,10 @@
 #include "config.h"
 #include "ImageDecoderQt.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QBuffer>
+#include <QByteArray>
+#include <QBuffer>
 
-#include <QtGui/QImageReader>
+#include <QImageReader>
 #include <qdebug.h>
 
 namespace WebCore {

@@ -24,15 +24,15 @@
 #ifndef QXMLSERIALIZER_P_H
 #define QXMLSERIALIZER_P_H
 
-#include <QtCore/QIODevice>
-#include <QtCore/QStack>
-#include <QtCore/QTextCodec>
-#include <QtXmlPatterns/QXmlQuery>
-#include <QtXmlPatterns/QXmlNamePool>
-#include <QtXmlPatterns/QXmlSerializer>
-#include "qnamepool_p.h"
-#include "qabstractxmlreceiver_p.h"
+#include <QIODevice>
+#include <QStack>
+#include <QTextCodec>
+#include <QXmlQuery>
+#include <QXmlNamePool>
+#include <QXmlSerializer>
 
+#include <qnamepool_p.h>
+#include <qabstractxmlreceiver_p.h>
 QT_BEGIN_NAMESPACE
 
 class QXmlSerializerPrivate : public QAbstractXmlReceiverPrivate

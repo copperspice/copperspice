@@ -23,7 +23,7 @@
 
 #include <qnlaengine.h>
 #include <qbearerplugin_p.h>
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -25,10 +25,10 @@
 #include <qnetworksession_impl.h>
 #include <qnetworkconfiguration_p.h>
 
-#include <QtCore/qthread.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qstringlist.h>
+#include <qthread.h>
+#include <qmutex.h>
+#include <qcoreapplication.h>
+#include <qstringlist.h>
 
 #include <qdebug.h>
 #include <qcoreapplication_p.h>

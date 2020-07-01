@@ -23,8 +23,8 @@
 #include "qwebkitglobal.h"
 #include "qwebpluginfactory.h"
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstringlist.h>
+#include <qobject.h>
+#include <qstringlist.h>
 
 namespace WebCore {
     class PluginDatabase;

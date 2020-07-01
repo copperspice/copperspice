@@ -24,8 +24,8 @@
 #ifndef QSQLFIELD_H
 #define QSQLFIELD_H
 
-#include <QtCore/qvariant.h>
-#include <QtCore/qstring.h>
+#include <qvariant.h>
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 

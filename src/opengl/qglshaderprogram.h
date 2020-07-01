@@ -24,11 +24,11 @@
 #ifndef QGLSHADERPROGRAM_H
 #define QGLSHADERPROGRAM_H
 
-#include <QtOpenGL/qgl.h>
-#include <QtGui/qvector2d.h>
-#include <QtGui/qvector3d.h>
-#include <QtGui/qvector4d.h>
-#include <QtGui/qmatrix4x4.h>
+#include <qgl.h>
+#include <qvector2d.h>
+#include <qvector3d.h>
+#include <qvector4d.h>
+#include <qmatrix4x4.h>
 #include <QScopedPointer>
 
 class QGLShaderProgram;

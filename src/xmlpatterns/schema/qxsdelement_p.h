@@ -29,8 +29,8 @@
 #include <qxsdalternative_p.h>
 #include <qxsdidentityconstraint_p.h>
 #include <qxsdcomplextype_p.h>
-#include <QtCore/QList>
-#include <QtCore/QSet>
+#include <QList>
+#include <QSet>
 
 QT_BEGIN_NAMESPACE
 

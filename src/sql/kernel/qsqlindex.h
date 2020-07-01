@@ -24,9 +24,9 @@
 #ifndef QSQLINDEX_H
 #define QSQLINDEX_H
 
-#include <QtSql/qsqlrecord.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qlist.h>
+#include <qsqlrecord.h>
+#include <qstring.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 

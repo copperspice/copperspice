@@ -26,9 +26,9 @@
 
 #include <dshow.h>
 
-#include <QtCore/qmutex.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qsemaphore.h>
+#include <qmutex.h>
+#include <qobject.h>
+#include <qsemaphore.h>
 
 class DirectShowTimedSample;
 

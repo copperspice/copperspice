@@ -37,8 +37,8 @@
 #endif
 
 #if PLATFORM(QT)
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
+#include <QPainter>
+#include <QPixmap>
 #endif
 
 namespace WebCore {

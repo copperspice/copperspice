@@ -25,10 +25,10 @@
 #define QXsdIdCache_P_H
 
 #include <qschemacomponent_p.h>
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QReadWriteLock>
-#include <QtCore/QSet>
-#include <QtCore/QString>
+#include <QExplicitlySharedDataPointer>
+#include <QReadWriteLock>
+#include <QSet>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
 

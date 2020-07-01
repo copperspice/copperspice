@@ -24,8 +24,8 @@
 #ifndef QXMLNAMEPOOL_H
 #define QXMLNAMEPOOL_H
 
-#include <QtCore/QSharedData>
-#include <QtCore/QString>
+#include <QSharedData>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
 

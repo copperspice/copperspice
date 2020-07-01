@@ -53,7 +53,7 @@
 #ifndef QJPUNICODE_H
 #define QJPUNICODE_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

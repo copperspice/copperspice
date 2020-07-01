@@ -25,14 +25,14 @@
 #include "qwindowsmime.h"
 #include "qwindowscontext.h"
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWindow>
-#include <QtGui/QPainter>
-#include <QtGui/QCursor>
-#include <QtGui/QApplication>
+#include <QMouseEvent>
+#include <QWindow>
+#include <QPainter>
+#include <QCursor>
+#include <QApplication>
 
-#include <QtCore/QMimeData>
-#include <QtCore/QDebug>
+#include <QMimeData>
+#include <QDebug>
 
 #include <shlobj.h>
 

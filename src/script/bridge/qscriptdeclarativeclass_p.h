@@ -24,8 +24,8 @@
 #ifndef QSCRIPTDECLARATIVECLASS_P_H
 #define QSCRIPTDECLARATIVECLASS_P_H
 
-#include <QtScript/qscriptvalue.h>
-#include <QtScript/qscriptclass.h>
+#include <qscriptvalue.h>
+#include <qscriptclass.h>
 
 QT_BEGIN_NAMESPACE
 

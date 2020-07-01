@@ -19,8 +19,8 @@
 #ifndef _WEBDATABASE_H_
 #define _WEBDATABASE_H_
 
-#include <QtCore/qstring.h>
-#include <QtCore/qshareddata.h>
+#include <qstring.h>
+#include <qshareddata.h>
 
 #include "qwebkitglobal.h"
 

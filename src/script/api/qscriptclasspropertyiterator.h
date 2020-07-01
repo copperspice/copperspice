@@ -24,9 +24,9 @@
 #ifndef QSCRIPTCLASSPROPERTYITERATOR_H
 #define QSCRIPTCLASSPROPERTYITERATOR_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtScript/qscriptvalue.h>
+#include <qstring.h>
+#include <qscopedpointer.h>
+#include <qscriptvalue.h>
 
 class QScriptClassPropertyIteratorPrivate;
 

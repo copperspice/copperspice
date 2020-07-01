@@ -24,8 +24,8 @@
 #ifndef QXMLSCHEMAVALIDATOR_H
 #define QXMLSCHEMAVALIDATOR_H
 
-#include <QtCore/QUrl>
-#include <QtXmlPatterns/QXmlNamePool>
+#include <QUrl>
+#include <QXmlNamePool>
 
 QT_BEGIN_NAMESPACE
 

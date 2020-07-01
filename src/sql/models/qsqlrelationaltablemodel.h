@@ -24,9 +24,7 @@
 #ifndef QSQLRELATIONALTABLEMODEL_H
 #define QSQLRELATIONALTABLEMODEL_H
 
-#include <QtSql/qsqltablemodel.h>
-
-
+#include <qsqltablemodel.h>
 
 class QSqlRelationalTableModelPrivate;
 

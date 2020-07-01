@@ -24,9 +24,9 @@
 #ifndef QSCRIPTPROGRAM_H
 #define QSCRIPTPROGRAM_H
 
-#include <QtCore/qsharedpointer.h>
+#include <qsharedpointer.h>
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
 class QScriptProgramPrivate;
 

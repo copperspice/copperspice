@@ -27,16 +27,16 @@
 #include "qwindowsintegration.h"
 #include "qwindowsmousehandler.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QObject>
-#include <QtCore/QRect>
-#include <QtCore/QRectF>
-#include <QtCore/QTextBoundaryFinder>
+#include <QDebug>
+#include <QObject>
+#include <QRect>
+#include <QRectF>
+#include <QTextBoundaryFinder>
 
-#include <QtGui/QInputMethodEvent>
-#include <QtGui/QTextCharFormat>
-#include <QtGui/QPalette>
-#include <QtGui/QApplication>
+#include <QInputMethodEvent>
+#include <QTextCharFormat>
+#include <QPalette>
+#include <QApplication>
 
 #include <qhighdpiscaling_p.h>
 

@@ -24,7 +24,7 @@
 #ifndef QSCRIPTPROGRAM_P_H
 #define QSCRIPTPROGRAM_P_H
 
-#include <QtCore/qshareddata.h>
+#include <qshareddata.h>
 #include "RefPtr.h"
 
 namespace JSC {

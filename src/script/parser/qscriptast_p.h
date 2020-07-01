@@ -24,7 +24,7 @@
 #ifndef QSCRIPTAST_P_H
 #define QSCRIPTAST_P_H
 
-#include <QtCore/QString>
+#include <QString>
 #include "qscriptastvisitor_p.h"
 
 QT_BEGIN_NAMESPACE

@@ -20,9 +20,9 @@
 #include "config.h"
 #include "TextureMapperQt.h"
 
-#include <QtCore/qdebug.h>
-#include <QtGui/qpaintengine.h>
-#include <QtGui/qpixmap.h>
+#include <qdebug.h>
+#include <qpaintengine.h>
+#include <qpixmap.h>
 
 #ifdef QT_OPENGL_LIB
 # include "opengl/TextureMapperGL.h"

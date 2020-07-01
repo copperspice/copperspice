@@ -24,8 +24,8 @@
 #ifndef QSCRIPTEXTENSIONINTERFACE_H
 #define QSCRIPTEXTENSIONINTERFACE_H
 
-#include <QtCore/qfactoryinterface.h>
-#include <QtCore/qobject.h>
+#include <qfactoryinterface.h>
+#include <qobject.h>
 
 class QScriptEngine;
 

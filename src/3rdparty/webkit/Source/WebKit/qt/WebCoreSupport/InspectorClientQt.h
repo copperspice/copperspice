@@ -34,7 +34,7 @@
 #include "InspectorFrontendClientLocal.h"
 #include "OwnPtr.h"
 #include "PassOwnPtr.h"
-#include <QtCore/QString>
+#include <QString>
 #include <wtf/Forward.h>
 
 class QWebPage;

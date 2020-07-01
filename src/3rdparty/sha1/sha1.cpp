@@ -26,7 +26,7 @@
   Copyright (C) Dominik Reichl <dominik.reichl@t-online.de>
 */
 
-#include <QtCore/qendian.h>
+#include <qendian.h>
 
 QT_BEGIN_NAMESPACE
 

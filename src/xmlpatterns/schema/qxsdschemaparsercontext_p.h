@@ -30,7 +30,7 @@
 #include <qxsdschemachecker_p.h>
 #include <qxsdschemacontext_p.h>
 #include <qxsdschemaresolver_p.h>
-#include <QtCore/QSharedData>
+#include <QSharedData>
 
 QT_BEGIN_NAMESPACE
 

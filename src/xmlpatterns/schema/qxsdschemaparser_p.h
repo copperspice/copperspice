@@ -39,11 +39,11 @@
 #include <qxsdschemaparsercontext_p.h>
 #include <qxsdstatemachine_p.h>
 
-#include <QtCore/QHash>
-#include <QtCore/QSet>
-#include <QtCore/QUrl>
-#include <QtXml/QXmlStreamReader>
-#include <QtXmlPatterns/QXmlNamePool>
+#include <QHash>
+#include <QSet>
+#include <QUrl>
+#include <QXmlStreamReader>
+#include <QXmlNamePool>
 
 QT_BEGIN_NAMESPACE
 

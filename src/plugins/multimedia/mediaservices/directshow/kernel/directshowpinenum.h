@@ -26,7 +26,7 @@
 
 #include <dshow.h>
 
-#include <QtCore/qlist.h>
+#include <qlist.h>
 
 
 class DirectShowPinEnum : public IEnumPins

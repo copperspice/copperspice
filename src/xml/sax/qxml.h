@@ -24,12 +24,12 @@
 #ifndef XML_QXML_H
 #define XML_QXML_H
 
-#include <QtCore/qtextstream.h>
-#include <QtCore/qfile.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qscopedpointer.h>
+#include <qtextstream.h>
+#include <qfile.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qlist.h>
+#include <qscopedpointer.h>
 
 class QXmlNamespaceSupport;
 class QXmlAttributes;

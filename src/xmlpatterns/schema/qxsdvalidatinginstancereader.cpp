@@ -48,21 +48,21 @@
 
 #include "qxsdschemadebugger_p.h"
 
-#include <QtCore/QFile>
-#include <QtXmlPatterns/QXmlQuery>
-#include <QtXmlPatterns/QXmlResultItems>
-
-QT_BEGIN_NAMESPACE
+#include <QFile>
+#include <QXmlQuery>
+#include <QXmlResultItems>
 
 using namespace QPatternist;
 
 namespace QPatternist {
+
 template <>
 template <>
 bool XsdStateMachine<XsdTerm::Ptr>::inputEqualsTransition<QXmlName>(QXmlName name, XsdTerm::Ptr term) const
 {
    if (term->isElement()) {
       return (XsdElement::Ptr(term)->name(m_namePool) == name);
+
    } else if (term->isWildcard()) {
       // wildcards using XsdWildcard::absentNamespace, so we have to fix that here
       if (name.namespaceURI() == StandardNamespaces::empty) {
@@ -1337,4 +1337,3 @@ XsdComplexType::Ptr XsdValidatingInstanceReader::anyType()
    return m_anyType;
 }
 
-QT_END_NAMESPACE

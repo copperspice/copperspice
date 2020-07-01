@@ -24,8 +24,8 @@
 #ifndef QSCRIPTENGINEAGENT_H
 #define QSCRIPTENGINEAGENT_H
 
-#include <QtCore/qvariant.h>
-#include <QtCore/qscopedpointer.h>
+#include <qvariant.h>
+#include <qscopedpointer.h>
 
 class QScriptEngine;
 class QScriptValue;

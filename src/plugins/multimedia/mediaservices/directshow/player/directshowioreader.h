@@ -26,9 +26,9 @@
 
 #include <dshow.h>
 
-#include <QtCore/qmutex.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qwaitcondition.h>
+#include <qmutex.h>
+#include <qobject.h>
+#include <qwaitcondition.h>
 
 QT_BEGIN_NAMESPACE
 class QIODevice;

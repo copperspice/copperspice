@@ -23,9 +23,9 @@
 
 #include "qxsdvalidatedxmlnodemodel_p.h"
 
-#include <QtCore/QUrl>
-#include <QtCore/QVariant>
-#include <QtCore/QVector>
+#include <QUrl>
+#include <QVariant>
+#include <QVector>
 
 QT_BEGIN_NAMESPACE
 

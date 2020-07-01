@@ -23,8 +23,8 @@
 
 #include <qwavedecoder_p.h>
 
-#include <QtCore/qtimer.h>
-#include <QtCore/qendian.h>
+#include <qtimer.h>
+#include <qendian.h>
 
 QWaveDecoder::QWaveDecoder(QIODevice *s, QObject *parent):
    QIODevice(parent),

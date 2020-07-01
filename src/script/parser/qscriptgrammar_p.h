@@ -26,7 +26,7 @@
 #ifndef QSCRIPTGRAMMAR_P_H
 #define QSCRIPTGRAMMAR_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

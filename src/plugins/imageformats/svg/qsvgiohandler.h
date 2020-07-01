@@ -24,7 +24,7 @@
 #ifndef QSVGIOHANDLER_H
 #define QSVGIOHANDLER_H
 
-#include <QtGui/qimageiohandler.h>
+#include <qimageiohandler.h>
 
 #ifndef QT_NO_SVGRENDERER
 

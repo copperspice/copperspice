@@ -24,8 +24,8 @@
 #ifndef QPULLBRIDGE_P_H
 #define QPULLBRIDGE_P_H
 
-#include <QtCore/QPair>
-#include <QtCore/QStack>
+#include <QPair>
+#include <QStack>
 
 #include <qabstractxmlforwarditerator_p.h>
 #include <qabstractxmlpullprovider_p.h>

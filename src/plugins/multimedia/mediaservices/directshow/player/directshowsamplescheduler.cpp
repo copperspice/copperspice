@@ -23,8 +23,8 @@
 
 #include "directshowsamplescheduler.h"
 
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qcoreevent.h>
+#include <qcoreapplication.h>
+#include <qcoreevent.h>
 
 class DirectShowTimedSample
 {

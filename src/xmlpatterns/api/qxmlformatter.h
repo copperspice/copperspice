@@ -24,7 +24,7 @@
 #ifndef QXMLFORMATTER_H
 #define QXMLFORMATTER_H
 
-#include <QtXmlPatterns/QXmlSerializer>
+#include <QXmlSerializer>
 #include <qstringfwd.h>
 
 QT_BEGIN_NAMESPACE

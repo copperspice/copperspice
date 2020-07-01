@@ -24,13 +24,13 @@
 #ifndef QPaintEngineEx_OPENGL2_P_H
 #define QPaintEngineEx_OPENGL2_P_H
 
-#include <QDebug>
+#include <qdebug.h>
 #include <qvector.h>
+
 #include <qpaintengineex_p.h>
 #include <qglengineshadermanager_p.h>
 #include <qgl2pexvertexarray_p.h>
 #include <qglpaintdevice_p.h>
-
 #include <qfontengine_p.h>
 #include <qtriangulatingstroker_p.h>
 #include <qopengl_extensions_p.h>
@@ -42,7 +42,6 @@ enum EngineMode {
    ImageArrayDrawingMode,
 
 };
-
 
 #define GL_STENCIL_HIGH_BIT         GLuint(0x80)
 #define QT_BRUSH_TEXTURE_UNIT       GLuint(0)
@@ -169,7 +168,7 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
    void updateTextureFilter(GLenum target, GLenum wrapMode, bool smoothPixmapTransform, GLuint id = GLuint(-1));
 
    void resetGLState();
-    bool resetOpenGLContextActiveEngine();
+   bool resetOpenGLContextActiveEngine();
 
    // fill, stroke, drawTexture, drawPixmaps & drawCachedGlyphs are the main rendering entry-points,
    // however writeClip can also be thought of as en entry point as it does similar things.
@@ -289,9 +288,8 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
 
    const GLfloat *vertexAttribPointers[3];
 
-    GLfloat translateZ;
+   GLfloat translateZ;
 };
-
 
 void QGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *pointer)
 {
@@ -307,7 +305,5 @@ void QGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayIndex
       glVertexAttribPointer(arrayIndex, 2, GL_FLOAT, GL_FALSE, 0, pointer);
    }
 }
-
-
 
 #endif

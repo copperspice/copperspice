@@ -25,14 +25,14 @@
 
 #include <qgstreameraudiodecodersession.h>
 
-#include <QtCore/qdatetime.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qsize.h>
-#include <QtCore/qtimer.h>
-#include <QtCore/qdebug.h>
-#include <QtCore/qdir.h>
-#include <QtCore/qstandardpaths.h>
-#include <QtCore/qurl.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qsize.h>
+#include <qtimer.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qstandardpaths.h>
+#include <qurl.h>
 
 #include <qgstreamerbushelper_p.h>
 #include <qgstutils_p.h>

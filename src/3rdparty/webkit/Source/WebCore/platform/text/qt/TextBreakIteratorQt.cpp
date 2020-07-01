@@ -21,7 +21,7 @@
 #include "config.h"
 #include "TextBreakIterator.h"
 
-#include <QtCore/qtextboundaryfinder.h>
+#include <qtextboundaryfinder.h>
 #include <algorithm>
 #include <qdebug.h>
 

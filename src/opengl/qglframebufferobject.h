@@ -24,8 +24,8 @@
 #ifndef QGLFRAMEBUFFEROBJECT_H
 #define QGLFRAMEBUFFEROBJECT_H
 
-#include <QtOpenGL/qgl.h>
-#include <QtGui/qpaintdevice.h>
+#include <qgl.h>
+#include <qpaintdevice.h>
 
 class QGLFramebufferObjectPrivate;
 class QGLFramebufferObjectFormat;

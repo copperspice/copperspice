@@ -43,7 +43,7 @@ typedef const struct __SCDynamicStore * SCDynamicStoreRef;
 
 #elif PLATFORM(QT)
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifdef QT_NO_BEARERMANAGEMENT
 #undef WTF_USE_QT_BEARER

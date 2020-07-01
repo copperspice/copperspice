@@ -30,7 +30,7 @@
 #include "qxsdstatemachinebuilder_p.h"
 #include "qxsdtypechecker_p.h"
 
-#include <QtCore/QFile>
+#include <QFile>
 
 QT_BEGIN_NAMESPACE
 

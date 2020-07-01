@@ -26,7 +26,7 @@
 
 #include <qreportcontext_p.h>
 #include <qschematype_p.h>
-#include <QtXmlPatterns/QXmlItem>
+#include <QXmlItem>
 
 QT_BEGIN_NAMESPACE
 

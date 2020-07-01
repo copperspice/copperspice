@@ -22,10 +22,10 @@
 
 #include "qwebkitglobal.h"
 
-#include <QtCore/qstring.h>
-#include <QtGui/qpixmap.h>
-#include <QtGui/qicon.h>
-#include <QtCore/qshareddata.h>
+#include <qstring.h>
+#include <qpixmap.h>
+#include <qicon.h>
+#include <qshareddata.h>
 
 namespace WebCore {
     class Settings;

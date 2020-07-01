@@ -29,7 +29,7 @@
 #define IconDatabaseClientQt_h
 
 #include "IconDatabaseClient.h"
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace WebCore {
 

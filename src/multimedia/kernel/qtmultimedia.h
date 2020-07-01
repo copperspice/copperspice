@@ -1,7 +1,7 @@
 #ifndef QTMULTIMEDIA_H
 #define QTMULTIMEDIA_H
-#include <QtCore/QtCore>
-#include <QtGui/QtGui>
+#include <QtCore>
+#include <QtGui>
 #include <qaudio.h>
 #include <qaudiodeviceinfo.h>
 #include <qaudioformat.h>

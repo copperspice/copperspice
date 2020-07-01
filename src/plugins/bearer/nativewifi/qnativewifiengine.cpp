@@ -26,10 +26,10 @@
 #include <qnetworksession_impl.h>
 
 #include <qnetworkconfiguration_p.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qcoreapplication.h>
+#include <qstringlist.h>
+#include <qcoreapplication.h>
 
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

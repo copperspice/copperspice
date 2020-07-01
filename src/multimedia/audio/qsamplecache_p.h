@@ -24,12 +24,12 @@
 #ifndef QSAMPLECACHE_P_H
 #define QSAMPLECACHE_P_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qthread.h>
-#include <QtCore/qurl.h>
-#include <QtCore/qmutex.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qset.h>
+#include <qobject.h>
+#include <qthread.h>
+#include <qurl.h>
+#include <qmutex.h>
+#include <qmap.h>
+#include <qset.h>
 #include <qaudioformat.h>
 
 class QIODevice;

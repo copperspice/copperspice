@@ -27,8 +27,8 @@
 #include <qxsdparticle_p.h>
 #include <qxsdstatemachine_p.h>
 #include <qxsdterm_p.h>
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QList>
+#include <QExplicitlySharedDataPointer>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 

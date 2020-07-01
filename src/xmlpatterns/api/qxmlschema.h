@@ -24,9 +24,9 @@
 #ifndef QXMLSCHEMA_H
 #define QXMLSCHEMA_H
 
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QUrl>
-#include <QtXmlPatterns/QXmlNamePool>
+#include <QSharedDataPointer>
+#include <QUrl>
+#include <QXmlNamePool>
 
 QT_BEGIN_NAMESPACE
 

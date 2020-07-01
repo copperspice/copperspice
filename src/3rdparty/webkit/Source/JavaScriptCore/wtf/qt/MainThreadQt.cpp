@@ -30,8 +30,8 @@
 #include "config.h"
 #include "MainThread.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QCoreApplication>
+#include <QObject>
+#include <QCoreApplication>
 #include <QThread>
 
 namespace WTF {

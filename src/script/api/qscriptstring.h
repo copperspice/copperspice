@@ -24,8 +24,8 @@
 #ifndef QSCRIPTSTRING_H
 #define QSCRIPTSTRING_H
 
-#include <QtCore/qstring.h>
-#include <QtCore/qsharedpointer.h>
+#include <qstring.h>
+#include <qsharedpointer.h>
 
 class QScriptStringPrivate;
 

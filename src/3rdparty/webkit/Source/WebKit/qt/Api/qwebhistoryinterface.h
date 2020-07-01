@@ -22,7 +22,7 @@
 #ifndef QWEBHISTORYINTERFACE_H
 #define QWEBHISTORYINTERFACE_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 
 #include "qwebkitglobal.h"
 

@@ -24,7 +24,7 @@
 #ifndef QSCRIPTASTFWD_P_H
 #define QSCRIPTASTFWD_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 

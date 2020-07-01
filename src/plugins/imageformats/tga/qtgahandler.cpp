@@ -24,9 +24,9 @@
 #include "qtgahandler.h"
 #include "qtgafile.h"
 
-#include <QtCore/QVariant>
-#include <QtCore/QDebug>
-#include <QtGui/QImage>
+#include <QVariant>
+#include <QDebug>
+#include <QImage>
 
 QT_BEGIN_NAMESPACE
 

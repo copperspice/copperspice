@@ -24,9 +24,9 @@
 #ifndef QWINDOWSOPENGLTESTER_H
 #define QWINDOWSOPENGLTESTER_H
 
-#include <QtCore/QByteArray>
-#include <QtCore/QFlags>
-#include <QtCore/qversionnumber.h>
+#include <QByteArray>
+#include <QFlags>
+#include <qversionnumber.h>
 
 class QDebug;
 class QVariant;

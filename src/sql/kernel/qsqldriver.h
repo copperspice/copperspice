@@ -24,10 +24,10 @@
 #ifndef QSQLDRIVER_H
 #define QSQLDRIVER_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
-#include <QtSql/qsql.h>
+#include <qobject.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qsql.h>
 #include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE

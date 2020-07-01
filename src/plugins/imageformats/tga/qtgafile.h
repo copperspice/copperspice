@@ -24,8 +24,8 @@
 #ifndef QTGAFILE_H
 #define QTGAFILE_H
 
-#include <QtGui/QColor>
-#include <QtGui/QImage>
+#include <QColor>
+#include <QImage>
 
 QT_BEGIN_NAMESPACE
 

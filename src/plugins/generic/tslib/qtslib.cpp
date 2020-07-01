@@ -29,7 +29,7 @@
 #include <QPoint>
 #include <QWindowSystemInterface>
 
-#include <Qt>
+#include <qnamespace.h>
 
 #include <errno.h>
 #include <tslib.h>

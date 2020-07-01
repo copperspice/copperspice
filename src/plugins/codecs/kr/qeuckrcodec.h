@@ -49,8 +49,8 @@
 #ifndef QEUCKRCODEC_H
 #define QEUCKRCODEC_H
 
-#include <QtCore/qtextcodec.h>
-#include <QtCore/qlist.h>
+#include <qtextcodec.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 

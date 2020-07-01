@@ -24,8 +24,8 @@
 #ifndef QSCRIPTVALUEITERATOR_H
 #define QSCRIPTVALUEITERATOR_H
 
-#include <QtScript/qscriptvalue.h>
-#include <QtCore/qscopedpointer.h>
+#include <qscriptvalue.h>
+#include <qscopedpointer.h>
 #include <qstringfwd.h>
 
 class QScriptString;

@@ -25,11 +25,11 @@
 #define QNamespaceSupport_P_H
 
 #include <qnamepool_p.h>
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QHash>
-#include <QtCore/QSet>
-#include <QtCore/QStack>
-#include <QtCore/QXmlStreamNamespaceDeclarations>
+#include <QExplicitlySharedDataPointer>
+#include <QHash>
+#include <QSet>
+#include <QStack>
+#include <QXmlStreamNamespaceDeclarations>
 
 QT_BEGIN_NAMESPACE
 

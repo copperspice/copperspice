@@ -37,7 +37,7 @@
 #include <qxsdschema_p.h>
 #include <qxsdschemachecker_p.h>
 #include <qxsdsimpletype_p.h>
-#include <QtCore/QExplicitlySharedDataPointer>
+#include <QExplicitlySharedDataPointer>
 
 QT_BEGIN_NAMESPACE
 

@@ -20,7 +20,7 @@
 #ifndef QWEBKITGLOBAL_H
 #define QWEBKITGLOBAL_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #define QTWEBKIT_VERSION_STR "2.2.4"
 // QTWEBKIT_VERSION is (major << 16) + (minor << 8) + patch. Similar to Qt.

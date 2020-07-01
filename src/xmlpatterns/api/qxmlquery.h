@@ -24,10 +24,10 @@
 #ifndef QXMLQUERY_H
 #define QXMLQUERY_H
 
-#include <QtCore/QUrl>
-#include <QtXmlPatterns/QAbstractXmlNodeModel>
-#include <QtXmlPatterns/QAbstractXmlReceiver>
-#include <QtXmlPatterns/QXmlNamePool>
+#include <QUrl>
+#include <QAbstractXmlNodeModel>
+#include <QAbstractXmlReceiver>
+#include <QXmlNamePool>
 
 QT_BEGIN_NAMESPACE
 

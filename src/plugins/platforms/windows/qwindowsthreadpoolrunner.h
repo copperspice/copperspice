@@ -24,10 +24,10 @@
 #ifndef QWINDOWSTHREADPOOLRUNNER_H
 #define QWINDOWSTHREADPOOLRUNNER_H
 
-#include <QtCore/QMutex>
-#include <QtCore/QRunnable>
-#include <QtCore/QThreadPool>
-#include <QtCore/QWaitCondition>
+#include <QMutex>
+#include <QRunnable>
+#include <QThreadPool>
+#include <QWaitCondition>
 
 class QWindowsThreadPoolRunner
 {

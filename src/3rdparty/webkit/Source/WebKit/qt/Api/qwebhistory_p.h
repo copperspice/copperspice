@@ -22,8 +22,8 @@
 
 #include "BackForwardListImpl.h"
 #include "HistoryItem.h"
-#include <QtCore/qglobal.h>
-#include <QtCore/qshareddata.h>
+#include <qglobal.h>
+#include <qshareddata.h>
 
 class QWebPagePrivate;
 

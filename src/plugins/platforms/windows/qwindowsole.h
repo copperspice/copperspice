@@ -26,9 +26,9 @@
 
 #include "qtwindows_additional.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QPointer>
-#include <QtCore/QVector>
+#include <QMap>
+#include <QPointer>
+#include <QVector>
 
 #include <objidl.h>
 

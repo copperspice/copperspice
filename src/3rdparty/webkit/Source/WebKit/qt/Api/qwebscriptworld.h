@@ -20,8 +20,8 @@
 #ifndef QWebScriptWorld_h_
 #define QWebScriptWorld_h_
 
-#include <QtCore/qurl.h>
-#include <QtCore/qshareddata.h>
+#include <qurl.h>
+#include <qshareddata.h>
 
 #include "qwebkitglobal.h"
 

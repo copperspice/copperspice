@@ -27,10 +27,10 @@
 #include "directshowglobal.h"
 #include "directshowiosource.h"
 
-#include <QtCore/qcoreapplication.h>
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qiodevice.h>
-#include <QtCore/qthread.h>
+#include <qcoreapplication.h>
+#include <qcoreevent.h>
+#include <qiodevice.h>
+#include <qthread.h>
 
 class DirectShowSampleRequest
 {

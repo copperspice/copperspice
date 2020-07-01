@@ -26,8 +26,8 @@
 #ifndef QGB18030CODEC_H
 #define QGB18030CODEC_H
 
-#include <QtCore/qtextcodec.h>
-#include <QtCore/qlist.h>
+#include <qtextcodec.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 

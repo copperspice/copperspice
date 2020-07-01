@@ -20,7 +20,7 @@
 #define _WEBDATABASE_P_H_
 
 #include <QString>
-#include <QtCore/qshareddata.h>
+#include <qshareddata.h>
 
 #include "PlatformString.h"
 #include "SecurityOrigin.h"

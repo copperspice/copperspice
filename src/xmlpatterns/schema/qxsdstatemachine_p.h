@@ -25,9 +25,9 @@
 #define QXsdStateMachine_P_H
 
 #include <qnamepool_p.h>
-#include <QtCore/QHash>
-#include <QtCore/QSet>
-#include <QtCore/QTextStream>
+#include <QHash>
+#include <QSet>
+#include <QTextStream>
 
 class QIODevice;
 

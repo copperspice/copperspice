@@ -17,12 +17,12 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 
 #ifndef qwebkitversion_h
 #define qwebkitversion_h
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 #include "qwebkitglobal.h"
 
 QWEBKIT_EXPORT QString qWebKitVersion();

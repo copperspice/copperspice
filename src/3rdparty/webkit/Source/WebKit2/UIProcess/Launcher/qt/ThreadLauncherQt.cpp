@@ -38,7 +38,7 @@
 #include <QLocalServer>
 #include <QProcess>
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #include <sys/resource.h>
 #include <unistd.h>

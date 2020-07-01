@@ -24,7 +24,7 @@
 #ifndef QTGAHANDLER_H
 #define QTGAHANDLER_H
 
-#include <QtGui/QImageIOHandler>
+#include <QImageIOHandler>
 
 QT_BEGIN_NAMESPACE
 

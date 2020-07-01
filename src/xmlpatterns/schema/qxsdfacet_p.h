@@ -28,7 +28,7 @@
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
 #include <qxsdassertion_p.h>
-#include <QtCore/QList>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 

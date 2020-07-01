@@ -24,9 +24,9 @@
 #ifndef QSCRIPTCONTEXTINFO_H
 #define QSCRIPTCONTEXTINFO_H
 
-#include <QtCore/qlist.h>
-#include <QtCore/qstringlist.h>
-#include <QtCore/qsharedpointer.h>
+#include <qlist.h>
+#include <qstringlist.h>
+#include <qsharedpointer.h>
 
 class QDataStream;
 class QScriptContext;

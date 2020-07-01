@@ -28,7 +28,7 @@
 
 #include "ScrollbarTheme.h"
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 QT_BEGIN_NAMESPACE
 class QStyle;

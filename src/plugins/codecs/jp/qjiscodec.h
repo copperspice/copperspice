@@ -54,8 +54,8 @@
 #define QJISCODEC_H
 
 #include "qjpunicode.h"
-#include <QtCore/qtextcodec.h>
-#include <QtCore/qlist.h>
+#include <qtextcodec.h>
+#include <qlist.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,7 +23,7 @@
 
 #include <qppdprintdevice.h>
 
-// emerald    #include <QtCore/QMimeDatabase>
+// emerald    #include <QMimeDatabase>
 
 #include <qdebug.h>
 #include <qstringlist.h>

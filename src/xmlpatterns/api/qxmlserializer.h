@@ -24,7 +24,7 @@
 #ifndef QXMLSERIALIZER_H
 #define QXMLSERIALIZER_H
 
-#include <QtXmlPatterns/QAbstractXmlReceiver>
+#include <QAbstractXmlReceiver>
 
 QT_BEGIN_NAMESPACE
 

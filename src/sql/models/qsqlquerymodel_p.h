@@ -25,12 +25,12 @@
 #define QSQLQUERYMODEL_P_H
 
 #include <qabstractitemmodel_p.h>
-#include <QtSql/qsqlerror.h>
-#include <QtSql/qsqlquery.h>
-#include <QtSql/qsqlrecord.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/qvector.h>
+#include <qsqlerror.h>
+#include <qsqlquery.h>
+#include <qsqlrecord.h>
+#include <qhash.h>
+#include <qvarlengtharray.h>
+#include <qvector.h>
 
 
 class QSqlQueryModelPrivate: public QAbstractItemModelPrivate

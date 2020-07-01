@@ -24,7 +24,7 @@
 #ifndef QSCRIPTSYNTAXCHECKER_P_H
 #define QSCRIPTSYNTAXCHECKER_P_H
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 #include "qscriptgrammar_p.h"
 
 QT_BEGIN_NAMESPACE

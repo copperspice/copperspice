@@ -24,8 +24,8 @@
 #ifndef QSIMPLEXMLNODEMODEL_H
 #define QSIMPLEXMLNODEMODEL_H
 
-#include <QtXmlPatterns/QAbstractXmlNodeModel>
-#include <QtXmlPatterns/QXmlQuery>
+#include <QAbstractXmlNodeModel>
+#include <QXmlQuery>
 
 QT_BEGIN_NAMESPACE
 

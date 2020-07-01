@@ -32,16 +32,16 @@
 #include "GraphicsContext.h"
 #include "IntRect.h"
 #include "TiledBackingStore.h"
-#include <QtCore/qmetaobject.h>
-#include <QtCore/qsharedpointer.h>
-#include <QtCore/qtimer.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qgraphicsscene.h>
-#include <QtGui/qgraphicssceneevent.h>
-#include <QtGui/qgraphicsview.h>
-#include <QtGui/qpixmapcache.h>
-#include <QtGui/qscrollbar.h>
-#include <QtGui/qstyleoption.h>
+#include <qmetaobject.h>
+#include <qsharedpointer.h>
+#include <qtimer.h>
+#include <qapplication.h>
+#include <qgraphicsscene.h>
+#include <qgraphicssceneevent.h>
+#include <qgraphicsview.h>
+#include <qpixmapcache.h>
+#include <qscrollbar.h>
+#include <qstyleoption.h>
 
 #include <Settings.h>
 

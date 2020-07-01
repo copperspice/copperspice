@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <QtGui/QImageIOHandler>
-#include <QtCore/QDebug>
+#include <QImageIOHandler>
+#include <QDebug>
 
 #ifndef QT_NO_IMAGEFORMATPLUGIN
 

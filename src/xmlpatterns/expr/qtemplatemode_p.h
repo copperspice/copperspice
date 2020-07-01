@@ -24,7 +24,7 @@
 #ifndef QTemplateMode_P_H
 #define QTemplateMode_P_H
 
-#include <QtCore/QSharedData>
+#include <QSharedData>
 #include <QXmlName>
 #include <qtemplatepattern_p.h>
 

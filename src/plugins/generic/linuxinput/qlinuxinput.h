@@ -25,7 +25,7 @@
 #define QLINUXINPUT_H
 
 #include <qobject.h>
-#include <Qt>
+#include <qnamespace.h>
 #include <termios.h>
 
 QT_BEGIN_NAMESPACE

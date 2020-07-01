@@ -20,17 +20,17 @@
 
 #include "qdeclarativewebview_p.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <qcoreevent.h>
-#include <QtCore/QFile>
+#include <QFile>
 #include <QtDeclarative/QDeclarativeContext>
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/qdeclarative.h>
-#include <QtGui/QApplication>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPen>
+#include <QApplication>
+#include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QPen>
 #include "qwebelement.h"
 #include "qwebframe.h"
 #include "qwebpage.h"

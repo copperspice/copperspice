@@ -31,7 +31,7 @@
 #include <qxsdsimpletype_p.h>
 #include <qxsduserschematype_p.h>
 #include <qxsdwildcard_p.h>
-#include <QtCore/QSet>
+#include <QSet>
 
 QT_BEGIN_NAMESPACE
 
