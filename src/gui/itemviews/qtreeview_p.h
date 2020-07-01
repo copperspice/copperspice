@@ -25,8 +25,8 @@
 #define QTREEVIEW_P_H
 
 #include <qabstractitemview_p.h>
-#include <QtCore/qvariantanimation.h>
-#include <QtCore/qabstractitemmodel.h>
+#include <qvariantanimation.h>
+#include <qabstractitemmodel.h>
 
 #ifndef QT_NO_TREEVIEW
 

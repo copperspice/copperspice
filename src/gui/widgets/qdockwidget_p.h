@@ -24,7 +24,7 @@
 #ifndef QDockWidget_P_H
 #define QDockWidget_P_H
 
-#include <QtGui/qstyleoption.h>
+#include <qstyleoption.h>
 #include <qwidget_p.h>
 #include <qboxlayout.h>
 #include <qdockwidget.h>

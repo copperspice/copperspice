@@ -24,8 +24,8 @@
 #ifndef QTEXTBROWSER_H
 #define QTEXTBROWSER_H
 
-#include <QtGui/qtextedit.h>
-#include <QtCore/qurl.h>
+#include <qtextedit.h>
+#include <qurl.h>
 
 #ifndef QT_NO_TEXTBROWSER
 

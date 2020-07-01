@@ -24,26 +24,26 @@
 #ifndef QCOMBOBOX_P_H
 #define QCOMBOBOX_P_H
 
-#include <QtGui/qcombobox.h>
+#include <qcombobox.h>
 
 #ifndef QT_NO_COMBOBOX
-#include <QtGui/qabstractslider.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qitemdelegate.h>
-#include <QtGui/qstandarditemmodel.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qlistview.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qstyleoption.h>
+#include <qabstractslider.h>
+#include <qapplication.h>
+#include <qitemdelegate.h>
+#include <qstandarditemmodel.h>
+#include <qlineedit.h>
+#include <qlistview.h>
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
 
-#include <QtCore/qpair.h>
-#include <QtCore/qtimer.h>
+#include <qpair.h>
+#include <qtimer.h>
 #include <qwidget_p.h>
-#include <QtCore/qpointer.h>
-#include <QtGui/qcompleter.h>
-#include <QtGui/qevent.h>
-#include <QtCore/qdebug.h>
+#include <qpointer.h>
+#include <qcompleter.h>
+#include <qevent.h>
+#include <qdebug.h>
 
 #include <limits.h>
 

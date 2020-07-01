@@ -24,13 +24,13 @@
 #ifndef QMOVIE_H
 #define QMOVIE_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 
 #ifndef QT_NO_MOVIE
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qlist.h>
-#include <QtGui/qimagereader.h>
+#include <qbytearray.h>
+#include <qlist.h>
+#include <qimagereader.h>
 
 
 

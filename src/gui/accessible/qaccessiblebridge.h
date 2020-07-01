@@ -24,8 +24,8 @@
 #ifndef QACCESSIBLEBRIDGE_H
 #define QACCESSIBLEBRIDGE_H
 
-#include <QtCore/qplugin.h>
-#include <QtCore/qfactoryinterface.h>
+#include <qplugin.h>
+#include <qfactoryinterface.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 

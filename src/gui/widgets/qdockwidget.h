@@ -24,7 +24,7 @@
 #ifndef QDOCKWIDGET_H
 #define QDOCKWIDGET_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
 
 #ifndef QT_NO_DOCKWIDGET

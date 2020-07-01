@@ -24,8 +24,8 @@
 #ifndef QPRINTPREVIEWWIDGET_H
 #define QPRINTPREVIEWWIDGET_H
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qprinter.h>
+#include <qwidget.h>
+#include <qprinter.h>
 
 #ifndef QT_NO_PRINTPREVIEWWIDGET
 

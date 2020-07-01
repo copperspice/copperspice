@@ -24,16 +24,16 @@
 #ifndef QTEXTDOCUMENTFRAGMENT_P_H
 #define QTEXTDOCUMENTFRAGMENT_P_H
 
-#include <QtGui/qtextdocument.h>
+#include <qtextdocument.h>
 #include <qtexthtmlparser_p.h>
 #include <qtextdocument_p.h>
-#include <QtGui/qtexttable.h>
-#include <QtCore/qatomic.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qpointer.h>
-#include <QtCore/qvarlengtharray.h>
-#include <QtCore/qdatastream.h>
+#include <qtexttable.h>
+#include <qatomic.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qpointer.h>
+#include <qvarlengtharray.h>
+#include <qdatastream.h>
 
 
 class QTextDocumentFragmentPrivate;

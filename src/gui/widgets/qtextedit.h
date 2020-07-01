@@ -24,11 +24,11 @@
 #ifndef QTEXTEDIT_H
 #define QTEXTEDIT_H
 
-#include <QtGui/qabstractscrollarea.h>
-#include <QtGui/qtextdocument.h>
-#include <QtGui/qtextoption.h>
-#include <QtGui/qtextcursor.h>
-#include <QtGui/qtextformat.h>
+#include <qabstractscrollarea.h>
+#include <qtextdocument.h>
+#include <qtextoption.h>
+#include <qtextcursor.h>
+#include <qtextformat.h>
 
 #ifndef QT_NO_TEXTEDIT
 

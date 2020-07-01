@@ -24,8 +24,8 @@
 #ifndef QTEXTOBJECT_P_H
 #define QTEXTOBJECT_P_H
 
-#include <QtGui/qtextobject.h>
-#include <QtGui/qtextdocument.h>
+#include <qtextobject.h>
+#include <qtextdocument.h>
 
 
 

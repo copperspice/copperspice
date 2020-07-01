@@ -24,10 +24,8 @@
 #ifndef QSTRINGLISTMODEL_H
 #define QSTRINGLISTMODEL_H
 
-#include <QtCore/qstringlist.h>
-#include <QtGui/qabstractitemview.h>
-
-
+#include <qstringlist.h>
+#include <qabstractitemview.h>
 
 #ifndef QT_NO_STRINGLISTMODEL
 

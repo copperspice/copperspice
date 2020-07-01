@@ -24,8 +24,8 @@
 #ifndef QPEN_H
 #define QPEN_H
 
-#include <QtGui/qcolor.h>
-#include <QtGui/qbrush.h>
+#include <qcolor.h>
+#include <qbrush.h>
 
 
 

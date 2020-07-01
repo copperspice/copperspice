@@ -24,10 +24,10 @@
 #ifndef QGRAPH_P_H
 #define QGRAPH_P_H
 
-#include <QtCore/QHash>
-#include <QtCore/QQueue>
-#include <QtCore/QString>
-#include <QtCore/QDebug>
+#include <QHash>
+#include <QQueue>
+#include <QString>
+#include <QDebug>
 #include <float.h>
 
 

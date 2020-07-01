@@ -24,9 +24,9 @@
 #ifndef QOUTLINEMAPPER_P_H
 #define QOUTLINEMAPPER_P_H
 
-#include <QtCore/qrect.h>
-#include <QtGui/qtransform.h>
-#include <QtGui/qpainterpath.h>
+#include <qrect.h>
+#include <qtransform.h>
+#include <qpainterpath.h>
 #include <qvector.h>
 
 #include <qrasterdefs_p.h>

@@ -27,9 +27,9 @@
 #include <qglobal.h>
 #ifndef QT_NO_TEXTODFWRITER
 
-#include <QtCore/qdatetime.h>
-#include <QtCore/qfile.h>
-#include <QtCore/qstring.h>
+#include <qdatetime.h>
+#include <qfile.h>
+#include <qstring.h>
 
 class QZipReaderPrivate;
 

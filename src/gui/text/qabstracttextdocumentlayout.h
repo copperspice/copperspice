@@ -24,11 +24,11 @@
 #ifndef QABSTRACTTEXTDOCUMENTLAYOUT_H
 #define QABSTRACTTEXTDOCUMENTLAYOUT_H
 
-#include <QtCore/qobject.h>
-#include <QtGui/qtextlayout.h>
-#include <QtGui/qtextdocument.h>
-#include <QtGui/qtextcursor.h>
-#include <QtGui/qpalette.h>
+#include <qobject.h>
+#include <qtextlayout.h>
+#include <qtextdocument.h>
+#include <qtextcursor.h>
+#include <qpalette.h>
 #include <QTextBlock>
 #include <QScopedPointer>
 

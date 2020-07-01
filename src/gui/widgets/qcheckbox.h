@@ -24,7 +24,7 @@
 #ifndef QCHECKBOX_H
 #define QCHECKBOX_H
 
-#include <QtGui/qabstractbutton.h>
+#include <qabstractbutton.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -24,9 +24,9 @@
 #ifndef QSHORTCUTMAP_P_H
 #define QSHORTCUTMAP_P_H
 
-#include <QtGui/qkeysequence.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qscopedpointer.h>
+#include <qkeysequence.h>
+#include <qvector.h>
+#include <qscopedpointer.h>
 
 
 

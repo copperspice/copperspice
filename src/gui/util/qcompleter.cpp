@@ -25,17 +25,16 @@
 
 #ifndef QT_NO_COMPLETER
 
-#include <QtGui/qscrollbar.h>
-#include <QtGui/qstringlistmodel.h>
-#include <QtGui/qdirmodel.h>
-#include <QtGui/qfilesystemmodel.h>
-#include <QtGui/qheaderview.h>
-#include <QtGui/qlistview.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qheaderview.h>
-#include <QtGui/qdesktopwidget.h>
-#include <QtGui/qlineedit.h>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qdirmodel.h>
+#include <qevent.h>
+#include <qfilesystemmodel.h>
+#include <qheaderview.h>
+#include <qlineedit.h>
+#include <qlistview.h>
+#include <qscrollbar.h>
+#include <qstringlistmodel.h>
 
 QCompletionModel::QCompletionModel(QCompleterPrivate *c, QObject *parent)
    : QAbstractProxyModel(*new QCompletionModelPrivate, parent),

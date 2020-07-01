@@ -24,9 +24,9 @@
 #ifndef QDIRMODEL_H
 #define QDIRMODEL_H
 
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qdir.h>
-#include <QtGui/qfileiconprovider.h>
+#include <qabstractitemmodel.h>
+#include <qdir.h>
+#include <qfileiconprovider.h>
 
 
 

@@ -24,10 +24,10 @@
 #ifndef QLINEEDIT_H
 #define QLINEEDIT_H
 
-#include <QtGui/qframe.h>
-#include <QtGui/qtextcursor.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qmargins.h>
+#include <qframe.h>
+#include <qtextcursor.h>
+#include <qstring.h>
+#include <qmargins.h>
 
 
 #ifndef QT_NO_LINEEDIT

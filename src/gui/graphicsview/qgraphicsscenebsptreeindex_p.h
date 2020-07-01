@@ -24,15 +24,15 @@
 #ifndef QGRAPHICSSCENEBSPTREEINDEX_P_H
 #define QGRAPHICSSCENEBSPTREEINDEX_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
 #include <qgraphicssceneindex_p.h>
 #include <qgraphicsitem_p.h>
 #include <qgraphicsscene_bsp_p.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qlist.h>
+#include <qrect.h>
+#include <qlist.h>
 
 
 

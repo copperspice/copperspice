@@ -26,8 +26,8 @@
 #ifndef QT_NO_STATEMACHINE
 
 #include <qbasicmouseeventtransition_p.h>
-#include <QtCore/qstatemachine.h>
-#include <QtGui/qpainterpath.h>
+#include <qstatemachine.h>
+#include <qpainterpath.h>
 #include <qeventtransition_p.h>
 
 QT_BEGIN_NAMESPACE

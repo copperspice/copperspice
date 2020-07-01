@@ -24,12 +24,12 @@
 #ifndef QGRAPHICSSCENEEVENT_H
 #define QGRAPHICSSCENEEVENT_H
 
-#include <QtCore/qcoreevent.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtCore/qrect.h>
-#include <QtGui/qpolygon.h>
-#include <QtCore/qset.h>
+#include <qcoreevent.h>
+#include <qpoint.h>
+#include <qscopedpointer.h>
+#include <qrect.h>
+#include <qpolygon.h>
+#include <qset.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 

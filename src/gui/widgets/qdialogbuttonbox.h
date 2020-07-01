@@ -24,7 +24,7 @@
 #ifndef QDIALOGBUTTONBOX_H
 #define QDIALOGBUTTONBOX_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
 QT_BEGIN_NAMESPACE
 

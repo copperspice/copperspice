@@ -24,7 +24,7 @@
 #ifndef QXPMHANDLER_P_H
 #define QXPMHANDLER_P_H
 
-#include <QtGui/qimageiohandler.h>
+#include <qimageiohandler.h>
 
 #ifndef QT_NO_IMAGEFORMAT_XPM
 

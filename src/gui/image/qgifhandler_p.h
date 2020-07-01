@@ -24,9 +24,9 @@
 #ifndef QGIFHANDLER_P_H
 #define QGIFHANDLER_P_H
 
-#include <QtGui/qimageiohandler.h>
-#include <QtGui/qimage.h>
-#include <QtCore/qbytearray.h>
+#include <qimageiohandler.h>
+#include <qimage.h>
+#include <qbytearray.h>
 
 
 

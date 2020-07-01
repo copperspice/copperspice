@@ -24,7 +24,7 @@
 #ifndef QKEYEVENTTRANSITION_H
 #define QKEYEVENTTRANSITION_H
 
-#include <QtCore/qeventtransition.h>
+#include <qeventtransition.h>
 
 QT_BEGIN_NAMESPACE
 

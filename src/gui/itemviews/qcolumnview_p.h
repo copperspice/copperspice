@@ -30,11 +30,11 @@
 
 #include <qabstractitemview_p.h>
 
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qpropertyanimation.h>
-#include <QtGui/qabstractitemdelegate.h>
-#include <QtGui/qabstractitemview.h>
-#include <QtGui/qitemdelegate.h>
+#include <qabstractitemmodel.h>
+#include <qpropertyanimation.h>
+#include <qabstractitemdelegate.h>
+#include <qabstractitemview.h>
+#include <qitemdelegate.h>
 #include <qlistview.h>
 #include <qevent.h>
 #include <qscrollbar.h>

@@ -26,7 +26,7 @@
 #ifndef QT_NO_STATEMACHINE
 
 #include <qbasickeyeventtransition_p.h>
-#include <QtCore/qstatemachine.h>
+#include <qstatemachine.h>
 #include <qeventtransition_p.h>
 
 QT_BEGIN_NAMESPACE

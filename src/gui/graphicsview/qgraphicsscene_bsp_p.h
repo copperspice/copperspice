@@ -28,9 +28,9 @@
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-#include <QtCore/qrect.h>
-#include <QtCore/qset.h>
-#include <QtCore/qvector.h>
+#include <qrect.h>
+#include <qset.h>
+#include <qvector.h>
 
 
 class QGraphicsItem;

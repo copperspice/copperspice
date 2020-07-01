@@ -24,15 +24,15 @@
 #ifndef QBRUSH_H
 #define QBRUSH_H
 
-#include <QtCore/qpair.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtGui/qcolor.h>
-#include <QtGui/qmatrix.h>
-#include <QtGui/qtransform.h>
-#include <QtGui/qimage.h>
-#include <QtGui/qpixmap.h>
+#include <qpair.h>
+#include <qpoint.h>
+#include <qvector.h>
+#include <qscopedpointer.h>
+#include <qcolor.h>
+#include <qmatrix.h>
+#include <qtransform.h>
+#include <qimage.h>
+#include <qpixmap.h>
 
 struct QBrushData;
 struct QBrushDataPointerDeleter;

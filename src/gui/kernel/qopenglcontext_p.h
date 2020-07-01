@@ -30,9 +30,9 @@
 #include <qopenglcontext.h>
 #include <qmutex.h>
 
-#include <QtCore/QByteArray>
-#include <QtCore/QHash>
-#include <QtCore/QSet>
+#include <QByteArray>
+#include <QHash>
+#include <QSet>
 
 class QOpenGLFunctions;
 class QOpenGLContext;

@@ -28,11 +28,11 @@
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-#include <QtGui/qmenu.h>
-#include <QtGui/qpixmap.h>
+#include <qmenu.h>
+#include <qpixmap.h>
 #include <qplatform_systemtrayicon.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qpointer.h>
+#include <qstring.h>
+#include <qpointer.h>
 
 class QSystemTrayIconSys;
 class QPlatformSystemTrayIcon;

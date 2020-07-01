@@ -24,10 +24,10 @@
 #ifndef QITEMEDITORFACTORY_H
 #define QITEMEDITORFACTORY_H
 
-#include <QtCore/qmetaobject.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qhash.h>
-#include <QtCore/qvariant.h>
+#include <qmetaobject.h>
+#include <qbytearray.h>
+#include <qhash.h>
+#include <qvariant.h>
 
 
 

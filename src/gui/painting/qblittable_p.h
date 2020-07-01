@@ -24,7 +24,7 @@
 #ifndef QBLITTABLE_P_H
 #define QBLITTABLE_P_H
 
-#include <QtCore/qsize.h>
+#include <qsize.h>
 #include <qpixmap_blitter_p.h>
 
 #ifndef QT_NO_BLITTABLE

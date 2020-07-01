@@ -24,8 +24,8 @@
 #ifndef QGRAPHICSLINEARLAYOUT_H
 #define QGRAPHICSLINEARLAYOUT_H
 
-#include <QtGui/qgraphicsitem.h>
-#include <QtGui/qgraphicslayout.h>
+#include <qgraphicsitem.h>
+#include <qgraphicslayout.h>
 
 
 

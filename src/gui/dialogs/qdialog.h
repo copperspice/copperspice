@@ -24,7 +24,7 @@
 #ifndef QDIALOG_H
 #define QDIALOG_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
 QT_BEGIN_NAMESPACE
 

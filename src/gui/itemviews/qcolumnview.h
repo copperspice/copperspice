@@ -24,7 +24,7 @@
 #ifndef QCOLUMNVIEW_H
 #define QCOLUMNVIEW_H
 
-#include <QtGui/qabstractitemview.h>
+#include <qabstractitemview.h>
 
 QT_BEGIN_NAMESPACE
 

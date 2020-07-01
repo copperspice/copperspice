@@ -24,8 +24,8 @@
 #ifndef QFONTINFO_H
 #define QFONTINFO_H
 
-#include <QtGui/qfont.h>
-#include <QtCore/qsharedpointer.h>
+#include <qfont.h>
+#include <qsharedpointer.h>
 
 class Q_GUI_EXPORT QFontInfo
 {

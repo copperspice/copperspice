@@ -24,8 +24,8 @@
 #ifndef QPATHCLIPPER_P_H
 #define QPATHCLIPPER_P_H
 
-#include <QtGui/qpainterpath.h>
-#include <QtCore/qlist.h>
+#include <qpainterpath.h>
+#include <qlist.h>
 #include <qbezier_p.h>
 #include <qvector.h>
 

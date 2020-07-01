@@ -24,16 +24,15 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
-#include "qmenu.h"
-#include "qmenubar.h"
-#include "qmenubar_p.h"
-#include "qmacnativewidget_mac.h"
-
-#include <QtCore/QDebug>
-#include <QtGui/QGuiApplication>
-#include <QtGui/QWindow>
+#include <qmenu.h>
+#include <qmenubar.h>
+#include <qmacnativewidget_mac.h>
+#include <qdebug.h>
+#include <qguiapplication.h>
+#include <qwindow.h>
 #include <qplatform_nativeinterface.h>
 
+#include <qmenubar_p.h>
 
 #ifndef QT_NO_MENU
 

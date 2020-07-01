@@ -25,17 +25,17 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include <QtCore/qdebug.h>
-#include <QtCore/qnumeric.h>
+#include <qdebug.h>
+#include <qnumeric.h>
 #include <qgraphicswidget_p.h>
 #include <qgraphicslayoutitem_p.h>
 #include <qgraphicslayout.h>
 #include <qgraphicsscene_p.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qgraphicsscene.h>
-#include <QtGui/qstyleoption.h>
-#include <QtGui/QStyleOptionTitleBar>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <qapplication.h>
+#include <qgraphicsscene.h>
+#include <qstyleoption.h>
+#include <QStyleOptionTitleBar>
+#include <QGraphicsSceneMouseEvent>
 
 
 

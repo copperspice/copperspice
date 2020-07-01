@@ -26,10 +26,10 @@
 
 #include <qgraphicsitem_p.h>
 #include <qgraphicswidget.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qpalette.h>
-#include <QtGui/qsizepolicy.h>
-#include <QtGui/qstyle.h>
+#include <qfont.h>
+#include <qpalette.h>
+#include <qsizepolicy.h>
+#include <qstyle.h>
 
 class QGraphicsLayout;
 class QStyleOptionTitleBar;

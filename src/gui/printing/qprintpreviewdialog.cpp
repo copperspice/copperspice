@@ -27,21 +27,21 @@
 #include <qdialog_p.h>
 #include <qprintdialog.h>
 
-#include <QtGui/qaction.h>
-#include <QtGui/qboxlayout.h>
-#include <QtGui/qcombobox.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qpagesetupdialog.h>
-#include <QtGui/qprinter.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qtoolbutton.h>
-#include <QtGui/qvalidator.h>
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qmainwindow.h>
-#include <QtGui/qtoolbar.h>
-#include <QtGui/qformlayout.h>
-#include <QtCore/QCoreApplication>
+#include <qaction.h>
+#include <qboxlayout.h>
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qpagesetupdialog.h>
+#include <qprinter.h>
+#include <qstyle.h>
+#include <qtoolbutton.h>
+#include <qvalidator.h>
+#include <qfiledialog.h>
+#include <qmainwindow.h>
+#include <qtoolbar.h>
+#include <qformlayout.h>
+#include <QCoreApplication>
 
 
 

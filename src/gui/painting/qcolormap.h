@@ -24,10 +24,10 @@
 #ifndef QCOLORMAP_H
 #define QCOLORMAP_H
 
-#include <QtCore/qatomic.h>
-#include <QtGui/qrgb.h>
-#include <QtCore/qvector.h>
-#include <QtGui/qwindowdefs.h>
+#include <qatomic.h>
+#include <qrgb.h>
+#include <qvector.h>
+#include <qwindowdefs.h>
 
 
 class QColor;

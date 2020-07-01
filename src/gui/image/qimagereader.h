@@ -24,10 +24,10 @@
 #ifndef QIMAGEREADER_H
 #define QIMAGEREADER_H
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qcoreapplication.h>
-#include <QtGui/qimage.h>
-#include <QtGui/qimageiohandler.h>
+#include <qbytearray.h>
+#include <qcoreapplication.h>
+#include <qimage.h>
+#include <qimageiohandler.h>
 
 
 class QColor;

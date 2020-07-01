@@ -24,7 +24,7 @@
 #ifndef QCOMMANDLINKBUTTON_H
 #define QCOMMANDLINKBUTTON_H
 
-#include <QtGui/qpushbutton.h>
+#include <qpushbutton.h>
 
 
 

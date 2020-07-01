@@ -43,12 +43,12 @@
 #include <qshortcutmap_p.h>
 #endif
 
-#include <QtCore/qmutex.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qgraphicsview.h>
-#include <QtGui/qgraphicsproxywidget.h>
-#include <QtGui/qpalette.h>
-#include <QtGui/qstyleoption.h>
+#include <qmutex.h>
+#include <qapplication.h>
+#include <qgraphicsview.h>
+#include <qgraphicsproxywidget.h>
+#include <qpalette.h>
+#include <qstyleoption.h>
 #include <qdebug.h>
 
 

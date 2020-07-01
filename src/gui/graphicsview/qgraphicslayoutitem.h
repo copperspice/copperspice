@@ -24,9 +24,9 @@
 #ifndef QGRAPHICSLAYOUTITEM_H
 #define QGRAPHICSLAYOUTITEM_H
 
-#include <QtCore/qscopedpointer.h>
-#include <QtGui/qsizepolicy.h>
-#include <QtGui/qevent.h>
+#include <qscopedpointer.h>
+#include <qsizepolicy.h>
+#include <qevent.h>
 
 QT_BEGIN_NAMESPACE
 

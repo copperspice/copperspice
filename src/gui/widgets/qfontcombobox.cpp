@@ -32,7 +32,7 @@
 #include <qevent.h>
 #include <qapplication.h>
 #include <qcombobox_p.h>
-#include <QDesktopWidget>
+#include <qdesktopwidget.h>
 #include <qdebug.h>
 
 static QFontDatabase::WritingSystem writingSystemFromScript(QLocale::Script script)

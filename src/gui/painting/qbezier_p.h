@@ -24,13 +24,13 @@
 #ifndef QBEZIER_P_H
 #define QBEZIER_P_H
 
-#include <QtCore/qpoint.h>
-#include <QtCore/qline.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qpair.h>
-#include <QtGui/qtransform.h>
+#include <qpoint.h>
+#include <qline.h>
+#include <qrect.h>
+#include <qvector.h>
+#include <qlist.h>
+#include <qpair.h>
+#include <qtransform.h>
 
 class QPolygonF;
 

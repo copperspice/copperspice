@@ -24,8 +24,8 @@
 #ifndef QMainWindow_H
 #define QMainWindow_H
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qtabwidget.h>
+#include <qwidget.h>
+#include <qtabwidget.h>
 
 #ifndef QT_NO_MAINWINDOW
 

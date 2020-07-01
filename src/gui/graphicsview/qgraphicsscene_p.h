@@ -34,12 +34,12 @@
 #include <qgraphicsview_p.h>
 #include <qgraphicsitem_p.h>
 
-#include <QtCore/qbitarray.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qmap.h>
-#include <QtCore/qset.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qpalette.h>
+#include <qbitarray.h>
+#include <qlist.h>
+#include <qmap.h>
+#include <qset.h>
+#include <qfont.h>
+#include <qpalette.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
 

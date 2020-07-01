@@ -25,8 +25,8 @@
 #include <qgraphicsitem_p.h>
 #include <qgraphicstransform_p.h>
 #include <QDebug>
-#include <QtCore/qmath.h>
-#include <QtCore/qnumeric.h>
+#include <qmath.h>
+#include <qnumeric.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 

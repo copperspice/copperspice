@@ -24,8 +24,8 @@
 #ifndef QGRAPHICSGRIDLAYOUT_H
 #define QGRAPHICSGRIDLAYOUT_H
 
-#include <QtGui/qgraphicsitem.h>
-#include <QtGui/qgraphicslayout.h>
+#include <qgraphicsitem.h>
+#include <qgraphicslayout.h>
 
 
 #if ! defined(QT_NO_GRAPHICSVIEW)

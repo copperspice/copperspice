@@ -29,7 +29,7 @@
 #include <qplatform_theme.h>
 #include <QIconEngine>
 #include <QPalette>
-#include <QtCore/QList>
+#include <QList>
 
 #include <QDir>
 #include <QSettings>

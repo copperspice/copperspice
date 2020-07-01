@@ -23,12 +23,12 @@
 
 #include <qtextdocumentwriter.h>
 
-#include <QtCore/qfile.h>
-#include <QtCore/qbytearray.h>
-#include <QtCore/qfileinfo.h>
-#include <QtCore/qtextcodec.h>
-#include <QtCore/qtextstream.h>
-#include <QtCore/qdebug.h>
+#include <qfile.h>
+#include <qbytearray.h>
+#include <qfileinfo.h>
+#include <qtextcodec.h>
+#include <qtextstream.h>
+#include <qdebug.h>
 #include <qtextdocument.h>
 #include <qtextdocumentfragment.h>
 

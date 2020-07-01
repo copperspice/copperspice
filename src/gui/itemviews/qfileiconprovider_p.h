@@ -24,9 +24,9 @@
 #ifndef QFILEICONPROVIDER_P_H
 #define QFILEICONPROVIDER_P_H
 
-#include <QtCore/qstring.h>
-#include <QtGui/qicon.h>
-#include <QtGui/qstyle.h>
+#include <qstring.h>
+#include <qicon.h>
+#include <qstyle.h>
 
 class QFileInfo;
 class QFileIconProvider;

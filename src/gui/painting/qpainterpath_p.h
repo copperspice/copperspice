@@ -24,10 +24,10 @@
 #ifndef QPAINTERPATH_P_H
 #define QPAINTERPATH_P_H
 
-#include <QtGui/qpainterpath.h>
-#include <QtGui/qregion.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qvarlengtharray.h>
+#include <qpainterpath.h>
+#include <qregion.h>
+#include <qlist.h>
+#include <qvarlengtharray.h>
 
 #include <qdebug.h>
 #include <qvectorpath_p.h>

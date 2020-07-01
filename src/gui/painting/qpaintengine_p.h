@@ -24,9 +24,9 @@
 #ifndef QPAINTENGINE_P_H
 #define QPAINTENGINE_P_H
 
-#include <QtGui/qpainter.h>
-#include <QtGui/qpaintengine.h>
-#include <QtGui/qregion.h>
+#include <qpainter.h>
+#include <qpaintengine.h>
+#include <qregion.h>
 
 class QPaintDevice;
 

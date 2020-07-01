@@ -24,10 +24,10 @@
 #ifndef QCOMBOBOX_H
 #define QCOMBOBOX_H
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qabstractitemdelegate.h>
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qvariant.h>
+#include <qwidget.h>
+#include <qabstractitemdelegate.h>
+#include <qabstractitemmodel.h>
+#include <qvariant.h>
 
 QT_BEGIN_NAMESPACE
 

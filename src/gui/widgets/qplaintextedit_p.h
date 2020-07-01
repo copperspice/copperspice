@@ -31,7 +31,7 @@
 #include <qtextformat.h>
 #include <qmenu.h>
 #include <qabstracttextdocumentlayout.h>
-#include <QtCore/qbasictimer.h>
+#include <qbasictimer.h>
 #include <qtextcontrol_p.h>
 #include <qplaintextedit.h>
 

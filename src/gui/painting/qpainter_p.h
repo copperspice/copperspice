@@ -24,14 +24,14 @@
 #ifndef QPAINTER_P_H
 #define QPAINTER_P_H
 
-#include <QtGui/qbrush.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qpen.h>
-#include <QtGui/qregion.h>
-#include <QtGui/qmatrix.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qpainterpath.h>
-#include <QtGui/qpaintengine.h>
+#include <qbrush.h>
+#include <qfont.h>
+#include <qpen.h>
+#include <qregion.h>
+#include <qmatrix.h>
+#include <qpainter.h>
+#include <qpainterpath.h>
+#include <qpaintengine.h>
 
 #include <qpen_p.h>
 

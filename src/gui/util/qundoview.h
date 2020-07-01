@@ -24,8 +24,8 @@
 #ifndef QUNDOVIEW_H
 #define QUNDOVIEW_H
 
-#include <QtGui/qlistview.h>
-#include <QtCore/qstring.h>
+#include <qlistview.h>
+#include <qstring.h>
 
 #ifndef QT_NO_UNDOVIEW
 

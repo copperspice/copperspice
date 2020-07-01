@@ -24,11 +24,11 @@
 #ifndef QBASICMOUSEEVENTTRANSITION_P_H
 #define QBASICMOUSEEVENTTRANSITION_P_H
 
-#include <QtCore/qabstracttransition.h>
+#include <qabstracttransition.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <QtGui/qevent.h>
+#include <qevent.h>
 
 QT_BEGIN_NAMESPACE
 

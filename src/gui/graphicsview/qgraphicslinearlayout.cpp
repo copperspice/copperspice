@@ -36,7 +36,7 @@
 
 
 #ifdef QT_DEBUG
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 #endif
 
 class QGraphicsLinearLayoutPrivate : public QGraphicsLayoutPrivate

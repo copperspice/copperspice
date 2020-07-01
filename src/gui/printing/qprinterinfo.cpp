@@ -27,7 +27,7 @@
 
 #ifndef QT_NO_PRINTER
 
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 
 #include <qplatform_printplugin.h>
 #include <qplatform_printersupport.h>

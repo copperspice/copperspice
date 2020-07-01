@@ -24,7 +24,7 @@
 #ifndef QGROUPBOX_H
 #define QGROUPBOX_H
 
-#include <QtGui/qframe.h>
+#include <qframe.h>
 
 #ifndef QT_NO_GROUPBOX
 

@@ -24,8 +24,8 @@
 #ifndef QPRINTENGINE_H
 #define QPRINTENGINE_H
 
-#include <QtCore/qvariant.h>
-#include <QtGui/qprinter.h>
+#include <qvariant.h>
+#include <qprinter.h>
 
 #ifndef QT_NO_PRINTER
 

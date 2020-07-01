@@ -24,11 +24,11 @@
 #ifndef QDOCKAREALAYOUT_P_H
 #define QDOCKAREALAYOUT_P_H
 
-#include <QtCore/qrect.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qvector.h>
-#include <QtGui/qlayout.h>
+#include <qrect.h>
+#include <qpair.h>
+#include <qlist.h>
+#include <qvector.h>
+#include <qlayout.h>
 
 #ifndef QT_NO_DOCKWIDGET
 

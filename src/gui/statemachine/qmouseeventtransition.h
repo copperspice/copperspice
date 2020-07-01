@@ -24,7 +24,7 @@
 #ifndef QMOUSEEVENTTRANSITION_H
 #define QMOUSEEVENTTRANSITION_H
 
-#include <QtCore/qeventtransition.h>
+#include <qeventtransition.h>
 
 QT_BEGIN_NAMESPACE
 

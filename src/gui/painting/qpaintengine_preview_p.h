@@ -24,8 +24,8 @@
 #ifndef QPAINTENGINE_PREVIEW_P_H
 #define QPAINTENGINE_PREVIEW_P_H
 
-#include <QtGui/qpaintengine.h>
-#include <QtGui/qprintengine.h>
+#include <qpaintengine.h>
+#include <qprintengine.h>
 
 #ifndef QT_NO_PRINTPREVIEWWIDGET
 

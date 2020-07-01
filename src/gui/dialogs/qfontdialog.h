@@ -24,9 +24,9 @@
 #ifndef QFONTDIALOG_H
 #define QFONTDIALOG_H
 
-#include <QtGui/qwindowdefs.h>
-#include <QtGui/qdialog.h>
-#include <QtGui/qfont.h>
+#include <qwindowdefs.h>
+#include <qdialog.h>
+#include <qfont.h>
 
 
 

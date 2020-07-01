@@ -24,7 +24,7 @@
 #ifndef QPAINTENGINE_PIC_P_H
 #define QPAINTENGINE_PIC_P_H
 
-#include <QtGui/qpaintengine.h>
+#include <qpaintengine.h>
 
 #ifndef QT_NO_PICTURE
 

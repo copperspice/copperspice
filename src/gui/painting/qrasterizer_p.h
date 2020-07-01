@@ -24,8 +24,8 @@
 #ifndef QRASTERIZER_P_H
 #define QRASTERIZER_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtGui/qpainter.h>
+#include <qglobal.h>
+#include <qpainter.h>
 #include <qdrawhelper_p.h>
 #include <qrasterdefs_p.h>
 

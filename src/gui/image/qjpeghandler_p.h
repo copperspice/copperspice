@@ -24,9 +24,9 @@
 #ifndef QJPEGHANDLER_P_H
 #define QJPEGHANDLER_P_H
 
-#include <QtGui/qimageiohandler.h>
-#include <QtCore/QSize>
-#include <QtCore/QRect>
+#include <qimageiohandler.h>
+#include <QSize>
+#include <QRect>
 
 
 

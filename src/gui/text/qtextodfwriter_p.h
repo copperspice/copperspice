@@ -27,9 +27,9 @@
 #include <qglobal.h>
 #ifndef QT_NO_TEXTODFWRITER
 
-#include <QtCore/QXmlStreamWriter>
-#include <QtCore/qset.h>
-#include <QtCore/qstack.h>
+#include <QXmlStreamWriter>
+#include <qset.h>
+#include <qstack.h>
 #include <qtextdocument_p.h>
 #include <qtextdocumentwriter.h>
 

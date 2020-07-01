@@ -24,9 +24,9 @@
 #ifndef QTEXTDOCUMENTLAYOUT_P_H
 #define QTEXTDOCUMENTLAYOUT_P_H
 
-#include <QtGui/qabstracttextdocumentlayout.h>
-#include <QtGui/qtextoption.h>
-#include <QtGui/qtextobject.h>
+#include <qabstracttextdocumentlayout.h>
+#include <qtextoption.h>
+#include <qtextobject.h>
 
 
 class QTextListFormat;

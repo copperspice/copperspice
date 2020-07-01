@@ -28,11 +28,11 @@
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
-#include <QtCore/qlist.h>
-#include <QtCore/qpair.h>
-#include <QtCore/qstack.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qvector.h>
+#include <qlist.h>
+#include <qpair.h>
+#include <qstack.h>
+#include <qvariant.h>
+#include <qvector.h>
 
 
 

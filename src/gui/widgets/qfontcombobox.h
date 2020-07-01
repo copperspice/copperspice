@@ -24,8 +24,8 @@
 #ifndef QFONTCOMBOBOX_H
 #define QFONTCOMBOBOX_H
 
-#include <QtGui/qcombobox.h>
-#include <QtGui/qfontdatabase.h>
+#include <qcombobox.h>
+#include <qfontdatabase.h>
 
 #ifndef QT_NO_FONTCOMBOBOX
 

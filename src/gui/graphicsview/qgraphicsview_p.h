@@ -28,8 +28,8 @@
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-#include <QtGui/qevent.h>
-#include <QtCore/qcoreapplication.h>
+#include <qevent.h>
+#include <qcoreapplication.h>
 #include <qgraphicssceneevent.h>
 #include <qstyleoption.h>
 #include <qabstractscrollarea_p.h>

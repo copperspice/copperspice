@@ -24,12 +24,12 @@
 #ifndef QICON_P_H
 #define QICON_P_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qsize.h>
-#include <QtCore/qlist.h>
-#include <QtGui/qpixmap.h>
-#include <QtGui/qicon.h>
-#include <QtGui/qiconengine.h>
+#include <qglobal.h>
+#include <qsize.h>
+#include <qlist.h>
+#include <qpixmap.h>
+#include <qicon.h>
+#include <qiconengine.h>
 
 #ifndef QT_NO_ICON
 

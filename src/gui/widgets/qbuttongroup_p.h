@@ -28,9 +28,9 @@
 
 #ifndef QT_NO_BUTTONGROUP
 
-#include <QtCore/qlist.h>
-#include <QtCore/qpointer.h>
-#include <QtCore/qhash.h>
+#include <qlist.h>
+#include <qpointer.h>
+#include <qhash.h>
 
 class QButtonGroupPrivate
 {

@@ -28,8 +28,8 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include <QtCore/QPointer>
-#include <QtCore/QPair>
+#include <qpointer.h>
+#include <qpair.h>
 
 QT_BEGIN_NAMESPACE
 

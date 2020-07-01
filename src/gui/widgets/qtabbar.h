@@ -24,7 +24,7 @@
 #ifndef QTABBAR_H
 #define QTABBAR_H
 
-#include <QtGui/qwidget.h>
+#include <qwidget.h>
 
 
 

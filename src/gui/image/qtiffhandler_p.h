@@ -24,7 +24,7 @@
 #ifndef QTIFFHANDLER_P_H
 #define QTIFFHANDLER_P_H
 
-#include <QtGui/qimageiohandler.h>
+#include <qimageiohandler.h>
 
 QT_BEGIN_NAMESPACE
 

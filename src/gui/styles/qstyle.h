@@ -24,13 +24,13 @@
 #ifndef QSTYLE_H
 #define QSTYLE_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qsize.h>
-#include <QtGui/qicon.h>
-#include <QtGui/qpixmap.h>
-#include <QtGui/qpalette.h>
-#include <QtGui/qsizepolicy.h>
+#include <qobject.h>
+#include <qrect.h>
+#include <qsize.h>
+#include <qicon.h>
+#include <qpixmap.h>
+#include <qpalette.h>
+#include <qsizepolicy.h>
 #include <QScopedPointer>
 
 class QAction;

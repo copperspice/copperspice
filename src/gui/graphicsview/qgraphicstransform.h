@@ -24,10 +24,10 @@
 #ifndef QGRAPHICSTRANSFORM_H
 #define QGRAPHICSTRANSFORM_H
 
-#include <QtCore/QObject>
-#include <QtGui/QVector3D>
-#include <QtGui/QTransform>
-#include <QtGui/QMatrix4x4>
+#include <QObject>
+#include <QVector3D>
+#include <QTransform>
+#include <QMatrix4x4>
 #include <QScopedPointer>
 
 #ifndef QT_NO_GRAPHICSVIEW

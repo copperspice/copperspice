@@ -38,11 +38,12 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qtreeview.h>
+#include <qabstractscrollarea.h>
+#include <qscrollarea.h>
+#include <qscrollbar.h>
+#include <qdebug.h>
+
 #include <qtabbar_p.h>
-#include <QAbstractScrollArea>
-#include <QScrollArea>
-#include <QScrollBar>
-#include <QDebug>
 
 #ifndef QT_NO_ACCESSIBILITY
 

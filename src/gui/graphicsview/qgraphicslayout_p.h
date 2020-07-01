@@ -30,9 +30,9 @@
 
 #include <qgraphicslayout.h>
 #include <qgraphicslayoutitem_p.h>
-#include <QtGui/qstyle.h>
-#include <QtGui/qwidget.h>
-#include <QtGui/qstyleoption.h>
+#include <qstyle.h>
+#include <qwidget.h>
+#include <qstyleoption.h>
 
 class QGraphicsLayoutItem;
 class QGraphicsWidget;

@@ -36,13 +36,13 @@
 #if ! defined(QT_NO_STYLE_GTK)
 
 #include <qcoreevent.h>
-#include <QtCore/QFile>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
-#include <QtCore/QHash>
-#include <QtCore/QUrl>
-#include <QtCore/QLibrary>
-#include <QtCore/QDebug>
+#include <QFile>
+#include <QStringList>
+#include <QTextStream>
+#include <QHash>
+#include <QUrl>
+#include <QLibrary>
+#include <QDebug>
 
 #include <qgtk2painter_p.h>
 
@@ -50,14 +50,14 @@
 #include <qiconloader_p.h>
 #include <qplatform_fontdatabase.h>
 
-#include <QtGui/QMenu>
-#include <QtGui/QStyle>
-#include <QtGui/QApplication>
-#include <QtGui/QPixmapCache>
-#include <QtGui/QStatusBar>
-#include <QtGui/QMenuBar>
-#include <QtGui/QToolBar>
-#include <QtGui/QToolButton>
+#include <QMenu>
+#include <QStyle>
+#include <QApplication>
+#include <QPixmapCache>
+#include <QStatusBar>
+#include <QMenuBar>
+#include <QToolBar>
+#include <QToolButton>
 
 #ifndef Q_OS_DARWIN
 // X11 Includes:

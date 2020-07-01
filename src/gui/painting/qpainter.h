@@ -24,21 +24,21 @@
 #ifndef QPAINTER_H
 #define QPAINTER_H
 
-#include <QtCore/qnamespace.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qscopedpointer.h>
-#include <QtGui/qpixmap.h>
-#include <QtGui/qimage.h>
-#include <QtGui/qtextoption.h>
+#include <qnamespace.h>
+#include <qrect.h>
+#include <qpoint.h>
+#include <qscopedpointer.h>
+#include <qpixmap.h>
+#include <qimage.h>
+#include <qtextoption.h>
 
-#include <QtGui/qpolygon.h>
-#include <QtGui/qpen.h>
-#include <QtGui/qbrush.h>
-#include <QtGui/qmatrix.h>
-#include <QtGui/qtransform.h>
-#include <QtGui/qfontinfo.h>
-#include <QtGui/qfontmetrics.h>
+#include <qpolygon.h>
+#include <qpen.h>
+#include <qbrush.h>
+#include <qmatrix.h>
+#include <qtransform.h>
+#include <qfontinfo.h>
+#include <qfontmetrics.h>
 
 
 class QBrush;

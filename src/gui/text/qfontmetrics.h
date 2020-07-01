@@ -24,8 +24,8 @@
 #ifndef QFONTMETRICS_H
 #define QFONTMETRICS_H
 
-#include <QtGui/qfont.h>
-#include <QtCore/qsharedpointer.h>
+#include <qfont.h>
+#include <qsharedpointer.h>
 #include <qrect.h>
 
 class QTextCodec;

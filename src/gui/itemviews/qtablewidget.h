@@ -24,9 +24,9 @@
 #ifndef QTABLEWIDGET_H
 #define QTABLEWIDGET_H
 
-#include <QtGui/qtableview.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qvector.h>
+#include <qtableview.h>
+#include <qvariant.h>
+#include <qvector.h>
 
 
 

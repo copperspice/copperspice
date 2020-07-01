@@ -28,11 +28,11 @@
 
 #ifndef QT_NO_MAINWINDOW
 
-#include <QtGui/qlayout.h>
-#include <QtGui/qtabbar.h>
-#include <QtCore/qvector.h>
-#include <QtCore/qset.h>
-#include <QtCore/qbasictimer.h>
+#include <qlayout.h>
+#include <qtabbar.h>
+#include <qvector.h>
+#include <qset.h>
+#include <qbasictimer.h>
 #include <qlayoutengine_p.h>
 #include <qwidgetanimator_p.h>
 #include <qdockarealayout_p.h>

@@ -25,14 +25,14 @@
 #define QTEXTEDIT_P_H
 
 #include <qabstractscrollarea_p.h>
-#include <QtGui/qtextdocumentfragment.h>
-#include <QtGui/qscrollbar.h>
-#include <QtGui/qtextcursor.h>
-#include <QtGui/qtextformat.h>
-#include <QtGui/qmenu.h>
-#include <QtGui/qabstracttextdocumentlayout.h>
-#include <QtCore/qbasictimer.h>
-#include <QtCore/qurl.h>
+#include <qtextdocumentfragment.h>
+#include <qscrollbar.h>
+#include <qtextcursor.h>
+#include <qtextformat.h>
+#include <qmenu.h>
+#include <qabstracttextdocumentlayout.h>
+#include <qbasictimer.h>
+#include <qurl.h>
 #include <qtextcontrol_p.h>
 #include <qtextedit.h>
 

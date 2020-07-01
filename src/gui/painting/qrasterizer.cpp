@@ -23,8 +23,8 @@
 
 #include <qrasterizer_p.h>
 
-#include <QPoint>
-#include <QRect>
+#include <qpoint.h>
+#include <qrect.h>
 #include <qvector.h>
 
 #include <qmath_p.h>

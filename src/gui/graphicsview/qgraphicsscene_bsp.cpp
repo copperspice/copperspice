@@ -25,7 +25,7 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include <QtCore/qstring.h>
+#include <qstring.h>
 #include <qgraphicsitem_p.h>
 
 class QGraphicsSceneInsertItemBspTreeVisitor : public QGraphicsSceneBspTreeVisitor

@@ -24,7 +24,7 @@
 #ifndef QIDENTITYPROXYMODEL_H
 #define QIDENTITYPROXYMODEL_H
 
-#include <QtGui/qabstractproxymodel.h>
+#include <qabstractproxymodel.h>
 
 #ifndef QT_NO_IDENTITYPROXYMODEL
 

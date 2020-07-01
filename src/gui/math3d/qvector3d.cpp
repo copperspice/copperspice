@@ -24,9 +24,9 @@
 #include <qvector3d.h>
 #include <qvector2d.h>
 #include <qvector4d.h>
-#include <QtCore/qmath.h>
-#include <QtCore/qvariant.h>
-#include <QtCore/qdebug.h>
+#include <qmath.h>
+#include <qvariant.h>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 

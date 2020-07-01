@@ -26,11 +26,12 @@
 
 #ifndef QT_NO_COMPLETER
 
-#include <qtreeview.h>
 #include <qabstractproxymodel.h>
 #include <qcompleter.h>
 #include <qitemdelegate.h>
 #include <qpainter.h>
+#include <qtreeview.h>
+
 #include <qabstractproxymodel_p.h>
 
 class QCompletionModel;

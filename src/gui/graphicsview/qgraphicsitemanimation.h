@@ -24,7 +24,7 @@
 #ifndef QGRAPHICSITEMANIMATION_H
 #define QGRAPHICSITEMANIMATION_H
 
-#include <QtCore/qobject.h>
+#include <qobject.h>
 #include <qcontainerfwd.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)

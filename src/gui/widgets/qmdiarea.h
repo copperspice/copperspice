@@ -24,8 +24,8 @@
 #ifndef QMDIAREA_H
 #define QMDIAREA_H
 
-#include <QtGui/qabstractscrollarea.h>
-#include <QtGui/qtabwidget.h>
+#include <qabstractscrollarea.h>
+#include <qtabwidget.h>
 
 #ifndef QT_NO_MDIAREA
 

@@ -22,10 +22,10 @@
 ***********************************************************************/
 
 #include <qicohandler_p.h>
-#include <QtCore/qendian.h>
-#include <QtGui/QImage>
-#include <QtCore/QFile>
-#include <QtCore/QBuffer>
+#include <qendian.h>
+#include <QImage>
+#include <QFile>
+#include <QBuffer>
 #include <qvariant.h>
 
 QT_BEGIN_NAMESPACE

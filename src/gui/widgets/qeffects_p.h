@@ -24,7 +24,7 @@
 #ifndef QEFFECTS_P_H
 #define QEFFECTS_P_H
 
-#include <QtCore/qnamespace.h>
+#include <qnamespace.h>
 
 #ifndef QT_NO_EFFECTS
 

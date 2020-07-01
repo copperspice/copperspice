@@ -24,12 +24,12 @@
 #ifndef QSYNTAXHIGHLIGHTER_H
 #define QSYNTAXHIGHLIGHTER_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
 
-#include <QtCore/qobject.h>
-#include <QtGui/qtextobject.h>
+#include <qobject.h>
+#include <qtextobject.h>
 #include <QScopedPointer>
 
 class QTextDocument;

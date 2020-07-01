@@ -24,8 +24,8 @@
 #ifndef QWIDGETRESIZEHANDLER_P_H
 #define QWIDGETRESIZEHANDLER_P_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qpoint.h>
+#include <qobject.h>
+#include <qpoint.h>
 
 #ifndef QT_NO_RESIZEHANDLER
 

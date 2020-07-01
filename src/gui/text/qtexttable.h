@@ -24,9 +24,9 @@
 #ifndef QTEXTTABLE_H
 #define QTEXTTABLE_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qobject.h>
-#include <QtGui/qtextobject.h>
+#include <qglobal.h>
+#include <qobject.h>
+#include <qtextobject.h>
 
 
 QT_BEGIN_NAMESPACE

@@ -24,7 +24,7 @@
 #ifndef QTREEWIDGETITEMITERATOR_P_H
 #define QTREEWIDGETITEMITERATOR_P_H
 
-#include <QtCore/qstack.h>
+#include <qstack.h>
 
 #ifndef QT_NO_TREEWIDGET
 #include <qtreewidgetitemiterator.h>

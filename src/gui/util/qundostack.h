@@ -24,8 +24,8 @@
 #ifndef QUNDOSTACK_H
 #define QUNDOSTACK_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstring.h>
+#include <qobject.h>
+#include <qstring.h>
 #include <QScopedPointer>
 
 

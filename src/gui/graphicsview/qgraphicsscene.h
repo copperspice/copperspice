@@ -24,14 +24,14 @@
 #ifndef QGRAPHICSSCENE_H
 #define QGRAPHICSSCENE_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qpoint.h>
-#include <QtCore/qrect.h>
-#include <QtGui/qbrush.h>
-#include <QtGui/qfont.h>
-#include <QtGui/qtransform.h>
-#include <QtGui/qmatrix.h>
-#include <QtGui/qpen.h>
+#include <qobject.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qbrush.h>
+#include <qfont.h>
+#include <qtransform.h>
+#include <qmatrix.h>
+#include <qpen.h>
 #include <QScopedPointer>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
