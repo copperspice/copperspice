@@ -21,29 +21,37 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
-#include <qwin_gdi_integration.h>
+#include <qwin_session_manager.h>
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+QWindowsSessionManager::QWindowsSessionManager(const QString &id, const QString &key)
+   : QPlatformSessionManager(id, key), m_isActive(false)
+   , m_blockUserInput(false)
+   , m_canceled(false)
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
-
- public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
-};
-
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
-
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
-{
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
-   }
-
-   return nullptr;
 }
+
+bool QWindowsSessionManager::allowsInteraction()
+{
+   m_blockUserInput = false;
+   return true;
+}
+
+bool QWindowsSessionManager::allowsErrorInteraction()
+{
+   m_blockUserInput = false;
+   return true;
+}
+
+void QWindowsSessionManager::release()
+{
+   if (m_isActive) {
+      m_blockUserInput = true;
+   }
+}
+
+void QWindowsSessionManager::cancel()
+{
+   m_canceled = true;
+}
+
 

@@ -27,48 +27,54 @@
 #include <qglobal.h>
 #include <algorithm>
 
-/* A simple, non-shared array. */
+// simple, non-shared array
 
 template <class T>
 class Array
 {
-   Q_DISABLE_COPY(Array)
-
  public:
    enum { initialSize = 5 };
 
-   typedef T *const_iterator;
+   using const_iterator = T*;
 
-   explicit Array(size_t size = 0) : data(0), m_capacity(0), m_size(0) {
+   explicit Array(size_t size = 0)
+      : data(0), m_capacity(0), m_size(0) {
+
       if (size) {
          resize(size);
       }
    }
+
+   Array(const Array &) = delete;
+   Array &operator=(const Array &) = delete;
+
    ~Array() {
       delete [] data;
    }
 
-   T *data;
-   inline size_t size() const          {
+   size_t size() const {
       return m_size;
    }
-   inline const_iterator begin() const {
+
+   const_iterator begin() const {
       return data;
    }
-   inline const_iterator end() const   {
+
+   const_iterator end() const   {
       return data + m_size;
    }
 
-   inline void append(const T &value) {
+   void append(const T &value) {
       const size_t oldSize = m_size;
       resize(m_size + 1);
       data[oldSize] = value;
    }
 
-   inline void resize(size_t size) {
+   void resize(size_t size) {
       if (size > m_size) {
          reserve(size > 1 ? size + size / 2 : size_t(initialSize));
       }
+
       m_size = size;
    }
 
@@ -85,6 +91,8 @@ class Array
          m_capacity = capacity;
       }
    }
+
+   T *data;
 
  private:
    size_t m_capacity;

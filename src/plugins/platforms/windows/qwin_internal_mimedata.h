@@ -21,29 +21,27 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
-#include <qwin_gdi_integration.h>
+#ifndef QWINDOWSINTERNALMIME_H
+#define QWINDOWSINTERNALMIME_H
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <qwin_additional.h>
+#include <qvariant.>
+
+#include <qdnd_p.h>
+
+class QDebug;
+
+// Implementation in qwindowsclipboard.cpp.
+class QWindowsInternalMimeData : public QInternalMimeData
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
-
  public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
+   bool hasFormat_sys(const QString &mimetype) const override;
+   QStringList formats_sys() const override;
+   QVariant retrieveData_sys(const QString &mimetype, QVariant::Type preferredType) const override;
+
+ protected:
+   virtual IDataObject *retrieveDataObject() const = 0;
+   virtual void releaseDataObject(IDataObject *) const {}
 };
 
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
-
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
-{
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
-   }
-
-   return nullptr;
-}
-
+#endif

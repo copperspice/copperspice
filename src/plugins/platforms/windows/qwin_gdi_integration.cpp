@@ -21,29 +21,41 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
 #include <qwin_gdi_integration.h>
+#include <qwin_context.h>
+#include <qwin_backingstore.h>
+#include <qwin_gdi_nativeinterface.h>
+#include <qdebug.h>
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <qpixmap_raster_p.h>
+
+class QWindowsGdiIntegrationPrivate
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
-
  public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
+   QWindowsGdiNativeInterface m_nativeInterface;
 };
 
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
-
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
+QWindowsGdiIntegration::QWindowsGdiIntegration(const QStringList &paramList)
+   : QWindowsIntegration(paramList), d(new QWindowsGdiIntegrationPrivate)
 {
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
-   }
+}
 
-   return nullptr;
+QWindowsGdiIntegration::~QWindowsGdiIntegration()
+{
+}
+
+QPlatformNativeInterface *QWindowsGdiIntegration::nativeInterface() const
+{
+   return &d->m_nativeInterface;
+}
+
+QPlatformPixmap *QWindowsGdiIntegration::createPlatformPixmap(QPlatformPixmap::PixelType type) const
+{
+   return new QRasterPlatformPixmap(type);
+}
+
+QPlatformBackingStore *QWindowsGdiIntegration::createPlatformBackingStore(QWindow *window) const
+{
+   return new QWindowsBackingStore(window);
 }
 

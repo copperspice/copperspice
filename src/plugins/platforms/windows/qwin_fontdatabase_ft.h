@@ -21,29 +21,27 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
-#include <qwin_gdi_integration.h>
+#ifndef QWINDOWSFONTDATABASE_FT_H
+#define QWINDOWSFONTDATABASE_FT_H
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <qbasicfontdatabase_p.h>
+#include <qsharedpointer.h>
+#include <qwin_additional.h>
+
+class QWindowsFontDatabaseFT : public QBasicFontDatabase
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
-
  public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
+   void populateFontDatabase() override;
+   void populateFamily(const QString &familyName) override;
+   QFontEngine *fontEngine(const QFontDef &fontDef, void *handle) override;
+   QFontEngine *fontEngine(const QByteArray &fontData, qreal pixelSize,
+      QFont::HintingPreference hintingPreference) override;
+
+   QStringList fallbacksForFamily(const QString &family, QFont::Style style,
+      QFont::StyleHint styleHint, QChar::Script script) const override;
+
+   QString fontDir() const override;
+   QFont defaultFont() const override;
 };
 
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
-
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
-{
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
-   }
-
-   return nullptr;
-}
-
+#endif

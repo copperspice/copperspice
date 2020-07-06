@@ -21,29 +21,39 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
-#include <qwin_gdi_integration.h>
+#ifndef QWINDOWSBACKINGSTORE_H
+#define QWINDOWSBACKINGSTORE_H
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <qwin_additional.h>
+#include <qplatform_backingstore.h>
+#include <qscopedpointer.h>
+
+class QWindowsWindow;
+class QWindowsNativeImage;
+
+class QWindowsBackingStore : public QPlatformBackingStore
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
+   Q_DISABLE_COPY(QWindowsBackingStore)
 
  public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
+   QWindowsBackingStore(QWindow *window);
+   ~QWindowsBackingStore();
+
+   QPaintDevice *paintDevice() override;
+   void flush(QWindow *window, const QRegion &region, const QPoint &offset) override;
+   void resize(const QSize &size, const QRegion &r) override;
+   bool scroll(const QRegion &area, int dx, int dy) override;
+   void beginPaint(const QRegion &) override;
+
+   HDC getDC() const;
+
+#ifndef QT_NO_OPENGL
+   QImage toImage() const override;
+#endif
+
+ private:
+   QScopedPointer<QWindowsNativeImage> m_image;
+   bool m_alphaNeedsFill;
 };
 
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
-
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
-{
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
-   }
-
-   return nullptr;
-}
-
+#endif

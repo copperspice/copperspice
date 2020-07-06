@@ -21,29 +21,17 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
-#include <qwin_gdi_integration.h>
+#ifndef QWINDOWSGDINATIVEINTERFACE_H
+#define QWINDOWSGDINATIVEINTERFACE_H
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <qwin_nativeinterface.h>
+
+class QWindowsGdiNativeInterface : public QWindowsNativeInterface
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
+   CS_OBJECT(QWindowsGdiNativeInterface)
 
  public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
+   void *nativeResourceForBackingStore(const QByteArray &resource, QBackingStore *bs) override;
 };
 
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
-
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
-{
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
-   }
-
-   return nullptr;
-}
-
+#endif

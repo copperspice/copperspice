@@ -21,29 +21,25 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
-#include <qwin_gdi_integration.h>
+#ifndef QWINDOWSGDIINTEGRATION_H
+#define QWINDOWSGDIINTEGRATION_H
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <qwin_integration.h>
+
+class QWindowsGdiIntegrationPrivate;
+
+class QWindowsGdiIntegration : public QWindowsIntegration
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
-
  public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
+   explicit QWindowsGdiIntegration(const QStringList &paramList);
+   virtual ~QWindowsGdiIntegration();
+
+   QPlatformNativeInterface *nativeInterface() const override;
+   QPlatformPixmap *createPlatformPixmap(QPlatformPixmap::PixelType type) const override;
+   QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const override;
+
+ private:
+   QScopedPointer<QWindowsGdiIntegrationPrivate> d;
 };
 
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
-
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
-{
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
-   }
-
-   return nullptr;
-}
-
+#endif

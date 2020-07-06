@@ -21,29 +21,27 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
-#include <qwin_gdi_integration.h>
+#ifndef QWINDOWSACCESSIBILITY_H
+#define QWINDOWSACCESSIBILITY_H
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+#ifndef QT_NO_ACCESSIBILITY
+
+#include <qwin_global.h>
+#include <qwin_context.h>
+#include <qplatform_accessibility.h>
+
+#include <oleacc.h>
+
+class QWindowsAccessibility : public QPlatformAccessibility
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
-
- public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
+public:
+    QWindowsAccessibility();
+    static bool handleAccessibleObjectFromWindowRequest(HWND hwnd, WPARAM wParam, LPARAM lParam, LRESULT *lResult);
+    void notifyAccessibilityUpdate(QAccessibleEvent *event) override;
+    static IAccessible *wrap(QAccessibleInterface *acc);
+    static QWindow *windowHelper(const QAccessibleInterface *iface);
 };
 
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
+#endif
 
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
-{
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
-   }
-
-   return nullptr;
-}
-
+#endif

@@ -21,29 +21,47 @@
 *
 ***********************************************************************/
 
-#include <qplatform_integrationplugin.h>
-#include <qstringlist.h>
-#include <qwin_gdi_integration.h>
+#ifndef QWINDOWSNATIVEIMAGE_H
+#define QWINDOWSNATIVEIMAGE_H
 
-class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
+#include <qwin_additional.h>
+#include <qimage.h>
+
+class QWindowsNativeImage
 {
-   CS_OBJECT(QWindowsIntegrationPlugin)
-
-   CS_PLUGIN_IID(QPlatformIntegrationInterface_ID)
-   CS_PLUGIN_KEY("windows")
+   Q_DISABLE_COPY(QWindowsNativeImage)
 
  public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
-};
+   QWindowsNativeImage(int width, int height, QImage::Format format);
 
-CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)
+   ~QWindowsNativeImage();
 
-QPlatformIntegration *QWindowsIntegrationPlugin::create(const QString &system, const QStringList &paramList, int &, char **)
-{
-   if (system.compare(system, "windows", Qt::CaseInsensitive) == 0) {
-      return new QWindowsGdiIntegration(paramList);
+   inline int width() const  {
+      return m_image.width();
+   }
+   inline int height() const {
+      return m_image.height();
    }
 
-   return nullptr;
-}
+   QImage &image() {
+      return m_image;
+   }
+   const QImage &image() const {
+      return m_image;
+   }
 
+   HDC hdc() const {
+      return m_hdc;
+   }
+
+   static QImage::Format systemFormat();
+
+ private:
+   const HDC m_hdc;
+   QImage m_image;
+
+   HBITMAP m_bitmap;
+   HBITMAP m_null_bitmap;
+};
+
+#endif

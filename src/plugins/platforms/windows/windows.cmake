@@ -1,43 +1,44 @@
 list(APPEND PLATFORMS_WIN_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/windows/array.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsbackingstore.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsgdiintegration.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsgdinativeinterface.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowswindow.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsintegration.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowscontext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsscreen.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowskeymapper.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsfontengine.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsfontdatabase.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsmousehandler.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qtwindowsglobal.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qtwindows_additional.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsole.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsmime.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsinternalmimedata.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowscursor.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsinputcontext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowstheme.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsdialoghelpers.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsservices.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsnativeimage.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsnativeinterface.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsglcontext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsopenglcontext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsopengltester.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsthreadpoolrunner.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsclipboard.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsdrag.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsfontdatabase_ft.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowssessionmanager.h
+
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_additional.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_backingstore.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_clipboard.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_context.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_cursor.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_dialoghelpers.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_drag.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_fontdatabase.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_fontdatabase_ft.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_fontengine.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_gdi_integration.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_gdi_nativeinterface.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_gl_context.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_global.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_inputcontext.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_integration.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_internal_mimedata.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_keymapper.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_mime.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_mousehandler.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_nativeimage.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_nativeinterface.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_ole.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_opengl_context.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_opengl_tester.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_screen.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_services.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_session_manager.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_theme.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_threadpoolrunner.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_window.h
 )
 
 list(APPEND PLATFORMS_WIN_OTHER_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/comutils.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsaccessibility.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindows_msaa_accessible.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/events/qwindowsguieventdispatcher_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwin_accessibility.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwin_msaa_accessible.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/windows/events/qwin_gui_eventdispatcher_p.h
 )
 
 if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
@@ -50,38 +51,38 @@ if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
    target_sources(CsGuiWin
       PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/windows/main.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsbackingstore.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsgdiintegration.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsgdinativeinterface.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowswindow.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsintegration.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowscontext.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsscreen.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowskeymapper.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsfontengine.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsfontdatabase.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsmousehandler.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsole.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsmime.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsinternalmimedata.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowscursor.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsinputcontext.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowstheme.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsdialoghelpers.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsservices.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsnativeimage.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsnativeinterface.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsglcontext.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsopengltester.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsclipboard.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsdrag.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowsfontdatabase_ft.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwindowssessionmanager.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_backingstore.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_gdi_integration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_gdi_nativeinterface.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_window.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_integration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_context.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_screen.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_keymapper.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_fontengine.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_fontdatabase.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_mousehandler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_ole.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_mime.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_internal_mimedata.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_cursor.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_inputcontext.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_theme.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_dialoghelpers.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_services.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_nativeimage.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_nativeinterface.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_gl_context.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_opengl_tester.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_clipboard.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_drag.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_fontdatabase_ft.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_session_manager.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/comutils.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindowsaccessibility.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwindows_msaa_accessible.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/windows/events/qwindowsguieventdispatcher.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwin_accessibility.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/accessible/qwin_msaa_accessible.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/windows/events/qwin_gui_eventdispatcher.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/windows/cursors.qrc
       ${CMAKE_CURRENT_BINARY_DIR}/qrc_cursors.cpp
