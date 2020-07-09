@@ -466,6 +466,9 @@ static qint64 cs_internal_convertToNumber(const QVariant &data, bool *ok)
       case QVariant::Char:
         return qint64(data.getData<char>());
 
+      case QVariant::SChar:
+         return qint64(data.getData<signed char>());
+
       case QVariant::UChar:
          return qint64(data.getData<uchar>());
 
@@ -518,9 +521,10 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::ULong:
             case QVariant::LongLong:
             case QVariant::ULongLong:
-            case QVariant::Float:
             case QVariant::Double:
+            case QVariant::Float:
             case QVariant::Char:
+            case QVariant::SChar:
             case QVariant::UChar: {
                bool tmp = cs_internal_convertToNumber(*this, &retval) != 0;
                setValue(tmp);
@@ -543,6 +547,18 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
                QString str = getData<QString>().toLower();
                if (str == QString("0") || str == QString("false") || str.isEmpty()) {
+                  setValue(false);
+               } else {
+                  setValue(true);
+               }
+
+               break;
+            }
+
+            case QVariant::String16: {
+
+               QString16 str = getData<QString16>().toLower();
+               if (str == QString16("0") || str == QString16("false") || str.isEmpty()) {
                   setValue(false);
                } else {
                   setValue(true);
@@ -688,6 +704,34 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                break;
             }
 
+            case QVariant::Int:
+            case QVariant::UInt:
+            case QVariant::Short:
+            case QVariant::UShort:
+            case QVariant::Long:
+            case QVariant::ULong:
+            case QVariant::LongLong:
+            case QVariant::ULongLong:
+            case QVariant::Char:
+            case QVariant::SChar:
+            case QVariant::UChar: {
+               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+               double data  = 0;
+
+               if (retval) {
+                  data = safe_cast<double>(tmp, &retval);
+               }
+
+               setValue(data);
+               break;
+            }
+
+            case QVariant::Float: {
+               double tmp = getData<float>();
+               setValue(tmp);
+               break;
+            }
+
             case QVariant::ByteArray: {
                double tmp = getData<QByteArray>().toDouble();
                setValue(tmp);
@@ -700,30 +744,9 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                break;
             }
 
-            case QVariant::Float: {
-               double tmp = getData<float>();
+            case QVariant::String16: {
+               double tmp = getData<QString16>().toDouble();
                setValue(tmp);
-               break;
-            }
-
-            case QVariant::Int:
-            case QVariant::UInt:
-            case QVariant::Short:
-            case QVariant::UShort:
-            case QVariant::Long:
-            case QVariant::ULong:
-            case QVariant::LongLong:
-            case QVariant::ULongLong:
-            case QVariant::Char:
-            case QVariant::UChar: {
-               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
-               double data  = 0;
-
-               if (retval) {
-                  data = safe_cast<double>(tmp, &retval);
-               }
-
-               setValue(data);
                break;
             }
 
@@ -759,6 +782,34 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                break;
             }
 
+            case QVariant::Int:
+            case QVariant::UInt:
+            case QVariant::Short:
+            case QVariant::UShort:
+            case QVariant::Long:
+            case QVariant::ULong:
+            case QVariant::LongLong:
+            case QVariant::ULongLong:
+            case QVariant::Char:
+            case QVariant::SChar:
+            case QVariant::UChar:  {
+               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+               float data  = 0;
+
+               if (retval) {
+                  data = safe_cast<double>(tmp, &retval);
+               }
+
+               setValue(data);
+               break;
+            }
+
+            case QVariant::Double:  {
+               float tmp = getData<double>();
+               setValue(tmp);
+               break;
+            }
+
             case QVariant::ByteArray: {
                float tmp = getData<QByteArray>().toFloat();
                setValue(tmp);
@@ -771,30 +822,9 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                break;
             }
 
-            case QVariant::Double:  {
-               float tmp = getData<double>();
+            case QVariant::String16:  {
+               float tmp = getData<QString16>().toFloat();
                setValue(tmp);
-               break;
-            }
-
-            case QVariant::Int:
-            case QVariant::UInt:
-            case QVariant::Short:
-            case QVariant::UShort:
-            case QVariant::Long:
-            case QVariant::ULong:
-            case QVariant::LongLong:
-            case QVariant::ULongLong:
-            case QVariant::Char:
-            case QVariant::UChar:  {
-               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
-               float data  = 0;
-
-               if (retval) {
-                  data = safe_cast<double>(tmp, &retval);
-               }
-
-               setValue(data);
                break;
             }
 
@@ -832,6 +862,18 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
          break;
       }
 
+      case QVariant::SChar: {
+         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         signed char data   = 0;
+
+         if (retval) {
+            data = safe_cast<signed char>(tmp, &retval);
+         }
+
+         setValue(data);
+         break;
+      }
+
       case QVariant::UChar: {
          uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
          uchar data   = 0;
@@ -858,7 +900,12 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::Float:
             case QVariant::Double:
             case QVariant::Char:
-            case QVariant::UChar: {
+            case QVariant::SChar:
+            case QVariant::UChar:
+            case QVariant::ByteArray:
+            case QVariant::String8:
+            case QVariant::String16:
+            case QVariant::JsonValue: {
                uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
                QChar32 data = 0;
 
@@ -893,54 +940,6 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                break;
             }
 
-            case QVariant::QChar: {
-               auto tmp = getData<QChar32>();
-
-               if (tmp.isNull()) {
-                  setValue<QByteArray>("");
-               } else {
-                  setValue<QByteArray>(QString(tmp).toUtf8());
-               }
-
-               break;
-            }
-
-            case QVariant::String:
-               setValue<QByteArray>(getData<QString>().toUtf8());
-               break;
-
-            case QVariant::Char: {
-               QByteArray tmp;
-
-               auto ch = getData<char>();
-               if (ch != 0) {
-                  tmp.append(ch);
-               }
-
-               setValue<QByteArray>(tmp);
-               break;
-            }
-
-            case QVariant::UChar: {
-               QByteArray tmp;
-
-               auto ch = getData<unsigned char>();
-               if (ch != 0) {
-                  tmp.append(ch);
-               }
-
-               setValue<QByteArray>(tmp);
-               break;
-            }
-
-            case QVariant::Short:
-               setValue<QByteArray>( QByteArray::number(getData<short>()) );
-               break;
-
-            case QVariant::UShort:
-               setValue<QByteArray>( QByteArray::number(getData<unsigned short>()) );
-               break;
-
             case QVariant::Int:
                setValue<QByteArray>( QByteArray::number(getData<int>()) );
                break;
@@ -973,9 +972,73 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                setValue<QByteArray>( QByteArray::number(getData<float>(), 'g', std::numeric_limits<float>::digits10) );
                break;
 
-            // emerald: may want to add other types
-            // Date, Time, DateTime
-            // StringList, JsonValue
+            case QVariant::Short:
+               setValue<QByteArray>( QByteArray::number(getData<short>()) );
+               break;
+
+            case QVariant::UShort:
+               setValue<QByteArray>( QByteArray::number(getData<unsigned short>()) );
+               break;
+
+            case QVariant::Char: {
+               QByteArray tmp;
+
+               auto ch = getData<char>();
+               if (ch != 0) {
+                  tmp.append(ch);
+               }
+
+               setValue<QByteArray>(tmp);
+               break;
+            }
+
+            case QVariant::QChar: {
+               auto tmp = getData<QChar32>();
+
+               if (tmp.isNull()) {
+                  setValue<QByteArray>("");
+               } else {
+                  setValue<QByteArray>(QString(tmp).toUtf8());
+               }
+
+               break;
+            }
+
+            case QVariant::SChar: {
+               QByteArray tmp;
+
+               auto ch = getData<signed char>();
+               if (ch != 0) {
+                  tmp.append(ch);
+               }
+
+               setValue<QByteArray>(tmp);
+               break;
+            }
+
+            case QVariant::UChar: {
+               QByteArray tmp;
+
+               auto ch = getData<unsigned char>();
+               if (ch != 0) {
+                  tmp.append(ch);
+               }
+
+               setValue<QByteArray>(tmp);
+               break;
+            }
+
+            case QVariant::String:
+               setValue<QByteArray>(getData<QString>().toUtf8());
+               break;
+
+            case QVariant::String16:
+               setValue<QByteArray>(getData<QString16>().toUtf8());
+               break;
+
+
+            // emerald: should these be added
+            // Date, Time, DateTime, StringList, JsonValue
 
             case QVariant::Url:
                setValue<QByteArray>(getData<QUrl>().toEncoded());
@@ -1006,38 +1069,6 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
                break;
             }
-
-            case QVariant::ByteArray:
-               setValue<QString>(QString::fromUtf8(getData<QByteArray>()));
-               break;
-
-            case QVariant::QChar: {
-               auto tmp = getData<QChar32>();
-
-               if (tmp.isNull()) {
-                  setValue<QString>("");
-               } else {
-                  setValue<QString>(tmp);
-               }
-
-               break;
-            }
-
-            case QVariant::Char:
-               setValue<QString>( QChar::fromLatin1(getData<char>()) );
-               break;
-
-            case QVariant::UChar:
-               setValue<QString>( QChar::fromLatin1(getData<unsigned char>()) );
-               break;
-
-            case QVariant::Short:
-               setValue<QString>( QString::number(getData<short>()) );
-               break;
-
-            case QVariant::UShort:
-               setValue<QString>( QString::number(getData<unsigned short>()) );
-               break;
 
             case QVariant::Int:
                setValue<QString>( QString::number(getData<int>()) );
@@ -1071,20 +1102,41 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                setValue<QString>( QString::number(getData<float>(), 'g', std::numeric_limits<float>::digits10) );
                break;
 
-
-#ifndef QT_NO_DATESTRING
-            case QVariant::Date:
-               setValue<QString>(getData<QDate>().toString(Qt::ISODate) );
+            case QVariant::Short:
+               setValue<QString>( QString::number(getData<short>()) );
                break;
 
-            case QVariant::Time:
-               setValue<QString>(getData<QTime>().toString(Qt::ISODate) );
+            case QVariant::UShort:
+               setValue<QString>( QString::number(getData<unsigned short>()) );
                break;
 
-            case QVariant::DateTime:
-               setValue<QString>(getData<QDateTime>().toString(Qt::ISODate) );
+            case QVariant::Char:
+               setValue<QString>( QChar::fromLatin1(getData<char>()) );
                break;
-#endif
+
+            case QVariant::SChar:
+               setValue<QString>( QChar::fromLatin1(getData<signed char>()) );
+               break;
+
+            case QVariant::UChar:
+               setValue<QString>( QChar::fromLatin1(getData<unsigned char>()) );
+               break;
+
+            case QVariant::QChar: {
+               auto tmp = getData<QChar32>();
+
+               if (tmp.isNull()) {
+                  setValue<QString>("");
+               } else {
+                  setValue<QString>(tmp);
+               }
+
+               break;
+            }
+
+            case QVariant::ByteArray:
+               setValue<QString>(QString::fromUtf8(getData<QByteArray>()));
+               break;
 
             case QVariant::StringList: {
                QStringList tmp = getData<QStringList>();
@@ -1095,6 +1147,18 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
                break;
             }
+
+            case QVariant::Date:
+               setValue<QString>(getData<QDate>().toString(Qt::ISODate) );
+               break;
+
+            case QVariant::DateTime:
+               setValue<QString>(getData<QDateTime>().toString(Qt::ISODate) );
+               break;
+
+            case QVariant::Time:
+               setValue<QString>(getData<QTime>().toString(Qt::ISODate) );
+               break;
 
             case QVariant::JsonValue: {
                QJsonValue tmp = getData<QJsonValue>();
@@ -1123,8 +1187,154 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
          break;
       }
 
-      case QVariant::StringList:
-         if (current_userType == QVariant::List) {
+      case QVariant::String16: {
+
+         switch (current_userType) {
+
+            case QVariant::Bool: {
+               bool tmp = getData<bool>();
+
+               if (tmp) {
+                  setValue<QString16>("true");
+               } else {
+                  setValue<QString16>("false");
+               }
+
+               break;
+            }
+
+            case QVariant::Int:
+               setValue<QString16>( QString16::number(getData<int>()) );
+               break;
+
+            case QVariant::UInt:
+               setValue<QString16>( QString16::number(getData<unsigned int>()) );
+               break;
+
+            case QVariant::Long:
+               setValue<QString16>( QString16::number(getData<long>()) );
+               break;
+
+            case QVariant::ULong:
+               setValue<QString16>( QString16::number(getData<unsigned long>()) );
+               break;
+
+            case QVariant::LongLong:
+               setValue<QString16>( QString16::number(getData<long long>()) );
+               break;
+
+            case QVariant::ULongLong:
+               setValue<QString16>( QString16::number(getData<unsigned long long>()) );
+               break;
+
+            case QVariant::Double:
+               setValue<QString16>( QString16::number(getData<double>(), 'g', std::numeric_limits<double>::digits10) );
+               break;
+
+            case QVariant::Float:
+               setValue<QString16>( QString16::number(getData<float>(), 'g', std::numeric_limits<float>::digits10) );
+               break;
+
+            case QVariant::Short:
+               setValue<QString16>( QString16::number(getData<short>()) );
+               break;
+
+            case QVariant::UShort:
+               setValue<QString16>( QString16::number(getData<unsigned short>()) );
+               break;
+
+            case QVariant::Char:
+               setValue<QString16>( QChar::fromLatin1(getData<char>()) );
+               break;
+
+            case QVariant::SChar:
+               setValue<QString16>( QChar::fromLatin1(getData<signed char>()) );
+               break;
+
+            case QVariant::UChar:
+               setValue<QString16>( QChar::fromLatin1(getData<unsigned char>()) );
+               break;
+
+            case QVariant::QChar: {
+               auto tmp = getData<QChar32>();
+
+               if (tmp.isNull()) {
+                  setValue<QString16>("");
+               } else {
+                  setValue<QString16>(tmp);
+               }
+
+               break;
+            }
+
+            case QVariant::ByteArray:
+               setValue<QString16>(QString16::fromUtf8(getData<QByteArray>()));
+               break;
+
+            case QVariant::StringList: {
+               QStringList tmp = getData<QStringList>();
+
+               if (tmp.count() == 1) {
+                  setValue<QString16>(tmp[0].toUtf16());
+               }
+
+               break;
+            }
+
+            case QVariant::Date:
+               setValue<QString16>(getData<QDate>().toString(Qt::ISODate).toUtf16());
+               break;
+
+            case QVariant::DateTime:
+               setValue<QString16>(getData<QDateTime>().toString(Qt::ISODate).toUtf16());
+               break;
+
+            case QVariant::Time:
+               setValue<QString16>(getData<QTime>().toString(Qt::ISODate).toUtf16());
+               break;
+
+            case QVariant::JsonValue: {
+               QJsonValue tmp = getData<QJsonValue>();
+
+               if (tmp.isString())  {
+                  setValue<QString16>(tmp.toString().toUtf16());
+               } else if (! tmp.isNull()) {
+                  retval = false;;
+               }
+
+               break;
+            }
+
+            case QVariant::Url:
+               setValue<QString16>(getData<QUrl>().toString().toUtf16());
+               break;
+
+            case QVariant::Uuid:
+               setValue<QString16>(getData<QUuid>().toString().toUtf16());
+               break;
+
+            default:
+               retval = false;
+         }
+
+         break;
+      }
+
+      case QVariant::StringList: {
+
+         if (current_userType == QVariant::String) {
+            QStringList list;
+            list.append(getData<QString>());
+
+            setValue<QStringList>(list);
+
+         } else if (current_userType == QVariant::String16) {
+            QStringList list;
+            list.append(QString::fromUtf16(getData<QString16>()));
+
+            setValue<QStringList>(list);
+
+         } else if (current_userType == QVariant::List) {
             QList<QVariant> tmp = getData<QList<QVariant>>();
 
             QStringList list;
@@ -1135,18 +1345,13 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
             setValue<QStringList>(list);
 
-         } else if (current_userType == QVariant::String) {
-            QStringList list;
-            list.append(getData<QString>());
-
-            setValue<QStringList>(list);
-
          } else {
             retval = false;
 
          }
 
          break;
+      }
 
       case QVariant::Date: {
          QDate tmp;
@@ -1156,11 +1361,14 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                tmp = getData<QDateTime>().date();
                break;
 
-#ifndef QT_NO_DATESTRING
             case QVariant::String:
                tmp = QDate::fromString(getData<QString>(), Qt::ISODate);
                break;
-#endif
+
+            case QVariant::String16:
+               tmp = QDate::fromString(QString::fromUtf16(getData<QString16>()), Qt::ISODate);
+               break;
+
             default:
                retval = false;
          }
@@ -1177,11 +1385,14 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                tmp = getData<QDateTime>().time();
                break;
 
-#ifndef QT_NO_DATESTRING
             case QVariant::String:
                tmp = QTime::fromString(getData<QString>(), Qt::ISODate);
                break;
-#endif
+
+            case QVariant::String16:
+               tmp = QTime::fromString(QString::fromUtf16(getData<QString16>()), Qt::ISODate);
+               break;
+
             default:
                retval = false;
          }
@@ -1199,11 +1410,13 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                tmp = QDateTime(getData<QDate>());
                break;
 
-#ifndef QT_NO_DATESTRING
             case QVariant::String:
                tmp = QDateTime::fromString(getData<QString>(), Qt::ISODate);
                break;
-#endif
+
+            case QVariant::String16:
+               tmp = QDateTime::fromString(QString::fromUtf16(getData<QString16>()), Qt::ISODate);
+               break;
 
             default:
                retval = false;
@@ -1213,7 +1426,8 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
          return tmp.isValid();
       }
 
-      // next 5
+      // next 5 are Container<QString, QVariant>
+
       case QVariant::List:
 
          if (current_userType == QVariant::StringList) {
@@ -1247,7 +1461,18 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
       case QVariant::Map:
 
-         if (current_userType == QVariant::JsonValue) {
+         if (current_userType == QVariant::Hash) {
+            QVariantHash tmp = getData<QVariantHash>();
+
+            QVariantMap result;
+
+            for (auto iter = tmp.cbegin(); iter != tmp.cend(); ++iter) {
+               result.insert(iter.key(), std::move(iter.value()));
+            }
+
+            setValue<QVariantMap>(result);
+
+         } else if (current_userType == QVariant::JsonValue) {
             QJsonValue tmp = getData<QJsonValue>();
 
             if (! tmp.isObject()) {
@@ -1271,7 +1496,18 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
       case QVariant::Hash:
 
-         if (current_userType == QVariant::JsonValue) {
+         if (current_userType == QVariant::Map) {
+            QVariantMap tmp = getData<QVariantMap>();
+
+            QVariantHash result;
+
+            for (auto iter = tmp.cbegin(); iter != tmp.cend(); ++iter) {
+               result.insert(iter.key(), std::move(iter.value()));
+            }
+
+            setValue<QVariantHash>(result);
+
+         } else if (current_userType == QVariant::JsonValue) {
             QJsonValue tmp = getData<QJsonValue>();
 
             if (! tmp.isObject()) {
@@ -1306,24 +1542,6 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       case QVariant::LineF:
          if (current_userType == QVariant::Line) {
             setValue<QLineF>(getData<QLine>());
-         } else {
-            retval = false;
-         }
-
-         break;
-
-      case QVariant::Point:
-         if (current_userType == QVariant::PointF) {
-            setValue<QPoint>(getData<QPointF>().toPoint());
-         } else {
-            retval = false;
-         }
-
-         break;
-
-      case QVariant::PointF:
-         if (current_userType == QVariant::Point) {
-            setValue<QPointF>(getData<QPoint>());
          } else {
             retval = false;
          }
@@ -1366,10 +1584,46 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
          break;
 
+      case QVariant::Point:
+         if (current_userType == QVariant::PointF) {
+            setValue<QPoint>(getData<QPointF>().toPoint());
+         } else {
+            retval = false;
+         }
+
+         break;
+
+      case QVariant::PointF:
+         if (current_userType == QVariant::Point) {
+            setValue<QPointF>(getData<QPoint>());
+         } else {
+            retval = false;
+         }
+
+         break;
+
+      case QVariant::ModelIndex:
+         if (current_userType == QVariant::PersistentModelIndex) {
+            setValue<QModelIndex>(getData<QPersistentModelIndex>());
+         }
+
+         break;
+
+      case QVariant::PersistentModelIndex:
+         if (current_userType == QVariant::ModelIndex) {
+            setValue<QPersistentModelIndex>(getData<QModelIndex>());
+         }
+
+         break;
+
       case QVariant::Url:
          switch (current_userType) {
             case QVariant::String:
                setValue<QUrl>(QUrl(getData<QString>()));
+               break;
+
+            case QVariant::String16:
+               setValue<QUrl>(QUrl(QString::fromUtf16(getData<QString16>())));
                break;
 
             default:
@@ -1377,6 +1631,23 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
          }
 
          break;
+
+      case QVariant::Uuid:
+         switch (current_userType) {
+            case QVariant::String:
+               setValue<QUuid>(QUuid(getData<QString>()));
+               break;
+
+            case QVariant::String16:
+               setValue<QUuid>(QUuid(QString::fromUtf16(getData<QString16>())));
+               break;
+
+            default:
+               retval = false;
+         }
+
+         break;
+
 
       default:
          retval = false;
