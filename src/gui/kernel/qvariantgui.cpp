@@ -103,6 +103,30 @@ bool QVariantGui::cs_internal_convert(uint current_userType, uint new_userType, 
          break;
       }
 
+      case QVariant::String16: {
+         switch (current_userType) {
+
+#ifndef QT_NO_SHORTCUT
+            case QVariant::KeySequence:
+               self.setValue<QString16>(self.getData<QKeySequence>().toString(QKeySequence::NativeText).toUtf16());
+               break;
+#endif
+
+            case QVariant::Font:
+               self.setValue<QString16>(self.getData<QFont>().toString().toUtf16());
+               break;
+
+            case QVariant::Color:
+               self.setValue<QString16>(self.getData<QColor>().name().toUtf16());
+               break;
+
+            default:
+               break;
+         }
+
+         break;
+      }
+
       case QVariant::Pixmap:
          if (current_userType == QVariant::Image) {
             self.setValue<QPixmap>(QPixmap::fromImage(self.getData<QImage>()));
@@ -144,25 +168,16 @@ bool QVariantGui::cs_internal_convert(uint current_userType, uint new_userType, 
 
          break;
 
-#ifndef QT_NO_SHORTCUT
-      case QVariant::Int:
-         if (current_userType == QVariant::KeySequence) {
-            QKeySequence tmp = self.getData<QKeySequence>();
-
-            if (tmp.isEmpty()) {
-               self.setValue<int>(0);
-            } else {
-               self.setValue<int>(tmp[0]);
-            }
-         }
-
-         break;
-#endif
-
       case QVariant::Font:
          if (current_userType == QVariant::String) {
             QFont tmp;
             tmp.fromString(self.getData<QString>());
+
+            self.setValue<QFont>(tmp);
+
+         } else if (current_userType == QVariant::String16) {
+            QFont tmp;
+            tmp.fromString(QString::fromUtf16(self.getData<QString16>()));
 
             self.setValue<QFont>(tmp);
          }
@@ -170,7 +185,14 @@ bool QVariantGui::cs_internal_convert(uint current_userType, uint new_userType, 
          break;
 
       case QVariant::Color:
-         if (current_userType == QVariant::String) {
+
+         if (current_userType == QVariant::ByteArray) {
+           QColor tmp;
+
+           tmp.setNamedColor(QString::fromLatin1(self.getData<QByteArray>()));
+           self.setValue<QColor>(tmp);
+
+         } else if (current_userType == QVariant::String) {
             QColor tmp;
 
             tmp.setNamedColor(self.getData<QString>());
@@ -178,11 +200,13 @@ bool QVariantGui::cs_internal_convert(uint current_userType, uint new_userType, 
 
             retval = tmp.isValid();
 
-         } else if (current_userType == QVariant::ByteArray) {
-              QColor tmp;
+         } else if (current_userType == QVariant::String16) {
+            QColor tmp;
 
-              tmp.setNamedColor(QString::fromLatin1(self.getData<QByteArray>()));
-              self.setValue<QColor>(tmp);
+            tmp.setNamedColor(QString::fromUtf16(self.getData<QString16>()));
+            self.setValue<QColor>(tmp);
+
+            retval = tmp.isValid();
 
          } else if (current_userType == QVariant::Brush) {
             QBrush tmp = self.getData<QBrush>();
@@ -211,8 +235,8 @@ bool QVariantGui::cs_internal_convert(uint current_userType, uint new_userType, 
                self.setValue<QKeySequence>(self.getData<QString>());
                break;
 
-            case QVariant::Int:
-               self.setValue<QKeySequence>(self.getData<int>());
+            case QVariant::String16:
+               self.setValue<QKeySequence>(QString::fromUtf16(self.getData<QString16>()));
                break;
 
             default:
