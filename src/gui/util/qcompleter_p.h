@@ -152,7 +152,10 @@ class QCompletionEngine
    typedef QMap<QString, QMatchData> CacheItem;
    typedef QMap<QModelIndex, CacheItem> Cache;
 
-   QCompletionEngine(QCompleterPrivate *c) : c(c), curRow(-1), cost(0) { }
+   QCompletionEngine(QCompleterPrivate *obj)
+      : m_completerPrivate(obj), curRow(-1), cost(0)
+   {
+   }
    virtual ~QCompletionEngine() { }
 
    void filter(const QStringList &parts);
@@ -171,7 +174,7 @@ class QCompletionEngine
    }
 
    QMatchData curMatch, historyMatch;
-   QCompleterPrivate *c;
+   QCompleterPrivate *m_completerPrivate;
    QStringList curParts;
    QModelIndex curParent;
    int curRow;
@@ -255,9 +258,11 @@ class QCompletionModel : public QAbstractProxyModel
    QModelIndex mapToSource(const QModelIndex &proxyIndex) const override;
    QModelIndex mapFromSource(const QModelIndex &sourceIndex) const override;
 
-   QCompleterPrivate *c;
+   QCompleterPrivate *m_completerPrivate;
    QScopedPointer<QCompletionEngine> engine;
+
    bool showAll;
+   bool m_completerShutdown;
 
    GUI_CS_SIGNAL_1(Public, void rowsAdded())
    GUI_CS_SIGNAL_2(rowsAdded)

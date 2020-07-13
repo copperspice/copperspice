@@ -36,9 +36,9 @@
 #include <qscrollbar.h>
 #include <qstringlistmodel.h>
 
-QCompletionModel::QCompletionModel(QCompleterPrivate *c, QObject *parent)
-   : QAbstractProxyModel(*new QCompletionModelPrivate, parent),
-     c(c), showAll(false)
+QCompletionModel::QCompletionModel(QCompleterPrivate *obj, QObject *parent)
+   : QAbstractProxyModel(*new QCompletionModelPrivate, parent), m_completerPrivate(obj),
+     showAll(false), m_completerShutdown(false)
 {
    createEngine();
 }
@@ -79,26 +79,26 @@ void QCompletionModel::createEngine()
 {
    bool sortedEngine = false;
 
-   if (c->filterMode == Qt::MatchStartsWith) {
-      switch (c->sorting) {
+   if (m_completerPrivate->filterMode == Qt::MatchStartsWith) {
+      switch (m_completerPrivate->sorting) {
          case QCompleter::UnsortedModel:
             sortedEngine = false;
             break;
 
          case QCompleter::CaseSensitivelySortedModel:
-            sortedEngine = c->cs == Qt::CaseSensitive;
+            sortedEngine = m_completerPrivate->cs == Qt::CaseSensitive;
             break;
 
          case QCompleter::CaseInsensitivelySortedModel:
-            sortedEngine = c->cs == Qt::CaseInsensitive;
+            sortedEngine = m_completerPrivate->cs == Qt::CaseInsensitive;
             break;
       }
    }
 
    if (sortedEngine) {
-      engine.reset(new QSortedModelEngine(c));
+      engine.reset(new QSortedModelEngine(m_completerPrivate));
    } else {
-      engine.reset(new QUnsortedModelEngine(c));
+      engine.reset(new QUnsortedModelEngine(m_completerPrivate));
    }
 }
 
@@ -205,7 +205,7 @@ QModelIndex QCompletionModel::currentIndex(bool sourceIndex) const
       row = engine->curMatch.indices[engine->curRow];
    }
 
-   QModelIndex idx = createIndex(row, c->column);
+   QModelIndex idx = createIndex(row, m_completerPrivate->column);
    if (!sourceIndex) {
       return idx;
    }
@@ -308,7 +308,9 @@ QVariant QCompletionModel::data(const QModelIndex &index, int role) const
 void QCompletionModel::modelDestroyed()
 {
    QAbstractProxyModel::setSourceModel(0); // switch to static empty model
-   invalidate();
+   if (! m_completerShutdown) {
+      invalidate();
+   }
 }
 
 void QCompletionModel::rowsInserted()
@@ -337,7 +339,7 @@ void QCompletionModel::filter(const QStringList &parts)
 
 void QCompletionEngine::filter(const QStringList &parts)
 {
-   const QAbstractItemModel *model = c->proxy->sourceModel();
+   const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
    curParts = parts;
    if (curParts.isEmpty()) {
       curParts.append(QString());
@@ -359,7 +361,8 @@ void QCompletionEngine::filter(const QStringList &parts)
       if (emi == -1) {
          return;
       }
-      parent = model->index(emi, c->column, parent);
+
+      parent = model->index(emi, m_completerPrivate->column, parent);
    }
 
    // Note that we set the curParent to a valid parent, even if we have no matches
@@ -377,8 +380,9 @@ void QCompletionEngine::filter(const QStringList &parts)
 
 QMatchData QCompletionEngine::filterHistory()
 {
-   QAbstractItemModel *source = c->proxy->sourceModel();
-   if (curParts.count() <= 1 || c->proxy->showAll || !source) {
+   QAbstractItemModel *source = m_completerPrivate->proxy->sourceModel();
+
+   if (curParts.count() <= 1 || m_completerPrivate->proxy->showAll || ! source) {
       return QMatchData();
    }
 
@@ -404,8 +408,8 @@ QMatchData QCompletionEngine::filterHistory()
    QMatchData m(im, -1, true);
 
    for (int i = 0; i < source->rowCount(); i++) {
-      QString str = source->index(i, c->column).data().toString();
-      if (str.startsWith(c->prefix, c->cs)
+      QString str = source->index(i, m_completerPrivate->column).data().toString();
+      if (str.startsWith(m_completerPrivate->prefix, m_completerPrivate->cs)
 
 #if ! defined(Q_OS_WIN)
          && ((!isFsModel && ! isDirModel) || QDir::toNativeSeparators(str) != QDir::separator())
@@ -422,7 +426,7 @@ QMatchData QCompletionEngine::filterHistory()
 // Returns a match hint from the cache by chopping the search string
 bool QCompletionEngine::matchHint(QString part, const QModelIndex &parent, QMatchData *hint)
 {
-   if (c->cs == Qt::CaseInsensitive) {
+   if (m_completerPrivate->cs == Qt::CaseInsensitive) {
       part = part.toLower();
    }
 
@@ -442,7 +446,7 @@ bool QCompletionEngine::matchHint(QString part, const QModelIndex &parent, QMatc
 
 bool QCompletionEngine::lookupCache(QString part, const QModelIndex &parent, QMatchData *m)
 {
-   if (c->cs == Qt::CaseInsensitive) {
+   if (m_completerPrivate->cs == Qt::CaseInsensitive) {
       part = part.toLower();
    }
    const CacheItem &map = cache[parent];
@@ -456,7 +460,7 @@ bool QCompletionEngine::lookupCache(QString part, const QModelIndex &parent, QMa
 // When the cache size exceeds 1MB, it clears out about 1/2 of the cache.
 void QCompletionEngine::saveInCache(QString part, const QModelIndex &parent, const QMatchData &m)
 {
-   if (c->filterMode == Qt::MatchEndsWith) {
+   if (m_completerPrivate->filterMode == Qt::MatchEndsWith) {
       return;
    }
    QMatchData old = cache[parent].take(part);
@@ -481,7 +485,7 @@ void QCompletionEngine::saveInCache(QString part, const QModelIndex &parent, con
       }
    }
 
-   if (c->cs == Qt::CaseInsensitive) {
+   if (m_completerPrivate->cs == Qt::CaseInsensitive) {
       part = part.toLower();
    }
    cache[parent][part] = m;
@@ -489,9 +493,9 @@ void QCompletionEngine::saveInCache(QString part, const QModelIndex &parent, con
 
 QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex &parent, Qt::SortOrder order)
 {
-   const QAbstractItemModel *model = c->proxy->sourceModel();
+   const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
 
-   if (c->cs == Qt::CaseInsensitive) {
+   if (m_completerPrivate->cs == Qt::CaseInsensitive) {
       part = part.toLower();
    }
 
@@ -533,20 +537,22 @@ QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex &pare
 
 Qt::SortOrder QSortedModelEngine::sortOrder(const QModelIndex &parent) const
 {
-   const QAbstractItemModel *model = c->proxy->sourceModel();
+   const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
 
    int rowCount = model->rowCount(parent);
    if (rowCount < 2) {
       return Qt::AscendingOrder;
    }
-   QString first = model->data(model->index(0, c->column, parent), c->role).toString();
-   QString last = model->data(model->index(rowCount - 1, c->column, parent), c->role).toString();
-   return QString::compare(first, last, c->cs) <= 0 ? Qt::AscendingOrder : Qt::DescendingOrder;
+
+   QString first = model->data(model->index(0, m_completerPrivate->column, parent), m_completerPrivate->role).toString();
+   QString last  = model->data(model->index(rowCount - 1, m_completerPrivate->column, parent), m_completerPrivate->role).toString();
+
+   return QString::compare(first, last, m_completerPrivate->cs) <= 0 ? Qt::AscendingOrder : Qt::DescendingOrder;
 }
 
 QMatchData QSortedModelEngine::filter(const QString &part, const QModelIndex &parent, int)
 {
-   const QAbstractItemModel *model = c->proxy->sourceModel();
+   const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
 
    QMatchData hint;
    if (lookupCache(part, parent, &hint)) {
@@ -574,9 +580,9 @@ QMatchData QSortedModelEngine::filter(const QString &part, const QModelIndex &pa
 
    while (high - low > 1) {
       probe = (high + low) / 2;
-      probeIndex = model->index(probe, c->column, parent);
-      probeData = model->data(probeIndex, c->role).toString();
-      const int cmp = QString::compare(probeData, part, c->cs);
+      probeIndex = model->index(probe, m_completerPrivate->column, parent);
+      probeData = model->data(probeIndex, m_completerPrivate->role).toString();
+      const int cmp = QString::compare(probeData, part, m_completerPrivate->cs);
       if ((order == Qt::AscendingOrder && cmp >= 0)
          || (order == Qt::DescendingOrder && cmp < 0)) {
          high = probe;
@@ -591,14 +597,14 @@ QMatchData QSortedModelEngine::filter(const QString &part, const QModelIndex &pa
       return QMatchData();
    }
 
-   probeIndex = model->index(order == Qt::AscendingOrder ? low + 1 : high - 1, c->column, parent);
-   probeData = model->data(probeIndex, c->role).toString();
-   if (!probeData.startsWith(part, c->cs)) {
+   probeIndex = model->index(order == Qt::AscendingOrder ? low + 1 : high - 1, m_completerPrivate->column, parent);
+   probeData = model->data(probeIndex, m_completerPrivate->role).toString();
+   if (!probeData.startsWith(part, m_completerPrivate->cs)) {
       saveInCache(part, parent, QMatchData());
       return QMatchData();
    }
 
-   const bool exactMatch = QString::compare(probeData, part, c->cs) == 0;
+   const bool exactMatch = QString::compare(probeData, part, m_completerPrivate->cs) == 0;
    int emi =  exactMatch ? (order == Qt::AscendingOrder ? low + 1 : high - 1) : -1;
 
    int from = 0;
@@ -615,9 +621,9 @@ QMatchData QSortedModelEngine::filter(const QString &part, const QModelIndex &pa
 
    while (high - low > 1) {
       probe = (high + low) / 2;
-      probeIndex = model->index(probe, c->column, parent);
-      probeData = model->data(probeIndex, c->role).toString();
-      const bool startsWith = probeData.startsWith(part, c->cs);
+      probeIndex = model->index(probe, m_completerPrivate->column, parent);
+      probeData = model->data(probeIndex, m_completerPrivate->role).toString();
+      const bool startsWith = probeData.startsWith(part, m_completerPrivate->cs);
       if ((order == Qt::AscendingOrder && startsWith)
          || (order == Qt::DescendingOrder && !startsWith)) {
          low = probe;
@@ -637,29 +643,30 @@ int QUnsortedModelEngine::buildIndices(const QString &str, const QModelIndex &pa
    Q_ASSERT(m->partial);
    Q_ASSERT(n != -1 || m->exactMatchIndex == -1);
 
-   const QAbstractItemModel *model = c->proxy->sourceModel();
+   const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
    int i, count = 0;
 
    for (i = 0; i < indices.count() && count != n; ++i) {
-      QModelIndex idx = model->index(indices[i], c->column, parent);
+      QModelIndex idx = model->index(indices[i], m_completerPrivate->column, parent);
       if (!(model->flags(idx) & Qt::ItemIsSelectable)) {
          continue;
       }
-      QString data = model->data(idx, c->role).toString();
+      QString data = model->data(idx, m_completerPrivate->role).toString();
 
-      switch (c->filterMode) {
+      switch (m_completerPrivate->filterMode) {
          case Qt::MatchStartsWith:
-            if (!data.startsWith(str, c->cs)) {
+            if (! data.startsWith(str, m_completerPrivate->cs)) {
                continue;
             }
             break;
          case Qt::MatchContains:
-            if (!data.contains(str, c->cs)) {
+            if (!data.contains(str, m_completerPrivate->cs)) {
                continue;
             }
             break;
+
          case Qt::MatchEndsWith:
-            if (!data.endsWith(str, c->cs)) {
+            if (!data.endsWith(str, m_completerPrivate->cs)) {
                continue;
             }
             break;
@@ -675,7 +682,8 @@ int QUnsortedModelEngine::buildIndices(const QString &str, const QModelIndex &pa
       }
       m->indices.append(indices[i]);
       ++count;
-      if (m->exactMatchIndex == -1 && QString::compare(data, str, c->cs) == 0) {
+
+      if (m->exactMatchIndex == -1 && QString::compare(data, str, m_completerPrivate->cs) == 0) {
          m->exactMatchIndex = indices[i];
          if (n == -1) {
             return indices[i];
@@ -696,7 +704,7 @@ void QUnsortedModelEngine::filterOnDemand(int n)
 
    Q_ASSERT(n >= -1);
 
-   const QAbstractItemModel *model = c->proxy->sourceModel();
+   const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
    int lastRow = model->rowCount(curParent) - 1;
    QIndexMapper im(curMatch.indices.last() + 1, lastRow);
    int lastIndex = buildIndices(curParts.last(), curParent, n, im, &curMatch);
@@ -712,7 +720,7 @@ QMatchData QUnsortedModelEngine::filter(const QString &part, const QModelIndex &
    QIndexMapper im(v);
    QMatchData m(im, -1, true);
 
-   const QAbstractItemModel *model = c->proxy->sourceModel();
+   const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
    bool foundInCache = lookupCache(part, parent, &m);
 
    if (!foundInCache) {
@@ -963,6 +971,10 @@ QCompleter::QCompleter(const QStringList &list, QObject *parent)
 
 QCompleter::~QCompleter()
 {
+   Q_D(QCompleter);
+
+   // warn QCompletionModel
+   d->proxy->m_completerShutdown = true;
 }
 
 /*!
