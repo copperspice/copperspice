@@ -98,6 +98,7 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
       Version98 = 24,
       Version10 = 25,
       Version11 = 26,
+      Version12 = 27,
    };
 
    explicit QPSQLDriver(QObject *parent = nullptr);

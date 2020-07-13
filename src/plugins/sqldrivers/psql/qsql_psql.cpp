@@ -859,9 +859,12 @@ static QPSQLDriver::Protocol qMakePSQLVersion(int vMaj, int vMin)
       case 11:
          return QPSQLDriver::Version11;
 
+      case 12:
+         return QPSQLDriver::Version12;
+
       default:
-         if (vMaj >= 12) {
-            return QPSQLDriver::Version11;
+         if (vMaj >= 13) {
+            return QPSQLDriver::Version12;
          }
 
          break;
@@ -1309,6 +1312,7 @@ QSqlIndex QPSQLDriver::primaryIndex(const QString &tablename) const
       case QPSQLDriver::Version98:
       case QPSQLDriver::Version10:
       case QPSQLDriver::Version11:
+      case QPSQLDriver::Version12:
          stmt = QString("SELECT pg_attribute.attname, pg_attribute.atttypid::int, "
                "pg_class.relname "
                "FROM pg_attribute, pg_class "
@@ -1424,6 +1428,27 @@ QSqlRecord QPSQLDriver::record(const QString &tablename) const
          stmt = QString("select pg_attribute.attname, pg_attribute.atttypid::int, "
                "pg_attribute.attnotnull, pg_attribute.attlen, pg_attribute.atttypmod, "
                "pg_attrdef.adsrc "
+               "from pg_class, pg_attribute "
+               "left join pg_attrdef on (pg_attrdef.adrelid = "
+               "pg_attribute.attrelid and pg_attrdef.adnum = pg_attribute.attnum) "
+               "where %1 "
+               "and pg_class.relname = '%2' "
+               "and pg_attribute.attnum > 0 "
+               "and pg_attribute.attrelid = pg_class.oid "
+               "and pg_attribute.attisdropped = false "
+               "order by pg_attribute.attnum ");
+
+         if (schema.isEmpty()) {
+            stmt = stmt.formatArg(QString("pg_table_is_visible(pg_class.oid)"));
+         } else
+            stmt = stmt.formatArg(QString::fromLatin1("pg_class.relnamespace = (select oid from "
+                     "pg_namespace where pg_namespace.nspname = '%1')").formatArg(schema));
+         break;
+
+      case QPSQLDriver::Version12:
+         stmt = QString("select pg_attribute.attname, pg_attribute.atttypid::int, "
+               "pg_attribute.attnotnull, pg_attribute.attlen, pg_attribute.atttypmod, "
+               "pg_get_expr(pg_attrdef.adbin, pg_attrdef.adrelid) "
                "from pg_class, pg_attribute "
                "left join pg_attrdef on (pg_attrdef.adrelid = "
                "pg_attribute.attrelid and pg_attrdef.adnum = pg_attribute.attnum) "
