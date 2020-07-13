@@ -73,6 +73,9 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
       DB2
    };
    explicit QSqlDriver(QObject *parent = nullptr);
+   QSqlDriver(const QSqlDriver &) = delete;
+   QSqlDriver &operator=(const QSqlDriver &) = delete;
+
    ~QSqlDriver();
    virtual bool isOpen() const;
    bool isOpenError() const;
@@ -131,7 +134,6 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
    QScopedPointer<QSqlDriverPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QSqlDriver)
 
    friend class QSqlDatabase;
    friend class QSqlResultPrivate;

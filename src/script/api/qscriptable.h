@@ -35,6 +35,9 @@ class Q_SCRIPT_EXPORT QScriptable
 {
  public:
    QScriptable();
+   QScriptable(const QScriptable &) = delete;
+   QScriptable &operator=(const QScriptable &) = delete;
+
    ~QScriptable();
 
    QScriptEngine *engine() const;
@@ -46,7 +49,6 @@ class Q_SCRIPT_EXPORT QScriptable
  private:
    QScopedPointer<QScriptablePrivate> d_ptr;
 
-   Q_DISABLE_COPY(QScriptable)
    Q_DECLARE_PRIVATE(QScriptable)
 };
 

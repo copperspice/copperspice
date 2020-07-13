@@ -48,6 +48,9 @@ class Q_SCRIPT_EXPORT QScriptClass
    };
 
    QScriptClass(QScriptEngine *engine);
+   QScriptClass(const QScriptClass &) = delete;
+   QScriptClass &operator=(const QScriptClass &) = delete;
+
    virtual ~QScriptClass();
 
    QScriptEngine *engine() const;
@@ -81,7 +84,6 @@ class Q_SCRIPT_EXPORT QScriptClass
 
  private:
    Q_DECLARE_PRIVATE(QScriptClass)
-   Q_DISABLE_COPY(QScriptClass)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QScriptClass::QueryFlags)

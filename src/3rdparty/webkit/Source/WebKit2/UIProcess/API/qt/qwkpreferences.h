@@ -55,6 +55,9 @@ public:
         DefaultFixedFontSize
     };
 
+    QWKPreferences(const QWKPreferences &) = delete;
+    QWKPreferences &operator=(const QWKPreferences &) = delete;
+
     static QWKPreferences* sharedPreferences();
 
     void setFontFamily(FontFamily which, const QString& family);
@@ -67,8 +70,6 @@ public:
     int fontSize(FontSize type) const;
 
 private:
-    Q_DISABLE_COPY(QWKPreferences)
-
     QWKPreferences();
     ~QWKPreferences();
 

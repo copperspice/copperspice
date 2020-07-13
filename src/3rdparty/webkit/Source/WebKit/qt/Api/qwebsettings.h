@@ -93,6 +93,9 @@ public:
         DefaultFixedFontSize
     };
 
+    QWebSettings(const QWebSettings &) = delete;
+    QWebSettings &operator=(const QWebSettings &) = delete;
+
     static QWebSettings *globalSettings();
 
     void setFontFamily(FontFamily which, const QString &family);
@@ -149,8 +152,6 @@ public:
 private:
     friend class QWebPagePrivate;
     friend class QWebSettingsPrivate;
-
-    Q_DISABLE_COPY(QWebSettings)
 
     QWebSettings();
     QWebSettings(WebCore::Settings *settings);

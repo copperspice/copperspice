@@ -112,6 +112,9 @@ class Q_SCRIPT_EXPORT QScriptEngine
    QScriptEngine();
 
    explicit QScriptEngine(QObject *parent);
+   QScriptEngine(const QScriptEngine &) = delete;
+   QScriptEngine &operator=(const QScriptEngine &) = delete;
+
    virtual ~QScriptEngine();
 
    QScriptValue globalObject() const;
@@ -218,7 +221,6 @@ class Q_SCRIPT_EXPORT QScriptEngine
 
  private:
    Q_DECLARE_PRIVATE(QScriptEngine)
-   Q_DISABLE_COPY(QScriptEngine)
 
    QScriptValue create(const QVariant &data);
 

@@ -35,8 +35,6 @@ class QScriptValue;
 
 class QScriptValuePrivate : public QSharedData
 {
-   Q_DISABLE_COPY(QScriptValuePrivate)
-
  public:
    inline void *operator new (size_t, QScriptEnginePrivate *);
    inline void operator delete (void *);
@@ -48,6 +46,8 @@ class QScriptValuePrivate : public QSharedData
    };
 
    inline QScriptValuePrivate(QScriptEnginePrivate *);
+   QScriptValuePrivate(const QScriptValuePrivate &) = delete;
+   QScriptValuePrivate &operator=(const QScriptValuePrivate &) = delete;
    inline ~QScriptValuePrivate();
 
    inline void initFrom(JSC::JSValue value);

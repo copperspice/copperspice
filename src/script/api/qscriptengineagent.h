@@ -39,6 +39,9 @@ class Q_SCRIPT_EXPORT QScriptEngineAgent
    };
 
    QScriptEngineAgent(QScriptEngine *engine);
+   QScriptEngineAgent(const QScriptEngineAgent &) = delete;
+   QScriptEngineAgent &operator=(const QScriptEngineAgent &) = delete;
+
    virtual ~QScriptEngineAgent();
 
    virtual void scriptLoad(qint64 id, const QString &program,
@@ -73,7 +76,6 @@ class Q_SCRIPT_EXPORT QScriptEngineAgent
 
  private:
    Q_DECLARE_PRIVATE(QScriptEngineAgent)
-   Q_DISABLE_COPY(QScriptEngineAgent)
 };
 
 

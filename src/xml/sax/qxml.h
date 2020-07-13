@@ -65,6 +65,10 @@ class Q_XML_EXPORT QXmlNamespaceSupport
 {
  public:
    QXmlNamespaceSupport();
+
+   QXmlNamespaceSupport(const QXmlNamespaceSupport &) = delete;
+   QXmlNamespaceSupport &operator=(const QXmlNamespaceSupport &) = delete;
+
    ~QXmlNamespaceSupport();
 
    void setPrefix(const QString &, const QString &);
@@ -84,7 +88,6 @@ class Q_XML_EXPORT QXmlNamespaceSupport
    QXmlNamespaceSupportPrivate *d;
 
    friend class QXmlSimpleReaderPrivate;
-   Q_DISABLE_COPY(QXmlNamespaceSupport)
 };
 
 
@@ -211,6 +214,10 @@ class Q_XML_EXPORT QXmlSimpleReader : public QXmlReader
 {
  public:
    QXmlSimpleReader();
+
+   QXmlSimpleReader(const QXmlSimpleReader &) = delete;
+   QXmlSimpleReader &operator=(const QXmlSimpleReader &) = delete;
+
    virtual ~QXmlSimpleReader();
 
    bool feature(const QString &name, bool *ok = 0) const override;
@@ -240,7 +247,6 @@ class Q_XML_EXPORT QXmlSimpleReader : public QXmlReader
    virtual bool parseContinue();
 
  private:
-   Q_DISABLE_COPY(QXmlSimpleReader)
    Q_DECLARE_PRIVATE(QXmlSimpleReader)
    QScopedPointer<QXmlSimpleReaderPrivate> d_ptr;
 
@@ -347,6 +353,8 @@ class Q_XML_EXPORT QXmlDefaultHandler : public QXmlContentHandler, public QXmlEr
  public:
    QXmlDefaultHandler() { }
    virtual ~QXmlDefaultHandler() { }
+   QXmlDefaultHandler(const QXmlDefaultHandler &) = delete;
+   QXmlDefaultHandler &operator=(const QXmlDefaultHandler &) = delete;
 
    void setDocumentLocator(QXmlLocator *locator) override;
    bool startDocument() override;
@@ -389,7 +397,6 @@ class Q_XML_EXPORT QXmlDefaultHandler : public QXmlContentHandler, public QXmlEr
 
  private:
    QXmlDefaultHandlerPrivate *d;
-   Q_DISABLE_COPY(QXmlDefaultHandler)
 };
 
 // inlines

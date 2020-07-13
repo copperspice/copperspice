@@ -53,6 +53,9 @@ class Q_OPENGL_EXPORT QGLFramebufferObject : public QPaintDevice
    QGLFramebufferObject(const QSize &size, const QGLFramebufferObjectFormat &format);
    QGLFramebufferObject(int width, int height, const QGLFramebufferObjectFormat &format);
 
+   QGLFramebufferObject(const QGLFramebufferObject &) = delete;
+   QGLFramebufferObject &operator=(const QGLFramebufferObject &) = delete;
+
    virtual ~QGLFramebufferObject();
 
    QGLFramebufferObjectFormat format() const;
@@ -90,7 +93,6 @@ class Q_OPENGL_EXPORT QGLFramebufferObject : public QPaintDevice
    }
 
  private:
-   Q_DISABLE_COPY(QGLFramebufferObject)
    QScopedPointer<QGLFramebufferObjectPrivate> d_ptr;
    friend class QGLPaintDevice;
    friend class QGLFBOGLPaintDevice;

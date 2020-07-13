@@ -153,6 +153,8 @@ class Releaser
    enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69, NumerusRules = 0x88 };
 
    Releaser() : m_codec(0) {}
+   Releaser(const Releaser &) = delete;
+   Releaser &operator=(const Releaser &) = delete;
 
    void setCodecName(const QString &codecName) {
       m_codec = QTextCodec::codecForName(codecName);
@@ -168,8 +170,6 @@ class Releaser
    void setNumerusRules(const QByteArray &rules);
 
  private:
-   Q_DISABLE_COPY(Releaser)
-
    // This should reproduce the byte array fetched from the source file, which
    // on turn should be the same as passed to the actual tr(...) calls
    QByteArray originalBytes(const QString &str, bool isUtf8) const;

@@ -162,6 +162,9 @@ class QDeclarativeWebView : public QDeclarativeItem {
 
 public:
     QDeclarativeWebView(QDeclarativeItem *parent = 0);
+    QDeclarativeWebView(const QDeclarativeWebView &) = delete;
+    QDeclarativeWebView &operator=(const QDeclarativeWebView &) = delete;
+
     ~QDeclarativeWebView();
 
     QUrl url() const;
@@ -315,7 +318,7 @@ private :
     void updateContentsSize();
     void init();
     virtual void componentComplete();
-    Q_DISABLE_COPY(QDeclarativeWebView)
+
     QDeclarativeWebViewPrivate* d;
     QMouseEvent* sceneMouseEventToMouseEvent(QGraphicsSceneMouseEvent*);
     QMouseEvent* sceneHoverMoveEventToMouseEvent(QGraphicsSceneHoverEvent*);

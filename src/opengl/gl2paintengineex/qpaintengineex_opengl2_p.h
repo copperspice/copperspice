@@ -76,8 +76,13 @@ class QGL2PaintEngineState : public QPainterState
 class Q_OPENGL_EXPORT QGL2PaintEngineEx : public QPaintEngineEx
 {
    Q_DECLARE_PRIVATE(QGL2PaintEngineEx)
+
  public:
    QGL2PaintEngineEx();
+
+   QGL2PaintEngineEx(const QGL2PaintEngineEx &) = delete;
+   QGL2PaintEngineEx &operator=(const QGL2PaintEngineEx &) = delete;
+
    ~QGL2PaintEngineEx();
 
    bool begin(QPaintDevice *device) override;
@@ -137,9 +142,6 @@ class Q_OPENGL_EXPORT QGL2PaintEngineEx : public QPaintEngineEx
    bool shouldDrawCachedGlyphs(QFontEngine *, const QTransform &) const override;
 
    void setTranslateZ(GLfloat z);
-
- private:
-   Q_DISABLE_COPY(QGL2PaintEngineEx)
 };
 
 class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGLExtensions

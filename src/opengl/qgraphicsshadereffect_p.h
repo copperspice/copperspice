@@ -38,6 +38,9 @@ class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
 
  public:
    QGraphicsShaderEffect(QObject *parent = nullptr);
+   QGraphicsShaderEffect(const QGraphicsShaderEffect &) = delete;
+   QGraphicsShaderEffect &operator=(const QGraphicsShaderEffect &) = delete;
+
    virtual ~QGraphicsShaderEffect();
 
    QByteArray pixelShaderFragment() const;
@@ -50,7 +53,6 @@ class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsShaderEffect)
-   Q_DISABLE_COPY(QGraphicsShaderEffect)
 
    friend class QGLCustomShaderEffectStage;
 };

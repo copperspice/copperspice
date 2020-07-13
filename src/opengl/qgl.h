@@ -213,6 +213,9 @@ class Q_OPENGL_EXPORT QGLContext
 
    QGLContext(const QGLFormat &format, QPaintDevice *device);
    QGLContext(const QGLFormat &format);
+   QGLContext(const QGLContext &) = delete;
+   QGLContext &operator=(const QGLContext &) = delete;
+
    virtual ~QGLContext();
 
    virtual bool create(const QGLContext *shareContext = nullptr);
@@ -325,8 +328,6 @@ class Q_OPENGL_EXPORT QGLContext
    friend class QX11GLSharedContexts;
    friend class QGLContextResourceBase;
    friend class QSGDistanceFieldGlyphCache;
-
-   Q_DISABLE_COPY(QGLContext)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGLContext::BindOptions)
@@ -345,6 +346,9 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
 
    explicit QGLWidget(const QGLFormat &format, QWidget *parent = nullptr,
       const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+   QGLWidget(const QGLWidget &) = delete;
+   QGLWidget &operator=(const QGLWidget &) = delete;
 
    ~QGLWidget();
 
@@ -431,7 +435,6 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
       const QGLWidget *shareWidget = nullptr,
       Qt::WindowFlags f = Qt::WindowFlags());
  private:
-   Q_DISABLE_COPY(QGLWidget)
 
    friend class QGLDrawable;
    friend class QGLPixelBuffer;

@@ -49,6 +49,9 @@ class Q_OPENGL_EXPORT QGLShader : public QObject
 
    explicit QGLShader(QGLShader::ShaderType type, QObject *parent = nullptr);
    QGLShader(QGLShader::ShaderType type, const QGLContext *context, QObject *parent = nullptr);
+   QGLShader(const QGLShader &) = delete;
+   QGLShader &operator=(const QGLShader &) = delete;
+
    virtual ~QGLShader();
 
    QGLShader::ShaderType shaderType() const;
@@ -70,7 +73,6 @@ class Q_OPENGL_EXPORT QGLShader : public QObject
  private:
    friend class QGLShaderProgram;
 
-   Q_DISABLE_COPY(QGLShader)
    Q_DECLARE_PRIVATE(QGLShader)
 
  protected:
@@ -87,6 +89,9 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
  public:
    explicit QGLShaderProgram(QObject *parent = nullptr);
    explicit QGLShaderProgram(const QGLContext *context, QObject *parent = nullptr);
+   QGLShaderProgram(const QGLShaderProgram &) = delete;
+   QGLShaderProgram &operator=(const QGLShaderProgram &) = delete;
+
    virtual ~QGLShaderProgram();
 
    bool addShader(QGLShader *shader);
@@ -280,7 +285,6 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
    OPENGL_CS_SLOT_1(Private, void shaderDestroyed())
    OPENGL_CS_SLOT_2(shaderDestroyed)
 
-   Q_DISABLE_COPY(QGLShaderProgram)
    Q_DECLARE_PRIVATE(QGLShaderProgram)
 
    bool init();

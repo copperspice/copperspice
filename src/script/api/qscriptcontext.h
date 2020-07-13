@@ -45,6 +45,9 @@ class Q_SCRIPT_EXPORT QScriptContext
       URIError
    };
 
+   QScriptContext(const QScriptContext &) = delete;
+   QScriptContext &operator=(const QScriptContext &) = delete;
+
    ~QScriptContext();
 
    QScriptContext *parentContext() const;
@@ -86,7 +89,6 @@ class Q_SCRIPT_EXPORT QScriptContext
    QScriptContextPrivate *d_ptr;
 
    Q_DECLARE_PRIVATE(QScriptContext)
-   Q_DISABLE_COPY(QScriptContext)
 };
 
 CS_DECLARE_METATYPE(QScriptContext)

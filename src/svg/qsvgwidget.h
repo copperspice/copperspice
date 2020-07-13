@@ -41,10 +41,13 @@ class Q_SVG_EXPORT QSvgWidget : public QWidget
  public:
    QSvgWidget(QWidget *parent = nullptr);
    QSvgWidget(const QString &file, QWidget *parent = nullptr);
+
+   QSvgWidget(const QSvgWidget &) = delete;
+   QSvgWidget &operator=(const QSvgWidget &) = delete;
+
    ~QSvgWidget();
 
    QSvgRenderer *renderer() const;
-
    QSize sizeHint() const override;
 
    SVG_CS_SLOT_1(Public, void load(const QString &file))
@@ -57,7 +60,6 @@ class Q_SVG_EXPORT QSvgWidget : public QWidget
    void paintEvent(QPaintEvent *event) override;
 
  private:
-   Q_DISABLE_COPY(QSvgWidget)
    Q_DECLARE_PRIVATE(QSvgWidget)
 };
 

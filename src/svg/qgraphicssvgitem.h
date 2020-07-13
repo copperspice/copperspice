@@ -47,6 +47,9 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
    QGraphicsSvgItem(QGraphicsItem *parentItem = nullptr);
    QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parentItem = nullptr);
 
+   QGraphicsSvgItem(const QGraphicsSvgItem &) = delete;
+   QGraphicsSvgItem &operator=(const QGraphicsSvgItem &) = delete;
+
    void setSharedRenderer(QSvgRenderer *renderer);
    QSvgRenderer *renderer() const;
 
@@ -66,7 +69,6 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
    int type() const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsSvgItem)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsSvgItem)
 
    SVG_CS_SLOT_1(Private, void _q_repaintItem())

@@ -197,6 +197,9 @@ class StylePainter {
 public:
     explicit StylePainter(RenderThemeQt*, const PaintInfo&);
     explicit StylePainter(ScrollbarThemeQt*, GraphicsContext*);
+    StylePainter(const StylePainter &) = delete;
+    StylePainter &operator=(const StylePainter &) = delete;
+
     ~StylePainter();
 
     bool isValid() const { return painter && style; }
@@ -218,7 +221,6 @@ private:
     QBrush oldBrush;
     bool oldAntialiasing;
 
-    Q_DISABLE_COPY(StylePainter)
 };
 
 }

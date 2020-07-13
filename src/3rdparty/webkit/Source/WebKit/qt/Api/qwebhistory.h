@@ -69,8 +69,12 @@ private:
 
 
 class QWebHistoryPrivate;
+
 class QWEBKIT_EXPORT QWebHistory {
-public:
+ public:
+    QWebHistory(const QWebHistory &) = delete;
+    QWebHistory &operator=(const QWebHistory &) = delete;
+
     void clear();
 
     QList<QWebHistoryItem> items() const;
@@ -104,8 +108,6 @@ private:
     friend class QWebPagePrivate;
     friend QWEBKIT_EXPORT QDataStream& operator>>(QDataStream&, QWebHistory&);
     friend QWEBKIT_EXPORT QDataStream& operator<<(QDataStream&, const QWebHistory&);
-
-    Q_DISABLE_COPY(QWebHistory)
 
     QWebHistoryPrivate *d;
 };

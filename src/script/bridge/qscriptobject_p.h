@@ -103,6 +103,9 @@ class QScriptObjectDelegate
    };
 
    QScriptObjectDelegate();
+   QScriptObjectDelegate(const QScriptObjectDelegate &) = delete;
+   QScriptObjectDelegate &operator=(const QScriptObjectDelegate &) = delete;
+
    virtual ~QScriptObjectDelegate();
 
    virtual Type type() const = 0;
@@ -127,7 +130,6 @@ class QScriptObjectDelegate
    virtual bool compareToObject(QScriptObject *, JSC::ExecState *, JSC::JSObject *);
 
  private:
-   Q_DISABLE_COPY(QScriptObjectDelegate)
 };
 
 inline JSC::JSValue QScriptObject::data() const

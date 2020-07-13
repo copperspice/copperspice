@@ -44,6 +44,8 @@ class Q_SQL_EXPORT QSqlResult
 
 
  public:
+   QSqlResult(const QSqlResult &) = delete;
+   QSqlResult &operator=(const QSqlResult &) = delete;
    virtual ~QSqlResult();
    virtual QVariant handle() const;
 
@@ -119,7 +121,6 @@ class Q_SQL_EXPORT QSqlResult
 
    QSqlResultPrivate *d_ptr;
  private:
-   Q_DISABLE_COPY(QSqlResult)
 };
 
 #endif // QSQLRESULT_H
