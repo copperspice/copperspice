@@ -45,18 +45,25 @@ class Q_GUI_EXPORT QCompleter : public QObject
 
    GUI_CS_PROPERTY_READ(completionPrefix, completionPrefix)
    GUI_CS_PROPERTY_WRITE(completionPrefix, setCompletionPrefix)
+
    GUI_CS_PROPERTY_READ(modelSorting, modelSorting)
    GUI_CS_PROPERTY_WRITE(modelSorting, setModelSorting)
+
    GUI_CS_PROPERTY_READ(completionMode, completionMode)
    GUI_CS_PROPERTY_WRITE(completionMode, setCompletionMode)
+
    GUI_CS_PROPERTY_READ(completionColumn, completionColumn)
    GUI_CS_PROPERTY_WRITE(completionColumn, setCompletionColumn)
+
    GUI_CS_PROPERTY_READ(completionRole, completionRole)
    GUI_CS_PROPERTY_WRITE(completionRole, setCompletionRole)
+
    GUI_CS_PROPERTY_READ(maxVisibleItems, maxVisibleItems)
    GUI_CS_PROPERTY_WRITE(maxVisibleItems, setMaxVisibleItems)
+
    GUI_CS_PROPERTY_READ(caseSensitivity, caseSensitivity)
    GUI_CS_PROPERTY_WRITE(caseSensitivity, setCaseSensitivity)
+
    GUI_CS_PROPERTY_READ(wrapAround, wrapAround)
    GUI_CS_PROPERTY_WRITE(wrapAround, setWrapAround)
 
@@ -168,10 +175,8 @@ class Q_GUI_EXPORT QCompleter : public QObject
 
    GUI_CS_SLOT_1(Private, void _q_fileSystemModelDirectoryLoaded(const QString &un_named_arg1))
    GUI_CS_SLOT_2(_q_fileSystemModelDirectoryLoaded)
-
 };
 
 #endif // QT_NO_COMPLETER
-
 
 #endif // QCOMPLETER_H

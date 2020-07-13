@@ -43,11 +43,12 @@ class QCompleterPrivate
 
  public:
    QCompleterPrivate();
+
    virtual ~QCompleterPrivate() {
       delete popup;
    }
 
-   void init(QAbstractItemModel *model = 0);
+   void init(QAbstractItemModel *model = nullptr);
 
    QPointer<QWidget> widget;
    QCompletionModel *proxy;
@@ -78,70 +79,97 @@ class QCompleterPrivate
 
  protected:
    QCompleter *q_ptr;
-
 };
 
 class QIndexMapper
 {
  public:
-   QIndexMapper() : v(false), f(0), t(-1) { }
-   QIndexMapper(int f, int t) : v(false), f(f), t(t) { }
-   QIndexMapper(const QVector<int> &vec) : v(true), vector(vec), f(-1), t(-1) { }
+   QIndexMapper()
+      : v(false), f(0), t(-1)
+   {
+   }
 
-   inline int count() const {
+   QIndexMapper(int f, int t)
+      : v(false), f(f), t(t)
+   {
+   }
+
+   QIndexMapper(const QVector<int> &vec)
+      : v(true), vector(vec), f(-1), t(-1)
+   {
+   }
+
+   int count() const {
       return v ? vector.count() : t - f + 1;
    }
-   inline int operator[] (int index) const {
+
+   int operator[] (int index) const {
       return v ? vector[index] : f + index;
    }
-   inline int indexOf(int x) const {
+
+   int indexOf(int x) const {
       return v ? vector.indexOf(x) : ((t < f) ? -1 : x - f);
    }
-   inline bool isValid() const {
+
+   bool isValid() const {
       return !isEmpty();
    }
-   inline bool isEmpty() const {
+
+   bool isEmpty() const {
       return v ? vector.isEmpty() : (t < f);
    }
-   inline void append(int x) {
+
+   void append(int x) {
       Q_ASSERT(v);
       vector.append(x);
    }
-   inline int first() const {
+
+   int first() const {
       return v ? vector.first() : f;
    }
-   inline int last() const {
+
+   int last() const {
       return v ? vector.last() : t;
    }
-   inline int from() const {
+
+   int from() const {
       Q_ASSERT(!v);
       return f;
    }
-   inline int to() const {
+
+   int to() const {
       Q_ASSERT(!v);
       return t;
    }
-   inline int cost() const {
+
+   int cost() const {
       return vector.count() + 2;
    }
 
  private:
    bool v;
    QVector<int> vector;
-   int f, t;
+   int f;
+   int t;
 };
 
 struct QMatchData {
-   QMatchData() : exactMatchIndex(-1), partial(false)
-   { }
+   QMatchData()
+      : exactMatchIndex(-1), partial(false)
+   {
+   }
 
-   QMatchData(const QIndexMapper &indices, int em, bool p) :
-      indices(indices), exactMatchIndex(em), partial(p) { }
+   QMatchData(const QIndexMapper &indices, int em, bool p)
+      : indices(indices), exactMatchIndex(em), partial(p)
+   {
+   }
+
    QIndexMapper indices;
 
    inline bool isValid() const {
       return indices.isValid();
    }
+
    int  exactMatchIndex;
    bool partial;
 };
@@ -156,7 +184,10 @@ class QCompletionEngine
       : m_completerPrivate(obj), curRow(-1), cost(0)
    {
    }
-   virtual ~QCompletionEngine() { }
+
+   virtual ~QCompletionEngine()
+   {
+   }
 
    void filter(const QStringList &parts);
 
@@ -186,7 +217,11 @@ class QCompletionEngine
 class QSortedModelEngine : public QCompletionEngine
 {
  public:
-   QSortedModelEngine(QCompleterPrivate *c) : QCompletionEngine(c) { }
+   QSortedModelEngine(QCompleterPrivate *obj)
+      : QCompletionEngine(obj)
+   {
+   }
+
    QMatchData filter(const QString &, const QModelIndex &, int) override;
    QIndexMapper indexHint(QString, const QModelIndex &, Qt::SortOrder);
    Qt::SortOrder sortOrder(const QModelIndex &) const;
@@ -195,7 +230,10 @@ class QSortedModelEngine : public QCompletionEngine
 class QUnsortedModelEngine : public QCompletionEngine
 {
  public:
-   QUnsortedModelEngine(QCompleterPrivate *c) : QCompletionEngine(c) { }
+   QUnsortedModelEngine(QCompleterPrivate *obj)
+      : QCompletionEngine(obj)
+   {
+   }
 
    void filterOnDemand(int) override;
    QMatchData filter(const QString &, const QModelIndex &, int) override;
@@ -208,7 +246,9 @@ class QCompleterItemDelegate : public QItemDelegate
 {
  public:
    QCompleterItemDelegate(QAbstractItemView *view)
-      : QItemDelegate(view), view(view) { }
+      : QItemDelegate(view), view(view)
+   {
+   }
 
    void paint(QPainter *p, const QStyleOptionViewItem &opt, const QModelIndex &idx) const  override {
       QStyleOptionViewItem optCopy = opt;
@@ -231,19 +271,22 @@ class QCompletionModel : public QAbstractProxyModel
    Q_DECLARE_PRIVATE(QCompletionModel)
 
  public:
-   QCompletionModel(QCompleterPrivate *c, QObject *parent);
+   QCompletionModel(QCompleterPrivate *obj, QObject *parent);
 
    void createEngine();
    void setFiltered(bool);
    void filter(const QStringList &parts);
    int completionCount() const;
+
    int currentRow() const {
       return engine->curRow;
    }
+
    bool setCurrentRow(int row);
    QModelIndex currentIndex(bool) const;
 
    QModelIndex index(int row, int column, const QModelIndex & = QModelIndex()) const override;
+
    int rowCount(const QModelIndex &index      = QModelIndex()) const override;
    int columnCount(const QModelIndex &index   = QModelIndex()) const override;
    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
@@ -280,4 +323,4 @@ class QCompletionModelPrivate : public QAbstractProxyModelPrivate
 
 #endif // QT_NO_COMPLETER
 
-#endif // QCOMPLETER_P_H
+#endif
