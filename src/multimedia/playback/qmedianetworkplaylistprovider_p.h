@@ -35,6 +35,9 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkPlaylistProvider : public QMediaPlaylistP
 
  public:
    QMediaNetworkPlaylistProvider(QObject *parent = 0);
+   QMediaNetworkPlaylistProvider(const QMediaNetworkPlaylistProvider &) = delete;
+   QMediaNetworkPlaylistProvider &operator=(const QMediaNetworkPlaylistProvider &) = delete;
+
    virtual ~QMediaNetworkPlaylistProvider();
 
    virtual bool load(const QNetworkRequest &request, const char *format = nullptr) override;
@@ -56,7 +59,6 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkPlaylistProvider : public QMediaPlaylistP
    MULTI_CS_SLOT_2(shuffle)
 
  private:
-   Q_DISABLE_COPY(QMediaNetworkPlaylistProvider)
    Q_DECLARE_PRIVATE(QMediaNetworkPlaylistProvider)
 
    MULTI_CS_SLOT_1(Private, void _q_handleParserError(QPlaylistFileParser::ParserError err, const QString &un_named_arg2))

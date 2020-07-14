@@ -38,6 +38,9 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
 
  public:
    explicit QUdpSocket(QObject *parent = nullptr);
+   QUdpSocket(const QUdpSocket &) = delete;
+   QUdpSocket &operator=(const QUdpSocket &) = delete;
+
    virtual ~QUdpSocket();
 
 #ifndef QT_NO_NETWORKINTERFACE
@@ -60,7 +63,6 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
    }
 
  private:
-   Q_DISABLE_COPY(QUdpSocket)
    Q_DECLARE_PRIVATE(QUdpSocket)
 };
 

@@ -51,6 +51,9 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    using SocketOptions = QFlags<SocketOption>;
 
    explicit QLocalServer(QObject *parent = nullptr);
+   QLocalServer(const QLocalServer &) = delete;
+   QLocalServer &operator=(const QLocalServer &) = delete;
+
    ~QLocalServer();
 
    void close();
@@ -79,7 +82,6 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    QScopedPointer<QLocalServerPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QLocalServer)
 
    NET_CS_SLOT_1(Private, void _q_onNewConnection())
    NET_CS_SLOT_2(_q_onNewConnection)

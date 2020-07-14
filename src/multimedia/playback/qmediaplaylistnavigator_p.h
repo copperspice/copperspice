@@ -44,6 +44,9 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylistNavigator : public QObject
 
  public:
    QMediaPlaylistNavigator(QMediaPlaylistProvider *playlist, QObject *parent = 0);
+   QMediaPlaylistNavigator(const QMediaPlaylistNavigator &) = delete;
+   QMediaPlaylistNavigator &operator=(const QMediaPlaylistNavigator &) = delete;
+
    virtual ~QMediaPlaylistNavigator();
 
    QMediaPlaylistProvider *playlist() const;
@@ -86,7 +89,6 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylistNavigator : public QObject
    QMediaPlaylistNavigatorPrivate *d_ptr;
 
  private:
-   Q_DISABLE_COPY(QMediaPlaylistNavigator)
    Q_DECLARE_PRIVATE(QMediaPlaylistNavigator)
 
    MULTI_CS_SLOT_1(Private, void _q_mediaInserted(int start, int end))

@@ -63,6 +63,10 @@ class Q_MULTIMEDIA_EXPORT QAudioDecoder : public QMediaObject
    };
 
    explicit QAudioDecoder(QObject *parent = nullptr);
+
+   QAudioDecoder(const QAudioDecoder &) = delete;
+   QAudioDecoder &operator=(const QAudioDecoder &) = delete;
+
    ~QAudioDecoder();
 
    static QMultimedia::SupportEstimate hasSupport(const QString &mimeType, const QStringList &codecs = QStringList());
@@ -120,7 +124,6 @@ class Q_MULTIMEDIA_EXPORT QAudioDecoder : public QMediaObject
    MULTI_CS_SIGNAL_2(durationChanged, duration)
 
  private:
-   Q_DISABLE_COPY(QAudioDecoder)
    Q_DECLARE_PRIVATE(QAudioDecoder)
 
    MULTI_CS_SLOT_1(Private, void _q_stateChanged(QAudioDecoder::State un_named_arg1))

@@ -35,6 +35,9 @@ class Q_NETWORK_EXPORT QTcpSocket : public QAbstractSocket
 
  public:
    explicit QTcpSocket(QObject *parent = nullptr);
+   QTcpSocket(const QTcpSocket &) = delete;
+   QTcpSocket &operator=(const QTcpSocket &) = delete;
+
    virtual ~QTcpSocket();
 
  protected:
@@ -42,7 +45,6 @@ class Q_NETWORK_EXPORT QTcpSocket : public QAbstractSocket
    QTcpSocket(QAbstractSocket::SocketType socketType, QTcpSocketPrivate &dd, QObject *parent = nullptr);
 
  private:
-   Q_DISABLE_COPY(QTcpSocket)
    Q_DECLARE_PRIVATE(QTcpSocket)
 };
 

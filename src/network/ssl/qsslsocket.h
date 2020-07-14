@@ -59,6 +59,9 @@ public:
    };
 
    QSslSocket(QObject *parent = nullptr);
+   QSslSocket(const QSslSocket &) = delete;
+   QSslSocket &operator=(const QSslSocket &) = delete;
+
    ~QSslSocket();
 
    void resume() override; // to continue after proxy authentication required, SSL errors etc.
@@ -200,7 +203,6 @@ protected:
 
 private:
    Q_DECLARE_PRIVATE(QSslSocket)
-   Q_DISABLE_COPY(QSslSocket)
 
    NET_CS_SLOT_1(Private, void _q_connectedSlot())
    NET_CS_SLOT_2(_q_connectedSlot)

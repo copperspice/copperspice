@@ -37,6 +37,9 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
 
  public:
    QSocks5SocketEngine(QObject *parent = nullptr);
+   QSocks5SocketEngine(const QSocks5SocketEngine &) = delete;
+   QSocks5SocketEngine &operator=(const QSocks5SocketEngine &) = delete;
+
    ~QSocks5SocketEngine();
 
    bool initialize(QAbstractSocket::SocketType type,
@@ -98,7 +101,6 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
 
  private:
    Q_DECLARE_PRIVATE(QSocks5SocketEngine)
-   Q_DISABLE_COPY(QSocks5SocketEngine)
 
    NET_CS_SLOT_1(Private, void _q_controlSocketConnected())
    NET_CS_SLOT_2(_q_controlSocketConnected)

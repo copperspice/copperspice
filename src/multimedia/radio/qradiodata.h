@@ -76,6 +76,9 @@ public:
    };
 
    explicit QRadioData(QMediaObject *mediaObject, QObject *parent = nullptr);
+   QRadioData(const QRadioData &) = delete;
+   QRadioData &operator=(const QRadioData &) = delete;
+
    ~QRadioData();
 
    QMultimedia::AvailabilityStatus availability() const;
@@ -122,7 +125,6 @@ protected:
    QRadioDataPrivate *d_ptr;
 
 private:
-   Q_DISABLE_COPY(QRadioData)
    Q_DECLARE_PRIVATE(QRadioData)
 
    MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())

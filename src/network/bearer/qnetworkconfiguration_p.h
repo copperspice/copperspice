@@ -42,6 +42,9 @@ class QNetworkConfigurationPrivate : public QSharedData
       isValid(false), roamingSupported(false) {
    }
 
+   QNetworkConfigurationPrivate(const QNetworkConfigurationPrivate &) = delete;
+   QNetworkConfigurationPrivate &operator=(const QNetworkConfigurationPrivate &) = delete;
+
    virtual ~QNetworkConfigurationPrivate() {
       //release pointers to member configurations
       serviceNetworkMembers.clear();
@@ -63,7 +66,6 @@ class QNetworkConfigurationPrivate : public QSharedData
    bool roamingSupported;
 
  private:
-   Q_DISABLE_COPY(QNetworkConfigurationPrivate)
 };
 
 #endif

@@ -84,6 +84,9 @@ class QNativeSocketEngine : public QAbstractSocketEngine
 
  public:
    QNativeSocketEngine(QObject *parent = nullptr);
+   QNativeSocketEngine(const QNativeSocketEngine &) = delete;
+   QNativeSocketEngine &operator=(const QNativeSocketEngine &) = delete;
+
    ~QNativeSocketEngine();
 
    bool initialize(QAbstractSocket::SocketType type, QAbstractSocket::NetworkLayerProtocol protocol =
@@ -151,7 +154,6 @@ class QNativeSocketEngine : public QAbstractSocketEngine
 
  private:
    Q_DECLARE_PRIVATE(QNativeSocketEngine)
-   Q_DISABLE_COPY(QNativeSocketEngine)
 };
 
 

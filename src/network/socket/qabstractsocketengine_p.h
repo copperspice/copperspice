@@ -112,6 +112,9 @@ class QAbstractSocketEngine : public QObject
    using PacketHeaderOptions = QFlags<PacketHeaderOption>;
 
    QAbstractSocketEngine(QObject *parent = nullptr);
+   QAbstractSocketEngine(const QAbstractSocketEngine &) = delete;
+   QAbstractSocketEngine &operator=(const QAbstractSocketEngine &) = delete;
+
    ~QAbstractSocketEngine();
 
    static QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType, const QNetworkProxy &, QObject *parent);
@@ -223,7 +226,6 @@ class QAbstractSocketEngine : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QAbstractSocketEngine)
-   Q_DISABLE_COPY(QAbstractSocketEngine)
 };
 
 class QAbstractSocketEnginePrivate

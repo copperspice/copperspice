@@ -40,6 +40,10 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
    explicit QAudioInput(const QAudioFormat &format = QAudioFormat(), QObject *parent = nullptr);
    explicit QAudioInput(const QAudioDeviceInfo &audioDeviceInfo, const QAudioFormat &format = QAudioFormat(),
       QObject *parent = nullptr);
+
+   QAudioInput(const QAudioInput &) = delete;
+   QAudioInput &operator=(const QAudioInput &) = delete;
+
    ~QAudioInput();
 
    QAudioFormat format() const;
@@ -76,8 +80,6 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
    MULTI_CS_SIGNAL_2(notify)
 
  private:
-   Q_DISABLE_COPY(QAudioInput)
-
    QAbstractAudioInput *d;
 };
 

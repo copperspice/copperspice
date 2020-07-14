@@ -44,6 +44,9 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
 
  public:
    explicit QTcpServer(QObject *parent = nullptr);
+   QTcpServer(const QTcpServer &) = delete;
+   QTcpServer &operator=(const QTcpServer &) = delete;
+
    virtual ~QTcpServer();
 
    bool listen(const QHostAddress &address = QHostAddress::Any, quint16 port = 0);
@@ -90,7 +93,6 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
    QScopedPointer<QTcpServerPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QTcpServer)
    Q_DECLARE_PRIVATE(QTcpServer)
 };
 

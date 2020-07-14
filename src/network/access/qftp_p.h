@@ -83,6 +83,8 @@ class Q_NETWORK_EXPORT QFtp : public QObject
       Ascii
    };
 
+   QFtp(const QFtp &) = delete;
+   QFtp &operator=(const QFtp &) = delete;
    int setProxy(const QString &host, quint16 port);
    int connectToHost(const QString &host, quint16 port = 21);
    int login(const QString &user = QString(), const QString &password = QString());
@@ -140,7 +142,6 @@ class Q_NETWORK_EXPORT QFtp : public QObject
    QScopedPointer<QFtpPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QFtp)
    Q_DECLARE_PRIVATE(QFtp)
 
    NET_CS_SLOT_1(Private, void _q_startNextCommand())

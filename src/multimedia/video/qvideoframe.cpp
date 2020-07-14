@@ -66,6 +66,9 @@ class QVideoFramePrivate : public QSharedData
       memset(bytesPerLine, 0, sizeof(bytesPerLine));
    }
 
+   QVideoFramePrivate(const QVideoFramePrivate &) = delete;
+   QVideoFramePrivate &operator=(const QVideoFramePrivate &) = delete;
+
    ~QVideoFramePrivate() {
       if (buffer) {
          buffer->release();
@@ -87,7 +90,6 @@ class QVideoFramePrivate : public QSharedData
    QVariantMap metadata;
 
  private:
-   Q_DISABLE_COPY(QVideoFramePrivate)
 };
 
 /*!

@@ -48,6 +48,8 @@ class QSslKeyPrivate
       clear(false);
    }
 
+   QSslKeyPrivate(const QSslKeyPrivate &) = delete;
+   QSslKeyPrivate &operator=(const QSslKeyPrivate &) = delete;
    inline ~QSslKeyPrivate() {
       clear();
    }
@@ -96,7 +98,6 @@ class QSslKeyPrivate
     QAtomicInt ref;
 
  private:
-   Q_DISABLE_COPY(QSslKeyPrivate)
 };
 
 

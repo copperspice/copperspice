@@ -90,12 +90,14 @@ class Q_NETWORK_EXPORT QNetworkCacheMetaData
 Q_NETWORK_EXPORT QDataStream &operator<<(QDataStream &, const QNetworkCacheMetaData &);
 Q_NETWORK_EXPORT QDataStream &operator>>(QDataStream &, QNetworkCacheMetaData &);
 
-
 class Q_NETWORK_EXPORT QAbstractNetworkCache : public QObject
 {
    NET_CS_OBJECT(QAbstractNetworkCache)
 
  public:
+   QAbstractNetworkCache(const QAbstractNetworkCache &) = delete;
+   QAbstractNetworkCache &operator=(const QAbstractNetworkCache &) = delete;
+
    virtual ~QAbstractNetworkCache();
 
    virtual QNetworkCacheMetaData metaData(const QUrl &url) = 0;
@@ -118,8 +120,6 @@ class Q_NETWORK_EXPORT QAbstractNetworkCache : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QAbstractNetworkCache)
-   Q_DISABLE_COPY(QAbstractNetworkCache)
-
 };
 
 #endif

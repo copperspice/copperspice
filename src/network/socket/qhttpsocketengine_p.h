@@ -50,6 +50,9 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    };
 
    QHttpSocketEngine(QObject *parent = nullptr);
+   QHttpSocketEngine(const QHttpSocketEngine &) = delete;
+   QHttpSocketEngine &operator=(const QHttpSocketEngine &) = delete;
+
    ~QHttpSocketEngine();
 
    bool initialize(QAbstractSocket::SocketType type, QAbstractSocket::NetworkLayerProtocol protocol = QAbstractSocket::IPv4Protocol) override;
@@ -139,7 +142,6 @@ class QHttpSocketEngine : public QAbstractSocketEngine
 
    bool readHttpHeader();
    Q_DECLARE_PRIVATE(QHttpSocketEngine)
-   Q_DISABLE_COPY(QHttpSocketEngine)
 };
 
 class QHttpSocketEnginePrivate : public QAbstractSocketEnginePrivate

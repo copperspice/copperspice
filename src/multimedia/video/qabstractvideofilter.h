@@ -54,6 +54,9 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoFilter : public QObject
 
 public:
     explicit QAbstractVideoFilter(QObject *parent = nullptr);
+   QAbstractVideoFilter(const QAbstractVideoFilter &) = delete;
+   QAbstractVideoFilter &operator=(const QAbstractVideoFilter &) = delete;
+
     ~QAbstractVideoFilter();
 
     bool isActive() const;
@@ -66,7 +69,6 @@ public:
 
 private:
     Q_DECLARE_PRIVATE(QAbstractVideoFilter)
-    Q_DISABLE_COPY(QAbstractVideoFilter)
 
     QAbstractVideoFilterPrivate *d_ptr;
 };

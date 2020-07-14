@@ -36,6 +36,9 @@ class Q_NETWORK_EXPORT QNetworkDiskCache : public QAbstractNetworkCache
 
  public:
    explicit QNetworkDiskCache(QObject *parent = nullptr);
+   QNetworkDiskCache(const QNetworkDiskCache &) = delete;
+   QNetworkDiskCache &operator=(const QNetworkDiskCache &) = delete;
+
    ~QNetworkDiskCache();
 
    QString cacheDirectory() const;
@@ -62,7 +65,6 @@ class Q_NETWORK_EXPORT QNetworkDiskCache : public QAbstractNetworkCache
 
  private:
    Q_DECLARE_PRIVATE(QNetworkDiskCache)
-   Q_DISABLE_COPY(QNetworkDiskCache)
 };
 
 #endif // QT_NO_NETWORKDISKCACHE

@@ -86,6 +86,9 @@ public:
     enum SearchMode { SearchFast, SearchGetStationId };
 
     explicit QRadioTuner(QObject *parent = nullptr);
+    QRadioTuner(const QRadioTuner &) = delete;
+    QRadioTuner &operator=(const QRadioTuner &) = delete;
+
     ~QRadioTuner();
 
     QMultimedia::AvailabilityStatus availability() const override;
@@ -168,7 +171,6 @@ public:
     MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioTuner::Error), error)
 
 private:
-    Q_DISABLE_COPY(QRadioTuner)
     Q_DECLARE_PRIVATE(QRadioTuner)
 };
 

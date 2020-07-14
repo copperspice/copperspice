@@ -132,6 +132,10 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
    };
 
    explicit QMediaPlayer(QObject *parent = nullptr, Flags flags = Flags());
+
+   QMediaPlayer(const QMediaPlayer &) = delete;
+   QMediaPlayer &operator=(const QMediaPlayer &) = delete;
+
    ~QMediaPlayer();
 
    static QMultimedia::SupportEstimate hasSupport(const QString &mimeType,
@@ -243,7 +247,6 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
    MULTI_CS_SIGNAL_2(networkConfigurationChanged, configuration)
 
  private:
-   Q_DISABLE_COPY(QMediaPlayer)
    Q_DECLARE_PRIVATE(QMediaPlayer)
 
    // wrapper for overloaded property

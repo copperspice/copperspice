@@ -103,6 +103,10 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
    };
 
    explicit QMediaRecorder(QMediaObject *mediaObject, QObject *parent = nullptr);
+
+   QMediaRecorder(const QMediaRecorder &) = delete;
+   QMediaRecorder &operator=(const QMediaRecorder &) = delete;
+
    ~QMediaRecorder();
 
    QMediaObject *mediaObject() const override;
@@ -215,7 +219,6 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
    QMediaRecorderPrivate *d_ptr;
 
  private:
-   Q_DISABLE_COPY(QMediaRecorder)
    Q_DECLARE_PRIVATE(QMediaRecorder)
 
    // wrapper

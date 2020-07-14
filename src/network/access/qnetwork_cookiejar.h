@@ -37,6 +37,10 @@ class Q_NETWORK_EXPORT QNetworkCookieJar: public QObject
 
  public:
    QNetworkCookieJar(QObject *parent = nullptr);
+
+   QNetworkCookieJar(const QNetworkCookieJar &) = delete;
+   QNetworkCookieJar &operator=(const QNetworkCookieJar &) = delete;
+
    virtual ~QNetworkCookieJar();
 
    virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const;
@@ -55,8 +59,6 @@ class Q_NETWORK_EXPORT QNetworkCookieJar: public QObject
 
  private:
    Q_DECLARE_PRIVATE(QNetworkCookieJar)
-   Q_DISABLE_COPY(QNetworkCookieJar)
-
 };
 
 #endif

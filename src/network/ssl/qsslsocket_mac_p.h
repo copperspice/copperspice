@@ -38,6 +38,9 @@ class QSecureTransportContext
 {
  public:
     explicit QSecureTransportContext(SSLContextRef context);
+    QSecureTransportContext(const QSecureTransportContext &) = delete;
+    QSecureTransportContext &operator=(const QSecureTransportContext &) = delete;
+
     ~QSecureTransportContext();
 
     operator SSLContextRef () const;
@@ -46,7 +49,6 @@ class QSecureTransportContext
  private:
     SSLContextRef context;
 
-    Q_DISABLE_COPY(QSecureTransportContext)
 };
 
 class QSslSocketBackendPrivate : public QSslSocketPrivate
@@ -55,6 +57,9 @@ class QSslSocketBackendPrivate : public QSslSocketPrivate
 
  public:
     QSslSocketBackendPrivate();
+    QSslSocketBackendPrivate(const QSslSocketBackendPrivate &) = delete;
+    QSslSocketBackendPrivate &operator=(const QSslSocketBackendPrivate &) = delete;
+
     virtual ~QSslSocketBackendPrivate();
 
     // Final-overriders (QSslSocketPrivate):
@@ -90,7 +95,6 @@ class QSslSocketBackendPrivate : public QSslSocketPrivate
 
     QSecureTransportContext context;
 
-    Q_DISABLE_COPY(QSslSocketBackendPrivate)
 };
 
 #endif

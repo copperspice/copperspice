@@ -61,6 +61,9 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    };
 
    QLocalSocket(QObject *parent = nullptr);
+   QLocalSocket(const QLocalSocket &) = delete;
+   QLocalSocket &operator=(const QLocalSocket &) = delete;
+
    ~QLocalSocket();
 
    void connectToServer(OpenMode openMode = ReadWrite);
@@ -113,8 +116,6 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    qint64 writeData(const char *, qint64) override;
 
  private:
-   Q_DISABLE_COPY(QLocalSocket)
-
 #if defined(QT_LOCALSOCKET_TCP)
    NET_CS_SLOT_1(Private, void _q_stateChanged(QAbstractSocket::SocketState un_named_arg1))
    NET_CS_SLOT_2(_q_stateChanged)

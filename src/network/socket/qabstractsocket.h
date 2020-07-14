@@ -129,6 +129,9 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
    using PauseModes = QFlags<PauseMode>;
 
    QAbstractSocket(SocketType socketType, QObject *parent);
+   QAbstractSocket(const QAbstractSocket &) = delete;
+   QAbstractSocket &operator=(const QAbstractSocket &) = delete;
+
    virtual ~QAbstractSocket();
 
    virtual void resume(); // to continue after proxy authentication required, SSL errors etc.
@@ -226,7 +229,6 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
 
  private:
    Q_DECLARE_PRIVATE(QAbstractSocket)
-   Q_DISABLE_COPY(QAbstractSocket)
 
    NET_CS_SLOT_1(Private, void _q_connectToNextAddress())
    NET_CS_SLOT_2(_q_connectToNextAddress)

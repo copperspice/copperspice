@@ -49,6 +49,9 @@ class Q_MULTIMEDIA_EXPORT QPlaylistFileParser : public QObject
       NetworkError
    };
 
+   QPlaylistFileParser(const QPlaylistFileParser &) = delete;
+   QPlaylistFileParser &operator=(const QPlaylistFileParser &) = delete;
+
    static FileType findPlaylistType(const QString &uri, const QString &mime, const void *data, quint32 size);
 
    void start(const QNetworkRequest &request, bool utf8 = false);
@@ -62,7 +65,6 @@ class Q_MULTIMEDIA_EXPORT QPlaylistFileParser : public QObject
    MULTI_CS_SIGNAL_2(error, err, errorMsg)
 
  private:
-   Q_DISABLE_COPY(QPlaylistFileParser)
    Q_DECLARE_PRIVATE(QPlaylistFileParser)
 
    QPlaylistFileParserPrivate *d_ptr;

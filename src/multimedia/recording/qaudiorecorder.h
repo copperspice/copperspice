@@ -44,6 +44,10 @@ class Q_MULTIMEDIA_EXPORT QAudioRecorder : public QMediaRecorder
 
  public:
    explicit QAudioRecorder(QObject *parent = nullptr);
+
+   QAudioRecorder(const QAudioRecorder &) = delete;
+   QAudioRecorder &operator=(const QAudioRecorder &) = delete;
+
    ~QAudioRecorder();
 
    QStringList audioInputs() const;
@@ -62,7 +66,6 @@ class Q_MULTIMEDIA_EXPORT QAudioRecorder : public QMediaRecorder
    MULTI_CS_SIGNAL_2(availableAudioInputsChanged)
 
  private:
-   Q_DISABLE_COPY(QAudioRecorder)
    Q_DECLARE_PRIVATE(QAudioRecorder)
 };
 

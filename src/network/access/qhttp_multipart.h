@@ -83,6 +83,9 @@ class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
 
    explicit QHttpMultiPart(QObject *parent = nullptr);
    explicit QHttpMultiPart(ContentType contentType, QObject *parent = nullptr);
+   QHttpMultiPart(const QHttpMultiPart &) = delete;
+   QHttpMultiPart &operator=(const QHttpMultiPart &) = delete;
+
    ~QHttpMultiPart();
 
    void append(const QHttpPart &httpPart);
@@ -94,7 +97,6 @@ class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QHttpMultiPart)
-   Q_DISABLE_COPY(QHttpMultiPart)
 
    friend class QNetworkAccessManager;
    friend class QNetworkAccessManagerPrivate;

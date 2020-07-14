@@ -81,6 +81,10 @@ class Q_MULTIMEDIA_EXPORT QSoundEffect : public QObject
    };
 
    explicit QSoundEffect(QObject *parent = nullptr);
+
+   QSoundEffect(const QSoundEffect &) = delete;
+   QSoundEffect &operator=(const QSoundEffect &) = delete;
+
    ~QSoundEffect();
 
    static QStringList supportedMimeTypes();
@@ -140,7 +144,6 @@ class Q_MULTIMEDIA_EXPORT QSoundEffect : public QObject
    MULTI_CS_SLOT_2(stop)
 
  private:
-   Q_DISABLE_COPY(QSoundEffect)
    QSoundEffectPrivate *d;
 };
 

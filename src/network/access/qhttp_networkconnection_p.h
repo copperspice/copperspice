@@ -93,6 +93,9 @@ class QHttpNetworkConnection : public QObject
                           ConnectionType connectionType = ConnectionTypeHTTP);
 #endif
 
+   QHttpNetworkConnection(const QHttpNetworkConnection &) = delete;
+   QHttpNetworkConnection &operator=(const QHttpNetworkConnection &) = delete;
+
    ~QHttpNetworkConnection();
 
    //The hostname to which this is connected to.
@@ -133,7 +136,7 @@ class QHttpNetworkConnection : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QHttpNetworkConnection)
-   Q_DISABLE_COPY(QHttpNetworkConnection)
+
    friend class QHttpThreadDelegate;
    friend class QHttpNetworkReply;
    friend class QHttpNetworkReplyPrivate;
