@@ -42,6 +42,9 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
 
  public:
    QCoreGraphicsPaintEngine();
+   QCoreGraphicsPaintEngine(const QCoreGraphicsPaintEngine &) = delete;
+   QCoreGraphicsPaintEngine &operator=(const QCoreGraphicsPaintEngine &) = delete;
+
    ~QCoreGraphicsPaintEngine();
 
    bool begin(QPaintDevice *pdev);
@@ -114,7 +117,6 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
    static CGColorSpaceRef m_genericColorSpace;
    static QHash<CGDirectDisplayID, CGColorSpaceRef> m_displayColorSpaceHash;
    static void cleanUpMacColorSpaces();
-   Q_DISABLE_COPY(QCoreGraphicsPaintEngine)
 };
 
 /*****************************************************************************

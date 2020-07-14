@@ -136,8 +136,6 @@ struct QWindowsShcoreDLL {
 
 class QWindowsContext
 {
-   Q_DISABLE_COPY(QWindowsContext)
-
  public:
 
    enum SystemInfoFlags {
@@ -149,6 +147,9 @@ class QWindowsContext
    static int verbose;
 
    explicit QWindowsContext();
+   QWindowsContext(const QWindowsContext &) = delete;
+   QWindowsContext &operator=(const QWindowsContext &) = delete;
+
    ~QWindowsContext();
 
    bool initTouch();

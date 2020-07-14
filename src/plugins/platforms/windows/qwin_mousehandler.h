@@ -35,14 +35,16 @@ class QTouchDevice;
 
 class QWindowsMouseHandler
 {
-   Q_DISABLE_COPY(QWindowsMouseHandler)
-
  public:
    QWindowsMouseHandler();
+
+   QWindowsMouseHandler(const QWindowsMouseHandler &) = delete;
+   QWindowsMouseHandler &operator=(const QWindowsMouseHandler &) = delete;
 
    QTouchDevice *touchDevice() const {
       return m_touchDevice;
    }
+
    QTouchDevice *ensureTouchDevice();
 
    bool translateMouseEvent(QWindow *widget, HWND hwnd, QtWindows::WindowsEventType t, MSG msg, LRESULT *result);
@@ -58,6 +60,7 @@ class QWindowsMouseHandler
    QWindow *windowUnderMouse() const {
       return m_windowUnderMouse.data();
    }
+
    void clearWindowUnderMouse() {
       m_windowUnderMouse = 0;
    }

@@ -52,10 +52,12 @@ struct KeyboardLayoutItem {
 
 class QWindowsKeyMapper
 {
-   Q_DISABLE_COPY(QWindowsKeyMapper)
-
  public:
    explicit QWindowsKeyMapper();
+
+   QWindowsKeyMapper(const QWindowsKeyMapper &) = delete;
+   QWindowsKeyMapper &operator=(const QWindowsKeyMapper &) = delete;
+
    ~QWindowsKeyMapper();
 
    void changeKeyboard();
@@ -73,6 +75,7 @@ class QWindowsKeyMapper
    QWindow *keyGrabber() const      {
       return m_keyGrabber;
    }
+
    void setKeyGrabber(QWindow *w)   {
       m_keyGrabber = w;
    }

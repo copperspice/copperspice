@@ -67,10 +67,11 @@ enum {
 class QMacSmartQuickDrawRegion
 {
    RgnHandle qdRgn;
-   Q_DISABLE_COPY(QMacSmartQuickDrawRegion)
 
  public:
    explicit QMacSmartQuickDrawRegion(RgnHandle rgn) : qdRgn(rgn) {}
+   QMacSmartQuickDrawRegion(const QMacSmartQuickDrawRegion &) = delete;
+   QMacSmartQuickDrawRegion &operator=(const QMacSmartQuickDrawRegion &) = delete;
 
    ~QMacSmartQuickDrawRegion() {
       extern void qt_mac_dispose_rgn(RgnHandle); // qregion_mac.cpp

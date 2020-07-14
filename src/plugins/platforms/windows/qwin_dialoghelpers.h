@@ -46,10 +46,12 @@ QPlatformDialogHelper *createHelper(QPlatformTheme::DialogType type);
 template <class BaseClass>
 class QWindowsDialogHelperBase : public BaseClass
 {
-   Q_DISABLE_COPY(QWindowsDialogHelperBase)
-
  public:
    typedef QSharedPointer<QWindowsNativeDialogBase> QWindowsNativeDialogBasePtr;
+
+   QWindowsDialogHelperBase(const QWindowsDialogHelperBase &) = delete;
+   QWindowsDialogHelperBase &operator=(const QWindowsDialogHelperBase &) = delete;
+
    ~QWindowsDialogHelperBase() {
       cleanupThread();
    }

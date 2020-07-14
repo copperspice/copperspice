@@ -48,10 +48,12 @@ inline uint qHash(const QWindowsPixmapCursorCacheKey &k, uint seed)
 
 class CursorHandle
 {
-   Q_DISABLE_COPY(CursorHandle)
 
  public:
    explicit CursorHandle(HCURSOR hcursor = nullptr) : m_hcursor(hcursor) {}
+   CursorHandle(const CursorHandle &) = delete;
+   CursorHandle &operator=(const CursorHandle &) = delete;
+
    ~CursorHandle() {
       if (m_hcursor) {
          DestroyCursor(m_hcursor);

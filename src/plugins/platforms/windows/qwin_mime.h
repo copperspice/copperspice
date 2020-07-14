@@ -34,10 +34,12 @@ class QMimeData;
 
 class QWindowsMime
 {
-   Q_DISABLE_COPY(QWindowsMime)
-
  public:
    QWindowsMime();
+
+   QWindowsMime(const QWindowsMime &) = delete;
+   QWindowsMime &operator=(const QWindowsMime &) = delete;
+
    virtual ~QWindowsMime();
 
    // for converting from CS
@@ -54,10 +56,12 @@ class QWindowsMime
 
 class QWindowsMimeConverter
 {
-   Q_DISABLE_COPY(QWindowsMimeConverter)
-
  public:
    QWindowsMimeConverter();
+
+   QWindowsMimeConverter(const QWindowsMimeConverter &) = delete;
+   QWindowsMimeConverter &operator=(const QWindowsMimeConverter &) = delete;
+
    ~QWindowsMimeConverter();
 
    QWindowsMime *converterToMime(const QString &mimeType, IDataObject *pDataObj) const;

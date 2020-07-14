@@ -165,7 +165,6 @@ struct QWindowsOpengl32DLL {
 
 class QOpenGLStaticContext : public QWindowsStaticOpenGLContext
 {
-   Q_DISABLE_COPY(QOpenGLStaticContext)
    QOpenGLStaticContext();
  public:
    enum Extensions {
@@ -185,6 +184,8 @@ class QOpenGLStaticContext : public QWindowsStaticOpenGLContext
    typedef HGLRC
    (APIENTRY *WglCreateContextAttribsARB)(HDC, HGLRC, const int *);
 
+   QOpenGLStaticContext(const QOpenGLStaticContext &) = delete;
+   QOpenGLStaticContext &operator=(const QOpenGLStaticContext &) = delete;
    typedef BOOL
    (APIENTRY *WglSwapInternalExt)(int interval);
    typedef int

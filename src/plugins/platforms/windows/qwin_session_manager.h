@@ -31,12 +31,16 @@ class QWindowsSessionManager : public QPlatformSessionManager
  public:
    explicit QWindowsSessionManager(const QString &id, const QString &key);
 
+   QWindowsSessionManager(const QWindowsSessionManager &) = delete;
+   QWindowsSessionManager &operator=(const QWindowsSessionManager &) = delete;
+
    bool allowsInteraction() override;
    bool allowsErrorInteraction() override;
 
    void blocksInteraction() {
       m_blockUserInput = true;
    }
+
    bool isInteractionBlocked() const {
       return m_blockUserInput;
    }
@@ -47,6 +51,7 @@ class QWindowsSessionManager : public QPlatformSessionManager
    void clearCancellation() {
       m_canceled = false;
    }
+
    bool wasCanceled() const {
       return m_canceled;
    }
@@ -54,6 +59,7 @@ class QWindowsSessionManager : public QPlatformSessionManager
    void setActive(bool active) {
       m_isActive = active;
    }
+
    bool isActive() const {
       return m_isActive;
    }
@@ -62,8 +68,6 @@ class QWindowsSessionManager : public QPlatformSessionManager
    bool m_isActive;
    bool m_blockUserInput;
    bool m_canceled;
-
-   Q_DISABLE_COPY(QWindowsSessionManager)
 };
 
 #endif

@@ -30,10 +30,12 @@
 
 class QWindowsFontEngineData
 {
-   Q_DISABLE_COPY(QWindowsFontEngineData)
-
  public:
    QWindowsFontEngineData();
+
+   QWindowsFontEngineData(const QWindowsFontEngineData &) = delete;
+   QWindowsFontEngineData &operator=(const QWindowsFontEngineData &) = delete;
+
    ~QWindowsFontEngineData();
 
    uint pow_gamma[256];

@@ -248,10 +248,12 @@ struct QWindowsLibGLESv2 {
 
 class QWindowsEGLStaticContext : public QWindowsStaticOpenGLContext
 {
-   Q_DISABLE_COPY(QWindowsEGLStaticContext)
-
  public:
    static QWindowsEGLStaticContext *create(QWindowsOpenGLTester::Renderers preferredType);
+
+   QWindowsEGLStaticContext(const QWindowsEGLStaticContext &) = delete;
+   QWindowsEGLStaticContext &operator=(const QWindowsEGLStaticContext &) = delete;
+
    ~QWindowsEGLStaticContext();
 
    EGLDisplay display() const {
@@ -262,6 +264,7 @@ class QWindowsEGLStaticContext : public QWindowsStaticOpenGLContext
    void *moduleHandle() const override {
       return libGLESv2.moduleHandle();
    }
+
    QOpenGLContext::OpenGLModuleType moduleType() const override {
       return QOpenGLContext::LibGLES;
    }

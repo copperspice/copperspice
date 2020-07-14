@@ -31,7 +31,6 @@
 
 class QWindowsThreadPoolRunner
 {
-   Q_DISABLE_COPY(QWindowsThreadPoolRunner)
 
    template <class RunnableFunction> // nested class implementing QRunnable to execute a function.
    class Runnable : public QRunnable
@@ -46,6 +45,9 @@ class QWindowsThreadPoolRunner
          m_condition->wakeAll();
          m_mutex->unlock();
       }
+
+      QWindowsThreadPoolRunner(const QWindowsThreadPoolRunner &) = delete;
+      QWindowsThreadPoolRunner &operator=(const QWindowsThreadPoolRunner &) = delete;
 
     private:
       QMutex *m_mutex;

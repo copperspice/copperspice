@@ -29,16 +29,18 @@
 
 class QWindowsNativeImage
 {
-   Q_DISABLE_COPY(QWindowsNativeImage)
-
  public:
    QWindowsNativeImage(int width, int height, QImage::Format format);
+
+   QWindowsNativeImage(const QWindowsNativeImage &) = delete;
+   QWindowsNativeImage &operator=(const QWindowsNativeImage &) = delete;
 
    ~QWindowsNativeImage();
 
    inline int width() const  {
       return m_image.width();
    }
+
    inline int height() const {
       return m_image.height();
    }
@@ -46,6 +48,7 @@ class QWindowsNativeImage
    QImage &image() {
       return m_image;
    }
+
    const QImage &image() const {
       return m_image;
    }

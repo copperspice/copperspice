@@ -33,10 +33,12 @@ class QWindowsNativeImage;
 
 class QWindowsBackingStore : public QPlatformBackingStore
 {
-   Q_DISABLE_COPY(QWindowsBackingStore)
-
  public:
    QWindowsBackingStore(QWindow *window);
+
+   QWindowsBackingStore(const QWindowsBackingStore &) = delete;
+   QWindowsBackingStore &operator=(const QWindowsBackingStore &) = delete;
+
    ~QWindowsBackingStore();
 
    QPaintDevice *paintDevice() override;

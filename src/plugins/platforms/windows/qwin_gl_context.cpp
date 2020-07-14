@@ -1031,9 +1031,11 @@ void QWindowsOpenGLContextFormat::apply(QSurfaceFormat *format) const
 
 class QOpenGLTemporaryContext
 {
-   Q_DISABLE_COPY(QOpenGLTemporaryContext)
  public:
    QOpenGLTemporaryContext();
+   QOpenGLTemporaryContext(const QOpenGLTemporaryContext &) = delete;
+   QOpenGLTemporaryContext &operator=(const QOpenGLTemporaryContext &) = delete;
+
    ~QOpenGLTemporaryContext();
 
  private:

@@ -41,6 +41,9 @@ class QCupsPrintEngine : public QPdfPrintEngine
 
  public:
    QCupsPrintEngine(QPrinter::PrinterMode m);
+   QCupsPrintEngine(const QCupsPrintEngine &) = delete;
+   QCupsPrintEngine &operator=(const QCupsPrintEngine &) = delete;
+
    virtual ~QCupsPrintEngine();
 
    // next two are a reimplementations of QPdfPrintEngine
@@ -48,7 +51,6 @@ class QCupsPrintEngine : public QPdfPrintEngine
    QVariant property(PrintEnginePropertyKey key) const override;
 
  private:
-   Q_DISABLE_COPY(QCupsPrintEngine)
 };
 
 class QCupsPrintEnginePrivate : public QPdfPrintEnginePrivate
@@ -57,13 +59,15 @@ class QCupsPrintEnginePrivate : public QPdfPrintEnginePrivate
 
  public:
    QCupsPrintEnginePrivate(QPrinter::PrinterMode m);
+   QCupsPrintEnginePrivate(const QCupsPrintEnginePrivate &) = delete;
+   QCupsPrintEnginePrivate &operator=(const QCupsPrintEnginePrivate &) = delete;
+
    ~QCupsPrintEnginePrivate();
 
    bool openPrintDevice() override;
    void closePrintDevice() override;
 
  private:
-   Q_DISABLE_COPY(QCupsPrintEnginePrivate)
 
    void setupDefaultPrinter();
    void changePrinter(const QString &newPrinter);
