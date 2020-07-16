@@ -98,34 +98,24 @@ static inline QByteArray fromUnicode(QTextCodec *tc, const QString &str)
 
 static inline QVariant qDateFromString(const QString &val)
 {
-#ifdef QT_NO_DATESTRING
-   return QVariant(val);
-#else
    if (val.isEmpty()) {
       return QVariant(QDate());
    }
+
    return QVariant(QDate::fromString(val, Qt::ISODate));
-#endif
 }
 
 static inline QVariant qTimeFromString(const QString &val)
 {
-#ifdef QT_NO_DATESTRING
-   return QVariant(val);
-#else
    if (val.isEmpty()) {
       return QVariant(QTime());
    }
+
    return QVariant(QTime::fromString(val, Qt::ISODate));
-#endif
 }
 
 static inline QVariant qDateTimeFromString(QString &val)
 {
-#ifdef QT_NO_DATESTRING
-   return QVariant(val);
-#else
-
    if (val.isEmpty()) {
       return QVariant(QDateTime());
    }
@@ -136,7 +126,6 @@ static inline QVariant qDateTimeFromString(QString &val)
                   .insert(10, QChar('T')).insert(13, QChar(':')).insert(16, QChar(':'));
 
    return QVariant(QDateTime::fromString(val, Qt::ISODate));
-#endif
 }
 
 class QMYSQLResultPrivate : public QObject

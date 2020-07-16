@@ -313,7 +313,6 @@ QByteArray QSslCertificatePrivate::subjectInfoToString(QSslCertificate::SubjectI
 
 QDebug operator<<(QDebug debug, const QSslCertificate &certificate)
 {
-
    // QDebugStateSaver saver(debug);
    // debug.resetFormat().nospace();
 
@@ -324,11 +323,8 @@ QDebug operator<<(QDebug debug, const QSslCertificate &certificate)
          << ", " << certificate.issuerInfo(QSslCertificate::Organization)
          << ", " << certificate.subjectInfo(QSslCertificate::Organization)
          << ", " << certificate.subjectAlternativeNames()
-
-#ifndef QT_NO_DATESTRING
          << ", " << certificate.effectiveDate()
          << ", " << certificate.expiryDate()
-#endif
          << ')';
 
    return debug;

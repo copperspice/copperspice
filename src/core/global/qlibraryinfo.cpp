@@ -153,13 +153,8 @@ QLibraryInfo::QLibraryInfo()
 
 QDate QLibraryInfo::buildDate()
 {
-#ifndef QT_NO_DATESTRING
    return QDate::fromString(QString::fromLatin1(BUILD_DATE), Qt::ISODate);
-#else
-   return QDate::fromSecsSinceEpoch(0);
-#endif
 }
-
 
 QString QLibraryInfo::licensee()
 {

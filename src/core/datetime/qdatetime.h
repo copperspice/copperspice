@@ -84,10 +84,8 @@ class Q_CORE_EXPORT QDate
    static QString longDayName(int weekday, MonthNameType type = DateFormat);
 #endif
 
-#ifndef QT_NO_DATESTRING
    QString toString(Qt::DateFormat f = Qt::TextDate) const;
    QString toString(const QString &format) const;
-#endif
 
    bool setDate(int year, int month, int day);
    void getDate(int *year, int *month, int *day);
@@ -118,10 +116,8 @@ class Q_CORE_EXPORT QDate
 
    static QDate currentDate();
 
-#ifndef QT_NO_DATESTRING
    static QDate fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
    static QDate fromString(const QString &s, const QString &format);
-#endif
 
    static bool isValid(int y, int m, int d);
    static bool isLeapYear(int year);
@@ -184,10 +180,8 @@ class Q_CORE_EXPORT QTime
    int second() const;
    int msec() const;
 
-#ifndef QT_NO_DATESTRING
    QString toString(Qt::DateFormat f = Qt::TextDate) const;
    QString toString(const QString &format) const;
-#endif
 
    bool setHMS(int h, int m, int s, int ms = 0);
 
@@ -230,10 +224,8 @@ class Q_CORE_EXPORT QTime
 
    static QTime currentTime();
 
-#ifndef QT_NO_DATESTRING
    static QTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
    static QTime fromString(const QString &s, const QString &format);
-#endif
 
    static bool isValid(int h, int m, int s, int ms = 0);
 
@@ -301,10 +293,8 @@ class Q_CORE_EXPORT QDateTime
    void setMSecsSinceEpoch(qint64 msecs);
    void setTime_t(quint64 secsSince1Jan1970UTC);
 
-#ifndef QT_NO_DATESTRING
    QString toString(Qt::DateFormat f = Qt::TextDate) const;
    QString toString(const QString &format) const;
-#endif
 
    QDateTime addDays(qint64 days) const;
    QDateTime addMonths(qint64 months) const;
@@ -350,10 +340,8 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime currentDateTime();
    static QDateTime currentDateTimeUtc();
 
-#ifndef QT_NO_DATESTRING
    static QDateTime fromString(const QString &s, Qt::DateFormat f = Qt::TextDate);
    static QDateTime fromString(const QString &s, const QString &format);
-#endif
 
    static QDateTime fromTime_t(quint64 secsSince1Jan1970UTC, Qt::TimeSpec spec = Qt::LocalTime, int offsetFromUtc = 0);
    static QDateTime fromTime_t(quint64 secsSince1Jan1970UTC, const QTimeZone &timeZone);
@@ -390,13 +378,12 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
 
-#if ! defined(QT_NO_DATESTRING)
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDate &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QTime &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
-#endif
 
 Q_CORE_EXPORT uint qHash(const QDateTime &key, uint seed = 0);
 Q_CORE_EXPORT uint qHash(const QDate &key, uint seed = 0);
 Q_CORE_EXPORT uint qHash(const QTime &key, uint seed = 0);
+
 #endif

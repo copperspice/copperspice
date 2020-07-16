@@ -1339,7 +1339,6 @@ QString QLocale::dateTimeFormat(FormatType format) const
    return dateFormat(format) + QLatin1Char(' ') + timeFormat(format);
 }
 
-#ifndef QT_NO_DATESTRING
 QTime QLocale::toTime(const QString &string, FormatType format) const
 {
    return toTime(string, timeFormat(format));
@@ -1400,7 +1399,6 @@ QDateTime QLocale::toDateTime(const QString &string, const QString &format) cons
 
    return QDateTime(QDate(), QTime(-1, -1, -1));
 }
-#endif
 
 QChar QLocale::decimalPoint() const
 {

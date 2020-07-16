@@ -716,13 +716,7 @@ QString QFileSystemModelPrivate::time(const QModelIndex &index) const
       return QString();
    }
 
-#ifndef QT_NO_DATESTRING
    return node(index)->lastModified().toString(Qt::SystemLocaleDate);
-#else
-
-   return QString();
-
-#endif
 }
 
 QString QFileSystemModelPrivate::type(const QModelIndex &index) const

@@ -573,7 +573,6 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
                     dist = 10;
                 }
 
-#ifndef QT_NO_DATESTRING
             } else if (type == String) {
                 UString ustring = value.toString(exec);
                 QString qstring = QString((const QChar*)ustring.impl()->characters(), ustring.length());
@@ -619,8 +618,6 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
                         dist = 3;
                     }
                 }
-#endif // QT_NO_DATESTRING
-
             }
             break;
 

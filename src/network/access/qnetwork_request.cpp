@@ -32,10 +32,7 @@
 #include <qdatetime.h>
 
 #include <ctype.h>
-
-#ifndef QT_NO_DATESTRING
-# include <stdio.h>
-#endif
+#include <stdio.h>
 
 class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
 {
@@ -672,7 +669,6 @@ QDateTime QNetworkHeadersPrivate::fromHttpDate(const QByteArray &value)
 
    int pos = value.indexOf(',');
    QDateTime dt;
-#ifndef QT_NO_DATESTRING
    if (pos == -1) {
       // no comma -> asctime(3) format
       dt = QDateTime::fromString(QString::fromLatin1(value), Qt::TextDate);
@@ -694,7 +690,6 @@ QDateTime QNetworkHeadersPrivate::fromHttpDate(const QByteArray &value)
          dt = c.toDateTime(sansWeekday, QLatin1String("dd-MMM-yy hh:mm:ss 'GMT'"));
       }
    }
-#endif // QT_NO_DATESTRING
 
    if (dt.isValid()) {
       dt.setTimeSpec(Qt::UTC);

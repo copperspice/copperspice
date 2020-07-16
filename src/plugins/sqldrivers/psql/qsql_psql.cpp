@@ -476,33 +476,22 @@ QVariant QPSQLResult::data(int i)
          if (val[0] == '\0') {
             return QVariant(QDate());
          } else {
-
-#ifndef QT_NO_DATESTRING
             return QVariant(QDate::fromString(QString::fromLatin1(val), Qt::ISODate));
-#else
-            return QVariant(QString::fromLatin1(val));
-#endif
          }
 
       case QVariant::Time: {
          const QString str = QString::fromLatin1(val);
 
-#ifndef QT_NO_DATESTRING
          if (str.isEmpty()) {
             return QVariant(QTime());
          } else {
             return QVariant(QTime::fromString(str, Qt::ISODate));
          }
-#else
-         return QVariant(str);
-#endif
-
       }
 
       case QVariant::DateTime: {
          QString dtval = QString::fromLatin1(val);
 
-#ifndef QT_NO_DATESTRING
          if (dtval.length() < 10) {
             return QVariant(QDateTime());
 
@@ -513,10 +502,8 @@ QVariant QPSQLResult::data(int i)
             }
             return QVariant(QDateTime::fromString(dtval, Qt::ISODate).toLocalTime());
          }
-#else
-         return QVariant(dtval);
-#endif
       }
+
       case QVariant::ByteArray: {
          size_t len;
          unsigned char *data = PQunescapeBytea((const unsigned char *)val, &len);
@@ -1568,7 +1555,6 @@ QString QPSQLDriver::formatValue(const QSqlField &field, bool trimStrings) const
       switch (int(field.type())) {
          case QVariant::DateTime:
 
-#ifndef QT_NO_DATESTRING
             if (field.value().toDateTime().isValid()) {
                // we force the value to be considered with a timezone information, and we force it to be UTC
                // this is safe since postgresql stores only the UTC value and not the timezone offset (only used
@@ -1580,19 +1566,15 @@ QString QPSQLDriver::formatValue(const QSqlField &field, bool trimStrings) const
             } else {
                r = QString("NULL");
             }
-#else
-            r = QString("NULL");
-#endif
+
             break;
 
          case QVariant::Time:
 
-#ifndef QT_NO_DATESTRING
             if (field.value().toTime().isValid()) {
                r = QChar('\'') + field.value().toTime().toString(QString("hh:mm:ss.zzz")) + QChar('\'');
-            } else
-#endif
-            {
+
+            } else {
                r = QString("NULL");
             }
             break;

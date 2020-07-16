@@ -51,13 +51,7 @@
 int QDateTimeParser::getDigit(const QDateTime &t, int index) const
 {
    if (index < 0 || index >= sectionNodes.size()) {
-
-#ifndef QT_NO_DATESTRING
       qWarning("QDateTimeParser::getDigit() Internal error (%s %d)", csPrintable(t.toString()), index);
-#else
-      qWarning("QDateTimeParser::getDigit() Internal error (%d)", index);
-#endif
-
       return -1;
    }
 
@@ -98,12 +92,7 @@ int QDateTimeParser::getDigit(const QDateTime &t, int index) const
          break;
    }
 
-#ifndef QT_NO_DATESTRING
-   qWarning("QDateTimeParser::getDigit() Internal error 2 (%s %d)",
-      qPrintable(t.toString()), index);
-#else
-   qWarning("QDateTimeParser::getDigit() Internal error 2 (%d)", index);
-#endif
+   qWarning("QDateTimeParser::getDigit() Internal error 2 (%s %d)", csPrintable(t.toString()), index);
 
    return -1;
 }
@@ -123,12 +112,7 @@ int QDateTimeParser::getDigit(const QDateTime &t, int index) const
 bool QDateTimeParser::setDigit(QDateTime &v, int index, int newVal) const
 {
    if (index < 0 || index >= sectionNodes.size()) {
-#ifndef QT_NO_DATESTRING
-      qWarning("QDateTimeParser::setDigit() Internal error (%s %d %d)",
-         qPrintable(v.toString()), index, newVal);
-#else
-      qWarning("QDateTimeParser::setDigit() Internal error (%d %d)", index, newVal);
-#endif
+      qWarning("QDateTimeParser::setDigit() Internal error (%s %d %d)", csPrintable(v.toString()), index, newVal);
       return false;
    }
    const SectionNode &node = sectionNodes.at(index);
@@ -922,7 +906,6 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
 }
 #endif // QT_NO_TEXTDATE
 
-#ifndef QT_NO_DATESTRING
 /*!
   \internal
 */
@@ -1333,7 +1316,6 @@ end:
 
    return node;
 }
-#endif // QT_NO_DATESTRING
 
 #ifndef QT_NO_TEXTDATE
 /*!
@@ -1852,7 +1834,6 @@ QString QDateTimeParser::stateName(State s) const
    }
 }
 
-#ifndef QT_NO_DATESTRING
 bool QDateTimeParser::fromString(const QString &t, QDate *date, QTime *time) const
 {
    QDateTime val(QDate(1900, 1, 1), QDATETIMEEDIT_TIME_MIN);
@@ -1883,7 +1864,6 @@ bool QDateTimeParser::fromString(const QString &t, QDate *date, QTime *time) con
 
    return true;
 }
-#endif // QT_NO_DATESTRING
 
 QDateTime QDateTimeParser::getMinimum() const
 {

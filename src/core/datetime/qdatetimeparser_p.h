@@ -146,14 +146,10 @@ class Q_CORE_EXPORT QDateTimeParser
       LowerCase
    };
 
-#ifndef QT_NO_DATESTRING
    StateNode parse(QString &input, int &cursorPosition, const QDateTime &currentValue, bool fixup) const;
-#endif
-   bool parseFormat(const QString &format);
 
-#ifndef QT_NO_DATESTRING
+   bool parseFormat(const QString &format);
    bool fromString(const QString &text, QDate *date, QTime *time) const;
-#endif
 
    enum FieldInfoFlag {
       Numeric = 0x01,
@@ -168,6 +164,7 @@ class Q_CORE_EXPORT QDateTimeParser
    void setDefaultLocale(const QLocale &loc) {
       defaultLocale = loc;
    }
+
    virtual QString displayText() const {
       return text;
    }

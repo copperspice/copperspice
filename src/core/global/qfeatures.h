@@ -281,11 +281,6 @@
 #define QT_NO_CODECS
 #endif
 
-// QDate/QTime/QDateTime
-#if !defined(QT_NO_DATESTRING) && (defined(QT_NO_TEXTDATE))
-#define QT_NO_DATESTRING
-#endif
-
 // QDial
 #if !defined(QT_NO_DIAL) && (defined(QT_NO_SLIDER))
 #define QT_NO_DIAL
@@ -697,7 +692,7 @@
 #endif
 
 // QDateTimeEdit
-#if !defined(QT_NO_DATETIMEEDIT) && (defined(QT_NO_CALENDARWIDGET) || defined(QT_NO_DATESTRING))
+#if !defined(QT_NO_DATETIMEEDIT) && defined(QT_NO_CALENDARWIDGET)
 #define QT_NO_DATETIMEEDIT
 #endif
 

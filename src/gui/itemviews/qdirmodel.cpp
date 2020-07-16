@@ -1337,12 +1337,7 @@ QString QDirModelPrivate::type(const QModelIndex &index) const
 
 QString QDirModelPrivate::time(const QModelIndex &index) const
 {
-#ifndef QT_NO_DATESTRING
    return node(index)->info.lastModified().toString(Qt::LocalDate);
-#else
-   Q_UNUSED(index);
-   return QString();
-#endif
 }
 
 void QDirModelPrivate::appendChild(QDirModelPrivate::QDirNode *parent, const QString &path) const

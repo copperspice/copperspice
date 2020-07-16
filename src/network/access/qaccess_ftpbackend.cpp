@@ -380,11 +380,9 @@ void QNetworkAccessFtpBackend::ftpRawCommandReply(int code, const QString &text)
          // reply to the size command
          setHeader(QNetworkRequest::ContentLengthHeader, text.toInteger<qint64>());
 
-#ifndef QT_NO_DATESTRING
       } else if (id == mdtmId) {
          QDateTime dt = QDateTime::fromString(text, QLatin1String("yyyyMMddHHmmss"));
          setHeader(QNetworkRequest::LastModifiedHeader, dt);
-#endif
       }
    }
 }

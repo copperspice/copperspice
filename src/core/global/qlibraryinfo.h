@@ -33,10 +33,7 @@ class Q_CORE_EXPORT QLibraryInfo
  public:
    static QString licensee();
    static QString licensedProducts();
-
-#ifndef QT_NO_DATESTRING
-    static QDate buildDate();
-#endif
+   static QDate buildDate();
 
    enum LibraryLocation {
       PrefixPath,
