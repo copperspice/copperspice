@@ -212,11 +212,6 @@ class Q_CORE_EXPORT QAbstractFileEngineIterator
    virtual QFileInfo currentFileInfo() const;
    QString currentFilePath() const;
 
- protected:
-   enum EntryInfoType {
-   };
-   virtual QVariant entryInfo(EntryInfoType type) const;
-
  private:
    Q_DISABLE_COPY(QAbstractFileEngineIterator)
    friend class QDirIterator;

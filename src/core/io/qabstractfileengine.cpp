@@ -671,21 +671,6 @@ QFileInfo QAbstractFileEngineIterator::currentFileInfo() const
    return d->fileInfo;
 }
 
-/*!
-    \internal
-
-    Returns the entry info \a type for this iterator's current directory entry
-    as a QVariant. If \a type is undefined for this entry, a null QVariant is
-    returned.
-
-    \sa QAbstractFileEngine::beginEntryList(), QDir::beginEntryList()
-*/
-QVariant QAbstractFileEngineIterator::entryInfo(EntryInfoType type) const
-{
-   Q_UNUSED(type)
-   return QVariant();
-}
-
 QAbstractFileEngine::Iterator *QAbstractFileEngine::beginEntryList(QDir::Filters filters,
       const QStringList &filterNames)
 {
