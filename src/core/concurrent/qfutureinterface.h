@@ -30,9 +30,9 @@
 #include <qtconcurrentexception.h>
 #include <qtconcurrentresultstore.h>
 
-QT_BEGIN_NAMESPACE
+template <typename T>
+class QFuture;
 
-template <typename T> class QFuture;
 class QFutureInterfaceBasePrivate;
 
 class QFutureWatcherBase;
@@ -287,6 +287,4 @@ class QFutureInterface<void> : public QFutureInterfaceBase
    }
 };
 
-QT_END_NAMESPACE
-
-#endif // QFUTUREINTERFACE_H
+#endif

@@ -90,7 +90,7 @@ QString qt_error_string(int errorCode)
       default: {
 
 #ifdef Q_OS_WIN
-         char16_t *string = 0;
+         char16_t *string = nullptr;
 
          FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
              NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&string, 0, NULL);
@@ -182,7 +182,7 @@ static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
 
    QByteArray buffer(1024, '\0');
 
-   if (msg) {
+   if (msg != nullptr) {
       try {
 
          while (true) {

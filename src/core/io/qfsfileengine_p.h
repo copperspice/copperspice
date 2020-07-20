@@ -33,8 +33,6 @@
 
 #ifndef QT_NO_FSFILEENGINE
 
-QT_BEGIN_NAMESPACE
-
 class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
 {
    Q_DECLARE_PUBLIC(QFSFileEngine)
@@ -139,8 +137,6 @@ class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
    QAbstractFileEngine::FileFlags getPermissions(QAbstractFileEngine::FileFlags type) const;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_FSFILEENGINE
 
-#endif // QFSFILEENGINE_P_H
+#endif

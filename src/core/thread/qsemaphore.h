@@ -26,8 +26,6 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSemaphorePrivate;
 
 class Q_CORE_EXPORT QSemaphore
@@ -50,6 +48,4 @@ class Q_CORE_EXPORT QSemaphore
    QSemaphorePrivate *d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QSEMAPHORE_H
+#endif

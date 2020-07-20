@@ -36,8 +36,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-QT_BEGIN_NAMESPACE
-
 static inline int _q_futex(void *addr, int op, int val, const struct timespec *timeout)
 {
    volatile int *int_addr = reinterpret_cast<volatile int *>(addr);
@@ -117,8 +115,5 @@ void QBasicMutex::unlockInternal()
    Q_ASSERT(d->recursive);
    static_cast<QRecursiveMutexPrivate *>(d)->unlock();
 }
-
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_THREAD

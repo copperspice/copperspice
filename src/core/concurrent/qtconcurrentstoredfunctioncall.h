@@ -29,8 +29,6 @@
 #include <qglobal.h>
 #include <qtconcurrentrunbase.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 template <typename T, typename FunctionPointer>
 struct StoredFunctorCall0: public RunFunctionTask<T> {
@@ -1534,7 +1532,5 @@ class StoredFunctorCall<void, Functor> : public RunFunctionTask<void>
 
 
 } //namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

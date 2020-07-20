@@ -27,13 +27,11 @@
 #include <qabstractfileengine_p.h>
 #include <qresource_p.h>
 
-QT_BEGIN_NAMESPACE
-
 /*!
     \internal
 
-    Returns the canonicalized form of \a path (i.e., with all symlinks
-    resolved, and all redundant path elements removed.
+    Returns the canonicalized form of \a path (i.e., with all symlinks resolved,
+    and all redundant path elements removed.
 */
 QString QFileSystemEngine::slowCanonicalized(const QString &path)
 {
@@ -385,4 +383,3 @@ QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFile
 #endif
 }
 
-QT_END_NAMESPACE

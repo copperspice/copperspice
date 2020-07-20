@@ -85,24 +85,24 @@
 class QMutexUnlocker
 {
  public:
-   inline explicit QMutexUnlocker(QMutex *m)
+   explicit QMutexUnlocker(QMutex *m)
       : mtx(m) {
    }
 
-   inline ~QMutexUnlocker() {
+   ~QMutexUnlocker() {
       unlock();
    }
 
-   inline void unlock() {
+   void unlock() {
       if (mtx) {
          mtx->unlock();
       }
+
       mtx = 0;
    }
 
  private:
    Q_DISABLE_COPY(QMutexUnlocker)
-
    QMutex *mtx;
 };
 

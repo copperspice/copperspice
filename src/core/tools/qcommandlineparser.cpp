@@ -243,10 +243,11 @@ void QCommandLineParser::process(const QStringList &arguments)
    }
 }
 
-void QCommandLineParser::process(const QCoreApplication &app)
+void QCommandLineParser::process(const QCoreApplication &)
 {
-   // QCoreApplication::arguments() is static, but the app instance must exist so we require it as parameter
-   Q_UNUSED(app);
+   // QCoreApplication::arguments() is static
+   // user must pass the parameter to ensure the QCoreApplication has been constructed
+
    process(QCoreApplication::arguments());
 }
 
@@ -726,4 +727,3 @@ QString QCommandLineParserPrivate::helpText() const
    return text;
 }
 
-QT_END_NAMESPACE

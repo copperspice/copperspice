@@ -28,9 +28,7 @@
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
 
-//#define QSYSTEMSEMAPHORE_DEBUG
-
-QT_BEGIN_NAMESPACE
+// #define QSYSTEMSEMAPHORE_DEBUG
 
 QSystemSemaphorePrivate::QSystemSemaphorePrivate() :
    semaphore(0), error(QSystemSemaphore::NoError)
@@ -96,6 +94,7 @@ void QSystemSemaphorePrivate::cleanHandle()
 #endif
 
    }
+
    semaphore = 0;
 }
 
@@ -129,6 +128,4 @@ bool QSystemSemaphorePrivate::modifySemaphore(int count)
    return true;
 }
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_SYSTEMSEMAPHORE
+#endif

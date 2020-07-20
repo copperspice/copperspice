@@ -36,8 +36,6 @@
 #define DEFAULT_TIMER_INTERVAL 16
 #define STARTSTOP_TIMER_DELAY 0
 
-QT_BEGIN_NAMESPACE
-
 Q_GLOBAL_STATIC(QThreadStorage<QUnifiedTimer *>, unifiedTimer)
 
 QUnifiedTimer::QUnifiedTimer() :
@@ -357,7 +355,8 @@ QDefaultAnimationDriver::QDefaultAnimationDriver(QUnifiedTimer *timer)
 void QDefaultAnimationDriver::timerEvent(QTimerEvent *e)
 {
    Q_ASSERT(e->timerId() == m_timer.timerId());
-   Q_UNUSED(e); // if the assertions are disabled
+   (void) e;
+
    advance();
 }
 
@@ -707,12 +706,6 @@ void QAbstractAnimation::resume()
    d->setState(Running);
 }
 
-/*!
-    If \a paused is true, the animation is paused.
-    If \a paused is false, the animation is resumed.
-
-    \sa state(), pause(), resume()
-*/
 void QAbstractAnimation::setPaused(bool paused)
 {
    if (paused) {
@@ -722,48 +715,20 @@ void QAbstractAnimation::setPaused(bool paused)
    }
 }
 
-
-/*!
-    \reimp
-*/
 bool QAbstractAnimation::event(QEvent *event)
 {
    return QObject::event(event);
 }
 
-/*!
-    \fn virtual void QAbstractAnimation::updateCurrentTime(int currentTime) = 0;
-
-    This pure virtual function is called every time the animation's
-    \a currentTime changes.
-
-    \sa updateState()
-*/
-
-/*!
-    This virtual function is called by QAbstractAnimation when the state
-    of the animation is changed from \a oldState to \a newState.
-
-    \sa start(), stop(), pause(), resume()
-*/
 void QAbstractAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
-   Q_UNUSED(oldState);
-   Q_UNUSED(newState);
+   (void) oldState;
+   (void) newState;
 }
 
-/*!
-    This virtual function is called by QAbstractAnimation when the direction
-    of the animation is changed. The \a direction argument is the new direction.
-
-    \sa setDirection(), direction()
-*/
 void QAbstractAnimation::updateDirection(QAbstractAnimation::Direction direction)
 {
-   Q_UNUSED(direction);
+   (void) direction;
 }
 
-
-QT_END_NAMESPACE
-
-#endif //QT_NO_ANIMATION
+#endif // QT_NO_ANIMATION

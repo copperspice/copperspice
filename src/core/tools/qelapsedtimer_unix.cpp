@@ -36,8 +36,6 @@
 # define _POSIX_MONOTONIC_CLOCK -1
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #if (_POSIX_MONOTONIC_CLOCK-0 != 0)
 static const bool monotonicClockChecked = true;
 static const bool monotonicClockAvailable = _POSIX_MONOTONIC_CLOCK > 0;
@@ -200,4 +198,3 @@ bool operator<(const QElapsedTimer &v1, const QElapsedTimer &v2)
    return v1.t1 < v2.t1 || (v1.t1 == v2.t1 && v1.t2 < v2.t2);
 }
 
-QT_END_NAMESPACE

@@ -30,8 +30,6 @@
 #include <qtconcurrentfunctionwrappers.h>
 #include <qstringlist.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 // map() on sequences
@@ -193,7 +191,5 @@ typename QtPrivate::MapResultType<Iterator, MapFunctor>::ResultType blockingMapp
 }
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

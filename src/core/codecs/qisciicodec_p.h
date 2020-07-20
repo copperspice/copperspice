@@ -26,8 +26,6 @@
 
 #include <qtextcodec.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_CODECS
 
 class QIsciiCodec : public QTextCodec
@@ -48,6 +46,4 @@ class QIsciiCodec : public QTextCodec
 
 #endif
 
-QT_END_NAMESPACE
-
-#endif // QISCIICODEC_P_H
+#endif

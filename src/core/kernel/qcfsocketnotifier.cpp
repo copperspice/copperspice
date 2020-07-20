@@ -26,11 +26,6 @@
 #include <qsocketnotifier.h>
 #include <qthread.h>
 
-QT_BEGIN_NAMESPACE
-
-/**************************************************************************
-    Socket Notifiers
- *************************************************************************/
 void qt_mac_socket_callback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef,
                             const void *, void *info)
 {
@@ -257,11 +252,8 @@ void QCFSocketNotifier::unregisterSocketInfo(MacSocketInfo *socketInfo)
     CFRelease(socketInfo->socket);
 }
 
-void QCFSocketNotifier::enableSocketNotifiers(CFRunLoopObserverRef ref, CFRunLoopActivity activity, void *info)
+void QCFSocketNotifier::enableSocketNotifiers(CFRunLoopObserverRef, CFRunLoopActivity, void *info)
 {
-    Q_UNUSED(ref);
-    Q_UNUSED(activity);
-
     QCFSocketNotifier *that = static_cast<QCFSocketNotifier *>(info);
 
     for (MacSocketInfo *socketInfo : that->macSockets) {
@@ -292,6 +284,3 @@ void QCFSocketNotifier::enableSocketNotifiers(CFRunLoopObserverRef ref, CFRunLoo
         }
     }
 }
-
-QT_END_NAMESPACE
-

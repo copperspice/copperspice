@@ -106,13 +106,14 @@ class Q_CORE_EXPORT QDebug
    QDebug(QtMsgType t)
       : stream(new Stream(t)) {}
 
-   QDebug(const QDebug &other): stream(other.stream) {
+   QDebug(const QDebug &other)
+      : stream(other.stream) {
       ++stream->ref;
    }
 
-   inline QDebug &operator=(const QDebug &other);
-
    ~QDebug();
+
+   inline QDebug &operator=(const QDebug &other);
 
    bool autoInsertSpaces() const {
      return stream->space;
@@ -173,7 +174,6 @@ class Q_CORE_EXPORT QDebug
       stream->ts << t;
       return maybeSpace();
    }
-
 
    inline QDebug &operator<<(char16_t t) {
       return *this << QChar(t);
@@ -258,8 +258,6 @@ class Q_CORE_EXPORT QDebug
       return maybeSpace();
    }
 
-
-
    inline QDebug &operator<<(QTextStreamFunction f) {
       stream->ts << f;
       return *this;
@@ -276,16 +274,16 @@ class Q_CORE_EXPORT QDebug
 
 class Q_CORE_EXPORT QDebugStateSaver
 {
-public:
+ public:
     QDebugStateSaver(QDebug &dbg);
-    ~QDebugStateSaver();
 
-protected:
-   QScopedPointer<QDebugStateSaverPrivate> d_ptr;
 
+   ~QDebugStateSaver();
 private:
     Q_DISABLE_COPY(QDebugStateSaver)
 
+ protected:
+   QScopedPointer<QDebugStateSaverPrivate> d_ptr;
 };
 
 class QNoDebug

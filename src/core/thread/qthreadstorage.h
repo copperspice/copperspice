@@ -26,8 +26,6 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 class Q_CORE_EXPORT QThreadStorageData
 {
  public:
@@ -44,8 +42,7 @@ class Q_CORE_EXPORT QThreadStorageData
 
 // pointer specialization
 template <typename T>
-inline
-T *&qThreadStorage_localData(QThreadStorageData &d, T **)
+inline T *&qThreadStorage_localData(QThreadStorageData &d, T **)
 {
    void **v = d.get();
    if (!v) {
@@ -55,31 +52,27 @@ T *&qThreadStorage_localData(QThreadStorageData &d, T **)
 }
 
 template <typename T>
-inline
-T *qThreadStorage_localData_const(const QThreadStorageData &d, T **)
+inline T *qThreadStorage_localData_const(const QThreadStorageData &d, T **)
 {
    void **v = d.get();
    return v ? *(reinterpret_cast<T **>(v)) : 0;
 }
 
 template <typename T>
-inline
-void qThreadStorage_setLocalData(QThreadStorageData &d, T **t)
+inline void qThreadStorage_setLocalData(QThreadStorageData &d, T **t)
 {
    (void) d.set(*t);
 }
 
 template <typename T>
-inline
-void qThreadStorage_deleteData(void *d, T **)
+inline void qThreadStorage_deleteData(void *d, T **)
 {
    delete static_cast<T *>(d);
 }
 
 // value-based specialization
 template <typename T>
-inline
-T &qThreadStorage_localData(QThreadStorageData &d, T *)
+inline T &qThreadStorage_localData(QThreadStorageData &d, T *)
 {
    void **v = d.get();
    if (!v) {
@@ -89,27 +82,23 @@ T &qThreadStorage_localData(QThreadStorageData &d, T *)
 }
 
 template <typename T>
-inline
-T qThreadStorage_localData_const(const QThreadStorageData &d, T *)
+inline T qThreadStorage_localData_const(const QThreadStorageData &d, T *)
 {
    void **v = d.get();
    return v ? *(reinterpret_cast<T *>(*v)) : T();
 }
 
 template <typename T>
-inline
-void qThreadStorage_setLocalData(QThreadStorageData &d, T *t)
+inline void qThreadStorage_setLocalData(QThreadStorageData &d, T *t)
 {
    (void) d.set(new T(*t));
 }
 
 template <typename T>
-inline
-void qThreadStorage_deleteData(void *d, T *)
+inline void qThreadStorage_deleteData(void *d, T *)
 {
    delete static_cast<T *>(d);
 }
-
 
 template <class T>
 class QThreadStorage
@@ -143,6 +132,4 @@ class QThreadStorage
    }
 };
 
-QT_END_NAMESPACE
-
-#endif // QTHREADSTORAGE_H
+#endif

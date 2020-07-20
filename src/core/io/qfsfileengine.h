@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_FSFILEENGINE
 
-QT_BEGIN_NAMESPACE
-
 class QFSFileEnginePrivate;
 
 class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
@@ -100,8 +98,6 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
    QFSFileEngine(QFSFileEnginePrivate &dd);
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_FSFILEENGINE
 
-#endif // QFSFILEENGINE_H
+#endif

@@ -44,19 +44,19 @@ class Q_CORE_EXPORT QXmlStreamAttribute
 
    ~QXmlStreamAttribute();
 
-   inline QStringView namespaceUri() const {
+   QStringView namespaceUri() const {
       return m_namespaceUri;
    }
 
-   inline QStringView name() const {
+   QStringView name() const {
       return m_name;
    }
 
-   inline QStringView qualifiedName() const {
+   QStringView qualifiedName() const {
       return m_qualifiedName;
    }
 
-   inline QStringView prefix() const {
+   QStringView prefix() const {
 
       if (m_qualifiedName.isEmpty()) {
          return QStringView();
@@ -76,15 +76,15 @@ class Q_CORE_EXPORT QXmlStreamAttribute
       return QStringView(m_qualifiedName.begin(), iter);
    }
 
-   inline QStringView value() const {
+   QStringView value() const {
       return m_value;
    }
 
-   inline bool isDefault() const {
+   bool isDefault() const {
       return m_isDefault;
    }
 
-   inline bool operator==(const QXmlStreamAttribute &other) const {
+   bool operator==(const QXmlStreamAttribute &other) const {
       bool retval = (value() == other.value());
 
       if (retval) {
@@ -100,7 +100,7 @@ class Q_CORE_EXPORT QXmlStreamAttribute
       return retval;
    }
 
-   inline bool operator!=(const QXmlStreamAttribute &other) const {
+   bool operator!=(const QXmlStreamAttribute &other) const {
       return ! operator==(other);
    }
 
@@ -120,7 +120,8 @@ class Q_CORE_EXPORT QXmlStreamAttributes : public QVector<QXmlStreamAttribute>
 {
  public:
    QXmlStreamAttributes()
-   { }
+   {
+   }
 
    QStringView value(const QString &namespaceUri, const QString &name) const;
    QStringView value(const QString &qualifiedName) const;
@@ -145,22 +146,24 @@ class Q_CORE_EXPORT QXmlStreamNamespaceDeclaration
    QXmlStreamNamespaceDeclaration();
    QXmlStreamNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &);
    QXmlStreamNamespaceDeclaration(const QString &prefix, const QString &namespaceUri);
+
    ~QXmlStreamNamespaceDeclaration();
 
    QXmlStreamNamespaceDeclaration &operator=(const QXmlStreamNamespaceDeclaration &);
-   inline QStringView prefix() const {
+
+   QStringView prefix() const {
       return m_prefix;
    }
 
-   inline QStringView namespaceUri() const {
+   QStringView namespaceUri() const {
       return m_namespaceUri;
    }
 
-   inline bool operator==(const QXmlStreamNamespaceDeclaration &other) const {
+   bool operator==(const QXmlStreamNamespaceDeclaration &other) const {
       return (prefix() == other.prefix() && namespaceUri() == other.namespaceUri());
    }
 
-   inline bool operator!=(const QXmlStreamNamespaceDeclaration &other) const {
+   bool operator!=(const QXmlStreamNamespaceDeclaration &other) const {
       return !operator==(other);
    }
 
@@ -171,7 +174,7 @@ class Q_CORE_EXPORT QXmlStreamNamespaceDeclaration
    friend class QXmlStreamReaderPrivate;
 };
 
-typedef QVector<QXmlStreamNamespaceDeclaration> QXmlStreamNamespaceDeclarations;
+using QXmlStreamNamespaceDeclarations = QVector<QXmlStreamNamespaceDeclaration>;
 
 class Q_CORE_EXPORT QXmlStreamNotationDeclaration
 {
@@ -182,24 +185,24 @@ class Q_CORE_EXPORT QXmlStreamNotationDeclaration
 
    ~QXmlStreamNotationDeclaration();
 
-   inline QStringView name() const {
+   QStringView name() const {
       return m_name;
    }
 
-   inline QStringView systemId() const {
+   QStringView systemId() const {
       return m_systemId;
    }
 
-   inline QStringView publicId() const {
+   QStringView publicId() const {
       return m_publicId;
    }
 
-   inline bool operator==(const QXmlStreamNotationDeclaration &other) const {
+   bool operator==(const QXmlStreamNotationDeclaration &other) const {
       return (name() == other.name() && systemId() == other.systemId()
               && publicId() == other.publicId());
    }
 
-   inline bool operator!=(const QXmlStreamNotationDeclaration &other) const {
+   bool operator!=(const QXmlStreamNotationDeclaration &other) const {
       return !operator==(other);
    }
 
@@ -211,7 +214,7 @@ class Q_CORE_EXPORT QXmlStreamNotationDeclaration
    friend class QXmlStreamReaderPrivate;
 };
 
-typedef QVector<QXmlStreamNotationDeclaration> QXmlStreamNotationDeclarations;
+using QXmlStreamNotationDeclarations = QVector<QXmlStreamNotationDeclaration>;
 
 class Q_CORE_EXPORT QXmlStreamEntityDeclaration
 {
@@ -222,26 +225,27 @@ class Q_CORE_EXPORT QXmlStreamEntityDeclaration
 
    ~QXmlStreamEntityDeclaration();
 
-   inline QStringView name() const {
+   QStringView name() const {
       return m_name;
    }
 
-   inline QStringView notationName() const {
+   QStringView notationName() const {
       return m_notationName;
    }
 
-   inline QStringView systemId() const {
+   QStringView systemId() const {
       return m_systemId;
    }
 
-   inline QStringView publicId() const {
+   QStringView publicId() const {
       return m_publicId;
    }
 
-   inline QStringView value() const {
+   QStringView value() const {
       return m_value;
    }
-   inline bool operator==(const QXmlStreamEntityDeclaration &other) const {
+
+   bool operator==(const QXmlStreamEntityDeclaration &other) const {
       return (name() == other.name()
               && notationName() == other.notationName()
               && systemId() == other.systemId()
@@ -249,7 +253,7 @@ class Q_CORE_EXPORT QXmlStreamEntityDeclaration
               && value() == other.value());
    }
 
-   inline bool operator!=(const QXmlStreamEntityDeclaration &other) const {
+   bool operator!=(const QXmlStreamEntityDeclaration &other) const {
       return !operator==(other);
    }
 
@@ -263,12 +267,13 @@ class Q_CORE_EXPORT QXmlStreamEntityDeclaration
    friend class QXmlStreamReaderPrivate;
 };
 
-typedef QVector<QXmlStreamEntityDeclaration> QXmlStreamEntityDeclarations;
+using QXmlStreamEntityDeclarations = QVector<QXmlStreamEntityDeclaration>;
 
 class Q_CORE_EXPORT QXmlStreamEntityResolver
 {
  public:
    virtual ~QXmlStreamEntityResolver();
+
    virtual QString resolveEntity(const QString &publicId, const QString &systemId);
    virtual QString resolveUndeclaredEntity(const QString &name);
 };
@@ -330,23 +335,23 @@ class Q_CORE_EXPORT QXmlStreamReader
    void setNamespaceProcessing(bool enable);
    bool namespaceProcessing() const;
 
-   inline bool isStartDocument() const {
+   bool isStartDocument() const {
       return tokenType() == StartDocument;
    }
 
-   inline bool isEndDocument() const {
+   bool isEndDocument() const {
       return tokenType() == EndDocument;
    }
 
-   inline bool isStartElement() const {
+   bool isStartElement() const {
       return tokenType() == StartElement;
    }
 
-   inline bool isEndElement() const {
+   bool isEndElement() const {
       return tokenType() == EndElement;
    }
 
-   inline bool isCharacters() const {
+   bool isCharacters() const {
       return tokenType() == Characters;
    }
 
@@ -354,18 +359,19 @@ class Q_CORE_EXPORT QXmlStreamReader
 
    bool isCDATA() const;
 
-   inline bool isComment() const {
+   bool isComment() const {
       return tokenType() == Comment;
    }
 
-   inline bool isDTD() const {
+   bool isDTD() const {
       return tokenType() == DTD;
    }
-   inline bool isEntityReference() const {
+
+   bool isEntityReference() const {
       return tokenType() == EntityReference;
    }
 
-   inline bool isProcessingInstruction() const {
+   bool isProcessingInstruction() const {
       return tokenType() == ProcessingInstruction;
    }
 
@@ -405,7 +411,7 @@ class Q_CORE_EXPORT QXmlStreamReader
    QString errorString() const;
    Error error() const;
 
-   inline bool hasError() const {
+   bool hasError() const {
       return error() != NoError;
    }
 

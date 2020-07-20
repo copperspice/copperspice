@@ -204,6 +204,7 @@ QVariant::QVariant(QDataStream &s)
 
 QVariant::QVariant(QVariant::Type type)
 {
+   // deprecated
    cs_internal_create(static_cast<uint>(type), nullptr);
 }
 

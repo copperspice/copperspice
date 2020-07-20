@@ -26,8 +26,6 @@
 
 #include <qtextcodec.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TEXTCODEC
 
 template <typename T> class QAtomicPointer;
@@ -53,7 +51,5 @@ class QSimpleTextCodec: public QTextCodec
 };
 
 #endif // QT_NO_TEXTCODEC
-
-QT_END_NAMESPACE
 
 #endif // QSIMPLECODEC_P_H

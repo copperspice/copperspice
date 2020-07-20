@@ -33,8 +33,6 @@
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFileInfoPrivate : public QSharedData
 {
  public:
@@ -141,6 +139,4 @@ class QFileInfoPrivate : public QSharedData
 
 };
 
-QT_END_NAMESPACE
-
-#endif // QFILEINFO_P_H
+#endif

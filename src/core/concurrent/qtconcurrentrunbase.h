@@ -29,8 +29,6 @@
 #include <qrunnable.h>
 #include <qthreadpool.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 template <typename T>
@@ -114,7 +112,5 @@ class RunFunctionTask<void> : public RunFunctionTaskBase<void>
 };
 
 } //namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

@@ -33,18 +33,11 @@
 #include <qfreelist_p.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 QMutex::QMutex(RecursionMode mode)
 {
    d_ptr.store(mode == Recursive ? new QRecursiveMutexPrivate : 0);
 }
 
-/*!
-    Destroys the mutex.
-
-    \warning Destroying a locked mutex may result in undefined behavior.
-*/
 QMutex::~QMutex()
 {
    QMutexData *d = d_ptr.load();
@@ -292,6 +285,3 @@ void QRecursiveMutexPrivate::unlock()
       mutex.unlock();
    }
 }
-
-QT_END_NAMESPACE
-

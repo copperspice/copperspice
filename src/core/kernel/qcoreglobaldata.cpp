@@ -23,8 +23,6 @@
 
 #include <qcoreglobaldata_p.h>
 
-QT_BEGIN_NAMESPACE
-
 Q_GLOBAL_STATIC(QCoreGlobalData, globalInstance)
 
 QCoreGlobalData *QCoreGlobalData::instance()
@@ -32,4 +30,3 @@ QCoreGlobalData *QCoreGlobalData::instance()
    return globalInstance();
 }
 
-QT_END_NAMESPACE

@@ -2635,8 +2635,10 @@ void QXmlStreamWriter::writeAttribute(const QXmlStreamAttribute &attribute)
 void QXmlStreamWriter::writeAttributes(const QXmlStreamAttributes &attributes)
 {
    Q_D(QXmlStreamWriter);
+
    Q_ASSERT(d->inStartElement);
-   Q_UNUSED(d);
+   (void) d;
+
    for (int i = 0; i < attributes.size(); ++i) {
       writeAttribute(attributes.at(i));
    }

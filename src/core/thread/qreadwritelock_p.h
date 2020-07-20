@@ -27,8 +27,6 @@
 #include <qglobal.h>
 #include <qhash.h>
 
-QT_BEGIN_NAMESPACE
-
 struct QReadWriteLockPrivate {
    QReadWriteLockPrivate(QReadWriteLock::RecursionMode recursionMode)
       : accessCount(0), waitingReaders(0), waitingWriters(0),
@@ -48,6 +46,4 @@ struct QReadWriteLockPrivate {
    QHash<Qt::HANDLE, int> currentReaders;
 };
 
-QT_END_NAMESPACE
-
-#endif // QREADWRITELOCK_P_H
+#endif

@@ -23,6 +23,7 @@
 
 #include <qplatformdefs.h>
 #include <qfilesystemwatcher.h>
+
 #include <qfilesystemwatcher_kqueue_p.h>
 #include <qcore_unix_p.h>
 
@@ -38,8 +39,6 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <fcntl.h>
-
-QT_BEGIN_NAMESPACE
 
 // #define KEVENT_DEBUG
 #ifdef KEVENT_DEBUG
@@ -327,6 +326,5 @@ void QKqueueFileSystemWatcherEngine::run()
    }
 }
 
-#endif //QT_NO_FILESYSTEMWATCHER
+#endif // QT_NO_FILESYSTEMWATCHER
 
-QT_END_NAMESPACE

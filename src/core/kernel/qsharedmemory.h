@@ -27,8 +27,6 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_SHAREDMEMORY
 
 class QSharedMemoryPrivate;
@@ -94,7 +92,5 @@ class Q_CORE_EXPORT QSharedMemory : public QObject
 
 #endif // QT_NO_SHAREDMEMORY
 
-QT_END_NAMESPACE
-
-#endif // QSHAREDMEMORY_H
+#endif
 

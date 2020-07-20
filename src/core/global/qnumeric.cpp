@@ -24,8 +24,6 @@
 #include <qnumeric.h>
 #include <qnumeric_p.h>
 
-QT_BEGIN_NAMESPACE
-
 Q_CORE_EXPORT bool qIsInf(double d)
 {
    return qt_is_inf(d);
@@ -80,5 +78,3 @@ Q_CORE_EXPORT double qInf()
    return qt_inf();
 }
 
-
-QT_END_NAMESPACE

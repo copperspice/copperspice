@@ -24,8 +24,6 @@
 #include <qarraydata.h>
 #include <qtools_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #if defined (__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__  >= 406) && !defined(Q_CC_INTEL)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
@@ -131,5 +129,3 @@ void QArrayData::deallocate(QArrayData *data, size_t objectSize, size_t alignmen
 
    qFree(data);
 }
-
-QT_END_NAMESPACE

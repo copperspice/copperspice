@@ -31,8 +31,6 @@
 #include <qhash.h>
 #include <qmutex.h>
 
-QT_BEGIN_NAMESPACE
-
 class QInotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
    CORE_CS_OBJECT(QInotifyFileSystemWatcherEngine)
@@ -60,6 +58,6 @@ class QInotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
    QHash<int, QString> idToPath;
 };
 
-QT_END_NAMESPACE
 #endif // QT_NO_FILESYSTEMWATCHER
-#endif // QFILESYSTEMWATCHER_INOTIFY_P_H
+
+#endif

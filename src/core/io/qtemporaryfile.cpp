@@ -39,8 +39,6 @@
 #include <qcoreapplication.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #if defined(Q_OS_WIN)
 typedef ushort Char;
 
@@ -415,7 +413,6 @@ QTemporaryFile::QTemporaryFile()
    d->templateName = defaultTemplateName();
 
    // uses the form "c_temp.XXXXXX"
-
 }
 
 QTemporaryFile::QTemporaryFile(const QString &templateName)
@@ -441,14 +438,6 @@ QTemporaryFile::QTemporaryFile(const QString &templateName, QObject *parent)
    d->templateName = templateName;
 }
 
-
-/*!
-    Destroys the temporary file object, the file is automatically
-    closed if necessary and if in auto remove mode it will
-    automatically delete the file.
-
-    \sa autoRemove()
-*/
 QTemporaryFile::~QTemporaryFile()
 {
    Q_D(QTemporaryFile);
@@ -458,56 +447,17 @@ QTemporaryFile::~QTemporaryFile()
    }
 }
 
-/*!
-  \fn bool QTemporaryFile::open()
-
-  A QTemporaryFile will always be opened in QIODevice::ReadWrite mode,
-  this allows easy access to the data in the file. This function will
-  return true upon success and will set the fileName() to the unique
-  filename used.
-
-  \sa fileName()
-*/
-
-/*!
-   Returns true if the QTemporaryFile is in auto remove
-   mode. Auto-remove mode will automatically delete the filename from
-   disk upon destruction. This makes it very easy to create your
-   QTemporaryFile object on the stack, fill it with data, read from
-   it, and finally on function return it will automatically clean up
-   after itself.
-
-   Auto-remove is on by default.
-
-   \sa setAutoRemove(), remove()
-*/
 bool QTemporaryFile::autoRemove() const
 {
    Q_D(const QTemporaryFile);
    return d->autoRemove;
 }
 
-/*!
-    Sets the QTemporaryFile into auto-remove mode if \a b is true.
-
-    Auto-remove is on by default.
-
-    \sa autoRemove(), remove()
-*/
 void QTemporaryFile::setAutoRemove(bool b)
 {
    Q_D(QTemporaryFile);
    d->autoRemove = b;
 }
-
-/*!
-   Returns the complete unique filename backing the QTemporaryFile
-   object. This string is null before the QTemporaryFile is opened,
-   afterwards it will contain the fileTemplate() plus
-   additional characters to make it unique.
-
-   \sa fileTemplate()
-*/
 
 QString QTemporaryFile::fileName() const
 {
@@ -524,18 +474,6 @@ QString QTemporaryFile::fileTemplate() const
    return d->templateName;
 }
 
-/*!
-   Sets the static portion of the file name to \a name. If the file
-   template ends in XXXXXX that will automatically be replaced with
-   the unique part of the filename, otherwise a filename will be
-   determined automatically based on the static portion specified.
-
-    If \a name contains a relative file path, the path will be relative to the
-    current working directory. You can use QDir::tempPath() to construct \a
-    name if you want use the system's temporary directory.
-
-   \sa fileTemplate()
-*/
 void QTemporaryFile::setFileTemplate(const QString &name)
 {
    Q_D(QTemporaryFile);
@@ -545,21 +483,6 @@ void QTemporaryFile::setFileTemplate(const QString &name)
    }
 }
 
-/*!
-  \fn QTemporaryFile *QTemporaryFile::createLocalFile(const QString &fileName)
-  \overload
-
-  Works on the given \a fileName rather than an existing QFile
-  object.
-*/
-
-
-/*!
-  If \a file is not on a local disk, a temporary file is created
-  on a local disk, \a file is copied into the temporary local file,
-  and a pointer to the temporary local file is returned. If \a file
-  is already on a local disk, a copy is not created and 0 is returned.
-*/
 QTemporaryFile *QTemporaryFile::createLocalFile(QFile &file)
 {
    if (QAbstractFileEngine *engine = file.d_func()->engine()) {
@@ -623,8 +546,4 @@ bool QTemporaryFile::open(OpenMode flags)
    return false;
 }
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_TEMPORARYFILE
-
-

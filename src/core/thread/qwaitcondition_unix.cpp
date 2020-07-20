@@ -33,8 +33,6 @@
 
 #include <errno.h>
 
-QT_BEGIN_NAMESPACE
-
 static void report_error(int code, const char *where, const char *what)
 {
    if (code != 0) {
@@ -171,5 +169,3 @@ bool QWaitCondition::wait(QReadWriteLock *readWriteLock, unsigned long time)
 
    return returnValue;
 }
-
-QT_END_NAMESPACE

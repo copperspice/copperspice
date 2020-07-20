@@ -27,14 +27,11 @@
 #include <qiodevice.h>
 #include <qstring.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFileDevicePrivate;
 
 class Q_CORE_EXPORT QFileDevice : public QIODevice
 {
    CORE_CS_OBJECT(QFileDevice)
-   Q_DECLARE_PRIVATE(QFileDevice)
 
  public:
    enum FileError {
@@ -109,11 +106,10 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    qint64 readLineData(char *data, qint64 maxlen) override;
 
  private:
+   Q_DECLARE_PRIVATE(QFileDevice)
    Q_DISABLE_COPY(QFileDevice)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFileDevice::Permissions)
 
-QT_END_NAMESPACE
-
-#endif // QFILEDEVICE_H
+#endif

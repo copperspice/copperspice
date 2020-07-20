@@ -29,8 +29,6 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-QT_BEGIN_NAMESPACE
-
 struct MacSocketInfo {
     MacSocketInfo() : socket(0), runloop(0), readNotifier(0), writeNotifier(0),
         readEnabled(false), writeEnabled(false) {}
@@ -78,7 +76,5 @@ private:
 
     friend void qt_mac_socket_callback(CFSocketRef, CFSocketCallBackType, CFDataRef, const void *, void *);
 };
-
-QT_END_NAMESPACE
 
 #endif

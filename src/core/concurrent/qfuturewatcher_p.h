@@ -27,8 +27,6 @@
 #include <qfutureinterface_p.h>
 #include <qlist.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFutureWatcherBase;
 
 class QFutureWatcherBasePrivate : public QFutureCallOutInterface
@@ -55,7 +53,5 @@ class QFutureWatcherBasePrivate : public QFutureCallOutInterface
    QFutureWatcherBase *q_ptr;
 
 };
-
-QT_END_NAMESPACE
 
 #endif

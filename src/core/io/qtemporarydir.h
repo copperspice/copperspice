@@ -27,8 +27,6 @@
 #include <qdir.h>
 #include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TEMPORARYFILE
 
 class QTemporaryDirPrivate;
@@ -56,6 +54,4 @@ class Q_CORE_EXPORT QTemporaryDir
 
 #endif // QT_NO_TEMPORARYFILE
 
-QT_END_NAMESPACE
-
-#endif // QTEMPORARYDIR_H
+#endif

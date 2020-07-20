@@ -28,8 +28,6 @@
 #include <qfilesystemengine_p.h>
 #include <qfile_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QTemporaryFilePrivate : public QFilePrivate
 {
    Q_DECLARE_PUBLIC(QTemporaryFile)
@@ -76,7 +74,4 @@ class QTemporaryFileEngine : public QFSFileEngine
    bool filePathWasTemplate;
 };
 
-QT_END_NAMESPACE
-
-#endif /* QTEMPORARYFILE_P_H */
-
+#endif

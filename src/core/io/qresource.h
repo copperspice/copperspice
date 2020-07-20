@@ -29,8 +29,6 @@
 #include <qstringlist.h>
 #include <qlist.h>
 
-QT_BEGIN_NAMESPACE
-
 class QResourcePrivate;
 
 class Q_CORE_EXPORT QResource
@@ -76,7 +74,4 @@ class Q_CORE_EXPORT QResource
    Q_DECLARE_PRIVATE(QResource)
 };
 
-QT_END_NAMESPACE
-
-
-#endif // QRESOURCE_H
+#endif

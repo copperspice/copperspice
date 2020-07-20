@@ -29,13 +29,6 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
-
-/*!
-    Constructs a QAnimationGroup.
-    \a parent is passed to QObject's constructor.
-*/
 QAnimationGroup::QAnimationGroup(QObject *parent)
    : QAbstractAnimation(*new QAnimationGroupPrivate, parent)
 {
@@ -227,17 +220,15 @@ bool QAnimationGroup::event(QEvent *event)
    return QAbstractAnimation::event(event);
 }
 
-
 void QAnimationGroupPrivate::animationRemoved(int index, QAbstractAnimation *)
 {
    Q_Q(QAnimationGroup);
-   Q_UNUSED(index);
+   (void) index;
+
    if (animations.isEmpty()) {
       currentTime = 0;
       q->stop();
    }
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_ANIMATION

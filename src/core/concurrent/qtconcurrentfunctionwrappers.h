@@ -21,14 +21,12 @@
 *
 ***********************************************************************/
 
-#ifndef QTCONCURRENTFUNCTIONWRAPPERS_H
-#define QTCONCURRENTFUNCTIONWRAPPERS_H
+#ifndef QTCONCURRENTFUNCTION_WRAPPERS_H
+#define QTCONCURRENTFUNCTION_WRAPPERS_H
 
 #include <qglobal.h>
 #include <qtconcurrentcompilertest.h>
 #include <qstringlist.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QtConcurrent {
 
@@ -223,7 +221,6 @@ struct MapResultType<void, T(C::*)() const> {
    typedef T ResultType;
 };
 
-
 template <template <typename> class InputSequence, typename MapFunctor, typename T>
 struct MapResultType<InputSequence<T>, MapFunctor> {
    typedef InputSequence<typename LazyResultType<MapFunctor>::Type> ResultType;
@@ -254,9 +251,6 @@ struct MapResultType<QStringList, U(C::*)() const> {
    typedef QList<U> ResultType;
 };
 
-} // namespace QtPrivate.
-
-
-QT_END_NAMESPACE
+} // namespace QtPrivate
 
 #endif

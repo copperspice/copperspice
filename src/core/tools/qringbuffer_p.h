@@ -27,8 +27,6 @@
 #include <qbytearray.h>
 #include <qlist.h>
 
-QT_BEGIN_NAMESPACE
-
 class QRingBuffer
 {
  public:
@@ -439,6 +437,4 @@ class QRingBuffer
    int bufferSize;
 };
 
-QT_END_NAMESPACE
-
-#endif // QRINGBUFFER_P_H
+#endif

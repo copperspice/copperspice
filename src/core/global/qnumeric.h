@@ -26,8 +26,6 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 Q_CORE_EXPORT bool qIsInf(double d);
 Q_CORE_EXPORT bool qIsNaN(double d);
 Q_CORE_EXPORT bool qIsFinite(double d);
@@ -42,6 +40,4 @@ Q_CORE_EXPORT double qInf();
 #define Q_SNAN (QT_PREPEND_NAMESPACE(qSNaN)())
 #define Q_QNAN (QT_PREPEND_NAMESPACE(qQNaN)())
 
-QT_END_NAMESPACE
-
-#endif // QNUMERIC_H
+#endif

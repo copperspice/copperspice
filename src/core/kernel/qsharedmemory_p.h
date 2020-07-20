@@ -28,14 +28,16 @@
 #include <qstringparser.h>
 
 #ifdef QT_NO_SHAREDMEMORY
+
 #ifndef QT_NO_SYSTEMSEMAPHORE
 
 namespace QSharedMemoryPrivate {
-int createUnixKeyFile(const QString &fileName);
-QString makePlatformSafeKey(const QString &key, const QString &prefix = QString("qipc_sharedmemory_");
+   int createUnixKeyFile(const QString &fileName);
+   QString makePlatformSafeKey(const QString &key, const QString &prefix = QString("qipc_sharedmemory_");
 }
 
 #endif
+
 #else
 
 #include <qsystemsemaphore.h>
@@ -45,8 +47,6 @@ QString makePlatformSafeKey(const QString &key, const QString &prefix = QString(
 #else
 #  include <sys/types.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
 
@@ -127,7 +127,7 @@ class QSharedMemoryPrivate
 
       return true;
    }
-#endif // QT_NO_SYSTEMSEMAPHORE
+#endif
 
  protected:
    QSharedMemory *q_ptr;
@@ -143,9 +143,7 @@ class QSharedMemoryPrivate
 
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_SHAREDMEMORY
 
-#endif // QSHAREDMEMORY_P_H
+#endif
 

@@ -28,16 +28,14 @@
 #include <qstringlist.h>
 #include <qshareddata.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PROCESS
 
 #if ! defined(Q_OS_WIN)
-typedef qint64 Q_PID;
+   using Q_PID = qint64;
+
 #else
-QT_END_NAMESPACE
-typedef struct _PROCESS_INFORMATION *Q_PID;
-QT_BEGIN_NAMESPACE
+   using Q_PID = struct _PROCESS_INFORMATION *;
+
 #endif
 
 class QProcessPrivate;
@@ -49,6 +47,7 @@ class Q_CORE_EXPORT QProcessEnvironment
    QProcessEnvironment();
    QProcessEnvironment(const QProcessEnvironment &other);
    ~QProcessEnvironment();
+
    QProcessEnvironment &operator=(QProcessEnvironment && other)  {
       swap(other);
       return *this;
@@ -93,22 +92,25 @@ class Q_CORE_EXPORT QProcess : public QIODevice
 
  public:
    enum ProcessError {
-      FailedToStart, //### file not found, resource error
+      FailedToStart,       // file not found, resource error
       Crashed,
       Timedout,
       ReadError,
       WriteError,
       UnknownError
    };
+
    enum ProcessState {
       NotRunning,
       Starting,
       Running
    };
+
    enum ProcessChannel {
       StandardOutput,
       StandardError
    };
+
    enum ProcessChannelMode {
       SeparateChannels,
       MergedChannels,
@@ -116,6 +118,7 @@ class Q_CORE_EXPORT QProcess : public QIODevice
       ForwardedOutputChannel,
       ForwardedErrorChannel
    };
+
    enum InputChannelMode {
       ManagedInputChannel,
        ForwardedInputChannel
@@ -131,16 +134,19 @@ class Q_CORE_EXPORT QProcess : public QIODevice
 
    void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);
    void start(const QString &command, OpenMode mode = ReadWrite);
-    void start(OpenMode mode = ReadWrite);
-    bool open(OpenMode mode = ReadWrite) override;
-    QString program() const;
-    void setProgram(const QString &program);
-    QStringList arguments() const;
-    void setArguments(const QStringList & arguments);
+   void start(OpenMode mode = ReadWrite);
+   bool open(OpenMode mode = ReadWrite) override;
+   QString program() const;
+   void setProgram(const QString &program);
+   QStringList arguments() const;
+   void setArguments(const QStringList & arguments);
+
    ProcessChannelMode readChannelMode() const;
    void setReadChannelMode(ProcessChannelMode mode);
+
    ProcessChannelMode processChannelMode() const;
    void setProcessChannelMode(ProcessChannelMode mode);
+
    InputChannelMode inputChannelMode() const;
    void setInputChannelMode(InputChannelMode mode);
 
@@ -169,10 +175,9 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    QProcessEnvironment processEnvironment() const;
 
    QProcess::ProcessError error() const;
-
    QProcess::ProcessState state() const;
 
-   // #### Qt5/Q_PID is a pointer on Windows and a value on Unix
+   // #### Q_PID is a pointer on Windows and a value on Unix
    Q_PID pid() const;
    qint64 processId() const;
 
@@ -260,10 +265,9 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    CORE_CS_SLOT_1(Private, bool _q_processDied())
    CORE_CS_SLOT_2(_q_processDied)
 
-
    friend class QProcessManager;
 };
 
 #endif // QT_NO_PROCESS
 
-#endif // QPROCESS_H
+#endif

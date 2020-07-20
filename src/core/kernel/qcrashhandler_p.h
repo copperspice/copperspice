@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_CRASHHANDLER
 
-QT_BEGIN_NAMESPACE
-
 typedef void (*QtCrashHandler)();
 
 class Q_CORE_EXPORT QSegfaultHandler
@@ -46,12 +44,7 @@ class Q_CORE_EXPORT QSegfaultHandler
    inline static QtCrashHandler crashHandler() {
       return callback;
    }
-
- private:
 };
 
-QT_END_NAMESPACE
-
-#endif // QT_NO_CRASHHANDLER
-
+#endif
 #endif // QCRASHHANDLER_P_H

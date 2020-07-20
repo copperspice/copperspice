@@ -58,9 +58,8 @@ QSharedPointer<X> qSharedPointerConstCast(const QSharedPointer<T> &ptr);
 template <class X, class T>
 QSharedPointer<X> qSharedPointerObjectCast(const QSharedPointer<T> &ptr);
 
-
 #ifdef QT_NO_DEBUG
-# define QSHAREDPOINTER_VERIFY_AUTO_CAST(T, X)          qt_noop()
+# define QSHAREDPOINTER_VERIFY_AUTO_CAST(T, X)  qt_noop()
 #else
 
 template<typename T> inline void qt_sharedpointer_cast_check(T *) { }
@@ -70,10 +69,14 @@ template<typename T> inline void qt_sharedpointer_cast_check(T *) { }
 
 namespace QtSharedPointer {
 
-template <class T> class InternalRefCount;
-template <class T> class ExternalRefCount;
+template <class T>
+class InternalRefCount;
 
-template <class X, class Y> QSharedPointer<X> copyAndSetPointer(X *ptr, const QSharedPointer<Y> &src);
+template <class T>
+class ExternalRefCount;
+
+template <class X, class Y>
+QSharedPointer<X> copyAndSetPointer(X *ptr, const QSharedPointer<Y> &src);
 
 // used in debug mode to verify the reuse of pointers
 Q_CORE_EXPORT void internalSafetyCheckAdd(const void *, const volatile void *);
@@ -90,19 +93,24 @@ inline void executeDeleter(T *t, Deleter d)
 {
    d(t);
 }
+
 struct NormalDeleter {};
 
-template <class T> struct RemovePointer;
+template <class T>
+struct RemovePointer;
 
-template <class T> struct RemovePointer<T *> {
+template <class T>
+struct RemovePointer<T *> {
    typedef T Type;
 };
 
-template <class T> struct RemovePointer<QSharedPointer<T> > {
+template <class T>
+struct RemovePointer<QSharedPointer<T> > {
    typedef T Type;
 };
 
-template <class T> struct RemovePointer<QWeakPointer<T> > {
+template <class T>
+struct RemovePointer<QWeakPointer<T> > {
    typedef T Type;
 };
 
@@ -125,13 +133,17 @@ struct ExternalRefCountData {
 
    DestroyerFn destroyer;
 
-   inline ExternalRefCountData(DestroyerFn d)
-      : destroyer(d) {
+   ExternalRefCountData(DestroyerFn d)
+      : destroyer(d)
+   {
       strongref.store(1);
       weakref.store(1);
    }
 
-   inline ExternalRefCountData(Qt::Initialization) { }
+   ExternalRefCountData(Qt::Initialization)
+   {
+   }
+
    ~ExternalRefCountData() {
       Q_ASSERT(! weakref.load());
       Q_ASSERT(strongref.load() <= 0);
@@ -145,13 +157,21 @@ struct ExternalRefCountData {
    Q_CORE_EXPORT void setQObjectShared(const QObject *, bool enable);
    Q_CORE_EXPORT void checkQObjectShared(const QObject *);
 
-   inline void checkQObjectShared(...) { }
-   inline void setQObjectShared(...) { }
+   void checkQObjectShared(...) {
+      // no code
+   }
 
-   inline void operator delete(void *ptr) {
+   void setQObjectShared(...) {
+      // no code
+   }
+
+   void operator delete(void *ptr) {
       ::operator delete(ptr);
    }
-   inline void operator delete(void *, void *) { }
+
+   void operator delete(void *, void *) {
+      // no code
+   }
 };
 // sizeof(ExternalRefCountData) = 12 (32-bit) / 16 (64-bit)
 
@@ -160,11 +180,16 @@ struct CustomDeleter {
    Deleter deleter;
    T *ptr;
 
-   CustomDeleter(T *p, Deleter d) : deleter(d), ptr(p) {}
+   CustomDeleter(T *p, Deleter d)
+      : deleter(d), ptr(p)
+   {
+   }
+
    void execute() {
       executeDeleter(ptr, deleter);
    }
 };
+
 // sizeof(CustomDeleter) = sizeof(Deleter) + sizeof(void*) + padding
 // for Deleter = stateless functor: 8 (32-bit) / 16 (64-bit) due to padding
 // for Deleter = function pointer:  8 (32-bit) / 16 (64-bit)
@@ -173,15 +198,21 @@ struct CustomDeleter {
 // This specialization of CustomDeleter for a deleter of type NormalDeleter
 // is an optimization: instead of storing a pointer to a function that does
 // the deleting, we simply delete the pointer ourselves.
+
 template <class T>
 struct CustomDeleter<T, NormalDeleter> {
    T *ptr;
 
-   CustomDeleter(T *p, NormalDeleter) : ptr(p) {}
+   CustomDeleter(T *p, NormalDeleter)
+      : ptr(p)
+   {
+   }
+
    void execute() {
       delete ptr;
    }
 };
+
 // sizeof(CustomDeleter specialization) = sizeof(void*)
 
 // This class extends ExternalRefCountData and implements
@@ -189,18 +220,21 @@ struct CustomDeleter<T, NormalDeleter> {
 // custom deleter are kept in the "extra" member so we can construct
 // and destruct it independently of the full structure.
 template <class T, typename Deleter>
-struct ExternalRefCountWithCustomDeleter: public ExternalRefCountData {
-   typedef ExternalRefCountWithCustomDeleter Self;
-   typedef ExternalRefCountData BaseClass;
-   CustomDeleter<T, Deleter> extra;
+struct ExternalRefCountWithCustomDeleter : public ExternalRefCountData {
 
-   static inline void deleter(ExternalRefCountData *self) {
+ public:
+   using Self      = ExternalRefCountWithCustomDeleter;
+   using BaseClass = ExternalRefCountData;
+
+
+   static  void deleter(ExternalRefCountData *self) {
       Self *realself = static_cast<Self *>(self);
       realself->extra.execute();
 
-      // delete the deleter too
+      // delete the deleter
       realself->extra.~CustomDeleter<T, Deleter>();
    }
+
    static void safetyCheckDeleter(ExternalRefCountData *self) {
       internalSafetyCheckRemove(self);
       deleter(self);
@@ -211,51 +245,53 @@ struct ExternalRefCountWithCustomDeleter: public ExternalRefCountData {
 
       // initialize the two sub-objects
       new (&d->extra) CustomDeleter<T, Deleter>(ptr, userDeleter);
-      new (d) BaseClass(actualDeleter); // can't throw
+      new (d) BaseClass(actualDeleter);    // can not throw
 
       return d;
    }
 
+   CustomDeleter<T, Deleter> extra;
+
  private:
-   // prevent construction
    ExternalRefCountWithCustomDeleter()  = delete;
    ~ExternalRefCountWithCustomDeleter() = delete;
    Q_DISABLE_COPY(ExternalRefCountWithCustomDeleter)
 };
 
-// This class extends ExternalRefCountData and adds a "T"
-// member. That way, when the create() function is called, we allocate
-// memory for both QSharedPointer's d-pointer and the actual object being tracked.
+// This class extends ExternalRefCountData and adds member "T"
+// when the create() function is called, we allocate memory for both QSharedPointer's d-pointer
+// and the actual object being tracked.
 
 template <class T>
-struct ExternalRefCountWithContiguousData: public ExternalRefCountData {
-   typedef ExternalRefCountData Parent;
-   T data;
+struct ExternalRefCountWithContiguousData : public ExternalRefCountData {
+
+ public:
 
    static void deleter(ExternalRefCountData *self) {
-      ExternalRefCountWithContiguousData *that =
-         static_cast<ExternalRefCountWithContiguousData *>(self);
+      ExternalRefCountWithContiguousData *that = static_cast<ExternalRefCountWithContiguousData *>(self);
       that->data.~T();
    }
+
    static void safetyCheckDeleter(ExternalRefCountData *self) {
       internalSafetyCheckRemove(self);
       deleter(self);
    }
 
-   static inline ExternalRefCountData *create(T **ptr, DestroyerFn destroy) {
+   static ExternalRefCountData *create(T **ptr, DestroyerFn destroy) {
       ExternalRefCountWithContiguousData *d =
          static_cast<ExternalRefCountWithContiguousData *>(::operator new(sizeof(ExternalRefCountWithContiguousData)));
 
       // initialize the d-pointer sub-object
       // leave d->data uninitialized
-      new (d) Parent(destroy); // can't throw
+      new (d) ExternalRefCountData(destroy);    // can not throw
 
       *ptr = &d->data;
       return d;
    }
 
+   T data;
+
  private:
-   // prevent construction
    ExternalRefCountWithContiguousData()  = delete;
    ~ExternalRefCountWithContiguousData() = delete;
    Q_DISABLE_COPY(ExternalRefCountWithContiguousData)
@@ -263,6 +299,7 @@ struct ExternalRefCountWithContiguousData: public ExternalRefCountData {
 
 Q_CORE_EXPORT QWeakPointer<QObject> weakPointerFromVariant_internal(const QVariant &variant);
 Q_CORE_EXPORT QSharedPointer<QObject> sharedPointerFromVariant_internal(const QVariant &variant);
+
 } // namespace QtSharedPointer
 
 template <class T> class QSharedPointer
@@ -373,9 +410,11 @@ template <class T> class QSharedPointer
    inline void reset() {
       clear();
    }
+
    inline void reset(T *t) {
       QSharedPointer copy(t);
       swap(copy);
+
    }
    template <typename Deleter>
    inline void reset(T *t, Deleter deleter) {
@@ -414,11 +453,11 @@ template <class T> class QSharedPointer
    static QSharedPointer<T> create(Args  &&...arguments) {
       typedef QtSharedPointer::ExternalRefCountWithContiguousData<T> Private;
 
-# ifdef QT_SHAREDPOINTER_TRACK_POINTERS
+#ifdef QT_SHAREDPOINTER_TRACK_POINTERS
       typename Private::DestroyerFn destroy = &Private::safetyCheckDeleter;
-# else
+#else
       typename Private::DestroyerFn destroy = &Private::deleter;
-# endif
+#endif
 
       QSharedPointer<T> result(Qt::Uninitialized);
       result.d = Private::create(&result.value, destroy);
@@ -427,10 +466,10 @@ template <class T> class QSharedPointer
       new (result.data()) T(std::forward<Args>(arguments)...);
       result.d->setQObjectShared(result.value, true);
 
-# ifdef QT_SHAREDPOINTER_TRACK_POINTERS
+#ifdef QT_SHAREDPOINTER_TRACK_POINTERS
       internalSafetyCheckAdd(result.d, result.value);
 
-# endif
+#endif
       return result;
    }
 
@@ -468,11 +507,13 @@ template <class T> class QSharedPointer
       }
 
       typedef QtSharedPointer::ExternalRefCountWithCustomDeleter<T, Deleter> Private;
-# ifdef QT_SHAREDPOINTER_TRACK_POINTERS
+
+#ifdef QT_SHAREDPOINTER_TRACK_POINTERS
       typename Private::DestroyerFn actualDeleter = &Private::safetyCheckDeleter;
-# else
+#else
       typename Private::DestroyerFn actualDeleter = &Private::deleter;
-# endif
+#endif
+
       d = Private::create(ptr, deleter, actualDeleter);
 
 #ifdef QT_SHAREDPOINTER_TRACK_POINTERS
@@ -507,8 +548,7 @@ template <class T> class QSharedPointer
    friend class QWeakPointer;
 
    template <class X, class Y>
-   friend QSharedPointer<X> QtSharedPointer::copyAndSetPointer(X *ptr,
-         const QSharedPointer<Y> &src);
+   friend QSharedPointer<X> QtSharedPointer::copyAndSetPointer(X *ptr, const QSharedPointer<Y> &src);
 #endif
 
    inline void ref() const {
@@ -758,6 +798,7 @@ bool operator==(const QSharedPointer<T> &ptr1, const QSharedPointer<X> &ptr2)
 {
    return ptr1.data() == ptr2.data();
 }
+
 template <class T, class X>
 bool operator!=(const QSharedPointer<T> &ptr1, const QSharedPointer<X> &ptr2)
 {
@@ -769,16 +810,19 @@ bool operator==(const QSharedPointer<T> &ptr1, const X *ptr2)
 {
    return ptr1.data() == ptr2;
 }
+
 template <class T, class X>
 bool operator==(const T *ptr1, const QSharedPointer<X> &ptr2)
 {
    return ptr1 == ptr2.data();
 }
+
 template <class T, class X>
 bool operator!=(const QSharedPointer<T> &ptr1, const X *ptr2)
 {
    return !(ptr1 == ptr2);
 }
+
 template <class T, class X>
 bool operator!=(const T *ptr1, const QSharedPointer<X> &ptr2)
 {
@@ -790,40 +834,38 @@ bool operator==(const QSharedPointer<T> &ptr1, const QWeakPointer<X> &ptr2)
 {
    return ptr2 == ptr1;
 }
+
 template <class T, class X>
 bool operator!=(const QSharedPointer<T> &ptr1, const QWeakPointer<X> &ptr2)
 {
    return ptr2 != ptr1;
 }
 
-//
-// operator-
-//
 template <class T, class X>
 inline typename QSharedPointer<T>::difference_type operator-(const QSharedPointer<T> &ptr1,
       const QSharedPointer<X> &ptr2)
 {
    return ptr1.data() - ptr2.data();
 }
+
 template <class T, class X>
 inline typename QSharedPointer<T>::difference_type operator-(const QSharedPointer<T> &ptr1, X *ptr2)
 {
    return ptr1.data() - ptr2;
 }
+
 template <class T, class X>
 inline typename QSharedPointer<X>::difference_type operator-(T *ptr1, const QSharedPointer<X> &ptr2)
 {
    return ptr1 - ptr2.data();
 }
 
-//
-// operator<
-//
 template <class T, class X>
 inline bool operator<(const QSharedPointer<T> &ptr1, const QSharedPointer<X> &ptr2)
 {
    return ptr1.data() < ptr2.data();
 }
+
 template <class T, class X>
 inline bool operator<(const QSharedPointer<T> &ptr1, X *ptr2)
 {
@@ -835,9 +877,6 @@ inline bool operator<(T *ptr1, const QSharedPointer<X> &ptr2)
    return ptr1 < ptr2.data();
 }
 
-//
-// qHash
-//
 template <class T>
 inline uint qHash(const QSharedPointer<T> &ptr, uint seed = 0)
 {
@@ -862,18 +901,19 @@ inline void qSwap(QSharedPointer<T> &p1, QSharedPointer<T> &p2)
    p1.swap(p2);
 }
 
-QT_END_NAMESPACE
 namespace std {
+
 template <class T>
 inline void swap(QT_PREPEND_NAMESPACE(QSharedPointer)<T> &p1, QT_PREPEND_NAMESPACE(QSharedPointer)<T> &p2)
 {
    p1.swap(p2);
 }
-}
-QT_BEGIN_NAMESPACE
+
+} // namespace
+
 
 namespace QtSharedPointer {
-// helper functions:
+
 template <class X, class T>
 inline QSharedPointer<X> copyAndSetPointer(X *ptr, const QSharedPointer<T> &src)
 {
@@ -881,7 +921,8 @@ inline QSharedPointer<X> copyAndSetPointer(X *ptr, const QSharedPointer<T> &src)
    result.internalSet(src.d, ptr);
    return result;
 }
-}
+
+} // namespace
 
 // cast operators
 template <class X, class T>
@@ -890,6 +931,7 @@ inline QSharedPointer<X> qSharedPointerCast(const QSharedPointer<T> &src)
    X *ptr = static_cast<X *>(src.data()); // if you get an error in this line, the cast is invalid
    return QtSharedPointer::copyAndSetPointer(ptr, src);
 }
+
 template <class X, class T>
 inline QSharedPointer<X> qSharedPointerCast(const QWeakPointer<T> &src)
 {
@@ -905,6 +947,7 @@ inline QSharedPointer<X> qSharedPointerDynamicCast(const QSharedPointer<T> &src)
    }
    return QtSharedPointer::copyAndSetPointer(ptr, src);
 }
+
 template <class X, class T>
 inline QSharedPointer<X> qSharedPointerDynamicCast(const QWeakPointer<T> &src)
 {
@@ -930,7 +973,6 @@ inline QWeakPointer<X> qWeakPointerCast(const QSharedPointer<T> &src)
    return qSharedPointerCast<X, T>(src).toWeakRef();
 }
 
-
 template <class X, class T>
 inline QSharedPointer<X> qSharedPointerObjectCast(const QSharedPointer<T> &src)
 {
@@ -946,28 +988,28 @@ inline QSharedPointer<X> qSharedPointerObjectCast(const QWeakPointer<T> &src)
 
 template <class X, class T>
 inline QSharedPointer<typename QtSharedPointer::RemovePointer<X>::Type>
-qobject_cast(const QSharedPointer<T> &src)
+      qobject_cast(const QSharedPointer<T> &src)
 {
    return qSharedPointerObjectCast<typename QtSharedPointer::RemovePointer<X>::Type, T>(src);
 }
 
 template <class X, class T>
 inline QSharedPointer<typename QtSharedPointer::RemovePointer<X>::Type>
-qobject_cast(const QWeakPointer<T> &src)
+      qobject_cast(const QWeakPointer<T> &src)
 {
    return qSharedPointerObjectCast<typename QtSharedPointer::RemovePointer<X>::Type, T>(src);
 }
 
 template<typename T>
 QWeakPointer<typename std::enable_if<std::is_base_of<QObject, T>::value, T>::type>
-qWeakPointerFromVariant(const QVariant &variant)
+      qWeakPointerFromVariant(const QVariant &variant)
 {
    return QWeakPointer<T>(dynamic_cast<T *>(QtSharedPointer::weakPointerFromVariant_internal(variant).data()));
 }
 
 template<typename T>
 QSharedPointer<typename std::enable_if<std::is_base_of<QObject, T>::value, T>::Type>
-qSharedPointerFromVariant(const QVariant &variant)
+      qSharedPointerFromVariant(const QVariant &variant)
 {
    return qSharedPointerObjectCast<T>(QtSharedPointer::sharedPointerFromVariant_internal(variant));
 }

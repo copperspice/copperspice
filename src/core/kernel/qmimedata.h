@@ -28,8 +28,6 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QUrl;
 class QMimeDataPrivate;
 
@@ -76,10 +74,7 @@ class Q_CORE_EXPORT QMimeData : public QObject
 
  private:
    Q_DISABLE_COPY(QMimeData)
-   Q_DECLARE_PRIVATE(QMimeData) 
-
+   Q_DECLARE_PRIVATE(QMimeData)
 };
 
-QT_END_NAMESPACE
-
-#endif // QMIMEDATA_H
+#endif

@@ -45,7 +45,7 @@ class Q_CORE_EXPORT QTranslator : public QObject
    virtual bool isEmpty() const;
 
    bool load(const QString &filename, const QString &directory = QString(), const QString &search_delimiters = QString(),
-                   const QString &suffix = QString());
+                  const QString &suffix = QString());
 
    bool load(const QLocale &locale, const QString &filename, const QString &prefix = QString(),
                   const QString &directory = QString(), const QString &suffix = QString());
@@ -58,9 +58,8 @@ class Q_CORE_EXPORT QTranslator : public QObject
  private:
    Q_DISABLE_COPY(QTranslator)
    Q_DECLARE_PRIVATE(QTranslator)
-
 };
 
 #endif // QT_NO_TRANSLATION
 
-#endif // QTRANSLATOR_H
+#endif

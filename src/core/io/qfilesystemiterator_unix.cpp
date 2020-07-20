@@ -29,8 +29,6 @@
 #include <stdlib.h>
 #include <errno.h>
 
-QT_BEGIN_NAMESPACE
-
 QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Filters filters,
       const QStringList &nameFilters, QDirIterator::IteratorFlags flags)
    : nativePath(entry.nativeFilePath()), dir(0), dirEntry(0), lastError(0)
@@ -73,7 +71,5 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
    lastError = errno;
    return false;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FILESYSTEMITERATOR

@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 bool QSequentialAnimationGroupPrivate::atEnd() const
 {
    // we try to detect if we're at the end of the group
@@ -550,7 +548,5 @@ void QSequentialAnimationGroupPrivate::animationRemoved(int index, QAbstractAnim
    //let's also update the total current time
    totalCurrentTime = currentTime + loopCount * q->duration();
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_ANIMATION

@@ -31,8 +31,6 @@
 #include <qsharedpointer.h>
 #include <qringbuffer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class Q_CORE_EXPORT QNonContiguousByteDevice : public QObject
 {
    CORE_CS_OBJECT(QNonContiguousByteDevice)
@@ -79,8 +77,6 @@ class Q_CORE_EXPORT QNonContiguousByteDeviceFactory
 
    static QIODevice *wrap(QNonContiguousByteDevice *byteDevice);
 };
-
-// the actual implementations
 
 class QNonContiguousByteDeviceByteArrayImpl : public QNonContiguousByteDevice
 {
@@ -165,7 +161,6 @@ class QNonContiguousByteDeviceBufferImpl : public QNonContiguousByteDevice
    QNonContiguousByteDeviceByteArrayImpl *arrayImpl;
 };
 
-// ... and the reverse thing
 class QByteDeviceWrappingIoDevice : public QIODevice
 {
  public:
@@ -183,7 +178,5 @@ class QByteDeviceWrappingIoDevice : public QIODevice
 
    QNonContiguousByteDevice *byteDevice;
 };
-
-QT_END_NAMESPACE
 
 #endif

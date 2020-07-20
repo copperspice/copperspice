@@ -26,8 +26,6 @@
 
 #include <qanimationgroup.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ANIMATION
 
 class QPauseAnimationPrivate;
@@ -58,6 +56,4 @@ class Q_CORE_EXPORT QPauseAnimation : public QAbstractAnimation
 
 #endif //QT_NO_ANIMATION
 
-QT_END_NAMESPACE
-
-#endif // QPAUSEANIMATION_P_H
+#endif

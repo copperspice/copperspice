@@ -31,8 +31,6 @@
 #define QFILESYSTEMENTRY_NATIVE_PATH_IS_UTF16
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QFileSystemEntry
 {
  public:
@@ -97,6 +95,4 @@ class QFileSystemEntry
    mutable qint16 m_lastDotInFileName; // index after m_firstDotInFileName for last dot (.)
 };
 
-QT_END_NAMESPACE
-
-#endif // include guard
+#endif

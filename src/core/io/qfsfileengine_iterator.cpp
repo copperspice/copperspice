@@ -28,11 +28,8 @@
 #ifndef QT_NO_FSFILEENGINE
 #ifndef QT_NO_FILESYSTEMITERATOR
 
-QT_BEGIN_NAMESPACE
-
 QFSFileEngineIterator::QFSFileEngineIterator(QDir::Filters filters, const QStringList &filterNames)
-   : QAbstractFileEngineIterator(filters, filterNames)
-   , done(false)
+   : QAbstractFileEngineIterator(filters, filterNames), done(false)
 {
 }
 
@@ -66,6 +63,7 @@ void QFSFileEngineIterator::advance() const
 
    QFileSystemEntry entry;
    QFileSystemMetaData data;
+
    if (nativeIterator->advance(entry, data)) {
       nextInfo = QFileInfo(new QFileInfoPrivate(entry, data));
    } else {
@@ -84,7 +82,6 @@ QFileInfo QFSFileEngineIterator::currentFileInfo() const
    return currentInfo;
 }
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_FILESYSTEMITERATOR
-#endif // QT_NO_FSFILEENGINE
+
+#endif

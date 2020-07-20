@@ -23,14 +23,17 @@
 
 #include <qtconcurrentresultstore.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 ResultIteratorBase::ResultIteratorBase()
-   : mapIterator(QMap<int, ResultItem>::const_iterator()), m_vectorIndex(0) { }
+   : mapIterator(QMap<int, ResultItem>::const_iterator()), m_vectorIndex(0)
+{
+}
+
 ResultIteratorBase::ResultIteratorBase(QMap<int, ResultItem>::const_iterator _mapIterator, int _vectorIndex)
-   : mapIterator(_mapIterator), m_vectorIndex(_vectorIndex) { }
+   : mapIterator(_mapIterator), m_vectorIndex(_vectorIndex)
+{
+}
 
 int ResultIteratorBase::vectorIndex() const
 {
@@ -240,6 +243,4 @@ int ResultStoreBase::updateInsertIndex(int index, int _count)
 }
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 

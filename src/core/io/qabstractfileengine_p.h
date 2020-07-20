@@ -26,17 +26,17 @@
 
 #include <qabstractfileengine.h>
 #include <qfile.h>
-QT_BEGIN_NAMESPACE
 
 class QAbstractFileEnginePrivate
 {
  public:
-   inline QAbstractFileEnginePrivate() : fileError(QFile::UnspecifiedError) 
+   QAbstractFileEnginePrivate()
+      : fileError(QFile::UnspecifiedError)
    {
    }
 
-   inline virtual ~QAbstractFileEnginePrivate()
-   { 
+   virtual ~QAbstractFileEnginePrivate()
+   {
    }
 
    QFile::FileError fileError;
@@ -48,6 +48,4 @@ class QAbstractFileEnginePrivate
 
 QAbstractFileEngine *qt_custom_file_engine_handler_create(const QString &path);
 
-QT_END_NAMESPACE
-
-#endif // QABSTRACTFILEENGINE_P_H
+#endif

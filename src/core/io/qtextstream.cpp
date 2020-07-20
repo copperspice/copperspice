@@ -2746,7 +2746,6 @@ bool QTextStream::generateByteOrderMark() const
 
 #endif
 
-
 void QTextStream::setLocale(const QLocale &locale)
 {
    Q_D(QTextStream);

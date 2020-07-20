@@ -26,8 +26,6 @@
 
 #include <qabstractfileengine.h>
 
-QT_BEGIN_NAMESPACE
-
 class QResourceFileEnginePrivate;
 
 class QResourceFileEngine : public QAbstractFileEngine
@@ -84,7 +82,5 @@ class QResourceFileEngine : public QAbstractFileEngine
    bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0) override;
    bool supportsExtension(Extension extension) const override;
 };
-
-QT_END_NAMESPACE
 
 #endif

@@ -184,15 +184,18 @@ class Q_CORE_EXPORT QLineF
 
    QLineF(const QPointF &point1, const QPointF &point2)
       : pt1(point1), pt2(point2)
-   { }
+   {
+   }
 
    QLineF(qreal x1, qreal y1, qreal x2, qreal y2)
       : pt1(x1, y1), pt2(x2, y2)
-   { }
+   {
+   }
 
    QLineF(const QLine &line)
       : pt1(line.p1()), pt2(line.p2())
-   { }
+   {
+   }
 
    static QLineF fromPolar(qreal length, qreal angle);
 

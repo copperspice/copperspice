@@ -36,8 +36,6 @@
 #error qtextstream.h must be included before any header file that defines Status
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QTextCodec;
 class QTextDecoder;
 class QTextStreamPrivate;
@@ -309,6 +307,4 @@ inline QTextStreamManipulator qSetRealNumberPrecision(int precision)
    return QTextStreamManipulator(func, precision);
 }
 
-
-
-#endif // QTEXTSTREAM_H
+#endif

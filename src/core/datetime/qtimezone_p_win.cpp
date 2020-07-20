@@ -521,11 +521,10 @@ QString QWinTimeZonePrivate::comment() const
 }
 
 QString QWinTimeZonePrivate::displayName(QTimeZone::TimeType timeType,
-   QTimeZone::NameType nameType,
-   const QLocale &locale) const
+   QTimeZone::NameType nameType, const QLocale &locale) const
 {
    // TODO Registry holds MUI keys, should be able to look up translations?
-   Q_UNUSED(locale);
+   (void) locale;
 
    if (nameType == QTimeZone::OffsetName) {
       QWinTransitionRule rule = ruleForYear(QDate::currentDate().year());

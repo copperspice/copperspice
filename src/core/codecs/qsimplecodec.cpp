@@ -26,8 +26,6 @@
 
 #ifndef QT_NO_TEXTCODEC
 
-QT_BEGIN_NAMESPACE
-
 #define LAST_MIB 2004
 
 static const struct {
@@ -844,7 +842,5 @@ int QSimpleTextCodec::mibEnum() const
 {
    return unicodevalues[forwardIndex].mib;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_TEXTCODEC

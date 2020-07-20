@@ -47,8 +47,6 @@
 #include <AvailabilityMacros.h>
 #include <qcore_mac_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #if ! defined(Q_OS_IOS)
 // Static operator overloading so for the sake of some convieniece.
 // They only live in this compilation unit to avoid polluting Qt in general.
@@ -483,6 +481,7 @@ void QFSEventsFileSystemWatcherEngine::run()
 #else
    Q_ASSERT(startedOK);
 #endif
+
    // If for some reason we called stop up above (and invalidated our stream), this call will return
    // immediately.
    CFRunLoopRun();
@@ -491,6 +490,4 @@ void QFSEventsFileSystemWatcherEngine::run()
    waitForStop.wakeAll();
 #endif
 }
-
-QT_END_NAMESPACE
 #endif //QT_NO_FILESYSTEMWATCHER

@@ -27,8 +27,6 @@
 #include <qiodevice_p.h>
 #include <qringbuffer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractFileEngine;
 class QFSFileEngine;
 
@@ -72,6 +70,4 @@ inline bool QFileDevicePrivate::ensureFlushed() const
    return true;
 }
 
-QT_END_NAMESPACE
-
-#endif // QFILEDEVICE_P_H
+#endif

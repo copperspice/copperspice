@@ -21,12 +21,7 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
 #include <qurl.h>
-#include <qurl_p.h>
-#include <qtldurl_p.h>
-#include <qipaddress_p.h>
 
 #include <qbytearray.h>
 #include <qdebug.h>
@@ -35,6 +30,12 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qurlquery.h>
+
+#include <qurl_p.h>
+#include <qtldurl_p.h>
+#include <qipaddress_p.h>
+
+#include <algorithm>
 
 // source code located in qdir.cpp
 extern QString cs_internal_normalizePath(const QString &name, bool allowUncPaths);
@@ -2164,7 +2165,7 @@ QByteArray QUrl::toAce(const QString &domain)
 
 bool QUrl::operator<(const QUrl &url) const
 {
-   if (!d || !url.d) {
+   if (! d || !url.d) {
       bool thisIsEmpty = !d || d->isEmpty();
       bool thatIsEmpty = !url.d || url.d->isEmpty();
 

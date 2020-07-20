@@ -23,8 +23,6 @@
 
 #include <qmath.h>
 
-QT_BEGIN_NAMESPACE
-
 const qreal qt_sine_table[QT_SINE_TABLE_SIZE] = {
    qreal(0.0),
    qreal(0.024541228522912288),
@@ -284,4 +282,3 @@ const qreal qt_sine_table[QT_SINE_TABLE_SIZE] = {
    qreal(-0.024541228522912448)
 };
 
-QT_END_NAMESPACE

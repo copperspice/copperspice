@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qjsondocument.h>
-#include <qjsonparser_p.h>
-#include <qjsonwriter_p.h>
 
 #include <qstringlist.h>
 #include <qvariant.h>
+
+#include <qjsonparser_p.h>
+#include <qjsonwriter_p.h>
 
 QJsonDocument::QJsonDocument()
    : m_data(std::make_shared<QJsonValue>())

@@ -29,8 +29,6 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 class QSequentialAnimationGroupPrivate : public QAnimationGroupPrivate
 {
    Q_DECLARE_PUBLIC(QSequentialAnimationGroup)
@@ -77,8 +75,6 @@ class QSequentialAnimationGroupPrivate : public QAnimationGroupPrivate
    void _q_uncontrolledAnimationFinished();
 };
 
-QT_END_NAMESPACE
-
 #endif //QT_NO_ANIMATION
 
-#endif //QSEQUENTIALANIMATIONGROUP_P_H
+#endif

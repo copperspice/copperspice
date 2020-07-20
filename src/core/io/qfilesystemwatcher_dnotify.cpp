@@ -59,8 +59,6 @@
 
 #endif
 
-QT_BEGIN_NAMESPACE
-
 static int qfswd_fileChanged_pipe[2];
 static void (*qfswd_old_sigio_handler)(int) = 0;
 static void (*qfswd_old_sigio_action)(int, siginfo_t *, void *) = 0;
@@ -459,7 +457,5 @@ bool QDnotifyFileSystemWatcherEngine::Directory::File::updateInfo()
       return false;
    }
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FILESYSTEMWATCHER

@@ -31,7 +31,7 @@ class QIODevice;
 
 class Q_CORE_EXPORT QMessageAuthenticationCode
 {
-public:
+   public:
     explicit QMessageAuthenticationCode(QCryptographicHash::Algorithm method, const QByteArray &key = QByteArray());
     ~QMessageAuthenticationCode();
 

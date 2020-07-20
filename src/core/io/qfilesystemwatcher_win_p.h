@@ -36,7 +36,6 @@
 #include <qhash.h>
 #include <qmutex.h>
 #include <qvector.h>
-QT_BEGIN_NAMESPACE
 
 class QWindowsFileSystemWatcherEngineThread;
 
@@ -132,6 +131,4 @@ class QWindowsFileSystemWatcherEngineThread : public QThread
 
 #endif // QT_NO_FILESYSTEMWATCHER
 
-QT_END_NAMESPACE
-
-#endif // QFILESYSTEMWATCHER_WIN_P_H
+#endif

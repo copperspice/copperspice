@@ -49,7 +49,8 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
  public:
    QAbstractItemModelPrivate()
       : roleNames(defaultRoleNames())
-   {}
+   {
+   }
 
    virtual ~QAbstractItemModelPrivate();
 
@@ -89,10 +90,10 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
       return (index.row() >= 0) && (index.column() >= 0) && (index.model() == q_func());
    }
 
-   inline void invalidatePersistentIndexes() {
-      for (QPersistentModelIndexData * data : persistent.m_indexes) {
+   void invalidatePersistentIndexes() {
+      for (QPersistentModelIndexData *data : persistent.m_indexes) {
          data->index = QModelIndex();
-         data->model = 0;
+         data->model = nullptr;
       }
 
       persistent.m_indexes.clear();

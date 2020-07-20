@@ -28,8 +28,6 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QEvent;
 class QFutureWatcherBasePrivate;
 
@@ -158,7 +156,7 @@ template <>
 class QFutureWatcher<void> : public QFutureWatcherBase
 {
  public:
-   QFutureWatcher(QObject *_parent = 0)
+   QFutureWatcher(QObject *_parent = nullptr)
       : QFutureWatcherBase(_parent) {
    }
 
@@ -192,7 +190,5 @@ inline void QFutureWatcher<void>::setFuture(const QFuture<void> &_future)
    m_future = _future;
    connectOutputInterface();
 }
-
-QT_END_NAMESPACE
 
 #endif // QFUTUREWATCHER_H

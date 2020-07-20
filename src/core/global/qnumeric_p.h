@@ -26,8 +26,6 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 #if ! defined(Q_CC_MIPS)
 
 static const union {
@@ -257,6 +255,5 @@ static inline bool qt_is_finite(float d)
    }
 }
 
-QT_END_NAMESPACE
 
-#endif // QNUMERIC_P_H
+#endif

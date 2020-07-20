@@ -30,8 +30,6 @@
 #error qabstractfileengine.h must be included before any header file that defines open
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QFileExtension;
 class QFileExtensionResult;
 class QVariant;
@@ -227,6 +225,4 @@ class Q_CORE_EXPORT QAbstractFileEngineIterator
    QScopedPointer<QAbstractFileEngineIteratorPrivate> d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QABSTRACTFILEENGINE_H
+#endif

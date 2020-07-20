@@ -33,8 +33,6 @@
 # include <mach/semaphore.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QMutexData
 {
  public:
@@ -43,12 +41,12 @@ class QMutexData
       : recursive(mode == QMutex::Recursive) {}
 };
 
-#if !defined(Q_OS_LINUX)
+#if ! defined(Q_OS_LINUX)
 class QMutexPrivate : public QMutexData
 {
  public:
-   ~QMutexPrivate();
    QMutexPrivate();
+   ~QMutexPrivate();
 
    bool wait(int timeout = -1);
    void wakeUp();
@@ -114,6 +112,4 @@ class QRecursiveMutexPrivate : public QMutexData
    void unlock();
 };
 
-QT_END_NAMESPACE
-
-#endif // QMUTEX_P_H
+#endif

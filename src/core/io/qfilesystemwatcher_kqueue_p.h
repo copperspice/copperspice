@@ -33,8 +33,6 @@
 #ifndef QT_NO_FILESYSTEMWATCHER
 struct kevent;
 
-QT_BEGIN_NAMESPACE
-
 class QKqueueFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {
    CORE_CS_OBJECT(QKqueueFileSystemWatcherEngine)
@@ -62,7 +60,6 @@ class QKqueueFileSystemWatcherEngine : public QFileSystemWatcherEngine
    QHash<int, QString> idToPath;
 };
 
-QT_END_NAMESPACE
-
 #endif //QT_NO_FILESYSTEMWATCHER
-#endif // FILEWATCHER_KQUEUE_P_H
+
+#endif

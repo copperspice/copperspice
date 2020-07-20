@@ -29,8 +29,6 @@
 #include <qtconcurrentmapkernel.h>
 #include <qtconcurrentreducekernel.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 template <typename T>
@@ -290,7 +288,5 @@ inline ThreadEngineStarter<ResultType> startFilteredReduced(Iterator begin, Iter
 
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

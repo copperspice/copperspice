@@ -61,71 +61,75 @@ struct QScopedPointerPodDeleter {
    }
 };
 
-template <typename T, typename Cleanup = QScopedPointerDeleter<T> >
+template <typename T, typename Cleanup = QScopedPointerDeleter<T>>
 class QScopedPointer
 {
-   typedef T *QScopedPointer::*RestrictedBool;
+   using RestrictedBool = T *QScopedPointer::*;
 
  public:
-   explicit inline QScopedPointer(T *p = 0) : d(p) {
+   explicit inline QScopedPointer(T *p = nullptr)
+      : d(p)
+   {
    }
 
-   inline ~QScopedPointer() {
+   ~QScopedPointer()
+   {
       T *oldD = this->d;
       Cleanup::cleanup(oldD);
    }
 
-   inline QScopedPointer(QScopedPointer<T, Cleanup> &&other)
+   QScopedPointer(QScopedPointer<T, Cleanup> &&other)
       : d(other.take()) {
    }
 
-   inline QScopedPointer<T, Cleanup> &operator=(QScopedPointer<T, Cleanup> && other) {
+   QScopedPointer<T, Cleanup> &operator=(QScopedPointer<T, Cleanup> && other) {
       reset(other.take());
       return *this;
    }
 
-   inline T &operator*() const {
+   T &operator*() const {
       Q_ASSERT(d);
       return *d;
    }
 
-   inline T *operator->() const {
+   T *operator->() const {
       Q_ASSERT(d);
       return d;
    }
 
-   inline bool operator!() const {
+   bool operator!() const {
       return !d;
    }
 
-   inline operator RestrictedBool() const {
-      return isNull() ? 0 : &QScopedPointer::d;
+   operator RestrictedBool() const {
+      return isNull() ? nullptr : &QScopedPointer::d;
    }
 
-   inline T *data() const {
+   T *data() const {
       return d;
    }
 
-   inline bool isNull() const {
+   bool isNull() const {
       return !d;
    }
 
-   inline void reset(T *other = 0) {
+   void reset(T *other = 0) {
       if (d == other) {
          return;
       }
+
       T *oldD = d;
       d = other;
       Cleanup::cleanup(oldD);
    }
 
-   inline T *take() {
+   T *take() {
       T *oldD = d;
       d = 0;
       return oldD;
    }
 
-   inline void swap(QScopedPointer<T, Cleanup> &other) {
+   void swap(QScopedPointer<T, Cleanup> &other) {
       qSwap(d, other.d);
    }
 
@@ -156,20 +160,20 @@ inline void qSwap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, Cleanup> &p2
    p1.swap(p2);
 }
 
-
-QT_END_NAMESPACE
 namespace std {
+
 template <class T, class Cleanup>
 inline void swap(QT_PREPEND_NAMESPACE(QScopedPointer)<T, Cleanup> &p1,
                             QT_PREPEND_NAMESPACE(QScopedPointer)<T, Cleanup> &p2)
 {
    p1.swap(p2);
 }
-}
-QT_BEGIN_NAMESPACE
+
+} // namespce
 
 
 namespace QtPrivate {
+
 template <typename X, typename Y> struct QScopedArrayEnsureSameType;
 template <typename X> struct QScopedArrayEnsureSameType<X, X> {
    typedef X *Type;
@@ -178,35 +182,34 @@ template <typename X> struct QScopedArrayEnsureSameType<X, X> {
 template <typename X> struct QScopedArrayEnsureSameType<const X, X> {
    typedef X *Type;
 };
-}
+
+} // namespace
 
 template <typename T, typename Cleanup = QScopedPointerArrayDeleter<T> >
 class QScopedArrayPointer : public QScopedPointer<T, Cleanup>
 {
  public:
-   inline QScopedArrayPointer() : QScopedPointer<T, Cleanup>(0) {}
+   inline QScopedArrayPointer()
+      : QScopedPointer<T, Cleanup>(0)
+   {
+   }
 
    template <typename D>
    explicit inline QScopedArrayPointer(D *p, typename QtPrivate::QScopedArrayEnsureSameType<T, D>::Type = 0)
       : QScopedPointer<T, Cleanup>(p) {
    }
 
-   inline T &operator[](int i) {
+   T &operator[](int i) {
       return this->d[i];
    }
 
-   inline const T &operator[](int i) const {
+   const T &operator[](int i) const {
       return this->d[i];
    }
 
  private:
    explicit inline QScopedArrayPointer(void *) {
-      // Enforce the same type.
-
-      // If you get a compile error here, make sure you declare
-      // QScopedArrayPointer with the same template type as you pass to the
-      // constructor. See also the QScopedPointer documentation.
-
+      // Enforce the same type
       // Storing a scalar array as a pointer to a different type is not
       // allowed and results in undefined behavior.
    }
@@ -214,4 +217,4 @@ class QScopedArrayPointer : public QScopedPointer<T, Cleanup>
    Q_DISABLE_COPY(QScopedArrayPointer)
 };
 
-#endif // QSCOPEDPOINTER_H
+#endif

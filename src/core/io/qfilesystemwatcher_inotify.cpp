@@ -118,15 +118,15 @@
 # define __NR_inotify_add_watch 27
 # define __NR_inotify_rm_watch  28
 // no inotify_init for aarch64
+
 #else
 # error "This architecture is not supported."
+
 #endif
 
 #if !defined(IN_CLOEXEC) && defined(O_CLOEXEC) && defined(__NR_inotify_init1)
-# define IN_CLOEXEC              O_CLOEXEC
+# define IN_CLOEXEC O_CLOEXEC
 #endif
-
-QT_BEGIN_NAMESPACE
 
 #ifdef QT_LINUXBASE
 // ### the LSB doesn't standardize syscall, need to wait until glib2.4 is standardized
@@ -193,17 +193,13 @@ extern "C" {
 #define IN_MOVE                 (IN_MOVED_FROM | IN_MOVED_TO)
 }
 
-QT_END_NAMESPACE
-
 // --------- inotify.h end ----------
 
-#else /* QT_NO_INOTIFY */
+#else // QT_NO_INOTIFY
 
 #include <sys/inotify.h>
 
 #endif
-
-QT_BEGIN_NAMESPACE
 
 QInotifyFileSystemWatcherEngine *QInotifyFileSystemWatcherEngine::create()
 {
@@ -253,6 +249,7 @@ QStringList QInotifyFileSystemWatcherEngine::addPaths(const QStringList &paths,
 
    QStringList p = paths;
    QMutableListIterator<QString> it(p);
+
    while (it.hasNext()) {
       QString path = it.next();
       QFileInfo fi(path);
@@ -395,7 +392,5 @@ void QInotifyFileSystemWatcherEngine::readFromInotify()
       }
    }
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FILESYSTEMWATCHER

@@ -57,14 +57,16 @@ class QStringView : public CsString::CsBasicStringView<S>
 
       QStringView(const_iterator begin, const_iterator end)
          : CsString::CsBasicStringView<S>(begin, end)
-      { }
+      {
+      }
 
       QStringView(const QStringView &other) = default;
       QStringView(QStringView &&other) = default;
 
       QStringView(const S &str)
          : QStringView(str.cbegin(), str.cend())
-      { }
+      {
+      }
 
       // methods
       value_type at(size_type n) const {

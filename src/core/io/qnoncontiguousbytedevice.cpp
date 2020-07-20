@@ -26,8 +26,6 @@
 #include <qdebug.h>
 #include <qfile.h>
 
-QT_BEGIN_NAMESPACE
-
 QNonContiguousByteDevice::QNonContiguousByteDevice() : QObject((QObject *)0), resetDisabled(false)
 {
 }
@@ -382,6 +380,7 @@ qint64 QByteDeviceWrappingIoDevice::readData( char *data, qint64 maxSize)
 
    memcpy(data, readPointer, len);
    byteDevice->advanceReadPointer(len);
+
    return len;
 }
 
@@ -389,6 +388,7 @@ qint64 QByteDeviceWrappingIoDevice::writeData( const char *data, qint64 maxSize)
 {
    Q_UNUSED(data);
    Q_UNUSED(maxSize);
+
    return -1;
 }
 
@@ -410,7 +410,6 @@ QNonContiguousByteDevice *QNonContiguousByteDeviceFactory::create(QByteArray *by
 {
    return new QNonContiguousByteDeviceByteArrayImpl(byteArray);
 }
-
 
 QNonContiguousByteDevice *QNonContiguousByteDeviceFactory::create(QSharedPointer<QRingBuffer> ringBuffer)
 {
@@ -439,6 +438,3 @@ QIODevice *QNonContiguousByteDeviceFactory::wrap(QNonContiguousByteDevice *byteD
 
    return new QByteDeviceWrappingIoDevice(byteDevice);
 }
-
-QT_END_NAMESPACE
-

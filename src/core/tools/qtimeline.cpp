@@ -27,8 +27,6 @@
 #include <qmath.h>
 #include <qelapsedtimer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QTimeLinePrivate
 {
    Q_DECLARE_PUBLIC(QTimeLine)
@@ -760,12 +758,6 @@ void QTimeLine::setPaused(bool paused)
    }
 }
 
-/*!
-    Toggles the direction of the timeline. If the direction was Forward, it
-    becomes Backward, and vice verca.
-
-    \sa setDirection()
-*/
 void QTimeLine::toggleDirection()
 {
    Q_D(QTimeLine);
@@ -791,4 +783,3 @@ void QTimeLine::timerEvent(QTimerEvent *event)
    }
 }
 
-QT_END_NAMESPACE

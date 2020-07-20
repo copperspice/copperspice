@@ -28,15 +28,12 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 QParallelAnimationGroup::QParallelAnimationGroup(QObject *parent)
    : QAnimationGroup(*new QParallelAnimationGroupPrivate, parent)
 {
 }
 
-QParallelAnimationGroup::QParallelAnimationGroup(QParallelAnimationGroupPrivate &dd,
-      QObject *parent)
+QParallelAnimationGroup::QParallelAnimationGroup(QParallelAnimationGroupPrivate &dd, QObject *parent)
    : QAnimationGroup(dd, parent)
 {
 }
@@ -279,12 +276,14 @@ void QParallelAnimationGroupPrivate::animationRemoved(int index, QAbstractAnimat
 void QParallelAnimationGroup::updateDirection(QAbstractAnimation::Direction direction)
 {
    Q_D(QParallelAnimationGroup);
+
    //we need to update the direction of the current animation
    if (state() != Stopped) {
       for (int i = 0; i < d->animations.size(); ++i) {
          QAbstractAnimation *animation = d->animations.at(i);
          animation->setDirection(direction);
       }
+
    } else {
       if (direction == Forward) {
          d->lastLoop = 0;
@@ -304,7 +303,5 @@ bool QParallelAnimationGroup::event(QEvent *event)
 {
    return QAnimationGroup::event(event);
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_ANIMATION

@@ -27,7 +27,7 @@
 #ifdef Q_OS_NACL
 
 #else
-# if !defined(Q_OS_HPUX) || defined(__ia64)
+# if ! defined(Q_OS_HPUX) || defined(__ia64)
 #  include <sys/select.h>
 # endif
 
@@ -39,8 +39,6 @@
 #ifdef Q_OS_DARWIN
 #include <mach/mach_time.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 static inline bool time_update(struct timespec *tv, const struct timespec &start,
                                const struct timespec &timeout)
@@ -93,4 +91,4 @@ int qt_select_msecs(int nfds, fd_set *fdread, fd_set *fdwrite, int timeout)
     tv.tv_nsec = (timeout % 1000) * 1000 * 1000;
     return qt_safe_select(nfds, fdread, fdwrite, 0, &tv);
 }
-QT_END_NAMESPACE
+

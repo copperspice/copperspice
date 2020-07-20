@@ -115,6 +115,7 @@ bool QDateTimeParser::setDigit(QDateTime &v, int index, int newVal) const
       qWarning("QDateTimeParser::setDigit() Internal error (%s %d %d)", csPrintable(v.toString()), index, newVal);
       return false;
    }
+
    const SectionNode &node = sectionNodes.at(index);
 
    int year = v.date().year();
@@ -906,10 +907,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
 }
 #endif // QT_NO_TEXTDATE
 
-/*!
-  \internal
-*/
-
+// internal
 QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPosition,
    const QDateTime &currentValue, bool fixup) const
 {
@@ -1885,12 +1883,11 @@ QString QDateTimeParser::getAmPmText(AmPm ap, Case cs) const
 /*
   \internal
 
-  I give arg2 preference because arg1 is always a QDateTime.
+  give arg2 preference because arg1 is always a QDateTime.
 */
 
 bool operator==(const QDateTimeParser::SectionNode &s1, const QDateTimeParser::SectionNode &s2)
 {
    return (s1.type == s2.type) && (s1.pos == s2.pos) && (s1.count == s2.count);
 }
-
 

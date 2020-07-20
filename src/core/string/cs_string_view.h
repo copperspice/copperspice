@@ -52,12 +52,14 @@ class CsBasicStringView
 
       CsBasicStringView(const S &str)
          : m_begin(str.begin()), m_end(str.end())
-      { }
+      {
+      }
 
       // initialize with a range from another string type container
       CsBasicStringView(const_iterator begin, const_iterator end)
          : m_begin(begin), m_end(end)
-      { }
+      {
+      }
 
       // operators
       CsBasicStringView<S> &operator=(const CsBasicStringView &str) = default;

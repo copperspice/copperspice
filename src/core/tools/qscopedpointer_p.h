@@ -26,8 +26,6 @@
 
 #include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 /* Internal helper class - exposes the data through data_ptr (legacy from QShared)
    Required for some internal classes, do not use otherwise. */
 
@@ -35,19 +33,19 @@ template <typename T, typename Cleanup = QScopedPointerDeleter<T> >
 class QCustomScopedPointer : public QScopedPointer<T, Cleanup>
 {
  public:
-   explicit inline QCustomScopedPointer(T *p = 0)
+   explicit inline QCustomScopedPointer(T *p = nullptr)
       : QScopedPointer<T, Cleanup>(p) {
    }
 
-   inline T *&data_ptr() {
+   T *&data_ptr() {
       return this->d;
    }
 
-   inline bool operator==(const QCustomScopedPointer<T, Cleanup> &other) const {
+   bool operator==(const QCustomScopedPointer<T, Cleanup> &other) const {
       return this->d == other.d;
    }
 
-   inline bool operator!=(const QCustomScopedPointer<T, Cleanup> &other) const {
+   bool operator!=(const QCustomScopedPointer<T, Cleanup> &other) const {
       return this->d != other.d;
    }
 
@@ -67,45 +65,45 @@ class QScopedPointerSharedDeleter
    }
 };
 
-/* Internal
-   This class is basically a scoped pointer pointing to a ref-counted object
+/* Internal - scoped pointer which points to a ref-counted object
  */
 template <typename T>
 class QScopedSharedPointer : public QCustomScopedPointer<T, QScopedPointerSharedDeleter<T> >
 {
  public:
-   explicit inline QScopedSharedPointer(T *p = 0)
+   explicit inline QScopedSharedPointer(T *p = nullptr)
       : QCustomScopedPointer<T, QScopedPointerSharedDeleter<T> >(p) {
    }
 
-   inline void detach() {
+
+   void detach() {
       qAtomicDetach(this->d);
    }
 
-   inline void assign(T *other) {
+   void assign(T *other) {
       if (this->d == other) {
          return;
       }
+
       if (other) {
          other->ref.ref();
       }
+
       T *oldD = this->d;
       this->d = other;
       QScopedPointerSharedDeleter<T>::cleanup(oldD);
    }
 
-   inline bool operator==(const QScopedSharedPointer<T> &other) const {
+   bool operator==(const QScopedSharedPointer<T> &other) const {
       return this->d == other.d;
    }
 
-   inline bool operator!=(const QScopedSharedPointer<T> &other) const {
+   bool operator!=(const QScopedSharedPointer<T> &other) const {
       return this->d != other.d;
    }
 
  private:
    Q_DISABLE_COPY(QScopedSharedPointer)
 };
-
-QT_END_NAMESPACE
 
 #endif

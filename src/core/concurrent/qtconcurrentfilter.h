@@ -28,8 +28,6 @@
 #include <qtconcurrentfilterkernel.h>
 #include <qtconcurrentfunctionwrappers.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 template <typename Sequence, typename KeepFunctor, typename ReduceFunctor>
@@ -155,7 +153,5 @@ OutputSequence blockingFiltered(Iterator begin, Iterator end, KeepFunctor keep)
 }
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

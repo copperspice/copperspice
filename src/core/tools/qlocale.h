@@ -886,7 +886,7 @@ class Q_CORE_EXPORT QLocale
    QTime toTime(const QString &string, const QString &format) const;
    QDateTime toDateTime(const QString &string, const QString &format) const;
 
-   // ### Qt5 need to return QString since unicode data contains several characters for these fields.
+   // ### emerald - should return QString since unicode data contains several characters for these fields.
    QChar decimalPoint() const;
    QChar groupSeparator() const;
    QChar percent() const;

@@ -28,8 +28,6 @@
 #include <qtconcurrentrunbase.h>
 #include <qtconcurrentstoredfunctioncall.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 template <typename T>
@@ -399,8 +397,6 @@ QFuture<T> run(const Class *object, T (Class::*fn)(Param1, Param2, Param3, Param
           fn, object, arg1, arg2, arg3, arg4, arg5))->start();
 }
 
-} //namespace QtConcurrent
-
-QT_END_NAMESPACE
+} // namespace QtConcurrent
 
 #endif

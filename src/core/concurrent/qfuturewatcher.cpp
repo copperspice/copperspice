@@ -29,8 +29,6 @@
 #include <qcoreapplication.h>
 #include <qthread.h>
 
-QT_BEGIN_NAMESPACE
-
 QFutureWatcherBase::QFutureWatcherBase(QObject *parent)
    : QObject(parent), d_ptr(new QFutureWatcherBasePrivate)
 {
@@ -345,26 +343,31 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
       case QFutureCallOutEvent::Started:
          emit q->started();
          break;
+
       case QFutureCallOutEvent::Finished:
          finished = true;
          emit q->finished();
          break;
+
       case QFutureCallOutEvent::Canceled:
          pendingResultsReady = 0;
          emit q->canceled();
          break;
+
       case QFutureCallOutEvent::Paused:
          if (q->futureInterface().isCanceled()) {
             break;
          }
          emit q->paused();
          break;
+
       case QFutureCallOutEvent::Resumed:
          if (q->futureInterface().isCanceled()) {
             break;
          }
          emit q->resumed();
          break;
+
       case QFutureCallOutEvent::ResultsReady: {
          if (q->futureInterface().isCanceled()) {
             break;
@@ -389,6 +392,7 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
 
       }
       break;
+
       case QFutureCallOutEvent::Progress:
          if (q->futureInterface().isCanceled()) {
             break;
@@ -409,108 +413,4 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
          break;
    }
 }
-
-
-/*! \fn const T &QFutureWatcher::result() const
-
-    Returns the first result in the future(). If the result is not immediately
-    available, this function will block and wait for the result to become
-    available. This is a convenience method for calling resultAt(0).
-
-    \sa resultAt()
-*/
-
-/*! \fn const T &QFutureWatcher::resultAt(int index) const
-
-    Returns the result at \a index in the future(). If the result is not
-    immediately available, this function will block and wait for the result to
-    become available.
-
-    \sa result()
-*/
-
-/*! \fn void QFutureWatcher::setFuture(const QFuture<T> &future)
-
-    Starts watching the given \a future.
-
-    One of the signals might be emitted for the current state of the
-    \a future. For example, if the future is already stopped, the
-    finished signal will be emitted.
-
-    To avoid a race condition, it is important to call this function
-    \e after doing the connections.
-*/
-
-/*! \fn QFuture<T> QFutureWatcher::future() const
-
-    Returns the watched future.
-*/
-
-/*! \fn void QFutureWatcher::started()
-
-    This signal is emitted when this QFutureWatcher starts watching the future
-    set with setFuture().
-*/
-
-/*!
-    \fn void QFutureWatcher::finished()
-    This signal is emitted when the watched future finishes.
-*/
-
-/*!
-    \fn void QFutureWatcher::canceled()
-    This signal is emitted if the watched future is canceled.
-*/
-
-/*! \fn void QFutureWatcher::paused()
-    This signal is emitted when the watched future is paused.
-*/
-
-/*! \fn void QFutureWatcher::resumed()
-    This signal is emitted when the watched future is resumed.
-*/
-
-/*!
-    \fn void QFutureWatcher::progressRangeChanged(int minimum, int maximum)
-
-    The progress range for the watched future has changed to \a minimum and
-    \a maximum
-*/
-
-/*!
-    \fn void QFutureWatcher::progressValueChanged(int progressValue)
-
-    This signal is emitted when the watched future reports progress,
-    \a progressValue gives the current progress. In order to avoid overloading
-    the GUI event loop, QFutureWatcher limits the progress signal emission
-    rate. This means that listeners connected to this slot might not get all
-    progress reports the future makes. The last progress update (where
-    \a progressValue equals the maximum value) will always be delivered.
-*/
-
-/*! \fn void QFutureWatcher::progressTextChanged(const QString &progressText)
-
-    This signal is emitted when the watched future reports textual progress
-    information, \a progressText.
-*/
-
-/*!
-    \fn void QFutureWatcher::resultReadyAt(int index)
-
-    This signal is emitted when the watched future reports a ready result at
-    \a index. If the future reports multiple results, the index will indicate
-    which one it is. Results can be reported out-of-order. To get the result,
-    call future().result(index);
-*/
-
-/*!
-    \fn void QFutureWatcher::resultsReadyAt(int beginIndex, int endIndex);
-
-    This signal is emitted when the watched future reports ready results.
-    The results are indexed from \a beginIndex to \a endIndex.
-
-*/
-
-QT_END_NAMESPACE
-
 

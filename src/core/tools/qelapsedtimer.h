@@ -25,7 +25,6 @@
 #define QElapsedTimer_H
 
 #include <qglobal.h>
-QT_BEGIN_NAMESPACE
 
 class Q_CORE_EXPORT QElapsedTimer
 {
@@ -68,6 +67,4 @@ class Q_CORE_EXPORT QElapsedTimer
    qint64 t2;
 };
 
-QT_END_NAMESPACE
-
-#endif // QTIMESTAMP_H
+#endif

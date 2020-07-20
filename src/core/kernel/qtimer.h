@@ -144,8 +144,7 @@ class Q_CORE_EXPORT QTimer : public QObject
 
  private:
    Q_DISABLE_COPY(QTimer)
-
-   inline int startTimer(int) {
+   int startTimer(int) {
       return -1;
    }
 

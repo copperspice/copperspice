@@ -26,20 +26,25 @@
 
 #include <qfuture.h>
 
-QT_BEGIN_NAMESPACE
-
 template <typename T>
 class QFutureSynchronizer
 {
    Q_DISABLE_COPY(QFutureSynchronizer)
 
  public:
-   QFutureSynchronizer() : m_cancelOnWait(false) { }
+   QFutureSynchronizer()
+      : m_cancelOnWait(false)
+   {
+   }
+
    explicit QFutureSynchronizer(const QFuture<T> &future)
-      : m_cancelOnWait(false) {
+      : m_cancelOnWait(false)
+   {
       addFuture(future);
    }
-   ~QFutureSynchronizer()  {
+
+   ~QFutureSynchronizer()
+   {
       waitForFinished();
    }
 
@@ -86,6 +91,4 @@ class QFutureSynchronizer
    bool m_cancelOnWait;
 };
 
-QT_END_NAMESPACE
-
-#endif // QFUTRUESYNCHRONIZER_H
+#endif

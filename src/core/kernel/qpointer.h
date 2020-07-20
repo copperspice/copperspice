@@ -26,8 +26,6 @@
 
 #include <qsharedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QVariant;
 
 template <class T>
@@ -126,7 +124,6 @@ inline bool operator!= (const QPointer<T> &p, const T *o)
    return p.operator->() != o;
 }
 
-
 template <class T>
 inline bool operator!=(T *o, const QPointer<T> &p)
 {
@@ -146,12 +143,9 @@ inline bool operator!= (const QPointer<T> &p1, const QPointer<T> &p2)
 }
 
 template<typename T>
-QPointer<T>
-qPointerFromVariant(const QVariant &variant)
+QPointer<T> qPointerFromVariant(const QVariant &variant)
 {
    return QPointer<T>(qobject_cast<T *>(QtSharedPointer::weakPointerFromVariant_internal(variant).data()));
 }
-
-QT_END_NAMESPACE
 
 #endif // QPOINTER_H

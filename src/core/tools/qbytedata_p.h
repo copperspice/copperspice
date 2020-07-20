@@ -27,8 +27,6 @@
 #include <qbytearray.h>
 #include <qlist.h>
 
-QT_BEGIN_NAMESPACE
-
 // this class handles a list of QByteArrays, it is a variant of QRingBuffer
 // which avoids malloc/realloc/memcpy
 
@@ -53,7 +51,6 @@ class QByteDataBuffer
       buffers.append(other.buffers);
       bufferCompleteSize += other.byteAmount();
    }
-
 
    inline void append(const QByteArray &bd) {
       if (bd.isEmpty()) {
@@ -177,6 +174,4 @@ class QByteDataBuffer
    }
 };
 
-QT_END_NAMESPACE
-
-#endif // QBYTEDATA_H
+#endif

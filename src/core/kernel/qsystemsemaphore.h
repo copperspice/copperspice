@@ -27,8 +27,6 @@
 #include <qstring.h>
 #include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_SYSTEMSEMAPHORE
 
 class QSystemSemaphorePrivate;
@@ -71,7 +69,5 @@ class Q_CORE_EXPORT QSystemSemaphore
 
 #endif // QT_NO_SYSTEMSEMAPHORE
 
-QT_END_NAMESPACE
-
-#endif // QSYSTEMSEMAPHORE_H
+#endif
 

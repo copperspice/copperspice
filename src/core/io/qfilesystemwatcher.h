@@ -29,8 +29,6 @@
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-QT_BEGIN_NAMESPACE
-
 class QFileSystemWatcherPrivate;
 
 class Q_CORE_EXPORT QFileSystemWatcher : public QObject
@@ -69,8 +67,6 @@ class Q_CORE_EXPORT QFileSystemWatcher : public QObject
 
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_FILESYSTEMWATCHER
 
-#endif // QFILESYSTEMWATCHER_H
+#endif

@@ -33,6 +33,7 @@
 #endif
 
 class QByteArray;
+class QDebug;
 class QIODevicePrivate;
 
 class Q_CORE_EXPORT QIODevice : public QObject
@@ -139,7 +140,6 @@ class Q_CORE_EXPORT QIODevice : public QObject
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QIODevice::OpenMode)
 
-class QDebug;
 Q_CORE_EXPORT QDebug operator<<(QDebug debug, QIODevice::OpenMode modes);
 
 #endif // QIODEVICE_H

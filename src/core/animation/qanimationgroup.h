@@ -26,8 +26,6 @@
 
 #include <qabstractanimation.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ANIMATION
 
 class QAnimationGroupPrivate;
@@ -56,10 +54,9 @@ class Q_CORE_EXPORT QAnimationGroup : public QAbstractAnimation
  private:
    Q_DISABLE_COPY(QAnimationGroup)
    Q_DECLARE_PRIVATE(QAnimationGroup)
+
 };
 
-#endif //QT_NO_ANIMATION
+#endif // QT_NO_ANIMATION
 
-QT_END_NAMESPACE
-
-#endif //QANIMATIONGROUP_H
+#endif

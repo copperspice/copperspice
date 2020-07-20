@@ -26,7 +26,6 @@
 
 #include <qobject.h>
 #include <qscopedpointer.h>
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_ANIMATION
 
@@ -138,7 +137,6 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
 class Q_CORE_EXPORT QAnimationDriver : public QObject
 {
    CORE_CS_OBJECT(QAnimationDriver)
-   Q_DECLARE_PRIVATE(QAnimationDriver)
 
  public:
    QAnimationDriver(QObject *parent = nullptr);
@@ -157,15 +155,13 @@ class Q_CORE_EXPORT QAnimationDriver : public QObject
    QScopedPointer<QAnimationDriverPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QAnimationDriver)
    friend class QUnifiedTimer;
 
    void start();
    void stop();
 };
 
+#endif // QT_NO_ANIMATION
 
-#endif //QT_NO_ANIMATION
-
-QT_END_NAMESPACE
-
-#endif // QABSTRACTANIMATION_H
+#endif

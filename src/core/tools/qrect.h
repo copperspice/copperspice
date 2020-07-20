@@ -32,8 +32,6 @@
 #error qrect.h must be included before any header file that defines topLeft
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class Q_CORE_EXPORT QRect
 {
  public:
@@ -1045,7 +1043,7 @@ inline QRectF &QRectF::operator-=(const QMarginsF &margins)
     *this = marginsRemoved(margins);
     return *this;
 }
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QRectF &);
 
+Q_CORE_EXPORT QDebug operator<<(QDebug, const QRectF &);
 
 #endif // QRECT_H

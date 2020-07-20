@@ -30,15 +30,17 @@ template <typename T>
 class QScopedValueRollback
 {
  public:
-   explicit QScopedValueRollback(T &var) :
-        varRef(var), oldValue(var)
-   { }
+   explicit QScopedValueRollback(T &var)
+      : varRef(var), oldValue(var)
+   {
+   }
 
-    explicit QScopedValueRollback(T &var, T value) :
-        varRef(var), oldValue(var)
-    {
-        varRef = qMove(value);
-    }
+   explicit QScopedValueRollback(T &var, T value)
+      : varRef(var), oldValue(var)
+   {
+      varRef = qMove(value);
+   }
+
 
    ~QScopedValueRollback() {
       varRef = std::move(oldValue);

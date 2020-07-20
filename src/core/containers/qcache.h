@@ -31,10 +31,14 @@ class QCache
 {
    struct Node {
       inline Node()
-         : keyPtr(0) {}
+         : keyPtr(0)
+      {
+      }
 
       inline Node(T *data, int cost)
-         : keyPtr(0), t(data), c(cost), p(0), n(0) {}
+         : keyPtr(0), t(data), c(cost), p(0), n(0)
+      {
+      }
 
       const Key *keyPtr;
       T *t;
@@ -51,7 +55,7 @@ class QCache
    int mx;
    int total;
 
-   inline void unlink(Node &n) {
+   void unlink(Node &n) {
       if (n.p) {
          n.p->n = n.n;
       }
@@ -75,7 +79,7 @@ class QCache
       delete obj;
    }
 
-   inline T *relink(const Key &key) {
+   T *relink(const Key &key) {
       typename QHash<Key, Node>::iterator i = hash.find(key);
 
       if (typename QHash<Key, Node>::const_iterator(i) == hash.constEnd()) {
@@ -112,28 +116,28 @@ class QCache
       clear();
    }
 
-   inline int maxCost() const {
+   int maxCost() const {
       return mx;
    }
 
    void setMaxCost(int m);
-   inline int totalCost() const {
+   int totalCost() const {
       return total;
    }
 
-   inline int size() const {
+   int size() const {
       return hash.size();
    }
 
-   inline int count() const {
+   int count() const {
       return hash.size();
    }
 
-   inline bool isEmpty() const {
+   bool isEmpty() const {
       return hash.isEmpty();
    }
 
-   inline QList<Key> keys() const {
+   QList<Key> keys() const {
       return hash.keys();
    }
 
@@ -142,7 +146,7 @@ class QCache
    bool insert(const Key &key, T *object, int cost = 1);
    T *object(const Key &key) const;
 
-   inline bool contains(const Key &key) const {
+   bool contains(const Key &key) const {
       return hash.contains(key);
    }
 
@@ -158,7 +162,9 @@ class QCache
 
 template <class Key, class T>
 inline QCache<Key, T>::QCache(int amaxCost)
-   : f(0), l(0), mx(amaxCost), total(0) {}
+   : f(0), l(0), mx(amaxCost), total(0)
+{
+}
 
 template <class Key, class T>
 inline void QCache<Key, T>::clear()

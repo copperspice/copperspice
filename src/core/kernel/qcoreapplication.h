@@ -182,7 +182,6 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static QCoreApplication *self;
 
    Q_DISABLE_COPY(QCoreApplication)
-
    friend class QApplication;
    friend class QApplicationPrivate;
    friend class QClassFactory;
@@ -192,10 +191,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    friend class QWidgetWindow;
    friend class QWidgetPrivate;
 
-
    friend bool qt_sendSpontaneousEvent(QObject *, QEvent *);
    friend Q_CORE_EXPORT QString qAppName();
-
 };
 
 // wrappers for static method

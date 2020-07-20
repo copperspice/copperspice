@@ -32,8 +32,6 @@
 #error qfile.h must be included before any header file that defines open
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QTemporaryFile;
 class QFilePrivate;
 
@@ -111,6 +109,4 @@ class Q_CORE_EXPORT QFile : public QFileDevice
    Q_DISABLE_COPY(QFile)
 };
 
-QT_END_NAMESPACE
-
-#endif // QFILE_H
+#endif

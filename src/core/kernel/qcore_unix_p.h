@@ -141,8 +141,9 @@ static inline int qt_safe_open(const char *pathname, int flags, mode_t mode = 07
    }
    return fd;
 }
+
 #undef QT_OPEN
-#define QT_OPEN         qt_safe_open
+#define QT_OPEN  qt_safe_open
 
 
 
@@ -312,8 +313,7 @@ static inline key_t qt_safe_ftok(const QByteArray &filename, int proj_id)
     return ::ftok(filename.constData(), qHash(filename, proj_id));
 }
 
-#endif // !QT_NO_SHAREDMEMORY
-#endif // !QT_POSIX_IPC
-QT_END_NAMESPACE
+#endif // QT_NO_SHAREDMEMORY
+#endif // QT_POSIX_IPC
 
 #endif

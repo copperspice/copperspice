@@ -26,8 +26,6 @@
 
 #include <qfiledevice_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QTemporaryFile;
 
 class QFilePrivate : public QFileDevicePrivate
@@ -51,6 +49,4 @@ class QFilePrivate : public QFileDevicePrivate
    static QFile::DecoderFn decoder;
 };
 
-QT_END_NAMESPACE
-
-#endif // QFILE_P_H
+#endif

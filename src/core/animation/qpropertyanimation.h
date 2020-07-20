@@ -54,13 +54,13 @@ class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
  protected:
    bool event(QEvent *event) override;
    void updateCurrentValue(const QVariant &value) override;
-   void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState) override; 
+   void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState) override;
 
  private:
    Q_DISABLE_COPY(QPropertyAnimation)
    Q_DECLARE_PRIVATE(QPropertyAnimation)
 };
 
-#endif //QT_NO_ANIMATION
+#endif
 
 #endif // QPROPERTYANIMATION_H

@@ -30,8 +30,6 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 class QParallelAnimationGroupPrivate : public QAnimationGroupPrivate
 {
    Q_DECLARE_PUBLIC(QParallelAnimationGroup)
@@ -56,8 +54,6 @@ class QParallelAnimationGroupPrivate : public QAnimationGroupPrivate
    void _q_uncontrolledAnimationFinished();
 };
 
-QT_END_NAMESPACE
-
 #endif //QT_NO_ANIMATION
 
-#endif //QPARALLELANIMATIONGROUP_P_H
+#endif

@@ -26,8 +26,6 @@
 
 #ifndef QT_NO_ANIMATION
 
-QT_BEGIN_NAMESPACE
-
 class QPauseAnimationPrivate : public QAbstractAnimationPrivate
 {
  public:
@@ -67,22 +65,13 @@ void QPauseAnimation::setDuration(int msecs)
    d->duration = msecs;
 }
 
-/*!
-    \reimp
- */
 bool QPauseAnimation::event(QEvent *e)
 {
    return QAbstractAnimation::event(e);
 }
 
-/*!
-    \reimp
- */
 void QPauseAnimation::updateCurrentTime(int)
 {
 }
-
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_ANIMATION

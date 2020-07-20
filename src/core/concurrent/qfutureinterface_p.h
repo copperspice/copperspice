@@ -33,8 +33,6 @@
 #include <qtconcurrentresultstore.h>
 #include <qtconcurrentexception.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFutureCallOutEvent : public QEvent
 {
  public:
@@ -52,9 +50,11 @@ class QFutureCallOutEvent : public QEvent
    QFutureCallOutEvent()
       : QEvent(QEvent::FutureCallOut), callOutType(CallOutType(0)), index1(-1), index2(-1) {
    }
+
    QFutureCallOutEvent(CallOutType callOutType, int index1 = -1)
       : QEvent(QEvent::FutureCallOut), callOutType(callOutType), index1(index1), index2(-1) {
    }
+
    QFutureCallOutEvent(CallOutType callOutType, int index1, int index2)
       : QEvent(QEvent::FutureCallOut), callOutType(callOutType), index1(index1), index2(index2) {
    }
@@ -77,10 +77,7 @@ class QFutureCallOutEvent : public QEvent
    }
 
  private:
-   QFutureCallOutEvent(CallOutType callOutType,
-                       int index1,
-                       int index2,
-                       const QString &text)
+   QFutureCallOutEvent(CallOutType callOutType, int index1, int index2, const QString &text)
       : QEvent(QEvent::FutureCallOut),
         callOutType(callOutType),
         index1(index1),
@@ -134,7 +131,5 @@ class QFutureInterfaceBasePrivate
 
    void setState(QFutureInterfaceBase::State state);
 };
-
-QT_END_NAMESPACE
 
 #endif

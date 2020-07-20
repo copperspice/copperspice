@@ -65,8 +65,6 @@ static Ptr_iconv ptr_iconv = 0;
 static Ptr_iconv_close ptr_iconv_close = 0;
 #endif
 
-QT_BEGIN_NAMESPACE
-
 extern bool qt_locale_initialized;
 
 QIconvCodec::QIconvCodec()
@@ -572,4 +570,3 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
    return cd;
 }
 
-QT_END_NAMESPACE

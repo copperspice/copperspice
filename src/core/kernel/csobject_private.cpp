@@ -190,7 +190,6 @@ bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, 
    return object->isSender(receiver, signal);
 }
 
-
 QList<QObject *> CSInternalSender::receiverList(const QObject *object, const QString &signal)
 {
    if (! object) {

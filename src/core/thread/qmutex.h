@@ -58,6 +58,7 @@ class Q_CORE_EXPORT QBasicMutex
    inline bool fastTryLock() {
       return d_ptr.testAndSetAcquire(0, dummyLocked());
    }
+
    bool lockInternal(int timeout = -1);
    void unlockInternal();
 
@@ -84,7 +85,7 @@ class Q_CORE_EXPORT QMutex : public QBasicMutex
 class Q_CORE_EXPORT QMutexLocker
 {
  public:
-   inline explicit QMutexLocker(QBasicMutex *mutex) {
+   explicit QMutexLocker(QBasicMutex *mutex) {
       Q_ASSERT_X((reinterpret_cast<quintptr>(mutex) & quintptr(1u)) == quintptr(0),
                  "QMutexLocker", "QMutex pointer is misaligned");
 
@@ -96,18 +97,18 @@ class Q_CORE_EXPORT QMutexLocker
       }
    }
 
-   inline ~QMutexLocker() {
+   ~QMutexLocker() {
       unlock();
    }
 
-   inline void unlock() {
+   void unlock() {
       if ((val & quintptr(1u)) == quintptr(1u)) {
          val &= ~quintptr(1u);
          mutex()->unlock();
       }
    }
 
-   inline void relock() {
+   void relock() {
       if (val) {
          if ((val & quintptr(1u)) == quintptr(0u)) {
             mutex()->lock();
@@ -116,7 +117,7 @@ class Q_CORE_EXPORT QMutexLocker
       }
    }
 
-   inline QMutex *mutex() const {
+   QMutex *mutex() const {
       return reinterpret_cast<QMutex *>(val & ~quintptr(1u));
    }
 

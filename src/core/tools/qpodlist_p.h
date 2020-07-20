@@ -26,8 +26,6 @@
 
 #include <qvarlengtharray.h>
 
-QT_BEGIN_NAMESPACE
-
 template <typename T, int Prealloc>
 class QPodList : public QVarLengthArray<T, Prealloc>
 {
@@ -73,7 +71,5 @@ class QPodList : public QVarLengthArray<T, Prealloc>
       return tmp;
    }
 };
-
-QT_END_NAMESPACE
 
 #endif // QPODLIST_P_H

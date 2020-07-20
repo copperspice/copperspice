@@ -33,8 +33,6 @@
 
 #include <ctype.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifdef Status // we seem to pick up a macro Status --> int somewhere
 #undef Status
 #endif
@@ -154,8 +152,6 @@ class Q_CORE_EXPORT QSettings : public QObject
 
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_SETTINGS
 
-#endif // QSETTINGS_H
+#endif

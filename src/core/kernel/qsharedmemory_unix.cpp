@@ -49,13 +49,12 @@
 #ifndef QT_NO_SHAREDMEMORY
 //#define QSHAREDMEMORY_DEBUG
 
-QT_BEGIN_NAMESPACE
-
 QSharedMemoryPrivate::QSharedMemoryPrivate()
    : memory(0), size(0), error(QSharedMemory::NoError),
 #ifndef QT_NO_SYSTEMSEMAPHORE
      systemSemaphore(QString()), lockedByMe(false),
 #endif
+
 #ifndef QT_POSIX_IPC
      unix_key(0)
 #else
@@ -436,7 +435,5 @@ bool QSharedMemoryPrivate::detach()
 
    return true;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_SHAREDMEMORY

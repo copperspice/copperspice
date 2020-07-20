@@ -26,8 +26,6 @@
 
 #include <qobject.h>
 
-QT_BEGIN_NAMESPACE
-
 class Q_CORE_EXPORT QObjectCleanupHandler : public QObject
 {
    CORE_CS_OBJECT(QObjectCleanupHandler)
@@ -41,14 +39,11 @@ class Q_CORE_EXPORT QObjectCleanupHandler : public QObject
    bool isEmpty() const;
    void clear();
 
-   // ### move into d pointer
    QObjectList cleanupObjects;
 
  private :
    CORE_CS_SLOT_1(Private, void objectDestroyed(QObject *un_named_arg1))
    CORE_CS_SLOT_2(objectDestroyed)
 };
-
-QT_END_NAMESPACE
 
 #endif 

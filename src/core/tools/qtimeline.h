@@ -28,8 +28,6 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 class QTimeLinePrivate;
 
 class Q_CORE_EXPORT QTimeLine : public QObject
@@ -57,10 +55,12 @@ class Q_CORE_EXPORT QTimeLine : public QObject
       Paused,
       Running
    };
+
    enum Direction {
       Forward,
       Backward
    };
+
    enum CurveShape {
       EaseInCurve,
       EaseOutCurve,
@@ -136,10 +136,7 @@ class Q_CORE_EXPORT QTimeLine : public QObject
  private:
    Q_DISABLE_COPY(QTimeLine)
    Q_DECLARE_PRIVATE(QTimeLine)
-  
 };
-
-QT_END_NAMESPACE
 
 #endif
 

@@ -27,8 +27,6 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_SIGNALMAPPER
 class QSignalMapperPrivate;
 
@@ -82,6 +80,4 @@ class Q_CORE_EXPORT QSignalMapper : public QObject
 
 #endif // QT_NO_SIGNALMAPPER
 
-QT_END_NAMESPACE
-
-#endif // QSIGNALMAPPER_H
+#endif

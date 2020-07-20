@@ -31,8 +31,6 @@
 #include <qstringlist.h>
 #include <qthread.h>
 
-QT_BEGIN_NAMESPACE
-
 class QFileSystemWatcherEngine : public QThread
 {
    CORE_CS_OBJECT(QFileSystemWatcherEngine)
@@ -55,7 +53,6 @@ class QFileSystemWatcherEngine : public QThread
    virtual QStringList removePaths(const QStringList &paths, QStringList *files, QStringList *directories) = 0;
 
    virtual void stop() = 0;
-
 
    CORE_CS_SIGNAL_1(Public, void fileChanged(const QString &path, bool removed))
    CORE_CS_SIGNAL_2(fileChanged, path, removed)
@@ -88,7 +85,6 @@ class QFileSystemWatcherPrivate
 
 };
 
-
-QT_END_NAMESPACE
 #endif // QT_NO_FILESYSTEMWATCHER
-#endif // QFILESYSTEMWATCHER_P_H
+
+#endif

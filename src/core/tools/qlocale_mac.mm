@@ -30,9 +30,6 @@
 #include <qcore_mac_p.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
-
 static QByteArray envVarLocale()
 {
    static QByteArray lang = 0;
@@ -525,5 +522,3 @@ QVariant QSystemLocale::query(QueryType type, QVariant in = QVariant()) const
 }
 
 #endif // QT_NO_SYSTEMLOCALE
-
-QT_END_NAMESPACE

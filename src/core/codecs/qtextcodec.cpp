@@ -552,7 +552,7 @@ static void setup()
    (void)new QLatin1Codec;
    (void)new QUtf8Codec;
 
-#if defined(Q_OS_UNIX) && !defined(QT_NO_ICONV)
+#if defined(Q_OS_UNIX) && ! defined(QT_NO_ICONV)
    // QIconvCodec depends on the UTF-16 codec so it needs to be created last
    (void) new QIconvCodec();
 #endif
@@ -561,6 +561,7 @@ static void setup()
       setupLocaleMapper();
    }
 }
+
 QTextCodec::ConverterState::~ConverterState()
 {
    if (flags & FreeFunction) {
@@ -622,15 +623,18 @@ QTextCodec *QTextCodec::codecForName(const QString &name)
          if (cache) {
             cache->insert(name, cursor);
          }
+
          return cursor;
       }
 
       QStringList aliases = cursor->aliases();
+
       for (int y = 0; y < aliases.size(); ++y)
          if (nameMatch(aliases.at(y), name)) {
             if (cache) {
                cache->insert(name, cursor);
             }
+
             return cursor;
          }
    }

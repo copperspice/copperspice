@@ -28,8 +28,6 @@
 #include <qtconcurrentiteratekernel.h>
 #include <qtconcurrentreducekernel.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 // map kernel, works with both parallel-for and parallel-while
@@ -223,7 +221,5 @@ inline ThreadEngineStarter<ResultType> startMappedReduced(Iterator begin, Iterat
 }
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

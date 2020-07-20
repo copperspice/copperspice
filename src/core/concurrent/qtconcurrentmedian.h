@@ -28,7 +28,6 @@
 #include <qvector.h>
 
 #include <algorithm>
-QT_BEGIN_NAMESPACE
 
 namespace QtConcurrent {
 
@@ -92,7 +91,5 @@ class Median
 };
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

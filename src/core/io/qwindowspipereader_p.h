@@ -28,8 +28,6 @@
 #include <qringbuffer_p.h>
 #include <qt_windows.h>
 
-QT_BEGIN_NAMESPACE
-
 class Q_CORE_EXPORT QWindowsPipeReader : public QObject
 {
     CORE_CS_OBJECT(QWindowsPipeReader)

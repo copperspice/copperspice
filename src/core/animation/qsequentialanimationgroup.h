@@ -26,8 +26,6 @@
 
 #include <qanimationgroup.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ANIMATION
 
 class QPauseAnimation;
@@ -69,8 +67,6 @@ class Q_CORE_EXPORT QSequentialAnimationGroup : public QAnimationGroup
    CORE_CS_SLOT_2(_q_uncontrolledAnimationFinished)
 };
 
-#endif //QT_NO_ANIMATION
+#endif // QT_NO_ANIMATION
 
-QT_END_NAMESPACE
-
-#endif //QSEQUENTIALANIMATIONGROUP_H
+#endif

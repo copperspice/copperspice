@@ -39,12 +39,8 @@
 #include <errno.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 QSaveFilePrivate::QSaveFilePrivate()
-   : writeError(QFileDevice::NoError),
-     useTemporaryFile(true),
-     directWriteFallback(false)
+   : writeError(QFileDevice::NoError), useTemporaryFile(true), directWriteFallback(false)
 {
 }
 
@@ -58,7 +54,7 @@ QSaveFile::QSaveFile(QObject *parent)
 }
 
 QSaveFile::QSaveFile(const QString &name)
-   : QFileDevice(*new QSaveFilePrivate, 0)
+   : QFileDevice(*new QSaveFilePrivate, nullptr)
 {
    Q_D(QSaveFile);
    d->fileName = name;
@@ -204,24 +200,6 @@ bool QSaveFile::commit()
    return true;
 }
 
-/*!
-  Cancels writing the new file.
-
-  If the application changes its mind while saving, it can call cancelWriting(),
-  which sets an error code so that commit() will discard the temporary file.
-
-  Alternatively, it can simply make sure not to call commit().
-
-  Further write operations are possible after calling this method, but none
-  of it will have any effect, the written file will be discarded.
-
-  This method has no effect when direct write fallback is used. This is the case
-  when saving over an existing file in a readonly directory: no temporary file can
-  be created, so the existing file is overwritten no matter what, and cancelWriting()
-  cannot do anything about that, the contents of the existing file will be lost.
-
-  \sa commit()
-*/
 void QSaveFile::cancelWriting()
 {
    Q_D(QSaveFile);
@@ -250,46 +228,16 @@ qint64 QSaveFile::writeData(const char *data, qint64 len)
    return ret;
 }
 
-/*!
-  Allows writing over the existing file if necessary.
-
-  QSaveFile creates a temporary file in the same directory as the final
-  file and atomically renames it. However this is not possible if the
-  directory permissions do not allow creating new files.
-  In order to preserve atomicity guarantees, open() fails when it
-  cannot create the temporary file.
-
-  In order to allow users to edit files with write permissions in a
-  directory with restricted permissions, call setDirectWriteFallback() with
-  \a enabled set to true, and the following calls to open() will fallback to
-  opening the existing file directly and writing into it, without the use of
-  a temporary file.
-  This does not have atomicity guarantees, i.e. an application crash or
-  for instance a power failure could lead to a partially-written file on disk.
-  It also means cancelWriting() has no effect, in such a case.
-
-  Typically, to save documents edited by the user, call setDirectWriteFallback(true),
-  and to save application internal files (configuration files, data files, ...), keep
-  the default setting which ensures atomicity.
-
-  \sa directWriteFallback()
-*/
 void QSaveFile::setDirectWriteFallback(bool enabled)
 {
    Q_D(QSaveFile);
    d->directWriteFallback = enabled;
 }
 
-/*!
-  Returns true if the fallback solution for saving files in read-only
-  directories is enabled.
-
-  \sa setDirectWriteFallback()
-*/
 bool QSaveFile::directWriteFallback() const
 {
    Q_D(const QSaveFile);
    return d->directWriteFallback;
 }
 
-QT_END_NAMESPACE
+

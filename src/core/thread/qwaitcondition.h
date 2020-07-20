@@ -25,13 +25,12 @@
 #define QWAITCONDITION_H
 
 #include <qglobal.h>
-#include <limits.h>
-
-QT_BEGIN_NAMESPACE
 
 class QWaitConditionPrivate;
 class QMutex;
 class QReadWriteLock;
+
+#include <limits.h>
 
 class Q_CORE_EXPORT QWaitCondition
 {
@@ -51,6 +50,4 @@ class Q_CORE_EXPORT QWaitCondition
    QWaitConditionPrivate *d;
 };
 
-QT_END_NAMESPACE
-
-#endif // QWAITCONDITION_H
+#endif

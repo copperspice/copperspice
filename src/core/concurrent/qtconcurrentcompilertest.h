@@ -21,11 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QTCONCURRENTCOMPILERTEST_H
-#define QTCONCURRENTCOMPILERTEST_H
-
-
-QT_BEGIN_NAMESPACE
+#ifndef QTCONCURRENT_COMPILERTEST_H
+#define QTCONCURRENT_COMPILERTEST_H
 
 #include <qglobal.h>
 
@@ -43,8 +40,6 @@ class HasResultType
    enum { Value = (sizeof(test<T>(0)) == sizeof(Yes)) };
 };
 
-}
-
-QT_END_NAMESPACE
+}  // namespace
 
 #endif

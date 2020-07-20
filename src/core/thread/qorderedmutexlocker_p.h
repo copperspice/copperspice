@@ -26,8 +26,6 @@
 
 #include <qmutex.h>
 
-QT_BEGIN_NAMESPACE
-
 /*
   Locks 2 mutexes in a defined order, avoiding a recursive lock if
   we are trying to lock the same mutex twice.
@@ -90,7 +88,5 @@ class QOrderedMutexLocker
    QMutex *mtx1, *mtx2;
    bool locked;
 };
-
-QT_END_NAMESPACE
 
 #endif

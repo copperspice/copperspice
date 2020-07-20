@@ -26,8 +26,6 @@
 
 // Define the container allocation functions in a separate file, so users can easily override them.
 
-QT_BEGIN_NAMESPACE
-
 void *qMalloc(size_t size)
 {
    return ::malloc(size);
@@ -51,7 +49,7 @@ void *qMallocAligned(size_t size, size_t alignment)
 void *qReallocAligned(void *oldptr, size_t newsize, size_t oldsize, size_t alignment)
 {
    // fake an aligned allocation
-   Q_UNUSED(oldsize);
+   (void) oldsize;
 
    void *actualptr = oldptr ? static_cast<void **>(oldptr)[-1] : 0;
    if (alignment <= sizeof(void *)) {
@@ -60,6 +58,7 @@ void *qReallocAligned(void *oldptr, size_t newsize, size_t oldsize, size_t align
       if (!newptr) {
          return 0;
       }
+
       if (newptr == actualptr) {
          // realloc succeeded without reallocating
          return oldptr;
@@ -103,6 +102,4 @@ void qFreeAligned(void *ptr)
    void **ptr2 = static_cast<void **>(ptr);
    free(ptr2[-1]);
 }
-
-QT_END_NAMESPACE
 

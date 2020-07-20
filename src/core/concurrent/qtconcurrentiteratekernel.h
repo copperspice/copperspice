@@ -30,9 +30,9 @@
 #include <qtconcurrentthreadengine.h>
 
 #include <iterator>
-QT_BEGIN_NAMESPACE
 
 namespace QtConcurrent {
+
 using std::advance;
 
 /*
@@ -50,6 +50,7 @@ class Q_CORE_EXPORT BlockSizeManager
    void timeBeforeUser();
    void timeAfterUser();
    int blockSize();
+
  private:
    inline bool blockSizeMaxed() {
       return (m_blockSize >= maxBlockSize);
@@ -124,7 +125,6 @@ inline bool selectIteration(std::random_access_iterator_tag)
 {
    return true; // for
 }
-
 
 template <typename Iterator, typename T>
 class IterateKernel : public ThreadEngine<T>
@@ -291,7 +291,5 @@ class IterateKernel : public ThreadEngine<T>
 };
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

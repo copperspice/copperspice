@@ -33,8 +33,6 @@
 #include <qthreadpool.h>
 #include <qvector.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QtConcurrent {
 
 /*
@@ -63,8 +61,8 @@ class IntermediateResults
 enum ReduceOption {
    UnorderedReduce = 0x1,
    OrderedReduce = 0x2,
-   SequentialReduce = 0x4
-                      // ParallelReduce = 0x8
+   SequentialReduce = 0x4,
+// ParallelReduce = 0x8
 };
 using ReduceOptions = QFlags<ReduceOption>;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ReduceOptions)
@@ -193,7 +191,5 @@ struct SequenceHolder2 : public Base {
 };
 
 } // namespace QtConcurrent
-
-QT_END_NAMESPACE
 
 #endif

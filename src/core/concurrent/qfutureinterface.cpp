@@ -30,8 +30,6 @@
 #include <qthreadpool_p.h>
 #include <qfutureinterface_p.h>
 
-QT_BEGIN_NAMESPACE
-
 enum {
    MaxProgressEmitsPerSecond = 25
 };
@@ -570,6 +568,3 @@ void QFutureInterfaceBasePrivate::setState(QFutureInterfaceBase::State newState)
 {
    state = newState;
 }
-
-QT_END_NAMESPACE
-

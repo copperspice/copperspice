@@ -29,25 +29,23 @@
 #include <qalgorithms.h>
 #include <qt_windows.h>
 
-#define Q_MUTEX_T void*
 #include <qmutex_p.h>
 #include <qreadwritelock_p.h>
 
-QT_BEGIN_NAMESPACE
-
-//***********************************************************************
 // QWaitConditionPrivate
-// **********************************************************************
 
 class QWaitConditionEvent
 {
  public:
-   inline QWaitConditionEvent() : priority(0), wokenUp(false) {
+   QWaitConditionEvent()
+      : priority(0), wokenUp(false) {
       event = CreateEvent(NULL, TRUE, FALSE, NULL);
    }
-   inline ~QWaitConditionEvent() {
+
+   ~QWaitConditionEvent() {
       CloseHandle(event);
    }
+
    int priority;
    bool wokenUp;
    HANDLE event;
@@ -93,6 +91,7 @@ bool QWaitConditionPrivate::wait(QWaitConditionEvent *wce, unsigned long time)
 {
    // wait for the event
    bool ret = false;
+
    switch (WaitForSingleObject(wce->event, time)) {
       default:
          break;
@@ -123,9 +122,9 @@ void QWaitConditionPrivate::post(QWaitConditionEvent *wce, bool ret)
    mtx.unlock();
 }
 
-//***********************************************************************
+// ***********************************************************************
 // QWaitCondition implementation
-//***********************************************************************
+// ***********************************************************************
 
 QWaitCondition::QWaitCondition()
 {
@@ -194,6 +193,7 @@ void QWaitCondition::wakeOne()
 {
    // wake up the first waiting thread in the queue
    QMutexLocker locker(&d->mtx);
+
    for (int i = 0; i < d->queue.size(); ++i) {
       QWaitConditionEvent *current = d->queue.at(i);
       if (current->wokenUp) {
@@ -215,5 +215,3 @@ void QWaitCondition::wakeAll()
       current->wokenUp = true;
    }
 }
-
-QT_END_NAMESPACE

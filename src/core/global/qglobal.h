@@ -1013,8 +1013,7 @@ Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
 #define QT_TRID_NOOP(id) id
 #endif
 
-//  some classes do not permit copies to be made of an object. These classes contain a private
-//  copy constructor and assignment operator to disable copying (the compiler gives an error message)
+// copy & move constructor and copy & move assignment operator = delete
 #define Q_DISABLE_COPY(ClassName)           \
     ClassName(const ClassName &) = delete;  \
     ClassName &operator=(const ClassName &) = delete;

@@ -25,7 +25,7 @@
 #include <qmutex.h>
 #include <qlog.h>
 
-#if !defined(QT_NO_THREAD)
+#if ! defined(QT_NO_THREAD)
 
 #include <qmutex_p.h>
 
@@ -33,8 +33,6 @@
 #include <mach/task.h>
 
 #include <errno.h>
-
-QT_BEGIN_NAMESPACE
 
 QMutexPrivate::QMutexPrivate()
 {
@@ -74,7 +72,4 @@ void QMutexPrivate::wakeUp()
    semaphore_signal(mach_semaphore);
 }
 
-
-QT_END_NAMESPACE
-
-#endif //QT_NO_THREAD
+#endif // QT_NO_THREAD

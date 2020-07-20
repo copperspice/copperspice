@@ -27,8 +27,6 @@
 #include <qtextcodec.h>
 #include <string.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TEXTCODEC
 
 typedef void (*QTextCodecStateFreeFunction)(QTextCodec::ConverterState *);
@@ -61,10 +59,11 @@ class QTextCodec
 
    struct ConverterState {
       ConverterState(ConversionFlags f = DefaultConversion)
-         : flags(f), remainingChars(0), invalidChars(0), d(0) {
+         : flags(f), remainingChars(0), invalidChars(0), d(nullptr)
+      {
          state_data[0] = state_data[1] = state_data[2] = 0;
       }
-      ~ConverterState() { }
+
       ConversionFlags flags;
       int remainingChars;
       int invalidChars;
@@ -76,8 +75,6 @@ class QTextCodec
    };
 };
 
-#endif //QT_NO_TEXTCODEC
-
-QT_END_NAMESPACE
+#endif // QT_NO_TEXTCODEC
 
 #endif

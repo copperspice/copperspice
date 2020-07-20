@@ -31,8 +31,6 @@
 #error qtemporaryfile.h must be included before any header file that defines open
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TEMPORARYFILE
 
 class QTemporaryFilePrivate;
@@ -80,6 +78,4 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
 
 #endif // QT_NO_TEMPORARYFILE
 
-QT_END_NAMESPACE
-
-#endif // QTEMPORARYFILE_H
+#endif

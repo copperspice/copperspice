@@ -34,13 +34,10 @@
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 
-// Platform-specific headers
 #if defined(Q_OS_WIN)
 #else
 #include <qscopedpointer.h>
 #endif
-
-QT_BEGIN_NAMESPACE
 
 class QFileSystemIterator
 {
@@ -72,8 +69,6 @@ class QFileSystemIterator
    Q_DISABLE_COPY(QFileSystemIterator)
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_FILESYSTEMITERATOR
 
-#endif // include guard
+#endif

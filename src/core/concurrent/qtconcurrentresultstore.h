@@ -28,9 +28,6 @@
 #include <qmap.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
-
-
 /*
     ResultStore stores indexed results. Results can be added and retrieved
     either individually batched in a QVector. Retriveing results and checking
@@ -205,8 +202,5 @@ class ResultStore : public ResultStoreBase
 };
 
 } // namespace QtConcurrent
-
-
-QT_END_NAMESPACE
 
 #endif

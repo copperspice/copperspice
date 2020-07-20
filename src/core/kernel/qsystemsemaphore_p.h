@@ -35,8 +35,6 @@
 #  include <semaphore.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 class QSystemSemaphorePrivate
 {
  public:
@@ -87,8 +85,6 @@ class QSystemSemaphorePrivate
    QSystemSemaphore::SystemSemaphoreError error;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_SYSTEMSEMAPHORE
 
-#endif // QSYSTEMSEMAPHORE_P_H
+#endif

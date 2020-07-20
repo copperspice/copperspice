@@ -75,7 +75,7 @@ class Q_CORE_EXPORT QTextCodec
 
    struct Q_CORE_EXPORT ConverterState {
       ConverterState(ConversionFlags f = DefaultConversion)
-         : flags(f), remainingChars(0), invalidChars(0), d(0)
+         : flags(f), remainingChars(0), invalidChars(0), d(nullptr)
       {
          state_data[0] = 0;
          state_data[1] = 0;
@@ -132,7 +132,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextCodec::ConversionFlags)
 
 inline QTextCodec *QTextCodec::codecForTr()
 {
-   return validCodecs() ? cftr : 0;
+   return validCodecs() ? cftr : nullptr;
 }
 
 inline void QTextCodec::setCodecForTr(QTextCodec *c)
@@ -162,9 +162,14 @@ class Q_CORE_EXPORT QTextDecoder
    Q_DISABLE_COPY(QTextDecoder)
 
  public:
-   explicit QTextDecoder(const QTextCodec *codec) : c(codec), state() {}
+   explicit QTextDecoder(const QTextCodec *codec)
+      : c(codec), state()
+   {
+   }
+
    QTextDecoder(const QTextCodec *codec, QTextCodec::ConversionFlags flags);
    ~QTextDecoder();
+
    QString toUnicode(const char *chars, int len);
    QString toUnicode(const QByteArray &ba);
    void toUnicode(QString *target, const char *chars, int len);
@@ -177,4 +182,4 @@ class Q_CORE_EXPORT QTextDecoder
 
 #endif // QT_NO_TEXTCODEC
 
-#endif // QTEXTCODEC_H
+#endif
