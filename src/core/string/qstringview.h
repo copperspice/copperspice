@@ -951,4 +951,7 @@ typename QStringView<S>::value_type QStringView<S>::operator[](size_type n) cons
 }  // cs namespace
 #endif
 
+Q_CORE_EXPORT QStringView8  make_view(QString8 &&str);
+Q_CORE_EXPORT QStringView16 make_view(QString16 &&str);
+
 #endif
