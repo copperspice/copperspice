@@ -68,6 +68,8 @@ class QStringView : public CsString::CsBasicStringView<S>
       {
       }
 
+      QStringView(S &&str) = delete;
+
       // methods
       value_type at(size_type n) const {
          return CsString::CsBasicStringView<S>::at(n);
