@@ -107,7 +107,8 @@ QString QJsonDocument::toJsonString(JsonFormat format) const
 
 QJsonDocument QJsonDocument::fromJson(const QByteArray &json, QJsonParseError *error)
 {
-   return fromJson(QString::fromUtf8(json), error);
+   QString str = QString::fromUtf8(json);
+   return fromJson(str, error);
 }
 
 QJsonDocument QJsonDocument::fromJson(QStringView json, QJsonParseError *error)

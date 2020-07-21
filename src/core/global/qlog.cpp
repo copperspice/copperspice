@@ -169,7 +169,8 @@ static void qEmergencyOut(QtMsgType msgType, const char *msg, va_list ap)
       std::vsnprintf(emergency_buf, 255, msg, ap);
    }
 
-   qt_message_output(msgType, QString::fromUtf8(emergency_buf));
+   QString str = QString::fromUtf8(emergency_buf);
+   qt_message_output(msgType, str);
 }
 
 // internal
@@ -202,7 +203,8 @@ static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
       }
    }
 
-   qt_message_output(msgType, QString::fromUtf8(buffer));
+   QString str = QString::fromUtf8(buffer);
+   qt_message_output(msgType, str);
 }
 
 //

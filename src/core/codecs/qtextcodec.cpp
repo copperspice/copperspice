@@ -137,8 +137,8 @@ static QTextCodec *createForName(QStringView name)
    QSet<QString> keySet = obj->keySet();
 
    for (auto key : keySet) {
-      if (nameMatch(name, key)) {
-         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
+      if (nameMatch(make_view(name), key)) {
+         if (QTextCodecFactoryInterface * factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
             return factory->create(key);
          }
       }
@@ -619,7 +619,7 @@ QTextCodec *QTextCodec::codecForName(const QString &name)
    for (int i = 0; i < all->size(); ++i) {
       QTextCodec *cursor = all->at(i);
 
-      if (nameMatch(cursor->name(), name)) {
+      if (nameMatch(make_view(cursor->name()), name)) {
          if (cache) {
             cache->insert(name, cursor);
          }
@@ -832,7 +832,7 @@ bool QTextCodec::canEncode(QChar ch) const
    ConverterState state;
 
    state.flags = ConvertInvalidToNull;
-   convertFromUnicode(QString(ch), &state);
+   convertFromUnicode(make_view(QString(ch)), &state);
 
    return (state.invalidChars == 0);
 }

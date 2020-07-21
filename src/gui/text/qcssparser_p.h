@@ -752,15 +752,15 @@ class Q_GUI_EXPORT Parser
    }
 
    inline bool testImport() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, QString("import"));
+      return testTokenAndEndsWith(ATKEYWORD_SYM, make_view(QString("import")));
    }
 
    inline bool testMedia() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, QString("media"));
+      return testTokenAndEndsWith(ATKEYWORD_SYM, make_view(QString("media")));
    }
 
    inline bool testPage() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, QString("page"));
+      return testTokenAndEndsWith(ATKEYWORD_SYM, make_view(QString("page")));
    }
 
    inline bool testCombinator() {

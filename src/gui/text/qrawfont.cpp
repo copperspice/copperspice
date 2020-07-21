@@ -318,7 +318,7 @@ bool QRawFont::supportsCharacter(QChar character) const
 bool QRawFont::supportsCharacter(quint32 ucs4) const
 {
    QChar c = QChar(char32_t(ucs4));
-   return d->isValid() && d->fontEngine->canRender(QString(c));
+   return d->isValid() && d->fontEngine->canRender(make_view(QString(c)));
 }
 
 // qfontdatabase.cpp

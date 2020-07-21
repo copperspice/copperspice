@@ -220,7 +220,7 @@ bool QFontMetrics::inFontUcs4(char32_t ch) const
       return false;
    }
 
-   return engine->canRender(QString(ch));
+   return engine->canRender(make_view(QString(ch)));
 }
 
 int QFontMetrics::leftBearing(QChar ch) const
@@ -686,7 +686,7 @@ bool QFontMetricsF::inFontUcs4(char32_t ch) const
       return false;
    }
 
-   return engine->canRender(QString(ch));
+   return engine->canRender(make_view(QString(ch)));
 }
 
 qreal QFontMetricsF::leftBearing(QChar ch) const

@@ -2154,7 +2154,8 @@ QString QUrl::fromAce(const QString &domain)
 
 QString QUrl::fromAce(const QByteArray &domain)
 {
-   return qt_ACE_do(QString::fromLatin1(domain), NormalizeAce, ForbidLeadingDot /*FIXME: make configurable*/);
+   QString str = QString::fromLatin1(domain);
+   return qt_ACE_do(str, NormalizeAce, ForbidLeadingDot /*FIXME: make configurable*/);
 }
 
 QByteArray QUrl::toAce(const QString &domain)

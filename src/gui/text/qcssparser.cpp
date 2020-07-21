@@ -2590,9 +2590,11 @@ void Parser::init(const QString &css, bool isFile)
 
 bool Parser::parse(StyleSheet *styleSheet, Qt::CaseSensitivity nameCaseSensitivity)
 {
-   if (testTokenAndEndsWith(ATKEYWORD_SYM, QString("charset"))) {
-      while (test(S) || test(CDO) || test(CDC))
-      { }
+   if (testTokenAndEndsWith(ATKEYWORD_SYM, make_view(QString("charset")))) {
+
+      while (test(S) || test(CDO) || test(CDC)) {
+         // do nothing
+      }
 
       if (!next(STRING)) {
          return false;
