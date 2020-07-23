@@ -45,6 +45,10 @@ class Q_CORE_EXPORT QTimer : public QObject
 
  public:
    explicit QTimer(QObject *parent = nullptr);
+
+   QTimer(const QTimer &) = delete;
+   QTimer &operator=(const QTimer &) = delete;
+
    ~QTimer();
 
    bool isActive() const {
@@ -143,7 +147,6 @@ class Q_CORE_EXPORT QTimer : public QObject
    void timerEvent(QTimerEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QTimer)
    int startTimer(int) {
       return -1;
    }

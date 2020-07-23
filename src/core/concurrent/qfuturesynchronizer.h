@@ -29,8 +29,6 @@
 template <typename T>
 class QFutureSynchronizer
 {
-   Q_DISABLE_COPY(QFutureSynchronizer)
-
  public:
    QFutureSynchronizer()
       : m_cancelOnWait(false)
@@ -42,6 +40,9 @@ class QFutureSynchronizer
    {
       addFuture(future);
    }
+
+   QFutureSynchronizer(const QFutureSynchronizer &) = delete;
+   QFutureSynchronizer &operator=(const QFutureSynchronizer &) = delete;
 
    ~QFutureSynchronizer()
    {

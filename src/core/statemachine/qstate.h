@@ -64,6 +64,10 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    QState(QState *parent = nullptr);
    QState(ChildMode childMode, QState *parent = nullptr);
+
+   QState(const QState &) = delete;
+   QState &operator=(const QState &) = delete;
+
    ~QState();
 
    void addTransition(QAbstractTransition *transition);
@@ -86,7 +90,6 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    void assignProperty(QObject *object, const char *name, const QVariant &value);
 
- public:
    CORE_CS_SIGNAL_1(Public, void finished())
    CORE_CS_SIGNAL_2(finished)
 
@@ -111,7 +114,6 @@ class Q_CORE_EXPORT QState : public QAbstractState
    QState(QStatePrivate &dd, QState *parent);
 
  private:
-   Q_DISABLE_COPY(QState)
    Q_DECLARE_PRIVATE(QState)
 };
 

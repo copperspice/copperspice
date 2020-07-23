@@ -56,6 +56,10 @@ class Q_CORE_EXPORT QSharedMemory : public QObject
 
    QSharedMemory(QObject *parent = nullptr);
    QSharedMemory(const QString &key, QObject *parent = nullptr);
+
+   QSharedMemory(const QSharedMemory &) = delete;
+   QSharedMemory &operator=(const QSharedMemory &) = delete;
+
    ~QSharedMemory();
 
    void setKey(const QString &key);
@@ -84,10 +88,6 @@ class Q_CORE_EXPORT QSharedMemory : public QObject
 
  protected:
    QScopedPointer<QSharedMemoryPrivate> d_ptr;
-
- private:
-   Q_DISABLE_COPY(QSharedMemory)
-
 };
 
 #endif // QT_NO_SHAREDMEMORY

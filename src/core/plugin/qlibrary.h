@@ -54,6 +54,10 @@ class Q_CORE_EXPORT QLibrary : public QObject
    explicit QLibrary(const QString &fileName, QObject *parent = nullptr);
    explicit QLibrary(const QString &fileName, int verNum, QObject *parent = nullptr);
    explicit QLibrary(const QString &fileName, const QString &version, QObject *parent = nullptr);
+
+   QLibrary(const QLibrary &) = delete;
+   QLibrary &operator=(const QLibrary &) = delete;
+
    ~QLibrary();
 
    void *resolve(const QString &symbol);
@@ -78,8 +82,6 @@ class Q_CORE_EXPORT QLibrary : public QObject
    LoadHints loadHints() const;
 
  private:
-   Q_DISABLE_COPY(QLibrary)
-
    QLibraryHandle *m_handle;
    bool m_loaded;
 };

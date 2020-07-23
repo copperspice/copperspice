@@ -39,6 +39,10 @@ class Q_CORE_EXPORT QCommandLineParser
 
  public:
    QCommandLineParser();
+
+   QCommandLineParser(const QCommandLineParser &) = delete;
+   QCommandLineParser &operator=(const QCommandLineParser &) = delete;
+
    ~QCommandLineParser();
 
    enum SingleDashWordOptionMode {
@@ -78,8 +82,6 @@ class Q_CORE_EXPORT QCommandLineParser
    QString helpText() const;
 
  private:
-   Q_DISABLE_COPY(QCommandLineParser)
-
    QCommandLineParserPrivate *const d;
 };
 

@@ -37,6 +37,10 @@ class Q_CORE_EXPORT QMimeData : public QObject
 
  public:
    QMimeData();
+
+   QMimeData(const QMimeData &) = delete;
+   QMimeData &operator=(const QMimeData &) = delete;
+
    ~QMimeData();
 
    QList<QUrl> urls() const;
@@ -73,7 +77,6 @@ class Q_CORE_EXPORT QMimeData : public QObject
    QScopedPointer<QMimeDataPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QMimeData)
    Q_DECLARE_PRIVATE(QMimeData)
 };
 

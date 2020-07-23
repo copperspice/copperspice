@@ -59,6 +59,10 @@ class Q_CORE_EXPORT QIODevice : public QObject
    QIODevice();
 
    explicit QIODevice(QObject *parent);
+
+   QIODevice(const QIODevice &) = delete;
+   QIODevice &operator=(const QIODevice &) = delete;
+
    virtual ~QIODevice();
 
    OpenMode openMode() const;
@@ -134,8 +138,6 @@ class Q_CORE_EXPORT QIODevice : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QIODevice)
-   Q_DISABLE_COPY(QIODevice)
-
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QIODevice::OpenMode)

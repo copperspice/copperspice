@@ -37,6 +37,10 @@ class Q_CORE_EXPORT QSignalMapper : public QObject
 
  public:
    explicit QSignalMapper(QObject *parent = nullptr);
+
+   QSignalMapper(const QSignalMapper &) = delete;
+   QSignalMapper &operator=(const QSignalMapper &) = delete;
+
    ~QSignalMapper();
 
    void setMapping(QObject *sender, int id);
@@ -72,8 +76,6 @@ class Q_CORE_EXPORT QSignalMapper : public QObject
    QScopedPointer<QSignalMapperPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QSignalMapper)
-
    CORE_CS_SLOT_1(Private, void _q_senderDestroyed())
    CORE_CS_SLOT_2(_q_senderDestroyed)
 };

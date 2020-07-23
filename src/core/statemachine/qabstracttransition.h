@@ -67,6 +67,10 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
    CORE_CS_ENUM(TransitionType)
 
    QAbstractTransition(QState *sourceState = nullptr);
+
+   QAbstractTransition(const QAbstractTransition &) = delete;
+   QAbstractTransition &operator=(const QAbstractTransition &) = delete;
+
    virtual ~QAbstractTransition();
 
    QState *sourceState() const;
@@ -105,7 +109,6 @@ class Q_CORE_EXPORT QAbstractTransition : public QObject
    QScopedPointer<QAbstractTransitionPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QAbstractTransition)
    Q_DECLARE_PRIVATE(QAbstractTransition)
 };
 

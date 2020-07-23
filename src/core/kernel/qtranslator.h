@@ -39,6 +39,10 @@ class Q_CORE_EXPORT QTranslator : public QObject
 
  public:
    explicit QTranslator(QObject *parent = nullptr);
+
+   QTranslator(const QTranslator &) = delete;
+   QTranslator &operator=(const QTranslator &) = delete;
+
    ~QTranslator();
 
    virtual QString translate(const char *context, const char *sourceText, const char *disambiguation = 0, int n = -1) const;
@@ -56,7 +60,6 @@ class Q_CORE_EXPORT QTranslator : public QObject
    QScopedPointer<QTranslatorPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QTranslator)
    Q_DECLARE_PRIVATE(QTranslator)
 };
 

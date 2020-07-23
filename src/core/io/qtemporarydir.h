@@ -36,6 +36,10 @@ class Q_CORE_EXPORT QTemporaryDir
  public:
    QTemporaryDir();
    explicit QTemporaryDir(const QString &templateName);
+
+   QTemporaryDir(const QTemporaryDir &) = delete;
+   QTemporaryDir &operator=(const QTemporaryDir &) = delete;
+
    ~QTemporaryDir();
 
    bool isValid() const;
@@ -48,8 +52,6 @@ class Q_CORE_EXPORT QTemporaryDir
 
  private:
    QScopedPointer<QTemporaryDirPrivate> d_ptr;
-
-   Q_DISABLE_COPY(QTemporaryDir)
 };
 
 #endif // QT_NO_TEMPORARYFILE

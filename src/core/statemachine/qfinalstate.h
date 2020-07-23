@@ -36,6 +36,10 @@ class Q_CORE_EXPORT QFinalState : public QAbstractState
 
  public:
    QFinalState(QState *parent = nullptr);
+
+   QFinalState(const QFinalState &) = delete;
+   QFinalState &operator=(const QFinalState &) = delete;
+
    ~QFinalState();
 
  protected:
@@ -45,7 +49,6 @@ class Q_CORE_EXPORT QFinalState : public QAbstractState
    bool event(QEvent *e) override;
 
  private:
-   Q_DISABLE_COPY(QFinalState)
    Q_DECLARE_PRIVATE(QFinalState)
 };
 

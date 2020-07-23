@@ -45,6 +45,9 @@ class QFileSystemIterator
    QFileSystemIterator(const QFileSystemEntry &entry, QDir::Filters filters, const QStringList &nameFilters,
          QDirIterator::IteratorFlags flags = QDirIterator::FollowSymlinks | QDirIterator::Subdirectories);
 
+   QFileSystemIterator(const QFileSystemIterator &) = delete;
+   QFileSystemIterator &operator=(const QFileSystemIterator &) = delete;
+
    ~QFileSystemIterator();
 
    bool advance(QFileSystemEntry &fileEntry, QFileSystemMetaData &metaData);
@@ -65,8 +68,6 @@ class QFileSystemIterator
 
    int lastError;
 #endif
-
-   Q_DISABLE_COPY(QFileSystemIterator)
 };
 
 #endif // QT_NO_FILESYSTEMITERATOR

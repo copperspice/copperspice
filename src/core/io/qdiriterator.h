@@ -44,6 +44,9 @@ class Q_CORE_EXPORT QDirIterator
    QDirIterator(const QString &path, QDir::Filters filter, IteratorFlags flags = NoIteratorFlags);
    QDirIterator(const QString &path, const QStringList &nameFilters, QDir::Filters filters = QDir::NoFilter, IteratorFlags flags = NoIteratorFlags);
 
+   QDirIterator(const QDirIterator &) = delete;
+   QDirIterator &operator=(const QDirIterator &) = delete;
+
    ~QDirIterator();
 
    QString next();
@@ -55,8 +58,6 @@ class Q_CORE_EXPORT QDirIterator
    QString path() const;
 
  private:
-   Q_DISABLE_COPY(QDirIterator)
-
    QScopedPointer<QDirIteratorPrivate> d;
    friend class QDir;
 };

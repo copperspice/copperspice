@@ -36,6 +36,10 @@ class Q_CORE_EXPORT QParallelAnimationGroup : public QAnimationGroup
 
  public:
    QParallelAnimationGroup(QObject *parent = nullptr);
+
+   QParallelAnimationGroup(const QParallelAnimationGroup &) = delete;
+   QParallelAnimationGroup &operator=(const QParallelAnimationGroup &) = delete;
+
    ~QParallelAnimationGroup();
 
    int duration() const override;
@@ -49,7 +53,6 @@ class Q_CORE_EXPORT QParallelAnimationGroup : public QAnimationGroup
    void updateDirection(QAbstractAnimation::Direction direction) override;
 
  private:
-   Q_DISABLE_COPY(QParallelAnimationGroup)
    Q_DECLARE_PRIVATE(QParallelAnimationGroup)
 
    CORE_CS_SLOT_1(Private, void _q_uncontrolledAnimationFinished())

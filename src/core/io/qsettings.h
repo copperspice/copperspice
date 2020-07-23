@@ -89,6 +89,9 @@ class Q_CORE_EXPORT QSettings : public QObject
    QSettings(const QString &fileName, Format format, QObject *parent = nullptr);
    explicit QSettings(QObject *parent = nullptr);
 
+   QSettings(const QSettings &) = delete;
+   QSettings &operator=(const QSettings &) = delete;
+
    ~QSettings();
 
    void clear();
@@ -146,10 +149,6 @@ class Q_CORE_EXPORT QSettings : public QObject
  protected:
    bool event(QEvent *event) override;
    QScopedPointer<QSettingsPrivate> d_ptr;
-
- private:
-   Q_DISABLE_COPY(QSettings)
-
 };
 
 #endif // QT_NO_SETTINGS

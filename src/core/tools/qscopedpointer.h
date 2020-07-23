@@ -72,6 +72,9 @@ class QScopedPointer
    {
    }
 
+   QScopedPointer(const QScopedPointer &) = delete;
+   QScopedPointer &operator=(const QScopedPointer &) = delete;
+
    ~QScopedPointer()
    {
       T *oldD = this->d;
@@ -137,9 +140,6 @@ class QScopedPointer
 
  protected:
    T *d;
-
- private:
-   Q_DISABLE_COPY(QScopedPointer)
 };
 
 template <class T, class Cleanup>
@@ -199,6 +199,9 @@ class QScopedArrayPointer : public QScopedPointer<T, Cleanup>
       : QScopedPointer<T, Cleanup>(p) {
    }
 
+   QScopedArrayPointer(const QScopedArrayPointer &) = delete;
+   QScopedArrayPointer &operator=(const QScopedArrayPointer &) = delete;
+
    T &operator[](int i) {
       return this->d[i];
    }
@@ -213,8 +216,6 @@ class QScopedArrayPointer : public QScopedPointer<T, Cleanup>
       // Storing a scalar array as a pointer to a different type is not
       // allowed and results in undefined behavior.
    }
-
-   Q_DISABLE_COPY(QScopedArrayPointer)
 };
 
 #endif

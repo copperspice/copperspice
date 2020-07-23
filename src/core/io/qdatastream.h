@@ -99,6 +99,10 @@ class Q_CORE_EXPORT QDataStream
 
    QDataStream(QByteArray *, QIODevice::OpenMode flags);
    QDataStream(const QByteArray &);
+
+   QDataStream(const QDataStream &) = delete;
+   QDataStream &operator=(const QDataStream &) = delete;
+
    virtual ~QDataStream();
 
    inline QIODevice *device() const;
@@ -159,8 +163,6 @@ class Q_CORE_EXPORT QDataStream
    int skipRawData(int len);
 
  private:
-   Q_DISABLE_COPY(QDataStream)
-
    QScopedPointer<QDataStreamPrivate> d;
 
    QIODevice *dev;

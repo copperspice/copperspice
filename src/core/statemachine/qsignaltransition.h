@@ -44,6 +44,9 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
    template<class SignalClass, class ...SignalArgs>
    QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState = nullptr);
 
+   QSignalTransition(const QSignalTransition &) = delete;
+   QSignalTransition &operator=(const QSignalTransition &) = delete;
+
    ~QSignalTransition();
 
    const QObject *senderObject() const;
@@ -63,7 +66,6 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
    bool event(QEvent *e) override;
 
  private:
-   Q_DISABLE_COPY(QSignalTransition)
    Q_DECLARE_PRIVATE(QSignalTransition)
 
    const QObject *m_sender;

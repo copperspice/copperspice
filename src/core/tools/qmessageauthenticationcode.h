@@ -33,6 +33,10 @@ class Q_CORE_EXPORT QMessageAuthenticationCode
 {
    public:
     explicit QMessageAuthenticationCode(QCryptographicHash::Algorithm method, const QByteArray &key = QByteArray());
+
+    QMessageAuthenticationCode(const QMessageAuthenticationCode &) = delete;
+    QMessageAuthenticationCode &operator=(const QMessageAuthenticationCode &) = delete;
+
     ~QMessageAuthenticationCode();
 
     void reset();
@@ -47,8 +51,7 @@ class Q_CORE_EXPORT QMessageAuthenticationCode
 
     static QByteArray hash(const QByteArray &message, const QByteArray &key, QCryptographicHash::Algorithm method);
 
-private:
-    Q_DISABLE_COPY(QMessageAuthenticationCode)
+ private:
     QMessageAuthenticationCodePrivate *d;
 };
 

@@ -70,6 +70,10 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    enum { ApplicationFlags = CS_VERSION | 0x01000000 };
 
    QCoreApplication(int &argc, char **argv, int = ApplicationFlags );
+
+   QCoreApplication(const QCoreApplication &) = delete;
+   QCoreApplication &operator=(const QCoreApplication &) = delete;
+
    ~QCoreApplication();
 
    static QStringList arguments();
@@ -181,7 +185,6 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
    static QCoreApplication *self;
 
-   Q_DISABLE_COPY(QCoreApplication)
    friend class QApplication;
    friend class QApplicationPrivate;
    friend class QClassFactory;

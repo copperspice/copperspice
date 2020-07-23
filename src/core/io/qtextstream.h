@@ -93,6 +93,10 @@ class Q_CORE_EXPORT QTextStream
    explicit QTextStream(QString *string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
    explicit QTextStream(QByteArray *array, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
    explicit QTextStream(const QByteArray &array, QIODevice::OpenMode openMode = QIODevice::ReadOnly);
+
+   QTextStream(const QTextStream &) = delete;
+   QTextStream &operator=(const QTextStream &) = delete;
+
    virtual ~QTextStream();
 
 #ifndef QT_NO_TEXTCODEC
@@ -198,8 +202,6 @@ class Q_CORE_EXPORT QTextStream
    QScopedPointer<QTextStreamPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QTextStream)
-
    friend class QDebugStateSaverPrivate;
    friend class QDebug;
 };

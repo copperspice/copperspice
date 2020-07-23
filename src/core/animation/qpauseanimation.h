@@ -40,6 +40,10 @@ class Q_CORE_EXPORT QPauseAnimation : public QAbstractAnimation
  public:
    QPauseAnimation(QObject *parent = nullptr);
    QPauseAnimation(int msecs, QObject *parent = nullptr);
+
+   QPauseAnimation(const QPauseAnimation &) = delete;
+   QPauseAnimation &operator=(const QPauseAnimation &) = delete;
+
    ~QPauseAnimation();
 
    int duration() const override;
@@ -50,7 +54,6 @@ class Q_CORE_EXPORT QPauseAnimation : public QAbstractAnimation
    void updateCurrentTime(int) override;
 
  private:
-   Q_DISABLE_COPY(QPauseAnimation)
    Q_DECLARE_PRIVATE(QPauseAnimation)
 };
 

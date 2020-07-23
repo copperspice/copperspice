@@ -277,10 +277,10 @@ class Q_CORE_EXPORT QDebugStateSaver
  public:
     QDebugStateSaver(QDebug &dbg);
 
+   QDebugStateSaver(const QDebugStateSaver &) = delete;
+   QDebugStateSaver &operator=(const QDebugStateSaver &) = delete;
 
    ~QDebugStateSaver();
-private:
-    Q_DISABLE_COPY(QDebugStateSaver)
 
  protected:
    QScopedPointer<QDebugStateSaverPrivate> d_ptr;

@@ -73,10 +73,12 @@ private:
 
     class Overlapped : public OVERLAPPED
     {
-        Q_DISABLE_COPY(Overlapped)
-
-    public:
+      public:
         explicit Overlapped(QWindowsPipeReader *reader);
+
+        Overlapped(const Overlapped &) = delete;
+        Overlapped &operator=(const Overlapped &) = delete;
+
         void clear();
         QWindowsPipeReader *pipeReader;
     };

@@ -89,6 +89,9 @@ class QMutexUnlocker
       : mtx(m) {
    }
 
+   QMutexUnlocker(const QMutexUnlocker &) = delete;
+   QMutexUnlocker &operator=(const QMutexUnlocker &) = delete;
+
    ~QMutexUnlocker() {
       unlock();
    }
@@ -102,7 +105,6 @@ class QMutexUnlocker
    }
 
  private:
-   Q_DISABLE_COPY(QMutexUnlocker)
    QMutex *mtx;
 };
 

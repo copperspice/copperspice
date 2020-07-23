@@ -226,6 +226,8 @@ struct ExternalRefCountWithCustomDeleter : public ExternalRefCountData {
    using Self      = ExternalRefCountWithCustomDeleter;
    using BaseClass = ExternalRefCountData;
 
+   ExternalRefCountWithCustomDeleter(const ExternalRefCountWithCustomDeleter &) = delete;
+   ExternalRefCountWithCustomDeleter &operator=(const ExternalRefCountWithCustomDeleter &) = delete;
 
    static  void deleter(ExternalRefCountData *self) {
       Self *realself = static_cast<Self *>(self);
@@ -255,7 +257,6 @@ struct ExternalRefCountWithCustomDeleter : public ExternalRefCountData {
  private:
    ExternalRefCountWithCustomDeleter()  = delete;
    ~ExternalRefCountWithCustomDeleter() = delete;
-   Q_DISABLE_COPY(ExternalRefCountWithCustomDeleter)
 };
 
 // This class extends ExternalRefCountData and adds member "T"
@@ -266,6 +267,8 @@ template <class T>
 struct ExternalRefCountWithContiguousData : public ExternalRefCountData {
 
  public:
+   ExternalRefCountWithContiguousData(const ExternalRefCountWithContiguousData &) = delete;
+   ExternalRefCountWithContiguousData &operator=(const ExternalRefCountWithContiguousData &) = delete;
 
    static void deleter(ExternalRefCountData *self) {
       ExternalRefCountWithContiguousData *that = static_cast<ExternalRefCountWithContiguousData *>(self);
@@ -294,7 +297,6 @@ struct ExternalRefCountWithContiguousData : public ExternalRefCountData {
  private:
    ExternalRefCountWithContiguousData()  = delete;
    ~ExternalRefCountWithContiguousData() = delete;
-   Q_DISABLE_COPY(ExternalRefCountWithContiguousData)
 };
 
 Q_CORE_EXPORT QWeakPointer<QObject> weakPointerFromVariant_internal(const QVariant &variant);

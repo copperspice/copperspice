@@ -43,6 +43,10 @@ class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
  public:
    QPropertyAnimation(QObject *parent = nullptr);
    QPropertyAnimation(QObject *target, const QString &propertyName, QObject *parent = nullptr);
+
+   QPropertyAnimation(const QPropertyAnimation &) = delete;
+   QPropertyAnimation &operator=(const QPropertyAnimation &) = delete;
+
    ~QPropertyAnimation();
 
    QObject *targetObject() const;
@@ -57,7 +61,6 @@ class Q_CORE_EXPORT QPropertyAnimation : public QVariantAnimation
    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState) override;
 
  private:
-   Q_DISABLE_COPY(QPropertyAnimation)
    Q_DECLARE_PRIVATE(QPropertyAnimation)
 };
 

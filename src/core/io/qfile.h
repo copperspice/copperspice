@@ -46,6 +46,10 @@ class Q_CORE_EXPORT QFile : public QFileDevice
 
    explicit QFile(QObject *parent);
    QFile(const QString &name, QObject *parent);
+
+   QFile(const QFile &) = delete;
+   QFile &operator=(const QFile &) = delete;
+
    ~QFile();
 
    QString fileName() const override;
@@ -106,7 +110,6 @@ class Q_CORE_EXPORT QFile : public QFileDevice
 
  private:
    friend class QTemporaryFile;
-   Q_DISABLE_COPY(QFile)
 };
 
 #endif

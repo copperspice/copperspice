@@ -76,10 +76,11 @@ class Q_CORE_EXPORT QMutex : public QBasicMutex
  public:
    enum RecursionMode { NonRecursive, Recursive };
    explicit QMutex(RecursionMode mode = NonRecursive);
-   ~QMutex();
 
- private:
-   Q_DISABLE_COPY(QMutex)
+   QMutex(const QMutex &) = delete;
+   QMutex &operator=(const QMutex &) = delete;
+
+   ~QMutex();
 };
 
 class Q_CORE_EXPORT QMutexLocker
@@ -96,6 +97,9 @@ class Q_CORE_EXPORT QMutexLocker
          val = 0;
       }
    }
+
+   QMutexLocker(const QMutexLocker &) = delete;
+   QMutexLocker &operator=(const QMutexLocker &) = delete;
 
    ~QMutexLocker() {
       unlock();
@@ -122,8 +126,6 @@ class Q_CORE_EXPORT QMutexLocker
    }
 
  private:
-   Q_DISABLE_COPY(QMutexLocker)
-
    quintptr val;
 };
 

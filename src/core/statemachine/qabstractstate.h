@@ -41,6 +41,9 @@ class Q_CORE_EXPORT QAbstractState : public QObject
    CORE_CS_PROPERTY_NOTIFY(active, activeChanged)
 
  public:
+   QAbstractState(const QAbstractState &) = delete;
+   QAbstractState &operator=(const QAbstractState &) = delete;
+
    ~QAbstractState();
 
    QState *parentState() const;
@@ -69,7 +72,6 @@ class Q_CORE_EXPORT QAbstractState : public QObject
    QScopedPointer<QAbstractStatePrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QAbstractState)
    Q_DECLARE_PRIVATE(QAbstractState)
 };
 

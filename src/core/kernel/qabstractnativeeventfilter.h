@@ -33,9 +33,10 @@ class Q_CORE_EXPORT QAbstractNativeEventFilter
    public:
       QAbstractNativeEventFilter();
 
+      QAbstractNativeEventFilter(const QAbstractNativeEventFilter &) = delete;
+      QAbstractNativeEventFilter &operator=(const QAbstractNativeEventFilter &) = delete;
 
       virtual ~QAbstractNativeEventFilter();
-    Q_DISABLE_COPY(QAbstractNativeEventFilter)
 
       virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) = 0;
 

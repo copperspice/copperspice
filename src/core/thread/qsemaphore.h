@@ -32,6 +32,10 @@ class Q_CORE_EXPORT QSemaphore
 {
  public:
    explicit QSemaphore(int n = 0);
+
+   QSemaphore(const QSemaphore &) = delete;
+   QSemaphore &operator=(const QSemaphore &) = delete;
+
    ~QSemaphore();
 
    void acquire(int n = 1);
@@ -43,8 +47,6 @@ class Q_CORE_EXPORT QSemaphore
    int available() const;
 
  private:
-   Q_DISABLE_COPY(QSemaphore)
-
    QSemaphorePrivate *d;
 };
 

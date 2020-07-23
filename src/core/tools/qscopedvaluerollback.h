@@ -41,6 +41,8 @@ class QScopedValueRollback
       varRef = qMove(value);
    }
 
+   QScopedValueRollback(const QScopedValueRollback &) = delete;
+   QScopedValueRollback &operator=(const QScopedValueRollback &) = delete;
 
    ~QScopedValueRollback() {
       varRef = std::move(oldValue);
@@ -53,8 +55,6 @@ class QScopedValueRollback
  private:
    T &varRef;
    T oldValue;
-
-   Q_DISABLE_COPY(QScopedValueRollback)
 };
 
 #endif

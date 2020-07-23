@@ -90,6 +90,9 @@ class Q_CORE_EXPORT QAbstractFileEngine
       AccessTime
    };
 
+   QAbstractFileEngine(const QAbstractFileEngine &) = delete;
+   QAbstractFileEngine &operator=(const QAbstractFileEngine &) = delete;
+
    virtual ~QAbstractFileEngine();
 
    virtual bool open(QIODevice::OpenMode openMode);
@@ -180,9 +183,9 @@ class Q_CORE_EXPORT QAbstractFileEngine
    QAbstractFileEngine(QAbstractFileEnginePrivate &);
 
    QScopedPointer<QAbstractFileEnginePrivate> d_ptr;
+
  private:
    Q_DECLARE_PRIVATE(QAbstractFileEngine)
-   Q_DISABLE_COPY(QAbstractFileEngine)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractFileEngine::FileFlags)
@@ -199,6 +202,10 @@ class Q_CORE_EXPORT QAbstractFileEngineIterator
 {
  public:
    QAbstractFileEngineIterator(QDir::Filters filters, const QStringList &nameFilters);
+
+   QAbstractFileEngineIterator(const QAbstractFileEngineIterator &) = delete;
+   QAbstractFileEngineIterator &operator=(const QAbstractFileEngineIterator &) = delete;
+
    virtual ~QAbstractFileEngineIterator();
 
    virtual QString next() = 0;
@@ -213,7 +220,6 @@ class Q_CORE_EXPORT QAbstractFileEngineIterator
    QString currentFilePath() const;
 
  private:
-   Q_DISABLE_COPY(QAbstractFileEngineIterator)
    friend class QDirIterator;
    friend class QDirIteratorPrivate;
    void setPath(const QString &path);

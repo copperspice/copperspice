@@ -36,6 +36,10 @@ class Q_CORE_EXPORT QWaitCondition
 {
  public:
    QWaitCondition();
+
+   QWaitCondition(const QWaitCondition &) = delete;
+   QWaitCondition &operator=(const QWaitCondition &) = delete;
+
    ~QWaitCondition();
 
    bool wait(QMutex *mutex, unsigned long time = ULONG_MAX);
@@ -45,8 +49,6 @@ class Q_CORE_EXPORT QWaitCondition
    void wakeAll();
 
  private:
-   Q_DISABLE_COPY(QWaitCondition)
-
    QWaitConditionPrivate *d;
 };
 

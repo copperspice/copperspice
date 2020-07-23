@@ -36,6 +36,10 @@ class Q_CORE_EXPORT QAnimationGroup : public QAbstractAnimation
 
  public:
    QAnimationGroup(QObject *parent = nullptr);
+
+   QAnimationGroup(const QAnimationGroup &) = delete;
+   QAnimationGroup &operator=(const QAnimationGroup &) = delete;
+
    ~QAnimationGroup();
 
    QAbstractAnimation *animationAt(int index) const;
@@ -52,9 +56,10 @@ class Q_CORE_EXPORT QAnimationGroup : public QAbstractAnimation
    bool event(QEvent *event) override;
 
  private:
-   Q_DISABLE_COPY(QAnimationGroup)
    Q_DECLARE_PRIVATE(QAnimationGroup)
 
+   virtual void _q_uncontrolledAnimationFinished() {
+   }
 };
 
 #endif // QT_NO_ANIMATION

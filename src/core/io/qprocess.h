@@ -130,6 +130,10 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    };
 
    explicit QProcess(QObject *parent = nullptr);
+
+   QProcess(const QProcess &) = delete;
+   QProcess &operator=(const QProcess &) = delete;
+
    virtual ~QProcess();
 
    void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);
@@ -248,7 +252,6 @@ class Q_CORE_EXPORT QProcess : public QIODevice
 
  private:
    Q_DECLARE_PRIVATE(QProcess)
-   Q_DISABLE_COPY(QProcess)
 
    CORE_CS_SLOT_1(Private, bool _q_canReadStandardOutput())
    CORE_CS_SLOT_2(_q_canReadStandardOutput)

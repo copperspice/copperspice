@@ -71,6 +71,10 @@ class Q_CORE_EXPORT QTimeLine : public QObject
    };
 
    explicit QTimeLine(int duration = 1000, QObject *parent = nullptr);
+
+   QTimeLine(const QTimeLine &) = delete;
+   QTimeLine &operator=(const QTimeLine &) = delete;
+
    virtual ~QTimeLine();
 
    State state() const;
@@ -134,7 +138,6 @@ class Q_CORE_EXPORT QTimeLine : public QObject
    QScopedPointer<QTimeLinePrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QTimeLine)
    Q_DECLARE_PRIVATE(QTimeLine)
 };
 

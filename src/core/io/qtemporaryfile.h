@@ -48,6 +48,9 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
    explicit QTemporaryFile(QObject *parent);
    QTemporaryFile(const QString &templateName, QObject *parent);
 
+   QTemporaryFile(const QTemporaryFile &) = delete;
+   QTemporaryFile &operator=(const QTemporaryFile &) = delete;
+
    ~QTemporaryFile();
 
    bool autoRemove() const;
@@ -73,7 +76,6 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
 
  private:
    friend class QFile;
-   Q_DISABLE_COPY(QTemporaryFile)
 };
 
 #endif // QT_NO_TEMPORARYFILE

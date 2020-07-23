@@ -107,10 +107,11 @@ class QCache
       return n.t;
    }
 
-   Q_DISABLE_COPY(QCache)
-
  public:
    inline explicit QCache(int maxCost = 100);
+
+   QCache(const QCache &) = delete;
+   QCache &operator=(const QCache &) = delete;
 
    inline ~QCache() {
       clear();

@@ -96,11 +96,12 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    CORE_CS_PROPERTY_READ(objectName,  objectName)
    CORE_CS_PROPERTY_WRITE(objectName, setObjectName)
 
-   Q_DISABLE_COPY(QObject)
-
  public:
    CORE_CS_INVOKABLE_CONSTRUCTOR_1(Public, explicit QObject(QObject *parent = nullptr) )
    CORE_CS_INVOKABLE_CONSTRUCTOR_2(QObject, QObject *)
+
+   QObject(const QObject &) = delete;
+   QObject &operator=(const QObject &) = delete;
 
    virtual ~QObject();
 

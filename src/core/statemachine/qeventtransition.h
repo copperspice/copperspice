@@ -44,6 +44,10 @@ class Q_CORE_EXPORT QEventTransition : public QAbstractTransition
  public:
    QEventTransition(QState *sourceState = nullptr);
    QEventTransition(QObject *object, QEvent::Type type, QState *sourceState = nullptr);
+
+   QEventTransition(const QEventTransition &) = delete;
+   QEventTransition &operator=(const QEventTransition &) = delete;
+
    ~QEventTransition();
 
    QObject *eventSource() const;
@@ -62,7 +66,6 @@ class Q_CORE_EXPORT QEventTransition : public QAbstractTransition
    QEventTransition(QEventTransitionPrivate &dd, QObject *object, QEvent::Type type, QState *parent);
 
  private:
-   Q_DISABLE_COPY(QEventTransition)
    Q_DECLARE_PRIVATE(QEventTransition)
 };
 

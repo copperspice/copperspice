@@ -37,6 +37,9 @@ class QCustomScopedPointer : public QScopedPointer<T, Cleanup>
       : QScopedPointer<T, Cleanup>(p) {
    }
 
+   QCustomScopedPointer(const QCustomScopedPointer &) = delete;
+   QCustomScopedPointer &operator=(const QCustomScopedPointer &) = delete;
+
    T *&data_ptr() {
       return this->d;
    }
@@ -48,9 +51,6 @@ class QCustomScopedPointer : public QScopedPointer<T, Cleanup>
    bool operator!=(const QCustomScopedPointer<T, Cleanup> &other) const {
       return this->d != other.d;
    }
-
- private:
-   Q_DISABLE_COPY(QCustomScopedPointer)
 };
 
 /* Internal helper class - a handler for QShared* classes, to be used in QCustomScopedPointer */
@@ -75,6 +75,8 @@ class QScopedSharedPointer : public QCustomScopedPointer<T, QScopedPointerShared
       : QCustomScopedPointer<T, QScopedPointerSharedDeleter<T> >(p) {
    }
 
+   QScopedSharedPointer(const QScopedSharedPointer &) = delete;
+   QScopedSharedPointer &operator=(const QScopedSharedPointer &) = delete;
 
    void detach() {
       qAtomicDetach(this->d);
@@ -101,9 +103,6 @@ class QScopedSharedPointer : public QCustomScopedPointer<T, QScopedPointerShared
    bool operator!=(const QScopedSharedPointer<T> &other) const {
       return this->d != other.d;
    }
-
- private:
-   Q_DISABLE_COPY(QScopedSharedPointer)
 };
 
 #endif

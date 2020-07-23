@@ -106,14 +106,19 @@ class Q_CORE_EXPORT QWindowsPipeWriter : public QObject
     void notified(DWORD errorCode, DWORD numberOfBytesWritten);
     bool waitForNotification(int timeout);
     void emitPendingBytesWrittenValue();
+
     class Overlapped : public OVERLAPPED
     {
-        Q_DISABLE_COPY(Overlapped)
-    public:
+      public:
         explicit Overlapped(QWindowsPipeWriter *pipeWriter);
+
+        Overlapped(const Overlapped &) = delete;
+        Overlapped &operator=(const Overlapped &) = delete;
+
         void clear();
         QWindowsPipeWriter *pipeWriter;
     };
+
     HANDLE handle;
     Overlapped overlapped;
     QByteArray buffer;

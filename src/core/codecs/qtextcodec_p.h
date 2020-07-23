@@ -64,14 +64,16 @@ class QTextCodec
          state_data[0] = state_data[1] = state_data[2] = 0;
       }
 
+      ConverterState(const ConverterState &) = delete;
+      ConverterState &operator=(const ConverterState &) = delete;
+
+      ~ConverterState() = default;
+
       ConversionFlags flags;
       int remainingChars;
       int invalidChars;
       uint state_data[3];
       void *d;
-
-    private:
-      Q_DISABLE_COPY(ConverterState)
    };
 };
 

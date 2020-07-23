@@ -38,6 +38,9 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
    explicit QBuffer(QObject *parent = nullptr);
    QBuffer(QByteArray *buf, QObject *parent = nullptr);
 
+   QBuffer(const QBuffer &) = delete;
+   QBuffer &operator=(const QBuffer &) = delete;
+
    ~QBuffer();
 
    QByteArray &buffer();
@@ -66,7 +69,6 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
 
  private:
    Q_DECLARE_PRIVATE(QBuffer)
-   Q_DISABLE_COPY(QBuffer)
 
    CORE_CS_SLOT_1(Private, void _q_emitSignals())
    CORE_CS_SLOT_2(_q_emitSignals)

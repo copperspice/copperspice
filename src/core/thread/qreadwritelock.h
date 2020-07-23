@@ -34,6 +34,10 @@ class Q_CORE_EXPORT QReadWriteLock
    enum RecursionMode { NonRecursive, Recursive };
 
    explicit QReadWriteLock(RecursionMode recursionMode = NonRecursive);
+
+   QReadWriteLock(const QReadWriteLock &) = delete;
+   QReadWriteLock &operator=(const QReadWriteLock &) = delete;
+
    ~QReadWriteLock();
 
    void lockForRead();
@@ -47,7 +51,6 @@ class Q_CORE_EXPORT QReadWriteLock
    void unlock();
 
  private:
-   Q_DISABLE_COPY(QReadWriteLock)
    QReadWriteLockPrivate *d;
 
    friend class QWaitCondition;
@@ -57,6 +60,9 @@ class Q_CORE_EXPORT QReadLocker
 {
  public:
    inline QReadLocker(QReadWriteLock *readWriteLock);
+
+   QReadLocker(const QReadLocker &) = delete;
+   QReadLocker &operator=(const QReadLocker &) = delete;
 
    inline ~QReadLocker() {
       unlock();
@@ -85,7 +91,6 @@ class Q_CORE_EXPORT QReadLocker
    }
 
  private:
-   Q_DISABLE_COPY(QReadLocker)
    quintptr q_val;
 };
 
@@ -101,6 +106,9 @@ class Q_CORE_EXPORT QWriteLocker
 {
  public:
    inline QWriteLocker(QReadWriteLock *readWriteLock);
+
+   QWriteLocker(const QWriteLocker &) = delete;
+   QWriteLocker &operator=(const QWriteLocker &) = delete;
 
    inline ~QWriteLocker() {
       unlock();
@@ -128,9 +136,7 @@ class Q_CORE_EXPORT QWriteLocker
       return reinterpret_cast<QReadWriteLock *>(q_val & ~quintptr(1u));
    }
 
-
  private:
-   Q_DISABLE_COPY(QWriteLocker)
    quintptr q_val;
 };
 

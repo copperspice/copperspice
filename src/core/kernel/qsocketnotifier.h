@@ -36,6 +36,10 @@ class Q_CORE_EXPORT QSocketNotifier : public QObject
    enum Type { Read, Write, Exception };
 
    QSocketNotifier(qintptr socket, Type, QObject *parent = nullptr);
+
+   QSocketNotifier(const QSocketNotifier &) = delete;
+   QSocketNotifier &operator=(const QSocketNotifier &) = delete;
+
    ~QSocketNotifier();
 
    qintptr socket() const;
@@ -52,8 +56,6 @@ class Q_CORE_EXPORT QSocketNotifier : public QObject
    bool event(QEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QSocketNotifier)
-
    qintptr sockfd;
    QSocketNotifier::Type sntype;
    bool snenabled;

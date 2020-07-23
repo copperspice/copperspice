@@ -40,6 +40,10 @@ class Q_CORE_EXPORT QSequentialAnimationGroup : public QAnimationGroup
 
  public:
    QSequentialAnimationGroup(QObject *parent = nullptr);
+
+   QSequentialAnimationGroup(const QSequentialAnimationGroup &) = delete;
+   QSequentialAnimationGroup &operator=(const QSequentialAnimationGroup &) = delete;
+
    ~QSequentialAnimationGroup();
 
    QPauseAnimation *addPause(int msecs);
@@ -60,7 +64,6 @@ class Q_CORE_EXPORT QSequentialAnimationGroup : public QAnimationGroup
    void updateDirection(QAbstractAnimation::Direction direction) override;
 
  private:
-   Q_DISABLE_COPY(QSequentialAnimationGroup)
    Q_DECLARE_PRIVATE(QSequentialAnimationGroup)
 
    CORE_CS_SLOT_1(Private, void _q_uncontrolledAnimationFinished())

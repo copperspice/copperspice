@@ -51,6 +51,10 @@ class Q_CORE_EXPORT QCryptographicHash
    };
 
    explicit QCryptographicHash(Algorithm method);
+
+   QCryptographicHash(const QCryptographicHash &) = delete;
+   QCryptographicHash &operator=(const QCryptographicHash &) = delete;
+
    ~QCryptographicHash();
 
    void reset();
@@ -64,7 +68,6 @@ class Q_CORE_EXPORT QCryptographicHash
    static QByteArray hash(const QByteArray &data, Algorithm method);
 
  private:
-   Q_DISABLE_COPY(QCryptographicHash)
    QCryptographicHashPrivate *d;
 };
 

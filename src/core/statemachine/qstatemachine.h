@@ -116,6 +116,9 @@ class Q_CORE_EXPORT QStateMachine : public QState
    explicit QStateMachine(QObject *parent = nullptr);
    explicit QStateMachine(QState::ChildMode childMode, QObject *parent = nullptr);
 
+   QStateMachine(const QStateMachine &) = delete;
+   QStateMachine &operator=(const QStateMachine &) = delete;
+
    ~QStateMachine();
 
    void addState(QAbstractState *state);
@@ -182,7 +185,6 @@ class Q_CORE_EXPORT QStateMachine : public QState
    QStateMachine(QStateMachinePrivate &dd, QObject *parent);
 
  private:
-   Q_DISABLE_COPY(QStateMachine)
    Q_DECLARE_PRIVATE(QStateMachine)
 
    CORE_CS_SLOT_1(Private, void _q_start())

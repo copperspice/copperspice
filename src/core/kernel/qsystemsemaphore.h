@@ -51,6 +51,10 @@ class Q_CORE_EXPORT QSystemSemaphore
    };
 
    QSystemSemaphore(const QString &key, int initialValue = 0, AccessMode mode = Open);
+
+   QSystemSemaphore(const QSystemSemaphore &) = delete;
+   QSystemSemaphore &operator=(const QSystemSemaphore &) = delete;
+
    ~QSystemSemaphore();
 
    void setKey(const QString &key, int initialValue = 0, AccessMode mode = Open);
@@ -63,7 +67,6 @@ class Q_CORE_EXPORT QSystemSemaphore
    QString errorString() const;
 
  private:
-   Q_DISABLE_COPY(QSystemSemaphore)
    QScopedPointer<QSystemSemaphorePrivate> d;
 };
 

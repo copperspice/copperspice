@@ -66,6 +66,9 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    };
    using FileHandleFlags = QFlags<FileHandleFlag>;
 
+   QFileDevice(const QFileDevice &) = delete;
+   QFileDevice &operator=(const QFileDevice &) = delete;
+
    ~QFileDevice();
 
    FileError error() const;
@@ -107,7 +110,6 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
 
  private:
    Q_DECLARE_PRIVATE(QFileDevice)
-   Q_DISABLE_COPY(QFileDevice)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFileDevice::Permissions)

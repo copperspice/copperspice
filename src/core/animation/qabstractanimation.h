@@ -78,6 +78,10 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
    CORE_CS_ENUM(Direction)
 
    QAbstractAnimation(QObject *parent = nullptr);
+
+   QAbstractAnimation(const QAbstractAnimation &) = delete;
+   QAbstractAnimation &operator=(const QAbstractAnimation &) = delete;
+
    virtual ~QAbstractAnimation();
 
    State state() const;
@@ -130,7 +134,6 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
    QScopedPointer<QAbstractAnimationPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QAbstractAnimation)
    Q_DECLARE_PRIVATE(QAbstractAnimation)
 };
 

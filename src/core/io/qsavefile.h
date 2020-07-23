@@ -42,10 +42,13 @@ class Q_CORE_EXPORT QSaveFile : public QFileDevice
    Q_DECLARE_PRIVATE(QSaveFile)
 
  public:
-
    explicit QSaveFile(const QString &name);
    explicit QSaveFile(QObject *parent = nullptr);
    explicit QSaveFile(const QString &name, QObject *parent);
+
+   QSaveFile(const QSaveFile &) = delete;
+   QSaveFile &operator=(const QSaveFile &) = delete;
+
    ~QSaveFile();
 
    QString fileName() const override;
@@ -64,7 +67,6 @@ class Q_CORE_EXPORT QSaveFile : public QFileDevice
 
  private:
    void close() override;
-   Q_DISABLE_COPY(QSaveFile)
 };
 
 #endif

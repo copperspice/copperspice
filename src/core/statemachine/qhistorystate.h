@@ -57,6 +57,10 @@ class Q_CORE_EXPORT QHistoryState : public QAbstractState
 
    QHistoryState(QState *parent = nullptr);
    QHistoryState(HistoryType type, QState *parent = nullptr);
+
+   QHistoryState(const QHistoryState &) = delete;
+   QHistoryState &operator=(const QHistoryState &) = delete;
+
    ~QHistoryState();
 
    QAbstractState *defaultState() const;
@@ -84,7 +88,6 @@ class Q_CORE_EXPORT QHistoryState : public QAbstractState
    bool event(QEvent *e) override;
 
  private:
-   Q_DISABLE_COPY(QHistoryState)
    Q_DECLARE_PRIVATE(QHistoryState)
 };
 

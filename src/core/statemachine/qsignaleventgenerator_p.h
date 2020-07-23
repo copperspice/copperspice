@@ -35,12 +35,12 @@ class QSignalEventGenerator : public QObject
  public:
    QSignalEventGenerator(QStateMachine *parent);
 
+   QSignalEventGenerator(const QSignalEventGenerator &) = delete;
+   QSignalEventGenerator &operator=(const QSignalEventGenerator &) = delete;
+
    // emerald (on hold, statemachine)
    CORE_CS_SLOT_1(Public, void execute())     // const TeaCupAbstract &data))
    CORE_CS_SLOT_2(execute)
-
- private:
-   Q_DISABLE_COPY(QSignalEventGenerator)
 };
 
 #endif

@@ -106,14 +106,16 @@ class QThreadStorage
  private:
    QThreadStorageData d;
 
-   Q_DISABLE_COPY(QThreadStorage)
-
    static inline void deleteData(void *x) {
       qThreadStorage_deleteData(x, reinterpret_cast<T *>(0));
    }
 
  public:
    inline QThreadStorage() : d(deleteData) { }
+
+   QThreadStorage(const QThreadStorage &) = delete;
+   QThreadStorage &operator=(const QThreadStorage &) = delete;
+
    inline ~QThreadStorage() { }
 
    inline bool hasLocalData() const {

@@ -314,6 +314,10 @@ class Q_CORE_EXPORT QXmlStreamReader
    QXmlStreamReader(const QByteArray &data);
    QXmlStreamReader(const QString &data);
    QXmlStreamReader(const char *data);
+
+   QXmlStreamReader(const QXmlStreamReader &) = delete;
+   QXmlStreamReader &operator=(const QXmlStreamReader &) = delete;
+
    ~QXmlStreamReader();
 
    void setDevice(QIODevice *device);
@@ -419,7 +423,6 @@ class Q_CORE_EXPORT QXmlStreamReader
    QXmlStreamEntityResolver *entityResolver() const;
 
  private:
-   Q_DISABLE_COPY(QXmlStreamReader)
    Q_DECLARE_PRIVATE(QXmlStreamReader)
    QScopedPointer<QXmlStreamReaderPrivate> d_ptr;
 
@@ -432,6 +435,10 @@ class Q_CORE_EXPORT QXmlStreamWriter
    QXmlStreamWriter(QIODevice *device);
    QXmlStreamWriter(QByteArray *array);
    QXmlStreamWriter(QString *string);
+
+   QXmlStreamWriter(const QXmlStreamWriter &) = delete;
+   QXmlStreamWriter &operator=(const QXmlStreamWriter &) = delete;
+
    ~QXmlStreamWriter();
 
    void setDevice(QIODevice *device);
@@ -482,7 +489,6 @@ class Q_CORE_EXPORT QXmlStreamWriter
    bool hasError() const;
 
  private:
-   Q_DISABLE_COPY(QXmlStreamWriter)
    Q_DECLARE_PRIVATE(QXmlStreamWriter)
    QScopedPointer<QXmlStreamWriterPrivate> d_ptr;
 };
