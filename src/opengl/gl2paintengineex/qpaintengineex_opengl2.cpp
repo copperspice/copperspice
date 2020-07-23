@@ -1955,8 +1955,7 @@ void QGL2PaintEngineEx::drawPixmapFragments(const QPainter::PixmapFragment *frag
 }
 
 void QGL2PaintEngineExPrivate::drawPixmapFragments(const QPainter::PixmapFragment *fragments,
-      int fragmentCount, const QPixmap &pixmap,
-      QPainter::PixmapFragmentHints hints)
+      int fragmentCount, const QPixmap &pixmap, QPainter::PixmapFragmentHints hints)
 {
     GLfloat dx = 1.0f / pixmap.size().width();
     GLfloat dy = 1.0f / pixmap.size().height();

@@ -160,8 +160,9 @@ class QDeclarativeWebView : public QDeclarativeItem {
     WEB_CS_PROPERTY_NOTIFY(backgroundColor, backgroundColorChanged)
     WEB_CS_PROPERTY_REVISION(backgroundColor, 1)
 
-public:
-    QDeclarativeWebView(QDeclarativeItem *parent = 0);
+ public:
+    QDeclarativeWebView(QDeclarativeItem *parent = nullptr);
+
     QDeclarativeWebView(const QDeclarativeWebView &) = delete;
     QDeclarativeWebView &operator=(const QDeclarativeWebView &) = delete;
 
@@ -291,7 +292,7 @@ public:
     WEB_CS_SLOT_1(Public, QVariant evaluateJavaScript(const QString & un_named_arg1))
     WEB_CS_SLOT_2(evaluateJavaScript)
 
-private :
+ private:
     WEB_CS_SLOT_1(Private, void doLoadStarted())
     WEB_CS_SLOT_2(doLoadStarted)
     WEB_CS_SLOT_1(Private, void doLoadProgress(int p))
@@ -322,6 +323,7 @@ private :
     QDeclarativeWebViewPrivate* d;
     QMouseEvent* sceneMouseEventToMouseEvent(QGraphicsSceneMouseEvent*);
     QMouseEvent* sceneHoverMoveEventToMouseEvent(QGraphicsSceneHoverEvent*);
+
     friend class QDeclarativeWebPage;
 };
 
@@ -331,7 +333,7 @@ class QDeclarativeWebViewAttached : public QObject {
     WEB_CS_PROPERTY_READ(windowObjectName, windowObjectName)
     WEB_CS_PROPERTY_WRITE(windowObjectName, setWindowObjectName)
 
-public:
+ public:
     QDeclarativeWebViewAttached(QObject* parent)
         : QObject(parent)
     {
@@ -347,7 +349,7 @@ public:
         m_windowObjectName = n;
     }
 
-private:
+ private:
     QString m_windowObjectName;
 };
 
@@ -407,7 +409,7 @@ class QDeclarativeWebSettings : public QObject {
     WEB_CS_PROPERTY_READ(localContentCanAccessRemoteUrls, localContentCanAccessRemoteUrls)
     WEB_CS_PROPERTY_WRITE(localContentCanAccessRemoteUrls, setLocalContentCanAccessRemoteUrls)
 
-public:
+ public:
     QDeclarativeWebSettings() {}
 
     QString standardFontFamily() const { return s->fontFamily(QWebSettings::StandardFont); }

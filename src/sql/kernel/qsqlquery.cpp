@@ -34,8 +34,6 @@
 #include <qvector.h>
 #include <qmap.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSqlQueryPrivate
 {
  public:
@@ -78,150 +76,10 @@ QSqlQueryPrivate::~QSqlQueryPrivate()
    delete sqlResult;
 }
 
-/*!
-    \class QSqlQuery
-    \brief The QSqlQuery class provides a means of executing and
-    manipulating SQL statements.
-
-    \ingroup database
-    \ingroup shared
-
-    \inmodule QtSql
-
-    QSqlQuery encapsulates the functionality involved in creating,
-    navigating and retrieving data from SQL queries which are
-    executed on a \l QSqlDatabase. It can be used to execute DML
-    (data manipulation language) statements, such as \c SELECT, \c
-    INSERT, \c UPDATE and \c DELETE, as well as DDL (data definition
-    language) statements, such as \c{CREATE} \c{TABLE}. It can also
-    be used to execute database-specific commands which are not
-    standard SQL (e.g. \c{SET DATESTYLE=ISO} for PostgreSQL).
-
-    Successfully executed SQL statements set the query's state to
-    active so that isActive() returns true. Otherwise the query's
-    state is set to inactive. In either case, when executing a new SQL
-    statement, the query is positioned on an invalid record. An active
-    query must be navigated to a valid record (so that isValid()
-    returns true) before values can be retrieved.
-
-    For some databases, if an active query that is a \c{SELECT}
-    statement exists when you call \l{QSqlDatabase::}{commit()} or
-    \l{QSqlDatabase::}{rollback()}, the commit or rollback will
-    fail. See isActive() for details.
-
-    \target QSqlQuery examples
-
-    Navigating records is performed with the following functions:
-
-    \list
-    \o next()
-    \o previous()
-    \o first()
-    \o last()
-    \o seek()
-    \endlist
-
-    These functions allow the programmer to move forward, backward
-    or arbitrarily through the records returned by the query. If you
-    only need to move forward through the results (e.g., by using
-    next()), you can use setForwardOnly(), which will save a
-    significant amount of memory overhead and improve performance on
-    some databases. Once an active query is positioned on a valid
-    record, data can be retrieved using value(). All data is
-    transferred from the SQL backend using QVariants.
-
-    For example:
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 7
-
-    To access the data returned by a query, use value(int). Each
-    field in the data returned by a \c SELECT statement is accessed
-    by passing the field's position in the statement, starting from
-    0. This makes using \c{SELECT *} queries inadvisable because the
-    order of the fields returned is indeterminate.
-
-    For the sake of efficiency, there are no functions to access a
-    field by name (unless you use prepared queries with names, as
-    explained below). To convert a field name into an index, use
-    record().\l{QSqlRecord::indexOf()}{indexOf()}, for example:
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 8
-
-    QSqlQuery supports prepared query execution and the binding of
-    parameter values to placeholders. Some databases don't support
-    these features, so for those, Qt emulates the required
-    functionality. For example, the Oracle and ODBC drivers have
-    proper prepared query support, and Qt makes use of it; but for
-    databases that don't have this support, Qt implements the feature
-    itself, e.g. by replacing placeholders with actual values when a
-    query is executed. Use numRowsAffected() to find out how many rows
-    were affected by a non-\c SELECT query, and size() to find how
-    many were retrieved by a \c SELECT.
-
-    Oracle databases identify placeholders by using a colon-name
-    syntax, e.g \c{:name}. ODBC simply uses \c ? characters. Qt
-    supports both syntaxes, with the restriction that you can't mix
-    them in the same query.
-
-    You can retrieve the values of all the fields in a single variable
-    (a map) using boundValues().
-
-    \section1 Approaches to Binding Values
-
-    Below we present the same example using each of the four
-    different binding approaches, as well as one example of binding
-    values to a stored procedure.
-
-    \bold{Named binding using named placeholders:}
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 9
-
-    \bold{Positional binding using named placeholders:}
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 10
-
-    \bold{Binding values using positional placeholders (version 1):}
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 11
-
-    \bold{Binding values using positional placeholders (version 2):}
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 12
-
-    \bold{Binding values to a stored procedure:}
-
-    This code calls a stored procedure called \c AsciiToInt(), passing
-    it a character through its in parameter, and taking its result in
-    the out parameter.
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 13
-
-    Note that unbound parameters will retain their values.
-
-    Stored procedures that uses the return statement to return values,
-    or return multiple result sets, are not fully supported. For specific
-    details see \l{SQL Database Drivers}.
-
-    \warning You must load the SQL driver and open the connection before a
-    QSqlQuery is created. Also, the connection must remain open while the
-    query exists; otherwise, the behavior of QSqlQuery is undefined.
-
-    \sa QSqlDatabase, QSqlQueryModel, QSqlTableModel, QVariant
-*/
-
-/*!
-    Constructs a QSqlQuery object which uses the QSqlResult \a result
-    to communicate with a database.
-*/
-
 QSqlQuery::QSqlQuery(QSqlResult *result)
 {
    d = new QSqlQueryPrivate(result);
 }
-
-/*!
-    Destroys the object and frees any allocated resources.
-*/
 
 QSqlQuery::~QSqlQuery()
 {
@@ -229,10 +87,6 @@ QSqlQuery::~QSqlQuery()
       delete d;
    }
 }
-
-/*!
-    Constructs a copy of \a other.
-*/
 
 QSqlQuery::QSqlQuery(const QSqlQuery &other)
 {
@@ -893,21 +747,14 @@ bool QSqlQuery::prepare(const QString &query)
       qWarning("QSqlQuery::prepare: empty query");
       return false;
    }
+
 #ifdef QT_DEBUG_SQL
    qDebug("\n QSqlQuery::prepare: %s", query.toLocal8Bit().constData());
 #endif
+
    return d->sqlResult->savePrepare(query);
 }
 
-/*!
-  Executes a previously prepared SQL query. Returns true if the query
-  executed successfully; otherwise returns false.
-
-  Note that the last error for this query is reset when exec() is
-  called.
-
-  \sa prepare() bindValue() addBindValue() boundValue() boundValues()
-*/
 bool QSqlQuery::exec()
 {
    d->sqlResult->resetBindCount();
@@ -919,81 +766,12 @@ bool QSqlQuery::exec()
    return d->sqlResult->exec();
 }
 
-/*! \enum QSqlQuery::BatchExecutionMode
-
-    \value ValuesAsRows - Updates multiple rows. Treats every entry in a QVariantList as a value for updating the next row.
-    \value ValuesAsColumns - Updates a single row. Treats every entry in a QVariantList as a single value of an array type.
-*/
-
-/*!
-    \since 4.2
-
-  Executes a previously prepared SQL query in a batch. All the bound
-  parameters have to be lists of variants. If the database doesn't
-  support batch executions, the driver will simulate it using
-  conventional exec() calls.
-
-  Returns true if the query is executed successfully; otherwise
-  returns false.
-
-  Example:
-
-  \snippet doc/src/snippets/code/src_sql_kernel_qsqlquery.cpp 2
-
-  The example above inserts four new rows into \c myTable:
-
-  \snippet doc/src/snippets/code/src_sql_kernel_qsqlquery.cpp 3
-
-  To bind NULL values, a null QVariant of the relevant type has to be
-  added to the bound QVariantList; for example, \c
-  {QVariant(QVariant::String)} should be used if you are using
-  strings.
-
-  \note Every bound QVariantList must contain the same amount of
-  variants.
-
-  \note The type of the QVariants in a list must not change. For
-  example, you cannot mix integer and string variants within a
-  QVariantList.
-
-  The \a mode parameter indicates how the bound QVariantList will be
-  interpreted.  If \a mode is \c ValuesAsRows, every variant within
-  the QVariantList will be interpreted as a value for a new row. \c
-  ValuesAsColumns is a special case for the Oracle driver. In this
-  mode, every entry within a QVariantList will be interpreted as
-  array-value for an IN or OUT value within a stored procedure.  Note
-  that this will only work if the IN or OUT value is a table-type
-  consisting of only one column of a basic type, for example \c{TYPE
-  myType IS TABLE OF VARCHAR(64) INDEX BY BINARY_INTEGER;}
-
-  \sa prepare(), bindValue(), addBindValue()
-*/
 bool QSqlQuery::execBatch(BatchExecutionMode mode)
 {
    d->sqlResult->resetBindCount();
    return d->sqlResult->execBatch(mode == ValuesAsColumns);
 }
 
-/*!
-  Set the placeholder \a placeholder to be bound to value \a val in
-  the prepared statement. Note that the placeholder mark (e.g \c{:})
-  must be included when specifying the placeholder name. If \a
-  paramType is QSql::Out or QSql::InOut, the placeholder will be
-  overwritten with data from the database after the exec() call.
-  In this case, sufficient space must be pre-allocated to store
-  the result into.
-
-  To bind a NULL value, use a null QVariant; for example, use
-  \c {QVariant(QVariant::String)} if you are binding a string.
-
-  Values cannot be bound to multiple locations in the query, eg:
-  \code
-  INSERT INTO testtable (id, name, samename) VALUES (:id, :name, :name)
-  \endcode
-  Binding to name will bind to the first :name, but not the second.
-
-  \sa addBindValue(), prepare(), exec(), boundValue() boundValues()
-*/
 void QSqlQuery::bindValue(const QString &placeholder, const QVariant &val,
    QSql::ParamType paramType
 )
@@ -1001,66 +779,26 @@ void QSqlQuery::bindValue(const QString &placeholder, const QVariant &val,
    d->sqlResult->bindValue(placeholder, val, paramType);
 }
 
-/*!
-  Set the placeholder in position \a pos to be bound to value \a val
-  in the prepared statement. Field numbering starts at 0. If \a
-  paramType is QSql::Out or QSql::InOut, the placeholder will be
-  overwritten with data from the database after the exec() call.
-*/
 void QSqlQuery::bindValue(int pos, const QVariant &val, QSql::ParamType paramType)
 {
    d->sqlResult->bindValue(pos, val, paramType);
 }
 
-/*!
-  Adds the value \a val to the list of values when using positional
-  value binding. The order of the addBindValue() calls determines
-  which placeholder a value will be bound to in the prepared query.
-  If \a paramType is QSql::Out or QSql::InOut, the placeholder will be
-  overwritten with data from the database after the exec() call.
-
-  To bind a NULL value, use a null QVariant; for example, use \c
-  {QVariant(QVariant::String)} if you are binding a string.
-
-  \sa bindValue(), prepare(), exec(), boundValue() boundValues()
-*/
 void QSqlQuery::addBindValue(const QVariant &val, QSql::ParamType paramType)
 {
    d->sqlResult->addBindValue(val, paramType);
 }
 
-/*!
-  Returns the value for the \a placeholder.
-
-  \sa boundValues() bindValue() addBindValue()
-*/
 QVariant QSqlQuery::boundValue(const QString &placeholder) const
 {
    return d->sqlResult->boundValue(placeholder);
 }
 
-/*!
-  Returns the value for the placeholder at position \a pos.
-*/
 QVariant QSqlQuery::boundValue(int pos) const
 {
    return d->sqlResult->boundValue(pos);
 }
 
-/*!
-  Returns a map of the bound values.
-
-  With named binding, the bound values can be examined in the
-  following ways:
-
-  \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 14
-
-  With positional binding, the code becomes:
-
-  \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 15
-
-  \sa boundValue() bindValue() addBindValue()
-*/
 QMap<QString, QVariant> QSqlQuery::boundValues() const
 {
    QMap<QString, QVariant> map;
@@ -1072,98 +810,26 @@ QMap<QString, QVariant> QSqlQuery::boundValues() const
    return map;
 }
 
-/*!
-  Returns the last query that was successfully executed.
-
-  In most cases this function returns the same string as lastQuery().
-  If a prepared query with placeholders is executed on a DBMS that
-  does not support it, the preparation of this query is emulated. The
-  placeholders in the original query are replaced with their bound
-  values to form a new query. This function returns the modified
-  query. It is mostly useful for debugging purposes.
-
-  \sa lastQuery()
-*/
 QString QSqlQuery::executedQuery() const
 {
    return d->sqlResult->executedQuery();
 }
 
-/*!
-  \fn bool QSqlQuery::prev()
-
-  Use previous() instead.
-*/
-
-/*!
-  Returns the object ID of the most recent inserted row if the
-  database supports it.  An invalid QVariant will be returned if the
-  query did not insert any value or if the database does not report
-  the id back.  If more than one row was touched by the insert, the
-  behavior is undefined.
-
-  For MySQL databases the row's auto-increment field will be returned.
-
-  \note For this function to work in PSQL, the table table must
-  contain OIDs, which may not have been created by default.  Check the
-  \c default_with_oids configuration variable to be sure.
-
-  \sa QSqlDriver::hasFeature()
-*/
 QVariant QSqlQuery::lastInsertId() const
 {
    return d->sqlResult->lastInsertId();
 }
 
-/*!
-
-  Instruct the database driver to return numerical values with a
-  precision specified by \a precisionPolicy.
-
-  The Oracle driver, for example, can retrieve numerical values as
-  strings to prevent the loss of precision. If high precision doesn't
-  matter, use this method to increase execution speed by bypassing
-  string conversions.
-
-  Note: Drivers that don't support fetching numerical values with low
-  precision will ignore the precision policy. You can use
-  QSqlDriver::hasFeature() to find out whether a driver supports this
-  feature.
-
-  Note: Setting the precision policy doesn't affect the currently
-  active query. Call \l{exec()}{exec(QString)} or prepare() in order
-  to activate the policy.
-
-  \sa QSql::NumericalPrecisionPolicy, numericalPrecisionPolicy()
-*/
 void QSqlQuery::setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy)
 {
    d->sqlResult->setNumericalPrecisionPolicy(precisionPolicy);
 }
 
-/*!
-  Returns the current precision policy.
-
-  \sa QSql::NumericalPrecisionPolicy, setNumericalPrecisionPolicy()
-*/
 QSql::NumericalPrecisionPolicy QSqlQuery::numericalPrecisionPolicy() const
 {
    return d->sqlResult->numericalPrecisionPolicy();
 }
 
-/*!
-  \since 4.3.2
-
-  Instruct the database driver that no more data will be fetched from
-  this query until it is re-executed. There is normally no need to
-  call this function, but it may be helpful in order to free resources
-  such as locks or cursors if you intend to re-use the query at a
-  later time.
-
-  Sets the query to inactive. Bound values retain their values.
-
-  \sa prepare() exec() isActive()
-*/
 void QSqlQuery::finish()
 {
    if (isActive()) {
@@ -1174,36 +840,6 @@ void QSqlQuery::finish()
    }
 }
 
-/*!
-  \since 4.4
-
-  Discards the current result set and navigates to the next if available.
-
-  Some databases are capable of returning multiple result sets for
-  stored procedures or SQL batches (a query strings that contains
-  multiple statements). If multiple result sets are available after
-  executing a query this function can be used to navigate to the next
-  result set(s).
-
-  If a new result set is available this function will return true.
-  The query will be repositioned on an \e invalid record in the new
-  result set and must be navigated to a valid record before data
-  values can be retrieved. If a new result set isn't available the
-  function returns false and the query is set to inactive. In any
-  case the old result set will be discarded.
-
-  When one of the statements is a non-select statement a count of
-  affected rows may be available instead of a result set.
-
-  Note that some databases, i.e. Microsoft SQL Server, requires
-  non-scrollable cursors when working with multiple result sets.  Some
-  databases may execute all statements at once while others may delay
-  the execution until the result set is actually accessed, and some
-  databases may have restrictions on which statements are allowed to
-  be used in a SQL batch.
-
-  \sa QSqlDriver::hasFeature() setForwardOnly() next() isSelect() numRowsAffected() isActive() lastError()
-*/
 bool QSqlQuery::nextResult()
 {
    if (isActive()) {
@@ -1211,5 +847,3 @@ bool QSqlQuery::nextResult()
    }
    return false;
 }
-
-QT_END_NAMESPACE

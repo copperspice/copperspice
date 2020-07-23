@@ -39,34 +39,28 @@ class Q_SCRIPT_EXPORT QScriptEngineAgent
    };
 
    QScriptEngineAgent(QScriptEngine *engine);
+
    QScriptEngineAgent(const QScriptEngineAgent &) = delete;
    QScriptEngineAgent &operator=(const QScriptEngineAgent &) = delete;
 
    virtual ~QScriptEngineAgent();
 
-   virtual void scriptLoad(qint64 id, const QString &program,
-      const QString &fileName, int baseLineNumber);
+   virtual void scriptLoad(qint64 id, const QString &program, const QString &fileName, int baseLineNumber);
    virtual void scriptUnload(qint64 id);
 
    virtual void contextPush();
    virtual void contextPop();
 
    virtual void functionEntry(qint64 scriptId);
-   virtual void functionExit(qint64 scriptId,
-      const QScriptValue &returnValue);
+   virtual void functionExit(qint64 scriptId, const QScriptValue &returnValue);
 
-   virtual void positionChange(qint64 scriptId,
-      int lineNumber, int columnNumber);
+   virtual void positionChange(qint64 scriptId, int lineNumber, int columnNumber);
 
-   virtual void exceptionThrow(qint64 scriptId,
-      const QScriptValue &exception,
-      bool hasHandler);
-   virtual void exceptionCatch(qint64 scriptId,
-      const QScriptValue &exception);
+   virtual void exceptionThrow(qint64 scriptId, const QScriptValue &exception, bool hasHandler);
+   virtual void exceptionCatch(qint64 scriptId, const QScriptValue &exception);
 
    virtual bool supportsExtension(Extension extension) const;
-   virtual QVariant extension(Extension extension,
-      const QVariant &argument = QVariant());
+   virtual QVariant extension(Extension extension, const QVariant &argument = QVariant());
 
    QScriptEngine *engine() const;
 
@@ -77,6 +71,5 @@ class Q_SCRIPT_EXPORT QScriptEngineAgent
  private:
    Q_DECLARE_PRIVATE(QScriptEngineAgent)
 };
-
 
 #endif

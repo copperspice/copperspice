@@ -28,8 +28,6 @@
 #include <qnamespace.h>
 #include <termios.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSocketNotifier;
 class QLinuxInputMouseHandlerData;
 
@@ -83,7 +81,5 @@ private:
     struct termios                m_tty_attr;
     int                           m_orig_kbmode;
 };
-
-QT_END_NAMESPACE
 
 #endif // QLINUXINPUT_H

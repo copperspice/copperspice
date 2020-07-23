@@ -38,6 +38,7 @@ class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
 
  public:
    QGraphicsShaderEffect(QObject *parent = nullptr);
+
    QGraphicsShaderEffect(const QGraphicsShaderEffect &) = delete;
    QGraphicsShaderEffect &operator=(const QGraphicsShaderEffect &) = delete;
 
@@ -56,7 +57,6 @@ class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect
 
    friend class QGLCustomShaderEffectStage;
 };
-
 
 #endif // QT_NO_GRAPHICSEFFECT
 

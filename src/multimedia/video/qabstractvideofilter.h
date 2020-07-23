@@ -52,8 +52,9 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoFilter : public QObject
     MULTI_CS_PROPERTY_WRITE(active, setActive)
     MULTI_CS_PROPERTY_NOTIFY(active, activeChanged)
 
-public:
+ public:
     explicit QAbstractVideoFilter(QObject *parent = nullptr);
+
    QAbstractVideoFilter(const QAbstractVideoFilter &) = delete;
    QAbstractVideoFilter &operator=(const QAbstractVideoFilter &) = delete;
 
@@ -67,7 +68,7 @@ public:
     MULTI_CS_SIGNAL_1(Public, void activeChanged())
     MULTI_CS_SIGNAL_2(activeChanged)
 
-private:
+ private:
     Q_DECLARE_PRIVATE(QAbstractVideoFilter)
 
     QAbstractVideoFilterPrivate *d_ptr;

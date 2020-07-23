@@ -79,4 +79,4 @@ private:
     friend class QWKPreferencesPrivate;
 };
 
-#endif // QWKPREFERENCES_H
+#endif

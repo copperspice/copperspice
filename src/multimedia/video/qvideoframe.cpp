@@ -40,28 +40,19 @@ class QVideoFramePrivate : public QSharedData
 {
  public:
    QVideoFramePrivate()
-      : startTime(-1)
-      , endTime(-1)
-      , mappedBytes(0)
-      , planeCount(0)
-      , pixelFormat(QVideoFrame::Format_Invalid)
-      , fieldType(QVideoFrame::ProgressiveFrame)
-      , buffer(0)
-      , mappedCount(0) {
+      : startTime(-1), endTime(-1), mappedBytes(0), planeCount(0)
+      , pixelFormat(QVideoFrame::Format_Invalid), fieldType(QVideoFrame::ProgressiveFrame)
+      , buffer(0), mappedCount(0)
+   {
       memset(data, 0, sizeof(data));
       memset(bytesPerLine, 0, sizeof(bytesPerLine));
    }
 
    QVideoFramePrivate(const QSize &size, QVideoFrame::PixelFormat format)
-      : size(size)
-      , startTime(-1)
-      , endTime(-1)
-      , mappedBytes(0)
-      , planeCount(0)
-      , pixelFormat(format)
-      , fieldType(QVideoFrame::ProgressiveFrame)
-      , buffer(0)
-      , mappedCount(0) {
+      : size(size), startTime(-1), endTime(-1), mappedBytes(0), planeCount(0)
+      , pixelFormat(format), fieldType(QVideoFrame::ProgressiveFrame)
+      , buffer(0), mappedCount(0)
+   {
       memset(data, 0, sizeof(data));
       memset(bytesPerLine, 0, sizeof(bytesPerLine));
    }
@@ -88,31 +79,7 @@ class QVideoFramePrivate : public QSharedData
    int mappedCount;
    QMutex mapMutex;
    QVariantMap metadata;
-
- private:
 };
-
-/*!
-    \class QVideoFrame
-    \brief The QVideoFrame class provides a representation of a frame of video data.
-    \since 4.6
-
-    A QVideoFrame encapsulates the data of a video frame, and information about the frame.
-
-    The contents of a video frame can be mapped to memory using the map() function.  While
-    mapped the video data can accessed using the bits() function which returns a pointer to a
-    buffer, the total size of which is given by the mappedBytes(), and the size of each line is given
-    by bytesPerLine().  The return value of the handle() function may be used to access frame data
-    using the internal buffer's native APIs.
-
-    The video data in a QVideoFrame is encapsulated in a QAbstractVideoBuffer.  A QVideoFrame
-    may be constructed from any buffer type by subclassing the QAbstractVideoBuffer class.
-
-    \note QVideoFrame is explicitly shared, any change made to video frame will also apply to any
-    copies.
-*/
-
-
 
 QVideoFrame::QVideoFrame()
    : d(new QVideoFramePrivate)
@@ -126,13 +93,6 @@ QVideoFrame::QVideoFrame(
    d->buffer = buffer;
 }
 
-/*!
-    Constructs a video frame of the given pixel \a format and \a size in pixels.
-
-    The \a bytesPerLine (stride) is the length of each scan line in bytes, and \a bytes is the total
-    number of bytes that must be allocated for the frame.
-*/
-
 QVideoFrame::QVideoFrame(int bytes, const QSize &size, int bytesPerLine, PixelFormat format)
    : d(new QVideoFramePrivate(size, format))
 {
@@ -141,20 +101,11 @@ QVideoFrame::QVideoFrame(int bytes, const QSize &size, int bytesPerLine, PixelFo
       data.resize(bytes);
 
       // Check the memory was successfully allocated.
-      if (!data.isEmpty()) {
+      if (! data.isEmpty()) {
          d->buffer = new QMemoryVideoBuffer(data, bytesPerLine);
       }
    }
 }
-
-/*!
-    Constructs a video frame from an \a image.
-
-    \note This will construct an invalid video frame if there is no frame type equivalent to the
-    image format.
-
-    \sa pixelFormatFromImageFormat()
-*/
 
 QVideoFrame::QVideoFrame(const QImage &image)
    : d(new QVideoFramePrivate(
@@ -164,10 +115,6 @@ QVideoFrame::QVideoFrame(const QImage &image)
       d->buffer = new QImageVideoBuffer(image);
    }
 }
-
-/*!
-    Constructs a copy of \a other.
-*/
 
 QVideoFrame::QVideoFrame(const QVideoFrame &other)
    : d(other.d)
@@ -196,31 +143,15 @@ QVideoFrame::~QVideoFrame()
 {
 }
 
-/*!
-    Identifies whether a video frame is valid.
-
-    An invalid frame has no video buffer associated with it.
-
-    Returns true if the frame is valid, and false if it is not.
-*/
-
 bool QVideoFrame::isValid() const
 {
    return d->buffer != 0;
 }
 
-/*!
-    Returns the color format of a video frame.
-*/
-
 QVideoFrame::PixelFormat QVideoFrame::pixelFormat() const
 {
    return d->pixelFormat;
 }
-
-/*!
-    Returns the type of a video frame's handle.
-*/
 
 QAbstractVideoBuffer::HandleType QVideoFrame::handleType() const
 {
@@ -236,38 +167,20 @@ QSize QVideoFrame::size() const
    return d->size;
 }
 
-/*!
-    Returns the width of a video frame.
-*/
-
 int QVideoFrame::width() const
 {
    return d->size.width();
 }
-
-/*!
-    Returns the height of a video frame.
-*/
 
 int QVideoFrame::height() const
 {
    return d->size.height();
 }
 
-/*!
-    Returns the field an interlaced video frame belongs to.
-
-    If the video is not interlaced this will return WholeFrame.
-*/
-
 QVideoFrame::FieldType QVideoFrame::fieldType() const
 {
    return d->fieldType;
 }
-
-/*!
-    Sets the \a field an interlaced video frame belongs to.
-*/
 
 void QVideoFrame::setFieldType(QVideoFrame::FieldType field)
 {
@@ -278,7 +191,6 @@ bool QVideoFrame::isMapped() const
 {
    return d->buffer != 0 && d->buffer->mapMode() != QAbstractVideoBuffer::NotMapped;
 }
-
 
 bool QVideoFrame::isWritable() const
 {
@@ -294,26 +206,6 @@ QAbstractVideoBuffer::MapMode QVideoFrame::mapMode() const
 {
    return d->buffer != 0 ? d->buffer->mapMode() : QAbstractVideoBuffer::NotMapped;
 }
-
-/*!
-    Maps the contents of a video frame to memory.
-
-    The map \a mode indicates whether the contents of the mapped memory should be read from and/or
-    written to the frame.  If the map mode includes the QAbstractVideoBuffer::ReadOnly flag the
-    mapped memory will be populated with the content of the video frame when mapped.  If the map
-    mode inclues the QAbstractVideoBuffer::WriteOnly flag the content of the mapped memory will be
-    persisted in the frame when unmapped.
-
-    While mapped the contents of a video frame can be accessed directly through the pointer returned
-    by the bits() function.
-
-    When access to the data is no longer needed be sure to call the unmap() function to release the
-    mapped memory.
-
-    Returns true if the buffer was mapped to memory in the given \a mode and false otherwise.
-
-    \sa unmap(), mapMode(), bits()
-*/
 
 bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
 {

@@ -28,9 +28,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qsql.h>
-#include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
+#include <qscopedpointer.h>
 
 class QSqlDatabase;
 class QSqlDriverPrivate;
@@ -44,7 +42,6 @@ class QVariant;
 class Q_SQL_EXPORT QSqlDriver : public QObject
 {
    SQL_CS_OBJECT(QSqlDriver)
-   Q_DECLARE_PRIVATE(QSqlDriver)
 
  public:
    enum DriverFeature { Transactions, QuerySize, BLOB, Unicode, PreparedQueries,
@@ -72,11 +69,14 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
       Interbase,
       DB2
    };
+
    explicit QSqlDriver(QObject *parent = nullptr);
+
    QSqlDriver(const QSqlDriver &) = delete;
    QSqlDriver &operator=(const QSqlDriver &) = delete;
 
    ~QSqlDriver();
+
    virtual bool isOpen() const;
    bool isOpenError() const;
 
@@ -134,6 +134,7 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
    QScopedPointer<QSqlDriverPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QSqlDriver)
 
    friend class QSqlDatabase;
    friend class QSqlResultPrivate;

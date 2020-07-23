@@ -90,7 +90,6 @@ class Q_XML_EXPORT QXmlNamespaceSupport
    friend class QXmlSimpleReaderPrivate;
 };
 
-
 //
 // SAX Attributes
 //
@@ -122,6 +121,7 @@ class Q_XML_EXPORT QXmlAttributes
    struct Attribute {
       QString qname, uri, localname, value;
    };
+
    typedef QList<Attribute> AttributeList;
    AttributeList attList;
 
@@ -351,10 +351,16 @@ class Q_XML_EXPORT QXmlDefaultHandler : public QXmlContentHandler, public QXmlEr
    public QXmlEntityResolver, public QXmlLexicalHandler, public QXmlDeclHandler
 {
  public:
-   QXmlDefaultHandler() { }
-   virtual ~QXmlDefaultHandler() { }
+   QXmlDefaultHandler()
+   {
+   }
+
    QXmlDefaultHandler(const QXmlDefaultHandler &) = delete;
    QXmlDefaultHandler &operator=(const QXmlDefaultHandler &) = delete;
+
+   virtual ~QXmlDefaultHandler()
+   {
+   }
 
    void setDocumentLocator(QXmlLocator *locator) override;
    bool startDocument() override;
@@ -398,8 +404,6 @@ class Q_XML_EXPORT QXmlDefaultHandler : public QXmlContentHandler, public QXmlEr
  private:
    QXmlDefaultHandlerPrivate *d;
 };
-
-// inlines
 
 inline int QXmlAttributes::count() const
 {

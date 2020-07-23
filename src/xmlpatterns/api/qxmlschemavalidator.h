@@ -27,8 +27,6 @@
 #include <QUrl>
 #include <QXmlNamePool>
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractMessageHandler;
 class QAbstractUriResolver;
 class QIODevice;
@@ -68,7 +66,5 @@ class Q_XMLPATTERNS_EXPORT QXmlSchemaValidator
 
    Q_DISABLE_COPY(QXmlSchemaValidator)
 };
-
-QT_END_NAMESPACE
 
 #endif

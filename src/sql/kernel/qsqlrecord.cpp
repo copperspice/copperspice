@@ -30,8 +30,6 @@
 #include <qstring.h>
 #include <qvector.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSqlRecordPrivate
 {
  public:
@@ -510,7 +508,6 @@ void QSqlRecord::detach()
    qAtomicDetach(d);
 }
 
-
 QDebug operator<<(QDebug dbg, const QSqlRecord &r)
 {
    QDebugStateSaver saver(dbg);
@@ -536,4 +533,4 @@ QSqlRecord QSqlRecord::keyValues(const QSqlRecord &keyFields) const
 
    return retValues;
 }
-QT_END_NAMESPACE
+

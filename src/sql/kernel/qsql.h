@@ -26,8 +26,6 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QSql {
 enum Location {
    BeforeFirstRow = -1,
@@ -60,7 +58,5 @@ enum NumericalPrecisionPolicy {
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QSql::ParamType)
-
-QT_END_NAMESPACE
 
 #endif // QSQL_H

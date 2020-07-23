@@ -43,7 +43,8 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylistNavigator : public QObject
    MULTI_CS_PROPERTY_READ(currentItem, currentItem)
 
  public:
-   QMediaPlaylistNavigator(QMediaPlaylistProvider *playlist, QObject *parent = 0);
+   QMediaPlaylistNavigator(QMediaPlaylistProvider *playlist, QObject *parent = nullptr);
+
    QMediaPlaylistNavigator(const QMediaPlaylistNavigator &) = delete;
    QMediaPlaylistNavigator &operator=(const QMediaPlaylistNavigator &) = delete;
 

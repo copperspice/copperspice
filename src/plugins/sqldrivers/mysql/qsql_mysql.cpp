@@ -41,8 +41,8 @@
 #include <qsqldriver_p.h>
 
 #ifdef Q_OS_WIN32
-// comment the next line out if you want to use MySQL/embedded on Win32 systems
-// note that it will crash if you do not statically link to the mysql/e library
+// comment the next line out to use MySQL/embedded on Win32 systems
+// linking will fail unless you statically link to the mysql/e library
 # define Q_NO_MYSQL_EMBEDDED
 #endif
 
@@ -51,7 +51,8 @@
 class QMYSQLDriverPrivate : public QSqlDriverPrivate
 {
  public:
-   QMYSQLDriverPrivate() : QSqlDriverPrivate(), mysql(0),
+   QMYSQLDriverPrivate()
+      : QSqlDriverPrivate(), mysql(0),
 
 #ifndef QT_NO_TEXTCODEC
       tc(QTextCodec::codecForLocale()),
@@ -122,8 +123,7 @@ static inline QVariant qDateTimeFromString(QString &val)
 
    if (val.length() == 14)
       // timestamps have the format yyyyMMddhhmmss
-      val.insert(4, QChar('-')).insert(7, QChar('-'))
-                  .insert(10, QChar('T')).insert(13, QChar(':')).insert(16, QChar(':'));
+      val.insert(4, QChar('-')).insert(7, QChar('-')).insert(10, QChar('T')).insert(13, QChar(':')).insert(16, QChar(':'));
 
    return QVariant(QDateTime::fromString(val, Qt::ISODate));
 }
@@ -152,9 +152,10 @@ class QMYSQLResultPrivate : public QObject
    bool hasBlobs;
    struct QMyField {
       QMyField()
-         : outField(0), nullIndicator(false), bufLength(0ul),
-           myField(0), type(QVariant::Invalid) {
+         : outField(0), nullIndicator(false), bufLength(0ul), myField(0), type(QVariant::Invalid)
+      {
       }
+
       char *outField;
       my_bool nullIndicator;
       ulong bufLength;
@@ -180,11 +181,11 @@ class QMYSQLResultPrivate : public QObject
 
 };
 
-
 #ifndef QT_NO_TEXTCODEC
 static QTextCodec *codec(MYSQL *mysql)
 {
    QTextCodec *heuristicCodec = QTextCodec::codecForName(mysql_character_set_name(mysql));
+
    if (heuristicCodec) {
       return heuristicCodec;
    }
@@ -196,7 +197,7 @@ static QTextCodec *codec(MYSQL *mysql)
 static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type,
    const QMYSQLDriverPrivate *p)
 {
-   const char *cerr = p->mysql ? mysql_error(p->mysql) : 0;
+   const char *cerr = p->mysql ? mysql_error(p->mysql) : nullptr;
 
    return QSqlError("QMYSQL: " + err, p->tc ? toUnicode(p->tc, cerr)
          : QString::fromUtf8(cerr), type, QString::fromUtf8(mysql_error(p->mysql)));
@@ -212,7 +213,7 @@ static QVariant::Type qDecodeMYSQLType(int mysqltype, uint flags)
          break;
 
       case FIELD_TYPE_SHORT:
-         type = flags & UNSIGNED_FLAG) ? QVariant::UShort : QVariant::Short;
+         type = (flags & UNSIGNED_FLAG) ? QVariant::UShort : QVariant::Short;
          break;
 
       case FIELD_TYPE_LONG:
@@ -291,17 +292,15 @@ static QSqlError qMakeStmtError(const QString &err, QSqlError::ErrorType type, M
 
 static bool qIsBlob(int t)
 {
-   return t == MYSQL_TYPE_TINY_BLOB
-      || t == MYSQL_TYPE_BLOB
-      || t == MYSQL_TYPE_MEDIUM_BLOB
-      || t == MYSQL_TYPE_LONG_BLOB;
+   return t == MYSQL_TYPE_TINY_BLOB || t == MYSQL_TYPE_BLOB
+                  || t == MYSQL_TYPE_MEDIUM_BLOB || t == MYSQL_TYPE_LONG_BLOB;
 }
 
 static bool qIsInteger(int t)
 {
-   return t == QVariant::Char  || t == QVariant::UChar
-      || t == QVariant::Short  || t == QVariant::UShort
-      || t == QVariant::Int    || t == QVariant::UInt
+   return t == QVariant::Char   || t == QVariant::UChar
+      || t == QVariant::Short    || t == QVariant::UShort
+      || t == QVariant::Int      || t == QVariant::UInt
       || t == QVariant::LongLong || t == QVariant::ULongLong;
 }
 
@@ -558,7 +557,8 @@ bool QMYSQLResult::fetchLast()
       return false;
    }
 
-   if (isForwardOnly()) { // fake this since MySQL can't seek on forward only queries
+   if (isForwardOnly()) {
+      // fake this since MySQL can not seek on forward only queries
       bool success = fetchNext(); // did we move at all?
       while (fetchNext()) {};
       return success;
@@ -576,9 +576,10 @@ bool QMYSQLResult::fetchLast()
       return true;
    }
 
-   if (!numRows) {
+   if (! numRows) {
       return false;
    }
+
    return fetch(numRows - 1);
 }
 
@@ -695,7 +696,7 @@ QVariant QMYSQLResult::data(int field)
          }
       }
 
-      return QVariant(val.toDouble());
+         return QVariant(val.toDouble());
 
       case QVariant::Date:
          return qDateFromString(val);
@@ -757,12 +758,14 @@ bool QMYSQLResult::reset (const QString &query)
             QSqlError::StatementError, d->driver->d_func()));
       return false;
    }
+
    d->result = mysql_store_result(d->driver->d_func()->mysql);
    if (!d->result && mysql_field_count(d->driver->d_func()->mysql) > 0) {
       setLastError(qMakeError(QCoreApplication::translate("QMYSQLResult", "Unable to store result"),
             QSqlError::StatementError, d->driver->d_func()));
       return false;
    }
+
    int numFields = mysql_field_count(d->driver->d_func()->mysql);
    setSelect(numFields != 0);
    d->fields.resize(numFields);
@@ -775,7 +778,9 @@ bool QMYSQLResult::reset (const QString &query)
       }
       setAt(QSql::BeforeFirstRow);
    }
+
    setActive(true);
+
    return isActive();
 }
 
@@ -839,13 +844,15 @@ QSqlRecord QMYSQLResult::record() const
          field = mysql_fetch_field(res);
       }
    }
+
    mysql_field_seek(res, 0);
+
    return info;
 }
 
 bool QMYSQLResult::nextResult()
 {
-   if (!d->driver) {
+   if (! d->driver) {
       return false;
    }
 
@@ -870,14 +877,16 @@ bool QMYSQLResult::nextResult()
       setLastError(qMakeError(QCoreApplication::translate("QMYSQLResult", "Unable to execute next query"),
             QSqlError::StatementError, d->driver->d_func()));
       return false;
+
    } else if (status == -1) {
-      return false;   // No more result sets
+      // no more result sets
+      return false;
    }
 
    d->result = mysql_store_result(d->driver->d_func()->mysql);
    int numFields = mysql_field_count(d->driver->d_func()->mysql);
 
-   if (!d->result && numFields > 0) {
+   if (! d->result && numFields > 0) {
       setLastError(qMakeError(QCoreApplication::translate("QMYSQLResult", "Unable to store next result"),
             QSqlError::StatementError, d->driver->d_func()));
       return false;
@@ -901,11 +910,8 @@ bool QMYSQLResult::nextResult()
 
 void QMYSQLResult::virtual_hook(int id, void *data)
 {
-
    QSqlResult::virtual_hook(id, data);
-
 }
-
 
 
 static MYSQL_TIME *toMySqlDate(QDate date, QTime time, QVariant::Type type)
@@ -917,15 +923,16 @@ static MYSQL_TIME *toMySqlDate(QDate date, QTime time, QVariant::Type type)
    memset(myTime, 0, sizeof(MYSQL_TIME));
 
    if (type == QVariant::Time || type == QVariant::DateTime) {
-      myTime->hour = time.hour();
-      myTime->minute = time.minute();
-      myTime->second = time.second();
-      myTime->second_part = time.msec() * 1000;
+      myTime.hour   = time.hour();
+      myTime.minute = time.minute();
+      myTime.second = time.second();
+      myTime.second_part = time.msec() * 1000;
    }
+
    if (type == QVariant::Date || type == QVariant::DateTime) {
-      myTime->year = date.year();
-      myTime->month = date.month();
-      myTime->day = date.day();
+      myTime.year  = date.year();
+      myTime.month = date.month();
+      myTime.day   = date.day();
    }
 
    return myTime;
@@ -933,12 +940,12 @@ static MYSQL_TIME *toMySqlDate(QDate date, QTime time, QVariant::Type type)
 
 bool QMYSQLResult::prepare(const QString &query)
 {
-   if (!d->driver) {
+   if (! d->driver) {
       return false;
    }
 
    cleanup();
-   if (!d->driver->d_func()->preparedQuerysEnabled) {
+   if (! d->driver->d_func()->preparedQuerysEnabled) {
       return QSqlResult::prepare(query);
    }
 
@@ -948,11 +955,11 @@ bool QMYSQLResult::prepare(const QString &query)
       return false;
    }
 
-   if (!d->stmt) {
+   if (! d->stmt) {
       d->stmt = mysql_stmt_init(d->driver->d_func()->mysql);
    }
 
-   if (!d->stmt) {
+   if (! d->stmt) {
       setLastError(qMakeError(QCoreApplication::translate("QMYSQLResult", "Unable to prepare statement"),
             QSqlError::StatementError, d->driver->d_func()));
       return false;
@@ -960,6 +967,7 @@ bool QMYSQLResult::prepare(const QString &query)
 
    const QByteArray encQuery(fromUnicode(d->driver->d_func()->tc, query));
    r = mysql_stmt_prepare(d->stmt, encQuery.constData(), encQuery.length());
+
    if (r != 0) {
       setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult",
                "Unable to prepare statement"), QSqlError::StatementError, d->stmt));
@@ -973,23 +981,26 @@ bool QMYSQLResult::prepare(const QString &query)
 
    setSelect(d->bindInValues());
    d->preparedQuery = true;
-   return true;
 
+   return true;
 }
 
 bool QMYSQLResult::exec()
 {
-   if (!d->driver) {
+   if (! d->driver) {
       return false;
    }
-   if (!d->preparedQuery) {
+
+   if (! d->preparedQuery) {
       return QSqlResult::exec();
    }
-   if (!d->stmt) {
+
+   if (! d->stmt) {
       return false;
    }
 
    int r = 0;
+
    MYSQL_BIND *currBind;
    QVector<MYSQL_TIME *> timeVector;
    QVector<QByteArray> stringVector;
@@ -998,9 +1009,10 @@ bool QMYSQLResult::exec()
    const QVector<QVariant> values = boundValues();
 
    r = mysql_stmt_reset(d->stmt);
+
    if (r != 0) {
       setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult",
-               "Unable to reset statement"), QSqlError::StatementError, d->stmt));
+                  "Unable to reset statement"), QSqlError::StatementError, d->stmt));
       return false;
    }
 
@@ -1046,9 +1058,11 @@ bool QMYSQLResult::exec()
                      currBind->buffer_type = MYSQL_TYPE_DATETIME;
                      myTime->time_type = MYSQL_TIMESTAMP_DATETIME;
                      break;
+
                   default:
                      break;
                }
+
                currBind->buffer_length = sizeof(MYSQL_TIME);
                currBind->length = 0;
                break;
@@ -1107,11 +1121,12 @@ bool QMYSQLResult::exec()
    qDeleteAll(timeVector);
 
    if (r != 0) {
-      setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult",
-               "Unable to execute statement"), QSqlError::StatementError, d->stmt));
+      setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult", "Unable to execute statement"),
+                  QSqlError::StatementError, d->stmt));
       return false;
    }
-   //if there is meta-data there is also data
+
+   // if there is meta-data there is also data
    setSelect(d->meta);
 
    d->rowsAffected = mysql_stmt_affected_rows(d->stmt);
@@ -1125,6 +1140,7 @@ bool QMYSQLResult::exec()
                   "Unable to bind outvalues"), QSqlError::StatementError, d->stmt));
          return false;
       }
+
       if (d->hasBlobs) {
          mysql_stmt_attr_set(d->stmt, STMT_ATTR_UPDATE_MAX_LENGTH, &update_max_length);
       }
@@ -1148,14 +1164,16 @@ bool QMYSQLResult::exec()
             return false;
          }
       }
+
       setAt(QSql::BeforeFirstRow);
    }
+
    setActive(true);
+
    return true;
 }
 
-
-static int qMySqlConnectionCount = 0;
+static int qMySqlConnectionCount    = 0;
 static bool qMySqlInitHandledByUser = false;
 
 static void qLibraryInit()
@@ -1196,15 +1214,19 @@ QMYSQLDriver::QMYSQLDriver(MYSQL *con, QObject *parent)
    init();
    if (con) {
       d->mysql = (MYSQL *) con;
+
 #ifndef QT_NO_TEXTCODEC
       d->tc = codec(con);
 #endif
+
       setOpen(true);
       setOpenError(false);
+
       if (qMySqlConnectionCount == 1) {
          qMySqlInitHandledByUser = true;
       }
    } else {
+
       qLibraryInit();
    }
 }
@@ -1218,16 +1240,17 @@ void QMYSQLDriver::init()
 
 QMYSQLDriver::~QMYSQLDriver()
 {
-   qMySqlConnectionCount--;
-   if (qMySqlConnectionCount == 0 && !qMySqlInitHandledByUser) {
+   --qMySqlConnectionCount;
+
+   if (qMySqlConnectionCount == 0 && ! qMySqlInitHandledByUser) {
       qLibraryEnd();
    }
-
 }
 
 bool QMYSQLDriver::hasFeature(DriverFeature f) const
 {
    Q_D(const QMYSQLDriver);
+
    switch (f) {
       case Transactions:
          // CLIENT_TRANSACTION should be defined in all recent mysql client libs > 3.23.34
@@ -1240,6 +1263,7 @@ bool QMYSQLDriver::hasFeature(DriverFeature f) const
          }
 #endif
          return false;
+
       case NamedPlaceholders:
       case BatchOperations:
       case SimpleLocking:
@@ -1247,6 +1271,7 @@ bool QMYSQLDriver::hasFeature(DriverFeature f) const
       case FinishQuery:
       case CancelQuery:
          return false;
+
       case QuerySize:
       case BLOB:
       case LastInsertId:
@@ -1303,10 +1328,9 @@ bool QMYSQLDriver::open(const QString &db, const QString &user, const QString &p
       close();
    }
 
-   /* This is a hack to get MySQL's stored procedure support working.
-      Since a stored procedure _may_ return multiple result sets,
-      we have to enable CLIEN_MULTI_STATEMENTS here, otherwise _any_
-      stored procedure call will fail.
+   /* Used to get MySQL's stored procedure support working. Since a stored procedure _may_
+      return multiple result sets, we have to enable CLIEN_MULTI_STATEMENTS here, otherwise
+      _any_ stored procedure call will fail.
    */
    unsigned int optionFlags = Q_CLIENT_MULTI_STATEMENTS;
    const QStringList opts(connOpts.split(QChar(';'), QStringParser::SkipEmptyParts));
@@ -1317,10 +1341,11 @@ bool QMYSQLDriver::open(const QString &db, const QString &user, const QString &p
    QString sslKey;
    QString sslCAPath;
    QString sslCipher;
-   my_bool reconnect = false;
+
+   my_bool reconnect   = false;
    uint connectTimeout = 0;
-   uint readTimeout = 0;
-   uint writeTimeout = 0;
+   uint readTimeout    = 0;
+   uint writeTimeout   = 0;
 
    // extract the real options from the string
    for (int i = 0; i < opts.count(); ++i) {
@@ -1380,8 +1405,9 @@ bool QMYSQLDriver::open(const QString &db, const QString &user, const QString &p
       setOpenError(true);
       return false;
    }
-   if (!sslKey.isEmpty() || !sslCert.isEmpty() || !sslCA.isEmpty() ||
-      !sslCAPath.isEmpty() || !sslCipher.isEmpty()) {
+
+   if (! sslKey.isEmpty() || ! sslCert.isEmpty() || !sslCA.isEmpty() ||
+      ! sslCAPath.isEmpty() || ! sslCipher.isEmpty()) {
 
       mysql_ssl_set(d->mysql,
          sslKey.isEmpty() ? static_cast<const char *>(0)
@@ -1395,6 +1421,7 @@ bool QMYSQLDriver::open(const QString &db, const QString &user, const QString &p
          sslCipher.isEmpty() ? static_cast<const char *>(0)
          : sslCipher.constData());
    }
+
    if (connectTimeout != 0) {
       mysql_options(d->mysql, MYSQL_OPT_CONNECT_TIMEOUT, &connectTimeout);
    }
@@ -1418,7 +1445,7 @@ bool QMYSQLDriver::open(const QString &db, const QString &user, const QString &p
 
    if (mysql == d->mysql) {
 
-      if (!db.isEmpty() && mysql_select_db(d->mysql, db.constData())) {
+      if (! db.isEmpty() && mysql_select_db(d->mysql, db.constData())) {
          setLastError(qMakeError(tr("Unable to open database '") + db + '\'', QSqlError::ConnectionError, d));
          mysql_close(d->mysql);
          setOpenError(true);
@@ -1448,11 +1475,11 @@ bool QMYSQLDriver::open(const QString &db, const QString &user, const QString &p
    d->preparedQuerysEnabled = mysql_get_client_version() >= 40108
       && mysql_get_server_version(d->mysql) >= 40100;
 
-
    mysql_thread_init();
 
    setOpen(true);
    setOpenError(false);
+
    return true;
 }
 
@@ -1593,13 +1620,16 @@ QVariant QMYSQLDriver::handle() const
 bool QMYSQLDriver::beginTransaction()
 {
    Q_D(QMYSQLDriver);
+
 #ifndef CLIENT_TRANSACTIONS
    return false;
 #endif
-   if (!isOpen()) {
+
+   if (! isOpen()) {
       qWarning("QMYSQLDriver::beginTransaction: Database not open");
       return false;
    }
+
    if (mysql_query(d->mysql, "BEGIN WORK")) {
       setLastError(qMakeError(tr("Unable to begin transaction"), QSqlError::StatementError, d));
       return false;
@@ -1632,6 +1662,7 @@ bool QMYSQLDriver::commitTransaction()
 bool QMYSQLDriver::rollbackTransaction()
 {
    Q_D(QMYSQLDriver);
+
 #ifndef CLIENT_TRANSACTIONS
    return false;
 #endif
@@ -1645,6 +1676,7 @@ bool QMYSQLDriver::rollbackTransaction()
       setLastError(qMakeError(tr("Unable to rollback transaction"), QSqlError::StatementError, d));
       return false;
    }
+
    return true;
 }
 
@@ -1696,9 +1728,11 @@ QString QMYSQLDriver::escapeIdentifier(const QString &identifier, IdentifierType
 {
    QString res = identifier;
 
-   if (! identifier.isEmpty() && ! identifier.startsWith(QChar('`')) && ! identifier.endsWith(QChar('`')) ) {
-      res.prepend(QChar('`')).append(QChar('`'));
-      res.replace(QChar('.'), QString("`.`"));
+   if (! identifier.isEmpty() && ! identifier.startsWith('`') && ! identifier.endsWith('`') ) {
+
+      res.prepend('`');
+      res.append('`');
+      res.replace('.', "`.`");
    }
 
    return res;

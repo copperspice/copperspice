@@ -45,8 +45,6 @@
 #include <QXmlStreamReader>
 #include <QXmlNamePool>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class XsdSchemaParser : public MaintainingReader<XsdSchemaToken, XsdTagScope::Type>
 {
@@ -695,7 +693,5 @@ class XsdSchemaParser : public MaintainingReader<XsdSchemaToken, XsdTagScope::Ty
    QSet<QXmlName>                                                       m_builtinTypeNames;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

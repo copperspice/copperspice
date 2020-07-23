@@ -33,8 +33,6 @@ class Q_MULTIMEDIA_EXPORT QPlaylistFileParser : public QObject
    MULTI_CS_OBJECT(QPlaylistFileParser)
 
  public:
-   QPlaylistFileParser(QObject *parent = nullptr);
-
    enum FileType {
       UNKNOWN,
       M3U,
@@ -48,6 +46,8 @@ class Q_MULTIMEDIA_EXPORT QPlaylistFileParser : public QObject
       FormatNotSupportedError,
       NetworkError
    };
+
+   QPlaylistFileParser(QObject *parent = nullptr);
 
    QPlaylistFileParser(const QPlaylistFileParser &) = delete;
    QPlaylistFileParser &operator=(const QPlaylistFileParser &) = delete;

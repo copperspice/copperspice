@@ -29,11 +29,10 @@
 #include <qsourcelocationreflection_p.h>
 #include <qxsdschemacontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QXmlQuery;
 
 namespace QPatternist {
+
 class XsdSchemaSourceLocationReflection : public SourceLocationReflection
 {
  public:
@@ -134,7 +133,5 @@ class XsdTypeChecker
    SourceLocationReflection  *m_reflection;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

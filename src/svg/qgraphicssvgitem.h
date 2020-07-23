@@ -29,6 +29,7 @@
 #if ! defined(QT_NO_GRAPHICSVIEW) && ! defined(QT_NO_SVGWIDGET)
 
 #include <qgraphicsitem.h>
+
 class QSvgRenderer;
 class QGraphicsSvgItemPrivate;
 
@@ -65,8 +66,9 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
    QRectF boundingRect() const override;
    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-   enum { Type = 13 };
    int type() const override;
+
+   static constexpr int Type = 13;
 
  private:
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsSvgItem)
@@ -76,4 +78,5 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
 };
 
 #endif // QT_NO_GRAPHICSVIEW or QT_NO_SVGWIDGETS
+
 #endif

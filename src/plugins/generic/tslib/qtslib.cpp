@@ -23,12 +23,10 @@
 
 #include "qtslib.h"
 
-
 #include <QSocketNotifier>
 #include <QStringList>
 #include <QPoint>
 #include <QWindowSystemInterface>
-
 #include <qnamespace.h>
 
 #include <errno.h>
@@ -121,4 +119,3 @@ void QTsLibMouseHandler::readMouseData()
     }
 }
 
-QT_END_NAMESPACE

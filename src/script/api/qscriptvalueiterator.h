@@ -35,6 +35,7 @@ class Q_SCRIPT_EXPORT QScriptValueIterator
 {
  public:
    QScriptValueIterator(const QScriptValue &value);
+
    QScriptValueIterator(const QScriptValueIterator &) = delete;
    QScriptValueIterator &operator=(const QScriptValueIterator &) = delete;
 
@@ -62,9 +63,8 @@ class Q_SCRIPT_EXPORT QScriptValueIterator
    QScriptValueIterator &operator=(QScriptValue &value);
 
  private:
-   QScopedPointer<QScriptValueIteratorPrivate> d_ptr;
-
    Q_DECLARE_PRIVATE(QScriptValueIterator)
+   QScopedPointer<QScriptValueIteratorPrivate> d_ptr;
 };
 
 #endif

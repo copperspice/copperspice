@@ -57,8 +57,6 @@
 #define XMLERR_RECURSIVEENTITIES          QT_TRANSLATE_NOOP("QXml", "recursive entities")
 #define XMLERR_ERRORINTEXTDECL            QT_TRANSLATE_NOOP("QXml", "error in the text declaration of an external entity")
 
-QT_BEGIN_NAMESPACE
-
 // the constants for the lookup table
 static const signed char cltWS      =  0; // white space
 static const signed char cltPer     =  1; // %

@@ -33,8 +33,6 @@ class QGLFramebufferObjectFormatPrivate;
 
 class Q_OPENGL_EXPORT QGLFramebufferObject : public QPaintDevice
 {
-   Q_DECLARE_PRIVATE(QGLFramebufferObject)
-
  public:
    enum Attachment {
       NoAttachment,
@@ -93,6 +91,8 @@ class Q_OPENGL_EXPORT QGLFramebufferObject : public QPaintDevice
    }
 
  private:
+   Q_DECLARE_PRIVATE(QGLFramebufferObject)
+
    QScopedPointer<QGLFramebufferObjectPrivate> d_ptr;
    friend class QGLPaintDevice;
    friend class QGLFBOGLPaintDevice;
@@ -100,11 +100,11 @@ class Q_OPENGL_EXPORT QGLFramebufferObject : public QPaintDevice
 
 class Q_OPENGL_EXPORT QGLFramebufferObjectFormat
 {
-
  public:
    QGLFramebufferObjectFormat();
    QGLFramebufferObjectFormat(const QGLFramebufferObjectFormat &other);
    QGLFramebufferObjectFormat &operator=(const QGLFramebufferObjectFormat &other);
+
    ~QGLFramebufferObjectFormat();
 
    void setSamples(int samples);
@@ -122,7 +122,6 @@ class Q_OPENGL_EXPORT QGLFramebufferObjectFormat
    void setInternalTextureFormat(GLenum internalTextureFormat);
    GLenum internalTextureFormat() const;
 
-
    bool operator==(const QGLFramebufferObjectFormat &other) const;
    bool operator!=(const QGLFramebufferObjectFormat &other) const;
 
@@ -131,6 +130,5 @@ class Q_OPENGL_EXPORT QGLFramebufferObjectFormat
 
    void detach();
 };
-
 
 #endif

@@ -26,8 +26,6 @@
 
 #include <QAbstractXmlReceiver>
 
-QT_BEGIN_NAMESPACE
-
 class QIODevice;
 class QTextCodec;
 class QXmlQuery;
@@ -125,7 +123,5 @@ class Q_XMLPATTERNS_EXPORT QXmlSerializer : public QAbstractXmlReceiver
 
    Q_DECLARE_PRIVATE(QXmlSerializer)
 };
-
-QT_END_NAMESPACE
 
 #endif

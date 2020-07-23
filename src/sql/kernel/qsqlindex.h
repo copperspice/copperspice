@@ -28,8 +28,6 @@
 #include <qstring.h>
 #include <qlist.h>
 
-QT_BEGIN_NAMESPACE
-
 class Q_SQL_EXPORT QSqlIndex : public QSqlRecord
 {
  public:
@@ -41,6 +39,7 @@ class Q_SQL_EXPORT QSqlIndex : public QSqlRecord
    inline QString cursorName() const {
       return cursor;
    }
+
    void setName(const QString &name);
    inline QString name() const {
       return nm;
@@ -58,7 +57,5 @@ class Q_SQL_EXPORT QSqlIndex : public QSqlRecord
    QString nm;
    QList<bool> sorts;
 };
-
-QT_END_NAMESPACE
 
 #endif // QSQLINDEX_H

@@ -82,9 +82,7 @@ class Q_SCRIPT_EXPORT QScriptSyntaxCheckResult
    friend class QScriptEnginePrivate;
 };
 
-class Q_SCRIPT_EXPORT QScriptEngine
-   : public QObject
-
+class Q_SCRIPT_EXPORT QScriptEngine : public QObject
 {
    SCRIPT_CS_OBJECT(QScriptEngine)
 
@@ -112,6 +110,7 @@ class Q_SCRIPT_EXPORT QScriptEngine
    QScriptEngine();
 
    explicit QScriptEngine(QObject *parent);
+
    QScriptEngine(const QScriptEngine &) = delete;
    QScriptEngine &operator=(const QScriptEngine &) = delete;
 
@@ -163,7 +162,6 @@ class Q_SCRIPT_EXPORT QScriptEngine
    QScriptValue newDate(qsreal value);
    QScriptValue newDate(const QDateTime &value);
    QScriptValue newActivationObject();
-
 
    QScriptValue newQObject(QObject *object, ValueOwnership ownership = QtOwnership,
       const QObjectWrapOptions &options = 0);

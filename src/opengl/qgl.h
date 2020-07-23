@@ -30,7 +30,7 @@
 #include <qglcolormap.h>
 #include <qmap.h>
 #include <qscopedpointer.h>
-#include <QSurfaceFormat>
+#include <qsurfaceformat.h>
 
 class QPixmap;
 class QGLWidgetPrivate;
@@ -213,6 +213,7 @@ class Q_OPENGL_EXPORT QGLContext
 
    QGLContext(const QGLFormat &format, QPaintDevice *device);
    QGLContext(const QGLFormat &format);
+
    QGLContext(const QGLContext &) = delete;
    QGLContext &operator=(const QGLContext &) = delete;
 
@@ -256,15 +257,10 @@ class Q_OPENGL_EXPORT QGLContext
    };
    using BindOptions = QFlags<BindOption>;
 
-   GLuint bindTexture(const QImage &image, GLenum target, GLint format,
-      BindOptions options);
-   GLuint bindTexture(const QPixmap &pixmap, GLenum target, GLint format,
-      BindOptions options);
-
-   GLuint bindTexture(const QImage &image, GLenum target = GL_TEXTURE_2D,
-      GLint format = GL_RGBA);
-   GLuint bindTexture(const QPixmap &pixmap, GLenum target = GL_TEXTURE_2D,
-      GLint format = GL_RGBA);
+   GLuint bindTexture(const QImage &image, GLenum target, GLint format, BindOptions options);
+   GLuint bindTexture(const QPixmap &pixmap, GLenum target, GLint format, BindOptions options);
+   GLuint bindTexture(const QImage &image, GLenum target = GL_TEXTURE_2D, GLint format = GL_RGBA);
+   GLuint bindTexture(const QPixmap &pixmap, GLenum target = GL_TEXTURE_2D, GLint format = GL_RGBA);
    GLuint bindTexture(const QString &fileName);
 
    void deleteTexture(GLuint tx_id);
@@ -319,7 +315,6 @@ class Q_OPENGL_EXPORT QGLContext
    friend class QGLTexture;
    friend QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags();
 
-
    friend class QGLFramebufferObject;
    friend class QGLFramebufferObjectPrivate;
    friend class QGLFBOGLPaintDevice;
@@ -335,7 +330,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QGLContext::BindOptions)
 class Q_OPENGL_EXPORT QGLWidget : public QWidget
 {
    OPENGL_CS_OBJECT(QGLWidget)
-   Q_DECLARE_PRIVATE(QGLWidget)
 
  public:
    explicit QGLWidget(QWidget *parent = nullptr,
@@ -404,7 +398,6 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    void drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
    void drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
 
- public :
    OPENGL_CS_SLOT_1(Public, virtual void updateGL())
    OPENGL_CS_SLOT_2(updateGL)
 
@@ -429,12 +422,12 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
 
    virtual void glInit();
    virtual void glDraw();
-   QGLWidget(QGLWidgetPrivate &dd,
-      const QGLFormat &format = QGLFormat(),
-      QWidget *parent = nullptr,
-      const QGLWidget *shareWidget = nullptr,
-      Qt::WindowFlags f = Qt::WindowFlags());
+
+   QGLWidget(QGLWidgetPrivate &dd, const QGLFormat &format = QGLFormat(), QWidget *parent = nullptr,
+      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
  private:
+   Q_DECLARE_PRIVATE(QGLWidget)
 
    friend class QGLDrawable;
    friend class QGLPixelBuffer;

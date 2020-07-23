@@ -29,8 +29,6 @@
 #include <qsqlerror.h>
 #include <qsqlresult.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSqlNullResult : public QSqlResult
 {
 
@@ -123,7 +121,5 @@ class QSqlNullDriver : public QSqlDriver
    inline void setOpenError(bool) override {}
    inline void setLastError(const QSqlError &) override {}
 };
-
-QT_END_NAMESPACE
 
 #endif // QSQLNULLDRIVER_P_H

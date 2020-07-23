@@ -64,4 +64,4 @@ class Q_SVG_EXPORT QSvgWidget : public QWidget
 };
 
 #endif // QT_NO_SVGWIDGET
-#endif // QSVGWIDGET_H
+#endif

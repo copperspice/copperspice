@@ -34,12 +34,10 @@ namespace WebCore {
 class QWebPage;
 class QWebPluginDatabase;
 class QWebSettingsPrivate;
-QT_BEGIN_NAMESPACE
 class QUrl;
-QT_END_NAMESPACE
 
 class QWEBKIT_EXPORT QWebSettings {
-public:
+ public:
     enum FontFamily {
         StandardFont,
         FixedFont,
@@ -48,6 +46,7 @@ public:
         CursiveFont,
         FantasyFont
     };
+
     enum WebAttribute {
         AutoLoadImages,
         JavascriptEnabled,
@@ -76,6 +75,7 @@ public:
         WebGLEnabled,
         HyperlinkAuditingEnabled
     };
+
     enum WebGraphic {
         MissingImageGraphic,
         MissingPluginGraphic,
@@ -86,6 +86,7 @@ public:
         SearchCancelButtonGraphic,
         SearchCancelButtonPressedGraphic
     };
+
     enum FontSize {
         MinimumFontSize,
         MinimumLogicalFontSize,
@@ -139,9 +140,9 @@ public:
     static QString offlineWebApplicationCachePath();
     static void setOfflineWebApplicationCacheQuota(qint64 maximumSize);
     static qint64 offlineWebApplicationCacheQuota();
-    
+
     void setLocalStoragePath(const QString& path);
-    QString localStoragePath() const; 
+    QString localStoragePath() const;
 
     static void clearMemoryCaches();
 

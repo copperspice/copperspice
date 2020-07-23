@@ -27,8 +27,6 @@
 #include <qxsdterm_p.h>
 #include <QSourceLocation>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdReference : public XsdTerm
@@ -90,7 +88,5 @@ class XsdReference : public XsdTerm
    QSourceLocation m_sourceLocation;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

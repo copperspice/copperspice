@@ -103,6 +103,7 @@ class QScriptObjectDelegate
    };
 
    QScriptObjectDelegate();
+
    QScriptObjectDelegate(const QScriptObjectDelegate &) = delete;
    QScriptObjectDelegate &operator=(const QScriptObjectDelegate &) = delete;
 
@@ -111,25 +112,24 @@ class QScriptObjectDelegate
    virtual Type type() const = 0;
 
    virtual bool getOwnPropertySlot(QScriptObject *, JSC::ExecState *,
-      const JSC::Identifier &propertyName,
-      JSC::PropertySlot &);
+      const JSC::Identifier &propertyName, JSC::PropertySlot &);
+
    virtual bool getOwnPropertyDescriptor(QScriptObject *, JSC::ExecState *,
-      const JSC::Identifier &propertyName,
-      JSC::PropertyDescriptor &);
+      const JSC::Identifier &propertyName, JSC::PropertyDescriptor &);
+
    virtual void put(QScriptObject *, JSC::ExecState *exec, const JSC::Identifier &propertyName,
       JSC::JSValue, JSC::PutPropertySlot &);
-   virtual bool deleteProperty(QScriptObject *, JSC::ExecState *,
-      const JSC::Identifier &propertyName);
+
+   virtual bool deleteProperty(QScriptObject *, JSC::ExecState *, const JSC::Identifier &propertyName);
+
    virtual void getOwnPropertyNames(QScriptObject *, JSC::ExecState *, JSC::PropertyNameArray &,
       JSC::EnumerationMode mode = JSC::ExcludeDontEnumProperties);
    virtual void markChildren(QScriptObject *, JSC::MarkStack &markStack);
    virtual JSC::CallType getCallData(QScriptObject *, JSC::CallData &);
    virtual JSC::ConstructType getConstructData(QScriptObject *, JSC::ConstructData &);
-   virtual bool hasInstance(QScriptObject *, JSC::ExecState *,
-      JSC::JSValue value, JSC::JSValue proto);
-   virtual bool compareToObject(QScriptObject *, JSC::ExecState *, JSC::JSObject *);
 
- private:
+   virtual bool hasInstance(QScriptObject *, JSC::ExecState *, JSC::JSValue value, JSC::JSValue proto);
+   virtual bool compareToObject(QScriptObject *, JSC::ExecState *, JSC::JSObject *);
 };
 
 inline JSC::JSValue QScriptObject::data() const
@@ -137,6 +137,7 @@ inline JSC::JSValue QScriptObject::data() const
    if (!d) {
       return JSC::JSValue();
    }
+
    return d->data;
 }
 

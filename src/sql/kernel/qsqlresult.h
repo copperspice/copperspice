@@ -24,29 +24,25 @@
 #ifndef QSQLRESULT_H
 #define QSQLRESULT_H
 
-#include <qvariant.h>
-#include <qvector.h>
 #include <qsql.h>
 #include <qstring.h>
+#include <qvariant.h>
+#include <qvector.h>
+
 class QSqlRecord;
 class QVariant;
 class QSqlDriver;
 class QSqlError;
 class QSqlResultPrivate;
 
-
 class Q_SQL_EXPORT QSqlResult
 {
-   Q_DECLARE_PRIVATE(QSqlResult)
-
-   friend class QSqlQuery;
-   friend class QSqlTableModelPrivate;
-
-
  public:
    QSqlResult(const QSqlResult &) = delete;
    QSqlResult &operator=(const QSqlResult &) = delete;
+
    virtual ~QSqlResult();
+
    virtual QVariant handle() const;
 
  protected:
@@ -78,8 +74,7 @@ class Q_SQL_EXPORT QSqlResult
    virtual bool prepare(const QString &query);
    virtual bool savePrepare(const QString &sqlquery);
    virtual void bindValue(int pos, const QVariant &val, QSql::ParamType type);
-   virtual void bindValue(const QString &placeholder, const QVariant &val,
-      QSql::ParamType type);
+   virtual void bindValue(const QString &placeholder, const QVariant &val, QSql::ParamType type);
    void addBindValue(const QVariant &val, QSql::ParamType type);
    QVariant boundValue(const QString &placeholder) const;
    QVariant boundValue(int pos) const;
@@ -117,10 +112,15 @@ class Q_SQL_EXPORT QSqlResult
    QSql::NumericalPrecisionPolicy numericalPrecisionPolicy() const;
 
    virtual bool nextResult();
-   void resetBindCount(); // HACK
+   void resetBindCount();       // emerald, redesign
 
    QSqlResultPrivate *d_ptr;
+
  private:
+   Q_DECLARE_PRIVATE(QSqlResult)
+
+   friend class QSqlQuery;
+   friend class QSqlTableModelPrivate;
 };
 
-#endif // QSQLRESULT_H
+#endif

@@ -78,7 +78,7 @@ class Q_MULTIMEDIA_EXPORT QRadioTuner : public QMediaObject
    MULTI_CS_ENUM(StereoMode)
    MULTI_CS_ENUM(SearchMode)
 
-public:
+ public:
     enum State { ActiveState, StoppedState };
     enum Band { AM, FM, SW, LW, FM2 };
     enum Error { NoError, ResourceError, OpenError, OutOfRangeError };
@@ -86,6 +86,7 @@ public:
     enum SearchMode { SearchFast, SearchGetStationId };
 
     explicit QRadioTuner(QObject *parent = nullptr);
+
     QRadioTuner(const QRadioTuner &) = delete;
     QRadioTuner &operator=(const QRadioTuner &) = delete;
 
@@ -170,7 +171,7 @@ public:
     MULTI_CS_SIGNAL_1(Public, void error(QRadioTuner::Error error))
     MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioTuner::Error), error)
 
-private:
+ private:
     Q_DECLARE_PRIVATE(QRadioTuner)
 };
 

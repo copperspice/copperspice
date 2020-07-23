@@ -26,8 +26,6 @@
 
 #include <qstring.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_DOM
 
 class QIODevice;
@@ -704,11 +702,8 @@ class Q_XML_EXPORT QDomProcessingInstruction : public QDomNode
    friend class QDomNode;
 };
 
-
 Q_XML_EXPORT QTextStream &operator<<(QTextStream &, const QDomNode &);
 
 #endif // QT_NO_DOM
 
-QT_END_NAMESPACE
-
-#endif // QDOM_H
+#endif

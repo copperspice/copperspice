@@ -27,8 +27,6 @@
 #include <qvariant.h>
 #include <qstring.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSqlFieldPrivate;
 
 class Q_SQL_EXPORT QSqlField
@@ -87,9 +85,6 @@ class Q_SQL_EXPORT QSqlField
    QSqlFieldPrivate *d;
 };
 
-
 Q_SQL_EXPORT QDebug operator<<(QDebug, const QSqlField &);
-
-QT_END_NAMESPACE
 
 #endif // QSQLFIELD_H

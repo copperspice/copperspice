@@ -34,7 +34,8 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkPlaylistProvider : public QMediaPlaylistP
    MULTI_CS_OBJECT(QMediaNetworkPlaylistProvider)
 
  public:
-   QMediaNetworkPlaylistProvider(QObject *parent = 0);
+   QMediaNetworkPlaylistProvider(QObject *parent = nullptr);
+
    QMediaNetworkPlaylistProvider(const QMediaNetworkPlaylistProvider &) = delete;
    QMediaNetworkPlaylistProvider &operator=(const QMediaNetworkPlaylistProvider &) = delete;
 
@@ -69,5 +70,4 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkPlaylistProvider : public QMediaPlaylistP
 };
 
 #endif
-
 

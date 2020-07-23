@@ -39,7 +39,8 @@ class Q_MULTIMEDIA_EXPORT QAudioOutput : public QObject
  public:
    explicit QAudioOutput(const QAudioFormat &format = QAudioFormat(), QObject *parent = nullptr);
    explicit QAudioOutput(const QAudioDeviceInfo &audioDeviceInfo, const QAudioFormat &format = QAudioFormat(),
-      QObject *parent = nullptr);
+                  QObject *parent = nullptr);
+
    QAudioOutput(const QAudioOutput &) = delete;
    QAudioOutput &operator=(const QAudioOutput &) = delete;
 

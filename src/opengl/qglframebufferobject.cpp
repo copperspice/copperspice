@@ -1175,4 +1175,3 @@ void QGLFramebufferObject::blitFramebuffer(QGLFramebufferObject *target, const Q
 
    functions.glBindFramebuffer(GL_FRAMEBUFFER, ctx->d_ptr->current_fbo);
 }
-

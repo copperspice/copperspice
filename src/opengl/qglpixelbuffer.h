@@ -31,12 +31,13 @@ class QGLPixelBufferPrivate;
 
 class Q_OPENGL_EXPORT QGLPixelBuffer : public QPaintDevice
 {
-   Q_DECLARE_PRIVATE(QGLPixelBuffer)
  public:
    QGLPixelBuffer(const QSize &size, const QGLFormat &format = QGLFormat::defaultFormat(),
       QGLWidget *shareWidget = nullptr);
+
    QGLPixelBuffer(int width, int height, const QGLFormat &format = QGLFormat::defaultFormat(),
       QGLWidget *shareWidget = nullptr);
+
    QGLPixelBuffer(const QGLPixelBuffer &) = delete;
    QGLPixelBuffer &operator=(const QGLPixelBuffer &) = delete;
 
@@ -77,6 +78,7 @@ class Q_OPENGL_EXPORT QGLPixelBuffer : public QPaintDevice
    }
 
  private:
+   Q_DECLARE_PRIVATE(QGLPixelBuffer)
    QScopedPointer<QGLPixelBufferPrivate> d_ptr;
 
    friend class QGLDrawable;

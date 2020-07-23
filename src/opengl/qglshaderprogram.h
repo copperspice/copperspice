@@ -29,7 +29,7 @@
 #include <qvector3d.h>
 #include <qvector4d.h>
 #include <qmatrix4x4.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 class QGLShaderProgram;
 class QGLShaderPrivate;
@@ -49,6 +49,7 @@ class Q_OPENGL_EXPORT QGLShader : public QObject
 
    explicit QGLShader(QGLShader::ShaderType type, QObject *parent = nullptr);
    QGLShader(QGLShader::ShaderType type, const QGLContext *context, QObject *parent = nullptr);
+
    QGLShader(const QGLShader &) = delete;
    QGLShader &operator=(const QGLShader &) = delete;
 
@@ -70,14 +71,12 @@ class Q_OPENGL_EXPORT QGLShader : public QObject
 
    static bool hasOpenGLShaders(ShaderType type, const QGLContext *context = nullptr);
 
- private:
-   friend class QGLShaderProgram;
-
-   Q_DECLARE_PRIVATE(QGLShader)
-
  protected:
    QScopedPointer<QGLShaderPrivate> d_ptr;
 
+ private:
+   Q_DECLARE_PRIVATE(QGLShader)
+   friend class QGLShaderProgram;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGLShader::ShaderType)
@@ -89,6 +88,7 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
  public:
    explicit QGLShaderProgram(QObject *parent = nullptr);
    explicit QGLShaderProgram(const QGLContext *context, QObject *parent = nullptr);
+
    QGLShaderProgram(const QGLShaderProgram &) = delete;
    QGLShaderProgram &operator=(const QGLShaderProgram &) = delete;
 
@@ -153,31 +153,19 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
    void setAttributeValue(const char *name, const QColor &value);
    void setAttributeValue(const char *name, const GLfloat *values, int columns, int rows);
 
-   void setAttributeArray
-   (int location, const GLfloat *values, int tupleSize, int stride = 0);
-   void setAttributeArray
-   (int location, const QVector2D *values, int stride = 0);
-   void setAttributeArray
-   (int location, const QVector3D *values, int stride = 0);
-   void setAttributeArray
-   (int location, const QVector4D *values, int stride = 0);
-   void setAttributeArray
-   (int location, GLenum type, const void *values, int tupleSize, int stride = 0);
-   void setAttributeArray
-   (const char *name, const GLfloat *values, int tupleSize, int stride = 0);
-   void setAttributeArray
-   (const char *name, const QVector2D *values, int stride = 0);
-   void setAttributeArray
-   (const char *name, const QVector3D *values, int stride = 0);
-   void setAttributeArray
-   (const char *name, const QVector4D *values, int stride = 0);
-   void setAttributeArray
-   (const char *name, GLenum type, const void *values, int tupleSize, int stride = 0);
+   void setAttributeArray(int location, const GLfloat *values, int tupleSize, int stride = 0);
+   void setAttributeArray(int location, const QVector2D *values, int stride = 0);
+   void setAttributeArray(int location, const QVector3D *values, int stride = 0);
+   void setAttributeArray(int location, const QVector4D *values, int stride = 0);
+   void setAttributeArray(int location, GLenum type, const void *values, int tupleSize, int stride = 0);
+   void setAttributeArray(const char *name, const GLfloat *values, int tupleSize, int stride = 0);
+   void setAttributeArray(const char *name, const QVector2D *values, int stride = 0);
+   void setAttributeArray(const char *name, const QVector3D *values, int stride = 0);
+   void setAttributeArray(const char *name, const QVector4D *values, int stride = 0);
+   void setAttributeArray(const char *name, GLenum type, const void *values, int tupleSize, int stride = 0);
 
-   void setAttributeBuffer
-   (int location, GLenum type, int offset, int tupleSize, int stride = 0);
-   void setAttributeBuffer
-   (const char *name, GLenum type, int offset, int tupleSize, int stride = 0);
+   void setAttributeBuffer(int location, GLenum type, int offset, int tupleSize, int stride = 0);
+   void setAttributeBuffer(const char *name, GLenum type, int offset, int tupleSize, int stride = 0);
 
    void enableAttributeArray(int location);
    void enableAttributeArray(const char *name);
@@ -281,7 +269,7 @@ class Q_OPENGL_EXPORT QGLShaderProgram : public QObject
  protected:
    QScopedPointer<QGLShaderProgramPrivate> d_ptr;
 
- private :
+ private:
    OPENGL_CS_SLOT_1(Private, void shaderDestroyed())
    OPENGL_CS_SLOT_2(shaderDestroyed)
 

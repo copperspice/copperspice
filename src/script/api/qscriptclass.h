@@ -31,8 +31,8 @@
 
 class QScriptString;
 class QScriptClassPropertyIterator;
-
 class QScriptClassPrivate;
+
 class Q_SCRIPT_EXPORT QScriptClass
 {
  public:
@@ -48,6 +48,7 @@ class Q_SCRIPT_EXPORT QScriptClass
    };
 
    QScriptClass(QScriptEngine *engine);
+
    QScriptClass(const QScriptClass &) = delete;
    QScriptClass &operator=(const QScriptClass &) = delete;
 
@@ -56,8 +57,7 @@ class Q_SCRIPT_EXPORT QScriptClass
    QScriptEngine *engine() const;
 
    virtual QueryFlags queryProperty(const QScriptValue &object,
-      const QScriptString &name,
-      QueryFlags flags, uint *id);
+      const QScriptString &name, QueryFlags flags, uint *id);
 
    virtual QScriptValue property(const QScriptValue &object,
       const QScriptString &name, uint id);

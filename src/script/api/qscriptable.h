@@ -35,6 +35,7 @@ class Q_SCRIPT_EXPORT QScriptable
 {
  public:
    QScriptable();
+
    QScriptable(const QScriptable &) = delete;
    QScriptable &operator=(const QScriptable &) = delete;
 
@@ -47,10 +48,8 @@ class Q_SCRIPT_EXPORT QScriptable
    QScriptValue argument(int index) const;
 
  private:
-   QScopedPointer<QScriptablePrivate> d_ptr;
-
    Q_DECLARE_PRIVATE(QScriptable)
+   QScopedPointer<QScriptablePrivate> d_ptr;
 };
 
-
-#endif // QSCRIPTABLE_H
+#endif

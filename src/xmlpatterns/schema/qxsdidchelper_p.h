@@ -28,8 +28,6 @@
 #include <qschematype_p.h>
 #include <QXmlItem>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class FieldNode
 {
@@ -140,8 +138,7 @@ inline uint qHash(const QPatternist::TargetNode &node)
 {
    return qHash(node.item().toNodeModelIndex());
 }
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

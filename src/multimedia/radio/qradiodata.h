@@ -61,21 +61,36 @@ class Q_MULTIMEDIA_EXPORT QRadioData : public QObject, public QMediaBindableInte
 public:
    enum Error { NoError, ResourceError, OpenError, OutOfRangeError };
 
-   enum ProgramType { Undefined = 0, News, CurrentAffairs, Information,
-        Sport, Education, Drama, Culture, Science, Varied,
-        PopMusic, RockMusic, EasyListening, LightClassical,
-        SeriousClassical, OtherMusic, Weather, Finance,
-        ChildrensProgrammes, SocialAffairs, Religion,
-        PhoneIn, Travel, Leisure, JazzMusic, CountryMusic,
-        NationalMusic, OldiesMusic, FolkMusic, Documentary,
-        AlarmTest, Alarm, Talk, ClassicRock, AdultHits,
-        SoftRock, Top40, Soft, Nostalgia, Classical,
-        RhythmAndBlues, SoftRhythmAndBlues, Language,
-        ReligiousMusic, ReligiousTalk, Personality, Public,
-        College
+   enum ProgramType {
+      Undefined = 0,
+      News,
+      CurrentAffairs,
+      Information,
+      Sport,
+      Education,
+      Drama,
+      Culture,
+      Science,
+      Varied,
+      PopMusic, RockMusic, EasyListening, LightClassical,
+      SeriousClassical, OtherMusic, Weather, Finance,
+      ChildrensProgrammes, SocialAffairs, Religion,
+      PhoneIn, Travel, Leisure, JazzMusic, CountryMusic,
+      NationalMusic, OldiesMusic, FolkMusic, Documentary,
+      AlarmTest, Alarm, Talk, ClassicRock, AdultHits,
+      SoftRock, Top40, Soft, Nostalgia, Classical,
+      RhythmAndBlues,
+      SoftRhythmAndBlues,
+      Language,
+      ReligiousMusic,
+      ReligiousTalk,
+      Personality,
+      Public,
+      College
    };
 
    explicit QRadioData(QMediaObject *mediaObject, QObject *parent = nullptr);
+
    QRadioData(const QRadioData &) = delete;
    QRadioData &operator=(const QRadioData &) = delete;
 
@@ -119,12 +134,12 @@ public:
    MULTI_CS_SIGNAL_1(Public, void error(QRadioData::Error error))
    MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioData::Error), error)
 
-protected:
+ protected:
    bool setMediaObject(QMediaObject *) override;
 
    QRadioDataPrivate *d_ptr;
 
-private:
+ private:
    Q_DECLARE_PRIVATE(QRadioData)
 
    MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())

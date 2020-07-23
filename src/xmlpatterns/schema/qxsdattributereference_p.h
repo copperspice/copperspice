@@ -27,8 +27,6 @@
 #include <qxsdattributeuse_p.h>
 #include <QSourceLocation>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdAttributeReference : public XsdAttributeUse
@@ -91,8 +89,7 @@ class XsdAttributeReference : public XsdAttributeUse
    QXmlName        m_referenceName;
    QSourceLocation m_sourceLocation;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

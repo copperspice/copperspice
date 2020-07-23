@@ -84,11 +84,10 @@ class Q_SCRIPT_EXPORT QScriptContext
    QString toString() const;
 
  private:
-   QScriptContext();
-
-   QScriptContextPrivate *d_ptr;
-
    Q_DECLARE_PRIVATE(QScriptContext)
+
+   QScriptContext();
+   QScriptContextPrivate *d_ptr;
 };
 
 CS_DECLARE_METATYPE(QScriptContext)
