@@ -26,8 +26,6 @@
 
 #include <qdatetime.h>
 
-QT_BEGIN_NAMESPACE
-
 class QNetworkCookiePrivate: public QSharedData
 {
  public:
@@ -66,6 +64,5 @@ static int nextNonWhitespace(const QByteArray &text, int from)
    // reached the end
    return text.length();
 }
-
 
 #endif

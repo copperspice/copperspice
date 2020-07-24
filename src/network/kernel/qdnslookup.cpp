@@ -31,8 +31,6 @@
 
 #include <algorithm>
 
-QT_BEGIN_NAMESPACE
-
 Q_GLOBAL_STATIC(QDnsLookupThreadPool, theDnsLookupThreadPool);
 Q_GLOBAL_STATIC(QThreadStorage<bool *>, theDnsLookupSeedStorage);
 
@@ -904,5 +902,3 @@ void QDnsLookup::_q_lookupFinished(const QDnsLookupReply &reply)
    Q_D(QDnsLookup);
    d->_q_lookupFinished(reply);
 }
-
-QT_END_NAMESPACE

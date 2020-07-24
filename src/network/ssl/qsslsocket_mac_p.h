@@ -38,6 +38,7 @@ class QSecureTransportContext
 {
  public:
     explicit QSecureTransportContext(SSLContextRef context);
+
     QSecureTransportContext(const QSecureTransportContext &) = delete;
     QSecureTransportContext &operator=(const QSecureTransportContext &) = delete;
 
@@ -48,15 +49,13 @@ class QSecureTransportContext
 
  private:
     SSLContextRef context;
-
 };
 
 class QSslSocketBackendPrivate : public QSslSocketPrivate
 {
-    Q_DECLARE_PUBLIC(QSslSocket)
-
  public:
     QSslSocketBackendPrivate();
+
     QSslSocketBackendPrivate(const QSslSocketBackendPrivate &) = delete;
     QSslSocketBackendPrivate &operator=(const QSslSocketBackendPrivate &) = delete;
 
@@ -80,11 +79,14 @@ class QSslSocketBackendPrivate : public QSslSocketPrivate
     static QSslCipher QSslCipher_from_SSLCipherSuite(SSLCipherSuite cipher);
 
  private:
+    Q_DECLARE_PUBLIC(QSslSocket)
+
     // SSL context management/properties:
     bool initSslContext();
     void destroySslContext();
     bool setSessionCertificate(QString &errorDescription, QAbstractSocket::SocketError &errorCode);
     bool setSessionProtocol();
+
     // Aux. functions to do a verification during handshake phase:
     bool canIgnoreTrustVerificationFailure() const;
     bool verifySessionProtocol() const;
@@ -94,7 +96,6 @@ class QSslSocketBackendPrivate : public QSslSocketPrivate
     bool startHandshake();
 
     QSecureTransportContext context;
-
 };
 
 #endif

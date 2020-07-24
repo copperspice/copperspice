@@ -320,8 +320,6 @@ bool QSslKey::operator==(const QSslKey &other) const
    return toDer() == other.toDer();
 }
 
-
-#ifndef QT_NO_DEBUG_STREAM
 QDebug operator<<(QDebug debug, const QSslKey &key)
 {
    // QDebugStateSaver saver(debug);
@@ -335,6 +333,4 @@ QDebug operator<<(QDebug debug, const QSslKey &key)
          << ')';
    return debug;
 }
-#endif
 
-QT_END_NAMESPACE

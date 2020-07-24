@@ -27,8 +27,6 @@
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-QT_BEGIN_NAMESPACE
-
 QThreadStorage<QSharedNetworkSessionManager *> tls;
 
 inline QSharedNetworkSessionManager *sharedNetworkSessionManager()
@@ -56,6 +54,7 @@ QSharedPointer<QNetworkSession> QSharedNetworkSessionManager::getSession(QNetwor
          return p;
       }
    }
+
    //otherwise make one
    QSharedPointer<QNetworkSession> session(new QNetworkSession(config), doDeleteLater);
    m->sessions[config] = session;
@@ -72,7 +71,5 @@ uint qHash(const QNetworkConfiguration &config)
 {
    return ((uint)config.type()) | (((uint)config.bearerType()) << 8) | (((uint)config.purpose()) << 16);
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_BEARERMANAGEMENT

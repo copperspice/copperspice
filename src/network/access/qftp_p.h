@@ -39,9 +39,6 @@ class Q_NETWORK_EXPORT QFtp : public QObject
    NET_CS_OBJECT(QFtp)
 
  public:
-   explicit QFtp(QObject *parent = nullptr);
-   virtual ~QFtp();
-
    enum State {
       Unconnected,
       HostLookup,
@@ -74,17 +71,24 @@ class Q_NETWORK_EXPORT QFtp : public QObject
       Rename,
       RawCommand
    };
+
    enum TransferMode {
       Active,
       Passive
    };
+
    enum TransferType {
       Binary,
       Ascii
    };
 
+   explicit QFtp(QObject *parent = nullptr);
+
    QFtp(const QFtp &) = delete;
    QFtp &operator=(const QFtp &) = delete;
+
+   virtual ~QFtp();
+
    int setProxy(const QString &host, quint16 port);
    int connectToHost(const QString &host, quint16 port = 21);
    int login(const QString &user = QString(), const QString &password = QString());
@@ -162,4 +166,4 @@ class Q_NETWORK_EXPORT QFtp : public QObject
 
 #endif // QT_NO_FTP
 
-#endif // QFTP_H
+#endif

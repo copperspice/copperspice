@@ -37,7 +37,8 @@
 #endif
 
 #ifdef Q_OS_WIN
-#define QT_SOCKLEN_T int
+
+#define QT_SOCKLEN_T    int
 #define QT_SOCKOPTLEN_T int
 
 #  ifndef WSAID_WSARECVMSG
@@ -72,10 +73,11 @@ union qt_sockaddr {
    sockaddr_in6 a6;
 };
 
+class QSocketNotifier;
 class QNativeSocketEnginePrivate;
 
 #ifndef QT_NO_NETWORKINTERFACE
-class QNetworkInterface;
+   class QNetworkInterface;
 #endif
 
 class QNativeSocketEngine : public QAbstractSocketEngine
@@ -84,6 +86,7 @@ class QNativeSocketEngine : public QAbstractSocketEngine
 
  public:
    QNativeSocketEngine(QObject *parent = nullptr);
+
    QNativeSocketEngine(const QNativeSocketEngine &) = delete;
    QNativeSocketEngine &operator=(const QNativeSocketEngine &) = delete;
 
@@ -156,13 +159,8 @@ class QNativeSocketEngine : public QAbstractSocketEngine
    Q_DECLARE_PRIVATE(QNativeSocketEngine)
 };
 
-
-class QSocketNotifier;
-
 class QNativeSocketEnginePrivate : public QAbstractSocketEnginePrivate
 {
-   Q_DECLARE_PUBLIC(QNativeSocketEngine)
-
  public:
    QNativeSocketEnginePrivate();
    ~QNativeSocketEnginePrivate();
@@ -279,6 +277,9 @@ class QNativeSocketEnginePrivate : public QAbstractSocketEnginePrivate
             *sockAddrSize = sizeof(sockaddr_in);
         }
     }
+
+ private:
+   Q_DECLARE_PUBLIC(QNativeSocketEngine)
 };
 
 #endif

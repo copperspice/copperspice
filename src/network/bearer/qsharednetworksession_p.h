@@ -33,8 +33,6 @@
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-QT_BEGIN_NAMESPACE
-
 uint qHash(const QNetworkConfiguration &config);
 
 class QSharedNetworkSessionManager
@@ -47,9 +45,7 @@ class QSharedNetworkSessionManager
    QHash<QNetworkConfiguration, QWeakPointer<QNetworkSession> > sessions;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_BEARERMANAGEMENT
 
-#endif //QSHAREDNETWORKSESSIONPRIVATE_H
+#endif
 

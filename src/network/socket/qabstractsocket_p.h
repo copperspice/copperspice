@@ -33,8 +33,6 @@
 #include <qabstractsocketengine_p.h>
 #include <qnetworkproxy.h>
 
-QT_BEGIN_NAMESPACE
-
 class QHostInfo;
 
 class QAbstractSocketPrivate : public QIODevicePrivate, public QAbstractSocketEngineReceiver
@@ -159,6 +157,4 @@ class QAbstractSocketPrivate : public QIODevicePrivate, public QAbstractSocketEn
    static QAbstractSocketEngine *getSocketEngine(QAbstractSocket *);
 };
 
-QT_END_NAMESPACE
-
-#endif // QABSTRACTSOCKET_P_H
+#endif

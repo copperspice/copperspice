@@ -575,10 +575,8 @@ static void _q_parseUnixDir(const QStringList &tokens, const QString &userName, 
    }  while (n < formats.size() && (!dateTime.isValid()));
 
    if (n == 2 || n == 4) {
-      // Guess the year.
-      dateTime.setDate(QDate(QDate::currentDate().year(),
-                             dateTime.date().month(),
-                             dateTime.date().day()));
+      // Guess the year
+      dateTime.setDate(QDate(QDate::currentDate().year(), dateTime.date().month(), dateTime.date().day()));
       _q_fixupDateTime(&dateTime);
    }
 
@@ -651,16 +649,13 @@ static void _q_parseDosDir(const QStringList &tokens, const QString &userName, Q
    info->setReadable(true);
    info->setWritable(info->isFile());
 
-   QDateTime dateTime;
-   dateTime = QLocale::c().toDateTime(tokens.at(1), QLatin1String("MM-dd-yy  hh:mmAP"));
+   QDateTime dateTime = QLocale::c().toDateTime(tokens.at(1), QLatin1String("MM-dd-yy  hh:mmAP"));
+
    if (dateTime.date().year() < 1971) {
-      dateTime.setDate(QDate(dateTime.date().year() + 100,
-                             dateTime.date().month(),
-                             dateTime.date().day()));
+      dateTime.setDate(QDate(dateTime.date().year() + 100, dateTime.date().month(), dateTime.date().day()));
    }
 
    info->setLastModified(dateTime);
-
 }
 
 bool QFtpDTP::parseDir(const QByteArray &buffer, const QString &userName, QUrlInfo *info)

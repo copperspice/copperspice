@@ -61,6 +61,7 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    };
 
    QLocalSocket(QObject *parent = nullptr);
+
    QLocalSocket(const QLocalSocket &) = delete;
    QLocalSocket &operator=(const QLocalSocket &) = delete;
 
@@ -124,9 +125,6 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    NET_CS_SLOT_2(_q_error)
 
 #elif defined(Q_OS_WIN)
-   // GONE NET_CS_SLOT_1(Private, void _q_notified())
-   // GONE NET_CS_SLOT_2(_q_notified)
-
    NET_CS_SLOT_1(Private, void _q_canWrite())
    NET_CS_SLOT_2(_q_canWrite)
 
@@ -136,14 +134,11 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    NET_CS_SLOT_1(Private, void _q_winError(ulong, const QString &))
    NET_CS_SLOT_2(_q_winError)
 
-   // GONE NET_CS_SLOT_1(Private, void _q_emitReadyRead())
-   // GONE NET_CS_SLOT_2(_q_emitReadyRead)
-
 #else
-   NET_CS_SLOT_1(Private, void _q_stateChanged(QAbstractSocket::SocketState un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_stateChanged(QAbstractSocket::SocketState state))
    NET_CS_SLOT_2(_q_stateChanged)
 
-   NET_CS_SLOT_1(Private, void _q_error(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_error(QAbstractSocket::SocketError error))
    NET_CS_SLOT_2(_q_error)
 
    NET_CS_SLOT_1(Private, void _q_connectToSocket())
@@ -160,4 +155,4 @@ Q_NETWORK_EXPORT QDebug operator<<(QDebug, QLocalSocket::LocalSocketState);
 
 #endif // QT_NO_LOCALSOCKET
 
-#endif // QLOCALSOCKET_H
+#endif

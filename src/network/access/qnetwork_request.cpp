@@ -668,10 +668,13 @@ QDateTime QNetworkHeadersPrivate::fromHttpDate(const QByteArray &value)
    // We only handle them exactly. If they deviate, we bail out.
 
    int pos = value.indexOf(',');
+
    QDateTime dt;
+
    if (pos == -1) {
       // no comma -> asctime(3) format
       dt = QDateTime::fromString(QString::fromLatin1(value), Qt::TextDate);
+
    } else {
       // Use sscanf over QLocal/QDateTimeParser for speed reasons. See the
       // QtWebKit performance benchmarks to get an idea.

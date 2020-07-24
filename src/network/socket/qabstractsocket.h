@@ -28,15 +28,13 @@
 #include <qobject.h>
 #include <qdebug.h>
 
-
-
 class QAbstractSocketPrivate;
 class QAuthenticator;
 class QHostAddress;
 class QHostInfo;
 
 #ifndef QT_NO_NETWORKPROXY
-class QNetworkProxy;
+   class QNetworkProxy;
 #endif
 
 class QAbstractSocketPrivate;
@@ -129,6 +127,7 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
    using PauseModes = QFlags<PauseMode>;
 
    QAbstractSocket(SocketType socketType, QObject *parent);
+
    QAbstractSocket(const QAbstractSocket &) = delete;
    QAbstractSocket &operator=(const QAbstractSocket &) = delete;
 
@@ -252,11 +251,11 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractSocket::PauseModes)
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, QAbstractSocket::SocketError);
 Q_NETWORK_EXPORT QDebug operator<<(QDebug, QAbstractSocket::SocketState);
 
-// moved to bottom of file to avoid recursive include issues
+// moved here to avoid recursive include issues
 #include <qhostinfo.h>
 
 #ifndef QT_NO_NETWORKPROXY
-#include <qnetworkproxy.h>
+   #include <qnetworkproxy.h>
 #endif
 
-#endif // QABSTRACTSOCKET_H
+#endif

@@ -367,11 +367,11 @@ void QNetworkAccessFtpBackend::ftpRawCommandReply(int code, const QString &text)
       // the "FEAT" ftp command would be nice here, but it is not part of the
       // initial FTP RFC 959, neither ar "SIZE" nor "MDTM" (they are all specified
       // in RFC 3659)
-      if (text.contains(QLatin1String("SIZE"), Qt::CaseSensitive)) {
+      if (text.contains(QString("SIZE"), Qt::CaseSensitive)) {
          supportsSize = true;
       }
 
-      if (text.contains(QLatin1String("MDTM"), Qt::CaseSensitive)) {
+      if (text.contains(QString("MDTM"), Qt::CaseSensitive)) {
          supportsMdtm = true;
       }
 
@@ -381,8 +381,9 @@ void QNetworkAccessFtpBackend::ftpRawCommandReply(int code, const QString &text)
          setHeader(QNetworkRequest::ContentLengthHeader, text.toInteger<qint64>());
 
       } else if (id == mdtmId) {
-         QDateTime dt = QDateTime::fromString(text, QLatin1String("yyyyMMddHHmmss"));
+         QDateTime dt = QDateTime::fromString(text, QString("yyyyMMddHHmmss"));
          setHeader(QNetworkRequest::LastModifiedHeader, dt);
+
       }
    }
 }

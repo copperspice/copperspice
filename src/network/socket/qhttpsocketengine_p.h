@@ -50,6 +50,7 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    };
 
    QHttpSocketEngine(QObject *parent = nullptr);
+
    QHttpSocketEngine(const QHttpSocketEngine &) = delete;
    QHttpSocketEngine &operator=(const QHttpSocketEngine &) = delete;
 
@@ -127,6 +128,8 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    NET_CS_SLOT_2(slotSocketStateChanged)
 
  private:
+   Q_DECLARE_PRIVATE(QHttpSocketEngine)
+
    NET_CS_SLOT_1(Private, void emitPendingReadNotification())
    NET_CS_SLOT_2(emitPendingReadNotification)
 
@@ -141,13 +144,10 @@ class QHttpSocketEngine : public QAbstractSocketEngine
    void emitConnectionNotification();
 
    bool readHttpHeader();
-   Q_DECLARE_PRIVATE(QHttpSocketEngine)
 };
 
 class QHttpSocketEnginePrivate : public QAbstractSocketEnginePrivate
 {
-   Q_DECLARE_PUBLIC(QHttpSocketEngine)
-
  public:
    QHttpSocketEnginePrivate();
    ~QHttpSocketEnginePrivate();
@@ -169,6 +169,9 @@ class QHttpSocketEnginePrivate : public QAbstractSocketEnginePrivate
    bool connectionNotificationPending;
    bool credentialsSent;
    uint pendingResponseData;
+
+ private:
+   Q_DECLARE_PUBLIC(QHttpSocketEngine)
 };
 
 class QHttpSocketEngineHandler : public QSocketEngineHandler
@@ -180,6 +183,5 @@ class QHttpSocketEngineHandler : public QSocketEngineHandler
    virtual QAbstractSocketEngine *createSocketEngine(qintptr socketDescriptor, QObject *parent) override;
 };
 #endif
-
 
 #endif // QHTTPSOCKETENGINE_H

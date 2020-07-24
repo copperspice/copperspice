@@ -29,7 +29,7 @@
 #include <qmutex.h>
 #include <qmap.h>
 
-typedef QExplicitlySharedDataPointer<QNetworkConfigurationPrivate> QNetworkConfigurationPrivatePointer;
+using QNetworkConfigurationPrivatePointer = QExplicitlySharedDataPointer<QNetworkConfigurationPrivate>;
 
 class QNetworkConfigurationPrivate : public QSharedData
 {
@@ -64,8 +64,6 @@ class QNetworkConfigurationPrivate : public QSharedData
 
    bool isValid;
    bool roamingSupported;
-
- private:
 };
 
 #endif

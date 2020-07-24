@@ -37,8 +37,6 @@
 #include <qdir.h>
 #include <qdatetime.h>
 
-QT_BEGIN_NAMESPACE
-
 void QLocalServerPrivate::init()
 {
 }
@@ -329,7 +327,5 @@ void QLocalServerPrivate::setError(const QString &function)
 #endif
    }
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_LOCALSERVER

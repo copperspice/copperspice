@@ -38,6 +38,7 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
 
  public:
    explicit QUdpSocket(QObject *parent = nullptr);
+
    QUdpSocket(const QUdpSocket &) = delete;
    QUdpSocket &operator=(const QUdpSocket &) = delete;
 
@@ -68,4 +69,4 @@ class Q_NETWORK_EXPORT QUdpSocket : public QAbstractSocket
 
 #endif // QT_NO_UDPSOCKET
 
-#endif // QUDPSOCKET_H
+#endif

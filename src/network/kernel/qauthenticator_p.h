@@ -30,9 +30,8 @@
 #include <qauthenticator.h>
 #include <qvariant.h>
 
-QT_BEGIN_NAMESPACE
-
 class QHttpResponseHeader;
+
 #ifdef Q_OS_WIN
 class QNtlmWindowsHandles;
 #endif
@@ -88,7 +87,5 @@ class QAuthenticatorPrivate
    void parseHttpResponse(const QList<QPair<QByteArray, QByteArray> > &, bool isProxy);
    void updateCredentials();
 };
-
-QT_END_NAMESPACE
 
 #endif

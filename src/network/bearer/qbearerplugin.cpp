@@ -25,8 +25,6 @@
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-QT_BEGIN_NAMESPACE
-
 QBearerEnginePlugin::QBearerEnginePlugin(QObject *parent)
    : QObject(parent)
 {
@@ -35,7 +33,5 @@ QBearerEnginePlugin::QBearerEnginePlugin(QObject *parent)
 QBearerEnginePlugin::~QBearerEnginePlugin()
 {
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -35,6 +35,7 @@ class Q_NETWORK_EXPORT QTcpSocket : public QAbstractSocket
 
  public:
    explicit QTcpSocket(QObject *parent = nullptr);
+
    QTcpSocket(const QTcpSocket &) = delete;
    QTcpSocket &operator=(const QTcpSocket &) = delete;
 
@@ -48,4 +49,4 @@ class Q_NETWORK_EXPORT QTcpSocket : public QAbstractSocket
    Q_DECLARE_PRIVATE(QTcpSocket)
 };
 
-#endif // QTCPSOCKET_H
+#endif

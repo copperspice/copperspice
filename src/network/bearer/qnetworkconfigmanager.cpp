@@ -32,11 +32,7 @@
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-QT_BEGIN_NAMESPACE
-
 static QAtomicPointer<QNetworkConfigurationManagerPrivate> connManager_ptr;
-
-
 static QAtomicInt appShutdown;
 
 static void connManager_prepare()
@@ -290,16 +286,6 @@ QNetworkConfiguration QNetworkConfigurationManager::configurationFromIdentifier(
    return QNetworkConfiguration();
 }
 
-/*!
-    Returns true if the system is considered to be connected to another device via an active
-    network interface; otherwise returns false.
-
-    This is equivalent to the following code snippet:
-
-    \snippet doc/src/snippets/code/src_network_bearer_qnetworkconfigmanager.cpp 0
-
-    \sa onlineStateChanged()
-*/
 bool QNetworkConfigurationManager::isOnline() const
 {
    QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
@@ -311,9 +297,6 @@ bool QNetworkConfigurationManager::isOnline() const
    return false;
 }
 
-/*!
-    Returns the capabilities supported by the current platform.
-*/
 QNetworkConfigurationManager::Capabilities QNetworkConfigurationManager::capabilities() const
 {
    QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
@@ -325,20 +308,6 @@ QNetworkConfigurationManager::Capabilities QNetworkConfigurationManager::capabil
    return QNetworkConfigurationManager::Capabilities(0);
 }
 
-/*!
-    Initiates an update of all configurations. This may be used to initiate WLAN scans or other
-    time consuming updates which may be required to obtain the correct state for configurations.
-
-    This call is asynchronous. On completion of this update the updateCompleted() signal is
-    emitted. If new configurations are discovered or old ones were removed or changed the update
-    process may trigger the emission of one or multiple configurationAdded(),
-    configurationRemoved() and configurationChanged() signals.
-
-    If a configuration state changes as a result of this update all existing QNetworkConfiguration
-    instances are updated automatically.
-
-    \sa allConfigurations()
-*/
 void QNetworkConfigurationManager::updateConfigurations()
 {
    QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
@@ -347,7 +316,5 @@ void QNetworkConfigurationManager::updateConfigurations()
       priv->performAsyncConfigurationUpdate();
    }
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_BEARERMANAGEMENT

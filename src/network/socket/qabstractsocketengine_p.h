@@ -28,8 +28,6 @@
 #include <qabstractsocket.h>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 class QAuthenticator;
 class QAbstractSocketEnginePrivate;
 
@@ -112,6 +110,7 @@ class QAbstractSocketEngine : public QObject
    using PacketHeaderOptions = QFlags<PacketHeaderOption>;
 
    QAbstractSocketEngine(QObject *parent = nullptr);
+
    QAbstractSocketEngine(const QAbstractSocketEngine &) = delete;
    QAbstractSocketEngine &operator=(const QAbstractSocketEngine &) = delete;
 
@@ -181,6 +180,8 @@ class QAbstractSocketEngine : public QObject
    QHostAddress peerAddress() const;
    quint16 peerPort() const;
 
+   void setReceiver(QAbstractSocketEngineReceiver *receiver);
+
    virtual bool isReadNotificationEnabled() const = 0;
    virtual void setReadNotificationEnabled(bool enable) = 0;
    virtual bool isWriteNotificationEnabled() const = 0;
@@ -207,8 +208,6 @@ class QAbstractSocketEngine : public QObject
    NET_CS_SLOT_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator))
    NET_CS_SLOT_2(proxyAuthenticationRequired)
 #endif
-
-   void setReceiver(QAbstractSocketEngineReceiver *receiver);
 
  protected:
    QAbstractSocketEngine(QAbstractSocketEnginePrivate &dd, QObject *parent = nullptr);
@@ -253,7 +252,6 @@ class QAbstractSocketEnginePrivate
    QAbstractSocketEngine *q_ptr;
 };
 
-
 class QSocketEngineHandler
 {
  protected:
@@ -270,4 +268,4 @@ class QSocketEngineHandler
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractSocketEngine::PacketHeaderOptions)
 
-#endif // QABSTRACTSOCKETENGINE_P_H
+#endif

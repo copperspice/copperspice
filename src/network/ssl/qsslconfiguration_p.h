@@ -31,8 +31,6 @@
 #include <qsslkey.h>
 #include <qsslellipticcurve.h>
 
-QT_BEGIN_NAMESPACE
-
 class QSslConfigurationPrivate : public QSharedData
 {
 public:
@@ -91,7 +89,5 @@ inline QSslConfiguration::QSslConfiguration(QSslConfigurationPrivate *dd)
    : d(dd)
 {
 }
-
-QT_END_NAMESPACE
 
 #endif

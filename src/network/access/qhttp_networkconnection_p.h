@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QHTTPNETWORKCONNECTION_P_H
-#define QHTTPNETWORKCONNECTION_P_H
+#ifndef QHTTP_NETWORKCONNECTION_P_H
+#define QHTTP_NETWORKCONNECTION_P_H
 
 #include <qnetwork_request.h>
 #include <qnetwork_reply.h>
@@ -31,7 +31,6 @@
 #include <qauthenticator.h>
 #include <qnetworkproxy.h>
 #include <qbuffer.h>
-
 #include <qscopedpointer.h>
 #include <qtimer.h>
 
@@ -43,14 +42,16 @@
 #ifdef QT_SSL
 
 #ifdef QT_OPENSSL
-#    include <qsslcontext_openssl_p.h>
+#   include <qsslcontext_openssl_p.h>
 #endif
 
-#    include <qsslsocket_p.h>
-#    include <qsslsocket.h>
-#    include <qsslerror.h>
+#   include <qsslsocket_p.h>
+#   include <qsslsocket.h>
+#   include <qsslerror.h>
+
 #else
 #   include <qtcpsocket.h>
+
 #endif
 
 class QHttpNetworkRequest;
@@ -67,7 +68,6 @@ class QHttpNetworkConnection : public QObject
    NET_CS_OBJECT(QHttpNetworkConnection)
 
  public:
-
     enum ConnectionType {
         ConnectionTypeHTTP,
         ConnectionTypeSPDY
@@ -98,10 +98,10 @@ class QHttpNetworkConnection : public QObject
 
    ~QHttpNetworkConnection();
 
-   //The hostname to which this is connected to.
+   // hostname to which this is connected to
    QString hostName() const;
 
-   //The HTTP port in use.
+   // HTTP port in use
    quint16 port() const;
 
    //add a new HTTP request through this connection
@@ -118,8 +118,8 @@ class QHttpNetworkConnection : public QObject
    bool isSsl() const;
    QHttpNetworkConnectionChannel *channels() const;
 
-    ConnectionType connectionType();
-    void setConnectionType(ConnectionType type);
+   ConnectionType connectionType();
+   void setConnectionType(ConnectionType type);
 
 #ifdef QT_SSL
    void setSslConfiguration(const QSslConfiguration &config);
@@ -164,17 +164,18 @@ class QHttpNetworkConnectionPrivate
    static const int defaultRePipelineLength;
 
    enum ConnectionState {
-      RunningState = 0,
-      PausedState = 1,
+        RunningState = 0,
+        PausedState = 1,
    };
 
-    enum NetworkLayerPreferenceState {
+   enum NetworkLayerPreferenceState {
         Unknown,
         HostLookupPending,
         IPv4,
         IPv6,
         IPv4or6
-    };
+   };
+
    QHttpNetworkConnectionPrivate(const QString &hostName, quint16 port, bool encrypt,
                   QHttpNetworkConnection::ConnectionType type);
 
@@ -189,7 +190,7 @@ class QHttpNetworkConnectionPrivate
    ConnectionState state;
    NetworkLayerPreferenceState networkLayerState;
 
-   enum { ChunkSize = 4096 };
+   static constexpr int ChunkSize = 4096;
 
    int indexOf(QAbstractSocket *socket) const;
 
@@ -235,7 +236,6 @@ class QHttpNetworkConnectionPrivate
    qint64 uncompressedBytesAvailable(const QHttpNetworkReply &reply) const;
    qint64 uncompressedBytesAvailableNextBlock(const QHttpNetworkReply &reply) const;
 
-
    void emitReplyError(QAbstractSocket *socket, QHttpNetworkReply *reply, QNetworkReply::NetworkError errorCode);
    bool handleAuthenticateChallenge(QAbstractSocket *socket, QHttpNetworkReply *reply, bool isProxy, bool &resend);
    QUrl parseRedirectResponse(QAbstractSocket *socket, QHttpNetworkReply *reply);
@@ -246,15 +246,17 @@ class QHttpNetworkConnectionPrivate
                   QAuthenticator *auth);
 #endif
 
-   //The request queues
+   // request queues
    QList<HttpMessagePair> highPriorityQueue;
    QList<HttpMessagePair> lowPriorityQueue;
 
    int preConnectRequests;
    QHttpNetworkConnection::ConnectionType connectionType;
+
 #ifdef QT_SSL
     QSharedPointer<QSslContext> sslContext;
 #endif
+
 #ifndef QT_NO_BEARERMANAGEMENT
    QSharedPointer<QNetworkSession> networkSession;
 #endif
@@ -263,8 +265,6 @@ class QHttpNetworkConnectionPrivate
 
  protected:
    QHttpNetworkConnection *q_ptr;
-
 };
-
 
 #endif

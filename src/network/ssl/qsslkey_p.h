@@ -35,14 +35,13 @@
 class QSslKeyPrivate
 {
  public:
-
    enum Cipher {
         DesCbc,
         DesEde3Cbc,
         Rc2Cbc
     };
 
-   inline QSslKeyPrivate()
+   QSslKeyPrivate()
       : algorithm(QSsl::Opaque), opaque(0)
    {
       clear(false);
@@ -50,7 +49,8 @@ class QSslKeyPrivate
 
    QSslKeyPrivate(const QSslKeyPrivate &) = delete;
    QSslKeyPrivate &operator=(const QSslKeyPrivate &) = delete;
-   inline ~QSslKeyPrivate() {
+
+   ~QSslKeyPrivate() {
       clear();
    }
 
@@ -96,9 +96,6 @@ class QSslKeyPrivate
 #endif
 
     QAtomicInt ref;
-
- private:
 };
 
-
-#endif // QSSLKEY_P_H
+#endif

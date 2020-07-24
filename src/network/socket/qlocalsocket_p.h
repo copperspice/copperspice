@@ -47,8 +47,6 @@
 
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #if ! defined(Q_OS_WIN) || defined(QT_LOCALSOCKET_TCP)
 class QLocalUnixSocket : public QTcpSocket
 {
@@ -77,7 +75,7 @@ class QLocalUnixSocket : public QTcpSocket
       return QTcpSocket::writeData(data, maxSize);
    }
 };
-#endif //#if !defined(Q_OS_WIN) || defined(QT_LOCALSOCKET_TCP)
+#endif
 
 class QLocalSocketPrivate : public QIODevicePrivate
 {

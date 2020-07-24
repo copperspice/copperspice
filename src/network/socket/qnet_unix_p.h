@@ -32,8 +32,6 @@
 #include <arpa/inet.h>
 #include <resolv.h>
 
-QT_BEGIN_NAMESPACE
-
 // Almost always the same. If not, specify in qplatformdefs.h.
 #if !defined(QT_SOCKOPTLEN_T)
 # define QT_SOCKOPTLEN_T QT_SOCKLEN_T
@@ -163,7 +161,5 @@ static inline int qt_safe_recvmsg(int sockfd, struct msghdr *msg, int flags)
     EINTR_LOOP(ret, ::recvmsg(sockfd, msg, flags));
     return ret;
 }
-
-
 
 #endif // QNET_UNIX_P_H

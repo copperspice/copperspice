@@ -27,15 +27,13 @@
 #include <qobject.h>
 #include <qabstractsocket.h>
 #include <qhostaddress.h>
-#include <QScopedPointer>
-
-
+#include <qscopedpointer.h>
 
 class QTcpServerPrivate;
 class QTcpSocket;
 
 #ifndef QT_NO_NETWORKPROXY
-class QNetworkProxy;
+   class QNetworkProxy;
 #endif
 
 class Q_NETWORK_EXPORT QTcpServer : public QObject
@@ -44,6 +42,7 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
 
  public:
    explicit QTcpServer(QObject *parent = nullptr);
+
    QTcpServer(const QTcpServer &) = delete;
    QTcpServer &operator=(const QTcpServer &) = delete;
 
@@ -96,6 +95,4 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
    Q_DECLARE_PRIVATE(QTcpServer)
 };
 
-
-
-#endif // QTCPSERVER_H
+#endif

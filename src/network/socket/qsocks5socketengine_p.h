@@ -37,6 +37,7 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
 
  public:
    QSocks5SocketEngine(QObject *parent = nullptr);
+
    QSocks5SocketEngine(const QSocks5SocketEngine &) = delete;
    QSocks5SocketEngine &operator=(const QSocks5SocketEngine &) = delete;
 
@@ -142,6 +143,7 @@ class QSocks5Authenticator
  public:
    QSocks5Authenticator();
    virtual ~QSocks5Authenticator();
+
    virtual char methodId();
    virtual bool beginAuthenticate(QTcpSocket *socket, bool *completed);
    virtual bool continueAuthenticate(QTcpSocket *socket, bool *completed);
@@ -289,4 +291,5 @@ class QSocks5SocketEngineHandler : public QSocketEngineHandler
 };
 
 #endif // QT_NO_SOCKS5
-#endif // QSOCKS5SOCKETENGINE_H
+
+#endif

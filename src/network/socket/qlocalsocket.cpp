@@ -181,14 +181,6 @@ void QLocalSocket::_q_error(QAbstractSocket::SocketError un_named_arg1)
 
 #elif defined(Q_OS_WIN)
 
-/* GONE
-void QLocalSocket::_q_notified()
-{
-   Q_D(QLocalSocket);
-   d->_q_notified();
-}
-*/
-
 void QLocalSocket::_q_canWrite()
 {
    Q_D(QLocalSocket);
@@ -206,14 +198,6 @@ void QLocalSocket::_q_winError(ulong data1, const QString &data2)
    Q_D(QLocalSocket);
    d->_q_winError(data1, data2);
 }
-
-/* GONE
-void QLocalSocket::_q_emitReadyRead()
-{
-   Q_D(QLocalSocket);
-   d->_q_emitReadyRead();
-}
-*/
 
 #else
 

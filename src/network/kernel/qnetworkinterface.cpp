@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_NETWORKINTERFACE
 
-QT_BEGIN_NAMESPACE
-
 static QList<QNetworkInterfacePrivate *> postProcess(QList<QNetworkInterfacePrivate *> list)
 {
    // Some platforms report a netmask but don't report a broadcast address
@@ -590,6 +588,7 @@ static inline QDebug operator<<(QDebug debug, const QNetworkAddressEntry &entry)
    }
 
    debug << ')';
+
    return debug;
 }
 
@@ -608,7 +607,5 @@ QDebug operator<<(QDebug debug, const QNetworkInterface &networkInterface)
 
    return debug;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_NETWORKINTERFACE

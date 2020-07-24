@@ -38,8 +38,6 @@
 #  include <gnu/lib-names.h>
 #endif
 
-QT_BEGIN_NAMESPACE
-
 typedef int (*dn_expand_proto)(const unsigned char *, const unsigned char *, const unsigned char *, char *, int);
 static dn_expand_proto local_dn_expand = 0;
 typedef void (*res_nclose_proto)(res_state);

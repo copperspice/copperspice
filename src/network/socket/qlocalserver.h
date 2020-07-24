@@ -35,7 +35,6 @@ class QLocalServerPrivate;
 class Q_NETWORK_EXPORT QLocalServer : public QObject
 {
    NET_CS_OBJECT(QLocalServer)
-   Q_DECLARE_PRIVATE(QLocalServer)
 
    NET_CS_PROPERTY_READ(socketOptions,  socketOptions)
    NET_CS_PROPERTY_WRITE(socketOptions, setSocketOptions)
@@ -51,6 +50,7 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    using SocketOptions = QFlags<SocketOption>;
 
    explicit QLocalServer(QObject *parent = nullptr);
+
    QLocalServer(const QLocalServer &) = delete;
    QLocalServer &operator=(const QLocalServer &) = delete;
 
@@ -82,13 +82,13 @@ class Q_NETWORK_EXPORT QLocalServer : public QObject
    QScopedPointer<QLocalServerPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QLocalServer)
 
    NET_CS_SLOT_1(Private, void _q_onNewConnection())
    NET_CS_SLOT_2(_q_onNewConnection)
 };
 
 #endif // QT_NO_LOCALSERVER
-
 
 #endif // QLOCALSERVER_H
 

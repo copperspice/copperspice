@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#ifndef QHTTPMULTIPART_H
-#define QHTTPMULTIPART_H
+#ifndef QHTTP_MULTIPART_H
+#define QHTTP_MULTIPART_H
 
-#include <qshareddatapointer.h>
 #include <qbytearray.h>
+#include <qshareddatapointer.h>
 #include <qnetwork_request.h>
 #include <qscopedpointer.h>
 
@@ -73,7 +73,6 @@ class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
    NET_CS_OBJECT(QHttpMultiPart)
 
  public:
-
    enum ContentType {
       MixedType,
       RelatedType,
@@ -83,6 +82,7 @@ class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
 
    explicit QHttpMultiPart(QObject *parent = nullptr);
    explicit QHttpMultiPart(ContentType contentType, QObject *parent = nullptr);
+
    QHttpMultiPart(const QHttpMultiPart &) = delete;
    QHttpMultiPart &operator=(const QHttpMultiPart &) = delete;
 
@@ -95,16 +95,14 @@ class Q_NETWORK_EXPORT QHttpMultiPart : public QObject
    QByteArray boundary() const;
    void setBoundary(const QByteArray &boundary);
 
+ protected:
+   QScopedPointer<QHttpMultiPartPrivate> d_ptr;
+
  private:
    Q_DECLARE_PRIVATE(QHttpMultiPart)
 
    friend class QNetworkAccessManager;
    friend class QNetworkAccessManagerPrivate;
-
- protected:
-   QScopedPointer<QHttpMultiPartPrivate> d_ptr;
-
 };
 
-
-#endif // QHTTPMULTIPART_H
+#endif
