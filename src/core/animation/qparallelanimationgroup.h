@@ -55,8 +55,8 @@ class Q_CORE_EXPORT QParallelAnimationGroup : public QAnimationGroup
  private:
    Q_DECLARE_PRIVATE(QParallelAnimationGroup)
 
-   CORE_CS_SLOT_1(Private, void _q_uncontrolledAnimationFinished())
-   CORE_CS_SLOT_2(_q_uncontrolledAnimationFinished)
+   // slot
+   void _q_uncontrolledAnimationFinished() override;
 };
 
 #endif // QT_NO_ANIMATION
