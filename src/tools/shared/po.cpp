@@ -23,12 +23,12 @@
 
 #include "translator.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QIODevice>
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QIODevice>
+#include <QHash>
+#include <QString>
+#include <QTextCodec>
+#include <QTextStream>
 
 #include <ctype.h>
 

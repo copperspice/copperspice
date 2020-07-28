@@ -25,7 +25,7 @@
 #define CPPEXTRACTIMAGES_H
 
 #include "treewalker.h"
-#include <QtCore/QDir>
+#include <QDir>
 
 QT_BEGIN_NAMESPACE
 

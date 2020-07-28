@@ -26,11 +26,11 @@
 
 #include "databaseinfo.h"
 #include "customwidgetsinfo.h"
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QHash>
-#include <QtCore/QStack>
-#include <QtCore/QXmlStreamReader>
+#include <QString>
+#include <QStringList>
+#include <QHash>
+#include <QStack>
+#include <QXmlStreamReader>
 
 QT_BEGIN_NAMESPACE
 

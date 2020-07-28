@@ -23,16 +23,16 @@
 
 #include "translator.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QMap>
-#include <QtCore/QStack>
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QMap>
+#include <QStack>
+#include <QString>
+#include <QTextCodec>
+#include <QTextStream>
 
-#include <QtXml/QXmlAttributes>
-#include <QtXml/QXmlDefaultHandler>
-#include <QtXml/QXmlParseException>
+#include <QXmlAttributes>
+#include <QXmlDefaultHandler>
+#include <QXmlParseException>
 
 
 // The string value is historical and reflects the main purpose: Keeping

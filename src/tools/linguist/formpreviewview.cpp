@@ -27,22 +27,22 @@
 #include <quiloader.h>
 #include <abstractformbuilder.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QTime>
+#include <QDebug>
+#include <QTime>
 
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QFontComboBox>
-#include <QtGui/QFrame>
-#include <QtGui/QGridLayout>
-#include <QtGui/QListWidget>
-#include <QtGui/QMdiArea>
-#include <QtGui/QMdiSubWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QTableWidget>
-#include <QtGui/QTabWidget>
-#include <QtGui/QToolBox>
-#include <QtGui/QTreeWidget>
+#include <QAction>
+#include <QApplication>
+#include <QFontComboBox>
+#include <QFrame>
+#include <QGridLayout>
+#include <QListWidget>
+#include <QMdiArea>
+#include <QMdiSubWindow>
+#include <QMenu>
+#include <QTableWidget>
+#include <QTabWidget>
+#include <QToolBox>
+#include <QTreeWidget>
 
 QT_BEGIN_NAMESPACE
 

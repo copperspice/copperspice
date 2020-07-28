@@ -25,9 +25,9 @@
 #define UTILS_H
 
 #include "ui4.h"
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtCore/QHash>
+#include <QString>
+#include <QList>
+#include <QHash>
 
 QT_BEGIN_NAMESPACE
 

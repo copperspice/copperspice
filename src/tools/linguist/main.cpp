@@ -24,21 +24,21 @@
 #include "mainwindow.h"
 #include "globals.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QLibraryInfo>
-#include <QtCore/QLocale>
-#include <QtCore/QSettings>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTranslator>
+#include <QFile>
+#include <QLibraryInfo>
+#include <QLocale>
+#include <QSettings>
+#include <QTextCodec>
+#include <QTranslator>
 
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QPixmap>
-#include <QtGui/QSplashScreen>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QPixmap>
+#include <QSplashScreen>
 
 #ifdef Q_OS_DARWIN
-#include <QtCore/QUrl>
-#include <QtGui/QFileOpenEvent>
+#include <QUrl>
+#include <QFileOpenEvent>
 #endif
 
 #ifdef Q_OS_DARWIN

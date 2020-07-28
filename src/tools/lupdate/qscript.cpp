@@ -26,12 +26,12 @@
 
 #include <translator.h>
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/qdebug.h>
-#include <QtCore/qnumeric.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qtextcodec.h>
-#include <QtCore/qvariant.h>
+#include <QCoreApplication>
+#include <qdebug.h>
+#include <qnumeric.h>
+#include <qstring.h>
+#include <qtextcodec.h>
+#include <qvariant.h>
 
 #include <iostream>
 

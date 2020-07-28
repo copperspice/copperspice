@@ -23,14 +23,14 @@
 
 #include "translator.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QMap>
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QMap>
+#include <QString>
+#include <QTextCodec>
 
 // magic number for the file
 static const int MagicLength = 16;

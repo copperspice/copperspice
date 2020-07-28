@@ -23,14 +23,14 @@
 
 #include "sourcecodeview.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextCodec>
+#include <QTextStream>
 
-#include <QtGui/QTextCharFormat>
-#include <QtGui/QTextBlock>
-#include <QtGui/QTextCursor>
+#include <QTextCharFormat>
+#include <QTextBlock>
+#include <QTextCursor>
 
 QT_BEGIN_NAMESPACE
 

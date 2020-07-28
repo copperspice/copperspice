@@ -26,12 +26,12 @@
 #include "simtexth.h"
 #include "translator.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
-#include <QtCore/QTextCodec>
-#include <QtCore/QVector>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QMap>
+#include <QStringList>
+#include <QTextCodec>
+#include <QVector>
 
 class LU
 {

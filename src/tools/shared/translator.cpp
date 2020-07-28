@@ -33,12 +33,12 @@
 #include <fcntl.h>    // for _O_BINARY
 #endif
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextCodec>
+#include <QTextStream>
 #include <qtranslator_p.h>
 
 Translator::Translator() :

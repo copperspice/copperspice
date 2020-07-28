@@ -23,7 +23,7 @@
 
 #include "messagehighlighter.h"
 
-#include <QtCore/QTextStream>
+#include <QTextStream>
 
 QT_BEGIN_NAMESPACE
 

@@ -27,8 +27,8 @@
 #include "ui_batchtranslation.h"
 #include "phrase.h"
 
-#include <QtGui/QDialog>
-#include <QtGui/QStandardItemModel>
+#include <QDialog>
+#include <QStandardItemModel>
 
 QT_BEGIN_NAMESPACE
 

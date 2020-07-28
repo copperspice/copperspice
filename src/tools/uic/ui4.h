@@ -26,12 +26,12 @@
 #ifndef UI4_H
 #define UI4_H
 
-#include <QtCore/QList>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QXmlStreamWriter>
-#include <QtCore/qglobal.h>
+#include <QList>
+#include <QString>
+#include <QStringList>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
+#include <qglobal.h>
 
 #if defined(QT_UIC3)
 #define QUILOADER_QDOM_READ

@@ -26,11 +26,11 @@
 
 #include "messagemodel.h"
 
-#include <QtCore/QLocale>
-#include <QtCore/QTimer>
+#include <QLocale>
+#include <QTimer>
 
-#include <QtGui/QFrame>
-#include <QtGui/QScrollArea>
+#include <QFrame>
+#include <QScrollArea>
 
 QT_BEGIN_NAMESPACE
 

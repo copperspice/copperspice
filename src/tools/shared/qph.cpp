@@ -28,8 +28,8 @@
 #include <QTextCodec>
 #include <QTextStream>
 
-#include <QtXml/QXmlStreamReader>
-#include <QtXml/QXmlStreamAttribute>
+#include <QXmlStreamReader>
+#include <QXmlStreamAttribute>
 
 QT_BEGIN_NAMESPACE
 

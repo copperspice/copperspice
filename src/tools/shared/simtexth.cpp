@@ -24,9 +24,9 @@
 #include "simtexth.h"
 #include "translator.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
-#include <QtCore/QList>
+#include <QByteArray>
+#include <QString>
+#include <QList>
 
 
 QT_BEGIN_NAMESPACE

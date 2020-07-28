@@ -25,12 +25,12 @@
 #define CPPWRITEINITIALIZATION_H
 
 #include "treewalker.h"
-#include <QtCore/QPair>
-#include <QtCore/QHash>
-#include <QtCore/QSet>
-#include <QtCore/QMap>
-#include <QtCore/QStack>
-#include <QtCore/QTextStream>
+#include <QPair>
+#include <QHash>
+#include <QSet>
+#include <QMap>
+#include <QStack>
+#include <QTextStream>
 
 class Driver;
 class Uic;

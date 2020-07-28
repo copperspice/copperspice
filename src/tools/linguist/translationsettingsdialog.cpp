@@ -25,7 +25,7 @@
 #include "messagemodel.h"
 #include "phrase.h"
 
-#include <QtCore/QLocale>
+#include <QLocale>
 
 QT_BEGIN_NAMESPACE
 

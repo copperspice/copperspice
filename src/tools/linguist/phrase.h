@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include <QtCore/QLocale>
+#include <QLocale>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,13 +23,13 @@
 
 #include "messagemodel.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QTextCodec>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QTextDocument>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QTextCodec>
+#include <QMessageBox>
+#include <QPainter>
+#include <QPixmap>
+#include <QTextDocument>
 #include <qtranslator_p.h>
 
 #include <limits.h>

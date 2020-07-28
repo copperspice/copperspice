@@ -25,14 +25,14 @@
 
 #include <translator.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <QDebug>
+#include <QFile>
 #include <qregularexpression.h>
-#include <QtCore/QStack>
-#include <QtCore/QStack>
+#include <QStack>
+#include <QStack>
 #include <qstring.h>
-#include <QtCore/QTextCodec>
-#include <QtCore/QCoreApplication>
+#include <QTextCodec>
+#include <QCoreApplication>
 
 #include <iostream>
 

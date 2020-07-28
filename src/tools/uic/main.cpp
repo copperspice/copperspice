@@ -27,10 +27,10 @@
 #include "option.h"
 #include "driver.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QDir>
-#include <QtCore/QTextStream>
-#include <QtCore/QTextCodec>
+#include <QFile>
+#include <QDir>
+#include <QTextStream>
+#include <QTextCodec>
 
 static const char *error = nullptr;
 

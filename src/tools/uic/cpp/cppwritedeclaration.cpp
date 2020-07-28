@@ -32,8 +32,8 @@
 #include "databaseinfo.h"
 #include "customwidgetsinfo.h"
 
-#include <QtCore/QTextStream>
-#include <QtCore/QDebug>
+#include <QTextStream>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 

@@ -26,10 +26,10 @@
 
 #include <quiloader_p.h>
 
-#include <QtCore/QHash>
-#include <QtCore/QList>
+#include <QHash>
+#include <QList>
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 

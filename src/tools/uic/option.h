@@ -24,8 +24,8 @@
 #ifndef OPTION_H
 #define OPTION_H
 
-#include <QtCore/QString>
-#include <QtCore/QDir>
+#include <QString>
+#include <QDir>
 
 QT_BEGIN_NAMESPACE
 

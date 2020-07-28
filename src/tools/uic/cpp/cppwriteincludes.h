@@ -26,10 +26,10 @@
 
 #include "treewalker.h"
 
-#include <QtCore/QHash>
-#include <QtCore/QMap>
-#include <QtCore/QSet>
-#include <QtCore/QString>
+#include <QHash>
+#include <QMap>
+#include <QSet>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
 

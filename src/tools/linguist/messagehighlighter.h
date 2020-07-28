@@ -24,7 +24,7 @@
 #ifndef MESSAGEHIGHLIGHTER_H
 #define MESSAGEHIGHLIGHTER_H
 
-#include <QtGui/QSyntaxHighlighter>
+#include <QSyntaxHighlighter>
 
 QT_BEGIN_NAMESPACE
 

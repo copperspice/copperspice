@@ -26,13 +26,13 @@
 
 #include "translator.h"
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QList>
-#include <QtCore/QHash>
-#include <QtCore/QLocale>
-#include <QtGui/QColor>
-#include <QtGui/QBitmap>
-#include <QtXml/QXmlDefaultHandler>
+#include <QAbstractItemModel>
+#include <QList>
+#include <QHash>
+#include <QLocale>
+#include <QColor>
+#include <QBitmap>
+#include <QXmlDefaultHandler>
 
 
 QT_BEGIN_NAMESPACE

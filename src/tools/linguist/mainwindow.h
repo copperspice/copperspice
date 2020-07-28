@@ -29,10 +29,10 @@
 #include "recentfiles.h"
 #include "messagemodel.h"
 
-#include <QtCore/QHash>
-#include <QtCore/QLocale>
+#include <QHash>
+#include <QLocale>
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 

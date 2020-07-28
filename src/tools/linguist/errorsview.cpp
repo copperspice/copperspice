@@ -25,15 +25,15 @@
 
 #include "messagemodel.h"
 
-#include <QtCore/QList>
-#include <QtCore/QString>
-#include <QtCore/QUrl>
+#include <QList>
+#include <QString>
+#include <QUrl>
 
-#include <QtGui/QListView>
-#include <QtGui/QStandardItem>
-#include <QtGui/QStandardItemModel>
-#include <QtGui/QTextEdit>
-#include <QtGui/QVBoxLayout>
+#include <QListView>
+#include <QStandardItem>
+#include <QStandardItemModel>
+#include <QTextEdit>
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
