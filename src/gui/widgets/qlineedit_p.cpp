@@ -511,7 +511,7 @@ QWidget *QLineEditPrivate::addAction(QAction *newAction, QAction *before, QLineE
       return 0;
    }
    if (! hasSideWidgets()) {
-      QObject::connect(q, &QLineEdit::textChanged, q, &QLineEdit::textChanged);
+      QObject::connect(q, &QLineEdit::textChanged, q, &QLineEdit::_q_textChanged);
       lastTextSize = q->text().size();
    }
 
