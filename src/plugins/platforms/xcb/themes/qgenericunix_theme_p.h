@@ -21,13 +21,16 @@
 *
 ***********************************************************************/
 
-#ifndef QGENERICUNIXTHEMES_P_H
-#define QGENERICUNIXTHEMES_P_H
+#ifndef QGENERICUNIX_THEME_P_H
+#define QGENERICUNIX_THEME_P_H
 
 #include <qplatform_theme.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfont.h>
+
+class QGenericUnixThemePrivate;
+class QGnomeThemePrivate;
 
 class ResourceHelper
 {
@@ -42,8 +45,6 @@ class ResourceHelper
    QPalette *palettes[QPlatformTheme::NPalettes];
    QFont *fonts[QPlatformTheme::NFonts];
 };
-
-class QGenericUnixThemePrivate;
 
 class QGenericUnixTheme : public QPlatformTheme
 {
@@ -60,7 +61,7 @@ class QGenericUnixTheme : public QPlatformTheme
 
    static QStringList xdgIconThemePaths();
 
-#if ! defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
+#if ! defined(QT_NO_DBUS) && ! defined(QT_NO_SYSTEMTRAYICON)
    QPlatformSystemTrayIcon *createPlatformSystemTrayIcon() const override;
 #endif
 
@@ -84,15 +85,13 @@ class QKdeTheme : public QPlatformTheme
 
    const QFont *font(Font type) const override;
 
-#if !defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
+#if ! defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
    QPlatformSystemTrayIcon *createPlatformSystemTrayIcon() const override;
 #endif
 
    static QString m_name;
 };
 #endif // QT_NO_SETTINGS
-
-class QGnomeThemePrivate;
 
 class QGnomeTheme : public QPlatformTheme
 {

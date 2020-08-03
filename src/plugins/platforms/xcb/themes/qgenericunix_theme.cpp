@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qgenericunixthemes_p.h"
+#include <qgenericunix_theme_p.h>
 
 #include <QPalette>
 #include <QFont>
@@ -40,12 +40,12 @@
 #include <qplatform_dialoghelper.h>
 
 #include <qapplication_p.h>
-#include <qgenericunixservices_p.h>
+#include <qgenericunix_services_p.h>
 #include <qplatform_theme_p.h>
 
 #if ! defined(QT_NO_DBUS) && ! defined(QT_NO_SYSTEMTRAYICON)
-#include "qdbustrayicon_p.h"
-#include "qdbusplatformmenu_p.h"
+#include <qdbustrayicon_p.h>
+#include <qdbusplatformmenu_p.h>
 #endif
 
 #include <algorithm>
@@ -72,7 +72,7 @@ QString QGenericUnixTheme::m_name = "generic";
 static const QString defaultSystemFontNameC = "Sans Serif";
 constexpr int defaultSystemFontSize = 9;
 
-#if !defined(QT_NO_DBUS) && ! defined(QT_NO_SYSTEMTRAYICON)
+#if ! defined(QT_NO_DBUS) && ! defined(QT_NO_SYSTEMTRAYICON)
 static bool isDBusTrayAvailable()
 {
    static bool dbusTrayAvailable = false;
@@ -806,5 +806,3 @@ QStringList QGenericUnixTheme::themeNames()
 
    return result;
 }
-
-
