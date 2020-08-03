@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QGENERICUNIXDESKTOPSERVICES_H
-#define QGENERICUNIXDESKTOPSERVICES_H
+#ifndef QGENERICUNIX_SERVICES_H
+#define QGENERICUNIX_SERVICES_H
 
 #include <qplatform_services.h>
 #include <qstring.h>
@@ -30,7 +30,9 @@
 class QGenericUnixServices : public QPlatformServices
 {
  public:
-   QGenericUnixServices() {}
+   QGenericUnixServices()
+   {
+   }
 
    QByteArray desktopEnvironment() const override;
 
@@ -42,4 +44,4 @@ class QGenericUnixServices : public QPlatformServices
    QString m_documentLauncher;
 };
 
-#endif // QGENERICUNIXDESKTOPSERVICES_H
+#endif

@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qgenericunixservices_p.h>
+#include <qgenericunix_services_p.h>
 
-#include <QStandardPaths>
-#include <QProcess>
-#include <QUrl>
-#include <QDebug>
+#include <qstandardpaths.h>
+#include <qprocess.h>
+#include <qurl.h>
+#include <qdebug.h>
 
 #include <stdlib.h>
 
