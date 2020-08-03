@@ -21,22 +21,38 @@
 *
 ***********************************************************************/
 
-#include "qgenericunixeventdispatcher_p.h"
-#include "qunixeventdispatcher_p.h"
+#ifndef QXCB_EVENTDISPATCHER_GLIB_P_H
+#define QXCB_EVENTDISPATCHER_GLIB_P_H
 
-#if ! defined(QT_NO_GLIB) && ! defined(Q_OS_WIN)
-#include "qxcbeventdispatcher_glib_p.h"
-#endif
+#include <qeventdispatcher_glib_p.h>
 
-class QAbstractEventDispatcher *createUnixEventDispatcher()
+using GMainContext = struct _GMainContext;
+
+class QXcbEventDispatcherGlibPrivate;
+struct GUserEventSource;
+
+class QXcbEventDispatcherGlib : public QEventDispatcherGlib
 {
-#if ! defined(QT_NO_GLIB) && ! defined(Q_OS_WIN)
+   CS_OBJECT(QXcbEventDispatcherGlib)
 
-   if (qgetenv("QT_NO_GLIB").isEmpty() && QEventDispatcherGlib::versionSupported()) {
-      return new QXcbEventDispatcherGlib();
-   } else
+ public:
+   explicit QXcbEventDispatcherGlib(QObject *parent = nullptr);
+   ~QXcbEventDispatcherGlib();
+
+   bool processEvents(QEventLoop::ProcessEventsFlags flags) override;
+   QEventLoop::ProcessEventsFlags m_flags;
+
+ private:
+   Q_DECLARE_PRIVATE(QXcbEventDispatcherGlib)
+};
+
+class QXcbEventDispatcherGlibPrivate : public QEventDispatcherGlibPrivate
+{
+   Q_DECLARE_PUBLIC(QXcbEventDispatcherGlib)
+
+ public:
+   QXcbEventDispatcherGlibPrivate(GMainContext *context = nullptr);
+   GUserEventSource *userEventSource;
+};
 
 #endif
-      return new QUnixEventDispatcher();
-}
-

@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QUNIXEVENTDISPATCHER_P_H
-#define QUNIXEVENTDISPATCHER_P_H
+#ifndef QUNIX_EVENTDISPATCHER_P_H
+#define QUNIX_EVENTDISPATCHER_P_H
 
 #include <qglobal.h>
 #include <qeventdispatcher_unix_p.h>
@@ -32,7 +32,6 @@ class QUnixEventDispatcherPrivate;
 class QUnixEventDispatcher : public QEventDispatcherUNIX
 {
    CS_OBJECT(QUnixEventDispatcher)
-   Q_DECLARE_PRIVATE(QUnixEventDispatcher)
 
  public:
    explicit QUnixEventDispatcher(QObject *parent = nullptr);
@@ -42,6 +41,9 @@ class QUnixEventDispatcher : public QEventDispatcherUNIX
    bool hasPendingEvents() override;
 
    void flush() override;
+
+ private:
+   Q_DECLARE_PRIVATE(QUnixEventDispatcher)
 };
 
 #endif

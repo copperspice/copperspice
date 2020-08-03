@@ -21,13 +21,23 @@
 *
 ***********************************************************************/
 
-#ifndef QGENERICUNIXEVENTDISPATCHER_P_H
-#define QGENERICUNIXEVENTDISPATCHER_P_H
+#include <qgenericunix_eventdispatcher_p.h>
+#include <qunix_eventdispatcher_p.h>
 
-#include <qglobal.h>
+#if ! defined(QT_NO_GLIB) && ! defined(Q_OS_WIN)
+#include <qxcb_eventdispatcher_glib_p.h>
+#endif
 
-class QAbstractEventDispatcher;
-QAbstractEventDispatcher *createUnixEventDispatcher();
+class QAbstractEventDispatcher *createUnixEventDispatcher()
+{
+#if ! defined(QT_NO_GLIB) && ! defined(Q_OS_WIN)
 
+   if (qgetenv("QT_NO_GLIB").isEmpty() && QEventDispatcherGlib::versionSupported()) {
+      return new QXcbEventDispatcherGlib();
+   } else
 
-#endif // QGENERICUNIXEVENTDISPATCHER_P_H
+#endif
+
+      return new QUnixEventDispatcher();
+}
+

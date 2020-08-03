@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <qxcbeventdispatcher_glib_p.h>
+#include <qxcb_eventdispatcher_glib_p.h>
 
 #include <qapplication.h>
 #include <qplatformdefs.h>

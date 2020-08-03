@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <qunixeventdispatcher_p.h>
+#include <qunix_eventdispatcher_p.h>
 
 #include <qcoreapplication.h>
 #include <qapplication_p.h>
