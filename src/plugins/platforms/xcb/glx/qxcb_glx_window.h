@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBGLXWINDOW_H
-#define QXCBGLXWINDOW_H
+#ifndef QXCB_GLX_WINDOW_H
+#define QXCB_GLX_WINDOW_H
 
-#include "qxcbglxintegration.h"
-#include "qxcbwindow.h"
+#include <qxcb_glx_integration.h>
+#include <qxcb_window.h>
 
 class QXcbGlxWindow : public QXcbWindow
 {
@@ -38,4 +38,4 @@ class QXcbGlxWindow : public QXcbWindow
    void *createVisual() override;
 };
 
-#endif //QXCBGLXWINDOW_H
+#endif

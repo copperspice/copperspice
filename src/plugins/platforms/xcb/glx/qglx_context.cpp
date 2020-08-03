@@ -21,22 +21,21 @@
 *
 ***********************************************************************/
 
-#include <QDebug>
-#include <QLibrary>
+#include <qglx_context.h>
 
-#include "qxcbwindow.h"
-#include "qxcbscreen.h"
+#include <qdebug.h>
+#include <qlibrary.h>
+#include <qxcb_window.h>
+#include <qxcb_screen.h>
+#include <qopenglcontext.h>
+#include <qoffscreensurface.h>
+#include <qglxnativecontext.h>
+
+#include <qglx_convenience_p.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <GL/glx.h>
-
-#include <QOpenGLContext>
-#include <QOffscreenSurface>
-
-#include "qglxintegration.h"
-#include <qglxconvenience_p.h>
-#include <QGLXNativeContext>
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
 #include <dlfcn.h>
@@ -122,8 +121,7 @@ static void updateFormatFromContext(QSurfaceFormat &format)
          return;
       }
 
-      // Version 3.0 onwards - check if it includes deprecated functionality or is
-      // a debug context
+      // Version 3.0 onwards - check if it includes deprecated functionality or is a debug context
       GLint value = 0;
       glGetIntegerv(GL_CONTEXT_FLAGS, &value);
       if (!(value & GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT)) {
@@ -150,17 +148,11 @@ static void updateFormatFromContext(QSurfaceFormat &format)
 
 QGLXContext::QGLXContext(QXcbScreen *screen, const QSurfaceFormat &format, QPlatformOpenGLContext *share,
    const QVariant &nativeHandle)
-   : QPlatformOpenGLContext()
-   , m_display(DISPLAY_FROM_XCB(screen))
-   , m_config(0)
-   , m_context(0)
-   , m_shareContext(0)
-   , m_format(format)
-   , m_isPBufferCurrent(false)
-   , m_swapInterval(-1)
-   , m_ownsContext(nativeHandle.isNull())
+   : QPlatformOpenGLContext(), m_display(DISPLAY_FROM_XCB(screen)), m_config(0), m_context(0)
+   , m_shareContext(0), m_format(format), m_isPBufferCurrent(false), m_swapInterval(-1)
+   , m_ownsContext(! nativeHandle.isValid())
 {
-   if (nativeHandle.isNull()) {
+   if (! nativeHandle.isValid()) {
       init(screen, share);
    } else {
       init(screen, share, nativeHandle);
@@ -170,11 +162,13 @@ QGLXContext::QGLXContext(QXcbScreen *screen, const QSurfaceFormat &format, QPlat
 void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
 {
    if (m_format.renderableType() == QSurfaceFormat::DefaultRenderableType)
+
 #if defined(QT_OPENGL_ES_2)
       m_format.setRenderableType(QSurfaceFormat::OpenGLES);
 #else
       m_format.setRenderableType(QSurfaceFormat::OpenGL);
 #endif
+
    if (m_format.renderableType() != QSurfaceFormat::OpenGL && m_format.renderableType() != QSurfaceFormat::OpenGLES) {
       return;
    }
@@ -185,14 +179,16 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
 
    GLXFBConfig config = qglx_findConfig(DISPLAY_FROM_XCB(screen), screen->screenNumber(), m_format);
    m_config = config;
-   XVisualInfo *visualInfo = 0;
-   Window window = 0; // Temporary window used to query OpenGL context
+
+   XVisualInfo *visualInfo = nullptr;
+   Window window = 0;                   // Temporary window used to query OpenGL context
 
    if (config) {
-      const QByteArrayList glxExt = QByteArray(glXQueryExtensionsString(m_display, screen->screenNumber())).split(' ');
+      const QStringList glxExt = QString::fromUtf8(glXQueryExtensionsString(m_display, screen->screenNumber())).split(' ');
 
       // Resolve entry point for glXCreateContextAttribsARB
-      glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
+      glXCreateContextAttribsARBProc glXCreateContextAttribsARB = nullptr;
+
       if (glxExt.contains("GLX_ARB_create_context")) {
          glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc) glXGetProcAddress((const GLubyte *)"glXCreateContextAttribsARB");
       }
@@ -201,11 +197,13 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
 
       // Use glXCreateContextAttribsARB if available
       // Also, GL ES context creation requires GLX_EXT_create_context_es2_profile
-      if (glXCreateContextAttribsARB != 0
-         && (m_format.renderableType() != QSurfaceFormat::OpenGLES || (supportsProfiles &&
+      if (glXCreateContextAttribsARB != nullptr &&
+               (m_format.renderableType() != QSurfaceFormat::OpenGLES || (supportsProfiles &&
                glxExt.contains("GLX_EXT_create_context_es2_profile")))) {
-         // Try to create an OpenGL context for each known OpenGL version in descending
+
+         // try to create an OpenGL context for each known OpenGL version in descending
          // order from the requested version.
+
          const int requestedVersion = m_format.majorVersion() * 10 + qMin(m_format.minorVersion(), 9);
 
          QVector<int> glVersions;
@@ -214,23 +212,26 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
                glVersions << requestedVersion;
             }
 
-            // Don't bother with versions below 2.0
+            // do not bother with versions below 2.0
             glVersions << 45 << 44 << 43 << 42 << 41 << 40 << 33 << 32 << 31 << 30 << 21 << 20;
+
          } else if (m_format.renderableType() == QSurfaceFormat::OpenGLES) {
             if (requestedVersion > 31) {
                glVersions << requestedVersion;
             }
 
-            // Don't bother with versions below ES 2.0
+            // Do not bother with versions below ES 2.0
             glVersions << 31 << 30 << 20;
+
             // ES does not support any format option
             m_format.setOptions(QSurfaceFormat::FormatOptions());
          }
 
          Q_ASSERT(glVersions.count() > 0);
 
-         for (int i = 0; !m_context && i < glVersions.count(); i++) {
+         for (int i = 0; ! m_context && i < glVersions.count(); i++) {
             const int version = glVersions[i];
+
             if (version > requestedVersion) {
                continue;
             }
@@ -285,7 +286,7 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
       }
 
       // Could not create a context using glXCreateContextAttribsARB, falling back to glXCreateNewContext.
-      if (!m_context) {
+      if (! m_context) {
          // requesting an OpenGL ES context requires glXCreateContextAttribsARB, so bail out
          if (m_format.renderableType() == QSurfaceFormat::OpenGLES) {
             return;
@@ -308,6 +309,7 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
 
       // Create a temporary window so that we can make the new context current
       window = createDummyWindow(DISPLAY_FROM_XCB(screen), config, screen->screenNumber(), screen->root());
+
    } else {
       // requesting an OpenGL ES context requires glXCreateContextAttribsARB, so bail out
       if (m_format.renderableType() == QSurfaceFormat::OpenGLES) {
@@ -354,7 +356,8 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share, const 
    }
    QGLXNativeContext handle = nativeHandle.value<QGLXNativeContext>();
    GLXContext context = handle.context();
-   if (!context) {
+
+   if (! context) {
       qWarning("QGLXContext: No GLXContext given");
       return;
    }
@@ -368,10 +371,12 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share, const 
    // Legacy contexts created using glXCreateContext are created using a visual
    // and the FBConfig cannot be queried. The only way to adapt these contexts
    // is to figure out the visual id.
-   XVisualInfo *vinfo = 0;
+   XVisualInfo *vinfo = nullptr;
+
    // If the VisualID is provided use it.
    VisualID vid = handle.visualId();
-   if (!vid) {
+
+   if (! vid) {
       // In the absence of the VisualID figure it out from the window.
       Window wnd = handle.window();
       if (wnd) {
@@ -395,8 +400,10 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share, const 
    // For contexts created with an FBConfig using the modern functions providing the
    // visual or window is not mandatory. Just query the config from the context.
    GLXFBConfig config = 0;
-   if (!vinfo) {
+
+   if (! vinfo) {
       int configId = 0;
+
       if (glXQueryContext(dpy, context, GLX_FBCONFIG_ID, &configId) != Success) {
          qWarning("QGLXContext: Failed to query config from the provided context");
          return;
@@ -474,11 +481,13 @@ QGLXContext::~QGLXContext()
 static QXcbScreen *screenForPlatformSurface(QPlatformSurface *surface)
 {
    QSurface::SurfaceClass surfaceClass = surface->surface()->surfaceClass();
+
    if (surfaceClass == QSurface::Window) {
       return static_cast<QXcbScreen *>(static_cast<QXcbWindow *>(surface)->screen());
    } else if (surfaceClass == QSurface::Offscreen) {
       return static_cast<QXcbScreen *>(static_cast<QGLXPbuffer *>(surface)->screen());
    }
+
    return nullptr;
 }
 
@@ -494,6 +503,7 @@ bool QGLXContext::makeCurrent(QPlatformSurface *surface)
 
    GLXDrawable glxDrawable = 0;
    QSurface::SurfaceClass surfaceClass = surface->surface()->surfaceClass();
+
    if (surfaceClass == QSurface::Window) {
       m_isPBufferCurrent = false;
       QXcbWindow *window = static_cast<QXcbWindow *>(surface);
@@ -581,8 +591,9 @@ void (*QGLXContext::getProcAddress(const QByteArray &procName)) ()
    if (resolved && !glXGetProcAddressARB) {
       return 0;
    }
-   if (!glXGetProcAddressARB) {
+   if (! glXGetProcAddressARB) {
       QList<QByteArray> glxExt = QByteArray(glXGetClientString(m_display, GLX_EXTENSIONS)).split(' ');
+
       if (glxExt.contains("GLX_ARB_get_proc_address")) {
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
          void *handle = dlopen(NULL, RTLD_LAZY);
@@ -590,22 +601,26 @@ void (*QGLXContext::getProcAddress(const QByteArray &procName)) ()
             glXGetProcAddressARB = (qt_glXGetProcAddressARB) dlsym(handle, "glXGetProcAddressARB");
             dlclose(handle);
          }
+
          if (!glXGetProcAddressARB)
 #endif
          {
 #ifndef QT_NO_LIBRARY
             extern const QString qt_gl_library_name();
-            //                QLibrary lib(qt_gl_library_name());
-            QLibrary lib(QLatin1String("GL"));
+            //  QLibrary lib(qt_gl_library_name());
+
+            QLibrary lib(QString("GL"));
             glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
 #endif
          }
       }
       resolved = true;
    }
+
    if (!glXGetProcAddressARB) {
       return 0;
    }
+
    return (void (*)())glXGetProcAddressARB(reinterpret_cast<const GLubyte *>(procName.constData()));
 #endif
 }
@@ -629,12 +644,11 @@ bool QGLXContext::m_queriedDummyContext = false;
 bool QGLXContext::m_supportsThreading = true;
 
 
-// If this list grows to any significant size, change it a
-// proper string table and make the implementation below use
-// binary search.
+// If this list grows to any significant size, change it a proper string table and
+// make the implementation below use binary search.
 static const char *qglx_threadedgl_blacklist_renderer[] = {
-   "Chromium",                             // QTBUG-32225 (initialization fails)
-   0
+   "Chromium",
+   nullptr
 };
 
 // This disables threaded rendering on anything using mesa, e.g.
@@ -658,10 +672,8 @@ static const char *qglx_threadedgl_blacklist_renderer[] = {
 // reevaluated once that patch is released in some version of xcb.
 
 static const char *qglx_threadedgl_blacklist_vendor[] = {
-   "Mesa Project and SGI",                // QTCREATORBUG-10875 (crash in creator)
-   // QTBUG-34492 (flickering in fullscreen)
-   // QTBUG-38221
-   0
+   "Mesa Project and SGI",
+   nullptr
 };
 
 void QGLXContext::queryDummyContext()
@@ -677,7 +689,8 @@ void QGLXContext::queryDummyContext()
    }
 
    QOpenGLContext *oldContext = QOpenGLContext::currentContext();
-   QSurface *oldSurface = 0;
+   QSurface *oldSurface = nullptr;
+
    if (oldContext) {
       oldSurface = oldContext->surface();
    }
@@ -746,8 +759,7 @@ bool QGLXContext::supportsThreading()
 }
 
 QGLXPbuffer::QGLXPbuffer(QOffscreenSurface *offscreenSurface)
-   : QPlatformOffscreenSurface(offscreenSurface)
-   , m_format(offscreenSurface->requestedFormat())
+   : QPlatformOffscreenSurface(offscreenSurface), m_format(offscreenSurface->requestedFormat())
    , m_screen(static_cast<QXcbScreen *>(offscreenSurface->screen()->handle()))
    , m_pbuffer(0)
 {

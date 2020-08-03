@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBGLXNATIVEINTERFACEHANDLER_H
-#define QXCBGLXNATIVEINTERFACEHANDLER_H
+#ifndef QXCB_GLX_NATIVEINTERFACEHANDLER_H
+#define QXCB_GLX_NATIVEINTERFACEHANDLER_H
 
-#include "qxcbnativeinterfacehandler.h"
+#include <qxcb_nativeinterfacehandler.h>
 
 class QXcbGlxNativeInterfaceHandler : public QXcbNativeInterfaceHandler
 {
@@ -35,11 +35,11 @@ class QXcbGlxNativeInterfaceHandler : public QXcbNativeInterfaceHandler
    };
 
    QXcbGlxNativeInterfaceHandler(QXcbNativeInterface *nativeInterface);
-   QPlatformNativeInterface::NativeResourceForContextFunction nativeResourceFunctionForContext(const QByteArray &resource) const override;
+   QPlatformNativeInterface::FP_Context nativeResourceFunctionForContext(const QByteArray &resource) const override;
 
  private:
    static void *glxContextForContext(QOpenGLContext *context);
    static void *glxConfigForContext(QOpenGLContext *context);
 };
 
-#endif //QXCBGLXNATIVEINTERFACEHANDLER_H
+#endif

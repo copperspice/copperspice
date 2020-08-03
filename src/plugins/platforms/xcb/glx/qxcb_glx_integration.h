@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBGLXINTEGRATION_H
-#define QXCBGLXINTEGRATION_H
+#ifndef QXCB_GLX_INTEGRATION_H
+#define QXCB_GLX_INTEGRATION_H
 
-#include "qxcbglintegration.h"
+#include <qxcb_gl_integration.h>
 
 class QXcbNativeInterfaceHandler;
 
@@ -51,4 +51,4 @@ class QXcbGlxIntegration : public QXcbGlIntegration
    QScopedPointer<QXcbNativeInterfaceHandler> m_native_interface_handler;
 };
 
-#endif //QXCBGLXINTEGRATION_H
+#endif

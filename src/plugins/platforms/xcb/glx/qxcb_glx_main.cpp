@@ -21,21 +21,20 @@
 *
 ***********************************************************************/
 
-#include "qxcbglintegrationplugin.h"
-
-#include "qxcbglxintegration.h"
+#include <qxcb_gl_integrationplugin.h>
+#include <qxcb_glx_integration.h>
 
 class QXcbGlxIntegrationPlugin : public QXcbGlIntegrationPlugin
 {
-   CS__OBJECT(QXcbGlxIntegrationPlugin)
+   CS_OBJECT(QXcbGlxIntegrationPlugin)
 
    CS_PLUGIN_IID(QXcbGlIntegrationInterface_ID)
+   CS_PLUGIN_KEY("xcb_glx")
 
  public:
    QXcbGlIntegration *create() {
       return new QXcbGlxIntegration();
    }
-
 };
 
 CS_PLUGIN_REGISTER(QXcbGlxIntegrationPlugin)

@@ -21,18 +21,18 @@
 *
 ***********************************************************************/
 
-#include "qxcbglxintegration.h"
+#include <qxcb_glx_integration.h>
 
 #if defined(XCB_HAS_XCB_GLX)
 #include <xcb/glx.h>
 #endif
 
-#include "qxcbnativeinterface.h"
-#include "qxcbglxwindow.h"
-#include "qxcbscreen.h"
-#include "qglxintegration.h"
-#include <QOpenGLContext>
-#include "qxcbglxnativeinterfacehandler.h"
+#include <qopenglcontext.h>
+#include <qxcb_nativeinterface.h>
+#include <qxcb_screen.h>
+#include <qglx_context.h>
+#include <qxcb_glx_window.h>
+#include <qxcb_glx_nativeinterfacehandler.h>
 
 #include <X11/Xlibint.h>
 
@@ -70,10 +70,9 @@ typedef struct {
 #endif
 
 QXcbGlxIntegration::QXcbGlxIntegration()
-   : m_connection(nullptr)
-   , m_glx_first_event(0)
+   : m_connection(nullptr), m_glx_first_event(0)
 {
-   qCDebug(QT_XCB_GLINTEGRATION) << "Xcb GLX gl-integration created";
+   qDebug() << "Xcb GLX gl-integration created";
 }
 
 QXcbGlxIntegration::~QXcbGlxIntegration()
@@ -83,10 +82,11 @@ QXcbGlxIntegration::~QXcbGlxIntegration()
 bool QXcbGlxIntegration::initialize(QXcbConnection *connection)
 {
    m_connection = connection;
-#ifdef XCB_HAS_XCB_GLX
 
+#ifdef XCB_HAS_XCB_GLX
    const xcb_query_extension_reply_t *reply = xcb_get_extension_data(m_connection->xcb_connection(), &xcb_glx_id);
-   if (!reply || !reply->present) {
+
+   if (! reply || ! reply->present) {
       return false;
    }
 
@@ -94,37 +94,45 @@ bool QXcbGlxIntegration::initialize(QXcbConnection *connection)
 
    xcb_generic_error_t *error = 0;
    xcb_glx_query_version_cookie_t xglx_query_cookie = xcb_glx_query_version(m_connection->xcb_connection(),
-         XCB_GLX_MAJOR_VERSION,
-         XCB_GLX_MINOR_VERSION);
+         XCB_GLX_MAJOR_VERSION, XCB_GLX_MINOR_VERSION);
+
    xcb_glx_query_version_reply_t *xglx_query = xcb_glx_query_version_reply(m_connection->xcb_connection(),
          xglx_query_cookie, &error);
-   if (!xglx_query || error) {
-      qCWarning(QT_XCB_GLINTEGRATION) << "QXcbConnection: Failed to initialize GLX";
+
+   if (! xglx_query || error) {
+      qWarning() << "QXcbConnection: Failed to initialize Xcb GLX gl-integration plugin";
       free(error);
+
       return false;
    }
+
    free(xglx_query);
 #endif
 
    m_native_interface_handler.reset(new QXcbGlxNativeInterfaceHandler(connection->nativeInterface()));
 
-   qCDebug(QT_XCB_GLINTEGRATION) << "Xcb GLX gl-integration successfully initialized";
+   qDebug() << "Xcb GLX gl-integration plugin successfully initialized";
+
    return true;
 }
 
 bool QXcbGlxIntegration::handleXcbEvent(xcb_generic_event_t *event, uint responseType)
 {
    bool handled = false;
-   // Check if a custom XEvent constructor was registered in xlib for this event type, and call it discarding the constructed XEvent if any.
-   // XESetWireToEvent might be used by libraries to intercept messages from the X server e.g. the OpenGL lib waiting for DRI2 events.
+   // Check if a custom XEvent constructor was registered in xlib for this event type, and call it discarding
+   // the constructed XEvent if any. XESetWireToEvent might be used by libraries to intercept messages from the
+   // X server e.g. the OpenGL lib waiting for DRI2 events.
+
    Display *xdisplay = static_cast<Display *>(m_connection->xlib_display());
    XLockDisplay(xdisplay);
    bool locked = true;
    Bool (*proc)(Display *, XEvent *, xEvent *) = XESetWireToEvent(xdisplay, responseType, 0);
+
    if (proc) {
       XESetWireToEvent(xdisplay, responseType, proc);
       XEvent dummy;
       event->sequence = LastKnownRequestProcessed(xdisplay);
+
       if (proc(xdisplay, &dummy, (xEvent *)event)) {
 #ifdef XCB_HAS_XCB_GLX
          // DRI2 clients don't receive GLXBufferSwapComplete events on the wire.

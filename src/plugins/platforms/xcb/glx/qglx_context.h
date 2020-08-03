@@ -21,16 +21,15 @@
 *
 ***********************************************************************/
 
-#ifndef QGLXINTEGRATION_H
-#define QGLXINTEGRATION_H
+#ifndef QGLX_CONTEXT_H
+#define QGLX_CONTEXT_H
 
-#include "qxcbwindow.h"
-#include "qxcbscreen.h"
-
+#include <qxcb_window.h>
+#include <qxcb_screen.h>
 #include <qplatform_openglcontext.h>
 #include <qplatform_offscreensurface.h>
-#include <QSurfaceFormat>
-#include <QMutex>
+#include <qsurfaceformat.h>
+#include <qmutex.h>
 
 #include <GL/glx.h>
 
@@ -44,7 +43,7 @@ class QGLXContext : public QPlatformOpenGLContext
    bool makeCurrent(QPlatformSurface *surface) override;
    void doneCurrent() override;
    void swapBuffers(QPlatformSurface *surface) override;
-   QFunctionPointer getProcAddress(const QByteArray &procName) override;
+   FP_Void getProcAddress(const QByteArray &procName) override;
 
    QSurfaceFormat format() const override;
    bool isSharing() const override;
@@ -77,7 +76,6 @@ class QGLXContext : public QPlatformOpenGLContext
    static bool m_queriedDummyContext;
    static bool m_supportsThreading;
 };
-
 
 class QGLXPbuffer : public QPlatformOffscreenSurface
 {
