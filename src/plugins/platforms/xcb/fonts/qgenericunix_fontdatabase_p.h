@@ -21,27 +21,21 @@
 *
 ***********************************************************************/
 
-#ifndef QFONTENGINEMULTIFONTCONFIG_P_H
-#define QFONTENGINEMULTIFONTCONFIG_P_H
+#ifndef QGENERICUNIX_FONTDATABASE_P_H
+#define QGENERICUNIX_FONTDATABASE_P_H
 
-#include <qvector.h>
-#include <qfontengine_p.h>
+#include <qglobal.h>
 
-// unix libraray
-#include <fontconfig/fontconfig.h>
+#ifdef QT_FONTCONFIGDATABASE
 
-class QFontEngineMultiFontConfig : public QFontEngineMulti
-{
-public:
-    explicit QFontEngineMultiFontConfig(QFontEngine *fe, int script);
-    ~QFontEngineMultiFontConfig();
+#include <qfontconfig_database_p.h>
+using QGenericUnixFontDatabase = QFontconfigDatabase;
 
-    bool shouldLoadFontEngineForCharacter(int at, char32_t ch) const override;
+#else
 
-private:
-    FcPattern *getMatchPatternForFallback(int at) const;
+#include <qbasicfontdatabase_p.h>
+using QGenericUnixFontDatabase = QBasicFontDatabase;
 
-    mutable QVector<FcPattern*> cachedMatchPatterns;
-};
+#endif
 
 #endif

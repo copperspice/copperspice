@@ -21,24 +21,23 @@
 *
 ***********************************************************************/
 
-#include <qfontconfigdatabase_p.h>
-#include <qfontenginemultifontconfig_p.h>
-
-// unix library
-#include <fontconfig/fontconfig.h>
+#include <qfontengine_multifontconfig_p.h>
 
 #include <qapplication.h>
 #include <qlist.h>
 #include <qelapsedtimer.h>
-
 #include <qplatform_nativeinterface.h>
 #include <qplatform_screen.h>
 #include <qplatform_integration.h>
 #include <qplatform_services.h>
 
-#include <qfontengine_ft_p.h>
 #include <qapplication_p.h>
+#include <qfontengine_ft_p.h>
+#include <qfontconfig_database_p.h>
 #include <qhighdpiscaling_p.h>
+
+// unix library
+#include <fontconfig/fontconfig.h>
 
 #if FC_VERSION >= 20402
 #include <fontconfig/fcfreetype.h>

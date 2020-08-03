@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QFONTCONFIGDATABASE_P_H
-#define QFONTCONFIGDATABASE_P_H
+#ifndef QFONTCONFIG_DATABASE_P_H
+#define QFONTCONFIG_DATABASE_P_H
 
 #include <qplatform_fontdatabase.h>
 #include <qbasicfontdatabase_p.h>

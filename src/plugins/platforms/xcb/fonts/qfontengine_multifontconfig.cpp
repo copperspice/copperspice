@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <qfontenginemultifontconfig_p.h>
+#include <qfontengine_multifontconfig_p.h>
 
 #include <qfontengine_ft_p.h>
 
