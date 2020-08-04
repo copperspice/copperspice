@@ -22,7 +22,7 @@
 ***********************************************************************/
 
 #include <qplatform_integrationplugin.h>
-#include "qxcbintegration.h"
+#include <qxcb_integration.h>
 
 class QXcbIntegrationPlugin : public QPlatformIntegrationPlugin
 {
@@ -39,7 +39,7 @@ CS_PLUGIN_REGISTER(QXcbIntegrationPlugin)
 
 QPlatformIntegration *QXcbIntegrationPlugin::create(const QString &system, const QStringList &parameters, int &argc, char **argv)
 {
-   if (!system.compare("xcb", Qt::CaseInsensitive)) {
+   if (! system.compare("xcb", Qt::CaseInsensitive)) {
       return new QXcbIntegration(parameters, argc, argv);
    }
 
