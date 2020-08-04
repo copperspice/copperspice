@@ -21,25 +21,54 @@
 *
 ***********************************************************************/
 
-#include "qxcbglintegrationfactory.h"
-#include "qxcbglintegrationplugin.h"
+#include <qxcb_gl_integrationfactory.h>
 
-#include "qxcbglintegrationplugin.h"
-#include "qfactoryloader_p.h"
-#include "qapplication.h"
-#include "qdir.h"
+#include <qxcb_gl_integrationplugin.h>
+#include <qapplication.h>
+#include <qdir.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QXcbGlIntegrationInterface_ID, "/xcbglintegrations", Qt::CaseInsensitive))
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader, (QXcbGlIntegrationInterface_ID, "", Qt::CaseInsensitive))
+#include <qfactoryloader_p.h>
+
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QXcbGlIntegrationInterface_ID, "/xcbglintegrations", Qt::CaseInsensitive);
+   return &retval;
+}
+
+static QFactoryLoader *directLoader()
+{
+   static QFactoryLoader retval(QXcbGlIntegrationInterface_ID, "", Qt::CaseInsensitive);
+   return &retval;
+}
 
 static inline QXcbGlIntegration *loadIntegration(QFactoryLoader *loader, const QString &key)
 {
-   QXcbGlIntegrationPlugin *factory = qobject_cast<QXcbGlIntegrationPlugin *>(loader->instance(key));
+   if (loader->keySet().contains(key)) {
+      QXcbGlIntegrationPlugin *factory = dynamic_cast<QXcbGlIntegrationPlugin *>(loader->instance(key));
 
-   if (factory != nullptr) {
-      if (QXcbGlIntegration *result = factory->create()) {
-         return result;
+      if (factory != nullptr) {
+         if (QXcbGlIntegration *result = factory->create()) {
+            return result;
+         }
       }
+   }
+
+   return nullptr;
+}
+
+QXcbGlIntegration *QXcbGlIntegrationFactory::create(const QString &platform, const QString &pluginPath)
+{
+   // try loading the xcb-glx plugin from the path first
+   if (! pluginPath.isEmpty()) {
+      QCoreApplication::addLibraryPath(pluginPath);
+
+      if (QXcbGlIntegration *ret = loadIntegration(directLoader(), platform)) {
+         return ret;
+      }
+   }
+
+   if (QXcbGlIntegration *ret = loadIntegration(loader(), platform)) {
+      return ret;
    }
 
    return nullptr;
@@ -67,21 +96,4 @@ QStringList QXcbGlIntegrationFactory::keys(const QString &pluginPath)
    return list;
 }
 
-QXcbGlIntegration *QXcbGlIntegrationFactory::create(const QString &platform, const QString &pluginPath)
-{
-   // Try loading the plugin from platformPluginPath first:
-   if (!pluginPath.isEmpty()) {
-      QCoreApplication::addLibraryPath(pluginPath);
-
-      if (QXcbGlIntegration *ret = loadIntegration(directLoader(), platform)) {
-         return ret;
-      }
-   }
-
-   if (QXcbGlIntegration *ret = loadIntegration(loader(), platform)) {
-      return ret;
-   }
-
-   return nullptr;
-}
 

@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBGLINTEGRATION_H
+#ifndef QXCB_GL_INTEGRATION_H
 
-#include "qxcbexport.h"
-#include "qxcbwindow.h"
+#include <qxcb_export.h>
+#include <qxcb_window.h>
 
 class QPlatformOffscreenSurface;
 class QOffscreenSurface;

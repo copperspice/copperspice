@@ -21,22 +21,19 @@
 *
 ***********************************************************************/
 
-#include "qxcbglintegration.h"
+#ifndef QXCB_GL_INTEGRATIONFACTORY_H
+#define QXCB_GL_INTEGRATIONFACTORY_H
 
-QXcbGlIntegration::QXcbGlIntegration()
+#include <qstringlist.h>
+
+class QXcbGlIntegration;
+
+class QXcbGlIntegrationFactory
 {
-}
+ public:
+   static QStringList keys(const QString &pluginPath = QString());
+   static QXcbGlIntegration *create(const QString &name, const QString &platformPluginPath = QString());
+};
 
-QXcbGlIntegration::~QXcbGlIntegration()
-{
-}
-
-bool QXcbGlIntegration::handleXcbEvent(xcb_generic_event_t *event, uint responseType)
-{
-   (void) event;
-   (void) responseType;
-
-   return false;
-}
-
+#endif
 

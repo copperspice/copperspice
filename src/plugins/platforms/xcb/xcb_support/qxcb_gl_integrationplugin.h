@@ -21,19 +21,27 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBGLINTEGRATIONFACTORY_H
-#define QXCBGLINTEGRATIONFACTORY_H
+#ifndef QXCB_GL_INTEGRATIONPLUGIN_H
+#define QXCB_GL_INTEGRATIONPLUGIN_H
 
-#include <qstringlist.h>
+#include <qfactoryinterface.h>
+#include <qplugin.h>
+#include <qxcb_export.h>
+
+#define QXcbGlIntegrationInterface_ID "com.copperspice.CS.Xcb.QXcbGlIntegrationInterface"
 
 class QXcbGlIntegration;
 
-class QXcbGlIntegrationFactory
+class Q_XCB_EXPORT QXcbGlIntegrationPlugin : public QObject
 {
+   CS_OBJECT(QXcbGlIntegrationPlugin)
+
  public:
-   static QStringList keys(const QString &pluginPath = QString());
-   static QXcbGlIntegration *create(const QString &name, const QString &platformPluginPath = QString());
+   explicit QXcbGlIntegrationPlugin(QObject *parent = nullptr)
+      : QObject(parent)
+   { }
+
+   virtual QXcbGlIntegration *create() = 0;
 };
 
 #endif
-

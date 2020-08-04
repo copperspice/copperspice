@@ -21,27 +21,22 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBGLINTEGRATIONPLUGIN_H
-#define QXCBGLINTEGRATIONPLUGIN_H
+#include <qxcb_gl_integration.h>
 
-#include "qxcbexport.h"
-#include <qplugin.h>
-#include <qfactoryinterface.h>
-
-#define QXcbGlIntegrationInterface_ID "com.copperspice.CS.Xcb.QXcbGlIntegrationInterface"
-
-class QXcbGlIntegration;
-
-class Q_XCB_EXPORT QXcbGlIntegrationPlugin : public QObject
+QXcbGlIntegration::QXcbGlIntegration()
 {
-   CS_OBJECT(QXcbGlIntegrationPlugin)
+}
 
- public:
-   explicit QXcbGlIntegrationPlugin(QObject *parent = nullptr)
-      : QObject(parent)
-   { }
+QXcbGlIntegration::~QXcbGlIntegration()
+{
+}
 
-   virtual QXcbGlIntegration *create() = 0;
-};
+bool QXcbGlIntegration::handleXcbEvent(xcb_generic_event_t *event, uint responseType)
+{
+   (void) event;
+   (void) responseType;
 
-#endif
+   return false;
+}
+
+
