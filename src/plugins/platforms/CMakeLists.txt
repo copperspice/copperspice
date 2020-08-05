@@ -22,6 +22,9 @@ include_directories(
 include(cocoa/cocoa.cmake)
 include(windows/windows.cmake)
 include(xcb/xcb.cmake)
+include(xcb/glx/xcb_glx.cmake)
+
+include(xcb/xcb_support/xcb_support.cmake)
 
 macro_generate_misc_private("${PLATFORMS_COCOA_PRIVATE_INCLUDES}" QtGui/private/platforms)
 macro_generate_misc_private("${PLATFORMS_WIN_PRIVATE_INCLUDES}"   QtGui/private/platforms)
@@ -29,4 +32,3 @@ macro_generate_misc_private("${PLATFORMS_XCB_PRIVATE_INCLUDES}"   QtGui/private/
 
 macro_generate_misc_private("${PLATFORMS_COCOA_OTHER_PRIVATE_INCLUDES}" QtGui/private/platforms)
 macro_generate_misc_private("${PLATFORMS_WIN_OTHER_PRIVATE_INCLUDES}"   QtGui/private/platforms)
-macro_generate_misc_private("${PLATFORMS_XCB_OTHER_PRIVATE_INCLUDES}"   QtGui/private/platforms)

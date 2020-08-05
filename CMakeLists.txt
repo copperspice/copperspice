@@ -32,15 +32,19 @@ include(TestLargeFiles)
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
    include(GNUInstallDirs)
 
-   # rpath
-   file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}" "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+   # rpath used for rcc and uic when compiling a user application
+   file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
+                                   "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+
    set(CMAKE_INSTALL_RPATH "@executable_path/${CS_BIN_RPATH}")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
    include(GNUInstallDirs)
 
-   # rpath
-   file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}" "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+   # rpath used for rcc and uic when compiling a user application
+   file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
+                                   "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+
    set(CMAKE_INSTALL_RPATH "$ORIGIN/${CS_BIN_RPATH}")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -363,7 +367,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       )
 
       find_package(XCB COMPONENTS xcb xcb-image xcb-icccm xcb-sync xcb-xfixes xcb-shm xcb-randr
-                   xcb-shape xcb-keysyms xcb-xinerama xcb-xkb xcb-render xcb-render-util)
+                   xcb-shape xcb-keysyms xcb-xinerama xcb-xkb xcb-render xcb-render-util xcb-glx)
       set_package_properties(XCB PROPERTIES
          PURPOSE "Required for XCB/X.Org integration support"
          DESCRIPTION "Open source implementation of the XCB Interface for the X11 Window System"

@@ -18,11 +18,12 @@
 # location of CsCore
 get_target_property(CS_CORE_LIB CopperSpice::CsCore LOCATION)
 
+get_filename_component(CS_INSTALLED_LIB_DIR "${CS_CORE_LIB}" DIRECTORY)
+
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-   get_filename_component(CS_INSTALLED_LIB_DIR "${CS_CORE_LIB}" DIRECTORY)
-   get_filename_component(CS_PLUGIN_DIR        "${CS_INSTALLED_LIB_DIR}/../lib" ABSOLUTE)
+   get_filename_component(CS_PLUGIN_DIR  "${CS_INSTALLED_LIB_DIR}/../lib" ABSOLUTE)
 else()
-   get_filename_component(CS_PLUGIN_DIR "${CS_CORE_LIB}" DIRECTORY)
+   get_filename_component(CS_PLUGIN_DIR  "${CS_CORE_LIB}" DIRECTORY)
 endif()
 
 
@@ -55,6 +56,7 @@ function(cs_copy_plugins LIB_NAME)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
          install(FILES ${CS_PLUGIN_DIR}/CsGuiXcb${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/platforms)
+         install(FILES ${CS_INSTALLED_LIB_DIR}/libCsXcbSupport${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR})
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
          install(FILES ${CS_PLUGIN_DIR}/CsGuiWin${COPPERSPICE_VERSION_API}.dll DESTINATION ${APP_INSTALL_DIR}/platforms)
@@ -80,6 +82,12 @@ function(cs_copy_plugins LIB_NAME)
       endif()
    endif()
 
+   if(LIB_NAME STREQUAL "CsOpenGL")
+
+      if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+         install(FILES ${CS_PLUGIN_DIR}/CsGuiXcb_Glx${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/xcbglintegrations)
+      endif()
+   endif()
    if(LIB_NAME STREQUAL "CsSqlPsql")
 
       if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
