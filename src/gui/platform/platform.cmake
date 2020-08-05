@@ -87,6 +87,7 @@ list(APPEND GUI_PRIVATE_INCLUDES
 list(APPEND GUI_PLATFORMHEADERS_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/cocoa/qcocoanativecontext.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/cocoa/qcocoawindowfunctions.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcb/qglxnativecontext.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcb/qxcbintegrationfunctions.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcb/qxcbscreenfunctions.h
    ${CMAKE_CURRENT_SOURCE_DIR}/platform/platformheaders/xcb/qxcbwindowfunctions.h
