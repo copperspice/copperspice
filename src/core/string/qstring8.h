@@ -76,11 +76,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
             return CsString::CsString::iterator::operator[](n);
          }
 
-         bool operator==(iterator other) const {
+         bool operator==(const iterator &other) const {
             return CsString::CsString::iterator::operator==(other);
          }
 
-         bool operator!=(iterator other) const {
+         bool operator!=(const iterator &other) const {
             return CsString::CsString::iterator::operator!=(other);
          }
 
@@ -155,11 +155,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
             return CsString::CsString::const_iterator::operator[](n);
          }
 
-         bool operator==(const_iterator other) const {
+         bool operator==(const const_iterator &other) const {
             return CsString::CsString::const_iterator::operator==(other);
          }
 
-         bool operator!=(const_iterator other) const {
+         bool operator!=(const const_iterator &other) const {
             return CsString::CsString::const_iterator::operator!=(other);
          }
 

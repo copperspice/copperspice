@@ -791,8 +791,8 @@ CsBasicString<E, A>::CsBasicString(CsBasicStringView<U> str, size_type indexStar
       "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
       "incompatible with the encoding for U");
 
-   const_iterator iter_begin = str.cbegin();
-   const_iterator iter_end;
+   typename U::const_iterator iter_begin = str.cbegin();
+   typename U::const_iterator iter_end;
 
    for (size_type i = 0; i < indexStart && iter_begin != str.cend(); ++i)  {
       ++iter_begin;
@@ -1086,8 +1086,8 @@ CsBasicString<E, A> &CsBasicString<E, A>::append(CsBasicStringView<U> str, size_
       "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
       "incompatible with the encoding for U");
 
-   const_iterator iter_begin = str.cbegin();
-   const_iterator iter_end;
+   typename U::const_iterator iter_begin = str.cbegin();
+   typename U::const_iterator iter_end;
 
    for (size_type i = 0; i < indexStart && iter_begin != str.cend(); ++i)  {
       ++iter_begin;
@@ -3877,8 +3877,8 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(size_type ind
       throw std::out_of_range("CsString::insert index out of range");
    }
 
-   const_iterator srcIter_begin = str.begin() + srcStart;
-   const_iterator srcIter_end   = srcIter_begin + srcSize;
+   typename U::const_iterator srcIter_begin = str.begin() + srcStart;
+   typename U::const_iterator srcIter_end   = srcIter_begin + srcSize;
 
    for (auto srcIter = srcIter_begin; srcIter != srcIter_end; ++srcIter) {
       // *srcIter is a CsChar
