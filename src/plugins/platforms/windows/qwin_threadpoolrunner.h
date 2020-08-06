@@ -21,61 +21,68 @@
 *
 ***********************************************************************/
 
-#ifndef QWINDOWSTHREADPOOLRUNNER_H
-#define QWINDOWSTHREADPOOLRUNNER_H
+#ifndef QWIN_THREADPOOLRUNNER_H
+#define QWIN_THREADPOOLRUNNER_H
 
-#include <QMutex>
-#include <QRunnable>
-#include <QThreadPool>
-#include <QWaitCondition>
+#include <qmutex.h>
+#include <qrunnable.h>
+#include <qthreadpool.h>
+#include <qwaitcondition.h>
 
 class QWindowsThreadPoolRunner
 {
-
-   template <class RunnableFunction> // nested class implementing QRunnable to execute a function.
+   // nested class implementing QRunnable to execute a function
+   template <class RunnableFunction>
    class Runnable : public QRunnable
    {
-    public:
-      explicit Runnable(QMutex *m, QWaitCondition *c, RunnableFunction f)
-         : m_mutex(m), m_condition(c), m_function(f) {}
+      public:
+         explicit Runnable(QMutex *m, QWaitCondition *c, RunnableFunction f)
+            : m_mutex(m), m_condition(c), m_function(f)
+         {
+         }
 
-      void run() override {
-         m_function();
-         m_mutex->lock();
-         m_condition->wakeAll();
-         m_mutex->unlock();
+         void run() override {
+            m_function();
+            m_mutex->lock();
+            m_condition->wakeAll();
+            m_mutex->unlock();
+         }
+
+      private:
+         QMutex *m_mutex;
+         QWaitCondition *m_condition;
+         RunnableFunction m_function;
+   };
+
+   public:
+      QWindowsThreadPoolRunner()
+      {
       }
 
       QWindowsThreadPoolRunner(const QWindowsThreadPoolRunner &) = delete;
       QWindowsThreadPoolRunner &operator=(const QWindowsThreadPoolRunner &) = delete;
 
-    private:
-      QMutex *m_mutex;
-      QWaitCondition *m_condition;
-      RunnableFunction m_function;
-   }; // class Runnable
+      template <class Function>
+      bool run(Function f, unsigned long timeOutMSecs = 5000) {
+         QThreadPool *pool = QThreadPool::globalInstance();
+         Q_ASSERT(pool);
 
- public:
-   QWindowsThreadPoolRunner() {}
+         Runnable<Function> *runnable = new Runnable<Function>(&m_mutex, &m_condition, f);
+         m_mutex.lock();
+         pool->start(runnable);
+         const bool ok = m_condition.wait(&m_mutex, timeOutMSecs);
+         m_mutex.unlock();
 
-   template <class Function>
-   bool run(Function f, unsigned long timeOutMSecs = 5000) {
-      QThreadPool *pool = QThreadPool::globalInstance();
-      Q_ASSERT(pool);
-      Runnable<Function> *runnable = new Runnable<Function>(&m_mutex, &m_condition, f);
-      m_mutex.lock();
-      pool->start(runnable);
-      const bool ok = m_condition.wait(&m_mutex, timeOutMSecs);
-      m_mutex.unlock();
-      if (!ok) {
-         pool->cancel(runnable);
+         if (!ok) {
+            pool->cancel(runnable);
+         }
+
+         return ok;
       }
-      return ok;
-   }
 
- private:
-   QMutex m_mutex;
-   QWaitCondition m_condition;
+   private:
+      QMutex m_mutex;
+      QWaitCondition m_condition;
 };
 
 #endif

@@ -25,6 +25,16 @@
 #define QT_MAC_P_H
 
 #include <qmacdefines_mac.h>
+#include <qglobal.h>
+#include <qvariant.h>
+#include <qmimedata.h>
+#include <qpointer.h>
+#include <qpainter.h>
+
+#include <qcore_mac_p.h>
+
+class QWidget;
+class QDragMoveEvent;
 
 #ifdef __OBJC__
 #include <Cocoa/Cocoa.h>
@@ -32,18 +42,7 @@
 #endif
 
 #include <CoreServices/CoreServices.h>
-
-#include <qglobal.h>
-#include <qvariant.h>
-#include <qmimedata.h>
-#include <qpointer.h>
-#include <qcore_mac_p.h>
-#include <qpainter.h>
-
-#include <Carbon/Carbon.h>         // consider removing
-
-class QWidget;
-class QDragMoveEvent;
+#include <Carbon/Carbon.h>               // consider removing
 
 enum {
    // AE types
@@ -69,12 +68,16 @@ class QMacSmartQuickDrawRegion
    RgnHandle qdRgn;
 
  public:
-   explicit QMacSmartQuickDrawRegion(RgnHandle rgn) : qdRgn(rgn) {}
+   explicit QMacSmartQuickDrawRegion(RgnHandle rgn)
+      : qdRgn(rgn)
+   {
+   }
+
    QMacSmartQuickDrawRegion(const QMacSmartQuickDrawRegion &) = delete;
    QMacSmartQuickDrawRegion &operator=(const QMacSmartQuickDrawRegion &) = delete;
 
    ~QMacSmartQuickDrawRegion() {
-      extern void qt_mac_dispose_rgn(RgnHandle); // qregion_mac.cpp
+      extern void qt_mac_dispose_rgn(RgnHandle);           // qregion_mac.cpp
       qt_mac_dispose_rgn(qdRgn);
    }
 
@@ -83,14 +86,14 @@ class QMacSmartQuickDrawRegion
    }
 };
 
-QString qt_mac_removeMnemonics(const QString &original); // implemented in qmacstyle_mac.cpp
+QString qt_mac_removeMnemonics(const QString &original);   // implemented in qmacstyle_mac.cpp
 
 class QMacCGContext
 {
    CGContextRef context;
 
  public:
-   QMacCGContext(QPainter *p); // qpaintengine_mac.mm
+   QMacCGContext(QPainter *p);                             // qpaintengine_mac.mm
 
    inline QMacCGContext() {
       context = 0;
@@ -145,11 +148,11 @@ class QMacCGContext
 class QMacInternalPasteboardMime;
 class QMimeData;
 
-extern QPaintDevice *qt_mac_safe_pdev;                      // qapplication_mac.cpp
+extern QPaintDevice *qt_mac_safe_pdev;                          // qapplication_mac.cpp
 
-extern OSWindowRef qt_mac_window_for(const QWidget *);      // qwidget_mac.mm
-extern OSViewRef qt_mac_nativeview_for(const QWidget *);    // qwidget_mac.mm
-extern QPoint qt_mac_nativeMapFromParent(const QWidget *child, const QPoint &pt); //qwidget_mac.mm
+extern OSWindowRef qt_mac_window_for(const QWidget *);          // qwidget_mac.mm
+extern OSViewRef qt_mac_nativeview_for(const QWidget *);
+extern QPoint qt_mac_nativeMapFromParent(const QWidget *child, const QPoint &pt);
 
 #ifdef check
 # undef check

@@ -48,9 +48,12 @@ inline uint qHash(const QWindowsPixmapCursorCacheKey &k, uint seed)
 
 class CursorHandle
 {
-
  public:
-   explicit CursorHandle(HCURSOR hcursor = nullptr) : m_hcursor(hcursor) {}
+   explicit CursorHandle(HCURSOR hcursor = nullptr)
+      : m_hcursor(hcursor)
+   {
+   }
+
    CursorHandle(const CursorHandle &) = delete;
    CursorHandle &operator=(const CursorHandle &) = delete;
 
@@ -63,6 +66,7 @@ class CursorHandle
    bool isNull() const {
       return !m_hcursor;
    }
+
    HCURSOR handle() const {
       return m_hcursor;
    }
@@ -79,7 +83,7 @@ class QWindowsCursor : public QPlatformCursor
    enum CursorState {
       CursorShowing,
       CursorHidden,
-      CursorSuppressed // Cursor suppressed by touch interaction (Windows 8).
+      CursorSuppressed       // Cursor suppressed by touch interaction (Windows 8).
    };
 
    struct PixmapCursor {

@@ -165,31 +165,23 @@ struct QWindowsOpengl32DLL {
 
 class QOpenGLStaticContext : public QWindowsStaticOpenGLContext
 {
-   QOpenGLStaticContext();
  public:
    enum Extensions {
       SampleBuffers = 0x1
    };
 
-   typedef bool
-   (APIENTRY *WglGetPixelFormatAttribIVARB)
-   (HDC hdc, int iPixelFormat, int iLayerPlane,
-      uint nAttributes, const int *piAttributes, int *piValues);
+   using WglGetPixelFormatAttribIVARB = bool  (APIENTRY *) (HDC hdc, int iPixelFormat, int iLayerPlane, uint nAttributes,
+                  const int *piAttributes, int *piValues);
 
-   typedef bool
-   (APIENTRY *WglChoosePixelFormatARB)(HDC hdc, const int *piAttribList,
-      const float *pfAttribFList, uint nMaxFormats, int *piFormats,
-      UINT *nNumFormats);
+   using WglChoosePixelFormatARB      = bool  (APIENTRY *)(HDC hdc, const int *piAttribList, const float *pfAttribFList,
+                  uint nMaxFormats, int *piFormats, UINT *nNumFormats);
 
-   typedef HGLRC
-   (APIENTRY *WglCreateContextAttribsARB)(HDC, HGLRC, const int *);
+   using WglCreateContextAttribsARB   = HGLRC (APIENTRY *)(HDC, HGLRC, const int *);
+   using WglSwapInternalExt           = BOOL  (APIENTRY *)(int interval);
+   using WglGetSwapInternalExt        = int   (APIENTRY *)(void);
 
    QOpenGLStaticContext(const QOpenGLStaticContext &) = delete;
    QOpenGLStaticContext &operator=(const QOpenGLStaticContext &) = delete;
-   typedef BOOL
-   (APIENTRY *WglSwapInternalExt)(int interval);
-   typedef int
-   (APIENTRY *WglGetSwapInternalExt)(void);
 
    bool hasExtensions() const {
       return wglGetPixelFormatAttribIVARB && wglChoosePixelFormatARB && wglCreateContextAttribsARB;
@@ -209,7 +201,7 @@ class QOpenGLStaticContext : public QWindowsStaticOpenGLContext
    // For a regular opengl32.dll report the ThreadedOpenGL capability.
    // For others, which are likely to be software-only, don't.
    bool supportsThreadedOpenGL() const {
-      return !opengl32.moduleIsNotOpengl32();
+      return ! opengl32.moduleIsNotOpengl32();
    }
 
    const QByteArray vendor;
@@ -225,6 +217,9 @@ class QOpenGLStaticContext : public QWindowsStaticOpenGLContext
    WglGetSwapInternalExt wglGetSwapInternalExt;
 
    static QWindowsOpengl32DLL opengl32;
+
+ private:
+   QOpenGLStaticContext();
 };
 
 class QWindowsGLContext : public QWindowsOpenGLContext
@@ -236,9 +231,11 @@ class QWindowsGLContext : public QWindowsOpenGLContext
    bool isSharing() const override {
       return m_context->shareHandle();
    }
+
    bool isValid() const override {
       return m_renderingContext && !m_lost;
    }
+
    QSurfaceFormat format() const override {
       return m_obtainedFormat;
    }

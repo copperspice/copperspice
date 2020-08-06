@@ -1018,21 +1018,11 @@ void QWindowsOpenGLContextFormat::apply(QSurfaceFormat *format) const
    }
 }
 
-/*!
-    \class QOpenGLTemporaryContext
-    \brief A temporary context that can be instantiated on the stack.
-
-    Functions like wglGetProcAddress() or glGetString() only work if there
-    is a current GL context.
-
-    \internal
-    \ingroup qt-lighthouse-win
-*/
-
 class QOpenGLTemporaryContext
 {
  public:
    QOpenGLTemporaryContext();
+
    QOpenGLTemporaryContext(const QOpenGLTemporaryContext &) = delete;
    QOpenGLTemporaryContext &operator=(const QOpenGLTemporaryContext &) = delete;
 
@@ -1043,9 +1033,8 @@ class QOpenGLTemporaryContext
    const QOpenGLContextData m_current;
 };
 
-QOpenGLTemporaryContext::QOpenGLTemporaryContext() :
-   m_previous(currentOpenGLContextData()),
-   m_current(createDummyWindowOpenGLContextData())
+QOpenGLTemporaryContext::QOpenGLTemporaryContext()
+   : m_previous(currentOpenGLContextData()), m_current(createDummyWindowOpenGLContextData())
 {
    QOpenGLStaticContext::opengl32.wglMakeCurrent(m_current.hdc, m_current.renderingContext);
 }
@@ -1057,30 +1046,6 @@ QOpenGLTemporaryContext::~QOpenGLTemporaryContext()
    DestroyWindow(m_current.hwnd);
    QOpenGLStaticContext::opengl32.wglDeleteContext(m_current.renderingContext);
 }
-
-/*!
-    \class QWindowsOpenGLAdditionalFormat
-    \brief Additional format information that is not in QSurfaceFormat
-    \ingroup qt-lighthouse-win
-*/
-
-/*!
-    \class QOpenGLStaticContext
-    \brief Static Open GL context containing version information, extension function pointers, etc.
-
-    Functions pending integration in the next version of OpenGL are post-fixed ARB.
-
-    No WGL or OpenGL functions are called directly from the windows plugin. Instead, the
-    static context loads opengl32.dll and resolves the necessary functions. This allows
-    building the plugin without linking to opengl32 and enables QT_OPENGL_DYNAMIC builds
-    where both the EGL and WGL (this) based implementation of the context are built.
-
-    \note Initialization requires an active context (see create()).
-
-    \sa QWindowsGLContext
-    \internal
-    \ingroup qt-lighthouse-win
-*/
 
 #define SAMPLE_BUFFER_EXTENSION "GL_ARB_multisample"
 
@@ -1108,6 +1073,7 @@ QByteArray QOpenGLStaticContext::getGlString(unsigned int which)
    if (const GLubyte *s = opengl32.glGetString(which)) {
       return QByteArray(reinterpret_cast<const char *>(s));
    }
+
    return QByteArray();
 }
 

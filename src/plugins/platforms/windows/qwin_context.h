@@ -121,6 +121,7 @@ struct QWindowsShell32DLL {
 struct QWindowsShcoreDLL {
    QWindowsShcoreDLL();
    void init();
+
    inline bool isValid() const {
       return getProcessDpiAwareness && setProcessDpiAwareness && getDpiForMonitor;
    }
@@ -137,20 +138,20 @@ struct QWindowsShcoreDLL {
 class QWindowsContext
 {
  public:
-
    enum SystemInfoFlags {
       SI_RTL_Extensions = 0x1,
       SI_SupportsTouch = 0x2
    };
 
-   // Verbose flag set by environment variable QT_QPA_VERBOSE
-   static int verbose;
-
    explicit QWindowsContext();
+
    QWindowsContext(const QWindowsContext &) = delete;
    QWindowsContext &operator=(const QWindowsContext &) = delete;
 
    ~QWindowsContext();
+
+   // Verbose flag set by environment variable QT_QPA_VERBOSE
+   static int verbose;
 
    bool initTouch();
    bool initTouch(unsigned integrationOptions); // For calls from QWindowsIntegration::QWindowsIntegration() only.
