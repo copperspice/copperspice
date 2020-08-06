@@ -26,8 +26,6 @@
 
 #include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractButton;
 class QPushButton;
 class QDialogButtonBoxPrivate;
@@ -149,7 +147,5 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDialogButtonBox::StandardButtons)
-
-
 
 #endif // QDIALOGBUTTONBOX_H

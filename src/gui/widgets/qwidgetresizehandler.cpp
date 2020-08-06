@@ -24,6 +24,7 @@
 #include <qwidgetresizehandler_p.h>
 
 #ifndef QT_NO_RESIZEHANDLER
+
 #include <qframe.h>
 #include <qapplication.h>
 #include <qdesktopwidget.h>
@@ -37,8 +38,6 @@
 
 #include <qdebug.h>
 #include <qlayoutengine_p.h>
-
-QT_BEGIN_NAMESPACE
 
 #define RANGE 4
 
@@ -534,12 +533,14 @@ void QWidgetResizeHandler::doResize()
       }
    }
    invertedMoveOffset = widget->rect().bottomRight() - moveOffset;
+
 #ifndef QT_NO_CURSOR
    setMouseCursor(mode);
    widget->grabMouse(widget->cursor() );
 #else
    widget->grabMouse();
 #endif
+
    widget->grabKeyboard();
    resizeHorizontalDirectionFixed = false;
    resizeVerticalDirectionFixed = false;
@@ -555,14 +556,14 @@ void QWidgetResizeHandler::doMove()
    moveResizeMode = true;
    moveOffset = widget->mapFromGlobal(QCursor::pos());
    invertedMoveOffset = widget->rect().bottomRight() - moveOffset;
+
 #ifndef QT_NO_CURSOR
    widget->grabMouse(Qt::SizeAllCursor);
 #else
    widget->grabMouse();
 #endif
+
    widget->grabKeyboard();
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_RESIZEHANDLER

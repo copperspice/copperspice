@@ -31,8 +31,6 @@
 
 #ifndef QT_NO_FILEDIALOG
 
-QT_BEGIN_NAMESPACE
-
 class QFileSystemModel;
 
 class QSideBarDelegate : public QStyledItemDelegate
@@ -71,7 +69,7 @@ class QUrlModel : public QStandardItemModel
    void setFileSystemModel(QFileSystemModel *model);
    bool showFullPath;
 
- private :
+ private:
    GUI_CS_SLOT_1(Private, void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight))
    GUI_CS_SLOT_2(dataChanged)
 
@@ -134,8 +132,6 @@ class QSidebar : public QListView
 
    QUrlModel *urlModel;
 };
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_FILEDIALOG
 

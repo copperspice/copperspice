@@ -26,8 +26,6 @@
 
 #include <qabstractitemview.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TREEVIEW
 
 class QTreeViewPrivate;
@@ -238,7 +236,6 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
  private:
-
    int visualIndex(const QModelIndex &index) const;
 
    Q_DECLARE_PRIVATE(QTreeView)
@@ -261,6 +258,5 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 };
 
 #endif // QT_NO_TREEVIEW
-
 
 #endif

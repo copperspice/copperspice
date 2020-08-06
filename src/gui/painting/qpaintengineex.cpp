@@ -33,9 +33,10 @@
 #include <qfontengine_p.h>
 #include <qstatictext_p.h>
 
-#if !defined(QT_MAX_CACHED_GLYPH_SIZE)
+#if ! defined(QT_MAX_CACHED_GLYPH_SIZE)
 #  define QT_MAX_CACHED_GLYPH_SIZE 64
 #endif
+
 QVectorPath::~QVectorPath()
 {
    if (m_hints & ShouldUseCacheHint) {
@@ -50,7 +51,6 @@ QVectorPath::~QVectorPath()
       }
    }
 }
-
 
 QRectF QVectorPath::controlPointRect() const
 {
@@ -110,9 +110,9 @@ QVectorPath::CacheEntry *QVectorPath::addCacheData(QPaintEngineEx *engine, void 
    e->cleanup = cleanup;
    e->next = m_cache;
    m_cache = e;
+
    return m_cache;
 }
-
 
 const QVectorPath &qtVectorPathForPath(const QPainterPath &path)
 {
@@ -131,7 +131,7 @@ QDebug Q_GUI_EXPORT &operator<<(QDebug &s, const QVectorPath &path)
 }
 
 struct StrokeHandler {
-   StrokeHandler(int reserve)
+   StrokeHandler(int)
    {
    }
 
@@ -139,12 +139,8 @@ struct StrokeHandler {
    QVector<QPainterPath::ElementType> types;
 };
 
-
 QPaintEngineExPrivate::QPaintEngineExPrivate()
-   : dasher(&stroker),
-     strokeHandler(0),
-     activeStroker(0),
-     strokerPen(Qt::NoPen)
+   : dasher(&stroker), strokeHandler(0), activeStroker(0), strokerPen(Qt::NoPen)
 {
 }
 
@@ -152,7 +148,6 @@ QPaintEngineExPrivate::~QPaintEngineExPrivate()
 {
    delete strokeHandler;
 }
-
 
 void QPaintEngineExPrivate::replayClipOperations()
 {
@@ -179,20 +174,22 @@ void QPaintEngineExPrivate::replayClipOperations()
          case QPainterClipInfo::RegionClip:
             q->clip(info.region, info.operation);
             break;
+
          case QPainterClipInfo::PathClip:
             q->clip(info.path, info.operation);
             break;
+
          case QPainterClipInfo::RectClip:
             q->clip(info.rect, info.operation);
             break;
+
          case QPainterClipInfo::RectFClip: {
             qreal right = info.rectf.x() + info.rectf.width();
             qreal bottom = info.rectf.y() + info.rectf.height();
+
             qreal pts[] = { info.rectf.x(), info.rectf.y(),
-                  right, info.rectf.y(),
-                  right, bottom,
-                  info.rectf.x(), bottom
-               };
+                  right, info.rectf.y(), right, bottom, info.rectf.x(), bottom};
+
             QVectorPath vp(pts, 4, 0, QVectorPath::RectangleHint);
             q->clip(vp, info.operation);
             break;
@@ -502,6 +499,7 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
          d->strokeHandler->types.data(),
          flags);
       fill(strokePath, pen.brush());
+
    } else {
       // For cosmetic pens we need a bit of trickery... We to process xform the input points
       if (state()->matrix.type() >= QTransform::TxProject) {
@@ -640,8 +638,10 @@ void QPaintEngineEx::clip(const QRegion &region, Qt::ClipOperation op)
          pts[pos++] = x1;
          pts[pos++] = y2;
       }
+
       QVectorPath vp(pts, rects.size() * 4, qpaintengineex_rect4_types_32);
       clip(vp, op);
+
    } else {
       QVarLengthArray<qreal> pts(rects.size() * 2 * 4);
       QVarLengthArray<QPainterPath::ElementType> types(rects.size() * 4);
@@ -737,7 +737,6 @@ void QPaintEngineEx::drawRects(const QRectF *rects, int rectCount)
    }
 }
 
-
 void QPaintEngineEx::drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius,
    Qt::SizeMode mode)
 {
@@ -816,7 +815,7 @@ void QPaintEngineEx::drawLines(const QLineF *lines, int lineCount)
 
 void QPaintEngineEx::drawEllipse(const QRectF &r)
 {
-   qreal pts[26]; // QPointF[13] without constructors...
+   qreal pts[26]; // QPointF[13] without constructors
    union {
       qreal *ptr;
       QPointF *points;

@@ -58,10 +58,7 @@ class QSpanBuffer
 {
  public:
    QSpanBuffer(ProcessSpans blend, void *data, const QRect &clipRect)
-      : m_spanCount(0)
-      , m_blend(blend)
-      , m_data(data)
-      , m_clipRect(clipRect) {
+      : m_spanCount(0), m_blend(blend), m_data(data), m_clipRect(clipRect) {
    }
 
    ~QSpanBuffer() {
@@ -313,10 +310,12 @@ void qScanConvert(QScanConverter &d, T allVertical)
             QScanConverter::Line *l = &d.m_lines[line];
             d.m_active.resize(d.m_active.size() + 1);
             int j;
+
             for (j = d.m_active.size() - 2; j >= 0 && xOrder(l, d.m_active.at(j)); --j) {
                d.m_active[j + 1] = d.m_active.at(j);
             }
             d.m_active[j + 1] = l;
+
          } else {
             d.m_active << &d.m_lines[line];
          }

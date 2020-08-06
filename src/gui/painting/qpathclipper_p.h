@@ -31,8 +31,6 @@
 
 #include <stdio.h>
 
-QT_BEGIN_NAMESPACE
-
 class QWingedEdge;
 
 class QPathClipper
@@ -436,14 +434,17 @@ inline void QWingedEdge::TraversalStatus::flipTraversal()
 {
    traversal = QWingedEdge::flip(traversal);
 }
+
 inline QPathEdge::Direction QWingedEdge::flip(QPathEdge::Direction direction)
 {
    return direction == QPathEdge::Forward ? QPathEdge::Backward : QPathEdge::Forward;
 }
+
 inline void QWingedEdge::TraversalStatus::flipDirection()
 {
    direction = QWingedEdge::flip(direction);
 }
+
 inline void QWingedEdge::TraversalStatus::flip()
 {
    flipDirection();

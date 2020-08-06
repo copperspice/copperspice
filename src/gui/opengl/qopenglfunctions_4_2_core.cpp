@@ -25,22 +25,6 @@
 #include "qopenglfunctions_4_2_core.h"
 #include "qopenglcontext.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QOpenGLFunctions_4_2_Core
-    \inmodule QtGui
-    \since 5.1
-    \wrapper
-    \brief The QOpenGLFunctions_4_2_Core class provides all functions for OpenGL 4.2 core profile.
-
-    This class is a wrapper for functions from OpenGL 4.2 core profile.
-    See reference pages on \l {http://www.opengl.org/sdk/docs/}{opengl.org}
-    for function documentation.
-
-    \sa QAbstractOpenGLFunctions
-*/
-
 QOpenGLFunctions_4_2_Core::QOpenGLFunctions_4_2_Core()
  : QAbstractOpenGLFunctions()
  , d_1_0_Core(0)
@@ -283,5 +267,3 @@ QOpenGLVersionProfile QOpenGLFunctions_4_2_Core::versionProfile()
     v.setProfile(QSurfaceFormat::CoreProfile);
     return v;
 }
-
-QT_END_NAMESPACE

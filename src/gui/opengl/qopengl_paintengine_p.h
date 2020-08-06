@@ -202,7 +202,7 @@ public:
     void composite(const QOpenGLRect& boundingRect);
 
     // Calls drawVertexArrays to render into stencil buffer:
-    void fillStencilWithVertexArray(const float *data, int count, const int *stops, int stopCount, const QOpenGLRect &bounds, 
+    void fillStencilWithVertexArray(const float *data, int count, const int *stops, int stopCount, const QOpenGLRect &bounds,
                   StencilFillMode mode);
 
     void fillStencilWithVertexArray(QOpenGL2PEXVertexArray& vertexArray, bool useWindingFill) {

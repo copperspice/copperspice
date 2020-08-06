@@ -26,9 +26,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <QScopedPointer>
-
-
+#include <qscopedpointer.h>
 
 class QUndoGroupPrivate;
 class QUndoStack;
@@ -39,7 +37,6 @@ class QAction;
 class Q_GUI_EXPORT QUndoGroup : public QObject
 {
    GUI_CS_OBJECT(QUndoGroup)
-   Q_DECLARE_PRIVATE(QUndoGroup)
 
  public:
    explicit QUndoGroup(QObject *parent = nullptr);
@@ -89,11 +86,10 @@ class Q_GUI_EXPORT QUndoGroup : public QObject
    QScopedPointer<QUndoGroupPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QUndoGroup)
    Q_DISABLE_COPY(QUndoGroup)
 };
 
 #endif // QT_NO_UNDOGROUP
-
-
 
 #endif // QUNDOGROUP_H

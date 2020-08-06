@@ -29,7 +29,6 @@
 #include <qstring.h>
 #include <qmargins.h>
 
-
 #ifndef QT_NO_LINEEDIT
 
 class QValidator;
@@ -175,7 +174,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    bool isUndoAvailable() const;
    bool isRedoAvailable() const;
 
-   void setDragEnabled(bool b);
+   void setDragEnabled(bool enable);
    bool dragEnabled() const;
 
    void setCursorMoveStyle(Qt::CursorMoveStyle style);
@@ -202,7 +201,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
 #endif
 
 
-   GUI_CS_SLOT_1(Public, void setText(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setText(const QString &str))
    GUI_CS_SLOT_2(setText)
 
    GUI_CS_SLOT_1(Public, void clear())
@@ -228,14 +227,14 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    GUI_CS_SLOT_2(paste)
 #endif
 
-   GUI_CS_SIGNAL_1(Public, void textChanged(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_2(textChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void textChanged(const QString &str))
+   GUI_CS_SIGNAL_2(textChanged, str)
 
-   GUI_CS_SIGNAL_1(Public, void textEdited(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_2(textEdited, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void textEdited(const QString &str))
+   GUI_CS_SIGNAL_2(textEdited, str)
 
-   GUI_CS_SIGNAL_1(Public, void cursorPositionChanged(int un_named_arg1, int un_named_arg2))
-   GUI_CS_SIGNAL_2(cursorPositionChanged, un_named_arg1, un_named_arg2)
+   GUI_CS_SIGNAL_1(Public, void cursorPositionChanged(int oldValue, int newValue))
+   GUI_CS_SIGNAL_2(cursorPositionChanged, oldValue, newValue)
 
    GUI_CS_SIGNAL_1(Public, void returnPressed())
    GUI_CS_SIGNAL_2(returnPressed)
@@ -247,7 +246,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    GUI_CS_SIGNAL_2(selectionChanged)
 
    QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
-   bool event(QEvent *) override;
+   bool event(QEvent *event) override;
 
  protected:
    void mousePressEvent(QMouseEvent *) override;

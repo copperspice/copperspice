@@ -74,6 +74,6 @@ class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject, public QAccessi
    Q_DISABLE_COPY(QAccessibleWidget)
 };
 
-#endif
+#endif // QT_NO_ACCESSIBILITY
 
-#endif // QACCESSIBLEWIDGET_H
+#endif

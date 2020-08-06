@@ -29,7 +29,6 @@
 #include <qimage.h>
 #include <qimageiohandler.h>
 
-
 class QColor;
 class QIODevice;
 class QRect;
@@ -39,8 +38,6 @@ class QImageReaderPrivate;
 
 class Q_GUI_EXPORT QImageReader
 {
-   Q_DECLARE_TR_FUNCTIONS(QImageReader)
-
  public:
    enum ImageReaderError {
       UnknownError,
@@ -124,9 +121,9 @@ class Q_GUI_EXPORT QImageReader
    static QList<QByteArray> supportedMimeTypes();
 
  private:
+   Q_DECLARE_TR_FUNCTIONS(QImageReader)
    Q_DISABLE_COPY(QImageReader)
    QImageReaderPrivate *d;
 };
-
 
 #endif

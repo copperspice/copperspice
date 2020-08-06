@@ -27,8 +27,6 @@
 #include <qhash.h>
 #include <qpair.h>
 
-QT_BEGIN_NAMESPACE
-
 struct QSimplexVariable {
    QSimplexVariable() : result(0), index(0) {}
 
@@ -176,6 +174,5 @@ inline void QSimplex::setValueAt(int rowIndex, int columnIndex, qreal value)
 {
    matrix[rowIndex * columns + columnIndex] = value;
 }
-
 
 #endif // QSIMPLEX_P_H

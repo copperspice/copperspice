@@ -25,12 +25,11 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qbasicmouseeventtransition_p.h>
 #include <qstatemachine.h>
 #include <qpainterpath.h>
-#include <qeventtransition_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qbasicmouseeventtransition_p.h>
+#include <qeventtransition_p.h>
 
 class QMouseEventTransitionPrivate : public QEventTransitionPrivate
 {
@@ -46,9 +45,6 @@ QMouseEventTransitionPrivate::QMouseEventTransitionPrivate()
 {
 }
 
-/*!
-  Constructs a new mouse event transition with the given \a sourceState.
-*/
 QMouseEventTransition::QMouseEventTransition(QState *sourceState)
    : QEventTransition(*new QMouseEventTransitionPrivate, sourceState)
 {
@@ -56,10 +52,6 @@ QMouseEventTransition::QMouseEventTransition(QState *sourceState)
    d->transition = new QBasicMouseEventTransition();
 }
 
-/*!
-  Constructs a new mouse event transition for events of the given \a type for
-  the given \a object, with the given \a button and \a sourceState.
-*/
 QMouseEventTransition::QMouseEventTransition(QObject *object, QEvent::Type type,
       Qt::MouseButton button,
       QState *sourceState)
@@ -69,69 +61,42 @@ QMouseEventTransition::QMouseEventTransition(QObject *object, QEvent::Type type,
    d->transition = new QBasicMouseEventTransition(type, button);
 }
 
-/*!
-  Destroys this mouse event transition.
-*/
 QMouseEventTransition::~QMouseEventTransition()
 {
    Q_D(QMouseEventTransition);
    delete d->transition;
 }
 
-/*!
-  Returns the button that this mouse event transition checks for.
-*/
 Qt::MouseButton QMouseEventTransition::button() const
 {
    Q_D(const QMouseEventTransition);
    return d->transition->button();
 }
 
-/*!
-  Sets the \a button that this mouse event transition will check for.
-*/
 void QMouseEventTransition::setButton(Qt::MouseButton button)
 {
    Q_D(QMouseEventTransition);
    d->transition->setButton(button);
 }
 
-/*!
-  Returns the keyboard modifier mask that this mouse event transition checks
-  for.
-*/
 Qt::KeyboardModifiers QMouseEventTransition::modifierMask() const
 {
    Q_D(const QMouseEventTransition);
    return d->transition->modifierMask();
 }
 
-/*!
-  Sets the keyboard modifier mask that this mouse event transition will
-  check for to \a modifierMask.
-*/
 void QMouseEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
 {
    Q_D(QMouseEventTransition);
    d->transition->setModifierMask(modifierMask);
 }
 
-/*!
-  Returns the hit test path for this mouse event transition.
-*/
 QPainterPath QMouseEventTransition::hitTestPath() const
 {
    Q_D(const QMouseEventTransition);
    return d->transition->hitTestPath();
 }
 
-/*!
-  Sets the hit test path for this mouse event transition to \a path.
-  If a valid path has been set, the transition will only trigger if the mouse
-  event position (QMouseEvent::pos()) is inside the path.
-
-  \sa QPainterPath::contains()
-*/
 void QMouseEventTransition::setHitTestPath(const QPainterPath &path)
 {
    Q_D(QMouseEventTransition);
@@ -159,7 +124,5 @@ void QMouseEventTransition::onTransition(QEvent *event)
 {
    QEventTransition::onTransition(event);
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_STATEMACHINE

@@ -50,28 +50,7 @@ class Q_GUI_EXPORT QStyle : public QObject
    GUI_CS_ENUM(StandardPixmap)
 
  public:
-   QStyle();
-   virtual ~QStyle();
-
-   virtual void polish(QWidget *widget);
-   virtual void unpolish(QWidget *widget);
-
-   virtual void polish(QApplication *app);
-   virtual void unpolish(QApplication *app);
-
-   virtual void polish(QPalette &palette);
-
-   virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r, int flags, bool enabled, const QString &text) const;
-   virtual QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const;
-
-   virtual void drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled,
-      const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const;
-
-   virtual void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment, const QPixmap &pixmap) const;
-
-   virtual QPalette standardPalette() const;
-
-   enum StateFlag {
+  enum StateFlag {
       State_None =                0x00000000,
       State_Enabled =             0x00000001,
       State_Raised =              0x00000002,
@@ -169,7 +148,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       PE_CustomBase = 0xf000000
    };
 
-   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const = 0;
    enum ControlElement {
       CE_PushButton,
       CE_PushButtonBevel,
@@ -237,8 +215,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       // do not add any values below/greater than this
       CE_CustomBase = 0xf0000000
    };
-
-   virtual void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const = 0;
 
    enum SubElement {
       SE_PushButtonContents,
@@ -319,8 +295,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       SE_CustomBase = 0xf0000000
    };
 
-   virtual QRect subElementRect(SubElement subElement, const QStyleOption *option, const QWidget *widget = 0) const = 0;
-
    enum ComplexControl {
       CC_SpinBox,
       CC_ComboBox,
@@ -392,15 +366,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       SC_All =                   0xffffffff
    };
    using SubControls = QFlags<SubControl>;
-
-   virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
-      const QWidget *widget = nullptr) const = 0;
-
-   virtual SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-      const QPoint &pt, const QWidget *widget = nullptr) const = 0;
-
-   virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
-      const QWidget *widget = nullptr) const = 0;
 
    enum PixelMetric {
       PM_ButtonMargin,
@@ -529,8 +494,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_CustomBase = 0xf0000000
    };
 
-   virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const = 0;
-
    enum ContentsType {
       CT_PushButton,
       CT_CheckBox,
@@ -558,9 +521,6 @@ class Q_GUI_EXPORT QStyle : public QObject
       // do not add any values below/greater than this
       CT_CustomBase = 0xf0000000
    };
-
-   virtual QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
-      const QSize &contentsSize, const QWidget *w = nullptr) const = 0;
 
    enum RequestSoftwareInputPanel {
       RSIP_OnMouseClickAndAlreadyFocused,
@@ -687,10 +647,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_CustomBase = 0xf0000000
    };
 
-   virtual int styleHint(StyleHint stylehint, const QStyleOption *opt = nullptr,
-      const QWidget *widget = nullptr, QStyleHintReturn *returnData = nullptr) const = 0;
-
-   enum StandardPixmap {
+  enum StandardPixmap {
       SP_TitleBarMenuButton,
       SP_TitleBarMinButton,
       SP_TitleBarMaxButton,
@@ -765,6 +722,49 @@ class Q_GUI_EXPORT QStyle : public QObject
       // do not add any values below/greater than this
       SP_CustomBase = 0xf0000000
    };
+
+
+   QStyle();
+   virtual ~QStyle();
+
+   virtual void polish(QWidget *widget);
+   virtual void unpolish(QWidget *widget);
+
+   virtual void polish(QApplication *app);
+   virtual void unpolish(QApplication *app);
+
+   virtual void polish(QPalette &palette);
+
+   virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r, int flags, bool enabled, const QString &text) const;
+   virtual QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const;
+
+   virtual void drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled,
+      const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const;
+
+   virtual void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment, const QPixmap &pixmap) const;
+
+   virtual QPalette standardPalette() const;
+
+   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const = 0;
+   virtual void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const = 0;
+   virtual QRect subElementRect(SubElement subElement, const QStyleOption *option, const QWidget *widget = 0) const = 0;
+
+   virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
+      const QWidget *widget = nullptr) const = 0;
+
+   virtual SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
+      const QPoint &pt, const QWidget *widget = nullptr) const = 0;
+
+   virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
+      const QWidget *widget = nullptr) const = 0;
+
+   virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const = 0;
+
+   virtual QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
+      const QSize &contentsSize, const QWidget *w = nullptr) const = 0;
+
+   virtual int styleHint(StyleHint stylehint, const QStyleOption *opt = nullptr,
+      const QWidget *widget = nullptr, QStyleHintReturn *returnData = nullptr) const = 0;
 
    virtual QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt = nullptr,
       const QWidget *widget = nullptr) const = 0;

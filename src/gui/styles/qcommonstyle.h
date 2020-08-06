@@ -28,7 +28,7 @@
 
 class QCommonStylePrivate;
 
-class Q_GUI_EXPORT QCommonStyle: public QStyle
+class Q_GUI_EXPORT QCommonStyle : public QStyle
 {
    GUI_CS_OBJECT(QCommonStyle)
 

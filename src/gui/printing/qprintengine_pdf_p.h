@@ -100,10 +100,9 @@ class Q_GUI_EXPORT QPdfPrintEnginePrivate : public QPdfEnginePrivate
 
  private:
    Q_DISABLE_COPY(QPdfPrintEnginePrivate)
-
-
    friend class QCupsPrintEngine;
    friend class QCupsPrintEnginePrivate;
+
    QString printerName;
    QString printProgram;
    QString selectionOption;
@@ -113,7 +112,7 @@ class Q_GUI_EXPORT QPdfPrintEnginePrivate : public QPdfEnginePrivate
    QPrinter::PageOrder pageOrder;
    QPrinter::PaperSource paperSource;
 
-    int fd;
+   int fd;
 };
 
 #endif // QT_NO_PRINTER

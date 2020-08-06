@@ -29,8 +29,6 @@
 #include <qabstractitemmodel.h>
 #include <qvariant.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_COMBOBOX
 
 class QAbstractItemView;
@@ -350,6 +348,5 @@ inline void QComboBox::insertItem(int aindex, const QString &atext, const QVaria
 
 #endif // QT_NO_COMBOBOX
 
-QT_END_NAMESPACE
 
 #endif // QCOMBOBOX_H

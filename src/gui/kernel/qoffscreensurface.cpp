@@ -313,4 +313,3 @@ QPlatformSurface *QOffscreenSurface::surfaceHandle() const
    return d->platformOffscreenSurface;
 }
 
-QT_END_NAMESPACE

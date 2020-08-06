@@ -112,6 +112,4 @@ class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
 
 #endif
 
-
-
 #endif

@@ -30,7 +30,6 @@
 #include <QScopedPointer>
 
 #ifndef QT_NO_GRAPHICSEFFECT
-QT_BEGIN_NAMESPACE
 
 class QGraphicsEffectSourcePrivate;
 
@@ -144,17 +143,19 @@ class Q_GUI_EXPORT QGraphicsEffectPrivate
 
 };
 
-
 class QGraphicsColorizeEffectPrivate : public QGraphicsEffectPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsColorizeEffect)
 
  public:
    QGraphicsColorizeEffectPrivate()
-      : opaque(true) {
+      : opaque(true)
+   {
       filter = new QPixmapColorizeFilter;
    }
-   ~QGraphicsColorizeEffectPrivate() {
+
+   ~QGraphicsColorizeEffectPrivate()
+   {
       delete filter;
    }
 
@@ -168,8 +169,12 @@ class QGraphicsBlurEffectPrivate : public QGraphicsEffectPrivate
    Q_DECLARE_PUBLIC(QGraphicsBlurEffect)
 
  public:
-   QGraphicsBlurEffectPrivate() : filter(new QPixmapBlurFilter) {}
-   ~QGraphicsBlurEffectPrivate() {
+   QGraphicsBlurEffectPrivate() : filter(new QPixmapBlurFilter)
+   {
+   }
+
+   ~QGraphicsBlurEffectPrivate()
+   {
       delete filter;
    }
 
@@ -181,8 +186,12 @@ class QGraphicsDropShadowEffectPrivate : public QGraphicsEffectPrivate
    Q_DECLARE_PUBLIC(QGraphicsDropShadowEffect)
 
  public:
-   QGraphicsDropShadowEffectPrivate() : filter(new QPixmapDropShadowFilter) {}
-   ~QGraphicsDropShadowEffectPrivate() {
+   QGraphicsDropShadowEffectPrivate() : filter(new QPixmapDropShadowFilter)
+   {
+   }
+
+   ~QGraphicsDropShadowEffectPrivate()
+   {
       delete filter;
    }
 
@@ -205,8 +214,7 @@ class QGraphicsOpacityEffectPrivate : public QGraphicsEffectPrivate
    uint hasOpacityMask : 1;
 };
 
-QT_END_NAMESPACE
+#endif // QT_NO_GRAPHICSEFFECT
 
-#endif //QT_NO_GRAPHICSEFFECT
-#endif // QGRAPHICSEFFECT_P_H
+#endif
 

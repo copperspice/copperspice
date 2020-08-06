@@ -664,7 +664,6 @@ QString QInputDialog::textValue() const
    return d->textValue;
 }
 
-
 void QInputDialog::setTextEchoMode(QLineEdit::EchoMode mode)
 {
    Q_D(QInputDialog);
@@ -1028,13 +1027,13 @@ QString QInputDialog::getText(QWidget *parent, const QString &title, const QStri
    dialog.setTextEchoMode(mode);
    dialog.setInputMethodHints(inputMethodHints);
 
-   const int ret = dialog.exec();
+   const int result = dialog.exec();
 
    if (ok) {
-      *ok = !!ret;
+      *ok = (result != 0);
    }
 
-   if (ret) {
+   if (result) {
       return dialog.textValue();
    } else {
       return QString();
@@ -1042,10 +1041,10 @@ QString QInputDialog::getText(QWidget *parent, const QString &title, const QStri
 }
 
 QString QInputDialog::getMultiLineText(QWidget *parent, const QString &title, const QString &label,
-   const QString &text, bool *ok, Qt::WindowFlags flags,
-   Qt::InputMethodHints inputMethodHints)
+   const QString &text, bool *ok, Qt::WindowFlags flags, Qt::InputMethodHints inputMethodHints)
 {
    QInputDialog dialog(parent, flags);
+
    dialog.setOptions(QInputDialog::UsePlainTextEditForTextInput);
    dialog.setWindowTitle(title);
    dialog.setLabelText(label);
@@ -1065,13 +1064,11 @@ QString QInputDialog::getMultiLineText(QWidget *parent, const QString &title, co
    }
 }
 
-
-
-
 int QInputDialog::getInt(QWidget *parent, const QString &title, const QString &label, int value,
    int min, int max, int step, bool *ok, Qt::WindowFlags flags)
 {
    QInputDialog dialog(parent, flags);
+
    dialog.setWindowTitle(title);
    dialog.setLabelText(label);
    dialog.setIntRange(min, max);
@@ -1079,9 +1076,11 @@ int QInputDialog::getInt(QWidget *parent, const QString &title, const QString &l
    dialog.setIntStep(step);
 
    int ret = dialog.exec();
+
    if (ok) {
       *ok = !!ret;
    }
+
    if (ret) {
       return dialog.intValue();
    } else {
@@ -1093,6 +1092,7 @@ double QInputDialog::getDouble(QWidget *parent, const QString &title, const QStr
    double value, double min, double max, int decimals, bool *ok, Qt::WindowFlags flags)
 {
    QInputDialog dialog(parent, flags);
+
    dialog.setWindowTitle(title);
    dialog.setLabelText(label);
    dialog.setDoubleDecimals(decimals);
@@ -1119,6 +1119,7 @@ QString QInputDialog::getItem(QWidget *parent, const QString &title, const QStri
    QString text(items.value(current));
 
    QInputDialog dialog(parent, flags);
+
    dialog.setWindowTitle(title);
    dialog.setLabelText(label);
    dialog.setComboBoxItems(items);
@@ -1131,15 +1132,13 @@ QString QInputDialog::getItem(QWidget *parent, const QString &title, const QStri
    if (ok) {
       *ok = !!ret;
    }
+
    if (ret) {
       return dialog.textValue();
    } else {
       return text;
    }
 }
-
-
-
 
 void QInputDialog::_q_textChanged(const QString &un_named_arg1)
 {

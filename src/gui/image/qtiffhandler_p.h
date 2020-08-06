@@ -26,8 +26,6 @@
 
 #include <qimageiohandler.h>
 
-QT_BEGIN_NAMESPACE
-
 class QTiffHandler : public QImageIOHandler
 {
  public:
@@ -55,7 +53,5 @@ class QTiffHandler : public QImageIOHandler
    void convert32BitOrderBigEndian(void *buffer, int width);
    int compression;
 };
-
-QT_END_NAMESPACE
 
 #endif // QTIFFHANDLER_P_H

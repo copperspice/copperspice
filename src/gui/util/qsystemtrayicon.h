@@ -55,7 +55,12 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
    GUI_CS_PROPERTY_DESIGNABLE(visible, false)
 
  public:
-   enum MessageIcon { NoIcon, Information, Warning, Critical };
+   enum MessageIcon {
+      NoIcon,
+      Information,
+      Warning,
+      Critical
+   };
 
    QSystemTrayIcon(QObject *parent = nullptr);
    QSystemTrayIcon(const QIcon &icon, QObject *parent = nullptr);
@@ -120,8 +125,6 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
    friend class QSystemTrayIconSys;
    friend class QBalloonTip;
 };
-
-
 
 inline void QSystemTrayIcon::show()
 {

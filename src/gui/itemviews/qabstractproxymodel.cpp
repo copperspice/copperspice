@@ -31,7 +31,7 @@
 
 #include <qabstractproxymodel_p.h>
 
-//detects the deletion of the source model
+// detects the deletion of the source model
 void QAbstractProxyModelPrivate::_q_sourceModelDestroyed()
 {
    invalidatePersistentIndexes();
@@ -63,6 +63,7 @@ void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
       if (sourceModel) {
          d->model = sourceModel;
          connect(d->model, &QObject::destroyed, this, &QAbstractProxyModel::_q_sourceModelDestroyed);
+
       } else {
          d->model = QAbstractItemModelPrivate::staticEmptyModel();
       }
@@ -74,16 +75,18 @@ void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
 
 void QAbstractProxyModel::resetInternalData()
 {
-    Q_D(QAbstractProxyModel);
-    d->roleNames = d->model->roleNames();
+   Q_D(QAbstractProxyModel);
+   d->roleNames = d->model->roleNames();
 }
 
 QAbstractItemModel *QAbstractProxyModel::sourceModel() const
 {
    Q_D(const QAbstractProxyModel);
+
    if (d->model == QAbstractItemModelPrivate::staticEmptyModel()) {
-      return 0;
+      return nullptr;
    }
+
    return d->model;
 }
 
@@ -136,13 +139,11 @@ QVariant QAbstractProxyModel::data(const QModelIndex &proxyIndex, int role) cons
    return d->model->data(mapToSource(proxyIndex), role);
 }
 
-/*!
-    \reimp
- */
 QVariant QAbstractProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    Q_D(const QAbstractProxyModel);
    int sourceSection;
+
    if (orientation == Qt::Horizontal) {
       const QModelIndex proxyIndex = index(0, section);
       sourceSection = mapToSource(proxyIndex).column();
@@ -150,50 +151,38 @@ QVariant QAbstractProxyModel::headerData(int section, Qt::Orientation orientatio
       const QModelIndex proxyIndex = index(section, 0);
       sourceSection = mapToSource(proxyIndex).row();
    }
+
    return d->model->headerData(sourceSection, orientation, role);
 }
 
-/*!
-    \reimp
- */
 QMap<int, QVariant> QAbstractProxyModel::itemData(const QModelIndex &proxyIndex) const
 {
    return QAbstractItemModel::itemData(proxyIndex);
 }
 
-/*!
-    \reimp
- */
 Qt::ItemFlags QAbstractProxyModel::flags(const QModelIndex &index) const
 {
    Q_D(const QAbstractProxyModel);
    return d->model->flags(mapToSource(index));
 }
 
-/*!
-    \reimp
- */
 bool QAbstractProxyModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
    Q_D(QAbstractProxyModel);
    return d->model->setData(mapToSource(index), value, role);
 }
 
-/*!
-    \reimp
- */
 bool QAbstractProxyModel::setItemData(const QModelIndex &index, const QMap< int, QVariant > &roles)
 {
    return QAbstractItemModel::setItemData(index, roles);
 }
 
-/*!
-    \reimp
- */
 bool QAbstractProxyModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
    Q_D(QAbstractProxyModel);
+
    int sourceSection;
+
    if (orientation == Qt::Horizontal) {
       const QModelIndex proxyIndex = index(0, section);
       sourceSection = mapToSource(proxyIndex).column();
@@ -204,56 +193,35 @@ bool QAbstractProxyModel::setHeaderData(int section, Qt::Orientation orientation
    return d->model->setHeaderData(sourceSection, orientation, value, role);
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
 QModelIndex QAbstractProxyModel::buddy(const QModelIndex &index) const
 {
    Q_D(const QAbstractProxyModel);
    return mapFromSource(d->model->buddy(mapToSource(index)));
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
 bool QAbstractProxyModel::canFetchMore(const QModelIndex &parent) const
 {
    Q_D(const QAbstractProxyModel);
    return d->model->canFetchMore(mapToSource(parent));
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
 void QAbstractProxyModel::fetchMore(const QModelIndex &parent)
 {
    Q_D(QAbstractProxyModel);
    d->model->fetchMore(mapToSource(parent));
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
 void QAbstractProxyModel::sort(int column, Qt::SortOrder order)
 {
    Q_D(QAbstractProxyModel);
    d->model->sort(column, order);
 }
 
-/*!
-    \reimp
-    \since 4.8
- */
 QSize QAbstractProxyModel::span(const QModelIndex &index) const
 {
    Q_D(const QAbstractProxyModel);
    return d->model->span(mapToSource(index));
 }
-
 
 bool QAbstractProxyModel::hasChildren(const QModelIndex &parent) const
 {
@@ -284,11 +252,14 @@ void QAbstractProxyModelPrivate::mapDropCoordinatesToSource(int row, int column,
    Q_Q(const QAbstractProxyModel);
    *sourceRow = -1;
    *sourceColumn = -1;
+
    if (row == -1 && column == -1) {
       *sourceParent = q->mapToSource(parent);
+
    } else if (row == q->rowCount(parent)) {
       *sourceParent = q->mapToSource(parent);
       *sourceRow = model->rowCount(*sourceParent);
+
    } else {
       QModelIndex proxyIndex = q->index(row, column, parent);
       QModelIndex sourceIndex = q->mapToSource(proxyIndex);
@@ -302,10 +273,12 @@ bool QAbstractProxyModel::canDropMimeData(const QMimeData *data, Qt::DropAction 
    int row, int column, const QModelIndex &parent) const
 {
    Q_D(const QAbstractProxyModel);
+
    int sourceDestinationRow;
    int sourceDestinationColumn;
    QModelIndex sourceParent;
    d->mapDropCoordinatesToSource(row, column, parent, &sourceDestinationRow, &sourceDestinationColumn, &sourceParent);
+
    return d->model->canDropMimeData(data, action, sourceDestinationRow, sourceDestinationColumn, sourceParent);
 }
 
@@ -325,7 +298,6 @@ QStringList QAbstractProxyModel::mimeTypes() const
    Q_D(const QAbstractProxyModel);
    return d->model->mimeTypes();
 }
-
 
 Qt::DropActions QAbstractProxyModel::supportedDragActions() const
 {

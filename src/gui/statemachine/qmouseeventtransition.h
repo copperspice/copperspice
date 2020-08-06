@@ -26,8 +26,6 @@
 
 #include <qeventtransition.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_STATEMACHINE
 
 class QMouseEventTransitionPrivate;
@@ -43,9 +41,9 @@ class Q_GUI_EXPORT QMouseEventTransition : public QEventTransition
    GUI_CS_PROPERTY_WRITE(modifierMask, setModifierMask)
 
  public:
-   QMouseEventTransition(QState *sourceState = 0);
-   QMouseEventTransition(QObject *object, QEvent::Type type,
-                         Qt::MouseButton button, QState *sourceState = 0);
+   QMouseEventTransition(QState *sourceState = nullptr);
+   QMouseEventTransition(QObject *object, QEvent::Type type, Qt::MouseButton button, QState *sourceState = nullptr);
+
    ~QMouseEventTransition();
 
    Qt::MouseButton button() const;
@@ -67,7 +65,5 @@ class Q_GUI_EXPORT QMouseEventTransition : public QEventTransition
 };
 
 #endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
 
 #endif

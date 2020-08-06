@@ -62,5 +62,4 @@ class Q_GUI_EXPORT QStringListModel : public QAbstractListModel
 
 #endif // QT_NO_STRINGLISTMODEL
 
-
-#endif // QSTRINGLISTMODEL_H
+#endif

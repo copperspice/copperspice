@@ -33,8 +33,6 @@ class QPlatformOffscreenSurfacePrivate;
 
 class Q_GUI_EXPORT QPlatformOffscreenSurface : public QPlatformSurface
 {
-   Q_DECLARE_PRIVATE(QPlatformOffscreenSurface)
-
  public:
    explicit QPlatformOffscreenSurface(QOffscreenSurface *offscreenSurface);
    virtual ~QPlatformOffscreenSurface();
@@ -50,8 +48,8 @@ class Q_GUI_EXPORT QPlatformOffscreenSurface : public QPlatformSurface
    QScopedPointer<QPlatformOffscreenSurfacePrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QPlatformOffscreenSurface)
    Q_DISABLE_COPY(QPlatformOffscreenSurface)
 };
-
 
 #endif

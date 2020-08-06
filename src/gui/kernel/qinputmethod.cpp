@@ -28,17 +28,13 @@
 #include <qplatform_inputcontext_p.h>
 #include <QDebug>
 
-/*!
-    \internal
-*/
+// internal
 QInputMethod::QInputMethod()
    : d_ptr(new QInputMethodPrivate)
 {
 }
 
-/*!
-    \internal
-*/
+// internal
 QInputMethod::~QInputMethod()
 {
 }
@@ -49,11 +45,6 @@ QTransform QInputMethod::inputItemTransform() const
    return d->inputItemTransform;
 }
 
-/*!
-    Sets the transformation from input item coordinates to window coordinates to be \a transform.
-    Item transform needs to be updated by the focused window like QQuickCanvas whenever
-    item is moved inside the scene.
-*/
 void QInputMethod::setInputItemTransform(const QTransform &transform)
 {
    Q_D(QInputMethod);
@@ -65,40 +56,18 @@ void QInputMethod::setInputItemTransform(const QTransform &transform)
    emit cursorRectangleChanged();
 }
 
-
-/*!
-    \since 5.1
-
-    Returns the input item's geometry in input item coordinates.
-
-    \sa setInputItemRectangle()
-*/
 QRectF QInputMethod::inputItemRectangle() const
 {
    Q_D(const QInputMethod);
    return d->inputRectangle;
 }
 
-/*!
-    \since 5.1
-
-    Sets the input item's geometry to be \a rect, in input item coordinates.
-    This needs to be updated by the focused window like QQuickCanvas whenever
-    item is moved inside the scene, or focus is changed.
-*/
 void QInputMethod::setInputItemRectangle(const QRectF &rect)
 {
    Q_D(QInputMethod);
    d->inputRectangle = rect;
 }
 
-/*!
-    \property QInputMethod::cursorRectangle
-    \brief Input item's cursor rectangle in window coordinates.
-
-    Cursor rectangle is often used by various text editing controls
-    like text prediction popups for following the text being typed.
-*/
 QRectF QInputMethod::cursorRectangle() const
 {
    Q_D(const QInputMethod);
@@ -111,6 +80,7 @@ QRectF QInputMethod::cursorRectangle() const
    QInputMethodQueryEvent query(Qt::ImCursorRectangle);
    QGuiApplication::sendEvent(focusObject, &query);
    QRectF r = query.value(Qt::ImCursorRectangle).toRectF();
+
    if (!r.isValid()) {
       return QRectF();
    }

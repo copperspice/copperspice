@@ -26,8 +26,6 @@
 
 #include <qeventtransition.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_STATEMACHINE
 
 class QKeyEventTransitionPrivate;
@@ -42,9 +40,9 @@ class Q_GUI_EXPORT QKeyEventTransition : public QEventTransition
    GUI_CS_PROPERTY_WRITE(modifierMask, setModifierMask)
 
  public:
-   QKeyEventTransition(QState *sourceState = 0);
-   QKeyEventTransition(QObject *object, QEvent::Type type, int key,
-                       QState *sourceState = 0);
+   QKeyEventTransition(QState *sourceState = nullptr);
+   QKeyEventTransition(QObject *object, QEvent::Type type, int key, QState *sourceState = nullptr);
+
    ~QKeyEventTransition();
 
    int key() const;
@@ -63,7 +61,5 @@ class Q_GUI_EXPORT QKeyEventTransition : public QEventTransition
 };
 
 #endif //QT_NO_STATEMACHINE
-
-QT_END_NAMESPACE
 
 #endif

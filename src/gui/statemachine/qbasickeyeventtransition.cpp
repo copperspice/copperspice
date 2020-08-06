@@ -29,17 +29,6 @@
 #include <qdebug.h>
 #include <qabstracttransition_p.h>
 
-QT_BEGIN_NAMESPACE
-
-/*!
-  \internal
-  \class QBasicKeyEventTransition
-  \since 4.6
-  \ingroup statemachine
-
-  \brief The QBasicKeyEventTransition class provides a transition for Qt key events.
-*/
-
 class QBasicKeyEventTransitionPrivate : public QAbstractTransitionPrivate
 {
    Q_DECLARE_PUBLIC(QBasicKeyEventTransition)
@@ -65,18 +54,11 @@ QBasicKeyEventTransitionPrivate *QBasicKeyEventTransitionPrivate::get(QBasicKeyE
    return q->d_func();
 }
 
-/*!
-  Constructs a new key event transition with the given \a sourceState.
-*/
 QBasicKeyEventTransition::QBasicKeyEventTransition(QState *sourceState)
    : QAbstractTransition(*new QBasicKeyEventTransitionPrivate, sourceState)
 {
 }
 
-/*!
-  Constructs a new event transition for events of the given \a type for the
-  given \a key, with the given \a sourceState.
-*/
 QBasicKeyEventTransition::QBasicKeyEventTransition(QEvent::Type type, int key,
       QState *sourceState)
    : QAbstractTransition(*new QBasicKeyEventTransitionPrivate, sourceState)
@@ -86,10 +68,6 @@ QBasicKeyEventTransition::QBasicKeyEventTransition(QEvent::Type type, int key,
    d->key = key;
 }
 
-/*!
-  Constructs a new event transition for events of the given \a type for the
-  given \a key, with the given \a modifierMask and \a sourceState.
-*/
 QBasicKeyEventTransition::QBasicKeyEventTransition(QEvent::Type type, int key,
       Qt::KeyboardModifiers modifierMask,
       QState *sourceState)
@@ -101,63 +79,40 @@ QBasicKeyEventTransition::QBasicKeyEventTransition(QEvent::Type type, int key,
    d->modifierMask = modifierMask;
 }
 
-/*!
-  Destroys this event transition.
-*/
 QBasicKeyEventTransition::~QBasicKeyEventTransition()
 {
 }
 
-/*!
-  Returns the event type that this key event transition is associated with.
-*/
 QEvent::Type QBasicKeyEventTransition::eventType() const
 {
    Q_D(const QBasicKeyEventTransition);
    return d->eventType;
 }
 
-/*!
-  Sets the event \a type that this key event transition is associated with.
-*/
 void QBasicKeyEventTransition::setEventType(QEvent::Type type)
 {
    Q_D(QBasicKeyEventTransition);
    d->eventType = type;
 }
 
-/*!
-  Returns the key that this key event transition checks for.
-*/
 int QBasicKeyEventTransition::key() const
 {
    Q_D(const QBasicKeyEventTransition);
    return d->key;
 }
 
-/*!
-  Sets the key that this key event transition will check for.
-*/
 void QBasicKeyEventTransition::setKey(int key)
 {
    Q_D(QBasicKeyEventTransition);
    d->key = key;
 }
 
-/*!
-  Returns the keyboard modifier mask that this key event transition checks
-  for.
-*/
 Qt::KeyboardModifiers QBasicKeyEventTransition::modifierMask() const
 {
    Q_D(const QBasicKeyEventTransition);
    return d->modifierMask;
 }
 
-/*!
-  Sets the keyboard modifier mask that this key event transition will check
-  for.
-*/
 void QBasicKeyEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
 {
    Q_D(QBasicKeyEventTransition);
@@ -184,7 +139,5 @@ bool QBasicKeyEventTransition::eventTest(QEvent *event)
 void QBasicKeyEventTransition::onTransition(QEvent *)
 {
 }
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_STATEMACHINE

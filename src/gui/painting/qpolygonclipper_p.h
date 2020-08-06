@@ -100,6 +100,7 @@ template <typename InType, typename OutType, typename CastType> class QPolygonCl
       // Gather some info since we are iterating through the points anyway..
       bool doLeft = false, doRight = false, doTop = false, doBottom = false;
       OutType ot;
+
       for (int i = 0; i < inCount; ++i) {
          ot = inPoints[i];
          clipped->add(ot);
@@ -272,7 +273,10 @@ template <typename InType, typename OutType, typename CastType> class QPolygonCl
    }
 
  private:
-   int x1, x2, y1, y2;
+   int x1;
+   int x2;
+   int y1;
+   int y2;
 
    QVector<OutType> buffer1;
    QVector<OutType> buffer2;

@@ -83,16 +83,17 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
     vertexArray.append(points[0]); // The first element is always a moveTo
 
     do {
-        if (!elements) {
-//             qDebug("QVectorPath has no elements");
-            // If the path has a null elements pointer, the elements implicitly
-            // start with a moveTo (already added) and continue with lineTos:
-            for (int i=1; i<path.elementCount(); ++i)
-                lineToArray(points[i].x(), points[i].y());
+        if (! elements) {
+//         qDebug("QVectorPath has no elements");
+           // If the path has a null elements pointer, the elements implicitly
+           // start with a moveTo (already added) and continue with lineTos:
+           for (int i=1; i<path.elementCount(); ++i)
+              lineToArray(points[i].x(), points[i].y());
 
-            break;
+           break;
         }
-//         qDebug("QVectorPath has element types");
+
+//      qDebug("QVectorPath has element types");
 
         for (int i=1; i<path.elementCount(); ++i) {
             switch (elements[i]) {
@@ -107,10 +108,12 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
                 }
                 lineToArray(points[i].x(), points[i].y()); // Add the moveTo as a new vertex
                 break;
+
             case QPainterPath::LineToElement:
 //                qDebug("element[%d] is a LineToElement", i);
                 lineToArray(points[i].x(), points[i].y());
                 break;
+
             case QPainterPath::CurveToElement: {
                 QBezier b = QBezier::fromPoints(*(((const QPointF *) points) + i - 1),
                                                 points[i],

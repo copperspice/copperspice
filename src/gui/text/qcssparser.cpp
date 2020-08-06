@@ -2605,9 +2605,9 @@ bool Parser::parse(StyleSheet *styleSheet, Qt::CaseSensitivity nameCaseSensitivi
       }
    }
 
-
-   while (test(S) || test(CDO) || test(CDC))
-   {}
+   while (test(S) || test(CDO) || test(CDC)) {
+      // do nothing
+   }
 
    while (testImport()) {
       ImportRule rule;

@@ -161,13 +161,16 @@ class QWellArray : public QWidget
 
  public:
    QWellArray(int rows, int cols, QWidget *parent = nullptr);
-   ~QWellArray() {}
+   ~QWellArray()
+   {
+   }
 
    QString cellContent(int row, int col) const;
 
    int selectedColumn() const {
       return selCol;
    }
+
    int selectedRow() const {
       return selRow;
    }
@@ -263,7 +266,6 @@ class QWellArray : public QWidget
    int curCol;
    int selRow;
    int selCol;
-
 };
 
 void QWellArray::paintEvent(QPaintEvent *e)

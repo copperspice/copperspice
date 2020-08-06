@@ -29,19 +29,16 @@
 #include <qsharedpointer.h>
 #include <qpaintdevice.h>
 
-
-
 #ifndef QT_NO_PICTURE
 
 class QPicturePrivate;
 
 class Q_GUI_EXPORT QPicture : public QPaintDevice
 {
-   Q_DECLARE_PRIVATE(QPicture)
-
  public:
    explicit QPicture(int formatVersion = -1);
    QPicture(const QPicture &);
+
    ~QPicture();
 
    bool isNull() const;
@@ -64,14 +61,15 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
 
    QPicture &operator=(const QPicture &p);
 
-   inline QPicture &operator=(QPicture &&other) {
+   QPicture &operator=(QPicture &&other) {
       qSwap(d_ptr, other.d_ptr);
       return *this;
    }
 
-   inline void swap(QPicture &other) {
+   void swap(QPicture &other) {
       d_ptr.swap(other.d_ptr);
    }
+
    void detach();
    bool isDetached() const;
 
@@ -87,8 +85,9 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
 
    QPaintEngine *paintEngine() const override;
 
-   typedef QExplicitlySharedDataPointer<QPicturePrivate> DataPtr;
-   inline DataPtr &data_ptr() {
+   using DataPtr = QExplicitlySharedDataPointer<QPicturePrivate>;
+
+   DataPtr &data_ptr() {
       return d_ptr;
    }
 
@@ -98,26 +97,27 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
    int metric(PaintDeviceMetric m) const override;
 
  private:
-   bool exec(QPainter *p, QDataStream &ds, int i);
+   Q_DECLARE_PRIVATE(QPicture)
 
+   bool exec(QPainter *p, QDataStream &ds, int i);
    QExplicitlySharedDataPointer<QPicturePrivate> d_ptr;
+
    friend class QPicturePaintEngine;
    friend class QAlphaPaintEngine;
    friend class QPreviewPaintEngine;
-
 };
 
 #ifndef QT_NO_PICTUREIO
+
 class QIODevice;
 class QPictureIO;
 
-typedef void (*picture_io_handler)(QPictureIO *); // picture IO handler
+using picture_io_handler = void (*)(QPictureIO *);
 
 struct QPictureIOData;
 
 class Q_GUI_EXPORT QPictureIO
 {
-
  public:
    QPictureIO();
    QPictureIO(QIODevice *ioDevice, const QString &format);
@@ -162,13 +162,10 @@ class Q_GUI_EXPORT QPictureIO
    QPictureIOData *d;
 };
 
-#endif //QT_NO_PICTUREIO
-
-
+#endif // QT_NO_PICTUREIO
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPicture &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPicture &);
-
 
 #endif // QT_NO_PICTURE
 

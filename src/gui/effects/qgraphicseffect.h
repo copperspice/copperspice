@@ -115,7 +115,7 @@ class Q_GUI_EXPORT QGraphicsEffect : public QObject
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsEffect::ChangeFlags)
 
-class Q_GUI_EXPORT QGraphicsColorizeEffect: public QGraphicsEffect
+class Q_GUI_EXPORT QGraphicsColorizeEffect : public QGraphicsEffect
 {
    GUI_CS_OBJECT(QGraphicsColorizeEffect)
 
@@ -151,7 +151,7 @@ class Q_GUI_EXPORT QGraphicsColorizeEffect: public QGraphicsEffect
    Q_DISABLE_COPY(QGraphicsColorizeEffect)
 };
 
-class Q_GUI_EXPORT QGraphicsBlurEffect: public QGraphicsEffect
+class Q_GUI_EXPORT QGraphicsBlurEffect : public QGraphicsEffect
 {
    GUI_CS_OBJECT(QGraphicsBlurEffect)
 
@@ -198,7 +198,7 @@ class Q_GUI_EXPORT QGraphicsBlurEffect: public QGraphicsEffect
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGraphicsBlurEffect::BlurHints)
 
-class Q_GUI_EXPORT QGraphicsDropShadowEffect: public QGraphicsEffect
+class Q_GUI_EXPORT QGraphicsDropShadowEffect : public QGraphicsEffect
 {
    GUI_CS_OBJECT(QGraphicsDropShadowEffect)
 

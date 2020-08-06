@@ -264,6 +264,4 @@ class Q_GUI_EXPORT QMenu : public QWidget
 
 #endif // QT_NO_MENU
 
-QT_END_NAMESPACE
-
 #endif // QMENU_H

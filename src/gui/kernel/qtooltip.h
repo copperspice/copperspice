@@ -26,8 +26,6 @@
 
 #include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TOOLTIP
 
 class Q_GUI_EXPORT QToolTip
@@ -53,6 +51,5 @@ class Q_GUI_EXPORT QToolTip
 };
 
 #endif // QT_NO_TOOLTIP
-
 
 #endif // QTOOLTIP_H

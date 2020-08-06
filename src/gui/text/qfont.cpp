@@ -1546,10 +1546,10 @@ bool QFontInfo::strikeOut() const
 bool QFontInfo::fixedPitch() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
 
 #ifdef Q_OS_DARWIN
-   if (!engine->fontDef.fixedPitchComputed) {
+   if (! engine->fontDef.fixedPitchComputed) {
       QGlyphLayoutArray<2> g;
       int l = 2;
 
@@ -1567,7 +1567,8 @@ bool QFontInfo::fixedPitch() const
 QFont::StyleHint QFontInfo::styleHint() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
+
    return (QFont::StyleHint) engine->fontDef.styleHint;
 }
 

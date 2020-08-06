@@ -27,8 +27,6 @@
 #include <qcoreapplication.h>
 #include <qaccessiblewidget.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAbstractButton;
@@ -40,6 +38,7 @@ class QProgressBar;
 class QAccessibleButton : public QAccessibleWidget
 {
    Q_DECLARE_TR_FUNCTIONS(QAccessibleButton)
+
  public:
    QAccessibleButton(QWidget *w);
 
@@ -156,6 +155,7 @@ class QAccessibleLineEdit : public QAccessibleWidget, public QAccessibleTextInte
    void deleteText(int startOffset, int endOffset) override;
    void insertText(int offset, const QString &text) override;
    void replaceText(int startOffset, int endOffset, const QString &text) override;
+
  protected:
    QLineEdit *lineEdit() const;
    friend class QAccessibleAbstractSpinBox;
@@ -182,6 +182,7 @@ class QAccessibleProgressBar : public QAccessibleDisplay, public QAccessibleValu
 #endif
 
 class QWindowContainer;
+
 class QAccessibleWindowContainer : public QAccessibleWidget
 {
  public:
@@ -196,6 +197,4 @@ class QAccessibleWindowContainer : public QAccessibleWidget
 
 #endif // QT_NO_ACCESSIBILITY
 
-QT_END_NAMESPACE
-
-#endif // SIMPLEWIDGETS_H
+#endif

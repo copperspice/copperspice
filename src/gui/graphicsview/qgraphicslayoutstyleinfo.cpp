@@ -31,7 +31,7 @@
 #include <qwidget.h>
 #include <qapplication.h>
 
-QT_BEGIN_NAMESPACE QGraphicsLayoutStyleInfo::QGraphicsLayoutStyleInfo(const QGraphicsLayoutPrivate *layout)
+QGraphicsLayoutStyleInfo::QGraphicsLayoutStyleInfo(const QGraphicsLayoutPrivate *layout)
    : m_layout(layout), m_style(0)
 {
    m_widget = new QWidget; // pixelMetric might need a widget ptr
@@ -92,7 +92,5 @@ QStyle *QGraphicsLayoutStyleInfo::style() const
    }
    return m_style;
 }
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_GRAPHICSVIEW

@@ -30,8 +30,6 @@
 
 #include <qevent.h>
 
-QT_BEGIN_NAMESPACE
-
 class QBasicKeyEventTransitionPrivate;
 
 class QBasicKeyEventTransition : public QAbstractTransition
@@ -39,9 +37,10 @@ class QBasicKeyEventTransition : public QAbstractTransition
    GUI_CS_OBJECT(QBasicKeyEventTransition)
 
  public:
-   QBasicKeyEventTransition(QState *sourceState = 0);
-   QBasicKeyEventTransition(QEvent::Type type, int key, QState *sourceState = 0);
-   QBasicKeyEventTransition(QEvent::Type type, int key, Qt::KeyboardModifiers modifierMask, QState *sourceState = 0);
+   QBasicKeyEventTransition(QState *sourceState = nullptr);
+   QBasicKeyEventTransition(QEvent::Type type, int key, QState *sourceState = nullptr);
+   QBasicKeyEventTransition(QEvent::Type type, int key, Qt::KeyboardModifiers modifierMask, QState *sourceState = nullptr);
+
    ~QBasicKeyEventTransition();
 
    QEvent::Type eventType() const;
@@ -61,8 +60,6 @@ class QBasicKeyEventTransition : public QAbstractTransition
    Q_DISABLE_COPY(QBasicKeyEventTransition)
    Q_DECLARE_PRIVATE(QBasicKeyEventTransition)
 };
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_STATEMACHINE
 

@@ -25,22 +25,6 @@
 #include "qopenglfunctions_1_5.h"
 #include "qopenglcontext.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QOpenGLFunctions_1_5
-    \inmodule QtGui
-    \since 5.1
-    \wrapper
-    \brief The QOpenGLFunctions_1_5 class provides all functions for OpenGL 1.5 specification.
-
-    This class is a wrapper for functions from OpenGL 1.5 specification.
-    See reference pages on \l {http://www.opengl.org/sdk/docs/}{opengl.org}
-    for function documentation.
-
-    \sa QAbstractOpenGLFunctions
-*/
-
 QOpenGLFunctions_1_5::QOpenGLFunctions_1_5()
  : QAbstractOpenGLFunctions()
  , d_1_0_Core(0)
@@ -233,5 +217,3 @@ QOpenGLVersionProfile QOpenGLFunctions_1_5::versionProfile()
     v.setVersion(1, 5);
     return v;
 }
-
-QT_END_NAMESPACE

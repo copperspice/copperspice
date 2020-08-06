@@ -26,8 +26,6 @@
 
 #include <qabstractitemview.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_LISTVIEW
 
 class QListViewPrivate;
@@ -198,6 +196,7 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
    QSize viewportSizeHint() const override;
+
  private:
    int visualIndex(const QModelIndex &index) const;
 

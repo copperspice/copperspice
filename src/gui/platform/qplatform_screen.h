@@ -46,8 +46,6 @@ using QDpi = QPair<qreal, qreal>;
 
 class Q_GUI_EXPORT QPlatformScreen
 {
-   Q_DECLARE_PRIVATE(QPlatformScreen)
-
  public:
    enum SubpixelAntialiasingType {
       // copied from qfontengine_p.h since we can't include private headers
@@ -123,6 +121,7 @@ class Q_GUI_EXPORT QPlatformScreen
    QScopedPointer<QPlatformScreenPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QPlatformScreen)
    Q_DISABLE_COPY(QPlatformScreen)
 
    friend class QScreenPrivate;

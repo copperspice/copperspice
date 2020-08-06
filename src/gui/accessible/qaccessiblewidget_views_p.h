@@ -30,8 +30,6 @@
 #include <qabstractitemview.h>
 #include <qheaderview.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ACCESSIBILITY
 
 #ifndef QT_NO_ITEMVIEWS
@@ -297,11 +295,8 @@ class QAccessibleTableCornerButton: public QAccessibleInterface
    QPointer<QAbstractItemView> view;
 };
 
-
 #endif
 
 #endif // QT_NO_ACCESSIBILITY
 
-QT_END_NAMESPACE
-
-#endif // ACCESSIBLE_ITEMVIEWS_H
+#endif

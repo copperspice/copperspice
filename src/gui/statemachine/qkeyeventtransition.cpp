@@ -29,20 +29,16 @@
 #include <qstatemachine.h>
 #include <qeventtransition_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QKeyEventTransitionPrivate : public QEventTransitionPrivate
 {
    Q_DECLARE_PUBLIC(QKeyEventTransition)
+
  public:
    QKeyEventTransitionPrivate() {}
 
    QBasicKeyEventTransition *transition;
 };
 
-/*!
-  Constructs a new key event transition with the given \a sourceState.
-*/
 QKeyEventTransition::QKeyEventTransition(QState *sourceState)
    : QEventTransition(*new QKeyEventTransitionPrivate, sourceState)
 {
@@ -50,10 +46,6 @@ QKeyEventTransition::QKeyEventTransition(QState *sourceState)
    d->transition = new QBasicKeyEventTransition();
 }
 
-/*!
-  Constructs a new key event transition for events of the given \a type for
-  the given \a object, with the given \a key and \a sourceState.
-*/
 QKeyEventTransition::QKeyEventTransition(QObject *object, QEvent::Type type,
       int key, QState *sourceState)
    : QEventTransition(*new QKeyEventTransitionPrivate, object, type, sourceState)
@@ -62,47 +54,30 @@ QKeyEventTransition::QKeyEventTransition(QObject *object, QEvent::Type type,
    d->transition = new QBasicKeyEventTransition(type, key);
 }
 
-/*!
-  Destroys this key event transition.
-*/
 QKeyEventTransition::~QKeyEventTransition()
 {
    Q_D(QKeyEventTransition);
    delete d->transition;
 }
 
-/*!
-  Returns the key that this key event transition checks for.
-*/
 int QKeyEventTransition::key() const
 {
    Q_D(const QKeyEventTransition);
    return d->transition->key();
 }
 
-/*!
-  Sets the key that this key event transition will check for.
-*/
 void QKeyEventTransition::setKey(int key)
 {
    Q_D(QKeyEventTransition);
    d->transition->setKey(key);
 }
 
-/*!
-  Returns the keyboard modifier mask that this key event transition checks
-  for.
-*/
 Qt::KeyboardModifiers QKeyEventTransition::modifierMask() const
 {
    Q_D(const QKeyEventTransition);
    return d->transition->modifierMask();
 }
 
-/*!
-  Sets the keyboard modifier mask that this key event transition will
-  check for to \a modifierMask.
-*/
 void QKeyEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
 {
    Q_D(QKeyEventTransition);
@@ -131,6 +106,5 @@ void QKeyEventTransition::onTransition(QEvent *event)
    QEventTransition::onTransition(event);
 }
 
-QT_END_NAMESPACE
 
 #endif //QT_NO_STATEMACHINE

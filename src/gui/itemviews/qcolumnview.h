@@ -26,8 +26,6 @@
 
 #include <qabstractitemview.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_COLUMNVIEW
 
 class QColumnViewPrivate;
@@ -100,7 +98,6 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
 };
 
 #endif // QT_NO_COLUMNVIEW
-
 
 #endif // QCOLUMNVIEW_H
 

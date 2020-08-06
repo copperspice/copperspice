@@ -31,8 +31,6 @@
 #include <qpointer.h>
 #include <qpair.h>
 
-QT_BEGIN_NAMESPACE
-
 class QTextEdit;
 class QStackedWidget;
 class QToolBox;
@@ -290,7 +288,5 @@ class QAccessibleMainWindow : public QAccessibleWidget
 #endif //QT_NO_MAINWINDOW
 
 #endif // QT_NO_ACCESSIBILITY
-
-QT_END_NAMESPACE
 
 #endif // QACESSIBLEWIDGETS_H

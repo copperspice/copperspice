@@ -28,9 +28,6 @@
 #include <qobject.h>
 #include <qtextobject.h>
 
-
-QT_BEGIN_NAMESPACE
-
 class QTextCursor;
 class QTextTable;
 class QTextTablePrivate;
@@ -128,6 +125,4 @@ class Q_GUI_EXPORT QTextTable : public QTextFrame
    friend class QTextTableCell;
 };
 
-QT_END_NAMESPACE
-
-#endif // QTEXTTABLE_H
+#endif

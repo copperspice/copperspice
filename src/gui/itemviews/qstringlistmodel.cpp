@@ -21,20 +21,12 @@
 *
 ***********************************************************************/
 
-/*
-    A simple model that uses a QStringList as its data source.
-*/
-
-
-
 #include <qstringlistmodel.h>
 #include <qvector.h>
 
 #include <algorithm>
 
 #ifndef QT_NO_STRINGLISTMODEL
-
-
 
 QStringListModel::QStringListModel(QObject *parent)
    : QAbstractListModel(parent)
@@ -57,22 +49,12 @@ int QStringListModel::rowCount(const QModelIndex &parent) const
 
 QModelIndex QStringListModel::sibling(int row, int column, const QModelIndex &idx) const
 {
-   if (!idx.isValid() || column != 0 || row >= lst.count()) {
+   if (! idx.isValid() || column != 0 || row >= lst.count()) {
       return QModelIndex();
    }
 
    return createIndex(row, 0);
 }
-
-
-/*!
-    Returns data for the specified \a role, from the item with the
-    given \a index.
-
-    If the view requests an invalid index, an invalid variant is returned.
-
-    \sa setData()
-*/
 
 QVariant QStringListModel::data(const QModelIndex &index, int role) const
 {
@@ -87,14 +69,6 @@ QVariant QStringListModel::data(const QModelIndex &index, int role) const
    return QVariant();
 }
 
-/*!
-    Returns the flags for the item with the given \a index.
-
-    Valid items are enabled, selectable, editable, drag enabled and drop enabled.
-
-    \sa QAbstractItemModel::flags()
-*/
-
 Qt::ItemFlags QStringListModel::flags(const QModelIndex &index) const
 {
    if (!index.isValid()) {
@@ -104,40 +78,23 @@ Qt::ItemFlags QStringListModel::flags(const QModelIndex &index) const
    return QAbstractListModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
-/*!
-    Sets the data for the specified \a role in the item with the given
-    \a index in the model, to the provided \a value.
-
-    The dataChanged() signal is emitted if the item is changed.
-
-    \sa Qt::ItemDataRole, data()
-*/
-
 bool QStringListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
    if (index.row() >= 0 && index.row() < lst.size()
-      && (role == Qt::EditRole || role == Qt::DisplayRole)) {
+         && (role == Qt::EditRole || role == Qt::DisplayRole)) {
       lst.replace(index.row(), value.toString());
+
       QVector<int> roles;
       roles.reserve(2);
       roles.append(Qt::DisplayRole);
       roles.append(Qt::EditRole);
+
       emit dataChanged(index, index, roles);
       return true;
    }
+
    return false;
 }
-
-/*!
-    Inserts \a count rows into the model, beginning at the given \a row.
-
-    The \a parent index of the rows is optional and is only used for
-    consistency with QAbstractItemModel. By default, a null index is
-    specified, indicating that the rows are inserted in the top level of
-    the model.
-
-    \sa QAbstractItemModel::insertRows()
-*/
 
 bool QStringListModel::insertRows(int row, int count, const QModelIndex &parent)
 {
@@ -155,17 +112,6 @@ bool QStringListModel::insertRows(int row, int count, const QModelIndex &parent)
 
    return true;
 }
-
-/*!
-    Removes \a count rows from the model, beginning at the given \a row.
-
-    The \a parent index of the rows is optional and is only used for
-    consistency with QAbstractItemModel. By default, a null index is
-    specified, indicating that the rows are removed in the top level of
-    the model.
-
-    \sa QAbstractItemModel::removeRows()
-*/
 
 bool QStringListModel::removeRows(int row, int count, const QModelIndex &parent)
 {
@@ -194,9 +140,6 @@ static bool decendingLessThan(const QPair<QString, int> &s1, const QPair<QString
    return s1.first > s2.first;
 }
 
-/*!
-  \reimp
-*/
 void QStringListModel::sort(int, Qt::SortOrder order)
 {
    emit layoutAboutToBeChanged(QList<QPersistentModelIndex>(), VerticalSortHint);
@@ -216,6 +159,7 @@ void QStringListModel::sort(int, Qt::SortOrder order)
 
    lst.clear();
    QVector<int> forwarding(list.count());
+
    for (int i = 0; i < list.count(); ++i) {
       lst.append(list.at(i).first);
       forwarding[list.at(i).second] = i;
@@ -223,6 +167,7 @@ void QStringListModel::sort(int, Qt::SortOrder order)
 
    QModelIndexList oldList = persistentIndexList();
    QModelIndexList newList;
+
    const int numOldIndexes = oldList.count();
 
    for (int i = 0; i < numOldIndexes; ++i) {
@@ -233,20 +178,11 @@ void QStringListModel::sort(int, Qt::SortOrder order)
    emit layoutChanged(QList<QPersistentModelIndex>(), VerticalSortHint);
 }
 
-/*!
-    Returns the string list used by the model to store data.
-*/
 QStringList QStringListModel::stringList() const
 {
    return lst;
 }
 
-/*!
-    Sets the model's internal string list to \a strings. The model will
-    notify any attached views that its underlying data has changed.
-
-    \sa dataChanged()
-*/
 void QStringListModel::setStringList(const QStringList &strings)
 {
    beginResetModel();
@@ -254,14 +190,9 @@ void QStringListModel::setStringList(const QStringList &strings)
    endResetModel();
 }
 
-/*!
-  \reimp
-*/
 Qt::DropActions QStringListModel::supportedDropActions() const
 {
    return QAbstractItemModel::supportedDropActions() | Qt::MoveAction;
 }
-
-
 
 #endif // QT_NO_STRINGLISTMODEL

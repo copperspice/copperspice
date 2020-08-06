@@ -104,8 +104,7 @@ class Q_GUI_EXPORT QPlatformWindow : public QPlatformSurface
 
    virtual void requestUpdate();
 
-   // Window property accessors. Platform plugins should use these
-   // instead of accessing QWindow directly.
+   // Window property accessors, platform plugins should use these instead of accessing QWindow directly
    QSize windowMinimumSize() const;
    QSize windowMaximumSize() const;
    QSize windowBaseSize() const;

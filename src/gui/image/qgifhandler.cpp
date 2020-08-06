@@ -27,20 +27,10 @@
 #include <qiodevice.h>
 #include <qvariant.h>
 
-QT_BEGIN_NAMESPACE
-
 #define Q_TRANSPARENT 0x00ffffff
 
 // avoid going through QImage::scanLine() which calls detach
 #define FAST_SCAN_LINE(bits, bpl, y) (bits + (y) * bpl)
-
-
-/*
-  Incremental image decoder for GIF image format.
-
-  This subclass of QImageFormat decodes GIF format images,
-  including animated GIFs. Internally in
-*/
 
 class QGIFFormat
 {

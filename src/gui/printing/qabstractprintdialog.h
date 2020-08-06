@@ -34,7 +34,6 @@ class QPrinter;
 class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
 {
    GUI_CS_OBJECT(QAbstractPrintDialog)
-   Q_DECLARE_PRIVATE(QAbstractPrintDialog)
 
  public:
    // Keep in sync with QPrinter::PrintRange
@@ -89,6 +88,7 @@ class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
    QAbstractPrintDialog(QAbstractPrintDialogPrivate &ptr, QPrinter *printer, QWidget *parent = nullptr);
 
  private:
+   Q_DECLARE_PRIVATE(QAbstractPrintDialog)
    Q_DISABLE_COPY(QAbstractPrintDialog)
 
 #endif // QT_NO_PRINTDIALOG

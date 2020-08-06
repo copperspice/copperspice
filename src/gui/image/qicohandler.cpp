@@ -28,10 +28,7 @@
 #include <QBuffer>
 #include <qvariant.h>
 
-QT_BEGIN_NAMESPACE
-
-// These next two structs represent how the icon information is stored
-// in an ICO file.
+// These next two structs represent how the icon information is stored in an ICO file.
 typedef struct {
    quint8  bWidth;               // Width of the image
    quint8  bHeight;              // Height of the image (times 2)
@@ -889,4 +886,3 @@ bool QIcoHandler::jumpToNextImage()
    return jumpToImage(m_currentIconIndex + 1);
 }
 
-QT_END_NAMESPACE

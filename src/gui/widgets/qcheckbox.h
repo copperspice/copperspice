@@ -26,8 +26,6 @@
 
 #include <qabstractbutton.h>
 
-QT_BEGIN_NAMESPACE
-
 class QCheckBoxPrivate;
 class QStyleOptionButton;
 
@@ -69,7 +67,5 @@ class Q_GUI_EXPORT QCheckBox : public QAbstractButton
    Q_DISABLE_COPY(QCheckBox)
    friend class QAccessibleButton;
 };
-
-QT_END_NAMESPACE
 
 #endif // QCHECKBOX_H

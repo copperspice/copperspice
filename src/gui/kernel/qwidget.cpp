@@ -7184,6 +7184,7 @@ Qt::InputMethodHints QWidget::inputMethodHints() const
 {
 #ifndef QT_NO_IM
    const QWidgetPrivate *priv = d_func();
+
    while (priv->inheritsInputMethodHints) {
       priv = priv->q_func()->parentWidget()->d_func();
       Q_ASSERT(priv);
@@ -7207,7 +7208,6 @@ void QWidget::setInputMethodHints(Qt::InputMethodHints hints)
 
    if (this == QGuiApplication::focusObject()) {
       QGuiApplication::inputMethod()->update(Qt::ImHints);
-
    }
 #endif
 }

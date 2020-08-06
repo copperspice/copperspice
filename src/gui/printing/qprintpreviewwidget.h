@@ -29,8 +29,6 @@
 
 #ifndef QT_NO_PRINTPREVIEWWIDGET
 
-QT_BEGIN_NAMESPACE
-
 class QPrintPreviewWidgetPrivate;
 
 class Q_GUI_EXPORT QPrintPreviewWidget : public QWidget
@@ -127,6 +125,6 @@ class Q_GUI_EXPORT QPrintPreviewWidget : public QWidget
    GUI_CS_SLOT_2(_q_updateCurrentPage)
 };
 
-
 #endif // QT_NO_PRINTPREVIEWWIDGET
+
 #endif // QPRINTPREVIEWWIDGET_H

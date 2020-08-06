@@ -51,6 +51,7 @@ QRect QLineEditPrivate::adjustedControlRect(const QRect &rect) const
    QRect widgetRect = !rect.isEmpty() ? rect : q_func()->rect();
    QRect cr = adjustedContentsRect();
    int cix = cr.x() - hscroll + horizontalMargin;
+
    return widgetRect.translated(QPoint(cix, vscroll));
 }
 
@@ -58,6 +59,7 @@ int QLineEditPrivate::xToPos(int x, QTextLine::CursorPosition betweenOrOn) const
 {
    QRect cr = adjustedContentsRect();
    x -= cr.x() - hscroll + horizontalMargin;
+
    return control->xToPos(x, betweenOrOn);
 }
 
@@ -115,7 +117,7 @@ void QLineEditPrivate::_q_textEdited(const QString &text)
 
 #ifndef QT_NO_COMPLETER
    if (control->completer()
-      && control->completer()->completionMode() != QCompleter::InlineCompletion) {
+         && control->completer()->completionMode() != QCompleter::InlineCompletion) {
       control->complete(-1);   // update the popup on cut/paste/del
    }
 #endif
@@ -139,12 +141,15 @@ void QLineEditPrivate::_q_editFocusChange(bool e)
 void QLineEditPrivate::_q_selectionChanged()
 {
    Q_Q(QLineEdit);
+
    if (control->preeditAreaText().isEmpty()) {
       QStyleOptionFrame opt;
       q->initStyleOption(&opt);
+
       bool showCursor = control->hasSelectedText() ?
          q->style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, q) :
          q->hasFocus();
+
       setCursorVisible(showCursor);
    }
 
@@ -312,7 +317,7 @@ void QLineEditPrivate::drag()
    }
 }
 
-#endif // QT_NO_DRAGANDDROP
+#endif
 
 QLineEditIconButton::QLineEditIconButton(QWidget *parent)
    : QToolButton(parent), m_opacity(0)
@@ -401,7 +406,8 @@ void QLineEditPrivate::_q_textChanged(const QString &text)
 {
    if (hasSideWidgets()) {
       const int newTextSize = text.size();
-      if (!newTextSize || !lastTextSize) {
+
+      if (! newTextSize || !lastTextSize) {
          lastTextSize = newTextSize;
 
 #ifndef QT_NO_ANIMATION
@@ -438,6 +444,7 @@ QLineEditPrivate::SideWidgetParameters QLineEditPrivate::sideWidgetParameters() 
    result.margin = result.iconSize / 4;
    result.widgetWidth = result.iconSize + 6;
    result.widgetHeight = result.iconSize + 2;
+
    return result;
 }
 
@@ -447,6 +454,7 @@ QIcon QLineEditPrivate::clearButtonIcon() const
    QStyleOptionFrame styleOption;
    q->initStyleOption(&styleOption);
    return q->style()->standardIcon(QStyle::SP_LineEditClearButton, &styleOption, q);
+
 }
 
 void QLineEditPrivate::setClearButtonEnabled(bool enabled)
@@ -495,6 +503,7 @@ QLineEditPrivate::PositionIndexPair QLineEditPrivate::findSideWidget(const QActi
          return PositionIndexPair(QLineEdit::LeadingPosition, i);
       }
    }
+
    for (int i = 0; i < trailingSideWidgets.size(); ++i) {
       if (a == trailingSideWidgets.at(i).action) {
          return PositionIndexPair(QLineEdit::TrailingPosition, i);
@@ -508,14 +517,16 @@ QWidget *QLineEditPrivate::addAction(QAction *newAction, QAction *before, QLineE
    Q_Q(QLineEdit);
 
    if (! newAction) {
-      return 0;
+      return nullptr;
    }
+
    if (! hasSideWidgets()) {
       QObject::connect(q, &QLineEdit::textChanged, q, &QLineEdit::_q_textChanged);
       lastTextSize = q->text().size();
    }
 
-   QWidget *w = 0;
+   QWidget *w = nullptr;
+
    // Store flags about QWidgetAction here since removeAction() may be called from ~QAction,
    // in which a qobject_cast<> no longer works.
 

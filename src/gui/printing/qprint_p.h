@@ -33,8 +33,6 @@
 #include <cups/ppd.h>  // Use for type defs only, do not want to actually link in main module
 #endif
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PRINTER
 
 // From windgdi.h
@@ -270,6 +268,5 @@ public:
 };
 
 #endif // QT_NO_PRINTER
-
 
 #endif // QPRINT_P_H

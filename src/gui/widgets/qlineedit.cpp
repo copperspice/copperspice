@@ -159,8 +159,6 @@ QString QLineEdit::displayText() const
    return d->control->displayText();
 }
 
-
-
 int QLineEdit::maxLength() const
 {
    Q_D(const QLineEdit);
@@ -172,7 +170,6 @@ void QLineEdit::setMaxLength(int maxLength)
    Q_D(QLineEdit);
    d->control->setMaxLength(maxLength);
 }
-
 
 bool QLineEdit::hasFrame() const
 {
@@ -186,47 +183,56 @@ void QLineEdit::addAction(QAction *action, ActionPosition position)
    QWidget::addAction(action);
    d->addAction(action, 0, position);
 }
+
 QAction *QLineEdit::addAction(const QIcon &icon, ActionPosition position)
 {
    QAction *result = new QAction(icon, QString(), this);
    addAction(result, position);
+
    return result;
 }
-static const char clearButtonActionNameC[] = "_q_qlineeditclearaction";
+
+static const QString clearButtonAction = QString("_cs_clearActionEnabled");
+
 void QLineEdit::setClearButtonEnabled(bool enable)
 {
    Q_D(QLineEdit);
+
    if (enable == isClearButtonEnabled()) {
       return;
    }
 
    if (enable) {
       QAction *clearAction = new QAction(d->clearButtonIcon(), QString(), this);
-      clearAction->setEnabled(!isReadOnly());
-      clearAction->setObjectName(QLatin1String(clearButtonActionNameC));
-      d->addAction(clearAction, 0, QLineEdit::TrailingPosition,
-         QLineEditPrivate::SideWidgetClearButton | QLineEditPrivate::SideWidgetFadeInWithText);
+      clearAction->setEnabled(! isReadOnly());
+      clearAction->setObjectName(clearButtonAction);
+
+      d->addAction(clearAction, nullptr, QLineEdit::TrailingPosition,
+                  QLineEditPrivate::SideWidgetClearButton | QLineEditPrivate::SideWidgetFadeInWithText);
+
    } else {
-      QAction *clearAction = findChild<QAction *>(QLatin1String(clearButtonActionNameC));
+      QAction *clearAction = findChild<QAction *>(clearButtonAction);
+
       Q_ASSERT(clearAction);
       d->removeAction(clearAction);
+
       delete clearAction;
    }
 }
+
 bool QLineEdit::isClearButtonEnabled() const
 {
-   return findChild<QAction *>(QLatin1String(clearButtonActionNameC));
+   return findChild<QAction *>(clearButtonAction);
 }
 
 void QLineEdit::setFrame(bool enable)
 {
    Q_D(QLineEdit);
+
    d->frame = enable;
    update();
    updateGeometry();
 }
-
-
 
 QLineEdit::EchoMode QLineEdit::echoMode() const
 {
@@ -237,9 +243,11 @@ QLineEdit::EchoMode QLineEdit::echoMode() const
 void QLineEdit::setEchoMode(EchoMode mode)
 {
    Q_D(QLineEdit);
+
    if (mode == (EchoMode)d->control->echoMode()) {
       return;
    }
+
    Qt::InputMethodHints imHints = inputMethodHints();
    if (mode == Password || mode == NoEcho) {
       imHints |= Qt::ImhHiddenText;

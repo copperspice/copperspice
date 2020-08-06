@@ -26,8 +26,6 @@
 
 #include <qdialog.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ERRORMESSAGE
 
 class QErrorMessagePrivate;
@@ -58,7 +56,5 @@ class Q_GUI_EXPORT QErrorMessage: public QDialog
 };
 
 #endif // QT_NO_ERRORMESSAGE
-
-QT_END_NAMESPACE
 
 #endif

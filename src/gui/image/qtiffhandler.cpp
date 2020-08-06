@@ -33,8 +33,6 @@ extern "C" {
 #include <tiffio.h>
 }
 
-QT_BEGIN_NAMESPACE
-
 tsize_t qtiffReadProc(thandle_t fd, tdata_t buf, tsize_t size)
 {
    QIODevice *device = static_cast<QTiffHandler *>(fd)->device();
@@ -53,9 +51,11 @@ toff_t qtiffSeekProc(thandle_t fd, toff_t off, int whence)
       case SEEK_SET:
          device->seek(off);
          break;
+
       case SEEK_CUR:
          device->seek(device->pos() + off);
          break;
+
       case SEEK_END:
          device->seek(device->size() + off);
          break;
@@ -672,5 +672,3 @@ void QTiffHandler::convert32BitOrderBigEndian(void *buffer, int width)
          | (p & 0x000000ff) << 8;
    }
 }
-
-QT_END_NAMESPACE

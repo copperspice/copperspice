@@ -62,8 +62,6 @@ class Q_GUI_EXPORT QPlatformDragQtResponse : public QPlatformDropQtResponse
 
 class Q_GUI_EXPORT QPlatformDrag
 {
-   Q_DECLARE_PRIVATE(QPlatformDrag)
-
  public:
    QPlatformDrag();
    virtual ~QPlatformDrag();
@@ -81,8 +79,8 @@ class Q_GUI_EXPORT QPlatformDrag
    virtual bool ownsDragObject() const;
 
  private:
+   Q_DECLARE_PRIVATE(QPlatformDrag)
    QPlatformDragPrivate *d_ptr;
-
    Q_DISABLE_COPY(QPlatformDrag)
 };
 

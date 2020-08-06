@@ -31,14 +31,12 @@
 
 // emerald   #include <qmimetype.h>
 
-
 #ifndef QT_NO_PRINTER
 
 class Q_GUI_EXPORT QPlatformPrintDevice
 {
     Q_DISABLE_COPY(QPlatformPrintDevice)
-
-public:
+ public:
     QPlatformPrintDevice();
     explicit QPlatformPrintDevice(const QString &id);
     virtual ~QPlatformPrintDevice();
@@ -98,7 +96,7 @@ public:
     static QPageSize createPageSize(const QString &key, const QSize &size, const QString &localizedName);
     static QPageSize createPageSize(int windowsId, const QSize &size, const QString &localizedName);
 
-protected:
+ protected:
     virtual void loadPageSizes() const;
     virtual void loadResolutions() const;
     virtual void loadInputSlots() const;
@@ -153,4 +151,4 @@ protected:
 
 #endif // QT_NO_PRINTER
 
-#endif // QPLATFORMPRINTDEVICE_H
+#endif

@@ -25,22 +25,6 @@
 #include "qopenglfunctions_4_0_compatibility.h"
 #include "qopenglcontext.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QOpenGLFunctions_4_0_Compatibility
-    \inmodule QtGui
-    \since 5.1
-    \wrapper
-    \brief The QOpenGLFunctions_4_0_Compatibility class provides all functions for OpenGL 4.0 compatibility profile.
-
-    This class is a wrapper for functions from OpenGL 4.0 compatibility profile.
-    See reference pages on \l {http://www.opengl.org/sdk/docs/}{opengl.org}
-    for function documentation.
-
-    \sa QAbstractOpenGLFunctions
-*/
-
 QOpenGLFunctions_4_0_Compatibility::QOpenGLFunctions_4_0_Compatibility()
  : QAbstractOpenGLFunctions()
  , d_1_0_Core(0)
@@ -340,4 +324,3 @@ QOpenGLVersionProfile QOpenGLFunctions_4_0_Compatibility::versionProfile()
     return v;
 }
 
-QT_END_NAMESPACE

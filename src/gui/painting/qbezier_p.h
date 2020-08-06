@@ -63,12 +63,15 @@ class Q_GUI_EXPORT QBezier
    QPointF pt1() const {
       return QPointF(x1, y1);
    }
+
    QPointF pt2() const {
       return QPointF(x2, y2);
    }
+
    QPointF pt3() const {
       return QPointF(x3, y3);
    }
+
    QPointF pt4() const {
       return QPointF(x4, y4);
    }

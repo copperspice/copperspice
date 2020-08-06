@@ -53,10 +53,14 @@ public:
 struct QOpenGLRect
 {
     QOpenGLRect(const QRectF &r)
-        :  left(r.left()), top(r.top()), right(r.right()), bottom(r.bottom()) {}
+        :  left(r.left()), top(r.top()), right(r.right()), bottom(r.bottom())
+    {
+    }
 
     QOpenGLRect(GLfloat l, GLfloat t, GLfloat r, GLfloat b)
-        : left(l), top(t), right(r), bottom(b) {}
+        : left(l), top(t), right(r), bottom(b)
+    {
+    }
 
     GLfloat left;
     GLfloat top;
@@ -69,10 +73,10 @@ struct QOpenGLRect
 class QOpenGL2PEXVertexArray
 {
 public:
-    QOpenGL2PEXVertexArray() :
-        maxX(-2e10), maxY(-2e10), minX(2e10), minY(2e10),
-        boundingRectDirty(true)
-    { }
+    QOpenGL2PEXVertexArray()
+        : maxX(-2e10), maxY(-2e10), minX(2e10), minY(2e10), boundingRectDirty(true)
+    {
+    }
 
     inline void addRect(const QRectF &rect)
     {
@@ -111,14 +115,16 @@ public:
     void addPath(const QVectorPath &path, GLfloat curveInverseScale, bool outline = true);
     void clear();
 
-    QOpenGLPoint *data() {return vertexArray.data();}
+    QOpenGLPoint *data() {
+      return vertexArray.data();
+    }
 
     const int *stops() const {
        return vertexArrayStops.data();
     }
 
     int stopCount() const { return vertexArrayStops.size(); }
-    QOpenGLRect         boundingRect() const;
+    QOpenGLRect boundingRect() const;
 
     int vertexCount() const { return vertexArray.size(); }
 

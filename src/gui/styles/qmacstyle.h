@@ -37,8 +37,6 @@ class QMacStyle : public QCommonStyle
 {
    GUI_CS_OBJECT(QMacStyle)
 
-   Q_DECLARE_PRIVATE(QMacStyle)
-
  public:
    enum FocusRectPolicy { FocusEnabled, FocusDisabled, FocusDefault };
    enum WidgetSizePolicy { SizeSmall, SizeLarge, SizeMini, SizeDefault };
@@ -55,31 +53,31 @@ class QMacStyle : public QCommonStyle
    void polish(QPalette &pal) override;
 
    void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
-         const QWidget *w = 0) const override;
+         const QWidget *w = nullptr) const override;
 
    void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p,
-         const QWidget *w = 0) const override;
+         const QWidget *w = nullptr) const override;
 
-   QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = 0) const override;
+   QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
 
    void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
-         const QWidget *w = 0) const override;
+         const QWidget *w = nullptr) const override;
 
    SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, const QPoint &pt,
-         const QWidget *w = 0) const override;
+         const QWidget *w = nullptr) const override;
 
    QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
-         const QWidget *w = 0) const override;
+         const QWidget *w = nullptr) const override;
 
    QSize sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize,
-         const QWidget *w = 0) const override;
+         const QWidget *w = nullptr) const override;
 
-   int pixelMetric(PixelMetric pm, const QStyleOption *opt = 0, const QWidget *widget = 0) const override;
+   int pixelMetric(PixelMetric pm, const QStyleOption *opt = nullptr, const QWidget *widget = nullptr) const override;
 
    QPalette standardPalette() const override;
 
-   int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0,
-      QStyleHintReturn *shret = 0) const override;
+   int styleHint(StyleHint sh, const QStyleOption *opt = nullptr, const QWidget *w = nullptr,
+         QStyleHintReturn *shret = nullptr) const override;
 
    static void setFocusRectPolicy(QWidget *w, FocusRectPolicy policy);
    static FocusRectPolicy focusRectPolicy(const QWidget *w);
@@ -87,7 +85,7 @@ class QMacStyle : public QCommonStyle
    static void setWidgetSizePolicy(const QWidget *w, WidgetSizePolicy policy);
    static WidgetSizePolicy widgetSizePolicy(const QWidget *w, const QStyleOption *opt = nullptr);
 
-   QPixmap standardPixmap(StandardPixmap sp, const QStyleOption *opt, const QWidget *widget = 0) const override;
+   QPixmap standardPixmap(StandardPixmap sp, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
 
    QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *opt) const override;
 
@@ -96,14 +94,15 @@ class QMacStyle : public QCommonStyle
 
    bool event(QEvent *e) override;
 
-   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *opt = 0, const QWidget *widget = 0) const override;
+   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *opt = nullptr, const QWidget *widget = nullptr) const override;
 
    int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation,
-      const QStyleOption *option = 0, const QWidget *widget = 0) const override;
+      const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
  private:
    Q_DISABLE_COPY(QMacStyle)
 
+   Q_DECLARE_PRIVATE(QMacStyle)
    friend bool qt_mac_buttonIsRenderedFlat(const QPushButton *pushButton, const QStyleOptionButton *option);
 };
 

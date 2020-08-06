@@ -25,22 +25,6 @@
 #include "qopenglfunctions_1_3.h"
 #include "qopenglcontext.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QOpenGLFunctions_1_3
-    \inmodule QtGui
-    \since 5.1
-    \wrapper
-    \brief The QOpenGLFunctions_1_3 class provides all functions for OpenGL 1.3 specification.
-
-    This class is a wrapper for functions from OpenGL 1.3 specification.
-    See reference pages on \l {http://www.opengl.org/sdk/docs/}{opengl.org}
-    for function documentation.
-
-    \sa QAbstractOpenGLFunctions
-*/
-
 QOpenGLFunctions_1_3::QOpenGLFunctions_1_3()
  : QAbstractOpenGLFunctions()
  , d_1_0_Core(0)
@@ -194,5 +178,3 @@ QOpenGLVersionProfile QOpenGLFunctions_1_3::versionProfile()
     v.setVersion(1, 3);
     return v;
 }
-
-QT_END_NAMESPACE

@@ -185,4 +185,3 @@ bool QRadioButton::event(QEvent *e)
    return QAbstractButton::event(e);
 }
 
-QT_END_NAMESPACE

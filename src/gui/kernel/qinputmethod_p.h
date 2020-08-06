@@ -37,11 +37,17 @@ class QInputMethodPrivate
    Q_DECLARE_PUBLIC(QInputMethod)
 
  public:
-   inline QInputMethodPrivate() : testContext(0)
-   {}
+   inline QInputMethodPrivate()
+      : testContext(nullptr)
+   {
+   }
 
    QPlatformInputContext *platformInputContext() const {
-      return testContext ? testContext : QGuiApplicationPrivate::platformIntegration()->inputContext();
+      if (testContext == nullptr) {
+         return QGuiApplicationPrivate::platformIntegration()->inputContext();
+      } else {
+         return testContext;
+      }
    }
 
    static inline QInputMethodPrivate *get(QInputMethod *inputMethod) {

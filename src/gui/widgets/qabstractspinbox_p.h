@@ -33,14 +33,14 @@
 #include <qvalidator.h>
 #include <qdatetime.h>
 #include <qvariant.h>
+
 #include <qwidget_p.h>
 #include <qdatetime_p.h>
-
-QT_BEGIN_NAMESPACE
 
 QVariant operator+(const QVariant &arg1, const QVariant &arg2);
 QVariant operator-(const QVariant &arg1, const QVariant &arg2);
 QVariant operator*(const QVariant &arg1, double multiplier);
+
 double operator/(const QVariant &arg1, const QVariant &arg2);
 
 enum EmitPolicy {
@@ -137,7 +137,6 @@ class QSpinBoxValidator : public QValidator
    QAbstractSpinBox *qptr;
    QAbstractSpinBoxPrivate *dptr;
 };
-
 
 #endif // QT_NO_SPINBOX
 

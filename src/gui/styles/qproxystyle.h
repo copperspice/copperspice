@@ -24,9 +24,9 @@
 #ifndef QPROXYSTYLE_H
 #define QPROXYSTYLE_H
 
-#include <QCommonStyle>
+#include <qcommonstyle.h>
 
-#if !defined(QT_NO_STYLE_PROXY)
+#if ! defined(QT_NO_STYLE_PROXY)
 
 class QProxyStylePrivate;
 
@@ -93,5 +93,4 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
 
 #endif // QT_NO_STYLE_PROXY
 
-
-#endif // QPROXYSTYLE_H
+#endif

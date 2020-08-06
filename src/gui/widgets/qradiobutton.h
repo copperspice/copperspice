@@ -26,8 +26,6 @@
 
 #include <qabstractbutton.h>
 
-QT_BEGIN_NAMESPACE
-
 class QRadioButtonPrivate;
 class QStyleOptionButton;
 

@@ -482,15 +482,10 @@ void QImageWriter::setText(const QString &key, const QString &text)
    if (!d->description.isEmpty()) {
       d->description += QLatin1String("\n\n");
    }
+
    d->description += key.simplified() + QLatin1String(": ") + text.simplified();
 }
 
-/*!
-    Returns true if QImageWriter can write the image; i.e., the image
-    format is supported and the assigned device is open for reading.
-
-    \sa write(), setDevice(), setFormat()
-*/
 bool QImageWriter::canWrite() const
 {
    if (QFile *file = qobject_cast<QFile *>(d->device)) {
@@ -561,12 +556,10 @@ bool QImageWriter::write(const QImage &image)
    return true;
 }
 
-
 QImageWriter::ImageWriterError QImageWriter::error() const
 {
    return d->imageWriterError;
 }
-
 
 QString QImageWriter::errorString() const
 {

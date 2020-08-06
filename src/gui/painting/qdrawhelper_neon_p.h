@@ -26,8 +26,6 @@
 
 #include <qdrawhelper_p.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifdef QT_HAVE_NEON
 
 void qt_blend_argb32_on_argb32_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,

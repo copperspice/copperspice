@@ -26,15 +26,12 @@
 
 #include <qwidget.h>
 
-QT_BEGIN_NAMESPACE
-
 class QPushButton;
 class QDialogPrivate;
 
 class Q_GUI_EXPORT QDialog : public QWidget
 {
    GUI_CS_OBJECT(QDialog)
-   friend class QPushButton;
 
    GUI_CS_PROPERTY_READ(sizeGripEnabled,  isSizeGripEnabled)
    GUI_CS_PROPERTY_WRITE(sizeGripEnabled, setSizeGripEnabled)
@@ -46,7 +43,10 @@ class Q_GUI_EXPORT QDialog : public QWidget
    explicit QDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
    ~QDialog();
 
-   enum DialogCode { Rejected, Accepted };
+   enum DialogCode {
+      Rejected,
+      Accepted
+   };
 
    int result() const;
 
@@ -111,6 +111,7 @@ class Q_GUI_EXPORT QDialog : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QDialog)
+   friend class QPushButton;
    Q_DISABLE_COPY(QDialog)
 
 };

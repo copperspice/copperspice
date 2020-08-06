@@ -30,8 +30,6 @@
 
 #include <qevent.h>
 
-QT_BEGIN_NAMESPACE
-
 class QPainterPath;
 class QBasicMouseEventTransitionPrivate;
 
@@ -40,8 +38,8 @@ class QBasicMouseEventTransition : public QAbstractTransition
    GUI_CS_OBJECT(QBasicMouseEventTransition)
 
  public:
-   QBasicMouseEventTransition(QState *sourceState = 0);
-   QBasicMouseEventTransition(QEvent::Type type, Qt::MouseButton button, QState *sourceState = 0);
+   QBasicMouseEventTransition(QState *sourceState = nullptr);
+   QBasicMouseEventTransition(QEvent::Type type, Qt::MouseButton button, QState *sourceState = nullptr);
    ~QBasicMouseEventTransition();
 
    QEvent::Type eventType() const;
@@ -64,8 +62,6 @@ class QBasicMouseEventTransition : public QAbstractTransition
    Q_DISABLE_COPY(QBasicMouseEventTransition)
    Q_DECLARE_PRIVATE(QBasicMouseEventTransition)
 };
-
-QT_END_NAMESPACE
 
 #endif //QT_NO_STATEMACHINE
 

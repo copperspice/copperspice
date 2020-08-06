@@ -29,7 +29,6 @@
 
 #ifndef QT_NO_UNDOVIEW
 
-
 class QUndoViewPrivate;
 class QUndoStack;
 class QUndoGroup;
@@ -38,7 +37,6 @@ class QIcon;
 class Q_GUI_EXPORT QUndoView : public QListView
 {
    GUI_CS_OBJECT(QUndoView)
-   Q_DECLARE_PRIVATE(QUndoView)
 
    GUI_CS_PROPERTY_READ(emptyLabel, emptyLabel)
    GUI_CS_PROPERTY_WRITE(emptyLabel, setEmptyLabel)
@@ -54,6 +52,7 @@ class Q_GUI_EXPORT QUndoView : public QListView
 #endif
 
    ~QUndoView();
+
    QUndoStack *stack() const;
 
 #ifndef QT_NO_UNDOGROUP
@@ -75,10 +74,9 @@ class Q_GUI_EXPORT QUndoView : public QListView
 #endif
 
  private:
+   Q_DECLARE_PRIVATE(QUndoView)
    Q_DISABLE_COPY(QUndoView)
 };
-
-
 
 #endif // QT_NO_UNDOVIEW
 #endif // QUNDOVIEW_H

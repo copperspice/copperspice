@@ -26,11 +26,6 @@
 
 #include <qimage.h>
 
-
-
-
-
-
 class QWindow;
 
 class QNativeImage

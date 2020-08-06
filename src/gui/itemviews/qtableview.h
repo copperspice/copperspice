@@ -26,8 +26,6 @@
 
 #include <qabstractitemview.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_TABLEVIEW
 
 class QHeaderView;
@@ -220,6 +218,5 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
 };
 
 #endif // QT_NO_TABLEVIEW
-
 
 #endif // QTABLEVIEW_H

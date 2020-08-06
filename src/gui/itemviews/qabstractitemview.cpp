@@ -126,6 +126,7 @@ void QAbstractItemViewPrivate::init()
 void QAbstractItemViewPrivate::setHoverIndex(const QPersistentModelIndex &index)
 {
    Q_Q(QAbstractItemView);
+
    if (hover == index) {
       return;
    }

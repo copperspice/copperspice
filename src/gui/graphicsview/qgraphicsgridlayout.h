@@ -27,14 +27,12 @@
 #include <qgraphicsitem.h>
 #include <qgraphicslayout.h>
 
-
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsGridLayoutPrivate;
 
 class Q_GUI_EXPORT QGraphicsGridLayout : public QGraphicsLayout
 {
-
  public:
    QGraphicsGridLayout(QGraphicsLayoutItem *parent = nullptr);
    virtual ~QGraphicsGridLayout();

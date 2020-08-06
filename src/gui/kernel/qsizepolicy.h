@@ -27,11 +27,11 @@
 #include <qobject.h>
 #include <qhashfunc.h>
 
-QT_BEGIN_NAMESPACE
-
 class QVariant;
 class QSizePolicy;
+
 inline uint qHash(QSizePolicy key, uint seed = 0);
+
 class Q_GUI_EXPORT QSizePolicy
 {
    GUI_CS_GADGET(QSizePolicy)
@@ -179,12 +179,11 @@ class Q_GUI_EXPORT QSizePolicy
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QSizePolicy::ControlTypes)
 
-
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &);
 
-
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QSizePolicy &);
+
 inline void QSizePolicy::transpose()
 {
    Policy hData = horizontalPolicy();
@@ -196,6 +195,5 @@ inline void QSizePolicy::transpose()
    setHorizontalStretch(vStretch);
    setVerticalStretch(hStretch);
 }
-
 
 #endif // QSIZEPOLICY_H

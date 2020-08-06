@@ -143,9 +143,10 @@ void QBezier::addToPolygon(QVector<QPointF> &polygon, qreal bezier_flattening_th
    QBezier beziers[10];
    int levels[10];
    beziers[0] = *this;
-   levels[0] = 9;
+   levels[0]  = 9;
+
    QBezier *b = beziers;
-   int *lvl = levels;
+   int *lvl   = levels;
 
    while (b >= beziers) {
       // check if we can pop the top bezier curve from the stack
@@ -153,6 +154,7 @@ void QBezier::addToPolygon(QVector<QPointF> &polygon, qreal bezier_flattening_th
       qreal x4x1 = b->x4 - b->x1;
       qreal l = qAbs(x4x1) + qAbs(y4y1);
       qreal d;
+
       if (l > 1.) {
          d = qAbs( (x4x1) * (b->y1 - b->y2) - (y4y1) * (b->x1 - b->x2) )
             + qAbs( (x4x1) * (b->y1 - b->y3) - (y4y1) * (b->x1 - b->x3) );
@@ -166,6 +168,7 @@ void QBezier::addToPolygon(QVector<QPointF> &polygon, qreal bezier_flattening_th
          polygon.append(QPointF(b->x4, b->y4));
          --b;
          --lvl;
+
       } else {
          // split, second half of the polygon goes lower into the stack
          b->split(b + 1, b);
@@ -175,6 +178,7 @@ void QBezier::addToPolygon(QVector<QPointF> &polygon, qreal bezier_flattening_th
       }
    }
 }
+
 QRectF QBezier::bounds() const
 {
    qreal xmin = x1;

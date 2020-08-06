@@ -26,15 +26,13 @@
 
 #include <qglobal.h>
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 #include <qgraphicssceneindex_p.h>
 #include <qgraphicsitem_p.h>
 #include <qgraphicsscene_bsp_p.h>
 #include <qrect.h>
 #include <qlist.h>
-
-
 
 static const int QGRAPHICSSCENE_INDEXTIMER_TIMEOUT = 2000;
 
@@ -59,7 +57,7 @@ class QGraphicsSceneBspTreeIndex : public QGraphicsSceneIndex
    int bspTreeDepth() const;
    void setBspTreeDepth(int depth);
 
- protected :
+ protected:
    GUI_CS_SLOT_1(Protected, void updateSceneRect(const QRectF &rect) override)
    GUI_CS_SLOT_2(updateSceneRect)
 
@@ -72,7 +70,7 @@ class QGraphicsSceneBspTreeIndex : public QGraphicsSceneIndex
 
    void itemChange(const QGraphicsItem *item, QGraphicsItem::GraphicsItemChange change, const void *const value) override;
 
- private :
+ private:
    Q_DECLARE_PRIVATE(QGraphicsSceneBspTreeIndex)
    Q_DISABLE_COPY(QGraphicsSceneBspTreeIndex)
 

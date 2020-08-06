@@ -35,7 +35,6 @@
 #include <qvarlengtharray.h>
 #include <qdatastream.h>
 
-
 class QTextDocumentFragmentPrivate;
 
 class QTextCopyHelper
@@ -77,7 +76,7 @@ class QTextDocumentFragmentPrivate
 {
  public:
    QTextDocumentFragmentPrivate(const QTextCursor &cursor = QTextCursor());
-   inline ~QTextDocumentFragmentPrivate() {
+   ~QTextDocumentFragmentPrivate() {
       delete doc;
    }
 
@@ -97,6 +96,7 @@ class QTextDocumentFragmentPrivate
 class QTextHtmlImporter : public QTextHtmlParser
 {
    struct Table;
+
  public:
    enum ImportMode {
       ImportToFragment,
@@ -128,6 +128,7 @@ class QTextHtmlImporter : public QTextHtmlParser
       int listNode;
       QPointer<QTextList> list;
    };
+
    QVector<List> lists;
    int indent;
 

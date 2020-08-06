@@ -105,6 +105,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    using Options = QFlags<Option>;
 
    QFileDialog(QWidget *parent, Qt::WindowFlags f);
+
    explicit QFileDialog(QWidget *parent = nullptr,
       const QString &caption = QString(),
       const QString &directory = QString(),
@@ -131,6 +132,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    QStringList nameFilters() const;
    void selectNameFilter(const QString &filter);
    QString selectedNameFilter() const;
+
 #ifndef QT_NO_MIMETYPE
    void setMimeTypeFilters(const QStringList &filters);
    QStringList mimeTypeFilters() const;
@@ -181,6 +183,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
 
    void setSupportedSchemes(const QStringList &schemes);
    QStringList supportedSchemes() const;
+
 #ifndef QT_NO_PROXYMODEL
    void setProxyModel(QAbstractProxyModel *model);
    QAbstractProxyModel *proxyModel() const;

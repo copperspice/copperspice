@@ -70,15 +70,14 @@ public:
    bool setPageSize(const QPageSize &size) override;
    void setPageSize(QPageSize::PageSizeId sizeId)  override;   // not sure about this method
 
-protected:
+ protected:
    QPaintEngine *paintEngine() const override;
    int metric(PaintDeviceMetric id) const override;
 
-private:
+ private:
     std::unique_ptr<QPdfEngine> m_engine;
 
     Q_DISABLE_COPY(QPdfWriter)
-
 };
 
 #endif // QT_NO_PDF

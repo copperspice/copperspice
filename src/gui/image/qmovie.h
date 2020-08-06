@@ -32,8 +32,6 @@
 #include <qlist.h>
 #include <qimagereader.h>
 
-
-
 class QByteArray;
 class QColor;
 class QIODevice;
@@ -110,7 +108,6 @@ class Q_GUI_EXPORT QMovie : public QObject
    CacheMode cacheMode() const;
    void setCacheMode(CacheMode mode);
 
- public:
    GUI_CS_SIGNAL_1(Public, void started())
    GUI_CS_SIGNAL_2(started)
 
@@ -157,8 +154,6 @@ class Q_GUI_EXPORT QMovie : public QObject
    GUI_CS_SLOT_2(_q_loadNextFrame)
 };
 
-
-
 #endif // QT_NO_MOVIE
 
-#endif // QMOVIE_H
+#endif

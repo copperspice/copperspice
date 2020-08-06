@@ -28,8 +28,6 @@
 #include <qaccessiblewidget.h>
 #include <qabstractitemview.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAbstractButton;
@@ -75,7 +73,7 @@ class QAccessibleScrollArea : public QAccessibleAbstractScrollArea
  public:
    explicit QAccessibleScrollArea(QWidget *widget);
 };
-#endif // QT_NO_SCROLLAREA
+#endif
 
 #ifndef QT_NO_TABBAR
 class QAccessibleTabBar : public QAccessibleWidget
@@ -94,7 +92,7 @@ class QAccessibleTabBar : public QAccessibleWidget
    QTabBar *tabBar() const;
    mutable QHash<int, QAccessible::Id> m_childInterfaces;
 };
-#endif // QT_NO_TABBAR
+#endif
 
 #ifndef QT_NO_COMBOBOX
 class QAccessibleComboBox : public QAccessibleWidget
@@ -118,10 +116,8 @@ class QAccessibleComboBox : public QAccessibleWidget
  protected:
    QComboBox *comboBox() const;
 };
-#endif // QT_NO_COMBOBOX
+#endif
 
 #endif // QT_NO_ACCESSIBILITY
 
-QT_END_NAMESPACE
-
-#endif // COMPLEXWIDGETS_H
+#endif

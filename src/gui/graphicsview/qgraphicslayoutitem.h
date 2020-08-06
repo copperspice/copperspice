@@ -28,16 +28,13 @@
 #include <qsizepolicy.h>
 #include <qevent.h>
 
-QT_BEGIN_NAMESPACE
-
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsLayoutItemPrivate;
 class QGraphicsItem;
 
 class Q_GUI_EXPORT QGraphicsLayoutItem
 {
-
  public:
    QGraphicsLayoutItem(QGraphicsLayoutItem *parent = nullptr, bool isLayout = false);
    virtual ~QGraphicsLayoutItem();

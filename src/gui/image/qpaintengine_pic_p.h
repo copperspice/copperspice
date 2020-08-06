@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_PICTURE
 
-
-
 class QPicturePaintEnginePrivate;
 class QBuffer;
 
@@ -84,8 +82,6 @@ class QPicturePaintEngine : public QPaintEngine
    void writeCmdLength(int pos, const QRectF &r, bool corr);
 };
 
-
-
 #endif // QT_NO_PICTURE
 
-#endif // QPAINTENGINE_PIC_P_H
+#endif

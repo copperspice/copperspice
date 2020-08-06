@@ -35,8 +35,6 @@ class QImageWriterPrivate;
 
 class Q_GUI_EXPORT QImageWriter
 {
-   Q_DECLARE_TR_FUNCTIONS(QImageWriter)
-
  public:
    enum ImageWriterError {
       UnknownError,
@@ -96,10 +94,9 @@ class Q_GUI_EXPORT QImageWriter
    static QList<QByteArray> supportedMimeTypes();
 
  private:
+   Q_DECLARE_TR_FUNCTIONS(QImageWriter)
    Q_DISABLE_COPY(QImageWriter)
    QImageWriterPrivate *d;
 };
-
-
 
 #endif

@@ -25,22 +25,6 @@
 #include "qopenglfunctions_3_2_compatibility.h"
 #include "qopenglcontext.h"
 
-QT_BEGIN_NAMESPACE
-
-/*!
-    \class QOpenGLFunctions_3_2_Compatibility
-    \inmodule QtGui
-    \since 5.1
-    \wrapper
-    \brief The QOpenGLFunctions_3_2_Compatibility class provides all functions for OpenGL 3.2 compatibility profile.
-
-    This class is a wrapper for functions from OpenGL 3.2 compatibility profile.
-    See reference pages on \l {http://www.opengl.org/sdk/docs/}{opengl.org}
-    for function documentation.
-
-    \sa QAbstractOpenGLFunctions
-*/
-
 QOpenGLFunctions_3_2_Compatibility::QOpenGLFunctions_3_2_Compatibility()
  : QAbstractOpenGLFunctions()
  , d_1_0_Core(0)
@@ -302,4 +286,3 @@ QOpenGLVersionProfile QOpenGLFunctions_3_2_Compatibility::versionProfile()
     return v;
 }
 
-QT_END_NAMESPACE

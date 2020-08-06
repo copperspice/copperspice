@@ -29,7 +29,6 @@
 
 #ifndef QT_NO_RESIZEHANDLER
 
-
 class QMouseEvent;
 class QKeyEvent;
 
@@ -49,30 +48,34 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
    inline void setActive(bool b) {
       setActive(Any, b);
    }
+
    void setActive(Action ac, bool b);
-   inline bool isActive() const {
+   bool isActive() const {
       return isActive(Any);
    }
+
    bool isActive(Action ac) const;
-   inline void setMovingEnabled(bool b) {
+   void setMovingEnabled(bool b) {
       movingEnabled = b;
    }
-   inline bool isMovingEnabled() const {
+
+   bool isMovingEnabled() const {
       return movingEnabled;
    }
 
-   inline bool isButtonDown() const {
+   bool isButtonDown() const {
       return buttonDown;
    }
 
-   inline void setExtraHeight(int h) {
+   void setExtraHeight(int h) {
       extrahei = h;
    }
-   inline void setSizeProtection(bool b) {
+
+   void setSizeProtection(bool b) {
       sizeprotect = b;
    }
 
-   inline void setFrameWidth(int w) {
+   void setFrameWidth(int w) {
       fw = w;
    }
 

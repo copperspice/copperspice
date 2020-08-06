@@ -25,8 +25,8 @@
 #define QPRINTENGINE_WIN_P_H
 
 #include <qglobal.h>
-#ifndef QT_NO_PRINTER
 
+#ifndef QT_NO_PRINTER
 
 #include <qpaintengine.h>
 #include <qpagelayout.h>
@@ -36,8 +36,6 @@
 
 #include <qpaintengine_alpha_p.h>
 #include <qprintdevice_p.h>
-
-QT_BEGIN_NAMESPACE
 
 class QWin32PrintEnginePrivate;
 class QPrinterPrivate;

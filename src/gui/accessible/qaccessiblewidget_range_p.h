@@ -26,8 +26,6 @@
 
 #include <qaccessiblewidget.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAbstractSpinBox;
@@ -142,7 +140,7 @@ class QAccessibleScrollBar : public QAccessibleAbstractSlider
  protected:
    QScrollBar *scrollBar() const;
 };
-#endif // QT_NO_SCROLLBAR
+#endif
 
 #ifndef QT_NO_SLIDER
 class QAccessibleSlider : public QAccessibleAbstractSlider
@@ -154,7 +152,7 @@ class QAccessibleSlider : public QAccessibleAbstractSlider
  protected:
    QSlider *slider() const;
 };
-#endif // QT_NO_SLIDER
+#endif
 
 #ifndef QT_NO_DIAL
 class QAccessibleDial : public QAccessibleAbstractSlider
@@ -167,10 +165,8 @@ class QAccessibleDial : public QAccessibleAbstractSlider
  protected:
    QDial *dial() const;
 };
-#endif // QT_NO_DIAL
+#endif
 
 #endif // QT_NO_ACCESSIBILITY
 
-QT_END_NAMESPACE
-
-#endif // RANGECONTROLS_H
+#endif

@@ -570,6 +570,7 @@ class Q_GUI_EXPORT QAccessibleImageInterface
 {
  public:
    virtual ~QAccessibleImageInterface();
+
    virtual QString imageDescription() const = 0;
    virtual QSize imageSize() const = 0;
    virtual QPoint imagePosition() const = 0;
@@ -578,10 +579,11 @@ class Q_GUI_EXPORT QAccessibleImageInterface
 class Q_GUI_EXPORT QAccessibleEvent
 {
    Q_DISABLE_COPY(QAccessibleEvent)
- public:
 
+ public:
    inline QAccessibleEvent(QObject *obj, QAccessible::Event type)
-      : m_type(type), m_object(obj), m_child(-1) {
+      : m_type(type), m_object(obj), m_child(-1)
+   {
       Q_ASSERT(obj);
 
       // All events below have a subclass of QAccessibleEvent.
@@ -597,8 +599,8 @@ class Q_GUI_EXPORT QAccessibleEvent
    }
 
    inline QAccessibleEvent(QAccessibleInterface *iface, QAccessible::Event type)
-      : m_type(type), m_object(nullptr) {
-
+      : m_type(type), m_object(nullptr)
+   {
       Q_ASSERT(iface);
       Q_ASSERT(m_type != QAccessible::ValueChanged);
       Q_ASSERT(m_type != QAccessible::StateChanged);
@@ -636,6 +638,7 @@ class Q_GUI_EXPORT QAccessibleEvent
  protected:
    QAccessible::Event m_type;
    QObject *m_object;
+
    union {
       int m_child;
       QAccessible::Id m_uniqueId;
@@ -647,20 +650,26 @@ class Q_GUI_EXPORT QAccessibleStateChangeEvent : public QAccessibleEvent
 {
  public:
    inline QAccessibleStateChangeEvent(QObject *obj, QAccessible::State state)
-      : QAccessibleEvent(obj, QAccessible::InvalidEvent), m_changedStates(state) {
+      : QAccessibleEvent(obj, QAccessible::InvalidEvent), m_changedStates(state)
+   {
       m_type = QAccessible::StateChanged;
    }
+
    inline QAccessibleStateChangeEvent(QAccessibleInterface *iface, QAccessible::State state)
-      : QAccessibleEvent(iface, QAccessible::InvalidEvent), m_changedStates(state) {
+      : QAccessibleEvent(iface, QAccessible::InvalidEvent), m_changedStates(state)
+   {
       m_type = QAccessible::StateChanged;
    }
+
    ~QAccessibleStateChangeEvent();
    QAccessible::State changedStates() const {
       return m_changedStates;
    }
+
  protected:
    QAccessible::State m_changedStates;
 };
+
 // Update the cursor and optionally the selection.
 class Q_GUI_EXPORT QAccessibleTextCursorEvent : public QAccessibleEvent
 {

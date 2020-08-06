@@ -55,6 +55,7 @@ class Q_GUI_EXPORT QPlatformOpenGLContext
    virtual bool isSharing() const {
       return false;
    }
+
    virtual bool isValid() const {
       return true;
    }

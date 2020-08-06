@@ -65,24 +65,31 @@ static QEvent *cloneEvent(QEvent *e)
 
       case QEvent::Resize:
          return new QResizeEvent(*static_cast<QResizeEvent *>(e));
+
       case QEvent::Create:
          Q_ASSERT_X(false, "cloneEvent()", "not implemented");
          break;
+
       case QEvent::Destroy:
          Q_ASSERT_X(false, "cloneEvent()", "not implemented");
          break;
       case QEvent::Show:
          return new QShowEvent(*static_cast<QShowEvent *>(e));
+
       case QEvent::Hide:
          return new QHideEvent(*static_cast<QHideEvent *>(e));
+
       case QEvent::Close:
          return new QCloseEvent(*static_cast<QCloseEvent *>(e));
       case QEvent::Quit:
          return new QEvent(*e);
+
       case QEvent::ParentChange:
          return new QEvent(*e);
+
       case QEvent::ParentAboutToChange:
          return new QEvent(*e);
+
       case QEvent::ThreadChange:
          return new QEvent(*e);
 
@@ -167,8 +174,10 @@ static QEvent *cloneEvent(QEvent *e)
 
       case QEvent::EmbeddingControl:
          return new QEvent(*e);
+
       case QEvent::ActivateControl:
          return new QEvent(*e);
+
       case QEvent::DeactivateControl:
          return new QEvent(*e);
 
@@ -176,6 +185,7 @@ static QEvent *cloneEvent(QEvent *e)
       case QEvent::ContextMenu:
          return new QContextMenuEvent(*static_cast<QContextMenuEvent *>(e));
 #endif
+
       case QEvent::InputMethod:
          return new QInputMethodEvent(*static_cast<QInputMethodEvent *>(e));
       case QEvent::LocaleChange:
@@ -186,12 +196,14 @@ static QEvent *cloneEvent(QEvent *e)
          return new QEvent(*e);
       case QEvent::Style:
          return new QEvent(*e);
+
 #ifndef QT_NO_TABLETEVENT
-    case QEvent::TabletMove:
+      case QEvent::TabletMove:
       case QEvent::TabletPress:
       case QEvent::TabletRelease:
          return new QTabletEvent(*static_cast<QTabletEvent *>(e));
-#endif //QT_NO_TABLETEVENT
+#endif
+
       case QEvent::OkRequest:
          return new QEvent(*e);
       case QEvent::HelpRequest:
@@ -217,13 +229,16 @@ static QEvent *cloneEvent(QEvent *e)
 
       case QEvent::WindowBlocked:
          return new QEvent(*e);
+
       case QEvent::WindowUnblocked:
          return new QEvent(*e);
+
       case QEvent::WindowStateChange:
          return new QWindowStateChangeEvent(*static_cast<QWindowStateChangeEvent *>(e));
 
       case QEvent::ToolTip:
          return new QHelpEvent(*static_cast<QHelpEvent *>(e));
+
       case QEvent::WhatsThis:
          return new QHelpEvent(*static_cast<QHelpEvent *>(e));
 
@@ -245,7 +260,7 @@ static QEvent *cloneEvent(QEvent *e)
 #ifndef QT_NO_SHORTCUT
       case QEvent::Shortcut:
          return new QShortcutEvent(*static_cast<QShortcutEvent *>(e));
-#endif //QT_NO_SHORTCUT
+#endif
 
       case QEvent::ShortcutOverride:
          return new QKeyEvent(*static_cast<QKeyEvent *>(e));
@@ -262,13 +277,16 @@ static QEvent *cloneEvent(QEvent *e)
 
       case QEvent::ApplicationActivate:
          return new QEvent(*e);
+
       case QEvent::ApplicationDeactivate:
          return new QEvent(*e);
 
       case QEvent::QueryWhatsThis:
          return new QHelpEvent(*static_cast<QHelpEvent *>(e));
+
       case QEvent::EnterWhatsThisMode:
          return new QEvent(*e);
+
       case QEvent::LeaveWhatsThisMode:
          return new QEvent(*e);
 
@@ -283,15 +301,18 @@ static QEvent *cloneEvent(QEvent *e)
 #ifdef QT_KEYPAD_NAVIGATION
       case QEvent::EnterEditFocus:
          return new QEvent(*e);
+
       case QEvent::LeaveEditFocus:
          return new QEvent(*e);
 #endif
+
       case QEvent::AcceptDropsChange:
          return new QEvent(*e);
 
       case QEvent::ZeroTimerEvent:
          Q_ASSERT_X(false, "cloneEvent()", "not implemented");
          break;
+
 #ifndef QT_NO_GRAPHICSVIEW
       case QEvent::GraphicsSceneMouseMove:
       case QEvent::GraphicsSceneMousePress:
@@ -314,8 +335,8 @@ static QEvent *cloneEvent(QEvent *e)
          me2->setButtons(me->buttons());
          me2->setButton(me->button());
          me2->setModifiers(me->modifiers());
-        me2->setSource(me->source());
-        me2->setFlags(me->flags());
+         me2->setSource(me->source());
+         me2->setFlags(me->flags());
          return me2;
       }
 
@@ -345,8 +366,10 @@ static QEvent *cloneEvent(QEvent *e)
          he2->setModifiers(he->modifiers());
          return he2;
       }
+
       case QEvent::GraphicsSceneHelp:
          return new QHelpEvent(*static_cast<QHelpEvent *>(e));
+
       case QEvent::GraphicsSceneDragEnter:
       case QEvent::GraphicsSceneDragMove:
       case QEvent::GraphicsSceneDragLeave:
@@ -360,6 +383,7 @@ static QEvent *cloneEvent(QEvent *e)
          dde2->setModifiers(dde->modifiers());
          return dde2;
       }
+
       case QEvent::GraphicsSceneWheel: {
          QGraphicsSceneWheelEvent *we = static_cast<QGraphicsSceneWheelEvent *>(e);
          QGraphicsSceneWheelEvent *we2 = new QGraphicsSceneWheelEvent(we->type());
@@ -373,6 +397,7 @@ static QEvent *cloneEvent(QEvent *e)
          return we2;
       }
 #endif
+
       case QEvent::KeyboardLayoutChange:
          return new QEvent(*e);
 
@@ -383,7 +408,7 @@ static QEvent *cloneEvent(QEvent *e)
       case QEvent::TabletEnterProximity:
       case QEvent::TabletLeaveProximity:
          return new QTabletEvent(*static_cast<QTabletEvent *>(e));
-#endif //QT_NO_TABLETEVENT
+#endif
 
       case QEvent::NonClientAreaMouseMove:
       case QEvent::NonClientAreaMouseButtonPress:
@@ -403,6 +428,7 @@ static QEvent *cloneEvent(QEvent *e)
       case QEvent::FutureCallOut:
          Q_ASSERT_X(false, "cloneEvent()", "not implemented");
          break;
+
 #ifndef QT_NO_GRAPHICSVIEW
       case QEvent::GraphicsSceneResize: {
          QGraphicsSceneResizeEvent *re = static_cast<QGraphicsSceneResizeEvent *>(e);
@@ -411,6 +437,7 @@ static QEvent *cloneEvent(QEvent *e)
          re2->setNewSize(re->newSize());
          return re2;
       }
+
       case QEvent::GraphicsSceneMove: {
          QGraphicsSceneMoveEvent *me = static_cast<QGraphicsSceneMoveEvent *>(e);
          QGraphicsSceneMoveEvent *me2 = new QGraphicsSceneMoveEvent();
@@ -420,8 +447,10 @@ static QEvent *cloneEvent(QEvent *e)
          return me2;
       }
 #endif
+
       case QEvent::CursorChange:
          return new QEvent(*e);
+
       case QEvent::ToolTipChange:
          return new QEvent(*e);
 
@@ -450,9 +479,11 @@ static QEvent *cloneEvent(QEvent *e)
       case QEvent::MaxUser:
          Q_ASSERT_X(false, "cloneEvent()", "not implemented");
          break;
+
       default:
          ;
    }
+
    return qcoreStateMachineHandler()->cloneEvent(e);
 }
 

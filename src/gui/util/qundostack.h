@@ -70,7 +70,6 @@ class Q_GUI_EXPORT QUndoCommand
 class Q_GUI_EXPORT QUndoStack : public QObject
 {
    GUI_CS_OBJECT(QUndoStack)
-   Q_DECLARE_PRIVATE(QUndoStack)
 
    GUI_CS_PROPERTY_READ(active, isActive)
    GUI_CS_PROPERTY_WRITE(active, setActive)
@@ -80,6 +79,7 @@ class Q_GUI_EXPORT QUndoStack : public QObject
  public:
    explicit QUndoStack(QObject *parent = nullptr);
    ~QUndoStack();
+
    void clear();
 
    void push(QUndoCommand *cmd);
@@ -142,6 +142,7 @@ class Q_GUI_EXPORT QUndoStack : public QObject
    QScopedPointer<QUndoStackPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QUndoStack)
    Q_DISABLE_COPY(QUndoStack)
    friend class QUndoGroup;
 };

@@ -39,25 +39,7 @@ class QImageIOHandlerPrivate;
 
 class Q_GUI_EXPORT QImageIOHandler
 {
-   Q_DECLARE_PRIVATE(QImageIOHandler)
-
  public:
-   QImageIOHandler();
-   virtual ~QImageIOHandler();
-
-   void setDevice(QIODevice *device);
-   QIODevice *device() const;
-
-   void setFormat(const QByteArray &format);
-   void setFormat(const QByteArray &format) const;
-   QByteArray format() const;
-
-   virtual QByteArray name() const;
-
-   virtual bool canRead() const = 0;
-   virtual bool read(QImage *image) = 0;
-   virtual bool write(const QImage &image);
-
    enum ImageOption {
       Size,
       ClipRect,
@@ -82,17 +64,34 @@ class Q_GUI_EXPORT QImageIOHandler
    };
 
    enum Transformation {
-      TransformationNone = 0,
-      TransformationMirror = 1,
-      TransformationFlip = 2,
+      TransformationNone      = 0,
+      TransformationMirror    = 1,
+      TransformationFlip      = 2,
       TransformationRotate180 = TransformationMirror | TransformationFlip,
-      TransformationRotate90 = 4,
+      TransformationRotate90  = 4,
       TransformationMirrorAndRotate90 = TransformationMirror | TransformationRotate90,
-      TransformationFlipAndRotate90 = TransformationFlip | TransformationRotate90,
-      TransformationRotate270 = TransformationRotate180 | TransformationRotate90
+      TransformationFlipAndRotate90   = TransformationFlip | TransformationRotate90,
+      TransformationRotate270         = TransformationRotate180 | TransformationRotate90
    };
 
    using Transformations = QFlags<Transformation>;
+
+   QImageIOHandler();
+
+   virtual ~QImageIOHandler();
+
+   void setDevice(QIODevice *device);
+   QIODevice *device() const;
+
+   void setFormat(const QByteArray &format);
+   void setFormat(const QByteArray &format) const;
+   QByteArray format() const;
+
+   virtual QByteArray name() const;
+
+   virtual bool canRead() const = 0;
+   virtual bool read(QImage *image) = 0;
+   virtual bool write(const QImage &image);
 
    virtual QVariant option(ImageOption option) const;
    virtual void setOption(ImageOption option, const QVariant &value);
@@ -112,6 +111,7 @@ class Q_GUI_EXPORT QImageIOHandler
    QScopedPointer<QImageIOHandlerPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QImageIOHandler)
    Q_DISABLE_COPY(QImageIOHandler)
 };
 
@@ -124,8 +124,8 @@ class Q_GUI_EXPORT QImageIOPlugin : public QObject
    virtual ~QImageIOPlugin();
 
    enum Capability {
-      CanRead = 0x1,
-      CanWrite = 0x2,
+      CanRead            = 0x1,
+      CanWrite           = 0x2,
       CanReadIncremental = 0x4
    };
    using Capabilities = QFlags<Capability>;
@@ -135,7 +135,5 @@ class Q_GUI_EXPORT QImageIOPlugin : public QObject
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QImageIOPlugin::Capabilities)
-
-
 
 #endif

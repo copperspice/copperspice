@@ -47,8 +47,6 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-QT_BEGIN_NAMESPACE
-
 QString qt_accStripAmp(const QString &text);
 QString qt_accHotKey(const QString &text);
 
@@ -500,7 +498,5 @@ QAccessibleScrollArea::QAccessibleScrollArea(QWidget *widget)
    Q_ASSERT(qobject_cast<QScrollArea *>(widget));
 }
 #endif // QT_NO_SCROLLAREA
-
-QT_END_NAMESPACE
 
 #endif // QT_NO_ACCESSIBILITY

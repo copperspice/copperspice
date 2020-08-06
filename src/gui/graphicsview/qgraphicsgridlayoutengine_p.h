@@ -33,8 +33,6 @@
 #include <qstyleoption.h>
 #include <qgraphicslayoutitem.h>
 
-QT_BEGIN_NAMESPACE
-
 class QGraphicsLayoutPrivate;
 
 class QGraphicsGridLayoutEngineItem : public QGridLayoutItem
@@ -107,8 +105,6 @@ class QGraphicsGridLayoutEngine : public QGridLayoutEngine
 
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_GRAPHICSVIEW
 
-#endif // QGRAPHICSGRIDLAYOUTENGINE_P_H
+#endif
