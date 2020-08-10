@@ -40,6 +40,8 @@
 
 #include <qsqldriver_p.h>
 
+#include <any>
+
 #ifdef Q_OS_WIN32
 // comment the next line out to use MySQL/embedded on Win32 systems
 // linking will fail unless you statically link to the mysql/e library
@@ -133,10 +135,11 @@ class QMYSQLResultPrivate : public QObject
    CS_OBJECT(QMYSQLResultPrivate)
 
  public:
-   QMYSQLResultPrivate(const QMYSQLDriver *dp, const QMYSQLResult *d) : driver(dp), result(0), q(d),
-      rowsAffected(0), hasBlobs(false), stmt(0), meta(0), inBinds(0), outBinds(0),
-      preparedQuery(false) {
-      connect(dp, SIGNAL(destroyed()), this, SLOT(driverDestroyed()));
+   QMYSQLResultPrivate(const QMYSQLDriver *dp, const QMYSQLResult *d)
+      : driver(dp), result(0), q(d), rowsAffected(0), hasBlobs(false), stmt(0), meta(0), inBinds(0),
+        outBinds(0), preparedQuery(false)
+   {
+      connect(dp, &QObject::destroyed, this, &QMYSQLResultPrivate::driverDestroyed);
    }
 
    const QMYSQLDriver *driver;
@@ -174,10 +177,10 @@ class QMYSQLResultPrivate : public QObject
    bool preparedQuery;
 
  private:
-   SQL_CS_SLOT_1(Private, void driverDestroyed() {
+   // slot method
+   void driverDestroyed() {
       driver = NULL;
-   })
-   SQL_CS_SLOT_2(driverDestroyed)
+   }
 
 };
 
@@ -613,7 +616,7 @@ QVariant QMYSQLResult::data(int field)
 
    if (d->preparedQuery) {
       if (f.nullIndicator) {
-         return QVariant(f.type);
+         return QVariant();
       }
 
       if (qIsInteger(f.type)) {
@@ -635,8 +638,7 @@ QVariant QMYSQLResult::data(int field)
 
    } else {
       if (d->row[field] == NULL) {
-         // NULL value
-         return QVariant(f.type);
+         return QVariant();
       }
 
       fieldLength = mysql_fetch_lengths(d->result)[field];
@@ -913,14 +915,11 @@ void QMYSQLResult::virtual_hook(int id, void *data)
    QSqlResult::virtual_hook(id, data);
 }
 
-
-static MYSQL_TIME *toMySqlDate(QDate date, QTime time, QVariant::Type type)
+static MYSQL_TIME toMySqlDate(QDate date, QTime time, QVariant::Type type)
 {
-   Q_ASSERT(type == QVariant::Time || type == QVariant::Date
-      || type == QVariant::DateTime);
+   Q_ASSERT(type == QVariant::Time || type == QVariant::Date || type == QVariant::DateTime);
 
-   MYSQL_TIME *myTime = new MYSQL_TIME;
-   memset(myTime, 0, sizeof(MYSQL_TIME));
+   MYSQL_TIME myTime{};
 
    if (type == QVariant::Time || type == QVariant::DateTime) {
       myTime.hour   = time.hour();
@@ -1002,9 +1001,9 @@ bool QMYSQLResult::exec()
    int r = 0;
 
    MYSQL_BIND *currBind;
-   QVector<MYSQL_TIME *> timeVector;
-   QVector<QByteArray> stringVector;
-   QVector<my_bool> nullVector;
+
+   QVector<std::any> dataVector;
+   QVector<my_bool>  nullVector;
 
    const QVector<QVariant> values = boundValues();
 
@@ -1016,47 +1015,55 @@ bool QMYSQLResult::exec()
       return false;
    }
 
-   if (mysql_stmt_param_count(d->stmt) > 0 &&
-      mysql_stmt_param_count(d->stmt) == (uint)values.count()) {
+   uint maxCount = values.count();
 
-      nullVector.resize(values.count());
-      for (int i = 0; i < values.count(); ++i) {
-         const QVariant &val = boundValues().at(i);
-         void *data = const_cast<void *>(val.constData());
+   if (mysql_stmt_param_count(d->stmt) > 0 && mysql_stmt_param_count(d->stmt) == maxCount) {
+      dataVector.reserve(maxCount);
+      nullVector.resize(maxCount);
 
-         currBind = &d->outBinds[i];
+      for (uint i = 0; i < maxCount; ++i) {
+         const QVariant &item = values.at(i);
 
-         nullVector[i] = static_cast<my_bool>(val.isNull());
-         currBind->is_null = &nullVector[i];
-         currBind->length = 0;
+         nullVector[i] = static_cast<my_bool>(! item.isValid());
+
+         currBind              = &d->outBinds[i];
+         currBind->is_null     = &nullVector[i];
+         currBind->length      = 0;
          currBind->is_unsigned = 0;
 
-         switch (val.type()) {
-            case QVariant::ByteArray:
-               currBind->buffer_type = MYSQL_TYPE_BLOB;
-               currBind->buffer = const_cast<char *>(val.toByteArray().constData());
-               currBind->buffer_length = val.toByteArray().size();
+         switch (item.type()) {
+            case QVariant::ByteArray: {
+               dataVector.append(item.value<QByteArray>());
+               QByteArray *tmp = std::any_cast<QByteArray>(&dataVector.last());
+
+               currBind->buffer_type   = MYSQL_TYPE_BLOB;
+               currBind->buffer        = tmp->data();
+               currBind->buffer_length = tmp->size();
                break;
+            }
 
             case QVariant::Time:
             case QVariant::Date:
             case QVariant::DateTime: {
-               MYSQL_TIME *myTime = toMySqlDate(val.toDate(), val.toTime(), val.type());
-               timeVector.append(myTime);
+               dataVector.append(toMySqlDate(item.toDate(), item.toTime(), item.type()));
+               MYSQL_TIME *tmp = std::any_cast<MYSQL_TIME>(&dataVector.last());
 
-               currBind->buffer = myTime;
-               switch (val.type()) {
+               currBind->buffer = tmp;
+
+               switch (item.type()) {
                   case QVariant::Time:
                      currBind->buffer_type = MYSQL_TYPE_TIME;
-                     myTime->time_type = MYSQL_TIMESTAMP_TIME;
+                     tmp->time_type     = MYSQL_TIMESTAMP_TIME;
                      break;
+
                   case QVariant::Date:
                      currBind->buffer_type = MYSQL_TYPE_DATE;
-                     myTime->time_type = MYSQL_TIMESTAMP_DATE;
+                     tmp->time_type     = MYSQL_TIMESTAMP_DATE;
                      break;
+
                   case QVariant::DateTime:
                      currBind->buffer_type = MYSQL_TYPE_DATETIME;
-                     myTime->time_type = MYSQL_TIMESTAMP_DATETIME;
+                     tmp->time_type     = MYSQL_TIMESTAMP_DATETIME;
                      break;
 
                   default:
@@ -1067,58 +1074,98 @@ bool QMYSQLResult::exec()
                currBind->length = 0;
                break;
             }
-            case QVariant::UInt:
-            case QVariant::Int:
-               currBind->buffer_type = MYSQL_TYPE_LONG;
-               currBind->buffer = data;
-               currBind->buffer_length = sizeof(int);
-               currBind->is_unsigned = (val.type() != QVariant::Int);
-               break;
 
-            case QVariant::Bool:
-               currBind->buffer_type = MYSQL_TYPE_TINY;
-               currBind->buffer = data;
+            case QVariant::Bool: {
+               dataVector.append(item.value<bool>());
+               bool *tmp = std::any_cast<bool>(&dataVector.last());
+
+               currBind->buffer_type   = MYSQL_TYPE_TINY;
+               currBind->buffer        = tmp;
                currBind->buffer_length = sizeof(bool);
-               currBind->is_unsigned = false;
+               currBind->is_unsigned   = false;
                break;
+            }
 
-            case QVariant::Double:
-               currBind->buffer_type = MYSQL_TYPE_DOUBLE;
-               currBind->buffer = data;
-               currBind->buffer_length = sizeof(double);
+            case QVariant::Int: {
+               dataVector.append(item.value<int>());
+               int *tmp = std::any_cast<int>(&dataVector.last());
+
+               currBind->buffer_type   = MYSQL_TYPE_LONG;
+               currBind->buffer        = tmp;
+               currBind->buffer_length = sizeof(int);
+               currBind->is_unsigned   = false;
                break;
+            }
 
-            case QVariant::LongLong:
-            case QVariant::ULongLong:
-               currBind->buffer_type = MYSQL_TYPE_LONGLONG;
-               currBind->buffer = data;
+            case QVariant::UInt: {
+               dataVector.append(item.value<uint>());
+               uint *tmp = std::any_cast<uint>(&dataVector.last());
+
+               currBind->buffer_type   = MYSQL_TYPE_LONG;
+               currBind->buffer        = tmp;
+               currBind->buffer_length = sizeof(uint);
+               currBind->is_unsigned   = true;
+               break;
+            }
+
+            case QVariant::LongLong: {
+               dataVector.append(item.value<qint64>());
+               qint64 *tmp = std::any_cast<qint64>(&dataVector.last());
+
+               currBind->buffer_type   = MYSQL_TYPE_LONGLONG;
+               currBind->buffer        = tmp;
                currBind->buffer_length = sizeof(qint64);
-               currBind->is_unsigned = (val.type() == QVariant::ULongLong);
+               currBind->is_unsigned   = true;
                break;
+            }
+
+            case QVariant::ULongLong: {
+               dataVector.append(item.value<quint64>());
+               quint64 *tmp = std::any_cast<quint64>(&dataVector.last());
+
+               currBind->buffer_type   = MYSQL_TYPE_LONGLONG;
+               currBind->buffer        = tmp;
+               currBind->buffer_length = sizeof(quint64);
+               currBind->is_unsigned   = false;
+               break;
+            }
+
+            case QVariant::Double: {
+               dataVector.append(item.value<double>());
+               double *tmp = std::any_cast<double>(&dataVector.last());
+
+               currBind->buffer_type   = MYSQL_TYPE_DOUBLE;
+               currBind->buffer        = tmp;
+               currBind->buffer_length = sizeof(double);
+               currBind->is_unsigned   = false;
+               break;
+            }
 
             case QVariant::String:
             default: {
-               QByteArray ba = fromUnicode(d->driver->d_func()->tc, val.toString());
-               stringVector.append(ba);
-               currBind->buffer_type = MYSQL_TYPE_STRING;
-               currBind->buffer = const_cast<char *>(ba.constData());
-               currBind->buffer_length = ba.length();
+               dataVector.append(fromUnicode(d->driver->d_func()->tc, item.toString()));
+               QByteArray *tmp = std::any_cast<QByteArray>(&dataVector.last());
+
+               currBind->buffer_type   = MYSQL_TYPE_STRING;
+               currBind->buffer        = tmp->data();
+               currBind->buffer_length = tmp->size();
+               currBind->is_unsigned   = false;
                break;
             }
          }
       }
 
       r = mysql_stmt_bind_param(d->stmt, d->outBinds);
+
       if (r != 0) {
-         setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult",
-                  "Unable to bind value"), QSqlError::StatementError, d->stmt));
-         qDeleteAll(timeVector);
+         setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult", "Unable to bind value"),
+                  QSqlError::StatementError, d->stmt));
+
          return false;
       }
    }
-   r = mysql_stmt_execute(d->stmt);
 
-   qDeleteAll(timeVector);
+   r = mysql_stmt_execute(d->stmt);
 
    if (r != 0) {
       setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult", "Unable to execute statement"),

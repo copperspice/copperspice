@@ -117,4 +117,8 @@ class Q_EXPORT_SQLDRIVER_MYSQL QMYSQLDriver : public QSqlDriver
    void init();
 };
 
+CS_DECLARE_METATYPE(st_mysql)
+CS_DECLARE_METATYPE(st_mysql_res)
+CS_DECLARE_METATYPE(st_mysql_stmt)
+
 #endif
