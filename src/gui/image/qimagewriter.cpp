@@ -466,17 +466,6 @@ QImageIOHandler::Transformations QImageWriter::transformation() const
    return d->transformation;
 }
 
-void QImageWriter::setDescription(const QString &description)
-{
-   d->description = description;
-}
-
-
-QString QImageWriter::description() const
-{
-   return d->description;
-}
-
 void QImageWriter::setText(const QString &key, const QString &text)
 {
    if (!d->description.isEmpty()) {

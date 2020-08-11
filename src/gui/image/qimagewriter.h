@@ -75,13 +75,7 @@ class Q_GUI_EXPORT QImageWriter
    QImageIOHandler::Transformations transformation() const;
    void setTransformation(QImageIOHandler::Transformations transform);
 
-   // Obsolete as of 4.1
-   void setDescription(const QString &description);
-
-   QString description() const;
-
    void setText(const QString &key, const QString &text);
-
    bool canWrite() const;
    bool write(const QImage &image);
 
