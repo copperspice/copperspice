@@ -24,7 +24,10 @@
 #ifndef QGLOBAL_H
 #define QGLOBAL_H
 
+#if ! defined (CS_DOXYPRESS)
 #include <cs_build_info.h>
+#endif
+
 #include <qexport.h>
 #include <qfeatures.h>
 
@@ -193,7 +196,9 @@
 
 #ifdef Q_OS_DARWIN
 
+#if ! defined (CS_DOXYPRESS)
 #  include <AvailabilityMacros.h>
+#endif
 
 #  if ! defined(MAC_OS_X_VERSION_10_9)
 #     define MAC_OS_X_VERSION_10_9  MAC_OS_X_VERSION_10_8 + 10

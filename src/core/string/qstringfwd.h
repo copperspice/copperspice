@@ -34,36 +34,52 @@ using QString       = QString8;
 using QLatin1Char   = QChar32;
 using QLatin1String = QString8;
 
-#if ! defined (CS_DOXYPRESS)
+#if defined (CS_DOXYPRESS)
+
+   template <typename S>
+   class QRegularExpression;
+
+   template <typename S>
+   class QRegularExpressionMatch;
+
+   template <typename S>
+   class QStringView;
+
+   using QRegularExpression8       = QRegularExpression<QString8>;
+   using QRegularExpression16      = QRegularExpression<QString16>;
+
+   using QRegularExpressionMatch8  = QRegularExpressionMatch<QString8>;
+   using QRegularExpressionMatch16 = QRegularExpressionMatch<QString16>;
+
+   using QStringView8   = QStringView<QString8>;
+   using QStringView16  = QStringView<QString16>;
+
+#else
+
 namespace Cs {
-#endif
+   template <typename S>
+   class QRegularExpression;
 
-template <typename S>
-class QRegularExpression;
+   template <typename S>
+   class QRegularExpressionMatch;
 
-template <typename S>
-class QRegularExpressionMatch;
-
-template <typename S>
-class QStringView;
-
-#if ! defined (CS_DOXYPRESS)
+   template <typename S>
+   class QStringView;
 }
-#endif
 
-using QRegularExpression        = Cs::QRegularExpression<QString8>;
-using QRegularExpression8       = Cs::QRegularExpression<QString8>;
-using QRegularExpression16      = Cs::QRegularExpression<QString16>;
+   using QRegularExpression        = Cs::QRegularExpression<QString8>;
+   using QRegularExpression8       = Cs::QRegularExpression<QString8>;
+   using QRegularExpression16      = Cs::QRegularExpression<QString16>;
 
-using QRegularExpressionMatch   = Cs::QRegularExpressionMatch<QString8>;
-using QRegularExpressionMatch8  = Cs::QRegularExpressionMatch<QString8>;
-using QRegularExpressionMatch16 = Cs::QRegularExpressionMatch<QString16>;
+   using QRegularExpressionMatch   = Cs::QRegularExpressionMatch<QString8>;
+   using QRegularExpressionMatch8  = Cs::QRegularExpressionMatch<QString8>;
+   using QRegularExpressionMatch16 = Cs::QRegularExpressionMatch<QString16>;
 
-#if ! defined (CS_DOXYPRESS)
-using QStringView    = Cs::QStringView<QString8>;
-#endif
+   using QStringView    = Cs::QStringView<QString8>;
 
-using QStringView8   = Cs::QStringView<QString8>;
-using QStringView16  = Cs::QStringView<QString16>;
+   using QStringView8   = Cs::QStringView<QString8>;
+   using QStringView16  = Cs::QStringView<QString16>;
+
+#endif  // doxypress
 
 #endif

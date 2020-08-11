@@ -352,7 +352,7 @@ class Q_CORE_EXPORT CS_ReturnType
       return retval;                                                                        \
    }
 
-#endif
+#endif // doxypress
 
 // methods for these 2 class, located in csmeta_internal2.h around line 117
 template<class E>

@@ -229,7 +229,7 @@ class QProcessEnvironmentPrivate: public QSharedData
    void insert(const QProcessEnvironmentPrivate &other);
 };
 
-/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
+#if ! defined (CS_DOXYPRESS)
 
 template<>
 inline void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
@@ -247,7 +247,7 @@ inline void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
    d = x;
 }
 
-/**   \endcond   */
+#endif // doxypress
 
 class QProcessPrivate : public QIODevicePrivate
 {

@@ -77,7 +77,7 @@ class QMetaObject;
 
 
 
-/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
+#if ! defined (CS_DOXYPRESS)
 
 template<int N>
 class cs_number : public cs_number<N - 1>
@@ -93,7 +93,7 @@ class cs_number<0>
       static constexpr int value = 0;
 };
 
-/**   \endcond   */
+#endif // doxypress
 
 
 #ifdef QT_NO_TEXTCODEC

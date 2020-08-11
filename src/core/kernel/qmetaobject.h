@@ -207,7 +207,7 @@ QObject *QMetaObject::newInstance(Ts... Vs) const
    return retval;
 }
 
-/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
+#if ! defined (CS_DOXYPRESS)
 
 // **
 class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
@@ -494,6 +494,6 @@ void QMetaObject_T<T>::register_property_reset(const QString &name, U methodPtr)
 // best way to handle declarations
 #include <csmeta_internal_2.h>
 
-/**   \endcond   */
+#endif // doxypress
 
 #endif
