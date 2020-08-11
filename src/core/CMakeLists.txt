@@ -122,7 +122,6 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "(OpenBSD|FreeBSD|NetBSD|DragonFly)")
    target_link_libraries(CsCore
       PRIVATE
       ${CMAKE_THREAD_LIBS_INIT}
-      iconv
    )
    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/forkfd)
 
