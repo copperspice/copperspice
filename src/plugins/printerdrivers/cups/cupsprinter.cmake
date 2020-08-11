@@ -18,10 +18,15 @@ if(Cups_FOUND)
    	${CMAKE_SOURCE_DIR}/src/plugins/printerdrivers/cups/qcupsprintersupport.cpp
    )
 
+   target_include_directories(CsPrinterDriverCups
+      PRIVATE
+      ${CUPS_INCLUDE_DIRS}
+   )
+
    target_link_libraries(CsPrinterDriverCups
       CsCore
       CsGui
-      cups
+      ${CUPS_LIBRARIES}
    )
 
    target_compile_definitions(CsPrinterDriverCups
