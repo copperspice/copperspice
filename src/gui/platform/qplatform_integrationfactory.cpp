@@ -30,13 +30,13 @@
 #include <qguiapplication.h>
 #include <qdebug.h>
 
-QFactoryLoader *loader()
+static QFactoryLoader *loader()
 {
    static QFactoryLoader retval(QPlatformIntegrationInterface_ID, "/platforms", Qt::CaseInsensitive);
    return &retval;
 }
 
-QFactoryLoader *directLoader()
+static QFactoryLoader *directLoader()
 {
    static QFactoryLoader retval(QPlatformIntegrationInterface_ID, "", Qt::CaseInsensitive);
    return &retval;
