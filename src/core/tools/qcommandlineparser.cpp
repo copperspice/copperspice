@@ -22,8 +22,8 @@
 ***********************************************************************/
 
 /*****************************************************
-** Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
-** Copyright (C) 2013 David Faure <faure@kde.org>
+** Copyright (c) 2013 Laszlo Papp <lpapp@kde.org>
+** Copyright (c) 2013 David Faure <faure@kde.org>
 *****************************************************/
 
 #include <stdio.h>

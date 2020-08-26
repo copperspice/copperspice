@@ -21,7 +21,9 @@
 *
 ***********************************************************************/
 
-// Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
+/*****************************************************
+** Copyright (c) 2013 Laszlo Papp <lpapp@kde.org>
+*****************************************************/
 
 #ifndef QCOMMANDLINEPARSER_H
 #define QCOMMANDLINEPARSER_H

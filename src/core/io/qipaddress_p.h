@@ -21,7 +21,9 @@
 *
 ***********************************************************************/
 
-// Copyright (C) 2012 Intel Corporation
+/*******************************************
+** Copyright (c) 2012 Intel Corporation
+*******************************************/
 
 #ifndef QIPADDRESS_P_H
 #define QIPADDRESS_P_H
