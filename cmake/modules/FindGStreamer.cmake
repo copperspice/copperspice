@@ -35,8 +35,8 @@ find_package(PkgConfig)
 
 # Helper macro to find a GStreamer plugin (or GStreamer itself)
 #   _component_prefix is prepended to the _INCLUDE_DIRS and _LIBRARIES variables (eg. "GSTREAMER_AUDIO")
-#   _pkgconfig_name is the component's pkg-config name (eg. "gstreamer-1.0", or "gstreamer-video-1.0").
-#   _library is the component's library name (eg. "gstreamer-1.0" or "gstvideo-1.0")
+#   _pkgconfig_name is the component pkg-config name (eg. "gstreamer-1.0", or "gstreamer-video-1.0").
+#   _library is the component library name (eg. "gstreamer-1.0" or "gstvideo-1.0")
 macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _library)
     pkg_check_modules(PKG_${_component_prefix} ${_pkgconfig_name})
     set(${_component_prefix}_INCLUDE_DIRS ${PKG_${_component_prefix}_INCLUDE_DIRS})
@@ -51,19 +51,24 @@ endmacro()
 FIND_GSTREAMER_COMPONENT(GSTREAMER gstreamer-1.0 gstreamer-1.0)
 FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE gstreamer-base-1.0 gstbase-1.0)
 
-if (NOT GSTREAMER_LIBRARIES STREQUAL "GSTREAMER_LIBRARIES-NOTFOUND")
-   set(GSTREAMER_ABI_VERSION "1.0")
+if (GSTREAMER_ABI_VERSION STREQUAL "1.0" OR GSTREAMER_ABI_VERSION STREQUAL "0.10")
+   # already set up
 
 else()
-   FIND_GSTREAMER_COMPONENT(GSTREAMER gstreamer-0.10 gstreamer-0.10)
-   FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE gstreamer-base-0.10 gstbase-0.10)
-   FIND_GSTREAMER_COMPONENT(GSTREAMER_INTERFACES gstreamer-interfaces-0.10 gstinterfaces-0.10)
+   if (NOT GSTREAMER_LIBRARIES STREQUAL "GSTREAMER_LIBRARIES-NOTFOUND")
+      set(GSTREAMER_ABI_VERSION "1.0")
 
-   if (DEFINED GSTREAMER_LIBRARIES)
-      set(GSTREAMER_ABI_VERSION "0.10")
    else()
-      # nothing was found
-      return()
+      FIND_GSTREAMER_COMPONENT(GSTREAMER gstreamer-0.10 gstreamer-0.10)
+      FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE gstreamer-base-0.10 gstbase-0.10)
+      FIND_GSTREAMER_COMPONENT(GSTREAMER_INTERFACES gstreamer-interfaces-0.10 gstinterfaces-0.10)
+
+      if (DEFINED GSTREAMER_LIBRARIES)
+         set(GSTREAMER_ABI_VERSION "0.10")
+      else()
+         # nothing was found
+         return()
+      endif()
    endif()
 endif()
 
@@ -78,5 +83,8 @@ find_package_handle_standard_args(GStreamer
    DEFAULT_MSG
    GSTREAMER_LIBRARIES
    GSTREAMER_INCLUDE_DIRS
+   GSTREAMER_ABI_VERSION
 )
 
+set (GSTREAMER_ABI_VERSION "${GSTREAMER_ABI_VERSION}" CACHE INTERNAL "")
+mark_as_advanced(GSTREAMER_ABI_VERSION)
