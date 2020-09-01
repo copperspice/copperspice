@@ -1090,14 +1090,14 @@ inline bool operator<(const QString16 &str1, const QString16 &str2)
 template <int N>
 inline bool operator<(const char (&cStr)[N], const QString16 &str)
 {
-   return ! (static_cast<CsString::CsString_utf16>(str) >= cStr);
+   return (QString16(cStr) < str);
 }
 
 // for an array of chars
 template <int N>
 inline bool operator<(const QString16 &str, const char (&cStr)[N])
 {
-   return (static_cast<CsString::CsString_utf16>(str) < cStr);
+   return (str < QString16(cStr));
 }
 
 inline bool operator<=(const QString16 &str1, const QString16 &str2)
@@ -1109,14 +1109,14 @@ inline bool operator<=(const QString16 &str1, const QString16 &str2)
 template <int N>
 inline bool operator<=(const char (&cStr)[N], const QString16 &str)
 {
-   return ! (static_cast<CsString::CsString_utf16>(str) > cStr);
+   return (QString16(cStr) <= str);
 }
 
 // for an array of chars
 template <int N>
 inline bool operator<=(const QString16 &str, const char (&cStr)[N])
 {
-   return (static_cast<CsString::CsString_utf16>(str) <= cStr);
+   return (str <= QString16(cStr));
 }
 
 inline bool operator>(const QString16 &str1, const QString16 &str2)
@@ -1128,14 +1128,14 @@ inline bool operator>(const QString16 &str1, const QString16 &str2)
 template <int N>
 inline bool operator>(const char (&cStr)[N], const QString16 &str)
 {
-   return ! (static_cast<CsString::CsString_utf16>(str) <= cStr);
+   return (QString16(cStr) > str);
 }
 
 // for an array of chars
 template <int N>
 inline bool operator>(const QString16 &str, const char (&cStr)[N])
 {
-   return (static_cast<CsString::CsString_utf16>(str) > cStr);
+   return (str > QString16(cStr));
 }
 
 inline bool operator>=(const QString16 &str1, const QString16 &str2)
@@ -1147,14 +1147,14 @@ inline bool operator>=(const QString16 &str1, const QString16 &str2)
 template <int N>
 inline bool operator>=(const char (&cStr)[N], const QString16 &str)
 {
-   return ! (static_cast<CsString::CsString_utf16>(str) < cStr);
+   return (QString16(cStr) >= str);
 }
 
 // for an array of chars
 template <int N>
 inline bool operator>=(const QString16 &str, const char (&cStr)[N])
 {
-   return (static_cast<CsString::CsString_utf16>(str) >= cStr);
+   return (str >= QString16(cStr));
 }
 
 inline void swap(QString16 &a, QString16 &b) {

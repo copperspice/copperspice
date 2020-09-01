@@ -1104,14 +1104,14 @@ inline bool operator<(const QString8 &str1, const QString8 &str2)
 template <int N>
 inline bool operator<(const char (&cStr)[N], const QString8 &str)
 {
-   return ! (static_cast<CsString::CsString>(str) >= cStr);
+   return (QString8(cStr) < str);
 }
 
 // for an array of chars
 template <int N>
 inline bool operator<(const QString8 &str, const char (&cStr)[N])
 {
-   return (static_cast<CsString::CsString>(str) < cStr);
+   return (str < QString8(cStr));
 }
 
 inline bool operator<=(const QString8 &str1, const QString8 &str2)
@@ -1123,14 +1123,14 @@ inline bool operator<=(const QString8 &str1, const QString8 &str2)
 template <int N>
 inline bool operator<=(const char (&cStr)[N], const QString8 &str)
 {
-   return ! (static_cast<CsString::CsString>(str) > cStr);
+   return (QString8(cStr) <= str);
 }
 
 // for an array of chars
 template <int N>
 inline bool operator<=(const QString8 &str, const char (&cStr)[N])
 {
-   return (static_cast<CsString::CsString>(str) <= cStr);
+   return (str <= QString8(cStr));
 }
 
 inline bool operator>(const QString8 &str1, const QString8 &str2)
@@ -1142,14 +1142,14 @@ inline bool operator>(const QString8 &str1, const QString8 &str2)
 template <int N>
 inline bool operator>(const char (&cStr)[N], const QString8 &str)
 {
-   return ! (static_cast<CsString::CsString>(str) <= cStr);
+   return (QString8(cStr) > str);
 }
 
 // for an array of chars
 template <int N>
 inline bool operator>(const QString8 &str, const char (&cStr)[N])
 {
-   return (static_cast<CsString::CsString>(str) > cStr);
+   return (str > QString8(cStr));
 }
 
 inline bool operator>=(const QString8 &str1, const QString8 &str2)
@@ -1161,14 +1161,14 @@ inline bool operator>=(const QString8 &str1, const QString8 &str2)
 template <int N>
 inline bool operator>=(const char (&cStr)[N], const QString8 &str)
 {
-   return ! (static_cast<CsString::CsString>(str) < cStr);
+   return (QString8(cStr) >= str);
 }
 
 // for an array of chars
 template <int N>
 inline bool operator>=(const QString8 &str, const char (&cStr)[N])
 {
-   return (static_cast<CsString::CsString>(str) >= cStr);
+   return (str >= QString8(cStr));
 }
 
 inline void swap(QString8 &a, QString8 &b) {
