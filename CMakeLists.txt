@@ -13,8 +13,8 @@ set(OpenGL_GL_PREFERENCE GLVND)
 project(copperspice)
 
 set(BUILD_MAJOR "1")
-set(BUILD_MINOR "6")
-set(BUILD_MICRO "3")
+set(BUILD_MINOR "7")
+set(BUILD_MICRO "0")
 
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
