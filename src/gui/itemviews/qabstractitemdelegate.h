@@ -52,6 +52,10 @@ class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
    };
 
    explicit QAbstractItemDelegate(QObject *parent = nullptr);
+
+   QAbstractItemDelegate(const QAbstractItemDelegate &) = delete;
+   QAbstractItemDelegate &operator=(const QAbstractItemDelegate &) = delete;
+
    virtual ~QAbstractItemDelegate();
 
    // painting
@@ -92,12 +96,9 @@ class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
 
  protected:
    QAbstractItemDelegate(QAbstractItemDelegatePrivate &, QObject *parent = nullptr);
-
    QScopedPointer<QAbstractItemDelegatePrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QAbstractItemDelegate)
-
    GUI_CS_SLOT_1(Private, void _q_commitDataAndCloseEditor(QWidget *))
    GUI_CS_SLOT_2(_q_commitDataAndCloseEditor)
 };

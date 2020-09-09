@@ -723,8 +723,11 @@ class Q_GUI_EXPORT QStyle : public QObject
       SP_CustomBase = 0xf0000000
    };
 
-
    QStyle();
+
+   QStyle(const QStyle &) = delete;
+   QStyle &operator=(const QStyle &) = delete;
+
    virtual ~QStyle();
 
    virtual void polish(QWidget *widget);
@@ -799,8 +802,6 @@ class Q_GUI_EXPORT QStyle : public QObject
    QScopedPointer<QStylePrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QStyle)
-
    void setProxy(QStyle *style);
 
    friend class QWidget;

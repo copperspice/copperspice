@@ -76,6 +76,10 @@ class QTextDocumentFragmentPrivate
 {
  public:
    QTextDocumentFragmentPrivate(const QTextCursor &cursor = QTextCursor());
+
+   QTextDocumentFragmentPrivate(const QTextDocumentFragmentPrivate &) = delete;
+   QTextDocumentFragmentPrivate &operator=(const QTextDocumentFragmentPrivate &) = delete;
+
    ~QTextDocumentFragmentPrivate() {
       delete doc;
    }
@@ -86,9 +90,6 @@ class QTextDocumentFragmentPrivate
    QTextDocument *doc;
 
    uint importedFromPlainText : 1;
-
- private:
-   Q_DISABLE_COPY(QTextDocumentFragmentPrivate)
 };
 
 #ifndef QT_NO_TEXTHTMLPARSER

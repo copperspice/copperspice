@@ -82,6 +82,9 @@ class Q_GUI_EXPORT QVectorPath
         m_hints(hints) {
    }
 
+   QVectorPath(const QVectorPath &) = delete;
+   QVectorPath &operator=(const QVectorPath &) = delete;
+
    ~QVectorPath();
 
    QRectF controlPointRect() const;
@@ -195,10 +198,7 @@ class Q_GUI_EXPORT QVectorPath
                   && types[3] == QPainterPath::LineToElement)));
    }
 
-
  private:
-   Q_DISABLE_COPY(QVectorPath)
-
    const QPainterPath::ElementType *m_elements;
    const qreal *m_points;
    const int m_count;

@@ -113,6 +113,10 @@ class QWindowsVistaStyle : public QWindowsXPStyle
 
  public:
    QWindowsVistaStyle();
+
+   QWindowsVistaStyle(const QWindowsVistaStyle &) = delete;
+   QWindowsVistaStyle &operator=(const QWindowsVistaStyle &) = delete;
+
    ~QWindowsVistaStyle();
 
    void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter,
@@ -155,7 +159,6 @@ class QWindowsVistaStyle : public QWindowsXPStyle
 
 
  private:
-   Q_DISABLE_COPY(QWindowsVistaStyle)
    Q_DECLARE_PRIVATE(QWindowsVistaStyle)
 
    friend class QStyleFactory;

@@ -41,6 +41,10 @@ class Q_GUI_EXPORT QPlatformOpenGLContext
    using FP_Void = void(*)();
 
    QPlatformOpenGLContext();
+
+   QPlatformOpenGLContext(const QPlatformOpenGLContext &) = delete;
+   QPlatformOpenGLContext &operator=(const QPlatformOpenGLContext &) = delete;
+
    virtual ~QPlatformOpenGLContext();
 
    virtual void initialize();
@@ -72,8 +76,6 @@ class Q_GUI_EXPORT QPlatformOpenGLContext
    friend class QOpenGLContext;
 
    void setContext(QOpenGLContext *context);
-
-   Q_DISABLE_COPY(QPlatformOpenGLContext)
 };
 
 #endif  // no-opengl

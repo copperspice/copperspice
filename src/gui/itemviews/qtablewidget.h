@@ -247,7 +247,6 @@ inline void QTableWidgetItem::setFont(const QFont &afont)
    setData(Qt::FontRole, afont);
 }
 
-
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QTableWidgetItem &item);
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QTableWidgetItem &item);
 
@@ -269,6 +268,10 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
  public:
    explicit QTableWidget(QWidget *parent = nullptr);
    QTableWidget(int rows, int columns, QWidget *parent = nullptr);
+
+   QTableWidget(const QTableWidget &) = delete;
+   QTableWidget &operator=(const QTableWidget &) = delete;
+
    ~QTableWidget();
 
    void setRowCount(int rows);
@@ -409,7 +412,6 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
    void setModel(QAbstractItemModel *model) override;
 
    Q_DECLARE_PRIVATE(QTableWidget)
-   Q_DISABLE_COPY(QTableWidget)
 
    GUI_CS_SLOT_1(Private, void _q_emitItemPressed(const QModelIndex &index))
    GUI_CS_SLOT_2(_q_emitItemPressed)

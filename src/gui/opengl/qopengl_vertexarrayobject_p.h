@@ -38,8 +38,6 @@ void Q_GUI_EXPORT qtInitializeVertexArrayObjectHelper(QOpenGLVertexArrayObjectHe
 
 class QOpenGLVertexArrayObjectHelper
 {
-    Q_DISABLE_COPY(QOpenGLVertexArrayObjectHelper)
-
 public:
     explicit inline QOpenGLVertexArrayObjectHelper(QOpenGLContext *context)
         : GenVertexArrays(nullptr)
@@ -49,6 +47,9 @@ public:
     {
         qtInitializeVertexArrayObjectHelper(this, context);
     }
+
+   QOpenGLVertexArrayObjectHelper(const QOpenGLVertexArrayObjectHelper &) = delete;
+   QOpenGLVertexArrayObjectHelper &operator=(const QOpenGLVertexArrayObjectHelper &) = delete;
 
     inline bool isValid() const
     {

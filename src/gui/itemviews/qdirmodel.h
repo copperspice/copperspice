@@ -28,8 +28,6 @@
 #include <qdir.h>
 #include <qfileiconprovider.h>
 
-
-
 #ifndef QT_NO_DIRMODEL
 
 class QDirModelPrivate;
@@ -55,6 +53,10 @@ class Q_GUI_EXPORT QDirModel : public QAbstractItemModel
    QDirModel(const QStringList &nameFilters, QDir::Filters filters,
       QDir::SortFlags sort, QObject *parent = nullptr);
    explicit QDirModel(QObject *parent = nullptr);
+
+   QDirModel(const QDirModel &) = delete;
+   QDirModel &operator=(const QDirModel &) = delete;
+
    ~QDirModel();
 
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
@@ -125,13 +127,11 @@ class Q_GUI_EXPORT QDirModel : public QAbstractItemModel
 
  private:
    Q_DECLARE_PRIVATE(QDirModel)
-   Q_DISABLE_COPY(QDirModel)
 
    GUI_CS_SLOT_1(Private, void _q_refresh())
    GUI_CS_SLOT_2(_q_refresh)
 };
 
 #endif // QT_NO_DIRMODEL
-
 
 #endif // QDIRMODEL_H

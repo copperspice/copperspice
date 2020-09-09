@@ -59,6 +59,10 @@ class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
 
 #ifndef QT_NO_PRINTDIALOG
    explicit QAbstractPrintDialog(QPrinter *printer, QWidget *parent = nullptr);
+
+   QAbstractPrintDialog(const QAbstractPrintDialog &) = delete;
+   QAbstractPrintDialog &operator=(const QAbstractPrintDialog &) = delete;
+
    ~QAbstractPrintDialog();
 
    int exec() override = 0;
@@ -89,7 +93,6 @@ class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
 
  private:
    Q_DECLARE_PRIVATE(QAbstractPrintDialog)
-   Q_DISABLE_COPY(QAbstractPrintDialog)
 
 #endif // QT_NO_PRINTDIALOG
 };

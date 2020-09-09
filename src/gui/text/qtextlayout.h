@@ -91,6 +91,9 @@ class Q_GUI_EXPORT QTextLayout
    QTextLayout(const QString &text, const QFont &font, QPaintDevice *paintdevice = nullptr);
    QTextLayout(const QTextBlock &b);
 
+   QTextLayout(const QTextLayout &) = delete;
+   QTextLayout &operator=(const QTextLayout &) = delete;
+
    ~QTextLayout();
 
    void setFont(const QFont &f);
@@ -176,7 +179,6 @@ class Q_GUI_EXPORT QTextLayout
 
  private:
    QTextLayout(QTextEngine *e) : d(e) {}
-   Q_DISABLE_COPY(QTextLayout)
 
     QTextEngine *d;
 

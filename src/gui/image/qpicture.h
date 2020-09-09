@@ -122,6 +122,10 @@ class Q_GUI_EXPORT QPictureIO
    QPictureIO();
    QPictureIO(QIODevice *ioDevice, const QString &format);
    QPictureIO(const QString &fileName, const QString &format);
+
+   QPictureIO(const QPictureIO &) = delete;
+   QPictureIO &operator=(const QPictureIO &) = delete;
+
    ~QPictureIO();
 
    const QPicture &picture() const;
@@ -156,7 +160,6 @@ class Q_GUI_EXPORT QPictureIO
       picture_io_handler read_picture, picture_io_handler write_picture);
 
  private:
-   Q_DISABLE_COPY(QPictureIO)
    void init();
 
    QPictureIOData *d;

@@ -43,6 +43,10 @@ class Q_GUI_EXPORT QUndoCommand
  public:
    explicit QUndoCommand(QUndoCommand *parent = nullptr);
    explicit QUndoCommand(const QString &text, QUndoCommand *parent = nullptr);
+
+   QUndoCommand(const QUndoCommand &) = delete;
+   QUndoCommand &operator=(const QUndoCommand &) = delete;
+
    virtual ~QUndoCommand();
 
    virtual void undo();
@@ -59,7 +63,6 @@ class Q_GUI_EXPORT QUndoCommand
    const QUndoCommand *child(int index) const;
 
  private:
-   Q_DISABLE_COPY(QUndoCommand)
    friend class QUndoStack;
 };
 
@@ -78,6 +81,10 @@ class Q_GUI_EXPORT QUndoStack : public QObject
 
  public:
    explicit QUndoStack(QObject *parent = nullptr);
+
+   QUndoStack(const QUndoStack &) = delete;
+   QUndoStack &operator=(const QUndoStack &) = delete;
+
    ~QUndoStack();
 
    void clear();
@@ -143,7 +150,6 @@ class Q_GUI_EXPORT QUndoStack : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QUndoStack)
-   Q_DISABLE_COPY(QUndoStack)
    friend class QUndoGroup;
 };
 

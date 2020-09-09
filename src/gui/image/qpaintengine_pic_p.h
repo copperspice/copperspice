@@ -37,6 +37,10 @@ class QPicturePaintEngine : public QPaintEngine
 
  public:
    QPicturePaintEngine();
+
+   QPicturePaintEngine(const QPicturePaintEngine &) = delete;
+   QPicturePaintEngine &operator=(const QPicturePaintEngine &) = delete;
+
    ~QPicturePaintEngine();
 
    bool begin(QPaintDevice *pdev) override;
@@ -77,8 +81,6 @@ class QPicturePaintEngine : public QPaintEngine
    QPicturePaintEngine(QPaintEnginePrivate &dptr);
 
  private:
-   Q_DISABLE_COPY(QPicturePaintEngine)
-
    void writeCmdLength(int pos, const QRectF &r, bool corr);
 };
 

@@ -34,6 +34,10 @@ class Q_GUI_EXPORT QOpenGLTextureBlitter
 {
 public:
     QOpenGLTextureBlitter();
+
+    QOpenGLTextureBlitter(const QOpenGLTextureBlitter &) = delete;
+    QOpenGLTextureBlitter &operator=(const QOpenGLTextureBlitter &) = delete;
+
     ~QOpenGLTextureBlitter();
 
     enum Origin {
@@ -59,8 +63,7 @@ public:
     static QMatrix4x4 targetTransform(const QRectF &target, const QRect &viewport);
     static QMatrix3x3 sourceTransform(const QRectF &subTexture, const QSize &textureSize, Origin origin);
 
-private:
-    Q_DISABLE_COPY(QOpenGLTextureBlitter)
+ private:
     Q_DECLARE_PRIVATE(QOpenGLTextureBlitter)
     QScopedPointer<QOpenGLTextureBlitterPrivate> d_ptr;
 };

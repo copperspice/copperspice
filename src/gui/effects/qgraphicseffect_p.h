@@ -38,6 +38,9 @@ class Q_GUI_EXPORT QGraphicsEffectSource : public QObject
    GUI_CS_OBJECT(QGraphicsEffectSource)
 
  public:
+    QGraphicsEffectSource(const QGraphicsEffectSource &) = delete;
+    QGraphicsEffectSource &operator=(const QGraphicsEffectSource &) = delete;
+
    ~QGraphicsEffectSource();
    const QGraphicsItem *graphicsItem() const;
    const QWidget *widget() const;
@@ -59,7 +62,6 @@ class Q_GUI_EXPORT QGraphicsEffectSource : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsEffectSource)
-   Q_DISABLE_COPY(QGraphicsEffectSource)
 
    friend class QGraphicsEffect;
    friend class QGraphicsEffectPrivate;

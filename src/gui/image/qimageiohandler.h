@@ -78,6 +78,9 @@ class Q_GUI_EXPORT QImageIOHandler
 
    QImageIOHandler();
 
+   QImageIOHandler(const QImageIOHandler &) = delete;
+   QImageIOHandler &operator=(const QImageIOHandler &) = delete;
+
    virtual ~QImageIOHandler();
 
    void setDevice(QIODevice *device);
@@ -112,7 +115,6 @@ class Q_GUI_EXPORT QImageIOHandler
 
  private:
    Q_DECLARE_PRIVATE(QImageIOHandler)
-   Q_DISABLE_COPY(QImageIOHandler)
 };
 
 class Q_GUI_EXPORT QImageIOPlugin : public QObject

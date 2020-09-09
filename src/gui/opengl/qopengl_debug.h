@@ -143,6 +143,10 @@ public:
     };
 
     explicit QOpenGLDebugLogger(QObject *parent = nullptr);
+
+    QOpenGLDebugLogger(const QOpenGLDebugLogger &) = delete;
+    QOpenGLDebugLogger &operator=(const QOpenGLDebugLogger &) = delete;
+
     ~QOpenGLDebugLogger();
 
     bool initialize();
@@ -191,7 +195,6 @@ public:
    QScopedPointer<QOpenGLDebugLoggerPrivate> d_ptr;
 
  private:
-    Q_DISABLE_COPY(QOpenGLDebugLogger)
     Q_DECLARE_PRIVATE(QOpenGLDebugLogger)
 
     GUI_CS_SLOT_1(Private, void _q_contextAboutToBeDestroyed())

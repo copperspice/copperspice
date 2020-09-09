@@ -43,6 +43,9 @@ class Q_GUI_EXPORT QKeyEventTransition : public QEventTransition
    QKeyEventTransition(QState *sourceState = nullptr);
    QKeyEventTransition(QObject *object, QEvent::Type type, int key, QState *sourceState = nullptr);
 
+   QKeyEventTransition(const QKeyEventTransition &) = delete;
+   QKeyEventTransition &operator=(const QKeyEventTransition &) = delete;
+
    ~QKeyEventTransition();
 
    int key() const;
@@ -56,7 +59,6 @@ class Q_GUI_EXPORT QKeyEventTransition : public QEventTransition
    bool eventTest(QEvent *event) override;
 
  private:
-   Q_DISABLE_COPY(QKeyEventTransition)
    Q_DECLARE_PRIVATE(QKeyEventTransition)
 };
 

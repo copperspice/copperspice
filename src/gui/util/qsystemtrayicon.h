@@ -64,6 +64,10 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
 
    QSystemTrayIcon(QObject *parent = nullptr);
    QSystemTrayIcon(const QIcon &icon, QObject *parent = nullptr);
+
+   QSystemTrayIcon(const QSystemTrayIcon &) = delete;
+   QSystemTrayIcon &operator=(const QSystemTrayIcon &) = delete;
+
    ~QSystemTrayIcon();
 
    enum ActivationReason {
@@ -117,8 +121,8 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
    QScopedPointer<QSystemTrayIconPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QSystemTrayIcon)
    Q_DECLARE_PRIVATE(QSystemTrayIcon)
+
    GUI_CS_SLOT_1(Private, void _q_emitActivated(QPlatformSystemTrayIcon::ActivationReason))
    GUI_CS_SLOT_2(_q_emitActivated)
 

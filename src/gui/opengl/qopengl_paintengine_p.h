@@ -80,6 +80,10 @@ class Q_GUI_EXPORT QOpenGL2PaintEngineEx : public QPaintEngineEx
     Q_DECLARE_PRIVATE(QOpenGL2PaintEngineEx)
 public:
     QOpenGL2PaintEngineEx();
+
+    QOpenGL2PaintEngineEx(const QOpenGL2PaintEngineEx &) = delete;
+    QOpenGL2PaintEngineEx &operator=(const QOpenGL2PaintEngineEx &) = delete;
+
     ~QOpenGL2PaintEngineEx();
 
     bool begin(QPaintDevice *device) override;
@@ -130,9 +134,6 @@ public:
     bool isNativePaintingActive() const;
     bool requiresPretransformedGlyphPositions(QFontEngine *, const QTransform &) const override { return false; }
     bool shouldDrawCachedGlyphs(QFontEngine *, const QTransform &) const override;
-
-private:
-    Q_DISABLE_COPY(QOpenGL2PaintEngineEx)
 
     friend class QOpenGLEngineShaderManager;
 };

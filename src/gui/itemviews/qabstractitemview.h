@@ -138,6 +138,10 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    };
 
    explicit QAbstractItemView(QWidget *parent = nullptr);
+
+   QAbstractItemView(const QAbstractItemView &) = delete;
+   QAbstractItemView &operator=(const QAbstractItemView &) = delete;
+
    ~QAbstractItemView();
 
    virtual void setModel(QAbstractItemModel *model);
@@ -424,7 +428,6 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 
  private:
    Q_DECLARE_PRIVATE(QAbstractItemView)
-   Q_DISABLE_COPY(QAbstractItemView)
 
    GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
    GUI_CS_SLOT_2(_q_columnsAboutToBeRemoved)

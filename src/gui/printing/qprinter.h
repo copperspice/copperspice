@@ -90,6 +90,10 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
 
    explicit QPrinter(PrinterMode mode = ScreenResolution);
    explicit QPrinter(const QPrinterInfo &printer, PrinterMode mode = ScreenResolution);
+
+   QPrinter(const QPrinter &) = delete;
+   QPrinter &operator=(const QPrinter &) = delete;
+
    ~QPrinter();
 
    int devType() const override;
@@ -214,8 +218,6 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    void setEngines(QPrintEngine *printEngine, QPaintEngine *paintEngine);
 
  private:
-   Q_DISABLE_COPY(QPrinter)
-
    QScopedPointer<QPrinterPrivate> d_ptr;
 
    friend class QPrintDialogPrivate;

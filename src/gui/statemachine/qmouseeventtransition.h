@@ -44,6 +44,9 @@ class Q_GUI_EXPORT QMouseEventTransition : public QEventTransition
    QMouseEventTransition(QState *sourceState = nullptr);
    QMouseEventTransition(QObject *object, QEvent::Type type, Qt::MouseButton button, QState *sourceState = nullptr);
 
+   QMouseEventTransition(const QMouseEventTransition &) = delete;
+   QMouseEventTransition &operator=(const QMouseEventTransition &) = delete;
+
    ~QMouseEventTransition();
 
    Qt::MouseButton button() const;
@@ -60,7 +63,6 @@ class Q_GUI_EXPORT QMouseEventTransition : public QEventTransition
    bool eventTest(QEvent *event) override;
 
  private:
-   Q_DISABLE_COPY(QMouseEventTransition)
    Q_DECLARE_PRIVATE(QMouseEventTransition)
 };
 

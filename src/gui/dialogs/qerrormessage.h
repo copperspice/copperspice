@@ -37,6 +37,10 @@ class Q_GUI_EXPORT QErrorMessage: public QDialog
 
  public:
    explicit QErrorMessage(QWidget *parent = nullptr);
+
+   QErrorMessage(const QErrorMessage &) = delete;
+   QErrorMessage &operator=(const QErrorMessage &) = delete;
+
    ~QErrorMessage();
 
    static QErrorMessage *qtHandler();
@@ -50,9 +54,6 @@ class Q_GUI_EXPORT QErrorMessage: public QDialog
  protected:
    void done(int) override;
    void changeEvent(QEvent *e) override;
-
- private:
-   Q_DISABLE_COPY(QErrorMessage)
 };
 
 #endif // QT_NO_ERRORMESSAGE

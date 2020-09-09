@@ -122,6 +122,10 @@ class Q_GUI_EXPORT QTextDocument : public QObject
  public:
    explicit QTextDocument(QObject *parent = nullptr);
    explicit QTextDocument(const QString &text, QObject *parent = nullptr);
+
+   QTextDocument(const QTextDocument &) = delete;
+   QTextDocument &operator=(const QTextDocument &) = delete;
+
    ~QTextDocument();
 
    QTextDocument *clone(QObject *parent = nullptr) const;
@@ -316,7 +320,6 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    QScopedPointer<QTextDocumentPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QTextDocument)
    Q_DECLARE_PRIVATE(QTextDocument)
    friend class QTextObjectPrivate;
 };

@@ -62,6 +62,10 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 
  public:
    explicit QTreeView(QWidget *parent = nullptr);
+
+   QTreeView(const QTreeView &) = delete;
+   QTreeView &operator=(const QTreeView &) = delete;
+
    ~QTreeView();
 
    void setModel(QAbstractItemModel *model) override;
@@ -239,7 +243,6 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    int visualIndex(const QModelIndex &index) const;
 
    Q_DECLARE_PRIVATE(QTreeView)
-   Q_DISABLE_COPY(QTreeView)
 
 #ifndef QT_NO_ANIMATION
    GUI_CS_SLOT_1(Private, void _q_endAnimatedOperation())

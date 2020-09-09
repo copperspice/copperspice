@@ -116,6 +116,10 @@ class Q_GUI_EXPORT QWizard : public QDialog
    using WizardOptions = QFlags<WizardOption>;
 
    explicit QWizard(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+
+   QWizard(const QWizard &) = delete;
+   QWizard &operator=(const QWizard &) = delete;
+
    ~QWizard();
 
    int addPage(QWizardPage *page);
@@ -203,7 +207,6 @@ class Q_GUI_EXPORT QWizard : public QDialog
    virtual void cleanupPage(int id);
 
  private:
-   Q_DISABLE_COPY(QWizard)
    Q_DECLARE_PRIVATE(QWizard)
 
    GUI_CS_SLOT_1(Private, void _q_emitCustomButtonClicked())
@@ -231,6 +234,10 @@ class Q_GUI_EXPORT QWizardPage : public QWidget
 
  public:
    explicit QWizardPage(QWidget *parent = nullptr);
+
+   QWizardPage(const QWizardPage &) = delete;
+   QWizardPage &operator=(const QWizardPage &) = delete;
+
    ~QWizardPage();
 
    void setTitle(const QString &title);
@@ -263,7 +270,6 @@ class Q_GUI_EXPORT QWizardPage : public QWidget
    QWizard *wizard() const;
 
  private:
-   Q_DISABLE_COPY(QWizardPage)
    Q_DECLARE_PRIVATE(QWizardPage)
 
    GUI_CS_SLOT_1(Private, void _q_maybeEmitCompleteChanged())

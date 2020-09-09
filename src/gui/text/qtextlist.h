@@ -36,6 +36,10 @@ class Q_GUI_EXPORT QTextList : public QTextBlockGroup
 
  public:
    explicit QTextList(QTextDocument *doc);
+
+   QTextList(const QTextList &) = delete;
+   QTextList &operator=(const QTextList &) = delete;
+
    ~QTextList();
 
    int count() const;
@@ -61,7 +65,6 @@ class Q_GUI_EXPORT QTextList : public QTextBlockGroup
    }
 
  private:
-   Q_DISABLE_COPY(QTextList)
    Q_DECLARE_PRIVATE(QTextList)
 };
 

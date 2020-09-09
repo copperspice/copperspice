@@ -81,6 +81,10 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    explicit QTextControl(QObject *parent = nullptr);
    explicit QTextControl(const QString &text, QObject *parent = nullptr);
    explicit QTextControl(QTextDocument *doc, QObject *parent = nullptr);
+
+   QTextControl(const QTextControl &) = delete;
+   QTextControl &operator=(const QTextControl &) = delete;
+
    virtual ~QTextControl();
 
    void setDocument(QTextDocument *document);
@@ -293,8 +297,6 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    QScopedPointer<QTextControlPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QTextControl)
-
    GUI_CS_SLOT_1(Private, void _q_updateCurrentCharFormatAndSelection())
    GUI_CS_SLOT_2(_q_updateCurrentCharFormatAndSelection)
 
@@ -316,7 +318,6 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    GUI_CS_SLOT_1(Private, void _q_contentsChanged(int arg1, int arg2, int arg3))
    GUI_CS_SLOT_2(_q_contentsChanged)
 };
-
 
 #ifndef QT_NO_CONTEXTMENU
 class QUnicodeControlCharacterMenu : public QMenu

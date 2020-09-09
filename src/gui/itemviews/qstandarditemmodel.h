@@ -343,6 +343,10 @@ class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
  public:
    explicit QStandardItemModel(QObject *parent = nullptr);
    QStandardItemModel(int rows, int columns, QObject *parent = nullptr);
+
+   QStandardItemModel(const QStandardItemModel &) = delete;
+   QStandardItemModel &operator=(const QStandardItemModel &) = delete;
+
    ~QStandardItemModel();
 
    void setItemRoleNames(const QMultiHash<int, QString> &roleNames);
@@ -437,7 +441,6 @@ class Q_GUI_EXPORT QStandardItemModel : public QAbstractItemModel
    friend class QStandardItemPrivate;
    friend class QStandardItem;
 
-   Q_DISABLE_COPY(QStandardItemModel)
    Q_DECLARE_PRIVATE(QStandardItemModel)
 
    GUI_CS_SLOT_1(Private, void _q_emitItemChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight))

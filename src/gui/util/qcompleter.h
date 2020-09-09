@@ -87,6 +87,9 @@ class Q_GUI_EXPORT QCompleter : public QObject
    QCompleter(const QStringList &completions, QObject *parent = nullptr);
 #endif
 
+   QCompleter(const QCompleter &) = delete;
+   QCompleter &operator=(const QCompleter &) = delete;
+
    ~QCompleter();
 
    void setWidget(QWidget *widget);
@@ -161,7 +164,6 @@ class Q_GUI_EXPORT QCompleter : public QObject
    QScopedPointer<QCompleterPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QCompleter)
    Q_DECLARE_PRIVATE(QCompleter)
 
    GUI_CS_SLOT_1(Private, void _q_complete(const QModelIndex &un_named_arg1))

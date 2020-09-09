@@ -43,6 +43,10 @@ public:
     QOpenGLPaintDevice();
     explicit QOpenGLPaintDevice(const QSize &size);
     QOpenGLPaintDevice(int width, int height);
+
+    QOpenGLPaintDevice(const QOpenGLPaintDevice &) = delete;
+    QOpenGLPaintDevice &operator=(const QOpenGLPaintDevice &) = delete;
+
     virtual ~QOpenGLPaintDevice();
 
     int devType() const { return QInternal::OpenGL; }
@@ -67,8 +71,6 @@ public:
 protected:
     QOpenGLPaintDevice(QOpenGLPaintDevicePrivate &dd);
     int metric(QPaintDevice::PaintDeviceMetric metric) const;
-
-    Q_DISABLE_COPY(QOpenGLPaintDevice)
     QScopedPointer<QOpenGLPaintDevicePrivate> d_ptr;
 };
 

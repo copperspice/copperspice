@@ -87,6 +87,10 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    enum ViewMode { ListMode, IconMode };
 
    explicit QListView(QWidget *parent = nullptr);
+
+   QListView(const QListView &) = delete;
+   QListView &operator=(const QListView &) = delete;
+
    ~QListView();
 
    void setMovement(Movement movement);
@@ -201,7 +205,6 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    int visualIndex(const QModelIndex &index) const;
 
    Q_DECLARE_PRIVATE(QListView)
-   Q_DISABLE_COPY(QListView)
 };
 
 #endif // QT_NO_LISTVIEW

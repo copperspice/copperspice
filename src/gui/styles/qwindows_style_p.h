@@ -40,6 +40,10 @@ class QWindowsStyle : public QCommonStyle
 
  public:
    QWindowsStyle();
+
+   QWindowsStyle(const QWindowsStyle &) = delete;
+   QWindowsStyle &operator=(const QWindowsStyle &) = delete;
+
    ~QWindowsStyle();
 
    void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const override;
@@ -75,7 +79,6 @@ class QWindowsStyle : public QCommonStyle
    QWindowsStyle(QWindowsStylePrivate &dd);
 
  private:
-   Q_DISABLE_COPY(QWindowsStyle)
    Q_DECLARE_PRIVATE(QWindowsStyle)
 
 };

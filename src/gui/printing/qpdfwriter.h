@@ -42,6 +42,10 @@ class Q_GUI_EXPORT QPdfWriter : public QObject, public QPagedPaintDevice
 public:
    explicit QPdfWriter(const QString &filename);
    explicit QPdfWriter(QIODevice *device);
+
+   QPdfWriter(const QPdfWriter &) = delete;
+   QPdfWriter &operator=(const QPdfWriter &) = delete;
+
    ~QPdfWriter();
 
    QString creator() const;
@@ -76,8 +80,6 @@ public:
 
  private:
     std::unique_ptr<QPdfEngine> m_engine;
-
-    Q_DISABLE_COPY(QPdfWriter)
 };
 
 #endif // QT_NO_PDF

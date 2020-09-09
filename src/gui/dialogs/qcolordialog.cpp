@@ -161,6 +161,10 @@ class QWellArray : public QWidget
 
  public:
    QWellArray(int rows, int cols, QWidget *parent = nullptr);
+
+   QWellArray(const QWellArray &) = delete;
+   QWellArray &operator=(const QWellArray &) = delete;
+
    ~QWellArray()
    {
    }
@@ -256,8 +260,6 @@ class QWellArray : public QWidget
    void paintEvent(QPaintEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QWellArray)
-
    int nrows;
    int ncols;
    int cellw;

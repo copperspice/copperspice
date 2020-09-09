@@ -35,6 +35,9 @@ class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject, public QAccessi
  public:
    explicit QAccessibleWidget(QWidget *widget, QAccessible::Role r = QAccessible::Client, const QString &name = QString());
 
+   QAccessibleWidget(const QAccessibleWidget &) = delete;
+   QAccessibleWidget &operator=(const QAccessibleWidget &) = delete;
+
    bool isValid() const override;
    QWindow *window() const override;
    int childCount() const override;
@@ -71,7 +74,6 @@ class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject, public QAccessi
 
  private:
    QAccessibleWidgetPrivate *d;
-   Q_DISABLE_COPY(QAccessibleWidget)
 };
 
 #endif // QT_NO_ACCESSIBILITY

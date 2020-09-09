@@ -68,6 +68,9 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    QProgressDialog(const QString &labelText, const QString &cancelButtonText, int minimum, int maximum,
       QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
+   QProgressDialog(const QProgressDialog &) = delete;
+   QProgressDialog &operator=(const QProgressDialog &) = delete;
+
    ~QProgressDialog();
 
    QString labelText() const;
@@ -133,8 +136,6 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
    GUI_CS_SLOT_2(forceShow)
 
  private:
-   Q_DISABLE_COPY(QProgressDialog)
-
    GUI_CS_SLOT_1(Private, void disconnectOnClose())
    GUI_CS_SLOT_2(disconnectOnClose)
 
@@ -159,6 +160,7 @@ class Q_GUI_EXPORT QProgressDialog : public QDialog
 #ifndef QT_NO_SHORTCUT
    QShortcut *escapeShortcut;
 #endif
+
    int  showTime;
    bool shown_once;
    bool cancellation_flag;

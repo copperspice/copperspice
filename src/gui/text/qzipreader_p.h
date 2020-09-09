@@ -39,6 +39,10 @@ class Q_GUI_EXPORT QZipReader
    explicit QZipReader(const QString &fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly );
 
    explicit QZipReader(QIODevice *device);
+
+   QZipReader(const QZipReader &) = delete;
+   QZipReader &operator=(const QZipReader &) = delete;
+
    ~QZipReader();
 
    QIODevice *device() const;
@@ -88,7 +92,6 @@ class Q_GUI_EXPORT QZipReader
 
  private:
    QZipReaderPrivate *d;
-   Q_DISABLE_COPY(QZipReader)
 };
 
 #endif // QT_NO_TEXTODFWRITER

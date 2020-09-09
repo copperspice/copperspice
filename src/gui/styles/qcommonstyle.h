@@ -34,6 +34,10 @@ class Q_GUI_EXPORT QCommonStyle : public QStyle
 
  public:
    QCommonStyle();
+
+   QCommonStyle(const QCommonStyle &) = delete;
+   QCommonStyle &operator=(const QCommonStyle &) = delete;
+
    ~QCommonStyle();
 
    void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const override;
@@ -75,7 +79,6 @@ class Q_GUI_EXPORT QCommonStyle : public QStyle
 
  private:
    Q_DECLARE_PRIVATE(QCommonStyle)
-   Q_DISABLE_COPY(QCommonStyle)
 
 #ifndef QT_NO_ANIMATION
    void _q_removeAnimation(QObject *obj);

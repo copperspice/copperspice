@@ -110,6 +110,10 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
       const QString &caption = QString(),
       const QString &directory = QString(),
       const QString &filter = QString());
+
+   QFileDialog(const QFileDialog &) = delete;
+   QFileDialog &operator=(const QFileDialog &) = delete;
+
    ~QFileDialog();
 
    void setDirectory(const QString &directory);
@@ -266,7 +270,6 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
 
  private:
    Q_DECLARE_PRIVATE(QFileDialog)
-   Q_DISABLE_COPY(QFileDialog)
 
    GUI_CS_SLOT_1(Private, void _q_pathChanged(const QString &un_named_arg1))
    GUI_CS_SLOT_2(_q_pathChanged)

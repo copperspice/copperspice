@@ -35,6 +35,10 @@ class Q_GUI_EXPORT QPlatformOffscreenSurface : public QPlatformSurface
 {
  public:
    explicit QPlatformOffscreenSurface(QOffscreenSurface *offscreenSurface);
+
+   QPlatformOffscreenSurface(const QPlatformOffscreenSurface &) = delete;
+   QPlatformOffscreenSurface &operator=(const QPlatformOffscreenSurface &) = delete;
+
    virtual ~QPlatformOffscreenSurface();
 
    QOffscreenSurface *offscreenSurface() const;
@@ -49,7 +53,6 @@ class Q_GUI_EXPORT QPlatformOffscreenSurface : public QPlatformSurface
 
  private:
    Q_DECLARE_PRIVATE(QPlatformOffscreenSurface)
-   Q_DISABLE_COPY(QPlatformOffscreenSurface)
 };
 
 #endif

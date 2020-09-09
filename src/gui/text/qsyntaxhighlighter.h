@@ -47,6 +47,10 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
  public:
    explicit QSyntaxHighlighter(QObject *parent);
    explicit QSyntaxHighlighter(QTextDocument *parent);
+
+   QSyntaxHighlighter(const QSyntaxHighlighter &) = delete;
+   QSyntaxHighlighter &operator=(const QSyntaxHighlighter &) = delete;
+
    virtual ~QSyntaxHighlighter();
 
    void setDocument(QTextDocument *doc);
@@ -78,8 +82,6 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
    QScopedPointer<QSyntaxHighlighterPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QSyntaxHighlighter)
-
    GUI_CS_SLOT_1(Private, void _q_reformatBlocks(int from, int charsRemoved, int charsAdded))
    GUI_CS_SLOT_2(_q_reformatBlocks)
 

@@ -52,6 +52,10 @@ class QStyleSheetStyle : public QWindowsStyle
 
  public:
    QStyleSheetStyle(QStyle *baseStyle);
+
+   QStyleSheetStyle(const QStyleSheetStyle &) = delete;
+   QStyleSheetStyle &operator=(const QStyleSheetStyle &) = delete;
+
    ~QStyleSheetStyle();
 
    void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, const QWidget *w = 0) const override;
@@ -158,7 +162,6 @@ class QStyleSheetStyle : public QWindowsStyle
 
    friend class QRenderRule;
 
-   Q_DISABLE_COPY(QStyleSheetStyle)
    Q_DECLARE_PRIVATE(QStyleSheetStyle)
 };
 

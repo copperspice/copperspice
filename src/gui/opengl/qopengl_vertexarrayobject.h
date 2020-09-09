@@ -40,6 +40,10 @@ class Q_GUI_EXPORT QOpenGLVertexArrayObject : public QObject
 
 public:
     explicit QOpenGLVertexArrayObject(QObject* parent = nullptr);
+
+    QOpenGLVertexArrayObject(const QOpenGLVertexArrayObject &) = delete;
+    QOpenGLVertexArrayObject &operator=(const QOpenGLVertexArrayObject &) = delete;
+
     ~QOpenGLVertexArrayObject();
 
     bool create();
@@ -83,8 +87,6 @@ public:
 protected:
    QScopedPointer<QOpenGLVertexArrayObjectPrivate> d_ptr;
 
-private:
-    Q_DISABLE_COPY(QOpenGLVertexArrayObject)
     Q_DECLARE_PRIVATE(QOpenGLVertexArrayObject)
 
     GUI_CS_SLOT_1(Private, void _q_contextAboutToBeDestroyed())

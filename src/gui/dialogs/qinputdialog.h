@@ -90,6 +90,10 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
    };
 
    QInputDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+
+   QInputDialog(const QInputDialog &) = delete;
+   QInputDialog &operator=(const QInputDialog &) = delete;
+
    ~QInputDialog();
 
    void setInputMode(InputMode mode);
@@ -203,7 +207,6 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
    void done(int result) override;
 
  private:
-   Q_DISABLE_COPY(QInputDialog)
 
    GUI_CS_SLOT_1(Private, void _q_textChanged(const QString &un_named_arg1))
    GUI_CS_SLOT_2(_q_textChanged)

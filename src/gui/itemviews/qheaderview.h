@@ -73,6 +73,10 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    };
 
    explicit QHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
+
+   QHeaderView(const QHeaderView &) = delete;
+   QHeaderView &operator=(const QHeaderView &) = delete;
+
    virtual ~QHeaderView();
 
    void setModel(QAbstractItemModel *model) override;
@@ -260,7 +264,6 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
 
  private:
    Q_DECLARE_PRIVATE(QHeaderView)
-   Q_DISABLE_COPY(QHeaderView)
 
    GUI_CS_SLOT_1(Private, void _q_sectionsRemoved(const QModelIndex &parent, int logicalFirst, int logicalLast))
    GUI_CS_SLOT_2(_q_sectionsRemoved)

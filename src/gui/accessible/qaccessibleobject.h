@@ -36,6 +36,9 @@ class Q_GUI_EXPORT QAccessibleObject : public QAccessibleInterface
  public:
    explicit QAccessibleObject(QObject *object);
 
+   QAccessibleObject(const QAccessibleObject &) = delete;
+   QAccessibleObject &operator=(const QAccessibleObject &) = delete;
+
    bool isValid() const override;
    QObject *object() const override;
 
@@ -49,7 +52,6 @@ class Q_GUI_EXPORT QAccessibleObject : public QAccessibleInterface
 
  private:
    QAccessibleObjectPrivate *d;
-   Q_DISABLE_COPY(QAccessibleObject)
 };
 
 class Q_GUI_EXPORT QAccessibleApplication : public QAccessibleObject

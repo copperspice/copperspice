@@ -45,6 +45,9 @@ class QPathClipper
 
    QPathClipper(const QPainterPath &subject, const QPainterPath &clip);
 
+   QPathClipper(const QPathClipper &) = delete;
+   QPathClipper &operator=(const QPathClipper &) = delete;
+
    QPainterPath clip(Operation op = BoolAnd);
 
    bool intersect();
@@ -54,8 +57,6 @@ class QPathClipper
    static QPainterPath intersect(const QPainterPath &path, const QRectF &rect);
 
  private:
-   Q_DISABLE_COPY(QPathClipper)
-
    enum ClipperMode {
       ClipMode, // do the full clip
       CheckMode // for contains/intersects (only interested in whether the result path is non-empty)

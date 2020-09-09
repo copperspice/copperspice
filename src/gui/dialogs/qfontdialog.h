@@ -62,6 +62,10 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
 
    explicit QFontDialog(QWidget *parent = nullptr);
    explicit QFontDialog(const QFont &initial, QWidget *parent = nullptr);
+
+   QFontDialog(const QFontDialog &) = delete;
+   QFontDialog &operator=(const QFontDialog &) = delete;
+
    ~QFontDialog();
 
    void setCurrentFont(const QFont &font);
@@ -97,8 +101,6 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
    bool eventFilter(QObject *object, QEvent *event) override;
 
  private:
-   Q_DISABLE_COPY(QFontDialog)
-
    GUI_CS_SLOT_1(Private, void _q_sizeChanged(const QString &un_named_arg1))
    GUI_CS_SLOT_2(_q_sizeChanged)
 

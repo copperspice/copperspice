@@ -240,6 +240,10 @@ class Q_GUI_EXPORT QListWidget : public QListView
 
  public:
    explicit QListWidget(QWidget *parent = nullptr);
+
+   QListWidget(const QListWidget &) = delete;
+   QListWidget &operator=(const QListWidget &) = delete;
+
    ~QListWidget();
 
    QListWidgetItem *item(int row) const;
@@ -348,7 +352,6 @@ class Q_GUI_EXPORT QListWidget : public QListView
    Qt::SortOrder sortOrder() const;
 
    Q_DECLARE_PRIVATE(QListWidget)
-   Q_DISABLE_COPY(QListWidget)
 
    GUI_CS_SLOT_1(Private, void _q_emitItemPressed(const QModelIndex &index))
    GUI_CS_SLOT_2(_q_emitItemPressed)

@@ -76,6 +76,9 @@ class QVectorPathConverter
         path(pathData.points.data(), path.size(),
            pathData.elements.data(), pathData.flags) {}
 
+   QVectorPathConverter(const QVectorPathConverter &) = delete;
+   QVectorPathConverter &operator=(const QVectorPathConverter &) = delete;
+
    const QVectorPath &vectorPath() {
       return path;
    }
@@ -125,9 +128,6 @@ class QVectorPathConverter
 
    QVectorPathData pathData;
    QVectorPath path;
-
- private:
-   Q_DISABLE_COPY(QVectorPathConverter)
 };
 
 class QPainterPathData : public QPainterPathPrivate

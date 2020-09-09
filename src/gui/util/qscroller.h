@@ -71,6 +71,9 @@ class Q_GUI_EXPORT QScroller : public QObject
       InputRelease
    };
 
+   QScroller(const QScroller &) = delete;
+   QScroller &operator=(const QScroller &) = delete;
+
    static bool hasScroller(QObject *target);
 
    static QScroller *scroller(QObject *target);
@@ -132,7 +135,6 @@ class Q_GUI_EXPORT QScroller : public QObject
    QScroller(QObject *target);
    virtual ~QScroller();
 
-   Q_DISABLE_COPY(QScroller)
    QScrollerPrivate *d_ptr;
 
 #ifndef QT_NO_GESTURES

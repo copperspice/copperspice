@@ -56,6 +56,10 @@ public:
     using ShaderType = QFlags<ShaderTypeBit>;
 
     explicit QOpenGLShader(QOpenGLShader::ShaderType type, QObject *parent = nullptr);
+
+    QOpenGLShader(const QOpenGLShader &) = delete;
+    QOpenGLShader &operator=(const QOpenGLShader &) = delete;
+
     virtual ~QOpenGLShader();
 
     QOpenGLShader::ShaderType shaderType() const;
@@ -80,7 +84,6 @@ public:
 private:
     friend class QOpenGLShaderProgram;
 
-    Q_DISABLE_COPY(QOpenGLShader)
     Q_DECLARE_PRIVATE(QOpenGLShader)
 };
 

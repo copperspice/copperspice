@@ -50,6 +50,10 @@ class Q_GUI_EXPORT QImageReader
    QImageReader();
    explicit QImageReader(QIODevice *device, const QByteArray &format = QByteArray());
    explicit QImageReader(const QString &fileName, const QByteArray &format = QByteArray());
+
+   QImageReader(const QImageReader &) = delete;
+   QImageReader &operator=(const QImageReader &) = delete;
+
    ~QImageReader();
 
    void setFormat(const QByteArray &format);
@@ -122,7 +126,6 @@ class Q_GUI_EXPORT QImageReader
 
  private:
    Q_DECLARE_TR_FUNCTIONS(QImageReader)
-   Q_DISABLE_COPY(QImageReader)
    QImageReaderPrivate *d;
 };
 

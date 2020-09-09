@@ -64,6 +64,10 @@ class Q_GUI_EXPORT QPlatformDrag
 {
  public:
    QPlatformDrag();
+
+   QPlatformDrag(const QPlatformDrag &) = delete;
+   QPlatformDrag &operator=(const QPlatformDrag &) = delete;
+
    virtual ~QPlatformDrag();
 
    QDrag *currentDrag() const;
@@ -81,7 +85,6 @@ class Q_GUI_EXPORT QPlatformDrag
  private:
    Q_DECLARE_PRIVATE(QPlatformDrag)
    QPlatformDragPrivate *d_ptr;
-   Q_DISABLE_COPY(QPlatformDrag)
 };
 
 #endif // QT_NO_DRAGANDDROP

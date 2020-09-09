@@ -42,6 +42,10 @@ class QMacStyle : public QCommonStyle
    enum WidgetSizePolicy { SizeSmall, SizeLarge, SizeMini, SizeDefault };
 
    QMacStyle();
+
+   QMacStyle(const QMacStyle &) = delete;
+   QMacStyle &operator=(const QMacStyle &) = delete;
+
    virtual ~QMacStyle();
 
    void polish(QWidget *w) override;
@@ -100,8 +104,6 @@ class QMacStyle : public QCommonStyle
       const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
  private:
-   Q_DISABLE_COPY(QMacStyle)
-
    Q_DECLARE_PRIVATE(QMacStyle)
    friend bool qt_mac_buttonIsRenderedFlat(const QPushButton *pushButton, const QStyleOptionButton *option);
 };

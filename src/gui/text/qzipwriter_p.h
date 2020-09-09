@@ -60,6 +60,8 @@ class Q_GUI_EXPORT QZipWriter
       AutoCompress
    };
 
+   QZipWriter(const QZipWriter &) = delete;
+   QZipWriter &operator=(const QZipWriter &) = delete;
    void setCompressionPolicy(CompressionPolicy policy);
    CompressionPolicy compressionPolicy() const;
 
@@ -78,7 +80,6 @@ class Q_GUI_EXPORT QZipWriter
 
  private:
    QZipWriterPrivate *d;
-   Q_DISABLE_COPY(QZipWriter)
 };
 
 #endif // QT_NO_TEXTODFWRITER

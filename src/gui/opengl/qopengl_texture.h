@@ -345,6 +345,10 @@ public:
 
     explicit QOpenGLTexture(Target target);
     explicit QOpenGLTexture(const QImage& image, MipMapGeneration genMipMaps = GenerateMipMaps);
+
+    QOpenGLTexture(const QOpenGLTexture &) = delete;
+    QOpenGLTexture &operator=(const QOpenGLTexture &) = delete;
+
     ~QOpenGLTexture();
 
     Target target() const;
@@ -515,8 +519,7 @@ public:
     void setLevelofDetailBias(float bias);
     float levelofDetailBias() const;
 
-private:
-    Q_DISABLE_COPY(QOpenGLTexture)
+ private:
     Q_DECLARE_PRIVATE(QOpenGLTexture)
     QScopedPointer<QOpenGLTexturePrivate> d_ptr;
 };

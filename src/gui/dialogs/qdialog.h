@@ -41,6 +41,10 @@ class Q_GUI_EXPORT QDialog : public QWidget
 
  public:
    explicit QDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+   QDialog(const QDialog &) = delete;
+   QDialog &operator=(const QDialog &) = delete;
+
    ~QDialog();
 
    enum DialogCode {
@@ -112,9 +116,6 @@ class Q_GUI_EXPORT QDialog : public QWidget
  private:
    Q_DECLARE_PRIVATE(QDialog)
    friend class QPushButton;
-   Q_DISABLE_COPY(QDialog)
-
 };
-
 
 #endif

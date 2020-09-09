@@ -129,6 +129,9 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    QMessageBox(Icon icon, const QString &title, const QString &text, StandardButtons buttons = NoButton,
       QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
+   QMessageBox(const QMessageBox &) = delete;
+   QMessageBox &operator=(const QMessageBox &) = delete;
+
    ~QMessageBox();
 
    void addButton(QAbstractButton *button, ButtonRole role);
@@ -269,7 +272,6 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    void changeEvent(QEvent *event) override;
 
  private:
-   Q_DISABLE_COPY(QMessageBox)
    Q_DECLARE_PRIVATE(QMessageBox)
 
    GUI_CS_SLOT_1(Private, void _q_buttonClicked(QAbstractButton *un_named_arg1))

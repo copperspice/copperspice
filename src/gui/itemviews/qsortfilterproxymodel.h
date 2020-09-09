@@ -67,6 +67,10 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
 
  public:
    QSortFilterProxyModel(QObject *parent = nullptr);
+
+   QSortFilterProxyModel(const QSortFilterProxyModel &) = delete;
+   QSortFilterProxyModel &operator=(const QSortFilterProxyModel &) = delete;
+
    ~QSortFilterProxyModel();
 
    void setSourceModel(QAbstractItemModel *sourceModel) override;
@@ -167,7 +171,6 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
 
  private:
    Q_DECLARE_PRIVATE(QSortFilterProxyModel)
-   Q_DISABLE_COPY(QSortFilterProxyModel)
 
    GUI_CS_SLOT_1(Private, void _q_sourceDataChanged(const QModelIndex &source_top_left,
          const QModelIndex &source_bottom_right, const QVector<int> &roles))

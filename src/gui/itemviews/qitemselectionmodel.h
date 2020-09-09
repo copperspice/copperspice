@@ -215,6 +215,10 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
 
    explicit QItemSelectionModel(QAbstractItemModel *model = nullptr);
    explicit QItemSelectionModel(QAbstractItemModel *model, QObject *parent);
+
+   QItemSelectionModel(const QItemSelectionModel &) = delete;
+   QItemSelectionModel &operator=(const QItemSelectionModel &) = delete;
+
    virtual ~QItemSelectionModel();
 
    QModelIndex currentIndex() const;
@@ -281,7 +285,6 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QItemSelectionModel)
-   Q_DISABLE_COPY(QItemSelectionModel)
 
    GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &arg1, int arg2, int arg3))
    GUI_CS_SLOT_2(_q_columnsAboutToBeRemoved)

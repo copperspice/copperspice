@@ -64,6 +64,10 @@ class Q_GUI_EXPORT QPlatformScreen
    };
 
    QPlatformScreen();
+
+   QPlatformScreen(const QPlatformScreen &) = delete;
+   QPlatformScreen &operator=(const QPlatformScreen &) = delete;
+
    virtual ~QPlatformScreen();
 
    virtual QPixmap grabWindow(WId window, int x, int y, int width, int height) const;
@@ -122,8 +126,6 @@ class Q_GUI_EXPORT QPlatformScreen
 
  private:
    Q_DECLARE_PRIVATE(QPlatformScreen)
-   Q_DISABLE_COPY(QPlatformScreen)
-
    friend class QScreenPrivate;
 };
 

@@ -41,6 +41,10 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
 
  public:
    explicit QStyledItemDelegate(QObject *parent = nullptr);
+
+   QStyledItemDelegate(const QStyledItemDelegate &) = delete;
+   QStyledItemDelegate &operator=(const QStyledItemDelegate &) = delete;
+
    ~QStyledItemDelegate() = default;
 
    // painting
@@ -69,7 +73,6 @@ class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
 
  private:
    Q_DECLARE_PRIVATE(QStyledItemDelegate)
-   Q_DISABLE_COPY(QStyledItemDelegate)
 };
 
 #endif // QT_NO_ITEMVIEWS

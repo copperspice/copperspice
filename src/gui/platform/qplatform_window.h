@@ -45,6 +45,10 @@ class Q_GUI_EXPORT QPlatformWindow : public QPlatformSurface
 
  public:
    explicit QPlatformWindow(QWindow *window);
+
+   QPlatformWindow(const QPlatformWindow &) = delete;
+   QPlatformWindow &operator=(const QPlatformWindow &) = delete;
+
    virtual ~QPlatformWindow();
 
    QWindow *window() const;
@@ -120,9 +124,6 @@ class Q_GUI_EXPORT QPlatformWindow : public QPlatformSurface
    static QSize constrainWindowSize(const QSize &size);
 
    QScopedPointer<QPlatformWindowPrivate> d_ptr;
-
- private:
-   Q_DISABLE_COPY(QPlatformWindow)
 };
 
 #endif

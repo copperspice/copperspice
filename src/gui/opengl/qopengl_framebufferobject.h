@@ -57,6 +57,9 @@ public:
     QOpenGLFramebufferObject(const QSize &size, const QOpenGLFramebufferObjectFormat &format);
     QOpenGLFramebufferObject(int width, int height, const QOpenGLFramebufferObjectFormat &format);
 
+    QOpenGLFramebufferObject(const QOpenGLFramebufferObject &) = delete;
+    QOpenGLFramebufferObject &operator=(const QOpenGLFramebufferObject &) = delete;
+
     virtual ~QOpenGLFramebufferObject();
 
     void addColorAttachment(const QSize &size, GLenum internalFormat = 0);
@@ -110,8 +113,6 @@ public:
                                 GLbitfield buffers = GL_COLOR_BUFFER_BIT,
                                 GLenum filter = GL_NEAREST);
 
-private:
-    Q_DISABLE_COPY(QOpenGLFramebufferObject)
     QScopedPointer<QOpenGLFramebufferObjectPrivate> d_ptr;
     friend class QOpenGLPaintDevice;
     friend class QOpenGLFBOGLPaintDevice;

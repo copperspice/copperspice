@@ -77,6 +77,10 @@ class Q_GUI_EXPORT QTextBlockGroup : public QTextObject
 
  protected:
    explicit QTextBlockGroup(QTextDocument *doc);
+
+   QTextBlockGroup(const QTextBlockGroup &) = delete;
+   QTextBlockGroup &operator=(const QTextBlockGroup &) = delete;
+
    ~QTextBlockGroup();
 
    virtual void blockInserted(const QTextBlock &block);
@@ -85,12 +89,11 @@ class Q_GUI_EXPORT QTextBlockGroup : public QTextObject
 
    QList<QTextBlock> blockList() const;
 
-
    QTextBlockGroup(QTextBlockGroupPrivate &p, QTextDocument *doc);
 
  private:
    Q_DECLARE_PRIVATE(QTextBlockGroup)
-   Q_DISABLE_COPY(QTextBlockGroup)
+
    friend class QTextDocumentPrivate;
 };
 
@@ -107,6 +110,10 @@ class Q_GUI_EXPORT QTextFrame : public QTextObject
 
  public:
    explicit QTextFrame(QTextDocument *doc);
+
+   QTextFrame(const QTextFrame &) = delete;
+   QTextFrame &operator=(const QTextFrame &) = delete;
+
    ~QTextFrame();
 
    inline void setFrameFormat(const QTextFrameFormat &format);
@@ -191,7 +198,6 @@ class Q_GUI_EXPORT QTextFrame : public QTextObject
  private:
    friend class QTextDocumentPrivate;
    Q_DECLARE_PRIVATE(QTextFrame)
-   Q_DISABLE_COPY(QTextFrame)
 };
 
 inline void QTextFrame::setFrameFormat(const QTextFrameFormat &aformat)

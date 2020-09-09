@@ -37,6 +37,10 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
  public:
    QProxyStyle(QStyle *baseStyle = nullptr);
    QProxyStyle(const QString &key);
+
+   QProxyStyle(const QProxyStyle &) = delete;
+   QProxyStyle &operator=(const QProxyStyle &) = delete;
+
    ~QProxyStyle();
 
    QStyle *baseStyle() const;
@@ -87,7 +91,6 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    bool event(QEvent *e) override;
 
  private:
-   Q_DISABLE_COPY(QProxyStyle)
    Q_DECLARE_PRIVATE(QProxyStyle)
 };
 

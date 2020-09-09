@@ -578,7 +578,6 @@ class Q_GUI_EXPORT QAccessibleImageInterface
 
 class Q_GUI_EXPORT QAccessibleEvent
 {
-   Q_DISABLE_COPY(QAccessibleEvent)
 
  public:
    inline QAccessibleEvent(QObject *obj, QAccessible::Event type)
@@ -612,6 +611,9 @@ class Q_GUI_EXPORT QAccessibleEvent
       Q_ASSERT(m_type != QAccessible::TableModelChanged);
       m_uniqueId = QAccessible::uniqueId(iface);
    }
+
+   QAccessibleEvent(const QAccessibleEvent &) = delete;
+   QAccessibleEvent &operator=(const QAccessibleEvent &) = delete;
 
    virtual ~QAccessibleEvent();
 

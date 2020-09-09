@@ -41,6 +41,9 @@ class QBasicKeyEventTransition : public QAbstractTransition
    QBasicKeyEventTransition(QEvent::Type type, int key, QState *sourceState = nullptr);
    QBasicKeyEventTransition(QEvent::Type type, int key, Qt::KeyboardModifiers modifierMask, QState *sourceState = nullptr);
 
+   QBasicKeyEventTransition(const QBasicKeyEventTransition &) = delete;
+   QBasicKeyEventTransition &operator=(const QBasicKeyEventTransition &) = delete;
+
    ~QBasicKeyEventTransition();
 
    QEvent::Type eventType() const;
@@ -57,7 +60,6 @@ class QBasicKeyEventTransition : public QAbstractTransition
    void onTransition(QEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QBasicKeyEventTransition)
    Q_DECLARE_PRIVATE(QBasicKeyEventTransition)
 };
 

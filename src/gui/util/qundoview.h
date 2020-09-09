@@ -51,6 +51,9 @@ class Q_GUI_EXPORT QUndoView : public QListView
    explicit QUndoView(QUndoGroup *group, QWidget *parent = nullptr);
 #endif
 
+   QUndoView(const QUndoView &) = delete;
+   QUndoView &operator=(const QUndoView &) = delete;
+
    ~QUndoView();
 
    QUndoStack *stack() const;
@@ -75,7 +78,6 @@ class Q_GUI_EXPORT QUndoView : public QListView
 
  private:
    Q_DECLARE_PRIVATE(QUndoView)
-   Q_DISABLE_COPY(QUndoView)
 };
 
 #endif // QT_NO_UNDOVIEW

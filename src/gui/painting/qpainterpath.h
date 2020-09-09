@@ -242,6 +242,10 @@ class Q_GUI_EXPORT QPainterPathStroker
  public:
    QPainterPathStroker();
    explicit QPainterPathStroker(const QPen &pen);
+
+   QPainterPathStroker(const QPainterPathStroker &) = delete;
+   QPainterPathStroker &operator=(const QPainterPathStroker &) = delete;
+
    ~QPainterPathStroker();
 
    void setWidth(qreal width);
@@ -269,7 +273,6 @@ class Q_GUI_EXPORT QPainterPathStroker
    QPainterPath createStroke(const QPainterPath &path) const;
 
  private:
-   Q_DISABLE_COPY(QPainterPathStroker)
 
    friend class QX11PaintEngine;
 

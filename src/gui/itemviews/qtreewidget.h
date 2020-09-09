@@ -306,6 +306,10 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
 
  public:
    explicit QTreeWidget(QWidget *parent = nullptr);
+
+   QTreeWidget(const QTreeWidget &) = delete;
+   QTreeWidget &operator=(const QTreeWidget &) = delete;
+
    ~QTreeWidget();
 
    int columnCount() const;
@@ -432,7 +436,6 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
    void setModel(QAbstractItemModel *model) override;
 
    Q_DECLARE_PRIVATE(QTreeWidget)
-   Q_DISABLE_COPY(QTreeWidget)
 
    GUI_CS_SLOT_1(Private, void _q_emitItemPressed(const QModelIndex &index))
    GUI_CS_SLOT_2(_q_emitItemPressed)

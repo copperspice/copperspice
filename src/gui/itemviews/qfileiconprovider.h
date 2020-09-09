@@ -40,6 +40,9 @@ class Q_GUI_EXPORT QFileIconProvider
    using Options = QFlags<Option>;
 
    QFileIconProvider();
+   QFileIconProvider(const QFileIconProvider &) = delete;
+   QFileIconProvider &operator=(const QFileIconProvider &) = delete;
+
    virtual ~QFileIconProvider();
    enum IconType { Computer, Desktop, Trashcan, Network, Drive, Folder, File };
    virtual QIcon icon(IconType type) const;
@@ -51,7 +54,6 @@ class Q_GUI_EXPORT QFileIconProvider
  private:
    Q_DECLARE_PRIVATE(QFileIconProvider)
    QScopedPointer<QFileIconProviderPrivate> d_ptr;
-   Q_DISABLE_COPY(QFileIconProvider)
 
 };
 

@@ -37,6 +37,9 @@ class Q_GUI_EXPORT QStringListModel : public QAbstractListModel
    explicit QStringListModel(QObject *parent = nullptr);
    explicit QStringListModel(const QStringList &strings, QObject *parent = nullptr);
 
+   QStringListModel(const QStringListModel &) = delete;
+   QStringListModel &operator=(const QStringListModel &) = delete;
+
    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
    QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
 
@@ -56,7 +59,6 @@ class Q_GUI_EXPORT QStringListModel : public QAbstractListModel
    Qt::DropActions supportedDropActions() const override;
 
  private:
-   Q_DISABLE_COPY(QStringListModel)
    QStringList lst;
 };
 

@@ -39,6 +39,10 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
 
  public:
    explicit QColumnView(QWidget *parent = nullptr);
+
+   QColumnView(const QColumnView &) = delete;
+   QColumnView &operator=(const QColumnView &) = delete;
+
    ~QColumnView();
 
    // QAbstractItemView overloads
@@ -72,6 +76,7 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
    void resizeEvent(QResizeEvent *event) override;
    void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command) override;
+
    QRegion visualRegionForSelection(const QItemSelection &selection) const override;
    int horizontalOffset() const override;
    int verticalOffset() const override;
@@ -85,7 +90,6 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
 
  private:
    Q_DECLARE_PRIVATE(QColumnView)
-   Q_DISABLE_COPY(QColumnView)
 
    GUI_CS_SLOT_1(Private, void _q_gripMoved(int un_named_arg1))
    GUI_CS_SLOT_2(_q_gripMoved)

@@ -83,6 +83,11 @@ class QFileDialogPrivate : public QDialogPrivate
  public:
    QFileDialogPrivate();
 
+   QFileDialogPrivate(const QFileDialogPrivate &) = delete;
+   QFileDialogPrivate &operator=(const QFileDialogPrivate &) = delete;
+
+   ~QFileDialogPrivate();
+
    QPlatformFileDialogHelper *platformFileDialogHelper() const {
       return static_cast<QPlatformFileDialogHelper *>(platformHelper());
    }
@@ -249,13 +254,11 @@ class QFileDialogPrivate : public QDialogPrivate
    QByteArray splitterState;
    QByteArray headerData;
    QList<QUrl> sidebarUrls;
-   ~QFileDialogPrivate();
 
  private:
    virtual void initHelper(QPlatformDialogHelper *) override;
    virtual void helperPrepareShow(QPlatformDialogHelper *) override;
    virtual void helperDone(QDialog::DialogCode, QPlatformDialogHelper *) override;
-   Q_DISABLE_COPY(QFileDialogPrivate)
 };
 
 class QFileDialogLineEdit : public QLineEdit

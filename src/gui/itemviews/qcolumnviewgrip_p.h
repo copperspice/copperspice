@@ -39,6 +39,10 @@ class QColumnViewGrip : public QWidget
    GUI_CS_SIGNAL_2(gripMoved, offset)
 
    explicit QColumnViewGrip(QWidget *parent = nullptr);
+
+   QColumnViewGrip(const QColumnViewGrip &) = delete;
+   QColumnViewGrip &operator=(const QColumnViewGrip &) = delete;
+
    ~QColumnViewGrip();
    int moveGrip(int offset);
 
@@ -52,7 +56,6 @@ class QColumnViewGrip : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QColumnViewGrip)
-   Q_DISABLE_COPY(QColumnViewGrip)
 };
 
 class QColumnViewGripPrivate : public QWidgetPrivate

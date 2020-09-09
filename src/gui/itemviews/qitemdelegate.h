@@ -43,6 +43,10 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
 
  public:
    explicit QItemDelegate(QObject *parent = nullptr);
+
+   QItemDelegate(const QItemDelegate &) = delete;
+   QItemDelegate &operator=(const QItemDelegate &) = delete;
+
    ~QItemDelegate();
 
    bool hasClipping() const;
@@ -91,7 +95,6 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
 
  private:
    Q_DECLARE_PRIVATE(QItemDelegate)
-   Q_DISABLE_COPY(QItemDelegate)
 };
 
 #endif // QT_NO_ITEMVIEWS

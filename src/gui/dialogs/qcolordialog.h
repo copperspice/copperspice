@@ -55,6 +55,10 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
 
    explicit QColorDialog(QWidget *parent = nullptr);
    explicit QColorDialog(const QColor &initial, QWidget *parent = nullptr);
+
+   QColorDialog(const QColorDialog &) = delete;
+   QColorDialog &operator=(const QColorDialog &) = delete;
+
    ~QColorDialog();
 
    void setCurrentColor(const QColor &color);
@@ -95,8 +99,6 @@ class Q_GUI_EXPORT QColorDialog : public QDialog
    void done(int result) override;
 
  private:
-   Q_DISABLE_COPY(QColorDialog)
-
    GUI_CS_SLOT_1(Private, void _q_addCustom())
    GUI_CS_SLOT_2(_q_addCustom)
 

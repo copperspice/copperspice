@@ -40,6 +40,10 @@ class QBasicMouseEventTransition : public QAbstractTransition
  public:
    QBasicMouseEventTransition(QState *sourceState = nullptr);
    QBasicMouseEventTransition(QEvent::Type type, Qt::MouseButton button, QState *sourceState = nullptr);
+
+   QBasicMouseEventTransition(const QBasicMouseEventTransition &) = delete;
+   QBasicMouseEventTransition &operator=(const QBasicMouseEventTransition &) = delete;
+
    ~QBasicMouseEventTransition();
 
    QEvent::Type eventType() const;
@@ -59,7 +63,6 @@ class QBasicMouseEventTransition : public QAbstractTransition
    void onTransition(QEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QBasicMouseEventTransition)
    Q_DECLARE_PRIVATE(QBasicMouseEventTransition)
 };
 

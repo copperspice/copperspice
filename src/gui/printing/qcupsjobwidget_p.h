@@ -39,6 +39,8 @@ class QCupsJobWidget : public QWidget
  public:
    explicit QCupsJobWidget(QWidget *parent = nullptr);
 
+   QCupsJobWidget(const QCupsJobWidget &) = delete;
+   QCupsJobWidget &operator=(const QCupsJobWidget &) = delete;
 
    ~QCupsJobWidget();
 
@@ -66,7 +68,6 @@ class QCupsJobWidget : public QWidget
    void initJobBilling();
    void initJobPriority();
    void initBannerPages();
-    Q_DISABLE_COPY(QCupsJobWidget)
 
    QPrinter *m_printer;
    Ui::QCupsJobWidget m_ui;

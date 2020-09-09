@@ -90,6 +90,10 @@ class Q_GUI_EXPORT QTextTable : public QTextFrame
 
  public:
    explicit QTextTable(QTextDocument *doc);
+
+   QTextTable(const QTextTable &) = delete;
+   QTextTable &operator=(const QTextTable &) = delete;
+
    ~QTextTable();
 
    void resize(int rows, int cols);
@@ -120,7 +124,6 @@ class Q_GUI_EXPORT QTextTable : public QTextFrame
    }
 
  private:
-   Q_DISABLE_COPY(QTextTable)
    Q_DECLARE_PRIVATE(QTextTable)
    friend class QTextTableCell;
 };

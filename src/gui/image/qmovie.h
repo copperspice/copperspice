@@ -70,6 +70,10 @@ class Q_GUI_EXPORT QMovie : public QObject
    explicit QMovie(QObject *parent = nullptr);
    explicit QMovie(QIODevice *device, const QByteArray &format = QByteArray(), QObject *parent = nullptr);
    explicit QMovie(const QString &fileName, const QByteArray &format = QByteArray(), QObject *parent = nullptr);
+
+   QMovie(const QMovie &) = delete;
+   QMovie &operator=(const QMovie &) = delete;
+
    ~QMovie();
 
    static QList<QByteArray> supportedFormats();
@@ -148,8 +152,6 @@ class Q_GUI_EXPORT QMovie : public QObject
    QScopedPointer<QMoviePrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QMovie)
-
    GUI_CS_SLOT_1(Private, void _q_loadNextFrame())
    GUI_CS_SLOT_2(_q_loadNextFrame)
 };

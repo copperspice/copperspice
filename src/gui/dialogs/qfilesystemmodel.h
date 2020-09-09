@@ -65,6 +65,10 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    };
 
    explicit QFileSystemModel(QObject *parent = nullptr);
+
+   QFileSystemModel(const QFileSystemModel &) = delete;
+   QFileSystemModel &operator=(const QFileSystemModel &) = delete;
+
    ~QFileSystemModel();
 
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
@@ -142,7 +146,6 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 
  private:
    Q_DECLARE_PRIVATE(QFileSystemModel)
-   Q_DISABLE_COPY(QFileSystemModel)
 
    GUI_CS_SLOT_1(Private, void _q_directoryChanged(const QString &directory, const QStringList &list))
    GUI_CS_SLOT_2(_q_directoryChanged)

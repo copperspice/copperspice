@@ -52,6 +52,10 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
 
  public:
    explicit QTableView(QWidget *parent = nullptr);
+
+   QTableView(const QTableView &) = delete;
+   QTableView &operator=(const QTableView &) = delete;
+
    ~QTableView();
 
    void setModel(QAbstractItemModel *model) override;
@@ -192,7 +196,6 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
    int visualIndex(const QModelIndex &index) const;
 
    Q_DECLARE_PRIVATE(QTableView)
-   Q_DISABLE_COPY(QTableView)
 
    GUI_CS_SLOT_1(Private, void _q_selectRow(int un_named_arg1))
    GUI_CS_SLOT_2(_q_selectRow)

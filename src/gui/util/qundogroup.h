@@ -40,6 +40,10 @@ class Q_GUI_EXPORT QUndoGroup : public QObject
 
  public:
    explicit QUndoGroup(QObject *parent = nullptr);
+
+   QUndoGroup(const QUndoGroup &) = delete;
+   QUndoGroup &operator=(const QUndoGroup &) = delete;
+
    ~QUndoGroup();
 
    void addStack(QUndoStack *stack);
@@ -87,7 +91,6 @@ class Q_GUI_EXPORT QUndoGroup : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QUndoGroup)
-   Q_DISABLE_COPY(QUndoGroup)
 };
 
 #endif // QT_NO_UNDOGROUP

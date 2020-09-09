@@ -32,6 +32,10 @@ class QNativeImage
 {
  public:
    QNativeImage(int width, int height, QImage::Format format, bool isTextBuffer = false, QWindow *window = nullptr);
+
+   QNativeImage(const QNativeImage &) = delete;
+   QNativeImage &operator=(const QNativeImage &) = delete;
+
    ~QNativeImage();
 
    inline int width() const;
@@ -40,8 +44,6 @@ class QNativeImage
    QImage image;
 
    static QImage::Format systemFormat();
- private:
-   Q_DISABLE_COPY(QNativeImage)
 };
 
 inline int QNativeImage::width() const

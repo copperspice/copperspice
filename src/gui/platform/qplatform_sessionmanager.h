@@ -33,6 +33,10 @@ class Q_GUI_EXPORT QPlatformSessionManager
 {
  public:
    explicit QPlatformSessionManager(const QString &id, const QString &key);
+
+   QPlatformSessionManager(const QPlatformSessionManager &) = delete;
+   QPlatformSessionManager &operator=(const QPlatformSessionManager &) = delete;
+
    virtual ~QPlatformSessionManager();
 
    virtual QString sessionId() const;
@@ -69,8 +73,6 @@ class Q_GUI_EXPORT QPlatformSessionManager
    QStringList m_restartCommand;
    QStringList m_discardCommand;
    QSessionManager::RestartHint m_restartHint;
-
-   Q_DISABLE_COPY(QPlatformSessionManager)
 };
 
 #endif // QT_NO_SESSIONMANAGER

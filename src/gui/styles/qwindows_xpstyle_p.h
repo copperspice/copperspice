@@ -55,6 +55,10 @@ class QWindowsXPStyle : public QWindowsStyle
  public:
    QWindowsXPStyle();
    QWindowsXPStyle(QWindowsXPStylePrivate &dd);
+
+   QWindowsXPStyle(const QWindowsXPStyle &) = delete;
+   QWindowsXPStyle &operator=(const QWindowsXPStyle &) = delete;
+
    ~QWindowsXPStyle();
 
    void drawPrimitive(PrimitiveElement pe, const QStyleOption *option, QPainter *p, const QWidget *widget = nullptr) const override;
@@ -91,7 +95,6 @@ class QWindowsXPStyle : public QWindowsStyle
    void unpolish(QWidget *) override;
 
  private:
-   Q_DISABLE_COPY(QWindowsXPStyle)
    Q_DECLARE_PRIVATE(QWindowsXPStyle)
 
    friend class QStyleFactory;

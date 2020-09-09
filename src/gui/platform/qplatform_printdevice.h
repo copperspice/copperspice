@@ -35,10 +35,13 @@
 
 class Q_GUI_EXPORT QPlatformPrintDevice
 {
-    Q_DISABLE_COPY(QPlatformPrintDevice)
  public:
     QPlatformPrintDevice();
     explicit QPlatformPrintDevice(const QString &id);
+
+    QPlatformPrintDevice(const QPlatformPrintDevice &) = delete;
+    QPlatformPrintDevice &operator=(const QPlatformPrintDevice &) = delete;
+
     virtual ~QPlatformPrintDevice();
 
     virtual QString id() const;

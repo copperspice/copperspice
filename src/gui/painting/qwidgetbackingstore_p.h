@@ -74,6 +74,10 @@ class QWidgetBackingStore
    };
 
    QWidgetBackingStore(QWidget *t);
+
+   QWidgetBackingStore(const QWidgetBackingStore &) = delete;
+   QWidgetBackingStore &operator=(const QWidgetBackingStore &) = delete;
+
    ~QWidgetBackingStore();
 
    static void showYellowThing(QWidget *widget, const QRegion &rgn, int msec, bool);
@@ -290,8 +294,6 @@ class QWidgetBackingStore
    friend class QWidgetPrivate;
    friend class QWidget;
    friend class QBackingStore;
-
-   Q_DISABLE_COPY(QWidgetBackingStore)
 };
 
 #endif

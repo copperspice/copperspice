@@ -45,6 +45,10 @@ class Q_GUI_EXPORT QImageWriter
    QImageWriter();
    explicit QImageWriter(QIODevice *device, const QByteArray &format);
    explicit QImageWriter(const QString &fileName, const QByteArray &format = QByteArray());
+
+   QImageWriter(const QImageWriter &) = delete;
+   QImageWriter &operator=(const QImageWriter &) = delete;
+
    ~QImageWriter();
 
    void setFormat(const QByteArray &format);
@@ -89,7 +93,6 @@ class Q_GUI_EXPORT QImageWriter
 
  private:
    Q_DECLARE_TR_FUNCTIONS(QImageWriter)
-   Q_DISABLE_COPY(QImageWriter)
    QImageWriterPrivate *d;
 };
 
