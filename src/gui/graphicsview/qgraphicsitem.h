@@ -154,6 +154,10 @@ class Q_GUI_EXPORT QGraphicsItem
    };
 
    explicit QGraphicsItem(QGraphicsItem *parent = nullptr);
+
+   QGraphicsItem(const QGraphicsItem &) = delete;
+   QGraphicsItem &operator=(const QGraphicsItem &) = delete;
+
    virtual ~QGraphicsItem();
 
    QGraphicsScene *scene() const;
@@ -476,7 +480,6 @@ class Q_GUI_EXPORT QGraphicsItem
    void prepareGeometryChange();
 
  private:
-   Q_DISABLE_COPY(QGraphicsItem)
    Q_DECLARE_PRIVATE(QGraphicsItem)
 
    friend class QGraphicsItemGroup;
@@ -758,6 +761,10 @@ class Q_GUI_EXPORT QAbstractGraphicsShapeItem : public QGraphicsItem
 {
  public:
    explicit QAbstractGraphicsShapeItem(QGraphicsItem *parent = nullptr);
+
+   QAbstractGraphicsShapeItem(const QAbstractGraphicsShapeItem &) = delete;
+   QAbstractGraphicsShapeItem &operator=(const QAbstractGraphicsShapeItem &) = delete;
+
    ~QAbstractGraphicsShapeItem();
 
    QPen pen() const;
@@ -773,7 +780,6 @@ class Q_GUI_EXPORT QAbstractGraphicsShapeItem : public QGraphicsItem
    QAbstractGraphicsShapeItem(QAbstractGraphicsShapeItemPrivate &dd, QGraphicsItem *parent);
 
  private:
-   Q_DISABLE_COPY(QAbstractGraphicsShapeItem)
    Q_DECLARE_PRIVATE(QAbstractGraphicsShapeItem)
 };
 
@@ -782,6 +788,9 @@ class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
  public:
    explicit QGraphicsPathItem(QGraphicsItem *parent = nullptr);
    explicit QGraphicsPathItem(const QPainterPath &path, QGraphicsItem *parent = nullptr);
+
+   QGraphicsPathItem(const QGraphicsPathItem &) = delete;
+   QGraphicsPathItem &operator=(const QGraphicsPathItem &) = delete;
 
    ~QGraphicsPathItem();
 
@@ -806,7 +815,6 @@ class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsPathItem)
    Q_DECLARE_PRIVATE(QGraphicsPathItem)
 };
 
@@ -816,6 +824,9 @@ class Q_GUI_EXPORT QGraphicsRectItem : public QAbstractGraphicsShapeItem
    explicit QGraphicsRectItem(QGraphicsItem *parent = nullptr);
    explicit QGraphicsRectItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
    explicit QGraphicsRectItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
+
+   QGraphicsRectItem(const QGraphicsRectItem &) = delete;
+   QGraphicsRectItem &operator=(const QGraphicsRectItem &) = delete;
 
    ~QGraphicsRectItem();
 
@@ -841,7 +852,6 @@ class Q_GUI_EXPORT QGraphicsRectItem : public QAbstractGraphicsShapeItem
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsRectItem)
    Q_DECLARE_PRIVATE(QGraphicsRectItem)
 };
 
@@ -856,6 +866,9 @@ class Q_GUI_EXPORT QGraphicsEllipseItem : public QAbstractGraphicsShapeItem
    explicit QGraphicsEllipseItem(QGraphicsItem *parent = nullptr);
    explicit QGraphicsEllipseItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
    explicit QGraphicsEllipseItem(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = nullptr);
+
+   QGraphicsEllipseItem(const QGraphicsEllipseItem &) = delete;
+   QGraphicsEllipseItem &operator=(const QGraphicsEllipseItem &) = delete;
 
    ~QGraphicsEllipseItem();
 
@@ -887,7 +900,6 @@ class Q_GUI_EXPORT QGraphicsEllipseItem : public QAbstractGraphicsShapeItem
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsEllipseItem)
    Q_DECLARE_PRIVATE(QGraphicsEllipseItem)
 };
 
@@ -901,6 +913,9 @@ class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
  public:
    explicit QGraphicsPolygonItem(QGraphicsItem *parent = nullptr);
    explicit QGraphicsPolygonItem(const QPolygonF &polygon, QGraphicsItem *parent = nullptr);
+
+   QGraphicsPolygonItem(const QGraphicsPolygonItem &) = delete;
+   QGraphicsPolygonItem &operator=(const QGraphicsPolygonItem &) = delete;
 
    ~QGraphicsPolygonItem();
 
@@ -928,7 +943,6 @@ class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsPolygonItem)
    Q_DECLARE_PRIVATE(QGraphicsPolygonItem)
 };
 
@@ -938,6 +952,9 @@ class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
    explicit QGraphicsLineItem(QGraphicsItem *parent = nullptr);
    explicit QGraphicsLineItem(const QLineF &line, QGraphicsItem *parent = nullptr);
    explicit QGraphicsLineItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent = nullptr);
+
+   QGraphicsLineItem(const QGraphicsLineItem &) = delete;
+   QGraphicsLineItem &operator=(const QGraphicsLineItem &) = delete;
 
    ~QGraphicsLineItem();
 
@@ -968,7 +985,6 @@ class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsLineItem)
    Q_DECLARE_PRIVATE(QGraphicsLineItem)
 };
 
@@ -983,6 +999,9 @@ class Q_GUI_EXPORT QGraphicsPixmapItem : public QGraphicsItem
 
    explicit QGraphicsPixmapItem(QGraphicsItem *parent = nullptr);
    explicit QGraphicsPixmapItem(const QPixmap &pixmap, QGraphicsItem *parent = nullptr);
+
+   QGraphicsPixmapItem(const QGraphicsPixmapItem &) = delete;
+   QGraphicsPixmapItem &operator=(const QGraphicsPixmapItem &) = delete;
 
    ~QGraphicsPixmapItem();
 
@@ -1017,7 +1036,6 @@ class Q_GUI_EXPORT QGraphicsPixmapItem : public QGraphicsItem
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsPixmapItem)
    Q_DECLARE_PRIVATE(QGraphicsPixmapItem)
 };
 
@@ -1040,6 +1058,9 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
  public:
    explicit QGraphicsTextItem(QGraphicsItem *parent = nullptr);
    explicit QGraphicsTextItem(const QString &text, QGraphicsItem *parent = nullptr);
+
+   QGraphicsTextItem(const QGraphicsTextItem &) = delete;
+   QGraphicsTextItem &operator=(const QGraphicsTextItem &) = delete;
 
    ~QGraphicsTextItem();
 
@@ -1120,9 +1141,6 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsTextItem)
-
-
    QGraphicsTextItemPrivate *dd;
 
    GUI_CS_SLOT_1(Private, void _q_updateBoundingRect(const QSizeF &un_named_arg1))
@@ -1143,6 +1161,9 @@ class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
  public:
    explicit QGraphicsSimpleTextItem(QGraphicsItem *parent = nullptr);
    explicit QGraphicsSimpleTextItem(const QString &text, QGraphicsItem *parent = nullptr);
+
+   QGraphicsSimpleTextItem(const QGraphicsSimpleTextItem &) = delete;
+   QGraphicsSimpleTextItem &operator=(const QGraphicsSimpleTextItem &) = delete;
 
    ~QGraphicsSimpleTextItem();
 
@@ -1170,7 +1191,6 @@ class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
    QVariant extension(const QVariant &variant) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsSimpleTextItem)
    Q_DECLARE_PRIVATE(QGraphicsSimpleTextItem)
 };
 
@@ -1178,6 +1198,10 @@ class Q_GUI_EXPORT QGraphicsItemGroup : public QGraphicsItem
 {
  public:
    explicit QGraphicsItemGroup(QGraphicsItem *parent = nullptr);
+
+   QGraphicsItemGroup(const QGraphicsItemGroup &) = delete;
+   QGraphicsItemGroup &operator=(const QGraphicsItemGroup &) = delete;
+
    ~QGraphicsItemGroup();
 
    void addToGroup(QGraphicsItem *item);
@@ -1193,7 +1217,6 @@ class Q_GUI_EXPORT QGraphicsItemGroup : public QGraphicsItem
    int type() const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsItemGroup)
    Q_DECLARE_PRIVATE(QGraphicsItemGroup)
 };
 

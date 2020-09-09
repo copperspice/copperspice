@@ -36,6 +36,10 @@ class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
 {
  public:
    QGraphicsLayout(QGraphicsLayoutItem *parent = nullptr);
+
+   QGraphicsLayout(const QGraphicsLayout &) = delete;
+   QGraphicsLayout &operator=(const QGraphicsLayout &) = delete;
+
    ~QGraphicsLayout();
 
    void setContentsMargins(qreal left, qreal top, qreal right, qreal bottom);
@@ -60,7 +64,6 @@ class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
    void addChildLayoutItem(QGraphicsLayoutItem *layoutItem);
 
  private:
-   Q_DISABLE_COPY(QGraphicsLayout)
    Q_DECLARE_PRIVATE(QGraphicsLayout)
    friend class QGraphicsWidget;
 };

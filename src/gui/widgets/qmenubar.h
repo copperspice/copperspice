@@ -46,6 +46,10 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
 
  public:
    explicit QMenuBar(QWidget *parent = nullptr);
+
+   QMenuBar(const QMenuBar &) = delete;
+   QMenuBar &operator=(const QMenuBar &) = delete;
+
    ~QMenuBar();
 
    using QWidget::addAction;
@@ -117,7 +121,6 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QMenuBar)
-   Q_DISABLE_COPY(QMenuBar)
 
    GUI_CS_SLOT_1(Private, void _q_actionTriggered())
    GUI_CS_SLOT_2(_q_actionTriggered)

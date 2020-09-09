@@ -36,6 +36,9 @@ class Q_GUI_EXPORT QPaintDeviceWindow : public QWindow, public QPaintDevice
    Q_DECLARE_PRIVATE(QPaintDeviceWindow)
 
  public:
+   QPaintDeviceWindow(const QPaintDeviceWindow &) = delete;
+   QPaintDeviceWindow &operator=(const QPaintDeviceWindow &) = delete;
+
    void update(const QRect &rect);
    void update(const QRegion &region);
 
@@ -57,7 +60,6 @@ class Q_GUI_EXPORT QPaintDeviceWindow : public QWindow, public QPaintDevice
 
  private:
    QPaintEngine *paintEngine() const override;
-   Q_DISABLE_COPY(QPaintDeviceWindow)
 };
 
 

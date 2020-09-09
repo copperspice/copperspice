@@ -52,6 +52,10 @@ class Q_GUI_EXPORT QGraphicsSceneEvent : public QEvent
 
  public:
    explicit QGraphicsSceneEvent(Type type);
+
+   QGraphicsSceneEvent(const QGraphicsSceneEvent &) = delete;
+   QGraphicsSceneEvent &operator=(const QGraphicsSceneEvent &) = delete;
+
    ~QGraphicsSceneEvent();
 
    QWidget *widget() const;
@@ -63,7 +67,6 @@ class Q_GUI_EXPORT QGraphicsSceneEvent : public QEvent
    Q_DECLARE_PRIVATE(QGraphicsSceneEvent)
 
  private:
-   Q_DISABLE_COPY(QGraphicsSceneEvent)
 };
 
 
@@ -72,6 +75,10 @@ class Q_GUI_EXPORT QGraphicsSceneMouseEvent : public QGraphicsSceneEvent
 
  public:
    explicit QGraphicsSceneMouseEvent(Type type = None);
+
+   QGraphicsSceneMouseEvent(const QGraphicsSceneMouseEvent &) = delete;
+   QGraphicsSceneMouseEvent &operator=(const QGraphicsSceneMouseEvent &) = delete;
+
    ~QGraphicsSceneMouseEvent();
 
    QPointF pos() const;
@@ -116,7 +123,6 @@ class Q_GUI_EXPORT QGraphicsSceneMouseEvent : public QGraphicsSceneEvent
    void setFlags(Qt::MouseEventFlags);
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneMouseEvent)
-   Q_DISABLE_COPY(QGraphicsSceneMouseEvent)
 };
 
 class Q_GUI_EXPORT QGraphicsSceneWheelEvent : public QGraphicsSceneEvent
@@ -124,6 +130,10 @@ class Q_GUI_EXPORT QGraphicsSceneWheelEvent : public QGraphicsSceneEvent
 
  public:
    explicit QGraphicsSceneWheelEvent(Type type = None);
+
+   QGraphicsSceneWheelEvent(const QGraphicsSceneWheelEvent &) = delete;
+   QGraphicsSceneWheelEvent &operator=(const QGraphicsSceneWheelEvent &) = delete;
+
    ~QGraphicsSceneWheelEvent();
 
    QPointF pos() const;
@@ -149,7 +159,6 @@ class Q_GUI_EXPORT QGraphicsSceneWheelEvent : public QGraphicsSceneEvent
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneWheelEvent)
-   Q_DISABLE_COPY(QGraphicsSceneWheelEvent)
 };
 
 
@@ -160,6 +169,10 @@ class Q_GUI_EXPORT QGraphicsSceneContextMenuEvent : public QGraphicsSceneEvent
    enum Reason { Mouse, Keyboard, Other };
 
    explicit QGraphicsSceneContextMenuEvent(Type type = None);
+
+   QGraphicsSceneContextMenuEvent(const QGraphicsSceneContextMenuEvent &) = delete;
+   QGraphicsSceneContextMenuEvent &operator=(const QGraphicsSceneContextMenuEvent &) = delete;
+
    ~QGraphicsSceneContextMenuEvent();
 
    QPointF pos() const;
@@ -179,7 +192,6 @@ class Q_GUI_EXPORT QGraphicsSceneContextMenuEvent : public QGraphicsSceneEvent
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneContextMenuEvent)
-   Q_DISABLE_COPY(QGraphicsSceneContextMenuEvent)
 };
 
 class Q_GUI_EXPORT QGraphicsSceneHoverEvent : public QGraphicsSceneEvent
@@ -187,6 +199,10 @@ class Q_GUI_EXPORT QGraphicsSceneHoverEvent : public QGraphicsSceneEvent
 
  public:
    explicit QGraphicsSceneHoverEvent(Type type = None);
+
+   QGraphicsSceneHoverEvent(const QGraphicsSceneHoverEvent &) = delete;
+   QGraphicsSceneHoverEvent &operator=(const QGraphicsSceneHoverEvent &) = delete;
+
    ~QGraphicsSceneHoverEvent();
 
    QPointF pos() const;
@@ -212,14 +228,16 @@ class Q_GUI_EXPORT QGraphicsSceneHoverEvent : public QGraphicsSceneEvent
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneHoverEvent)
-   Q_DISABLE_COPY(QGraphicsSceneHoverEvent)
 };
 
 class Q_GUI_EXPORT QGraphicsSceneHelpEvent : public QGraphicsSceneEvent
 {
-
  public:
    explicit QGraphicsSceneHelpEvent(Type type = None);
+
+   QGraphicsSceneHelpEvent(const QGraphicsSceneHelpEvent &) = delete;
+   QGraphicsSceneHelpEvent &operator=(const QGraphicsSceneHelpEvent &) = delete;
+
    ~QGraphicsSceneHelpEvent();
 
    QPointF scenePos() const;
@@ -230,14 +248,16 @@ class Q_GUI_EXPORT QGraphicsSceneHelpEvent : public QGraphicsSceneEvent
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneHelpEvent)
-   Q_DISABLE_COPY(QGraphicsSceneHelpEvent)
 };
 
 class Q_GUI_EXPORT QGraphicsSceneDragDropEvent : public QGraphicsSceneEvent
 {
-
  public:
    explicit QGraphicsSceneDragDropEvent(Type type = None);
+
+   QGraphicsSceneDragDropEvent(const QGraphicsSceneDragDropEvent &) = delete;
+   QGraphicsSceneDragDropEvent &operator=(const QGraphicsSceneDragDropEvent &) = delete;
+
    ~QGraphicsSceneDragDropEvent();
 
    QPointF pos() const;
@@ -273,16 +293,17 @@ class Q_GUI_EXPORT QGraphicsSceneDragDropEvent : public QGraphicsSceneEvent
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneDragDropEvent)
-   Q_DISABLE_COPY(QGraphicsSceneDragDropEvent)
 };
 
 class Q_GUI_EXPORT QGraphicsSceneResizeEvent : public QGraphicsSceneEvent
 {
    Q_DECLARE_PRIVATE(QGraphicsSceneResizeEvent)
-   Q_DISABLE_COPY(QGraphicsSceneResizeEvent)
-
  public:
    QGraphicsSceneResizeEvent();
+
+   QGraphicsSceneResizeEvent(const QGraphicsSceneResizeEvent &) = delete;
+   QGraphicsSceneResizeEvent &operator=(const QGraphicsSceneResizeEvent &) = delete;
+
    ~QGraphicsSceneResizeEvent();
 
    QSizeF oldSize() const;
@@ -296,10 +317,13 @@ class Q_GUI_EXPORT QGraphicsSceneResizeEvent : public QGraphicsSceneEvent
 class Q_GUI_EXPORT QGraphicsSceneMoveEvent : public QGraphicsSceneEvent
 {
    Q_DECLARE_PRIVATE(QGraphicsSceneMoveEvent)
-   Q_DISABLE_COPY(QGraphicsSceneMoveEvent)
 
  public:
    QGraphicsSceneMoveEvent();
+
+   QGraphicsSceneMoveEvent(const QGraphicsSceneMoveEvent &) = delete;
+   QGraphicsSceneMoveEvent &operator=(const QGraphicsSceneMoveEvent &) = delete;
+
    ~QGraphicsSceneMoveEvent();
 
    QPointF oldPos() const;

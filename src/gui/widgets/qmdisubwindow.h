@@ -59,6 +59,10 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
    using SubWindowOptions = QFlags<SubWindowOption>;
 
    QMdiSubWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+
+   QMdiSubWindow(const  QMdiSubWindow &) = delete;
+   QMdiSubWindow &operator=(const  QMdiSubWindow &) = delete;
+
    ~QMdiSubWindow();
 
    QSize sizeHint() const override;
@@ -128,7 +132,6 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
    void childEvent(QChildEvent *childEvent) override;
 
  private:
-   Q_DISABLE_COPY(QMdiSubWindow)
    Q_DECLARE_PRIVATE(QMdiSubWindow)
 
    GUI_CS_SLOT_1(Private, void _q_updateStaysOnTopHint())

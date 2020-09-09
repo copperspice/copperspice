@@ -48,6 +48,9 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
       PdmDevicePixelRatioScaled
    };
 
+   QPaintDevice(const QPaintDevice &) = delete;
+   QPaintDevice &operator=(const QPaintDevice &) = delete;
+
    virtual ~QPaintDevice();
 
    virtual int devType() const;
@@ -116,9 +119,8 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
    ushort painters;       // refcount
 
  private:
-   Q_DISABLE_COPY(QPaintDevice)
-
    QPaintDevicePrivate *reserved;
+
    friend class QPainter;
    friend class QPainterPrivate;
    friend class QFontEngineMac;
@@ -135,7 +137,5 @@ inline bool QPaintDevice::paintingActive() const
 {
    return painters != 0;
 }
-
-
 
 #endif

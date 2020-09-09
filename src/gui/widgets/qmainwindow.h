@@ -87,6 +87,10 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
    using DockOptions = QFlags<DockOption>;
 
    explicit QMainWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+
+   QMainWindow(const QMainWindow &) = delete;
+   QMainWindow &operator=(const QMainWindow &) = delete;
+
    ~QMainWindow();
 
    QSize iconSize() const;
@@ -198,7 +202,6 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QMainWindow)
-   Q_DISABLE_COPY(QMainWindow)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMainWindow::DockOptions)

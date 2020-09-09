@@ -68,6 +68,10 @@ class Q_GUI_EXPORT QMenu : public QWidget
  public:
    explicit QMenu(QWidget *parent = nullptr);
    explicit QMenu(const QString &title, QWidget *parent = nullptr);
+
+   QMenu(const QMenu &) = delete;
+   QMenu &operator=(const QMenu &) = delete;
+
    ~QMenu();
 
    using QWidget::addAction;
@@ -234,8 +238,6 @@ class Q_GUI_EXPORT QMenu : public QWidget
    QMenu(QMenuPrivate &dd, QWidget *parent = nullptr);
 
  private:
-   Q_DISABLE_COPY(QMenu)
-
    GUI_CS_SLOT_1(Private, void internalDelayedPopup())
    GUI_CS_SLOT_2(internalDelayedPopup)
 

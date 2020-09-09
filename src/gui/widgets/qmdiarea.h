@@ -83,6 +83,10 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    };
 
    QMdiArea(QWidget *parent = nullptr);
+
+   QMdiArea(const QMdiArea &) = delete;
+   QMdiArea &operator=(const QMdiArea &) = delete;
+
    ~QMdiArea();
 
    QSize sizeHint() const override;
@@ -165,7 +169,6 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    void scrollContentsBy(int dx, int dy) override;
 
  private:
-   Q_DISABLE_COPY(QMdiArea)
    Q_DECLARE_PRIVATE(QMdiArea)
 
    GUI_CS_SLOT_1(Private, void _q_deactivateAllWindows())

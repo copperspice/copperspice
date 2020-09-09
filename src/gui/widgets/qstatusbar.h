@@ -39,6 +39,10 @@ class Q_GUI_EXPORT QStatusBar: public QWidget
 
  public:
    explicit QStatusBar(QWidget *parent = nullptr);
+
+   QStatusBar(const QStatusBar &) = delete;
+   QStatusBar &operator=(const QStatusBar &) = delete;
+
    virtual ~QStatusBar();
 
    void addWidget(QWidget *widget, int stretch = 0);
@@ -72,7 +76,6 @@ class Q_GUI_EXPORT QStatusBar: public QWidget
    bool event(QEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QStatusBar)
    Q_DECLARE_PRIVATE(QStatusBar)
 };
 

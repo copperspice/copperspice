@@ -62,6 +62,10 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
 
    QLayout(QWidget *parent);
    QLayout();
+
+   QLayout(const QLayout &) = delete;
+   QLayout &operator=(const QLayout &) = delete;
+
    ~QLayout();
 
    int margin() const;
@@ -138,8 +142,6 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    QScopedPointer<QLayoutPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QLayout)
-
    static void activateRecursiveHelper(QLayoutItem *item);
 
    friend class QApplicationPrivate;

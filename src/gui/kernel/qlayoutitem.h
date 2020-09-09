@@ -107,12 +107,13 @@ class Q_GUI_EXPORT QSpacerItem : public QLayoutItem
 
 class Q_GUI_EXPORT QWidgetItem : public QLayoutItem
 {
-   Q_DISABLE_COPY(QWidgetItem)
-
  public:
    explicit QWidgetItem(QWidget *w)
       : wid(w) {
    }
+
+   QWidgetItem(const QWidgetItem &) = delete;
+   QWidgetItem &operator=(const QWidgetItem &) = delete;
 
    ~QWidgetItem();
 
@@ -140,6 +141,10 @@ class Q_GUI_EXPORT QWidgetItemV2 : public QWidgetItem
 
  public:
    explicit QWidgetItemV2(QWidget *widget);
+
+   QWidgetItemV2(const QWidgetItemV2 &) = delete;
+   QWidgetItemV2 &operator=(const QWidgetItemV2 &) = delete;
+
    ~QWidgetItemV2();
 
    QSize sizeHint() const override;
@@ -166,8 +171,6 @@ class Q_GUI_EXPORT QWidgetItemV2 : public QWidgetItem
    void *d;
 
    friend class QWidgetPrivate;
-
-   Q_DISABLE_COPY(QWidgetItemV2)
 };
 
 #endif // QLAYOUTITEM_H

@@ -306,6 +306,10 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    using RenderFlags = QFlags<RenderFlag>;
 
    explicit QWidget(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+   QWidget(const QWidget &) = delete;
+   QWidget &operator=(const QWidget &) = delete;
+
    ~QWidget();
 
    int devType() const override;
@@ -853,8 +857,6 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    friend class QDataWidgetMapperPrivate; // for access to focusNextPrevChild
 
  private:
-   Q_DISABLE_COPY(QWidget)
-
    GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
    GUI_CS_SLOT_2(_q_showIfNotHidden)
 

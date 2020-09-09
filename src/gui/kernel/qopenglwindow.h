@@ -50,6 +50,9 @@ class Q_GUI_EXPORT QOpenGLWindow : public QPaintDeviceWindow
    explicit QOpenGLWindow(QOpenGLContext *shareContext, UpdateBehavior updateBehavior = NoPartialUpdate,
       QWindow *parent = nullptr);
 
+   QOpenGLWindow(const QOpenGLWindow &) = delete;
+   QOpenGLWindow &operator=(const QOpenGLWindow &) = delete;
+
    ~QOpenGLWindow();
 
    UpdateBehavior updateBehavior() const;
@@ -81,7 +84,6 @@ class Q_GUI_EXPORT QOpenGLWindow : public QPaintDeviceWindow
    QPaintDevice *redirected(QPoint *) const override;
 
  private:
-   Q_DISABLE_COPY(QOpenGLWindow)
 };
 
 #endif // QT_NO_OPENGL

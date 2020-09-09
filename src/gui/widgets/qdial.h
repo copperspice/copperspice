@@ -49,6 +49,9 @@ class Q_GUI_EXPORT QDial: public QAbstractSlider
  public:
    explicit QDial(QWidget *parent = nullptr);
 
+   QDial(const QDial &) = delete;
+   QDial &operator=(const QDial &) = delete;
+
    ~QDial();
 
    bool wrapping() const;
@@ -81,10 +84,8 @@ class Q_GUI_EXPORT QDial: public QAbstractSlider
 
  private:
    Q_DECLARE_PRIVATE(QDial)
-   Q_DISABLE_COPY(QDial)
 };
 
 #endif  // QT_NO_DIAL
-
 
 #endif // QDIAL_H

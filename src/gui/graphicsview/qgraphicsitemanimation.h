@@ -29,8 +29,6 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-
-
 class QGraphicsItem;
 class QMatrix;
 class QPointF;
@@ -43,6 +41,10 @@ class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
 
  public:
    QGraphicsItemAnimation(QObject *parent = nullptr);
+
+   QGraphicsItemAnimation(const QGraphicsItemAnimation &) = delete;
+   QGraphicsItemAnimation &operator=(const QGraphicsItemAnimation &) = delete;
+
    virtual ~QGraphicsItemAnimation();
 
    QGraphicsItem *item() const;
@@ -89,11 +91,9 @@ class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
    virtual void afterAnimationStep(qreal step);
 
  private:
-   Q_DISABLE_COPY(QGraphicsItemAnimation)
    QGraphicsItemAnimationPrivate *d;
 };
 
-
-
 #endif // QT_NO_GRAPHICSVIEW
+
 #endif

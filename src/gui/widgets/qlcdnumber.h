@@ -62,6 +62,8 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame
    ~QLCDNumber();
 
    enum Mode { Hex, Dec, Oct, Bin };
+   QLCDNumber(const QLCDNumber &) = delete;
+   QLCDNumber &operator=(const QLCDNumber &) = delete;
 
    enum SegmentStyle { Outline, Filled, Flat  };
 
@@ -121,7 +123,6 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame
    void paintEvent(QPaintEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QLCDNumber)
    Q_DECLARE_PRIVATE(QLCDNumber)
 };
 

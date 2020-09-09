@@ -46,6 +46,10 @@ public:
     };
 
     explicit QOpenGLWidget(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+    QOpenGLWidget(const QOpenGLWidget &) = delete;
+    QOpenGLWidget &operator=(const QOpenGLWidget &) = delete;
+
     ~QOpenGLWidget();
 
     void setUpdateBehavior(UpdateBehavior updateBehavior);
@@ -90,7 +94,6 @@ protected:
     QPaintEngine *paintEngine() const override;
 
 private:
-    Q_DISABLE_COPY(QOpenGLWidget)
 };
 
 #endif // QT_NO_OPENGL

@@ -58,8 +58,6 @@ class QSetValueOnDestroy
 
 class QMenuSloppyState
 {
-   Q_DISABLE_COPY(QMenuSloppyState)
-
  public:
    QMenuSloppyState()
       : m_menu(nullptr)
@@ -75,6 +73,9 @@ class QMenuSloppyState
       , m_origin_action(nullptr)
       , m_parent(nullptr)
    { }
+
+   QMenuSloppyState(const QMenuSloppyState &) = delete;
+   QMenuSloppyState &operator=(const QMenuSloppyState &) = delete;
 
    ~QMenuSloppyState() {
       reset();

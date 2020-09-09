@@ -94,6 +94,10 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
    };
 
    explicit QCalendarWidget(QWidget *parent = nullptr);
+
+   QCalendarWidget(const QCalendarWidget &) = delete;
+   QCalendarWidget &operator=(const QCalendarWidget &) = delete;
+
    ~QCalendarWidget();
 
    QSize sizeHint() const override;
@@ -200,7 +204,6 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QCalendarWidget)
-   Q_DISABLE_COPY(QCalendarWidget)
 
    GUI_CS_SLOT_1(Private, void _q_slotShowDate(const QDate &date))
    GUI_CS_SLOT_2(_q_slotShowDate)

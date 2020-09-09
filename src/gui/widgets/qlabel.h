@@ -70,6 +70,10 @@ class Q_GUI_EXPORT QLabel : public QFrame
  public:
    explicit QLabel(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
    explicit QLabel(const QString &text, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+   QLabel(const QLabel &) = delete;
+   QLabel &operator=(const QLabel &) = delete;
+
    ~QLabel();
 
    QString text() const;
@@ -166,7 +170,6 @@ class Q_GUI_EXPORT QLabel : public QFrame
    bool focusNextPrevChild(bool next) override;
 
  private:
-   Q_DISABLE_COPY(QLabel)
    Q_DECLARE_PRIVATE(QLabel)
 
 #ifndef QT_NO_MOVIE
@@ -184,6 +187,5 @@ class Q_GUI_EXPORT QLabel : public QFrame
    friend class QMessageBoxPrivate;
    friend class QBalloonTip;
 };
-
 
 #endif

@@ -104,6 +104,9 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    explicit QDateTimeEdit(const QDate &d, QWidget *parent = nullptr);
    explicit QDateTimeEdit(const QTime &t, QWidget *parent = nullptr);
 
+   QDateTimeEdit(const QDateTimeEdit &) = delete;
+   QDateTimeEdit &operator=(const QDateTimeEdit &) = delete;
+
    ~QDateTimeEdit();
 
    QDateTime dateTime() const;
@@ -213,7 +216,6 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 
  private:
    Q_DECLARE_PRIVATE(QDateTimeEdit)
-   Q_DISABLE_COPY(QDateTimeEdit)
 
    GUI_CS_SLOT_1(Private, void _q_resetButton())
    GUI_CS_SLOT_2(_q_resetButton)

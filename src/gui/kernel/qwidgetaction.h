@@ -39,6 +39,10 @@ class Q_GUI_EXPORT QWidgetAction : public QAction
 
  public:
    explicit QWidgetAction(QObject *parent);
+
+   QWidgetAction(const QWidgetAction &) = delete;
+   QWidgetAction &operator=(const QWidgetAction &) = delete;
+
    virtual ~QWidgetAction();
 
    void setDefaultWidget(QWidget *w);
@@ -55,8 +59,6 @@ class Q_GUI_EXPORT QWidgetAction : public QAction
    QList<QWidget *> createdWidgets() const;
 
  private:
-   Q_DISABLE_COPY(QWidgetAction)
-
    GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject *obj))
    GUI_CS_SLOT_2(_q_widgetDestroyed)
 

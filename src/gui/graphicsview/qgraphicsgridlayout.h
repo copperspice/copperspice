@@ -35,6 +35,10 @@ class Q_GUI_EXPORT QGraphicsGridLayout : public QGraphicsLayout
 {
  public:
    QGraphicsGridLayout(QGraphicsLayoutItem *parent = nullptr);
+
+   QGraphicsGridLayout(const QGraphicsGridLayout &) = delete;
+   QGraphicsGridLayout &operator=(const QGraphicsGridLayout &) = delete;
+
    virtual ~QGraphicsGridLayout();
 
    void addItem(QGraphicsLayoutItem *item, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = Qt::Alignment());
@@ -102,7 +106,6 @@ class Q_GUI_EXPORT QGraphicsGridLayout : public QGraphicsLayout
    // QSizePolicy::ControlTypes controlTypes(LayoutSide side) const;
 
  private:
-   Q_DISABLE_COPY(QGraphicsGridLayout)
    Q_DECLARE_PRIVATE(QGraphicsGridLayout)
 };
 

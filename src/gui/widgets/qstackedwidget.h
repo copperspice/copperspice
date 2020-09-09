@@ -44,6 +44,10 @@ class Q_GUI_EXPORT QStackedWidget : public QFrame
 
  public:
    explicit QStackedWidget(QWidget *parent = nullptr);
+
+   QStackedWidget(const QStackedWidget &) = delete;
+   QStackedWidget &operator=(const QStackedWidget &) = delete;
+
    ~QStackedWidget();
 
    int addWidget(QWidget *w);
@@ -73,7 +77,6 @@ class Q_GUI_EXPORT QStackedWidget : public QFrame
    bool event(QEvent *e) override;
 
  private:
-   Q_DISABLE_COPY(QStackedWidget)
    Q_DECLARE_PRIVATE(QStackedWidget)
 };
 

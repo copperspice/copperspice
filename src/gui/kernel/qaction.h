@@ -131,6 +131,9 @@ class Q_GUI_EXPORT QAction : public QObject
    QAction(const QString &text, QObject *parent);
    QAction(const QIcon &icon, const QString &text, QObject *parent);
 
+   QAction(const QAction &) = delete;
+   QAction &operator=(const QAction &) = delete;
+
    ~QAction();
 
    void setActionGroup(QActionGroup *group);
@@ -252,8 +255,6 @@ class Q_GUI_EXPORT QAction : public QObject
    QScopedPointer<QActionPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QAction)
-
    friend class QGraphicsWidget;
    friend class QWidget;
    friend class QActionGroup;

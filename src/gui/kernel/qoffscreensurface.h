@@ -38,6 +38,10 @@ class Q_GUI_EXPORT QOffscreenSurface : public QObject, public QSurface
 
  public:
    explicit QOffscreenSurface(QScreen *screen = nullptr);
+
+   QOffscreenSurface(const QOffscreenSurface &) = delete;
+   QOffscreenSurface &operator=(const QOffscreenSurface &) = delete;
+
    virtual ~QOffscreenSurface();
 
    SurfaceType surfaceType() const override;
@@ -70,7 +74,6 @@ class Q_GUI_EXPORT QOffscreenSurface : public QObject, public QSurface
 
    QPlatformSurface *surfaceHandle() const override;
 
-   Q_DISABLE_COPY(QOffscreenSurface)
 };
 
 #endif

@@ -44,6 +44,10 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
 
  public:
    explicit QScrollArea(QWidget *parent = nullptr);
+
+   QScrollArea(const QScrollArea &) = delete;
+   QScrollArea &operator=(const QScrollArea &) = delete;
+
    ~QScrollArea();
 
    QWidget *widget() const;
@@ -72,7 +76,6 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
    QSize viewportSizeHint() const override;
  private:
    Q_DECLARE_PRIVATE(QScrollArea)
-   Q_DISABLE_COPY(QScrollArea)
 };
 
 #endif // QT_NO_SCROLLAREA

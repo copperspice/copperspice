@@ -36,12 +36,14 @@ class Q_GUI_EXPORT QRasterWindow : public QPaintDeviceWindow
  public:
    explicit QRasterWindow(QWindow *parent = nullptr);
 
+   QRasterWindow(const QRasterWindow &) = delete;
+   QRasterWindow &operator=(const QRasterWindow &) = delete;
+
  protected:
    int metric(PaintDeviceMetric metric) const override;
    QPaintDevice *redirected(QPoint *) const override;
 
  private:
-   Q_DISABLE_COPY(QRasterWindow)
 };
 
 #endif

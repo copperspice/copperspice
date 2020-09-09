@@ -26,7 +26,6 @@
 
 #include <qwidget.h>
 
-
 #ifndef QT_NO_KEYSEQUENCEEDIT
 
 class QKeySequenceEditPrivate;
@@ -43,6 +42,10 @@ class Q_GUI_EXPORT QKeySequenceEdit : public QWidget
  public:
    explicit QKeySequenceEdit(QWidget *parent = nullptr);
    explicit QKeySequenceEdit(const QKeySequence &keySequence, QWidget *parent = nullptr);
+
+   QKeySequenceEdit(const QKeySequenceEdit &) = delete;
+   QKeySequenceEdit &operator=(const QKeySequenceEdit &) = delete;
+
    ~QKeySequenceEdit();
 
    QKeySequence keySequence() const;
@@ -66,7 +69,6 @@ class Q_GUI_EXPORT QKeySequenceEdit : public QWidget
    void timerEvent(QTimerEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QKeySequenceEdit)
    Q_DECLARE_PRIVATE(QKeySequenceEdit)
 };
 

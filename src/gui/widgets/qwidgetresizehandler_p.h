@@ -45,6 +45,9 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
 
    explicit QWidgetResizeHandler(QWidget *parent, QWidget *cw = nullptr);
 
+   QWidgetResizeHandler(const QWidgetResizeHandler &) = delete;
+   QWidgetResizeHandler &operator=(const QWidgetResizeHandler &) = delete;
+
    inline void setActive(bool b) {
       setActive(Any, b);
    }
@@ -91,8 +94,6 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
    void keyPressEvent(QKeyEvent *e);
 
  private:
-   Q_DISABLE_COPY(QWidgetResizeHandler)
-
    enum MousePosition {
       Nowhere,
       TopLeft, BottomRight, BottomLeft, TopRight,

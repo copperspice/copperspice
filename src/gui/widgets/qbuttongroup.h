@@ -42,6 +42,10 @@ class Q_GUI_EXPORT QButtonGroup : public QObject
 
  public:
    explicit QButtonGroup(QObject *parent = nullptr);
+
+   QButtonGroup(const QButtonGroup &) = delete;
+   QButtonGroup &operator=(const QButtonGroup &) = delete;
+
    ~QButtonGroup();
 
    void setExclusive(bool);
@@ -89,7 +93,6 @@ class Q_GUI_EXPORT QButtonGroup : public QObject
    QScopedPointer<QButtonGroupPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QButtonGroup)
    Q_DECLARE_PRIVATE(QButtonGroup)
 
    friend class QAbstractButton;

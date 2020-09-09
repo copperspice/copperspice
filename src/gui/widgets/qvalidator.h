@@ -42,6 +42,10 @@ class Q_GUI_EXPORT QValidator : public QObject
 
  public:
    explicit QValidator(QObject *parent = nullptr);
+
+   QValidator(const QValidator &) = delete;
+   QValidator &operator=(const QValidator &) = delete;
+
    ~QValidator();
 
    enum State {
@@ -64,7 +68,6 @@ class Q_GUI_EXPORT QValidator : public QObject
    QScopedPointer<QValidatorPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QValidator)
    Q_DECLARE_PRIVATE(QValidator)
 
 };
@@ -84,6 +87,10 @@ class Q_GUI_EXPORT QIntValidator : public QValidator
  public:
    explicit QIntValidator(QObject *parent = nullptr);
    QIntValidator(int bottom, int top, QObject *parent = nullptr);
+
+   QIntValidator(const QIntValidator &) = delete;
+   QIntValidator &operator=(const QIntValidator &) = delete;
+
    ~QIntValidator();
 
    QValidator::State validate(QString &, int &) const override;
@@ -102,7 +109,6 @@ class Q_GUI_EXPORT QIntValidator : public QValidator
    GUI_CS_SIGNAL_2(topChanged, top)
 
  private:
-   Q_DISABLE_COPY(QIntValidator)
 
    int b;
    int t;
@@ -142,6 +148,10 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
  public:
    explicit QDoubleValidator(QObject *parent = nullptr);
    QDoubleValidator(double bottom, double top, int decimals, QObject *parent = nullptr);
+
+   QDoubleValidator(const QDoubleValidator &) = delete;
+   QDoubleValidator &operator=(const QDoubleValidator &) = delete;
+
    ~QDoubleValidator();
 
    enum Notation {
@@ -172,7 +182,6 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
 
  private:
    Q_DECLARE_PRIVATE(QDoubleValidator)
-   Q_DISABLE_COPY(QDoubleValidator)
 
    double b;
    double t;
@@ -191,6 +200,9 @@ class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
    explicit QRegularExpressionValidator(QObject *parent = nullptr);
    explicit QRegularExpressionValidator(const QRegularExpression &regExp, QObject *parent = nullptr);
 
+   QRegularExpressionValidator(const QRegularExpressionValidator &) = delete;
+   QRegularExpressionValidator &operator=(const QRegularExpressionValidator &) = delete;
+
    ~QRegularExpressionValidator();
 
    QValidator::State validate(QString &input, int &pos) const override;
@@ -206,7 +218,6 @@ class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
  private:
    QRegularExpression m_regexp;
 
-   Q_DISABLE_COPY(QRegularExpressionValidator)
    Q_DECLARE_PRIVATE(QRegularExpressionValidator)
 };
 

@@ -140,6 +140,10 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
 
    explicit QWindow(QScreen *screen = nullptr);
    explicit QWindow(QWindow *parent);
+
+   QWindow(const QWindow &) = delete;
+   QWindow &operator=(const QWindow &) = delete;
+
    virtual ~QWindow();
 
    void setSurfaceType(SurfaceType surfaceType);
@@ -429,7 +433,6 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    QScopedPointer<QWindowPrivate> d_ptr;
 
  private:
-   Q_DISABLE_COPY(QWindow)
 
    GUI_CS_SLOT_1(Private, void _q_clearAlert())
    GUI_CS_SLOT_2(_q_clearAlert)

@@ -93,6 +93,10 @@ class Q_GUI_EXPORT QComboBox : public QWidget
 
  public:
    explicit QComboBox(QWidget *parent = nullptr);
+
+   QComboBox(const QComboBox &) = delete;
+   QComboBox &operator=(const QComboBox &) = delete;
+
    ~QComboBox();
 
    int maxVisibleItems() const;
@@ -286,7 +290,6 @@ class Q_GUI_EXPORT QComboBox : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QComboBox)
-   Q_DISABLE_COPY(QComboBox)
 
    GUI_CS_SLOT_1(Private, void _q_itemSelected(const QModelIndex &item))
    GUI_CS_SLOT_2(_q_itemSelected)

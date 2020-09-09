@@ -156,6 +156,9 @@ class Q_GUI_EXPORT QPainter
       RasterOp_SetDestination,
       RasterOp_NotDestination
    };
+   QPainter(const QPainter &) = delete;
+   QPainter &operator=(const QPainter &) = delete;
+
    void setCompositionMode(CompositionMode mode);
    CompositionMode compositionMode() const;
 
@@ -454,8 +457,6 @@ class Q_GUI_EXPORT QPainter
    void endNativePainting();
 
  private:
-   Q_DISABLE_COPY(QPainter)
-
    QScopedPointer<QPainterPrivate> d_ptr;
 
    friend class QWidget;

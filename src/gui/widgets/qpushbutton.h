@@ -46,6 +46,10 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
    explicit QPushButton(QWidget *parent = nullptr);
    explicit QPushButton(const QString &text, QWidget *parent = nullptr);
    QPushButton(const QIcon &icon, const QString &text, QWidget *parent = nullptr);
+
+   QPushButton(const QPushButton &) = delete;
+   QPushButton &operator=(const QPushButton &) = delete;
+
    ~QPushButton();
 
    QSize sizeHint() const override;
@@ -79,7 +83,6 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
    QPushButton(QPushButtonPrivate &dd, QWidget *parent = nullptr);
 
  private:
-   Q_DISABLE_COPY(QPushButton)
    Q_DECLARE_PRIVATE(QPushButton)
 
 #ifndef QT_NO_MENU

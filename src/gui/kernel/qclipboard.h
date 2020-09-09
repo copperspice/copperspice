@@ -41,6 +41,9 @@ class Q_GUI_EXPORT QClipboard : public QObject
    ~QClipboard();
 
  public:
+   QClipboard(const QClipboard &) = delete;
+   QClipboard &operator=(const QClipboard &) = delete;
+
    enum Mode { Clipboard, Selection, FindBuffer, LastMode = FindBuffer };
 
    void clear(Mode mode = Clipboard);
@@ -84,7 +87,6 @@ class Q_GUI_EXPORT QClipboard : public QObject
    friend class QPlatformClipboard;
 
  private:
-   Q_DISABLE_COPY(QClipboard)
 
    bool supportsMode(Mode mode) const;
    bool ownsMode(Mode mode) const;

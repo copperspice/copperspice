@@ -114,6 +114,9 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
 
    QApplication(int &argc, char **argv, int = ApplicationFlags);
 
+   QApplication(const QApplication &) = delete;
+   QApplication &operator=(const QApplication &) = delete;
+
    virtual ~QApplication();
 
    static void setApplicationDisplayName(const QString &name);
@@ -409,8 +412,8 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    bool compressEvent(QEvent *, QObject *receiver, QPostEventList *) override;
 
    QApplication(QApplicationPrivate &p);
+
  private:
-   Q_DISABLE_COPY(QApplication)
    Q_DECLARE_PRIVATE(QApplication)
 
    friend class QGraphicsWidget;

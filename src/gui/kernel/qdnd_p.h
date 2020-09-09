@@ -97,6 +97,10 @@ class QDragManager: public QObject
 
  public:
    QDragManager();
+
+   QDragManager(const QDragManager &) = delete;
+   QDragManager &operator=(const QDragManager &) = delete;
+
    ~QDragManager();
 
    static QDragManager *self();
@@ -119,7 +123,6 @@ class QDragManager: public QObject
    QDrag *m_object;
 
    static QDragManager *m_instance;
-   Q_DISABLE_COPY(QDragManager)
 };
 
 #endif // ! QT_NO_DRAGANDDROP

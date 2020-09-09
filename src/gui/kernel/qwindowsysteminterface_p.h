@@ -447,6 +447,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
       mutable QMutex mutex;
     public:
       WindowSystemEventList() : impl(), mutex() {}
+      WindowSystemEventList(const WindowSystemEventList &) = delete;
+      WindowSystemEventList &operator=(const WindowSystemEventList &) = delete;
+
       ~WindowSystemEventList() {
          clear();
       }
@@ -499,7 +502,6 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
          }
       }
     private:
-      Q_DISABLE_COPY(WindowSystemEventList)
    };
 
    static WindowSystemEventList windowSystemEventQueue;

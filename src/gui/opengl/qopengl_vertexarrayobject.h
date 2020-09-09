@@ -64,6 +64,8 @@ public:
                 vao->bind();
         }
 
+         Binder(const Binder &) = delete;
+         Binder &operator=(const Binder &) = delete;
         inline ~Binder()
         {
             release();
@@ -80,7 +82,6 @@ public:
         }
 
     private:
-        Q_DISABLE_COPY(Binder)
         QOpenGLVertexArrayObject *vao;
     };
 

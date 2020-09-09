@@ -127,6 +127,10 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    QGraphicsScene(QObject *parent = nullptr);
    QGraphicsScene(const QRectF &sceneRect, QObject *parent = nullptr);
    QGraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
+
+   QGraphicsScene(const QGraphicsScene &) = delete;
+   QGraphicsScene &operator=(const QGraphicsScene &) = delete;
+
    virtual ~QGraphicsScene();
 
    QRectF sceneRect() const;
@@ -332,7 +336,6 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsScene)
-   Q_DISABLE_COPY(QGraphicsScene)
 
    GUI_CS_SLOT_1(Private, void _q_emitUpdated())
    GUI_CS_SLOT_2(_q_emitUpdated)

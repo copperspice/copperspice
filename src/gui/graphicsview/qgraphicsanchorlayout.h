@@ -73,6 +73,10 @@ class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
 {
  public:
    QGraphicsAnchorLayout(QGraphicsLayoutItem *parent = nullptr);
+
+   QGraphicsAnchorLayout(const QGraphicsAnchorLayout &) = delete;
+   QGraphicsAnchorLayout &operator=(const QGraphicsAnchorLayout &) = delete;
+
    virtual ~QGraphicsAnchorLayout();
 
    QGraphicsAnchor *addAnchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
@@ -104,7 +108,6 @@ class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
 
  private:
-   Q_DISABLE_COPY(QGraphicsAnchorLayout)
    Q_DECLARE_PRIVATE(QGraphicsAnchorLayout)
 
    friend class QGraphicsAnchor;

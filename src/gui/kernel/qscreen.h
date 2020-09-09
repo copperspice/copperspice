@@ -112,6 +112,9 @@ class Q_GUI_EXPORT QScreen : public QObject
    GUI_CS_PROPERTY_NOTIFY(refreshRate, refreshRateChanged)
 
  public:
+   QScreen(const QScreen &) = delete;
+   QScreen &operator=(const QScreen &) = delete;
+
    ~QScreen();
    QPlatformScreen *handle() const;
 
@@ -195,7 +198,6 @@ class Q_GUI_EXPORT QScreen : public QObject
  private:
    explicit QScreen(QPlatformScreen *screen);
 
-   Q_DISABLE_COPY(QScreen)
 
    friend class QApplicationPrivate;
    friend class QPlatformIntegration;

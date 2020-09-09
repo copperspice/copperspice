@@ -98,6 +98,10 @@ class Q_GUI_EXPORT QOpenGLShaderProgram : public QObject
 
 public:
     explicit QOpenGLShaderProgram(QObject *parent = nullptr);
+
+    QOpenGLShaderProgram(const QOpenGLShaderProgram &) = delete;
+    QOpenGLShaderProgram &operator=(const QOpenGLShaderProgram &) = delete;
+
     virtual ~QOpenGLShaderProgram();
 
     bool addShader(QOpenGLShader *shader);
@@ -293,7 +297,6 @@ private:
     GUI_CS_SLOT_1(Private, void shaderDestroyed())
     GUI_CS_SLOT_2(shaderDestroyed)
 
-    Q_DISABLE_COPY(QOpenGLShaderProgram)
     Q_DECLARE_PRIVATE(QOpenGLShaderProgram)
 
     bool init();

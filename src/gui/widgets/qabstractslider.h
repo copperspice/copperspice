@@ -62,6 +62,10 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
 
  public:
    explicit QAbstractSlider(QWidget *parent = nullptr);
+
+   QAbstractSlider(const QAbstractSlider &) = delete;
+   QAbstractSlider &operator=(const QAbstractSlider &) = delete;
+
    ~QAbstractSlider();
 
    Qt::Orientation orientation() const;
@@ -164,7 +168,6 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
    QAbstractSlider(QAbstractSliderPrivate &dd, QWidget *parent = nullptr);
 
  private:
-   Q_DISABLE_COPY(QAbstractSlider)
    Q_DECLARE_PRIVATE(QAbstractSlider)
 };
 

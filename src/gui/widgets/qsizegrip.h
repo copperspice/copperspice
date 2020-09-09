@@ -36,6 +36,10 @@ class Q_GUI_EXPORT QSizeGrip : public QWidget
 
  public:
    explicit QSizeGrip(QWidget *parent);
+
+   QSizeGrip(const QSizeGrip &) = delete;
+   QSizeGrip &operator=(const QSizeGrip &) = delete;
+
    ~QSizeGrip();
 
    QSize sizeHint() const override;
@@ -57,7 +61,6 @@ class Q_GUI_EXPORT QSizeGrip : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QSizeGrip)
-   Q_DISABLE_COPY(QSizeGrip)
 
    GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
    GUI_CS_SLOT_2(_q_showIfNotHidden)

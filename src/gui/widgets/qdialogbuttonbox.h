@@ -100,6 +100,10 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
    explicit QDialogButtonBox(StandardButtons buttons, QWidget *parent = nullptr);
    QDialogButtonBox(StandardButtons buttons, Qt::Orientation orientation = Qt::Horizontal,
       QWidget *parent = nullptr);
+
+   QDialogButtonBox(const QDialogButtonBox &) = delete;
+   QDialogButtonBox &operator=(const QDialogButtonBox &) = delete;
+
    ~QDialogButtonBox();
 
    void setOrientation(Qt::Orientation orientation);
@@ -136,7 +140,6 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
    bool event(QEvent *event) override;
 
  private:
-   Q_DISABLE_COPY(QDialogButtonBox)
    Q_DECLARE_PRIVATE(QDialogButtonBox)
 
    GUI_CS_SLOT_1(Private, void _q_handleButtonClicked())

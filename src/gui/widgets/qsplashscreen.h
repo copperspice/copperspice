@@ -39,6 +39,10 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
  public:
    explicit QSplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
    QSplashScreen(QWidget *parent, const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
+
+   QSplashScreen(const QSplashScreen &) = delete;
+   QSplashScreen &operator=(const QSplashScreen &) = delete;
+
    virtual ~QSplashScreen();
 
    void setPixmap(const QPixmap &pixmap);
@@ -63,7 +67,6 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
    void mousePressEvent(QMouseEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QSplashScreen)
    Q_DECLARE_PRIVATE(QSplashScreen)
 };
 

@@ -55,6 +55,10 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
    QStackedLayout();
    explicit QStackedLayout(QWidget *parent);
    explicit QStackedLayout(QLayout *parentLayout);
+
+   QStackedLayout(const QStackedLayout &) = delete;
+   QStackedLayout &operator=(const QStackedLayout &) = delete;
+
    ~QStackedLayout();
 
    int addWidget(QWidget *w);
@@ -93,7 +97,6 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
    GUI_CS_SLOT_2(setCurrentWidget)
 
  private:
-   Q_DISABLE_COPY(QStackedLayout)
 };
 
 #endif // QSTACKEDLAYOUT_H

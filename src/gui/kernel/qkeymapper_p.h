@@ -43,6 +43,10 @@ class QKeyMapper : public QObject
 
  public:
    explicit QKeyMapper();
+
+   QKeyMapper(const QKeyMapper &) = delete;
+   QKeyMapper &operator=(const QKeyMapper &) = delete;
+
    ~QKeyMapper();
 
    static QKeyMapper *instance();
@@ -54,8 +58,6 @@ class QKeyMapper : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QKeyMapper)
-   Q_DISABLE_COPY(QKeyMapper)
-
    friend QKeyMapperPrivate *qt_keymapper_private();
 };
 

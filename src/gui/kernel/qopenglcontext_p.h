@@ -43,6 +43,10 @@ class Q_GUI_EXPORT QOpenGLSharedResource
 {
  public:
    QOpenGLSharedResource(QOpenGLContextGroup *group);
+
+   QOpenGLSharedResource(const QOpenGLSharedResource &) = delete;
+   QOpenGLSharedResource &operator=(const QOpenGLSharedResource &) = delete;
+
    virtual ~QOpenGLSharedResource() = 0;
 
    QOpenGLContextGroup *group() const {
@@ -65,8 +69,6 @@ class Q_GUI_EXPORT QOpenGLSharedResource
    friend class QOpenGLContextGroup;
    friend class QOpenGLContextGroupPrivate;
    friend class QOpenGLMultiGroupSharedResource;
-
-   Q_DISABLE_COPY(QOpenGLSharedResource)
 };
 
 class Q_GUI_EXPORT QOpenGLSharedResourceGuard : public QOpenGLSharedResource

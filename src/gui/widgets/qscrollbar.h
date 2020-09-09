@@ -40,6 +40,10 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
  public:
    explicit QScrollBar(QWidget *parent = nullptr);
    explicit QScrollBar(Qt::Orientation, QWidget *parent = nullptr);
+
+   QScrollBar(const QScrollBar &) = delete;
+   QScrollBar &operator=(const QScrollBar &) = delete;
+
    ~QScrollBar();
 
    QSize sizeHint() const override;
@@ -67,7 +71,6 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
    friend class QAbstractScrollAreaPrivate;
    friend Q_GUI_EXPORT QStyleOptionSlider qt_qscrollbarStyleOption(QScrollBar *scrollBar);
 
-   Q_DISABLE_COPY(QScrollBar)
    Q_DECLARE_PRIVATE(QScrollBar)
 };
 

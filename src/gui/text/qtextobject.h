@@ -45,6 +45,9 @@ class Q_GUI_EXPORT QTextObject : public QObject
    GUI_CS_OBJECT(QTextObject)
 
  public:
+   QTextObject(const QTextObject &) = delete;
+   QTextObject &operator=(const QTextObject &) = delete;
+
    QTextFormat format() const;
    int formatIndex() const;
 
@@ -65,7 +68,6 @@ class Q_GUI_EXPORT QTextObject : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QTextObject)
-   Q_DISABLE_COPY(QTextObject)
 
    friend class QTextDocumentPrivate;
 };

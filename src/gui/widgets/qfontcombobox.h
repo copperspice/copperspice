@@ -49,6 +49,10 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
 
  public:
    explicit QFontComboBox(QWidget *parent = nullptr);
+
+   QFontComboBox(const QFontComboBox &) = delete;
+   QFontComboBox &operator=(const QFontComboBox &) = delete;
+
    ~QFontComboBox();
 
    void setWritingSystem(QFontDatabase::WritingSystem);
@@ -79,7 +83,6 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
    bool event(QEvent *e) override;
 
  private:
-   Q_DISABLE_COPY(QFontComboBox)
    Q_DECLARE_PRIVATE(QFontComboBox)
 
    GUI_CS_SLOT_1(Private, void _q_currentChanged(const QString &un_named_arg1))
@@ -90,7 +93,6 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFontComboBox::FontFilters)
-
 
 
 #endif // QT_NO_FONTCOMBOBOX

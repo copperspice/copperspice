@@ -57,6 +57,10 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
  public:
    explicit QGroupBox(QWidget *parent = nullptr);
    explicit QGroupBox(const QString &title, QWidget *parent = nullptr);
+
+   QGroupBox(const QGroupBox &) = delete;
+   QGroupBox &operator=(const QGroupBox &) = delete;
+
    ~QGroupBox();
 
    QString title() const;
@@ -94,7 +98,6 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
    void initStyleOption(QStyleOptionGroupBox *option) const;
 
  private:
-   Q_DISABLE_COPY(QGroupBox)
    Q_DECLARE_PRIVATE(QGroupBox)
 
    GUI_CS_SLOT_1(Private, void _q_setChildrenEnabled(bool b))

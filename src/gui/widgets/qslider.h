@@ -57,6 +57,9 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
    explicit QSlider(QWidget *parent = nullptr);
    explicit QSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
 
+   QSlider(const QSlider &) = delete;
+   QSlider &operator=(const QSlider &) = delete;
+
    ~QSlider();
 
    QSize sizeHint() const override;
@@ -80,7 +83,6 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
  private:
    friend Q_GUI_EXPORT QStyleOptionSlider qt_qsliderStyleOption(QSlider *slider);
 
-   Q_DISABLE_COPY(QSlider)
    Q_DECLARE_PRIVATE(QSlider)
 };
 

@@ -63,6 +63,10 @@ class Q_GUI_EXPORT QTextBrowser : public QTextEdit
 
  public:
    explicit QTextBrowser(QWidget *parent = nullptr);
+
+   QTextBrowser(const QTextBrowser &) = delete;
+   QTextBrowser &operator=(const QTextBrowser &) = delete;
+
    virtual ~QTextBrowser();
 
    QUrl source() const;
@@ -129,7 +133,6 @@ class Q_GUI_EXPORT QTextBrowser : public QTextEdit
    void paintEvent(QPaintEvent *e) override;
 
  private:
-   Q_DISABLE_COPY(QTextBrowser)
    Q_DECLARE_PRIVATE(QTextBrowser)
 
    GUI_CS_SLOT_1(Private, void _q_documentModified())

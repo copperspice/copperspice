@@ -108,6 +108,10 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 
    explicit QPlainTextEdit(QWidget *parent = nullptr);
    explicit QPlainTextEdit(const QString &text, QWidget *parent = nullptr);
+
+   QPlainTextEdit(const QPlainTextEdit &) = delete;
+   QPlainTextEdit &operator=(const QPlainTextEdit &) = delete;
+
    virtual ~QPlainTextEdit();
 
    void setDocument(QTextDocument *document);
@@ -321,7 +325,6 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 
    void zoomInF(float range);
  private:
-   Q_DISABLE_COPY(QPlainTextEdit)
 
    GUI_CS_SLOT_1(Private, void _q_repaintContents(const QRectF &r))
    GUI_CS_SLOT_2(_q_repaintContents)

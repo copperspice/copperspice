@@ -81,6 +81,10 @@ class QWidgetBackingStoreTracker
 
  public:
    QWidgetBackingStoreTracker();
+
+   QWidgetBackingStoreTracker(const QWidgetBackingStoreTracker &) = delete;
+   QWidgetBackingStoreTracker &operator=(const QWidgetBackingStoreTracker &) = delete;
+
    ~QWidgetBackingStoreTracker();
 
    void create(QWidget *tlw);
@@ -107,8 +111,6 @@ class QWidgetBackingStoreTracker
    }
 
  private:
-   Q_DISABLE_COPY(QWidgetBackingStoreTracker)
-
    QWidgetBackingStore *m_ptr;
    QSet<QWidget *> m_widgets;
 };

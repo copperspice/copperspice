@@ -37,6 +37,10 @@ class Q_GUI_EXPORT QFocusFrame : public QWidget
 
  public:
    QFocusFrame(QWidget *parent = nullptr);
+
+   QFocusFrame(const QFocusFrame &) = delete;
+   QFocusFrame &operator=(const QFocusFrame &) = delete;
+
    ~QFocusFrame();
 
    void setWidget(QWidget *widget);
@@ -51,7 +55,6 @@ class Q_GUI_EXPORT QFocusFrame : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QFocusFrame)
-   Q_DISABLE_COPY(QFocusFrame)
 };
 
 

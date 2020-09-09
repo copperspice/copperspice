@@ -110,6 +110,10 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
 
    explicit QLineEdit(QWidget *parent = nullptr);
    explicit QLineEdit(const QString &, QWidget *parent = nullptr);
+
+   QLineEdit(const QLineEdit &) = delete;
+   QLineEdit &operator=(const QLineEdit &) = delete;
+
    ~QLineEdit();
 
    QString text() const;
@@ -200,7 +204,6 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    QMenu *createStandardContextMenu();
 #endif
 
-
    GUI_CS_SLOT_1(Public, void setText(const QString &str))
    GUI_CS_SLOT_2(setText)
 
@@ -285,7 +288,6 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    friend class QDateTimeEdit;
 #endif
 
-   Q_DISABLE_COPY(QLineEdit)
    Q_DECLARE_PRIVATE(QLineEdit)
 
    GUI_CS_SLOT_1(Private, void _q_handleWindowActivate())

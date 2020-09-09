@@ -58,6 +58,9 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
       AdjustToContents
    };
 
+   QAbstractScrollArea(const QAbstractScrollArea &) = delete;
+   QAbstractScrollArea &operator=(const QAbstractScrollArea &) = delete;
+
    Qt::ScrollBarPolicy verticalScrollBarPolicy() const;
    void setVerticalScrollBarPolicy(Qt::ScrollBarPolicy);
    QScrollBar *verticalScrollBar() const;
@@ -123,7 +126,6 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    virtual QSize viewportSizeHint() const;
  private:
    Q_DECLARE_PRIVATE(QAbstractScrollArea)
-   Q_DISABLE_COPY(QAbstractScrollArea)
 
    GUI_CS_SLOT_1(Private, void _q_hslide(int un_named_arg1))
    GUI_CS_SLOT_2(_q_hslide)

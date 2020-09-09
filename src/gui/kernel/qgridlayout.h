@@ -43,6 +43,10 @@ class Q_GUI_EXPORT QGridLayout : public QLayout
  public:
    explicit QGridLayout(QWidget *parent);
    QGridLayout();
+
+   QGridLayout(const QGridLayout &) = delete;
+   QGridLayout &operator=(const QGridLayout &) = delete;
+
    ~QGridLayout();
 
    QSize sizeHint() const override;
@@ -105,7 +109,6 @@ class Q_GUI_EXPORT QGridLayout : public QLayout
    void addItem(QLayoutItem *) override;
 
  private:
-   Q_DISABLE_COPY(QGridLayout)
 };
 
 #endif

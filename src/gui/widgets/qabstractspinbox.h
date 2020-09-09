@@ -86,6 +86,10 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    enum ButtonSymbols  { UpDownArrows, PlusMinus, NoButtons };
    enum CorrectionMode { CorrectToPreviousValue, CorrectToNearestValue };
 
+   QAbstractSpinBox(const QAbstractSpinBox &) = delete;
+   QAbstractSpinBox &operator=(const QAbstractSpinBox &) = delete;
+
+
    bool hasAcceptableInput() const;
    QString text() const;
 
@@ -177,7 +181,6 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QAbstractSpinBox)
-   Q_DISABLE_COPY(QAbstractSpinBox)
 
    GUI_CS_SLOT_1(Private, void _q_editorTextChanged(const QString &un_named_arg1))
    GUI_CS_SLOT_2(_q_editorTextChanged)

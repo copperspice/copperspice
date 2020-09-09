@@ -62,6 +62,10 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
    };
 
    explicit QToolButton(QWidget *parent = nullptr);
+
+   QToolButton(const QToolButton &) = delete;
+   QToolButton &operator=(const QToolButton &) = delete;
+
    ~QToolButton();
 
    QSize sizeHint() const override;
@@ -118,7 +122,6 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
    void initStyleOption(QStyleOptionToolButton *option) const;
 
  private:
-   Q_DISABLE_COPY(QToolButton)
    Q_DECLARE_PRIVATE(QToolButton)
 
 #ifndef QT_NO_MENU
@@ -137,7 +140,6 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
 
    GUI_CS_SLOT_1(Private, void _q_actionTriggered())
    GUI_CS_SLOT_2(_q_actionTriggered)
-
 };
 
 #endif // QT_NO_TOOLBUTTON

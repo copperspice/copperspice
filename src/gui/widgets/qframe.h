@@ -58,6 +58,10 @@ class Q_GUI_EXPORT QFrame : public QWidget
 
  public:
    explicit QFrame(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+
+   QFrame(const QFrame &) = delete;
+   QFrame &operator=(const QFrame &) = delete;
+
    ~QFrame();
 
    int frameStyle() const;
@@ -111,7 +115,6 @@ class Q_GUI_EXPORT QFrame : public QWidget
    void initStyleOption(QStyleOptionFrame *option) const;
 
  private:
-   Q_DISABLE_COPY(QFrame)
    Q_DECLARE_PRIVATE(QFrame)
 };
 

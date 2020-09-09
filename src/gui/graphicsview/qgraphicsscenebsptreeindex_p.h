@@ -48,6 +48,10 @@ class QGraphicsSceneBspTreeIndex : public QGraphicsSceneIndex
 
  public:
    QGraphicsSceneBspTreeIndex(QGraphicsScene *scene = 0);
+
+   QGraphicsSceneBspTreeIndex(const QGraphicsSceneBspTreeIndex &) = delete;
+   QGraphicsSceneBspTreeIndex &operator=(const QGraphicsSceneBspTreeIndex &) = delete;
+
    ~QGraphicsSceneBspTreeIndex();
 
    QList<QGraphicsItem *> estimateItems(const QRectF &rect, Qt::SortOrder order) const override;
@@ -72,7 +76,6 @@ class QGraphicsSceneBspTreeIndex : public QGraphicsSceneIndex
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneBspTreeIndex)
-   Q_DISABLE_COPY(QGraphicsSceneBspTreeIndex)
 
    GUI_CS_SLOT_1(Private, void _q_updateSortCache())
    GUI_CS_SLOT_2(_q_updateSortCache)

@@ -116,10 +116,12 @@ struct QSimplexConstraint {
 
 class QSimplex
 {
-   Q_DISABLE_COPY(QSimplex)
-
  public:
    QSimplex();
+
+   QSimplex(const QSimplex &) = delete;
+   QSimplex &operator=(const QSimplex &) = delete;
+
    ~QSimplex();
 
    qreal solveMin();

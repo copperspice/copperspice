@@ -51,6 +51,10 @@ class Q_GUI_EXPORT QSplitter : public QFrame
  public:
    explicit QSplitter(QWidget *parent = nullptr);
    explicit QSplitter(Qt::Orientation, QWidget *parent = nullptr);
+
+   QSplitter(const QSplitter &) = delete;
+   QSplitter &operator=(const QSplitter &) = delete;
+
    ~QSplitter();
 
    void addWidget(QWidget *widget);
@@ -106,7 +110,6 @@ class Q_GUI_EXPORT QSplitter : public QFrame
    int closestLegalPosition(int, int);
 
  private:
-   Q_DISABLE_COPY(QSplitter)
    Q_DECLARE_PRIVATE(QSplitter)
 
    friend class QSplitterHandle;
@@ -121,6 +124,10 @@ class Q_GUI_EXPORT QSplitterHandle : public QWidget
 
  public:
    explicit QSplitterHandle(Qt::Orientation o, QSplitter *parent);
+
+   QSplitterHandle(const QSplitterHandle &) = delete;
+   QSplitterHandle &operator=(const QSplitterHandle &) = delete;
+
    ~QSplitterHandle();
    void setOrientation(Qt::Orientation o);
    Qt::Orientation orientation() const;
@@ -141,7 +148,6 @@ class Q_GUI_EXPORT QSplitterHandle : public QWidget
    int closestLegalPosition(int p);
 
  private:
-   Q_DISABLE_COPY(QSplitterHandle)
    Q_DECLARE_PRIVATE(QSplitterHandle)
 };
 

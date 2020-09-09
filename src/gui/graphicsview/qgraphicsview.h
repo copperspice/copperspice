@@ -125,6 +125,10 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 
    QGraphicsView(QWidget *parent = nullptr);
    QGraphicsView(QGraphicsScene *scene, QWidget *parent = nullptr);
+
+   QGraphicsView(const QGraphicsView &) = delete;
+   QGraphicsView &operator=(const QGraphicsView &) = delete;
+
    ~QGraphicsView();
 
    QSize sizeHint() const override;
@@ -294,7 +298,6 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsView)
-   Q_DISABLE_COPY(QGraphicsView)
 
 #ifndef QT_NO_CURSOR
    GUI_CS_SLOT_1(Private, void _q_setViewportCursor(const QCursor &un_named_arg1))

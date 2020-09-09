@@ -74,6 +74,10 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    enum TabShape { Rounded, Triangular };
 
    explicit QTabWidget(QWidget *parent = nullptr);
+
+   QTabWidget(const QTabWidget &) = delete;
+   QTabWidget &operator=(const QTabWidget &) = delete;
+
    ~QTabWidget();
 
    int addTab(QWidget *widget, const QString &);
@@ -180,7 +184,6 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QTabWidget)
-   Q_DISABLE_COPY(QTabWidget)
 
    GUI_CS_SLOT_1(Private, void _q_showTab(int un_named_arg1))
    GUI_CS_SLOT_2(_q_showTab)

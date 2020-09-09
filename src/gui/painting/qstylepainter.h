@@ -43,6 +43,9 @@ class QStylePainter : public QPainter
       begin(pd, w);
    }
 
+   QStylePainter(const QStylePainter &) = delete;
+   QStylePainter &operator=(const QStylePainter &) = delete;
+
    inline bool begin(QWidget *w) {
       return begin(w, w);
    }
@@ -68,7 +71,6 @@ class QStylePainter : public QPainter
  private:
    QWidget *widget;
    QStyle *wstyle;
-   Q_DISABLE_COPY(QStylePainter)
 };
 
 void QStylePainter::drawPrimitive(QStyle::PrimitiveElement pe, const QStyleOption &opt)

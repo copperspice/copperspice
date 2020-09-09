@@ -36,6 +36,10 @@ class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
 
  public:
    QGraphicsProxyWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = nullptr);
+
+   QGraphicsProxyWidget(const QGraphicsProxyWidget &) = delete;
+   QGraphicsProxyWidget &operator=(const QGraphicsProxyWidget &) = delete;
+
    ~QGraphicsProxyWidget();
 
    void setWidget(QWidget *widget);
@@ -106,7 +110,6 @@ class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
    GUI_CS_SLOT_2(newProxyWidget)
 
  private:
-   Q_DISABLE_COPY(QGraphicsProxyWidget)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsProxyWidget)
 
    GUI_CS_SLOT_1(Private, void _q_removeWidgetSlot())

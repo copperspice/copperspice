@@ -42,6 +42,10 @@ class Q_GUI_EXPORT QDesktopWidget : public QWidget
 
  public:
    QDesktopWidget();
+
+   QDesktopWidget(const QDesktopWidget &) = delete;
+   QDesktopWidget &operator=(const QDesktopWidget &) = delete;
+
    ~QDesktopWidget();
 
    bool isVirtualDesktop() const;
@@ -85,7 +89,6 @@ class Q_GUI_EXPORT QDesktopWidget : public QWidget
    void resizeEvent(QResizeEvent *e) override;
 
  private:
-   Q_DISABLE_COPY(QDesktopWidget)
    Q_DECLARE_PRIVATE(QDesktopWidget)
 
    GUI_CS_SLOT_1(Private, void _q_updateScreens())

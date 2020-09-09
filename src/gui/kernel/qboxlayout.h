@@ -41,6 +41,10 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
    };
 
    explicit QBoxLayout(Direction, QWidget *parent = nullptr);
+
+   QBoxLayout(const QBoxLayout &) = delete;
+   QBoxLayout &operator=(const QBoxLayout &) = delete;
+
    ~QBoxLayout();
 
    Direction direction() const;
@@ -85,7 +89,6 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
    void setGeometry(const QRect &) override;
 
  private:
-   Q_DISABLE_COPY(QBoxLayout)
 };
 
 class Q_GUI_EXPORT QHBoxLayout : public QBoxLayout
@@ -97,8 +100,8 @@ class Q_GUI_EXPORT QHBoxLayout : public QBoxLayout
    explicit QHBoxLayout(QWidget *parent);
    ~QHBoxLayout();
 
- private:
-   Q_DISABLE_COPY(QHBoxLayout)
+   QHBoxLayout(const QHBoxLayout &) = delete;
+   QHBoxLayout &operator=(const QHBoxLayout &) = delete;
 };
 
 class Q_GUI_EXPORT QVBoxLayout : public QBoxLayout
@@ -110,8 +113,9 @@ class Q_GUI_EXPORT QVBoxLayout : public QBoxLayout
    explicit QVBoxLayout(QWidget *parent);
    ~QVBoxLayout();
 
- private:
-   Q_DISABLE_COPY(QVBoxLayout)
+   QVBoxLayout(const QVBoxLayout &) = delete;
+   QVBoxLayout &operator=(const QVBoxLayout &) = delete;
+
 };
 
 #endif // QBOXLAYOUT_H

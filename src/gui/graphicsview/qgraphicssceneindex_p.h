@@ -47,6 +47,9 @@ class QGraphicsSceneIndex : public QObject
 
  public:
    QGraphicsSceneIndex(QGraphicsScene *scene = 0);
+   QGraphicsSceneIndex(const QGraphicsSceneIndex &) = delete;
+   QGraphicsSceneIndex &operator=(const QGraphicsSceneIndex &) = delete;
+
    virtual ~QGraphicsSceneIndex();
 
    QGraphicsScene *scene() const;
@@ -86,7 +89,6 @@ class QGraphicsSceneIndex : public QObject
    friend class QGraphicsSceneBspTreeIndex;
 
  private:
-   Q_DISABLE_COPY(QGraphicsSceneIndex)
    Q_DECLARE_PRIVATE(QGraphicsSceneIndex)
 
 };

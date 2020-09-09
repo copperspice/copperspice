@@ -36,6 +36,10 @@ class Q_GUI_EXPORT QRadioButton : public QAbstractButton
  public:
    explicit QRadioButton(QWidget *parent = nullptr);
    explicit QRadioButton(const QString &text, QWidget *parent = nullptr);
+
+   QRadioButton(const QRadioButton &) = delete;
+   QRadioButton &operator=(const QRadioButton &) = delete;
+
    ~QRadioButton();
 
    QSize sizeHint() const override;
@@ -50,7 +54,6 @@ class Q_GUI_EXPORT QRadioButton : public QAbstractButton
 
  private:
    Q_DECLARE_PRIVATE(QRadioButton)
-   Q_DISABLE_COPY(QRadioButton)
    friend class QAccessibleButton;
 };
 

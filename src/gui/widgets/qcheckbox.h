@@ -39,6 +39,10 @@ class Q_GUI_EXPORT QCheckBox : public QAbstractButton
  public:
    explicit QCheckBox(QWidget *parent = nullptr);
    explicit QCheckBox(const QString &text, QWidget *parent = nullptr);
+
+   QCheckBox(const QCheckBox &) = delete;
+   QCheckBox &operator=(const QCheckBox &) = delete;
+
    ~QCheckBox();
 
    QSize sizeHint() const override;
@@ -64,7 +68,6 @@ class Q_GUI_EXPORT QCheckBox : public QAbstractButton
 
  private:
    Q_DECLARE_PRIVATE(QCheckBox)
-   Q_DISABLE_COPY(QCheckBox)
    friend class QAccessibleButton;
 };
 

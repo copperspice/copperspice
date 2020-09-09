@@ -71,6 +71,10 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
    enum Direction { TopToBottom, BottomToTop };
 
    explicit QProgressBar(QWidget *parent = nullptr);
+
+   QProgressBar(const QProgressBar &) = delete;
+   QProgressBar &operator=(const QProgressBar &) = delete;
+
    ~QProgressBar();
 
    int minimum() const;
@@ -128,7 +132,6 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QProgressBar)
-   Q_DISABLE_COPY(QProgressBar)
 };
 
 #endif // QT_NO_PROGRESSBAR

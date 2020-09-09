@@ -82,6 +82,10 @@ class Q_GUI_EXPORT QTabBar: public QWidget
 
  public:
    explicit QTabBar(QWidget *parent = nullptr);
+
+   QTabBar(const QTabBar &) = delete;
+   QTabBar &operator=(const QTabBar &) = delete;
+
    ~QTabBar();
 
    enum Shape { RoundedNorth, RoundedSouth, RoundedWest, RoundedEast,
@@ -228,7 +232,6 @@ class Q_GUI_EXPORT QTabBar: public QWidget
 #endif
 
  private:
-   Q_DISABLE_COPY(QTabBar)
    Q_DECLARE_PRIVATE(QTabBar)
 
    GUI_CS_SLOT_1(Private, void _q_scrollTabs())

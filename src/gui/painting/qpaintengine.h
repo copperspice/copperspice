@@ -127,6 +127,10 @@ class Q_GUI_EXPORT QPaintEngine
    };
 
    explicit QPaintEngine(PaintEngineFeatures features = PaintEngineFeatures());
+
+   QPaintEngine(const QPaintEngine &) = delete;
+   QPaintEngine &operator=(const QPaintEngine &) = delete;
+
    virtual ~QPaintEngine();
 
    bool isActive() const {
@@ -236,8 +240,6 @@ class Q_GUI_EXPORT QPaintEngine
    bool autoDestruct() const {
       return selfDestruct;
    }
-
-   Q_DISABLE_COPY(QPaintEngine)
 
    friend class QPainterReplayer;
    friend class QFontEngineBox;

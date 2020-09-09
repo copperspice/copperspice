@@ -95,6 +95,10 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
 
  public:
    QGraphicsWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = Qt::WindowFlags());
+
+   QGraphicsWidget(const QGraphicsWidget &) = delete;
+   QGraphicsWidget &operator=(const QGraphicsWidget &) = delete;
+
    ~QGraphicsWidget();
 
    QGraphicsLayout *layout() const;
@@ -262,7 +266,6 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    virtual void ungrabKeyboardEvent(QEvent *event);
 
  private:
-   Q_DISABLE_COPY(QGraphicsWidget)
    Q_DECLARE_PRIVATE_D(QGraphicsItem::d_ptr.data(), QGraphicsWidget)
 
    friend class QGraphicsScene;

@@ -42,6 +42,10 @@ class Q_GUI_EXPORT QDrag : public QObject
 
  public:
    explicit QDrag(QObject *dragSource);
+
+   QDrag(const QDrag &) = delete;
+   QDrag &operator=(const QDrag &) = delete;
+
    ~QDrag();
 
    void setMimeData(QMimeData *data);
@@ -76,8 +80,6 @@ class Q_GUI_EXPORT QDrag : public QObject
 
  private:
    friend class QDragManager;
-   Q_DISABLE_COPY(QDrag)
-
 };
 
 #endif // QT_NO_DRAGANDDROP

@@ -64,6 +64,10 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
 
  public:
    explicit QSpinBox(QWidget *parent = nullptr);
+
+   QSpinBox(const QSpinBox &) = delete;
+   QSpinBox &operator=(const QSpinBox &) = delete;
+
    ~QSpinBox();
 
    int value() const;
@@ -111,7 +115,6 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
    void fixup(QString &str) const override;
 
  private:
-   Q_DISABLE_COPY(QSpinBox)
    Q_DECLARE_PRIVATE(QSpinBox)
 };
 
@@ -146,6 +149,10 @@ class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
 
  public:
    explicit QDoubleSpinBox(QWidget *parent = nullptr);
+
+   QDoubleSpinBox(const QDoubleSpinBox &) = delete;
+   QDoubleSpinBox &operator=(const QDoubleSpinBox &) = delete;
+
    ~QDoubleSpinBox();
 
    double value() const;
@@ -191,7 +198,6 @@ class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
    GUI_CS_SIGNAL_2(cs_valueChanged, un_named_arg1)
 
  private:
-   Q_DISABLE_COPY(QDoubleSpinBox)
    Q_DECLARE_PRIVATE(QDoubleSpinBox)
 };
 

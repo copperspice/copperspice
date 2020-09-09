@@ -38,6 +38,9 @@ class Q_GUI_EXPORT QGraphicsLinearLayout : public QGraphicsLayout
  public:
    QGraphicsLinearLayout(QGraphicsLayoutItem *parent = nullptr);
    QGraphicsLinearLayout(Qt::Orientation orientation, QGraphicsLayoutItem *parent = 0);
+   QGraphicsLinearLayout(const QGraphicsLinearLayout &) = delete;
+   QGraphicsLinearLayout &operator=(const QGraphicsLinearLayout &) = delete;
+
    virtual ~QGraphicsLinearLayout();
 
    void setOrientation(Qt::Orientation orientation);
@@ -78,7 +81,6 @@ class Q_GUI_EXPORT QGraphicsLinearLayout : public QGraphicsLayout
    void dump(int indent = 0) const;
 
  private:
-   Q_DISABLE_COPY(QGraphicsLinearLayout)
    Q_DECLARE_PRIVATE(QGraphicsLinearLayout)
 };
 

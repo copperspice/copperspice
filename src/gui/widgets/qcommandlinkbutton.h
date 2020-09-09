@@ -44,6 +44,10 @@ class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
    explicit QCommandLinkButton(QWidget *parent = nullptr);
    explicit QCommandLinkButton(const QString &text, QWidget *parent = nullptr);
    QCommandLinkButton(const QString &text, const QString &description, QWidget *parent = nullptr);
+
+   QCommandLinkButton(const QCommandLinkButton &) = delete;
+   QCommandLinkButton &operator=(const QCommandLinkButton &) = delete;
+
    ~QCommandLinkButton();
    QString description() const;
    void setDescription(const QString &description);
@@ -56,7 +60,6 @@ class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
    void paintEvent(QPaintEvent *) override;
 
  private:
-   Q_DISABLE_COPY(QCommandLinkButton)
    Q_DECLARE_PRIVATE(QCommandLinkButton)
 };
 

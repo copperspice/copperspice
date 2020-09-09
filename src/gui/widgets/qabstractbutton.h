@@ -76,6 +76,10 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
 
  public:
    explicit QAbstractButton(QWidget *parent = nullptr);
+
+   QAbstractButton(const QAbstractButton &) = delete;
+   QAbstractButton &operator=(const QAbstractButton &) = delete;
+
    ~QAbstractButton();
 
    void setText(const QString &text);
@@ -156,7 +160,6 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QAbstractButton)
-   Q_DISABLE_COPY(QAbstractButton)
    friend class QButtonGroup;
 };
 

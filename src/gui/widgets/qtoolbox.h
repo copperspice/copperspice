@@ -44,6 +44,10 @@ class Q_GUI_EXPORT QToolBox : public QFrame
 
  public:
    explicit QToolBox(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+   QToolBox(const QToolBox &) = delete;
+   QToolBox &operator=(const QToolBox &) = delete;
+
    ~QToolBox();
 
    int addItem(QWidget *widget, const QString &text);
@@ -93,7 +97,6 @@ class Q_GUI_EXPORT QToolBox : public QFrame
 
  private:
    Q_DECLARE_PRIVATE(QToolBox)
-   Q_DISABLE_COPY(QToolBox)
 
    GUI_CS_SLOT_1(Private, void _q_buttonClicked())
    GUI_CS_SLOT_2(_q_buttonClicked)
@@ -118,6 +121,5 @@ inline int QToolBox::insertItem(int index, QWidget *item, const QString &text)
 }
 
 #endif // QT_NO_TOOLBOX
-
 
 #endif // QTOOLBOX_H

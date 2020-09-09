@@ -68,6 +68,10 @@ class Q_GUI_EXPORT QToolBar : public QWidget
  public:
    explicit QToolBar(const QString &title, QWidget *parent = nullptr);
    explicit QToolBar(QWidget *parent = nullptr);
+
+   QToolBar(const QToolBar &) = delete;
+   QToolBar &operator=(const QToolBar &) = delete;
+
    ~QToolBar();
 
    void setMovable(bool movable);
@@ -187,7 +191,6 @@ class Q_GUI_EXPORT QToolBar : public QWidget
 
  private:
    Q_DECLARE_PRIVATE(QToolBar)
-   Q_DISABLE_COPY(QToolBar)
 
    GUI_CS_SLOT_1(Private, void _q_toggleView(bool un_named_arg1))
    GUI_CS_SLOT_2(_q_toggleView)
