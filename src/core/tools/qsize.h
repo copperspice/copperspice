@@ -24,8 +24,8 @@
 #ifndef QSIZE_H
 #define QSIZE_H
 
-#include <qnamespace.h>
 #include <qassert.h>
+#include <qnamespace.h>
 
 class QDataStream;
 class QDebug;
@@ -33,15 +33,16 @@ class QDebug;
 class Q_CORE_EXPORT QSize
 {
  public:
-   QSize();
-   QSize(int w, int h);
+   constexpr QSize();
+   constexpr QSize(int w, int h);
 
-   inline bool isNull() const;
-   inline bool isEmpty() const;
-   inline bool isValid() const;
+   constexpr inline bool isNull() const;
+   constexpr inline bool isEmpty() const;
+   constexpr inline bool isValid() const;
 
-   inline int width() const;
-   inline int height() const;
+   constexpr inline int width() const;
+   constexpr inline int height() const;
+
    inline void setWidth(int w);
    inline void setHeight(int h);
 
@@ -53,7 +54,6 @@ class Q_CORE_EXPORT QSize
 
    QSize scaled(int w, int h, Qt::AspectRatioMode mode) const;
    QSize scaled(const QSize &s, Qt::AspectRatioMode mode) const;
-
 
    inline QSize expandedTo(const QSize &) const;
    inline QSize boundedTo(const QSize &) const;
@@ -82,38 +82,37 @@ class Q_CORE_EXPORT QSize
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSize &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSize &);
 
-inline QSize::QSize()
+constexpr inline QSize::QSize()
+   : wd(-1), ht(-1)
 {
-   wd = ht = -1;
 }
 
-inline QSize::QSize(int w, int h)
+constexpr inline QSize::QSize(int w, int h)
+   : wd(w), ht(h)
 {
-   wd = w;
-   ht = h;
 }
 
-inline bool QSize::isNull() const
+constexpr inline bool QSize::isNull() const
 {
    return wd == 0 && ht == 0;
 }
 
-inline bool QSize::isEmpty() const
+constexpr inline bool QSize::isEmpty() const
 {
    return wd < 1 || ht < 1;
 }
 
-inline bool QSize::isValid() const
+constexpr inline bool QSize::isValid() const
 {
    return wd >= 0 && ht >= 0;
 }
 
-inline int QSize::width() const
+constexpr inline int QSize::width() const
 {
    return wd;
 }
 
-inline int QSize::height() const
+constexpr inline int QSize::height() const
 {
    return ht;
 }
