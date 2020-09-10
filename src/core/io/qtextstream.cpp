@@ -1329,18 +1329,37 @@ QString QTextStream::readAll()
 
 QString QTextStream::readLine(qint64 maxlen)
 {
-   Q_D(QTextStream);
-   CHECK_VALID_STREAM(QString());
-
    QString retval;
+   readLineInto(&retval, maxlen);
 
-   if (! d->scan(&retval, int(maxlen), QTextStreamPrivate::EndOfLine)) {
-      return QString();
+   return retval;
+}
+
+bool QTextStream::readLineInto(QString *line, qint64 maxlen)
+{
+   Q_D(QTextStream);
+
+   if (d->m_string == nullptr && d->device == nullptr) {
+      qWarning("QTextStream::readLineInto() No device was provided");
+
+      if (line != nullptr && ! line->isEmpty()) {
+         line->clear();
+      }
+
+      return false;
+   }
+
+   if (! d->scan(line, int(maxlen), QTextStreamPrivate::EndOfLine)) {
+      if (line != nullptr && ! line->isEmpty()) {
+         line->clear();
+      }
+
+      return false;
    }
 
    d->consumeLastToken();
 
-   return retval;
+   return true;
 }
 
 QString QTextStream::read(qint64 maxlen)
