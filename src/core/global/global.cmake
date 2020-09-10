@@ -56,9 +56,10 @@ list(APPEND CORE_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnumeric_p.h
 )
 
-target_compile_definitions(CsCore
-   PRIVATE
-   -DBUILD_DATE="${BUILD_DATE}"
+set_property(SOURCE
+   ${CMAKE_CURRENT_SOURCE_DIR}/global/qlibraryinfo.cpp
+   APPEND PROPERTY COMPILE_DEFINITIONS
+   BUILD_DATE="${BUILD_DATE}"
 )
 
 target_sources(CsCore
