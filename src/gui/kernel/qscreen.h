@@ -44,7 +44,6 @@ class QDebug;
 class Q_GUI_EXPORT QScreen : public QObject
 {
    GUI_CS_OBJECT(QScreen)
-   Q_DECLARE_PRIVATE(QScreen)
 
    GUI_CS_PROPERTY_READ(name, name)
    GUI_CS_PROPERTY_CONSTANT(name)
@@ -196,8 +195,8 @@ class Q_GUI_EXPORT QScreen : public QObject
    QScopedPointer<QScreenPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QScreen)
    explicit QScreen(QPlatformScreen *screen);
-
 
    friend class QApplicationPrivate;
    friend class QPlatformIntegration;

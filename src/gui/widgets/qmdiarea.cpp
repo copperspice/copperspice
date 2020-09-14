@@ -650,8 +650,7 @@ void QMdiAreaPrivate::_q_deactivateAllWindows(QMdiSubWindow *aboutToActivate)
 /*!
     \internal
 */
-void QMdiAreaPrivate::_q_processWindowStateChanged(Qt::WindowStates oldState,
-   Qt::WindowStates newState)
+void QMdiAreaPrivate::_q_processWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
    if (ignoreWindowStateChange) {
       return;
@@ -667,8 +666,9 @@ void QMdiAreaPrivate::_q_processWindowStateChanged(Qt::WindowStates oldState,
    if (!(oldState & Qt::WindowActive) && (newState & Qt::WindowActive)) {
       emitWindowActivated(child);
    }
+
    // windowDeactivated
-   else if ((oldState & Qt::WindowActive) && !(newState & Qt::WindowActive)) {
+   else if ((oldState & Qt::WindowActive) && ! (newState & Qt::WindowActive)) {
       resetActiveWindow(child);
    }
 
@@ -2640,28 +2640,28 @@ void QMdiArea::_q_deactivateAllWindows()
    d->_q_deactivateAllWindows();
 }
 
-void QMdiArea::_q_processWindowStateChanged(Qt::WindowStates un_named_arg1, Qt::WindowStates un_named_arg2)
+void QMdiArea::_q_processWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newStates)
 {
    Q_D(QMdiArea);
-   d->_q_processWindowStateChanged(un_named_arg1, un_named_arg2);
+   d->_q_processWindowStateChanged(oldState, newStates);
 }
 
-void QMdiArea::_q_currentTabChanged(int un_named_arg1)
+void QMdiArea::_q_currentTabChanged(int index)
 {
    Q_D(QMdiArea);
-   d->_q_currentTabChanged(un_named_arg1);
+   d->_q_currentTabChanged(index);
 }
 
-void QMdiArea::_q_closeTab(int un_named_arg1)
+void QMdiArea::_q_closeTab(int index)
 {
    Q_D(QMdiArea);
-   d->_q_closeTab(un_named_arg1);
+   d->_q_closeTab(index);
 }
 
-void QMdiArea::_q_moveTab(int un_named_arg1, int un_named_arg2)
+void QMdiArea::_q_moveTab(int from, int to)
 {
    Q_D(QMdiArea);
-   d->_q_moveTab(un_named_arg1, un_named_arg2);
+   d->_q_moveTab(from, to);
 }
 
 #endif // QT_NO_MDIAREA

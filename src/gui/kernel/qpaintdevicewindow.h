@@ -33,7 +33,6 @@ class QPaintEvent;
 class Q_GUI_EXPORT QPaintDeviceWindow : public QWindow, public QPaintDevice
 {
    GUI_CS_OBJECT(QPaintDeviceWindow)
-   Q_DECLARE_PRIVATE(QPaintDeviceWindow)
 
  public:
    QPaintDeviceWindow(const QPaintDeviceWindow &) = delete;
@@ -59,8 +58,8 @@ class Q_GUI_EXPORT QPaintDeviceWindow : public QWindow, public QPaintDevice
    QPaintDeviceWindow(QPaintDeviceWindowPrivate &dd, QWindow *parent);
 
  private:
+   Q_DECLARE_PRIVATE(QPaintDeviceWindow)
    QPaintEngine *paintEngine() const override;
 };
-
 
 #endif

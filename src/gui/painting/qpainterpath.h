@@ -32,8 +32,10 @@
 #include <qscopedpointer.h>
 
 class QFont;
+
 class QPainterPathPrivate;
 struct QPainterPathPrivateDeleter;
+
 class QPainterPathData;
 class QPainterPathStrokerPrivate;
 class QPen;
@@ -237,8 +239,6 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
 
 class Q_GUI_EXPORT QPainterPathStroker
 {
-   Q_DECLARE_PRIVATE(QPainterPathStroker)
-
  public:
    QPainterPathStroker();
    explicit QPainterPathStroker(const QPen &pen);
@@ -273,10 +273,11 @@ class Q_GUI_EXPORT QPainterPathStroker
    QPainterPath createStroke(const QPainterPath &path) const;
 
  private:
-
-   friend class QX11PaintEngine;
+   Q_DECLARE_PRIVATE(QPainterPathStroker)
 
    QScopedPointer<QPainterPathStrokerPrivate> d_ptr;
+
+   friend class QX11PaintEngine;
 };
 
 inline void QPainterPath::moveTo(qreal x, qreal y)
@@ -368,7 +369,6 @@ inline QPainterPath QPainterPath::translated(const QPointF &offset) const
 {
    return translated(offset.x(), offset.y());
 }
-
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPainterPath &);
 

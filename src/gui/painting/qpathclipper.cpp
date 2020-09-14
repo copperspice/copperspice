@@ -231,6 +231,7 @@ struct TreeNode {
          int first;
          int last;
       } interval;
+
       struct {
          int left;
          int right;
@@ -659,11 +660,11 @@ void qTraverseKdPointTree(QKdPointTree::Node &node, T &t, int depth = 0)
    const bool traverseLeft = (status == QKdPointTree::TraverseBoth || status == QKdPointTree::TraverseLeft);
 
    if (traverseLeft && node.left) {
-      QT_PREPEND_NAMESPACE(qTraverseKdPointTree<T>)(*node.left, t, depth + 1);
+      qTraverseKdPointTree<T>(*node.left, t, depth + 1);
    }
 
    if (traverseRight && node.right) {
-      QT_PREPEND_NAMESPACE(qTraverseKdPointTree<T>)(*node.right, t, depth + 1);
+      qTraverseKdPointTree<T>(*node.right, t, depth + 1);
    }
 }
 
@@ -671,6 +672,7 @@ static inline qreal component(const QPointF &point, unsigned int i)
 {
    Q_ASSERT(i < 2);
    const qreal components[] = { point.x(), point.y() };
+
    return components[i];
 }
 
@@ -776,7 +778,7 @@ void QPathSegments::mergePoints()
 
       for (int i = 0; i < points(); ++i) {
          QKdPointFinder finder(i, *this, tree);
-         QT_PREPEND_NAMESPACE(qTraverseKdPointTree<QKdPointFinder>)(*tree.rootNode(), finder);
+         qTraverseKdPointTree<QKdPointFinder>(*tree.rootNode(), finder);
 
          Q_ASSERT(finder.result() != -1);
 
@@ -1515,7 +1517,7 @@ static void clear(QWingedEdge &list, int edge, QPathEdge::Traversal traversal)
 template <typename InputIterator>
 InputIterator qFuzzyFind(InputIterator first, InputIterator last, qreal val)
 {
-   while (first != last && !QT_PREPEND_NAMESPACE(qFuzzyCompare)(qreal(*first), qreal(val))) {
+   while (first != last && ! qFuzzyCompare(qreal(*first), qreal(val))) {
       ++first;
    }
    return first;

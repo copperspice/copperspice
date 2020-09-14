@@ -91,7 +91,7 @@ class QDragPrivate
    QMap<Qt::DropAction, QPixmap> customCursors;
 };
 
-class QDragManager: public QObject
+class QDragManager : public QObject
 {
    GUI_CS_OBJECT(QDragManager)
 

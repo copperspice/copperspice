@@ -147,7 +147,7 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
    GUI_CS_SLOT_1(Public, void setShowGrid(bool show))
    GUI_CS_SLOT_2(setShowGrid)
 
- protected :
+ protected:
    GUI_CS_SLOT_1(Protected, void rowMoved(int row, int oldIndex, int newIndex))
    GUI_CS_SLOT_2(rowMoved)
    GUI_CS_SLOT_1(Protected, void columnMoved(int column, int oldIndex, int newIndex))

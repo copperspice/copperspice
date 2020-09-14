@@ -243,5 +243,4 @@ class Q_GUI_EXPORT QTabBar: public QWidget
 
 #endif // QT_NO_TABBAR
 
-
-#endif // QTABBAR_H
+#endif

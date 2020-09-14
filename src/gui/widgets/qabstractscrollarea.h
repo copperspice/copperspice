@@ -50,16 +50,18 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    GUI_CS_PROPERTY_WRITE(sizeAdjustPolicy, setSizeAdjustPolicy)
 
  public:
-   explicit QAbstractScrollArea(QWidget *parent = nullptr);
-   ~QAbstractScrollArea();
    enum SizeAdjustPolicy {
       AdjustIgnored,
       AdjustToContentsOnFirstShow,
       AdjustToContents
    };
 
+   explicit QAbstractScrollArea(QWidget *parent = nullptr);
+
    QAbstractScrollArea(const QAbstractScrollArea &) = delete;
    QAbstractScrollArea &operator=(const QAbstractScrollArea &) = delete;
+
+   ~QAbstractScrollArea();
 
    Qt::ScrollBarPolicy verticalScrollBarPolicy() const;
    void setVerticalScrollBarPolicy(Qt::ScrollBarPolicy);
@@ -87,7 +89,8 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    virtual void setupViewport(QWidget *viewport);
    SizeAdjustPolicy sizeAdjustPolicy() const;
    void setSizeAdjustPolicy(SizeAdjustPolicy policy);
- protected :
+
+ protected:
    QAbstractScrollArea(QAbstractScrollAreaPrivate &dd, QWidget *parent = nullptr);
    void setViewportMargins(int left, int top, int right, int bottom);
    void setViewportMargins(const QMargins &margins);
@@ -122,8 +125,8 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    void keyPressEvent(QKeyEvent *) override;
 
    virtual void scrollContentsBy(int dx, int dy);
-
    virtual QSize viewportSizeHint() const;
+
  private:
    Q_DECLARE_PRIVATE(QAbstractScrollArea)
 
@@ -141,6 +144,5 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
 };
 
 #endif // QT_NO_SCROLLAREA
-
 
 #endif

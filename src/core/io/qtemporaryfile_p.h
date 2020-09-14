@@ -30,8 +30,6 @@
 
 class QTemporaryFilePrivate : public QFilePrivate
 {
-   Q_DECLARE_PUBLIC(QTemporaryFile)
-
  protected:
    QTemporaryFilePrivate();
    ~QTemporaryFilePrivate();
@@ -40,6 +38,9 @@ class QTemporaryFilePrivate : public QFilePrivate
    QString templateName;
 
    static QString defaultTemplateName();
+
+ private:
+   Q_DECLARE_PUBLIC(QTemporaryFile)
 };
 
 class QTemporaryFileEngine : public QFSFileEngine
@@ -48,8 +49,8 @@ class QTemporaryFileEngine : public QFSFileEngine
 
  public:
    QTemporaryFileEngine(const QString &file, bool fileIsTemplate = true)
-      : QFSFileEngine(), filePathIsTemplate(fileIsTemplate),
-        filePathWasTemplate(fileIsTemplate) {
+      : QFSFileEngine(), filePathIsTemplate(fileIsTemplate), filePathWasTemplate(fileIsTemplate)
+   {
       Q_D(QFSFileEngine);
       d->fileEntry = QFileSystemEntry(file);
 

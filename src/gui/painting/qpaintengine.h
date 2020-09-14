@@ -126,6 +126,28 @@ class Q_GUI_EXPORT QPaintEngine
       PolylineMode
    };
 
+   enum Type {
+      X11,
+      Windows,
+      QuickDraw, CoreGraphics, MacPrinter,
+      QWindowSystem,
+      PostScript,
+      OpenGL,
+      Picture,
+      SVG,
+      Raster,
+      Direct3D,
+      Pdf,
+      OpenVG,
+      OpenGL2,
+      PaintBuffer,
+      Blitter,
+      Direct2D,
+
+      User = 50,    // first user type id
+      MaxUser = 100 // last user type id
+   };
+
    explicit QPaintEngine(PaintEngineFeatures features = PaintEngineFeatures());
 
    QPaintEngine(const QPaintEngine &) = delete;
@@ -179,28 +201,6 @@ class Q_GUI_EXPORT QPaintEngine
    QRect systemRect() const;
 
    virtual QPoint coordinateOffset() const;
-
-   enum Type {
-      X11,
-      Windows,
-      QuickDraw, CoreGraphics, MacPrinter,
-      QWindowSystem,
-      PostScript,
-      OpenGL,
-      Picture,
-      SVG,
-      Raster,
-      Direct3D,
-      Pdf,
-      OpenVG,
-      OpenGL2,
-      PaintBuffer,
-      Blitter,
-      Direct2D,
-
-      User = 50,    // first user type id
-      MaxUser = 100 // last user type id
-   };
    virtual Type type() const = 0;
 
    inline void fix_neg_rect(int *x, int *y, int *w, int *h);

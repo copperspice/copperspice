@@ -448,7 +448,6 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    GUI_CS_SLOT_2(_q_updateFocusObject)
 };
 
-
 void QApplication::cs_setApplicationDisplayName(const QString &name)
 {
    setApplicationDisplayName(name);

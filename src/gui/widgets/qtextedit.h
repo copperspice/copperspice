@@ -368,8 +368,8 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    virtual void doSetTextCursor(const QTextCursor &cursor);
 
    void zoomInF(float range);
- private:
 
+ private:
    GUI_CS_SLOT_1(Private, void _q_repaintContents(const QRectF &r))
    GUI_CS_SLOT_2(_q_repaintContents)
 

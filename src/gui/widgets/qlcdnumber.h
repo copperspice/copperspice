@@ -57,15 +57,17 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame
    GUI_CS_PROPERTY_WRITE(intValue, cs_displayI)
 
  public:
+   enum Mode { Hex, Dec, Oct, Bin };
+
+   enum SegmentStyle { Outline, Filled, Flat  };
+
    explicit QLCDNumber(QWidget *parent = nullptr);
    explicit QLCDNumber(uint numDigits, QWidget *parent = nullptr);
-   ~QLCDNumber();
 
-   enum Mode { Hex, Dec, Oct, Bin };
    QLCDNumber(const QLCDNumber &) = delete;
    QLCDNumber &operator=(const QLCDNumber &) = delete;
 
-   enum SegmentStyle { Outline, Filled, Flat  };
+   ~QLCDNumber();
 
    bool smallDecimalPoint() const;
    int digitCount() const;
@@ -138,4 +140,4 @@ void QLCDNumber::cs_displayI(int num)
 
 #endif // QT_NO_LCDNUMBER
 
-#endif // QLCDNUMBER_H
+#endif

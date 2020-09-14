@@ -84,9 +84,9 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 
  public:
    enum Section {
-      NoSection = 0x0000,
-      AmPmSection = 0x0001,
-      MSecSection = 0x0002,
+      NoSection     = 0x0000,
+      AmPmSection   = 0x0001,
+      MSecSection   = 0x0002,
       SecondSection = 0x0004,
       MinuteSection = 0x0008,
       HourSection   = 0x0010,
@@ -224,7 +224,6 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 class Q_GUI_EXPORT QTimeEdit : public QDateTimeEdit
 {
    GUI_CS_OBJECT(QTimeEdit)
-
 
    GUI_CS_PROPERTY_READ(time, time)
    GUI_CS_PROPERTY_WRITE(time, setTime)

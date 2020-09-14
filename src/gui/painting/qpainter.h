@@ -61,8 +61,6 @@ class Q_GUI_EXPORT QPainter
 {
    GUI_CS_GADGET(QPainter)
 
-   Q_DECLARE_PRIVATE(QPainter)
-
    GUI_CS_FLAG(RenderHint, RenderHints)
 
  public:
@@ -73,44 +71,7 @@ class Q_GUI_EXPORT QPainter
       HighQualityAntialiasing = 0x08,
       NonCosmeticDefaultPen = 0x10
    };
-
    using RenderHints = QFlags<RenderHint>;
-
-   class PixmapFragment
-   {
-    public:
-      qreal x;
-      qreal y;
-      qreal sourceLeft;
-      qreal sourceTop;
-      qreal width;
-      qreal height;
-      qreal scaleX;
-      qreal scaleY;
-      qreal rotation;
-      qreal opacity;
-      static PixmapFragment Q_GUI_EXPORT create(const QPointF &pos, const QRectF &sourceRect,
-         qreal scaleX = 1, qreal scaleY = 1,
-         qreal rotation = 0, qreal opacity = 1);
-   };
-
-   enum PixmapFragmentHint {
-      OpaqueHint = 0x01
-   };
-
-   using PixmapFragmentHints = QFlags<PixmapFragmentHint>;
-
-   QPainter();
-   explicit QPainter(QPaintDevice *);
-   ~QPainter();
-
-   QPaintDevice *device() const;
-
-   bool begin(QPaintDevice *);
-   bool end();
-   bool isActive() const;
-
-   void initFrom(const QPaintDevice *device);
 
    enum CompositionMode {
       CompositionMode_SourceOver,
@@ -156,8 +117,45 @@ class Q_GUI_EXPORT QPainter
       RasterOp_SetDestination,
       RasterOp_NotDestination
    };
+
+   enum PixmapFragmentHint {
+      OpaqueHint = 0x01
+   };
+   using PixmapFragmentHints = QFlags<PixmapFragmentHint>;
+
+   class PixmapFragment
+   {
+    public:
+      qreal x;
+      qreal y;
+      qreal sourceLeft;
+      qreal sourceTop;
+      qreal width;
+      qreal height;
+      qreal scaleX;
+      qreal scaleY;
+      qreal rotation;
+      qreal opacity;
+      static PixmapFragment Q_GUI_EXPORT create(const QPointF &pos, const QRectF &sourceRect,
+         qreal scaleX = 1, qreal scaleY = 1,
+         qreal rotation = 0, qreal opacity = 1);
+   };
+
+   QPainter();
+   explicit QPainter(QPaintDevice *);
+
    QPainter(const QPainter &) = delete;
    QPainter &operator=(const QPainter &) = delete;
+
+   ~QPainter();
+
+   QPaintDevice *device() const;
+
+   bool begin(QPaintDevice *);
+   bool end();
+   bool isActive() const;
+
+   void initFrom(const QPaintDevice *device);
 
    void setCompositionMode(CompositionMode mode);
    CompositionMode compositionMode() const;
@@ -441,7 +439,7 @@ class Q_GUI_EXPORT QPainter
    void setRenderHints(RenderHints hints, bool on = true);
    RenderHints renderHints() const;
 
-   inline bool testRenderHint(RenderHint hint) const {
+   bool testRenderHint(RenderHint hint) const {
       return renderHints() & hint;
    }
 
@@ -457,6 +455,7 @@ class Q_GUI_EXPORT QPainter
    void endNativePainting();
 
  private:
+   Q_DECLARE_PRIVATE(QPainter)
    QScopedPointer<QPainterPrivate> d_ptr;
 
    friend class QWidget;
@@ -479,7 +478,6 @@ class Q_GUI_EXPORT QPainter
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPainter::RenderHints)
-
 
 inline void QPainter::drawLine(const QLineF &l)
 {

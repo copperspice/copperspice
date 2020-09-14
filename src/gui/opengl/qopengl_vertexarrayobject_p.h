@@ -38,12 +38,10 @@ void Q_GUI_EXPORT qtInitializeVertexArrayObjectHelper(QOpenGLVertexArrayObjectHe
 
 class QOpenGLVertexArrayObjectHelper
 {
-public:
+ public:
     explicit inline QOpenGLVertexArrayObjectHelper(QOpenGLContext *context)
-        : GenVertexArrays(nullptr)
-        , DeleteVertexArrays(nullptr)
-        , BindVertexArray(nullptr)
-        , IsVertexArray(nullptr)
+        : GenVertexArrays(nullptr), DeleteVertexArrays(nullptr),
+          BindVertexArray(nullptr), IsVertexArray(nullptr)
     {
         qtInitializeVertexArrayObjectHelper(this, context);
     }
@@ -51,18 +49,15 @@ public:
    QOpenGLVertexArrayObjectHelper(const QOpenGLVertexArrayObjectHelper &) = delete;
    QOpenGLVertexArrayObjectHelper &operator=(const QOpenGLVertexArrayObjectHelper &) = delete;
 
-    inline bool isValid() const
-    {
+    bool isValid() const {
         return GenVertexArrays && DeleteVertexArrays && BindVertexArray && IsVertexArray;
     }
 
-    inline void glGenVertexArrays(GLsizei n, GLuint *arrays) const
-    {
+    void glGenVertexArrays(GLsizei n, GLuint *arrays) const {
         GenVertexArrays(n, arrays);
     }
 
-    inline void glDeleteVertexArrays(GLsizei n, const GLuint *arrays) const
-    {
+    void glDeleteVertexArrays(GLsizei n, const GLuint *arrays) const {
         DeleteVertexArrays(n, arrays);
     }
 
@@ -71,8 +66,7 @@ public:
         BindVertexArray(array);
     }
 
-    inline GLboolean glIsVertexArray(GLuint array) const
-    {
+    GLboolean glIsVertexArray(GLuint array) const {
         return IsVertexArray(array);
     }
 

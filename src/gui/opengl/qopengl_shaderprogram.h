@@ -38,6 +38,7 @@
 class QOpenGLContext;
 class QOpenGLShaderProgram;
 class QOpenGLShaderPrivate;
+class QOpenGLShaderProgramPrivate;
 
 class Q_GUI_EXPORT QOpenGLShader : public QObject
 {
@@ -81,22 +82,18 @@ public:
  protected:
    QScopedPointer<QOpenGLShaderPrivate> d_ptr;
 
-private:
-    friend class QOpenGLShaderProgram;
-
+   private:
     Q_DECLARE_PRIVATE(QOpenGLShader)
+    friend class QOpenGLShaderProgram;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QOpenGLShader::ShaderType)
-
-
-class QOpenGLShaderProgramPrivate;
 
 class Q_GUI_EXPORT QOpenGLShaderProgram : public QObject
 {
     GUI_CS_OBJECT(QOpenGLShaderProgram)
 
-public:
+ public:
     explicit QOpenGLShaderProgram(QObject *parent = nullptr);
 
     QOpenGLShaderProgram(const QOpenGLShaderProgram &) = delete;
@@ -290,18 +287,17 @@ public:
 
     static bool hasOpenGLShaderPrograms(QOpenGLContext *context = nullptr);
 
-protected:
+ protected:
    QScopedPointer<QOpenGLShaderProgramPrivate> d_ptr;
 
-private:
-    GUI_CS_SLOT_1(Private, void shaderDestroyed())
-    GUI_CS_SLOT_2(shaderDestroyed)
-
+ private:
     Q_DECLARE_PRIVATE(QOpenGLShaderProgram)
 
     bool init();
-};
 
+    GUI_CS_SLOT_1(Private, void shaderDestroyed())
+    GUI_CS_SLOT_2(shaderDestroyed)
+};
 
 #endif // QT_NO_OPENGL
 

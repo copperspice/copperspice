@@ -36,8 +36,15 @@ class QZipReaderPrivate;
 class Q_GUI_EXPORT QZipReader
 {
  public:
-   explicit QZipReader(const QString &fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly );
+   enum Status {
+      NoError,
+      FileReadError,
+      FileOpenError,
+      FilePermissionsError,
+      FileError
+   };
 
+   explicit QZipReader(const QString &fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly );
    explicit QZipReader(QIODevice *device);
 
    QZipReader(const QZipReader &) = delete;
@@ -53,8 +60,8 @@ class Q_GUI_EXPORT QZipReader
    struct FileInfo {
       FileInfo()
          : isDir(false), isFile(false), isSymLink(false), crc(0), size(0)
-      {}
-
+      {
+      }
 
       bool isValid() const {
          return isDir || isFile || isSymLink;
@@ -78,16 +85,7 @@ class Q_GUI_EXPORT QZipReader
    QByteArray fileData(const QString &fileName) const;
    bool extractAll(const QString &destinationDir) const;
 
-   enum Status {
-      NoError,
-      FileReadError,
-      FileOpenError,
-      FilePermissionsError,
-      FileError
-   };
-
    Status status() const;
-
    void close();
 
  private:
@@ -95,4 +93,5 @@ class Q_GUI_EXPORT QZipReader
 };
 
 #endif // QT_NO_TEXTODFWRITER
-#endif // QZIPREADER_H
+
+#endif

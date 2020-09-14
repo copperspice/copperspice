@@ -69,7 +69,6 @@ class Q_GUI_EXPORT QValidator : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QValidator)
-
 };
 
 class Q_GUI_EXPORT QIntValidator : public QValidator
@@ -109,7 +108,6 @@ class Q_GUI_EXPORT QIntValidator : public QValidator
    GUI_CS_SIGNAL_2(topChanged, top)
 
  private:
-
    int b;
    int t;
 };
@@ -158,9 +156,10 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
       StandardNotation,
       ScientificNotation
    };
-   QValidator::State validate(QString &, int &) const override;
 
+   QValidator::State validate(QString &, int &) const override;
    virtual void setRange(double bottom, double top, int decimals = 0);
+
    void setBottom(double);
    void setTop(double);
    void setDecimals(int);
@@ -216,9 +215,9 @@ class Q_GUI_EXPORT QRegularExpressionValidator : public QValidator
    GUI_CS_SLOT_2(setRegularExpression)
 
  private:
-   QRegularExpression m_regexp;
-
    Q_DECLARE_PRIVATE(QRegularExpressionValidator)
+
+   QRegularExpression m_regexp;
 };
 
 double QDoubleValidator::bottom() const

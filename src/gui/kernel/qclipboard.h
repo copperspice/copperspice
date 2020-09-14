@@ -25,7 +25,7 @@
 #define QCLIPBOARD_H
 
 #include <qobject.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_CLIPBOARD
 
@@ -36,9 +36,6 @@ class QPixmap;
 class Q_GUI_EXPORT QClipboard : public QObject
 {
    GUI_CS_OBJECT(QClipboard)
-
-   explicit QClipboard(QObject *parent);
-   ~QClipboard();
 
  public:
    QClipboard(const QClipboard &) = delete;
@@ -87,12 +84,14 @@ class Q_GUI_EXPORT QClipboard : public QObject
    friend class QPlatformClipboard;
 
  private:
+   explicit QClipboard(QObject *parent);
+   ~QClipboard();
 
    bool supportsMode(Mode mode) const;
    bool ownsMode(Mode mode) const;
    void emitChanged(Mode mode);
-
 };
 
 #endif // QT_NO_CLIPBOARD
+
 #endif

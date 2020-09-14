@@ -29,15 +29,17 @@
 #include <qopengl.h>
 #include <qopenglcontext.h>
 #include <qmutex.h>
-
-#include <QByteArray>
-#include <QHash>
-#include <QSet>
+#include <qbytearray.h>
+#include <qhash.h>
+#include <qset.h>
 
 class QOpenGLFunctions;
 class QOpenGLContext;
 class QOpenGLFramebufferObject;
 class QOpenGLMultiGroupSharedResource;
+class QPaintEngineEx;
+class QOpenGLFunctions;
+class QOpenGLTextureHelper;
 
 class Q_GUI_EXPORT QOpenGLSharedResource
 {
@@ -75,10 +77,10 @@ class Q_GUI_EXPORT QOpenGLSharedResourceGuard : public QOpenGLSharedResource
 {
  public:
    typedef void (*FreeResourceFunc)(QOpenGLFunctions *functions, GLuint id);
+
    QOpenGLSharedResourceGuard(QOpenGLContext *context, GLuint id, FreeResourceFunc func)
-      : QOpenGLSharedResource(context->shareGroup())
-      , m_id(id)
-      , m_func(func) {
+      : QOpenGLSharedResource(context->shareGroup()), m_id(id), m_func(func)
+   {
    }
 
    GLuint id() const {
@@ -103,9 +105,8 @@ class Q_GUI_EXPORT QOpenGLContextGroupPrivate
 
  public:
    QOpenGLContextGroupPrivate()
-      : m_context(0)
-      , m_mutex(QMutex::Recursive)
-      , m_refs(0) {
+      : m_context(0), m_mutex(QMutex::Recursive), m_refs(0)
+   {
    }
 
    void addContext(QOpenGLContext *ctx);
@@ -128,7 +129,6 @@ class Q_GUI_EXPORT QOpenGLContextGroupPrivate
 
  protected:
    QOpenGLContextGroup *q_ptr;
-
 };
 
 class Q_GUI_EXPORT QOpenGLMultiGroupSharedResource
@@ -163,10 +163,6 @@ class Q_GUI_EXPORT QOpenGLMultiGroupSharedResource
    QList<QOpenGLContextGroup *> m_groups;
    QMutex m_mutex;
 };
-
-class QPaintEngineEx;
-class QOpenGLFunctions;
-class QOpenGLTextureHelper;
 
 class Q_GUI_EXPORT QOpenGLContextPrivate
 {
@@ -267,6 +263,6 @@ class Q_GUI_EXPORT QOpenGLContextPrivate
 Q_GUI_EXPORT void qt_gl_set_global_share_context(QOpenGLContext *context);
 Q_GUI_EXPORT QOpenGLContext *qt_gl_global_share_context();
 
-
 #endif // QT_NO_OPENGL
+
 #endif

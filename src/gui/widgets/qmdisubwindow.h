@@ -154,8 +154,6 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMdiSubWindow::SubWindowOptions)
 
-
-
 #endif // QT_NO_MDIAREA
 
-#endif // QMDISUBWINDOW_H
+#endif

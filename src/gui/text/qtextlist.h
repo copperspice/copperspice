@@ -44,7 +44,7 @@ class Q_GUI_EXPORT QTextList : public QTextBlockGroup
 
    int count() const;
 
-   inline bool isEmpty() const {
+   bool isEmpty() const {
       return count() == 0;
    }
 
@@ -72,6 +72,5 @@ inline void QTextList::setFormat(const QTextListFormat &aformat)
 {
    QTextObject::setFormat(aformat);
 }
-
 
 #endif // QTEXTLIST_H

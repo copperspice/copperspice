@@ -32,7 +32,6 @@ class QStackedLayoutPrivate;
 class Q_GUI_EXPORT QStackedLayout : public QLayout
 {
    GUI_CS_OBJECT(QStackedLayout)
-   Q_DECLARE_PRIVATE(QStackedLayout)
 
    GUI_CS_ENUM(StackingMode)
 
@@ -97,6 +96,7 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
    GUI_CS_SLOT_2(setCurrentWidget)
 
  private:
+   Q_DECLARE_PRIVATE(QStackedLayout)
 };
 
 #endif // QSTACKEDLAYOUT_H

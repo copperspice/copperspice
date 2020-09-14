@@ -26,8 +26,6 @@
 
 #include <qmenu.h>
 
-
-
 #ifndef QT_NO_MENUBAR
 
 class QMenuBarPrivate;
@@ -41,6 +39,7 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
 
    GUI_CS_PROPERTY_READ(defaultUp, isDefaultUp)
    GUI_CS_PROPERTY_WRITE(defaultUp, setDefaultUp)
+
    GUI_CS_PROPERTY_READ(nativeMenuBar, isNativeMenuBar)
    GUI_CS_PROPERTY_WRITE(nativeMenuBar, setNativeMenuBar)
 
@@ -60,7 +59,6 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    QAction *addMenu(QMenu *menu);
    QMenu *addMenu(const QString &title);
    QMenu *addMenu(const QIcon &icon, const QString &title);
-
 
    QAction *addSeparator();
    QAction *insertSeparator(QAction *before);
@@ -84,7 +82,6 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
 
    void setCornerWidget(QWidget *w, Qt::Corner corner = Qt::TopRightCorner);
    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
-
 
 #ifdef Q_OS_DARWIN
    NSMenu *toNSMenu();
@@ -141,4 +138,4 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
 
 #endif // QT_NO_MENUBAR
 
-#endif // QMENUBAR_H
+#endif

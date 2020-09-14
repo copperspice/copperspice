@@ -40,13 +40,15 @@ class QLayoutPrivate;
 class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
 {
    GUI_CS_OBJECT_MULTIPLE(QLayout, QObject)
-   Q_DECLARE_PRIVATE(QLayout)
 
    GUI_CS_ENUM(SizeConstraint)
+
    GUI_CS_PROPERTY_READ(margin, margin)
    GUI_CS_PROPERTY_WRITE(margin, setMargin)
+
    GUI_CS_PROPERTY_READ(spacing, spacing)
    GUI_CS_PROPERTY_WRITE(spacing, setSpacing)
+
    GUI_CS_PROPERTY_READ(sizeConstraint, sizeConstraint)
    GUI_CS_PROPERTY_WRITE(sizeConstraint, setSizeConstraint)
 
@@ -142,6 +144,7 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    QScopedPointer<QLayoutPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QLayout)
    static void activateRecursiveHelper(QLayoutItem *item);
 
    friend class QApplicationPrivate;
@@ -152,4 +155,4 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
 #include <qboxlayout.h>
 #include <qgridlayout.h>
 
-#endif // QLAYOUT_H
+#endif

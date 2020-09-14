@@ -32,7 +32,7 @@
 #include <qtransform.h>
 #include <qmatrix.h>
 #include <qpen.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
@@ -134,16 +134,17 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    virtual ~QGraphicsScene();
 
    QRectF sceneRect() const;
-   inline qreal width() const {
+
+   qreal width() const {
       return sceneRect().width();
    }
 
-   inline qreal height() const {
+   qreal height() const {
       return sceneRect().height();
    }
 
    void setSceneRect(const QRectF &rect);
-   inline void setSceneRect(qreal x, qreal y, qreal w, qreal h) {
+   void setSceneRect(qreal x, qreal y, qreal w, qreal h) {
       setSceneRect(QRectF(x, y, w, h));
    }
 
@@ -178,14 +179,12 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 
    QGraphicsItem *itemAt(const QPointF &pos, const QTransform &deviceTransform) const;
 
-
-
-   inline QList<QGraphicsItem *> items(qreal x, qreal y, qreal w, qreal h, Qt::ItemSelectionMode mode, Qt::SortOrder order,
+   QList<QGraphicsItem *> items(qreal x, qreal y, qreal w, qreal h, Qt::ItemSelectionMode mode, Qt::SortOrder order,
       const QTransform &deviceTransform = QTransform()) const {
       return items(QRectF(x, y, w, h), mode, order, deviceTransform);
    }
 
-   inline QGraphicsItem *itemAt(qreal x, qreal y, const QTransform &deviceTransform) const {
+   QGraphicsItem *itemAt(qreal x, qreal y, const QTransform &deviceTransform) const {
       return itemAt(QPointF(x, y), deviceTransform);
    }
 
@@ -213,15 +212,15 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    QGraphicsSimpleTextItem *addSimpleText(const QString &text, const QFont &font = QFont());
    QGraphicsProxyWidget *addWidget(QWidget *widget, Qt::WindowFlags wFlags = Qt::WindowFlags());
 
-   inline QGraphicsEllipseItem *addEllipse(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(), const QBrush &brush = QBrush()) {
+   QGraphicsEllipseItem *addEllipse(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(), const QBrush &brush = QBrush()) {
       return addEllipse(QRectF(x, y, w, h), pen, brush);
    }
 
-   inline QGraphicsLineItem *addLine(qreal x1, qreal y1, qreal x2, qreal y2, const QPen &pen = QPen()) {
+   QGraphicsLineItem *addLine(qreal x1, qreal y1, qreal x2, qreal y2, const QPen &pen = QPen()) {
       return addLine(QLineF(x1, y1, x2, y2), pen);
    }
 
-   inline QGraphicsRectItem *addRect(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(),
+   QGraphicsRectItem *addRect(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(),
       const QBrush &brush = QBrush()) {
       return addRect(QRectF(x, y, w, h), pen, brush);
    }
@@ -252,6 +251,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    inline void update(qreal x, qreal y, qreal w, qreal h) {
       update(QRectF(x, y, w, h));
    }
+
    inline void invalidate(qreal x, qreal y, qreal w, qreal h, SceneLayers layers = AllLayers) {
       invalidate(QRectF(x, y, w, h), layers);
    }

@@ -38,7 +38,7 @@ class Q_GUI_EXPORT QOpenGLVertexArrayObject : public QObject
 {
     GUI_CS_OBJECT(QOpenGLVertexArrayObject)
 
-public:
+ public:
     explicit QOpenGLVertexArrayObject(QObject* parent = nullptr);
 
     QOpenGLVertexArrayObject(const QOpenGLVertexArrayObject &) = delete;
@@ -55,47 +55,45 @@ public:
 
     class Q_GUI_EXPORT Binder
     {
-    public:
-        inline Binder(QOpenGLVertexArrayObject *v)
+      public:
+         Binder(QOpenGLVertexArrayObject *v)
             : vao(v)
-        {
+         {
             Q_ASSERT(v);
             if (vao->isCreated() || vao->create())
                 vao->bind();
-        }
+         }
 
          Binder(const Binder &) = delete;
          Binder &operator=(const Binder &) = delete;
-        inline ~Binder()
-        {
+
+         ~Binder() {
             release();
-        }
+         }
 
-        inline void release()
-        {
+         void release() {
             vao->release();
-        }
+         }
 
-        inline void rebind()
-        {
+         void rebind() {
             vao->bind();
-        }
+          }
 
-    private:
+     private:
         QOpenGLVertexArrayObject *vao;
     };
 
-protected:
+ protected:
    QScopedPointer<QOpenGLVertexArrayObjectPrivate> d_ptr;
 
+ private:
     Q_DECLARE_PRIVATE(QOpenGLVertexArrayObject)
+
+    QOpenGLVertexArrayObject(QOpenGLVertexArrayObjectPrivate &dd);
 
     GUI_CS_SLOT_1(Private, void _q_contextAboutToBeDestroyed())
     GUI_CS_SLOT_2(_q_contextAboutToBeDestroyed)
-
-    QOpenGLVertexArrayObject(QOpenGLVertexArrayObjectPrivate &dd);
 };
-
 
 #endif  // QT_NO_OPENGL
 

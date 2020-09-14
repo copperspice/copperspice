@@ -37,9 +37,7 @@ class QOpenGLPaintDevicePrivate;
 
 class Q_GUI_EXPORT QOpenGLPaintDevice : public QPaintDevice
 {
-    Q_DECLARE_PRIVATE(QOpenGLPaintDevice)
-
-public:
+ public:
     QOpenGLPaintDevice();
     explicit QOpenGLPaintDevice(const QSize &size);
     QOpenGLPaintDevice(int width, int height);
@@ -49,7 +47,10 @@ public:
 
     virtual ~QOpenGLPaintDevice();
 
-    int devType() const { return QInternal::OpenGL; }
+    int devType() const {
+      return QInternal::OpenGL;
+    }
+
     QPaintEngine *paintEngine() const;
 
     QOpenGLContext *context() const;
@@ -68,10 +69,13 @@ public:
 
     virtual void ensureActiveTarget();
 
-protected:
+ protected:
     QOpenGLPaintDevice(QOpenGLPaintDevicePrivate &dd);
     int metric(QPaintDevice::PaintDeviceMetric metric) const;
     QScopedPointer<QOpenGLPaintDevicePrivate> d_ptr;
+
+ private:
+    Q_DECLARE_PRIVATE(QOpenGLPaintDevice)
 };
 
 #endif // QT_NO_OPENGL

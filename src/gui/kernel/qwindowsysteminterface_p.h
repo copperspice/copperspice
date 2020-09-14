@@ -445,8 +445,13 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
       QList<WindowSystemEvent *> impl;
       mutable QMutex mutex;
+
     public:
-      WindowSystemEventList() : impl(), mutex() {}
+      WindowSystemEventList()
+         : impl(), mutex()
+      {
+      }
+
       WindowSystemEventList(const WindowSystemEventList &) = delete;
       WindowSystemEventList &operator=(const WindowSystemEventList &) = delete;
 
@@ -459,30 +464,38 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
          qDeleteAll(impl);
          impl.clear();
       }
+
       void prepend(WindowSystemEvent *e) {
          const QMutexLocker locker(&mutex);
          impl.prepend(e);
       }
+
       WindowSystemEvent *takeFirstOrReturnNull() {
          const QMutexLocker locker(&mutex);
          return impl.empty() ? 0 : impl.takeFirst();
       }
+
       WindowSystemEvent *takeFirstNonUserInputOrReturnNull() {
          const QMutexLocker locker(&mutex);
-         for (int i = 0; i < impl.size(); ++i)
+         for (int i = 0; i < impl.size(); ++i) {
             if (!(impl.at(i)->type & QWindowSystemInterfacePrivate::UserInputEvent)) {
                return impl.takeAt(i);
             }
-         return 0;
+         }
+
+         return nullptr;
       }
+
       void append(WindowSystemEvent *e) {
          const QMutexLocker locker(&mutex);
          impl.append(e);
       }
+
       int count() const {
          const QMutexLocker locker(&mutex);
          return impl.count();
       }
+
       WindowSystemEvent *peekAtFirstOfType(EventType t) const {
          const QMutexLocker locker(&mutex);
          for (int i = 0; i < impl.size(); ++i) {
@@ -492,6 +505,7 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
          }
          return 0;
       }
+
       void remove(const WindowSystemEvent *e) {
          const QMutexLocker locker(&mutex);
          for (int i = 0; i < impl.size(); ++i) {
@@ -501,7 +515,6 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
             }
          }
       }
-    private:
    };
 
    static WindowSystemEventList windowSystemEventQueue;

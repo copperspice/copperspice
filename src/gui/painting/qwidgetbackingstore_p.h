@@ -85,7 +85,7 @@ class QWidgetBackingStore
    void sync();
    void flush(QWidget *widget = nullptr);
 
-   inline QPoint topLevelOffset() const {
+   QPoint topLevelOffset() const {
       return tlwOffset;
    }
 
@@ -93,12 +93,11 @@ class QWidgetBackingStore
       return store;
    }
 
-
-   inline bool isDirty() const {
+   bool isDirty() const {
       return !(dirtyWidgets.isEmpty() && dirty.isEmpty() && !fullUpdatePending && dirtyRenderToTextureWidgets.isEmpty());
    }
 
-   // ### Qt Merge into a template function (after MSVC isn't supported anymore).
+   // ### merge into a template function (after MSVC isn't supported anymore).
    void markDirty(const QRegion &rgn, QWidget *widget, UpdateTime updateTime = UpdateLater,
       BufferState bufferState = BufferValid);
 
@@ -154,7 +153,8 @@ class QWidgetBackingStore
    void updateLists(QWidget *widget);
 
    bool syncAllowed();
-   inline void addDirtyWidget(QWidget *widget, const QRegion &rgn) {
+
+   void addDirtyWidget(QWidget *widget, const QRegion &rgn) {
       if (widget && !widget->d_func()->inDirtyList && !widget->data->in_destructor) {
          QWidgetPrivate *widgetPrivate = widget->d_func();
 
@@ -172,7 +172,7 @@ class QWidgetBackingStore
       }
    }
 
-   inline void addDirtyRenderToTextureWidget(QWidget *widget) {
+   void addDirtyRenderToTextureWidget(QWidget *widget) {
       if (widget && !widget->d_func()->inDirtyList && !widget->data->in_destructor) {
          QWidgetPrivate *widgetPrivate = widget->d_func();
          Q_ASSERT(widgetPrivate->renderToTexture);
@@ -181,7 +181,7 @@ class QWidgetBackingStore
       }
    }
 
-   inline void dirtyWidgetsRemoveAll(QWidget *widget) {
+   void dirtyWidgetsRemoveAll(QWidget *widget) {
       int i = 0;
 
       while (i < dirtyWidgets.size()) {
@@ -193,8 +193,8 @@ class QWidgetBackingStore
       }
    }
 
-   inline void addStaticWidget(QWidget *widget) {
-      if (!widget) {
+   void addStaticWidget(QWidget *widget) {
+      if (! widget) {
          return;
       }
 
@@ -231,11 +231,11 @@ class QWidgetBackingStore
       }
    }
 
-   inline QRect topLevelRect() const {
+   QRect topLevelRect() const {
       return tlw->data->crect;
    }
 
-   inline void appendDirtyOnScreenWidget(QWidget *widget) {
+   void appendDirtyOnScreenWidget(QWidget *widget) {
       if (! widget) {
          return;
       }
@@ -248,7 +248,7 @@ class QWidgetBackingStore
       }
    }
 
-   inline void dirtyOnScreenWidgetsRemoveAll(QWidget *widget) {
+   void dirtyOnScreenWidgetsRemoveAll(QWidget *widget) {
       if (! widget || !dirtyOnScreenWidgets) {
          return;
       }
@@ -263,7 +263,7 @@ class QWidgetBackingStore
       }
    }
 
-   inline void resetWidget(QWidget *widget) {
+   void resetWidget(QWidget *widget) {
       if (widget) {
          widget->d_func()->inDirtyList = false;
          widget->d_func()->isScrolled = false;
@@ -272,7 +272,7 @@ class QWidgetBackingStore
       }
    }
 
-   inline void updateStaticContentsSize() {
+   void updateStaticContentsSize() {
       for (int i = 0; i < staticWidgets.size(); ++i) {
          QWidgetPrivate *wd = staticWidgets.at(i)->d_func();
          if (!wd->extra) {
@@ -282,7 +282,7 @@ class QWidgetBackingStore
       }
    }
 
-   inline bool hasStaticContents() const {
+   bool hasStaticContents() const {
 #if defined(Q_OS_WIN)
       return !staticWidgets.isEmpty();
 #else

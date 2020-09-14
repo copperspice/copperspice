@@ -54,8 +54,8 @@ class Q_GUI_EXPORT QRadioButton : public QAbstractButton
 
  private:
    Q_DECLARE_PRIVATE(QRadioButton)
+
    friend class QAccessibleButton;
 };
 
-
-#endif // QRADIOBUTTON_H
+#endif

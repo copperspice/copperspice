@@ -37,9 +37,8 @@ class QOpenGLWidgetPrivate;
 class Q_GUI_EXPORT QOpenGLWidget : public QWidget
 {
     CS_OBJECT(QOpenGLWidget)
-    Q_DECLARE_PRIVATE(QOpenGLWidget)
 
-public:
+ public:
     enum UpdateBehavior {
         NoPartialUpdate,
         PartialUpdate
@@ -80,7 +79,7 @@ public:
     CS_SIGNAL_1(Public, void resized())
     CS_SIGNAL_2(resized)
 
-protected:
+ protected:
     virtual void initializeGL();
     virtual void resizeGL(int w, int h);
     virtual void paintGL();
@@ -93,7 +92,8 @@ protected:
     QPaintDevice *redirected(QPoint *p) const override;
     QPaintEngine *paintEngine() const override;
 
-private:
+ private:
+      Q_DECLARE_PRIVATE(QOpenGLWidget)
 };
 
 #endif // QT_NO_OPENGL

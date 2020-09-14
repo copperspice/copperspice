@@ -77,8 +77,7 @@ public:
 
 class Q_GUI_EXPORT QOpenGL2PaintEngineEx : public QPaintEngineEx
 {
-    Q_DECLARE_PRIVATE(QOpenGL2PaintEngineEx)
-public:
+ public:
     QOpenGL2PaintEngineEx();
 
     QOpenGL2PaintEngineEx(const QOpenGL2PaintEngineEx &) = delete;
@@ -135,6 +134,8 @@ public:
     bool requiresPretransformedGlyphPositions(QFontEngine *, const QTransform &) const override { return false; }
     bool shouldDrawCachedGlyphs(QFontEngine *, const QTransform &) const override;
 
+ private:
+    Q_DECLARE_PRIVATE(QOpenGL2PaintEngineEx)
     friend class QOpenGLEngineShaderManager;
 };
 
@@ -144,26 +145,19 @@ public:
 
 class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
 {
-    Q_DECLARE_PUBLIC(QOpenGL2PaintEngineEx)
-public:
+ public:
     enum StencilFillMode {
         OddEvenFillMode,
         WindingFillMode,
         TriStripStrokeFillMode
     };
 
-    QOpenGL2PaintEngineExPrivate(QOpenGL2PaintEngineEx *q_ptr) :
-            q(q_ptr),
-            shaderManager(0),
-            width(0), height(0),
-            ctx(0),
-            useSystemClip(true),
-            elementIndicesVBOId(0),
-            snapToPixelGrid(false),
-            nativePaintingActive(false),
-            inverseScale(1),
-            lastTextureUnitUsed(QT_UNKNOWN_TEXTURE_UNIT)
-    { }
+    QOpenGL2PaintEngineExPrivate(QOpenGL2PaintEngineEx *q_ptr)
+      : q(q_ptr), shaderManager(0), width(0), height(0), ctx(0), useSystemClip(true), elementIndicesVBOId(0),
+        snapToPixelGrid(false), nativePaintingActive(false), inverseScale(1),
+        lastTextureUnitUsed(QT_UNKNOWN_TEXTURE_UNIT)
+    {
+    }
 
     ~QOpenGL2PaintEngineExPrivate();
 
@@ -215,8 +209,10 @@ public:
     void transferMode(EngineMode newMode);
     bool prepareForDraw(bool srcPixelsAreOpaque); // returns true if the program has changed
     bool prepareForCachedGlyphDraw(const QFontEngineGlyphCache &cache);
+
     inline void useSimpleShader();
-    inline GLuint location(const QOpenGLEngineShaderManager::Uniform uniform) {
+
+    GLuint location(const QOpenGLEngineShaderManager::Uniform uniform) {
         return shaderManager->getUniformLocation(uniform);
     }
 
@@ -293,15 +289,20 @@ public:
     QVector<GLuint> unusedIBOSToClean;
 
     const GLfloat *vertexAttribPointers[3];
+
+ private:
+   Q_DECLARE_PUBLIC(QOpenGL2PaintEngineEx)
 };
 
 void QOpenGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *pointer)
 {
     Q_ASSERT(arrayIndex < 3);
+
     if (pointer == vertexAttribPointers[arrayIndex])
         return;
 
     vertexAttribPointers[arrayIndex] = pointer;
+
     if (arrayIndex == QT_OPACITY_ATTR)
         funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, pointer);
     else

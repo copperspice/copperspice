@@ -26,13 +26,13 @@
 #define QOPENGLTEXTUREBLITTER_P_H
 
 #include <qopengl.h>
-#include <QMatrix3x3>
+#include <qmatrix3x3.h>
 
 class QOpenGLTextureBlitterPrivate;
 
 class Q_GUI_EXPORT QOpenGLTextureBlitter
 {
-public:
+ public:
     QOpenGLTextureBlitter();
 
     QOpenGLTextureBlitter(const QOpenGLTextureBlitter &) = delete;

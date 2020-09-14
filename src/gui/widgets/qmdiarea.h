@@ -174,22 +174,21 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    GUI_CS_SLOT_1(Private, void _q_deactivateAllWindows())
    GUI_CS_SLOT_2(_q_deactivateAllWindows)
 
-   GUI_CS_SLOT_1(Private, void _q_processWindowStateChanged(Qt::WindowStates un_named_arg1,
-         Qt::WindowStates un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_processWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newStates))
    GUI_CS_SLOT_2(_q_processWindowStateChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_currentTabChanged(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_currentTabChanged(int index))
    GUI_CS_SLOT_2(_q_currentTabChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_closeTab(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_closeTab(int index))
    GUI_CS_SLOT_2(_q_closeTab)
 
-   GUI_CS_SLOT_1(Private, void _q_moveTab(int un_named_arg1, int un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_moveTab(int from, int to))
    GUI_CS_SLOT_2(_q_moveTab)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMdiArea::AreaOptions)
 
-
 #endif // QT_NO_MDIAREA
-#endif // QMDIAREA_H
+
+#endif

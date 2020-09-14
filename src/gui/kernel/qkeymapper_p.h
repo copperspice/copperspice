@@ -29,8 +29,7 @@
 #include <qlist.h>
 #include <qlocale.h>
 #include <qevent.h>
-#include <QScopedPointer>
-
+#include <qscopedpointer.h>
 
 class QKeyEvent;
 class QKeyMapperPrivate;
@@ -63,8 +62,6 @@ class QKeyMapper : public QObject
 
 class QKeyMapperPrivate
 {
-   Q_DECLARE_PUBLIC(QKeyMapper)
-
  public:
    QKeyMapperPrivate();
    virtual ~QKeyMapperPrivate();
@@ -76,8 +73,8 @@ class QKeyMapperPrivate
    Qt::LayoutDirection keyboardInputDirection;
 
  protected:
+   Q_DECLARE_PUBLIC(QKeyMapper)
    QKeyMapper *q_ptr;
-
 };
 
 QKeyMapperPrivate *qt_keymapper_private(); // from qkeymapper.cpp

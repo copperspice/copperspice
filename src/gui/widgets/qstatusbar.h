@@ -30,7 +30,7 @@
 
 class QStatusBarPrivate;
 
-class Q_GUI_EXPORT QStatusBar: public QWidget
+class Q_GUI_EXPORT QStatusBar : public QWidget
 {
    GUI_CS_OBJECT(QStatusBar)
 
@@ -81,4 +81,4 @@ class Q_GUI_EXPORT QStatusBar: public QWidget
 
 #endif // QT_NO_STATUSBAR
 
-#endif // QSTATUSBAR_H
+#endif

@@ -106,7 +106,6 @@ class QWidgetPrivate;
 class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 {
    GUI_CS_OBJECT_MULTIPLE(QWidget, QObject)
-   Q_DECLARE_PRIVATE(QWidget)
 
    GUI_CS_PROPERTY_READ(modal, isModal)
 
@@ -857,8 +856,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    friend class QDataWidgetMapperPrivate; // for access to focusNextPrevChild
 
  private:
-   GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
-   GUI_CS_SLOT_2(_q_showIfNotHidden)
+   Q_DECLARE_PRIVATE(QWidget)
 
    QWidgetData *data;
 
@@ -866,6 +864,9 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    bool testAttribute_helper(Qt::WidgetAttribute) const;
 
    QLayout *takeLayout();
+
+   GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
+   GUI_CS_SLOT_2(_q_showIfNotHidden)
 
    friend class QAccessibleWidget;
    friend class QAccessibleTable;

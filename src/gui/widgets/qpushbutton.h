@@ -74,7 +74,6 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
  protected:
    bool event(QEvent *e) override;
 
-
    void paintEvent(QPaintEvent *) override;
    void keyPressEvent(QKeyEvent *) override;
    void focusInEvent(QFocusEvent *) override;
@@ -91,6 +90,5 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
 #endif
 
 };
-
 
 #endif // QPUSHBUTTON_H

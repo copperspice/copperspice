@@ -120,7 +120,7 @@ class QWindowsVistaStyle : public QWindowsXPStyle
    ~QWindowsVistaStyle();
 
    void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter,
-      const QWidget *widget = 0) const override;
+      const QWidget *widget = nullptr) const override;
 
    void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter,
       const QWidget *widget) const override;
@@ -156,7 +156,6 @@ class QWindowsVistaStyle : public QWindowsXPStyle
    void unpolish(QApplication *app) override;
 
    QPalette standardPalette() const override;
-
 
  private:
    Q_DECLARE_PRIVATE(QWindowsVistaStyle)

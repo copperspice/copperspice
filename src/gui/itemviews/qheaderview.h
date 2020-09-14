@@ -161,7 +161,6 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    bool sectionsMoved() const;
    bool sectionsHidden() const;
 
-
    QByteArray saveState() const;
    bool restoreState(const QByteArray &state);
 
@@ -209,7 +208,7 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    GUI_CS_SIGNAL_1(Public, void sortIndicatorChanged(int logicalIndex, Qt::SortOrder order))
    GUI_CS_SIGNAL_2(sortIndicatorChanged, logicalIndex, order)
 
- protected :
+ protected:
    GUI_CS_SLOT_1(Protected, void updateSection(int logicalIndex))
    GUI_CS_SLOT_2(updateSection)
 

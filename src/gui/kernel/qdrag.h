@@ -38,7 +38,6 @@ class QDragManager;
 class Q_GUI_EXPORT QDrag : public QObject
 {
    GUI_CS_OBJECT(QDrag)
-   Q_DECLARE_PRIVATE(QDrag)
 
  public:
    explicit QDrag(QObject *dragSource);
@@ -79,10 +78,11 @@ class Q_GUI_EXPORT QDrag : public QObject
    QScopedPointer<QDragPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QDrag)
    friend class QDragManager;
 };
 
 #endif // QT_NO_DRAGANDDROP
 
 
-#endif // QDRAG_H
+#endif

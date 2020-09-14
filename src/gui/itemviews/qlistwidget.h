@@ -251,13 +251,17 @@ class Q_GUI_EXPORT QListWidget : public QListView
    void insertItem(int row, QListWidgetItem *item);
    void insertItem(int row, const QString &label);
    void insertItems(int row, const QStringList &labels);
-   inline void addItem(const QString &label) {
+
+   void addItem(const QString &label) {
       insertItem(count(), label);
    }
+
    inline void addItem(QListWidgetItem *item);
-   inline void addItems(const QStringList &labels) {
+
+   void addItems(const QStringList &labels) {
       insertItems(count(), labels);
    }
+
    QListWidgetItem *takeItem(int row);
    int count() const;
 
@@ -342,6 +346,7 @@ class Q_GUI_EXPORT QListWidget : public QListView
    virtual bool dropMimeData(int index, const QMimeData *data, Qt::DropAction action);
    virtual Qt::DropActions supportedDropActions() const;
 #endif
+
    QList<QListWidgetItem *> items(const QMimeData *data) const;
 
    QModelIndex indexFromItem(QListWidgetItem *item) const;
@@ -379,7 +384,6 @@ class Q_GUI_EXPORT QListWidget : public QListView
 
    GUI_CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight))
    GUI_CS_SLOT_2(_q_dataChanged)
-
 };
 
 void QListWidget::cs_setCurrentRow(int row)

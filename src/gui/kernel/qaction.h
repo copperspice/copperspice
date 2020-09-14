@@ -122,7 +122,8 @@ class Q_GUI_EXPORT QAction : public QObject
       AboutRole, PreferencesRole, QuitRole
    };
 
-   enum Priority { LowPriority    = 0,
+   enum Priority {
+      LowPriority    = 0,
       NormalPriority = 128,
       HighPriority   = 256
    };
@@ -192,9 +193,7 @@ class Q_GUI_EXPORT QAction : public QObject
    void setData(const QVariant &var);
 
    bool isChecked() const;
-
    bool isEnabled() const;
-
    bool isVisible() const;
 
    enum ActionEvent { Trigger, Hover };

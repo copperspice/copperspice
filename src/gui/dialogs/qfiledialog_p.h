@@ -63,7 +63,10 @@ class Ui_QFileDialog;
 class QPlatformDialogHelper;
 
 struct QFileDialogArgs {
-   QFileDialogArgs() : parent(0), mode(QFileDialog::AnyFile) {}
+   QFileDialogArgs()
+      : parent(0), mode(QFileDialog::AnyFile)
+   {
+   }
 
    QWidget *parent;
    QString caption;
@@ -91,12 +94,14 @@ class QFileDialogPrivate : public QDialogPrivate
    QPlatformFileDialogHelper *platformFileDialogHelper() const {
       return static_cast<QPlatformFileDialogHelper *>(platformHelper());
    }
+
    void createToolButtons();
    void createMenuActions();
    void createWidgets();
 
    void init(const QUrl &directory = QUrl(), const QString &nameFilter = QString(),
       const QString &caption = QString());
+
    bool itemViewKeyboardEvent(QKeyEvent *event);
    QString getEnvironmentVariable(const QString &string);
    static QUrl workingDirectory(const QUrl &path);
@@ -128,9 +133,11 @@ class QFileDialogPrivate : public QDialogPrivate
 
    QString basename(const QString &path) const {
       int separator = QDir::toNativeSeparators(path).lastIndexOf(QDir::separator());
+
       if (separator != -1) {
          return path.mid(separator + 1);
       }
+
       return path;
    }
 
@@ -143,30 +150,46 @@ class QFileDialogPrivate : public QDialogPrivate
       } else {
          filters |= QDir::Drives | QDir::AllDirs | QDir::Files | QDir::Dirs;
       }
+
       return filters;
    }
 
    QAbstractItemView *currentView() const;
 
-   static inline QString toInternal(const QString &path) {
+   static QString toInternal(const QString &path) {
+
 #if defined(Q_OS_WIN)
       QString n(path);
-
       n.replace('\\', '/');
-
 
       return n;
 
 #else
       return path;
+
 #endif
 
    }
+
+   // setVisible_sys returns true if it ends up showing a native
+   // dialog. Returning false means that a non-native dialog must be used instead
+   bool canBeNativeDialog() const override;
+   bool usingWidgets() const;
+
+   void setDirectory_sys(const QUrl &directory);
+   QUrl directory_sys() const;
+   void selectFile_sys(const QUrl &filename);
+   QList<QUrl> selectedFiles_sys() const;
+
+   void setFilter_sys();
+   void selectNameFilter_sys(const QString &filter);
+   QString selectedNameFilter_sys() const;
 
 #ifndef QT_NO_SETTINGS
    void saveSettings();
    bool restoreFromSettings();
 #endif
+
    bool restoreWidgetState(QStringList &history, int splitterPosition);
    static void setLastVisitedDirectory(const QUrl &dir);
    void retranslateWindowTitle();
@@ -213,6 +236,7 @@ class QFileDialogPrivate : public QDialogPrivate
 #ifndef QT_NO_FSCOMPLETER
    QFSCompleter *completer;
 #endif
+
    QString setWindowTitle;
 
    QStringList currentHistory;
@@ -225,20 +249,6 @@ class QFileDialogPrivate : public QDialogPrivate
 
    bool useDefaultCaption;
    bool defaultFileTypes;
-
-   // setVisible_sys returns true if it ends up showing a native
-   // dialog. Returning false means that a non-native dialog must be used instead
-   bool canBeNativeDialog() const override;
-   bool usingWidgets() const;
-
-   void setDirectory_sys(const QUrl &directory);
-   QUrl directory_sys() const;
-   void selectFile_sys(const QUrl &filename);
-   QList<QUrl> selectedFiles_sys() const;
-
-   void setFilter_sys();
-   void selectNameFilter_sys(const QString &filter);
-   QString selectedNameFilter_sys() const;
 
    QScopedPointer<Ui_QFileDialog> qFileDialogUi;
 
@@ -264,7 +274,10 @@ class QFileDialogPrivate : public QDialogPrivate
 class QFileDialogLineEdit : public QLineEdit
 {
  public:
-   QFileDialogLineEdit(QWidget *parent = nullptr) : QLineEdit(parent), d_ptr(0) {}
+   QFileDialogLineEdit(QWidget *parent = nullptr)
+      : QLineEdit(parent), d_ptr(0)
+   {
+   }
 
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer) {
       d_ptr = d_pointer;
@@ -280,7 +293,11 @@ class QFileDialogLineEdit : public QLineEdit
 class QFileDialogComboBox : public QComboBox
 {
  public:
-   QFileDialogComboBox(QWidget *parent = nullptr) : QComboBox(parent), urlModel(0) {}
+   QFileDialogComboBox(QWidget *parent = nullptr)
+      : QComboBox(parent), urlModel(0)
+   {
+   }
+
    void setFileDialogPrivate(QFileDialogPrivate *d_pointer);
    void showPopup() override;
    void setHistory(const QStringList &paths);

@@ -136,7 +136,7 @@ class Q_GUI_EXPORT QOpenGLDebugLogger : public QObject
     GUI_CS_ENUM(LoggingMode)
     GUI_CS_PROPERTY_READ(loggingMode, loggingMode)
 
-public:
+ public:
     enum LoggingMode {
         AsynchronousLogging,
         SynchronousLogging

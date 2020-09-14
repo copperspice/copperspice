@@ -55,7 +55,7 @@ class Q_GUI_EXPORT QTextInlineObject
    QTextInlineObject(int i, QTextEngine *e) : itm(i), eng(e) {}
    inline QTextInlineObject() : itm(0), eng(nullptr) {}
 
-   inline bool isValid() const {
+   bool isValid() const {
       return eng;
    }
 
@@ -77,15 +77,20 @@ class Q_GUI_EXPORT QTextInlineObject
    QTextFormat format() const;
 
  private:
-   friend class QTextLayout;
    int itm;
    QTextEngine *eng;
-};
 
+   friend class QTextLayout;
+};
 
 class Q_GUI_EXPORT QTextLayout
 {
  public:
+   enum CursorMode {
+      SkipCharacters,
+      SkipWords
+   };
+
    QTextLayout();
    QTextLayout(const QString &text);
    QTextLayout(const QString &text, const QFont &font, QPaintDevice *paintdevice = nullptr);
@@ -125,7 +130,6 @@ class Q_GUI_EXPORT QTextLayout
       }
    };
 
-
    void setFormats(const QVector<FormatRange> &overrides);
    QVector<FormatRange> formats() const;
    void clearFormats();
@@ -145,11 +149,6 @@ class Q_GUI_EXPORT QTextLayout
    int lineCount() const;
    QTextLine lineAt(int i) const;
    QTextLine lineForTextPosition(int pos) const;
-
-   enum CursorMode {
-      SkipCharacters,
-      SkipWords
-   };
 
    bool isValidCursorPosition(int pos) const;
    int nextCursorPosition(int oldPos, CursorMode mode = SkipCharacters) const;
@@ -175,12 +174,16 @@ class Q_GUI_EXPORT QTextLayout
    QTextEngine *engine() const {
       return d;
    }
+
    void setFlags(int flags);
 
  private:
-   QTextLayout(QTextEngine *e) : d(e) {}
+   QTextLayout(QTextEngine *e)
+      : d(e)
+   {
+   }
 
-    QTextEngine *d;
+   QTextEngine *d;
 
    friend class QPainter;
 
@@ -205,9 +208,12 @@ class Q_GUI_EXPORT QTextLine
       CursorOnCharacter
    };
 
-   inline QTextLine() : index(0), m_textEngine(nullptr) {}
+   QTextLine()
+      : index(0), m_textEngine(nullptr)
+   {
+   }
 
-   inline bool isValid() const {
+   bool isValid() const {
       return m_textEngine;
    }
 

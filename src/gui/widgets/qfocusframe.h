@@ -26,8 +26,6 @@
 
 #include <qwidget.h>
 
-
-
 class QFocusFramePrivate;
 class QStyleOption;
 
@@ -57,6 +55,4 @@ class Q_GUI_EXPORT QFocusFrame : public QWidget
    Q_DECLARE_PRIVATE(QFocusFrame)
 };
 
-
-
-#endif // QFOCUSFRAME_H
+#endif

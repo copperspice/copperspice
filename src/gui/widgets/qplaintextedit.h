@@ -244,8 +244,6 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    GUI_CS_SLOT_1(Public, void zoomOut(int range = 1))
    GUI_CS_SLOT_2(zoomOut)
 
-
-
    GUI_CS_SIGNAL_1(Public, void textChanged())
    GUI_CS_SIGNAL_2(textChanged)
 
@@ -324,8 +322,8 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    QAbstractTextDocumentLayout::PaintContext getPaintContext() const;
 
    void zoomInF(float range);
- private:
 
+ private:
    GUI_CS_SLOT_1(Private, void _q_repaintContents(const QRectF &r))
    GUI_CS_SLOT_2(_q_repaintContents)
 
@@ -416,4 +414,4 @@ int QPlainTextEdit::maximumBlockCount() const
 
 #endif // QT_NO_TEXTEDIT
 
-#endif // QPLAINTEXTEDIT_H
+#endif

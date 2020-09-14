@@ -37,7 +37,6 @@ class QOpenGLWindowPrivate;
 class Q_GUI_EXPORT QOpenGLWindow : public QPaintDeviceWindow
 {
    GUI_CS_OBJECT(QOpenGLWindow)
-   Q_DECLARE_PRIVATE(QOpenGLWindow)
 
  public:
    enum UpdateBehavior {
@@ -84,6 +83,7 @@ class Q_GUI_EXPORT QOpenGLWindow : public QPaintDeviceWindow
    QPaintDevice *redirected(QPoint *) const override;
 
  private:
+   Q_DECLARE_PRIVATE(QOpenGLWindow)
 };
 
 #endif // QT_NO_OPENGL

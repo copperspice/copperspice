@@ -35,7 +35,7 @@ class QInputDialogPrivate;
 class Q_GUI_EXPORT QInputDialog : public QDialog
 {
    GUI_CS_OBJECT(QInputDialog)
-   Q_DECLARE_PRIVATE(QInputDialog)
+
    GUI_CS_PROPERTY_READ(inputMode, inputMode)
    GUI_CS_PROPERTY_WRITE(inputMode, setInputMode)
    GUI_CS_PROPERTY_READ(labelText, labelText)
@@ -175,8 +175,6 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
       int current = 0, bool editable = true, bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags(),
       Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
 
-
-
    static int getInt(QWidget *parent, const QString &title, const QString &label, int value = 0,
       int minValue = -2147483647, int maxValue = 2147483647,
       int step = 1, bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
@@ -184,7 +182,6 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
    static double getDouble(QWidget *parent, const QString &title, const QString &label, double value = 0,
       double minValue = -2147483647, double maxValue = 2147483647, int decimals = 1,
       bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
-
 
    GUI_CS_SIGNAL_1(Public, void textValueChanged(const QString &text))
    GUI_CS_SIGNAL_2(textValueChanged, text)
@@ -207,6 +204,7 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
    void done(int result) override;
 
  private:
+   Q_DECLARE_PRIVATE(QInputDialog)
 
    GUI_CS_SLOT_1(Private, void _q_textChanged(const QString &un_named_arg1))
    GUI_CS_SLOT_2(_q_textChanged)
@@ -221,7 +219,5 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
 Q_DECLARE_OPERATORS_FOR_FLAGS(QInputDialog::InputDialogOptions)
 
 #endif // QT_NO_INPUTDIALOG
-
-
 
 #endif

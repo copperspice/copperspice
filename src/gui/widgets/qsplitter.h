@@ -41,10 +41,13 @@ class Q_GUI_EXPORT QSplitter : public QFrame
 
    GUI_CS_PROPERTY_READ(orientation, orientation)
    GUI_CS_PROPERTY_WRITE(orientation, setOrientation)
+
    GUI_CS_PROPERTY_READ(opaqueResize, opaqueResize)
    GUI_CS_PROPERTY_WRITE(opaqueResize, setOpaqueResize)
+
    GUI_CS_PROPERTY_READ(handleWidth, handleWidth)
    GUI_CS_PROPERTY_WRITE(handleWidth, setHandleWidth)
+
    GUI_CS_PROPERTY_READ(childrenCollapsible, childrenCollapsible)
    GUI_CS_PROPERTY_WRITE(childrenCollapsible, setChildrenCollapsible)
 
@@ -129,6 +132,7 @@ class Q_GUI_EXPORT QSplitterHandle : public QWidget
    QSplitterHandle &operator=(const QSplitterHandle &) = delete;
 
    ~QSplitterHandle();
+
    void setOrientation(Qt::Orientation o);
    Qt::Orientation orientation() const;
    bool opaqueResize() const;
@@ -153,5 +157,4 @@ class Q_GUI_EXPORT QSplitterHandle : public QWidget
 
 #endif // QT_NO_SPLITTER
 
-
-#endif // QSPLITTER_H
+#endif

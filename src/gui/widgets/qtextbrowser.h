@@ -148,4 +148,4 @@ class Q_GUI_EXPORT QTextBrowser : public QTextEdit
 #endif // QT_NO_TEXTBROWSER
 
 
-#endif // QTEXTBROWSER_H
+#endif

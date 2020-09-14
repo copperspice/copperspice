@@ -69,7 +69,6 @@ class QDebug;
 class Q_GUI_EXPORT QWindow : public QObject, public QSurface
 {
    GUI_CS_OBJECT_MULTIPLE(QWindow, QObject)
-   Q_DECLARE_PRIVATE(QWindow)
 
    GUI_CS_ENUM(Visibility)
 
@@ -138,6 +137,11 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
       FullScreen
    };
 
+   enum AncestorMode {
+      ExcludeTransients,
+      IncludeTransients
+   };
+
    explicit QWindow(QScreen *screen = nullptr);
    explicit QWindow(QWindow *parent);
 
@@ -196,25 +200,22 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    void setTransientParent(QWindow *parent);
    QWindow *transientParent() const;
 
-   enum AncestorMode {
-      ExcludeTransients,
-      IncludeTransients
-   };
-
    bool isAncestorOf(const QWindow *child, AncestorMode mode = IncludeTransients) const;
-
    bool isExposed() const;
 
-   inline int minimumWidth() const {
+   int minimumWidth() const {
       return minimumSize().width();
    }
-   inline int minimumHeight() const {
+
+   int minimumHeight() const {
       return minimumSize().height();
    }
-   inline int maximumWidth() const {
+
+   int maximumWidth() const {
       return maximumSize().width();
    }
-   inline int maximumHeight() const {
+
+   int maximumHeight() const {
       return maximumSize().height();
    }
 
@@ -238,23 +239,27 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    QPoint framePosition() const;
    void setFramePosition(const QPoint &point);
 
-   inline int width() const {
+   int width() const {
       return geometry().width();
    }
-   inline int height() const {
+
+   int height() const {
       return geometry().height();
    }
-   inline int x() const {
+
+   int x() const {
       return geometry().x();
    }
-   inline int y() const {
+
+   int y() const {
       return geometry().y();
    }
 
    QSize size() const override {
       return geometry().size();
    }
-   inline QPoint position() const {
+
+   QPoint position() const {
       return geometry().topLeft();
    }
 
@@ -433,11 +438,12 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    QScopedPointer<QWindowPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QWindow)
+
+   QPlatformSurface *surfaceHandle() const override;
 
    GUI_CS_SLOT_1(Private, void _q_clearAlert())
    GUI_CS_SLOT_2(_q_clearAlert)
-
-   QPlatformSurface *surfaceHandle() const override;
 
    friend class QApplication;
    friend class QApplicationPrivate;

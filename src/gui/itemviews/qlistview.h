@@ -164,6 +164,7 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
 
    void mouseMoveEvent(QMouseEvent *e) override;
    void mouseReleaseEvent(QMouseEvent *e) override;
+
 #ifndef QT_NO_WHEELEVENT
    void wheelEvent(QWheelEvent *e) override;
 #endif
@@ -202,11 +203,11 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    QSize viewportSizeHint() const override;
 
  private:
-   int visualIndex(const QModelIndex &index) const;
-
    Q_DECLARE_PRIVATE(QListView)
+
+   int visualIndex(const QModelIndex &index) const;
 };
 
 #endif // QT_NO_LISTVIEW
 
-#endif // QLISTVIEW_H
+#endif

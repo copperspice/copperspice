@@ -26,18 +26,16 @@
 
 #include <qobject.h>
 #include <qabstractitemdelegate.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_DATAWIDGETMAPPER
-
-
 
 class QAbstractItemDelegate;
 class QAbstractItemModel;
 class QModelIndex;
 class QDataWidgetMapperPrivate;
 
-class Q_GUI_EXPORT QDataWidgetMapper: public QObject
+class Q_GUI_EXPORT QDataWidgetMapper : public QObject
 {
    GUI_CS_OBJECT(QDataWidgetMapper)
 

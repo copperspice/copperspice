@@ -74,21 +74,30 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    GUI_CS_PROPERTY_WRITE(keyboardTracking, setKeyboardTracking)
 
  public:
-   explicit QAbstractSpinBox(QWidget *parent = nullptr);
-   ~QAbstractSpinBox();
-
-   enum StepEnabledFlag { StepNone = 0x00,
-      StepUpEnabled = 0x01,
+   enum StepEnabledFlag {
+      StepNone        = 0x00,
+      StepUpEnabled   = 0x01,
       StepDownEnabled = 0x02
    };
    using StepEnabled = QFlags<StepEnabledFlag>;
 
-   enum ButtonSymbols  { UpDownArrows, PlusMinus, NoButtons };
-   enum CorrectionMode { CorrectToPreviousValue, CorrectToNearestValue };
+   enum ButtonSymbols  {
+      UpDownArrows,
+      PlusMinus,
+      NoButtons
+   };
+
+   enum CorrectionMode {
+      CorrectToPreviousValue,
+      CorrectToNearestValue
+   };
+
+   explicit QAbstractSpinBox(QWidget *parent = nullptr);
 
    QAbstractSpinBox(const QAbstractSpinBox &) = delete;
    QAbstractSpinBox &operator=(const QAbstractSpinBox &) = delete;
 
+   ~QAbstractSpinBox();
 
    bool hasAcceptableInput() const;
    QString text() const;
@@ -191,9 +200,9 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    friend class QAccessibleAbstractSpinBox;
 
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractSpinBox::StepEnabled)
 
 #endif // QT_NO_SPINBOX
-
 
 #endif

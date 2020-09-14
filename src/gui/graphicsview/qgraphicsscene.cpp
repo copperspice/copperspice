@@ -95,42 +95,16 @@ static void _q_hoverFromMouseEvent(QGraphicsSceneHoverEvent *hover, const QGraph
     \internal
 */
 QGraphicsScenePrivate::QGraphicsScenePrivate()
-   : indexMethod(QGraphicsScene::BspTreeIndex),
-     index(0),
-     lastItemCount(0),
-     hasSceneRect(false),
-     dirtyGrowingItemsBoundingRect(true),
-     updateAll(false),
-     calledEmitUpdated(false),
-     processDirtyItemsEmitted(false),
-     needSortTopLevelItems(true),
-     holesInTopLevelSiblingIndex(false),
-     topLevelSequentialOrdering(true),
-     scenePosDescendantsUpdatePending(false),
-     stickyFocus(false),
-     hasFocus(false),
-     lastMouseGrabberItemHasImplicitMouseGrab(false),
-     allItemsIgnoreHoverEvents(true),
-     allItemsUseDefaultCursor(true),
-     painterStateProtection(true),
-     sortCacheEnabled(false),
-     allItemsIgnoreTouchEvents(true),
-     minimumRenderSize(0.0),
-     selectionChanging(0),
-     rectAdjust(2),
-     focusItem(0),
-     lastFocusItem(0),
-     passiveFocusItem(0),
-     tabFocusFirst(0),
-     activePanel(0),
-     lastActivePanel(0),
-     activationRefCount(0),
-     childExplicitActivation(0),
-     lastMouseGrabberItem(0),
-     dragDropItem(0),
-     enterWidget(0),
-     lastDropAction(Qt::IgnoreAction),
-     style(0)
+   : indexMethod(QGraphicsScene::BspTreeIndex), index(0), lastItemCount(0), hasSceneRect(false),
+     dirtyGrowingItemsBoundingRect(true), updateAll(false), calledEmitUpdated(false),
+     processDirtyItemsEmitted(false), needSortTopLevelItems(true), holesInTopLevelSiblingIndex(false),
+     topLevelSequentialOrdering(true), scenePosDescendantsUpdatePending(false), stickyFocus(false),
+     hasFocus(false), lastMouseGrabberItemHasImplicitMouseGrab(false), allItemsIgnoreHoverEvents(true),
+     allItemsUseDefaultCursor(true), painterStateProtection(true), sortCacheEnabled(false),
+     allItemsIgnoreTouchEvents(true), minimumRenderSize(0.0), selectionChanging(0), rectAdjust(2),
+     focusItem(0), lastFocusItem(0), passiveFocusItem(0), tabFocusFirst(0), activePanel(0),
+     lastActivePanel(0), activationRefCount(0), childExplicitActivation(0), lastMouseGrabberItem(0),
+     dragDropItem(0), enterWidget(0), lastDropAction(Qt::IgnoreAction), style(0)
 {
 }
 
@@ -169,6 +143,7 @@ void QGraphicsScenePrivate::_q_emitUpdated()
             emit q->sceneRectChanged(growingItemsBoundingRect);
          }
       }
+
       dirtyGrowingItemsBoundingRect = false;
    }
 
@@ -202,6 +177,7 @@ void QGraphicsScenePrivate::_q_emitUpdated()
       for (int i = 0; i < views.size(); ++i) {
          views.at(i)->d_func()->dispatchPendingUpdateRequests();
       }
+
       return;
    }
 
@@ -1845,7 +1821,6 @@ QList<QGraphicsItem *> QGraphicsScene::selectedItems() const
    return d->selectedItems.values();
 }
 
-
 QPainterPath QGraphicsScene::selectionArea() const
 {
    Q_D(const QGraphicsScene);
@@ -1863,18 +1838,6 @@ void QGraphicsScene::setSelectionArea(const QPainterPath &path, Qt::ItemSelectio
    setSelectionArea(path, Qt::ReplaceSelection, mode, deviceTransform);
 }
 
-/*!
-    \overload
-    \since 4.6
-
-    Sets the selection area to \a path using \a mode to determine if items are
-    included in the selection area.
-
-    \a deviceTransform is the transformation that applies to the view, and needs to
-    be provided if the scene contains items that ignore transformations.
-
-    \sa clearSelection(), selectionArea()
-*/
 void QGraphicsScene::setSelectionArea(const QPainterPath &path,
    Qt::ItemSelectionOperation selectionOperation,
    Qt::ItemSelectionMode mode, const QTransform &deviceTransform)
@@ -1896,9 +1859,10 @@ void QGraphicsScene::setSelectionArea(const QPainterPath &path,
    // Set all items in path to selected.
    for (QGraphicsItem *item : items(path, mode, Qt::DescendingOrder, deviceTransform)) {
       if (item->flags() & QGraphicsItem::ItemIsSelectable) {
-         if (!item->isSelected()) {
+         if (! item->isSelected()) {
             changed = true;
          }
+
          unselectItems.remove(item);
          item->setSelected(true);
       }
@@ -1912,6 +1876,7 @@ void QGraphicsScene::setSelectionArea(const QPainterPath &path,
             changed = true;
          }
          break;
+
       default:
          break;
    }
@@ -1923,7 +1888,6 @@ void QGraphicsScene::setSelectionArea(const QPainterPath &path,
       emit selectionChanged();
    }
 }
-
 
 void QGraphicsScene::clearSelection()
 {
@@ -1947,14 +1911,15 @@ void QGraphicsScene::clearSelection()
    }
 }
 
-
 void QGraphicsScene::clear()
 {
    Q_D(QGraphicsScene);
    // NB! We have to clear the index before deleting items; otherwise the
    // index might try to access dangling item pointers.
    d->index->clear();
+
    // NB! QGraphicsScenePrivate::unregisterTopLevelItem() removes items
+
    while (!d->topLevelItems.isEmpty()) {
       delete d->topLevelItems.first();
    }
@@ -1965,24 +1930,12 @@ void QGraphicsScene::clear()
    d->allItemsIgnoreTouchEvents = true;
 }
 
-/*!
-    Groups all items in \a items into a new QGraphicsItemGroup, and returns a
-    pointer to the group. The group is created with the common ancestor of \a
-    items as its parent, and with position (0, 0). The items are all
-    reparented to the group, and their positions and transformations are
-    mapped to the group. If \a items is empty, this function will return an
-    empty top-level QGraphicsItemGroup.
-
-    QGraphicsScene has ownership of the group item; you do not need to delete
-    it. To dismantle (ungroup) a group, call destroyItemGroup().
-
-    \sa destroyItemGroup(), QGraphicsItemGroup::addToGroup()
-*/
 QGraphicsItemGroup *QGraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
 {
    // Build a list of the first item's ancestors
    QList<QGraphicsItem *> ancestors;
    int n = 0;
+
    if (!items.isEmpty()) {
       QGraphicsItem *parent = items.at(n++);
       while ((parent = parent->parentItem())) {
@@ -2025,13 +1978,6 @@ QGraphicsItemGroup *QGraphicsScene::createItemGroup(const QList<QGraphicsItem *>
    return group;
 }
 
-/*!
-    Reparents all items in \a group to \a group's parent item, then removes \a
-    group from the scene, and finally deletes it. The items' positions and
-    transformations are mapped from the group to the group's parent.
-
-    \sa createItemGroup(), QGraphicsItemGroup::removeFromGroup()
-*/
 void QGraphicsScene::destroyItemGroup(QGraphicsItemGroup *group)
 {
    for (QGraphicsItem *item : group->childItems()) {
@@ -2041,7 +1987,6 @@ void QGraphicsScene::destroyItemGroup(QGraphicsItemGroup *group)
    removeItem(group);
    delete group;
 }
-
 
 void QGraphicsScene::addItem(QGraphicsItem *item)
 {

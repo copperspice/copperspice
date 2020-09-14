@@ -72,7 +72,6 @@ class Q_GUI_EXPORT QTextObject : public QObject
    friend class QTextDocumentPrivate;
 };
 
-
 class Q_GUI_EXPORT QTextBlockGroup : public QTextObject
 {
    GUI_CS_OBJECT(QTextBlockGroup)
@@ -101,7 +100,6 @@ class Q_GUI_EXPORT QTextBlockGroup : public QTextObject
 
 class Q_GUI_EXPORT QTextFrameLayoutData
 {
-
  public:
    virtual ~QTextFrameLayoutData();
 };
@@ -198,8 +196,8 @@ class Q_GUI_EXPORT QTextFrame : public QTextObject
    QTextFrame(QTextFramePrivate &p, QTextDocument *doc);
 
  private:
-   friend class QTextDocumentPrivate;
    Q_DECLARE_PRIVATE(QTextFrame)
+   friend class QTextDocumentPrivate;
 };
 
 inline void QTextFrame::setFrameFormat(const QTextFrameFormat &aformat)
@@ -216,11 +214,15 @@ class Q_GUI_EXPORT QTextBlockUserData
 class Q_GUI_EXPORT QTextBlock
 {
  public:
-   inline QTextBlock(QTextDocumentPrivate *priv, int b)
-      : p(priv), n(b)  {}
+   QTextBlock(QTextDocumentPrivate *priv, int b)
+      : p(priv), n(b)
+   {
+   }
 
-   inline QTextBlock()
-      : p(0), n(0)  {}
+   QTextBlock()
+      : p(0), n(0)
+   {
+   }
 
    inline QTextBlock(const QTextBlock &o) = default;
    inline QTextBlock &operator=(const QTextBlock &o) = default;
@@ -281,7 +283,9 @@ class Q_GUI_EXPORT QTextBlock
    {
     public:
       iterator()
-         : p(0), b(0), e(0), n(0) {}
+         : p(0), b(0), e(0), n(0)
+      {
+      }
 
       iterator(const iterator &o) = default;
 

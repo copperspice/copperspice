@@ -27,7 +27,6 @@
 #include <qwidget.h>
 #include <qabstractslider.h>
 
-
 #ifndef QT_NO_SCROLLBAR
 
 class QScrollBarPrivate;
@@ -50,10 +49,6 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
    bool event(QEvent *event) override;
 
  protected:
-#ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *) override;
-#endif
-
    void paintEvent(QPaintEvent *) override;
    void mousePressEvent(QMouseEvent *) override;
    void mouseReleaseEvent(QMouseEvent *) override;
@@ -65,15 +60,19 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
    void contextMenuEvent(QContextMenuEvent *) override;
 #endif
 
+#ifndef QT_NO_WHEELEVENT
+   void wheelEvent(QWheelEvent *) override;
+#endif
+
    void initStyleOption(QStyleOptionSlider *option) const;
 
  private:
+   Q_DECLARE_PRIVATE(QScrollBar)
+
    friend class QAbstractScrollAreaPrivate;
    friend Q_GUI_EXPORT QStyleOptionSlider qt_qscrollbarStyleOption(QScrollBar *scrollBar);
-
-   Q_DECLARE_PRIVATE(QScrollBar)
 };
 
 #endif // QT_NO_SCROLLBAR
 
-#endif // QSCROLLBAR_H
+#endif

@@ -1799,7 +1799,7 @@ void QColorDialogPrivate::initWidgets()
       lblBasicColors->setBuddy(standard);
 #endif
 
-      q->connect(standard, SIGNAL(selected(int, int)), SLOT(_q_newStandard(int, int)));
+      q->connect(standard, SIGNAL(selected(int, int)), q, SLOT(_q_newStandard(int, int)));
       leftLay->addWidget(lblBasicColors);
       leftLay->addWidget(standard);
 
@@ -1810,7 +1810,7 @@ void QColorDialogPrivate::initWidgets()
 
       lblScreenColorInfo = new QLabel("\n");
       leftLay->addWidget(lblScreenColorInfo);
-      q->connect(screenColorPickerButton, SIGNAL(clicked()), SLOT(_q_pickScreenColor()));
+      q->connect(screenColorPickerButton, SIGNAL(clicked()), q, SLOT(_q_pickScreenColor()));
 #endif
 
       leftLay->addStretch();

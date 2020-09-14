@@ -26,11 +26,9 @@
 
 #include <qgraphicsitem.h>
 #include <qgraphicslayout.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
-
-
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsAnchorPrivate;
 class QGraphicsAnchorLayout;
@@ -66,7 +64,6 @@ class Q_GUI_EXPORT QGraphicsAnchor : public QObject
 
  protected:
    QScopedPointer<QGraphicsAnchorPrivate> d_ptr;
-
 };
 
 class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout

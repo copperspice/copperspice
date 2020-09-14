@@ -65,8 +65,5 @@ class Q_GUI_EXPORT QWidgetAction : public QAction
    friend class QToolBar;
 };
 
-#endif // QT_NO_ACTION
-
-
-
-#endif // QWIDGETACTION_H
+#endif
+#endif

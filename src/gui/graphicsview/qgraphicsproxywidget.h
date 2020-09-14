@@ -26,7 +26,7 @@
 
 #include <qgraphicswidget.h>
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsProxyWidgetPrivate;
 
@@ -51,9 +51,7 @@ class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
 
    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-   enum {
-      Type = 12
-   };
+   static constexpr const int Type = 12;
    int type() const override;
 
    QGraphicsProxyWidget *createProxyForChildWidget(QWidget *child);

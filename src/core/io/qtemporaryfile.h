@@ -39,8 +39,6 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
 {
    CORE_CS_OBJECT(QTemporaryFile)
 
-   Q_DECLARE_PRIVATE(QTemporaryFile)
-
  public:
    QTemporaryFile();
    explicit QTemporaryFile(const QString &templateName);
@@ -65,16 +63,19 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
    QString fileTemplate() const;
    void setFileTemplate(const QString &name);
 
-   inline static QTemporaryFile *createLocalFile(const QString &fileName) {
+   static QTemporaryFile *createLocalFile(const QString &fileName) {
       QFile file(fileName);
       return createLocalFile(file);
    }
+
    static QTemporaryFile *createLocalFile(QFile &file);
 
  protected:
    bool open(OpenMode flags) override;
 
  private:
+   Q_DECLARE_PRIVATE(QTemporaryFile)
+
    friend class QFile;
 };
 

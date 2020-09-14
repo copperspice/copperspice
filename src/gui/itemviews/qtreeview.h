@@ -177,22 +177,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    GUI_CS_SLOT_1(Public, void expandToDepth(int depth))
    GUI_CS_SLOT_2(expandToDepth)
 
- protected :
-   GUI_CS_SLOT_1(Protected, void columnResized(int column, int oldSize, int newSize))
-   GUI_CS_SLOT_2(columnResized)
-
-   GUI_CS_SLOT_1(Protected, void columnCountChanged(int oldCount, int newCount))
-   GUI_CS_SLOT_2(columnCountChanged)
-
-   GUI_CS_SLOT_1(Protected, void columnMoved())
-   GUI_CS_SLOT_2(columnMoved)
-
-   GUI_CS_SLOT_1(Protected, void reexpand())
-   GUI_CS_SLOT_2(reexpand)
-
-   GUI_CS_SLOT_1(Protected, void rowsRemoved(const QModelIndex &parent, int first, int last))
-   GUI_CS_SLOT_2(rowsRemoved)
-
+ protected:
    QTreeView(QTreeViewPrivate &dd, QWidget *parent = nullptr);
    void scrollContentsBy(int dx, int dy) override;
    void rowsInserted(const QModelIndex &parent, int start, int end)override;
@@ -239,10 +224,25 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
- private:
-   int visualIndex(const QModelIndex &index) const;
+   GUI_CS_SLOT_1(Protected, void columnResized(int column, int oldSize, int newSize))
+   GUI_CS_SLOT_2(columnResized)
 
+   GUI_CS_SLOT_1(Protected, void columnCountChanged(int oldCount, int newCount))
+   GUI_CS_SLOT_2(columnCountChanged)
+
+   GUI_CS_SLOT_1(Protected, void columnMoved())
+   GUI_CS_SLOT_2(columnMoved)
+
+   GUI_CS_SLOT_1(Protected, void reexpand())
+   GUI_CS_SLOT_2(reexpand)
+
+   GUI_CS_SLOT_1(Protected, void rowsRemoved(const QModelIndex &parent, int first, int last))
+   GUI_CS_SLOT_2(rowsRemoved)
+
+ private:
    Q_DECLARE_PRIVATE(QTreeView)
+
+   int visualIndex(const QModelIndex &index) const;
 
 #ifndef QT_NO_ANIMATION
    GUI_CS_SLOT_1(Private, void _q_endAnimatedOperation())

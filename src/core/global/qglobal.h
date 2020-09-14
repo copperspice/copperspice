@@ -992,7 +992,7 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
     inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(Dptr); } \
     friend class Class##Private;
 
-#define Q_DECLARE_PUBLIC(Class)                                    \
+#define Q_DECLARE_PUBLIC(Class)                                     \
     inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
     inline const Class* q_func() const { return static_cast<const Class *>(q_ptr); } \
     friend class Class;

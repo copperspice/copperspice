@@ -22,10 +22,7 @@
 ***********************************************************************/
 
 #include <qcontiguouscache.h>
-
-#ifdef QT_QCONTIGUOUSCACHE_DEBUG
 #include <qdebug.h>
-#endif
 
 #ifdef QT_QCONTIGUOUSCACHE_DEBUG
 void QContiguousCacheData::dump() const

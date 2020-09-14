@@ -32,7 +32,6 @@ class QGridLayoutPrivate;
 class Q_GUI_EXPORT QGridLayout : public QLayout
 {
    GUI_CS_OBJECT(QGridLayout)
-   Q_DECLARE_PRIVATE(QGridLayout)
 
    // following 4 were qdoc_property
    GUI_CS_PROPERTY_READ(horizontalSpacing, horizontalSpacing)
@@ -109,6 +108,7 @@ class Q_GUI_EXPORT QGridLayout : public QLayout
    void addItem(QLayoutItem *) override;
 
  private:
+   Q_DECLARE_PRIVATE(QGridLayout)
 };
 
 #endif

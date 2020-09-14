@@ -69,16 +69,16 @@ class QUpdateLaterEvent : public QEvent
    ~QUpdateLaterEvent() {
    }
 
-   inline const QRegion &region() const {
+   const QRegion &region() const {
       return m_region;
    }
 
  protected:
    QRegion m_region;
 };
+
 class QWidgetBackingStoreTracker
 {
-
  public:
    QWidgetBackingStoreTracker();
 
@@ -94,19 +94,19 @@ class QWidgetBackingStoreTracker
    void unregisterWidget(QWidget *w);
    void unregisterWidgetSubtree(QWidget *w);
 
-   inline QWidgetBackingStore *data() {
+   QWidgetBackingStore *data() {
       return m_ptr;
    }
 
-   inline QWidgetBackingStore *operator->() {
+   QWidgetBackingStore *operator->() {
       return m_ptr;
    }
 
-   inline QWidgetBackingStore &operator*() {
+   QWidgetBackingStore &operator*() {
       return *m_ptr;
    }
 
-   inline operator bool() const {
+   operator bool() const {
       return (0 != m_ptr);
    }
 

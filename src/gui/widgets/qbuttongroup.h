@@ -25,7 +25,7 @@
 #define QBUTTONGROUP_H
 
 #include <qobject.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_BUTTONGROUP
 
@@ -88,7 +88,6 @@ class Q_GUI_EXPORT QButtonGroup : public QObject
    GUI_CS_SIGNAL_1(Public, void buttonToggled(int un_named_arg1, bool un_named_arg2))
    GUI_CS_SIGNAL_OVERLOAD(buttonToggled, (int, bool), un_named_arg1, un_named_arg2)
 
-
  protected:
    QScopedPointer<QButtonGroupPrivate> d_ptr;
 
@@ -101,4 +100,4 @@ class Q_GUI_EXPORT QButtonGroup : public QObject
 
 #endif // QT_NO_BUTTONGROUP
 
-#endif // QBUTTONGROUP_H
+#endif

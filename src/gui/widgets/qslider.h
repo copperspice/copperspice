@@ -26,7 +26,6 @@
 
 #include <qabstractslider.h>
 
-
 #ifndef QT_NO_SLIDER
 
 class QSliderPrivate;
@@ -81,12 +80,11 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
    void initStyleOption(QStyleOptionSlider *option) const;
 
  private:
-   friend Q_GUI_EXPORT QStyleOptionSlider qt_qsliderStyleOption(QSlider *slider);
-
    Q_DECLARE_PRIVATE(QSlider)
+
+   friend Q_GUI_EXPORT QStyleOptionSlider qt_qsliderStyleOption(QSlider *slider);
 };
 
 #endif // QT_NO_SLIDER
 
-
-#endif // QSLIDER_H
+#endif

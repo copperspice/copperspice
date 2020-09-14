@@ -96,6 +96,7 @@ class Q_GUI_EXPORT QDesktopWidget : public QWidget
 
    GUI_CS_SLOT_1(Private, void _q_availableGeometryChanged())
    GUI_CS_SLOT_2(_q_availableGeometryChanged)
+
    friend class QApplication;
    friend class QApplicationPrivate;
 };

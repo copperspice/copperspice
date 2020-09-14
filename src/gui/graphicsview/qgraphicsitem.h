@@ -269,13 +269,15 @@ class Q_GUI_EXPORT QGraphicsItem
 
    // Positioning in scene coordinates
    QPointF pos() const;
-   inline qreal x() const {
+   qreal x() const {
       return pos().x();
    }
+
    void setX(qreal x);
-   inline qreal y() const {
+   qreal y() const {
       return pos().y();
    }
+
    void setY(qreal y);
    QPointF scenePos() const;
 
@@ -283,11 +285,11 @@ class Q_GUI_EXPORT QGraphicsItem
    inline void setPos(qreal x, qreal y);
 
    // wrapper for static method
-   inline void cs_setPos(const QPointF &pos) {
+   void cs_setPos(const QPointF &pos) {
       setPos(pos);
    }
 
-   inline void moveBy(qreal dx, qreal dy) {
+   void moveBy(qreal dx, qreal dy) {
       setPos(pos().x() + dx, pos().y() + dy);
    }
 
@@ -305,8 +307,6 @@ class Q_GUI_EXPORT QGraphicsItem
    QTransform itemTransform(const QGraphicsItem *other, bool *ok = nullptr) const;
    void setTransform(const QTransform &matrix, bool combine = false);
    void resetTransform();
-
-
 
    void setRotation(qreal angle);
    qreal rotation() const;
@@ -430,10 +430,9 @@ class Q_GUI_EXPORT QGraphicsItem
    Qt::InputMethodHints inputMethodHints() const;
    void setInputMethodHints(Qt::InputMethodHints hints);
 
-   enum {
-      Type = 1,
-      UserType = 65536
-   };
+   static constexpr const int Type = 1;
+   static constexpr const int UserType = 65536;
+
    virtual int type() const;
 
    void installSceneEventFilter(QGraphicsItem *filterItem);
@@ -468,6 +467,7 @@ class Q_GUI_EXPORT QGraphicsItem
    enum Extension {
       UserExtension = 0x80000000
    };
+
    virtual bool supportsExtension(Extension extension) const;
    virtual void setExtension(Extension extension, const QVariant &variant);
    virtual QVariant extension(const QVariant &variant) const;
@@ -512,74 +512,92 @@ inline void QGraphicsItem::setPos(qreal ax, qreal ay)
 {
    setPos(QPointF(ax, ay));
 }
+
 inline void QGraphicsItem::ensureVisible(qreal ax, qreal ay, qreal w, qreal h, int xmargin, int ymargin)
 {
    ensureVisible(QRectF(ax, ay, w, h), xmargin, ymargin);
 }
+
 inline void QGraphicsItem::update(qreal ax, qreal ay, qreal width, qreal height)
 {
    update(QRectF(ax, ay, width, height));
 }
+
 inline bool QGraphicsItem::isObscured(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return isObscured(QRectF(ax, ay, w, h));
 }
+
 inline QPointF QGraphicsItem::mapToItem(const QGraphicsItem *item, qreal ax, qreal ay) const
 {
    return mapToItem(item, QPointF(ax, ay));
 }
+
 inline QPointF QGraphicsItem::mapToParent(qreal ax, qreal ay) const
 {
    return mapToParent(QPointF(ax, ay));
 }
+
 inline QPointF QGraphicsItem::mapToScene(qreal ax, qreal ay) const
 {
    return mapToScene(QPointF(ax, ay));
 }
+
 inline QPointF QGraphicsItem::mapFromItem(const QGraphicsItem *item, qreal ax, qreal ay) const
 {
    return mapFromItem(item, QPointF(ax, ay));
 }
+
 inline QPointF QGraphicsItem::mapFromParent(qreal ax, qreal ay) const
 {
    return mapFromParent(QPointF(ax, ay));
 }
+
 inline QPointF QGraphicsItem::mapFromScene(qreal ax, qreal ay) const
 {
    return mapFromScene(QPointF(ax, ay));
 }
+
 inline QPolygonF QGraphicsItem::mapToItem(const QGraphicsItem *item, qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapToItem(item, QRectF(ax, ay, w, h));
 }
+
 inline QPolygonF QGraphicsItem::mapToParent(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapToParent(QRectF(ax, ay, w, h));
 }
+
 inline QPolygonF QGraphicsItem::mapToScene(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapToScene(QRectF(ax, ay, w, h));
 }
+
 inline QRectF QGraphicsItem::mapRectToItem(const QGraphicsItem *item, qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapRectToItem(item, QRectF(ax, ay, w, h));
 }
+
 inline QRectF QGraphicsItem::mapRectToParent(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapRectToParent(QRectF(ax, ay, w, h));
 }
+
 inline QRectF QGraphicsItem::mapRectToScene(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapRectToScene(QRectF(ax, ay, w, h));
 }
+
 inline QPolygonF QGraphicsItem::mapFromItem(const QGraphicsItem *item, qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapFromItem(item, QRectF(ax, ay, w, h));
 }
+
 inline QPolygonF QGraphicsItem::mapFromParent(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapFromParent(QRectF(ax, ay, w, h));
 }
+
 inline QPolygonF QGraphicsItem::mapFromScene(qreal ax, qreal ay, qreal w, qreal h) const
 {
    return mapFromScene(QRectF(ax, ay, w, h));
@@ -724,12 +742,13 @@ class Q_GUI_EXPORT QGraphicsObject : public QObject, public QGraphicsItem
    GUI_CS_SIGNAL_2(heightChanged)
 
  protected:
-   GUI_CS_SLOT_1(Protected, void updateMicroFocus())
-   GUI_CS_SLOT_2(updateMicroFocus)
-
    QGraphicsObject(QGraphicsItemPrivate &dd, QGraphicsItem *parent);
 
    bool event(QEvent *ev) override;
+
+   GUI_CS_SLOT_1(Protected, void updateMicroFocus())
+   GUI_CS_SLOT_2(updateMicroFocus)
+
  private:
    friend class QGraphicsItem;
    friend class QGraphicsItemPrivate;
@@ -806,7 +825,7 @@ class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 2 };
+   static constexpr const int Type = 2;
    int type() const override;
 
  protected:
@@ -843,7 +862,7 @@ class Q_GUI_EXPORT QGraphicsRectItem : public QAbstractGraphicsShapeItem
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 3 };
+   static constexpr const int Type = 3;
    int type() const override;
 
  protected:
@@ -891,7 +910,7 @@ class Q_GUI_EXPORT QGraphicsEllipseItem : public QAbstractGraphicsShapeItem
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 4 };
+   static constexpr const int Type = 4;
    int type() const override;
 
  protected:
@@ -934,7 +953,7 @@ class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 5 };
+   static constexpr const int Type = 5;
    int type() const override;
 
  protected:
@@ -976,7 +995,7 @@ class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 6 };
+   static constexpr const int Type = 6;
    int type() const override;
 
  protected:
@@ -1024,7 +1043,7 @@ class Q_GUI_EXPORT QGraphicsPixmapItem : public QGraphicsItem
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 7 };
+   static constexpr const int Type = 7;
    int type() const override;
 
    ShapeMode shapeMode() const;
@@ -1085,7 +1104,7 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 8 };
+   static constexpr const int Type = 8;
    int type() const override;
 
    void setTextWidth(qreal width);
@@ -1182,7 +1201,7 @@ class Q_GUI_EXPORT QGraphicsSimpleTextItem : public QAbstractGraphicsShapeItem
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 9 };
+   static constexpr const int Type = 9;
    int type() const override;
 
  protected:
@@ -1213,7 +1232,7 @@ class Q_GUI_EXPORT QGraphicsItemGroup : public QGraphicsItem
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
 
-   enum { Type = 10 };
+   static constexpr const int Type = 10;
    int type() const override;
 
  private:

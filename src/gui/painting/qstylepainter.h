@@ -30,27 +30,28 @@
 
 class QStylePainter : public QPainter
 {
-
  public:
-   inline QStylePainter() : QPainter(), widget(nullptr), wstyle(nullptr)
-   { }
+   QStylePainter()
+      : QPainter(), widget(nullptr), wstyle(nullptr)
+   {
+   }
 
-   inline explicit QStylePainter(QWidget *w) {
+   explicit QStylePainter(QWidget *w) {
       begin(w, w);
    }
 
-   inline QStylePainter(QPaintDevice *pd, QWidget *w) {
+   QStylePainter(QPaintDevice *pd, QWidget *w) {
       begin(pd, w);
    }
 
    QStylePainter(const QStylePainter &) = delete;
    QStylePainter &operator=(const QStylePainter &) = delete;
 
-   inline bool begin(QWidget *w) {
+   bool begin(QWidget *w) {
       return begin(w, w);
    }
 
-   inline bool begin(QPaintDevice *pd, QWidget *w) {
+   bool begin(QPaintDevice *pd, QWidget *w) {
       Q_ASSERT_X(w, "QStylePainter::QStylePainter", "Widget must be non-zero");
       widget = w;
       wstyle = w->style();
@@ -64,7 +65,7 @@ class QStylePainter : public QPainter
       const QString &text, QPalette::ColorRole textRole = QPalette::NoRole);
    inline void drawItemPixmap(const QRect &r, int flags, const QPixmap &pixmap);
 
-   inline QStyle *style() const {
+   QStyle *style() const {
       return wstyle;
    }
 

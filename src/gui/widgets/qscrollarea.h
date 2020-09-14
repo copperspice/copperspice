@@ -26,8 +26,6 @@
 
 #include <qabstractscrollarea.h>
 
-
-
 #ifndef QT_NO_SCROLLAREA
 
 class QScrollAreaPrivate;
@@ -74,11 +72,11 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
    void scrollContentsBy(int dx, int dy) override;
 
    QSize viewportSizeHint() const override;
+
  private:
    Q_DECLARE_PRIVATE(QScrollArea)
 };
 
 #endif // QT_NO_SCROLLAREA
 
-
-#endif // QSCROLLAREA_H
+#endif

@@ -28,9 +28,8 @@
 #include <qkeysequence.h>
 #include <qwidget.h>
 
-
-
 class QButtonGroup;
+
 class QAbstractButtonPrivate;
 
 class Q_GUI_EXPORT QAbstractButton : public QWidget
@@ -163,6 +162,4 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
    friend class QButtonGroup;
 };
 
-
-
-#endif // QABSTRACTBUTTON_H
+#endif

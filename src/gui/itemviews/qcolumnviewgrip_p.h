@@ -35,9 +35,6 @@ class QColumnViewGrip : public QWidget
    GUI_CS_OBJECT(QColumnViewGrip)
 
  public:
-   GUI_CS_SIGNAL_1(Public, void gripMoved(int offset))
-   GUI_CS_SIGNAL_2(gripMoved, offset)
-
    explicit QColumnViewGrip(QWidget *parent = nullptr);
 
    QColumnViewGrip(const QColumnViewGrip &) = delete;
@@ -45,6 +42,9 @@ class QColumnViewGrip : public QWidget
 
    ~QColumnViewGrip();
    int moveGrip(int offset);
+
+   GUI_CS_SIGNAL_1(Public, void gripMoved(int offset))
+   GUI_CS_SIGNAL_2(gripMoved, offset)
 
  protected:
    QColumnViewGrip(QColumnViewGripPrivate &, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
@@ -60,17 +60,19 @@ class QColumnViewGrip : public QWidget
 
 class QColumnViewGripPrivate : public QWidgetPrivate
 {
-   Q_DECLARE_PUBLIC(QColumnViewGrip)
-
  public:
    QColumnViewGripPrivate();
-   ~QColumnViewGripPrivate() {}
+
+   ~QColumnViewGripPrivate()
+   {
+   }
 
    int originalXLocation;
+
+ private:
+   Q_DECLARE_PUBLIC(QColumnViewGrip)
 };
 
+#endif //QT_NO_QCOLUMNVIEW
 
-
-#endif // QT_NO_QCOLUMNVIEW
-
-#endif //QCOLUMNVIEWGRIP_P_H
+#endif

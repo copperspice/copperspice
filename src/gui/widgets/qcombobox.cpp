@@ -321,11 +321,13 @@ QSize QComboBoxPrivate::recomputeSizeHint(QSize &sh) const
 
       // text width
       if (&sh == &sizeHint || minimumContentsLength == 0) {
+
          switch (sizeAdjustPolicy) {
             case QComboBox::AdjustToContents:
             case QComboBox::AdjustToContentsOnFirstShow:
                if (count == 0) {
-                  sh.rwidth() = 7 * fm.width(QLatin1Char('x'));
+                  sh.rwidth() = 7 * fm.width('x');
+
                } else {
                   for (int i = 0; i < count; ++i) {
                      if (!q->itemIcon(i).isNull()) {
@@ -342,8 +344,9 @@ QSize QComboBoxPrivate::recomputeSizeHint(QSize &sh) const
                   hasIcon = !q->itemIcon(i).isNull();
                }
             default:
-               ;
+               break;
          }
+
       } else {
          for (int i = 0; i < count && !hasIcon; ++i) {
             hasIcon = !q->itemIcon(i).isNull();
@@ -1406,6 +1409,7 @@ int QComboBox::minimumContentsLength() const
 void QComboBox::setMinimumContentsLength(int characters)
 {
    Q_D(QComboBox);
+
    if (characters == d->minimumContentsLength || characters < 0) {
       return;
    }
@@ -1420,15 +1424,6 @@ void QComboBox::setMinimumContentsLength(int characters)
       updateGeometry();
    }
 }
-
-/*!
-    \property QComboBox::iconSize
-    \brief the size of the icons shown in the combobox.
-
-    Unless explicitly set this returns the default value of the
-    current style.  This size is the maximum size that icons can have;
-    icons of smaller size are not scaled up.
-*/
 
 QSize QComboBox::iconSize() const
 {
@@ -1454,27 +1449,18 @@ void QComboBox::setIconSize(const QSize &size)
    updateGeometry();
 }
 
-/*!
-    \property QComboBox::editable
-    \brief whether the combo box can be edited by the user
-
-    By default, this property is false. The effect of editing depends
-    on the insert policy.
-
-    \sa InsertPolicy
-*/
 bool QComboBox::isEditable() const
 {
    Q_D(const QComboBox);
    return d->lineEdit != 0;
 }
 
-
 void QComboBoxPrivate::updateDelegate(bool force)
 {
    Q_Q(QComboBox);
    QStyleOptionComboBox opt;
    q->initStyleOption(&opt);
+
    if (q->style()->styleHint(QStyle::SH_ComboBox_Popup, &opt, q)) {
       if (force || qobject_cast<QComboBoxDelegate *>(q->itemDelegate())) {
          q->setItemDelegate(new QComboMenuDelegate(q->view(), q));
@@ -1597,7 +1583,6 @@ void QComboBox::setLineEdit(QLineEdit *edit)
    update();
 }
 
-
 QLineEdit *QComboBox::lineEdit() const
 {
    Q_D(const QComboBox);
@@ -1674,12 +1659,6 @@ QAbstractItemModel *QComboBox::model() const
    return d->model;
 }
 
-/*!
-    Sets the model to be \a model. \a model must not be 0.
-    If you want to clear the contents of a model, call clear().
-
-    \sa clear()
-*/
 void QComboBox::setModel(QAbstractItemModel *model)
 {
    Q_D(QComboBox);
@@ -3083,12 +3062,14 @@ void QComboBox::setModelColumn(int visibleColumn)
    if (lv) {
       lv->setModelColumn(visibleColumn);
    }
+
 #ifndef QT_NO_COMPLETER
    if (d->lineEdit && d->lineEdit->completer()
       && d->lineEdit->completer() == d->completer) {
       d->lineEdit->completer()->setCompletionColumn(visibleColumn);
    }
 #endif
+
    setCurrentIndex(currentIndex()); //update the text to the text of the new column;
 }
 

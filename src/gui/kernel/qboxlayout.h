@@ -27,16 +27,15 @@
 #include <qlayout.h>
 #include <limits.h>
 
-
 class QBoxLayoutPrivate;
 
 class Q_GUI_EXPORT QBoxLayout : public QLayout
 {
    GUI_CS_OBJECT(QBoxLayout)
-   Q_DECLARE_PRIVATE(QBoxLayout)
 
  public:
-   enum Direction { LeftToRight, RightToLeft, TopToBottom, BottomToTop,
+   enum Direction {
+      LeftToRight, RightToLeft, TopToBottom, BottomToTop,
       Down = TopToBottom, Up = BottomToTop
    };
 
@@ -89,6 +88,7 @@ class Q_GUI_EXPORT QBoxLayout : public QLayout
    void setGeometry(const QRect &) override;
 
  private:
+   Q_DECLARE_PRIVATE(QBoxLayout)
 };
 
 class Q_GUI_EXPORT QHBoxLayout : public QBoxLayout
@@ -98,10 +98,11 @@ class Q_GUI_EXPORT QHBoxLayout : public QBoxLayout
  public:
    QHBoxLayout();
    explicit QHBoxLayout(QWidget *parent);
-   ~QHBoxLayout();
 
    QHBoxLayout(const QHBoxLayout &) = delete;
    QHBoxLayout &operator=(const QHBoxLayout &) = delete;
+
+   ~QHBoxLayout();
 };
 
 class Q_GUI_EXPORT QVBoxLayout : public QBoxLayout
@@ -111,11 +112,11 @@ class Q_GUI_EXPORT QVBoxLayout : public QBoxLayout
  public:
    QVBoxLayout();
    explicit QVBoxLayout(QWidget *parent);
-   ~QVBoxLayout();
 
    QVBoxLayout(const QVBoxLayout &) = delete;
    QVBoxLayout &operator=(const QVBoxLayout &) = delete;
 
+   ~QVBoxLayout();
 };
 
-#endif // QBOXLAYOUT_H
+#endif

@@ -28,20 +28,20 @@
 
 #ifndef QT_NO_MDIAREA
 
-#include <QStyle>
-#include <QStyleOptionTitleBar>
-#include <QMenuBar>
-#include <QSizeGrip>
-#include <QPointer>
-#include <QDebug>
+#include <qstyle.h>
+#include <qstyleoptiontitlebar.h>
+#include <qmenubar.h>
+#include <qsizegrip.h>
+#include <qpointer.h>
+#include <qdebug.h>
+
 #include <qwidget_p.h>
-
-
 
 class QVBoxLayout;
 class QMouseEvent;
 
 namespace QMdi {
+
 template<typename T>
 class ControlElement : public T
 {
@@ -69,7 +69,8 @@ class ControlContainer : public QObject
 
 #ifndef QT_NO_MENUBAR
    void showButtonsInMenuBar(QMenuBar *menuBar);
-   void removeButtonsFromMenuBar(QMenuBar *menuBar = 0);
+   void removeButtonsFromMenuBar(QMenuBar *menuBar = nullptr);
+
    QMenuBar *menuBar() const {
       return m_menuBar;
    }
@@ -79,6 +80,7 @@ class ControlContainer : public QObject
    QWidget *controllerWidget() const {
       return m_controllerWidget;
    }
+
    QWidget *systemMenuLabel() const {
       return m_menuLabel;
    }
@@ -95,14 +97,12 @@ class ControlContainer : public QObject
    QPointer<QWidget> m_menuLabel;
    QPointer<QMdiSubWindow> mdiChild;
 };
+
 } // namespace QMdi
 
 class QMdiSubWindowPrivate : public QWidgetPrivate
 {
-   Q_DECLARE_PUBLIC(QMdiSubWindow)
-
  public:
-   // Enums and typedefs.
    enum Operation {
       None,
       Move,
@@ -117,8 +117,8 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    };
 
    enum ChangeFlag {
-      HMove = 0x01,
-      VMove = 0x02,
+      HMove   = 0x01,
+      VMove   = 0x02,
       HResize = 0x04,
       VResize = 0x08,
       HResizeReverse = 0x10,
@@ -142,16 +142,17 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
       Qt::CursorShape cursorShape;
       QRegion region;
       bool hover;
+
       OperationInfo(uint changeFlags, Qt::CursorShape cursorShape, bool hover = true)
          : changeFlags(changeFlags), cursorShape(cursorShape), hover(hover)
-      { }
+      {
+      }
    };
 
-   typedef QMap<Operation, OperationInfo> OperationInfoMap;
+   using OperationInfoMap = QMap<Operation, OperationInfo>;
 
    QMdiSubWindowPrivate();
 
-   // Variables.
    QPointer<QWidget> baseWidget;
    QPointer<QWidget> restoreFocusWidget;
    QPointer<QMdi::ControlContainer> controlContainer;
@@ -209,12 +210,10 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    QStyleOptionTitleBar cachedStyleOptions;
    QString originalTitle;
 
-   // Slots.
    void _q_updateStaysOnTopHint();
    void _q_enterInteractiveMode();
    void _q_processFocusChanged(QWidget *old, QWidget *now);
 
-   // Functions.
    void leaveInteractiveMode();
    void removeBaseWidget();
    void initOperationMap();
@@ -270,7 +269,8 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
 #ifndef QT_NO_MENU
    void addToSystemMenu(WindowStateAction, const QString &text, const QString &slot);
 #endif
-#endif
+
+#endif  // action
 
    QSize iconSize() const;
 
@@ -283,7 +283,7 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    QString originalWindowTitle();
    void setNewWindowTitle();
 
-   inline int titleBarHeight() const {
+   int titleBarHeight() const {
       Q_Q(const QMdiSubWindow);
 
       if (! q->parent() || q->windowFlags() & Qt::FramelessWindowHint
@@ -300,13 +300,13 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
       return height;
    }
 
-   inline QStyle::SubControl getSubControl(const QPoint &pos) const {
+   QStyle::SubControl getSubControl(const QPoint &pos) const {
       Q_Q(const QMdiSubWindow);
       QStyleOptionTitleBar titleBarOptions = this->titleBarOptions();
       return q->style()->hitTestComplexControl(QStyle::CC_TitleBar, &titleBarOptions, pos, q);
    }
 
-   inline void setNewGeometry(QRect *geometry) {
+   void setNewGeometry(QRect *geometry) {
       Q_Q(QMdiSubWindow);
       Q_ASSERT(q->parent());
 
@@ -320,25 +320,28 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
          q->setGeometry(*geometry);
    }
 
-   inline bool hasBorder(const QStyleOptionTitleBar &options) const {
+   bool hasBorder(const QStyleOptionTitleBar &options) const {
       Q_Q(const QMdiSubWindow);
       return !q->style()->styleHint(QStyle::SH_TitleBar_NoBorder, &options, q);
    }
 
-   inline bool autoRaise() const {
+   bool autoRaise() const {
       Q_Q(const QMdiSubWindow);
       return q->style()->styleHint(QStyle::SH_TitleBar_AutoRaise, 0, q);
    }
 
-   inline bool isResizeOperation() const {
+   bool isResizeOperation() const {
       return currentOperation != None && currentOperation != Move;
    }
 
-   inline bool isMoveOperation() const {
+   bool isMoveOperation() const {
       return currentOperation == Move;
    }
+
+ private:
+   Q_DECLARE_PUBLIC(QMdiSubWindow)
 };
 
 #endif // QT_NO_MDIAREA
 
-#endif // QMDISUBWINDOW_P_H
+#endif

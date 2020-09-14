@@ -31,7 +31,7 @@
 #include <qpolygon.h>
 #include <qset.h>
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QMimeData;
 class QPointF;
@@ -49,7 +49,6 @@ class QGraphicsSceneMoveEventPrivate;
 
 class Q_GUI_EXPORT QGraphicsSceneEvent : public QEvent
 {
-
  public:
    explicit QGraphicsSceneEvent(Type type);
 
@@ -64,15 +63,13 @@ class Q_GUI_EXPORT QGraphicsSceneEvent : public QEvent
  protected:
    QGraphicsSceneEvent(QGraphicsSceneEventPrivate &dd, Type type = None);
    QScopedPointer<QGraphicsSceneEventPrivate> d_ptr;
-   Q_DECLARE_PRIVATE(QGraphicsSceneEvent)
 
  private:
+   Q_DECLARE_PRIVATE(QGraphicsSceneEvent)
 };
-
 
 class Q_GUI_EXPORT QGraphicsSceneMouseEvent : public QGraphicsSceneEvent
 {
-
  public:
    explicit QGraphicsSceneMouseEvent(Type type = None);
 
@@ -121,13 +118,13 @@ class Q_GUI_EXPORT QGraphicsSceneMouseEvent : public QGraphicsSceneEvent
    void setSource(Qt::MouseEventSource source);
    Qt::MouseEventFlags flags() const;
    void setFlags(Qt::MouseEventFlags);
+
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneMouseEvent)
 };
 
 class Q_GUI_EXPORT QGraphicsSceneWheelEvent : public QGraphicsSceneEvent
 {
-
  public:
    explicit QGraphicsSceneWheelEvent(Type type = None);
 
@@ -161,12 +158,14 @@ class Q_GUI_EXPORT QGraphicsSceneWheelEvent : public QGraphicsSceneEvent
    Q_DECLARE_PRIVATE(QGraphicsSceneWheelEvent)
 };
 
-
 class Q_GUI_EXPORT QGraphicsSceneContextMenuEvent : public QGraphicsSceneEvent
 {
-
  public:
-   enum Reason { Mouse, Keyboard, Other };
+   enum Reason {
+      Mouse,
+      Keyboard,
+      Other
+   };
 
    explicit QGraphicsSceneContextMenuEvent(Type type = None);
 
@@ -196,7 +195,6 @@ class Q_GUI_EXPORT QGraphicsSceneContextMenuEvent : public QGraphicsSceneEvent
 
 class Q_GUI_EXPORT QGraphicsSceneHoverEvent : public QGraphicsSceneEvent
 {
-
  public:
    explicit QGraphicsSceneHoverEvent(Type type = None);
 
@@ -297,7 +295,6 @@ class Q_GUI_EXPORT QGraphicsSceneDragDropEvent : public QGraphicsSceneEvent
 
 class Q_GUI_EXPORT QGraphicsSceneResizeEvent : public QGraphicsSceneEvent
 {
-   Q_DECLARE_PRIVATE(QGraphicsSceneResizeEvent)
  public:
    QGraphicsSceneResizeEvent();
 
@@ -311,13 +308,13 @@ class Q_GUI_EXPORT QGraphicsSceneResizeEvent : public QGraphicsSceneEvent
 
    QSizeF newSize() const;
    void setNewSize(const QSizeF &size);
-};
 
+ private:
+   Q_DECLARE_PRIVATE(QGraphicsSceneResizeEvent)
+};
 
 class Q_GUI_EXPORT QGraphicsSceneMoveEvent : public QGraphicsSceneEvent
 {
-   Q_DECLARE_PRIVATE(QGraphicsSceneMoveEvent)
-
  public:
    QGraphicsSceneMoveEvent();
 
@@ -331,6 +328,9 @@ class Q_GUI_EXPORT QGraphicsSceneMoveEvent : public QGraphicsSceneEvent
 
    QPointF newPos() const;
    void setNewPos(const QPointF &pos);
+
+ private:
+   Q_DECLARE_PRIVATE(QGraphicsSceneMoveEvent)
 };
 
 #endif // QT_NO_GRAPHICSVIEW

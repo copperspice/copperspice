@@ -61,6 +61,17 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
    GUI_CS_PROPERTY_DESIGNABLE(sliderDown, false)
 
  public:
+   enum SliderAction {
+      SliderNoAction,
+      SliderSingleStepAdd,
+      SliderSingleStepSub,
+      SliderPageStepAdd,
+      SliderPageStepSub,
+      SliderToMinimum,
+      SliderToMaximum,
+      SliderMove
+   };
+
    explicit QAbstractSlider(QWidget *parent = nullptr);
 
    QAbstractSlider(const QAbstractSlider &) = delete;
@@ -75,8 +86,6 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
 
    void setMaximum(int);
    int maximum() const;
-
-
 
    void setSingleStep(int);
    int singleStep() const;
@@ -98,17 +107,6 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
 
    void setInvertedControls(bool);
    bool invertedControls() const;
-
-   enum SliderAction {
-      SliderNoAction,
-      SliderSingleStepAdd,
-      SliderSingleStepSub,
-      SliderPageStepAdd,
-      SliderPageStepSub,
-      SliderToMinimum,
-      SliderToMaximum,
-      SliderMove
-   };
 
    int value() const;
 
@@ -143,17 +141,18 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
    GUI_CS_SIGNAL_2(actionTriggered, action)
 
  protected:
-   bool event(QEvent *e) override;
-
-   void setRepeatAction(SliderAction action, int thresholdTime = 500, int repeatTime = 50);
-   SliderAction repeatAction() const;
-
    enum SliderChange {
       SliderRangeChange,
       SliderOrientationChange,
       SliderStepsChange,
       SliderValueChange
    };
+
+   bool event(QEvent *e) override;
+
+   void setRepeatAction(SliderAction action, int thresholdTime = 500, int repeatTime = 50);
+   SliderAction repeatAction() const;
+
    virtual void sliderChange(SliderChange change);
 
    void keyPressEvent(QKeyEvent *ev) override;
@@ -170,6 +169,5 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
  private:
    Q_DECLARE_PRIVATE(QAbstractSlider)
 };
-
 
 #endif

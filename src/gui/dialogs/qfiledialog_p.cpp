@@ -855,10 +855,10 @@ void QFileDialogPrivate::createWidgets()
    qFileDialogUi->fileTypeCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
    QObject::connect(qFileDialogUi->fileTypeCombo, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-                   q, &QFileDialog::_q_useNameFilter);
+                  q, &QFileDialog::_q_useNameFilter);
 
    QObject::connect(qFileDialogUi->fileTypeCombo, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::activated),
-                   q, &QFileDialog::filterSelected);
+                  q, &QFileDialog::filterSelected);
 
    qFileDialogUi->listView->setFileDialogPrivate(this);
    qFileDialogUi->listView->setModel(model);

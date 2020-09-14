@@ -24,14 +24,13 @@
 #ifndef QRASTERWINDOW_H
 #define QRASTERWINDOW_H
 
-#include <QPaintDeviceWindow>
+#include <qpaintdevicewindow.h>
 
 class QRasterWindowPrivate;
 
 class Q_GUI_EXPORT QRasterWindow : public QPaintDeviceWindow
 {
    GUI_CS_OBJECT(QRasterWindow)
-   Q_DECLARE_PRIVATE(QRasterWindow)
 
  public:
    explicit QRasterWindow(QWindow *parent = nullptr);
@@ -44,6 +43,8 @@ class Q_GUI_EXPORT QRasterWindow : public QPaintDeviceWindow
    QPaintDevice *redirected(QPoint *) const override;
 
  private:
+   Q_DECLARE_PRIVATE(QRasterWindow)
+
 };
 
 #endif

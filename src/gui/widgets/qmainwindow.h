@@ -108,6 +108,7 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
    void setCentralWidget(QWidget *widget);
 
    QWidget *takeCentralWidget();
+
 #ifndef QT_NO_DOCKWIDGET
    bool isAnimated() const;
    bool isDockNestingEnabled() const;
@@ -147,6 +148,7 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
    QTabWidget::TabPosition tabPosition(Qt::DockWidgetArea area) const;
    void setTabPosition(Qt::DockWidgetAreas areas, QTabWidget::TabPosition tabPosition);
 #endif
+
 #ifndef QT_NO_MENU
    virtual QMenu *createPopupMenu();
 #endif
@@ -182,7 +184,6 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
 
    GUI_CS_SLOT_1(Public, void setUnifiedTitleAndToolBarOnMac(bool set))
    GUI_CS_SLOT_2(setUnifiedTitleAndToolBarOnMac)
-
 #endif
 
    QByteArray saveState(int version = 0) const;
@@ -208,5 +209,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QMainWindow::DockOptions)
 
 #endif // QT_NO_MAINWINDOW
 
-
-#endif // QDYNAMICMAINWINDOW_H
+#endif

@@ -82,6 +82,7 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
 
    GUI_CS_SIGNAL_1(Public, void clicked(bool checked = false))
    GUI_CS_SIGNAL_2(clicked, checked)
+
    GUI_CS_SIGNAL_1(Public, void toggled(bool un_named_arg1))
    GUI_CS_SIGNAL_2(toggled, un_named_arg1)
 
@@ -106,5 +107,4 @@ class Q_GUI_EXPORT QGroupBox : public QWidget
 
 #endif // QT_NO_GROUPBOX
 
-
-#endif // QGROUPBOX_H
+#endif

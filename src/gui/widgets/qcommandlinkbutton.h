@@ -26,8 +26,6 @@
 
 #include <qpushbutton.h>
 
-
-
 class QCommandLinkButtonPrivate;
 
 class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
@@ -49,6 +47,7 @@ class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
    QCommandLinkButton &operator=(const QCommandLinkButton &) = delete;
 
    ~QCommandLinkButton();
+
    QString description() const;
    void setDescription(const QString &description);
 
@@ -63,6 +62,4 @@ class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
    Q_DECLARE_PRIVATE(QCommandLinkButton)
 };
 
-
-
-#endif // QCOMMANDLINKBUTTON
+#endif

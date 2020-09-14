@@ -72,9 +72,10 @@ class QVectorPathConverter
 {
  public:
    QVectorPathConverter(const QVector<QPainterPath::Element> &path, uint fillRule, bool convex)
-      : pathData(path, fillRule, convex),
-        path(pathData.points.data(), path.size(),
-           pathData.elements.data(), pathData.flags) {}
+      : pathData(path, fillRule, convex), path(pathData.points.data(), path.size(),
+        pathData.elements.data(), pathData.flags)
+   {
+   }
 
    QVectorPathConverter(const QVectorPathConverter &) = delete;
    QVectorPathConverter &operator=(const QVectorPathConverter &) = delete;

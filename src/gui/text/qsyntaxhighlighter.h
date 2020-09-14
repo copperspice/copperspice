@@ -92,4 +92,4 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
 
 #endif // QT_NO_SYNTAXHIGHLIGHTER
 
-#endif // QSYNTAXHIGHLIGHTER_H
+#endif

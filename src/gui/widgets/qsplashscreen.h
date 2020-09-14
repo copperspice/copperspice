@@ -72,5 +72,4 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
 
 #endif // QT_NO_SPLASHSCREEN
 
-
-#endif // QSPLASHSCREEN_H
+#endif

@@ -70,7 +70,9 @@ class Q_GUI_EXPORT QLayoutItem
 };
 
 inline QLayoutItem::QLayoutItem(Qt::Alignment aalignment)
-   : align(aalignment) { }
+   : align(aalignment)
+{
+}
 
 class Q_GUI_EXPORT QSpacerItem : public QLayoutItem
 {
@@ -133,12 +135,10 @@ class Q_GUI_EXPORT QWidgetItem : public QLayoutItem
 
  protected:
    QWidget *wid;
-
 };
 
 class Q_GUI_EXPORT QWidgetItemV2 : public QWidgetItem
 {
-
  public:
    explicit QWidgetItemV2(QWidget *widget);
 
@@ -157,7 +157,8 @@ class Q_GUI_EXPORT QWidgetItemV2 : public QWidgetItem
 
    inline bool useSizeCache() const;
    void updateCacheIfNecessary() const;
-   inline void invalidateSizeCache() {
+
+   void invalidateSizeCache() {
       q_cachedMinimumSize.setWidth(Dirty);
       q_hfwCacheSize = 0;
    }

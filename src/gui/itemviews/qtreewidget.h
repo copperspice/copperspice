@@ -430,12 +430,12 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
    void dropEvent(QDropEvent *event) override;
 
  private:
-   friend class QTreeModel;
-   friend class QTreeWidgetItem;
+   Q_DECLARE_PRIVATE(QTreeWidget)
 
    void setModel(QAbstractItemModel *model) override;
 
-   Q_DECLARE_PRIVATE(QTreeWidget)
+   friend class QTreeModel;
+   friend class QTreeWidgetItem;
 
    GUI_CS_SLOT_1(Private, void _q_emitItemPressed(const QModelIndex &index))
    GUI_CS_SLOT_2(_q_emitItemPressed)

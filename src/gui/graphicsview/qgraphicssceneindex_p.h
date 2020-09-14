@@ -30,9 +30,9 @@
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qtransform.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsSceneIndexPrivate;
 class QPointF;
@@ -46,7 +46,8 @@ class QGraphicsSceneIndex : public QObject
    GUI_CS_OBJECT(QGraphicsSceneIndex)
 
  public:
-   QGraphicsSceneIndex(QGraphicsScene *scene = 0);
+   QGraphicsSceneIndex(QGraphicsScene *scene = nullptr);
+
    QGraphicsSceneIndex(const QGraphicsSceneIndex &) = delete;
    QGraphicsSceneIndex &operator=(const QGraphicsSceneIndex &) = delete;
 
@@ -67,10 +68,7 @@ class QGraphicsSceneIndex : public QObject
    virtual QList<QGraphicsItem *> estimateItems(const QRectF &rect, Qt::SortOrder order) const = 0;
    virtual QList<QGraphicsItem *> estimateTopLevelItems(const QRectF &, Qt::SortOrder order) const;
 
- protected :
-   GUI_CS_SLOT_1(Protected, virtual void updateSceneRect(const QRectF &rect))
-   GUI_CS_SLOT_2(updateSceneRect)
-
+ protected:
    virtual void clear();
    virtual void addItem(QGraphicsItem *item) = 0;
    virtual void removeItem(QGraphicsItem *item) = 0;
@@ -82,6 +80,9 @@ class QGraphicsSceneIndex : public QObject
    QGraphicsSceneIndex(QGraphicsSceneIndexPrivate &dd, QGraphicsScene *scene);
    QScopedPointer<QGraphicsSceneIndexPrivate> d_ptr;
 
+   GUI_CS_SLOT_1(Protected, virtual void updateSceneRect(const QRectF &rect))
+   GUI_CS_SLOT_2(updateSceneRect)
+
    friend class QGraphicsScene;
    friend class QGraphicsScenePrivate;
    friend class QGraphicsItem;
@@ -90,7 +91,6 @@ class QGraphicsSceneIndex : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QGraphicsSceneIndex)
-
 };
 
 class QGraphicsSceneIndexPrivate
@@ -117,7 +117,6 @@ class QGraphicsSceneIndexPrivate
 
  protected:
    QGraphicsSceneIndex *q_ptr;
-
 };
 
 inline void QGraphicsSceneIndexPrivate::items_helper(const QRectF &rect, QGraphicsSceneIndexIntersector intersect,
@@ -139,8 +138,6 @@ inline void QGraphicsSceneIndexPrivate::items_helper(const QRectF &rect, QGraphi
    }
 }
 
-
 #endif // QT_NO_GRAPHICSVIEW
 
-
-#endif // QGRAPHICSSCENEINDEX_H
+#endif

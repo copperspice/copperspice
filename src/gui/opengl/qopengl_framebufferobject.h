@@ -38,8 +38,7 @@ class QOpenGLFramebufferObjectFormat;
 
 class Q_GUI_EXPORT QOpenGLFramebufferObject
 {
-    Q_DECLARE_PRIVATE(QOpenGLFramebufferObject)
-public:
+ public:
     enum Attachment {
         NoAttachment,
         CombinedDepthStencil,
@@ -113,18 +112,23 @@ public:
                                 GLbitfield buffers = GL_COLOR_BUFFER_BIT,
                                 GLenum filter = GL_NEAREST);
 
+ private:
+    Q_DECLARE_PRIVATE(QOpenGLFramebufferObject)
+
     QScopedPointer<QOpenGLFramebufferObjectPrivate> d_ptr;
     friend class QOpenGLPaintDevice;
     friend class QOpenGLFBOGLPaintDevice;
 };
 
 class QOpenGLFramebufferObjectFormatPrivate;
+
 class Q_GUI_EXPORT QOpenGLFramebufferObjectFormat
 {
-public:
+ public:
     QOpenGLFramebufferObjectFormat();
     QOpenGLFramebufferObjectFormat(const QOpenGLFramebufferObjectFormat &other);
     QOpenGLFramebufferObjectFormat &operator=(const QOpenGLFramebufferObjectFormat &other);
+
     ~QOpenGLFramebufferObjectFormat();
 
     void setSamples(int samples);

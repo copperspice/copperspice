@@ -92,6 +92,16 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_PROPERTY_WRITE(modelColumn, setModelColumn)
 
  public:
+   enum InsertPolicy {
+      NoInsert,
+      InsertAtTop,
+      InsertAtCurrent,
+      InsertAtBottom,
+      InsertAfterCurrent,
+      InsertBeforeCurrent,
+      InsertAlphabetically
+   };
+
    explicit QComboBox(QWidget *parent = nullptr);
 
    QComboBox(const QComboBox &) = delete;
@@ -120,22 +130,13 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    void setFrame(bool);
    bool hasFrame() const;
 
-   inline int findText(const QString &text,
+   int findText(const QString &text,
       Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly | Qt::MatchCaseSensitive)) const {
       return findData(text, Qt::DisplayRole, flags);
    }
+
    int findData(const QVariant &data, int role = Qt::UserRole,
       Qt::MatchFlags flags = static_cast<Qt::MatchFlags>(Qt::MatchExactly | Qt::MatchCaseSensitive)) const;
-
-   enum InsertPolicy {
-      NoInsert,
-      InsertAtTop,
-      InsertAtCurrent,
-      InsertAtBottom,
-      InsertAfterCurrent,
-      InsertBeforeCurrent,
-      InsertAlphabetically
-   };
 
    InsertPolicy insertPolicy() const;
    void setInsertPolicy(InsertPolicy policy);
@@ -193,7 +194,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    inline void addItem(const QString &text, const QVariant &userData = QVariant());
    inline void addItem(const QIcon &icon, const QString &text, const QVariant &userData = QVariant());
 
-   inline void addItems(const QStringList &texts) {
+   void addItems(const QStringList &texts) {
       insertItems(count(), texts);
    }
 
@@ -351,5 +352,4 @@ inline void QComboBox::insertItem(int aindex, const QString &atext, const QVaria
 
 #endif // QT_NO_COMBOBOX
 
-
-#endif // QCOMBOBOX_H
+#endif

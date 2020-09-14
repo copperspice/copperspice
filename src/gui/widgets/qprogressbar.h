@@ -68,7 +68,10 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
    GUI_CS_PROPERTY_WRITE(format, setFormat)
 
  public:
-   enum Direction { TopToBottom, BottomToTop };
+   enum Direction {
+      TopToBottom,
+      BottomToTop
+   };
 
    explicit QProgressBar(QWidget *parent = nullptr);
 
@@ -136,5 +139,4 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
 
 #endif // QT_NO_PROGRESSBAR
 
-
-#endif // QPROGRESSBAR_H
+#endif

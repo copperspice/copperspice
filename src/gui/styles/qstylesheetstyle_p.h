@@ -29,13 +29,11 @@
 #ifndef QT_NO_STYLE_STYLESHEET
 
 #include <qstyleoption.h>
-
 #include <qbrush.h>
 #include <qevent.h>
 #include <qhash.h>
 #include <qvector.h>
 #include <qapplication.h>
-
 
 #include <qcssparser_p.h>
 #include <qrenderrule_p.h>
@@ -131,6 +129,8 @@ class QStyleSheetStyle : public QWindowsStyle
    bool event(QEvent *e) override;
 
  private:
+   Q_DECLARE_PRIVATE(QStyleSheetStyle)
+
    int refcount;
 
    int nativeFrameWidth(const QWidget *obj);
@@ -161,8 +161,6 @@ class QStyleSheetStyle : public QWindowsStyle
    bool initObject(const QObject *obj) const;
 
    friend class QRenderRule;
-
-   Q_DECLARE_PRIVATE(QStyleSheetStyle)
 };
 
 class QStyleSheetStyleCaches : public QObject

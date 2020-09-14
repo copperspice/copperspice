@@ -42,7 +42,8 @@ class Q_GUI_EXPORT QOpenGLCustomShaderStage
     QOpenGLCustomShaderStage &operator=(const QOpenGLCustomShaderStage &) = delete;
 
     virtual ~QOpenGLCustomShaderStage();
-    virtual void setUniforms(QOpenGLShaderProgram*) {}
+    virtual void setUniforms(QOpenGLShaderProgram*)
+    { }
 
     void setUniformsDirty();
 

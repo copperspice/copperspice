@@ -95,6 +95,7 @@ class Q_GUI_EXPORT QToolBar : public QWidget
    QAction *addAction(const QIcon &icon, const QString &text);
    QAction *addAction(const QString &text, const QObject *receiver, const QString &member);
    QAction *addAction(const QIcon &icon, const QString &text, const QObject *receiver, const QString &member);
+
    // addAction(QString): Connect to a QObject slot / functor or function pointer (with context)
    template<class Obj, typename Func1>
    typename std::enable_if < ! std::is_same<const char *, Func1>::value &&
@@ -125,7 +126,7 @@ class Q_GUI_EXPORT QToolBar : public QWidget
 
    // addAction(QIcon, QString): Connect to a functor or function pointer (without context)
    template <typename Func1>
-   inline QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot) {
+   QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot) {
       QAction *result = addAction(actionIcon, text);
       connect(result, &QAction::triggered, slot);
       return result;
@@ -216,5 +217,4 @@ QAction *QToolBar::actionAt(int ax, int ay) const
 
 #endif // QT_NO_TOOLBAR
 
-
-#endif // QDYNAMICTOOLBAR_H
+#endif
