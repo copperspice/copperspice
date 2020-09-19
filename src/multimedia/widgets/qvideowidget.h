@@ -87,6 +87,20 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
    MULTI_CS_SLOT_2(setContrast)
    MULTI_CS_SLOT_1(Public, void setHue(int hue))
    MULTI_CS_SLOT_2(setHue)
+
+   // these four slots were private
+   MULTI_CS_SLOT_1(Public, void _q_brightnessChanged(int un_named_arg1))
+   MULTI_CS_SLOT_2(_q_brightnessChanged)
+
+   MULTI_CS_SLOT_1(Public, void _q_contrastChanged(int un_named_arg1))
+   MULTI_CS_SLOT_2(_q_contrastChanged)
+
+   MULTI_CS_SLOT_1(Public, void _q_hueChanged(int un_named_arg1))
+   MULTI_CS_SLOT_2(_q_hueChanged)
+
+   MULTI_CS_SLOT_1(Public, void _q_saturationChanged(int un_named_arg1))
+   MULTI_CS_SLOT_2(_q_saturationChanged)
+
    MULTI_CS_SLOT_1(Public, void setSaturation(int saturation))
    MULTI_CS_SLOT_2(setSaturation)
 
@@ -128,18 +142,6 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
 
    MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())
    MULTI_CS_SLOT_2(_q_serviceDestroyed)
-
-   MULTI_CS_SLOT_1(Private, void _q_brightnessChanged(int un_named_arg1))
-   MULTI_CS_SLOT_2(_q_brightnessChanged)
-
-   MULTI_CS_SLOT_1(Private, void _q_contrastChanged(int un_named_arg1))
-   MULTI_CS_SLOT_2(_q_contrastChanged)
-
-   MULTI_CS_SLOT_1(Private, void _q_hueChanged(int un_named_arg1))
-   MULTI_CS_SLOT_2(_q_hueChanged)
-
-   MULTI_CS_SLOT_1(Private, void _q_saturationChanged(int un_named_arg1))
-   MULTI_CS_SLOT_2(_q_saturationChanged)
 
    MULTI_CS_SLOT_1(Private, void _q_fullScreenChanged(bool un_named_arg1))
    MULTI_CS_SLOT_2(_q_fullScreenChanged)

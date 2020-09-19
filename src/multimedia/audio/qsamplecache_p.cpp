@@ -36,8 +36,8 @@ QSampleCache::QSampleCache(QObject *parent)
      m_capacity(0), m_usage(0), m_loadingRefCount(0)
 {
    m_loadingThread.setObjectName(QLatin1String("QSampleCache::LoadingThread"));
-   connect(&m_loadingThread, SIGNAL(finished()), this, SLOT(isLoadingChanged()));
-   connect(&m_loadingThread, SIGNAL(started()),  this, SLOT(isLoadingChanged()));
+   connect(&m_loadingThread, &QThread::finished, this, &QSampleCache::isLoadingChanged);
+   connect(&m_loadingThread, &QThread::started,  this, &QSampleCache::isLoadingChanged);
 }
 
 QNetworkAccessManager &QSampleCache::networkAccessManager()
@@ -336,11 +336,12 @@ void QSample::load()
    qDebug() << "QSample: load [" << m_url << "]";
 #endif
    m_stream = m_parent->networkAccessManager().get(QNetworkRequest(m_url));
-   connect(m_stream, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(decoderError()));
+   connect(m_stream, &QNetworkReply::error, this, &QSample::decoderError);
+
    m_waveDecoder = new QWaveDecoder(m_stream);
-   connect(m_waveDecoder, SIGNAL(formatKnown()), SLOT(decoderReady()));
-   connect(m_waveDecoder, SIGNAL(parsingError()), SLOT(decoderError()));
-   connect(m_waveDecoder, SIGNAL(readyRead()), SLOT(readSample()));
+   connect(m_waveDecoder, &QWaveDecoder::formatKnown,  this, &QSample::decoderReady);
+   connect(m_waveDecoder, &QWaveDecoder::parsingError, this, &QSample::decoderError);
+   connect(m_waveDecoder, &QWaveDecoder::readyRead,    this, &QSample::readSample);
 }
 
 // Called in loading thread

@@ -100,7 +100,7 @@ class QRendererVideoWidgetBackend : public QVideoWidgetBackend
    MULTI_CS_OBJECT(QRendererVideoWidgetBackend)
 
  public:
-   QRendererVideoWidgetBackend(QMediaService *service, QVideoRendererControl *control, QWidget *widget);
+   QRendererVideoWidgetBackend(QMediaService *service, QVideoRendererControl *control, QVideoWidget *widget);
    ~QRendererVideoWidgetBackend();
 
    void releaseControl();
@@ -145,7 +145,7 @@ class QRendererVideoWidgetBackend : public QVideoWidgetBackend
 
    QMediaService *m_service;
    QVideoRendererControl *m_rendererControl;
-   QWidget *m_widget;
+   QVideoWidget *m_widget;
    QPainterVideoSurface *m_surface;
    Qt::AspectRatioMode m_aspectRatioMode;
    QRect m_boundingRect;

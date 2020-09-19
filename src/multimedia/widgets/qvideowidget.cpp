@@ -99,22 +99,17 @@ void QVideoWidgetControlBackend::setAspectRatioMode(Qt::AspectRatioMode mode)
    m_widgetControl->setAspectRatioMode(mode);
 }
 
-QRendererVideoWidgetBackend::QRendererVideoWidgetBackend(
-   QMediaService *service, QVideoRendererControl *control, QWidget *widget)
-   : m_service(service)
-   , m_rendererControl(control)
-   , m_widget(widget)
-   , m_surface(new QPainterVideoSurface)
-   , m_aspectRatioMode(Qt::KeepAspectRatio)
-   , m_updatePaintDevice(true)
+QRendererVideoWidgetBackend::QRendererVideoWidgetBackend(QMediaService *service, QVideoRendererControl *control, QVideoWidget *widget)
+   : m_service(service), m_rendererControl(control), m_widget(widget), m_surface(new QPainterVideoSurface),
+     m_aspectRatioMode(Qt::KeepAspectRatio), m_updatePaintDevice(true)
 {
-   connect(this, SIGNAL(brightnessChanged(int)), m_widget, SLOT(_q_brightnessChanged(int)));
-   connect(this, SIGNAL(contrastChanged(int)), m_widget, SLOT(_q_contrastChanged(int)));
-   connect(this, SIGNAL(hueChanged(int)), m_widget, SLOT(_q_hueChanged(int)));
-   connect(this, SIGNAL(saturationChanged(int)), m_widget, SLOT(_q_saturationChanged(int)));
-   connect(m_surface, SIGNAL(frameChanged()), this, SLOT(frameChanged()));
-   connect(m_surface, SIGNAL(surfaceFormatChanged(QVideoSurfaceFormat)),
-      this, SLOT(formatChanged(QVideoSurfaceFormat)));
+   connect(this, &QRendererVideoWidgetBackend::brightnessChanged, m_widget, &QVideoWidget::_q_brightnessChanged);
+   connect(this, &QRendererVideoWidgetBackend::contrastChanged,   m_widget, &QVideoWidget::_q_contrastChanged);
+   connect(this, &QRendererVideoWidgetBackend::hueChanged,        m_widget, &QVideoWidget::_q_hueChanged);
+   connect(this, &QRendererVideoWidgetBackend::saturationChanged, m_widget, &QVideoWidget::_q_saturationChanged);
+
+   connect(m_surface, &QPainterVideoSurface::frameChanged,         this, &QRendererVideoWidgetBackend::frameChanged);
+   connect(m_surface, &QPainterVideoSurface::surfaceFormatChanged, this, &QRendererVideoWidgetBackend::formatChanged);
 
    m_rendererControl->setSurface(m_surface);
 }
@@ -292,12 +287,12 @@ QWindowVideoWidgetBackend::QWindowVideoWidgetBackend(
    , m_windowControl(control)
    , m_widget(widget)
 {
-   connect(control, SIGNAL(brightnessChanged(int)), m_widget, SLOT(_q_brightnessChanged(int)));
-   connect(control, SIGNAL(contrastChanged(int)), m_widget, SLOT(_q_contrastChanged(int)));
-   connect(control, SIGNAL(hueChanged(int)), m_widget, SLOT(_q_hueChanged(int)));
-   connect(control, SIGNAL(saturationChanged(int)), m_widget, SLOT(_q_saturationChanged(int)));
+   connect(control, SIGNAL(brightnessChanged(int)),  m_widget, SLOT(_q_brightnessChanged(int)));
+   connect(control, SIGNAL(contrastChanged(int)),    m_widget, SLOT(_q_contrastChanged(int)));
+   connect(control, SIGNAL(hueChanged(int)),         m_widget, SLOT(_q_hueChanged(int)));
+   connect(control, SIGNAL(saturationChanged(int)),  m_widget, SLOT(_q_saturationChanged(int)));
    connect(control, SIGNAL(fullScreenChanged(bool)), m_widget, SLOT(_q_fullScreenChanged(bool)));
-   connect(control, SIGNAL(nativeSizeChanged()), m_widget, SLOT(_q_dimensionsChanged()));
+   connect(control, SIGNAL(nativeSizeChanged()),     m_widget, SLOT(_q_dimensionsChanged()));
 
    control->setWinId(widget->winId());
 }

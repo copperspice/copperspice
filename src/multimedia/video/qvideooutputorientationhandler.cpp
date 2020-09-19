@@ -35,8 +35,7 @@ QVideoOutputOrientationHandler::QVideoOutputOrientationHandler(QObject *parent)
     screen->setOrientationUpdateMask(Qt::PortraitOrientation|Qt::LandscapeOrientation
                                      |Qt::InvertedPortraitOrientation|Qt::InvertedLandscapeOrientation);
 
-    connect(screen, SIGNAL(orientationChanged(Qt::ScreenOrientation)),
-            this, SLOT(screenOrientationChanged(Qt::ScreenOrientation)));
+    connect(screen, &QScreen::orientationChanged, this, &QVideoOutputOrientationHandler::screenOrientationChanged);
 
     screenOrientationChanged(screen->orientation());
 }

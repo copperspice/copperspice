@@ -585,8 +585,7 @@ QMediaPlayer::QMediaPlayer(QObject *parent, QMediaPlayer::Flags flags)
       }
 
       if (d->networkAccessControl != 0) {
-         connect(d->networkAccessControl, SIGNAL(configurationChanged(QNetworkConfiguration)),
-            this, SLOT(networkConfigurationChanged(QNetworkConfiguration)));
+         connect(d->networkAccessControl, &QMediaNetworkAccessControl::configurationChanged, this, &QMediaPlayer::networkConfigurationChanged);
       }
    }
 }

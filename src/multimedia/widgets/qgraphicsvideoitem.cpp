@@ -75,7 +75,7 @@ void QGraphicsVideoItemPrivate::clearService()
       rendererControl = 0;
    }
    if (service) {
-      QObject::disconnect(service, SIGNAL(destroyed()), q_ptr, SLOT(_q_serviceDestroyed()));
+      QObject::disconnect(service, &QMediaService::destroyed, q_ptr, &QGraphicsVideoItem::_q_serviceDestroyed);
       service = 0;
    }
 }
@@ -147,9 +147,9 @@ QGraphicsVideoItem::QGraphicsVideoItem(QGraphicsItem *parent)
 {
    d_ptr->q_ptr = this;
    d_ptr->surface = new QPainterVideoSurface;
-   connect(d_ptr->surface, SIGNAL(frameChanged()), this, SLOT(_q_present()));
-   connect(d_ptr->surface, SIGNAL(surfaceFormatChanged(QVideoSurfaceFormat)),
-      this, SLOT(_q_updateNativeSize()), Qt::QueuedConnection);
+
+   connect(d_ptr->surface, &QPainterVideoSurface::frameChanged,         this, &QGraphicsVideoItem::_q_present);
+   connect(d_ptr->surface, &QPainterVideoSurface::surfaceFormatChanged, this, &QGraphicsVideoItem::_q_updateNativeSize, Qt::QueuedConnection);
 }
 
 QGraphicsVideoItem::~QGraphicsVideoItem()
@@ -198,7 +198,7 @@ bool QGraphicsVideoItem::setMediaObject(QMediaObject *object)
                   update(boundingRect());
                }
 
-               connect(d->service, SIGNAL(destroyed()), this, SLOT(_q_serviceDestroyed()));
+               connect(d->service, &QMediaService::destroyed, this, &QGraphicsVideoItem::_q_serviceDestroyed);
 
                return true;
             }
@@ -298,7 +298,7 @@ void QGraphicsVideoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
 #if ! defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && !defined(QT_OPENGL_ES_1)
       if (widget) {
-         connect(widget, SIGNAL(destroyed()), d->surface, SLOT(viewportDestroyed()));
+         connect(widget, &QWidget::destroyed, d->surface, &QPainterVideoSurface::viewportDestroyed);
       }
 
       d->surface->setGLContext(const_cast<QGLContext *>(QGLContext::currentContext()));

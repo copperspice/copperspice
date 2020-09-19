@@ -521,9 +521,9 @@ void QPlaylistFileParser::start(const QNetworkRequest &request, bool utf8)
 
    d->m_source = d->m_mgr.get(request);
 
-   connect(d->m_source, SIGNAL(readyRead()), this, SLOT(_q_handleData()));
-   connect(d->m_source, SIGNAL(finished()),  this, SLOT(_q_handleData()));
-   connect(d->m_source, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(_q_handleError()));
+   connect(d->m_source, &QNetworkReply::readyRead, this, &QPlaylistFileParser::_q_handleData);
+   connect(d->m_source, &QNetworkReply::finished,  this, &QPlaylistFileParser::_q_handleData);
+   connect(d->m_source, &QNetworkReply::error,     this, &QPlaylistFileParser::_q_handleError);
 
    d->_q_handleData();
 }
@@ -531,12 +531,11 @@ void QPlaylistFileParser::start(const QNetworkRequest &request, bool utf8)
 void QPlaylistFileParser::stop()
 {
    Q_D(QPlaylistFileParser);
-   if (d->m_currentParser) {
-      disconnect(d->m_currentParser, SIGNAL(newItem(QVariant)), this, SLOT(newItem(QVariant)));
-      disconnect(d->m_currentParser, SIGNAL(finished()),        this, SLOT(_q_handleParserFinished()));
 
-      disconnect(d->m_currentParser, SIGNAL(error(QPlaylistFileParser::ParserError, QString)),
-         this, SLOT(_q_handleParserError(QPlaylistFileParser::ParserError, QString)));
+   if (d->m_currentParser) {
+      disconnect(d->m_currentParser, &ParserBase::newItem,  this, &QPlaylistFileParser::newItem);
+      disconnect(d->m_currentParser, &ParserBase::finished, this, &QPlaylistFileParser::_q_handleParserFinished);
+      disconnect(d->m_currentParser, &ParserBase::error,    this, &QPlaylistFileParser::_q_handleParserError);
 
       d->m_currentParser->deleteLater();
       d->m_currentParser = 0;
@@ -546,9 +545,10 @@ void QPlaylistFileParser::stop()
    d->m_scanIndex = 0;
    d->m_lineIndex = -1;
    if (d->m_source) {
-      disconnect(d->m_source, SIGNAL(readyRead()), this, SLOT(_q_handleData()));
-      disconnect(d->m_source, SIGNAL(finished()),  this, SLOT(_q_handleData()));
-      disconnect(d->m_source, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(_q_handleError()));
+      disconnect(d->m_source, &QNetworkReply::readyRead, this, &QPlaylistFileParser::_q_handleData);
+      disconnect(d->m_source, &QNetworkReply::finished,  this, &QPlaylistFileParser::_q_handleData);
+      disconnect(d->m_source, &QNetworkReply::error,     this, &QPlaylistFileParser::_q_handleError);
+
       d->m_source->deleteLater();
       d->m_source = 0;
    }

@@ -106,24 +106,18 @@ bool QMediaPlaylist::setMediaObject(QMediaObject *mediaObject)
 
       if (d->control) {
          QMediaPlaylistProvider *playlist = d->control->playlistProvider();
-         disconnect(playlist, SIGNAL(loadFailed(QMediaPlaylist::Error, QString)),
-            this, SLOT(_q_loadFailed(QMediaPlaylist::Error, QString)));
 
-         disconnect(playlist, SIGNAL(mediaChanged(int, int)),           this, SLOT(mediaChanged(int, int)));
-         disconnect(playlist, SIGNAL(mediaAboutToBeInserted(int, int)), this, SLOT(mediaAboutToBeInserted(int, int)));
-         disconnect(playlist, SIGNAL(mediaInserted(int, int)),          this, SLOT(mediaInserted(int, int)));
-         disconnect(playlist, SIGNAL(mediaAboutToBeRemoved(int, int)),  this, SLOT(mediaAboutToBeRemoved(int, int)));
-         disconnect(playlist, SIGNAL(mediaRemoved(int, int)),           this, SLOT(mediaRemoved(int, int)));
-         disconnect(playlist, SIGNAL(loaded()),                        this, SLOT(loaded()));
+         disconnect(playlist,   &QMediaPlaylistProvider::loadFailed,             this, &QMediaPlaylist::_q_loadFailed);
+         disconnect(playlist,   &QMediaPlaylistProvider::mediaChanged,           this, &QMediaPlaylist::mediaChanged);
+         disconnect(playlist,   &QMediaPlaylistProvider::mediaAboutToBeInserted, this, &QMediaPlaylist::mediaAboutToBeInserted);
+         disconnect(playlist,   &QMediaPlaylistProvider::mediaInserted,          this, &QMediaPlaylist::mediaInserted);
+         disconnect(playlist,   &QMediaPlaylistProvider::mediaAboutToBeRemoved,  this, &QMediaPlaylist::mediaAboutToBeRemoved);
+         disconnect(playlist,   &QMediaPlaylistProvider::mediaRemoved,           this, &QMediaPlaylist::mediaRemoved);
+         disconnect(playlist,   &QMediaPlaylistProvider::loaded,                 this, &QMediaPlaylist::loaded);
 
-         disconnect(d->control, SIGNAL(playbackModeChanged(QMediaPlaylist::PlaybackMode)),
-            this, SLOT(playbackModeChanged(QMediaPlaylist::PlaybackMode)));
-
-         disconnect(d->control, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(currentIndexChanged(int)));
-
-         disconnect(d->control, SIGNAL(currentMediaChanged(QMediaContent)),
-            this, SLOT(currentMediaChanged(QMediaContent)));
+         disconnect(d->control, &QMediaPlaylistControl::playbackModeChanged,     this, &QMediaPlaylist::playbackModeChanged);
+         disconnect(d->control, &QMediaPlaylistControl::currentIndexChanged,     this, &QMediaPlaylist::currentIndexChanged);
+         disconnect(d->control, &QMediaPlaylistControl::currentMediaChanged,     this, &QMediaPlaylist::currentMediaChanged);
 
          // Copy playlist items, sync playback mode and sync current index between
          // old control and new control
@@ -136,24 +130,18 @@ bool QMediaPlaylist::setMediaObject(QMediaObject *mediaObject)
 
       d->control = newControl;
       QMediaPlaylistProvider *playlist = d->control->playlistProvider();
-      connect(playlist, SIGNAL(loadFailed(QMediaPlaylist::Error, QString)),
-         this, SLOT(_q_loadFailed(QMediaPlaylist::Error, QString)));
 
-      connect(playlist, SIGNAL(mediaChanged(int, int)),           this, SLOT(mediaChanged(int, int)));
-      connect(playlist, SIGNAL(mediaAboutToBeInserted(int, int)), this, SLOT(mediaAboutToBeInserted(int, int)));
-      connect(playlist, SIGNAL(mediaInserted(int, int)),          this, SLOT(mediaInserted(int, int)));
-      connect(playlist, SIGNAL(mediaAboutToBeRemoved(int, int)),  this, SLOT(mediaAboutToBeRemoved(int, int)));
-      connect(playlist, SIGNAL(mediaRemoved(int, int)),           this, SLOT(mediaRemoved(int, int)));
-      connect(playlist, SIGNAL(loaded()),                        this, SLOT(loaded()));
+      connect(playlist,   &QMediaPlaylistProvider::loadFailed,             this, &QMediaPlaylist::_q_loadFailed);
+      connect(playlist,   &QMediaPlaylistProvider::mediaChanged,           this, &QMediaPlaylist::mediaChanged);
+      connect(playlist,   &QMediaPlaylistProvider::mediaAboutToBeInserted, this, &QMediaPlaylist::mediaAboutToBeInserted);
+      connect(playlist,   &QMediaPlaylistProvider::mediaInserted,          this, &QMediaPlaylist::mediaInserted);
+      connect(playlist,   &QMediaPlaylistProvider::mediaAboutToBeRemoved,  this, &QMediaPlaylist::mediaAboutToBeRemoved);
+      connect(playlist,   &QMediaPlaylistProvider::mediaRemoved,           this, &QMediaPlaylist::mediaRemoved);
+      connect(playlist,   &QMediaPlaylistProvider::loaded,                  this, &QMediaPlaylist::loaded);
 
-      connect(d->control, SIGNAL(playbackModeChanged(QMediaPlaylist::PlaybackMode)),
-         this, SLOT(playbackModeChanged(QMediaPlaylist::PlaybackMode)));
-
-      connect(d->control, SIGNAL(currentIndexChanged(int)),
-         this, SLOT(currentIndexChanged(int)));
-
-      connect(d->control, SIGNAL(currentMediaChanged(QMediaContent)),
-         this, SLOT(currentMediaChanged(QMediaContent)));
+      connect(d->control, &QMediaPlaylistControl::playbackModeChanged,     this, &QMediaPlaylist::playbackModeChanged);
+      connect(d->control, &QMediaPlaylistControl::currentIndexChanged,     this, &QMediaPlaylist::currentIndexChanged);
+      connect(d->control, &QMediaPlaylistControl::currentMediaChanged,     this, &QMediaPlaylist::currentMediaChanged);
 
       if (removedStart != -1 && removedEnd != -1) {
          emit mediaAboutToBeRemoved(removedStart, removedEnd);

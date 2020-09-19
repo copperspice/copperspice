@@ -45,8 +45,8 @@ QVideoProbe::~QVideoProbe()
     if (d->source) {
         // Disconnect
         if (d->probee) {
-            disconnect(d->probee.data(), SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(videoFrameProbed(QVideoFrame)));
-            disconnect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
+            disconnect(d->probee.data(), &QMediaVideoProbeControl::videoFrameProbed, this, &QVideoProbe::videoFrameProbed);
+            disconnect(d->probee.data(), &QMediaVideoProbeControl::flush,            this, &QVideoProbe::flush);
         }
         d->source.data()->service()->releaseControl(d->probee.data());
     }
@@ -60,17 +60,18 @@ bool QVideoProbe::setSource(QMediaObject *source)
     // 3) connect if so
 
     // in case source was destroyed but probe control is still valid
-    if (!d->source && d->probee) {
-        disconnect(d->probee.data(), SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(videoFrameProbed(QVideoFrame)));
-        disconnect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
+    if (! d->source && d->probee) {
+        disconnect(d->probee.data(), &QMediaVideoProbeControl::videoFrameProbed, this, &QVideoProbe::videoFrameProbed);
+        disconnect(d->probee.data(), &QMediaVideoProbeControl::flush,            this, &QVideoProbe::flush);
         d->probee.clear();
     }
 
     if (source != d->source.data()) {
         if (d->source) {
             Q_ASSERT(d->probee);
-            disconnect(d->probee.data(), SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(videoFrameProbed(QVideoFrame)));
-            disconnect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
+            disconnect(d->probee.data(), &QMediaVideoProbeControl::videoFrameProbed, this, &QVideoProbe::videoFrameProbed);
+            disconnect(d->probee.data(), &QMediaVideoProbeControl::flush,            this, &QVideoProbe::flush);
+
             d->source.data()->service()->releaseControl(d->probee.data());
             d->source.clear();
             d->probee.clear();
@@ -83,9 +84,9 @@ bool QVideoProbe::setSource(QMediaObject *source)
             }
 
             if (d->probee) {
-                connect(d->probee.data(), SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(videoFrameProbed(QVideoFrame)));
-                connect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
-                d->source = source;
+               connect(d->probee.data(), &QMediaVideoProbeControl::videoFrameProbed, this, &QVideoProbe::videoFrameProbed);
+               connect(d->probee.data(), &QMediaVideoProbeControl::flush,            this, &QVideoProbe::flush);
+               d->source = source;
             }
         }
     }

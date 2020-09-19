@@ -54,17 +54,17 @@ QRadioTuner::QRadioTuner(QObject *parent):
         d->control = qobject_cast<QRadioTunerControl*>(d->service->requestControl(QRadioTunerControl_iid));
 
         if (d->control != 0) {
-            connect(d->control, SIGNAL(stateChanged(QRadioTuner::State)), SLOT(stateChanged(QRadioTuner::State)));
-            connect(d->control, SIGNAL(bandChanged(QRadioTuner::Band)),   SLOT(bandChanged(QRadioTuner::Band)));
-            connect(d->control, SIGNAL(frequencyChanged(int)),            SLOT(frequencyChanged(int)));
-            connect(d->control, SIGNAL(stereoStatusChanged(bool)),        SLOT(stereoStatusChanged(bool)));
-            connect(d->control, SIGNAL(searchingChanged(bool)),           SLOT(searchingChanged(bool)));
-            connect(d->control, SIGNAL(signalStrengthChanged(int)),       SLOT(signalStrengthChanged(int)));
-            connect(d->control, SIGNAL(volumeChanged(int)),               SLOT(volumeChanged(int)));
-            connect(d->control, SIGNAL(mutedChanged(bool)),               SLOT(mutedChanged(bool)));
-            connect(d->control, SIGNAL(stationFound(int,QString)),        SLOT(stationFound(int,QString)));
-            connect(d->control, SIGNAL(antennaConnectedChanged(bool)),    SLOT(antennaConnectedChanged(bool)));
-            connect(d->control, SIGNAL(error(QRadioTuner::Error)),        SLOT(error(QRadioTuner::Error)));
+            connect(d->control, &QRadioTunerControl::stateChanged,            this, &QRadioTuner::stateChanged);
+            connect(d->control, &QRadioTunerControl::bandChanged,             this, &QRadioTuner::bandChanged);
+            connect(d->control, &QRadioTunerControl::frequencyChanged,        this, &QRadioTuner::frequencyChanged);
+            connect(d->control, &QRadioTunerControl::stereoStatusChanged,     this, &QRadioTuner::stereoStatusChanged);
+            connect(d->control, &QRadioTunerControl::searchingChanged,        this, &QRadioTuner::searchingChanged);
+            connect(d->control, &QRadioTunerControl::signalStrengthChanged,   this, &QRadioTuner::signalStrengthChanged);
+            connect(d->control, &QRadioTunerControl::volumeChanged,           this, &QRadioTuner::volumeChanged);
+            connect(d->control, &QRadioTunerControl::mutedChanged,            this, &QRadioTuner::mutedChanged);
+            connect(d->control, &QRadioTunerControl::stationFound,            this, &QRadioTuner::stationFound);
+            connect(d->control, &QRadioTunerControl::antennaConnectedChanged, this, &QRadioTuner::antennaConnectedChanged);
+            connect(d->control, &QRadioTunerControl::error,                   this, &QRadioTuner::error);
         }
 
         d->radioData = new QRadioData(this, this);

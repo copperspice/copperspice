@@ -34,6 +34,7 @@
 
 class QIODevice;
 class QNetworkAccessManager;
+class QNetworkReply;
 class QSampleCache;
 class QWaveDecoder;
 
@@ -85,12 +86,12 @@ class Q_MULTIMEDIA_EXPORT QSample : public QObject
    QSampleCache *m_parent;
    QByteArray   m_soundData;
    QAudioFormat m_audioFormat;
-   QIODevice    *m_stream;
    QWaveDecoder *m_waveDecoder;
    QUrl         m_url;
    qint64       m_sampleReadLength;
    State        m_state;
    int          m_ref;
+   QNetworkReply  *m_stream;
 
    MULTI_CS_SLOT_1(Private, void load())
    MULTI_CS_SLOT_2(load)

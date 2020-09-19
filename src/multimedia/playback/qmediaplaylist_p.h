@@ -100,10 +100,9 @@ class QMediaNetworkPlaylistControl : public QMediaPlaylistControl
       m_navigator = new QMediaPlaylistNavigator(playlist, this);
       m_navigator->setPlaybackMode(QMediaPlaylist::Sequential);
 
-      connect(m_navigator, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChanged(int)));
-      connect(m_navigator, SIGNAL(activated(QMediaContent)), this, SLOT(currentMediaChanged(QMediaContent)));
-      connect(m_navigator, SIGNAL(playbackModeChanged(QMediaPlaylist::PlaybackMode)), this,
-         SLOT(playbackModeChanged(QMediaPlaylist::PlaybackMode)));
+      connect(m_navigator, &QMediaPlaylistNavigator::currentIndexChanged, this, &QMediaNetworkPlaylistControl::currentIndexChanged);
+      connect(m_navigator, &QMediaPlaylistNavigator::activated,           this, &QMediaNetworkPlaylistControl::currentMediaChanged);
+      connect(m_navigator, &QMediaPlaylistNavigator::playbackModeChanged, this, &QMediaNetworkPlaylistControl::playbackModeChanged);
    }
 
    virtual ~QMediaNetworkPlaylistControl() {};
