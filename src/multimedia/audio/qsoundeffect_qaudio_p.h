@@ -71,7 +71,6 @@ class PrivateSoundSource : public QIODevice
    friend class QSoundEffectPrivate;
 };
 
-
 class QSoundEffectPrivate : public QObject
 {
    MULTI_CS_OBJECT(QSoundEffectPrivate)
@@ -132,7 +131,7 @@ class QSoundEffectPrivate : public QObject
    void setPlaying(bool playing);
    void setLoopsRemaining(int loopsRemaining);
 
-   PrivateSoundSource *d;
+   PrivateSoundSource *m_soundSource;
 
    friend class PrivateSoundSource;
 };

@@ -31,68 +31,67 @@
 QAudioInput::QAudioInput(const QAudioFormat &format, QObject *parent)
    : QObject(parent)
 {
-   d = QAudioDeviceFactory::createDefaultInputDevice(format);
-   connect(d, SIGNAL(notify()),                    this, SLOT(notify()));
-   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(stateChanged(QAudio::State)));
+   m_audioInput = QAudioDeviceFactory::createDefaultInputDevice(format);
+   connect(m_audioInput, &QAbstractAudioInput::notify,       this, &QAudioInput::notify);
+   connect(m_audioInput, &QAbstractAudioInput::stateChanged, this, &QAudioInput::stateChanged);
 }
 
-QAudioInput::QAudioInput(const QAudioDeviceInfo &audioDevice, const QAudioFormat &format, QObject *parent):
-   QObject(parent)
+QAudioInput::QAudioInput(const QAudioDeviceInfo &audioDevice, const QAudioFormat &format, QObject *parent)
+   : QObject(parent)
 {
-   d = QAudioDeviceFactory::createInputDevice(audioDevice, format);
-   connect(d, SIGNAL(notify()),                    this, SLOT(notify()));
-   connect(d, SIGNAL(stateChanged(QAudio::State)), this, SLOT(stateChanged(QAudio::State)));
+   m_audioInput = QAudioDeviceFactory::createInputDevice(audioDevice, format);
+   connect(m_audioInput, &QAbstractAudioInput::notify,       this, &QAudioInput::notify);
+   connect(m_audioInput, &QAbstractAudioInput::stateChanged, this, &QAudioInput::stateChanged);
 }
 
 QAudioInput::~QAudioInput()
 {
-   delete d;
+   delete m_audioInput;
 }
 
 void QAudioInput::start(QIODevice *device)
 {
-   d->start(device);
+   m_audioInput->start(device);
 }
 
 QIODevice *QAudioInput::start()
 {
-   return d->start();
+   return m_audioInput->start();
 }
 
 QAudioFormat QAudioInput::format() const
 {
-   return d->format();
+   return m_audioInput->format();
 }
 
 void QAudioInput::stop()
 {
-   d->stop();
+   m_audioInput->stop();
 }
 
 void QAudioInput::reset()
 {
-   d->reset();
+   m_audioInput->reset();
 }
 
 void QAudioInput::suspend()
 {
-   d->suspend();
+   m_audioInput->suspend();
 }
 
 void QAudioInput::resume()
 {
-   d->resume();
+   m_audioInput->resume();
 }
-
 
 void QAudioInput::setBufferSize(int value)
 {
-   d->setBufferSize(value);
+   m_audioInput->setBufferSize(value);
 }
 
 int QAudioInput::bufferSize() const
 {
-   return d->bufferSize();
+   return m_audioInput->bufferSize();
 }
 
 int QAudioInput::bytesReady() const
@@ -101,49 +100,51 @@ int QAudioInput::bytesReady() const
    -If not ActiveState|IdleState, return 0
    -return amount of audio data available to read
    */
-   return d->bytesReady();
+   return m_audioInput->bytesReady();
 }
 
 int QAudioInput::periodSize() const
 {
-   return d->periodSize();
+   return m_audioInput->periodSize();
 }
 
 void QAudioInput::setNotifyInterval(int ms)
 {
-   d->setNotifyInterval(ms);
+   m_audioInput->setNotifyInterval(ms);
 }
 
 int QAudioInput::notifyInterval() const
 {
-   return d->notifyInterval();
+   return m_audioInput->notifyInterval();
 }
+
 void QAudioInput::setVolume(qreal volume)
 {
    qreal v = qBound(qreal(0.0), volume, qreal(1.0));
-   d->setVolume(v);
+   m_audioInput->setVolume(v);
 }
+
 qreal QAudioInput::volume() const
 {
-   return d->volume();
+   return m_audioInput->volume();
 }
 
 qint64 QAudioInput::processedUSecs() const
 {
-   return d->processedUSecs();
+   return m_audioInput->processedUSecs();
 }
 
 qint64 QAudioInput::elapsedUSecs() const
 {
-   return d->elapsedUSecs();
+   return m_audioInput->elapsedUSecs();
 }
 
 QAudio::Error QAudioInput::error() const
 {
-   return d->error();
+   return m_audioInput->error();
 }
 
 QAudio::State QAudioInput::state() const
 {
-   return d->state();
+   return m_audioInput->state();
 }

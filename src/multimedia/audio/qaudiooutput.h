@@ -84,7 +84,7 @@ class Q_MULTIMEDIA_EXPORT QAudioOutput : public QObject
    MULTI_CS_SIGNAL_2(notify)
 
  private:
-   QAbstractAudioOutput *d;
+   QAbstractAudioOutput *m_audioOutput;
 };
 
 #endif
