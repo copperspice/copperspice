@@ -52,7 +52,7 @@ class Q_MULTIMEDIA_EXPORT QPlaylistFileParser : public QObject
    QPlaylistFileParser(const QPlaylistFileParser &) = delete;
    QPlaylistFileParser &operator=(const QPlaylistFileParser &) = delete;
 
-   static FileType findPlaylistType(const QString &uri, const QString &mime, const void *data, quint32 size);
+   static FileType findPlaylistType(const QString &uri, const QString &mime, const QByteArray &data);
 
    void start(const QNetworkRequest &request, bool utf8 = false);
    void stop();

@@ -291,7 +291,7 @@ void QPlaylistFileParserPrivate::processLine(int startIndex, int length)
       Q_ASSERT(! m_currentParser);
 
       QString mimeType = m_source->header(QNetworkRequest::ContentTypeHeader).toString();
-      m_type = QPlaylistFileParser::findPlaylistType(m_root.toString(), mimeType, m_buffer.constData(), m_buffer.size());
+      m_type = QPlaylistFileParser::findPlaylistType(m_root.toString(), mimeType, m_buffer);
 
       switch (m_type) {
          case QPlaylistFileParser::UNKNOWN:
@@ -437,10 +437,10 @@ QPlaylistFileParser::QPlaylistFileParser(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-QPlaylistFileParser::FileType QPlaylistFileParser::findPlaylistType(const QString &uri, const QString &mime, const void *data,
-   quint32 size)
+QPlaylistFileParser::FileType QPlaylistFileParser::findPlaylistType(const QString &uri, const QString &mime,
+                  const QByteArray &data)
 {
-   if (! data || !size) {
+   if (data.isEmpty()) {
       return UNKNOWN;
    }
 
@@ -473,18 +473,25 @@ QPlaylistFileParser::FileType QPlaylistFileParser::findPlaylistType(const QStrin
    }
 
    FileType bufferType = UNKNOWN;
-   if (size >= 7 && strncmp((const char *)data, "#EXTM3U", 7) == 0) {
+
+   if (data.startsWith("#EXTM3U")) {
       bufferType = M3U;
-   } else if (size >= 10 && strncmp((const char *)data, "[playlist]", 10) == 0) {
+
+   } else if (data.startsWith("[playlist]")) {
       bufferType = PLS;
+
    } else {
-      // Make sure every line is a text string
-      quint32 n;
-      for (n = 0; n < size; n++)
-         if (!QChar(QLatin1Char(((const char *)data)[n])).isPrint()) {
+      // make sure every line is a text string
+      bool printok = true;
+
+      for (char ch : data) {
+         if (! std::isprint(ch)) {
+            printok = false;
             break;
          }
-      if (n == size) {
+      }
+
+      if (printok) {
          bufferType = M3U;
       }
    }
