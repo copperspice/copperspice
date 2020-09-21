@@ -30,7 +30,7 @@
 #include <qmediarecorder.h>
 
 class QVideoProbePrivate {
-public:
+  public:
     QPointer<QMediaObject> source;
     QPointer<QMediaVideoProbeControl> probee;
 };
@@ -43,11 +43,11 @@ QVideoProbe::QVideoProbe(QObject *parent)
 QVideoProbe::~QVideoProbe()
 {
     if (d->source) {
-        // Disconnect
         if (d->probee) {
             disconnect(d->probee.data(), &QMediaVideoProbeControl::videoFrameProbed, this, &QVideoProbe::videoFrameProbed);
             disconnect(d->probee.data(), &QMediaVideoProbeControl::flush,            this, &QVideoProbe::flush);
         }
+
         d->source.data()->service()->releaseControl(d->probee.data());
     }
 }
@@ -102,7 +102,7 @@ bool QVideoProbe::setSource(QMediaRecorder *mediaRecorder)
     if (!mediaRecorder)
         return true;
 
-    if (mediaRecorder && !source)
+    if (mediaRecorder && ! source)
         return false;
 
     return result;
@@ -112,5 +112,3 @@ bool QVideoProbe::isActive() const
 {
     return d->probee != 0;
 }
-
-

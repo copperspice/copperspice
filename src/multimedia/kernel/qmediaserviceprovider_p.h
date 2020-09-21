@@ -24,10 +24,10 @@
 #ifndef QMEDIASERVICEPROVIDER_H
 #define QMEDIASERVICEPROVIDER_H
 
+#include <qmediaservice_provider_plugin.h>
+#include <qmultimedia.h>
 #include <qobject.h>
 #include <qshareddata.h>
-#include <qmultimedia.h>
-#include <qmediaservice_provider_plugin.h>
 
 class QMediaService;
 
@@ -42,7 +42,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProvider : public QObject
    virtual QMediaServiceProviderHint::Features supportedFeatures(const QMediaService *service) const;
 
    virtual QMultimedia::SupportEstimate hasSupport(const QString &serviceType,
-      const QString &mimeType, const QStringList &codecs, int flags = 0) const;
+         const QString &mimeType, const QStringList &codecs, int flags = 0) const;
 
    virtual QStringList supportedMimeTypes(const QString &serviceType, int flags = 0) const;
 

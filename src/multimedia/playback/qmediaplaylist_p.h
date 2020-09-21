@@ -41,8 +41,6 @@ class QMediaPlayerControl;
 
 class QMediaPlaylistPrivate
 {
-   Q_DECLARE_PUBLIC(QMediaPlaylist)
-
  public:
    QMediaPlaylistPrivate()
       : mediaObject(0), control(0), networkPlaylistControl(0), error(QMediaPlaylist::NoError) {
@@ -87,6 +85,9 @@ class QMediaPlaylistPrivate
    QString errorString;
 
    QMediaPlaylist *q_ptr;
+
+ private:
+   Q_DECLARE_PUBLIC(QMediaPlaylist)
 };
 
 class QMediaNetworkPlaylistControl : public QMediaPlaylistControl
@@ -95,7 +96,8 @@ class QMediaNetworkPlaylistControl : public QMediaPlaylistControl
 
  public:
    QMediaNetworkPlaylistControl(QObject *parent)
-      : QMediaPlaylistControl(parent) {
+      : QMediaPlaylistControl(parent)
+   {
       QMediaPlaylistProvider *playlist = new QMediaNetworkPlaylistProvider(this);
       m_navigator = new QMediaPlaylistNavigator(playlist, this);
       m_navigator->setPlaybackMode(QMediaPlaylist::Sequential);

@@ -35,23 +35,24 @@ class QRadioTunerPrivate : public QMediaObjectPrivate
 {
 public:
     QRadioTunerPrivate():provider(0), control(0), radioData(0)
-    {}
+    {
+    }
 
     QMediaServiceProvider *provider;
     QRadioTunerControl* control;
     QRadioData *radioData;
 };
 
-QRadioTuner::QRadioTuner(QObject *parent):
-    QMediaObject(*new QRadioTunerPrivate, parent,
-                  QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_RADIO))
+QRadioTuner::QRadioTuner(QObject *parent)
+   : QMediaObject(*new QRadioTunerPrivate, parent,
+     QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_RADIO))
 {
     Q_D(QRadioTuner);
 
     d->provider = QMediaServiceProvider::defaultServiceProvider();
 
     if (d->service != 0) {
-        d->control = qobject_cast<QRadioTunerControl*>(d->service->requestControl(QRadioTunerControl_iid));
+        d->control = dynamic_cast<QRadioTunerControl *>(d->service->requestControl(QRadioTunerControl_iid));
 
         if (d->control != 0) {
             connect(d->control, &QRadioTunerControl::stateChanged,            this, &QRadioTuner::stateChanged);
@@ -71,10 +72,6 @@ QRadioTuner::QRadioTuner(QObject *parent):
     }
 }
 
-/*!
-    Destroys a radio tuner.
-*/
-
 QRadioTuner::~QRadioTuner()
 {
     Q_D(QRadioTuner);
@@ -88,39 +85,22 @@ QRadioTuner::~QRadioTuner()
     d->provider->releaseService(d->service);
 }
 
-/*!
-    Returns the availability of the radio tuner.
-*/
 QMultimedia::AvailabilityStatus QRadioTuner::availability() const
 {
     if (d_func()->control == 0)
         return QMultimedia::ServiceMissing;
 
-    if (!d_func()->control->isAntennaConnected())
+    if (! d_func()->control->isAntennaConnected())
         return QMultimedia::ResourceError;
 
     return QMediaObject::availability();
 }
-
-/*!
-    \property QRadioTuner::state
-    Return the current radio tuner state.
-
-    \sa QRadioTuner::State
-*/
 
 QRadioTuner::State QRadioTuner::state() const
 {
     return d_func()->control ?
             d_func()->control->state() : QRadioTuner::StoppedState;
 }
-
-/*!
-    \property QRadioTuner::band
-    \brief the frequency band a radio tuner is tuned to.
-
-    \sa QRadioTuner::Band
-*/
 
 QRadioTuner::Band QRadioTuner::band() const
 {
@@ -131,11 +111,6 @@ QRadioTuner::Band QRadioTuner::band() const
 
     return QRadioTuner::FM;
 }
-
-/*!
-    \property QRadioTuner::frequency
-    \brief the frequency in Hertz a radio tuner is tuned to.
-*/
 
 int QRadioTuner::frequency() const
 {

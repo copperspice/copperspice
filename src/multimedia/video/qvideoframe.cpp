@@ -641,12 +641,13 @@ QImage qt_imageFromVideoFrame(const QVideoFrame &f)
    // Need conversion
    else {
       static bool initAsmFuncsDone = false;
-      if (!initAsmFuncsDone) {
+      if (! initAsmFuncsDone) {
          qInitConvertFuncsAsm();
          initAsmFuncsDone = true;
       }
+
       VideoFrameConvertFunc convert = qConvertFuncs[frame.pixelFormat()];
-      if (!convert) {
+      if (! convert) {
          qWarning() << Q_FUNC_INFO << ": unsupported pixel format" << frame.pixelFormat();
       } else {
          result = QImage(frame.width(), frame.height(), QImage::Format_ARGB32);
@@ -663,6 +664,7 @@ QDebug operator<<(QDebug dbg, QVideoFrame::PixelFormat pf)
 {
    QDebugStateSaver saver(dbg);
    dbg.nospace();
+
    switch (pf) {
       case QVideoFrame::Format_Invalid:
          return dbg << "Format_Invalid";
@@ -755,7 +757,7 @@ static QString qFormatTimeStamps(qint64 start, qint64 end)
 {
    // Early out for invalid.
    if (start < 0) {
-      return QLatin1String("[no timestamp]");
+      return QString("[no timestamp]");
    }
 
    bool onlyOne = (start == end);
@@ -771,29 +773,29 @@ static QString qFormatTimeStamps(qint64 start, qint64 end)
    if (onlyOne) {
       if (start > 0)
          return QString("@%1:%2:%3.%4")
-            .formatArg(start, 1, 10, QLatin1Char('0'))
-            .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
-            .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
-            .formatArg(s_millis, 2, 10, QLatin1Char('0'));
+            .formatArg(start, 1, 10, '0')
+            .formatArg(s_minutes, 2, 10, '0')
+            .formatArg(s_seconds, 2, 10, '0')
+            .formatArg(s_millis, 2, 10, '0');
       else
          return QString("@%1:%2.%3")
-            .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
-            .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
-            .formatArg(s_millis, 2, 10, QLatin1Char('0'));
+            .formatArg(s_minutes, 2, 10, '0')
+            .formatArg(s_seconds, 2, 10, '0')
+            .formatArg(s_millis, 2, 10, '0');
 
    } else if (end == -1) {
       // Similar to start-start, except it means keep displaying it?
       if (start > 0)
          return QString("%1:%2:%3.%4 - forever")
-            .formatArg(start, 1, 10, QLatin1Char('0'))
-            .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
-            .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
-            .formatArg(s_millis, 2, 10, QLatin1Char('0'));
+            .formatArg(start, 1, 10, '0')
+            .formatArg(s_minutes, 2, 10, '0')
+            .formatArg(s_seconds, 2, 10, '0')
+            .formatArg(s_millis, 2, 10, '0');
       else
          return QString("%1:%2.%3 - forever")
-            .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
-            .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
-            .formatArg(s_millis, 2, 10, QLatin1Char('0'));
+            .formatArg(s_minutes, 2, 10, '0')
+            .formatArg(s_seconds, 2, 10, '0')
+            .formatArg(s_millis, 2, 10, '0');
    } else {
       const int e_millis = end % 1000000;
       end /= 1000000;
@@ -804,22 +806,22 @@ static QString qFormatTimeStamps(qint64 start, qint64 end)
 
       if (start > 0 || end > 0)
          return QString("%1:%2:%3.%4 - %5:%6:%7.%8")
-            .formatArg(start, 1, 10, QLatin1Char('0'))
-            .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
-            .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
-            .formatArg(s_millis, 2, 10, QLatin1Char('0'))
-            .formatArg(end, 1, 10, QLatin1Char('0'))
-            .formatArg(e_minutes, 2, 10, QLatin1Char('0'))
-            .formatArg(e_seconds, 2, 10, QLatin1Char('0'))
-            .formatArg(e_millis, 2, 10, QLatin1Char('0'));
+            .formatArg(start, 1, 10, '0')
+            .formatArg(s_minutes, 2, 10, '0')
+            .formatArg(s_seconds, 2, 10, '0')
+            .formatArg(s_millis, 2, 10, '0')
+            .formatArg(end, 1, 10, '0')
+            .formatArg(e_minutes, 2, 10, '0')
+            .formatArg(e_seconds, 2, 10, '0')
+            .formatArg(e_millis, 2, 10, '0');
       else
          return QString("%1:%2.%3 - %4:%5.%6")
-            .formatArg(s_minutes, 2, 10, QLatin1Char('0'))
-            .formatArg(s_seconds, 2, 10, QLatin1Char('0'))
-            .formatArg(s_millis, 2, 10, QLatin1Char('0'))
-            .formatArg(e_minutes, 2, 10, QLatin1Char('0'))
-            .formatArg(e_seconds, 2, 10, QLatin1Char('0'))
-            .formatArg(e_millis, 2, 10, QLatin1Char('0'));
+            .formatArg(s_minutes, 2, 10, '0')
+            .formatArg(s_seconds, 2, 10, '0')
+            .formatArg(s_millis, 2, 10, '0')
+            .formatArg(e_minutes, 2, 10, '0')
+            .formatArg(e_seconds, 2, 10, '0')
+            .formatArg(e_millis, 2, 10, '0');
    }
 }
 
@@ -829,10 +831,10 @@ QDebug operator<<(QDebug dbg, const QVideoFrame &f)
    dbg.nospace();
 
    dbg << "QVideoFrame(" << f.size() << ", "
-      << f.pixelFormat() << ", "
-      << f.handleType() << ", "
-      << f.mapMode() << ", "
-      << qFormatTimeStamps(f.startTime(), f.endTime());
+       << f.pixelFormat() << ", "
+       << f.handleType() << ", "
+       << f.mapMode() << ", "
+       << qFormatTimeStamps(f.startTime(), f.endTime());
 
    if (f.availableMetaData().count()) {
       auto iter_end = f.availableMetaData().constEnd();

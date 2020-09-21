@@ -370,7 +370,8 @@ QSoundEffectPrivate::~QSoundEffectPrivate()
 QStringList QSoundEffectPrivate::supportedMimeTypes()
 {
     QStringList supportedTypes;
-    supportedTypes << QLatin1String("audio/x-wav") << QLatin1String("audio/vnd.wave") ;
+    supportedTypes << "audio/x-wav" << "audio/vnd.wave";
+
     return supportedTypes;
 }
 

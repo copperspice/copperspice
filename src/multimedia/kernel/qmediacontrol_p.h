@@ -30,7 +30,8 @@ class QMediaControlPrivate
 {
  public:
    virtual ~QMediaControlPrivate()
-   {}
+   {
+   }
 
    QMediaControl *q_ptr;
 };

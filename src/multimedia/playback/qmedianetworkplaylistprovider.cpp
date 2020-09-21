@@ -86,8 +86,10 @@ void QMediaNetworkPlaylistProviderPrivate::_q_handleNewItem(const QVariant &cont
    QUrl url;
    if (content.type() == QVariant::Url) {
       url = content.toUrl();
+
    } else if (content.type() == QVariant::Map) {
-      url = content.toMap()[QLatin1String("url")].toUrl();
+      url = content.toMap()["url"].toUrl();
+
    } else {
       return;
    }

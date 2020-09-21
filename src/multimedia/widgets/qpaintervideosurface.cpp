@@ -33,9 +33,9 @@
 
 #if ! defined(QT_NO_OPENGL) && ! defined(QT_OPENGL_ES_1_CL) && ! defined(QT_OPENGL_ES_1)
 #include <qglshaderprogram.h>
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
-#include <QWindow>
+#include <qopenglcontext.h>
+#include <qopenglfunctions.h>
+#include <qwindow.h>
 
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -297,19 +297,13 @@ class QVideoSurfaceGLPainter : public QVideoSurfacePainter, protected QOpenGLFun
 };
 
 QVideoSurfaceGLPainter::QVideoSurfaceGLPainter(QGLContext *context)
-   : m_context(context)
-   , m_handleType(QAbstractVideoBuffer::NoHandle)
-   , m_scanLineDirection(QVideoSurfaceFormat::TopToBottom)
-   , m_mirrored(false)
-   , m_colorSpace(QVideoSurfaceFormat::YCbCr_BT601)
-   , m_textureFormat(0)
-   , m_textureInternalFormat(0)
-   , m_textureType(0)
-   , m_textureCount(0)
-   , m_yuv(false)
+   : m_context(context), m_handleType(QAbstractVideoBuffer::NoHandle),
+     m_scanLineDirection(QVideoSurfaceFormat::TopToBottom), m_mirrored(false),
+     m_colorSpace(QVideoSurfaceFormat::YCbCr_BT601), m_textureFormat(0),
+     m_textureInternalFormat(0), m_textureType(0), m_textureCount(0), m_yuv(false)
 {
 #if !defined(QT_OPENGL_ES) && !defined(QT_OPENGL_DYNAMIC)
-   glActiveTexture = (_glActiveTexture)m_context->getProcAddress(QLatin1String("glActiveTexture"));
+   glActiveTexture = (_glActiveTexture)m_context->getProcAddress("glActiveTexture");
 #endif
 
    memset(m_textureIds, 0, sizeof(m_textureIds));
@@ -663,16 +657,14 @@ class QVideoSurfaceArbFpPainter : public QVideoSurfaceGLPainter
    QAbstractVideoSurface::Error start(const QVideoSurfaceFormat &format);
    void stop();
 
-   QAbstractVideoSurface::Error paint(
-      const QRectF &target, QPainter *painter, const QRectF &source);
+   QAbstractVideoSurface::Error paint(const QRectF &target, QPainter *painter, const QRectF &source);
 
  private:
    typedef void (APIENTRY *_glProgramStringARB) (GLenum, GLenum, GLsizei, const GLvoid *);
    typedef void (APIENTRY *_glBindProgramARB) (GLenum, GLuint);
    typedef void (APIENTRY *_glDeleteProgramsARB) (GLsizei, const GLuint *);
    typedef void (APIENTRY *_glGenProgramsARB) (GLsizei, GLuint *);
-   typedef void (APIENTRY *_glProgramLocalParameter4fARB) (
-      GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
+   typedef void (APIENTRY *_glProgramLocalParameter4fARB) (GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
    typedef void (APIENTRY *_glActiveTexture) (GLenum);
 
    _glProgramStringARB glProgramStringARB;
@@ -686,22 +678,17 @@ class QVideoSurfaceArbFpPainter : public QVideoSurfaceGLPainter
 };
 
 QVideoSurfaceArbFpPainter::QVideoSurfaceArbFpPainter(QGLContext *context)
-   : QVideoSurfaceGLPainter(context)
-   , m_programId(0)
+   : QVideoSurfaceGLPainter(context), m_programId(0)
 {
-   glProgramStringARB = (_glProgramStringARB) m_context->getProcAddress(
-         QLatin1String("glProgramStringARB"));
-   glBindProgramARB = (_glBindProgramARB) m_context->getProcAddress(
-         QLatin1String("glBindProgramARB"));
-   glDeleteProgramsARB = (_glDeleteProgramsARB) m_context->getProcAddress(
-         QLatin1String("glDeleteProgramsARB"));
-   glGenProgramsARB = (_glGenProgramsARB) m_context->getProcAddress(
-         QLatin1String("glGenProgramsARB"));
-   glProgramLocalParameter4fARB = (_glProgramLocalParameter4fARB) m_context->getProcAddress(
-         QLatin1String("glProgramLocalParameter4fARB"));
+   glProgramStringARB  = (_glProgramStringARB) m_context->getProcAddress("glProgramStringARB");
+   glBindProgramARB    = (_glBindProgramARB) m_context->getProcAddress("glBindProgramARB");
+   glDeleteProgramsARB = (_glDeleteProgramsARB) m_context->getProcAddress("glDeleteProgramsARB");
+   glGenProgramsARB    = (_glGenProgramsARB) m_context->getProcAddress("glGenProgramsARB");
+
+   glProgramLocalParameter4fARB = (_glProgramLocalParameter4fARB) m_context->getProcAddress("glProgramLocalParameter4fARB");
 
    m_imagePixelFormats
-         << QVideoFrame::Format_RGB32
+            << QVideoFrame::Format_RGB32
             << QVideoFrame::Format_BGR32
             << QVideoFrame::Format_ARGB32
             << QVideoFrame::Format_RGB24
@@ -711,8 +698,9 @@ QVideoSurfaceArbFpPainter::QVideoSurfaceArbFpPainter(QGLContext *context)
             << QVideoFrame::Format_YUV444
             << QVideoFrame::Format_YV12
             << QVideoFrame::Format_YUV420P;
+
    m_glPixelFormats
-         << QVideoFrame::Format_RGB32
+            << QVideoFrame::Format_RGB32
             << QVideoFrame::Format_ARGB32
             << QVideoFrame::Format_BGR32
             << QVideoFrame::Format_BGRA32;

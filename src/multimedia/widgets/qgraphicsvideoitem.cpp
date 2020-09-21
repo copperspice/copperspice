@@ -72,11 +72,12 @@ void QGraphicsVideoItemPrivate::clearService()
       surface->stop();
       rendererControl->setSurface(0);
       service->releaseControl(rendererControl);
-      rendererControl = 0;
+      rendererControl = nullptr;
    }
+
    if (service) {
       QObject::disconnect(service, &QMediaService::destroyed, q_ptr, &QGraphicsVideoItem::_q_serviceDestroyed);
-      service = 0;
+      service = nullptr;
    }
 }
 
@@ -88,9 +89,11 @@ void QGraphicsVideoItemPrivate::updateRects()
       //this is necessary for item to receive the
       //first paint event and configure video surface.
       boundingRect = rect;
+
    } else if (aspectRatioMode == Qt::IgnoreAspectRatio) {
       boundingRect = rect;
       sourceRect = QRectF(0, 0, 1, 1);
+
    } else if (aspectRatioMode == Qt::KeepAspectRatio) {
       QSizeF size = nativeSize;
       size.scale(rect.size(), Qt::KeepAspectRatio);
@@ -99,6 +102,7 @@ void QGraphicsVideoItemPrivate::updateRects()
       boundingRect.moveCenter(rect.center());
 
       sourceRect = QRectF(0, 0, 1, 1);
+
    } else if (aspectRatioMode == Qt::KeepAspectRatioByExpanding) {
       boundingRect = rect;
 
@@ -145,7 +149,7 @@ void QGraphicsVideoItemPrivate::_q_serviceDestroyed()
 QGraphicsVideoItem::QGraphicsVideoItem(QGraphicsItem *parent)
    : QGraphicsObject(parent), d_ptr(new QGraphicsVideoItemPrivate)
 {
-   d_ptr->q_ptr = this;
+   d_ptr->q_ptr   = this;
    d_ptr->surface = new QPainterVideoSurface;
 
    connect(d_ptr->surface, &QPainterVideoSurface::frameChanged,         this, &QGraphicsVideoItem::_q_present);
@@ -177,7 +181,6 @@ bool QGraphicsVideoItem::setMediaObject(QMediaObject *object)
    }
 
    d->clearService();
-
    d->mediaObject = object;
 
    if (d->mediaObject) {
@@ -192,8 +195,9 @@ bool QGraphicsVideoItem::setMediaObject(QMediaObject *object)
             if (d->rendererControl) {
                // do not set the surface untill the item is painted
                // at least once and the surface is configured
-               if (!d->updatePaintDevice) {
+               if (! d->updatePaintDevice) {
                   d->rendererControl->setSurface(d->surface);
+
                } else {
                   update(boundingRect());
                }
@@ -210,13 +214,9 @@ bool QGraphicsVideoItem::setMediaObject(QMediaObject *object)
    }
 
    d->mediaObject = 0;
+
    return false;
 }
-
-/*!
-    \property QGraphicsVideoItem::aspectRatioMode
-    \brief how a video is scaled to fit the graphics item's size.
-*/
 
 Qt::AspectRatioMode QGraphicsVideoItem::aspectRatioMode() const
 {
@@ -231,14 +231,6 @@ void QGraphicsVideoItem::setAspectRatioMode(Qt::AspectRatioMode mode)
    d->updateRects();
 }
 
-/*!
-    \property QGraphicsVideoItem::offset
-    \brief the video item's offset.
-
-    QGraphicsVideoItem will draw video using the offset for its top left
-    corner.
-*/
-
 QPointF QGraphicsVideoItem::offset() const
 {
    return d_func()->rect.topLeft();
@@ -251,14 +243,6 @@ void QGraphicsVideoItem::setOffset(const QPointF &offset)
    d->rect.moveTo(offset);
    d->updateRects();
 }
-
-/*!
-    \property QGraphicsVideoItem::size
-    \brief the video item's size.
-
-    QGraphicsVideoItem will draw video scaled to fit size according to its
-    fillMode.
-*/
 
 QSizeF QGraphicsVideoItem::size() const
 {
@@ -273,11 +257,6 @@ void QGraphicsVideoItem::setSize(const QSizeF &size)
    d->updateRects();
 }
 
-/*!
-    \property QGraphicsVideoItem::nativeSize
-    \brief the native size of the video.
-*/
-
 QSizeF QGraphicsVideoItem::nativeSize() const
 {
    return d_func()->nativeSize;
@@ -287,6 +266,7 @@ QRectF QGraphicsVideoItem::boundingRect() const
 {
    return d_func()->boundingRect;
 }
+
 void QGraphicsVideoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
    (void) option;
@@ -296,7 +276,7 @@ void QGraphicsVideoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
    if (d->surface && d->updatePaintDevice) {
       d->updatePaintDevice = false;
 
-#if ! defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && !defined(QT_OPENGL_ES_1)
+#if ! defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && ! defined(QT_OPENGL_ES_1)
       if (widget) {
          connect(widget, &QWidget::destroyed, d->surface, &QPainterVideoSurface::viewportDestroyed);
       }

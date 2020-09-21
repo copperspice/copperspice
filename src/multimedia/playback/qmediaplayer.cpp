@@ -52,18 +52,12 @@ class QMediaPlayerPrivate : public QMediaObjectPrivate
 
  public:
    QMediaPlayerPrivate()
-      : provider(0)
-      , control(0)
-      , audioRoleControl(0)
-      , playlist(0)
-      , networkAccessControl(0)
-      , state(QMediaPlayer::StoppedState)
-      , status(QMediaPlayer::UnknownMediaStatus)
-      , error(QMediaPlayer::NoError)
-      , ignoreNextStatusChange(-1)
-      , nestedPlaylists(0)
+      : provider(0), control(0), audioRoleControl(0), playlist(0), networkAccessControl(0)
+      , state(QMediaPlayer::StoppedState), status(QMediaPlayer::UnknownMediaStatus)
+      , error(QMediaPlayer::NoError), ignoreNextStatusChange(-1), nestedPlaylists(0)
       , hasStreamPlaybackFeature(false)
-   {}
+   {
+   }
 
    QMediaServiceProvider *provider;
    QMediaPlayerControl *control;
@@ -297,11 +291,12 @@ void QMediaPlayerPrivate::setMedia(const QMediaContent &media, QIODevice *stream
    // Backends can't play qrc files directly.
    // If the backend supports StreamPlayback, we pass a QFile for that resource.
    // If it doesn't, we copy the data to a temporary file and pass its path.
-   if (!media.isNull() && !stream && media.canonicalUrl().scheme() == QLatin1String("qrc")) {
+   if (! media.isNull() && ! stream && media.canonicalUrl().scheme() == "qrc") {
       qrcMedia = media;
 
-      file.reset(new QFile(QLatin1Char(':') + media.canonicalUrl().path()));
-      if (!file->open(QFile::ReadOnly)) {
+      file.reset(new QFile(':' + media.canonicalUrl().path()));
+
+      if (! file->open(QFile::ReadOnly)) {
          QMetaObject::invokeMethod(q, "_q_error", Qt::QueuedConnection,
             Q_ARG(int, QMediaPlayer::ResourceError),
             Q_ARG(QString, QMediaPlayer::tr("Attempting to play invalid resource")));
@@ -324,8 +319,8 @@ void QMediaPlayerPrivate::setMedia(const QMediaContent &media, QIODevice *stream
          // Preserve original file extension, some backends might not load the file if it doesn't
          // have an extension.
          const QString suffix = QFileInfo(*file).suffix();
-         if (!suffix.isEmpty()) {
-            tempFile->setFileTemplate(tempFile->fileTemplate() + QLatin1Char('.') + suffix);
+         if (! suffix.isEmpty()) {
+            tempFile->setFileTemplate(tempFile->fileTemplate() + '.' + suffix);
          }
 
          // Copy the qrc data into the temporary file
@@ -600,6 +595,7 @@ QMediaPlayer::~QMediaPlayer()
       if (d->control) {
          d->service->releaseControl(d->control);
       }
+
       if (d->audioRoleControl) {
          d->service->releaseControl(d->audioRoleControl);
       }

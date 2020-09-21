@@ -79,12 +79,16 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
 
    MULTI_CS_SLOT_1(Public, void setFullScreen(bool fullScreen))
    MULTI_CS_SLOT_2(setFullScreen)
+
    MULTI_CS_SLOT_1(Public, void setAspectRatioMode(Qt::AspectRatioMode mode))
    MULTI_CS_SLOT_2(setAspectRatioMode)
+
    MULTI_CS_SLOT_1(Public, void setBrightness(int brightness))
    MULTI_CS_SLOT_2(setBrightness)
+
    MULTI_CS_SLOT_1(Public, void setContrast(int contrast))
    MULTI_CS_SLOT_2(setContrast)
+
    MULTI_CS_SLOT_1(Public, void setHue(int hue))
    MULTI_CS_SLOT_2(setHue)
 
@@ -106,12 +110,16 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
 
    MULTI_CS_SIGNAL_1(Public, void fullScreenChanged(bool fullScreen))
    MULTI_CS_SIGNAL_2(fullScreenChanged, fullScreen)
+
    MULTI_CS_SIGNAL_1(Public, void brightnessChanged(int brightness))
    MULTI_CS_SIGNAL_2(brightnessChanged, brightness)
+
    MULTI_CS_SIGNAL_1(Public, void contrastChanged(int contrast))
    MULTI_CS_SIGNAL_2(contrastChanged, contrast)
+
    MULTI_CS_SIGNAL_1(Public, void hueChanged(int hue))
    MULTI_CS_SIGNAL_2(hueChanged, hue)
+
    MULTI_CS_SIGNAL_1(Public, void saturationChanged(int saturation))
    MULTI_CS_SIGNAL_2(saturationChanged, saturation)
 

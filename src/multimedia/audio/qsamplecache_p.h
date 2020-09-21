@@ -38,13 +38,12 @@ class QNetworkReply;
 class QSampleCache;
 class QWaveDecoder;
 
-// Lives in application thread
+// lives in application thread
 class Q_MULTIMEDIA_EXPORT QSample : public QObject
 {
    MULTI_CS_OBJECT(QSample)
 
  public:
-   friend class QSampleCache;
    enum State {
       Creating,
       Loading,
@@ -53,12 +52,15 @@ class Q_MULTIMEDIA_EXPORT QSample : public QObject
    };
 
    State state() const;
+
    // These are not (currently) locked because they are only meant to be called after these
    // variables are updated to their final states
+
    const QByteArray &data() const {
       Q_ASSERT(state() == Ready);
       return m_soundData;
    }
+
    const QAudioFormat &format() const {
       Q_ASSERT(state() == Ready);
       return m_audioFormat;
@@ -79,19 +81,23 @@ class Q_MULTIMEDIA_EXPORT QSample : public QObject
    void cleanup();
    void addRef();
    void loadIfNecessary();
+
    QSample();
    ~QSample();
 
    mutable QMutex m_mutex;
-   QSampleCache *m_parent;
-   QByteArray   m_soundData;
-   QAudioFormat m_audioFormat;
-   QWaveDecoder *m_waveDecoder;
-   QUrl         m_url;
-   qint64       m_sampleReadLength;
-   State        m_state;
-   int          m_ref;
+
+   QByteArray     m_soundData;
+   QAudioFormat   m_audioFormat;
+   QSampleCache  *m_parent;
+   QWaveDecoder   *m_waveDecoder;
+
    QNetworkReply  *m_stream;
+
+   QUrl m_url;
+   qint64 m_sampleReadLength;
+   State m_state;
+   int m_ref;
 
    MULTI_CS_SLOT_1(Private, void load())
    MULTI_CS_SLOT_2(load)
@@ -105,6 +111,7 @@ class Q_MULTIMEDIA_EXPORT QSample : public QObject
    MULTI_CS_SLOT_1(Private, void decoderReady())
    MULTI_CS_SLOT_2(decoderReady)
 
+   friend class QSampleCache;
 };
 
 class Q_MULTIMEDIA_EXPORT QSampleCache : public QObject
@@ -112,8 +119,6 @@ class Q_MULTIMEDIA_EXPORT QSampleCache : public QObject
    MULTI_CS_OBJECT(QSampleCache)
 
  public:
-   friend class QSample;
-
    QSampleCache(QObject *parent = 0);
    ~QSampleCache();
 
@@ -144,6 +149,8 @@ class Q_MULTIMEDIA_EXPORT QSampleCache : public QObject
    void loadingRelease();
    int m_loadingRefCount;
    QMutex m_loadingMutex;
+
+   friend class QSample;
 };
 
 #endif

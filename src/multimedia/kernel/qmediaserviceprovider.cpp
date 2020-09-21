@@ -23,7 +23,6 @@
 
 #include <qdebug.h>
 #include <qmap.h>
-
 #include <qmediaservice.h>
 #include <qmediaplayer.h>
 #include <qmediaplayercontrol.h>
@@ -34,7 +33,6 @@
 
 QMediaServiceProviderPlugin::~QMediaServiceProviderPlugin()
 {
-   // required so a symbol is generated for staticMetaObject()
 }
 
 class QMediaServiceProviderHintPrivate : public QSharedData
@@ -319,7 +317,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
                   if (currentEstimate > estimate) {
                      estimate = currentEstimate;
-                     plugin = currentPlugin;
+                     plugin   = currentPlugin;
 
                      if (currentEstimate == QMultimedia::PreferredService) {
                         break;
@@ -330,10 +328,10 @@ class QPluginServiceProvider : public QMediaServiceProvider
             break;
          }
 
-         if (plugin != 0) {
+         if (plugin != nullptr) {
             QMediaService *service = plugin->create(key);
 
-            if (service != 0) {
+            if (service != nullptr) {
                MediaServiceData d;
                d.type   = key;
                d.plugin = plugin;

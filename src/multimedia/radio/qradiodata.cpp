@@ -32,9 +32,7 @@
 
 class QRadioDataPrivate
 {
-    Q_DECLARE_NON_CONST_PUBLIC(QRadioData)
-
-public:
+ public:
     QRadioDataPrivate();
 
     QMediaObject *mediaObject;
@@ -43,11 +41,15 @@ public:
     void _q_serviceDestroyed();
 
     QRadioData *q_ptr;
+
+ private:
+    Q_DECLARE_NON_CONST_PUBLIC(QRadioData)
 };
 
 QRadioDataPrivate::QRadioDataPrivate()
     : mediaObject(0), control(0)
-{}
+{
+}
 
 void QRadioDataPrivate::_q_serviceDestroyed()
 {
@@ -111,6 +113,7 @@ bool QRadioData::setMediaObject(QMediaObject *mediaObject)
 
     if (d->mediaObject) {
         QMediaService *service = mediaObject->service();
+
         if (service) {
             d->control = qobject_cast<QRadioDataControl*>(service->requestControl(QRadioDataControl_iid));
 
@@ -137,13 +140,6 @@ bool QRadioData::setMediaObject(QMediaObject *mediaObject)
     return false;
 }
 
-/*!
-    Returns the availability of the radio data service.
-
-    A long as there is a media service which provides radio functionality, then the
-    \l{QMultimedia::AvailabilityStatus}{availability} will be that
-    of the \l{QRadioTuner::availability()}{radio tuner}.
-*/
 QMultimedia::AvailabilityStatus QRadioData::availability() const
 {
     Q_D(const QRadioData);
@@ -154,11 +150,6 @@ QMultimedia::AvailabilityStatus QRadioData::availability() const
     return d->mediaObject->availability();
 }
 
-/*!
-    \property QRadioData::stationId
-    \brief Current Program Identification
-
-*/
 
 QString QRadioData::stationId() const
 {
@@ -168,12 +159,6 @@ QString QRadioData::stationId() const
         return d->control->stationId();
     return QString();
 }
-
-/*!
-    \property QRadioData::programType
-    \brief Current Program Type
-
-*/
 
 QRadioData::ProgramType QRadioData::programType() const
 {

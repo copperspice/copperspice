@@ -26,8 +26,8 @@
 #include <qcoreapplication.h>
 #include <qiodevice.h>
 
-//#include <QDebug>
-//#define QT_QAUDIO_DEBUG 1
+// #include <QDebug>
+// #define QT_QAUDIO_DEBUG 1
 
 Q_GLOBAL_STATIC(QSampleCache, sampleCache)
 
@@ -58,14 +58,12 @@ QStringList QSoundEffectPrivate::supportedMimeTypes()
 {
    // Only return supported mime types if we have a audio device available
    const QList<QAudioDeviceInfo> devices = QAudioDeviceInfo::availableDevices(QAudio::AudioOutput);
+
    if (devices.size() <= 0) {
       return QStringList();
    }
 
-   return QStringList() << QLatin1String("audio/x-wav")
-      << QLatin1String("audio/wav")
-      << QLatin1String("audio/wave")
-      << QLatin1String("audio/x-pn-wav");
+   return QStringList( { "audio/x-wav", "audio/wav", "audio/wave", "audio/x-pn-wav"} );
 }
 
 QUrl QSoundEffectPrivate::source() const
@@ -91,7 +89,7 @@ void QSoundEffectPrivate::setSource(const QUrl &url)
       return;
    }
 
-   if (!url.isValid()) {
+   if (! url.isValid()) {
       setStatus(QSoundEffect::Error);
       return;
    }
@@ -120,6 +118,7 @@ void QSoundEffectPrivate::setSource(const QUrl &url)
       case QSample::Error:
          m_soundSource->decoderError();
          break;
+
       default:
          break;
    }
@@ -140,6 +139,7 @@ void QSoundEffectPrivate::setLoopCount(int loopCount)
 #ifdef QT_QAUDIO_DEBUG
    qDebug() << "setLoopCount " << loopCount;
 #endif
+
    if (loopCount == 0) {
       loopCount = 1;
    }
@@ -250,7 +250,9 @@ void QSoundEffectPrivate::setStatus(QSoundEffect::Status status)
    }
    bool oldLoaded = isLoaded();
    m_soundSource->m_status = status;
+
    emit statusChanged();
+
    if (oldLoaded != isLoaded()) {
       emit loadedChanged();
    }
@@ -298,20 +300,11 @@ void QSoundEffectPrivate::setCategory(const QString &category)
 }
 
 PrivateSoundSource::PrivateSoundSource(QSoundEffectPrivate *s):
-   QIODevice(s),
-   m_loopCount(1),
-   m_runningCount(0),
-   m_playing(false),
-   m_status(QSoundEffect::Null),
-   m_audioOutput(0),
-   m_sample(0),
-   m_muted(false),
-   m_volume(1.0),
-   m_sampleReady(false),
-   m_offset(0)
+   QIODevice(s), m_loopCount(1), m_runningCount(0), m_playing(false), m_status(QSoundEffect::Null),
+   m_audioOutput(0), m_sample(0), m_muted(false), m_volume(1.0), m_sampleReady(false), m_offset(0)
 {
    soundeffect = s;
-   m_category = QLatin1String("game");
+   m_category  = QString("game");
    open(QIODevice::ReadOnly);
 }
 
@@ -324,6 +317,7 @@ void PrivateSoundSource::sampleReady()
 #ifdef QT_QAUDIO_DEBUG
    qDebug() << this << "sampleReady " << m_playing;
 #endif
+
    disconnect(m_sample, &QSample::error, this, &PrivateSoundSource::decoderError);
    disconnect(m_sample, &QSample::ready, this, &PrivateSoundSource::sampleReady);
 
@@ -338,6 +332,7 @@ void PrivateSoundSource::sampleReady()
          m_audioOutput->setVolume(0);
       }
    }
+
    m_sampleReady = true;
    soundeffect->setStatus(QSoundEffect::Ready);
 
@@ -352,6 +347,7 @@ void PrivateSoundSource::decoderError()
 
    disconnect(m_sample, &QSample::error, this, &PrivateSoundSource::decoderError);
    disconnect(m_sample, &QSample::ready, this, &PrivateSoundSource::sampleReady);
+
    m_playing = false;
    soundeffect->setStatus(QSoundEffect::Error);
 }
@@ -361,6 +357,7 @@ void PrivateSoundSource::stateChanged(QAudio::State state)
 #ifdef QT_QAUDIO_DEBUG
    qDebug() << this << "stateChanged " << state;
 #endif
+
    if ((state == QAudio::IdleState && m_runningCount == 0)
       || (state == QAudio::StoppedState && m_audioOutput->error() != QAudio::NoError)) {
       emit soundeffect->stop();
@@ -397,22 +394,28 @@ qint64 PrivateSoundSource::readData( char *data, qint64 len)
             m_offset += periodSize;
             dataOffset += periodSize;
             bytesWritten += periodSize;
+
 #ifdef QT_QAUDIO_DEBUG
             qDebug() << "WHOLE PERIOD: bytesWritten=" << bytesWritten << ", offset=" << m_offset
                << ", filesize=" << sampleSize;
 #endif
+
          } else {
             // We are at end of sound, first write what is left of current sound
             memcpy(data + dataOffset, sampleData + m_offset, sampleSize - m_offset);
             bytesWritten += sampleSize - m_offset;
+
             int wrapLen = periodSize - (sampleSize - m_offset);
+
             if (wrapLen > sampleSize) {
                wrapLen = sampleSize;
             }
+
 #ifdef QT_QAUDIO_DEBUG
             qDebug() << "END OF SOUND: bytesWritten=" << bytesWritten << ", offset=" << m_offset
                << ", part1=" << (sampleSize - m_offset);
 #endif
+
             dataOffset += (sampleSize - m_offset);
             m_offset = 0;
 
@@ -426,6 +429,7 @@ qint64 PrivateSoundSource::readData( char *data, qint64 len)
                m_offset += wrapLen;
                dataOffset += wrapLen;
                bytesWritten += wrapLen;
+
 #ifdef QT_QAUDIO_DEBUG
                qDebug() << "APPEND START FOR FULL PERIOD: bytesWritten=" << bytesWritten << ", offset=" << m_offset
                   << ", part2=" << wrapLen;
@@ -433,6 +437,7 @@ qint64 PrivateSoundSource::readData( char *data, qint64 len)
 #endif
             }
          }
+
          if (m_runningCount == 0) {
             break;
          }

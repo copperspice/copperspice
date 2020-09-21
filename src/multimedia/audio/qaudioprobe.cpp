@@ -29,7 +29,7 @@
 #include <qpointer.h>
 
 class QAudioProbePrivate {
-public:
+ public:
     QPointer<QMediaObject> source;
     QPointer<QMediaAudioProbeControl> probee;
 };

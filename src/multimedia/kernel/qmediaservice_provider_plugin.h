@@ -108,11 +108,6 @@ struct Q_MULTIMEDIA_EXPORT QMediaServiceSupportedDevicesInterface {
 #define QMediaServiceSupportedDevicesInterface_ID "com.copperspice.CS.mediaServiceSupportedDevices/1.0"
 CS_DECLARE_INTERFACE(QMediaServiceSupportedDevicesInterface, QMediaServiceSupportedDevicesInterface_ID)
 
-// emerald - review
-// This should be part of QMediaServiceSupportedDevicesInterface the whole media service plugin API
-// should not be public in the first place. It should be and QMediaServiceDefaultDeviceInterface should
-// be merged with QMediaServiceSupportedDevicesInterface
-
 struct Q_MULTIMEDIA_EXPORT QMediaServiceDefaultDeviceInterface {
    virtual ~QMediaServiceDefaultDeviceInterface() {}
    virtual QString defaultDevice(const QString &service) const = 0;

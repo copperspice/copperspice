@@ -38,7 +38,8 @@ class ParserBase : public QObject
  public:
    ParserBase(QObject *parent)
       : QObject(parent)
-   { }
+   {
+   }
 
    virtual void parseLine(int lineIndex, const QString &line, const QUrl &root) = 0;
 
@@ -53,8 +54,8 @@ class ParserBase : public QObject
 
  protected:
    QUrl expandToFullPath(const QUrl &root, const QString &line) {
-      // On Linux, backslashes are not converted to forward slashes :/
-      if (line.startsWith(QLatin1String("//")) || line.startsWith(QLatin1String("\\\\"))) {
+      // On Linux, backslashes are not converted to forward slashes
+      if (line.startsWith("//") || line.startsWith("\\\\")) {
          // Network share paths are not resolved
          return QUrl::fromLocalFile(line);
       }
@@ -67,6 +68,7 @@ class ParserBase : public QObject
          } else {
             return root.resolved(url);
          }
+
       } else if (url.scheme().length() == 1) {
          // Assume it's a drive letter for a Windows path
          url = QUrl::fromLocalFile(line);
@@ -218,7 +220,8 @@ class PLSParser : public ParserBase
  public:
    PLSParser(QObject *parent)
       : ParserBase(parent)
-   { }
+   {
+   }
 
    void parseLine(int, const QString &line, const QUrl &root) override {
       // ignore everything but 'File' entries, since that's the only thing we care about.
@@ -253,7 +256,8 @@ class QPlaylistFileParserPrivate
    QPlaylistFileParserPrivate()
       : m_source(0), m_scanIndex(0), m_utf8(false), m_lineIndex(-1),
         m_type(QPlaylistFileParser::UNKNOWN), m_currentParser(0)
-   { }
+   {
+   }
 
    void _q_handleData();
    void _q_handleError();
@@ -281,10 +285,10 @@ class QPlaylistFileParserPrivate
 void QPlaylistFileParserPrivate::processLine(int startIndex, int length)
 {
    Q_Q(QPlaylistFileParser);
-   m_lineIndex++;
+   ++m_lineIndex;
 
    if (! m_currentParser) {
-      Q_ASSERT(!m_currentParser);
+      Q_ASSERT(! m_currentParser);
 
       QString mimeType = m_source->header(QNetworkRequest::ContentTypeHeader).toString();
       m_type = QPlaylistFileParser::findPlaylistType(m_root.toString(), mimeType, m_buffer.constData(), m_buffer.size());
@@ -427,7 +431,6 @@ void QPlaylistFileParserPrivate::_q_handleParserFinished()
    }
 }
 
-
 QPlaylistFileParser::QPlaylistFileParser(QObject *parent)
    : QObject(parent), d_ptr(new QPlaylistFileParserPrivate)
 {
@@ -444,28 +447,28 @@ QPlaylistFileParser::FileType QPlaylistFileParser::findPlaylistType(const QStrin
    FileType uriType = UNKNOWN;
    QString suffix = QFileInfo(uri).suffix().toLower();
 
-   if (suffix == QLatin1String("m3u")) {
+   if (suffix == "m3u") {
       uriType = M3U;
    }
 
-   else if (suffix == QLatin1String("m3u8")) {
+   else if (suffix == "m3u8") {
       uriType = M3U8;
    }
 
-   else if (suffix == QLatin1String("pls")) {
+   else if (suffix == "pls") {
       uriType = PLS;
    }
 
    FileType mimeType = UNKNOWN;
-   if (mime == QLatin1String("text/uri-list") || mime == "audio/x-mpegurl" || mime == "audio/mpegurl") {
+   if (mime == "text/uri-list" || mime == "audio/x-mpegurl" || mime == "audio/mpegurl") {
       mimeType = QPlaylistFileParser::M3U;
    }
 
-   else if (mime == QLatin1String("application/x-mpegURL") || mime == "application/vnd.apple.mpegurl") {
+   else if (mime == "application/x-mpegURL" || mime == "application/vnd.apple.mpegurl") {
       mimeType = QPlaylistFileParser::M3U8;
    }
 
-   else if (mime == QLatin1String("audio/x-scpls")) {
+   else if (mime == "audio/x-scpls") {
       mimeType = QPlaylistFileParser::PLS;
    }
 
@@ -538,19 +541,20 @@ void QPlaylistFileParser::stop()
       disconnect(d->m_currentParser, &ParserBase::error,    this, &QPlaylistFileParser::_q_handleParserError);
 
       d->m_currentParser->deleteLater();
-      d->m_currentParser = 0;
+      d->m_currentParser = nullptr;
    }
 
    d->m_buffer.clear();
    d->m_scanIndex = 0;
    d->m_lineIndex = -1;
+
    if (d->m_source) {
       disconnect(d->m_source, &QNetworkReply::readyRead, this, &QPlaylistFileParser::_q_handleData);
       disconnect(d->m_source, &QNetworkReply::finished,  this, &QPlaylistFileParser::_q_handleData);
       disconnect(d->m_source, &QNetworkReply::error,     this, &QPlaylistFileParser::_q_handleError);
 
       d->m_source->deleteLater();
-      d->m_source = 0;
+      d->m_source = nullptr;
    }
 }
 
@@ -577,5 +581,4 @@ void QPlaylistFileParser::_q_handleParserFinished()
    Q_D(QPlaylistFileParser);
    d->_q_handleParserFinished();
 }
-
 

@@ -162,7 +162,7 @@ void QWaveDecoder::handleData()
             parsingFailed();
             return;
          } else {
-            format.setCodec(QLatin1String("audio/pcm"));
+            format.setCodec("audio/pcm");
 
             if (bigEndian) {
                int bps = qFromBigEndian<quint16>(wave.bitsPerSample);

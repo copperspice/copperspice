@@ -85,24 +85,22 @@ bool QMediaPlaylist::setMediaObject(QMediaObject *mediaObject)
       return true;
    }
 
-   QMediaService *service = mediaObject
-      ? mediaObject->service() : 0;
-
+   QMediaService *service = mediaObject ? mediaObject->service() : 0;
    QMediaPlaylistControl *newControl = 0;
 
    if (service) {
-      newControl = qobject_cast<QMediaPlaylistControl *>(service->requestControl(QMediaPlaylistControl_iid));
+      newControl = dynamic_cast<QMediaPlaylistControl *>(service->requestControl(QMediaPlaylistControl_iid));
    }
 
-   if (!newControl) {
+   if (! newControl) {
       newControl = d->networkPlaylistControl;
    }
 
    if (d->control != newControl) {
-      int removedStart = -1;
-      int removedEnd = -1;
+      int removedStart  = -1;
+      int removedEnd    = -1;
       int insertedStart = -1;
-      int insertedEnd = -1;
+      int insertedEnd   = -1;
 
       if (d->control) {
          QMediaPlaylistProvider *playlist = d->control->playlistProvider();
@@ -119,8 +117,7 @@ bool QMediaPlaylist::setMediaObject(QMediaObject *mediaObject)
          disconnect(d->control, &QMediaPlaylistControl::currentIndexChanged,     this, &QMediaPlaylist::currentIndexChanged);
          disconnect(d->control, &QMediaPlaylistControl::currentMediaChanged,     this, &QMediaPlaylist::currentMediaChanged);
 
-         // Copy playlist items, sync playback mode and sync current index between
-         // old control and new control
+         // Copy playlist items, sync playback mode and sync current index between old control and new control
          d->syncControls(d->control, newControl, &removedStart, &removedEnd, &insertedStart, &insertedEnd);
 
          if (d->mediaObject) {

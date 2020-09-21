@@ -65,6 +65,6 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylistControl : public QMediaControl
 };
 
 #define QMediaPlaylistControl_iid "com.copperspice.CS.mediaPlayListControl/1.0"
-CS_DECLARE_INTERFACE(QMediaPlaylistControl, QMediaPlaylistControl_iid)    // emerald, was Q_MEDIA_DECLARE_CONTROL
+CS_DECLARE_INTERFACE(QMediaPlaylistControl, QMediaPlaylistControl_iid)
 
 #endif

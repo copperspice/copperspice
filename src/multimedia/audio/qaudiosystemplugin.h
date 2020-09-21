@@ -42,7 +42,7 @@ struct Q_MULTIMEDIA_EXPORT QAudioSystemFactoryInterface {
    virtual ~QAudioSystemFactoryInterface();
 };
 
-#define QAudioSystemFactoryInterface_iid  "com.copperspice.CS.audioSystemFactory/1.0"
+#define QAudioSystemFactoryInterface_iid "com.copperspice.CS.audioSystemFactory/1.0"
 CS_DECLARE_INTERFACE(QAudioSystemFactoryInterface, QAudioSystemFactoryInterface_iid)
 
 class Q_MULTIMEDIA_EXPORT QAudioSystemPlugin : public QObject, public QAudioSystemFactoryInterface

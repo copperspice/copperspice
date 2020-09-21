@@ -94,7 +94,6 @@ class QVideoWidgetControlBackend : public QObject, public QVideoWidgetControlInt
    QVideoWidgetControl *m_widgetControl;
 };
 
-
 class QRendererVideoWidgetBackend : public QVideoWidgetBackend
 {
    MULTI_CS_OBJECT(QRendererVideoWidgetBackend)
@@ -126,18 +125,23 @@ class QRendererVideoWidgetBackend : public QVideoWidgetBackend
 
    MULTI_CS_SIGNAL_1(Public, void fullScreenChanged(bool fullScreen))
    MULTI_CS_SIGNAL_2(fullScreenChanged, fullScreen)
+
    MULTI_CS_SIGNAL_1(Public, void brightnessChanged(int brightness))
    MULTI_CS_SIGNAL_2(brightnessChanged, brightness)
+
    MULTI_CS_SIGNAL_1(Public, void contrastChanged(int contrast))
    MULTI_CS_SIGNAL_2(contrastChanged, contrast)
+
    MULTI_CS_SIGNAL_1(Public, void hueChanged(int hue))
    MULTI_CS_SIGNAL_2(hueChanged, hue)
+
    MULTI_CS_SIGNAL_1(Public, void saturationChanged(int saturation))
    MULTI_CS_SIGNAL_2(saturationChanged, saturation)
 
  private:
    MULTI_CS_SLOT_1(Private, void formatChanged(const QVideoSurfaceFormat &format))
    MULTI_CS_SLOT_2(formatChanged)
+
    MULTI_CS_SLOT_1(Private, void frameChanged())
    MULTI_CS_SLOT_2(frameChanged)
 
@@ -153,7 +157,6 @@ class QRendererVideoWidgetBackend : public QVideoWidgetBackend
    QSize m_nativeSize;
    bool m_updatePaintDevice;
 };
-
 
 class QWindowVideoWidgetBackend : public QVideoWidgetBackend
 {

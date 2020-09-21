@@ -32,7 +32,7 @@ class QWaveDecoder : public QIODevice
    MULTI_CS_OBJECT(QWaveDecoder)
 
  public:
-   explicit QWaveDecoder(QIODevice *source, QObject *parent = 0);
+   explicit QWaveDecoder(QIODevice *source, QObject *parent = nullptr);
    ~QWaveDecoder();
 
    QAudioFormat audioFormat() const;
@@ -73,6 +73,7 @@ class QWaveDecoder : public QIODevice
       chunk       descriptor;
       char        type[4];
    };
+
    struct WAVEHeader {
       chunk       descriptor;
       quint16     audioFormat;
