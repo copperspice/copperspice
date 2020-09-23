@@ -27,8 +27,7 @@
 #include <qstringlist.h>
 #include <qplugin.h>
 #include <qmultimedia.h>
-
-// emerald #include <qcamera.h>
+#include <qcamera.h>
 
 class QMediaService;
 class QMediaServiceProviderHintPrivate;
@@ -49,7 +48,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderHint
    QMediaServiceProviderHint();
    QMediaServiceProviderHint(const QString &mimeType, const QStringList &codecs);
    QMediaServiceProviderHint(const QString &device);
-   // emerald     QMediaServiceProviderHint(QCamera::Position position);
+   QMediaServiceProviderHint(QCamera::Position position);
    QMediaServiceProviderHint(Features features);
    QMediaServiceProviderHint(const QMediaServiceProviderHint &other);
 
@@ -68,7 +67,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderHint
    QStringList codecs() const;
 
    QString device() const;
-   // emerald     QCamera::Position cameraPosition() const;
+   QCamera::Position cameraPosition() const;
 
    Features features() const;
 
@@ -117,19 +116,15 @@ struct Q_MULTIMEDIA_EXPORT QMediaServiceDefaultDeviceInterface {
 CS_DECLARE_INTERFACE(QMediaServiceDefaultDeviceInterface, QMediaServiceDefaultDeviceInterface_ID)
 
 
-/* emerald
-
 struct Q_MULTIMEDIA_EXPORT QMediaServiceCameraInfoInterface
 {
-    virtual ~QMediaServiceCameraInfoInterface() {}
-    virtual QCamera::Position cameraPosition(const QString &device) const = 0;
-    virtual int cameraOrientation(const QString &device) const = 0;
+   virtual ~QMediaServiceCameraInfoInterface() {}
+   virtual QCamera::Position cameraPosition(const QString &device) const = 0;
+   virtual int cameraOrientation(const QString &device) const = 0;
 };
 
 #define QMediaServiceCameraInfoInterface_ID "com.copperspice.CS.mediaServiceCameraInfo/1.0"
 CS_DECLARE_INTERFACE(QMediaServiceCameraInfoInterface, QMediaServiceCameraInfoInterface_ID)
-
-*/
 
 
 struct Q_MULTIMEDIA_EXPORT QMediaServiceFeaturesInterface {

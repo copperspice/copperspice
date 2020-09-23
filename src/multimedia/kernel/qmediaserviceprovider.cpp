@@ -39,18 +39,12 @@ class QMediaServiceProviderHintPrivate : public QSharedData
 {
  public:
    QMediaServiceProviderHintPrivate(QMediaServiceProviderHint::Type type)
-      : type(type),
-        // emerald    cameraPosition(QCamera::UnspecifiedPosition),
-        features(0) {
+      : type(type), cameraPosition(QCamera::UnspecifiedPosition), features(0) {
    }
 
    QMediaServiceProviderHintPrivate(const QMediaServiceProviderHintPrivate &other)
-      : QSharedData(other),
-        type(other.type),
-        device(other.device),
-        // emerald    cameraPosition(other.cameraPosition),
-        mimeType(other.mimeType),
-        codecs(other.codecs),
+      : QSharedData(other), type(other.type), device(other.device),
+        cameraPosition(other.cameraPosition), mimeType(other.mimeType), codecs(other.codecs),
         features(other.features) {
    }
 
@@ -59,7 +53,7 @@ class QMediaServiceProviderHintPrivate : public QSharedData
 
    QMediaServiceProviderHint::Type type;
    QString device;
-   // emerald        QCamera::Position cameraPosition;
+   QCamera::Position cameraPosition;
    QString mimeType;
    QStringList codecs;
    QMediaServiceProviderHint::Features features;
@@ -83,17 +77,11 @@ QMediaServiceProviderHint::QMediaServiceProviderHint(const QString &device)
    d->device = device;
 }
 
-
-/* emerald
-
 QMediaServiceProviderHint::QMediaServiceProviderHint(QCamera::Position position)
     :d(new QMediaServiceProviderHintPrivate(CameraPosition))
 {
     d->cameraPosition = position;
 }
-
-*/
-
 
 QMediaServiceProviderHint::QMediaServiceProviderHint(QMediaServiceProviderHint::Features features)
    : d(new QMediaServiceProviderHintPrivate(SupportedFeatures))
@@ -121,7 +109,7 @@ bool QMediaServiceProviderHint::operator == (const QMediaServiceProviderHint &ot
    return (d == other.d) ||
       (d->type == other.d->type &&
          d->device == other.d->device &&
-         // emerald       d->cameraPosition == other.d->cameraPosition &&
+         d->cameraPosition == other.d->cameraPosition &&
          d->mimeType == other.d->mimeType &&
          d->codecs == other.d->codecs &&
          d->features == other.d->features);
@@ -157,15 +145,10 @@ QString QMediaServiceProviderHint::device() const
    return d->device;
 }
 
-
-/* emerald
-
 QCamera::Position QMediaServiceProviderHint::cameraPosition() const
 {
-    return d->cameraPosition;
+   return d->cameraPosition;
 }
-
-*/
 
 QMediaServiceProviderHint::Features QMediaServiceProviderHint::features() const
 {
@@ -227,7 +210,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
                // special case for media player, if low latency was not asked,
                // prefer services not offering it, since they are likely to support more formats
 
-               if (key == QMediaPlayerControl_Key) {
+               if (key == Q_MEDIASERVICE_MEDIAPLAYER) {
                   for (QMediaServiceProviderPlugin *currentPlugin : plugins) {
 
                      QMediaServiceFeaturesInterface *iface = dynamic_cast<QMediaServiceFeaturesInterface *>(currentPlugin);
@@ -270,37 +253,32 @@ class QPluginServiceProvider : public QMediaServiceProvider
             }
             break;
 
-            case QMediaServiceProviderHint::CameraPosition:
-               break;
+            case QMediaServiceProviderHint::CameraPosition: {
+               plugin = plugins[0];
 
-            /* emerald
+               if (key == Q_MEDIASERVICE_CAMERA && hint.cameraPosition() != QCamera::UnspecifiedPosition) {
+                  for (QMediaServiceProviderPlugin *currentPlugin : plugins) {
+                     const QMediaServiceSupportedDevicesInterface *deviceIface =
+                        dynamic_cast<QMediaServiceSupportedDevicesInterface*>(currentPlugin);
 
-               case QMediaServiceProviderHint::CameraPosition: {
-                  plugin = plugins[0];
+                     const QMediaServiceCameraInfoInterface *cameraIface =
+                        dynamic_cast<QMediaServiceCameraInfoInterface*>(currentPlugin);
 
-                  if (key == Q_MEDIASERVICE_CAMERA && hint.cameraPosition() != QCamera::UnspecifiedPosition) {
-                     for (QMediaServiceProviderPlugin *currentPlugin : plugins) {
-                        const QMediaServiceSupportedDevicesInterface *deviceIface =
-                           qobject_cast<QMediaServiceSupportedDevicesInterface*>(currentPlugin);
+                     if (deviceIface && cameraIface) {
+                        const QList<QString> cameras = deviceIface->devices(key);
 
-                        const QMediaServiceCameraInfoInterface *cameraIface =
-                           qobject_cast<QMediaServiceCameraInfoInterface*>(currentPlugin);
-
-                        if (deviceIface && cameraIface) {
-                           const QList<QString> cameras = deviceIface->devices(key);
-
-                           for (const QString &camera : cameras) {
-                              if (cameraIface->cameraPosition(camera) == hint.cameraPosition()) {
-                                 plugin = currentPlugin;
-                                 break;
-                              }
+                        for (const QString &camera : cameras) {
+                           if (cameraIface->cameraPosition(camera) == hint.cameraPosition()) {
+                              plugin = currentPlugin;
+                              break;
                            }
                         }
                      }
                   }
                }
-               break;
-            */
+            }
+            break;
+
 
             case QMediaServiceProviderHint::ContentType: {
                QMultimedia::SupportEstimate estimate = QMultimedia::NotSupported;
@@ -559,56 +537,61 @@ class QPluginServiceProvider : public QMediaServiceProvider
       return QString();
    }
 
+   QCamera::Position cameraPosition(const QString &device) const
+   {
+     const QString serviceType(Q_MEDIASERVICE_CAMERA);
 
-   /* emerald
+     QFactoryLoader *factoryObj = loader();
 
-       QCamera::Position cameraPosition(const QString &device) const
-       {
-           const QString serviceType(Q_MEDIASERVICE_CAMERA);
+     for (QLibraryHandle *handle : factoryObj->librarySet(serviceType))  {
+         QObject *obj = factoryObj->instance(handle);
 
-           for (QObject *obj : loader()->instances(serviceType)) {
-               const QMediaServiceSupportedDevicesInterface *deviceIface =
-                       dynamic_cast<QMediaServiceSupportedDevicesInterface*>(obj);
+         if (obj == nullptr) {
+            continue;
+         }
 
-               const QMediaServiceCameraInfoInterface *cameraIface =
-                       dynamic_cast<QMediaServiceCameraInfoInterface*>(obj);
+         const QMediaServiceSupportedDevicesInterface *deviceIface = dynamic_cast<QMediaServiceSupportedDevicesInterface*>(obj);
+         const QMediaServiceCameraInfoInterface *cameraIface       = dynamic_cast<QMediaServiceCameraInfoInterface*>(obj);
 
-               if (cameraIface) {
-                   if (deviceIface && !deviceIface->devices(serviceType).contains(device)) {
-                      continue;
-                   }
+         if (cameraIface) {
+             if (deviceIface && ! deviceIface->devices(serviceType).contains(device)) {
+                continue;
+             }
 
-                   return cameraIface->cameraPosition(device);
-               }
-           }
+             return cameraIface->cameraPosition(device);
+         }
+     }
 
-           return QCamera::UnspecifiedPosition;
-       }
+     return QCamera::UnspecifiedPosition;
+   }
 
-       int cameraOrientation(const QString &device) const
-       {
-           const QString serviceType(Q_MEDIASERVICE_CAMERA);
+   int cameraOrientation(const QString &device) const
+   {
+     const QString serviceType(Q_MEDIASERVICE_CAMERA);
 
-           for (QObject *obj : loader()->instances(serviceType)) {
-               const QMediaServiceSupportedDevicesInterface *deviceIface =
-                       dynamic_cast<QMediaServiceSupportedDevicesInterface*>(obj);
+     QFactoryLoader *factoryObj = loader();
 
-               const QMediaServiceCameraInfoInterface *cameraIface =
-                       dynamic_cast<QMediaServiceCameraInfoInterface*>(obj);
+     for (QLibraryHandle *handle : factoryObj->librarySet(serviceType))  {
+         QObject *obj = factoryObj->instance(handle);
 
-               if (cameraIface) {
-                  if (deviceIface && !deviceIface->devices(serviceType).contains(device)) {
-                     continue;
-                  }
+         if (obj == nullptr) {
+            continue;
+         }
 
-                  return cameraIface->cameraOrientation(device);
-               }
-           }
+         const QMediaServiceSupportedDevicesInterface *deviceIface = dynamic_cast<QMediaServiceSupportedDevicesInterface*>(obj);
+         const QMediaServiceCameraInfoInterface *cameraIface       = dynamic_cast<QMediaServiceCameraInfoInterface*>(obj);
 
-           return 0;
-       }
-   */
+         if (cameraIface) {
+            if (deviceIface && ! deviceIface->devices(serviceType).contains(device)) {
+               continue;
+            }
 
+            return cameraIface->cameraOrientation(device);
+         }
+     }
+
+     return 0;
+   }
 };
 
 QPluginServiceProvider *pluginProvider() {
@@ -664,20 +647,19 @@ QString QMediaServiceProvider::deviceDescription(const QString &serviceType, con
    return QString();
 }
 
-
-/* emerald
-
 QCamera::Position QMediaServiceProvider::cameraPosition(const QString &device) const
 {
-    return QCamera::UnspecifiedPosition;
+   (void) device;
+
+   return QCamera::UnspecifiedPosition;
 }
 
 int QMediaServiceProvider::cameraOrientation(const QString &device) const
 {
+   (void) device;
+
     return 0;
 }
-
-*/
 
 static QMediaServiceProvider *qt_defaultMediaServiceProvider = 0;
 

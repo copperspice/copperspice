@@ -50,8 +50,8 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProvider : public QObject
    virtual QList<QString> devices(const QString &serviceType) const;
    virtual QString deviceDescription(const QString &serviceType, const QString &device);
 
-   // emerald   virtual QCamera::Position cameraPosition(const QString &device) const;
-   // emerald   virtual int cameraOrientation(const QString &device) const;
+   virtual QCamera::Position cameraPosition(const QString &device) const;
+   virtual int cameraOrientation(const QString &device) const;
 
    static QMediaServiceProvider *defaultServiceProvider();
    static void setDefaultServiceProvider(QMediaServiceProvider *provider);

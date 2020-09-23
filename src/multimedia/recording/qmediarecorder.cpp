@@ -23,8 +23,8 @@
 
 #include <qmediarecorder.h>
 
-// emerald  #include <qcamera.h>
-// emerald  #include <qcameracontrol.h>
+#include <qcamera.h>
+#include <qcameracontrol.h>
 #include <qmediarecordercontrol.h>
 #include <qmediaservice.h>
 #include <qmediaserviceprovider_p.h>
@@ -140,20 +140,13 @@ void QMediaRecorderPrivate::_q_availabilityChanged(QMultimedia::AvailabilityStat
 
 void QMediaRecorderPrivate::restartCamera()
 {
-
-/*  emerald
-
    //restart camera if it can't apply new settings in the Active state
    QCamera *camera = qobject_cast<QCamera *>(mediaObject);
 
    if (camera && camera->captureMode() == QCamera::CaptureVideo) {
-      QMetaObject::invokeMethod(camera,
-         "_q_preparePropertyChange",
-         Qt::DirectConnection,
-         Q_ARG(int, QCameraControl::VideoEncodingSettings));
+      QMetaObject::invokeMethod(camera, "_q_preparePropertyChange",
+         Qt::DirectConnection, Q_ARG(int, QCameraControl::VideoEncodingSettings));
    }
-*/
-
 }
 
 QMediaRecorder::QMediaRecorder(QMediaObject *mediaObject, QObject *parent)
@@ -254,6 +247,7 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
 
             service->releaseControl(d->metaDataControl);
          }
+
          if (d->availabilityControl) {
             disconnect(d->availabilityControl, &QMediaAvailabilityControl::availabilityChanged, this, &QMediaRecorder::_q_availabilityChanged);
 
@@ -262,11 +256,11 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
       }
    }
 
-   d->control = 0;
-   d->formatControl = 0;
-   d->audioControl = 0;
-   d->videoControl = 0;
-   d->metaDataControl = 0;
+   d->control             = 0;
+   d->formatControl       = 0;
+   d->audioControl        = 0;
+   d->videoControl        = 0;
+   d->metaDataControl     = 0;
    d->availabilityControl = 0;
 
    d->mediaObject = object;
@@ -278,19 +272,21 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
       connect(d->mediaObject, &QMediaObject::notifyIntervalChanged, this, &QMediaRecorder::_q_updateNotifyInterval);
 
       if (service) {
-         d->control = qobject_cast<QMediaRecorderControl *>(service->requestControl(QMediaRecorderControl_iid));
+         d->control = dynamic_cast<QMediaRecorderControl *>(service->requestControl(QMediaRecorderControl_iid));
 
          if (d->control) {
-            d->formatControl = qobject_cast<QMediaContainerControl *>(service->requestControl(QMediaContainerControl_iid));
-            d->audioControl  = qobject_cast<QAudioEncoderSettingsControl *>(service->requestControl(QAudioEncoderSettingsControl_iid));
-            d->videoControl  = qobject_cast<QVideoEncoderSettingsControl *>(service->requestControl(QVideoEncoderSettingsControl_iid));
+            d->formatControl = dynamic_cast<QMediaContainerControl *>(service->requestControl(QMediaContainerControl_iid));
+            d->audioControl  = dynamic_cast<QAudioEncoderSettingsControl *>(service->requestControl(QAudioEncoderSettingsControl_iid));
+            d->videoControl  = dynamic_cast<QVideoEncoderSettingsControl *>(service->requestControl(QVideoEncoderSettingsControl_iid));
 
             QMediaControl *control = service->requestControl(QMetaDataWriterControl_iid);
-            if (control) {
-               d->metaDataControl = qobject_cast<QMetaDataWriterControl *>(control);
 
-               if (!d->metaDataControl) {
+            if (control) {
+               d->metaDataControl = dynamic_cast<QMetaDataWriterControl *>(control);
+
+               if (! d->metaDataControl) {
                   service->releaseControl(control);
+
                } else {
                   connect(d->metaDataControl, static_cast<void (QMetaDataWriterControl::*)()>
                         (&QMetaDataWriterControl::metaDataChanged), this,
@@ -438,20 +434,17 @@ QString QMediaRecorder::containerDescription(const QString &format) const
 
 QString QMediaRecorder::containerFormat() const
 {
-   return d_func()->formatControl ?
-      d_func()->formatControl->containerFormat() : QString();
+   return d_func()->formatControl ? d_func()->formatControl->containerFormat() : QString();
 }
 
 QStringList QMediaRecorder::supportedAudioCodecs() const
 {
-   return d_func()->audioControl ?
-      d_func()->audioControl->supportedAudioCodecs() : QStringList();
+   return d_func()->audioControl ? d_func()->audioControl->supportedAudioCodecs() : QStringList();
 }
 
 QString QMediaRecorder::audioCodecDescription(const QString &codec) const
 {
-   return d_func()->audioControl ?
-      d_func()->audioControl->codecDescription(codec) : QString();
+   return d_func()->audioControl ? d_func()->audioControl->codecDescription(codec) : QString();
 }
 
 QList<int> QMediaRecorder::supportedAudioSampleRates(const QAudioEncoderSettings &settings, bool *continuous) const
@@ -510,9 +503,6 @@ QVideoEncoderSettings QMediaRecorder::videoSettings() const
 
 void QMediaRecorder::setAudioSettings(const QAudioEncoderSettings &settings)
 {
-   (void) settings;
-
-/*  emerald
    Q_D(QMediaRecorder);
 
    //restart camera if it can't apply new settings in the Active state
@@ -522,15 +512,10 @@ void QMediaRecorder::setAudioSettings(const QAudioEncoderSettings &settings)
       d->audioControl->setAudioSettings(settings);
       d->applySettingsLater();
    }
-*/
-
 }
 
 void QMediaRecorder::setVideoSettings(const QVideoEncoderSettings &settings)
 {
-   (void) settings;
-
-/*  emerald
    Q_D(QMediaRecorder);
    d->restartCamera();
 
@@ -538,15 +523,10 @@ void QMediaRecorder::setVideoSettings(const QVideoEncoderSettings &settings)
       d->videoControl->setVideoSettings(settings);
       d->applySettingsLater();
    }
-*/
-
 }
 
 void QMediaRecorder::setContainerFormat(const QString &container)
 {
-   (void) container;
-
-/*  emerald
    Q_D(QMediaRecorder);
    d->restartCamera();
 
@@ -554,19 +534,11 @@ void QMediaRecorder::setContainerFormat(const QString &container)
       d->formatControl->setContainerFormat(container);
       d->applySettingsLater();
    }
-*/
-
 }
 
 void QMediaRecorder::setEncodingSettings(const QAudioEncoderSettings &audio,
          const QVideoEncoderSettings &video, const QString &container)
 {
-   (void) audio;
-   (void) video;
-   (void) container;
-
-/*  emerald
-
    Q_D(QMediaRecorder);
    d->restartCamera();
 
@@ -583,9 +555,6 @@ void QMediaRecorder::setEncodingSettings(const QAudioEncoderSettings &audio,
    }
 
    d->applySettingsLater();
-*/
-
-
 }
 
 void QMediaRecorder::record()
