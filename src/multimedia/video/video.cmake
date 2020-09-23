@@ -27,7 +27,7 @@ list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
 
 target_sources(CsMultimedia
    PRIVATE
-   ${CMAKE_CURRENT_SOURCE_DIR}/video/qabstractvideofilter.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/video/qabstractvideofilter.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/video/qabstractvideobuffer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/video/qabstractvideosurface.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/video/qimagevideobuffer.cpp

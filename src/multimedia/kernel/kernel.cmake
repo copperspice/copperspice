@@ -28,6 +28,7 @@ list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourceset_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaservice_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaserviceprovider_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediastoragelocation_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourcepolicy_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourcepolicyplugin_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultimediautils_p.h
@@ -43,6 +44,7 @@ target_sources(CsMultimedia
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaservice.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaserviceprovider.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediatimerange.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediastoragelocation.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourcepolicy.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmediaresourcepolicyplugin.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmultimediautils.cpp

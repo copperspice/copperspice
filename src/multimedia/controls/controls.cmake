@@ -1,33 +1,69 @@
 list(APPEND MULTIMEDIA_PUBLIC_INCLUDES
-	QAudioRoleControl
-	QAudioInputSelectorControl
-	QAudioOutputSelectorControl
-	QMediaAvailabilityControl
-	QMediaNetworkAccessControl
-	QMediaPlayerControl
-	QMetaDataReaderControl
-	QVideoRendererControl
-	QVideoWindowControl
+
+   QAudioDecoderControl
+   QAudioEncoderSettingsControl
+   QAudioInputSelectorControl
+   QAudioOutputSelectorControl
+   QAudioRoleControl
+   QCameraControl
+   QCameraExposureControl
+   QCameraFeedbackControl
+   QCameraFlashControl
+   QCameraFocusControl
+   QCameraImageCaptureControl
+   QCameraInfoControl
+   QCameraLocksControl
+   QCameraViewfinderSettingsControl
+   QCameraZoomControl
+   QImageEncoderControl
+   QMediaAudioProbeControl
+   QMediaAvailabilityControl
+   QMediaContainerControl
+   QMediaGaplessPlaybackControl
+   QMediaNetworkAccessControl
+   QMediaPlayerControl
+   QMediaRecorderControl
+   QMediaStreamsControl
+   QMediaVideoProbeControl
+   QMetaDataReaderControl
+   QMetaDataWriterControl
+   QRadioDataControl
+   QRadioTunerControl
+   QVideoRendererControl
+   QVideoWindowControl
 )
 
 list(APPEND MULTIMEDIA_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiodecodercontrol.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiorolecontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioencodersettingscontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioinputselectorcontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiooutputselectorcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiorolecontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameracapturebufferformatcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameracapturedestinationcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameracontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraexposurecontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcamerafeedbackcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraflashcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcamerafocuscontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraimagecapturecontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraimageprocessingcontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcamerainfocontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameralockscontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraviewfindersettingscontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcamerazoomcontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qimageencodercontrol.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediagaplessplaybackcontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaaudioprobecontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaavailabilitycontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediacontainercontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediagaplessplaybackcontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmedianetworkaccesscontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaplayercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediarecordercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediastreamscontrol.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediavideoprobecontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatareadercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmetadatawritercontrol.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediacontainercontrol.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediavideoprobecontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qradiodatacontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qradiotunercontrol.h
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qvideorenderercontrol.h
@@ -48,6 +84,19 @@ target_sources(CsMultimedia
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioencodersettingscontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudioinputselectorcontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qaudiooutputselectorcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameracapturebufferformatcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameracapturedestinationcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameracontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraexposurecontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcamerafeedbackcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraflashcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcamerafocuscontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraimagecapturecontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraimageprocessingcontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcamerainfocontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameralockscontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcameraviewfindersettingscontrol.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/controls/qcamerazoomcontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qimageencodercontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediagaplessplaybackcontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/controls/qmediaaudioprobecontrol.cpp
