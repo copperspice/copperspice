@@ -87,7 +87,7 @@ QMediaService *DSServicePlugin::create(QString const &key)
 #endif
 
 #ifdef QMEDIA_DIRECTSHOW_PLAYER
-   if (key == QMediaPlayerControl_Key) {
+   if (key == Q_MEDIASERVICE_MEDIAPLAYER) {
       addRefCount();
       return new DirectShowPlayerService;
    }
@@ -104,7 +104,7 @@ void DSServicePlugin::release(QMediaService *service)
 
 QMediaServiceProviderHint::Features DSServicePlugin::supportedFeatures(const QString &service) const
 {
-   if (service == QMediaPlayerControl_Key) {
+   if (service == Q_MEDIASERVICE_MEDIAPLAYER) {
       return QMediaServiceProviderHint::StreamPlayback | QMediaServiceProviderHint::VideoSurface;
    } else {
       return QMediaServiceProviderHint::Features();
