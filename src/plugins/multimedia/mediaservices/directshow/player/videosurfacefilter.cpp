@@ -23,15 +23,15 @@
 
 #include <videosurfacefilter.h>
 
-#include <directshoweventloop.h>
-#include <directshowglobal.h>
-#include <directshowpinenum.h>
-#include <mediasamplevideobuffer.h>
 #include <qabstractvideosurface.h>
-
 #include <qcoreapplication.h>
 #include <qcoreevent.h>
 #include <qthread.h>
+
+#include <directshoweventloop.h>
+#include <directshowpinenum.h>
+#include <dsplayer_global.h>
+#include <mediasamplevideobuffer.h>
 
 #include <initguid.h>
 

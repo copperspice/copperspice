@@ -21,16 +21,16 @@
 *
 ***********************************************************************/
 
-#include "directshowioreader.h"
-
-#include "directshoweventloop.h"
-#include "directshowglobal.h"
-#include "directshowiosource.h"
+#include <directshowioreader.h>
 
 #include <qcoreapplication.h>
 #include <qcoreevent.h>
 #include <qiodevice.h>
 #include <qthread.h>
+
+#include <directshoweventloop.h>
+#include <directshowiosource.h>
+#include <dsplayer_global.h>
 
 class DirectShowSampleRequest
 {

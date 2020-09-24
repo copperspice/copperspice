@@ -30,9 +30,7 @@
 #include <qobject.h>
 #include <qwaitcondition.h>
 
-QT_BEGIN_NAMESPACE
 class QIODevice;
-QT_END_NAMESPACE
 
 class DirectShowEventLoop;
 class DirectShowIOSource;

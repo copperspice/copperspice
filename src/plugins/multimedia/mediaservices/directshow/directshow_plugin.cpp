@@ -35,8 +35,8 @@
 
 #ifdef QMEDIA_DIRECTSHOW_CAMERA
 
-#include <dsvideodevicecontrol.h>
-#include <dscameraservice.h>
+#include <dsvideo_devicecontrol.h>
+#include <dscamera_service.h>
 
 extern const CLSID CLSID_VideoInputDeviceCategory;
 
@@ -80,6 +80,7 @@ QMediaService *DSServicePlugin::create(QString const &key)
 {
 
 #ifdef QMEDIA_DIRECTSHOW_CAMERA
+
    if (key == Q_MEDIASERVICE_CAMERA) {
       addRefCount();
       return new DSCameraService;
@@ -116,8 +117,8 @@ QString DSServicePlugin::defaultDevice(const QString &service) const
 
 #ifdef QMEDIA_DIRECTSHOW_CAMERA
    if (service == Q_MEDIASERVICE_CAMERA) {
-
       const QList<DSVideoDeviceInfo> &devs = DSVideoDeviceControl::availableDevices();
+
       if (! devs.isEmpty()) {
          return devs.first().first;
       }
@@ -160,6 +161,7 @@ QString DSServicePlugin::deviceDescription(const QString &service, const QString
          }
       }
    }
+
 #else
    (void) service;
    (void) device;

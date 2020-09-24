@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "directshowaudioendpointcontrol.h"
+#include <directshowaudioendpointcontrol.h>
 
-#include "directshowglobal.h"
-#include "directshowplayerservice.h"
+#include <dsplayer_global.h>
+#include <directshowplayerservice.h>
 
 DirectShowAudioEndpointControl::DirectShowAudioEndpointControl(
    DirectShowPlayerService *service, QObject *parent)

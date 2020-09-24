@@ -24,28 +24,27 @@
 #ifndef DIRECTSHOWPLAYERSERVICE_H
 #define DIRECTSHOWPLAYERSERVICE_H
 
-#include <dshow.h>
-
-#include "qmediaplayer.h"
-#include "qmediaresource.h"
-#include "qmediaservice.h"
-#include "qmediatimerange.h"
-
-#include "directshoweventloop.h"
-#include "directshowglobal.h"
-
 #include <qcoreevent.h>
 #include <qmutex.h>
 #include <qurl.h>
 #include <qwaitcondition.h>
+#include <qmediaplayer.h>
+#include <qmediaresource.h>
+#include <qmediaservice.h>
+#include <qmediatimerange.h>
+
+#include <directshoweventloop.h>
+#include <dsplayer_global.h>
+
+#include <dshow.h>
+
+class QMediaContent;
+class QVideoWindowControl;
 
 class DirectShowAudioEndpointControl;
 class DirectShowMetaDataControl;
 class DirectShowPlayerControl;
 class DirectShowVideoRendererControl;
-
-class QMediaContent;
-class QVideoWindowControl;
 
 class DirectShowPlayerService : public QMediaService
 {
@@ -60,8 +59,8 @@ class DirectShowPlayerService : public QMediaService
    DirectShowPlayerService(QObject *parent = nullptr);
    ~DirectShowPlayerService();
 
-   QMediaControl *requestControl(const QString &name);
-   void releaseControl(QMediaControl *control);
+   QMediaControl *requestControl(const QString &name) override;
+   void releaseControl(QMediaControl *control) override;
 
    void load(const QMediaContent &media, QIODevice *stream);
    void play();

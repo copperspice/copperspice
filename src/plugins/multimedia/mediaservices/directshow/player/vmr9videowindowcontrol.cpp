@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include "vmr9videowindowcontrol.h"
+#include <vmr9videowindowcontrol.h>
 
-#include "directshowglobal.h"
+#include <qpalette.h>
+#include <qwidget.h>
 
-#include <QPalette>
-#include <QWidget>
+#include <dsplayer_global.h>
 
 Vmr9VideoWindowControl::Vmr9VideoWindowControl(QObject *parent)
    : QVideoWindowControl(parent)

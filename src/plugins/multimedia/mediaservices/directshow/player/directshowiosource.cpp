@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include "directshowiosource.h"
-
-#include "directshowglobal.h"
-#include "directshowmediatype.h"
-#include "directshowpinenum.h"
+#include <directshowiosource.h>
 
 #include <qcoreapplication.h>
 #include <qurl.h>
+
+#include <directshowmediatype.h>
+#include <directshowpinenum.h>
+#include <dsplayer_global.h>
 
 static const GUID directshow_subtypes[] = {
    MEDIASUBTYPE_NULL,

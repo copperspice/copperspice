@@ -24,18 +24,14 @@
 #ifndef DIRECTSHOWIOSOURCE_H
 #define DIRECTSHOWIOSOURCE_H
 
-#include "directshowglobal.h"
-#include "directshowioreader.h"
-#include "directshowmediatype.h"
-#include "directshowmediatypelist.h"
-
 #include <qfile.h>
 
-class DirectShowIOSource
-   : public DirectShowMediaTypeList
-   , public IBaseFilter
-   , public IAMFilterMiscFlags
-   , public IPin
+#include <directshowioreader.h>
+#include <directshowmediatype.h>
+#include <directshowmediatypelist.h>
+#include <dsplayer_global.h>
+
+class DirectShowIOSource : public DirectShowMediaTypeList , public IBaseFilter, public IAMFilterMiscFlags, public IPin
 {
  public:
    DirectShowIOSource(DirectShowEventLoop *loop);

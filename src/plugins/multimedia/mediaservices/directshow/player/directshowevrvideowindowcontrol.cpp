@@ -21,13 +21,12 @@
 *
 ***********************************************************************/
 
-#include "directshowevrvideowindowcontrol.h"
+#include <directshowevrvideowindowcontrol.h>
 
-#include "directshowglobal.h"
+#include <dsplayer_global.h>
 
 DirectShowEvrVideoWindowControl::DirectShowEvrVideoWindowControl(QObject *parent)
-   : EvrVideoWindowControl(parent)
-   , m_evrFilter(NULL)
+   : EvrVideoWindowControl(parent), m_evrFilter(NULL)
 {
 }
 
@@ -42,7 +41,8 @@ IBaseFilter *DirectShowEvrVideoWindowControl::filter()
 {
    if (!m_evrFilter) {
       m_evrFilter = com_new<IBaseFilter>(clsid_EnhancedVideoRenderer);
-      if (!setEvr(m_evrFilter)) {
+
+      if (! setEvr(m_evrFilter)) {
          m_evrFilter->Release();
          m_evrFilter = NULL;
       }
