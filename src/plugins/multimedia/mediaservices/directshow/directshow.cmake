@@ -1,6 +1,16 @@
 list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.h
 
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_global.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_service.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_control.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_session.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_viewfindersettingscontrol.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_imageprocessingcontrol.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsimage_capturecontrol.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_renderer.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_devicecontrol.h
+
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.h
@@ -30,7 +40,17 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
    target_sources(CsMultimedia_DirectShow
       PRIVATE
+
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.cpp
+
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_service.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_control.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_session.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_viewfindersettingscontrol.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_imageprocessingcontrol.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsimage_capturecontrol.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_renderer.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_devicecontrol.cpp
 
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.cpp
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.cpp
@@ -68,6 +88,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     target_compile_definitions(CsMultimedia_DirectShow
        PRIVATE
        -DQT_PLUGIN
+       -DQMEDIA_DIRECTSHOW_CAMERA
        -DQMEDIA_DIRECTSHOW_PLAYER
        -DNO_DSHOW_STRSAFE
     )
