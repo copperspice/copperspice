@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#ifndef DIRECTSHOWGLOBAL_H
-#define DIRECTSHOWGLOBAL_H
-
-#include <dshow.h>
+#ifndef DSPLAYER_GLOBAL_H
+#define DSPLAYER_GLOBAL_H
 
 #include <qglobal.h>
+
+#include <dshow.h>
 
 template <typename T> T *com_cast(IUnknown *unknown, const IID &iid)
 {

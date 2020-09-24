@@ -2,10 +2,10 @@ list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.h
 
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowglobal.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.h
 
+   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/dsplayer_global.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.h
