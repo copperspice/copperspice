@@ -36,7 +36,7 @@ class QGstreamerAudioDecoderServicePlugin
    CS_OBJECT_MULTIPLE(QGstreamerAudioDecoderServicePlugin, QMediaServiceProviderPlugin)
 
    CS_PLUGIN_IID(QMediaServiceProviderInterface_ID)
-   CS_PLUGIN_KEY(QAudioDecoderControl_Key)
+   CS_PLUGIN_KEY(Q_MEDIASERVICE_AUDIODECODER)
 
    CS_INTERFACES(QMediaServiceSupportedFormatsInterface)
 

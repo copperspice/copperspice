@@ -39,7 +39,7 @@ QMediaService *QGstreamerPlayerServicePlugin::create(const QString &key)
 {
    QGstUtils::initializeGst();
 
-   if (key == QMediaPlayerControl_Key) {
+   if (key == Q_MEDIASERVICE_MEDIAPLAYER) {
       return new QGstreamerPlayerService;
    }
 

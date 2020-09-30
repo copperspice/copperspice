@@ -36,7 +36,7 @@ class QGstreamerPlayerServicePlugin
    CS_OBJECT_MULTIPLE(QGstreamerPlayerServicePlugin, QMediaServiceProviderPlugin)
 
    CS_PLUGIN_IID(QMediaServiceProviderInterface_ID)
-   CS_PLUGIN_KEY(QMediaPlayerControl_Key)
+   CS_PLUGIN_KEY(Q_MEDIASERVICE_MEDIAPLAYER)
 
    CS_INTERFACES(QMediaServiceFeaturesInterface, QMediaServiceSupportedFormatsInterface)
 
