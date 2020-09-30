@@ -24,11 +24,11 @@
 #ifndef QGSTUTILS_P_H
 #define QGSTUTILS_P_H
 
+#include <qcamera.h>
 #include <qmap.h>
 #include <qset.h>
 #include <qvector.h>
 #include <qaudioformat.h>
-// emerald   #include <qcamera.h>
 #include <qabstractvideobuffer.h>
 #include <qvideoframe.h>
 #include <qdebug.h>
@@ -58,16 +58,14 @@ class QVideoSurfaceFormat;
 
 namespace QGstUtils {
 
-/*
-    struct CameraInfo
-    {
-        QString name;
-        QString description;
-        int orientation;
-        QCamera::Position position;
-        QByteArray driver;
-    };
-*/
+struct CameraInfo
+{
+  QString name;
+  QString description;
+  int orientation;
+  QCamera::Position position;
+  QByteArray driver;
+};
 
 QMap<QByteArray, QVariant> gstTagListToMap(const GstTagList *list);
 
@@ -87,14 +85,12 @@ QMultimedia::SupportEstimate hasSupport(const QString &mimeType,
    const QStringList &codecs,
    const QSet<QString> &supportedMimeTypeSet);
 
-/*
-    QVector<CameraInfo> enumerateCameras(GstElementFactory *factory = 0);
-    QList<QByteArray> cameraDevices(GstElementFactory * factory = 0);
-    QString cameraDescription(const QString &device, GstElementFactory * factory = 0);
-    QCamera::Position cameraPosition(const QString &device, GstElementFactory * factory = 0);
-    int cameraOrientation(const QString &device, GstElementFactory * factory = 0);
-    QByteArray cameraDriver(const QString &device, GstElementFactory * factory = 0);
-*/
+QVector<CameraInfo> enumerateCameras(GstElementFactory *factory = nullptr);
+QList<QString> cameraDevices(GstElementFactory *factory = nullptr);
+QString cameraDescription(const QString &device, GstElementFactory *factory = nullptr);
+QCamera::Position cameraPosition(const QString &device, GstElementFactory *factory = nullptr);
+int cameraOrientation(const QString &device, GstElementFactory *factory = nullptr);
+QByteArray cameraDriver(const QString &device, GstElementFactory *factory = nullptr);
 
 QSet<QString> supportedMimeTypes(bool (*isValidFactory)(GstElementFactory *factory));
 

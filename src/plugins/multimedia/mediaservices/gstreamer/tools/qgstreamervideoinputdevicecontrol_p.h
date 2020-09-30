@@ -28,7 +28,7 @@
 #include <qstringlist.h>
 
 #include <gst/gst.h>
-// emerald   #include <qcamera.h>
+#include <qcamera.h>
 
 class QGstreamerVideoInputDeviceControl : public QVideoDeviceSelectorControl
 {

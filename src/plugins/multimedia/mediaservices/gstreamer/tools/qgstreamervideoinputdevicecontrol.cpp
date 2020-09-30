@@ -51,24 +51,17 @@ QGstreamerVideoInputDeviceControl::~QGstreamerVideoInputDeviceControl()
 
 int QGstreamerVideoInputDeviceControl::deviceCount() const
 {
-   // emerald - camera    return QGstUtils::enumerateCameras(m_factory).count();
-   return 0;
+   return QGstUtils::enumerateCameras(m_factory).count();
 }
 
 QString QGstreamerVideoInputDeviceControl::deviceName(int index) const
 {
-   // emerald - camera    return QGstUtils::enumerateCameras(m_factory).value(index).name;
-   (void) index;
-
-   return QString();
+   return QGstUtils::enumerateCameras(m_factory).value(index).name;
 }
 
 QString QGstreamerVideoInputDeviceControl::deviceDescription(int index) const
 {
-   // emerald - camera    return QGstUtils::enumerateCameras(m_factory).value(index).description;
-   (void) index;
-
-   return QString();
+   return QGstUtils::enumerateCameras(m_factory).value(index).description;
 }
 
 int QGstreamerVideoInputDeviceControl::defaultDevice() const

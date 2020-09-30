@@ -516,20 +516,12 @@ QMultimedia::SupportEstimate QGstUtils::hasSupport(const QString &mimeType, cons
    return QMultimedia::MaybeSupported;
 }
 
-/* emerald - camera
-
 namespace {
 
 using FactoryCameraInfoMap = QHash<GstElementFactory *, QVector<QGstUtils::CameraInfo>>;
 Q_GLOBAL_STATIC(FactoryCameraInfoMap, qt_camera_device_info);
 
 }
-
-*/
-
-
-
-/* emerald - camera
 
 QVector<QGstUtils::CameraInfo> QGstUtils::enumerateCameras(GstElementFactory *factory)
 {
@@ -665,12 +657,12 @@ QVector<QGstUtils::CameraInfo> QGstUtils::enumerateCameras(GstElementFactory *fa
    return devices;
 }
 
-QList<QByteArray> QGstUtils::cameraDevices(GstElementFactory *factory)
+QList<QString> QGstUtils::cameraDevices(GstElementFactory *factory)
 {
-   QList<QByteArray> devices;
+   QList<QString> devices;
 
    for (const CameraInfo &camera : enumerateCameras(factory)) {
-      devices.append(camera.name.toUtf8());
+      devices.append(camera.name);
    }
 
    return devices;
@@ -717,8 +709,6 @@ QByteArray QGstUtils::cameraDriver(const QString &device, GstElementFactory *fac
 
    return QByteArray();
 }
-
-*/
 
 QSet<QString> QGstUtils::supportedMimeTypes(bool (*isValidFactory)(GstElementFactory *factory))
 {
