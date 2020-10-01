@@ -162,6 +162,8 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings2.cpp
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturebufferformat.cpp
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_infocontrol.cpp
+
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioinputselector.cpp
    )
 
    if (GSTREAMER_ABI_VERSION VERSION_EQUAL "0.10")
@@ -174,7 +176,6 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
    else()
       target_sources(CsMultimedia_gst_camerabin
          PRIVATE
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioinputselector.cpp
          ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
       )
 
@@ -194,8 +195,10 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
 
    if (GSTREAMER_ABI_VERSION VERSION_EQUAL "0.10")
       target_link_libraries(CsMultimedia_gst_camerabin
-#     ${GSTREAMER_INTERFACES_LIBRARIES}
-      )
+      ${GSTREAMER_LIBRARIES}
+      ${GSTREAMER_BASE_LIBRARIES}
+      ${GSTREAMER_INTERFACES_LIBRARIES}
+   )
    endif()
 
    target_include_directories(

@@ -287,10 +287,12 @@ bool CameraBinImageCapture::processBusMessage(const QGstreamerMessage &message)
          }
 
          QString elementName = QString::fromLatin1(gst_element_get_name(element));
-#if !GST_CHECK_VERSION(1,0,0)
+
+#if ! GST_CHECK_VERSION(1,0,0)
          GstElementClass *elementClass = GST_ELEMENT_GET_CLASS(element);
-         QString elementLongName = elementClass->details.longname;
+         QString elementLongName = QString::fromUtf8(elementClass->details.longname);
 #endif
+
          if (elementName.contains("jpegenc") && element != m_jpegEncoderElement) {
             m_jpegEncoderElement = element;
             GstPad *sinkpad = gst_element_get_static_pad(element, "sink");
