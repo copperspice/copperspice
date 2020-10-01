@@ -1111,9 +1111,9 @@ bool QGstreamerPlayerSession::processBusMessage(const QGstreamerMessage &message
                states << "GST_STATE_VOID_PENDING" <<  "GST_STATE_NULL" << "GST_STATE_READY" << "GST_STATE_PAUSED" << "GST_STATE_PLAYING";
 
                qDebug() << QString("state changed: old: %1  new: %2  pending: %3") \
-                  .arg(states[oldState]) \
-                  .arg(states[newState]) \
-                  .arg(states[pending]);
+                  .formatArg(states[oldState]) \
+                  .formatArg(states[newState]) \
+                  .formatArg(states[pending]);
 #endif
 
                switch (newState) {
