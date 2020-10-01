@@ -24,14 +24,12 @@
 #ifndef QGSTREAMERAUDIODECODERSERVICEPLUGIN_H
 #define QGSTREAMERAUDIODECODERSERVICEPLUGIN_H
 
-#include <qmediaservice_provider_plugin.h>
 #include <qaudiodecodercontrol.h>
-
-#include <qset.h>
+#include <qmediaservice_provider_plugin.h>
 #include <qobject.h>
+#include <qset.h>
 
-class QGstreamerAudioDecoderServicePlugin
-   : public QMediaServiceProviderPlugin, public QMediaServiceSupportedFormatsInterface
+class QGstreamerAudioDecoderServicePlugin : public QMediaServiceProviderPlugin, public QMediaServiceSupportedFormatsInterface
 {
    CS_OBJECT_MULTIPLE(QGstreamerAudioDecoderServicePlugin, QMediaServiceProviderPlugin)
 

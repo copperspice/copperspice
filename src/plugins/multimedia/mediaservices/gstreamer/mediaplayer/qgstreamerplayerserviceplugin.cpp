@@ -25,13 +25,10 @@
 #include <qdir.h>
 #include <qdebug.h>
 #include <qstring.h>
-
 #include <qgstreamerplayerserviceplugin.h>
 #include <qgstreamerplayerservice.h>
 
 #include <qgstutils_p.h>
-
-//#define QT_SUPPORTEDMIMETYPES_DEBUG
 
 CS_PLUGIN_REGISTER(QGstreamerPlayerServicePlugin)
 
@@ -82,6 +79,7 @@ static bool isDecoderOrDemuxer(GstElementFactory *factory)
 #if GST_CHECK_VERSION(0, 10, 31)
    return gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_DEMUXER)
       || gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_DECODER);
+
 #else
    return (factory
          && (qstrcmp(factory->details.klass,   "Codec/Decoder/Audio") == 0

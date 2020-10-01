@@ -29,8 +29,7 @@
 #include <qset.h>
 #include <qobject.h>
 
-class QGstreamerPlayerServicePlugin
-   : public QMediaServiceProviderPlugin, public QMediaServiceFeaturesInterface,
+class QGstreamerPlayerServicePlugin : public QMediaServiceProviderPlugin, public QMediaServiceFeaturesInterface,
      public QMediaServiceSupportedFormatsInterface
 {
    CS_OBJECT_MULTIPLE(QGstreamerPlayerServicePlugin, QMediaServiceProviderPlugin)

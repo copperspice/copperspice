@@ -23,15 +23,13 @@
 
 #include <qgstreameraudiodecoderserviceplugin.h>
 
-#include <qstring.h>
 #include <qdebug.h>
-#include <QDir>
-#include <QDebug>
+#include <qdir.h>
+#include <qdebug.h>
+#include <qstring.h>
 #include <qgstreameraudiodecoderservice.h>
 
 #include <qgstutils_p.h>
-
-// #define QT_SUPPORTEDMIMETYPES_DEBUG
 
 CS_PLUGIN_REGISTER(QGstreamerAudioDecoderServicePlugin)
 

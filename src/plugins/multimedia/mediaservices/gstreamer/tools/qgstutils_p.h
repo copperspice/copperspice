@@ -24,14 +24,14 @@
 #ifndef QGSTUTILS_P_H
 #define QGSTUTILS_P_H
 
+#include <qabstractvideobuffer.h>
+#include <qaudioformat.h>
 #include <qcamera.h>
+#include <qdebug.h>
 #include <qmap.h>
 #include <qset.h>
 #include <qvector.h>
-#include <qaudioformat.h>
-#include <qabstractvideobuffer.h>
 #include <qvideoframe.h>
-#include <qdebug.h>
 
 #include <gst/gst.h>
 #include <gst/video/video.h>
@@ -74,16 +74,16 @@ QSize capsCorrectedResolution(const GstCaps *caps);
 QAudioFormat audioFormatForCaps(const GstCaps *caps);
 
 #if GST_CHECK_VERSION(1,0,0)
-QAudioFormat audioFormatForSample(GstSample *sample);
+   QAudioFormat audioFormatForSample(GstSample *sample);
 #else
-QAudioFormat audioFormatForBuffer(GstBuffer *buffer);
+   QAudioFormat audioFormatForBuffer(GstBuffer *buffer);
 #endif
 
 GstCaps *capsForAudioFormat(const QAudioFormat &format);
 void initializeGst();
-QMultimedia::SupportEstimate hasSupport(const QString &mimeType,
-   const QStringList &codecs,
-   const QSet<QString> &supportedMimeTypeSet);
+
+QMultimedia::SupportEstimate hasSupport(const QString &mimeType, const QStringList &codecs,
+                  const QSet<QString> &supportedMimeTypeSet);
 
 QVector<CameraInfo> enumerateCameras(GstElementFactory *factory = nullptr);
 QList<QString> cameraDevices(GstElementFactory *factory = nullptr);
@@ -95,17 +95,17 @@ QByteArray cameraDriver(const QString &device, GstElementFactory *factory = null
 QSet<QString> supportedMimeTypes(bool (*isValidFactory)(GstElementFactory *factory));
 
 #if GST_CHECK_VERSION(1,0,0)
+
 QImage bufferToImage(GstBuffer *buffer, const GstVideoInfo &info);
-QVideoSurfaceFormat formatForCaps(
-   GstCaps *caps,
-   GstVideoInfo *info = 0,
+QVideoSurfaceFormat formatForCaps(GstCaps *caps, GstVideoInfo *info = nullptr,
    QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle);
+
 #else
+
 QImage bufferToImage(GstBuffer *buffer);
-QVideoSurfaceFormat formatForCaps(
-   GstCaps *caps,
-   int *bytesPerLine = 0,
+QVideoSurfaceFormat formatForCaps(GstCaps *caps, int *bytesPerLine = nullptr,
    QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle);
+
 #endif
 
 GstCaps *capsForFormats(const QList<QVideoFrame::PixelFormat> &formats);
@@ -117,7 +117,7 @@ void setMetaData(GstBin *bin, const QMap<QByteArray, QVariant> &data);
 GstCaps *videoFilterCaps();
 
 QSize structureResolution(const GstStructure *s);
-QVideoFrame::PixelFormat structurePixelFormat(const GstStructure *s, int *bpp = 0);
+QVideoFrame::PixelFormat structurePixelFormat(const GstStructure *s, int *bpp = nullptr);
 QSize structurePixelAspectRatio(const GstStructure *s);
 QPair<qreal, qreal> structureFrameRateRange(const GstStructure *s);
 

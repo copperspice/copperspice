@@ -33,8 +33,7 @@ QGstreamerVideoInputDeviceControl::QGstreamerVideoInputDeviceControl(QObject *pa
 {
 }
 
-QGstreamerVideoInputDeviceControl::QGstreamerVideoInputDeviceControl(
-   GstElementFactory *factory, QObject *parent)
+QGstreamerVideoInputDeviceControl::QGstreamerVideoInputDeviceControl(GstElementFactory *factory, QObject *parent)
    : QVideoDeviceSelectorControl(parent), m_factory(factory), m_selectedDevice(0)
 {
    if (m_factory) {
