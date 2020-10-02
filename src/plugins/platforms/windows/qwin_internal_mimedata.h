@@ -25,7 +25,7 @@
 #define QWINDOWSINTERNALMIME_H
 
 #include <qwin_additional.h>
-#include <qvariant.>
+#include <qvariant.h>
 
 #include <qdnd_p.h>
 

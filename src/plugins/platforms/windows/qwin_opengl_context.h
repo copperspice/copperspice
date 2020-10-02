@@ -24,7 +24,7 @@
 #ifndef QWINDOWSOPENGLCONTEXT_H
 #define QWINDOWSOPENGLCONTEXT_H
 
-#include <qopenglcontext.>
+#include <qopenglcontext.h>
 #include <qplatform_openglcontext.h>
 
 #ifndef QT_NO_OPENGL
