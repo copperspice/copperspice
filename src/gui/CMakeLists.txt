@@ -49,9 +49,19 @@ include_directories(
    ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng
 )
+
+if (${JPEG_FOUND})
+   include_directories(
+      # using system library
+      ${JPEG_INCLUDE_DIR}
+   )
+else()
+   include_directories(
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg
+   )
+endif()
 
 include(accessible/accessible.cmake)
 include(animation/animation.cmake)
@@ -174,6 +184,13 @@ target_link_libraries(CsGui
    CsCore
    ${OPENGL_LIBRARIES}
 )
+
+if (${JPEG_FOUND})
+   target_link_libraries(CsGui
+      PRIVATE
+      ${JPEG_LIBRARIES}
+   )
+endif()
 
 set_target_properties(CsGui
    PROPERTIES

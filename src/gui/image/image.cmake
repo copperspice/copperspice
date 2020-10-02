@@ -102,53 +102,6 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qtiffhandler.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage_conversions.cpp
 
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jaricom.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcapimin.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcapistd.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcarith.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jccoefct.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jccolor.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcdctmgr.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jchuff.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcinit.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcmainct.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcmarker.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcmaster.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcomapi.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcparam.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcprepct.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcsample.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jctrans.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdapimin.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdapistd.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdarith.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdatadst.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdatasrc.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdcoefct.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdcolor.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jddctmgr.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdhuff.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdinput.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdmainct.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdmarker.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdmaster.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdmerge.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdpostct.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdsample.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdtrans.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jerror.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jfdctflt.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jfdctfst.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jfdctint.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jidctflt.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jidctfst.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jidctint.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jmemmgr.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jmemnobs.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jquant1.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jquant2.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jutils.c
-
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng/libmng_callback_xs.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng/libmng_chunk_descr.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng/libmng_chunk_io.c
@@ -218,6 +171,58 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_write.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_zip.c
 )
+
+if (NOT ${JPEG_FOUND})
+   target_sources(CsGui
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jaricom.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcapimin.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcapistd.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcarith.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jccoefct.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jccolor.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcdctmgr.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jchuff.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcinit.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcmainct.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcmarker.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcmaster.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcomapi.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcparam.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcprepct.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jcsample.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jctrans.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdapimin.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdapistd.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdarith.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdatadst.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdatasrc.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdcoefct.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdcolor.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jddctmgr.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdhuff.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdinput.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdmainct.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdmarker.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdmaster.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdmerge.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdpostct.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdsample.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jdtrans.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jerror.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jfdctflt.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jfdctfst.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jfdctint.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jidctflt.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jidctfst.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jidctint.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jmemmgr.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jmemnobs.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jquant1.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jquant2.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jutils.c
+   )
+endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
    target_sources(CsGui

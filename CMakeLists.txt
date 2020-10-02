@@ -229,7 +229,24 @@ set_package_properties(ZLIB PROPERTIES
    TYPE RECOMMENDED
 )
 
-if(NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
+if (NOT ZLIB_FOUND)
+   message(STATUS "ZLIB was not found, bundled library will be used\n")
+endif()
+
+find_package(JPEG QUIET)
+set_package_properties(JPEG PROPERTIES
+   PURPOSE "Used for JPEG compression for images"
+   DESCRIPTION "JPEG Compression Library"
+   URL "https://ijg.org"
+   TYPE RECOMMENDED
+)
+
+if (NOT JPEG_FOUND)
+   message(STATUS "libjpeg was not found, bundled library will be used\n")
+endif()
+
+
+if (NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
 
 find_package(Cups)
 set_package_properties(Cups PROPERTIES
