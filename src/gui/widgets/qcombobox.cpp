@@ -339,10 +339,7 @@ QSize QComboBoxPrivate::recomputeSizeHint(QSize &sh) const
                   }
                }
                break;
-            case QComboBox::AdjustToMinimumContentsLength:
-               for (int i = 0; i < count && !hasIcon; ++i) {
-                  hasIcon = !q->itemIcon(i).isNull();
-               }
+
             default:
                break;
          }
@@ -1197,6 +1194,8 @@ void QComboBoxPrivate::_q_emitCurrentIndexChanged(const QModelIndex &index)
 {
    Q_Q(QComboBox);
    const QString text = itemText(index);
+
+   emit q->cs_currentIndexChanged(index.row());
    emit q->currentIndexChanged(index.row());
    emit q->currentIndexChanged(text);
 
@@ -1416,9 +1415,7 @@ void QComboBox::setMinimumContentsLength(int characters)
 
    d->minimumContentsLength = characters;
 
-   if (d->sizeAdjustPolicy == AdjustToContents
-      || d->sizeAdjustPolicy == AdjustToMinimumContentsLength
-      || d->sizeAdjustPolicy == AdjustToMinimumContentsLengthWithIcon) {
+   if (d->sizeAdjustPolicy == AdjustToContents || d->sizeAdjustPolicy == AdjustToMinimumContentsLengthWithIcon) {
       d->sizeHint = QSize();
       d->adjustComboBoxSize();
       updateGeometry();

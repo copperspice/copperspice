@@ -102,6 +102,12 @@ class Q_GUI_EXPORT QComboBox : public QWidget
       InsertAlphabetically
    };
 
+   enum SizeAdjustPolicy {
+      AdjustToContents,
+      AdjustToContentsOnFirstShow,
+      AdjustToMinimumContentsLengthWithIcon
+   };
+
    explicit QComboBox(QWidget *parent = nullptr);
 
    QComboBox(const QComboBox &) = delete;
@@ -140,13 +146,6 @@ class Q_GUI_EXPORT QComboBox : public QWidget
 
    InsertPolicy insertPolicy() const;
    void setInsertPolicy(InsertPolicy policy);
-
-   enum SizeAdjustPolicy {
-      AdjustToContents,
-      AdjustToContentsOnFirstShow,
-      AdjustToMinimumContentsLength, // ### Qt5/remove
-      AdjustToMinimumContentsLengthWithIcon
-   };
 
    SizeAdjustPolicy sizeAdjustPolicy() const;
    void setSizeAdjustPolicy(SizeAdjustPolicy policy);

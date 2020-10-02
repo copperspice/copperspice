@@ -851,7 +851,7 @@ void QFileDialogPrivate::createWidgets()
 
    // filetype
    qFileDialogUi->fileTypeCombo->setDuplicatesEnabled(false);
-   qFileDialogUi->fileTypeCombo->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
+   qFileDialogUi->fileTypeCombo->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
    qFileDialogUi->fileTypeCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
    QObject::connect(qFileDialogUi->fileTypeCombo, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
