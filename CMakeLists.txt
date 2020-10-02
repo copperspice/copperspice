@@ -29,7 +29,7 @@ include(ResourceMacros)
 include(TestLargeFiles)
 
 # location for install or package
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
    include(GNUInstallDirs)
 
    # rpath used for rcc and uic when compiling a user application
@@ -38,7 +38,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
    set(CMAKE_INSTALL_RPATH "@executable_path/${CS_BIN_RPATH}")
 
-elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+elseif (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
    include(GNUInstallDirs)
 
    # rpath used for rcc and uic when compiling a user application
@@ -47,7 +47,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
    set(CMAKE_INSTALL_RPATH "$ORIGIN/${CS_BIN_RPATH}")
 
-elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_BINDIR bin)
    set(CMAKE_INSTALL_LIBDIR lib)
    set(CMAKE_INSTALL_INCLUDEDIR include)
@@ -73,11 +73,11 @@ set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(VERSION     "${PACKAGE_VERSION}")
 set(prefix      "${CMAKE_INSTALL_PREFIX}")
 
-if(MSVC)
+if (MSVC)
    enable_language(ASM_MASM)
    set(target "MSVC")
 
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
    execute_process(
       COMMAND ${CMAKE_CXX_COMPILER} -dumpmachine
       OUTPUT_VARIABLE DUMPMACHINE_OUTPUT
@@ -85,7 +85,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
       OUTPUT_STRIP_TRAILING_WHITESPACE
    )
 
-   if(NOT DUMPMACHINE_EXITCODE EQUAL 0)
+   if (NOT DUMPMACHINE_EXITCODE EQUAL 0)
       message(SEND_ERROR "Failed to obtain machine from ${CMAKE_CXX_COMPILER}")
    endif()
 
@@ -125,17 +125,17 @@ set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
    set(CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS}    -Wl,-undefined,error")
    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-undefined,error")
    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-undefined,error")
 
-elseif(CMAKE_SYSTEM_NAME MATCHES "(OpenBSD|FreeBSD|NetBSD|DragonFly)")
+elseif (CMAKE_SYSTEM_NAME MATCHES "(OpenBSD|FreeBSD|NetBSD|DragonFly)")
    set(CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS}    -Wl,--no-undefined")
    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ")
    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-undefined")
 
-elseif(MSVC)
+elseif (MSVC)
    string (REGEX REPLACE "/W3" "" CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}"  )
    string (REGEX REPLACE "/W3" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
@@ -146,7 +146,7 @@ else()
    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-undefined")
 
-   if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+   if (CMAKE_SYSTEM_NAME MATCHES "Windows")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wa,-mbig-obj")
       set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Wa,-mbig-obj")
    endif()
@@ -211,7 +211,7 @@ endforeach()
 # start if output
 message("")
 message("Configuring CMake for CopperSpice\n\n")
-message("Search for required Packages\n")
+message("Searching for required packages\n")
 
 find_package(OpenSSL 1.0)
 set_package_properties(OpenSSL PROPERTIES
@@ -221,7 +221,7 @@ set_package_properties(OpenSSL PROPERTIES
    TYPE RECOMMENDED
 )
 
-find_package(ZLIB)
+find_package(ZLIB QUIET)
 set_package_properties(ZLIB PROPERTIES
    PURPOSE "Required for compression support"
    DESCRIPTION "Compression Library"
@@ -274,7 +274,7 @@ set_package_properties(PulseAudio PROPERTIES
 
 endif()
 
-find_package(PostgreSQL)
+find_package(PostgreSQL QUIET)
 set_package_properties(PostgreSQL PROPERTIES
    PURPOSE "Required for PostgreSQL database support"
    DESCRIPTION "Popular open source database"
@@ -282,10 +282,15 @@ set_package_properties(PostgreSQL PROPERTIES
    TYPE RECOMMENDED
 )
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND PostgreSQL_FOUND)
+if (NOT PostgreSQL_FOUND)
+   message(STATUS "PostgreSQL was not found, CopperSpice plugin will not be built\n")
+endif()
+
+
+if (CMAKE_SYSTEM_NAME MATCHES "Windows" AND PostgreSQL_FOUND)
 
    foreach (fname IN LISTS PostgreSQL_INCLUDE_DIRS)
-      # testing for 'EXISTS', is really a query for if the file can be read or written
+      # testing for 'EXISTS', a query for if the file can be read or written
 
       if (EXISTS "${fname}/pthread.h")
          # Postgres bug
@@ -310,7 +315,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND PostgreSQL_FOUND)
    endforeach()
 endif()
 
-find_package(MySQL)
+find_package(MySQL QUIET)
 set_package_properties(MySQL PROPERTIES
    PURPOSE "Required for MySQL database support"
    DESCRIPTION "Popular open source database"
@@ -318,10 +323,15 @@ set_package_properties(MySQL PROPERTIES
    TYPE RECOMMENDED
 )
 
+if (NOT MySQL_FOUND)
+   message(STATUS "MySQL was not found, CopperSpice plugin will not be built\n")
+endif()
+
+
 # emerald - temporarily turn off GTK as a workaround, conflicts with freetype version in Harfbuzz
 set(CMAKE_DISABLE_FIND_PACKAGE_GTK2 TRUE)
 
-if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
+if (NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
    find_package(GTK2)
    set_package_properties(GTK2 PROPERTIES
       PURPOSE "Required for GTK style and application integration support"
@@ -331,7 +341,7 @@ if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
    )
 endif()
 
-#if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+#if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 #   find_package(Security)
 #   set_package_properties(Security PROPERTIES
 #      PURPOSE "Required for HTTPS support"
@@ -341,7 +351,7 @@ endif()
 #   )
 #endif()
 
-if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
    find_package(Threads)
    set_package_properties(Threads PROPERTIES
       PURPOSE "Required for threading support"
@@ -374,7 +384,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       TYPE REQUIRED
    )
 
-   if(WITH_GUI)
+   if (WITH_GUI)
       find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender)
       set_package_properties(X11 PROPERTIES
          PURPOSE "Required for X11/X.Org integration support"
@@ -425,7 +435,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       )
    endif()
 
-   if(WITH_MULTIMEDIA)
+   if (WITH_MULTIMEDIA)
       find_package(GStreamer)
       set_package_properties(GStreamer PROPERTIES
          PURPOSE "Required for multimedia audio and video support"
@@ -435,7 +445,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       )
    endif()
 
-   if(WITH_OPENGL)
+   if (WITH_OPENGL)
       find_package(OpenGL)
       set_package_properties(OpenGL PROPERTIES
          PURPOSE "Required for OpenGL support"
@@ -445,7 +455,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       )
    endif()
 
-   if(WITH_WEBKIT)
+   if (WITH_WEBKIT)
       find_package(LibXml2)
       set_package_properties(LibXml2 PROPERTIES
          PURPOSE "Required for XML support in WebKit"
@@ -456,32 +466,32 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
    endif()
 endif()
 
-if(WIN32)
+if (WIN32)
    add_definitions(-DUNICODE)
 endif()
 
-if(NOT Cups_FOUND)
+if (NOT Cups_FOUND)
    add_definitions(-DQT_NO_CUPS)
 endif()
 
-if(NOT GLIB2_FOUND)
+if (NOT GLIB2_FOUND)
    add_definitions(-DQT_NO_GLIB)
 endif()
 
-if(NOT ZLIB_FOUND)
+if (NOT ZLIB_FOUND)
    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/zlib)
 endif()
 
-if(HAVE_LARGEFILESUPPORT)
-   if(_FILE_OFFSET_BITS)
+if (HAVE_LARGEFILESUPPORT)
+   if (_FILE_OFFSET_BITS)
       add_definitions(-D_FILE_OFFSET_BITS=64)
    endif()
 
-   if(_LARGE_FILES)
+   if (_LARGE_FILES)
       add_definitions(-D_LARGE_FILES)
    endif()
 
-   if(_LARGEFILE_SOURCE)
+   if (_LARGEFILE_SOURCE)
       add_definitions(-D_LARGEFILE_SOURCE)
    endif()
 endif()
@@ -505,19 +515,19 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
 
 # check components dependencies  BROOM
-if(WITH_MULTIMEDIA AND NOT WITH_GUI)
+if (WITH_MULTIMEDIA AND NOT WITH_GUI)
    message(SEND_ERROR "Multimedia component requires Gui component")
 
-elseif(WITH_OPENGL AND NOT WITH_GUI)
+elseif (WITH_OPENGL AND NOT WITH_GUI)
    message(SEND_ERROR "OpenGL component requires Gui component")
 
-elseif(WITH_SVG AND NOT WITH_GUI)
+elseif (WITH_SVG AND NOT WITH_GUI)
    message(SEND_ERROR "Svg component requires Gui component")
 
-elseif(WITH_XMLPATTERNS AND NOT WITH_NETWORK)
+elseif (WITH_XMLPATTERNS AND NOT WITH_NETWORK)
    message(SEND_ERROR "XmlPatterns component requires Network component")
 
-elseif(WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
+elseif (WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
    message(SEND_ERROR "WebKit component requires Gui, Network, and Script components")
 
 endif()
@@ -526,36 +536,36 @@ add_subdirectory(src/core)
 foreach(component ${CS_OPTIONAL_COMPONENTS})
    string(TOUPPER ${component} uppercomp)
 
-   if(WITH_${uppercomp})
+   if (WITH_${uppercomp})
       string(TOLOWER ${component} lowercomp)
       add_subdirectory(src/${lowercomp})
       set(BUILD_COMPONENTS "${BUILD_COMPONENTS} ${component}")
    endif()
 endforeach()
 
-if(WITH_XML)
+if (WITH_XML)
    add_subdirectory(src/tools/shared)
    add_subdirectory(src/tools/lconvert)
    add_subdirectory(src/tools/lrelease)
    add_subdirectory(src/tools/lupdate)
 endif()
 
-if(WITH_XML AND WITH_GUI)
+if (WITH_XML AND WITH_GUI)
    add_subdirectory(src/tools/rcc)
    add_subdirectory(src/tools/uic)
 endif()
 
 # platform plugins
-if(WITH_GUI)
-   if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+if (WITH_GUI)
+   if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
       set(BUILD_PLATFORMS_COCOA_PLUGIN TRUE)
    endif()
 
-   if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+   if (CMAKE_SYSTEM_NAME MATCHES "Windows")
       set(BUILD_PLATFORMS_WINDOWS_PLUGIN TRUE)
    endif()
 
-   if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+   if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       set(BUILD_PLATFORMS_XCB_PLUGIN TRUE)
    endif()
 
@@ -578,7 +588,7 @@ configure_file(
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
    set(PKG_PREFIX "CopperSpice.framework/Resources")
 
-elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(PKG_PREFIX "cmake/CopperSpice")
 
 else()
@@ -611,12 +621,12 @@ install(EXPORT CopperSpiceLibraryTargets
 )
 
 message("\n")
-message("Enabled CopperSpice libraries")
+message("-- The following CopperSpice libraries will be built:")
 message("\n * ${BUILD_COMPONENTS}\n")
 
 feature_summary(WHAT PACKAGES_FOUND PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
-if(${CMAKE_SIZEOF_VOID_P} EQUAL 4)
+if (${CMAKE_SIZEOF_VOID_P} EQUAL 4)
    set(TARGETBITS 32)
 else()
    set(TARGETBITS 64)

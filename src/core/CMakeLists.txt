@@ -10,7 +10,7 @@ target_compile_definitions(CsCore
    -DBUILDING_LIB_CS_STRING
 )
 
-if(GTK2_FOUND)
+if (GTK2_FOUND)
    target_link_libraries(CsCore
       PRIVATE
       ${GLIB2_LIBRARIES}
@@ -69,7 +69,7 @@ macro_generate_private("${CORE_PRIVATE_INCLUDES}" QtCore)
 macro_generate_misc("${CORE_INCLUDES}" QtCore)
 macro_generate_misc("${CORE_REGEX_INCLUDES}" QtCore/regex)
 
-if(ZLIB_FOUND)
+if (ZLIB_FOUND)
    target_link_libraries(CsCore
       PUBLIC
       ${ZLIB_LIBRARIES}
