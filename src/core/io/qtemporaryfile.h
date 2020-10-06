@@ -34,6 +34,7 @@
 #ifndef QT_NO_TEMPORARYFILE
 
 class QTemporaryFilePrivate;
+class QLockFilePrivate;
 
 class Q_CORE_EXPORT QTemporaryFile : public QFile
 {
@@ -77,6 +78,7 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
    Q_DECLARE_PRIVATE(QTemporaryFile)
 
    friend class QFile;
+   friend class QLockFilePrivate;
 };
 
 #endif // QT_NO_TEMPORARYFILE

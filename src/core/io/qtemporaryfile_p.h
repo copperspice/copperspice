@@ -41,6 +41,7 @@ class QTemporaryFilePrivate : public QFilePrivate
 
  private:
    Q_DECLARE_PUBLIC(QTemporaryFile)
+   friend class QLockFilePrivate;
 };
 
 class QTemporaryFileEngine : public QFSFileEngine
