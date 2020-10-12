@@ -67,12 +67,15 @@ function(cs_copy_plugins LIB_NAME)
    if(LIB_NAME STREQUAL "CsMultimedia")
 
       if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+         install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_avf_camera${COPPERSPICE_VERSION_API}.so      DESTINATION ${APP_INSTALL_DIR}/mediaservices)
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_avf_mediaplayer${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/mediaservices)
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_m3u${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/playlistformats)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
-         install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_gst_mediaplayer${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/mediaservices)
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_gst_audiodecoder${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/audio)
+         install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_gst_camerabin${COPPERSPICE_VERSION_API}.so    DESTINATION ${APP_INSTALL_DIR}/mediaservices)
+         install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_gst_mediaplayer${COPPERSPICE_VERSION_API}.so  DESTINATION ${APP_INSTALL_DIR}/mediaservices)
+
          install(FILES ${CS_PLUGIN_DIR}/CsMultimedia_m3u${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/playlistformats)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
