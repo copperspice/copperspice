@@ -172,7 +172,7 @@ void AVFVideoWindowControl::setLayer(void *playerLayer)
       return;
    }
 
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_DARWIN)
    [m_nativeView setWantsLayer: YES];
 #endif
 

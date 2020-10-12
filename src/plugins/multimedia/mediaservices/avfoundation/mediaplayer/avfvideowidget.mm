@@ -81,7 +81,7 @@ void AVFVideoWidget::setPlayerLayer(AVPlayerLayer *layer)
 
    if (!m_nativeView) {
       //make video widget a native window
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_DARWIN)
       m_nativeView = (NSView *)this->winId();
       [m_nativeView setWantsLayer: YES];
 #else

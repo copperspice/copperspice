@@ -27,7 +27,7 @@
 #include <QVideoWindowControl>
 
 @class AVPlayerLayer;
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_DARWIN)
 @class NSView;
 typedef NSView NativeView;
 #else

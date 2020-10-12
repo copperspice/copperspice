@@ -27,7 +27,7 @@
 #include <QWidget>
 
 @class AVPlayerLayer;
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_DARWIN)
 @class NSView;
 #else
 @class UIView;
@@ -56,7 +56,7 @@ class AVFVideoWidget : public QWidget
    Qt::AspectRatioMode m_aspectRatioMode;
    AVPlayerLayer *m_playerLayer;
 
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_DARWIN)
    NSView *m_nativeView;
 #else
    UIView *m_nativeView;

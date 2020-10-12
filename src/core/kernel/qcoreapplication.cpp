@@ -409,9 +409,9 @@ void QCoreApplicationPrivate::createEventDispatcher()
 
 #if defined(Q_OS_UNIX)
 
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_DARWIN)
     bool ok   = false;
-    int value = qgetenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION").toInteger<int>(&ok);
+    int value = qgetenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION").toInt(&ok);
 
     if (ok && value > 0) {
         eventDispatcher = new QEventDispatcherCoreFoundation(q);
