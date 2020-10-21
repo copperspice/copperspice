@@ -242,13 +242,14 @@ bool QVariantGui::cs_internal_convert(uint current_userType, uint new_userType, 
             default:
                break;
          }
+
+         break;
       }
 #endif
 
       default:
          retval = false;
          break;
-
    }
 
    return retval;
