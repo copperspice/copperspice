@@ -1829,18 +1829,11 @@ QPainterPath QGraphicsScene::selectionArea() const
 
 void QGraphicsScene::setSelectionArea(const QPainterPath &path, const QTransform &deviceTransform)
 {
-   setSelectionArea(path, Qt::IntersectsItemShape, deviceTransform);
-}
-
-void QGraphicsScene::setSelectionArea(const QPainterPath &path, Qt::ItemSelectionMode mode,
-   const QTransform &deviceTransform)
-{
-   setSelectionArea(path, Qt::ReplaceSelection, mode, deviceTransform);
+   setSelectionArea(path, Qt::ReplaceSelection, Qt::IntersectsItemShape, deviceTransform);
 }
 
 void QGraphicsScene::setSelectionArea(const QPainterPath &path,
-   Qt::ItemSelectionOperation selectionOperation,
-   Qt::ItemSelectionMode mode, const QTransform &deviceTransform)
+   Qt::ItemSelectionOperation selectionOperation, Qt::ItemSelectionMode mode, const QTransform &deviceTransform)
 {
    Q_D(QGraphicsScene);
 
