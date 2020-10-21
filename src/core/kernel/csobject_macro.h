@@ -111,30 +111,30 @@ class cs_number<0>
 
 // ** cs_object
 #define CS_OBJECT(classNameX)         \
-   public: \
-      typedef cs_class cs_parent;     \
-      typedef classNameX cs_class;    \
+   public:                            \
+      using cs_parent = cs_class;     \
+      using cs_class  = classNameX;   \
       CS_OBJECT_INTERNAL(classNameX)  \
    private:
 
 #define CS_OBJECT_MULTIPLE(classNameX,parentX) \
-   public: \
-      typedef parentX cs_parent;      \
-      typedef classNameX cs_class;    \
-      CS_OBJECT_INTERNAL(classNameX)  \
+   public:                            \
+      using cs_parent = parentX;      \
+      using cs_class  = classNameX;   \
+      CS_OBJECT_INTERNAL(classNameX); \
    private:
 
 #define CS_OBJECT_OUTSIDE(classNameX) \
-   public: \
-      typedef cs_class cs_parent;     \
-      typedef classNameX cs_class;    \
+   public:                            \
+      using cs_parent = cs_class;     \
+      using cs_class  = classNameX;   \
       CS_OBJECT_INTERNAL_OUTSIDE(classNameX)   \
    private:
 
 #define CS_OBJECT_MULTIPLE_OUTSIDE(classNameX,parentX) \
-   public: \
-      typedef parentX cs_parent;      \
-      typedef classNameX cs_class;    \
+   public:                            \
+      using cs_parent = parentX;      \
+      using cs_class  = classNameX;   \
       CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
    private:
 
@@ -206,18 +206,18 @@ class cs_number<0>
 
 
 // ** cs_gadget
-#define CS_GADGET(classNameX) \
-   public: \
-      typedef CSGadget_Fake_Parent cs_parent; \
-      typedef classNameX cs_class; \
-      CS_GADGET_INTERNAL(classNameX) \
+#define CS_GADGET(classNameX)                   \
+   public:                                      \
+      using cs_parent = CSGadget_Fake_Parent;   \
+      using cs_class  = classNameX;             \
+      CS_GADGET_INTERNAL(classNameX);           \
    private:
 
-#define CS_GADGET_OUTSIDE(classNameX) \
-   public: \
-      typedef CSGadget_Fake_Parent cs_parent; \
-      typedef classNameX cs_class; \
-      CS_GADGET_INTERNAL_OUTSIDE(classNameX) \
+#define CS_GADGET_OUTSIDE(classNameX)           \
+   public:                                      \
+      using cs_parent = CSGadget_Fake_Parent;   \
+      using cs_class  = classNameX;             \
+      CS_GADGET_INTERNAL_OUTSIDE(classNameX)    \
    private:
 
 
