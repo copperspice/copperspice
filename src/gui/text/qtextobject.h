@@ -187,8 +187,6 @@ class Q_GUI_EXPORT QTextFrame : public QTextObject
 
    friend class iterator;
 
-   typedef iterator Iterator;
-
    iterator begin() const;
    iterator end() const;
 
@@ -332,8 +330,6 @@ class Q_GUI_EXPORT QTextBlock
          : p(priv), b(begin), e(end), n(f) {}
 
    };
-
-   typedef iterator Iterator;
 
    iterator begin() const;
    iterator end() const;

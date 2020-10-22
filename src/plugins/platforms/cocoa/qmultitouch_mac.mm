@@ -24,8 +24,6 @@
 #include "qmultitouch_mac_p.h"
 #include "qcocoahelpers.h"
 
-QT_BEGIN_NAMESPACE
-
 QHash<qint64, QCocoaTouch *> QCocoaTouch::_currentTouches;
 QPointF QCocoaTouch::_screenReferencePos;
 QPointF QCocoaTouch::_trackpadReferencePos;
@@ -202,4 +200,3 @@ QList<QWindowSystemInterface::TouchPoint> QCocoaTouch::getCurrentTouchPointList(
    return touchPoints.values();
 }
 
-QT_END_NAMESPACE

@@ -39,8 +39,6 @@
 #include <qdebug.h>
 #include <qvarlengtharray.h>
 
-QT_BEGIN_NAMESPACE
-
 #define FBVERSION SQL_DIALECT_V6
 
 #ifndef SQLDA_CURRENT_VERSION
@@ -1968,4 +1966,3 @@ QString QIBaseDriver::escapeIdentifier(const QString &identifier, IdentifierType
    return res;
 }
 
-QT_END_NAMESPACE

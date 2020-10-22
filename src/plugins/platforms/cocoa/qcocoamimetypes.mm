@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qcocoamimetypes.h"
+#include <qcocoamimetypes.h>
 #include <qmacmime_p.h>
-#include "qcocoahelpers.h"
-
-QT_BEGIN_NAMESPACE
+#include <qcocoahelpers.h>
 
 class QMacPasteboardMimeTraditionalMacPlainText : public QMacInternalPasteboardMime
 {
@@ -197,4 +195,3 @@ void QCocoaMimeTypes::initializeMimeTypes()
    new QMacPasteboardMimeTiff;
 }
 
-QT_END_NAMESPACE

@@ -169,7 +169,11 @@ int runUic(int argc, char *argv[])
          f.remove();
       }
 
-      fprintf(stderr, "File '%s' is not valid\n", inputFile.isEmpty() ? "<stdin>" : csPrintable(inputFile));
+      if (inputFile.isEmpty()) {
+         fprintf(stderr, "File '<stdin>' is not valid\n");
+      } else {
+         fprintf(stderr, "File '%s' is not valid\n", csPrintable(inputFile));
+      }
    }
 
    return !rtn;

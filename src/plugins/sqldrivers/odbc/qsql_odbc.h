@@ -44,9 +44,6 @@
 #include <sql.h>
 #include <sqlext.h>
 
-
-QT_BEGIN_NAMESPACE
-
 class QODBCPrivate;
 class QODBCDriverPrivate;
 class QODBCDriver;
@@ -124,8 +121,5 @@ class Q_EXPORT_SQLDRIVER_ODBC QODBCDriver : public QSqlDriver
    QODBCDriverPrivate *d;
    friend class QODBCPrivate;
 };
-
-QT_END_NAMESPACE
-
 
 #endif // QSQL_ODBC_H

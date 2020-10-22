@@ -195,10 +195,11 @@ QVideoFrame::PixelFormat pixelFormatFromMediaSubtype(GUID uid)
 }
 
 DSCameraSession::DSCameraSession(QObject *parent)
-   : QObject(parent), m_graphBuilder(nullptr), m_filterGraph(nullptr), m_sourceDeviceName(QLatin1String("default")),
-     m_sourceFilter(nullptr), m_needsHorizontalMirroring(false), m_previewFilter(nullptr), m_previewSampleGrabber(nullptr),
-     m_nullRendererFilter(nullptr), m_previewStarted(false), m_surface(nullptr), m_previewPixelFormat(QVideoFrame::Format_Invalid),
-     m_readyForCapture(false), m_imageIdCounter(0), m_currentImageId(-1), m_status(QCamera::UnloadedStatus)
+   : QObject(parent), m_graphBuilder(nullptr), m_filterGraph(nullptr), m_sourceDeviceName(QString("default")),
+     m_sourceFilter(nullptr), m_needsHorizontalMirroring(false), m_previewFilter(nullptr),
+     m_previewSampleGrabber(nullptr), m_nullRendererFilter(nullptr), m_previewStarted(false), m_surface(nullptr),
+     m_previewPixelFormat(QVideoFrame::Format_Invalid), m_readyForCapture(false), m_imageIdCounter(0),
+     m_currentImageId(-1), m_status(QCamera::UnloadedStatus)
 {
    ZeroMemory(&m_sourceFormat, sizeof(m_sourceFormat));
    connect(this, SIGNAL(statusChanged(QCamera::Status)), this, SLOT(updateReadyForCapture()));
@@ -425,7 +426,7 @@ void DSCameraSession::setImageProcessingParameter(
          capsFlags = (*sourceValueInfo).capsFlags;
          break;
 
-      case QCameraImageProcessingControl::ContrastAdjustment: // falling back
+      case QCameraImageProcessingControl::ContrastAdjustment:   // falling back
       case QCameraImageProcessingControl::SaturationAdjustment: // falling back
       case QCameraImageProcessingControl::BrightnessAdjustment: // falling back
       case QCameraImageProcessingControl::SharpeningAdjustment:
@@ -489,11 +490,11 @@ bool DSCameraSession::load()
 
 bool DSCameraSession::unload()
 {
-   if (!m_graphBuilder) {
+   if (! m_graphBuilder) {
       return false;
    }
 
-   if (!stopPreview()) {
+   if (! stopPreview()) {
       return false;
    }
 
@@ -539,7 +540,7 @@ bool DSCameraSession::startPreview()
       goto failed;
    }
 
-   if (!connectGraph()) {
+   if (! connectGraph()) {
       goto failed;
    }
 
@@ -569,8 +570,10 @@ failed:
    if (m_surface && m_surface->isActive()) {
       m_surface->stop();
    }
+
    disconnectGraph();
    setStatus(QCamera::LoadedStatus);
+
    return false;
 }
 
@@ -842,7 +845,7 @@ bool DSCameraSession::createFilterGraph()
       }
    }
 
-   if (!m_sourceFilter) {
+   if (! m_sourceFilter) {
       qWarning() << "No capture device found";
       goto failed;
    }
@@ -850,6 +853,7 @@ bool DSCameraSession::createFilterGraph()
    // Sample grabber filter
    hr = CoCreateInstance(cLSID_SampleGrabber, NULL, CLSCTX_INPROC,
                          IID_IBaseFilter, (void **)&m_previewFilter);
+
    if (FAILED(hr)) {
       qWarning() << "failed to create sample grabber";
       goto failed;

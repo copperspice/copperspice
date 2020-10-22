@@ -152,7 +152,11 @@ class Releaser
 
    enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69, NumerusRules = 0x88 };
 
-   Releaser() : m_codec(0) {}
+   Releaser()
+      : m_codec(0)
+   {
+   }
+
    Releaser(const Releaser &) = delete;
    Releaser &operator=(const Releaser &) = delete;
 
@@ -198,13 +202,14 @@ class Releaser
 QByteArray Releaser::originalBytes(const QString &str, bool isUtf8) const
 {
    if (str.isEmpty()) {
-      // Do not use QByteArray() here as the result of the serialization
-      // will be different.
+      // Do not use QByteArray() here as the result of the serialization will be different.
       return QByteArray("");
    }
+
    if (isUtf8) {
       return str.toUtf8();
    }
+
    return m_codec ? m_codec->fromUnicode(str) : str.toLatin1();
 }
 
@@ -227,6 +232,7 @@ Prefix Releaser::commonPrefix(const ByteTranslatorMessage &m1, const ByteTransla
    if (m1.comment() != m2.comment()) {
       return HashContextSourceText;
    }
+
    return HashContextSourceTextComment;
 }
 

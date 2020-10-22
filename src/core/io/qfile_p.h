@@ -30,9 +30,6 @@ class QTemporaryFile;
 
 class QFilePrivate : public QFileDevicePrivate
 {
-   Q_DECLARE_PUBLIC(QFile)
-   friend class QTemporaryFile;
-
  protected:
    QFilePrivate();
    ~QFilePrivate();
@@ -45,8 +42,12 @@ class QFilePrivate : public QFileDevicePrivate
    QString fileName;
 
  private:
+   Q_DECLARE_PUBLIC(QFile)
+
    static QFile::EncoderFn encoder;
    static QFile::DecoderFn decoder;
+
+   friend class QTemporaryFile;
 };
 
 #endif

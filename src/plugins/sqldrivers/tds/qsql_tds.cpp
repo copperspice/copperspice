@@ -49,8 +49,6 @@
 
 #include <stdlib.h>
 
-QT_BEGIN_NAMESPACE
-
 #ifdef DBNTWIN32
 #define QMSGHANDLE DBMSGHANDLE_PROC
 #define QERRHANDLE DBERRHANDLE_PROC
@@ -844,5 +842,3 @@ QString QTDSDriver::escapeIdentifier(const QString &identifier, IdentifierType t
    }
    return res;
 }
-
-QT_END_NAMESPACE

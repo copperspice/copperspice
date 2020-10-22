@@ -138,7 +138,6 @@ inline QRect fromNative(const QRect &rect, qreal scaleFactor, const QPoint &orig
 inline QRect toNative(const QRect &rect, qreal scaleFactor, const QPoint &origin)
 {
    return QRect(toNative(rect.topLeft(), scaleFactor, origin), toNative(rect.size(), scaleFactor));
-
 }
 
 inline QRect fromNative(const QRect &rect, const QScreen *screen, const QPoint &screenOrigin)
@@ -180,6 +179,7 @@ inline QRect fromNativePixels(const QRect &pixelRect, const QPlatformScreen *pla
 {
    const qreal scaleFactor = QHighDpiScaling::factor(platformScreen);
    const QPoint origin = QHighDpiScaling::origin(platformScreen);
+
    return QRect(fromNative(pixelRect.topLeft(), scaleFactor, origin),
          fromNative(pixelRect.size(), scaleFactor));
 }
@@ -188,6 +188,7 @@ inline QRect toNativePixels(const QRect &pointRect, const QPlatformScreen *platf
 {
    const qreal scaleFactor = QHighDpiScaling::factor(platformScreen);
    const QPoint origin = QHighDpiScaling::origin(platformScreen);
+
    return QRect(toNative(pointRect.topLeft(), scaleFactor, origin),
          toNative(pointRect.size(), scaleFactor));
 }
@@ -196,6 +197,7 @@ inline QRect fromNativePixels(const QRect &pixelRect, const QScreen *screen)
 {
    const qreal scaleFactor = QHighDpiScaling::factor(screen);
    const QPoint origin = QHighDpiScaling::origin(screen);
+
    return QRect(fromNative(pixelRect.topLeft(), scaleFactor, origin),
          fromNative(pixelRect.size(), scaleFactor));
 }
@@ -204,6 +206,7 @@ inline QRect toNativePixels(const QRect &pointRect, const QScreen *screen)
 {
    const qreal scaleFactor = QHighDpiScaling::factor(screen);
    const QPoint origin = QHighDpiScaling::origin(screen);
+
    return QRect(toNative(pointRect.topLeft(), scaleFactor, origin),
          toNative(pointRect.size(), scaleFactor));
 }
@@ -222,6 +225,7 @@ inline QRectF toNativePixels(const QRectF &pointRect, const QScreen *screen)
 {
    const qreal scaleFactor = QHighDpiScaling::factor(screen);
    const QPoint origin = QHighDpiScaling::origin(screen);
+
    return QRectF(toNative(pointRect.topLeft(), scaleFactor, origin),
          toNative(pointRect.size(), scaleFactor));
 }
@@ -240,6 +244,7 @@ inline QRectF fromNativePixels(const QRectF &pixelRect, const QScreen *screen)
 {
    const qreal scaleFactor = QHighDpiScaling::factor(screen);
    const QPoint origin = QHighDpiScaling::origin(screen);
+
    return QRectF(fromNative(pixelRect.topLeft(), scaleFactor, origin),
          fromNative(pixelRect.size(), scaleFactor));
 }
@@ -343,6 +348,7 @@ inline QPointF toNativePixels(const QPointF &pointPoint, const QWindow *window)
 inline QMargins fromNativePixels(const QMargins &pixelMargins, const QWindow *window)
 {
    const qreal scaleFactor = QHighDpiScaling::factor(window);
+
    return QMargins(pixelMargins.left() / scaleFactor, pixelMargins.top() / scaleFactor,
          pixelMargins.right() / scaleFactor, pixelMargins.bottom() / scaleFactor);
 }
@@ -350,41 +356,47 @@ inline QMargins fromNativePixels(const QMargins &pixelMargins, const QWindow *wi
 inline QMargins toNativePixels(const QMargins &pointMargins, const QWindow *window)
 {
    const qreal scaleFactor = QHighDpiScaling::factor(window);
+
    return QMargins(pointMargins.left() * scaleFactor, pointMargins.top() * scaleFactor,
          pointMargins.right() * scaleFactor, pointMargins.bottom() * scaleFactor);
 }
 
 inline QRegion fromNativeLocalRegion(const QRegion &pixelRegion, const QWindow *window)
 {
-   if (!QHighDpiScaling::isActive()) {
+   if (! QHighDpiScaling::isActive()) {
       return pixelRegion;
    }
 
    qreal scaleFactor = QHighDpiScaling::factor(window);
    QRegion pointRegion;
+
    for (const QRect &rect : pixelRegion.rects()) {
       pointRegion += QRect(fromNative(rect.topLeft(), scaleFactor),
             fromNative(rect.size(), scaleFactor));
    }
+
    return pointRegion;
 }
 
-// When mapping expose events to Qt rects: round top/left towards the origin and
+// When mapping expose events to QtRects, round top/left towards the origin and
 // bottom/right away from the origin, making sure that we cover the whole window.
 inline QRegion fromNativeLocalExposedRegion(const QRegion &pixelRegion, const QWindow *window)
 {
-   if (!QHighDpiScaling::isActive()) {
+   if (! QHighDpiScaling::isActive()) {
       return pixelRegion;
    }
 
    const qreal scaleFactor = QHighDpiScaling::factor(window);
    QRegion pointRegion;
+
    for (const QRect &rect : pixelRegion.rects()) {
-      const QPointF topLeftP = QPointF(rect.topLeft()) / scaleFactor;
+      const QPointF topLeftP     = QPointF(rect.topLeft()) / scaleFactor;
       const QPointF bottomRightP = QPointF(rect.bottomRight()) / scaleFactor;
+
       pointRegion += QRect(QPoint(qFloor(topLeftP.x()), qFloor(topLeftP.y())),
             QPoint(qCeil(bottomRightP.x()), qCeil(bottomRightP.y())));
    }
+
    return pointRegion;
 }
 
@@ -396,9 +408,11 @@ inline QRegion toNativeLocalRegion(const QRegion &pointRegion, const QWindow *wi
 
    qreal scaleFactor = QHighDpiScaling::factor(window);
    QRegion pixelRegon;
+
    for (const QRect &rect : pointRegion.rects()) {
       pixelRegon += QRect(toNative(rect.topLeft(), scaleFactor), toNative(rect.size(), scaleFactor));
    }
+
    return pixelRegon;
 }
 
@@ -459,6 +473,7 @@ QVector<T> fromNativePixels(const QVector<T> &pixelValues, const QWindow *window
    for (const T &pixelValue : pixelValues) {
       pointValues.append(pixelValue / QHighDpiScaling::factor(window));
    }
+
    return pointValues;
 }
 
@@ -466,7 +481,7 @@ QVector<T> fromNativePixels(const QVector<T> &pixelValues, const QWindow *window
 template <typename T>
 QVector<T> toNativePixels(const QVector<T> &pointValues, const QWindow *window)
 {
-   if (!QHighDpiScaling::isActive()) {
+   if (! QHighDpiScaling::isActive()) {
       return pointValues;
    }
 
@@ -474,6 +489,7 @@ QVector<T> toNativePixels(const QVector<T> &pointValues, const QWindow *window)
    for (const T &pointValue : pointValues) {
       pixelValues.append(pointValue * QHighDpiScaling::factor(window));
    }
+
    return pixelValues;
 }
 

@@ -208,7 +208,7 @@ bool Uic::write(QIODevice *in)
 
 #ifdef QT_UIC_CPP_GENERATOR
       if (! language.isEmpty() && language.toLower() != "c++") {
-         fprintf(stderr, "Uic: File is not a 'c++' ui file, language=%s\n", qPrintable(language));
+         fprintf(stderr, "Uic: File is not a C++ ui file, language = %s\n", csPrintable(language));
          return false;
       }
 

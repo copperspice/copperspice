@@ -37,10 +37,9 @@ class QCupsPrintEnginePrivate;
 
 class QCupsPrintEngine : public QPdfPrintEngine
 {
-   Q_DECLARE_PRIVATE(QCupsPrintEngine)
-
  public:
    QCupsPrintEngine(QPrinter::PrinterMode m);
+
    QCupsPrintEngine(const QCupsPrintEngine &) = delete;
    QCupsPrintEngine &operator=(const QCupsPrintEngine &) = delete;
 
@@ -51,14 +50,15 @@ class QCupsPrintEngine : public QPdfPrintEngine
    QVariant property(PrintEnginePropertyKey key) const override;
 
  private:
+   Q_DECLARE_PRIVATE(QCupsPrintEngine)
+
 };
 
 class QCupsPrintEnginePrivate : public QPdfPrintEnginePrivate
 {
-   Q_DECLARE_PUBLIC(QCupsPrintEngine)
-
  public:
    QCupsPrintEnginePrivate(QPrinter::PrinterMode m);
+
    QCupsPrintEnginePrivate(const QCupsPrintEnginePrivate &) = delete;
    QCupsPrintEnginePrivate &operator=(const QCupsPrintEnginePrivate &) = delete;
 
@@ -68,6 +68,7 @@ class QCupsPrintEnginePrivate : public QPdfPrintEnginePrivate
    void closePrintDevice() override;
 
  private:
+   Q_DECLARE_PUBLIC(QCupsPrintEngine)
 
    void setupDefaultPrinter();
    void changePrinter(const QString &newPrinter);
