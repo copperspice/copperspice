@@ -24,14 +24,15 @@
 #ifndef QFONTDATABASE_H
 #define QFONTDATABASE_H
 
-#include <qwindowdefs.h>
-#include <qstring.h>
-#include <qfont.h>
 #include <qcontainerfwd.h>
+#include <qfont.h>
+#include <qstring.h>
+#include <qwindowdefs.h>
 
 class QStringList;
 class QFontEngine;
 class QFontDatabasePrivate;
+
 struct QFontDef;
 
 class Q_GUI_EXPORT QFontDatabase
@@ -104,8 +105,8 @@ class Q_GUI_EXPORT QFontDatabase
    QStringList styles(const QString &family) const;
    QList<int> pointSizes(const QString &family, const QString &style = QString());
    QList<int> smoothSizes(const QString &family, const QString &style);
-   QString styleString(const QFont &font);
-   QString styleString(const QFontInfo &fontInfo);
+   QString styleString(const QFont &font) const;
+   QString styleString(const QFontInfo &fontInfo) const;
 
    QFont font(const QString &family, const QString &style, int pointSize) const;
 
@@ -133,7 +134,7 @@ class Q_GUI_EXPORT QFontDatabase
    static QFont systemFont(SystemFont type);
 
  private:
-   QFontDatabasePrivate *d;
+   QFontDatabasePrivate *m_fontdatabase;
 
    static void createDatabase();
    static void parseFontName(const QString &name, QString &foundry, QString &family);
@@ -146,7 +147,6 @@ class Q_GUI_EXPORT QFontDatabase
    friend class QFontDialog;
    friend class QFontDialogPrivate;
    friend class QFontEngineMulti;
-
 };
 
 #endif
