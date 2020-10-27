@@ -29,7 +29,7 @@
 #include "KURL.h"
 #include "NetworkingContext.h"
 
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <QNetworkProxy>
 #include <QNetworkProxyFactory>
 #include <QNetworkProxyQuery>

@@ -19,9 +19,9 @@
 
 #include "config.h"
 #include "WebFrameNetworkingContext.h"
-
 #include "WebProcess.h"
-#include <qaccess_manager.h>
+
+#include <qnetaccess_manager.h>
 #include <qobject.h>
 
 namespace WebCore {

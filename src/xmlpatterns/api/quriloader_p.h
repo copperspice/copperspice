@@ -24,7 +24,7 @@
 #ifndef QURILOADER_P_H
 #define QURILOADER_P_H
 
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qxmlname.h>
 
 #include <qnamepool_p.h>

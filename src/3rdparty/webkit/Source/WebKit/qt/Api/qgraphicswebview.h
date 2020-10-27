@@ -20,16 +20,16 @@
 #ifndef QGraphicsWebView_h
 #define QGraphicsWebView_h
 
-#include "qwebkitglobal.h"
-#include "qwebpage.h"
+#include <qwebkitglobal.h>
+#include <qwebpage.h>
 #include <qurl.h>
 #include <qevent.h>
 #include <qgraphicswidget.h>
 #include <qicon.h>
 #include <qpainter.h>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QWebPage;
 class QWebHistory;

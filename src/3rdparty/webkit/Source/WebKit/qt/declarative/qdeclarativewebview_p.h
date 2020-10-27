@@ -25,7 +25,7 @@
 #include <QUrl>
 #include <QtDeclarative/QDeclarativeItem>
 #include <qaction.h>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 
 #include "qgraphicswebview.h"
 #include "qwebpage.h"

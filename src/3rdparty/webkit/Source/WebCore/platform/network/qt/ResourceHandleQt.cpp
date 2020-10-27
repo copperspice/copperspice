@@ -45,7 +45,7 @@
 #include <qcoreapplication.h>
 #include <qurl.h>
 #include <qabstract_networkcache.h>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qnetwork_request.h>
 #include <qnetwork_reply.h>
 

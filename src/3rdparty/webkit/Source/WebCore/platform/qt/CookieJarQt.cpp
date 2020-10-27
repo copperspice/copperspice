@@ -35,7 +35,7 @@
 #include "PlatformString.h"
 #include "qwebframe.h"
 #include "qwebpage.h"
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qnetwork_cookie.h>
 #include <qnetwork_cookiejar.h>
 #include <qstringlist.h>

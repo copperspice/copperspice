@@ -32,7 +32,7 @@
 #include <qxsdschemachecker_p.h>
 #include <qxsdschemaresolver_p.h>
 #include <qurl.h>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qabstractmessagehandler.h>
 
 namespace QPatternist {

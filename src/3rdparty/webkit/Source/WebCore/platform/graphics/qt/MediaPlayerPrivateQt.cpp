@@ -36,7 +36,7 @@
 #include <QGraphicsVideoItem>
 #include <QMediaPlayerControl>
 #include <QMediaService>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qnetwork_cookiejar.h>
 #include <qnetwork_request.h>
 #include <QPainter>

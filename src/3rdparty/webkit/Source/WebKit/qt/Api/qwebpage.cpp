@@ -150,7 +150,7 @@
 #include <QTextCharFormat>
 #include <QTextDocument>
 #include <QTouchEvent>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qnetwork_request.h>
 
 #if USE(QT_MOBILITY_SYSTEMINFO)

@@ -23,7 +23,7 @@
 
 #include <qsamplecache_p.h>
 
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qnetwork_reply.h>
 #include <qnetwork_request.h>
 #include <qdebug.h>

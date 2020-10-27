@@ -21,9 +21,9 @@
 
 #include "FrameNetworkingContextQt.h"
 
-#include "qwebframe.h"
-#include "qwebpage.h"
-#include <qaccess_manager.h>
+#include <qwebframe.h>
+#include <qwebpage.h>
+#include <qnetaccess_manager.h>
 #include <qobject.h>
 
 namespace WebCore {
