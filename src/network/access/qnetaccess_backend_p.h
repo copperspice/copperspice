@@ -21,12 +21,13 @@
 *
 ***********************************************************************/
 
-#ifndef QACCESS_BACKEND_P_H
-#define QACCESS_BACKEND_P_H
+#ifndef QNETWORK_ACCESS_BACKEND_P_H
+#define QNETWORK_ACCESS_BACKEND_P_H
 
-#include <qnetwork_replyimpl_p.h>
 #include <qobject.h>
 #include <qsslerror.h>
+
+#include <qnetwork_replyimpl_p.h>
 
 class QAuthenticator;
 class QNetworkProxy;

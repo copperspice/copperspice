@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qaccess_ftpbackend_p.h>
+#include <qnetaccess_ftpbackend_p.h>
 
-#include <qaccess_manager_p.h>
+#include <qnetaccess_manager_p.h>
 #include <qauthenticator.h>
 #include <qnoncontiguousbytedevice_p.h>
 #include <qstring.h>

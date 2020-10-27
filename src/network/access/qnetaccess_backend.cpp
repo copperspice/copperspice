@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <qaccess_backend_p.h>
-#include <qaccess_manager_p.h>
+#include <qnetaccess_backend_p.h>
+#include <qnetaccess_manager_p.h>
 
 #include <qabstract_networkcache.h>
 #include <qnetworkconfigmanager.h>
@@ -34,7 +34,7 @@
 
 #include <qnetwork_reply_p.h>
 #include <qnetworksession_p.h>
-#include <qaccess_cachebackend_p.h>
+#include <qnetaccess_cachebackend_p.h>
 #include <qnoncontiguousbytedevice_p.h>
 
 class QNetworkAccessBackendFactoryData: public QList<QNetworkAccessBackendFactory *>

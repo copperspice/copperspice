@@ -21,16 +21,16 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKACCESSMANAGER_P_H
-#define QNETWORKACCESSMANAGER_P_H
+#ifndef QNETWORK_ACCESS_MANAGER_P_H
+#define QNETWORK_ACCESS_MANAGER_P_H
 
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qnetworkproxy.h>
 #include <qnetworksession.h>
 
-#include <qaccess_cache_p.h>
-#include <qaccess_backend_p.h>
-#include <qaccess_authenticationmanager_p.h>
+#include <qnetaccess_cache_p.h>
+#include <qnetaccess_backend_p.h>
+#include <qnetaccess_authenticationmanager_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 #include <qnetworkconfigmanager.h>
@@ -46,8 +46,7 @@ class QNetworkAccessManagerPrivate
 {
  public:
    QNetworkAccessManagerPrivate()
-      : networkCache(0), cookieJar(0),
-        httpThread(0),
+      : networkCache(0), cookieJar(0), httpThread(0),
 
 #ifndef QT_NO_NETWORKPROXY
         proxyFactory(0),
@@ -70,12 +69,13 @@ class QNetworkAccessManagerPrivate
 #ifndef QT_NO_BEARERMANAGEMENT
         online = (networkConfiguration.state().testFlag(QNetworkConfiguration::Active));
 
-        if (online)
+        if (online) {
             networkAccessible = QNetworkAccessManager::Accessible;
-        else if (networkConfiguration.state().testFlag(QNetworkConfiguration::Undefined))
+        } else if (networkConfiguration.state().testFlag(QNetworkConfiguration::Undefined)) {
             networkAccessible = QNetworkAccessManager::UnknownAccessibility;
-        else
+        } else {
             networkAccessible = QNetworkAccessManager::NotAccessible;
+        }
 #endif
    }
 

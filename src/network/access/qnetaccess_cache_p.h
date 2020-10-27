@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKACCESSCACHE_P_H
-#define QNETWORKACCESSCACHE_P_H
+#ifndef QNETWORK_ACCESS_CACHE_P_H
+#define QNETWORK_ACCESS_CACHE_P_H
 
 #include <qobject.h>
 #include <qbasictimer.h>

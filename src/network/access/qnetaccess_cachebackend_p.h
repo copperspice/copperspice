@@ -21,49 +21,31 @@
 *
 ***********************************************************************/
 
-#ifndef QACCESS_FILEBACKEND_P_H
-#define QACCESS_FILEBACKEND_P_H
+#ifndef QNETWORK_ACCESS_CACHEBACKEND_P_H
+#define QNETWORK_ACCESS_CACHEBACKEND_P_H
 
-#include <qaccess_backend_p.h>
-
+#include <qnetaccess_backend_p.h>
 #include <qnetwork_request.h>
 #include <qnetwork_reply.h>
-#include <qfile.h>
 
-class QNetworkAccessFileBackend: public QNetworkAccessBackend
+class QNetworkAccessCacheBackend : public QNetworkAccessBackend
 {
-   NET_CS_OBJECT(QNetworkAccessFileBackend)
-
  public:
-   QNetworkAccessFileBackend();
-   virtual ~QNetworkAccessFileBackend();
+   QNetworkAccessCacheBackend();
+   ~QNetworkAccessCacheBackend();
 
    void open() override;
    void closeDownstreamChannel() override;
 
+   void closeUpstreamChannel();
+   void upstreamReadyRead();
+
    void downstreamReadyWrite() override;
 
-   NET_CS_SLOT_1(Public, void uploadReadyReadSlot())
-   NET_CS_SLOT_2(uploadReadyReadSlot)
-
- protected:
-   QNonContiguousByteDevice *uploadByteDevice;
-
  private:
-   QFile file;
-   qint64 totalBytes;
-   bool hasUploadFinished;
+   bool sendCacheContents();
 
-   bool loadFileInfo();
-   bool readMoreFromFile();
-};
-
-class QNetworkAccessFileBackendFactory: public QNetworkAccessBackendFactory
-{
- public:
-    QStringList supportedSchemes() const override;
-    QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const override;
 };
 
 
-#endif
+#endif // QNETWORKACCESSCACHEBACKEND_P_H

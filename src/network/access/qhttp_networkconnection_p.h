@@ -42,15 +42,15 @@
 #ifdef QT_SSL
 
 #ifdef QT_OPENSSL
-#   include <qsslcontext_openssl_p.h>
+#include <qsslcontext_openssl_p.h>
 #endif
 
-#   include <qsslsocket_p.h>
-#   include <qsslsocket.h>
-#   include <qsslerror.h>
+#include <qsslsocket_p.h>
+#include <qsslsocket.h>
+#include <qsslerror.h>
 
 #else
-#   include <qtcpsocket.h>
+#include <qtcpsocket.h>
 
 #endif
 

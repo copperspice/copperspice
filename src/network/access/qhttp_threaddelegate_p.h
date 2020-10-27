@@ -37,7 +37,7 @@
 #include <qhttp_networkrequest_p.h>
 #include <qhttp_networkconnection_p.h>
 #include <qnoncontiguousbytedevice_p.h>
-#include <qaccess_authenticationmanager_p.h>
+#include <qnetaccess_authenticationmanager_p.h>
 
 class QAuthenticator;
 class QHttpNetworkReply;

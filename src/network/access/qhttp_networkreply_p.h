@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QHTTPNETWORKREPLY_P_H
-#define QHTTPNETWORKREPLY_P_H
+#ifndef QHTTP_NETWORKREPLY_P_H
+#define QHTTP_NETWORKREPLY_P_H
 
 #include <qplatformdefs.h>
 

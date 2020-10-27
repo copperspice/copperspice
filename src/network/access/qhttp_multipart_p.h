@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QHTTPMULTIPART_P_H
-#define QHTTPMULTIPART_P_H
+#ifndef QHTTP_MULTIPART_P_H
+#define QHTTP_MULTIPART_P_H
 
 #include <qshareddata.h>
 #include <qhttp_part.h>

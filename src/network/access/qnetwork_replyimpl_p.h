@@ -25,7 +25,7 @@
 #define QNETWORK_REPLYIMPL_P_H
 
 #include <qnetwork_reply.h>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qnetworkproxy.h>
 #include <qnetworksession.h>
 #include <qbuffer.h>

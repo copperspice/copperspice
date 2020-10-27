@@ -29,7 +29,7 @@
 #include <qeventloop.h>
 
 #include <qhttp_networkreply_p.h>
-#include <qaccess_cache_p.h>
+#include <qnetaccess_cache_p.h>
 #include <qnoncontiguousbytedevice_p.h>
 
 //#define QHTTPTHREADDELEGATE_DEBUG

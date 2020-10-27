@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QHTTPNETWORKREQUEST_P_H
-#define QHTTPNETWORKREQUEST_P_H
+#ifndef QHTTP_NETWORKREQUEST_P_H
+#define QHTTP_NETWORKREQUEST_P_H
 
 #include <qhttp_networkheader_p.h>
 

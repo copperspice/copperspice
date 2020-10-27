@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QHTTPNETWORKHEADER_P_H
-#define QHTTPNETWORKHEADER_P_H
+#ifndef QHTTP_NETWORKHEADER_P_H
+#define QHTTP_NETWORKHEADER_P_H
 
 #include <qshareddata.h>
 #include <qurl.h>

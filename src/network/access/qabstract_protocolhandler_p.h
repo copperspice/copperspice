@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QABSTRACTPROTOCOLHANDLER_H
-#define QABSTRACTPROTOCOLHANDLER_H
+#ifndef QABSTRACT_PROTOCOLHANDLER_H
+#define QABSTRACT_PROTOCOLHANDLER_H
 
 #include <qglobal.h>
 

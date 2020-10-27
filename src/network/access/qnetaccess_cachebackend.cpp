@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <qaccess_cachebackend_p.h>
+#include <qnetaccess_cachebackend_p.h>
 
 #include <qassert.h>
 #include <qurlinfo_p.h>

@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QHTTPHEADER_P_H
-#define QHTTPHEADER_P_H
+#ifndef QHTTP_HEADER_P_H
+#define QHTTP_HEADER_P_H
 
 #include <qobject.h>
 #include <qstringlist.h>

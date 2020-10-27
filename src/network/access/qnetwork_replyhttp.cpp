@@ -35,8 +35,8 @@
 #include <qthread.h>
 
 #include <qthread_p.h>
-#include <qaccess_manager_p.h>
-#include <qaccess_cache_p.h>
+#include <qnetaccess_manager_p.h>
+#include <qnetaccess_cache_p.h>
 #include <qnetwork_request_p.h>
 #include <qhttp_threaddelegate_p.h>
 #include <qnetwork_cookie_p.h>

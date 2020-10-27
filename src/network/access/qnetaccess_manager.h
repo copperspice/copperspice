@@ -21,16 +21,16 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKACCESSMANAGER_H
-#define QNETWORKACCESSMANAGER_H
+#ifndef QNETWORK_ACCESS_MANAGER_H
+#define QNETWORK_ACCESS_MANAGER_H
 
-#include <QObject>
-#include <QNetworkSession>
-#include <QStringList>
+#include <qobject.h>
+#include <qnetworksession.h>
+#include <qstringlist.h>
 
 #ifdef QT_SSL
-#include <QSslConfiguration>
-#include <QSslPreSharedKeyAuthenticator>
+#include <qsslconfiguration.h>
+#include <qsslpresharedkeyauthenticator.h>
 #endif
 
 class QIODevice;
@@ -87,6 +87,7 @@ class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
 
    explicit QNetworkAccessManager(QObject *parent = nullptr);
    ~QNetworkAccessManager();
+
     virtual QStringList supportedSchemes() const;
     void clearAccessCache();
 
@@ -141,7 +142,6 @@ class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
    NET_CS_SIGNAL_1(Public, void finished(QNetworkReply *reply))
    NET_CS_SIGNAL_2(finished, reply)
 
-
 #ifdef QT_SSL
    NET_CS_SIGNAL_1(Public,  void encrypted(QNetworkReply *reply))
    NET_CS_SIGNAL_2(encrypted, reply)
@@ -170,10 +170,6 @@ class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
    NET_CS_SLOT_2(supportedSchemesImplementation)
 
  private:
-   friend class QNetworkReplyImplPrivate;
-   friend class QNetworkReplyHttpImpl;
-   friend class QNetworkReplyHttpImplPrivate;
-
    Q_DECLARE_PRIVATE(QNetworkAccessManager)
 
    NET_CS_SLOT_1(Private, void _q_replyFinished())
@@ -207,6 +203,9 @@ class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
    NET_CS_SLOT_2(_q_networkSessionFailed)
 #endif
 
+   friend class QNetworkReplyImplPrivate;
+   friend class QNetworkReplyHttpImpl;
+   friend class QNetworkReplyHttpImplPrivate;
 };
 
 #endif

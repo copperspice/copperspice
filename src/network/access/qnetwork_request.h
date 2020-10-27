@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKREQUEST_H
-#define QNETWORKREQUEST_H
+#ifndef QNETWORK_REQUEST_H
+#define QNETWORK_REQUEST_H
 
-#include <QSharedDataPointer>
-#include <QString>
-#include <QUrl>
-#include <QVariant>
+#include <qshareddatapointer.h>
+#include <qstring.h>
+#include <qurl.h>
+#include <qvariant.h>
 
 class QSslConfiguration;
 class QNetworkRequestPrivate;

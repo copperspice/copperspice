@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKCOOKIE_H
-#define QNETWORKCOOKIE_H
+#ifndef QNETWORK_COOKIE_H
+#define QNETWORK_COOKIE_H
 
 #include <qlist.h>
 #include <qobject.h>

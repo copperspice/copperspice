@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKREQUEST_P_H
-#define QNETWORKREQUEST_P_H
+#ifndef QNETWORK_REQUEST_P_H
+#define QNETWORK_REQUEST_P_H
 
 #include <qnetwork_request.h>
 #include <qbytearray.h>

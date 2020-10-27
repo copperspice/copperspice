@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKDISKCACHE_P_H
-#define QNETWORKDISKCACHE_P_H
+#ifndef QNETWORK_DISKCACHE_P_H
+#define QNETWORK_DISKCACHE_P_H
 
 #include <qabstract_networkcache_p.h>
 #include <qbuffer.h>

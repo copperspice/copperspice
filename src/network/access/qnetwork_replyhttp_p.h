@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKREPLYHTTPIMPL_P_H
-#define QNETWORKREPLYHTTPIMPL_P_H
+#ifndef QNETWORK_REPLYHTTPIMPL_P_H
+#define QNETWORK_REPLYHTTPIMPL_P_H
 
 #include <qnetwork_reply.h>
 

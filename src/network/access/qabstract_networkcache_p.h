@@ -21,22 +21,17 @@
 *
 ***********************************************************************/
 
-#ifndef QABSTRACTNETWORKCACHE_P_H
-#define QABSTRACTNETWORKCACHE_P_H
-
+#ifndef QABSTRACT_NETWORKCACHE_P_H
+#define QABSTRACT_NETWORKCACHE_P_H
 
 class QAbstractNetworkCachePrivate
 {
-
  public:
    virtual ~QAbstractNetworkCachePrivate() {}
 
  protected:
    Q_DECLARE_PUBLIC(QAbstractNetworkCache)
    QAbstractNetworkCache *q_ptr;
-
 };
-
-
 
 #endif

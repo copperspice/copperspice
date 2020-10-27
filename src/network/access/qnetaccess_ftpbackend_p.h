@@ -21,16 +21,16 @@
 *
 ***********************************************************************/
 
-#ifndef QACCESS_FTPBACKEND_P_H
-#define QACCESS_FTPBACKEND_P_H
+#ifndef QNETWORK_ACCESS__FTPBACKEND_P_H
+#define QNETWORK_ACCESS__FTPBACKEND_P_H
 
 #include <qnetwork_request.h>
 #include <qnetwork_reply.h>
 #include <qpointer.h>
 
 #include <qftp_p.h>
-#include <qaccess_backend_p.h>
-#include <qaccess_cache_p.h>
+#include <qnetaccess_backend_p.h>
+#include <qnetaccess_cache_p.h>
 
 #ifndef QT_NO_FTP
 

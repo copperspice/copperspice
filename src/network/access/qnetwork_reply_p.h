@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKREPLY_P_H
-#define QNETWORKREPLY_P_H
+#ifndef QNETWORK_REPLY_P_H
+#define QNETWORK_REPLY_P_H
 
 #include <qnetwork_reply.h>
 

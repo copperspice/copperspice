@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QHTTPNETWORKCONNECTIONCHANNEL_P_H
-#define QHTTPNETWORKCONNECTIONCHANNEL_P_H
+#ifndef QHTTP_NETWORKCONNECTIONCHANNEL_P_H
+#define QHTTP_NETWORKCONNECTIONCHANNEL_P_H
 
 #include <qnetwork_request.h>
 #include <qnetwork_reply.h>

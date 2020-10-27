@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKCOOKIE_P_H
-#define QNETWORKCOOKIE_P_H
+#ifndef QNETWORK_COOKIE_P_H
+#define QNETWORK_COOKIE_P_H
 
 #include <qdatetime.h>
 

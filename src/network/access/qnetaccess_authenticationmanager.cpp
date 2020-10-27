@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <qaccess_authenticationmanager_p.h>
+#include <qnetaccess_authenticationmanager_p.h>
 
 #include <qsslerror.h>
 #include <qauthenticator.h>
@@ -30,8 +30,8 @@
 #include <qurl.h>
 #include <qvector.h>
 
-#include <qaccess_manager.h>
-#include <qaccess_manager_p.h>
+#include <qnetaccess_manager.h>
+#include <qnetaccess_manager_p.h>
 
 #include <algorithm>
 

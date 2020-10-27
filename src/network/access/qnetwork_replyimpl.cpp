@@ -32,8 +32,8 @@
 #include <qsslconfiguration.h>
 #include <qnetworksession.h>
 
-#include <qaccess_backend_p.h>
-#include <qaccess_manager_p.h>
+#include <qnetaccess_backend_p.h>
+#include <qnetaccess_manager_p.h>
 
 inline QNetworkReplyImplPrivate::QNetworkReplyImplPrivate()
    : backend(0), outgoingData(0), copyDevice(0),

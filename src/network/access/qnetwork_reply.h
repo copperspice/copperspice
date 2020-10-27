@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKREPLY_H
-#define QNETWORKREPLY_H
+#ifndef QNETWORK_REPLY_H
+#define QNETWORK_REPLY_H
 
 #include <qiodevice.h>
 #include <qstring.h>
 #include <qvariant.h>
 #include <qnetwork_request.h>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 
 class QUrl;
 class QVariant;

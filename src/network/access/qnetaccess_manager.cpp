@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <qaccess_manager.h>
-#include <qaccess_manager_p.h>
+#include <qnetaccess_manager.h>
+#include <qnetaccess_manager_p.h>
 
 #include <qalgorithms.h>
 #include <qabstract_networkcache.h>
@@ -41,9 +41,9 @@
 
 #include <qauthenticator_p.h>
 #include <qsharednetworksession_p.h>
-#include <qaccess_ftpbackend_p.h>
-#include <qaccess_filebackend_p.h>
-#include <qaccess_cachebackend_p.h>
+#include <qnetaccess_ftpbackend_p.h>
+#include <qnetaccess_filebackend_p.h>
+#include <qnetaccess_cachebackend_p.h>
 #include <qnetwork_replydata_p.h>
 #include <qnetwork_replyfile_p.h>
 #include <qnetwork_replyhttp_p.h>

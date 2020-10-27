@@ -25,7 +25,7 @@
 #define QNETWORK_REPLYDATA_P_H
 
 #include <qnetwork_reply.h>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qbuffer.h>
 
 #include <qnetwork_reply_p.h>

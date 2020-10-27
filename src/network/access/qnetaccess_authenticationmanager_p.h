@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORKACCESSAUTHENTICATIONMANAGER_P_H
-#define QNETWORKACCESSAUTHENTICATIONMANAGER_P_H
+#ifndef QNETWORK_ACCESS_AUTHENTICATIONMANAGER_P_H
+#define QNETWORK_ACCESS_AUTHENTICATIONMANAGER_P_H
 
-#include <qaccess_manager.h>
-#include <qaccess_cache_p.h>
-#include <qaccess_backend_p.h>
+#include <qnetaccess_manager.h>
+#include <qnetaccess_cache_p.h>
+#include <qnetaccess_backend_p.h>
 #include <qnetworkproxy.h>
 #include <qmutex.h>
 

@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QABSTRACTNETWORKCACHE_H
-#define QABSTRACTNETWORKCACHE_H
+#ifndef QABSTRACT_NETWORKCACHE_H
+#define QABSTRACT_NETWORKCACHE_H
 
 #include <qobject.h>
 #include <qshareddata.h>
@@ -39,7 +39,6 @@ template<class T> class QList;
 
 class Q_NETWORK_EXPORT QNetworkCacheMetaData
 {
-
  public:
    typedef QPair<QByteArray, QByteArray> RawHeader;
    typedef QList<RawHeader> RawHeaderList;

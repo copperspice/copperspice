@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <qaccess_filebackend_p.h>
+#include <qnetaccess_filebackend_p.h>
 
 #include <qcoreapplication.h>
 #include <qfileinfo.h>
