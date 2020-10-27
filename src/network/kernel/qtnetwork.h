@@ -16,7 +16,7 @@
 #include <qhttp_part.h>
 #include <qlocalserver.h>
 #include <qlocalsocket.h>
-#include <qaccess_manager.h>
+#include <qnetaccess_manager.h>
 #include <qnetwork_cachemetadata.h>
 #include <qnetworkconfigmanager.h>
 #include <qnetworkconfiguration.h>
