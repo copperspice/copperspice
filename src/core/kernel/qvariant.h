@@ -531,7 +531,7 @@ class CustomType_T : public QVariant::CustomType
    {
    }
 
-   std::shared_ptr<CustomType> clone() const {
+   std::shared_ptr<CustomType> clone() const override {
       return std::make_shared<CustomType_T<T>>(m_value);
    }
 

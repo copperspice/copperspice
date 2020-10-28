@@ -40,15 +40,15 @@ class AVFCameraDeviceControl : public QVideoDeviceSelectorControl
    AVFCameraDeviceControl(AVFCameraService *service, QObject *parent = nullptr);
    ~AVFCameraDeviceControl();
 
-   int deviceCount() const;
+   int deviceCount() const override;
 
-   QString deviceName(int index) const;
-   QString deviceDescription(int index) const;
+   QString deviceName(int index) const override;
+   QString deviceDescription(int index) const override;
 
-   int defaultDevice() const;
-   int selectedDevice() const;
+   int defaultDevice() const override;
+   int selectedDevice() const override;
 
-   CS_SLOT_1(Public, void setSelectedDevice(int index))
+   CS_SLOT_1(Public, void setSelectedDevice(int index) override)
    CS_SLOT_2(setSelectedDevice)
 
    //device changed since the last createCaptureDevice()

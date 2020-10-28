@@ -50,10 +50,10 @@ class Q_MULTIMEDIA_EXPORT QCameraViewfinder : public QVideoWidget
 
    ~QCameraViewfinder();
 
-   QMediaObject *mediaObject() const;
+   QMediaObject *mediaObject() const override;
 
  protected:
-   bool setMediaObject(QMediaObject *object);
+   bool setMediaObject(QMediaObject *object) override;
 
  private:
    Q_DECLARE_PRIVATE(QCameraViewfinder)

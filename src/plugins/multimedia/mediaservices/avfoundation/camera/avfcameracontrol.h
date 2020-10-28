@@ -38,16 +38,16 @@ class AVFCameraControl : public QCameraControl
    AVFCameraControl(AVFCameraService *service, QObject *parent = nullptr);
    ~AVFCameraControl();
 
-   QCamera::State state() const;
-   void setState(QCamera::State state);
+   QCamera::State state() const override;
+   void setState(QCamera::State state) override;
 
-   QCamera::Status status() const;
+   QCamera::Status status() const override;
 
-   QCamera::CaptureModes captureMode() const;
-   void setCaptureMode(QCamera::CaptureModes);
-   bool isCaptureModeSupported(QCamera::CaptureModes mode) const;
+   QCamera::CaptureModes captureMode() const override;
+   void setCaptureMode(QCamera::CaptureModes) override;
 
-   bool canChangeProperty(PropertyChangeType changeType, QCamera::Status status) const;
+   bool isCaptureModeSupported(QCamera::CaptureModes mode) const override;
+   bool canChangeProperty(PropertyChangeType changeType, QCamera::Status status) const override;
 
  private:
    CS_SLOT_1(Private, void updateStatus())

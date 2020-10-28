@@ -35,7 +35,7 @@ class QCocoaPrinterSupportPlugin : public QPlatformPrinterSupportPlugin
    CS_PLUGIN_KEY("printerdriver_cocoa")
 
  public:
-   QPlatformPrinterSupport *create(const QString &);
+   QPlatformPrinterSupport *create(const QString &) override;
 };
 
 CS_PLUGIN_REGISTER(QCocoaPrinterSupportPlugin)

@@ -37,8 +37,8 @@ class AVFMediaPlayerService : public QMediaService
    explicit AVFMediaPlayerService(QObject *parent = nullptr);
    ~AVFMediaPlayerService();
 
-   QMediaControl *requestControl(const QString &name);
-   void releaseControl(QMediaControl *control);
+   QMediaControl *requestControl(const QString &name) override;
+   void releaseControl(QMediaControl *control) override;
 
  private:
    AVFMediaPlayerSession *m_session;

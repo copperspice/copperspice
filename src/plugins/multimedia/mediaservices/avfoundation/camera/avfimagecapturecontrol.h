@@ -45,21 +45,21 @@ class AVFImageCaptureControl : public QCameraImageCaptureControl
    AVFImageCaptureControl(AVFCameraService *service, QObject *parent = nullptr);
    ~AVFImageCaptureControl();
 
-   bool isReadyForCapture() const;
+   bool isReadyForCapture() const override;
 
-   QCameraImageCapture::DriveMode driveMode() const {
+   QCameraImageCapture::DriveMode driveMode() const override {
       return QCameraImageCapture::SingleImageCapture;
    }
 
-   void setDriveMode(QCameraImageCapture::DriveMode ) {
+   void setDriveMode(QCameraImageCapture::DriveMode) override {
    }
 
    AVCaptureStillImageOutput *stillImageOutput() const {
       return m_stillImageOutput;
    }
 
-   int capture(const QString &fileName);
-   void cancelCapture();
+   int capture(const QString &fileName) override;
+   void cancelCapture() override;
 
  private :
    CS_SLOT_1(Private, void updateCaptureConnection())

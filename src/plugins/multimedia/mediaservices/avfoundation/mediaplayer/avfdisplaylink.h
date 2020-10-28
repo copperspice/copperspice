@@ -40,6 +40,7 @@ class AVFDisplayLink : public QObject
  public:
    explicit AVFDisplayLink(QObject *parent = nullptr);
    virtual ~AVFDisplayLink();
+
    bool isValid() const;
    bool isActive() const;
 
@@ -55,7 +56,7 @@ class AVFDisplayLink : public QObject
    void displayLinkEvent(const CVTimeStamp *);
 
  protected:
-   virtual bool event(QEvent *);
+   virtual bool event(QEvent *) override;
 
  private:
 
