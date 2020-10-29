@@ -42,6 +42,7 @@
 #include <qfontengine_p.h>
 #include <qunicodetables_p.h>
 
+#include <memory>
 #include <stdlib.h>
 #include <limits.h>
 
@@ -200,9 +201,27 @@ static int getFontWeight(const QString &weightString)
    return QFont::Normal;
 }
 
-struct QtFontSize {
+struct FontSizeHandleDeleter {
+   void operator()(void *p) const {
+      if (p != nullptr) {
+         QPlatformIntegration *integration = QGuiApplicationPrivate::platformIntegration();
 
-   void *handle;
+         if (integration != nullptr) {
+            integration->fontDatabase()->releaseHandle(p);
+         }
+      }
+   }
+};
+
+using FontSizeHandle = std::shared_ptr<void>;
+
+FontSizeHandle MakeFontSizeHandle(void *p)
+{
+   return FontSizeHandle(p, FontSizeHandleDeleter());
+}
+
+struct QtFontSize {
+   FontSizeHandle handle;
    unsigned short pixelSize : 16;
 };
 
@@ -250,18 +269,6 @@ struct QtFontStyle {
    explicit QtFontStyle(const Key &k, const QString &s)
       : key(k), bitmapScalable(false), smoothScalable(false), styleName(s)
    {
-   }
-
-   ~QtFontStyle()
-   {
-      for (const auto &fontSize : m_sizes) {
-         QPlatformIntegration *integration = QGuiApplicationPrivate::platformIntegration();
-
-         if (integration != nullptr) {
-            // on shut down there will be some that we don't release.
-            integration->fontDatabase()->releaseHandle(fontSize.handle);
-         }
-      }
    }
 
    Key key;
@@ -697,15 +704,7 @@ void qt_registerFont(const QString &familyName, const QString &stylename, const 
    fontStyle->antialiased    = antialiased;
    QtFontSize *size          = fontStyle->fontSize(pixelSize ? pixelSize : SMOOTH_SCALABLE, true);
 
-   if (size->handle) {
-      QPlatformIntegration *integration = QGuiApplicationPrivate::platformIntegration();
-
-      if (integration != nullptr) {
-         integration->fontDatabase()->releaseHandle(size->handle);
-      }
-   }
-
-   size->handle        = handle;
+   size->handle        = MakeFontSizeHandle(handle);
    family->m_populated = true;
 }
 
@@ -937,7 +936,8 @@ static QFontEngine *loadSingleEngine(int script, const QFontDef &request,
          def.stretch = (request.stretch * 100 + 50) / style->key.stretch;
       }
 
-      engine = pfdb->fontEngine(def, size->handle);
+      engine = pfdb->fontEngine(def, size->handle.get());
+
       if (engine) {
          // Also check for OpenType tables when using complex scripts
          if (! engine->supportsScript(QChar::Script(script))) {
