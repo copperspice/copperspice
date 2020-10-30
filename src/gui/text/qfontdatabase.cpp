@@ -2557,7 +2557,7 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
 
                do {
                   index = match(script, def, def.family, QString(""), &desc, blackListed);
-                  if (index >= 0) {
+                  if (index != nullptr) {
                      QFontDef loadDef = def;
 
                      if (loadDef.family.isEmpty()) {
@@ -2573,7 +2573,7 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
                      }
                   }
 
-               } while (index >= 0 && ! engine);
+               } while ((index != nullptr) && ! engine);
             }
          }
       }
