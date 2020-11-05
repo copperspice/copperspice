@@ -24,33 +24,25 @@
 #ifndef DSCAMERASESSION_H
 #define DSCAMERASESSION_H
 
+#include <qmutex.h>
 #include <qobject.h>
 #include <qtime.h>
 #include <qurl.h>
-#include <qmutex.h>
 
-#include <qcamera.h>
-
-#include <qvideoframe.h>
 #include <qabstractvideosurface.h>
-#include <qvideosurfaceformat.h>
+#include <qcamera.h>
 #include <qcameraimageprocessingcontrol.h>
+#include <qvideoframe.h>
+#include <qvideosurfaceformat.h>
+
 #include <qmediastoragelocation_p.h>
 
 #include <tchar.h>
 #include <dshow.h>
-#include <objbase.h>
 #include <initguid.h>
-
-/*
-#ifdef Q_CC_MSVC
-#  pragma comment(lib, "strmiids.lib")
-#  pragma comment(lib, "ole32.lib")
-#endif
-*/
+#include <objbase.h>
 
 #include <windows.h>
-#include <qedit.h>
 
 #define __IDxtCompositor_INTERFACE_DEFINED__
 #define __IDxtAlphaSetter_INTERFACE_DEFINED__
@@ -93,24 +85,27 @@ class DSCameraSession : public QObject
       return m_supportedViewfinderSettings;
    }
 
-   bool isImageProcessingParameterSupported(
-      QCameraImageProcessingControl::ProcessingParameter) const;
+   bool isImageProcessingParameterSupported(QCameraImageProcessingControl::ProcessingParameter) const;
 
    bool isImageProcessingParameterValueSupported(QCameraImageProcessingControl::ProcessingParameter, const QVariant &) const;
    QVariant imageProcessingParameter(QCameraImageProcessingControl::ProcessingParameter) const;
    void setImageProcessingParameter(QCameraImageProcessingControl::ProcessingParameter, const QVariant &);
 
- public:
    CS_SIGNAL_1(Public, void statusChanged(QCamera::Status un_named_arg1))
    CS_SIGNAL_2(statusChanged, un_named_arg1)
+
    CS_SIGNAL_1(Public, void imageExposed(int id))
    CS_SIGNAL_2(imageExposed, id)
+
    CS_SIGNAL_1(Public, void imageCaptured(int id, const QImage &preview))
    CS_SIGNAL_2(imageCaptured, id, preview)
+
    CS_SIGNAL_1(Public, void imageSaved(int id, const QString &fileName))
    CS_SIGNAL_2(imageSaved, id, fileName)
+
    CS_SIGNAL_1(Public, void readyForCaptureChanged(bool un_named_arg1))
    CS_SIGNAL_2(readyForCaptureChanged, un_named_arg1)
+
    CS_SIGNAL_1(Public, void captureError(int id, int error, const QString &errorString))
    CS_SIGNAL_2(captureError, id, error, errorString)
 
