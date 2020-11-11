@@ -63,14 +63,13 @@ www.copperspice.com/docs/cs_overview/index.html
 
 ###### API
 
-The API contains full class documentation and multiple tutorials for CopperSpice. It is available on the website or
-from our download page.
+The API contains full class documentation and multiple tutorials for CopperSpice and is available directly on our
+website and from our download page.
 
 
 |URL      |Description|
 |---------|-----------|
-|www.copperspice.com/docs/cs_api_1.5/index.html|CopperSpice 1.5  (stable)|
-|www.copperspice.com/docs/cs_api_1.6/index.html|CopperSpice 1.6|
+|www.copperspice.com/docs/cs_api/index.html|CopperSpice 1.7|
 |         |           |
 |https://download.copperspice.com/copperspice/documentation|Overview and API (tar and zip formats)|
 
@@ -110,7 +109,7 @@ Using the Libraries
 
 ### Presentations
 
-Our YouTube channel contains videos about modern C++, graphics, build systems, CopperSpice, DoxyPress, and other
+Our YouTube channel contains videos about C++, graphics, build systems, CopperSpice, DoxyPress, and other
 topics related to software development.
 
 https://www.youtube.com/copperspice
@@ -127,9 +126,10 @@ www.copperspice.com/presentations.html
 
 * **Ansel Sermersheim**
 * **Barbara Geller**
-* **Tim van Deurzen**
 * **Jan Wilmans**
+* **Tim van Deurzen**
 * **Peter Bindels**
+* **Jeff Cohen**
 * **Mortaro Marcello**
 * **Adam Mensel**
 * **Robin Mills**
