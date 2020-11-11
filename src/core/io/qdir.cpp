@@ -285,44 +285,49 @@ bool QDirSortItemComparator::operator()(const QDirSortItem &n1, const QDirSortIt
    return r < 0;
 }
 
-inline void QDirPrivate::sortFileList(QDir::SortFlags sort, QFileInfoList &l, QStringList *names, QFileInfoList *infos)
+inline void QDirPrivate::sortFileList(QDir::SortFlags sort, QFileInfoList &infoList, QStringList *names, QFileInfoList *infos)
 {
    // names and infos are always empty lists or 0 here
-   int n = l.size();
+   int n = infoList.size();
+
    if (n > 0) {
 
       if (n == 1 || (sort & QDir::SortByMask) == QDir::Unsorted) {
-         if (infos) {
-            *infos = l;
+         if (infos != nullptr) {
+            *infos = infoList;
          }
 
-         if (names) {
-            for (int i = 0; i < n; ++i) {
-               names->append(l.at(i).fileName());
+         if (names != nullptr) {
+            for (const auto &item : infoList) {
+               names->append(item.fileName());
             }
          }
 
       } else {
-         QScopedArrayPointer<QDirSortItem> si(new QDirSortItem[n]);
+         QVector<QDirSortItem> si(n);
+
          for (int i = 0; i < n; ++i) {
-            si[i].item = l.at(i);
+            si[i].item = infoList.at(i);
          }
-         std::sort(si.data(), si.data() + n, QDirSortItemComparator(sort));
+
+         std::sort(si.begin(), si.end(), QDirSortItemComparator(sort));
 
          // put them back in the list(s)
-         if (infos) {
-            for (int i = 0; i < n; ++i) {
-               infos->append(si[i].item);
+         if (infos != nullptr) {
+            for (const auto &item : si) {
+               infos->append(item.item);
             }
          }
-         if (names) {
-            for (int i = 0; i < n; ++i) {
-               names->append(si[i].item.fileName());
+
+         if (names != nullptr) {
+            for (const auto &item : si) {
+               names->append(item.item.fileName());
             }
          }
       }
    }
 }
+
 inline void QDirPrivate::initFileLists(const QDir &dir) const
 {
    if (!fileListsInitialized) {

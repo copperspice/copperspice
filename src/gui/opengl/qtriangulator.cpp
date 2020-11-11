@@ -1315,7 +1315,7 @@ void QTriangulator<T>::ComplexToSimple::fillPriorityQueue()
         }
     }
 
-    std::sort(m_events.data(), m_events.data() + m_events.size());
+    std::sort(m_events.begin(), m_events.end());
 }
 
 template <typename T>
@@ -1867,15 +1867,15 @@ void QTriangulator<T>::SimpleToMonotone::removeZeroLengthEdges()
 template <typename T>
 void QTriangulator<T>::SimpleToMonotone::fillPriorityQueue()
 {
-    m_upperVertex.clear();
-    m_upperVertex.reserve(m_edges.size());
-    for (int i = 0; i < m_edges.size(); ++i)
-        m_upperVertex.append(i);
-    CompareVertices cmp(this);
-    std::sort(m_upperVertex.data(), m_upperVertex.data() + m_upperVertex.size(), cmp);
-    //for (int i = 1; i < m_upperVertex.size(); ++i) {
-    //    Q_ASSERT(!cmp(m_upperVertex.at(i), m_upperVertex.at(i - 1)));
-    //}
+   m_upperVertex.clear();
+   m_upperVertex.reserve(m_edges.size());
+
+   for (int i = 0; i < m_edges.size(); ++i) {
+     m_upperVertex.append(i);
+   }
+
+   CompareVertices cmp(this);
+   std::sort(m_upperVertex.begin(), m_upperVertex.end(), cmp);
 }
 
 template <typename T>

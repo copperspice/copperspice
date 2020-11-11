@@ -831,7 +831,7 @@ void QWingedEdge::intersectAndAdd()
          }
       }
 
-      std::sort(intersections.data(), intersections.data() + intersections.size());
+      std::sort(intersections.begin(), intersections.end());
 
       int first = m_segments.segmentAt(i).va;
       int second = m_segments.segmentAt(i).vb;
