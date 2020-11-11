@@ -299,8 +299,8 @@
 #elif defined(_MSC_VER)
 //  ****
 
-#  if _MSC_VER < 1914
-#    error "CopperSpice requires Visual Studio 2017 Version 15.8 or newer"
+#  if _MSC_VER < 1926
+#    error "CopperSpice requires Visual Studio 2019 Version 15.5 or newer"
 #  endif
 
 #  define Q_CC_MSVC         (_MSC_VER)
