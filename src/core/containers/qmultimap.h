@@ -596,7 +596,7 @@ bool QMultiMap<Key, Val, C>::contains(const Key &key, const Val &value) const
 template <class Key, class Val, class C>
 typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::count(const Key &key, const Val &value) const
 {
-   int retval = 0;
+   size_type retval = 0;
 
    auto range = m_data.equal_range(key);
 
@@ -666,7 +666,7 @@ QList<Key> QMultiMap<Key, Val, C>::keys(const Val &value) const
 template <class Key, class Val, class C>
 typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::remove(const Key &key, const Val &value)
 {
-   int retval = 0;
+   size_type retval = 0;
 
    auto range = m_data.equal_range(key);
    auto iter  = range.first;
@@ -675,6 +675,7 @@ typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::remove(const 
       if (iter->second == value) {
          iter = m_data.erase(iter);
          ++retval;
+
       } else {
          ++iter;
       }

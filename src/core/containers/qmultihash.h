@@ -532,15 +532,12 @@ typename QMultiHash<Key, Val, Hash, KeyEqual>::size_type QMultiHash<Key, Val, Ha
 {
    size_type retval = 0;
 
-   typename QMultiHash<Key, Val, Hash, KeyEqual>::const_iterator iter(constFind(key));
-   typename QMultiHash<Key, Val, Hash, KeyEqual>::const_iterator end(QMultiHash<Key, Val, Hash, KeyEqual>::constEnd());
+   auto range = m_data.equal_range(key);
 
-   while (iter != end && iter.key() == key) {
-      if (iter.value() == value) {
+   for (auto iter = range.first; iter != range.second; ++iter) {
+      if (iter->second == value) {
          ++retval;
       }
-
-      ++iter;
    }
 
    return retval;
@@ -604,12 +601,12 @@ typename QMultiHash<Key, Val, Hash, KeyEqual>::size_type QMultiHash<Key, Val, Ha
 {
    size_type retval = 0;
 
-   typename QMultiHash<Key, Val>::iterator iter(find(key));
-   typename QMultiHash<Key, Val>::iterator end(QMultiHash<Key, Val, Hash, KeyEqual>::end());
+   auto range = m_data.equal_range(key);
+   auto iter  = range.first;
 
-   while (iter != end && iter.key() == key) {
-      if (iter.value() == value) {
-         iter = erase(iter);
+   while (iter != range.second) {
+      if (iter->second == value) {
+         iter = m_data.erase(iter);
          ++retval;
 
       } else {
