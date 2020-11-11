@@ -928,6 +928,23 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::crend();
       }
 
+      // storage iterators
+      const_storage_iterator storage_begin() const {
+         return CsString::CsString::storage_begin();
+      }
+
+      const_storage_iterator storage_end() const {
+         return CsString::CsString::storage_end();
+      }
+
+      const_storage_reverse_iterator storage_rbegin() const {
+         return CsString::CsString::storage_rbegin();
+      }
+
+      const_storage_reverse_iterator storage_rend() const {
+         return CsString::CsString::storage_rend();
+      }
+
       // operators
       QString8 &operator=(const QString8 &other) = default;
       QString8 &operator=(QString8 && other) = default;

@@ -914,6 +914,23 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return CsString::CsString_utf16::crend();
       }
 
+      // storage iterators
+      const_storage_iterator storage_begin() const {
+         return CsString::CsString_utf16::storage_begin();
+      }
+
+      const_storage_iterator storage_end() const {
+         return CsString::CsString_utf16::storage_end();
+      }
+
+      const_storage_reverse_iterator storage_rbegin() const {
+         return CsString::CsString_utf16::storage_rbegin();
+      }
+
+      const_storage_reverse_iterator storage_rend() const {
+         return CsString::CsString_utf16::storage_rend();
+      }
+
       // operators
       QString16 &operator=(const QString16 &other) = default;
       QString16 &operator=(QString16 && other) = default;

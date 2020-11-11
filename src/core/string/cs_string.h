@@ -56,6 +56,9 @@ class CsBasicString
       using const_reverse_iterator = CsStringReverseIterator<const_iterator>;
       using reverse_iterator       = CsStringReverseIterator<iterator>;
 
+      using const_storage_iterator         = typename std::vector<typename E::storage_unit, A>::const_iterator;
+      using const_storage_reverse_iterator = typename std::vector<typename E::storage_unit, A>::const_reverse_iterator;
+
       static constexpr const size_type npos = -1;
 
       CsBasicString()
@@ -607,6 +610,13 @@ class CsBasicString
 
       const_reverse_iterator rend() const;
       const_reverse_iterator crend() const;
+
+      // storage iterators
+      const_storage_iterator storage_begin() const;
+      const_storage_iterator storage_end() const;
+
+      const_storage_reverse_iterator storage_rbegin() const;
+      const_storage_reverse_iterator storage_rend() const;
 
       // returns const ptr to the raw data
       const typename E::storage_unit *constData() const
@@ -4447,6 +4457,30 @@ template <typename E, typename A>
 typename CsBasicString<E, A>::const_reverse_iterator CsBasicString<E, A>::crend() const
 {
    return const_reverse_iterator(cbegin());
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_storage_iterator CsBasicString<E, A>::storage_begin() const
+{
+   return m_string.cbegin();
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_storage_iterator CsBasicString<E, A>::storage_end() const
+{
+   return m_string.cend() - 1;
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_storage_reverse_iterator CsBasicString<E, A>::storage_rbegin() const
+{
+   return m_string.crbegin() + 1;
+}
+
+template <typename E, typename A>
+typename CsBasicString<E, A>::const_storage_reverse_iterator CsBasicString<E, A>::storage_rend() const
+{
+   return m_string.crend();
 }
 
 // functions
