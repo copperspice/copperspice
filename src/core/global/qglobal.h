@@ -749,27 +749,16 @@ constexpr inline bool qFuzzyIsNull(float f)
    return qAbs(f) <= 0.00001f;
 }
 
-// tests a double for a null value. It does not check whether the
-// actual value is 0 or close to 0, but whether it is binary 0.
-static inline bool qIsNull(double d)
+// test a double actual value
+static inline bool qIsNull(double value)
 {
-   union U {
-      double d;
-      quint64 u;
-   };
-
-   U val;
-   val.d = d;
-   return val.u == quint64(0);
+   return value == 0.0;
 }
 
 // tests a float to see if all the bits are zero
-static inline bool qIsNull(float data)
+static inline bool qIsNull(float value)
 {
-   quint32 tmp;
-   memcpy(&tmp, &data, sizeof(quint32));
-
-   return tmp == 0u;
+   return value == 0.0f;
 }
 
 // used everywhere
