@@ -90,26 +90,31 @@ class Q_CORE_EXPORT QDate
    bool setDate(int year, int month, int day);
    void getDate(int *year, int *month, int *day);
 
-   QDate addDays(qint64 days) const;
-   QDate addMonths(qint64 months) const;
-   QDate addYears(qint64 years) const;
+   [[nodiscard]] QDate addDays(qint64 days) const;
+   [[nodiscard]] QDate addMonths(qint64 months) const;
+   [[nodiscard]] QDate addYears(qint64 years) const;
    qint64 daysTo(const QDate &) const;
 
    bool operator==(const QDate &other) const {
       return jd == other.jd;
    }
+
    bool operator!=(const QDate &other) const {
       return jd != other.jd;
    }
+
    bool operator<(const QDate &other) const {
       return jd < other.jd;
    }
+
    bool operator<=(const QDate &other) const {
       return jd <= other.jd;
    }
+
    bool operator>(const QDate &other) const {
       return jd > other.jd;
    }
+
    bool operator>=(const QDate &other) const {
       return jd >= other.jd;
    }
@@ -185,9 +190,10 @@ class Q_CORE_EXPORT QTime
 
    bool setHMS(int h, int m, int s, int ms = 0);
 
-   QTime addSecs(int secs) const;
+   [[nodiscard]] QTime addSecs(int secs) const;
    int secsTo(const QTime &) const;
-   QTime addMSecs(int ms) const;
+
+   [[nodiscard]] QTime addMSecs(int ms) const;
    int msecsTo(const QTime &) const;
 
    bool operator==(const QTime &other) const {
@@ -296,11 +302,11 @@ class Q_CORE_EXPORT QDateTime
    QString toString(Qt::DateFormat f = Qt::TextDate) const;
    QString toString(const QString &format) const;
 
-   QDateTime addDays(qint64 days) const;
-   QDateTime addMonths(qint64 months) const;
-   QDateTime addYears(qint64 years) const;
-   QDateTime addSecs(qint64 secs) const;
-   QDateTime addMSecs(qint64 msecs) const;
+   [[nodiscard]] QDateTime addDays(qint64 days) const;
+   [[nodiscard]] QDateTime addMonths(qint64 months) const;
+   [[nodiscard]] QDateTime addYears(qint64 years) const;
+   [[nodiscard]] QDateTime addSecs(qint64 secs) const;
+   [[nodiscard]] QDateTime addMSecs(qint64 msecs) const;
 
    QDateTime toTimeSpec(Qt::TimeSpec spec) const;
 
