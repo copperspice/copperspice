@@ -33,6 +33,7 @@
 #if defined(OCSP_RESPONSE)
 #undef OCSP_RESPONSE
 #endif
+
 #if defined(X509_NAME)
 #undef X509_NAME
 #endif

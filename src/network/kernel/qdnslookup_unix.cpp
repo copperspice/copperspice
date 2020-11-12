@@ -34,7 +34,7 @@
 #include <arpa/nameser_compat.h>
 #include <resolv.h>
 
-#if defined(__GNU_LIBRARY__) && !defined(__UCLIBC__)
+#if defined(__GNU_LIBRARY__) && ! defined(__UCLIBC__)
 #  include <gnu/lib-names.h>
 #endif
 

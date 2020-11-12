@@ -28,16 +28,17 @@
 
 class QNetworkCookieJarPrivate
 {
-
  public:
-   virtual ~QNetworkCookieJarPrivate() {}
+   virtual ~QNetworkCookieJarPrivate()
+   {
+   }
+
    QList<QNetworkCookie> allCookies;
 
+ protected:
    Q_DECLARE_PUBLIC(QNetworkCookieJar)
 
- protected:
    QNetworkCookieJar *q_ptr;
-
 };
 
 #endif

@@ -46,6 +46,7 @@ class Q_NETWORK_EXPORT QNetworkRequest
       UserAgentHeader,
       ServerHeader
    };
+
    enum Attribute {
       HttpStatusCodeAttribute,
       HttpReasonPhraseAttribute,
@@ -73,12 +74,14 @@ class Q_NETWORK_EXPORT QNetworkRequest
       User = 1000,
       UserMax = 32767
    };
+
    enum CacheLoadControl {
       AlwaysNetwork,
       PreferNetwork,
       PreferCache,
       AlwaysCache
    };
+
    enum LoadControl {
       Automatic = 0,
       Manual

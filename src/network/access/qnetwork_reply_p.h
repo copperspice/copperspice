@@ -44,8 +44,14 @@ class QNetworkReplyPrivate: public QIODevicePrivate, public QNetworkHeadersPriva
         Aborted,            // The reply has been aborted.
         WaitingForSession,  // The reply is waiting for the session to open before connecting.
         Reconnecting        // The reply will reconnect to once roaming has completed.
-    };
+   };
+
    QNetworkReplyPrivate();
+
+   static inline void setManager(QNetworkReply *reply, QNetworkAccessManager *manager) {
+      reply->d_func()->manager = manager;
+   }
+
    QNetworkRequest request;
    QNetworkRequest originalRequest;
    QUrl url;
@@ -61,13 +67,7 @@ class QNetworkReplyPrivate: public QIODevicePrivate, public QNetworkHeadersPriva
    QNetworkReply::NetworkError errorCode;
    bool isFinished;
 
-   static inline void setManager(QNetworkReply *reply, QNetworkAccessManager *manager) {
-      reply->d_func()->manager = manager;
-   }
-
    Q_DECLARE_PUBLIC(QNetworkReply)
 };
-
-
 
 #endif

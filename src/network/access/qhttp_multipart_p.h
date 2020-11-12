@@ -34,19 +34,23 @@ class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
 {
 
  public:
-   inline QHttpPartPrivate() : bodyDevice(0), headerCreated(false), readPointer(0) {
+   QHttpPartPrivate()
+      : bodyDevice(0), headerCreated(false), readPointer(0)
+   {
    }
 
-   ~QHttpPartPrivate() {
+   ~QHttpPartPrivate()
+   {
    }
 
    QHttpPartPrivate(const QHttpPartPrivate &other)
       : QSharedData(other), QNetworkHeadersPrivate(other), body(other.body),
-        header(other.header), headerCreated(other.headerCreated), readPointer(other.readPointer) {
+        header(other.header), headerCreated(other.headerCreated), readPointer(other.readPointer)
+   {
       bodyDevice = other.bodyDevice;
    }
 
-   inline bool operator==(const QHttpPartPrivate &other) const {
+   bool operator==(const QHttpPartPrivate &other) const {
       return rawHeaders == other.rawHeaders && body == other.body &&
              bodyDevice == other.bodyDevice && readPointer == other.readPointer;
    }
@@ -55,6 +59,7 @@ class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
       bodyDevice = device;
       readPointer = 0;
    }
+
    void setBody(const QByteArray &newBody) {
       body = newBody;
       readPointer = 0;
@@ -133,7 +138,6 @@ class QHttpMultiPartPrivate
    QByteArray boundary;
    QHttpMultiPart::ContentType contentType;
    QHttpMultiPartIODevice *device;
-
 };
 
-#endif // QHTTPMULTIPART_P_H
+#endif

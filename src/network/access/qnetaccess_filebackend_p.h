@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORK_ACCESS__FILEBACKEND_P_H
-#define QNETWORK_ACCESS__FILEBACKEND_P_H
+#ifndef QNETWORK_ACCESS_FILEBACKEND_P_H
+#define QNETWORK_ACCESS_FILEBACKEND_P_H
 
 #include <qnetaccess_backend_p.h>
 

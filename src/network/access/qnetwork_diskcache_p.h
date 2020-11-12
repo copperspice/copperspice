@@ -36,40 +36,43 @@ class QFile;
 class QCacheItem
 {
  public:
-   QCacheItem() : file(0) {
+   QCacheItem()
+      : file(0)
+   {
    }
 
-   ~QCacheItem() {
+   ~QCacheItem()
+   {
       reset();
    }
 
-   QNetworkCacheMetaData metaData;
-   QBuffer data;
-   QTemporaryFile *file;
-   inline qint64 size() const {
+   qint64 size() const {
       return file ? file->size() : data.size();
    }
 
-   inline void reset() {
+   void reset() {
       metaData = QNetworkCacheMetaData();
       data.close();
       delete file;
       file = 0;
    }
+
    void writeHeader(QFile *device) const;
    void writeCompressedData(QFile *device) const;
    bool read(QFile *device, bool readData);
-
    bool canCompress() const;
+
+   QNetworkCacheMetaData metaData;
+   QBuffer data;
+   QTemporaryFile *file;
 };
 
 class QNetworkDiskCachePrivate : public QAbstractNetworkCachePrivate
 {
  public:
    QNetworkDiskCachePrivate()
-      : QAbstractNetworkCachePrivate()
-      , maximumCacheSize(1024 * 1024 * 50)
-      , currentCacheSize(-1) {
+      : QAbstractNetworkCachePrivate(), maximumCacheSize(1024 * 1024 * 50), currentCacheSize(-1)
+   {
    }
 
    static QString uniqueFileName(const QUrl &url);
@@ -90,7 +93,6 @@ class QNetworkDiskCachePrivate : public QAbstractNetworkCachePrivate
    Q_DECLARE_PUBLIC(QNetworkDiskCache)
 };
 
-
 #endif // QT_NO_NETWORKDISKCACHE
 
-#endif // QNETWORKDISKCACHE_P_H
+#endif

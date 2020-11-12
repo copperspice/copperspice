@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QNETWORK_ACCESS__FTPBACKEND_P_H
-#define QNETWORK_ACCESS__FTPBACKEND_P_H
+#ifndef QNETWORK_ACCESS_FTPBACKEND_P_H
+#define QNETWORK_ACCESS_FTPBACKEND_P_H
 
 #include <qnetwork_request.h>
 #include <qnetwork_reply.h>

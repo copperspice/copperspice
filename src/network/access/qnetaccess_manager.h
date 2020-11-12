@@ -55,7 +55,7 @@ class QNetworkAccessManagerPrivate;
 template<typename T> class QList;
 class QNetworkCookie;
 
-class Q_NETWORK_EXPORT QNetworkAccessManager: public QObject
+class Q_NETWORK_EXPORT QNetworkAccessManager : public QObject
 {
    NET_CS_OBJECT(QNetworkAccessManager)
 

@@ -64,5 +64,4 @@ class QNetworkReplyDataImplPrivate: public QNetworkReplyPrivate
    Q_DECLARE_PUBLIC(QNetworkReplyDataImpl)
 };
 
-
-#endif // QNETWORKREPLYDATAIMPL_H
+#endif

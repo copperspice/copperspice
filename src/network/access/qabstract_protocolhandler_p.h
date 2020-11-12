@@ -31,8 +31,8 @@ class QHttpNetworkReply;
 class QAbstractSocket;
 class QHttpNetworkConnection;
 
-class QAbstractProtocolHandler {
-
+class QAbstractProtocolHandler
+{
  public:
     QAbstractProtocolHandler(QHttpNetworkConnectionChannel *channel);
     virtual ~QAbstractProtocolHandler();
@@ -49,4 +49,4 @@ class QAbstractProtocolHandler {
     QHttpNetworkConnection *m_connection;
 };
 
-#endif // QABSTRACTPROTOCOLHANDLER_H
+#endif
