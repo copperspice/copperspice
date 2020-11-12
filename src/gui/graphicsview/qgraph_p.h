@@ -24,12 +24,12 @@
 #ifndef QGRAPH_P_H
 #define QGRAPH_P_H
 
-#include <QHash>
-#include <QQueue>
-#include <QString>
-#include <QDebug>
-#include <float.h>
+#include <qhash.h>
+#include <qqueue.h>
+#include <qstring.h>
+#include <qdebug.h>
 
+#include <float.h>
 
 template <typename Vertex, typename EdgeData>
 class Graph

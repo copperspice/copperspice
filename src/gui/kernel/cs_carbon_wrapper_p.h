@@ -25,7 +25,7 @@
 #define CS_CARBON_WRAPPER_P_H
 
 #include <qglobal.h>
-#include <QTabBar>
+#include <qtabbar.h>
 
 // OS X framework
 #include <CoreServices/CoreServices.h>

@@ -28,7 +28,7 @@
 #include <qstring.h>
 #include <qdialog.h>
 #include <qurl.h>
-#include <QModelIndex>
+#include <qmodelindex.h>
 
 #ifndef QT_NO_FILEDIALOG
 

@@ -35,7 +35,7 @@
 #include <qevent.h>
 #include <qpen.h>
 #include <qdebug.h>
-#include <QMetaMethod>
+#include <qmetamethod.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

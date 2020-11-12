@@ -37,7 +37,7 @@
 #include <qplatform_nativeinterface.h>
 #include <qpointer.h>
 #include <qpoint.h>
-#include <QPointF>
+#include <qpointf.h>
 #include <qregion.h>
 #include <qtime.h>
 #include <qwindow.h>

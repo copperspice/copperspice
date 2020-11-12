@@ -412,23 +412,23 @@ typedef uint32_t             quint32;
 typedef long long            qint64;
 typedef unsigned long long   quint64;
 
-#define Q_INT64_C(c)         static_cast<int64_t>(c ## LL)
-#define Q_UINT64_C(c)        static_cast<uint64_t>(c ## ULL)
+#define Q_INT64_C(c)      static_cast<int64_t>(c ## LL)
+#define Q_UINT64_C(c)     static_cast<uint64_t>(c ## ULL)
 
 #ifndef QT_POINTER_SIZE
-#define QT_POINTER_SIZE      sizeof(void *)
+#define QT_POINTER_SIZE   sizeof(void *)
 #endif
 
 #if defined(__cplusplus)      // block c
 
-using qintptr   = std::conditional<sizeof(void *) == 4, qint32, qint64>::type;
-using qptrdiff  = qintptr;
-using quintptr  = std::conditional<sizeof(void *) == 4, quint32, quint64>::type;
+using qintptr  = std::conditional<sizeof(void *) == 4, qint32, qint64>::type;
+using qptrdiff = qintptr;
+using quintptr = std::conditional<sizeof(void *) == 4, quint32, quint64>::type;
 
-using uchar     = unsigned char;
-using ushort    = unsigned short;
-using uint      = unsigned int;
-using ulong     = unsigned long;
+using uchar    = unsigned char;
+using ushort   = unsigned short;
+using uint     = unsigned int;
+using ulong    = unsigned long;
 
 // ****
 #ifndef TRUE
@@ -519,9 +519,9 @@ constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max)
 
 #if defined(Q_OS_DARWIN)
 
-#  ifndef QMAC_QMENUBAR_NO_EVENT
+#ifndef QMAC_QMENUBAR_NO_EVENT
 #    define QMAC_QMENUBAR_NO_EVENT
-#  endif
+#endif
 
 // implemented in qcore_mac_objc.mm
 class Q_CORE_EXPORT QMacAutoReleasePool
@@ -555,14 +555,15 @@ class Q_CORE_EXPORT QSysInfo
       BigEndian,
       LittleEndian,
 
-#  if Q_BYTE_ORDER == Q_BIG_ENDIAN
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
       ByteOrder = BigEndian
 
-#  elif Q_BYTE_ORDER == Q_LITTLE_ENDIAN
+#elif Q_BYTE_ORDER == Q_LITTLE_ENDIAN
       ByteOrder = LittleEndian
 
-#  endif
-   };
+#endif
+};
+
 #endif
 
 #if defined(Q_OS_WIN)
@@ -805,16 +806,20 @@ inline QFlag::QFlag(int ai) : i(ai) {}
 
 class Q_CORE_EXPORT QIncompatibleFlag
 {
-   int i;
-
    public:
      inline explicit QIncompatibleFlag(int i);
      inline operator int() const {
         return i;
      }
+
+  private:
+   int i;
 };
 
-inline QIncompatibleFlag::QIncompatibleFlag(int ai) : i(ai) {}
+inline QIncompatibleFlag::QIncompatibleFlag(int ai)
+   : i(ai)
+{
+}
 
 #ifndef Q_NO_TYPESAFE_FLAGS
 

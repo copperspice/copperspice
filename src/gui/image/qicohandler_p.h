@@ -24,7 +24,7 @@
 #ifndef QICOHANDLER_P_H
 #define QICOHANDLER_P_H
 
-#include <QImageIOHandler>
+#include <qimageiohandler.h>
 
 class ICOReader;
 

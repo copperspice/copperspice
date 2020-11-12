@@ -35,6 +35,7 @@
 #include <qmemoryvideobuffer_p.h>
 
 namespace {
+
 // DirectShow helper implementation
 
 void _CopyMediaType(AM_MEDIA_TYPE *pmtTarget, const AM_MEDIA_TYPE *pmtSource)

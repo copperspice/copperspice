@@ -22,18 +22,19 @@
 ***********************************************************************/
 
 #ifndef QT_NO_ICON
+
 #include <qiconloader_p.h>
 
-#include <QIconEnginePlugin>
-#include <QPixmapCache>
+#include <qiconengineplugin.h>
+#include <qpixmapcache.h>
 #include <qplatform_theme.h>
-#include <QIconEngine>
-#include <QPalette>
-#include <QList>
+#include <qiconengine.h>
+#include <qpalette.h>
+#include <qlist.h>
 
-#include <QDir>
-#include <QSettings>
-#include <QPainter>
+#include <qdir.h>
+#include <qsettings.h>
+#include <qpainter.h>
 
 #include <qapplication_p.h>
 #include <qicon_p.h>

@@ -104,6 +104,7 @@ class Q_GUI_EXPORT QQuaternion
 #ifndef QT_NO_VECTOR3D
    static QQuaternion fromAxisAndAngle(const QVector3D &axis, qreal angle);
 #endif
+
    static QQuaternion fromAxisAndAngle
    (qreal x, qreal y, qreal z, qreal angle);
 
@@ -116,11 +117,15 @@ class Q_GUI_EXPORT QQuaternion
    qreal wp, xp, yp, zp;
 };
 
-inline QQuaternion::QQuaternion() : wp(1.0f), xp(0.0f), yp(0.0f), zp(0.0f) {}
+inline QQuaternion::QQuaternion()
+   : wp(1.0f), xp(0.0f), yp(0.0f), zp(0.0f)
+{
+}
 
-inline QQuaternion::QQuaternion(qreal aScalar, qreal xpos, qreal ypos, qreal zpos) : wp(aScalar), xp(xpos), yp(ypos),
-   zp(zpos) {}
-
+inline QQuaternion::QQuaternion(qreal aScalar, qreal xpos, qreal ypos, qreal zpos)
+   : wp(aScalar), xp(xpos), yp(ypos), zp(zpos)
+{
+}
 
 inline bool QQuaternion::isNull() const
 {
@@ -136,13 +141,16 @@ inline qreal QQuaternion::x() const
 {
    return qreal(xp);
 }
+
 inline qreal QQuaternion::y() const
 {
    return qreal(yp);
 }
+
 inline qreal QQuaternion::z() const
 {
    return qreal(zp);
+
 }
 inline qreal QQuaternion::scalar() const
 {

@@ -25,12 +25,11 @@
 #define QJPEGHANDLER_P_H
 
 #include <qimageiohandler.h>
-#include <QSize>
-#include <QRect>
-
-
+#include <qsize.h>
+#include <qrect.h>
 
 class QJpegHandlerPrivate;
+
 class QJpegHandler : public QImageIOHandler
 {
  public:
@@ -52,7 +51,5 @@ class QJpegHandler : public QImageIOHandler
  private:
    QJpegHandlerPrivate *d;
 };
-
-
 
 #endif

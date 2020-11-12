@@ -23,9 +23,9 @@
 
 #include <qicohandler_p.h>
 #include <qendian.h>
-#include <QImage>
-#include <QFile>
-#include <QBuffer>
+#include <qimage.h>
+#include <qfile.h>
+#include <qbuffer.h>
 #include <qvariant.h>
 
 // These next two structs represent how the icon information is stored in an ICO file.

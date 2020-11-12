@@ -24,14 +24,13 @@
 #ifndef QGRAPHICSTRANSFORM_H
 #define QGRAPHICSTRANSFORM_H
 
-#include <QObject>
-#include <QVector3D>
-#include <QTransform>
-#include <QMatrix4x4>
-#include <QScopedPointer>
+#include <qobject.h>
+#include <qvector3d.h>
+#include <qtransform.h>
+#include <qmatrix4x4.h>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
-
 
 class QGraphicsItem;
 class QGraphicsTransformPrivate;

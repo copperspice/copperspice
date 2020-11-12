@@ -29,8 +29,7 @@
 #include <qwidget.h>
 #include <qvariant.h>
 #include <qicon.h>
-#include <QScopedPointer>
-
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_ACTION
 

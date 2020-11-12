@@ -25,15 +25,14 @@
 #define QGRAPHICSANCHORLAYOUT_P_H
 
 #include <qmultihash.h>
-
-#include <QGraphicsWidget>
-#include <qgraphicslayout_p.h>
+#include <qgraphicswidget.h>
 #include <qgraphicsanchorlayout.h>
+
+#include <qgraphicslayout_p.h>
 #include <qgraph_p.h>
 #include <qsimplex_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
-
 
 // internal
 struct AnchorVertex {

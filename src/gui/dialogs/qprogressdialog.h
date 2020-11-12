@@ -25,8 +25,9 @@
 #define QPROGRESSDIALOG_H
 
 #include <qdialog.h>
-#include <QElapsedTimer>
-#include <QShortcut>
+#include <qelapsedtimer.h>
+#include <qshortcut.h>
+
 #ifndef QT_NO_PROGRESSDIALOG
 
 class QLabel;

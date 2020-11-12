@@ -24,9 +24,9 @@
 #ifndef AVFVIDEORENDERERCONTROL_H
 #define AVFVIDEORENDERERCONTROL_H
 
-#include <QVideoRendererControl>
-#include <QMutex>
-#include <QSize>
+#include <qvideorenderercontrol.h>
+#include <qmutex.h>
+#include <qsize.h>
 #include <avfvideooutput.h>
 
 #import <CoreVideo/CVBase.h>

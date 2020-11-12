@@ -29,7 +29,7 @@
 
 #include <qapplication.h>
 #include <qdebug.h>
-#include <QDesktopWidget>
+#include <qdesktopwidget.h>
 #include <qplatform_nativeinterface.h>
 #include <qmouseevent.h>
 #include <qpaintengine.h>

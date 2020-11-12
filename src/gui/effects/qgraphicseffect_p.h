@@ -25,9 +25,10 @@
 #define QGRAPHICSEFFECT_P_H
 
 #include <qgraphicseffect.h>
-#include <QPixmapCache>
+#include <qpixmapcache.h>
+#include <qscopedpointer.h>
+
 #include <qpixmapfilter_p.h>
-#include <QScopedPointer>
 
 #ifndef QT_NO_GRAPHICSEFFECT
 

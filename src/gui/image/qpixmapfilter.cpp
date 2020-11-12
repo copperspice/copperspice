@@ -23,19 +23,19 @@
 
 #include <qglobal.h>
 
-#include <QDebug>
-#include "qpainter.h"
-#include "qpixmap.h"
-#include "qpixmapfilter_p.h"
-#include "qvarlengtharray.h"
+#include <qdebug.h>
+#include <qmath.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qvarlengtharray.h>
 
-#include "qguiapplication_p.h"
-#include "qpaintengineex_p.h"
-#include "qpaintengine_raster_p.h"
-#include "qmath.h"
-#include "qmath_p.h"
-#include "qmemrotate_p.h"
-#include "qdrawhelper_p.h"
+#include <qguiapplication_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qpixmapfilter_p.h>
+#include <qpaintengineex_p.h>
+#include <qmath_p.h>
+#include <qmemrotate_p.h>
+#include <qdrawhelper_p.h>
 
 #ifndef QT_NO_GRAPHICSEFFECT
 

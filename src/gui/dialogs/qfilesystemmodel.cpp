@@ -34,7 +34,7 @@
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
-#include <QVarLengthArray>
+#include <qvarlengtharray.h>
 #endif
 
 #ifndef QT_NO_FILESYSTEMMODEL

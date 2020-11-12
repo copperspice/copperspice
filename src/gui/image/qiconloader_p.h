@@ -28,13 +28,13 @@
 
 #ifndef QT_NO_ICON
 
-#include <QIcon>
+#include <qicon.h>
 #include <qiconengine.h>
 #include <qpixmapcache.h>
-#include <qicon_p.h>
 #include <qhash.h>
 #include <qvector.h>
 
+#include <qicon_p.h>
 #include <qfactoryloader_p.h>
 
 class QIconLoader;

@@ -23,7 +23,7 @@
 
 #include <qglobal.h>
 #include <qvarlengtharray.h>
-#include <QDebug>
+#include <qdebug.h>
 #include <qmath.h>
 
 #include <qgridlayoutengine_p.h>

@@ -42,7 +42,7 @@
 // factory loader
 #include <qcoreapplication.h>
 #include <qfactoryloader_p.h>
-#include <QMutexLocker>
+#include <qmutexlocker.h>
 
 // image handlers
 #include <qbmphandler_p.h>

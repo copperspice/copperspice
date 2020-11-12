@@ -58,8 +58,6 @@ class QAbstractAnimation;
 struct CalculationCache;
 class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
 {
-   Q_DECLARE_PUBLIC(QStateMachine)
-
  public:
    enum State {
       NotRunning,
@@ -323,11 +321,15 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
    QMutex delayedEventsMutex;
 
    typedef QEvent *(*f_cloneEvent)(QEvent *);
+
    struct Handler {
       f_cloneEvent cloneEvent;
    };
 
    static const Handler *handler;
+
+ private:
+   Q_DECLARE_PUBLIC(QStateMachine)
 };
 
 Q_CORE_EXPORT const QStateMachinePrivate::Handler *qcoreStateMachineHandler();

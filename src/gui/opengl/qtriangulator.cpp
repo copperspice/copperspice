@@ -574,6 +574,7 @@ public:
     // QTriangulator::ComplexToSimple //
     //================================//
     friend class ComplexToSimple;
+
     class ComplexToSimple
     {
     public:
@@ -674,6 +675,7 @@ public:
         QInt64Set m_processedEdgePairs;
         int m_initialPointCount;
     };
+
 #ifdef Q_TRIANGULATOR_DEBUG
     friend class ComplexToSimple::DebugDialog;
 #endif
@@ -1304,10 +1306,12 @@ void QTriangulator<T>::ComplexToSimple::fillPriorityQueue()
         Q_ASSERT(m_edges.at(i).node == 0);
         Q_ASSERT(m_edges.at(i).pointingUp == m_edges.at(i).originallyPointingUp);
         Q_ASSERT(m_edges.at(i).pointingUp == (m_parent->m_vertices.at(m_edges.at(i).to) < m_parent->m_vertices.at(m_edges.at(i).from)));
-        // Ignore zero-length edges.
+
+        // Ignore zero-length edges
         if (m_parent->m_vertices.at(m_edges.at(i).to) != m_parent->m_vertices.at(m_edges.at(i).from)) {
             QPodPoint upper = m_parent->m_vertices.at(m_edges.at(i).upper());
             QPodPoint lower = m_parent->m_vertices.at(m_edges.at(i).lower());
+
             Event upperEvent = {{upper.x, upper.y}, Event::Upper, i};
             Event lowerEvent = {{lower.x, lower.y}, Event::Lower, i};
             m_events.append(upperEvent);
@@ -1857,6 +1861,7 @@ void QTriangulator<T>::SimpleToMonotone::removeZeroLengthEdges()
             ++count;
         }
     }
+
     m_edges.resize(count);
     for (int i = 0; i < m_edges.size(); ++i) {
         m_edges[i].next = newMapping.at(m_edges[i].next);
@@ -1885,7 +1890,9 @@ bool QTriangulator<T>::SimpleToMonotone::edgeIsLeftOfEdge(int leftEdgeIndex, int
     const Edge &rightEdge = m_edges.at(rightEdgeIndex);
     const QPodPoint &u = m_parent->m_vertices.at(rightEdge.upper());
     const QPodPoint &l = m_parent->m_vertices.at(rightEdge.lower());
+
     qint64 d = QT_PREPEND_NAMESPACE(qPointDistanceFromLine)(m_parent->m_vertices.at(leftEdge.upper()), l, u);
+
     // d < 0: left, d > 0: right, d == 0: on top
     if (d == 0)
         d = QT_PREPEND_NAMESPACE(qPointDistanceFromLine)(m_parent->m_vertices.at(leftEdge.lower()), l, u);

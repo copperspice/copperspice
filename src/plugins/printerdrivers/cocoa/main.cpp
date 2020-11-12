@@ -43,7 +43,7 @@ CS_PLUGIN_REGISTER(QCocoaPrinterSupportPlugin)
 QPlatformPrinterSupport *QCocoaPrinterSupportPlugin::create(const QString &key)
 {
    if (key.compare(key, "printerdriver_cocoa", Qt::CaseInsensitive) != 0) {
-      return 0;
+      return nullptr;
    }
 
    QApplication *app = dynamic_cast<QApplication *>(QCoreApplication::instance());
