@@ -2514,15 +2514,15 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
 
    QtFontDesc desc;
    QList<QtFontFamily *> blackListed;
-   auto index = match(script, request, family_name, foundry_name, &desc, blackListed);
+   auto fontFamily = match(script, request, family_name, foundry_name, &desc, blackListed);
 
-   if (index != nullptr) {
+   if (fontFamily != nullptr) {
       engine = loadEngine(script, request, desc.family, desc.foundry, desc.style, desc.size);
 
       if (engine != nullptr) {
          initFontDef(desc, request, &engine->fontDef, multi);
       } else {
-         blackListed.append(index);
+         blackListed.append(fontFamily);
       }
 
    } else {
@@ -2556,8 +2556,8 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
                QtFontDesc desc;
 
                do {
-                  index = match(script, def, def.family, QString(""), &desc, blackListed);
-                  if (index != nullptr) {
+                  fontFamily = match(script, def, def.family, QString(""), &desc, blackListed);
+                  if (fontFamily != nullptr) {
                      QFontDef loadDef = def;
 
                      if (loadDef.family.isEmpty()) {
@@ -2569,11 +2569,11 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
                      if (engine != nullptr) {
                         initFontDef(desc, loadDef, &engine->fontDef, multi);
                      } else {
-                        blackListed.append(index);
+                        blackListed.append(fontFamily);
                      }
                   }
 
-               } while ((index != nullptr) && ! engine);
+               } while ((fontFamily != nullptr) && ! engine);
             }
          }
       }
