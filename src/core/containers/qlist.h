@@ -251,6 +251,16 @@ class QList
       m_data.push_front(value);
    }
 
+  void remove(size_type i) {
+      Q_ASSERT_X(i >= 0 && i < size(), "QList<T>::remove", "index out of range");
+      erase(begin() + i, begin() + i + 1);
+   }
+
+   void remove(size_type i, size_type n)  {
+      Q_ASSERT_X(i >= 0 && n >= 0 && i + n <= size(), "QList<T>::remove", "index out of range");
+      m_data.erase(m_data.begin() + i, m_data.begin() + i + n);
+   }
+
    size_type removeAll(const T &value);
 
    void removeAt(size_type i) {

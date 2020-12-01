@@ -130,11 +130,11 @@ class QLinkedList
    }
 
    reference front() {
-      return m_data.first();
+      return m_data.front();
    }
 
    const_reference front() const {
-      return m_data.first();
+      return m_data.front();
    }
 
    reference last() {
