@@ -271,7 +271,7 @@ class QMap
    QMap(const QMap<Key, Val, C> &other) = default;
    QMap(QMap<Key, Val, C> &&other)      = default;
 
-   QMap(std::initializer_list<std::pair<Key, Val>> list, const C &compare = C())
+   QMap(std::initializer_list<std::pair<const Key, Val>> list, const C &compare = C())
       : m_data(list, compare) {}
 
    explicit QMap(C compare)

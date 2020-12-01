@@ -291,7 +291,7 @@ class QFlatMap
    QFlatMap(const QFlatMap<Key, Val, C> &other) = default;
    QFlatMap(QFlatMap<Key, Val, C> &&other)      = default;
 
-   QFlatMap(std::initializer_list<std::pair<Key, Val>> list, const C &compare = C())
+   QFlatMap(std::initializer_list<std::pair<const Key, Val>> list, const C &compare = C())
       : m_compare(compare) {
 
       for (auto &item : list) {

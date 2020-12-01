@@ -253,7 +253,7 @@ class QMultiHash
    QMultiHash(const QMultiHash<Key, Val, Hash, KeyEqual> &other) = default;
    QMultiHash(QMultiHash<Key, Val, Hash, KeyEqual> &&other) = default;
 
-   QMultiHash(std::initializer_list<std::pair<Key, Val> > list, const Hash & hash = Hash(),
+   QMultiHash(std::initializer_list<std::pair<const Key, Val> > list, const Hash & hash = Hash(),
                   const KeyEqual &key_equal = KeyEqual())
       : m_data(list, hash, key_equal) {}
 

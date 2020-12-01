@@ -252,7 +252,7 @@ class QHash
    QHash(const QHash<Key, Val, Hash, KeyEqual> &other) = default;
    QHash(QHash<Key, Val, Hash, KeyEqual> &&other) = default;
 
-   QHash(std::initializer_list<std::pair<Key, Val> > list, const Hash & hash = Hash(), const KeyEqual &key_equal = KeyEqual())
+   QHash(std::initializer_list<std::pair<const Key, Val> > list, const Hash & hash = Hash(), const KeyEqual &key_equal = KeyEqual())
       : m_data(list, hash, key_equal) {}
 
    explicit QHash(const Hash & hash, const KeyEqual &key_equal = KeyEqual())
