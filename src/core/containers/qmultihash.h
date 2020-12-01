@@ -369,6 +369,11 @@ class QMultiHash
       return find(key, value);
    }
 
+   iterator insert(const std::pair<const Key, Val> &data) {
+      auto iter = m_data.lower_bound(data.first);
+      return m_data.insert(iter, data);
+   }
+
    iterator insert(const Key &key, const Val &value) {
       return insertMulti(key, value);
    }

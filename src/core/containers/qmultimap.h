@@ -381,6 +381,11 @@ class QMultiMap
       return find(key, value);
    }
 
+   iterator insert(const std::pair<const Key, Val> &data) {
+      auto iter = m_data.lower_bound(data.first);
+      return m_data.insert(iter, data);
+   }
+
    iterator insert(const Key &key, const Val &value)  {
       return insertMulti(key, value);
    }
@@ -391,7 +396,7 @@ class QMultiMap
    }
 
    iterator insertMulti(const Key &key, const Val &value)  {
-      // ensure newest item is first
+      // ensures newest item is first
       auto iter = m_data.lower_bound(key);
       return m_data.emplace_hint(iter, key, value);
    }
