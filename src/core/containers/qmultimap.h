@@ -272,8 +272,8 @@ class QMultiMap
    QMultiMap(const QMultiMap<Key, Val, C> &other) = default;
    QMultiMap(QMultiMap<Key, Val, C> &&other)      = default;
 
-   QMultiMap(std::initializer_list<std::pair<Key, Val>> list, const C &compare = C())
-      : m_data(list)  {}
+   QMultiMap(std::initializer_list<std::pair<const Key, Val>> list, const C &compare = C())
+      : m_data(list, compare) {}
 
    explicit QMultiMap(C compare)
       : m_data(compare) {}
