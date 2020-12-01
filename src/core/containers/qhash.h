@@ -236,7 +236,9 @@ class QHash
    using hasher          = typename std::unordered_map<Key, Val, Hash, KeyEqual>::hasher;
    using key_equal       = typename std::unordered_map<Key, Val, Hash, KeyEqual>::key_equal;
 
-   using allocator_type         = typename std::unordered_map<Key, Val, Hash, KeyEqual>::allocator_type;
+   using allocator_type  = typename std::unordered_map<Key, Val, Hash, KeyEqual>::allocator_type;
+
+   static constexpr int bucket_count = 1;
 
    // iterator and const_iterator are classes
 
@@ -244,8 +246,8 @@ class QHash
    using const_reference = const Val &;
 
    // java
-   using Java_Iterator          = QHashIterator<Key, Val, Hash, KeyEqual>;
-   using Java_MutableIterator   = QMutableHashIterator<Key, Val, Hash, KeyEqual>;
+   using Java_Iterator        = QHashIterator<Key, Val, Hash, KeyEqual>;
+   using Java_MutableIterator = QMutableHashIterator<Key, Val, Hash, KeyEqual>;
 
    QHash() = default;
 
@@ -253,7 +255,7 @@ class QHash
    QHash(QHash<Key, Val, Hash, KeyEqual> &&other) = default;
 
    QHash(std::initializer_list<std::pair<const Key, Val> > list, const Hash & hash = Hash(), const KeyEqual &key_equal = KeyEqual())
-      : m_data(list, hash, key_equal) {}
+      : m_data(list, bucket_count, hash, key_equal) {}
 
    explicit QHash(const Hash & hash, const KeyEqual &key_equal = KeyEqual())
       : m_data(hash, key_equal) {}

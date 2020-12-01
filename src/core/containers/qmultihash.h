@@ -237,7 +237,9 @@ class QMultiHash
    using hasher          = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::hasher;
    using key_equal       = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::key_equal;
 
-   using allocator_type         = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::allocator_type;
+   using allocator_type  = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::allocator_type;
+
+   static constexpr int bucket_count = 1;
 
    // iterator and const_iterator are classes
 
@@ -255,7 +257,7 @@ class QMultiHash
 
    QMultiHash(std::initializer_list<std::pair<const Key, Val> > list, const Hash & hash = Hash(),
                   const KeyEqual &key_equal = KeyEqual())
-      : m_data(list, hash, key_equal) {}
+      : m_data(list, bucket_count, hash, key_equal) {}
 
    explicit QMultiHash(const Hash & hash, const KeyEqual &key_equal = KeyEqual())
       : m_data(hash, key_equal) {}
