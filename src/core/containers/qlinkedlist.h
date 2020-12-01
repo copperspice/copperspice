@@ -147,6 +147,10 @@ class QLinkedList
       return *(--m_data.end());
    }
 
+   size_type length() const {
+      return size();
+   }
+
    void pop_front() {
       Q_ASSERT(! isEmpty());
       m_data.pop_front();
