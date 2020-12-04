@@ -79,7 +79,7 @@ class Q_CORE_EXPORT QStringParser
 
       // V is data type quint64, long, short, etc
       template <typename T, typename V, typename = typename std::enable_if<std::is_integral<V>::value>::type>
-      static T formatArg(const T &str, V value, int fieldwidth = 0, int base = 10, QChar32 fillChar = QChar32(' '))
+      [[nodiscard]] static T formatArg(const T &str, V value, int fieldwidth = 0, int base = 10, QChar32 fillChar = QChar32(' '))
       {
          ArgEscapeData d = findArgEscapes(str);
 
@@ -137,7 +137,7 @@ class Q_CORE_EXPORT QStringParser
 
       // V data type is double, float, long double
       template <typename T, typename V, typename = typename std::enable_if<std::is_floating_point<V>::value>::type>
-      static T formatArg(const T &str, V value, int fieldwidth = 0, char format = 'g', int precision = 6,
+      [[nodiscard]] static T formatArg(const T &str, V value, int fieldwidth = 0, char format = 'g', int precision = 6,
                   QChar32 fillChar = QChar32(' ') )
       {
          ArgEscapeData d = findArgEscapes(str);
@@ -241,7 +241,7 @@ class Q_CORE_EXPORT QStringParser
       template <typename T, typename V,
                   typename = typename std::enable_if<! std::is_arithmetic<typename std::remove_reference<V>::type>::value>::type>
 
-      static T formatArg(const T &str, V &&value, int fieldwidth = 0, QChar32 fillChar = QChar32(' '))
+      [[nodiscard]] static T formatArg(const T &str, V &&value, int fieldwidth = 0, QChar32 fillChar = QChar32(' '))
       {
          const T tmp(std::forward<V>(value));
          ArgEscapeData d = findArgEscapes(str);
@@ -260,7 +260,7 @@ class Q_CORE_EXPORT QStringParser
 
       // a4
       template <typename T, typename ...Ts>
-      static T formatArgs(const T &str, Ts... args)
+      [[nodiscard]] static T formatArgs(const T &str, Ts... args)
       {
          const QVector<T> argList = { T(args)... };
          return multiArg(str, argList);
@@ -272,7 +272,7 @@ class Q_CORE_EXPORT QStringParser
 
       // b1  value - quint64, long, short, etc
       template <typename T = QString8, typename V>
-      static T number(V value, int base  = 10)
+      [[nodiscard]] static T number(V value, int base  = 10)
       {
          if (base < 2 || base > 36) {
             qWarning("Warning: QStringParser::number() invalid numeric base (%d)", base);
@@ -293,7 +293,7 @@ class Q_CORE_EXPORT QStringParser
 
       // b2  value
       template <typename T = QString8>
-      static T number(double value, char format = 'g', int precision = 6)
+      [[nodiscard]] static T number(double value, char format = 'g', int precision = 6)
       {
          std::basic_ostringstream<char> stream;
 

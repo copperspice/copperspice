@@ -788,25 +788,25 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       // wrappers
       template <typename SP = QStringParser, typename ...Ts>
-      QString16 formatArg(Ts&&... args) const
+      [[nodiscard]] QString16 formatArg(Ts&&... args) const
       {
          return SP::template formatArg<QString16>(*this, std::forward<Ts>(args)...);
       }
 
       template <typename SP = QStringParser, typename ...Ts>
-      QString16 formatArgs(Ts... args) const
+      [[nodiscard]] QString16 formatArgs(Ts... args) const
       {
          return SP::template formatArgs<QString16>(*this, args...);
       }
 
       template <typename V, typename SP = QStringParser>
-      static QString16 number(V value, int base  = 10)
+      [[nodiscard]] static QString16 number(V value, int base  = 10)
       {
          return SP::template number<QString16>(value, base);
       }
 
       template <typename SP = QStringParser>
-      static QString16 number(double value, char format = 'g', int precision = 6)
+      [[nodiscard]] static QString16 number(double value, char format = 'g', int precision = 6)
       {
          return SP::template number<QString16>(value, format, precision);
       }

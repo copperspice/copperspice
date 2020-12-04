@@ -796,25 +796,25 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       // wrappers
       template <typename SP = QStringParser, typename ...Ts>
-      QString8 formatArg(Ts&&... args) const
+      [[nodiscard]] QString8 formatArg(Ts&&... args) const
       {
          return SP::template formatArg<QString8>(*this, std::forward<Ts>(args)...);
       }
 
       template <typename SP = QStringParser, typename ...Ts>
-      QString8 formatArgs(Ts... args) const
+      [[nodiscard]] QString8 formatArgs(Ts... args) const
       {
          return SP::template formatArgs<QString8>(*this, args...);
       }
 
       template <typename V, typename SP = QStringParser>
-      static QString8 number(V value, int base  = 10)
+      [[nodiscard]] static QString8 number(V value, int base  = 10)
       {
          return SP::template number<QString8>(value, base);
       }
 
       template <typename SP = QStringParser>
-      static QString8 number(double value, char format = 'g', int precision = 6)
+      [[nodiscard]] static QString8 number(double value, char format = 'g', int precision = 6)
       {
          return SP::template number<QString8>(value, format, precision);
       }
