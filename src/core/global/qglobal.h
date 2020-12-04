@@ -300,7 +300,7 @@
 //  ****
 
 #  if _MSC_VER < 1926
-#    error "CopperSpice requires Visual Studio 2019 Version 15.5 or newer"
+#    error "CopperSpice requires Visual Studio 2019 Version 16.6 or newer"
 #  endif
 
 #  define Q_CC_MSVC         (_MSC_VER)
