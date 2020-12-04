@@ -136,7 +136,7 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
    int len  = -1;
    int size = PATH_CHUNK_SIZE;
 
-   while (1) {
+   while (true) {
       s = (char *) ::realloc(s, size);
       Q_CHECK_PTR(s);
       len = ::readlink(link.nativeFilePath().constData(), s, size);

@@ -80,7 +80,7 @@ void debugBinaryString(const char *data, qint64 maxlen)
             qWarning("QIODevice::"#function": Called with maxSize < 0"); \
             return returnType; \
         } \
-    } while (0)
+    } while (false)
 
 #define CHECK_WRITABLE(function, returnType) \
    do { \
@@ -90,7 +90,7 @@ void debugBinaryString(const char *data, qint64 maxlen)
            qWarning("QIODevice::"#function": ReadOnly device"); \
            return returnType; \
        } \
-   } while (0)
+   } while (false)
 
 
 bool QIODevicePrivate::check_readable() const

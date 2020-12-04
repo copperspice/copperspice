@@ -47,7 +47,7 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
     if (! d->m_string && ! d->device) { \
         qWarning("QTextStream: No device"); \
         return x; \
-    } } while (0)
+    } } while (false)
 
 // Base implementations of operator>> for ints and reals
 #define IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(type) do { \
@@ -64,7 +64,7 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
         setStatus(atEnd() ? QTextStream::ReadPastEnd : QTextStream::ReadCorruptData); \
         break; \
     } \
-    return *this; } while (0)
+    return *this; } while (false)
 
 #define IMPLEMENT_STREAM_RIGHT_REAL_OPERATOR(type) do { \
     Q_D(QTextStream); \
@@ -76,7 +76,7 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
         f = (type)0; \
         setStatus(atEnd() ? QTextStream::ReadPastEnd : QTextStream::ReadCorruptData); \
     } \
-    return *this; } while (0)
+    return *this; } while (false)
 
 
 class QDeviceClosedNotifier : public QObject

@@ -52,7 +52,7 @@ static const int MaxWriteBufferSize = 128 * 1024;
 #define Q_INIT_CHECK(returnValue) do { \
     if (! d->data) { \
         return returnValue; \
-    } } while (0)
+    } } while (false)
 
 #define S5_VERSION_5 0x05
 #define S5_CONNECT 0x01

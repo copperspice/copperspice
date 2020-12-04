@@ -792,7 +792,8 @@ QList<QSslCertificate> QSslSocketPrivate::systemCaCertificates()
 
       if (hSystemStore) {
          PCCERT_CONTEXT pc = NULL;
-         while (1) {
+
+         while (true) {
             pc = ptrCertFindCertificateInStore( hSystemStore, X509_ASN_ENCODING, 0, CERT_FIND_ANY, NULL, pc);
             if (!pc) {
                break;

@@ -53,8 +53,8 @@
 #define DEC_INDENT debug_indent = debug_indent.left(debug_indent.length()-2)
 #else
 #define LDEBUG if(0) qDebug()
-#define INC_INDENT do {} while(0)
-#define DEC_INDENT do {} while(0)
+#define INC_INDENT do {} while (false)
+#define DEC_INDENT do {} while (false)
 #endif
 
 // ################ should probably add frameFormatChange notification
@@ -2797,7 +2797,7 @@ void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosi
       tl->beginLayout();
       bool firstLine = true;
 
-      while (1) {
+      while (true) {
          QTextLine line = tl->createLine();
          if (!line.isValid()) {
             break;
@@ -2998,7 +2998,7 @@ QFixed QTextDocumentLayoutPrivate::findY(QFixed yFrom, const QTextLayoutStruct *
    requiredWidth = qMin(requiredWidth, layoutStruct->x_right - layoutStruct->x_left);
 
    //     qDebug() << "findY:" << yFrom;
-   while (1) {
+   while (true) {
       floatMargins(yFrom, layoutStruct, &left, &right);
       //         qDebug() << "    yFrom=" << yFrom<<"right=" << right << "left=" << left << "requiredWidth=" << requiredWidth;
       if (right - left >= requiredWidth) {

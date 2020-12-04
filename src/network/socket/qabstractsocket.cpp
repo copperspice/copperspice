@@ -45,7 +45,7 @@
 #define Q_CHECK_SOCKETENGINE(returnValue) do { \
     if (!d->socketEngine) { \
         return returnValue; \
-    } } while (0)
+    } } while (false)
 
 #ifndef QABSTRACTSOCKET_BUFFERSIZE
 #define QABSTRACTSOCKET_BUFFERSIZE 32768

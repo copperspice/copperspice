@@ -50,7 +50,7 @@
         if (! (a)->d->isParsed)  { \
            (a)->d->parse(); \
         } \
-    } while (0)
+    } while (false)
 
 #ifdef Q_OS_WIN
 

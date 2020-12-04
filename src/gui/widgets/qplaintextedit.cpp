@@ -315,7 +315,8 @@ void QPlainTextDocumentLayout::layoutBlock(const QTextBlock &block)
       availableWidth = qreal(INT_MAX); // similar to text edit with pageSize.width == 0
    }
    availableWidth -= 2 * margin + extraMargin;
-   while (1) {
+
+   while (true) {
       QTextLine line = tl->createLine();
       if (!line.isValid()) {
          break;

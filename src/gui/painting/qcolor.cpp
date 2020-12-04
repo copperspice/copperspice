@@ -38,7 +38,7 @@
             qWarning(#fn": invalid value %d", var); \
             var = qMax(0, qMin(var, 255)); \
         } \
-    } while (0)
+    } while (false)
 
 #define QCOLOR_REAL_RANGE_CHECK(fn, var) \
     do { \
@@ -46,7 +46,7 @@
             qWarning(#fn": invalid value %g", var); \
             var = qMax(qreal(0.0), qMin(var, qreal(1.0)));      \
         } \
-    } while (0)
+    } while (false)
 
 QColor::QColor(Qt::GlobalColor color)
 {

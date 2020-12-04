@@ -392,11 +392,11 @@
 
 #define Q_INIT_RESOURCE(name) \
    do { extern int QT_MANGLE_NAMESPACE(qInitResources_ ## name) ();       \
-   QT_MANGLE_NAMESPACE(qInitResources_ ## name) (); } while (0)
+   QT_MANGLE_NAMESPACE(qInitResources_ ## name) (); } while (false)
 
 #define Q_CLEANUP_RESOURCE(name) \
    do { extern int QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) ();    \
-   QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (0)
+   QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (false)
 
 // make sure to update QVariant when changing the following
 
@@ -645,7 +645,7 @@ Q_CORE_EXPORT const char *qVersion();
 Q_CORE_EXPORT void qt_check_pointer(const char *, int);
 Q_CORE_EXPORT void qBadAlloc();
 
-#define Q_CHECK_PTR(p) do { if (!(p)) qBadAlloc(); } while (0)
+#define Q_CHECK_PTR(p) do { if (!(p)) qBadAlloc(); } while (false)
 
 template <typename T>
 inline T *q_check_ptr(T *p)

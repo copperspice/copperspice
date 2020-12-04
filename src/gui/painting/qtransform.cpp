@@ -69,7 +69,7 @@
                 ny *= w;                                                \
             }                                                           \
         }                                                               \
-    } while (0)
+    } while (false)
 
 QTransform::QTransform()
    : affine(true)

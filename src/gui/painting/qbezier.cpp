@@ -624,7 +624,8 @@ qreal QBezier::tAtLength(qreal l) const
    //int iters = 0;
    //qDebug()<<"LEN is "<<l<<len;
    qreal lastBigger = qreal(1.0);
-   while (1) {
+
+   while (true) {
       //qDebug()<<"\tt is "<<t;
       QBezier right = *this;
       QBezier left;

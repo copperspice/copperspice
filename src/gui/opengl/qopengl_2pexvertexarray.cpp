@@ -134,7 +134,7 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
                 break;
             }
         }
-    } while (0);
+    } while (false);
 
     if (!outline)
         addClosingLine(lastMoveTo);

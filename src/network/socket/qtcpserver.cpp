@@ -37,7 +37,7 @@
 #define Q_CHECK_SOCKETENGINE(returnValue) do { \
     if (! d->socketEngine) { \
         return returnValue; \
-    } } while (0)
+    } } while (false)
 
 
 /*! \internal

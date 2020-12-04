@@ -110,7 +110,7 @@ static int numerusHelper(int n, const uchar *rules, int rulesSize)
     do { \
         if (i >= rulesSize) \
             return -1; \
-    } while (0)
+    } while (false)
 
    int result = 0;
    int i = 0;
