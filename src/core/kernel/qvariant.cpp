@@ -3593,7 +3593,7 @@ uint QVariant::getTypeId(QString name)
    uint retval = QVariant::Invalid;
 
    for (const auto &item : builtinTypes) {
-      if (strcmp(item.meta_typeName, name.constData()))  {
+      if (strcmp(item.meta_typeName, name.constData()) == 0)  {
          retval = item.meta_typeId;
          break;
       }
@@ -3601,7 +3601,7 @@ uint QVariant::getTypeId(QString name)
 
    if (retval == QVariant::Invalid) {
       for (const auto &item : m_userTypes) {
-         if (strcmp(item.meta_typeName, name.constData()))  {
+         if (strcmp(item.meta_typeName, name.constData()) == 0)  {
             retval = item.meta_typeId;
             break;
          }
