@@ -361,7 +361,7 @@ QDataStream &QDataStream::operator>>(bool &i)
 
 QDataStream &QDataStream::operator>>(float &f)
 {
-   if (version() >= QDataStream::Qt_4_8 && floatingPointPrecision() == QDataStream::DoublePrecision) {
+   if (floatingPointPrecision() == QDataStream::DoublePrecision) {
       double d;
       *this >> d;
       f = d;
@@ -406,7 +406,7 @@ QDataStream &QDataStream::operator>>(float &f)
 
 QDataStream &QDataStream::operator>>(double &f)
 {
-   if (version() >= QDataStream::Qt_4_6 && floatingPointPrecision() == QDataStream::SinglePrecision) {
+   if (floatingPointPrecision() == QDataStream::SinglePrecision) {
       float d;
       *this >> d;
       f = d;
@@ -695,7 +695,7 @@ QDataStream &QDataStream::operator<<(bool i)
 
 QDataStream &QDataStream::operator<<(float f)
 {
-   if (version() >= QDataStream::Qt_4_8 && floatingPointPrecision() == QDataStream::DoublePrecision) {
+   if (floatingPointPrecision() == QDataStream::DoublePrecision) {
       *this << double(f);
       return *this;
    }
@@ -734,7 +734,7 @@ QDataStream &QDataStream::operator<<(float f)
 
 QDataStream &QDataStream::operator<<(double f)
 {
-   if (version() >= QDataStream::Qt_4_8 && floatingPointPrecision() == QDataStream::SinglePrecision) {
+   if (floatingPointPrecision() == QDataStream::SinglePrecision) {
       *this << float(f);
       return *this;
    }

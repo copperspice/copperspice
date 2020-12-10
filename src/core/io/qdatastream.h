@@ -54,18 +54,9 @@ class Q_CORE_EXPORT QDataStream
 #error (CopperSpice compile issue in qdatastream.h) Verify version number is listed in the following enum
 #endif
 
-   // emerald - verify if used
-   enum Version {
-      Qt_4_0 = 7,
-      Qt_4_1 = Qt_4_0,
-      Qt_4_2 = 8,
-      Qt_4_3 = 9,
-      Qt_4_4 = 10,
-      Qt_4_5 = 11,
-      Qt_4_6 = 12,
-      Qt_4_7 = Qt_4_6,
-      Qt_4_8 = Qt_4_7,
+   // emerald, may want to consider adding a setVersion(QDataStream::CS_1_7) to a stream written to disk
 
+   enum Version {
       CS_1_0 = 128,
       CS_1_1 = CS_1_0,
       CS_1_2 = CS_1_1,
