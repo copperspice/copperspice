@@ -637,9 +637,9 @@ QString16 QString16::fromUtf16(const char16_t *str, size_type numOfChars)
    return retval;
 }
 
-QString16 QString16::fromUtf16(const QString16 &str)
+QString16 QString16::fromUtf8(const QString8 &str)
 {
-   return fromUtf16((const char16_t *)str.constData(), str.size_storage());
+   return fromUtf8(str.constData(), str.size_storage());
 }
 
 QString16 QString16::fromStdWString(const std::wstring &str, size_type numOfChars)

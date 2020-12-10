@@ -781,7 +781,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       static QString16 fromUtf8(const char *str, size_type numOfChars = -1);
 
       static QString16 fromUtf16(const char16_t *str, size_type numOfChars = -1);
-      static QString16 fromUtf16(const QString16 &str);
+      static QString16 fromUtf8(const QString8 &str);
 
       static QString16 fromStdWString(const std::wstring &str, size_type numOfChars = -1);
       static QString16 fromStdString(const std::string &str, size_type numOfChars = -1);
