@@ -55,12 +55,28 @@ template <typename T>
 T safe_cast(qint64 data, bool *ok)
 {
    if constexpr(std::is_same_v<T, quint64>) {
+      // uint64
+
       *ok = true;
       return static_cast<T>(data);
 
-   } else {
+   } else if constexpr (std::numeric_limits<T>::is_signed) {
+      // T is signed
 
-      if (data >= std::numeric_limits<T>::min() && data <= std::numeric_limits<T>::max())  {
+      if (data >= std::numeric_limits<T>::min() && data <= std::numeric_limits<T>::max()) {
+         // value in data will fit in the current T
+         *ok = true;
+         return static_cast<T>(data);
+
+      } else {
+         *ok = false;
+         return 0;
+      }
+
+   } else {
+      // T is unsigned
+
+      if (data >= 0 && static_cast<quint64>(data) <= std::numeric_limits<T>::max()) {
          // value in data will fit in the current T
          *ok = true;
          return static_cast<T>(data);
