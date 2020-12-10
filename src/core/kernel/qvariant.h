@@ -352,6 +352,8 @@ class Q_CORE_EXPORT QVariant
    bool toBool(bool *ok = nullptr) const;
    int toInt(bool *ok = nullptr) const;
    uint toUInt(bool *ok = nullptr) const;
+   long toLong(bool *ok = nullptr) const;
+   ulong toULong(bool *ok = nullptr) const;
    qint64 toLongLong(bool *ok = nullptr) const;
    quint64 toULongLong(bool *ok = nullptr) const;
    double toDouble(bool *ok = nullptr) const;

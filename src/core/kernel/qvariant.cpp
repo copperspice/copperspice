@@ -3666,6 +3666,16 @@ uint QVariant::toUInt(bool *ok) const
    return cs_internal_VariantToType<uint>(QVariant::UInt, ok);
 }
 
+long QVariant::toLong(bool *ok) const
+{
+   return cs_internal_VariantToType<long>(QVariant::Long, ok);
+}
+
+ulong QVariant::toULong(bool *ok) const
+{
+   return cs_internal_VariantToType<ulong>(QVariant::ULong, ok);
+}
+
 qint64 QVariant::toLongLong(bool *ok) const
 {
    return cs_internal_VariantToType<qint64>(QVariant::LongLong, ok);
