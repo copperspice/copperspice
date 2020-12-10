@@ -1139,6 +1139,10 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                setValue<QString>(QString::fromUtf8(getData<QByteArray>()));
                break;
 
+            case QVariant::String16:
+               setValue<QString>(QString::fromUtf16(getData<QString16>()));
+               break;
+
             case QVariant::StringList: {
                QStringList tmp = getData<QStringList>();
 
@@ -1270,6 +1274,10 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
             case QVariant::ByteArray:
                setValue<QString16>(QString16::fromUtf8(getData<QByteArray>()));
+               break;
+
+            case QVariant::String:
+               setValue<QString16>(QString16::fromUtf8(getData<QString>()));
                break;
 
             case QVariant::StringList: {
@@ -2506,6 +2514,9 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::ByteArray) {
             return true;
 
+         } else if (current_userType == QVariant::String || current_userType == QVariant::String16) {
+            return true;
+
          } else if (current_userType == QVariant::StringList) {
             return true;
 
@@ -3709,6 +3720,11 @@ QChar32 QVariant::toChar() const
 QString QVariant::toString() const
 {
    return cs_internal_VariantToType<QString>(QVariant::String);
+}
+
+QString16 QVariant::toString16() const
+{
+   return cs_internal_VariantToType<QString16>(QVariant::String16);
 }
 
 QByteArray QVariant::toByteArray() const
