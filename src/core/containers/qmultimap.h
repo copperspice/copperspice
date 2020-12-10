@@ -406,11 +406,22 @@ class QMultiMap
       return iter;
    }
 
-   const Key key(const Val &value) const;
-   const Key key(const Val &value, const Key &defaultKey) const;
+   const Key key(const Val &value, const Key &defaultKey = Key()) const;
 
    QList<Key> keys() const;
    QList<Key> keys(const Val &value) const;
+
+   Val &last()  {
+      return (end()- 1).value();
+   }
+
+   const Val &last() const  {
+      return (end() - 1).value();
+   }
+
+   const Key &lastKey() const  {
+      return (end() - 1).key();
+   }
 
    iterator lowerBound(const Key &key) {
       return m_data.lower_bound(key);
@@ -612,12 +623,6 @@ typename QMultiMap<Key, Val, C>::size_type QMultiMap<Key, Val, C>::count(const K
    }
 
    return retval;
-}
-
-template <class Key, class Val, class C>
-const Key QMultiMap<Key, Val, C>::key(const Val &value) const
-{
-   return key(value, Key());
 }
 
 template <class Key, class Val, class C>
