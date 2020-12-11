@@ -114,18 +114,8 @@ void QDataStream::setDevice(QIODevice *d)
       delete dev;
       owndev = false;
    }
+
    dev = d;
-}
-
-/*!
-    \obsolete
-    Unsets the I/O device.
-    Use setDevice(0) instead.
-*/
-
-void QDataStream::unsetDevice()
-{
-   setDevice(0);
 }
 
 

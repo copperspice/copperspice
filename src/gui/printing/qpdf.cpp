@@ -1428,7 +1428,7 @@ bool QPdfEngine::end()
     Q_D(QPdfEngine);
     d->writeTail();
 
-    d->stream->unsetDevice();
+    d->stream->setDevice(nullptr);
 
     qDeleteAll(d->fonts);
     d->fonts.clear();

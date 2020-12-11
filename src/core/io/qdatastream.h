@@ -99,7 +99,6 @@ class Q_CORE_EXPORT QDataStream
 
    inline QIODevice *device() const;
    void setDevice(QIODevice *);
-   void unsetDevice();
 
    bool atEnd() const;
 
