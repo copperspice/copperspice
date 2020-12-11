@@ -28,6 +28,7 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QLineF
    QLocale
    QMargins
+   QMarginsF
    QMessageAuthenticationCode
    QPair
    QPoint
@@ -71,6 +72,7 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinef.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmargins.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmarginsf.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmessageauthenticationcode.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qpair.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qpoint.h
