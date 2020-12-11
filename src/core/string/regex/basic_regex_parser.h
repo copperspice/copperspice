@@ -1871,7 +1871,7 @@ charT basic_regex_parser<charT, traits>::unescape_character()
                return result;
             }
 
-            char32_t i = this->m_traits.toi(m_position, m_end, 16);
+            intmax_t i = this->m_traits.toi(m_position, m_end, 16);
 
             if ((m_position == m_end) || (i < 0) ||
                   (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_brace)) {
@@ -1887,11 +1887,12 @@ charT basic_regex_parser<charT, traits>::unescape_character()
             }
 
             ++m_position;
-            result = charT(i);
+
+            result = charT(static_cast<char32_t>(i));
 
          } else  {
             std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), static_cast<std::ptrdiff_t>(m_end - m_position));
-            char32_t i = this->m_traits.toi(m_position, m_position + len, 16);
+            intmax_t i = this->m_traits.toi(m_position, m_position + len, 16);
 
             if ((i < 0) || ! valid_value(charT(0), i)) {
                // Rewind to start of escape:
@@ -1903,7 +1904,7 @@ charT basic_regex_parser<charT, traits>::unescape_character()
                return result;
             }
 
-            result = charT(i);
+            result = charT(static_cast<char32_t>(i));
          }
 
          return result;
