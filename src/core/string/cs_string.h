@@ -1553,11 +1553,11 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
    while (iter != iter_end)   {
 
       if (*iter == ch)  {
+
          auto text_iter    = iter + 1;
          auto pattern_iter = str  + 1;
 
-         while (text_iter != iter_end && pattern_iter != str + N)  {
-
+         while (text_iter != iter_end && pattern_iter != str + N - 1)  {
             if (*text_iter == *pattern_iter)  {
                ++text_iter;
                ++pattern_iter;
@@ -1568,7 +1568,7 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
             }
          }
 
-         if (pattern_iter == str + N) {
+         if (pattern_iter == str + N - 1) {
             // found a match
             return iter;
          }

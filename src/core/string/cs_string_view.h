@@ -579,7 +579,7 @@ typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(co
          auto text_iter    = iter + 1;
          auto pattern_iter = str  + 1;
 
-         while (text_iter != iter_end && pattern_iter != str + N)  {
+         while (text_iter != iter_end && pattern_iter != str + N - 1)  {
 
             if (*text_iter == *pattern_iter)  {
                ++text_iter;
@@ -591,7 +591,7 @@ typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(co
             }
          }
 
-         if (pattern_iter == str + N) {
+         if (pattern_iter == str + N - 1) {
             // found a match
             return iter;
          }
