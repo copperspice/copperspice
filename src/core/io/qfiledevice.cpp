@@ -29,7 +29,7 @@
 static const int QFILE_WRITEBUFFER_SIZE = 16384;
 
 QFileDevicePrivate::QFileDevicePrivate()
-   : fileEngine(0), lastWasWrite(false),
+   : fileEngine(nullptr), lastWasWrite(false),
      writeBuffer(QFILE_WRITEBUFFER_SIZE), error(QFile::NoError),
      cachedSize(0)
 {
@@ -70,7 +70,7 @@ void QFileDevicePrivate::setError(QFileDevice::FileError err, int errNum)
 
 
 QFileDevice::QFileDevice()
-   : QIODevice(*new QFileDevicePrivate, 0)
+   : QIODevice(*new QFileDevicePrivate, nullptr)
 {
 }
 
@@ -481,7 +481,7 @@ uchar *QFileDevice::map(qint64 offset, qint64 size, MemoryMapFlags flags)
          && d->fileEngine->supportsExtension(QAbstractFileEngine::MapExtension)) {
       unsetError();
       uchar *address = d->fileEngine->map(offset, size, flags);
-      if (address == 0) {
+      if (address == nullptr) {
          d->setError(d->fileEngine->error(), d->fileEngine->errorString());
       }
       return address;

@@ -57,11 +57,11 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
    // so this would only create confusion (ca not lock, but no lock file to read from).
    const DWORD dwShareMode = FILE_SHARE_READ;
 
-   SECURITY_ATTRIBUTES securityAtts = { sizeof(SECURITY_ATTRIBUTES), NULL, FALSE };
+   SECURITY_ATTRIBUTES securityAtts = { sizeof(SECURITY_ATTRIBUTES), nullptr, FALSE };
 
    HANDLE fh = CreateFile(fileEntry.nativeFilePath().toStdWString().c_str(), GENERIC_WRITE, dwShareMode, &securityAtts,
          CREATE_NEW, // error if already exists
-         FILE_ATTRIBUTE_NORMAL, NULL);
+         FILE_ATTRIBUTE_NORMAL, nullptr);
 
    if (fh == INVALID_HANDLE_VALUE) {
       const DWORD lastError = GetLastError();
@@ -100,7 +100,7 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
    DWORD bytesWritten = 0;
    QLockFile::LockError error = QLockFile::NoError;
 
-   if (! WriteFile(fh, fileData.constData(), fileData.size(), &bytesWritten, NULL) || ! FlushFileBuffers(fh)) {
+   if (! WriteFile(fh, fileData.constData(), fileData.size(), &bytesWritten, nullptr) || ! FlushFileBuffers(fh)) {
       error = QLockFile::UnknownError;   // partition full
    }
 
@@ -176,7 +176,7 @@ QString QLockFilePrivate::processNameByPid(qint64 pid)
    }
 
    std::wstring buffer(MAX_PATH, L'\0');
-   const DWORD length = qGetModuleFileNameEx(hProcess, NULL, &buffer[0], buffer.size());
+   const DWORD length = qGetModuleFileNameEx(hProcess, nullptr, &buffer[0], buffer.size());
 
    CloseHandle(hProcess);
    FreeLibrary(hPsapi);

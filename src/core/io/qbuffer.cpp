@@ -31,7 +31,7 @@ class QBufferPrivate : public QIODevicePrivate
 
  public:
    QBufferPrivate()
-      : buf(0), writtenSinceLastEmit(0), signalConnectionCount(0), signalsEmitted(false)
+      : buf(nullptr), writtenSinceLastEmit(0), signalConnectionCount(0), signalsEmitted(false)
 
    { }
    ~QBufferPrivate() { }

@@ -40,7 +40,7 @@ class QIODevicePrivateLinearBuffer
 {
  public:
    QIODevicePrivateLinearBuffer(int)
-      : len(0), first(0), buf(0), capacity(0) {
+      : len(0), first(nullptr), buf(nullptr), capacity(0) {
    }
 
    ~QIODevicePrivateLinearBuffer() {

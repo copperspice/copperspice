@@ -78,7 +78,7 @@ bool QFilePrivate::openExternalFile(int flags, int fd, QFile::FileHandleFlags ha
 
 #else
    delete fileEngine;
-   fileEngine = 0;
+   fileEngine = nullptr;
    QFSFileEngine *fe = new QFSFileEngine;
    fileEngine = fe;
 
@@ -94,7 +94,7 @@ bool QFilePrivate::openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags 
    return false;
 #else
    delete fileEngine;
-   fileEngine = 0;
+   fileEngine = nullptr;
    QFSFileEngine *fe = new QFSFileEngine;
    fileEngine = fe;
    return fe->open(QIODevice::OpenMode(flags), fh, handleFlags);
@@ -164,7 +164,7 @@ void QFile::setFileName(const QString &name)
 
    if (d->fileEngine) { //get a new file engine later
       delete d->fileEngine;
-      d->fileEngine = 0;
+      d->fileEngine = nullptr;
    }
 
    d->fileName = name;

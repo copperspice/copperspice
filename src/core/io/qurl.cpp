@@ -529,7 +529,7 @@ inline void QUrlPrivate::appendFragment(QString &appendTo, QUrl::FormattingOptio
 {
    appendToUser(appendTo, fragment, options,
                 options & QUrl::EncodeDelimiters ? fragmentInUrl :
-                appendingTo == FullUrl ? 0 : fragmentInIsolation);
+                appendingTo == FullUrl ? nullptr : fragmentInIsolation);
 }
 
 inline void QUrlPrivate::appendQuery(QString &appendTo, QUrl::FormattingOptions options, Section appendingTo) const
@@ -806,7 +806,7 @@ static QString::const_iterator parseIpFuture(QString &host, QString::const_itera
 
       QString decoded;
 
-      if (mode == QUrl::TolerantMode && qt_urlRecode(decoded, begin, end, QUrl::FullyDecoded, 0)) {
+      if (mode == QUrl::TolerantMode && qt_urlRecode(decoded, begin, end, QUrl::FullyDecoded, nullptr)) {
          begin = decoded.constBegin();
          end   = decoded.constEnd();
       }
@@ -1441,12 +1441,14 @@ inline void QUrlPrivate::validate() const
 }
 #endif
 
-QUrl::QUrl(const QString &url, ParsingMode parsingMode) : d(0)
+QUrl::QUrl(const QString &url, ParsingMode parsingMode)
+   : d(nullptr)
 {
    setUrl(url, parsingMode);
 }
 
-QUrl::QUrl() : d(0)
+QUrl::QUrl()
+   : d(nullptr)
 {
 }
 
@@ -1488,7 +1490,7 @@ void QUrl::clear()
    if (d && !d->ref.deref()) {
       delete d;
    }
-   d = 0;
+   d = nullptr;
 }
 
 void QUrl::setUrl(const QString &url, ParsingMode parsingMode)

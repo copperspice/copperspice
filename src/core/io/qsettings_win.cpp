@@ -119,7 +119,7 @@ static void mergeKeySets(NameSet *dest, const QStringList &src)
 static QString errorCodeToString(DWORD errorCode)
 {
    wchar_t *data = nullptr;
-   FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, errorCode, 0, (LPTSTR)&data, 0, 0);
+   FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, errorCode, 0, (LPTSTR)&data, 0, nullptr);
 
    QString result;
 
@@ -138,14 +138,14 @@ static QString errorCodeToString(DWORD errorCode)
 // Open a key with the specified perms
 static HKEY openKey(HKEY parentHandle, REGSAM perms, const QString &rSubKey)
 {
-   HKEY resultHandle = 0;
+   HKEY resultHandle = nullptr;
    LONG res = RegOpenKeyEx(parentHandle, &rSubKey.toStdWString()[0], 0, perms, &resultHandle);
 
    if (res == ERROR_SUCCESS) {
       return resultHandle;
    }
 
-   return 0;
+   return nullptr;
 }
 
 // Open a key with the specified perms, create it if it does not exist
@@ -153,18 +153,19 @@ static HKEY createOrOpenKey(HKEY parentHandle, REGSAM perms, const QString &rSub
 {
    // try to open it
    HKEY resultHandle = openKey(parentHandle, perms, rSubKey);
-   if (resultHandle != 0) {
+   if (resultHandle != nullptr) {
       return resultHandle;
    }
 
    // try to create it
-   LONG res = RegCreateKeyEx(parentHandle, &rSubKey.toStdWString()[0], 0, 0, REG_OPTION_NON_VOLATILE, perms, 0, &resultHandle, 0);
+   LONG res = RegCreateKeyEx(parentHandle, &rSubKey.toStdWString()[0], 0, nullptr,
+                  REG_OPTION_NON_VOLATILE, perms, nullptr, &resultHandle, nullptr);
 
    if (res == ERROR_SUCCESS) {
       return resultHandle;
    }
 
-   return 0;
+   return nullptr;
 }
 
 // Open or create a key in read-write mode if possible, otherwise read-only
@@ -173,8 +174,8 @@ static HKEY createOrOpenKey(HKEY parentHandle, const QString &rSubKey, bool *rea
    // try to open or create it read/write
    HKEY resultHandle = createOrOpenKey(parentHandle, registryPermissions, rSubKey);
 
-   if (resultHandle != 0) {
-      if (readOnly != 0) {
+   if (resultHandle != nullptr) {
+      if (readOnly != nullptr) {
          *readOnly = false;
       }
       return resultHandle;
@@ -183,13 +184,14 @@ static HKEY createOrOpenKey(HKEY parentHandle, const QString &rSubKey, bool *rea
    // try to open or create it read/only
    resultHandle = createOrOpenKey(parentHandle, KEY_READ, rSubKey);
 
-   if (resultHandle != 0) {
-      if (readOnly != 0) {
+   if (resultHandle != nullptr) {
+      if (readOnly != nullptr) {
          *readOnly = true;
       }
       return resultHandle;
    }
-   return 0;
+
+   return nullptr;
 }
 
 static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildSpec spec)
@@ -202,8 +204,8 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
    DWORD maxSubgroupSize;
 
    // Find the number of keys and subgroups, as well as the max of their lengths.
-   LONG res = RegQueryInfoKey(parentHandle, 0, 0, 0, &numSubgroups, &maxSubgroupSize, 0,
-                              &numKeys, &maxKeySize, 0, 0, 0);
+   LONG res = RegQueryInfoKey(parentHandle, nullptr, nullptr, nullptr, &numSubgroups, &maxSubgroupSize, nullptr,
+                  &numKeys, &maxKeySize, nullptr, nullptr, nullptr);
 
    if (res != ERROR_SUCCESS) {
       qWarning("QSettings: RegQueryInfoKey() failed: %s", errorCodeToString(res).toLatin1().data());
@@ -235,9 +237,9 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
       DWORD l = buffer.size();
 
       if (spec == QSettingsPrivate::ChildKeys) {
-         res = RegEnumValue(parentHandle, i, &buffer[0], &l, 0, 0, 0, 0);
+         res = RegEnumValue(parentHandle, i, &buffer[0], &l, nullptr, nullptr, nullptr, nullptr);
       } else {
-         res = RegEnumKeyEx(parentHandle, i, &buffer[0], &l, 0, 0, 0, 0);
+         res = RegEnumKeyEx(parentHandle, i, &buffer[0], &l, nullptr, nullptr, nullptr, nullptr);
       }
 
       if (res == ERROR_SUCCESS) {
@@ -262,7 +264,7 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
 static void allKeys(HKEY parentHandle, const QString &rSubKey, NameSet *result)
 {
    HKEY handle = openKey(parentHandle, KEY_READ, rSubKey);
-   if (handle == 0) {
+   if (handle == nullptr) {
       return;
    }
 
@@ -302,7 +304,8 @@ static void deleteChildGroups(HKEY parentHandle)
 
       // delete subgroups in group
       HKEY childGroupHandle = openKey(parentHandle, registryPermissions, group);
-      if (childGroupHandle == 0) {
+
+      if (childGroupHandle == nullptr) {
          continue;
       }
 
@@ -323,7 +326,7 @@ static void deleteChildGroups(HKEY parentHandle)
 class RegistryKey
 {
  public:
-   RegistryKey(HKEY parent_handle = 0, const QString &key = QString(), bool read_only = true);
+   RegistryKey(HKEY parent_handle = nullptr, const QString &key = QString(), bool read_only = true);
 
    QString key() const;
    HKEY handle() const;
@@ -341,7 +344,7 @@ class RegistryKey
 RegistryKey::RegistryKey(HKEY parent_handle, const QString &key, bool read_only)
 {
    m_parent_handle = parent_handle;
-   m_handle = 0;
+   m_handle = nullptr;
    m_read_only = read_only;
    m_key = key;
 }
@@ -353,7 +356,7 @@ QString RegistryKey::key() const
 
 HKEY RegistryKey::handle() const
 {
-   if (m_handle != 0) {
+   if (m_handle != nullptr) {
       return m_handle;
    }
 
@@ -378,10 +381,11 @@ bool RegistryKey::readOnly() const
 
 void RegistryKey::close()
 {
-   if (m_handle != 0) {
+   if (m_handle != nullptr) {
       RegCloseKey(m_handle);
    }
-   m_handle = 0;
+
+   m_handle = nullptr;
 }
 
 typedef QVector<RegistryKey> RegistryKeyList;
@@ -492,14 +496,14 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
 
    // open a handle on the subkey
    HKEY handle = openKey(parentHandle, KEY_READ, rSubkeyPath);
-   if (handle == 0) {
+   if (handle == nullptr) {
       return false;
    }
 
    // get the size and type of the value
    DWORD dataType;
    DWORD dataSize;
-   LONG res = RegQueryValueEx(handle, &rSubkeyName.toStdWString()[0], 0, &dataType, 0, &dataSize);
+   LONG res = RegQueryValueEx(handle, &rSubkeyName.toStdWString()[0], nullptr, &dataType, nullptr, &dataSize);
 
    if (res != ERROR_SUCCESS) {
       RegCloseKey(handle);
@@ -508,7 +512,8 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
 
    // get the value
    QByteArray data(dataSize, 0);
-   res = RegQueryValueEx(handle, &rSubkeyName.toStdWString()[0], 0, 0, reinterpret_cast<unsigned char *>(data.data()), &dataSize);
+   res = RegQueryValueEx(handle, &rSubkeyName.toStdWString()[0], nullptr, nullptr,
+                  reinterpret_cast<unsigned char *>(data.data()), &dataSize);
 
    if (res != ERROR_SUCCESS) {
       RegCloseKey(handle);
@@ -524,7 +529,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
             s = QString::fromUtf16((const char16_t *)data.constData());
          }
 
-         if (value != 0) {
+         if (value != nullptr) {
             *value = stringToVariant(s);
          }
          break;
@@ -548,7 +553,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
             }
          }
 
-         if (value != 0) {
+         if (value != nullptr) {
             *value = stringListToVariantList(list);
          }
          break;
@@ -562,7 +567,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
             s = QString::fromUtf16((const char16_t *)data.constData(), data.size() / 2);
          }
 
-         if (value != 0) {
+         if (value != nullptr) {
             *value = stringToVariant(s);
          }
          break;
@@ -575,7 +580,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
 
          memcpy((char *)&i, data.constData(), sizeof(int));
 
-         if (value != 0) {
+         if (value != nullptr) {
             *value = i;
          }
          break;
@@ -585,7 +590,8 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
          Q_ASSERT(data.size() == sizeof(qint64));
          qint64 i;
          memcpy((char *)&i, data.constData(), sizeof(qint64));
-         if (value != 0) {
+
+         if (value != nullptr) {
             *value = i;
          }
          break;
@@ -593,31 +599,34 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
 
       default:
          qWarning("QSettings: Unknown data %d type in Windows registry", static_cast<int>(dataType));
-         if (value != 0) {
+         if (value != nullptr) {
             *value = QVariant();
          }
          break;
    }
 
    RegCloseKey(handle);
+
    return true;
 }
 
 HKEY QWinSettingsPrivate::writeHandle() const
 {
    if (regList.isEmpty()) {
-      return 0;
+      return nullptr;
    }
+
    const RegistryKey &key = regList.at(0);
-   if (key.handle() == 0 || key.readOnly()) {
-      return 0;
+   if (key.handle() == nullptr || key.readOnly()) {
+      return nullptr;
    }
+
    return key.handle();
 }
 
 QWinSettingsPrivate::~QWinSettingsPrivate()
 {
-   if (deleteWriteHandleOnExit && writeHandle() != 0) {
+   if (deleteWriteHandleOnExit && writeHandle() != nullptr) {
 
       QString emptyKey;
       DWORD res = RegDeleteKey(writeHandle(), &emptyKey.toStdWString()[0]);
@@ -635,7 +644,7 @@ QWinSettingsPrivate::~QWinSettingsPrivate()
 
 void QWinSettingsPrivate::remove(const QString &uKey)
 {
-   if (writeHandle() == 0) {
+   if (writeHandle() == nullptr) {
       setStatus(QSettings::AccessError);
       return;
    }
@@ -646,7 +655,7 @@ void QWinSettingsPrivate::remove(const QString &uKey)
    LONG res;
    HKEY handle = openKey(writeHandle(), registryPermissions, keyPath(rKey));
 
-   if (handle != 0) {
+   if (handle != nullptr) {
       res = RegDeleteValue(handle, &keyName(rKey).toStdWString()[0]);
       RegCloseKey(handle);
    }
@@ -654,7 +663,7 @@ void QWinSettingsPrivate::remove(const QString &uKey)
    // try to delete key foo/bar and all subkeys
    handle = openKey(writeHandle(), registryPermissions, rKey);
 
-   if (handle != 0) {
+   if (handle != nullptr) {
       deleteChildGroups(handle);
 
       if (rKey.isEmpty()) {
@@ -697,7 +706,7 @@ static bool stringContainsNullChar(const QString &s)
 
 void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
 {
-   if (writeHandle() == 0) {
+   if (writeHandle() == nullptr) {
       setStatus(QSettings::AccessError);
       return;
    }
@@ -705,7 +714,7 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
    QString rKey = escapedKey(uKey);
 
    HKEY handle = createOrOpenKey(writeHandle(), registryPermissions, keyPath(rKey));
-   if (handle == 0) {
+   if (handle == nullptr) {
       setStatus(QSettings::AccessError);
       return;
    }
@@ -828,7 +837,8 @@ bool QWinSettingsPrivate::get(const QString &uKey, QVariant *value) const
 
    for (int i = 0; i < regList.size(); ++i) {
       HKEY handle = regList.at(i).handle();
-      if (handle != 0 && readKey(handle, rKey, value)) {
+
+      if (handle != nullptr && readKey(handle, rKey, value)) {
          return true;
       }
 
@@ -847,11 +857,12 @@ QStringList QWinSettingsPrivate::children(const QString &uKey, ChildSpec spec) c
 
    for (int i = 0; i < regList.size(); ++i) {
       HKEY parent_handle = regList.at(i).handle();
-      if (parent_handle == 0) {
+      if (parent_handle == nullptr) {
          continue;
       }
       HKEY handle = openKey(parent_handle, KEY_READ, rKey);
-      if (handle == 0) {
+
+      if (handle == nullptr) {
          continue;
       }
 
@@ -910,7 +921,7 @@ QString QWinSettingsPrivate::fileName() const
 
 bool QWinSettingsPrivate::isWritable() const
 {
-   return writeHandle() != 0;
+   return writeHandle() != nullptr;
 }
 
 QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format, QSettings::Scope scope,

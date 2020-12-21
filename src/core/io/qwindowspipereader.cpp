@@ -55,7 +55,7 @@ QWindowsPipeReader::QWindowsPipeReader(QObject *parent)
 bool qt_cancelIo(HANDLE handle, OVERLAPPED *overlapped)
 {
    typedef BOOL (WINAPI * PtrCancelIoEx)(HANDLE, LPOVERLAPPED);
-   static PtrCancelIoEx ptrCancelIoEx = 0;
+   static PtrCancelIoEx ptrCancelIoEx = nullptr;
    if (!ptrCancelIoEx) {
       HMODULE kernel32 = GetModuleHandleA("kernel32");
       if (kernel32) {
@@ -276,7 +276,7 @@ void QWindowsPipeReader::readFileCompleted(DWORD errorCode, DWORD numberOfBytesT
 DWORD QWindowsPipeReader::checkPipeState()
 {
    DWORD bytes;
-   if (PeekNamedPipe(handle, NULL, 0, NULL, &bytes, NULL)) {
+   if (PeekNamedPipe(handle, nullptr, 0, nullptr, &bytes, nullptr)) {
       return bytes;
    } else {
       if (!pipeBroken) {

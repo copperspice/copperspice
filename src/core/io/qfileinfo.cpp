@@ -35,7 +35,7 @@ QString QFileInfoPrivate::getFileName(QAbstractFileEngine::FileName name) const
 
    QString ret;
 
-   if (fileEngine == 0) {
+   if (fileEngine == nullptr) {
       // local file; use the QFileSystemEngine directly
 
       switch (name) {
@@ -105,7 +105,7 @@ QString QFileInfoPrivate::getFileOwner(QAbstractFileEngine::FileOwner own) const
 
    QString ret;
 
-   if (fileEngine == 0) {
+   if (fileEngine == nullptr) {
       switch (own) {
          case QAbstractFileEngine::OwnerUser:
             ret = QFileSystemEngine::resolveUserName(fileEntry, metaData);
@@ -267,7 +267,7 @@ bool QFileInfo::operator==(const QFileInfo &fileinfo) const
    }
 
    Qt::CaseSensitivity sensitive;
-   if (d->fileEngine == 0 || fileinfo.d_ptr->fileEngine == 0) {
+   if (d->fileEngine == nullptr || fileinfo.d_ptr->fileEngine == nullptr) {
       if (d->fileEngine != fileinfo.d_ptr->fileEngine) { // one is native, the other is a custom file-engine
          return false;
       }
@@ -381,7 +381,7 @@ bool QFileInfo::isRelative() const
       return true;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       return d->fileEntry.isRelative();
    }
    return d->fileEngine->isRelativePath();
@@ -405,7 +405,7 @@ bool QFileInfo::exists() const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (! d->cache_enabled || ! d->metaData.hasFlags(QFileSystemMetaData::ExistsAttribute)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::ExistsAttribute);
       }
@@ -512,7 +512,7 @@ bool QFileInfo::isReadable() const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::UserReadPermission)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::UserReadPermission);
       }
@@ -531,7 +531,7 @@ bool QFileInfo::isWritable() const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::UserWritePermission)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::UserWritePermission);
       }
@@ -550,7 +550,7 @@ bool QFileInfo::isExecutable() const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (! d->cache_enabled || ! d->metaData.hasFlags(QFileSystemMetaData::UserExecutePermission)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::UserExecutePermission);
       }
@@ -569,7 +569,7 @@ bool QFileInfo::isHidden() const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (! d->cache_enabled || ! d->metaData.hasFlags(QFileSystemMetaData::HiddenAttribute)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::HiddenAttribute);
       }
@@ -603,7 +603,7 @@ bool QFileInfo::isFile() const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (! d->cache_enabled || ! d->metaData.hasFlags(QFileSystemMetaData::FileType)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::FileType);
       }
@@ -622,7 +622,7 @@ bool QFileInfo::isDir() const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::DirectoryType)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::DirectoryType);
       }
@@ -640,7 +640,7 @@ bool QFileInfo::isBundle() const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::BundleType)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::BundleType);
       }
@@ -655,7 +655,7 @@ bool QFileInfo::isSymLink() const
    if (d->isDefaultConstructed) {
       return false;
    }
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::LegacyLinkType)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::LegacyLinkType);
       }
@@ -672,7 +672,7 @@ bool QFileInfo::isRoot() const
       return true;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (d->fileEntry.isRoot()) {
 
 #if defined(Q_OS_WIN)
@@ -724,7 +724,7 @@ uint QFileInfo::ownerId() const
       return 0;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::UserId)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::UserId);
       }
@@ -748,7 +748,7 @@ uint QFileInfo::groupId() const
       return 0;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::GroupId)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::GroupId);
       }
@@ -766,7 +766,7 @@ bool QFileInfo::permission(QFile::Permissions permissions) const
       return false;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       // the QFileSystemMetaData::MetaDataFlag and QFile::Permissions overlap, so just static cast.
       QFileSystemMetaData::MetaDataFlag permissionFlags = static_cast<QFileSystemMetaData::MetaDataFlag>((int)permissions);
       if (!d->cache_enabled || !d->metaData.hasFlags(permissionFlags)) {
@@ -785,7 +785,7 @@ QFile::Permissions QFileInfo::permissions() const
       return 0;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::Permissions)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::Permissions);
       }
@@ -803,7 +803,7 @@ qint64 QFileInfo::size() const
       return 0;
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::SizeAttribute)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::SizeAttribute);
       }
@@ -825,7 +825,7 @@ QDateTime QFileInfo::created() const
       return QDateTime();
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::CreationTime)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::CreationTime);
       }
@@ -844,7 +844,7 @@ QDateTime QFileInfo::lastModified() const
       return QDateTime();
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::ModificationTime)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::ModificationTime);
       }
@@ -861,7 +861,7 @@ QDateTime QFileInfo::lastRead() const
       return QDateTime();
    }
 
-   if (d->fileEngine == 0) {
+   if (d->fileEngine == nullptr) {
       if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::AccessTime)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::AccessTime);
       }

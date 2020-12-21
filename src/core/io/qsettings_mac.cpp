@@ -95,7 +95,7 @@ static CFArrayRef macList(const QList<QVariant> &list)
 
 static QCFType<CFPropertyListRef> macValue(const QVariant &value)
 {
-   CFPropertyListRef result = 0;
+   CFPropertyListRef result = nullptr;
 
    switch (value.type()) {
       case QVariant::ByteArray: {
@@ -195,7 +195,7 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
       case QVariant::LongLong:
       case QVariant::ULongLong: {
          qint64 n = value.toLongLong();
-         result = CFNumberCreate(0, kCFNumberLongLongType, &n);
+         result = CFNumberCreate(nullptr, kCFNumberLongLongType, &n);
       }
       break;
       case QVariant::String:
@@ -387,10 +387,10 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
    if (domainName.isEmpty()) {
         CFBundleRef main_bundle = CFBundleGetMainBundle();
 
-        if (main_bundle != NULL) {
+        if (main_bundle != nullptr) {
             CFStringRef main_bundle_identifier = CFBundleGetIdentifier(main_bundle);
 
-            if (main_bundle_identifier != NULL) {
+            if (main_bundle_identifier != nullptr) {
                 QString bundle_identifier(qtKey(main_bundle_identifier));
 
                 // CFBundleGetIdentifier returns identifier separated by slashes rather than periods.
@@ -472,7 +472,7 @@ void QMacSettingsPrivate::remove(const QString &key)
          subKey += QLatin1Char('/');
          subKey += keys.at(i);
       }
-      CFPreferencesSetValue(macKey(subKey), 0, domains[0].applicationOrSuiteId,
+      CFPreferencesSetValue(macKey(subKey), nullptr, domains[0].applicationOrSuiteId,
                             domains[0].userName, hostName);
    }
 }
@@ -539,7 +539,7 @@ void QMacSettingsPrivate::clear()
 {
    QCFType<CFArrayRef> cfarray = CFPreferencesCopyKeyList(domains[0].applicationOrSuiteId,
                                  domains[0].userName, hostName);
-   CFPreferencesSetMultiple(0, cfarray, domains[0].applicationOrSuiteId, domains[0].userName,
+   CFPreferencesSetMultiple(nullptr, cfarray, domains[0].applicationOrSuiteId, domains[0].userName,
                             hostName);
 }
 
@@ -574,7 +574,7 @@ bool QMacSettingsPrivate::isWritable() const
 
    that->set(impossibleKey, QVariant());
    that->sync();
-   bool writable = (status == QSettings::NoError) && that->get(impossibleKey, 0);
+   bool writable = (status == QSettings::NoError) && that->get(impossibleKey, nullptr);
    that->remove(impossibleKey);
    that->sync();
 
@@ -648,7 +648,7 @@ bool QConfFileSettingsPrivate::readPlistFile(const QString &fileName, ParsedSett
          CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, reinterpret_cast<const UInt8 *>(data.constData()), data.length(), kCFAllocatorNull);
 
    QCFType<CFPropertyListRef> propertyList =
-         CFPropertyListCreateWithData(kCFAllocatorDefault, resource, kCFPropertyListImmutable, NULL, NULL);
+         CFPropertyListCreateWithData(kCFAllocatorDefault, resource, kCFPropertyListImmutable, nullptr, nullptr);
 
    if (! propertyList) {
       return true;
@@ -694,7 +694,7 @@ bool QConfFileSettingsPrivate::writePlistFile(const QString &fileName, const Par
                          &kCFTypeDictionaryValueCallBacks);
 
    QCFType<CFDataRef> xmlData = CFPropertyListCreateData(
-                 kCFAllocatorDefault, propertyList, kCFPropertyListXMLFormat_v1_0, 0, 0);
+                 kCFAllocatorDefault, propertyList, kCFPropertyListXMLFormat_v1_0, 0, nullptr);
 
    auto len = CFDataGetLength(xmlData);
    QByteArray data(reinterpret_cast<const char *>(CFDataGetBytePtr(xmlData)), len);

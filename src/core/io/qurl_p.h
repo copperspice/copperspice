@@ -28,7 +28,7 @@
 
 // in qurlrecode.cpp
 extern int qt_urlRecode(QString &appendTo, QString::const_iterator begin, QString::const_iterator end,
-                        QUrl::FormattingOptions encoding, const ushort *tableModifications = 0);
+                        QUrl::FormattingOptions encoding, const ushort *tableModifications = nullptr);
 
 // in qurlidna.cpp
 enum AceLeadingDot { AllowLeadingDot, ForbidLeadingDot };

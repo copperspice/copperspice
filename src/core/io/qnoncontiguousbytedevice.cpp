@@ -26,7 +26,8 @@
 #include <qdebug.h>
 #include <qfile.h>
 
-QNonContiguousByteDevice::QNonContiguousByteDevice() : QObject((QObject *)0), resetDisabled(false)
+QNonContiguousByteDevice::QNonContiguousByteDevice()
+   : QObject((QObject *)nullptr), resetDisabled(false)
 {
 }
 
@@ -97,7 +98,7 @@ const char *QNonContiguousByteDeviceByteArrayImpl::readPointer(qint64 maximumLen
 {
    if (atEnd()) {
       len = -1;
-      return 0;
+      return nullptr;
    }
 
    if (maximumLength != -1) {
@@ -155,7 +156,7 @@ const char *QNonContiguousByteDeviceRingBufferImpl::readPointer(qint64 maximumLe
 {
    if (atEnd()) {
       len = -1;
-      return 0;
+      return nullptr;
    }
 
    const char *returnValue = ringBuffer->readPointerAtPosition(currentPosition, len);
@@ -201,7 +202,7 @@ qint64 QNonContiguousByteDeviceRingBufferImpl::pos()
 
 QNonContiguousByteDeviceIoDeviceImpl::QNonContiguousByteDeviceIoDeviceImpl(QIODevice *d)
    : QNonContiguousByteDevice(),
-     currentReadBuffer(0), currentReadBufferSize(16 * 1024),
+     currentReadBuffer(nullptr), currentReadBufferSize(16 * 1024),
      currentReadBufferAmount(0), currentReadBufferPosition(0), totalAdvancements(0),
      eof(false)
 {
@@ -220,10 +221,10 @@ const char *QNonContiguousByteDeviceIoDeviceImpl::readPointer(qint64 maximumLeng
 {
    if (eof == true) {
       len = -1;
-      return 0;
+      return nullptr;
    }
 
-   if (currentReadBuffer == 0) {
+   if (currentReadBuffer == nullptr) {
       currentReadBuffer = new QByteArray(currentReadBufferSize, '\0');   // lazy alloc
    }
 
@@ -245,7 +246,7 @@ const char *QNonContiguousByteDeviceIoDeviceImpl::readPointer(qint64 maximumLeng
       if (size() == -1) {
          emit readProgress(totalAdvancements, totalAdvancements);
       }
-      return 0;
+      return nullptr;
    }
 
    currentReadBufferAmount = haveRead;
@@ -272,7 +273,7 @@ bool QNonContiguousByteDeviceIoDeviceImpl::advanceReadPointer(qint64 amount)
    if (currentReadBufferPosition > currentReadBufferAmount) {
       qint64 i = currentReadBufferPosition - currentReadBufferAmount;
       while (i > 0) {
-         if (device->getChar(0) == false) {
+         if (device->getChar(nullptr) == false) {
             emit readProgress(totalAdvancements - i, size());
             return false; // ### FIXME handle eof
          }
@@ -303,7 +304,7 @@ bool QNonContiguousByteDeviceIoDeviceImpl::reset()
       totalAdvancements = 0; //reset the progress counter
       if (currentReadBuffer) {
          delete currentReadBuffer;
-         currentReadBuffer = 0;
+         currentReadBuffer = nullptr;
       }
       currentReadBufferAmount = 0;
       currentReadBufferPosition = 0;
@@ -333,7 +334,8 @@ qint64 QNonContiguousByteDeviceIoDeviceImpl::pos()
    return device->pos();
 }
 
-QByteDeviceWrappingIoDevice::QByteDeviceWrappingIoDevice(QNonContiguousByteDevice *bd) : QIODevice((QObject *)0)
+QByteDeviceWrappingIoDevice::QByteDeviceWrappingIoDevice(QNonContiguousByteDevice *bd)
+   : QIODevice((QObject *)nullptr)
 {
    byteDevice = bd;
    connect(bd, SIGNAL(readyRead()), this, SLOT(readyRead()));

@@ -87,7 +87,7 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
       }
 
       findFileHandle = FindFirstFileEx(&nativePath.toStdWString()[0], FINDEX_INFO_LEVELS(infoLevel), &findData,
-                                       FINDEX_SEARCH_OPS(searchOps), 0, dwAdditionalFlags);
+                                       FINDEX_SEARCH_OPS(searchOps), nullptr, dwAdditionalFlags);
 
       if (findFileHandle == INVALID_HANDLE_VALUE) {
 

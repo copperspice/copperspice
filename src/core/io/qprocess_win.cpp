@@ -56,7 +56,7 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
    // read handles to avoid non-closable handles (this is done by the
    // DuplicateHandle() call).
 
-   SECURITY_ATTRIBUTES secAtt = { sizeof(SECURITY_ATTRIBUTES), 0, false };
+   SECURITY_ATTRIBUTES secAtt = { sizeof(SECURITY_ATTRIBUTES), nullptr, false };
 
    HANDLE hServer;
    wchar_t pipeName[256];
@@ -111,7 +111,7 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
                                      &secAtt,
                                      OPEN_EXISTING,
                                      FILE_FLAG_OVERLAPPED,
-                                     NULL);
+                                     nullptr);
 
    if (hClient == INVALID_HANDLE_VALUE) {
       qErrnoWarning("QProcess: CreateFile failed.");
@@ -119,7 +119,7 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
       return;
    }
 
-   ConnectNamedPipe(hServer, NULL);
+   ConnectNamedPipe(hServer, nullptr);
 
    if (isInputPipe) {
       pipe[0] = hClient;
@@ -195,14 +195,14 @@ bool QProcessPrivate::openChannel(Channel &channel)
       return true;
    } else if (channel.type == Channel::Redirect) {
       // we're redirecting the channel to/from a file
-      SECURITY_ATTRIBUTES secAtt = { sizeof(SECURITY_ATTRIBUTES), NULL, TRUE };
+      SECURITY_ATTRIBUTES secAtt = { sizeof(SECURITY_ATTRIBUTES), nullptr, TRUE };
 
       if (&channel == &stdinChannel) {
          // try to open in read-only mode
          channel.pipe[1] = INVALID_Q_PIPE;
          channel.pipe[0] = CreateFile(&QFSFileEnginePrivate::longFileName(channel.file).toStdWString()[0],
                   GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &secAtt,
-                  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+                  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
          if (channel.pipe[0] != INVALID_Q_PIPE) {
             return true;
@@ -215,11 +215,11 @@ bool QProcessPrivate::openChannel(Channel &channel)
          channel.pipe[0] = INVALID_Q_PIPE;
          channel.pipe[1] = CreateFile(&QFSFileEnginePrivate::longFileName(channel.file).toStdWString()[0],
                   GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &secAtt,
-                  channel.append ? OPEN_ALWAYS : CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+                  channel.append ? OPEN_ALWAYS : CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 
          if (channel.pipe[1] != INVALID_Q_PIPE) {
             if (channel.append) {
-               SetFilePointer(channel.pipe[1], 0, NULL, FILE_END);
+               SetFilePointer(channel.pipe[1], 0, nullptr, FILE_END);
             }
             return true;
          }
@@ -310,12 +310,14 @@ void QProcessPrivate::closeChannel(Channel *channel)
 {
    if (channel == &stdinChannel) {
       delete stdinChannel.writer;
-      stdinChannel.writer = 0;
+      stdinChannel.writer = nullptr;
+
    } else if (channel->reader) {
       channel->reader->stop();
       channel->reader->deleteLater();
-      channel->reader = 0;
+      channel->reader = nullptr;
    }
+
    destroyPipe(channel->pipe);
 }
 
@@ -473,7 +475,7 @@ void QProcessPrivate::startProcess()
       CloseHandle(pid->hThread);
       CloseHandle(pid->hProcess);
       delete pid;
-      pid = 0;
+      pid = nullptr;
    }
 
    pid = new PROCESS_INFORMATION;
@@ -510,14 +512,14 @@ void QProcessPrivate::startProcess()
    DWORD dwCreationFlags = (GetConsoleWindow() ? 0 : CREATE_NO_WINDOW);
    dwCreationFlags |= CREATE_UNICODE_ENVIRONMENT;
 
-   STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), 0, 0, 0,
+   STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), nullptr, nullptr, nullptr,
                   (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
-                  0, 0, 0, STARTF_USESTDHANDLES, 0, 0, 0,
-                  stdinChannel.pipe[0], stdoutChannel.pipe[1], stderrChannel.pipe[1]};
+                  0, 0, 0, STARTF_USESTDHANDLES, 0, 0, nullptr, stdinChannel.pipe[0], stdoutChannel.pipe[1], stderrChannel.pipe[1]};
 
-   success = CreateProcess(0, &args.toStdWString()[0], 0, 0, TRUE, dwCreationFlags,
-                  environment.isEmpty() ? 0 : envlist.data(),
-                  workingDirectory.isEmpty() ? nullptr : &QDir::toNativeSeparators(workingDirectory).toStdWString()[0], &startupInfo, pid);
+   success = CreateProcess(nullptr, &args.toStdWString()[0], nullptr, nullptr, TRUE, dwCreationFlags,
+                  environment.isEmpty() ? nullptr : envlist.data(),
+                  workingDirectory.isEmpty() ? nullptr : &QDir::toNativeSeparators(workingDirectory).toStdWString()[0],
+                  &startupInfo, pid);
 
    QString errorString;
 
@@ -938,12 +940,12 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
 
    PROCESS_INFORMATION pinfo;
 
-   STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), 0, 0, 0,
+   STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), nullptr, nullptr, nullptr,
                   (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                  0, 0, 0, 0, 0, 0, nullptr, nullptr, nullptr, nullptr};
 
-   success = CreateProcess(0, &args.toStdWString()[0],
-                  0, 0, FALSE, CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_CONSOLE, 0,
+   success = CreateProcess(nullptr, &args.toStdWString()[0], nullptr, nullptr,
+                  FALSE, CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_CONSOLE, nullptr,
                   workingDir.isEmpty() ? nullptr : &workingDir.toStdWString()[0], &startupInfo, &pinfo);
 
    if (success) {

@@ -151,7 +151,7 @@ inline QString QUrlQueryPrivate::recodeToUser(const QString &input, QUrl::Format
    if (! (encoding & QUrl::EncodeDelimiters)) {
       QString output;
 
-      if (qt_urlRecode(output, input.begin(), input.end(), encoding, 0)) {
+      if (qt_urlRecode(output, input.begin(), input.end(), encoding, nullptr)) {
          return output;
       }
       return input;
@@ -244,17 +244,17 @@ QSharedDataPointer<QUrlQueryPrivate>::clone()
 }
 
 QUrlQuery::QUrlQuery()
-   : d(0)
+   : d(nullptr)
 {
 }
 
 QUrlQuery::QUrlQuery(const QString &queryString)
-   : d(queryString.isEmpty() ? 0 : new QUrlQueryPrivate(queryString))
+   : d(queryString.isEmpty() ? nullptr : new QUrlQueryPrivate(queryString))
 {
 }
 
 QUrlQuery::QUrlQuery(const QUrl &url)
-   : d(0)
+   : d(nullptr)
 {
    // use internals to avoid unnecessary recoding
    if (url.hasQuery()) {

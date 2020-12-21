@@ -170,7 +170,7 @@ class Q_CORE_EXPORT QAbstractFileEngine
       uchar *address;
    };
 
-   virtual bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0);
+   virtual bool extension(Extension extension, const ExtensionOption *option = nullptr, ExtensionReturn *output = nullptr);
    virtual bool supportsExtension(Extension extension) const;
 
    // Factory

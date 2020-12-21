@@ -34,10 +34,10 @@ QUrl QUrl::fromCFURL(CFURLRef url)
 
 CFURLRef QUrl::toCFURL() const
 {
-    CFURLRef url = 0;
+    CFURLRef url = nullptr;
     CFStringRef str = toString(FullyEncoded).toCFString();
     if (str) {
-        url = CFURLCreateWithString(0, str, 0);
+        url = CFURLCreateWithString(nullptr, str, nullptr);
         CFRelease(str);
     }
     return url;

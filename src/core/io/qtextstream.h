@@ -220,11 +220,11 @@ class Q_CORE_EXPORT QTextStreamManipulator
 {
  public:
    QTextStreamManipulator(QTSMFI m, int a)
-      : mf(m), mc(0), arg(a)
+      : mf(m), mc(nullptr), arg(a)
    { }
 
    QTextStreamManipulator(QTSMFC m, QChar c)
-      : mf(0), mc(m), arg(-1), ch(c)
+      : mf(nullptr), mc(m), arg(-1), ch(c)
    { }
 
    void exec(QTextStream &s) {

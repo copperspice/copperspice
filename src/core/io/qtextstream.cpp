@@ -204,7 +204,7 @@ class QTextStreamPrivate
 QTextStreamPrivate::QTextStreamPrivate(QTextStream *q_ptr)
    :
 #ifndef QT_NO_TEXTCODEC
-   readConverterSavedState(0),
+   readConverterSavedState(nullptr),
 #endif
 
    readConverterSavedStateOffset(0), locale(QLocale::c())
@@ -286,9 +286,9 @@ void QTextStreamPrivate::reset()
    realNumberNotation  = QTextStream::SmartNotation;
    numberFlags         = 0;
 
-   device       = 0;
+   device       = nullptr;
    deleteDevice = false;
-   m_string     = 0;
+   m_string     = nullptr;
    stringOffset = 0;
    stringOpenMode = QIODevice::NotOpen;
 
@@ -301,7 +301,7 @@ void QTextStreamPrivate::reset()
    resetCodecConverterStateHelper(&readConverterState);
    resetCodecConverterStateHelper(&writeConverterState);
    delete readConverterSavedState;
-   readConverterSavedState = 0;
+   readConverterSavedState = nullptr;
    writeConverterState.flags |= QTextCodec::IgnoreHeader;
    autoDetectUnicode = true;
 #endif
@@ -903,7 +903,7 @@ bool QTextStream::seek(qint64 pos)
       resetCodecConverterStateHelper(&d->readConverterState);
       resetCodecConverterStateHelper(&d->writeConverterState);
       delete d->readConverterSavedState;
-      d->readConverterSavedState = 0;
+      d->readConverterSavedState = nullptr;
       d->writeConverterState.flags |= QTextCodec::IgnoreHeader;
 #endif
       return true;

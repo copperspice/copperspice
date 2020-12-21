@@ -99,7 +99,7 @@ void QTemporaryDirPrivate::create(const QString &templateName)
 
    std::wstring array = basePath.toStdWString();
 
-   if (_wmktemp(&array[0]) && ::CreateDirectory(array.c_str(), 0)) {
+   if (_wmktemp(&array[0]) && ::CreateDirectory(array.c_str(), nullptr)) {
       success = true;
 
       QFileSystemEntry entry(QString::fromStdWString(array), QFileSystemEntry::FromNativePath());

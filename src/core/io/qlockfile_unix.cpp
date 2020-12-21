@@ -333,7 +333,7 @@ QString QLockFilePrivate::processNameByPid(qint64 pid)
    size_t len = sizeof(kp);
    u_int mib_len = sizeof(mib) / sizeof(u_int);
 
-   if (sysctl(mib, mib_len, &kp, &len, NULL, 0) < 0) {
+   if (sysctl(mib, mib_len, &kp, &len, nullptr, 0) < 0) {
       return QString();
    }
 

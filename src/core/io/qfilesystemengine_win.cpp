@@ -136,27 +136,27 @@ Q_CORE_EXPORT int qt_ntfs_permission_lookup = 0;
 
 typedef DWORD (WINAPI *PtrGetNamedSecurityInfoW)(LPWSTR, SE_OBJECT_TYPE, SECURITY_INFORMATION, PSID *, PSID *, PACL *,
       PACL *, PSECURITY_DESCRIPTOR *);
-static PtrGetNamedSecurityInfoW ptrGetNamedSecurityInfoW = 0;
+static PtrGetNamedSecurityInfoW ptrGetNamedSecurityInfoW = nullptr;
 
 typedef BOOL (WINAPI *PtrLookupAccountSidW)(LPCWSTR, PSID, LPWSTR, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE);
-static PtrLookupAccountSidW ptrLookupAccountSidW = 0;
+static PtrLookupAccountSidW ptrLookupAccountSidW = nullptr;
 
 typedef VOID (WINAPI *PtrBuildTrusteeWithSidW)(PTRUSTEE_W, PSID);
-static PtrBuildTrusteeWithSidW ptrBuildTrusteeWithSidW = 0;
+static PtrBuildTrusteeWithSidW ptrBuildTrusteeWithSidW = nullptr;
 
 typedef DWORD (WINAPI *PtrGetEffectiveRightsFromAclW)(PACL, PTRUSTEE_W, OUT PACCESS_MASK);
-static PtrGetEffectiveRightsFromAclW ptrGetEffectiveRightsFromAclW = 0;
+static PtrGetEffectiveRightsFromAclW ptrGetEffectiveRightsFromAclW = nullptr;
 
 typedef BOOL (WINAPI *PtrGetUserProfileDirectoryW)(HANDLE, LPWSTR, LPDWORD);
-static PtrGetUserProfileDirectoryW ptrGetUserProfileDirectoryW = 0;
+static PtrGetUserProfileDirectoryW ptrGetUserProfileDirectoryW = nullptr;
 
 typedef BOOL (WINAPI *PtrGetVolumePathNamesForVolumeNameW)(LPCWSTR, LPWSTR, DWORD, PDWORD);
-static PtrGetVolumePathNamesForVolumeNameW ptrGetVolumePathNamesForVolumeNameW = 0;
+static PtrGetVolumePathNamesForVolumeNameW ptrGetVolumePathNamesForVolumeNameW = nullptr;
 
 static TRUSTEE_W currentUserTrusteeW;
 static TRUSTEE_W worldTrusteeW;
-static PSID currentUserSID = 0;
-static PSID worldSID = 0;
+static PSID currentUserSID = nullptr;
+static PSID worldSID = nullptr;
 
 /*
     Deletes the allocated SIDs during global static cleanup
@@ -170,12 +170,12 @@ class SidCleanup
 SidCleanup::~SidCleanup()
 {
    qFree(currentUserSID);
-   currentUserSID = 0;
+   currentUserSID = nullptr;
 
    // worldSID was allocated with AllocateAndInitializeSid so it needs to be freed with FreeSid
    if (worldSID) {
       ::FreeSid(worldSID);
-      worldSID = 0;
+      worldSID = nullptr;
    }
 }
 
@@ -210,7 +210,7 @@ static void resolveLibs()
       if (ptrBuildTrusteeWithSidW) {
          // Create TRUSTEE for current user
          HANDLE hnd = ::GetCurrentProcess();
-         HANDLE token = 0;
+         HANDLE token = nullptr;
          initSidCleanup();
 
          if (::OpenProcessToken(hnd, TOKEN_QUERY, &token)) {
@@ -219,7 +219,8 @@ static void resolveLibs()
             // the SID struct. Since the SID struct can have variable number of subauthorities
             // tacked at the end, its size is variable. Obtain the required size by first
             // doing a dummy GetTokenInformation call.
-            ::GetTokenInformation(token, TokenUser, 0, 0, &retsize);
+            ::GetTokenInformation(token, TokenUser, nullptr, 0, &retsize);
+
             if (retsize) {
                void *tokenBuffer = qMalloc(retsize);
                if (::GetTokenInformation(token, TokenUser, tokenBuffer, retsize, &retsize)) {
@@ -266,10 +267,10 @@ static void resolveLibs()
 
 
 typedef DWORD (WINAPI *PtrNetShareEnum)(LPWSTR, DWORD, LPBYTE *, DWORD, LPDWORD, LPDWORD, LPDWORD);
-static PtrNetShareEnum ptrNetShareEnum = 0;
+static PtrNetShareEnum ptrNetShareEnum = nullptr;
 
 typedef DWORD (WINAPI *PtrNetApiBufferFree)(LPVOID);
-static PtrNetApiBufferFree ptrNetApiBufferFree = 0;
+static PtrNetApiBufferFree ptrNetApiBufferFree = nullptr;
 
 typedef struct _SHARE_INFO_1 {
    LPWSTR shi1_netname;
@@ -304,8 +305,8 @@ static QString readSymLink(const QFileSystemEntry &link)
    QString result;
 
    HANDLE handle = CreateFile( &link.nativeFilePath().toStdWString()[0],
-                  FILE_READ_EA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 0, OPEN_EXISTING,
-                  FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT,0);
+                  FILE_READ_EA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING,
+                  FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, nullptr);
 
    if (handle != INVALID_HANDLE_VALUE) {
 
@@ -313,7 +314,7 @@ static QString readSymLink(const QFileSystemEntry &link)
       REPARSE_DATA_BUFFER *rdb = (REPARSE_DATA_BUFFER *)malloc(bufsize);
       DWORD retsize = 0;
 
-      if (::DeviceIoControl(handle, FSCTL_GET_REPARSE_POINT, 0, 0, rdb, bufsize, &retsize, 0)) {
+      if (::DeviceIoControl(handle, FSCTL_GET_REPARSE_POINT, nullptr, 0, rdb, bufsize, &retsize, nullptr)) {
          if (rdb->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT) {
             int length = rdb->MountPointReparseBuffer.SubstituteNameLength / sizeof(wchar_t);
             int offset = rdb->MountPointReparseBuffer.SubstituteNameOffset / sizeof(wchar_t);
@@ -372,13 +373,13 @@ static QString readLink(const QFileSystemEntry &link)
    std::wstring szGotPath(MAX_PATH, L'\0');
 
    // Get pointer to the IShellLink interface.
-   HRESULT hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *)&psl);
+   HRESULT hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *)&psl);
 
    if (hres == CO_E_NOTINITIALIZED) {
       // COM was not initialized
       neededCoInit = true;
-      CoInitialize(NULL);
-      hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *)&psl);
+      CoInitialize(nullptr);
+      hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *)&psl);
    }
 
    if (SUCCEEDED(hres)) {
@@ -632,7 +633,7 @@ QByteArray fileIdWin8(HANDLE handle)
    using GetFileInformationByHandleExType = BOOL (WINAPI *)(HANDLE, Q_FILE_INFO_BY_HANDLE_CLASS, void *, DWORD);
 
    // Dynamically resolve  GetFileInformationByHandleEx (Vista onwards).
-   static GetFileInformationByHandleExType getFileInformationByHandleEx = 0;
+   static GetFileInformationByHandleExType getFileInformationByHandleEx = nullptr;
 
    if (! getFileInformationByHandleEx) {
       QSystemLibrary library("kernel32");
@@ -659,7 +660,7 @@ QByteArray QFileSystemEngine::id(const QFileSystemEntry &entry)
 {
    QByteArray result;
    const HANDLE handle = CreateFile(&entry.nativeFilePath().toStdWString()[0],
-                  GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+                  GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
    if (handle) {
       result = QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS8 ? fileIdWin8(handle) : fileId(handle);
@@ -680,13 +681,13 @@ QString QFileSystemEngine::owner(const QFileSystemEntry &entry, QAbstractFileEng
       resolveLibs();
 
       if (ptrGetNamedSecurityInfoW && ptrLookupAccountSidW) {
-         PSID pOwner = 0;
+         PSID pOwner = nullptr;
          PSECURITY_DESCRIPTOR pSD;
 
-         if (ptrGetNamedSecurityInfoW(&entry.nativeFilePath().toStdWString()[0],
-                  SE_FILE_OBJECT, own == QAbstractFileEngine::OwnerGroup ? GROUP_SECURITY_INFORMATION : OWNER_SECURITY_INFORMATION,
-                  own == QAbstractFileEngine::OwnerUser ? &pOwner : 0, own == QAbstractFileEngine::OwnerGroup ? &pOwner : 0,
-                  0, 0, &pSD) == ERROR_SUCCESS) {
+         if (ptrGetNamedSecurityInfoW(&entry.nativeFilePath().toStdWString()[0], SE_FILE_OBJECT,
+                  own == QAbstractFileEngine::OwnerGroup ? GROUP_SECURITY_INFORMATION : OWNER_SECURITY_INFORMATION,
+                  own == QAbstractFileEngine::OwnerUser  ? &pOwner : nullptr,
+                  own == QAbstractFileEngine::OwnerGroup ? &pOwner : nullptr, nullptr, nullptr, &pSD) == ERROR_SUCCESS) {
 
             DWORD lowner = 64;
             DWORD ldomain = 64;
@@ -695,7 +696,7 @@ QString QFileSystemEngine::owner(const QFileSystemEntry &entry, QAbstractFileEng
             SID_NAME_USE use = SidTypeUnknown;
 
             // First call, to determine size of the strings (with '\0').
-            if (!ptrLookupAccountSidW(NULL, pOwner, (LPWSTR)owner.data(), &lowner, (LPWSTR)domain.data(), &ldomain, (SID_NAME_USE *)&use)) {
+            if (!ptrLookupAccountSidW(nullptr, pOwner, (LPWSTR)owner.data(), &lowner, (LPWSTR)domain.data(), &ldomain, (SID_NAME_USE *)&use)) {
 
                if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
                   if (lowner > (DWORD)owner.size()) {
@@ -707,7 +708,7 @@ QString QFileSystemEngine::owner(const QFileSystemEntry &entry, QAbstractFileEng
                   }
 
                   // Second call, try on resized buf-s
-                  if (!ptrLookupAccountSidW(NULL, pOwner, (LPWSTR)owner.data(), &lowner, (LPWSTR)domain.data(), &ldomain, (SID_NAME_USE *)&use)) {
+                  if (!ptrLookupAccountSidW(nullptr, pOwner, (LPWSTR)owner.data(), &lowner, (LPWSTR)domain.data(), &ldomain, (SID_NAME_USE *)&use)) {
                      lowner = 0;
                   }
 
@@ -739,14 +740,14 @@ bool QFileSystemEngine::fillPermissions(const QFileSystemEntry &entry, QFileSyst
 
          QString fname = entry.nativeFilePath();
 
-         PSID pOwner = 0;
-         PSID pGroup = 0;
+         PSID pOwner = nullptr;
+         PSID pGroup = nullptr;
          PACL pDacl;
          PSECURITY_DESCRIPTOR pSD;
 
          DWORD res = ptrGetNamedSecurityInfoW(&fname.toStdWString()[0],
                   SE_FILE_OBJECT, OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
-                  &pOwner, &pGroup, &pDacl, 0, &pSD);
+                  &pOwner, &pGroup, &pDacl, nullptr, &pSD);
 
          if (res == ERROR_SUCCESS) {
             ACCESS_MASK access_mask;
@@ -1016,7 +1017,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
    const QString origFilePath = entry.filePath();
 
-   if (origFilePath.endsWith(".lnk") && ! isDirPath(origFilePath, 0)) {
+   if (origFilePath.endsWith(".lnk") && ! isDirPath(origFilePath, nullptr)) {
       data.entryFlags |= QFileSystemMetaData::WinLnkType;
       fname = QFileSystemEntry(readLink(entry));
 
@@ -1075,7 +1076,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
 static inline bool mkDir(const QString &path)
 {
-   return ::CreateDirectory(&QFSFileEnginePrivate::longFileName(path).toStdWString()[0], 0);
+   return ::CreateDirectory(&QFSFileEnginePrivate::longFileName(path).toStdWString()[0], nullptr);
 }
 
 static inline bool rmDir(const QString &path)
@@ -1178,7 +1179,8 @@ bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool remo
          if (chunk.length() == 2 && chunk.at(0).isLetter() && chunk.at(1) == QLatin1Char(':')) {
             break;
          }
-         if (!isDirPath(chunk, 0)) {
+
+         if (!isDirPath(chunk, nullptr)) {
             return false;
          }
          if (!rmDir(chunk)) {
@@ -1214,14 +1216,14 @@ QString QFileSystemEngine::homePath()
 
    if (ptrGetUserProfileDirectoryW) {
       HANDLE hnd   = ::GetCurrentProcess();
-      HANDLE token = 0;
+      HANDLE token = nullptr;
       BOOL ok      = ::OpenProcessToken(hnd, TOKEN_QUERY, &token);
 
       if (ok) {
          DWORD dwBufferSize = 0;
 
          // First call, to determine size of the strings (with '\0').
-         ok = ptrGetUserProfileDirectoryW(token, NULL, &dwBufferSize);
+         ok = ptrGetUserProfileDirectoryW(token, nullptr, &dwBufferSize);
 
          if (!ok && dwBufferSize != 0) {
             // We got the required buffer size
@@ -1416,7 +1418,7 @@ static inline QDateTime fileTimeToQDateTime(const FILETIME *time)
 
    SYSTEMTIME sTime, lTime;
    FileTimeToSystemTime(time, &sTime);
-   SystemTimeToTzSpecificLocalTime(0, &sTime, &lTime);
+   SystemTimeToTzSpecificLocalTime(nullptr, &sTime, &lTime);
    retval.setDate(QDate(lTime.wYear, lTime.wMonth, lTime.wDay));
    retval.setTime(QTime(lTime.wHour, lTime.wMinute, lTime.wSecond, lTime.wMilliseconds));
 

@@ -43,7 +43,7 @@ using GetSpecialFolderPath = BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL);
 
 static GetSpecialFolderPath resolveGetSpecialFolderPath()
 {
-   static GetSpecialFolderPath gsfp = 0;
+   static GetSpecialFolderPath gsfp = nullptr;
 
    if (! gsfp) {
       QSystemLibrary library("shell32");
@@ -76,7 +76,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
       case DataLocation:
       case GenericDataLocation:
 
-         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_LOCAL_APPDATA, FALSE)) {
+         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_LOCAL_APPDATA, FALSE)) {
             result = convertCharArray(path);
          }
 
@@ -97,44 +97,44 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          break;
 
       case DesktopLocation:
-         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_DESKTOPDIRECTORY, FALSE)) {
+         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_DESKTOPDIRECTORY, FALSE)) {
             result = convertCharArray(path);
          }
          break;
 
       case DownloadLocation: // TODO implement with SHGetKnownFolderPath(FOLDERID_Downloads) (starting from Vista)
       case DocumentsLocation:
-         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_PERSONAL, FALSE)) {
+         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_PERSONAL, FALSE)) {
             result = convertCharArray(path);
          }
          break;
 
       case FontsLocation:
-         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_FONTS, FALSE)) {
+         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_FONTS, FALSE)) {
             result = convertCharArray(path);
          }
          break;
 
       case ApplicationsLocation:
-         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_PROGRAMS, FALSE)) {
+         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_PROGRAMS, FALSE)) {
             result = convertCharArray(path);
          }
          break;
 
       case MusicLocation:
-         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_MYMUSIC, FALSE)) {
+         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_MYMUSIC, FALSE)) {
             result = convertCharArray(path);
          }
          break;
 
       case MoviesLocation:
-         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_MYVIDEO, FALSE)) {
+         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_MYVIDEO, FALSE)) {
             result = convertCharArray(path);
          }
          break;
 
       case PicturesLocation:
-         if (SHGetSpecialFolderPath(0, &path[0], CSIDL_MYPICTURES, FALSE)) {
+         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_MYPICTURES, FALSE)) {
             result = convertCharArray(path);
          }
          break;
@@ -180,7 +180,7 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
          case DataLocation:
          case GenericDataLocation:
 
-            if (SHGetSpecialFolderPath(0, &path[0], CSIDL_COMMON_APPDATA, FALSE)) {
+            if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_COMMON_APPDATA, FALSE)) {
                QString result = convertCharArray(path);
 
                if (type != GenericDataLocation && type != GenericConfigLocation) {

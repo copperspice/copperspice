@@ -42,7 +42,7 @@ class QFileInfoPrivate : public QSharedData
         };
 
    inline QFileInfoPrivate()
-      : QSharedData(), fileEngine(0),
+      : QSharedData(), fileEngine(nullptr),
         cachedFlags(0),
         isDefaultConstructed(true),
         cache_enabled(true), fileFlags(0), fileSize(0) {
@@ -81,7 +81,7 @@ class QFileInfoPrivate : public QSharedData
         cachedFlags(0),
         isDefaultConstructed(false),
         cache_enabled(true), fileFlags(0), fileSize(0) {
-     
+
       // If the file engine is not null, this maybe a "mount point" for a custom file engine
       // in which case we ca not trust the metadata
       if (fileEngine) {

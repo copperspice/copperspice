@@ -115,7 +115,7 @@ static inline bool _q_checkEntry(QAbstractFileEngine *&engine, bool resolvingEnt
    if (resolvingEntry) {
       if (!(engine->fileFlags(QAbstractFileEngine::FlagsMask) & QAbstractFileEngine::ExistsFlag)) {
          delete engine;
-         engine = 0;
+         engine = nullptr;
          return false;
       }
    }

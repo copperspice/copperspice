@@ -746,7 +746,7 @@ QStringList QDir::entryList(const QStringList &nameFilters, Filters filters, Sor
    }
 
    QStringList ret;
-   d->sortFileList(sort, list, &ret, 0);
+   d->sortFileList(sort, list, &ret, nullptr);
 
    return ret;
 }
@@ -775,7 +775,7 @@ QFileInfoList QDir::entryInfoList(const QStringList &nameFilters, Filters filter
       l.append(it.fileInfo());
    }
    QFileInfoList ret;
-   d->sortFileList(sort, l, 0, &ret);
+   d->sortFileList(sort, l, nullptr, &ret);
    return ret;
 }
 

@@ -251,7 +251,7 @@ QConfFile *QConfFile::fromName(const QString &fileName, bool _userPerms)
    ConfFileHash *usedHash = usedHashFunc();
    ConfFileCache *unusedCache = unusedCacheFunc();
 
-   QConfFile *confFile = 0;
+   QConfFile *confFile = nullptr;
    QMutexLocker locker(globalMutex());
 
    if (!(confFile = usedHash->value(absPath))) {
@@ -277,15 +277,15 @@ void QConfFile::clearCache()
 // QSettingsPrivate
 
 QSettingsPrivate::QSettingsPrivate(QSettings::Format format)
-   : format(format), scope(QSettings::UserScope /* nothing better to put */), iniCodec(0), spec(0), fallbacks(true),
+   : format(format), scope(QSettings::UserScope), iniCodec(nullptr), spec(0), fallbacks(true),
      pendingChanges(false), status(QSettings::NoError)
 {
 }
 
 QSettingsPrivate::QSettingsPrivate(QSettings::Format format, QSettings::Scope scope,
-                                   const QString &organization, const QString &application)
+                  const QString &organization, const QString &application)
    : format(format), scope(scope), organizationName(organization), applicationName(application),
-     iniCodec(0), spec(0), fallbacks(true), pendingChanges(false), status(QSettings::NoError)
+     iniCodec(nullptr), spec(0), fallbacks(true), pendingChanges(false), status(QSettings::NoError)
 {
 }
 
@@ -1015,8 +1015,8 @@ QStringList QSettingsPrivate::splitArgs(const QString &s, int idx)
 void QConfFileSettingsPrivate::initFormat()
 {
    extension = (format == QSettings::NativeFormat) ? QLatin1String(".conf") : QLatin1String(".ini");
-   readFunc  = 0;
-   writeFunc = 0;
+   readFunc  = nullptr;
+   writeFunc = nullptr;
 
 #if defined(Q_OS_DARWIN)
    caseSensitivity = (format == QSettings::NativeFormat) ? Qt::CaseSensitive : IniCaseSensitivity;
@@ -1063,7 +1063,7 @@ static QString windowsConfigPath(int type)
 
    if (SHGetSpecialFolderPath) {
       std::wstring path(MAX_PATH, L'\0');
-      SHGetSpecialFolderPath(0, &path[0], type, FALSE);
+      SHGetSpecialFolderPath(nullptr, &path[0], type, FALSE);
       result = QString::fromStdWString(path);
    }
 
@@ -1121,7 +1121,7 @@ static void initDefaultPaths(QMutexLocker *locker)
       QString userPath;
       char *env = getenv("XDG_CONFIG_HOME");
 
-      if (env == 0) {
+      if (env == nullptr) {
          userPath = homePath;
          userPath += QString("/.config");
 
@@ -1476,8 +1476,8 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
    }
 
 #ifdef Q_OS_WIN
-   HANDLE readSemaphore  = 0;
-   HANDLE writeSemaphore = 0;
+   HANDLE readSemaphore  = nullptr;
+   HANDLE writeSemaphore = nullptr;
 
    static const int FileLockSemMax = 50;
    int numReadLocks = readOnly ? 1 : FileLockSemMax;
@@ -1488,7 +1488,7 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
          QString writeSemName = "QSettingsWriteSem ";
          writeSemName.append(file.fileName());
 
-         writeSemaphore = CreateSemaphore(0, 1, 1, &writeSemName.toStdWString()[0]);
+         writeSemaphore = CreateSemaphore(nullptr, 1, 1, &writeSemName.toStdWString()[0]);
 
          if (writeSemaphore) {
             WaitForSingleObject(writeSemaphore, INFINITE);
@@ -1503,7 +1503,7 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       QString readSemName("QSettingsReadSem ");
       readSemName.append(file.fileName());
 
-      readSemaphore = CreateSemaphore(0, FileLockSemMax, FileLockSemMax, &readSemName.toStdWString()[0]);
+      readSemaphore = CreateSemaphore(nullptr, FileLockSemMax, FileLockSemMax, &readSemName.toStdWString()[0]);
 
       if (readSemaphore) {
          for (int i = 0; i < numReadLocks; ++i) {
@@ -1513,8 +1513,8 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       } else {
          setStatus(QSettings::AccessError);
 
-         if (writeSemaphore != 0) {
-            ReleaseSemaphore(writeSemaphore, 1, 0);
+         if (writeSemaphore != nullptr) {
+            ReleaseSemaphore(writeSemaphore, 1, nullptr);
             CloseHandle(writeSemaphore);
          }
          return;
@@ -1663,12 +1663,12 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
        Release the file lock.
    */
 #ifdef Q_OS_WIN
-   if (readSemaphore != 0) {
-      ReleaseSemaphore(readSemaphore, numReadLocks, 0);
+   if (readSemaphore != nullptr) {
+      ReleaseSemaphore(readSemaphore, numReadLocks, nullptr);
       CloseHandle(readSemaphore);
    }
-   if (writeSemaphore != 0) {
-      ReleaseSemaphore(writeSemaphore, 1, 0);
+   if (writeSemaphore != nullptr) {
+      ReleaseSemaphore(writeSemaphore, 1, nullptr);
       CloseHandle(writeSemaphore);
    }
 #endif
@@ -2632,7 +2632,7 @@ bool QSettings::contains(const QString &key) const
 {
    Q_D(const QSettings);
    QString k = d->actualKey(key);
-   return d->get(k, 0);
+   return d->get(k, nullptr);
 }
 
 /*!

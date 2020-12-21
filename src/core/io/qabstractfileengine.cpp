@@ -87,7 +87,7 @@ QAbstractFileEngineHandler::~QAbstractFileEngineHandler()
 */
 QAbstractFileEngine *qt_custom_file_engine_handler_create(const QString &path)
 {
-   QAbstractFileEngine *engine = 0;
+   QAbstractFileEngine *engine = nullptr;
 
    if (qt_file_engine_handlers_in_use) {
       QReadLocker locker(fileEngineHandlerMutex());
@@ -523,7 +523,7 @@ uchar *QAbstractFileEngine::map(qint64 offset, qint64 size, QFile::MemoryMapFlag
    option.flags = flags;
    MapExtensionReturn r;
    if (!extension(MapExtension, &option, &r)) {
-      return 0;
+      return nullptr;
    }
    return r.address;
 }
@@ -676,7 +676,7 @@ QAbstractFileEngine::Iterator *QAbstractFileEngine::beginEntryList(QDir::Filters
 {
    Q_UNUSED(filters);
    Q_UNUSED(filterNames);
-   return 0;
+   return nullptr;
 }
 
 /*!
@@ -684,7 +684,7 @@ QAbstractFileEngine::Iterator *QAbstractFileEngine::beginEntryList(QDir::Filters
 */
 QAbstractFileEngine::Iterator *QAbstractFileEngine::endEntryList()
 {
-   return 0;
+   return nullptr;
 }
 
 qint64 QAbstractFileEngine::read(char *data, qint64 maxlen)

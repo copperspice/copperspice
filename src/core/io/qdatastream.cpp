@@ -54,7 +54,7 @@
 
 QDataStream::QDataStream()
 {
-   dev = 0;
+   dev       = nullptr;
    owndev = false;
    byteorder = BigEndian;
    ver = CS_DefaultStreamVersion;
@@ -143,12 +143,12 @@ bool QDataStream::atEnd() const
 */
 QDataStream::FloatingPointPrecision QDataStream::floatingPointPrecision() const
 {
-   return d == 0 ? QDataStream::DoublePrecision : d->floatingPointPrecision;
+   return d == nullptr ? QDataStream::DoublePrecision : d->floatingPointPrecision;
 }
 
 void QDataStream::setFloatingPointPrecision(QDataStream::FloatingPointPrecision precision)
 {
-   if (d == 0) {
+   if (d == nullptr) {
       d.reset(new QDataStreamPrivate());
    }
    d->floatingPointPrecision = precision;
@@ -501,7 +501,7 @@ QDataStream &QDataStream::operator>>(char *&s)
 
 QDataStream &QDataStream::readBytes(char *&s, uint &l)
 {
-   s = 0;
+   s = nullptr;
    l = 0;
    CHECK_STREAM_PRECOND(*this)
 
@@ -513,8 +513,8 @@ QDataStream &QDataStream::readBytes(char *&s, uint &l)
 
    const quint32 Step = 1024 * 1024;
    quint32 allocated = 0;
-   char *prevBuf = 0;
-   char *curBuf = 0;
+   char *prevBuf = nullptr;
+   char *curBuf  = nullptr;
 
    do {
       int blockSize = qMin(Step, len - allocated);

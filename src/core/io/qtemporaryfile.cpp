@@ -134,8 +134,8 @@ static bool createFileFromTemplate(NativeFileHandle &file,
 #if defined(Q_OS_WIN)
       file = CreateFile((const wchar_t *)path.constData(),
                         GENERIC_READ | GENERIC_WRITE,
-                        FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_NEW,
-                        FILE_ATTRIBUTE_NORMAL, NULL);
+                        FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, CREATE_NEW,
+                        FILE_ATTRIBUTE_NORMAL, nullptr);
 
       if (file != INVALID_HANDLE_VALUE) {
          return true;
@@ -225,7 +225,7 @@ bool QTemporaryFileEngine::isReallyOpen()
 {
    Q_D(QFSFileEngine);
 
-   if (!((0 == d->fh) && (-1 == d->fd)
+   if (!((nullptr == d->fh) && (-1 == d->fd)
 
 #if defined Q_OS_WIN
          && (INVALID_HANDLE_VALUE == d->fileHandle)
@@ -407,7 +407,7 @@ static QString defaultTemplateName()
 }
 
 QTemporaryFile::QTemporaryFile()
-   : QFile(*new QTemporaryFilePrivate, 0)
+   : QFile(*new QTemporaryFilePrivate, nullptr)
 {
    Q_D(QTemporaryFile);
    d->templateName = defaultTemplateName();
@@ -416,7 +416,7 @@ QTemporaryFile::QTemporaryFile()
 }
 
 QTemporaryFile::QTemporaryFile(const QString &templateName)
-   : QFile(*new QTemporaryFilePrivate, 0)
+   : QFile(*new QTemporaryFilePrivate, nullptr)
 {
    Q_D(QTemporaryFile);
    d->templateName = templateName;
@@ -487,7 +487,7 @@ QTemporaryFile *QTemporaryFile::createLocalFile(QFile &file)
 {
    if (QAbstractFileEngine *engine = file.d_func()->engine()) {
       if (engine->fileFlags(QAbstractFileEngine::FlagsMask) & QAbstractFileEngine::LocalDiskFlag) {
-         return 0;   //local already
+         return nullptr;   //local already
       }
       //cache
       bool wasOpen = file.isOpen();
@@ -519,7 +519,7 @@ QTemporaryFile *QTemporaryFile::createLocalFile(QFile &file)
       //done
       return ret;
    }
-   return 0;
+   return nullptr;
 }
 
 /*!

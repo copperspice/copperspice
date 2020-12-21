@@ -111,7 +111,7 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       pathInfo = fileInfo;
 
       // Look for a thread
-      QWindowsFileSystemWatcherEngineThread *thread = 0;
+      QWindowsFileSystemWatcherEngineThread *thread = nullptr;
       QWindowsFileSystemWatcherEngine::Handle handle;
       QList<QWindowsFileSystemWatcherEngineThread *>::const_iterator jt, end;
       end = threads.constEnd();
@@ -234,7 +234,7 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
 
       for (jt = threads.begin(); jt != end; ++jt) {
          QWindowsFileSystemWatcherEngineThread *thread = *jt;
-         if (*jt == 0) {
+         if (*jt == nullptr) {
             continue;
          }
 
@@ -290,11 +290,11 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
    for (jt = threads.begin(); jt != end; ++jt) {
       if (!(*jt)->isRunning()) {
          delete *jt;
-         *jt = 0;
+         *jt = nullptr;
       }
    }
 
-   threads.removeAll(0);
+   threads.removeAll(nullptr);
    return p;
 }
 
@@ -305,7 +305,7 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
 QWindowsFileSystemWatcherEngineThread::QWindowsFileSystemWatcherEngineThread()
    : msg(0)
 {
-   if (HANDLE h = CreateEvent(0, false, false, 0)) {
+   if (HANDLE h = CreateEvent(nullptr, false, false, nullptr)) {
       handles.reserve(MAXIMUM_WAIT_OBJECTS);
       handles.append(h);
    }

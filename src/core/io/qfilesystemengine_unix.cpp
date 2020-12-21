@@ -54,19 +54,19 @@ extern "C" NSString *NSTemporaryDirectory();
 
 static inline bool hasResourcePropertyFlag(const QFileSystemMetaData &data, const QFileSystemEntry &entry, CFStringRef key)
 {
-   QCFString path = CFStringCreateWithFileSystemRepresentation(0, entry.nativeFilePath().constData());
+   QCFString path = CFStringCreateWithFileSystemRepresentation(nullptr, entry.nativeFilePath().constData());
 
    if (! path) {
       return false;
    }
 
-   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(0, path, kCFURLPOSIXPathStyle, data.hasFlags(QFileSystemMetaData::DirectoryType));
+   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, path, kCFURLPOSIXPathStyle, data.hasFlags(QFileSystemMetaData::DirectoryType));
    if (! url) {
       return false;
    }
 
    CFBooleanRef value;
-   if (CFURLCopyResourcePropertyForKey(url, key, &value, NULL)) {
+   if (CFURLCopyResourcePropertyForKey(url, key, &value, nullptr)) {
       if (value == kCFBooleanTrue) {
          return true;
       }
@@ -87,7 +87,7 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
    if (suffix.length() > 0) {
       // First step: is the extension known ?
       QCFType<CFStringRef> extensionRef = QCFString::toCFStringRef(suffix);
-      QCFType<CFStringRef> uniformTypeIdentifier = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, extensionRef, NULL);
+      QCFType<CFStringRef> uniformTypeIdentifier = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, extensionRef, nullptr);
 
       if (UTTypeConformsTo(uniformTypeIdentifier, kUTTypeBundle)) {
          return true;
@@ -95,7 +95,7 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
 
       // Second step: check if an application knows the package type
       QCFType<CFStringRef> path = QCFString::toCFStringRef(entry.filePath());
-      QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(0, path, kCFURLPOSIXPathStyle, true);
+      QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, path, kCFURLPOSIXPathStyle, true);
 
       UInt32 type, creator;
       // Well created packages have the PkgInfo file
@@ -105,7 +105,7 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
 
       // Find if an application other than Finder claims to know how to handle the package
       QCFType<CFURLRef> application;
-      application = LSCopyDefaultApplicationURLForURL(url, kLSRolesEditor | kLSRolesViewer | kLSRolesViewer, NULL);
+      application = LSCopyDefaultApplicationURLForURL(url, kLSRolesEditor | kLSRolesViewer | kLSRolesViewer, nullptr);
 
       if (application) {
          QCFType<CFBundleRef> bundle = CFBundleCreate(kCFAllocatorDefault, application);
@@ -197,27 +197,27 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
 
 #if defined(Q_OS_DARWIN)
    {
-      QCFString path = CFStringCreateWithFileSystemRepresentation(0,
+      QCFString path = CFStringCreateWithFileSystemRepresentation(nullptr,
                   QFile::encodeName(QDir::cleanPath(link.filePath())).data());
 
       if (! path) {
          return QFileSystemEntry();
       }
 
-      QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(0, path, kCFURLPOSIXPathStyle,
+      QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, path, kCFURLPOSIXPathStyle,
                   data.hasFlags(QFileSystemMetaData::DirectoryType));
       if (! url) {
          return QFileSystemEntry();
       }
 
-      QCFType<CFDataRef> bookmarkData = CFURLCreateBookmarkDataFromFile(0, url, NULL);
+      QCFType<CFDataRef> bookmarkData = CFURLCreateBookmarkDataFromFile(nullptr, url, nullptr);
       if (! bookmarkData) {
          return QFileSystemEntry();
       }
 
-      QCFType<CFURLRef> resolvedUrl = CFURLCreateByResolvingBookmarkData(0, bookmarkData,
+      QCFType<CFURLRef> resolvedUrl = CFURLCreateByResolvingBookmarkData(nullptr, bookmarkData,
                   (CFURLBookmarkResolutionOptions)(kCFBookmarkResolutionWithoutUIMask
-                  | kCFBookmarkResolutionWithoutMountingMask), NULL, NULL, NULL, NULL);
+                  | kCFBookmarkResolutionWithoutMountingMask), nullptr, nullptr, nullptr, nullptr);
 
       if (! resolvedUrl) {
          return QFileSystemEntry();
@@ -247,17 +247,17 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
     Q_UNUSED(data);
     return QFileSystemEntry(slowCanonicalized(absoluteName(entry).filePath()));
 #else
-    char *ret = 0;
+    char *ret = nullptr;
 
 #ifdef Q_OS_DARWIN
 
     ret = (char*)malloc(PATH_MAX + 1);
 
-    if (ret && realpath(entry.nativeFilePath().constData(), (char*)ret) == 0) {
+    if (ret && realpath(entry.nativeFilePath().constData(), (char*)ret) == nullptr) {
         const int savedErrno = errno; // errno is checked below, and free() might change it
         free(ret);
         errno = savedErrno;
-        ret = 0;
+        ret = nullptr;
     }
 
 #elif defined(Q_OS_ANDROID)
@@ -389,7 +389,7 @@ QString QFileSystemEngine::resolveUserName(uint userId)
    QVarLengthArray<char, 1024> buf(size_max);
 #endif
 
-   struct passwd *pw = 0;
+   struct passwd *pw = nullptr;
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && ! defined(Q_OS_OPENBSD)
    struct passwd entry;
@@ -416,7 +416,7 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
    QVarLengthArray<char, 1024> buf(size_max);
 #endif
 
-   struct group *gr = 0;
+   struct group *gr = nullptr;
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
    size_max = sysconf(_SC_GETGR_R_SIZE_MAX);
@@ -450,8 +450,9 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
 //static
 QString QFileSystemEngine::bundleName(const QFileSystemEntry &entry)
 {
-   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(0, QCFString(entry.filePath()),
+   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, QCFString(entry.filePath()),
                            kCFURLPOSIXPathStyle, true);
+
    if (QCFType<CFDictionaryRef> dict = CFBundleCopyInfoDictionaryForURL(url)) {
       if (CFTypeRef name = (CFTypeRef)CFDictionaryGetValue(dict, kCFBundleNameKey)) {
          if (CFGetTypeID(name) == CFStringGetTypeID()) {

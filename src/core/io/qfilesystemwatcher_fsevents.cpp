@@ -135,7 +135,7 @@ const CFTimeInterval Latency = 0.033; // This will do updates 30 times a second 
 #endif
 
 QFSEventsFileSystemWatcherEngine::QFSEventsFileSystemWatcherEngine()
-   : fsStream(0), pathsToWatch(0), threadsRunLoop(0)
+   : fsStream(nullptr), pathsToWatch(nullptr), threadsRunLoop(nullptr)
 {
 }
 
@@ -229,7 +229,7 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       pathsToWatch = CFArrayCreateCopy(kCFAllocatorDefault, tmpArray);
    }
 
-   FSEventStreamContext context = { 0, this, 0, 0, 0 };
+   FSEventStreamContext context = { 0, this, nullptr, nullptr, nullptr };
    fsStream = FSEventStreamCreate(kCFAllocatorDefault,
                                   QFSEventsFileSystemWatcherEngine::fseventsCallback,
                                   &context, pathsToWatch,
@@ -264,7 +264,7 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
    wait();
    QMutexLocker locker(&mutex);
    // short circuit for smarties that call remove before add and we have nothing.
-   if (pathsToWatch == 0) {
+   if (pathsToWatch == nullptr) {
       return paths;
    }
    QStringList failedToRemove;
@@ -273,7 +273,7 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
    if (fsStream) {
       idToCheck = FSEventStreamGetLatestEventId(fsStream);
       cleanupFSStream(fsStream);
-      fsStream = 0;
+      fsStream = nullptr;
    } else {
       idToCheck = kFSEventStreamEventIdSinceNow;
    }
@@ -282,7 +282,7 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
    QCFType<CFMutableArrayRef> tmpArray = CFArrayCreateMutableCopy(kCFAllocatorDefault, itemCount,
                                          pathsToWatch);
    CFRelease(pathsToWatch);
-   pathsToWatch = 0;
+   pathsToWatch = nullptr;
    for (int i = 0; i < paths.size(); ++i) {
       // Get the itemCount at the beginning to avoid any overruns during the iteration.
       itemCount = CFArrayGetCount(tmpArray);
@@ -312,7 +312,7 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
    if (itemCount != 0) {
       pathsToWatch = CFArrayCreateCopy(kCFAllocatorDefault, tmpArray);
 
-      FSEventStreamContext context = { 0, this, 0, 0, 0 };
+      FSEventStreamContext context = { 0, this, nullptr, nullptr, nullptr };
       fsStream = FSEventStreamCreate(kCFAllocatorDefault,
                                      QFSEventsFileSystemWatcherEngine::fseventsCallback,
                                      &context, pathsToWatch, idToCheck, Latency, QtFSEventFlags);
@@ -485,7 +485,7 @@ void QFSEventsFileSystemWatcherEngine::run()
    // If for some reason we called stop up above (and invalidated our stream), this call will return
    // immediately.
    CFRunLoopRun();
-   threadsRunLoop = 0;
+   threadsRunLoop = nullptr;
    QMutexLocker locker(&mutex);
    waitForStop.wakeAll();
 #endif

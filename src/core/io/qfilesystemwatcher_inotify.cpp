@@ -210,7 +210,7 @@ QInotifyFileSystemWatcherEngine *QInotifyFileSystemWatcherEngine::create()
    if (fd == -1) {
       fd = inotify_init();
       if (fd == -1) {
-         return 0;
+         return nullptr;
       }
       ::fcntl(fd, F_SETFD, FD_CLOEXEC);
    }

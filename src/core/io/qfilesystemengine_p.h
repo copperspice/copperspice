@@ -93,7 +93,7 @@ class QFileSystemEngine
    static bool removeFile(const QFileSystemEntry &entry, QSystemError &error);
 
    static bool setPermissions(const QFileSystemEntry &entry, QFile::Permissions permissions,
-         QSystemError &error, QFileSystemMetaData *data = 0);
+         QSystemError &error, QFileSystemMetaData *data = nullptr);
 
    static bool setCurrentPath(const QFileSystemEntry &entry);
    static QFileSystemEntry currentPath();

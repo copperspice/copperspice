@@ -79,7 +79,7 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
    qint64 readLine(char *data, qint64 maxlen) override;
    qint64 write(const char *data, qint64 len) override;
 
-   bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0) override;
+   bool extension(Extension extension, const ExtensionOption *option = nullptr, ExtensionReturn *output = nullptr) override;
    bool supportsExtension(Extension extension) const override;
 
    //FS only!!
