@@ -494,7 +494,7 @@ static QPair<QString, int> parsePosixZoneNameAndOffset(const char *&pos, const c
       ++zoneEnd;
    }
    while (zoneEnd < end) {
-      if (strchr(offsetChars, char(*zoneEnd)) == NULL) {
+      if (strchr(offsetChars, char(*zoneEnd)) == nullptr) {
          break;
       }
       ++zoneEnd;

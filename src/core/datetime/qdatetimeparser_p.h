@@ -227,13 +227,14 @@ class Q_CORE_EXPORT QDateTimeParser
    int sectionMaxSize(Section s, int count) const;
    QString sectionText(const QString &text, int sectionIndex, int index) const;
    int parseSection(const QDateTime &currentValue, int sectionIndex, QString &txt, int &cursorPosition,
-      int index, QDateTimeParser::State &state, int *used = 0) const;
+      int index, QDateTimeParser::State &state, int *used = nullptr) const;
 
 #ifndef QT_NO_TEXTDATE
    int findMonth(const QString &str1, int monthstart, int sectionIndex,
-      QString *monthName = 0, int *used = 0) const;
+      QString *monthName = nullptr, int *used = nullptr) const;
+
    int findDay(const QString &str1, int intDaystart, int sectionIndex,
-      QString *dayName = 0, int *used = 0) const;
+      QString *dayName = nullptr, int *used = nullptr) const;
 #endif
 
    enum AmPmFinder {
@@ -245,7 +246,7 @@ class Q_CORE_EXPORT QDateTimeParser
       PossibleBoth = 4
    };
 
-   AmPmFinder findAmPm(QString &str, int index, int *used = 0) const;
+   AmPmFinder findAmPm(QString &str, int index, int *used = nullptr) const;
    bool potentialValue(const QString &str, int min, int max, int index,
       const QDateTime &currentValue, int insert) const;
 

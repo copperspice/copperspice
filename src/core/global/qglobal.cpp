@@ -122,7 +122,7 @@ static inline bool determineWinOsVersionPost8(OSVERSIONINFO *result)
    }
 
    UINT uLen;
-   VS_FIXEDFILEINFO *fileInfo = 0;
+   VS_FIXEDFILEINFO *fileInfo = nullptr;
 
    if (! verQueryValueW(versionInfo.data(), L"\\", (LPVOID *)&fileInfo, &uLen)) {
      return false;

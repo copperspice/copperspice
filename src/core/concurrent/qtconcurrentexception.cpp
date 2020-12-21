@@ -110,7 +110,7 @@ void ExceptionStore::setException(const Exception &e)
 
 bool ExceptionStore::hasException() const
 {
-   return (exceptionHolder.exception() != 0);
+   return (exceptionHolder.exception() != nullptr);
 }
 
 ExceptionHolder ExceptionStore::exception()

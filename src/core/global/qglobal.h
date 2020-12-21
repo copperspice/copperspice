@@ -687,7 +687,7 @@ class QGlobalStaticDeleter
 #define Q_GLOBAL_STATIC(TYPE, NAME)                                              \
    static TYPE *NAME()                                                           \
    {                                                                             \
-      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(nullptr), false }; \
       if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
          TYPE *x = new TYPE;                                                     \
          if (! staticVar.pointer.testAndSetOrdered(nullptr, x)) {                \
@@ -702,7 +702,7 @@ class QGlobalStaticDeleter
 #define Q_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                              \
    static TYPE *NAME()                                                           \
    {                                                                             \
-      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(nullptr), false }; \
       if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
          TYPE *x = new TYPE ARGS;                                                \
          if (! staticVar.pointer.testAndSetOrdered(nullptr, x))                  \
@@ -716,7 +716,7 @@ class QGlobalStaticDeleter
 #define Q_GLOBAL_STATIC_WITH_INITIALIZER(TYPE, NAME, INITIALIZER)                \
    static TYPE *NAME()                                                           \
    {                                                                             \
-      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(0), false }; \
+      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(nullptr), false }; \
       if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
          QScopedPointer<TYPE > x(new TYPE);                                      \
          INITIALIZER;                                                            \

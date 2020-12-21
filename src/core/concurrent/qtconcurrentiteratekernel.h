@@ -106,8 +106,9 @@ class ResultReporter<void>
    inline ResultReporter(ThreadEngine<void> *) { }
    inline void reserveSpace(int) { };
    inline void reportResults(int) { };
+
    inline void *getPointer() {
-      return 0;
+      return nullptr;
    }
 };
 

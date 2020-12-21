@@ -110,7 +110,7 @@ template <typename T>
 class QFutureWatcher : public QFutureWatcherBase
 {
  public:
-   QFutureWatcher(QObject *_parent = 0)
+   QFutureWatcher(QObject *_parent = nullptr)
       : QFutureWatcherBase(_parent) {
    }
 

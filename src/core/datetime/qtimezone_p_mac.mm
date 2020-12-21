@@ -34,20 +34,20 @@
 
 // Create the system default time zone
 QMacTimeZonePrivate::QMacTimeZonePrivate()
-    : m_nstz(0)
+    : m_nstz(nullptr)
 {
     init(systemTimeZoneId());
 }
 
 // Create a named time zone
 QMacTimeZonePrivate::QMacTimeZonePrivate(const QByteArray &ianaId)
-    : m_nstz(0)
+    : m_nstz(nullptr)
 {
     init(ianaId);
 }
 
 QMacTimeZonePrivate::QMacTimeZonePrivate(const QMacTimeZonePrivate &other)
-    : QTimeZonePrivate(other), m_nstz(0)
+    : QTimeZonePrivate(other), m_nstz(nullptr)
 {
     m_nstz = [other.m_nstz copy];
 }

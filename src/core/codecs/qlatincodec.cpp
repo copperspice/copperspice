@@ -32,7 +32,7 @@ QLatin1Codec::~QLatin1Codec()
 
 QString QLatin1Codec::convertToUnicode(const char *chars, int len, ConverterState *) const
 {
-   if (chars == 0) {
+   if (chars == nullptr) {
       return QString();
    }
 
@@ -93,7 +93,7 @@ QLatin15Codec::~QLatin15Codec()
 
 QString QLatin15Codec::convertToUnicode(const char *chars, int len, ConverterState *) const
 {
-   if (chars == 0) {
+   if (chars == nullptr) {
       return QString();
    }
 

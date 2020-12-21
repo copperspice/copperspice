@@ -118,7 +118,7 @@ bool ThreadEngineBarrier::releaseUnlessLast()
 }
 
 ThreadEngineBase::ThreadEngineBase()
-   : futureInterface(0), threadPool(QThreadPool::globalInstance())
+   : futureInterface(nullptr), threadPool(QThreadPool::globalInstance())
 {
    setAutoDelete(false);
 }
@@ -194,7 +194,7 @@ void ThreadEngineBase::waitForResume()
 bool ThreadEngineBase::isProgressReportingEnabled()
 {
    // If we don't have a QFuture, there is no-one to report the progress to.
-   return (futureInterface != 0);
+   return (futureInterface != nullptr);
 }
 
 void ThreadEngineBase::setProgressValue(int progress)
@@ -233,7 +233,7 @@ void ThreadEngineBase::startThreads()
 
 void ThreadEngineBase::threadExit()
 {
-   const bool asynchronous = futureInterface != 0;
+   const bool asynchronous = futureInterface != nullptr;
    const int lastThread = (barrier.release() == 0);
 
    if (lastThread && asynchronous) {

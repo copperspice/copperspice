@@ -35,7 +35,7 @@ class QSequentialAnimationGroupPrivate : public QAnimationGroupPrivate
 
  public:
    QSequentialAnimationGroupPrivate()
-      : currentAnimation(0), currentAnimationIndex(-1), lastLoop(0) {
+      : currentAnimation(nullptr), currentAnimationIndex(-1), lastLoop(0) {
    }
 
 

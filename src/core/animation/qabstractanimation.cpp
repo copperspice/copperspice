@@ -348,7 +348,7 @@ void QAnimationDriver::stop()
 }
 
 QDefaultAnimationDriver::QDefaultAnimationDriver(QUnifiedTimer *timer)
-   : QAnimationDriver(0), m_unified_timer(timer)
+   : QAnimationDriver(nullptr), m_unified_timer(timer)
 {
 }
 
@@ -469,7 +469,7 @@ void QAbstractAnimationPrivate::setState(QAbstractAnimation::State newState)
 }
 
 QAbstractAnimation::QAbstractAnimation(QObject *parent)
-   : QObject(0), d_ptr(new QAbstractAnimationPrivate)
+   : QObject(nullptr), d_ptr(new QAbstractAnimationPrivate)
 {
    d_ptr->q_ptr = this;
 
@@ -479,7 +479,7 @@ QAbstractAnimation::QAbstractAnimation(QObject *parent)
 
 // internal
 QAbstractAnimation::QAbstractAnimation(QAbstractAnimationPrivate &dd, QObject *parent)
-   : QObject(0), d_ptr(&dd)
+   : QObject(nullptr), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 

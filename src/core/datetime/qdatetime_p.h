@@ -129,7 +129,7 @@ class QDateTimePrivate : public QSharedData
    }
 
    static qint64 zoneMSecsToEpochMSecs(qint64 msecs, const QTimeZone &zone,
-      QDate *localDate = 0, QTime *localTime = 0);
+      QDate *localDate = nullptr, QTime *localTime = nullptr);
 
    static inline qint64 minJd() {
       return QDate::minJd();
@@ -138,6 +138,5 @@ class QDateTimePrivate : public QSharedData
       return QDate::maxJd();
    }
 };
-
 
 #endif

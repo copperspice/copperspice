@@ -37,7 +37,7 @@ static const struct {
 
    // from RFC 1489, ftp://ftp.isi.edu/in-notes/rfc1489.txt
    {
-      "KOI8-R", { "csKOI8R", 0 }, 2084,
+      "KOI8-R", { "csKOI8R", nullptr }, 2084,
       {
          0x2500, 0x2502, 0x250C, 0x2510, 0x2514, 0x2518, 0x251C, 0x2524,
          0x252C, 0x2534, 0x253C, 0x2580, 0x2584, 0x2588, 0x258C, 0x2590,
@@ -62,7 +62,7 @@ static const struct {
 
    // from RFC 2319, ftp://ftp.isi.edu/in-notes/rfc2319.txt
    {
-      "KOI8-U", { "KOI8-RU", 0 }, 2088,
+      "KOI8-U", { "KOI8-RU", nullptr }, 2088,
       {
          0x2500, 0x2502, 0x250C, 0x2510, 0x2514, 0x2518, 0x251C, 0x2524,
          0x252C, 0x2534, 0x253C, 0x2580, 0x2584, 0x2588, 0x258C, 0x2590,
@@ -91,7 +91,7 @@ static const struct {
 
    // then I inserted the files manually.
    {
-      "ISO-8859-2", {"latin2", "iso-ir-101", "csISOLatin2", 0 }, 5,
+      "ISO-8859-2", {"latin2", "iso-ir-101", "csISOLatin2", nullptr }, 5,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -112,7 +112,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-3", { "latin3", "iso-ir-109", "csISOLatin3", 0 }, 6,
+      "ISO-8859-3", { "latin3", "iso-ir-109", "csISOLatin3", nullptr }, 6,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -133,7 +133,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-4", { "latin4", "iso-ir-110", "csISOLatin4", 0 }, 7,
+      "ISO-8859-4", { "latin4", "iso-ir-110", "csISOLatin4", nullptr }, 7,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -154,7 +154,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-5", { "cyrillic", "iso-ir-144", "csISOLatinCyrillic", 0 }, 8,
+      "ISO-8859-5", { "cyrillic", "iso-ir-144", "csISOLatinCyrillic", nullptr }, 8,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -175,7 +175,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-6", { "ISO-8859-6-I", "ECMA-114", "ASMO-708", "arabic", "iso-ir-127", "csISOLatinArabic", 0 }, 82,
+      "ISO-8859-6", { "ISO-8859-6-I", "ECMA-114", "ASMO-708", "arabic", "iso-ir-127", "csISOLatinArabic", nullptr }, 82,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -196,7 +196,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-7", { "ECMA-118", "greek", "iso-ir-126", "csISOLatinGreek", 0 }, 10,
+      "ISO-8859-7", { "ECMA-118", "greek", "iso-ir-126", "csISOLatinGreek", nullptr }, 10,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -217,7 +217,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-8", { "ISO 8859-8-I", "iso-ir-138", "hebrew", "csISOLatinHebrew", 0 }, 85,
+      "ISO-8859-8", { "ISO 8859-8-I", "iso-ir-138", "hebrew", "csISOLatinHebrew", nullptr }, 85,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -238,7 +238,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-9", { "iso-ir-148", "latin5", "csISOLatin5", 0 }, 12,
+      "ISO-8859-9", { "iso-ir-148", "latin5", "csISOLatin5", nullptr }, 12,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -259,7 +259,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-10", { "iso-ir-157", "latin6", "ISO-8859-10:1992", "csISOLatin6", 0 }, 13,
+      "ISO-8859-10", { "iso-ir-157", "latin6", "ISO-8859-10:1992", "csISOLatin6", nullptr }, 13,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -280,7 +280,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-13", { 0 }, 109,
+      "ISO-8859-13", { nullptr }, 109,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -301,7 +301,7 @@ static const struct {
       }
    },
    {
-      "ISO-8859-14", { "iso-ir-199", "latin8", "iso-celtic", 0 }, 110,
+      "ISO-8859-14", { "iso-ir-199", "latin8", "iso-celtic", nullptr }, 110,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -323,7 +323,7 @@ static const struct {
    },
 
    {
-      "ISO-8859-16", { "iso-ir-226", "latin10", 0 }, 112,
+      "ISO-8859-16", { "iso-ir-226", "latin10", nullptr }, 112,
       {
          0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087,
          0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
@@ -349,7 +349,7 @@ static const struct {
    // $ for a in CP* ; do (awk '/^0x[89ABCDEF]/{ print $1, $2 }' < $a) | sort | sed -e 's/#UNDEF.*$/0xFFFD/' | cut -c6- | paste '-d ' - - - - - - - - | sed -e 's/ /, /g' -e 's/$/,/' -e '$ s/,$/} },/' -e '1 s/^/{ /' > ~/tmp/$a ; done
 
    {
-      "IBM850", { "CP850", "csPC850Multilingual", 0 }, 2009,
+      "IBM850", { "CP850", "csPC850Multilingual", nullptr }, 2009,
       {
          0x00C7, 0x00FC, 0x00E9, 0x00E2, 0x00E4, 0x00E0, 0x00E5, 0x00E7,
          0x00EA, 0x00EB, 0x00E8, 0x00EF, 0x00EE, 0x00EC, 0x00C4, 0x00C5,
@@ -370,7 +370,7 @@ static const struct {
       }
    },
    {
-      "IBM874", { "CP874", 0 }, -874, //### what is the mib?
+      "IBM874", { "CP874", nullptr }, -874, //### what is the mib?
       {
          0x20AC, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0x2026, 0xFFFD, 0xFFFD,
          0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -392,7 +392,7 @@ static const struct {
    },
 
    {
-      "IBM866", { "CP866", "csIBM866", 0 }, 2086,
+      "IBM866", { "CP866", "csIBM866", nullptr }, 2086,
       {
          0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0415, 0x0416, 0x0417,
          0x0418, 0x0419, 0x041A, 0x041B, 0x041C, 0x041D, 0x041E, 0x041F,
@@ -414,7 +414,7 @@ static const struct {
    },
 
    {
-      "windows-1250", { "CP1250", 0 }, 2250,
+      "windows-1250", { "CP1250", nullptr }, 2250,
       {
          0x20AC, 0xFFFD, 0x201A, 0xFFFD, 0x201E, 0x2026, 0x2020, 0x2021,
          0xFFFD, 0x2030, 0x0160, 0x2039, 0x015A, 0x0164, 0x017D, 0x0179,
@@ -435,7 +435,7 @@ static const struct {
       }
    },
    {
-      "windows-1251", { "CP1251", 0 }, 2251,
+      "windows-1251", { "CP1251", nullptr }, 2251,
       {
          0x0402, 0x0403, 0x201A, 0x0453, 0x201E, 0x2026, 0x2020, 0x2021,
          0x20AC, 0x2030, 0x0409, 0x2039, 0x040A, 0x040C, 0x040B, 0x040F,
@@ -456,7 +456,7 @@ static const struct {
       }
    },
    {
-      "windows-1252", { "CP1252", 0 }, 2252,
+      "windows-1252", { "CP1252", nullptr }, 2252,
       {
          0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
          0x02C6, 0x2030, 0x0160, 0x2039, 0x0152, 0xFFFD, 0x017D, 0xFFFD,
@@ -477,7 +477,7 @@ static const struct {
       }
    },
    {
-      "windows-1253", {"CP1253", 0 }, 2253,
+      "windows-1253", {"CP1253", nullptr }, 2253,
       {
          0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
          0xFFFD, 0x2030, 0xFFFD, 0x2039, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -498,7 +498,7 @@ static const struct {
       }
    },
    {
-      "windows-1254", { "CP1254", 0 }, 2254,
+      "windows-1254", { "CP1254", nullptr }, 2254,
       {
          0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
          0x02C6, 0x2030, 0x0160, 0x2039, 0x0152, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -519,7 +519,7 @@ static const struct {
       }
    },
    {
-      "windows-1255", { "CP1255", 0 }, 2255,
+      "windows-1255", { "CP1255", nullptr }, 2255,
       {
          0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
          0x02C6, 0x2030, 0xFFFD, 0x2039, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -540,7 +540,7 @@ static const struct {
       }
    },
    {
-      "windows-1256", { "CP1256", 0 }, 2256,
+      "windows-1256", { "CP1256", nullptr }, 2256,
       {
          0x20AC, 0x067E, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
          0x02C6, 0x2030, 0x0679, 0x2039, 0x0152, 0x0686, 0x0698, 0x0688,
@@ -561,7 +561,7 @@ static const struct {
       }
    },
    {
-      "windows-1257", { "CP1257", 0 }, 2257,
+      "windows-1257", { "CP1257", nullptr }, 2257,
       {
          0x20AC, 0xFFFD, 0x201A, 0xFFFD, 0x201E, 0x2026, 0x2020, 0x2021,
          0xFFFD, 0x2030, 0xFFFD, 0x2039, 0xFFFD, 0x00A8, 0x02C7, 0x00B8,
@@ -582,7 +582,7 @@ static const struct {
       }
    },
    {
-      "windows-1258", { "CP1258", 0 }, 2258,
+      "windows-1258", { "CP1258", nullptr }, 2258,
       {
          0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
          0x02C6, 0x2030, 0xFFFD, 0x2039, 0x0152, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -604,7 +604,7 @@ static const struct {
    },
 
    {
-      "Apple Roman", { "macintosh", "MacRoman", 0 }, -168,
+      "Apple Roman", { "macintosh", "MacRoman", nullptr }, -168,
       {
          0x00C4, 0x00C5, 0x00C7, 0x00C9, 0x00D1, 0x00D6, 0x00DC, 0x00E1,
          0x00E0, 0x00E2, 0x00E4, 0x00E3, 0x00E5, 0x00E7, 0x00E9, 0x00E8,
@@ -629,7 +629,7 @@ static const struct {
    // /usr/share/i18n/charmaps/SAMI-WS2.gz, which is manually adapted
    // to this format by Boerre Gaup <boerre@subdimension.com>
    {
-      "WINSAMI2", { "WS2", 0 }, -165,
+      "WINSAMI2", { "WS2", nullptr }, -165,
       {
          0x20AC, 0xFFFD, 0x010C, 0x0192, 0x010D, 0x01B7, 0x0292, 0x01EE,
          0x01EF, 0x0110, 0x0160, 0x2039, 0x0152, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -657,7 +657,7 @@ static const struct {
 
    // $ for A in 8 9 A B C D E F ; do for B in 0 1 2 3 4 5 6 7 8 9 A B C D E F ; do echo x${A}${B} 0xFFFD ; done ; done > /tmp/digits ; (cut -c25- < TIS-620 ; cat /tmp/digits) | awk '/^x[89ABCDEF]/{ print $1, $2 }' | sed -e 's/<U/0x/' -e 's/>//' | sort | uniq -w4 | cut -c5- | paste '-d ' - - - - - - - - | sed -e 's/ /, /g' -e 's/$/,/' -e '$ s/,$/} },/' -e '1 s/^/{ /' > ~/tmp/tis-620
    {
-      "TIS-620", { "ISO 8859-11", 0 }, 2259, // Thai character set mib enum taken from tis620 (which is byte by byte equivalent)
+      "TIS-620", { "ISO 8859-11", nullptr }, 2259, // Thai character set mib enum taken from tis620 (which is byte by byte equivalent)
       {
          0x20AC, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0x2026, 0xFFFD, 0xFFFD,
          0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -688,7 +688,7 @@ static const struct {
      Alias: csHPRoman8
    */
    {
-      "roman8", { "hp-roman8", "csHPRoman8", 0 }, 2004,
+      "roman8", { "hp-roman8", "csHPRoman8", nullptr }, 2004,
       {
          0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
          0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD, 0xFFFD,
@@ -712,7 +712,8 @@ static const struct {
    // if you add more chacater sets at the end, change LAST_MIB above
 };
 
-QSimpleTextCodec::QSimpleTextCodec(int i) : forwardIndex(i), reverseMap(0)
+QSimpleTextCodec::QSimpleTextCodec(int i)
+   : forwardIndex(i), reverseMap(nullptr)
 {
 }
 
@@ -753,7 +754,7 @@ static QByteArray *buildReverseMap(int forwardIndex)
 
 QString QSimpleTextCodec::convertToUnicode(const char *chars, int len, ConverterState *) const
 {
-   if (len <= 0 || chars == 0) {
+   if (len <= 0 || chars == nullptr) {
       return QString();
    }
 
@@ -782,7 +783,7 @@ QByteArray QSimpleTextCodec::convertFromUnicode(QStringView str, ConverterState 
    if (! rmap) {
       rmap = buildReverseMap(this->forwardIndex);
 
-      if (!reverseMap.testAndSetRelease(0, rmap)) {
+      if (!reverseMap.testAndSetRelease(nullptr, rmap)) {
          delete rmap;
          rmap = reverseMap.load();
       }

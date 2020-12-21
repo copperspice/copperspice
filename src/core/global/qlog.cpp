@@ -93,7 +93,7 @@ QString qt_error_string(int errorCode)
          char16_t *string = nullptr;
 
          FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-             NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&string, 0, NULL);
+             nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&string, 0, nullptr);
 
          retval = QString::fromUtf16(string);
          LocalFree((HLOCAL)string);

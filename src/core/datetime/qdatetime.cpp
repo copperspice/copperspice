@@ -387,7 +387,7 @@ int QDate::weekNumber(int *yearNumber) const
       Q_ASSERT(week == 53 || week == 1);
    }
 
-   if (yearNumber != 0) {
+   if (yearNumber != nullptr) {
       *yearNumber = year;
    }
    return week;
@@ -724,7 +724,7 @@ QDate QDate::fromString(const QString &string, const QString &format)
 
    QDateTimeParser dt(QVariant::Date, QDateTimeParser::FromString);
    if (dt.parseFormat(format)) {
-      dt.fromString(string, &date, 0);
+      dt.fromString(string, &date, nullptr);
    }
 
    return date;
@@ -1016,7 +1016,7 @@ QTime QTime::fromString(const QString &string, Qt::DateFormat format)
       case Qt::ISODate:
       case Qt::TextDate:
       default:
-         return fromIsoTimeString(string, format, 0);
+         return fromIsoTimeString(string, format, nullptr);
    }
 }
 
@@ -1027,7 +1027,7 @@ QTime QTime::fromString(const QString &string, const QString &format)
    QDateTimeParser dt(QVariant::Time, QDateTimeParser::FromString);
 
    if (dt.parseFormat(format)) {
-      dt.fromString(string, 0, &time);
+      dt.fromString(string, nullptr, &time);
    }
 
    return time;
@@ -1087,7 +1087,7 @@ static int qt_timezone()
    return offset;
 
 #elif defined(Q_OS_BSD4) && ! defined(Q_OS_DARWIN)
-   time_t clock = time(NULL);
+   time_t clock = time(nullptr);
    struct tm t;
    localtime_r(&clock, &t);
 
@@ -1136,7 +1136,7 @@ static QString qt_tzname(QDateTimePrivate::DaylightStatus daylightStatus)
 // then null date/time will be returned, you should adjust the date first if
 // you need a guaranteed result.
 static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStatus *daylightStatus,
-   QString *abbreviation, bool *ok = 0)
+   QString *abbreviation, bool *ok = nullptr)
 {
    const qint64 msec = time->msec();
    int yy, mm, dd;
@@ -1240,7 +1240,7 @@ static bool qt_localtime(qint64 msecsSinceEpoch, QDate *localDate, QTime *localT
 
    // Use the reentrant version of localtime() where available
    // as is thread-safe and doesn't use a shared static data area
-   tm *res = 0;
+   tm *res = nullptr;
    res = localtime_r(&secsSinceEpoch, &local);
 
    if (res) {
@@ -1322,7 +1322,7 @@ static qint64 timeToMSecs(const QDate &date, const QTime &time)
 
 // Convert an MSecs Since Epoch into Local Time
 static bool epochMSecsToLocalTime(qint64 msecs, QDate *localDate, QTime *localTime,
-   QDateTimePrivate::DaylightStatus *daylightStatus = 0)
+   QDateTimePrivate::DaylightStatus *daylightStatus = nullptr)
 {
    if (msecs < 0) {
       // Docs state any LocalTime before 1970-01-01 will *not* have any Daylight Time applied
@@ -1366,8 +1366,8 @@ static bool epochMSecsToLocalTime(qint64 msecs, QDate *localDate, QTime *localTi
 // values from mktime for the adjusted local date and time.
 static qint64 localMSecsToEpochMSecs(qint64 localMsecs,
    QDateTimePrivate::DaylightStatus *daylightStatus,
-   QDate *localDate = 0, QTime *localTime = 0,
-   QString *abbreviation = 0)
+   QDate *localDate = nullptr, QTime *localTime = nullptr,
+   QString *abbreviation = nullptr)
 {
    QDate dt;
    QTime tm;
@@ -1774,7 +1774,7 @@ QDate QDateTime::date() const
       return QDate();
    }
    QDate dt;
-   msecsToTime(d->m_msecs, &dt, 0);
+   msecsToTime(d->m_msecs, &dt, nullptr);
    return dt;
 }
 
@@ -1785,7 +1785,7 @@ QTime QDateTime::time() const
       return QTime();
    }
    QTime tm;
-   msecsToTime(d->m_msecs, 0, &tm);
+   msecsToTime(d->m_msecs, nullptr, &tm);
    return tm;
 }
 
@@ -1831,7 +1831,7 @@ QString QDateTime::timeZoneAbbreviation() const
       case Qt::LocalTime:  {
          QString abbrev;
          QDateTimePrivate::DaylightStatus status = d->daylightStatus();
-         localMSecsToEpochMSecs(d->m_msecs, &status, 0, 0, &abbrev);
+         localMSecsToEpochMSecs(d->m_msecs, &status, nullptr, nullptr, &abbrev);
          return abbrev;
       }
    }
@@ -2322,7 +2322,7 @@ qint64 QDateTime::currentMSecsSinceEpoch()
    // posix compliant system
    // we have milliseconds
    struct timeval tv;
-   gettimeofday(&tv, 0);
+   gettimeofday(&tv, nullptr);
    return qint64(tv.tv_sec) * Q_INT64_C(1000) + tv.tv_usec / 1000;
 }
 

@@ -121,7 +121,7 @@ static QString readRegistryString(const HKEY &key, const wchar_t *value)
    std::wstring buffer{MAX_PATH};
 
    DWORD size = sizeof(wchar_t) * MAX_PATH;
-   RegQueryValueEx(key, (LPCWSTR)value, NULL, NULL, (LPBYTE)&buffer[0], &size);
+   RegQueryValueEx(key, (LPCWSTR)value, nullptr, nullptr, (LPBYTE)&buffer[0], &size);
 
    buffer.resize(size);
 
@@ -132,7 +132,7 @@ static int readRegistryValue(const HKEY &key, const wchar_t *value)
 {
    DWORD buffer;
    DWORD size = sizeof(buffer);
-   RegQueryValueEx(key, (LPCWSTR)value, NULL, NULL, (LPBYTE)&buffer, &size);
+   RegQueryValueEx(key, (LPCWSTR)value, nullptr, nullptr, (LPBYTE)&buffer, &size);
 
    return buffer;
 }
@@ -144,8 +144,7 @@ static QWinTimeZonePrivate::QWinTransitionRule readRegistryRule(const HKEY &key,
    REG_TZI_FORMAT tzi;
    DWORD tziSize = sizeof(tzi);
 
-   if (RegQueryValueEx(key, (LPCWSTR)value, NULL, NULL, (BYTE *)&tzi, &tziSize)
-      == ERROR_SUCCESS) {
+   if (RegQueryValueEx(key, (LPCWSTR)value, nullptr, nullptr, (BYTE *)&tzi, &tziSize) == ERROR_SUCCESS) {
       rule.startYear = 0;
       rule.standardTimeBias = tzi.Bias + tzi.StandardBias;
       rule.daylightTimeBias = tzi.Bias + tzi.DaylightBias - rule.standardTimeBias;
@@ -162,20 +161,19 @@ static TIME_ZONE_INFORMATION getRegistryTzi(const QByteArray &windowsId, bool *o
    TIME_ZONE_INFORMATION tzi;
    REG_TZI_FORMAT regTzi;
    DWORD regTziSize = sizeof(regTzi);
-   HKEY key = NULL;
+   HKEY key = nullptr;
 
    const QString tziKeyPath = QString::fromUtf8(tzRegPath) + '\\' + QString::fromUtf8(windowsId);
 
    if (openRegistryKey(tziKeyPath, &key)) {
 
       DWORD size = sizeof(tzi.DaylightName);
-      RegQueryValueEx(key, L"Dlt", NULL, NULL, (LPBYTE)tzi.DaylightName, &size);
+      RegQueryValueEx(key, L"Dlt", nullptr, nullptr, (LPBYTE)tzi.DaylightName, &size);
 
       size = sizeof(tzi.StandardName);
-      RegQueryValueEx(key, L"Std", NULL, NULL, (LPBYTE)tzi.StandardName, &size);
+      RegQueryValueEx(key, L"Std", nullptr, nullptr, (LPBYTE)tzi.StandardName, &size);
 
-      if (RegQueryValueEx(key, L"TZI", NULL, NULL, (BYTE *) &regTzi, &regTziSize)
-         == ERROR_SUCCESS) {
+      if (RegQueryValueEx(key, L"TZI", nullptr, nullptr, (BYTE *) &regTzi, &regTziSize) == ERROR_SUCCESS) {
          tzi.Bias = regTzi.Bias;
          tzi.StandardBias = regTzi.StandardBias;
          tzi.DaylightBias = regTzi.DaylightBias;
@@ -248,18 +246,19 @@ static QList<QByteArray> availableWindowsIds()
 #ifdef QT_USE_REGISTRY_TIMEZONE
    // TODO Consider caching results in a global static, very unlikely to change.
    QList<QByteArray> list;
-   HKEY key = NULL;
+   HKEY key = nullptr;
 
    if (openRegistryKey(QString::fromUtf8(tzRegPath), &key)) {
       DWORD idCount = 0;
 
-      if (RegQueryInfoKey(key, 0, 0, 0, &idCount, 0, 0, 0, 0, 0, 0, 0) == ERROR_SUCCESS && idCount > 0) {
+      if (RegQueryInfoKey(key, nullptr, nullptr, nullptr, &idCount, nullptr, nullptr,
+                  nullptr, nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS && idCount > 0) {
 
          for (DWORD i = 0; i < idCount; ++i) {
             DWORD maxLen = MAX_KEY_LENGTH;
             std::wstring buffer{MAX_KEY_LENGTH};
 
-            if (RegEnumKeyEx(key, i, &buffer[0], &maxLen, 0, 0, 0, 0) == ERROR_SUCCESS) {
+            if (RegEnumKeyEx(key, i, &buffer[0], &maxLen, nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS) {
                buffer.resize(maxLen);
                list.append(QString::fromStdWString(buffer).toUtf8());
             }
@@ -282,7 +281,7 @@ static QByteArray windowsSystemZoneId()
 #ifdef QT_USE_REGISTRY_TIMEZONE
    // On Vista and later is held in the value TimeZoneKeyName in key currTzRegPath
    QString id;
-   HKEY key = NULL;
+   HKEY key = nullptr;
    QString tziKeyPath = QString::fromUtf8(currTzRegPath);
 
    if (openRegistryKey(tziKeyPath, &key)) {
@@ -433,7 +432,7 @@ void QWinTimeZonePrivate::init(const QByteArray &ianaId)
    if (!m_windowsId.isEmpty()) {
 #ifdef QT_USE_REGISTRY_TIMEZONE
       // Open the base TZI for the time zone
-      HKEY baseKey = NULL;
+      HKEY baseKey = nullptr;
       const QString baseKeyPath = QString::fromUtf8(tzRegPath) + QLatin1Char('\\')
          + QString::fromUtf8(m_windowsId);
       if (openRegistryKey(baseKeyPath, &baseKey)) {
@@ -445,7 +444,7 @@ void QWinTimeZonePrivate::init(const QByteArray &ianaId)
          // On Vista and later the optional dynamic key holds historic data
          const QString dynamicKeyPath = baseKeyPath + "\\Dynamic DST";
 
-         HKEY dynamicKey = NULL;
+         HKEY dynamicKey = nullptr;
          if (openRegistryKey(dynamicKeyPath, &dynamicKey)) {
             // Find out the start and end years stored, then iterate over them
             int startYear = readRegistryValue(dynamicKey, L"FirstEntry");

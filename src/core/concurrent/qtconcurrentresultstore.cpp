@@ -151,7 +151,7 @@ void ResultStoreBase::syncPendingResults()
 
 int ResultStoreBase::addResult(int index, const void *result)
 {
-   ResultItem resultItem(result, 0); // 0 means "not a vector"
+   ResultItem resultItem(result, 0);                // 0 means "not a vector"
    return insertResultItem(index, resultItem);
 }
 
@@ -160,12 +160,14 @@ int ResultStoreBase::addResults(int index, const void *results, int vectorSize, 
    if (m_filterMode == false || vectorSize == totalCount) {
       ResultItem resultItem(results, vectorSize);
       return insertResultItem(index, resultItem);
+
    } else {
       if (vectorSize > 0) {
          ResultItem filteredIn(results, vectorSize);
          insertResultItem(index, filteredIn);
       }
-      ResultItem filteredAway(0, totalCount - vectorSize);
+
+      ResultItem filteredAway(nullptr, totalCount - vectorSize);
       return insertResultItem(index + vectorSize, filteredAway);
    }
 }

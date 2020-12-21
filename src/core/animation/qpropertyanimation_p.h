@@ -35,7 +35,7 @@ class QPropertyAnimationPrivate : public QVariantAnimationPrivate
 
  public:
    QPropertyAnimationPrivate()
-      : targetValue(0), propertyType(0), propertyIndex(-1) {
+      : targetValue(nullptr), propertyType(0), propertyIndex(-1) {
    }
 
    void updateProperty(const QVariant &);

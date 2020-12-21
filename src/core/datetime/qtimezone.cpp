@@ -102,9 +102,8 @@ class QTimeZoneSingleton
 
 Q_GLOBAL_STATIC(QTimeZoneSingleton, global_tz);
 
-
 QTimeZone::QTimeZone()
-   : d(0)
+   : d(nullptr)
 {
 }
 
@@ -125,7 +124,7 @@ QTimeZone::QTimeZone(int offsetSeconds)
    if (offsetSeconds >= -50400 && offsetSeconds <= 50400) {
       d = new QUtcTimeZonePrivate(offsetSeconds);
    } else {
-      d = 0;
+      d = nullptr;
    }
 }
 

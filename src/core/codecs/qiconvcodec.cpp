@@ -60,18 +60,18 @@ typedef iconv_t (*Ptr_iconv_open) (const char *, const char *);
 typedef size_t (*Ptr_iconv) (iconv_t, const char **, size_t *, char **, size_t *);
 typedef int (*Ptr_iconv_close) (iconv_t);
 
-static Ptr_iconv_open ptr_iconv_open = 0;
-static Ptr_iconv ptr_iconv = 0;
-static Ptr_iconv_close ptr_iconv_close = 0;
+static Ptr_iconv_open ptr_iconv_open = nullptr;
+static Ptr_iconv ptr_iconv = nullptr;
+static Ptr_iconv_close ptr_iconv_close = nullptr;
 #endif
 
 extern bool qt_locale_initialized;
 
 QIconvCodec::QIconvCodec()
-   : utf16Codec(0)
+   : utf16Codec(nullptr)
 {
    utf16Codec = QTextCodec::codecForMib(1015);
-   Q_ASSERT_X(utf16Codec != 0,
+   Q_ASSERT_X(utf16Codec != nullptr,
               "QIconvCodec::convertToUnicode",
               "internal error, UTF-16 codec not found");
 
@@ -81,7 +81,7 @@ QIconvCodec::QIconvCodec()
    }
 
 #if defined(Q_OS_DARWIN)
-   if (ptr_iconv_open == 0) {
+   if (ptr_iconv_open == nullptr) {
       QLibrary libiconv("/usr/lib/libiconv");
       libiconv.setLoadHints(QLibrary::ExportExternalSymbolsHint);
 
@@ -158,8 +158,8 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
 
    int invalidCount      = 0;
    int remainingCount    = 0;
-   char *remainingBuffer = 0;
-   IconvState *temporaryState = 0;
+   char *remainingBuffer = nullptr;
+   IconvState *temporaryState = nullptr;
    IconvState **pstate;
 
    if (convState) {
@@ -191,7 +191,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
 
    if (!*pstate) {
       // first time, create the state
-      iconv_t cd = QIconvCodec::createIconv_t(UTF16, 0);
+      iconv_t cd = QIconvCodec::createIconv_t(UTF16, nullptr);
 
       if (cd == reinterpret_cast<iconv_t>(-1)) {
          static int reported = 0;
@@ -269,7 +269,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
 
          if (!convState) {
             // reset state
-            iconv(state->cd, 0, &inBytesLeft, 0, &outBytesLeft);
+            iconv(state->cd, nullptr, &inBytesLeft, nullptr, &outBytesLeft);
          }
 
          delete temporaryState;
@@ -288,7 +288,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
       s = utf16Codec->toUnicode(ba.constData(), ba.size() - outBytesLeft);
 
       // reset state
-      iconv(state->cd, 0, &inBytesLeft, 0, &outBytesLeft);
+      iconv(state->cd, nullptr, &inBytesLeft, nullptr, &outBytesLeft);
    }
 
    delete temporaryState;
@@ -344,12 +344,12 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
    perror("QIconvCodec::convertFromUnicode: using Latin1 for conversion, iconv failed for BOM");
    return str.toLatin1();
 
-   IconvState *temporaryState = 0;
+   IconvState *temporaryState = nullptr;
    QThreadStorage<QIconvCodec::IconvState *> *ts = fromUnicodeState();
    IconvState *&state = (qt_locale_initialized && ts) ? ts->localData() : temporaryState;
 
    if (! state) {
-      iconv_t cd = QIconvCodec::createIconv_t(0, UTF16);
+      iconv_t cd = QIconvCodec::createIconv_t(nullptr, UTF16);
 
       if (cd != reinterpret_cast<iconv_t>(-1)) {
          if (! setByteOrder(cd)) {
@@ -471,7 +471,7 @@ int QIconvCodec::mibEnum() const
 
 iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
 {
-   Q_ASSERT((to == 0 && from != 0) || (to != 0 && from == 0));
+   Q_ASSERT((to == nullptr && from != nullptr) || (to != nullptr && from == nullptr));
 
    iconv_t cd = (iconv_t) - 1;
 #if defined(__GLIBC__) || defined(GNU_LIBICONV)
@@ -506,7 +506,7 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
       // First part is getting that locale name.  First try setlocale() which
       // definitely knows it, but since we cannot fully trust it, get ready
       // to fall back to environment variables.
-      char *ctype = qstrdup(setlocale(LC_CTYPE, 0));
+      char *ctype = qstrdup(setlocale(LC_CTYPE, nullptr));
 
       // Get the first nonempty value from $LC_ALL, $LC_CTYPE, and $LANG
       // environment variables.
@@ -532,7 +532,7 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
       // 5. check for "@euro"
 
       // 1. CODESET from ctype if it contains a .CODESET part (e.g. en_US.ISO8859-15)
-      codeset = ctype ? strchr(ctype, '.') : 0;
+      codeset = ctype ? strchr(ctype, '.') : nullptr;
 
       if (codeset && *codeset == '.') {
          ++codeset;
@@ -540,7 +540,7 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
       }
 
       // 2. CODESET from lang if it contains a .CODESET part
-      codeset = lang ? strchr(lang, '.') : 0;
+      codeset = lang ? strchr(lang, '.') : nullptr;
 
       if (cd == (iconv_t) - 1 && codeset && *codeset == '.') {
          ++codeset;

@@ -121,7 +121,7 @@ QSettings *QLibraryInfoPrivate::findConfiguration()
 
       if (bundleRef) {
          // locates the cs.conf file in foo.app/Contents/Resources
-         QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef, QCFString("cs.conf"), 0, 0);
+         QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef, QCFString("cs.conf"), nullptr, nullptr);
 
          if (urlRef) {
             QCFString path = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
