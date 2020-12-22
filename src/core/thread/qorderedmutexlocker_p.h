@@ -35,7 +35,7 @@ class QOrderedMutexLocker
  public:
    QOrderedMutexLocker(QMutex *m1, QMutex *m2)
       : mtx1((m1 == m2) ? m1 : (m1 < m2 ? m1 : m2)),
-        mtx2((m1 == m2) ?  0 : (m1 < m2 ? m2 : m1)),
+        mtx2((m1 == m2) ? nullptr : (m1 < m2 ? m2 : m1)),
         locked(false) {
       relock();
    }

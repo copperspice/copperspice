@@ -30,7 +30,7 @@
 struct QReadWriteLockPrivate {
    QReadWriteLockPrivate(QReadWriteLock::RecursionMode recursionMode)
       : accessCount(0), waitingReaders(0), waitingWriters(0),
-        recursive(recursionMode == QReadWriteLock::Recursive), currentWriter(0) {
+        recursive(recursionMode == QReadWriteLock::Recursive), currentWriter(nullptr) {
    }
 
    QMutex mutex;

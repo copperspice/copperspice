@@ -34,7 +34,7 @@
 #include <qcoreapplication_p.h>
 
 QThreadData::QThreadData(int initialRefCount)
-    : thread(0), threadId(0), eventDispatcher(0), loopLevel(0),
+    : thread(nullptr), threadId(nullptr), eventDispatcher(nullptr), loopLevel(0),
       quitNow(false), canWait(true), isAdopted(false), requiresCoreApplication(true), m_ref(initialRefCount)
 {
    // fprintf(stderr, "QThreadData %p created\n", this);
@@ -51,12 +51,12 @@ QThreadData::~QThreadData()
    // safeguard the main thread here.. This fix is a bit crude, but it solves
    // the problem...
    if (this->thread == QCoreApplicationPrivate::theMainThread) {
-      QCoreApplicationPrivate::theMainThread = 0;
+      QCoreApplicationPrivate::theMainThread = nullptr;
       QThreadData::clearCurrentThreadData();
    }
 
    QThread *t = thread;
-   thread = 0;
+   thread = nullptr;
    delete t;
 
    for (int i = 0; i < postEventList.size(); ++i) {
@@ -124,7 +124,7 @@ QThreadPrivate::QThreadPrivate(QThreadData *d)
 {
 
 #if defined (Q_OS_WIN)
-   handle  = 0;
+   handle  = nullptr;
    id      = 0;
    waiters = 0;
 
@@ -145,7 +145,7 @@ QThreadPrivate::~QThreadPrivate()
 QThread *QThread::currentThread()
 {
    QThreadData *data = QThreadData::current();
-   Q_ASSERT(data != 0);
+   Q_ASSERT(data != nullptr);
    return data->thread;
 }
 
@@ -186,7 +186,7 @@ QThread::~QThread()
          qWarning("QThread: Destroyed while thread is still running");
       }
 
-      d->data->thread = 0;
+      d->data->thread = nullptr;
    }
 }
 

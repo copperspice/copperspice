@@ -54,7 +54,7 @@ QStateMachine *QAbstractTransitionPrivate::machine() const
       return parent->machine();
    }
 
-   return 0;
+   return nullptr;
 }
 
 bool QAbstractTransitionPrivate::callEventTest(QEvent *e)
@@ -119,7 +119,7 @@ void QAbstractTransition::setTargetState(QAbstractState *target)
    Q_D(QAbstractTransition);
 
    if ((d->targetStates.size() == 1 && target == d->targetStates.at(0).data()) ||
-      (d->targetStates.isEmpty() && target == 0)) {
+      (d->targetStates.isEmpty() && target == nullptr)) {
       return;
    }
 

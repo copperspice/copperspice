@@ -34,7 +34,7 @@
 #include <qstatemachine_p.h>
 
 QAbstractStatePrivate::QAbstractStatePrivate(StateType type)
-   : stateType(type), isMachine(false), active(false), parentState(0)
+   : stateType(type), isMachine(false), active(false), parentState(nullptr)
 {
 }
 

@@ -170,11 +170,11 @@ struct regex_data : public named_subexpressions<Traits> {
    using flag_type = regex_constants::syntax_option_type;
 
    regex_data(const std::shared_ptr< cs_regex_ns::regex_traits_wrapper<Traits> > &t)
-      : m_ptraits(t), m_expression(0), m_expression_len(0), m_disable_match_any(false)
+      : m_ptraits(t), m_expression(nullptr), m_expression_len(0), m_disable_match_any(false)
    {}
 
    regex_data()
-      : m_ptraits(new cs_regex_ns::regex_traits_wrapper<Traits>()), m_expression(0),
+      : m_ptraits(new cs_regex_ns::regex_traits_wrapper<Traits>()), m_expression(nullptr),
         m_expression_len(0), m_disable_match_any(false)
    {}
 
@@ -496,32 +496,32 @@ class basic_regex : public regbase
 
    // access methods
    const cs_regex_detail_ns::re_syntax_base *get_first_state() const {
-      assert(0 != m_pimpl.get());
+      assert(m_pimpl.get() != nullptr);
       return m_pimpl->get_first_state();
    }
 
    unsigned get_restart_type() const {
-      assert(0 != m_pimpl.get());
+      assert(m_pimpl.get() != nullptr);
       return m_pimpl->get_restart_type();
    }
 
    const unsigned char *get_map() const {
-      assert(0 != m_pimpl.get());
+      assert(m_pimpl.get() != nullptr);
       return m_pimpl->get_map();
    }
 
    const cs_regex_ns::regex_traits_wrapper<Traits> &get_traits() const {
-      assert(0 != m_pimpl.get());
+      assert(m_pimpl.get() != nullptr);
       return m_pimpl->get_traits();
    }
 
    bool can_be_null() const {
-      assert(0 != m_pimpl.get());
+      assert(m_pimpl.get() != nullptr);
       return m_pimpl->can_be_null();
    }
 
    const cs_regex_detail_ns::regex_data<charT, Traits> &get_data() const {
-      assert(0 != m_pimpl.get());
+      assert(m_pimpl.get() != nullptr);
       return m_pimpl->get_data();
    }
 

@@ -279,9 +279,11 @@ class repeater_count
    repeater_count *unwind_until(int n, repeater_count *p, int current_recursion_id) {
       while (p && (p->state_id != n)) {
          if (-2 - current_recursion_id == p->state_id) {
-            return 0;
+            return nullptr;
          }
+
          p = p->next;
+
          if (p && (p->state_id < 0)) {
             p = unwind_until(p->state_id, p, current_recursion_id);
             if (!p) {
@@ -290,10 +292,14 @@ class repeater_count
             p = p->next;
          }
       }
+
       return p;
    }
+
  public:
-   repeater_count(repeater_count **s) : stack(s), next(0), state_id(-1), count(0), start_pos() {}
+   repeater_count(repeater_count **s)
+      : stack(s), next(nullptr), state_id(-1), count(0), start_pos()
+   {}
 
    repeater_count(int i, repeater_count **s, BidiIterator start, int current_recursion_id)
       : start_pos(start) {

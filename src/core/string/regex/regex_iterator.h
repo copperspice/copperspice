@@ -120,7 +120,7 @@ class regex_iterator
       return *this;
    }
    bool operator==(const regex_iterator &that)const {
-      if ((pdata.get() == 0) || (that.pdata.get() == 0)) {
+      if ((pdata.get() == nullptr) || (that.pdata.get() == nullptr)) {
          return pdata.get() == that.pdata.get();
       }
       return pdata->compare(*(that.pdata.get()));
@@ -139,7 +139,8 @@ class regex_iterator
    }
    regex_iterator &operator++() {
       cow();
-      if (0 == pdata->next()) {
+
+      if (pdata->next() == nullptr) {
          pdata.reset();
       }
       return *this;

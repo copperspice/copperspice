@@ -45,9 +45,9 @@ void perl_matcher<BidiIterator, Allocator, traits>::construct_init(const basic_r
       throw ex;
    }
 
-   pstate        = 0;
+   pstate        = nullptr;
    m_match_flags = f;
-   estimate_max_state_count(static_cast<category *>(0));
+   estimate_max_state_count(static_cast<category *>(nullptr));
    expression_flag_type re_f = re.flags();
    icase = re_f & regex_constants::icase;
 
@@ -70,8 +70,8 @@ void perl_matcher<BidiIterator, Allocator, traits>::construct_init(const basic_r
       m_presult = &m_result;
    }
 
-   m_stack_base   = 0;
-   m_backup_state = 0;
+   m_stack_base   = nullptr;
+   m_backup_state = nullptr;
 
    // find the value to use for matching word boundaries:
    m_word_mask = re.get_data().m_word_mask;

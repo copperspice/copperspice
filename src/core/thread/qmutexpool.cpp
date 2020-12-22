@@ -34,7 +34,7 @@ QMutexPool::QMutexPool(QMutex::RecursionMode recursionMode, int size)
    : mutexes(size), recursionMode(recursionMode)
 {
    for (int index = 0; index < mutexes.count(); ++index) {
-      mutexes[index].store(0);
+      mutexes[index].store(nullptr);
    }
 }
 
@@ -66,7 +66,7 @@ QMutex *QMutexPool::createMutex(int index)
 {
    // mutex not created, create one
    QMutex *newMutex = new QMutex(recursionMode);
-   if (!mutexes[index].testAndSetRelease(0, newMutex)) {
+   if (!mutexes[index].testAndSetRelease(nullptr, newMutex)) {
       delete newMutex;
    }
    return mutexes[index].load();
@@ -78,8 +78,8 @@ QMutex *QMutexPool::createMutex(int index)
 QMutex *QMutexPool::globalInstanceGet(const void *address)
 {
    QMutexPool *const globalInstance = globalMutexPool();
-   if (globalInstance == 0) {
-      return 0;
+   if (globalInstance == nullptr) {
+      return nullptr;
    }
    return globalInstance->get(address);
 }

@@ -53,7 +53,7 @@ class QWaitConditionPrivate
       while (true) {
          if (time != ULONG_MAX) {
             struct timeval tv;
-            gettimeofday(&tv, 0);
+            gettimeofday(&tv, nullptr);
 
             timespec ti;
             ti.tv_nsec = (tv.tv_usec + (time % 1000) * 1000) * 1000;
@@ -93,8 +93,8 @@ class QWaitConditionPrivate
 QWaitCondition::QWaitCondition()
 {
    d = new QWaitConditionPrivate;
-   report_error(pthread_mutex_init(&d->mutex, NULL), "QWaitCondition", "mutex init");
-   report_error(pthread_cond_init(&d->cond, NULL), "QWaitCondition", "cv init");
+   report_error(pthread_mutex_init(&d->mutex, nullptr), "QWaitCondition", "mutex init");
+   report_error(pthread_cond_init(&d->cond, nullptr), "QWaitCondition", "cv init");
    d->waiters = d->wakeups = 0;
 }
 

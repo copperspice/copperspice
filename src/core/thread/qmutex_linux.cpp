@@ -45,7 +45,7 @@ static inline int _q_futex(void *addr, int op, int val, const struct timespec *t
    int_addr++;
 #endif
 
-   int *addr2 = 0;
+   int *addr2 = nullptr;
    int val2 = 0;
    return syscall(SYS_futex, int_addr, op, val, timeout, addr2, val2);
 }
@@ -72,8 +72,8 @@ bool QBasicMutex::lockInternal(int timeout)
          if (timeout == 0) {
             return false;
          }
-         while (this->d_ptr.fetchAndStoreAcquire(dummyFutexValue()) != 0) {
-            struct timespec ts, *pts = 0;
+         while (this->d_ptr.fetchAndStoreAcquire(dummyFutexValue()) != nullptr) {
+            struct timespec ts, *pts = nullptr;
             if (timeout >= 1) {
                // recalculate the timeout
                qint64 xtimeout = qint64(timeout) * 1000 * 1000;
@@ -107,8 +107,8 @@ void QBasicMutex::unlockInternal()
    Q_ASSERT(d != dummyLocked()); // testAndSetRelease(dummyLocked(), 0) failed
 
    if (d == dummyFutexValue()) {
-      this->d_ptr.fetchAndStoreRelease(0);
-      _q_futex(&this->d_ptr, FUTEX_WAKE, 1, 0);
+      this->d_ptr.fetchAndStoreRelease(nullptr);
+      _q_futex(&this->d_ptr, FUTEX_WAKE, 1, nullptr);
       return;
    }
 

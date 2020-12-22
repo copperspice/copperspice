@@ -114,7 +114,7 @@ static void destroy_current_thread_data(void *p)
    // reset it to zero before returning so we are not
    // called again (POSIX allows implementations to call destructor
    // functions repeatedly until all values are zero)
-   pthread_setspecific(current_thread_data_key, 0);
+   pthread_setspecific(current_thread_data_key, nullptr);
 }
 
 static void create_current_thread_data_key()
@@ -159,9 +159,9 @@ static void set_thread_data(QThreadData *data)
 static void clear_thread_data()
 {
 #ifdef HAVE_TLS
-   currentThreadData = 0;
+   currentThreadData = nullptr;
 #endif
-   pthread_setspecific(current_thread_data_key, 0);
+   pthread_setspecific(current_thread_data_key, nullptr);
 }
 
 template <typename T>
@@ -206,7 +206,7 @@ QThreadData *QThreadData::current(bool createIfNecessary)
       } catch (...) {
          clear_thread_data();
          data->deref();
-         data = 0;
+         data = nullptr;
          throw;
       }
 
@@ -282,7 +282,7 @@ static void setCurrentThreadName(pthread_t threadId, const QString &name)
 
 void *QThreadPrivate::start(void *arg)
 {
-   pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
+   pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, nullptr);
    pthread_cleanup_push(QThreadPrivate::finish, arg);
 
    QThread *thr = reinterpret_cast<QThread *>(arg);
@@ -321,13 +321,13 @@ void *QThreadPrivate::start(void *arg)
 #endif
 
    emit thr->started();
-   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, nullptr);
    pthread_testcancel();
    thr->run();
 
    pthread_cleanup_pop(1);
 
-   return 0;
+   return nullptr;
 }
 
 void QThreadPrivate::finish(void *arg)
@@ -344,13 +344,13 @@ void QThreadPrivate::finish(void *arg)
    locker.unlock();
 
    emit thr->finished();
-   QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+   QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
    QThreadStorageData::finish((void **)data);
    locker.relock();
 
    QAbstractEventDispatcher *eventDispatcher = d->data->eventDispatcher.load();
    if (eventDispatcher) {
-      d->data->eventDispatcher = 0;
+      d->data->eventDispatcher = nullptr;
       locker.unlock();
       eventDispatcher->closingDown();
       delete eventDispatcher;
@@ -388,7 +388,7 @@ int QThread::idealThreadCount()
    mib[0] = CTL_HW;
    mib[1] = HW_NCPU;
 
-   if (sysctl(mib, 2, &cores, &len, NULL, 0) != 0) {
+   if (sysctl(mib, 2, &cores, &len, nullptr, 0) != 0) {
        perror("sysctl");
    }
 
@@ -418,8 +418,8 @@ static void thread_sleep(struct timespec *ti)
    pthread_mutex_t mtx;
    pthread_cond_t cnd;
 
-   pthread_mutex_init(&mtx, 0);
-   pthread_cond_init(&cnd, 0);
+   pthread_mutex_init(&mtx, nullptr);
+   pthread_cond_init(&cnd, nullptr);
 
    pthread_mutex_lock(&mtx);
    (void) pthread_cond_timedwait(&cnd, &mtx, ti);
@@ -432,7 +432,7 @@ static void thread_sleep(struct timespec *ti)
 void QThread::sleep(unsigned long secs)
 {
    struct timeval tv;
-   gettimeofday(&tv, 0);
+   gettimeofday(&tv, nullptr);
    struct timespec ti;
    ti.tv_sec = tv.tv_sec + secs;
    ti.tv_nsec = (tv.tv_usec * 1000);
@@ -442,7 +442,7 @@ void QThread::sleep(unsigned long secs)
 void QThread::msleep(unsigned long msecs)
 {
    struct timeval tv;
-   gettimeofday(&tv, 0);
+   gettimeofday(&tv, nullptr);
    struct timespec ti;
 
    ti.tv_nsec = (tv.tv_usec + (msecs % 1000) * 1000) * 1000;
@@ -454,7 +454,7 @@ void QThread::msleep(unsigned long msecs)
 void QThread::usleep(unsigned long usecs)
 {
    struct timeval tv;
-   gettimeofday(&tv, 0);
+   gettimeofday(&tv, nullptr);
    struct timespec ti;
 
    ti.tv_nsec = (tv.tv_usec + (usecs % 1000000)) * 1000;
@@ -605,7 +605,7 @@ void QThread::start(Priority priority)
 
       d->running = false;
       d->finished = false;
-      d->data->threadId = 0;
+      d->data->threadId = nullptr;
    }
 }
 
@@ -650,10 +650,10 @@ bool QThread::wait(unsigned long time)
 void QThread::setTerminationEnabled(bool enabled)
 {
    QThread *thr = currentThread();
-   Q_ASSERT_X(thr != 0, "QThread::setTerminationEnabled()",
+   Q_ASSERT_X(thr != nullptr, "QThread::setTerminationEnabled()",
               "Current thread was not started with QThread.");
 
-   pthread_setcancelstate(enabled ? PTHREAD_CANCEL_ENABLE : PTHREAD_CANCEL_DISABLE, NULL);
+   pthread_setcancelstate(enabled ? PTHREAD_CANCEL_ENABLE : PTHREAD_CANCEL_DISABLE, nullptr);
    if (enabled) {
       pthread_testcancel();
    }

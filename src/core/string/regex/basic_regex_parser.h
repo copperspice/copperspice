@@ -689,7 +689,7 @@ bool basic_regex_parser<charT, traits>::parse_basic_escape()
 
                char_set.add_class(this->m_word_mask);
 
-               if (0 == this->append_set(char_set)) {
+               if (this->append_set(char_set) == nullptr) {
                   fail(regex_constants::error_ctype, m_position - m_base);
                   return false;
                }
@@ -754,7 +754,7 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
 
                char_set.add_class(m);
 
-               if (0 == this->append_set(char_set)) {
+               if (this->append_set(char_set) == nullptr) {
                   fail(regex_constants::error_ctype, m_position - m_base);
                   return false;
                }
@@ -863,7 +863,7 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
 
             char_set.add_class(m);
 
-            if (0 == this->append_set(char_set)) {
+            if (this->append_set(char_set) == nullptr) {
                fail(regex_constants::error_ctype, m_position - m_base);
                return false;
             }
@@ -1068,7 +1068,7 @@ bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_
       }
    }
 
-   if (0 == this->m_last_state) {
+   if (this->m_last_state == nullptr) {
       fail(regex_constants::error_badrepeat, std::distance(m_base, m_position), "Nothing to repeat.");
       return false;
    }
@@ -1362,15 +1362,12 @@ bool basic_regex_parser<charT, traits>::parse_alt()
    // or if the last state was a '(' then error:
    //
    if (
-      ((this->m_last_state == 0) || (this->m_last_state->type == syntax_element_startmark))
-      &&
-      !(
-         ((this->flags() & regbase::main_option_type) == regbase::perl_syntax_group)
-         &&
-         ((this->flags() & regbase::no_empty_expressions) == 0)
-      )
-   ) {
-      fail(regex_constants::error_empty, this->m_position - this->m_base, "A regular expression cannot start with the alternation operator |.");
+      ((this->m_last_state == nullptr) || (this->m_last_state->type == syntax_element_startmark)) &&
+      !( ((this->flags() & regbase::main_option_type) == regbase::perl_syntax_group) &&
+         ((this->flags() & regbase::no_empty_expressions) == 0) )) {
+      fail(regex_constants::error_empty, this->m_position - this->m_base,
+                  "A regular expression cannot start with the alternation operator |.");
+
       return false;
    }
    //
@@ -1451,13 +1448,16 @@ bool basic_regex_parser<charT, traits>::parse_set()
                parse_set_literal(char_set);
             }
             break;
+
          case regex_constants::syntax_close_set:
             if (m_position == item_base) {
                parse_set_literal(char_set);
                break;
+
             } else {
                ++m_position;
-               if (0 == this->append_set(char_set)) {
+
+               if (this->append_set(char_set) == nullptr) {
                   fail(regex_constants::error_ctype, m_position - m_base);
                   return false;
                }
@@ -3160,7 +3160,7 @@ bool basic_regex_parser<charT, traits>::add_emacs_code(bool negate)
       return false;
    }
 
-   if (0 == this->append_set(char_set)) {
+   if (this->append_set(char_set) == nullptr) {
       fail(regex_constants::error_ctype, m_position - m_base);
       return false;
    }

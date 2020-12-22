@@ -154,7 +154,7 @@ class LIB_CS_STRING_EXPORT raw_storage
 
 inline raw_storage::raw_storage()
 {
-   last = start = end = 0;
+   last = start = end = nullptr;
 }
 
 inline raw_storage::raw_storage(size_type n)

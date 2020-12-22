@@ -76,7 +76,7 @@ static const char32_t * cs_internal_decomposition(uint value, int *length, int *
       *length = 0;
       *tag    = QChar32::NoDecomposition;
 
-      return 0;
+      return nullptr;
    }
 
    const char32_t *decomposition = QUnicodeTables::uc_decomposition_map + index;

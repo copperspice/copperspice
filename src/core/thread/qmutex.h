@@ -43,7 +43,7 @@ class Q_CORE_EXPORT QBasicMutex
 
    inline void unlock() {
       Q_ASSERT(d_ptr.load()); //mutex must be locked
-      if (!d_ptr.testAndSetRelease(dummyLocked(), 0)) {
+      if (! d_ptr.testAndSetRelease(dummyLocked(), nullptr)) {
          unlockInternal();
       }
    }
@@ -56,7 +56,7 @@ class Q_CORE_EXPORT QBasicMutex
 
  private:
    inline bool fastTryLock() {
-      return d_ptr.testAndSetAcquire(0, dummyLocked());
+      return d_ptr.testAndSetAcquire(nullptr, dummyLocked());
    }
 
    bool lockInternal(int timeout = -1);

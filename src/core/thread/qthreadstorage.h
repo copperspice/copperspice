@@ -45,8 +45,9 @@ template <typename T>
 inline T *&qThreadStorage_localData(QThreadStorageData &d, T **)
 {
    void **v = d.get();
-   if (!v) {
-      v = d.set(0);
+
+   if (! v) {
+      v = d.set(nullptr);
    }
    return *(reinterpret_cast<T **>(v));
 }
@@ -55,7 +56,8 @@ template <typename T>
 inline T *qThreadStorage_localData_const(const QThreadStorageData &d, T **)
 {
    void **v = d.get();
-   return v ? *(reinterpret_cast<T **>(v)) : 0;
+
+   return v ? *(reinterpret_cast<T **>(v)) : nullptr;
 }
 
 template <typename T>
@@ -78,6 +80,7 @@ inline T &qThreadStorage_localData(QThreadStorageData &d, T *)
    if (!v) {
       v = d.set(new T());
    }
+
    return *(reinterpret_cast<T *>(*v));
 }
 
@@ -107,7 +110,7 @@ class QThreadStorage
    QThreadStorageData d;
 
    static inline void deleteData(void *x) {
-      qThreadStorage_deleteData(x, reinterpret_cast<T *>(0));
+      qThreadStorage_deleteData(x, static_cast<T *>(nullptr));
    }
 
  public:
@@ -119,14 +122,15 @@ class QThreadStorage
    inline ~QThreadStorage() { }
 
    inline bool hasLocalData() const {
-      return d.get() != 0;
+      return d.get() != nullptr;
    }
 
    inline T &localData() {
-      return qThreadStorage_localData(d, reinterpret_cast<T *>(0));
+      return qThreadStorage_localData(d, static_cast<T *>(nullptr));
    }
+
    inline T localData() const {
-      return qThreadStorage_localData_const(d, reinterpret_cast<T *>(0));
+      return qThreadStorage_localData_const(d, static_cast<T *>(nullptr));
    }
 
    inline void setLocalData(T t) {

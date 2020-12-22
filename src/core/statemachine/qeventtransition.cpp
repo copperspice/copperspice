@@ -34,8 +34,8 @@
 
 QEventTransitionPrivate::QEventTransitionPrivate()
 {
-   object = 0;
-   eventType = QEvent::None;
+   object     = nullptr;
+   eventType  = QEvent::None;
    registered = false;
 }
 

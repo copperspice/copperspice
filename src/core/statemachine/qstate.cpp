@@ -37,7 +37,7 @@
 
 QStatePrivate::QStatePrivate()
    : QAbstractStatePrivate(StandardState),
-     errorState(0), initialState(0), childMode(QState::ExclusiveStates),
+     errorState(nullptr), initialState(nullptr), childMode(QState::ExclusiveStates),
      childStatesListNeedsRefresh(true), transitionsListNeedsRefresh(true)
 {
 }
@@ -181,11 +181,11 @@ void QState::setErrorState(QAbstractState *state)
 {
    Q_D(QState);
 
-   if (state != 0 && qobject_cast<QStateMachine *>(state)) {
+   if (state != nullptr && qobject_cast<QStateMachine *>(state)) {
       qWarning("QStateMachine::setErrorState: root state cannot be error state");
       return;
    }
-   if (state != 0 && (!state->machine() || ((state->machine() != machine()) && !qobject_cast<QStateMachine *>(this)))) {
+   if (state != nullptr && (!state->machine() || ((state->machine() != machine()) && !qobject_cast<QStateMachine *>(this)))) {
       qWarning("QState::setErrorState(): Error state cannot belong to a different state machine");
       return;
    }
@@ -280,7 +280,7 @@ void QState::removeTransition(QAbstractTransition *transition)
       mach->unregisterTransition(transition);
    }
 
-   transition->setParent(0);
+   transition->setParent(nullptr);
 }
 
 QList<QAbstractTransition *> QState::transitions() const
@@ -359,7 +359,7 @@ bool QState::event(QEvent *e)
       d->transitionsListNeedsRefresh = true;
 
       if ((e->type() == QEvent::ChildRemoved) && (static_cast<QChildEvent *>(e)->child() == d->initialState)) {
-         d->initialState = 0;
+         d->initialState = nullptr;
       }
    }
 

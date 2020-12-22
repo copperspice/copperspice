@@ -182,7 +182,7 @@ template <typename T>
 class QAtomicPointer
 {
    public:
-      QAtomicPointer(T *value = 0) : m_data(value) {
+      QAtomicPointer(T *value = nullptr) : m_data(value) {
       }
 
       QAtomicPointer(const QAtomicPointer<T> &other) {

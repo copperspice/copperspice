@@ -35,7 +35,7 @@
 
 QMutex::QMutex(RecursionMode mode)
 {
-   d_ptr.store(mode == Recursive ? new QRecursiveMutexPrivate : 0);
+   d_ptr.store(mode == Recursive ? new QRecursiveMutexPrivate : nullptr);
 }
 
 QMutex::~QMutex()
@@ -158,7 +158,7 @@ bool QBasicMutex::lockInternal(int timeout)
          return false;
       }
    }
-   Q_ASSERT(d_ptr.load() != 0);
+   Q_ASSERT(d_ptr.load() != nullptr);
    return true;
 }
 
@@ -180,7 +180,7 @@ void QBasicMutex::unlockInternal()
 
    if (d->waiters.fetchAndAddRelease(-QMutexPrivate::BigNumber) == 0) {
       //there is no one waiting on this mutex anymore, set the mutex as unlocked (d = 0)
-      if (d_ptr.testAndSetRelease(d, 0)) {
+      if (d_ptr.testAndSetRelease(d, nullptr)) {
          if (d->possiblyUnlocked.load() && d->possiblyUnlocked.testAndSetRelaxed(true, false)) {
             d->deref();
          }
@@ -281,7 +281,7 @@ void QRecursiveMutexPrivate::unlock()
    if (count > 0) {
       count--;
    } else {
-      owner = 0;
+      owner = nullptr;
       mutex.unlock();
    }
 }

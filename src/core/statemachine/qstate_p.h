@@ -40,7 +40,8 @@ class QState;
 
 struct QPropertyAssignment {
    QPropertyAssignment()
-      : object(0), explicitlySet(true) {}
+      : object(nullptr), explicitlySet(true)
+   { }
 
    QPropertyAssignment(QObject *o, const QByteArray &n, const QVariant &v, bool es = true)
       : object(o), propertyName(n), value(v), explicitlySet(es)
@@ -51,7 +52,7 @@ struct QPropertyAssignment {
    }
 
    void write() const {
-      Q_ASSERT(object != 0);
+      Q_ASSERT(object != nullptr);
       object->setProperty(propertyName, value);
    }
 

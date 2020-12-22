@@ -312,7 +312,7 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
       { }
 
       DelayedEvent()
-         : event(0), timerId(0)
+         : event(nullptr), timerId(0)
       { }
    };
 

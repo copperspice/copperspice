@@ -61,7 +61,7 @@ Q_DESTRUCTOR_FUNCTION(qt_free_tls)
 
 void QThreadData::clearCurrentThreadData()
 {
-   TlsSetValue(qt_current_thread_data_tls_index, 0);
+   TlsSetValue(qt_current_thread_data_tls_index, nullptr);
 }
 
 QThreadData *QThreadData::current(bool createIfNecessary)
@@ -79,9 +79,9 @@ QThreadData *QThreadData::current(bool createIfNecessary)
       QT_TRY {
          threadData->thread = new QAdoptedThread(threadData);
       } QT_CATCH(...) {
-         TlsSetValue(qt_current_thread_data_tls_index, 0);
+         TlsSetValue(qt_current_thread_data_tls_index, nullptr);
          threadData->deref();
-         threadData = 0;
+         threadData = nullptr;
          QT_RETHROW;
       }
 
@@ -118,7 +118,7 @@ static QVector<HANDLE> qt_adopted_thread_handles;
 static QVector<QThread *> qt_adopted_qthreads;
 static QMutex qt_adopted_thread_watcher_mutex;
 static DWORD qt_adopted_thread_watcher_id = 0;
-static HANDLE qt_adopted_thread_wakeup = 0;
+static HANDLE qt_adopted_thread_wakeup = nullptr;
 
 /*! \internal
     Adds an adopted thread to the list of threads that Qt watches to make sure
@@ -140,12 +140,12 @@ void qt_watch_adopted_thread(const HANDLE adoptedThreadHandle, QThread *qthread)
 
    // Start watcher thread if it is not already running.
    if (qt_adopted_thread_watcher_id == 0) {
-      if (qt_adopted_thread_wakeup == 0) {
-         qt_adopted_thread_wakeup = CreateEvent(0, false, false, 0);
+      if (qt_adopted_thread_wakeup == nullptr) {
+         qt_adopted_thread_wakeup = CreateEvent(nullptr, false, false, nullptr);
          qt_adopted_thread_handles.prepend(qt_adopted_thread_wakeup);
       }
 
-        CloseHandle(CreateThread(0, 0, qt_adopted_thread_watcher_function, 0, 0, &qt_adopted_thread_watcher_id));
+        CloseHandle(CreateThread(nullptr, 0, qt_adopted_thread_watcher_function, nullptr, 0, &qt_adopted_thread_watcher_id));
    } else {
       SetEvent(qt_adopted_thread_wakeup);
    }
@@ -326,7 +326,7 @@ void QThreadPrivate::finish(void *arg, bool lockAnyway)
    QThread *thr = reinterpret_cast<QThread *>(arg);
    QThreadPrivate *d = thr->d_func();
 
-   QMutexLocker locker(lockAnyway ? &d->mutex : 0);
+   QMutexLocker locker(lockAnyway ? &d->mutex : nullptr);
    d->isInFinish = true;
    d->priority = QThread::InheritPriority;
 
@@ -334,14 +334,14 @@ void QThreadPrivate::finish(void *arg, bool lockAnyway)
    locker.unlock();
    emit thr->finished();
 
-   QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+   QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
    QThreadStorageData::finish(tls_data);
    locker.relock();
 
    QAbstractEventDispatcher *eventDispatcher = d->data->eventDispatcher.load();
 
    if (eventDispatcher) {
-      d->data->eventDispatcher = 0;
+      d->data->eventDispatcher = nullptr;
       locker.unlock();
       eventDispatcher->closingDown();
       delete eventDispatcher;
@@ -355,7 +355,7 @@ void QThreadPrivate::finish(void *arg, bool lockAnyway)
 
    if (!d->waiters) {
       CloseHandle(d->handle);
-      d->handle = 0;
+      d->handle = nullptr;
    }
 
    d->id = 0;
@@ -428,7 +428,7 @@ void QThread::start(Priority priority)
      its 'parent' and runs at normal priority.
    */
 
-   d->handle = (Qt::HANDLE) _beginthreadex(NULL, d->stackSize, QThreadPrivate::start,
+   d->handle = (Qt::HANDLE) _beginthreadex(nullptr, d->stackSize, QThreadPrivate::start,
                                            this, CREATE_SUSPENDED, &(d->id));
 
    if (!d->handle) {
@@ -540,7 +540,7 @@ bool QThread::wait(unsigned long time)
 
    if (d->finished && !d->waiters) {
       CloseHandle(d->handle);
-      d->handle = 0;
+      d->handle = nullptr;
    }
 
    return ret;
@@ -549,7 +549,7 @@ bool QThread::wait(unsigned long time)
 void QThread::setTerminationEnabled(bool enabled)
 {
    QThread *thr = currentThread();
-   Q_ASSERT_X(thr != 0, "QThread::setTerminationEnabled()",
+   Q_ASSERT_X(thr != nullptr, "QThread::setTerminationEnabled()",
               "Current thread was not started with QThread.");
 
    QThreadPrivate *d = thr->d_func();

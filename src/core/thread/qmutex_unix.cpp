@@ -40,8 +40,8 @@ static void report_error(int code, const char *where, const char *what)
 QMutexPrivate::QMutexPrivate()
    : wakeup(false)
 {
-   report_error(pthread_mutex_init(&mutex, NULL), "QMutex", "mutex init");
-   report_error(pthread_cond_init(&cond, NULL), "QMutex", "cv init");
+   report_error(pthread_mutex_init(&mutex, nullptr), "QMutex", "mutex init");
+   report_error(pthread_cond_init(&cond, nullptr), "QMutex", "cv init");
 }
 
 QMutexPrivate::~QMutexPrivate()

@@ -28,7 +28,7 @@
 #include <qhistorystate_p.h>
 
 QHistoryStatePrivate::QHistoryStatePrivate()
-   : QAbstractStatePrivate(HistoryState), defaultTransition(0), historyType(QHistoryState::ShallowHistory)
+   : QAbstractStatePrivate(HistoryState), defaultTransition(nullptr), historyType(QHistoryState::ShallowHistory)
 {
 }
 

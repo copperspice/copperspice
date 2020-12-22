@@ -74,7 +74,7 @@ QThreadStorageData::QThreadStorageData(void (*func)(void *))
       return;
    }
    for (id = 0; id < destr->count(); id++) {
-      if (destr->at(id) == 0) {
+      if (destr->at(id) == nullptr) {
          break;
       }
    }
@@ -91,7 +91,7 @@ QThreadStorageData::~QThreadStorageData()
    DEBUG_MSG("QThreadStorageData: Released id %d", id);
    QMutexLocker locker(mutex());
    if (destructors()) {
-      (*destructors())[id] = 0;
+      (*destructors())[id] = nullptr;
    }
 }
 
@@ -100,7 +100,7 @@ void **QThreadStorageData::get() const
    QThreadData *data = QThreadData::current();
    if (!data) {
       qWarning("QThreadStorage::get: QThreadStorage can only be used with threads started with QThread");
-      return 0;
+      return nullptr;
    }
    QVector<void *> &tls = data->tls;
    if (tls.size() <= id) {
@@ -113,7 +113,7 @@ void **QThreadStorageData::get() const
              *v,
              data->thread.load());
 
-   return *v ? v : 0;
+   return *v ? v : nullptr;
 }
 
 void **QThreadStorageData::set(void *p)
@@ -121,7 +121,7 @@ void **QThreadStorageData::set(void *p)
    QThreadData *data = QThreadData::current();
    if (! data) {
       qWarning("QThreadStorage::set: QThreadStorage can only be used with threads started with QThread");
-      return 0;
+      return nullptr;
    }
 
    QVector<void *> &tls = data->tls;
@@ -131,17 +131,17 @@ void **QThreadStorageData::set(void *p)
 
    void *&value = tls[id];
    // delete any previous data
-   if (value != 0) {
+   if (value != nullptr) {
       DEBUG_MSG("QThreadStorageData: Deleting previous storage %d, data %p, for thread %p",
                 id, value, data->thread.load());
 
       QMutexLocker locker(mutex());
       DestructorMap *destr = destructors();
-      void (*destructor)(void *) = destr ? destr->value(id) : 0;
+      void (*destructor)(void *) = destr ? destr->value(id) : nullptr;
       locker.unlock();
 
       void *q = value;
-      value = 0;
+      value = nullptr;
 
       if (destructor) {
          destructor(q);
@@ -166,7 +166,7 @@ void QThreadStorageData::finish(void **p)
    while (!tls->isEmpty()) {
       void *&value = tls->last();
       void *q = value;
-      value = 0;
+      value = nullptr;
       int i = tls->size() - 1;
       tls->resize(i);
 
@@ -189,7 +189,7 @@ void QThreadStorageData::finish(void **p)
 
       if (tls->size() > i) {
          //re reset the tls in case it has been recreated by its own destructor.
-         (*tls)[i] = 0;
+         (*tls)[i] = nullptr;
       }
    }
    tls->clear();

@@ -39,7 +39,7 @@ class QWaitConditionEvent
  public:
    QWaitConditionEvent()
       : priority(0), wokenUp(false) {
-      event = CreateEvent(NULL, TRUE, FALSE, NULL);
+      event = CreateEvent(nullptr, TRUE, FALSE, nullptr);
    }
 
    ~QWaitConditionEvent() {

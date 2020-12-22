@@ -42,7 +42,7 @@ void QReadWriteLock::lockForRead()
 {
    QMutexLocker lock(&d->mutex);
 
-   Qt::HANDLE self = 0;
+   Qt::HANDLE self = nullptr;
    if (d->recursive) {
       self = QThread::currentThreadId();
 
@@ -73,7 +73,7 @@ bool QReadWriteLock::tryLockForRead()
 {
    QMutexLocker lock(&d->mutex);
 
-   Qt::HANDLE self = 0;
+   Qt::HANDLE self = nullptr;
    if (d->recursive) {
       self = QThread::currentThreadId();
 
@@ -104,7 +104,7 @@ bool QReadWriteLock::tryLockForRead(int timeout)
 {
    QMutexLocker lock(&d->mutex);
 
-   Qt::HANDLE self = 0;
+   Qt::HANDLE self = nullptr;
    if (d->recursive) {
       self = QThread::currentThreadId();
 
@@ -140,7 +140,7 @@ void QReadWriteLock::lockForWrite()
 {
    QMutexLocker lock(&d->mutex);
 
-   Qt::HANDLE self = 0;
+   Qt::HANDLE self = nullptr;
    if (d->recursive) {
       self = QThread::currentThreadId();
 
@@ -181,7 +181,7 @@ bool QReadWriteLock::tryLockForWrite()
 {
    QMutexLocker lock(&d->mutex);
 
-   Qt::HANDLE self = 0;
+   Qt::HANDLE self = nullptr;
    if (d->recursive) {
       self = QThread::currentThreadId();
 
@@ -227,7 +227,7 @@ bool QReadWriteLock::tryLockForWrite(int timeout)
 {
    QMutexLocker lock(&d->mutex);
 
-   Qt::HANDLE self = 0;
+   Qt::HANDLE self = nullptr;
    if (d->recursive) {
       self = QThread::currentThreadId();
 
@@ -282,7 +282,7 @@ void QReadWriteLock::unlock()
    } else if (d->accessCount < 0 && ++d->accessCount == 0) {
       // released a write lock
       unlocked = true;
-      d->currentWriter = 0;
+      d->currentWriter = nullptr;
    }
 
    if (unlocked) {
