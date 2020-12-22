@@ -114,7 +114,7 @@ QSingleShotTimer::QSingleShotTimer(int msec, Qt::TimerType timerType, const QObj
    if (m_receiver && thread() != m_receiver->thread()) {
       // Avoid leaking the QSingleShotTimer instance in case the application exits before the timer fires
       connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &QObject::deleteLater);
-      setParent(0);
+      setParent(nullptr);
       moveToThread(m_receiver->thread());
    }
 }

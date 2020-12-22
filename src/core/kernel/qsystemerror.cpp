@@ -51,10 +51,10 @@ static inline QString fromstrerror_helper(const char *str, const QByteArray &)
 static QString windowsErrorString(int errorCode)
 {
    QString ret;
-   wchar_t *buffer = 0;
+   wchar_t *buffer = nullptr;
 
    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                 NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&buffer, 0, NULL);
+                 nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&buffer, 0, nullptr);
 
    if (buffer != nullptr) {
       ret = QString::fromStdWString(std::wstring(buffer));
@@ -71,7 +71,7 @@ static QString windowsErrorString(int errorCode)
 
 static QString standardLibraryErrorString(int errorCode)
 {
-   const char *s = 0;
+   const char *s = nullptr;
    QString ret;
 
    switch (errorCode) {

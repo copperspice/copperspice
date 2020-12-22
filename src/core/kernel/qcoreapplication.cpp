@@ -101,7 +101,7 @@ class QMutexUnlocker
          mtx->unlock();
       }
 
-      mtx = 0;
+      mtx = nullptr;
    }
 
  private:
@@ -147,7 +147,7 @@ QString QCoreApplicationPrivate::appName() const
 
 bool QCoreApplicationPrivate::checkInstance(const char *function)
 {
-   bool b = (QCoreApplication::self != 0);
+   bool b = (QCoreApplication::self != nullptr);
 
    if (!b) {
       qWarning("QApplication::%s: Please instantiate the QApplication object first", function);
@@ -188,8 +188,8 @@ void QCoreApplicationPrivate::processCommandLineArguments()
    }
 
    if (j < argc) {
-      argv[j] = 0;
-      argc = j;
+      argv[j] = nullptr;
+      argc    = j;
    }
 }
 
@@ -263,7 +263,7 @@ static void qt_call_pre_routines()
 
 void Q_CORE_EXPORT qt_call_post_routines()
 {
-   QVFuncList *list = 0;
+   QVFuncList *list = nullptr;
 
    try {
       list = postRList();
@@ -312,7 +312,7 @@ QAbstractEventDispatcher *QCoreApplicationPrivate::eventDispatcher = nullptr;
 uint QCoreApplicationPrivate::attribs;
 
 #ifdef Q_OS_UNIX
-   Qt::HANDLE qt_application_thread_id = 0;
+   Qt::HANDLE qt_application_thread_id = nullptr;
 #endif
 
 struct QCoreApplicationData {
@@ -356,7 +356,7 @@ QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv, uint 
 
    static const char *const empty = "";
 
-   if (argc == 0 || argv == 0) {
+   if (argc == 0 || argv == nullptr) {
       argc = 0;
       argv = const_cast<char **>(&empty);
    }
@@ -450,7 +450,7 @@ QThread *QCoreApplicationPrivate::theMainThread = nullptr;
 
 QThread *QCoreApplicationPrivate::mainThread()
 {
-   Q_ASSERT(theMainThread != 0);
+   Q_ASSERT(theMainThread != nullptr);
    return theMainThread;
 }
 
@@ -595,7 +595,7 @@ QCoreApplication::~QCoreApplication()
 {
    qt_call_post_routines();
 
-   self = 0;
+   self = nullptr;
    QCoreApplicationPrivate::is_app_closing = true;
    QCoreApplicationPrivate::is_app_running = false;
 
@@ -622,7 +622,7 @@ QCoreApplication::~QCoreApplication()
       QCoreApplicationPrivate::eventDispatcher->closingDown();
    }
 
-   QCoreApplicationPrivate::eventDispatcher = 0;
+   QCoreApplicationPrivate::eventDispatcher = nullptr;
 
    delete coreappdata()->app_libpaths;
    coreappdata()->app_libpaths = nullptr;
@@ -818,7 +818,7 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags)
    }
 
    if (flags & QEventLoop::DeferredDeletion) {
-      QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+      QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
    }
 
    tmp->processEvents(flags);
@@ -835,7 +835,7 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int m
    start.start();
 
    if (flags & QEventLoop::DeferredDeletion) {
-      QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+      QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
    }
 
    while (data->eventDispatcher.load()->processEvents(flags & ~QEventLoop::WaitForMoreEvents)) {
@@ -844,7 +844,7 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int m
       }
 
       if (flags & QEventLoop::DeferredDeletion) {
-         QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+         QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
       }
    }
 }
@@ -883,7 +883,7 @@ int QCoreApplication::exec()
       }
 
       self->d_func()->aboutToQuitEmitted = true;
-      sendPostedEvents(0, QEvent::DeferredDelete);
+      sendPostedEvents(nullptr, QEvent::DeferredDelete);
    }
 
    return returnCode;
@@ -906,8 +906,8 @@ void QCoreApplication::exit(int returnCode)
 
 void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
 {
-   if (receiver == 0) {
-      qWarning("QCoreApplication::postEvent: Unexpected null receiver");
+   if (receiver == nullptr) {
+      qWarning("QCoreApplication::postEvent: Unexpected nullptr for receiver");
       delete event;
       return;
    }
@@ -1008,7 +1008,7 @@ bool QCoreApplication::compressEvent(QEvent *event, QObject *receiver, QPostEven
 
          for (int i = 0; i < postedEvents->size(); ++i) {
             const QPostEvent &cur = postedEvents->at(i);
-            if (cur.receiver != receiver || cur.event == 0 || cur.event->type() != event->type()) {
+            if (cur.receiver != receiver || cur.event == nullptr || cur.event->type() != event->type()) {
                continue;
             }
 
@@ -1078,6 +1078,7 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
       if (!pe.event) {
          continue;
       }
+
       if ((receiver && receiver != pe.receiver) || (event_type && event_type != pe.event->type())) {
          data->canWait = false;
          continue;
@@ -1087,11 +1088,12 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
          // DeferredDelete events are only sent when we are explicitly asked to
          // (s.a. QEvent::DeferredDelete), and then only if the event loop that
          // posted the event has returned.
-         const bool allowDeferredDelete =
-            (quintptr(pe.event->d) > unsigned(data->loopLevel)
-             || (! quintptr(pe.event->d) && data->loopLevel > 0)
-             || (event_type == QEvent::DeferredDelete
-                 && quintptr(pe.event->d) == unsigned(data->loopLevel)));
+
+         const bool tmp1 = quintptr(pe.event->d) > unsigned(data->loopLevel);
+         const bool tmp2 = pe.event->d == nullptr && (data->loopLevel > 0);
+         const bool tmp3 = (event_type == QEvent::DeferredDelete) && (quintptr(pe.event->d) == unsigned(data->loopLevel));
+
+         const bool allowDeferredDelete = tmp1 || tmp2 || tmp3;
 
          if (! allowDeferredDelete) {
             // can not send deferred delete
@@ -1102,7 +1104,7 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
 
                // null out the event so if sendPostedEvents recurses, it
                // will ignore this one, as it's been re-posted
-               const_cast<QPostEvent &>(pe).event = 0;
+               const_cast<QPostEvent &>(pe).event = nullptr;
 
                // re-post the copied event so it is not lost
                data->postEventList.addEvent(pe_copy);
@@ -1123,7 +1125,7 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
       Q_ASSERT(CSInternalEvents::get_m_PostedEvents(r) >= 0);
 
       // next, update the data structure so that we're ready for the next event
-      const_cast<QPostEvent &>(pe).event = 0;
+      const_cast<QPostEvent &>(pe).event = nullptr;
 
       locker.unlock();
       // time to deliver the event
@@ -1217,7 +1219,7 @@ void QCoreApplication::removePostedEvents(QObject *receiver, int eventType)
 
          pe.event->posted = false;
          events.append(pe.event);
-         const_cast<QPostEvent &>(pe).event = 0;
+         const_cast<QPostEvent &>(pe).event = nullptr;
 
       } else if (! data->postEventList.recursion) {
          if (i != j) {
@@ -1278,7 +1280,7 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
          pe.event->posted = false;
 
          delete pe.event;
-         const_cast<QPostEvent &>(pe).event = 0;
+         const_cast<QPostEvent &>(pe).event = nullptr;
          return;
       }
    }
@@ -1419,7 +1421,7 @@ QString QCoreApplication::translate(const char *context, const char *sourceText,
       if (encoding == UnicodeUTF8) {
          result = QString::fromUtf8(sourceText);
 
-      } else if (QTextCodec::codecForTr() != 0) {
+      } else if (QTextCodec::codecForTr() != nullptr) {
          result = QTextCodec::codecForTr()->toUnicode(sourceText);
 
       } else
@@ -1436,7 +1438,7 @@ QString QCoreApplication::translate(const char *context, const char *sourceText,
 // Declared in qglobal.h
 QString qtTrId(const char *id, int n)
 {
-   return QCoreApplication::translate(0, id, 0, QCoreApplication::UnicodeUTF8, n);
+   return QCoreApplication::translate(nullptr, id, nullptr, QCoreApplication::UnicodeUTF8, n);
 }
 
 bool QCoreApplicationPrivate::isTranslatorInstalled(QTranslator *translator)

@@ -211,8 +211,8 @@ class QTranslatorPrivate
    enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69, NumerusRules = 0x88 };
 
    QTranslatorPrivate()
-      : used_mmap(0), unmapPointer(0), unmapLength(0), resource(0),
-        messageArray(0), offsetArray(0), contextArray(0), numerusRulesArray(0),
+      : used_mmap(0), unmapPointer(nullptr), unmapLength(0), resource(nullptr),
+        messageArray(nullptr), offsetArray(nullptr), contextArray(nullptr), numerusRulesArray(nullptr),
         messageLength(0), offsetLength(0), contextLength(0), numerusRulesLength(0) {}
 
    virtual ~QTranslatorPrivate() {}
@@ -383,7 +383,7 @@ bool QTranslatorPrivate::do_load(const QString &realname)
 
       } else {
          delete d->resource;
-         d->resource = 0;
+         d->resource = nullptr;
       }
    }
 
@@ -411,7 +411,7 @@ bool QTranslatorPrivate::do_load(const QString &realname)
          if (! QT_FSTAT(fd, &st)) {
             char *ptr;
             ptr = reinterpret_cast<char *>(
-                     mmap(0, st.st_size,             // any address, whole file
+                     mmap(nullptr, st.st_size,             // any address, whole file
                           PROT_READ,                 // read-only memory
                           MAP_FILE | MAP_PRIVATE,    // swap-backed map from file
                           fd, 0));                   // from offset 0 of fd
@@ -441,7 +441,7 @@ bool QTranslatorPrivate::do_load(const QString &realname)
 
       if (! ok) {
          delete [] d->unmapPointer;
-         d->unmapPointer = 0;
+         d->unmapPointer = nullptr;
          d->unmapLength = 0;
          return false;
       }
@@ -689,7 +689,7 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len)
 static QString getMessage(const uchar *m, const uchar *end, const char *context, const char *sourceText,
                   const char *comment, int numerus)
 {
-   const uchar *tn    = 0;
+   const uchar *tn    = nullptr;
    uint tn_length     = 0;
    int currentNumerus = -1;
 
@@ -782,15 +782,15 @@ static QString getMessage(const uchar *m, const uchar *end, const char *context,
 
 QString QTranslatorPrivate::do_translate(const char *context, const char *sourceText, const char *comment, int n) const
 {
-   if (context == 0) {
+   if (context == nullptr) {
       context = "";
    }
 
-   if (sourceText == 0) {
+   if (sourceText == nullptr) {
       sourceText = "";
    }
 
-   if (comment == 0) {
+   if (comment == nullptr) {
       comment = "";
    }
 
@@ -905,16 +905,16 @@ void QTranslatorPrivate::clear()
 
    delete resource;
 
-   resource = 0;
-   unmapPointer = 0;
-   unmapLength = 0;
-   messageArray = 0;
-   contextArray = 0;
-   offsetArray = 0;
-   numerusRulesArray = 0;
-   messageLength = 0;
-   contextLength = 0;
-   offsetLength = 0;
+   resource           = nullptr;
+   unmapPointer       = nullptr;
+   unmapLength        = 0;
+   messageArray       = nullptr;
+   contextArray       = nullptr;
+   offsetArray        = nullptr;
+   numerusRulesArray  = nullptr;
+   messageLength      = 0;
+   contextLength      = 0;
+   offsetLength       = 0;
    numerusRulesLength = 0;
 
    if (QCoreApplicationPrivate::isTranslatorInstalled(q)) {

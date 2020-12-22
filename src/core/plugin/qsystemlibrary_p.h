@@ -35,18 +35,18 @@ class QSystemLibrary
  public:
    explicit QSystemLibrary(const QString &libraryName) {
       m_libraryName = libraryName;
-      m_handle      = 0;
+      m_handle      = nullptr;
       m_didLoad     = false;
    }
 
    bool load(bool onlySystemDirectory = true) {
       m_handle = load(m_libraryName, onlySystemDirectory);
       m_didLoad = true;
-      return (m_handle != 0);
+      return (m_handle != nullptr);
    }
 
    bool isLoaded() {
-      return (m_handle != 0);
+      return (m_handle != nullptr);
    }
 
    void *resolve(const char *symbol) {
@@ -55,7 +55,7 @@ class QSystemLibrary
       }
 
       if (! m_handle) {
-         return 0;
+         return nullptr;
       }
 
       return (void *)GetProcAddress(m_handle, symbol);

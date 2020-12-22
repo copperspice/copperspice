@@ -39,12 +39,12 @@ int appCmdShow = 0;
 
 Q_CORE_EXPORT HINSTANCE qWinAppInst()                      // get Windows app handle
 {
-   return GetModuleHandle(0);
+   return GetModuleHandle(nullptr);
 }
 
 Q_CORE_EXPORT HINSTANCE qWinAppPrevInst()                  // get Windows prev app handle
 {
-   return 0;
+   return nullptr;
 }
 
 Q_CORE_EXPORT int qWinAppCmdShow()                         // get main window show command
@@ -75,7 +75,7 @@ Q_CORE_EXPORT QString qAppFileName()
    // get application file name
    std::wstring buffer(MAX_PATH + 2, L'\0');
 
-   DWORD v = GetModuleFileName(0, &buffer[0], MAX_PATH + 1);
+   DWORD v = GetModuleFileName(nullptr, &buffer[0], MAX_PATH + 1);
 
    if (v == 0) {
       return QString();
@@ -96,7 +96,7 @@ Q_CORE_EXPORT QString qAppFileName()
       size = MAX_PATH * i;
       buffer.resize(size + 1);
 
-      v = GetModuleFileName(NULL, &buffer[0], size);
+      v = GetModuleFileName(nullptr, &buffer[0], size);
 
    } while (v == size);
 
@@ -211,7 +211,7 @@ void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerI
          pe.event->posted = false;
 
          delete pe.event;
-         const_cast<QPostEvent &>(pe).event = 0;
+         const_cast<QPostEvent &>(pe).event = nullptr;
          return;
       }
    }
@@ -533,14 +533,14 @@ struct KnownWM {
    { 0x038F, "WM_PENWINLAST" },
    { 0x0400, "WM_USER" },
    { 0x8000, "WM_APP" },
-   { 0, 0 }
+   { 0,      nullptr }
 }; // End of known messages
 
 // Looks up the WM_ message in the table above
 static const char *findWMstr(uint msg)
 {
    uint i = 0;
-   const char *result = 0;
+   const char *result = nullptr;
    // Known WM_'s
    while (knownWM[i].str && (knownWM[i].WM != msg)) {
       ++i;
@@ -555,7 +555,7 @@ struct FLAG_STRING_STRUCT {
    const char *str;
 };
 
-FLAG_STRING_STRUCT FLAG_STRING(uint value = 0, const char *c = 0)
+FLAG_STRING_STRUCT FLAG_STRING(uint value = 0, const char *c = nullptr)
 {
    FLAG_STRING_STRUCT s = {value, c};
    return s;
@@ -748,7 +748,7 @@ QString decodeMSG(const MSG &msg)
 
          QString className;
 
-         if (lpcs->lpszClass != 0) {
+         if (lpcs->lpszClass != nullptr) {
             if (HIWORD(lpcs->lpszClass) == 0) {
                // Atom
                className = QString::number(LOWORD(lpcs->lpszClass), 16);
@@ -761,7 +761,7 @@ QString decodeMSG(const MSG &msg)
 
          QString windowName;
 
-         if (lpcs->lpszName != 0) {
+         if (lpcs->lpszName != nullptr) {
             windowName = QString((QChar *)lpcs->lpszName, (int)wcslen(reinterpret_cast<const wchar_t *>(lpcs->lpszName)));
          }
 

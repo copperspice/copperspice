@@ -349,7 +349,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
    }
 
-   if (m_bento == 0)  {
+   if (m_bento == nullptr)  {
       qWarning("QMetaMethod::invoke() MetaMethod registration issue, Receiver is %s", csPrintable(m_metaObject->className()));
       return false;
    }
@@ -374,7 +374,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
    }
 
    QThread *currentThread = QThread::currentThread();
-   QThread *objectThread  = 0;
+   QThread *objectThread  = nullptr;
 
    if (isConstructor) {
       // only allowed to create a new object in your own thread
@@ -413,7 +413,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
       // store the signal data, true indicates the data will be copied into a TeaCup Object (stored on the heap)
       CSMetaCallEvent *event = new CSMetaCallEvent(m_bento,
-                  new CsSignal::Internal::TeaCup_Data<Ts...>(true, std::forward<Ts>(Vs)...), 0, -1);
+                  new CsSignal::Internal::TeaCup_Data<Ts...>(true, std::forward<Ts>(Vs)...), nullptr, -1);
 
       QCoreApplication::postEvent(object, event);
 
@@ -432,7 +432,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
       // store the signal data, false indicates the data will not be copied
       CSMetaCallEvent *event = new CSMetaCallEvent(m_bento,
-                  new CsSignal::Internal::TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), 0, -1, &semaphore);
+                  new CsSignal::Internal::TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), nullptr, -1, &semaphore);
 
       QCoreApplication::postEvent(object, event);
 
@@ -485,7 +485,8 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, Ts &&...Vs) c
    } else if (type == Qt::QueuedConnection) {
 
       // store the signal data, false indicates the data will not be copied
-      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento, new CsSignal::Internal::TeaCup_Data<Ts...>(true, std::forward<Ts>(Vs)...), 0, -1);
+      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento,
+                  new CsSignal::Internal::TeaCup_Data<Ts...>(true, std::forward<Ts>(Vs)...), nullptr, -1);
       QCoreApplication::postEvent(object, event);
 
    } else {
@@ -499,8 +500,8 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, Ts &&...Vs) c
       QSemaphore semaphore;
 
       // store the signal data, false indicates the data will not be copied
-      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento, new CsSignal::Internal::TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), 0, -1,
-            &semaphore);
+      CSMetaCallEvent *event = new CSMetaCallEvent(m_bento,
+                  new CsSignal::Internal::TeaCup_Data<Ts...>(false, std::forward<Ts>(Vs)...), nullptr, -1, &semaphore);
       QCoreApplication::postEvent(object, event);
 
       semaphore.acquire();

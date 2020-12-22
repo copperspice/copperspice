@@ -155,13 +155,15 @@ int QEventDispatcherUNIXPrivate::doSelect(QEventLoop::ProcessEventsFlags flags, 
                do {
                   switch (type) {
                      case 0: // read
-                        ret = select(sn->fd + 1, &fdset, 0, 0, &tm);
+                        ret = select(sn->fd + 1, &fdset, nullptr, nullptr, &tm);
                         break;
+
                      case 1: // write
-                        ret = select(sn->fd + 1, 0, &fdset, 0, &tm);
+                        ret = select(sn->fd + 1, nullptr, &fdset, nullptr, &tm);
                         break;
+
                      case 2: // except
-                        ret = select(sn->fd + 1, 0, 0, &fdset, &tm);
+                        ret = select(sn->fd + 1, nullptr, nullptr, &fdset, &tm);
                         break;
                   }
                } while (ret == -1 && (errno == EINTR || errno == EAGAIN));
@@ -414,7 +416,7 @@ void QEventDispatcherUNIX::unregisterSocketNotifier(QSocketNotifier *notifier)
    QSockNotType::List &list = d->sn_vec[type].list;
    fd_set *fds  =  &d->sn_vec[type].enabled_fds;
 
-   QSockNot *sn = 0;
+   QSockNot *sn = nullptr;
    int i;
 
    for (i = 0; i < list.size(); ++i) {
@@ -463,7 +465,7 @@ void QEventDispatcherUNIX::setSocketNotifierPending(QSocketNotifier *notifier)
 
    Q_D(QEventDispatcherUNIX);
    QSockNotType::List &list = d->sn_vec[type].list;
-   QSockNot *sn = 0;
+   QSockNot *sn = nullptr;
    int i;
    for (i = 0; i < list.size(); ++i) {
       sn = list[i];
@@ -529,7 +531,7 @@ bool QEventDispatcherUNIX::processEvents(QEventLoop::ProcessEventsFlags flags)
    emit awake();
 
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
-   QCoreApplicationPrivate::sendPostedEvents(0, 0, threadData);
+   QCoreApplicationPrivate::sendPostedEvents(nullptr, 0, threadData);
 
    int nevents = 0;
    const bool canWait = (threadData->canWaitLocked()
@@ -541,7 +543,7 @@ bool QEventDispatcherUNIX::processEvents(QEventLoop::ProcessEventsFlags flags)
 
    if (! d->interrupt.load()) {
       // return the maximum time we can wait for an event.
-      timespec *tm = 0;
+      timespec *tm = nullptr;
       timespec wait_tm = { 0l, 0l };
 
       if (!(flags & QEventLoop::X11ExcludeTimers)) {

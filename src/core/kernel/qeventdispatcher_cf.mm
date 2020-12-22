@@ -172,8 +172,8 @@ QEventDispatcherCoreFoundation::QEventDispatcherCoreFoundation(QObject *parent)
 #endif
     )
     , m_runLoopModeTracker([[RunLoopModeTracker alloc] init])
-    , m_runLoopTimer(0)
-    , m_blockedRunLoopTimer(0)
+    , m_runLoopTimer(nullptr)
+    , m_blockedRunLoopTimer(nullptr)
     , m_overdueTimerScheduled(false)
 {
     m_cfSocketNotifier.setHostEventDispatcher(this);
@@ -225,7 +225,7 @@ bool QEventDispatcherCoreFoundation::processEvents(QEventLoop::ProcessEventsFlag
         Q_ASSERT(m_blockedRunLoopTimer == m_runLoopTimer);
 
         qEventDispatcherDebug() << "Recursing from blocked timer " << m_blockedRunLoopTimer;
-        m_runLoopTimer = 0; // Unset current timer to force creation of new timer
+        m_runLoopTimer = nullptr; // Unset current timer to force creation of new timer
         updateTimers();
     }
 
@@ -327,7 +327,7 @@ bool QEventDispatcherCoreFoundation::processEvents(QEventLoop::ProcessEventsFlag
                 // APIs on the other hand document eg. zero-interval timers to always be
                 // handled after processing all available window-system events.
                 qEventDispatcherDebug() << "Manually processing timers due to overdue timer";
-                processTimers(0);
+                processTimers(nullptr);
                 eventsProcessed = true;
             }
         }
@@ -616,5 +616,5 @@ void QEventDispatcherCoreFoundation::invalidateTimer()
     qEventDispatcherDebug() << "Invalidated CFRunLoopTimer " << m_runLoopTimer;
 
     CFRelease(m_runLoopTimer);
-    m_runLoopTimer = 0;
+    m_runLoopTimer = nullptr;
 }

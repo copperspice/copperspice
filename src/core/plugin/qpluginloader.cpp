@@ -168,7 +168,7 @@ void QPluginLoader::setFileName(const QString &fileName)
    if (mp_handle) {
       lh = mp_handle->loadHints();
       mp_handle->release();
-      mp_handle = 0;
+      mp_handle = nullptr;
       mp_loaded = false;
    }
 

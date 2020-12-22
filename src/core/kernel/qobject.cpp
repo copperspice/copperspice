@@ -34,12 +34,12 @@
 
 QObject::QObject(QObject *t_parent)
 {
-   m_parent                   = 0;        // no parent yet, set by setParent()
+   m_parent                   = nullptr;        // no parent yet, set by setParent()
 
-   m_currentChildBeingDeleted = 0;
-   m_declarativeData          = 0;
+   m_currentChildBeingDeleted = nullptr;
+   m_declarativeData          = nullptr;
    m_postedEvents             = 0;
-   m_sharedRefCount           = 0;
+   m_sharedRefCount           = nullptr;
 
    m_pendTimer                = false;    // no timers yet
    m_wasDeleted               = false;    // double delete flag
@@ -66,7 +66,7 @@ QObject::QObject(QObject *t_parent)
       try {
 
          if (! this->check_parent_thread(t_parent, t_parent->m_threadData, m_threadData)) {
-            t_parent = 0;
+            t_parent = nullptr;
          }
 
          this->setParent(t_parent);
@@ -96,7 +96,7 @@ QObject::~QObject()
    // this line needs to be located after the emit destroyed
    this->m_wasDeleted = true;
 
-   QtSharedPointer::ExternalRefCountData *sharedRefCount = m_sharedRefCount.exchange(0);
+   QtSharedPointer::ExternalRefCountData *sharedRefCount = m_sharedRefCount.exchange(nullptr);
 
    if (sharedRefCount) {
 
@@ -126,7 +126,7 @@ QObject::~QObject()
 
    if (this->m_parent)  {
       // remove 'this' from parent object
-      this->setParent(0);
+      this->setParent(nullptr);
    }
 
    QThreadData *threadData = m_threadData.load();
@@ -374,12 +374,12 @@ void QObject::deleteChildren()
 
    for (int i = 0; i < m_children.count(); ++i) {
       m_currentChildBeingDeleted = m_children.at(i);
-      m_children[i] = 0;
+      m_children[i] = nullptr;
       delete m_currentChildBeingDeleted;
    }
 
    m_children.clear();
-   m_currentChildBeingDeleted = 0;
+   m_currentChildBeingDeleted = nullptr;
 
    m_wasDeleted = reallyWasDeleted;
 }
@@ -773,7 +773,7 @@ void QObject::moveToThread(QThread *targetThread)
       return;
    }
 
-   if (m_parent != 0) {
+   if (m_parent != nullptr) {
       qWarning("QObject::moveToThread() Can not move an object with a parent");
       return;
    }
@@ -788,7 +788,7 @@ void QObject::moveToThread(QThread *targetThread)
 
    QThreadData *threadData = m_threadData.load();
 
-   if (threadData->thread == 0 && currentData == targetData) {
+   if (threadData->thread == nullptr && currentData == targetData) {
       // exception: allow moving objects with no thread affinity to the current thread
       currentData = threadData;
 
@@ -882,7 +882,7 @@ QDebug operator<<(QDebug debug, const QObject *object)
    if (object) {
 
       msg =  object->metaObject()->className() + "(";
-      msg += QString8::number(static_cast<quint64>(object - static_cast<const QObject *>(0)), 16);
+      msg += QString8::number(static_cast<quint64>(object - static_cast<const QObject *>(nullptr)), 16);
 
       if (! object->objectName().isEmpty())  {
          msg += ", name = ";
@@ -969,7 +969,7 @@ void QObject::removeEventFilter(QObject *obj)
    for (int i = 0; i < m_eventFilters.count(); ++i) {
 
       if (m_eventFilters.at(i) == obj) {
-         m_eventFilters[i] = 0;
+         m_eventFilters[i] = nullptr;
       }
    }
 }
@@ -1057,7 +1057,7 @@ void QObject::setParent(QObject *newParent)
          const int index = m_parent->m_children.indexOf(this);
 
          if (m_parent->m_wasDeleted) {
-            m_parent->m_children[index] = 0;
+            m_parent->m_children[index] = nullptr;
 
          } else {
             m_parent->m_children.removeAt(index);
@@ -1077,7 +1077,7 @@ void QObject::setParent(QObject *newParent)
 
       if (m_threadData.load() != m_parent->m_threadData.load()) {
          qWarning("QObject::setParent() Can not set parent, new parent is in a different thread");
-         m_parent = 0;
+         m_parent = nullptr;
          return;
       }
 
@@ -1171,7 +1171,7 @@ void QObject::setThreadData_helper(QThreadData *currentData, QThreadData *target
       if (postedEvent.receiver == this) {
          // move this post event to the targetList
          targetData->postEventList.addEvent(postedEvent);
-         const_cast<QPostEvent &>(postedEvent).event = 0;
+         const_cast<QPostEvent &>(postedEvent).event = nullptr;
          ++eventsMoved;
       }
    }
@@ -1279,10 +1279,10 @@ std::recursive_mutex &QObject::m_metaObjectMutex()
 }
 
 // **
-void (*CSAbstractDeclarativeData::destroyed)(CSAbstractDeclarativeData *, QObject *) = 0;
-void (*CSAbstractDeclarativeData::parentChanged)(CSAbstractDeclarativeData *, QObject *, QObject *) = 0;
-void (*CSAbstractDeclarativeData::signalEmitted)(CSAbstractDeclarativeData *, QObject *, int, void **) = 0;
-int  (*CSAbstractDeclarativeData::receivers)(CSAbstractDeclarativeData *, const QObject *, int) = 0;
+void (*CSAbstractDeclarativeData::destroyed)(CSAbstractDeclarativeData *, QObject *) = nullptr;
+void (*CSAbstractDeclarativeData::parentChanged)(CSAbstractDeclarativeData *, QObject *, QObject *) = nullptr;
+void (*CSAbstractDeclarativeData::signalEmitted)(CSAbstractDeclarativeData *, QObject *, int, void **) = nullptr;
+int  (*CSAbstractDeclarativeData::receivers)(CSAbstractDeclarativeData *, const QObject *, int) = nullptr;
 
 // **
 const QMetaObject &CSGadget_Fake_Parent::staticMetaObject()

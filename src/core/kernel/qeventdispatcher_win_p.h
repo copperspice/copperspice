@@ -72,7 +72,7 @@ class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
    bool event(QEvent *e) override;
 
 protected:
-    QEventDispatcherWin32(QEventDispatcherWin32Private &dd, QObject *parent = 0);
+    QEventDispatcherWin32(QEventDispatcherWin32Private &dd, QObject *parent = nullptr);
     virtual void sendPostedEvents();
     void doUnregisterSocketNotifier(QSocketNotifier *notifier);
 

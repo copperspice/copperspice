@@ -33,7 +33,7 @@
 class QPersistentModelIndexData
 {
  public:
-   QPersistentModelIndexData() : model(0) {}
+   QPersistentModelIndexData() : model(nullptr) {}
    QPersistentModelIndexData(const QModelIndex &idx) : index(idx), model(idx.model()) {}
    QModelIndex index;
    QAtomicInt ref;
@@ -78,7 +78,7 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
    bool allowMove(const QModelIndex &srcParent, int srcFirst, int srcLast,
                   const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
 
-   inline QModelIndex createIndex(int row, int column, void *data = 0) const {
+   inline QModelIndex createIndex(int row, int column, void *data = nullptr) const {
       return q_func()->createIndex(row, column, data);
    }
 
@@ -106,7 +106,7 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
          QPersistentModelIndexData *data = *it;
          persistent.m_indexes.erase(it);
          data->index = QModelIndex();
-         data->model = 0;
+         data->model = nullptr;
       }
    }
 

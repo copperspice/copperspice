@@ -69,7 +69,7 @@ bool QEventLoop::processEvents(ProcessEventsFlags flags)
    }
 
    if (flags & DeferredDeletion) {
-      QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+      QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
    }
 
    return threadData->eventDispatcher.load()->processEvents(flags);
@@ -153,7 +153,7 @@ void QEventLoop::processEvents(ProcessEventsFlags flags, int maxTime)
    start.start();
 
    if (flags & DeferredDeletion) {
-      QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+      QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
    }
 
    while (processEvents(flags & ~WaitForMoreEvents)) {
@@ -162,7 +162,7 @@ void QEventLoop::processEvents(ProcessEventsFlags flags, int maxTime)
       }
 
       if (flags & DeferredDeletion) {
-         QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+         QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
       }
    }
 }

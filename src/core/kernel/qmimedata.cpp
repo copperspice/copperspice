@@ -214,7 +214,7 @@ QVariant QMimeDataPrivate::retrieveTypedData(const QString &format, QVariant::Ty
 }
 
 QMimeData::QMimeData()
-   : QObject(0), d_ptr(new QMimeDataPrivate)
+   : QObject(nullptr), d_ptr(new QMimeDataPrivate)
 {
    d_ptr->q_ptr = this;
 }

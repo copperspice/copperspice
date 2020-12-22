@@ -45,7 +45,7 @@ class Q_CORE_EXPORT QTranslator : public QObject
 
    ~QTranslator();
 
-   virtual QString translate(const char *context, const char *sourceText, const char *disambiguation = 0, int n = -1) const;
+   virtual QString translate(const char *context, const char *sourceText, const char *disambiguation = nullptr, int n = -1) const;
    virtual bool isEmpty() const;
 
    bool load(const QString &filename, const QString &directory = QString(), const QString &search_delimiters = QString(),

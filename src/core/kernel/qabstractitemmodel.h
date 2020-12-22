@@ -46,7 +46,7 @@ class Q_CORE_EXPORT QModelIndex
 
  public:
    inline QModelIndex()
-      : r(-1), c(-1), p(0), m(nullptr)
+      : r(-1), c(-1), p(nullptr), m(nullptr)
    {
    }
 
@@ -79,7 +79,7 @@ class Q_CORE_EXPORT QModelIndex
    }
 
    inline bool isValid() const {
-      return (r >= 0) && (c >= 0) && (m != 0);
+      return (r >= 0) && (c >= 0) && (m != nullptr);
    }
 
    inline bool operator==(const QModelIndex &other) const {

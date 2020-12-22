@@ -30,7 +30,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 
 struct MacSocketInfo {
-    MacSocketInfo() : socket(0), runloop(0), readNotifier(0), writeNotifier(0),
+    MacSocketInfo() : socket(nullptr), runloop(nullptr), readNotifier(nullptr), writeNotifier(nullptr),
         readEnabled(false), writeEnabled(false) {}
     CFSocketRef socket;
     CFRunLoopSourceRef runloop;

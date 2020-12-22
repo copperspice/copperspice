@@ -74,11 +74,11 @@ HINSTANCE QSystemLibrary::load(const QString &libraryName, bool onlySystemDirect
       fullPathAttempt.append(fileName);
       HINSTANCE inst = ::LoadLibrary(&fullPathAttempt.toStdWString()[0]);
 
-      if (inst != 0) {
+      if (inst != nullptr) {
          return inst;
       }
    }
 
-   return 0;
+   return nullptr;
 }
 

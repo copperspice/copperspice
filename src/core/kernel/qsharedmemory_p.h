@@ -68,7 +68,7 @@ class QSharedMemoryLocker
       if (q_sm && q_sm->lock()) {
          return true;
       }
-      q_sm = 0;
+      q_sm = nullptr;
       return false;
    }
 

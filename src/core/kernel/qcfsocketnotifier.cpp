@@ -63,7 +63,7 @@ CFRunLoopSourceRef qt_mac_add_socket_to_runloop(const CFSocketRef socket)
 {
     CFRunLoopSourceRef loopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, socket, 0);
     if (!loopSource)
-        return 0;
+        return nullptr;
 
     CFRunLoopAddSource(CFRunLoopGetMain(), loopSource, kCFRunLoopCommonModes);
     return loopSource;
@@ -81,9 +81,9 @@ void qt_mac_remove_socket_from_runloop(const CFSocketRef socket, CFRunLoopSource
 }
 
 QCFSocketNotifier::QCFSocketNotifier()
-    : eventDispatcher(0)
-    , maybeCancelWaitForMoreEvents(0)
-    , enableNotifiersObserver(0)
+    : eventDispatcher(nullptr)
+    , maybeCancelWaitForMoreEvents(nullptr)
+    , enableNotifiersObserver(nullptr)
 {
 
 }
@@ -132,7 +132,7 @@ void QCFSocketNotifier::registerSocketNotifier(QSocketNotifier *notifier)
         // Create CFSocket, specify that we want both read and write callbacks (the callbacks
         // are enabled/disabled later on).
         const int callbackTypes = kCFSocketReadCallBack | kCFSocketWriteCallBack;
-        CFSocketContext context = {0, this, 0, 0, 0};
+        CFSocketContext context = {0, this, nullptr, nullptr, nullptr};
         socketInfo->socket = CFSocketCreateWithNative(kCFAllocatorDefault, nativeSocket, callbackTypes, qt_mac_socket_callback, &context);
         if (CFSocketIsValid(socketInfo->socket) == false) {
             qWarning("QEventDispatcherMac::registerSocketNotifier: Failed to create CFSocket");
@@ -150,11 +150,11 @@ void QCFSocketNotifier::registerSocketNotifier(QSocketNotifier *notifier)
     }
 
     if (type == QSocketNotifier::Read) {
-        Q_ASSERT(socketInfo->readNotifier == 0);
+        Q_ASSERT(socketInfo->readNotifier == nullptr);
         socketInfo->readNotifier = notifier;
         socketInfo->readEnabled = false;
     } else if (type == QSocketNotifier::Write) {
-        Q_ASSERT(socketInfo->writeNotifier == 0);
+        Q_ASSERT(socketInfo->writeNotifier == nullptr);
         socketInfo->writeNotifier = notifier;
         socketInfo->writeEnabled = false;
     }
@@ -199,18 +199,18 @@ void QCFSocketNotifier::unregisterSocketNotifier(QSocketNotifier *notifier)
     // Decrement read/write counters and disable callbacks if necessary.
     if (type == QSocketNotifier::Read) {
         Q_ASSERT(notifier == socketInfo->readNotifier);
-        socketInfo->readNotifier = 0;
+        socketInfo->readNotifier = nullptr;
         socketInfo->readEnabled = false;
         CFSocketDisableCallBacks(socketInfo->socket, kCFSocketReadCallBack);
     } else if (type == QSocketNotifier::Write) {
         Q_ASSERT(notifier == socketInfo->writeNotifier);
-        socketInfo->writeNotifier = 0;
+        socketInfo->writeNotifier = nullptr;
         socketInfo->writeEnabled = false;
         CFSocketDisableCallBacks(socketInfo->socket, kCFSocketWriteCallBack);
     }
 
     // Remove CFSocket from runloop if this was the last QSocketNotifier.
-    if (socketInfo->readNotifier == 0 && socketInfo->writeNotifier == 0) {
+    if (socketInfo->readNotifier == nullptr && socketInfo->writeNotifier == nullptr) {
         unregisterSocketInfo(socketInfo);
         delete socketInfo;
         macSockets.remove(nativeSocket);
@@ -237,7 +237,7 @@ void QCFSocketNotifier::destroyRunLoopObserver()
 
     CFRunLoopObserverInvalidate(enableNotifiersObserver);
     CFRelease(enableNotifiersObserver);
-    enableNotifiersObserver = 0;
+    enableNotifiersObserver = nullptr;
 }
 
 void QCFSocketNotifier::unregisterSocketInfo(MacSocketInfo *socketInfo)

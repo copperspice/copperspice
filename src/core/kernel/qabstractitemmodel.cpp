@@ -46,8 +46,8 @@ QPersistentModelIndexData *QPersistentModelIndexData::create(const QModelIndex &
 {
    Q_ASSERT(index.isValid());          // we will _never_ insert an invalid index in the list
 
-   QPersistentModelIndexData *d = 0;
-   QAbstractItemModel *model = const_cast<QAbstractItemModel *>(index.model());
+   QPersistentModelIndexData *d = nullptr;
+   QAbstractItemModel *model    = const_cast<QAbstractItemModel *>(index.model());
 
    QMultiMap<QModelIndex, QPersistentModelIndexData *> &tmpIndex = model->d_func()->persistent.m_indexes;
    const QMultiMap<QModelIndex, QPersistentModelIndexData *>::iterator it = tmpIndex.find(index);
@@ -83,7 +83,7 @@ void QPersistentModelIndexData::destroy(QPersistentModelIndexData *data)
 }
 
 QPersistentModelIndex::QPersistentModelIndex()
-   : d(0)
+   : d(nullptr)
 {
 }
 
@@ -96,7 +96,7 @@ QPersistentModelIndex::QPersistentModelIndex(const QPersistentModelIndex &other)
 }
 
 QPersistentModelIndex::QPersistentModelIndex(const QModelIndex &index)
-   : d(0)
+   : d(nullptr)
 {
    if (index.isValid()) {
       d = QPersistentModelIndexData::create(index);
@@ -108,7 +108,7 @@ QPersistentModelIndex::~QPersistentModelIndex()
 {
    if (d && !d->ref.deref()) {
       QPersistentModelIndexData::destroy(d);
-      d = 0;
+      d = nullptr;
    }
 }
 
@@ -159,7 +159,7 @@ QPersistentModelIndex &QPersistentModelIndex::operator=(const QModelIndex &other
          d->ref.ref();
       }
    } else {
-      d = 0;
+      d = nullptr;
    }
 
    return *this;
@@ -211,7 +211,7 @@ void *QPersistentModelIndex::internalPointer() const
    if (d) {
       return d->index.internalPointer();
    }
-   return 0;
+   return nullptr;
 }
 
 quintptr QPersistentModelIndex::internalId() const
@@ -272,7 +272,8 @@ const QAbstractItemModel *QPersistentModelIndex::model() const
    if (d) {
       return d->index.model();
    }
-   return 0;
+
+   return nullptr;
 }
 
 /*!
@@ -702,7 +703,7 @@ void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent,
       }
 
       data->index = QModelIndex();
-      data->model = 0;
+      data->model = nullptr;
    }
 }
 
@@ -832,7 +833,7 @@ void QAbstractItemModelPrivate::columnsRemoved(const QModelIndex &parent,
       }
 
       data->index = QModelIndex();
-      data->model = 0;
+      data->model = nullptr;
    }
 }
 
@@ -925,12 +926,12 @@ QStringList QAbstractItemModel::mimeTypes() const
 QMimeData *QAbstractItemModel::mimeData(const QModelIndexList &indexes) const
 {
    if (indexes.count() <= 0) {
-      return 0;
+      return nullptr;
    }
 
    QStringList types = mimeTypes();
    if (types.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    QMimeData *data = new QMimeData();
@@ -1623,7 +1624,7 @@ void QAbstractItemModel::changePersistentIndex(const QModelIndex &from, const QM
       if (to.isValid()) {
          d->persistent.insertMultiAtEnd(to, data);
       } else {
-         data->model = 0;
+         data->model = nullptr;
       }
    }
 }
@@ -1655,7 +1656,7 @@ void QAbstractItemModel::changePersistentIndexList(const QModelIndexList &from,
          if (data->index.isValid()) {
             toBeReinserted << data;
          } else {
-            data->model = 0;
+            data->model = nullptr;
          }
       }
    }

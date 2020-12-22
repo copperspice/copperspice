@@ -296,9 +296,9 @@ inline QString QCoreApplication::translate(const char *, const char *sourceText,
 // ### merge the four functions into two (using "int n = -1")
 #define Q_DECLARE_TR_FUNCTIONS(context) \
 public: \
-    static inline QString tr(const char *sourceText, const char *disambiguation = 0) \
+    static inline QString tr(const char *sourceText, const char *disambiguation = nullptr) \
         { return QCoreApplication::translate(#context, sourceText, disambiguation); } \
-    static inline QString trUtf8(const char *sourceText, const char *disambiguation = 0) \
+    static inline QString trUtf8(const char *sourceText, const char *disambiguation = nullptr) \
         { return QCoreApplication::translate(#context, sourceText, disambiguation, \
                                              QCoreApplication::UnicodeUTF8); } \
     static inline QString tr(const char *sourceText, const char *disambiguation, int n) \

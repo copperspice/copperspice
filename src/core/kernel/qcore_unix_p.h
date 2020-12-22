@@ -117,7 +117,7 @@ inline void qt_ignore_sigpipe()
         memset(&noaction, 0, sizeof(noaction));
 
         noaction.sa_handler = SIG_IGN;
-        ::sigaction(SIGPIPE, &noaction, 0);
+        ::sigaction(SIGPIPE, &noaction, nullptr);
 
         atom.store(true);
     }

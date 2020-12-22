@@ -101,7 +101,8 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
          argv[argc++] = start;
       }
    }
-   argv[argc] = 0;
+
+   argv[argc] = nullptr;
 
    return argv;
 }

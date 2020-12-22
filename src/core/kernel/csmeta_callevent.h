@@ -31,7 +31,7 @@ class Q_CORE_EXPORT CSMetaCallEvent : public QEvent
 {
  public:
    CSMetaCallEvent(const CsSignal::Internal::BentoAbstract *bento, const CsSignal::Internal::TeaCupAbstract *dataPack,
-                   const QObject *sender, int signal_index, QSemaphore *semaphore = 0);
+                   const QObject *sender, int signal_index, QSemaphore *semaphore = nullptr);
 
    ~CSMetaCallEvent();
 

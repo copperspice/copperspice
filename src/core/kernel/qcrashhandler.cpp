@@ -49,7 +49,7 @@
 #include <signal.h>
 #include <stdlib.h>
 
-QtCrashHandler QSegfaultHandler::callback = 0;
+QtCrashHandler QSegfaultHandler::callback = nullptr;
 
 #if defined(__GLIBC__) && (__GLIBC__ >= 2) && ! defined(__UCLIBC__) && ! defined(QT_LINUXBASE)
 
@@ -88,7 +88,7 @@ static void init_backtrace(char **, int)
 #include <sys/types.h>
 #include <sys/wait.h>
 
-static char *globalProgName = NULL;
+static char *globalProgName = nullptr;
 static bool backtrace_command(FILE *outb, const char *format, ...)
 {
    bool ret = false;
@@ -299,8 +299,8 @@ QSegfaultHandler::initialize(char **argv, int argc)
    SignalAction.sa_flags = 0;
    SignalAction.sa_handler = qt_signal_handler;
    sigemptyset(&SignalAction.sa_mask);
-   sigaction(SIGSEGV, &SignalAction, NULL);
-   sigaction(SIGBUS, &SignalAction, NULL);
+   sigaction(SIGSEGV, &SignalAction, nullptr);
+   sigaction(SIGBUS, &SignalAction, nullptr);
 }
 
 #endif // QT_NO_CRASHHANDLER

@@ -31,7 +31,7 @@
 // #define QSYSTEMSEMAPHORE_DEBUG
 
 QSystemSemaphorePrivate::QSystemSemaphorePrivate() :
-   semaphore(0), error(QSystemSemaphore::NoError)
+   semaphore(nullptr), error(QSystemSemaphore::NoError)
 {
 }
 
@@ -70,14 +70,14 @@ HANDLE QSystemSemaphorePrivate::handle(QSystemSemaphore::AccessMode)
 {
    // don't allow making handles on empty keys
    if (key.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    // Create it if it doesn't already exists.
-   if (semaphore == 0) {
-      semaphore = CreateSemaphore(0, initialValue, MAXLONG, &fileName.toStdWString()[0]);
+   if (semaphore == nullptr) {
+      semaphore = CreateSemaphore(nullptr, initialValue, MAXLONG, &fileName.toStdWString()[0]);
 
-      if (semaphore == NULL) {
+      if (semaphore == nullptr) {
          setErrorString("QSystemSemaphore::handle");
       }
    }
@@ -95,17 +95,17 @@ void QSystemSemaphorePrivate::cleanHandle()
 
    }
 
-   semaphore = 0;
+   semaphore = nullptr;
 }
 
 bool QSystemSemaphorePrivate::modifySemaphore(int count)
 {
-   if (0 == handle()) {
+   if (handle() == nullptr) {
       return false;
    }
 
    if (count > 0) {
-      if (0 == ReleaseSemaphore(semaphore, count, 0)) {
+      if (ReleaseSemaphore(semaphore, count, nullptr) == 0) {
          setErrorString(QLatin1String("QSystemSemaphore::modifySemaphore"));
 
 #if defined QSYSTEMSEMAPHORE_DEBUG

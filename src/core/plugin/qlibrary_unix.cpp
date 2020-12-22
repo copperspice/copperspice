@@ -191,10 +191,10 @@ bool QLibraryHandle::load_sys()
 #ifdef Q_OS_DARWIN
    if (!pHnd) {
       QByteArray utf8Bundle = fileName.toUtf8();
-      QCFType<CFURLRef> bundleUrl = CFURLCreateFromFileSystemRepresentation(NULL,
+      QCFType<CFURLRef> bundleUrl = CFURLCreateFromFileSystemRepresentation(nullptr,
             reinterpret_cast<const UInt8 *>(utf8Bundle.data()), utf8Bundle.length(), true);
 
-      QCFType<CFBundleRef> bundle = CFBundleCreate(NULL, bundleUrl);
+      QCFType<CFBundleRef> bundle = CFBundleCreate(nullptr, bundleUrl);
 
       if (bundle) {
          QCFType<CFURLRef> url = CFBundleCopyExecutableURL(bundle);
@@ -216,7 +216,7 @@ bool QLibraryHandle::load_sys()
    } else {
       errorString = QLibrary::tr("Unable to load library %1: %2").formatArg(fileName).formatArg(qdlerror());
    }
-   return (pHnd != 0);
+   return (pHnd != nullptr);
 }
 
 bool QLibraryHandle::unload_sys()

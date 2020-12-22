@@ -441,7 +441,7 @@ class CSBentoAbstract : public virtual CsSignal::Internal::BentoAbstract
    public:
       using CsSignal::Internal::BentoAbstract::invoke;
       virtual void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
-                  CSGenericReturnArgument *retval = 0) const = 0;
+                  CSGenericReturnArgument *retval = nullptr) const = 0;
 
       virtual bool checkReturnType(CSGenericReturnArgument &retval) const = 0;
 };
@@ -456,7 +456,7 @@ class CSBento : public CSBentoAbstract, public CsSignal::Internal::Bento<T>
 
       using CsSignal::Internal::Bento<T>::invoke;
       void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
-                  CSGenericReturnArgument *retval = 0) const override;
+                  CSGenericReturnArgument *retval = nullptr) const override;
 
       bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
@@ -472,7 +472,7 @@ class CSBento<FunctionReturn (*)(FunctionArgs...)> : public CSBentoAbstract,
 
       using CsSignal::Internal::Bento<FunctionReturn (*)(FunctionArgs...)>::invoke;
       void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
-                  CSGenericReturnArgument *retval = 0) const override;
+                  CSGenericReturnArgument *retval = nullptr) const override;
 
       bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
@@ -488,7 +488,7 @@ class CSBento<MethodReturn(MethodClass::*)(MethodArgs...)>: public CSBentoAbstra
 
       using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...)>::invoke;
       void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
-                  CSGenericReturnArgument *retval = 0) const override;
+                  CSGenericReturnArgument *retval = nullptr) const override;
 
       bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };
@@ -506,7 +506,7 @@ class CSBento<MethodReturn(MethodClass::*)(MethodArgs...) const>: public CSBento
 
       using CsSignal::Internal::Bento<MethodReturn(MethodClass::*)(MethodArgs...) const>::invoke;
       void invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
-                     CSGenericReturnArgument *retval = 0) const override;
+                     CSGenericReturnArgument *retval = nullptr) const override;
 
       bool checkReturnType(CSGenericReturnArgument &retval) const override;
 };

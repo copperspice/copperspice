@@ -41,7 +41,7 @@ template <typename T>
 class Q_CORE_EXPORT QCFType
 {
  public:
-   inline QCFType(const T &t = 0) : type(t) {}
+   inline QCFType(const T &t = nullptr) : type(t) {}
    inline QCFType(const QCFType &helper) : type(helper.type) {
       if (type) {
          CFRetain(type);
@@ -92,8 +92,8 @@ class Q_CORE_EXPORT QCFType
 class Q_CORE_EXPORT QCFString : public QCFType<CFStringRef>
 {
  public:
-   inline QCFString(const QString &str) : QCFType<CFStringRef>(0), string(str) {}
-   inline QCFString(const CFStringRef cfstr = 0) : QCFType<CFStringRef>(cfstr) {}
+   inline QCFString(const QString &str) : QCFType<CFStringRef>(nullptr), string(str) {}
+   inline QCFString(const CFStringRef cfstr = nullptr) : QCFType<CFStringRef>(cfstr) {}
    inline QCFString(const QCFType<CFStringRef> &other) : QCFType<CFStringRef>(other) {}
    operator QString() const;
    operator CFStringRef() const;

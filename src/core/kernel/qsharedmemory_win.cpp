@@ -31,11 +31,13 @@
 //#define QSHAREDMEMORY_DEBUG
 
 QSharedMemoryPrivate::QSharedMemoryPrivate()
-   : memory(0), size(0), error(QSharedMemory::NoError),
+   : memory(nullptr), size(0), error(QSharedMemory::NoError),
+
 #ifndef QT_NO_SYSTEMSEMAPHORE
      systemSemaphore(QString()), lockedByMe(false),
 #endif
-     hand(0)
+
+     hand(nullptr)
 {
 }
 
@@ -85,12 +87,12 @@ HANDLE QSharedMemoryPrivate::handle()
       if (nativeKey.isEmpty()) {
          error       = QSharedMemory::KeyError;
          errorString = QSharedMemory::tr("%1: key is empty").formatArg("QSharedMemory::handle");
-         return 0;
+         return nullptr;
       }
 
       // This works for opening a mapping too, but always opens it with read/write access in
       // attach as it seems.
-      hand = CreateFileMapping(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, 0, &nativeKey.toStdWString()[0]);
+      hand = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, 0, &nativeKey.toStdWString()[0]);
 
       if (! hand) {
          setErrorString(QLatin1String("QSharedMemory::handle"));
@@ -102,10 +104,10 @@ HANDLE QSharedMemoryPrivate::handle()
 
 void QSharedMemoryPrivate::cleanHandle()
 {
-   if (hand != 0 && !CloseHandle(hand)) {
+   if (hand != nullptr && ! CloseHandle(hand)) {
       setErrorString(QLatin1String("QSharedMemory::cleanHandle"));
    }
-   hand = 0;
+   hand = nullptr;
 }
 
 bool QSharedMemoryPrivate::create(int size)
@@ -116,8 +118,8 @@ bool QSharedMemoryPrivate::create(int size)
       return false;
    }
 
-   // Create the file mapping.
-   hand = CreateFileMapping(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, size, &nativeKey.toStdWString()[0]);
+   // Create the file mapping
+   hand = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, size, &nativeKey.toStdWString()[0]);
    setErrorString(QLatin1String("QSharedMemory::create"));
 
    // hand is valid when it already exists unlike unix so explicitly check
@@ -158,7 +160,8 @@ bool QSharedMemoryPrivate::detach()
       setErrorString(QLatin1String("QSharedMemory::detach"));
       return false;
    }
-   memory = 0;
+
+   memory = nullptr;
    size = 0;
 
    // close handle

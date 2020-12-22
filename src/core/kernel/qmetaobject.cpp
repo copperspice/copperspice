@@ -404,14 +404,14 @@ QObject *QMetaObject::newInstance() const
    int index = this->indexOfConstructor(constructorSig);
 
    if (index == -1)  {
-      return 0;
+      return nullptr;
    }
 
    QMetaMethod metaMethod = this->constructor(index);
-   QObject *retval = 0;
+   QObject *retval = nullptr;
 
    // about to call QMetaMethod::invoke()
-   metaMethod.invoke(0, Qt::DirectConnection, CSReturnArgument<QObject *>(retval));
+   metaMethod.invoke(nullptr, Qt::DirectConnection, CSReturnArgument<QObject *>(retval));
 
    return retval;
 }

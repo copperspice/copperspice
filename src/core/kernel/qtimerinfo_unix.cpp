@@ -65,7 +65,7 @@ QTimerInfoList::QTimerInfoList()
    }
 #endif
 
-   firstTimerInfo = 0;
+   firstTimerInfo = nullptr;
 }
 
 timespec QTimerInfoList::updateCurrentTime()
@@ -459,7 +459,7 @@ void QTimerInfoList::registerTimer(int timerId, int interval, Qt::TimerType time
    t->interval = interval;
    t->timerType = timerType;
    t->obj = object;
-   t->activateRef = 0;
+   t->activateRef = nullptr;
 
    timespec expected = updateCurrentTime() + interval;
 
@@ -528,11 +528,11 @@ bool QTimerInfoList::unregisterTimer(int timerId)
          removeAt(i);
 
          if (t == firstTimerInfo) {
-            firstTimerInfo = 0;
+            firstTimerInfo = nullptr;
          }
 
          if (t->activateRef) {
-            *(t->activateRef) = 0;
+            *(t->activateRef) = nullptr;
          }
 
          delete t;
@@ -556,11 +556,11 @@ bool QTimerInfoList::unregisterTimers(QObject *object)
          // object found
          removeAt(i);
          if (t == firstTimerInfo) {
-            firstTimerInfo = 0;
+            firstTimerInfo = nullptr;
          }
 
          if (t->activateRef) {
-            *(t->activateRef) = 0;
+            *(t->activateRef) = nullptr;
          }
 
          delete t;
@@ -598,7 +598,7 @@ int QTimerInfoList::activateTimers()
    }
 
    int n_act = 0, maxCount = 0;
-   firstTimerInfo = 0;
+   firstTimerInfo = nullptr;
 
    timespec currentTime = updateCurrentTime();
    // qDebug() << "Thread" << QThread::currentThreadId() << "woken up at" << currentTime;
@@ -680,12 +680,12 @@ int QTimerInfoList::activateTimers()
          QCoreApplication::sendEvent(currentTimerInfo->obj, &e);
 
          if (currentTimerInfo) {
-            currentTimerInfo->activateRef = 0;
+            currentTimerInfo->activateRef = nullptr;
          }
       }
    }
 
-   firstTimerInfo = 0;
+   firstTimerInfo = nullptr;
    // qDebug() << "Thread" << QThread::currentThreadId() << "activated" << n_act << "timers";
 
    return n_act;

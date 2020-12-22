@@ -66,7 +66,7 @@ public:
         CFRelease(m_source);
     }
 
-    void addToMode(CFStringRef mode, CFRunLoopRef runLoop = 0)
+    void addToMode(CFStringRef mode, CFRunLoopRef runLoop = nullptr)
     {
         if (!runLoop)
             runLoop = CFRunLoopGetCurrent();
@@ -110,7 +110,7 @@ public:
         CFRelease(m_observer);
     }
 
-    void addToMode(CFStringRef mode, CFRunLoopRef runLoop = 0)
+    void addToMode(CFStringRef mode, CFRunLoopRef runLoop = nullptr)
     {
         if (!runLoop)
             runLoop = CFRunLoopGetCurrent();
@@ -119,7 +119,7 @@ public:
             CFRunLoopAddObserver(runLoop, m_observer, mode);
     }
 
-    void removeFromMode(CFStringRef mode, CFRunLoopRef runLoop = 0)
+    void removeFromMode(CFStringRef mode, CFRunLoopRef runLoop = nullptr)
     {
         if (!runLoop)
             runLoop = CFRunLoopGetCurrent();
