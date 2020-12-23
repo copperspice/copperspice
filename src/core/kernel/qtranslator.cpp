@@ -548,49 +548,6 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
    return QString();
 }
 
-/*!
-    \since 4.8
-
-    Loads \a filename + \a prefix + \l{QLocale::uiLanguages()}{ui language
-    name} + \a suffix (".qm" if the \a suffix is not specified), which may be
-    an absolute file name or relative to \a directory. Returns true if the
-    translation is successfully loaded; otherwise returns false.
-
-    The previous contents of this translator object are discarded.
-
-    If the file name does not exist, other file names are tried
-    in the following order:
-
-    \list 1
-    \o File name without \a suffix appended.
-    \o File name with ui language part after a "_" character stripped and \a suffix.
-    \o File name with ui language part stripped without \a suffix appended.
-    \o File name with ui language part stripped further, etc.
-    \endlist
-
-    For example, an application running in the locale with the following
-    \l{QLocale::uiLanguages()}{ui languages} - "es", "fr-CA", "de" might call
-    load(QLocale::system(), "foo", ".", "/opt/foolib", ".qm"). load() would
-    replace '-' (dash) with '_' (underscore) in the ui language and then try to
-    open the first existing readable file from this list:
-
-    \list 1
-    \o \c /opt/foolib/foo.es.qm
-    \o \c /opt/foolib/foo.es
-    \o \c /opt/foolib/foo.fr_CA.qm
-    \o \c /opt/foolib/foo.fr_CA
-    \o \c /opt/foolib/foo.de.qm
-    \o \c /opt/foolib/foo.de
-    \o \c /opt/foolib/foo.fr.qm
-    \o \c /opt/foolib/foo.fr
-    \o \c /opt/foolib/foo.qm
-    \o \c /opt/foolib/foo.
-    \o \c /opt/foolib/foo
-    \endlist
-
-    On operating systems where file system is case sensitive, QTranslator also
-    tries to load a lower-cased version of the locale name.
-*/
 bool QTranslator::load(const QLocale &locale,
                        const QString &filename,
                        const QString &prefix,
@@ -603,16 +560,6 @@ bool QTranslator::load(const QLocale &locale,
    return !fname.isEmpty() && d->do_load(fname);
 }
 
-/*!
-  \overload load()
-  \fn bool QTranslator::load(const uchar *data, int len)
-
-  Loads the QM file data \a data of length \a len into the
-  translator.
-
-  The data is not copied. The caller must be able to guarantee that \a data
-  will not be deleted or modified.
-*/
 bool QTranslator::load(const uchar *data, int len)
 {
    Q_D(QTranslator);

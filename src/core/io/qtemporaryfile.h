@@ -55,7 +55,7 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
    bool autoRemove() const;
    void setAutoRemove(bool b);
 
-   // ### Hides open(flags)
+   // hide open(flags)
    bool open() {
       return open(QIODevice::ReadWrite);
    }

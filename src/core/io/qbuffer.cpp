@@ -32,9 +32,10 @@ class QBufferPrivate : public QIODevicePrivate
  public:
    QBufferPrivate()
       : buf(nullptr), writtenSinceLastEmit(0), signalConnectionCount(0), signalsEmitted(false)
-
    { }
-   ~QBufferPrivate() { }
+
+   ~QBufferPrivate()
+   { }
 
    QByteArray *buf;
    QByteArray defaultBuf;

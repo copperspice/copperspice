@@ -26,7 +26,9 @@
 namespace QtConcurrent {
 
 ThreadEngineBarrier::ThreadEngineBarrier()
-   : count(0) { }
+   : count(0)
+{
+}
 
 void ThreadEngineBarrier::acquire()
 {
@@ -123,13 +125,17 @@ ThreadEngineBase::ThreadEngineBase()
    setAutoDelete(false);
 }
 
-ThreadEngineBase::~ThreadEngineBase() {}
+ThreadEngineBase::~ThreadEngineBase() {
+}
 
 void ThreadEngineBase::startSingleThreaded()
 {
    start();
-   while (threadFunction() != ThreadFinished)
+
+   while (threadFunction() != ThreadFinished) {
       ;
+   }
+
    finish();
 }
 
@@ -227,14 +233,15 @@ bool ThreadEngineBase::startThreadInternal()
 
 void ThreadEngineBase::startThreads()
 {
-   while (shouldStartThread() && startThreadInternal())
+   while (shouldStartThread() && startThreadInternal()) {
       ;
+   }
 }
 
 void ThreadEngineBase::threadExit()
 {
    const bool asynchronous = futureInterface != nullptr;
-   const int lastThread = (barrier.release() == 0);
+   const int lastThread    = (barrier.release() == 0);
 
    if (lastThread && asynchronous) {
       this->asynchronousFinish();

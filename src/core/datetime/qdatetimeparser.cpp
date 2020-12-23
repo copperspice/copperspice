@@ -1584,11 +1584,14 @@ int QDateTimeParser::SectionNode::maxChange() const
 QDateTimeParser::FieldInfo QDateTimeParser::fieldInfo(int index) const
 {
    FieldInfo ret = Qt::EmptyFlag;
+
    const SectionNode &sn = sectionNode(index);
+
    switch (sn.type) {
       case MSecSection:
          ret |= Fraction;
-      // fallthrough
+         [[fallthrough]];
+
       case SecondSection:
       case MinuteSection:
       case Hour24Section:
@@ -1603,31 +1606,37 @@ QDateTimeParser::FieldInfo QDateTimeParser::fieldInfo(int index) const
             ret |= FixedWidth;
          }
          break;
+
       case MonthSection:
       case DaySection:
          switch (sn.count) {
             case 2:
                ret |= FixedWidth;
-            // fallthrough
+               [[fallthrough]];
+
             case 1:
                ret |= (Numeric | AllowPartial);
                break;
          }
          break;
+
       case DayOfWeekSectionShort:
       case DayOfWeekSectionLong:
          if (sn.count == 3) {
             ret |= FixedWidth;
          }
          break;
+
       case AmPmSection:
          ret |= FixedWidth;
          break;
+
       default:
          qWarning("QDateTimeParser::fieldInfo Internal error 2 (%d %s %d)",
             index, qPrintable(sn.name()), sn.count);
          break;
    }
+
    return ret;
 }
 

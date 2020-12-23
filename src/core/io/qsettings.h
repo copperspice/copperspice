@@ -43,7 +43,6 @@ class QSettingsPrivate;
 class Q_CORE_EXPORT QSettings : public QObject
 {
    CORE_CS_OBJECT(QSettings)
-   Q_DECLARE_PRIVATE(QSettings)
 
  public:
    enum Status {
@@ -81,11 +80,14 @@ class Q_CORE_EXPORT QSettings : public QObject
    };
 
    explicit QSettings(const QString &organization,
-                      const QString &application = QString(), QObject *parent = nullptr);
+                  const QString &application = QString(), QObject *parent = nullptr);
+
    QSettings(Scope scope, const QString &organization,
-             const QString &application = QString(), QObject *parent = nullptr);
+                  const QString &application = QString(), QObject *parent = nullptr);
+
    QSettings(Format format, Scope scope, const QString &organization,
-             const QString &application = QString(), QObject *parent = nullptr);
+                  const QString &application = QString(), QObject *parent = nullptr);
+
    QSettings(const QString &fileName, Format format, QObject *parent = nullptr);
    explicit QSettings(QObject *parent = nullptr);
 
@@ -149,6 +151,9 @@ class Q_CORE_EXPORT QSettings : public QObject
  protected:
    bool event(QEvent *event) override;
    QScopedPointer<QSettingsPrivate> d_ptr;
+
+ private:
+   Q_DECLARE_PRIVATE(QSettings)
 };
 
 #endif // QT_NO_SETTINGS

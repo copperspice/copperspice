@@ -78,9 +78,9 @@ class QMutexPrivate : public QMutexData
    void release();
    static QMutexPrivate *allocate();
 
-   QAtomicInt waiters; //number of thread waiting
-   QAtomicInt possiblyUnlocked; //bool saying that a timed wait timed out
-   enum { BigNumber = 0x100000 }; //Must be bigger than the possible number of waiters (number of threads)
+   QAtomicInt waiters;                 // number of thread waiting
+   QAtomicInt possiblyUnlocked;        // bool saying that a timed wait timed out
+   enum { BigNumber = 0x100000 };      // Must be bigger than the possible number of waiters (number of threads)
    void derefWaiters(int value);
 
    //platform specific stuff

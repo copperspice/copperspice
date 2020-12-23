@@ -115,10 +115,10 @@ class Q_CORE_EXPORT QUrlQuery
 
 Q_DECLARE_SHARED(QUrlQuery)
 
-inline void QUrl::setQueryItems(const QList<QPair<QString, QString> > &qry)
+inline void QUrl::setQueryItems(const QList<QPair<QString, QString> > &query)
 {
    QUrlQuery q(*this);
-   q.setQueryItems(qry);
+   q.setQueryItems(query);
    setQuery(q);
 }
 
@@ -194,14 +194,16 @@ inline void QUrl::removeAllEncodedQueryItems(const QByteArray &key)
    setQuery(q);
 }
 
-inline void QUrl::setEncodedQueryItems(const QList<QPair<QByteArray, QByteArray> > &qry)
+inline void QUrl::setEncodedQueryItems(const QList<QPair<QByteArray, QByteArray> > &query)
 {
    QUrlQuery q;
-   QList<QPair<QByteArray, QByteArray> >::const_iterator it = qry.constBegin();
 
-   for ( ; it != qry.constEnd(); ++it) {
+   auto it = query.constBegin();
+
+   for ( ; it != query.constEnd(); ++it) {
       q.addQueryItem(fromEncodedComponent_helper(it->first), fromEncodedComponent_helper(it->second));
    }
+
    setQuery(q);
 }
 

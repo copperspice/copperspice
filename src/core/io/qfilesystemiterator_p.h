@@ -34,8 +34,7 @@
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 
-#if defined(Q_OS_WIN)
-#else
+#if ! defined(Q_OS_WIN)
 #include <qscopedpointer.h>
 #endif
 

@@ -597,7 +597,8 @@ int QTimerInfoList::activateTimers()
       return 0;   // nothing to do
    }
 
-   int n_act = 0, maxCount = 0;
+   int n_act      = 0;
+   int maxCount   = 0;
    firstTimerInfo = nullptr;
 
    timespec currentTime = updateCurrentTime();

@@ -1758,15 +1758,15 @@ bool QTextStreamPrivate::getReal(double *f)
    // for some reason. QLocale only checks for lower-case
    // nan/+inf/-inf, so here we also check for uppercase and mixed case versions.
 
-   if (!qstricmp(buf, "nan") || !qstricmp(buf, "+nan") || !qstricmp(buf, "-nan")) {
+   if (qstricmp(buf, "nan") == 0 || qstricmp(buf, "+nan") == 0  || qstricmp(buf, "-nan") == 0) {
       *f = qSNaN();
       return true;
 
-   } else if (!qstricmp(buf, "+inf") || !qstricmp(buf, "inf")) {
+   } else if (qstricmp(buf, "+inf") == 0 || qstricmp(buf, "inf") == 0) {
       *f = qInf();
       return true;
 
-   } else if (!qstricmp(buf, "-inf")) {
+   } else if (qstricmp(buf, "-inf") == 0) {
       *f = -qInf();
       return true;
    }

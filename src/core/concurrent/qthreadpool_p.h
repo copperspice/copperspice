@@ -33,9 +33,6 @@ class QThreadPoolThread;
 
 class QThreadPoolPrivate
 {
-   Q_DECLARE_PUBLIC(QThreadPool)
-   friend class QThreadPoolThread;
-
  public:
    QThreadPoolPrivate();
    virtual ~QThreadPoolPrivate() {}
@@ -71,6 +68,9 @@ class QThreadPoolPrivate
  protected:
    QThreadPool *q_ptr;
 
+ private:
+   Q_DECLARE_PUBLIC(QThreadPool)
+   friend class QThreadPoolThread;
 };
 
 

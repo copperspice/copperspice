@@ -29,7 +29,6 @@
 #include <qdatetime.h>
 #include <qabstractfileengine.h>
 
-// Platform-specific includes
 #if defined(Q_OS_WIN)
 #ifndef IO_REPARSE_TAG_SYMLINK
 #define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
@@ -72,15 +71,16 @@ class QFileSystemMetaData
       BundleType          = 0x00080000,
       AliasType           = 0x08000000,
 #else
-      BundleType          =        0x0,
-      AliasType           =        0x0,
+      BundleType          = 0x0,
+      AliasType           = 0x0,
 #endif
 
 #if defined(Q_OS_WIN)
       WinLnkType          = 0x08000000,   // Note: Uses the same position for AliasType on Mac
 #else
-      WinLnkType          =        0x0,
+      WinLnkType          = 0x0,
 #endif
+
       SequentialType      = 0x00800000,   // Note: overlaps with QAbstractFileEngine::RootFlag
 
       LegacyLinkType      = LinkType | AliasType | WinLnkType,

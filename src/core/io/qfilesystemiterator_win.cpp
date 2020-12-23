@@ -42,19 +42,23 @@ QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Fi
 {
    Q_UNUSED(nameFilters)
    Q_UNUSED(flags)
-   if (nativePath.endsWith(QLatin1String(".lnk"))) {
+
+   if (nativePath.endsWith(".lnk")) {
       QFileSystemMetaData metaData;
       QFileSystemEntry link = QFileSystemEngine::getLinkTarget(entry, metaData);
       nativePath = link.nativeFilePath();
    }
-   if (!nativePath.endsWith(QLatin1Char('\\'))) {
-      nativePath.append(QLatin1Char('\\'));
+
+   if (! nativePath.endsWith('\\')) {
+      nativePath.append('\\');
    }
-   nativePath.append(QLatin1Char('*'));
-   if (!dirPath.endsWith(QLatin1Char('/'))) {
-      dirPath.append(QLatin1Char('/'));
+
+   nativePath.append('*');
+   if (!dirPath.endsWith('/')) {
+      dirPath.append('/');
    }
-   if ((filters & (QDir::Dirs | QDir::Drives)) && (!(filters & (QDir::Files)))) {
+
+   if ((filters & (QDir::Dirs | QDir::Drives)) && (! (filters & (QDir::Files)))) {
       onlyDirs = true;
    }
 }

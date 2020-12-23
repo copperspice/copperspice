@@ -59,54 +59,56 @@ class Q_CORE_EXPORT QDateTimeParser
         fixday(false), spec(Qt::LocalTime), context(ctx)
    {
       defaultLocale = QLocale::system();
-      first.type = FirstSection;
-      first.pos = -1;
-      first.count = -1;
+      first.type        = FirstSection;
+      first.pos         = -1;
+      first.count       = -1;
       first.zeroesAdded = 0;
-      last.type = LastSection;
-      last.pos = -1;
-      last.count = -1;
-      last.zeroesAdded = 0;
-      none.type = NoSection;
-      none.pos = -1;
-      none.count = -1;
-      none.zeroesAdded = 0;
+      last.type         = LastSection;
+      last.pos          = -1;
+      last.count        = -1;
+      last.zeroesAdded  = 0;
+      none.type         = NoSection;
+      none.pos          = -1;
+      none.count        = -1;
+      none.zeroesAdded  = 0;
    }
-   virtual ~QDateTimeParser() {}
+
+   virtual ~QDateTimeParser()
+   {
+   }
 
    enum Section {
-      NoSection     = 0x00000,
-      AmPmSection   = 0x00001,
-      MSecSection   = 0x00002,
-      SecondSection = 0x00004,
-      MinuteSection = 0x00008,
+      NoSection       = 0x00000,
+      AmPmSection     = 0x00001,
+      MSecSection     = 0x00002,
+      SecondSection   = 0x00004,
+      MinuteSection   = 0x00008,
       Hour12Section   = 0x00010,
       Hour24Section   = 0x00020,
       HourSectionMask = (Hour12Section | Hour24Section),
-      TimeSectionMask = (MSecSection | SecondSection | MinuteSection |
-            HourSectionMask | AmPmSection),
+      TimeSectionMask = (MSecSection | SecondSection | MinuteSection | HourSectionMask | AmPmSection),
 
-      DaySection         = 0x00100,
-      MonthSection       = 0x00200,
-      YearSection        = 0x00400,
-      YearSection2Digits = 0x00800,
-      YearSectionMask = YearSection | YearSection2Digits,
+      DaySection            = 0x00100,
+      MonthSection          = 0x00200,
+      YearSection           = 0x00400,
+      YearSection2Digits    = 0x00800,
+      YearSectionMask       = YearSection | YearSection2Digits,
       DayOfWeekSectionShort = 0x01000,
       DayOfWeekSectionLong  = 0x02000,
-      DayOfWeekSectionMask = DayOfWeekSectionShort | DayOfWeekSectionLong,
-      DaySectionMask = DaySection | DayOfWeekSectionMask,
-      DateSectionMask = DaySectionMask | MonthSection | YearSectionMask,
+      DayOfWeekSectionMask  = DayOfWeekSectionShort | DayOfWeekSectionLong,
+      DaySectionMask        = DaySection | DayOfWeekSectionMask,
+      DateSectionMask       = DaySectionMask | MonthSection | YearSectionMask,
 
-      Internal             = 0x10000,
-      FirstSection         = 0x20000 | Internal,
-      LastSection          = 0x40000 | Internal,
-      CalendarPopupSection = 0x80000 | Internal,
+      Internal              = 0x10000,
+      FirstSection          = 0x20000 | Internal,
+      LastSection           = 0x40000 | Internal,
+      CalendarPopupSection  = 0x80000 | Internal,
 
-      NoSectionIndex = -1,
-      FirstSectionIndex = -2,
-      LastSectionIndex = -3,
+      NoSectionIndex     = -1,
+      FirstSectionIndex  = -2,
+      LastSectionIndex   = -3,
       CalendarPopupIndex = -4
-   }; // extending qdatetimeedit.h's equivalent
+   }; // extending qdatetimeedit.h equivalent
    Q_DECLARE_FLAGS(Sections, Section)
 
    struct Q_CORE_EXPORT SectionNode {
@@ -153,10 +155,10 @@ class Q_CORE_EXPORT QDateTimeParser
    bool fromString(const QString &text, QDate *date, QTime *time) const;
 
    enum FieldInfoFlag {
-      Numeric = 0x01,
-      FixedWidth = 0x02,
+      Numeric      = 0x01,
+      FixedWidth   = 0x02,
       AllowPartial = 0x04,
-      Fraction = 0x08
+      Fraction     = 0x08
    };
    Q_DECLARE_FLAGS(FieldInfo, FieldInfoFlag)
 
@@ -170,7 +172,8 @@ class Q_CORE_EXPORT QDateTimeParser
       return text;
    }
 
- protected: // for the benefit of QDateTimeEditPrivate
+ protected:
+   // for the benefit of QDateTimeEditPrivate
    int sectionSize(int index) const;
    int sectionMaxSize(int index) const;
    int sectionPos(int index) const;
@@ -198,10 +201,10 @@ class Q_CORE_EXPORT QDateTimeParser
    }
 
    mutable int currentSectionIndex;
+
    Sections display;
    /*
-       This stores the most recently selected day.
-       It is useful when considering the following scenario:
+       stores the most recently selected day, useful when considering the following scenario:
 
        1. Date is: 31/01/2000
        2. User increments month: 29/02/2000
@@ -212,6 +215,7 @@ class Q_CORE_EXPORT QDateTimeParser
        This is good for when users have selected their desired day and are scrolling up or down in the month or year section
        and do not want smaller months (or non-leap years) to alter the day that they chose.
    */
+
    mutable int cachedDay;
    mutable QString text;
    QVector<SectionNode> sectionNodes;
@@ -225,6 +229,15 @@ class Q_CORE_EXPORT QDateTimeParser
    Context context;
 
  private:
+   enum AmPmFinder {
+      Neither      = -1,
+      AM           = 0,
+      PM           = 1,
+      PossibleAM   = 2,
+      PossiblePM   = 3,
+      PossibleBoth = 4
+   };
+
    int sectionMaxSize(Section s, int count) const;
    QString sectionText(const QString &text, int sectionIndex, int index) const;
    int parseSection(const QDateTime &currentValue, int sectionIndex, QString &txt, int &cursorPosition,
@@ -238,25 +251,14 @@ class Q_CORE_EXPORT QDateTimeParser
       QString *dayName = nullptr, int *used = nullptr) const;
 #endif
 
-   enum AmPmFinder {
-      Neither = -1,
-      AM = 0,
-      PM = 1,
-      PossibleAM = 2,
-      PossiblePM = 3,
-      PossibleBoth = 4
-   };
-
    AmPmFinder findAmPm(QString &str, int index, int *used = nullptr) const;
    bool potentialValue(const QString &str, int min, int max, int index,
       const QDateTime &currentValue, int insert) const;
-
 };
 
 Q_CORE_EXPORT bool operator==(const QDateTimeParser::SectionNode &s1, const QDateTimeParser::SectionNode &s2);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDateTimeParser::Sections)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDateTimeParser::FieldInfo)
-
 
 #endif

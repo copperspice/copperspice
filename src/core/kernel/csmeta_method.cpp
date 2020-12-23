@@ -32,7 +32,7 @@ QMetaMethod::QMetaMethod(const QString &typeName, const QString &signature, std:
      m_access(access), m_methodType(methodType), m_attributes(attributes), m_metaObject(obj)
 {
    m_bento     = nullptr;
-   m_tag       = "";
+   m_tag       = QString();
    m_revision  = 0;
 }
 
@@ -47,7 +47,7 @@ QMetaMethod::QMetaMethod()
    m_metaObject = nullptr;
 
    m_bento      = nullptr;
-   m_tag        = "";
+   m_tag        = QString();
    m_revision   = 0;
 }
 
@@ -87,7 +87,7 @@ const QMetaObject *QMetaMethod::getMetaObject() const
 
 int QMetaMethod::methodIndex() const
 {
-   if (! m_metaObject) {
+   if (m_metaObject == nullptr) {
       return -1;
    }
 

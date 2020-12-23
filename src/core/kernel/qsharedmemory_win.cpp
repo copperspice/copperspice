@@ -95,7 +95,7 @@ HANDLE QSharedMemoryPrivate::handle()
       hand = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, 0, &nativeKey.toStdWString()[0]);
 
       if (! hand) {
-         setErrorString(QLatin1String("QSharedMemory::handle"));
+         setErrorString("QSharedMemory::handle");
       }
    }
 

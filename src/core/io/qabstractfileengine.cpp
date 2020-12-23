@@ -22,20 +22,15 @@
 ***********************************************************************/
 
 #include <qabstractfileengine.h>
-#include <qabstractfileengine_p.h>
-
-#ifdef QT_BUILD_CORE_LIB
-#include <qresource_p.h>
-#endif
 
 #include <qdatetime.h>
 #include <qreadwritelock.h>
 #include <qvariant.h>
-
-// built-in handlers
 #include <qfsfileengine.h>
 #include <qdiriterator.h>
 
+#include <qabstractfileengine_p.h>
+#include <qresource_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 #include <qfilesystemengine_p.h>
@@ -369,9 +364,8 @@ QStringList QAbstractFileEngine::entryList(QDir::Filters filters, const QStringL
 
     \sa setFileName()
 */
-QAbstractFileEngine::FileFlags QAbstractFileEngine::fileFlags(FileFlags type) const
+QAbstractFileEngine::FileFlags QAbstractFileEngine::fileFlags(FileFlags) const
 {
-   Q_UNUSED(type);
    return Qt::EmptyFlag;
 }
 

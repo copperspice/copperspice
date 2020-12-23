@@ -53,9 +53,10 @@ class QTemporaryFileEngine : public QFSFileEngine
       : QFSFileEngine(), filePathIsTemplate(fileIsTemplate), filePathWasTemplate(fileIsTemplate)
    {
       Q_D(QFSFileEngine);
+
       d->fileEntry = QFileSystemEntry(file);
 
-      if (!filePathIsTemplate) {
+      if (! filePathIsTemplate) {
          QFSFileEngine::setFileName(file);
       }
    }

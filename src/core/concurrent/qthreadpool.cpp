@@ -54,6 +54,7 @@ QThreadPoolThread::QThreadPoolThread(QThreadPoolPrivate *manager)
 void QThreadPoolThread::run()
 {
    QMutexLocker locker(&manager->mutex);
+
    for (;;) {
       QRunnable *r = runnable;
       runnable = nullptr;
@@ -100,16 +101,20 @@ void QThreadPoolThread::run()
 
       // if too many threads are active, expire this thread
       bool expired = manager->tooManyThreadsActive();
+
       if (!expired) {
          manager->waitingThreads.enqueue(this);
          registerThreadInactive();
+
          // wait for work, exiting after the expiry timeout is reached
          runnableReady.wait(locker.mutex(), manager->expiryTimeout);
          ++manager->activeThreads;
+
          if (manager->waitingThreads.removeOne(this)) {
             expired = true;
          }
       }
+
       if (expired) {
          manager->expiredThreads.enqueue(this);
          registerThreadInactive();
@@ -141,7 +146,7 @@ bool QThreadPoolPrivate::tryStart(QRunnable *task)
       return true;
    }
 
-   // can't do anything if we're over the limit
+   // can not do anything if we're over the limit
    if (activeThreadCount() >= maxThreadCount) {
       return false;
    }
@@ -153,7 +158,7 @@ bool QThreadPoolPrivate::tryStart(QRunnable *task)
       return true;
    }
 
-   if (!expiredThreads.isEmpty()) {
+   if (! expiredThreads.isEmpty()) {
       // restart an expired thread
       QThreadPoolThread *thread = expiredThreads.dequeue();
       Q_ASSERT(thread->runnable == nullptr);
@@ -170,6 +175,7 @@ bool QThreadPoolPrivate::tryStart(QRunnable *task)
 
    // start a new thread
    startThread(task);
+
    return true;
 }
 

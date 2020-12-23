@@ -126,12 +126,14 @@ QFSFileEngine::QFSFileEngine(QFSFileEnginePrivate &dd)
 QFSFileEngine::~QFSFileEngine()
 {
    Q_D(QFSFileEngine);
+
    if (d->closeFileHandle) {
       if (d->fh) {
          int ret;
          do {
             ret = fclose(d->fh);
          } while (ret == EOF && errno == EINTR);
+
       } else if (d->fd != -1) {
          int ret;
          do {
@@ -139,6 +141,7 @@ QFSFileEngine::~QFSFileEngine()
          } while (ret == -1 && errno == EINTR);
       }
    }
+
    QList<uchar *> keys = d->maps.keys();
    for (int i = 0; i < keys.count(); ++i) {
       unmap(keys.at(i));
@@ -164,7 +167,7 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode)
 
    if (d->fileEntry.isEmpty()) {
       qWarning("QFSFileEngine::open() No file name specified");
-      setError(QFile::OpenError, QLatin1String("No file name specified"));
+      setError(QFile::OpenError, QString("No file name specified"));
       return false;
    }
 

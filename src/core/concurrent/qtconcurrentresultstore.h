@@ -41,8 +41,14 @@ namespace QtConcurrent {
 class ResultItem
 {
  public:
-   ResultItem(const void *_result, int _count) : m_count(_count), result(_result) { } // contruct with vector of results
-   ResultItem(const void *_result) : m_count(0), result(_result) { } // construct with result
+   ResultItem(const void *_result, int _count)
+      : m_count(_count), result(_result)
+   { }
+
+   ResultItem(const void *_result)
+      : m_count(0), result(_result)
+   { }
+
    ResultItem()
       : m_count(0), result(nullptr)
    { }
@@ -50,14 +56,17 @@ class ResultItem
    bool isValid() const {
       return result != nullptr;
    }
+
    bool isVector() const {
       return m_count != 0;
    }
+
    int count() const {
       return (m_count == 0) ?  1 : m_count;
    }
-   int m_count;          // result is either a pointer to a result or to a vector of results,
-   const void *result; // if count is 0 it's a result, otherwise it's a vector.
+
+   int m_count;           // result is either a pointer to a result or to a vector of results,
+   const void *result;   // if count is 0 it's a result, otherwise it's a vector.
 };
 
 class Q_CORE_EXPORT ResultIteratorBase

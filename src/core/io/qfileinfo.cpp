@@ -145,9 +145,9 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
    uint cachedFlags = 0;
 
    if (request & (QAbstractFileEngine::FlagsMask | QAbstractFileEngine::TypesMask)) {
-      if (!getCachedFlag(CachedFileFlags)) {
-         req |= QAbstractFileEngine::FlagsMask;
-         req |= QAbstractFileEngine::TypesMask;
+      if (! getCachedFlag(CachedFileFlags)) {
+         req |=   QAbstractFileEngine::FlagsMask;
+         req |=   QAbstractFileEngine::TypesMask;
          req &= (~QAbstractFileEngine::LinkType);
          req &= (~QAbstractFileEngine::BundleType);
 
@@ -749,9 +749,10 @@ uint QFileInfo::groupId() const
    }
 
    if (d->fileEngine == nullptr) {
-      if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::GroupId)) {
+      if (! d->cache_enabled || ! d->metaData.hasFlags(QFileSystemMetaData::GroupId)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::GroupId);
       }
+
       return d->metaData.groupId();
    }
 
@@ -767,13 +768,16 @@ bool QFileInfo::permission(QFile::Permissions permissions) const
    }
 
    if (d->fileEngine == nullptr) {
-      // the QFileSystemMetaData::MetaDataFlag and QFile::Permissions overlap, so just static cast.
+      // QFileSystemMetaData::MetaDataFlag and QFile::Permissions overlap, so just static cast
       QFileSystemMetaData::MetaDataFlag permissionFlags = static_cast<QFileSystemMetaData::MetaDataFlag>((int)permissions);
-      if (!d->cache_enabled || !d->metaData.hasFlags(permissionFlags)) {
+
+      if (! d->cache_enabled || ! d->metaData.hasFlags(permissionFlags)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, permissionFlags);
       }
+
       return (d->metaData.permissions() & permissions) == permissions;
    }
+
    return d->getFileFlags(QAbstractFileEngine::FileFlags((int)permissions)) == (uint)permissions;
 }
 
@@ -786,9 +790,10 @@ QFile::Permissions QFileInfo::permissions() const
    }
 
    if (d->fileEngine == nullptr) {
-      if (!d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::Permissions)) {
+      if (! d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::Permissions)) {
          QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::Permissions);
       }
+
       return d->metaData.permissions();
    }
 

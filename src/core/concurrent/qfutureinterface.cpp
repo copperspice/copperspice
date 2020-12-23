@@ -402,10 +402,13 @@ const QtConcurrent::ResultStoreBase &QFutureInterfaceBase::resultStoreBase() con
 QFutureInterfaceBase &QFutureInterfaceBase::operator=(const QFutureInterfaceBase &other)
 {
    other.d->refCount.ref();
-   if (!d->refCount.deref()) {
+
+   if (! d->refCount.deref()) {
       delete d;
    }
+
    d = other.d;
+
    return *this;
 }
 

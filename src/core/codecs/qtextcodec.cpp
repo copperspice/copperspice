@@ -778,7 +778,7 @@ void QTextCodec::setCodecForLocale(QTextCodec *c)
    QMutexLocker locker(textCodecsMutex());
 
    localeMapper = c;
-   if (!localeMapper) {
+   if (! localeMapper) {
       setupLocaleMapper();
    }
 }

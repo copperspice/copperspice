@@ -417,11 +417,13 @@ static bool procCpuinfoContains(const char *prefix, const char *string)
       char *colon = static_cast<char *>(::memchr(line.data, ':', line.size));
 
       if (colon && line.size > prefix_len + string_len) {
-         if (!::strncmp(prefix, line.data, prefix_len)) {
+         if (::strncmp(prefix, line.data, prefix_len) == 0) {
             // prefix matches, next character must be ':' or space
+
             if (line.data[prefix_len] == ':' || ::isspace(line.data[prefix_len])) {
                // Does it contain the string?
                char *found = ::strstr(line.cString(), string);
+
                if (found && ::isspace(found[-1]) &&
                      (::isspace(found[string_len]) || found[string_len] == '\0')) {
                   present = true;
@@ -434,6 +436,7 @@ static bool procCpuinfoContains(const char *prefix, const char *string)
    } while (line.size);
 
    ::qt_safe_close(cpuinfo_fd);
+
    return present;
 }
 #endif

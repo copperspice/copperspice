@@ -315,12 +315,6 @@ QStringList QProcessEnvironment::toStringList() const
    return d->toList();
 }
 
-/*!
-    \since 4.8
-
-    Returns a list containing all the variable names in this QProcessEnvironment
-    object.
-*/
 QStringList QProcessEnvironment::keys() const
 {
    if (!d) {
@@ -330,13 +324,6 @@ QStringList QProcessEnvironment::keys() const
    return d->keys();
 }
 
-/*!
-    \overload
-    \since 4.8
-
-    Inserts the contents of \a e in this QProcessEnvironment object. Variables in
-    this object that also exist in \a e will be overwritten.
-*/
 void QProcessEnvironment::insert(const QProcessEnvironment &e)
 {
    if (!e.d) {
@@ -385,7 +372,7 @@ QProcessPrivate::QProcessPrivate()
 #endif
 
    sequenceNumber = 0;
-   exitCode = 0;
+   exitCode   = 0;
    exitStatus = QProcess::NormalExit;
    startupSocketNotifier = nullptr;
    deathNotifier = nullptr;
@@ -393,11 +380,11 @@ QProcessPrivate::QProcessPrivate()
    childStartedPipe[0] = INVALID_Q_PIPE;
    childStartedPipe[1] = INVALID_Q_PIPE;
 
-   forkfd = -1;
+   forkfd   = -1;
    exitCode = 0;
-   crashed = false;
-   dying = false;
-   emittedReadyRead = false;
+   crashed  = false;
+   dying    = false;
+   emittedReadyRead    = false;
    emittedBytesWritten = false;
 
 #ifdef Q_OS_WIN

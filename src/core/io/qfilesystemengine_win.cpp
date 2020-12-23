@@ -1172,24 +1172,30 @@ bool QFileSystemEngine::createDirectory(const QFileSystemEntry &entry, bool crea
 bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool removeEmptyParents)
 {
    QString dirName = entry.filePath();
+
    if (removeEmptyParents) {
       dirName = QDir::toNativeSeparators(QDir::cleanPath(dirName));
+
       for (int oldslash = 0, slash = dirName.length(); slash > 0; oldslash = slash) {
          QString chunk = dirName.left(slash);
-         if (chunk.length() == 2 && chunk.at(0).isLetter() && chunk.at(1) == QLatin1Char(':')) {
+
+         if (chunk.length() == 2 && chunk.at(0).isLetter() && chunk.at(1) == ':') {
             break;
          }
 
          if (!isDirPath(chunk, nullptr)) {
             return false;
          }
+
          if (!rmDir(chunk)) {
             return oldslash != 0;
          }
          slash = dirName.lastIndexOf(QDir::separator(), oldslash - 1);
       }
+
       return true;
    }
+
    return rmDir(entry.filePath());
 }
 

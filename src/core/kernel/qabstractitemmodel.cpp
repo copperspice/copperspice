@@ -211,6 +211,7 @@ void *QPersistentModelIndex::internalPointer() const
    if (d) {
       return d->index.internalPointer();
    }
+
    return nullptr;
 }
 
@@ -228,15 +229,16 @@ QModelIndex QPersistentModelIndex::parent() const
    if (d) {
       return d->index.parent();
    }
+
    return QModelIndex();
 }
-
 
 QModelIndex QPersistentModelIndex::sibling(int row, int column) const
 {
    if (d) {
       return d->index.sibling(row, column);
    }
+
    return QModelIndex();
 }
 
@@ -276,18 +278,6 @@ const QAbstractItemModel *QPersistentModelIndex::model() const
 
    return nullptr;
 }
-
-/*!
-    \fn bool QPersistentModelIndex::isValid() const
-
-    Returns true if this persistent model index is valid; otherwise returns
-    false.
-
-    A valid index belongs to a model, and has non-negative row and column
-    numbers.
-
-    \sa model(), row(), column()
-*/
 
 bool QPersistentModelIndex::isValid() const
 {
@@ -842,7 +832,6 @@ void QAbstractItemModel::resetInternalData()
 {
 }
 
-
 QAbstractItemModel::QAbstractItemModel(QObject *parent)
    : QObject(parent), d_ptr(new QAbstractItemModelPrivate)
 {
@@ -1079,8 +1068,6 @@ void QAbstractItemModel::sort(int column, Qt::SortOrder order)
 {
    (void) column;
    (void) order;
-
-   // do nothing
 }
 
 QModelIndex QAbstractItemModel::buddy(const QModelIndex &index) const
@@ -1270,10 +1257,10 @@ void QAbstractItemModel::encodeData(const QModelIndexList &indexes, QDataStream 
  */
 bool QAbstractItemModel::decodeData(int row, int column, const QModelIndex &parent, QDataStream &stream)
 {
-   int top = INT_MAX;
-   int left = INT_MAX;
+   int top    = INT_MAX;
+   int left   = INT_MAX;
    int bottom = 0;
-   int right = 0;
+   int right  = 0;
 
    QVector<int> rows, columns;
    QVector<QMap<int, QVariant> > data;

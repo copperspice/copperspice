@@ -2905,10 +2905,6 @@ QString QLocale::toCurrencyString(qint64 value, const QString &symbol) const
    return format.formatArgs(str, sym);
 }
 
-/*!
-    \since 4.8
-    \overload
-*/
 QString QLocale::toCurrencyString(quint64 value, const QString &symbol) const
 {
 #ifndef QT_NO_SYSTEMLOCALE

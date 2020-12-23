@@ -39,10 +39,6 @@ class QParallelAnimationGroupPrivate : public QAnimationGroupPrivate
       : lastLoop(0), lastCurrentTime(0) {
    }
 
-   QHash<QAbstractAnimation *, int> uncontrolledFinishTime;
-   int lastLoop;
-   int lastCurrentTime;
-
    bool shouldAnimationStart(QAbstractAnimation *animation, bool startIfAtEnd) const;
    void applyGroupState(QAbstractAnimation *animation);
    bool isUncontrolledAnimationFinished(QAbstractAnimation *anim) const;
@@ -52,6 +48,10 @@ class QParallelAnimationGroupPrivate : public QAnimationGroupPrivate
    void animationRemoved(int index, QAbstractAnimation *) override;
 
    void _q_uncontrolledAnimationFinished();
+
+   QHash<QAbstractAnimation *, int> uncontrolledFinishTime;
+   int lastLoop;
+   int lastCurrentTime;
 };
 
 #endif //QT_NO_ANIMATION

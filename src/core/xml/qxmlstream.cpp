@@ -2448,9 +2448,6 @@ QXmlStreamWriter::QXmlStreamWriter(QByteArray *array)
    d->deleteDevice = true;
 }
 
-
-/*!  Constructs a stream writer that writes into \a string.
- */
 QXmlStreamWriter::QXmlStreamWriter(QString *string)
    : d_ptr(new QXmlStreamWriterPrivate(this))
 {
@@ -2458,20 +2455,10 @@ QXmlStreamWriter::QXmlStreamWriter(QString *string)
    d->stringDevice = string;
 }
 
-/*!
-    Destructor.
-*/
 QXmlStreamWriter::~QXmlStreamWriter()
 {
 }
 
-
-/*!
-    Sets the current device to \a device. If you want the stream to
-    write into a QByteArray, you can create a QBuffer device.
-
-    \sa device()
-*/
 void QXmlStreamWriter::setDevice(QIODevice *device)
 {
    Q_D(QXmlStreamWriter);
@@ -2485,6 +2472,7 @@ void QXmlStreamWriter::setDevice(QIODevice *device)
       delete d->device;
       d->deleteDevice = false;
    }
+
    d->device = device;
 }
 
@@ -2493,7 +2481,6 @@ QIODevice *QXmlStreamWriter::device() const
    Q_D(const QXmlStreamWriter);
    return d->device;
 }
-
 
 void QXmlStreamWriter::setCodec(QTextCodec *codec)
 {
@@ -2542,15 +2529,6 @@ int QXmlStreamWriter::autoFormattingIndent() const
    return d->autoFormattingIndent.count(' ') - d->autoFormattingIndent.count('\t');
 }
 
-/*!
-    \since 4.8
-
-    Returns true if the stream failed to write to the underlying device;
-    otherwise returns false.
-
-    The error status is never reset. Writes happening after the error
-    occurred are ignored, even if the error condition is cleared.
- */
 bool QXmlStreamWriter::hasError() const
 {
    Q_D(const QXmlStreamWriter);

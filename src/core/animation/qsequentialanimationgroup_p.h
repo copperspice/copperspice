@@ -38,13 +38,16 @@ class QSequentialAnimationGroupPrivate : public QAnimationGroupPrivate
       : currentAnimation(nullptr), currentAnimationIndex(-1), lastLoop(0) {
    }
 
-
    struct AnimationIndex {
-      AnimationIndex() : index(0), timeOffset(0) {}
+      AnimationIndex()
+         : index(0), timeOffset(0)
+      {}
+
       // index points to the animation at timeOffset, skipping 0 duration animations.
       // Note that the index semantic is slightly different depending on the direction.
-      int index; // the index of the animation in timeOffset
-      int timeOffset; // time offset when the animation at index starts.
+
+      int index;       // the index of the animation in timeOffset
+      int timeOffset;  // time offset when the animation at index starts.
    };
 
    int animationActualTotalDuration(int index) const;
@@ -56,7 +59,14 @@ class QSequentialAnimationGroupPrivate : public QAnimationGroupPrivate
    void animationInsertedAt(int index) override;
    void animationRemoved(int index, QAbstractAnimation *anim) override;
 
+   void restart();
    bool atEnd() const;
+
+   // handle time changes
+   void rewindForwards(const AnimationIndex &newAnimationIndex);
+   void advanceForwards(const AnimationIndex &newAnimationIndex);
+
+   void _q_uncontrolledAnimationFinished();
 
    QAbstractAnimation *currentAnimation;
    int currentAnimationIndex;
@@ -65,14 +75,7 @@ class QSequentialAnimationGroupPrivate : public QAnimationGroupPrivate
    // it helps seeking and even going forward
    QList<int> actualDuration;
 
-   void restart();
    int lastLoop;
-
-   // handle time changes
-   void rewindForwards(const AnimationIndex &newAnimationIndex);
-   void advanceForwards(const AnimationIndex &newAnimationIndex);
-
-   void _q_uncontrolledAnimationFinished();
 };
 
 #endif //QT_NO_ANIMATION

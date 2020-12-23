@@ -796,33 +796,35 @@ class EmptyFlag_Type {
 
 class Q_CORE_EXPORT QFlag
 {
-  int i;
-
   public:
-     inline QFlag(int i);
-     inline operator int() const {
-       return i;
-     }
-};
+    QFlag(int value)
+       : i(value)
+    {
+    }
 
-inline QFlag::QFlag(int ai) : i(ai) {}
+    operator int() const {
+       return i;
+    }
+
+ private:
+    int i;
+};
 
 class Q_CORE_EXPORT QIncompatibleFlag
 {
-   public:
-     inline explicit QIncompatibleFlag(int i);
-     inline operator int() const {
-        return i;
-     }
+ public:
+    explicit QIncompatibleFlag(int value)
+       : i(value)
+    {
+    }
 
-  private:
-   int i;
+    operator int() const {
+       return i;
+    }
+
+ private:
+    int i;
 };
-
-inline QIncompatibleFlag::QIncompatibleFlag(int ai)
-   : i(ai)
-{
-}
 
 #ifndef Q_NO_TYPESAFE_FLAGS
 
@@ -835,106 +837,113 @@ class QFlags
       using uint_type = std::make_unsigned_t<int_type>;
       using sint_type = std::make_signed_t<int_type>;
 
-      constexpr inline QFlags(const QFlags &other)
-         : i(other.i)
-      {}
+      constexpr QFlags()
+         : i(0)
+      {
+      }
 
       constexpr QFlags(EmptyFlag_Type)
          : i(0)
       {
       }
-      constexpr inline QFlags(E value)
+
+      constexpr QFlags(std::nullptr_t)
+         : i(0)
+      {
+      }
+
+
+      constexpr QFlags(E value)
          : i(static_cast<int_type>(value))
-      {}
+      {
+      }
 
-      constexpr inline QFlags()
-         : i(0)
-      {}
-
-      constexpr inline QFlags(std::nullptr_t)
-         : i(0)
-      {}
-
-      inline QFlags(QFlag flag)
+      QFlags(QFlag flag)
          : i(flag)
-      {}
+      {
+      }
 
-      inline QFlags &operator=(const QFlags &other) {
+      constexpr QFlags(const QFlags &other)
+         : i(other.i)
+      {
+      }
+
+      QFlags &operator=(const QFlags &other) {
          i = other.i;
          return *this;
       }
 
-      inline QFlags &operator&=(sint_type mask)  {
+      QFlags &operator&=(sint_type mask)  {
          i &= mask;
          return *this;
       }
 
-      inline QFlags &operator&=(uint_type mask)  {
+      QFlags &operator&=(uint_type mask)  {
          i &= mask;
          return *this;
       }
 
-      inline QFlags &operator|=(QFlags other)  {
+      QFlags &operator|=(QFlags other)  {
          i |= other.i;
          return *this;
       }
 
-      inline QFlags &operator|=(E value)    {
+      QFlags &operator|=(E value)    {
          i |= static_cast<int_type>(value);
          return *this;
       }
 
-      inline QFlags &operator^=(QFlags other)  {
+      QFlags &operator^=(QFlags other)  {
          i ^= other.i;
          return *this;
       }
 
-      inline QFlags &operator^=(E value)    {
+      QFlags &operator^=(E value)    {
          i ^= static_cast<int_type>(value);
          return *this;
       }
 
-      constexpr inline operator int_type() const {
+      constexpr operator int_type() const {
          return i;
       }
 
-      constexpr inline QFlags operator|(QFlags other) const {
+      constexpr QFlags operator|(QFlags other) const {
          return QFlags(E(i | other.i));
       }
 
-      constexpr inline QFlags operator|(E value) const {
+      constexpr QFlags operator|(E value) const {
          return QFlags(E(i | static_cast<int_type>(value)));
       }
 
-      constexpr inline QFlags operator^(QFlags other) const {
+      constexpr QFlags operator^(QFlags other) const {
          return QFlags(E(i ^ other.i));
       }
 
-      constexpr inline QFlags operator^(E value) const {
+      constexpr QFlags operator^(E value) const {
          return QFlags(E(i ^ static_cast<int_type>(value)));
       }
 
-      constexpr inline QFlags operator&(sint_type mask) const {
+      constexpr QFlags operator&(sint_type mask) const {
          return QFlags(E(i & mask));
       }
 
-      constexpr inline QFlags operator&(uint_type mask) const {
+      constexpr QFlags operator&(uint_type mask) const {
          return QFlags(E(i & mask));
       }
 
-      constexpr inline QFlags operator&(E value) const {
+      constexpr QFlags operator&(E value) const {
          return QFlags(E(i & static_cast<int_type>(value)));
       }
 
-      constexpr inline QFlags operator~() const {
+      constexpr QFlags operator~() const {
          return QFlags(E(~i));
       }
 
-      constexpr inline bool operator!() const {
-         return !i;
+      constexpr bool operator!() const {
+         return ! i;
       }
 
-      inline bool testFlag(E value) const {
+      bool testFlag(E value) const {
          int_type tmp = static_cast<int_type>(value);
          return (i & tmp) == tmp && (tmp != 0 || i == tmp);
       }

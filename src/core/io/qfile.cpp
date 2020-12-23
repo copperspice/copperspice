@@ -587,7 +587,7 @@ bool QFile::open(OpenMode mode)
    Q_D(QFile);
 
    if (isOpen()) {
-      qWarning("QFile::open: File (%s) already open", qPrintable(fileName()));
+      qWarning("QFile::open: File (%s) already open", csPrintable(fileName()));
       return false;
    }
 
@@ -675,8 +675,10 @@ bool QFile::open(int fd, OpenMode mode, FileHandleFlags handleFlags)
 
    if (d->openExternalFile(mode, fd, handleFlags)) {
       QIODevice::open(mode);
+
       if (mode & Append) {
          seek(size());
+
       } else {
          qint64 pos = (qint64)QT_LSEEK(fd, QT_OFF_T(0), SEEK_CUR);
          if (pos != -1) {

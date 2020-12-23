@@ -109,26 +109,32 @@ template <class T> class QSharedDataPointer
          d->ref.ref();
       }
    }
+
    inline QSharedDataPointer<T> &operator=(const QSharedDataPointer<T> &o) {
       if (o.d != d) {
          if (o.d) {
             o.d->ref.ref();
          }
+
          T *old = d;
          d = o.d;
+
          if (old && !old->ref.deref()) {
             delete old;
          }
       }
       return *this;
    }
+
    inline QSharedDataPointer &operator=(T *o) {
       if (o != d) {
          if (o) {
             o->ref.ref();
          }
+
          T *old = d;
          d = o;
+
          if (old && !old->ref.deref()) {
             delete old;
          }
@@ -147,7 +153,7 @@ template <class T> class QSharedDataPointer
    }
 
    inline bool operator!() const {
-      return !d;
+      return ! d;
    }
 
    inline void swap(QSharedDataPointer &other) {

@@ -234,9 +234,6 @@ void QPollingFileSystemWatcherEngine::timeout()
    }
 }
 
-
-
-
 QFileSystemWatcherEngine *QFileSystemWatcherPrivate::createNativeEngine()
 {
 #if defined(Q_OS_WIN)
@@ -378,12 +375,14 @@ QFileSystemWatcher::~QFileSystemWatcher()
       delete d->native;
       d->native = nullptr;
    }
+
    if (d->poller) {
       d->poller->stop();
       d->poller->wait();
       delete d->poller;
       d->poller = nullptr;
    }
+
    if (d->forced) {
       d->forced->stop();
       d->forced->wait();

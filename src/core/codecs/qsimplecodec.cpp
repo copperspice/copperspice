@@ -717,7 +717,6 @@ QSimpleTextCodec::QSimpleTextCodec(int i)
 {
 }
 
-
 QSimpleTextCodec::~QSimpleTextCodec()
 {
    delete reverseMap.load();
@@ -726,29 +725,37 @@ QSimpleTextCodec::~QSimpleTextCodec()
 static QByteArray *buildReverseMap(int forwardIndex)
 {
    QByteArray *map = new QByteArray();
+
    int m = 0;
    int i = 0;
+
    while (i < 128) {
       if (unicodevalues[forwardIndex].values[i] > m &&
             unicodevalues[forwardIndex].values[i] < 0xfffd) {
          m = unicodevalues[forwardIndex].values[i];
       }
-      i++;
+
+      ++i;
    }
-   m++;
+
+   ++m;
    map->resize(m);
+
    for (i = 0; i < 128 && i < m; i++) {
       (*map)[i] = (char)i;
    }
+
    for (; i < m; i++) {
       (*map)[i] = 0;
    }
+
    for (i = 128; i < 256; i++) {
       int u = unicodevalues[forwardIndex].values[i - 128];
       if (u < m) {
          (*map)[u] = (char)(unsigned char)(i);
       }
    }
+
    return map;
 }
 

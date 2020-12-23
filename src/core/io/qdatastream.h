@@ -70,7 +70,7 @@ class Q_CORE_EXPORT QDataStream
    };
 
    enum ByteOrder {
-      BigEndian = QSysInfo::BigEndian,
+      BigEndian    = QSysInfo::BigEndian,
       LittleEndian = QSysInfo::LittleEndian
    };
 

@@ -523,7 +523,7 @@ void QProcessPrivate::startProcess()
 
    QString errorString;
 
-   if (!success) {
+   if (! success) {
       // Capture the error string before we do CloseHandle below
       errorString = QProcess::tr("Process failed to start: %1").formatArg(qt_error_string());
    }

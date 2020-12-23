@@ -63,8 +63,7 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    inline bool isValid() const {
       return d;
    }
-
-   inline BoundaryType type() const {
+   BoundaryType type() const {
       return m_type;
    }
 

@@ -25,7 +25,9 @@
 
 #ifndef QT_NO_TEMPORARYFILE
 
+#include <qcoreapplication.h>
 #include <qplatformdefs.h>
+
 #include <qtemporaryfile_p.h>
 #include <qfile_p.h>
 #include <qsystemerror_p.h>
@@ -35,9 +37,6 @@
 #include <errno.h>
 #endif
 
-#if defined(QT_BUILD_CORE_LIB)
-#include <qcoreapplication.h>
-#endif
 
 #if defined(Q_OS_WIN)
 typedef ushort Char;
@@ -105,22 +104,24 @@ static bool createFileFromTemplate(NativeFileHandle &file,
    Q_ASSERT(length <= size_t(path.length()) - pos);
 
    Char *const placeholderStart = (Char *)path.data() + pos;
-   Char *const placeholderEnd = placeholderStart + length;
+   Char *const placeholderEnd   = placeholderStart + length;
 
    // Initialize placeholder with random chars + PID.
    {
       Char *rIter = placeholderEnd;
 
-#if defined(QT_BUILD_CORE_LIB)
       quint64 pid = quint64(QCoreApplication::applicationPid());
+
       do {
          *--rIter = Latin1Char((pid % 10) + '0');
          pid /= 10;
+
       } while (rIter != placeholderStart && pid != 0);
-#endif
+
 
       while (rIter != placeholderStart) {
          char ch = char((qrand() & 0xffff) % (26 + 26));
+
          if (ch < 26) {
             *--rIter = Latin1Char(ch + 'A');
          } else {
@@ -141,14 +142,20 @@ static bool createFileFromTemplate(NativeFileHandle &file,
          return true;
       }
 
+
       DWORD err = GetLastError();
+
       if (err == ERROR_ACCESS_DENIED) {
          DWORD attributes = GetFileAttributes((const wchar_t *)path.constData());
          if (attributes == INVALID_FILE_ATTRIBUTES) {
-            // Potential write error (read-only parent directory, etc.).
+            // Potential write error (read-only parent directory, etc.)
             error = QSystemError(err, QSystemError::NativeError);
+
             return false;
-         } // else file already exists as a directory.
+         }
+
+         // else file already exists as a directory
+
       } else if (err != ERROR_FILE_EXISTS) {
          error = QSystemError(err, QSystemError::NativeError);
          return false;
@@ -171,9 +178,11 @@ static bool createFileFromTemplate(NativeFileHandle &file,
 #endif
 
       /* tricky little algorwwithm for backward compatibility */
+
       for (Char *iter = placeholderStart;;) {
          // Character progression: [0-9] => 'a' ... 'z' => 'A' .. 'Z'
          // String progression: "ZZaiC" => "aabiC"
+
          switch (char(*iter)) {
             case 'Z':
                // Rollover, advance next character
@@ -225,29 +234,31 @@ bool QTemporaryFileEngine::isReallyOpen()
 {
    Q_D(QFSFileEngine);
 
-   if (!((nullptr == d->fh) && (-1 == d->fd)
+   if (! ((nullptr == d->fh) && (-1 == d->fd)
 
 #if defined Q_OS_WIN
          && (INVALID_HANDLE_VALUE == d->fileHandle)
 #endif
         )) {
+
       return true;
    }
 
    return false;
-
 }
 
 void QTemporaryFileEngine::setFileName(const QString &file)
 {
-   // Really close the file, so we don't leak
+   // close the file first to prevent a warning
    QFSFileEngine::close();
+
    QFSFileEngine::setFileName(file);
 }
 
 void QTemporaryFileEngine::setFileTemplate(const QString &fileTemplate)
 {
    Q_D(QFSFileEngine);
+
    if (filePathIsTemplate) {
       d->fileEntry = QFileSystemEntry(fileTemplate);
    }
@@ -256,30 +267,30 @@ void QTemporaryFileEngine::setFileTemplate(const QString &fileTemplate)
 bool QTemporaryFileEngine::open(QIODevice::OpenMode openMode)
 {
    Q_D(QFSFileEngine);
-   Q_ASSERT(!isReallyOpen());
+
+   Q_ASSERT(! isReallyOpen());
 
    openMode |= QIODevice::ReadWrite;
 
-   if (!filePathIsTemplate) {
+   if (! filePathIsTemplate) {
       return QFSFileEngine::open(openMode);
    }
 
    QString qfilename = d->fileEntry.filePath();
 
    // Ensure there is a placeholder mask
-   uint phPos = qfilename.length();
+   uint phPos    = qfilename.length();
    uint phLength = 0;
 
    while (phPos != 0) {
       --phPos;
 
-      if (qfilename[phPos] == QLatin1Char('X')) {
+      if (qfilename[phPos] == 'X') {
          ++phLength;
          continue;
       }
 
-      if (phLength >= 6
-            || qfilename[phPos] == QLatin1Char('/')) {
+      if (phLength >= 6 || qfilename[phPos] == '/') {
          ++phPos;
          break;
       }
@@ -289,17 +300,16 @@ bool QTemporaryFileEngine::open(QIODevice::OpenMode openMode)
    }
 
    if (phLength < 6) {
-      qfilename.append(QLatin1String(".XXXXXX"));
+      qfilename.append(".XXXXXX");
    }
 
-   // "Nativify" :-)
    QFileSystemEntry::NativePath filename = QFileSystemEngine::absoluteName(
-         QFileSystemEntry(qfilename, QFileSystemEntry::FromInternalPath()))
-                                           .nativeFilePath();
+         QFileSystemEntry(qfilename, QFileSystemEntry::FromInternalPath())).nativeFilePath();
 
    // Find mask in native path
-   phPos = filename.length();
+   phPos    = filename.length();
    phLength = 0;
+
    while (phPos != 0) {
       --phPos;
 
@@ -320,9 +330,11 @@ bool QTemporaryFileEngine::open(QIODevice::OpenMode openMode)
    Q_ASSERT(phLength >= 6);
 
    QSystemError error;
+
 #if defined(Q_OS_WIN)
    NativeFileHandle &file = d->fileHandle;
-#else // POSIX
+#else
+   // POSIX
    NativeFileHandle &file = d->fd;
 #endif
 
@@ -333,15 +345,14 @@ bool QTemporaryFileEngine::open(QIODevice::OpenMode openMode)
 
    d->fileEntry = QFileSystemEntry(filename, QFileSystemEntry::FromNativePath());
 
-#if !defined(Q_OS_WIN)
+#if ! defined(Q_OS_WIN)
    d->closeFileHandle = true;
 #endif
 
    filePathIsTemplate = false;
-
-   d->openMode = openMode;
+   d->openMode        = openMode;
    d->lastFlushFailed = false;
-   d->tried_stat = 0;
+   d->tried_stat      = 0;
 
    return true;
 }
@@ -349,43 +360,56 @@ bool QTemporaryFileEngine::open(QIODevice::OpenMode openMode)
 bool QTemporaryFileEngine::remove()
 {
    Q_D(QFSFileEngine);
-   // Since the QTemporaryFileEngine::close() does not really close the file,
+
+   // Since the QTemporaryFileEngine::close() does not really close the file
    // we must explicitly call QFSFileEngine::close() before we remove it.
+
    QFSFileEngine::close();
+
    if (QFSFileEngine::remove()) {
+
       d->fileEntry.clear();
+
       // If a QTemporaryFile is constructed using a template file path, the path
       // is generated in QTemporaryFileEngine::open() and then filePathIsTemplate
       // is set to false. If remove() and then open() are called on the same
       // QTemporaryFile, the path is not regenerated. Here we ensure that if the
       // file path was generated, it will be generated again in the scenario above.
+
       filePathIsTemplate = filePathWasTemplate;
       return true;
    }
+
    return false;
 }
 
 bool QTemporaryFileEngine::rename(const QString &newName)
 {
+   // close the file first to prevent a warning
    QFSFileEngine::close();
+
    return QFSFileEngine::rename(newName);
 }
 
 bool QTemporaryFileEngine::renameOverwrite(const QString &newName)
 {
+   // close the file first to prevent a warning
    QFSFileEngine::close();
+
    return QFSFileEngine::renameOverwrite(newName);
 }
 
 bool QTemporaryFileEngine::close()
 {
-   // Don't close the file, just seek to the front.
+   // do not close the file, just seek to the front
    seek(0);
    setError(QFile::UnspecifiedError, QString());
+
    return true;
 }
 
-QTemporaryFilePrivate::QTemporaryFilePrivate() : autoRemove(true)
+QTemporaryFilePrivate::QTemporaryFilePrivate()
+   : autoRemove(true)
 {
 }
 
@@ -442,7 +466,8 @@ QTemporaryFile::~QTemporaryFile()
 {
    Q_D(QTemporaryFile);
    close();
-   if (!d->fileName.isEmpty() && d->autoRemove) {
+
+   if (! d->fileName.isEmpty() && d->autoRemove) {
       remove();
    }
 }
@@ -462,9 +487,11 @@ void QTemporaryFile::setAutoRemove(bool b)
 QString QTemporaryFile::fileName() const
 {
    Q_D(const QTemporaryFile);
+
    if (d->fileName.isEmpty()) {
       return QString();
    }
+
    return d->engine()->fileName(QAbstractFileEngine::DefaultName);
 }
 
@@ -478,6 +505,7 @@ void QTemporaryFile::setFileTemplate(const QString &name)
 {
    Q_D(QTemporaryFile);
    d->templateName = name;
+
    if (d->fileEngine) {
       static_cast<QTemporaryFileEngine *>(d->fileEngine)->setFileTemplate(name);
    }
@@ -487,21 +515,25 @@ QTemporaryFile *QTemporaryFile::createLocalFile(QFile &file)
 {
    if (QAbstractFileEngine *engine = file.d_func()->engine()) {
       if (engine->fileFlags(QAbstractFileEngine::FlagsMask) & QAbstractFileEngine::LocalDiskFlag) {
-         return nullptr;   //local already
+         return nullptr;   // local already
       }
+
       //cache
       bool wasOpen = file.isOpen();
       qint64 old_off = 0;
+
       if (wasOpen) {
          old_off = file.pos();
       } else {
          file.open(QIODevice::ReadOnly);
       }
+
       //dump data
       QTemporaryFile *ret = new QTemporaryFile;
       ret->open();
       file.seek(0);
       char buffer[1024];
+
       while (true) {
          qint64 len = file.read(buffer, 1024);
          if (len < 1) {
@@ -509,40 +541,40 @@ QTemporaryFile *QTemporaryFile::createLocalFile(QFile &file)
          }
          ret->write(buffer, len);
       }
+
       ret->seek(0);
       //restore
+
       if (wasOpen) {
          file.seek(old_off);
       } else {
          file.close();
       }
+
       //done
       return ret;
    }
+
    return nullptr;
 }
 
-/*!
-   \reimp
-
-    Creates a unique file name for the temporary file, and opens it.  You can
-    get the unique name later by calling fileName(). The file is guaranteed to
-    have been created by this function (i.e., it has never existed before).
-*/
 bool QTemporaryFile::open(OpenMode flags)
 {
    Q_D(QTemporaryFile);
-   if (!d->fileName.isEmpty()) {
+
+   if (! d->fileName.isEmpty()) {
       if (static_cast<QTemporaryFileEngine *>(d->engine())->isReallyOpen()) {
          setOpenMode(flags);
          return true;
       }
    }
 
+
    if (QFile::open(flags)) {
       d->fileName = d->fileEngine->fileName(QAbstractFileEngine::DefaultName);
       return true;
    }
+
    return false;
 }
 

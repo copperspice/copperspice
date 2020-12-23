@@ -390,16 +390,12 @@ void RegistryKey::close()
 
 typedef QVector<RegistryKey> RegistryKeyList;
 
-/*******************************************************************************
-** class QWinSettingsPrivate
-*/
-
 class QWinSettingsPrivate : public QSettingsPrivate
 {
  public:
-   QWinSettingsPrivate(QSettings::Scope scope, const QString &organization,
-                       const QString &application);
+   QWinSettingsPrivate(QSettings::Scope scope, const QString &organization, const QString &application);
    QWinSettingsPrivate(QString rKey);
+
    ~QWinSettingsPrivate();
 
    void remove(const QString &uKey) override;
@@ -417,7 +413,7 @@ class QWinSettingsPrivate : public QSettingsPrivate
    QString fileName() const override;
 
  private:
-   RegistryKeyList regList; // list of registry locations to search for keys
+   RegistryKeyList regList;       // list of registry locations to search for keys
    bool deleteWriteHandleOnExit;
 };
 
@@ -426,7 +422,7 @@ QWinSettingsPrivate::QWinSettingsPrivate(QSettings::Scope scope, const QString &
 {
    deleteWriteHandleOnExit = false;
 
-   if (!organization.isEmpty()) {
+   if (! organization.isEmpty()) {
       QString prefix    = "Software\\" + organization;
       QString orgPrefix = prefix + "\\OrganizationDefaults";
       QString appPrefix = prefix + '\\' + application;
@@ -439,7 +435,7 @@ QWinSettingsPrivate::QWinSettingsPrivate(QSettings::Scope scope, const QString &
          regList.append(RegistryKey(HKEY_CURRENT_USER, orgPrefix, ! regList.isEmpty()));
       }
 
-      if (!application.isEmpty()) {
+      if (! application.isEmpty()) {
          regList.append(RegistryKey(HKEY_LOCAL_MACHINE, appPrefix, ! regList.isEmpty()));
       }
 
@@ -842,7 +838,7 @@ bool QWinSettingsPrivate::get(const QString &uKey, QVariant *value) const
          return true;
       }
 
-      if (!fallbacks) {
+      if (! fallbacks) {
          return false;
       }
    }
@@ -852,14 +848,16 @@ bool QWinSettingsPrivate::get(const QString &uKey, QVariant *value) const
 
 QStringList QWinSettingsPrivate::children(const QString &uKey, ChildSpec spec) const
 {
-   NameSet result;
+   NameSet retval;
    QString rKey = escapedKey(uKey);
 
-   for (int i = 0; i < regList.size(); ++i) {
-      HKEY parent_handle = regList.at(i).handle();
+   for (auto &item : regList) {
+      HKEY parent_handle = item.handle();
+
       if (parent_handle == nullptr) {
          continue;
       }
+
       HKEY handle = openKey(parent_handle, KEY_READ, rKey);
 
       if (handle == nullptr) {
@@ -868,21 +866,24 @@ QStringList QWinSettingsPrivate::children(const QString &uKey, ChildSpec spec) c
 
       if (spec == AllKeys) {
          NameSet keys;
-         allKeys(handle, "", &keys);
-         mergeKeySets(&result, keys);
-      } else { // ChildGroups or ChildKeys
+         allKeys(handle, QString(), &keys);
+         mergeKeySets(&retval, keys);
+
+      } else {
+         // ChildGroups or ChildKeys
+
          QStringList names = childKeysOrGroups(handle, spec);
-         mergeKeySets(&result, names);
+         mergeKeySets(&retval, names);
       }
 
       RegCloseKey(handle);
 
-      if (!fallbacks) {
-         return result.keys();
+      if (! fallbacks) {
+         return retval.keys();
       }
    }
 
-   return result.keys();
+   return retval.keys();
 }
 
 void QWinSettingsPrivate::clear()

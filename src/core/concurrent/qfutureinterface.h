@@ -244,6 +244,7 @@ inline QList<T> QFutureInterface<T>::results()
       exceptionStore().throwPossibleException();
       return QList<T>();
    }
+
    QFutureInterfaceBase::waitForResult(-1);
 
    QList<T> res;
@@ -265,6 +266,7 @@ class QFutureInterface<void> : public QFutureInterfaceBase
    QFutureInterface<void>(State initialState = NoState)
       : QFutureInterfaceBase(initialState) {
    }
+
    QFutureInterface<void>(const QFutureInterface<void> &other)
       : QFutureInterfaceBase(other) {
    }
