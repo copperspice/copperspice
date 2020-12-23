@@ -284,7 +284,7 @@ void QTextStreamPrivate::reset()
    padChar             = ' ';
    fieldAlignment      = QTextStream::AlignRight;
    realNumberNotation  = QTextStream::SmartNotation;
-   numberFlags         = 0;
+   numberFlags         = Qt::EmptyFlag;
 
    device       = nullptr;
    deleteDevice = false;
@@ -874,7 +874,7 @@ void QTextStream::reset()
    d->padChar = ' ';
    d->fieldAlignment = QTextStream::AlignRight;
    d->realNumberNotation = QTextStream::SmartNotation;
-   d->numberFlags = 0;
+   d->numberFlags = Qt::EmptyFlag;
 }
 
 

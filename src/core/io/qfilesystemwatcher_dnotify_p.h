@@ -60,7 +60,7 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 
       struct File {
          File()
-            : ownerId(0u), groupId(0u), permissions(0u)
+            : ownerId(0u), groupId(0u), permissions(Qt::EmptyFlag)
          { }
 
          File(const File &o) : path(o.path), ownerId(o.ownerId),

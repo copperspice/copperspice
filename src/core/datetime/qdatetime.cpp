@@ -1479,23 +1479,21 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs,
 
 QDateTimePrivate::QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt::TimeSpec toSpec,
    int offsetSeconds)
-   : m_msecs(0), m_spec(Qt::LocalTime), m_offsetFromUtc(0), m_status(0)
+   : m_msecs(0), m_spec(Qt::LocalTime), m_offsetFromUtc(0), m_status(Qt::EmptyFlag)
 {
    setTimeSpec(toSpec, offsetSeconds);
    setDateTime(toDate, toTime);
 }
-
 
 QDateTimePrivate::QDateTimePrivate(const QDate &toDate, const QTime &toTime,
    const QTimeZone &toTimeZone)
    : m_spec(Qt::TimeZone),
      m_offsetFromUtc(0),
      m_timeZone(toTimeZone),
-     m_status(0)
+     m_status(Qt::EmptyFlag)
 {
    setDateTime(toDate, toTime);
 }
-
 
 void QDateTimePrivate::setTimeSpec(Qt::TimeSpec spec, int offsetSeconds)
 {
@@ -1901,8 +1899,6 @@ qint64 QDateTime::toMSecsSinceEpoch() const
    return d->toMSecsSinceEpoch();
 }
 
-
-
 quint64 QDateTime::toTime_t() const
 {
    if (!isValid()) {
@@ -1922,7 +1918,7 @@ void QDateTime::setMSecsSinceEpoch(qint64 msecs)
 {
    QDateTimePrivate *d = this->d.data(); // detaches (and shadows d)
 
-   d->m_status = 0;
+   d->m_status = Qt::EmptyFlag;
    switch (d->m_spec) {
       case Qt::UTC:
          d->m_msecs = msecs;

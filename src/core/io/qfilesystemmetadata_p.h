@@ -42,7 +42,7 @@ class QFileSystemMetaData
 {
  public:
    QFileSystemMetaData()
-      : knownFlagsMask(0) {
+      : knownFlagsMask(Qt::EmptyFlag) {
    }
 
    enum MetaDataFlag {
@@ -140,7 +140,7 @@ class QFileSystemMetaData
    }
 
    void clear() {
-      knownFlagsMask = 0;
+      knownFlagsMask = Qt::EmptyFlag;
    }
 
    void clearFlags(MetaDataFlags flags = AllMetaDataFlags) {

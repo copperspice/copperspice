@@ -1244,7 +1244,7 @@ QAbstractFileEngine::FileFlags QResourceFileEngine::fileFlags(QAbstractFileEngin
 {
    Q_D(const QResourceFileEngine);
 
-   QAbstractFileEngine::FileFlags ret = 0;
+   QAbstractFileEngine::FileFlags ret = Qt::EmptyFlag;
 
    if (! d->resource.isValid()) {
       return ret;

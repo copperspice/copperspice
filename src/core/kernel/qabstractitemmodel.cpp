@@ -264,7 +264,8 @@ Qt::ItemFlags QPersistentModelIndex::flags() const
    if (d) {
       return d->index.flags();
    }
-   return 0;
+
+   return Qt::EmptyFlag;
 }
 
 const QAbstractItemModel *QPersistentModelIndex::model() const
@@ -1066,8 +1067,9 @@ bool QAbstractItemModel::canFetchMore(const QModelIndex &) const
 Qt::ItemFlags QAbstractItemModel::flags(const QModelIndex &index) const
 {
    Q_D(const QAbstractItemModel);
-   if (!d->indexValid(index)) {
-      return 0;
+
+   if (! d->indexValid(index)) {
+      return Qt::EmptyFlag;
    }
 
    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;

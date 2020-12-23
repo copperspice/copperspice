@@ -391,7 +391,7 @@ static inline QString recodeFromUser(const QString &input, const ushort *actions
    QString::const_iterator begin = input.begin() + from;
    QString::const_iterator end   = input.begin() + to;
 
-   if (qt_urlRecode(output, begin, end, 0, actions)) {
+   if (qt_urlRecode(output, begin, end, Qt::EmptyFlag, actions)) {
       return output;
    }
 
@@ -751,7 +751,7 @@ inline void QUrlPrivate::appendHost(QString &appendTo, QUrl::FormattingOptions o
 {
    // EncodeUnicode is the only flag that matters
    if ((options & QUrl::FullyDecoded) == QUrl::FullyDecoded) {
-      options = 0;
+      options = Qt::EmptyFlag;
    } else {
       options &= QUrl::EncodeUnicode;
    }
@@ -850,7 +850,7 @@ static QString::const_iterator parseIp6(QString &host, QString::const_iterator b
       // IPv6 failed parsing, check if it was a percent-encoded character in the middle and try again
       QString decoded;
 
-      if (mode == QUrl::TolerantMode && qt_urlRecode(decoded, begin, end, 0, decodeColon)) {
+      if (mode == QUrl::TolerantMode && qt_urlRecode(decoded, begin, end, Qt::EmptyFlag, decodeColon)) {
          // recurse if the parsing fails again, the qt_urlRecode above will return end
          return parseIp6(host, decoded.constBegin(), decoded.constEnd(), mode);
       }
@@ -948,7 +948,7 @@ inline bool QUrlPrivate::setHost(const QString &value, int xfrom, int xend, QUrl
    // check for percent-encoding first
    QString s;
 
-   if (mode == QUrl::TolerantMode && qt_urlRecode(s, begin, end, 0, 0)) {
+   if (mode == QUrl::TolerantMode && qt_urlRecode(s, begin, end, Qt::EmptyFlag, nullptr)) {
       // something was decoded, anything encoded left?
       int pos = s.indexOf('%'); // '%'
 

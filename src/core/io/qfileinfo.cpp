@@ -141,7 +141,7 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
 
    // Bundle detecton on Mac can be slow, expecially on network paths, so we separate out that as well.
 
-   QAbstractFileEngine::FileFlags req = 0;
+   QAbstractFileEngine::FileFlags req = Qt::EmptyFlag;
    uint cachedFlags = 0;
 
    if (request & (QAbstractFileEngine::FlagsMask | QAbstractFileEngine::TypesMask)) {
@@ -782,7 +782,7 @@ QFile::Permissions QFileInfo::permissions() const
    Q_D(const QFileInfo);
 
    if (d->isDefaultConstructed) {
-      return 0;
+      return Qt::EmptyFlag;
    }
 
    if (d->fileEngine == nullptr) {

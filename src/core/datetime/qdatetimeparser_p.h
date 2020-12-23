@@ -55,8 +55,9 @@ class Q_CORE_EXPORT QDateTimeParser
       DateTimeEdit
    };
    QDateTimeParser(QVariant::Type t, Context ctx)
-      : currentSectionIndex(-1), display(0), cachedDay(-1), parserType(t),
-        fixday(false), spec(Qt::LocalTime), context(ctx) {
+      : currentSectionIndex(-1), display(Qt::EmptyFlag), cachedDay(-1), parserType(t),
+        fixday(false), spec(Qt::LocalTime), context(ctx)
+   {
       defaultLocale = QLocale::system();
       first.type = FirstSection;
       first.pos = -1;

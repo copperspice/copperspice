@@ -372,7 +372,7 @@ QStringList QAbstractFileEngine::entryList(QDir::Filters filters, const QStringL
 QAbstractFileEngine::FileFlags QAbstractFileEngine::fileFlags(FileFlags type) const
 {
    Q_UNUSED(type);
-   return 0;
+   return Qt::EmptyFlag;
 }
 
 /*!

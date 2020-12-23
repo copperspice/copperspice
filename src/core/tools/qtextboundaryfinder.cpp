@@ -55,7 +55,7 @@ static void init(QTextBoundaryFinder::BoundaryType type, const QString &str, QCh
       }
    }
 
-   QUnicodeTools::CharAttributeOptions options = 0;
+   QUnicodeTools::CharAttributeOptions options = Qt::EmptyFlag;
 
    switch (type) {
       case QTextBoundaryFinder::Grapheme:

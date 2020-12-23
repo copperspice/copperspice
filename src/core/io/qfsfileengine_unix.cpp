@@ -513,7 +513,7 @@ QAbstractFileEngine::FileFlags QFSFileEngine::fileFlags(FileFlags type) const
       d->metaData.clear();
    }
 
-   QAbstractFileEngine::FileFlags ret = 0;
+   QAbstractFileEngine::FileFlags ret = Qt::EmptyFlag;
 
    if (type & FlagsMask) {
       ret |= LocalDiskFlag;
@@ -521,7 +521,7 @@ QAbstractFileEngine::FileFlags QFSFileEngine::fileFlags(FileFlags type) const
 
    bool exists;
    {
-      QFileSystemMetaData::MetaDataFlags queryFlags = 0;
+      QFileSystemMetaData::MetaDataFlags queryFlags = Qt::EmptyFlag;
 
       queryFlags |= QFileSystemMetaData::MetaDataFlags(uint(type))
                     & QFileSystemMetaData::Permissions;
