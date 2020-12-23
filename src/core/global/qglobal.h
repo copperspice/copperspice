@@ -791,6 +791,9 @@ Q_CORE_EXPORT void *qReallocAligned(void *ptr, size_t size, size_t oldsize, size
 Q_CORE_EXPORT void qFree(void *ptr);
 Q_CORE_EXPORT void qFreeAligned(void *ptr);
 
+class EmptyFlag_Type {
+};
+
 class Q_CORE_EXPORT QFlag
 {
   int i;
@@ -836,6 +839,10 @@ class QFlags
          : i(other.i)
       {}
 
+      constexpr QFlags(EmptyFlag_Type)
+         : i(0)
+      {
+      }
       constexpr inline QFlags(E value)
          : i(static_cast<int_type>(value))
       {}

@@ -54,6 +54,8 @@ class Q_CORE_EXPORT Qt
          return cs_number<0>{};
       }
 
+      static constexpr EmptyFlag_Type EmptyFlag = {};
+
       enum GlobalColor {
          color0,
          color1,
