@@ -152,12 +152,12 @@ class QXmlStreamReader_Table
 };
 
 const char *const QXmlStreamReader_Table::spell [] = {
-   "end of file", 0, " ", "<", ">", "&", "#", "\'", "\"", "[",
+   "end of file", nullptr, " ", "<", ">", "&", "#", "\'", "\"", "[",
    "]", "(", ")", "|", "=", "%", "/", ":", ";", ",",
    "-", "+", "*", ".", "?", "!", "[a-zA-Z]", "[0-9]", "[CDATA[", "DOCTYPE",
    "ELEMENT", "ATTLIST", "ENTITY", "NOTATION", "SYSTEM", "PUBLIC", "NDATA", "REQUIRED", "IMPLIED", "FIXED",
-   "EMPTY", "ANY", "PCDATA", 0, 0, 0, 0, "CDATA", "ID", "IDREF",
-   "IDREFS", "ENTITIES", "NMTOKEN", "NMTOKENS", "<?xml", "version", 0
+   "EMPTY", "ANY", "PCDATA", nullptr, nullptr, nullptr, nullptr, "CDATA", "ID", "IDREF",
+   "IDREFS", "ENTITIES", "NMTOKEN", "NMTOKENS", "<?xml", "version", nullptr
 };
 
 const short QXmlStreamReader_Table::lhs [] = {
@@ -897,7 +897,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    int fastScanLiteralContent();
    int fastScanSpace();
    int fastScanContentCharList();
-   int fastScanName(int *prefix = 0);
+   int fastScanName(int *prefix = nullptr);
    inline int fastScanNMTOKEN();
 
    bool parse();

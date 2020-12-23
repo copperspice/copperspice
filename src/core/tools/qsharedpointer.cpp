@@ -60,7 +60,7 @@ QtSharedPointer::ExternalRefCountData *QtSharedPointer::ExternalRefCountData::ge
    x->strongref.store(-1);
    x->weakref.store(2);  		// the QWeakPointer that called us plus the QObject itself
 
-   ExternalRefCountData *newPtr = 0;
+   ExternalRefCountData *newPtr = nullptr;
 
    if (! sharedRefcount.compare_exchange_strong(newPtr, x, std::memory_order_release, std::memory_order_acquire)) {
       delete x;
@@ -132,10 +132,10 @@ static void printBacktrace(QByteArray stacktrace)
       dup2(filter[0], fileno(stdin));
       close(filter[0]);
       close(filter[1]);
-      execlp("c++filt", "c++filt", "-n", NULL);
+      execlp("c++filt", "c++filt", "-n", nullptr);
 
       // execlp failed
-      execl("/bin/cat", "/bin/cat", NULL);
+      execl("/bin/cat", "/bin/cat", nullptr);
       _exit(127);
    }
 
@@ -200,7 +200,7 @@ void QtSharedPointer::internalSafetyCheckAdd(const void *d_ptr, const volatile v
 
    //qDebug("Adding d=%p value=%p", d_ptr, ptr);
 
-   const void *other_d_ptr = kp->dataPointers.value(ptr, 0);
+   const void *other_d_ptr = kp->dataPointers.value(ptr, nullptr);
    if (other_d_ptr) {
 
 #ifdef BACKTRACE_SUPPORTED

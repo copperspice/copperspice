@@ -352,16 +352,16 @@ class Q_CORE_EXPORT QByteArray
    inline QByteArray &operator+=(const char *s);
    inline QByteArray &operator+=(const QByteArray &a);
 
-   short toShort(bool *ok = 0, int base = 10) const;
-   ushort toUShort(bool *ok = 0, int base = 10) const;
-   int toInt(bool *ok = 0, int base = 10) const;
-   uint toUInt(bool *ok = 0, int base = 10) const;
-   long toLong(bool *ok = 0, int base = 10) const;
-   ulong toULong(bool *ok = 0, int base = 10) const;
-   qint64 toLongLong(bool *ok = 0, int base = 10) const;
-   quint64 toULongLong(bool *ok = 0, int base = 10) const;
-   float toFloat(bool *ok = 0) const;
-   double toDouble(bool *ok = 0) const;
+   short toShort(bool *ok = nullptr, int base = 10) const;
+   ushort toUShort(bool *ok = nullptr, int base = 10) const;
+   int toInt(bool *ok = nullptr, int base = 10) const;
+   uint toUInt(bool *ok = nullptr, int base = 10) const;
+   long toLong(bool *ok = nullptr, int base = 10) const;
+   ulong toULong(bool *ok = nullptr, int base = 10) const;
+   qint64 toLongLong(bool *ok = nullptr, int base = 10) const;
+   quint64 toULongLong(bool *ok = nullptr, int base = 10) const;
+   float toFloat(bool *ok = nullptr) const;
+   double toDouble(bool *ok = nullptr) const;
    QByteArray toBase64() const;
    QByteArray toHex() const;
 

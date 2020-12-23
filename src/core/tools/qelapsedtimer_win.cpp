@@ -28,7 +28,7 @@
 #include <windows.h>
 
 typedef ULONGLONG (WINAPI *PtrGetTickCount64)(void);
-static PtrGetTickCount64 ptrGetTickCount64 = 0;
+static PtrGetTickCount64 ptrGetTickCount64 = nullptr;
 
 // Result of QueryPerformanceFrequency, 0 indicates that the high resolution timer is unavailable
 static quint64 counterFrequency = 0;

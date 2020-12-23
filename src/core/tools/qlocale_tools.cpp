@@ -810,7 +810,7 @@ static Bigint *pow5mult(Bigint *b, int k)
       /* first time */
       static p5s_deleter deleter;
       p5 = p5s = i2b(625);
-      p5->next = 0;
+      p5->next = nullptr;
    }
    for (;;) {
       if (k & 1) {
@@ -823,7 +823,7 @@ static Bigint *pow5mult(Bigint *b, int k)
       }
       if (!(p51 = p5->next)) {
          p51 = p5->next = mult(p5, p5);
-         p51->next = 0;
+         p51->next = nullptr;
       }
       p5 = p51;
    }
@@ -1277,7 +1277,7 @@ Q_CORE_EXPORT double qstrtod(const char *s00, const char **se, bool *ok)
    Long L;
    ULong y, z;
    Bigint *bb1, *bd0;
-   Bigint *bb = NULL, *bd = NULL, *bs = NULL, *delta = NULL;/* pacify gcc */
+   Bigint *bb = nullptr, *bd = nullptr, *bs = nullptr, *delta =nullptr;/* pacify gcc */
 
    /*
      #ifndef KR_headers
@@ -1285,7 +1285,7 @@ Q_CORE_EXPORT double qstrtod(const char *s00, const char **se, bool *ok)
      #else
      const char decimal_point = '.';
      #endif */
-   if (ok != 0) {
+   if (ok != nullptr) {
       *ok = true;
    }
 
@@ -1438,7 +1438,7 @@ dig_done:
       rv = tens[k - 9] * rv + z;
    }
 
-   bd0 = 0;
+   bd0 = nullptr;
 
    if (nd <= DBL_DIG
 #ifndef RND_PRODQUOT
@@ -1501,7 +1501,7 @@ dig_done:
          if (e1 > DBL_MAX_10_EXP) {
          ovfl:
             //                                errno = ERANGE;
-            if (ok != 0) {
+            if (ok != nullptr) {
                *ok = false;
             }
 
@@ -1570,7 +1570,7 @@ dig_done:
             undfl:
                rv = 0.;
                //                                        errno = ERANGE;
-               if (ok != 0) {
+               if (ok != nullptr) {
                   *ok = false;
                }
                if (bd0) {
@@ -2088,7 +2088,7 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
 #endif
 
    Bigint *b, *b1, *delta, *mhi, *S;
-   Bigint *mlo = NULL; /* pacify gcc */
+   Bigint *mlo = nullptr; /* pacify gcc */
 
    double d2;
    double ds;
@@ -2339,7 +2339,7 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
       setWord0(&eps, getWord0(eps) - (P - 1)*Exp_msk1);
 
       if (ilim == 0) {
-         S = mhi = 0;
+         S = mhi = nullptr;
          d -= 5.;
          if (d > eps) {
             goto one_digit;
@@ -2408,7 +2408,7 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
       /* Yes. */
       ds = tens[k];
       if (ndigits < 0 && ilim <= 0) {
-         S = mhi = 0;
+         S = mhi = nullptr;
          if (ilim < 0 || d <= 5 * ds) {
             goto no_digits;
          }
@@ -2448,7 +2448,7 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
 
    m2 = b2;
    m5 = b5;
-   mhi = mlo = 0;
+   mhi = mlo = nullptr;
 
    if (leftright) {
       if (mode < 2) {

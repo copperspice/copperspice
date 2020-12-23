@@ -116,7 +116,7 @@ class QScopedPointer
       return !d;
    }
 
-   void reset(T *other = 0) {
+   void reset(T *other = nullptr) {
       if (d == other) {
          return;
       }
@@ -128,7 +128,8 @@ class QScopedPointer
 
    T *take() {
       T *oldD = d;
-      d = 0;
+      d = nullptr;
+
       return oldD;
    }
 
@@ -190,12 +191,12 @@ class QScopedArrayPointer : public QScopedPointer<T, Cleanup>
 {
  public:
    inline QScopedArrayPointer()
-      : QScopedPointer<T, Cleanup>(0)
+      : QScopedPointer<T, Cleanup>(nullptr)
    {
    }
 
    template <typename D>
-   explicit inline QScopedArrayPointer(D *p, typename QtPrivate::QScopedArrayEnsureSameType<T, D>::Type = 0)
+   explicit inline QScopedArrayPointer(D *p, typename QtPrivate::QScopedArrayEnsureSameType<T, D>::Type = nullptr)
       : QScopedPointer<T, Cleanup>(p) {
    }
 

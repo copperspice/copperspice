@@ -53,10 +53,9 @@
 
 #include <stdlib.h>
 
-
 #ifndef QT_NO_SYSTEMLOCALE
 
-static QSystemLocale *_systemLocale = 0;
+static QSystemLocale *_systemLocale = nullptr;
 
 static QSystemLocale *QSystemLocale_globalSystemLocale();
 Q_GLOBAL_STATIC_WITH_ARGS(QSystemLocale, QSystemLocale_globalSystemLocale, (QSystemLocale::cs_internal_private_tag()) )
@@ -70,7 +69,7 @@ static const QLocaleData *defaultData();
 static uint default_number_options = 0;
 
 static const int locale_data_size      = sizeof(locale_data) / sizeof(QLocaleData) - 1;
-static const QLocaleData *default_data = 0;
+static const QLocaleData *default_data = nullptr;
 static const QLocaleData *const c_data = locale_data;
 
 Q_GLOBAL_STATIC_WITH_ARGS(QSharedDataPointer<QLocalePrivate>, defaultLocalePrivate,
@@ -332,8 +331,8 @@ QString QLocaleId::name(char separator) const
    }
 
    const unsigned char *lang    = language_code_list + 3 * language_id;
-   const unsigned char *script  = (script_id  != QLocale::AnyScript  ? script_code_list + 4  * script_id : 0);
-   const unsigned char *country = (country_id != QLocale::AnyCountry ? country_code_list + 3 * country_id : 0);
+   const unsigned char *script  = (script_id  != QLocale::AnyScript  ? script_code_list + 4  * script_id : nullptr);
+   const unsigned char *country = (country_id != QLocale::AnyCountry ? country_code_list + 3 * country_id : nullptr);
 
    QString name;
    name.append(lang[0]);
@@ -638,7 +637,6 @@ QSystemLocale::QSystemLocale()
    }
 }
 
-
 QSystemLocale::QSystemLocale(QSystemLocale::cs_internal_private_tag)
 {
 }
@@ -646,7 +644,7 @@ QSystemLocale::QSystemLocale(QSystemLocale::cs_internal_private_tag)
 QSystemLocale::~QSystemLocale()
 {
    if (_systemLocale == this) {
-      _systemLocale = 0;
+      _systemLocale = nullptr;
 
       if (system_data) {
          system_data->m_language_id = 0;
@@ -1127,14 +1125,14 @@ float QLocale::toFloat(const QString &s, bool *ok) const
 
    if (! isOk || d < std::numeric_limits<float>::lowest() || d > std::numeric_limits<float>::max() )  {
 
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
 
       return 0.0;
    }
 
-   if (ok != 0) {
+   if (ok != nullptr) {
       *ok = true;
    }
 
@@ -1363,7 +1361,7 @@ QTime QLocale::toTime(const QString &string, const QString &format) const
    dt.setDefaultLocale(*this);
 
    if (dt.parseFormat(format)) {
-      dt.fromString(string, 0, &time);
+      dt.fromString(string, nullptr, &time);
    }
 
    return time;
@@ -1378,7 +1376,7 @@ QDate QLocale::toDate(const QString &string, const QString &format) const
    dt.setDefaultLocale(*this);
 
    if (dt.parseFormat(format)) {
-      dt.fromString(string, &date, 0);
+      dt.fromString(string, &date, nullptr);
    }
 
    return date;
@@ -2167,20 +2165,20 @@ QString QLocaleData::doubleToString(const QChar _zero, const QChar plus, const Q
          ++pr;
       }
 
-      char *rve  = 0;
-      char *buff = 0;
+      char *rve  = nullptr;
+      char *buff = nullptr;
 
       try {
          digits = qdtoa(d, mode, pr, &decpt, &sign, &rve, &buff);
 
       } catch (...) {
-         if (buff != 0) {
+         if (buff != nullptr) {
             free(buff);
          }
          throw;
       }
 
-      if (buff != 0) {
+      if (buff != nullptr) {
          free(buff);
       }
 
@@ -2652,7 +2650,7 @@ double QLocaleData::stringToDouble(const QString &number, bool *ok, GroupSeparat
    CharBuff buff;
 
    if (! numberToCLocale(number, group_sep_mode, &buff)) {
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
 
@@ -2666,7 +2664,7 @@ qint64 QLocaleData::stringToLongLong(const QString &number, int base, bool *ok, 
    CharBuff buff;
 
    if (! numberToCLocale(number, group_sep_mode, &buff)) {
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
       return 0;
@@ -2679,7 +2677,7 @@ quint64 QLocaleData::stringToUnsLongLong(const QString &number, int base, bool *
 {
    CharBuff buff;
    if (! numberToCLocale(number, group_sep_mode, &buff)) {
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
       return 0;
@@ -2690,16 +2688,16 @@ quint64 QLocaleData::stringToUnsLongLong(const QString &number, int base, bool *
 
 double QLocaleData::bytearrayToDouble(const char *num, bool *ok, bool *overflow)
 {
-   if (ok != 0) {
+   if (ok != nullptr) {
       *ok = true;
    }
 
-   if (overflow != 0) {
+   if (overflow != nullptr) {
       *overflow = false;
    }
 
    if (*num == '\0') {
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
       return 0.0;
@@ -2723,10 +2721,10 @@ double QLocaleData::bytearrayToDouble(const char *num, bool *ok, bool *overflow)
 
    if (!_ok) {
       // the only way strtod can fail with *endptr != '\0' on a non-empty input string is overflow
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
-      if (overflow != 0) {
+      if (overflow != nullptr) {
          *overflow = *endptr != '\0';
       }
       return 0.0;
@@ -2734,21 +2732,23 @@ double QLocaleData::bytearrayToDouble(const char *num, bool *ok, bool *overflow)
 
    if (*endptr != '\0') {
       // we stopped at a non-digit character after converting some digits
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
-      if (overflow != 0) {
+      if (overflow != nullptr) {
          *overflow = false;
       }
       return 0.0;
    }
 
-   if (ok != 0) {
+   if (ok != nullptr) {
       *ok = true;
    }
-   if (overflow != 0) {
+
+   if (overflow != nullptr) {
       *overflow = false;
    }
+
    return d;
 }
 
@@ -2758,10 +2758,10 @@ qint64 QLocaleData::bytearrayToLongLong(const char *num, int base, bool *ok, boo
    const char *endptr;
 
    if (*num == '\0') {
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
-      if (overflow != 0) {
+      if (overflow != nullptr) {
          *overflow = false;
       }
       return 0;
@@ -2770,10 +2770,10 @@ qint64 QLocaleData::bytearrayToLongLong(const char *num, int base, bool *ok, boo
    qint64 l = qstrtoll(num, &endptr, base, &_ok);
 
    if (!_ok) {
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
-      if (overflow != 0) {
+      if (overflow != nullptr) {
          // the only way qstrtoll can fail with *endptr != '\0' on a non-empty
          // input string is overflow
          *overflow = *endptr != '\0';
@@ -2783,20 +2783,20 @@ qint64 QLocaleData::bytearrayToLongLong(const char *num, int base, bool *ok, boo
 
    if (*endptr != '\0') {
       // we stopped at a non-digit character after converting some digits
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
-      if (overflow != 0) {
+      if (overflow != nullptr) {
          *overflow = false;
       }
       return 0;
    }
 
-   if (ok != 0) {
+   if (ok != nullptr) {
       *ok = true;
    }
 
-   if (overflow != 0) {
+   if (overflow != nullptr) {
       *overflow = false;
    }
 
@@ -2810,15 +2810,16 @@ quint64 QLocaleData::bytearrayToUnsLongLong(const char *num, int base, bool *ok)
    quint64 l = qstrtoull(num, &endptr, base, &_ok);
 
    if (!_ok || *endptr != '\0') {
-      if (ok != 0) {
+      if (ok != nullptr) {
          *ok = false;
       }
       return 0;
    }
 
-   if (ok != 0) {
+   if (ok != nullptr) {
       *ok = true;
    }
+
    return l;
 }
 

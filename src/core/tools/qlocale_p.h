@@ -184,7 +184,7 @@ struct QLocaleData {
 
       if (std::fabs(d) > std::numeric_limits<float>::max()) {
 
-         if (ok != 0) {
+         if (ok != nullptr) {
             *ok = false;
          }
 
@@ -200,8 +200,8 @@ struct QLocaleData {
    quint64 stringToUnsLongLong(const QString & number, int base, bool * ok, GroupSeparatorMode group_sep_mode) const;
 
    // these are used in QIntValidator (QtGui)
-   Q_CORE_EXPORT static double bytearrayToDouble(const char *num, bool * ok, bool * overflow = 0);
-   Q_CORE_EXPORT static qint64 bytearrayToLongLong(const char *num, int base, bool * ok, bool * overflow = 0);
+   Q_CORE_EXPORT static double bytearrayToDouble(const char *num, bool * ok, bool * overflow = nullptr);
+   Q_CORE_EXPORT static qint64 bytearrayToLongLong(const char *num, int base, bool * ok, bool * overflow = nullptr);
    Q_CORE_EXPORT static quint64 bytearrayToUnsLongLong(const char *num, int base, bool * ok);
 
    bool numberToCLocale(const QString &num, GroupSeparatorMode group_sep_mode, CharBuff * result) const;

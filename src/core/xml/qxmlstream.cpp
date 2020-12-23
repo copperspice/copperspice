@@ -168,7 +168,7 @@ void QXmlStreamReader::clear()
          delete d->device;
       }
 
-      d->device = 0;
+      d->device = nullptr;
    }
 }
 
@@ -332,16 +332,16 @@ QXmlStreamPrivateTagStack::QXmlStreamPrivateTagStack()
 QXmlStreamReaderPrivate::QXmlStreamReaderPrivate(QXmlStreamReader *q)
    : q_ptr(q)
 {
-   device = 0;
+   device       = nullptr;
    deleteDevice = false;
-   decoder = 0;
+   decoder      = nullptr;
 
    stack_size  = 64;
-   sym_stack   = 0;
-   state_stack = 0;
+   sym_stack   = nullptr;
+   state_stack = nullptr;
 
    reallocateStack();
-   entityResolver = 0;
+   entityResolver = nullptr;
    init();
 
    entityHash.insert("lt",   Entity::createLiteral("<"));
@@ -380,11 +380,11 @@ void QXmlStreamReaderPrivate::init()
    codec = QTextCodec::codecForMib(106);       // utf8
 
    delete decoder;
-   decoder = 0;
+   decoder = nullptr;
 
    attributeStack.clear();
    attributeStack.reserve(16);
-   entityParser = 0;
+   entityParser = nullptr;
    hasCheckedStartDocument = false;
    normalizeLiterals = false;
    hasSeenTag = false;
@@ -2478,7 +2478,9 @@ void QXmlStreamWriter::setDevice(QIODevice *device)
    if (device == d->device) {
       return;
    }
-   d->stringDevice = 0;
+
+   d->stringDevice = nullptr;
+
    if (d->deleteDevice) {
       delete d->device;
       d->deleteDevice = false;

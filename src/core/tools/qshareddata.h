@@ -94,7 +94,7 @@ template <class T> class QSharedDataPointer
    }
 
    inline QSharedDataPointer() {
-      d = 0;
+      d = nullptr;
    }
 
    inline ~QSharedDataPointer() {
@@ -136,9 +136,11 @@ template <class T> class QSharedDataPointer
       return *this;
    }
 
-   QSharedDataPointer(QSharedDataPointer &&o) : d(o.d) {
-      o.d = 0;
+   QSharedDataPointer(QSharedDataPointer && o)
+      : d(o.d) {
+      o.d = nullptr;
    }
+
    inline QSharedDataPointer<T> &operator=(QSharedDataPointer<T> && other) {
       qSwap(d, other.d);
       return *this;
@@ -194,11 +196,11 @@ template <class T> class QExplicitlySharedDataPointer
          delete d;
       }
 
-      d = 0;
+      d = nullptr;
    }
 
    inline operator bool () const {
-      return d != 0;
+      return d != nullptr;
    }
 
    inline bool operator==(const QExplicitlySharedDataPointer<T> &other) const {
@@ -215,7 +217,7 @@ template <class T> class QExplicitlySharedDataPointer
    }
 
    inline QExplicitlySharedDataPointer() {
-      d = 0;
+      d = nullptr;
    }
    inline ~QExplicitlySharedDataPointer() {
       if (d && !d->ref.deref()) {
@@ -265,7 +267,7 @@ template <class T> class QExplicitlySharedDataPointer
    }
 
    inline QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&o) : d(o.d) {
-      o.d = 0;
+      o.d = nullptr;
    }
    inline QExplicitlySharedDataPointer<T> &operator=(QExplicitlySharedDataPointer<T> && other) {
       qSwap(d, other.d);

@@ -32,7 +32,7 @@
 
 static QByteArray envVarLocale()
 {
-   static QByteArray lang = 0;
+   static QByteArray lang = "";
 
 #ifdef Q_OS_UNIX
    lang = qgetenv("LC_ALL");
@@ -72,13 +72,13 @@ static QString macMonthName(int month, bool short_format)
    }
 
    QCFType<CFDateFormatterRef> formatter
-      = CFDateFormatterCreate(0, QCFType<CFLocaleRef>(CFLocaleCopyCurrent()),
+      = CFDateFormatterCreate(nullptr, QCFType<CFLocaleRef>(CFLocaleCopyCurrent()),
                               kCFDateFormatterNoStyle,  kCFDateFormatterNoStyle);
    QCFType<CFArrayRef> values
       = static_cast<CFArrayRef>(CFDateFormatterCopyProperty(formatter,
                                 short_format ? kCFDateFormatterShortMonthSymbols
                                 : kCFDateFormatterMonthSymbols));
-   if (values != 0) {
+   if (values != nullptr) {
       CFStringRef cfstring = static_cast<CFStringRef>(CFArrayGetValueAtIndex(values, month));
       return QCFString::toQString(cfstring);
    }
@@ -92,12 +92,12 @@ static QString macDayName(int day, bool short_format)
    }
 
    QCFType<CFDateFormatterRef> formatter
-      = CFDateFormatterCreate(0, QCFType<CFLocaleRef>(CFLocaleCopyCurrent()),
+      = CFDateFormatterCreate(nullptr, QCFType<CFLocaleRef>(CFLocaleCopyCurrent()),
                               kCFDateFormatterNoStyle,  kCFDateFormatterNoStyle);
    QCFType<CFArrayRef> values = static_cast<CFArrayRef>(CFDateFormatterCopyProperty(formatter,
                                 short_format ? kCFDateFormatterShortWeekdaySymbols
                                 : kCFDateFormatterWeekdaySymbols));
-   if (values != 0) {
+   if (values != nullptr) {
       CFStringRef cfstring = static_cast<CFStringRef>(CFArrayGetValueAtIndex(values, day % 7));
       return QCFString::toQString(cfstring);
    }
@@ -115,7 +115,7 @@ static QString macDateToString(const QDate &date, bool short_format)
    macGDate.second = 0.0;
 
    QCFType<CFDateRef> myDate
-      = CFDateCreate(0, CFGregorianDateGetAbsoluteTime(macGDate,
+      = CFDateCreate(nullptr, CFGregorianDateGetAbsoluteTime(macGDate,
                      QCFType<CFTimeZoneRef>(CFTimeZoneCopyDefault())));
    QCFType<CFLocaleRef> mylocale = CFLocaleCopyCurrent();
    CFDateFormatterStyle style = short_format ? kCFDateFormatterShortStyle : kCFDateFormatterLongStyle;
@@ -123,7 +123,7 @@ static QString macDateToString(const QDate &date, bool short_format)
       = CFDateFormatterCreate(kCFAllocatorDefault,
                               mylocale, style,
                               kCFDateFormatterNoStyle);
-   return QCFString(CFDateFormatterCreateStringWithDate(0, myFormatter, myDate));
+   return QCFString(CFDateFormatterCreateStringWithDate(nullptr, myFormatter, myDate));
 }
 
 static QString macTimeToString(const QTime &time, bool short_format)
@@ -138,7 +138,7 @@ static QString macTimeToString(const QTime &time, bool short_format)
    macGDate.minute = time.minute();
    macGDate.second = time.second();
    QCFType<CFDateRef> myDate
-      = CFDateCreate(0, CFGregorianDateGetAbsoluteTime(macGDate,
+      = CFDateCreate(nullptr, CFGregorianDateGetAbsoluteTime(macGDate,
                      QCFType<CFTimeZoneRef>(CFTimeZoneCopyDefault())));
 
    QCFType<CFLocaleRef> mylocale = CFLocaleCopyCurrent();
@@ -147,7 +147,7 @@ static QString macTimeToString(const QTime &time, bool short_format)
          mylocale,
          kCFDateFormatterNoStyle,
          style);
-   return QCFString(CFDateFormatterCreateStringWithDate(0, myFormatter, myDate));
+   return QCFString(CFDateFormatterCreateStringWithDate(nullptr, myFormatter, myDate));
 }
 
 // Mac uses the Unicode CLDR format codes
@@ -352,18 +352,18 @@ static QString macFormatCurrency(const QSystemLocale::CurrencyToStringArgument &
       case QVariant::Int:
       case QVariant::UInt: {
          int v = arg.value.toInt();
-         value = CFNumberCreate(NULL, kCFNumberIntType, &v);
+         value = CFNumberCreate(nullptr, kCFNumberIntType, &v);
          break;
       }
       case QVariant::Double: {
          double v = arg.value.toDouble();
-         value = CFNumberCreate(NULL, kCFNumberDoubleType, &v);
+         value = CFNumberCreate(nullptr, kCFNumberDoubleType, &v);
          break;
       }
       case QVariant::LongLong:
       case QVariant::ULongLong: {
          qint64 v = arg.value.toLongLong();
-         value = CFNumberCreate(NULL, kCFNumberLongLongType, &v);
+         value = CFNumberCreate(nullptr, kCFNumberLongLongType, &v);
          break;
       }
       default:
@@ -372,12 +372,12 @@ static QString macFormatCurrency(const QSystemLocale::CurrencyToStringArgument &
 
    QCFType<CFLocaleRef> locale = CFLocaleCopyCurrent();
    QCFType<CFNumberFormatterRef> currencyFormatter =
-      CFNumberFormatterCreate(NULL, locale, kCFNumberFormatterCurrencyStyle);
+      CFNumberFormatterCreate(nullptr, locale, kCFNumberFormatterCurrencyStyle);
    if (!arg.symbol.isEmpty()) {
       CFNumberFormatterSetProperty(currencyFormatter, kCFNumberFormatterCurrencySymbol,
                                    QCFString::toCFStringRef(arg.symbol));
    }
-   QCFType<CFStringRef> result = CFNumberFormatterCreateStringWithNumber(NULL, currencyFormatter, value);
+   QCFType<CFStringRef> result = CFNumberFormatterCreateStringWithNumber(nullptr, currencyFormatter, value);
    return QCFString::toQString(result);
 }
 
@@ -466,7 +466,7 @@ QVariant QSystemLocale::query(QueryType type, QVariant in = QVariant()) const
       case AMText:
       case PMText: {
          QCFType<CFLocaleRef> locale = CFLocaleCopyCurrent();
-         QCFType<CFDateFormatterRef> formatter = CFDateFormatterCreate(NULL, locale, kCFDateFormatterLongStyle,
+         QCFType<CFDateFormatterRef> formatter = CFDateFormatterCreate(nullptr, locale, kCFDateFormatterLongStyle,
                                                  kCFDateFormatterLongStyle);
          QCFType<CFStringRef> value = static_cast<CFStringRef>(CFDateFormatterCopyProperty(formatter,
                                       (type == AMText ? kCFDateFormatterAMSymbol : kCFDateFormatterPMSymbol)));

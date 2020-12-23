@@ -64,7 +64,7 @@ QSharedPointer<X> qSharedPointerObjectCast(const QSharedPointer<T> &ptr);
 
 template<typename T> inline void qt_sharedpointer_cast_check(T *) { }
 # define QSHAREDPOINTER_VERIFY_AUTO_CAST(T, X)          \
-    qt_sharedpointer_cast_check<T>(static_cast<X *>(0))
+    qt_sharedpointer_cast_check<T>(static_cast<X *>(nullptr))
 #endif
 
 namespace QtSharedPointer {
@@ -328,7 +328,7 @@ template <class T> class QSharedPointer
    }
 
    inline operator RestrictedBool() const {
-      return isNull() ? 0 : &QSharedPointer::value;
+      return isNull() ? nullptr : &QSharedPointer::value;
    }
 
    inline bool operator !() const {
@@ -350,7 +350,10 @@ template <class T> class QSharedPointer
       return data();
    }
 
-   QSharedPointer() : value(0), d(0) { }
+   QSharedPointer()
+      : value(nullptr), d(nullptr)
+   { }
+
    ~QSharedPointer() {
       deref();
    }
@@ -395,7 +398,8 @@ template <class T> class QSharedPointer
    }
 
    template <class X>
-   inline QSharedPointer(const QWeakPointer<X> &other) : value(0), d(0) {
+   inline QSharedPointer(const QWeakPointer<X> &other)
+      : value(nullptr), d(nullptr) {
       *this = other;
    }
 
@@ -503,8 +507,8 @@ template <class T> class QSharedPointer
 
    template <typename Deleter>
    inline void internalConstruct(T *ptr, Deleter deleter) {
-      if (!ptr) {
-         d = 0;
+      if (! ptr) {
+         d = nullptr;
          return;
       }
 
@@ -577,7 +581,7 @@ template <class T> class QSharedPointer
             o->weakref.ref();
          } else {
             o->checkQObjectShared(actual);
-            o = 0;
+            o = nullptr;
          }
       }
 
@@ -611,23 +615,25 @@ class QWeakPointer
    typedef const value_type &const_reference;
    typedef qptrdiff difference_type;
 
-   inline bool isNull() const {
-      return d == 0 || d->strongref.load() == 0 || value == 0;
+   bool isNull() const {
+      return d == nullptr || d->strongref.load() == 0 || value == nullptr;
    }
 
-   inline operator RestrictedBool() const {
-      return isNull() ? 0 : &QWeakPointer::value;
+   operator RestrictedBool() const {
+      return isNull() ? nullptr : &QWeakPointer::value;
    }
 
    inline bool operator !() const {
       return isNull();
    }
 
-   inline T *data() const {
-      return d == 0 || d->strongref.load() == 0 ? 0 : value;
+   T *data() const {
+      return (d == nullptr || d->strongref.load() == 0) ? nullptr : value;
    }
 
-   inline QWeakPointer() : d(0), value(0) { }
+   QWeakPointer()
+      : d(nullptr), value(nullptr) { }
+
    inline ~QWeakPointer() {
       if (d && !d->weakref.deref()) {
          delete d;
@@ -635,8 +641,9 @@ class QWeakPointer
    }
 
    // special constructor enabled only if X derives from QObject
-   template <class X, typename O = QObject, typename = typename std::enable_if<std::is_base_of<O, X>::value>::type>
-   inline QWeakPointer(X *ptr) : d(ptr ? Data::getAndRef(ptr) : 0), value(ptr)
+   template <class X, typename OBJ = QObject, typename = typename std::enable_if<std::is_base_of<OBJ, X>::value>::type>
+   QWeakPointer(X *ptr)
+      : d(ptr ? Data::getAndRef(ptr) : nullptr), value(ptr)
    { }
 
    template <class X, typename O = QObject, typename = typename std::enable_if<std::is_base_of<O, X>::value>::type>
@@ -668,7 +675,8 @@ class QWeakPointer
    }
 
    template <class X>
-   inline QWeakPointer(const QWeakPointer<X> &other) : d(0), value(0) {
+   QWeakPointer(const QWeakPointer<X> &other)
+      : d(nullptr), value(nullptr) {
       *this = other;
    }
 
@@ -691,7 +699,8 @@ class QWeakPointer
    }
 
    template <class X>
-   inline QWeakPointer(const QSharedPointer<X> &other) : d(0), value(0) {
+   QWeakPointer(const QSharedPointer<X> &other)
+      : d(nullptr), value(nullptr) {
       *this = other;
    }
 
@@ -733,7 +742,8 @@ class QWeakPointer
    }
 
    template <class X>
-   inline QWeakPointer(X *ptr, bool) : d(ptr ? Data::getAndRef(ptr) : 0), value(ptr) {
+   QWeakPointer(X *ptr, bool)
+      : d(ptr ? Data::getAndRef(ptr) : nullptr), value(ptr) {
    }
 
    inline void internalSet(Data *o, T *actual) {

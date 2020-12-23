@@ -40,7 +40,7 @@ class QRingBuffer
    }
 
    inline const char *readPointer() const {
-      return buffers.isEmpty() ? 0 : (buffers.first().constData() + head);
+      return buffers.isEmpty() ? nullptr : (buffers.first().constData() + head);
    }
 
    // access the bytes at a specified position
@@ -49,12 +49,12 @@ class QRingBuffer
    inline const char *readPointerAtPosition(qint64 pos, qint64 &length) const {
       if (buffers.isEmpty()) {
          length = 0;
-         return 0;
+         return nullptr;
       }
 
       if (pos >= bufferSize) {
          length = 0;
-         return 0;
+         return nullptr;
       }
 
       // special case: it is in the first buffer
@@ -67,7 +67,7 @@ class QRingBuffer
       // special case: we only had one buffer and tried to read over it
       if (buffers.length() == 1) {
          length = 0;
-         return 0;
+         return nullptr;
       }
 
       // skip the first
@@ -399,7 +399,7 @@ class QRingBuffer
    }
 
    inline int skip(int length) {
-      return read(0, length);
+      return read(nullptr, length);
    }
 
    inline int readLine(char *data, int maxLength) {

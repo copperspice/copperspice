@@ -24,10 +24,7 @@
 #ifndef QFREELIST_P_H
 #define QFREELIST_P_H
 
-
-
 #include <qatomic.h>
-
 
 template <typename T>
 struct QFreeListElement {
@@ -174,16 +171,18 @@ inline int QFreeList<T, ConstantsType>::next()
 
       if (!v) {
          v = allocate((id & ConstantsType::IndexMask) - at, ConstantsType::Sizes[block]);
-         if (!_v[block].testAndSetRelease(0, v)) {
+         if (!_v[block].testAndSetRelease(nullptr, v)) {
             // race with another thread lost
             delete [] v;
             v = _v[block].loadAcquire();
-            Q_ASSERT(v != 0);
+            Q_ASSERT(v != nullptr);
          }
       }
 
       newid = v[at].next.load() | (id & ~ConstantsType::IndexMask);
+
    } while (!_next.testAndSetRelaxed(id, newid));
+
    // qDebug("QFreeList::next(): returning %d (_next now %d, serial %d)",
    //        id & ConstantsType::IndexMask,
    //        newid & ConstantsType::IndexMask,

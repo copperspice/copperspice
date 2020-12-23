@@ -357,14 +357,14 @@ static unsigned int cs_decompose_compatibility(hb_unicode_funcs_t *, hb_codepoin
 struct cs_hb_unicode_funcs_t {
 
    cs_hb_unicode_funcs_t() {
-      funcs = hb_unicode_funcs_create(NULL);
+      funcs = hb_unicode_funcs_create(nullptr);
 
-      hb_unicode_funcs_set_combining_class_func(funcs,   cs_combining_class, NULL, NULL);
-      hb_unicode_funcs_set_general_category_func(funcs,  cs_category, NULL, NULL);
-      hb_unicode_funcs_set_mirroring_func(funcs,         cs_mirroring, NULL, NULL);
-      hb_unicode_funcs_set_script_func(funcs,            cs_script, NULL, NULL);
-      hb_unicode_funcs_set_compose_func(funcs,           cs_compose, NULL, NULL);
-      hb_unicode_funcs_set_decompose_func(funcs,         cs_decompose, NULL, NULL);
+      hb_unicode_funcs_set_combining_class_func(funcs,   cs_combining_class, nullptr, nullptr);
+      hb_unicode_funcs_set_general_category_func(funcs,  cs_category, nullptr, nullptr);
+      hb_unicode_funcs_set_mirroring_func(funcs,         cs_mirroring, nullptr, nullptr);
+      hb_unicode_funcs_set_script_func(funcs,            cs_script, nullptr, nullptr);
+      hb_unicode_funcs_set_compose_func(funcs,           cs_compose, nullptr, nullptr);
+      hb_unicode_funcs_set_decompose_func(funcs,         cs_decompose, nullptr, nullptr);
    }
 
    ~cs_hb_unicode_funcs_t() {

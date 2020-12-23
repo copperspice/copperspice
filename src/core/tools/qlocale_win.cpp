@@ -140,7 +140,7 @@ QString QSystemLocalePrivate::getLocaleInfo(LCTYPE type, int maxlen)
    }
 
    if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-      int cnt = GetLocaleInfo(lcid, type, 0, 0);
+      int cnt = GetLocaleInfo(lcid, type, nullptr, 0);
 
       if (cnt == 0) {
          return QString();
@@ -361,7 +361,7 @@ QString QSystemLocalePrivate::toString(const QDate &date, QLocale::FormatType ty
    DWORD flags = (type == QLocale::LongFormat ? DATE_LONGDATE : DATE_SHORTDATE);
    std::wstring buffer(255, L'\0');
 
-   if (GetDateFormat(lcid, flags, &st, NULL, &buffer[0], 255)) {
+   if (GetDateFormat(lcid, flags, &st, nullptr, &buffer[0], 255)) {
       QString format = QString::fromStdWString(buffer);
 
       if (substitution() == SAlways) {
@@ -387,7 +387,7 @@ QString QSystemLocalePrivate::toString(const QTime &time, QLocale::FormatType)
    DWORD flags = 0;
    std::wstring buffer(255, L'\0');
 
-   if (GetTimeFormat(lcid, flags, &st, NULL, &buffer[0], buffer.size())) {
+   if (GetTimeFormat(lcid, flags, &st, nullptr, &buffer[0], buffer.size())) {
       QString format = QString::fromStdWString(buffer);
 
       if (substitution() == SAlways) {
@@ -536,7 +536,7 @@ QVariant QSystemLocalePrivate::toCurrencyString(const QSystemLocale::CurrencyToS
    QString thousandSep;
 
    CURRENCYFMT format;
-   CURRENCYFMT *pformat = NULL;
+   CURRENCYFMT *pformat = nullptr;
 
    if (! arg.symbol.isEmpty()) {
       format.NumDigits   = getLocaleInfo_int(lcid, LOCALE_ICURRDIGITS);
@@ -600,7 +600,7 @@ QStringList QSystemLocalePrivate::uiLanguages()
       typedef BOOL (WINAPI * GetUserPreferredUILanguagesFunc) (
          DWORD dwFlags, PULONG pulNumLanguages, PWSTR pwszLanguagesBuffer, PULONG pcchLanguagesBuffer);
 
-      static GetUserPreferredUILanguagesFunc GetUserPreferredUILanguages_ptr = 0;
+      static GetUserPreferredUILanguagesFunc GetUserPreferredUILanguages_ptr = nullptr;
 
       if (! GetUserPreferredUILanguages_ptr) {
          QSystemLibrary lib("kernel32");
@@ -619,7 +619,7 @@ QStringList QSystemLocalePrivate::uiLanguages()
          if (! GetUserPreferredUILanguages_ptr(MUI_LANGUAGE_NAME, &cnt, &buffer[0], &size)) {
             size = 0;
 
-            if (GetLastError() == ERROR_INSUFFICIENT_BUFFER && GetUserPreferredUILanguages_ptr(MUI_LANGUAGE_NAME, &cnt, NULL, &size)) {
+            if (GetLastError() == ERROR_INSUFFICIENT_BUFFER && GetUserPreferredUILanguages_ptr(MUI_LANGUAGE_NAME, &cnt, nullptr, &size)) {
                buffer.resize(size);
 
                if (! GetUserPreferredUILanguages_ptr(MUI_LANGUAGE_NAME, &cnt, &buffer[0], &size)) {
@@ -1005,7 +1005,7 @@ static const char *winLangCodeToIsoName(int code)
 {
    int cmp = code - windows_to_iso_list[0].windows_code;
    if (cmp < 0) {
-      return 0;
+      return nullptr;
    }
 
    if (cmp == 0) {
@@ -1029,7 +1029,7 @@ static const char *winLangCodeToIsoName(int code)
       }
    }
 
-   return 0;
+   return nullptr;
 
 }
 
@@ -1088,7 +1088,7 @@ static QByteArray getWinLocaleName(LCID id)
       if (result == "C" || (!result.isEmpty() && qt_splitLocaleName(QString::fromUtf8(result), lang, script, cntry)) ) {
          long id = 0;
          bool ok = false;
-         id      = qstrtoll(result.data(), 0, 0, &ok);
+         id      = qstrtoll(result.data(), nullptr, 0, &ok);
 
          if ( !ok || id == 0 || id < INT_MIN || id > INT_MAX ) {
             return result;
