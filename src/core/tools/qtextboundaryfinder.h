@@ -60,9 +60,6 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    QTextBoundaryFinder &operator=(const QTextBoundaryFinder &other);
    QTextBoundaryFinder &operator=(QTextBoundaryFinder &&other);
 
-   inline bool isValid() const {
-      return d;
-   }
    BoundaryType type() const {
       return m_type;
    }

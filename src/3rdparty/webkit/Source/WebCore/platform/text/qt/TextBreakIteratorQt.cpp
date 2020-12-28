@@ -52,7 +52,7 @@ TextBreakIterator * setUpIterator(TextBreakIterator& iterator, QTextBoundaryFind
       return 0;
   }
 
-  if (iterator.isValid() && type == iterator.type()) {
+  if (! iterator.string().isEmpty() && type == iterator.type()) {
       iterator.toStart();
       return &iterator;
   }
