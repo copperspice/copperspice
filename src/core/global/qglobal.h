@@ -852,6 +852,13 @@ class QFlags
       {
       }
 
+      constexpr QFlags(std::initializer_list<E> list)
+         : i(0)
+      {
+         for (auto item : list) {
+            i |= item;
+         }
+      }
 
       constexpr QFlags(E value)
          : i(static_cast<int_type>(value))
