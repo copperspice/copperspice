@@ -43,6 +43,7 @@
 #include <qstringfwd.h>
 
 #include <algorithm>
+#include <cstring>
 #include <type_traits>
 
 #define QT_PREPEND_NAMESPACE(name)       ::name
@@ -788,8 +789,23 @@ Q_CORE_EXPORT void *qMalloc(size_t size);
 Q_CORE_EXPORT void *qRealloc(void *ptr, size_t size);
 Q_CORE_EXPORT void *qMallocAligned(size_t size, size_t alignment);
 Q_CORE_EXPORT void *qReallocAligned(void *ptr, size_t size, size_t oldsize, size_t alignment);
+
 Q_CORE_EXPORT void qFree(void *ptr);
 Q_CORE_EXPORT void qFreeAligned(void *ptr);
+
+template <typename Result, typename Original>
+typename std::enable_if_t<sizeof(Result) == sizeof(Original) &&
+      std::is_trivially_copyable_v<Result> && std::is_trivially_copyable_v<Original>,
+      Result> bit_cast(const Original &src) noexcept
+{
+    static_assert(std::is_trivially_constructible_v<Result>,
+        "Destination data type must be trivially constructible");
+
+    Result dst;
+    std::memcpy(&dst, &src, sizeof(Result));
+
+    return dst;
+}
 
 class EmptyFlag_Type {
 };

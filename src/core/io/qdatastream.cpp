@@ -270,23 +270,16 @@ QDataStream &QDataStream::operator>>(float &f)
       setStatus(ReadPastEnd);
 
    } else {
-      if (!noswap) {
-         union {
-            float val1;
-            quint32 val2;
-         } x;
+      if (! noswap) {
+         quint32 tmp = bit_cast<quint32>(f);
 
-         x.val2 = qbswap(*reinterpret_cast<quint32 *>(&f));
-         f = x.val1;
+         tmp = qbswap(tmp);
+         f   = bit_cast<float>(tmp);
       }
    }
 
    return *this;
 }
-
-#if defined(Q_DOUBLE_FORMAT)
-#define Q_DF(x) Q_DOUBLE_FORMAT[(x)] - '0'
-#endif
 
 QDataStream &QDataStream::operator>>(double &f)
 {
@@ -301,55 +294,19 @@ QDataStream &QDataStream::operator>>(double &f)
    f = 0.0;
    CHECK_STREAM_PRECOND(*this)
 
-#ifndef Q_DOUBLE_FORMAT
    if (dev->read((char *)&f, 8) != 8) {
       f = 0.0;
       setStatus(ReadPastEnd);
 
    } else {
-      if (!noswap) {
-         union {
-            double val1;
-            quint64 val2;
-         } x;
-         x.val2 = qbswap(*reinterpret_cast<quint64 *>(&f));
-         f = x.val1;
+      if (! noswap) {
+         quint64 tmp = bit_cast<quint64>(f);
+
+         tmp = qbswap(tmp);
+         f   = bit_cast<double>(tmp);
       }
-   }
-#else
-   //non-standard floating point format
-   union {
-      double val1;
-      char val2[8];
-   } x;
-   char *p = x.val2;
-   char b[8];
-   if (dev->read(b, 8) == 8) {
-      if (noswap) {
-         *p++ = b[Q_DF(0)];
-         *p++ = b[Q_DF(1)];
-         *p++ = b[Q_DF(2)];
-         *p++ = b[Q_DF(3)];
-         *p++ = b[Q_DF(4)];
-         *p++ = b[Q_DF(5)];
-         *p++ = b[Q_DF(6)];
-         *p = b[Q_DF(7)];
-      } else {
-         *p++ = b[Q_DF(7)];
-         *p++ = b[Q_DF(6)];
-         *p++ = b[Q_DF(5)];
-         *p++ = b[Q_DF(4)];
-         *p++ = b[Q_DF(3)];
-         *p++ = b[Q_DF(2)];
-         *p++ = b[Q_DF(1)];
-         *p = b[Q_DF(0)];
-      }
-      f = x.val1;
-   } else {
-      setStatus(ReadPastEnd);
    }
 
-#endif
    return *this;
 }
 
@@ -511,22 +468,15 @@ QDataStream &QDataStream::operator<<(float f)
    }
 
    CHECK_STREAM_WRITE_PRECOND(*this)
-   float g = f;                                // fixes float-on-stack problem
-   if (!noswap) {
-      union {
-         float val1;
-         quint32 val2;
-      } x;
-      x.val1 = g;
-      x.val2 = qbswap(x.val2);
 
-      if (dev->write((char *)&x.val2, sizeof(float)) != sizeof(float)) {
-         q_status = WriteFailed;
-      }
-      return *this;
+   if (! noswap) {
+      quint32 tmp = bit_cast<quint32>(f);
+
+      tmp = qbswap(tmp);
+      f   = bit_cast<float>(tmp);
    }
 
-   if (dev->write((char *)&g, sizeof(float)) != sizeof(float)) {
+   if (dev->write((char *)&f, sizeof(float)) != sizeof(float)) {
       q_status = WriteFailed;
    }
 
@@ -541,54 +491,18 @@ QDataStream &QDataStream::operator<<(double f)
    }
 
    CHECK_STREAM_WRITE_PRECOND(*this)
-#ifndef Q_DOUBLE_FORMAT
-   if (noswap) {
-      if (dev->write((char *)&f, sizeof(double)) != sizeof(double)) {
-         q_status = WriteFailed;
-      }
-   } else {
-      union {
-         double val1;
-         quint64 val2;
-      } x;
-      x.val1 = f;
-      x.val2 = qbswap(x.val2);
-      if (dev->write((char *)&x.val2, sizeof(double)) != sizeof(double)) {
-         q_status = WriteFailed;
-      }
+
+   if (! noswap) {
+      quint64 tmp = bit_cast<quint64>(f);
+
+      tmp = qbswap(tmp);
+      f   = bit_cast<double>(tmp);
    }
-#else
-   union {
-      double val1;
-      char val2[8];
-   } x;
-   x.val1 = f;
-   char *p = x.val2;
-   char b[8];
-   if (noswap) {
-      b[Q_DF(0)] = *p++;
-      b[Q_DF(1)] = *p++;
-      b[Q_DF(2)] = *p++;
-      b[Q_DF(3)] = *p++;
-      b[Q_DF(4)] = *p++;
-      b[Q_DF(5)] = *p++;
-      b[Q_DF(6)] = *p++;
-      b[Q_DF(7)] = *p;
-   } else {
-      b[Q_DF(7)] = *p++;
-      b[Q_DF(6)] = *p++;
-      b[Q_DF(5)] = *p++;
-      b[Q_DF(4)] = *p++;
-      b[Q_DF(3)] = *p++;
-      b[Q_DF(2)] = *p++;
-      b[Q_DF(1)] = *p++;
-      b[Q_DF(0)] = *p;
-   }
-   if (dev->write(b, 8) != 8) {
+
+   if (dev->write((char *)&f, sizeof(double)) != sizeof(double)) {
       q_status = WriteFailed;
    }
 
-#endif
    return *this;
 }
 

@@ -191,22 +191,42 @@ inline void QDataStream::setVersion(int v)
 
 inline QDataStream &QDataStream::operator>>(quint8 &i)
 {
-   return *this >> reinterpret_cast<qint8 &>(i);
+   qint8 tmp;
+
+   *this >> tmp;
+   i = bit_cast<quint8>(tmp);
+
+   return *this;
 }
 
 inline QDataStream &QDataStream::operator>>(quint16 &i)
 {
-   return *this >> reinterpret_cast<qint16 &>(i);
+   qint16 tmp;
+
+   *this >> tmp;
+   i = bit_cast<quint16>(tmp);
+
+   return *this;
 }
 
 inline QDataStream &QDataStream::operator>>(quint32 &i)
 {
-   return *this >> reinterpret_cast<qint32 &>(i);
+   qint32 tmp;
+
+   *this >> tmp;
+   i = bit_cast<quint32>(tmp);
+
+   return *this;
 }
 
 inline QDataStream &QDataStream::operator>>(quint64 &i)
 {
-   return *this >> reinterpret_cast<qint64 &>(i);
+   qint64 tmp;
+
+   *this >> tmp;
+   i = bit_cast<quint64>(tmp);
+
+   return *this;
 }
 
 inline QDataStream &QDataStream::operator<<(quint8 i)
