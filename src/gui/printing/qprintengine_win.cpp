@@ -1560,13 +1560,13 @@ void QWin32PrintEngine::setGlobalDevMode(HGLOBAL globalDevNames, HGLOBAL globalD
 
       d->devMode = dm;
 
-      QString16 tmp = d->m_printDevice.id().toUtf16();
-      d->hdc = CreateDC(NULL, reinterpret_cast<const wchar_t *>(tmp.constData()), 0, dm);
+      std::wstring tmp = d->m_printDevice.id().toStdWString();
+      d->hdc = CreateDC(NULL, &tmp[0], 0, dm);
 
       d->num_copies = d->devMode->dmCopies;
       d->updatePageLayout();
 
-      if (! OpenPrinter((wchar_t *)tmp.constData(), &d->hPrinter, 0)) {
+      if (! OpenPrinter(&tmp[0], &d->hPrinter, 0)) {
          qWarning("QPrinter: OpenPrinter() failed after reading DEVMODE.");
       }
    }

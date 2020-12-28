@@ -118,12 +118,12 @@ static bool openRegistryKey(const QString &keyPath, HKEY *key)
 
 static QString readRegistryString(const HKEY &key, const wchar_t *value)
 {
-   std::wstring buffer{MAX_PATH};
+   std::wstring buffer(MAX_PATH, L'\0');
 
    DWORD size = sizeof(wchar_t) * MAX_PATH;
    RegQueryValueEx(key, (LPCWSTR)value, nullptr, nullptr, (LPBYTE)&buffer[0], &size);
 
-   buffer.resize(size);
+   buffer.resize(size/sizeof(wchar_t));
 
    return QString::fromStdWString(buffer);
 }
@@ -256,7 +256,7 @@ static QList<QByteArray> availableWindowsIds()
 
          for (DWORD i = 0; i < idCount; ++i) {
             DWORD maxLen = MAX_KEY_LENGTH;
-            std::wstring buffer{MAX_KEY_LENGTH};
+            std::wstring buffer(MAX_KEY_LENGTH, L'\0');
 
             if (RegEnumKeyEx(key, i, &buffer[0], &maxLen, nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS) {
                buffer.resize(maxLen);
@@ -383,7 +383,7 @@ static void calculateTransitionsForYear(const QWinTimeZonePrivate::QWinTransitio
 static QLocale::Country userCountry()
 {
    const GEOID id = GetUserGeoID(GEOCLASS_NATION);
-   std::wstring code{3};
+   std::wstring code(3, L'\0');
 
    const int size = GetGeoInfo(id, GEO_ISO2, &code[0], 3, 0);
    return (size == 3) ? QLocalePrivate::codeToCountry(QString::fromStdWString(code)) : QLocale::AnyCountry;
