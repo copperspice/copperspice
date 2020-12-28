@@ -85,6 +85,15 @@ const QMetaObject *QMetaMethod::getMetaObject() const
    return m_metaObject;
 }
 
+bool QMetaMethod::isValid() const
+{
+   if (m_metaObject == nullptr) {
+      return false;
+   }
+
+   return true;
+}
+
 int QMetaMethod::methodIndex() const
 {
    if (m_metaObject == nullptr) {

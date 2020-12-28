@@ -106,6 +106,8 @@ class Q_CORE_EXPORT QMetaMethod
    const CSBentoAbstract *getBentoBox() const;
    const QMetaObject *getMetaObject() const;
 
+   bool isValid() const;
+
    const QString name() const;
 
    int methodIndex() const;

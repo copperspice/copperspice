@@ -1621,14 +1621,17 @@ QMetaMethod QMetaObject_X::method(int index) const
 {
    const int count = m_methods.size();
 
-   if (index >= count) {
+   if (index < 0) {
+      return QMetaMethod();
+
+   } else if (index >= count) {
       // index is out of bounds, look in parent class
       return superClass()->method(index - count);
 
    }  else {
       auto elem = m_methods.end();
 
-      // decrement iterator (end() is really plus 1, sub it out)
+      // decrement iterator (end() is really plus 1, subtract it out)
       elem -= index + 1;
       return elem.value();
    }
