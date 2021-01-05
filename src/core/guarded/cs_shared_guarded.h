@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-* Copyright (c) 2015-2020 Ansel Sermersheim
+* Copyright (c) 2016-2021 Ansel Sermersheim
 *
 * This file is part of CsLibGuarded.
 *

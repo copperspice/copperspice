@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2020 Barbara Geller
-* Copyright (c) 2012-2020 Ansel Sermersheim
+* Copyright (c) 2017-2021 Barbara Geller
+* Copyright (c) 2017-2021 Ansel Sermersheim
 *
-* This file is part of CopperSpice.
+* This file is part of CsString.
 *
 * CsString is free software, released under the BSD 2-Clause license.
 * For license details refer to LICENSE provided with this project.
