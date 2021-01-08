@@ -434,7 +434,8 @@ class QMap
       return *this;
    }
 
-   const Val value(const Key &key, const Val &defaultValue = Val()) const;
+   const Val value(const Key &key) const;
+   const Val value(const Key &key, const Val &defaultValue) const;
 
    QList<Val> values() const;
 
@@ -588,17 +589,27 @@ QList<Key> QMap<Key, Val, C>::uniqueKeys() const
 }
 
 template <class Key, class Val, class C>
+const Val QMap<Key, Val, C>::value(const Key &key) const
+{
+   auto iter = m_data.find(key);
+
+   if (iter == m_data.end()) {
+      // key was not found
+      return Val();
+   }
+
+   return iter->second;
+}
+
+template <class Key, class Val, class C>
 const Val QMap<Key, Val, C>::value(const Key &key, const Val &defaultValue) const
 {
-   auto range = m_data.equal_range(key);
+   auto iter = m_data.find(key);
 
-   if (range.first == range.second) {
+   if (iter == m_data.end()) {
       // key was not found
       return defaultValue;
    }
-
-   // get last key in the range
-   auto iter = --range.second;
 
    return iter->second;
 }

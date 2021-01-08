@@ -487,20 +487,7 @@ class QMultiMap
       return *this;
    }
 
-   const Val value(const Key &key) const {
-      auto range = m_data.equal_range(key);
-
-      if (range.first == range.second) {
-         // key was not found
-         return Val();
-      }
-
-      // get last key in the range
-      auto iter = --range.second;
-
-      return iter->second;
-   }
-
+   const Val value(const Key &key) const;
    const Val value(const Key &key, const Val &defaultValue) const;
 
    QList<Val> values() const;
@@ -709,6 +696,38 @@ QList<Key> QMultiMap<Key, Val, C>::uniqueKeys() const
    }
 
    return retval;
+}
+
+template <class Key, class Val, class C>
+const Val QMultiMap<Key, Val, C>::value(const Key &key) const
+{
+   auto range = m_data.equal_range(key);
+
+   if (range.first == range.second) {
+      // key was not found
+      return Val();
+   }
+
+   // get last key in the range
+   auto iter = --range.second;
+
+   return iter->second;
+}
+
+template <class Key, class Val, class C>
+const Val QMultiMap<Key, Val, C>::value(const Key &key, const Val &defaultValue) const
+{
+   auto range = m_data.equal_range(key);
+
+   if (range.first == range.second) {
+      // key was not found
+      return defaultValue;
+   }
+
+   // get last key in the range
+   auto iter = --range.second;
+
+   return iter->second;
 }
 
 template <class Key, class Val, class C>
