@@ -395,7 +395,8 @@ QList<QByteArray> QTimeZonePrivate::availableTimeZoneIds(int offsetFromUtc) cons
 
 void QTimeZonePrivate::serialize(QDataStream &ds) const
 {
-   ds << QString::fromUtf8(m_id);
+   // leave this as a QByteArray
+   ds << m_id;
 }
 
 // Static Utility Methods
@@ -765,7 +766,8 @@ QList<QByteArray> QUtcTimeZonePrivate::availableTimeZoneIds(qint32 offsetSeconds
 
 void QUtcTimeZonePrivate::serialize(QDataStream &ds) const
 {
-   ds << "OffsetFromUtc" << QString::fromUtf8(m_id) << m_offsetFromUtc << m_name
+   // first entry must be a QByteArray
+
+   ds << QByteArray("OffsetFromUtc") << QString::fromUtf8(m_id) << m_offsetFromUtc << m_name
       << m_abbreviation << (qint32) m_country << m_comment;
 }
-

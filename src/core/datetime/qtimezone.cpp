@@ -571,7 +571,6 @@ QList<QByteArray> QTimeZone::windowsIdToIanaIds(const QByteArray &windowsId)
    return QTimeZonePrivate::windowsIdToIanaIds(windowsId);
 }
 
-
 QList<QByteArray> QTimeZone::windowsIdToIanaIds(const QByteArray &windowsId, QLocale::Country country)
 {
    return QTimeZonePrivate::windowsIdToIanaIds(windowsId, country);
@@ -585,28 +584,34 @@ QDataStream &operator<<(QDataStream &ds, const QTimeZone &tz)
 
 QDataStream &operator>>(QDataStream &ds, QTimeZone &tz)
 {
-   QString ianaId;
+   QByteArray ianaId;            // must be a QByteArray
    ds >> ianaId;
 
-   if (ianaId == QLatin1String("OffsetFromUtc")) {
+   if (ianaId == "OffsetFromUtc") {
       int utcOffset;
       QString name;
       QString abbreviation;
-      int country;
+      int country;               // QLocale::Country
       QString comment;
+
       ds >> ianaId >> utcOffset >> name >> abbreviation >> country >> comment;
-      tz = QTimeZone(ianaId.toUtf8(), utcOffset, name, abbreviation, (QLocale::Country) country, comment);
+      tz = QTimeZone(ianaId, utcOffset, name, abbreviation,
+                  static_cast<QLocale::Country>(country), comment);
+
    } else {
-      tz = QTimeZone(ianaId.toUtf8());
+      tz = QTimeZone(ianaId);
    }
+
    return ds;
 }
 
 QDebug operator<<(QDebug dbg, const QTimeZone &tz)
 {
    QDebugStateSaver saver(dbg);
-   //TODO Include backend and data version details?
+
+   // TODO Include backend and data version details?
    dbg.nospace() << "QTimeZone(" << QString::fromUtf8(tz.id()) << ')';
+
    return dbg;
 }
 
