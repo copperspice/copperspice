@@ -349,31 +349,11 @@ class QMap
    }
 
    iterator insert(const std::pair<const Key, Val> &data) {
-      auto iter = m_data.find(data.first);
-
-      if (iter == m_data.end()) {
-         // add new element, emplace returns an std::pair where the first element is an iterator
-         return m_data.emplace(data).first;
-      }
-
-      // update value
-      iter->second = data.second;
-
-      return iter;
+      return m_data.insert_or_assign(data.first, data.second).first;
    }
 
    iterator insert(const Key &key, const Val &value) {
-      auto iter = m_data.find(key);
-
-      if (iter == m_data.end()) {
-         // add new element, emplace returns an std::pair where the first element is an iterator
-         return m_data.emplace(key, value).first;
-      }
-
-      // update value
-      iter->second = value;
-
-      return iter;
+      return m_data.insert_or_assign(key, value).first;
    }
 
    iterator insert(const_iterator hint, const Key &key, const Val &value) {
