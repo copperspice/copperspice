@@ -1746,6 +1746,11 @@ QDateTime::QDateTime(const QDateTime &other)
 {
 }
 
+QDateTime::QDateTime(QDateTime &&other)
+   : d(std::move(other.d))
+{
+}
+
 QDateTime::~QDateTime()
 {
 }

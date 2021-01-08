@@ -263,7 +263,10 @@ class Q_CORE_EXPORT QDateTime
    QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec = Qt::LocalTime, int offsetSeconds = 0);
 
    QDateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone);
+
    QDateTime(const QDateTime &other);
+   QDateTime(QDateTime &&other);
+
    ~QDateTime();
 
    QDateTime &operator=(QDateTime &&other) {
