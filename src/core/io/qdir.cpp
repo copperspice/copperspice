@@ -1151,13 +1151,12 @@ QString cs_internal_normalizePath(const QString &name, bool allowUncPaths)
 
    iter += prefix;
 
+   if (iter == name.end()) {
+      // entire path is the prefix
+      return name;
+   }
+
    if (name.endsWith('/')) {
-
-      if (iter == name.end()) {
-         // entire path is the prefix
-         return name;
-      }
-
       retval.prepend('/');
 
       if (iter != end) {
