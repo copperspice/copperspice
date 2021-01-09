@@ -255,9 +255,10 @@ QDataStream &QDataStream::operator>>(bool &i)
 QDataStream &QDataStream::operator>>(float &f)
 {
    if (floatingPointPrecision() == QDataStream::DoublePrecision) {
-      double d;
-      *this >> d;
-      f = d;
+      double tmp;
+
+      *this >> tmp;
+      f = tmp;
 
       return *this;
    }
@@ -284,9 +285,9 @@ QDataStream &QDataStream::operator>>(float &f)
 QDataStream &QDataStream::operator>>(double &f)
 {
    if (floatingPointPrecision() == QDataStream::SinglePrecision) {
-      float d;
-      *this >> d;
-      f = d;
+      float tmp;
+      *this >> tmp;
+      f = tmp;
 
       return *this;
    }
@@ -344,6 +345,7 @@ QDataStream &QDataStream::readBytes(char *&s, uint &l)
 
    quint32 len;
    *this >> len;
+
    if (len == 0) {
       return *this;
    }
