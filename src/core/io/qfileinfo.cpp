@@ -142,7 +142,7 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
    // Bundle detecton on Mac can be slow, expecially on network paths, so we separate out that as well.
 
    QAbstractFileEngine::FileFlags req = Qt::EmptyFlag;
-   uint cachedFlags = 0;
+   uint localFlags = 0;
 
    if (request & (QAbstractFileEngine::FlagsMask | QAbstractFileEngine::TypesMask)) {
       if (! getCachedFlag(CachedFileFlags)) {
@@ -151,28 +151,28 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
          req &= (~QAbstractFileEngine::LinkType);
          req &= (~QAbstractFileEngine::BundleType);
 
-         cachedFlags |= CachedFileFlags;
+         localFlags |= CachedFileFlags;
       }
 
       if (request & QAbstractFileEngine::LinkType) {
-         if (!getCachedFlag(CachedLinkTypeFlag)) {
+         if (! getCachedFlag(CachedLinkTypeFlag)) {
             req |= QAbstractFileEngine::LinkType;
-            cachedFlags |= CachedLinkTypeFlag;
+            localFlags |= CachedLinkTypeFlag;
          }
       }
 
       if (request & QAbstractFileEngine::BundleType) {
-         if (!getCachedFlag(CachedBundleTypeFlag)) {
+         if (! getCachedFlag(CachedBundleTypeFlag)) {
             req |= QAbstractFileEngine::BundleType;
-            cachedFlags |= CachedBundleTypeFlag;
+            localFlags |= CachedBundleTypeFlag;
          }
       }
    }
 
    if (request & QAbstractFileEngine::PermsMask) {
-      if (!getCachedFlag(CachedPerms)) {
+      if (! getCachedFlag(CachedPerms)) {
          req |= QAbstractFileEngine::PermsMask;
-         cachedFlags |= CachedPerms;
+         localFlags |= CachedPerms;
       }
    }
 
@@ -185,7 +185,7 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
 
       QAbstractFileEngine::FileFlags flags = fileEngine->fileFlags(req);
       fileFlags |= uint(flags);
-      setCachedFlag(cachedFlags);
+      setCachedFlag(localFlags);
    }
 
    return fileFlags & request;
