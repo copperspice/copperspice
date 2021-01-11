@@ -96,7 +96,7 @@ class LIB_SIG_EXPORT SlotBase
       static SignalBase *&get_threadLocal_currentSender();
 
       // list of possible Senders for this Receiver
-      mutable LibG::SharedList<const SignalBase *> m_possibleSenders;
+      mutable libguarded::SharedList<const SignalBase *> m_possibleSenders;
 
       virtual bool compareThreads() const;
       virtual void queueSlot(PendingSlot data, ConnectionKind type);

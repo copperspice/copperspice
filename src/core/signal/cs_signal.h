@@ -109,11 +109,11 @@ class LIB_SIG_EXPORT SignalBase
       };
 
       // list of connections from my Signal to some Receiver
-      mutable LibG::SharedList<ConnectStruct> m_connectList;
+      mutable libguarded::SharedList<ConnectStruct> m_connectList;
 
       void addConnection(std::unique_ptr<const Internal::BentoAbstract> signalMethod, const SlotBase *,
                   std::unique_ptr<const Internal::BentoAbstract> slotMethod, ConnectionKind type,
-                  LibG::SharedList<ConnectStruct>::write_handle senderListHandle) const;
+                  libguarded::SharedList<ConnectStruct>::write_handle senderListHandle) const;
 
       virtual void handleException(std::exception_ptr data);
 

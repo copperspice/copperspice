@@ -83,7 +83,7 @@ std::unordered_set<const CsSignal::SignalBase *> &CsSignal::SignalBase::get_bein
 
 void CsSignal::SignalBase::addConnection(std::unique_ptr<const Internal::BentoAbstract> signalMethod, const SlotBase *receiver,
                   std::unique_ptr<const Internal::BentoAbstract> slotMethod, ConnectionKind type,
-                  LibG::SharedList<ConnectStruct>::write_handle senderListHandle) const
+                  libguarded::SharedList<ConnectStruct>::write_handle senderListHandle) const
 {
    struct ConnectStruct tempStruct;
 
