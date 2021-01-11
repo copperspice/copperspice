@@ -1040,7 +1040,7 @@ inline QString16 operator+(const QString16 &str1, const QString16 &str2)
    return t;
 }
 
-inline QString16 &&operator+(QString16 &&str1, const QString16 &str2)
+inline QString16 operator+(QString16 &&str1, const QString16 &str2)
 {
    str1 += str2;
    return std::move(str1);
@@ -1066,7 +1066,7 @@ inline QString16 operator+(const QString16 &str, QChar32 c)
    return t;
 }
 
-inline QString16 &&operator+(QString16 &&str, QChar32 c)
+inline QString16 operator+(QString16 &&str, QChar32 c)
 {
    str += c;
    return std::move(str);
@@ -1092,7 +1092,7 @@ inline const QString16 operator+(const QString16 &str, const char (&cStr)[N])
 
 // for an array of chars
 template <int N>
-inline QString16 &&operator+(QString16 &&str, const char (&cStr)[N])
+inline QString16 operator+(QString16 &&str, const char (&cStr)[N])
 {
    str += cStr;
    return std::move(str);

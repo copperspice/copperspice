@@ -1060,7 +1060,7 @@ inline QString8::const_iterator operator+(QString8::size_type n, QString8::const
    return iter;
 }
 
-inline QString8 &&operator+(QString8 &&str1, const QString8 &str2)
+inline QString8 operator+(QString8 &&str1, const QString8 &str2)
 {
    str1 += str2;
    return std::move(str1);
@@ -1080,7 +1080,7 @@ inline QString8 operator+(const QString8 &str, QChar32 c)
    return t;
 }
 
-inline QString8 &&operator+(QString8 &&str, QChar32 c)
+inline QString8 operator+(QString8 &&str, QChar32 c)
 {
    str += c;
    return std::move(str);
@@ -1106,7 +1106,7 @@ inline const QString8 operator+(const QString8 &str, const char (&cStr)[N])
 
 // for an array of chars
 template <int N>
-inline QString8 &&operator+(QString8 &&str, const char (&cStr)[N])
+inline QString8 operator+(QString8 &&str, const char (&cStr)[N])
 {
    str += cStr;
    return std::move(str);
