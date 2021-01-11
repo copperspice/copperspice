@@ -49,10 +49,12 @@ QMetaEnum QMetaProperty::enumerator() const
 {
    QMetaEnum enumObj;
 
-   int index = m_metaObject->indexOfEnumerator(m_typeName);
+   if (m_metaObject != nullptr) {
+      int index = m_metaObject->indexOfEnumerator(m_typeName);
 
-   if (index > 0) {
-      enumObj = m_metaObject->enumerator(index);
+      if (index >= 0) {
+         enumObj = m_metaObject->enumerator(index);
+      }
    }
 
    return enumObj;
@@ -220,7 +222,7 @@ int QMetaProperty::notifySignalIndex() const
 
 int QMetaProperty::propertyIndex() const
 {
-   if (! m_metaObject) {
+   if (m_metaObject == nullptr) {
       return -1;
    }
 
@@ -281,7 +283,7 @@ void QMetaProperty::setTypeName(const QString &typeName)
 
 QVariant::Type QMetaProperty::type() const
 {
-   QVariant::Type retval = QVariant::UserType;
+   QVariant::Type retval = QVariant::Invalid;
    QMetaEnum enumObj     = this->enumerator();
 
    if (enumObj.isValid()) {
@@ -311,7 +313,7 @@ const QString &QMetaProperty::typeName() const
 
 uint QMetaProperty::userType() const
 {
-   uint retval = QVariant::UserType;
+   uint retval = QVariant::Invalid;
    QMetaEnum enumObj = this->enumerator();
 
    if (enumObj.isValid()) {

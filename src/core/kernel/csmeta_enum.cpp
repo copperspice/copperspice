@@ -45,7 +45,7 @@ bool QMetaEnum::isFlag() const
 
 bool QMetaEnum::isValid() const
 {
-   return m_name.isEmpty();
+   return ! m_name.isEmpty();
 }
 
 const QString &QMetaEnum::key(int index) const

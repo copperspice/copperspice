@@ -1539,7 +1539,10 @@ QMetaClassInfo QMetaObject_X::classInfo(int index) const
 {
    const int count = m_classInfo.size();
 
-   if (index >= count) {
+   if (index < 0) {
+      return QMetaClassInfo();
+
+   } else if (index >= count) {
       // index is out of bounds, look in parent class
       return superClass()->classInfo(index - count);
 
@@ -1567,8 +1570,11 @@ QMetaMethod QMetaObject_X::constructor(int index) const
 {
    const int count = m_constructor.size();
 
-   if (index >= count) {
-      // not sure
+   if (index < 0) {
+      return QMetaMethod();
+
+   } else if (index >= count) {
+      return QMetaMethod();
 
    }  else {
       auto elem = m_constructor.end();
@@ -1593,7 +1599,10 @@ QMetaEnum QMetaObject_X::enumerator(int index) const
 {
    const int count = m_enums.size();
 
-   if (index >= count) {
+   if (index < 0) {
+      return QMetaEnum();
+
+   } else if (index >= count) {
       // index is out of bounds, look in parent class
       return superClass()->enumerator(index - count);
 
@@ -1653,7 +1662,10 @@ QMetaProperty QMetaObject_X::property(int index) const
 {
    const int count = m_properties.size();
 
-   if (index >= count) {
+   if (index < 0) {
+      return QMetaProperty();
+
+   } else if (index >= count) {
       // index is out of bounds, look in parent class
       return superClass()->property(index - count);
 

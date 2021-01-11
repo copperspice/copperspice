@@ -42,6 +42,7 @@ class QMetaObject;
 class Q_CORE_EXPORT QMetaClassInfo
 {
  public:
+   QMetaClassInfo() = default;
    QMetaClassInfo(const QString &name, const QString &value);
 
    const QString &name() const;
