@@ -49,6 +49,7 @@ class Q_CORE_EXPORT QJsonObject
 
    QJsonObject();
    QJsonObject(const_iterator iter_begin, const_iterator iter_end);
+   QJsonObject(std::initializer_list<QPair<QString, QJsonValue> > list);
    QJsonObject(const QJsonObject &other);
    QJsonObject(QJsonObject &&other);
 

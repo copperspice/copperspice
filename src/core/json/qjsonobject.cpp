@@ -36,6 +36,13 @@ QJsonObject::QJsonObject(const_iterator iter_begin, const_iterator iter_end)
    m_object->m_map = QFlatMap<QString, QJsonValue>(iter_begin, iter_end);
 }
 
+QJsonObject::QJsonObject(std::initializer_list<QPair<QString, QJsonValue> > list)
+{
+   m_object = std::make_shared<QJsonDataObject>();
+   m_object->m_map = QFlatMap<QString, QJsonValue>(list.begin(), list.end());
+}
+
+
 QJsonObject::QJsonObject(const QJsonObject &other)
 {
    m_object = std::make_shared<QJsonDataObject>(*other.m_object);
