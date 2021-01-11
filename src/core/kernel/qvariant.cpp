@@ -122,6 +122,7 @@ static const QVariant::NamesAndTypes builtinTypes[] = {
    { "QByteArray",             QVariant::ByteArray,            typeid(QByteArray *) },
    { "QBitArray",              QVariant::BitArray,             typeid(QBitArray *) },
    { "QString",                QVariant::String,               typeid(QString *) },
+   { "QString8",               QVariant::String8,              typeid(QString8 *) },
    { "QString16",              QVariant::String16,             typeid(QString16 *) },
    { "QStringList",            QVariant::StringList,           typeid(QStringList *) },
    { "QStringView",            QVariant::StringView,           typeid(QStringView *) },
