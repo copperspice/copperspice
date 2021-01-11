@@ -262,7 +262,7 @@ class Q_CORE_EXPORT QStringParser
       template <typename T, typename ...Ts>
       [[nodiscard]] static T formatArgs(const T &str, Ts... args)
       {
-         const QVector<T> argList = { T(args)... };
+         const QVector<T> argList = { T("%1").formatArg(args)... };
          return multiArg(str, argList);
       }
 
