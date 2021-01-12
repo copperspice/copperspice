@@ -21,12 +21,52 @@
 *
 ***********************************************************************/
 
-#include <qmargins.h>
 #include <qdatastream.h>
 #include <qdebug.h>
+#include <qmargins.h>
+
+QDataStream &operator<<(QDataStream &s, const QMargins &m)
+{
+    s << m.left() << m.top() << m.right() << m.bottom();
+
+    return s;
+}
+
+QDataStream &operator>>(QDataStream &s, QMargins &m)
+{
+    int left, top, right, bottom;
+
+    s >> left; m.setLeft(left);
+    s >> top; m.setTop(top);
+    s >> right; m.setRight(right);
+    s >> bottom; m.setBottom(bottom);
+
+    return s;
+}
+
+QDataStream &operator<<(QDataStream &s, const QMarginsF &m)
+{
+    s << double(m.left()) << double(m.top()) << double(m.right()) << double(m.bottom());
+
+    return s;
+}
+
+QDataStream &operator>>(QDataStream &s, QMarginsF &m)
+{
+    double left, top, right, bottom;
+    s >> left;
+    s >> top;
+    s >> right;
+    s >> bottom;
+
+    m = QMarginsF(qreal(left), qreal(top), qreal(right), qreal(bottom));
+
+    return s;
+}
 
 QDebug operator<<(QDebug dbg, const QMargins &m)
 {
+
    dbg.nospace() << "QMargins(" << m.left() << ", "
                  << m.top() << ", " << m.right() << ", " << m.bottom() << ')';
 
