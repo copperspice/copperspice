@@ -45,26 +45,6 @@ static QString16 cs_internal_decompose(QString16::const_iterator first_iter, QSt
 static QString16 cs_internal_canonicalOrder(const QString16 &str, QChar32::UnicodeVersion version);
 static QString16 cs_internal_compose(const QString16 &str, QChar32::UnicodeVersion version);
 
-struct UCS2Pair {
-   ushort u1;
-   ushort u2;
-};
-
-struct UCS2SurrogatePair {
-   UCS2Pair p1;
-   UCS2Pair p2;
-};
-
-inline bool operator<(ushort u1, const UCS2Pair &ligature)
-{
-   return u1 < ligature.u1;
-}
-
-inline bool operator<(const UCS2Pair &ligature, ushort u1)
-{
-   return ligature.u1 < u1;
-}
-
 #if ! defined(CSTR_LESS_THAN)
 #define CSTR_LESS_THAN       1
 #define CSTR_EQUAL           2
@@ -587,14 +567,14 @@ QString16 QString16::fromLatin1(const char *str, size_type numOfChars)
    } else if (numOfChars == -1)  {
 
       for (size_type i = 0; str[i] != 0; ++i) {
-         const char32_t value = str[i];
+         const char32_t value = static_cast<uint8_t>(str[i]);
          retval.append(value);
       }
 
    } else {
 
       for (size_type i = 0; i < numOfChars; ++i) {
-         const char32_t value = str[i];
+         const char32_t value = static_cast<uint8_t>(str[i]);
          retval.append(value);
       }
    }
@@ -1823,7 +1803,7 @@ bool cs_internal_quickCheck(QString16::const_iterator &first_iter, QString16::co
 }
 
 // buffer has to have a length of 3, required for Hangul decomposition
-static const char32_t * cs_internal_decompose_2(uint ucs4, int *length, int *tag, char32_t *buffer)
+static const char32_t * cs_internal_decompose_2(char32_t ucs4, int *length, int *tag, char32_t *buffer)
 {
     if (ucs4 >= Hangul_Constants::Hangul_SBase && ucs4 < Hangul_Constants::Hangul_SBase + Hangul_Constants::Hangul_SCount) {
         // compute Hangul syllable decomposition as per UAX #15
@@ -1951,8 +1931,10 @@ QString16 cs_internal_canonicalOrder(const QString16 &str, QChar32::UnicodeVersi
    return retval;
 }
 
-static char32_t inline cs_internal_ligature(uint u1, uint u2)
+static char32_t inline cs_internal_ligature(char32_t u1, char32_t u2)
 {
+   char32_t retval = U'\0';
+
    if (u1 >= Hangul_Constants::Hangul_LBase && u1 <= Hangul_Constants::Hangul_SBase + Hangul_Constants::Hangul_SCount) {
      // compute Hangul syllable composition as per UAX #15
      // hangul L-V pair
@@ -1979,21 +1961,22 @@ static char32_t inline cs_internal_ligature(uint u1, uint u2)
 
    const unsigned short index = GET_LIGATURE_INDEX(u2);
    if (index == 0xffff) {
-      return 0;
+      return retval;
    }
 
    const char32_t *ligatures = QUnicodeTables::uc_ligature_map + index;
-   ushort length = *ligatures++;
 
-   // broom - review ligature
-   const UCS2Pair *data = reinterpret_cast<const UCS2Pair *>(ligatures);
-   const UCS2Pair *r    = std::lower_bound(data, data + length, ushort(u1));
+   uint32_t length = *ligatures;
+   ++ligatures;
 
-   if (r != data + length && r->u1 == ushort(u1)) {
-     return r->u2;
+   for (uint32_t i = 0; i < length *2; i += 2)  {
+      if (ligatures[i] == u1) {
+         retval = ligatures[i + 1];
+         break;
+      }
    }
 
-   return 0;
+   return retval;
 }
 
 static QString16 cs_internal_compose(const QString16 &str, QChar32::UnicodeVersion version)
@@ -2007,12 +1990,12 @@ static QString16 cs_internal_compose(const QString16 &str, QChar32::UnicodeVersi
    QString16::const_iterator iterBeg = last_iter;
    QString16::const_iterator iterEnd = last_iter;
 
-   uint codePointBeg = 0;           // starting code point value
+   char32_t codePointBeg = 0;       // starting code point value
    int lastCombining = 255;         // to prevent combining > lastCombining
 
    for (auto iter = first_iter; iter != last_iter; ++iter) {
-      QChar32 uc   = *iter;
-      uint ucValue = uc.unicode();
+      QChar32 uc = *iter;
+      char32_t  ucValue = uc.unicode();
 
       const QUnicodeTables::Properties *p = QUnicodeTables::properties(ucValue);
 
@@ -2032,7 +2015,7 @@ static QString16 cs_internal_compose(const QString16 &str, QChar32::UnicodeVersi
          // form ligature with prior code point
          char32_t ligature = cs_internal_ligature(codePointBeg, ucValue);
 
-         if (ligature) {
+         if (ligature != U'\0') {
             codePointBeg = ligature;
 
             retval.chop(1);
