@@ -749,7 +749,7 @@ QList<S> QRegularExpression<S>::namedCaptureGroups() const
    if (m_valid) {
       std::vector<S> tmp = m_regex.getNamedCaptureGroups();
 
-      QList<S> retval(tmp.begin(), tmp.end());
+      QList<S> retval(tmp.cbegin(), tmp.cend());
       return retval;
 
    } else {
