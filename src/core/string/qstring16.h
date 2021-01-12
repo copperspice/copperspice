@@ -356,6 +356,10 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return reinterpret_cast<const char16_t *>(CsString::CsString_utf16::constData());
       }
 
+      bool contains(char ch, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
+         return contains(QChar32(ch), cs);
+      }
+
       bool contains(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool contains(const QString16 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool contains(QStringView16 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;

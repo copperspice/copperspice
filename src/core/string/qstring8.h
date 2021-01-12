@@ -360,6 +360,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return reinterpret_cast<const char *>(CsString::CsString::constData());
       }
 
+      bool contains(char ch, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
+         return contains(QChar32(ch), cs);
+      }
+
       bool contains(QChar32 c, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool contains(const QString8 &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
       bool contains(QStringView8 str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
