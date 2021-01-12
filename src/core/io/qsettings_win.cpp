@@ -689,17 +689,6 @@ void QWinSettingsPrivate::remove(const QString &uKey)
    }
 }
 
-static bool stringContainsNullChar(const QString &s)
-{
-   for (int i = 0; i < s.length(); ++i) {
-      if (s.at(i).unicode() == 0) {
-         return true;
-      }
-   }
-
-   return false;
-}
-
 void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
 {
    if (writeHandle() == nullptr) {
@@ -726,11 +715,13 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
          // native registry string list type. Otherwise we use REG_BINARY.
 
          type = REG_MULTI_SZ;
-         QStringList l = variantListToStringList(value.toList());
-         QStringList::const_iterator it = l.constBegin();
 
-         for (; it != l.constEnd(); ++it) {
-            if ((*it).length() == 0 || stringContainsNullChar(*it)) {
+         QStringList l = variantListToStringList(value.toList());
+         QStringList::const_iterator iter = l.constBegin();
+
+         for (; iter != l.constEnd(); ++iter) {
+
+            if (iter->isEmpty() || iter->contains('\0')) {
                type = REG_BINARY;
                break;
             }
@@ -785,30 +776,30 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
       }
 
       case QVariant::ByteArray:
-      // fallthrough intended
+         [[fallthrough]];
 
       default: {
          // If the string does not contain '\0', we can use REG_SZ, the native registry
          // string type. Otherwise we use REG_BINARY.
+
          QString s = variantToString(value);
-         type      = stringContainsNullChar(s) ? REG_BINARY : REG_SZ;
 
          std::wstring tmp = s.toStdWString();
 
-         QByteArray tmpArray;
+         if (s.contains('\0')) {
+            type = REG_BINARY;
 
-         if (type == REG_BINARY) {
-             tmpArray.resize(tmp.size() * 2);
-             memcpy(tmpArray.data(), tmp.data(), tmp.size() * 2);
+            regValueBuff.resize(tmp.size() * 2);
+            memcpy(regValueBuff.data(), tmp.data(), tmp.size() * 2);
 
-             regValueBuff == tmpArray;
 
          } else {
-            tmpArray.resize((tmp.size() + 1) * 2);
-            memcpy(tmpArray.data(), tmp.data(), (tmp.size() + 1) * 2);
+            type = REG_SZ;
 
-            regValueBuff = tmpArray;
+            regValueBuff.resize((tmp.size() + 1) * 2);
+            memcpy(regValueBuff.data(), tmp.data(), (tmp.size() + 1) * 2);
          }
+
          break;
       }
    }
