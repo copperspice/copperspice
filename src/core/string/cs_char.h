@@ -74,19 +74,19 @@ class CsChar
       {
       }
 
-      bool operator!=(const CsChar &other) const;
-      bool operator==(const CsChar &other) const;
+      inline bool operator!=(const CsChar &other) const;
+      inline bool operator==(const CsChar &other) const;
 
-      bool operator<(const CsChar &other) const;
-      bool operator<=(const CsChar &other) const;
-      bool operator>(const CsChar &other) const;
-      bool operator>=(const CsChar &other) const;
+      inline bool operator<(const CsChar &other) const;
+      inline bool operator<=(const CsChar &other) const;
+      inline bool operator>(const CsChar &other) const;
+      inline bool operator>=(const CsChar &other) const;
 
-      CsChar &operator=(char c) &;
-      CsChar &operator=(char32_t c) &;
-      CsChar &operator=(CsChar c) &;
+      inline CsChar &operator=(char c) &;
+      inline CsChar &operator=(char32_t c) &;
+      inline CsChar &operator=(CsChar c) &;
 
-      uint32_t unicode() const;
+      inline uint32_t unicode() const;
 
    private:
       uint32_t m_char;
