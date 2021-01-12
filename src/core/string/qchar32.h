@@ -457,7 +457,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
          uint32_t tmp = unicode();
 
          if (tmp < 256) {
-            return tmp;
+            return static_cast<char>(tmp);
          }
 
          return 0;
