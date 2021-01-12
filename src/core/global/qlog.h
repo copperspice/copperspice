@@ -50,16 +50,18 @@ enum QtMsgType { QtDebugMsg, QtWarningMsg, QtCriticalMsg, QtFatalMsg, QtSystemMs
 
 using QtMsgHandler = void (*)(QtMsgType, QStringView);
 
-Q_CORE_EXPORT QtMsgHandler qInstallMsgHandler(QtMsgHandler);
+Q_CORE_EXPORT QtMsgHandler csInstallMsgHandler(QtMsgHandler handler);
+Q_CORE_EXPORT QtMsgHandler qInstallMsgHandler(QtMsgHandler handler);
+
 Q_CORE_EXPORT QString      qt_error_string(int errorCode = -1);
 Q_CORE_EXPORT void         qt_message_output(QtMsgType, QStringView str);
 Q_CORE_EXPORT void         qErrnoWarning(int code, const char *msg, ...);
 Q_CORE_EXPORT void         qErrnoWarning(const char *msg, ...);
 
-Q_CORE_EXPORT void qDebug(const char *, ...)     Q_ATTRIBUTE_FORMAT_PRINTF(1,2);
-Q_CORE_EXPORT void qCritical(const char *, ...)  Q_ATTRIBUTE_FORMAT_PRINTF(1,2);
-Q_CORE_EXPORT void qFatal(const char *, ...)     Q_ATTRIBUTE_FORMAT_PRINTF(1,2);
-Q_CORE_EXPORT void qWarning(const char *, ...)   Q_ATTRIBUTE_FORMAT_PRINTF(1,2);
+Q_CORE_EXPORT void qDebug(const char *msg, ...)     Q_ATTRIBUTE_FORMAT_PRINTF(1,2);
+Q_CORE_EXPORT void qCritical(const char *msg, ...)  Q_ATTRIBUTE_FORMAT_PRINTF(1,2);
+Q_CORE_EXPORT void qFatal(const char *msg, ...)     Q_ATTRIBUTE_FORMAT_PRINTF(1,2);
+Q_CORE_EXPORT void qWarning(const char *msg, ...)   Q_ATTRIBUTE_FORMAT_PRINTF(1,2);
 
 // forward declarations
 inline QDebug qDebug();

@@ -177,7 +177,7 @@ Q_CORE_EXPORT void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cm
    usingWinMain = true;
 
    // Install default debug handler
-   qInstallMsgHandler(qWinMsgHandler);
+   csInstallMsgHandler(qWinMsgHandler);
 
    // Create command line
    argv = qWinCmdLine<char>(cmdParam, int(strlen(cmdParam)), argc);

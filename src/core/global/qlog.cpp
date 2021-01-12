@@ -31,9 +31,9 @@
 #include <qt_windows.h>
 #endif
 
-#if defined(Q_OS_WIN) && defined(QT_BUILD_CORE_LIB)
+#if defined(Q_OS_WIN)
 extern bool usingWinMain;
-extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, QStringView str);
+extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType type, QStringView str);
 #endif
 
 static QtMsgHandler s_handler = nullptr;          // pointer to debug handler
@@ -122,32 +122,39 @@ QString qt_error_string(int errorCode)
    return retval.trimmed();
 }
 
-QtMsgHandler qInstallMsgHandler(QtMsgHandler h)
+QtMsgHandler qInstallMsgHandler(QtMsgHandler handler)
 {
-   QtMsgHandler old = s_handler;
-   s_handler = h;
+   return csInstallMsgHandler(handler);
+}
+
+QtMsgHandler csInstallMsgHandler(QtMsgHandler handler)
+{
+   QtMsgHandler previous = s_handler;
+   s_handler = handler;
 
 #if defined(Q_OS_WIN)
-   if (! s_handler && usingWinMain) {
+   if (s_handler == nullptr && usingWinMain) {
       s_handler = qWinMsgHandler;
    }
 #endif
 
-   return old;
+   return previous;
 }
 
-
 // internal
-void qt_message_output(QtMsgType msgType, QStringView str)
+void qt_message_output(QtMsgType msgType, QStringView msg)
 {
-   if (s_handler) {
-      (*s_handler)(msgType, str);
+   if (s_handler != nullptr) {
+      // user app will do something
+      (*s_handler)(msgType, msg);
 
    } else {
-      fprintf(stderr, "%s\n", csPrintable(str));
+      fwrite(msg.charData(), msg.size_storage(), 1, stderr);
+      fputc('\n', stderr);
       fflush(stderr);
    }
 
+   // always happens
    if (msgType == QtFatalMsg || (msgType == QtWarningMsg && (! qgetenv("QT_FATAL_WARNINGS").isNull())) ) {
 
 #if (defined(Q_OS_UNIX) || defined(Q_CC_MINGW))
@@ -155,8 +162,8 @@ void qt_message_output(QtMsgType msgType, QStringView str)
 #else
       exit(1);
 #endif
-
    }
+
 }
 
 // internal
@@ -183,12 +190,15 @@ static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
 
    QByteArray buffer(1024, '\0');
 
+   int maxSize = 0;
+
    if (msg != nullptr) {
       try {
 
          while (true) {
+            maxSize = std::vsnprintf(buffer.data(), buffer.size(), msg, ap);
 
-            if (std::vsnprintf(buffer.data(), buffer.size(), msg, ap) < buffer.size()) {
+            if (maxSize < buffer.size()) {
                break;
             }
 
@@ -202,6 +212,8 @@ static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
          return;
       }
    }
+
+   buffer.resize(maxSize);
 
    QString str = QString::fromUtf8(buffer);
    qt_message_output(msgType, str);
