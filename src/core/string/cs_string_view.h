@@ -435,55 +435,11 @@ typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(co
 // for an array of chars
 template <typename S>
 template <int N>
-typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(const char (&str)[N], const_iterator iter_begin,
-                  size_type size) const
+typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(const char (&str)[N],
+                  const_iterator iter_begin, size_type size) const
 {
-   // make this safe
-
-   const_iterator iter_end = end();
-
-   if (iter_begin == iter_end) {
-      return iter_end;
-   }
-
-   if (str == nullptr || str[0] == 0) {
-      return iter_begin;
-   }
-
-   auto iter = iter_begin;
-
-   while (iter != iter_end)   {
-
-      if (*iter == str[0])  {
-         auto text_iter    = iter + 1;
-         auto pattern_iter = str  + 1;
-
-         int count = 0;
-
-         while (text_iter != iter_end && *pattern_iter != 0 && count < size)  {
-
-            if (*text_iter == *pattern_iter)  {
-               ++text_iter;
-               ++pattern_iter;
-
-               ++count;
-
-            } else {
-               break;
-
-            }
-         }
-
-         if (*pattern_iter == 0) {
-            // found a match
-            return iter;
-         }
-      }
-
-      ++iter;
-   }
-
-   return iter_end;
+   // make this safe by treating str as utf8
+   return find_fast(S::fromUtf8(str, size), iter_begin);
 }
 
 // for a const char * and char *
@@ -559,48 +515,8 @@ template <int N>
 typename CsBasicStringView<S>::const_iterator CsBasicStringView<S>::find_fast(const char (&str)[N],
                   const_iterator iter_begin) const
 {
-   // make this safe (find which encoding the compiler is using, convert str from X to E)
-
-   const_iterator iter_end = end();
-
-   if (iter_begin == iter_end) {
-      return iter_end;
-   }
-
-   if (N == 0) {
-      return iter_begin;
-   }
-
-   auto iter = iter_begin;
-
-   while (iter != iter_end)   {
-
-      if (*iter == str[0])  {
-         auto text_iter    = iter + 1;
-         auto pattern_iter = str  + 1;
-
-         while (text_iter != iter_end && pattern_iter != str + N - 1)  {
-
-            if (*text_iter == *pattern_iter)  {
-               ++text_iter;
-               ++pattern_iter;
-
-            } else {
-               break;
-
-            }
-         }
-
-         if (pattern_iter == str + N - 1) {
-            // found a match
-            return iter;
-         }
-      }
-
-      ++iter;
-   }
-
-   return iter_end;
+   // make this safe by treating str as utf8
+   return find_fast(S::fromUtf8(str, N - 1), iter_begin);
 }
 
 template <typename S>
