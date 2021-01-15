@@ -66,7 +66,10 @@ QMutex *QMutexPool::createMutex(int index)
 {
    // mutex not created, create one
    QMutex *newMutex = new QMutex(recursionMode);
-   if (!mutexes[index].testAndSetRelease(nullptr, newMutex)) {
+
+    QMutex *expected = nullptr;
+
+   if (! mutexes[index].compareExchange(expected, newMutex, std::memory_order_release)) {
       delete newMutex;
    }
    return mutexes[index].load();

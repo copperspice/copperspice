@@ -35,44 +35,52 @@
 #define ATOMIC_POINTER_LOCK_FREE 0
 #endif
 
-
 class QAtomicInt
 {
    public:
-
-      inline QAtomicInt() : m_data(0) {
+      QAtomicInt()
+         : m_data(0) {
       }
 
-      inline QAtomicInt(int value) : m_data(value) {
+      QAtomicInt(int value)
+         : m_data(value) {
       }
 
-      inline QAtomicInt(const QAtomicInt &other) {
+      QAtomicInt(const QAtomicInt &other) {
          int data = other.load();
          store(data);
       }
 
-      inline QAtomicInt &operator=(const QAtomicInt &other) {
+      QAtomicInt &operator=(const QAtomicInt &other) {
          int data = other.load();
          store(data);
 
          return *this;
       }
 
-      inline QAtomicInt &operator=(int data) {
-         store(data);
+      QAtomicInt &operator=(int value) {
+         store(value);
          return *this;
       }
 
       int load() const {
-         return m_data.load();
+         return m_data.load(std::memory_order_seq_cst);
       }
 
-      int loadAcquire() {
+      int load(std::memory_order order) const {
+         return m_data.load(order);
+      }
+
+      int loadAcquire() const {
          return m_data.load(std::memory_order_acquire);
       }
 
       void store(int newValue) {
-         m_data.store(newValue);
+         m_data.store(newValue, std::memory_order_seq_cst);
+      }
+
+      void store(int newValue, std::memory_order order) {
+         m_data.store(newValue, order);
       }
 
       void storeRelease(int newValue) {
@@ -107,19 +115,32 @@ class QAtomicInt
          return ATOMIC_INT_LOCK_FREE == 2;
       }
 
-      bool testAndSetRelaxed(int expectedValue, int newValue)  {
+      bool compareExchange(int &expectedValue, int newValue,
+            std::memory_order order1 = std::memory_order_seq_cst,
+            std::memory_order order2 = std::memory_order_seq_cst)  {
+         return m_data.compare_exchange_strong(expectedValue, newValue, order1, order2);
+      }
+
+      bool compareExchangeWeak(int &expectedValue, int newValue,
+            std::memory_order order1 = std::memory_order_seq_cst,
+            std::memory_order order2 = std::memory_order_seq_cst)  {
+         return m_data.compare_exchange_weak(expectedValue, newValue, order1, order2);
+      }
+
+      //
+      [[deprecated]] bool testAndSetRelaxed(int expectedValue, int newValue)  {
          return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);
       }
 
-      bool testAndSetAcquire(int expectedValue, int newValue) {
+      [[deprecated]] bool testAndSetAcquire(int expectedValue, int newValue) {
          return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire);
       }
 
-      bool testAndSetRelease(int expectedValue, int newValue) {
+      [[deprecated]] bool testAndSetRelease(int expectedValue, int newValue) {
          return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_release);
       }
 
-      bool testAndSetOrdered(int expectedValue, int newValue) {
+      [[deprecated]] bool testAndSetOrdered(int expectedValue, int newValue) {
          return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_seq_cst);
       }
 
@@ -173,6 +194,30 @@ class QAtomicInt
          return m_data.fetch_add(valueToAdd, std::memory_order_seq_cst);
       }
 
+      int operator++() {
+         return ++m_data;
+      }
+
+      int operator++(int) {
+         return m_data++;
+      }
+
+      int operator--() {
+         return --m_data;
+      }
+
+      int operator--(int) {
+         return m_data--;
+      }
+
+      int operator+=(int value) {
+         return m_data += value;
+      }
+
+      int operator-=(int value) {
+         return m_data -= value;
+      }
+
    private:
       std::atomic<int> m_data;
 };
@@ -182,7 +227,8 @@ template <typename T>
 class QAtomicPointer
 {
    public:
-      QAtomicPointer(T *value = nullptr) : m_data(value) {
+      QAtomicPointer(T *value = nullptr)
+         : m_data(value) {
       }
 
       QAtomicPointer(const QAtomicPointer<T> &other) {
@@ -197,21 +243,29 @@ class QAtomicPointer
          return *this;
       }
 
-      QAtomicPointer<T> &operator=(T *data) {
-         store(data);
+      QAtomicPointer<T> &operator=(T *value) {
+         store(value);
          return *this;
       }
 
       T *load() const {
-         return m_data.load();
+         return m_data.load(std::memory_order_seq_cst);
       }
 
-      T *loadAcquire() {
+      T *load(std::memory_order order) const {
+         return m_data.load(order);
+      }
+
+      T *loadAcquire() const {
          return m_data.load(std::memory_order_acquire);
       }
 
       void store(T *newValue) {
-         m_data.store(newValue);
+         m_data.store(newValue, std::memory_order_seq_cst);
+      }
+
+      void store(T *newValue, std::memory_order order) {
+         m_data.store(newValue, order);
       }
 
       void storeRelease(T *newValue) {
@@ -227,19 +281,31 @@ class QAtomicPointer
          return ATOMIC_POINTER_LOCK_FREE == 2;
       }
 
-      bool testAndSetRelaxed(T *expectedValue, T *newValue) {
+      bool compareExchange(T * &expectedValue, T *newValue,
+            std::memory_order order1 = std::memory_order_seq_cst,
+            std::memory_order order2 = std::memory_order_seq_cst)  {
+         return m_data.compare_exchange_strong(expectedValue, newValue, order1, order2);
+      }
+
+      bool compareExchangeWeak(T * &expectedValue, T *newValue,
+            std::memory_order order1 = std::memory_order_seq_cst,
+            std::memory_order order2 = std::memory_order_seq_cst)  {
+         return m_data.compare_exchange_weak(expectedValue, newValue, order1, order2);
+      }
+
+      [[deprecated]] bool testAndSetRelaxed(T *expectedValue, T *newValue) {
          return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);
       }
 
-      bool testAndSetAcquire(T *expectedValue, T *newValue) {
+      [[deprecated]] bool testAndSetAcquire(T *expectedValue, T *newValue) {
          return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire);
       }
 
-      bool testAndSetRelease(T *expectedValue, T *newValue) {
+      [[deprecated]] bool testAndSetRelease(T *expectedValue, T *newValue) {
          return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_release);
       }
 
-      bool testAndSetOrdered(T *expectedValue, T *newValue) {
+      [[deprecated]] bool testAndSetOrdered(T *expectedValue, T *newValue) {
          return m_data.compare_exchange_strong(expectedValue, newValue, std::memory_order_seq_cst);
       }
 
@@ -291,6 +357,30 @@ class QAtomicPointer
 
       T *fetchAndAddOrdered(std::ptrdiff_t valueToAdd){
          return m_data.fetch_add(valueToAdd, std::memory_order_seq_cst);
+      }
+
+      T *operator++() {
+         return ++m_data;
+      }
+
+      T *operator++(int) {
+         return m_data++;
+      }
+
+      T *operator--() {
+         return --m_data;
+      }
+
+      T *operator--(int) {
+         return m_data--;
+      }
+
+      T *operator+=(std::ptrdiff_t value) {
+         return m_data += value;
+      }
+
+      T *operator-=(std::ptrdiff_t value) {
+         return m_data -= value;
       }
 
    private:

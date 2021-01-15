@@ -35,15 +35,18 @@ class QMutexData;
 class Q_CORE_EXPORT QBasicMutex
 {
  public:
-   inline void lock() {
+   void lock() {
       if (! fastTryLock()) {
          lockInternal();
       }
    }
 
-   inline void unlock() {
+   void unlock() {
       Q_ASSERT(d_ptr.load()); //mutex must be locked
-      if (! d_ptr.testAndSetRelease(dummyLocked(), nullptr)) {
+
+      QMutexData *expected = dummyLocked();
+
+      if (! d_ptr.compareExchange(expected, nullptr, std::memory_order_release)) {
          unlockInternal();
       }
    }
@@ -55,14 +58,16 @@ class Q_CORE_EXPORT QBasicMutex
    bool isRecursive();
 
  private:
-   inline bool fastTryLock() {
-      return d_ptr.testAndSetAcquire(nullptr, dummyLocked());
+   bool fastTryLock() {
+      QMutexData *expected = nullptr;
+      return d_ptr.compareExchange(expected, dummyLocked(), std::memory_order_acquire);
    }
 
    bool lockInternal(int timeout = -1);
    void unlockInternal();
 
    QAtomicPointer<QMutexData> d_ptr;
+
    static inline QMutexData *dummyLocked() {
       return reinterpret_cast<QMutexData *>(quintptr(1));
    }

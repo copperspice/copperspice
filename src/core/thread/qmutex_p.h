@@ -51,30 +51,37 @@ class QMutexPrivate : public QMutexData
    bool wait(int timeout = -1);
    void wakeUp();
 
-   // Conrol the lifetime of the privates
+   // Control the lifetime of the privates
    QAtomicInt refCount;
    int id;
 
    bool ref() {
       Q_ASSERT(refCount.load() >= 0);
       int c;
+
+      c = refCount.load();
+
       do {
-         c = refCount.load();
          if (c == 0) {
             return false;
          }
-      } while (!refCount.testAndSetRelaxed(c, c + 1));
+
+      } while (! refCount.compareExchange(c, c + 1, std::memory_order_relaxed));
+
       Q_ASSERT(refCount.load() >= 0);
       return true;
    }
 
    void deref() {
       Q_ASSERT(refCount.load() >= 0);
-      if (!refCount.deref()) {
+
+      if (! refCount.deref()) {
          release();
       }
+
       Q_ASSERT(refCount.load() >= 0);
    }
+
    void release();
    static QMutexPrivate *allocate();
 
@@ -83,7 +90,7 @@ class QMutexPrivate : public QMutexData
    enum { BigNumber = 0x100000 };      // Must be bigger than the possible number of waiters (number of threads)
    void derefWaiters(int value);
 
-   //platform specific stuff
+   //platform specific
 #if defined(Q_OS_DARWIN)
    semaphore_t mach_semaphore;
 

@@ -103,8 +103,9 @@ bool QBasicMutex::lockInternal(int timeout)
 void QBasicMutex::unlockInternal()
 {
    QMutexData *d = d_ptr.load();
-   Q_ASSERT(d); //we must be locked
-   Q_ASSERT(d != dummyLocked()); // testAndSetRelease(dummyLocked(), 0) failed
+
+   Q_ASSERT(d);
+   Q_ASSERT(d != dummyLocked());
 
    if (d == dummyFutexValue()) {
       this->d_ptr.fetchAndStoreRelease(nullptr);

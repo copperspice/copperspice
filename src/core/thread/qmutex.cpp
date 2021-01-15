@@ -72,7 +72,9 @@ bool QBasicMutex::lockInternal(int timeout)
 {
    while (!fastTryLock()) {
       QMutexData *copy = d_ptr.loadAcquire();
-      if (!copy) { // if d is 0, the mutex is unlocked
+
+      if (! copy) {
+         // if d is 0, the mutex is unlocked
          continue;
       }
 
@@ -80,24 +82,30 @@ bool QBasicMutex::lockInternal(int timeout)
          if (timeout == 0) {
             return false;
          }
-         QMutexPrivate *newD = QMutexPrivate::allocate();
-         if (!d_ptr.testAndSetOrdered(dummyLocked(), newD)) {
-            //Either the mutex is already unlocked, or another thread already set it.
+
+         QMutexPrivate *newD  = QMutexPrivate::allocate();
+         QMutexData *expected = dummyLocked();
+
+         if (! d_ptr.compareExchange(expected, newD)) {
+            // Either the mutex is already unlocked, or another thread already set it.
             newD->deref();
             continue;
          }
+
          copy = newD;
-         //the d->refCount is already 1 the deref will occurs when we unlock
+         // d->refCount is already 1 the deref will occurs when we unlock
+
       } else if (copy->recursive) {
          return static_cast<QRecursiveMutexPrivate *>(copy)->lock(timeout);
       }
 
       QMutexPrivate *d = static_cast<QMutexPrivate *>(copy);
+
       if (timeout == 0 && !d->possiblyUnlocked.load()) {
          return false;
       }
 
-      if (!d->ref()) {
+      if (! d->ref()) {
          continue;   //that QMutexData was already released
       }
 
@@ -108,24 +116,34 @@ bool QBasicMutex::lockInternal(int timeout)
       }
 
       int old_waiters;
+
+      old_waiters = d->waiters.load();
+
       do {
-         old_waiters = d->waiters.load();
          if (old_waiters == -QMutexPrivate::BigNumber) {
             // we are unlocking, and the thread that unlocks is about to change d to 0
             // we try to aquire the mutex by changing to dummyLocked()
-            if (d_ptr.testAndSetAcquire(d, dummyLocked())) {
-               // Mutex acquired
+
+            QMutexData *expected = d;
+
+            if (d_ptr.compareExchange(expected, dummyLocked(), std::memory_order_acquire)) {
+               // mutex acquired
+
                d->deref();
                return true;
+
             } else {
-               Q_ASSERT(d != d_ptr.load()); //else testAndSetAcquire should have succeeded
+               Q_ASSERT(d != d_ptr.load());
+
                // Mutex is likely to bo 0, we should continue the outer-loop,
                //  set old_waiters to the magic value of BigNumber
+
                old_waiters = QMutexPrivate::BigNumber;
                break;
             }
          }
-      } while (!d->waiters.testAndSetRelaxed(old_waiters, old_waiters + 1));
+
+      } while (! d->waiters.compareExchange(old_waiters, old_waiters + 1, std::memory_order_relaxed));
 
       if (d != d_ptr.loadAcquire()) {
          // Mutex was unlocked.
@@ -139,26 +157,38 @@ bool QBasicMutex::lockInternal(int timeout)
       }
 
       if (d->wait(timeout)) {
-         if (d->possiblyUnlocked.load() && d->possiblyUnlocked.testAndSetRelaxed(true, false)) {
+         int expected = true;
+
+         if (d->possiblyUnlocked.load() && d->possiblyUnlocked.compareExchange(expected, false, std::memory_order_relaxed)) {
             d->deref();
          }
+
          d->derefWaiters(1);
          //we got the lock. (do not deref)
          Q_ASSERT(d == d_ptr.load());
          return true;
+
       } else {
          Q_ASSERT(timeout >= 0);
+
          //timeout
          d->derefWaiters(1);
+
          //There may be a race in which the mutex is unlocked right after we timed out,
          // and before we deref the waiters, so maybe the mutex is actually unlocked.
-         if (!d->possiblyUnlocked.testAndSetRelaxed(false, true)) {
+
+         int expected = false;
+
+         if (! d->possiblyUnlocked.compareExchange(expected, true, std::memory_order_relaxed)) {
             d->deref();
          }
+
          return false;
       }
    }
+
    Q_ASSERT(d_ptr.load() != nullptr);
+
    return true;
 }
 
@@ -168,8 +198,9 @@ bool QBasicMutex::lockInternal(int timeout)
 void QBasicMutex::unlockInternal()
 {
    QMutexData *copy = d_ptr.loadAcquire();
-   Q_ASSERT(copy); //we must be locked
-   Q_ASSERT(copy != dummyLocked()); // testAndSetRelease(dummyLocked(), 0) failed
+
+   Q_ASSERT(copy);
+   Q_ASSERT(copy != dummyLocked());
 
    if (copy->recursive) {
       static_cast<QRecursiveMutexPrivate *>(copy)->unlock();
@@ -180,12 +211,20 @@ void QBasicMutex::unlockInternal()
 
    if (d->waiters.fetchAndAddRelease(-QMutexPrivate::BigNumber) == 0) {
       //there is no one waiting on this mutex anymore, set the mutex as unlocked (d = 0)
-      if (d_ptr.testAndSetRelease(d, nullptr)) {
-         if (d->possiblyUnlocked.load() && d->possiblyUnlocked.testAndSetRelaxed(true, false)) {
+
+      QMutexData *expected = d;
+
+      if (d_ptr.compareExchange(expected, nullptr, std::memory_order_release)) {
+
+         int expected2 = true;
+
+         if (d->possiblyUnlocked.load() && d->possiblyUnlocked.compareExchange(expected2, false, std::memory_order_relaxed)) {
             d->deref();
          }
       }
+
       d->derefWaiters(0);
+
    } else {
       d->derefWaiters(0);
       //there are thread waiting, transfer the lock.
@@ -238,14 +277,19 @@ void QMutexPrivate::derefWaiters(int value)
 {
    int old_waiters;
    int new_waiters;
+
+   old_waiters = waiters.load();
+
    do {
-      old_waiters = waiters.load();
       new_waiters = old_waiters;
+
       if (new_waiters < 0) {
          new_waiters += QMutexPrivate::BigNumber;
       }
+
       new_waiters -= value;
-   } while (!waiters.testAndSetRelaxed(old_waiters, new_waiters));
+
+   } while (! waiters.compareExchange(old_waiters, new_waiters, std::memory_order_relaxed));
 }
 #endif
 
