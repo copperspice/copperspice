@@ -94,7 +94,7 @@ QFileSystemEntry::QFileSystemEntry(const QString &filePath)
    Use this constructor when the path is guaranteed to be in internal format, i.e. all
    directory separators are '/' and not the native separator.
  */
-QFileSystemEntry::QFileSystemEntry(const QString &filePath, FromInternalPath /* dummy */)
+QFileSystemEntry::QFileSystemEntry(const QString &filePath, FromInternalPath)
    : m_filePath(filePath),
      m_lastSeparator(-2),
      m_firstDotInFileName(-2),
@@ -106,7 +106,7 @@ QFileSystemEntry::QFileSystemEntry(const QString &filePath, FromInternalPath /* 
    \internal
    Use this constructor when the path comes from a native API
  */
-QFileSystemEntry::QFileSystemEntry(const NativePath &nativeFilePath, FromNativePath /* dummy */)
+QFileSystemEntry::QFileSystemEntry(const QString &nativeFilePath, FromNativePath)
    : m_nativeFilePath(nativeFilePath),
      m_lastSeparator(-2),
      m_firstDotInFileName(-2),
@@ -114,7 +114,7 @@ QFileSystemEntry::QFileSystemEntry(const NativePath &nativeFilePath, FromNativeP
 {
 }
 
-QFileSystemEntry::QFileSystemEntry(const QString &filePath, const NativePath &nativeFilePath)
+QFileSystemEntry::QFileSystemEntry(const QString &filePath, const QString &nativeFilePath)
    : m_filePath(QDir::fromNativeSeparators(filePath)),
      m_nativeFilePath(nativeFilePath),
      m_lastSeparator(-2),
@@ -129,21 +129,19 @@ QString QFileSystemEntry::filePath() const
    return m_filePath;
 }
 
-QFileSystemEntry::NativePath QFileSystemEntry::nativeFilePath() const
+QString QFileSystemEntry::nativeFilePath() const
 {
    resolveNativeFilePath();
-
    return m_nativeFilePath;
 }
 
 void QFileSystemEntry::resolveFilePath() const
 {
-   if (m_filePath.isEmpty() && !m_nativeFilePath.isEmpty()) {
-
-#if defined(QFILESYSTEMENTRY_NATIVE_PATH_IS_UTF16)
-      m_filePath = QDir::fromNativeSeparators(m_nativeFilePath);
+   if (m_filePath.isEmpty() && ! m_nativeFilePath.isEmpty()) {
 
 #ifdef Q_OS_WIN
+      m_filePath = QDir::fromNativeSeparators(m_nativeFilePath);
+
       if (m_filePath.startsWith("//?/UNC/")) {
          m_filePath = m_filePath.remove(2, 6);
       }
@@ -151,10 +149,8 @@ void QFileSystemEntry::resolveFilePath() const
       if (m_filePath.startsWith("//?/")) {
          m_filePath = m_filePath.remove(0, 4);
       }
-#endif
-
 #else
-      m_filePath = QDir::fromNativeSeparators(QFile::decodeName(m_nativeFilePath));
+      m_filePath = QDir::fromNativeSeparators(QFile::decodeName(m_nativeFilePath.toUtf8()));
 #endif
    }
 }
@@ -169,12 +165,11 @@ void QFileSystemEntry::resolveNativeFilePath() const
       if (isRelative()) {
          filePath = fixIfRelativeUncPath(m_filePath);
       }
+
       m_nativeFilePath = QFSFileEnginePrivate::longFileName(QDir::toNativeSeparators(filePath));
 
-#elif defined(QFILESYSTEMENTRY_NATIVE_PATH_IS_UTF16)
-      m_nativeFilePath = QDir::toNativeSeparators(m_filePath);
 #else
-      m_nativeFilePath = QFile::encodeName(QDir::toNativeSeparators(m_filePath));
+      m_nativeFilePath = QString::fromUtf8(QFile::encodeName(QDir::toNativeSeparators(m_filePath)));
 #endif
 
    }

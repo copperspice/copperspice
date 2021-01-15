@@ -95,7 +95,7 @@ void QTemporaryDirPrivate::create(const QString &templateName)
    }
 
    QFileSystemEntry baseEntry(buffer);
-   QFileSystemEntry::NativePath basePath = baseEntry.nativeFilePath();
+   QString basePath = baseEntry.nativeFilePath();
 
    std::wstring array = basePath.toStdWString();
 

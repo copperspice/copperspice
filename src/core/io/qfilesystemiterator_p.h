@@ -52,10 +52,10 @@ class QFileSystemIterator
    bool advance(QFileSystemEntry &fileEntry, QFileSystemMetaData &metaData);
 
  private:
-   QFileSystemEntry::NativePath nativePath;
+   QString nativePath;
 
 #if defined(Q_OS_WIN)
-   QFileSystemEntry::NativePath dirPath;
+   QString dirPath;
    HANDLE findFileHandle;
    QStringList uncShares;
    bool uncFallback;

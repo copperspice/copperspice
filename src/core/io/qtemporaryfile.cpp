@@ -27,6 +27,7 @@
 
 #include <qcoreapplication.h>
 #include <qplatformdefs.h>
+#include <qregularexpression.h>
 
 #include <qtemporaryfile_p.h>
 #include <qfile_p.h>
@@ -37,21 +38,10 @@
 #include <errno.h>
 #endif
 
-
 #if defined(Q_OS_WIN)
-typedef ushort Char;
-
-static inline Char Latin1Char(char ch)
-{
-   return ushort(uchar(ch));
-}
-
-typedef HANDLE NativeFileHandle;
-
-#else // POSIX
-typedef char Char;
-typedef char Latin1Char;
-typedef int NativeFileHandle;
+   using NativeFileHandle = HANDLE;
+#else
+   using NativeFileHandle = int;
 #endif
 
 /*
@@ -95,62 +85,61 @@ typedef int NativeFileHandle;
     handle otherwise. In both cases, the string in \a path will be changed and
     contain the generated path name.
 */
-static bool createFileFromTemplate(NativeFileHandle &file,
-                                   QFileSystemEntry::NativePath &path, size_t pos, size_t length,
-                                   QSystemError &error)
+
+static QString createFileName(QString fName, size_t pos, size_t length)
 {
-   Q_ASSERT(length != 0);
-   Q_ASSERT(pos < size_t(path.length()));
-   Q_ASSERT(length <= size_t(path.length()) - pos);
+   auto placeholderStart_iter = fName.begin() + pos;
+   auto placeholderEnd_iter   = placeholderStart_iter + length;
 
-   Char *const placeholderStart = (Char *)path.data() + pos;
-   Char *const placeholderEnd   = placeholderStart + length;
+   QString::iterator iter     = placeholderEnd_iter - 1;
 
-   // Initialize placeholder with random chars + PID.
-   {
-      Char *rIter = placeholderEnd;
+   while (iter >= placeholderStart_iter) {
+      char32_t ch = static_cast<char32_t>((qrand() & 0xffff) % (26 + 26));
 
-      quint64 pid = quint64(QCoreApplication::applicationPid());
-
-      do {
-         *--rIter = Latin1Char((pid % 10) + '0');
-         pid /= 10;
-
-      } while (rIter != placeholderStart && pid != 0);
-
-
-      while (rIter != placeholderStart) {
-         char ch = char((qrand() & 0xffff) % (26 + 26));
-
-         if (ch < 26) {
-            *--rIter = Latin1Char(ch + 'A');
-         } else {
-            *--rIter = Latin1Char(ch - 26 + 'a');
-         }
+      if (ch < 26) {
+         fName.replace(iter, iter + 1, QString(static_cast<char32_t>(ch + U'A')));
+      } else {
+         fName.replace(iter, iter + 1, QString(static_cast<char32_t>(ch - 26 + U'a')));
       }
+
+      --iter;
    }
 
-   for (;;) {
-      // Atomically create file and obtain handle
+   return fName;
+}
+
+static bool createFileFromTemplate(NativeFileHandle &fHandle, QString &fName,
+                  size_t pos, size_t length, quint32 mode, QSystemError &error)
+{
+   for (int cntLimit = 0; cntLimit < 100; ++cntLimit) {
+      // create file and obtain handle
+
+      fName = createFileName(fName, pos, length);
+
 #if defined(Q_OS_WIN)
-      file = CreateFile((const wchar_t *)path.constData(),
-                        GENERIC_READ | GENERIC_WRITE,
+      (void) mode;
+
+      fHandle = CreateFile(&fName.toStdWString()[0], GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, CREATE_NEW,
                         FILE_ATTRIBUTE_NORMAL, nullptr);
 
-      if (file != INVALID_HANDLE_VALUE) {
+      if (fHandle != INVALID_HANDLE_VALUE) {
+         // opened successfully
          return true;
       }
 
-
       DWORD err = GetLastError();
 
-      if (err == ERROR_ACCESS_DENIED) {
-         DWORD attributes = GetFileAttributes((const wchar_t *)path.constData());
-         if (attributes == INVALID_FILE_ATTRIBUTES) {
-            // Potential write error (read-only parent directory, etc.)
-            error = QSystemError(err, QSystemError::NativeError);
+      if (err != ERROR_FILE_EXISTS) {
+         // file name already in use, get another name
+         continue;
 
+      } else if (err == ERROR_ACCESS_DENIED) {
+         DWORD attributes = GetFileAttributes(&fName.toStdWString()[0]);
+
+         if (attributes == INVALID_FILE_ATTRIBUTES) {
+            // Potential write error (read-only parent directory, etc)
+            error = QSystemError(err, QSystemError::NativeError);
             return false;
          }
 
@@ -159,71 +148,32 @@ static bool createFileFromTemplate(NativeFileHandle &file,
       } else if (err != ERROR_FILE_EXISTS) {
          error = QSystemError(err, QSystemError::NativeError);
          return false;
+
       }
 
-#else // POSIX
-      file = QT_OPEN(path.constData(),
-                     QT_OPEN_CREAT | O_EXCL | QT_OPEN_RDWR | QT_OPEN_LARGEFILE,
-                     0600);
+#else
+      fHandle = QT_OPEN(fName.constData(), QT_OPEN_CREAT | O_EXCL | QT_OPEN_RDWR | QT_OPEN_LARGEFILE,
+                  static_cast<mode_t>(mode));
 
-      if (file != -1) {
+      if (fHandle != -1) {
+         // opened successfully
          return true;
       }
 
-      int err = errno;
-      if (err != EEXIST) {
-         error = QSystemError(err, QSystemError::NativeError);
+      if (errno == EEXIST) {
+         // file name already in use, get another name
+         continue;
+
+      } else {
+         error = QSystemError(errno, QSystemError::NativeError);
          return false;
       }
+
 #endif
-
-      /* tricky little algorwwithm for backward compatibility */
-
-      for (Char *iter = placeholderStart;;) {
-         // Character progression: [0-9] => 'a' ... 'z' => 'A' .. 'Z'
-         // String progression: "ZZaiC" => "aabiC"
-
-         switch (char(*iter)) {
-            case 'Z':
-               // Rollover, advance next character
-               *iter = Latin1Char('a');
-               if (++iter == placeholderEnd) {
-                  // Out of alternatives. Return file exists error, previously set.
-                  error = QSystemError(err, QSystemError::NativeError);
-                  return false;
-               }
-
-               continue;
-
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-               *iter = Latin1Char('a');
-               break;
-
-            case 'z':
-               // increment 'z' to 'A'
-               *iter = Latin1Char('A');
-               break;
-
-            default:
-               ++*iter;
-               break;
-         }
-         break;
-      }
    }
 
-   Q_ASSERT(false);
+   return false;
 }
-
 
 QTemporaryFileEngine::~QTemporaryFileEngine()
 {
@@ -276,74 +226,48 @@ bool QTemporaryFileEngine::open(QIODevice::OpenMode openMode)
       return QFSFileEngine::open(openMode);
    }
 
-   QString qfilename = d->fileEntry.filePath();
+   QString tmpName = d->fileEntry.filePath();
 
-   // Ensure there is a placeholder mask
-   uint phPos    = qfilename.length();
-   uint phLength = 0;
+   // ensure there is a placeholder mask
+   QRegularExpression regExp("(X{6,})[^X/]*$");
+   QRegularExpressionMatch match = regExp.match(tmpName);
 
-   while (phPos != 0) {
-      --phPos;
-
-      if (qfilename[phPos] == 'X') {
-         ++phLength;
-         continue;
-      }
-
-      if (phLength >= 6 || qfilename[phPos] == '/') {
-         ++phPos;
-         break;
-      }
-
-      // start over
-      phLength = 0;
+   if (! match.hasMatch()) {
+      tmpName.append(".XXXXXX");
    }
 
-   if (phLength < 6) {
-      qfilename.append(".XXXXXX");
-   }
-
-   QFileSystemEntry::NativePath filename = QFileSystemEngine::absoluteName(
-         QFileSystemEntry(qfilename, QFileSystemEntry::FromInternalPath())).nativeFilePath();
+   QFileSystemEntry entry(tmpName, QFileSystemEntry::FromInternalPath());
+   QString fName = QFileSystemEngine::absoluteName(entry).nativeFilePath();
 
    // Find mask in native path
-   phPos    = filename.length();
-   phLength = 0;
+   uint pos;
+   uint length;
 
-   while (phPos != 0) {
-      --phPos;
+   match = regExp.match(fName);
 
-      if (filename[phPos] == Latin1Char('X')) {
-         ++phLength;
-         continue;
-      }
+   if (match.hasMatch()) {
+      pos    = match.capturedStart(1) - fName.cbegin();
+      length = match.capturedLength(1);
 
-      if (phLength >= 6) {
-         ++phPos;
-         break;
-      }
-
-      // start over
-      phLength = 0;
+   } else {
+      // something is wrong
+      return false;
    }
-
-   Q_ASSERT(phLength >= 6);
 
    QSystemError error;
 
 #if defined(Q_OS_WIN)
-   NativeFileHandle &file = d->fileHandle;
+   NativeFileHandle &fHandle = d->fileHandle;
 #else
-   // POSIX
-   NativeFileHandle &file = d->fd;
+   NativeFileHandle &fHandle = d->fd;
 #endif
 
-   if (!createFileFromTemplate(file, filename, phPos, phLength, error)) {
+   if (! createFileFromTemplate(fHandle, fName, pos, length, fileMode, error)) {
       setError(QFile::OpenError, error.toString());
       return false;
    }
 
-   d->fileEntry = QFileSystemEntry(filename, QFileSystemEntry::FromNativePath());
+   d->fileEntry = QFileSystemEntry(fName, QFileSystemEntry::FromNativePath());
 
 #if ! defined(Q_OS_WIN)
    d->closeFileHandle = true;

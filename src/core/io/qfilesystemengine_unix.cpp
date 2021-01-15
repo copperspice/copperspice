@@ -324,18 +324,19 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
       return entry;
    }
 
-   QByteArray orig = entry.nativeFilePath();
-   QByteArray result;
+   QString orig = entry.nativeFilePath();
+   QString result;
 
-   if (orig.isEmpty() || !orig.startsWith('/')) {
+   if (orig.isEmpty() || ! orig.startsWith('/')) {
       QFileSystemEntry cur(currentPath());
       result = cur.nativeFilePath();
    }
 
-   if (! orig.isEmpty() && !(orig.length() == 1 && orig[0] == '.')) {
+   if (! orig.isEmpty() && ! (orig.length() == 1 && orig[0] == '.')) {
       if (!result.isEmpty() && ! result.endsWith('/')) {
          result.append('/');
       }
+
       result.append(orig);
    }
 
@@ -493,27 +494,23 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
    data.entryFlags &= ~what;
 
-   const char *nativeFilePath;
-   int nativeFilePathLength;
-   {
-      const QByteArray &path = entry.nativeFilePath();
-      nativeFilePath = path.constData();
-      nativeFilePathLength = path.size();
-      Q_UNUSED(nativeFilePathLength);
-   }
+   QString nativeFilePath = entry.nativeFilePath();
 
-   bool entryExists = true; // innocent until proven otherwise
+   bool entryExists = true;
 
    QT_STATBUF statBuffer;
    bool statBufferValid = false;
+
    if (what & QFileSystemMetaData::LinkType) {
-      if (QT_LSTAT(nativeFilePath, &statBuffer) == 0) {
+      if (QT_LSTAT(nativeFilePath.constData(), &statBuffer) == 0) {
+
          if (S_ISLNK(statBuffer.st_mode)) {
             data.entryFlags |= QFileSystemMetaData::LinkType;
          } else {
             statBufferValid = true;
             data.entryFlags &= ~QFileSystemMetaData::PosixStatFlags;
          }
+
       } else {
          entryExists = false;
       }
@@ -523,7 +520,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
    if (statBufferValid || (what & QFileSystemMetaData::PosixStatFlags)) {
       if (entryExists && ! statBufferValid) {
-         statBufferValid = (QT_STAT(nativeFilePath, &statBuffer) == 0);
+         statBufferValid = (QT_STAT(nativeFilePath.constData(), &statBuffer) == 0);
       }
 
       if (statBufferValid) {
@@ -558,17 +555,17 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
       if (entryExists) {
          if (what & QFileSystemMetaData::UserReadPermission) {
-            if (QT_ACCESS(nativeFilePath, R_OK) == 0) {
+            if (QT_ACCESS(nativeFilePath.constData(), R_OK) == 0) {
                data.entryFlags |= QFileSystemMetaData::UserReadPermission;
             }
          }
          if (what & QFileSystemMetaData::UserWritePermission) {
-            if (QT_ACCESS(nativeFilePath, W_OK) == 0) {
+            if (QT_ACCESS(nativeFilePath.constData(), W_OK) == 0) {
                data.entryFlags |= QFileSystemMetaData::UserWritePermission;
             }
          }
          if (what & QFileSystemMetaData::UserExecutePermission) {
-            if (QT_ACCESS(nativeFilePath, X_OK) == 0) {
+            if (QT_ACCESS(nativeFilePath.constData(), X_OK) == 0) {
                data.entryFlags |= QFileSystemMetaData::UserExecutePermission;
             }
          }
