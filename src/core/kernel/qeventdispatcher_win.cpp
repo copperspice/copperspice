@@ -1068,7 +1068,9 @@ void QEventDispatcherWin32::wakeUp()
    Q_D(QEventDispatcherWin32);
    d->serialNumber.ref();
 
-   if (d->internalHwnd && d->wakeUps.testAndSetAcquire(0, 1)) {
+   int expected = 0;
+
+   if (d->internalHwnd && d->wakeUps.compareExchange(expected, 1, std::memory_order_acquire)) {
       // post a WM_QT_SENDPOSTEDEVENTS to this thread if there isn't one already pending
       PostMessage(d->internalHwnd, WM_QT_SENDPOSTEDEVENTS, 0, 0);
    }

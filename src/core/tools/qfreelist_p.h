@@ -162,18 +162,23 @@ inline int QFreeList<T, ConstantsType>::next()
 {
    int id, newid, at;
    ElementType *v;
-   do {
-      id = _next.load();
 
+   id = _next.load();
+
+   do {
       at = id & ConstantsType::IndexMask;
       const int block = blockfor(at);
       v = _v[block].loadAcquire();
 
-      if (!v) {
+      if (! v) {
          v = allocate((id & ConstantsType::IndexMask) - at, ConstantsType::Sizes[block]);
-         if (!_v[block].testAndSetRelease(nullptr, v)) {
+
+         ElementType *expected = nullptr;
+
+         if (! _v[block].compareExchange(expected, v, std::memory_order_release)) {
             // race with another thread lost
             delete [] v;
+
             v = _v[block].loadAcquire();
             Q_ASSERT(v != nullptr);
          }
@@ -181,12 +186,13 @@ inline int QFreeList<T, ConstantsType>::next()
 
       newid = v[at].next.load() | (id & ~ConstantsType::IndexMask);
 
-   } while (!_next.testAndSetRelaxed(id, newid));
+   } while (! _next.compareExchange(id, newid, std::memory_order_relaxed));
 
    // qDebug("QFreeList::next(): returning %d (_next now %d, serial %d)",
    //        id & ConstantsType::IndexMask,
    //        newid & ConstantsType::IndexMask,
    //        (newid & ~ConstantsType::IndexMask) >> 24);
+
    return id & ConstantsType::IndexMask;
 }
 
@@ -197,13 +203,18 @@ inline void QFreeList<T, ConstantsType>::release(int id)
    const int block = blockfor(at);
    ElementType *v = _v[block].load();
 
-   int x, newid;
+   int x;
+   int newid;
+
+   x = _next.load(std::memory_order_acquire);
+
    do {
-      x = _next.loadAcquire();
       v[at].next.store(x & ConstantsType::IndexMask);
 
       newid = incrementserial(x, id);
-   } while (!_next.testAndSetRelease(x, newid));
+
+   } while (! _next.compareExchange(x, newid, std::memory_order_release, std::memory_order_acquire));
+
    // qDebug("QFreeList::release(%d): _next now %d (was %d), serial %d",
    //        id & ConstantsType::IndexMask,
    //        newid & ConstantsType::IndexMask,

@@ -1169,11 +1169,14 @@ static void cleanup()
    }
 }
 
-void qt_init_picture_handlers()                // initialize picture handlers
+void qt_init_picture_handlers()
 {
+   // initialize picture handlers
    static QAtomicInt done = 0;
 
-   if (done.testAndSetRelaxed(0, 1)) {
+   int expected = 0;
+
+   if (done.compareExchange(expected, 1, std::memory_order_relaxed)) {
       qAddPostRoutine(cleanup);
    }
 }

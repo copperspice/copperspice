@@ -236,9 +236,10 @@ int QEventDispatcherUNIXPrivate::processThreadWakeUp(int nsel)
             }
         }
 
-        if (!wakeUps.testAndSetRelease(1, 0)) {
-            // hopefully, this is dead code
-            qWarning("QEventDispatcherUNIX: internal error, wakeUps.testAndSetRelease(1, 0) failed!");
+        int expected = 1;
+
+        if (! wakeUps.compareExchange(expected, 0, std::memory_order_release)) {
+            qWarning("QEventDispatcherUNIX::processThreadWakeUp Internal error");
         }
         return 1;
     }
@@ -595,7 +596,10 @@ int QEventDispatcherUNIX::remainingTime(int timerId)
 void QEventDispatcherUNIX::wakeUp()
 {
    Q_D(QEventDispatcherUNIX);
-   if (d->wakeUps.testAndSetAcquire(0, 1)) {
+
+   int expected = 0;
+
+   if (d->wakeUps.compareExchange(expected, 1, std::memory_order_acquire)) {
 
 #ifdef HAVE_SYS_EVENTFD_H
         if (d->thread_pipe[1] == -1) {

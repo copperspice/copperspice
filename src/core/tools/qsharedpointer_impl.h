@@ -577,10 +577,10 @@ template <class T> class QSharedPointer
 
          while (tmp > 0) {
             // try to increment from "tmp" to "tmp + 1"
-            if (o->strongref.testAndSetRelaxed(tmp, tmp + 1)) {
+
+            if (o->strongref.compareExchange(tmp, tmp + 1, std::memory_order_relaxed)) {
                break;   // succeeded
             }
-            tmp = o->strongref.load();  // failed, try again
          }
 
          if (tmp > 0) {

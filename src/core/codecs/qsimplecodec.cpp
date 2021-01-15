@@ -790,7 +790,9 @@ QByteArray QSimpleTextCodec::convertFromUnicode(QStringView str, ConverterState 
    if (! rmap) {
       rmap = buildReverseMap(this->forwardIndex);
 
-      if (!reverseMap.testAndSetRelease(nullptr, rmap)) {
+      QByteArray *expected = nullptr;
+
+      if (! reverseMap.compareExchange(expected, rmap, std::memory_order_release)) {
          delete rmap;
          rmap = reverseMap.load();
       }

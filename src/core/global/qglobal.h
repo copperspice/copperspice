@@ -691,7 +691,8 @@ class QGlobalStaticDeleter
       static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(nullptr), false }; \
       if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
          TYPE *x = new TYPE;                                                     \
-         if (! staticVar.pointer.testAndSetOrdered(nullptr, x)) {                \
+         TYPE *expected = nullptr;                                               \
+         if (! staticVar.pointer.compareExchange(expected, x)) {                 \
             delete x;                                                            \
          } else {                                                                \
             static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
@@ -706,7 +707,8 @@ class QGlobalStaticDeleter
       static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(nullptr), false }; \
       if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
          TYPE *x = new TYPE ARGS;                                                \
-         if (! staticVar.pointer.testAndSetOrdered(nullptr, x))                  \
+         TYPE * expected = nullptr;                                              \
+         if (! staticVar.pointer.compareExchange(expected, x))                   \
             delete x;                                                            \
          else                                                                    \
             static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
@@ -721,7 +723,8 @@ class QGlobalStaticDeleter
       if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
          QScopedPointer<TYPE > x(new TYPE);                                      \
          INITIALIZER;                                                            \
-         if (staticVar.pointer.testAndSetOrdered(nullptr, x.data())) {           \
+         TYPE *expected = nullptr;                                               \
+         if (staticVar.pointer.compareExchange(expected, x.data())) {            \
             static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
             x.take();                                                            \
          }                                                                       \

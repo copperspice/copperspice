@@ -3437,12 +3437,14 @@ const QDrawHelperGammaTables *QGuiApplicationPrivate::gammaTables()
 {
    QDrawHelperGammaTables *result = m_gammaTables.load();
 
-   if (!result) {
-      QDrawHelperGammaTables *tables = new QDrawHelperGammaTables(fontSmoothingGamma);
+   if (! result) {
+      QDrawHelperGammaTables *tables   = new QDrawHelperGammaTables(fontSmoothingGamma);
+      QDrawHelperGammaTables *expected = nullptr;
 
-      if (!m_gammaTables.testAndSetRelease(0, tables)) {
+      if (! m_gammaTables.compareExchange(expected, tables, std::memory_order_release)) {
          delete tables;
       }
+
       result = m_gammaTables.load();
    }
    return result;

@@ -34,14 +34,18 @@ void ThreadEngineBarrier::acquire()
 {
    while (true) {
       int localCount = count.load();
-      if (localCount < 0)
-      {
-         if (count.testAndSetOrdered(localCount, localCount - 1)) {
+
+      if (localCount < 0) {
+         int expected = localCount;
+
+         if (count.compareExchange(expected, localCount - 1)) {
             return;
          }
+
       } else {
-         if (count.testAndSetOrdered(localCount, localCount + 1))
-         {
+         int expected = localCount;
+
+         if (count.compareExchange(expected, localCount + 1)) {
             return;
          }
       }
@@ -52,20 +56,26 @@ int ThreadEngineBarrier::release()
 {
    while (true)  {
       int localCount = count.load();
-      if (localCount == -1)
-      {
-         if (count.testAndSetOrdered(-1, 0)) {
+
+      if (localCount == -1) {
+         int expected = -1;
+
+         if (count.compareExchange(expected, 0)) {
             semaphore.release();
             return 0;
          }
-      } else if (localCount < 0)
-      {
-         if (count.testAndSetOrdered(localCount, localCount + 1)) {
+
+      } else if (localCount < 0) {
+         int expected = localCount;
+
+         if (count.compareExchange(expected, localCount + 1)) {
             return qAbs(localCount + 1);
          }
+
       } else {
-         if (count.testAndSetOrdered(localCount, localCount - 1))
-         {
+         int expected = localCount;
+
+         if (count.compareExchange(expected, localCount - 1)) {
             return localCount - 1;
          }
       }
@@ -77,14 +87,16 @@ void ThreadEngineBarrier::wait()
 {
    while (true)  {
       int localCount = count.load();
-      if (localCount == 0)
-      {
+
+      if (localCount == 0) {
          return;
       }
 
-      Q_ASSERT(localCount > 0); // multiple waiters are not allowed.
-      if (count.testAndSetOrdered(localCount, -localCount))
-      {
+      Q_ASSERT(localCount > 0); // multiple waiters are not allowed
+
+      int expected = localCount;
+
+      if (count.compareExchange(expected, -localCount)) {
          semaphore.acquire();
          return;
       }
@@ -102,17 +114,22 @@ bool ThreadEngineBarrier::releaseUnlessLast()
 {
    while (true)  {
       int localCount = count.load();
-      if (qAbs(localCount) == 1)
-      {
+
+
+      if (qAbs(localCount) == 1) {
          return false;
-      } else if (localCount < 0)
-      {
-         if (count.testAndSetOrdered(localCount, localCount + 1)) {
+
+      } else if (localCount < 0) {
+         int expected = localCount;
+
+         if (count.compareExchange(expected, localCount + 1)) {
             return true;
          }
+
       } else {
-         if (count.testAndSetOrdered(localCount, localCount - 1))
-         {
+         int expected = localCount;
+
+         if (count.compareExchange(expected, localCount - 1)) {
             return true;
          }
       }

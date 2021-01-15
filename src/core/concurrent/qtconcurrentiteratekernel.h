@@ -238,7 +238,9 @@ class IterateKernel : public ThreadEngine<T>
    }
 
    ThreadFunctionResult whileThreadFunction() {
-      if (iteratorThreads.testAndSetAcquire(0, 1) == false) {
+      int expected = 0;
+
+      if (iteratorThreads.compareExchange(expected, 1, std::memory_order_acquire) == false) {
          return ThreadFinished;
       }
 
@@ -251,8 +253,11 @@ class IterateKernel : public ThreadEngine<T>
          // on input iterators. (prev is dereferenced inside user.runIteration())
          Iterator prev = current;
          ++current;
+
          int index = currentIndex.fetchAndAddRelaxed(1);
-         iteratorThreads.testAndSetRelease(1, 0);
+
+         expected = 1;
+         iteratorThreads.compareExchange(expected, 0, std::memory_order_release);
 
          this->waitForResume(); // (only waits if the qfuture is paused.)
 
@@ -269,7 +274,8 @@ class IterateKernel : public ThreadEngine<T>
             return ThrottleThread;
          }
 
-         if (iteratorThreads.testAndSetAcquire(0, 1) == false) {
+         expected = 0;
+         if (iteratorThreads.compareExchange(expected, 1, std::memory_order_acquire) == false) {
             return ThreadFinished;
          }
       }
