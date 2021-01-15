@@ -511,7 +511,7 @@ void QTemporaryFile::setFileTemplate(const QString &name)
    }
 }
 
-QTemporaryFile *QTemporaryFile::createLocalFile(QFile &file)
+QTemporaryFile *QTemporaryFile::createNativeFile(QFile &file)
 {
    if (QAbstractFileEngine *engine = file.d_func()->engine()) {
       if (engine->fileFlags(QAbstractFileEngine::FlagsMask) & QAbstractFileEngine::LocalDiskFlag) {

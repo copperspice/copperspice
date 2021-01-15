@@ -64,12 +64,12 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
    QString fileTemplate() const;
    void setFileTemplate(const QString &name);
 
-   static QTemporaryFile *createLocalFile(const QString &fileName) {
+   static QTemporaryFile *createNativeFile(const QString &fileName) {
       QFile file(fileName);
-      return createLocalFile(file);
+      return createNativeFile(file);
    }
 
-   static QTemporaryFile *createLocalFile(QFile &file);
+   static QTemporaryFile *createNativeFile(QFile &file);
 
  protected:
    bool open(OpenMode flags) override;
