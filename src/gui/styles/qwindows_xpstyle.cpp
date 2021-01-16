@@ -1844,19 +1844,21 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
                QWindowsXPStylePrivate::pGetThemeEnumValue( theme.handle(),
                   partId, stateId, TMT_BGTYPE, &bgType);
 
-               if ( bgType == BT_IMAGEFILE ) {
+               if (bgType == BT_IMAGEFILE) {
                   theme.mirrorHorizontally = hMirrored;
                   theme.mirrorVertically = vMirrored;
                   theme.noBorder = noBorder;
                   theme.noContent = noContent;
                   theme.rotate = rotate;
                   d->drawBackground(theme);
+
                } else {
                   QBrush fillColor = option->palette.brush(QPalette::Base);
 
                   if (!isEnabled) {
                      PROPERTYORIGIN origin = PO_NOTFOUND;
                      QWindowsXPStylePrivate::pGetThemePropertyOrigin(theme.handle(), theme.partId, theme.stateId, TMT_FILLCOLOR, &origin);
+
                      // Use only if the fill property comes from our part
                      if ((origin == PO_PART || origin == PO_STATE)) {
                         COLORREF bgRef;
@@ -1896,15 +1898,18 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
                      }
                   }
                }
+
                // This should work, but currently there's an error in the ::drawBackgroundDirectly()
                // code, when using the HDC directly..
                if (useGradient) {
                   QStyleOptionTabWidgetFrame frameOpt = *tab;
                   frameOpt.rect = widget->rect();
+
                   QRect contentsRect = subElementRect(SE_TabWidgetTabContents, &frameOpt, widget);
                   QRegion reg = option->rect;
                   reg -= contentsRect;
                   p->setClipRegion(reg);
+
                   XPThemeData theme(widget, p, themeNumber, partId, stateId, rect);
                   theme.mirrorHorizontally = hMirrored;
                   theme.mirrorVertically = vMirrored;
@@ -1912,24 +1917,29 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
                   p->setClipRect(contentsRect);
                   partId = TABP_BODY;
                }
+
             }
             switch (tab->shape) {
                case QTabBar::RoundedNorth:
                case QTabBar::TriangularNorth:
                   break;
+
                case QTabBar::RoundedSouth:
                case QTabBar::TriangularSouth:
                   vMirrored = true;
                   break;
+
                case QTabBar::RoundedEast:
                case QTabBar::TriangularEast:
                   rotate = 90;
                   break;
+
                case QTabBar::RoundedWest:
                case QTabBar::TriangularWest:
                   rotate = 90;
                   hMirrored = true;
                   break;
+
                default:
                   break;
             }

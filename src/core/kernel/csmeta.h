@@ -56,8 +56,8 @@ class Q_CORE_EXPORT QMetaClassInfo
 class Q_CORE_EXPORT QMetaEnum
 {
  public:
-   QMetaEnum(const QString &name, const QString &scope, bool isFlag);
    QMetaEnum();
+   QMetaEnum(const QString &name, const QString &scope, bool isFlag);
 
    bool isFlag() const;
    bool isValid() const;
@@ -79,7 +79,7 @@ class Q_CORE_EXPORT QMetaEnum
  private:
    QString m_name;
    QString m_scope;
-   bool     m_flag;
+   bool m_flag;
 
    QMap<QString, int> m_data;
 };

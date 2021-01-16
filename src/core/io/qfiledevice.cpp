@@ -419,10 +419,13 @@ void QFileDevice::unsetError()
 qint64 QFileDevice::size() const
 {
    Q_D(const QFileDevice);
-   if (!d->ensureFlushed()) {
+
+   if (! d->ensureFlushed()) {
       return 0;
    }
+
    d->cachedSize = d->engine()->size();
+
    return d->cachedSize;
 }
 

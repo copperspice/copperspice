@@ -63,10 +63,14 @@ class QVector
 
    QVector() = default;
    explicit QVector(size_type size)
-      : m_data(size) {}
+      : m_data(size)
+   {
+   }
 
    QVector(size_type size, const T &value)
-      : m_data(size, value) {}
+      : m_data(size, value)
+   {
+   }
 
    QVector(const QVector<T> &other) = default;
    QVector(QVector<T> &&other) = default;

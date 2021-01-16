@@ -203,14 +203,6 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode, FILE *fh)
    return open(openMode, fh, QFile::DontCloseHandle);
 }
 
-/*!
-    Opens the file handle \a fh in \a openMode mode. Returns true
-    on success; otherwise returns false.
-
-    The \a handleFlags argument specifies whether the file handle will be
-    closed by Qt. See the QFile::FileHandleFlags documentation for more
-    information.
-*/
 bool QFSFileEngine::open(QIODevice::OpenMode openMode, FILE *fh, QFile::FileHandleFlags handleFlags)
 {
    Q_D(QFSFileEngine);
@@ -274,14 +266,6 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode, int fd)
    return open(openMode, fd, QFile::DontCloseHandle);
 }
 
-/*!
-    Opens the file descriptor \a fd in \a openMode mode. Returns true
-    on success; otherwise returns false.
-
-    The \a handleFlags argument specifies whether the file handle will be
-    closed by Qt. See the QFile::FileHandleFlags documentation for more
-    information.
-*/
 bool QFSFileEngine::open(QIODevice::OpenMode openMode, int fd, QFile::FileHandleFlags handleFlags)
 {
    Q_D(QFSFileEngine);
@@ -526,6 +510,7 @@ bool QFSFileEnginePrivate::seekFdFh(qint64 pos)
    if (fh) {
       // Buffered stdlib mode.
       int ret;
+
       do {
          ret = QT_FSEEK(fh, QT_OFF_T(pos), SEEK_SET);
       } while (ret != 0 && errno == EINTR);
@@ -534,6 +519,7 @@ bool QFSFileEnginePrivate::seekFdFh(qint64 pos)
          q->setError(QFile::ReadError, qt_error_string(int(errno)));
          return false;
       }
+
    } else {
       // Unbuffered stdio mode.
       if (QT_LSEEK(fd, QT_OFF_T(pos), SEEK_SET) == -1) {
@@ -546,6 +532,7 @@ bool QFSFileEnginePrivate::seekFdFh(qint64 pos)
          return false;
       }
    }
+
    return true;
 }
 

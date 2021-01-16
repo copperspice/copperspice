@@ -56,7 +56,7 @@ QLayout::QLayout(QWidget *parent)
 {
    d_ptr->q_ptr = this;
 
-   if (!parent) {
+   if (! parent) {
       return;
    }
    parent->setLayout(this);

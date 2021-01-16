@@ -766,7 +766,8 @@ void basic_regex_creator<charT, traits>::fixup_recursions(re_syntax_base *state)
             }
             if (!ok) {
                // recursion to sub-expression that doesn't exist:
-               if (0 == this->m_pdata->m_status) { // update the error code if not already set
+               if (this->m_pdata->m_status == 0) {
+                  // update the error code if not already set
                   this->m_pdata->m_status = cs_regex_ns::regex_constants::error_bad_pattern;
                }
                //
@@ -777,7 +778,7 @@ void basic_regex_creator<charT, traits>::fixup_recursions(re_syntax_base *state)
 
                // and throw if required:
                //
-               if (0 == (this->flags() & regex_constants::no_except)) {
+               if ((this->flags() & regex_constants::no_except) == 0) {
                   std::string message = "Encountered a forward reference to a recursive sub-expression that does not exist.";
                   cs_regex_ns::regex_error e(message, cs_regex_ns::regex_constants::error_bad_pattern, 0);
                   e.raise();
@@ -1247,6 +1248,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base *state, 
                *pnull |= mask;
             }
             return;
+
          case syntax_element_endmark:
             // need to handle independent subs as a special case:
             if (static_cast<re_brace *>(state)->index < 0) {
@@ -1256,6 +1258,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base *state, 
                   *pnull |= mask;
                }
                return;
+
             } else if (recursion_start && (recursion_sub != 0) && (recursion_sub == static_cast<re_brace *>(state)->index)) {
                // recursion termination:
                recursion_start = nullptr;
@@ -1272,6 +1275,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base *state, 
             if (m_pdata->m_has_recursions && static_cast<re_brace *>(state)->index) {
                bool ok = false;
                re_syntax_base *p = m_pdata->m_first_state;
+
                while (p) {
                   if (p->type == syntax_element_recurse) {
                      re_brace *p2 = static_cast<re_brace *>(static_cast<re_jump *>(p)->alt.p);

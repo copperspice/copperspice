@@ -50,10 +50,11 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    using BoundaryReasons = QFlags<BoundaryReason>;
 
    QTextBoundaryFinder();
-   QTextBoundaryFinder(const QTextBoundaryFinder &other);
-   QTextBoundaryFinder(BoundaryType type, const QString &str);
 
+   QTextBoundaryFinder(const QTextBoundaryFinder &other);
    QTextBoundaryFinder(QTextBoundaryFinder &&other);
+
+   QTextBoundaryFinder(BoundaryType type, const QString &str);
 
    ~QTextBoundaryFinder();
 

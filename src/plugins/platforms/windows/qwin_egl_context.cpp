@@ -51,22 +51,27 @@ static void *resolveFunc(HMODULE lib, const char *name)
    // breaking binary compatibility. So be flexible here instead.
 
    int argSize = -1;
+
    while (!proc && argSize <= 64) {
       nameStr = baseNameStr;
+
       if (argSize >= 0) {
          nameStr += QLatin1Char('@') + QString::number(argSize);
       }
+
       argSize = argSize < 0 ? 0 : argSize + 4;
       proc = (void *) ::GetProcAddress(lib, nameStr.toLatin1().constData());
    }
+
    return proc;
 }
 #else
+
 static void *resolveFunc(HMODULE lib, const char *name)
 {
    return (void *) ::GetProcAddress(lib, name);
 }
-#endif // Q_CC_MINGW
+#endif
 
 void *QWindowsLibEGL::resolve(const char *name)
 {
@@ -77,10 +82,9 @@ void *QWindowsLibEGL::resolve(const char *name)
 
    return proc;
 }
+#endif
 
-#endif // !QT_STATIC
-
-#if !defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
+#if ! defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
 #  define RESOLVE(signature, name) signature(resolve( #name ));
 #else
 #  define RESOLVE(signature, name) signature(&::name);
@@ -88,17 +92,12 @@ void *QWindowsLibEGL::resolve(const char *name)
 
 bool QWindowsLibEGL::init()
 {
-   const char dllName[] = QT_STRINGIFY(LIBEGL_NAME)
-#if defined(QT_DEBUG) && !defined(Q_OS_WINCE)
-      "d"
-#endif
-      "";
+   const wchar_t dllName[] = L QT_STRINGIFY(LIBEGL_NAME);
 
-   qDebug() << "Using EGL from" << dllName;
+#if ! defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
+   m_lib = ::LoadLibraryW(dllName);
 
-#if !defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
-   m_lib = ::LoadLibraryW((const wchar_t *) QString::fromLatin1(dllName).utf16());
-   if (!m_lib) {
+   if (! m_lib) {
       qErrnoWarning(::GetLastError(), "Failed to load %s", dllName);
       return false;
    }
@@ -1042,7 +1041,7 @@ EGLConfig QWindowsEGLContext::chooseConfig(const QSurfaceFormat &format)
    } while (reduceConfigAttributes(&configureAttributes));
 
    if (!cfg) {
-      qWarning("Cannot find EGLConfig, returning null config");
+      qWarning("Unable to find EGLConfig, returning null config");
    }
 
    return cfg;

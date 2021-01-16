@@ -8,7 +8,7 @@ QTokenAutomaton generates a C++ class that essentially has this interface:
 
     class YourTokenizer
     {
-    protected:
+      protected:
         enum Token
         {
             A,
@@ -18,7 +18,7 @@ QTokenAutomaton generates a C++ class that essentially has this interface:
         };
 
         static inline Token toToken(const QString &string);
-        static inline Token toToken(const QStringRef &string);
+        static inline Token toToken(const QStringView &string);
         static Token toToken(const QChar *data, int length);
         static QString toString(Token token);
     };
@@ -61,6 +61,3 @@ Using it is approached as follows:
 
 4. Include the produced C++ files with your build system.
 
-
-1.
-In Qt there is as of 4.4 no support for XSL-T.

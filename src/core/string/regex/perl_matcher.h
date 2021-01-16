@@ -305,10 +305,12 @@ class repeater_count
       : start_pos(start) {
       state_id = i;
       stack = s;
-      next = *stack;
+      next  = *stack;
       *stack = this;
+
       if ((state_id > next->state_id) && (next->state_id >= 0)) {
          count = 0;
+
       } else {
          repeater_count *p = next;
          p = unwind_until(state_id, p, current_recursion_id);

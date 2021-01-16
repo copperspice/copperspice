@@ -67,7 +67,7 @@ bool QMetaProperty::hasNotifySignal() const
 
 bool QMetaProperty::hasStdCppSet() const
 {
-   //  internal & undocumented, used to bypass issues in Qt
+   //  internal & undocumented, used to bypass issues
    return false;
 }
 
@@ -189,7 +189,8 @@ QMetaMethod QMetaProperty::notifySignal() const
    int id = notifySignalIndex();
 
    if (id == -1) {
-      return QMetaMethod(str, str, std::vector<QString>(), QMetaMethod::Private, QMetaMethod::Slot, QMetaMethod::Attributes(), m_metaObject);
+      return QMetaMethod(str, str, std::vector<QString>(), QMetaMethod::Private, QMetaMethod::Slot,
+                  QMetaMethod::Attributes(), m_metaObject);
 
    } else  {
       return m_metaObject->method(id);

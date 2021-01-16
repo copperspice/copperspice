@@ -725,5 +725,3 @@ qint64 QFile::size() const
 {
    return QFileDevice::size();
 }
-
-

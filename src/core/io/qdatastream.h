@@ -25,10 +25,10 @@
 #define QDATASTREAM_H
 
 #include <qglobal.h>
-#include <qscopedpointer.h>
-#include <qiodevice.h>
 #include <qcontainerfwd.h>
+#include <qiodevice.h>
 #include <qregularexpression.h>
+#include <qscopedpointer.h>
 
 #ifdef Status
 #error qdatastream.h must be included before any header file that defines Status

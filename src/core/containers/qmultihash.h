@@ -445,7 +445,7 @@ class QMultiHash
    }
 
    Val value(const Key &key) const {
-     auto iter = m_data.find(key);
+      auto iter = m_data.find(key);
 
       if (iter == m_data.end()) {
          // key was not found

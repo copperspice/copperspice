@@ -221,19 +221,20 @@ int QEventDispatcherUNIXPrivate::processThreadWakeUp(int nsel)
 {
     if (nsel > 0 && FD_ISSET(thread_pipe[0], &sn_vec[0].select_fds)) {
         // some other thread woke us up... consume the data on the thread pipe so that
-        // select doesn't immediately return next time
+        // select does not immediately return next time
+
 #ifdef HAVE_SYS_EVENTFD_H
        if (thread_pipe[1] == -1) {
-            // eventfd
-            eventfd_t value;
-            eventfd_read(thread_pipe[0], &value);
+           // eventfd
+           eventfd_t value;
+           eventfd_read(thread_pipe[0], &value);
        } else
 
 #endif
         {
-            char c[16];
-            while (::read(thread_pipe[0], c, sizeof(c)) > 0) {
-            }
+           char c[16];
+           while (::read(thread_pipe[0], c, sizeof(c)) > 0) {
+           }
         }
 
         int expected = 1;
@@ -241,8 +242,10 @@ int QEventDispatcherUNIXPrivate::processThreadWakeUp(int nsel)
         if (! wakeUps.compareExchange(expected, 0, std::memory_order_release)) {
             qWarning("QEventDispatcherUNIX::processThreadWakeUp Internal error");
         }
+
         return 1;
     }
+
     return 0;
 }
 

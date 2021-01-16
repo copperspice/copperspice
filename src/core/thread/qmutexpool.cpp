@@ -53,12 +53,6 @@ QMutexPool *QMutexPool::instance()
    return globalMutexPool();
 }
 
-/*!
-    \fn QMutexPool::get(const void *address)
-    Returns a QMutex from the pool. QMutexPool uses the value \a address
-    to determine which mutex is returned from the pool.
-*/
-
 /*! \internal
   create the mutex for the given index
  */
@@ -72,6 +66,7 @@ QMutex *QMutexPool::createMutex(int index)
    if (! mutexes[index].compareExchange(expected, newMutex, std::memory_order_release)) {
       delete newMutex;
    }
+
    return mutexes[index].load();
 }
 

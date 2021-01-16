@@ -54,6 +54,7 @@ class QFileSystemEntry
    QString completeBaseName() const;
    QString suffix() const;
    QString completeSuffix() const;
+
    bool isAbsolute() const;
    bool isRelative() const;
    bool isClean() const;
@@ -85,9 +86,9 @@ class QFileSystemEntry
    mutable QString m_filePath;            // always has slashes as separator
    mutable QString m_nativeFilePath;      // native encoding and separators
 
-   mutable qint16 m_lastSeparator; // index in m_filePath of last separator
-   mutable qint16 m_firstDotInFileName; // index after m_filePath for first dot (.)
-   mutable qint16 m_lastDotInFileName; // index after m_firstDotInFileName for last dot (.)
+   mutable qint16 m_lastSeparator;        // index in m_filePath of last separator
+   mutable qint16 m_firstDotInFileName;   // index after m_filePath for first dot (.)
+   mutable qint16 m_lastDotInFileName;    // index after m_firstDotInFileName for last dot (.)
 };
 
 #endif

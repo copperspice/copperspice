@@ -93,32 +93,35 @@ class regex_iterator
    typedef std::shared_ptr<impl> pimpl;
 
  public:
-   typedef          basic_regex<charT, traits>                              regex_type;
-   typedef          match_results<BidirectionalIterator>                    value_type;
-   typedef          const value_type                                        *pointer;
-   typedef          const value_type                                        &reference;
-   typedef          std::forward_iterator_tag                               iterator_category;
+   typedef basic_regex<charT, traits> regex_type;
+   typedef match_results<BidirectionalIterator> value_type;
+   typedef const value_type *pointer;
+   typedef const value_type &reference;
+   typedef std::forward_iterator_tag iterator_category;
 
    typedef typename cs_regex_detail_ns::regex_iterator_traits<BidirectionalIterator>::difference_type difference_type;
 
-   regex_iterator() {}
+   regex_iterator() {
+   }
+
    regex_iterator(BidirectionalIterator a, BidirectionalIterator b,
-                  const regex_type &re,
-                  match_flag_type m = match_default)
+                  const regex_type &re, match_flag_type m = match_default)
       : pdata(new impl(&re, b, m)) {
-      if (!pdata->init(a)) {
+      if (! pdata->init(a)) {
          pdata.reset();
       }
    }
 
    regex_iterator(const regex_iterator &that)
       : pdata(that.pdata)
-   {}
+   {
+   }
 
    regex_iterator &operator=(const regex_iterator &that) {
       pdata = that.pdata;
       return *this;
    }
+
    bool operator==(const regex_iterator &that)const {
       if ((pdata.get() == nullptr) || (that.pdata.get() == nullptr)) {
          return pdata.get() == that.pdata.get();
@@ -137,17 +140,21 @@ class regex_iterator
    const value_type *operator->()const {
       return &(pdata->get());
    }
+
    regex_iterator &operator++() {
       cow();
 
       if (pdata->next() == nullptr) {
          pdata.reset();
       }
+
       return *this;
    }
+
    regex_iterator operator++(int) {
       regex_iterator result(*this);
       ++(*this);
+
       return result;
    }
 

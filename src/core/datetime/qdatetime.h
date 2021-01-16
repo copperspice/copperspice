@@ -55,8 +55,10 @@ class Q_CORE_EXPORT QDate
       StandaloneFormat
    };
 
-   constexpr QDate() : jd(nullJd())
-   {}
+   constexpr QDate()
+      : jd(nullJd())
+   {
+   }
 
    QDate(int y, int m, int d);
 
@@ -136,8 +138,10 @@ class Q_CORE_EXPORT QDate
    }
 
  private:
-   explicit constexpr QDate(qint64 julianDay) : jd(julianDay)
-   {}
+   explicit constexpr QDate(qint64 julianDay)
+      : jd(julianDay)
+   {
+   }
 
    // extra parentheses around min, avoids expanding if it is a macro (MSVC issue)
    static constexpr qint64 nullJd() {
@@ -261,7 +265,6 @@ class Q_CORE_EXPORT QDateTime
    QDateTime();
    explicit QDateTime(const QDate &date);
    QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec = Qt::LocalTime, int offsetSeconds = 0);
-
    QDateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone);
 
    QDateTime(const QDateTime &other);
@@ -269,12 +272,12 @@ class Q_CORE_EXPORT QDateTime
 
    ~QDateTime();
 
+   QDateTime &operator=(const QDateTime &other);
+
    QDateTime &operator=(QDateTime &&other) {
       swap(other);
       return *this;
    }
-
-   QDateTime &operator=(const QDateTime &other);
 
    void swap(QDateTime &other) {
       qSwap(d, other.d);
@@ -369,10 +372,11 @@ class Q_CORE_EXPORT QDateTime
 #endif
 
 #endif
+
  private:
    friend class QDateTimePrivate;
 
-   // emerald - for performance add the qdatetimePrivate data members directly into this class
+   // emerald - for performance move the qdatetimePrivate members to here
    QSharedDataPointer<QDateTimePrivate> d;
 
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);

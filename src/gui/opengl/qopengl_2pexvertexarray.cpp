@@ -122,22 +122,32 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
                 QRectF bounds = b.bounds();
                 // threshold based on same algorithm as in qtriangulatingstroker.cpp
                 int threshold = qMin<float>(64, qMax(bounds.width(), bounds.height()) * 3.14f / (curveInverseScale * 6));
-                if (threshold < 3) threshold = 3;
-                qreal one_over_threshold_minus_1 = qreal(1) / (threshold - 1);
-                for (int t=0; t<threshold; ++t) {
-                    QPointF pt = b.pointAt(t * one_over_threshold_minus_1);
-                    lineToArray(pt.x(), pt.y());
+
+                if (threshold < 3) {
+                  threshold = 3;
                 }
+
+                qreal one_over_threshold_minus_1 = qreal(1) / (threshold - 1);
+
+                for (int t = 0; t < threshold; ++t) {
+                   QPointF pt = b.pointAt(t * one_over_threshold_minus_1);
+                   lineToArray(pt.x(), pt.y());
+                }
+
                 i += 2;
-                break; }
+                break;
+            }
+
             default:
                 break;
             }
         }
     } while (false);
 
-    if (!outline)
+    if (! outline) {
         addClosingLine(lastMoveTo);
+    }
+
     vertexArrayStops.append(vertexArray.size());
 }
 

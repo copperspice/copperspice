@@ -1733,13 +1733,10 @@ QDateTime::QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec, in
 {
 }
 
-
 QDateTime::QDateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone)
    : d(new QDateTimePrivate(date, time, timeZone))
 {
 }
-
-
 
 QDateTime::QDateTime(const QDateTime &other)
    : d(other.d)
@@ -1760,6 +1757,7 @@ QDateTime &QDateTime::operator=(const QDateTime &other)
    d = other.d;
    return *this;
 }
+
 bool QDateTime::isNull() const
 {
    return d->isNullDate() && d->isNullTime();
@@ -1770,29 +1768,28 @@ bool QDateTime::isValid() const
    return (d->isValidDateTime());
 }
 
-
 QDate QDateTime::date() const
 {
    if (d->isNullDate()) {
       return QDate();
    }
+
    QDate dt;
    msecsToTime(d->m_msecs, &dt, nullptr);
+
    return dt;
 }
-
 
 QTime QDateTime::time() const
 {
    if (d->isNullTime()) {
       return QTime();
    }
+
    QTime tm;
    msecsToTime(d->m_msecs, nullptr, &tm);
    return tm;
 }
-
-
 
 Qt::TimeSpec QDateTime::timeSpec() const
 {
@@ -1866,14 +1863,10 @@ void QDateTime::setDate(const QDate &date)
    d->setDateTime(date, time());
 }
 
-
-
 void QDateTime::setTime(const QTime &time)
 {
    d->setDateTime(date(), time);
 }
-
-
 
 void QDateTime::setTimeSpec(Qt::TimeSpec spec)
 {

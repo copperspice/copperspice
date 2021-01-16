@@ -44,46 +44,15 @@
    using NativeFileHandle = int;
 #endif
 
-/*
- * Copyright (c) 1987, 1993
- *	The Regents of the University of California.  All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. Neither the name of the University nor the names of its contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- */
-
 /*!
-    \internal
+\internal
 
-    Generates a unique file path and returns a native handle to the open file.
-    \a path is used as a template when generating unique paths, \a pos
-    identifies the position of the first character that will be replaced in the
-    template and \a length the number of characters that may be substituted.
+Generates a unique file path and returns a native handle to the open file. path is used as a template when generating
+unique paths, pos identifies the position of the first character that will be replaced in the template and length
+the number of characters that may be substituted.
 
-    Returns an open handle to the newly created file if successful, an invalid
-    handle otherwise. In both cases, the string in \a path will be changed and
-    contain the generated path name.
+Returns an open handle to the newly created file if successful, an invalid handle otherwise. In both cases, the string
+in  path will be changed and contain the generated path name.
 */
 
 static QString createFileName(QString fName, size_t pos, size_t length)
@@ -365,15 +334,13 @@ void QTemporaryFilePrivate::resetFileEngine() const
 
 static QString defaultTemplateName()
 {
-   QString baseName;
+   QString baseName = QCoreApplication::applicationName();
 
-#if defined(QT_BUILD_CORE_LIB)
-   baseName = QCoreApplication::applicationName();
-   if (baseName.isEmpty())
-#endif
-      baseName = QLatin1String("c_temp");
+   if (baseName.isEmpty()) {
+      baseName = "cs_temp";
+   }
 
-   return QDir::tempPath() + QLatin1Char('/') + baseName + QLatin1String(".XXXXXX");
+   return QDir::tempPath() + QChar('/') + baseName + QString(".XXXXXX");
 }
 
 QTemporaryFile::QTemporaryFile()
@@ -398,7 +365,7 @@ QTemporaryFile::QTemporaryFile(QObject *parent)
    Q_D(QTemporaryFile);
    d->templateName = defaultTemplateName();
 
-   // uses the form "c_temp.XXXXXX"
+   // uses the form "cs_temp.XXXXXX"
 }
 
 QTemporaryFile::QTemporaryFile(const QString &templateName, QObject *parent)

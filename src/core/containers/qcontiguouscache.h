@@ -89,12 +89,13 @@ class QContiguousCache
       : d(other.d)
    {
       d->ref.ref();
+
       if (! d->sharable) {
          detach_helper();
       }
    }
 
-   inline ~QContiguousCache() {
+   ~QContiguousCache() {
       if (! d) {
          return;
       }
@@ -287,7 +288,9 @@ void QContiguousCache<T>::setCapacity(int size)
    if (size == d->alloc) {
       return;
    }
+
    detach();
+
    union {
       QContiguousCacheData *d;
       QContiguousCacheTypedData<T> *p;
@@ -384,8 +387,11 @@ QContiguousCache<T>::QContiguousCache(int capacity)
 {
    d = malloc(capacity);
    d->ref.store(1);
-   d->count = d->start = d->offset = 0;
+
    d->alloc    = capacity;
+   d->count    = 0;
+   d->start    = 0;
+   d->offset   = 0;
    d->sharable = true;
 }
 

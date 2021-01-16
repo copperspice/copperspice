@@ -24,8 +24,9 @@
 #ifndef QPAIR_H
 #define QPAIR_H
 
-#include <utility>
 #include <qdatastream.h>
+
+#include <utility>
 
 template <class T1, class T2>
 using QPair = std::pair<T1, T2>;

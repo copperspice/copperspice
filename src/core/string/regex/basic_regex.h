@@ -196,7 +196,7 @@ struct regex_data : public named_subexpressions<Traits> {
 
    cs_regex_detail_ns::re_syntax_base  *m_first_state;             // the first state of the machine
    cs_regex_detail_ns::raw_storage      m_data;                    // the buffer in which our states are constructed
-   typename Traits::char_class_type     m_word_mask;               // mask used to determine if a character is a word character
+   typename Traits::char_class_type    m_word_mask;               // mask used to determine if a character is a word character
 
    std::vector <std::pair <std::size_t, std::size_t > > m_subs;    // position of sub-expressions within the *string*
 };
