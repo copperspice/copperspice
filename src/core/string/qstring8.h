@@ -596,7 +596,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       [[nodiscard]] QString8 left(size_type numOfChars) const;
       [[nodiscard]] QStringView8 leftView(size_type numOfChars) const;
-      [[nodiscard]] QString8 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const;
+      [[nodiscard]] QString8 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool truncate = false) const;
 
       size_type length() const {
          return CsString::CsString::size();
@@ -728,9 +728,9 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::resize(numOfChars, c);
       }
 
-      [[nodiscard]] QString8 right(size_type numOfChars) const;
-      [[nodiscard]] QStringView8 rightView(size_type numOfChars) const;
-      [[nodiscard]] QString8 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const;
+      [[nodiscard]] QString8 right(size_type count) const;
+      [[nodiscard]] QStringView8 rightView(size_type count) const;
+      [[nodiscard]] QString8 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool truncate = false) const;
 
       [[nodiscard]] QString8 simplified() const &;
       [[nodiscard]] QString8 simplified() &&;

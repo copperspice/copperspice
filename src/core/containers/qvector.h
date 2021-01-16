@@ -184,8 +184,8 @@ class QVector
       return retval;
    }
 
-   void insert(size_type i, const T &value);
-   void insert(size_type i, size_type count, const T &value);
+   void insert(size_type pos, const T &value);
+   void insert(size_type pos, size_type count, const T &value);
 
    const_reference constLast() const {
       Q_ASSERT(! isEmpty());
@@ -256,21 +256,21 @@ class QVector
       m_data.insert(m_data.begin(), std::move(value));
    }
 
-   void remove(size_type i) {
-      Q_ASSERT_X(i >= 0 && i < size(), "QVector<T>::remove", "index out of range");
-      erase(begin() + i, begin() + i + 1);
+   void remove(size_type pos) {
+      Q_ASSERT_X(pos >= 0 && pos < size(), "QVector<T>::remove", "index out of range");
+      erase(begin() + pos, begin() + pos + 1);
    }
 
-   void remove(size_type i, size_type n)  {
-      Q_ASSERT_X(i >= 0 && n >= 0 && i + n <= size(), "QVector<T>::remove", "index out of range");
-      m_data.erase(m_data.begin() + i, m_data.begin() + i + n);
+   void remove(size_type pos, size_type count)  {
+      Q_ASSERT_X(pos >= 0 && count >= 0 && pos + count <= size(), "QVector<T>::remove", "index out of range");
+      m_data.erase(m_data.begin() + pos, m_data.begin() + pos + count);
    }
 
    size_type removeAll(const T &value);
 
-   void removeAt(size_type i) {
-      Q_ASSERT_X(i >= 0 && i < size(), "QVector<T>::removeAt", "index out of range");
-      m_data.erase(m_data.begin() + i);
+   void removeAt(size_type pos) {
+      Q_ASSERT_X(pos >= 0 && pos < size(), "QVector<T>::removeAt", "index out of range");
+      m_data.erase(m_data.begin() + pos);
    }
 
    void removeFirst() {
@@ -515,17 +515,17 @@ QVector<T> &QVector<T>::fill(const T &value, size_type newSize)
 }
 
 template <typename T>
-inline void QVector<T>::insert(size_type i, const T &value)
+inline void QVector<T>::insert(size_type pos, const T &value)
 {
-   Q_ASSERT_X(i >= 0 && i <= size(), "QVector<T>::insert", "index out of range");
-   m_data.insert(m_data.begin() + i, value);
+   Q_ASSERT_X(pos >= 0 && pos <= size(), "QVector<T>::insert", "index out of range");
+   m_data.insert(m_data.begin() + pos, value);
 }
 
 template <typename T>
-inline void QVector<T>::insert(size_type i, size_type n, const T &value)
+inline void QVector<T>::insert(size_type pos, size_type count, const T &value)
 {
-   Q_ASSERT_X(i >= 0 && i <= size(), "QVector<T>::insert", "index out of range");
-   m_data.insert(m_data.begin() + i, n, value);
+   Q_ASSERT_X(pos >= 0 && pos <= size(), "QVector<T>::insert", "index out of range");
+   m_data.insert(m_data.begin() + pos, count, value);
 }
 
 template <typename T>
@@ -660,8 +660,8 @@ QList<T> QVector<T>::toList() const
 {
    QList<T> result;
 
-   for (const auto &i : m_data) {
-      result.append(i);
+   for (const auto &pos : m_data) {
+      result.append(pos);
    }
 
    return result;
@@ -691,11 +691,16 @@ class QVectorIterator
    const_iterator i;
 
    public:
-      inline QVectorIterator(const QVector<T> &container)
-         : c(container), i(c.constBegin()) {}
+      inline QVectorIterator(const QVector<T> &vector)
+         : c(vector), i(c.constBegin())
+      {
+      }
 
-      inline QVectorIterator &operator=(const QVector<T> &container)
-         { c = container; i = c.constBegin(); return *this; }
+      inline QVectorIterator &operator=(const QVector<T> &vector) {
+         c = vector;
+         i = c.constBegin();
+         return *this;
+      }
 
       inline void toFront() { i = c.constBegin(); }
       inline void toBack() { i = c.constEnd(); }
@@ -706,18 +711,18 @@ class QVectorIterator
       inline const T &previous() { return *--i; }
       inline const T &peekPrevious() const { const_iterator p = i; return *--p; }
 
-      inline bool findNext(const T &t)  {
+      inline bool findNext(const T &value)  {
          while (i != c.constEnd()) {
-            if (*i++ == t) {
+            if (*i++ == value) {
                return true;
             }
          }
          return false;
       }
 
-      inline bool findPrevious(const T &t)   {
+      inline bool findPrevious(const T &value)   {
          while (i != c.constBegin()) {
-            if (*(--i) == t)  {
+            if (*(--i) == value)  {
                return true;
             }
          }
@@ -739,16 +744,16 @@ class QMutableVectorIterator
    }
 
    public:
-      inline QMutableVectorIterator(QVector<T> &container)
-         : c(&container)
+      inline QMutableVectorIterator(QVector<T> &vector)
+         : c(&vector)
       {
          i = c->begin();
          n = c->end();
       }
 
-      inline QMutableVectorIterator &operator=(QVector<T> &container)
+      inline QMutableVectorIterator &operator=(QVector<T> &vector)
       {
-         c = &container;
+         c = &vector;
          i = c->begin();
          n = c->end();
          return *this;
@@ -763,21 +768,41 @@ class QMutableVectorIterator
       inline T &previous() { n = --i; return *n; }
       inline T &peekPrevious() const { iterator p = i; return *--p; }
 
-      inline void remove()
-         { if (c->constEnd() != const_iterator(n)) { i = c->erase(n); n = c->end(); } }
+      inline void remove() {
+         if (c->constEnd() != const_iterator(n)) {
+            i = c->erase(n);
+            n = c->end();
+         }
+      }
 
-      inline void setValue(const T &t) const { if (c->constEnd() != const_iterator(n)) *n = t; }
+      inline void setValue(const T &value) const { if (c->constEnd() != const_iterator(n)) *n = value; }
       inline T &value() { Q_ASSERT(item_exists()); return *n; }
       inline const T &value() const { Q_ASSERT(item_exists()); return *n; }
-      inline void insert(const T &t) { n = i = c->insert(i, t); ++i; }
+      inline void insert(const T &value) { n = i = c->insert(i, value); ++i; }
 
-      inline bool findNext(const T &t)
-         { while (c->constEnd() != const_iterator(n = i)) if (*i++ == t) return true; return false; }
+      inline bool findNext(const T &value) {
+         while (c->constEnd() != const_iterator(n = i)) {
 
-      inline bool findPrevious(const T &t)
-         { while (c->constBegin() != const_iterator(i)) if (*(n = --i) == t) return true;
+            if (*i++ == value) {
+               return true;
+            }
+         }
 
-      n = c->end(); return false;  }
+         return false;
+      }
+
+      inline bool findPrevious(const T &value) {
+         while (c->constBegin() != const_iterator(i)) {
+
+            if (*(n = --i) == value) {
+               return true;
+            }
+         }
+
+         n = c->end();
+
+         return false;
+      }
 };
 
 #endif

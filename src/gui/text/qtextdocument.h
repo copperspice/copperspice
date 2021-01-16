@@ -274,17 +274,17 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    GUI_CS_SIGNAL_1(Public, void contentsChanged())
    GUI_CS_SIGNAL_2(contentsChanged)
 
-   GUI_CS_SIGNAL_1(Public, void undoAvailable(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(undoAvailable, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void undoAvailable(bool status))
+   GUI_CS_SIGNAL_2(undoAvailable, status)
 
-   GUI_CS_SIGNAL_1(Public, void redoAvailable(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(redoAvailable, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void redoAvailable(bool status))
+   GUI_CS_SIGNAL_2(redoAvailable, status)
 
    GUI_CS_SIGNAL_1(Public, void undoCommandAdded())
    GUI_CS_SIGNAL_2(undoCommandAdded)
 
-   GUI_CS_SIGNAL_1(Public, void modificationChanged(bool m))
-   GUI_CS_SIGNAL_2(modificationChanged, m)
+   GUI_CS_SIGNAL_1(Public, void modificationChanged(bool status))
+   GUI_CS_SIGNAL_2(modificationChanged, status)
 
    GUI_CS_SIGNAL_1(Public, void cursorPositionChanged(const QTextCursor &cursor))
    GUI_CS_SIGNAL_2(cursorPositionChanged, cursor)
@@ -304,7 +304,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    GUI_CS_SLOT_1(Public, void redo())
    GUI_CS_SLOT_OVERLOAD(redo, ())
 
-   GUI_CS_SLOT_1(Public, void appendUndoItem(QAbstractUndoItem *un_named_arg1))
+   GUI_CS_SLOT_1(Public, void appendUndoItem(QAbstractUndoItem *item))
    GUI_CS_SLOT_2(appendUndoItem)
 
    GUI_CS_SLOT_1(Public, void setModified(bool m = true))

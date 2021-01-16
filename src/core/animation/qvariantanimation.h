@@ -74,7 +74,7 @@ class Q_CORE_EXPORT QVariantAnimation : public QAbstractAnimation
    void setKeyValueAt(double step, const QVariant &value);
 
    QVector<QVariantAnimation::ValuePair> keyValues() const;
-   void setKeyValues(const QVector<QVariantAnimation::ValuePair> &values);
+   void setKeyValues(const QVector<QVariantAnimation::ValuePair> &keyValues);
 
    QVariant currentValue() const;
 

@@ -162,8 +162,8 @@ class QCache
 };
 
 template <class Key, class T>
-inline QCache<Key, T>::QCache(int amaxCost)
-   : f(nullptr), l(nullptr), mx(amaxCost), total(0)
+inline QCache<Key, T>::QCache(int maxCost)
+   : f(nullptr), l(nullptr), mx(maxCost), total(0)
 {
 }
 
@@ -230,31 +230,35 @@ inline T *QCache<Key, T>::take(const Key &key)
 }
 
 template <class Key, class T>
-bool QCache<Key, T>::insert(const Key &akey, T *aobject, int acost)
+bool QCache<Key, T>::insert(const Key &key, T *object, int cost)
 {
-   remove(akey);
+   remove(key);
 
-   if (acost > mx) {
-      delete aobject;
+   if (cost > mx) {
+      delete object;
       return false;
    }
 
-   trim(mx - acost);
-   Node sn(aobject, acost);
+   trim(mx - cost);
+   Node sn(object, cost);
 
-   typename QHash<Key, Node>::iterator i = hash.insert(akey, sn);
-   total += acost;
+   typename QHash<Key, Node>::iterator i = hash.insert(key, sn);
+
+   total    += cost;
    Node *n   = &i.value();
    n->keyPtr = &i.key();
 
    if (f) {
       f->p = n;
    }
+
    n->n = f;
    f = n;
+
    if (!l) {
       l = f;
    }
+
    return true;
 }
 

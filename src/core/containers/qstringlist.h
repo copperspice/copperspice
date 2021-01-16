@@ -59,7 +59,7 @@ class QStringList : public QList<QString>
 
    QStringList Q_CORE_EXPORT filter(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
-   QString Q_CORE_EXPORT join(const QString &sep) const;
+   QString Q_CORE_EXPORT join(const QString &separator) const;
 
    int Q_CORE_EXPORT removeDuplicates();
    Q_CORE_EXPORT QStringList &replaceInStrings(const QString &before, const QString &after,
@@ -84,8 +84,8 @@ class QStringList : public QList<QString>
       return *this;
    }
 
-   QStringList &operator<<(const QStringList &value) {
-      *this += value;
+   QStringList &operator<<(const QStringList &other) {
+      *this += other;
       return *this;
    }
 

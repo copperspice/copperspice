@@ -87,10 +87,10 @@ class Q_CORE_EXPORT QDataStream
    };
 
    QDataStream();
-   explicit QDataStream(QIODevice *);
+   explicit QDataStream(QIODevice *device);
 
-   QDataStream(QByteArray *, QIODevice::OpenMode flags);
-   QDataStream(const QByteArray &);
+   QDataStream(QByteArray *buffer, QIODevice::OpenMode mode);
+   QDataStream(const QByteArray &buffer);
 
    QDataStream(const QDataStream &) = delete;
    QDataStream &operator=(const QDataStream &) = delete;
@@ -98,7 +98,7 @@ class Q_CORE_EXPORT QDataStream
    virtual ~QDataStream();
 
    inline QIODevice *device() const;
-   void setDevice(QIODevice *);
+   void setDevice(QIODevice *device);
 
    bool atEnd() const;
 
@@ -110,10 +110,10 @@ class Q_CORE_EXPORT QDataStream
    void setFloatingPointPrecision(FloatingPointPrecision precision);
 
    inline ByteOrder byteOrder() const;
-   void setByteOrder(ByteOrder);
+   void setByteOrder(ByteOrder order);
 
    inline int version() const;
-   inline void setVersion(int);
+   inline void setVersion(int version);
 
    QDataStream &operator>>(qint8 &i);
    inline QDataStream &operator>>(quint8 &i);
@@ -145,11 +145,11 @@ class Q_CORE_EXPORT QDataStream
    QDataStream &operator<<(unsigned long i);
    QDataStream &operator<<(const char *str);
 
-   QDataStream &readBytes(char *&, uint &len);
-   int readRawData(char *, int len);
+   QDataStream &readBytes(char *&buffer, uint &len);
+   int readRawData(char *buffer, int len);
 
-   QDataStream &writeBytes(const char *, uint len);
-   int writeRawData(const char *, int len);
+   QDataStream &writeBytes(const char *buffer, uint len);
+   int writeRawData(const char *buffer, int len);
 
    int skipRawData(int len);
 
@@ -184,9 +184,9 @@ inline int QDataStream::version() const
    return ver;
 }
 
-inline void QDataStream::setVersion(int v)
+inline void QDataStream::setVersion(int version)
 {
-   ver = v;
+   ver = version;
 }
 
 inline QDataStream &QDataStream::operator>>(quint8 &i)

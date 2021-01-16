@@ -601,12 +601,12 @@ bool QStringView<S>::contains(value_type c, Qt::CaseSensitivity cs) const
 }
 
 template <typename S>
-bool QStringView<S>::contains(const S &other, Qt::CaseSensitivity cs) const
+bool QStringView<S>::contains(const S &str, Qt::CaseSensitivity cs) const
 {
    const_iterator iter      = this->cbegin();
    const_iterator iter_end  = this->cend();
 
-   iter = indexOfFast(other, iter, cs);
+   iter = indexOfFast(str, iter, cs);
 
    if (iter != iter_end) {
       return true;

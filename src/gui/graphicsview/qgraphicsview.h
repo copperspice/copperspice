@@ -200,13 +200,13 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    inline void ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = 50, int ymargin = 50);
    void ensureVisible(const QGraphicsItem *item, int xmargin = 50, int ymargin = 50);
 
-   void fitInView(const QRectF &rect, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
+   void fitInView(const QRectF &rect, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
 
-   inline void fitInView(qreal x, qreal y, qreal w, qreal h, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
-   void fitInView(const QGraphicsItem *item, Qt::AspectRatioMode aspectRadioMode = Qt::IgnoreAspectRatio);
+   inline void fitInView(qreal x, qreal y, qreal w, qreal h, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
+   void fitInView(const QGraphicsItem *item, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
 
    void render(QPainter *painter, const QRectF &target = QRectF(), const QRect &source = QRect(),
-      Qt::AspectRatioMode aspectRatioMode = Qt::KeepAspectRatio);
+      Qt::AspectRatioMode mode = Qt::KeepAspectRatio);
 
    QList<QGraphicsItem *> items() const;
    QList<QGraphicsItem *> items(const QPoint &pos) const;

@@ -2006,22 +2006,23 @@ QByteArray QByteArray::fromRawData(const char *data, int size)
    return QByteArray(dataPtr);
 }
 
-QByteArray &QByteArray::setRawData(const char *data, uint size)
+QByteArray &QByteArray::setRawData(const char *str, int size)
 {
    if (d->ref.isShared() || d->alloc) {
-      *this = fromRawData(data, size);
+      *this = fromRawData(str, size);
 
    } else {
-      if (data) {
-         d->size = size;
-         d->offset = data - reinterpret_cast<char *>(d);
+      if (str != nullptr) {
+         d->size   = size;
+         d->offset = str - reinterpret_cast<char *>(d);
 
       } else {
-         d->offset = sizeof(QByteArrayData);
-         d->size = 0;
+         d->offset  = sizeof(QByteArrayData);
+         d->size    = 0;
          *d->data() = 0;
       }
    }
+
    return *this;
 }
 

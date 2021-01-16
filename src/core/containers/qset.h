@@ -88,7 +88,7 @@ class QSet
       m_data.clear();
    }
 
-   bool contains(const QSet<T> &set) const;
+   bool contains(const QSet<T> &other) const;
 
    bool contains(const T &value) const {
       return m_data.count(value);
@@ -408,11 +408,11 @@ class QSetIterator
    const_iterator i;
 
    public:
-      inline QSetIterator(const QSet<T> &container)
-         : c(container), i(c.constBegin()) {}
+      inline QSetIterator(const QSet<T> &set)
+         : c(set), i(c.constBegin()) {}
 
-      inline QSetIterator &operator=(const QSet<T> &container)
-         { c = container; i = c.constBegin(); return *this; }
+      inline QSetIterator &operator=(const QSet<T> &set)
+         { c = set; i = c.constBegin(); return *this; }
 
       inline void toFront() { i = c.constBegin(); }
       inline void toBack() { i = c.constEnd(); }
@@ -423,18 +423,18 @@ class QSetIterator
       inline const T &previous() { return *--i; }
       inline const T &peekPrevious() const { const_iterator p = i; return *--p; }
 
-      inline bool findNext(const T &t)  {
+      inline bool findNext(const T &value)  {
          while (i != c.constEnd()) {
-            if (*i++ == t) {
+            if (*i++ == value) {
                return true;
             }
          }
          return false;
       }
 
-      inline bool findPrevious(const T &t)   {
+      inline bool findPrevious(const T &value)   {
          while (i != c.constBegin()) {
-            if (*(--i) == t)  {
+            if (*(--i) == value)  {
                return true;
             }
          }
@@ -455,8 +455,8 @@ class QMutableSetIterator
    }
 
  public:
-   inline QMutableSetIterator(QSet<T> &container)
-      : c(&container)
+   inline QMutableSetIterator(QSet<T> &set)
+      : c(&set)
    {
       i = c->begin();
       n = c->end();
@@ -465,9 +465,9 @@ class QMutableSetIterator
    inline ~QMutableSetIterator() {
    }
 
-   inline QMutableSetIterator &operator=(QSet<T> &container)
+   inline QMutableSetIterator &operator=(QSet<T> &set)
    {
-      c = &container;
+      c = &set;
       i = c->begin();
       n = c->end();
       return *this;
@@ -514,16 +514,16 @@ class QMutableSetIterator
       Q_ASSERT(item_exists());
       return *n;
    }
-   inline bool findNext(const T &t) {
-      while (c->constEnd() != (n = i)) if (*i++ == t) {
+   inline bool findNext(const T &value) {
+      while (c->constEnd() != (n = i)) if (*i++ == value) {
             return true;
-         }
+      }
       return false;
    }
-   inline bool findPrevious(const T &t) {
-      while (c->constBegin() != i) if (*(n = --i) == t) {
+   inline bool findPrevious(const T &value) {
+      while (c->constBegin() != i) if (*(n = --i) == value) {
             return true;
-         }
+      }
       n = c->end();
       return false;
    }

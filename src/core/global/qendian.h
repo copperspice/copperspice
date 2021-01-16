@@ -66,7 +66,7 @@ template <typename T> inline T qFromUnaligned(const uchar *src)
 */
 
 template <typename T>
-inline T qFromLittleEndian(const uchar *src)
+inline T qFromLittleEndian(const uchar *source)
 {
    static_assert(std::is_integral<T>::value, "Data type for T must be an integer");
    static_assert(sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8, "T must be a 16-bit, 32-bit, or 64-bit integer");
@@ -74,32 +74,32 @@ inline T qFromLittleEndian(const uchar *src)
    if (sizeof(T) == 8) {
       // 64
       quint64 retval = 0
-             | src[0]
-             | src[1] * Q_UINT64_C(0x0000000000000100)
-             | src[2] * Q_UINT64_C(0x0000000000010000)
-             | src[3] * Q_UINT64_C(0x0000000001000000)
-             | src[4] * Q_UINT64_C(0x0000000100000000)
-             | src[5] * Q_UINT64_C(0x0000010000000000)
-             | src[6] * Q_UINT64_C(0x0001000000000000)
-             | src[7] * Q_UINT64_C(0x0100000000000000);
+             | source[0]
+             | source[1] * Q_UINT64_C(0x0000000000000100)
+             | source[2] * Q_UINT64_C(0x0000000000010000)
+             | source[3] * Q_UINT64_C(0x0000000001000000)
+             | source[4] * Q_UINT64_C(0x0000000100000000)
+             | source[5] * Q_UINT64_C(0x0000010000000000)
+             | source[6] * Q_UINT64_C(0x0001000000000000)
+             | source[7] * Q_UINT64_C(0x0100000000000000);
 
       return static_cast<T>(retval);
 
    } else if (sizeof(T) == 4) {
       // 32
       quint32 retval = 0
-             | src[0]
-             | src[1] * quint32(0x00000100)
-             | src[2] * quint32(0x00010000)
-             | src[3] * quint32(0x01000000);
+             | source[0]
+             | source[1] * quint32(0x00000100)
+             | source[2] * quint32(0x00010000)
+             | source[3] * quint32(0x01000000);
 
       return static_cast<T>(retval);
 
    } else  {
       // 16
       quint16 retval = 0
-             | src[0]
-             | src[1] * 0x0100;
+             | source[0]
+             | source[1] * 0x0100;
 
       return static_cast<T>(retval);
    }
@@ -111,7 +111,7 @@ inline T qFromLittleEndian(const uchar *src)
 */
 
 template <typename T>
-inline T qFromBigEndian(const uchar *src)
+inline T qFromBigEndian(const uchar *source)
 {
    static_assert(std::is_integral<T>::value, "Data type for T must be an integer");
    static_assert(sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8, "T must be a 16-bit, 32-bit, or 64-bit integer");
@@ -119,32 +119,32 @@ inline T qFromBigEndian(const uchar *src)
    if (sizeof(T) == 8) {
       // 64
       quint64 retval = 0
-             | src[7]
-             | src[6] * Q_UINT64_C(0x0000000000000100)
-             | src[5] * Q_UINT64_C(0x0000000000010000)
-             | src[4] * Q_UINT64_C(0x0000000001000000)
-             | src[3] * Q_UINT64_C(0x0000000100000000)
-             | src[2] * Q_UINT64_C(0x0000010000000000)
-             | src[1] * Q_UINT64_C(0x0001000000000000)
-             | src[0] * Q_UINT64_C(0x0100000000000000);
+             | source[7]
+             | source[6] * Q_UINT64_C(0x0000000000000100)
+             | source[5] * Q_UINT64_C(0x0000000000010000)
+             | source[4] * Q_UINT64_C(0x0000000001000000)
+             | source[3] * Q_UINT64_C(0x0000000100000000)
+             | source[2] * Q_UINT64_C(0x0000010000000000)
+             | source[1] * Q_UINT64_C(0x0001000000000000)
+             | source[0] * Q_UINT64_C(0x0100000000000000);
 
       return static_cast<T>(retval);
 
    } else if (sizeof(T) == 4) {
       // 32
       quint32 retval = 0
-             | src[3]
-             | src[2] * quint32(0x00000100)
-             | src[1] * quint32(0x00010000)
-             | src[0] * quint32(0x01000000);
+             | source[3]
+             | source[2] * quint32(0x00000100)
+             | source[1] * quint32(0x00010000)
+             | source[0] * quint32(0x01000000);
 
       return static_cast<T>(retval);
 
    } else  {
       // 16
       quint16 retval = 0
-             | src[1]
-             | src[0] * 0x0100;
+             | source[1]
+             | source[0] * 0x0100;
 
       return static_cast<T>(retval);
    }

@@ -502,6 +502,7 @@ QString QSettingsPrivate::variantToString(const QVariant &v)
          result += QLatin1Char(')');
          break;
       }
+
       case QVariant::Point: {
          QPoint p = v.value<QPoint>();
 
@@ -514,16 +515,16 @@ QString QSettingsPrivate::variantToString(const QVariant &v)
       }
 
       default: {
-         QByteArray a;
+         QByteArray data;
 
          {
-            QDataStream s(&a, QIODevice::WriteOnly);
+            QDataStream s(&data, QIODevice::WriteOnly);
             s << v;
          }
 
-         result = QLatin1String("@Variant(");
-         result += QString::fromLatin1(a.constData(), a.size());
-         result += QLatin1Char(')');
+         result = "@Variant(";
+         result += QString::fromLatin1(data.constData(), data.size());
+         result += ')';
 
          break;
       }

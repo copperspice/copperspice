@@ -126,7 +126,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    bool disconnect(const QString &signalMethod = QString(), const QObject *receiver = nullptr, const QString &slotMethod = QString()) const;
 
-   bool disconnect(const QString &signalMethod, const QString &lineNumber, const QObject *receiver = nullptr,
+   bool disconnect(const QString &signalMethod, const QString &location, const QObject *receiver = nullptr,
                    const QString &slotMethod = QString()) const;
 
    bool disconnect(const QObject *receiver, const QString &slotMethod = QString()) const;
@@ -145,11 +145,11 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    QList<QString> dynamicPropertyNames() const;
 
-   virtual bool event(QEvent *);
+   virtual bool event(QEvent *event);
    virtual bool eventFilter(QObject *watched, QEvent *event);
-   void installEventFilter(QObject *obj);
+   void installEventFilter(QObject *filterObj);
 
-   bool inherits(const QString &classname) const;
+   bool inherits(const QString &className) const;
    bool isWidgetType() const;
    bool isWindowType() const;
 
@@ -182,7 +182,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    // function ptr or lambda
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class T>
    static bool connect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                       const Receiver *receiver, T slot, Qt::ConnectionType type = Qt::AutoConnection);
+                       const Receiver *receiver, T slotLambda, Qt::ConnectionType type = Qt::AutoConnection);
 
    // signal * slot method ptr
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
@@ -192,10 +192,10 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    // function ptr or lambda
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class T>
    static bool disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                          const Receiver *receiver, T slot);
+                          const Receiver *receiver, T slotMethod);
 
    template<typename T>
-   T findChild(const QString &aName = QString()) const;
+   T findChild(const QString &childName = QString()) const;
 
    template<class T>
    QList<T> findChildren(const QString &objName = QString(), Qt::FindChildOptions options = Qt::FindChildrenRecursively) const;

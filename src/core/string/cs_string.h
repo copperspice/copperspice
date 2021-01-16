@@ -483,7 +483,7 @@ class CsBasicString
       CsBasicString &insert(size_type indexStart, const CsBasicString &str);
 
       CsBasicString &insert(size_type indexStart, const CsBasicString &str,
-                  size_type srcStart, size_type srcSize = npos);
+                  size_type srcStart, size_type size = npos);
 
       iterator insert(const_iterator posStart, CsChar c);
       iterator insert(const_iterator posStart, size_type count, CsChar c);
@@ -510,7 +510,7 @@ class CsBasicString
 
       template <typename U, typename = typename std::enable_if< std::is_convertible<
             decltype(*(std::declval<typename U::const_iterator>())), CsChar>::value>::type>
-      iterator insert(size_type indexStart, CsBasicStringView<U> str, size_type srcStart, size_type srcSize = npos);
+      iterator insert(size_type indexStart, CsBasicStringView<U> str, size_type srcStart, size_type size = npos);
 
       void pop_back();
       void push_back(CsChar c);
@@ -518,8 +518,8 @@ class CsBasicString
       CsBasicString &replace(size_type indexStart, size_type size, const CsBasicString &str);
       CsBasicString &replace(const_iterator first, const_iterator last, const CsBasicString &str);
 
-      CsBasicString &replace(size_type indexStart, size_type size, const CsBasicString &str,
-                  size_type srcStart, size_type srcSize = npos);
+      CsBasicString &replace(size_type indexStart, size_type count, const CsBasicString &str,
+                  size_type srcStart, size_type size = npos);
 
       template <class Iterator>
       CsBasicString &replace(const_iterator first1, const_iterator last1, Iterator first2, Iterator last2);
@@ -527,20 +527,20 @@ class CsBasicString
       // for a const char * and char *
       template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
                   std::is_same<T, char *>::value>::type>
-      CsBasicString &replace(size_type indexStart, size_type size, const T &str, size_type srcSize);
+      CsBasicString &replace(size_type indexStart, size_type count, const T &str, size_type size);
 
       // for an array of chars
       template <int N>
-      CsBasicString &replace(size_type indexStart, size_type size, const char (&str)[N], size_type srcSize);
+      CsBasicString &replace(size_type indexStart, size_type count, const char (&str)[N], size_type size);
 
       // for a const char * and char *
       template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
                   std::is_same<T, char *>::value>::type>
-      CsBasicString &replace(const_iterator first, const_iterator last, const T &str, size_type srcSize);
+      CsBasicString &replace(const_iterator first, const_iterator last, const T &str, size_type size);
 
       // for an array of chars
       template <int N>
-      CsBasicString &replace(const_iterator first, const_iterator last, const char (&str)[N], size_type srcSize);
+      CsBasicString &replace(const_iterator first, const_iterator last, const char (&str)[N], size_type size);
 
       // for a const char * and char *
       template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
@@ -575,12 +575,12 @@ class CsBasicString
       // basic_string &replace(const_iterator first, const_iterator last, CsBasicStringView<U> str);
 
       template <class T>
-      CsBasicString &replace(size_type indexStart, size_type size, const T &str,
-                  size_type srcStart, size_type srcSize = npos);
+      CsBasicString &replace(size_type indexStart, size_type count, const T &str,
+                  size_type srcStart, size_type size = npos);
 
       template <class T>
       CsBasicString &replace(const_iterator first, const_iterator last, const T &str,
-                  size_type srcStart, size_type srcSize = npos);
+                  size_type srcStart, size_type size = npos);
 
       iterator replace(const_iterator iter, const CsBasicString &str);
 

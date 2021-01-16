@@ -95,12 +95,12 @@ Q_CORE_EXPORT int qstrnicmp(const char *, const char *, uint len);
 Q_CORE_EXPORT quint16 qChecksum(const char *s, uint len);
 
 template<int N> struct QStaticByteArrayData {
-   QByteArrayData ba;
+   QByteArrayData value;
    char data[N + 1];
 
    QByteArrayData *data_ptr() const {
-      Q_ASSERT(ba.ref.isStatic());
-      return const_cast<QByteArrayData *>(&ba);
+      Q_ASSERT(value.ref.isStatic());
+      return const_cast<QByteArrayData *>(&value);
    }
 };
 
@@ -142,8 +142,8 @@ class Q_CORE_EXPORT QByteArray
    QByteArray() : d(Data::sharedNull())
    { }
 
-   QByteArray(const char *, int size = -1);
-   QByteArray(int size, char c);
+   QByteArray(const char *str, int size = -1);
+   QByteArray(int size, char ch);
 
    QByteArray(const QByteArray &other)
       : d(other.d)
@@ -172,10 +172,10 @@ class Q_CORE_EXPORT QByteArray
 
    inline char at(int i) const;
 
-   QByteArray &append(char c);
-   QByteArray &append(const char *s);
-   QByteArray &append(const char *s, int len);
-   QByteArray &append(const QByteArray &a);
+   QByteArray &append(char ch);
+   QByteArray &append(const char *str);
+   QByteArray &append(const char *str, int len);
+   QByteArray &append(const QByteArray &value);
 
    inline int capacity() const;
    void clear();
@@ -183,13 +183,13 @@ class Q_CORE_EXPORT QByteArray
 
    void chop(int n);
 
-   inline bool contains(char c) const;
-   inline bool contains(const char *a) const;
-   inline bool contains(const QByteArray &a) const;
+   inline bool contains(char ch) const;
+   inline bool contains(const char *str) const;
+   inline bool contains(const QByteArray &value) const;
 
-   int count(char c) const;
-   int count(const char *a) const;
-   int count(const QByteArray &a) const;
+   int count(char ch) const;
+   int count(const char *str) const;
+   int count(const QByteArray &value) const;
 
    inline int count() const {
       return d->size;
@@ -205,33 +205,33 @@ class Q_CORE_EXPORT QByteArray
       return d;
    }
 
-   bool endsWith(const QByteArray &a) const;
-   bool endsWith(char c) const;
-   bool endsWith(const char *c) const;
+   bool endsWith(const QByteArray &value) const;
+   bool endsWith(char ch) const;
+   bool endsWith(const char *str) const;
 
-   QByteArray &fill(char c, int size = -1);
+   QByteArray &fill(char ch, int size = -1);
 
    inline bool isEmpty() const;
    inline bool isDetached() const;
 
-   inline bool isSharedWith(const QByteArray &other) const {
-      return d == other.d;
+   inline bool isSharedWith(const QByteArray &value) const {
+      return d == value.d;
    }
 
-   int indexOf(char c, int from = 0) const;
-   int indexOf(const char *c, int from = 0) const;
-   int indexOf(const QByteArray &a, int from = 0) const;
+   int indexOf(char ch, int from = 0) const;
+   int indexOf(const char *str, int from = 0) const;
+   int indexOf(const QByteArray &value, int from = 0) const;
 
-   QByteArray &insert(int i, char c);
-   QByteArray &insert(int i, const char *s);
-   QByteArray &insert(int i, const char *s, int len);
-   QByteArray &insert(int i, const QByteArray &a);
+   QByteArray &insert(int i, char ch);
+   QByteArray &insert(int i, const char *str);
+   QByteArray &insert(int i, const char *str, int len);
+   QByteArray &insert(int i, const QByteArray &value);
 
    bool isNull() const;
 
-   int lastIndexOf(char c, int from = -1) const;
-   int lastIndexOf(const char *c, int from = -1) const;
-   int lastIndexOf(const QByteArray &a, int from = -1) const;
+   int lastIndexOf(char ch, int from = -1) const;
+   int lastIndexOf(const char *str, int from = -1) const;
+   int lastIndexOf(const QByteArray &value, int from = -1) const;
 
    int length() const {
       return d->size;
@@ -240,32 +240,33 @@ class Q_CORE_EXPORT QByteArray
    QByteArray leftJustified(int width, char fill = ' ', bool truncate = false) const;
    QByteArray left(int len) const;
 
-   QByteArray mid(int index, int len = -1) const;
+   QByteArray mid(int pos, int len = -1) const;
 
-   inline void push_back(char c);
-   inline void push_back(const char *c);
-   inline void push_back(const QByteArray &a);
+   inline void push_back(char ch);
+   inline void push_back(const char *str);
+   inline void push_back(const QByteArray &value);
 
-   inline void push_front(char c);
-   inline void push_front(const char *c);
-   inline void push_front(const QByteArray &a);
+   inline void push_front(char ch);
+   inline void push_front(const char *str);
+   inline void push_front(const QByteArray &value);
 
-   QByteArray &prepend(char c);
-   QByteArray &prepend(const char *s);
-   QByteArray &prepend(const char *s, int len);
-   QByteArray &prepend(const QByteArray &a);
+   QByteArray &prepend(char ch);
+   QByteArray &prepend(const char *str);
+   QByteArray &prepend(const char *str, int len);
+   QByteArray &prepend(const QByteArray &value);
 
    QByteArray rightJustified(int width, char fill = ' ', bool truncate = false) const;
    QByteArray right(int len) const;
    void resize(int size);
    inline void reserve(int size);
 
-   QByteArray &remove(char c);
-   QByteArray &remove(int index, int len);
+   QByteArray &remove(char ch);
+   QByteArray &remove(int pos, int len);
 
-   QByteArray &replace(int index, int len, const char *s);
-   QByteArray &replace(int index, int len, const char *s, int alen);
-   QByteArray &replace(int index, int len, const QByteArray &s);
+   QByteArray &replace(int pos, int len, const char *str);
+   QByteArray &replace(int pos, int len, const char *str, int size);
+   QByteArray &replace(int pos, int len, const QByteArray &value);
+
    inline QByteArray &replace(char before, const char *after);
    QByteArray &replace(char before, const QByteArray &after);
    inline QByteArray &replace(const char *before, const char *after);
@@ -277,9 +278,9 @@ class Q_CORE_EXPORT QByteArray
 
    QByteArray repeated(int times) const;
 
-   bool startsWith(const QByteArray &a) const;
-   bool startsWith(char c) const;
-   bool startsWith(const char *c) const;
+   bool startsWith(const QByteArray &value) const;
+   bool startsWith(char ch) const;
+   bool startsWith(const char *str) const;
 
    QByteArray simplified() const;
 
@@ -334,7 +335,7 @@ class Q_CORE_EXPORT QByteArray
    }
 
    // operators
-   QByteArray &operator=(const QByteArray &);
+   QByteArray &operator=(const QByteArray &other);
    QByteArray &operator=(const char *str);
 
    QByteArray &operator=(QByteArray && other) {
@@ -348,9 +349,9 @@ class Q_CORE_EXPORT QByteArray
    inline QByteRef operator[](int i);
    inline QByteRef operator[](uint i);
 
-   inline QByteArray &operator+=(char c);
-   inline QByteArray &operator+=(const char *s);
-   inline QByteArray &operator+=(const QByteArray &a);
+   inline QByteArray &operator+=(char ch);
+   inline QByteArray &operator+=(const char *str);
+   inline QByteArray &operator+=(const QByteArray &value);
 
    short toShort(bool *ok = nullptr, int base = 10) const;
    ushort toUShort(bool *ok = nullptr, int base = 10) const;
@@ -368,25 +369,25 @@ class Q_CORE_EXPORT QByteArray
    QByteArray toPercentEncoding(const QByteArray &exclude = QByteArray(),
                                 const QByteArray &include = QByteArray(), char percent = '%') const;
 
-   inline QByteArray &setNum(short, int base = 10);
-   inline QByteArray &setNum(ushort, int base = 10);
-   inline QByteArray &setNum(int, int base = 10);
-   inline QByteArray &setNum(uint, int base = 10);
-   QByteArray &setNum(qint64, int base = 10);
-   QByteArray &setNum(quint64, int base = 10);
-   inline QByteArray &setNum(float, char f = 'g', int prec = 6);
-   QByteArray &setNum(double, char f = 'g', int prec = 6);
-   QByteArray &setRawData(const char *a, uint n); // ### Qt5/use an int
+   inline QByteArray &setNum(short n, int base = 10);
+   inline QByteArray &setNum(ushort n, int base = 10);
+   inline QByteArray &setNum(int n, int base = 10);
+   inline QByteArray &setNum(uint n, int base = 10);
+   QByteArray &setNum(qint64 n, int base = 10);
+   QByteArray &setNum(quint64 n, int base = 10);
+   inline QByteArray &setNum(float n, char f = 'g', int prec = 6);
+   QByteArray &setNum(double n, char f = 'g', int prec = 6);
+   QByteArray &setRawData(const char *str, int size);
 
-   static QByteArray number(int, int base = 10);
-   static QByteArray number(uint, int base = 10);
-   static QByteArray number(qint64, int base = 10);
-   static QByteArray number(quint64, int base = 10);
-   static QByteArray number(double, char f = 'g', int prec = 6);
-   static QByteArray fromRawData(const char *, int size);
-   static QByteArray fromBase64(const QByteArray &base64);
-   static QByteArray fromHex(const QByteArray &hexEncoded);
-   static QByteArray fromPercentEncoding(const QByteArray &pctEncoded, char percent = '%');
+   static QByteArray number(int n, int base = 10);
+   static QByteArray number(uint n, int base = 10);
+   static QByteArray number(qint64 n, int base = 10);
+   static QByteArray number(quint64 n, int base = 10);
+   static QByteArray number(double n, char f = 'g', int prec = 6);
+   static QByteArray fromRawData(const char *str, int size);
+   static QByteArray fromBase64(const QByteArray &value);
+   static QByteArray fromHex(const QByteArray &value);
+   static QByteArray fromPercentEncoding(const QByteArray &value, char percent = '%');
 
 #if defined(Q_OS_DARWIN)
     static QByteArray fromCFData(CFDataRef data);
@@ -475,10 +476,10 @@ inline int QByteArray::capacity() const
    return d->alloc ? d->alloc - 1 : 0;
 }
 
-inline void QByteArray::reserve(int asize)
+inline void QByteArray::reserve(int size)
 {
-   if (d->ref.isShared() || uint(asize) + 1u > d->alloc) {
-      reallocData(uint(asize) + 1u, d->detachFlags() | Data::CapacityReserved);
+   if (d->ref.isShared() || uint(size) + 1u > d->alloc) {
+      reallocData(uint(size) + 1u, d->detachFlags() | Data::CapacityReserved);
    } else {
       // cannot set unconditionally, since d could be the shared_null or
       // otherwise static
@@ -613,59 +614,59 @@ inline QByteArray::const_iterator QByteArray::constEnd() const
    return d->data() + d->size;
 }
 
-inline QByteArray &QByteArray::operator+=(char c)
+inline QByteArray &QByteArray::operator+=(char ch)
 {
-   return append(c);
+   return append(ch);
 }
 
-inline QByteArray &QByteArray::operator+=(const char *s)
+inline QByteArray &QByteArray::operator+=(const char *str)
 {
-   return append(s);
+   return append(str);
 }
 
-inline QByteArray &QByteArray::operator+=(const QByteArray &a)
+inline QByteArray &QByteArray::operator+=(const QByteArray &value)
 {
-   return append(a);
+   return append(value);
 }
 
-inline void QByteArray::push_back(char c)
+inline void QByteArray::push_back(char ch)
 {
-   append(c);
+   append(ch);
 }
 
-inline void QByteArray::push_back(const char *c)
+inline void QByteArray::push_back(const char *str)
 {
-   append(c);
+   append(str);
 }
 
-inline void QByteArray::push_back(const QByteArray &a)
+inline void QByteArray::push_back(const QByteArray &value)
 {
-   append(a);
+   append(value);
 }
 
-inline void QByteArray::push_front(char c)
+inline void QByteArray::push_front(char ch)
 {
-   prepend(c);
+   prepend(ch);
 }
 
-inline void QByteArray::push_front(const char *c)
+inline void QByteArray::push_front(const char *str)
 {
-   prepend(c);
+   prepend(str);
 }
 
-inline void QByteArray::push_front(const QByteArray &a)
+inline void QByteArray::push_front(const QByteArray &value)
 {
-   prepend(a);
+   prepend(value);
 }
 
-inline bool QByteArray::contains(const QByteArray &a) const
+inline bool QByteArray::contains(const QByteArray &value) const
 {
-   return bool(indexOf(a) != -1);
+   return bool(indexOf(value) != -1);
 }
 
-inline bool QByteArray::contains(char c) const
+inline bool QByteArray::contains(char ch) const
 {
-   return bool(indexOf(c) != -1);
+   return bool(indexOf(ch) != -1);
 }
 
 inline bool operator==(const QByteArray &a1, const QByteArray &a2)
@@ -783,9 +784,9 @@ inline const QByteArray operator+(char a1, const QByteArray &a2)
    return QByteArray(&a1, 1) += a2;
 }
 
-inline bool QByteArray::contains(const char *c) const
+inline bool QByteArray::contains(const char *str) const
 {
-   return bool(indexOf(c) != -1);
+   return bool(indexOf(str) != -1);
 }
 
 inline QByteArray &QByteArray::replace(char before, const char *after)
@@ -828,20 +829,20 @@ inline QByteArray &QByteArray::setNum(float n, char f, int prec)
    return setNum(double(n), f, prec);
 }
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QByteArray &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &value);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QByteArray &value);
 
 Q_CORE_EXPORT QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel = -1);
 Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes);
 
-inline QByteArray qCompress(const QByteArray &data, int compressionLevel = -1)
+inline QByteArray qCompress(const QByteArray &value, int compressionLevel = -1)
 {
-   return qCompress(reinterpret_cast<const uchar *>(data.constData()), data.size(), compressionLevel);
+   return qCompress(reinterpret_cast<const uchar *>(value.constData()), value.size(), compressionLevel);
 }
 
-inline QByteArray qUncompress(const QByteArray &data)
+inline QByteArray qUncompress(const QByteArray &value)
 {
-   return qUncompress(reinterpret_cast<const uchar *>(data.constData()), data.size());
+   return qUncompress(reinterpret_cast<const uchar *>(value.constData()), value.size());
 }
 
 Q_DECLARE_SHARED(QByteArray)

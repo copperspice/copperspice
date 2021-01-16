@@ -403,8 +403,8 @@ class Q_CORE_EXPORT QXmlStreamReader
    QStringView text() const;
 
    QXmlStreamNamespaceDeclarations namespaceDeclarations() const;
-   void addExtraNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &extraNamespaceDeclaraction);
-   void addExtraNamespaceDeclarations(const QXmlStreamNamespaceDeclarations &extraNamespaceDeclaractions);
+   void addExtraNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &declaration);
+   void addExtraNamespaceDeclarations(const QXmlStreamNamespaceDeclarations &declarations);
    QXmlStreamNotationDeclarations notationDeclarations() const;
    QXmlStreamEntityDeclarations entityDeclarations() const;
    QStringView dtdName() const;

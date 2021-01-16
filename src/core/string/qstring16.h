@@ -592,7 +592,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       [[nodiscard]] QString16 left(size_type numOfChars) const;
       [[nodiscard]] QStringView16 leftView(size_type numOfChars) const;
-      [[nodiscard]] QString16 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const;
+      [[nodiscard]] QString16 leftJustified(size_type width, QChar32 fill = UCHAR(' '), bool truncate = false) const;
 
       size_type length() const {
          return CsString::CsString_utf16::size();
@@ -725,9 +725,9 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return CsString::CsString_utf16::resize(numOfChars, c);
       }
 
-      [[nodiscard]] QString16 right(size_type numOfChars) const;
-      [[nodiscard]] QStringView16 rightView(size_type numOfChars) const;
-      [[nodiscard]] QString16 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool trunc = false) const;
+      [[nodiscard]] QString16 right(size_type count) const;
+      [[nodiscard]] QStringView16 rightView(size_type count) const;
+      [[nodiscard]] QString16 rightJustified(size_type width, QChar32 fill = UCHAR(' '), bool truncate = false) const;
 
       [[nodiscard]] QString16 simplified() const &;
       [[nodiscard]] QString16 simplified() &&;

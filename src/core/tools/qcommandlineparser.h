@@ -53,7 +53,7 @@ class Q_CORE_EXPORT QCommandLineParser
    };
    void setSingleDashWordOptionMode(SingleDashWordOptionMode parsingMode);
 
-   bool addOption(const QCommandLineOption &commandLineOption);
+   bool addOption(const QCommandLineOption &option);
 
    QCommandLineOption addVersionOption();
    QCommandLineOption addHelpOption();
@@ -69,8 +69,8 @@ class Q_CORE_EXPORT QCommandLineParser
    QString errorText() const;
 
    bool isSet(const QString &name) const;
-   QString value(const QString &name) const;
-   QStringList values(const QString &name) const;
+   QString value(const QString &optionName) const;
+   QStringList values(const QString &optionName) const;
 
    bool isSet(const QCommandLineOption &option) const;
    QString value(const QCommandLineOption &option) const;

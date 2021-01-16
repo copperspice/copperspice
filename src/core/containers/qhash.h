@@ -145,8 +145,8 @@ class QHash
          : m_iter(std::move(iter)) {
       }
 
-      const_iterator(iterator iter)
-         : m_iter(std::move(iter.m_iter)) {
+      const_iterator(iterator other)
+         : m_iter(std::move(other.m_iter)) {
       }
 
       const Key &key() const {
@@ -475,7 +475,7 @@ const Key QHash<Key, Val, Hash, KeyEqual>::key(const Val &value) const
 }
 
 template <typename Key, typename Val, typename Hash, typename KeyEqual>
-const Key QHash<Key, Val, Hash, KeyEqual>::key(const Val &value, const Key &defaultValue) const
+const Key QHash<Key, Val, Hash, KeyEqual>::key(const Val &value, const Key &defaultKey) const
 {
    const_iterator iter = begin();
 
@@ -487,7 +487,7 @@ const Key QHash<Key, Val, Hash, KeyEqual>::key(const Val &value, const Key &defa
       ++iter;
    }
 
-   return defaultValue;
+   return defaultKey;
 }
 
 template <typename Key, typename Val, typename Hash, typename KeyEqual>
@@ -544,14 +544,17 @@ class QHashIterator
    typedef const_iterator Item;
 
  public:
-   QHashIterator(const QHash<Key, Val, Hash, KeyEqual> &container)
-      : c(&container), i(c->constBegin()), n(c->constEnd()) {}
+   QHashIterator(const QHash<Key, Val, Hash, KeyEqual> &hash)
+      : c(&hash), i(c->constBegin()), n(c->constEnd())
+   {
+   }
 
    ~QHashIterator()
-   { }
+   {
+   }
 
-   QHashIterator &operator=(const QHash<Key, Val, Hash, KeyEqual> &container) {
-      c = container;
+   QHashIterator &operator=(const QHash<Key, Val, Hash, KeyEqual> &hash) {
+      c = hash;
       i = c->constBegin();
       n = c->constEnd();
 
@@ -605,9 +608,9 @@ class QHashIterator
       return n.key();
    }
 
-   bool findNext(const Val &t) {
+   bool findNext(const Val &value) {
       while ((n = i) != c->constEnd()) {
-         if (*i++ == t) {
+         if (*i++ == value) {
             return true;
          }
       }
@@ -615,9 +618,9 @@ class QHashIterator
       return false;
    }
 
-   bool findPrevious(const Val &t) {
+   bool findPrevious(const Val &value) {
       while (i != c->constBegin()) {
-         if (*(n = --i) == t) {
+         if (*(n = --i) == value) {
             return true;
          }
       }
@@ -645,14 +648,16 @@ class QMutableHashIterator
    typedef iterator Item;
 
  public:
-   QMutableHashIterator(QHash<Key, Val, Hash, KeyEqual> &container)
-      : c(&container), i(c->begin()), n(c->end()) {}
+   QMutableHashIterator(QHash<Key, Val, Hash, KeyEqual> &hash)
+      : c(&hash), i(c->begin()), n(c->end())
+   {
+   }
 
    ~QMutableHashIterator()
    { }
 
-   QMutableHashIterator &operator=(QHash<Key, Val, Hash, KeyEqual> &container) {
-      c = & container;
+   QMutableHashIterator &operator=(QHash<Key, Val, Hash, KeyEqual> &hash) {
+      c = &hash;
       i = c->begin();
       n = c->end();
 
@@ -703,9 +708,9 @@ class QMutableHashIterator
       }
    }
 
-   void setValue(const Val &t) {
+   void setValue(const Val &value) {
       if (const_iterator(n) != c->constEnd()) {
-         *n = t;
+         *n = value;
       }
    }
 
@@ -724,9 +729,9 @@ class QMutableHashIterator
       return n.key();
    }
 
-   bool findNext(const Val &t) {
+   bool findNext(const Val &value) {
       while (const_iterator(n = i) != c->constEnd()) {
-         if (*i++ == t) {
+         if (*i++ == value) {
             return true;
          }
       }
@@ -734,9 +739,9 @@ class QMutableHashIterator
       return false;
    }
 
-   bool findPrevious(const Val &t) {
+   bool findPrevious(const Val &value) {
       while (const_iterator(i) != c->constBegin()) {
-         if (*(n = --i) == t) {
+         if (*(n = --i) == value) {
             return true;
          }
       }

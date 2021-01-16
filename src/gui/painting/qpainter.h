@@ -40,7 +40,6 @@
 #include <qfontinfo.h>
 #include <qfontmetrics.h>
 
-
 class QBrush;
 class QFontInfo;
 class QFontMetrics;
@@ -142,7 +141,7 @@ class Q_GUI_EXPORT QPainter
    };
 
    QPainter();
-   explicit QPainter(QPaintDevice *);
+   explicit QPainter(QPaintDevice *device);
 
    QPainter(const QPainter &) = delete;
    QPainter &operator=(const QPainter &) = delete;
@@ -151,7 +150,7 @@ class Q_GUI_EXPORT QPainter
 
    QPaintDevice *device() const;
 
-   bool begin(QPaintDevice *);
+   bool begin(QPaintDevice *device);
    bool end();
    bool isActive() const;
 
@@ -161,7 +160,7 @@ class Q_GUI_EXPORT QPainter
    CompositionMode compositionMode() const;
 
    const QFont &font() const;
-   void setFont(const QFont &f);
+   void setFont(const QFont &font);
 
    QFontMetrics fontMetrics() const;
    QFontInfo fontInfo() const;
@@ -181,10 +180,10 @@ class Q_GUI_EXPORT QPainter
 
    QPoint brushOrigin() const;
    inline void setBrushOrigin(int x, int y);
-   inline void setBrushOrigin(const QPoint &);
-   void setBrushOrigin(const QPointF &);
+   inline void setBrushOrigin(const QPoint &position);
+   void setBrushOrigin(const QPointF &position);
 
-   void setBackground(const QBrush &bg);
+   void setBackground(const QBrush &brush);
    const QBrush &background() const;
 
    qreal opacity() const;
@@ -194,13 +193,13 @@ class Q_GUI_EXPORT QPainter
    QRegion clipRegion() const;
    QPainterPath clipPath() const;
 
-   void setClipRect(const QRectF &, Qt::ClipOperation op = Qt::ReplaceClip);
-   void setClipRect(const QRect &, Qt::ClipOperation op = Qt::ReplaceClip);
-   inline void setClipRect(int x, int y, int w, int h, Qt::ClipOperation op = Qt::ReplaceClip);
+   void setClipRect(const QRectF &rectangle, Qt::ClipOperation operation = Qt::ReplaceClip);
+   void setClipRect(const QRect &rectangle, Qt::ClipOperation operation = Qt::ReplaceClip);
+   inline void setClipRect(int x, int y, int w, int h, Qt::ClipOperation operation = Qt::ReplaceClip);
 
-   void setClipRegion(const QRegion &, Qt::ClipOperation op = Qt::ReplaceClip);
+   void setClipRegion(const QRegion &region, Qt::ClipOperation operation = Qt::ReplaceClip);
 
-   void setClipPath(const QPainterPath &path, Qt::ClipOperation op = Qt::ReplaceClip);
+   void setClipPath(const QPainterPath &path, Qt::ClipOperation operation = Qt::ReplaceClip);
 
    void setClipping(bool enable);
    bool hasClipping() const;
@@ -230,15 +229,15 @@ class Q_GUI_EXPORT QPainter
    QMatrix combinedMatrix() const;
    QTransform combinedTransform() const;
 
-   void setMatrixEnabled(bool enabled);
+   void setMatrixEnabled(bool enable);
    bool matrixEnabled() const;
 
-   void setWorldMatrixEnabled(bool enabled);
+   void setWorldMatrixEnabled(bool enable);
    bool worldMatrixEnabled() const;
 
    void scale(qreal sx, qreal sy);
    void shear(qreal sh, qreal sv);
-   void rotate(qreal a);
+   void rotate(qreal angle);
 
    void translate(const QPointF &offset);
    inline void translate(const QPoint &offset);
@@ -260,14 +259,14 @@ class Q_GUI_EXPORT QPainter
    void fillPath(const QPainterPath &path, const QBrush &brush);
    void drawPath(const QPainterPath &path);
 
-   inline void drawPoint(const QPointF &pt);
-   inline void drawPoint(const QPoint &p);
+   inline void drawPoint(const QPointF &point);
+   inline void drawPoint(const QPoint &point);
    inline void drawPoint(int x, int y);
 
    void drawPoints(const QPointF *points, int pointCount);
-   inline void drawPoints(const QPolygonF &points);
+   inline void drawPoints(const QPolygonF &polygon);
    void drawPoints(const QPoint *points, int pointCount);
-   inline void drawPoints(const QPolygon &points);
+   inline void drawPoints(const QPolygon &polygon);
 
    inline void drawLine(const QLineF &line);
    inline void drawLine(const QLine &line);
@@ -284,24 +283,24 @@ class Q_GUI_EXPORT QPainter
    void drawLines(const QPoint *pointPairs, int lineCount);
    inline void drawLines(const QVector<QPoint> &pointPairs);
 
-   inline void drawRect(const QRectF &rect);
-   inline void drawRect(int x1, int y1, int w, int h);
-   inline void drawRect(const QRect &rect);
+   inline void drawRect(const QRectF &rectangle);
+   inline void drawRect(int x, int y, int w, int h);
+   inline void drawRect(const QRect &rectangle);
 
-   void drawRects(const QRectF *rects, int rectCount);
+   void drawRects(const QRectF *rectangles, int rectCount);
    inline void drawRects(const QVector<QRectF> &rectangles);
-   void drawRects(const QRect *rects, int rectCount);
+   void drawRects(const QRect *rectangles, int rectCount);
    inline void drawRects(const QVector<QRect> &rectangles);
 
-   void drawEllipse(const QRectF &r);
-   void drawEllipse(const QRect &r);
+   void drawEllipse(const QRectF &rectangle);
+   void drawEllipse(const QRect &rectangle);
    inline void drawEllipse(int x, int y, int w, int h);
 
    inline void drawEllipse(const QPointF &center, qreal rx, qreal ry);
    inline void drawEllipse(const QPoint &center, int rx, int ry);
 
    void drawPolyline(const QPointF *points, int pointCount);
-   inline void drawPolyline(const QPolygonF &polyline);
+   inline void drawPolyline(const QPolygonF &polygon);
    void drawPolyline(const QPoint *points, int pointCount);
    inline void drawPolyline(const QPolygon &polygon);
 
@@ -315,52 +314,52 @@ class Q_GUI_EXPORT QPainter
    void drawConvexPolygon(const QPoint *points, int pointCount);
    inline void drawConvexPolygon(const QPolygon &polygon);
 
-   void drawArc(const QRectF &rect, int a, int alen);
-   inline void drawArc(const QRect &, int a, int alen);
-   inline void drawArc(int x, int y, int w, int h, int a, int alen);
+   void drawArc(const QRectF &rectangle, int startAngle, int spanAngle);
+   inline void drawArc(const QRect &rectangle, int startAngle, int spanAngle);
+   inline void drawArc(int x, int y, int w, int h, int startAngle, int spanAngle);
 
-   void drawPie(const QRectF &rect, int a, int alen);
-   inline void drawPie(int x, int y, int w, int h, int a, int alen);
-   inline void drawPie(const QRect &, int a, int alen);
+   void drawPie(const QRectF &rectangle, int startAngle, int spanAngle);
+   inline void drawPie(int x, int y, int w, int h, int startAngle, int spanAngle);
+   inline void drawPie(const QRect &rectangle, int startAngle, int spanAngle);
 
-   void drawChord(const QRectF &rect, int a, int alen);
-   inline void drawChord(int x, int y, int w, int h, int a, int alen);
-   inline void drawChord(const QRect &, int a, int alen);
+   void drawChord(const QRectF &rectangle, int startAngle, int spanAngle);
+   inline void drawChord(int x, int y, int w, int h, int startAngle, int spanAngle);
+   inline void drawChord(const QRect &rectangle, int startAngle, int spanAngle);
 
-   void drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius,
+   void drawRoundedRect(const QRectF &rectangle, qreal xRadius, qreal yRadius,
       Qt::SizeMode mode = Qt::AbsoluteSize);
 
    inline void drawRoundedRect(int x, int y, int w, int h, qreal xRadius, qreal yRadius,
       Qt::SizeMode mode = Qt::AbsoluteSize);
 
-   inline void drawRoundedRect(const QRect &rect, qreal xRadius, qreal yRadius,
+   inline void drawRoundedRect(const QRect &rectangle, qreal xRadius, qreal yRadius,
       Qt::SizeMode mode = Qt::AbsoluteSize);
 
-   void drawRoundRect(const QRectF &r, int xround = 25, int yround = 25);
-   inline void drawRoundRect(int x, int y, int w, int h, int = 25, int = 25);
-   inline void drawRoundRect(const QRect &r, int xround = 25, int yround = 25);
+   void drawRoundRect(const QRectF &rectangle, int xRound = 25, int yRound = 25);
+   inline void drawRoundRect(int x, int y, int w, int h, int xRound = 25, int yRound = 25);
+   inline void drawRoundRect(const QRect &rectangle, int xRound = 25, int yRound = 25);
 
-   void drawTiledPixmap(const QRectF &rect, const QPixmap &pm, const QPointF &offset = QPointF());
-   inline void drawTiledPixmap(int x, int y, int w, int h, const QPixmap &, int sx = 0, int sy = 0);
-   inline void drawTiledPixmap(const QRect &, const QPixmap &, const QPoint & = QPoint());
+   void drawTiledPixmap(const QRectF &rectangle, const QPixmap &pixmap, const QPointF &position = QPointF());
+   inline void drawTiledPixmap(int x, int y, int w, int h, const QPixmap &pixmap, int sx = 0, int sy = 0);
+   inline void drawTiledPixmap(const QRect &rectangle, const QPixmap &pixmap, const QPoint &position = QPoint());
 
 #ifndef QT_NO_PICTURE
-   void drawPicture(const QPointF &p, const QPicture &picture);
+   void drawPicture(const QPointF &point, const QPicture &picture);
    inline void drawPicture(int x, int y, const QPicture &picture);
-   inline void drawPicture(const QPoint &p, const QPicture &picture);
+   inline void drawPicture(const QPoint &point, const QPicture &picture);
 #endif
 
    void drawPixmap(const QRectF &targetRect, const QPixmap &pixmap, const QRectF &sourceRect);
    inline void drawPixmap(const QRect &targetRect, const QPixmap &pixmap, const QRect &sourceRect);
-   inline void drawPixmap(int x, int y, int w, int h, const QPixmap &pm, int sx, int sy, int sw, int sh);
-   inline void drawPixmap(int x, int y, const QPixmap &pm, int sx, int sy, int sw, int sh);
-   inline void drawPixmap(const QPointF &p, const QPixmap &pm, const QRectF &sr);
-   inline void drawPixmap(const QPoint &p, const QPixmap &pm, const QRect &sr);
-   void drawPixmap(const QPointF &p, const QPixmap &pm);
-   inline void drawPixmap(const QPoint &p, const QPixmap &pm);
-   inline void drawPixmap(int x, int y, const QPixmap &pm);
-   inline void drawPixmap(const QRect &r, const QPixmap &pm);
-   inline void drawPixmap(int x, int y, int w, int h, const QPixmap &pm);
+   inline void drawPixmap(int x, int y, int w, int h, const QPixmap &pixmap, int sx, int sy, int sw, int sh);
+   inline void drawPixmap(int x, int y, const QPixmap &pixmap, int sx, int sy, int sw, int sh);
+   inline void drawPixmap(const QPointF &point, const QPixmap &pixmap, const QRectF &sourceRect);
+   inline void drawPixmap(const QPoint &point, const QPixmap &pixmap, const QRect &sourceRect);
+   void drawPixmap(const QPointF &point, const QPixmap &pixmap);
+   inline void drawPixmap(const QPoint &point, const QPixmap &pixmap);
+   inline void drawPixmap(int x, int y, const QPixmap &pixmap);
+   inline void drawPixmap(const QRect &rectangle, const QPixmap &pixmap);
+   inline void drawPixmap(int x, int y, int w, int h, const QPixmap &pixmap);
 
    void drawPixmapFragments(const PixmapFragment *fragments, int fragmentCount,
       const QPixmap &pixmap, PixmapFragmentHints hints = PixmapFragmentHints());
@@ -371,69 +370,69 @@ class Q_GUI_EXPORT QPainter
    inline void drawImage(const QRect &targetRect, const QImage &image, const QRect &sourceRect,
       Qt::ImageConversionFlags flags = Qt::AutoColor);
 
-   inline void drawImage(const QPointF &p, const QImage &image, const QRectF &sr,
+   inline void drawImage(const QPointF &point, const QImage &image, const QRectF &sourceRect,
       Qt::ImageConversionFlags flags = Qt::AutoColor);
 
-   inline void drawImage(const QPoint &p, const QImage &image, const QRect &sr,
+   inline void drawImage(const QPoint &point, const QImage &image, const QRect &sourceRect,
       Qt::ImageConversionFlags flags = Qt::AutoColor);
 
-   inline void drawImage(const QRectF &r, const QImage &image);
-   inline void drawImage(const QRect &r, const QImage &image);
-   void drawImage(const QPointF &p, const QImage &image);
-   inline void drawImage(const QPoint &p, const QImage &image);
+   inline void drawImage(const QRectF &rectangle, const QImage &image);
+   inline void drawImage(const QRect &rectangle, const QImage &image);
+   void drawImage(const QPointF &point, const QImage &image);
+   inline void drawImage(const QPoint &point, const QImage &image);
    inline void drawImage(int x, int y, const QImage &image, int sx = 0, int sy = 0,
       int sw = -1, int sh = -1, Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    void setLayoutDirection(Qt::LayoutDirection direction);
    Qt::LayoutDirection layoutDirection() const;
 
-   void drawGlyphRun(const QPointF &position, const QGlyphRun &glyphRun);
+   void drawGlyphRun(const QPointF &position, const QGlyphRun &glyphs);
 
    void drawStaticText(const QPointF &topLeftPosition, const QStaticText &staticText);
    inline void drawStaticText(const QPoint &topLeftPosition, const QStaticText &staticText);
    inline void drawStaticText(int left, int top, const QStaticText &staticText);
 
-   void drawText(const QPointF &p, const QString &s);
-   inline void drawText(const QPoint &p, const QString &s);
-   inline void drawText(int x, int y, const QString &s);
+   void drawText(const QPointF &position, const QString &text);
+   inline void drawText(const QPoint &point, const QString &text);
+   inline void drawText(int x, int y, const QString &text);
 
-   void drawText(const QPointF &p, const QString &str, int tf, int justificationPadding);
+   void drawText(const QPointF &point, const QString &text, int tf, int justificationPadding);
 
-   void drawText(const QRectF &r, int flags, const QString &text, QRectF *br = nullptr);
-   void drawText(const QRect &r, int flags, const QString &text, QRect *br = nullptr);
-   inline void drawText(int x, int y, int w, int h, int flags, const QString &text, QRect *br = nullptr);
+   void drawText(const QRectF &rectangle, int flags, const QString &text, QRectF *boundingRect = nullptr);
+   void drawText(const QRect &rectangle, int flags, const QString &text, QRect *boundingRect  = nullptr);
+   inline void drawText(int x, int y, int w, int h, int flags, const QString &text, QRect *boundingRect  = nullptr);
 
-   void drawText(const QRectF &r, const QString &text, const QTextOption &o = QTextOption());
+   void drawText(const QRectF &rectangle, const QString &text, const QTextOption &option = QTextOption());
 
-   QRectF boundingRect(const QRectF &rect, int flags, const QString &text);
-   QRect boundingRect(const QRect &rect, int flags, const QString &text);
+   QRectF boundingRect(const QRectF &rectangle, int flags, const QString &text);
+   QRect boundingRect(const QRect &rectangle, int flags, const QString &text);
    inline QRect boundingRect(int x, int y, int w, int h, int flags, const QString &text);
 
-   QRectF boundingRect(const QRectF &rect, const QString &text, const QTextOption &o = QTextOption());
+   QRectF boundingRect(const QRectF &rectangle, const QString &text, const QTextOption &option = QTextOption());
 
-   void drawTextItem(const QPointF &p, const QTextItem &ti);
-   inline void drawTextItem(int x, int y, const QTextItem &ti);
-   inline void drawTextItem(const QPoint &p, const QTextItem &ti);
+   void drawTextItem(const QPointF &topLeftPosition, const QTextItem &staticText);
+   inline void drawTextItem(int x, int y, const QTextItem &staticText);
+   inline void drawTextItem(const QPoint &point, const QTextItem &staticText);
 
-   void fillRect(const QRectF &, const QBrush &);
-   inline void fillRect(int x, int y, int w, int h, const QBrush &);
-   void fillRect(const QRect &, const QBrush &);
+   void fillRect(const QRectF &rectangle, const QBrush &brush);
+   inline void fillRect(int x, int y, int w, int h, const QBrush &brush);
+   void fillRect(const QRect &rectangle, const QBrush &brush);
 
-   void fillRect(const QRectF &, const QColor &color);
+   void fillRect(const QRectF &rectangle, const QColor &color);
    inline void fillRect(int x, int y, int w, int h, const QColor &color);
-   void fillRect(const QRect &, const QColor &color);
+   void fillRect(const QRect &rectangle, const QColor &color);
 
    inline void fillRect(int x, int y, int w, int h, Qt::GlobalColor c);
-   inline void fillRect(const QRect &r, Qt::GlobalColor c);
-   inline void fillRect(const QRectF &r, Qt::GlobalColor c);
+   inline void fillRect(const QRect &rectangle, Qt::GlobalColor c);
+   inline void fillRect(const QRectF &rectangle, Qt::GlobalColor c);
 
    inline void fillRect(int x, int y, int w, int h, Qt::BrushStyle style);
-   inline void fillRect(const QRect &r, Qt::BrushStyle style);
-   inline void fillRect(const QRectF &r, Qt::BrushStyle style);
+   inline void fillRect(const QRect &rectangle, Qt::BrushStyle style);
+   inline void fillRect(const QRectF &rectangle, Qt::BrushStyle style);
 
-   void eraseRect(const QRectF &);
+   void eraseRect(const QRectF &rectangle);
    inline void eraseRect(int x, int y, int w, int h);
-   inline void eraseRect(const QRect &);
+   inline void eraseRect(const QRect &rectangle);
 
    void setRenderHint(RenderHint hint, bool on = true);
    void setRenderHints(RenderHints hints, bool on = true);
@@ -446,9 +445,9 @@ class Q_GUI_EXPORT QPainter
    QPaintEngine *paintEngine() const;
 
    static void setRedirected(const QPaintDevice *device, QPaintDevice *replacement,
-      const QPoint &offset = QPoint());
+      const QPoint &position = QPoint());
 
-   static QPaintDevice *redirected(const QPaintDevice *device, QPoint *offset = nullptr);
+   static QPaintDevice *redirected(const QPaintDevice *device, QPoint *position = nullptr);
    static void restoreRedirected(const QPaintDevice *device);
 
    void beginNativePainting();
@@ -479,9 +478,9 @@ class Q_GUI_EXPORT QPainter
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPainter::RenderHints)
 
-inline void QPainter::drawLine(const QLineF &l)
+inline void QPainter::drawLine(const QLineF &line)
 {
-   drawLines(&l, 1);
+   drawLines(&line, 1);
 }
 
 inline void QPainter::drawLine(const QLine &line)
@@ -526,14 +525,14 @@ inline void QPainter::drawLines(const QVector<QPoint> &pointPairs)
    drawLines(pointPairs.constData(), pointPairs.size() / 2);
 }
 
-inline void QPainter::drawPolyline(const QPolygonF &polyline)
+inline void QPainter::drawPolyline(const QPolygonF &polygon)
 {
-   drawPolyline(polyline.constData(), polyline.size());
+   drawPolyline(polygon.constData(), polygon.size());
 }
 
-inline void QPainter::drawPolyline(const QPolygon &polyline)
+inline void QPainter::drawPolyline(const QPolygon &polygon)
 {
-   drawPolyline(polyline.constData(), polyline.size());
+   drawPolyline(polygon.constData(), polygon.size());
 }
 
 inline void QPainter::drawPolygon(const QPolygonF &polygon, Qt::FillRule fillRule)
@@ -546,19 +545,19 @@ inline void QPainter::drawPolygon(const QPolygon &polygon, Qt::FillRule fillRule
    drawPolygon(polygon.constData(), polygon.size(), fillRule);
 }
 
-inline void QPainter::drawConvexPolygon(const QPolygonF &poly)
+inline void QPainter::drawConvexPolygon(const QPolygonF &polygon)
 {
-   drawConvexPolygon(poly.constData(), poly.size());
+   drawConvexPolygon(polygon.constData(), polygon.size());
 }
 
-inline void QPainter::drawConvexPolygon(const QPolygon &poly)
+inline void QPainter::drawConvexPolygon(const QPolygon &polygon)
 {
-   drawConvexPolygon(poly.constData(), poly.size());
+   drawConvexPolygon(polygon.constData(), polygon.size());
 }
 
-inline void QPainter::drawRect(const QRectF &rect)
+inline void QPainter::drawRect(const QRectF &rectangle)
 {
-   drawRects(&rect, 1);
+   drawRects(&rectangle, 1);
 }
 
 inline void QPainter::drawRect(int x, int y, int w, int h)
@@ -567,24 +566,24 @@ inline void QPainter::drawRect(int x, int y, int w, int h)
    drawRects(&r, 1);
 }
 
-inline void QPainter::drawRect(const QRect &r)
+inline void QPainter::drawRect(const QRect &rectangle)
 {
-   drawRects(&r, 1);
+   drawRects(&rectangle, 1);
 }
 
-inline void QPainter::drawRects(const QVector<QRectF> &rects)
+inline void QPainter::drawRects(const QVector<QRectF> &rectangles)
 {
-   drawRects(rects.constData(), rects.size());
+   drawRects(rectangles.constData(), rectangles.size());
 }
 
-inline void QPainter::drawRects(const QVector<QRect> &rects)
+inline void QPainter::drawRects(const QVector<QRect> &rectangles)
 {
-   drawRects(rects.constData(), rects.size());
+   drawRects(rectangles.constData(), rectangles.size());
 }
 
-inline void QPainter::drawPoint(const QPointF &p)
+inline void QPainter::drawPoint(const QPointF &point)
 {
-   drawPoints(&p, 1);
+   drawPoints(&point, 1);
 }
 
 inline void QPainter::drawPoint(int x, int y)
@@ -593,29 +592,29 @@ inline void QPainter::drawPoint(int x, int y)
    drawPoints(&p, 1);
 }
 
-inline void QPainter::drawPoint(const QPoint &p)
+inline void QPainter::drawPoint(const QPoint &point)
 {
-   drawPoints(&p, 1);
+   drawPoints(&point, 1);
 }
 
-inline void QPainter::drawPoints(const QPolygonF &points)
+inline void QPainter::drawPoints(const QPolygonF &polygon)
 {
-   drawPoints(points.constData(), points.size());
+   drawPoints(polygon.constData(), polygon.size());
 }
 
-inline void QPainter::drawPoints(const QPolygon &points)
+inline void QPainter::drawPoints(const QPolygon &polygon)
 {
-   drawPoints(points.constData(), points.size());
+   drawPoints(polygon.constData(), polygon.size());
 }
 
-inline void QPainter::drawRoundRect(int x, int y, int w, int h, int xRnd, int yRnd)
+inline void QPainter::drawRoundRect(int x, int y, int w, int h, int xRound, int yRound)
 {
-   drawRoundRect(QRectF(x, y, w, h), xRnd, yRnd);
+   drawRoundRect(QRectF(x, y, w, h), xRound, yRound);
 }
 
-inline void QPainter::drawRoundRect(const QRect &rect, int xRnd, int yRnd)
+inline void QPainter::drawRoundRect(const QRect &rectangle, int xRound, int yRound)
 {
-   drawRoundRect(QRectF(rect), xRnd, yRnd);
+   drawRoundRect(QRectF(rectangle), xRound, yRound);
 }
 
 inline void QPainter::drawRoundedRect(int x, int y, int w, int h, qreal xRadius, qreal yRadius,
@@ -624,10 +623,10 @@ inline void QPainter::drawRoundedRect(int x, int y, int w, int h, qreal xRadius,
    drawRoundedRect(QRectF(x, y, w, h), xRadius, yRadius, mode);
 }
 
-inline void QPainter::drawRoundedRect(const QRect &rect, qreal xRadius, qreal yRadius,
+inline void QPainter::drawRoundedRect(const QRect &rectangle, qreal xRadius, qreal yRadius,
    Qt::SizeMode mode)
 {
-   drawRoundedRect(QRectF(rect), xRadius, yRadius, mode);
+   drawRoundedRect(QRectF(rectangle), xRadius, yRadius, mode);
 }
 
 inline void QPainter::drawEllipse(int x, int y, int w, int h)
@@ -645,44 +644,44 @@ inline void QPainter::drawEllipse(const QPoint &center, int rx, int ry)
    drawEllipse(QRect(center.x() - rx, center.y() - ry, 2 * rx, 2 * ry));
 }
 
-inline void QPainter::drawArc(const QRect &r, int a, int alen)
+inline void QPainter::drawArc(const QRect &rectangle, int startAngle, int spanAngle)
 {
-   drawArc(QRectF(r), a, alen);
+   drawArc(QRectF(rectangle), startAngle, spanAngle);
 }
 
-inline void QPainter::drawArc(int x, int y, int w, int h, int a, int alen)
+inline void QPainter::drawArc(int x, int y, int w, int h, int startAngle, int spanAngle)
 {
-   drawArc(QRectF(x, y, w, h), a, alen);
+   drawArc(QRectF(x, y, w, h), startAngle, spanAngle);
 }
 
-inline void QPainter::drawPie(const QRect &rect, int a, int alen)
+inline void QPainter::drawPie(const QRect &rectangle, int startAngle, int spanAngle)
 {
-   drawPie(QRectF(rect), a, alen);
+   drawPie(QRectF(rectangle), startAngle, spanAngle);
 }
 
-inline void QPainter::drawPie(int x, int y, int w, int h, int a, int alen)
+inline void QPainter::drawPie(int x, int y, int w, int h, int startAngle, int spanAngle)
 {
-   drawPie(QRectF(x, y, w, h), a, alen);
+   drawPie(QRectF(x, y, w, h), startAngle, spanAngle);
 }
 
-inline void QPainter::drawChord(const QRect &rect, int a, int alen)
+inline void QPainter::drawChord(const QRect &rectangle, int startAngle, int spanAngle)
 {
-   drawChord(QRectF(rect), a, alen);
+   drawChord(QRectF(rectangle), startAngle, spanAngle);
 }
 
-inline void QPainter::drawChord(int x, int y, int w, int h, int a, int alen)
+inline void QPainter::drawChord(int x, int y, int w, int h, int startAngle, int spanAngle)
 {
-   drawChord(QRectF(x, y, w, h), a, alen);
+   drawChord(QRectF(x, y, w, h), startAngle, spanAngle);
 }
 
-inline void QPainter::setClipRect(int x, int y, int w, int h, Qt::ClipOperation op)
+inline void QPainter::setClipRect(int x, int y, int w, int h, Qt::ClipOperation operation)
 {
-   setClipRect(QRect(x, y, w, h), op);
+   setClipRect(QRect(x, y, w, h), operation);
 }
 
-inline void QPainter::eraseRect(const QRect &rect)
+inline void QPainter::eraseRect(const QRect &rectangle)
 {
-   eraseRect(QRectF(rect));
+   eraseRect(QRectF(rectangle));
 }
 
 inline void QPainter::eraseRect(int x, int y, int w, int h)
@@ -690,29 +689,29 @@ inline void QPainter::eraseRect(int x, int y, int w, int h)
    eraseRect(QRectF(x, y, w, h));
 }
 
-inline void QPainter::fillRect(int x, int y, int w, int h, const QBrush &b)
+inline void QPainter::fillRect(int x, int y, int w, int h, const QBrush &brush)
 {
-   fillRect(QRect(x, y, w, h), b);
+   fillRect(QRect(x, y, w, h), brush);
 }
 
-inline void QPainter::fillRect(int x, int y, int w, int h, const QColor &b)
+inline void QPainter::fillRect(int x, int y, int w, int h, const QColor &color)
 {
-   fillRect(QRect(x, y, w, h), b);
+   fillRect(QRect(x, y, w, h), color);
 }
 
-inline void QPainter::fillRect(int x, int y, int w, int h, Qt::GlobalColor c)
+inline void QPainter::fillRect(int x, int y, int w, int h, Qt::GlobalColor color)
 {
-   fillRect(QRect(x, y, w, h), QColor(c));
+   fillRect(QRect(x, y, w, h), QColor(color));
 }
 
-inline void QPainter::fillRect(const QRect &r, Qt::GlobalColor c)
+inline void QPainter::fillRect(const QRect &rectangle, Qt::GlobalColor color)
 {
-   fillRect(r, QColor(c));
+   fillRect(rectangle, QColor(color));
 }
 
-inline void QPainter::fillRect(const QRectF &r, Qt::GlobalColor c)
+inline void QPainter::fillRect(const QRectF &rectangle, Qt::GlobalColor color)
 {
-   fillRect(r, QColor(c));
+   fillRect(rectangle, QColor(color));
 }
 
 inline void QPainter::fillRect(int x, int y, int w, int h, Qt::BrushStyle style)
@@ -720,35 +719,34 @@ inline void QPainter::fillRect(int x, int y, int w, int h, Qt::BrushStyle style)
    fillRect(QRectF(x, y, w, h), QBrush(style));
 }
 
-inline void QPainter::fillRect(const QRect &r, Qt::BrushStyle style)
+inline void QPainter::fillRect(const QRect &rectangle, Qt::BrushStyle style)
 {
-   fillRect(QRectF(r), QBrush(style));
+   fillRect(QRectF(rectangle), QBrush(style));
 }
 
-inline void QPainter::fillRect(const QRectF &r, Qt::BrushStyle style)
+inline void QPainter::fillRect(const QRectF &rectangle, Qt::BrushStyle style)
 {
-   fillRect(r, QBrush(style));
+   fillRect(rectangle, QBrush(style));
 }
-
 
 inline void QPainter::setBrushOrigin(int x, int y)
 {
    setBrushOrigin(QPoint(x, y));
 }
 
-inline void QPainter::setBrushOrigin(const QPoint &p)
+inline void QPainter::setBrushOrigin(const QPoint &position)
 {
-   setBrushOrigin(QPointF(p));
+   setBrushOrigin(QPointF(position));
 }
 
-inline void QPainter::drawTiledPixmap(const QRect &rect, const QPixmap &pm, const QPoint &offset)
+inline void QPainter::drawTiledPixmap(const QRect &rectangle, const QPixmap &pixmap, const QPoint &position)
 {
-   drawTiledPixmap(QRectF(rect), pm, QPointF(offset));
+   drawTiledPixmap(QRectF(rectangle), pixmap, QPointF(position));
 }
 
-inline void QPainter::drawTiledPixmap(int x, int y, int w, int h, const QPixmap &pm, int sx, int sy)
+inline void QPainter::drawTiledPixmap(int x, int y, int w, int h, const QPixmap &pixmap, int sx, int sy)
 {
-   drawTiledPixmap(QRectF(x, y, w, h), pm, QPointF(sx, sy));
+   drawTiledPixmap(QRectF(x, y, w, h), pixmap, QPointF(sx, sy));
 }
 
 inline void QPainter::drawPixmap(const QRect &targetRect, const QPixmap &pixmap, const QRect &sourceRect)
@@ -756,51 +754,51 @@ inline void QPainter::drawPixmap(const QRect &targetRect, const QPixmap &pixmap,
    drawPixmap(QRectF(targetRect), pixmap, QRectF(sourceRect));
 }
 
-inline void QPainter::drawPixmap(const QPoint &p, const QPixmap &pm)
+inline void QPainter::drawPixmap(const QPoint &point, const QPixmap &pixmap)
 {
-   drawPixmap(QPointF(p), pm);
+   drawPixmap(QPointF(point), pixmap);
 }
 
-inline void QPainter::drawPixmap(const QRect &r, const QPixmap &pm)
+inline void QPainter::drawPixmap(const QRect &rectangle, const QPixmap &pixmap)
 {
-   drawPixmap(QRectF(r), pm, QRectF());
+   drawPixmap(QRectF(rectangle), pixmap, QRectF());
 }
 
-inline void QPainter::drawPixmap(int x, int y, const QPixmap &pm)
+inline void QPainter::drawPixmap(int x, int y, const QPixmap &pixmap)
 {
-   drawPixmap(QPointF(x, y), pm);
+   drawPixmap(QPointF(x, y), pixmap);
 }
 
-inline void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap &pm)
+inline void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap &pixmap)
 {
-   drawPixmap(QRectF(x, y, w, h), pm, QRectF());
+   drawPixmap(QRectF(x, y, w, h), pixmap, QRectF());
 }
 
-inline void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap &pm,
+inline void QPainter::drawPixmap(int x, int y, int w, int h, const QPixmap &pixmap,
    int sx, int sy, int sw, int sh)
 {
-   drawPixmap(QRectF(x, y, w, h), pm, QRectF(sx, sy, sw, sh));
+   drawPixmap(QRectF(x, y, w, h), pixmap, QRectF(sx, sy, sw, sh));
 }
 
-inline void QPainter::drawPixmap(int x, int y, const QPixmap &pm,
+inline void QPainter::drawPixmap(int x, int y, const QPixmap &pixmap,
    int sx, int sy, int sw, int sh)
 {
-   drawPixmap(QRectF(x, y, -1, -1), pm, QRectF(sx, sy, sw, sh));
+   drawPixmap(QRectF(x, y, -1, -1), pixmap, QRectF(sx, sy, sw, sh));
 }
 
-inline void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm, const QRectF &sr)
+inline void QPainter::drawPixmap(const QPointF &point, const QPixmap &pixmap, const QRectF &sourceRect)
 {
-   drawPixmap(QRectF(p.x(), p.y(), -1, -1), pm, sr);
+   drawPixmap(QRectF(point.x(), point.y(), -1, -1), pixmap, sourceRect);
 }
 
-inline void QPainter::drawPixmap(const QPoint &p, const QPixmap &pm, const QRect &sr)
+inline void QPainter::drawPixmap(const QPoint &point, const QPixmap &pixmap, const QRect &sourceRect)
 {
-   drawPixmap(QRectF(p.x(), p.y(), -1, -1), pm, sr);
+   drawPixmap(QRectF(point.x(), point.y(), -1, -1), pixmap, sourceRect);
 }
 
-inline void QPainter::drawTextItem(int x, int y, const QTextItem &ti)
+inline void QPainter::drawTextItem(int x, int y, const QTextItem &staticText)
 {
-   drawTextItem(QPointF(x, y), ti);
+   drawTextItem(QPointF(x, y), staticText);
 }
 
 inline void QPainter::drawImage(const QRect &targetRect, const QImage &image, const QRect &sourceRect,
@@ -809,31 +807,31 @@ inline void QPainter::drawImage(const QRect &targetRect, const QImage &image, co
    drawImage(QRectF(targetRect), image, QRectF(sourceRect), flags);
 }
 
-inline void QPainter::drawImage(const QPointF &p, const QImage &image, const QRectF &sr,
+inline void QPainter::drawImage(const QPointF &point, const QImage &image, const QRectF &sourceRect,
    Qt::ImageConversionFlags flags)
 {
-   drawImage(QRectF(p.x(), p.y(), -1, -1), image, sr, flags);
+   drawImage(QRectF(point.x(), point.y(), -1, -1), image, sourceRect, flags);
 }
 
-inline void QPainter::drawImage(const QPoint &p, const QImage &image, const QRect &sr,
+inline void QPainter::drawImage(const QPoint &point, const QImage &image, const QRect &sourceRect,
    Qt::ImageConversionFlags flags)
 {
-   drawImage(QRect(p.x(), p.y(), -1, -1), image, sr, flags);
+   drawImage(QRect(point.x(), point.y(), -1, -1), image, sourceRect, flags);
 }
 
-inline void QPainter::drawImage(const QRectF &r, const QImage &image)
+inline void QPainter::drawImage(const QRectF &rectangle, const QImage &image)
 {
-   drawImage(r, image, QRect(0, 0, image.width(), image.height()));
+   drawImage(rectangle, image, QRect(0, 0, image.width(), image.height()));
 }
 
-inline void QPainter::drawImage(const QRect &r, const QImage &image)
+inline void QPainter::drawImage(const QRect &rectangle, const QImage &image)
 {
-   drawImage(r, image, QRectF(0, 0, image.width(), image.height()));
+   drawImage(rectangle, image, QRectF(0, 0, image.width(), image.height()));
 }
 
-inline void QPainter::drawImage(const QPoint &p, const QImage &image)
+inline void QPainter::drawImage(const QPoint &point, const QImage &image)
 {
-   drawImage(QPointF(p), image);
+   drawImage(QPointF(point), image);
 }
 
 inline void QPainter::drawImage(int x, int y, const QImage &image, int sx, int sy, int sw, int sh,
@@ -846,34 +844,34 @@ inline void QPainter::drawImage(int x, int y, const QImage &image, int sx, int s
    }
 }
 
-inline void QPainter::drawStaticText(const QPoint &p, const QStaticText &staticText)
+inline void QPainter::drawStaticText(const QPoint &topLeftPosition, const QStaticText &staticText)
 {
-   drawStaticText(QPointF(p), staticText);
+   drawStaticText(QPointF(topLeftPosition), staticText);
 }
 
-inline void QPainter::drawStaticText(int x, int y, const QStaticText &staticText)
+inline void QPainter::drawStaticText(int left, int top, const QStaticText &staticText)
 {
-   drawStaticText(QPointF(x, y), staticText);
+   drawStaticText(QPointF(left, top), staticText);
 }
 
-inline void QPainter::drawTextItem(const QPoint &p, const QTextItem &ti)
+inline void QPainter::drawTextItem(const QPoint &topLeftPosition, const QTextItem &staticText)
 {
-   drawTextItem(QPointF(p), ti);
+   drawTextItem(QPointF(topLeftPosition), staticText);
 }
 
-inline void QPainter::drawText(const QPoint &p, const QString &s)
+inline void QPainter::drawText(const QPoint &position, const QString &text)
 {
-   drawText(QPointF(p), s);
+   drawText(QPointF(position), text);
 }
 
-inline void QPainter::drawText(int x, int y, int w, int h, int flags, const QString &str, QRect *br)
+inline void QPainter::drawText(int x, int y, int w, int h, int flags, const QString &text, QRect *boundingRect)
 {
-   drawText(QRect(x, y, w, h), flags, str, br);
+   drawText(QRect(x, y, w, h), flags, text, boundingRect);
 }
 
-inline void QPainter::drawText(int x, int y, const QString &s)
+inline void QPainter::drawText(int x, int y, const QString &text)
 {
-   drawText(QPointF(x, y), s);
+   drawText(QPointF(x, y), text);
 }
 
 inline QRect QPainter::boundingRect(int x, int y, int w, int h, int flags, const QString &text)
@@ -902,17 +900,16 @@ inline void QPainter::setWindow(int x, int y, int w, int h)
 }
 
 #ifndef QT_NO_PICTURE
-inline void QPainter::drawPicture(int x, int y, const QPicture &p)
+inline void QPainter::drawPicture(int x, int y, const QPicture &picture)
 {
-   drawPicture(QPoint(x, y), p);
+   drawPicture(QPoint(x, y), picture);
 }
 
-inline void QPainter::drawPicture(const QPoint &pt, const QPicture &p)
+inline void QPainter::drawPicture(const QPoint &point, const QPicture &picture)
 {
-   drawPicture(QPointF(pt), p);
+   drawPicture(QPointF(point), picture);
 }
 #endif
-
 
 
 #endif

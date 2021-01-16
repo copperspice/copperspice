@@ -473,49 +473,49 @@ using qreal = double;
 
 // utility macros and inline functions
 template <typename T>
-constexpr inline T qAbs(const T &t)
+constexpr inline T qAbs(const T &value)
 {
-   return t >= 0 ? t : -t;
+   return value >= 0 ? value : -value;
 }
 
-constexpr inline int qRound(double d)
+constexpr inline int qRound(double value)
 {
-   return d >= 0.0 ? int(d + 0.5) : int(d - double(int(d - 1)) + 0.5) + int(d - 1);
+   return value >= 0.0 ? int(value + 0.5) : int(value - double(int(value - 1)) + 0.5) + int(value - 1);
 }
 
-constexpr inline int qRound(float d)
+constexpr inline int qRound(float value)
 {
-   return d >= 0.0f ? int(d + 0.5f) : int(d - float(int(d - 1)) + 0.5f) + int(d - 1);
+   return value >= 0.0f ? int(value + 0.5f) : int(value - float(int(value - 1)) + 0.5f) + int(value- 1);
 }
 
-constexpr inline qint64 qRound64(double d)
+constexpr inline qint64 qRound64(double value)
 {
-   return d >= 0.0 ? qint64(d + 0.5) : qint64(d - double(qint64(d - 1)) + 0.5) + qint64(d - 1);
+   return value >= 0.0 ? qint64(value + 0.5) : qint64(value - double(qint64(value - 1)) + 0.5) + qint64(value - 1);
 }
 
-constexpr inline qint64 qRound64(float d)
+constexpr inline qint64 qRound64(float value)
 {
-   return d >= 0.0f ? qint64(d + 0.5f) : qint64(d - float(qint64(d - 1)) + 0.5f) + qint64(d - 1);
+   return value >= 0.0f ? qint64(value + 0.5f) : qint64(value - float(qint64(value - 1)) + 0.5f) + qint64(value - 1);
 }
 
 // enhanced to support size_type which can be 32 bit or 64 bit
 // the larger data type size will be returned
 template <typename T1, typename T2>
-constexpr inline auto qMin(const T1 &a, const T2 &b)
+constexpr inline auto qMin(const T1 &value1, const T2 &value2)
 {
-   return (a < b) ? a : b;
+   return (value1 < value2) ? value1 : value2;
 }
 
 template <typename T1, typename T2>
-constexpr inline auto qMax(const T1 &a, const T2 &b)
+constexpr inline auto qMax(const T1 &value1, const T2 &value2)
 {
-   return (a < b) ? b : a;
+   return (value1 < value2) ? value2 : value1;
 }
 
 template <typename T1, typename T2, typename T3>
-constexpr inline auto qBound(const T1 &min, const T2 &val, const T3 &max)
+constexpr inline auto qBound(const T1 &min, const T2 & value, const T3 &max)
 {
-   return qMax(min, qMin(max, val));
+   return qMax(min, qMin(max, value));
 }
 
 #if defined(Q_OS_DARWIN)
@@ -649,10 +649,10 @@ Q_CORE_EXPORT void qBadAlloc();
 #define Q_CHECK_PTR(p) do { if (!(p)) qBadAlloc(); } while (false)
 
 template <typename T>
-inline T *q_check_ptr(T *p)
+inline T *q_check_ptr(T *ptr)
 {
-   Q_CHECK_PTR(p);
-   return p;
+   Q_CHECK_PTR(ptr);
+   return ptr;
 }
 
 // * *

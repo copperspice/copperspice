@@ -126,9 +126,9 @@ class Q_CORE_EXPORT QIODevice : public QObject
  protected:
    QIODevice(QIODevicePrivate &dd, QObject *parent = nullptr);
 
-   virtual qint64 readData(char *data, qint64 maxlen) = 0;
-   virtual qint64 readLineData(char *data, qint64 maxlen);
-   virtual qint64 writeData(const char *data, qint64 len) = 0;
+   virtual qint64 readData(char *data, qint64 maxSize) = 0;
+   virtual qint64 readLineData(char *data, qint64 maxSize);
+   virtual qint64 writeData(const char *data, qint64 size) = 0;
 
    void setOpenMode(OpenMode openMode);
 

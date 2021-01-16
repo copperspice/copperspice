@@ -723,14 +723,14 @@ class QFlatMapIterator
    using Item           = const_iterator;
 
  public:
-   QFlatMapIterator(const QFlatMap<Key, Val, C> &container)
-      : c(&container), i(c->constBegin()), n(c->constEnd()) {}
+   QFlatMapIterator(const QFlatMap<Key, Val, C> &flatmap)
+      : c(&flatmap), i(c->constBegin()), n(c->constEnd()) {}
 
    ~QFlatMapIterator() {
    }
 
-   QFlatMapIterator &operator=(const QFlatMap<Key, Val, C> &container) {
-      c = container;
+   QFlatMapIterator &operator=(const QFlatMap<Key, Val, C> &flatmap) {
+      c = flatmap;
       i = c->constBegin();
       n = c->constEnd();
 
@@ -784,18 +784,18 @@ class QFlatMapIterator
       return n.key();
    }
 
-   bool findNext(const Val &t) {
+   bool findNext(const Val &value) {
       while ((n = i) != c->constEnd()) {
-         if (*i++ == t) {
+         if (*i++ == value) {
             return true;
          }
       }
       return false;
    }
 
-   bool findPrevious(const Val &t) {
+   bool findPrevious(const Val &value) {
       while (i != c->constBegin()) {
-         if (*(n = --i) == t) {
+         if (*(n = --i) == value) {
             return true;
          }
       }
@@ -822,14 +822,17 @@ class QMutableFlatMapIterator
    using Item           = iterator;
 
  public:
-   QMutableFlatMapIterator(QFlatMap<Key, Val, C> &container)
-      : c(&container), i(c->begin()), n(c->end()) {}
-
-   ~QMutableFlatMapIterator() {
+   QMutableFlatMapIterator(QFlatMap<Key, Val, C> &flatmap)
+      : c(&flatmap), i(c->begin()), n(c->end())
+   {
    }
 
-   QMutableFlatMapIterator &operator=(QFlatMap<Key, Val, C> &container) {
-      c = &container;
+   ~QMutableFlatMapIterator()
+   {
+   }
+
+   QMutableFlatMapIterator &operator=(QFlatMap<Key, Val, C> &flatmap) {
+      c = &flatmap;
       i = c->begin();
       n = c->end();
 
@@ -901,9 +904,9 @@ class QMutableFlatMapIterator
       return n.key();
    }
 
-   bool findNext(const Val &t) {
+   bool findNext(const Val &value) {
       while (c->constEnd() != const_iterator(n = i)) {
-         if (*i++ == t)  {
+         if (*i++ == value)  {
             return true;
          }
       }
@@ -911,9 +914,9 @@ class QMutableFlatMapIterator
       return false;
    }
 
-   bool findPrevious(const Val &t) {
+   bool findPrevious(const Val &value) {
       while (c->constBegin() != const_iterator(i)) {
-         if (*(n = --i) == t) {
+         if (*(n = --i) == value) {
             return true;
          }
       }

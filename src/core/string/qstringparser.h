@@ -361,10 +361,10 @@ class Q_CORE_EXPORT QStringParser
 
 #if defined (CS_DOXYPRESS)
       template <typename T>
-      static QList<T> split(const T &str, const QRegularExpression &separator, SplitBehavior behavior = KeepEmptyParts);
+      static QList<T> split(const T &str, const QRegularExpression &regExp, SplitBehavior behavior = KeepEmptyParts);
 #else
       template <typename T>
-      static QList<T> split(const T &str, const Cs::QRegularExpression<T> &separator, SplitBehavior behavior = KeepEmptyParts);
+      static QList<T> split(const T &str, const Cs::QRegularExpression<T> &regExp, SplitBehavior behavior = KeepEmptyParts);
 
 #endif
 
@@ -891,11 +891,11 @@ QList<T> QStringParser::split(const T &str, const T &separator, SplitBehavior be
 }
 
 template <typename T>
-QList<T> QStringParser::split(const T &str, const Cs::QRegularExpression<T> &separator, SplitBehavior behavior)
+QList<T> QStringParser::split(const T &str, const Cs::QRegularExpression<T> &regExp, SplitBehavior behavior)
 {
    QList<T> retval;
 
-   if (! separator.isValid()) {
+   if (! regExp.isValid()) {
       qWarning("QStringParser::split: Invalid QRegularExpression");
       return retval;
    }
@@ -903,7 +903,7 @@ QList<T> QStringParser::split(const T &str, const Cs::QRegularExpression<T> &sep
    typename T::const_iterator start_iter = str.begin();
    typename T::const_iterator end_iter;
 
-   Cs::QRegularExpressionMatch<T> match = separator.match(str);
+   Cs::QRegularExpressionMatch<T> match = regExp.match(str);
 
    while (match.hasMatch())  {
       end_iter = match.capturedStart();
@@ -915,7 +915,7 @@ QList<T> QStringParser::split(const T &str, const Cs::QRegularExpression<T> &sep
       start_iter = match.capturedEnd();
 
       // redo the match
-      match = separator.match(str, start_iter);
+      match = regExp.match(str, start_iter);
    }
 
    // pick up remaining text

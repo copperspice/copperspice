@@ -68,8 +68,8 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
    CORE_CS_SIGNAL_2(paused)
    CORE_CS_SIGNAL_1(Public, void resumed())
    CORE_CS_SIGNAL_2(resumed)
-   CORE_CS_SIGNAL_1(Public, void resultReadyAt(int resultIndex))
-   CORE_CS_SIGNAL_2(resultReadyAt, resultIndex)
+   CORE_CS_SIGNAL_1(Public, void resultReadyAt(int index))
+   CORE_CS_SIGNAL_2(resultReadyAt, index)
    CORE_CS_SIGNAL_1(Public, void resultsReadyAt(int beginIndex, int endIndex))
    CORE_CS_SIGNAL_2(resultsReadyAt, beginIndex, endIndex)
    CORE_CS_SIGNAL_1(Public, void progressRangeChanged(int minimum, int maximum))
@@ -110,8 +110,8 @@ template <typename T>
 class QFutureWatcher : public QFutureWatcherBase
 {
  public:
-   QFutureWatcher(QObject *_parent = nullptr)
-      : QFutureWatcherBase(_parent) {
+   QFutureWatcher(QObject *parent = nullptr)
+      : QFutureWatcherBase(parent) {
    }
 
    ~QFutureWatcher() {
@@ -141,14 +141,14 @@ class QFutureWatcher : public QFutureWatcherBase
 };
 
 template <typename T>
-inline void QFutureWatcher<T>::setFuture(const QFuture<T> &_future)
+inline void QFutureWatcher<T>::setFuture(const QFuture<T> &future)
 {
-   if (_future == m_future) {
+   if (future == m_future) {
       return;
    }
 
    disconnectOutputInterface(true);
-   m_future = _future;
+   m_future = future;
    connectOutputInterface();
 }
 
@@ -156,8 +156,8 @@ template <>
 class QFutureWatcher<void> : public QFutureWatcherBase
 {
  public:
-   QFutureWatcher(QObject *_parent = nullptr)
-      : QFutureWatcherBase(_parent) {
+   QFutureWatcher(QObject *parent = nullptr)
+      : QFutureWatcherBase(parent) {
    }
 
    ~QFutureWatcher() {
@@ -180,14 +180,14 @@ class QFutureWatcher<void> : public QFutureWatcherBase
    }
 };
 
-inline void QFutureWatcher<void>::setFuture(const QFuture<void> &_future)
+inline void QFutureWatcher<void>::setFuture(const QFuture<void> &future)
 {
-   if (_future == m_future) {
+   if (future == m_future) {
       return;
    }
 
    disconnectOutputInterface(true);
-   m_future = _future;
+   m_future = future;
    connectOutputInterface();
 }
 

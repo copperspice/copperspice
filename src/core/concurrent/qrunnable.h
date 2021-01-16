@@ -41,8 +41,8 @@ class QRunnable
       return ref != -1;
    }
 
-   void setAutoDelete(bool _autoDelete) {
-      ref = _autoDelete ? 0 : -1;
+   void setAutoDelete(bool autoDelete) {
+      ref = autoDelete ? 0 : -1;
    }
 
  private:

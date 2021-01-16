@@ -36,7 +36,7 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
 
  public:
    explicit QBuffer(QObject *parent = nullptr);
-   QBuffer(QByteArray *buf, QObject *parent = nullptr);
+   QBuffer(QByteArray *buffer, QObject *parent = nullptr);
 
    QBuffer(const QBuffer &) = delete;
    QBuffer &operator=(const QBuffer &) = delete;
@@ -45,10 +45,10 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
 
    QByteArray &buffer();
    const QByteArray &buffer() const;
-   void setBuffer(QByteArray *a);
+   void setBuffer(QByteArray *buffer);
 
-   void setData(const QByteArray &data);
-   inline void setData(const char *data, int len);
+   void setData(const QByteArray &buffer);
+   inline void setData(const char *data, int size);
    const QByteArray &data() const;
 
    bool open(OpenMode openMode) override;
@@ -64,8 +64,8 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
    void connectNotify(const QMetaMethod &signalMethod) const override;
    void disconnectNotify(const QMetaMethod &signalMethod) const override;
 
-   qint64 readData(char *data, qint64 maxlen) override;
-   qint64 writeData(const char *data, qint64 len) override;
+   qint64 readData(char *data, qint64 maxSize) override;
+   qint64 writeData(const char *data, qint64 size) override;
 
  private:
    Q_DECLARE_PRIVATE(QBuffer)
@@ -74,9 +74,9 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
    CORE_CS_SLOT_2(_q_emitSignals)
 };
 
-inline void QBuffer::setData(const char *adata, int alen)
+inline void QBuffer::setData(const char *data, int size)
 {
-   setData(QByteArray(adata, alen));
+   setData(QByteArray(data, size));
 }
 
 #endif // QBUFFER_H

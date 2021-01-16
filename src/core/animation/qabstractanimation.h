@@ -107,8 +107,8 @@ class Q_CORE_EXPORT QAbstractAnimation : public QObject
    CORE_CS_SIGNAL_2(stateChanged, newState, oldState)
    CORE_CS_SIGNAL_1(Public, void currentLoopChanged(int currentLoop))
    CORE_CS_SIGNAL_2(currentLoopChanged, currentLoop)
-   CORE_CS_SIGNAL_1(Public, void directionChanged(QAbstractAnimation::Direction direction))
-   CORE_CS_SIGNAL_2(directionChanged, direction)
+   CORE_CS_SIGNAL_1(Public, void directionChanged(QAbstractAnimation::Direction newDirection))
+   CORE_CS_SIGNAL_2(directionChanged, newDirection)
 
    CORE_CS_SLOT_1(Public, void start(QAbstractAnimation::DeletionPolicy policy = KeepWhenStopped))
    CORE_CS_SLOT_2(start)

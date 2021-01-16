@@ -118,8 +118,8 @@ class QFuture
 
    inline T result() const;
    inline T resultAt(int index) const;
-   bool isResultReadyAt(int resultIndex) const {
-      return d.isResultReadyAt(resultIndex);
+   bool isResultReadyAt(int index) const {
+      return d.isResultReadyAt(index);
    }
 
    operator T() const {
@@ -282,11 +282,11 @@ class QFutureIterator
    const_iterator i;
 
    public:
-      inline QFutureIterator(const QFuture<T> &container)
-         : c(container), i(c.constBegin()) {}
+      inline QFutureIterator(const QFuture<T> &future)
+         : c(future), i(c.constBegin()) {}
 
-      inline QFutureIterator &operator=(const QFuture<T> &container)
-         { c = container; i = c.constBegin(); return *this; }
+      inline QFutureIterator &operator=(const QFuture<T> &future)
+         { c = future; i = c.constBegin(); return *this; }
 
       inline void toFront() { i = c.constBegin(); }
       inline void toBack() { i = c.constEnd(); }
@@ -297,18 +297,18 @@ class QFutureIterator
       inline const T &previous() { return *--i; }
       inline const T &peekPrevious() const { const_iterator p = i; return *--p; }
 
-      inline bool findNext(const T &t)  {
+      inline bool findNext(const T &value)  {
          while (i != c.constEnd()) {
-            if (*i++ == t) {
+            if (*i++ == value) {
                return true;
             }
          }
          return false;
       }
 
-      inline bool findPrevious(const T &t)   {
+      inline bool findPrevious(const T &value)   {
          while (i != c.constBegin()) {
-            if (*(--i) == t)  {
+            if (*(--i) == value)  {
                return true;
             }
          }
