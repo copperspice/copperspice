@@ -1373,8 +1373,6 @@ QModelIndex QFileSystemModel::setRootPath(const QString &newPath)
 #if defined(Q_OS_WIN32)
    QString longNewPath = qt_GetLongPathName(newPath);
 
-#elif defined(Q_OS_WIN)
-   QString longNewPath = QDir::fromNativeSeparators(newPath);
 #else
    QString longNewPath = newPath;
 

@@ -226,7 +226,7 @@ bool QObject::connect(const QObject *sender, const QString8 &signalMethod, const
                   " Signal Index: ", sIndex, " Slot Index: ", rIndex);
       }
 
-#ifdef CS_Debug
+#if defined(CS_INTERNAL_DEBUG)
       qDebug("");
       for (int k = 0; k < senderMetaObject->methodCount(); ++k) {
          qDebug("QObject::connect()  Class %s has method %s", csPrintable(senderMetaObject->className()),

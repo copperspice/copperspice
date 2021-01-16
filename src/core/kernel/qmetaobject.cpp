@@ -819,7 +819,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
                   bool firstLoop = true;
                   int index = k + 1;
 
-#ifdef CS_Debug
+#if defined(CS_INTERNAL_DEBUG)
                   qDebug("Debug (bigArg):  Passed full name %s",    fullName );
 #endif
 
@@ -850,7 +850,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
                            firstLoop   = false;
                            bigArg      = true;
 
-#ifdef CS_Debug
+#if defined(CS_INTERNAL_DEBUG)
                            qDebug("Debug (bigArg):  Inside 'first loop'  %s", csPrintable(typeArg));
 #endif
 
@@ -968,7 +968,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
                   if (bigArg)  {
                      // we are on a comma, var name, right paren, star, ampersand
 
-#ifdef CS_Debug
+#if defined(CS_INTERNAL_DEBUG)
                      // parse the following:   &  *  (  )
                      qDebug("Debug (bigArg):  Args:     %s", csPrintable(typeArg) );
                      qDebug("Debug (bigArg):  NextWord  %s", csPrintable(nextWord) );
@@ -1086,7 +1086,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
          }
       }
 
-#ifdef CS_Debug
+#if defined(CS_INTERNAL_DEBUG)
       const char *space = "                      ";
       qDebug("QObject:getSignature()  Passed name: %s\n %s Signature: %s \n", fullName, space, csPrintable(signature));
 #endif

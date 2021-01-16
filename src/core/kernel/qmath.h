@@ -63,93 +63,81 @@ inline qreal qFabs(qreal v)
 
 inline qreal qSin(qreal v)
 {
-
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return sinf(float(v));
    } else
-#    endif
+#endif
       return sin(v);
-
 }
 
 inline qreal qCos(qreal v)
 {
-
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return cosf(float(v));
    } else
-#    endif
+#endif
       return cos(v);
-
 }
 
 inline qreal qTan(qreal v)
 {
-
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return tanf(float(v));
    } else
-#    endif
+#endif
       return tan(v);
-
 }
 
 inline qreal qAcos(qreal v)
 {
-
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return acosf(float(v));
    } else
-#    endif
+#endif
       return acos(v);
-
 }
 
 inline qreal qAsin(qreal v)
 {
-
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return asinf(float(v));
    } else
-#    endif
+#endif
       return asin(v);
 }
 
 inline qreal qAtan(qreal v)
 {
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return atanf(float(v));
    } else
-#    endif
+#endif
       return atan(v);
-
 }
 
-inline qreal qAtan2(qreal x, qreal y)
+inline qreal qAtan2(qreal y, qreal x)
 {
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
-      return atan2f(float(x), float(y));
+      return atan2f(float(y), float(x));
    } else
-#    endif
-      return atan2(x, y);
-
+#endif
+      return atan2(y, x);
 }
 
 inline qreal qSqrt(qreal v)
 {
-
-#    ifdef QT_USE_MATH_H_FLOATS
+#ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return sqrtf(float(v));
    } else
-#    endif
+#endif
       return sqrt(v);
 }
 
@@ -172,7 +160,6 @@ inline qreal qExp(qreal v)
 
 inline qreal qPow(qreal x, qreal y)
 {
-
 #ifdef QT_USE_MATH_H_FLOATS
    if (sizeof(qreal) == sizeof(float)) {
       return powf(float(x), float(y));

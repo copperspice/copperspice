@@ -363,10 +363,10 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime fromCFDate(CFDateRef date);
    CFDateRef toCFDate() const;
 
-#  if defined(__OBJC__)
+#if defined(__OBJC__)
    static QDateTime fromNSDate(const NSDate *date);
    NSDate *toNSDate() const;
-#  endif
+#endif
 
 #endif
  private:

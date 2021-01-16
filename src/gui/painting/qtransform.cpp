@@ -448,7 +448,8 @@ QTransform &QTransform::rotate(qreal a, Qt::Axis axis)
    if (a == 0) {
       return *this;
    }
-#ifndef QT_NO_DEBUG
+
+#if defined(CS_DEBUG)
    if (qIsNaN(a)) {
       qWarning() << "QTransform::rotate with NaN called";
       return *this;
