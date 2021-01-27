@@ -721,7 +721,7 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
 
          for (; iter != l.constEnd(); ++iter) {
 
-            if (iter->isEmpty() || iter->contains('\0')) {
+            if (iter->isEmpty() || iter->contains(QChar32('\0'))) {
                type = REG_BINARY;
                break;
             }
@@ -786,7 +786,7 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
 
          std::wstring tmp = s.toStdWString();
 
-         if (s.contains('\0')) {
+         if (s.contains(QChar32('\0'))) {
             type = REG_BINARY;
 
             regValueBuff.resize(tmp.size() * 2);

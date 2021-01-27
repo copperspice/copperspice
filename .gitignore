@@ -31,3 +31,6 @@
 /utilities/unicode/**/*.Po
 
 /utilities/harfbuzz_fonts/generate_qrc.sh
+/.vs
+/out/build/x64-Debug (default)
+/out/install/x64-Debug (default)

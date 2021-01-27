@@ -478,7 +478,9 @@ if (NOT GLIB2_FOUND)
    add_definitions(-DQT_NO_GLIB)
 endif()
 
-if (NOT ZLIB_FOUND)
+if (ZLIB_FOUND)
+   include_directories(${ZLIB_INCLUDE_DIRS})
+else ()
    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/zlib)
 endif()
 
