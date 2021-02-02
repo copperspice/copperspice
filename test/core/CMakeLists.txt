@@ -71,6 +71,8 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedpointer.cpp
+
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qreqularexpression.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.cpp
@@ -98,7 +100,6 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qpointf.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrect.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrectf.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsharedpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsizef.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
