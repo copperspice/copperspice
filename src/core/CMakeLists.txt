@@ -39,6 +39,7 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/json
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin
+   ${CMAKE_CURRENT_SOURCE_DIR}/pointer
    ${CMAKE_CURRENT_SOURCE_DIR}/statemachine
    ${CMAKE_CURRENT_SOURCE_DIR}/thread
    ${CMAKE_CURRENT_SOURCE_DIR}/tools
@@ -57,6 +58,7 @@ include(io/io.cmake)
 include(json/json.cmake)
 include(kernel/kernel.cmake)
 include(plugin/plugin.cmake)
+include(pointer/pointer.cmake)
 include(signal/signal.cmake)
 include(statemachine/statemachine.cmake)
 include(string/string.cmake)

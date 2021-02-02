@@ -23,7 +23,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QCryptographicHash
    QEasingCurve
    QElapsedTimer
-   QExplicitlySharedDataPointer
    QLine
    QLineF
    QLocale
@@ -35,15 +34,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QPointF
    QRect
    QRectF
-   QScopedArrayPointer
-   QScopedPointer
-   QScopedPointerArrayDeleter
-   QScopedPointerDeleter
-   QScopedPointerPodDeleter
-   QScopedValueRollback
-   QSharedData
-   QSharedDataPointer
-   QSharedPointer
    QSize
    QSizeF
    QSystemLocale
@@ -52,7 +42,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QTimeZone
    QVarLengthArray
    QVersionNumber
-   QWeakPointer
 )
 
 list(APPEND CORE_INCLUDES
@@ -67,7 +56,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcryptographichash.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qeasingcurve.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qexplicitlyshareddatapointer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qline.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinef.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale.h
@@ -80,16 +68,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrect.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrectf.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrefcount.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedarraypointer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointerarraydeleter.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointerdeleter.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointerpoddeleter.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedvaluerollback.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qshareddata.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qshareddatapointer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsharedpointer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsharedpointer_impl.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsizef.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsystemlocale.h
@@ -97,7 +75,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvarlengtharray.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qversionnumber.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qweakpointer.h
 )
 
 list(APPEND CORE_PRIVATE_INCLUDES
@@ -109,7 +86,6 @@ list(APPEND CORE_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_tools_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qpodlist_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qringbuffer_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointer_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsimd_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtools_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetables_p.h
@@ -136,10 +112,6 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineparser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrect.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrefcount.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedpointer.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qscopedvaluerollback.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qshareddata.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsharedpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsimd.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
