@@ -593,8 +593,9 @@ template <class T> class QSharedPointer
 
       qSwap(d, o);
       qSwap(this->value, actual);
-      if (!d || d->strongref.load() == 0) {
-         this->value = 0;
+
+      if (! d || d->strongref.load() == 0) {
+         this->value = nullptr;
       }
 
       // dereference saved data
