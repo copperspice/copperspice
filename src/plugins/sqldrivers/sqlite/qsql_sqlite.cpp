@@ -121,9 +121,12 @@ class QSQLiteResult : public QSqlCachedResult
 class QSQLiteDriverPrivate : public QSqlDriverPrivate
 {
  public:
-   inline QSQLiteDriverPrivate() : QSqlDriverPrivate(), access(0) {
+   QSQLiteDriverPrivate()
+      : QSqlDriverPrivate(), access(nullptr)
+   {
       dbmsType = QSqlDriver::SQLite;
    }
+
    sqlite3 *access;
    QList <QSQLiteResult *> results;
 };
@@ -150,8 +153,8 @@ class QSQLiteResultPrivate
    QVector<QVariant> firstRow;
 };
 
-QSQLiteResultPrivate::QSQLiteResultPrivate(QSQLiteResult *res) : q(res), access(0),
-   stmt(0), skippedStatus(false), skipRow(false)
+QSQLiteResultPrivate::QSQLiteResultPrivate(QSQLiteResult *res)
+   : q(res), access(nullptr), stmt(nullptr), skippedStatus(false), skipRow(false)
 {
 }
 
@@ -173,12 +176,13 @@ void QSQLiteResultPrivate::finalize()
    }
 
    sqlite3_finalize(stmt);
-   stmt = 0;
+   stmt = nullptr;
 }
 
 void QSQLiteResultPrivate::initColumns(bool emptyResultset)
 {
    int nCols = sqlite3_column_count(stmt);
+
    if (nCols <= 0) {
       return;
    }
@@ -681,7 +685,7 @@ bool QSQLiteDriver::open(const QString &db, const QString &, const QString &, co
    }
    sqlite3_enable_shared_cache(sharedCache);
 
-   if (sqlite3_open_v2(db.toUtf8().constData(), &d->access, openMode, NULL) == SQLITE_OK) {
+   if (sqlite3_open_v2(db.toUtf8().constData(), &d->access, openMode, nullptr) == SQLITE_OK) {
       sqlite3_busy_timeout(d->access, timeOut);
       setOpen(true);
       setOpenError(false);
@@ -690,7 +694,7 @@ bool QSQLiteDriver::open(const QString &db, const QString &, const QString &, co
    } else {
       if (d->access) {
          sqlite3_close(d->access);
-         d->access = 0;
+         d->access = nullptr;
       }
 
       setLastError(qMakeError(d->access, tr("Error opening database"), QSqlError::ConnectionError));
@@ -712,7 +716,7 @@ void QSQLiteDriver::close()
          setLastError(qMakeError(d->access, tr("Error closing database"), QSqlError::ConnectionError));
       }
 
-      d->access = 0;
+      d->access = nullptr;
       setOpen(false);
       setOpenError(false);
    }

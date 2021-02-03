@@ -523,7 +523,7 @@ void QSqlDatabasePrivate::init(const QString &type)
       qWarning("QSqlDatabase: %s driver not loaded", csPrintable(type));
       qWarning("QSqlDatabase: available drivers: %s", QSqlDatabase::drivers().join(" ").toLatin1().data());
 
-      if (QCoreApplication::instance() == 0) {
+      if (QCoreApplication::instance() == nullptr) {
          qWarning("QSqlDatabase: an instance of QCoreApplication is required to load an SQL driver plugin");
       }
 

@@ -51,6 +51,7 @@ QSqlDriver *QPSQLDriverPlugin::create(const QString &name)
       QPSQLDriver *driver = new QPSQLDriver();
       return driver;
    }
-   return 0;
+
+   return nullptr;
 }
 

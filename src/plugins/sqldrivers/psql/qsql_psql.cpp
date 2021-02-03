@@ -131,9 +131,10 @@ class QPSQLDriverPrivate : public QSqlDriverPrivate
    Q_DECLARE_PUBLIC(QPSQLDriver)
 
  public:
-   QPSQLDriverPrivate() : QSqlDriverPrivate(),
-      connection(0), isUtf8(false), pro(QPSQLDriver::Version6),
-      sn(0), pendingNotifyCheck(false), hasBackslashEscape(false) {
+   QPSQLDriverPrivate()
+      : QSqlDriverPrivate(), connection(nullptr), isUtf8(false), pro(QPSQLDriver::Version6),
+        sn(nullptr), pendingNotifyCheck(false), hasBackslashEscape(false)
+   {
       dbmsType = QSqlDriver::PostgreSQL;
    }
 
@@ -205,11 +206,9 @@ class QPSQLResultPrivate : public QSqlResultPrivate
 
  public:
    QPSQLResultPrivate()
-      : QSqlResultPrivate(),
-        result(0),
-        currentSize(-1),
-        preparedQueriesEnabled(false)
-   { }
+      : QSqlResultPrivate(), result(nullptr), currentSize(-1), preparedQueriesEnabled(false)
+   {
+   }
 
    QString fieldSerial(int i) const override {
       return '$' + QString::number(i + 1);
@@ -230,7 +229,8 @@ class QPSQLResultPrivate : public QSqlResultPrivate
    bool processResults();
 };
 
-static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const QPSQLDriverPrivate *p, PGresult *result = 0)
+static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const QPSQLDriverPrivate *p,
+               PGresult *result = nullptr)
 {
    const char *s = PQerrorMessage(p->connection);
 
@@ -372,7 +372,7 @@ void QPSQLResult::cleanup()
       PQclear(d->result);
    }
 
-   d->result = 0;
+   d->result = nullptr;
    setAt(QSql::BeforeFirstRow);
    d->currentSize = -1;
    setActive(false);
@@ -1069,7 +1069,7 @@ bool QPSQLDriver::open(const QString &db, const QString &user, const QString &pa
       setLastError(qMakeError(tr("Unable to connect"), QSqlError::ConnectionError, d));
       setOpenError(true);
       PQfinish(d->connection);
-      d->connection = 0;
+      d->connection = nullptr;
       return false;
    }
 
@@ -1094,13 +1094,14 @@ void QPSQLDriver::close()
       if (d->sn) {
          disconnect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
          delete d->sn;
-         d->sn = 0;
+         d->sn = nullptr;
       }
 
       if (d->connection) {
          PQfinish(d->connection);
       }
-      d->connection = 0;
+
+      d->connection = nullptr;
       setOpen(false);
       setOpenError(false);
    }
@@ -1736,7 +1737,7 @@ bool QPSQLDriver::unsubscribeFromNotification(const QString &name)
    if (d->seid.isEmpty()) {
       disconnect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
       delete d->sn;
-      d->sn = 0;
+      d->sn = nullptr;
    }
 
    return true;
@@ -1754,9 +1755,9 @@ void QPSQLDriver::_q_handleNotification(int)
    d->pendingNotifyCheck = false;
    PQconsumeInput(d->connection);
 
-   PGnotify *notify = 0;
+   PGnotify *notify = nullptr;
 
-   while ((notify = PQnotifies(d->connection)) != 0) {
+   while ((notify = PQnotifies(d->connection)) != nullptr) {
       QString name = QString::fromLatin1(notify->relname);
 
       if (d->seid.contains(name)) {

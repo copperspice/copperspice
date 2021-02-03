@@ -47,7 +47,7 @@ class Q_SQL_EXPORT QSqlResultPrivate
 
  public:
    QSqlResultPrivate()
-      : q_ptr(0),
+      : q_ptr(nullptr),
         idx(QSql::BeforeFirstRow),
         active(false),
         isSel(false),

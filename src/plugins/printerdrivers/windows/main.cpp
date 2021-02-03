@@ -45,6 +45,6 @@ QPlatformPrinterSupport *QWindowsPrinterSupportPlugin::create(const QString &key
       return new QWindowsPrinterSupport;
    }
 
-   return 0;
+   return nullptr;
 }
 

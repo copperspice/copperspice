@@ -54,7 +54,7 @@ class QMYSQLDriverPrivate : public QSqlDriverPrivate
 {
  public:
    QMYSQLDriverPrivate()
-      : QSqlDriverPrivate(), mysql(0),
+      : QSqlDriverPrivate(), mysql(nullptr),
 
 #ifndef QT_NO_TEXTCODEC
       tc(QTextCodec::codecForLocale()),
@@ -136,8 +136,8 @@ class QMYSQLResultPrivate : public QObject
 
  public:
    QMYSQLResultPrivate(const QMYSQLDriver *dp, const QMYSQLResult *d)
-      : driver(dp), result(0), q(d), rowsAffected(0), hasBlobs(false), stmt(0), meta(0), inBinds(0),
-        outBinds(0), preparedQuery(false)
+      : driver(dp), result(nullptr), q(d), rowsAffected(0), hasBlobs(false), stmt(nullptr),
+        meta(nullptr), inBinds(nullptr), outBinds(nullptr), preparedQuery(false)
    {
       connect(dp, &QObject::destroyed, this, &QMYSQLResultPrivate::driverDestroyed);
    }
@@ -155,7 +155,7 @@ class QMYSQLResultPrivate : public QObject
    bool hasBlobs;
    struct QMyField {
       QMyField()
-         : outField(0), nullIndicator(false), bufLength(0ul), myField(0), type(QVariant::Invalid)
+         : outField(nullptr), nullIndicator(false), bufLength(0ul), myField(nullptr), type(QVariant::Invalid)
       {
       }
 
@@ -427,12 +427,12 @@ void QMYSQLResult::cleanup()
       if (mysql_stmt_close(d->stmt)) {
          qWarning("QMYSQLResult::cleanup: unable to free statement handle");
       }
-      d->stmt = 0;
+      d->stmt = nullptr;
    }
 
    if (d->meta) {
       mysql_free_result(d->meta);
-      d->meta = 0;
+      d->meta = nullptr;
    }
 
    int i;
@@ -442,12 +442,12 @@ void QMYSQLResult::cleanup()
 
    if (d->outBinds) {
       delete[] d->outBinds;
-      d->outBinds = 0;
+      d->outBinds = nullptr;
    }
 
    if (d->inBinds) {
       delete[] d->inBinds;
-      d->inBinds = 0;
+      d->inBinds = nullptr;
    }
 
    d->hasBlobs = false;
@@ -865,7 +865,7 @@ bool QMYSQLResult::nextResult()
       mysql_free_result(d->result);
    }
 
-   d->result = 0;
+   d->result = nullptr;
    setSelect(false);
 
    for (int i = 0; i < d->fields.count(); ++i) {
@@ -1028,7 +1028,7 @@ bool QMYSQLResult::exec()
 
          currBind              = &d->outBinds[i];
          currBind->is_null     = &nullVector[i];
-         currBind->length      = 0;
+         currBind->length      = nullptr;
          currBind->is_unsigned = 0;
 
          switch (item.type()) {
@@ -1071,7 +1071,7 @@ bool QMYSQLResult::exec()
                }
 
                currBind->buffer_length = sizeof(MYSQL_TIME);
-               currBind->length = 0;
+               currBind->length = nullptr;
                break;
             }
 
@@ -1232,7 +1232,7 @@ static void qLibraryInit()
       return;
    }
 
-   if (mysql_library_init(0, 0, 0)) {
+   if (mysql_library_init(0, nullptr, nullptr)) {
       qWarning("QMYSQLDriver::qServerInit: unable to start server.");
    }
 
@@ -1281,7 +1281,7 @@ QMYSQLDriver::QMYSQLDriver(MYSQL *con, QObject *parent)
 void QMYSQLDriver::init()
 {
    Q_D(QMYSQLDriver);
-   d->mysql = 0;
+   d->mysql = nullptr;
    qMySqlConnectionCount++;
 }
 
@@ -1645,7 +1645,7 @@ QSqlRecord QMYSQLDriver::record(const QString &tablename) const
       return info;
    }
 
-   MYSQL_RES *r = mysql_list_fields(d->mysql, table.constData(), 0);
+   MYSQL_RES *r = mysql_list_fields(d->mysql, table.constData(), nullptr);
    if (!r) {
       return info;
    }
@@ -1753,7 +1753,7 @@ QString QMYSQLDriver::formatValue(const QSqlField &field, bool trimStrings) cons
                // buffer has to be at least length*2+1 bytes
                char *buffer = new char[ba.size() * 2 + 1];
 
-               int escapedSize = int(mysql_real_escape_string(d->mysql, buffer, ba.data(), ba.size()));
+               mysql_real_escape_string(d->mysql, buffer, ba.data(), ba.size());
 
                r.append('\'').append(toUnicode(d->tc, buffer)).append('\'');
                delete[] buffer;
@@ -1763,11 +1763,13 @@ QString QMYSQLDriver::formatValue(const QSqlField &field, bool trimStrings) cons
                qWarning("QMYSQLDriver::formatValue: Database not open");
             }
 
-         // fall through
+            [[fallthrough]];
+
          default:
             r = QSqlDriver::formatValue(field, trimStrings);
       }
    }
+
    return r;
 }
 
@@ -1776,7 +1778,6 @@ QString QMYSQLDriver::escapeIdentifier(const QString &identifier, IdentifierType
    QString res = identifier;
 
    if (! identifier.isEmpty() && ! identifier.startsWith('`') && ! identifier.endsWith('`') ) {
-
       res.prepend('`');
       res.append('`');
       res.replace('.', "`.`");
@@ -1785,7 +1786,7 @@ QString QMYSQLDriver::escapeIdentifier(const QString &identifier, IdentifierType
    return res;
 }
 
-bool QMYSQLDriver::isIdentifierEscaped(const QString &identifier, IdentifierType type) const
+bool QMYSQLDriver::isIdentifierEscaped(const QString &identifier, IdentifierType) const
 {
    return identifier.size() > 2
       && identifier.startsWith('`')  // left delimited

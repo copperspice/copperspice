@@ -49,7 +49,10 @@ class QRelatedTableModel;
 
 struct QRelation {
  public:
-   QRelation(): model(0), m_parent(0), m_dictInitialized(false) {}
+   QRelation(): model(nullptr), m_parent(nullptr), m_dictInitialized(false)
+   {
+   }
+
    void init(QSqlRelationalTableModel *parent, const QSqlRelation &relation);
 
    void populateModel();
@@ -148,7 +151,7 @@ void QRelation::clearDictionary()
 void QRelation::clear()
 {
    delete model;
-   model = 0;
+   model = nullptr;
    clearDictionary();
 }
 
@@ -459,12 +462,12 @@ QSqlTableModel *QSqlRelationalTableModel::relationModel(int column) const
 {
    Q_D(const QSqlRelationalTableModel);
    if ( column < 0 || column >= d->relations.count()) {
-      return 0;
+      return nullptr;
    }
 
    QRelation &relation = const_cast<QSqlRelationalTableModelPrivate *>(d)->relations[column];
    if (!relation.isValid()) {
-      return 0;
+      return nullptr;
    }
 
    if (!relation.model) {
