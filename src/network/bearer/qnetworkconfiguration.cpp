@@ -26,7 +26,7 @@
 #include <qdebug.h>
 
 QNetworkConfiguration::QNetworkConfiguration()
-   : d(0)
+   : d(nullptr)
 {
 }
 

@@ -127,13 +127,13 @@ QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
 
    Q_D(QNetworkDiskCache);
 
-   if (!metaData.isValid() || ! metaData.url().isValid() || !metaData.saveToDisk()) {
-      return 0;
+   if (! metaData.isValid() || ! metaData.url().isValid() || !metaData.saveToDisk()) {
+      return nullptr;
    }
 
    if (d->cacheDirectory.isEmpty()) {
       qWarning() << "QNetworkDiskCache::prepare() The cache directory is not set";
-      return 0;
+      return nullptr;
    }
 
    for (const QNetworkCacheMetaData::RawHeader &header : metaData.rawHeaders()) {
@@ -141,7 +141,7 @@ QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
 
          const qint64 size = header.second.toLongLong();
          if (size > (maximumCacheSize() * 3) / 4) {
-            return 0;
+            return nullptr;
          }
          break;
       }
@@ -149,21 +149,24 @@ QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
    QScopedPointer<QCacheItem> cacheItem(new QCacheItem);
    cacheItem->metaData = metaData;
 
-   QIODevice *device = 0;
+   QIODevice *device = nullptr;
+
    if (cacheItem->canCompress()) {
       cacheItem->data.open(QBuffer::ReadWrite);
       device = &(cacheItem->data);
+
    } else {
       QString templateName = d->tmpCacheFileName();
+
       QT_TRY {
          cacheItem->file = new QTemporaryFile(templateName, &cacheItem->data);
       } QT_CATCH(...) {
-         cacheItem->file = 0;
+         cacheItem->file = nullptr;
       }
       if (!cacheItem->file || !cacheItem->file->open()) {
          qWarning() << "QNetworkDiskCache::prepare() unable to open temporary file";
          cacheItem.reset();
-         return 0;
+         return nullptr;
       }
       cacheItem->writeHeader(cacheItem->file);
       device = cacheItem->file;
@@ -270,9 +273,11 @@ bool QNetworkDiskCache::remove(const QUrl &url)
 
    // remove is also used to cancel insertions, not a common operation
    QHashIterator<QIODevice *, QCacheItem *> it(d->inserting);
+
    while (it.hasNext()) {
       it.next();
       QCacheItem *item = it.value();
+
       if (item && item->metaData.url() == url) {
          delete item;
          d->inserting.remove(it.key());
@@ -363,31 +368,35 @@ QIODevice *QNetworkDiskCache::data(const QUrl &url)
    Q_D(QNetworkDiskCache);
    QScopedPointer<QBuffer> buffer;
    if (!url.isValid()) {
-      return 0;
+      return nullptr;
    }
+
    if (d->lastItem.metaData.url() == url && d->lastItem.data.isOpen()) {
       buffer.reset(new QBuffer);
       buffer->setData(d->lastItem.data.data());
+
    } else {
       QScopedPointer<QFile> file(new QFile(d->cacheFileName(url)));
       if (!file->open(QFile::ReadOnly | QIODevice::Unbuffered)) {
-         return 0;
+         return nullptr;
       }
 
       if (!d->lastItem.read(file.data(), true)) {
          file->close();
          remove(url);
-         return 0;
+         return nullptr;
       }
+
       if (d->lastItem.data.isOpen()) {
          // compressed
          buffer.reset(new QBuffer);
          buffer->setData(d->lastItem.data.data());
+
       } else {
          buffer.reset(new QBuffer);
          // ### verify that QFile uses the fd size and not the file name
          qint64 size = file->size() - file->pos();
-         const uchar *p = 0;
+         const uchar *p = nullptr;
 
          p = file->map(file->pos(), size);
 
@@ -528,7 +537,7 @@ qint64 QNetworkDiskCache::expire()
             QCacheItem *item = iterator.value();
             if (item && item->file && item->file->fileName() == name) {
                delete item->file;
-               item->file = 0;
+               item->file = nullptr;
                break;
             }
          }

@@ -92,12 +92,10 @@ void QLocalSocketPrivate::_q_winError(ulong windowsError, const QString &functio
    emit q->error(error);
 }
 
-QLocalSocketPrivate::QLocalSocketPrivate() : QIODevicePrivate(),
-   handle(INVALID_HANDLE_VALUE),
-   pipeWriter(0),
-   pipeReader(0),
-   error(QLocalSocket::UnknownSocketError),
-   state(QLocalSocket::UnconnectedState)
+QLocalSocketPrivate::QLocalSocketPrivate()
+   : QIODevicePrivate(), handle(INVALID_HANDLE_VALUE),
+     pipeWriter(nullptr), pipeReader(nullptr),
+     error(QLocalSocket::UnknownSocketError), state(QLocalSocket::UnconnectedState)
 {
 }
 
@@ -156,7 +154,7 @@ void QLocalSocket::connectToServer(OpenMode openMode)
       permissions |= (openMode & QIODevice::WriteOnly) ? GENERIC_WRITE : 0;
 
       localSocket = CreateFile(d->fullServerName.toStdWString().c_str(), permissions, 0,
-                  NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+                  nullptr, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, nullptr);
 
       if (localSocket != INVALID_HANDLE_VALUE)  {
          break;
@@ -239,7 +237,7 @@ void QLocalSocket::abort()
 
    if (d->pipeWriter) {
       delete d->pipeWriter;
-      d->pipeWriter = 0;
+      d->pipeWriter = nullptr;
       d->writeBuffer.clear();
    }
 
@@ -269,7 +267,7 @@ void QLocalSocketPrivate::_q_pipeClosed()
    handle = INVALID_HANDLE_VALUE;
    if (pipeWriter) {
       delete pipeWriter;
-      pipeWriter = 0;
+      pipeWriter = nullptr;
    }
 }
 
@@ -342,7 +340,7 @@ void QLocalSocket::disconnectFromServer()
       // If we have unwritten data, the pipeWriter is still present.
       // It must be destroyed before close() to prevent an infinite loop.
       delete d->pipeWriter;
-      d->pipeWriter = 0;
+      d->pipeWriter = nullptr;
       d->writeBuffer.clear();
    }
 

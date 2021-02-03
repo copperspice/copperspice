@@ -55,7 +55,7 @@ static QByteArray qNtlmPhase3_SSPI(QAuthenticatorPrivate *ctx, const QByteArray 
 #endif
 
 QAuthenticator::QAuthenticator()
-   : d(0)
+   : d(nullptr)
 {
 }
 
@@ -70,7 +70,7 @@ QAuthenticator::~QAuthenticator()
     Constructs a copy of \a other.
 */
 QAuthenticator::QAuthenticator(const QAuthenticator &other)
-   : d(0)
+   : d(nullptr)
 {
    if (other.d) {
       *this = other;
@@ -100,7 +100,7 @@ QAuthenticator &QAuthenticator::operator=(const QAuthenticator &other)
 
    } else if (d->phase == QAuthenticatorPrivate::Start) {
       delete d;
-      d = 0;
+      d = nullptr;
    }
 
    return *this;
@@ -203,16 +203,15 @@ class QNtlmWindowsHandles
    CtxtHandle ctxHandle;
 };
 #endif
+
 QAuthenticatorPrivate::QAuthenticatorPrivate()
    : method(None)
 
 #if defined(Q_OS_WIN)
-   , ntlmWindowsHandles(0)
+   , ntlmWindowsHandles(nullptr)
 #endif
 
-   , hasFailed(false)
-   , phase(Start)
-   , nonceCount(0)
+   , hasFailed(false), phase(Start), nonceCount(0)
 {
    cnonce = QCryptographicHash::hash(QByteArray::number(qrand(), 16) + QByteArray::number(qrand(), 16),
                                      QCryptographicHash::Md5).toHex();
@@ -329,7 +328,7 @@ void QAuthenticatorPrivate::parseHttpResponse(const QList<QPair<QByteArray, QByt
 QByteArray QAuthenticatorPrivate::calculateResponse(const QByteArray &requestMethod, const QByteArray &path)
 {
    QByteArray response;
-   const char *methodString = 0;
+   const char *methodString = nullptr;
    switch (method) {
       case QAuthenticatorPrivate::None:
          methodString = "";
@@ -1085,7 +1084,7 @@ QByteArray qEncodeHmacMd5(QByteArray &key, const QByteArray &message)
 
 static QByteArray qCreatev2Hash(const QAuthenticatorPrivate *ctx, QNtlmPhase3Block *phase3)
 {
-   Q_ASSERT(phase3 != 0);
+   Q_ASSERT(phase3 != nullptr);
 
    // since v2 Hash is need for both NTLMv2 and LMv2 it is calculated
    // only once and stored and reused
@@ -1144,7 +1143,7 @@ static QByteArray qEncodeNtlmv2Response(const QAuthenticatorPrivate *ctx,
                                         const QNtlmPhase2Block &ch,
                                         QNtlmPhase3Block *phase3)
 {
-   Q_ASSERT(phase3 != 0);
+   Q_ASSERT(phase3 != nullptr);
    // return value stored in phase3
    qCreatev2Hash(ctx, phase3);
 
@@ -1214,7 +1213,7 @@ static QByteArray qEncodeLmv2Response(const QAuthenticatorPrivate *ctx,
                                       const QNtlmPhase2Block &ch,
                                       QNtlmPhase3Block *phase3)
 {
-   Q_ASSERT(phase3 != 0);
+   Q_ASSERT(phase3 != nullptr);
    // return value stored in phase3
    qCreatev2Hash(ctx, phase3);
 
@@ -1348,26 +1347,26 @@ static QByteArray qNtlmPhase3(QAuthenticatorPrivate *ctx, const QByteArray &phas
 
 #if defined(Q_OS_WIN)
 
-static HMODULE securityDLLHandle = NULL;
-static PSecurityFunctionTable pSecurityFunctionTable = NULL;
+static HMODULE securityDLLHandle = nullptr;
+static PSecurityFunctionTable pSecurityFunctionTable = nullptr;
 
 static bool q_NTLM_SSPI_library_load()
 {
    QMutexLocker locker(QMutexPool::globalInstanceGet((void *)&pSecurityFunctionTable));
-   if (pSecurityFunctionTable == NULL) {
+   if (pSecurityFunctionTable == nullptr) {
       securityDLLHandle = LoadLibrary(L"secur32.dll");
 
-      if (securityDLLHandle != NULL) {
+      if (securityDLLHandle != nullptr) {
          INIT_SECURITY_INTERFACE pInitSecurityInterface =
             (INIT_SECURITY_INTERFACE)GetProcAddress(securityDLLHandle,
                   "InitSecurityInterfaceW");
 
-         if (pInitSecurityInterface != NULL) {
+         if (pInitSecurityInterface != nullptr) {
             pSecurityFunctionTable = pInitSecurityInterface();
          }
       }
    }
-   if (pSecurityFunctionTable == NULL) {
+   if (pSecurityFunctionTable == nullptr) {
       return false;
    }
    return true;
@@ -1389,11 +1388,11 @@ static QByteArray qNtlmPhase1_SSPI(QAuthenticatorPrivate *ctx)
    memset(&ctx->ntlmWindowsHandles->credHandle, 0, sizeof(CredHandle));
    TimeStamp tsDummy;
    SECURITY_STATUS secStatus = pSecurityFunctionTable->AcquireCredentialsHandle(
-                                  NULL, (SEC_WCHAR *)L"NTLM", SECPKG_CRED_OUTBOUND, NULL, NULL,
-                                  NULL, NULL, &ctx->ntlmWindowsHandles->credHandle, &tsDummy);
+                                  nullptr, (SEC_WCHAR *)L"NTLM", SECPKG_CRED_OUTBOUND, nullptr, nullptr,
+                                  nullptr, nullptr, &ctx->ntlmWindowsHandles->credHandle, &tsDummy);
    if (secStatus != SEC_E_OK) {
       delete ctx->ntlmWindowsHandles;
-      ctx->ntlmWindowsHandles = 0;
+      ctx->ntlmWindowsHandles = nullptr;
       return result;
    }
    // 2. The client calls the SSPI InitializeSecurityContext function
@@ -1406,13 +1405,13 @@ static QByteArray qNtlmPhase1_SSPI(QAuthenticatorPrivate *ctx)
    desc.pBuffers  = &buf;
    buf.cbBuffer   = 0;
    buf.BufferType = SECBUFFER_TOKEN;
-   buf.pvBuffer   = NULL;
+   buf.pvBuffer   = nullptr;
    ULONG attrs;
-   secStatus = pSecurityFunctionTable->InitializeSecurityContext(&ctx->ntlmWindowsHandles->credHandle, NULL,
+   secStatus = pSecurityFunctionTable->InitializeSecurityContext(&ctx->ntlmWindowsHandles->credHandle, nullptr,
                const_cast<SEC_WCHAR *>(L"") /* host */,
                ISC_REQ_ALLOCATE_MEMORY,
                0, SECURITY_NETWORK_DREP,
-               NULL, 0,
+               nullptr, 0,
                &ctx->ntlmWindowsHandles->ctxHandle, &desc,
                &attrs, &tsDummy);
    if (secStatus == SEC_I_COMPLETE_AND_CONTINUE ||
@@ -1424,7 +1423,7 @@ static QByteArray qNtlmPhase1_SSPI(QAuthenticatorPrivate *ctx)
       }
       pSecurityFunctionTable->FreeCredentialsHandle(&ctx->ntlmWindowsHandles->credHandle);
       delete ctx->ntlmWindowsHandles;
-      ctx->ntlmWindowsHandles = 0;
+      ctx->ntlmWindowsHandles = nullptr;
       return result;
    }
 
@@ -1449,7 +1448,7 @@ static QByteArray qNtlmPhase3_SSPI(QAuthenticatorPrivate *ctx, const QByteArray 
 
    QByteArray result;
 
-   if (pSecurityFunctionTable == NULL) {
+   if (pSecurityFunctionTable == nullptr) {
       return result;
    }
 
@@ -1467,7 +1466,7 @@ static QByteArray qNtlmPhase3_SSPI(QAuthenticatorPrivate *ctx, const QByteArray 
    type_2.pvBuffer   = (PVOID)phase2data.data();
    type_2.cbBuffer   = phase2data.length();
    type_3.BufferType = SECBUFFER_TOKEN;
-   type_3.pvBuffer   = 0;
+   type_3.pvBuffer   = nullptr;
    type_3.cbBuffer   = 0;
 
    SECURITY_STATUS secStatus = pSecurityFunctionTable->InitializeSecurityContext(&ctx->ntlmWindowsHandles->credHandle,
@@ -1486,7 +1485,7 @@ static QByteArray qNtlmPhase3_SSPI(QAuthenticatorPrivate *ctx, const QByteArray 
    pSecurityFunctionTable->FreeCredentialsHandle(&ctx->ntlmWindowsHandles->credHandle);
    pSecurityFunctionTable->DeleteSecurityContext(&ctx->ntlmWindowsHandles->ctxHandle);
    delete ctx->ntlmWindowsHandles;
-   ctx->ntlmWindowsHandles = 0;
+   ctx->ntlmWindowsHandles = nullptr;
 
    return result;
 }

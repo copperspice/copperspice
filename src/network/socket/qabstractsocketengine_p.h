@@ -163,11 +163,11 @@ class QAbstractSocketEngine : public QObject
    virtual int option(SocketOption option) const = 0;
    virtual bool setOption(SocketOption option, int value) = 0;
 
-   virtual bool waitForRead(int msecs = 30000, bool *timedOut = 0)  = 0;
-   virtual bool waitForWrite(int msecs = 30000, bool *timedOut = 0) = 0;
+   virtual bool waitForRead(int msecs = 30000, bool *timedOut = nullptr)  = 0;
+   virtual bool waitForWrite(int msecs = 30000, bool *timedOut = nullptr) = 0;
 
    virtual bool waitForReadOrWrite(bool *readyToRead, bool *readyToWrite, bool checkRead, bool checkWrite,
-                                   int msecs = 30000, bool *timedOut = 0) = 0;
+                                   int msecs = 30000, bool *timedOut = nullptr) = 0;
 
    QAbstractSocket::SocketError error() const;
    QString errorString() const;

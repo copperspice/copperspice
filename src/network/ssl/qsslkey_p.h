@@ -42,7 +42,7 @@ class QSslKeyPrivate
     };
 
    QSslKeyPrivate()
-      : algorithm(QSsl::Opaque), opaque(0)
+      : algorithm(QSsl::Opaque), opaque(nullptr)
    {
       clear(false);
    }

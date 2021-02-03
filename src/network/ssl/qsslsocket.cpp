@@ -75,7 +75,7 @@ QSslSocket::~QSslSocket()
    qDebug() << "QSslSocket::~QSslSocket(), this =" << (void *)this;
 #endif
    delete d->plainSocket;
-   d->plainSocket = 0;
+   d->plainSocket = nullptr;
 }
 
 void QSslSocket::resume()
@@ -886,16 +886,9 @@ qint64 QSslSocket::writeData(const char *data, qint64 len)
     \internal
 */
 QSslSocketPrivate::QSslSocketPrivate()
-   : initialized(false)
-   , mode(QSslSocket::UnencryptedMode)
-   , autoStartHandshake(false)
-   , connectionEncrypted(false)
-   , shutdown(false)
-   , ignoreAllSslErrors(false)
-   , readyReadEmittedPointer(0)
-   , allowRootCertOnDemandLoading(true)
-   , plainSocket(0)
-   , paused(false)
+   : initialized(false), mode(QSslSocket::UnencryptedMode), autoStartHandshake(false), connectionEncrypted(false),
+     shutdown(false), ignoreAllSslErrors(false), readyReadEmittedPointer(nullptr), allowRootCertOnDemandLoading(true),
+     plainSocket(nullptr), paused(false)
 {
    QSslConfigurationPrivate::deepCopyDefaultConfiguration(&configuration);
 }

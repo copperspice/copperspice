@@ -45,13 +45,13 @@ static DH *get_dh1024()
                        "/1y29Aa37e44a/taiZ+lrp8kEXxLH+ZJKGZR7OZTgf//////////AgEC"));
 
    const char *ptr = params.constData();
-   DH *dh = q_d2i_DHparams(NULL, reinterpret_cast<const unsigned char **>(&ptr), params.length());
+   DH *dh = q_d2i_DHparams(nullptr, reinterpret_cast<const unsigned char **>(&ptr), params.length());
 
    return dh;
 }
 
 QSslContext::QSslContext()
-   : ctx(0), pkey(0), session(0), m_sessionTicketLifeTimeHint(-1)
+   : ctx(nullptr), pkey(nullptr), session(nullptr), m_sessionTicketLifeTimeHint(-1)
 {
 }
 
@@ -102,7 +102,7 @@ init_context:
 
 #else
          // SSL 2 not supported by the system, but chosen deliberately -> error
-         sslContext->ctx = 0;
+         sslContext->ctx = nullptr;
          unsupportedProtocol = true;
 #endif
          break;
@@ -118,7 +118,7 @@ init_context:
 
 #else
          // SSL 3 not supported by the system, but chosen deliberately -> error
-         sslContext->ctx = 0;
+         sslContext->ctx = nullptr;
          unsupportedProtocol = true;
 #endif
          break;
@@ -273,7 +273,7 @@ init_context:
       QList<QByteArray> unixDirs = QSslSocketPrivate::unixRootCertDirectories();
 
       for (int a = 0; a < unixDirs.count(); ++a) {
-         q_SSL_CTX_load_verify_locations(sslContext->ctx, 0, unixDirs.at(a).constData());
+         q_SSL_CTX_load_verify_locations(sslContext->ctx, nullptr, unixDirs.at(a).constData());
       }
    }
 
@@ -324,7 +324,7 @@ init_context:
       }
 
       if (configuration.d->privateKey.algorithm() == QSsl::Opaque) {
-         sslContext->pkey = 0;    // Don't free the private key, it belongs to QSslKey
+         sslContext->pkey = nullptr;    // do not free the private key, it belongs to QSslKey
       }
 
       // Check if the certificate matches the private key.
@@ -348,7 +348,7 @@ init_context:
 
    // Initialize peer verification.
    if (sslContext->sslConfiguration.peerVerifyMode() == QSslSocket::VerifyNone) {
-      q_SSL_CTX_set_verify(sslContext->ctx, SSL_VERIFY_NONE, 0);
+      q_SSL_CTX_set_verify(sslContext->ctx, SSL_VERIFY_NONE, nullptr);
    } else {
       q_SSL_CTX_set_verify(sslContext->ctx, SSL_VERIFY_PEER, q_X509Callback);
    }
@@ -364,7 +364,8 @@ init_context:
    }
 
    // Set temp DH params
-   DH *dh = 0;
+   DH *dh = nullptr;
+
    dh = get_dh1024();
    q_SSL_CTX_set_tmp_dh(sslContext->ctx, dh);
    q_DH_free(dh);
@@ -374,14 +375,15 @@ init_context:
 // ECDH is enabled by default since 1.1.0: https://github.com/openssl/openssl/issues/1437
 #if OPENSSL_VERSION_NUMBER >= 0x10002000L && OPENSSL_VERSION_NUMBER <= 0x10100000L
    if (q_SSLeay() >= 0x10002000L) {
-      q_SSL_CTX_ctrl(sslContext->ctx, SSL_CTRL_SET_ECDH_AUTO, 1, NULL);
+      q_SSL_CTX_ctrl(sslContext->ctx, SSL_CTRL_SET_ECDH_AUTO, 1, nullptr);
 
    } else
 
 #endif
    {
       // Set temp ECDH params
-      EC_KEY *ecdh = 0;
+      EC_KEY *ecdh = nullptr;
+
       ecdh = q_EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
       q_SSL_CTX_set_tmp_ecdh(sslContext->ctx, ecdh);
       q_EC_KEY_free(ecdh);
@@ -471,7 +473,7 @@ SSL *QSslContext::createSsl()
 
    if (!session && !sessionASN1().isEmpty() && !sslConfiguration.testSslOption(QSsl::SslOptionDisableSessionPersistence)) {
       const unsigned char *data = reinterpret_cast<const unsigned char *>(m_sessionASN1.constData());
-      session = q_d2i_SSL_SESSION(0, &data, m_sessionASN1.size());   // refcount is 1 already, set
+      session = q_d2i_SSL_SESSION(nullptr, &data, m_sessionASN1.size());   // refcount is 1 already, set
       // by function above
    }
 
@@ -480,7 +482,7 @@ SSL *QSslContext::createSsl()
       if (! q_SSL_set_session(ssl, session)) {
          qWarning("Could not set SSL session");
          q_SSL_SESSION_free(session);
-         session = 0;
+         session = nullptr;
       }
    }
 
@@ -529,8 +531,8 @@ bool QSslContext::cacheSession(SSL *ssl)
    // cache the session the caller gave us and increase reference count
    session = q_SSL_get1_session(ssl);
 
-   if (session && !sslConfiguration.testSslOption(QSsl::SslOptionDisableSessionPersistence)) {
-      int sessionSize = q_i2d_SSL_SESSION(session, 0);
+   if (session && ! sslConfiguration.testSslOption(QSsl::SslOptionDisableSessionPersistence)) {
+      int sessionSize = q_i2d_SSL_SESSION(session, nullptr);
 
       if (sessionSize > 0) {
          m_sessionASN1.resize(sessionSize);
@@ -548,7 +550,7 @@ bool QSslContext::cacheSession(SSL *ssl)
       }
    }
 
-   return (session != 0);
+   return (session != nullptr);
 }
 
 QByteArray QSslContext::sessionASN1() const
@@ -575,5 +577,3 @@ QString QSslContext::errorString() const
 {
    return errorStr;
 }
-
-

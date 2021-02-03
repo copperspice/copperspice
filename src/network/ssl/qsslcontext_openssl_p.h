@@ -57,7 +57,7 @@ class QSslContext
 
    struct NPNContext {
       NPNContext()
-         : data(0), len(0), status(QSslConfiguration::NextProtocolNegotiationNone)
+         : data(nullptr), len(0), status(QSslConfiguration::NextProtocolNegotiationNone)
       {
       }
 

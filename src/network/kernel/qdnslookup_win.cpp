@@ -70,7 +70,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
 
    DNS_RECORD_PTR dns_records = nullptr;
 
-   const DNS_STATUS status = DnsQuery_UTF8(requestName.constData(), requestType, DNS_QUERY_STANDARD, &srvList, &dns_records, NULL);
+   const DNS_STATUS status = DnsQuery_UTF8(requestName.constData(), requestType, DNS_QUERY_STANDARD, &srvList, &dns_records, nullptr);
 
    switch (status) {
       case ERROR_SUCCESS:
@@ -103,7 +103,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
    }
 
    // Extract results
-   for (DNS_RECORD_PTR ptr = dns_records; ptr != NULL; ptr = ptr->pNext) {
+   for (DNS_RECORD_PTR ptr = dns_records; ptr != nullptr; ptr = ptr->pNext) {
 
 #ifdef Q_CC_MSVC
       const QString name = QUrl::fromAce(QString::fromUtf8(reinterpret_cast<const char *>(ptr->pName)));

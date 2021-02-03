@@ -449,13 +449,13 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
    SOCKET socket = INVALID_SOCKET;
    // Windows 7 or later, try the new API
    if ((osver & QSysInfo::WV_NT_based) >= QSysInfo::WV_6_1) {
-      socket = ::WSASocket(protocol, type, 0, NULL, 0, WSA_FLAG_NO_HANDLE_INHERIT | WSA_FLAG_OVERLAPPED);
+      socket = ::WSASocket(protocol, type, 0, nullptr, 0, WSA_FLAG_NO_HANDLE_INHERIT | WSA_FLAG_OVERLAPPED);
    }
    // previous call fails if the windows 7 service pack 1 or hot fix isn't installed.
 
    // Try the old API if the new one failed on Windows 7, or always on earlier versions
    if (socket == INVALID_SOCKET && ((osver & QSysInfo::WV_NT_based) <= QSysInfo::WV_6_1)) {
-      socket = ::WSASocket(protocol, type, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+      socket = ::WSASocket(protocol, type, 0, nullptr, 0, WSA_FLAG_OVERLAPPED);
 
 #ifdef HANDLE_FLAG_INHERIT
       if (socket != INVALID_SOCKET) {
@@ -502,7 +502,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
       DWORD dwBytesReturned = 0;
       int bNewBehavior = 1;
       if (::WSAIoctl(socket, SIO_UDP_CONNRESET, &bNewBehavior, sizeof(bNewBehavior),
-                     NULL, 0, &dwBytesReturned, NULL, NULL) == SOCKET_ERROR) {
+                     nullptr, 0, &dwBytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
          // not to worry isBogusUdpReadNotification() should handle this otherwise
          int err = WSAGetLastError();
          WS_ERROR_DEBUG(err);
@@ -514,15 +514,15 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
    GUID recvmsgguid = WSAID_WSARECVMSG;
    if (WSAIoctl(socketDescriptor, SIO_GET_EXTENSION_FUNCTION_POINTER,
                 &recvmsgguid, sizeof(recvmsgguid),
-                &recvmsg, sizeof(recvmsg), &bytesReturned, NULL, NULL) == SOCKET_ERROR) {
-      recvmsg = 0;
+                &recvmsg, sizeof(recvmsg), &bytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
+      recvmsg = nullptr;
    }
 
    GUID sendmsgguid = WSAID_WSASENDMSG;
    if (WSAIoctl(socketDescriptor, SIO_GET_EXTENSION_FUNCTION_POINTER,
                 &sendmsgguid, sizeof(sendmsgguid),
-                &sendmsg, sizeof(sendmsg), &bytesReturned, NULL, NULL) == SOCKET_ERROR) {
-      sendmsg = 0;
+                &sendmsg, sizeof(sendmsg), &bytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
+      sendmsg = nullptr;
    }
 
    socketDescriptor = socket;
@@ -557,7 +557,7 @@ int QNativeSocketEnginePrivate::option(QNativeSocketEngine::SocketOption opt) co
 
       case QNativeSocketEngine::NonBlockingSocketOption: {
          unsigned long buf = 0;
-         if (WSAIoctl(socketDescriptor, FIONBIO, 0, 0, &buf, sizeof(buf), 0, 0, 0) == 0) {
+         if (WSAIoctl(socketDescriptor, FIONBIO, nullptr, 0, &buf, sizeof(buf), nullptr, nullptr, nullptr) == 0) {
             return buf;
          } else {
             return -1;
@@ -605,17 +605,22 @@ bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt
             return false;
          }
          break;
+
       case QNativeSocketEngine::NonBlockingSocketOption: {
          unsigned long buf = v;
          unsigned long outBuf;
          DWORD sizeWritten = 0;
-         if (::WSAIoctl(socketDescriptor, FIONBIO, &buf, sizeof(unsigned long), &outBuf, sizeof(unsigned long), &sizeWritten, 0, 0) == SOCKET_ERROR) {
+
+         if (::WSAIoctl(socketDescriptor, FIONBIO, &buf, sizeof(unsigned long), &outBuf,
+                  sizeof(unsigned long), &sizeWritten, nullptr, nullptr) == SOCKET_ERROR) {
             WS_ERROR_DEBUG(WSAGetLastError());
             return false;
          }
+
          return true;
          break;
       }
+
       case QNativeSocketEngine::TypeOfServiceOption:
          return false;
 
@@ -765,7 +770,7 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
    }
 
    while(true) {
-      int connectResult = ::WSAConnect(socketDescriptor, &aa.a, sockAddrSize, 0, 0, 0, 0);
+      int connectResult = ::WSAConnect(socketDescriptor, &aa.a, sockAddrSize, nullptr, nullptr, nullptr, nullptr);
 
       if (connectResult == SOCKET_ERROR)    {
          int err = WSAGetLastError();
@@ -1018,7 +1023,8 @@ bool QNativeSocketEnginePrivate::nativeListen(int backlog)
 
 int QNativeSocketEnginePrivate::nativeAccept()
 {
-   int acceptedDescriptor = WSAAccept(socketDescriptor, 0, 0, 0, 0);
+   int acceptedDescriptor = WSAAccept(socketDescriptor, nullptr, nullptr, nullptr, 0);
+
    if (acceptedDescriptor == -1) {
       int err = WSAGetLastError();
       switch (err) {
@@ -1230,9 +1236,11 @@ bool QNativeSocketEnginePrivate::nativeSetMulticastInterface(const QNetworkInter
 qint64 QNativeSocketEnginePrivate::nativeBytesAvailable() const
 {
    unsigned long  nbytes = 0;
-   unsigned long dummy = 0;
-   DWORD sizeWritten = 0;
-   if (::WSAIoctl(socketDescriptor, FIONREAD, &dummy, sizeof(dummy), &nbytes, sizeof(nbytes), &sizeWritten, 0, 0) == SOCKET_ERROR) {
+   unsigned long dummy   = 0;
+   DWORD sizeWritten     = 0;
+
+   if (::WSAIoctl(socketDescriptor, FIONREAD, &dummy, sizeof(dummy), &nbytes, sizeof(nbytes),
+                  &sizeWritten, nullptr, nullptr) == SOCKET_ERROR) {
       WS_ERROR_DEBUG(WSAGetLastError());
       return -1;
    }
@@ -1248,7 +1256,8 @@ qint64 QNativeSocketEnginePrivate::nativeBytesAvailable() const
       buf.buf = &c;
       buf.len = sizeof(c);
       DWORD flags = MSG_PEEK;
-      if (::WSARecvFrom(socketDescriptor, &buf, 1, 0, &flags, 0, 0, 0, 0) == SOCKET_ERROR) {
+
+      if (::WSARecvFrom(socketDescriptor, &buf, 1, nullptr, &flags, nullptr, nullptr, nullptr, nullptr) == SOCKET_ERROR) {
          int err = WSAGetLastError();
          if (err != WSAECONNRESET && err != WSAENETRESET) {
             return 0;
@@ -1257,7 +1266,6 @@ qint64 QNativeSocketEnginePrivate::nativeBytesAvailable() const
    }
    return nbytes;
 }
-
 
 bool QNativeSocketEnginePrivate::nativeHasPendingDatagrams() const
 {
@@ -1278,7 +1286,7 @@ bool QNativeSocketEnginePrivate::nativeHasPendingDatagrams() const
    DWORD available = 0;
    DWORD flags = MSG_PEEK;
 
-   int ret = ::WSARecvFrom(socketDescriptor, &buf, 1, &available, &flags, &storage.a, &storageSize, 0, 0);
+   int ret = ::WSARecvFrom(socketDescriptor, &buf, 1, &available, &flags, &storage.a, &storageSize, nullptr, nullptr);
    int err = WSAGetLastError();
 
    if (ret == SOCKET_ERROR && err !=  WSAEMSGSIZE) {
@@ -1298,14 +1306,13 @@ bool QNativeSocketEnginePrivate::nativeHasPendingDatagrams() const
    return result;
 }
 
-
 qint64 QNativeSocketEnginePrivate::nativePendingDatagramSize() const
 {
    qint64 ret = -1;
    int recvResult = 0;
    DWORD flags;
    DWORD bufferCount = 5;
-   WSABUF *buf = 0;
+   WSABUF *buf = nullptr;
 
    for (;;) {
       // the data written to udpMessagePeekBuffer is discarded, so
@@ -1320,7 +1327,7 @@ qint64 QNativeSocketEnginePrivate::nativePendingDatagramSize() const
       }
       flags = MSG_PEEK;
       DWORD bytesRead = 0;
-      recvResult = ::WSARecv(socketDescriptor, buf, bufferCount, &bytesRead, &flags, 0, 0);
+      recvResult = ::WSARecv(socketDescriptor, buf, bufferCount, &bytesRead, &flags, nullptr, nullptr);
       int err = WSAGetLastError();
 
       if (recvResult != SOCKET_ERROR) {
@@ -1333,10 +1340,12 @@ qint64 QNativeSocketEnginePrivate::nativePendingDatagramSize() const
                bufferCount += 5;
                delete[] buf;
                continue;
+
             case WSAECONNRESET:
             case WSAENETRESET:
                ret = 0;
                break;
+
             default:
                WS_ERROR_DEBUG(err);
                ret = -1;
@@ -1344,6 +1353,7 @@ qint64 QNativeSocketEnginePrivate::nativePendingDatagramSize() const
          }
          break;
       }
+
       if (buf) {
          delete[] buf;
       }
@@ -1378,6 +1388,7 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxL
    msg.dwBufferCount = 1;
    msg.name = reinterpret_cast<LPSOCKADDR>(&aa);
    msg.namelen = sizeof(aa);
+
    if (options & (QAbstractSocketEngine::WantDatagramHopLimit | QAbstractSocketEngine::WantDatagramDestination)) {
       msg.Control.buf = cbuf;
       msg.Control.len = sizeof(cbuf);
@@ -1388,9 +1399,9 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxL
    qint64 ret;
 
    if (recvmsg) {
-      ret = recvmsg(socketDescriptor, &msg, &bytesRead, 0, 0);
+      ret = recvmsg(socketDescriptor, &msg, &bytesRead, nullptr, nullptr);
    } else {
-      ret = ::WSARecvFrom(socketDescriptor, &buf, 1, &bytesRead, &flags, msg.name, &msg.namelen, 0, 0);
+      ret = ::WSARecvFrom(socketDescriptor, &buf, 1, &bytesRead, &flags, msg.name, &msg.namelen, nullptr, nullptr);
    }
 
    if (ret == SOCKET_ERROR) {
@@ -1405,9 +1416,11 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxL
             case WSAENETRESET:
                setError(QAbstractSocket::NetworkError, NetworkDroppedConnectionErrorString);
                break;
+
             case WSAECONNRESET:
                setError(QAbstractSocket::ConnectionRefusedError, ConnectionResetErrorString);
                break;
+
             default:
                setError(QAbstractSocket::NetworkError, ReceiveDatagramErrorString);
                break;
@@ -1427,7 +1440,7 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxL
    if (ret != -1 && recvmsg) {
       // get the ancillary data
       WSACMSGHDR *cmsgptr;
-      for (cmsgptr = WSA_CMSG_FIRSTHDR(&msg); cmsgptr != NULL;
+      for (cmsgptr = WSA_CMSG_FIRSTHDR(&msg); cmsgptr != nullptr;
             cmsgptr = WSA_CMSG_NXTHDR(&msg, cmsgptr)) {
          if (cmsgptr->cmsg_level == IPPROTO_IPV6 && cmsgptr->cmsg_type == IPV6_PKTINFO
                && cmsgptr->cmsg_len >= WSA_CMSG_LEN(sizeof(in6_pktinfo))) {
@@ -1483,7 +1496,7 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
    memset(&msg, 0, sizeof(msg));
    memset(&aa, 0, sizeof(aa));
 
-   buf.buf = len ? (char *)data : 0;
+   buf.buf = len ? (char *)data : nullptr;
 
    msg.lpBuffers = &buf;
    msg.dwBufferCount = 1;
@@ -1550,9 +1563,9 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
    DWORD bytesSent = 0;
    qint64 ret = -1;
    if (sendmsg) {
-      ret = sendmsg(socketDescriptor, &msg, flags, &bytesSent, 0, 0);
+      ret = sendmsg(socketDescriptor, &msg, flags, &bytesSent, nullptr, nullptr);
    } else {
-      ret = ::WSASendTo(socketDescriptor, &buf, 1, &bytesSent, flags, msg.name, msg.namelen, 0, 0);
+      ret = ::WSASendTo(socketDescriptor, &buf, 1, &bytesSent, flags, msg.name, msg.namelen, nullptr, nullptr);
    }
    if (ret == SOCKET_ERROR) {
       int err = WSAGetLastError();
@@ -1594,7 +1607,7 @@ qint64 QNativeSocketEnginePrivate::nativeWrite(const char *data, qint64 len)
       DWORD flags = 0;
       DWORD bytesWritten = 0;
 
-      int socketRet = ::WSASend(socketDescriptor, &buf, 1, &bytesWritten, flags, 0, 0);
+      int socketRet = ::WSASend(socketDescriptor, &buf, 1, &bytesWritten, flags, nullptr, nullptr);
 
       ret += qint64(bytesWritten);
 
@@ -1649,7 +1662,7 @@ qint64 QNativeSocketEnginePrivate::nativeRead(char *data, qint64 maxLength)
    DWORD flags = 0;
    DWORD bytesRead = 0;
 
-   if (::WSARecv(socketDescriptor, &buf, 1, &bytesRead, &flags, 0, 0) ==  SOCKET_ERROR) {
+   if (::WSARecv(socketDescriptor, &buf, 1, &bytesRead, &flags, nullptr, nullptr) ==  SOCKET_ERROR) {
       int err = WSAGetLastError();
       WS_ERROR_DEBUG(err);
       switch (err) {
@@ -1668,6 +1681,7 @@ qint64 QNativeSocketEnginePrivate::nativeRead(char *data, qint64 maxLength)
          default:
             break;
       }
+
    } else {
       if (WSAGetLastError() == WSAEWOULDBLOCK) {
          ret = -2;
@@ -1709,7 +1723,8 @@ int QNativeSocketEnginePrivate::nativeSelect(int timeout, bool selectForRead) co
    tv.tv_usec = (timeout % 1000) * 1000;
 
    if (selectForRead) {
-      ret = select(0, &fds, 0, 0, timeout < 0 ? 0 : &tv);
+      ret = select(0, &fds, nullptr, nullptr, timeout < 0 ? nullptr : &tv);
+
    } else {
       // select for write
 
@@ -1718,9 +1733,9 @@ int QNativeSocketEnginePrivate::nativeSelect(int timeout, bool selectForRead) co
       FD_ZERO(&fdexception);
       FD_SET((SOCKET)socketDescriptor, &fdexception);
 
-      ret = select(0, 0, &fds, &fdexception, timeout < 0 ? 0 : &tv);
+      ret = select(0, nullptr, &fds, &fdexception, timeout < 0 ? nullptr : &tv);
 
-      // ... but if it is actually set, pretend it did not happen
+      // if it is actually set, pretend it did not happen
       if (ret > 0 && FD_ISSET((SOCKET)socketDescriptor, &fdexception)) {
          ret--;
       }
@@ -1734,8 +1749,7 @@ int QNativeSocketEnginePrivate::nativeSelect(int timeout, bool selectForRead) co
 }
 
 int QNativeSocketEnginePrivate::nativeSelect(int timeout,
-      bool checkRead, bool checkWrite,
-      bool *selectForRead, bool *selectForWrite) const
+      bool checkRead, bool checkWrite, bool *selectForRead, bool *selectForWrite) const
 {
    bool readEnabled = checkRead && readNotifier && readNotifier->isEnabled();
    if (readEnabled) {
@@ -1767,7 +1781,7 @@ int QNativeSocketEnginePrivate::nativeSelect(int timeout,
    tv.tv_sec = timeout / 1000;
    tv.tv_usec = (timeout % 1000) * 1000;
 
-   ret = select(socketDescriptor + 1, &fdread, &fdwrite, &fdexception, timeout < 0 ? 0 : &tv);
+   ret = select(socketDescriptor + 1, &fdread, &fdwrite, &fdexception, timeout < 0 ? nullptr : &tv);
 
    //... but if it is actually set, pretend it did not happen
    if (ret > 0 && FD_ISSET((SOCKET)socketDescriptor, &fdexception)) {

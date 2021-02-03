@@ -586,7 +586,8 @@ bool QNativeSocketEnginePrivate::nativeListen(int backlog)
 
 int QNativeSocketEnginePrivate::nativeAccept()
 {
-   int acceptedDescriptor = qt_safe_accept(socketDescriptor, 0, 0);
+   int acceptedDescriptor = qt_safe_accept(socketDescriptor, nullptr, nullptr);
+
    if (acceptedDescriptor == -1) {
       switch (errno) {
          case EBADF:
@@ -909,7 +910,7 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxS
 
       // parse the ancillary data
       struct cmsghdr *cmsgptr;
-      for (cmsgptr = CMSG_FIRSTHDR(&msg); cmsgptr != NULL;
+      for (cmsgptr = CMSG_FIRSTHDR(&msg); cmsgptr != nullptr;
             cmsgptr = CMSG_NXTHDR(&msg, cmsgptr)) {
          if (cmsgptr->cmsg_level == IPPROTO_IPV6 && cmsgptr->cmsg_type == IPV6_PKTINFO
                && cmsgptr->cmsg_len >= CMSG_LEN(sizeof(in6_pktinfo))) {
@@ -1049,7 +1050,7 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
    }
 
    if (msg.msg_controllen == 0) {
-      msg.msg_control = 0;
+      msg.msg_control = nullptr;
    }
 
    ssize_t sentBytes = qt_safe_sendmsg(socketDescriptor, &msg, 0);
@@ -1281,9 +1282,9 @@ int QNativeSocketEnginePrivate::nativeSelect(int timeout, bool selectForRead) co
 
    int retval;
    if (selectForRead) {
-      retval = qt_safe_select(socketDescriptor + 1, &fds, 0, 0, timeout < 0 ? 0 : &tv);
+      retval = qt_safe_select(socketDescriptor + 1, &fds, nullptr, nullptr, timeout < 0 ? nullptr : &tv);
    } else {
-      retval = qt_safe_select(socketDescriptor + 1, 0, &fds, 0, timeout < 0 ? 0 : &tv);
+      retval = qt_safe_select(socketDescriptor + 1, nullptr, &fds, nullptr, timeout < 0 ? nullptr : &tv);
    }
 
    return retval;
@@ -1309,7 +1310,7 @@ int QNativeSocketEnginePrivate::nativeSelect(int timeout, bool checkRead, bool c
    tv.tv_nsec = (timeout % 1000) * 1000 * 1000;
 
    int ret;
-   ret = qt_safe_select(socketDescriptor + 1, &fdread, &fdwrite, 0, timeout < 0 ? 0 : &tv);
+   ret = qt_safe_select(socketDescriptor + 1, &fdread, &fdwrite, nullptr, timeout < 0 ? nullptr : &tv);
 
    if (ret <= 0) {
       return ret;

@@ -35,7 +35,7 @@ class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
 
  public:
    QHttpPartPrivate()
-      : bodyDevice(0), headerCreated(false), readPointer(0)
+      : bodyDevice(nullptr), headerCreated(false), readPointer(0)
    {
    }
 

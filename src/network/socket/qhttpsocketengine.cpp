@@ -201,7 +201,7 @@ void QHttpSocketEngine::close()
    if (d->socket) {
       d->socket->close();
       delete d->socket;
-      d->socket = 0;
+      d->socket = nullptr;
    }
 }
 
@@ -594,7 +594,8 @@ void QHttpSocketEngine::slotSocketReadNotification()
 
    int statusCode = d->reply->statusCode();
 
-   QAuthenticatorPrivate *priv = 0;
+   QAuthenticatorPrivate *priv = nullptr;
+
    if (statusCode == 200) {
       d->state = Connected;
       setLocalAddress(d->socket->localAddress());
@@ -873,8 +874,8 @@ QHttpSocketEnginePrivate::QHttpSocketEnginePrivate()
    , credentialsSent(false)
    , pendingResponseData(0)
 {
-   socket = 0;
-   reply  = 0;
+   socket = nullptr;
+   reply  = nullptr;
    state  = QHttpSocketEngine::None;
 }
 

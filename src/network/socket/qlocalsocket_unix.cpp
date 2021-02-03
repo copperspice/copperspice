@@ -42,8 +42,8 @@
 #define QT_CONNECT_TIMEOUT 30000
 
 QLocalSocketPrivate::QLocalSocketPrivate()
-   : QIODevicePrivate(), delayConnect(0), connectTimer(0), connectingSocket(-1),
-      connectingOpenMode(0), state(QLocalSocket::UnconnectedState)
+   : QIODevicePrivate(), delayConnect(nullptr), connectTimer(nullptr), connectingSocket(-1),
+      connectingOpenMode(nullptr), state(QLocalSocket::UnconnectedState)
 {
 }
 
@@ -334,7 +334,7 @@ void QLocalSocketPrivate::_q_connectToSocket()
 
    connectingSocket = -1;
    connectingName.clear();
-   connectingOpenMode = 0;
+   connectingOpenMode = nullptr;
 }
 
 bool QLocalSocket::setSocketDescriptor(qintptr socketDescriptor, LocalSocketState socketState, OpenMode openMode)
@@ -373,10 +373,10 @@ void QLocalSocketPrivate::cancelDelayedConnect()
    if (delayConnect) {
       delayConnect->setEnabled(false);
       delete delayConnect;
-      delayConnect = 0;
+      delayConnect = nullptr;
       connectTimer->stop();
       delete connectTimer;
-      connectTimer = 0;
+      connectTimer = nullptr;
    }
 }
 
@@ -432,7 +432,7 @@ void QLocalSocket::close()
    }
    d->connectingSocket = -1;
    d->connectingName.clear();
-   d->connectingOpenMode = 0;
+   d->connectingOpenMode = nullptr;
    d->serverName.clear();
    d->fullServerName.clear();
    QIODevice::close();
@@ -534,7 +534,7 @@ bool QLocalSocket::waitForConnected(int msec)
 
    while (state() == ConnectingState && (-1 == msec || timer.elapsed() < msec)) {
 
-      result = ::select(d->connectingSocket + 1, &fds, 0, 0, &timeout);
+      result = ::select(d->connectingSocket + 1, &fds, nullptr, nullptr, &timeout);
 
       if (-1 == result && errno != EINTR) {
          d->errorOccurred( QLocalSocket::UnknownSocketError, "QLocalSocket::waitForConnected");

@@ -38,7 +38,7 @@
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QBearerEngineInterface_ID, "/bearer"))
 
 QNetworkConfigurationManagerPrivate::QNetworkConfigurationManagerPrivate()
-   : QObject(), pollTimer(0), bearerThread(0),  mutex(QMutex::Recursive), forcedPolling(0), firstUpdate(true)
+   : QObject(), pollTimer(nullptr), bearerThread(nullptr),  mutex(QMutex::Recursive), forcedPolling(0), firstUpdate(true)
 {
 }
 

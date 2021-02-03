@@ -43,8 +43,8 @@
 /*! \internal
 */
 QTcpServerPrivate::QTcpServerPrivate()
-   : port(0), state(QAbstractSocket::UnconnectedState), socketEngine(0)
-   , serverSocketError(QAbstractSocket::UnknownSocketError), maxConnections(30)
+   : port(0), state(QAbstractSocket::UnconnectedState), socketEngine(nullptr),
+     serverSocketError(QAbstractSocket::UnknownSocketError), maxConnections(30)
 {
 }
 
@@ -272,7 +272,7 @@ void QTcpServer::close()
          // in out of memory situations, the socketEngine
          // will be deleted in ~QTcpServer (it's a child-object of this)
       }
-      d->socketEngine = 0;
+      d->socketEngine = nullptr;
    }
 
    d->state = QAbstractSocket::UnconnectedState;
@@ -385,7 +385,7 @@ QTcpSocket *QTcpServer::nextPendingConnection()
 {
    Q_D(QTcpServer);
    if (d->pendingConnections.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    if (! d->socketEngine->isReadNotificationEnabled()) {

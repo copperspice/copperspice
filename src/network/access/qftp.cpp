@@ -253,7 +253,7 @@ class QFtpCommand
 
  public:
    QFtpCommand(QFtp::Command cmd, const QStringList &raw, const QByteArray &ba);
-   QFtpCommand(QFtp::Command cmd, const QStringList &raw, QIODevice *dev = 0);
+   QFtpCommand(QFtp::Command cmd, const QStringList &raw, QIODevice *dev = nullptr);
    ~QFtpCommand();
 
    int id;
@@ -301,7 +301,7 @@ QFtpCommand::~QFtpCommand()
  *
  *********************************************************************/
 QFtpDTP::QFtpDTP(QFtpPI *p, QObject *parent)
-   : QObject(parent), socket(0), listener(this), pi(p), callWriteData(false)
+   : QObject(parent), socket(nullptr), listener(this), pi(p), callWriteData(false)
 {
    clearData();
    listener.setObjectName(QLatin1String("QFtpDTP active state server"));
@@ -333,7 +333,7 @@ void QFtpDTP::connectToHost(const QString &host, quint16 port)
 
    if (socket) {
       delete socket;
-      socket = 0;
+      socket = nullptr;
    }
    socket = new QTcpSocket(this);
 
@@ -467,7 +467,7 @@ void QFtpDTP::writeData()
       }
 
       // do we continue uploading?
-      callWriteData = data.dev != 0;
+      callWriteData = data.dev != nullptr;
    }
 }
 
@@ -842,7 +842,7 @@ void QFtpDTP::setupSocket()
 void QFtpDTP::clearData()
 {
    is_ba = false;
-   data.dev = 0;
+   data.dev = nullptr;
 }
 
 /**********************************************************************
@@ -850,18 +850,13 @@ void QFtpDTP::clearData()
  * QFtpPI implemenatation
  *
  *********************************************************************/
-QFtpPI::QFtpPI(QObject *parent) :
-   QObject(parent),
-   rawCommand(false),
-   transferConnectionExtended(true),
-   dtp(this),
-   commandSocket(0),
-   state(Begin), abortState(None),
-   currentCmd(QString()),
-   waitForDtpToConnect(false),
-   waitForDtpToClose(false)
+QFtpPI::QFtpPI(QObject *parent)
+   : QObject(parent), rawCommand(false), transferConnectionExtended(true), dtp(this),
+     commandSocket(nullptr), state(Begin), abortState(None), currentCmd(QString()),
+     waitForDtpToConnect(false), waitForDtpToClose(false)
 {
    commandSocket.setObjectName("QFtpPI_socket");
+
    connect(&commandSocket, SIGNAL(hostFound()),     this, SLOT(hostFound()));
    connect(&commandSocket, SIGNAL(connected()),     this, SLOT(connected()));
    connect(&commandSocket, SIGNAL(disconnected()),  this, SLOT(connectionClosed()));
@@ -2032,11 +2027,12 @@ QFtp::Command QFtp::currentCommand() const
 QIODevice *QFtp::currentDevice() const
 {
    if (d_func()->pending.isEmpty()) {
-      return 0;
+      return nullptr;
    }
+
    QFtpCommand *c = d_func()->pending.first();
    if (c->is_ba) {
-      return 0;
+      return nullptr;
    }
    return c->data.dev;
 }

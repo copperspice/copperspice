@@ -97,11 +97,11 @@ void QNetworkAccessCache::linkEntry(const QByteArray &key)
    Node *const node = &(it.value());
 
    Q_ASSERT(node != oldest && node != newest);
-   Q_ASSERT(node->older == 0 && node->newer == 0);
+   Q_ASSERT(node->older == nullptr && node->newer == nullptr);
    Q_ASSERT(node->useCount == 0);
 
    if (newest) {
-      Q_ASSERT(newest->newer == 0);
+      Q_ASSERT(newest->newer == nullptr);
       newest->newer = node;
       node->older   = newest;
    }
@@ -201,9 +201,9 @@ void QNetworkAccessCache::timerEvent(QTimerEvent *)
 
    // fixup the list
    if (oldest) {
-      oldest->older = 0;
+      oldest->older = nullptr;
    } else {
-      newest = 0;
+      newest = nullptr;
    }
 
    updateTimer();
@@ -249,7 +249,7 @@ bool QNetworkAccessCache::requestEntry(const QByteArray &key, QObject *target, c
    if (node->useCount > 0 && !node->object->shareable) {
       // object is not shareable and is in use
       // queue for later use
-      Q_ASSERT(node->older == 0 && node->newer == 0);
+      Q_ASSERT(node->older == nullptr && node->newer == nullptr);
 
       Receiver receiver;
       receiver.object = target;

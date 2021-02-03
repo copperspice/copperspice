@@ -33,60 +33,60 @@
 // **************** Shared declarations ******************
 // ret func(arg)
 
-#  define DEFINEFUNC(ret, func, arg, a, err, funcret)                           \
+#  define DEFINEFUNC(ret, func, arg, a, err, funcret)    \
    typedef ret (*_q_PTR_ ## func)(arg);                  \
-   static _q_PTR_ ## func _q_ ## func = 0;         \
-   ret q_ ## func(arg) {                                               \
-      if (!_q_ ## func) {                                        \
-         qWarning("QSslSocket: cannot call unresolved function "#func);      \
-         err;                                                                \
-      } \
-      funcret _q_ ## func(a); \
+   static _q_PTR_ ## func _q_ ## func = nullptr;         \
+   ret q_ ## func(arg) {                                 \
+      if (!_q_ ## func) {                                \
+         qWarning("QSslSocket: can not call unresolved function "#func);  \
+         err;                                            \
+      }                                                  \
+      funcret _q_ ## func(a);                            \
    }
 
 // ret func(arg1, arg2)
 #  define DEFINEFUNC2(ret, func, arg1, a, arg2, b, err, funcret) \
-   typedef ret (*_q_PTR_ ## func)(arg1, arg2);         \
-   static _q_PTR_ ## func _q_ ## func = 0;               \
-   ret q_ ## func(arg1, arg2) { \
-      if (!_q_ ## func) { \
-         qWarning("QSslSocket: cannot call unresolved function "#func); \
-         err; \
-      } \
-      funcret _q_ ## func(a, b); \
+   typedef ret (*_q_PTR_ ## func)(arg1, arg2);           \
+   static _q_PTR_ ## func _q_ ## func = nullptr;         \
+   ret q_ ## func(arg1, arg2) {                          \
+      if (!_q_ ## func) {                                \
+         qWarning("QSslSocket: can not call unresolved function "#func);  \
+         err;                                            \
+      }                                                  \
+      funcret _q_ ## func(a, b);                         \
    }
 
 // ret func(arg1, arg2, arg3)
-#  define DEFINEFUNC3(ret, func, arg1, a, arg2, b, arg3, c, err, funcret) \
-   typedef ret (*_q_PTR_ ## func)(arg1, arg2, arg3);            \
-   static _q_PTR_ ## func _q_ ## func = 0;                        \
-   ret q_ ## func(arg1, arg2, arg3) { \
-      if (!_q_ ## func) { \
-         qWarning("QSslSocket: cannot call unresolved function "#func); \
-         err; \
-      } \
-      funcret _q_ ## func(a, b, c); \
+#  define DEFINEFUNC3(ret, func, arg1, a, arg2, b, arg3, c, err, funcret)  \
+   typedef ret (*_q_PTR_ ## func)(arg1, arg2, arg3);     \
+   static _q_PTR_ ## func _q_ ## func = nullptr;         \
+   ret q_ ## func(arg1, arg2, arg3) {                    \
+      if (!_q_ ## func) {                                \
+         qWarning("QSslSocket: can not call unresolved function "#func); \
+         err;                                            \
+      }                                                  \
+      funcret _q_ ## func(a, b, c);                      \
    }
 
 // ret func(arg1, arg2, arg3, arg4)
 #  define DEFINEFUNC4(ret, func, arg1, a, arg2, b, arg3, c, arg4, d, err, funcret) \
-   typedef ret (*_q_PTR_ ## func)(arg1, arg2, arg3, arg4);               \
-   static _q_PTR_ ## func _q_ ## func = 0;                                 \
-   ret q_ ## func(arg1, arg2, arg3, arg4) { \
-      if (!_q_ ## func) { \
-         qWarning("QSslSocket: cannot call unresolved function "#func); \
-         err; \
-      } \
-      funcret _q_ ## func(a, b, c, d); \
+   typedef ret (*_q_PTR_ ## func)(arg1, arg2, arg3, arg4);  \
+   static _q_PTR_ ## func _q_ ## func = nullptr;            \
+   ret q_ ## func(arg1, arg2, arg3, arg4) {                 \
+      if (!_q_ ## func) {                                   \
+         qWarning("QSslSocket: can not call unresolved function "#func); \
+         err;                                               \
+      }                                                     \
+      funcret _q_ ## func(a, b, c, d);                      \
    }
 
 // ret func(arg1, arg2, arg3, arg4, arg5)
 #  define DEFINEFUNC5(ret, func, arg1, a, arg2, b, arg3, c, arg4, d, arg5, e, err, funcret) \
    typedef ret (*_q_PTR_ ## func)(arg1, arg2, arg3, arg4, arg5);         \
-   static _q_PTR_ ## func _q_ ## func = 0;                                 \
+   static _q_PTR_ ## func _q_ ## func = nullptr;                                 \
    ret q_ ## func(arg1, arg2, arg3, arg4, arg5) { \
       if (!_q_ ## func) { \
-         qWarning("QSslSocket: cannot call unresolved function "#func); \
+         qWarning("QSslSocket: can not call unresolved function "#func); \
          err; \
       } \
       funcret _q_ ## func(a, b, c, d, e); \
@@ -95,10 +95,10 @@
 // ret func(arg1, arg2, arg3, arg4, arg6)
 #  define DEFINEFUNC6(ret, func, arg1, a, arg2, b, arg3, c, arg4, d, arg5, e, arg6, f, err, funcret) \
    typedef ret (*_q_PTR_ ## func)(arg1, arg2, arg3, arg4, arg5, arg6);   \
-   static _q_PTR_ ## func _q_ ## func = 0;                                 \
+   static _q_PTR_ ## func _q_ ## func = nullptr;                                 \
    ret q_ ## func(arg1, arg2, arg3, arg4, arg5, arg6) { \
       if (!_q_ ## func) { \
-         qWarning("QSslSocket: cannot call unresolved function "#func); \
+         qWarning("QSslSocket: can not call unresolved function "#func); \
          err; \
       } \
       funcret _q_ ## func(a, b, c, d, e, f); \
@@ -107,10 +107,10 @@
 // ret func(arg1, arg2, arg3, arg4, arg6, arg7)
 #  define DEFINEFUNC7(ret, func, arg1, a, arg2, b, arg3, c, arg4, d, arg5, e, arg6, f, arg7, g, err, funcret) \
    typedef ret (*_q_PTR_ ## func)(arg1, arg2, arg3, arg4, arg5, arg6, arg7);   \
-   static _q_PTR_ ## func _q_ ## func = 0;                                       \
+   static _q_PTR_ ## func _q_ ## func = nullptr;                                       \
    ret q_ ## func(arg1, arg2, arg3, arg4, arg5, arg6, arg7) { \
       if (!_q_ ## func) { \
-         qWarning("QSslSocket: cannot call unresolved function "#func); \
+         qWarning("QSslSocket: can not call unresolved function "#func); \
          err; \
       } \
       funcret _q_ ## func(a, b, c, d, e, f, g); \
@@ -119,10 +119,10 @@
 // ret func(arg1, arg2, arg3, arg4, arg6, arg7, arg8, arg9)
 #  define DEFINEFUNC9(ret, func, arg1, a, arg2, b, arg3, c, arg4, d, arg5, e, arg6, f, arg7, g, arg8, h, arg9, i, err, funcret) \
    typedef ret (*_q_PTR_ ## func)(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);   \
-   static _q_PTR_ ## func _q_ ## func = 0;                                                   \
+   static _q_PTR_ ## func _q_ ## func = nullptr;                                                   \
    ret q_ ## func(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) { \
       if (_q_ ## func) { \
-         qWarning("QSslSocket: cannot call unresolved function "#func); \
+         qWarning("QSslSocket: cann ot call unresolved function "#func); \
          err; \
       }   \
       funcret _q_ ## func(a, b, c, d, e, f, g, h, i); \
@@ -550,7 +550,7 @@ PKCS12 *q_d2i_PKCS12_bio(BIO *bio, PKCS12 **pkcs12);
 void q_PKCS12_free(PKCS12 *pkcs12);
 
 #define q_BIO_get_mem_data(b, pp) (int)q_BIO_ctrl(b,BIO_CTRL_INFO,0,(char *)pp)
-#define q_BIO_pending(b) (int)q_BIO_ctrl(b,BIO_CTRL_PENDING,0,NULL)
+#define q_BIO_pending(b) (int)q_BIO_ctrl(b,BIO_CTRL_PENDING,0,nullptr)
 
 #ifdef SSLEAY_MACROS
 int     q_i2d_DSAPrivateKey(const DSA *a, unsigned char **pp);
@@ -572,9 +572,9 @@ DSA *q_d2i_DSAPrivateKey(DSA **a, unsigned char **pp, long length);
                       bp,(char *)x,enc,kstr,klen,cb,u)
 #endif
 
-#define q_SSL_CTX_set_mode(ctx,op) q_SSL_CTX_ctrl((ctx),SSL_CTRL_MODE,(op),NULL)
+#define q_SSL_CTX_set_mode(ctx,op) q_SSL_CTX_ctrl((ctx),SSL_CTRL_MODE,(op),nullptr)
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
-#define q_SSL_CTX_set_options(ctx,op) q_SSL_CTX_ctrl((ctx),SSL_CTRL_OPTIONS,(op),NULL)
+#define q_SSL_CTX_set_options(ctx,op) q_SSL_CTX_ctrl((ctx),SSL_CTRL_OPTIONS,(op),nullptr)
 #else
 long q_SSL_CTX_set_options(SSL_CTX *ctx, long options);
 #endif

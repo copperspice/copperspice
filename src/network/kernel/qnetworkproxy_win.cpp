@@ -84,8 +84,8 @@ typedef struct {
 #define WINHTTP_ACCESS_TYPE_NO_PROXY                    1
 #define WINHTTP_ACCESS_TYPE_NAMED_PROXY                 3
 
-#define WINHTTP_NO_PROXY_NAME     NULL
-#define WINHTTP_NO_PROXY_BYPASS   NULL
+#define WINHTTP_NO_PROXY_NAME     nullptr
+#define WINHTTP_NO_PROXY_BYPASS   nullptr
 
 #define WINHTTP_ERROR_BASE                      12000
 #define ERROR_WINHTTP_LOGIN_FAILURE             (WINHTTP_ERROR_BASE + 15)
@@ -98,11 +98,11 @@ typedef BOOL (WINAPI *PtrWinHttpGetDefaultProxyConfiguration)(WINHTTP_PROXY_INFO
 typedef BOOL (WINAPI *PtrWinHttpGetIEProxyConfigForCurrentUser)(WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *);
 typedef BOOL (WINAPI *PtrWinHttpCloseHandle)(HINTERNET);
 typedef BOOL (WINAPI *PtrCloseServiceHandle)(SC_HANDLE hSCObject);
-static PtrWinHttpGetProxyForUrl ptrWinHttpGetProxyForUrl = 0;
-static PtrWinHttpOpen ptrWinHttpOpen = 0;
-static PtrWinHttpGetDefaultProxyConfiguration ptrWinHttpGetDefaultProxyConfiguration = 0;
-static PtrWinHttpGetIEProxyConfigForCurrentUser ptrWinHttpGetIEProxyConfigForCurrentUser = 0;
-static PtrWinHttpCloseHandle ptrWinHttpCloseHandle = 0;
+static PtrWinHttpGetProxyForUrl ptrWinHttpGetProxyForUrl = nullptr;
+static PtrWinHttpOpen ptrWinHttpOpen = nullptr;
+static PtrWinHttpGetDefaultProxyConfiguration ptrWinHttpGetDefaultProxyConfiguration = nullptr;
+static PtrWinHttpGetIEProxyConfigForCurrentUser ptrWinHttpGetIEProxyConfigForCurrentUser = nullptr;
+static PtrWinHttpCloseHandle ptrWinHttpCloseHandle = nullptr;
 
 static bool currentProcessIsService()
 {
@@ -123,7 +123,7 @@ static bool currentProcessIsService()
          DWORD domainSize  = 0;
 
          // first call is to get the correct size
-         bool bRet = ptrLookupAccountName(NULL, userName, NULL, &sidSize, NULL, &domainSize, &type);
+         bool bRet = ptrLookupAccountName(nullptr, userName, nullptr, &sidSize, nullptr, &domainSize, &type);
          if (bRet == FALSE && ERROR_INSUFFICIENT_BUFFER != GetLastError()) {
             return false;
          }
@@ -132,8 +132,8 @@ static bool currentProcessIsService()
          QVarLengthArray<wchar_t, MAX_PATH> domainName(domainSize);
 
          // second call to LookupAccountNameW actually gets the SID
-         // both the pointer to the buffer and the pointer to the domain name should not be NULL
-         if (ptrLookupAccountName(NULL, userName, buff.data(), &sidSize, domainName.data(), &domainSize, &type)) {
+         // both the pointer to the buffer and the pointer to the domain name should not be nullptr
+         if (ptrLookupAccountName(nullptr, userName, buff.data(), &sidSize, domainName.data(), &domainSize, &type)) {
             return type != SidTypeUser;   //returns true if the current user is not a user
          }
       }
@@ -399,7 +399,7 @@ class QRegistryWatcher
                            REG_NOTIFY_CHANGE_LAST_SET | REG_NOTIFY_CHANGE_SECURITY;
 
       // Watch the registry key for a change of value.
-      HANDLE handle = CreateEvent(NULL, true, false, NULL);
+      HANDLE handle = CreateEvent(nullptr, true, false, nullptr);
       if (RegNotifyChangeKeyValue(openedKey, true, filter, handle, true) != ERROR_SUCCESS) {
          CloseHandle(handle);
          return;
@@ -471,7 +471,7 @@ class QWindowsSystemProxy
 Q_GLOBAL_STATIC(QWindowsSystemProxy, systemProxy)
 
 QWindowsSystemProxy::QWindowsSystemProxy()
-   : hHttpSession(0), initialized(false), functional(false), isAutoConfig(false)
+   : hHttpSession(nullptr), initialized(false), functional(false), isAutoConfig(false)
 {
    defaultResult << QNetworkProxy::NoProxy;
 }
@@ -575,7 +575,7 @@ void QWindowsSystemProxy::init()
       }
    }
 
-   hHttpSession = NULL;
+   hHttpSession = nullptr;
 
    if (ieProxyConfig.fAutoDetect || !autoConfigUrl.isEmpty())  {
       // open the handle and obtain the options

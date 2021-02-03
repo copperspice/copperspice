@@ -42,7 +42,7 @@
 #endif
 
 using PtrConvertInterfaceLuidToName = NETIO_STATUS (WINAPI *)(const NET_LUID *, PWSTR, SIZE_T);
-static PtrConvertInterfaceLuidToName ptrConvertInterfaceLuidToName = 0;
+static PtrConvertInterfaceLuidToName ptrConvertInterfaceLuidToName = nullptr;
 
 static void resolveLibs()
 {
@@ -140,7 +140,7 @@ static QList<QNetworkInterfacePrivate *> interfaceListingWinXP()
    const QHash<QHostAddress, QHostAddress> &ipv4netmasks = ipv4Netmasks();
    ULONG flags = GAA_FLAG_INCLUDE_PREFIX | GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_MULTICAST;
 
-   ULONG retval = GetAdaptersAddresses(AF_UNSPEC, flags, NULL, pAdapter, &bufSize);
+   ULONG retval = GetAdaptersAddresses(AF_UNSPEC, flags, nullptr, pAdapter, &bufSize);
 
    if (retval == ERROR_BUFFER_OVERFLOW) {
       // need more memory
@@ -151,7 +151,7 @@ static QList<QNetworkInterfacePrivate *> interfaceListingWinXP()
       }
 
       // try again
-      if (GetAdaptersAddresses(AF_UNSPEC, flags, NULL, pAdapter, &bufSize) != ERROR_SUCCESS) {
+      if (GetAdaptersAddresses(AF_UNSPEC, flags, nullptr, pAdapter, &bufSize) != ERROR_SUCCESS) {
          free(pAdapter);
          return interfaces;
       }
@@ -217,7 +217,7 @@ static QList<QNetworkInterfacePrivate *> interfaceListingWinXP()
       // But if you have IPv6 addresses, generally N > M.
       // I cannot find a way to relate the Address to the Prefix, aside from stopping
       // the iteration at the last Prefix entry and assume that it applies to all addresses from that point on.
-      PIP_ADAPTER_PREFIX pprefix = 0;
+      PIP_ADAPTER_PREFIX pprefix = nullptr;
 
       if (ptr->Length >= offsetof(IP_ADAPTER_ADDRESSES_LH, FirstPrefix)) {
          pprefix = ptr->FirstPrefix;

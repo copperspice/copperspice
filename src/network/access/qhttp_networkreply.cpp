@@ -292,27 +292,21 @@ QHttpNetworkConnection *QHttpNetworkReply::connection()
 }
 
 QHttpNetworkReplyPrivate::QHttpNetworkReplyPrivate(const QUrl &newUrl)
-   : QHttpNetworkHeaderPrivate(newUrl)
-   , state(NothingDoneState)
-   , ssl(false)
-   , statusCode(100),
+   : QHttpNetworkHeaderPrivate(newUrl), state(NothingDoneState), ssl(false), statusCode(100),
      majorVersion(0), minorVersion(0), bodyLength(0), contentRead(0), totalProgress(0),
      chunkedTransferEncoding(false),
      connectionCloseEnabled(true),
      forceConnectionCloseEnabled(false),
      lastChunkRead(false),
-     currentChunkSize(0), currentChunkRead(0),    readBufferMaxSize(0),
-     windowSizeDownload(65536), // 64K initial window size according to SPDY standard
-     windowSizeUpload(65536), // 64K initial window size according to SPDY standard
-     currentlyReceivedDataInWindow(0),
-     currentlyUploadedDataInWindow(0),
-     totallyUploadedData(0),
-     connection(0),
-     autoDecompress(false), responseData(), requestIsPrepared(false)
-   , pipeliningUsed(false), spdyUsed(false), downstreamLimited(false)
-   , userProvidedDownloadBuffer(0)
+     currentChunkSize(0), currentChunkRead(0), readBufferMaxSize(0),
+     windowSizeDownload(65536),    // 64K initial window size according to SPDY standard
+     windowSizeUpload(65536),      // 64K initial window size according to SPDY standard
+     currentlyReceivedDataInWindow(0), currentlyUploadedDataInWindow(0),
+     totallyUploadedData(0), connection(nullptr),
+     autoDecompress(false), responseData(), requestIsPrepared(false),
+     pipeliningUsed(false), spdyUsed(false), downstreamLimited(false), userProvidedDownloadBuffer(nullptr)
 #ifndef QT_NO_COMPRESS
-   , inflateStrm(0)
+   , inflateStrm(nullptr)
 #endif
 {
    QString scheme = newUrl.scheme();
@@ -333,14 +327,15 @@ QHttpNetworkReplyPrivate::~QHttpNetworkReplyPrivate()
 
 void QHttpNetworkReplyPrivate::clearHttpLayerInformation()
 {
-   state = NothingDoneState;
-   statusCode = 100;
-   bodyLength = 0;
-   contentRead = 0;
-   totalProgress = 0;
+   state            = NothingDoneState;
+   statusCode       = 100;
+   bodyLength       = 0;
+   contentRead      = 0;
+   totalProgress    = 0;
    currentChunkSize = 0;
    currentChunkRead = 0;
-   lastChunkRead = false;
+
+   lastChunkRead          = false;
    connectionCloseEnabled = true;
 
 #ifndef QT_NO_COMPRESS
@@ -355,9 +350,9 @@ void QHttpNetworkReplyPrivate::clearHttpLayerInformation()
 // TODO: Isn't everything HTTP layer related? We don't need to set connection and connectionChannel to 0 at all
 void QHttpNetworkReplyPrivate::clear()
 {
-   connection = 0;
-   connectionChannel = 0;
-   autoDecompress = false;
+   connection        = nullptr;
+   connectionChannel = nullptr;
+   autoDecompress    = false;
    clearHttpLayerInformation();
 }
 
@@ -754,11 +749,12 @@ qint64 QHttpNetworkReplyPrivate::readBody(QAbstractSocket *socket, QByteDataBuff
 #ifndef QT_NO_COMPRESS
 int QHttpNetworkReplyPrivate::initializeInflateStream()
 {
-   inflateStrm->zalloc = Z_NULL;
-   inflateStrm->zfree = Z_NULL;
-   inflateStrm->opaque = Z_NULL;
+   inflateStrm->zalloc   = nullptr;
+   inflateStrm->zfree    = nullptr;
+   inflateStrm->opaque   = nullptr;
    inflateStrm->avail_in = 0;
-   inflateStrm->next_in = Z_NULL;
+   inflateStrm->next_in  = nullptr;
+
    int ret = inflateInit2(inflateStrm, MAX_WBITS + 32);
    Q_ASSERT(ret == Z_OK);
    return ret;
@@ -785,12 +781,12 @@ qint64 QHttpNetworkReplyPrivate::uncompressBodyData(QByteDataBuffer *in, QByteDa
          int ret = inflate(inflateStrm, Z_NO_FLUSH);
          if (ret == Z_DATA_ERROR && !triedRawDeflate) {
             inflateEnd(inflateStrm);
-            triedRawDeflate = true;
-            inflateStrm->zalloc = Z_NULL;
-            inflateStrm->zfree = Z_NULL;
-            inflateStrm->opaque = Z_NULL;
+            triedRawDeflate       = true;
+            inflateStrm->zalloc   = nullptr;
+            inflateStrm->zfree    = nullptr;
+            inflateStrm->opaque   = nullptr;
             inflateStrm->avail_in = 0;
-            inflateStrm->next_in = Z_NULL;
+            inflateStrm->next_in  = nullptr;
             int ret = inflateInit2(inflateStrm, -MAX_WBITS);
             if (ret != Z_OK) {
                return -1;

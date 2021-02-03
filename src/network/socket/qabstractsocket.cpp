@@ -135,13 +135,13 @@ QAbstractSocketPrivate::QAbstractSocketPrivate()
      port(0),
      localPort(0),
      peerPort(0),
-     socketEngine(0),
+     socketEngine(nullptr),
      cachedSocketDescriptor(-1),
      readBufferMaxSize(0),
      writeBuffer(QABSTRACTSOCKET_BUFFERSIZE),
      isBuffered(false),
-     connectTimer(0),
-     disconnectTimer(0),
+     connectTimer(nullptr),
+     disconnectTimer(nullptr),
      connectTimeElapsed(0),
      hostLookupId(-1),
      socketType(QAbstractSocket::UnknownSocketType),
@@ -175,7 +175,7 @@ void QAbstractSocketPrivate::resetSocketLayer()
       socketEngine->close();
       socketEngine->disconnect();
       delete socketEngine;
-      socketEngine = 0;
+      socketEngine = nullptr;
       cachedSocketDescriptor = -1;
    }
    if (connectTimer) {
@@ -1837,7 +1837,7 @@ void QAbstractSocket::abort()
    if (d->connectTimer) {
       d->connectTimer->stop();
       delete d->connectTimer;
-      d->connectTimer = 0;
+      d->connectTimer = nullptr;
    }
 
    d->abortCalled = true;

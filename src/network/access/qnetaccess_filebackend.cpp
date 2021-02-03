@@ -37,8 +37,8 @@ QStringList QNetworkAccessFileBackendFactory::supportedSchemes() const
 
    return schemes;
 }
-QNetworkAccessBackend *
-QNetworkAccessFileBackendFactory::create(QNetworkAccessManager::Operation op,
+
+QNetworkAccessBackend * QNetworkAccessFileBackendFactory::create(QNetworkAccessManager::Operation op,
       const QNetworkRequest &request) const
 {
    // is it an operation we know of?
@@ -49,7 +49,7 @@ QNetworkAccessFileBackendFactory::create(QNetworkAccessManager::Operation op,
 
       default:
          // no, we can't handle this operation
-         return 0;
+         return nullptr;
    }
 
    QUrl url = request.url();
@@ -71,11 +71,11 @@ QNetworkAccessFileBackendFactory::create(QNetworkAccessManager::Operation op,
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 QNetworkAccessFileBackend::QNetworkAccessFileBackend()
-   : uploadByteDevice(0), totalBytes(0), hasUploadFinished(false)
+   : uploadByteDevice(nullptr), totalBytes(0), hasUploadFinished(false)
 {
 }
 
@@ -180,7 +180,7 @@ void QNetworkAccessFileBackend::uploadReadyReadSlot()
          finished();
          break;
 
-      } else if (haveRead == 0 || readPointer == 0) {
+      } else if (haveRead == 0 || readPointer == nullptr) {
          // nothing to read right now, we will be called again later
          break;
 

@@ -86,8 +86,8 @@ bool getProxyAuth(const QString &proxyHostname, const QString &scheme, QString &
    }
 
    QByteArray proxyHostnameUtf8(proxyHostname.toUtf8());
-   err = SecKeychainFindInternetPassword(NULL, proxyHostnameUtf8.length(), proxyHostnameUtf8.constData(),
-                 0, NULL, 0, NULL, 0, NULL, 0, protocolType, kSecAuthenticationTypeAny, 0, NULL, &itemRef);
+   err = SecKeychainFindInternetPassword(nullptr, proxyHostnameUtf8.length(), proxyHostnameUtf8.constData(),
+                 0, nullptr, 0, nullptr, 0, nullptr, 0, protocolType, kSecAuthenticationTypeAny, nullptr, nullptr, &itemRef);
 
    if (err == noErr) {
 
@@ -98,12 +98,12 @@ bool getProxyAuth(const QString &proxyHostname, const QString &scheme, QString &
 
       attr.tag = kSecAccountItemAttr;
       attr.length = 0;
-      attr.data = NULL;
+      attr.data = nullptr;
 
       attrList.count = 1;
       attrList.attr = &attr;
 
-      if (SecKeychainItemCopyContent(itemRef, NULL, &attrList, &length, &outData) == noErr) {
+      if (SecKeychainItemCopyContent(itemRef, nullptr, &attrList, &length, &outData) == noErr) {
          username = QString::fromUtf8((const char *)attr.data, attr.length);
          password = QString::fromUtf8((const char *)outData, length);
          SecKeychainItemFreeContent(&attrList, outData);
@@ -188,7 +188,7 @@ void QNetworkAccessManager::setProxy(const QNetworkProxy &proxy)
 
    delete d->proxyFactory;
    d->proxy = proxy;
-   d->proxyFactory = 0;
+   d->proxyFactory = nullptr;
 }
 
 QNetworkProxyFactory *QNetworkAccessManager::proxyFactory() const
@@ -896,6 +896,7 @@ QList<QNetworkProxy> QNetworkAccessManagerPrivate::queryProxy(const QNetworkProx
                   proxyFactory);
          proxies << QNetworkProxy::NoProxy;
       }
+
    } else if (proxy.type() == QNetworkProxy::DefaultProxy) {
       // no proxy set, query the application
       return QNetworkProxyFactory::proxyForQuery(query);
@@ -915,12 +916,13 @@ void QNetworkAccessManagerPrivate::clearCache(QNetworkAccessManager *manager)
    if (manager->d_func()->httpThread) {
       manager->d_func()->httpThread->quit();
       manager->d_func()->httpThread->wait(5000);
+
       if (manager->d_func()->httpThread->isFinished()) {
          delete manager->d_func()->httpThread;
       } else {
          QObject::connect(manager->d_func()->httpThread, SIGNAL(finished()), manager->d_func()->httpThread, SLOT(deleteLater()));
       }
-      manager->d_func()->httpThread = 0;
+      manager->d_func()->httpThread = nullptr;
    }
 }
 
@@ -929,12 +931,13 @@ QNetworkAccessManagerPrivate::~QNetworkAccessManagerPrivate()
    if (httpThread) {
       httpThread->quit();
       httpThread->wait(5000);
+
       if (httpThread->isFinished()) {
          delete httpThread;
       } else {
          QObject::connect(httpThread, SIGNAL(finished()), httpThread, SLOT(deleteLater()));
       }
-      httpThread = 0;
+      httpThread = nullptr;
    }
 }
 

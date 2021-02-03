@@ -88,11 +88,8 @@
 #define Q_TR(a) QT_TRANSLATE_NOOP(QNativeSocketEngine, a)
 
 
-QNativeSocketEnginePrivate::QNativeSocketEnginePrivate() :
-   socketDescriptor(-1),
-   readNotifier(0),
-   writeNotifier(0),
-   exceptNotifier(0)
+QNativeSocketEnginePrivate::QNativeSocketEnginePrivate()
+   : socketDescriptor(-1), readNotifier(nullptr), writeNotifier(nullptr), exceptNotifier(nullptr)
 {
 
 #if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
@@ -764,17 +761,17 @@ void QNativeSocketEngine::close()
 
    if (d->readNotifier) {
       delete d->readNotifier;
-      d->readNotifier = 0;
+      d->readNotifier = nullptr;
    }
 
    if (d->writeNotifier) {
       delete d->writeNotifier;
-      d->writeNotifier = 0;
+      d->writeNotifier = nullptr;
    }
 
    if (d->exceptNotifier) {
       delete d->exceptNotifier;
-      d->exceptNotifier = 0;
+      d->exceptNotifier = nullptr;
    }
 }
 

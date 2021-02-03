@@ -52,7 +52,7 @@ class QNetworkAuthenticationCache: private QVector<QNetworkAuthenticationCredent
       }
 
       if (it == end() || ! domain.startsWith(it->domain)) {
-         return 0;
+         return nullptr;
       }
       return &*it;
    }

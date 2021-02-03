@@ -54,9 +54,9 @@ typedef int (__stdcall *getnameinfoProto)(const sockaddr *, int, const char *, D
 typedef int (__stdcall *getaddrinfoProto)(const char *, const char *, const qt_addrinfo *, qt_addrinfo **);
 typedef int (__stdcall *freeaddrinfoProto)(qt_addrinfo *);
 
-static getnameinfoProto local_getnameinfo = 0;
-static getaddrinfoProto local_getaddrinfo = 0;
-static freeaddrinfoProto local_freeaddrinfo = 0;
+static getnameinfoProto local_getnameinfo   = nullptr;
+static getaddrinfoProto local_getaddrinfo   = nullptr;
+static freeaddrinfoProto local_freeaddrinfo = nullptr;
 
 static void resolveLibraryInternal()
 {
@@ -131,7 +131,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
          }
 
          char hbuf[NI_MAXHOST];
-         if (local_getnameinfo(sa, saSize, hbuf, sizeof(hbuf), 0, 0, 0) == 0) {
+         if (local_getnameinfo(sa, saSize, hbuf, sizeof(hbuf), nullptr, 0, 0) == 0) {
             results.setHostName(QString::fromLatin1(hbuf));
          }
 
@@ -167,12 +167,12 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       // Call getaddrinfo, and place all IPv4 addresses at the start
       // and the IPv6 addresses at the end of the address list in results.
       qt_addrinfo *res;
-      int err = local_getaddrinfo(aceHostname.constData(), 0, 0, &res);
+      int err = local_getaddrinfo(aceHostname.constData(), nullptr, nullptr, &res);
 
       if (err == 0) {
          QList<QHostAddress> addresses;
 
-         for (qt_addrinfo *p = res; p != 0; p = p->ai_next) {
+         for (qt_addrinfo *p = res; p != nullptr; p = p->ai_next) {
             switch (p->ai_family) {
                case AF_INET: {
                   QHostAddress addr;
@@ -219,13 +219,14 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
          switch (ent->h_addrtype) {
             case AF_INET:
-               for (p = ent->h_addr_list; *p != 0; p++) {
+               for (p = ent->h_addr_list; *p != nullptr; p++) {
                   long *ip4Addr = (long *) *p;
                   QHostAddress temp;
                   temp.setAddress(ntohl(*ip4Addr));
                   addresses << temp;
                }
                break;
+
             default:
                results.setError(QHostInfo::UnknownError);
                results.setErrorString(tr("Unknown address type"));

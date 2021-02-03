@@ -47,7 +47,7 @@ static void connManager_cleanup()
    int shutdown = appShutdown.fetchAndStoreAcquire(1);
    Q_ASSERT(shutdown == 0);
 
-   QNetworkConfigurationManagerPrivate *cmp = connManager_ptr.fetchAndStoreAcquire(0);
+   QNetworkConfigurationManagerPrivate *cmp = connManager_ptr.fetchAndStoreAcquire(nullptr);
 
    if (cmp) {
       cmp->cleanup();
@@ -305,7 +305,7 @@ QNetworkConfigurationManager::Capabilities QNetworkConfigurationManager::capabil
       return priv->capabilities();
    }
 
-   return QNetworkConfigurationManager::Capabilities(0);
+   return QNetworkConfigurationManager::Capabilities(nullptr);
 }
 
 void QNetworkConfigurationManager::updateConfigurations()

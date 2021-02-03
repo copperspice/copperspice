@@ -48,13 +48,14 @@ bool QLocalServerPrivate::addListener()
    Listener &listener = listeners.last();
    SECURITY_ATTRIBUTES sa;
    sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-   sa.bInheritHandle = FALSE;      //non inheritable handle, same as default
-   sa.lpSecurityDescriptor = 0;    //default security descriptor
+   sa.bInheritHandle = false;                  // non inheritable handle, same as default
+   sa.lpSecurityDescriptor = nullptr;         // default security descriptor
    QScopedPointer<SECURITY_DESCRIPTOR> pSD;
-   PSID worldSID = 0;
+   PSID worldSID = nullptr;
    QByteArray aclBuffer;
    QByteArray tokenUserBuffer;
    QByteArray tokenGroupBuffer;
+
    // create security descriptor if access options were specified
    if ((socketOptions & QLocalServer::WorldAccessOption)) {
       pSD.reset(new SECURITY_DESCRIPTOR);
@@ -62,14 +63,17 @@ bool QLocalServerPrivate::addListener()
          setError(QLatin1String("QLocalServerPrivate::addListener"));
          return false;
       }
-      HANDLE hToken = NULL;
+
+      HANDLE hToken = nullptr;
       if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
          return false;
       }
+
       DWORD dwBufferSize = 0;
-      GetTokenInformation(hToken, TokenUser, 0, 0, &dwBufferSize);
+      GetTokenInformation(hToken, TokenUser, nullptr, 0, &dwBufferSize);
       tokenUserBuffer.fill(0, dwBufferSize);
       PTOKEN_USER pTokenUser = (PTOKEN_USER)tokenUserBuffer.data();
+
       if (!GetTokenInformation(hToken, TokenUser, pTokenUser, dwBufferSize, &dwBufferSize)) {
          setError(QLatin1String("QLocalServerPrivate::addListener"));
          CloseHandle(hToken);
@@ -77,9 +81,10 @@ bool QLocalServerPrivate::addListener()
       }
 
       dwBufferSize = 0;
-      GetTokenInformation(hToken, TokenPrimaryGroup, 0, 0, &dwBufferSize);
+      GetTokenInformation(hToken, TokenPrimaryGroup, nullptr, 0, &dwBufferSize);
       tokenGroupBuffer.fill(0, dwBufferSize);
       PTOKEN_PRIMARY_GROUP pTokenGroup = (PTOKEN_PRIMARY_GROUP)tokenGroupBuffer.data();
+
       if (!GetTokenInformation(hToken, TokenPrimaryGroup, pTokenGroup, dwBufferSize, &dwBufferSize)) {
          setError(QLatin1String("QLocalServerPrivate::addListener"));
          CloseHandle(hToken);
@@ -92,9 +97,11 @@ bool QLocalServerPrivate::addListener()
       DWORD domainNameSize;
       SID_NAME_USE groupNameUse;
       LPWSTR groupNameSid;
+
       LookupAccountSid(0, pTokenGroup->PrimaryGroup, 0, &groupNameSize, 0, &domainNameSize, &groupNameUse);
       QScopedPointer<wchar_t, QScopedPointerArrayDeleter<wchar_t>> groupName(new wchar_t[groupNameSize]);
       QScopedPointer<wchar_t, QScopedPointerArrayDeleter<wchar_t>> domainName(new wchar_t[domainNameSize]);
+
       if (LookupAccountSid(0, pTokenGroup->PrimaryGroup, groupName.data(), &groupNameSize, domainName.data(), &domainNameSize, &groupNameUse)) {
          qDebug() << "primary group" << QString::fromWCharArray(domainName.data()) << "\\" << QString::fromWCharArray(groupName.data()) << "type=" << groupNameUse;
       }
@@ -226,7 +233,7 @@ bool QLocalServerPrivate::listen(const QString &name)
    // Use only one event for all listeners of one socket.
    // The idea is that listener events are rare, so polling all listeners once in a while is
    // cheap compared to waiting for N additional events in each iteration of the main loop.
-   eventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
+   eventHandle = CreateEvent(nullptr, TRUE, FALSE, nullptr);
    connectionEventNotifier = new QWinEventNotifier(eventHandle, q);
    q->connect(connectionEventNotifier, SIGNAL(activated(HANDLE)), q, SLOT(_q_onNewConnection()));
 
@@ -293,7 +300,7 @@ void QLocalServerPrivate::_q_onNewConnection() {
 void QLocalServerPrivate::closeServer() {
    connectionEventNotifier->setEnabled(false); // Otherwise, closed handle is checked before deleter runs
    connectionEventNotifier->deleteLater();
-   connectionEventNotifier = 0;
+   connectionEventNotifier = nullptr;
    CloseHandle(eventHandle);
 
    for (int i = 0; i < listeners.size(); ++i) {

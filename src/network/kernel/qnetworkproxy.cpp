@@ -47,11 +47,9 @@ class QGlobalNetworkProxy
 {
  public:
    QGlobalNetworkProxy()
-      : mutex(QMutex::Recursive)
-      , applicationLevelProxy(0)
-      , applicationLevelProxyFactory(0)
-      , socks5SocketEngineHandler(0)
-      , httpSocketEngineHandler(0) {
+      : mutex(QMutex::Recursive), applicationLevelProxy(nullptr), applicationLevelProxyFactory(nullptr),
+        socks5SocketEngineHandler(nullptr), httpSocketEngineHandler(nullptr)
+   {
 #ifdef QT_USE_SYSTEM_PROXIES
       setApplicationProxyFactory(new QSystemConfigurationProxyFactory);
 #endif
@@ -77,9 +75,10 @@ class QGlobalNetworkProxy
       if (!applicationLevelProxy) {
          applicationLevelProxy = new QNetworkProxy;
       }
+
       *applicationLevelProxy = proxy;
       delete applicationLevelProxyFactory;
-      applicationLevelProxyFactory = 0;
+      applicationLevelProxyFactory = nullptr;
    }
 
    void setApplicationProxyFactory(QNetworkProxyFactory *factory) {
@@ -245,7 +244,7 @@ template<> void QSharedDataPointer<QNetworkProxyPrivate>::detach()
 }
 
 QNetworkProxy::QNetworkProxy()
-   : d(0)
+   : d(nullptr)
 {
    // make sure we have QGlobalNetworkProxy singleton created, otherwise
    // you don't have any socket engine handler created when directly setting
@@ -758,7 +757,7 @@ void QNetworkProxyFactory::setUseSystemConfiguration(bool enable)
    if (enable) {
       setApplicationProxyFactory(new QSystemConfigurationProxyFactory);
    } else {
-      setApplicationProxyFactory(0);
+      setApplicationProxyFactory(nullptr);
    }
 }
 

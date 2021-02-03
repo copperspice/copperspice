@@ -50,8 +50,7 @@ QNetworkCookie::QNetworkCookie(const QNetworkCookie &other)
 
 QNetworkCookie::~QNetworkCookie()
 {
-   // QSharedDataPointer auto deletes
-   d = 0;
+   d = nullptr;
 }
 
 QNetworkCookie &QNetworkCookie::operator=(const QNetworkCookie &other)
@@ -65,6 +64,7 @@ bool QNetworkCookie::operator==(const QNetworkCookie &other) const
    if (d == other.d) {
       return true;
    }
+
    return d->name == other.d->name &&
           d->value == other.d->value &&
           d->expirationDate.toUTC() == other.d->expirationDate.toUTC() &&

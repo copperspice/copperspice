@@ -46,10 +46,10 @@ class QNetworkAccessManagerPrivate
 {
  public:
    QNetworkAccessManagerPrivate()
-      : networkCache(0), cookieJar(0), httpThread(0),
+      : networkCache(nullptr), cookieJar(nullptr), httpThread(nullptr),
 
 #ifndef QT_NO_NETWORKPROXY
-        proxyFactory(0),
+        proxyFactory(nullptr),
 #endif
 
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -57,12 +57,9 @@ class QNetworkAccessManagerPrivate
         networkConfiguration(networkConfigurationManager.defaultConfiguration()),
         customNetworkConfiguration(false),
         networkSessionRequired(networkConfigurationManager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired),
-        activeReplyCount(0),
-        online(false),
-        initializeSession(true),
+        activeReplyCount(0), online(false), initializeSession(true),
 #endif
-        cookieJarCreated(false),
-        defaultAccessControl(true),
+        cookieJarCreated(false), defaultAccessControl(true),
         authenticationManager(QSharedPointer<QNetworkAccessAuthenticationManager>::create())
     {
 
@@ -100,7 +97,7 @@ class QNetworkAccessManagerPrivate
                   QAuthenticator *authenticator, QNetworkProxy *lastProxyAuthentication);
 
     void cacheProxyCredentials(const QNetworkProxy &proxy, const QAuthenticator *auth);
-    QNetworkAuthenticationCredential *fetchCachedProxyCredentials(const QNetworkProxy &proxy, const QAuthenticator *auth = 0);
+    QNetworkAuthenticationCredential *fetchCachedProxyCredentials(const QNetworkProxy &proxy, const QAuthenticator *auth = nullptr);
     QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery &query);
 #endif
 

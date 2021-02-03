@@ -229,13 +229,9 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
 
  public:
    QNonContiguousByteDeviceThreadForwardImpl(bool aE, qint64 s)
-      : QNonContiguousByteDevice(),
-        wantDataPending(false),
-        m_amount(0),
-        m_data(0),
-        m_atEnd(aE),
-        m_size(s),
-        m_pos(0) {
+      : QNonContiguousByteDevice(), wantDataPending(false), m_amount(0), m_data(nullptr),
+        m_atEnd(aE), m_size(s), m_pos(0)
+   {
    }
 
    ~QNonContiguousByteDeviceThreadForwardImpl() {
@@ -261,11 +257,12 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
          // Do nothing, we already sent a wantData signal and wait for results
          len = 0;
       }
-      return 0;
+
+      return nullptr;
    }
 
    bool advanceReadPointer(qint64 a) override {
-      if (m_data == 0) {
+      if (m_data == nullptr) {
          return false;
       }
 
@@ -289,7 +286,7 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
 
    bool reset() override {
       m_amount = 0;
-      m_data   = 0;
+      m_data   = nullptr;
       m_dataArray.clear();
 
       if (wantDataPending) {

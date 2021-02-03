@@ -48,8 +48,9 @@ QStringList QNetworkAccessFtpBackendFactory::supportedSchemes() const
 {
    return QStringList("ftp");
 }
-QNetworkAccessBackend *
-QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const
+
+QNetworkAccessBackend * QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op,
+               const QNetworkRequest &request) const
 {
    // is it an operation we know of?
    switch (op) {
@@ -58,8 +59,8 @@ QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op, con
          break;
 
       default:
-         // no, we can't handle this operation
-         return 0;
+         // can not handle this operation
+         return nullptr;
    }
 
    QUrl url = request.url();
@@ -67,7 +68,7 @@ QNetworkAccessFtpBackendFactory::create(QNetworkAccessManager::Operation op, con
       return new QNetworkAccessFtpBackend;
    }
 
-   return 0;
+   return nullptr;
 }
 
 class QNetworkAccessCachedFtpConnection : public QFtp, public QNetworkAccessCache::CacheableObject
@@ -85,7 +86,7 @@ class QNetworkAccessCachedFtpConnection : public QFtp, public QNetworkAccessCach
 };
 
 QNetworkAccessFtpBackend::QNetworkAccessFtpBackend()
-   : ftp(0), uploadDevice(0), totalBytes(0), helpId(-1), sizeId(-1), mdtmId(-1),
+   : ftp(nullptr), uploadDevice(nullptr), totalBytes(0), helpId(-1), sizeId(-1), mdtmId(-1),
      supportsSize(false), supportsMdtm(false), state(Idle)
 {
 }
@@ -205,7 +206,7 @@ void QNetworkAccessFtpBackend::disconnectFromFtp(CacheCleanupMode mode)
    state = Disconnecting;
 
    if (ftp) {
-      disconnect(ftp, 0, this, 0);
+      disconnect(ftp, nullptr, this, nullptr);
 
       QByteArray key = makeCacheKey(url());
 
@@ -216,7 +217,7 @@ void QNetworkAccessFtpBackend::disconnectFromFtp(CacheCleanupMode mode)
          QNetworkAccessManagerPrivate::getObjectCache(this)->releaseEntry(key);
       }
 
-      ftp = 0;
+      ftp = nullptr;
    }
 }
 
@@ -335,9 +336,11 @@ void QNetworkAccessFtpBackend::ftpDone()
       state = Transferring;
 
       QFtp::TransferType type = QFtp::Binary;
+
       if (operation() == QNetworkAccessManager::GetOperation) {
          setCachingEnabled(true);
-         ftp->get(url().path(), 0, type);
+         ftp->get(url().path(), nullptr, type);
+
       } else {
          ftp->put(uploadDevice, url().path(), type);
       }

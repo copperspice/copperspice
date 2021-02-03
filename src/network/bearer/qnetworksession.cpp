@@ -38,7 +38,7 @@
 #ifndef QT_NO_BEARERMANAGEMENT
 
 QNetworkSession::QNetworkSession(const QNetworkConfiguration &connectionConfig, QObject *parent)
-   : QObject(parent), d(0)
+   : QObject(parent), d(nullptr)
 {
    // invalid configuration
    if (!connectionConfig.identifier().isEmpty()) {

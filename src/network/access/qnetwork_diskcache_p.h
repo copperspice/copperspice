@@ -37,7 +37,7 @@ class QCacheItem
 {
  public:
    QCacheItem()
-      : file(0)
+      : file(nullptr)
    {
    }
 
@@ -54,7 +54,7 @@ class QCacheItem
       metaData = QNetworkCacheMetaData();
       data.close();
       delete file;
-      file = 0;
+      file = nullptr;
    }
 
    void writeHeader(QFile *device) const;
