@@ -193,8 +193,9 @@ class QFragmentMapData
 
 };
 
-template <class Fragment> QFragmentMapData<Fragment>::QFragmentMapData()
-   : fragments(0)
+template <class Fragment>
+QFragmentMapData<Fragment>::QFragmentMapData()
+   : fragments(nullptr )
 {
    init();
 }

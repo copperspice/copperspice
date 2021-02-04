@@ -77,8 +77,8 @@ class QWindowsXPStyle : public QWindowsStyle
 
    int pixelMetric(PixelMetric pm, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
-   int styleHint(StyleHint hint, const QStyleOption *option = nullptr, const QWidget *widget = 0,
-      QStyleHintReturn *returnData = 0) const override;
+   int styleHint(StyleHint hint, const QStyleOption *option = nullptr, const QWidget *widget = nullptr,
+      QStyleHintReturn *returnData = nullptr) const override;
 
    QPalette standardPalette() const override;
 
@@ -229,12 +229,13 @@ typedef struct _DTBGOPTS {
 class XPThemeData
 {
  public:
-   explicit XPThemeData(const QWidget *w = 0, QPainter *p = 0, int themeIn = -1,
+   explicit XPThemeData(const QWidget *w = nullptr, QPainter *p = nullptr, int themeIn = -1,
       int part = 0, int state = 0, const QRect &r = QRect())
-      : widget(w), painter(p), theme(themeIn), htheme(0), partId(part), stateId(state),
+      : widget(w), painter(p), theme(themeIn), htheme(nullptr), partId(part), stateId(state),
         mirrorHorizontally(false), mirrorVertically(false), noBorder(false),
         noContent(false), rotate(0), rect(r)
-   {}
+   {
+   }
 
    HRGN mask(QWidget *widget);
    HTHEME handle();
@@ -245,11 +246,16 @@ class XPThemeData
    QSizeF size();
    QMarginsF margins(const QRect &rect, int propId = TMT_CONTENTMARGINS);
    QMarginsF margins(int propId = TMT_CONTENTMARGINS);
-   static QSizeF themeSize(const QWidget *w = 0, QPainter *p = 0, int themeIn = -1, int part = 0, int state = 0);
-   static QMarginsF themeMargins(const QRect &rect, const QWidget *w = 0, QPainter *p = 0, int themeIn = -1,
-      int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
-   static QMarginsF themeMargins(const QWidget *w = 0, QPainter *p = 0, int themeIn = -1,
-      int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
+
+   static QSizeF themeSize(const QWidget *widget = nullptr, QPainter *painter = nullptr, int themeIn = -1,
+               int part = 0, int state = 0);
+
+   static QMarginsF themeMargins(const QRect &rect, const QWidget *widget = nullptr, QPainter *painter = nullptr,
+               int themeIn = -1, int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
+
+   static QMarginsF themeMargins(const QWidget *widget = nullptr, QPainter *painter = nullptr, int themeIn = -1,
+               int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
+
    const QWidget *widget;
    QPainter *painter;
 
@@ -408,9 +414,11 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate, public QWindowsUxThe
       VistaTreeViewTheme,   // arrow shape treeview indicators (Vista) obtained from "explorer" theme.
       NThemes
    };
+
    QWindowsXPStylePrivate()
-      : QWindowsStylePrivate(), hasInitColors(false), bufferDC(0), bufferBitmap(0), nullBitmap(0),
-        bufferPixels(0), bufferW(0), bufferH(0) {
+      : QWindowsStylePrivate(), hasInitColors(false), bufferDC(nullptr), bufferBitmap(nullptr),
+        nullBitmap(nullptr), bufferPixels(nullptr), bufferW(0), bufferH(0)
+   {
       init();
    }
 
@@ -418,8 +426,10 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate, public QWindowsUxThe
       cleanup();
    }
 
-   static int pixelMetricFromSystemDp(QStyle::PixelMetric pm, const QStyleOption *option = 0, const QWidget *widget = 0);
-   static int fixedPixelMetric(QStyle::PixelMetric pm, const QStyleOption *option = 0, const QWidget *widget = 0);
+   static int pixelMetricFromSystemDp(QStyle::PixelMetric pm, const QStyleOption *option = nullptr,
+               const QWidget *widget = nullptr);
+   static int fixedPixelMetric(QStyle::PixelMetric pm, const QStyleOption *option = nullptr,
+               const QWidget *widget = nullptr);
 
    static HWND winId(const QWidget *widget);
 
@@ -493,7 +503,7 @@ inline QSizeF XPThemeData::size()
    QSizeF result(0, 0);
    if (isValid()) {
       SIZE size;
-      if (SUCCEEDED(QWindowsXPStylePrivate::pGetThemePartSize(handle(), 0, partId, stateId, 0, TS_TRUE, &size))) {
+      if (SUCCEEDED(QWindowsXPStylePrivate::pGetThemePartSize(handle(), nullptr, partId, stateId, nullptr, TS_TRUE, &size))) {
          result = QSize(size.cx, size.cy);
       }
    }
@@ -503,10 +513,11 @@ inline QSizeF XPThemeData::size()
 inline QMarginsF XPThemeData::margins(const QRect &qRect, int propId)
 {
    QMarginsF result(0, 0, 0, 0);
+
    if (isValid()) {
       MARGINS margins;
       RECT rect = XPThemeData::toRECT(qRect);
-      if (SUCCEEDED(QWindowsXPStylePrivate::pGetThemeMargins(handle(), 0, partId, stateId, propId, &rect, &margins))) {
+      if (SUCCEEDED(QWindowsXPStylePrivate::pGetThemeMargins(handle(), nullptr, partId, stateId, propId, &rect, &margins))) {
          result = QMargins(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
       }
    }
@@ -516,9 +527,10 @@ inline QMarginsF XPThemeData::margins(const QRect &qRect, int propId)
 inline QMarginsF XPThemeData::margins(int propId)
 {
    QMarginsF result(0, 0, 0, 0);
+
    if (isValid()) {
       MARGINS margins;
-      if (SUCCEEDED(QWindowsXPStylePrivate::pGetThemeMargins(handle(), 0, partId, stateId, propId, NULL, &margins))) {
+      if (SUCCEEDED(QWindowsXPStylePrivate::pGetThemeMargins(handle(), nullptr, partId, stateId, propId, nullptr, &margins))) {
          result = QMargins(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
       }
    }

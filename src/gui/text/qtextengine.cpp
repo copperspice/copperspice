@@ -75,7 +75,7 @@ class Itemizer
 {
  public:
    Itemizer(const QString &string, const QScriptAnalysis *analysis, QScriptItemArray &items)
-      : m_string(string), m_analysis(analysis), m_items(items), m_splitter(0) {
+      : m_string(string), m_analysis(analysis), m_items(items), m_splitter(nullptr) {
    }
 
    ~Itemizer() {
@@ -1381,7 +1381,7 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
 
                   if (g.glyphs[infos_position] != 0) {
                      QGlyphLayout tmp = g.mid(infos_position, 1);
-                     actualFontEngine->recalcAdvances(&tmp, 0);
+                     actualFontEngine->recalcAdvances(&tmp, Qt::EmptyFlag);
                   }
                   g.attributes[infos_position].dontPrint = true;
                }
@@ -1500,11 +1500,11 @@ void QTextEngine::init(QTextEngine *e)
    e->visualMovement     = false;
    e->delayDecorations   = false;
 
-   e->layoutData = 0;
-   e->minWidth   = 0;
-   e->maxWidth   = 0;
+   e->layoutData         = nullptr;
+   e->minWidth           = 0;
+   e->maxWidth           = 0;
 
-   e->specialData        = 0;
+   e->specialData        = nullptr;
    e->stackEngine        = false;
    e->useRawFont         = false;
 }
@@ -1785,7 +1785,7 @@ void QTextEngine::itemize() const
 
             if (s && position >= s->preeditPosition) {
                position += s->preeditText.length();
-               s = 0;
+               s = nullptr;
             }
 
             Q_ASSERT(position <= length);
@@ -2168,8 +2168,8 @@ QTextEngine::FontEngineCache::FontEngineCache()
 //input is common (and hard to cache at a higher level)
 QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFixed *descent, QFixed *leading) const
 {
-   QFontEngine *engine = 0;
-   QFontEngine *scaledEngine = 0;
+   QFontEngine *engine = nullptr;
+   QFontEngine *scaledEngine = nullptr;
    int script = si.analysis.script;
 
    QFont font = fnt;
@@ -2186,7 +2186,7 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
 
          if (feCache.prevScaledFontEngine) {
             releaseCachedFontEngine(feCache.prevScaledFontEngine);
-            feCache.prevScaledFontEngine = 0;
+            feCache.prevScaledFontEngine = nullptr;
          }
       }
 
@@ -2279,7 +2279,7 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
             feCache.prevScript = script;
             feCache.prevPosition = -1;
             feCache.prevLength = -1;
-            feCache.prevScaledFontEngine = 0;
+            feCache.prevScaledFontEngine = nullptr;
          }
       }
 
@@ -2318,7 +2318,7 @@ static void set(QJustificationPoint *point, int type, const QGlyphLayout &glyph,
          g.numGlyphs = 1;
          g.glyphs = &kashidaGlyph;
          g.advances = &point->kashidaWidth;
-         fe->recalcAdvances(&g, 0);
+         fe->recalcAdvances(&g, Qt::EmptyFlag);
 
          if (point->kashidaWidth == 0) {
             point->type = Justification_Prohibited;
@@ -2580,15 +2580,15 @@ void QScriptLine::setDefaultHeight(QTextEngine *eng)
 
 QTextEngine::LayoutData::LayoutData()
 {
-   memory = 0;
-   allocated = 0;
-   memory_on_stack = false;
-   used = 0;
-   hasBidi = false;
-   layoutState = LayoutEmpty;
+   memory             = nullptr;
+   allocated          = 0;
+   memory_on_stack    = false;
+   used               = 0;
+   hasBidi            = false;
+   layoutState        = LayoutEmpty;
    haveCharAttributes = false;
-   logClustersPtr = 0;
-   available_glyphs = 0;
+   logClustersPtr     = nullptr;
+   available_glyphs   = 0;
 }
 
 QTextEngine::LayoutData::LayoutData(const QString &str, void **stack_memory, int _allocated)
@@ -2609,8 +2609,8 @@ QTextEngine::LayoutData::LayoutData(const QString &str, void **stack_memory, int
       allocated = 0;
 
       memory_on_stack = false;
-      memory = 0;
-      logClustersPtr = 0;
+      memory = nullptr;
+      logClustersPtr = nullptr;
 
    } else {
       memory_on_stack = true;
@@ -2634,7 +2634,7 @@ QTextEngine::LayoutData::~LayoutData()
    if (!memory_on_stack) {
       free(memory);
    }
-   memory = 0;
+   memory = nullptr;
 }
 
 bool QTextEngine::LayoutData::reallocate(int totalGlyphs)
@@ -2664,7 +2664,7 @@ bool QTextEngine::LayoutData::reallocate(int totalGlyphs)
    }
 
    void **newMem = memory;
-   newMem = (void **)::realloc(memory_on_stack ? 0 : memory, newAllocated * sizeof(void *));
+   newMem = (void **)::realloc(memory_on_stack ? nullptr : memory, newAllocated * sizeof(void *));
 
    if (!newMem) {
       layoutState = LayoutFailed;
@@ -2717,7 +2717,8 @@ void QTextEngine::freeMemory()
 {
    if (!stackEngine) {
       delete layoutData;
-      layoutData = 0;
+      layoutData = nullptr;
+
    } else {
       layoutData->used = 0;
       layoutData->hasBidi = false;
@@ -2838,7 +2839,8 @@ void QTextEngine::setPreeditArea(int position, const QString &preeditText)
       }
       if (specialData->formats.isEmpty()) {
          delete specialData;
-         specialData = 0;
+         specialData = nullptr;
+
       } else {
          specialData->preeditText = QString();
          specialData->preeditPosition = -1;
@@ -2863,7 +2865,7 @@ void QTextEngine::setFormats(const QVector<QTextLayout::FormatRange> &formats)
       }
       if (specialData->preeditText.isEmpty()) {
          delete specialData;
-         specialData = 0;
+         specialData = nullptr;
       } else {
          specialData->formats.clear();
       }
@@ -3024,13 +3026,13 @@ QString QTextEngine::elidedText(Qt::TextElideMode mode, const QFixed &width, int
       glyphs.advances  = &ellipsisWidth;
 
       if (glyph != 0) {
-         fe->recalcAdvances(&glyphs, 0);
+         fe->recalcAdvances(&glyphs, Qt::EmptyFlag);
          ellipsisText = ellipsisChar;
 
       } else {
          glyph = fe->glyphIndex('.');
          if (glyph != 0) {
-            fe->recalcAdvances(&glyphs, 0);
+            fe->recalcAdvances(&glyphs, Qt::EmptyFlag);
 
             ellipsisWidth *= 3;
             ellipsisText = "...";
@@ -3802,7 +3804,7 @@ QStackTextEngine::QStackTextEngine(const QString &string, const QFont &f)
 
 QTextItemInt::QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFormat &format)
    : justified(false), underlineStyle(QTextCharFormat::NoUnderline), charFormat(format),
-     logClusters(0), f(0), fontEngine(0)
+     logClusters(nullptr), f(nullptr), fontEngine(nullptr)
 {
    f = font;
    fontEngine = f->d->engineForScript(si.analysis.script);
@@ -3812,10 +3814,9 @@ QTextItemInt::QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFo
 }
 
 QTextItemInt::QTextItemInt(const QGlyphLayout &g, QFont *font, QString::const_iterator begin, const QString::const_iterator end,
-   QFontEngine *fe, const QTextCharFormat &format)
-
-   : flags(0), justified(false), underlineStyle(QTextCharFormat::NoUnderline), charFormat(format),
-     m_iter(begin), m_end(end), logClusters(0), f(font),  glyphs(g), fontEngine(fe)
+            QFontEngine *fe, const QTextCharFormat &format)
+   : flags(Qt::EmptyFlag), justified(false), underlineStyle(QTextCharFormat::NoUnderline), charFormat(format),
+     m_iter(begin), m_end(end), logClusters(nullptr), f(font),  glyphs(g), fontEngine(fe)
 {
 }
 
@@ -3824,7 +3825,7 @@ void QTextItemInt::initWithScriptItem(const QScriptItem &si)
 {
    // explicitly initialize flags so that initFontAttributes can be called
    // multiple times on the same TextItem
-   flags = 0;
+   flags = Qt::EmptyFlag;
 
    if (si.analysis.bidiLevel % 2) {
       flags |= QTextItem::RightToLeft;

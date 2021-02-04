@@ -27,7 +27,10 @@
 #include <qhash.h>
 
 struct QTextObjectHandler {
-   QTextObjectHandler() : iface(0) {}
+   QTextObjectHandler() : iface(nullptr)
+   {
+   }
+
    QTextObjectInterface *iface;
    QPointer<QObject> component;
 };
@@ -40,13 +43,16 @@ class QAbstractTextDocumentLayoutPrivate
    Q_DECLARE_PUBLIC(QAbstractTextDocumentLayout)
 
    inline QAbstractTextDocumentLayoutPrivate()
-      : paintDevice(0) {}
+      : paintDevice(nullptr)
+   {
+   }
 
    virtual ~QAbstractTextDocumentLayoutPrivate();
 
    inline void setDocument(QTextDocument *doc) {
-      document = doc;
-      docPrivate = 0;
+      document   = doc;
+      docPrivate = nullptr;
+
       if (doc) {
          docPrivate = doc->docHandle();
       }

@@ -84,7 +84,7 @@ typedef struct {
 #define _SIID_SHIELD             77
 
 typedef HRESULT (WINAPI *PtrSHGetStockIconInfo)(int siid, int uFlags, QSHSTOCKICONINFO *psii);
-static PtrSHGetStockIconInfo pSHGetStockIconInfo = 0;
+static PtrSHGetStockIconInfo pSHGetStockIconInfo = nullptr;
 
 Q_GUI_EXPORT HICON qt_pixmapToWinHICON(const QPixmap &);
 Q_GUI_EXPORT QPixmap qt_pixmapFromWinHICON(HICON icon);
@@ -146,7 +146,7 @@ bool QWindowsStyle::eventFilter(QObject *o, QEvent *e)
                QWidget *w = list.at(pos);
 
                if (w->isWindow() || ! w->isVisible() ||
-                  w->style()->styleHint(SH_UnderlineShortcut, 0, w)) {
+                  w->style()->styleHint(SH_UnderlineShortcut, nullptr, w)) {
                   list.removeAt(pos);
                }
             }
@@ -218,7 +218,7 @@ void QWindowsStyle::polish(QApplication *app)
    QWindowsStylePrivate *d = const_cast<QWindowsStylePrivate *>(d_func());
 
    // We only need the overhead when shortcuts are sometimes hidden
-   if (! proxy()->styleHint(SH_UnderlineShortcut, 0) && app) {
+   if (! proxy()->styleHint(SH_UnderlineShortcut, nullptr) && app) {
       app->installEventFilter(this);
    }
 
@@ -724,18 +724,14 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
                x -= 2;
             }
             if (opt->rect.height() > 4) {
-               qDrawShadePanel(p, x, 2, 3, opt->rect.height() - 4,
-                  opt->palette, false, 1, 0);
-               qDrawShadePanel(p, x + 3, 2, 3, opt->rect.height() - 4,
-                  opt->palette, false, 1, 0);
+               qDrawShadePanel(p, x, 2, 3, opt->rect.height() - 4, opt->palette, false, 1, nullptr);
+               qDrawShadePanel(p, x + 3, 2, 3, opt->rect.height() - 4, opt->palette, false, 1, nullptr);
             }
          } else {
             if (opt->rect.width() > 4) {
                int y = opt->rect.height() / 2 - 4;
-               qDrawShadePanel(p, 2, y, opt->rect.width() - 4, 3,
-                  opt->palette, false, 1, 0);
-               qDrawShadePanel(p, 2, y + 3, opt->rect.width() - 4, 3,
-                  opt->palette, false, 1, 0);
+               qDrawShadePanel(p, 2, y, opt->rect.width() - 4, 3, opt->palette, false, 1, nullptr);
+               qDrawShadePanel(p, 2, y + 3, opt->rect.width() - 4, 3, opt->palette, false, 1, nullptr);
             }
          }
          p->restore();
@@ -789,7 +785,7 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
                }
             } else {
                qDrawWinButton(p, opt->rect, opt->palette,
-                  opt->state & (State_Sunken | State_On), panel ? &fill : 0);
+                  opt->state & (State_Sunken | State_On), panel ? &fill : nullptr);
             }
          } else {
             p->fillRect(opt->rect, fill);
@@ -1062,7 +1058,7 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
 
          if (opt->state & (State_Raised | State_On | State_Sunken)) {
             qDrawWinButton(p, opt->rect, opt->palette, opt->state & (State_Sunken | State_On),
-               panel ? &fill : 0);
+               panel ? &fill : nullptr);
          } else {
             if (panel) {
                p->fillRect(opt->rect, fill);
@@ -1092,7 +1088,7 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
 #endif
 
       case PE_FrameStatusBarItem:
-         qDrawShadePanel(p, opt->rect, opt->palette, true, 1, 0);
+         qDrawShadePanel(p, opt->rect, opt->palette, true, 1, nullptr);
          break;
 
       case PE_IndicatorProgressChunk: {
@@ -1131,7 +1127,7 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
       break;
 
       case PE_FrameTabWidget: {
-         qDrawWinButton(p, opt->rect, opt->palette, false, 0);
+         qDrawWinButton(p, opt->rect, opt->palette, false, nullptr);
          break;
       }
       default:

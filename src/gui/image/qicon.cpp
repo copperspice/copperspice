@@ -63,7 +63,7 @@ static void qt_cleanup_icon_cache()
    qtIconCache()->clear();
 }
 
-static qreal qt_effective_device_pixel_ratio(QWindow *window = 0)
+static qreal qt_effective_device_pixel_ratio(QWindow *window = nullptr)
 {
    if (!qApp->testAttribute(Qt::AA_UseHighDpiPixmaps)) {
       return qreal(1.0);
@@ -74,9 +74,7 @@ static qreal qt_effective_device_pixel_ratio(QWindow *window = 0)
    return qApp->devicePixelRatio(); // Don't know which window to target.
 }
 QIconPrivate::QIconPrivate()
-   : engine(0), ref(1),
-     serialNum(serialNumCounter.fetchAndAddRelaxed(1)),
-     detach_no(0), is_mask(false)
+   : engine(nullptr), ref(1), serialNum(serialNumCounter.fetchAndAddRelaxed(1)), detach_no(0), is_mask(false)
 {
 }
 
@@ -103,7 +101,7 @@ QPixmapIconEngine::~QPixmapIconEngine()
 
 void QPixmapIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state)
 {
-   QSize pixmapSize = rect.size() * qt_effective_device_pixel_ratio(0);
+   QSize pixmapSize = rect.size() * qt_effective_device_pixel_ratio(nullptr);
    QPixmap px = pixmap(pixmapSize, mode, state);
    painter->drawPixmap(rect, px);
 }
@@ -141,8 +139,9 @@ static QPixmapIconEngineEntry *bestSizeMatch( const QSize &size, QPixmapIconEngi
 
 QPixmapIconEngineEntry *QPixmapIconEngine::tryMatch(const QSize &size, QIcon::Mode mode, QIcon::State state)
 {
-   QPixmapIconEngineEntry *pe = 0;
-   for (int i = 0; i < pixmaps.count(); ++i)
+   QPixmapIconEngineEntry *pe = nullptr;
+
+   for (int i = 0; i < pixmaps.count(); ++i) {
       if (pixmaps.at(i).mode == mode && pixmaps.at(i).state == state) {
          if (pe) {
             pe = bestSizeMatch(size, &pixmaps[i], pe);
@@ -150,6 +149,7 @@ QPixmapIconEngineEntry *QPixmapIconEngine::tryMatch(const QSize &size, QIcon::Mo
             pe = &pixmaps[i];
          }
       }
+   }
    return pe;
 }
 
@@ -535,12 +535,12 @@ QFactoryLoader *cs_internal_iconLoader()
 }
 
 QIcon::QIcon()
-   : d(0)
+   : d(nullptr)
 {
 }
 
 QIcon::QIcon(const QPixmap &pixmap)
-   : d(0)
+   : d(nullptr)
 {
    addPixmap(pixmap);
 }
@@ -554,7 +554,7 @@ QIcon::QIcon(const QIcon &other)
 }
 
 QIcon::QIcon(const QString &fileName)
-   : d(0)
+   : d(nullptr)
 {
    addFile(fileName);
 }
@@ -617,7 +617,7 @@ QPixmap QIcon::pixmap(const QSize &size, Mode mode, State state) const
       return QPixmap();
    }
 
-   return pixmap(0, size, mode, state);
+   return pixmap(nullptr, size, mode, state);
 }
 
 
@@ -627,7 +627,7 @@ QSize QIcon::actualSize(const QSize &size, Mode mode, State state) const
       return QSize();
    }
 
-   return actualSize(0, size, mode, state);
+   return actualSize(nullptr, size, mode, state);
 }
 QPixmap QIcon::pixmap(QWindow *window, const QSize &size, Mode mode, State state) const
 {

@@ -33,8 +33,6 @@
 #include <qbasictimer.h>
 #include <qpointer.h>
 
-
-
 class QMimeData;
 class QAbstractScrollArea;
 
@@ -59,8 +57,8 @@ class QTextControlPrivate
 
    void createAutoBulletList();
 
-   void init(Qt::TextFormat format = Qt::RichText, const QString &text = QString(), QTextDocument *document = 0);
-   void setContent(Qt::TextFormat format = Qt::RichText, const QString &text = QString(), QTextDocument *document = 0);
+   void init(Qt::TextFormat format = Qt::RichText, const QString &text = QString(), QTextDocument *document = nullptr);
+   void setContent(Qt::TextFormat format = Qt::RichText, const QString &text = QString(), QTextDocument *document = nullptr);
    void startDrag();
 
    void paste(const QMimeData *source);

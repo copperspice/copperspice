@@ -43,7 +43,7 @@ class QGtkPainter
    QGtkPainter();
    virtual ~QGtkPainter();
 
-   void reset(QPainter *painter = 0);
+   void reset(QPainter *painter = nullptr);
 
    void setAlphaSupport(bool value) {
       m_alpha = value;
@@ -104,14 +104,15 @@ class QGtkPainter
    virtual void paintExtention(GtkWidget *gtkWidget, const QString &part, const QRect &rect, GtkStateType state,
       GtkShadowType shadow, GtkPositionType gap_pos, GtkStyle *style) = 0;
 
-   virtual void paintOption(GtkWidget *gtkWidget, const QRect &rect, GtkStateType state, GtkShadowType shadow, GtkStyle *style,
-      const QString &detail) = 0;
+   virtual void paintOption(GtkWidget *gtkWidget, const QRect &rect, GtkStateType state,
+               GtkShadowType shadow, GtkStyle *style, const QString &detail) = 0;
 
-   virtual void paintCheckbox(GtkWidget *gtkWidget, const QRect &rect, GtkStateType state, GtkShadowType shadow, GtkStyle *style,
-      const QString &detail) = 0;
+   virtual void paintCheckbox(GtkWidget *gtkWidget, const QRect &rect, GtkStateType state,
+               GtkShadowType shadow, GtkStyle *style, const QString &detail) = 0;
 
  protected:
-   static QString uniqueName(const QString &key, GtkStateType state, GtkShadowType shadow, const QSize &size, GtkWidget *widget = 0);
+   static QString uniqueName(const QString &key, GtkStateType state, GtkShadowType shadow, const QSize &size,
+               GtkWidget *widget = nullptr);
 
    QPainter *m_painter;
    bool m_alpha;

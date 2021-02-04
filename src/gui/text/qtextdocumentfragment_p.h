@@ -106,7 +106,7 @@ class QTextHtmlImporter : public QTextHtmlParser
 
    QTextHtmlImporter(QTextDocument *_doc, const QString &html,
       ImportMode mode,
-      const QTextDocument *resourceProvider = 0);
+      const QTextDocument *resourceProvider = nullptr);
 
    void import();
 
@@ -138,7 +138,10 @@ class QTextHtmlImporter : public QTextHtmlParser
    QStringList namedAnchors;
 
    struct TableCellIterator {
-      inline TableCellIterator(QTextTable *t = 0) : table(t), row(0), column(0) {}
+      inline TableCellIterator(QTextTable *t = nullptr)
+         : table(t), row(0), column(0)
+      {
+      }
 
       inline TableCellIterator &operator++() {
          if (atEnd()) {
@@ -160,7 +163,7 @@ class QTextHtmlImporter : public QTextHtmlParser
       }
 
       inline bool atEnd() const {
-         return table == 0 || row >= table->rows();
+         return table == nullptr || row >= table->rows();
       }
 
       QTextTableCell cell() const {

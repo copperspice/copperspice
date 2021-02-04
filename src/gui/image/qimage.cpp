@@ -53,7 +53,7 @@
 
 static inline bool isLocked(QImageData *data)
 {
-   return data != 0 && data->is_locked;
+   return data != nullptr && data->is_locked;
 }
 
 #if defined(Q_CC_DEC) && defined(__alpha) && (__DECCXX_VER-0 >= 50190001)
@@ -73,21 +73,20 @@ static QImage rotated270(const QImage &src);
 QAtomicInt qimage_serial_number = 1;
 
 QImageData::QImageData()
-   : ref(0), width(0), height(0), depth(0), nbytes(0), devicePixelRatio(1.0), data(0),
+   : ref(0), width(0), height(0), depth(0), nbytes(0), devicePixelRatio(1.0), data(nullptr),
      format(QImage::Format_ARGB32), bytes_per_line(0),
      ser_no(qimage_serial_number.fetchAndAddRelaxed(1)), detach_no(0),
      dpmx(qt_defaultDpiX() * 100 / qreal(2.54)),
      dpmy(qt_defaultDpiY() * 100 / qreal(2.54)),
      offset(0, 0), own_data(true), ro_data(false), has_alpha_clut(false),
-     is_cached(false), is_locked(false), cleanupFunction(0), cleanupInfo(0),
-     paintEngine(0)
+     is_cached(false), is_locked(false), cleanupFunction(nullptr), cleanupInfo(nullptr), paintEngine(nullptr)
 {
 }
 
 QImageData *QImageData::create(const QSize &size, QImage::Format format)
 {
    if (!size.isValid() || format == QImage::Format_Invalid) {
-      return 0;   // invalid parameter(s)
+      return nullptr;   // invalid parameter(s)
    }
 
    uint width  = size.width();
@@ -102,7 +101,7 @@ QImageData *QImageData::create(const QSize &size, QImage::Format format)
       || height <= 0
       || INT_MAX / uint(bytes_per_line) < height
       || INT_MAX / sizeof(uchar *) < uint(height)) {
-      return 0;
+      return nullptr;
    }
 
    QScopedPointer<QImageData> d(new QImageData);
@@ -131,7 +130,7 @@ QImageData *QImageData::create(const QSize &size, QImage::Format format)
    d->data   = (uchar *)malloc(d->nbytes);
 
    if (! d->data) {
-      return 0;
+      return nullptr;
    }
 
    d->ref.ref();
@@ -154,7 +153,7 @@ QImageData::~QImageData()
       free(data);
    }
 
-   data = 0;
+   data = nullptr;
 }
 
 bool QImageData::checkForAlphaPixels() const
@@ -267,6 +266,7 @@ bool QImageData::checkForAlphaPixels() const
       case QImage::Format_RGB30:
       case QImage::Format_Grayscale8:
          break;
+
       case QImage::Format_Invalid:
       case QImage::NImageFormats:
          // error, may want to throw
@@ -279,7 +279,7 @@ bool QImageData::checkForAlphaPixels() const
 QImage::QImage()
    : QPaintDevice()
 {
-   d = 0;
+   d = nullptr;
 }
 
 QImage::QImage(int width, int height, Format format)
@@ -370,7 +370,7 @@ QImage::QImage(const uchar *data, int width, int height, int bytesPerLine, Forma
 QImage::QImage(const QString &fileName, const char *format)
    : QPaintDevice()
 {
-   d = 0;
+   d = nullptr;
    load(fileName, format);
 }
 
@@ -380,13 +380,13 @@ extern bool qt_read_xpm_image_or_array(QIODevice *device, const char *const *sou
 QImage::QImage(const char *const xpm[])
    : QPaintDevice()
 {
-   d = 0;
+   d = nullptr;
 
    if (!xpm) {
       return;
    }
 
-   if (! qt_read_xpm_image_or_array(0, xpm, *this)) {
+   if (! qt_read_xpm_image_or_array(nullptr, xpm, *this)) {
       qWarning("QImage::QImage(), XPM is not supported");
    }
 }
@@ -396,7 +396,7 @@ QImage::QImage(const QImage &image)
    : QPaintDevice()
 {
    if (image.paintingActive() || isLocked(image.d)) {
-      d = 0;
+      d = nullptr;
       image.copy().swap(*this);
 
    } else {
@@ -733,14 +733,14 @@ void QImage::setColor(int i, QRgb c)
 uchar *QImage::scanLine(int i)
 {
    if (!d) {
-      return 0;
+      return nullptr;
    }
 
    detach();
 
    // In case detach() ran out of memory
    if (!d) {
-      return 0;
+      return nullptr;
    }
 
    return d->data + i * d->bytes_per_line;
@@ -749,7 +749,7 @@ uchar *QImage::scanLine(int i)
 const uchar *QImage::scanLine(int i) const
 {
    if (!d) {
-      return 0;
+      return nullptr;
    }
 
    Q_ASSERT(i >= 0 && i < height());
@@ -759,7 +759,7 @@ const uchar *QImage::scanLine(int i) const
 const uchar *QImage::constScanLine(int i) const
 {
    if (!d) {
-      return 0;
+      return nullptr;
    }
 
    Q_ASSERT(i >= 0 && i < height());
@@ -769,13 +769,13 @@ const uchar *QImage::constScanLine(int i) const
 uchar *QImage::bits()
 {
    if (!d) {
-      return 0;
+      return nullptr;
    }
    detach();
 
    // In case detach ran out of memory...
    if (!d) {
-      return 0;
+      return nullptr;
    }
 
    return d->data;
@@ -783,12 +783,12 @@ uchar *QImage::bits()
 
 const uchar *QImage::bits() const
 {
-   return d ? d->data : 0;
+   return d ? d->data : nullptr;
 }
 
 const uchar *QImage::constBits() const
 {
-   return d ? d->data : 0;
+   return d ? d->data : nullptr;
 }
 
 void QImage::fill(uint pixel)
@@ -939,7 +939,7 @@ void QImage::invertPixels(InvertMode mode)
 
    // Inverting premultiplied pixels would produce invalid image data.
    if (hasAlphaChannel() && qPixelLayouts[d->format].premultiplied) {
-      if (!d->convertInPlace(QImage::Format_ARGB32, 0)) {
+      if (!d->convertInPlace(QImage::Format_ARGB32, Qt::EmptyFlag)) {
          *this = convertToFormat(QImage::Format_ARGB32);
       }
    }
@@ -1007,7 +1007,7 @@ void QImage::invertPixels(InvertMode mode)
    }
 
    if (originalFormat != d->format) {
-      if (! d->convertInPlace(originalFormat, 0)) {
+      if (! d->convertInPlace(originalFormat, Qt::EmptyFlag)) {
          *this = convertToFormat(originalFormat);
       }
    }
@@ -1307,7 +1307,7 @@ QRgb QImage::pixel(int x, int y) const
    uint result;
    const uint *ptr = qFetchPixels[layout->bpp](&result, s, x, 1);
 
-   return *layout->convertToARGB32PM(&result, ptr, 1, layout, 0);
+   return *layout->convertToARGB32PM(&result, ptr, 1, layout, nullptr);
 }
 
 void QImage::setPixel(int x, int y, uint index_or_rgb)
@@ -1389,7 +1389,7 @@ void QImage::setPixel(int x, int y, uint index_or_rgb)
    }
    const QPixelLayout *layout = &qPixelLayouts[d->format];
    uint result;
-   const uint *ptr = layout->convertFromARGB32PM(&result, &index_or_rgb, 1, layout, 0);
+   const uint *ptr = layout->convertFromARGB32PM(&result, &index_or_rgb, 1, layout, nullptr);
    qStorePixels[layout->bpp](s, ptr, x, 1);
 }
 
@@ -1524,7 +1524,7 @@ bool QImage::allGray() const
       while (x < d->width) {
          int l = qMin(d->width - x, buffer_size);
          const uint *ptr = fetch(buffer, b, x, l);
-         ptr = layout->convertToARGB32PM(buffer, ptr, l, layout, 0);
+         ptr = layout->convertToARGB32PM(buffer, ptr, l, layout, nullptr);
          for (int i = 0; i < l; ++i) {
             if (!qIsGray(ptr[i])) {
                return false;
@@ -1693,12 +1693,12 @@ QImage QImage::createHeuristicMask(bool clipTight) const
    while (!done) {
       done = true;
       ypn = m.scanLine(0);
-      ypc = 0;
+      ypc = nullptr;
 
       for (y = 0; y < h; y++) {
          ypp = ypc;
          ypc = ypn;
-         ypn = (y == h - 1) ? 0 : m.scanLine(y + 1);
+         ypn = (y == h - 1) ? nullptr : m.scanLine(y + 1);
          const QRgb *p = (const QRgb *)scanLine(y);
 
          for (x = 0; x < w; x++) {
@@ -1721,12 +1721,14 @@ QImage QImage::createHeuristicMask(bool clipTight) const
 
    if (!clipTight) {
       ypn = m.scanLine(0);
-      ypc = 0;
+      ypc = nullptr;
+
       for (y = 0; y < h; y++) {
          ypp = ypc;
          ypc = ypn;
-         ypn = (y == h - 1) ? 0 : m.scanLine(y + 1);
+         ypn = (y == h - 1) ? nullptr : m.scanLine(y + 1);
          const QRgb *p = (const QRgb *)scanLine(y);
+
          for (x = 0; x < w; x++) {
             if ((*p & 0x00ffffff) != background) {
                if (x > 0) {
@@ -2243,7 +2245,7 @@ QDataStream &operator>>(QDataStream &s, QImage &image)
       return s;
    }
 
-   image = QImageReader(s.device(), 0).read();
+   image = QImageReader(s.device(), nullptr).read();
    return s;
 }
 
@@ -2406,12 +2408,12 @@ void QImage::setText(const QString &key, const QString &value)
 QPaintEngine *QImage::paintEngine() const
 {
    if (!d) {
-      return 0;
+      return nullptr;
    }
 
    if (!d->paintEngine) {
       QPaintDevice *paintDevice = const_cast<QImage *>(this);
-      QPaintEngine *paintEngine = 0;
+      QPaintEngine *paintEngine = nullptr;
       QPlatformIntegration *platformIntegration = QApplicationPrivate::platformIntegration();
 
       if (platformIntegration) {

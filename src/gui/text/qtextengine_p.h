@@ -279,7 +279,7 @@ class QTextItemInt : public QTextItem
 {
  public:
    inline QTextItemInt()
-      : justified(false), underlineStyle(QTextCharFormat::NoUnderline), logClusters(0), f(0), fontEngine(0) {
+      : justified(false), underlineStyle(QTextCharFormat::NoUnderline), logClusters(nullptr), f(nullptr), fontEngine(nullptr) {
    }
 
    QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFormat &format = QTextCharFormat());
@@ -519,7 +519,7 @@ class Q_GUI_EXPORT QTextEngine
       if (block.docHandle()) {
          return block.docHandle()->formatCollection();
       }
-      return specialData ? specialData->formatCollection.data() : 0;
+      return specialData ? specialData->formatCollection.data() : nullptr;
    }
 
    QTextCharFormat format(const QScriptItem *si) const;
@@ -621,8 +621,8 @@ class Q_GUI_EXPORT QTextEngine
       mutable int prevLength;
 
       inline void reset() {
-         prevFontEngine = 0;
-         prevScaledFontEngine = 0;
+         prevFontEngine = nullptr;
+         prevScaledFontEngine = nullptr;
          prevScript = -1;
          prevPosition = -1;
          prevLength = -1;

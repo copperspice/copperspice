@@ -252,17 +252,17 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    void invertPixels(InvertMode = InvertRgb);
 
    bool load(QIODevice *device, const char *format);
-   bool load(const QString &fileName, const char *format = 0);
-   bool loadFromData(const uchar *buf, int len, const char *format = 0);
-   inline bool loadFromData(const QByteArray &data, const char *aformat = 0) {
+   bool load(const QString &fileName, const char *format = nullptr);
+   bool loadFromData(const uchar *buf, int len, const char *format = nullptr);
+   inline bool loadFromData(const QByteArray &data, const char *aformat = nullptr) {
       return loadFromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), aformat);
    }
 
-   bool save(const QString &fileName, const char *format = 0, int quality = -1) const;
-   bool save(QIODevice *device, const char *format = 0, int quality = -1) const;
+   bool save(const QString &fileName, const char *format = nullptr, int quality = -1) const;
+   bool save(QIODevice *device, const char *format = nullptr, int quality = -1) const;
 
-   static QImage fromData(const uchar *data, int size, const char *format = 0);
-   inline static QImage fromData(const QByteArray &data, const char *format = 0) {
+   static QImage fromData(const uchar *data, int size, const char *format = nullptr);
+   inline static QImage fromData(const QByteArray &data, const char *format = nullptr) {
       return fromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format);
    }
 

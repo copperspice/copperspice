@@ -56,14 +56,14 @@ QPicturePaintEngine::QPicturePaintEngine()
    : QPaintEngine(*(new QPicturePaintEnginePrivate), AllFeatures)
 {
    Q_D(QPicturePaintEngine);
-   d->pt = 0;
+   d->pt = nullptr;
 }
 
 QPicturePaintEngine::QPicturePaintEngine(QPaintEnginePrivate &dptr)
    : QPaintEngine(dptr, AllFeatures)
 {
    Q_D(QPicturePaintEngine);
-   d->pt = 0;
+   d->pt = nullptr;
 }
 
 QPicturePaintEngine::~QPicturePaintEngine()

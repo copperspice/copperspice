@@ -150,7 +150,7 @@ void QGlyphRun::clear()
 {
    detach();
    d->rawFont = QRawFont();
-   d->flags = 0;
+   d->flags = Qt::EmptyFlag;
 
    setPositions(QVector<QPointF>());
    setGlyphIndexes(QVector<quint32>());

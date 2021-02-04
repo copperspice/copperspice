@@ -137,17 +137,17 @@ class QWindowsVistaStyle : public QWindowsXPStyle
       const QWidget *widget) const override;
 
    SubControl hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option, const QPoint &pos,
-      const QWidget *widget = 0) const override;
+      const QWidget *widget = nullptr) const override;
 
    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
       const QWidget *widget = nullptr) const;
 
-   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = 0) const override;
+   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
 
-   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const override;
+   int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
-   int styleHint(StyleHint hint, const QStyleOption *opt = 0, const QWidget *widget = 0,
-      QStyleHintReturn *returnData = 0) const override;
+   int styleHint(StyleHint hint, const QStyleOption *opt = nullptr, const QWidget *widget = nullptr,
+      QStyleHintReturn *returnData = nullptr) const override;
 
    void polish(QWidget *widget) override;
    void unpolish(QWidget *widget) override;

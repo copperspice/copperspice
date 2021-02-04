@@ -234,9 +234,10 @@ bool QTiffHandler::read(QImage *image)
                }
             } else {
                // create the color table
-               uint16 *redTable = 0;
-               uint16 *greenTable = 0;
-               uint16 *blueTable = 0;
+               uint16 *redTable   = nullptr;
+               uint16 *greenTable = nullptr;
+               uint16 *blueTable  = nullptr;
+
                if (!TIFFGetField(tiff, TIFFTAG_COLORMAP, &redTable, &greenTable, &blueTable)) {
                   TIFFClose(tiff);
                   return false;

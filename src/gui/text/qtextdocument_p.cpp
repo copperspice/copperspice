@@ -152,7 +152,7 @@ bool QTextUndoCommand::tryMerge(const QTextUndoCommand &other)
 
 QTextDocumentPrivate::QTextDocumentPrivate()
    : wasUndoAvailable(false), wasRedoAvailable(false), docChangeOldLength(0), docChangeLength(0),
-     framesDirty(true), rtFrame(0), initialBlockCharFormatIndex(-1) // set correctly later in init()
+     framesDirty(true), rtFrame(nullptr), initialBlockCharFormatIndex(-1) // set correctly later in init()
 {
    editBlock = 0;
    editBlockCursorPosition = -1;
@@ -161,7 +161,7 @@ QTextDocumentPrivate::QTextDocumentPrivate()
    undoState = 0;
    revision = -1; // init() inserts a block, bringing it to 0
 
-   lout = 0;
+   lout = nullptr;
 
    modified = false;
    modifiedState = 0;
@@ -242,7 +242,7 @@ void QTextDocumentPrivate::clear()
       cachedResources.clear();
 
       delete rtFrame;
-      rtFrame = 0;
+      rtFrame = nullptr;
 
       init();
       cursors = oldCursors;
@@ -263,7 +263,7 @@ void QTextDocumentPrivate::clear()
 QTextDocumentPrivate::~QTextDocumentPrivate()
 {
    for (QTextCursorPrivate *curs : cursors) {
-      curs->priv = 0;
+      curs->priv = nullptr;
    }
 
    cursors.clear();
@@ -649,7 +649,7 @@ void QTextDocumentPrivate::move(int pos, int to, int length, QTextUndoCommand::O
 
       } else {
          b = blocks.previous(b);
-         tmpBlock = 0;
+         tmpBlock = nullptr;
 
          c.command = blocks.size(b) == 1 ? QTextUndoCommand::BlockDeleted : QTextUndoCommand::BlockRemoved;
          w = remove_block(key, &c.blockFormat, QTextUndoCommand::BlockAdded, op);
@@ -1588,7 +1588,7 @@ void QTextDocumentPrivate::clearFrame(QTextFrame *f)
    }
 
    f->d_func()->childFrames.clear();
-   f->d_func()->parentFrame = 0;
+   f->d_func()->parentFrame = nullptr;
 }
 
 void QTextDocumentPrivate::scan_frames(int pos, int charsRemoved, int charsAdded)
@@ -1682,7 +1682,7 @@ QTextFrame *QTextDocumentPrivate::insertFrame(int start, int end, const QTextFra
    Q_ASSERT(start <= end || end == -1);
 
    if (start != end && frameAt(start) != frameAt(end)) {
-      return 0;
+      return nullptr;
    }
 
    beginEditBlock();
@@ -1731,10 +1731,10 @@ void QTextDocumentPrivate::removeFrame(QTextFrame *frame)
 QTextObject *QTextDocumentPrivate::objectForIndex(int objectIndex) const
 {
    if (objectIndex < 0) {
-      return 0;
+      return nullptr;
    }
 
-   QTextObject *object = objects.value(objectIndex, 0);
+   QTextObject *object = objects.value(objectIndex, nullptr);
 
    if (!object) {
       QTextDocumentPrivate *that = const_cast<QTextDocumentPrivate *>(this);

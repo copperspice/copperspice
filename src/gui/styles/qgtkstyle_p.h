@@ -76,7 +76,7 @@ class QGtkStyle : public QCommonStyle
    void drawItemText(QPainter *painter, const QRect &rect, int alignment, const QPalette &pal, bool enabled, const QString &text,
       QPalette::ColorRole textRole) const override;
 
-   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const override;
+   int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
    int styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const override;
 
@@ -90,8 +90,8 @@ class QGtkStyle : public QCommonStyle
    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const override;
 
    QSize sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget) const override;
-   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = 0,
-      const QWidget *widget = 0) const override;
+   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
+      const QWidget *widget = nullptr) const override;
 
    QPixmap standardPixmap(StandardPixmap sp, const QStyleOption *option, const QWidget *widget) const override;
    QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *opt) const override;
@@ -315,7 +315,7 @@ class QGtkStylePrivate : public QCommonStylePrivate
 
    QGtkStyleFilter filter;
 
-   static QGtkPainter *gtkPainter(QPainter *painter = 0);
+   static QGtkPainter *gtkPainter(QPainter *painter = nullptr);
    static GtkWidget *gtkWidget(const QHashableLatin1Literal &path);
    static GtkStyle *gtkStyle(const QHashableLatin1Literal &path = QHashableLatin1Literal("GtkWindow"));
    static void gtkWidgetSetFocus(GtkWidget *widget, bool focus);

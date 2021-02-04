@@ -46,8 +46,8 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    QStyle *baseStyle() const;
    void setBaseStyle(QStyle *style);
 
-   void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = 0) const override;
-   void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = 0) const override;
+   void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const override;
+   void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const override;
 
    void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter,
       const QWidget *widget = nullptr) const override;
@@ -65,12 +65,12 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const override;
 
    SubControl hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option, const QPoint &pos,
-      const QWidget *widget = 0) const override;
+      const QWidget *widget = nullptr) const override;
 
-   int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0,
-      QStyleHintReturn *returnData = 0) const override;
+   int styleHint(StyleHint hint, const QStyleOption *option = nullptr, const QWidget *widget = nullptr,
+      QStyleHintReturn *returnData = nullptr) const override;
 
-   int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = nullptr) const override;
+   int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
    int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
       Qt::Orientation orientation, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;

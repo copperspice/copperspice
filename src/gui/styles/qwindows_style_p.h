@@ -48,7 +48,7 @@ class QWindowsStyle : public QCommonStyle
 
    void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const override;
    void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const override;
-   QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = 0) const override;
+   QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
 
    void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
       const QWidget *widget = nullptr) const override;
@@ -91,7 +91,7 @@ class QWindowsStylePrivate : public QCommonStylePrivate
    constexpr static const int InvalidMetric = -23576;
    QWindowsStylePrivate();
 
-   static int pixelMetricFromSystemDp(QStyle::PixelMetric pm, const QStyleOption *option = 0, const QWidget *widget = 0);
+   static int pixelMetricFromSystemDp(QStyle::PixelMetric pm, const QStyleOption *option = nullptr, const QWidget *widget = nullptr);
    static int fixedPixelMetric(QStyle::PixelMetric pm);
 
    static qreal devicePixelRatio(const QWidget *widget = nullptr) {

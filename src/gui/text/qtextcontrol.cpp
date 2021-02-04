@@ -97,7 +97,7 @@ static QTextLine currentTextLine(const QTextCursor &cursor)
 }
 
 QTextControlPrivate::QTextControlPrivate()
-   : doc(0), cursorOn(false), cursorIsFocusIndicator(false),
+   : doc(nullptr), cursorOn(false), cursorIsFocusIndicator(false),
 
 #ifndef Q_OS_ANDROID
      interactionFlags(Qt::TextEditorInteraction),
@@ -111,22 +111,17 @@ QTextControlPrivate::QTextControlPrivate()
      mousePressed(false), mightStartDrag(false),
 #endif
 
-     lastSelectionPosition(0),
-     lastSelectionAnchor(0),
-     ignoreAutomaticScrollbarAdjustement(false),
-     overwriteMode(false),
-     acceptRichText(true),
-     preeditCursor(0), hideCursor(false),
-     hasFocus(false),
+     lastSelectionPosition(0), lastSelectionAnchor(0), ignoreAutomaticScrollbarAdjustement(false),
+     overwriteMode(false), acceptRichText(true), preeditCursor(0), hideCursor(false), hasFocus(false),
+
 #ifdef QT_KEYPAD_NAVIGATION
      hasEditFocus(false),
 #endif
-     isEnabled(true),
-     hadSelectionOnMousePress(false),
-     ignoreUnusedNavigationEvents(false),
-     openExternalLinks(false),
-     wordSelectionEnabled(false)
-{}
+
+     isEnabled(true), hadSelectionOnMousePress(false), ignoreUnusedNavigationEvents(false),
+     openExternalLinks(false), wordSelectionEnabled(false)
+{
+}
 
 bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
 {
@@ -649,7 +644,8 @@ void QTextControlPrivate::_q_contentsChanged(int from, int charsRemoved, int cha
       // always report the right number of removed chars, but in lack of the real string use spaces
       QString oldText = QString(charsRemoved, QLatin1Char(' '));
 
-      QAccessibleEvent *ev = 0;
+      QAccessibleEvent *ev = nullptr;
+
       if (charsRemoved == 0) {
          ev = new QAccessibleTextInsertEvent(q->parent(), from, newText);
       } else if (charsAdded == 0) {
@@ -881,13 +877,13 @@ void QTextControl::setDocument(QTextDocument *document)
 
    d->doc->disconnect(this);
    d->doc->documentLayout()->disconnect(this);
-   d->doc->documentLayout()->setPaintDevice(0);
+   d->doc->documentLayout()->setPaintDevice(nullptr);
 
    if (d->doc->parent() == this) {
       delete d->doc;
    }
 
-   d->doc = 0;
+   d->doc = nullptr;
    d->setContent(Qt::RichText, QString(), document);
 }
 

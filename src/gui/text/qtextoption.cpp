@@ -32,14 +32,14 @@ struct QTextOptionPrivate {
 
 QTextOption::QTextOption()
    : align(Qt::AlignLeft), wordWrap(QTextOption::WordWrap),
-     design(false), f(0), tab(-1), d(0)
+     design(false), f(0), tab(-1), d(nullptr)
 {
    direction = Qt::LayoutDirectionAuto;
 }
 
 QTextOption::QTextOption(Qt::Alignment alignment)
    : align(alignment), wordWrap(QTextOption::WordWrap),
-     design(false), f(0), tab(-1), d(0)
+     design(false), f(0), tab(-1), d(nullptr)
 {
    direction = QGuiApplication::layoutDirection();
 }
@@ -51,7 +51,7 @@ QTextOption::~QTextOption()
 
 QTextOption::QTextOption(const QTextOption &o)
    : align(o.align), wordWrap(o.wordWrap), design(o.design),
-     direction(o.direction), f(o.f), tab(o.tab), d(0)
+     direction(o.direction), f(o.f), tab(o.tab), d(nullptr)
 {
    if (o.d) {
       d = new QTextOptionPrivate(*o.d);
@@ -64,7 +64,7 @@ QTextOption &QTextOption::operator=(const QTextOption &o)
       return *this;
    }
 
-   QTextOptionPrivate *dNew = 0;
+   QTextOptionPrivate *dNew = nullptr;
    if (o.d) {
       dNew = new QTextOptionPrivate(*o.d);
    }

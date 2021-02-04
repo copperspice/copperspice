@@ -1004,7 +1004,7 @@ namespace {
 
 struct LineBreakHelper {
    LineBreakHelper()
-      : glyphCount(0), maxGlyphs(0), m_currentPosition(0), fontEngine(0), logClusters(0),
+      : glyphCount(0), maxGlyphs(0), m_currentPosition(0), fontEngine(nullptr), logClusters(nullptr),
         manualWrap(false), whiteSpaceOrObject(true) {
    }
 
@@ -1054,7 +1054,7 @@ struct LineBreakHelper {
 
    inline void calculateRightBearing(glyph_t glyph) {
       qreal rb;
-      fontEngine->getGlyphBearings(glyph, 0, &rb);
+      fontEngine->getGlyphBearings(glyph, nullptr, &rb);
       rightBearing = qMin(QFixed::fromReal(rb), QFixed(0));
    }
 
@@ -1549,7 +1549,7 @@ static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &g
    const QGlyphRun::GlyphRunFlags &flags, const QFixed &selectionX, const QFixed &selectionWidth,
    int glyphsStart, int glyphsEnd, unsigned short *logClusters, int textPosition, int textLength)
 {
-   Q_ASSERT(logClusters != 0);
+   Q_ASSERT(logClusters != nullptr);
 
    QGlyphRun glyphRun;
 

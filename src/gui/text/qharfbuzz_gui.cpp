@@ -175,7 +175,7 @@ static hb_user_data_key_t internal_useDesignMetricsKey;
 
 void cs_font_set_use_design_metrics(hb_font_t *font, uint value)
 {
-   hb_font_set_user_data(font, &internal_useDesignMetricsKey, (void *)quintptr(value), NULL, true);
+   hb_font_set_user_data(font, &internal_useDesignMetricsKey, (void *)quintptr(value), nullptr, true);
 }
 
 uint cs_font_get_use_design_metrics(hb_font_t *font)
@@ -188,25 +188,25 @@ struct cs_hb_font_funcs_t {
    cs_hb_font_funcs_t() {
       funcs = hb_font_funcs_create();
 
-      hb_font_funcs_set_glyph_func(funcs,               cs_font_get_glyph, NULL, NULL);
+      hb_font_funcs_set_glyph_func(funcs,               cs_font_get_glyph, nullptr, nullptr);
 
       // emerald - instead of hb_font_funcs_set_glyph_func use these two
-//    hb_font_funcs_set_nominal_gylph_func(funcs,        cs_font_get_nominal_glyph, NULL, NULL);
-//    hb_font_funcs_set_variation_gylph_func(funcs,      cs_font_get_variation_glyph, NULL, NULL);
+//    hb_font_funcs_set_nominal_gylph_func(funcs,        cs_font_get_nominal_glyph, nullptr, nullptr);
+//    hb_font_funcs_set_variation_gylph_func(funcs,      cs_font_get_variation_glyph, nullptr, nullptr);
 
-      hb_font_funcs_set_glyph_h_advance_func(funcs,     cs_font_get_glyph_h_advance, NULL, NULL);
-      hb_font_funcs_set_glyph_v_advance_func(funcs,     cs_font_get_glyph_v_advance, NULL, NULL);
+      hb_font_funcs_set_glyph_h_advance_func(funcs,     cs_font_get_glyph_h_advance, nullptr, nullptr);
+      hb_font_funcs_set_glyph_v_advance_func(funcs,     cs_font_get_glyph_v_advance, nullptr, nullptr);
 
-      hb_font_funcs_set_glyph_h_origin_func(funcs,      cs_font_get_glyph_h_origin, NULL, NULL);
-      hb_font_funcs_set_glyph_v_origin_func(funcs,      cs_font_get_glyph_v_origin, NULL, NULL);
+      hb_font_funcs_set_glyph_h_origin_func(funcs,      cs_font_get_glyph_h_origin, nullptr, nullptr);
+      hb_font_funcs_set_glyph_v_origin_func(funcs,      cs_font_get_glyph_v_origin, nullptr, nullptr);
 
-      hb_font_funcs_set_glyph_h_kerning_func(funcs,     cs_font_get_glyph_h_kerning, NULL, NULL);
-      hb_font_funcs_set_glyph_v_kerning_func(funcs,     cs_font_get_glyph_v_kerning, NULL, NULL);
-      hb_font_funcs_set_glyph_extents_func(funcs,       cs_font_get_glyph_extents, NULL, NULL);
+      hb_font_funcs_set_glyph_h_kerning_func(funcs,     cs_font_get_glyph_h_kerning, nullptr, nullptr);
+      hb_font_funcs_set_glyph_v_kerning_func(funcs,     cs_font_get_glyph_v_kerning, nullptr, nullptr);
+      hb_font_funcs_set_glyph_extents_func(funcs,       cs_font_get_glyph_extents, nullptr, nullptr);
 
-      hb_font_funcs_set_glyph_contour_point_func(funcs, cs_font_get_glyph_contour_point, NULL, NULL);
-      hb_font_funcs_set_glyph_name_func(funcs,          cs_font_get_glyph_name, NULL, NULL);
-      hb_font_funcs_set_glyph_from_name_func(funcs,     cs_font_get_glyph_from_name, NULL, NULL);
+      hb_font_funcs_set_glyph_contour_point_func(funcs, cs_font_get_glyph_contour_point, nullptr, nullptr);
+      hb_font_funcs_set_glyph_name_func(funcs,          cs_font_get_glyph_name, nullptr, nullptr);
+      hb_font_funcs_set_glyph_from_name_func(funcs,     cs_font_get_glyph_from_name, nullptr, nullptr);
    }
 
    ~cs_hb_font_funcs_t() {
@@ -233,7 +233,7 @@ static hb_blob_t *internal_hb_reference_table(hb_face_t * /*face*/, hb_tag_t tag
    Q_ASSERT(funcPtr);
 
    uint length = 0;
-   if (! funcPtr(data->user_data, tag, 0, &length)) {
+   if (! funcPtr(data->user_data, tag, nullptr, &length)) {
       return hb_blob_get_empty();
    }
 
@@ -309,7 +309,7 @@ static inline hb_font_t *internal_hb_font_create(QFontEngine *fe)
    const int y_ppem = fe->fontDef.pixelSize;
    const int x_ppem = (fe->fontDef.pixelSize * fe->fontDef.stretch) / 100;
 
-   hb_font_set_funcs(font, cs_get_font_funcs(), (void *)fe, NULL);
+   hb_font_set_funcs(font, cs_get_font_funcs(), (void *)fe, nullptr);
 
 #ifdef Q_OS_DARWIN
    hb_font_set_scale(font, QFixed(x_ppem).value(),  QFixed(y_ppem).value());

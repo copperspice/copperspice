@@ -226,12 +226,12 @@ class QImageWriterPrivate
 */
 QImageWriterPrivate::QImageWriterPrivate(QImageWriter *qq)
 {
-   device = 0;
+   device       = nullptr;
    deleteDevice = false;
-   handler = 0;
-   quality = -1;
-   compression = 0;
-   gamma = 0.0;
+   handler      = nullptr;
+   quality      = -1;
+   compression  = 0;
+   gamma        = 0.0;
 
    optimizedWrite = false;
    progressiveScanWrite = false;
@@ -249,19 +249,23 @@ bool QImageWriterPrivate::canWriteHelper()
       errorString = QImageWriter::tr("Device is not set");
       return false;
    }
+
    if (!device->isOpen()) {
       device->open(QIODevice::WriteOnly);
    }
+
    if (!device->isWritable()) {
       imageWriterError = QImageWriter::DeviceError;
       errorString = QImageWriter::tr("Device not writable");
       return false;
    }
-   if (!handler && (handler = createWriteHandlerHelper(device, format)) == 0) {
+
+   if (!handler && (handler = createWriteHandlerHelper(device, format)) == nullptr) {
       imageWriterError = QImageWriter::UnsupportedFormatError;
       errorString = QImageWriter::tr("Unsupported image format");
       return false;
    }
+
    return true;
 }
 
@@ -333,7 +337,7 @@ void QImageWriter::setDevice(QIODevice *device)
    d->device = device;
    d->deleteDevice = false;
    delete d->handler;
-   d->handler = 0;
+   d->handler = nullptr;
 }
 
 /*!
@@ -557,7 +561,7 @@ QString QImageWriter::errorString() const
 
 bool QImageWriter::supportsOption(QImageIOHandler::ImageOption option) const
 {
-   if (! d->handler && (d->handler = createWriteHandlerHelper(d->device, d->format)) == 0) {
+   if (! d->handler && (d->handler = createWriteHandlerHelper(d->device, d->format)) == nullptr) {
       d->imageWriterError = QImageWriter::UnsupportedFormatError;
 
       d->errorString = QImageWriter::tr("Unsupported image format");
@@ -578,7 +582,7 @@ void supportedImageHandlerFormats(QFactoryLoader *factoryObj, QImageIOPlugin::Ca
 
       QByteArray key = item.toUtf8();
 
-      if (plugin && (plugin->capabilities(0, key) & cap) != 0) {
+      if (plugin && (plugin->capabilities(nullptr, key) & cap) != 0) {
          result->append(key);
       }
    }
@@ -602,7 +606,7 @@ void supportedImageHandlerMimeTypes(QFactoryLoader *factoryObj, QImageIOPlugin::
 
             QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(factoryObj->instance(library));
 
-            if (plugin && (plugin->capabilities(0, item.toUtf8()) & cap) != 0) {
+            if (plugin && (plugin->capabilities(nullptr, item.toUtf8()) & cap) != 0) {
                result->append(mimeType.toLatin1());
             }
          }

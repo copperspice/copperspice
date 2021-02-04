@@ -63,7 +63,7 @@ static int unpackControlTypes(QSizePolicy::ControlTypes controls, QSizePolicy::C
 }
 
 QStyle::QStyle()
-   : QObject(0), d_ptr(new QStylePrivate)
+   : QObject(nullptr), d_ptr(new QStylePrivate)
 {
    d_ptr->q_ptr = this;
    Q_D(QStyle);
@@ -77,7 +77,7 @@ QStyle::QStyle()
     Constructs a style object.
 */
 QStyle::QStyle(QStylePrivate &dd)
-   : QObject(0), d_ptr(&dd)
+   : QObject(nullptr), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
    Q_D(QStyle);

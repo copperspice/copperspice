@@ -218,7 +218,7 @@ class Q_GUI_EXPORT QTextBlock
    }
 
    QTextBlock()
-      : p(0), n(0)
+      : p(nullptr), n(0)
    {
    }
 
@@ -281,7 +281,7 @@ class Q_GUI_EXPORT QTextBlock
    {
     public:
       iterator()
-         : p(0), b(0), e(0), n(0)
+         : p(nullptr), b(0), e(0), n(0)
       {
       }
 

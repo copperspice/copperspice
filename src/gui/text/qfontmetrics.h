@@ -84,7 +84,7 @@ class Q_GUI_EXPORT QFontMetrics
       return boundingRect(QRect(x, y, w, h), flags, text, tabstops, tabarray);
    }
 
-   QSize size(int flags, const QString &str, int tabstops = 0, int *tabarray = 0) const;
+   QSize size(int flags, const QString &str, int tabstops = 0, int *tabarray = nullptr) const;
 
    QRect tightBoundingRect(const QString &text) const;
 

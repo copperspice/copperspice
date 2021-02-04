@@ -127,9 +127,8 @@ class QMoviePrivate
 /*! \internal
  */
 QMoviePrivate::QMoviePrivate(QMovie *qq)
-   : reader(0), speed(100), movieState(QMovie::NotRunning),
-     currentFrameNumber(-1), nextFrameNumber(0), greatestFrameNumber(-1),
-     nextDelay(0), playCounter(-1),
+   : reader(nullptr), speed(100), movieState(QMovie::NotRunning), currentFrameNumber(-1), nextFrameNumber(0),
+     greatestFrameNumber(-1), nextDelay(0), playCounter(-1),
      cacheMode(QMovie::CacheNone), haveReadAll(false), isFirstIteration(true)
 {
    q_ptr = qq;

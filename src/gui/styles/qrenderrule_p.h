@@ -68,14 +68,18 @@ struct QStyleSheetBackgroundData : public QSharedData {
 };
 
 struct QStyleSheetBorderData : public QSharedData {
-   QStyleSheetBorderData() : bi(0) {
+   QStyleSheetBorderData()
+      : bi(nullptr)
+   {
       for (int i = 0; i < 4; i++) {
          borders[i] = 0;
          styles[i] = QCss::BorderStyle_None;
       }
    }
 
-   QStyleSheetBorderData(int *b, QBrush *c, QCss::BorderStyle *s, QSize *r) : bi(0) {
+   QStyleSheetBorderData(int *b, QBrush *c, QCss::BorderStyle *s, QSize *r)
+      : bi(nullptr)
+   {
       for (int i = 0; i < 4; i++) {
          borders[i] = b[i];
          styles[i] = s[i];
@@ -94,7 +98,7 @@ struct QStyleSheetBorderData : public QSharedData {
    }
 
    bool hasBorderImage() const {
-      return bi != 0;
+      return bi != nullptr;
    }
 
    QSharedDataPointer<QStyleSheetBorderImageData> bi;
@@ -119,7 +123,7 @@ struct QStyleSheetBorderData : public QSharedData {
          }
       }
 
-      if (bi != 0 && bi->pixmap.hasAlpha()) {
+      if (bi != nullptr && bi->pixmap.hasAlpha()) {
          return false;
       }
 
@@ -178,7 +182,7 @@ struct QStyleSheetGeometryData : public QSharedData {
 
 struct QStyleSheetPositionData : public QSharedData {
    QStyleSheetPositionData(int l, int t, int r, int b, QCss::Origin o, Qt::Alignment p,
-      QCss::PositionMode m, Qt::Alignment a = 0)
+      QCss::PositionMode m, Qt::Alignment a = Qt::EmptyFlag)
       : left(l), top(t), bottom(b), right(r), origin(o), position(p), mode(m), textAlignment(a) { }
 
    int left, top, bottom, right;
@@ -201,7 +205,10 @@ class QRenderRule
 {
  public:
    QRenderRule()
-      : features(0), hasFont(false), pal(0), b(0), bg(0), bd(0), ou(0), geo(0), p(0), img(0), clipset(0) { }
+      : features(0), hasFont(false), pal(nullptr), b(nullptr), bg(nullptr), bd(nullptr),
+        ou(nullptr), geo(nullptr), p(nullptr), img(nullptr), clipset(0)
+   {
+   }
 
    QRenderRule(const QVector<QCss::Declaration> &, const QObject *);
 
@@ -256,11 +263,11 @@ class QRenderRule
    }
 
    bool hasPalette() const {
-      return pal != 0;
+      return pal != nullptr;
    }
 
    bool hasBackground() const {
-      return bg != 0 && (! bg->pixmap.isNull() || bg->brush.style() != Qt::NoBrush);
+      return bg != nullptr && (! bg->pixmap.isNull() || bg->brush.style() != Qt::NoBrush);
    }
 
    bool hasGradientBackground() const {
@@ -268,11 +275,11 @@ class QRenderRule
    }
 
    bool hasNativeBorder() const {
-      return bd == 0 || (! bd->hasBorderImage() && bd->styles[0] == QCss::BorderStyle_Native);
+      return bd == nullptr || (! bd->hasBorderImage() && bd->styles[0] == QCss::BorderStyle_Native);
    }
 
    bool hasNativeOutline() const {
-      return (ou == 0 || (! ou->hasBorderImage() && ou->styles[0] == QCss::BorderStyle_Native));
+      return (ou == nullptr || (! ou->hasBorderImage() && ou->styles[0] == QCss::BorderStyle_Native));
    }
 
    bool baseStyleCanDraw() const {
@@ -291,21 +298,21 @@ class QRenderRule
    }
 
    bool hasBox() const {
-      return b != 0;
+      return b != nullptr;
    }
    bool hasBorder() const {
-      return bd != 0;
+      return bd !=nullptr;
    }
    bool hasOutline() const {
-      return ou != 0;
+      return ou != nullptr;
    }
 
    bool hasPosition() const {
-      return p != 0;
+      return p != nullptr;
    }
 
    bool hasGeometry() const {
-      return geo != 0;
+      return geo != nullptr;
    }
 
    bool hasDrawable() const {
@@ -313,7 +320,7 @@ class QRenderRule
    }
 
    bool hasImage() const {
-      return img != 0;
+      return img != nullptr;
    }
 
    QSize minimumContentsSize() const {

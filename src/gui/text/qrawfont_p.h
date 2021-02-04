@@ -37,16 +37,13 @@ class QRawFontPrivate
 {
  public:
    QRawFontPrivate()
-      : fontEngine(0)
-      , hintingPreference(QFont::PreferDefaultHinting)
-      , thread(0)
+      : fontEngine(nullptr), hintingPreference(QFont::PreferDefaultHinting), thread(nullptr)
    {}
 
    QRawFontPrivate(const QRawFontPrivate &other)
-      : fontEngine(other.fontEngine)
-      , hintingPreference(other.hintingPreference)
-      , thread(other.thread) {
-      if (fontEngine != 0) {
+      : fontEngine(other.fontEngine), hintingPreference(other.hintingPreference), thread(other.thread)
+   {
+      if (fontEngine != nullptr) {
          fontEngine->ref.ref();
       }
    }
@@ -57,33 +54,32 @@ class QRawFontPrivate
    }
 
    inline void cleanUp() {
-      setFontEngine(0);
+      setFontEngine(nullptr);
       hintingPreference = QFont::PreferDefaultHinting;
    }
    inline bool isValid() const {
-      Q_ASSERT(fontEngine == 0 || thread == QThread::currentThread());
-      return fontEngine != 0;
+      Q_ASSERT(fontEngine == nullptr || thread == QThread::currentThread());
+      return fontEngine != nullptr;
    }
 
    inline void setFontEngine(QFontEngine *engine) {
-      Q_ASSERT(fontEngine == 0 || thread == QThread::currentThread());
+      Q_ASSERT(fontEngine == nullptr || thread == QThread::currentThread());
 
       if (fontEngine == engine) {
          return;
       }
 
-      if (fontEngine != 0) {
+      if (fontEngine != nullptr) {
          if (!fontEngine->ref.deref()) {
             delete fontEngine;
          }
 
-         thread = 0;
-
+         thread = nullptr;
       }
 
       fontEngine = engine;
 
-      if (fontEngine != 0) {
+      if (fontEngine != nullptr) {
          fontEngine->ref.ref();
 
          thread = QThread::currentThread();
@@ -91,6 +87,7 @@ class QRawFontPrivate
 
       }
    }
+
    void loadFromData(const QByteArray &fontData,
       qreal pixelSize,
       QFont::HintingPreference hintingPreference);
@@ -106,7 +103,6 @@ class QRawFontPrivate
 
  private:
    QThread *thread;
-
 };
 
 #endif

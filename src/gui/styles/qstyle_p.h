@@ -25,10 +25,7 @@
 #define QSTYLE_P_H
 
 #include <qstyle.h>
-
 #include <qguiapplication.h>
-
-
 
 class QStyle;
 
@@ -38,7 +35,9 @@ class QStylePrivate
 
  public:
    inline QStylePrivate()
-      : layoutSpacingIndex(-1), proxyStyle(0) {}
+      : layoutSpacingIndex(-1), proxyStyle(nullptr)
+   {
+   }
 
    virtual ~QStylePrivate() {}
 

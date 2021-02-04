@@ -183,7 +183,7 @@ bool QFontEngine::supportsScript(QChar::Script script) const
       uint script_count = 2;
       hb_tag_t script_tag[2];
 
-      hb_ot_tags_from_script_and_language(cs_script_to_hb_script(script), HB_LANGUAGE_INVALID, &script_count, script_tag, NULL, NULL);
+      hb_ot_tags_from_script_and_language(cs_script_to_hb_script(script), HB_LANGUAGE_INVALID, &script_count, script_tag, nullptr, nullptr);
 
       unsigned int script_index;
 
@@ -309,7 +309,7 @@ void QFontEngine::getGlyphPositions(const QGlyphLayout &glyphs, const QTransform
             g.numGlyphs = 1;
             g.glyphs = &kashidaGlyph;
             g.advances = &kashidaWidth;
-            recalcAdvances(&g, 0);
+            recalcAdvances(&g, Qt::EmptyFlag);
 
             for (uint k = 0; k < glyphs.justifications[i].nKashidas; ++k) {
                xpos -= kashidaWidth;
@@ -386,11 +386,11 @@ void QFontEngine::getGlyphBearings(glyph_t glyph, qreal *leftBearing, qreal *rig
 {
    glyph_metrics_t gi = boundingBox(glyph);
 
-   if (leftBearing != 0) {
+   if (leftBearing != nullptr) {
       *leftBearing = gi.leftBearing().toReal();
    }
 
-   if (rightBearing != 0) {
+   if (rightBearing != nullptr) {
       *rightBearing = gi.rightBearing().toReal();
    }
 }
@@ -802,7 +802,7 @@ QImage *QFontEngine::lockedAlphaMapForGlyph(glyph_t glyph, QFixed subPixelPositi
       currentlyLockedAlphaMap = alphaRGBMapForGlyph(glyph, subPixelPosition, t);
    }
 
-   if (offset != 0) {
+   if (offset != nullptr) {
       *offset = QPoint(0, 0);
    }
 
@@ -839,7 +839,7 @@ QImage QFontEngine::alphaMapForGlyph(glyph_t glyph)
 
    QPainter p(&im);
    p.setRenderHint(QPainter::Antialiasing);
-   addGlyphsToPath(&glyph, &pt, 1, &path, 0);
+   addGlyphsToPath(&glyph, &pt, 1, &path, Qt::EmptyFlag);
    p.setPen(Qt::NoPen);
    p.setBrush(Qt::black);
    p.drawPath(path);
@@ -910,7 +910,7 @@ QByteArray QFontEngine::getSfntTable(uint tag) const
 
    uint len = 0;
 
-   if (! getSfntTableData(tag, 0, &len)) {
+   if (! getSfntTableData(tag, nullptr, &len)) {
       return table;
    }
 
@@ -1135,7 +1135,7 @@ int QFontEngine::glyphCount() const
 
 Qt::HANDLE QFontEngine::handle() const
 {
-   return 0;
+   return nullptr;
 }
 
 const uchar *QFontEngine::getCMap(const uchar *table, uint tableSize, bool *isSymbolFont, int *cmapSize)
@@ -1241,11 +1241,11 @@ resolveTable:
 
    quint32 unicode_table;
    if (!qSafeFromBigEndian(maps + 8 * tableToUse + 4, endPtr, &unicode_table)) {
-      return 0;
+      return nullptr;
    }
 
    if (!unicode_table) {
-      return 0;
+      return nullptr;
    }
 
    // get the header of the unicode table
@@ -1839,7 +1839,7 @@ glyph_t QFontEngineMulti::glyphIndex(char32_t ch) const
             engine = m_engines.at(x);
          }
 
-         Q_ASSERT(engine != 0);
+         Q_ASSERT(engine != nullptr);
 
          if (engine->type() == Box) {
             continue;
@@ -1894,7 +1894,7 @@ bool QFontEngineMulti::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *
                }
             }
 
-            Q_ASSERT(engine != 0);
+            Q_ASSERT(engine != nullptr);
 
             if (engine->type() == Box) {
                continue;

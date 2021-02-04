@@ -490,9 +490,9 @@ class QImageReaderPrivate
 QImageReaderPrivate::QImageReaderPrivate(QImageReader *qq)
    : autoDetectImageFormat(true), ignoresFormatAndExtension(false)
 {
-   device = 0;
+   device = nullptr;
    deleteDevice = false;
-   handler = 0;
+   handler = nullptr;
    quality = -1;
    imageReaderError = QImageReader::UnknownError;
    autoTransform = UsePluginDefault;
@@ -558,7 +558,7 @@ bool QImageReaderPrivate::initHandler()
 
    // assign a handler
    if (! handler &&
-      (handler = createReadHandlerHelper(device, format, autoDetectImageFormat, ignoresFormatAndExtension)) == 0) {
+      (handler = createReadHandlerHelper(device, format, autoDetectImageFormat, ignoresFormatAndExtension)) == nullptr) {
       imageReaderError = QImageReader::UnsupportedFormatError;
       errorString = QImageReader::tr("Unsupported image format");
       return false;
@@ -662,7 +662,7 @@ void QImageReader::setDevice(QIODevice *device)
    d->device = device;
    d->deleteDevice = false;
    delete d->handler;
-   d->handler = 0;
+   d->handler = nullptr;
    d->text.clear();
 }
 

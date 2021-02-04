@@ -33,7 +33,7 @@
 
 QStyleOption::QStyleOption(int version, int type)
    : version(version), type(type), state(QStyle::State_None),
-     direction(QApplication::layoutDirection()), fontMetrics(QFont()), styleObject(0)
+     direction(QApplication::layoutDirection()), fontMetrics(QFont()), styleObject(nullptr)
 {
 }
 
@@ -202,13 +202,9 @@ QStyleOptionToolBar::QStyleOptionToolBar(int version)
 #ifndef QT_NO_TABBAR
 
 QStyleOptionTab::QStyleOptionTab()
-   : QStyleOption(QStyleOptionTab::Version, SO_Tab),
-     shape(QTabBar::RoundedNorth),
-     row(0),
-     position(Beginning),
-     selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets),
-     documentMode(false),
-     features(QStyleOptionTab::None)
+   : QStyleOption(QStyleOptionTab::Version, SO_Tab), shape(QTabBar::RoundedNorth), row(0),
+     position(Beginning), selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets),
+     documentMode(false), features(QStyleOptionTab::None)
 {
 }
 
@@ -216,13 +212,9 @@ QStyleOptionTab::QStyleOptionTab()
     \internal
 */
 QStyleOptionTab::QStyleOptionTab(int version)
-   : QStyleOption(version, SO_Tab),
-     shape(QTabBar::RoundedNorth),
-     row(0),
-     position(Beginning),
-     selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets),
-     documentMode(false),
-     features(QStyleOptionTab::None)
+   : QStyleOption(version, SO_Tab), shape(QTabBar::RoundedNorth), row(0),
+     position(Beginning), selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets),
+     documentMode(false), features(QStyleOptionTab::None)
 {
 }
 
@@ -385,13 +377,13 @@ QStyleOptionRubberBand::QStyleOptionRubberBand(int version)
 #endif // QT_NO_RUBBERBAND
 
 QStyleOptionTitleBar::QStyleOptionTitleBar()
-   : QStyleOptionComplex(Version, SO_TitleBar), titleBarState(0), titleBarFlags(0)
+   : QStyleOptionComplex(Version, SO_TitleBar), titleBarState(0), titleBarFlags(Qt::EmptyFlag)
 {
 }
 
 // internal
 QStyleOptionTitleBar::QStyleOptionTitleBar(int version)
-   : QStyleOptionComplex(version, SO_TitleBar), titleBarState(0), titleBarFlags(0)
+   : QStyleOptionComplex(version, SO_TitleBar), titleBarState(0), titleBarFlags(Qt::EmptyFlag)
 {
 }
 
@@ -400,7 +392,7 @@ QStyleOptionViewItem::QStyleOptionViewItem()
    : QStyleOption(Version, SO_ViewItem),
      displayAlignment(Qt::AlignLeft), decorationAlignment(Qt::AlignLeft),
      textElideMode(Qt::ElideMiddle), decorationPosition(Left),
-     showDecorationSelected(false), features(None), widget(0),
+     showDecorationSelected(false), features(None), widget(nullptr),
      checkState(Qt::Unchecked), viewItemPosition(QStyleOptionViewItem::Invalid)
 {
 }
@@ -410,7 +402,7 @@ QStyleOptionViewItem::QStyleOptionViewItem(int version)
    : QStyleOption(version, SO_ViewItem),
      displayAlignment(Qt::AlignLeft), decorationAlignment(Qt::AlignLeft),
      textElideMode(Qt::ElideMiddle), decorationPosition(Left),
-     showDecorationSelected(false), features(None), widget(0),
+     showDecorationSelected(false), features(None), widget(nullptr),
      checkState(Qt::Unchecked), viewItemPosition(QStyleOptionViewItem::Invalid)
 {
 }

@@ -162,19 +162,18 @@ Q_GUI_EXPORT int qt_defaultDpi()
 }
 
 QFontPrivate::QFontPrivate()
-   : engineData(0), dpi(qt_defaultDpi()), screen(0),
+   : engineData(nullptr), dpi(qt_defaultDpi()), screen(0),
      underline(false), overline(false), strikeOut(false), kerning(true),
-     capital(0), letterSpacingIsAbsolute(false), scFont(0)
+     capital(0), letterSpacingIsAbsolute(false), scFont(nullptr)
 {
 }
 
 QFontPrivate::QFontPrivate(const QFontPrivate &other)
-   : request(other.request), engineData(0), dpi(other.dpi), screen(other.screen),
+   : request(other.request), engineData(nullptr), dpi(other.dpi), screen(other.screen),
      underline(other.underline), overline(other.overline),
      strikeOut(other.strikeOut), kerning(other.kerning),
      capital(other.capital), letterSpacingIsAbsolute(other.letterSpacingIsAbsolute),
-     letterSpacing(other.letterSpacing), wordSpacing(other.wordSpacing),
-     scFont(other.scFont)
+     letterSpacing(other.letterSpacing), wordSpacing(other.wordSpacing), scFont(other.scFont)
 {
    if (scFont && scFont != this) {
       scFont->ref.ref();
@@ -187,12 +186,12 @@ QFontPrivate::~QFontPrivate()
       delete engineData;
    }
 
-   engineData = 0;
+   engineData = nullptr;
    if (scFont && scFont != this) {
       scFont->ref.deref();
    }
 
-   scFont = 0;
+   scFont = nullptr;
 }
 
 extern QMutex *qt_fontdatabase_mutex();
@@ -211,7 +210,7 @@ QFontEngine *QFontPrivate::engineForScript(int script) const
       if (! engineData->ref.deref()) {
          delete engineData;
       }
-      engineData = 0;
+      engineData = nullptr;
    }
 
    if (! engineData || ! QT_FONT_ENGINE_FROM_DATA(engineData, script)) {
@@ -262,7 +261,7 @@ QFontPrivate *QFontPrivate::smallCapsFontPrivate() const
 
 void QFontPrivate::resolve(uint mask, const QFontPrivate *other)
 {
-   Q_ASSERT(other != 0);
+   Q_ASSERT(other != nullptr);
 
    dpi = other->dpi;
 
@@ -357,7 +356,7 @@ QFontEngineData::~QFontEngineData()
             delete engines[i];
          }
 
-         engines[i] = 0;
+         engines[i] = nullptr;
       }
    }
 }
@@ -365,7 +364,7 @@ QFontEngineData::~QFontEngineData()
 QFont::QFont(const QFont &font, QPaintDevice *pd)
    : resolve_mask(font.resolve_mask)
 {
-   Q_ASSERT(pd != 0);
+   Q_ASSERT(pd != nullptr);
    int dpi = pd->logicalDpiY();
 
    const int screen = 0;
@@ -397,13 +396,13 @@ void QFont::detach()
          delete d->engineData;
       }
 
-      d->engineData = 0;
+      d->engineData = nullptr;
 
       if (d->scFont && d->scFont != d.data()) {
          d->scFont->ref.deref();
       }
 
-      d->scFont = 0;
+      d->scFont = nullptr;
       return;
    }
 
@@ -977,7 +976,7 @@ QFont::Capitalization QFont::capitalization() const
 bool QFont::exactMatch() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
 
    return d->request.exactMatch(engine->fontDef);
 }
@@ -1095,7 +1094,7 @@ Q_GLOBAL_STATIC(QFontSubst, globalFontSubst)
 QString QFont::substitute(const QString &familyName)
 {
    QFontSubst *fontSubst = globalFontSubst();
-   Q_ASSERT(fontSubst != 0);
+   Q_ASSERT(fontSubst != nullptr);
 
    QFontSubst::const_iterator it = fontSubst->constFind(familyName.toLower());
    if (it != fontSubst->constEnd() && !(*it).isEmpty()) {
@@ -1108,7 +1107,7 @@ QString QFont::substitute(const QString &familyName)
 QStringList QFont::substitutes(const QString &familyName)
 {
    QFontSubst *fontSubst = globalFontSubst();
-   Q_ASSERT(fontSubst != 0);
+   Q_ASSERT(fontSubst != nullptr);
 
    return fontSubst->value(familyName.toLower(), QStringList());
 }
@@ -1116,7 +1115,7 @@ QStringList QFont::substitutes(const QString &familyName)
 void QFont::insertSubstitution(const QString &familyName, const QString &substituteName)
 {
    QFontSubst *fontSubst = globalFontSubst();
-   Q_ASSERT(fontSubst != 0);
+   Q_ASSERT(fontSubst != nullptr);
 
    QStringList &list = (*fontSubst)[familyName.toLower()];
    QString s = substituteName.toLower();
@@ -1129,7 +1128,7 @@ void QFont::insertSubstitution(const QString &familyName, const QString &substit
 void QFont::insertSubstitutions(const QString &familyName, const QStringList &substituteNames)
 {
    QFontSubst *fontSubst = globalFontSubst();
-   Q_ASSERT(fontSubst != 0);
+   Q_ASSERT(fontSubst != nullptr);
 
    QStringList &list = (*fontSubst)[familyName.toLower()];
 
@@ -1145,7 +1144,7 @@ void QFont::insertSubstitutions(const QString &familyName, const QStringList &su
 void QFont::removeSubstitutions(const QString &familyName)
 {
    QFontSubst *fontSubst = globalFontSubst();
-   Q_ASSERT(fontSubst != 0);
+   Q_ASSERT(fontSubst != nullptr);
 
    fontSubst->remove(familyName.toLower());
 }
@@ -1153,7 +1152,7 @@ void QFont::removeSubstitutions(const QString &familyName)
 QStringList QFont::substitutions()
 {
    QFontSubst *fontSubst = globalFontSubst();
-   Q_ASSERT(fontSubst != 0);
+   Q_ASSERT(fontSubst != nullptr);
 
    QStringList ret = fontSubst->keys();
 
@@ -1166,7 +1165,7 @@ static quint8 get_font_bits(int version, const QFontPrivate *f)
 {
    (void) version;
 
-   Q_ASSERT(f != 0);
+   Q_ASSERT(f != nullptr);
 
    quint8 bits = 0;
    if (f->request.style) {
@@ -1205,7 +1204,7 @@ static quint8 get_font_bits(int version, const QFontPrivate *f)
 
 static quint8 get_extended_font_bits(const QFontPrivate *f)
 {
-   Q_ASSERT(f != 0);
+   Q_ASSERT(f != nullptr);
    quint8 bits = 0;
 
    if (f->request.ignorePitch) {
@@ -1223,7 +1222,7 @@ static void set_font_bits(int version, quint8 bits, QFontPrivate *f)
 {
    (void) version;
 
-   Q_ASSERT(f != 0);
+   Q_ASSERT(f != nullptr);
 
    f->request.style         = (bits & 0x01) != 0 ? QFont::StyleItalic : QFont::StyleNormal;
    f->underline             = (bits & 0x02) != 0;
@@ -1242,7 +1241,7 @@ static void set_font_bits(int version, quint8 bits, QFontPrivate *f)
 
 static void set_extended_font_bits(quint8 bits, QFontPrivate *f)
 {
-   Q_ASSERT(f != 0);
+   Q_ASSERT(f != nullptr);
    f->request.ignorePitch = (bits & 0x01) != 0;
    f->letterSpacingIsAbsolute = (bits & 0x02) != 0;
 }
@@ -1471,7 +1470,7 @@ QFontInfo &QFontInfo::operator=(const QFontInfo &fi)
 QString QFontInfo::family() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
 
    return engine->fontDef.family;
 }
@@ -1479,7 +1478,7 @@ QString QFontInfo::family() const
 QString QFontInfo::styleName() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
 
    return engine->fontDef.styleName;
 }
@@ -1487,7 +1486,7 @@ QString QFontInfo::styleName() const
 int QFontInfo::pointSize() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
 
    return qRound(engine->fontDef.pointSize);
 }
@@ -1495,35 +1494,40 @@ int QFontInfo::pointSize() const
 qreal QFontInfo::pointSizeF() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
+
    return engine->fontDef.pointSize;
 }
 
 int QFontInfo::pixelSize() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
+
    return engine->fontDef.pixelSize;
 }
 
 bool QFontInfo::italic() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
+
    return engine->fontDef.style != QFont::StyleNormal;
 }
 
 QFont::Style QFontInfo::style() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
+
    return (QFont::Style)engine->fontDef.style;
 }
 
 int QFontInfo::weight() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
+
    return engine->fontDef.weight;
 
 }
@@ -1575,7 +1579,7 @@ QFont::StyleHint QFontInfo::styleHint() const
 bool QFontInfo::exactMatch() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
-   Q_ASSERT(engine != 0);
+   Q_ASSERT(engine != nullptr);
 
    return d->request.exactMatch(engine->fontDef);
 }
@@ -1605,7 +1609,7 @@ QFontCache *QFontCache::instance()
 
 void QFontCache::cleanup()
 {
-   QThreadStorage<QFontCache *> *cache = 0;
+   QThreadStorage<QFontCache *> *cache = nullptr;
 
    try {
       cache = theFontCache();
@@ -1615,7 +1619,7 @@ void QFontCache::cleanup()
    }
 
    if (cache && cache->hasLocalData()) {
-      cache->setLocalData(0);
+      cache->setLocalData(nullptr);
    }
 }
 
@@ -1650,7 +1654,7 @@ void QFontCache::clear()
                   delete data->engines[i];
                }
 
-               data->engines[i] = 0;
+               data->engines[i] = nullptr;
             }
          }
 
@@ -1686,7 +1690,7 @@ void QFontCache::clear()
             } else if (cacheCount == 0) {
                FC_DEBUG("QFontCache::clear: engine %p still has refcount %d", engine, engine->ref.load());
             }
-            it.value().data = 0;
+            it.value().data = nullptr;
          }
       }
    } while (mightHaveEnginesLeftForCleanup);

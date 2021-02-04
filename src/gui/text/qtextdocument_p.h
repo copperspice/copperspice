@@ -73,8 +73,8 @@ class QTextBlockData : public QFragment<3>
 {
  public:
    inline void initialize() {
-      layout    = 0;
-      userData  = 0;
+      layout    = nullptr;
+      userData  = nullptr;
       userState = -1;
       revision  = 0;
       hidden    = 0;
@@ -84,10 +84,10 @@ class QTextBlockData : public QFragment<3>
 
    inline void free() {
       delete layout;
-      layout = 0;
+      layout = nullptr;
 
       delete userData;
-      userData = 0;
+      userData = nullptr;
    }
 
    mutable int format;

@@ -32,14 +32,11 @@ class QGlyphRunPrivate: public QSharedData
 {
  public:
    QGlyphRunPrivate()
-      : flags(0)
-      , glyphIndexData(glyphIndexes.constData())
-      , glyphIndexDataSize(0)
-      , glyphPositionData(glyphPositions.constData())
-      , glyphPositionDataSize(0)
-      , textRangeStart(-1)
-      , textRangeEnd(-1)
-   { }
+      : flags(Qt::EmptyFlag), glyphIndexData(glyphIndexes.constData()), glyphIndexDataSize(0),
+        glyphPositionData(glyphPositions.constData()), glyphPositionDataSize(0),
+        textRangeStart(-1), textRangeEnd(-1)
+   {
+   }
 
    QGlyphRunPrivate(const QGlyphRunPrivate &other)
       : QSharedData(other)

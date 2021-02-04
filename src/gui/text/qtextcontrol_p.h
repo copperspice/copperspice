@@ -101,9 +101,9 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    void setCurrentCharFormat(const QTextCharFormat &format);
    QTextCharFormat currentCharFormat() const;
 
-   bool find(const QString &exp, QTextDocument::FindFlags options = 0);
+   bool find(const QString &exp, QTextDocument::FindFlags options = Qt::EmptyFlag);
 
-   bool find(const QRegularExpression &exp, QTextDocument::FindFlags options = 0);
+   bool find(const QRegularExpression &exp, QTextDocument::FindFlags options = Qt::EmptyFlag);
    QString toPlainText() const;
 
 #ifndef QT_NO_TEXTHTMLPARSER
@@ -272,11 +272,11 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    QPalette palette() const;
    void setPalette(const QPalette &pal);
 
-   virtual void processEvent(QEvent *e, const QMatrix &matrix, QWidget *contextWidget = 0);
-   void processEvent(QEvent *e, const QPointF &coordinateOffset = QPointF(), QWidget *contextWidget = 0);
+   virtual void processEvent(QEvent *e, const QMatrix &matrix, QWidget *contextWidget = nullptr);
+   void processEvent(QEvent *e, const QPointF &coordinateOffset = QPointF(), QWidget *contextWidget = nullptr);
 
    // control methods
-   void drawContents(QPainter *painter, const QRectF &rect = QRectF(), QWidget *widget = 0);
+   void drawContents(QPainter *painter, const QRectF &rect = QRectF(), QWidget *widget = nullptr);
 
    void setFocus(bool focus, Qt::FocusReason = Qt::OtherFocusReason);
 

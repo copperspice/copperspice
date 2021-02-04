@@ -539,7 +539,7 @@ static bool write_jpeg_image(const QImage &image, QIODevice *device, volatile in
    }
    struct jpeg_compress_struct cinfo;
    JSAMPROW row_pointer[1];
-   row_pointer[0] = 0;
+   row_pointer[0] = nullptr;
 
    struct my_jpeg_destination_mgr *iod_dest = new my_jpeg_destination_mgr(device);
    struct my_error_mgr jerr;
@@ -730,15 +730,17 @@ class QJpegHandlerPrivate
    };
 
    QJpegHandlerPrivate(QJpegHandler *qq)
-      : quality(75), transformation(QImageIOHandler::TransformationNone), iod_src(0),
-        rgb888ToRgb32ConverterPtr(qt_convert_rgb888_to_rgb32), state(Ready), optimize(false), progressive(false), q(qq)
-   {}
+      : quality(75), transformation(QImageIOHandler::TransformationNone), iod_src(nullptr),
+        rgb888ToRgb32ConverterPtr(qt_convert_rgb888_to_rgb32), state(Ready), optimize(false),
+        progressive(false), q(qq)
+   {
+   }
 
    ~QJpegHandlerPrivate() {
       if (iod_src) {
          jpeg_destroy_decompress(&info);
          delete iod_src;
-         iod_src = 0;
+         iod_src = nullptr;
       }
    }
 

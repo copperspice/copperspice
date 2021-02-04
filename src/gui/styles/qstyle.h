@@ -748,9 +748,9 @@ class Q_GUI_EXPORT QStyle : public QObject
 
    virtual QPalette standardPalette() const;
 
-   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const = 0;
-   virtual void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = nullptr) const = 0;
-   virtual QRect subElementRect(SubElement subElement, const QStyleOption *option, const QWidget *widget = 0) const = 0;
+   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const = 0;
+   virtual void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const = 0;
+   virtual QRect subElementRect(SubElement subElement, const QStyleOption *option, const QWidget *widget = nullptr) const = 0;
 
    virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
       const QWidget *widget = nullptr) const = 0;

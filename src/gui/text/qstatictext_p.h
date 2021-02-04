@@ -51,7 +51,7 @@ class Q_GUI_EXPORT QStaticTextItem
 {
  public:
    QStaticTextItem()
-      : useBackendOptimizations(false), userDataNeedsUpdate(0), usesRawFont(0), m_fontEngine(0), m_userData(0)
+      : useBackendOptimizations(false), userDataNeedsUpdate(0), usesRawFont(0), m_fontEngine(nullptr), m_userData(nullptr)
    { }
 
    QStaticTextItem(const QStaticTextItem &other) {
@@ -68,8 +68,8 @@ class Q_GUI_EXPORT QStaticTextItem
       userDataNeedsUpdate     = other.userDataNeedsUpdate;
       usesRawFont             = other.usesRawFont;
 
-      m_fontEngine = 0;
-      m_userData   = 0;
+      m_fontEngine = nullptr;
+      m_userData   = nullptr;
       setUserData(other.userData());
       setFontEngine(other.fontEngine());
    }
@@ -81,12 +81,12 @@ class Q_GUI_EXPORT QStaticTextItem
          return;
       }
 
-      if (m_userData != 0 && !m_userData->ref.deref()) {
+      if (m_userData != nullptr && !m_userData->ref.deref()) {
          delete m_userData;
       }
 
       m_userData = newUserData;
-      if (m_userData != 0) {
+      if (m_userData != nullptr) {
          m_userData->ref.ref();
       }
    }

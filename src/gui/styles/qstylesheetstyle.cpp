@@ -86,13 +86,13 @@ static QStyleSheetStyleCaches *styleSheetCaches = nullptr;
  * The first instance of QStyleSheetStyle will set globalStyleSheetStyle to itself. The second one
  * will notice the globalStyleSheetStyle is not istelf and call its base style directly.
  */
-static const QStyleSheetStyle *globalStyleSheetStyle = 0;
+static const QStyleSheetStyle *globalStyleSheetStyle = nullptr;
 
 class QStyleSheetStyleRecursionGuard
 {
  public:
    QStyleSheetStyleRecursionGuard(const QStyleSheetStyle *that)
-      :  guarded(globalStyleSheetStyle == 0) {
+      :  guarded(globalStyleSheetStyle == nullptr) {
 
       if (guarded) {
          globalStyleSheetStyle = that;
@@ -101,7 +101,7 @@ class QStyleSheetStyleRecursionGuard
 
    ~QStyleSheetStyleRecursionGuard() {
       if (guarded) {
-         globalStyleSheetStyle = 0;
+         globalStyleSheetStyle = nullptr;
       }
    }
 
@@ -109,7 +109,7 @@ class QStyleSheetStyleRecursionGuard
 };
 
 #define RECURSION_GUARD(RETURN) \
-    if (globalStyleSheetStyle != 0 && globalStyleSheetStyle != this) { RETURN; } \
+    if (globalStyleSheetStyle != nullptr && globalStyleSheetStyle != this) { RETURN; } \
     QStyleSheetStyleRecursionGuard recursion_guard(this);
 
 #define ceil(x) ((int)(x) + ((x) > 0 && (x) != (int)(x)))
@@ -595,7 +595,8 @@ static QStyle::StandardPixmap subControlIcon(int pe)
 }
 
 QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const QObject *object)
-   : features(0), hasFont(false), pal(0), b(0), bg(0), bd(0), ou(0), geo(0), p(0), img(0), clipset(0)
+   : features(0), hasFont(false), pal(nullptr), b(nullptr), bg(nullptr), bd(nullptr), ou(nullptr),
+     geo(nullptr), p(nullptr), img(nullptr), clipset(0)
 {
    QPalette palette = QApplication::palette(); // ###: ideally widget's palette
    QCss::ValueExtractor v(declarations, palette);
@@ -608,10 +609,10 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
 
    int left = 0, top = 0, right = 0, bottom = 0;
    QCss::Origin origin = QCss::Origin_Unknown;
-   Qt::Alignment position = 0;
+   Qt::Alignment position = Qt::EmptyFlag;
 
    QCss::PositionMode mode = QCss::PositionMode_Unknown;
-   Qt::Alignment textAlignment = 0;
+   Qt::Alignment textAlignment =  Qt::EmptyFlag;
 
    if (v.extractPosition(&left, &top, &right, &bottom, &origin, &position, &mode, &textAlignment)) {
       p = new QStyleSheetPositionData(left, top, right, bottom, origin, position, mode, textAlignment);
@@ -860,12 +861,12 @@ QSize QRenderRule::boxSize(const QSize &cs, int flags) const
 
 void QRenderRule::fixupBorder(int nativeWidth)
 {
-   if (bd == 0) {
+   if (bd == nullptr) {
       return;
    }
 
    if (! bd->hasBorderImage() || bd->bi->pixmap.isNull()) {
-      bd->bi = 0;
+      bd->bi = nullptr;
       // ignore the color, border of edges that have none border-style
       QBrush color = pal ? pal->foreground : QBrush();
       const bool hasRadius = bd->radii[0].isValid() || bd->radii[1].isValid()
@@ -1293,7 +1294,7 @@ class QStyleSheetStyleSelector : public QCss::StyleSelector
 
          metaObject = metaObject->superClass();
 
-      } while (metaObject != 0);
+      } while (metaObject != nullptr);
 
       return result;
    }
@@ -1327,7 +1328,7 @@ class QStyleSheetStyleSelector : public QCss::StyleSelector
 
          } else if (name == QLatin1String("style")) {
             QWidget *w = qobject_cast<QWidget *>(obj);
-            QStyleSheetStyle *proxy = w ? qobject_cast<QStyleSheetStyle *>(w->style()) : 0;
+            QStyleSheetStyle *proxy = w ? qobject_cast<QStyleSheetStyle *>(w->style()) : nullptr;
 
             if (proxy) {
                QString styleName = proxy->baseStyle()->metaObject()->className();
@@ -1377,7 +1378,7 @@ class QStyleSheetStyleSelector : public QCss::StyleSelector
 
          metaObject = metaObject->superClass();
 
-      } while (metaObject != 0);
+      } while (metaObject != nullptr);
 
       return false;
    }
@@ -1391,18 +1392,18 @@ class QStyleSheetStyleSelector : public QCss::StyleSelector
    }
 
    bool isNullNode(QCss::StyleSelector::NodePtr node) const override {
-      return node.ptr == 0;
+      return node.ptr == nullptr;
    }
 
    NodePtr parentNode(QCss::StyleSelector::NodePtr node) const override {
       NodePtr n;
-      n.ptr = isNullNode(node) ? 0 : parentObject(OBJECT_PTR(node));
+      n.ptr = isNullNode(node) ? nullptr : parentObject(OBJECT_PTR(node));
       return n;
    }
 
    NodePtr previousSiblingNode(QCss::StyleSelector::NodePtr) const override {
       NodePtr n;
-      n.ptr = 0;
+      n.ptr = nullptr;
       return n;
    }
 
@@ -1558,25 +1559,25 @@ int QStyleSheetStyle::nativeFrameWidth(const QWidget *w)
 
 #ifndef QT_NO_SPINBOX
    if (qobject_cast<const QAbstractSpinBox *>(w)) {
-      return base->pixelMetric(QStyle::PM_SpinBoxFrameWidth, 0, w);
+      return base->pixelMetric(QStyle::PM_SpinBoxFrameWidth, nullptr, w);
    }
 #endif
 
 #ifndef QT_NO_COMBOBOX
    if (qobject_cast<const QComboBox *>(w)) {
-      return base->pixelMetric(QStyle::PM_ComboBoxFrameWidth, 0, w);
+      return base->pixelMetric(QStyle::PM_ComboBoxFrameWidth, nullptr, w);
    }
 #endif
 
 #ifndef QT_NO_MENU
    if (qobject_cast<const QMenu *>(w)) {
-      return base->pixelMetric(QStyle::PM_MenuPanelWidth, 0, w);
+      return base->pixelMetric(QStyle::PM_MenuPanelWidth, nullptr, w);
    }
 #endif
 
 #ifndef QT_NO_MENUBAR
    if (qobject_cast<const QMenuBar *>(w)) {
-      return base->pixelMetric(QStyle::PM_MenuBarPanelWidth, 0, w);
+      return base->pixelMetric(QStyle::PM_MenuBarPanelWidth, nullptr, w);
    }
 #endif
 
@@ -1589,10 +1590,10 @@ int QStyleSheetStyle::nativeFrameWidth(const QWidget *w)
 #endif
 
    if (w->metaObject()->className() == "QTipLabel") {
-      return base->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, w);
+      return base->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, nullptr, w);
    }
 
-   return base->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, w);
+   return base->pixelMetric(QStyle::PM_DefaultFrameWidth, nullptr, w);
 }
 
 static quint64 pseudoClass(QStyle::State state)
@@ -2200,7 +2201,7 @@ static Qt::Alignment defaultPosition(int pe)
          return Qt::AlignRight | Qt::AlignVCenter;
 
       default:
-         return 0;
+         return Qt::EmptyFlag;
    }
 }
 
@@ -2212,27 +2213,27 @@ QSize QStyleSheetStyle::defaultSize(const QWidget *w, QSize sz, const QRect &rec
       case PseudoElement_Indicator:
       case PseudoElement_MenuCheckMark:
          if (sz.width() == -1) {
-            sz.setWidth(base->pixelMetric(PM_IndicatorWidth, 0, w));
+            sz.setWidth(base->pixelMetric(PM_IndicatorWidth, nullptr, w));
          }
 
          if (sz.height() == -1) {
-            sz.setHeight(base->pixelMetric(PM_IndicatorHeight, 0, w));
+            sz.setHeight(base->pixelMetric(PM_IndicatorHeight, nullptr, w));
          }
          break;
 
       case PseudoElement_ExclusiveIndicator:
       case PseudoElement_GroupBoxIndicator:
          if (sz.width() == -1) {
-            sz.setWidth(base->pixelMetric(PM_ExclusiveIndicatorWidth, 0, w));
+            sz.setWidth(base->pixelMetric(PM_ExclusiveIndicatorWidth, nullptr, w));
          }
 
          if (sz.height() == -1) {
-            sz.setHeight(base->pixelMetric(PM_ExclusiveIndicatorHeight, 0, w));
+            sz.setHeight(base->pixelMetric(PM_ExclusiveIndicatorHeight, nullptr, w));
          }
          break;
 
       case PseudoElement_PushButtonMenuIndicator: {
-         int pm = base->pixelMetric(PM_MenuButtonIndicator, 0, w);
+         int pm = base->pixelMetric(PM_MenuButtonIndicator, nullptr, w);
          if (sz.width() == -1) {
             sz.setWidth(pm);
          }
@@ -2273,13 +2274,13 @@ QSize QStyleSheetStyle::defaultSize(const QWidget *w, QSize sz, const QRect &rec
 
       case PseudoElement_ToolButtonMenu:
          if (sz.width() == -1) {
-            sz.setWidth(base->pixelMetric(PM_MenuButtonIndicator, 0, w));
+            sz.setWidth(base->pixelMetric(PM_MenuButtonIndicator, nullptr, w));
          }
          break;
 
       case PseudoElement_HeaderViewUpArrow:
       case PseudoElement_HeaderViewDownArrow: {
-         int pm = base->pixelMetric(PM_HeaderMargin, 0, w);
+         int pm = base->pixelMetric(PM_HeaderMargin, nullptr, w);
          if (sz.width() == -1) {
             sz.setWidth(pm);
          }
@@ -2294,7 +2295,7 @@ QSize QStyleSheetStyle::defaultSize(const QWidget *w, QSize sz, const QRect &rec
       case PseudoElement_ScrollBarAddLine:
       case PseudoElement_ScrollBarSubLine:
       case PseudoElement_ScrollBarSlider: {
-         int pm = pixelMetric(QStyle::PM_ScrollBarExtent, 0, w);
+         int pm = pixelMetric(QStyle::PM_ScrollBarExtent, nullptr, w);
          if (sz.width() == -1) {
             sz.setWidth(pm);
          }
@@ -2306,7 +2307,7 @@ QSize QStyleSheetStyle::defaultSize(const QWidget *w, QSize sz, const QRect &rec
 
       case PseudoElement_DockWidgetCloseButton:
       case PseudoElement_DockWidgetFloatButton: {
-         int iconSize = pixelMetric(PM_SmallIconSize, 0, w);
+         int iconSize = pixelMetric(PM_SmallIconSize, nullptr, w);
          return QSize(iconSize, iconSize);
       }
 
@@ -2983,14 +2984,12 @@ void QStyleSheetStyle::unpolish(QWidget *w)
    w->setProperty("_q_stylesheet_maxh", QVariant());
    w->setAttribute(Qt::WA_StyleSheet, false);
 
-   QObject::disconnect(w, 0, this, 0);
+   QObject::disconnect(w, QString(), this, QString());
 
 #ifndef QT_NO_SCROLLAREA
    if (QAbstractScrollArea *sa = qobject_cast<QAbstractScrollArea *>(w)) {
-      QObject::disconnect(sa->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-         sa, SLOT(update()));
-      QObject::disconnect(sa->verticalScrollBar(), SIGNAL(valueChanged(int)),
-         sa, SLOT(update()));
+      QObject::disconnect(sa->horizontalScrollBar(), SIGNAL(valueChanged(int)), sa, SLOT(update()));
+      QObject::disconnect(sa->verticalScrollBar(),   SIGNAL(valueChanged(int)), sa, SLOT(update()));
    }
 #endif
 
@@ -3392,7 +3391,8 @@ void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionC
             }
 
             QStyleOptionComplex optCopy(*opt);
-            optCopy.subControls = 0;
+            optCopy.subControls = Qt::EmptyFlag;
+
             for (int i = 0; i < layout.count(); i++) {
                int layoutButton = layout[i].toInt();
                if (layoutButton < PseudoElement_MdiCloseButton
@@ -3453,7 +3453,7 @@ void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionC
                   tb->icon.paint(p, ir);
                } else {
                   int iconSize = pixelMetric(PM_SmallIconSize, tb, w);
-                  pm = standardIcon(SP_TitleBarMenuButton, 0, w).pixmap(iconSize, iconSize);
+                  pm = standardIcon(SP_TitleBarMenuButton, nullptr, w).pixmap(iconSize, iconSize);
                   drawItemPixmap(p, ir, Qt::AlignCenter, pm);
                }
             }
@@ -3465,9 +3465,9 @@ void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionC
 
                QSize sz = subSubRule.contentsRect(ir).size();
                if ((tb->titleBarFlags & Qt::WindowType_Mask) == Qt::Tool) {
-                  pm = standardIcon(SP_DockWidgetCloseButton, 0, w).pixmap(sz);
+                  pm = standardIcon(SP_DockWidgetCloseButton, nullptr, w).pixmap(sz);
                } else {
-                  pm = standardIcon(SP_TitleBarCloseButton, 0, w).pixmap(sz);
+                  pm = standardIcon(SP_TitleBarCloseButton, nullptr, w).pixmap(sz);
                }
                drawItemPixmap(p, ir, Qt::AlignCenter, pm);
             }
@@ -3490,7 +3490,7 @@ void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionC
                }
                QRenderRule subSubRule = renderRule(w, opt, pe);
                subSubRule.drawRule(p, ir);
-               pm = standardIcon(subControlIcon(pe), 0, w).pixmap(subSubRule.contentsRect(ir).size());
+               pm = standardIcon(subControlIcon(pe), nullptr, w).pixmap(subSubRule.contentsRect(ir).size());
                drawItemPixmap(p, ir, Qt::AlignCenter, pm);
             }
 
@@ -4330,7 +4330,7 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                }
                r = subRule.contentsRect(r);
 
-               Qt::Alignment alignment = 0;
+               Qt::Alignment alignment = Qt::EmptyFlag;
                if (subRule.hasPosition()) {
                   alignment = subRule.position()->textAlignment;
                }
@@ -4372,7 +4372,7 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
 
    if (pe1 != PseudoElement_None) {
       QRenderRule subRule = renderRule(w, opt, pe1);
-      if (subRule.bg != 0 || subRule.hasDrawable()) {
+      if (subRule.bg != nullptr || subRule.hasDrawable()) {
          //We test subRule.bg directly because hasBackground() would return false for background:none.
          //But we still don't want the default drawning in that case (example for QScrollBar::add-page) (task 198926)
          subRule.drawRule(p, opt->rect);
@@ -5204,7 +5204,7 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
       case CT_LineEdit:
 
 #ifndef QT_NO_SPINBOX
-         if (qobject_cast<QAbstractSpinBox *>(w ? w->parentWidget() : 0)) {
+         if (qobject_cast<QAbstractSpinBox *>(w ? w->parentWidget() : nullptr)) {
             return csz;   // we only care about the size hint of the line edit
          }
 #endif
@@ -6030,7 +6030,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
                break;
             }
 
-            subRule.img = 0;
+            subRule.img = nullptr;
             QRect gr = positionRect(w, rule, subRule, PseudoElement_SliderGroove, opt->rect, opt->direction);
             switch (sc) {
                case SC_SliderGroove:
@@ -6042,8 +6042,8 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
                   QRenderRule subRule2 = renderRule(w, opt, PseudoElement_SliderHandle);
                   int len = horizontal ? subRule2.size().width() : subRule2.size().height();
 
-                  subRule2.img = 0;
-                  subRule2.geo = 0;
+                  subRule2.img = nullptr;
+                  subRule2.geo = nullptr;
                   cr = positionRect(w, subRule2, PseudoElement_SliderHandle, cr, opt->direction);
 
                   int thickness = horizontal ? cr.height() : cr.width();
@@ -6162,7 +6162,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
             QRect ir = subElementRect(isRadio ? SE_RadioButtonIndicator : SE_CheckBoxIndicator,
                   opt, w);
             ir = visualRect(opt->direction, opt->rect, ir);
-            int spacing = pixelMetric(isRadio ? PM_RadioButtonLabelSpacing : PM_CheckBoxLabelSpacing, 0, w);
+            int spacing = pixelMetric(isRadio ? PM_RadioButtonLabelSpacing : PM_CheckBoxLabelSpacing, nullptr, w);
             QRect cr = rule.contentsRect(opt->rect);
             ir.setRect(ir.left() + ir.width() + spacing, cr.y(),
                cr.width() - ir.width() - spacing, cr.height());

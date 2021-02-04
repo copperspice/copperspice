@@ -176,7 +176,7 @@ static inline QBackingStore *backingStoreForWidget(const QWidget *widget)
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 static inline HDC hdcForWidgetBackingStore(const QWidget *widget)
@@ -189,7 +189,7 @@ static inline HDC hdcForWidgetBackingStore(const QWidget *widget)
       }
    }
 
-   return 0;
+   return nullptr;
 }
 bool XPThemeData::isValid()
 {
@@ -200,7 +200,7 @@ bool XPThemeData::isValid()
 HTHEME XPThemeData::handle()
 {
    if (! QWindowsXPStylePrivate::useXP()) {
-      return 0;
+      return nullptr;
    }
 
    if (! htheme) {
@@ -231,11 +231,11 @@ RECT XPThemeData::toRECT(const QRect &qr)
 HRGN XPThemeData::mask(QWidget *widget)
 {
    if (!QWindowsXPStylePrivate::pIsThemeBackgroundPartiallyTransparent(handle(), partId, stateId)) {
-      return 0;
+      return nullptr;
    }
 
    HRGN hrgn;
-   HDC dc = 0;
+   HDC dc = nullptr;
    if (widget) {
       dc = hdcForWidgetBackingStore(widget);
    }
@@ -247,8 +247,8 @@ HRGN XPThemeData::mask(QWidget *widget)
 
 // Static initializations
 
-QPixmap *QWindowsXPStylePrivate::tabbody = 0;
-HWND QWindowsXPStylePrivate::m_vistaTreeViewHelper = 0;
+QPixmap *QWindowsXPStylePrivate::tabbody = nullptr;
+HWND QWindowsXPStylePrivate::m_vistaTreeViewHelper = nullptr;
 HTHEME QWindowsXPStylePrivate::m_themes[NThemes];
 bool QWindowsXPStylePrivate::use_xp = false;
 
@@ -311,7 +311,7 @@ void QWindowsXPStylePrivate::init(bool force)
    }
 
    useXP(true);
-   std::fill(m_themes, m_themes + NThemes, HTHEME(0));
+   std::fill(m_themes, m_themes + NThemes, HTHEME(nullptr));
 }
 
 /* \internal
@@ -324,13 +324,13 @@ void QWindowsXPStylePrivate::cleanup(bool force)
          SelectObject(bufferDC, nullBitmap);
       }
       DeleteObject(bufferBitmap);
-      bufferBitmap = 0;
+      bufferBitmap = nullptr;
    }
 
    if (bufferDC) {
       DeleteDC(bufferDC);
    }
-   bufferDC = 0;
+   bufferDC = nullptr;
 
    if (ref.deref() && !force) {
       return;
@@ -342,7 +342,7 @@ void QWindowsXPStylePrivate::cleanup(bool force)
    use_xp = false;
    cleanupHandleMap();
    delete tabbody;
-   tabbody = 0;
+   tabbody = nullptr;
 }
 
 /* In order to obtain the correct VistaTreeViewTheme (arrows for PE_IndicatorBranch),
@@ -386,7 +386,7 @@ bool QWindowsXPStylePrivate::initVistaTreeViewTheming()
       return false;
    }
 
-   if (FAILED(QWindowsXPStylePrivate::pSetWindowTheme(m_vistaTreeViewHelper, L"explorer", NULL))) {
+   if (FAILED(QWindowsXPStylePrivate::pSetWindowTheme(m_vistaTreeViewHelper, L"explorer", nullptr))) {
       qErrnoWarning("SetWindowTheme() failed.");
       cleanupVistaTreeViewTheming();
       return false;
@@ -399,7 +399,7 @@ void QWindowsXPStylePrivate::cleanupVistaTreeViewTheming()
 {
    if (m_vistaTreeViewHelper) {
       DestroyWindow(m_vistaTreeViewHelper);
-      m_vistaTreeViewHelper = 0;
+      m_vistaTreeViewHelper = nullptr;
    }
 }
 
@@ -413,7 +413,7 @@ void QWindowsXPStylePrivate::cleanupHandleMap()
    for (int i = 0; i < NThemes; ++i)
       if (m_themes[i]) {
          pCloseThemeData(m_themes[i]);
-         m_themes[i] = 0;
+         m_themes[i] = nullptr;
       }
 
    QWindowsXPStylePrivate::cleanupVistaTreeViewTheming();
@@ -423,7 +423,7 @@ HTHEME QWindowsXPStylePrivate::createTheme(int theme, HWND hwnd)
 {
    if (theme < 0 || theme >= NThemes || ! hwnd) {
       qWarning("Invalid parameters #%d, %p", theme, hwnd);
-      return 0;
+      return nullptr;
    }
 
    if (!m_themes[theme]) {
@@ -508,7 +508,7 @@ HWND QWindowsXPStylePrivate::winId(const QWidget *widget)
 
    Q_ASSERT(false);
 
-   return 0;
+   return nullptr;
 }
 
 /*! \internal
@@ -519,7 +519,7 @@ HWND QWindowsXPStylePrivate::winId(const QWidget *widget)
 const QPixmap *QWindowsXPStylePrivate::tabBody(QWidget *widget)
 {
    if (!tabbody) {
-      XPThemeData theme(0, 0, QWindowsXPStylePrivate::TabTheme, TABP_BODY);
+      XPThemeData theme(nullptr, nullptr, QWindowsXPStylePrivate::TabTheme, TABP_BODY);
       const QSize size = (theme.size() * QWindowsStylePrivate::nativeMetricScaleFactor(widget)).toSize();
 
       tabbody = new QPixmap(size.width(), QApplication::desktop()->screenGeometry().height());
@@ -580,7 +580,7 @@ bool QWindowsXPStylePrivate::resolveSymbols()
 
    }
 
-   return pIsAppThemed != 0;
+   return pIsAppThemed != nullptr;
 }
 
 /*! \internal
@@ -602,7 +602,7 @@ HBITMAP QWindowsXPStylePrivate::buffer(int w, int h)
       }
 
       DeleteObject(bufferBitmap);
-      bufferBitmap = 0;
+      bufferBitmap = nullptr;
    }
 
    w = qMax(bufferW, w);
@@ -623,23 +623,26 @@ HBITMAP QWindowsXPStylePrivate::buffer(int w, int h)
    bmi.bmiHeader.biCompression = BI_RGB;
 
    // Create the pixmap
-   bufferPixels = 0;
-   bufferBitmap = CreateDIBSection(bufferDC, &bmi, DIB_RGB_COLORS, (void **) &bufferPixels, 0, 0);
+   bufferPixels = nullptr;
+   bufferBitmap = CreateDIBSection(bufferDC, &bmi, DIB_RGB_COLORS, (void **) &bufferPixels, nullptr, 0);
    GdiFlush();
+
    nullBitmap = (HBITMAP)SelectObject(bufferDC, bufferBitmap);
 
    if (!bufferBitmap) {
       qErrnoWarning("QWindowsXPStylePrivate::buffer(%dx%d), CreateDIBSection() failed.", w, h);
       bufferW = 0;
       bufferH = 0;
-      return 0;
+      return nullptr;
    }
+
    if (!bufferPixels) {
       qErrnoWarning("QWindowsXPStylePrivate::buffer(%dx%d), CreateDIBSection() did not allocate pixel data.", w, h);
       bufferW = 0;
       bufferH = 0;
-      return 0;
+      return nullptr;
    }
+
    bufferW = w;
    bufferH = h;
 
@@ -666,7 +669,7 @@ QRegion QWindowsXPStylePrivate::region(XPThemeData &themeData)
 {
    qreal dpiScale = QWindowsStylePrivate::nativeMetricScaleFactor(themeData.widget);
 
-   HRGN hRgn = 0;
+   HRGN hRgn = nullptr;
    RECT rect = themeData.toRECT(QRect(themeData.rect.topLeft() / dpiScale, themeData.rect.size() / dpiScale));
 
    if (! SUCCEEDED(pGetThemeBackgroundRegion(themeData.handle(), bufferHDC(), themeData.partId,
@@ -675,18 +678,18 @@ QRegion QWindowsXPStylePrivate::region(XPThemeData &themeData)
    }
 
    HRGN dest = CreateRectRgn(0, 0, 0, 0);
-   const bool success = CombineRgn(dest, hRgn, 0, RGN_COPY) != ERROR;
+   const bool success = CombineRgn(dest, hRgn, nullptr, RGN_COPY) != ERROR;
 
    QRegion region;
 
    if (success) {
-      int numBytes = GetRegionData(dest, 0, 0);
+      int numBytes = GetRegionData(dest, 0, nullptr);
       if (numBytes == 0) {
          return QRegion();
       }
 
       char *buf = new char[numBytes];
-      if (buf == 0) {
+      if (buf == nullptr) {
          return QRegion();
       }
 
@@ -849,7 +852,9 @@ bool QWindowsXPStylePrivate::drawBackground(XPThemeData &themeData)
    }
 
    QPainter *painter = themeData.painter;
-   Q_ASSERT_X(painter != 0, "QWindowsXPStylePrivate::drawBackground()", "Trying to draw a theme part without a painter");
+   Q_ASSERT_X(painter != nullptr, "QWindowsXPStylePrivate::drawBackground()",
+               "Trying to draw a theme part without a painter");
+
    if (!painter || !painter->isActive()) {
       return false;
    }
@@ -886,14 +891,15 @@ bool QWindowsXPStylePrivate::drawBackground(XPThemeData &themeData)
             break;
          case QInternal::Image:
             // Ensure the backing store has received as resize and is initialized.
-            if (QBackingStore *bs = backingStoreForWidget(themeData.widget))
+            if (QBackingStore *bs = backingStoreForWidget(themeData.widget)) {
                if (bs->size().isValid() && bs->paintDevice() == enginePaintDevice) {
                   canDrawDirectly = true;
                }
       }
    }
 
-   const HDC dc = canDrawDirectly ? hdcForWidgetBackingStore(themeData.widget) : HDC(0);
+   const HDC dc = canDrawDirectly ? hdcForWidgetBackingStore(themeData.widget) : HDC(nullptr);
+
    const bool result = dc
       ? drawBackgroundDirectly(dc, themeData, aditionalDevicePixelRatio)
       : drawBackgroundThruNativeBuffer(themeData, aditionalDevicePixelRatio);
@@ -970,7 +976,7 @@ bool QWindowsXPStylePrivate::drawBackgroundDirectly(HDC dc, XPThemeData &themeDa
 
    HRESULT result = S_FALSE;
 
-   if (pDrawThemeBackgroundEx != 0) {
+   if (pDrawThemeBackgroundEx != nullptr) {
       result = pDrawThemeBackgroundEx(themeData.handle(), dc, themeData.partId, themeData.stateId, &(drawRECT), &drawOptions);
    } else {
       // running on a system where the uxtheme.dll does not have the DrawThemeBackgroundEx function,
@@ -1009,7 +1015,7 @@ bool QWindowsXPStylePrivate::drawBackgroundDirectly(HDC dc, XPThemeData &themeDa
       result = pDrawThemeBackground(themeData.handle(), dc, themeData.partId, themeData.stateId, &(drawRECT), &(drawOptions.rcClip));
    }
 
-   SelectClipRgn(dc, 0);
+   SelectClipRgn(dc, nullptr);
    DeleteObject(hrgn);
    return SUCCEEDED(result);
 }
@@ -1189,7 +1195,7 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
          | (themeData.noContent ? DTBG_OMITCONTENT : 0);
 
       // Drawing the part into the backing store
-      if (pDrawThemeBackgroundEx != 0) {
+      if (pDrawThemeBackgroundEx != nullptr) {
          RECT rect(themeData.toRECT(area));
          pDrawThemeBackgroundEx(themeData.handle(), dc, themeData.partId, themeData.stateId, &rect, &drawOptions);
 
@@ -1204,10 +1210,10 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
             DeleteObject(hrgn);
          }
 
-         pDrawThemeBackground(themeData.handle(), dc, themeData.partId, themeData.stateId, &(drawOptions.rcClip), 0);
+         pDrawThemeBackground(themeData.handle(), dc, themeData.partId, themeData.stateId, &(drawOptions.rcClip), nullptr);
 
          if (addBorderContentClipping) {
-            SelectClipRgn(dc, 0);
+            SelectClipRgn(dc, nullptr);
          }
       }
 
@@ -1406,7 +1412,7 @@ void QWindowsXPStyle::polish(QWidget *widget)
       // Get text color for group box labels
 
       COLORREF cref;
-      XPThemeData theme(widget, 0, QWindowsXPStylePrivate::ButtonTheme, 0, 0);
+      XPThemeData theme(widget, nullptr, QWindowsXPStylePrivate::ButtonTheme, 0, 0);
       QWindowsXPStylePrivate::pGetThemeColor(theme.handle(), BP_GROUPBOX, GBS_NORMAL, TMT_TEXTCOLOR, &cref);
       d->groupBoxTextColor = qRgb(GetRValue(cref), GetGValue(cref), GetBValue(cref));
       QWindowsXPStylePrivate::pGetThemeColor(theme.handle(), BP_GROUPBOX, GBS_DISABLED, TMT_TEXTCOLOR, &cref);
@@ -1530,8 +1536,9 @@ QRect QWindowsXPStyle::subElementRect(SubElement sr, const QStyleOption *option,
       case SE_PushButtonContents:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(option)) {
             MARGINS borderSize;
+
             if (widget) {
-               XPThemeData buttontheme(widget, 0, QWindowsXPStylePrivate::ButtonTheme);
+               XPThemeData buttontheme(widget, nullptr, QWindowsXPStylePrivate::ButtonTheme);
                HTHEME theme = buttontheme.handle();
                if (theme) {
                   int stateId;
@@ -1551,7 +1558,7 @@ QRect QWindowsXPStyle::subElementRect(SubElement sr, const QStyleOption *option,
                   rect = option->rect.adjusted(border, border, -border, -border);
 
                   int result = QWindowsXPStylePrivate::pGetThemeMargins(theme,
-                        NULL, BP_PUSHBUTTON, stateId, TMT_CONTENTMARGINS, NULL, &borderSize);
+                        nullptr, BP_PUSHBUTTON, stateId, TMT_CONTENTMARGINS, nullptr, &borderSize);
 
                   if (result == S_OK) {
                      rect.adjust(borderSize.cxLeftWidth, borderSize.cyTopHeight,
@@ -1755,7 +1762,7 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
 
          themeNumber = QWindowsXPStylePrivate::ListViewTheme;
          partId = LVP_LISTGROUP;
-         XPThemeData theme(widget, 0, themeNumber, partId, 0);
+         XPThemeData theme(widget, nullptr, themeNumber, partId, 0);
 
          if (! (flags & State_Enabled)) {
             stateId = ETS_DISABLED;
@@ -1834,7 +1841,7 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
             if (QWindowsXPStylePrivate::isLineEditBaseColorSet(option, widget)) {
                p->fillRect(panel->rect, panel->palette.brush(QPalette::Base));
             } else {
-               XPThemeData theme(0, p, themeNumber, partId, stateId, rect);
+               XPThemeData theme(nullptr, p, themeNumber, partId, stateId, rect);
                if (! theme.isValid()) {
                   QWindowsStyle::drawPrimitive(pe, option, p, widget);
                   return;
@@ -1889,11 +1896,12 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
                wchar_t themeColor[maxlength];
 
                // Due to a a scaling issue with the XP Silver theme, tab gradients are not used with it
-               if (QWindowsXPStylePrivate::pGetCurrentThemeName(themeFileName, maxlength, themeColor, maxlength, NULL, 0) == S_OK) {
-                  wchar_t *offset = 0;
-                  if ((offset = wcsrchr(themeFileName, QChar(QLatin1Char('\\')).unicode())) != NULL) {
+               if (QWindowsXPStylePrivate::pGetCurrentThemeName(themeFileName, maxlength, themeColor, maxlength, nullptr, 0) == S_OK) {
+                  wchar_t *offset = nullptr;
+
+                  if ((offset = wcsrchr(themeFileName, QChar(QLatin1Char('\\')).unicode())) != nullptr) {
                      offset++;
-                     if (!lstrcmp(offset, L"Luna.msstyles") && !lstrcmp(offset, L"Metallic")) {
+                     if (lstrcmp(offset, L"Luna.msstyles") == 0 && lstrcmp(offset, L"Metallic") == 0) {
                         useGradient = false;
                      }
                   }
@@ -2142,7 +2150,7 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
             bef_v -= delta;
             aft_h += delta;
             aft_v += delta;
-            XPThemeData theme(0, p, QWindowsXPStylePrivate::XpTreeViewTheme);
+            XPThemeData theme(nullptr, p, QWindowsXPStylePrivate::XpTreeViewTheme);
             theme.rect = QRect(bef_h, bef_v, decoration_size, decoration_size);
             theme.partId = TVP_GLYPH;
             theme.stateId = flags & QStyle::State_Open ? GLPS_OPENED : GLPS_CLOSED;
@@ -2234,7 +2242,7 @@ void QWindowsXPStyle::drawControl(ControlElement element, const QStyleOption *op
 
          themeNumber = QWindowsXPStylePrivate::StatusTheme;
          partId = SP_GRIPPER;
-         XPThemeData theme(0, p, themeNumber, partId, 0);
+         XPThemeData theme(nullptr, p, themeNumber, partId, 0);
          QSize size = (theme.size() * QWindowsStylePrivate::nativeMetricScaleFactor(widget)).toSize();
          size.rheight()--;
 
@@ -2314,7 +2322,7 @@ void QWindowsXPStyle::drawControl(ControlElement element, const QStyleOption *op
             if (btn->features & QStyleOptionButton::HasMenu) {
                int mbiw = 0;
                int mbih = 0;
-               XPThemeData theme(widget, 0, QWindowsXPStylePrivate::ToolBarTheme, TP_SPLITBUTTONDROPDOWN);
+               XPThemeData theme(widget, nullptr, QWindowsXPStylePrivate::ToolBarTheme, TP_SPLITBUTTONDROPDOWN);
 
                if (theme.isValid()) {
                   const QSize size = (theme.size() * QWindowsStylePrivate::nativeMetricScaleFactor(widget)).toSize();
@@ -2661,7 +2669,7 @@ void QWindowsXPStyle::drawControl(ControlElement element, const QStyleOption *op
 
             if (isFloating) {
                titleRect.adjust(0, -fw, 0, 0);
-               if (widget != 0 && widget->windowIcon().cacheKey() != QApplication::windowIcon().cacheKey()) {
+               if (widget != nullptr && widget->windowIcon().cacheKey() != QApplication::windowIcon().cacheKey()) {
                   titleRect.adjust(titleRect.height() + mw, 0, 0, 0);
                }
             } else {
@@ -3329,7 +3337,7 @@ void QWindowsXPStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCo
                      p->save();
                      p->setClipRect(menuarea);
                      tool.rect = option->rect;
-                     proxy()->drawPrimitive(PE_PanelButtonBevel, &tool, p, 0);
+                     proxy()->drawPrimitive(PE_PanelButtonBevel, &tool, p, nullptr);
                      p->restore();
                   }
                   // Draw arrow
@@ -3676,7 +3684,7 @@ void QWindowsXPStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCo
    }
 }
 
-static inline Qt::Orientation progressBarOrientation(const QStyleOption *option = 0)
+static inline Qt::Orientation progressBarOrientation(const QStyleOption *option = nullptr)
 {
    if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(option)) {
       return pb->orientation;
@@ -3688,24 +3696,24 @@ int QWindowsXPStylePrivate::pixelMetricFromSystemDp(QStyle::PixelMetric pm, cons
 {
    switch (pm) {
       case QStyle::PM_IndicatorWidth:
-         return XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::ButtonTheme, BP_CHECKBOX, CBS_UNCHECKEDNORMAL).width();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::ButtonTheme, BP_CHECKBOX, CBS_UNCHECKEDNORMAL).width();
 
       case QStyle::PM_IndicatorHeight:
-         return XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::ButtonTheme, BP_CHECKBOX, CBS_UNCHECKEDNORMAL).height();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::ButtonTheme, BP_CHECKBOX, CBS_UNCHECKEDNORMAL).height();
 
       case QStyle::PM_ExclusiveIndicatorWidth:
-         return XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::ButtonTheme, BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL).width();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::ButtonTheme, BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL).width();
 
       case QStyle::PM_ExclusiveIndicatorHeight:
-         return XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::ButtonTheme, BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL).height();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::ButtonTheme, BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL).height();
 
       case QStyle::PM_ProgressBarChunkWidth:
          return progressBarOrientation(option) == Qt::Horizontal
-            ? XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::ProgressTheme, PP_CHUNK).width()
-            : XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::ProgressTheme, PP_CHUNKVERT).height();
+            ? XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::ProgressTheme, PP_CHUNK).width()
+            : XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::ProgressTheme, PP_CHUNKVERT).height();
 
       case QStyle::PM_SliderThickness:
-         return XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::TrackBarTheme, TKP_THUMB).height();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::TrackBarTheme, TKP_THUMB).height();
 
       case QStyle::PM_TitleBarHeight:
          return widget && (widget->windowType() == Qt::Tool)
@@ -3713,10 +3721,10 @@ int QWindowsXPStylePrivate::pixelMetricFromSystemDp(QStyle::PixelMetric pm, cons
             : GetSystemMetrics(SM_CYCAPTION)   + GetSystemMetrics(SM_CXSIZEFRAME);
 
       case QStyle::PM_MdiSubWindowFrameWidth:
-         return XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::WindowTheme, WP_FRAMELEFT, FS_ACTIVE).width();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_FRAMELEFT, FS_ACTIVE).width();
 
       case QStyle::PM_DockWidgetFrameWidth:
-         return XPThemeData::themeSize(widget, 0, QWindowsXPStylePrivate::WindowTheme, WP_SMALLFRAMERIGHT, FS_ACTIVE).width();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_SMALLFRAMERIGHT, FS_ACTIVE).width();
 
       default:
          break;
@@ -4127,7 +4135,7 @@ QSize QWindowsXPStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt
    switch (ct) {
       case CT_LineEdit:
       case CT_ComboBox: {
-         XPThemeData buttontheme(widget, 0, QWindowsXPStylePrivate::ButtonTheme, BP_PUSHBUTTON, PBS_NORMAL);
+         XPThemeData buttontheme(widget, nullptr, QWindowsXPStylePrivate::ButtonTheme, BP_PUSHBUTTON, PBS_NORMAL);
          if (buttontheme.isValid()) {
             const qreal factor = QWindowsXPStylePrivate::nativeMetricScaleFactor(widget);
             const QMarginsF borderSize = buttontheme.margins() * factor;
@@ -4219,7 +4227,7 @@ int QWindowsXPStyle::styleHint(StyleHint hint, const QStyleOption *option, const
    switch (hint) {
 
       case SH_EtchDisabledText:
-         res = (qobject_cast<const QLabel *>(widget) != 0);
+         res = (qobject_cast<const QLabel *>(widget) != nullptr);
          break;
 
       case SH_SpinControls_DisableOnBounds:
@@ -4260,13 +4268,13 @@ int QWindowsXPStyle::styleHint(StyleHint hint, const QStyleOption *option, const
             XPThemeData themeData;
 
             if (titlebar->titleBarState & Qt::WindowMinimized) {
-               themeData = XPThemeData(widget, 0, QWindowsXPStylePrivate::WindowTheme,
+               themeData = XPThemeData(widget, nullptr, QWindowsXPStylePrivate::WindowTheme,
                      WP_MINCAPTION, CS_ACTIVE, titleBarRect);
 
             } else
-               themeData = XPThemeData(widget, 0,
-                     QWindowsXPStylePrivate::WindowTheme,
+               themeData = XPThemeData(widget, nullptr, QWindowsXPStylePrivate::WindowTheme,
                      WP_CAPTION, CS_ACTIVE, titleBarRect);
+
             mask->region = d->region(themeData) +
                QRect(0, tbHeight, option->rect.width(), option->rect.height() - tbHeight);
          }
@@ -4318,7 +4326,7 @@ QPixmap QWindowsXPStyle::standardPixmap(StandardPixmap standardPixmap, const QSt
       case SP_TitleBarCloseButton:
          if (qstyleoption_cast<const QStyleOptionDockWidget *>(option)) {
             if (widget && widget->isWindow()) {
-               XPThemeData theme(widget, 0, QWindowsXPStylePrivate::WindowTheme, WP_SMALLCLOSEBUTTON, CBS_NORMAL);
+               XPThemeData theme(widget, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_SMALLCLOSEBUTTON, CBS_NORMAL);
                if (theme.isValid()) {
                   const QSize size = (theme.size() * QWindowsStylePrivate::nativeMetricScaleFactor(widget)).toSize();
                   return QIcon(QWindowsStyle::standardPixmap(standardPixmap, option, widget)).pixmap(size);
@@ -4347,10 +4355,10 @@ QIcon QWindowsXPStyle::standardIcon(StandardPixmap standardIcon,
       case SP_TitleBarMaxButton:
          if (qstyleoption_cast<const QStyleOptionDockWidget *>(option)) {
             if (d->dockFloat.isNull()) {
-               XPThemeData themeSize(0, 0, QWindowsXPStylePrivate::WindowTheme,
-                  WP_SMALLCLOSEBUTTON, CBS_NORMAL);
-               XPThemeData theme(0, 0, QWindowsXPStylePrivate::WindowTheme,
-                  WP_MAXBUTTON, MAXBS_NORMAL);
+
+               XPThemeData themeSize(nullptr, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_SMALLCLOSEBUTTON, CBS_NORMAL);
+               XPThemeData theme(nullptr, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_MAXBUTTON, MAXBS_NORMAL);
+
                if (theme.isValid()) {
                   const QSize size = (themeSize.size() * QWindowsStylePrivate::nativeMetricScaleFactor(widget)).toSize();
 
@@ -4386,11 +4394,11 @@ QIcon QWindowsXPStyle::standardIcon(StandardPixmap standardIcon,
 
          }
          break;
+
       case SP_TitleBarCloseButton:
          if (qstyleoption_cast<const QStyleOptionDockWidget *>(option)) {
             if (d->dockClose.isNull()) {
-               XPThemeData theme(0, 0, QWindowsXPStylePrivate::WindowTheme,
-                  WP_SMALLCLOSEBUTTON, CBS_NORMAL);
+               XPThemeData theme(nullptr, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_SMALLCLOSEBUTTON, CBS_NORMAL);
 
                if (theme.isValid()) {
                   const QSize size = (theme.size() * QWindowsStylePrivate::nativeMetricScaleFactor(widget)).toSize();
@@ -4426,10 +4434,10 @@ QIcon QWindowsXPStyle::standardIcon(StandardPixmap standardIcon,
       case SP_TitleBarNormalButton:
          if (qstyleoption_cast<const QStyleOptionDockWidget *>(option)) {
             if (d->dockFloat.isNull()) {
-               XPThemeData themeSize(0, 0, QWindowsXPStylePrivate::WindowTheme,
-                  WP_SMALLCLOSEBUTTON, CBS_NORMAL);
-               XPThemeData theme(0, 0, QWindowsXPStylePrivate::WindowTheme,
-                  WP_RESTOREBUTTON, RBS_NORMAL);
+
+               XPThemeData themeSize(nullptr, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_SMALLCLOSEBUTTON, CBS_NORMAL);
+               XPThemeData theme(nullptr, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_RESTOREBUTTON, RBS_NORMAL);
+
                if (theme.isValid()) {
                   const QSize size = (themeSize.size() * QWindowsStylePrivate::nativeMetricScaleFactor(widget)).toSize();
                   QPixmap pm(size);

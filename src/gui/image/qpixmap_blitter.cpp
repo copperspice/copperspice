@@ -74,8 +74,8 @@ void QBlittablePlatformPixmap::setBlittable(QBlittable *blittable)
 void QBlittablePlatformPixmap::resize(int width, int height)
 {
 
-   m_blittable.reset(0);
-   m_engine.reset(0);
+   m_blittable.reset(nullptr);
+   m_engine.reset(nullptr);
 
    d = QGuiApplication::primaryScreen()->depth();
 
@@ -129,8 +129,8 @@ void QBlittablePlatformPixmap::fill(const QColor &color)
       // if we could just change the format, e.g. when going from
       // RGB32 -> ARGB8888.
       if (color.alpha() != 255 && !hasAlphaChannel()) {
-         m_blittable.reset(0);
-         m_engine.reset(0);
+         m_blittable.reset(nullptr);
+         m_engine.reset(nullptr);
          m_alpha = true;
       }
 
@@ -138,7 +138,7 @@ void QBlittablePlatformPixmap::fill(const QColor &color)
       const QPixelLayout *layout = &qPixelLayouts[blittable()->lock()->format()];
       Q_ASSERT(layout->convertFromARGB32PM);
 
-      layout->convertFromARGB32PM(&pixel, &pixel, 1, layout, 0);
+      layout->convertFromARGB32PM(&pixel, &pixel, 1, layout, nullptr);
 
       //so premultiplied formats are supported and ARGB32 and RGB32
       blittable()->lock()->fill(pixel);

@@ -28,7 +28,8 @@
 
 static int cache_limit = 10240;    // 10 MB cache limit for desktop
 
-QPixmapCache::Key::Key() : d(0)
+QPixmapCache::Key::Key()
+   : d(nullptr)
 {
 }
 
@@ -128,9 +129,8 @@ uint qHash(const QPixmapCache::Key &k)
 }
 
 QPMCache::QPMCache()
-   : QObject(0),
-     QCache<QPixmapCache::Key, QPixmapCacheEntry>(cache_limit * 1024),
-     keyArray(0), theid(0), ps(0), keyArraySize(0), freeKey(0), t(false)
+   : QObject(nullptr), QCache<QPixmapCache::Key, QPixmapCacheEntry>(cache_limit * 1024),
+     keyArray(nullptr), theid(0), ps(0), keyArraySize(0), freeKey(0), t(false)
 {
 }
 
@@ -182,7 +182,7 @@ QPixmap *QPMCache::object(const QString &key) const
    QPixmapCache::Key cacheKey = cacheKeys.value(key);
    if (!cacheKey.d || !cacheKey.d->isValid) {
       const_cast<QPMCache *>(this)->cacheKeys.remove(key);
-      return 0;
+      return nullptr;
    }
    QPixmap *ptr = QCache<QPixmapCache::Key, QPixmapCacheEntry>::object(cacheKey);
    //We didn't find the pixmap in the cache, the key is not valid anymore
@@ -328,9 +328,10 @@ void QPMCache::releaseKey(const QPixmapCache::Key &key)
 void QPMCache::clear()
 {
    free(keyArray);
-   keyArray = 0;
-   freeKey = 0;
+   keyArray     = nullptr;
+   freeKey      = 0;
    keyArraySize = 0;
+
    //Mark all keys as invalid
    QList<QPixmapCache::Key> keys = QCache<QPixmapCache::Key, QPixmapCacheEntry>::keys();
    for (int i = 0; i < keys.size(); ++i) {
@@ -373,7 +374,7 @@ bool QPixmapCache::find(const QString &key, QPixmap *pixmap)
    if (ptr && pixmap) {
       *pixmap = *ptr;
    }
-   return ptr != 0;
+   return ptr != nullptr;
 }
 
 bool QPixmapCache::find(const Key &key, QPixmap *pixmap)
@@ -387,7 +388,7 @@ bool QPixmapCache::find(const Key &key, QPixmap *pixmap)
    if (ptr && pixmap) {
       *pixmap = *ptr;
    }
-   return ptr != 0;
+   return ptr != nullptr;
 }
 
 bool QPixmapCache::insert(const QString &key, const QPixmap &pixmap)

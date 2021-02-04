@@ -287,7 +287,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
       }
 
       case PE_FrameStatusBarItem:
-         qDrawShadeRect(p, opt->rect, opt->palette, true, 1, 0, 0);
+         qDrawShadeRect(p, opt->rect, opt->palette, true, 1, 0, nullptr);
          break;
 
       case PE_IndicatorHeaderArrow:
@@ -396,7 +396,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
 
       case PE_FrameTabWidget:
       case PE_FrameWindow:
-         qDrawWinPanel(p, opt->rect, opt->palette, false, 0);
+         qDrawWinPanel(p, opt->rect, opt->palette, false, nullptr);
          break;
 
       case PE_FrameLineEdit:
@@ -439,26 +439,26 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
       case PE_IndicatorToolBarHandle:
          p->save();
          p->translate(opt->rect.x(), opt->rect.y());
+
          if (opt->state & State_Horizontal) {
             int x = opt->rect.width() / 3;
             if (opt->direction == Qt::RightToLeft) {
                x -= 2;
             }
+
             if (opt->rect.height() > 4) {
-               qDrawShadePanel(p, x, 2, 3, opt->rect.height() - 4,
-                  opt->palette, false, 1, 0);
-               qDrawShadePanel(p, x + 3, 2, 3, opt->rect.height() - 4,
-                  opt->palette, false, 1, 0);
+               qDrawShadePanel(p, x, 2, 3, opt->rect.height() - 4, opt->palette, false, 1, nullptr);
+               qDrawShadePanel(p, x + 3, 2, 3, opt->rect.height() - 4, opt->palette, false, 1, nullptr);
             }
+
          } else {
             if (opt->rect.width() > 4) {
                int y = opt->rect.height() / 3;
-               qDrawShadePanel(p, 2, y, opt->rect.width() - 4, 3,
-                  opt->palette, false, 1, 0);
-               qDrawShadePanel(p, 2, y + 3, opt->rect.width() - 4, 3,
-                  opt->palette, false, 1, 0);
+               qDrawShadePanel(p, 2, y, opt->rect.width() - 4, 3, opt->palette, false, 1, nullptr);
+               qDrawShadePanel(p, 2, y + 3, opt->rect.width() - 4, 3, opt->palette, false, 1, nullptr);
             }
          }
+
          p->restore();
          break;
 
@@ -795,7 +795,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
 
 #ifndef QT_NO_TOOLBUTTON
 static void drawArrow(const QStyle *style, const QStyleOptionToolButton *toolbutton,
-   const QRect &rect, QPainter *painter, const QWidget *widget = 0)
+   const QRect &rect, QPainter *painter, const QWidget *widget = nullptr)
 {
    QStyle::PrimitiveElement pe;
    switch (toolbutton->arrowType) {
@@ -915,7 +915,7 @@ QSize QCommonStylePrivate::viewItemSize(const QStyleOptionViewItem *option, int 
 void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewItem *option, const QRect &rect) const
 {
    const QWidget *widget = option->widget;
-   const int textMargin = proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, widget) + 1;
+   const int textMargin = proxyStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, nullptr, widget) + 1;
 
    QRect textRect = rect.adjusted(textMargin, 0, -textMargin, 0); // remove width padding
    const bool wrapText = option->features & QStyleOptionViewItem::WrapText;
@@ -3089,8 +3089,8 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
          QRect rect = opt->rect;
 
          const QStyleOptionDockWidget *dwOpt = qstyleoption_cast<const QStyleOptionDockWidget *>(opt);
-         bool canClose = dwOpt == 0 ? true : dwOpt->closable;
-         bool canFloat = dwOpt == 0 ? false : dwOpt->floatable;
+         bool canClose = dwOpt == nullptr ? true : dwOpt->closable;
+         bool canFloat = dwOpt == nullptr ? false : dwOpt->floatable;
 
          const bool verticalTitleBar = dwOpt && dwOpt->verticalTitleBar;
 
@@ -3202,7 +3202,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                d->viewItemLayout(vopt, &d->checkRect, &d->decorationRect, &d->displayRect, false);
                if (d->cachedOption) {
                   delete d->cachedOption;
-                  d->cachedOption = 0;
+                  d->cachedOption = nullptr;
                }
                d->cachedOption = new QStyleOptionViewItem(*vopt);
             }

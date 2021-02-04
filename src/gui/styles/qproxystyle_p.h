@@ -38,8 +38,11 @@ class QProxyStylePrivate : public QCommonStylePrivate
    void ensureBaseStyle() const;
 
  private:
-   QProxyStylePrivate() :
-      QCommonStylePrivate(), baseStyle(0) {}
+   QProxyStylePrivate()
+      :QCommonStylePrivate(), baseStyle(nullptr)
+   {
+   }
+
    mutable QPointer <QStyle> baseStyle;
 };
 

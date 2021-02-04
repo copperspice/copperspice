@@ -52,7 +52,7 @@ class QOutputStrategy
 {
  public:
    QOutputStrategy()
-      : contentStream(0), counter(1)
+      : contentStream(nullptr), counter(1)
    { }
 
    virtual ~QOutputStrategy() {}
@@ -186,7 +186,7 @@ void QTextOdfWriter::writeFrame(QXmlStreamWriter &writer, const QTextFrame *fram
    }
 
    QTextFrame::iterator iterator = frame->begin();
-   QTextFrame *child = 0;
+   QTextFrame *child = nullptr;
 
    int tableRow = -1;
    while (! iterator.atEnd()) {
@@ -272,7 +272,7 @@ void QTextOdfWriter::writeBlock(QXmlStreamWriter &writer, const QTextBlock &bloc
                writer.writeAttribute(textNS, "style-name", QString("L%1")
                   .formatArg(block.textList()->formatIndex()));
             } else {
-               m_listStack.push(0);
+               m_listStack.push(nullptr);
             }
          }
       }
@@ -398,7 +398,7 @@ void QTextOdfWriter::writeInlineCharacter(QXmlStreamWriter &writer, const QTextF
 {
    writer.writeStartElement(drawNS, QString::fromLatin1("frame"));
 
-   if (m_strategy == 0) {
+   if (m_strategy == nullptr) {
       // don't do anything
 
    } else if (fragment.charFormat().isImageFormat()) {
@@ -919,7 +919,7 @@ QTextOdfWriter::QTextOdfWriter(const QTextDocument &document, QIODevice *device)
      drawNS("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"),
      xlinkNS("http://www.w3.org/1999/xlink"),
      svgNS("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"),
-     m_document(&document), m_device(device), m_strategy(0), m_codec(0), m_createArchive(true)
+     m_document(&document), m_device(device), m_strategy(nullptr), m_codec(nullptr), m_createArchive(true)
 {
 }
 
@@ -1000,7 +1000,7 @@ bool QTextOdfWriter::writeAll()
    writer.writeEndElement(); // document-content
    writer.writeEndDocument();
    delete m_strategy;
-   m_strategy = 0;
+   m_strategy = nullptr;
 
    return true;
 }

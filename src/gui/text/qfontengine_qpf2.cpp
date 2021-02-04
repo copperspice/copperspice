@@ -69,7 +69,7 @@ static const QFontEngineQPF2::TagType tagTypes[QFontEngineQPF2::NumTags] = {
 #define READ_VERIFY(type, variable) \
     if (tagPtr + sizeof(type) > endPtr) { \
         DEBUG_VERIFY() << "read verify failed in line" << __LINE__; \
-        return 0; \
+        return nullptr; \
     } \
     variable = qFromBigEndian<type>(tagPtr); \
     DEBUG_VERIFY() << "read value" << variable << "of type " #type; \
@@ -92,7 +92,7 @@ T readValue(const uchar *&data)
 #define VERIFY_TAG(condition) \
     if (!(condition)) { \
         DEBUG_VERIFY() << "verifying tag condition " #condition " failed in line" << __LINE__ << "with tag" << tag; \
-        return 0; \
+        return nullptr; \
     }
 
 static inline const uchar *verifyTag(const uchar *tagPtr, const uchar *endPtr)
@@ -136,14 +136,14 @@ static inline const uchar *verifyTag(const uchar *tagPtr, const uchar *endPtr)
 const QFontEngineQPF2::Glyph *QFontEngineQPF2::findGlyph(glyph_t g) const
 {
    if (!g || g >= glyphMapEntries) {
-      return 0;
+      return nullptr;
    }
    const quint32 *gmapPtr = reinterpret_cast<const quint32 *>(fontData + glyphMapOffset);
    quint32 glyphPos = qFromBigEndian<quint32>(gmapPtr[g]);
 
    if (glyphPos > glyphDataSize) {
       if (glyphPos == 0xffffffff) {
-         return 0;
+         return nullptr;
       }
 
 #if defined(DEBUG_FONTENGINE)
@@ -151,7 +151,7 @@ const QFontEngineQPF2::Glyph *QFontEngineQPF2::findGlyph(glyph_t g) const
 #endif
 
       if (glyphPos > glyphDataSize) {
-         return 0;
+         return nullptr;
       }
    }
    return reinterpret_cast<const Glyph *>(fontData + glyphDataOffset + glyphPos);
@@ -173,7 +173,7 @@ bool QFontEngineQPF2::verifyHeader(const uchar *data, int size)
    const quint16 dataSize = qFromBigEndian<quint16>(header->dataSize);
    VERIFY(size >= int(sizeof(Header)) + dataSize);
 
-   const uchar *tagPtr = data + sizeof(Header);
+   const uchar *tagPtr    = data + sizeof(Header);
    const uchar *tagEndPtr = tagPtr + dataSize;
    while (tagPtr < tagEndPtr - 3) {
       tagPtr = verifyTag(tagPtr, tagEndPtr);
@@ -217,12 +217,11 @@ QVariant QFontEngineQPF2::extractHeaderField(const uchar *data, HeaderTag reques
 
 
 QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
-   : QFontEngine(QPF2),
-     fontData(reinterpret_cast<const uchar *>(data.constData())), dataSize(data.size())
+   : QFontEngine(QPF2), fontData(reinterpret_cast<const uchar *>(data.constData())), dataSize(data.size())
 {
    fontDef = def;
    cache_cost = 100;
-   cmap = 0;
+   cmap       = nullptr;
    cmapOffset = 0;
    cmapSize = 0;
    glyphMapOffset = 0;

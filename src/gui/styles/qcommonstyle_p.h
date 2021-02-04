@@ -40,7 +40,7 @@ class QCommonStylePrivate : public QStylePrivate
    QCommonStylePrivate()
 
 #ifndef QT_NO_ITEMVIEWS
-      : cachedOption(0), animationFps(30)
+      : cachedOption(nullptr), animationFps(30)
 #else
       : animationFps(30)
 #endif
