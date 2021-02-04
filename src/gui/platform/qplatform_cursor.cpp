@@ -64,7 +64,7 @@ void QPlatformCursor::setPos(const QPoint &pos)
       qWarning("This plugin does not support QCursor::setPos() emulating movement within the application.");
    }
 
-   QWindowSystemInterface::handleMouseEvent(0, pos, pos, Qt::NoButton);
+   QWindowSystemInterface::handleMouseEvent(nullptr, pos, pos, Qt::NoButton);
 }
 
 // End of display and pointer event handling code
@@ -407,10 +407,11 @@ void QPlatformCursorImage::createSystemCursor(int id)
 {
    if (!systemCursorTableInit) {
       for (int i = 0; i <= Qt::LastCursor; i++) {
-         systemCursorTable[i] = 0;
+         systemCursorTable[i] = nullptr;
       }
       systemCursorTableInit = true;
    }
+
    switch (id) {
       // 16x16 cursors
       case Qt::ArrowCursor:
@@ -455,7 +456,7 @@ void QPlatformCursorImage::createSystemCursor(int id)
 
       case Qt::BlankCursor:
          systemCursorTable[Qt::BlankCursor] =
-            new QPlatformCursorImage(0, 0, 0, 0, 0, 0);
+            new QPlatformCursorImage(nullptr, nullptr, 0, 0, 0, 0);
          break;
 
       // 20x20 cursors
@@ -525,7 +526,7 @@ void QPlatformCursorImage::createSystemCursor(int id)
 
 void QPlatformCursorImage::set(Qt::CursorShape id)
 {
-   QPlatformCursorImage *cursor = 0;
+   QPlatformCursorImage *cursor = nullptr;
    if (id >= 0 && id <= Qt::LastCursor) {
       if (!systemCursorTable[id]) {
          createSystemCursor(id);
@@ -533,7 +534,7 @@ void QPlatformCursorImage::set(Qt::CursorShape id)
       cursor = systemCursorTable[id];
    }
 
-   if (cursor == 0) {
+   if (cursor == nullptr) {
       if (!systemCursorTable[Qt::ArrowCursor]) {
          createSystemCursor(Qt::ArrowCursor);
       }

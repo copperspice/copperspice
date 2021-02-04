@@ -36,8 +36,9 @@
 
 QFileInfoGatherer::QFileInfoGatherer(QObject *parent)
    : QThread(parent), abort(false),
+
 #ifndef QT_NO_FILESYSTEMWATCHER
-     watcher(0),
+     watcher(nullptr),
 #endif
      m_iconProvider(&defaultProvider)
 {

@@ -88,7 +88,7 @@ QAccessibleInterface *QAccessibleObject::childAt(int x, int y) const
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 QAccessibleApplication::QAccessibleApplication()
@@ -98,8 +98,9 @@ QAccessibleApplication::QAccessibleApplication()
 
 QWindow *QAccessibleApplication::window() const
 {
-   return 0;
+   return nullptr;
 }
+
 // all toplevel widgets except popups and the desktop
 static QObjectList topLevelObjects()
 {
@@ -137,7 +138,7 @@ int QAccessibleApplication::indexOfChild(const QAccessibleInterface *child) cons
 QAccessibleInterface *QAccessibleApplication::parent() const
 {
 
-   return 0;
+   return nullptr;
 }
 
 QAccessibleInterface *QAccessibleApplication::child(int index) const
@@ -146,7 +147,7 @@ QAccessibleInterface *QAccessibleApplication::child(int index) const
    if (index >= 0 && index < tlo.count()) {
       return QAccessible::queryAccessibleInterface(tlo.at(index));
    }
-   return 0;
+   return nullptr;
 }
 
 
@@ -155,7 +156,7 @@ QAccessibleInterface *QAccessibleApplication::focusChild() const
    if (QWindow *window = QGuiApplication::focusWindow()) {
       return window->accessibleRoot();
    }
-   return 0;
+   return nullptr;
 }
 
 QString QAccessibleApplication::text(QAccessible::Text t) const

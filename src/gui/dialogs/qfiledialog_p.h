@@ -64,7 +64,7 @@ class QPlatformDialogHelper;
 
 struct QFileDialogArgs {
    QFileDialogArgs()
-      : parent(0), mode(QFileDialog::AnyFile)
+      : parent(nullptr), mode(QFileDialog::AnyFile)
    {
    }
 
@@ -275,7 +275,7 @@ class QFileDialogLineEdit : public QLineEdit
 {
  public:
    QFileDialogLineEdit(QWidget *parent = nullptr)
-      : QLineEdit(parent), d_ptr(0)
+      : QLineEdit(parent), d_ptr(nullptr)
    {
    }
 
@@ -294,7 +294,7 @@ class QFileDialogComboBox : public QComboBox
 {
  public:
    QFileDialogComboBox(QWidget *parent = nullptr)
-      : QComboBox(parent), urlModel(0)
+      : QComboBox(parent), urlModel(nullptr)
    {
    }
 

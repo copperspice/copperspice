@@ -275,7 +275,7 @@ class QFontEngineFT : public QFontEngine
 
    Glyph *loadGlyph(uint glyph, QFixed subPixelPosition, GlyphFormat format = Format_None,
                   bool fetchMetricsOnly = false) const {
-      return loadGlyph(cacheEnabled ? &defaultGlyphSet : 0, glyph, subPixelPosition, format, fetchMetricsOnly);
+      return loadGlyph(cacheEnabled ? &defaultGlyphSet : nullptr, glyph, subPixelPosition, format, fetchMetricsOnly);
    }
 
    Glyph *loadGlyph(QGlyphSet *set, uint glyph, QFixed subPixelPosition, GlyphFormat = Format_None,

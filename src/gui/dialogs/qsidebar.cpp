@@ -49,7 +49,7 @@ void QSideBarDelegate::initStyleOption(QStyleOptionViewItem *option, const QMode
 }
 
 QUrlModel::QUrlModel(QObject *parent)
-   : QStandardItemModel(parent), showFullPath(false), fileSystemModel(0)
+   : QStandardItemModel(parent), showFullPath(false), fileSystemModel(nullptr)
 {
 }
 
@@ -300,14 +300,14 @@ void QUrlModel::setFileSystemModel(QFileSystemModel *model)
       return;
    }
 
-   if (fileSystemModel != 0) {
+   if (fileSystemModel != nullptr) {
       disconnect(model, &QFileSystemModel::dataChanged,   this, &QUrlModel::dataChanged);
       disconnect(model, &QFileSystemModel::layoutChanged, this, &QUrlModel::layoutChanged);
       disconnect(model, &QFileSystemModel::rowsRemoved,   this, &QUrlModel::layoutChanged);
    }
 
    fileSystemModel = model;
-   if (fileSystemModel != 0) {
+   if (fileSystemModel != nullptr) {
       connect(model, &QFileSystemModel::dataChanged,   this, &QUrlModel::dataChanged);
       connect(model, &QFileSystemModel::layoutChanged, this, &QUrlModel::layoutChanged);
       connect(model, &QFileSystemModel::rowsRemoved,   this, &QUrlModel::layoutChanged);

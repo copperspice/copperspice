@@ -259,7 +259,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
       Options options = Options());
 
    static QList<QUrl> getOpenFileUrls(QWidget *parent = nullptr, const QString &caption = QString(), const QUrl &dir = QUrl(),
-      const QString &filter = QString(), QString *selectedFilter = 0, Options options = Options(),
+      const QString &filter = QString(), QString *selectedFilter = nullptr, Options options = Options(),
       const QStringList &supportedSchemes = QStringList());
 
  protected:

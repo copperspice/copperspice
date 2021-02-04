@@ -159,8 +159,9 @@ class QFontDialogOptionsPrivate : public QSharedData
 {
  public:
    QFontDialogOptionsPrivate()
-      : options(0)
-    {}
+      : options(Qt::EmptyFlag)
+   {
+   }
 
    QFontDialogOptions::FontDialogOptions options;
    QString windowTitle;
@@ -296,8 +297,9 @@ class QColorDialogOptionsPrivate : public QSharedData
 {
  public:
    QColorDialogOptionsPrivate()
-      : options(0)
-   {}
+      : options(Qt::EmptyFlag)
+   {
+   }
 
    // Write out settings around destruction of dialogs
    ~QColorDialogOptionsPrivate() {
@@ -434,12 +436,12 @@ void QPlatformColorDialogHelper::setOptions(const QSharedPointer<QColorDialogOpt
 class QFileDialogOptionsPrivate : public QSharedData
 {
  public:
-   QFileDialogOptionsPrivate() : options(0),
-      viewMode(QFileDialogOptions::Detail),
-      fileMode(QFileDialogOptions::AnyFile),
-      acceptMode(QFileDialogOptions::AcceptOpen),
-      filters(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::AllDirs)
-   {}
+   QFileDialogOptionsPrivate()
+      : options(Qt::EmptyFlag), viewMode(QFileDialogOptions::Detail),
+        fileMode(QFileDialogOptions::AnyFile), acceptMode(QFileDialogOptions::AcceptOpen),
+        filters(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::AllDirs)
+   {
+   }
 
    QFileDialogOptions::FileDialogOptions options;
    QString windowTitle;

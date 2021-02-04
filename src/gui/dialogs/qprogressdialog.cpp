@@ -85,7 +85,7 @@ void QProgressDialog::init(const QString &labelText, const QString &cancelButton
    //
    m_label = new QLabel(labelText, this);
 
-   int alignL = style()->styleHint(QStyle::SH_ProgressDialog_TextLabelAlignment, 0, this);
+   int alignL = style()->styleHint(QStyle::SH_ProgressDialog_TextLabelAlignment, nullptr, this);
    m_label->setAlignment(Qt::Alignment(alignL));
 
    m_progressBar = new QProgressBar(this);
@@ -93,7 +93,8 @@ void QProgressDialog::init(const QString &labelText, const QString &cancelButton
    m_progressBar->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
    m_cancelButton =  new QPushButton();
-   m_centerCancelPB = style()->styleHint(QStyle::SH_ProgressDialog_CenterCancelButton, 0, this);
+   m_centerCancelPB = style()->styleHint(QStyle::SH_ProgressDialog_CenterCancelButton, nullptr, this);
+
    if (useDefaultCancelText) {
       retranslateStrings();
 
@@ -136,7 +137,7 @@ void QProgressDialog::disconnectOnClose()
 {
    if (receiverToDisconnectOnClose) {
       QObject::disconnect(this, SIGNAL(canceled()), receiverToDisconnectOnClose, memberToDisconnectOnClose);
-      receiverToDisconnectOnClose = 0;
+      receiverToDisconnectOnClose = nullptr;
    }
 
    memberToDisconnectOnClose.clear();
@@ -215,7 +216,7 @@ void QProgressDialog::setCancelButton(QPushButton *newButton)
 
 #ifndef QT_NO_SHORTCUT
       delete escapeShortcut;
-      escapeShortcut = 0;
+      escapeShortcut = nullptr;
 #endif
 
    }
@@ -280,7 +281,7 @@ void QProgressDialog::setCancelButtonText(const QString &cancelButtonText)
       }
 
    } else {
-      setCancelButton(0);
+      setCancelButton(nullptr);
 
    }
 

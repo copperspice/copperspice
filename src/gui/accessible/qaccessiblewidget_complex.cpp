@@ -70,11 +70,11 @@ class QAccessibleTabButton: public QAccessibleInterface, public QAccessibleActio
       if (t == QAccessible::ActionInterface) {
          return static_cast<QAccessibleActionInterface *>(this);
       }
-      return 0;
+      return nullptr;
    }
 
    QObject *object() const override {
-      return 0;
+      return nullptr;
    }
    QAccessible::Role role() const override {
       return QAccessible::PageTab;
@@ -103,7 +103,7 @@ class QAccessibleTabButton: public QAccessibleInterface, public QAccessibleActio
    }
 
    QAccessibleInterface *childAt(int, int) const override {
-      return 0;
+      return nullptr;
    }
    int childCount() const override {
       return 0;
@@ -137,7 +137,7 @@ class QAccessibleTabButton: public QAccessibleInterface, public QAccessibleActio
       return QAccessible::queryAccessibleInterface(m_parent.data());
    }
    QAccessibleInterface *child(int) const override {
-      return 0;
+      return nullptr;
    }
 
    // action interface
@@ -209,7 +209,7 @@ QAccessibleInterface *QAccessibleTabBar::child(int index) const
          return QAccessible::queryAccessibleInterface(tabBar()->d_func()->rightB);
       }
    }
-   return 0;
+   return nullptr;
 }
 
 int QAccessibleTabBar::indexOfChild(const QAccessibleInterface *child) const
@@ -283,7 +283,7 @@ QAccessibleInterface *QAccessibleComboBox::child(int index) const
    } else if (index == 1 && comboBox()->isEditable()) {
       return QAccessible::queryAccessibleInterface(comboBox()->lineEdit());
    }
-   return 0;
+   return nullptr;
 }
 
 int QAccessibleComboBox::childCount() const
@@ -297,7 +297,7 @@ QAccessibleInterface *QAccessibleComboBox::childAt(int x, int y) const
    if (comboBox()->isEditable() && comboBox()->lineEdit()->rect().contains(x, y)) {
       return child(1);
    }
-   return 0;
+   return nullptr;
 }
 
 int QAccessibleComboBox::indexOfChild(const QAccessibleInterface *child) const
@@ -412,7 +412,7 @@ bool QAccessibleAbstractScrollArea::isValid() const
 QAccessibleInterface *QAccessibleAbstractScrollArea::childAt(int x, int y) const
 {
    if (!abstractScrollArea()->isVisible()) {
-      return 0;
+      return nullptr;
    }
 
    for (int i = 0; i < childCount(); ++i) {
@@ -422,7 +422,7 @@ QAccessibleInterface *QAccessibleAbstractScrollArea::childAt(int x, int y) const
          return child(i);
       }
    }
-   return 0;
+   return nullptr;
 }
 
 QAbstractScrollArea *QAccessibleAbstractScrollArea::abstractScrollArea() const

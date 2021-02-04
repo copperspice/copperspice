@@ -29,8 +29,9 @@ class QPlatformOpenGLContextPrivate
 {
  public:
    QPlatformOpenGLContextPrivate()
-      : context(0)
-   {  }
+      : context(nullptr)
+   {
+   }
 
    QOpenGLContext *context;
 };

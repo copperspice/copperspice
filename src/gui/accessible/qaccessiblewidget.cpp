@@ -332,7 +332,7 @@ QAccessibleInterface *QAccessibleWidget::child(int index) const
    if (index >= 0 && index < childList.size()) {
       return QAccessible::queryAccessibleInterface(childList.at(index));
    }
-   return 0;
+   return nullptr;
 }
 
 /*! \reimp */
@@ -344,13 +344,13 @@ QAccessibleInterface *QAccessibleWidget::focusChild() const
 
    QWidget *fw = widget()->focusWidget();
    if (!fw) {
-      return 0;
+      return nullptr;
    }
 
    if (isAncestor(widget(), fw) || fw == widget()) {
       return QAccessible::queryAccessibleInterface(fw);
    }
-   return 0;
+   return nullptr;
 }
 
 int QAccessibleWidget::childCount() const
@@ -499,7 +499,7 @@ void *QAccessibleWidget::interface_cast(QAccessible::InterfaceType t)
       return static_cast<QAccessibleActionInterface *>(this);
    }
 
-   return 0;
+   return nullptr;
 }
 
 #endif //QT_NO_ACCESSIBILITY

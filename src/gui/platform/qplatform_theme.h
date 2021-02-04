@@ -268,7 +268,7 @@ class Q_GUI_EXPORT QPlatformTheme
 
    virtual QPixmap standardPixmap(StandardPixmap sp, const QSizeF &size) const;
    virtual QPixmap fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size,
-      QPlatformTheme::IconOptions iconOptions = 0) const;
+      QPlatformTheme::IconOptions iconOptions = Qt::EmptyFlag) const;
 
    virtual QIconEngine *createIconEngine(const QString &iconName) const;
 

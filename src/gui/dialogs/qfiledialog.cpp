@@ -58,7 +58,7 @@ QFileDialog::QFileDialog(QWidget *parent, Qt::WindowFlags f)
 }
 
 QFileDialog::QFileDialog(QWidget *parent, const QString &caption, const QString &directory, const QString &filter)
-   : QDialog(*new QFileDialogPrivate, parent, 0)
+   : QDialog(*new QFileDialogPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QFileDialog);
    d->init(QUrl::fromLocalFile(directory), filter, caption);
@@ -66,7 +66,7 @@ QFileDialog::QFileDialog(QWidget *parent, const QString &caption, const QString 
 
 // internal
 QFileDialog::QFileDialog(const QFileDialogArgs &args)
-   : QDialog(*new QFileDialogPrivate, args.parent, 0)
+   : QDialog(*new QFileDialogPrivate, args.parent, Qt::EmptyFlag)
 {
    Q_D(QFileDialog);
    d->init(args.directory, args.filter, args.caption);
@@ -303,7 +303,7 @@ void QFileDialog::setVisible(bool visible)
 #ifndef QT_NO_FSCOMPLETER
          //So the completer don't try to complete and therefore to show a popup
          if (!d->nativeDialogInUse) {
-            d->completer->setModel(0);
+            d->completer->setModel(nullptr);
          }
 #endif
 
@@ -313,7 +313,7 @@ void QFileDialog::setVisible(bool visible)
 
 #ifndef QT_NO_FSCOMPLETER
          if (!d->nativeDialogInUse) {
-            if (d->proxyModel != 0) {
+            if (d->proxyModel != nullptr) {
                d->completer->setModel(d->proxyModel);
 
             } else {
@@ -514,9 +514,9 @@ void QFileDialog::selectUrl(const QUrl &url)
 }
 
 #ifdef Q_OS_UNIX
-QString qt_tildeExpansion(const QString &path, bool *expanded = 0)
+QString qt_tildeExpansion(const QString &path, bool *expanded = nullptr)
 {
-   if (expanded != 0) {
+   if (expanded != nullptr) {
       *expanded = false;
    }
    if (!path.startsWith(QLatin1Char('~'))) {
@@ -555,7 +555,7 @@ QString qt_tildeExpansion(const QString &path, bool *expanded = 0)
       ret.replace(0, tokens.first().length(), homePath);
    }
 
-   if (expanded != 0) {
+   if (expanded != nullptr) {
       *expanded = true;
    }
 
@@ -1048,7 +1048,7 @@ QAbstractItemDelegate *QFileDialog::itemDelegate() const
 {
    Q_D(const QFileDialog);
    if (!d->usingWidgets()) {
-      return 0;
+      return nullptr;
    }
    return d->qFileDialogUi->listView->itemDelegate();
 }
@@ -1300,7 +1300,7 @@ void QFileDialog::done(int result)
 
    if (d->receiverToDisconnectOnClose) {
       disconnect(this, d->signalToDisconnectOnClose, d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
-      d->receiverToDisconnectOnClose = 0;
+      d->receiverToDisconnectOnClose = nullptr;
    }
 
    d->memberToDisconnectOnClose.clear();
@@ -1433,7 +1433,6 @@ void QFileDialog::accept()
    }
 }
 
-
 #ifndef QT_NO_PROXYMODEL
 void QFileDialog::setProxyModel(QAbstractProxyModel *proxyModel)
 {
@@ -1457,7 +1456,7 @@ void QFileDialog::setProxyModel(QAbstractProxyModel *proxyModel)
 
    }
 
-   if (proxyModel != 0) {
+   if (proxyModel != nullptr) {
       proxyModel->setParent(this);
       d->proxyModel = proxyModel;
       proxyModel->setSourceModel(d->model);
@@ -1472,14 +1471,14 @@ void QFileDialog::setProxyModel(QAbstractProxyModel *proxyModel)
       connect(d->proxyModel, &QAbstractProxyModel::rowsInserted, this, &QFileDialog::_q_rowsInserted);
 
    } else {
-      d->proxyModel = 0;
+      d->proxyModel = nullptr;
       d->qFileDialogUi->listView->setModel(d->model);
       d->qFileDialogUi->treeView->setModel(d->model);
 
 #ifndef QT_NO_FSCOMPLETER
       d->completer->setModel(d->model);
       d->completer->sourceModel = d->model;
-      d->completer->proxyModel = 0;
+      d->completer->proxyModel  = nullptr;
 #endif
 
       connect(d->model, &QAbstractProxyModel::rowsInserted, this, &QFileDialog::_q_rowsInserted);

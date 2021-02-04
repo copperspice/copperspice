@@ -229,8 +229,8 @@ class QInputDialogPrivate : public QDialogPrivate
 };
 
 QInputDialogPrivate::QInputDialogPrivate()
-   : label(0), buttonBox(0), lineEdit(0), plainTextEdit(0), intSpinBox(0), doubleSpinBox(0),
-     comboBox(0), listView(0), inputWidget(0), mainLayout(0)
+   : label(nullptr), buttonBox(nullptr), lineEdit(nullptr), plainTextEdit(nullptr), intSpinBox(nullptr),
+     doubleSpinBox(nullptr), comboBox(nullptr), listView(nullptr), inputWidget(nullptr), mainLayout(nullptr)
 {
 }
 
@@ -983,7 +983,6 @@ void QInputDialog::setVisible(bool visible)
    QDialog::setVisible(visible);
 }
 
-
 void QInputDialog::done(int result)
 {
    Q_D(QInputDialog);
@@ -1009,7 +1008,7 @@ void QInputDialog::done(int result)
       disconnect(this, signalForMember(d->memberToDisconnectOnClose), d->receiverToDisconnectOnClose,
          d->memberToDisconnectOnClose);
 
-      d->receiverToDisconnectOnClose = 0;
+      d->receiverToDisconnectOnClose = nullptr;
    }
 
    d->memberToDisconnectOnClose.clear();

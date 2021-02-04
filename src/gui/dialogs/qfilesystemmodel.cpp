@@ -460,10 +460,10 @@ QModelIndex QFileSystemModel::parent(const QModelIndex &index) const
    }
 
    QFileSystemModelPrivate::QFileSystemNode *indexNode = d->node(index);
-   Q_ASSERT(indexNode != 0);
+   Q_ASSERT(indexNode != nullptr);
 
    QFileSystemModelPrivate::QFileSystemNode *parentNode = (indexNode ? indexNode->parent : nullptr);
-   if (parentNode == 0 || parentNode == &d->root) {
+   if (parentNode == nullptr || parentNode == &d->root) {
       return QModelIndex();
    }
 
@@ -485,7 +485,7 @@ QModelIndex QFileSystemModelPrivate::index(const QFileSystemModelPrivate::QFileS
 {
    Q_Q(const QFileSystemModel);
 
-   QFileSystemModelPrivate::QFileSystemNode *parentNode = (node ? node->parent : 0);
+   QFileSystemModelPrivate::QFileSystemNode *parentNode = (node ? node->parent : nullptr);
 
    if (node == &root || !parentNode) {
       return QModelIndex();
@@ -794,7 +794,7 @@ bool QFileSystemModel::setData(const QModelIndex &idx, const QVariant &value, in
       || ! QDir(filePath(parent(idx))).rename(oldName, newName)) {
 
 #ifndef QT_NO_MESSAGEBOX
-      QMessageBox::information(0, QFileSystemModel::tr("Invalid Filename"), QFileSystemModel::tr("<b>\"%1\" is invalid.</b><br>"
+      QMessageBox::information(nullptr, QFileSystemModel::tr("Invalid Filename"), QFileSystemModel::tr("<b>\"%1\" is invalid.</b><br>"
             "Use a filename with fewer characters or no punctuation.").formatArg(newName), QMessageBox::Ok);
 
 #endif
@@ -1687,8 +1687,9 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::addNode(QFile
       std::wstring name(MAX_PATH + 1, L'\0');
 
       // GetVolumeInformation requires to add trailing backslash
-      const QString nodeName = fileName + QString("\\");
-      BOOL success = ::GetVolumeInformation(&nodeName.toStdWString()[0], &name[0], MAX_PATH + 1, NULL, 0, NULL, NULL, 0);
+      const QString nodeName = fileName + "\\";
+      BOOL success = ::GetVolumeInformation(&nodeName.toStdWString()[0], &name[0], MAX_PATH + 1,
+                  nullptr, nullptr, nullptr, nullptr, 0);
 
       if (success && name[0]) {
          node->volumeName = QString::fromStdWString(name);

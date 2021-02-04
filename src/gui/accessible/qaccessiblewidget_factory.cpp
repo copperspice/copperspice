@@ -41,7 +41,7 @@
 
 QAccessibleInterface *qAccessibleFactory(const QString &classname, QObject *object)
 {
-   QAccessibleInterface *iface = 0;
+   QAccessibleInterface *iface = nullptr;
    if (!object || !object->isWidgetType()) {
       return iface;
    }
@@ -62,7 +62,7 @@ QAccessibleInterface *qAccessibleFactory(const QString &classname, QObject *obje
 #ifndef QT_NO_LINEEDIT
    } else if (classname == QLatin1String("QLineEdit")) {
       if (widget->objectName() == QLatin1String("qt_spinbox_lineedit")) {
-         iface = 0;
+         iface = nullptr;
       } else {
          iface = new QAccessibleLineEdit(widget);
       }
@@ -212,7 +212,7 @@ QAccessibleInterface *qAccessibleFactory(const QString &classname, QObject *obje
 #endif
 
    } else if (classname == QLatin1String("QDesktopScreenWidget")) {
-      iface = 0;
+      iface = nullptr;
    } else if (classname == QLatin1String("QWidget")) {
       iface = new QAccessibleWidget(widget);
    } else if (classname == QLatin1String("QWindowContainer")) {

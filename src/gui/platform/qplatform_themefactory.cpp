@@ -50,7 +50,7 @@ QPlatformTheme *QPlatformThemeFactory::create(const QString &key, const QString 
       return ret;
    }
 
-   return 0;
+   return nullptr;
 }
 
 /*!

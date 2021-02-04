@@ -31,7 +31,6 @@
 #include <qpushbutton.h>
 #include <qplatform_dialoghelper.h>
 
-
 class QSizeGrip;
 
 class QDialogPrivate : public QWidgetPrivate
@@ -41,13 +40,12 @@ class QDialogPrivate : public QWidgetPrivate
  public:
 
    QDialogPrivate()
-      : mainDef(0), orientation(Qt::Horizontal), extension(0), doShowExtension(false),
+      : mainDef(nullptr), orientation(Qt::Horizontal), extension(nullptr), doShowExtension(false),
 #ifndef QT_NO_SIZEGRIP
-        resizer(0),
-        sizeGripEnabled(false),
+        resizer(nullptr), sizeGripEnabled(false),
 #endif
-        rescode(0), resetModalityTo(-1), wasModalitySet(true), eventLoop(0),
-        nativeDialogInUse(false), m_platformHelper(0), m_platformHelperCreated(false)
+        rescode(0), resetModalityTo(-1), wasModalitySet(true), eventLoop(nullptr),
+        nativeDialogInUse(false), m_platformHelper(nullptr), m_platformHelperCreated(false)
    {}
 
    ~QDialogPrivate() {

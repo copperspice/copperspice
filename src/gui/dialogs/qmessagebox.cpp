@@ -62,9 +62,10 @@ HMENU qt_getWindowsSystemMenu(const QWidget *w)
       if (void *handle = QGuiApplication::platformNativeInterface()->nativeResourceForWindow("handle", window)) {
          return GetSystemMenu(reinterpret_cast<HWND>(handle), false);
       }
-   return 0;
+   return nullptr;
 }
 #endif
+
 enum Button { Old_Ok = 1, Old_Cancel = 2, Old_Yes = 3, Old_No = 4, Old_Abort = 5, Old_Retry = 6,
    Old_Ignore = 7, Old_YesAll = 8, Old_NoAll = 9, Old_ButtonMask = 0xFF,
    NewButtonMask = 0xFFFFFC00
@@ -92,7 +93,8 @@ void cs_require_version(int argc, char *argv[], const char *str)
       QString errMsg = QApplication::tr("%1 requires CopperSpice version %2\n\nFound CopperSpice version %3\n")
          .formatArg(qAppName()).formatArg(req_version).formatArg(cur_version);
 
-      QMessageBox box(QMessageBox::Critical, QApplication::tr("Incompatible Library"), errMsg, QMessageBox::Abort, 0);
+      QMessageBox box(QMessageBox::Critical, QApplication::tr("Incompatible Library"),
+               errMsg, QMessageBox::Abort, nullptr);
 
       QIcon icon(":/copperspice/dialogs/images/cslogo-64.png");
       box.setWindowIcon(icon);
@@ -221,14 +223,16 @@ class QMessageBoxPrivate : public QDialogPrivate
    Q_DECLARE_PUBLIC(QMessageBox)
 
  public:
-
-   QMessageBoxPrivate() : escapeButton(0), defaultButton(0), checkbox(0), clickedButton(0), detailsButton(0),
+   QMessageBoxPrivate()
+      : escapeButton(nullptr), defaultButton(nullptr), checkbox(nullptr),
+        clickedButton(nullptr), detailsButton(nullptr),
 #ifndef QT_NO_TEXTEDIT
-      detailsText(0),
+        detailsText(nullptr),
 #endif
-      compatMode(false), autoAddOkButton(true),
-      detectedEscapeButton(0), informativeLabel(0),
-      options(new QMessageDialogOptions) { }
+        compatMode(false), autoAddOkButton(true), detectedEscapeButton(nullptr), informativeLabel(nullptr),
+        options(new QMessageDialogOptions)
+   {
+   }
 
    void init(const QString &title = QString(), const QString &text = QString());
    void setupLayout();
@@ -295,8 +299,8 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
    Q_Q(QMessageBox);
 
    label = new QLabel;
-   label->setObjectName(QLatin1String("qt_msgbox_label"));
-   label->setTextInteractionFlags(Qt::TextInteractionFlags(q->style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, 0, q)));
+   label->setObjectName("qt_msgbox_label");
+   label->setTextInteractionFlags(Qt::TextInteractionFlags(q->style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, q)));
 
    label->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
    label->setOpenExternalLinks(true);
@@ -307,7 +311,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
 
    buttonBox = new QDialogButtonBox;
    buttonBox->setObjectName(QLatin1String("qt_msgbox_buttonbox"));
-   buttonBox->setCenterButtons(q->style()->styleHint(QStyle::SH_MessageBox_CenterButtons, 0, q));
+   buttonBox->setCenterButtons(q->style()->styleHint(QStyle::SH_MessageBox_CenterButtons, nullptr, q));
 
    QObject::connect(buttonBox, &QDialogButtonBox::clicked, q, &QMessageBox::_q_buttonClicked);
 
@@ -539,7 +543,7 @@ void QMessageBoxPrivate::_q_buttonClicked(QAbstractButton *button)
       if (receiverToDisconnectOnClose) {
          QObject::disconnect(q, signalToDisconnectOnClose, receiverToDisconnectOnClose, memberToDisconnectOnClose);
 
-         receiverToDisconnectOnClose = 0;
+         receiverToDisconnectOnClose = nullptr;
       }
       signalToDisconnectOnClose.clear();
       memberToDisconnectOnClose.clear();
@@ -723,8 +727,10 @@ void QMessageBoxPrivate::detectEscapeButton()
    // if the message box has one RejectRole button, make it the escape button
    for (int i = 0; i < buttons.count(); i++) {
       if (buttonBox->buttonRole(buttons.at(i)) == QDialogButtonBox::RejectRole) {
-         if (detectedEscapeButton) { // already detected
-            detectedEscapeButton = 0;
+
+         if (detectedEscapeButton) {
+            // already detected
+            detectedEscapeButton = nullptr;
             break;
          }
          detectedEscapeButton = buttons.at(i);
@@ -737,8 +743,10 @@ void QMessageBoxPrivate::detectEscapeButton()
    // if the message box has one NoRole button, make it the escape button
    for (int i = 0; i < buttons.count(); i++) {
       if (buttonBox->buttonRole(buttons.at(i)) == QDialogButtonBox::NoRole) {
-         if (detectedEscapeButton) { // already detected!
-            detectedEscapeButton = 0;
+
+         if (detectedEscapeButton) {
+            // already detected
+            detectedEscapeButton = nullptr;
             break;
          }
          detectedEscapeButton = buttons.at(i);
@@ -787,7 +795,7 @@ void QMessageBox::setCheckBox(QCheckBox *cb)
       d->checkbox->hide();
       layout()->removeWidget(d->checkbox);
       if (d->checkbox->parentWidget() == this) {
-         d->checkbox->setParent(0);
+         d->checkbox->setParent(nullptr);
          d->checkbox->deleteLater();
       }
    }
@@ -938,9 +946,9 @@ void QMessageBox::changeEvent(QEvent *ev)
          if (d->icon != NoIcon) {
             setIcon(d->icon);
          }
-         Qt::TextInteractionFlags flags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, 0, this));
+         Qt::TextInteractionFlags flags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this));
          d->label->setTextInteractionFlags(flags);
-         d->buttonBox->setCenterButtons(style()->styleHint(QStyle::SH_MessageBox_CenterButtons, 0, this));
+         d->buttonBox->setCenterButtons(style()->styleHint(QStyle::SH_MessageBox_CenterButtons, nullptr, this));
 
          if (d->informativeLabel) {
             d->informativeLabel->setTextInteractionFlags(flags);
@@ -1123,7 +1131,7 @@ static QMessageBox::StandardButton showNewMessageBox(QWidget *parent, QMessageBo
 
    QMessageBox msgBox(icon, title, text, QMessageBox::NoButton, parent);
    QDialogButtonBox *buttonBox = msgBox.findChild<QDialogButtonBox *>();
-   Q_ASSERT(buttonBox != 0);
+   Q_ASSERT(buttonBox != nullptr);
 
    uint mask = QMessageBox::FirstButton;
    while (mask <= QMessageBox::LastButton) {
@@ -1260,7 +1268,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    font.setPointSize(10);
    msg3->setFont(font);
 
-   QLabel *csImage = 0;
+   QLabel *csImage = nullptr;
    QPixmap pm(":/copperspice/dialogs/images/cslogo-64.png");
 
    if (! pm.isNull()) {
@@ -1355,8 +1363,8 @@ QAbstractButton *QMessageBoxPrivate::abstractButtonForId(int id) const
    }
 
    if (id & QMessageBox::FlagMask) {
-      // for compatibility with Qt 4.0/4.1 (even if it is silly) Qt5
-      return 0;
+      // for compatibility with older versions
+      return nullptr;
    }
 
    return q->button(newButton(id));
@@ -1502,13 +1510,13 @@ void QMessageBox::setDetailedText(const QString &text)
          d->detailsText->hide();
          d->detailsText->deleteLater();
       }
-      d->detailsText = 0;
+      d->detailsText = nullptr;
       removeButton(d->detailsButton);
       if (d->detailsButton) {
          d->detailsButton->hide();
          d->detailsButton->deleteLater();
       }
-      d->detailsButton = 0;
+      d->detailsButton = nullptr;
 
    } else {
 
@@ -1544,12 +1552,14 @@ void QMessageBox::setInformativeText(const QString &text)
          d->informativeLabel->hide();
          d->informativeLabel->deleteLater();
       }
-      d->informativeLabel = 0;
+
+      d->informativeLabel = nullptr;
+
    } else {
       if (!d->informativeLabel) {
          QLabel *label = new QLabel;
          label->setObjectName(QLatin1String("qt_msgbox_informativelabel"));
-         label->setTextInteractionFlags(Qt::TextInteractionFlags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, 0, this)));
+         label->setTextInteractionFlags(Qt::TextInteractionFlags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this)));
          label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
          label->setOpenExternalLinks(true);
          label->setWordWrap(true);
@@ -1591,22 +1601,22 @@ void QMessageBox::setWindowModality(Qt::WindowModality windowModality)
 QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb)
 {
    QStyle *style = mb ? mb->style() : QApplication::style();
-   int iconSize = style->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, mb);
+   int iconSize = style->pixelMetric(QStyle::PM_MessageBoxIconSize, nullptr, mb);
 
    QIcon tmpIcon;
 
    switch (icon) {
       case QMessageBox::Information:
-         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxInformation, 0, mb);
+         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, mb);
          break;
       case QMessageBox::Warning:
-         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxWarning, 0, mb);
+         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxWarning, nullptr, mb);
          break;
       case QMessageBox::Critical:
-         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxCritical, 0, mb);
+         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxCritical, nullptr, mb);
          break;
       case QMessageBox::Question:
-         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxQuestion, 0, mb);
+         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxQuestion, nullptr, mb);
       default:
          break;
    }
@@ -1677,7 +1687,7 @@ void QMessageBoxPrivate::helperDone(QDialog::DialogCode code, QPlatformDialogHel
 // obsolete
 QPixmap QMessageBox::standardIcon(Icon icon)
 {
-   return QMessageBoxPrivate::standardIcon(icon, 0);
+   return QMessageBoxPrivate::standardIcon(icon, nullptr);
 }
 
 #endif // QT_NO_MESSAGEBOX

@@ -127,10 +127,10 @@ typedef HRESULT (WINAPI *PtrDwmExtendFrameIntoClientArea)(HWND hWnd, const WIZ_M
 typedef HRESULT (WINAPI *PtrSetWindowThemeAttribute)(HWND hwnd, enum WIZ_WINDOWTHEMEATTRIBUTETYPE eAttribute,
    PVOID pvAttribute, DWORD cbAttribute);
 
-static PtrDwmDefWindowProc pDwmDefWindowProc = 0;
-static PtrDwmIsCompositionEnabled pDwmIsCompositionEnabled = 0;
-static PtrDwmExtendFrameIntoClientArea pDwmExtendFrameIntoClientArea = 0;
-static PtrSetWindowThemeAttribute pSetWindowThemeAttribute = 0;
+static PtrDwmDefWindowProc pDwmDefWindowProc = nullptr;
+static PtrDwmIsCompositionEnabled pDwmIsCompositionEnabled = nullptr;
+static PtrDwmExtendFrameIntoClientArea pDwmExtendFrameIntoClientArea = nullptr;
+static PtrSetWindowThemeAttribute pSetWindowThemeAttribute = nullptr;
 
 //Theme related
 typedef bool (WINAPI *PtrIsAppThemed)();
@@ -150,15 +150,15 @@ typedef HRESULT (WINAPI *PtrGetThemePartSize)(HANDLE hTheme, HDC hdc, int iPartI
 
 typedef HRESULT (WINAPI *PtrGetThemeColor)(HANDLE hTheme, int iPartId, int iStateId, int iPropId, OUT COLORREF *pColor);
 
-static PtrIsAppThemed pIsAppThemed = 0;
-static PtrIsThemeActive pIsThemeActive = 0;
-static PtrOpenThemeData pOpenThemeData = 0;
-static PtrCloseThemeData pCloseThemeData = 0;
-static PtrGetThemeSysFont pGetThemeSysFont = 0;
-static PtrDrawThemeTextEx pDrawThemeTextEx = 0;
-static PtrDrawThemeBackground pDrawThemeBackground = 0;
-static PtrGetThemePartSize pGetThemePartSize = 0;
-static PtrGetThemeColor pGetThemeColor = 0;
+static PtrIsAppThemed pIsAppThemed = nullptr;
+static PtrIsThemeActive pIsThemeActive = nullptr;
+static PtrOpenThemeData pOpenThemeData = nullptr;
+static PtrCloseThemeData pCloseThemeData = nullptr;
+static PtrGetThemeSysFont pGetThemeSysFont = nullptr;
+static PtrDrawThemeTextEx pDrawThemeTextEx = nullptr;
+static PtrDrawThemeBackground pDrawThemeBackground = nullptr;
+static PtrGetThemePartSize pGetThemePartSize = nullptr;
+static PtrGetThemeColor pGetThemeColor = nullptr;
 
 int QVistaHelper::instanceCount = 0;
 int QVistaHelper::m_devicePixelRatio = 1;
@@ -214,7 +214,7 @@ void QVistaBackButton::paintEvent(QPaintEvent *)
 {
    QPainter p(this);
    QRect r = rect();
-   HANDLE theme = pOpenThemeData(0, L"Navigation");
+   HANDLE theme = pOpenThemeData(nullptr, L"Navigation");
    //RECT rect;
 
    QPoint origin;
@@ -254,10 +254,7 @@ void QVistaBackButton::paintEvent(QPaintEvent *)
 */
 
 QVistaHelper::QVistaHelper(QWizard *wizard)
-   : QObject(wizard)
-   , pressed(false)
-   , wizard(wizard)
-   , backButton_(0)
+   : QObject(wizard), pressed(false), wizard(wizard), backButton_(nullptr)
 {
    QVistaHelper::m_devicePixelRatio = wizard->devicePixelRatio();
    is_vista = QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && resolveSymbols();
@@ -430,7 +427,7 @@ void QVistaHelper::drawTitleBar(QPainter *painter)
    const QString text = wizard->window()->windowTitle();
 
    QFont font;
-   if (!isWindow || !getCaptionQFont(wizard->logicalDpiY() * wizard->devicePixelRatio(), &font)) {
+   if (! isWindow || !getCaptionQFont(wizard->logicalDpiY() * wizard->devicePixelRatio(), &font)) {
       font = QApplication::font("QMdiSubWindowTitleBar");
    }
 
@@ -448,9 +445,10 @@ void QVistaHelper::drawTitleBar(QPainter *painter)
    }
 
    const int titleLeft = (wizard->layoutDirection() == Qt::LeftToRight
-         ? titleOffset() - glowOffset
-         : wizard->width() - titleOffset() - textWidth + glowOffset);
+         ? titleOffset() - glowOffset : wizard->width() - titleOffset() - textWidth + glowOffset);
+
    const QRect textRectangle(titleLeft, verticalCenter - textHeight / 2, textWidth, textHeight);
+
    if (isWindow) {
       drawTitleText(painter, text, textRectangle, hdc);
    } else {
@@ -461,6 +459,7 @@ void QVistaHelper::drawTitleBar(QPainter *painter)
    }
 
    const QIcon windowIcon = wizard->windowIcon();
+
    if (! windowIcon.isNull()) {
       const int size = QVistaHelper::iconSize();
 
@@ -472,7 +471,7 @@ void QVistaHelper::drawTitleBar(QPainter *painter)
       const QPoint posDp = pos * QVistaHelper::m_devicePixelRatio;
       const HICON hIcon = qt_pixmapToWinHICON(windowIcon.pixmap(size * QVistaHelper::m_devicePixelRatio));
 
-      DrawIconEx(hdc, posDp.x(), posDp.y(), hIcon, 0, 0, 0, NULL, DI_NORMAL | DI_COMPAT);
+      DrawIconEx(hdc, posDp.x(), posDp.y(), hIcon, 0, 0, 0, nullptr, DI_NORMAL | DI_COMPAT);
 
       DestroyIcon(hIcon);
    }
@@ -766,7 +765,7 @@ HWND QVistaHelper::wizardHWND() const
 
    qWarning().nospace() << "Failed to obtain HWND for wizard.";
 
-   return 0;
+   return nullptr;
 }
 
 bool QVistaHelper::drawTitleText(QPainter *painter, const QString &text, const QRect &rect, HDC hdc)
@@ -797,7 +796,7 @@ bool QVistaHelper::drawTitleText(QPainter *painter, const QString &text, const Q
       dib.bmiHeader.biBitCount    = 32;
       dib.bmiHeader.biCompression = BI_RGB;
 
-      bmp = CreateDIBSection(hdc, &dib, DIB_RGB_COLORS, NULL, NULL, 0);
+      bmp = CreateDIBSection(hdc, &dib, DIB_RGB_COLORS, nullptr, nullptr, 0);
 
       // Set up the DC
       const LOGFONT captionLogFont = getCaptionLogFont(hTheme);
@@ -852,7 +851,7 @@ bool QVistaHelper::drawBlackRect(const QRect &rect, HDC hdc)
       dib.bmiHeader.biBitCount = 32;
       dib.bmiHeader.biCompression = BI_RGB;
 
-      bmp = CreateDIBSection(hdc, &dib, DIB_RGB_COLORS, NULL, NULL, 0);
+      bmp = CreateDIBSection(hdc, &dib, DIB_RGB_COLORS, nullptr, nullptr, 0);
       HBITMAP hOldBmp = (HBITMAP)SelectObject(dcMem, (HGDIOBJ) bmp);
 
       BitBlt(hdc, rectDp.left(), rectDp.top(), rectDp.width(), rectDp.height(), dcMem, 0, 0, SRCCOPY);
@@ -921,19 +920,19 @@ bool QVistaHelper::resolveSymbols()
    }
 
    return (
-         pDwmIsCompositionEnabled != 0
-         && pDwmDefWindowProc != 0
-         && pDwmExtendFrameIntoClientArea != 0
-         && pIsAppThemed != 0
-         && pDrawThemeBackground != 0
-         && pGetThemePartSize != 0
-         && pGetThemeColor != 0
-         && pIsThemeActive != 0
-         && pOpenThemeData != 0
-         && pCloseThemeData != 0
-         && pGetThemeSysFont != 0
-         && pDrawThemeTextEx != 0
-         && pSetWindowThemeAttribute != 0
+         pDwmIsCompositionEnabled != nullptr
+         && pDwmDefWindowProc != nullptr
+         && pDwmExtendFrameIntoClientArea != nullptr
+         && pIsAppThemed != nullptr
+         && pDrawThemeBackground != nullptr
+         && pGetThemePartSize != nullptr
+         && pGetThemeColor != nullptr
+         && pIsThemeActive != nullptr
+         && pOpenThemeData != nullptr
+         && pCloseThemeData != nullptr
+         && pGetThemeSysFont != nullptr
+         && pDrawThemeTextEx != nullptr
+         && pSetWindowThemeAttribute != nullptr
       );
 }
 

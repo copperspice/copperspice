@@ -38,7 +38,7 @@ QPlatformScreen::QPlatformScreen()
    : d_ptr(new QPlatformScreenPrivate)
 {
    Q_D(QPlatformScreen);
-   d->screen = 0;
+   d->screen = nullptr;
 }
 
 QPlatformScreen::~QPlatformScreen()
@@ -75,7 +75,7 @@ QWindow *QPlatformScreen::topLevelWindowAt(const QPoint &pos) const
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 const QPlatformScreen *QPlatformScreen::screenForPosition(const QPoint &point) const
@@ -154,7 +154,7 @@ QPlatformScreen *QPlatformScreen::platformScreenForWindow(const QWindow *window)
    // when one screen is disconnected that the window doesn't have a screen.
 
    if (! window->screen()) {
-      return 0;
+      return nullptr;
    }
 
    return window->screen()->handle();
@@ -162,7 +162,7 @@ QPlatformScreen *QPlatformScreen::platformScreenForWindow(const QWindow *window)
 
 QPlatformCursor *QPlatformScreen::cursor() const
 {
-   return 0;
+   return nullptr;
 }
 
 void QPlatformScreen::resizeMaximizedWindows()

@@ -68,8 +68,10 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       };
 
     public:
-      explicit QFileSystemNode(const QString &filename = QString(), QFileSystemNode *p = 0)
-         : fileName(filename), populatedChildren(false), isVisible(false), dirtyChildrenIndex(-1), parent(p), info(0) {}
+      explicit QFileSystemNode(const QString &filename = QString(), QFileSystemNode *p = nullptr)
+         : fileName(filename), populatedChildren(false), isVisible(false), dirtyChildrenIndex(-1), parent(p), info(nullptr)
+      {
+      }
 
       ~QFileSystemNode() {
          for (auto i : children) {
@@ -77,8 +79,8 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          }
 
          delete info;
-         info   = 0;
-         parent = 0;
+         info   = nullptr;
+         parent = nullptr;
       }
 
       QString fileName;
@@ -112,7 +114,8 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          if (info) {
             return info->permissions();
          }
-         return 0;
+
+         return Qt::EmptyFlag;
       }
 
       inline bool isReadable() const {
@@ -221,7 +224,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       }
 
       inline bool hasInformation() const {
-         return info != 0;
+         return info != nullptr;
       }
 
       void populate(const QExtendedInformation &fileInfo) {

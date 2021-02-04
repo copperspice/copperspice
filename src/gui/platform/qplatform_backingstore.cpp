@@ -67,8 +67,7 @@ class QPlatformBackingStorePrivate
    QPlatformBackingStorePrivate(QWindow *w)
       : window(w)
 #ifndef QT_NO_OPENGL
-      , textureId(0)
-      , blitter(0)
+      , textureId(0), blitter(nullptr)
 #endif
    {
    }
@@ -337,11 +336,13 @@ void QPlatformBackingStore::composeAndFlush(QWindow *window, const QRegion &regi
          origin = QOpenGLTextureBlitter::OriginBottomLeft;
       }
       textureId = d_ptr->textureId;
+
    } else {
-      TextureFlags flags = 0;
+      TextureFlags flags = Qt::EmptyFlag;
       textureId = toTexture(deviceRegion(region, window, offset), &d_ptr->textureSize, &flags);
       d_ptr->needsSwizzle = (flags & TextureSwizzle) != 0;
       d_ptr->premultiplied = (flags & TexturePremultiplied) != 0;
+
       if (flags & TextureFlip) {
          origin = QOpenGLTextureBlitter::OriginBottomLeft;
       }
@@ -401,7 +402,7 @@ GLuint QPlatformBackingStore::toTexture(const QRegion &dirtyRegion, QSize *textu
    GLuint pixelType = GL_UNSIGNED_BYTE;
 
    bool needsConversion = false;
-   *flags = 0;
+   *flags = Qt::EmptyFlag;
 
    switch (image.format()) {
       case QImage::Format_ARGB32_Premultiplied:

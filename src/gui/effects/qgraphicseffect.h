@@ -101,7 +101,7 @@ class Q_GUI_EXPORT QGraphicsEffect : public QObject
    QRectF sourceBoundingRect(Qt::CoordinateSystem system = Qt::LogicalCoordinates) const;
    void drawSource(QPainter *painter);
 
-   QPixmap sourcePixmap(Qt::CoordinateSystem system = Qt::LogicalCoordinates, QPoint *offset = 0,
+   QPixmap sourcePixmap(Qt::CoordinateSystem system = Qt::LogicalCoordinates, QPoint *offset = nullptr,
                         PixmapPadMode mode = PadToEffectiveBoundingRect) const;
 
    QScopedPointer<QGraphicsEffectPrivate> d_ptr;

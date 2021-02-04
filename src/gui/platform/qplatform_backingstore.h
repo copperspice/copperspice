@@ -53,7 +53,7 @@ class Q_GUI_EXPORT QPlatformTextureList : public QObject
    };
    using Flags = QFlags<Flag>;
 
-   explicit QPlatformTextureList(QObject *parent = 0);
+   explicit QPlatformTextureList(QObject *parent = nullptr);
    ~QPlatformTextureList();
 
    int count() const;
@@ -69,7 +69,7 @@ class Q_GUI_EXPORT QPlatformTextureList : public QObject
    bool isLocked() const;
 
    void appendTexture(void *source, GLuint textureId, const QRect &geometry,
-      const QRect &clipRect = QRect(), Flags flags = 0);
+      const QRect &clipRect = QRect(), Flags flags = Qt::EmptyFlag);
    void clear();
 
    GUI_CS_SIGNAL_1(Public, void locked(bool un_named_arg1))

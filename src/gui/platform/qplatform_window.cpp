@@ -51,7 +51,7 @@ QWindow *QPlatformWindow::window() const
 
 QPlatformWindow *QPlatformWindow::parent() const
 {
-   return window()->parent() ? window()->parent()->handle() : 0;
+   return window()->parent() ? window()->parent()->handle() : nullptr;
 }
 
 QPlatformScreen *QPlatformWindow::screen() const

@@ -60,7 +60,7 @@ QString qt_accHotKey(const QString &text);
 
 QList<QWidget *> childWidgets(const QWidget *widget)
 {
-   if (widget == 0) {
+   if (widget == nullptr) {
       return QList<QWidget *>();
    }
 
@@ -324,7 +324,7 @@ int QAccessibleStackedWidget::indexOfChild(const QAccessibleInterface *child) co
 QAccessibleInterface *QAccessibleStackedWidget::child(int index) const
 {
    if (index < 0 || index >= stackedWidget()->count()) {
-      return 0;
+      return nullptr;
    }
    return QAccessible::queryAccessibleInterface(stackedWidget()->widget(index));
 }
@@ -367,7 +367,7 @@ QAccessibleInterface *QAccessibleMdiArea::child(int index) const
 
    QWidget *targetObject = subWindows.value(index);
    if (!targetObject) {
-      return 0;
+      return nullptr;
    }
 
    return QAccessible::queryAccessibleInterface(targetObject);
@@ -451,7 +451,7 @@ QAccessibleInterface *QAccessibleMdiSubWindow::child(int index) const
 {
    QMdiSubWindow *source = mdiSubWindow();
    if (index != 0 || !source->widget()) {
-      return 0;
+      return nullptr;
    }
 
    return QAccessible::queryAccessibleInterface(source->widget());
@@ -533,7 +533,7 @@ int QAccessibleCalendarWidget::indexOfChild(const QAccessibleInterface *child) c
 QAccessibleInterface *QAccessibleCalendarWidget::child(int index) const
 {
    if (index < 0 || index >= childCount()) {
-      return 0;
+      return nullptr;
    }
 
    if (childCount() > 1 && index == 0) {
@@ -555,7 +555,8 @@ QAbstractItemView *QAccessibleCalendarWidget::calendarView() const
          return static_cast<QAbstractItemView *>(child);
       }
    }
-   return 0;
+
+   return nullptr;
 }
 
 QWidget *QAccessibleCalendarWidget::navigationBar() const
@@ -565,7 +566,8 @@ QWidget *QAccessibleCalendarWidget::navigationBar() const
          return static_cast<QWidget *>(child);
       }
    }
-   return 0;
+
+   return nullptr;
 }
 #endif // QT_NO_CALENDARWIDGET
 
@@ -610,7 +612,7 @@ QAccessibleInterface *QAccessibleDockWidget::child(int index) const
          return QAccessible::queryAccessibleInterface(item->widget());
       }
    }
-   return 0;
+   return nullptr;
 }
 
 int QAccessibleDockWidget::indexOfChild(const QAccessibleInterface *child) const
@@ -1100,7 +1102,8 @@ QAccessibleInterface *QAccessibleMainWindow::child(int index) const
    if (index >= 0 && index < kids.count()) {
       return QAccessible::queryAccessibleInterface(kids.at(index));
    }
-   return 0;
+
+   return nullptr;
 }
 
 int QAccessibleMainWindow::childCount() const
@@ -1118,24 +1121,26 @@ int QAccessibleMainWindow::indexOfChild(const QAccessibleInterface *iface) const
 QAccessibleInterface *QAccessibleMainWindow::childAt(int x, int y) const
 {
    QWidget *w = widget();
-   if (!w->isVisible()) {
-      return 0;
+   if (! w->isVisible()) {
+      return nullptr;
    }
 
    QPoint gp = w->mapToGlobal(QPoint(0, 0));
    if (!QRect(gp.x(), gp.y(), w->width(), w->height()).contains(x, y)) {
-      return 0;
+      return nullptr;
    }
 
    QWidgetList kids = childWidgets(mainWindow());
    QPoint rp = mainWindow()->mapFromGlobal(QPoint(x, y));
+
    for (int i = 0; i < kids.size(); ++i) {
       QWidget *child = kids.at(i);
       if (!child->isWindow() && !child->isHidden() && child->geometry().contains(rp)) {
          return QAccessible::queryAccessibleInterface(child);
       }
    }
-   return 0;
+
+   return nullptr;
 }
 
 QMainWindow *QAccessibleMainWindow::mainWindow() const

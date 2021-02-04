@@ -92,13 +92,13 @@ QSize QErrorMessageTextView::sizeHint() const
 
 
 
-static QErrorMessage *qtMessageHandler = 0;
+static QErrorMessage *qtMessageHandler = nullptr;
 
 static void deleteStaticcQErrorMessage() // post-routine
 {
    if (qtMessageHandler) {
       delete qtMessageHandler;
-      qtMessageHandler = 0;
+      qtMessageHandler = nullptr;
    }
 }
 
@@ -181,12 +181,11 @@ QErrorMessage::QErrorMessage(QWidget *parent)
    d->retranslateStrings();
 }
 
-
 QErrorMessage::~QErrorMessage()
 {
    if (this == qtMessageHandler) {
-      qtMessageHandler = 0;
-      QtMsgHandler tmp = qInstallMsgHandler(0);
+      qtMessageHandler = nullptr;
+      QtMsgHandler tmp = qInstallMsgHandler(nullptr);
 
       // in case someone else has later stuck in another...
       if (tmp != jump) {
@@ -224,7 +223,7 @@ void QErrorMessage::done(int a)
 QErrorMessage *QErrorMessage::qtHandler()
 {
    if (!qtMessageHandler) {
-      qtMessageHandler = new QErrorMessage(0);
+      qtMessageHandler = new QErrorMessage(nullptr);
       qAddPostRoutine(deleteStaticcQErrorMessage); // clean up
       qtMessageHandler->setWindowTitle(QApplication::applicationName());
       qInstallMsgHandler(jump);
