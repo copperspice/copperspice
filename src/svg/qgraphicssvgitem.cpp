@@ -30,7 +30,7 @@
 #include <qsvgrenderer.h>
 #include <qdebug.h>
 
-#include <qgraphicsitem_p.h>
+#include <qgraphics_item_p.h>
 
 class QGraphicsSvgItemPrivate : public QGraphicsItemPrivate
 {

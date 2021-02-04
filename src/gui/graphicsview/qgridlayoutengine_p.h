@@ -30,8 +30,8 @@
 #include <qmap.h>
 #include <qpair.h>
 #include <qvector.h>
-#include <qgraphicslayout_p.h>
 
+#include <qgraphics_layout_p.h>
 #include <qlayoutpolicy_p.h>
 #include <qabstractlayoutstyleinfo_p.h>
 

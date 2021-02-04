@@ -76,7 +76,7 @@
 #include <qwindow_p.h>
 #include <qaction_p.h>
 #include <qlayout_p.h>
-#include <qgraphicsproxywidget_p.h>
+#include <qgraphics_proxywidget_p.h>
 #include <qabstractscrollarea_p.h>
 #include <qevent_p.h>
 #include <qgesturemanager_p.h>

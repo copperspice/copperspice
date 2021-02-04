@@ -26,7 +26,8 @@
 
 #include <qaction.h>
 #include <qmenu.h>
-#include <qgraphicswidget_p.h>
+
+#include <qgraphics_widget_p.h>
 
 #ifndef QT_NO_ACTION
 class QShortcutMap;

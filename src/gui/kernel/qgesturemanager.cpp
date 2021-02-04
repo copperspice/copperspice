@@ -31,7 +31,7 @@
 #include <qstandardgestures_p.h>
 #include <qwidget_p.h>
 #include <qgesture_p.h>
-#include <qgraphicsitem_p.h>
+#include <qgraphics_item_p.h>
 #include <qevent_p.h>
 #include <qapplication_p.h>
 #include <qwidgetwindow_p.h>
