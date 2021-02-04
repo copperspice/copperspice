@@ -28,8 +28,8 @@
 #include <qscrollerproperties.h>
 #include <qscrollerproperties_p.h>
 
-static QScrollerPropertiesPrivate *userDefaults   = 0;
-static QScrollerPropertiesPrivate *systemDefaults = 0;
+static QScrollerPropertiesPrivate *userDefaults   = nullptr;
+static QScrollerPropertiesPrivate *systemDefaults = nullptr;
 
 QScrollerPropertiesPrivate *QScrollerPropertiesPrivate::defaults()
 {
@@ -170,7 +170,7 @@ void QScrollerProperties::setDefaultScrollerProperties(const QScrollerProperties
 void QScrollerProperties::unsetDefaultScrollerProperties()
 {
    delete userDefaults;
-   userDefaults = 0;
+   userDefaults = nullptr;
 }
 
 QVariant QScrollerProperties::scrollMetric(ScrollMetric metric) const

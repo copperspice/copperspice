@@ -74,7 +74,7 @@ QGraphicsGridLayout::~QGraphicsGridLayout()
       // ~QGraphicsLayoutItem.
       removeAt(i);
       if (item) {
-         item->setParentLayoutItem(0);
+         item->setParentLayoutItem(nullptr);
          if (item->ownedByLayout()) {
             delete item;
          }
@@ -462,12 +462,14 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int row, int column) const
    Q_D(const QGraphicsGridLayout);
    if (row < 0 || row >= rowCount() || column < 0 || column >= columnCount()) {
       qWarning("QGraphicsGridLayout::itemAt: invalid row, column %d, %d", row, column);
-      return 0;
+      return nullptr;
    }
+
    if (QGraphicsGridLayoutEngineItem *engineItem = static_cast<QGraphicsGridLayoutEngineItem *>(d->engine.itemAt(row, column))) {
       return engineItem->layoutItem();
    }
-   return 0;
+
+   return nullptr;
 }
 
 /*!
@@ -488,9 +490,10 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
    Q_D(const QGraphicsGridLayout);
    if (index < 0 || index >= d->engine.itemCount()) {
       qWarning("QGraphicsGridLayout::itemAt: invalid index %d", index);
-      return 0;
+      return nullptr;
    }
-   QGraphicsLayoutItem *item = 0;
+
+   QGraphicsLayoutItem *item = nullptr;
    if (QGraphicsGridLayoutEngineItem *engineItem = static_cast<QGraphicsGridLayoutEngineItem *>(d->engine.itemAt(index))) {
       item = engineItem->layoutItem();
    }
@@ -507,7 +510,7 @@ void QGraphicsGridLayout::removeAt(int index)
 
    if (QGraphicsGridLayoutEngineItem *gridItem = static_cast<QGraphicsGridLayoutEngineItem *>(d->engine.itemAt(index))) {
       if (QGraphicsLayoutItem *layoutItem = gridItem->layoutItem()) {
-         layoutItem->setParentLayoutItem(0);
+         layoutItem->setParentLayoutItem(nullptr);
       }
 
       d->engine.removeItem(gridItem);

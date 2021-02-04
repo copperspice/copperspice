@@ -32,7 +32,7 @@ class QUndoGroupPrivate
    Q_DECLARE_PUBLIC(QUndoGroup)
 
  public:
-   QUndoGroupPrivate() : active(0) {}
+   QUndoGroupPrivate() : active(nullptr) {}
    virtual ~QUndoGroupPrivate() {}
 
    QUndoStack *active;
@@ -57,7 +57,7 @@ QUndoGroup::~QUndoGroup()
    QList<QUndoStack *>::iterator end = d->stack_list.end();
 
    while (it != end) {
-      (*it)->d_func()->group = 0;
+      (*it)->d_func()->group = nullptr;
       ++it;
    }
 }
@@ -85,9 +85,9 @@ void QUndoGroup::removeStack(QUndoStack *stack)
       return;
    }
    if (stack == d->active) {
-      setActiveStack(0);
+      setActiveStack(nullptr);
    }
-   stack->d_func()->group = 0;
+   stack->d_func()->group = nullptr;
 }
 
 QList<QUndoStack *> QUndoGroup::stacks() const
@@ -104,7 +104,7 @@ void QUndoGroup::setActiveStack(QUndoStack *stack)
       return;
    }
 
-   if (d->active != 0) {
+   if (d->active != nullptr) {
       disconnect(d->active, &QUndoStack::canUndoChanged,  this, &QUndoGroup::canUndoChanged);
       disconnect(d->active, &QUndoStack::undoTextChanged, this, &QUndoGroup::undoTextChanged);
       disconnect(d->active, &QUndoStack::canRedoChanged,  this, &QUndoGroup::canRedoChanged);
@@ -115,7 +115,7 @@ void QUndoGroup::setActiveStack(QUndoStack *stack)
 
    d->active = stack;
 
-   if (d->active == 0) {
+   if (d->active == nullptr) {
       emit canUndoChanged(false);
       emit undoTextChanged(QString());
       emit canRedoChanged(false);
@@ -151,7 +151,7 @@ QUndoStack *QUndoGroup::activeStack() const
 void QUndoGroup::undo()
 {
    Q_D(QUndoGroup);
-   if (d->active != 0) {
+   if (d->active != nullptr) {
       d->active->undo();
    }
 }
@@ -159,7 +159,7 @@ void QUndoGroup::undo()
 void QUndoGroup::redo()
 {
    Q_D(QUndoGroup);
-   if (d->active != 0) {
+   if (d->active != nullptr) {
       d->active->redo();
    }
 }
@@ -167,31 +167,31 @@ void QUndoGroup::redo()
 bool QUndoGroup::canUndo() const
 {
    Q_D(const QUndoGroup);
-   return d->active != 0 && d->active->canUndo();
+   return d->active != nullptr && d->active->canUndo();
 }
 
 bool QUndoGroup::canRedo() const
 {
    Q_D(const QUndoGroup);
-   return d->active != 0 && d->active->canRedo();
+   return d->active != nullptr && d->active->canRedo();
 }
 
 QString QUndoGroup::undoText() const
 {
    Q_D(const QUndoGroup);
-   return d->active == 0 ? QString() : d->active->undoText();
+   return d->active == nullptr ? QString() : d->active->undoText();
 }
 
 QString QUndoGroup::redoText() const
 {
    Q_D(const QUndoGroup);
-   return d->active == 0 ? QString() : d->active->redoText();
+   return d->active == nullptr ? QString() : d->active->redoText();
 }
 
 bool QUndoGroup::isClean() const
 {
    Q_D(const QUndoGroup);
-   return d->active == 0 || d->active->isClean();
+   return d->active == nullptr || d->active->isClean();
 }
 
 #ifndef QT_NO_ACTION

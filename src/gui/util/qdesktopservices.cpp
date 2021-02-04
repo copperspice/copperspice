@@ -126,7 +126,7 @@ void QDesktopServices::setUrlHandler(const QString &scheme, QObject *receiver, c
 
 void QDesktopServices::unsetUrlHandler(const QString &scheme)
 {
-   setUrlHandler(scheme, 0, 0);
+   setUrlHandler(scheme, nullptr, nullptr);
 }
 
 extern Q_CORE_EXPORT QString qt_applicationName_noFallback();

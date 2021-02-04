@@ -40,23 +40,13 @@ class QStyleOptionTitleBar;
 class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsWidget)
+
  public:
    QGraphicsWidgetPrivate()
-      : margins(0),
-        layout(0),
-        inheritedPaletteResolveMask(0),
-        inheritedFontResolveMask(0),
-        inSetGeometry(0),
-        polished(0),
-        inSetPos(0),
-        autoFillBackground(0),
-        focusPolicy(Qt::NoFocus),
-        focusNext(0),
-        focusPrev(0),
-        windowFlags(0),
-        windowData(0),
-        setWindowFrameMargins(false),
-        windowFrameMargins(0) {
+      : margins(nullptr), layout(nullptr), inheritedPaletteResolveMask(0), inheritedFontResolveMask(0),
+        inSetGeometry(0), polished(0), inSetPos(0), autoFillBackground(0),
+        focusPolicy(Qt::NoFocus), focusNext(nullptr), focusPrev(nullptr), windowFlags(Qt::EmptyFlag), windowData(nullptr),
+        setWindowFrameMargins(false), windowFrameMargins(nullptr) {
    }
    virtual ~QGraphicsWidgetPrivate();
 
@@ -68,7 +58,7 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    mutable qreal *margins;
    void ensureMargins() const;
 
-   void fixFocusChainBeforeReparenting(QGraphicsWidget *newParent, QGraphicsScene *oldScene, QGraphicsScene *newScene = 0);
+   void fixFocusChainBeforeReparenting(QGraphicsWidget *newParent, QGraphicsScene *oldScene, QGraphicsScene *newScene = nullptr);
    void setLayout_helper(QGraphicsLayout *l);
 
    // Layouts

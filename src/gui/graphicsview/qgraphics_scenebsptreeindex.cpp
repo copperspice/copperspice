@@ -303,7 +303,7 @@ void QGraphicsSceneBspTreeIndexPrivate::removeItem(QGraphicsItem *item, bool rec
       Q_ASSERT(indexedItems.at(item->d_ptr->index) == item);
       Q_ASSERT(!item->d_ptr->itemDiscovered);
       freeItemIndexes << item->d_ptr->index;
-      indexedItems[item->d_ptr->index] = 0;
+      indexedItems[item->d_ptr->index] = nullptr;
       item->d_ptr->index = -1;
 
       if (item->d_ptr->itemIsUntransformable()) {

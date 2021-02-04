@@ -58,7 +58,7 @@
 /*!
   \internal
 */
-QSimplex::QSimplex() : objective(0), rows(0), columns(0), firstArtificial(0), matrix(0)
+QSimplex::QSimplex() : objective(nullptr), rows(0), columns(0), firstArtificial(0), matrix(nullptr)
 {
 }
 
@@ -75,7 +75,7 @@ QSimplex::~QSimplex()
 */
 void QSimplex::clearDataStructures()
 {
-   if (matrix == 0) {
+   if (matrix == nullptr) {
       return;
    }
 
@@ -84,7 +84,7 @@ void QSimplex::clearDataStructures()
    columns = 0;
    firstArtificial = 0;
    free(matrix);
-   matrix = 0;
+   matrix = nullptr;
 
    // Constraints
    for (int i = 0; i < constraints.size(); ++i) {
@@ -96,7 +96,7 @@ void QSimplex::clearDataStructures()
 
    // Other
    variables.clear();
-   objective = 0;
+   objective = nullptr;
 }
 
 /*!
@@ -174,8 +174,8 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
       QSimplexVariable *surplus;
       QSimplexVariable *artificial;
 
-      Q_ASSERT(constraints[i]->helper.first == 0);
-      Q_ASSERT(constraints[i]->artificial == 0);
+      Q_ASSERT(constraints[i]->helper.first == nullptr);
+      Q_ASSERT(constraints[i]->artificial == nullptr);
 
       switch (constraints[i]->ratio) {
          case QSimplexConstraint::LessOrEqual:

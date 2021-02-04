@@ -325,7 +325,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    virtual void drawBackground(QPainter *painter, const QRectF &rect);
    virtual void drawForeground(QPainter *painter, const QRectF &rect);
    virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[],
-      const QStyleOptionGraphicsItem options[], QWidget *widget = 0);
+      const QStyleOptionGraphicsItem options[], QWidget *widget = nullptr);
 
    QScopedPointer<QGraphicsScenePrivate> d_ptr;
 

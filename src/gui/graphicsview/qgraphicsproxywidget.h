@@ -35,7 +35,7 @@ class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
    GUI_CS_OBJECT(QGraphicsProxyWidget)
 
  public:
-   QGraphicsProxyWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = nullptr);
+   QGraphicsProxyWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = Qt::EmptyFlag);
 
    QGraphicsProxyWidget(const QGraphicsProxyWidget &) = delete;
    QGraphicsProxyWidget &operator=(const QGraphicsProxyWidget &) = delete;

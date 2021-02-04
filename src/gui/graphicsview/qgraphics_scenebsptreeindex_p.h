@@ -48,7 +48,7 @@ class QGraphicsSceneBspTreeIndex : public QGraphicsSceneIndex
    GUI_CS_PROPERTY_WRITE(bspTreeDepth, setBspTreeDepth)
 
  public:
-   QGraphicsSceneBspTreeIndex(QGraphicsScene *scene = 0);
+   QGraphicsSceneBspTreeIndex(QGraphicsScene *scene = nullptr);
 
    QGraphicsSceneBspTreeIndex(const QGraphicsSceneBspTreeIndex &) = delete;
    QGraphicsSceneBspTreeIndex &operator=(const QGraphicsSceneBspTreeIndex &) = delete;

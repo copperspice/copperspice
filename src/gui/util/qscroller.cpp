@@ -275,7 +275,7 @@ QScroller *QScroller::scroller(QObject *target)
 {
    if (!target) {
       qWarning("QScroller::scroller() was called with a null target.");
-      return 0;
+      return nullptr;
    }
 
    if (qt_allScrollers()->contains(target)) {
@@ -464,7 +464,7 @@ void QScroller::ungrabGesture(QObject *target)
 
    QGestureRecognizer::unregisterRecognizer(sp->recognizerType);
    // do not delete the recognizer. The QGestureManager is doing this.
-   sp->recognizer = 0;
+   sp->recognizer = nullptr;
 }
 
 #endif // QT_NO_GESTURES
@@ -489,7 +489,7 @@ QScroller::~QScroller()
 #ifndef QT_NO_GESTURES
    QGestureRecognizer::unregisterRecognizer(d->recognizerType);
    // do not delete the recognizer. The QGestureManager is doing this.
-   d->recognizer = 0;
+   d->recognizer = nullptr;
 #endif
    qt_allScrollers()->remove(d->target);
    qt_activeScrollers()->remove(this);
@@ -882,17 +882,12 @@ void QScroller::setSnapPositionsY(qreal first, qreal interval)
 QScrollerPrivate::QScrollerPrivate(QScroller *q, QObject *_target)
    : target(_target)
 #ifndef QT_NO_GESTURES
-   , recognizer(0)
-   , recognizerType(Qt::CustomGesture)
+     , recognizer(nullptr), recognizerType(Qt::CustomGesture)
 #endif
-   , state(QScroller::Inactive)
-   , firstScroll(true)
-   , pressTimestamp(0)
-   , lastTimestamp(0)
-   , snapFirstX(-1.0)
-   , snapIntervalX(0.0)
-   , snapFirstY(-1.0)
-   , snapIntervalY(0.0)
+
+   , state(QScroller::Inactive), firstScroll(true), pressTimestamp(0), lastTimestamp(0), snapFirstX(-1.0),
+     snapIntervalX(0.0), snapFirstY(-1.0), snapIntervalY(0.0)
+
 #ifndef QT_NO_ANIMATION
    , scrollTimer(new QScrollTimer(this))
 #endif
@@ -903,7 +898,7 @@ QScrollerPrivate::QScrollerPrivate(QScroller *q, QObject *_target)
 
 void QScrollerPrivate::init()
 {
-   setDpiFromWidget(0);
+   setDpiFromWidget(nullptr);
    monotonicTimer.start();
 }
 

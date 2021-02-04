@@ -34,7 +34,7 @@ QUndoCommand::QUndoCommand(const QString &text, QUndoCommand *parent)
 {
    d = new QUndoCommandPrivate;
 
-   if (parent != 0) {
+   if (parent != nullptr) {
       parent->d->child_list.append(this);
    }
 
@@ -44,7 +44,7 @@ QUndoCommand::QUndoCommand(const QString &text, QUndoCommand *parent)
 QUndoCommand::QUndoCommand(QUndoCommand *parent)
 {
    d = new QUndoCommandPrivate;
-   if (parent != 0) {
+   if (parent != nullptr) {
       parent->d->child_list.append(this);
    }
 }
@@ -108,11 +108,10 @@ int QUndoCommand::childCount() const
    return d->child_list.count();
 }
 
-
 const QUndoCommand *QUndoCommand::child(int index) const
 {
    if (index < 0 || index >= d->child_list.count()) {
-      return 0;
+      return nullptr;
    }
    return d->child_list.at(index);
 }
@@ -237,7 +236,7 @@ QUndoStack::~QUndoStack()
 {
 #ifndef QT_NO_UNDOGROUP
    Q_D(QUndoStack);
-   if (d->group != 0) {
+   if (d->group != nullptr) {
       d->group->removeStack(this);
    }
 #endif
@@ -281,7 +280,8 @@ void QUndoStack::push(QUndoCommand *cmd)
 
    bool macro = !d->macro_stack.isEmpty();
 
-   QUndoCommand *cur = 0;
+   QUndoCommand *cur = nullptr;
+
    if (macro) {
       QUndoCommand *macro_cmd = d->macro_stack.last();
       if (!macro_cmd->d->child_list.isEmpty()) {
@@ -299,7 +299,7 @@ void QUndoStack::push(QUndoCommand *cmd)
       }
    }
 
-   bool try_merge = cur != 0
+   bool try_merge = cur != nullptr
       && cur->id() != -1
       && cur->id() == cmd->id()
       && (macro || d->index != d->clean_index);
@@ -616,7 +616,7 @@ const QUndoCommand *QUndoStack::command(int index) const
    Q_D(const QUndoStack);
 
    if (index < 0 || index >= d->command_list.count()) {
-      return 0;
+      return nullptr;
    }
    return d->command_list.at(index);
 }
@@ -668,11 +668,11 @@ void QUndoStack::setActive(bool active)
 #else
    Q_D(QUndoStack);
 
-   if (d->group != 0) {
+   if (d->group != nullptr) {
       if (active) {
          d->group->setActiveStack(this);
       } else if (d->group->activeStack() == this) {
-         d->group->setActiveStack(0);
+         d->group->setActiveStack(nullptr);
       }
    }
 #endif
@@ -684,7 +684,7 @@ bool QUndoStack::isActive() const
    return true;
 #else
    Q_D(const QUndoStack);
-   return d->group == 0 || d->group->activeStack() == this;
+   return d->group == nullptr || d->group->activeStack() == this;
 #endif
 }
 

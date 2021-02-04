@@ -192,7 +192,7 @@ void QGraphicsAnchorLayout::addAnchors(QGraphicsLayoutItem *firstItem,
    bool ok = true;
    if (orientations & Qt::Horizontal) {
       // Currently, if the first is ok, then the rest of the calls should be ok
-      ok = addAnchor(secondItem, Qt::AnchorLeft, firstItem, Qt::AnchorLeft) != 0;
+      ok = addAnchor(secondItem, Qt::AnchorLeft, firstItem, Qt::AnchorLeft) != nullptr;
       if (ok) {
          addAnchor(firstItem, Qt::AnchorRight, secondItem, Qt::AnchorRight);
       }
@@ -306,7 +306,7 @@ void QGraphicsAnchorLayout::removeAt(int index)
    d->removeAnchors(item);
    d->items.remove(index);
 
-   item->setParentLayoutItem(0);
+   item->setParentLayoutItem(nullptr);
    invalidate();
 }
 

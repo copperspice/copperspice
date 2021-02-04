@@ -29,7 +29,6 @@
 #include <qaction.h>
 #include <qundostack.h>
 
-
 class QUndoCommand;
 class QUndoGroup;
 
@@ -50,7 +49,11 @@ class QUndoStackPrivate
    Q_DECLARE_PUBLIC(QUndoStack)
 
  public:
-   QUndoStackPrivate() : index(0), clean_index(0), group(0), undo_limit(0) {}
+   QUndoStackPrivate()
+      : index(0), clean_index(0), group(nullptr), undo_limit(0)
+   {
+   }
+
    virtual ~QUndoStackPrivate() {}
 
    QList<QUndoCommand *> command_list;

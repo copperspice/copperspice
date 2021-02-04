@@ -36,15 +36,10 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
 
  public:
    QGraphicsProxyWidgetPrivate()
-      : dragDropWidget(0),
-        posChangeMode(NoMode),
-        sizeChangeMode(NoMode),
-        visibleChangeMode(NoMode),
-        enabledChangeMode(NoMode),
-        styleChangeMode(NoMode),
-        paletteChangeMode(NoMode),
-        tooltipChangeMode(NoMode),
-        focusFromWidgetToProxy(0) {
+      : dragDropWidget(nullptr), posChangeMode(NoMode), sizeChangeMode(NoMode), visibleChangeMode(NoMode),
+        enabledChangeMode(NoMode), styleChangeMode(NoMode), paletteChangeMode(NoMode),
+        tooltipChangeMode(NoMode), focusFromWidgetToProxy(0)
+   {
    }
 
    void init();
@@ -92,8 +87,6 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
    quint32 focusFromWidgetToProxy : 1;
    quint32 proxyIsGivingFocus : 1;
 };
-
-
 
 #endif
 

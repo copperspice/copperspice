@@ -76,7 +76,7 @@ class QUndoModel : public QAbstractItemModel
 QUndoModel::QUndoModel(QObject *parent)
    : QAbstractItemModel(parent)
 {
-   m_stack = 0;
+   m_stack = nullptr;
    m_sel_model = new QItemSelectionModel(this, this);
 
    connect(m_sel_model, &QItemSelectionModel::currentChanged, this, &QUndoModel::setStackCurrentIndex);
@@ -100,7 +100,7 @@ void QUndoModel::setStack(QUndoStack *stack)
       return;
    }
 
-   if (m_stack != 0) {
+   if (m_stack != nullptr) {
       disconnect(m_stack, &QUndoStack::cleanChanged, this, &QUndoModel::stackChanged);
       disconnect(m_stack, &QUndoStack::indexChanged, this, &QUndoModel::stackChanged);
       disconnect(m_stack, &QUndoStack::destroyed,    this, &QUndoModel::stackDestroyed);
@@ -108,7 +108,7 @@ void QUndoModel::setStack(QUndoStack *stack)
 
    m_stack = stack;
 
-   if (m_stack != 0) {
+   if (m_stack != nullptr) {
       connect(m_stack, &QUndoStack::cleanChanged, this, &QUndoModel::stackChanged);
       connect(m_stack, &QUndoStack::indexChanged, this, &QUndoModel::stackChanged);
       connect(m_stack, &QUndoStack::destroyed,    this, &QUndoModel::stackDestroyed);
@@ -123,7 +123,7 @@ void QUndoModel::stackDestroyed(QObject *obj)
       return;
    }
 
-   m_stack = 0;
+   m_stack = nullptr;
    stackChanged();
 }
 
@@ -136,7 +136,7 @@ void QUndoModel::stackChanged()
 
 void QUndoModel::setStackCurrentIndex(const QModelIndex &index)
 {
-   if (m_stack == 0) {
+   if (m_stack == nullptr) {
       return;
    }
 
@@ -153,12 +153,12 @@ void QUndoModel::setStackCurrentIndex(const QModelIndex &index)
 
 QModelIndex QUndoModel::selectedIndex() const
 {
-   return m_stack == 0 ? QModelIndex() : createIndex(m_stack->index(), 0);
+   return m_stack == nullptr ? QModelIndex() : createIndex(m_stack->index(), 0);
 }
 
 QModelIndex QUndoModel::index(int row, int column, const QModelIndex &parent) const
 {
-   if (m_stack == 0) {
+   if (m_stack == nullptr) {
       return QModelIndex();
    }
 
@@ -184,7 +184,7 @@ QModelIndex QUndoModel::parent(const QModelIndex &) const
 
 int QUndoModel::rowCount(const QModelIndex &parent) const
 {
-   if (m_stack == 0) {
+   if (m_stack == nullptr) {
       return 0;
    }
 
@@ -202,7 +202,7 @@ int QUndoModel::columnCount(const QModelIndex &) const
 
 QVariant QUndoModel::data(const QModelIndex &index, int role) const
 {
-   if (m_stack == 0) {
+   if (m_stack == nullptr) {
       return QVariant();
    }
 
@@ -274,13 +274,19 @@ class QUndoViewPrivate : public QListViewPrivate
 {
    Q_DECLARE_PUBLIC(QUndoView)
  public:
-   QUndoViewPrivate() :
-#ifndef QT_NO_UNDOGROUP
-      group(0),
-#endif
-      model(0) {}
 
-#ifndef QT_NO_UNDOGROUP
+#ifdef QT_NO_UNDOGROUP
+   QUndoViewPrivate()
+      : model(nullptr)
+  {
+  }
+
+#else
+   QUndoViewPrivate()
+      : group(nullptr), model(nullptr)
+   {
+   }
+
    QPointer<QUndoGroup> group;
 #endif
    QUndoModel *model;
@@ -372,8 +378,9 @@ void QUndoView::setStack(QUndoStack *stack)
 {
    Q_D(QUndoView);
 #ifndef QT_NO_UNDOGROUP
-   setGroup(0);
+   setGroup(nullptr);
 #endif
+
    d->model->setStack(stack);
 }
 
@@ -387,18 +394,18 @@ void QUndoView::setGroup(QUndoGroup *group)
       return;
    }
 
-   if (d->group != 0) {
+   if (d->group != nullptr) {
       disconnect(d->group.data(), &QUndoGroup::activeStackChanged, d->model, &QUndoModel::setStack);
    }
 
    d->group = group;
 
-   if (d->group != 0) {
+   if (d->group != nullptr) {
       connect(d->group.data(), &QUndoGroup::activeStackChanged, d->model, &QUndoModel::setStack);
       d->model->setStack(d->group->activeStack());
 
    } else {
-      d->model->setStack(0);
+      d->model->setStack(nullptr);
 
    }
 }

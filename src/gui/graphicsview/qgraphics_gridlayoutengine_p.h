@@ -39,7 +39,7 @@ class QGraphicsGridLayoutEngineItem : public QGridLayoutItem
 {
  public:
    QGraphicsGridLayoutEngineItem(QGraphicsLayoutItem *item, int row, int columns, int rowSpan = 1, int columnSpan = 1,
-      Qt::Alignment alignment = 0)
+      Qt::Alignment alignment = Qt::EmptyFlag)
       : QGridLayoutItem(row, columns, rowSpan, columnSpan, alignment), q_layoutItem(item) {}
 
    virtual QLayoutPolicy::Policy sizePolicy(Qt::Orientation orientation) const override {
@@ -83,7 +83,7 @@ class QGraphicsGridLayoutEngine : public QGridLayoutEngine
    QGraphicsGridLayoutEngineItem *findLayoutItem(QGraphicsLayoutItem *layoutItem) const {
       const int index = indexOf(layoutItem);
       if (index < 0) {
-         return 0;
+         return nullptr;
       }
       return static_cast<QGraphicsGridLayoutEngineItem *>(q_items.at(index));
    }

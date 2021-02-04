@@ -34,8 +34,10 @@ class QGraphicsTransformPrivate
  public:
    Q_DECLARE_PUBLIC(QGraphicsTransform)
 
-   QGraphicsTransformPrivate() : item(0)
-   {}
+   QGraphicsTransformPrivate()
+      : item(nullptr)
+   {
+   }
 
    virtual ~QGraphicsTransformPrivate();
 

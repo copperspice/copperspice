@@ -70,9 +70,9 @@ class QLayoutStyleInfo
    }
 
    inline void invalidate() {
-      m_valid = false;
-      m_style = 0;
-      m_widget = 0;
+      m_valid  = false;
+      m_style  = nullptr;
+      m_widget = nullptr;
    }
 
    inline QStyle *style() const {
@@ -119,7 +119,8 @@ class QGraphicsLayoutPrivate : public QGraphicsLayoutItemPrivate
    Q_DECLARE_PUBLIC(QGraphicsLayout)
 
  public:
-   QGraphicsLayoutPrivate() : QGraphicsLayoutItemPrivate(0, true), left(-1.0), top(-1.0), right(-1.0), bottom(-1.0), activated(true)
+   QGraphicsLayoutPrivate()
+      : QGraphicsLayoutItemPrivate(nullptr, true), left(-1.0), top(-1.0), right(-1.0), bottom(-1.0), activated(true)
    { }
 
    void reparentChildItems(QGraphicsItem *newParent);

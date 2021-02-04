@@ -50,7 +50,7 @@ class QGraphicsLayoutStyleInfo : public QAbstractLayoutStyleInfo
    virtual qreal windowMargin(Qt::Orientation orientation) const override;
 
    virtual void invalidate() override {
-      m_style = 0;
+      m_style = nullptr;
       QAbstractLayoutStyleInfo::invalidate();
    }
 
@@ -63,6 +63,5 @@ class QGraphicsLayoutStyleInfo : public QAbstractLayoutStyleInfo
    QStyleOption m_styleOption;
    QWidget *m_widget;
 };
-
 
 #endif

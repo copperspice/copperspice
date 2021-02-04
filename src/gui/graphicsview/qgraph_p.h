@@ -110,7 +110,7 @@ class Graph
 
    EdgeData *edgeData(Vertex *first, Vertex *second) {
       QHash<Vertex *, EdgeData *> *row = m_graph.value(first);
-      return row ? row->value(second) : 0;
+      return row ? row->value(second) : nullptr;
    }
 
    void createEdge(Vertex *first, Vertex *second, EdgeData *data) {

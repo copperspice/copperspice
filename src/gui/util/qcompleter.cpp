@@ -405,13 +405,13 @@ QMatchData QCompletionEngine::filterHistory()
    }
 
 #ifndef QT_NO_DIRMODEL
-   const bool isDirModel = (qobject_cast<QDirModel *>(source) != 0);
+   const bool isDirModel = (qobject_cast<QDirModel *>(source) != nullptr);
 #else
    const bool isDirModel = false;
 #endif
 
 #ifndef QT_NO_FILESYSTEMMODEL
-   const bool isFsModel = (qobject_cast<QFileSystemModel *>(source) != 0);
+   const bool isFsModel = (qobject_cast<QFileSystemModel *>(source) != nullptr);
 #else
    const bool isFsModel = false;
 #endif
@@ -790,7 +790,7 @@ QMatchData QUnsortedModelEngine::filter(const QString &part, const QModelIndex &
 }
 
 QCompleterPrivate::QCompleterPrivate()
-   : widget(0), proxy(0), popup(0), filterMode(Qt::MatchStartsWith), cs(Qt::CaseSensitive),
+   : widget(nullptr), proxy(nullptr), popup(nullptr), filterMode(Qt::MatchStartsWith), cs(Qt::CaseSensitive),
      role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(QCompleter::UnsortedModel),
      wrap(true), eatFocusOut(true), hiddenBecauseNoMatch(false)
 {
@@ -1102,7 +1102,7 @@ void QCompleter::setCompletionMode(QCompleter::CompletionMode mode)
       }
       if (d->popup) {
          d->popup->deleteLater();
-         d->popup = 0;
+         d->popup = nullptr;
       }
    } else {
       if (d->widget) {
@@ -1144,11 +1144,11 @@ void QCompleter::setPopup(QAbstractItemView *popup)
 {
    Q_D(QCompleter);
 
-   Q_ASSERT(popup != 0);
+   Q_ASSERT(popup != nullptr);
 
    if (d->popup) {
-      QObject::disconnect(d->popup->selectionModel(), 0, this, 0);
-      QObject::disconnect(d->popup, 0, this, 0);
+      QObject::disconnect(d->popup->selectionModel(), nullptr, this, nullptr);
+      QObject::disconnect(d->popup, nullptr, this, nullptr);
    }
 
    if (d->popup != popup) {
@@ -1166,7 +1166,7 @@ void QCompleter::setPopup(QAbstractItemView *popup)
       origPolicy = d->widget->focusPolicy();
    }
 
-   popup->setParent(0, Qt::Popup);
+   popup->setParent(nullptr, Qt::Popup);
    popup->setFocusPolicy(Qt::NoFocus);
 
    if (d->widget) {
@@ -1430,9 +1430,11 @@ void QCompleter::complete(const QRect &rect)
       return;
    }
 
-   Q_ASSERT(d->widget != 0);
-   if ((d->mode == QCompleter::PopupCompletion && !idx.isValid())
-      || (d->mode == QCompleter::UnfilteredPopupCompletion && d->proxy->rowCount() == 0)) {
+   Q_ASSERT(d->widget != nullptr);
+
+   if ((d->mode == QCompleter::PopupCompletion && !idx.isValid()) ||
+            (d->mode == QCompleter::UnfilteredPopupCompletion && d->proxy->rowCount() == 0)) {
+
       if (d->popup) {
          d->popup->hide();   // no suggestion, hide
       }
@@ -1667,11 +1669,11 @@ QString QCompleter::pathFromIndex(const QModelIndex &index) const
    bool isFsModel = false;
 
 #ifndef QT_NO_DIRMODEL
-   isDirModel = qobject_cast<QDirModel *>(d->proxy->sourceModel()) != 0;
+   isDirModel = qobject_cast<QDirModel *>(d->proxy->sourceModel()) != nullptr;
 #endif
 
 #ifndef QT_NO_FILESYSTEMMODEL
-   isFsModel = qobject_cast<QFileSystemModel *>(d->proxy->sourceModel()) != 0;
+   isFsModel = qobject_cast<QFileSystemModel *>(d->proxy->sourceModel()) != nullptr;
 #endif
 
    if (!isDirModel && !isFsModel) {
@@ -1724,7 +1726,7 @@ QStringList QCompleter::splitPath(const QString &path) const
 
 #ifndef QT_NO_DIRMODEL
    Q_D(const QCompleter);
-   isDirModel = qobject_cast<QDirModel *>(d->proxy->sourceModel()) != 0;
+   isDirModel = qobject_cast<QDirModel *>(d->proxy->sourceModel()) != nullptr;
 #endif
 
 #ifndef QT_NO_FILESYSTEMMODEL
@@ -1733,7 +1735,7 @@ QStringList QCompleter::splitPath(const QString &path) const
    Q_D(const QCompleter);
 #endif
 
-   isFsModel = qobject_cast<QFileSystemModel *>(d->proxy->sourceModel()) != 0;
+   isFsModel = qobject_cast<QFileSystemModel *>(d->proxy->sourceModel()) != nullptr;
 #endif
 
    if ((!isDirModel && !isFsModel) || path.isEmpty()) {

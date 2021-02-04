@@ -192,7 +192,7 @@ class QGraphicsScenePrivate
 
    void drawSubtreeRecursive(QGraphicsItem *item, QPainter *painter, const QTransform *const,
       QRegion *exposedRegion, QWidget *widget, qreal parentOpacity = qreal(1.0),
-      const QTransform *const effectTransform = 0);
+      const QTransform *const effectTransform = nullptr);
 
    void draw(QGraphicsItem *, QPainter *, const QTransform *const, const QTransform *const,
       QRegion *, QWidget *, qreal, const QTransform *const, bool, bool);
@@ -285,8 +285,8 @@ class QGraphicsScenePrivate
    void gestureEventHandler(QGestureEvent *event);
 
    void gestureTargetsAtHotSpots(const QSet<QGesture *> &gestures, Qt::GestureFlag flag,
-      QHash<QGraphicsObject *, QSet<QGesture *>> *targets, QSet<QGraphicsObject *> *itemsSet = 0,
-      QSet<QGesture *> *normal = 0, QSet<QGesture *> *conflicts = 0);
+      QHash<QGraphicsObject *, QSet<QGesture *>> *targets, QSet<QGraphicsObject *> *itemsSet = nullptr,
+      QSet<QGesture *> *normal = nullptr, QSet<QGesture *> *conflicts = nullptr);
 
    void cancelGesturesForChildren(QGesture *original);
    void grabGesture(QGraphicsItem *, Qt::GestureType gesture);

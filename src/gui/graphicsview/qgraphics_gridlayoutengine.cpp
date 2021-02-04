@@ -84,9 +84,9 @@ Qt::Alignment QGraphicsGridLayoutEngine::alignment(QGraphicsLayoutItem *graphics
    if (QGraphicsGridLayoutEngineItem *gridEngineItem = findLayoutItem(graphicsLayoutItem)) {
       return gridEngineItem->alignment();
    }
-   return 0;
-}
 
+   return Qt::EmptyFlag;
+}
 
 void QGraphicsGridLayoutEngine::setStretchFactor(QGraphicsLayoutItem *layoutItem, int stretch,
    Qt::Orientation orientation)

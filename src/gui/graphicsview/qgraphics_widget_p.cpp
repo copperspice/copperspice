@@ -306,6 +306,7 @@ void QGraphicsWidgetPrivate::initStyleOptionTitleBar(QStyleOptionTitleBar *optio
    option->subControls = QStyle::SC_TitleBarCloseButton | QStyle::SC_TitleBarLabel | QStyle::SC_TitleBarSysMenu;
    option->activeSubControls = windowData->hoveredSubControl;
    bool isActive = q->isActiveWindow();
+
    if (isActive) {
       option->state |= QStyle::State_Active;
       option->titleBarState = Qt::WindowActive;
@@ -314,8 +315,9 @@ void QGraphicsWidgetPrivate::initStyleOptionTitleBar(QStyleOptionTitleBar *optio
       option->state &= ~QStyle::State_Active;
       option->titleBarState = Qt::WindowNoState;
    }
+
    QFont windowTitleFont = QApplication::font("QMdiSubWindowTitleBar");
-   QRect textRect = q->style()->subControlRect(QStyle::CC_TitleBar, option, QStyle::SC_TitleBarLabel, 0);
+   QRect textRect = q->style()->subControlRect(QStyle::CC_TitleBar, option, QStyle::SC_TitleBarLabel, nullptr);
    option->text = QFontMetrics(windowTitleFont).elidedText(
          windowData->windowTitle, Qt::ElideRight, textRect.width());
 }
@@ -686,14 +688,16 @@ void QGraphicsWidgetPrivate::windowFrameHoverMoveEvent(QGraphicsSceneHoverEvent 
       case Qt::BottomSection:
          cursorShape = Qt::SizeVerCursor;
          break;
+
       case Qt::TitleBarArea:
          windowData->buttonRect = q->style()->subControlRect(
-               QStyle::CC_TitleBar, &bar, QStyle::SC_TitleBarCloseButton, 0);
+               QStyle::CC_TitleBar, &bar, QStyle::SC_TitleBarCloseButton, nullptr);
          if (windowData->buttonRect.contains(pos.toPoint())) {
             windowData->buttonMouseOver = true;
          }
          event->ignore();
          break;
+
       default:
          needsSetCursorCall = false;
          event->ignore();
@@ -704,7 +708,7 @@ void QGraphicsWidgetPrivate::windowFrameHoverMoveEvent(QGraphicsSceneHoverEvent 
    }
 #endif
    // update buttons if we hover over them
-   windowData->hoveredSubControl = q->style()->hitTestComplexControl(QStyle::CC_TitleBar, &bar, pos.toPoint(), 0);
+   windowData->hoveredSubControl = q->style()->hitTestComplexControl(QStyle::CC_TitleBar, &bar, pos.toPoint(), nullptr);
    if (windowData->hoveredSubControl != QStyle::SC_TitleBarCloseButton) {
       windowData->hoveredSubControl = QStyle::SC_TitleBarLabel;
    }
@@ -785,7 +789,7 @@ void QGraphicsWidgetPrivate::fixFocusChainBeforeReparenting(QGraphicsWidget *new
 
    if (!parent && oldScene && oldScene != newScene && oldScene->d_func()->tabFocusFirst == q) {
       // detach from old scene's top level focus chain.
-      oldScene->d_func()->tabFocusFirst = (focusAfter != q) ? focusAfter : 0;
+      oldScene->d_func()->tabFocusFirst = (focusAfter != q) ? focusAfter : nullptr;
    }
 
    // detach from current focus chain; skip this widget subtree.

@@ -170,7 +170,7 @@ static inline HWND createTrayIconMessageWindow()
 {
    QPlatformNativeInterface *ni = QGuiApplication::platformNativeInterface();
    if (! ni) {
-      return 0;
+      return nullptr;
    }
 
    // Register window class in the platform plugin.
@@ -180,21 +180,19 @@ static inline HWND createTrayIconMessageWindow()
    if (! QMetaObject::invokeMethod(ni, "registerWindowClass", Qt::DirectConnection, Q_RETURN_ARG(QString, className),
                   Q_ARG(const QString &, "QTrayIconMessageWindowClass"), Q_ARG(void *, wndProc))) {
 
-      return 0;
+      return nullptr;
    }
 
    const wchar_t windowName[] = L"QTrayIconMessageWindow";
    std::wstring tmp = className.toStdWString();
 
    return CreateWindowEx(0, &tmp[0], windowName, WS_OVERLAPPED, CW_USEDEFAULT, CW_USEDEFAULT,
-         CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, (HINSTANCE)GetModuleHandle(0), NULL);
+         CW_USEDEFAULT, CW_USEDEFAULT, nullptr, nullptr, (HINSTANCE)GetModuleHandle(nullptr), nullptr);
 }
 
 QSystemTrayIconSys::QSystemTrayIconSys(HWND hwnd, QSystemTrayIcon *object)
-   : m_hwnd(hwnd), hIcon(0), q(object)
-   , notifyIconSize(NOTIFYICONDATA_V2_SIZE), version(NOTIFYICON_VERSION)
-   , ignoreNextMouseRelease(false)
-
+   : m_hwnd(hwnd), hIcon(nullptr), q(object), notifyIconSize(NOTIFYICONDATA_V2_SIZE), version(NOTIFYICON_VERSION),
+     ignoreNextMouseRelease(false)
 {
    handleTrayIconHash()->insert(m_hwnd, this);
 
@@ -214,7 +212,7 @@ QSystemTrayIconSys::QSystemTrayIconSys(HWND hwnd, QSystemTrayIcon *object)
 
    if (pChangeWindowMessageFilterEx) {
       // Call the safer ChangeWindowMessageFilterEx API if available
-      pChangeWindowMessageFilterEx(m_hwnd, MYWM_TASKBARCREATED, Q_MSGFLT_ALLOW, 0);
+      pChangeWindowMessageFilterEx(m_hwnd, MYWM_TASKBARCREATED, Q_MSGFLT_ALLOW, nullptr);
    } else {
       static PtrChangeWindowMessageFilter pChangeWindowMessageFilter =
          (PtrChangeWindowMessageFilter)QSystemLibrary::resolve(QLatin1String("user32"), "ChangeWindowMessageFilter");
@@ -314,7 +312,7 @@ Q_GUI_EXPORT HICON qt_pixmapToWinHICON(const QPixmap &);
 HICON QSystemTrayIconSys::createIcon()
 {
    const HICON oldIcon = hIcon;
-   hIcon = 0;
+   hIcon = nullptr;
    const QIcon icon = q->icon();
    if (icon.isNull()) {
       return oldIcon;
@@ -397,11 +395,12 @@ bool QSystemTrayIconSys::winEvent( MSG *m, long *result )
 
    return false;
 }
+
 QSystemTrayIconPrivate::QSystemTrayIconPrivate()
-   : sys(0),
-     visible(false)
+   : sys(nullptr), visible(false)
 {
 }
+
 QSystemTrayIconPrivate::~QSystemTrayIconPrivate()
 {
 }
@@ -453,15 +452,15 @@ QRect QSystemTrayIconSys::findIconGeometry(UINT iconId)
 
    TBBUTTON buttonData;
    DWORD processID = 0;
-   HWND trayHandle = FindWindow(L"Shell_TrayWnd", NULL);
+   HWND trayHandle = FindWindow(L"Shell_TrayWnd", nullptr);
 
    //find the toolbar used in the notification area
    if (trayHandle) {
-      trayHandle = FindWindowEx(trayHandle, NULL, L"TrayNotifyWnd", NULL);
+      trayHandle = FindWindowEx(trayHandle, nullptr, L"TrayNotifyWnd", nullptr);
       if (trayHandle) {
-         HWND hwnd = FindWindowEx(trayHandle, NULL, L"SysPager", NULL);
+         HWND hwnd = FindWindowEx(trayHandle, nullptr, L"SysPager", nullptr);
          if (hwnd) {
-            hwnd = FindWindowEx(hwnd, NULL, L"ToolbarWindow32", NULL);
+            hwnd = FindWindowEx(hwnd, nullptr, L"ToolbarWindow32", nullptr);
             if (hwnd) {
                trayHandle = hwnd;
             }
@@ -484,7 +483,7 @@ QRect QSystemTrayIconSys::findIconGeometry(UINT iconId)
    }
 
    int buttonCount = SendMessage(trayHandle, TB_BUTTONCOUNT, 0, 0);
-   LPVOID data = VirtualAllocEx(trayProcess, NULL, sizeof(TBBUTTON), MEM_COMMIT, PAGE_READWRITE);
+   LPVOID data = VirtualAllocEx(trayProcess, nullptr, sizeof(TBBUTTON), MEM_COMMIT, PAGE_READWRITE);
 
    if ( buttonCount < 1 || !data ) {
       CloseHandle(trayProcess);
@@ -494,7 +493,8 @@ QRect QSystemTrayIconSys::findIconGeometry(UINT iconId)
    //search for our icon among all toolbar buttons
    for (int toolbarButton = 0; toolbarButton  < buttonCount; ++toolbarButton ) {
       SIZE_T numBytes = 0;
-      AppData appData = { 0, 0 };
+      AppData appData = { nullptr, 0 };
+
       SendMessage(trayHandle, TB_GETBUTTON, toolbarButton, (LPARAM)data);
 
       if (!ReadProcessMemory(trayProcess, data, &buttonData, sizeof(TBBUTTON), &numBytes)) {
@@ -511,7 +511,7 @@ QRect QSystemTrayIconSys::findIconGeometry(UINT iconId)
          SendMessage(trayHandle, TB_GETITEMRECT, toolbarButton, (LPARAM)data);
          RECT iconRect = {0, 0, 0, 0};
          if (ReadProcessMemory(trayProcess, data, &iconRect, sizeof(RECT), &numBytes)) {
-            MapWindowPoints(trayHandle, NULL, (LPPOINT)&iconRect, 2);
+            MapWindowPoints(trayHandle, nullptr, (LPPOINT)&iconRect, 2);
             QRect geometry(iconRect.left + 1, iconRect.top + 1,
                iconRect.right - iconRect.left - 2,
                iconRect.bottom - iconRect.top - 2);
@@ -567,7 +567,7 @@ void QSystemTrayIconPrivate::remove_sys()
 
    sys->trayMessage(NIM_DELETE);
    delete sys;
-   sys = 0;
+   sys = nullptr;
 }
 
 void QSystemTrayIconPrivate::updateIcon_sys()

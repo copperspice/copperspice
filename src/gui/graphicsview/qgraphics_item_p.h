@@ -90,76 +90,25 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       AncestorContainsChildren = 0x10
    };
 
-   inline QGraphicsItemPrivate()
-      : z(0),
-        opacity(1.),
-        scene(0),
-        parent(0),
-        transformData(0),
-        graphicsEffect(0),
-        index(-1),
-        siblingIndex(-1),
-        itemDepth(-1),
-        focusProxy(0),
-        subFocusItem(0),
-        focusScopeItem(0),
-        imHints(Qt::ImhNone),
-        panelModality(QGraphicsItem::NonModal),
-        acceptedMouseButtons(0x1f),
-        visible(1),
-        explicitlyHidden(0),
-        enabled(1),
-        explicitlyDisabled(0),
-        selected(0),
-        acceptsHover(0),
-        acceptDrops(0),
-        isMemberOfGroup(0),
-        handlesChildEvents(0),
-        itemDiscovered(0),
-        hasCursor(0),
-        ancestorFlags(0),
-        cacheMode(0),
-        hasBoundingRegionGranularity(0),
-        isWidget(0),
-        dirty(0),
-        dirtyChildren(0),
-        localCollisionHack(0),
-        inSetPosHelper(0),
-        needSortChildren(0),
-        allChildrenDirty(0),
-        fullUpdatePending(0),
-
-        flags(0),
-        paintedViewBoundingRectsNeedRepaint(0),
-        dirtySceneTransform(1),
-        geometryChanged(1),
-        inDestructor(0),
-        isObject(0),
-        ignoreVisible(0),
-        ignoreOpacity(0),
-        acceptTouchEvents(0),
-        acceptedTouchBeginEvent(0),
-        filtersDescendantEvents(0),
-        sceneTransformTranslateOnly(0),
-        notifyBoundingRectChanged(0),
-        notifyInvalidated(0),
-        mouseSetsFocus(1),
-        explicitActivate(0),
-        wantsActive(0),
-        holesInSiblingIndex(0),
-        sequentialOrdering(1),
-        updateDueToGraphicsEffect(0),
-        scenePosDescendants(0),
-        pendingPolish(0),
-        mayHaveChildWithGraphicsEffect(0),
-        isDeclarativeItem(0),
-        sendParentChangeNotification(0),
-        dirtyChildrenBoundingRect(1),
-        globalStackingOrder(-1),
-        q_ptr(0) {
+   QGraphicsItemPrivate()
+      : z(0), opacity(1.), scene(nullptr), parent(nullptr), transformData(nullptr), graphicsEffect(nullptr),
+        index(-1), siblingIndex(-1), itemDepth(-1), focusProxy(nullptr), subFocusItem(nullptr),
+        focusScopeItem(nullptr), imHints(Qt::ImhNone), panelModality(QGraphicsItem::NonModal),
+        acceptedMouseButtons(0x1f), visible(1), explicitlyHidden(0), enabled(1), explicitlyDisabled(0), selected(0),
+        acceptsHover(0), acceptDrops(0), isMemberOfGroup(0), handlesChildEvents(0), itemDiscovered(0),
+        hasCursor(0), ancestorFlags(0), cacheMode(0), hasBoundingRegionGranularity(0), isWidget(0), dirty(0),
+        dirtyChildren(0), localCollisionHack(0), inSetPosHelper(0), needSortChildren(0), allChildrenDirty(0),
+        fullUpdatePending(0), flags(0), paintedViewBoundingRectsNeedRepaint(0), dirtySceneTransform(1),
+        geometryChanged(1), inDestructor(0), isObject(0), ignoreVisible(0), ignoreOpacity(0),
+        acceptTouchEvents(0), acceptedTouchBeginEvent(0), filtersDescendantEvents(0), sceneTransformTranslateOnly(0),
+        notifyBoundingRectChanged(0), notifyInvalidated(0), mouseSetsFocus(1), explicitActivate(0),
+        wantsActive(0), holesInSiblingIndex(0), sequentialOrdering(1), updateDueToGraphicsEffect(0), scenePosDescendants(0),
+        pendingPolish(0), mayHaveChildWithGraphicsEffect(0), isDeclarativeItem(0), sendParentChangeNotification(0),
+        dirtyChildrenBoundingRect(1), globalStackingOrder(-1), q_ptr(nullptr)
+   {
    }
 
-   inline virtual ~QGraphicsItemPrivate() {
+   virtual ~QGraphicsItemPrivate() {
    }
 
    static const QGraphicsItemPrivate *get(const QGraphicsItem *item) {
@@ -183,8 +132,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
          || (ancestorFlags & AncestorIgnoresTransformations);
    }
 
-   void combineTransformToParent(QTransform *x, const QTransform *viewTransform = 0) const;
-   void combineTransformFromParent(QTransform *x, const QTransform *viewTransform = 0) const;
+   void combineTransformToParent(QTransform *x, const QTransform *viewTransform = nullptr) const;
+   void combineTransformFromParent(QTransform *x, const QTransform *viewTransform = nullptr) const;
    virtual void updateSceneTransformFromParent();
 
    static bool movableAncestorIsSelected(const QGraphicsItem *item);
@@ -221,7 +170,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    void initStyleOption(QStyleOptionGraphicsItem *option, const QTransform &worldTransform,
       const QRegion &exposedRegion, bool allItems = false) const;
 
-   QRectF effectiveBoundingRect(QGraphicsItem *topMostEffectItem = 0) const;
+   QRectF effectiveBoundingRect(QGraphicsItem *topMostEffectItem = nullptr) const;
    QRectF sceneEffectiveBoundingRect() const;
 
    QRectF effectiveBoundingRect(const QRectF &rect) const;
@@ -399,8 +348,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    void setFocusHelper(Qt::FocusReason focusReason, bool climb, bool focusFromHide);
    void clearFocusHelper(bool giveFocusToParent, bool hiddenByParentPanel);
-   void setSubFocus(QGraphicsItem *rootItem = 0, QGraphicsItem *stopItem = 0);
-   void clearSubFocus(QGraphicsItem *rootItem = 0, QGraphicsItem *stopItem = 0);
+   void setSubFocus(QGraphicsItem *rootItem = nullptr, QGraphicsItem *stopItem = nullptr);
+   void clearSubFocus(QGraphicsItem *rootItem = nullptr, QGraphicsItem *stopItem = nullptr);
    void resetFocusProxy();
    virtual void subFocusItemChange();
    virtual void focusScopeItemChange(bool isSubFocusItem);
@@ -531,7 +480,7 @@ struct QGraphicsItemPrivate::TransformData {
       onlyTransform(true) {
    }
 
-   QTransform computedFullTransform(QTransform *postmultiplyTransform = 0) const {
+   QTransform computedFullTransform(QTransform *postmultiplyTransform = nullptr) const {
       if (onlyTransform) {
          if (!postmultiplyTransform || postmultiplyTransform->isIdentity()) {
             return transform;
@@ -587,11 +536,11 @@ class QGraphicsItemEffectSourcePrivate : public QGraphicsEffectSourcePrivate
 {
  public:
    QGraphicsItemEffectSourcePrivate(QGraphicsItem *i)
-      : QGraphicsEffectSourcePrivate(), item(i), info(0) {
+      : QGraphicsEffectSourcePrivate(), item(i), info(nullptr) {
    }
 
    void detach() override {
-      item->d_ptr->graphicsEffect = 0;
+      item->d_ptr->graphicsEffect = nullptr;
       item->prepareGeometryChange();
    }
 
@@ -639,7 +588,7 @@ class QGraphicsItemEffectSourcePrivate : public QGraphicsEffectSourcePrivate
    QPixmap pixmap(Qt::CoordinateSystem system, QPoint *offset, QGraphicsEffect::PixmapPadMode mode) const override;
 
    QRect paddedEffectRect(Qt::CoordinateSystem system, QGraphicsEffect::PixmapPadMode mode, const QRectF &sourceRect,
-      bool *unpadded = 0) const;
+      bool *unpadded = nullptr) const;
 
    QGraphicsItem *item;
    QGraphicsItemPaintInfo *info;

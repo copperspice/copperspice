@@ -820,7 +820,7 @@ class Q_GUI_EXPORT QGraphicsPathItem : public QAbstractGraphicsShapeItem
    QPainterPath shape() const override;
    bool contains(const QPointF &point) const override;
 
-   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
@@ -905,7 +905,7 @@ class Q_GUI_EXPORT QGraphicsEllipseItem : public QAbstractGraphicsShapeItem
    QPainterPath shape() const override;
    bool contains(const QPointF &point) const override;
 
-   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
@@ -948,7 +948,7 @@ class Q_GUI_EXPORT QGraphicsPolygonItem : public QAbstractGraphicsShapeItem
    QPainterPath shape() const override;
    bool contains(const QPointF &point) const override;
 
-   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
@@ -990,7 +990,7 @@ class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
    QPainterPath shape() const override;
    bool contains(const QPointF &point) const override;
 
-   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
    bool isObscuredBy(const QGraphicsItem *item) const override;
    QPainterPath opaqueArea() const override;
@@ -1245,7 +1245,7 @@ T qgraphicsitem_cast(QGraphicsItem *item)
    using Item = typename std::remove_cv<typename std::remove_pointer<T>::type>::type;
 
    return int(Item::Type) == int(QGraphicsItem::Type)
-      || (item && int(Item::Type) == item->type()) ? static_cast<T>(item) : 0;
+      || (item && int(Item::Type) == item->type()) ? static_cast<T>(item) : nullptr;
 }
 
 template <class T>
@@ -1254,7 +1254,7 @@ T qgraphicsitem_cast(const QGraphicsItem *item)
    using Item = typename std::remove_cv<typename std::remove_pointer<T>::type>::type;
 
    return int(Item::Type) == int(QGraphicsItem::Type)
-      || (item && int(Item::Type) == item->type()) ? static_cast<T>(item) : 0;
+      || (item && int(Item::Type) == item->type()) ? static_cast<T>(item) : nullptr;
 }
 
 Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QGraphicsItem *item);

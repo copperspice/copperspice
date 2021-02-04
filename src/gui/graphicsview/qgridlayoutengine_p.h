@@ -165,7 +165,7 @@ class QGridLayoutBox
             t = &q_minimumAscent;
             break;
          default:
-            t = 0;
+            t = nullptr;
             break;
       }
       return *t;
@@ -189,7 +189,7 @@ class QGridLayoutBox
             t = &q_minimumAscent;
             break;
          default:
-            t = 0;
+            t = nullptr;
             break;
       }
       return *t;
@@ -228,7 +228,7 @@ class QGridLayoutRowData
 
 
 
-   QBitArray ignore;   // ### rename q_
+   QBitArray ignore;
    QVector<QGridLayoutBox> boxes;
    MultiCellMap multiCellMap;
    QVector<int> stretches;
@@ -259,7 +259,7 @@ class QGridLayoutItem
 {
  public:
    QGridLayoutItem(int row, int column, int rowSpan = 1, int columnSpan = 1,
-      Qt::Alignment alignment = 0);
+      Qt::Alignment alignment = Qt::EmptyFlag);
 
    virtual ~QGridLayoutItem() {}
 
@@ -338,7 +338,8 @@ class QGridLayoutItem
 class QGridLayoutEngine
 {
  public:
-   QGridLayoutEngine(Qt::Alignment defaultAlignment = Qt::Alignment(0), bool snapToPixelGrid = false);
+   QGridLayoutEngine(Qt::Alignment defaultAlignment = Qt::Alignment(Qt::EmptyFlag), bool snapToPixelGrid = false);
+
    ~QGridLayoutEngine() {
       qDeleteAll(q_items);
    }

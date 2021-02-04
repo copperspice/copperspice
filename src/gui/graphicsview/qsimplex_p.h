@@ -47,7 +47,7 @@ struct QSimplexVariable {
     Where (ci, Xi) are the pairs in "variables" and K the real "constant".
 */
 struct QSimplexConstraint {
-   QSimplexConstraint() : constant(0), ratio(Equal), artificial(0) {}
+   QSimplexConstraint() : constant(0), ratio(Equal), artificial(nullptr) {}
 
    enum Ratio {
       LessOrEqual = 0,
