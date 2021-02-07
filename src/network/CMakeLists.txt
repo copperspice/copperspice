@@ -92,7 +92,7 @@ target_link_libraries(CsNetwork
 
 target_include_directories(CsNetwork
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtNetwork>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtNetwork>
 )
 
 set_target_properties(CsNetwork

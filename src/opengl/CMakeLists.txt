@@ -130,7 +130,7 @@ function_variable_fixup("${EXTRA_OPENGL_LDFLAGS}"  EXTRA_OPENGL_LDFLAGS)
 
 target_include_directories(CsOpenGL
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtOpenGL>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtOpenGL>
 )
 
 target_link_libraries(CsOpenGL

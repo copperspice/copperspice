@@ -154,8 +154,8 @@ endif()
 
 target_include_directories(CsCore
    PUBLIC
-   $<INSTALL_INTERFACE:include>
-   $<INSTALL_INTERFACE:include/QtCore>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtCore>
 )
 
 set_target_properties(CsCore

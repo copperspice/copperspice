@@ -44,7 +44,7 @@ target_sources(CsXml
 
 target_include_directories(CsXml
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtXml>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtXml>
 )
 
 target_link_libraries(CsXml

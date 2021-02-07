@@ -76,7 +76,7 @@ target_link_libraries(CsSql
 
 target_include_directories(CsSql
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtSql>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtSql>
 )
 
 set_target_properties(CsSql

@@ -175,7 +175,7 @@ target_sources(CsGui
 
 target_include_directories(CsGui
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtGui>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtGui>
    ${OPENGL_INCLUDE_DIR}
 )
 

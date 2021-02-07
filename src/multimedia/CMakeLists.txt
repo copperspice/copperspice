@@ -81,7 +81,7 @@ target_link_libraries(CsMultimedia
 target_include_directories(CsMultimedia
    PUBLIC
    ${GSTREAMER_INCLUDE_DIRS}
-   $<INSTALL_INTERFACE:include/QtMultimedia>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtMultimedia>
 )
 
 set_target_properties(CsMultimedia

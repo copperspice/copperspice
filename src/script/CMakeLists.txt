@@ -569,7 +569,7 @@ target_sources(CsScript
 
 target_include_directories(CsScript
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtScript>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtScript>
 )
 
 target_link_libraries(CsScript

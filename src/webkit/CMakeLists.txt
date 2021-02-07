@@ -2432,7 +2432,7 @@ function_variable_fixup("${EXTRA_WEBKIT_LDFLAGS}"  EXTRA_WEBKIT_LDFLAGS)
 
 target_include_directories(CsWebKit
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtWebKit>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtWebKit>
 )
 
 target_link_libraries(CsWebKit

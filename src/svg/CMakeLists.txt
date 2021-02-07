@@ -89,7 +89,7 @@ target_sources(CsSvg
 
 target_include_directories(CsSvg
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtSvg>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtSvg>
 )
 
 target_link_libraries(CsSvg

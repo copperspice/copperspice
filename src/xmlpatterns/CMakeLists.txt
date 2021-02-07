@@ -67,7 +67,7 @@ target_sources(CsXmlPatterns
 
 target_include_directories(CsXmlPatterns
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtXmlPatterns>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/QtXmlPatterns>
 )
 
 target_link_libraries(CsXmlPatterns
