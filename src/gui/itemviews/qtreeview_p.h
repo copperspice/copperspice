@@ -53,14 +53,13 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
 
    QTreeViewPrivate()
       : QAbstractItemViewPrivate(),
-        header(0), indent(20), lastViewedItem(0), defaultItemHeight(-1),
-        uniformRowHeights(false), rootDecoration(true),
-        itemsExpandable(true), sortingEnabled(false),
-        expandsOnDoubleClick(true),
-        allColumnsShowFocus(false), customIndent(false), current(0), spanning(false),
-        animationsEnabled(false), columnResizeTimerID(0),
-        autoExpandDelay(-1), hoverBranch(-1), geometryRecursionBlock(false), hasRemovedItems(false),
-        treePosition(0) {}
+        header(nullptr), indent(20), lastViewedItem(0), defaultItemHeight(-1),
+        uniformRowHeights(false), rootDecoration(true), itemsExpandable(true), sortingEnabled(false),
+        expandsOnDoubleClick(true),allColumnsShowFocus(false), customIndent(false), current(0), spanning(false),
+        animationsEnabled(false), columnResizeTimerID(0), autoExpandDelay(-1), hoverBranch(-1),
+        geometryRecursionBlock(false), hasRemovedItems(false),treePosition(0)
+   {
+   }
 
    ~QTreeViewPrivate() {}
    void initialize();
@@ -141,7 +140,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    bool checkViewItems() const;
 #endif
 
-   int firstVisibleItem(int *offset = 0) const;
+   int firstVisibleItem(int *offset = nullptr) const;
    int lastVisibleItem(int firstVisual = -1, int offset = -1) const;
    int columnAt(int x) const;
    bool hasVisibleChildren( const QModelIndex &parent) const;

@@ -108,7 +108,7 @@ void QColumnView::setResizeGripsVisible(bool visible)
 
       } else {
          QWidget *widget = view->cornerWidget();
-         view->setCornerWidget(0);
+         view->setCornerWidget(nullptr);
          widget->deleteLater();
       }
    }
@@ -305,7 +305,7 @@ void QColumnView::scrollTo(const QModelIndex &index, ScrollHint hint)
    }
 
 #ifndef QT_NO_ANIMATION
-   if (style()->styleHint(QStyle::SH_Widget_Animate, 0, this)) {
+   if (style()->styleHint(QStyle::SH_Widget_Animate, nullptr, this)) {
       d->currentAnimation.setEndValue(newScrollbarValue);
       d->currentAnimation.start();
    } else
@@ -1058,11 +1058,7 @@ void QColumnView::selectAll()
  * private object implementation
  */
 QColumnViewPrivate::QColumnViewPrivate()
-   :  QAbstractItemViewPrivate()
-   , showResizeGrips(true)
-   , offset(0)
-   , previewWidget(0)
-   , previewColumn(0)
+   :  QAbstractItemViewPrivate(), showResizeGrips(true), offset(), previewWidget(nullptr), previewColumn(nullptr)
 {
 }
 

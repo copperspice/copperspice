@@ -40,39 +40,17 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
    enum StateVersion { VersionMarker = 0xff };
 
    QHeaderViewPrivate()
-      : state(NoState),
-        offset(0),
-        sortIndicatorOrder(Qt::DescendingOrder),
-        sortIndicatorSection(0),
-        sortIndicatorShown(false),
-        lastPos(-1),
-        firstPos(-1),
-        originalSize(-1),
-        section(-1),
-        target(-1),
-        pressed(-1),
-        hover(-1),
-        length(0),
-        preventCursorChangeInSetOffset(false),
-        movableSections(false),
-        clickableSections(false),
-        highlightSelected(false),
-        stretchLastSection(false),
-        cascadingResizing(false),
-        resizeRecursionBlock(false),
+      : state(NoState), offset(0), sortIndicatorOrder(Qt::DescendingOrder), sortIndicatorSection(0),
+        sortIndicatorShown(false), lastPos(-1), firstPos(-1), originalSize(-1), section(-1),
+        target(-1), pressed(-1), hover(-1), length(0), preventCursorChangeInSetOffset(false),
+        movableSections(false), clickableSections(false), highlightSelected(false),
+        stretchLastSection(false), cascadingResizing(false), resizeRecursionBlock(false),
         allowUserMoveOfSection0(true),       // will be false for QTreeView and true for QTableView
-        customDefaultSectionSize(false),
-        stretchSections(0),
-        contentsSections(0),
-        minimumSectionSize(-1),
-        maximumSectionSize(-1),
-        lastSectionSize(0),
-        sectionIndicatorOffset(0),
-        sectionIndicator(0),
-        globalResizeMode(QHeaderView::Interactive),
-        sectionStartposRecalc(true),
-        resizeContentsPrecision(1000)
-   {}
+        customDefaultSectionSize(false), stretchSections(0), contentsSections(0), minimumSectionSize(-1),
+        maximumSectionSize(-1), lastSectionSize(0), sectionIndicatorOffset(0), sectionIndicator(nullptr),
+        globalResizeMode(QHeaderView::Interactive), sectionStartposRecalc(true), resizeContentsPrecision(1000)
+   {
+   }
 
    int lastVisibleVisualIndex() const;
    int sectionHandleAt(int position);

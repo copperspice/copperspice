@@ -28,10 +28,12 @@
 
 
 
-QPageSetupDialogPrivate::QPageSetupDialogPrivate(QPrinter *prntr) : printer(0), ownsPrinter(false)
+QPageSetupDialogPrivate::QPageSetupDialogPrivate(QPrinter *prntr)
+   : printer(nullptr), ownsPrinter(false)
 {
    setPrinter(prntr);
 }
+
 void QPageSetupDialogPrivate::setPrinter(QPrinter *newPrinter)
 {
    if (printer && ownsPrinter) {
@@ -82,7 +84,7 @@ void QPageSetupDialog::done(int result)
    if (d->receiverToDisconnectOnClose) {
       disconnect(this, SIGNAL(accepted()),
          d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
-      d->receiverToDisconnectOnClose = 0;
+      d->receiverToDisconnectOnClose = nullptr;
    }
    d->memberToDisconnectOnClose.clear();
 }

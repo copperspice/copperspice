@@ -1198,7 +1198,7 @@ void QTreeView::drawTree(QPainter *painter, const QRegion &region) const
 /// ### move to QObject
 static inline bool ancestorOf(QObject *widget, QObject *other)
 {
-   for (QObject *parent = other; parent != 0; parent = parent->parent()) {
+   for (QObject *parent = other; parent != nullptr; parent = parent->parent()) {
       if (parent == widget) {
          return true;
       }
@@ -1636,7 +1636,7 @@ void QTreeView::mousePressEvent(QMouseEvent *event)
    Q_D(QTreeView);
    bool handled = false;
 
-   if (style()->styleHint(QStyle::SH_ListViewExpand_SelectMouseType, 0, this) == QEvent::MouseButtonPress) {
+   if (style()->styleHint(QStyle::SH_ListViewExpand_SelectMouseType, nullptr, this) == QEvent::MouseButtonPress) {
       handled = d->expandOrCollapseItemAtPos(event->pos());
    }
 
@@ -1660,7 +1660,7 @@ void QTreeView::mouseReleaseEvent(QMouseEvent *event)
          setState(QAbstractItemView::NoState);
       }
 
-      if (style()->styleHint(QStyle::SH_ListViewExpand_SelectMouseType, 0, this) == QEvent::MouseButtonRelease) {
+      if (style()->styleHint(QStyle::SH_ListViewExpand_SelectMouseType, nullptr, this) == QEvent::MouseButtonRelease) {
          d->expandOrCollapseItemAtPos(event->pos());
       }
    }
@@ -1705,7 +1705,7 @@ void QTreeView::mouseDoubleClickEvent(QMouseEvent *event)
          return;   // the double click triggered editing
       }
 
-      if (! style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, this)) {
+      if (! style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, nullptr, this)) {
          emit activated(persistent);
       }
 
@@ -2020,7 +2020,7 @@ QModelIndex QTreeView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
             d->collapse(vi, true);
             d->moveCursorUpdatedView = true;
          } else {
-            bool descend = style()->styleHint(QStyle::SH_ItemView_ArrowKeysNavigateIntoChildren, 0, this);
+            bool descend = style()->styleHint(QStyle::SH_ItemView_ArrowKeysNavigateIntoChildren, nullptr, this);
             if (descend) {
                QModelIndex par = current.parent();
                if (par.isValid() && par != rootIndex()) {
@@ -2062,7 +2062,7 @@ QModelIndex QTreeView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifie
             d->moveCursorUpdatedView = true;
 
          } else {
-            bool descend = style()->styleHint(QStyle::SH_ItemView_ArrowKeysNavigateIntoChildren, 0, this);
+            bool descend = style()->styleHint(QStyle::SH_ItemView_ArrowKeysNavigateIntoChildren, nullptr, this);
             if (descend) {
                QModelIndex idx = d->modelIndex(d->below(vi));
                if (idx.parent() == current) {
@@ -2815,7 +2815,7 @@ void QTreeViewPrivate::initialize()
    q->setHeader(header);
 
 #ifndef QT_NO_ANIMATION
-   animationsEnabled = q->style()->styleHint(QStyle::SH_Widget_Animate, 0, q);
+   animationsEnabled = q->style()->styleHint(QStyle::SH_Widget_Animate, nullptr, q);
    QObject::connect(&animatedOperation, SIGNAL(finished()), q, SLOT(_q_endAnimatedOperation()));
 #endif
 
@@ -3151,7 +3151,7 @@ void QTreeViewPrivate::layout(int i, bool recursiveExpanding, bool afterIsUninit
    int last     = 0;
    int children = 0;
 
-   QTreeViewItem *item = 0;
+   QTreeViewItem *item = nullptr;
 
    for (int j = first; j < first + count; ++j) {
       current = model->index(j - first, 0, parent);
@@ -3837,7 +3837,7 @@ int QTreeViewPrivate::accessibleTree2Index(const QModelIndex &index) const
 void QTreeViewPrivate::updateIndentationFromStyle()
 {
    Q_Q(const QTreeView);
-   indent = q->style()->pixelMetric(QStyle::PM_TreeViewIndentation, 0, q);
+   indent = q->style()->pixelMetric(QStyle::PM_TreeViewIndentation, nullptr, q);
 }
 
 void QTreeView::currentChanged(const QModelIndex &current, const QModelIndex &previous)

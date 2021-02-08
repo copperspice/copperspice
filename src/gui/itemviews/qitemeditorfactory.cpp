@@ -91,7 +91,7 @@ class QUIntSpinBox : public QSpinBox
 
 QWidget *QItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) const
 {
-   QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
+   QItemEditorCreatorBase *creator = creatorMap.value(type, nullptr);
 
    if (! creator) {
       const QItemEditorFactory *dfactory = defaultFactory();
@@ -103,7 +103,7 @@ QWidget *QItemEditorFactory::createEditor(QVariant::Type type, QWidget *parent) 
 
 QString QItemEditorFactory::valuePropertyName(QVariant::Type type) const
 {
-   QItemEditorCreatorBase *creator = creatorMap.value(type, 0);
+   QItemEditorCreatorBase *creator = creatorMap.value(type, nullptr);
 
    if (! creator) {
       const QItemEditorFactory *dfactory = defaultFactory();
@@ -210,8 +210,8 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
       default: {
          // the default editor is a lineedit
          QExpandingLineEdit *le = new QExpandingLineEdit(parent);
-         le->setFrame(le->style()->styleHint(QStyle::SH_ItemView_DrawDelegateFrame, 0, le));
-         if (!le->style()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, 0, le)) {
+         le->setFrame(le->style()->styleHint(QStyle::SH_ItemView_DrawDelegateFrame, nullptr, le));
+         if (!le->style()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, nullptr, le)) {
             le->setWidgetOwnsGeometry(true);
          }
          return le;
@@ -221,7 +221,8 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
          break;
 #endif
    }
-   return 0;
+
+   return nullptr;
 }
 
 QString QDefaultItemEditorFactory::valuePropertyName(QVariant::Type type) const
@@ -318,9 +319,9 @@ void QExpandingLineEdit::changeEvent(QEvent *e)
 void QExpandingLineEdit::updateMinimumWidth()
 {
    int left, right;
-   getTextMargins(&left, 0, &right, 0);
+   getTextMargins(&left, nullptr, &right, nullptr);
    int width = left + right + 4 /*horizontalMargin in qlineedit.cpp*/;
-   getContentsMargins(&left, 0, &right, 0);
+   getContentsMargins(&left, nullptr, &right, nullptr);
    width += left + right;
 
    QStyleOptionFrame opt;

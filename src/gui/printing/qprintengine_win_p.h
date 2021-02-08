@@ -94,31 +94,19 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
    Q_DECLARE_PUBLIC(QWin32PrintEngine)
 
  public:
-   QWin32PrintEnginePrivate() :
-      hPrinter(0),
-      globalDevMode(0),
-      devMode(0),
-      pInfo(0),
-      hMem(0),
-      hdc(0),
-      ownsDevMode(false),
-      mode(QPrinter::ScreenResolution),
-      state(QPrinter::Idle),
-      resolution(0),
-      m_pageLayout(QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF(0, 0, 0, 0))),
-      stretch_x(1), stretch_y(1), origin_x(0), origin_y(0),
-      dpi_x(96), dpi_y(96), dpi_display(96),
-      num_copies(1),
-      printToFile(false),
-
-      reinit(false),
-      complex_xform(false), has_pen(false), has_brush(false), has_custom_paper_size(false),
-      embed_fonts(true),
-      txop(0 /* QTransform::TxNone */) {
+   QWin32PrintEnginePrivate()
+      : hPrinter(nullptr), globalDevMode(nullptr), devMode(nullptr), pInfo(nullptr), hMem(nullptr), hdc(nullptr),
+        ownsDevMode(false), mode(QPrinter::ScreenResolution), state(QPrinter::Idle),
+        resolution(0), m_pageLayout(QPageLayout(QPageSize(QPageSize::A4),
+        QPageLayout::Portrait, QMarginsF(0, 0, 0, 0))),
+        stretch_x(1), stretch_y(1), origin_x(0), origin_y(0), dpi_x(96), dpi_y(96),
+        dpi_display(96), num_copies(1), printToFile(false), reinit(false),
+        complex_xform(false), has_pen(false), has_brush(false),
+        has_custom_paper_size(false), embed_fonts(true), txop(0)
+   {
    }
 
    ~QWin32PrintEnginePrivate();
-
 
    /* Initializes the printer data based on the current printer name. This
       function creates a DEVMODE struct, HDC and a printer handle. If these
@@ -138,7 +126,6 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
       this function only sets the reinit variable to true so it
       is handled in the next begin or newpage. */
    void doReinit();
-
 
    bool resetDC();
 

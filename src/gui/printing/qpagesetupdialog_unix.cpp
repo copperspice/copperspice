@@ -197,12 +197,9 @@ void QUnixPageSetupDialogPrivate::init()
 }
 
 QPageSetupWidget::QPageSetupWidget(QWidget *parent)
-   : QWidget(parent),
-     m_pagePreview(0),
-     m_printer(0),
+   : QWidget(parent), m_pagePreview(nullptr), m_printer(nullptr),
      m_outputFormat(QPrinter::OutputFormat::PdfFormat),
-     m_units(QPageSize::Unit::Point),
-     m_blockSignals(false)
+     m_units(QPageSize::Unit::Point), m_blockSignals(false)
 {
    m_ui.setupUi(this);
 
@@ -609,7 +606,7 @@ QPageSetupDialog::QPageSetupDialog(QPrinter *printer, QWidget *parent)
 }
 
 QPageSetupDialog::QPageSetupDialog(QWidget *parent)
-   : QDialog(*(new QUnixPageSetupDialogPrivate(0)), parent)
+   : QDialog(*(new QUnixPageSetupDialogPrivate(nullptr)), parent)
 {
    Q_D(QPageSetupDialog);
    setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));

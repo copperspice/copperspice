@@ -30,10 +30,8 @@
 #include <qevent.h>
 #include <qdebug.h>
 
-
-
 QColumnViewGrip::QColumnViewGrip(QWidget *parent)
-   :  QWidget(*new QColumnViewGripPrivate, parent, 0)
+   :  QWidget(*new QColumnViewGripPrivate, parent, Qt::EmptyFlag)
 {
 #ifndef QT_NO_CURSOR
    setCursor(Qt::SplitHCursor);

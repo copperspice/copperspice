@@ -441,7 +441,7 @@ void QWin32PrintEngine::updateClipPath(const QPainterPath & clipPath, Qt::ClipOp
 
    bool doclip = true;
    if (op == Qt::NoClip) {
-      SelectClipRgn(d->hdc, 0);
+      SelectClipRgn(d->hdc, nullptr);
       doclip = false;
    }
 
@@ -563,11 +563,11 @@ void QWin32PrintEngine::drawPixmap(const QRectF & targetRect, const QPixmap & or
          painter.drawPixmap(0, 0, pixmap, tileSize * x, tileSize * y, imgw, imgh);
          QPixmap p = QPixmap::fromImage(img);
          HBITMAP hbitmap = qt_pixmapToWinHBITMAP(p, HBitmapNoAlpha);
-         HDC display_dc = GetDC(0);
+         HDC display_dc = GetDC(nullptr);
          HDC hbitmap_hdc = CreateCompatibleDC(display_dc);
          HGDIOBJ null_bitmap = SelectObject(hbitmap_hdc, hbitmap);
 
-         ReleaseDC(0, display_dc);
+         ReleaseDC(nullptr, display_dc);
 
          if (!StretchBlt(d->hdc, qRound(tposx - xform_offset_x), qRound(tposy - xform_offset_y), width, height,
                hbitmap_hdc, 0, 0, p.width(), p.height(), SRCCOPY)) {
@@ -597,12 +597,12 @@ void QWin32PrintEngine::drawTiledPixmap(const QRectF & r, const QPixmap & pm, co
    } else {
       int dc_state = SaveDC(d->hdc);
 
-      HDC display_dc = GetDC(0);
+      HDC display_dc = GetDC(nullptr);
       HBITMAP hbitmap = qt_pixmapToWinHBITMAP(pm, HBitmapNoAlpha);
       HDC hbitmap_hdc = CreateCompatibleDC(display_dc);
       HGDIOBJ null_bitmap = SelectObject(hbitmap_hdc, hbitmap);
 
-      ReleaseDC(0, display_dc);
+      ReleaseDC(nullptr, display_dc);
 
       QRectF trect = d->painterMatrix.mapRect(r);
       int tx = int(trect.left() * d->stretch_x + d->origin_x);
@@ -661,7 +661,7 @@ void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath & path)
                CloseFigure(hdc);
             }
             start = i;
-            MoveToEx(hdc, qRound(elm.x), qRound(elm.y), 0);
+            MoveToEx(hdc, qRound(elm.x), qRound(elm.y), nullptr);
             break;
          case QPainterPath::LineToElement:
             LineTo(hdc, qRound(elm.x), qRound(elm.y));
@@ -730,7 +730,7 @@ void QWin32PrintEnginePrivate::strokePath_dev(const QPainterPath & path, const Q
    }
 
    HPEN pen = ExtCreatePen(PS_GEOMETRIC | PS_SOLID | capStyle | joinStyle,
-         (penWidth == 0) ? 1 : penWidth, &brush, 0, 0);
+         (penWidth == 0) ? 1 : penWidth, &brush, 0, nullptr);
 
    HGDIOBJ old_pen = SelectObject(hdc, pen);
    StrokePath(hdc);
@@ -856,7 +856,7 @@ void QWin32PrintEnginePrivate::initialize()
    txop = QTransform::TxNone;
 
    QString printerName = m_printDevice.id();
-   bool ok = OpenPrinter(&printerName.toStdWString()[0], (LPHANDLE)&hPrinter, 0);
+   bool ok = OpenPrinter(&printerName.toStdWString()[0], (LPHANDLE)&hPrinter, nullptr);
 
    if (! ok) {
       qErrnoWarning("QWin32PrintEngine::initialize: OpenPrinter failed");
@@ -865,7 +865,7 @@ void QWin32PrintEnginePrivate::initialize()
 
    // Fetch the PRINTER_INFO_2 with DEVMODE data containing the printer settings.
    DWORD infoSize, numBytes;
-   GetPrinter(hPrinter, 2, NULL, 0, &infoSize);
+   GetPrinter(hPrinter, 2, nullptr, 0, &infoSize);
 
    hMem  = GlobalAlloc(GHND, infoSize);
    pInfo = (PRINTER_INFO_2 *) GlobalLock(hMem);
@@ -884,22 +884,22 @@ void QWin32PrintEnginePrivate::initialize()
 
    if (! devMode) {
       // Allocate the required buffer
-      LONG result = DocumentProperties(NULL, hPrinter, &tmpName[0], NULL, NULL, 0);
+      LONG result = DocumentProperties(nullptr, hPrinter, &tmpName[0], nullptr, nullptr, 0);
       devMode = (DEVMODE *) malloc(result);
       ownsDevMode = true;
 
       // Get the default DevMode
-      result = DocumentProperties(NULL, hPrinter, &tmpName[0], devMode, NULL, DM_OUT_BUFFER);
+      result = DocumentProperties(nullptr, hPrinter, &tmpName[0], devMode, nullptr, DM_OUT_BUFFER);
       if (result != IDOK) {
          qErrnoWarning("QWin32PrintEngine::initialize: Failed to obtain devMode");
 
          free(devMode);
-         devMode = NULL;
+         devMode = nullptr;
          ownsDevMode = false;
       }
    }
 
-   hdc = CreateDC(NULL, &tmpName[0], 0, devMode);
+   hdc = CreateDC(nullptr, &tmpName[0], nullptr, devMode);
 
    if (! hdc) {
       qErrnoWarning("QWin32PrintEngine::initialize: CreateDC failed");
@@ -922,11 +922,12 @@ void QWin32PrintEnginePrivate::initHDC()
 {
    Q_ASSERT(hdc);
 
-   HDC display_dc = GetDC(0);
+   HDC display_dc = GetDC(nullptr);
    dpi_x = GetDeviceCaps(hdc, LOGPIXELSX);
    dpi_y = GetDeviceCaps(hdc, LOGPIXELSY);
    dpi_display = GetDeviceCaps(display_dc, LOGPIXELSY);
-   ReleaseDC(0, display_dc);
+   ReleaseDC(nullptr, display_dc);
+
    if (dpi_display == 0) {
       qWarning("QWin32PrintEngine::metric: GetDeviceCaps() failed, "
          "might be a driver problem");
@@ -976,11 +977,12 @@ void QWin32PrintEnginePrivate::release()
    if (ownsDevMode) {
       free(devMode);
    }
-   hdc = 0;
-   hPrinter = 0;
-   pInfo = 0;
-   hMem = 0;
-   devMode = 0;
+
+   hdc      = nullptr;
+   hPrinter = nullptr;
+   pInfo    = nullptr;
+   hMem     = nullptr;
+   devMode  = nullptr;
 
    ownsDevMode = false;
 }
@@ -1008,7 +1010,7 @@ bool QWin32PrintEnginePrivate::resetDC()
       const int lastError = GetLastError();
       qErrnoWarning(lastError, "ResetDC() on %p failed (%d)", oldHdc, lastError);
    }
-   return hdc != 0;
+   return hdc != nullptr;
 }
 
 static int indexOfId(const QList<QPrint::InputSlot> &inputSlots, QPrint::InputSlotId id)
@@ -1561,12 +1563,12 @@ void QWin32PrintEngine::setGlobalDevMode(HGLOBAL globalDevNames, HGLOBAL globalD
       d->devMode = dm;
 
       std::wstring tmp = d->m_printDevice.id().toStdWString();
-      d->hdc = CreateDC(NULL, &tmp[0], 0, dm);
+      d->hdc = CreateDC(nullptr, &tmp[0], nullptr, dm);
 
       d->num_copies = d->devMode->dmCopies;
       d->updatePageLayout();
 
-      if (! OpenPrinter(&tmp[0], &d->hPrinter, 0)) {
+      if (! OpenPrinter(&tmp[0], &d->hPrinter, nullptr)) {
          qWarning("QPrinter: OpenPrinter() failed after reading DEVMODE.");
       }
    }
@@ -1665,7 +1667,7 @@ static void draw_text_item_win(const QPointF & pos, const QTextItemInt & ti, HDC
 
    const bool has_kerning = ti.f && ti.f->kerning();
 
-   HFONT hfont = 0;
+   HFONT hfont = nullptr;
 
    if (ti.fontEngine->type() == QFontEngine::Win) {
       const QVariantMap userData = ti.fontEngine->userData().toMap();
@@ -1717,7 +1719,7 @@ static void draw_text_item_win(const QPointF & pos, const QTextItemInt & ti, HDC
 
       ExtTextOut(hdc, qRound(baseline_pos.x() + glyphs.offsets[0].x.toReal()),
             qRound(baseline_pos.y() + glyphs.offsets[0].y.toReal()),
-            options, 0, g.constData(), glyphs.numGlyphs, 0);
+            options, nullptr, g.constData(), glyphs.numGlyphs, nullptr);
 
    } else {
       QVarLengthArray<QFixedPoint> positions;
@@ -1748,7 +1750,7 @@ static void draw_text_item_win(const QPointF & pos, const QTextItemInt & ti, HDC
          glyphDistances[(_glyphs.size() - 1) * 2 + 1] = 0;
          g[_glyphs.size() - 1] = _glyphs[_glyphs.size() - 1];
 
-         ExtTextOut(hdc, qRound(positions[0].x), qRound(positions[0].y), options, 0,
+         ExtTextOut(hdc, qRound(positions[0].x), qRound(positions[0].y), options, nullptr,
                g.constData(), _glyphs.size(), glyphDistances.data());
 
       } else {
@@ -1757,7 +1759,7 @@ static void draw_text_item_win(const QPointF & pos, const QTextItemInt & ti, HDC
          while (i < _glyphs.size()) {
             wchar_t g = _glyphs[i];
 
-            ExtTextOut(hdc, qRound(positions[i].x), qRound(positions[i].y), options, 0, &g, 1, 0);
+            ExtTextOut(hdc, qRound(positions[i].x), qRound(positions[i].y), options, nullptr, &g, 1, nullptr);
             ++i;
          }
       }

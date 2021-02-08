@@ -48,7 +48,7 @@ class Q_GUI_EXPORT QListWidgetItem
    enum ItemType { Type = 0, UserType = 1000 };
    explicit QListWidgetItem(QListWidget *view = nullptr, int type = Type);
    explicit QListWidgetItem(const QString &text, QListWidget *view = nullptr, int type = Type);
-   explicit QListWidgetItem(const QIcon &icon, const QString &text, QListWidget *view = 0, int type = Type);
+   explicit QListWidgetItem(const QIcon &icon, const QString &text, QListWidget *view = nullptr, int type = Type);
    QListWidgetItem(const QListWidgetItem &other);
    virtual ~QListWidgetItem();
 

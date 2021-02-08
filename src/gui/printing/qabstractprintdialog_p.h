@@ -30,7 +30,6 @@
 
 #include <qabstractprintdialog.h>
 
-
 #ifndef QT_NO_PRINTER
 
 class QPrinter;
@@ -42,9 +41,9 @@ class QAbstractPrintDialogPrivate : public QDialogPrivate
 
  public:
    QAbstractPrintDialogPrivate()
-      : printer(0), pd(0), ownsPrinter(false)
+      : printer(nullptr), pd(nullptr), ownsPrinter(false)
       , options(QAbstractPrintDialog::PrintToFile | QAbstractPrintDialog::PrintPageRange |
-           QAbstractPrintDialog::PrintCollateCopies | QAbstractPrintDialog::PrintShowPageSize),
+                QAbstractPrintDialog::PrintCollateCopies | QAbstractPrintDialog::PrintShowPageSize),
         minPage(0), maxPage(INT_MAX)
    {  }
 

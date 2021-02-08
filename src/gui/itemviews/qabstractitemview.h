@@ -365,7 +365,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 
    virtual bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event);
 
-   virtual QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event = 0) const;
+   virtual QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event = nullptr) const;
 
 #ifndef QT_NO_DRAGANDDROP
    virtual void startDrag(Qt::DropActions supportedActions);

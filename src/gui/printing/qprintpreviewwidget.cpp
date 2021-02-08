@@ -154,10 +154,10 @@ class QPrintPreviewWidgetPrivate : public QWidgetPrivate
 
  public:
    QPrintPreviewWidgetPrivate()
-      : scene(0), curPage(1),
-        viewMode(QPrintPreviewWidget::SinglePageView),
-        zoomMode(QPrintPreviewWidget::FitInView),
-        zoomFactor(1), initialized(false), fitting(true) {
+      : scene(nullptr), curPage(1), viewMode(QPrintPreviewWidget::SinglePageView),
+        zoomMode(QPrintPreviewWidget::FitInView), zoomFactor(1),
+        initialized(false), fitting(true)
+   {
    }
 
    // private slots

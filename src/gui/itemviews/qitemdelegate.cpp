@@ -61,7 +61,10 @@ class QItemDelegatePrivate : public QAbstractItemDelegatePrivate
    Q_DECLARE_PUBLIC(QItemDelegate)
 
  public:
-   QItemDelegatePrivate() : f(0), clipPainting(true) {}
+   QItemDelegatePrivate()
+      : f(nullptr), clipPainting(true)
+   {
+   }
 
    inline const QItemEditorFactory *editorFactory() const {
       return f ? f : QItemEditorFactory::defaultFactory();
@@ -346,7 +349,7 @@ void QItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionView
    QPixmap pixmap = decoration(option, index.data(Qt::DecorationRole));
    QString text = QItemDelegatePrivate::replaceNewLine(index.data(Qt::DisplayRole).toString());
    QRect pixmapRect = QRect(QPoint(0, 0), option.decorationSize).intersected(pixmap.rect());
-   QRect textRect = textRectangle(0, option.rect, option.font, text);
+   QRect textRect = textRectangle(nullptr, option.rect, option.font, text);
    QRect checkRect = doCheck(option, textRect, index.data(Qt::CheckStateRole));
 
    QStyleOptionViewItem opt = option;
@@ -402,7 +405,7 @@ void QItemDelegate::drawDisplay(QPainter *painter, const QStyleOptionViewItem &o
    const QWidget *widget = d->widget(option);
    QStyle *style = widget ? widget->style() : QApplication::style();
 
-   const int textMargin = style->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, widget) + 1;
+   const int textMargin = style->pixelMetric(QStyle::PM_FocusFrameHMargin, nullptr, widget) + 1;
    QRect textRect = rect.adjusted(textMargin, 0, -textMargin, 0); // remove width padding
 
    const bool wrapText = opt.features & QStyleOptionViewItem::WrapText;
@@ -568,9 +571,9 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
    const bool hasCheck    = checkRect->isValid();
    const bool hasPixmap   = pixmapRect->isValid();
    const bool hasText     = textRect->isValid();
-   const int textMargin   = hasText   ? style->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, widget) + 1 : 0;
-   const int pixmapMargin = hasPixmap ? style->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, widget) + 1 : 0;
-   const int checkMargin  = hasCheck  ? style->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, widget) + 1 : 0;
+   const int textMargin   = hasText   ? style->pixelMetric(QStyle::PM_FocusFrameHMargin, nullptr, widget) + 1 : 0;
+   const int pixmapMargin = hasPixmap ? style->pixelMetric(QStyle::PM_FocusFrameHMargin, nullptr, widget) + 1 : 0;
+   const int checkMargin  = hasCheck  ? style->pixelMetric(QStyle::PM_FocusFrameHMargin, nullptr, widget) + 1 : 0;
 
    int x = option.rect.left();
    int y = option.rect.top();
@@ -831,7 +834,7 @@ QRect QItemDelegate::rect(const QStyleOptionViewItem &option, const QModelIndex 
 
             QFont fnt = value.value<QFont>().resolve(option.font);
 
-            return textRectangle(0, d->textLayoutBounds(option), fnt, text);
+            return textRectangle(nullptr, d->textLayoutBounds(option), fnt, text);
          }
       }
    }
@@ -968,7 +971,7 @@ QStyleOptionViewItem QItemDelegate::setOptions(const QModelIndex &index,
    }
 
    // disable style animations for checkboxes etc. within itemviews (QTBUG-30146)
-   opt.styleObject = 0;
+   opt.styleObject = nullptr;
 
    return opt;
 }

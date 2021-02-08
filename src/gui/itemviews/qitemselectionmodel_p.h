@@ -24,8 +24,6 @@
 #ifndef QITEMSELECTIONMODEL_P_H
 #define QITEMSELECTIONMODEL_P_H
 
-
-
 #ifndef QT_NO_ITEMVIEWS
 
 class QItemSelectionModelPrivate
@@ -34,8 +32,10 @@ class QItemSelectionModelPrivate
 
  public:
    QItemSelectionModelPrivate()
-      : model(0), currentCommand(QItemSelectionModel::NoUpdate),
-        tableSelected(false), tableColCount(0), tableRowCount(0) {}
+      : model(nullptr), currentCommand(QItemSelectionModel::NoUpdate),
+        tableSelected(false), tableColCount(0), tableRowCount(0)
+   {
+   }
 
    virtual ~QItemSelectionModelPrivate() {}
 

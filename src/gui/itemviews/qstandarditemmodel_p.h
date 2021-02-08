@@ -66,12 +66,8 @@ class QStandardItemPrivate
 
  public:
    inline QStandardItemPrivate()
-      : model(0),
-        parent(0),
-        rows(0),
-        columns(0),
-        q_ptr(0),
-        lastIndexOf(2) {
+      : model(nullptr), parent(nullptr), rows(0), columns(0), q_ptr(nullptr), lastIndexOf(2)
+   {
    }
    virtual ~QStandardItemPrivate();
 
@@ -99,8 +95,8 @@ class QStandardItemPrivate
    inline int columnCount() const {
       return columns;
    }
-   void childDeleted(QStandardItem *child);
 
+   void childDeleted(QStandardItem *child);
    void setModel(QStandardItemModel *mod);
 
    inline void setParentAndModel(
@@ -152,11 +148,12 @@ class QStandardItemModelPrivate : public QAbstractItemModelPrivate
          return root.data();
       }
       if (index.model() != q) {
-         return 0;
+         return nullptr;
       }
+
       QStandardItem *parent = static_cast<QStandardItem *>(index.internalPointer());
-      if (parent == 0) {
-         return 0;
+      if (parent == nullptr) {
+         return nullptr;
       }
       return parent->child(index.row(), index.column());
    }

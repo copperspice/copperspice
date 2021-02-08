@@ -97,7 +97,7 @@ class QFileIconEngine : public QPixmapIconEngine
       (void) state;
 
       static QList<QSize> sizes;
-      static QPlatformTheme *theme = 0;
+      static QPlatformTheme *theme = nullptr;
 
       if (!theme) {
          theme = QGuiApplicationPrivate::platformTheme();

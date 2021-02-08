@@ -384,8 +384,8 @@ QByteArray QPdf::generateDashes(const QPen &pen)
 
 
 static const char* const pattern_for_brush[] = {
-    0, // NoBrush
-    0, // SolidPattern
+    nullptr,    // NoBrush
+    nullptr,    // SolidPattern
     "0 J\n"
     "6 w\n"
     "[] 0 d\n"
@@ -582,9 +582,7 @@ static void cubicToHook(qfixed c1x, qfixed c1y,
 }
 
 QPdf::Stroker::Stroker()
-    : stream(0),
-    first(true),
-    dashStroker(&basicStroker)
+    : stream(nullptr), first(true), dashStroker(&basicStroker)
 {
     stroker = &basicStroker;
     basicStroker.setMoveToHook(moveToHook);
@@ -597,7 +595,7 @@ QPdf::Stroker::Stroker()
 void QPdf::Stroker::setPen(const QPen &pen, QPainter::RenderHints hints)
 {
     if (pen.style() == Qt::NoPen) {
-        stroker = 0;
+        stroker = nullptr;
         return;
     }
     qreal w = pen.widthF();
@@ -642,6 +640,7 @@ QByteArray QPdf::ascii85Encode(const QByteArray &input)
     output.resize(input.size()*5/4+7);
     char *out = output.data();
     const uchar *in = (const uchar *)input.constData();
+
     for (int i = 0; i < isize; i += 4) {
         uint val = (((uint)in[i])<<24) + (((uint)in[i+1])<<16) + (((uint)in[i+2])<<8) + (uint)in[i+3];
         if (val == 0) {
@@ -1356,15 +1355,13 @@ int QPdfEngine::metric(QPaintDevice::PaintDeviceMetric metricType) const
 
 QPdfEnginePrivate::QPdfEnginePrivate()
     : clipEnabled(false), allClipped(false), hasPen(true), hasBrush(false), simplePen(false),
-      outDevice(0), ownsDevice(false),
-      embedFonts(true),
-      grayscale(false),
+      outDevice(nullptr), ownsDevice(false), embedFonts(true), grayscale(false),
       m_pageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF(10, 10, 10, 10))
 {
     resolution = 1200;
     currentObject = 1;
-    currentPage = 0;
-    stroker.stream = 0;
+    currentPage    = nullptr;
+    stroker.stream = nullptr;
 
     streampos = 0;
 
@@ -1433,12 +1430,12 @@ bool QPdfEngine::end()
     qDeleteAll(d->fonts);
     d->fonts.clear();
     delete d->currentPage;
-    d->currentPage = 0;
+    d->currentPage = nullptr;
 
     if (d->outDevice && d->ownsDevice) {
         d->outDevice->close();
         delete d->outDevice;
-        d->outDevice = 0;
+        d->outDevice = nullptr;
     }
 
     setActive(false);
@@ -1842,9 +1839,11 @@ int QPdfEnginePrivate::writeCompressed(QIODevice *dev)
         int size = QPdfPage::chunkSize();
         int sum = 0;
         ::z_stream zStruct;
-        zStruct.zalloc = Z_NULL;
-        zStruct.zfree = Z_NULL;
-        zStruct.opaque = Z_NULL;
+
+        zStruct.zalloc = nullptr;
+        zStruct.zfree  = nullptr;
+        zStruct.opaque = nullptr;
+
         if (::deflateInit(&zStruct, Z_DEFAULT_COMPRESSION) != Z_OK) {
             qWarning("QPdfStream::writeCompressed: Error in deflateInit()");
             return sum;
@@ -2616,7 +2615,7 @@ void QPdfEnginePrivate::drawTextItem(const QPointF &p, const QTextItemInt &ti)
         noEmbed = true;
     }
 
-    QFontSubset *font = fonts.value(face_id, 0);
+    QFontSubset *font = fonts.value(face_id, nullptr);
     if (!font) {
         font = new QFontSubset(fe, requestObject());
         font->noEmbed = noEmbed;
@@ -2631,10 +2630,11 @@ void QPdfEnginePrivate::drawTextItem(const QPointF &p, const QTextItemInt &ti)
     QVarLengthArray<glyph_t> glyphs;
     QVarLengthArray<QFixedPoint> positions;
     QTransform m = QTransform::fromTranslate(p.x(), p.y());
-    ti.fontEngine->getGlyphPositions(ti.glyphs, m, ti.flags,
-                                     glyphs, positions);
+    ti.fontEngine->getGlyphPositions(ti.glyphs, m, ti.flags, glyphs, positions);
+
     if (glyphs.size() == 0)
         return;
+
     int synthesized = ti.fontEngine->synthesized();
     qreal stretch = synthesized & QFontEngine::SynthesizedStretch ? ti.fontEngine->fontDef.stretch/100. : 1.;
 

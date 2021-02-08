@@ -47,7 +47,10 @@ class QDirModelPrivate : public QAbstractItemModelPrivate
 
  public:
    struct QDirNode {
-      QDirNode() : parent(0), populated(false), stat(false) {}
+      QDirNode()
+         : parent(nullptr), populated(false), stat(false)
+      {
+      }
 
       QDirNode *parent;
       QFileInfo info;
@@ -169,7 +172,7 @@ QDirModel::QDirModel(const QStringList &nameFilters, QDir::Filters filters,
    d->nameFilters = nameFilters.isEmpty() ? QStringList(QLatin1String("*")) : nameFilters;
    d->filters = filters;
    d->sort = sort;
-   d->root.parent = 0;
+   d->root.parent = nullptr;
    d->root.info = QFileInfo();
    d->clear(&d->root);
 }
@@ -224,7 +227,7 @@ QModelIndex QDirModel::index(int row, int column, const QModelIndex &parent) con
       return QModelIndex();
    }
    // now get the internal pointer for the index
-   QDirModelPrivate::QDirNode *n = d->node(row, d->indexValid(parent) ? p : 0);
+   QDirModelPrivate::QDirNode *n = d->node(row, d->indexValid(parent) ? p : nullptr);
    Q_ASSERT(n);
 
    return createIndex(row, column, n);
@@ -242,8 +245,10 @@ QModelIndex QDirModel::parent(const QModelIndex &child) const
       return QModelIndex();
    }
    QDirModelPrivate::QDirNode *node = d->node(child);
-   QDirModelPrivate::QDirNode *par = (node ? node->parent : 0);
-   if (par == 0) { // parent is the root node
+   QDirModelPrivate::QDirNode *par = (node ? node->parent : nullptr);
+
+   if (par == nullptr) {
+      // parent is the root node
       return QModelIndex();
    }
 
@@ -1140,7 +1145,7 @@ void QDirModelPrivate::init()
    sort    = QDir::Name;
    nameFilters << "*";
 
-   root.parent = 0;
+   root.parent = nullptr;
    root.info = QFileInfo();
    clear(&root);
 
@@ -1152,7 +1157,7 @@ void QDirModelPrivate::init()
 QDirModelPrivate::QDirNode *QDirModelPrivate::node(int row, QDirNode *parent) const
 {
    if (row < 0) {
-      return 0;
+      return nullptr;
    }
 
    bool isDir = !parent || parent->info.isDir();
@@ -1162,8 +1167,8 @@ QDirModelPrivate::QDirNode *QDirModelPrivate::node(int row, QDirNode *parent) co
    }
 
    if (row >= p->children.count()) {
-      qWarning("node: the row does not exist");
-      return 0;
+      qWarning("QDirNode: row does not exist");
+      return nullptr;
    }
 
    return const_cast<QDirNode *>(&p->children.at(row));
@@ -1173,8 +1178,9 @@ QVector<QDirModelPrivate::QDirNode> QDirModelPrivate::children(QDirNode *parent,
 {
    Q_ASSERT(parent);
    QFileInfoList infoList;
+
    if (parent == &root) {
-      parent = 0;
+      parent = nullptr;
       infoList = QDir::drives();
    } else if (parent->info.isDir()) {
       //resolve directory links only if requested.
@@ -1245,7 +1251,7 @@ void QDirModelPrivate::restorePersistentIndexes()
       int column   = savedPersistent.at(i).column;
 
       QModelIndex idx = q->index(path, column);
-      if (idx != data->index || data->model == 0) {
+      if (idx != data->index || data->model == nullptr) {
          //data->model may be equal to 0 if the model is getting destroyed
          persistent.m_indexes.remove(data->index);
 
@@ -1345,7 +1351,7 @@ void QDirModelPrivate::appendChild(QDirModelPrivate::QDirNode *parent, const QSt
    QDirModelPrivate::QDirNode node;
    node.populated = false;
    node.stat = shouldStat;
-   node.parent = (parent == &root ? 0 : parent);
+   node.parent = (parent == &root ? nullptr : parent);
    node.info = QFileInfo(path);
    node.info.setCaching(true);
 

@@ -42,7 +42,8 @@
 class QColumnViewPreviewColumn : public QAbstractItemView
 {
  public:
-   QColumnViewPreviewColumn(QWidget *parent) : QAbstractItemView(parent), previewWidget(0)
+   QColumnViewPreviewColumn(QWidget *parent)
+      : QAbstractItemView(parent), previewWidget(nullptr)
    {
    }
 

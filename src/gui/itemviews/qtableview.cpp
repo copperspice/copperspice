@@ -130,12 +130,12 @@ QSpanCollection::Span *QSpanCollection::spanAt(int x, int y) const
 {
    Index::const_iterator it_y = index.lowerBound(-y);
    if (it_y == index.end()) {
-      return 0;
+      return nullptr;
    }
 
    SubIndex::const_iterator it_x = (*it_y).lowerBound(-x);
    if (it_x == (*it_y).end()) {
-      return 0;
+      return nullptr;
    }
 
    Span *span = *it_x;
@@ -143,7 +143,7 @@ QSpanCollection::Span *QSpanCollection::spanAt(int x, int y) const
       return span;
    }
 
-   return 0;
+   return nullptr;
 }
 
 // internal - remove and deletes all spans inside the collection
@@ -761,7 +761,7 @@ void QTableViewPrivate::drawAndClipSpans(const QRegion &area, QPainter *painter,
          }
       }
 
-      set.remove(0);
+      set.remove(nullptr);
       visibleSpans = set.toList();
    }
 

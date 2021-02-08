@@ -107,12 +107,10 @@ class QTableViewPrivate : public QAbstractItemViewPrivate
 
  public:
    QTableViewPrivate()
-      : showGrid(true), gridStyle(Qt::SolidLine),
-        rowSectionAnchor(-1), columnSectionAnchor(-1),
-        columnResizeTimerID(0), rowResizeTimerID(0),
-        horizontalHeader(0), verticalHeader(0),
-        sortingEnabled(false), geometryRecursionBlock(false),
-        visualCursor(QPoint()) {
+      : showGrid(true), gridStyle(Qt::SolidLine), rowSectionAnchor(-1), columnSectionAnchor(-1),
+        columnResizeTimerID(0), rowResizeTimerID(0), horizontalHeader(nullptr), verticalHeader(nullptr),
+        sortingEnabled(false), geometryRecursionBlock(false), visualCursor(QPoint())
+   {
       wrapItemText = true;
 
 #ifndef QT_NO_DRAGANDDROP

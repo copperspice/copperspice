@@ -271,7 +271,10 @@ class QListModeViewBase : public QCommonListViewBase
 class QIconModeViewBase : public QCommonListViewBase
 {
  public:
-   QIconModeViewBase(QListView *q, QListViewPrivate *d) : QCommonListViewBase(q, d), interSectingVector(0) {}
+   QIconModeViewBase(QListView *q, QListViewPrivate *d)
+      : QCommonListViewBase(q, d), interSectingVector(nullptr)
+   {
+   }
 
    QBspTree tree;
    QVector<QListViewItem> items;

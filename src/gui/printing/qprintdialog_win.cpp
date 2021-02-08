@@ -27,6 +27,7 @@
 #include <qwidget.h>
 #include <qapplication.h>
 #include <qmessagebox.h>
+
 #include <qapplication_p.h>
 #include <qabstractprintdialog_p.h>
 #include <qprintengine_win_p.h>
@@ -47,8 +48,9 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 
  public:
    QPrintDialogPrivate()
-      : engine(0), ep(0)
-   { }
+      : engine(nullptr), ep(nullptr)
+   {
+   }
 
    int openWindowsPrintDialogModally();
 
@@ -125,7 +127,7 @@ static void qt_win_setup_PRINTDLGEX(PRINTDLGEX *pd, QWidget *parent,
 
    QWindow *parentWindow = parent->windowHandle();
 
-   pd->hwndOwner = parentWindow ? (HWND)QGuiApplication::platformNativeInterface()->nativeResourceForWindow("handle", parentWindow) : 0;
+   pd->hwndOwner = parentWindow ? (HWND)QGuiApplication::platformNativeInterface()->nativeResourceForWindow("handle", parentWindow) : nullptr;
    pd->lpPageRanges[0].nFromPage = qMax(pdlg->fromPage(), pdlg->minPage());
    pd->lpPageRanges[0].nToPage   = (pdlg->toPage() > 0) ? qMin(pdlg->toPage(), pdlg->maxPage()) : 1;
    pd->nCopies = d->printer->copyCount();
@@ -190,7 +192,7 @@ QPrintDialog::QPrintDialog(QPrinter *printer, QWidget *parent)
 }
 
 QPrintDialog::QPrintDialog(QWidget *parent)
-   : QAbstractPrintDialog( *(new QPrintDialogPrivate), 0, parent)
+   : QAbstractPrintDialog( *(new QPrintDialogPrivate), nullptr, parent)
 {
    Q_D(QPrintDialog);
 
@@ -230,7 +232,7 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
    }
 
    // If there is no window, fall back to the print dialog itself
-   if (parent == 0) {
+   if (parent == nullptr) {
       parent = q;
    }
 
@@ -262,13 +264,14 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
             pd.lpPageRanges[0].nToPage = 1;
             done = false;
          }
-         if (pd.hDC == 0) {
+
+         if (pd.hDC == nullptr) {
             result = false;
          }
       }
 
       if (!done) {
-         QMessageBox::warning(0, QPrintDialog::tr("Print"),
+         QMessageBox::warning(nullptr, QPrintDialog::tr("Print"),
             QPrintDialog::tr("The 'From' value cannot be greater than the 'To' value."),
             QPrintDialog::tr("OK"));
       }

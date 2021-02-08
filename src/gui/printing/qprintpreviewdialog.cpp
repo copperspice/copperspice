@@ -50,7 +50,9 @@
 class QPrintPreviewMainWindow : public QMainWindow
 {
  public:
-   QPrintPreviewMainWindow(QWidget *parent) : QMainWindow(parent) {}
+   QPrintPreviewMainWindow(QWidget *parent)
+      : QMainWindow(parent)
+   {}
 
    QMenu *createPopupMenu() override {
       return nullptr;
@@ -131,7 +133,9 @@ class QPrintPreviewDialogPrivate : public QDialogPrivate
 
  public:
    QPrintPreviewDialogPrivate()
-      : printDialog(0), ownPrinter(false), initialized(false) {}
+      : printDialog(nullptr), ownPrinter(false), initialized(false)
+   {
+   }
 
    // private slots
    void _q_fit(QAction *action);
@@ -145,7 +149,7 @@ class QPrintPreviewDialogPrivate : public QDialogPrivate
    void _q_previewChanged();
    void _q_zoomFactorChanged();
 
-   void init(QPrinter *printer = 0);
+   void init(QPrinter *printer = nullptr);
    void populateScene();
    void layoutPages();
    void setupActions();
@@ -694,7 +698,7 @@ void QPrintPreviewDialog::done(int result)
 
    if (d->receiverToDisconnectOnClose) {
       disconnect(this, SIGNAL(finished(int)), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
-      d->receiverToDisconnectOnClose = 0;
+      d->receiverToDisconnectOnClose = nullptr;
    }
 
    d->memberToDisconnectOnClose.clear();
