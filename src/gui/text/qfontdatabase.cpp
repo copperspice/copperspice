@@ -400,7 +400,8 @@ struct QtFontFamily {
 QtFontFoundry *QtFontFamily::foundry(const QString &familyName, bool create)
 {
    if (familyName.isEmpty() && m_foundries.size() == 1) {
-      return &m_foundries[0];
+      auto iter = m_foundries.begin();
+      return &iter.value();
    }
 
    const auto key = familyName.toCaseFolded();
