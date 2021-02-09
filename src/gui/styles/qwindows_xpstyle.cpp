@@ -895,6 +895,7 @@ bool QWindowsXPStylePrivate::drawBackground(XPThemeData &themeData)
                if (bs->size().isValid() && bs->paintDevice() == enginePaintDevice) {
                   canDrawDirectly = true;
                }
+            }
       }
    }
 
