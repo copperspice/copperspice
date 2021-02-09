@@ -291,7 +291,7 @@ void QLineEdit::setCompleter(QCompleter *c)
    }
 
    if (d->control->completer()) {
-      disconnect(d->control->completer(), 0, this, 0);
+      disconnect(d->control->completer(), QString(), this, QString());
       d->control->completer()->setWidget(0);
 
       if (d->control->completer()->parent() == this) {
@@ -1423,7 +1423,7 @@ void QLineEdit::focusOutEvent(QFocusEvent *e)
 
 #ifndef QT_NO_COMPLETER
    if (d->control->completer()) {
-      QObject::disconnect(d->control->completer(), 0, this, 0);
+      QObject::disconnect(d->control->completer(), QString(), this, QString());
    }
 #endif
 

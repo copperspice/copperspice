@@ -223,6 +223,8 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       QString16(const QString16 &other) = default;
       QString16(QString16 &&other) = default;
 
+      QString16(std::nullptr_t) = delete;
+
       QString16(QChar32 c);
       QString16(size_type numOfChars, QChar32 c);
 

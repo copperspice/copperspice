@@ -741,7 +741,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
                   if (actual.isNumber()) {
                      int ival = QScriptEnginePrivate::toInt32(exec, actual);
 
-                     if (m.valueToKey(ival) != 0) {
+                     if (m.valueToKey(ival) != QString()) {
                         v.setValue(ival);
                         converted = true;
                         matchDistance += 10;

@@ -1007,11 +1007,11 @@ void QNetworkReplyImpl::abort()
 
    // stop both upload and download
    if (d->outgoingData) {
-      disconnect(d->outgoingData, nullptr, this, nullptr);
+      disconnect(d->outgoingData, QString(), this, QString());
    }
 
    if (d->copyDevice) {
-      disconnect(d->copyDevice, nullptr, this, nullptr);
+      disconnect(d->copyDevice, QString(), this, QString());
    }
 
    QNetworkReply::close();
@@ -1048,7 +1048,7 @@ void QNetworkReplyImpl::close()
    }
 
    if (d->copyDevice) {
-      disconnect(d->copyDevice, nullptr, this, nullptr);
+      disconnect(d->copyDevice, QString(), this, QString());
    }
 
    QNetworkReply::close();

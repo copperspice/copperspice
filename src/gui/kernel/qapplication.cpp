@@ -3217,7 +3217,7 @@ void QApplication::setStyle(QStyle *style)
       initSystemPalette();
       QApplicationPrivate::initializeWidgetPaletteHash();
       QApplicationPrivate::initializeWidgetFontHash();
-      QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_palette, 0,  false);
+      QApplicationPrivate::setPalette_helper(*QApplicationPrivate::sys_palette, QString(), false);
 
    } else if (!QApplicationPrivate::sys_palette) {
       // Initialize the sys_palette if it has not happened yet

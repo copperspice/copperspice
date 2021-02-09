@@ -52,7 +52,7 @@ int QCompletionModel::columnCount(const QModelIndex &) const
 void QCompletionModel::setSourceModel(QAbstractItemModel *source)
 {
    if (sourceModel() != nullptr) {
-      QObject::disconnect(sourceModel(), nullptr, this, nullptr);
+      QObject::disconnect(sourceModel(), QString(), this, QString());
    }
 
    QAbstractProxyModel::setSourceModel(source);
@@ -1147,8 +1147,8 @@ void QCompleter::setPopup(QAbstractItemView *popup)
    Q_ASSERT(popup != nullptr);
 
    if (d->popup) {
-      QObject::disconnect(d->popup->selectionModel(), nullptr, this, nullptr);
-      QObject::disconnect(d->popup, nullptr, this, nullptr);
+      QObject::disconnect(d->popup->selectionModel(), QString(), this, QString());
+      QObject::disconnect(d->popup, QString(), this, QString());
    }
 
    if (d->popup != popup) {

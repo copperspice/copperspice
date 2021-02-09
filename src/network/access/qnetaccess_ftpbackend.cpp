@@ -206,7 +206,7 @@ void QNetworkAccessFtpBackend::disconnectFromFtp(CacheCleanupMode mode)
    state = Disconnecting;
 
    if (ftp) {
-      disconnect(ftp, nullptr, this, nullptr);
+      disconnect(ftp, QString(), this, QString());
 
       QByteArray key = makeCacheKey(url());
 

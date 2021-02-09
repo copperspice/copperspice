@@ -114,7 +114,7 @@ void QLineControl::copy(QClipboard::Mode mode) const
    QString t = selectedText();
 
    if (! t.isEmpty() && m_echoMode == QLineEdit::Normal) {
-      disconnect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, nullptr);
+      disconnect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, QString());
 
       QApplication::clipboard()->setText(t, mode);
       connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(_q_clipboardChanged()));
