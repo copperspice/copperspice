@@ -708,7 +708,6 @@
 /src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginContainerQt.cpp
 /src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp
 /src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
-/src/3rdparty/webkit/Source/WebCore/plugins/win/PaintHooks.asm
 /src/3rdparty/webkit/Source/WebCore/rendering/RenderFullScreen.cpp
 /src/3rdparty/webkit/Source/WebCore/rendering/RenderInputSpeech.cpp
 /src/3rdparty/webkit/Source/WebCore/rendering/RenderMedia.cpp
