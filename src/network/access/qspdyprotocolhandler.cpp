@@ -601,7 +601,7 @@ void QSpdyProtocolHandler::sendSYN_STREAM(HttpMessagePair messagePair,
    QHttpNetworkRequest request = messagePair.first;
    QHttpNetworkReply *reply = messagePair.second;
 
-   ControlFrameFlags flags = nullptr;
+   ControlFrameFlags flags = Qt::EmptyFlag;
 
    if (!request.uploadByteDevice()) {
       // no upload -> this is the last frame, send the FIN flag
@@ -657,14 +657,14 @@ void QSpdyProtocolHandler::sendRST_STREAM(qint32 streamID, RST_STREAM_STATUS_COD
    char wireData[8];
    appendIntToFourBytes(wireData, streamID);
    appendIntToFourBytes(wireData + 4, statusCode);
-   sendControlFrame(FrameType_RST_STREAM, nullptr, wireData, 8);
+   sendControlFrame(FrameType_RST_STREAM, Qt::EmptyFlag, wireData, 8);
 }
 
 void QSpdyProtocolHandler::sendPING(quint32 pingID)
 {
    char rawData[4];
    appendIntToFourBytes(rawData, pingID);
-   sendControlFrame(FrameType_PING, nullptr, rawData, 4);
+   sendControlFrame(FrameType_PING, Qt::EmptyFlag, rawData, 4);
 }
 
 bool QSpdyProtocolHandler::uploadData(qint32 streamID)
@@ -708,7 +708,7 @@ bool QSpdyProtocolHandler::uploadData(qint32 streamID)
          break;
 
       } else {
-         DataFrameFlags flags = nullptr;
+         DataFrameFlags flags = Qt::EmptyFlag;
          // we will send the FIN flag later if appropriate
          qint64 currentWriteSize = sendDataFrame(streamID, flags, currentReadSize, readPointer);
 
@@ -761,7 +761,7 @@ void QSpdyProtocolHandler::sendWINDOW_UPDATE(qint32 streamID, quint32 deltaWindo
    appendIntToFourBytes(windowUpdateData, streamID);
    appendIntToFourBytes(windowUpdateData + 4, deltaWindowSize);
 
-   sendControlFrame(FrameType_WINDOW_UPDATE, nullptr, windowUpdateData, 8);
+   sendControlFrame(FrameType_WINDOW_UPDATE, Qt::EmptyFlag, windowUpdateData, 8);
 }
 
 qint64 QSpdyProtocolHandler::sendDataFrame(qint32 streamID, DataFrameFlags flags,

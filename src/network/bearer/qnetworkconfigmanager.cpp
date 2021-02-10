@@ -305,7 +305,7 @@ QNetworkConfigurationManager::Capabilities QNetworkConfigurationManager::capabil
       return priv->capabilities();
    }
 
-   return QNetworkConfigurationManager::Capabilities(nullptr);
+   return QNetworkConfigurationManager::Capabilities(Qt::EmptyFlag);
 }
 
 void QNetworkConfigurationManager::updateConfigurations()
