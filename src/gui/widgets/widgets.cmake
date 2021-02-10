@@ -126,7 +126,6 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qbuttongroup_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qcombobox_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdatetimeedit_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdockarealayout_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdockwidget_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qeffects_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qframe_p.h
@@ -134,7 +133,6 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlabel_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlinecontrol_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlineedit_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmainwindowlayout_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmdiarea_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmdisubwindow_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmenu_p.h
@@ -147,9 +145,7 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtabbar_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtextedit_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbar_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbararealayout_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbarextension_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbarlayout_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbarseparator_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qwidgetanimator_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qwidgetresizehandler_p.h
@@ -169,7 +165,6 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdial.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdialogbuttonbox.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdockwidget.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qdockarealayout.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qeffects.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qfontcombobox.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qframe.cpp
@@ -181,7 +176,6 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlineedit.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qlinecontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmainwindow.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmainwindowlayout.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmdiarea.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmdisubwindow.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qmenu.cpp
@@ -203,7 +197,6 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtextedit.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtextbrowser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbar.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbarlayout.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbarextension.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbarseparator.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbox.cpp
@@ -214,7 +207,6 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qfocusframe.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qscrollarea.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qwidgetanimator.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qtoolbararealayout.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/qplaintextedit.cpp
 )
 

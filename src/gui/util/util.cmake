@@ -23,23 +23,19 @@ list(APPEND GUI_INCLUDES
 )
 
 list(APPEND GUI_PRIVATE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/util/qabstractlayoutstyleinfo_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qcompleter_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qflickgesture_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qscroller_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qscrollerproperties_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/util/qlayoutpolicy_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qundostack_p.h
 )
 
 target_sources(CsGui
    PRIVATE
-   ${CMAKE_CURRENT_SOURCE_DIR}/util/qabstractlayoutstyleinfo.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qcompleter.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qdesktopservices.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qflickgesture.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/util/qlayoutpolicy.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qscroller.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qscrollerproperties.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/qsystemtrayicon.cpp

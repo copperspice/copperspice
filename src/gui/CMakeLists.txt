@@ -33,6 +33,7 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/image
    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel
+   ${CMAKE_CURRENT_SOURCE_DIR}/layout
    ${CMAKE_CURRENT_SOURCE_DIR}/math3d
    ${CMAKE_CURRENT_SOURCE_DIR}/painting
    ${CMAKE_CURRENT_SOURCE_DIR}/platform
@@ -71,6 +72,7 @@ include(graphicsview/graphicsview.cmake)
 include(image/image.cmake)
 include(itemviews/itemviews.cmake)
 include(kernel/kernel.cmake)
+include(layout/layout.cmake)
 include(math3d/math3d.cmake)
 include(painting/painting.cmake)
 include(opengl/opengl.cmake)

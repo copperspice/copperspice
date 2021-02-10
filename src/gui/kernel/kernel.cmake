@@ -4,7 +4,6 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QActionGroup
    QApplication
    QGuiApplication
-   QBoxLayout
    QClipboard
    QClipboardEvent
    QCloseEvent
@@ -22,14 +21,11 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QEvent
    QFileOpenEvent
    QFocusEvent
-   QFormLayout
    QGenericPlugin
    QGenericPluginFactory
    QGesture
    QGestureEvent
    QGestureRecognizer
-   QGridLayout
-   QHBoxLayout
    QHelpEvent
    QHideEvent
    QHoverEvent
@@ -39,9 +35,6 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QInputMethodEvent
    QKeyEvent
    QKeySequence
-   QLayout
-   QLayoutItem
-   QLayoutIterator
    QMenubarUpdatedEvent
    QMouseEvent
    QMoveEvent
@@ -64,7 +57,6 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QShowEvent
    QSizePolicy
    QSpacerItem
-   QStackedLayout
    QStatusTipEvent
    QStyleHints
    QSurface
@@ -78,7 +70,6 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QTouchDevice
    QTouchEvent
    QUpdateLaterEvent
-   QVBoxLayout
    QWhatsThis
    QWhatsThisClickedEvent
    QWheelEvent
@@ -102,7 +93,6 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qactiongroup.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qguiapplication.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qboxlayout.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboardevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcloseevent.h
@@ -120,14 +110,11 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qfileopenevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qfocusevent.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qformlayout.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericplugin.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericpluginfactory.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesture.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgestureevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturerecognizer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgridlayout.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhboxlayout.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhelpevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhideevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhoverevent.h
@@ -137,9 +124,6 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethodevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeyevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeysequence.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayout.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutitem.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutiterator.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmenubarupdatedevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmouseevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmoveevent.h
@@ -162,7 +146,6 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshowevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsizepolicy.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qspaceritem.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstackedlayout.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstatustipevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstylehints.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsurface.h
@@ -177,7 +160,6 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qupdatelaterevent.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvboxlayout.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwhatsthis.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwhatsthisclickedevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwheelevent.h
@@ -214,8 +196,6 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethod_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeysequence_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayout_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutengine_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpaintdevicewindow_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qscreen_p.h
@@ -242,28 +222,22 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qactiongroup.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qapplication_cs.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qboxlayout.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qclipboard.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcursor.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdrag.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnd.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdesktopwidget.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qevent.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qformlayout.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericplugin.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericpluginfactory.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesture.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturerecognizer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgesturemanager.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgridlayout.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhighdpiscaling.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputdevicemanager.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qinputmethod.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeymapper.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qkeysequence.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayout.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutengine.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qlayoutitem.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qoffscreensurface.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglcontext.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qopenglwidget.cpp
@@ -278,7 +252,6 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshapedpixmapdndwindow.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcut.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qshortcutmap.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstackedlayout.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstylehints.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsurface.cpp
