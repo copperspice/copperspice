@@ -42,7 +42,9 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/styles
    ${CMAKE_CURRENT_SOURCE_DIR}/text
    ${CMAKE_CURRENT_SOURCE_DIR}/util
+   ${CMAKE_CURRENT_SOURCE_DIR}/widgetbase
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
+
 
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include/freetype
@@ -83,6 +85,7 @@ include(statemachine/statemachine.cmake)
 include(styles/styles.cmake)
 include(text/text.cmake)
 include(util/util.cmake)
+include(widgetbase/widgetbase.cmake)
 include(widgets/widgets.cmake)
 
 macro_generate_public("${GUI_PUBLIC_INCLUDES}" QtGui)

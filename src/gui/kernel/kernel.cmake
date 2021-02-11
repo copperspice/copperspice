@@ -73,14 +73,6 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QWhatsThis
    QWhatsThisClickedEvent
    QWheelEvent
-   QWidget
-   QWidgetAction
-   QWidgetData
-   QWidgetItem
-   QWidgetItemV2
-   QWidgetList
-   QWidgetMapper
-   QWidgetSet
    QWindow
    QWindowStateChangeEvent
    QWindowSystemInterface
@@ -163,14 +155,6 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwhatsthis.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwhatsthisclickedevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwheelevent.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetdata.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetitem.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetitemv2.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetlist.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetmapper.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetset.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowdefs.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowdefs_win.h
@@ -206,9 +190,6 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qstandardgestures_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantgui_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetwindow_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowcontainer_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface_p.h
@@ -260,9 +241,6 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtouchdevice.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariantgui.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwhatsthis.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidget.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetaction.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwidgetwindow.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindow.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowcontainer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qwindowsysteminterface.cpp
