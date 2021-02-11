@@ -83,12 +83,12 @@ void QLayoutItem::invalidate()
 
 QLayout *QLayoutItem::layout()
 {
-   return 0;
+   return nullptr;
 }
 
 QSpacerItem *QLayoutItem::spacerItem()
 {
-   return 0;
+   return nullptr;
 }
 
 QLayout *QLayout::layout()
@@ -103,7 +103,7 @@ QSpacerItem *QSpacerItem::spacerItem()
 
 QWidget *QLayoutItem::widget()
 {
-   return 0;
+   return nullptr;
 }
 
 QWidget *QWidgetItem::widget()
@@ -274,7 +274,7 @@ Qt::Orientations QSpacerItem::expandingDirections() const
 Qt::Orientations QWidgetItem::expandingDirections() const
 {
    if (isEmpty()) {
-      return Qt::Orientations(0);
+      return Qt::Orientations(Qt::EmptyFlag);
    }
 
    Qt::Orientations e = wid->sizePolicy().expandingDirections();
@@ -402,13 +402,8 @@ QSizePolicy::ControlTypes QWidgetItem::controlTypes() const
 }
 
 QWidgetItemV2::QWidgetItemV2(QWidget *widget)
-   : QWidgetItem(widget),
-     q_cachedMinimumSize(Dirty, Dirty),
-     q_cachedSizeHint(Dirty, Dirty),
-     q_cachedMaximumSize(Dirty, Dirty),
-     q_firstCachedHfw(0),
-     q_hfwCacheSize(0),
-     d(0)
+   : QWidgetItem(widget), q_cachedMinimumSize(Dirty, Dirty), q_cachedSizeHint(Dirty, Dirty),
+     q_cachedMaximumSize(Dirty, Dirty), q_firstCachedHfw(0), q_hfwCacheSize(0), d(nullptr)
 {
    QWidgetPrivate *wd = wid->d_func();
    if (!wd->widgetItem) {
@@ -421,7 +416,7 @@ QWidgetItemV2::~QWidgetItemV2()
    if (wid) {
       QWidgetPrivate *wd = wid->d_func();
       if (wd->widgetItem == this) {
-         wd->widgetItem = 0;
+         wd->widgetItem = nullptr;
       }
    }
 }

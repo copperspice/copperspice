@@ -235,9 +235,10 @@ class QGridLayoutPrivate : public QLayoutPrivate
       if (index < things.count()) {
          return things.at(index)->item();
       } else {
-         return 0;
+         return nullptr;
       }
    }
+
    inline QLayoutItem *takeAt(int index) {
       Q_Q(QGridLayout);
       if (index < things.count()) {
@@ -246,21 +247,22 @@ class QGridLayoutPrivate : public QLayoutPrivate
             if (QLayout *l = item->layout()) {
                // sanity check in case the user passed something weird to QObject::setParent()
                if (l->parent() == q) {
-                  l->setParent(0);
+                  l->setParent(nullptr);
                }
             }
             delete b;
             return item;
          }
       }
-      return 0;
+
+      return nullptr;
    }
 
    QLayoutItem *replaceAt(int index, QLayoutItem *newitem) override {
       if (!newitem) {
-         return 0;
+         return nullptr;
       }
-      QLayoutItem *item = 0;
+      QLayoutItem *item = nullptr;
       QGridBox *b = things.value(index);
       if (b) {
          item = b->takeItem();
@@ -340,10 +342,11 @@ void QGridLayoutPrivate::effectiveMargins(int *left, int *top, int *right, int *
    int rightMost = 0;
    int bottomMost = 0;
 
-   QWidget *w = 0;
+   QWidget *w = nullptr;
    const int n = things.count();
+
    for (int i = 0; i < n; ++i) {
-      QGridBox *box = things.at(i);
+      QGridBox *box    = things.at(i);
       QLayoutItem *itm = box->item();
       w = itm->widget();
       if (w) {
@@ -440,7 +443,7 @@ QGridLayoutPrivate::QGridLayoutPrivate()
    setDirty();
    rr = cc = 0;
    nextR = nextC = 0;
-   hfwData = 0;
+   hfwData   = nullptr;
    hReversed = false;
    vReversed = false;
    horizontalSpacing = -1;
@@ -514,7 +517,8 @@ int QGridLayoutPrivate::minimumHeightForWidth(int w, int hSpacing, int vSpacing)
       return -1;
    }
    int top, bottom;
-   effectiveMargins(0, &top, 0, &bottom);
+   effectiveMargins(nullptr, &top, nullptr, &bottom);
+
    return hfw_minheight + top + bottom;
 }
 
@@ -608,7 +612,7 @@ void QGridLayoutPrivate::setSize(int r, int c)
 
    if (hfwData && (int)hfwData->size() < r) {
       delete hfwData;
-      hfwData = 0;
+      hfwData   = nullptr;
       hfw_width = -1;
    }
    rr = r;
@@ -814,7 +818,7 @@ void QGridLayoutPrivate::setupSpacings(QVector<QLayoutStruct> &chain,
       qSwap(numRows, numColumns);
    }
 
-   QStyle *style = 0;
+   QStyle *style = nullptr;
    if (fixedSpacing < 0) {
       if (QWidget *parentWidget = q->parentWidget()) {
          style = parentWidget->style();
@@ -822,7 +826,8 @@ void QGridLayoutPrivate::setupSpacings(QVector<QLayoutStruct> &chain,
    }
 
    for (int c = 0; c < numColumns; ++c) {
-      QGridBox *previousBox = 0;
+      QGridBox *previousBox = nullptr;
+
       int previousRow = -1;       // previous *non-empty* row
 
       for (int r = 0; r < numRows; ++r) {
@@ -850,7 +855,7 @@ void QGridLayoutPrivate::setupSpacings(QVector<QLayoutStruct> &chain,
 
                if (style)
                   spacing = style->combinedLayoutSpacing(controlTypes1, controlTypes2,
-                        orientation, 0, q->parentWidget());
+                        orientation, nullptr, q->parentWidget());
             } else {
                if (orientation == Qt::Vertical) {
                   QGridBox *sibling = vReversed ? previousBox : box;
@@ -1115,15 +1120,14 @@ QRect QGridLayoutPrivate::cellRect(int row, int col) const
 }
 
 QGridLayout::QGridLayout(QWidget *parent)
-   : QLayout(*new QGridLayoutPrivate, 0, parent)
+   : QLayout(*new QGridLayoutPrivate, nullptr, parent)
 {
    Q_D(QGridLayout);
    d->expand(1, 1);
 }
 
-
 QGridLayout::QGridLayout()
-   : QLayout(*new QGridLayoutPrivate, 0, 0)
+   : QLayout(*new QGridLayoutPrivate, nullptr, nullptr)
 {
    Q_D(QGridLayout);
    d->expand(1, 1);
@@ -1347,7 +1351,7 @@ QLayoutItem *QGridLayout::itemAtPosition(int row, int column) const
          return box->item();
       }
    }
-   return 0;
+   return nullptr;
 }
 
 /*!

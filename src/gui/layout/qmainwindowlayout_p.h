@@ -47,7 +47,7 @@ class QDockWidgetGroupWindow : public QWidget
    GUI_CS_OBJECT(QDockWidgetGroupWindow)
 
  public:
-   explicit QDockWidgetGroupWindow(QWidget *parent = 0, Qt::WindowFlags f = 0)
+   explicit QDockWidgetGroupWindow(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::EmptyFlag)
       : QWidget(parent, f)
    {}
 
@@ -136,7 +136,7 @@ class QMainWindowLayoutState
    bool isValid() const;
 
    QLayoutItem *plug(const QList<int> &path);
-   QLayoutItem *unplug(const QList<int> &path, QMainWindowLayoutState *savedState = 0);
+   QLayoutItem *unplug(const QList<int> &path, QMainWindowLayoutState *savedState = nullptr);
 
    void saveState(QDataStream &stream) const;
    bool checkFormat(QDataStream &stream);

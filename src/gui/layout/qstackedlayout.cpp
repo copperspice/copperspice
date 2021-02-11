@@ -48,12 +48,12 @@ QLayoutItem *QStackedLayoutPrivate::replaceAt(int idx, QLayoutItem *newitem)
 {
    Q_Q(QStackedLayout);
    if (idx < 0 || idx >= list.size() || !newitem) {
-      return 0;
+      return nullptr;
    }
    QWidget *wdg = newitem->widget();
    if (!wdg) {
       qWarning("QStackedLayout::replaceAt: Only widgets can be added");
-      return 0;
+      return nullptr;
    }
    QLayoutItem *orgitem = list.at(idx);
    list.replace(idx, newitem);
@@ -63,19 +63,19 @@ QLayoutItem *QStackedLayoutPrivate::replaceAt(int idx, QLayoutItem *newitem)
    return orgitem;
 }
 QStackedLayout::QStackedLayout()
-   : QLayout(*new QStackedLayoutPrivate, 0, 0)
+   : QLayout(*new QStackedLayoutPrivate, nullptr, nullptr)
 {
 }
 
 
 QStackedLayout::QStackedLayout(QWidget *parent)
-   : QLayout(*new QStackedLayoutPrivate, 0, parent)
+   : QLayout(*new QStackedLayoutPrivate, nullptr, parent)
 {
 }
 
 
 QStackedLayout::QStackedLayout(QLayout *parentLayout)
-   : QLayout(*new QStackedLayoutPrivate, parentLayout, 0)
+   : QLayout(*new QStackedLayoutPrivate, parentLayout, nullptr)
 {
 }
 
@@ -134,7 +134,7 @@ QLayoutItem *QStackedLayout::takeAt(int index)
 {
    Q_D(QStackedLayout);
    if (index < 0 || index >= d->list.size()) {
-      return 0;
+      return nullptr;
    }
 
    QLayoutItem *item = d->list.takeAt(index);
@@ -179,7 +179,7 @@ void QStackedLayout::setCurrentIndex(int index)
       parent->setUpdatesEnabled(false);
    }
 
-   QPointer<QWidget> fw = parent ? parent->window()->focusWidget() : 0;
+   QPointer<QWidget> fw = parent ? parent->window()->focusWidget() : nullptr;
    const bool focusWasOnOldPage = fw && (prev && prev->isAncestorOf(fw));
 
    if (prev) {
@@ -205,9 +205,10 @@ void QStackedLayout::setCurrentIndex(int index)
             // second best: first child widget in the focus chain
             if (QWidget *i = fw) {
                while ((i = i->nextInFocusChain()) != fw) {
+
                   if (((i->focusPolicy() & Qt::TabFocus) == Qt::TabFocus)
-                     && !i->focusProxy() && i->isVisibleTo(next) && i->isEnabled()
-                     && next->isAncestorOf(i)) {
+                        && !i->focusProxy() && i->isVisibleTo(next) && i->isEnabled()
+                        && next->isAncestorOf(i)) {
                      i->setFocus();
                      break;
                   }
@@ -253,7 +254,7 @@ void QStackedLayout::setCurrentWidget(QWidget *widget)
 QWidget *QStackedLayout::currentWidget() const
 {
    Q_D(const QStackedLayout);
-   return d->index >= 0 ? d->list.at(d->index)->widget() : 0;
+   return d->index >= 0 ? d->list.at(d->index)->widget() : nullptr;
 }
 
 /*!
@@ -266,7 +267,7 @@ QWidget *QStackedLayout::widget(int index) const
 {
    Q_D(const QStackedLayout);
    if (index < 0 || index >= d->list.size()) {
-      return 0;
+      return nullptr;
    }
    return d->list.at(index)->widget();
 }

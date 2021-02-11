@@ -63,7 +63,7 @@ QLayout::QLayout(QWidget *parent)
 }
 
 QLayout::QLayout()
-   : QObject(0), d_ptr(new QLayoutPrivate)
+   : QObject(nullptr), d_ptr(new QLayoutPrivate)
 {
    d_ptr->q_ptr = this;
 }
@@ -85,7 +85,7 @@ QLayout::QLayout(QLayoutPrivate &dd, QLayout *lay, QWidget *w)
          qWarning("QLayout: Attempting to add QLayout \"%s\" to %s \"%s\", which  already has a layout",
             csPrintable(QObject::objectName()), csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
 
-         setParent(0);
+         setParent(nullptr);
 
       } else {
          d->topLevel = true;
@@ -95,7 +95,7 @@ QLayout::QLayout(QLayoutPrivate &dd, QLayout *lay, QWidget *w)
             invalidate();
 
          } catch (...) {
-            w->d_func()->layout = 0;
+            w->d_func()->layout = nullptr;
             throw;
          }
       }
@@ -105,7 +105,7 @@ QLayout::QLayout(QLayoutPrivate &dd, QLayout *lay, QWidget *w)
 QLayoutPrivate::QLayoutPrivate()
    : insideSpacing(-1), userLeftMargin(-1), userTopMargin(-1), userRightMargin(-1),
      userBottomMargin(-1), topLevel(false), enabled(true), activated(true), autoNewChild(false),
-     constraint(QLayout::SetDefaultConstraint), menubar(0)
+     constraint(QLayout::SetDefaultConstraint), menubar(nullptr)
 {
 }
 
@@ -122,7 +122,8 @@ void QLayoutPrivate::getMargin(int *result, int userMargin, QStyle::PixelMetric 
    } else if (!topLevel) {
       *result = 0;
    } else if (QWidget *pw = q->parentWidget()) {
-      *result = pw->style()->pixelMetric(pm, 0, pw);
+      *result = pw->style()->pixelMetric(pm, nullptr, pw);
+
    } else {
       *result = 0;
    }
@@ -130,8 +131,8 @@ void QLayoutPrivate::getMargin(int *result, int userMargin, QStyle::PixelMetric 
 
 // Static item factory functions that allow for hooking things in Designer
 
-QLayoutPrivate::QWidgetItemFactoryMethod QLayoutPrivate::widgetItemFactoryMethod = 0;
-QLayoutPrivate::QSpacerItemFactoryMethod QLayoutPrivate::spacerItemFactoryMethod = 0;
+QLayoutPrivate::QWidgetItemFactoryMethod QLayoutPrivate::widgetItemFactoryMethod = nullptr;
+QLayoutPrivate::QSpacerItemFactoryMethod QLayoutPrivate::spacerItemFactoryMethod = nullptr;
 
 QWidgetItem *QLayoutPrivate::createWidgetItem(const QLayout *layout, QWidget *widget)
 {
@@ -459,7 +460,7 @@ void QLayout::widgetEvent(QEvent *e)
 
 #ifndef QT_NO_MENUBAR
             if (c->child() == d->menubar) {
-               d->menubar = 0;
+               d->menubar = nullptr;
             }
 #endif
             removeWidgetRecursively(this, c->child());
@@ -787,7 +788,7 @@ void QLayout::addChildWidget(QWidget *w)
          qWarning("QLayout::addChildWidget: %s \"%s\" in wrong parent; moved to correct parent",
             csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
 #endif
-      pw = 0;
+      pw = nullptr;
    }
 
    bool needShow = mw && mw->isVisible() && !(w->isHidden() && w->testAttribute(Qt::WA_WState_ExplicitShowHide));
@@ -913,7 +914,7 @@ bool QLayout::activate()
    }
 
    QWidget *mw = static_cast<QWidget *>(parent());
-   if (mw == 0) {
+   if (mw == nullptr) {
       qWarning("QLayout::activate: %s \"%s\" does not have a main widget",
          csPrintable(QObject::metaObject()->className()), csPrintable(QObject::objectName()));
       return false;
@@ -987,11 +988,11 @@ QLayoutItem *QLayout::replaceWidget(QWidget *from, QWidget *to, Qt::FindChildOpt
 {
    Q_D(QLayout);
    if (!from || !to) {
-      return 0;
+      return nullptr;
    }
 
    int index = -1;
-   QLayoutItem *item = 0;
+   QLayoutItem *item = nullptr;
    for (int u = 0; u < count(); ++u) {
       item = itemAt(u);
       if (!item) {
@@ -1011,7 +1012,7 @@ QLayoutItem *QLayout::replaceWidget(QWidget *from, QWidget *to, Qt::FindChildOpt
       }
    }
    if (index == -1) {
-      return 0;
+      return nullptr;
    }
 
    addChildWidget(to);
@@ -1070,7 +1071,7 @@ QRect QLayout::alignmentRect(const QRect &r) const
      returned by QLayoutItems that have an alignment.
    */
    QLayout *that = const_cast<QLayout *>(this);
-   that->setAlignment(0);
+   that->setAlignment(Qt::EmptyFlag);
    QSize ms = that->maximumSize();
    that->setAlignment(a);
 

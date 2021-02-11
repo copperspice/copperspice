@@ -76,10 +76,10 @@ Q_GUI_EXPORT QSize qSmartMinSize(const QWidgetItem *i);
 Q_GUI_EXPORT QSize qSmartMinSize(const QWidget *w);
 
 Q_GUI_EXPORT QSize qSmartMaxSize(const QSize &sizeHint, const QSize &minSize, const QSize &maxSize,
-   const QSizePolicy &sizePolicy, Qt::Alignment align = 0);
+   const QSizePolicy &sizePolicy, Qt::Alignment align = Qt::EmptyFlag);
 
-Q_GUI_EXPORT QSize qSmartMaxSize(const QWidgetItem *i, Qt::Alignment align = 0);
-Q_GUI_EXPORT QSize qSmartMaxSize(const QWidget *w, Qt::Alignment align = 0);
+Q_GUI_EXPORT QSize qSmartMaxSize(const QWidgetItem *i, Qt::Alignment align = Qt::EmptyFlag);
+Q_GUI_EXPORT QSize qSmartMaxSize(const QWidget *w, Qt::Alignment align = Qt::EmptyFlag);
 Q_GUI_EXPORT int qSmartSpacing(const QLayout *layout, QStyle::PixelMetric pm);
 
 /*
