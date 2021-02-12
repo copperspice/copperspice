@@ -21,23 +21,6 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QSharedPointer empty", "[qsharedpointer]")
-{
-   QSharedPointer<int> ptr;
-
-   REQUIRE(ptr == nullptr);
-   REQUIRE(ptr.isNull() == true);
-}
-
-TEST_CASE("QSharedPointer reset", "[qsharedpointer]")
-{
-   QSharedPointer<int> ptr = QMakeShared<int>();
-   ptr.reset();
-
-   REQUIRE(ptr == nullptr);
-   REQUIRE(ptr.isNull() == true);
-}
-
 TEST_CASE("QSharedPointer copy", "[qsharedpointer]")
 {
    QSharedPointer<int> ptr1;
@@ -52,15 +35,7 @@ TEST_CASE("QSharedPointer copy", "[qsharedpointer]")
    REQUIRE(rawPointer == ptr1.data());
 }
 
-TEST_CASE("QSharedPointer move", "[qsharedpointer]")
-{
-   QSharedPointer<int> ptr1 = QMakeShared<int>();
-   QSharedPointer<int> ptr2(std::move(ptr1));
-
-   REQUIRE(ptr2.isNull() == false);
-}
-
-TEST_CASE("QSharedPointer customdeleter called", "[qsharedpointer]")
+TEST_CASE("QSharedPointer custom_deleter", "[qsharedpointer]")
 {
    bool deleterExecuted = false;
 
@@ -78,37 +53,23 @@ TEST_CASE("QSharedPointer customdeleter called", "[qsharedpointer]")
    REQUIRE(deleterExecuted == true);
 }
 
-TEST_CASE("QWeakPointer reset", "[qsharedpointer]")
+TEST_CASE("QSharedPointer empty", "[qsharedpointer]")
 {
-   QSharedPointer<int> ptr = QMakeShared<int>();
-   QWeakPointer<int> weakPointer = ptr.toWeakRef();
-
-   weakPointer.clear();
-
-   REQUIRE(weakPointer == nullptr);
-   REQUIRE(weakPointer.isNull() == true);
-}
-
-TEST_CASE("QWeakPointer nullptr", "[qsharedpointer]")
-{
-   QSharedPointer<int> ptr = QMakeShared<int>();
-   QWeakPointer<int> weakPointer = ptr.toWeakRef();
-   ptr.reset();
-
-   REQUIRE(static_cast<bool>(weakPointer) == false);
-   REQUIRE(static_cast<bool>(ptr) == false);
+   QSharedPointer<int> ptr;
 
    REQUIRE(ptr == nullptr);
    REQUIRE(ptr.isNull() == true);
-
-   REQUIRE(weakPointer == nullptr);
-   REQUIRE(weakPointer.isNull()  == true);
-
-   REQUIRE(ptr != weakPointer);
-   REQUIRE(weakPointer != ptr);
 }
 
-TEST_CASE("QSharedPointer non-swapping", "[qsharedpointer]")
+TEST_CASE("QSharedPointer move_a", "[qsharedpointer]")
+{
+   QSharedPointer<int> ptr1 = QMakeShared<int>();
+   QSharedPointer<int> ptr2(std::move(ptr1));
+
+   REQUIRE(ptr2.isNull() == false);
+}
+
+TEST_CASE("QSharedPointer move_b", "[qsharedpointer]")
 {
    QSharedPointer<int> ptr1 = QMakeShared<int>();
    QSharedPointer<int> ptr2 = QMakeShared<int>();
@@ -118,4 +79,13 @@ TEST_CASE("QSharedPointer non-swapping", "[qsharedpointer]")
    ptr1 = std::move(ptr2);
 
    REQUIRE(ptr1.data() == rawPointer);
+}
+
+TEST_CASE("QSharedPointer reset", "[qsharedpointer]")
+{
+   QSharedPointer<int> ptr = QMakeShared<int>();
+   ptr.reset();
+
+   REQUIRE(ptr == nullptr);
+   REQUIRE(ptr.isNull() == true);
 }
