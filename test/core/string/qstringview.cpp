@@ -114,7 +114,7 @@ TEST_CASE("QStringView8 mid", "[qstringview]")
    REQUIRE(view.mid(11, 3) == "day");
 }
 
-TEST_CASE("QStringView8 operator_bracket", "[qstringview]")
+TEST_CASE("QStringView8 operator", "[qstringview]")
 {
    QString8 str      = "On a clear day you can see forever";
    QStringView8 view = str;
@@ -148,6 +148,3 @@ TEST_CASE("QStringView8 trimmed", "[qstringview]")
 
    REQUIRE(view.trimmed() == "orange  apple pear  quince");
 }
-
-
-

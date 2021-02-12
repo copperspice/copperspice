@@ -325,7 +325,7 @@ TEST_CASE("QString16 repeated", "[qstring16]")
    REQUIRE(str == "A wacky fox A wacky fox A wacky fox ");
 }
 
-TEST_CASE("QString16 replace-a", "[qstring16]")
+TEST_CASE("QString16 replace_a", "[qstring16]")
 {
    QString16 str = "A wacky fox went to lunch";
 

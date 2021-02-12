@@ -107,7 +107,7 @@ TEST_CASE("QMetaMethod method", "[qmetamethod]")
    REQUIRE(method.typeName() == "QStringView");
 }
 
-TEST_CASE("QMetaMethod invalid_case", "[qmetamethod]")
+TEST_CASE("QMetaMethod invalid_signature", "[qmetamethod]")
 {
    Ginger_MM obj;
 

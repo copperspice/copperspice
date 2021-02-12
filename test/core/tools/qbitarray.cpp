@@ -97,7 +97,7 @@ TEST_CASE("QBitArray resize", "[qbitarray]")
    REQUIRE(data.isNull() == false);
 }
 
-TEST_CASE("QBitArray operator&=", "[qbitarray]")
+TEST_CASE("QBitArray operator_a", "[qbitarray]")
 {
    int size = 16;
 
@@ -111,7 +111,7 @@ TEST_CASE("QBitArray operator&=", "[qbitarray]")
    REQUIRE(! data1.testBit(size - 1));
 }
 
-TEST_CASE("QBitArray operator==", "[qbitarray]")
+TEST_CASE("QBitArray operator_b", "[qbitarray]")
 {
    QBitArray data1(7, true);
    QBitArray data2(7, true);
@@ -119,7 +119,7 @@ TEST_CASE("QBitArray operator==", "[qbitarray]")
    REQUIRE(data1 == data2);
 }
 
-TEST_CASE("QBitArray operator^=", "[qbitarray]")
+TEST_CASE("QBitArray operator_c", "[qbitarray]")
 {
    QBitArray data1(13, true);
    QBitArray data2(13, false);

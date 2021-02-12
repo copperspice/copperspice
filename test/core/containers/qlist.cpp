@@ -110,7 +110,7 @@ TEST_CASE("QList position", "[qlist]")
    REQUIRE(list.back()  == "grapefruit");
 }
 
-TEST_CASE("QList preapend", "[qlist]")
+TEST_CASE("QList prepend", "[qlist]")
 {
    QList<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 

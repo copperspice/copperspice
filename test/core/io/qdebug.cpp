@@ -26,8 +26,6 @@
 
 FILE *handle = nullptr;
 
-// TEST_CASE("QDebug basic", "[qdebug]") ( only here for a tally count )
-
 void myMessageTest(QtMsgType type, QStringView msg) {
    switch (type) {
       case QtDebugMsg:

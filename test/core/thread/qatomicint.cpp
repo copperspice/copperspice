@@ -32,7 +32,7 @@ TEST_CASE("QAtomicInt constructor", "[qatomic_int]")
    REQUIRE(atomic3.load() == 17);
 }
 
-TEST_CASE("QAtomicInt assignment_operator", "[qatomic_int]")
+TEST_CASE("QAtomicInt assignment", "[qatomic_int]")
 {
    QAtomicInt atomic1(17);
    atomic1 = 42;

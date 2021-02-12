@@ -159,7 +159,7 @@ TEST_CASE("QMultiHash remove", "[qmultihash]")
    REQUIRE(hash.size() == 3);
 }
 
-TEST_CASE("QMHash swap", "[qmultihash]")
+TEST_CASE("QMultiHash swap", "[qmultihash]")
 {
    QMultiHash<int, QString> hash1 = { { 1, "watermelon"},
                                       { 2, "apple"},

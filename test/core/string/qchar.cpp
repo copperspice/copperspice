@@ -28,7 +28,7 @@ TEST_CASE("QChar empty", "[qchar]")
    REQUIRE(str.isNull());
 }
 
-TEST_CASE("QChar is_something", "[qchar]")
+TEST_CASE("QChar is_methods", "[qchar]")
 {
    QChar str = 'B';
 

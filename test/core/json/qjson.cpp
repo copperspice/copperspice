@@ -22,7 +22,7 @@
 
 #include <catch2/catch.hpp>
 
-TEST_CASE("QJsonDocument is_to", "[qjson]")
+TEST_CASE("QJsonDocument values", "[qjson]")
 {
    QJsonObject object;
    QJsonValue  value;

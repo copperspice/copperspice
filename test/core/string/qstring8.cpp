@@ -151,7 +151,7 @@ TEST_CASE("QString8 find", "[qstring]")
    }
 
    {
-      auto iter  = str1.find_fast("day");
+      auto iter = str1.find_fast("day");
       QString str2(iter, str1.end());
 
       REQUIRE(str2 == "day you can see forever");

@@ -30,7 +30,7 @@ TEST_CASE("QTemporaryFile fname_a", "[qtemporaryfile]")
    REQUIRE(! tmpFile.fileName().endsWith(".XXXXXX"));
 }
 
-TEST_CASE("QTemporaryFile fName_b", "[qtemporaryfile]")
+TEST_CASE("QTemporaryFile fname_b", "[qtemporaryfile]")
 {
    QCoreApplication::setApplicationName("CsCoreTest");
 
@@ -43,7 +43,7 @@ TEST_CASE("QTemporaryFile fName_b", "[qtemporaryfile]")
    QCoreApplication::setApplicationName("");
 }
 
-TEST_CASE("QTemporaryFile fName_c", "[qtemporaryfile]")
+TEST_CASE("QTemporaryFile fname_c", "[qtemporaryfile]")
 {
    QCoreApplication::setApplicationName("CsCoreTestXXXXXX.exe");
 
@@ -56,7 +56,7 @@ TEST_CASE("QTemporaryFile fName_c", "[qtemporaryfile]")
    QCoreApplication::setApplicationName("");
 }
 
-TEST_CASE("QTemporaryFile fName_d", "[qtemporaryfile]")
+TEST_CASE("QTemporaryFile fname_d", "[qtemporaryfile]")
 {
    QCoreApplication::setApplicationName("CsCoreTest.exeXX");
 
@@ -69,7 +69,7 @@ TEST_CASE("QTemporaryFile fName_d", "[qtemporaryfile]")
    QCoreApplication::setApplicationName("");
 }
 
-TEST_CASE("QTemporaryFile fName_e", "[qtemporaryfile]")
+TEST_CASE("QTemporaryFile fname_e", "[qtemporaryfile]")
 {
    QTemporaryFile tmpFile("MyCsCoreTestXXXXXX.name");
    tmpFile.open();
