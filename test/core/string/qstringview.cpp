@@ -64,6 +64,32 @@ TEST_CASE("QStringView8 ends_with", "[qstringview]")
    REQUIRE(view.endsWith("ForEver", Qt::CaseInsensitive) == true);
 }
 
+TEST_CASE("QStringView8 index_of_fast", "[qstringview]")
+{
+   QString8 str1 = "On a clear Day\0 you can see forever";
+   QStringView8 view = str1;
+
+   {
+      auto iter = view.indexOfFast("dAY", view.cbegin(), Qt::CaseInsensitive);
+      QString8 str2(iter, view.end());
+
+      REQUIRE(str2 == "Day\0 you can see forever");
+   }
+}
+
+TEST_CASE("QStringView8 last_index_of_fast", "[qstringview]")
+{
+   QString8 str1 = "On a clear Day\0 you can see forever";
+   QStringView8 view = str1;
+
+   {
+      auto iter = view.lastIndexOfFast("dAY", view.cbegin(), Qt::CaseInsensitive);
+      QString8 str2(iter, view.end());
+
+      REQUIRE(str2 == "Day\0 you can see forever");
+   }
+}
+
 TEST_CASE("QStringView8 left", "[qstringview]")
 {
    QString8 str      = "A wacky fox and sizeable pig jumped halfway over a blue moon";

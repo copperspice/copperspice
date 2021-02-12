@@ -158,6 +158,30 @@ TEST_CASE("QString16 find", "[qstring16]")
    }
 }
 
+TEST_CASE("QString16 index_of_fast", "[qstring16]")
+{
+   QString16 str1 = "On a clear Day\0 you can see forever";
+
+   {
+      auto iter = str1.indexOfFast("dAY", str1.cbegin(), Qt::CaseInsensitive);
+      QString16 str2(iter, str1.end());
+
+      REQUIRE(str2 == "Day\0 you can see forever");
+   }
+}
+
+TEST_CASE("QString16 last_index_of_fast", "[qstring16]")
+{
+   QString16 str1 = "On a clear Day\0 you can see forever";
+
+   {
+      auto iter = str1.lastIndexOfFast("dAY", str1.cbegin(), Qt::CaseInsensitive);
+      QString16 str2(iter, str1.end());
+
+      REQUIRE(str2 == "Day\0 you can see forever");
+   }
+}
+
 TEST_CASE("QString16 index", "[qstring16]")
 {
    QString16 str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
