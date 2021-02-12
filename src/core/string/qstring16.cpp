@@ -114,7 +114,7 @@ QString16::const_iterator QString16::cs_internal_find_fast(const QString16 &str,
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
-         while (text_iter != iter_end && pattern_iter != str.cend())  {
+         while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
             if (text_iter->toCaseFolded16() == QString16(*pattern_iter))  {
                ++text_iter;
@@ -191,7 +191,7 @@ QString16::const_iterator QString16::cs_internal_rfind_fast(const QString16 &str
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
-         while (text_iter != iter_end && pattern_iter != str.cend())  {
+         while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
             if (text_iter->toCaseFolded16() == QString16(*pattern_iter))  {
                ++text_iter;

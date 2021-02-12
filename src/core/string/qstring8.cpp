@@ -115,7 +115,7 @@ QString8::const_iterator QString8::cs_internal_find_fast(const QString8 &str, co
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
-         while (text_iter != iter_end && pattern_iter != str.cend())  {
+         while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
             if (text_iter->toCaseFolded() == QString8(*pattern_iter))  {
                ++text_iter;
@@ -192,7 +192,7 @@ QString8::const_iterator QString8::cs_internal_rfind_fast(const QString8 &str, c
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
-         while (text_iter != iter_end && pattern_iter != str.cend())  {
+         while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
             if (text_iter->toCaseFolded() == QString8(*pattern_iter))  {
                ++text_iter;

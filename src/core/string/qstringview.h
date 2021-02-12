@@ -382,7 +382,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(co
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
-         while (text_iter != iter_end && pattern_iter != str.cend())  {
+         while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
             if (text_iter->toCaseFolded() == S(*pattern_iter))  {
                ++text_iter;
@@ -462,7 +462,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_rfind_fast(c
          auto text_iter    = iter + 1;
          auto pattern_iter = strFolded.begin() + 1;
 
-         while (text_iter != iter_end && pattern_iter != str.cend())  {
+         while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
             if (text_iter->toCaseFolded() == S(*pattern_iter))  {
                ++text_iter;
