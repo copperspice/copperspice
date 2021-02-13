@@ -21,17 +21,6 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QAtomicInt constructor", "[qatomic_int]")
-{
-   QAtomicInt atomic1(17);
-   QAtomicInt atomic2 = 17;
-   QAtomicInt atomic3 = atomic2;
-
-   REQUIRE(atomic1.load() == 17);
-   REQUIRE(atomic2.load() == 17);
-   REQUIRE(atomic3.load() == 17);
-}
-
 TEST_CASE("QAtomicInt assignment", "[qatomic_int]")
 {
    QAtomicInt atomic1(17);
@@ -42,6 +31,17 @@ TEST_CASE("QAtomicInt assignment", "[qatomic_int]")
 
    REQUIRE(atomic1.load() == 42);    // emerald, should be load("relaxed")
    REQUIRE(atomic2.load() == 42);
+}
+
+TEST_CASE("QAtomicInt constructor", "[qatomic_int]")
+{
+   QAtomicInt atomic1(17);
+   QAtomicInt atomic2 = 17;
+   QAtomicInt atomic3 = atomic2;
+
+   REQUIRE(atomic1.load() == 17);
+   REQUIRE(atomic2.load() == 17);
+   REQUIRE(atomic3.load() == 17);
 }
 
 TEST_CASE("QAtomicInt ref", "[qatomic_int]")
