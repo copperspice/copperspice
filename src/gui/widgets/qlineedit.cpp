@@ -104,7 +104,7 @@ void QLineEdit::initStyleOption(QStyleOptionFrame *option) const
 
 
 QLineEdit::QLineEdit(QWidget *parent)
-   : QWidget(*new QLineEditPrivate, parent, 0)
+   : QWidget(*new QLineEditPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QLineEdit);
    d->init(QString());
@@ -112,7 +112,7 @@ QLineEdit::QLineEdit(QWidget *parent)
 
 
 QLineEdit::QLineEdit(const QString &contents, QWidget *parent)
-   : QWidget(*new QLineEditPrivate, parent, 0)
+   : QWidget(*new QLineEditPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QLineEdit);
    d->init(contents);
@@ -181,7 +181,7 @@ void QLineEdit::addAction(QAction *action, ActionPosition position)
 {
    Q_D(QLineEdit);
    QWidget::addAction(action);
-   d->addAction(action, 0, position);
+   d->addAction(action, nullptr, position);
 }
 
 QAction *QLineEdit::addAction(const QIcon &icon, ActionPosition position)
@@ -292,7 +292,7 @@ void QLineEdit::setCompleter(QCompleter *c)
 
    if (d->control->completer()) {
       disconnect(d->control->completer(), QString(), this, QString());
-      d->control->completer()->setWidget(0);
+      d->control->completer()->setWidget(nullptr);
 
       if (d->control->completer()->parent() == this) {
          delete d->control->completer();
@@ -305,7 +305,7 @@ void QLineEdit::setCompleter(QCompleter *c)
       return;
    }
 
-   if (c->widget() == 0) {
+   if (c->widget() == nullptr) {
       c->setWidget(this);
    }
 

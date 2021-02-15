@@ -117,7 +117,7 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
    static QDateTimeEdit::Sections convertSections(QDateTimeParser::Sections s);
    static QDateTimeEdit::Section convertToPublic(QDateTimeParser::Section s);
 
-   void initCalendarPopup(QCalendarWidget *cw = 0);
+   void initCalendarPopup(QCalendarWidget *cw = nullptr);
    void positionCalendarPopup();
 
    QDateTimeEdit::Sections sections;

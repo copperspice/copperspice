@@ -112,7 +112,7 @@ class QSizeGripPrivate : public QWidgetPrivate
 };
 
 QSizeGripPrivate::QSizeGripPrivate()
-   : dxMax(0), dyMax(0), gotMousePress(false), tlw(0), m_platformSizeGrip(false)
+   : dxMax(0), dyMax(0), gotMousePress(false), tlw(nullptr), m_platformSizeGrip(false)
 {
 }
 
@@ -133,7 +133,7 @@ Qt::Corner QSizeGripPrivate::corner() const
 }
 
 QSizeGrip::QSizeGrip(QWidget *parent)
-   : QWidget(*new QSizeGripPrivate, parent, 0)
+   : QWidget(*new QSizeGripPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QSizeGrip);
    d->init();

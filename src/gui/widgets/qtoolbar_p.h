@@ -43,8 +43,7 @@ class QToolBarPrivate : public QWidgetPrivate
    inline QToolBarPrivate()
       : explicitIconSize(false), explicitToolButtonStyle(false), movable(true), floatable(true),
         allowedAreas(Qt::AllToolBarAreas), orientation(Qt::Horizontal),
-        toolButtonStyle(Qt::ToolButtonIconOnly),
-        layout(0), state(0)
+        toolButtonStyle(Qt::ToolButtonIconOnly), layout(nullptr), state(nullptr)
 #ifdef Q_OS_DARWIN
       , macWindowDragging(false)
 #endif

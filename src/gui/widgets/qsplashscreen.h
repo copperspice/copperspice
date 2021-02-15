@@ -27,8 +27,6 @@
 #include <qpixmap.h>
 #include <qwidget.h>
 
-
-
 #ifndef QT_NO_SPLASHSCREEN
 class QSplashScreenPrivate;
 
@@ -37,8 +35,8 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
    GUI_CS_OBJECT(QSplashScreen)
 
  public:
-   explicit QSplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
-   QSplashScreen(QWidget *parent, const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
+   explicit QSplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = Qt::EmptyFlag);
+   QSplashScreen(QWidget *parent, const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = Qt::EmptyFlag);
 
    QSplashScreen(const QSplashScreen &) = delete;
    QSplashScreen &operator=(const QSplashScreen &) = delete;

@@ -125,23 +125,21 @@ void QGroupBoxPrivate::click()
    emit q->clicked(checked);
 }
 
-
-
 QGroupBox::QGroupBox(QWidget *parent)
-   : QWidget(*new QGroupBoxPrivate, parent, 0)
+   : QWidget(*new QGroupBoxPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QGroupBox);
    d->init();
 }
 
-
 QGroupBox::QGroupBox(const QString &title, QWidget *parent)
-   : QWidget(*new QGroupBoxPrivate, parent, 0)
+   : QWidget(*new QGroupBoxPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QGroupBox);
    d->init();
    setTitle(title);
 }
+
 QGroupBox::~QGroupBox()
 {
 }
@@ -337,10 +335,12 @@ void QGroupBoxPrivate::_q_fixFocus(Qt::FocusReason reason)
 {
    Q_Q(QGroupBox);
    QWidget *fw = q->focusWidget();
+
    if (!fw || fw == q) {
-      QWidget *best = 0;
-      QWidget *candidate = 0;
+      QWidget *best      = nullptr;
+      QWidget *candidate = nullptr;
       QWidget *w = q;
+
       while ((w = w->nextInFocusChain()) != q) {
          if (q->isAncestorOf(w) && (w->focusPolicy() & Qt::TabFocus) == Qt::TabFocus && w->isVisibleTo(q)) {
             if (!best && qobject_cast<QRadioButton *>(w) && ((QRadioButton *)w)->isChecked())

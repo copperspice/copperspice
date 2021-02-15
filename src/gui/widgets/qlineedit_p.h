@@ -54,7 +54,7 @@ class QLineEditIconButton : public QToolButton
    GUI_CS_PROPERTY_WRITE(opacity, setOpacity)
 
  public:
-   explicit QLineEditIconButton(QWidget *parent =  0);
+   explicit QLineEditIconButton(QWidget *parent = nullptr);
 
    qreal opacity() const {
       return m_opacity;
@@ -96,7 +96,11 @@ class QLineEditPrivate : public QWidgetPrivate
    };
 
    struct SideWidgetEntry {
-      SideWidgetEntry(QWidget *w = 0, QAction *a = 0, int _flags = 0) : widget(w), action(a), flags(_flags) {}
+      SideWidgetEntry(QWidget *w = nullptr, QAction *a = nullptr, int _flags = 0)
+         : widget(w), action(a), flags(_flags)
+      {
+      }
+
       QWidget *widget;
       QAction *action;
       int flags;
@@ -112,7 +116,7 @@ class QLineEditPrivate : public QWidgetPrivate
    };
 
    QLineEditPrivate()
-      : control(0), frame(1), contextMenuEnabled(1), cursorVisible(0),
+      : control(nullptr), frame(1), contextMenuEnabled(1), cursorVisible(0),
         dragEnabled(0), clickCausedFocus(0), hscroll(0), vscroll(0),
         alignment(Qt::AlignLeading | Qt::AlignVCenter),
         leftTextMargin(0), topTextMargin(0), rightTextMargin(0), bottomTextMargin(0),

@@ -55,7 +55,7 @@ class Q_GUI_EXPORT QFrame : public QWidget
    GUI_CS_PROPERTY_DESIGNABLE(frameRect, false)
 
  public:
-   explicit QFrame(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+   explicit QFrame(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QFrame(const QFrame &) = delete;
    QFrame &operator=(const QFrame &) = delete;

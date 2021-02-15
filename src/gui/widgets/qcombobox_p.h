@@ -56,7 +56,10 @@ class QComboBoxListView : public QListView
    GUI_CS_OBJECT(QComboBoxListView)
 
  public:
-   QComboBoxListView(QComboBox *cmb = 0) : combo(cmb) {}
+   QComboBoxListView(QComboBox *cmb = nullptr)
+      : combo(cmb)
+   {
+   }
 
  protected:
    void resizeEvent(QResizeEvent *event)  override {
@@ -310,7 +313,7 @@ class QComboBoxDelegate : public QItemDelegate
 
    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override {
       if (isSeparator(index)) {
-         int pm = mCombo->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, mCombo);
+         int pm = mCombo->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, nullptr, mCombo);
          return QSize(pm, pm);
       }
 

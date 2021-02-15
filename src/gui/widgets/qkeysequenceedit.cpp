@@ -125,7 +125,7 @@ void QKeySequenceEditPrivate::finishEditing()
     Constructs a QKeySequenceEdit widget with the given \a parent.
 */
 QKeySequenceEdit::QKeySequenceEdit(QWidget *parent) :
-   QWidget(*new QKeySequenceEditPrivate, parent, 0)
+   QWidget(*new QKeySequenceEditPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QKeySequenceEdit);
    d->init();
@@ -135,7 +135,7 @@ QKeySequenceEdit::QKeySequenceEdit(QWidget *parent) :
     Constructs a QKeySequenceEdit widget with the given \a keySequence and \a parent.
 */
 QKeySequenceEdit::QKeySequenceEdit(const QKeySequence &keySequence, QWidget *parent) :
-   QWidget(*new QKeySequenceEditPrivate, parent, 0)
+   QWidget(*new QKeySequenceEditPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QKeySequenceEdit);
    d->init();

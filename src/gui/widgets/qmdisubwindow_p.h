@@ -46,16 +46,19 @@ template<typename T>
 class ControlElement : public T
 {
  public:
-   ControlElement(QMdiSubWindow *child) : T(child, 0) {
+   ControlElement(QMdiSubWindow *child)
+      : T(child, nullptr)
+   {
       Q_ASSERT(child);
       mdiChild = child;
    }
 
    void *qt_metacast(const char *classname) {
-      if (classname && strcmp(classname, "ControlElement") == 0) {
+      if (classname != nullptr && (strcmp(classname, "ControlElement") == 0)) {
          return this;
       }
-      return 0;
+
+      return nullptr;
    }
 
    QPointer<QMdiSubWindow> mdiChild;
@@ -327,7 +330,7 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
 
    bool autoRaise() const {
       Q_Q(const QMdiSubWindow);
-      return q->style()->styleHint(QStyle::SH_TitleBar_AutoRaise, 0, q);
+      return q->style()->styleHint(QStyle::SH_TitleBar_AutoRaise, nullptr, q);
    }
 
    bool isResizeOperation() const {

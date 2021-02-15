@@ -566,7 +566,7 @@ void QCalendarDateValidator::clear()
    m_tokens.clear();
    m_separators.clear();
 
-   m_currentToken = 0;
+   m_currentToken = nullptr;
 }
 
 void QCalendarDateValidator::setFormat(const QString &format)
@@ -590,7 +590,7 @@ void QCalendarDateValidator::setFormat(const QString &format)
             quoting = false;
 
          } else {
-            SectionToken *token = 0;
+            SectionToken *token = nullptr;
             if (nextChar == QLatin1Char('d')) {
                offset = qMin(4, countRepeat(format, pos));
                token = new SectionToken(&m_dayValidator, offset);
@@ -685,8 +685,11 @@ class QCalendarTextNavigator: public QObject
    GUI_CS_OBJECT(QCalendarTextNavigator)
 
  public:
-   QCalendarTextNavigator(QObject *parent = 0)
-      : QObject(parent), m_dateText(0), m_dateFrame(0), m_dateValidator(0), m_widget(0), m_editDelay(1500), m_date(QDate::currentDate()) { }
+   QCalendarTextNavigator(QObject *parent = nullptr)
+      : QObject(parent), m_dateText(nullptr), m_dateFrame(nullptr), m_dateValidator(nullptr), m_widget(nullptr),
+        m_editDelay(1500), m_date(QDate::currentDate())
+   {
+   }
 
    QWidget *widget() const;
    void setWidget(QWidget *widget);
@@ -801,9 +804,9 @@ void QCalendarTextNavigator::removeDateLabel()
    m_dateFrame->hide();
    m_dateFrame->deleteLater();
    delete m_dateValidator;
-   m_dateFrame = 0;
-   m_dateText = 0;
-   m_dateValidator = 0;
+   m_dateFrame     = nullptr;
+   m_dateText      = nullptr;
+   m_dateValidator = nullptr;
 }
 
 bool QCalendarTextNavigator::eventFilter(QObject *o, QEvent *e)
@@ -1269,10 +1272,10 @@ Qt::ItemFlags QCalendarModel::flags(const QModelIndex &index) const
       return QAbstractTableModel::flags(index);
    }
    if (date < m_minimumDate) {
-      return 0;
+      return Qt::EmptyFlag;
    }
    if (date > m_maximumDate) {
-      return 0;
+      return Qt::EmptyFlag;
    }
    return QAbstractTableModel::flags(index);
 }
@@ -1793,11 +1796,11 @@ void QCalendarDelegate::paintCell(QPainter *painter, const QRect &rect, const QD
 QCalendarWidgetPrivate::QCalendarWidgetPrivate()
    : QWidgetPrivate()
 {
-   m_model     = 0;
-   m_view      = 0;
-   m_delegate  = 0;
-   m_selection = 0;
-   m_navigator = 0;
+   m_model     = nullptr;
+   m_view      = nullptr;
+   m_delegate  = nullptr;
+   m_selection = nullptr;
+   m_navigator = nullptr;
    m_dateEditEnabled = false;
    navBarVisible = true;
    oldFocusPolicy = Qt::StrongFocus;
@@ -1807,7 +1810,7 @@ void QCalendarWidgetPrivate::setNavigatorEnabled(bool enable)
 {
    Q_Q(QCalendarWidget);
 
-   bool navigatorEnabled = (m_navigator->widget() != 0);
+   bool navigatorEnabled = (m_navigator->widget() != nullptr);
    if (enable == navigatorEnabled) {
       return;
    }
@@ -1822,7 +1825,7 @@ void QCalendarWidgetPrivate::setNavigatorEnabled(bool enable)
       m_view->installEventFilter(m_navigator);
 
    } else {
-      m_navigator->setWidget(0);
+      m_navigator->setWidget(nullptr);
 
       q->disconnect(m_navigator, &QCalendarTextNavigator::dateChanged,      q,
                   static_cast<void (QCalendarWidget::*)(const QDate &)>(&QCalendarWidget::_q_slotChangeDate));
@@ -1910,8 +1913,8 @@ void QCalendarWidgetPrivate::createNavigationBar(QWidget *widget)
 void QCalendarWidgetPrivate::updateButtonIcons()
 {
    Q_Q(QCalendarWidget);
-   prevMonth->setIcon(q->style()->standardIcon(q->isRightToLeft() ? QStyle::SP_ArrowRight : QStyle::SP_ArrowLeft, 0, q));
-   nextMonth->setIcon(q->style()->standardIcon(q->isRightToLeft() ? QStyle::SP_ArrowLeft : QStyle::SP_ArrowRight, 0, q));
+   prevMonth->setIcon(q->style()->standardIcon(q->isRightToLeft() ? QStyle::SP_ArrowRight : QStyle::SP_ArrowLeft,  nullptr, q));
+   nextMonth->setIcon(q->style()->standardIcon(q->isRightToLeft() ? QStyle::SP_ArrowLeft  : QStyle::SP_ArrowRight, nullptr, q));
 }
 
 void QCalendarWidgetPrivate::updateMonthMenu()
@@ -2111,7 +2114,7 @@ void QCalendarWidgetPrivate::_q_editingFinished()
 }
 
 QCalendarWidget::QCalendarWidget(QWidget *parent)
-   : QWidget(*new QCalendarWidgetPrivate, parent, 0)
+   : QWidget(*new QCalendarWidgetPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QCalendarWidget);
 

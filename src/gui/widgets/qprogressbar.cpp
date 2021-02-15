@@ -167,9 +167,8 @@ bool QProgressBarPrivate::repaintRequired() const
    return (valueDifference * grooveBlock > cw * totalSteps);
 }
 
-
 QProgressBar::QProgressBar(QWidget *parent)
-   : QWidget(*(new QProgressBarPrivate), parent, 0)
+   : QWidget(*(new QProgressBarPrivate), parent, Qt::EmptyFlag)
 {
    d_func()->init();
 }

@@ -110,7 +110,7 @@ class QToolBoxPrivate : public QFramePrivate
    typedef QList<Page> PageList;
 
    inline QToolBoxPrivate()
-      : currentPage(0) {
+      : currentPage(nullptr) {
    }
 
    void _q_buttonClicked();
@@ -131,7 +131,7 @@ class QToolBoxPrivate : public QFramePrivate
 const QToolBoxPrivate::Page *QToolBoxPrivate::page(const QObject *widget) const
 {
    if (! widget) {
-      return 0;
+      return nullptr;
    }
 
    for (PageList::const_iterator i = pageList.constBegin(); i != pageList.constEnd(); ++i)
@@ -139,7 +139,7 @@ const QToolBoxPrivate::Page *QToolBoxPrivate::page(const QObject *widget) const
          return (const Page *) & (*i);
       }
 
-   return 0;
+   return nullptr;
 }
 
 QToolBoxPrivate::Page *QToolBoxPrivate::page(int index)
@@ -147,7 +147,7 @@ QToolBoxPrivate::Page *QToolBoxPrivate::page(int index)
    if (index >= 0 && index < pageList.size()) {
       return &pageList[index];
    }
-   return 0;
+   return nullptr;
 }
 
 const QToolBoxPrivate::Page *QToolBoxPrivate::page(int index) const
@@ -155,12 +155,12 @@ const QToolBoxPrivate::Page *QToolBoxPrivate::page(int index) const
    if (index >= 0 && index < pageList.size()) {
       return &pageList.at(index);
    }
-   return 0;
+   return nullptr;
 }
 
 void QToolBoxPrivate::updateTabs()
 {
-   QToolBoxButton *lastButton = currentPage ? currentPage->button : 0;
+   QToolBoxButton *lastButton = currentPage ? currentPage->button : nullptr;
    bool after = false;
    int index  = 0;
 
@@ -188,7 +188,7 @@ QSize QToolBoxButton::sizeHint() const
 {
    QSize iconSize(8, 8);
    if (!icon().isNull()) {
-      int icone = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, parentWidget() /* QToolBox */);
+      int icone = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, parentWidget());
       iconSize += QSize(icone + 2, icone);
    }
    QSize textSize = fontMetrics().size(Qt::TextShowMnemonic, text()) + QSize(0, 8);
@@ -202,7 +202,7 @@ QSize QToolBoxButton::minimumSizeHint() const
    if (icon().isNull()) {
       return QSize();
    }
-   int icone = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, parentWidget() /* QToolBox */);
+   int icone = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, parentWidget());
 
    return QSize(icone + 8, icone + 8);
 }
@@ -313,7 +313,7 @@ int QToolBox::insertItem(int index, QWidget *widget, const QIcon &icon, const QS
          QWidget *current = d->currentPage->widget;
          int oldindex = indexOf(current);
          if (index <= oldindex) {
-            d->currentPage = 0; // trigger change
+            d->currentPage = nullptr;       // trigger change
             setCurrentIndex(oldindex);
          }
       }
@@ -400,10 +400,10 @@ void QToolBoxPrivate::_q_widgetDestroyed(QObject *object)
    pageList.removeAll(*c);
 
    if (!pageList.count()) {
-      currentPage = 0;
+      currentPage = nullptr;
       emit q->currentChanged(-1);
    } else if (removeCurrent) {
-      currentPage = 0;
+      currentPage = nullptr;
       q->setCurrentIndex(0);
    }
 }
@@ -432,7 +432,7 @@ int QToolBox::currentIndex() const
 QWidget *QToolBox::currentWidget() const
 {
    Q_D(const QToolBox);
-   return d->currentPage ? d->currentPage->widget : 0;
+   return d->currentPage ? d->currentPage->widget : nullptr;
 }
 
 void QToolBox::setCurrentWidget(QWidget *widget)
@@ -450,7 +450,7 @@ QWidget *QToolBox::widget(int index) const
 {
    Q_D(const QToolBox);
    if (index < 0 || index >= (int) d->pageList.size()) {
-      return 0;
+      return nullptr;
    }
 
    return d->pageList.at(index).widget;
@@ -459,7 +459,7 @@ QWidget *QToolBox::widget(int index) const
 int QToolBox::indexOf(QWidget *widget) const
 {
    Q_D(const QToolBox);
-   const QToolBoxPrivate::Page *c = (widget ? d->page(widget) : 0);
+   const QToolBoxPrivate::Page *c = (widget ? d->page(widget) : nullptr);
 
    return c ? d->pageList.indexOf(*c) : -1;
 }

@@ -112,7 +112,7 @@ static inline bool useScrollBar(const QRect &childrenRect, const QSize &maxViewp
 static inline QMdiArea *mdiAreaParent(QWidget *widget)
 {
    if (!widget) {
-      return 0;
+      return nullptr;
    }
 
    QWidget *parent = widget->parentWidget();
@@ -122,7 +122,7 @@ static inline QMdiArea *mdiAreaParent(QWidget *widget)
       }
       parent = parent->parentWidget();
    }
-   return 0;
+   return nullptr;
 }
 
 #ifndef QT_NO_TABWIDGET
@@ -238,7 +238,7 @@ void SimpleCascader::rearrange(QList<QWidget *> &widgets, const QRect &domain) c
 
    const QFontMetrics fontMetrics = QFontMetrics(QApplication::font("QMdiSubWindowTitleBar"));
    const int dy = qMax(titleBarHeight - (titleBarHeight - fontMetrics.height()) / 2, 1)
-      + widgets.at(0)->style()->pixelMetric(QStyle::PM_FocusFrameVMargin, 0, widgets.at(0));
+            + widgets.at(0)->style()->pixelMetric(QStyle::PM_FocusFrameVMargin, nullptr, widgets.at(0));
 
    const int n = widgets.size();
    const int nrows = qMax((domain.height() - (topOffset + bottomOffset)) / dy, 1);
@@ -547,7 +547,7 @@ void QMdiAreaTabBar::contextMenuEvent(QContextMenuEvent *event)
 QMdiSubWindow *QMdiAreaTabBar::subWindowFromIndex(int index) const
 {
    if (index < 0 || index >= count()) {
-      return 0;
+      return nullptr;
    }
 
    QMdiArea *mdiArea = qobject_cast<QMdiArea *>(parentWidget());
@@ -567,41 +567,31 @@ QMdiSubWindow *QMdiAreaTabBar::subWindowFromIndex(int index) const
     \internal
 */
 QMdiAreaPrivate::QMdiAreaPrivate()
-   : cascader(0),
-     regularTiler(0),
-     iconTiler(0),
-     placer(0),
+   : cascader(nullptr), regularTiler(nullptr), iconTiler(nullptr), placer(nullptr),
+
 #ifndef QT_NO_RUBBERBAND
-     rubberBand(0),
+     rubberBand(nullptr),
 #endif
+
 #ifndef QT_NO_TABBAR
-     tabBar(0),
+     tabBar(nullptr),
 #endif
-     activationOrder(QMdiArea::CreationOrder),
-     viewMode(QMdiArea::SubWindowView),
+
+     activationOrder(QMdiArea::CreationOrder), viewMode(QMdiArea::SubWindowView),
+
 #ifndef QT_NO_TABBAR
-     documentMode(false),
-     tabsClosable(false),
-     tabsMovable(false),
+     documentMode(false), tabsClosable(false), tabsMovable(false),
 #endif
+
 #ifndef QT_NO_TABWIDGET
-     tabShape(QTabWidget::Rounded),
-     tabPosition(QTabWidget::North),
+     tabShape(QTabWidget::Rounded), tabPosition(QTabWidget::North),
 #endif
-     ignoreGeometryChange(false),
-     ignoreWindowStateChange(false),
-     isActivated(false),
-     isSubWindowsTiled(false),
-     showActiveWindowMaximized(false),
-     tileCalledFromResizeEvent(false),
-     updatesDisabledByUs(false),
-     inViewModeChange(false),
-     indexToNextWindow(-1),
-     indexToPreviousWindow(-1),
-     indexToHighlighted(-1),
-     indexToLastActiveTab(-1),
-     resizeTimerId(-1),
-     tabToPreviousTimerId(-1)
+
+     ignoreGeometryChange(false), ignoreWindowStateChange(false), isActivated(false),
+     isSubWindowsTiled(false), showActiveWindowMaximized(false), tileCalledFromResizeEvent(false),
+     updatesDisabledByUs(false), inViewModeChange(false), indexToNextWindow(-1),
+     indexToPreviousWindow(-1), indexToHighlighted(-1), indexToLastActiveTab(-1),
+     resizeTimerId(-1), tabToPreviousTimerId(-1)
 {
 }
 
@@ -1008,7 +998,7 @@ void QMdiAreaPrivate::emitWindowActivated(QMdiSubWindow *activeWindow)
 
    Q_ASSERT(aboutToBecomeActive == activeWindow);
    active = activeWindow;
-   aboutToBecomeActive = 0;
+   aboutToBecomeActive = nullptr;
    Q_ASSERT(active->d_func()->isActive);
 
 #ifndef QT_NO_TABBAR
@@ -1034,12 +1024,13 @@ void QMdiAreaPrivate::resetActiveWindow(QMdiSubWindow *deactivatedWindow)
       if (deactivatedWindow != active) {
          return;
       }
-      active = 0;
+
+      active = nullptr;
       if ((aboutToBecomeActive || isActivated || lastWindowAboutToBeDestroyed())
          && !isExplicitlyDeactivated(deactivatedWindow) && !q->window()->isMinimized()) {
          return;
       }
-      emit q->subWindowActivated(0);
+      emit q->subWindowActivated(nullptr);
       return;
    }
 
@@ -1047,8 +1038,8 @@ void QMdiAreaPrivate::resetActiveWindow(QMdiSubWindow *deactivatedWindow)
       return;
    }
 
-   active = 0;
-   emit q->subWindowActivated(0);
+   active = nullptr;
+   emit q->subWindowActivated(nullptr);
 }
 
 /*!
@@ -1119,7 +1110,8 @@ void QMdiAreaPrivate::updateScrollBars()
    QSize hbarExtent = hbar->sizeHint();
    QSize vbarExtent = vbar->sizeHint();
 
-   if (q->style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents, 0, q)) {
+   if (q->style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents, nullptr, q)) {
+
       const int doubleFrameWidth = frameWidth * 2;
       if (hbarpolicy == Qt::ScrollBarAlwaysOn) {
          maxSize.rheight() -= doubleFrameWidth;
@@ -1248,8 +1240,8 @@ QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, in
          minAreaWidth += vbar->width();
       }
 
-      if (q->style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents, 0, q)) {
-         const int frame = q->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, q);
+      if (q->style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents, nullptr, q)) {
+         const int frame = q->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, nullptr, q);
          minAreaWidth += 2 * frame;
          minAreaHeight += 2 * frame;
       }
@@ -1421,12 +1413,12 @@ QMdiSubWindow *QMdiAreaPrivate::nextVisibleSubWindow(int increaseFactor, QMdiAre
    int removedIndex, int fromIndex) const
 {
    if (childWindows.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    Q_Q(const QMdiArea);
    const QList<QMdiSubWindow *> subWindows = q->subWindowList(order);
-   QMdiSubWindow *current = 0;
+   QMdiSubWindow *current = nullptr;
 
    if (removedIndex < 0) {
       if (fromIndex >= 0 && fromIndex < subWindows.size()) {
@@ -1469,7 +1461,7 @@ QMdiSubWindow *QMdiAreaPrivate::nextVisibleSubWindow(int increaseFactor, QMdiAre
    if (!subWindows.at(index)->isHidden()) {
       return subWindows.at(index);
    }
-   return 0;
+   return nullptr;
 }
 
 /*!
@@ -1597,7 +1589,7 @@ void QMdiAreaPrivate::setViewMode(QMdiArea::ViewMode mode)
       // SubWindowView
 #ifndef QT_NO_TABBAR
       delete tabBar;
-      tabBar = 0;
+      tabBar = nullptr;
 #endif
 
       viewMode = mode;
@@ -1705,7 +1697,7 @@ QMdiArea::QMdiArea(QWidget *parent)
    setFrameStyle(QFrame::NoFrame);
    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-   setViewport(0);
+   setViewport(nullptr);
    setFocusPolicy(Qt::NoFocus);
 
    QApplication::instance()->installEventFilter(this);
@@ -1718,16 +1710,16 @@ QMdiArea::~QMdiArea()
 {
    Q_D(QMdiArea);
    delete d->cascader;
-   d->cascader = 0;
+   d->cascader = nullptr;
 
    delete d->regularTiler;
-   d->regularTiler = 0;
+   d->regularTiler = nullptr;
 
    delete d->iconTiler;
-   d->iconTiler = 0;
+   d->iconTiler = nullptr;
 
    delete d->placer;
-   d->placer = 0;
+   d->placer = nullptr;
 }
 
 /*!
@@ -1765,8 +1757,10 @@ QSize QMdiArea::sizeHint() const
 QSize QMdiArea::minimumSizeHint() const
 {
    Q_D(const QMdiArea);
-   QSize size(style()->pixelMetric(QStyle::PM_MdiSubWindowMinimizedWidth, 0, this),
-      style()->pixelMetric(QStyle::PM_TitleBarHeight, 0, this));
+
+   QSize size(style()->pixelMetric(QStyle::PM_MdiSubWindowMinimizedWidth, nullptr, this),
+      style()->pixelMetric(QStyle::PM_TitleBarHeight, nullptr, this));
+
    size = size.expandedTo(QAbstractScrollArea::minimumSizeHint());
    if (!d->scrollBarsEnabled()) {
       for (QMdiSubWindow *child : d->childWindows) {
@@ -1792,7 +1786,7 @@ QMdiSubWindow *QMdiArea::currentSubWindow() const
 {
    Q_D(const QMdiArea);
    if (d->childWindows.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    if (d->active) {
@@ -1800,7 +1794,7 @@ QMdiSubWindow *QMdiArea::currentSubWindow() const
    }
 
    if (d->isActivated && !window()->isMinimized()) {
-      return 0;
+      return nullptr;
    }
 
    Q_ASSERT(d->indicesToActivatedChildren.count() > 0);
@@ -1828,7 +1822,7 @@ void QMdiArea::setActiveSubWindow(QMdiSubWindow *window)
 {
    Q_D(QMdiArea);
    if (!window) {
-      d->activateWindow(0);
+      d->activateWindow(nullptr);
       return;
    }
 
@@ -1978,7 +1972,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
       d->childWindows.removeAll(child);
       d->indicesToActivatedChildren.removeAll(index);
       d->updateActiveWindow(index, d->active == child);
-      child->setParent(0);
+      child->setParent(nullptr);
       return;
    }
 
@@ -1988,7 +1982,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
          continue;
       }
       if (child->widget() == widget) {
-         child->setWidget(0);
+         child->setWidget(nullptr);
          Q_ASSERT(!child->widget());
          found = true;
          break;

@@ -144,15 +144,15 @@ QRect QStatusBarPrivate::messageRect() const
 
 
 QStatusBar::QStatusBar(QWidget *parent)
-   : QWidget(*new QStatusBarPrivate, parent, 0)
+   : QWidget(*new QStatusBarPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QStatusBar);
-   d->box = 0;
-   d->timer = 0;
+   d->box   = nullptr;
+   d->timer = nullptr;
 
 #ifndef QT_NO_SIZEGRIP
-   d->resizer = 0;
-   setSizeGripEnabled(true); // causes reformat()
+   d->resizer = nullptr;
+   setSizeGripEnabled(true);    // causes reformat()
 #else
    reformat();
 #endif
@@ -324,7 +324,7 @@ void QStatusBar::setSizeGripEnabled(bool enabled)
          d->showSizeGrip = true;
       } else {
          delete d->resizer;
-         d->resizer = 0;
+         d->resizer = nullptr;
          d->showSizeGrip = false;
       }
       reformat();
@@ -372,7 +372,8 @@ void QStatusBar::reformat()
 
    int i;
    QStatusBarPrivate::SBItem *item;
-   for (i = 0, item = 0; i < d->items.size(); ++i) {
+
+   for (i = 0, item = nullptr; i < d->items.size(); ++i) {
       item = d->items.at(i);
       if (!item || item->p) {
          break;
@@ -384,7 +385,7 @@ void QStatusBar::reformat()
 
    l->addStretch(0);
 
-   for (item = 0; i < d->items.size(); ++i) {
+   for (item = nullptr; i < d->items.size(); ++i) {
       item = d->items.at(i);
       if (!item) {
          break;
@@ -418,9 +419,10 @@ void QStatusBar::showMessage(const QString &message, int timeout)
          connect(d->timer, SIGNAL(timeout()), this, SLOT(clearMessage()));
       }
       d->timer->start(timeout);
+
    } else if (d->timer) {
       delete d->timer;
-      d->timer = 0;
+      d->timer = nullptr;
    }
 
    if (d->tempItem == message) {
@@ -442,7 +444,7 @@ void QStatusBar::clearMessage()
 
    if (d->timer) {
       delete d->timer;
-      d->timer = 0;
+      d->timer = nullptr;
    }
 
    d->tempItem.clear();
@@ -461,7 +463,7 @@ void QStatusBar::hideOrShow()
    Q_D(QStatusBar);
    bool haveMessage = !d->tempItem.isEmpty();
 
-   QStatusBarPrivate::SBItem *item = 0;
+   QStatusBarPrivate::SBItem *item = nullptr;
    for (int i = 0; i < d->items.size(); ++i) {
       item = d->items.at(i);
       if (!item || item->p) {
@@ -551,7 +553,7 @@ bool QStatusBar::event(QEvent *e)
       // Calculate new strut height and call reformat() if it has changed
       int maxH = fontMetrics().height();
 
-      QStatusBarPrivate::SBItem *item = 0;
+      QStatusBarPrivate::SBItem *item = nullptr;
       for (int i = 0; i < d->items.size(); ++i) {
          item = d->items.at(i);
          if (!item) {
@@ -574,7 +576,7 @@ bool QStatusBar::event(QEvent *e)
       }
    }
    if (e->type() == QEvent::ChildRemoved) {
-      QStatusBarPrivate::SBItem *item = 0;
+      QStatusBarPrivate::SBItem *item = nullptr;
 
       for (int i = 0; i < d->items.size(); ++i) {
          item = d->items.at(i);

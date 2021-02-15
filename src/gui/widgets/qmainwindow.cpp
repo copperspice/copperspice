@@ -51,7 +51,7 @@ class QMainWindowPrivate : public QWidgetPrivate
 
  public:
    inline QMainWindowPrivate()
-      : layout(0), explicitIconSize(false), toolButtonStyle(Qt::ToolButtonIconOnly)
+      : layout(nullptr), explicitIconSize(false), toolButtonStyle(Qt::ToolButtonIconOnly)
 #ifdef Q_OS_DARWIN
       , useUnifiedToolBar(false)
 #endif
@@ -84,7 +84,7 @@ class QMainWindowPrivate : public QWidgetPrivate
 #endif
 
    static inline QMainWindowLayout *mainWindowLayout(const QMainWindow *mainWindow) {
-      return mainWindow ? mainWindow->d_func()->layout : static_cast<QMainWindowLayout *>(0);
+      return mainWindow ? mainWindow->d_func()->layout : static_cast<QMainWindowLayout *>(nullptr);
    }
 };
 
@@ -143,10 +143,10 @@ void QMainWindowPrivate::init()
 
    topLayout->addItem(layout, 1, 1);
 #else
-   layout = new QMainWindowLayout(q, 0);
+   layout = new QMainWindowLayout(q, nullptr);
 #endif
 
-   const int metric = q->style()->pixelMetric(QStyle::PM_ToolBarIconSize, 0, q);
+   const int metric = q->style()->pixelMetric(QStyle::PM_ToolBarIconSize, nullptr, q);
    iconSize = QSize(metric, metric);
    q->setAttribute(Qt::WA_Hover);
 }
@@ -216,7 +216,7 @@ void QMainWindow::setIconSize(const QSize &iconSize)
    Q_D(QMainWindow);
    QSize sz = iconSize;
    if (!sz.isValid()) {
-      const int metric = style()->pixelMetric(QStyle::PM_ToolBarIconSize, 0, this);
+      const int metric = style()->pixelMetric(QStyle::PM_ToolBarIconSize, nullptr, this);
       sz = QSize(metric, metric);
    }
    if (d->iconSize != sz) {
@@ -362,8 +362,8 @@ QWidget *QMainWindow::takeCentralWidget()
    Q_D(QMainWindow);
    QWidget *oldcentralwidget = d->layout->centralWidget();
    if (oldcentralwidget) {
-      oldcentralwidget->setParent(0);
-      d->layout->setCentralWidget(0);
+      oldcentralwidget->setParent(nullptr);
+      d->layout->setCentralWidget(nullptr);
    }
    return oldcentralwidget;
 }
@@ -780,7 +780,8 @@ bool QMainWindow::restoreState(const QByteArray &state, int version)
 QCursor QMainWindowPrivate::separatorCursor(const QList<int> &path) const
 {
    QDockAreaLayoutInfo *info = layout->layoutState.dockAreaLayout.info(path);
-   Q_ASSERT(info != 0);
+   Q_ASSERT(info != nullptr);
+
    if (path.size() == 1) { // is this the "top-level" separator which separates a dock area
       // from the central widget?
       switch (path.first()) {

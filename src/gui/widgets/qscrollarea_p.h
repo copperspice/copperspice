@@ -29,14 +29,16 @@
 #include <qabstractscrollarea_p.h>
 #include <qscrollbar.h>
 
-
-
 class QScrollAreaPrivate: public QAbstractScrollAreaPrivate
 {
    Q_DECLARE_PUBLIC(QScrollArea)
 
  public:
-   QScrollAreaPrivate(): resizable(false), alignment(0) {}
+   QScrollAreaPrivate()
+      : resizable(false), alignment(Qt::EmptyFlag)
+   {
+   }
+
    void updateScrollBars();
    void updateWidgetPosition();
    QPointer<QWidget> widget;
@@ -46,7 +48,5 @@ class QScrollAreaPrivate: public QAbstractScrollAreaPrivate
 };
 
 #endif
-
-
 
 #endif

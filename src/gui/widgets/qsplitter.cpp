@@ -51,7 +51,7 @@ QSplitterPrivate::~QSplitterPrivate()
 }
 
 QSplitterHandle::QSplitterHandle(Qt::Orientation orientation, QSplitter *parent)
-   : QWidget(*new QSplitterHandlePrivate, parent, 0)
+   : QWidget(*new QSplitterHandlePrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QSplitterHandle);
    d->s = parent;
@@ -773,7 +773,7 @@ QSplitterLayoutStruct *QSplitterPrivate::findWidget(QWidget *w) const
          return list.at(i);
       }
    }
-   return 0;
+   return nullptr;
 }
 
 /*!
@@ -807,7 +807,7 @@ QSplitterLayoutStruct *QSplitterPrivate::insertWidget(int index, QWidget *w)
 {
    Q_Q(QSplitter);
 
-   QSplitterLayoutStruct *sls = 0;
+   QSplitterLayoutStruct *sls = nullptr;
    int i;
    int last = list.count();
    for (i = 0; i < list.size(); ++i) {
@@ -826,7 +826,7 @@ QSplitterLayoutStruct *QSplitterPrivate::insertWidget(int index, QWidget *w)
    if (sls) {
       list.move(i, index);
    } else {
-      QSplitterHandle *newHandle = 0;
+      QSplitterHandle *newHandle = nullptr;
       sls = new QSplitterLayoutStruct;
       QString tmp = QLatin1String("qt_splithandle_");
       tmp += w->objectName();
@@ -1025,7 +1025,7 @@ QSplitterHandle *QSplitter::handle(int index) const
 {
    Q_D(const QSplitter);
    if (index < 0 || index >= d->list.size()) {
-      return 0;
+      return nullptr;
    }
    return d->list.at(index)->handle;
 }
@@ -1039,7 +1039,7 @@ QWidget *QSplitter::widget(int index) const
 {
    Q_D(const QSplitter);
    if (index < 0 || index >= d->list.size()) {
-      return 0;
+      return nullptr;
    }
    return d->list.at(index)->widget;
 }
@@ -1213,7 +1213,7 @@ void QSplitter::moveSplitter(int pos, int index)
 void QSplitter::getRange(int index, int *min, int *max) const
 {
    Q_D(const QSplitter);
-   d->getRange(index, min, 0, 0, max);
+   d->getRange(index, min, nullptr, nullptr, max);
 }
 
 
@@ -1228,7 +1228,7 @@ int QSplitter::closestLegalPosition(int pos, int index)
 bool QSplitter::opaqueResize() const
 {
    Q_D(const QSplitter);
-   return d->opaqueResizeSet ? d->opaque : style()->styleHint(QStyle::SH_Splitter_OpaqueResize, 0, this);
+   return d->opaqueResizeSet ? d->opaque : style()->styleHint(QStyle::SH_Splitter_OpaqueResize, nullptr, this);
 }
 
 
@@ -1337,7 +1337,7 @@ int QSplitter::handleWidth() const
    if (d->handleWidth >= 0) {
       return d->handleWidth;
    } else {
-      return style()->pixelMetric(QStyle::PM_SplitterWidth, 0, this);
+      return style()->pixelMetric(QStyle::PM_SplitterWidth, nullptr, this);
    }
 }
 

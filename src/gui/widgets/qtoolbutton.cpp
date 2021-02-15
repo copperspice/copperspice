@@ -106,7 +106,7 @@ void QToolButtonPrivate::init()
 {
    Q_Q(QToolButton);
 
-   defaultAction = 0;
+   defaultAction = nullptr;
 
 #ifndef QT_NO_TOOLBAR
    if (qobject_cast<QToolBar *>(q->parent())) {
@@ -133,7 +133,7 @@ void QToolButtonPrivate::init()
 #endif
 
    setLayoutItemMargins(QStyle::SE_ToolButtonLayoutItem);
-   delay = q->style()->styleHint(QStyle::SH_ToolButton_PopupDelay, 0, q);
+   delay = q->style()->styleHint(QStyle::SH_ToolButton_PopupDelay, nullptr, q);
 }
 
 
@@ -369,11 +369,11 @@ void QToolButton::actionEvent(QActionEvent *event)
          break;
       case QEvent::ActionRemoved:
          if (d->defaultAction == action) {
-            d->defaultAction = 0;
+            d->defaultAction = nullptr;
          }
 #ifndef QT_NO_MENU
          if (action == d->menuAction) {
-            d->menuAction = 0;
+            d->menuAction = nullptr;
          }
 #endif
          action->disconnect(this);
@@ -483,8 +483,9 @@ void QToolButton::changeEvent(QEvent *e)
 #ifdef Q_OS_DARWIN
       || e->type() == QEvent::MacSizeChange
 #endif
+
    ) {
-      d->delay = style()->styleHint(QStyle::SH_ToolButton_PopupDelay, 0, this);
+      d->delay = style()->styleHint(QStyle::SH_ToolButton_PopupDelay, nullptr, this);
       d->setLayoutItemMargins(QStyle::SE_ToolButtonLayoutItem);
    }
 #endif
@@ -550,7 +551,7 @@ void QToolButton::setMenu(QMenu *menu)
 {
    Q_D(QToolButton);
 
-   if (d->menuAction == (menu ? menu->menuAction() : 0)) {
+   if (d->menuAction == (menu ? menu->menuAction() : nullptr)) {
       return;
    }
    if (d->menuAction) {
@@ -561,13 +562,12 @@ void QToolButton::setMenu(QMenu *menu)
       d->menuAction = menu->menuAction();
       addAction(d->menuAction);
    } else {
-      d->menuAction = 0;
+      d->menuAction = nullptr;
    }
    d->sizeHint = QSize();
    updateGeometry();
    update();
 }
-
 
 QMenu *QToolButton::menu() const
 {
@@ -575,7 +575,7 @@ QMenu *QToolButton::menu() const
    if (d->menuAction) {
       return d->menuAction->menu();
    }
-   return 0;
+   return nullptr;
 }
 
 /*!

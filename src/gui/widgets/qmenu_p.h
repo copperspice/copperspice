@@ -76,9 +76,9 @@ class QMenuSloppyState
 
    void initialize(QMenu *menu) {
       m_menu = menu;
-      m_uni_directional = menu->style()->styleHint(QStyle::SH_Menu_SubMenuUniDirection, 0, menu);
-      m_uni_dir_fail_at_count = menu->style()->styleHint(QStyle::SH_Menu_SubMenuUniDirectionFailCount, 0, menu);
-      m_select_other_actions = menu->style()->styleHint(QStyle::SH_Menu_SubMenuSloppySelectOtherActions, 0, menu);
+      m_uni_directional = menu->style()->styleHint(QStyle::SH_Menu_SubMenuUniDirection, nullptr, menu);
+      m_uni_dir_fail_at_count = menu->style()->styleHint(QStyle::SH_Menu_SubMenuUniDirectionFailCount, nullptr, menu);
+      m_select_other_actions = menu->style()->styleHint(QStyle::SH_Menu_SubMenuSloppySelectOtherActions, nullptr, menu);
       m_timeout = menu->style()->styleHint(QStyle::SH_Menu_SubMenuSloppyCloseTimeout);
       m_discard_state_when_entering_parent = menu->style()->styleHint(QStyle::SH_Menu_SubMenuResetWhenReenteringParent);
       m_dont_start_time_on_leave = menu->style()->styleHint(QStyle::SH_Menu_SubMenuDontStartSloppyOnLeave);
@@ -248,18 +248,19 @@ class QMenuPrivate : public QWidgetPrivate
       SelectedFromElsewhere
    };
 
-   QMenuPrivate() : itemsDirty(0), maxIconWidth(0), tabWidth(0), ncols(0),
-      collapsibleSeparators(true), toolTipsVisible(false), activationRecursionGuard(false),
-      delayedPopupGuard(false), hasReceievedEnter(false), hasHadMouse(0), aboutToHide(0),
-      motions(0), currentAction(0),
+   QMenuPrivate()
+      : itemsDirty(0), maxIconWidth(0), tabWidth(0), ncols(0),
+        collapsibleSeparators(true), toolTipsVisible(false), activationRecursionGuard(false),
+        delayedPopupGuard(false), hasReceievedEnter(false), hasHadMouse(0), aboutToHide(0),
+        motions(0), currentAction(nullptr),
 
 #ifdef QT_KEYPAD_NAVIGATION
-      selectAction(0),
-      cancelAction(0),
+      selectAction(nullptr),
+      cancelAction(nullptr),
 #endif
 
-      scroll(0), eventLoop(0), tearoff(0), tornoff(0), tearoffHighlighted(0),
-      hasCheckableItems(0), doChildEffects(false), platformMenu(0)
+      scroll(nullptr), eventLoop(nullptr), tearoff(0), tornoff(0), tearoffHighlighted(0),
+      hasCheckableItems(0), doChildEffects(false), platformMenu(nullptr)
    {
    }
 
@@ -325,7 +326,7 @@ class QMenuPrivate : public QWidgetPrivate
 
    struct DelayState {
       DelayState()
-         : parent(0), action(0)
+         : parent(nullptr), action(nullptr)
       {
       }
 
@@ -343,7 +344,7 @@ class QMenuPrivate : public QWidgetPrivate
       }
 
       void stop() {
-         action = 0;
+         action = nullptr;
          timer.stop();
       }
 
