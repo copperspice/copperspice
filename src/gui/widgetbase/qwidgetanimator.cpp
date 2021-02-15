@@ -82,7 +82,7 @@ void QWidgetAnimator::animate(QWidget *widget, const QRect &end_geometry, bool a
 
 #ifndef QT_NO_ANIMATION
 
-   if (widget->style()->styleHint(QStyle::SH_Widget_Animate, 0, widget)) {
+   if (widget->style()->styleHint(QStyle::SH_Widget_Animate, nullptr, widget)) {
       AnimationMap::const_iterator it = m_animation_map.constFind(widget);
 
       if (it != m_animation_map.constEnd() && (*it)->endValue().toRect() == final_geometry) {

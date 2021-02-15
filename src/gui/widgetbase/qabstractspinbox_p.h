@@ -71,7 +71,7 @@ class QAbstractSpinBoxPrivate : public QWidgetPrivate
    void init();
    void reset();
    void updateState(bool up, bool fromKeyboard = false);
-   QString stripped(const QString &text, int *pos = 0) const;
+   QString stripped(const QString &text, int *pos = nullptr) const;
    bool specialValue() const;
    virtual QVariant getZeroVariant() const;
    virtual void setRange(const QVariant &min, const QVariant &max);

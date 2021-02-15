@@ -95,13 +95,13 @@ void QAbstractSliderPrivate::setSteps(int single, int page)
     \l value of 0.
 */
 QAbstractSlider::QAbstractSlider(QWidget *parent)
-   : QWidget(*new QAbstractSliderPrivate, parent, 0)
+   : QWidget(*new QAbstractSliderPrivate, parent, Qt::EmptyFlag)
 {
 }
 
 /*! \internal */
 QAbstractSlider::QAbstractSlider(QAbstractSliderPrivate &dd, QWidget *parent)
-   : QWidget(dd, parent, 0)
+   : QWidget(dd, parent, Qt::EmptyFlag)
 {
 }
 

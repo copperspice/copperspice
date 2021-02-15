@@ -329,7 +329,7 @@ bool QWidgetWindow::event(QEvent *event)
 #endif
 
       case QEvent::WindowBlocked:
-         qt_button_down = 0;
+         qt_button_down = nullptr;
          break;
 
       case QEvent::UpdateRequest:
@@ -349,7 +349,7 @@ bool QWidgetWindow::event(QEvent *event)
    return QWindow::event(event);
 }
 
-QPointer<QWidget> qt_last_mouse_receiver = 0;
+QPointer<QWidget> qt_last_mouse_receiver = nullptr;
 
 void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
 {
@@ -363,7 +363,7 @@ void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
    }
 #endif
    if (event->type() == QEvent::Leave) {
-      QWidget *enter = 0;
+      QWidget *enter = nullptr;
       // Check from window system event queue if the next queued enter targets a window
       // in the same window hierarchy (e.g. enter a child of this window). If so,
       // remove the enter event from queue and handle both in single dispatch.
@@ -451,7 +451,7 @@ void QWidgetWindow::handleFocusInEvent(QFocusEvent *e)
       focusWidget = getFocusWidget(FirstFocusWidget);
    }
 
-   if (focusWidget != 0) {
+   if (focusWidget != nullptr) {
       focusWidget->setFocus();
    }
 }
@@ -478,8 +478,8 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
       QWidget *popupChild  = activePopupWidget->childAt(mapped);
 
       if (activePopupWidget != qt_popup_down) {
-         qt_button_down = 0;
-         qt_popup_down = 0;
+         qt_button_down = nullptr;
+         qt_popup_down  = nullptr;
       }
 
       switch (event->type()) {
@@ -560,7 +560,7 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
                      QPlatformIntegration::ReplayMousePressOutsidePopup).toBool()) {
 
          if (m_widget->windowType() != Qt::Popup) {
-            qt_button_down = 0;
+            qt_button_down = nullptr;
          }
 
          if (event->type() == QEvent::MouseButtonPress) {
@@ -613,8 +613,8 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
       }
 
       if (releaseAfter) {
-         qt_button_down = 0;
-         qt_popup_down = 0;
+         qt_button_down = nullptr;
+         qt_popup_down  = nullptr;
       }
       return;
    }
@@ -877,7 +877,7 @@ void QWidgetWindow::handleDragEnterMoveEvent(QDragMoveEvent *event)
    }
    for ( ; widget && !widget->isWindow() && !widget->acceptDrops(); widget = widget->parentWidget()) ;
    if (widget && !widget->acceptDrops()) {
-      widget = 0;
+      widget = nullptr;
    }
    // Target widget unchanged: DragMove
    if (widget && widget == m_dragTarget.data()) {
@@ -902,7 +902,7 @@ void QWidgetWindow::handleDragEnterMoveEvent(QDragMoveEvent *event)
    if (m_dragTarget.data()) {
       QDragLeaveEvent le;
       QGuiApplication::sendSpontaneousEvent(m_dragTarget.data(), &le);
-      m_dragTarget = 0;
+      m_dragTarget = nullptr;
    }
    if (!widget) {
       event->ignore();
@@ -925,7 +925,8 @@ void QWidgetWindow::handleDragLeaveEvent(QDragLeaveEvent *event)
    if (m_dragTarget) {
       QGuiApplication::sendSpontaneousEvent(m_dragTarget.data(), event);
    }
-   m_dragTarget = 0;
+
+   m_dragTarget = nullptr;
 }
 
 void QWidgetWindow::handleDropEvent(QDropEvent *event)
@@ -942,7 +943,7 @@ void QWidgetWindow::handleDropEvent(QDropEvent *event)
       event->accept();
    }
    event->setDropAction(translated.dropAction());
-   m_dragTarget = 0;
+   m_dragTarget = nullptr;
 }
 
 #endif // QT_NO_DRAGANDDROP
@@ -1038,7 +1039,8 @@ bool QWidgetWindow::nativeEvent(const QByteArray &eventType, void *message, long
 #ifndef QT_NO_TABLETEVENT
 void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
 {
-   static QPointer<QWidget> qt_tablet_target = 0;
+   static QPointer<QWidget> qt_tablet_target = nullptr;
+
    if (event->type() == QEvent::TabletPress) {
       QWidget *widget = m_widget->childAt(event->pos());
       if (!widget) {
@@ -1059,7 +1061,7 @@ void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
    }
 
    if (event->type() == QEvent::TabletRelease && event->buttons() == Qt::NoButton) {
-      qt_tablet_target = 0;
+      qt_tablet_target = nullptr;
    }
 }
 #endif // QT_NO_TABLETEVENT
@@ -1068,7 +1070,7 @@ void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
 void QWidgetWindow::handleGestureEvent(QNativeGestureEvent *e)
 {
    // copy-pasted code to find correct widget follows:
-   QObject *receiver = 0;
+   QObject *receiver = nullptr;
    if (QApplicationPrivate::inPopupMode()) {
       QWidget *popup = QApplication::activePopupWidget();
       QWidget *popupFocusWidget = popup->focusWidget();
