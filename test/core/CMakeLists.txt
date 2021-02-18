@@ -1,3 +1,5 @@
+set(CMAKE_CURRENT_BINARY_DIR "${CMAKE_BINARY_DIR}/bin/")
+
 include(Load_Catch2)
 include(CTest)
 
