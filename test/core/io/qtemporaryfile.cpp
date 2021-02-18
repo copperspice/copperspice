@@ -18,6 +18,7 @@
 ***********************************************************************/
 
 #include <qtemporaryfile.h>
+#include <qregularexpression.h>
 
 #include <cs_catch2.h>
 
@@ -77,6 +78,50 @@ TEST_CASE("QTemporaryFile fname_e", "[qtemporaryfile]")
    REQUIRE(tmpFile.fileName().contains("MyCsCoreTest"));
    REQUIRE(! tmpFile.fileName().contains("XXXXXX"));
    REQUIRE(tmpFile.fileName().endsWith(".name"));
+}
+
+TEST_CASE("QTemporaryFile create_fname_a", "[qtemporaryfile]")
+{
+   QTemporaryFile tmpFile("MyCsCoreTestXXXXXX.name");
+   tmpFile.open();
+
+   QRegularExpression regExp("/MyCsCoreTest[A-Za-z]{6}\\.name$");
+   QRegularExpressionMatch match = regExp.match(tmpFile.fileName());
+
+   REQUIRE(match.hasMatch());
+}
+
+TEST_CASE("QTemporaryFile create_fname_b", "[qtemporaryfile]")
+{
+   QTemporaryFile tmpFile("XXXXXX.log");
+   tmpFile.open();
+
+   QRegularExpression regExp("/[A-Za-z]{6}\\.log$");
+   QRegularExpressionMatch match = regExp.match(tmpFile.fileName());
+
+   REQUIRE(match.hasMatch());
+}
+
+TEST_CASE("QTemporaryFile create_fname_c", "[qtemporaryfile]")
+{
+   QTemporaryFile tmpFile("tmpXXXXXX");
+   tmpFile.open();
+
+   QRegularExpression regExp("/tmp[A-Za-z]{6}$");
+   QRegularExpressionMatch match = regExp.match(tmpFile.fileName());
+
+   REQUIRE(match.hasMatch());
+}
+
+TEST_CASE("QTemporaryFile create_fname_d", "[qtemporaryfile]")
+{
+   QTemporaryFile tmpFile("XXXXXX");
+   tmpFile.open();
+
+   QRegularExpression regExp("/[A-Za-z]{6}$");
+   QRegularExpressionMatch match = regExp.match(tmpFile.fileName());
+
+   REQUIRE(match.hasMatch());
 }
 
 TEST_CASE("QTemporaryFile file_template", "[qtemporaryfile]")
