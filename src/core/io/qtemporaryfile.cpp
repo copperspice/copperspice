@@ -29,8 +29,8 @@
 #include <qplatformdefs.h>
 #include <qregularexpression.h>
 
-#include <qtemporaryfile_p.h>
 #include <qfile_p.h>
+#include <qtemporaryfile_p.h>
 #include <qsystemerror_p.h>
 
 #if ! defined(Q_OS_WIN)
@@ -44,35 +44,23 @@
    using NativeFileHandle = int;
 #endif
 
-/*!
-\internal
-
-Generates a unique file path and returns a native handle to the open file. path is used as a template when generating
-unique paths, pos identifies the position of the first character that will be replaced in the template and length
-the number of characters that may be substituted.
-
-Returns an open handle to the newly created file if successful, an invalid handle otherwise. In both cases, the string
-in  path will be changed and contain the generated path name.
-*/
-
 static QString createFileName(QString fName, size_t pos, size_t length)
 {
    auto placeholderStart_iter = fName.begin() + pos;
-   auto placeholderEnd_iter   = placeholderStart_iter + length;
 
-   QString::iterator iter     = placeholderEnd_iter - 1;
+   QString newText;
 
-   while (iter >= placeholderStart_iter) {
+   for (size_t cnt = 0; cnt < length; ++cnt) {
       char32_t ch = static_cast<char32_t>((qrand() & 0xffff) % (26 + 26));
 
       if (ch < 26) {
-         fName.replace(iter, iter + 1, QString(static_cast<char32_t>(ch + U'A')));
+         newText.append(static_cast<char32_t>(ch + U'A'));
       } else {
-         fName.replace(iter, iter + 1, QString(static_cast<char32_t>(ch - 26 + U'a')));
+         newText.append(static_cast<char32_t>(ch - 26 + U'a'));
       }
-
-      --iter;
    }
+
+   fName.replace(placeholderStart_iter, placeholderStart_iter + length, newText);
 
    return fName;
 }
