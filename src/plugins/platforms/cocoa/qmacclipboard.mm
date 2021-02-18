@@ -245,7 +245,7 @@ bool QMacPasteboard::hasFlavor(QString c_flavor) const
       }
 
       PasteboardFlavorFlags flags;
-      if (PasteboardGetItemFlavorFlags(paste, id, QCFString(c_flavor), &flags) == noErr) {
+      if (PasteboardGetItemFlavorFlags(paste, id, QCFString(c_flavor).toCFStringRef(), &flags) == noErr) {
 #ifdef DEBUG_PASTEBOARD
          qDebug("  - Found!");
 #endif
@@ -336,7 +336,10 @@ void QMacPasteboard::setMimeData(QMimeData *mime_src, DataRequestType dataReques
 
                   QMacPasteboard::Promise promise(itemID, c, mimeType, mimeData, item, dataRequestType);
                   promises.append(promise);
-                  PasteboardPutItemFlavor(paste, reinterpret_cast<PasteboardItemID>(itemID), QCFString(flavor), 0, kPasteboardFlavorNoFlags);
+
+                  PasteboardPutItemFlavor(paste, reinterpret_cast<PasteboardItemID>(itemID), QCFString(flavor).toCFStringRef(),
+                        0, kPasteboardFlavorNoFlags);
+
 #ifdef DEBUG_PASTEBOARD
                   qDebug(" -  adding %d %s [%s] <%s> [%d]",
                      itemID, qPrintable(mimeType), qPrintable(flavor), qPrintable(c->convertorName()), item);

@@ -200,9 +200,10 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
             directories->append(path);
             // Full file path for dirs.
             QCFString cfpath(createFSStreamPath(fileInfo.canonicalFilePath()));
-            addPathToHash(dirPathInfoHash, cfpath, fileInfo, path);
-            CFArrayAppendValue(tmpArray, cfpath);
+            addPathToHash(dirPathInfoHash, cfpath.toQString(), fileInfo, path);
+            CFArrayAppendValue(tmpArray, cfpath.toCFStringRef());
          }
+
       } else {
          if (files->contains(path)) {
             failedToAdd.append(path);
@@ -211,8 +212,8 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
             // Just the absolute path (minus it's filename) for files.
             QCFString cfpath(createFSStreamPath(fileInfo.canonicalPath()));
             files->append(path);
-            addPathToHash(filePathInfoHash, cfpath, fileInfo, path);
-            CFArrayAppendValue(tmpArray, cfpath);
+            addPathToHash(filePathInfoHash, cfpath.toQString(), fileInfo, path);
+            CFArrayAppendValue(tmpArray, cfpath.toCFStringRef());
          }
       }
    }
@@ -290,19 +291,22 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
       QFileInfo fi(path);
       QCFString cfpath(createFSStreamPath(fi.canonicalPath()));
 
-      CFIndex index = CFArrayGetFirstIndexOfValue(tmpArray, CFRangeMake(0, itemCount), cfpath);
+      CFIndex index = CFArrayGetFirstIndexOfValue(tmpArray, CFRangeMake(0, itemCount), cfpath.toCFStringRef());
+
       if (index != -1) {
          CFArrayRemoveValueAtIndex(tmpArray, index);
          files->removeAll(path);
-         removePathFromHash(filePathInfoHash, cfpath, path);
+         removePathFromHash(filePathInfoHash, cfpath.toQString(), path);
+
       } else {
          // Could be a directory we are watching instead.
          QCFString cfdirpath(createFSStreamPath(fi.canonicalFilePath()));
-         index = CFArrayGetFirstIndexOfValue(tmpArray, CFRangeMake(0, itemCount), cfdirpath);
+         index = CFArrayGetFirstIndexOfValue(tmpArray, CFRangeMake(0, itemCount), cfdirpath.toCFStringRef());
+
          if (index != -1) {
             CFArrayRemoveValueAtIndex(tmpArray, index);
             directories->removeAll(path);
-            removePathFromHash(dirPathInfoHash, cfpath, path);
+            removePathFromHash(dirPathInfoHash, cfpath.toQString(), path);
          } else {
             failedToRemove.append(path);
          }

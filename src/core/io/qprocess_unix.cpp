@@ -369,7 +369,9 @@ void QProcessPrivate::startProcess()
    QFileInfo fileInfo(program);
 
    if (encodedProgramName.endsWith(".app") && fileInfo.isDir()) {
-      QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, QCFString(fileInfo.absoluteFilePath()), kCFURLPOSIXPathStyle, true);
+      QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, QCFString(fileInfo.absoluteFilePath()).toCFStringRef(),
+               kCFURLPOSIXPathStyle, true);
+
       {
          // CFBundle is not reentrant, since CFBundleCreate might return a reference
          // to a cached bundle object. Protect the bundle calls with a mutex lock.
@@ -387,7 +389,7 @@ void QProcessPrivate::startProcess()
 
       if (url) {
          const QCFString str = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
-         encodedProgramName += "/Contents/MacOS/" + static_cast<QString>(str).toUtf8();
+         encodedProgramName += "/Contents/MacOS/" + str.toQString().toUtf8();
       }
    }
 #endif

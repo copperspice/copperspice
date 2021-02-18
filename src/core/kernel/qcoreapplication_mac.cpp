@@ -22,9 +22,9 @@
 ***********************************************************************/
 
 #include <qcoreapplication.h>
+
 #include <qcoreapplication_p.h>
 #include <qcore_mac_p.h>
-
 
 QString qAppFileName()
 {
@@ -36,14 +36,12 @@ QString qAppFileName()
       if (bundleURL) {
          QCFString cfPath(CFURLCopyFileSystemPath(bundleURL, kCFURLPOSIXPathStyle));
 
-         if (cfPath) {
-            appFileName = cfPath;
+         if (cfPath.toCFStringRef() != nullptr) {
+            appFileName = cfPath.toQString();
          }
       }
    }
 
    return appFileName;
 }
-
-
 

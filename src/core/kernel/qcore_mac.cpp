@@ -29,28 +29,28 @@ QString QCFString::toQString(CFStringRef str)
    return QString::fromCFString(str);
 }
 
-QCFString::operator QString() const
+CFStringRef QCFString::toCFStringRef(const QString &str)
 {
-   if (string.isEmpty() && type) {
-      const_cast<QCFString *>(this)->string = toQString(type);
+   return str.toCFString();
+}
+
+QString QCFString::toQString() const
+{
+   if (m_string.isEmpty() && m_type) {
+      const_cast<QCFString *>(this)->m_string = toQString(m_type);
    }
 
-   return string;
+   return m_string;
 }
 
-CFStringRef QCFString::toCFStringRef(const QString &string)
+CFStringRef QCFString::toCFStringRef() const
 {
-   return string.toCFString();
-}
-
-QCFString::operator CFStringRef() const
-{
-   if (! type) {
-      const_cast<QCFString *>(this)->type = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault,
-                  reinterpret_cast<const UInt8 *>(string.constData()), string.size_storage(),
+   if (! m_type) {
+      const_cast<QCFString *>(this)->m_type = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault,
+                  reinterpret_cast<const UInt8 *>(m_string.constData()), m_string.size_storage(),
                   kCFStringEncodingUTF8, false, kCFAllocatorNull);
    }
 
-   return type;
+   return m_type;
 }
 

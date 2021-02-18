@@ -41,43 +41,51 @@ template <typename T>
 class Q_CORE_EXPORT QCFType
 {
  public:
-   inline QCFType(const T &t = nullptr) : type(t) {}
-   inline QCFType(const QCFType &helper) : type(helper.type) {
-      if (type) {
-         CFRetain(type);
+   QCFType(const T &t = nullptr)
+      : m_type(t)
+   {
+   }
+
+   QCFType(const QCFType &helper)
+      : m_type(helper.m_type)
+   {
+      if (m_type) {
+         CFRetain(m_type);
       }
    }
 
-   inline ~QCFType() {
-      if (type) {
-         CFRelease(type);
+   ~QCFType() {
+      if (m_type) {
+         CFRelease(m_type);
       }
    }
 
-   inline operator T() {
-      return type;
+   operator T() {
+      return m_type;
    }
 
-   inline QCFType operator =(const QCFType &helper) {
-      if (helper.type) {
-         CFRetain(helper.type);
+   QCFType operator =(const QCFType &helper) {
+      if (helper.m_type) {
+         CFRetain(helper.m_type);
       }
 
-      CFTypeRef type2 = type;
-      type = helper.type;
-      if (type2) {
-         CFRelease(type2);
+      CFTypeRef refType = m_type;
+      m_type = helper.m_type;
+
+      if (refType) {
+         CFRelease(refType);
       }
+
       return *this;
    }
 
-   inline T *operator&() {
-      return &type;
+   T *operator &() {
+      return &m_type;
    }
 
-   template <typename X>
-   X as() const {
-      return reinterpret_cast<X>(type);
+   template <typename U>
+   U as() const {
+      return reinterpret_cast<U>(m_type);
    }
 
    static QCFType constructFromGet(const T &t) {
@@ -86,17 +94,32 @@ class Q_CORE_EXPORT QCFType
    }
 
  protected:
-   T type;
+   T m_type;
 };
 
 class Q_CORE_EXPORT QCFString : public QCFType<CFStringRef>
 {
  public:
-   inline QCFString(const QString &str) : QCFType<CFStringRef>(nullptr), string(str) {}
-   inline QCFString(const CFStringRef cfstr = nullptr) : QCFType<CFStringRef>(cfstr) {}
-   inline QCFString(const QCFType<CFStringRef> &other) : QCFType<CFStringRef>(other) {}
-   operator QString() const;
-   operator CFStringRef() const;
+   QCFString(const QString &str)
+      : QCFType<CFStringRef>(nullptr), m_string(str)
+   {
+   }
+
+   QCFString(const CFStringRef cfstr = nullptr)
+      : QCFType<CFStringRef>(cfstr)
+   {
+   }
+
+   QCFString(const QCFType<CFStringRef> &other)
+      : QCFType<CFStringRef>(other)
+   {
+   }
+
+   QString toQString() const;
+   CFStringRef toCFStringRef() const;
+
+   operator CFStringRef() = delete;
+
    static QString toQString(CFStringRef cfstr);
    static CFStringRef toCFStringRef(const QString &str);
 
@@ -106,7 +129,7 @@ class Q_CORE_EXPORT QCFString : public QCFType<CFStringRef>
 #endif
 
  private:
-   QString string;
+   QString m_string;
 };
 
 typedef struct {

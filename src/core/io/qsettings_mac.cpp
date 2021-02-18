@@ -438,15 +438,16 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
    }
 
    numDomains = 0;
+
    for (int i = (spec & F_System) ? 1 : 0; i < 2; ++i) {
       for (int j = (spec & F_Organization) ? 1 : 0; j < 3; ++j) {
          SearchDomain &domain = domains[numDomains++];
          domain.userName = (i == 0) ? kCFPreferencesCurrentUser : kCFPreferencesAnyUser;
 
          if (j == 0) {
-            domain.applicationOrSuiteId = applicationId;
+            domain.applicationOrSuiteId = applicationId.toCFStringRef();
          } else if (j == 1) {
-            domain.applicationOrSuiteId = suiteId;
+            domain.applicationOrSuiteId = suiteId.toCFStringRef();
          } else {
             domain.applicationOrSuiteId = kCFPreferencesAnyApplication;
          }
@@ -468,29 +469,33 @@ void QMacSettingsPrivate::remove(const QString &key)
    // If i == -1, then delete "key" itself.
    for (int i = -1; i < keys.size(); ++i) {
       QString subKey = key;
+
       if (i >= 0) {
          subKey += QLatin1Char('/');
          subKey += keys.at(i);
       }
+
       CFPreferencesSetValue(macKey(subKey), nullptr, domains[0].applicationOrSuiteId,
-                            domains[0].userName, hostName);
+               domains[0].userName, hostName.toCFStringRef());
    }
 }
 
 void QMacSettingsPrivate::set(const QString &key, const QVariant &value)
 {
    CFPreferencesSetValue(macKey(key), macValue(value), domains[0].applicationOrSuiteId,
-                         domains[0].userName, hostName);
+               domains[0].userName, hostName.toCFStringRef());
 }
 
 bool QMacSettingsPrivate::get(const QString &key, QVariant *value) const
 {
    QCFString k = macKey(key);
    for (int i = 0; i < numDomains; ++i) {
+
       for (int j = 0; j < numHostNames; ++j) {
-         QCFType<CFPropertyListRef> ret =
-            CFPreferencesCopyValue(k, domains[i].applicationOrSuiteId, domains[i].userName,
-                                   hostNames[j]);
+
+         QCFType<CFPropertyListRef> ret = CFPreferencesCopyValue(k.toCFStringRef(), domains[i].applicationOrSuiteId,
+               domains[i].userName, hostNames[j]);
+
          if (ret) {
             if (value) {
                *value = qtValue(ret);
@@ -513,11 +518,13 @@ QStringList QMacSettingsPrivate::children(const QString &prefix, ChildSpec spec)
 
    for (int i = 0; i < numDomains; ++i) {
       for (int j = 0; j < numHostNames; ++j) {
+
          QCFType<CFArrayRef> cfarray = CFPreferencesCopyKeyList(domains[i].applicationOrSuiteId,
-                                       domains[i].userName,
-                                       hostNames[j]);
+               domains[i].userName, hostNames[j]);
+
          if (cfarray) {
             CFIndex size = CFArrayGetCount(cfarray);
+
             for (CFIndex k = 0; k < size; ++k) {
                QString currentKey =
                   qtKey(static_cast<CFStringRef>(CFArrayGetValueAtIndex(cfarray, k)));
@@ -538,9 +545,10 @@ QStringList QMacSettingsPrivate::children(const QString &prefix, ChildSpec spec)
 void QMacSettingsPrivate::clear()
 {
    QCFType<CFArrayRef> cfarray = CFPreferencesCopyKeyList(domains[0].applicationOrSuiteId,
-                                 domains[0].userName, hostName);
+               domains[0].userName, hostName.toCFStringRef());
+
    CFPreferencesSetMultiple(nullptr, cfarray, domains[0].applicationOrSuiteId, domains[0].userName,
-                            hostName);
+               hostName.toCFStringRef());
 }
 
 void QMacSettingsPrivate::sync()
@@ -549,10 +557,10 @@ void QMacSettingsPrivate::sync()
 
       for (int j = 0; j < numHostNames; ++j) {
          Boolean ok = CFPreferencesSynchronize(domains[i].applicationOrSuiteId,
-                                               domains[i].userName, hostNames[j]);
+               domains[i].userName, hostNames[j]);
 
          // only report failures for the primary file (the one we write to)
-         if (!ok && i == 0 && hostNames[j] == hostName && status == QSettings::NoError) {
+         if (! ok && i == 0 && hostNames[j] == hostName.toCFStringRef() && status == QSettings::NoError) {
             setStatus(QSettings::AccessError);
          }
       }
@@ -630,8 +638,7 @@ QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format,
 
 static QCFType<CFURLRef> urlFromFileName(const QString &fileName)
 {
-   return CFURLCreateWithFileSystemPath(kCFAllocatorDefault, QCFString(fileName),
-                                        kCFURLPOSIXPathStyle, false);
+   return CFURLCreateWithFileSystemPath(kCFAllocatorDefault, QCFString(fileName).toCFStringRef(), kCFURLPOSIXPathStyle, false);
 }
 
 bool QConfFileSettingsPrivate::readPlistFile(const QString &fileName, ParsedSettingsMap *map) const
@@ -644,11 +651,11 @@ bool QConfFileSettingsPrivate::readPlistFile(const QString &fileName, ParsedSett
 
    QByteArray data = file.readAll();
 
-   QCFType<CFDataRef> resource =
-         CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, reinterpret_cast<const UInt8 *>(data.constData()), data.length(), kCFAllocatorNull);
+   QCFType<CFDataRef> resource = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault,
+               reinterpret_cast<const UInt8 *>(data.constData()), data.length(), kCFAllocatorNull);
 
-   QCFType<CFPropertyListRef> propertyList =
-         CFPropertyListCreateWithData(kCFAllocatorDefault, resource, kCFPropertyListImmutable, nullptr, nullptr);
+   QCFType<CFPropertyListRef> propertyList = CFPropertyListCreateWithData(kCFAllocatorDefault, resource,
+               kCFPropertyListImmutable, nullptr, nullptr);
 
    if (! propertyList) {
       return true;

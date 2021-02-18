@@ -1895,8 +1895,9 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
       return nil;
    }
 
-   QCFString string(selectedText.mid(aRange.location, aRange.length));
-   const NSString *tmpString = reinterpret_cast<const NSString *>((CFStringRef)string);
+   QCFString str(selectedText.mid(aRange.location, aRange.length));
+   const NSString *tmpString = reinterpret_cast<const NSString *>(str.toCFStringRef());
+
    return [[[NSAttributedString alloc]  initWithString: const_cast<NSString *>(tmpString)] autorelease];
 }
 

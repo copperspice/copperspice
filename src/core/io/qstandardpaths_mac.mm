@@ -258,6 +258,5 @@ QString QStandardPaths::displayName(StandardLocation type)
       return QString();
    }
 
-   return static_cast<QString>(displayName);
+   return displayName.toQString();
 }
-

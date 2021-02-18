@@ -2305,6 +2305,7 @@ QMacStyle::QMacStyle()
 
    [[NSNotificationCenter defaultCenter] addObserver: receiver
                                                       selector: @selector(scrollBarStyleDidChange:)
+
     name: NSPreferredScrollerStyleDidChangeNotification
     object: nil];
 
@@ -2394,7 +2395,7 @@ void QMacStyle::polish(QPalette & pal) {
    QCFString theme;
    const OSErr err = CS_CopyThemeIdentifier(&theme);
 
-   if (err == noErr && CFStringCompare(theme, kThemeAppearanceAquaGraphite, 0) == kCFCompareEqualTo) {
+   if (err == noErr && CFStringCompare(theme.toCFStringRef(), kThemeAppearanceAquaGraphite, 0) == kCFCompareEqualTo) {
       pal.setBrush(QPalette::All, QPalette::AlternateBase, QColor(240, 240, 240));
    } else {
       pal.setBrush(QPalette::All, QPalette::AlternateBase, QColor(237, 243, 254));
@@ -4296,7 +4297,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
                   QCFString buttonText = qt_mac_removeMnemonics(btn.text);
                   QRect r = btn.rect;
                   HIRect bounds = qt_hirectForQRect(r);
-                  CS_HIThemeDrawTextBox(buttonText, &bounds, &tti, cg, kHIThemeOrientationNormal);
+                  CS_HIThemeDrawTextBox(buttonText.toCFStringRef(), &bounds, &tti, cg, kHIThemeOrientationNormal);
                   p->restore();
                }
 
@@ -4572,7 +4573,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
                QCFString tabText = qt_mac_removeMnemonics(myTab.text);
                QRect r = myTab.rect.adjusted(0, 0, 0, -1);
                HIRect bounds = qt_hirectForQRect(r);
-               CS_HIThemeDrawTextBox(tabText, &bounds, &tti, cg, kHIThemeOrientationNormal);
+               CS_HIThemeDrawTextBox(tabText.toCFStringRef(), &bounds, &tti, cg, kHIThemeOrientationNormal);
                p->restore();
             }
          }
@@ -4775,15 +4776,16 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
                int xp = contentRect.x();
                xp += macItemFrame;
                CGFloat outWidth, outHeight, outBaseline;
-               CS_HIThemeGetTextDimensions(checkmark, 0, &tti, &outWidth, &outHeight,
+               CS_HIThemeGetTextDimensions(checkmark.toCFStringRef(), 0, &tti, &outWidth, &outHeight,
                                            &outBaseline);
+
                if (widgetSize == QAquaSizeMini) {
                   outBaseline += 1;
                }
                QRect r(xp, contentRect.y(), mw, mh);
                r.translate(0, p->fontMetrics().ascent() - int(outBaseline) + 1);
                HIRect bounds = qt_hirectForQRect(r);
-               CS_HIThemeDrawTextBox(checkmark, &bounds, &tti, cg, kHIThemeOrientationNormal);
+               CS_HIThemeDrawTextBox(checkmark.toCFStringRef(), &bounds, &tti, cg, kHIThemeOrientationNormal);
                p->restore();
             }
             if (!mi->icon.isNull()) {
@@ -6287,7 +6289,7 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                QCFString groupText = qt_mac_removeMnemonics(groupBox.text);
                QRect r = proxy()->subControlRect(CC_GroupBox, &groupBox, SC_GroupBoxLabel, widget);
                HIRect bounds = qt_hirectForQRect(r);
-               CS_HIThemeDrawTextBox(groupText, &bounds, &tti, cg, kHIThemeOrientationNormal);
+               CS_HIThemeDrawTextBox(groupText.toCFStringRef(), &bounds, &tti, cg, kHIThemeOrientationNormal);
                p->restore();
             }
          }
@@ -6770,7 +6772,7 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
                      CGFloat height;
 
                      QCFString groupText = qt_mac_removeMnemonics(groupBox->text);
-                     CS_HIThemeGetTextDimensions(groupText, 0, &tti, &width, &height, 0);
+                     CS_HIThemeGetTextDimensions(groupText.toCFStringRef(), 0, &tti, &width, &height, 0);
                      tw = qRound(width);
                      h = qCeil(height);
 

@@ -68,9 +68,8 @@ bool QMacPrintEngine::begin(QPaintDevice *dev)
 
    if (! d->outputFilename.isEmpty()) {
       QCFType<CFURLRef> outFile = CFURLCreateWithFileSystemPath(kCFAllocatorSystemDefault,
-            QCFString(d->outputFilename),
-            kCFURLPOSIXPathStyle,
-            false);
+            QCFString(d->outputFilename).toCFStringRef(), kCFURLPOSIXPathStyle, false);
+
       if (PMSessionSetDestination(d->session(), d->settings(), kPMDestinationFile,
             kPMDocumentFormatPDF, outFile) != noErr) {
          qWarning("QMacPrintEngine::begin: Problem setting file [%s]", d->outputFilename.toUtf8().constData());
@@ -537,7 +536,7 @@ void QMacPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
          d->m_creator = value.toString();
          break;
       case PPK_DocumentName:
-         PMPrintSettingsSetJobName(d->settings(), QCFString(value.toString()));
+         PMPrintSettingsSetJobName(d->settings(), QCFString(value.toString()).toCFStringRef());
          break;
       case PPK_Duplex: {
          QPrint::DuplexMode mode = QPrint::DuplexMode(value.toInt());

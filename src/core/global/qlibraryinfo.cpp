@@ -121,11 +121,11 @@ QSettings *QLibraryInfoPrivate::findConfiguration()
 
       if (bundleRef) {
          // locates the cs.conf file in foo.app/Contents/Resources
-         QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef, QCFString("cs.conf"), nullptr, nullptr);
+         QCFType<CFURLRef> urlRef = CFBundleCopyResourceURL(bundleRef, QCFString("cs.conf").toCFStringRef(), nullptr, nullptr);
 
          if (urlRef) {
             QCFString path = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
-            qtconfig = QDir::cleanPath(path);
+            qtconfig = QDir::cleanPath(path.toQString());
          }
       }
 
@@ -284,7 +284,7 @@ QString QLibraryInfo::location(LibraryLocation loc)
                if (urlRef) {
                   QCFString path = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
 
-                  QString bundleContentsDir = QString(path) + "/Contents/";
+                  QString bundleContentsDir = QString(path.toQString()) + "/Contents/";
 
                   if (QDir(bundleContentsDir).exists()) {
                      return QDir::cleanPath(bundleContentsDir + retval);

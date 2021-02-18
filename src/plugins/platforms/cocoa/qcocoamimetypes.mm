@@ -71,10 +71,15 @@ QVariant QMacPasteboardMimeTraditionalMacPlainText::convertToMime(const QString 
    }
    const QByteArray &firstData = data.first();
    QVariant ret;
-   if (flavor == QLatin1String("com.apple.traditional-mac-plain-text")) {
-      return QString(QCFString(CFStringCreateWithBytes(kCFAllocatorDefault,
-                  reinterpret_cast<const UInt8 *>(firstData.constData()),
-                  firstData.size(), CFStringGetSystemEncoding(), false)));
+
+   if (flavor == "com.apple.traditional-mac-plain-text") {
+
+      QCFString tmp = CFStringCreateWithBytes(kCFAllocatorDefault,
+                        reinterpret_cast<const UInt8 *>(firstData.constData()),
+                        firstData.size(), CFStringGetSystemEncoding(), false);
+
+      return tmp.toQString();
+
    } else {
       qWarning("QMime::convertToMime: unhandled mimetype: %s", qPrintable(mimetype));
    }

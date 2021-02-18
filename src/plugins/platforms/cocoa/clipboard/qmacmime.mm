@@ -267,9 +267,12 @@ QVariant QMacPasteboardMimePlainTextFallback::convertToMime(const QString &mimet
       // Note that public.text is documented by Apple to have an undefined encoding. From
       // testing it seems that utf8 is normally used, at least by Safari on iOS.
       const QByteArray &firstData = data.first();
-      return QString(QCFString(CFStringCreateWithBytes(kCFAllocatorDefault,
-                  reinterpret_cast<const UInt8 *>(firstData.constData()),
-                  firstData.size(), kCFStringEncodingUTF8, false)));
+
+      QCFString tmp = CFStringCreateWithBytes(kCFAllocatorDefault,
+               reinterpret_cast<const UInt8 *>(firstData.constData()), firstData.size(), kCFStringEncodingUTF8, false);
+
+      return tmp.toQString();
+
    } else {
       qWarning("QMime::convertToMime: unhandled mimetype: %s", qPrintable(mimetype));
    }

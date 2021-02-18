@@ -556,7 +556,7 @@ PMPaper QCocoaPrintDevice::macPaper(const QPageSize &pageSize) const
    paperMargins.top = m_customMargins.top();
    paperMargins.bottom = m_customMargins.bottom();
 
-   PMPaperCreateCustom(m_printer, QCFString(pageSize.key()), QCFString(pageSize.name()),
+   PMPaperCreateCustom(m_printer, QCFString(pageSize.key()).toCFStringRef(), QCFString(pageSize.name()).toCFStringRef(),
       pageSize.sizePoints().width(), pageSize.sizePoints().height(), &paperMargins, &paper);
 
    m_macPapers.insert(pageSize.key(), paper);

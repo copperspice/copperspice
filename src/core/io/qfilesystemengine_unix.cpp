@@ -56,11 +56,13 @@ static inline bool hasResourcePropertyFlag(const QFileSystemMetaData &data, cons
 {
    QCFString path = CFStringCreateWithFileSystemRepresentation(nullptr, entry.nativeFilePath().constData());
 
-   if (! path) {
+   if (path.toCFStringRef() == nullptr) {
       return false;
    }
 
-   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, path, kCFURLPOSIXPathStyle, data.hasFlags(QFileSystemMetaData::DirectoryType));
+   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, path.toCFStringRef(), kCFURLPOSIXPathStyle,
+               data.hasFlags(QFileSystemMetaData::DirectoryType));
+
    if (! url) {
       return false;
    }
@@ -200,12 +202,13 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
       QCFString path = CFStringCreateWithFileSystemRepresentation(nullptr,
                   QFile::encodeName(QDir::cleanPath(link.filePath())).data());
 
-      if (! path) {
+      if (path.toCFStringRef() == nullptr) {
          return QFileSystemEntry();
       }
 
-      QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, path, kCFURLPOSIXPathStyle,
+      QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, path.toCFStringRef(), kCFURLPOSIXPathStyle,
                   data.hasFlags(QFileSystemMetaData::DirectoryType));
+
       if (! url) {
          return QFileSystemEntry();
       }
@@ -224,11 +227,11 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
       }
 
       QCFString cfstr(CFURLCopyFileSystemPath(resolvedUrl, kCFURLPOSIXPathStyle));
-      if (!cfstr) {
+      if (cfstr.toCFStringRef() != nullptr) {
          return QFileSystemEntry();
       }
 
-      return QFileSystemEntry(QCFString::toQString(cfstr));
+      return QFileSystemEntry(cfstr.toQString());
    }
 
 #endif
@@ -451,7 +454,7 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
 //static
 QString QFileSystemEngine::bundleName(const QFileSystemEntry &entry)
 {
-   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, QCFString(entry.filePath()),
+   QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, QCFString(entry.filePath()).toCFStringRef(),
                            kCFURLPOSIXPathStyle, true);
 
    if (QCFType<CFDictionaryRef> dict = CFBundleCopyInfoDictionaryForURL(url)) {

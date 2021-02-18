@@ -1235,7 +1235,7 @@ void QGuiApplicationPrivate::init()
 
          if (QDir::currentPath() == "/") {
             QCFType<CFURLRef> bundleURL(CFBundleCopyBundleURL(CFBundleGetMainBundle()));
-            QString qbundlePath = QCFString(CFURLCopyFileSystemPath(bundleURL, kCFURLPOSIXPathStyle));
+            QString qbundlePath = QCFString(CFURLCopyFileSystemPath(bundleURL, kCFURLPOSIXPathStyle)).toQString();
 
             if (qbundlePath.endsWith(".app")) {
                QDir::setCurrent(qbundlePath.section('/', 0, -2));

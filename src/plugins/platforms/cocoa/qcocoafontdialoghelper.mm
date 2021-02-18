@@ -62,8 +62,8 @@ static NSButton *macCreateButton(const char *text, NSView *superview)
    [button setButtonType: NSMomentaryLightButton];
    [button setBezelStyle: NSRoundedBezelStyle];
 
-   [button setTitle: (NSString *)(CFStringRef)QCFString(
-      qt_mac_removeMnemonics(QCoreApplication::translate("QDialogButtonBox", text)))];
+   QCFString tmp = qt_mac_removeMnemonics(QCoreApplication::translate("QDialogButtonBox", text));
+   [button setTitle: (NSString *) tmp.toCFStringRef()];
 
    [[button cell] setFont: [NSFont systemFontOfSize: [NSFont systemFontSizeForControlSize: NSControlSizeRegular]]];
    [superview addSubview: button];
@@ -78,8 +78,9 @@ static QFont qfontForCocoaFont(NSFont *cocoaFont, const QFont &resolveFont)
    if (cocoaFont) {
       int pSize = qRound([cocoaFont pointSize]);
       QCFType<CTFontDescriptorRef> font(CTFontCopyFontDescriptor((CTFontRef)cocoaFont));
-      QString family(QCFString((CFStringRef)CTFontDescriptorCopyAttribute(font, kCTFontFamilyNameAttribute)));
-      QString style(QCFString(((CFStringRef)CTFontDescriptorCopyAttribute(font, kCTFontStyleNameAttribute))));
+
+      QString family(QCFString((CFStringRef)CTFontDescriptorCopyAttribute(font, kCTFontFamilyNameAttribute)).toQString());
+      QString style(QCFString((CFStringRef)CTFontDescriptorCopyAttribute(font, kCTFontStyleNameAttribute)).toQString());
 
       newFont = QFontDatabase().font(family, style, pSize);
       newFont.setUnderline(resolveFont.underline());
