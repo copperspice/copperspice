@@ -116,12 +116,6 @@ void QGraphicsScenePrivate::init()
 
    index = new QGraphicsSceneBspTreeIndex(q);
 
-   // Keep this index so we can check for connected slots later on.
-   changedSignalIndex = q->metaObject()->indexOfSignal("changed(const QList<QRectF> &)");
-
-   processDirtyItemsIndex = q->metaObject()->indexOfSlot("_q_processDirtyItems()");
-   polishItemsIndex = q->metaObject()->indexOfSlot("_q_polishItems()");
-
    qApp->d_func()->scene_list.append(q);
    q->update();
 }
@@ -153,7 +147,7 @@ void QGraphicsScenePrivate::_q_emitUpdated()
    // the optimization that items send updates directly to the views, but it
    // needs to happen in order to keep backward compatibility
 
-   const QMetaMethod &metaMethod = q->metaObject()->method(changedSignalIndex);
+   const QMetaMethod &metaMethod = q->metaObject()->method(q->metaObject()->indexOfSignal("changed(const QList<QRectF> &)"));
 
    if (q->isSignalConnected(metaMethod)) {
       for (int i = 0; i < views.size(); ++i) {
@@ -2024,7 +2018,7 @@ void QGraphicsScene::addItem(QGraphicsItem *item)
    // function allows far more opportunity for delayed-construction optimization.
    if (!item->d_ptr->isDeclarativeItem) {
       if (d->unpolishedItems.isEmpty()) {
-         QMetaMethod method = metaObject()->method(d->polishItemsIndex);
+         QMetaMethod method = metaObject()->method(metaObject()->indexOfSlot("_q_polishItems()"));
          method.invoke(this, Qt::QueuedConnection);
       }
       d->unpolishedItems.append(item);
@@ -2544,13 +2538,10 @@ void QGraphicsScene::update(const QRectF &rect)
    // Check if anyone's connected. If not, we can send updates directly to the views.
    // Otherwise or if there are no views, use old behavior
 
-   int signalIndex = d->changedSignalIndex;
    bool directUpdates = false;
 
-   if (signalIndex != -1) {
-      const QMetaMethod &metaMethod = this->metaObject()->method(signalIndex);
-      directUpdates = ! ( this->isSignalConnected(metaMethod) ) && ! d->views.isEmpty();
-   }
+   const QMetaMethod &metaMethod = this->metaObject()->method(metaObject()->indexOfSignal("changed(const QList<QRectF> &)"));
+   directUpdates = ! ( this->isSignalConnected(metaMethod) ) && ! d->views.isEmpty();
 
    if (rect.isNull()) {
       d->updateAll = true;
@@ -4424,11 +4415,7 @@ void QGraphicsScenePrivate::markDirty(QGraphicsItem *item, const QRectF &rect, b
    }
 
    if (! processDirtyItemsEmitted) {
-      QMetaMethod method = q_ptr->metaObject()->method(processDirtyItemsIndex);
-
-      method.invoke(q_ptr, Qt::QueuedConnection);
-      //      QMetaObject::invokeMethod(q_ptr, "_q_processDirtyItems", Qt::QueuedConnection);
-
+      QMetaObject::invokeMethod(q_ptr, "_q_processDirtyItems", Qt::QueuedConnection);
       processDirtyItemsEmitted = true;
    }
 
@@ -4436,7 +4423,7 @@ void QGraphicsScenePrivate::markDirty(QGraphicsItem *item, const QRectF &rect, b
       // Note that this function can be called from the item's destructor, so
       // do NOT call any virtual functions on it within this block.
 
-      const QMetaMethod &metaMethod = q_ptr->metaObject()->method(changedSignalIndex);
+      const QMetaMethod &metaMethod = q_ptr->metaObject()->method(q_ptr->metaObject()->indexOfSignal("changed(const QList<QRectF> &)"));
 
       if (q_ptr->isSignalConnected(metaMethod) || views.isEmpty()) {
          // This block of code is kept for compatibility. Since 4.5, by default,
@@ -4599,7 +4586,7 @@ void QGraphicsScenePrivate::processDirtyItemsRecursive(QGraphicsItem *item, bool
    // Process item.
    if (item->d_ptr->dirty || item->d_ptr->paintedViewBoundingRectsNeedRepaint) {
 
-      const QMetaMethod &metaMethod = q->metaObject()->method(changedSignalIndex);
+      const QMetaMethod &metaMethod = q->metaObject()->method(q->metaObject()->indexOfSignal("changed(const QList<QRectF> &)"));
 
       const bool useCompatUpdate    = views.isEmpty() || q->isSignalConnected(metaMethod);
       const QRectF itemBoundingRect = adjustedItemEffectiveBoundingRect(item);

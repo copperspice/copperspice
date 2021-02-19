@@ -4940,7 +4940,7 @@ void QGraphicsItem::prepareGeometryChange()
       // Note that this has to be done *after* markDirty to ensure that
       // _q_processDirtyItems is called before _q_emitUpdated.
 
-      const QMetaMethod &metaMethod = d_ptr->scene->metaObject()->method(scenePrivate->changedSignalIndex);
+      const QMetaMethod &metaMethod = d_ptr->scene->metaObject()->method(d_ptr->scene->metaObject()->indexOfSignal("changed(const QList<QRectF> &)"));
 
       if (d_ptr->scene->isSignalConnected(metaMethod) || scenePrivate->views.isEmpty()) {
 
