@@ -984,7 +984,7 @@ void QTriangulator<T>::ComplexToSimple::initEdges()
         } else {
             Q_ASSERT(i + 1 < m_parent->m_indices.size());
             // {node, from, to, next, previous, winding, mayIntersect, pointingUp, originallyPointingUp}
-            Edge edge = {0, int(m_parent->m_indices.at(i)), int(m_parent->m_indices.at(i + 1)), -1, -1, 0, true, false, false};
+            Edge edge = {nullptr, int(m_parent->m_indices.at(i)), int(m_parent->m_indices.at(i + 1)), -1, -1, 0, true, false, false};
             m_edges.append(edge);
         }
     }
@@ -1058,7 +1058,7 @@ template <typename T>
 QRBTree<int>::Node *QTriangulator<T>::ComplexToSimple::searchEdgeLeftOf(int edgeIndex) const
 {
     QRBTree<int>::Node *current = m_edgeList.root;
-    QRBTree<int>::Node *result = 0;
+    QRBTree<int>::Node *result  = nullptr;
     while (current) {
         if (edgeIsLeftOfEdge(edgeIndex, current->data)) {
             current = current->left;
@@ -1090,7 +1090,7 @@ template <typename T>
 QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> QTriangulator<T>::ComplexToSimple::bounds(const QPodPoint &point) const
 {
     QRBTree<int>::Node *current = m_edgeList.root;
-    QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> result(0, 0);
+    QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> result(nullptr, nullptr);
     while (current) {
         const QPodPoint &v1 = m_parent->m_vertices.at(m_edges.at(current->data).lower());
         const QPodPoint &v2 = m_parent->m_vertices.at(m_edges.at(current->data).upper());
@@ -1101,7 +1101,7 @@ QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> QTriangulator<T>::ComplexToSim
         }
         current = (d < 0 ? current->left : current->right);
     }
-    if (current == 0)
+    if (current == nullptr)
         return result;
 
     current = result.first->left;
@@ -1139,7 +1139,7 @@ template <typename T>
 QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> QTriangulator<T>::ComplexToSimple::outerBounds(const QPodPoint &point) const
 {
     QRBTree<int>::Node *current = m_edgeList.root;
-    QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> result(0, 0);
+    QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> result(nullptr, nullptr);
 
     while (current) {
         const QPodPoint &v1 = m_parent->m_vertices.at(m_edges.at(current->data).lower());
@@ -1303,7 +1303,7 @@ void QTriangulator<T>::ComplexToSimple::fillPriorityQueue()
 
     for (int i = 0; i < m_edges.size(); ++i) {
         Q_ASSERT(m_edges.at(i).previous == -1 && m_edges.at(i).next == -1);
-        Q_ASSERT(m_edges.at(i).node == 0);
+        Q_ASSERT(m_edges.at(i).node == nullptr);
         Q_ASSERT(m_edges.at(i).pointingUp == m_edges.at(i).originallyPointingUp);
         Q_ASSERT(m_edges.at(i).pointingUp == (m_parent->m_vertices.at(m_edges.at(i).to) < m_parent->m_vertices.at(m_edges.at(i).from)));
 
@@ -1328,7 +1328,7 @@ void QTriangulator<T>::ComplexToSimple::calculateIntersections()
     fillPriorityQueue();
 
     Q_ASSERT(m_topIntersection.empty());
-    Q_ASSERT(m_edgeList.root == 0);
+    Q_ASSERT(m_edgeList.root == nullptr);
 
     // Find all intersection points.
     while (!m_events.isEmpty()) {
@@ -1337,11 +1337,11 @@ void QTriangulator<T>::ComplexToSimple::calculateIntersections()
 
         // Find all edges in the edge list that contain the current vertex and mark them to be split later.
         QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> range = bounds(event.point);
-        QRBTree<int>::Node *leftNode = range.first ? m_edgeList.previous(range.first) : 0;
+        QRBTree<int>::Node *leftNode = range.first ? m_edgeList.previous(range.first) : nullptr;
         int vertex = (event.type == Event::Upper ? m_edges.at(event.edge).upper() : m_edges.at(event.edge).lower());
         QIntersectionPoint eventPoint = QT_PREPEND_NAMESPACE(qIntersectionPoint)(event.point);
 
-        if (range.first != 0) {
+        if (range.first != nullptr) {
             splitEdgeListRange(range.first, range.second, vertex, eventPoint);
             reorderEdgeListRange(range.first, range.second);
         }
@@ -1393,7 +1393,7 @@ int QTriangulator<T>::ComplexToSimple::splitEdge(int splitIndex)
 {
     const Split &split = m_splits.at(splitIndex);
     Edge &lowerEdge = m_edges[split.edge];
-    Q_ASSERT(lowerEdge.node == 0);
+    Q_ASSERT(lowerEdge.node == nullptr);
     Q_ASSERT(lowerEdge.previous == -1 && lowerEdge.next == -1);
 
     if (lowerEdge.from == split.vertex)
@@ -1474,7 +1474,7 @@ void QTriangulator<T>::ComplexToSimple::insertEdgeIntoVectorIfWanted(ShortArray 
 template <typename T>
 void QTriangulator<T>::ComplexToSimple::removeUnwantedEdgesAndConnect()
 {
-    Q_ASSERT(m_edgeList.root == 0);
+    Q_ASSERT(m_edgeList.root == nullptr);
     // Initialize priority queue.
     fillPriorityQueue();
 
@@ -1810,7 +1810,7 @@ void QTriangulator<T>::SimpleToMonotone::setupDataStructures()
 {
     int i = 0;
     Edge e;
-    e.node = 0;
+    e.node = nullptr;
     e.twin = -1;
 
     while (i + 3 <= m_parent->m_indices.size()) {
@@ -1904,7 +1904,7 @@ template <typename T>
 QRBTree<int>::Node *QTriangulator<T>::SimpleToMonotone::searchEdgeLeftOfEdge(int edgeIndex) const
 {
     QRBTree<int>::Node *current = m_edgeList.root;
-    QRBTree<int>::Node *result = 0;
+    QRBTree<int>::Node *result  = nullptr;
     while (current) {
         if (edgeIsLeftOfEdge(edgeIndex, current->data)) {
             current = current->left;
@@ -1921,7 +1921,7 @@ template <typename T>
 QRBTree<int>::Node *QTriangulator<T>::SimpleToMonotone::searchEdgeLeftOfPoint(int pointIndex) const
 {
     QRBTree<int>::Node *current = m_edgeList.root;
-    QRBTree<int>::Node *result = 0;
+    QRBTree<int>::Node *result  = nullptr;
     while (current) {
         const QPodPoint &p1 = m_parent->m_vertices.at(m_edges.at(current->data).lower());
         const QPodPoint &p2 = m_parent->m_vertices.at(m_edges.at(current->data).upper());
@@ -2082,7 +2082,7 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
         j = m_edges[i].previous;
         Q_ASSERT(j < m_edges.size());
 
-        QRBTree<int>::Node *leftEdgeNode = 0;
+        QRBTree<int>::Node *leftEdgeNode = nullptr;
 
         switch (m_edges[i].type) {
         case RegularVertex:
@@ -2093,7 +2093,7 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
                     if (m_edges.at(m_edges[i].helper).type == MergeVertex)
                         diagonals.append(QPair<int, int>(i, m_edges[i].helper));
                     m_edges[j].node  = m_edges[i].node;
-                    m_edges[i].node = 0;
+                    m_edges[i].node = nullptr;
                     m_edges[j].node->data = j;
                     m_edges[j].helper = i;
                 } else if (m_edges[j].node) {
@@ -2101,7 +2101,7 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
                     if (m_edges.at(m_edges[j].helper).type == MergeVertex)
                         diagonals.append(QPair<int, int>(i, m_edges[j].helper));
                     m_edges[i].node = m_edges[j].node;
-                    m_edges[j].node = 0;
+                    m_edges[j].node = nullptr;
                     m_edges[i].node->data = i;
                     m_edges[i].helper = i;
                 } else {

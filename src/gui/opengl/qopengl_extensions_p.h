@@ -272,7 +272,7 @@ public:
     void flushShared();
 
 private:
-    static bool isInitialized(const QOpenGLFunctionsPrivate *d) { return d != 0; }
+    static bool isInitialized(const QOpenGLFunctionsPrivate *d) { return d != nullptr; }
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QOpenGLExtensions::OpenGLExtensions)

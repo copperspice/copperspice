@@ -71,13 +71,10 @@ QOpenGLPaintDevice::~QOpenGLPaintDevice()
 */
 
 QOpenGLPaintDevicePrivate::QOpenGLPaintDevicePrivate(const QSize &sz)
-    : size(sz)
-    , ctx(QOpenGLContext::currentContext())
+    : size(sz), ctx(QOpenGLContext::currentContext())
     , dpmx(qt_defaultDpiX() * 100. / 2.54)
     , dpmy(qt_defaultDpiY() * 100. / 2.54)
-    , devicePixelRatio(1.0)
-    , flipped(false)
-    , engine(0)
+    , devicePixelRatio(1.0), flipped(false), engine(nullptr)
 {
 }
 

@@ -27,18 +27,18 @@
 
 QOpenGLFunctions_3_3_Core::QOpenGLFunctions_3_3_Core()
  : QAbstractOpenGLFunctions()
- , d_1_0_Core(0)
- , d_1_1_Core(0)
- , d_1_2_Core(0)
- , d_1_3_Core(0)
- , d_1_4_Core(0)
- , d_1_5_Core(0)
- , d_2_0_Core(0)
- , d_2_1_Core(0)
- , d_3_0_Core(0)
- , d_3_1_Core(0)
- , d_3_2_Core(0)
- , d_3_3_Core(0)
+ , d_1_0_Core(nullptr)
+ , d_1_1_Core(nullptr)
+ , d_1_2_Core(nullptr)
+ , d_1_3_Core(nullptr)
+ , d_1_4_Core(nullptr)
+ , d_1_5_Core(nullptr)
+ , d_2_0_Core(nullptr)
+ , d_2_1_Core(nullptr)
+ , d_3_0_Core(nullptr)
+ , d_3_1_Core(nullptr)
+ , d_3_2_Core(nullptr)
+ , d_3_3_Core(nullptr)
 {
 }
 
@@ -108,7 +108,7 @@ bool QOpenGLFunctions_3_3_Core::initializeOpenGLFunctions()
     {
         // Associate with private implementation, creating if necessary
         // Function pointers in the backends are resolved at creation time
-        QOpenGLVersionFunctionsBackend* d = 0;
+        QOpenGLVersionFunctionsBackend *d = nullptr;
         d = QAbstractOpenGLFunctionsPrivate::functionsBackend(context, QOpenGLFunctions_1_0_CoreBackend::versionStatus());
         if (!d) {
             d = new QOpenGLFunctions_1_0_CoreBackend(context);

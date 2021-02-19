@@ -80,15 +80,18 @@ public:
 class QOpenGLFramebufferObjectPrivate
 {
 public:
-    QOpenGLFramebufferObjectPrivate() : fbo_guard(0), depth_buffer_guard(0)
-                                  , stencil_buffer_guard(0)
-                                  , valid(false) {}
+    QOpenGLFramebufferObjectPrivate()
+      : fbo_guard(nullptr), depth_buffer_guard(nullptr), stencil_buffer_guard(nullptr), valid(false)
+   {
+   }
+
     ~QOpenGLFramebufferObjectPrivate() {}
 
     void init(QOpenGLFramebufferObject *q, const QSize &size,
               QOpenGLFramebufferObject::Attachment attachment,
               GLenum texture_target, GLenum internal_format,
               GLint samples = 0, bool mipmap = false);
+
     void initTexture(int idx);
     void initColorBuffer(int idx, GLint *samples);
     void initDepthStencilAttachments(QOpenGLContext *ctx, QOpenGLFramebufferObject::Attachment attachment);
@@ -106,9 +109,16 @@ public:
     QOpenGLExtensions funcs;
 
     struct ColorAttachment {
-        ColorAttachment() : internalFormat(0), guard(0) { }
+        ColorAttachment()
+           : internalFormat(0), guard(nullptr)
+        {
+        }
+
         ColorAttachment(const QSize &size, GLenum internalFormat)
-            : size(size), internalFormat(internalFormat), guard(0) { }
+            : size(size), internalFormat(internalFormat), guard(nullptr)
+        {
+        }
+
         QSize size;
         GLenum internalFormat;
         QOpenGLSharedResourceGuard *guard;

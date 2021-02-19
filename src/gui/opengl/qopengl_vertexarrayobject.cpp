@@ -78,9 +78,7 @@ class QOpenGLVertexArrayObjectPrivate
 {
 public:
     QOpenGLVertexArrayObjectPrivate()
-        : vao(0)
-        , vaoFuncsType(NotSupported)
-        , context(0)
+        : vao(0), vaoFuncsType(NotSupported), context(nullptr)
     {
     }
 
@@ -148,9 +146,11 @@ bool QOpenGLVertexArrayObjectPrivate::create()
             vaoFuncsType = OES;
             vaoFuncs.helper->glGenVertexArrays(1, &vao);
         }
+
     } else {
-        vaoFuncs.core_3_0 = 0;
+        vaoFuncs.core_3_0 = nullptr;
         vaoFuncsType = NotSupported;
+
         QSurfaceFormat format = ctx->format();
 #ifndef QT_OPENGL_ES_2
         if (format.version() >= qMakePair<int, int>(3,2)) {
@@ -183,7 +183,7 @@ void QOpenGLVertexArrayObjectPrivate::destroy()
 
     if (context) {
         QObject::disconnect(context, SIGNAL(aboutToBeDestroyed()), q, SLOT(_q_contextAboutToBeDestroyed()));
-        context = 0;
+        context = nullptr;
     }
 
     if (!vao)
@@ -343,8 +343,8 @@ QOpenGLVertexArrayObject::~QOpenGLVertexArrayObject()
     QOpenGLContext* ctx = QOpenGLContext::currentContext();
 
     Q_D(QOpenGLVertexArrayObject);
-    QOpenGLContext *oldContext = 0;
-    QSurface *oldContextSurface = 0;
+    QOpenGLContext *oldContext  = nullptr;
+    QSurface *oldContextSurface = nullptr;
     QScopedPointer<QOffscreenSurface> offscreenSurface;
 
     if (d->context && ctx && d->context != ctx) {
@@ -361,7 +361,7 @@ QOpenGLVertexArrayObject::~QOpenGLVertexArrayObject()
             ctx = d->context;
         } else {
             qWarning("QOpenGLVertexArrayObject::~QOpenGLVertexArrayObject() failed to make VAO's context current");
-            ctx = 0;
+            ctx = nullptr;
         }
     }
 

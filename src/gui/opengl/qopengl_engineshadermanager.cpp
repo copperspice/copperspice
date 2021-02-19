@@ -52,7 +52,7 @@ public:
     void invalidateResource() override
     {
         delete m_shaders;
-        m_shaders = 0;
+        m_shaders = nullptr;
     }
 
     void freeResource(QOpenGLContext *) override
@@ -70,11 +70,13 @@ class QOpenGLShaderStorage
 public:
     QOpenGLEngineSharedShaders *shadersForThread(QOpenGLContext *context) {
         QOpenGLMultiGroupSharedResource *&shaders = m_storage.localData();
+
         if (!shaders)
             shaders = new QOpenGLMultiGroupSharedResource;
-        QOpenGLEngineSharedShadersResource *resource =
-            shaders->value<QOpenGLEngineSharedShadersResource>(context);
-        return resource ? resource->shaders() : 0;
+
+        QOpenGLEngineSharedShadersResource *resource = shaders->value<QOpenGLEngineSharedShadersResource>(context);
+
+        return resource ? resource->shaders() : nullptr;
     }
 
 private:
@@ -89,15 +91,14 @@ QOpenGLEngineSharedShaders *QOpenGLEngineSharedShaders::shadersForContext(QOpenG
 }
 
 const char* QOpenGLEngineSharedShaders::qShaderSnippets[] = {
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0
-};
+    nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    nullptr, nullptr, nullptr, nullptr, nullptr
+ };
 
 QOpenGLEngineSharedShaders::QOpenGLEngineSharedShaders(QOpenGLContext* context)
-    : blitShaderProg(0)
-    , simpleShaderProg(0)
+    : blitShaderProg(nullptr), simpleShaderProg(nullptr)
 {
 
 /*
@@ -179,7 +180,7 @@ QOpenGLEngineSharedShaders::QOpenGLEngineSharedShaders(QOpenGLContext* context)
 #if defined(QT_DEBUG)
         // Check that all the elements have been filled:
         for (int i = 0; i < TotalSnippetCount; ++i) {
-            if (qShaderSnippets[i] == 0) {
+            if (qShaderSnippets[i] == nullptr) {
                 qFatal("Shader snippet for %s (#%d) is missing ", csPrintable(snippetNameStr(SnippetName(i))), i);
             }
         }
@@ -293,12 +294,12 @@ QOpenGLEngineSharedShaders::~QOpenGLEngineSharedShaders()
 
     if (blitShaderProg) {
         delete blitShaderProg;
-        blitShaderProg = 0;
+        blitShaderProg = nullptr;
     }
 
     if (simpleShaderProg) {
         delete simpleShaderProg;
-        simpleShaderProg = 0;
+        simpleShaderProg = nullptr;
     }
 }
 
@@ -335,8 +336,10 @@ QOpenGLEngineShaderProg *QOpenGLEngineSharedShaders::findProgramInCache(const QO
             fragSource.append(prog.customStageSource);
         fragSource.append(qShaderSnippets[prog.mainFragShader]);
         fragSource.append(qShaderSnippets[prog.srcPixelFragShader]);
+
         if (prog.compositionFragShader)
             fragSource.append(qShaderSnippets[prog.compositionFragShader]);
+
         if (prog.maskFragShader)
             fragSource.append(qShaderSnippets[prog.maskFragShader]);
 
@@ -474,17 +477,11 @@ void QOpenGLEngineSharedShaders::cleanupCustomStage(QOpenGLCustomShaderStage* st
     }
 }
 
-
 QOpenGLEngineShaderManager::QOpenGLEngineShaderManager(QOpenGLContext* context)
-    : ctx(context),
-      shaderProgNeedsChanging(true),
-      complexGeometry(false),
-      srcPixelType(Qt::NoBrush),
-      opacityMode(NoOpacity),
-      maskType(NoMask),
-      compositionMode(QPainter::CompositionMode_SourceOver),
-      customSrcStage(0),
-      currentShaderProg(0)
+    : ctx(context), shaderProgNeedsChanging(true), complexGeometry(false),
+      srcPixelType(Qt::NoBrush), opacityMode(NoOpacity), maskType(NoMask),
+      compositionMode(QPainter::CompositionMode_SourceOver), customSrcStage(nullptr),
+      currentShaderProg(nullptr)
 {
     sharedShaders = QOpenGLEngineSharedShaders::shadersForContext(context);
 }
@@ -600,7 +597,7 @@ void QOpenGLEngineShaderManager::removeCustomStage()
 {
     if (customSrcStage)
         customSrcStage->setInactive();
-    customSrcStage = 0;
+    customSrcStage = nullptr;
     shaderProgNeedsChanging = true;
 }
 
@@ -657,7 +654,7 @@ bool QOpenGLEngineShaderManager::useCorrectShaderProg()
     if (!shaderProgNeedsChanging)
         return false;
 
-    bool useCustomSrc = customSrcStage != 0;
+    bool useCustomSrc = (customSrcStage != nullptr);
     if (useCustomSrc && srcPixelType != QOpenGLEngineShaderManager::ImageSrc && srcPixelType != Qt::TexturePattern) {
         useCustomSrc = false;
         qWarning("QOpenGLEngineShaderManager - Ignoring custom shader stage for non image src");

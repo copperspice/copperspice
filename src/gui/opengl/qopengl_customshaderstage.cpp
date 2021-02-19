@@ -31,8 +31,10 @@
 class QOpenGLCustomShaderStagePrivate
 {
 public:
-    QOpenGLCustomShaderStagePrivate() :
-        m_manager(0) {}
+    QOpenGLCustomShaderStagePrivate()
+       : m_manager(nullptr)
+    {
+    }
 
     QPointer<QOpenGLEngineShaderManager> m_manager;
     QByteArray              m_source;
@@ -94,8 +96,8 @@ void QOpenGLCustomShaderStage::removeFromPainter(QPainter* p)
     // Just set the stage to null, don't call removeCustomStage().
     // This should leave the program in a compiled/linked state
     // if the next custom shader stage is this one again.
-    d->m_manager->setCustomStage(0);
-    d->m_manager = 0;
+    d->m_manager->setCustomStage(nullptr);
+    d->m_manager = nullptr;
 }
 
 QByteArray QOpenGLCustomShaderStage::source() const
@@ -109,7 +111,7 @@ QByteArray QOpenGLCustomShaderStage::source() const
 void QOpenGLCustomShaderStage::setInactive()
 {
     Q_D(QOpenGLCustomShaderStage);
-    d->m_manager = 0;
+    d->m_manager = nullptr;
 }
 
 void QOpenGLCustomShaderStage::setSource(const QByteArray& s)

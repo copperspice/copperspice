@@ -804,7 +804,7 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath &path)
                   Q_ASSERT(cache->ibo == 0);
 #else
                   free(cache->vertices);
-                  Q_ASSERT(cache->indices == 0);
+                  Q_ASSERT(cache->indices == nullptr);
 #endif
                   updateCache = true;
                }
@@ -835,7 +835,7 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath &path)
 #else
             cache->vertices = (float *) malloc(floatSizeInBytes);
             memcpy(cache->vertices, vertexCoordinateArray.data(), floatSizeInBytes);
-            cache->indices = 0;
+            cache->indices = nullptr;
 #endif
          }
 
@@ -1311,7 +1311,7 @@ void QOpenGL2PaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
    }
 
    QOpenGL2PaintEngineState *s = state();
-   if (qt_pen_is_cosmetic(pen, state()->renderHints) && !qt_scaleForTransform(s->transform(), 0)) {
+   if (qt_pen_is_cosmetic(pen, state()->renderHints) && !qt_scaleForTransform(s->transform(), nullptr)) {
       // QTriangulatingStroker class is not meant to support cosmetically sheared strokes.
       QPaintEngineEx::stroke(path, pen);
       return;
@@ -1388,7 +1388,7 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
       QRectF bounds = path.controlPointRect().adjusted(-extra, -extra, extra, extra);
 
       fillStencilWithVertexArray(stroker.vertices(), stroker.vertexCount() / 2,
-                                 0, 0, bounds, QOpenGL2PaintEngineExPrivate::TriStripStrokeFillMode);
+                                 nullptr, 0, bounds, QOpenGL2PaintEngineExPrivate::TriStripStrokeFillMode);
 
       funcs.glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
 
@@ -1535,7 +1535,7 @@ void QOpenGL2PaintEngineEx::drawImage(const QRectF &dest, const QImage &image, c
       case QImage::Format_RGBA8888:
       case QImage::Format_ARGB32:
          d->shaderManager->setSrcPixelType(QOpenGLEngineShaderManager::NonPremultipliedImageSrc);
-         bindOption = 0;
+         bindOption = Qt::EmptyFlag;
          break;
 
       case QImage::Format_Alpha8:
@@ -1731,7 +1731,7 @@ void QOpenGL2PaintEngineExPrivate::drawCachedGlyphs(QFontEngine::GlyphFormat gly
 
    QOpenGLTextureGlyphCache *cache =
       (QOpenGLTextureGlyphCache *) fe->glyphCache(cacheKey, glyphFormat, glyphCacheTransform);
-   if (!cache || cache->glyphFormat() != glyphFormat || cache->contextGroup() == 0) {
+   if (!cache || cache->glyphFormat() != glyphFormat || cache->contextGroup() == nullptr) {
       cache = new QOpenGLTextureGlyphCache(glyphFormat, glyphCacheTransform);
       fe->setGlyphCache(cacheKey, cache);
       recreateVertexArrays = true;
@@ -1739,10 +1739,13 @@ void QOpenGL2PaintEngineExPrivate::drawCachedGlyphs(QFontEngine::GlyphFormat gly
 
    if (staticTextItem->userDataNeedsUpdate) {
       recreateVertexArrays = true;
-   } else if (staticTextItem->userData() == 0) {
+
+   } else if (staticTextItem->userData() == nullptr) {
       recreateVertexArrays = true;
+
    } else if (staticTextItem->userData()->type != QStaticTextUserData::OpenGLUserData) {
       recreateVertexArrays = true;
+
    } else {
       QOpenGLStaticTextUserData *userData = static_cast<QOpenGLStaticTextUserData *>(staticTextItem->userData());
       if (userData->glyphFormat != glyphFormat) {
@@ -1805,9 +1808,9 @@ void QOpenGL2PaintEngineExPrivate::drawCachedGlyphs(QFontEngine::GlyphFormat gly
    QOpenGL2PEXVertexArray *textureCoordinates = &textureCoordinateArray;
 
    if (staticTextItem->useBackendOptimizations) {
-      QOpenGLStaticTextUserData *userData = 0;
+      QOpenGLStaticTextUserData *userData = nullptr;
 
-      if (staticTextItem->userData() == 0
+      if (staticTextItem->userData() == nullptr
             || staticTextItem->userData()->type != QStaticTextUserData::OpenGLUserData) {
 
          userData = new QOpenGLStaticTextUserData();
@@ -2195,12 +2198,12 @@ bool QOpenGL2PaintEngineEx::end()
    d->funcs.glUseProgram(0);
    d->transferMode(BrushDrawingMode);
 
-   ctx->d_func()->active_engine = 0;
+   ctx->d_func()->active_engine = nullptr;
 
    d->resetGLState();
 
    delete d->shaderManager;
-   d->shaderManager = 0;
+   d->shaderManager = nullptr;
    d->currentBrush = QBrush();
 
 #ifdef QT_OPENGL_CACHE_AS_VBOS

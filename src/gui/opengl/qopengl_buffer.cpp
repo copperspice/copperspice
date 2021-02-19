@@ -34,9 +34,9 @@ class QOpenGLBufferPrivate
 {
 public:
     QOpenGLBufferPrivate(QOpenGLBuffer::Type t)
-        : ref(1), type(t), guard(0), usagePattern(QOpenGLBuffer::StaticDraw),
+        : ref(1), type(t), guard(nullptr), usagePattern(QOpenGLBuffer::StaticDraw),
           actualUsagePattern(QOpenGLBuffer::StaticDraw),
-          funcs(0)
+          funcs(nullptr)
     { }
 
     QAtomicInt ref;
@@ -142,11 +142,11 @@ void QOpenGLBuffer::destroy()
 
     if (d->guard) {
         d->guard->free();
-        d->guard = 0;
+        d->guard = nullptr;
     }
 
     delete d->funcs;
-    d->funcs = 0;
+    d->funcs = nullptr;
 }
 
 bool QOpenGLBuffer::read(int offset, void *data, int count)
@@ -285,10 +285,10 @@ void *QOpenGLBuffer::map(QOpenGLBuffer::Access access)
 #endif
 
     if (! d->guard || ! d->guard->id())
-        return 0;
+        return nullptr;
 
     if (d->funcs->hasOpenGLExtension(QOpenGLExtensions::MapBufferRange)) {
-        QOpenGLBuffer::RangeAccessFlags rangeAccess = 0;
+        QOpenGLBuffer::RangeAccessFlags rangeAccess = Qt::EmptyFlag;
 
         switch (access) {
            case QOpenGLBuffer::ReadOnly:
@@ -320,8 +320,9 @@ void *QOpenGLBuffer::mapRange(int offset, int count, QOpenGLBuffer::RangeAccessF
         qWarning("QOpenGLBuffer::mapRange(): buffer not created");
     }
 #endif
+
     if (! d->guard || ! d->guard->id()) {
-        return 0;
+        return nullptr;
     }
 
     return d->funcs->glMapBufferRange(d->type, offset, count, access);

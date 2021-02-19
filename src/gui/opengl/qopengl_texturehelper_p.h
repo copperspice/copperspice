@@ -138,7 +138,7 @@ public:
 
     inline void glTextureSubImage3D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset, GLint yoffset, GLint zoffset,
                                     GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type,
-                                    const GLvoid *pixels, const QOpenGLPixelTransferOptions * const options = 0)
+                                    const GLvoid *pixels, const QOpenGLPixelTransferOptions * const options = nullptr)
     {
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();
@@ -152,7 +152,7 @@ public:
 
     inline void glTextureSubImage2D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset, GLint yoffset,
                                     GLsizei width, GLsizei height, GLenum format, GLenum type,
-                                    const GLvoid *pixels, const QOpenGLPixelTransferOptions * const options = 0)
+                                    const GLvoid *pixels, const QOpenGLPixelTransferOptions * const options = nullptr)
     {
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();
@@ -166,7 +166,7 @@ public:
 
     inline void glTextureSubImage1D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset,
                                     GLsizei width, GLenum format, GLenum type,
-                                    const GLvoid *pixels, const QOpenGLPixelTransferOptions * const options = 0)
+                                    const GLvoid *pixels, const QOpenGLPixelTransferOptions * const options = nullptr)
     {
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();
@@ -193,7 +193,7 @@ public:
     inline void glCompressedTextureSubImage1D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level,
                                               GLint xoffset, GLsizei width,
                                               GLenum format, GLsizei imageSize, const GLvoid *bits,
-                                              const QOpenGLPixelTransferOptions * const options = 0)
+                                              const QOpenGLPixelTransferOptions * const options = nullptr)
     {
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();
@@ -209,7 +209,7 @@ public:
                                               GLint xoffset, GLint yoffset,
                                               GLsizei width, GLsizei height,
                                               GLenum format, GLsizei imageSize, const GLvoid *bits,
-                                              const QOpenGLPixelTransferOptions * const options = 0)
+                                              const QOpenGLPixelTransferOptions * const options = nullptr)
     {
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();
@@ -225,7 +225,7 @@ public:
                                               GLint xoffset, GLint yoffset, GLint zoffset,
                                               GLsizei width, GLsizei height, GLsizei depth,
                                               GLenum format, GLsizei imageSize, const GLvoid *bits,
-                                              const QOpenGLPixelTransferOptions * const options = 0)
+                                              const QOpenGLPixelTransferOptions * const options = nullptr)
     {
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();
@@ -240,7 +240,7 @@ public:
     inline void glCompressedTextureImage1D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level,
                                            GLenum internalFormat, GLsizei width,
                                            GLint border, GLsizei imageSize, const GLvoid *bits,
-                                           const QOpenGLPixelTransferOptions * const options = 0)
+                                           const QOpenGLPixelTransferOptions * const options = nullptr)
     {
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();
@@ -255,7 +255,7 @@ public:
     inline void glCompressedTextureImage2D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level,
                                            GLenum internalFormat, GLsizei width, GLsizei height,
                                            GLint border, GLsizei imageSize, const GLvoid *bits,
-                                           const QOpenGLPixelTransferOptions * const options = 0)
+                                           const QOpenGLPixelTransferOptions * const options = nullptr)
 
     {
         if (options) {
@@ -271,7 +271,7 @@ public:
     inline void glCompressedTextureImage3D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level,
                                            GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth,
                                            GLint border, GLsizei imageSize, const GLvoid *bits,
-                                           const QOpenGLPixelTransferOptions * const options = 0)
+                                           const QOpenGLPixelTransferOptions * const options = nullptr)
     {
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();

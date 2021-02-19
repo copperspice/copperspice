@@ -153,7 +153,7 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     };
 
     QOpenGL2PaintEngineExPrivate(QOpenGL2PaintEngineEx *q_ptr)
-      : q(q_ptr), shaderManager(0), width(0), height(0), ctx(0), useSystemClip(true), elementIndicesVBOId(0),
+      : q(q_ptr), shaderManager(nullptr), width(0), height(0), ctx(nullptr), useSystemClip(true), elementIndicesVBOId(0),
         snapToPixelGrid(false), nativePaintingActive(false), inverseScale(1),
         lastTextureUnitUsed(QT_UNKNOWN_TEXTURE_UNIT)
     {

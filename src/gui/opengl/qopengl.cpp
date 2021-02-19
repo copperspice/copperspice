@@ -47,7 +47,7 @@ QOpenGLExtensionMatcher::QOpenGLExtensionMatcher()
 {
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     QOpenGLFunctions *funcs = ctx->functions();
-    const char *extensionStr = 0;
+    const char *extensionStr = nullptr;
 
     if (ctx->isOpenGLES() || ctx->format().majorVersion() < 3)
         extensionStr = reinterpret_cast<const char *>(funcs->glGetString(GL_EXTENSIONS));

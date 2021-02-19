@@ -70,7 +70,7 @@ struct QOpenGLFunctionsPrivateEx : public QOpenGLExtensionsPrivate, public QOpen
 
 Q_GLOBAL_STATIC(QOpenGLMultiGroupSharedResource, qt_gl_functions_resource)
 
-static QOpenGLFunctionsPrivateEx *qt_gl_functions(QOpenGLContext *context = 0)
+static QOpenGLFunctionsPrivateEx *qt_gl_functions(QOpenGLContext *context = nullptr)
 {
     if (!context)
         context = QOpenGLContext::currentContext();
@@ -81,12 +81,12 @@ static QOpenGLFunctionsPrivateEx *qt_gl_functions(QOpenGLContext *context = 0)
 }
 
 QOpenGLFunctions::QOpenGLFunctions()
-    : d_ptr(0)
+    : d_ptr(nullptr)
 {
 }
 
 QOpenGLFunctions::QOpenGLFunctions(QOpenGLContext *context)
-    : d_ptr(0)
+    : d_ptr(nullptr)
 {
     if (context && QOpenGLContextGroup::currentContextGroup() == context->shareGroup())
         d_ptr = qt_gl_functions(context);
@@ -321,7 +321,8 @@ QOpenGLFunctions::OpenGLFeatures QOpenGLFunctions::openGLFeatures() const
 {
     QOpenGLFunctionsPrivateEx *d = static_cast<QOpenGLFunctionsPrivateEx *>(d_ptr);
     if (!d)
-        return 0;
+        return Qt::EmptyFlag;
+
     if (d->m_features == -1)
         d->m_features = qt_gl_resolve_features();
     return QOpenGLFunctions::OpenGLFeatures(d->m_features);
@@ -359,7 +360,8 @@ QOpenGLExtensions::OpenGLExtensions QOpenGLExtensions::openGLExtensions()
 {
     QOpenGLFunctionsPrivateEx *d = static_cast<QOpenGLFunctionsPrivateEx *>(d_ptr);
     if (!d)
-        return 0;
+        return Qt::EmptyFlag;
+
     if (d->m_extensions == -1)
         d->m_extensions = qt_gl_resolve_extensions();
     return QOpenGLExtensions::OpenGLExtensions(d->m_extensions);
@@ -2277,15 +2279,16 @@ void Resolver<Base, FuncType, Policy, void>::operator()(P1 p1, P2 p2, P3 p3, P4 
 }
 
 template <typename ReturnType, int Policy, typename Base, typename FuncType>
-Resolver<Base, FuncType, Policy, ReturnType> functionResolverWithFallback(FuncType Base::*func, FuncType fallback, const char *name, const char *alternate = 0)
+Resolver<Base, FuncType, Policy, ReturnType> functionResolverWithFallback(FuncType Base::*func, FuncType fallback, const char *name,
+         const char *alternate = nullptr)
 {
     return Resolver<Base, FuncType, Policy, ReturnType>(func, fallback, name, alternate);
 }
 
 template <typename ReturnType, int Policy, typename Base, typename FuncType>
-Resolver<Base, FuncType, Policy, ReturnType> functionResolver(FuncType Base::*func, const char *name, const char *alternate = 0)
+Resolver<Base, FuncType, Policy, ReturnType> functionResolver(FuncType Base::*func, const char *name, const char *alternate = nullptr)
 {
-    return Resolver<Base, FuncType, Policy, ReturnType>(func, 0, name, alternate);
+    return Resolver<Base, FuncType, Policy, ReturnType>(func, nullptr, name, alternate);
 }
 
 } // namespace
@@ -3067,7 +3070,7 @@ static GLvoid *QOPENGLF_APIENTRY qopenglfResolveMapBuffer(GLenum target, GLenum 
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (ctx->isOpenGLES() && ctx->format().majorVersion() >= 3) {
         qWarning("QOpenGLFunctions: glMapBuffer is not available in OpenGL ES 3.0 and up. Use glMapBufferRange instead.");
-        return 0;
+        return nullptr;
     } else {
         RESOLVE_FUNC(GLvoid *, ResolveOES, MapBuffer)(target, access);
     }

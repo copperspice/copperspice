@@ -27,8 +27,8 @@
 
 QOpenGLFunctions_1_0::QOpenGLFunctions_1_0()
  : QAbstractOpenGLFunctions()
- , d_1_0_Core(0)
- , d_1_0_Deprecated(0)
+ , d_1_0_Core(nullptr)
+ , d_1_0_Deprecated(nullptr)
 {
 }
 
@@ -58,7 +58,7 @@ bool QOpenGLFunctions_1_0::initializeOpenGLFunctions()
     {
         // Associate with private implementation, creating if necessary
         // Function pointers in the backends are resolved at creation time
-        QOpenGLVersionFunctionsBackend* d = 0;
+        QOpenGLVersionFunctionsBackend *d = nullptr;
         d = QAbstractOpenGLFunctionsPrivate::functionsBackend(context, QOpenGLFunctions_1_0_CoreBackend::versionStatus());
         if (!d) {
             d = new QOpenGLFunctions_1_0_CoreBackend(context);

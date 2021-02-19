@@ -346,8 +346,11 @@ private:
 
 class QOpenGLEngineShaderProg
 {
-public:
-    QOpenGLEngineShaderProg() : program(0) {}
+ public:
+   QOpenGLEngineShaderProg()
+      : program(nullptr)
+   {
+   }
 
     ~QOpenGLEngineShaderProg() {
         if (program)
