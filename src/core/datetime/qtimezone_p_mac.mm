@@ -64,11 +64,22 @@ QTimeZonePrivate *QMacTimeZonePrivate::clone()
 
 void QMacTimeZonePrivate::init(const QByteArray &ianaId)
 {
-    if (availableTimeZoneIds().contains(ianaId)) {
-        m_nstz = [[NSTimeZone timeZoneWithName:QCFString::toNSString(QString::fromUtf8(ianaId))] retain];
-        if (m_nstz)
-            m_id = ianaId;
-    }
+   if (ianaId.isEmpty()) {
+      // use system timezone
+      m_nstz = [NSTimeZone.systemTimeZone retain];
+
+      if (m_nstz != nullptr) {
+         m_id = QString::fromNSString(m_nstz.name).toUtf8();
+      }
+   }
+
+   if (availableTimeZoneIds().contains(ianaId)) {
+     m_nstz = [[NSTimeZone timeZoneWithName:QCFString::toNSString(QString::fromUtf8(ianaId))] retain];
+
+     if (m_nstz != nullptr) {
+        m_id = ianaId;
+     }
+   }
 }
 
 QString QMacTimeZonePrivate::comment() const
