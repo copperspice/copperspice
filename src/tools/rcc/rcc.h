@@ -24,9 +24,9 @@
 #ifndef RCC_H
 #define RCC_H
 
-#include <qstringlist.h>
 #include <qhash.h>
 #include <qstring.h>
+#include <qstringlist.h>
 
 class RCCFileInfo;
 class QIODevice;
@@ -42,13 +42,13 @@ class RCCResourceLibrary
    ~RCCResourceLibrary();
 
    bool output(QIODevice &out, QIODevice &errorDevice);
-
    bool readFiles(bool ignoreErrors, QIODevice &errorDevice);
 
    enum Format { Binary, C_Code };
    void setFormat(Format f) {
       m_format = f;
    }
+
    Format format() const {
       return m_format;
    }
@@ -56,6 +56,7 @@ class RCCResourceLibrary
    void setInputFiles(const QStringList &files) {
       m_fileNames = files;
    }
+
    QStringList inputFiles() const {
       return m_fileNames;
    }
@@ -69,6 +70,7 @@ class RCCResourceLibrary
    void setVerbose(bool b) {
       m_verbose = b;
    }
+
    bool verbose() const {
       return m_verbose;
    }
@@ -76,6 +78,7 @@ class RCCResourceLibrary
    void setInitName(const QString &name) {
       m_initName = name;
    }
+
    QString initName() const {
       return m_initName;
    }
@@ -83,6 +86,7 @@ class RCCResourceLibrary
    void setCompressLevel(int c) {
       m_compressLevel = c;
    }
+
    int compressLevel() const {
       return m_compressLevel;
    }
@@ -90,6 +94,7 @@ class RCCResourceLibrary
    void setCompressThreshold(int t) {
       m_compressThreshold = t;
    }
+
    int compressThreshold() const {
       return m_compressThreshold;
    }
@@ -97,15 +102,9 @@ class RCCResourceLibrary
    void setResourceRoot(const QString &root) {
       m_resourceRoot = root;
    }
+
    QString resourceRoot() const {
       return m_resourceRoot;
-   }
-
-   void setUseNameSpace(bool v) {
-      m_useNameSpace = v;
-   }
-   bool useNameSpace() const {
-      return m_useNameSpace;
    }
 
    QStringList failedResources() const {
@@ -115,6 +114,7 @@ class RCCResourceLibrary
  private:
    struct Strings {
       Strings();
+
       const QString TAG_RCC;
       const QString TAG_RESOURCE;
       const QString TAG_FILE;
@@ -131,15 +131,13 @@ class RCCResourceLibrary
    bool addFile(const QString &alias, const RCCFileInfo &file);
 
    bool interpretResourceFile(QIODevice *inputDevice, const QString &file,
-      QString currentPath = QString(), bool ignoreErrors = false);
+            QString currentPath = QString(), bool ignoreErrors = false);
 
    bool writeHeader();
    bool writeDataBlobs();
    bool writeDataNames();
    bool writeDataStructure();
    bool writeInitializer();
-   void writeMangleNamespaceFunction(const QByteArray &name);
-   void writeAddNamespaceFunction(const QByteArray &name);
    void writeHex(quint8 number);
 
    void writeNumber1(quint8 number);
@@ -160,12 +158,13 @@ class RCCResourceLibrary
    QString m_initName;
    Format m_format;
    bool m_verbose;
+
    int m_compressLevel;
    int m_compressThreshold;
    int m_treeOffset;
    int m_namesOffset;
    int m_dataOffset;
-   bool m_useNameSpace;
+
    QStringList m_failedResources;
    QIODevice *m_errorDevice;
    QByteArray m_out;

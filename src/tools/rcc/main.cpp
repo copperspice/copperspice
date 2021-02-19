@@ -24,13 +24,14 @@
 #define RCC_VERSION_STR "1.0.0"
 
 #include <rcc.h>
-#include <qcorecmdlineargs_p.h>
 
-#include <QDebug>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QTextStream>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qtextstream.h>
+
+#include <qcorecmdlineargs_p.h>
 
 void showHelp(const QString &argv0, const QString &error)
 {
@@ -49,7 +50,6 @@ void showHelp(const QString &argv0, const QString &error)
       "  -root path           prefix resource access path with root path\n"
       "  -no-compress         disable all compression\n"
       "  -binary              output a binary file for use as a dynamic resource\n"
-      "  -namespace           turn off namespace macros\n"
       "  -project             generate resource file containing all files from the current directory\n"
       "  -version             display rcc version\n"
       "  -help                display this information\n",
@@ -66,9 +66,7 @@ void dumpRecursive(const QDir &dir, QTextStream &out)
          dumpRecursive(entry.filePath(), out);
 
       } else {
-         out << QLatin1String("<file>")
-            << entry.filePath()
-            << QLatin1String("</file>\n");
+         out << "<file>" << entry.filePath() << "</file>\n";
       }
    }
 }
@@ -79,7 +77,7 @@ int createProject(const QString &outFileName)
    QString currentDirName = currentDir.dirName();
 
    if (currentDirName.isEmpty()) {
-      currentDirName = QLatin1String("root");
+      currentDirName = "root";
    }
 
    QFile file;
@@ -92,6 +90,7 @@ int createProject(const QString &outFileName)
       file.setFileName(outFileName);
       isOk = file.open(QFile::WriteOnly | QFile::Text);
    }
+
    if (! isOk) {
       fprintf(stderr, "Unable to open %s: %s\n",
          outFileName.isEmpty() ? csPrintable(outFileName) : "standard output", csPrintable(file.errorString()));
@@ -99,12 +98,12 @@ int createProject(const QString &outFileName)
    }
 
    QTextStream out(&file);
-   out << QLatin1String("<!DOCTYPE RCC><RCC version=\"1.0\">\n" "<qresource>\n");
+   out << "<!DOCTYPE RCC><RCC version=\"1.0\">\n" "<qresource>\n";
 
    // use "." as dir to get relative file pathes
-   dumpRecursive(QDir(QLatin1String(".")), out);
+   dumpRecursive(QDir("."), out);
 
-   out << QLatin1String("</qresource>\n" "</RCC>\n");
+   out << "</qresource>\n" "</RCC>\n";
 
    return 0;
 }
@@ -134,68 +133,65 @@ int runRcc(int argc, char *argv[])
          // option
          QString opt = args[i];
 
-         if (opt == QLatin1String("-o")) {
-            if (!(i < argc - 1)) {
-               errorMsg = QLatin1String("Missing output name");
+         if (opt == "-o") {
+            if (! (i < argc - 1)) {
+               errorMsg = "Missing output name";
                break;
             }
             outFilename = args[++i];
 
-         } else if (opt == QLatin1String("-name")) {
-            if (!(i < argc - 1)) {
-               errorMsg = QLatin1String("Missing target name");
+         } else if (opt == "-name") {
+            if (! (i < argc - 1)) {
+               errorMsg = "Missing target name";
                break;
             }
             library.setInitName(args[++i]);
 
-         } else if (opt == QLatin1String("-root")) {
-            if (!(i < argc - 1)) {
-               errorMsg = QLatin1String("Missing root path");
+         } else if (opt == "-root") {
+            if (! (i < argc - 1)) {
+               errorMsg = "Missing root path";
                break;
             }
 
             library.setResourceRoot(QDir::cleanPath(args[++i]));
-            if (library.resourceRoot().isEmpty() || library.resourceRoot().at(0) != QLatin1Char('/')) {
-               errorMsg = QLatin1String("Root must start with a /");
+            if (library.resourceRoot().isEmpty() || library.resourceRoot().at(0) != '/') {
+               errorMsg = "Root must start with a /";
             }
 
-         } else if (opt == QLatin1String("-compress")) {
-            if (!(i < argc - 1)) {
-               errorMsg = QLatin1String("Missing compression level");
+         } else if (opt == "-compress") {
+            if (! (i < argc - 1)) {
+               errorMsg = "Missing compression level";
                break;
             }
             library.setCompressLevel(args[++i].toInteger<int>());
 
-         } else if (opt == QLatin1String("-threshold")) {
+         } else if (opt == "-threshold") {
             if (!(i < argc - 1)) {
-               errorMsg = QLatin1String("Missing compression threshold");
+               errorMsg = "Missing compression threshold";
                break;
             }
             library.setCompressThreshold(args[++i].toInteger<int>());
 
-         } else if (opt == QLatin1String("-binary")) {
+         } else if (opt == "-binary") {
             library.setFormat(RCCResourceLibrary::Binary);
 
-         } else if (opt == QLatin1String("-namespace")) {
-            library.setUseNameSpace(!library.useNameSpace());
-
-         } else if (opt == QLatin1String("-verbose")) {
+         } else if (opt == "-verbose") {
             library.setVerbose(true);
 
-         } else if (opt == QLatin1String("-list")) {
+         } else if (opt == "-list") {
             list = true;
 
-         } else if (opt == QLatin1String("-version") || opt == QLatin1String("-v")) {
+         } else if (opt == "-version" || opt == "-v") {
             fprintf(stderr, "CopperSpice Resource Compiler version %s\n", RCC_VERSION_STR);
             return 1;
 
-         } else if (opt == QLatin1String("-help") || opt == QLatin1String("-h")) {
+         } else if (opt == "-help" || opt == "-h") {
             helpRequested = true;
 
-         } else if (opt == QLatin1String("-no-compress")) {
+         } else if (opt == "-no-compress") {
             library.setCompressLevel(-2);
 
-         } else if (opt == QLatin1String("-project")) {
+         } else if (opt == "-project") {
             projectRequested = true;
 
          } else {
@@ -203,7 +199,7 @@ int runRcc(int argc, char *argv[])
          }
 
       } else {
-         if (!QFile::exists(args[i])) {
+         if (! QFile::exists(args[i])) {
             qWarning("%s: File does not exist '%s'", csPrintable(args[0]), qPrintable(args[i]));
             return 1;
          }
@@ -242,7 +238,7 @@ int runRcc(int argc, char *argv[])
       mode |= QIODevice::Text;
    }
 
-   if (outFilename.isEmpty() || outFilename == QLatin1String("-")) {
+   if (outFilename.isEmpty() || outFilename == "-") {
       // using this overload close() only flushes.
       out.open(stdout, mode);
 
@@ -258,11 +254,10 @@ int runRcc(int argc, char *argv[])
    }
 
    // do the task
-   if (list) {
-      const QStringList data = library.dataFiles();
 
-      for (int i = 0; i < data.size(); ++i) {
-         out.write(qPrintable(QDir::cleanPath(data.at(i))));
+   if (list) {
+      for (const auto &item : library.dataFiles()) {
+         out.write(QDir::cleanPath(item).toUtf8());
          out.write("\n");
       }
 
