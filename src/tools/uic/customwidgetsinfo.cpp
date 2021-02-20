@@ -21,12 +21,11 @@
 *
 ***********************************************************************/
 
-#include "customwidgetsinfo.h"
-#include "driver.h"
-#include "ui4.h"
-#include "utils.h"
+#include <customwidgetsinfo.h>
+#include <driver.h>
+#include <ui4.h>
+#include <utils.h>
 
-QT_BEGIN_NAMESPACE
 CustomWidgetsInfo::CustomWidgetsInfo()
 {
 }
@@ -54,39 +53,47 @@ void CustomWidgetsInfo::acceptCustomWidget(DomCustomWidget *node)
    m_customWidgets.insert(node->elementClass(), node);
 }
 
-bool CustomWidgetsInfo::extends(const QString &classNameIn, const QLatin1String &baseClassName) const
+bool CustomWidgetsInfo::extends(const QString &classNameIn, const QString &baseClassName) const
 {
    if (classNameIn == baseClassName) {
       return true;
    }
 
    QString className = classNameIn;
+
    while (const DomCustomWidget *c = customWidget(className)) {
       const QString extends = c->elementExtends();
-      if (className == extends) { // Faulty legacy custom widget entries exist.
+
+      if (className == extends) {
+         // Faulty legacy custom widget entries exist.
          return false;
       }
+
       if (extends == baseClassName) {
          return true;
       }
+
       className = extends;
    }
+
    return false;
 }
 
 bool CustomWidgetsInfo::isCustomWidgetContainer(const QString &className) const
 {
-   if (const DomCustomWidget *dcw = m_customWidgets.value(className, 0))
+   if (const DomCustomWidget *dcw = m_customWidgets.value(className, nullptr)) {
       if (dcw->hasElementContainer()) {
          return dcw->elementContainer() != 0;
       }
+   }
+
    return false;
 }
 
 QString CustomWidgetsInfo::realClassName(const QString &className) const
 {
-   if (className == QLatin1String("Line")) {
-      return QLatin1String("QFrame");
+   if (className == "Line") {
+      return "QFrame";
    }
 
    return className;
@@ -95,24 +102,23 @@ QString CustomWidgetsInfo::realClassName(const QString &className) const
 DomScript *CustomWidgetsInfo::customWidgetScript(const QString &name) const
 {
    if (m_customWidgets.empty()) {
-      return 0;
+      return nullptr;
    }
 
-   const NameCustomWidgetMap::const_iterator it = m_customWidgets.constFind(name);
-   if (it == m_customWidgets.constEnd()) {
-      return 0;
+   const NameCustomWidgetMap::const_iterator iter = m_customWidgets.constFind(name);
+   if (iter == m_customWidgets.constEnd()) {
+      return nullptr;
    }
 
-   return it.value()->elementScript();
+   return iter.value()->elementScript();
 }
 
 QString CustomWidgetsInfo::customWidgetAddPageMethod(const QString &name) const
 {
-   if (DomCustomWidget *dcw = m_customWidgets.value(name, 0)) {
+   if (DomCustomWidget *dcw = m_customWidgets.value(name, nullptr)) {
       return dcw->elementAddPageMethod();
    }
+
    return QString();
 }
 
-
-QT_END_NAMESPACE

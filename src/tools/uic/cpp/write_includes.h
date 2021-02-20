@@ -24,14 +24,12 @@
 #ifndef CPPWRITEINCLUDES_H
 #define CPPWRITEINCLUDES_H
 
-#include "treewalker.h"
+#include <treewalker.h>
 
-#include <QHash>
-#include <QMap>
-#include <QSet>
-#include <QString>
-
-QT_BEGIN_NAMESPACE
+#include <qhash.h>
+#include <qmap.h>
+#include <qset.h>
+#include <qstring.h>
 
 class QTextStream;
 class Driver;
@@ -89,7 +87,5 @@ struct WriteIncludes : public TreeWalker {
 };
 
 } // namespace CPP
-
-QT_END_NAMESPACE
 
 #endif // CPPWRITEINCLUDES_H

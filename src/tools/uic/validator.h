@@ -24,7 +24,7 @@
 #ifndef VALIDATOR_H
 #define VALIDATOR_H
 
-#include "treewalker.h"
+#include <treewalker.h>
 
 class QTextStream;
 class Driver;

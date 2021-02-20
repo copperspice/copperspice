@@ -26,11 +26,7 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
+static constexpr const int BOXLAYOUT_DEFAULT_MARGIN  = 11;
+static constexpr const int BOXLAYOUT_DEFAULT_SPACING = 6;
 
-enum { BOXLAYOUT_DEFAULT_MARGIN = 11 };
-enum { BOXLAYOUT_DEFAULT_SPACING = 6 };
-
-QT_END_NAMESPACE
-
-#endif // GLOBALDEFS_H
+#endif

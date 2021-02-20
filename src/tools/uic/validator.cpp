@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#include "validator.h"
-#include "driver.h"
-#include "ui4.h"
-#include "uic.h"
+#include <validator.h>
+#include <driver.h>
+#include <ui4.h>
+#include <uic.h>
 
-Validator::Validator(Uic *uic)   :
-   m_driver(uic->driver())
+Validator::Validator(Uic *uic)
+   : m_driver(uic->driver())
 {
 }
 

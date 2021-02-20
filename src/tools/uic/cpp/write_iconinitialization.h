@@ -21,43 +21,39 @@
 *
 ***********************************************************************/
 
-#include "cppwriteicondeclaration.h"
-#include "driver.h"
-#include "ui4.h"
-#include "uic.h"
+#ifndef CPPWRITEICONINITIALIZATION_H
+#define CPPWRITEICONINITIALIZATION_H
 
-#include <QTextStream>
+#include <treewalker.h>
 
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qtextstream.h>
+
+class Driver;
+class Uic;
+
+struct Option;
 
 namespace CPP {
 
-WriteIconDeclaration::WriteIconDeclaration(Uic *uic)
-   : driver(uic->driver()), output(uic->output()), option(uic->option())
+class WriteIconInitialization : public TreeWalker
 {
-}
+ public:
+   WriteIconInitialization(Uic *uic);
 
-void WriteIconDeclaration::acceptUI(DomUI *node)
-{
-   TreeWalker::acceptUI(node);
-}
+   void acceptUI(DomUI *node) override;
+   void acceptImages(DomImages *images) override;
+   void acceptImage(DomImage *image) override;
 
-void WriteIconDeclaration::acceptImages(DomImages *images)
-{
-   TreeWalker::acceptImages(images);
-}
+   static QString iconFromDataFunction();
 
-void WriteIconDeclaration::acceptImage(DomImage *image)
-{
-   QString name = image->attributeName();
-   if (name.isEmpty()) {
-      return;
-   }
-
-   driver->insertPixmap(name);
-   output << option.indent << option.indent << name << "_ID,\n";
-}
+ private:
+   Uic *uic;
+   Driver *driver;
+   QTextStream &output;
+   const Option &option;
+};
 
 } // namespace CPP
 
-QT_END_NAMESPACE
+#endif

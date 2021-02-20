@@ -21,14 +21,13 @@
 *
 ***********************************************************************/
 
-#include "cppwriteicondata.h"
-#include "driver.h"
-#include "ui4.h"
-#include "uic.h"
+#include <write_icondata.h>
 
-#include <QTextStream>
+#include <driver.h>
+#include <ui4.h>
+#include <uic.h>
 
-QT_BEGIN_NAMESPACE
+#include <qtextstream.h>
 
 namespace CPP {
 
@@ -36,26 +35,34 @@ static QByteArray transformImageData(QString data)
 {
    int baSize = data.length() / 2;
    uchar *ba = new uchar[baSize];
+
    for (int i = 0; i < baSize; ++i) {
       char h = data[2 * (i)].toLatin1();
       char l = data[2 * (i) + 1].toLatin1();
       uchar r = 0;
+
       if (h <= '9') {
          r += h - '0';
+
       } else {
          r += h - 'a' + 10;
       }
+
       r = r << 4;
+
       if (l <= '9') {
          r += l - '0';
       } else {
          r += l - 'a' + 10;
       }
+
       ba[i] = r;
    }
-   QByteArray ret(reinterpret_cast<const char *>(ba), baSize);
+
+   QByteArray retval(reinterpret_cast<const char *>(ba), baSize);
    delete [] ba;
-   return ret;
+
+   return retval;
 }
 
 static QByteArray unzipXPM(QString data, ulong &length)
@@ -71,15 +78,18 @@ static QByteArray unzipXPM(QString data, ulong &length)
    ba[2] = (length & 0x0000ff00) >> 8;
    ba[3] = (length & 0x000000ff);
    ba.append(transformImageData(data));
+
    QByteArray baunzip = qUncompress(ba);
    return baunzip;
+
 #else
-   Q_UNUSED(data);
-   Q_UNUSED(length);
+   (void) data;
+   (void) length;
+
    return QByteArray();
 #endif
-}
 
+}
 
 WriteIconData::WriteIconData(Uic *uic)
    : driver(uic->driver()), output(uic->output()), option(uic->option())
@@ -105,31 +115,39 @@ void WriteIconData::acceptImage(DomImage *image)
 void WriteIconData::writeImage(QTextStream &output, const QString &indent,
    bool limitXPM_LineLength, const DomImage *image)
 {
-   QString img = image->attributeName() + QLatin1String("_data");
+   QString img  = image->attributeName() + "_data";
    QString data = image->elementData()->text();
-   QString fmt = image->elementData()->attributeFormat();
+   QString fmt  = image->elementData()->attributeFormat();
+
    int size = image->elementData()->attributeLength();
 
-   if (fmt == QLatin1String("XPM.GZ")) {
+   if (fmt == "XPM.GZ") {
       ulong length = size;
+
       QByteArray baunzip = unzipXPM(data, length);
       length = baunzip.size();
+
       // shouldn't we test the initial 'length' against the
       // resulting 'length' to catch corrupt UIC files?
-      int a = 0;
-      int column = 0;
+
+      int a        = 0;
+      int column   = 0;
       bool inQuote = false;
+
       output << indent << "/* XPM */\n"
-         << indent << "static const char* const " << img << "[] = { \n";
+             << indent << "static const char* const " << img << "[] = { \n";
+
       while (baunzip[a] != '\"') {
          a++;
       }
+
       for (; a < (int) length; a++) {
          output << baunzip[a];
+
          if (baunzip[a] == '\n') {
             column = 0;
          } else if (baunzip[a] == '"') {
-            inQuote = !inQuote;
+            inQuote = ! inQuote;
          }
 
          column++;
@@ -144,18 +162,22 @@ void WriteIconData::writeImage(QTextStream &output, const QString &indent,
       }
 
       output << "\n\n";
+
    } else {
       output << indent << "static const unsigned char " << img << "[] = { \n";
       output << indent;
       int a ;
+
       for (a = 0; a < (int) (data.length() / 2) - 1; a++) {
          output << "0x" << QString(data[2 * a]) << QString(data[2 * a + 1]) << ',';
+
          if (a % 12 == 11) {
             output << '\n' << indent;
          } else {
             output << ' ';
          }
       }
+
       output << "0x" << QString(data[2 * a]) << QString(data[2 * a + 1]) << '\n';
       output << "};\n\n";
    }
@@ -167,6 +189,4 @@ void WriteIconData::writeImage(QIODevice &output, DomImage *image)
    output.write(array.constData(), array.size());
 }
 
-} // namespace CPP
-
-QT_END_NAMESPACE
+}

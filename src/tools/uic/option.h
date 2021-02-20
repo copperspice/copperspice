@@ -24,10 +24,8 @@
 #ifndef OPTION_H
 #define OPTION_H
 
-#include <QString>
-#include <QDir>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qdir.h>
 
 struct Option {
    enum Generator {
@@ -44,6 +42,7 @@ struct Option {
    unsigned int extractImages : 1;
    unsigned int limitXPM_LineLength : 1;
    unsigned int implicitIncludes: 1;
+
    Generator generator;
 
    QString inputFile;
@@ -53,33 +52,23 @@ struct Option {
    QString prefix;
    QString postfix;
    QString translateFunction;
+
 #ifdef QT_UIC_JAVA_GENERATOR
    QString javaPackage;
    QString javaOutputDirectory;
 #endif
 
    Option()
-      : headerProtection(1),
-        copyrightHeader(1),
-        generateImplemetation(0),
-        generateNamespace(1),
-        autoConnection(1),
-        dependencies(0),
-        extractImages(0),
-        limitXPM_LineLength(0),
-        implicitIncludes(1),
-        generator(CppGenerator),
-        prefix(QLatin1String("Ui_")) {
-      indent.fill(QLatin1Char(' '), 4);
+      : headerProtection(1), copyrightHeader(1), generateImplemetation(0), generateNamespace(1), autoConnection(1),
+        dependencies(0), extractImages(0), limitXPM_LineLength(0), implicitIncludes(1),
+        generator(CppGenerator), prefix("Ui_")
+   {
+      indent.fill(' ', 4);
    }
 
    QString messagePrefix() const {
-      return inputFile.isEmpty() ?
-         QString(QLatin1String("stdin")) :
-         QDir::toNativeSeparators(inputFile);
+      return inputFile.isEmpty() ? QString("stdin") : QDir::toNativeSeparators(inputFile);
    }
 };
 
-QT_END_NAMESPACE
-
-#endif // OPTION_H
+#endif

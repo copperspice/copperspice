@@ -21,38 +21,41 @@
 *
 ***********************************************************************/
 
-#ifndef CPPWRITEDECLARATION_H
-#define CPPWRITEDECLARATION_H
+#include <write_icondeclaration.h>
 
-#include "treewalker.h"
-#include <QTextStream>
+#include <driver.h>
+#include <ui4.h>
+#include <uic.h>
 
-class Driver;
-class Uic;
-
-struct Option;
+#include <qtextstream.h>
 
 namespace CPP {
 
-struct WriteDeclaration : public TreeWalker {
-   WriteDeclaration(Uic *uic, bool activateScripts);
+WriteIconDeclaration::WriteIconDeclaration(Uic *uic)
+   : driver(uic->driver()), output(uic->output()), option(uic->option())
+{
+}
 
-   void acceptUI(DomUI *node) override;
-   void acceptWidget(DomWidget *node) override;
-   void acceptSpacer(DomSpacer *node) override;
-   void acceptLayout(DomLayout *node) override;
-   void acceptActionGroup(DomActionGroup *node) override;
-   void acceptAction(DomAction *node) override;
-   void acceptButtonGroup(const DomButtonGroup *buttonGroup) override;
+void WriteIconDeclaration::acceptUI(DomUI *node)
+{
+   TreeWalker::acceptUI(node);
+}
 
- private:
-   Uic *m_uic;
-   Driver *m_driver;
-   QTextStream &m_output;
-   const Option &m_option;
-   const bool m_activateScripts;
-};
+void WriteIconDeclaration::acceptImages(DomImages *images)
+{
+   TreeWalker::acceptImages(images);
+}
+
+void WriteIconDeclaration::acceptImage(DomImage *image)
+{
+   QString name = image->attributeName();
+   if (name.isEmpty()) {
+      return;
+   }
+
+   driver->insertPixmap(name);
+   output << option.indent << option.indent << name << "_ID,\n";
+}
 
 } // namespace CPP
 
-#endif // CPPWRITEDECLARATION_H

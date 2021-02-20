@@ -24,7 +24,7 @@
 #ifndef TREEWALKER_H
 #define TREEWALKER_H
 
-#include <QList>
+#include <qlist.h>
 
 class DomUI;
 class DomLayoutDefault;
@@ -69,7 +69,9 @@ class DomButtonGroups;
 class DomButtonGroup;
 
 struct TreeWalker {
-   inline virtual ~TreeWalker() {}
+   virtual ~TreeWalker()
+   {
+   }
 
    virtual void acceptUI(DomUI *ui);
    virtual void acceptLayoutDefault(DomLayoutDefault *layoutDefault);

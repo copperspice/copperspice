@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#ifndef CPPWRITEICONDECLARATION_H
-#define CPPWRITEICONDECLARATION_H
+#ifndef CPPWRITEDECLARATION_H
+#define CPPWRITEDECLARATION_H
 
-#include "treewalker.h"
-#include <QTextStream>
+#include <treewalker.h>
+
+#include <qtextstream.h>
 
 class Driver;
 class Uic;
@@ -34,21 +35,25 @@ struct Option;
 
 namespace CPP {
 
-class WriteIconDeclaration : public TreeWalker
-{
- public:
-   WriteIconDeclaration(Uic *uic);
+struct WriteDeclaration : public TreeWalker {
+   WriteDeclaration(Uic *uic, bool activateScripts);
 
    void acceptUI(DomUI *node) override;
-   void acceptImages(DomImages *images) override;
-   void acceptImage(DomImage *image) override;
+   void acceptWidget(DomWidget *node) override;
+   void acceptSpacer(DomSpacer *node) override;
+   void acceptLayout(DomLayout *node) override;
+   void acceptActionGroup(DomActionGroup *node) override;
+   void acceptAction(DomAction *node) override;
+   void acceptButtonGroup(const DomButtonGroup *buttonGroup) override;
 
  private:
-   Driver *driver;
-   QTextStream &output;
-   const Option &option;
+   Uic *m_uic;
+   Driver *m_driver;
+   QTextStream &m_output;
+   const Option &m_option;
+   const bool m_activateScripts;
 };
 
 } // namespace CPP
 
-#endif // CPPWRITEICONDECLARATION_H
+#endif

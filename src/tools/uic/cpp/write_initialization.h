@@ -21,16 +21,17 @@
 *
 ***********************************************************************/
 
-#ifndef CPPWRITEINITIALIZATION_H
-#define CPPWRITEINITIALIZATION_H
+#ifndef WRITE_INITIALIZATION_H
+#define WRITE_INITIALIZATION_H
 
-#include "treewalker.h"
-#include <QPair>
-#include <QHash>
-#include <QSet>
-#include <QMap>
-#include <QStack>
-#include <QTextStream>
+#include <treewalker.h>
+
+#include <qhash.h>
+#include <qmap.h>
+#include <qpair.h>
+#include <qset.h>
+#include <qstack.h>
+#include <qtextstream.h>
 
 class Driver;
 class Uic;
@@ -38,6 +39,8 @@ class DomBrush;
 class DomFont;
 class DomResourceIcon;
 class DomSizePolicy;
+class DomStringList;
+
 struct Option;
 
 namespace CPP {
@@ -51,17 +54,14 @@ class FontHandle
 
  private:
    const DomFont *m_domFont;
-
-#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
-   friend uint qHash(const FontHandle &);
-#endif
 };
 
 inline bool operator ==(const FontHandle &f1, const FontHandle &f2)
 {
    return f1.compare(f2) == 0;
 }
-inline bool operator  <(const FontHandle &f1, const FontHandle &f2)
+
+inline bool operator <(const FontHandle &f1, const FontHandle &f2)
 {
    return f1.compare(f2) < 0;
 }
@@ -72,16 +72,16 @@ class IconHandle
  public:
    IconHandle(const DomResourceIcon *domIcon);
    int compare(const IconHandle &) const;
+
  private:
    const DomResourceIcon *m_domIcon;
-#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
-   friend uint qHash(const IconHandle &);
-#endif
 };
+
 inline bool operator ==(const IconHandle &i1, const IconHandle &i2)
 {
    return i1.compare(i2) == 0;
 }
+
 inline bool operator  <(const IconHandle &i1, const IconHandle &i2)
 {
    return i1.compare(i2) < 0;
@@ -96,10 +96,6 @@ class SizePolicyHandle
 
  private:
    const DomSizePolicy *m_domSizePolicy;
-
-#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
-   friend uint qHash(const SizePolicyHandle &);
-#endif
 };
 
 inline bool operator ==(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
@@ -107,13 +103,10 @@ inline bool operator ==(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
    return f1.compare(f2) == 0;
 }
 
-#if !(defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3))
-inline bool operator  <(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
+inline bool operator <(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
 {
    return f1.compare(f2) < 0;
 }
-#endif
-
 
 struct WriteInitialization : public TreeWalker {
    using DomPropertyList = QList<DomProperty *>;
@@ -177,13 +170,16 @@ struct WriteInitialization : public TreeWalker {
    QString noTrCall(DomString *str, const QString &defaultString = QString()) const;
    QString autoTrCall(DomString *str, const QString &defaultString = QString()) const;
 
-   QTextStream &autoTrOutput(DomString *str, const QString &defaultString = QString());
+   inline QTextStream &autoTrOutput(const DomProperty *str);
+   QTextStream &autoTrOutput(const DomString *str, const QString &defaultString = QString());
 
    // Apply a comma-separated list of values using a function "setSomething(int idx, value)"
    void writePropertyList(const QString &varName, const QString &setFunction, const QString &value,
       const QString &defaultValue);
 
    enum { WritePropertyIgnoreMargin = 1, WritePropertyIgnoreSpacing = 2, WritePropertyIgnoreObjectName = 4 };
+
+   QString writeStringListProperty(const DomStringList *list) const;
    void writeProperties(const QString &varName, const QString &className, const DomPropertyList &lst, unsigned flags = 0);
    void writeColorGroup(DomColorGroup *colorGroup, const QString &group, const QString &paletteName);
    void writeBrush(const DomBrush *brush, const QString &brushName);
@@ -192,9 +188,10 @@ struct WriteInitialization : public TreeWalker {
    class Item
    {
     public:
-      Item(const QString &itemClassName, const QString &indent, QTextStream &setupUiStream, QTextStream &retranslateUiStream,
-         Driver *driver);
+      Item(const QString &itemClassName, const QString &indent, QTextStream &setupUiStream,
+               QTextStream &retranslateUiStream, Driver *driver);
       ~Item();
+
       enum EmptyItemPolicy {
          DontConstruct,
          ConstructItemOnly,
@@ -205,13 +202,14 @@ struct WriteInitialization : public TreeWalker {
       void writeRetranslateUi(const QString &parentPath);
 
       void addSetter(const QString &setter, const QString &directive = QString(),
-         bool translatable = false); // do not call it if you already added *this as a child of another Item
+         bool translatable = false);    // do not call it if you already added *this as a child of another Item
 
-      void addChild(Item *child); // all setters should already been added
+      void addChild(Item *child);       // all setters should already been added
 
       int setupUiCount() const {
          return m_setupUiData.setters.count();
       }
+
       int retranslateUiCount() const {
          return m_retranslateUiData.setters.count();
       }
@@ -221,12 +219,14 @@ struct WriteInitialization : public TreeWalker {
          ItemData() : policy(DontGenerate) {}
          QMultiMap<QString, QString> setters;       // directive to setter
          QSet<QString> directives;
+
          enum TemporaryVariableGeneratorPolicy {   // policies with priority, number describes the priority
             DontGenerate = 1,
             GenerateWithMultiDirective = 2,
             Generate = 3
          } policy;
       };
+
       ItemData m_setupUiData;
       ItemData m_retranslateUiData;
       QList<Item *> m_children;
@@ -264,12 +264,9 @@ struct WriteInitialization : public TreeWalker {
    QString disableSorting(DomWidget *w, const QString &varName);
    void enableSorting(DomWidget *w, const QString &varName, const QString &tempName);
 
-   //
-   // Sql
-   //
-
+   // sql
    QString findDeclaration(const QString &name);
-   DomWidget *findWidget(const QLatin1String &widgetClass);
+   DomWidget *findWidget(const QString &widgetClass);
    DomImage *findImage(const QString &name) const;
 
    bool isValidObject(const QString &name) const;
@@ -292,7 +289,10 @@ struct WriteInitialization : public TreeWalker {
 
    struct Buddy {
       Buddy(const QString &oN, const QString &b)
-         : objName(oN), buddy(b) {}
+         : objName(oN), buddy(b)
+      {
+      }
+
       QString objName;
       QString buddy;
    };
@@ -306,21 +306,16 @@ struct WriteInitialization : public TreeWalker {
    QHash<QString, DomWidget *> m_registeredWidgets;
    QHash<QString, DomImage *> m_registeredImages;
    QHash<QString, DomAction *> m_registeredActions;
+
    typedef QHash<uint, QString> ColorBrushHash;
    ColorBrushHash m_colorBrushHash;
 
    // Map from font properties to  font variable name for reuse
    // Map from size policy to  variable for reuse
 
-#if defined(Q_OS_DARWIN) && defined(Q_CC_GNU) && (__GNUC__ == 3 && __GNUC_MINOR__ == 3)
-   typedef QHash<FontHandle, QString> FontPropertiesNameMap;
-   typedef QHash<IconHandle, QString> IconPropertiesNameMap;
-   typedef QHash<SizePolicyHandle, QString> SizePolicyNameMap;
-#else
    typedef QMap<FontHandle, QString> FontPropertiesNameMap;
    typedef QMap<IconHandle, QString> IconPropertiesNameMap;
    typedef QMap<SizePolicyHandle, QString> SizePolicyNameMap;
-#endif
 
    FontPropertiesNameMap m_fontPropertiesNameMap;
    IconPropertiesNameMap m_iconPropertiesNameMap;
@@ -336,6 +331,7 @@ struct WriteInitialization : public TreeWalker {
       // Write out the layout margin and spacing properties applying the defaults.
       void writeProperties(const QString &indent, const QString &varName,  const DomPropertyMap &pm, int marginType,
          bool suppressMarginDefault, QTextStream &str) const;
+
     private:
       void writeProperty(int p, const QString &indent, const QString &objectName, const DomPropertyMap &pm,
          const QString &propertyName, const QString &setter, int defaultStyleValue,
@@ -372,4 +368,4 @@ struct WriteInitialization : public TreeWalker {
 
 } // namespace CPP
 
-#endif // CPPWRITEINITIALIZATION_H
+#endif

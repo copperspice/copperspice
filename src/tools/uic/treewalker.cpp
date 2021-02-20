@@ -21,15 +21,16 @@
 *
 ***********************************************************************/
 
-#include "treewalker.h"
-#include "ui4.h"
-
-QT_BEGIN_NAMESPACE
+#include <treewalker.h>
+#include <ui4.h>
 
 void TreeWalker::acceptUI(DomUI *ui)
 {
    acceptWidget(ui->elementWidget());
-   if (const DomButtonGroups *domButtonGroups = ui->elementButtonGroups()) {
+
+   const DomButtonGroups *domButtonGroups = ui->elementButtonGroups();
+
+   if (domButtonGroups != nullptr) {
       acceptButtonGroups(domButtonGroups);
    }
 
@@ -42,27 +43,27 @@ void TreeWalker::acceptUI(DomUI *ui)
 
 void TreeWalker::acceptLayoutDefault(DomLayoutDefault *layoutDefault)
 {
-   Q_UNUSED(layoutDefault);
+   (void) layoutDefault;
 }
 
 void TreeWalker::acceptLayoutFunction(DomLayoutFunction *layoutFunction)
 {
-   Q_UNUSED(layoutFunction);
+   (void) layoutFunction;
 }
 
 void TreeWalker::acceptTabStops(DomTabStops *tabStops)
 {
-   Q_UNUSED(tabStops);
+   (void) tabStops;
 }
 
 void TreeWalker::acceptLayout(DomLayout *layout)
 {
-   for (int i = 0; i < layout->elementProperty().size(); ++i) {
-      acceptProperty(layout->elementProperty().at(i));
+   for (auto item : layout->elementProperty()) {
+      acceptProperty(item);
    }
 
-   for (int i = 0; i < layout->elementItem().size(); ++i) {
-      acceptLayoutItem(layout->elementItem().at(i));
+   for (auto item : layout->elementItem()) {
+      acceptLayoutItem(item);
    }
 }
 
@@ -72,48 +73,49 @@ void TreeWalker::acceptLayoutItem(DomLayoutItem *layoutItem)
       case DomLayoutItem::Widget:
          acceptWidget(layoutItem->elementWidget());
          return;
+
       case DomLayoutItem::Layout:
          acceptLayout(layoutItem->elementLayout());
          return;
+
       case DomLayoutItem::Spacer:
          acceptSpacer(layoutItem->elementSpacer());
          return;
+
       case DomLayoutItem::Unknown:
          break;
    }
 
-   Q_ASSERT( 0 );
+   Q_ASSERT(0);
 }
 
 void TreeWalker::acceptWidget(DomWidget *widget)
 {
-   for (int i = 0; i < widget->elementAction().size(); ++i) {
-      acceptAction(widget->elementAction().at(i));
+   for (auto item : widget->elementAction()) {
+      acceptAction(item);
    }
 
-   for (int i = 0; i < widget->elementActionGroup().size(); ++i) {
-      acceptActionGroup(widget->elementActionGroup().at(i));
+   for (auto item : widget->elementActionGroup()) {
+      acceptActionGroup(item);
    }
 
-   for (int i = 0; i < widget->elementAddAction().size(); ++i) {
-      acceptActionRef(widget->elementAddAction().at(i));
+   for (auto item : widget->elementAddAction()) {
+      acceptActionRef(item);
    }
 
-   for (int i = 0; i < widget->elementProperty().size(); ++i) {
-      acceptProperty(widget->elementProperty().at(i));
+   for (auto item : widget->elementProperty()) {
+      acceptProperty(item);
    }
-
-
 
    // recurse down
    DomWidgets childWidgets;
-   for (int i = 0; i < widget->elementWidget().size(); ++i) {
-      DomWidget *child = widget->elementWidget().at(i);
+
+   for (auto child : widget->elementWidget()) {
       childWidgets += child;
       acceptWidget(child);
    }
 
-   if (!widget->elementLayout().isEmpty()) {
+   if (! widget->elementLayout().isEmpty()) {
       acceptLayout(widget->elementLayout().at(0));
    }
 
@@ -123,19 +125,19 @@ void TreeWalker::acceptWidget(DomWidget *widget)
 
 void TreeWalker::acceptSpacer(DomSpacer *spacer)
 {
-   for (int i = 0; i < spacer->elementProperty().size(); ++i) {
-      acceptProperty(spacer->elementProperty().at(i));
+   for (auto item :  spacer->elementProperty()) {
+      acceptProperty(item);
    }
 }
 
 void TreeWalker::acceptColor(DomColor *color)
 {
-   Q_UNUSED(color);
+   (void) color;
 }
 
 void TreeWalker::acceptColorGroup(DomColorGroup *colorGroup)
 {
-   Q_UNUSED(colorGroup);
+   (void) colorGroup;
 }
 
 void TreeWalker::acceptPalette(DomPalette *palette)
@@ -147,42 +149,42 @@ void TreeWalker::acceptPalette(DomPalette *palette)
 
 void TreeWalker::acceptFont(DomFont *font)
 {
-   Q_UNUSED(font);
+   (void) font;
 }
 
 void TreeWalker::acceptPoint(DomPoint *point)
 {
-   Q_UNUSED(point);
+   (void) point;
 }
 
 void TreeWalker::acceptRect(DomRect *rect)
 {
-   Q_UNUSED(rect);
+   (void) rect;
 }
 
 void TreeWalker::acceptSizePolicy(DomSizePolicy *sizePolicy)
 {
-   Q_UNUSED(sizePolicy);
+   (void) sizePolicy;
 }
 
 void TreeWalker::acceptSize(DomSize *size)
 {
-   Q_UNUSED(size);
+   (void) size;
 }
 
 void TreeWalker::acceptDate(DomDate *date)
 {
-   Q_UNUSED(date);
+   (void) date;
 }
 
 void TreeWalker::acceptTime(DomTime *time)
 {
-   Q_UNUSED(time);
+   (void) time;
 }
 
 void TreeWalker::acceptDateTime(DomDateTime *dateTime)
 {
-   Q_UNUSED(dateTime);
+   (void) dateTime;
 }
 
 void TreeWalker::acceptProperty(DomProperty *property)
@@ -228,65 +230,65 @@ void TreeWalker::acceptProperty(DomProperty *property)
 
 void TreeWalker::acceptCustomWidgets(DomCustomWidgets *customWidgets)
 {
-   for (int i = 0; i < customWidgets->elementCustomWidget().size(); ++i) {
-      acceptCustomWidget(customWidgets->elementCustomWidget().at(i));
+   for (auto item : customWidgets->elementCustomWidget()) {
+      acceptCustomWidget(item);
    }
 }
 
 void TreeWalker::acceptCustomWidget(DomCustomWidget *customWidget)
 {
-   Q_UNUSED(customWidget);
+   (void) customWidget;
 }
 
 void TreeWalker::acceptAction(DomAction *action)
 {
-   Q_UNUSED(action);
+   (void) action;
 }
 
 void TreeWalker::acceptActionGroup(DomActionGroup *actionGroup)
 {
-   for (int i = 0; i < actionGroup->elementAction().size(); ++i) {
-      acceptAction(actionGroup->elementAction().at(i));
+   for (auto item : actionGroup->elementAction()) {
+      acceptAction(item);
    }
 
-   for (int i = 0; i < actionGroup->elementActionGroup().size(); ++i) {
-      acceptActionGroup(actionGroup->elementActionGroup().at(i));
+   for (auto item : actionGroup->elementActionGroup()) {
+      acceptActionGroup(item);
    }
 }
 
 void TreeWalker::acceptActionRef(DomActionRef *actionRef)
 {
-   Q_UNUSED(actionRef);
+   (void) actionRef;
 }
 
 void TreeWalker::acceptImages(DomImages *images)
 {
-   for (int i = 0; i < images->elementImage().size(); ++i) {
-      acceptImage(images->elementImage().at(i));
+   for (auto item : images->elementImage()) {
+      acceptImage(item);
    }
 }
 
 void TreeWalker::acceptImage(DomImage *image)
 {
-   Q_UNUSED(image);
+   (void) image;
 }
 
 void TreeWalker::acceptIncludes(DomIncludes *includes)
 {
-   for (int i = 0; i < includes->elementInclude().size(); ++i) {
-      acceptInclude(includes->elementInclude().at(i));
+   for (auto item : includes->elementInclude()) {
+      acceptInclude(item);
    }
 }
 
 void TreeWalker::acceptInclude(DomInclude *incl)
 {
-   Q_UNUSED(incl);
+   (void) incl;
 }
 
 void TreeWalker::acceptConnections(DomConnections *connections)
 {
-   for (int i = 0; i < connections->elementConnection().size(); ++i) {
-      acceptConnection(connections->elementConnection().at(i));
+   for (auto item : connections->elementConnection()) {
+      acceptConnection(item);
    }
 }
 
@@ -297,14 +299,14 @@ void TreeWalker::acceptConnection(DomConnection *connection)
 
 void TreeWalker::acceptConnectionHints(DomConnectionHints *connectionHints)
 {
-   for (int i = 0; i < connectionHints->elementHint().size(); ++i) {
-      acceptConnectionHint(connectionHints->elementHint().at(i));
+   for (auto item : connectionHints->elementHint()) {
+      acceptConnectionHint(item);
    }
 }
 
 void TreeWalker::acceptConnectionHint(DomConnectionHint *connectionHint)
 {
-   Q_UNUSED(connectionHint);
+   (void) connectionHint;
 }
 
 void TreeWalker::acceptWidgetScripts(const DomScripts &, DomWidget *, const  DomWidgets &)
@@ -313,11 +315,8 @@ void TreeWalker::acceptWidgetScripts(const DomScripts &, DomWidget *, const  Dom
 
 void TreeWalker::acceptButtonGroups(const DomButtonGroups *domButtonGroups)
 {
-   typedef QList<DomButtonGroup *> DomButtonGroupList;
-   const DomButtonGroupList domGroups = domButtonGroups->elementButtonGroup();
-   const DomButtonGroupList::const_iterator cend = domGroups.constEnd();
-   for (DomButtonGroupList::const_iterator it = domGroups.constBegin(); it != cend; ++it) {
-      acceptButtonGroup(*it);
+   for (auto item : domButtonGroups->elementButtonGroup()) {
+      acceptButtonGroup(item);
    }
 }
 
@@ -325,4 +324,3 @@ void TreeWalker::acceptButtonGroup(const DomButtonGroup *)
 {
 }
 
-QT_END_NAMESPACE

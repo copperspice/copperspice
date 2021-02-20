@@ -21,15 +21,12 @@
 *
 ***********************************************************************/
 
-#ifndef CPPEXTRACTIMAGES_H
-#define CPPEXTRACTIMAGES_H
+#ifndef CPPWRITEICONDECLARATION_H
+#define CPPWRITEICONDECLARATION_H
 
-#include "treewalker.h"
-#include <QDir>
+#include <treewalker.h>
+#include <qtextstream.h>
 
-QT_BEGIN_NAMESPACE
-
-class QTextStream;
 class Driver;
 class Uic;
 
@@ -37,23 +34,21 @@ struct Option;
 
 namespace CPP {
 
-class ExtractImages : public TreeWalker
+class WriteIconDeclaration : public TreeWalker
 {
  public:
-   ExtractImages(const Option &opt);
+   WriteIconDeclaration(Uic *uic);
 
    void acceptUI(DomUI *node) override;
    void acceptImages(DomImages *images) override;
    void acceptImage(DomImage *image) override;
 
  private:
-   QTextStream *m_output;
-   const Option &m_option;
-   QDir m_imagesDir;
+   Driver *driver;
+   QTextStream &output;
+   const Option &option;
 };
 
 } // namespace CPP
 
-QT_END_NAMESPACE
-
-#endif // CPPEXTRACTIMAGES_H
+#endif

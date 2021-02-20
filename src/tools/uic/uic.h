@@ -24,15 +24,14 @@
 #ifndef UIC_H
 #define UIC_H
 
-#include "databaseinfo.h"
-#include "customwidgetsinfo.h"
-#include <QString>
-#include <QStringList>
-#include <QHash>
-#include <QStack>
-#include <QXmlStreamReader>
+#include <databaseinfo.h>
+#include <customwidgetsinfo.h>
 
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qhash.h>
+#include <qstack.h>
+#include <qxmlstreamreader.h>
 
 class QTextStream;
 class QIODevice;
@@ -55,39 +54,39 @@ class Uic
 
    bool printDependencies();
 
-   inline Driver *driver() const {
+   Driver *driver() const {
       return drv;
    }
 
-   inline QTextStream &output() {
+   QTextStream &output() {
       return out;
    }
 
-   inline const Option &option() const {
+   const Option &option() const {
       return opt;
    }
 
-   inline QString pixmapFunction() const {
+   QString pixmapFunction() const {
       return pixFunction;
    }
 
-   inline void setPixmapFunction(const QString &f) {
+   void setPixmapFunction(const QString &f) {
       pixFunction = f;
    }
 
-   inline bool hasExternalPixmap() const {
+   bool hasExternalPixmap() const {
       return externalPix;
    }
 
-   inline void setExternalPixmap(bool b) {
+   void setExternalPixmap(bool b) {
       externalPix = b;
    }
 
-   inline const DatabaseInfo *databaseInfo() const {
+   const DatabaseInfo *databaseInfo() const {
       return &info;
    }
 
-   inline const CustomWidgetsInfo *customWidgetsInfo() const {
+   const CustomWidgetsInfo *customWidgetsInfo() const {
       return &cWidgetsInfo;
    }
 
@@ -121,7 +120,6 @@ class Uic
    void writeHeaderProtectionEnd();
 #endif
 
- private:
    Driver *drv;
    QTextStream &out;
    Option &opt;
@@ -131,6 +129,4 @@ class Uic
    bool externalPix;
 };
 
-QT_END_NAMESPACE
-
-#endif // UIC_H
+#endif

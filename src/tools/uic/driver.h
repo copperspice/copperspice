@@ -24,13 +24,13 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
-#include "option.h"
-#include <QHash>
-#include <QString>
-#include <QStringList>
-#include <QTextStream>
+#include <option.h>
 
-class QTextStream;
+#include <qhash.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qtextstream.h>
+
 class DomUI;
 class DomWidget;
 class DomSpacer;
@@ -48,14 +48,15 @@ class Driver
 
    // tools
    bool printDependencies(const QString &fileName);
-   bool uic(const QString &fileName, QTextStream *output = 0);
-   bool uic(const QString &fileName, DomUI *ui, QTextStream *output = 0);
+   bool uic(const QString &fileName, QTextStream *output = nullptr);
+   bool uic(const QString &fileName, DomUI *ui, QTextStream *output = nullptr);
 
    // configuration
-   inline QTextStream &output() const {
+   QTextStream &output() const {
       return *m_output;
    }
-   inline Option &option() {
+
+   Option &option() {
       return m_option;
    }
 
@@ -63,10 +64,11 @@ class Driver
    void reset();
 
    // error
-   inline QStringList problems() {
+   QStringList problems() {
       return m_problems;
    }
-   inline void addProblem(const QString &problem) {
+
+   void addProblem(const QString &problem) {
       m_problems.append(problem);
    }
 
@@ -91,7 +93,7 @@ class Driver
    // Find a group by its non-uniqified name
    const DomButtonGroup *findButtonGroup(const QString &attributeName) const;
 
-   inline bool hasName(const QString &name) const {
+   bool hasName(const QString &name) const {
       return m_nameRepository.contains(name);
    }
 
@@ -126,4 +128,4 @@ class Driver
    QHash<QString, bool> m_pixmaps;
 };
 
-#endif // DRIVER_H
+#endif

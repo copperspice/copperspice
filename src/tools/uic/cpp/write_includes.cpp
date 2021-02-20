@@ -21,16 +21,17 @@
 *
 ***********************************************************************/
 
-#include "cppwriteincludes.h"
-#include "driver.h"
-#include "ui4.h"
-#include "uic.h"
-#include "databaseinfo.h"
+#include <write_includes.h>
+
+#include <databaseinfo.h>
+#include <driver.h>
+#include <ui4.h>
+#include <uic.h>
 
 #include <qstring.h>
-#include <QDebug>
-#include <QFileInfo>
-#include <QTextStream>
+#include <qdebug.h>
+#include <qfileinfo.h>
+#include <qtextstream.h>
 
 #include <stdio.h>
 
@@ -44,9 +45,10 @@ struct ClassInfoEntry {
 };
 
 static const ClassInfoEntry qclass_lib_map[] = {
+
 #define QT_CLASS_LIB(klass, module, header) { #klass, #module, #header },
 
-#include "qclass_lib_map.h"
+#include <qclass_lib_map.h>
 
 #undef QT_CLASS_LIB
 };
@@ -129,7 +131,7 @@ void WriteIncludes::acceptUI(DomUI *node)
 void WriteIncludes::acceptWidget(DomWidget *node)
 {
    if (debugWriteIncludes) {
-      fprintf(stderr, "%s '%s'\n", Q_FUNC_INFO, qPrintable(node->attributeClass()));
+      fprintf(stderr, "%s '%s'\n", Q_FUNC_INFO, csPrintable(node->attributeClass()));
    }
 
    add(node->attributeClass());
@@ -165,7 +167,7 @@ void WriteIncludes::acceptProperty(DomProperty *node)
 void WriteIncludes::insertIncludeForClass(const QString &className, QString header, bool global)
 {
    if (debugWriteIncludes) {
-      fprintf(stderr, "%s %s '%s' %d\n", Q_FUNC_INFO, qPrintable(className), qPrintable(header), global);
+      fprintf(stderr, "%s %s '%s' %d\n", Q_FUNC_INFO, csPrintable(className), qPrintable(header), global);
    }
 
    do {
@@ -327,21 +329,21 @@ void WriteIncludes::writeHeaders(const OrderedSet &headers, bool global)
       const  QString header =  mapped ? hit.value() : sit.key();
 
       if (! header.trimmed().isEmpty()) {
-         m_output << "#include " << openingQuote << header << closingQuote << QLatin1Char('\n');
+         m_output << "#include " << openingQuote << header << closingQuote << '\n';
       }
    }
 }
 
 void WriteIncludes::acceptWidgetScripts(const DomScripts &scripts, DomWidget *, const  DomWidgets &)
 {
-   if (!scripts.empty()) {
+   if (! scripts.empty()) {
       activateScripts();
    }
 }
 
 void WriteIncludes::activateScripts()
 {
-   if (!  m_scriptsActivated) {
+   if (! m_scriptsActivated) {
       add("QScriptEngine");
       add("QDebug");
       m_scriptsActivated = true;

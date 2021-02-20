@@ -21,14 +21,13 @@
 *
 ***********************************************************************/
 
-#include "driver.h"
-#include "uic.h"
-#include "ui4.h"
+#include <driver.h>
+#include <uic.h>
+#include <ui4.h>
 
 #include <qfileinfo.h>
 #include <qdebug.h>
 
-QT_BEGIN_NAMESPACE
 Driver::Driver()
    : m_stdout(stdout, QFile::WriteOnly | QFile::Text)
 {
@@ -52,7 +51,7 @@ QString Driver::findOrInsertSpacer(DomSpacer *ui_spacer)
 {
    if (!m_spacers.contains(ui_spacer)) {
       const QString name = ui_spacer->hasAttributeName() ? ui_spacer->attributeName() : QString();
-      m_spacers.insert(ui_spacer, unique(name, QLatin1String("QSpacerItem")));
+      m_spacers.insert(ui_spacer, unique(name, "QSpacerItem"));
    }
 
    return m_spacers.value(ui_spacer);
@@ -73,23 +72,26 @@ QString Driver::findOrInsertLayoutItem(DomLayoutItem *ui_layoutItem)
    switch (ui_layoutItem->kind()) {
       case DomLayoutItem::Widget:
          return findOrInsertWidget(ui_layoutItem->elementWidget());
+
       case DomLayoutItem::Spacer:
          return findOrInsertSpacer(ui_layoutItem->elementSpacer());
+
       case DomLayoutItem::Layout:
          return findOrInsertLayout(ui_layoutItem->elementLayout());
+
       case DomLayoutItem::Unknown:
          break;
    }
 
-   Q_ASSERT( 0 );
+   Q_ASSERT(0);
 
    return QString();
 }
 
 QString Driver::findOrInsertActionGroup(DomActionGroup *ui_group)
 {
-   if (!m_actionGroups.contains(ui_group)) {
-      m_actionGroups.insert(ui_group, unique(ui_group->attributeName(), QLatin1String("QActionGroup")));
+   if (! m_actionGroups.contains(ui_group)) {
+      m_actionGroups.insert(ui_group, unique(ui_group->attributeName(), "QActionGroup"));
    }
 
    return m_actionGroups.value(ui_group);
@@ -98,7 +100,7 @@ QString Driver::findOrInsertActionGroup(DomActionGroup *ui_group)
 QString Driver::findOrInsertAction(DomAction *ui_action)
 {
    if (!m_actions.contains(ui_action)) {
-      m_actions.insert(ui_action, unique(ui_action->attributeName(), QLatin1String("QAction")));
+      m_actions.insert(ui_action, unique(ui_action->attributeName(), "QAction"));
    }
 
    return m_actions.value(ui_action);
@@ -106,11 +108,13 @@ QString Driver::findOrInsertAction(DomAction *ui_action)
 
 QString Driver::findOrInsertButtonGroup(const DomButtonGroup *ui_group)
 {
-   ButtonGroupNameHash::iterator it = m_buttonGroups.find(ui_group);
-   if (it == m_buttonGroups.end()) {
-      it = m_buttonGroups.insert(ui_group, unique(ui_group->attributeName(), QLatin1String("QButtonGroup")));
+   ButtonGroupNameHash::iterator iter = m_buttonGroups.find(ui_group);
+
+   if (iter == m_buttonGroups.end()) {
+      iter = m_buttonGroups.insert(ui_group, unique(ui_group->attributeName(), "QButtonGroup"));
    }
-   return it.value();
+
+   return iter.value();
 }
 
 // Find a group by its non-uniqified name
@@ -118,13 +122,13 @@ const DomButtonGroup *Driver::findButtonGroup(const QString &attributeName) cons
 {
    const ButtonGroupNameHash::const_iterator cend = m_buttonGroups.constEnd();
 
-   for (auto it = m_buttonGroups.constBegin(); it != cend; ++it)  {
-      if (it.key()->attributeName() == attributeName) {
-         return it.key();
+   for (auto iter = m_buttonGroups.constBegin(); iter != cend; ++iter)  {
+      if (iter.key()->attributeName() == attributeName) {
+         return iter.key();
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 QString Driver::findOrInsertName(const QString &name)
@@ -140,6 +144,7 @@ QString Driver::normalizedName(const QString &name)
 
       if (c.isLetterOrNumber()) {
          retval.append(c);
+
       } else {
          retval.append('_');
       }
@@ -155,24 +160,26 @@ QString Driver::unique(const QString &instanceName, const QString &className)
 
    if (instanceName.size()) {
       int id = 1;
+
       name = instanceName;
       name = normalizedName(name);
       QString base = name;
 
       while (m_nameRepository.contains(name)) {
          alreadyUsed = true;
-         name = base + QString::number(id++);
+         name = base + QString::number(id);
+         ++id;
       }
 
    } else if (className.size()) {
       name = unique(qtify(className));
    } else {
-      name = unique(QLatin1String("var"));
+      name = unique("var");
    }
 
    if (alreadyUsed && className.size()) {
       fprintf(stderr, "%s: Warning: The name '%s' (%s) is already in use, defaulting to '%s'.\n",
-         qPrintable(m_option.messagePrefix()), qPrintable(instanceName), qPrintable(className), qPrintable(name));
+         csPrintable(m_option.messagePrefix()), csPrintable(instanceName), csPrintable(className), csPrintable(name));
    }
 
    m_nameRepository.insert(name, true);
@@ -207,8 +214,7 @@ QString Driver::qtify(const QString &name)
 
 static bool isAnsiCCharacter(const QChar &c)
 {
-   return (c.toUpper() >= QLatin1Char('A') && c.toUpper() <= QLatin1Char('Z'))
-      || c.isDigit() || c == QLatin1Char('_');
+   return (c.toUpper() >= "A" && c.toUpper() <= "Z") || c.isDigit() || c == '_';
 }
 
 QString Driver::headerFileName() const
@@ -216,7 +222,7 @@ QString Driver::headerFileName() const
    QString name = m_option.outputFile;
 
    if (name.isEmpty()) {
-      name = QLatin1String("ui_"); // ### use ui_ as prefix.
+      name = "ui_";
       name.append(m_option.inputFile);
    }
 
@@ -226,25 +232,29 @@ QString Driver::headerFileName() const
 QString Driver::headerFileName(const QString &fileName)
 {
    if (fileName.isEmpty()) {
-      return headerFileName(QLatin1String("noname"));
+      return headerFileName("noname");
    }
 
    QFileInfo info(fileName);
    QString baseName = info.baseName();
+
    // Transform into a valid C++ identifier
-   if (!baseName.isEmpty() && baseName.at(0).isDigit()) {
-      baseName.prepend(QLatin1Char('_'));
+   if (! baseName.isEmpty() && baseName.at(0).isDigit()) {
+      baseName.prepend('_');
    }
+
    for (int i = 0; i < baseName.size(); ++i) {
       QChar c = baseName.at(i);
-      if (!isAnsiCCharacter(c)) {
+
+      if (! isAnsiCCharacter(c)) {
          // Replace character by its unicode value
          QString hex = QString::number(c.unicode(), 16);
-         baseName.replace(i, 1, QLatin1Char('_') + hex + QLatin1Char('_'));
+         baseName.replace(i, 1, '_' + hex + '_');
          i += hex.size() + 1;
       }
    }
-   return baseName.toUpper() + QLatin1String("_H");
+
+   return baseName.toUpper() + "_H";
 }
 
 bool Driver::printDependencies(const QString &fileName)
@@ -252,8 +262,8 @@ bool Driver::printDependencies(const QString &fileName)
    Q_ASSERT(m_option.dependencies == true);
 
    m_option.inputFile = fileName;
-
    Uic tool(this);
+
    return tool.printDependencies();
 }
 
@@ -274,7 +284,7 @@ bool Driver::uic(const QString &fileName, DomUI *ui, QTextStream *out)
 #ifdef QT_UIC_CPP_GENERATOR
    retval = tool.write(ui);
 #else
-   Q_UNUSED(ui);
+   (void) ui;
    fprintf(stderr, "Uic: option to generate cpp code not compiled in [%s:%d]\n", __FILE__, __LINE__);
 #endif
 
@@ -309,10 +319,10 @@ bool Driver::uic(const QString &fileName, QTextStream *out)
    } else {
 
 #ifdef Q_OS_WIN
-      // As one might also redirect the output to a file on win,
-      // we should not create the textstream with QFile::Text flag.
-      // The redirected file is opened in TextMode and this will
+      // since the user might redirect the output to a file on win, we should not create the
+      // textstream with QFile::Text flag. The redirected file is opened in TextMode and this will
       // result in broken line endings as writing will replace \n again.
+
       m_output = new QTextStream(stdout, QIODevice::WriteOnly);
 #else
       m_output = new QTextStream(stdout, QIODevice::WriteOnly | QFile::Text);
@@ -337,10 +347,10 @@ bool Driver::uic(const QString &fileName, QTextStream *out)
 
 void Driver::reset()
 {
-   Q_ASSERT( m_output == 0);
+   Q_ASSERT( m_output == nullptr);
 
    m_option = Option();
-   m_output = 0;
+   m_output = nullptr;
    m_problems.clear();
 
    QStringList m_problems;
@@ -388,5 +398,3 @@ DomAction *Driver::actionByName(const QString &name) const
 {
    return m_actions.key(name);
 }
-
-QT_END_NAMESPACE

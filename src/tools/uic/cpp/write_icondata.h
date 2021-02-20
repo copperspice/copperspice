@@ -21,12 +21,14 @@
 *
 ***********************************************************************/
 
-#ifndef CPPWRITEICONINITIALIZATION_H
-#define CPPWRITEICONINITIALIZATION_H
+#ifndef CPPWRITEICONDATA_H
+#define CPPWRITEICONDATA_H
 
-#include "treewalker.h"
-#include <QString>
-#include <QTextStream>
+#include <treewalker.h>
+
+#include <qstring.h>
+#include <qtextstream.h>
+#include <qiodevice.h>
 
 class Driver;
 class Uic;
@@ -35,19 +37,19 @@ struct Option;
 
 namespace CPP {
 
-class WriteIconInitialization : public TreeWalker
+class WriteIconData : public TreeWalker
 {
  public:
-   WriteIconInitialization(Uic *uic);
+   WriteIconData(Uic *uic);
 
    void acceptUI(DomUI *node) override;
    void acceptImages(DomImages *images) override;
    void acceptImage(DomImage *image) override;
 
-   static QString iconFromDataFunction();
+   static void writeImage(QTextStream &output, const QString &indent, bool limitXPM_LineLength, const DomImage *image);
+   static void writeImage(QIODevice &output, DomImage *image);
 
  private:
-   Uic *uic;
    Driver *driver;
    QTextStream &output;
    const Option &option;
@@ -55,4 +57,4 @@ class WriteIconInitialization : public TreeWalker
 
 } // namespace CPP
 
-#endif // CPPWRITEICONINITIALIZATION_H
+#endif

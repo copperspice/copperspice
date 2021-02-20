@@ -24,11 +24,10 @@
 #ifndef DATABASEINFO_H
 #define DATABASEINFO_H
 
-#include "treewalker.h"
-#include <QStringList>
-#include <QMap>
+#include <treewalker.h>
 
-QT_BEGIN_NAMESPACE
+#include <qstringlist.h>
+#include <qmap.h>
 
 class Driver;
 
@@ -40,15 +39,15 @@ class DatabaseInfo : public TreeWalker
    void acceptUI(DomUI *node) override;
    void acceptWidget(DomWidget *node) override;
 
-   inline QStringList connections() const {
+   QStringList connections() const {
       return m_connections;
    }
 
-   inline QStringList cursors(const QString &connection) const {
+   QStringList cursors(const QString &connection) const {
       return m_cursors.value(connection);
    }
 
-   inline QStringList fields(const QString &connection) const {
+   QStringList fields(const QString &connection) const {
       return m_fields.value(connection);
    }
 
@@ -59,6 +58,4 @@ class DatabaseInfo : public TreeWalker
    QMap<QString, QStringList> m_fields;
 };
 
-QT_END_NAMESPACE
-
-#endif // DATABASEINFO_H
+#endif

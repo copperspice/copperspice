@@ -21,17 +21,16 @@
 *
 ***********************************************************************/
 
-#include "cppwriteiconinitialization.h"
-#include "cppwriteicondata.h"
-#include "driver.h"
-#include "ui4.h"
-#include "utils.h"
-#include "uic.h"
+#include <write_iconinitialization.h>
 
-#include <QTextStream>
-#include <QString>
+#include <driver.h>
+#include <ui4.h>
+#include <utils.h>
+#include <uic.h>
+#include <write_icondata.h>
 
-QT_BEGIN_NAMESPACE
+#include <qtextstream.h>
+#include <qstring.h>
 
 namespace CPP {
 
@@ -43,7 +42,7 @@ WriteIconInitialization::WriteIconInitialization(Uic *uic)
 
 void WriteIconInitialization::acceptUI(DomUI *node)
 {
-   if (node->elementImages() == 0) {
+   if (node->elementImages() == nullptr) {
       return;
    }
 
@@ -61,12 +60,12 @@ void WriteIconInitialization::acceptUI(DomUI *node)
    output << option.indent << option.indent << "default: return QPixmap();\n";
 
    output << option.indent << "} // switch\n"
-      << option.indent << "} // icon\n\n";
+          << option.indent << "} // icon\n\n";
 }
 
 QString WriteIconInitialization::iconFromDataFunction()
 {
-   return QLatin1String("qt_get_icon");
+   return "qt_get_icon";
 }
 
 void WriteIconInitialization::acceptImages(DomImages *images)
@@ -76,24 +75,24 @@ void WriteIconInitialization::acceptImages(DomImages *images)
 
 void WriteIconInitialization::acceptImage(DomImage *image)
 {
-   QString img = image->attributeName() + QLatin1String("_data");
+   QString img  = image->attributeName() + "_data";
    QString data = image->elementData()->text();
-   QString fmt = image->elementData()->attributeFormat();
+   QString fmt  = image->elementData()->attributeFormat();
 
-   QString imageId = image->attributeName() + QLatin1String("_ID");
-   QString imageData = image->attributeName() + QLatin1String("_data");
+   QString imageId   = image->attributeName() + "_ID";
+   QString imageData = image->attributeName() + "_data";
    QString ind = option.indent + option.indent;
 
    output << ind << "case " << imageId << ": ";
 
-   if (fmt == QLatin1String("XPM.GZ")) {
+   if (fmt == "XPM.GZ") {
       output << "return " << "QPixmap((const char**)" << imageData << ");\n";
+
    } else {
       output << " { QImage img; img.loadFromData(" << imageData << ", sizeof(" << imageData << "), " << fixString(fmt,
             ind) << "); return QPixmap::fromImage(img); }\n";
    }
 }
 
-} // namespace CPP
+} // namespace
 
-QT_END_NAMESPACE

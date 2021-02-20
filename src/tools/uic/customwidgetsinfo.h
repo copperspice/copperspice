@@ -24,11 +24,10 @@
 #ifndef CUSTOMWIDGETSINFO_H
 #define CUSTOMWIDGETSINFO_H
 
-#include "treewalker.h"
-#include <QStringList>
-#include <QMap>
+#include <treewalker.h>
 
-QT_BEGIN_NAMESPACE
+#include <qstringlist.h>
+#include <qmap.h>
 
 class Driver;
 class DomScript;
@@ -43,26 +42,23 @@ class CustomWidgetsInfo : public TreeWalker
    void acceptCustomWidgets(DomCustomWidgets *node) override;
    void acceptCustomWidget(DomCustomWidget *node) override;
 
-   inline QStringList customWidgets() const {
+   QStringList customWidgets() const {
       return m_customWidgets.keys();
    }
 
-   inline bool hasCustomWidget(const QString &name) const {
+   bool hasCustomWidget(const QString &name) const {
       return m_customWidgets.contains(name);
    }
 
-   inline DomCustomWidget *customWidget(const QString &name) const {
+   DomCustomWidget *customWidget(const QString &name) const {
       return m_customWidgets.value(name);
    }
 
    DomScript *customWidgetScript(const QString &name) const;
 
    QString customWidgetAddPageMethod(const QString &name) const;
-
    QString realClassName(const QString &className) const;
-
-   bool extends(const QString &className, const QLatin1String &baseClassName) const;
-
+   bool extends(const QString &className, const QString &baseClassName) const;
    bool isCustomWidgetContainer(const QString &className) const;
 
  private:
@@ -70,6 +66,4 @@ class CustomWidgetsInfo : public TreeWalker
    NameCustomWidgetMap m_customWidgets;
 };
 
-QT_END_NAMESPACE
-
-#endif // CUSTOMWIDGETSINFO_H
+#endif

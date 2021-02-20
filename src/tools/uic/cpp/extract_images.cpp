@@ -21,36 +21,35 @@
 *
 ***********************************************************************/
 
-#include "cppextractimages.h"
-#include "cppwriteicondata.h"
-#include "driver.h"
-#include "ui4.h"
-#include "utils.h"
-#include "uic.h"
+#include <extract_images.h>
 
-#include <QDataStream>
-#include <QTextStream>
-#include <QTextCodec>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
+#include <driver.h>
+#include <ui4.h>
+#include <uic.h>
+#include <utils.h>
+#include <write_icondata.h>
 
-QT_BEGIN_NAMESPACE
+#include <qdatastream.h>
+#include <qtextstream.h>
+#include <qtextcodec.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 
 namespace CPP {
 
 ExtractImages::ExtractImages(const Option &opt)
-   : m_output(0), m_option(opt)
+   : m_output(nullptr), m_option(opt)
 {
 }
 
 void ExtractImages::acceptUI(DomUI *node)
 {
-   if (!m_option.extractImages) {
+   if (! m_option.extractImages) {
       return;
    }
 
-   if (node->elementImages() == 0) {
+   if (node->elementImages() == nullptr) {
       return;
    }
 
@@ -61,7 +60,7 @@ void ExtractImages::acceptUI(DomUI *node)
       f.setFileName(m_option.qrcOutputFile);
 
       if (! f.open(QIODevice::WriteOnly | QFile::Text)) {
-         fprintf(stderr, "%s: Error: Could not create resource file\n", qPrintable(m_option.messagePrefix()));
+         fprintf(stderr, "%s: Error: Could not create resource file\n", csPrintable(m_option.messagePrefix()));
          return;
       }
 
@@ -73,7 +72,7 @@ void ExtractImages::acceptUI(DomUI *node)
          return;
       }
 
-      dir.cd(QLatin1String("images"));
+      dir.cd("images");
       m_imagesDir = dir;
 
       m_output = new QTextStream(&f);
@@ -89,7 +88,7 @@ void ExtractImages::acceptUI(DomUI *node)
 
       f.close();
       delete m_output;
-      m_output = 0;
+      m_output = nullptr;
    }
 }
 
@@ -100,23 +99,25 @@ void ExtractImages::acceptImages(DomImages *images)
 
 void ExtractImages::acceptImage(DomImage *image)
 {
-   QString format = image->elementData()->attributeFormat();
-   QString extension = format.left(format.indexOf(QLatin1Char('.'))).toLower();
-   QString fname = m_imagesDir.absoluteFilePath(image->attributeName() + QLatin1Char('.') + extension);
+   QString format    = image->elementData()->attributeFormat();
+   QString extension = format.left(format.indexOf('.')).toLower();
+   QString fname     = m_imagesDir.absoluteFilePath(image->attributeName() + '.' + extension);
 
-   *m_output << "        <file>images/" << image->attributeName() << QLatin1Char('.') + extension << "</file>\n";
+   *m_output << "        <file>images/" << image->attributeName() << '.' + extension << "</file>\n";
 
    QFile f;
    f.setFileName(fname);
-   const bool isXPM_GZ = format == QLatin1String("XPM.GZ");
+   const bool isXPM_GZ = (format == "XPM.GZ");
+
    QIODevice::OpenMode openMode = QIODevice::WriteOnly;
+
    if (isXPM_GZ) {
       openMode |= QIODevice::Text;
    }
-   if (!f.open(openMode)) {
+
+   if (! f.open(openMode)) {
       fprintf(stderr, "%s: Error: Could not create image file %s: %s",
-         qPrintable(m_option.messagePrefix()),
-         qPrintable(fname), qPrintable(f.errorString()));
+         csPrintable(m_option.messagePrefix()), csPrintable(fname), csPrintable(f.errorString()));
       return;
    }
 
@@ -126,6 +127,7 @@ void ExtractImages::acceptImage(DomImage *image)
 
       CPP::WriteIconData::writeImage(*imageOut, QString(), m_option.limitXPM_LineLength, image);
       delete imageOut;
+
    } else {
       CPP::WriteIconData::writeImage(f, image);
    }
@@ -134,5 +136,3 @@ void ExtractImages::acceptImage(DomImage *image)
 }
 
 } // namespace CPP
-
-QT_END_NAMESPACE
