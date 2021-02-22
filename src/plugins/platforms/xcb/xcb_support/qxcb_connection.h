@@ -673,8 +673,12 @@ class QXcbConnection : public QObject
 
 #ifndef QT_NO_TABLETEVENT
    struct TabletData {
-      TabletData() : deviceId(0), pointerType(QTabletEvent::UnknownPointer),
-         tool(QTabletEvent::Stylus), buttons(0), serialId(0), inProximity(false) { }
+      TabletData()
+         : deviceId(0), pointerType(QTabletEvent::UnknownPointer),
+           tool(QTabletEvent::Stylus), buttons(Qt::EmptyFlag), serialId(0), inProximity(false)
+      {
+      }
+
       int deviceId;
       QTabletEvent::PointerType pointerType;
       QTabletEvent::TabletDevice tool;
@@ -697,7 +701,12 @@ class QXcbConnection : public QObject
 #endif
 
    struct ScrollingDevice {
-      ScrollingDevice() : deviceId(0), verticalIndex(0), horizontalIndex(0), orientations(0), legacyOrientations(0) { }
+      ScrollingDevice()
+         : deviceId(0), verticalIndex(0), horizontalIndex(0),
+           orientations(Qt::EmptyFlag), legacyOrientations(Qt::EmptyFlag)
+      {
+      }
+
       int deviceId;
       int verticalIndex, horizontalIndex;
       double verticalIncrement, horizontalIncrement;

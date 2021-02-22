@@ -475,7 +475,7 @@ QScriptClass::QueryFlags QScriptDeclarativeClass::queryProperty(Object *object,
    Q_UNUSED(object);
    Q_UNUSED(name);
    Q_UNUSED(flags);
-   return 0;
+   return Qt::EmptyFlag;
 }
 
 QScriptDeclarativeClass::Value QScriptDeclarativeClass::property(Object *object, const Identifier &name)
@@ -496,7 +496,7 @@ QScriptValue::PropertyFlags QScriptDeclarativeClass::propertyFlags(Object *objec
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
-   return 0;
+   return Qt::EmptyFlag;
 }
 
 QScriptDeclarativeClass::Value QScriptDeclarativeClass::call(Object *object, QScriptContext *ctxt)

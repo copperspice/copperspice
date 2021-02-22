@@ -28,7 +28,7 @@
 #include <qdebug.h>
 
 QWindowsGuiEventDispatcher::QWindowsGuiEventDispatcher(QObject *parent) :
-    QEventDispatcherWin32(parent), m_flags(0)
+    QEventDispatcherWin32(parent), m_flags(Qt::EmptyFlag)
 {
     setObjectName("QWindowsGuiEventDispatcher");
     createInternalHwnd();                            // Do not delay registering timers, etc. for QtMfc.

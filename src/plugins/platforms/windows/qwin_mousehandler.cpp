@@ -171,7 +171,7 @@ QTouchDevice *QWindowsMouseHandler::ensureTouchDevice()
 
 Qt::MouseButtons QWindowsMouseHandler::queryMouseButtons()
 {
-   Qt::MouseButtons result = 0;
+   Qt::MouseButtons result = Qt::EmptyFlag;
    const bool mouseSwapped = GetSystemMetrics(SM_SWAPBUTTON);
 
    if (GetAsyncKeyState(VK_LBUTTON) < 0) {
@@ -529,7 +529,7 @@ bool QWindowsMouseHandler::translateTouchEvent(QWindow *window, HWND,
    memset(winTouchInputs.data(), 0, sizeof(TOUCHINPUT) * size_t(winTouchPointCount));
 
    QTouchPointList touchPoints;
-   Qt::TouchPointStates allStates = 0;
+   Qt::TouchPointStates allStates = Qt::EmptyFlag;
 
    QWindowsContext::user32dll.getTouchInputInfo(reinterpret_cast<HANDLE>(msg.lParam),
       UINT(msg.wParam), winTouchInputs.data(), sizeof(TOUCHINPUT));

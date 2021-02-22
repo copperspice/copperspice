@@ -411,7 +411,7 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
 
    } else {
       int nrDevices = 0;
-      QTouchDevice::Capabilities caps = 0;
+      QTouchDevice::Capabilities caps = Qt::EmptyFlag;
       dev = new XInput2TouchDeviceData;
       dev->xiDeviceInfo = XIQueryDevice(static_cast<Display *>(m_xlib_display), id, &nrDevices);
       if (nrDevices <= 0) {

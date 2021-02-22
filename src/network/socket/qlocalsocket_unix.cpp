@@ -43,7 +43,7 @@
 
 QLocalSocketPrivate::QLocalSocketPrivate()
    : QIODevicePrivate(), delayConnect(nullptr), connectTimer(nullptr), connectingSocket(-1),
-      connectingOpenMode(nullptr), state(QLocalSocket::UnconnectedState)
+      connectingOpenMode(Qt::EmptyFlag), state(QLocalSocket::UnconnectedState)
 {
 }
 
@@ -334,7 +334,7 @@ void QLocalSocketPrivate::_q_connectToSocket()
 
    connectingSocket = -1;
    connectingName.clear();
-   connectingOpenMode = nullptr;
+   connectingOpenMode = Qt::EmptyFlag;
 }
 
 bool QLocalSocket::setSocketDescriptor(qintptr socketDescriptor, LocalSocketState socketState, OpenMode openMode)
@@ -432,7 +432,7 @@ void QLocalSocket::close()
    }
    d->connectingSocket = -1;
    d->connectingName.clear();
-   d->connectingOpenMode = nullptr;
+   d->connectingOpenMode = Qt::EmptyFlag;
    d->serverName.clear();
    d->fullServerName.clear();
    QIODevice::close();

@@ -57,7 +57,9 @@
 class QGLDefaultExtensions
 {
  public:
-   QGLDefaultExtensions() : extensions(0) {
+   QGLDefaultExtensions()
+      : extensions(Qt::EmptyFlag)
+   {
       QGLTemporaryContext tempContext;
       Q_ASSERT(QOpenGLContext::currentContext());
       QOpenGLExtensions *ext = qgl_extensions();

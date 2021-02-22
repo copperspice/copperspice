@@ -39,7 +39,7 @@ class QMediaServiceProviderHintPrivate : public QSharedData
 {
  public:
    QMediaServiceProviderHintPrivate(QMediaServiceProviderHint::Type type)
-      : type(type), cameraPosition(QCamera::UnspecifiedPosition), features(0) {
+      : type(type), cameraPosition(QCamera::UnspecifiedPosition), features(Qt::EmptyFlag) {
    }
 
    QMediaServiceProviderHintPrivate(const QMediaServiceProviderHintPrivate &other)
@@ -603,7 +603,7 @@ QMediaServiceProviderHint::Features QMediaServiceProvider::supportedFeatures(con
 {
    (void) service;
 
-   return QMediaServiceProviderHint::Features(0);
+   return Qt::EmptyFlag;
 }
 
 QMultimedia::SupportEstimate QMediaServiceProvider::hasSupport(const QString &serviceType,

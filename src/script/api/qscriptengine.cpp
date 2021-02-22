@@ -1884,9 +1884,9 @@ QScriptValue::PropertyFlags QScriptEnginePrivate::propertyFlags(JSC::ExecState *
          JSC::JSValue proto = object->prototype();
          return propertyFlags(exec, proto, id, mode);
       }
-      return 0;
+      return Qt::EmptyFlag;
    }
-   QScriptValue::PropertyFlags result = 0;
+   QScriptValue::PropertyFlags result = Qt::EmptyFlag;
    if (attribs & JSC::ReadOnly) {
       result |= QScriptValue::ReadOnly;
    }

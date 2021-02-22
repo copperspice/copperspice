@@ -1277,7 +1277,7 @@ QScriptValue::PropertyFlags QScriptValue::propertyFlags(const QString &name,
 {
    Q_D(const QScriptValue);
    if (!d || !d->isObject()) {
-      return 0;
+      return Qt::EmptyFlag;
    }
    QScript::APIShim shim(d->engine);
    JSC::ExecState *exec = d->engine->currentFrame;
@@ -1290,7 +1290,7 @@ QScriptValue::PropertyFlags QScriptValue::propertyFlags(const QScriptString &nam
 {
    Q_D(const QScriptValue);
    if (!d || !d->isObject() || !QScriptStringPrivate::isValid(name)) {
-      return 0;
+      return Qt::EmptyFlag;
    }
    return d->propertyFlags(name.d_ptr->identifier, mode);
 }

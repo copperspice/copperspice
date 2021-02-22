@@ -577,7 +577,7 @@ static const Qt::KeyboardModifiers ModsTbl[] = {
 
 Qt::KeyboardModifiers QXcbKeyboard::translateModifiers(int s) const
 {
-   Qt::KeyboardModifiers ret = 0;
+   Qt::KeyboardModifiers ret = Qt::EmptyFlag;
    if (s & XCB_MOD_MASK_SHIFT) {
       ret |= Qt::ShiftModifier;
    }

@@ -313,7 +313,7 @@ class QScriptEnginePrivate
    //
    void markQObjectData(JSC::MarkStack &);
    JSC::JSValue newQObject(QObject *object, QScriptEngine::ValueOwnership ownership = QScriptEngine::QtOwnership,
-      const QScriptEngine:: QObjectWrapOptions &options = 0);
+      const QScriptEngine:: QObjectWrapOptions &options = Qt::EmptyFlag);
 
    JSC::JSValue newQMetaObject(const QMetaObject *metaObject, JSC::JSValue ctor);
 

@@ -203,7 +203,7 @@ QGLFunctions::OpenGLFeatures QGLFunctions::openGLFeatures() const
 {
    QGLFunctionsPrivateEx *d = static_cast<QGLFunctionsPrivateEx *>(d_ptr);
    if (!d) {
-      return 0;
+      return Qt::EmptyFlag;
    }
    if (d->m_features == -1) {
       d->m_features = qt_gl_resolve_features();

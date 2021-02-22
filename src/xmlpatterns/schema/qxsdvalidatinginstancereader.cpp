@@ -489,7 +489,8 @@ bool XsdValidatingInstanceReader::validateElement(const XsdElement::Ptr &declara
       }
 
       // 4.2
-      SchemaType::DerivationConstraints constraints = 0;
+      SchemaType::DerivationConstraints constraints = Qt::EmptyFlag;
+
       if (declaration->disallowedSubstitutions() & NamedSchemaComponent::ExtensionConstraint) {
          constraints |= SchemaType::ExtensionConstraint;
       }

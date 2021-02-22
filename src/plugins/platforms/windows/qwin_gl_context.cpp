@@ -955,10 +955,8 @@ static inline QOpenGLContextData createDummyWindowOpenGLContextData()
     \ingroup qt-lighthouse-win
 */
 
-QWindowsOpenGLContextFormat::QWindowsOpenGLContextFormat() :
-   profile(QSurfaceFormat::NoProfile),
-   version(0),
-   options(0)
+QWindowsOpenGLContextFormat::QWindowsOpenGLContextFormat()
+   : profile(QSurfaceFormat::NoProfile), version(0), options(Qt::EmptyFlag)
 {
 }
 

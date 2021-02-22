@@ -40,7 +40,7 @@ class QSvgWidgetPrivate : public QWidgetPrivate
 };
 
 QSvgWidget::QSvgWidget(QWidget *parent)
-   : QWidget(*new QSvgWidgetPrivate, parent, 0)
+   : QWidget(*new QSvgWidgetPrivate, parent, Qt::EmptyFlag)
 {
    d_func()->renderer = new QSvgRenderer(this);
    QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()),
@@ -49,7 +49,7 @@ QSvgWidget::QSvgWidget(QWidget *parent)
 
 
 QSvgWidget::QSvgWidget(const QString &file, QWidget *parent)
-   : QWidget(*new QSvgWidgetPrivate, parent, 0)
+   : QWidget(*new QSvgWidgetPrivate, parent, Qt::EmptyFlag)
 {
    d_func()->renderer = new QSvgRenderer(file, this);
    QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()),

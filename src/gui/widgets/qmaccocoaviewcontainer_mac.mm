@@ -73,7 +73,7 @@ QMacCocoaViewContainerPrivate::~QMacCocoaViewContainerPrivate()
 }
 
 QMacCocoaViewContainer::QMacCocoaViewContainer(NSView *view, QWidget *parent)
-   : QWidget(*new QMacCocoaViewContainerPrivate, parent, 0)
+   : QWidget(*new QMacCocoaViewContainerPrivate, parent, Qt::EmptyFlag)
 {
     if (view) {
         setCocoaView(view);

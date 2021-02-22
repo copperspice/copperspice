@@ -54,7 +54,7 @@ class QWindowsTheme : public QPlatformTheme
 
    QPixmap standardPixmap(StandardPixmap sp, const QSizeF &size) const override;
    QPixmap fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size,
-      QPlatformTheme::IconOptions iconOptions = 0) const override;
+      QPlatformTheme::IconOptions iconOptions = Qt::EmptyFlag) const override;
 
    void windowsThemeChanged(QWindow *window);
    void displayChanged() {

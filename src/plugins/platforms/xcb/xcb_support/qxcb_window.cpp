@@ -1101,7 +1101,7 @@ static void setMotifWmHints(QXcbConnection *c, xcb_window_t window, const QtMoti
 
 QXcbWindow::NetWmStates QXcbWindow::netWmStates()
 {
-   NetWmStates result(0);
+   NetWmStates result(Qt::EmptyFlag);
 
    xcb_get_property_cookie_t get_cookie =
       xcb_get_property_unchecked(xcb_connection(), 0, m_window, atom(QXcbAtom::_NET_WM_STATE),
@@ -1223,7 +1223,7 @@ void QXcbWindow::setWindowFlags(Qt::WindowFlags flags)
 
    xcb_change_window_attributes(xcb_connection(), xcb_window(), mask, values);
 
-   QXcbWindowFunctions::WmWindowTypes wmWindowTypes = 0;
+   QXcbWindowFunctions::WmWindowTypes wmWindowTypes = Qt::EmptyFlag;
 
    QString id = QString::fromUtf8(wm_window_type_property_id);
 
@@ -1451,7 +1451,7 @@ void QXcbWindow::updateMotifWmHintsBeforeMap()
 
 void QXcbWindow::updateNetWmStateBeforeMap()
 {
-   NetWmStates states(0);
+   NetWmStates states(Qt::EmptyFlag);
 
    const Qt::WindowFlags flags = window()->flags();
    if (flags & Qt::WindowStaysOnTopHint) {
@@ -1833,7 +1833,7 @@ uint QXcbWindow::visualIdStatic(QWindow *window)
 
 QXcbWindowFunctions::WmWindowTypes QXcbWindow::wmWindowTypes() const
 {
-   QXcbWindowFunctions::WmWindowTypes result(0);
+   QXcbWindowFunctions::WmWindowTypes result(Qt::EmptyFlag);
 
    xcb_get_property_cookie_t get_cookie =
       xcb_get_property_unchecked(xcb_connection(), 0, m_window, atom(QXcbAtom::_NET_WM_WINDOW_TYPE),

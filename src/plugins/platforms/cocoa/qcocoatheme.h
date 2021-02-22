@@ -49,7 +49,8 @@ class QCocoaTheme : public QPlatformTheme
    const QPalette *palette(Palette type = SystemPalette) const override;
    const QFont *font(Font type = SystemFont) const override;
    QPixmap standardPixmap(StandardPixmap sp, const QSizeF &size) const override;
-   QPixmap fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size, QPlatformTheme::IconOptions options = 0) const override;
+   QPixmap fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size,
+            QPlatformTheme::IconOptions options = Qt::EmptyFlag) const override;
 
    QVariant themeHint(ThemeHint hint) const override;
    QString standardButtonText(int button) const override;

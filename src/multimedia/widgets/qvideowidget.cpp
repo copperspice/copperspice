@@ -556,8 +556,7 @@ void QVideoWidgetPrivate::_q_dimensionsChanged()
 }
 
 QVideoWidget::QVideoWidget(QWidget *parent)
-   : QWidget(parent, 0)
-   , d_ptr(new QVideoWidgetPrivate)
+   : QWidget(parent, Qt::EmptyFlag), d_ptr(new QVideoWidgetPrivate)
 {
    d_ptr->q_ptr = this;
 }
@@ -566,8 +565,7 @@ QVideoWidget::QVideoWidget(QWidget *parent)
   \internal
 */
 QVideoWidget::QVideoWidget(QVideoWidgetPrivate &dd, QWidget *parent)
-   : QWidget(parent, 0)
-   , d_ptr(&dd)
+   : QWidget(parent, Qt::EmptyFlag), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 

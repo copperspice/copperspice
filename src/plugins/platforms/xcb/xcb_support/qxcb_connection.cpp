@@ -578,7 +578,7 @@ QXcbConnection::QXcbConnection(QXcbNativeInterface *nativeInterface, bool canGra
    , has_randr_extension(false)
    , has_input_shape(false)
    , has_xkb(false)
-   , m_buttons(0)
+   , m_buttons(Qt::EmptyFlag)
    , m_focusWindow(0)
    , m_mouseGrabber(0)
    , m_mousePressWindow(0)
@@ -1065,7 +1065,7 @@ void QXcbConnection::handleXcbError(xcb_generic_error_t *error)
 
 static Qt::MouseButtons translateMouseButtons(int s)
 {
-   Qt::MouseButtons ret = 0;
+   Qt::MouseButtons ret = Qt::EmptyFlag;
 
    if (s & XCB_BUTTON_MASK_1) {
       ret |= Qt::LeftButton;

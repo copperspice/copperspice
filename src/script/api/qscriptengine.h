@@ -164,10 +164,10 @@ class Q_SCRIPT_EXPORT QScriptEngine : public QObject
    QScriptValue newActivationObject();
 
    QScriptValue newQObject(QObject *object, ValueOwnership ownership = QtOwnership,
-      const QObjectWrapOptions &options = 0);
+      const QObjectWrapOptions &options = Qt::EmptyFlag);
+
    QScriptValue newQObject(const QScriptValue &scriptObject, QObject *qtObject,
-      ValueOwnership ownership = QtOwnership,
-      const QObjectWrapOptions &options = 0);
+      ValueOwnership ownership = QtOwnership, const QObjectWrapOptions &options = Qt::EmptyFlag);
 
    QScriptValue newQMetaObject(const QMetaObject *metaObject, const QScriptValue &ctor = QScriptValue());
 
