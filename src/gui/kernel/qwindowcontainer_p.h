@@ -34,7 +34,7 @@ class Q_GUI_EXPORT QWindowContainer : public QWidget
    Q_DECLARE_PRIVATE(QWindowContainer)
 
  public:
-   explicit QWindowContainer(QWindow *embeddedWindow, QWidget *parent = 0, Qt::WindowFlags f = 0);
+   explicit QWindowContainer(QWindow *embeddedWindow, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::EmptyFlag);
    ~QWindowContainer();
    QWindow *containedWindow() const;
 

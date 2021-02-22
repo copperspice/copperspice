@@ -127,7 +127,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    void process_cmdline();
 
    // modality
-   virtual bool isWindowBlocked(QWindow *window, QWindow **blockingWindow = 0) const;
+   virtual bool isWindowBlocked(QWindow *window, QWindow **blockingWindow = nullptr) const;
 
    QPixmap getPixmapCursor(Qt::CursorShape cshape);
 
@@ -297,7 +297,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
 
    static bool isBlockedByModal(QWidget *widget);
    static bool modalState();
-   static bool tryModalHelper(QWidget *widget, QWidget **rettop = 0);
+   static bool tryModalHelper(QWidget *widget, QWidget **rettop = nullptr);
 
    // style
    static bool usesNativeStyle() {
@@ -423,7 +423,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
          return nativeParent->windowHandle();
       }
 
-      return 0;
+      return nullptr;
    }
 
 #ifdef Q_OS_WIN
@@ -434,7 +434,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
          }
       }
 
-      return 0;
+      return nullptr;
    }
 #endif
 
@@ -460,7 +460,6 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
       const QList<QTouchEvent::TouchPoint> &touchPoints, ulong timestamp);
 
    static void translateTouchCancel(QTouchDevice *device, ulong timestamp);
-
 
  protected:
    virtual void notifyThemeChanged();

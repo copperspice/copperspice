@@ -44,12 +44,12 @@ class Q_GUI_EXPORT QWindowPrivate
    };
 
    QWindowPrivate()
-      : surfaceType(QWindow::RasterSurface), windowFlags(Qt::Window), parentWindow(0), platformWindow(0)
+      : surfaceType(QWindow::RasterSurface), windowFlags(Qt::Window), parentWindow(nullptr), platformWindow(nullptr)
       , visible(false), visibilityOnDestroy(false), exposed(false), windowState(Qt::WindowNoState)
       , visibility(QWindow::Hidden), resizeEventPending(true), receivedExpose(false), positionPolicy(WindowFrameExclusive)
       , positionAutomatic(true), contentOrientation(Qt::PrimaryOrientation), opacity(qreal(1.0))
       , minimumSize(0, 0), maximumSize(QWINDOWSIZE_MAX, QWINDOWSIZE_MAX), modality(Qt::NonModal)
-      , blockedByModalWindow(false), updateRequestPending(false), updateTimer(0), transientParent(0), topLevelScreen(0)
+      , blockedByModalWindow(false), updateRequestPending(false), updateTimer(0), transientParent(nullptr), topLevelScreen(nullptr)
 
 #ifndef QT_NO_CURSOR
       , cursor(Qt::ArrowCursor)

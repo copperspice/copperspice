@@ -73,7 +73,7 @@ class QDragPrivate
  public:
 
    QDragPrivate()
-      : source(0), target(0), data(0)
+      : source(nullptr), target(nullptr), data(nullptr)
    { }
 
    virtual ~QDragPrivate() {};

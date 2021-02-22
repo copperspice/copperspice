@@ -58,7 +58,7 @@ void QActionGroupPrivate::_q_actionChanged()
 {
    Q_Q(QActionGroup);
    QAction *action = qobject_cast<QAction *>(q->sender());
-   Q_ASSERT_X(action != 0, "QWidgetGroup::_q_actionChanged", "internal error");
+   Q_ASSERT_X(action != nullptr, "QWidgetGroup::_q_actionChanged", "internal error");
 
    if (exclusive) {
       if (action->isChecked()) {
@@ -68,8 +68,9 @@ void QActionGroupPrivate::_q_actionChanged()
             }
             current = action;
          }
+
       } else if (action == current) {
-         current = 0;
+         current = nullptr;
       }
    }
 }
@@ -77,16 +78,20 @@ void QActionGroupPrivate::_q_actionChanged()
 void QActionGroupPrivate::_q_actionTriggered()
 {
    Q_Q(QActionGroup);
+
    QAction *action = qobject_cast<QAction *>(q->sender());
-   Q_ASSERT_X(action != 0, "QWidgetGroup::_q_actionTriggered", "internal error");
+   Q_ASSERT_X(action != nullptr, "QWidgetGroup::_q_actionTriggered", "internal error");
+
    emit q->triggered(action);
 }
 
 void QActionGroupPrivate::_q_actionHovered()
 {
    Q_Q(QActionGroup);
+
    QAction *action = qobject_cast<QAction *>(q->sender());
-   Q_ASSERT_X(action != 0, "QWidgetGroup::_q_actionHovered", "internal error");
+   Q_ASSERT_X(action != nullptr, "QWidgetGroup::_q_actionHovered", "internal error");
+
    emit q->hovered(action);
 }
 
@@ -182,12 +187,13 @@ void QActionGroup::removeAction(QAction *action)
 
    if (d->actions.removeAll(action)) {
       if (action == d->current) {
-         d->current = 0;
+         d->current = nullptr;
       }
+
       QObject::disconnect(action, SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
       QObject::disconnect(action, SIGNAL(changed()), this, SLOT(_q_actionChanged()));
       QObject::disconnect(action, SIGNAL(hovered()), this, SLOT(_q_actionHovered()));
-      action->d_func()->group = 0;
+      action->d_func()->group = nullptr;
    }
 }
 

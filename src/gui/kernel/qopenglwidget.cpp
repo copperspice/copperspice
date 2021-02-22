@@ -66,23 +66,6 @@ class QOpenGLWidgetPrivate : public QWidgetPrivate
     Q_DECLARE_PUBLIC(QOpenGLWidget)
 
 public:
-    QOpenGLWidgetPrivate()
-        : context(0),
-          fbo(0),
-          resolvedFbo(0),
-          surface(0),
-          initialized(false),
-          fakeHidden(false),
-          inBackingStorePaint(false),
-          hasBeenComposed(false),
-          flushPending(false),
-          paintDevice(0),
-          updateBehavior(QOpenGLWidget::NoPartialUpdate),
-          requestedSamples(0),
-          inPaintGL(false)
-    {
-        requestedFormat = QSurfaceFormat::defaultFormat();
-    }
 
     void reset();
     void recreateFbo();
@@ -118,6 +101,15 @@ public:
     QOpenGLWidget::UpdateBehavior updateBehavior;
     int requestedSamples;
     bool inPaintGL;
+   QOpenGLWidgetPrivate()
+      : context(nullptr), fbo(nullptr), resolvedFbo(nullptr), surface(nullptr),
+        initialized(false), fakeHidden(false), inBackingStorePaint(false),
+        hasBeenComposed(false), flushPending(false),
+        paintDevice(nullptr), updateBehavior(QOpenGLWidget::NoPartialUpdate),
+        requestedSamples(0), inPaintGL(false)
+   {
+      requestedFormat = QSurfaceFormat::defaultFormat();
+   }
 };
 
 void QOpenGLWidgetPaintDevicePrivate::beginPaint()
@@ -167,28 +159,29 @@ GLuint QOpenGLWidgetPrivate::textureId() const
 void QOpenGLWidgetPrivate::reset()
 {
     Q_Q(QOpenGLWidget);
+   delete paintDevice;
+   paintDevice = nullptr;
 
+   delete fbo;
+   fbo = nullptr;
+
+   delete resolvedFbo;
+   resolvedFbo = nullptr;
     // Destroy the OpenGL resources first. These need the context to be current.
     if (initialized)
         q->makeCurrent();
 
-    delete paintDevice;
-    paintDevice = 0;
-    delete fbo;
-    fbo = 0;
-    delete resolvedFbo;
-    resolvedFbo = 0;
+   delete context;
+   context = nullptr;
 
+   delete surface;
+   surface = nullptr;
     if (initialized)
         q->doneCurrent();
 
     // Delete the context first, then the surface. Slots connected to
     // the context's aboutToBeDestroyed() may still call makeCurrent()
     // to perform some cleanup.
-    delete context;
-    context = 0;
-    delete surface;
-    surface = 0;
     initialized = fakeHidden = inBackingStorePaint = false;
 }
 
@@ -199,11 +192,11 @@ void QOpenGLWidgetPrivate::recreateFbo()
     emit q->aboutToResize();
 
     context->makeCurrent(surface);
+   delete fbo;
+   fbo = nullptr;
 
-    delete fbo;
-    fbo = 0;
-    delete resolvedFbo;
-    resolvedFbo = 0;
+   delete resolvedFbo;
+   resolvedFbo = nullptr;
 
     int samples = requestedSamples;
     QOpenGLExtensions *extfuncs = static_cast<QOpenGLExtensions *>(context->functions());
@@ -737,8 +730,8 @@ int QOpenGLWidget::metric(QPaintDevice::PaintDeviceMetric metric) const
         return QWidget::metric(metric);
 
     QWidget *tlw = window();
-    QWindow *window = tlw ? tlw->windowHandle() : 0;
-    QScreen *screen = tlw && tlw->windowHandle() ? tlw->windowHandle()->screen() : 0;
+    QWindow *window = tlw ? tlw->windowHandle() : nullptr;
+    QScreen *screen = tlw && tlw->windowHandle() ? tlw->windowHandle()->screen() : nullptr;
     if (!screen && QGuiApplication::primaryScreen())
         screen = QGuiApplication::primaryScreen();
 
@@ -825,7 +818,7 @@ QPaintEngine *QOpenGLWidget::paintEngine() const
         return QWidget::paintEngine();
 
     if (!d->initialized)
-        return 0;
+      return nullptr;
 
     return d->paintDevice->paintEngine();
 }

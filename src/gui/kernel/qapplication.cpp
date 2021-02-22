@@ -281,7 +281,7 @@ static void initFontUnlocked()
 static inline void clearFontUnlocked()
 {
    delete QGuiApplicationPrivate::app_font;
-   QGuiApplicationPrivate::app_font = 0;
+   QGuiApplicationPrivate::app_font = nullptr;
 }
 
 static QString get_style_class_name()
@@ -457,7 +457,7 @@ QApplication::~QApplication()
    QApplicationPrivate::is_app_running = false;
 
    delete QWidgetPrivate::mapper;
-   QWidgetPrivate::mapper = 0;
+   QWidgetPrivate::mapper = nullptr;
 
    // delete all widgets
    if (QWidgetPrivate::allWidgets) {
@@ -522,16 +522,16 @@ QApplication::~QApplication()
 #endif
 
    d->eventDispatcher->closingDown();
-   d->eventDispatcher = 0;
+   d->eventDispatcher = nullptr;
 
 #ifndef QT_NO_CLIPBOARD
    delete QGuiApplicationPrivate::qt_clipboard;
-   QGuiApplicationPrivate::qt_clipboard = 0;
+   QGuiApplicationPrivate::qt_clipboard = nullptr;
 #endif
 
 #ifndef QT_NO_SESSIONMANAGER
    delete d->session_manager;
-   d->session_manager = 0;
+   d->session_manager = nullptr;
 #endif
 
    clearPalette();
@@ -542,16 +542,16 @@ QApplication::~QApplication()
 #endif
 
    delete QGuiApplicationPrivate::app_icon;
-   QGuiApplicationPrivate::app_icon = 0;
+   QGuiApplicationPrivate::app_icon = nullptr;
 
    delete QGuiApplicationPrivate::platform_name;
-   QGuiApplicationPrivate::platform_name = 0;
+   QGuiApplicationPrivate::platform_name = nullptr;
 
    delete QGuiApplicationPrivate::displayName;
-   QGuiApplicationPrivate::displayName = 0;
+   QGuiApplicationPrivate::displayName = nullptr;
 
    delete QGuiApplicationPrivate::m_inputDeviceManager;
-   QGuiApplicationPrivate::m_inputDeviceManager = 0;
+   QGuiApplicationPrivate::m_inputDeviceManager = nullptr;
 }
 
 void QApplication::setApplicationDisplayName(const QString &name)
@@ -630,17 +630,17 @@ QApplicationPrivate::~QApplicationPrivate()
 #ifndef QT_NO_OPENGL
    if (ownGlobalShareContext) {
       delete qt_gl_global_share_context();
-      qt_gl_set_global_share_context(0);
+      qt_gl_set_global_share_context(nullptr);
    }
 #endif
 
    platform_integration->destroy();
 
    delete platform_theme;
-   platform_theme = 0;
+   platform_theme = nullptr;
 
    delete platform_integration;
-   platform_integration = 0;
+   platform_integration = nullptr;
 
    delete m_gammaTables.load();
    window_list.clear();
@@ -668,7 +668,7 @@ void QGuiApplicationPrivate::showModalWindow(QWindow *modal)
          self->modalWindowList.removeFirst();
          QEvent e(QEvent::Leave);
          QGuiApplication::sendEvent(currentMouseWindow, &e);
-         currentMouseWindow = 0;
+         currentMouseWindow = nullptr;
          self->modalWindowList.prepend(modal);
       }
    }
@@ -712,9 +712,9 @@ QObject *QApplication::focusObject()
    if (focusWindow()) {
       return focusWindow()->focusObject();
    }
-   return 0;
-}
 
+   return nullptr;
+}
 
 QWindowList QApplication::allWindows()
 {
@@ -742,7 +742,7 @@ QWindowList QApplication::topLevelWindows()
 QScreen *QApplication::primaryScreen()
 {
    if (QGuiApplicationPrivate::screen_list.isEmpty()) {
-      return 0;
+      return nullptr;
    }
    return QGuiApplicationPrivate::screen_list.at(0);
 }
@@ -811,7 +811,7 @@ bool QApplication::event(QEvent *e)
 #endif
    } else if (e->type() == QEvent::Timer) {
       QTimerEvent *te = static_cast<QTimerEvent *>(e);
-      Q_ASSERT(te != 0);
+      Q_ASSERT(te != nullptr);
       if (te->timerId() == d->toolTipWakeUp.timerId()) {
          d->toolTipWakeUp.stop();
          if (d->toolTipWidget) {
@@ -823,14 +823,14 @@ bool QApplication::event(QEvent *e)
             while (w && !showToolTip) {
                showToolTip = w->isActiveWindow();
                w = w->parentWidget();
-               w = w ? w->window() : 0;
+               w = w ? w->window() : nullptr;
             }
             if (showToolTip) {
                QHelpEvent e(QEvent::ToolTip, d->toolTipPos, d->toolTipGlobalPos);
                QApplication::sendEvent(d->toolTipWidget, &e);
                if (e.isAccepted()) {
                   QStyle *s = d->toolTipWidget->style();
-                  int sleepDelay = s->styleHint(QStyle::SH_ToolTip_FallAsleepDelay, 0, d->toolTipWidget, 0);
+                  int sleepDelay = s->styleHint(QStyle::SH_ToolTip_FallAsleepDelay, nullptr, d->toolTipWidget, nullptr);
                   d->toolTipFallAsleep.start(sleepDelay, this);
                }
             }
@@ -941,7 +941,7 @@ static void init_platform(const QString &pluginArgument, const QString &platform
       // display the message box unless it is a console application or debug build showing an assert box
 
       if (! GetConsoleWindow()) {
-         MessageBox(0, &fatalMessage.toStdWString()[0],
+         MessageBox(nullptr, &fatalMessage.toStdWString()[0],
             &QCoreApplication::applicationName().toStdWString()[0], MB_OK | MB_ICONERROR);
       }
 #endif
@@ -1133,7 +1133,7 @@ void QGuiApplicationPrivate::createPlatformIntegration()
    }
 
    if (j < argc) {
-      argv[j] = 0;
+      argv[j] = nullptr;
       argc = j;
    }
 
@@ -1277,7 +1277,7 @@ void QGuiApplicationPrivate::init()
    }
 
    if (j < argc) {
-      argv[j] = 0;
+      argv[j] = nullptr;
       argc = j;
    }
 
@@ -1290,7 +1290,7 @@ void QGuiApplicationPrivate::init()
       }
    }
 
-   if (platform_integration == 0) {
+   if (platform_integration == nullptr) {
       createPlatformIntegration();
    }
 
@@ -1363,7 +1363,7 @@ Qt::KeyboardModifiers QApplication::keyboardModifiers()
 
 Qt::KeyboardModifiers QApplication::queryKeyboardModifiers()
 {
-   CHECK_QAPP_INSTANCE(Qt::KeyboardModifiers(0))
+   CHECK_QAPP_INSTANCE(Qt::KeyboardModifiers(Qt::EmptyFlag))
    QPlatformIntegration *pi = QGuiApplicationPrivate::platformIntegration();
 
    return pi->queryKeyboardModifiers();
@@ -1574,7 +1574,7 @@ void QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mo
             }
          } else if (currentMousePressWindow) {
             window = currentMousePressWindow;
-            currentMousePressWindow = 0;
+            currentMousePressWindow = nullptr;
          }
          QPointF delta = globalPoint - globalPoint.toPoint();
          localPoint = window->mapFromGlobal(globalPoint.toPoint()) + delta;
@@ -1822,7 +1822,7 @@ void QGuiApplicationPrivate::processLeaveEvent(QWindowSystemInterfacePrivate::Le
       return;
    }
 
-   currentMouseWindow = 0;
+   currentMouseWindow = nullptr;
 
    QEvent event(QEvent::Leave);
    QCoreApplication::sendSpontaneousEvent(e->leave.data(), &event);
@@ -1843,7 +1843,7 @@ void QGuiApplicationPrivate::processActivatedEvent(QWindowSystemInterfacePrivate
             platformWindow->setAlertState(false);
          }
 
-   QObject *previousFocusObject = previous ? previous->focusObject() : 0;
+   QObject *previousFocusObject = previous ? previous->focusObject() : nullptr;
 
    if (previous) {
       QFocusEvent focusAboutToChange(QEvent::FocusAboutToChange);
@@ -1914,9 +1914,11 @@ void QGuiApplicationPrivate::processWindowScreenChangedEvent(QWindowSystemInterf
    if (QWindow *window  = wse->window.data()) {
       if (window->isTopLevel()) {
          if (QScreen *screen = wse->screen.data()) {
-            window->d_func()->setTopLevelScreen(screen, false /* recreate */);
-         } else { // Fall back to default behavior, and try to find some appropriate screen
-            window->setScreen(0);
+            window->d_func()->setTopLevelScreen(screen, false);
+
+         } else {
+            // Fall back to default behavior, and try to find some appropriate screen
+            window->setScreen(nullptr);
          }
       }
       // we may have changed scaling, so trigger resize event if needed
@@ -2044,7 +2046,7 @@ void QGuiApplicationPrivate::processTabletEvent(QWindowSystemInterfacePrivate::T
          localValid = false;
       }
       if (type == QEvent::TabletRelease) {
-         tabletPressTarget = 0;
+         tabletPressTarget = nullptr;
       }
       if (!window) {
          return;
@@ -2305,7 +2307,7 @@ void QGuiApplicationPrivate::processTouchEvent(QWindowSystemInterfacePrivate::To
             break;
       }
 
-      Q_ASSERT(w.data() != 0);
+      Q_ASSERT(w.data() != nullptr);
 
       // make the *scene* functions return the same as the *screen* functions
       touchPoint.d->sceneRect = touchPoint.screenRect();
@@ -2613,7 +2615,7 @@ QPlatformDragQtResponse QGuiApplicationPrivate::processDrag(QWindow *w, const QM
 
    if (!dropData) {
       if (currentDragWindow.data() == w) {
-         currentDragWindow = 0;
+         currentDragWindow = nullptr;
       }
       QDragLeaveEvent e;
       QGuiApplication::sendEvent(w, &e);
@@ -2670,12 +2672,12 @@ QPlatformDropQtResponse QGuiApplicationPrivate::processDrop(QWindow *w, const QM
 */
 QClipboard *QApplication::clipboard()
 {
-   if (QGuiApplicationPrivate::qt_clipboard == 0) {
-      if (!qApp) {
+   if (QGuiApplicationPrivate::qt_clipboard == nullptr) {
+      if (! qApp) {
          qWarning("QGuiApplication: Must construct a QGuiApplication before accessing a QClipboard");
-         return 0;
+         return nullptr;
       }
-      QGuiApplicationPrivate::qt_clipboard = new QClipboard(0);
+      QGuiApplicationPrivate::qt_clipboard = new QClipboard(nullptr);
    }
    return QGuiApplicationPrivate::qt_clipboard;
 }
@@ -2944,7 +2946,7 @@ Qt::LayoutDirection QApplication::layoutDirection()
 QCursor *QApplication::overrideCursor()
 {
    CHECK_QAPP_INSTANCE(nullptr)
-   return qGuiApp->d_func()->cursor_list.isEmpty() ? 0 : &qGuiApp->d_func()->cursor_list.first();
+   return qGuiApp->d_func()->cursor_list.isEmpty() ? nullptr : &qGuiApp->d_func()->cursor_list.first();
 }
 
 /*!
@@ -2980,7 +2982,7 @@ static inline void unsetCursor(QWindow *w)
 {
    if (const QScreen *screen = w->screen())
       if (QPlatformCursor *cursor = screen->handle()->cursor()) {
-         cursor->changeCursor(0, w);
+         cursor->changeCursor(nullptr, w);
       }
 }
 
@@ -3109,7 +3111,7 @@ QStyle *QApplication::style()
 
    if (! qobject_cast<QApplication *>(QCoreApplication::instance())) {
       Q_ASSERT(!"No style available without QApplication!");
-      return 0;
+      return nullptr;
    }
 
    if (!QApplicationPrivate::app_style) {
@@ -3134,7 +3136,7 @@ QStyle *QApplication::style()
       }
       if (! app_style) {
          Q_ASSERT(! "No styles are available");
-         return 0;
+         return nullptr;
       }
 
       QApplicationPrivate::overrides_native_style =

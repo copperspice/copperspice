@@ -388,8 +388,7 @@ int QTapAndHoldGesturePrivate::Timeout = 700; // in ms
 
 
 QGestureEvent::QGestureEvent(const QList<QGesture *> &gestures)
-    : QEvent(QEvent::Gesture), m_gestures(gestures), m_widget(0)
-
+    : QEvent(QEvent::Gesture), m_gestures(gestures), m_widget(nullptr)
 {
 }
 
@@ -404,11 +403,15 @@ QList<QGesture *> QGestureEvent::gestures() const
 
 QGesture *QGestureEvent::gesture(Qt::GestureType type) const
 {
-    for (int i = 0; i < m_gestures.size(); ++i)
-        if (m_gestures.at(i)->gestureType() == type)
+    for (int i = 0; i < m_gestures.size(); ++i) {
+        if (m_gestures.at(i)->gestureType() == type) {
             return m_gestures.at(i);
-    return 0;
+        }
+    }
+
+    return nullptr;
 }
+
 QList<QGesture *> QGestureEvent::activeGestures() const
 {
     QList<QGesture *> gestures;

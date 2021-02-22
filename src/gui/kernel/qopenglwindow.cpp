@@ -95,8 +95,8 @@ QOpenGLWindowPrivate::~QOpenGLWindowPrivate()
    Q_Q(QOpenGLWindow);
    if (q->isValid()) {
       q->makeCurrent(); // this works even when the platformwindow is destroyed
-      paintDevice.reset(0);
-      fbo.reset(0);
+      paintDevice.reset(nullptr);
+      fbo.reset(nullptr);
       blitter.destroy();
       q->doneCurrent();
    }
@@ -412,7 +412,7 @@ QPaintDevice *QOpenGLWindow::redirected(QPoint *) const
    if (QOpenGLContext::currentContext() == d->context.data()) {
       return d->paintDevice.data();
    }
-   return 0;
+   return nullptr;
 }
 
 

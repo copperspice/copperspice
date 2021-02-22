@@ -272,7 +272,7 @@ void QHighDpiScaling::updateHighDpiScaling()
       int i = 0;
 
       for (const QByteArray &spec : env.split(';')) {
-         QScreen *screen = 0;
+         QScreen *screen = nullptr;
          int equalsPos = spec.lastIndexOf('=');
          double factor = 0;
 

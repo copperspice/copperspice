@@ -35,7 +35,8 @@ class QScreenPrivate
 
  public:
    QScreenPrivate()
-      : platformScreen(0), orientationUpdateMask(0) {
+      : platformScreen(nullptr), orientationUpdateMask(Qt::EmptyFlag)
+   {
    }
    void setPlatformScreen(QPlatformScreen *screen);
 

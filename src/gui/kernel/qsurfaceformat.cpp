@@ -39,7 +39,7 @@
 class QSurfaceFormatPrivate
 {
  public:
-   explicit QSurfaceFormatPrivate(QSurfaceFormat::FormatOptions _opts = 0)
+   explicit QSurfaceFormatPrivate(QSurfaceFormat::FormatOptions _opts = Qt::EmptyFlag)
       : ref(1)
       , opts(_opts)
       , redBufferSize(-1)

@@ -171,6 +171,6 @@ QPaintDeviceWindow::QPaintDeviceWindow(QPaintDeviceWindowPrivate &dd, QWindow *p
 // internal
 QPaintEngine *QPaintDeviceWindow::paintEngine() const
 {
-   return 0;
+   return nullptr;
 }
 

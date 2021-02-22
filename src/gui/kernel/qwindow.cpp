@@ -188,7 +188,7 @@ inline bool QWindowPrivate::windowRecreationRequired(QScreen *newScreen) const
 inline void QWindowPrivate::disconnectFromScreen()
 {
    if (topLevelScreen) {
-      topLevelScreen = 0;
+      topLevelScreen = nullptr;
    }
 }
 
@@ -479,7 +479,7 @@ void QWindow::setParent(QWindow *parent)
       if (parent && parent->d_func()->platformWindow) {
          d->platformWindow->setParent(parent->d_func()->platformWindow);
       } else {
-         d->platformWindow->setParent(0);
+         d->platformWindow->setParent(nullptr);
       }
    }
 
@@ -492,7 +492,7 @@ void QWindow::setParent(QWindow *parent)
 bool QWindow::isTopLevel() const
 {
    Q_D(const QWindow);
-   return d->parentWindow == 0;
+   return d->parentWindow == nullptr;
 }
 
 bool QWindow::isModal() const
@@ -1576,7 +1576,7 @@ void QWindow::destroy()
    d->resizeEventPending = true;
    d->receivedExpose = false;
    d->exposed = false;
-   d->platformWindow = 0;
+   d->platformWindow = nullptr;
 
    if (wasVisible) {
       d->maybeQuitOnLastWindowClosed();
@@ -1673,7 +1673,7 @@ void QWindow::setScreen(QScreen *newScreen)
    if (!newScreen) {
       newScreen = QGuiApplication::primaryScreen();
    }
-   d->setTopLevelScreen(newScreen, newScreen != 0);
+   d->setTopLevelScreen(newScreen, newScreen != nullptr);
 }
 
 /*!
@@ -1691,7 +1691,7 @@ void QWindow::setScreen(QScreen *newScreen)
   */
 QAccessibleInterface *QWindow::accessibleRoot() const
 {
-   return 0;
+   return nullptr;
 }
 
 /*!
@@ -2354,7 +2354,7 @@ QWindow *QWindow::fromWinId(WId id)
 {
    if (!QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::ForeignWindows)) {
       qWarning() << "QWindow::fromWinId(): platform plugin does not support foreign windows.";
-      return 0;
+      return nullptr;
    }
 
    QWindow *window = new QWindow;
@@ -2395,7 +2395,7 @@ void QWindow::setCursor(const QCursor &cursor)
 void QWindow::unsetCursor()
 {
    Q_D(QWindow);
-   d->setCursor(0);
+   d->setCursor(nullptr);
 }
 
 QCursor QWindow::cursor() const

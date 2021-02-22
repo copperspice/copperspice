@@ -164,7 +164,7 @@ QGestureRecognizer::Result QPinchGestureRecognizer::recognize(QGesture *state,
       }
       case QEvent::TouchUpdate: {
          const QTouchEvent *ev = static_cast<const QTouchEvent *>(event);
-         d->changeFlags = 0;
+         d->changeFlags = Qt::EmptyFlag;
          if (ev->touchPoints().size() == 2) {
             QTouchEvent::TouchPoint p1 = ev->touchPoints().at(0);
             QTouchEvent::TouchPoint p2 = ev->touchPoints().at(1);
@@ -248,7 +248,7 @@ void QPinchGestureRecognizer::reset(QGesture *state)
    QPinchGesture *pinch = static_cast<QPinchGesture *>(state);
    QPinchGesturePrivate *d = pinch->d_func();
 
-   d->totalChangeFlags = d->changeFlags = 0;
+   d->totalChangeFlags = d->changeFlags = Qt::EmptyFlag;
 
    d->startCenterPoint = d->lastCenterPoint = d->centerPoint = QPointF();
    d->totalScaleFactor = d->lastScaleFactor = d->scaleFactor = 1;

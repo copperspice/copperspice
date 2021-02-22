@@ -101,7 +101,7 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class CloseEvent : public WindowSystemEvent
    {
     public:
-      explicit CloseEvent(QWindow *w, bool *a = 0)
+      explicit CloseEvent(QWindow *w, bool *a = nullptr)
          : WindowSystemEvent(Close), window(w), accepted(a)
       { }
       QPointer<QWindow> window;
@@ -381,8 +381,11 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       TabletEnterProximityEvent(ulong time, int device, int pointerType, qint64 uid)
-         : InputEvent(0, time, TabletEnterProximity, Qt::NoModifier),
-           device(device), pointerType(pointerType), uid(uid) { }
+         : InputEvent(nullptr, time, TabletEnterProximity, Qt::NoModifier),
+           device(device), pointerType(pointerType), uid(uid)
+      {
+      }
+
       int device;
       int pointerType;
       qint64 uid;
@@ -392,8 +395,11 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       TabletLeaveProximityEvent(ulong time, int device, int pointerType, qint64 uid)
-         : InputEvent(0, time, TabletLeaveProximity, Qt::NoModifier),
-           device(device), pointerType(pointerType), uid(uid) { }
+         : InputEvent(nullptr, time, TabletLeaveProximity, Qt::NoModifier),
+           device(device), pointerType(pointerType), uid(uid)
+      {
+      }
+
       int device;
       int pointerType;
       qint64 uid;
@@ -472,7 +478,7 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
 
       WindowSystemEvent *takeFirstOrReturnNull() {
          const QMutexLocker locker(&mutex);
-         return impl.empty() ? 0 : impl.takeFirst();
+         return impl.empty() ? nullptr : impl.takeFirst();
       }
 
       WindowSystemEvent *takeFirstNonUserInputOrReturnNull() {
@@ -498,12 +504,14 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
 
       WindowSystemEvent *peekAtFirstOfType(EventType t) const {
          const QMutexLocker locker(&mutex);
+
          for (int i = 0; i < impl.size(); ++i) {
             if (impl.at(i)->type == t) {
                return impl.at(i);
             }
          }
-         return 0;
+
+         return nullptr;
       }
 
       void remove(const WindowSystemEvent *e) {

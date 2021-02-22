@@ -474,7 +474,7 @@ QObject *QDropEvent::source() const
       return manager->source();
    }
 
-   return 0;
+   return nullptr;
 }
 
 void QDropEvent::setDropAction(Qt::DropAction action)
@@ -1122,8 +1122,8 @@ QWindowStateChangeEvent::~QWindowStateChangeEvent()
 {}
 
 QTouchEvent::QTouchEvent(QEvent::Type eventType, QTouchDevice *device, Qt::KeyboardModifiers modifiers,
-   Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints)
-   : QInputEvent(eventType, modifiers), _window(0), _target(0), _device(device),
+            Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints)
+   : QInputEvent(eventType, modifiers), _window(nullptr), _target(nullptr), _device(device),
      _touchPointStates(touchPointStates), _touchPoints(touchPoints)
 {}
 
@@ -1443,7 +1443,7 @@ void QTouchEvent::TouchPoint::setFlags(InfoFlags flags)
 }
 
 QScrollPrepareEvent::QScrollPrepareEvent(const QPointF &startPos)
-   : QEvent(QEvent::ScrollPrepare), m_target(0), m_startPos(startPos)
+   : QEvent(QEvent::ScrollPrepare), m_target(nullptr), m_startPos(startPos)
 {
    Q_UNUSED(m_target);
 }

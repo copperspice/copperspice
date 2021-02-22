@@ -75,7 +75,7 @@ class QWhatsThat : public QWidget
    QPixmap background;
 };
 
-QWhatsThat *QWhatsThat::instance = 0;
+QWhatsThat *QWhatsThat::instance = nullptr;
 
 // shadowWidth not const, for XP drop-shadow-fu turns it to 0
 static int shadowWidth   = 6;   // also used as '5' and '6' and even '8' below
@@ -108,7 +108,7 @@ QWhatsThat::QWhatsThat(const QString &txt, QWidget *parent, QWidget *showTextFor
 #endif
 
    QRect r;
-   doc = 0;
+   doc = nullptr;
    ensurePolished(); // Ensures style sheet font before size calc
    if (Qt::mightBeRichText(text)) {
       doc = new QTextDocument();
@@ -146,7 +146,7 @@ QWhatsThat::QWhatsThat(const QString &txt, QWidget *parent, QWidget *showTextFor
 
 QWhatsThat::~QWhatsThat()
 {
-   instance = 0;
+   instance = nullptr;
    if (doc) {
       delete doc;
    }
@@ -313,7 +313,7 @@ void QWhatsThisPrivate::notifyToplevels(QEvent *e)
    }
 }
 
-QWhatsThisPrivate *QWhatsThisPrivate::instance = 0;
+QWhatsThisPrivate *QWhatsThisPrivate::instance = nullptr;
 
 QWhatsThisPrivate::QWhatsThisPrivate()
    : leaveOnMouseRelease(false)
@@ -354,7 +354,7 @@ QWhatsThisPrivate::~QWhatsThisPrivate()
    QAccessibleEvent event(this, QAccessible::ContextHelpEnd);
    QAccessible::updateAccessibility(&event);
 #endif
-   instance = 0;
+   instance = nullptr;
 }
 
 bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
@@ -473,7 +473,7 @@ void QWhatsThis::enterWhatsThisMode()
 
 bool QWhatsThis::inWhatsThisMode()
 {
-   return (QWhatsThisPrivate::instance != 0);
+   return (QWhatsThisPrivate::instance != nullptr);
 }
 
 void QWhatsThis::leaveWhatsThisMode()
@@ -490,11 +490,11 @@ void QWhatsThisPrivate::say(QWidget *widget, const QString &text, int x, int y)
    }
 
    // make a fresh widget, and set it up
-   QWhatsThat *whatsThat = new QWhatsThat(text, 0, widget);
 
 
 
    // okay, now to find a suitable location
+   QWhatsThat *whatsThat = new QWhatsThat(text, nullptr, widget);
 
    int scr = (widget ?
          QApplication::desktop()->screenNumber(widget) :

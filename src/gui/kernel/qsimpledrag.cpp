@@ -56,13 +56,12 @@ static QWindow *topLevelAt(const QPoint &pos)
          return w;
       }
    }
-   return 0;
+   return nullptr;
 }
 
-QBasicDrag::QBasicDrag() :
-   m_restoreCursor(false), m_eventLoop(0),
-   m_executed_drop_action(Qt::IgnoreAction), m_can_drop(false),
-   m_drag(0), m_drag_icon_window(0), m_useCompositing(true), m_screen(nullptr)
+QBasicDrag::QBasicDrag()
+   : m_restoreCursor(false), m_eventLoop(nullptr), m_executed_drop_action(Qt::IgnoreAction),
+     m_can_drop(false), m_drag(nullptr), m_drag_icon_window(nullptr), m_useCompositing(true), m_screen(nullptr)
 {
 }
 
@@ -159,8 +158,8 @@ Qt::DropAction QBasicDrag::drag(QDrag *o)
    m_eventLoop = new QEventLoop;
    m_eventLoop->exec();
    delete m_eventLoop;
-   m_eventLoop = 0;
-   m_drag = 0;
+   m_eventLoop = nullptr;
+   m_drag = nullptr;
    endDrag();
 
    return m_executed_drop_action;
@@ -281,9 +280,8 @@ void QBasicDrag::updateCursor(Qt::DropAction action)
    updateAction(action);
 }
 
-
-
-QSimpleDrag::QSimpleDrag() : m_current_window(0)
+QSimpleDrag::QSimpleDrag()
+   : m_current_window(nullptr)
 {
 }
 
@@ -292,7 +290,7 @@ QMimeData *QSimpleDrag::platformDropData()
    if (drag()) {
       return drag()->mimeData();
    }
-   return 0;
+   return nullptr;
 }
 
 void QSimpleDrag::startDrag()
@@ -315,8 +313,8 @@ void QSimpleDrag::cancel()
 {
    QBasicDrag::cancel();
    if (drag() && m_current_window) {
-      QWindowSystemInterface::handleDrag(m_current_window, 0, QPoint(), Qt::IgnoreAction);
-      m_current_window = 0;
+      QWindowSystemInterface::handleDrag(m_current_window, nullptr, QPoint(), Qt::IgnoreAction);
+      m_current_window = nullptr;
    }
 }
 

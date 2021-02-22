@@ -36,9 +36,8 @@ class QWindowContainerPrivate : public QWidgetPrivate
    Q_DECLARE_PUBLIC(QWindowContainer)
 
    QWindowContainerPrivate()
-      : window(0)
-      , oldFocusWindow(0)
-      , usesNativeWidgets(false) {
+      : window(nullptr), oldFocusWindow(nullptr) , usesNativeWidgets(false)
+   {
    }
 
    ~QWindowContainerPrivate() { }
@@ -48,7 +47,8 @@ class QWindowContainerPrivate : public QWidgetPrivate
       if (wc) {
          return wc->d_func();
       }
-      return 0;
+
+      return nullptr;
    }
 
    void updateGeometry() {
@@ -69,7 +69,7 @@ class QWindowContainerPrivate : public QWidgetPrivate
    }
 
    void updateUsesNativeWidgets() {
-      if (usesNativeWidgets || window->parent() == 0) {
+      if (usesNativeWidgets || window->parent() == nullptr) {
          return;
       }
       Q_Q(QWindowContainer);
@@ -85,10 +85,10 @@ class QWindowContainerPrivate : public QWidgetPrivate
          if (
 
 #ifndef QT_NO_MDIAREA
-            qobject_cast<QMdiSubWindow *>(p) != 0 ||
+            qobject_cast<QMdiSubWindow *>(p) != nullptr ||
 #endif
 
-            qobject_cast<QAbstractScrollArea *>(p) != 0) {
+            qobject_cast<QAbstractScrollArea *>(p) != nullptr) {
             q->winId();
             usesNativeWidgets = true;
             break;
@@ -267,7 +267,7 @@ bool QWindowContainer::event(QEvent *e)
       case QEvent::ChildRemoved: {
          QChildEvent *ce = static_cast<QChildEvent *>(e);
          if (ce->child() == d->window) {
-            d->window = 0;
+            d->window = nullptr;
          }
          break;
       }

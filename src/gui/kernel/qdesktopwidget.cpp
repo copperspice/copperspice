@@ -180,7 +180,7 @@ void QDesktopWidgetPrivate::_q_availableGeometryChanged()
 }
 
 QDesktopWidget::QDesktopWidget()
-   : QWidget(*new QDesktopWidgetPrivate, 0, Qt::Desktop)
+   : QWidget(*new QDesktopWidgetPrivate, nullptr, Qt::Desktop)
 {
    Q_D(QDesktopWidget);
 

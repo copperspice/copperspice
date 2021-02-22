@@ -42,7 +42,7 @@ QSessionManagerPrivate::QSessionManagerPrivate(const QString &id, const QString 
 QSessionManagerPrivate::~QSessionManagerPrivate()
 {
     delete platformSessionManager;
-    platformSessionManager = 0;
+    platformSessionManager = nullptr;
 }
 
 QSessionManager::QSessionManager(QApplication *app, QString &id, QString &key)

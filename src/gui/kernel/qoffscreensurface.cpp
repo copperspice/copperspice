@@ -37,8 +37,9 @@ class Q_GUI_EXPORT QOffscreenSurfacePrivate
 
  public:
    QOffscreenSurfacePrivate()
-      : surfaceType(QSurface::OpenGLSurface), platformOffscreenSurface(0), offscreenWindow(0),
-        requestedFormat(QSurfaceFormat::defaultFormat()), screen(0), size(1, 1) {
+      : surfaceType(QSurface::OpenGLSurface), platformOffscreenSurface(nullptr), offscreenWindow(nullptr),
+        requestedFormat(QSurfaceFormat::defaultFormat()), screen(nullptr), size(1, 1)
+   {
    }
 
    ~QOffscreenSurfacePrivate() {
@@ -141,11 +142,12 @@ void QOffscreenSurface::destroy()
    QGuiApplication::sendEvent(this, &e);
 
    delete d->platformOffscreenSurface;
-   d->platformOffscreenSurface = 0;
+   d->platformOffscreenSurface = nullptr;
+
    if (d->offscreenWindow) {
       d->offscreenWindow->destroy();
       delete d->offscreenWindow;
-      d->offscreenWindow = 0;
+      d->offscreenWindow = nullptr;
    }
 }
 
@@ -248,7 +250,7 @@ void QOffscreenSurface::setScreen(QScreen *newScreen)
       newScreen = QGuiApplication::primaryScreen();
    }
    if (newScreen != d->screen) {
-      const bool wasCreated = d->platformOffscreenSurface != 0 || d->offscreenWindow != 0;
+      const bool wasCreated = d->platformOffscreenSurface != nullptr || d->offscreenWindow != nullptr;
       if (wasCreated) {
          destroy();
       }
@@ -275,7 +277,7 @@ void QOffscreenSurface::screenDestroyed(QObject *object)
 {
    Q_D(QOffscreenSurface);
    if (object == static_cast<QObject *>(d->screen)) {
-      setScreen(0);
+      setScreen(nullptr);
    }
 }
 

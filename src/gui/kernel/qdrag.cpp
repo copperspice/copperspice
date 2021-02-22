@@ -37,8 +37,8 @@ QDrag::QDrag(QObject *dragSource)
    Q_D(QDrag);
 
    d->source  = dragSource;
-   d->target  = 0;
-   d->data    = 0;
+   d->target  = nullptr;
+   d->data    = nullptr;
    d->hotspot = QPoint(-10, -10);
 
    d->executed_action   = Qt::IgnoreAction;
@@ -58,7 +58,7 @@ void QDrag::setMimeData(QMimeData *data)
    if (d->data == data) {
       return;
    }
-   if (d->data != 0) {
+   if (d->data != nullptr) {
       delete d->data;
    }
    d->data = data;

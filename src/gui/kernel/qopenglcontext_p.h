@@ -105,7 +105,7 @@ class Q_GUI_EXPORT QOpenGLContextGroupPrivate
 
  public:
    QOpenGLContextGroupPrivate()
-      : m_context(0), m_mutex(QMutex::Recursive), m_refs(0)
+      : m_context(nullptr), m_mutex(QMutex::Recursive), m_refs(0)
    {
    }
 
@@ -147,10 +147,12 @@ class Q_GUI_EXPORT QOpenGLMultiGroupSharedResource
    template <typename T>
    T *value(QOpenGLContext *context) {
       QOpenGLContextGroup *group = context->shareGroup();
+
       // Have to use our own mutex here, not the group's, since
       // m_groups has to be protected too against any concurrent access.
       QMutexLocker locker(&m_mutex);
-      T *resource = static_cast<T *>(group->d_func()->m_resources.value(this, 0));
+      T *resource = static_cast<T *>(group->d_func()->m_resources.value(this, nullptr));
+
       if (!resource) {
          resource = new T(context);
          insert(context, resource);
@@ -170,23 +172,11 @@ class Q_GUI_EXPORT QOpenGLContextPrivate
 
  public:
    QOpenGLContextPrivate()
-      : qGLContextHandle(0)
-      , qGLContextDeleteFunction(0)
-      , platformGLContext(0)
-      , shareContext(0)
-      , shareGroup(0)
-      , screen(0)
-      , surface(0)
-      , functions(0)
-      , textureFunctions(0)
-      , max_texture_size(-1)
-      , workaround_brokenFBOReadBack(false)
-      , workaround_brokenTexSubImage(false)
-      , workaround_missingPrecisionQualifiers(false)
-      , active_engine(0)
-      , qgl_current_fbo_invalid(false)
-      , qgl_current_fbo(nullptr)
-      , defaultFboRedirect(0) {
+      : qGLContextHandle(nullptr), qGLContextDeleteFunction(nullptr), platformGLContext(nullptr), shareContext(nullptr),
+        shareGroup(nullptr), screen(nullptr), surface(nullptr), functions(nullptr), textureFunctions(nullptr), max_texture_size(-1),
+        workaround_brokenFBOReadBack(false), workaround_brokenTexSubImage(false), workaround_missingPrecisionQualifiers(false),
+        active_engine(nullptr), qgl_current_fbo_invalid(false), qgl_current_fbo(nullptr), defaultFboRedirect(0)
+   {
       requestedFormat = QSurfaceFormat::defaultFormat();
    }
 
