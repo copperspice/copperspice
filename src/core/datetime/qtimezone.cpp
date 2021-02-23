@@ -46,7 +46,6 @@ static QTimeZonePrivate *newBackendTimeZone()
 
 #elif defined Q_OS_UNIX
    return new QTzTimeZonePrivate();
-   // Registry based timezone backend not available on WinRT
 
 #elif defined Q_OS_WIN
    return new QWinTimeZonePrivate();
@@ -54,7 +53,7 @@ static QTimeZonePrivate *newBackendTimeZone()
 #else
    return new QUtcTimeZonePrivate();
 
-#endif // System Locales
+#endif
 
 #endif // QT_NO_SYSTEMLOCALE
 }
@@ -75,7 +74,6 @@ static QTimeZonePrivate *newBackendTimeZone(const QByteArray &ianaId)
 
 #elif defined Q_OS_UNIX
    return new QTzTimeZonePrivate(ianaId);
-   // Registry based timezone backend not available on WinRT
 
 #elif defined Q_OS_WIN
    return new QWinTimeZonePrivate(ianaId);
@@ -83,7 +81,7 @@ static QTimeZonePrivate *newBackendTimeZone(const QByteArray &ianaId)
 #else
    return new QUtcTimeZonePrivate(ianaId);
 
-#endif // System Locales
+#endif
 
 #endif // QT_NO_SYSTEMLOCALE
 }
@@ -109,11 +107,11 @@ QTimeZone::QTimeZone()
 
 QTimeZone::QTimeZone(const QByteArray &ianaId)
 {
-   // Try and see if it's a valid UTC offset ID, just as quick to try create as look-up
+   // see if ianaId is a valid UTC offset ID
    d = new QUtcTimeZonePrivate(ianaId);
-   // If not a valid UTC offset ID then try create it with the system backend
-   // Relies on backend not creating valid tz with invalid name
-   if (!d->isValid()) {
+
+   if (! d->isValid()) {
+      // create with the system backend
       d = newBackendTimeZone(ianaId);
    }
 }
@@ -128,93 +126,35 @@ QTimeZone::QTimeZone(int offsetSeconds)
    }
 }
 
-/*!
-    Creates a custom time zone with an ID of \a ianaId and an offset from UTC
-    of \a offsetSeconds.  The \a name will be the name used by displayName()
-    for the LongName, the \a abbreviation will be used by displayName() for the
-    ShortName and by abbreviation(), and the optional \a country will be used
-    by country().  The \a comment is an optional note that may be displayed in
-    a GUI to assist users in selecting a time zone.
-
-    The \a ianaId must not be one of the available system IDs returned by
-    availableTimeZoneIds().  The \a offsetSeconds from UTC must be in the range
-    -14 hours to +14 hours.
-
-    If the custom time zone does not have a specific country then set it to the
-    default value of QLocale::AnyCountry.
-*/
-
 QTimeZone::QTimeZone(const QByteArray &ianaId, int offsetSeconds, const QString &name,
-   const QString &abbreviation, QLocale::Country country, const QString &comment)
+            const QString &abbreviation, QLocale::Country country, const QString &comment)
    : d()
 {
-   if (!isTimeZoneIdAvailable(ianaId)) {
+   if (! isTimeZoneIdAvailable(ianaId)) {
       d = new QUtcTimeZonePrivate(ianaId, offsetSeconds, name, abbreviation, country, comment);
    }
 }
 
-/*!
-    \internal
-
-    Private. Create time zone with given private backend
-*/
-
+// internal
 QTimeZone::QTimeZone(QTimeZonePrivate &dd)
    : d(&dd)
 {
 }
-
-/*!
-    Copy constructor, copy \a other to this.
-*/
 
 QTimeZone::QTimeZone(const QTimeZone &other)
    : d(other.d)
 {
 }
 
-/*!
-    Destroys the time zone.
-*/
-
 QTimeZone::~QTimeZone()
 {
 }
-
-/*!
-    \fn QTimeZone::swap(QTimeZone &other)
-
-    Swaps this time zone instance with \a other. This function is very
-    fast and never fails.
-*/
-
-/*!
-    Assignment operator, assign \a other to this.
-*/
 
 QTimeZone &QTimeZone::operator=(const QTimeZone &other)
 {
    d = other.d;
    return *this;
 }
-
-/*
-    \fn void QTimeZone::swap(QTimeZone &other)
-
-    Swaps this timezone with \a other. This function is very fast and
-    never fails.
-*/
-
-/*!
-    \fn QTimeZone &QTimeZone::operator=(QTimeZone &&other)
-
-    Move-assigns \a other to this QTimeZone instance, transferring the
-    ownership of the managed pointer to this instance.
-*/
-
-/*!
-    Returns \c true if this time zone is equal to the \a other time zone.
-*/
 
 bool QTimeZone::operator==(const QTimeZone &other) const
 {
@@ -225,10 +165,6 @@ bool QTimeZone::operator==(const QTimeZone &other) const
    }
 }
 
-/*!
-    Returns \c true if this time zone is not equal to the \a other time zone.
-*/
-
 bool QTimeZone::operator!=(const QTimeZone &other) const
 {
    if (d && other.d) {
@@ -237,10 +173,6 @@ bool QTimeZone::operator!=(const QTimeZone &other) const
       return (d != other.d);
    }
 }
-
-/*!
-    Returns \c true if this time zone is valid.
-*/
 
 bool QTimeZone::isValid() const
 {
@@ -251,13 +183,6 @@ bool QTimeZone::isValid() const
    }
 }
 
-/*!
-    Returns the IANA ID for the time zone.
-
-    IANA IDs are used on all platforms.  On Windows these are translated
-    from the Windows ID into the closest IANA ID for the time zone and country.
-*/
-
 QByteArray QTimeZone::id() const
 {
    if (d) {
@@ -266,10 +191,6 @@ QByteArray QTimeZone::id() const
       return QByteArray();
    }
 }
-
-/*!
-    Returns the country for the time zone.
-*/
 
 QLocale::Country QTimeZone::country() const
 {
@@ -316,20 +237,6 @@ QString QTimeZone::abbreviation(const QDateTime &atDateTime) const
    }
 }
 
-/*!
-    Returns the total effective offset at the given \a atDateTime, i.e. the
-    number of seconds to add to UTC to obtain the local time.  This includes
-    any DST offset that may be in effect, i.e. it is the sum of
-    standardTimeOffset() and daylightTimeOffset() for the given datetime.
-
-    For example, for the time zone "Europe/Berlin" the standard time offset is
-    +3600 seconds and the DST offset is +3600 seconds.  During standard time
-    offsetFromUtc() will return +3600 (UTC+01:00), and during DST it will
-    return +7200 (UTC+02:00).
-
-    \sa standardTimeOffset(), daylightTimeOffset()
-*/
-
 int QTimeZone::offsetFromUtc(const QDateTime &atDateTime) const
 {
    if (isValid()) {
@@ -338,18 +245,6 @@ int QTimeZone::offsetFromUtc(const QDateTime &atDateTime) const
       return 0;
    }
 }
-
-/*!
-    Returns the standard time offset at the given \a atDateTime, i.e. the
-    number of seconds to add to UTC to obtain the local Standard Time.  This
-    excludes any DST offset that may be in effect.
-
-    For example, for the time zone "Europe/Berlin" the standard time offset is
-    +3600 seconds.  During both standard and DST offsetFromUtc() will return
-    +3600 (UTC+01:00).
-
-    \sa offsetFromUtc(), daylightTimeOffset()
-*/
 
 int QTimeZone::standardTimeOffset(const QDateTime &atDateTime) const
 {
@@ -360,18 +255,6 @@ int QTimeZone::standardTimeOffset(const QDateTime &atDateTime) const
    }
 }
 
-/*!
-    Returns the daylight-saving time offset at the given \a atDateTime,
-    i.e. the number of seconds to add to the standard time offset to obtain the
-    local daylight-saving time.
-
-    For example, for the time zone "Europe/Berlin" the DST offset is +3600
-    seconds.  During standard time daylightTimeOffset() will return 0, and when
-    daylight-saving is in effect it will return +3600.
-
-    \sa offsetFromUtc(), standardTimeOffset()
-*/
-
 int QTimeZone::daylightTimeOffset(const QDateTime &atDateTime) const
 {
    if (hasDaylightTime()) {
@@ -380,12 +263,6 @@ int QTimeZone::daylightTimeOffset(const QDateTime &atDateTime) const
       return 0;
    }
 }
-
-/*!
-    Returns \c true if the time zone has practiced daylight-saving at any time.
-
-    \sa isDaylightTime(), daylightTimeOffset()
-*/
 
 bool QTimeZone::hasDaylightTime() const
 {
@@ -462,12 +339,10 @@ QByteArray QTimeZone::systemTimeZoneId()
    return global_tz()->backend->systemTimeZoneId();
 }
 
-
 QTimeZone QTimeZone::systemTimeZone()
 {
    return QTimeZone(QTimeZone::systemTimeZoneId());
 }
-
 
 QTimeZone QTimeZone::utc()
 {
@@ -481,7 +356,9 @@ bool QTimeZone::isTimeZoneIdAvailable(const QByteArray &ianaId)
    if (!QTimeZonePrivate::isValidId(ianaId)) {
       return false;
    }
+
    const QList<QByteArray> tzIds = availableTimeZoneIds();
+
    return std::binary_search(tzIds.begin(), tzIds.end(), ianaId);
 }
 
@@ -492,28 +369,11 @@ static QList<QByteArray> set_union(const QList<QByteArray> &l1, const QList<QByt
    return result;
 }
 
-/*!
-    Returns a list of all available IANA time zone IDs on this system.
-
-    \sa isTimeZoneIdAvailable()
-*/
-
 QList<QByteArray> QTimeZone::availableTimeZoneIds()
 {
    return set_union(QUtcTimeZonePrivate().availableTimeZoneIds(),
          global_tz()->backend->availableTimeZoneIds());
 }
-
-/*!
-    Returns a list of all available IANA time zone IDs for a given \a country.
-
-    As a special case, a \a country of Qt::AnyCountry returns those time zones
-    that do not have any country related to them, such as UTC.  If you require
-    a list of all time zone IDs for all countries then use the standard
-    availableTimeZoneIds() method.
-
-    \sa isTimeZoneIdAvailable()
-*/
 
 QList<QByteArray> QTimeZone::availableTimeZoneIds(QLocale::Country country)
 {
@@ -521,40 +381,16 @@ QList<QByteArray> QTimeZone::availableTimeZoneIds(QLocale::Country country)
          global_tz()->backend->availableTimeZoneIds(country));
 }
 
-/*!
-    Returns a list of all available IANA time zone IDs with a given standard
-    time offset of \a offsetSeconds.
-
-    \sa isTimeZoneIdAvailable()
-*/
-
 QList<QByteArray> QTimeZone::availableTimeZoneIds(int offsetSeconds)
 {
    return set_union(QUtcTimeZonePrivate().availableTimeZoneIds(offsetSeconds),
          global_tz()->backend->availableTimeZoneIds(offsetSeconds));
 }
 
-/*!
-    Returns the Windows ID equivalent to the given \a ianaId.
-
-    \sa windowsIdToDefaultIanaId(), windowsIdToIanaIds()
-*/
-
 QByteArray QTimeZone::ianaIdToWindowsId(const QByteArray &ianaId)
 {
    return QTimeZonePrivate::ianaIdToWindowsId(ianaId);
 }
-
-/*!
-    Returns the default IANA ID for a given \a windowsId.
-
-    Because a Windows ID can cover several IANA IDs in several different
-    countries, this function returns the most frequently used IANA ID with no
-    regard for the country and should thus be used with care.  It is usually
-    best to request the default for a specific country.
-
-    \sa ianaIdToWindowsId(), windowsIdToIanaIds()
-*/
 
 QByteArray QTimeZone::windowsIdToDefaultIanaId(const QByteArray &windowsId)
 {
@@ -614,6 +450,3 @@ QDebug operator<<(QDebug dbg, const QTimeZone &tz)
 
    return dbg;
 }
-
-
-

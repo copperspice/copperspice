@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
 #include <qfilesystemengine_p.h>
+
+#include <qplatformdefs.h>
 #include <qfsfileengine.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -124,8 +125,6 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
    return hasResourcePropertyFlag(data, entry, kCFURLIsPackageKey);
 }
 #endif  // Q_OS_DARWIN
-
-
 
 //static
 QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, QFileSystemMetaData &data)
@@ -233,8 +232,8 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
 
       return QFileSystemEntry(cfstr.toQString());
    }
-
 #endif
+
    return QFileSystemEntry();
 }
 
@@ -451,7 +450,7 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
 }
 
 #ifdef Q_OS_DARWIN
-//static
+
 QString QFileSystemEngine::bundleName(const QFileSystemEntry &entry)
 {
    QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, QCFString(entry.filePath()).toCFStringRef(),
@@ -767,31 +766,38 @@ bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Per
                                        QSystemError &error, QFileSystemMetaData *data)
 {
    mode_t mode = 0;
-    if (permissions & (QFile::ReadOwner | QFile::ReadUser))
-        mode |= S_IRUSR;
+   if (permissions & (QFile::ReadOwner | QFile::ReadUser)) {
+      mode |= S_IRUSR;
+   }
 
-    if (permissions & (QFile::WriteOwner | QFile::WriteUser))
-        mode |= S_IWUSR;
+   if (permissions & (QFile::WriteOwner | QFile::WriteUser)) {
+      mode |= S_IWUSR;
+   }
 
-    if (permissions & (QFile::ExeOwner | QFile::ExeUser))
-        mode |= S_IXUSR;
-
+   if (permissions & (QFile::ExeOwner | QFile::ExeUser)) {
+      mode |= S_IXUSR;
+   }
 
    if (permissions & QFile::ReadGroup) {
       mode |= S_IRGRP;
    }
+
    if (permissions & QFile::WriteGroup) {
       mode |= S_IWGRP;
    }
+
    if (permissions & QFile::ExeGroup) {
       mode |= S_IXGRP;
    }
+
    if (permissions & QFile::ReadOther) {
       mode |= S_IROTH;
    }
+
    if (permissions & QFile::WriteOther) {
       mode |= S_IWOTH;
    }
+
    if (permissions & QFile::ExeOther) {
       mode |= S_IXOTH;
    }

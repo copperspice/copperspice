@@ -53,7 +53,7 @@ QString8 QString8::fromCFString(CFStringRef str)
 CFStringRef QString8::toCFString() const
 {
    return CFStringCreateWithBytes(kCFAllocatorDefault,
-                  reinterpret_cast<const UInt8 *>(this->constData()), this->size_storage(), kCFStringEncodingUTF8, false);
+               reinterpret_cast<const UInt8 *>(this->constData()), this->size_storage(), kCFStringEncodingUTF8, false);
 }
 
 QString8 QString8::fromNSString(const NSString *str)

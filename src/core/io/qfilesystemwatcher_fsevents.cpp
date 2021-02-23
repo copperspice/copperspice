@@ -52,8 +52,7 @@
 // They only live in this compilation unit to avoid polluting Qt in general.
 static bool operator==(const struct ::timespec &left, const struct ::timespec &right)
 {
-   return left.tv_sec == right.tv_sec
-          && left.tv_nsec == right.tv_nsec;
+   return left.tv_sec == right.tv_sec && left.tv_nsec == right.tv_nsec;
 }
 
 static bool operator==(const struct ::stat &left, const struct ::stat &right)
@@ -74,13 +73,10 @@ static bool operator!=(const struct ::stat &left, const struct ::stat &right)
    return !(operator==(left, right));
 }
 
-
-static void addPathToHash(PathHash &pathHash, const QString &key, const QFileInfo &fileInfo,
-                          const QString &path)
+static void addPathToHash(PathHash &pathHash, const QString &key, const QFileInfo &fileInfo, const QString &path)
 {
    PathInfoList &list = pathHash[key];
-   list.push_back(PathInfo(path,
-                           fileInfo.canonicalFilePath().normalized(QString::NormalizationForm_D).toUtf8()));
+   list.push_back(PathInfo(path, fileInfo.canonicalFilePath().normalized(QString::NormalizationForm_D).toUtf8()));
    pathHash.insert(key, list);
 }
 
@@ -99,6 +95,7 @@ static void removePathFromHash(PathHash &pathHash, const QString &key, const QSt
       }
       ++it;
    }
+
    if (list.isEmpty()) {
       pathHash.remove(key);
    }
@@ -146,6 +143,7 @@ QFSEventsFileSystemWatcherEngine::~QFSEventsFileSystemWatcherEngine()
    // on me, so I don't need to invalidate or stop my stream, simply
    // release it.
    cleanupFSStream(fsStream);
+
    if (pathsToWatch) {
       CFRelease(pathsToWatch);
    }
@@ -158,14 +156,14 @@ QFSEventsFileSystemWatcherEngine *QFSEventsFileSystemWatcherEngine::create()
 }
 
 QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
-      QStringList *files,
-      QStringList *directories)
+      QStringList *files, QStringList *directories)
 {
 #if ! defined(Q_OS_IOS)
    stop();
    wait();
    QMutexLocker locker(&mutex);
    QStringList failedToAdd;
+
    // if we have a running FSStreamEvent, we have to kill it, we'll re-add the stream soon.
    FSEventStreamEventId idToCheck;
    if (fsStream) {
@@ -231,10 +229,9 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
    }
 
    FSEventStreamContext context = { 0, this, nullptr, nullptr, nullptr };
-   fsStream = FSEventStreamCreate(kCFAllocatorDefault,
-                                  QFSEventsFileSystemWatcherEngine::fseventsCallback,
-                                  &context, pathsToWatch,
-                                  idToCheck, Latency, QtFSEventFlags);
+   fsStream = FSEventStreamCreate(kCFAllocatorDefault, QFSEventsFileSystemWatcherEngine::fseventsCallback,
+                  &context, pathsToWatch, idToCheck, Latency, QtFSEventFlags);
+
    warmUpFSEvents();
 
    return failedToAdd;
@@ -257,20 +254,22 @@ void QFSEventsFileSystemWatcherEngine::warmUpFSEvents()
 }
 
 QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &paths,
-      QStringList *files,
-      QStringList *directories)
+      QStringList *files, QStringList *directories)
 {
 #if ! defined(Q_OS_IOS)
    stop();
    wait();
+
    QMutexLocker locker(&mutex);
    // short circuit for smarties that call remove before add and we have nothing.
    if (pathsToWatch == nullptr) {
       return paths;
    }
+
    QStringList failedToRemove;
    // if we have a running FSStreamEvent, we have to stop it, we'll re-add the stream soon.
    FSEventStreamEventId idToCheck;
+
    if (fsStream) {
       idToCheck = FSEventStreamGetLatestEventId(fsStream);
       cleanupFSStream(fsStream);
@@ -280,10 +279,10 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
    }
 
    CFIndex itemCount = CFArrayGetCount(pathsToWatch);
-   QCFType<CFMutableArrayRef> tmpArray = CFArrayCreateMutableCopy(kCFAllocatorDefault, itemCount,
-                                         pathsToWatch);
+   QCFType<CFMutableArrayRef> tmpArray = CFArrayCreateMutableCopy(kCFAllocatorDefault, itemCount, pathsToWatch);
    CFRelease(pathsToWatch);
    pathsToWatch = nullptr;
+
    for (int i = 0; i < paths.size(); ++i) {
       // Get the itemCount at the beginning to avoid any overruns during the iteration.
       itemCount = CFArrayGetCount(tmpArray);
@@ -312,21 +311,24 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
          }
       }
    }
+
    itemCount = CFArrayGetCount(tmpArray);
    if (itemCount != 0) {
       pathsToWatch = CFArrayCreateCopy(kCFAllocatorDefault, tmpArray);
 
       FSEventStreamContext context = { 0, this, nullptr, nullptr, nullptr };
-      fsStream = FSEventStreamCreate(kCFAllocatorDefault,
-                                     QFSEventsFileSystemWatcherEngine::fseventsCallback,
-                                     &context, pathsToWatch, idToCheck, Latency, QtFSEventFlags);
+      fsStream = FSEventStreamCreate(kCFAllocatorDefault, QFSEventsFileSystemWatcherEngine::fseventsCallback,
+                  &context, pathsToWatch, idToCheck, Latency, QtFSEventFlags);
       warmUpFSEvents();
    }
+
    return failedToRemove;
+
 #else
    Q_UNUSED(paths);
    Q_UNUSED(files);
    Q_UNUSED(directories);
+
    return QStringList();
 #endif
 }
@@ -344,15 +346,18 @@ void QFSEventsFileSystemWatcherEngine::updateList(PathInfoList &list, bool direc
          if (emitSignals) {
             if (newInfo != it->savedInfo) {
                it->savedInfo = newInfo;
+
                if (directory) {
                   emit directoryChanged(it->originalPath, false);
                } else {
                   emit fileChanged(it->originalPath, false);
                }
             }
+
          } else {
             it->savedInfo = newInfo;
          }
+
       } else {
          if (errno == ENOENT) {
             if (emitSignals) {
@@ -362,14 +367,17 @@ void QFSEventsFileSystemWatcherEngine::updateList(PathInfoList &list, bool direc
                   emit fileChanged(it->originalPath, true);
                }
             }
+
             it = list.erase(it);
             continue;
+
          } else {
             qWarning("%s:%d:QFSEventsFileSystemWatcherEngine: stat error on %s:%s",
-                     __FILE__, __LINE__, qPrintable(it->originalPath), strerror(errno));
+                     __FILE__, __LINE__, csPrintable(it->originalPath), strerror(errno));
 
          }
       }
+
       ++it;
    }
 }
@@ -379,8 +387,10 @@ void QFSEventsFileSystemWatcherEngine::updateHash(PathHash &pathHash)
    PathHash::iterator HashEnd = pathHash.end();
    PathHash::iterator it = pathHash.begin();
    const bool IsDirectory = (&pathHash == &dirPathInfoHash);
+
    while (it != HashEnd) {
       updateList(it.value(), IsDirectory, false);
+
       if (it.value().isEmpty()) {
          it = pathHash.erase(it);
       } else {
@@ -390,11 +400,9 @@ void QFSEventsFileSystemWatcherEngine::updateHash(PathHash &pathHash)
 }
 #endif
 
-void QFSEventsFileSystemWatcherEngine::fseventsCallback(ConstFSEventStreamRef ,
-      void *clientCallBackInfo, size_t numEvents,
-      void *eventPaths,
-      const FSEventStreamEventFlags eventFlags[],
-      const FSEventStreamEventId [])
+void QFSEventsFileSystemWatcherEngine::fseventsCallback(ConstFSEventStreamRef,
+      void *clientCallBackInfo, size_t numEvents, void *eventPaths,
+      const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId [])
 {
 #if ! defined(Q_OS_IOS)
    QFSEventsFileSystemWatcherEngine *watcher = static_cast<QFSEventsFileSystemWatcherEngine *>(clientCallBackInfo);
@@ -477,9 +485,11 @@ void QFSEventsFileSystemWatcherEngine::run()
    threadsRunLoop = CFRunLoopGetCurrent();
    FSEventStreamScheduleWithRunLoop(fsStream, threadsRunLoop, kCFRunLoopDefaultMode);
    bool startedOK = FSEventStreamStart(fsStream);
+
    // It's recommended by Apple that you only update the files after you've started
    // the stream, because otherwise you might miss an update in between starting it.
    updateFiles();
+
 #ifdef QT_NO_DEBUG
    Q_UNUSED(startedOK);
 #else
@@ -489,6 +499,7 @@ void QFSEventsFileSystemWatcherEngine::run()
    // If for some reason we called stop up above (and invalidated our stream), this call will return
    // immediately.
    CFRunLoopRun();
+
    threadsRunLoop = nullptr;
    QMutexLocker locker(&mutex);
    waitForStop.wakeAll();

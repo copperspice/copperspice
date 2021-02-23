@@ -219,7 +219,10 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       using reverse_iterator       = CsString::CsStringReverseIterator<iterator>;
       using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;
 
-      QString16() {};
+      QString16()
+      {
+      }
+
       QString16(const QString16 &other) = default;
       QString16(QString16 &&other) = default;
 
@@ -230,7 +233,8 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       QString16(QChar32::SpecialCharacter c)
          : QString16(QChar32(c))
-      { }
+      {
+      }
 
       QString16(const QChar32 *data, size_type numOfChars = -1)  {
 
@@ -251,7 +255,8 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       QString16(const_iterator begin, const_iterator end)
          : CsString::CsString_utf16(begin, end)
-      { }
+      {
+      }
 
       // for an array of chars
       template <int N>

@@ -24,18 +24,18 @@
 #ifndef QCORE_MAC_P_H
 #define QCORE_MAC_P_H
 
+#include <qglobal.h>
+#include <qstring.h>
+
 #ifndef __IMAGECAPTURE__
 #  define __IMAGECAPTURE__
 #endif
 
 #include <CoreFoundation/CoreFoundation.h>
-#include <qglobal.h>
 
 #ifdef __OBJC__
 #include <Foundation/Foundation.h>
 #endif
-
-#include <qstring.h>
 
 template <typename T>
 class Q_CORE_EXPORT QCFType
@@ -125,23 +125,24 @@ class Q_CORE_EXPORT QCFString : public QCFType<CFStringRef>
 
 #ifdef __OBJC__
     static QString toQString(const NSString *nsstr);
-    static  NSString *toNSString(const QString &string);
+    static NSString *toNSString(const QString &string);
 #endif
 
  private:
    QString m_string;
 };
 
-typedef struct {
-    int major, minor, patch;
-} QAppleOperatingSystemVersion;
+struct QAppleOperatingSystemVersion {
+   int major;
+   int minor;
+   int patch;
+};
 
 QAppleOperatingSystemVersion qt_apple_os_version();
 
-#if defined(Q_OS_DARWIN) && ! defined(Q_OS_IOS)
+#if defined(Q_OS_DARWIN)
 Q_CORE_EXPORT QChar qt_mac_qtKey2CocoaKey(Qt::Key key);
 Q_CORE_EXPORT Qt::Key qt_mac_cocoaKey2QtKey(QChar keyCode);
 #endif
-
 
 #endif

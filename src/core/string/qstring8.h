@@ -219,7 +219,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       using reverse_iterator       = CsString::CsStringReverseIterator<iterator>;
       using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;
 
-      QString8() {};
+      QString8()
+      {
+      }
+
       QString8(const QString8 &other) = default;
       QString8(QString8 &&other) = default;
 
@@ -230,7 +233,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8(QChar32::SpecialCharacter c)
          : QString8(QChar32(c))
-      { }
+      {
+      }
 
       QString8(const QChar32 *data, size_type numOfChars = -1)  {
 
@@ -255,13 +259,15 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8(const_iterator begin, const_iterator end)
          : CsString::CsString(begin, end)
-      { }
+      {
+      }
 
       // for an array of chars
       template <int N>
       QString8(const char (&cStr)[N])
          : CsString::CsString(cStr)
-      { }
+      {
+      }
 
 #ifdef CS_STRING_ALLOW_UNSAFE
       QString8(const QByteArray &str)

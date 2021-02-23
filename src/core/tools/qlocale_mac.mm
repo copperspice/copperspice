@@ -26,7 +26,7 @@
 #include <qvariant.h>
 #include <qdatetime.h>
 
-#if ! defined(QWS) && defined(Q_OS_DARWIN)
+#if defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>
 #endif
 
@@ -78,10 +78,12 @@ static QString macMonthName(int month, bool short_format)
       = static_cast<CFArrayRef>(CFDateFormatterCopyProperty(formatter,
                                 short_format ? kCFDateFormatterShortMonthSymbols
                                 : kCFDateFormatterMonthSymbols));
+
    if (values != nullptr) {
       CFStringRef cfstring = static_cast<CFStringRef>(CFArrayGetValueAtIndex(values, month));
       return QCFString::toQString(cfstring);
    }
+
    return QString();
 }
 
@@ -91,16 +93,18 @@ static QString macDayName(int day, bool short_format)
       return QString();
    }
 
-   QCFType<CFDateFormatterRef> formatter
-      = CFDateFormatterCreate(nullptr, QCFType<CFLocaleRef>(CFLocaleCopyCurrent()),
-                              kCFDateFormatterNoStyle,  kCFDateFormatterNoStyle);
+   QCFType<CFDateFormatterRef> formatter = CFDateFormatterCreate(nullptr, QCFType<CFLocaleRef>(CFLocaleCopyCurrent()),
+               kCFDateFormatterNoStyle,  kCFDateFormatterNoStyle);
+
    QCFType<CFArrayRef> values = static_cast<CFArrayRef>(CFDateFormatterCopyProperty(formatter,
-                                short_format ? kCFDateFormatterShortWeekdaySymbols
-                                : kCFDateFormatterWeekdaySymbols));
+               short_format ? kCFDateFormatterShortWeekdaySymbols
+               : kCFDateFormatterWeekdaySymbols));
+
    if (values != nullptr) {
       CFStringRef cfstring = static_cast<CFStringRef>(CFArrayGetValueAtIndex(values, day % 7));
       return QCFString::toQString(cfstring);
    }
+
    return QString();
 }
 
@@ -114,10 +118,11 @@ static QString macDateToString(const QDate &date, bool short_format)
    macGDate.minute = 0;
    macGDate.second = 0.0;
 
-   QCFType<CFDateRef> myDate
-      = CFDateCreate(nullptr, CFGregorianDateGetAbsoluteTime(macGDate,
-                     QCFType<CFTimeZoneRef>(CFTimeZoneCopyDefault())));
+   QCFType<CFDateRef> myDate = CFDateCreate(nullptr, CFGregorianDateGetAbsoluteTime(macGDate,
+               QCFType<CFTimeZoneRef>(CFTimeZoneCopyDefault())));
+
    QCFType<CFLocaleRef> mylocale = CFLocaleCopyCurrent();
+
    CFDateFormatterStyle style = short_format ? kCFDateFormatterShortStyle : kCFDateFormatterLongStyle;
    QCFType<CFDateFormatterRef> myFormatter = CFDateFormatterCreate(kCFAllocatorDefault,
                mylocale, style, kCFDateFormatterNoStyle);
@@ -136,9 +141,9 @@ static QString macTimeToString(const QTime &time, bool short_format)
    macGDate.hour = time.hour();
    macGDate.minute = time.minute();
    macGDate.second = time.second();
-   QCFType<CFDateRef> myDate
-      = CFDateCreate(nullptr, CFGregorianDateGetAbsoluteTime(macGDate,
-                     QCFType<CFTimeZoneRef>(CFTimeZoneCopyDefault())));
+
+   QCFType<CFDateRef> myDate = CFDateCreate(nullptr, CFGregorianDateGetAbsoluteTime(macGDate,
+               QCFType<CFTimeZoneRef>(CFTimeZoneCopyDefault())));
 
    QCFType<CFLocaleRef> mylocale = CFLocaleCopyCurrent();
    CFDateFormatterStyle style = short_format ? kCFDateFormatterShortStyle :  kCFDateFormatterLongStyle;
@@ -161,6 +166,7 @@ static QString macToQtFormat(const QString &sys_fmt)
    while (i < sys_fmt.size()) {
       if (sys_fmt.at(i).unicode() == '\'') {
          QString text = qt_readEscapedFormatString(sys_fmt, &i);
+
          if (text == QLatin1String("'")) {
             result += QLatin1String("''");
          } else {
@@ -173,7 +179,7 @@ static QString macToQtFormat(const QString &sys_fmt)
       int repeat = qt_repeatCount(sys_fmt, i);
 
       switch (c.unicode()) {
-         // Qt does not support the following options
+         // unsupported options
          case 'G': // Era (1..5): 4 = long, 1..3 = short, 5 = narrow
          case 'Y': // Year of Week (1..n): 1..n = padded number
          case 'U': // Cyclic Year Name (1..5): 4 = long, 1..3 = short, 5 = narrow
@@ -196,6 +202,7 @@ static QString macToQtFormat(const QString &sys_fmt)
                result += QLatin1String("yyyy");
             }
             break;
+
          case 'M': // Month (1..5): 4 = long, 3 = short, 1..2 = number, 5 = narrow
          case 'L': // Standalone Month (1..5): 4 = long, 3 = short, 1..2 = number, 5 = narrow
             // Qt only supports long, short and number, use short for narrow
@@ -205,9 +212,11 @@ static QString macToQtFormat(const QString &sys_fmt)
                result += QString(repeat, QLatin1Char('M'));
             }
             break;
+
          case 'd': // Day of Month (1..2): 1..2 padded number
             result += QString(repeat, c);
             break;
+
          case 'E': // Day of Week (1..6): 4 = long, 1..3 = short, 5..6 = narrow
             // Qt only supports long, short and padded number, use short for narrow
             if (repeat == 4) {
@@ -225,25 +234,30 @@ static QString macToQtFormat(const QString &sys_fmt)
                result += QString(repeat, QLatin1Char('d'));
             }
             break;
+
          case 'a': // AM/PM (1): 1 = short
             // Translate to Qt uppercase AM/PM
             result += QLatin1String("AP");
             break;
+
          case 'h': // Hour [1..12] (1..2): 1..2 = padded number
          case 'K': // Hour [0..11] (1..2): 1..2 = padded number
          case 'j': // Local Hour [12 or 24] (1..2): 1..2 = padded number
             // Qt h is local hour
             result += QString(repeat, QLatin1Char('h'));
             break;
+
          case 'H': // Hour [0..23] (1..2): 1..2 = padded number
          case 'k': // Hour [1..24] (1..2): 1..2 = padded number
             // Qt H is 0..23 hour
             result += QString(repeat, QLatin1Char('H'));
             break;
+
          case 'm': // Minutes (1..2): 1..2 = padded number
          case 's': // Seconds (1..2): 1..2 = padded number
             result += QString(repeat, c);
             break;
+
          case 'S': // Fractional second (1..n): 1..n = truncates to decimal places
             // Qt uses msecs either unpadded or padded to 3 places
             if (repeat < 3) {
@@ -252,6 +266,7 @@ static QString macToQtFormat(const QString &sys_fmt)
                result += QLatin1String("zzz");
             }
             break;
+
          case 'z': // Time Zone (1..4)
          case 'Z': // Time Zone (1..5)
          case 'O': // Time Zone (1, 4)
@@ -261,6 +276,7 @@ static QString macToQtFormat(const QString &sys_fmt)
          case 'x': // Time Zone (1..5)
             result += QLatin1Char('t');
             break;
+
          default:
             // a..z and A..Z are reserved for format codes, so any occurrence of these not
             // already processed are not known and so unsupported formats to be ignored.
@@ -329,6 +345,7 @@ static QString macCurrencySymbol(QLocale::CurrencySymbolFormat format)
    switch (format) {
       case QLocale::CurrencyIsoCode:
          return QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale, kCFLocaleCurrencyCode)));
+
       case QLocale::CurrencySymbol:
          return QCFString::toQString(static_cast<CFStringRef>(CFLocaleGetValue(locale, kCFLocaleCurrencySymbol)));
       case QLocale::CurrencyDisplayName: {
@@ -336,6 +353,7 @@ static QString macCurrencySymbol(QLocale::CurrencySymbolFormat format)
          QCFType<CFStringRef> value = CFLocaleCopyDisplayNameForPropertyValue(locale, kCFLocaleCurrencyCode, code);
          return QCFString::toQString(value);
       }
+
       default:
          break;
    }
@@ -353,35 +371,38 @@ static QString macFormatCurrency(const QSystemLocale::CurrencyToStringArgument &
          value = CFNumberCreate(nullptr, kCFNumberIntType, &v);
          break;
       }
+
       case QVariant::Double: {
          double v = arg.value.toDouble();
          value = CFNumberCreate(nullptr, kCFNumberDoubleType, &v);
          break;
       }
+
       case QVariant::LongLong:
       case QVariant::ULongLong: {
          qint64 v = arg.value.toLongLong();
          value = CFNumberCreate(nullptr, kCFNumberLongLongType, &v);
          break;
       }
+
       default:
          return QString();
    }
 
    QCFType<CFLocaleRef> locale = CFLocaleCopyCurrent();
-   QCFType<CFNumberFormatterRef> currencyFormatter =
-      CFNumberFormatterCreate(nullptr, locale, kCFNumberFormatterCurrencyStyle);
+   QCFType<CFNumberFormatterRef> currencyFormatter = CFNumberFormatterCreate(nullptr, locale, kCFNumberFormatterCurrencyStyle);
+
    if (!arg.symbol.isEmpty()) {
-      CFNumberFormatterSetProperty(currencyFormatter, kCFNumberFormatterCurrencySymbol,
-                                   QCFString::toCFStringRef(arg.symbol));
+      CFNumberFormatterSetProperty(currencyFormatter, kCFNumberFormatterCurrencySymbol, QCFString::toCFStringRef(arg.symbol));
    }
+
    QCFType<CFStringRef> result = CFNumberFormatterCreateStringWithNumber(nullptr, currencyFormatter, value);
+
    return QCFString::toQString(result);
 }
 
 static QVariant macQuoteString(QSystemLocale::QueryType type, QStringView str)
 {
-
 #if ! defined(Q_OS_IOS)
    QString begin, end;
    QCFType<CFLocaleRef> locale = CFLocaleCopyCurrent();
@@ -470,12 +491,16 @@ QVariant QSystemLocale::query(QueryType type, QVariant in = QVariant()) const
                                       (type == AMText ? kCFDateFormatterAMSymbol : kCFDateFormatterPMSymbol)));
          return QCFString::toQString(value);
       }
+
       case FirstDayOfWeek:
          return QVariant(macFirstDayOfWeek());
+
       case CurrencySymbol:
          return QVariant(macCurrencySymbol(QLocale::CurrencySymbolFormat(in.toUInt())));
+
       case CurrencyToString:
          return macFormatCurrency(in.value<QSystemLocale::CurrencyToStringArgument>());
+
       case UILanguages: {
          QCFType<CFPropertyListRef> languages = CFPreferencesCopyValue(
                CFSTR("AppleLanguages"),

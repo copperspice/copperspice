@@ -21,15 +21,15 @@
 *
 ***********************************************************************/
 
-#include <qdir.h>
-#include <qstringlist.h>
-#include <qfile.h>
-#include <qsettings.h>
-#include <qlibraryinfo.h>
-#include <qscopedpointer.h>
 #include <qcoreapplication.h>
-
+#include <qdir.h>
+#include <qfile.h>
+#include <qlibraryinfo.h>
 #include <qregularexpression.h>
+#include <qstringlist.h>
+#include <qsettings.h>
+#include <qscopedpointer.h>
+
 #include <cs_build_info.h>
 
 #ifdef Q_OS_DARWIN
@@ -313,7 +313,6 @@ QString QLibraryInfo::location(LibraryLocation loc)
 
 QStringList QLibraryInfo::platformPluginArguments(const QString &platformName)
 {
-
 #if ! defined(QT_NO_SETTINGS)
     QScopedPointer<const QSettings> settings(QLibraryInfoPrivate::findConfiguration());
 
@@ -343,4 +342,3 @@ Q_CORE_EXPORT void cs_print_build_info()
 
    fflush(stdout);
 }
-
