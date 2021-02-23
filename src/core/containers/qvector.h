@@ -128,15 +128,15 @@ class QVector
    }
 
    T *data() {
-      return &m_data[0];
+      return m_data.data();
    }
 
    const T *data() const {
-      return &m_data[0];
+      return m_data.data();
    }
 
    const T *constData() const {
-      return &m_data[0];
+      return m_data.data();
    }
 
    bool empty() const {
