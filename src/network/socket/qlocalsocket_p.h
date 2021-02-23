@@ -50,14 +50,15 @@
 #if ! defined(Q_OS_WIN) || defined(QT_LOCALSOCKET_TCP)
 class QLocalUnixSocket : public QTcpSocket
 {
-
  public:
-   QLocalUnixSocket() : QTcpSocket() {
-   };
+   QLocalUnixSocket()
+      : QTcpSocket()
+   {
+   }
 
    void setSocketState(QAbstractSocket::SocketState state) {
       QTcpSocket::setSocketState(state);
-   };
+   }
 
    void setErrorString(const QString &string) {
       QTcpSocket::setErrorString(string);
@@ -119,6 +120,7 @@ class QLocalSocketPrivate : public QIODevicePrivate
    // GONE QRingBuffer readBuffer;
    // GONE int actualReadBufferSize;
    // GONE WinEventNotifier *dataReadNotifier;
+
    QLocalSocket::LocalSocketError error;
    // GONE bool readSequenceStarted;
    // GONE bool pendingReadyRead;

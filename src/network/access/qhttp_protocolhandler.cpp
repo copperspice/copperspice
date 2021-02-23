@@ -280,6 +280,7 @@ bool QHttpProtocolHandler::sendRequest()
             // _q_connected or _q_encrypted
             return false;
          }
+
          QString scheme = m_channel->request.url().scheme();
          if (scheme == QLatin1String("preconnect-http")
                || scheme == QLatin1String("preconnect-https")) {
@@ -322,12 +323,14 @@ bool QHttpProtocolHandler::sendRequest()
          if (m_channel->request.withCredentials()) {
             m_connection->d_func()->createAuthorization(m_socket, m_channel->request);
          }
+
 #ifndef QT_NO_NETWORKPROXY
          QByteArray header = QHttpNetworkRequestPrivate::header(m_channel->request,
                              (m_connection->d_func()->networkProxy.type() != QNetworkProxy::NoProxy));
 #else
          QByteArray header = QHttpNetworkRequestPrivate::header(m_channel->request, false);
 #endif
+
          m_socket->write(header);
          // flushing is dangerous (QSslSocket calls transmit which might read or error)
          //        m_socket->flush();
@@ -340,6 +343,7 @@ bool QHttpProtocolHandler::sendRequest()
 
             m_channel->state = QHttpNetworkConnectionChannel::WritingState; // start writing data
             sendRequest(); //recurse
+
          } else {
             m_channel->state = QHttpNetworkConnectionChannel::WaitingState; // now wait for response
             sendRequest(); //recurse
@@ -347,6 +351,7 @@ bool QHttpProtocolHandler::sendRequest()
 
          break;
       }
+
       case QHttpNetworkConnectionChannel::WritingState: {
          // write the data
          QNonContiguousByteDevice *uploadByteDevice = m_channel->request.uploadByteDevice();
@@ -360,9 +365,8 @@ bool QHttpProtocolHandler::sendRequest()
          }
 
          // only feed the QTcpSocket buffer when there is less than 32 kB in it
-         const qint64 socketBufferFill = 32 * 1024;
+         const qint64 socketBufferFill   = 32 * 1024;
          const qint64 socketWriteMaxSize = 16 * 1024;
-
 
 #ifdef QT_SSL
          QSslSocket *sslSocket = qobject_cast<QSslSocket *>(m_socket);
@@ -370,8 +374,7 @@ bool QHttpProtocolHandler::sendRequest()
          while ((m_socket->bytesToWrite() + (sslSocket ? sslSocket->encryptedBytesToWrite() : 0))
                 <= socketBufferFill && m_channel->bytesTotal != m_channel->written)
 #else
-         while (m_socket->bytesToWrite() <= socketBufferFill
-                && m_channel->bytesTotal != m_channel->written)
+         while (m_socket->bytesToWrite() <= socketBufferFill && m_channel->bytesTotal != m_channel->written)
 #endif
          {
             // get pointer to upload data
@@ -387,20 +390,24 @@ bool QHttpProtocolHandler::sendRequest()
             } else if (readPointer == nullptr || currentReadSize == 0) {
                // nothing to read currently, break the loop
                break;
+
             } else {
                if (m_channel->written != uploadByteDevice->pos()) {
                   // Sanity check. This was useful in tracking down an upload corruption.
-                  qWarning() << "QHttpProtocolHandler: Internal error in sendRequest. Expected to write at position" << m_channel->written << "but read device is at" <<
-                             uploadByteDevice->pos();
+                  qWarning() << "QHttpProtocolHandler: Internal error in sendRequest. Expected to write at position"
+                             << m_channel->written << "but read device is at" << uploadByteDevice->pos();
                   Q_ASSERT(m_channel->written == uploadByteDevice->pos());
                   m_connection->d_func()->emitReplyError(m_socket, m_reply, QNetworkReply::ProtocolFailure);
+
                   return false;
                }
+
                qint64 currentWriteSize = m_socket->write(readPointer, currentReadSize);
                if (currentWriteSize == -1 || currentWriteSize != currentReadSize) {
                   // socket broke down
                   m_connection->d_func()->emitReplyError(m_socket, m_reply, QNetworkReply::UnknownNetworkError);
                   return false;
+
                } else {
                   m_channel->written += currentWriteSize;
                   uploadByteDevice->advanceReadPointer(currentWriteSize);
@@ -416,6 +423,7 @@ bool QHttpProtocolHandler::sendRequest()
                }
             }
          }
+
          break;
       }
 
@@ -437,12 +445,14 @@ bool QHttpProtocolHandler::sendRequest()
          }
          break;
       }
+
       case QHttpNetworkConnectionChannel::ReadingState:
       // ignore _q_bytesWritten in these states
       // fall through
       default:
          break;
    }
+
    return true;
 }
 

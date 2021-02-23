@@ -51,10 +51,11 @@ class QNetworkInterfacePrivate: public QSharedData
    {
    }
 
-   ~QNetworkInterfacePrivate() {
+   ~QNetworkInterfacePrivate()
+   {
    }
 
-   int index;                  // interface index, if know
+   int index;                                 // interface index, if know
    QNetworkInterface::InterfaceFlags flags;
 
    QString name;

@@ -35,18 +35,18 @@ QHttpNetworkRequestPrivate::QHttpNetworkRequestPrivate(QHttpNetworkRequest::Oper
 QHttpNetworkRequestPrivate::QHttpNetworkRequestPrivate(const QHttpNetworkRequestPrivate &other)
    : QHttpNetworkHeaderPrivate(other)
 {
-   operation = other.operation;
-   priority = other.priority;
-   uploadByteDevice = other.uploadByteDevice;
-   autoDecompress = other.autoDecompress;
+   operation         = other.operation;
+   priority          = other.priority;
+   uploadByteDevice  = other.uploadByteDevice;
+   autoDecompress    = other.autoDecompress;
    pipeliningAllowed = other.pipeliningAllowed;
-   spdyAllowed = other.spdyAllowed;
-   customVerb = other.customVerb;
-   withCredentials = other.withCredentials;
-   ssl = other.ssl;
-   preConnect = other.preConnect;
-   followRedirect = other.followRedirect;
-   redirectCount = other.redirectCount;
+   spdyAllowed       = other.spdyAllowed;
+   customVerb        = other.customVerb;
+   withCredentials   = other.withCredentials;
+   ssl               = other.ssl;
+   preConnect        = other.preConnect;
+   followRedirect    = other.followRedirect;
+   redirectCount     = other.redirectCount;
 }
 
 QHttpNetworkRequestPrivate::~QHttpNetworkRequestPrivate()
@@ -74,30 +74,39 @@ QByteArray QHttpNetworkRequest::methodName() const
       case QHttpNetworkRequest::Get:
          return "GET";
          break;
-      case QHttpNetworkRequest::Head:
+
+     case QHttpNetworkRequest::Head:
          return "HEAD";
          break;
+
       case QHttpNetworkRequest::Post:
          return "POST";
          break;
+
       case QHttpNetworkRequest::Options:
          return "OPTIONS";
          break;
+
       case QHttpNetworkRequest::Put:
          return "PUT";
          break;
+
       case QHttpNetworkRequest::Delete:
          return "DELETE";
          break;
+
       case QHttpNetworkRequest::Trace:
          return "TRACE";
          break;
+
       case QHttpNetworkRequest::Connect:
          return "CONNECT";
          break;
+
       case QHttpNetworkRequest::Custom:
          return d->customVerb;
          break;
+
       default:
          break;
    }
@@ -183,6 +192,7 @@ QByteArray QHttpNetworkRequestPrivate::header(const QHttpNetworkRequest &request
    } else {
       ba += "\r\n";
    }
+
    return ba;
 }
 
@@ -214,30 +224,37 @@ bool QHttpNetworkRequest::isSsl() const
 {
    return d->ssl;
 }
+
 void QHttpNetworkRequest::setSsl(bool s)
 {
    d->ssl = s;
 }
+
 bool QHttpNetworkRequest::isPreConnect() const
 {
    return d->preConnect;
 }
+
 void QHttpNetworkRequest::setPreConnect(bool preConnect)
 {
    d->preConnect = preConnect;
 }
+
 bool QHttpNetworkRequest::isFollowRedirects() const
 {
    return d->followRedirect;
 }
+
 void QHttpNetworkRequest::setFollowRedirects(bool followRedirect)
 {
    d->followRedirect = followRedirect;
 }
+
 int QHttpNetworkRequest::redirectCount() const
 {
    return d->redirectCount;
 }
+
 void QHttpNetworkRequest::setRedirectCount(int count)
 {
    d->redirectCount = count;
@@ -356,5 +373,3 @@ int QHttpNetworkRequest::minorVersion() const
 {
    return 1;
 }
-
-

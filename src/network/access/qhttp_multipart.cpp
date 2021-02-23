@@ -36,79 +36,32 @@ QHttpPart::QHttpPart(const QHttpPart &other) : d(other.d)
 {
 }
 
-/*!
-    Destroys this QHttpPart.
-*/
 QHttpPart::~QHttpPart()
 {
    d = nullptr;
 }
 
-/*!
-    Creates a copy of \a other.
-*/
 QHttpPart &QHttpPart::operator=(const QHttpPart &other)
 {
    d = other.d;
    return *this;
 }
 
-/*!
-    Returns true if this object is the same as \a other (i.e., if they
-    have the same headers and body).
-
-    \sa operator!=()
-*/
 bool QHttpPart::operator==(const QHttpPart &other) const
 {
    return d == other.d || *d == *other.d;
 }
 
-/*!
-    \fn bool QHttpPart::operator!=(const QHttpPart &other) const
-
-    Returns true if this object is not the same as \a other.
-
-    \sa operator==()
-*/
-
-/*!
-    Sets the value of the known header \a header to be \a value,
-    overriding any previously set headers.
-
-    \sa QNetworkRequest::KnownHeaders, setRawHeader(), QNetworkRequest::setHeader()
-*/
 void QHttpPart::setHeader(QNetworkRequest::KnownHeaders header, const QVariant &value)
 {
    d->setCookedHeader(header, value);
 }
 
-/*!
-    Sets the header \a headerName to be of value \a headerValue. If \a
-    headerName corresponds to a known header (see
-    QNetworkRequest::KnownHeaders), the raw format will be parsed and
-    the corresponding "cooked" header will be set as well.
-
-    Note: setting the same header twice overrides the previous
-    setting. To accomplish the behaviour of multiple HTTP headers of
-    the same name, you should concatenate the two values, separating
-    them with a comma (",") and set one single raw header.
-
-    \sa QNetworkRequest::KnownHeaders, setHeader(), QNetworkRequest::setRawHeader()
-*/
 void QHttpPart::setRawHeader(const QByteArray &headerName, const QByteArray &headerValue)
 {
    d->setRawHeader(headerName, headerValue);
 }
 
-/*!
-    Sets the body of this MIME part to \a body. The body set with this method
-    will be used unless the device is set via setBodyDevice(). For a large
-    amount of data (e.g. an image), use setBodyDevice(), which will not copy
-    the data internally.
-
-    \sa setBodyDevice()
-*/
 void QHttpPart::setBody(const QByteArray &body)
 {
    d->setBody(body);
@@ -118,7 +71,6 @@ void QHttpPart::setBodyDevice(QIODevice *device)
 {
    d->setBodyDevice(device);
 }
-
 
 QHttpMultiPart::QHttpMultiPart(QObject *parent)
    : QObject(parent), d_ptr(new QHttpMultiPartPrivate)
@@ -228,6 +180,7 @@ bool QHttpPartPrivate::reset()
    readPointer = 0;
    return ret;
 }
+
 void QHttpPartPrivate::checkHeaderCreated() const
 {
    if (!headerCreated) {
@@ -354,6 +307,7 @@ qint64 QHttpMultiPartIODevice::readData(char *data, qint64 maxSize)
          index++;
       }
    }
+
    // check whether we need to return the final boundary
    if (bytesRead < maxSize && index == multiPart->parts.count()) {
       QByteArray finalBoundary = "--" + multiPart->boundary + "--\r\n";
@@ -373,5 +327,3 @@ qint64 QHttpMultiPartIODevice::writeData(const char *data, qint64 maxSize)
 
    return -1;
 }
-
-

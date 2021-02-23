@@ -97,7 +97,7 @@ class QFtpDTP : public QObject
    NET_CS_SIGNAL_1(Public, void connectState(int un_named_arg1))
    NET_CS_SIGNAL_2(connectState, un_named_arg1)
 
- private :
+ private:
    NET_CS_SLOT_1(Private, void socketConnected())
    NET_CS_SLOT_2(socketConnected)
 
@@ -136,6 +136,7 @@ class QFtpDTP : public QObject
       QByteArray *ba;
       QIODevice *dev;
    } data;
+
    bool is_ba;
 
    QByteArray bytesFromSocket;
@@ -187,7 +188,7 @@ class QFtpPI : public QObject
    NET_CS_SIGNAL_1(Public, void rawFtpReply(int un_named_arg1, const QString &un_named_arg2))
    NET_CS_SIGNAL_2(rawFtpReply, un_named_arg1, un_named_arg2)
 
- private :
+ private:
    NET_CS_SLOT_1(Private, void hostFound())
    NET_CS_SLOT_2(hostFound)
 
@@ -347,7 +348,7 @@ void QFtpDTP::connectToHost(const QString &host, quint16 port)
    connect(socket, SIGNAL(connected()),          this,   SLOT(socketConnected()));
    connect(socket, SIGNAL(readyRead()),          this,   SLOT(socketReadyRead()));
 
-   connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this,   SLOT(socketError(QAbstractSocket::SocketError)));
+   connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
 
    connect(socket, SIGNAL(disconnected()),       this,   SLOT(socketConnectionClosed()));
    connect(socket, SIGNAL(bytesWritten(qint64)), this,   SLOT(socketBytesWritten(qint64)));
@@ -496,6 +497,7 @@ void QFtpDTP::abortConnection()
 #if defined(QFTPDTP_DEBUG)
    qDebug("QFtpDTP::abortConnection, bytesAvailable == %lli", socket ? socket->bytesAvailable() : (qint64) 0);
 #endif
+
    callWriteData = false;
    clearData();
 
@@ -1089,9 +1091,11 @@ bool QFtpPI::processReply()
       case AbortStarted:
          abortState = WaitForAbortToFinish;
          break;
+
       case WaitForAbortToFinish:
          abortState = None;
          return true;
+
       default:
          break;
    }
@@ -1344,7 +1348,7 @@ void QFtpPI::dtpConnectState(int s)
          if (waitForDtpToClose) {
             // there is an unprocessed reply
             if (processReply()) {
-               replyText = QLatin1String("");
+               replyText = QString("");
             } else {
                return;
             }
@@ -1352,16 +1356,18 @@ void QFtpPI::dtpConnectState(int s)
          waitForDtpToClose = false;
          readyRead();
          return;
+
       case QFtpDTP::CsConnected:
          waitForDtpToConnect = false;
          startNextCmd();
          return;
+
       case QFtpDTP::CsHostNotFound:
       case QFtpDTP::CsConnectionRefused:
-         emit error(QFtp::ConnectionRefused,
-                    QFtp::tr("Data connection refused"));
+         emit error(QFtp::ConnectionRefused, QFtp::tr("Data connection refused"));
          startNextCmd();
          return;
+
       default:
          return;
    }
@@ -2000,30 +2006,15 @@ int QFtp::currentId() const
    return d_func()->pending.first()->id;
 }
 
-/*!
-    Returns the command type of the FTP command being executed or \c
-    None if there is no command being executed.
-
-    \sa currentId()
-*/
 QFtp::Command QFtp::currentCommand() const
 {
    if (d_func()->pending.isEmpty()) {
       return None;
    }
+
    return d_func()->pending.first()->command;
 }
 
-/*!
-    Returns the QIODevice pointer that is used by the FTP command to read data
-    from or store data to. If there is no current FTP command being executed or
-    if the command does not use an IO device, this function returns 0.
-
-    This function can be used to delete the QIODevice in the slot connected to
-    the commandFinished() signal.
-
-    \sa get() put()
-*/
 QIODevice *QFtp::currentDevice() const
 {
    if (d_func()->pending.isEmpty()) {
@@ -2034,30 +2025,15 @@ QIODevice *QFtp::currentDevice() const
    if (c->is_ba) {
       return nullptr;
    }
+
    return c->data.dev;
 }
 
-/*!
-    Returns true if there are any commands scheduled that have not yet
-    been executed; otherwise returns false.
-
-    The command that is being executed is \e not considered as a
-    scheduled command.
-
-    \sa clearPendingCommands() currentId() currentCommand()
-*/
 bool QFtp::hasPendingCommands() const
 {
    return d_func()->pending.count() > 1;
 }
 
-/*!
-    Deletes all pending commands from the list of scheduled commands.
-    This does not affect the command that is being executed. If you
-    want to stop this as well, use abort().
-
-    \sa hasPendingCommands() abort()
-*/
 void QFtp::clearPendingCommands()
 {
    // delete all entires except the first one
@@ -2066,40 +2042,16 @@ void QFtp::clearPendingCommands()
    }
 }
 
-/*!
-    Returns the current state of the object. When the state changes,
-    the stateChanged() signal is emitted.
-
-    \sa State stateChanged()
-*/
 QFtp::State QFtp::state() const
 {
    return d_func()->state;
 }
 
-/*!
-    Returns the last error that occurred. This is useful to find out
-    what went wrong when receiving a commandFinished() or a done()
-    signal with the \c error argument set to \c true.
-
-    If you start a new command, the error status is reset to \c NoError.
-*/
 QFtp::Error QFtp::error() const
 {
    return d_func()->error;
 }
 
-/*!
-    Returns a human-readable description of the last error that
-    occurred. This is useful for presenting a error message to the
-    user when receiving a commandFinished() or a done() signal with
-    the \c error argument set to \c true.
-
-    The error string is often (but not always) the reply from the
-    server, so it is not always possible to translate the string. If
-    the message comes from Qt, the string has already passed through
-    tr().
-*/
 QString QFtp::errorString() const
 {
    return d_func()->errorString;
@@ -2294,6 +2246,7 @@ void QFtpPrivate::_q_piError(int errorCode, const QString &text)
 
    pending.removeFirst();
    delete c;
+
    if (pending.isEmpty()) {
       emit q->done(true);
    } else {

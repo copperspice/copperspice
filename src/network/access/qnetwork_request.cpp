@@ -39,7 +39,7 @@ class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
  public:
    static const int maxRedirectCount = 50;
 
-   inline QNetworkRequestPrivate()
+   QNetworkRequestPrivate()
       : priority(QNetworkRequest::NormalPriority)
 #ifdef QT_SSL
       , sslConfiguration(nullptr)
@@ -619,6 +619,7 @@ static int name_to_month(const char *month_str)
                }
          }
          break;
+
       case 'F':
          return 2;
 
@@ -632,6 +633,7 @@ static int name_to_month(const char *month_str)
 
          }
          break;
+
       case 'A':
          switch (month_str[1]) {
             case 'p':
@@ -642,6 +644,7 @@ static int name_to_month(const char *month_str)
 
          }
          break;
+
       case 'O':
          return 10;
 
@@ -678,19 +681,25 @@ QDateTime QNetworkHeadersPrivate::fromHttpDate(const QByteArray &value)
    } else {
       // Use sscanf over QLocal/QDateTimeParser for speed reasons. See the
       // QtWebKit performance benchmarks to get an idea.
+
       if (pos == 3) {
          char month_name[4];
          int day, year, hour, minute, second;
-         if (sscanf(value.constData(), "%*3s, %d %3s %d %d:%d:%d 'GMT'", &day, month_name, &year, &hour, &minute,
-                    &second) == 6) {
+
+         if (sscanf(value.constData(), "%*3s, %d %3s %d %d:%d:%d 'GMT'", &day, month_name,
+                  &year, &hour, &minute, &second) == 6) {
+
             dt = QDateTime(QDate(year, name_to_month(month_name), day), QTime(hour, minute, second));
          }
+
       } else {
          QLocale c = QLocale::c();
+
          // eat the weekday, the comma and the space following it
          QString sansWeekday = QString::fromLatin1(value.constData() + pos + 2);
+
          // must be RFC 850 date
-         dt = c.toDateTime(sansWeekday, QLatin1String("dd-MMM-yy hh:mm:ss 'GMT'"));
+         dt = c.toDateTime(sansWeekday, "dd-MMM-yy hh:mm:ss 'GMT'");
       }
    }
 
@@ -702,6 +711,5 @@ QDateTime QNetworkHeadersPrivate::fromHttpDate(const QByteArray &value)
 
 QByteArray QNetworkHeadersPrivate::toHttpDate(const QDateTime &dt)
 {
-   return QLocale::c().toString(dt, QLatin1String("ddd, dd MMM yyyy hh:mm:ss 'GMT'"))
-          .toLatin1();
+   return QLocale::c().toString(dt, "ddd, dd MMM yyyy hh:mm:ss 'GMT'").toLatin1();
 }

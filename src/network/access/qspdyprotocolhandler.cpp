@@ -699,8 +699,7 @@ bool QSpdyProtocolHandler::uploadData(qint32 streamID)
 
       if (currentReadSize == -1) {
          // premature eof happened
-         m_connection->d_func()->emitReplyError(m_socket, reply,
-                                                QNetworkReply::UnknownNetworkError);
+         m_connection->d_func()->emitReplyError(m_socket, reply, QNetworkReply::UnknownNetworkError);
          return false;
 
       } else if (readPointer == nullptr || currentReadSize == 0) {
@@ -714,21 +713,20 @@ bool QSpdyProtocolHandler::uploadData(qint32 streamID)
 
          if (currentWriteSize == -1 || currentWriteSize != currentReadSize) {
             // socket broke down
-            m_connection->d_func()->emitReplyError(m_socket, reply,
-                                                   QNetworkReply::UnknownNetworkError);
+            m_connection->d_func()->emitReplyError(m_socket, reply, QNetworkReply::UnknownNetworkError);
             return false;
+
          } else {
             replyPrivate->currentlyUploadedDataInWindow += currentWriteSize;
             replyPrivate->totallyUploadedData += currentWriteSize;
-            dataLeftInWindow = replyPrivate->windowSizeUpload
-                               - replyPrivate->currentlyUploadedDataInWindow;
+            dataLeftInWindow = replyPrivate->windowSizeUpload - replyPrivate->currentlyUploadedDataInWindow;
             request.uploadByteDevice()->advanceReadPointer(currentWriteSize);
 
-            emit reply->dataSendProgress(replyPrivate->totallyUploadedData,
-                                         request.contentLength());
+            emit reply->dataSendProgress(replyPrivate->totallyUploadedData, request.contentLength());
          }
       }
    }
+
    if (replyPrivate->totallyUploadedData == request.contentLength()) {
       DataFrameFlags finFlag = DataFrame_FLAG_FIN;
       qint64 writeSize = sendDataFrame(streamID, finFlag, 0, nullptr);
@@ -736,12 +734,13 @@ bool QSpdyProtocolHandler::uploadData(qint32 streamID)
       Q_ASSERT(writeSize == 0);
       Q_UNUSED(writeSize); // silence -Wunused-variable
       replyPrivate->state = QHttpNetworkReplyPrivate::SPDYHalfClosed;
+
       if (reply->request().uploadByteDevice()) {
          reply->request().uploadByteDevice()->disconnect(this);
       }
+
       // ### this will not work if the content length is not known, but
-      // then again many servers will fail in this case anyhow according
-      // to the SPDY RFC
+      // then again many servers will fail in this case anyhow according to the SPDY RFC
    }
    return true;
 }
@@ -890,7 +889,7 @@ void QSpdyProtocolHandler::parseHttpHeaders(char flags, const QByteArray &frameD
    }
 
    QByteArray uncompressedHeader;
-   if (!uncompressHeader(headerValuePairs, &uncompressedHeader)) {
+   if (! uncompressHeader(headerValuePairs, &uncompressedHeader)) {
       qWarning("error reading header from SYN_REPLY message");
       return;
    }
@@ -901,12 +900,15 @@ void QSpdyProtocolHandler::parseHttpHeaders(char flags, const QByteArray &frameD
       sendRST_STREAM(streamID, RST_STREAM_PROTOCOL_ERROR);
       return;
    }
+
    qint32 readPointer = 4;
+
    for (qint32 a = 0; a < headerCount; ++a) {
       qint32 count = fourBytesToInt(uncompressedHeader.constData() + readPointer);
       readPointer += 4;
       QByteArray name = uncompressedHeader.mid(readPointer, count);
       readPointer += count;
+
       if (readPointer > uncompressedHeader.size()) {
          qWarning("error parsing header from SYN_REPLY message");
          sendRST_STREAM(streamID, RST_STREAM_PROTOCOL_ERROR);
@@ -916,21 +918,26 @@ void QSpdyProtocolHandler::parseHttpHeaders(char flags, const QByteArray &frameD
       readPointer += 4;
       QByteArray value = uncompressedHeader.mid(readPointer, count);
       readPointer += count;
+
       if (readPointer > uncompressedHeader.size()) {
          qWarning("error parsing header from SYN_REPLY message");
          sendRST_STREAM(streamID, RST_STREAM_PROTOCOL_ERROR);
          return;
       }
+
       if (name == ":status") {
          httpReply->setStatusCode(value.left(3).toInt());
          httpReply->d_func()->reasonPhrase = QString::fromLatin1(value.mid(4));
+
       } else if (name == ":version") {
          int majorVersion = value.at(5) - 48;
          int minorVersion = value.at(7) - 48;
          httpReply->d_func()->majorVersion = majorVersion;
          httpReply->d_func()->minorVersion = minorVersion;
+
       } else if (name == "content-length") {
          httpReply->setContentLength(value.toLongLong());
+
       } else {
          if (value.contains('\0')) {
             QList<QByteArray> values = value.split('\0');
@@ -961,13 +968,13 @@ void QSpdyProtocolHandler::parseHttpHeaders(char flags, const QByteArray &frameD
    }
 }
 
-void QSpdyProtocolHandler::handleRST_STREAM(char /*flags*/, quint32 length,
-      const QByteArray &frameData)
+void QSpdyProtocolHandler::handleRST_STREAM(char, quint32 length, const QByteArray &frameData)
 {
    // flags are ignored
 
    Q_ASSERT(length == 8);
-   Q_UNUSED(length); // silence -Wunused-parameter
+   Q_UNUSED(length);
+
    qint32 streamID = getStreamID(frameData.constData());
    QHttpNetworkReply *httpReply = m_inFlightStreams.value(streamID).second;
 
@@ -981,51 +988,63 @@ void QSpdyProtocolHandler::handleRST_STREAM(char /*flags*/, quint32 length,
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "SPDY protocol error";
          break;
+
       case RST_STREAM_INVALID_STREAM:
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "SPDY stream is not active";
          break;
+
       case RST_STREAM_REFUSED_STREAM:
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "SPDY stream was refused";
          break;
+
       case RST_STREAM_UNSUPPORTED_VERSION:
          errorCode = QNetworkReply::ProtocolUnknownError;
          errorMessage = "SPDY version is unknown to the server";
          break;
+
       case RST_STREAM_CANCEL:
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "SPDY stream is no longer needed";
          break;
+
       case RST_STREAM_INTERNAL_ERROR:
          errorCode = QNetworkReply::InternalServerError;
          errorMessage = "Internal server error";
          break;
+
       case RST_STREAM_FLOW_CONTROL_ERROR:
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "peer violated the flow control protocol";
          break;
+
       case RST_STREAM_STREAM_IN_USE:
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "server received a SYN_REPLY for an already open stream";
          break;
+
       case RST_STREAM_STREAM_ALREADY_CLOSED:
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "server received data or a SYN_REPLY for an already half-closed stream";
          break;
+
       case RST_STREAM_INVALID_CREDENTIALS:
          errorCode = QNetworkReply::ContentAccessDenied;
          errorMessage = "server received invalid credentials";
          break;
+
       case RST_STREAM_FRAME_TOO_LARGE:
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "server cannot process the frame because it is too large";
          break;
+
       default:
          qWarning("could not understand servers RST_STREAM status code");
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "got SPDY RST_STREAM message with unknown error code";
    }
+
    if (httpReply) {
       replyFinishedWithError(httpReply, streamID, errorCode, errorMessage.constData());
    }

@@ -23,11 +23,12 @@
 
 #include <qnetaccess_ftpbackend_p.h>
 
-#include <qnetaccess_manager_p.h>
 #include <qauthenticator.h>
-#include <qnoncontiguousbytedevice_p.h>
 #include <qstring.h>
 #include <qstringlist.h>
+
+#include <qnetaccess_manager_p.h>
+#include <qnoncontiguousbytedevice_p.h>
 
 #ifndef QT_NO_FTP
 
@@ -80,7 +81,7 @@ class QNetworkAccessCachedFtpConnection : public QFtp, public QNetworkAccessCach
    }
 
    void dispose() override {
-      connect(this, SIGNAL(done(bool)), this, SLOT(deleteLater()));
+      connect(this, &QNetworkAccessCachedFtpConnection::done, this, &QNetworkAccessCachedFtpConnection::deleteLater);
       close();
    }
 };
@@ -122,7 +123,6 @@ void QNetworkAccessFtpBackend::open()
       finished();
       return;
    }
-
 #endif
 
    QUrl url = this->url();
@@ -309,6 +309,7 @@ void QNetworkAccessFtpBackend::ftpDone()
       } else {
          ftpDone();
       }
+
    } else if (state == CheckingFeatures) {
       state = Statting;
       if (operation() == QNetworkAccessManager::GetOperation) {
@@ -330,6 +331,7 @@ void QNetworkAccessFtpBackend::ftpDone()
       } else {
          ftpDone();
       }
+
    } else if (state == Statting) {
       // statted successfully, send the actual request
       emit metaDataChanged();

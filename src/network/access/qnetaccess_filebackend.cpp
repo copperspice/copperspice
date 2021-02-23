@@ -87,7 +87,7 @@ void QNetworkAccessFileBackend::open()
 {
    QUrl url = this->url();
 
-   if (url.host() == QLatin1String("localhost")) {
+   if (url.host() == "localhost") {
       url.setHost(QString());
    }
 
@@ -98,9 +98,12 @@ void QNetworkAccessFileBackend::open()
       error(QNetworkReply::ProtocolInvalidOperationError,
             QCoreApplication::translate("QNetworkAccessFileBackend", "Request for opening non-local file %1").formatArg(url.toString()));
       finished();
+
       return;
    }
-#endif // !defined(Q_OS_WIN)
+
+#endif
+
    if (url.path().isEmpty()) {
       url.setPath("/");
    }
@@ -145,7 +148,7 @@ void QNetworkAccessFileBackend::open()
    bool opened = file.open(mode);
 
    // could we open the file?
-   if (!opened) {
+   if (! opened) {
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend", "Error opening %1: %2")
                     .formatArgs(this->url().toString(), file.errorString());
 
@@ -200,7 +203,6 @@ void QNetworkAccessFileBackend::uploadReadyReadSlot()
          } else {
             uploadByteDevice->advanceReadPointer(haveWritten);
          }
-
 
          file.flush();
       }
@@ -279,6 +281,3 @@ bool QNetworkAccessFileBackend::readMoreFromFile()
    }
    return true;
 }
-
-
-

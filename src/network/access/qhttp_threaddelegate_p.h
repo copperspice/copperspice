@@ -249,10 +249,12 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
 
       if (m_atEnd) {
          len = -1;
+
       } else if (!wantDataPending) {
          len = 0;
          wantDataPending = true;
          emit wantData(maximumLength);
+
       } else {
          // Do nothing, we already sent a wantData signal and wait for results
          len = 0;
@@ -267,8 +269,8 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
       }
 
       m_amount -= a;
-      m_data += a;
-      m_pos += a;
+      m_data   += a;
+      m_pos    += a;
 
       // To main thread to inform about our state. The m_pos will be sent as a sanity check.
       emit processedData(m_pos, a);
@@ -312,16 +314,6 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
       return m_size;
    }
 
- protected:
-   bool wantDataPending;
-   qint64 m_amount;
-   char *m_data;
-   QByteArray m_dataArray;
-   bool m_atEnd;
-   qint64 m_size;
-   qint64 m_pos;
-
- public:
    // From user thread
    NET_CS_SLOT_1(Public, void haveDataSlot(qint64 pos, QByteArray dataArray, bool dataAtEnd, qint64 dataSize))
    NET_CS_SLOT_2(haveDataSlot)
@@ -335,8 +327,15 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
 
    NET_CS_SIGNAL_1(Public, void resetData(bool *b))
    NET_CS_SIGNAL_2(resetData, b)
+
+ protected:
+   bool wantDataPending;
+   qint64 m_amount;
+   char *m_data;
+   QByteArray m_dataArray;
+   bool m_atEnd;
+   qint64 m_size;
+   qint64 m_pos;
 };
-
-
 
 #endif

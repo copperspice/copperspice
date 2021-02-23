@@ -36,7 +36,7 @@ class QHttpResponseHeaderPrivate;
 
 class Q_NETWORK_EXPORT QHttpHeader
 {
-public:
+ public:
     QHttpHeader();
     QHttpHeader(const QHttpHeader &other);
     QHttpHeader(const QString &str);
@@ -69,7 +69,7 @@ public:
     virtual int majorVersion() const = 0;
     virtual int minorVersion() const = 0;
 
-protected:
+ protected:
     virtual bool parseLine(const QString &line, int number);
     bool parse(const QString &str);
     void setValid(bool);
@@ -79,7 +79,7 @@ protected:
 
     QScopedPointer<QHttpHeaderPrivate> d_ptr;
 
-private:
+ private:
     Q_DECLARE_PRIVATE(QHttpHeader)
 };
 
@@ -112,7 +112,7 @@ class Q_NETWORK_EXPORT QHttpRequestHeader : public QHttpHeader
 
 class Q_NETWORK_EXPORT QHttpResponseHeader : public QHttpHeader
 {
-public:
+ public:
     QHttpResponseHeader();
     QHttpResponseHeader(const QHttpResponseHeader &other);
     QHttpResponseHeader(const QString &str);
@@ -130,10 +130,10 @@ public:
 
     QString toString() const;
 
-protected:
+ protected:
     bool parseLine(const QString &line, int number);
 
-private:
+ private:
     Q_DECLARE_PRIVATE(QHttpResponseHeader)
     friend class QHttpPrivate;
 };

@@ -42,6 +42,7 @@ static QNetworkReply::NetworkError statusCodeFromHttp(int httpStatusCode, const 
       case 400:               // Bad Request
          code = QNetworkReply::ProtocolInvalidOperationError;
          break;
+
       case 401:               // Authorization required
          code = QNetworkReply::AuthenticationRequiredError;
          break;
@@ -65,9 +66,11 @@ static QNetworkReply::NetworkError statusCodeFromHttp(int httpStatusCode, const 
       case 409:               // Resource Conflict
          code = QNetworkReply::ContentConflictError;
          break;
+
       case 410:               // Content no longer available
          code = QNetworkReply::ContentGoneError;
          break;
+
       case 418:               // I'm a teapot
          code = QNetworkReply::ProtocolInvalidOperationError;
          break;
@@ -79,26 +82,29 @@ static QNetworkReply::NetworkError statusCodeFromHttp(int httpStatusCode, const 
       case 501:               // Server does not support this functionality
          code = QNetworkReply::OperationNotImplementedError;
          break;
+
       case 503:               // Service unavailable
          code = QNetworkReply::ServiceUnavailableError;
          break;
+
       default:
          if (httpStatusCode > 500) {
             // some kind of server error
             code = QNetworkReply::UnknownServerError;
+
          } else if (httpStatusCode >= 400) {
             // content error we did not handle above
             code = QNetworkReply::UnknownContentError;
+
          } else {
             qWarning("QNetworkAccess: got HTTP status code %d which is not expected from url: \"%s\"",
-                     httpStatusCode, qPrintable(url.toString()));
+                     httpStatusCode, csPrintable(url.toString()));
             code = QNetworkReply::ProtocolFailure;
          }
    }
 
    return code;
 }
-
 
 static QByteArray makeCacheKey(QUrl &url, QNetworkProxy *proxy)
 {
@@ -107,14 +113,17 @@ static QByteArray makeCacheKey(QUrl &url, QNetworkProxy *proxy)
    QUrl copy = url;
    QString scheme = copy.scheme();
 
-   bool isEncrypted = scheme == QLatin1String("https");
+   bool isEncrypted = (scheme == "https");
 
    copy.setPort(copy.port(isEncrypted ? 443 : 80));
+
    if (scheme == QLatin1String("preconnect-http")) {
-      copy.setScheme(QLatin1String("http"));
-   } else if (scheme == QLatin1String("preconnect-https")) {
-      copy.setScheme(QLatin1String("https"));
+      copy.setScheme("http");
+
+   } else if (scheme == "preconnect-https") {
+      copy.setScheme("https");
    }
+
    result = copy.toString(QUrl::RemoveUserInfo | QUrl::RemovePath |
                           QUrl::RemoveQuery | QUrl::RemoveFragment | QUrl::FullyEncoded);
 
@@ -124,12 +133,12 @@ static QByteArray makeCacheKey(QUrl &url, QNetworkProxy *proxy)
 
       switch (proxy->type()) {
          case QNetworkProxy::Socks5Proxy:
-            key.setScheme(QLatin1String("proxy-socks5"));
+            key.setScheme("proxy-socks5");
             break;
 
          case QNetworkProxy::HttpProxy:
          case QNetworkProxy::HttpCachingProxy:
-            key.setScheme(QLatin1String("proxy-http"));
+            key.setScheme("proxy-http");
             break;
 
          default:
@@ -145,6 +154,7 @@ static QByteArray makeCacheKey(QUrl &url, QNetworkProxy *proxy)
          result = key.toString(QUrl::FullyEncoded);
       }
    }
+
 #else
    Q_UNUSED(proxy)
 #endif
@@ -158,14 +168,14 @@ class QNetworkAccessCachedHttpConnection: public QHttpNetworkConnection, public 
 
 #ifdef QT_NO_BEARERMANAGEMENT
    QNetworkAccessCachedHttpConnection(const QString &hostName, quint16 port, bool encrypt,
-                                      QHttpNetworkConnection::ConnectionType connectionType)
+                  QHttpNetworkConnection::ConnectionType connectionType)
       : QHttpNetworkConnection(hostName, port, encrypt, connectionType)
 #else
    QNetworkAccessCachedHttpConnection(const QString & hostName, quint16 port, bool encrypt,
-                                      QHttpNetworkConnection::ConnectionType connectionType,
-                                      QSharedPointer<QNetworkSession> networkSession)
-      : QHttpNetworkConnection(hostName, port, encrypt, connectionType, nullptr,
-                               std::move(networkSession))
+                  QHttpNetworkConnection::ConnectionType connectionType,
+                  QSharedPointer<QNetworkSession> networkSession)
+
+      : QHttpNetworkConnection(hostName, port, encrypt, connectionType, nullptr, std::move(networkSession))
 #endif
 
    {
@@ -177,7 +187,6 @@ class QNetworkAccessCachedHttpConnection: public QHttpNetworkConnection, public 
       delete this;
    }
 };
-
 
 QThreadStorage<QNetworkAccessCache *> QHttpThreadDelegate::connections;
 
@@ -210,6 +219,7 @@ void QHttpThreadDelegate::startRequestSynchronously()
 #ifdef QHTTPTHREADDELEGATE_DEBUG
    qDebug() << "QHttpThreadDelegate::startRequestSynchronously() thread=" << QThread::currentThreadId();
 #endif
+
    synchronous = true;
 
    QEventLoop synchronousRequestLoop;
@@ -229,7 +239,6 @@ void QHttpThreadDelegate::startRequestSynchronously()
 #endif
 }
 
-
 // This is invoked as QueuedConnection from QNetworkAccessHttpBackend in the user thread
 void QHttpThreadDelegate::startRequest()
 {
@@ -239,7 +248,7 @@ void QHttpThreadDelegate::startRequest()
 
    // Check QThreadStorage for the QNetworkAccessCache
    // If not there, create this connection cache
-   if (!connections.hasLocalData()) {
+   if (! connections.hasLocalData()) {
       connections.setLocalData(new QNetworkAccessCache());
    }
 
@@ -261,11 +270,14 @@ void QHttpThreadDelegate::startRequest()
       incomingSslConfiguration.setAllowedNextProtocols(nextProtocols);
    }
 #endif
+
 #ifndef QT_NO_NETWORKPROXY
    if (transparentProxy.type() != QNetworkProxy::NoProxy) {
       cacheKey = makeCacheKey(urlCopy, &transparentProxy);
+
    } else if (cacheProxy.type() != QNetworkProxy::NoProxy) {
       cacheKey = makeCacheKey(urlCopy, &cacheProxy);
+
    } else
 #endif
 
@@ -322,24 +334,25 @@ void QHttpThreadDelegate::startRequest()
       connect(httpReply, SIGNAL(headerChanged()), this, SLOT(synchronousHeaderChangedSlot()));
       connect(httpReply, SIGNAL(finished()), this, SLOT(synchronousFinishedSlot()));
 
-      connect(httpReply, SIGNAL(finishedWithError(QNetworkReply::NetworkError,  const QString &)),
-              this, SLOT(synchronousFinishedWithErrorSlot(QNetworkReply::NetworkError, const QString &)));
+      connect(httpReply, SIGNAL(finishedWithError(QNetworkReply::NetworkError, const QString &)),
+               this, SLOT(synchronousFinishedWithErrorSlot(QNetworkReply::NetworkError, const QString &)));
 
       connect(httpReply, SIGNAL(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)),
-              this, SLOT(synchronousAuthenticationRequiredSlot(QHttpNetworkRequest, QAuthenticator *)));
+               this, SLOT(synchronousAuthenticationRequiredSlot(QHttpNetworkRequest, QAuthenticator *)));
 
 #ifndef QT_NO_NETWORKPROXY
       connect(httpReply, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
-              this, SLOT(synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &, QAuthenticator *)));
+               this, SLOT(synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &, QAuthenticator *)));
 #endif
 
-      // Don't care about ignored SSL errors for now in the synchronous HTTP case.
+      // ignore SSL errors for now in the synchronous HTTP case.
+
    } else if (! synchronous) {
       connect(httpReply, SIGNAL(headerChanged()), this, SLOT(headerChangedSlot()));
       connect(httpReply, SIGNAL(finished()), this, SLOT(finishedSlot()));
 
       connect(httpReply, SIGNAL(finishedWithError(QNetworkReply::NetworkError, const QString &)),
-              this, SLOT(finishedWithErrorSlot(QNetworkReply::NetworkError, const QString &)));
+               this, SLOT(finishedWithErrorSlot(QNetworkReply::NetworkError, const QString &)));
 
       // some signals are only interesting when normal asynchronous style is used
       connect(httpReply, SIGNAL(readyRead()), this, SLOT(readyReadSlot()));
@@ -350,22 +363,22 @@ void QHttpThreadDelegate::startRequest()
       connect(httpReply, SIGNAL(sslErrors(const QList<QSslError> &)), this, SLOT(sslErrorsSlot(const QList<QSslError> &)));
 
       connect(httpReply, SIGNAL(preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *)),
-              this, SLOT(preSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator *)));
+               this, SLOT(preSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator *)));
 
 #endif
       // In the asynchronous HTTP case we can just forward those signals
       // Connect the reply signals that we can directly forward
       connect(httpReply, SIGNAL(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)),
-              this, SLOT(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)));
+               this, SLOT(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)));
 
 #ifndef QT_NO_NETWORKPROXY
       connect(httpReply, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
-              this, SLOT(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)));
+               this, SLOT(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)));
 #endif
    }
 
    connect(httpReply, SIGNAL(cacheCredentials(const QHttpNetworkRequest &, QAuthenticator *)),
-           this, SLOT(cacheCredentialsSlot(const QHttpNetworkRequest &, QAuthenticator *)));
+               this, SLOT(cacheCredentialsSlot(const QHttpNetworkRequest &, QAuthenticator *)));
 }
 
 // This gets called from the user thread or by the synchronous HTTP timeout timer
@@ -442,6 +455,7 @@ void QHttpThreadDelegate::readyReadSlot()
       } else {
          // We need to wait until we empty data from the read buffer in the reply.
       }
+
    } else {
       while (httpReply->readAnyAvailable()) {
          pendingDownloadData->fetchAndAddRelease(1);
@@ -452,7 +466,7 @@ void QHttpThreadDelegate::readyReadSlot()
 
 void QHttpThreadDelegate::finishedSlot()
 {
-   if (!httpReply) {
+   if (! httpReply) {
       return;
    }
 
@@ -523,8 +537,8 @@ void QHttpThreadDelegate::finishedWithErrorSlot(QNetworkReply::NetworkError erro
    }
 
 #ifdef QHTTPTHREADDELEGATE_DEBUG
-   qDebug() << "QHttpThreadDelegate::finishedWithErrorSlot() thread=" << QThread::currentThreadId() << "error=" <<
-            errorCode << detail;
+   qDebug() << "QHttpThreadDelegate::finishedWithErrorSlot() thread=" << QThread::currentThreadId() << "error="
+            << errorCode << detail;
 #endif
 
 #ifdef QT_SSL
@@ -535,7 +549,6 @@ void QHttpThreadDelegate::finishedWithErrorSlot(QNetworkReply::NetworkError erro
 
    emit error(errorCode, detail);
    emit downloadFinished();
-
 
    QMetaObject::invokeMethod(httpReply, "deleteLater", Qt::QueuedConnection);
    QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
@@ -553,6 +566,7 @@ void QHttpThreadDelegate::synchronousFinishedWithErrorSlot(QNetworkReply::Networ
    qDebug() << "QHttpThreadDelegate::synchronousFinishedWithErrorSlot() thread=" << QThread::currentThreadId() << "error="
             << errorCode << detail;
 #endif
+
    incomingErrorCode = errorCode;
    incomingErrorDetail = detail;
    synchronousDownloadData = httpReply->readAll();
@@ -608,9 +622,8 @@ void QHttpThreadDelegate::headerChangedSlot()
    incomingContentLength = httpReply->contentLength();
    isSpdyUsed = httpReply->isSpdyUsed();
 
-   emit downloadMetaData(incomingHeaders,
-                         incomingStatusCode, incomingReasonPhrase, isPipeliningUsed,
-                         downloadBuffer, incomingContentLength, isSpdyUsed);
+   emit downloadMetaData(incomingHeaders, incomingStatusCode, incomingReasonPhrase, isPipeliningUsed,
+               downloadBuffer, incomingContentLength, isSpdyUsed);
 }
 
 void QHttpThreadDelegate::synchronousHeaderChangedSlot()
@@ -622,6 +635,7 @@ void QHttpThreadDelegate::synchronousHeaderChangedSlot()
 #ifdef QHTTPTHREADDELEGATE_DEBUG
    qDebug() << "QHttpThreadDelegate::synchronousHeaderChangedSlot() thread=" << QThread::currentThreadId();
 #endif
+
    // Store the information we need in this object, the QNetworkAccessHttpBackend will later read it
    incomingHeaders = httpReply->header();
    incomingStatusCode = httpReply->statusCode();
@@ -647,7 +661,6 @@ void QHttpThreadDelegate::cacheCredentialsSlot(const QHttpNetworkRequest &reques
 {
    authenticationManager->cacheCredentials(request.url(), authenticator);
 }
-
 
 #ifdef QT_SSL
 void QHttpThreadDelegate::encryptedSlot()
@@ -706,7 +719,7 @@ void QHttpThreadDelegate::synchronousAuthenticationRequiredSlot(const QHttpNetwo
 
    // Disconnect this connection now since we only want to ask the authentication cache once.
    QObject::disconnect(httpReply, SIGNAL(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)),
-                       this, SLOT(synchronousAuthenticationRequiredSlot(QHttpNetworkRequest, QAuthenticator *)));
+               this, SLOT(synchronousAuthenticationRequiredSlot(QHttpNetworkRequest, QAuthenticator *)));
 }
 
 #ifndef QT_NO_NETWORKPROXY
@@ -726,7 +739,7 @@ void  QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot(const QNet
 
    // Disconnect this connection now since we only want to ask the authentication cache once.
    QObject::disconnect(httpReply, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *)),
-                       this, SLOT(synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &proxy, QAuthenticator *)));
+               this, SLOT(synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &proxy, QAuthenticator *)));
 }
 #endif
 

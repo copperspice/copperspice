@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qnetaccess_backend_p.h>
-#include <qnetaccess_manager_p.h>
 
 #include <qabstract_networkcache.h>
 #include <qnetworkconfigmanager.h>
@@ -32,6 +31,7 @@
 #include <qhostinfo.h>
 #include <qmutex.h>
 
+#include <qnetaccess_manager_p.h>
 #include <qnetwork_reply_p.h>
 #include <qnetworksession_p.h>
 #include <qnetaccess_cachebackend_p.h>
@@ -40,10 +40,14 @@
 class QNetworkAccessBackendFactoryData: public QList<QNetworkAccessBackendFactory *>
 {
  public:
-   QNetworkAccessBackendFactoryData() : mutex(QMutex::Recursive) {
+   QNetworkAccessBackendFactoryData()
+      : mutex(QMutex::Recursive)
+   {
       valid.ref();
    }
-   ~QNetworkAccessBackendFactoryData() {
+
+   ~QNetworkAccessBackendFactoryData()
+   {
       QMutexLocker locker(&mutex); // why do we need to lock?
       valid.deref();
    }
@@ -76,8 +80,10 @@ QNetworkAccessBackend *QNetworkAccessManagerPrivate::findBackend(QNetworkAccessM
 {
    if (QNetworkAccessBackendFactoryData::valid.load()) {
       QMutexLocker locker(&factoryData()->mutex);
-      QNetworkAccessBackendFactoryData::const_iterator it = factoryData()->constBegin(),
-                                                      end = factoryData()->constEnd();
+
+      auto it  = factoryData()->constBegin();
+      auto end = factoryData()->constEnd();
+
       while (it != end) {
          QNetworkAccessBackend *backend = (*it)->create(op, request);
          if (backend) {
@@ -95,15 +101,19 @@ QStringList QNetworkAccessManagerPrivate::backendSupportedSchemes() const
 {
    if (QNetworkAccessBackendFactoryData::valid.load()) {
       QMutexLocker locker(&factoryData()->mutex);
-      QNetworkAccessBackendFactoryData::const_iterator it = factoryData()->constBegin();
-      QNetworkAccessBackendFactoryData::const_iterator end = factoryData()->constEnd();
+
+      auto it  = factoryData()->constBegin();
+      auto end = factoryData()->constEnd();
+
       QStringList schemes;
+
       while (it != end) {
          schemes += (*it)->supportedSchemes();
          ++it;
       }
       return schemes;
    }
+
    return QStringList();
 }
 QNonContiguousByteDevice *QNetworkAccessBackend::createUploadByteDevice()
@@ -147,39 +157,32 @@ QNetworkAccessBackend::~QNetworkAccessBackend()
 
 void QNetworkAccessBackend::downstreamReadyWrite()
 {
-   // do nothing
 }
 
 void QNetworkAccessBackend::setDownstreamLimited(bool b)
 {
-   Q_UNUSED(b);
-   // do nothing
+   (void) b;
 }
 
 void QNetworkAccessBackend::copyFinished(QIODevice *)
 {
-   // do nothing
 }
 
 void QNetworkAccessBackend::ignoreSslErrors()
 {
-   // do nothing
 }
 
 void QNetworkAccessBackend::ignoreSslErrors(const QList<QSslError> &errors)
 {
-   Q_UNUSED(errors);
-   // do nothing
+   (void) errors;
 }
 
 void QNetworkAccessBackend::fetchSslConfiguration(QSslConfiguration &) const
 {
-   // do nothing
 }
 
 void QNetworkAccessBackend::setSslConfiguration(const QSslConfiguration &)
 {
-   // do nothing
 }
 
 QNetworkCacheMetaData QNetworkAccessBackend::fetchCacheMetaData(const QNetworkCacheMetaData &) const
@@ -292,6 +295,7 @@ void QNetworkAccessBackend::setAttribute(QNetworkRequest::Attribute code, const 
       reply->attributes.remove(code);
    }
 }
+
 QUrl QNetworkAccessBackend::url() const
 {
    return reply->url;
@@ -340,6 +344,7 @@ void QNetworkAccessBackend::encrypted()
    reply->encrypted();
 #endif
 }
+
 void QNetworkAccessBackend::sslErrors(const QList<QSslError> &errors)
 {
 #ifdef QT_SSL
@@ -349,11 +354,6 @@ void QNetworkAccessBackend::sslErrors(const QList<QSslError> &errors)
 #endif
 }
 
-/*!
-    Starts the backend.  Returns true if the backend is started.  Returns false if the backend
-    could not be started due to an unopened or roaming session.  The caller should recall this
-    function once the session has been opened or the roaming process has finished.
-*/
 bool QNetworkAccessBackend::start()
 {
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -424,4 +424,3 @@ bool QNetworkAccessBackend::start()
    open();
    return true;
 }
-

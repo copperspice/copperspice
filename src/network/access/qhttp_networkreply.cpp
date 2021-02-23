@@ -310,8 +310,8 @@ QHttpNetworkReplyPrivate::QHttpNetworkReplyPrivate(const QUrl &newUrl)
 #endif
 {
    QString scheme = newUrl.scheme();
-   if (scheme == QLatin1String("preconnect-http")
-         || scheme == QLatin1String("preconnect-https")) {
+
+   if (scheme == "preconnect-http" || scheme == "preconnect-https") {
       connectionCloseEnabled = false;
    }
 }
@@ -733,10 +733,12 @@ qint64 QHttpNetworkReplyPrivate::readBody(QAbstractSocket *socket, QByteDataBuff
       // no content length. just read what's possible
       bytes += readReplyBodyRaw(socket, tempOutDataBuffer, socket->bytesAvailable());
    }
+
 #ifndef QT_NO_COMPRESS
    if (autoDecompress) {
       qint64 uncompressRet = uncompressBodyData(tempOutDataBuffer, out);
       delete tempOutDataBuffer;
+
       if (uncompressRet < 0) {
          return -1;
       }
@@ -757,28 +759,36 @@ int QHttpNetworkReplyPrivate::initializeInflateStream()
 
    int ret = inflateInit2(inflateStrm, MAX_WBITS + 32);
    Q_ASSERT(ret == Z_OK);
+
    return ret;
 }
 qint64 QHttpNetworkReplyPrivate::uncompressBodyData(QByteDataBuffer *in, QByteDataBuffer *out)
 {
-   if (!inflateStrm) { // happens when called from the SPDY protocol handler
+   if (! inflateStrm) {
+      // happens when called from the SPDY protocol handler
+
       inflateStrm = new z_stream;
       initializeInflateStream();
    }
-   if (!inflateStrm) {
+
+   if (! inflateStrm) {
       return -1;
    }
+
    bool triedRawDeflate = false;
+
    for (int i = 0; i < in->bufferCount(); i++) {
       QByteArray &bIn = (*in)[i];
       inflateStrm->avail_in = bIn.size();
       inflateStrm->next_in = reinterpret_cast<Bytef *>(bIn.data());
+
       do {
          QByteArray bOut;
          bOut.reserve(inflateStrm->avail_in * 3 + 512);
          inflateStrm->avail_out = bOut.capacity();
          inflateStrm->next_out = reinterpret_cast<Bytef *>(bOut.data());
          int ret = inflate(inflateStrm, Z_NO_FLUSH);
+
          if (ret == Z_DATA_ERROR && !triedRawDeflate) {
             inflateEnd(inflateStrm);
             triedRawDeflate       = true;
@@ -788,26 +798,34 @@ qint64 QHttpNetworkReplyPrivate::uncompressBodyData(QByteDataBuffer *in, QByteDa
             inflateStrm->avail_in = 0;
             inflateStrm->next_in  = nullptr;
             int ret = inflateInit2(inflateStrm, -MAX_WBITS);
+
             if (ret != Z_OK) {
                return -1;
+
             } else {
                inflateStrm->avail_in = bIn.size();
                inflateStrm->next_in = reinterpret_cast<Bytef *>(bIn.data());
                continue;
             }
+
          } else if (ret < 0 || ret == Z_NEED_DICT) {
             return -1;
          }
+
          bOut.resize(bOut.capacity() - inflateStrm->avail_out);
          out->append(bOut);
+
          if (ret == Z_STREAM_END) {
             return out->byteAmount();
          }
+
       } while (inflateStrm->avail_in > 0);
    }
+
    return out->byteAmount();
 }
 #endif
+
 qint64 QHttpNetworkReplyPrivate::readReplyBodyRaw(QAbstractSocket *socket, QByteDataBuffer *out, qint64 size)
 {
    // FIXME get rid of this function and just use readBodyFast and give it socket->bytesAvailable()
@@ -1038,4 +1056,3 @@ void QHttpNetworkReply::ignoreSslErrors(const QList<QSslError> &errors)
 }
 
 #endif
-

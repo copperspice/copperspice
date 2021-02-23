@@ -496,11 +496,13 @@ bool QHttpNetworkConnectionPrivate::handleAuthenticateChallenge(QAbstractSocket 
          // such as in the case of an XMLHttpRequest, this is our only opportunity to cache them.
          emit reply->cacheCredentials(reply->request(), auth);
       }
+
       // - Changing values in QAuthenticator will reset the 'phase'. Therefore if it is still "Done"
       //   then nothing was filled in by the user or the cache
       // - If withCredentials has been set to false (e.g. by QtWebKit for a cross-origin XMLHttpRequest) then
       //   we need to bail out if authentication is required.
-      if (priv->phase == QAuthenticatorPrivate::Done || !reply->request().withCredentials()) {
+
+      if (priv->phase == QAuthenticatorPrivate::Done || ! reply->request().withCredentials()) {
          // Reset authenticator so the next request on that channel does not get messed up
          auth = nullptr;
 
@@ -513,19 +515,22 @@ bool QHttpNetworkConnectionPrivate::handleAuthenticateChallenge(QAbstractSocket 
          // authentication is cancelled, send the current contents to the user.
          emit channels[i].reply->headerChanged();
          emit channels[i].reply->readyRead();
-         QNetworkReply::NetworkError errorCode =
-            isProxy
-            ? QNetworkReply::ProxyAuthenticationRequiredError
-            : QNetworkReply::AuthenticationRequiredError;
+
+         QNetworkReply::NetworkError errorCode = isProxy
+            ? QNetworkReply::ProxyAuthenticationRequiredError : QNetworkReply::AuthenticationRequiredError;
+
          reply->d_func()->errorString = errorDetail(errorCode, socket);
+
          emit reply->finishedWithError(errorCode, reply->d_func()->errorString);
          // ### at this point the reply could be deleted
          return true;
       }
+
       //resend the request
       resend = true;
       return true;
    }
+
    return false;
 }
 
@@ -672,6 +677,7 @@ void QHttpNetworkConnectionPrivate::requeueRequest(const HttpMessagePair &pair)
       case QHttpNetworkRequest::HighPriority:
          highPriorityQueue.prepend(pair);
          break;
+
       case QHttpNetworkRequest::NormalPriority:
       case QHttpNetworkRequest::LowPriority:
          lowPriorityQueue.prepend(pair);
@@ -894,33 +900,43 @@ QString QHttpNetworkConnectionPrivate::errorDetail(QNetworkReply::NetworkError e
       case QNetworkReply::ConnectionRefusedError:
          errorString = QCoreApplication::translate("QHttp", "Connection refused");
          break;
+
       case QNetworkReply::RemoteHostClosedError:
          errorString = QCoreApplication::translate("QHttp", "Connection closed");
          break;
+
       case QNetworkReply::TimeoutError:
          errorString = QCoreApplication::translate("QAbstractSocket", "Socket operation timed out");
          break;
+
       case QNetworkReply::ProxyAuthenticationRequiredError:
          errorString = QCoreApplication::translate("QHttp", "Proxy requires authentication");
          break;
+
       case QNetworkReply::AuthenticationRequiredError:
          errorString = QCoreApplication::translate("QHttp", "Host requires authentication");
          break;
+
       case QNetworkReply::ProtocolFailure:
          errorString = QCoreApplication::translate("QHttp", "Data corrupted");
          break;
+
       case QNetworkReply::ProtocolUnknownError:
          errorString = QCoreApplication::translate("QHttp", "Unknown protocol specified");
          break;
+
       case QNetworkReply::SslHandshakeFailedError:
          errorString = QCoreApplication::translate("QHttp", "SSL handshake failed");
          break;
+
       case QNetworkReply::TooManyRedirectsError:
          errorString = QCoreApplication::translate("QHttp", "Too many redirects");
          break;
+
       case QNetworkReply::InsecureRedirectError:
          errorString = QCoreApplication::translate("QHttp", "Insecure redirect");
          break;
+
       default:
          // all other errors are treated as QNetworkReply::UnknownNetworkError
          errorString = extraDetail;
@@ -1542,6 +1558,7 @@ void QHttpNetworkConnectionPrivate::emitProxyAuthenticationRequired(const QHttpN
 #ifdef QT_SSL
    }
 #endif
+
    Q_ASSERT(reply);
    emit reply->proxyAuthenticationRequired(proxy, auth);
    resumeConnection();
@@ -1563,10 +1580,8 @@ void QHttpNetworkConnection::_q_hostLookupFinished(const QHostInfo &info)
    d->_q_hostLookupFinished(info);
 }
 
-
 void QHttpNetworkConnection::_q_connectDelayedChannel()
 {
    Q_D(QHttpNetworkConnection);
    d->_q_connectDelayedChannel();
 }
-

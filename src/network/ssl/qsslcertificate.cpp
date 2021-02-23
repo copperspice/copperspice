@@ -28,7 +28,7 @@
 #endif
 
 #ifdef QT_SECURETRANSPORT
-#include "qsslsocket_mac_p.h"
+#include <qsslsocket_mac_p.h>
 #endif
 
 #include <qssl_p.h>
@@ -58,7 +58,8 @@ QSslCertificate::QSslCertificate(const QByteArray &data, QSsl::EncodingFormat fo
    d->init(data, format);
 }
 
-QSslCertificate::QSslCertificate(const QSslCertificate &other) : d(other.d)
+QSslCertificate::QSslCertificate(const QSslCertificate &other)
+   : d(other.d)
 {
 }
 
@@ -76,6 +77,7 @@ bool QSslCertificate::isBlacklisted() const
 {
    return QSslCertificatePrivate::isBlacklisted(*this);
 }
+
 void QSslCertificate::clear()
 {
    if (isNull()) {
@@ -185,8 +187,7 @@ QList<QSslCertificate> QSslCertificate::fromDevice(QIODevice *device, QSsl::Enco
 
 QList<QSslCertificate> QSslCertificate::fromData(const QByteArray &data, QSsl::EncodingFormat format)
 {
-   return (format == QSsl::Pem)
-          ? QSslCertificatePrivate::certificatesFromPem(data)
+   return (format == QSsl::Pem) ? QSslCertificatePrivate::certificatesFromPem(data)
           : QSslCertificatePrivate::certificatesFromDer(data);
 }
 
@@ -196,7 +197,7 @@ QList<QSslError> QSslCertificate::verify(const QList<QSslCertificate> &certifica
 }
 
 bool QSslCertificate::importPkcs12(QIODevice *device, QSslKey *key, QSslCertificate *certificate,
-                                   QList<QSslCertificate> *caCertificates, const QByteArray &passPhrase)
+            QList<QSslCertificate> *caCertificates, const QByteArray &passPhrase)
 {
    return QSslSocketBackendPrivate::importPkcs12(device, key, certificate, caCertificates, passPhrase);
 }

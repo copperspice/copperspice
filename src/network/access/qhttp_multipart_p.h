@@ -56,7 +56,7 @@ class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
    }
 
    void setBodyDevice(QIODevice *device) {
-      bodyDevice = device;
+      bodyDevice  = device;
       readPointer = 0;
    }
 
@@ -65,8 +65,8 @@ class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
       readPointer = 0;
    }
 
-   // QIODevice-style methods called by QHttpMultiPartIODevice (but this class is
-   // not a QIODevice):
+   // QIODevice-style methods called by QHttpMultiPartIODevice
+   // (but this class is not a QIODevice)
    qint64 bytesAvailable() const;
    qint64 readData(char *data, qint64 maxSize);
    qint64 size() const;
