@@ -701,13 +701,13 @@ int QKdPointTree::build(int begin, int end, int depth)
    if (last > begin) {
       m_nodes[last].left = &m_nodes[build(begin, last, depth + 1)];
    } else {
-      m_nodes[last].left = 0;
+      m_nodes[last].left = nullptr;
    }
 
    if (last + 1 < end) {
       m_nodes[last].right = &m_nodes[build(last + 1, end, depth + 1)];
    } else {
-      m_nodes[last].right = 0;
+      m_nodes[last].right = nullptr;
    }
 
    return last;
@@ -827,7 +827,7 @@ void QWingedEdge::intersectAndAdd()
          if (isect->next) {
             isect += isect->next;
          } else {
-            isect = 0;
+            isect = nullptr;
          }
       }
 
@@ -1582,8 +1582,8 @@ QPainterPath QPathClipper::clip(Operation operation)
          return op == BoolSub ? QPainterPath() : subjectPath;
       }
 
-      bool subjectIsRect = pathToRect(subjectPath, 0);
-      bool clipIsRect = pathToRect(clipPath, 0);
+      bool subjectIsRect = pathToRect(subjectPath, nullptr);
+      bool clipIsRect = pathToRect(clipPath, nullptr);
 
       const QRectF clipBounds = clipPath.boundingRect();
       const QRectF subjectBounds = subjectPath.boundingRect();

@@ -134,25 +134,19 @@ class QVectorPathConverter
 class QPainterPathData : public QPainterPathPrivate
 {
  public:
-   QPainterPathData() :
-      cStart(0),
-      fillRule(Qt::OddEvenFill),
-      dirtyBounds(false),
-      dirtyControlBounds(false),
-      pathConverter(0) {
-
+   QPainterPathData()
+      : cStart(0), fillRule(Qt::OddEvenFill), dirtyBounds(false),
+        dirtyControlBounds(false), pathConverter(nullptr)
+   {
       require_moveTo = false;
       convex = false;
    }
 
-   QPainterPathData(const QPainterPathData &other) :
-      QPainterPathPrivate(), cStart(other.cStart), fillRule(other.fillRule),
-      bounds(other.bounds),
-      controlBounds(other.controlBounds),
-      dirtyBounds(other.dirtyBounds),
-      dirtyControlBounds(other.dirtyControlBounds),
-      convex(other.convex),
-      pathConverter(0) {
+   QPainterPathData(const QPainterPathData &other)
+      : QPainterPathPrivate(), cStart(other.cStart), fillRule(other.fillRule),
+        bounds(other.bounds), controlBounds(other.controlBounds), dirtyBounds(other.dirtyBounds),
+        dirtyControlBounds(other.dirtyControlBounds), convex(other.convex), pathConverter(nullptr)
+   {
       require_moveTo = false;
       elements = other.elements;
    }

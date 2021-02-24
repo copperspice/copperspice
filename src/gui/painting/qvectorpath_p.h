@@ -72,7 +72,7 @@ class Q_GUI_EXPORT QVectorPath
 
    // ### add a struct XY for points
    QVectorPath(const qreal *points, int count,
-      const QPainterPath::ElementType *elements = 0, uint hints = ArbitraryShapeHint)
+      const QPainterPath::ElementType *elements = nullptr, uint hints = ArbitraryShapeHint)
       : m_elements(elements), m_points(points), m_count(count), m_hints(hints)
    {
    }
@@ -110,7 +110,7 @@ class Q_GUI_EXPORT QVectorPath
 
    void makeCacheable() const {
       m_hints |= ShouldUseCacheHint;
-      m_cache = 0;
+      m_cache = nullptr;
    }
 
    uint hints() const {
@@ -145,7 +145,7 @@ class Q_GUI_EXPORT QVectorPath
    }
 
    bool isEmpty() const {
-      return m_points == 0;
+      return m_points == nullptr;
    }
 
    int elementCount() const {

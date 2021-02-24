@@ -455,7 +455,7 @@ QPainterPath qt_regionToPath(const QRegion &region)
    const QRect *end  = rect + rects.size();
 
    int lastRowSegmentCount  = 0;
-   Segment *lastRowSegments = 0;
+   Segment *lastRowSegments = nullptr;
 
    int lastSegment = 0;
    int lastY = 0;
@@ -721,10 +721,10 @@ void QRegionPrivate::intersect(const QRect &rect)
          extents.setRight(qMax(extents.right(), dest->right()));
          extents.setBottom(qMax(extents.bottom(), dest->bottom()));
 
-         const QRect *nextToLast = (numRects > 1 ? dest - 2 : 0);
+         const QRect *nextToLast = (numRects > 1 ? dest - 2 : nullptr);
 
          // mergeFromBelow inlined and optimized
-         if (canMergeFromBelow(dest - 1, dest, nextToLast, 0)) {
+         if (canMergeFromBelow(dest - 1, dest, nextToLast, nullptr)) {
             if (!n || src->y() != dest->y() || src->left() > r.right()) {
                QRect *prev = dest - 1;
                prev->setBottom(dest->bottom());
@@ -752,13 +752,14 @@ void QRegionPrivate::append(const QRect *r)
 
    if (mergeFromRight(myLast, r)) {
       if (numRects > 1) {
-         const QRect *nextToTop = (numRects > 2 ? myLast - 2 : 0);
-         if (mergeFromBelow(myLast - 1, myLast, nextToTop, 0)) {
+         const QRect *nextToTop = (numRects > 2 ? myLast - 2 : nullptr);
+
+         if (mergeFromBelow(myLast - 1, myLast, nextToTop, nullptr)) {
             --numRects;
          }
       }
 
-   } else if (mergeFromBelow(myLast, r, (numRects > 1 ? myLast - 1 : 0), 0)) {
+   } else if (mergeFromBelow(myLast, r, (numRects > 1 ? myLast - 1 : nullptr), nullptr)) {
       // nothing
 
    } else {
@@ -800,20 +801,23 @@ void QRegionPrivate::append(const QRegionPrivate *r)
    {
       const QRect *rFirst = srcRect;
       QRect *myLast = destRect - 1;
-      const QRect *nextToLast = (numRects > 1 ? myLast - 1 : 0);
+      const QRect *nextToLast = (numRects > 1 ? myLast - 1 : nullptr);
 
       if (mergeFromRight(myLast, rFirst)) {
          ++srcRect;
          --numAppend;
-         const QRect *rNextToFirst = (numAppend > 1 ? rFirst + 2 : 0);
+
+         const QRect *rNextToFirst = (numAppend > 1 ? rFirst + 2 : nullptr);
+
          if (mergeFromBelow(myLast, rFirst + 1, nextToLast, rNextToFirst)) {
             ++srcRect;
             --numAppend;
          }
 
          if (numRects  > 1) {
-            nextToLast = (numRects > 2 ? myLast - 2 : 0);
-            rNextToFirst = (numAppend > 0 ? srcRect : 0);
+            nextToLast = (numRects > 2 ? myLast - 2 : nullptr);
+            rNextToFirst = (numAppend > 0 ? srcRect : nullptr);
+
             if (mergeFromBelow(myLast - 1, myLast, nextToLast, rNextToFirst)) {
                --destRect;
                --numRects;
@@ -876,20 +880,22 @@ void QRegionPrivate::prepend(const QRegionPrivate *r)
    // try merging
    {
       QRect *myFirst = rects.data();
-      const QRect *nextToFirst = (numRects > 1 ? myFirst + 1 : 0);
+      const QRect *nextToFirst = (numRects > 1 ? myFirst + 1 : nullptr);
       const QRect *rLast = r->rects.constData() + r->numRects - 1;
-      const QRect *rNextToLast = (r->numRects > 1 ? rLast - 1 : 0);
+      const QRect *rNextToLast = (r->numRects > 1 ? rLast - 1 : nullptr);
+
       if (mergeFromLeft(myFirst, rLast)) {
          --numPrepend;
          --rLast;
-         rNextToLast = (numPrepend > 1 ? rLast - 1 : 0);
+         rNextToLast = (numPrepend > 1 ? rLast - 1 : nullptr);
+
          if (mergeFromAbove(myFirst, rLast, nextToFirst, rNextToLast)) {
             --numPrepend;
             --rLast;
          }
          if (numRects  > 1) {
-            nextToFirst = (numRects > 2 ? myFirst + 2 : 0);
-            rNextToLast = (numPrepend > 0 ? rLast : 0);
+            nextToFirst = (numRects > 2 ? myFirst + 2 : nullptr);
+            rNextToLast = (numPrepend > 0 ? rLast : nullptr);
             if (mergeFromAbove(myFirst + 1, myFirst, nextToFirst, rNextToLast)) {
                --numRects;
                ++numSkip;
@@ -941,15 +947,15 @@ void QRegionPrivate::prepend(const QRect *r)
 
    if (mergeFromLeft(myFirst, r)) {
       if (numRects > 1) {
-         const QRect *nextToFirst = (numRects > 2 ? myFirst + 2 : 0);
+         const QRect *nextToFirst = (numRects > 2 ? myFirst + 2 : nullptr);
 
-         if (mergeFromAbove(myFirst + 1, myFirst, nextToFirst, 0)) {
+         if (mergeFromAbove(myFirst + 1, myFirst, nextToFirst, nullptr)) {
             --numRects;
             memmove(rects.data(), rects.constData() + 1, numRects * sizeof(QRect));
          }
       }
 
-   } else if (mergeFromAbove(myFirst, r, (numRects > 1 ? myFirst + 1 : 0), 0)) {
+   } else if (mergeFromAbove(myFirst, r, (numRects > 1 ? myFirst + 1 : nullptr), nullptr)) {
       // nothing
 
    } else {
@@ -1699,7 +1705,7 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
          top = qMax(r1->top(), ybot + 1);
          bot = qMin(r1->bottom(), r2->top() - 1);
 
-         if (nonOverlap1Func != 0 && bot >= top) {
+         if (nonOverlap1Func != nullptr && bot >= top) {
             (*nonOverlap1Func)(dest, r1, r1BandEnd, top, bot);
          }
 
@@ -1709,7 +1715,7 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
          top = qMax(r2->top(), ybot + 1);
          bot = qMin(r2->bottom(), r1->top() - 1);
 
-         if (nonOverlap2Func != 0 && bot >= top) {
+         if (nonOverlap2Func != nullptr && bot >= top) {
             (*nonOverlap2Func)(dest, r2, r2BandEnd, top, bot);
          }
 
@@ -1766,7 +1772,7 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
    curBand = dest.numRects;
 
    if (r1 != r1End) {
-      if (nonOverlap1Func != 0) {
+      if (nonOverlap1Func != nullptr) {
          do {
             r1BandEnd = r1;
 
@@ -1780,7 +1786,7 @@ static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const Q
          } while (r1 != r1End);
       }
 
-   } else if ((r2 != r2End) && (nonOverlap2Func != 0)) {
+   } else if ((r2 != r2End) && (nonOverlap2Func != nullptr)) {
       do {
          r2BandEnd = r2;
          while (r2BandEnd < r2End && r2BandEnd->top() == r2->top()) {
@@ -2064,7 +2070,7 @@ static void SubtractRegion(QRegionPrivate *regM, QRegionPrivate *regS,
    Q_ASSERT(!regS->contains(*regM));
    Q_ASSERT(!EqualRegion(regM, regS));
 
-   miRegionOp(dest, regM, regS, miSubtractO, miSubtractNonO1, 0);
+   miRegionOp(dest, regM, regS, miSubtractO, miSubtractNonO1, nullptr);
 
    /*
     * Can't alter dest's extents before we call miRegionOp because
@@ -2611,14 +2617,14 @@ static void InsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE, int scanline,
             (ScanLineListBlock *)malloc(sizeof(ScanLineListBlock));
          Q_CHECK_PTR(tmpSLLBlock);
          (*SLLBlock)->next = tmpSLLBlock;
-         tmpSLLBlock->next = (ScanLineListBlock *)NULL;
+         tmpSLLBlock->next = nullptr;
          *SLLBlock = tmpSLLBlock;
          *iSLLBlock = 0;
       }
       pSLL = &((*SLLBlock)->SLLs[(*iSLLBlock)++]);
 
       pSLL->next = pPrevSLL->next;
-      pSLL->edgelist = (EdgeTableEntry *)NULL;
+      pSLL->edgelist = nullptr;
       pPrevSLL->next = pSLL;
    }
    pSLL->scanline = scanline;
@@ -2626,7 +2632,7 @@ static void InsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE, int scanline,
    /*
     * now insert the edge in the right bucket
     */
-   prev = 0;
+   prev = nullptr;
    start = pSLL->edgelist;
    while (start && (start->bres.minor_axis < ETE->bres.minor_axis)) {
       prev = start;
@@ -2684,18 +2690,19 @@ static void CreateETandAET(int count, const QPoint *pts,
    /*
     *  initialize the Active Edge Table
     */
-   AET->next = 0;
-   AET->back = 0;
-   AET->nextWETE = 0;
+   AET->next     = nullptr;
+   AET->back     = nullptr;
+   AET->nextWETE = nullptr;
    AET->bres.minor_axis = SMALL_COORDINATE;
 
    /*
     *  initialize the Edge Table.
     */
-   ET->scanlines.next = 0;
+   ET->scanlines.next = nullptr;
    ET->ymax = SMALL_COORDINATE;
    ET->ymin = LARGE_COORDINATE;
-   pSLLBlock->next = 0;
+
+   pSLLBlock->next    = nullptr;
 
    PrevPt = &pts[count - 1];
 
@@ -2807,7 +2814,7 @@ static void computeWAET(EdgeTableEntry *AET)
    int inside = 1;
    int isInside = 0;
 
-   AET->nextWETE = 0;
+   AET->nextWETE = nullptr;
    pWETE = AET;
    AET = AET->next;
    while (AET) {
@@ -2824,7 +2831,7 @@ static void computeWAET(EdgeTableEntry *AET)
       }
       AET = AET->next;
    }
-   pWETE->nextWETE = 0;
+   pWETE->nextWETE = nullptr;
 }
 
 /*
@@ -2983,7 +2990,7 @@ static void PtsToRegion(int numFullPtBlocks, int iCurPtBlock, POINTBLOCK *FirstP
             }
 
             if (rowSize) {
-               QPoint *next = i ? &pts[2] : (numFullPtBlocks && iCurPtBlock ? CurPtBlock->next->pts : 0);
+               QPoint *next = i ? &pts[2] : (numFullPtBlocks && iCurPtBlock ? CurPtBlock->next->pts : nullptr);
 
                if (! next || next->y() != pts[0].y()) {
                   flushRow(row.data(), pts[0].y(), rowSize, reg, &lastRow, &extendTo, &needsExtend);

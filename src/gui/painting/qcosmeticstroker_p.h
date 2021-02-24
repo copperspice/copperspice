@@ -64,18 +64,10 @@ class QCosmeticStroker
    };
 
    QCosmeticStroker(QRasterPaintEngineState *s, const QRect &dr, const QRect &dr_unclipped)
-      : state(s),
-        deviceRect(dr_unclipped),
-        clip(dr),
-        pattern(0),
-        reversePattern(0),
-        patternSize(0),
-        patternLength(0),
-        patternOffset(0),
-        legacyRounding(false),
-        current_span(0),
-        lastDir(LeftToRight),
-        lastAxisAligned(false) {
+      : state(s), deviceRect(dr_unclipped), clip(dr), pattern(nullptr), reversePattern(nullptr),
+        patternSize(0), patternLength(0), patternOffset(0), legacyRounding(false),
+        current_span(0), lastDir(LeftToRight), lastAxisAligned(false)
+   {
       setup();
    }
 

@@ -86,7 +86,7 @@ void QPaintEngine::syncState()
    }
 }
 
-static QPaintEngine *qt_polygon_recursion = 0;
+static QPaintEngine *qt_polygon_recursion = nullptr;
 
 struct QT_Point {
    int x;
@@ -107,7 +107,7 @@ void QPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDra
    }
 
    drawPolygon((QPoint *)p.data(), pointCount, mode);
-   qt_polygon_recursion = 0;
+   qt_polygon_recursion = nullptr;
 }
 
 struct QT_PointF {
@@ -129,7 +129,7 @@ void QPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDraw
       p[i].y = points[i].y();
    }
    drawPolygon((QPointF *)p.data(), pointCount, mode);
-   qt_polygon_recursion = 0;
+   qt_polygon_recursion = nullptr;
 }
 
 
@@ -302,11 +302,7 @@ void QPaintEngine::drawImage(const QRectF &r, const QImage &image, const QRectF 
 
 
 QPaintEngine::QPaintEngine(PaintEngineFeatures caps)
-   : state(0),
-     gccaps(caps),
-     active(0),
-     selfDestruct(false),
-     extended(false),
+   : state(nullptr), gccaps(caps), active(0), selfDestruct(false), extended(false),
      d_ptr(new QPaintEnginePrivate)
 {
    d_ptr->q_ptr = this;
@@ -317,12 +313,7 @@ QPaintEngine::QPaintEngine(PaintEngineFeatures caps)
 */
 
 QPaintEngine::QPaintEngine(QPaintEnginePrivate &dptr, PaintEngineFeatures caps)
-   : state(0),
-     gccaps(caps),
-     active(0),
-     selfDestruct(false),
-     extended(false),
-     d_ptr(&dptr)
+   : state(nullptr), gccaps(caps), active(0), selfDestruct(false), extended(false), d_ptr(&dptr)
 {
    d_ptr->q_ptr = this;
 }
@@ -335,7 +326,7 @@ QPaintEngine::~QPaintEngine()
 
 QPainter *QPaintEngine::painter() const
 {
-   return state ? state->painter() : 0;
+   return state ? state->painter() : nullptr;
 }
 void QPaintEngine::drawPath(const QPainterPath &)
 {

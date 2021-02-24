@@ -79,7 +79,7 @@ Q_GUI_EXPORT void qDrawWinPanel(QPainter *p, int x, int y, int w, int h,
 
 Q_GUI_EXPORT void qDrawWinPanel(QPainter *p, const QRect &r,
    const QPalette &pal, bool sunken = false,
-   const QBrush *fill = 0);
+   const QBrush *fill = nullptr);
 
 Q_GUI_EXPORT void qDrawPlainRect(QPainter *p, int x, int y, int w, int h, const QColor &,
    int lineWidth = 1, const QBrush *fill = nullptr);

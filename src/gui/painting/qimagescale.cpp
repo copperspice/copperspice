@@ -165,7 +165,8 @@ QImageScaleInfo *QImageScale::qimageFreeScaleInfo(QImageScaleInfo *isi)
       delete[] isi->yapoints;
       delete isi;
    }
-   return 0;
+
+   return nullptr;
 }
 
 QImageScaleInfo *QImageScale::qimageCalcScaleInfo(const QImage &img,
@@ -180,7 +181,7 @@ QImageScaleInfo *QImageScale::qimageCalcScaleInfo(const QImage &img,
 
    isi = new QImageScaleInfo;
    if (!isi) {
-      return 0;
+      return nullptr;
    }
    memset(isi, 0, sizeof(QImageScaleInfo));
 

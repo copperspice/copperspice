@@ -29,6 +29,7 @@
 #include <qdebug.h>
 
 typedef QPenPrivate QPenData;
+
 // internal
 inline QPenPrivate::QPenPrivate(const QBrush &_brush, qreal _width, Qt::PenStyle penStyle,
    Qt::PenCapStyle _capStyle, Qt::PenJoinStyle _joinStyle, bool _defaultWidth)
@@ -57,7 +58,8 @@ class QPenDataHolder
       if (!pen->ref.deref()) {
          delete pen;
       }
-      pen = 0;
+
+      pen = nullptr;
    }
 };
 

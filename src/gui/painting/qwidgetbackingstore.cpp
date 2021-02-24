@@ -315,7 +315,7 @@ void QWidgetBackingStore::unflushPaint(QWidget *widget, const QRegion &rgn)
    }
 
    const QPoint offset = widget->mapTo(tlw, QPoint());
-   qt_flush(widget, rgn, tlwExtra->backingStoreTracker->store, tlw, offset, 0, tlw->d_func()->maybeBackingStore());
+   qt_flush(widget, rgn, tlwExtra->backingStoreTracker->store, tlw, offset, nullptr, tlw->d_func()->maybeBackingStore());
 }
 #endif // QT_NO_PAINT_DEBUG
 
@@ -479,7 +479,7 @@ QRegion QWidgetBackingStore::staticContents(QWidget *parent, const QRect &within
       if (visible.isEmpty()) {
          continue;
       }
-      wd->subtractOpaqueSiblings(visible, 0, /*alsoNonOpaque=*/true);
+      wd->subtractOpaqueSiblings(visible, nullptr, true);
 
       visible.translate(offset);
       region += visible;
@@ -843,8 +843,8 @@ void QWidgetBackingStore::updateLists(QWidget *cur)
 }
 
 QWidgetBackingStore::QWidgetBackingStore(QWidget *topLevel)
-   : tlw(topLevel), dirtyOnScreenWidgets(0), fullUpdatePending(0), updateRequestSent(0),
-     textureListWatcher(0), perfFrames(0)
+   : tlw(topLevel), dirtyOnScreenWidgets(nullptr), fullUpdatePending(0), updateRequestSent(0),
+     textureListWatcher(nullptr), perfFrames(0)
 {
    store = tlw->backingStore();
    Q_ASSERT(store);
@@ -1046,7 +1046,7 @@ static void findTextureWidgetsRecursively(QWidget *tlw, QWidget *widget, QPlatfo
    QWidgetPrivate *wd = QWidgetPrivate::get(widget);
 
    if (wd->renderToTexture) {
-      QPlatformTextureList::Flags flags = 0;
+      QPlatformTextureList::Flags flags = Qt::EmptyFlag;
       if (widget->testAttribute(Qt::WA_AlwaysStackOnTop)) {
          flags |= QPlatformTextureList::StacksOnTop;
       }
@@ -1131,7 +1131,7 @@ static QPlatformTextureList *widgetTexturesFor(QWidget *tlw, QWidget *widget)
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 // Watches one or more QPlatformTextureLists for changes in the lock state and
@@ -1195,7 +1195,8 @@ bool QWidgetBackingStore::syncAllowed()
    QTLWExtra *tlwExtra = tlw->d_func()->maybeTopData();
    if (textureListWatcher && !textureListWatcher->isLocked()) {
       textureListWatcher->deleteLater();
-      textureListWatcher = 0;
+      textureListWatcher = nullptr;
+
    } else if (!tlwExtra->widgetTextures.isEmpty()) {
       bool skipSync = false;
       for (QPlatformTextureList *tl : tlwExtra->widgetTextures) {
@@ -1304,7 +1305,7 @@ void QWidgetBackingStore::doSync()
       if (hasStaticContents() && !store->size().isEmpty() ) {
          // Repaint existing dirty area and newly visible area.
          const QRect clipRect(0, 0, surfaceGeometry.width(), surfaceGeometry.height());
-         const QRegion staticRegion(staticContents(0, clipRect));
+         const QRegion staticRegion(staticContents(nullptr, clipRect));
 
          QRegion newVisible(0, 0, tlwRect.width(), tlwRect.height());
          newVisible -= staticRegion;
@@ -1538,13 +1539,13 @@ void QWidgetBackingStore::doSync()
          offset += w->mapTo(tlw, QPoint());
       }
 
-      wd->drawWidget(store->paintDevice(), toBePainted, offset, flags, 0, this);
+      wd->drawWidget(store->paintDevice(), toBePainted, offset, flags, nullptr, this);
    }
 
    // Paint the rest with composition.
    if (repaintAllWidgets || ! dirtyCopy.isEmpty()) {
       const int flags = QWidgetPrivate::DrawAsRoot | QWidgetPrivate::DrawRecursive;
-      tlw->d_func()->drawWidget(store->paintDevice(), dirtyCopy, tlwOffset, flags, 0, this);
+      tlw->d_func()->drawWidget(store->paintDevice(), dirtyCopy, tlwOffset, flags, nullptr, this);
    }
 
 
@@ -1592,7 +1593,7 @@ void QWidgetBackingStore::flush(QWidget *widget)
       QWidgetPrivate *wd = w->d_func();
       Q_ASSERT(wd->needsFlush);
 
-      QPlatformTextureList *widgetTexturesForNative = wd->textureChildSeen ? widgetTexturesFor(tlw, w) : 0;
+      QPlatformTextureList *widgetTexturesForNative = wd->textureChildSeen ? widgetTexturesFor(tlw, w) : nullptr;
       qt_flush(w, *wd->needsFlush, store, tlw, tlwOffset, widgetTexturesForNative, this);
       *wd->needsFlush = QRegion();
    }
@@ -1639,7 +1640,8 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
 
    if (!staticContents || graphicsEffect) {
       QRegion staticChildren;
-      QWidgetBackingStore *bs = 0;
+      QWidgetBackingStore *bs = nullptr;
+
       if (offset.isNull() && (bs = maybeBackingStore())) {
          staticChildren = bs->staticContents(q, oldWidgetRect);
       }
@@ -1818,7 +1820,7 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
       return;   // Nothing to repaint.
    }
 
-   drawWidget(q, toBePainted, QPoint(), QWidgetPrivate::DrawAsRoot | QWidgetPrivate::DrawPaintOnScreen, 0);
+   drawWidget(q, toBePainted, QPoint(), QWidgetPrivate::DrawAsRoot | QWidgetPrivate::DrawPaintOnScreen, nullptr);
 
    if (q->paintingActive()) {
       qWarning("QWidget::repaint: It is dangerous to leave painters active on a widget outside of the PaintEvent");

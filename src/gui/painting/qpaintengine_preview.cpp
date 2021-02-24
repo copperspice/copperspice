@@ -54,8 +54,8 @@ QPreviewPaintEngine::QPreviewPaintEngine()
    : QPaintEngine(*(new QPreviewPaintEnginePrivate), PaintEngineFeatures(AllFeatures & ~ObjectBoundingModeGradients))
 {
    Q_D(QPreviewPaintEngine);
-   d->proxy_print_engine = 0;
-   d->proxy_paint_engine = 0;
+   d->proxy_print_engine = nullptr;
+   d->proxy_paint_engine = nullptr;
 }
 
 QPreviewPaintEngine::~QPreviewPaintEngine()
@@ -87,9 +87,9 @@ bool QPreviewPaintEngine::end()
    Q_D(QPreviewPaintEngine);
 
    delete d->painter;
-   d->painter = 0;
-   d->engine = 0;
-   d->state = QPrinter::Idle;
+   d->painter = nullptr;
+   d->engine  = nullptr;
+   d->state   = QPrinter::Idle;
    return true;
 }
 

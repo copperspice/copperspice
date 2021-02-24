@@ -181,7 +181,7 @@ class QRasterizerPrivate
 };
 
 QScanConverter::QScanConverter()
-   : m_alloc(0), m_size(0), m_intersections(0)
+   : m_alloc(0), m_size(0), m_intersections(nullptr)
 {
 }
 
@@ -431,7 +431,7 @@ void QScanConverter::end()
       free(m_intersections);
       m_alloc = 0;
       m_size = 0;
-      m_intersections = 0;
+      m_intersections = nullptr;
    }
 
    if (m_lines.size() > 1024) {

@@ -268,7 +268,7 @@ void QEmulationPaintEngine::fillBGRect(const QRectF &r)
          r.x() + r.width(), r.y() + r.height(), r.x(), r.y() + r.height()
       };
 
-   QVectorPath vp(pts, 4, 0, QVectorPath::RectangleHint);
+   QVectorPath vp(pts, 4, nullptr, QVectorPath::RectangleHint);
    real_engine->fill(vp, state()->bgBrush);
 }
 

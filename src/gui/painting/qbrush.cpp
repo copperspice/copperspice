@@ -154,7 +154,7 @@ Q_GUI_EXPORT QImage qt_imageForBrush(int brushStyle, bool invert)
 struct QTexturedBrushData : public QBrushData {
    QTexturedBrushData() {
       m_has_pixmap_texture = false;
-      m_pixmap = 0;
+      m_pixmap = nullptr;
    }
    ~QTexturedBrushData() {
       delete m_pixmap;
@@ -164,7 +164,7 @@ struct QTexturedBrushData : public QBrushData {
       delete m_pixmap;
 
       if (pm.isNull()) {
-         m_pixmap = 0;
+         m_pixmap = nullptr;
          m_has_pixmap_texture = false;
       } else {
          m_pixmap = new QPixmap(pm);
@@ -177,7 +177,7 @@ struct QTexturedBrushData : public QBrushData {
    void setImage(const QImage &image) {
       m_image = image;
       delete m_pixmap;
-      m_pixmap = 0;
+      m_pixmap = nullptr;
       m_has_pixmap_texture = false;
    }
 
@@ -252,7 +252,8 @@ class QNullBrushData
       if (!brush->ref.deref()) {
          delete brush;
       }
-      brush = 0;
+
+      brush = nullptr;
    }
 };
 
@@ -638,7 +639,8 @@ const QGradient *QBrush::gradient() const
       || d->style == Qt::ConicalGradientPattern) {
       return &static_cast<const QGradientBrushData *>(d.data())->gradient;
    }
-   return 0;
+
+   return nullptr;
 }
 
 Q_GUI_EXPORT bool qt_isExtendedRadialGradient(const QBrush &brush)
@@ -750,7 +752,9 @@ bool QBrush::operator==(const QBrush &b) const
          // be used to avoid iterating over the data for a texture update, this should
          // still be better than doing an accurate comparison.
 
-         const QPixmap *us = 0, *them = 0;
+         const QPixmap *us   = nullptr;
+         const QPixmap *them = nullptr;
+
          qint64 cacheKey1, cacheKey2;
 
          if (qHasPixmapTexture(*this)) {
@@ -817,7 +821,7 @@ QDebug operator<<(QDebug dbg, const QBrush &b)
       "LinearGradientPattern",
       "RadialGradientPattern",
       "ConicalGradientPattern",
-      0, 0, 0, 0, 0, 0,
+      nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
       "TexturePattern" // 24
    };
 
@@ -986,7 +990,7 @@ QDataStream &operator>>(QDataStream &s, QBrush &b)
 }
 
 QGradient::QGradient()
-   : m_type(NoGradient), dummy(0)
+   : m_type(NoGradient), dummy(nullptr)
 {
 }
 

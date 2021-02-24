@@ -42,7 +42,7 @@ class QColormapPrivate
    int numcolors;
 };
 
-static QColormapPrivate *screenMap = 0;
+static QColormapPrivate *screenMap = nullptr;
 
 void QColormap::initialize()
 {
@@ -70,7 +70,7 @@ void QColormap::initialize()
 void QColormap::cleanup()
 {
    delete screenMap;
-   screenMap = 0;
+   screenMap = nullptr;
 }
 
 QColormap QColormap::instance(int /*screen*/)

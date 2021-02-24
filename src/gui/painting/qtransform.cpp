@@ -916,11 +916,12 @@ QDebug operator<<(QDebug dbg, const QTransform &m)
       "TxNone",
       "TxTranslate",
       "TxScale",
-      0,
+      nullptr,
       "TxRotate",
-      0, 0, 0,
+      nullptr, nullptr, nullptr,
       "TxShear",
-      0, 0, 0, 0, 0, 0, 0,
+      nullptr, nullptr, nullptr,
+      nullptr, nullptr, nullptr, nullptr,
       "TxProject"
    };
 

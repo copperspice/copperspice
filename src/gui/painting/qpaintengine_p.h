@@ -35,8 +35,10 @@ class QPaintEnginePrivate
    Q_DECLARE_PUBLIC(QPaintEngine)
 
  public:
-   QPaintEnginePrivate() : pdev(0), q_ptr(0), currentClipDevice(0), hasSystemTransform(0),
-      hasSystemViewport(0) {}
+   QPaintEnginePrivate()
+      : pdev(nullptr), q_ptr(nullptr), currentClipDevice(nullptr), hasSystemTransform(0), hasSystemViewport(0)
+   {
+   }
 
    virtual ~QPaintEnginePrivate()
    { }

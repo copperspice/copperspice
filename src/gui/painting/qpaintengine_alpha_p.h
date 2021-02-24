@@ -28,7 +28,6 @@
 
 #include <qpaintengine_p.h>
 
-
 class QAlphaPaintEnginePrivate;
 
 class QAlphaPaintEngine : public QPaintEngine
@@ -51,7 +50,7 @@ class QAlphaPaintEngine : public QPaintEngine
    void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
 
  protected:
-   QAlphaPaintEngine(QAlphaPaintEnginePrivate &data, PaintEngineFeatures devcaps = 0);
+   QAlphaPaintEngine(QAlphaPaintEnginePrivate &data, PaintEngineFeatures devcaps = Qt::EmptyFlag);
    QRegion alphaClipping() const;
    bool continueCall() const;
    void flushAndInit(bool init = true);

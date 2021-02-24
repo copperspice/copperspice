@@ -329,7 +329,7 @@ void QPainterPrivate::detachPainterPrivate(QPainter *q)
       original = new QPainterPrivate(q);
    }
 
-   d_ptrs[refcount - 1] = 0;
+   d_ptrs[refcount - 1] = nullptr;
    q->restore();
    q->d_ptr.take();
    q->d_ptr.reset(original);
@@ -337,7 +337,7 @@ void QPainterPrivate::detachPainterPrivate(QPainter *q)
    if (emulationEngine) {
       extended = emulationEngine->real_engine;
       delete emulationEngine;
-      emulationEngine = 0;
+      emulationEngine = nullptr;
    }
 }
 
@@ -926,9 +926,9 @@ QPainter::QPainter()
 }
 
 QPainter::QPainter(QPaintDevice *pd)
-   : d_ptr(0)
+   : d_ptr(nullptr)
 {
-   Q_ASSERT(pd != 0);
+   Q_ASSERT(pd != nullptr);
 
    if (!QPainterPrivate::attachPainterPrivate(this, pd)) {
       d_ptr.reset(new QPainterPrivate(this));
@@ -1121,9 +1121,9 @@ static inline void qt_cleanup_painter_state(QPainterPrivate *d)
 {
    d->states.clear();
    delete d->state;
-   d->state = 0;
-   d->engine = 0;
-   d->device = 0;
+   d->state  = nullptr;
+   d->engine = nullptr;
+   d->device = nullptr;
 }
 
 bool QPainter::begin(QPaintDevice *pd)
@@ -1186,14 +1186,14 @@ bool QPainter::begin(QPaintDevice *pd)
 
    d->device = pd;
 
-   d->extended = d->engine->isExtended() ? static_cast<QPaintEngineEx *>(d->engine) : 0;
+   d->extended = d->engine->isExtended() ? static_cast<QPaintEngineEx *>(d->engine) : nullptr;
    if (d->emulationEngine) {
       d->emulationEngine->real_engine = d->extended;
    }
 
-   // Setup new state...
+   // Setup new state
    Q_ASSERT(!d->state);
-   d->state = d->extended ? d->extended->createState(0) : new QPainterState;
+   d->state = d->extended ? d->extended->createState(nullptr) : new QPainterState;
    d->state->painter = this;
    d->states.push_back(d->state);
 
@@ -1330,11 +1330,11 @@ bool QPainter::end()
 
    if (d->engine->isActive()) {
       ended = d->engine->end();
-      d->updateState(0);
+      d->updateState(nullptr);
 
       --d->device->painters;
       if (d->device->painters == 0) {
-         d->engine->setPaintDevice(0);
+         d->engine->setPaintDevice(nullptr);
          d->engine->setActive(false);
       }
    }
@@ -1349,11 +1349,11 @@ bool QPainter::end()
 
    if (d->emulationEngine) {
       delete d->emulationEngine;
-      d->emulationEngine = 0;
+      d->emulationEngine = nullptr;
    }
 
    if (d->extended) {
-      d->extended = 0;
+      d->extended = nullptr;
    }
 
    qt_cleanup_painter_state(d);
@@ -1843,7 +1843,7 @@ void QPainter::setClipRect(const QRectF &rect, Qt::ClipOperation op)
             rect.x(), bottom
          };
 
-      QVectorPath vp(pts, 4, 0, QVectorPath::RectangleHint);
+      QVectorPath vp(pts, 4, nullptr, QVectorPath::RectangleHint);
       d->state->clipEnabled = true;
       d->extended->clip(vp, op);
 
@@ -3758,7 +3758,7 @@ void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positio
 
    QFixed width = rightMost - leftMost;
 
-   if (extended != 0 && state->matrix.isAffine()) {
+   if (extended != nullptr && state->matrix.isAffine()) {
       QStaticTextItem staticTextItem;
       staticTextItem.color = state->pen.color();
       staticTextItem.font  = state->font;
@@ -3805,7 +3805,7 @@ void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positio
       flags |= QTextItemInt::StrikeOut;
    }
 
-   drawTextItemDecoration(q, QPointF(leftMost.toReal(), baseLine.toReal()), fontEngine, 0,
+   drawTextItemDecoration(q, QPointF(leftMost.toReal(), baseLine.toReal()), fontEngine, nullptr,
       (underline ? QTextCharFormat::SingleUnderline : QTextCharFormat::NoUnderline),
       flags, width.toReal(), QTextCharFormat());
 }
@@ -3840,8 +3840,7 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
    // If we don't have an extended paint engine, or if the painter is projected,
    // we go through standard code path
 
-   if (d->extended == 0 || ! d->state->matrix.isAffine()
-      || !fe->supportsTransformation(d->state->matrix)) {
+   if (d->extended == nullptr || ! d->state->matrix.isAffine() || ! fe->supportsTransformation(d->state->matrix)) {
       staticText_d->paintText(topLeftPosition, this);
       return;
    }
@@ -3967,7 +3966,7 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
       QVarLengthGlyphLayoutArray glyphs(len);
       QFontEngine *fontEngine = d->state->font.d->engineForScript(QChar::Script_Common);
 
-      if (! fontEngine->stringToCMap(str, &glyphs, &numGlyphs, 0)) {
+      if (! fontEngine->stringToCMap(str, &glyphs, &numGlyphs, Qt::EmptyFlag)) {
          // error - may want to throw
       }
 
@@ -4060,7 +4059,7 @@ void QPainter::drawText(const QRect &r, int flags, const QString &str, QRect *br
    }
 
    QRectF bounds;
-   qt_format_text(d->state->font, r, flags, 0, str, br ? &bounds : 0, 0, 0, 0, this);
+   qt_format_text(d->state->font, r, flags, nullptr, str, br ? &bounds : nullptr, 0, nullptr, 0, this);
 
    if (br) {
       *br = bounds.toAlignedRect();
@@ -4085,7 +4084,7 @@ void QPainter::drawText(const QRectF &r, int flags, const QString &str, QRectF *
       d->updateState(d->state);
    }
 
-   qt_format_text(d->state->font, r, flags, 0, str, br, 0, 0, 0, this);
+   qt_format_text(d->state->font, r, flags, nullptr, str, br, 0, nullptr, 0, this);
 }
 
 void QPainter::drawText(const QRectF &r, const QString &text, const QTextOption &o)
@@ -4107,7 +4106,7 @@ void QPainter::drawText(const QRectF &r, const QString &text, const QTextOption 
       d->updateState(d->state);
    }
 
-   qt_format_text(d->state->font, r, 0, &o, text, 0, 0, 0, 0, this);
+   qt_format_text(d->state->font, r, 0, &o, text, nullptr, 0, nullptr, 0, this);
 }
 
 static QPixmap generateWavyPixmap(qreal maxRadius, const QPen &pen)
@@ -4300,7 +4299,7 @@ Q_GUI_EXPORT void qt_draw_decoration_for_glyphs(QPainter *painter, const glyph_t
    }
 
    QFixed width = rightMost - leftMost;
-   QTextItem::RenderFlags flags = 0;
+   QTextItem::RenderFlags flags = Qt::EmptyFlag;
 
    if (font.underline()) {
       flags |= QTextItem::Underline;
@@ -4315,16 +4314,14 @@ Q_GUI_EXPORT void qt_draw_decoration_for_glyphs(QPainter *painter, const glyph_t
    }
 
    drawTextItemDecoration(painter, QPointF(leftMost.toReal(), baseLine.toReal()),
-      fontEngine, 0,
-      font.underline() ? QTextCharFormat::SingleUnderline
-      : QTextCharFormat::NoUnderline, flags,
-      width.toReal(), charFormat);
+      fontEngine, nullptr, font.underline() ? QTextCharFormat::SingleUnderline : QTextCharFormat::NoUnderline,
+      flags, width.toReal(), charFormat);
 }
 
 void QPainter::drawTextItem(const QPointF &p, const QTextItem &ti)
 {
    Q_D(QPainter);
-   d->drawTextItem(p, ti, static_cast<QTextEngine *>(0));
+   d->drawTextItem(p, ti, static_cast<QTextEngine *>(nullptr));
 }
 
 void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QTextEngine *textEngine)
@@ -4532,7 +4529,7 @@ QRectF QPainter::boundingRect(const QRectF &r, const QString &text, const QTextO
    }
 
    QRectF br;
-   qt_format_text(d->state->font, r, Qt::TextDontPrint, &o, text, &br, 0, 0, 0, this);
+   qt_format_text(d->state->font, r, Qt::TextDontPrint, &o, text, &br, 0, nullptr, 0, this);
 
    return br;
 }
@@ -4800,7 +4797,7 @@ QPainter::RenderHints QPainter::renderHints() const
    Q_D(const QPainter);
 
    if (!d->engine) {
-      return 0;
+      return Qt::EmptyFlag;
    }
 
    return d->state->renderHints;
@@ -4912,7 +4909,7 @@ void QPainter::setRedirected(const QPaintDevice *device, QPaintDevice *replaceme
    (void) replacement;
    (void) offset;
 
-   Q_ASSERT(device != 0);
+   Q_ASSERT(device != nullptr);
    qWarning("QPainter::setRedirected(): Ignoring call to deprecated method, use QWidget::render() instead");
 }
 
@@ -4929,19 +4926,19 @@ QPaintDevice *QPainter::redirected(const QPaintDevice *device, QPoint *offset)
    (void) device;
    (void) offset;
 
-   return 0;
+   return nullptr;
 }
 
 void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QString &str, QRectF *brect,
    int tabstops, int *ta, int tabarraylen, QPainter *painter)
 {
-   qt_format_text(fnt, _r, tf, 0, str, brect, tabstops, ta, tabarraylen, painter);
+   qt_format_text(fnt, _r, tf, nullptr, str, brect, tabstops, ta, tabarraylen, painter);
 }
 
 void qt_format_text(const QFont &fnt, const QRectF &_r, int tf, const QTextOption *option,
    const QString &str, QRectF *brect, int tabstops, int *ta, int tabarraylen, QPainter *painter)
 {
-   Q_ASSERT( !((tf & ~Qt::TextDontPrint) != 0 && option != 0) ); //  either have an option or flags
+   Q_ASSERT( !((tf & ~Qt::TextDontPrint) != 0 && option != nullptr) ); //  either have an option or flags
 
    if (option) {
       tf |= option->alignment();
@@ -5286,15 +5283,14 @@ QPainterState::QPainterState(const QPainterState *s)
 
 QPainterState::QPainterState()
    : brushOrigin(0, 0), bgBrush(Qt::white), clipOperation(Qt::NoClip),
-     renderHints(0),
-     wx(0), wy(0), ww(0), wh(0), vx(0), vy(0), vw(0), vh(0),
+     renderHints(Qt::EmptyFlag), wx(0), wy(0), ww(0), wh(0), vx(0), vy(0), vw(0), vh(0),
      opacity(1), WxF(false), VxF(false), clipEnabled(true),
-     bgMode(Qt::TransparentMode), painter(0),
+     bgMode(Qt::TransparentMode), painter(nullptr),
      layoutDirection(QGuiApplication::layoutDirection()),
      composition_mode(QPainter::CompositionMode_SourceOver),
      emulationSpecifier(0), changeFlags(0)
 {
-   dirtyFlags = 0;
+   dirtyFlags = Qt::EmptyFlag;
 }
 
 QPainterState::~QPainterState()
@@ -5324,9 +5320,9 @@ void QPainterState::init(QPainter *p)
    layoutDirection = QGuiApplication::layoutDirection();
    composition_mode = QPainter::CompositionMode_SourceOver;
    emulationSpecifier = 0;
-   dirtyFlags = 0;
+   dirtyFlags = Qt::EmptyFlag;
    changeFlags = 0;
-   renderHints = 0;
+   renderHints = Qt::EmptyFlag;
    opacity = 1;
 }
 

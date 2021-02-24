@@ -53,7 +53,7 @@ class QPathClipper
    bool intersect();
    bool contains();
 
-   static bool pathToRect(const QPainterPath &path, QRectF *rect = 0);
+   static bool pathToRect(const QPainterPath &path, QRectF *rect = nullptr);
    static QPainterPath intersect(const QPainterPath &path, const QRectF &rect);
 
  private:
@@ -359,7 +359,7 @@ inline const QPathSegments::Intersection *QPathSegments::intersectionAt(int inde
 {
    const int intersection = m_segments.at(index).intersection;
    if (intersection < 0) {
-      return 0;
+      return nullptr;
    } else {
       return &m_intersections.at(intersection);
    }
@@ -397,12 +397,12 @@ inline int QWingedEdge::edgeCount() const
 
 inline QPathEdge *QWingedEdge::edge(int edge)
 {
-   return edge < 0 ? 0 : &m_edges[edge];
+   return edge < 0 ? nullptr : &m_edges[edge];
 }
 
 inline const QPathEdge *QWingedEdge::edge(int edge) const
 {
-   return edge < 0 ? 0 : &m_edges[edge];
+   return edge < 0 ? nullptr : &m_edges[edge];
 }
 
 inline int QWingedEdge::vertexCount() const
@@ -418,12 +418,12 @@ inline int QWingedEdge::addVertex(const QPointF &p)
 
 inline QPathVertex *QWingedEdge::vertex(int vertex)
 {
-   return vertex < 0 ? 0 : &m_vertices[vertex];
+   return vertex < 0 ? nullptr : &m_vertices[vertex];
 }
 
 inline const QPathVertex *QWingedEdge::vertex(int vertex) const
 {
-   return vertex < 0 ? 0 : &m_vertices[vertex];
+   return vertex < 0 ? nullptr : &m_vertices[vertex];
 }
 
 inline QPathEdge::Traversal QWingedEdge::flip(QPathEdge::Traversal traversal)
