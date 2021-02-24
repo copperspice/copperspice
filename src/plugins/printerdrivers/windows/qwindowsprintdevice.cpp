@@ -93,12 +93,12 @@ static LPDEVMODE getDevmode(HANDLE hPrinter, const QString &printerId)
 }
 
 QWindowsPrintDevice::QWindowsPrintDevice()
-   : QPlatformPrintDevice(), m_hPrinter(0)
+   : QPlatformPrintDevice(), m_hPrinter(nullptr)
 {
 }
 
 QWindowsPrintDevice::QWindowsPrintDevice(const QString &id)
-   : QPlatformPrintDevice(id), m_hPrinter(0)
+   : QPlatformPrintDevice(id), m_hPrinter(nullptr)
 {
    // First do a fast lookup to see if printer exists, if it does then open it
    if (! id.isEmpty() && QWindowsPrintDevice::availablePrintDeviceIds().contains(id)) {
@@ -108,7 +108,7 @@ QWindowsPrintDevice::QWindowsPrintDevice(const QString &id)
       if (OpenPrinter(const_cast<LPWSTR>(tmp.data()), &m_hPrinter, nullptr)) {
 
          DWORD needed = 0;
-         GetPrinter(m_hPrinter, 2, 0, 0, &needed);
+         GetPrinter(m_hPrinter, 2, nullptr, 0, &needed);
          QScopedArrayPointer<BYTE> buffer(new BYTE[needed]);
 
          if (GetPrinter(m_hPrinter, 2, buffer.data(), needed, &needed)) {
@@ -154,7 +154,7 @@ bool QWindowsPrintDevice::isDefault() const
 QPrint::DeviceState QWindowsPrintDevice::state() const
 {
    DWORD needed = 0;
-   GetPrinter(m_hPrinter, 6, 0, 0, &needed);
+   GetPrinter(m_hPrinter, 6, nullptr, 0, &needed);
    QScopedArrayPointer<BYTE> buffer(new BYTE[needed]);
 
    if (GetPrinter(m_hPrinter, 6, buffer.data(), needed, &needed)) {
@@ -250,7 +250,7 @@ QMarginsF QWindowsPrintDevice::printableMargins(const QPageSize &pageSize,
    // Modify the DevMode to get the DC printable margins in device pixels
    QMarginsF margins = QMarginsF(0, 0, 0, 0);
    DWORD needed = 0;
-   GetPrinter(m_hPrinter, 2, 0, 0, &needed);
+   GetPrinter(m_hPrinter, 2, nullptr, 0, &needed);
    QScopedArrayPointer<BYTE> buffer(new BYTE[needed]);
 
    if (GetPrinter(m_hPrinter, 2, buffer.data(), needed, &needed)) {
@@ -484,7 +484,7 @@ QStringList QWindowsPrintDevice::availablePrintDeviceIds()
    DWORD needed = 0;
    DWORD returned = 0;
 
-   if ((!EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr, 4, 0, 0, &needed, &returned) &&
+   if ((! EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr, 4, nullptr, 0, &needed, &returned) &&
          GetLastError() != ERROR_INSUFFICIENT_BUFFER) || ! needed) {
       return list;
    }
