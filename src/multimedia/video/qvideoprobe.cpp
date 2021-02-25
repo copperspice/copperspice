@@ -91,12 +91,12 @@ bool QVideoProbe::setSource(QMediaObject *source)
         }
     }
 
-    return (!source || d->probee != 0);
+    return (! source || d->probee != nullptr);
 }
 
 bool QVideoProbe::setSource(QMediaRecorder *mediaRecorder)
 {
-    QMediaObject *source = mediaRecorder ? mediaRecorder->mediaObject() : 0;
+    QMediaObject *source = mediaRecorder ? mediaRecorder->mediaObject() : nullptr;
     bool result = setSource(source);
 
     if (!mediaRecorder)
@@ -110,5 +110,5 @@ bool QVideoProbe::setSource(QMediaRecorder *mediaRecorder)
 
 bool QVideoProbe::isActive() const
 {
-    return d->probee != 0;
+    return d->probee != nullptr;
 }

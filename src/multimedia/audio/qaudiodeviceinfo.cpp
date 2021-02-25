@@ -127,7 +127,7 @@ bool QAudioDeviceInfo::operator !=(const QAudioDeviceInfo &other) const
 }
 bool QAudioDeviceInfo::isNull() const
 {
-   return d->info == 0;
+   return d->info == nullptr;
 }
 
 /*!

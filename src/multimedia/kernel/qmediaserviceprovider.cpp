@@ -167,7 +167,10 @@ class QPluginServiceProvider : public QMediaServiceProvider
       QString type;
       QMediaServiceProviderPlugin *plugin;
 
-      MediaServiceData() : plugin(0) { }
+      MediaServiceData()
+         : plugin(nullptr)
+      {
+      }
    };
 
    QMap<const QMediaService *, MediaServiceData> mediaServiceData;
@@ -326,10 +329,10 @@ class QPluginServiceProvider : public QMediaServiceProvider
    }
 
    void releaseService(QMediaService *service) {
-      if (service != 0) {
+      if (service != nullptr) {
          MediaServiceData d = mediaServiceData.take(service);
 
-         if (d.plugin != 0) {
+         if (d.plugin != nullptr) {
             d.plugin->release(service);
          }
       }
@@ -661,7 +664,7 @@ int QMediaServiceProvider::cameraOrientation(const QString &device) const
     return 0;
 }
 
-static QMediaServiceProvider *qt_defaultMediaServiceProvider = 0;
+static QMediaServiceProvider *qt_defaultMediaServiceProvider = nullptr;
 
 void QMediaServiceProvider::setDefaultServiceProvider(QMediaServiceProvider *provider)
 {
@@ -670,7 +673,7 @@ void QMediaServiceProvider::setDefaultServiceProvider(QMediaServiceProvider *pro
 
 QMediaServiceProvider *QMediaServiceProvider::defaultServiceProvider()
 {
-   if (qt_defaultMediaServiceProvider != 0) {
+   if (qt_defaultMediaServiceProvider != nullptr) {
       return qt_defaultMediaServiceProvider;
 
    } else {
@@ -678,4 +681,3 @@ QMediaServiceProvider *QMediaServiceProvider::defaultServiceProvider()
 
    }
 }
-

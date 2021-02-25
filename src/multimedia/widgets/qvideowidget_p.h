@@ -203,8 +203,9 @@ class QVideoWidgetPrivate
 
  public:
    QVideoWidgetPrivate()
-      : q_ptr(0), mediaObject(0), service(0), widgetBackend(0), windowBackend(0), rendererBackend(0),
-        currentControl(0), currentBackend(0), brightness(0), contrast(0), hue(0), saturation(0),
+      : q_ptr(nullptr), mediaObject(nullptr), service(nullptr), widgetBackend(nullptr),
+        windowBackend(nullptr), rendererBackend(nullptr), currentControl(nullptr), currentBackend(nullptr),
+        brightness(0), contrast(0), hue(0), saturation(0),
         aspectRatioMode(Qt::KeepAspectRatio), nonFullScreenFlags(Qt::EmptyFlag), wasFullScreen(false) {
    }
 

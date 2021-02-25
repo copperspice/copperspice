@@ -37,7 +37,7 @@ int QAbstractVideoBufferPrivate::map(
 
 
 QAbstractVideoBuffer::QAbstractVideoBuffer(HandleType type)
-   : d_ptr(0), m_type(type)
+   : d_ptr(nullptr), m_type(type)
 {
 }
 
@@ -115,7 +115,7 @@ uchar *QAbstractPlanarVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPe
       }
       return data[0];
    } else {
-      return 0;
+      return nullptr;
    }
 }
 QDebug operator<<(QDebug dbg, QAbstractVideoBuffer::HandleType type)

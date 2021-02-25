@@ -45,9 +45,9 @@
 #define ENUM_NAME(c,e,v) (c::staticMetaObject.enumerator(c::staticMetaObject.indexOfEnumerator(e)).valueToKey((v)))
 
 QMediaRecorderPrivate::QMediaRecorderPrivate()
-   : mediaObject(0), control(0), formatControl(0), audioControl(0),
-     videoControl(0), metaDataControl(0), availabilityControl(0), settingsChanged(false),
-     notifyTimer(0), state(QMediaRecorder::StoppedState), error(QMediaRecorder::NoError)
+   : mediaObject(nullptr), control(nullptr), formatControl(nullptr), audioControl(nullptr),
+     videoControl(nullptr), metaDataControl(nullptr), availabilityControl(nullptr), settingsChanged(false),
+     notifyTimer(nullptr), state(QMediaRecorder::StoppedState), error(QMediaRecorder::NoError)
 {
 }
 
@@ -81,14 +81,14 @@ void QMediaRecorderPrivate::_q_error(int error, const QString &errorString)
 
 void QMediaRecorderPrivate::_q_serviceDestroyed()
 {
-   mediaObject     = 0;
-   control         = 0;
-   formatControl   = 0;
-   audioControl    = 0;
-   videoControl    = 0;
-   metaDataControl = 0;
-   availabilityControl = 0;
-   settingsChanged = true;
+   mediaObject         = nullptr;
+   control             = nullptr;
+   formatControl       = nullptr;
+   audioControl        = nullptr;
+   videoControl        = nullptr;
+   metaDataControl     = nullptr;
+   availabilityControl = nullptr;
+   settingsChanged     = true;
 }
 
 void QMediaRecorderPrivate::_q_updateActualLocation(const QUrl &location)
@@ -256,14 +256,13 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
       }
    }
 
-   d->control             = 0;
-   d->formatControl       = 0;
-   d->audioControl        = 0;
-   d->videoControl        = 0;
-   d->metaDataControl     = 0;
-   d->availabilityControl = 0;
-
-   d->mediaObject = object;
+   d->control             = nullptr;
+   d->formatControl       = nullptr;
+   d->audioControl        = nullptr;
+   d->videoControl        = nullptr;
+   d->metaDataControl     = nullptr;
+   d->availabilityControl = nullptr;
+   d->mediaObject         = object;
 
    if (d->mediaObject) {
       QMediaService *service = d->mediaObject->service();
@@ -324,7 +323,7 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
          }
       }
 
-      d->mediaObject = 0;
+      d->mediaObject = nullptr;
       return false;
    }
 
@@ -338,7 +337,7 @@ bool QMediaRecorder::isAvailable() const
 
 QMultimedia::AvailabilityStatus QMediaRecorder::availability() const
 {
-   if (d_func()->control == NULL) {
+   if (d_func()->control == nullptr) {
       return QMultimedia::ServiceMissing;
    }
 

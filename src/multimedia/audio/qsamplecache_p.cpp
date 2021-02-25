@@ -33,7 +33,7 @@
 
 
 QSampleCache::QSampleCache(QObject *parent)
-   : QObject(parent), m_networkAccessManager(0), m_mutex(QMutex::Recursive),
+   : QObject(parent), m_networkAccessManager(nullptr), m_mutex(QMutex::Recursive),
      m_capacity(0), m_usage(0), m_loadingRefCount(0)
 {
    m_loadingThread.setObjectName("QSampleCache::LoadingThread");

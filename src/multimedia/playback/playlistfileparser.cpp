@@ -254,8 +254,8 @@ class QPlaylistFileParserPrivate
 
  public:
    QPlaylistFileParserPrivate()
-      : m_source(0), m_scanIndex(0), m_utf8(false), m_lineIndex(-1),
-        m_type(QPlaylistFileParser::UNKNOWN), m_currentParser(0)
+      : m_source(nullptr), m_scanIndex(0), m_utf8(false), m_lineIndex(-1),
+        m_type(QPlaylistFileParser::UNKNOWN), m_currentParser(nullptr)
    {
    }
 
@@ -419,7 +419,8 @@ void QPlaylistFileParserPrivate::_q_handleParserError(QPlaylistFileParser::Parse
 void QPlaylistFileParserPrivate::_q_handleParserFinished()
 {
    Q_Q(QPlaylistFileParser);
-   bool isParserValid = (m_currentParser != 0);
+   bool isParserValid = (m_currentParser != nullptr);
+
    if (!isParserValid) {
       emit q->error(QPlaylistFileParser::FormatNotSupportedError, QPlaylistFileParser::tr("Empty file provided"));
    }

@@ -40,8 +40,9 @@ class QGraphicsVideoItemPrivate
 {
  public:
    QGraphicsVideoItemPrivate()
-      : q_ptr(0), surface(0), mediaObject(0), service(0), rendererControl(0)
-      , aspectRatioMode(Qt::KeepAspectRatio), updatePaintDevice(true), rect(0.0, 0.0, 320, 240) {
+      : q_ptr(nullptr), surface(nullptr), mediaObject(nullptr), service(nullptr), rendererControl(nullptr),
+        aspectRatioMode(Qt::KeepAspectRatio), updatePaintDevice(true), rect(0.0, 0.0, 320, 240)
+   {
    }
 
    QGraphicsVideoItem *q_ptr;
@@ -70,7 +71,7 @@ void QGraphicsVideoItemPrivate::clearService()
 {
    if (rendererControl) {
       surface->stop();
-      rendererControl->setSurface(0);
+      rendererControl->setSurface(nullptr);
       service->releaseControl(rendererControl);
       rendererControl = nullptr;
    }
@@ -140,8 +141,8 @@ void QGraphicsVideoItemPrivate::_q_updateNativeSize()
 
 void QGraphicsVideoItemPrivate::_q_serviceDestroyed()
 {
-   rendererControl = 0;
-   service = 0;
+   rendererControl = nullptr;
+   service         = nullptr;
 
    surface->stop();
 }
@@ -159,7 +160,7 @@ QGraphicsVideoItem::QGraphicsVideoItem(QGraphicsItem *parent)
 QGraphicsVideoItem::~QGraphicsVideoItem()
 {
    if (d_ptr->rendererControl) {
-      d_ptr->rendererControl->setSurface(0);
+      d_ptr->rendererControl->setSurface(nullptr);
       d_ptr->service->releaseControl(d_ptr->rendererControl);
    }
 
@@ -213,7 +214,7 @@ bool QGraphicsVideoItem::setMediaObject(QMediaObject *object)
       }
    }
 
-   d->mediaObject = 0;
+   d->mediaObject = nullptr;
 
    return false;
 }

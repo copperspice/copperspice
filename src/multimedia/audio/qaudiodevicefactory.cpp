@@ -291,7 +291,7 @@ QAbstractAudioDeviceInfo *QAudioDeviceFactory::audioDeviceInfo(const QString &re
       rc = plugin->createDeviceInfo(handle, mode);
    }
 
-   return rc == 0 ? new QNullDeviceInfo() : rc;
+   return rc == nullptr ? new QNullDeviceInfo() : rc;
 }
 
 QAbstractAudioInput *QAudioDeviceFactory::createDefaultInputDevice(QAudioFormat const &format)

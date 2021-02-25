@@ -61,7 +61,7 @@ class QPainterVideoSurface : public QAbstractVideoSurface
    MULTI_CS_OBJECT(QPainterVideoSurface)
 
  public:
-   explicit QPainterVideoSurface(QObject *parent = 0);
+   explicit QPainterVideoSurface(QObject *parent = nullptr);
    ~QPainterVideoSurface();
 
    QList<QVideoFrame::PixelFormat> supportedPixelFormats(

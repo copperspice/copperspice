@@ -53,7 +53,7 @@ QMediaPlaylist::QMediaPlaylist(QObject *parent)
    d->q_ptr = this;
    d->networkPlaylistControl = new QMediaNetworkPlaylistControl(this);
 
-   setMediaObject(0);
+   setMediaObject(nullptr);
 }
 
 QMediaPlaylist::~QMediaPlaylist()
@@ -85,8 +85,8 @@ bool QMediaPlaylist::setMediaObject(QMediaObject *mediaObject)
       return true;
    }
 
-   QMediaService *service = mediaObject ? mediaObject->service() : 0;
-   QMediaPlaylistControl *newControl = 0;
+   QMediaService *service = mediaObject ? mediaObject->service() : nullptr;
+   QMediaPlaylistControl *newControl = nullptr;
 
    if (service) {
       newControl = dynamic_cast<QMediaPlaylistControl *>(service->requestControl(QMediaPlaylistControl_iid));

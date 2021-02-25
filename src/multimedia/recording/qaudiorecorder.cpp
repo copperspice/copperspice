@@ -72,14 +72,16 @@ class QAudioRecorderPrivate : public QMediaRecorderPrivate
    }
 
    QAudioRecorderPrivate()
-      : QMediaRecorderPrivate(), provider(0), audioInputSelector(0) {}
+      : QMediaRecorderPrivate(), provider(nullptr), audioInputSelector(nullptr)
+   {
+   }
 
    QMediaServiceProvider *provider;
    QAudioInputSelectorControl *audioInputSelector;
 };
 
 QAudioRecorder::QAudioRecorder(QObject *parent):
-   QMediaRecorder(*new QAudioRecorderPrivate, 0, parent)
+   QMediaRecorder(*new QAudioRecorderPrivate, nullptr, parent)
 {
    Q_D(QAudioRecorder);
    d->provider = QMediaServiceProvider::defaultServiceProvider();
@@ -93,9 +95,9 @@ QAudioRecorder::~QAudioRecorder()
 {
    Q_D(QAudioRecorder);
 
-   QMediaService *service = d->mediaObject ? d->mediaObject->service() : 0;
+   QMediaService *service = d->mediaObject ? d->mediaObject->service() : nullptr;
    QMediaObject *mediaObject = d->mediaObject;
-   setMediaObject(0);
+   setMediaObject(nullptr);
 
    if (service && d->audioInputSelector) {
       service->releaseControl(d->audioInputSelector);

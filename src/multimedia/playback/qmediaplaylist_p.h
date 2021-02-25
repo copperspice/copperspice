@@ -43,7 +43,8 @@ class QMediaPlaylistPrivate
 {
  public:
    QMediaPlaylistPrivate()
-      : mediaObject(0), control(0), networkPlaylistControl(0), error(QMediaPlaylist::NoError) {
+      : mediaObject(nullptr), control(nullptr), networkPlaylistControl(nullptr), error(QMediaPlaylist::NoError)
+   {
    }
 
    virtual ~QMediaPlaylistPrivate() {}
@@ -57,13 +58,13 @@ class QMediaPlaylistPrivate
 
    void _q_mediaObjectDeleted() {
       Q_Q(QMediaPlaylist);
-      mediaObject = 0;
+      mediaObject = nullptr;
 
       if (control != networkPlaylistControl) {
-         control = 0;
+         control = nullptr;
       }
 
-      q->setMediaObject(0);
+      q->setMediaObject(nullptr);
    }
 
    QMediaObject *mediaObject;

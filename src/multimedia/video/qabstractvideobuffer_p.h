@@ -34,8 +34,9 @@ class QAbstractVideoBufferPrivate
 {
  public:
    QAbstractVideoBufferPrivate()
-      : q_ptr(0)
-   {}
+      : q_ptr(nullptr)
+   {
+   }
 
    virtual ~QAbstractVideoBufferPrivate()
    { }

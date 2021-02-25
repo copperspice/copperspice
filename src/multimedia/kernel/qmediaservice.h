@@ -49,7 +49,7 @@ class Q_MULTIMEDIA_EXPORT QMediaService : public QObject
          releaseControl(control);
       }
 
-      return 0;
+      return nullptr;
    }
 
    virtual void releaseControl(QMediaControl *control) = 0;

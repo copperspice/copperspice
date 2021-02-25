@@ -320,7 +320,7 @@ QVideoSurfaceGLPainter::~QVideoSurfaceGLPainter()
 
 void QVideoSurfaceGLPainter::viewportDestroyed()
 {
-   m_context = 0;
+   m_context = nullptr;
 }
 
 QList<QVideoFrame::PixelFormat> QVideoSurfaceGLPainter::supportedPixelFormats(
@@ -714,7 +714,7 @@ QAbstractVideoSurface::Error QVideoSurfaceArbFpPainter::start(const QVideoSurfac
 
    m_context->makeCurrent();
 
-   const char *program = 0;
+   const char *program = nullptr;
 
    if (format.handleType() == QAbstractVideoBuffer::NoHandle) {
       switch (format.pixelFormat()) {
@@ -1095,7 +1095,7 @@ QAbstractVideoSurface::Error QVideoSurfaceGlslPainter::start(const QVideoSurface
 
    m_context->makeCurrent();
 
-   const char *fragmentProgram = 0;
+   const char *fragmentProgram = nullptr;
 
    if (format.handleType() == QAbstractVideoBuffer::NoHandle) {
       switch (format.pixelFormat()) {
@@ -1346,20 +1346,14 @@ QAbstractVideoSurface::Error QVideoSurfaceGlslPainter::paint(
 /*!
 */
 QPainterVideoSurface::QPainterVideoSurface(QObject *parent)
-   : QAbstractVideoSurface(parent)
-   , m_painter(0)
-#if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && !defined(QT_OPENGL_ES_1)
-   , m_glContext(0)
-   , m_shaderTypes(NoShaders)
-   , m_shaderType(NoShaders)
+   : QAbstractVideoSurface(parent), m_painter(nullptr),
+
+#if ! defined(QT_NO_OPENGL) && ! defined(QT_OPENGL_ES_1_CL) && ! defined(QT_OPENGL_ES_1)
+     m_glContext(nullptr), m_shaderTypes(NoShaders), m_shaderType(NoShaders),
 #endif
-   , m_brightness(0)
-   , m_contrast(0)
-   , m_hue(0)
-   , m_saturation(0)
-   , m_pixelFormat(QVideoFrame::Format_Invalid)
-   , m_colorsDirty(true)
-   , m_ready(false)
+
+     m_brightness(0), m_contrast(0), m_hue(0), m_saturation(0), m_pixelFormat(QVideoFrame::Format_Invalid),
+     m_colorsDirty(true), m_ready(false)
 {
 }
 
@@ -1639,7 +1633,7 @@ void QPainterVideoSurface::setGLContext(QGLContext *context)
       if (isActive()) {
          m_painter->stop();
          delete m_painter;
-         m_painter = 0;
+         m_painter = nullptr;
          m_ready = false;
 
          setError(ResourceError);
@@ -1689,14 +1683,14 @@ void QPainterVideoSurface::setShaderType(ShaderType type)
       if (isActive()) {
          m_painter->stop();
          delete m_painter;
-         m_painter = 0;
+         m_painter = nullptr;
          m_ready = false;
 
          setError(ResourceError);
          QAbstractVideoSurface::stop();
       } else {
          delete m_painter;
-         m_painter = 0;
+         m_painter = nullptr;
       }
       emit supportedFormatsChanged();
    }
@@ -1712,7 +1706,7 @@ void QPainterVideoSurface::viewportDestroyed()
       setError(ResourceError);
       stop();
       delete m_painter;
-      m_painter = 0;
+      m_painter = nullptr;
    }
 }
 

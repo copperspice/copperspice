@@ -55,7 +55,7 @@ QMediaObject::~QMediaObject()
 
 QMultimedia::AvailabilityStatus QMediaObject::availability() const
 {
-   if (d_func()->service == 0) {
+   if (d_func()->service == nullptr) {
       return QMultimedia::ServiceMissing;
    }
 
@@ -117,7 +117,7 @@ void QMediaObject::unbind(QObject *object)
    QMediaBindableInterface *helper = dynamic_cast<QMediaBindableInterface *>(object);
 
    if (helper && helper->mediaObject() == this) {
-      helper->setMediaObject(0);
+      helper->setMediaObject(nullptr);
    } else {
       qWarning() << "QMediaObject:unbind(): Trying to unbind a helper object which was never bound";
    }
@@ -203,7 +203,7 @@ void QMediaObject::setupControls()
 {
    Q_D(QMediaObject);
 
-   if (d->service != 0) {
+   if (d->service != nullptr) {
       d->metaDataControl = qobject_cast<QMetaDataReaderControl *>(d->service->requestControl(QMetaDataReaderControl_iid));
 
       if (d->metaDataControl) {

@@ -39,7 +39,7 @@ QVideoSurfaceOutput::QVideoSurfaceOutput(QObject *parent)
 QVideoSurfaceOutput::~QVideoSurfaceOutput()
 {
    if (m_control) {
-      m_control.data()->setSurface(0);
+      m_control.data()->setSurface(nullptr);
       m_service.data()->releaseControl(m_control.data());
    }
 }
@@ -61,7 +61,7 @@ void QVideoSurfaceOutput::setVideoSurface(QAbstractVideoSurface *surface)
 bool QVideoSurfaceOutput::setMediaObject(QMediaObject *object)
 {
    if (m_control) {
-      m_control.data()->setSurface(0);
+      m_control.data()->setSurface(nullptr);
       m_service.data()->releaseControl(m_control.data());
    }
    m_control.clear();

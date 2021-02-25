@@ -61,7 +61,7 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylistControl : public QMediaControl
    MULTI_CS_SIGNAL_2(playbackModeChanged, mode)
 
  protected:
-   QMediaPlaylistControl(QObject *parent = 0);
+   QMediaPlaylistControl(QObject *parent = nullptr);
 };
 
 #define QMediaPlaylistControl_iid "com.copperspice.CS.mediaPlayListControl/1.0"

@@ -73,7 +73,7 @@ uchar *QImageVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
 
       return d->image.bits();
    } else {
-      return 0;
+      return nullptr;
    }
 }
 

@@ -55,7 +55,7 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayerResourceSetInterface : public QObject
    MULTI_CS_SIGNAL_2(availabilityChanged, available)
 
  protected:
-   QMediaPlayerResourceSetInterface(QObject *parent = 0);
+   QMediaPlayerResourceSetInterface(QObject *parent = nullptr);
 };
 
 #endif

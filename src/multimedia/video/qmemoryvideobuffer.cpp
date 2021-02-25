@@ -30,9 +30,9 @@ class QMemoryVideoBufferPrivate : public QAbstractVideoBufferPrivate
 {
  public:
    QMemoryVideoBufferPrivate()
-      : bytesPerLine(0)
-      , mapMode(QAbstractVideoBuffer::NotMapped)
-   { }
+      : bytesPerLine(0), mapMode(QAbstractVideoBuffer::NotMapped)
+   {
+   }
 
    int bytesPerLine;
    QAbstractVideoBuffer::MapMode mapMode;
@@ -95,7 +95,7 @@ uchar *QMemoryVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
 
       return reinterpret_cast<uchar *>(d->data.data());
    } else {
-      return 0;
+      return nullptr;
    }
 }
 

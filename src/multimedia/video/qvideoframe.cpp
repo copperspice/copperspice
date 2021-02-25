@@ -40,18 +40,18 @@ class QVideoFramePrivate : public QSharedData
 {
  public:
    QVideoFramePrivate()
-      : startTime(-1), endTime(-1), mappedBytes(0), planeCount(0)
-      , pixelFormat(QVideoFrame::Format_Invalid), fieldType(QVideoFrame::ProgressiveFrame)
-      , buffer(0), mappedCount(0)
+      : startTime(-1), endTime(-1), mappedBytes(0), planeCount(0),
+        pixelFormat(QVideoFrame::Format_Invalid), fieldType(QVideoFrame::ProgressiveFrame),
+        buffer(nullptr), mappedCount(0)
    {
       memset(data, 0, sizeof(data));
       memset(bytesPerLine, 0, sizeof(bytesPerLine));
    }
 
    QVideoFramePrivate(const QSize &size, QVideoFrame::PixelFormat format)
-      : size(size), startTime(-1), endTime(-1), mappedBytes(0), planeCount(0)
-      , pixelFormat(format), fieldType(QVideoFrame::ProgressiveFrame)
-      , buffer(0), mappedCount(0)
+      : size(size), startTime(-1), endTime(-1), mappedBytes(0), planeCount(0),
+        pixelFormat(format), fieldType(QVideoFrame::ProgressiveFrame),
+        buffer(nullptr), mappedCount(0)
    {
       memset(data, 0, sizeof(data));
       memset(bytesPerLine, 0, sizeof(bytesPerLine));
@@ -145,7 +145,7 @@ QVideoFrame::~QVideoFrame()
 
 bool QVideoFrame::isValid() const
 {
-   return d->buffer != 0;
+   return d->buffer != nullptr;
 }
 
 QVideoFrame::PixelFormat QVideoFrame::pixelFormat() const
@@ -189,22 +189,22 @@ void QVideoFrame::setFieldType(QVideoFrame::FieldType field)
 
 bool QVideoFrame::isMapped() const
 {
-   return d->buffer != 0 && d->buffer->mapMode() != QAbstractVideoBuffer::NotMapped;
+   return d->buffer != nullptr && d->buffer->mapMode() != QAbstractVideoBuffer::NotMapped;
 }
 
 bool QVideoFrame::isWritable() const
 {
-   return d->buffer != 0 && (d->buffer->mapMode() & QAbstractVideoBuffer::WriteOnly);
+   return d->buffer != nullptr && (d->buffer->mapMode() & QAbstractVideoBuffer::WriteOnly);
 }
 
 bool QVideoFrame::isReadable() const
 {
-   return d->buffer != 0 && (d->buffer->mapMode() & QAbstractVideoBuffer::ReadOnly);
+   return d->buffer != nullptr && (d->buffer->mapMode() & QAbstractVideoBuffer::ReadOnly);
 }
 
 QAbstractVideoBuffer::MapMode QVideoFrame::mapMode() const
 {
-   return d->buffer != 0 ? d->buffer->mapMode() : QAbstractVideoBuffer::NotMapped;
+   return d->buffer != nullptr ? d->buffer->mapMode() : QAbstractVideoBuffer::NotMapped;
 }
 
 bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
@@ -229,7 +229,8 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
          return false;
       }
    }
-   Q_ASSERT(d->data[0] == 0);
+
+   Q_ASSERT(d->data[0] == nullptr);
    Q_ASSERT(d->bytesPerLine[0] == 0);
    Q_ASSERT(d->planeCount == 0);
    Q_ASSERT(d->mappedBytes == 0);
@@ -379,7 +380,7 @@ uchar *QVideoFrame::bits()
 
 uchar *QVideoFrame::bits(int plane)
 {
-   return plane >= 0 && plane < d->planeCount ? d->data[plane] : 0;
+   return plane >= 0 && plane < d->planeCount ? d->data[plane] : nullptr;
 }
 
 
@@ -390,7 +391,7 @@ const uchar *QVideoFrame::bits() const
 
 const uchar *QVideoFrame::bits(int plane) const
 {
-   return plane >= 0 && plane < d->planeCount ?  d->data[plane] : 0;
+   return plane >= 0 && plane < d->planeCount ?  d->data[plane] : nullptr;
 }
 
 
@@ -406,7 +407,7 @@ int QVideoFrame::planeCount() const
 
 QVariant QVideoFrame::handle() const
 {
-   return d->buffer != 0 ? d->buffer->handle() : QVariant();
+   return d->buffer != nullptr ? d->buffer->handle() : QVariant();
 }
 
 

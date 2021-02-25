@@ -159,12 +159,12 @@ void QCameraPrivate::initControls()
       error = QCamera::NoError;
 
    } else {
-      control       = 0;
-      locksControl  = 0;
-      deviceControl = 0;
-      infoControl   = 0;
-      viewfinderSettingsControl = 0;
-      viewfinderSettingsControl2 = 0;
+      control       = nullptr;
+      locksControl  = nullptr;
+      deviceControl = nullptr;
+      infoControl   = nullptr;
+      viewfinderSettingsControl  = nullptr;
+      viewfinderSettingsControl2 = nullptr;
 
       error = QCamera::ServiceMissingError;
       errorString = QCamera::tr("The camera service is missing");
@@ -205,16 +205,16 @@ void QCameraPrivate::clear()
       provider->releaseService(service);
    }
 
-   cameraExposure = 0;
-   cameraFocus = 0;
-   imageProcessing = 0;
-   control = 0;
-   locksControl = 0;
-   deviceControl = 0;
-   infoControl = 0;
-   viewfinderSettingsControl = 0;
-   viewfinderSettingsControl2 = 0;
-   service = 0;
+   cameraExposure  = nullptr;
+   cameraFocus     = nullptr;
+   imageProcessing = nullptr;
+   control         = nullptr;
+   locksControl    = nullptr;
+   deviceControl   = nullptr;
+   infoControl     = nullptr;
+   viewfinderSettingsControl  = nullptr;
+   viewfinderSettingsControl2 = nullptr;
+   service         = nullptr;
 }
 
 void QCameraPrivate::updateLockStatus()
@@ -297,7 +297,7 @@ QCamera::QCamera(QObject *parent)
    d->init();
 
    // Select the default camera
-   if (d->service != 0 && d->deviceControl) {
+   if (d->service != nullptr && d->deviceControl) {
       d->deviceControl->setSelectedDevice(d->deviceControl->defaultDevice());
    }
 }
@@ -317,7 +317,7 @@ QCamera::QCamera(const QByteArray &deviceName, QObject *parent):
    Q_D(QCamera);
    d->init();
 
-   if (d->service != 0) {
+   if (d->service != nullptr) {
       //pass device name to service
       if (d->deviceControl) {
          const QString name = QString::fromLatin1(deviceName);
@@ -347,7 +347,7 @@ QCamera::QCamera(const QCameraInfo &cameraInfo, QObject *parent)
    Q_D(QCamera);
    d->init();
 
-   if (d->service != 0 && d->deviceControl) {
+   if (d->service != nullptr && d->deviceControl) {
       for (int i = 0; i < d->deviceControl->deviceCount(); i++) {
          if (d->deviceControl->deviceName(i) == cameraInfo.deviceName()) {
             d->deviceControl->setSelectedDevice(i);
@@ -377,7 +377,7 @@ QCamera::QCamera(QCamera::Position position, QObject *parent)
    Q_D(QCamera);
    d->init();
 
-   if (d->service != 0 && d->deviceControl) {
+   if (d->service != nullptr && d->deviceControl) {
       bool selectDefault = true;
 
       if (d->infoControl && position != UnspecifiedPosition) {
@@ -412,7 +412,8 @@ QCamera::~QCamera()
 QMultimedia::AvailabilityStatus QCamera::availability() const
 {
    Q_D(const QCamera);
-   if (d->control == NULL) {
+
+   if (d->control == nullptr) {
       return QMultimedia::ServiceMissing;
    }
 
@@ -456,7 +457,7 @@ void QCamera::setViewfinder(QVideoWidget *viewfinder)
    // We don't know (in this library) that QVideoWidget inherits QObject
    QObject *viewFinderObject = reinterpret_cast<QObject *>(viewfinder);
 
-   d->viewfinder = viewFinderObject && bind(viewFinderObject) ? viewFinderObject : 0;
+   d->viewfinder = viewFinderObject && bind(viewFinderObject) ? viewFinderObject : nullptr;
 }
 
 void QCamera::setViewfinder(QGraphicsVideoItem *viewfinder)
@@ -472,7 +473,7 @@ void QCamera::setViewfinder(QGraphicsVideoItem *viewfinder)
    // but QObject inheritance depends on QObject coming first, so try this out.
    QObject *viewFinderObject = reinterpret_cast<QObject *>(viewfinder);
 
-   d->viewfinder = viewFinderObject && bind(viewFinderObject) ? viewFinderObject : 0;
+   d->viewfinder = viewFinderObject && bind(viewFinderObject) ? viewFinderObject : nullptr;
 }
 
 void QCamera::setViewfinder(QAbstractVideoSurface *surface)
@@ -486,7 +487,7 @@ void QCamera::setViewfinder(QAbstractVideoSurface *surface)
          unbind(d->viewfinder);
       }
 
-      d->viewfinder = 0;
+      d->viewfinder = nullptr;
 
       if (surface && bind(&d->surfaceViewfinder)) {
          d->viewfinder = &d->surfaceViewfinder;
@@ -494,7 +495,7 @@ void QCamera::setViewfinder(QAbstractVideoSurface *surface)
    } else if (!surface) {
       //unbind the surfaceViewfinder if null surface is set
       unbind(&d->surfaceViewfinder);
-      d->viewfinder = 0;
+      d->viewfinder = nullptr;
    }
 }
 

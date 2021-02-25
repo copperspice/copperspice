@@ -43,12 +43,13 @@ class QCameraPrivate : public QMediaObjectPrivate
    Q_DECLARE_NON_CONST_PUBLIC(QCamera)
 
  public:
-   QCameraPrivate():
-      QMediaObjectPrivate(), provider(0), control(0), deviceControl(0), locksControl(0), infoControl(0),
-      viewfinderSettingsControl(0), viewfinderSettingsControl2(0), cameraExposure(0), cameraFocus(0),
-      imageProcessing(0), viewfinder(0), capture(0), state(QCamera::UnloadedState),
-      error(QCamera::NoError), requestedLocks(QCamera::NoLock), lockStatus(QCamera::Unlocked),
-      lockChangeReason(QCamera::UserRequest), supressLockChangedSignal(false), restartPending(false)
+   QCameraPrivate()
+      : QMediaObjectPrivate(), provider(nullptr), control(nullptr), deviceControl(nullptr),
+        locksControl(nullptr), infoControl(nullptr), viewfinderSettingsControl(nullptr),
+        viewfinderSettingsControl2(nullptr), cameraExposure(nullptr), cameraFocus(nullptr),
+        imageProcessing(nullptr), viewfinder(nullptr), capture(nullptr), state(QCamera::UnloadedState),
+        error(QCamera::NoError), requestedLocks(QCamera::NoLock), lockStatus(QCamera::Unlocked),
+        lockChangeReason(QCamera::UserRequest), supressLockChangedSignal(false), restartPending(false)
    {
    }
 

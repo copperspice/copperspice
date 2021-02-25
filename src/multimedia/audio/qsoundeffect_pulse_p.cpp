@@ -113,13 +113,13 @@ private:
 
         if (m_context) {
             pa_context_unref(m_context);
-            m_context = 0;
+            m_context = nullptr;
         }
 
         if (m_mainLoop) {
             pa_threaded_mainloop_stop(m_mainLoop);
             pa_threaded_mainloop_free(m_mainLoop);
-            m_mainLoop = 0;
+            m_mainLoop = nullptr;
         }
 
         m_prepared = false;
@@ -166,11 +166,11 @@ void PulseDaemon::onContextFailed()
 
 void PulseDaemon::prepare()
 {
-  m_context = 0;
+  m_context  = nullptr;
   m_mainLoop = pa_threaded_mainloop_new();
 
-  if (m_mainLoop == 0) {
-      qWarning("PulseAudioService: unable to create pulseaudio mainloop");
+  if (m_mainLoop == nullptr) {
+      qWarning("PulseAudioService: Unable to create pulseaudio mainloop");
       return;
   }
 
@@ -185,24 +185,25 @@ void PulseDaemon::prepare()
   lock();
   m_context = pa_context_new(m_mainLoopApi, QString("QtPulseAudio:%1").formatArg(::getpid()).toLatin1().constData());
 
-  if (m_context == 0) {
+  if (m_context == nullptr) {
       qWarning("PulseAudioService: Unable to create new pulseaudio context");
       pa_threaded_mainloop_unlock(m_mainLoop);
       pa_threaded_mainloop_free(m_mainLoop);
-      m_mainLoop = 0;
+      m_mainLoop = nullptr;
       onContextFailed();
       return;
   }
 
   pa_context_set_state_callback(m_context, context_state_callback, this);
 
-  if (pa_context_connect(m_context, 0, (pa_context_flags_t)0, 0) < 0) {
+  if (pa_context_connect(m_context, nullptr, (pa_context_flags_t)0, nullptr) < 0) {
       qWarning("PulseAudioService: pa_context_connect() failed");
       pa_context_unref(m_context);
       pa_threaded_mainloop_unlock(m_mainLoop);
       pa_threaded_mainloop_free(m_mainLoop);
-      m_mainLoop = 0;
-      m_context = 0;
+      m_mainLoop = nullptr;
+      m_context  = nullptr;
+
       return;
   }
   unlock();
@@ -283,7 +284,7 @@ public:
         qDebug() << "QSoundEffectRef(" << this << ") notifyDeleted";
 #endif
         QMutexLocker locker(&m_mutex);
-        m_target = NULL;
+        m_target = nullptr;
     }
 
 private:
@@ -292,12 +293,11 @@ private:
     QSoundEffectPrivate *m_target;
 };
 
-QSoundEffectPrivate::QSoundEffectPrivate(QObject* parent):
-    QObject(parent), m_pulseStream(0), m_sinkInputId(-1), m_emptying(false),
-    m_sampleReady(false), m_playing(false), m_status(QSoundEffect::Null),
-    m_muted(false), m_playQueued(false), m_stopping(false), m_volume(1.0),
-    m_loopCount(1), m_runningCount(0), m_reloadCategory(false), m_sample(0),
-    m_position(0), m_resourcesAvailable(false)
+QSoundEffectPrivate::QSoundEffectPrivate(QObject* parent)
+   : QObject(parent), m_pulseStream(nullptr), m_sinkInputId(-1), m_emptying(false), m_sampleReady(false),
+     m_playing(false), m_status(QSoundEffect::Null), m_muted(false), m_playQueued(false), m_stopping(false),
+     m_volume(1.0), m_loopCount(1), m_runningCount(0), m_reloadCategory(false), m_sample(nullptr),
+     m_position(0), m_resourcesAvailable(false)
 {
     m_ref = new QSoundEffectRef(this);
     pa_sample_spec_init(&m_pulseSpec);
@@ -328,7 +328,7 @@ void QSoundEffectPrivate::release()
     unloadPulseStream();
     if (m_sample) {
         m_sample->release();
-        m_sample = 0;
+        m_sample = nullptr;
     }
 
     this->deleteLater();
@@ -363,7 +363,7 @@ void QSoundEffectPrivate::setCategory(const QString &category)
 QSoundEffectPrivate::~QSoundEffectPrivate()
 {
     QMediaResourcePolicy::destroyResourceSet(m_resources);
-    m_resources = 0;
+    m_resources = nullptr;
     m_ref->release();
 }
 
@@ -399,7 +399,7 @@ void QSoundEffectPrivate::setSource(const QUrl &url)
             disconnect(m_sample, SIGNAL(ready()), this, SLOT(sampleReady()));
         }
         m_sample->release();
-        m_sample = 0;
+        m_sample = nullptr;
     }
 
     m_source = url;
@@ -408,9 +408,9 @@ void QSoundEffectPrivate::setSource(const QUrl &url)
     PulseDaemonLocker locker;
     setLoopsRemaining(0);
     if (m_pulseStream && !pa_stream_is_corked(m_pulseStream)) {
-        pa_stream_set_write_callback(m_pulseStream, 0, 0);
-        pa_stream_set_underflow_callback(m_pulseStream, 0, 0);
-        pa_operation *op = pa_stream_cork(m_pulseStream, 1, 0, 0);
+        pa_stream_set_write_callback(m_pulseStream, nullptr, nullptr);
+        pa_stream_set_underflow_callback(m_pulseStream, nullptr, nullptr);
+        pa_operation *op = pa_stream_cork(m_pulseStream, 1, nullptr, nullptr);
         if (op)
             pa_operation_unref(op);
         else
@@ -594,8 +594,8 @@ void QSoundEffectPrivate::emptyStream(EmptyStreamOptions options)
                                                           : stream_flush_callback;
 
     m_emptying = true;
-    pa_stream_set_write_callback(m_pulseStream, 0, 0);
-    pa_stream_set_underflow_callback(m_pulseStream, 0, 0);
+    pa_stream_set_write_callback(m_pulseStream, nullptr, nullptr);
+    pa_stream_set_underflow_callback(m_pulseStream, nullptr, nullptr);
     pa_operation *op = pa_stream_flush(m_pulseStream, flushCompleteCb, m_ref->getRef());
     if (op)
         pa_operation_unref(op);
@@ -613,7 +613,8 @@ void QSoundEffectPrivate::emptyComplete(void *stream, bool reload)
     m_emptying = false;
 
     if ((pa_stream *)stream == m_pulseStream) {
-        pa_operation *op = pa_stream_cork(m_pulseStream, 1, reload ? stream_cork_callback : 0, m_ref->getRef());
+        pa_operation *op = pa_stream_cork(m_pulseStream, 1, reload ?
+                  stream_cork_callback : nullptr, m_ref->getRef());
         if (op)
             pa_operation_unref(op);
         else
@@ -725,13 +726,15 @@ void QSoundEffectPrivate::unloadPulseStream()
     m_sinkInputId = -1;
     PulseDaemonLocker locker;
     if (m_pulseStream) {
-        pa_stream_set_state_callback(m_pulseStream, 0, 0);
-        pa_stream_set_write_callback(m_pulseStream, 0, 0);
-        pa_stream_set_underflow_callback(m_pulseStream, 0, 0);
+        pa_stream_set_state_callback(m_pulseStream, nullptr, nullptr);
+        pa_stream_set_write_callback(m_pulseStream, nullptr, nullptr);
+        pa_stream_set_underflow_callback(m_pulseStream, nullptr, nullptr);
         pa_stream_disconnect(m_pulseStream);
         pa_stream_unref(m_pulseStream);
+
         disconnect(pulseDaemon(), SIGNAL(contextFailed()), this, SLOT(contextFailed()));
-        m_pulseStream = 0;
+
+        m_pulseStream = nullptr;
         m_reloadCategory = false; // category will be reloaded when we connect anyway
     }
 }
@@ -858,7 +861,7 @@ void QSoundEffectPrivate::playSample()
 #endif
     Q_ASSERT(m_pulseStream);
     Q_ASSERT(pa_stream_get_state(m_pulseStream) == PA_STREAM_READY);
-    pa_operation *o = pa_stream_cork(m_pulseStream, 0, 0, 0);
+    pa_operation *o = pa_stream_cork(m_pulseStream, 0, nullptr, nullptr);
     if (o)
         pa_operation_unref(o);
 }
@@ -924,14 +927,14 @@ void QSoundEffectPrivate::createPulseStream()
         pa_proplist_sets(propList, PA_PROP_MEDIA_ROLE, m_category.toLatin1().constData());
    }
 
-    pa_stream *stream = pa_stream_new_with_proplist(pulseDaemon()->context(), m_name.constData(), &m_pulseSpec, 0, propList);
+    pa_stream *stream = pa_stream_new_with_proplist(pulseDaemon()->context(), m_name.constData(), &m_pulseSpec, nullptr, propList);
     pa_proplist_free(propList);
 
     connect(pulseDaemon(), SIGNAL(contextFailed()), this, SLOT(contextFailed()));
 
-    if (stream == 0) {
+    if (stream == nullptr) {
         qWarning("QSoundEffect(pulseaudio): Failed to create stream");
-        m_pulseStream = 0;
+        m_pulseStream = nullptr;
         setStatus(QSoundEffect::Error);
         setPlaying(false);
         return;
@@ -951,10 +954,10 @@ void QSoundEffectPrivate::createPulseStream()
     bufferAttr.prebuf = -1;
     bufferAttr.fragsize = -1;
 
-    if (pa_stream_connect_playback(m_pulseStream, 0, &bufferAttr, PA_STREAM_START_CORKED, 0, 0) < 0) {
+    if (pa_stream_connect_playback(m_pulseStream, nullptr, &bufferAttr, PA_STREAM_START_CORKED, nullptr, nullptr) < 0) {
 
 #else
-    if (pa_stream_connect_playback(m_pulseStream, 0, 0, PA_STREAM_START_CORKED, 0, 0) < 0) {
+    if (pa_stream_connect_playback(m_pulseStream, nullptr, nullptr, PA_STREAM_START_CORKED, nullptr, nullptr) < 0) {
 
 #endif
         qWarning("QSoundEffect(pulseaudio): Failed to connect stream, error = %s",

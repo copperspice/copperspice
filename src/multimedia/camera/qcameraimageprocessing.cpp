@@ -68,14 +68,14 @@ class QCameraImageProcessingPrivate : public QMediaObjectPrivate
 
 void QCameraImageProcessingPrivate::initControls()
 {
-   imageControl = 0;
+   imageControl = nullptr;
 
    QMediaService *service = camera->service();
    if (service) {
       imageControl = qobject_cast<QCameraImageProcessingControl *>(service->requestControl(QCameraImageProcessingControl_iid));
    }
 
-   available = (imageControl != 0);
+   available = (imageControl != nullptr);
 
    if (!imageControl) {
       imageControl = new QCameraImageProcessingFakeControl(q_ptr);

@@ -119,7 +119,7 @@ class Q_MULTIMEDIA_EXPORT QSampleCache : public QObject
    MULTI_CS_OBJECT(QSampleCache)
 
  public:
-   QSampleCache(QObject *parent = 0);
+   QSampleCache(QObject *parent = nullptr);
    ~QSampleCache();
 
    QSample *requestSample(const QUrl &url);
