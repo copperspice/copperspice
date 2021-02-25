@@ -99,8 +99,8 @@ static QFactoryLoader *loader()
 }
 
 QVideoSurfaceGstDelegate::QVideoSurfaceGstDelegate(QAbstractVideoSurface *surface)
-   : m_surface(surface), m_renderer(0), m_activeRenderer(0), m_surfaceCaps(0), m_startCaps(0), m_renderBuffer(0),
-     m_notified(false), m_stop(false), m_flush(false)
+   : m_surface(surface), m_renderer(nullptr), m_activeRenderer(nullptr), m_surfaceCaps(nullptr), m_startCaps(nullptr),
+     m_renderBuffer(nullptr), m_notified(false), m_stop(false), m_flush(false)
 {
    QFactoryLoader *factoryObj = loader();
 
@@ -170,10 +170,10 @@ bool QVideoSurfaceGstDelegate::start(GstCaps *caps)
    if (!waitForAsyncEvent(&locker, &m_setupCondition, 1000) && m_startCaps) {
       qWarning() << "Failed to start video surface due to main thread blocked.";
       gst_caps_unref(m_startCaps);
-      m_startCaps = 0;
+      m_startCaps = nullptr;
    }
 
-   return m_activeRenderer != 0;
+   return m_activeRenderer != nullptr;
 }
 
 void QVideoSurfaceGstDelegate::stop()
@@ -189,7 +189,7 @@ void QVideoSurfaceGstDelegate::stop()
 
    if (m_startCaps) {
       gst_caps_unref(m_startCaps);
-      m_startCaps = 0;
+      m_startCaps = nullptr;
    }
 
    waitForAsyncEvent(&locker, &m_setupCondition, 500);
@@ -221,7 +221,7 @@ void QVideoSurfaceGstDelegate::flush()
    QMutexLocker locker(&m_mutex);
 
    m_flush = true;
-   m_renderBuffer = 0;
+   m_renderBuffer = nullptr;
    m_renderCondition.wakeAll();
 
    notify();
@@ -238,7 +238,7 @@ GstFlowReturn QVideoSurfaceGstDelegate::render(GstBuffer *buffer)
       ? m_renderReturn
       : GST_FLOW_ERROR;
 
-   m_renderBuffer = 0;
+   m_renderBuffer = nullptr;
 
    return flowReturn;
 }
@@ -271,7 +271,7 @@ bool QVideoSurfaceGstDelegate::handleEvent(QMutexLocker *locker)
       m_stop = false;
 
       if (QGstVideoRenderer *const activePool = m_activeRenderer) {
-         m_activeRenderer = 0;
+         m_activeRenderer = nullptr;
          locker->unlock();
 
          activePool->stop(m_surface);
@@ -282,7 +282,7 @@ bool QVideoSurfaceGstDelegate::handleEvent(QMutexLocker *locker)
       Q_ASSERT(!m_activeRenderer);
 
       GstCaps *const startCaps = m_startCaps;
-      m_startCaps = 0;
+      m_startCaps = nullptr;
 
       if (m_renderer && m_surface) {
          locker->unlock();
@@ -291,11 +291,10 @@ bool QVideoSurfaceGstDelegate::handleEvent(QMutexLocker *locker)
 
          locker->relock();
 
-         m_activeRenderer = started
-            ? m_renderer
-            : 0;
+         m_activeRenderer = started ? m_renderer : nullptr;
+
       } else if (QGstVideoRenderer *const activePool = m_activeRenderer) {
-         m_activeRenderer = 0;
+         m_activeRenderer = nullptr;
          locker->unlock();
 
          activePool->stop(m_surface);
@@ -306,7 +305,7 @@ bool QVideoSurfaceGstDelegate::handleEvent(QMutexLocker *locker)
       gst_caps_unref(startCaps);
    } else if (m_renderBuffer) {
       GstBuffer *buffer = m_renderBuffer;
-      m_renderBuffer = 0;
+      m_renderBuffer = nullptr;
       m_renderReturn = GST_FLOW_ERROR;
 
       if (m_activeRenderer && m_surface) {
@@ -361,7 +360,7 @@ void QVideoSurfaceGstDelegate::updateSupportedFormats()
 {
    if (m_surfaceCaps) {
       gst_caps_unref(m_surfaceCaps);
-      m_surfaceCaps = 0;
+      m_surfaceCaps = nullptr;
    }
 
    for (QGstVideoRenderer *pool : m_renderers) {
@@ -391,7 +390,7 @@ static GstVideoSinkClass *sink_parent_class;
 QGstVideoRendererSink *QGstVideoRendererSink::createSink(QAbstractVideoSurface *surface)
 {
    QGstVideoRendererSink *sink = reinterpret_cast<QGstVideoRendererSink *>(
-         g_object_new(QGstVideoRendererSink::get_type(), 0));
+         g_object_new(QGstVideoRendererSink::get_type(), nullptr));
 
    sink->delegate = new QVideoSurfaceGstDelegate(surface);
 
@@ -415,7 +414,7 @@ GType QGstVideoRendererSink::get_type()
          sizeof(QGstVideoRendererSink),                         // instance_size
          0,                                                 // n_preallocs
          instance_init,                                     // instance_init
-         0                                                  // value_table
+         nullptr                                           // value_table
       };
 
       type = g_type_register_static(
@@ -467,7 +466,7 @@ void QGstVideoRendererSink::instance_init(GTypeInstance *instance, gpointer g_cl
 
    Q_UNUSED(g_class);
 
-   sink->delegate = 0;
+   sink->delegate = nullptr;
 }
 
 void QGstVideoRendererSink::finalize(GObject *object)

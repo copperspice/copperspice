@@ -58,7 +58,8 @@ class CameraBinAudioEncoder : public QAudioEncoderSettingsControl
    void setEncodingOption(const QString &codec, const QString &name, const QVariant &value);
 
    QList<int> supportedSampleRates(const QAudioEncoderSettings &settings = QAudioEncoderSettings(),
-                                   bool *isContinuous = 0) const;
+                                   bool *isContinuous = nullptr) const;
+
    QList<int> supportedChannelCounts(const QAudioEncoderSettings &settings = QAudioEncoderSettings()) const;
    QList<int> supportedSampleSizes(const QAudioEncoderSettings &settings = QAudioEncoderSettings()) const;
 

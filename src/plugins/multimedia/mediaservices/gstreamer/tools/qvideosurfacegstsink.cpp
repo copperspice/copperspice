@@ -47,7 +47,7 @@ static QFactoryLoader *loader()
 }
 
 QVideoSurfaceGstDelegate::QVideoSurfaceGstDelegate(QAbstractVideoSurface *surface)
-   : m_surface(surface), m_pool(0), m_renderReturn(GST_FLOW_ERROR), m_bytesPerLine(0), m_startCanceled(false)
+   : m_surface(surface), m_pool(nullptr), m_renderReturn(GST_FLOW_ERROR), m_bytesPerLine(0), m_startCanceled(false)
 {
    QFactoryLoader *factoryObj = loader();
 
@@ -204,7 +204,7 @@ GstFlowReturn QVideoSurfaceGstDelegate::render(GstBuffer *buffer)
 
    QMutexLocker locker(&m_mutex);
 
-   QAbstractVideoBuffer *videoBuffer = 0;
+   QAbstractVideoBuffer *videoBuffer = nullptr;
 
    if (m_pool) {
       videoBuffer = m_pool->prepareVideoBuffer(buffer, m_bytesPerLine);
@@ -301,7 +301,7 @@ void QVideoSurfaceGstDelegate::queuedRender()
 
 void QVideoSurfaceGstDelegate::updateSupportedFormats()
 {
-   QGstBufferPoolInterface *newPool = 0;
+   QGstBufferPoolInterface *newPool = nullptr;
    for (QGstBufferPoolInterface *pool : m_pools) {
       if (!m_surface->supportedPixelFormats(pool->handleType()).isEmpty()) {
          newPool = pool;
@@ -337,7 +337,7 @@ static GstVideoSinkClass *sink_parent_class;
 QVideoSurfaceGstSink *QVideoSurfaceGstSink::createSink(QAbstractVideoSurface *surface)
 {
    QVideoSurfaceGstSink *sink = reinterpret_cast<QVideoSurfaceGstSink *>(
-         g_object_new(QVideoSurfaceGstSink::get_type(), 0));
+         g_object_new(QVideoSurfaceGstSink::get_type(), nullptr));
 
    sink->delegate = new QVideoSurfaceGstDelegate(surface);
 
@@ -354,14 +354,14 @@ GType QVideoSurfaceGstSink::get_type()
       static const GTypeInfo info = {
          sizeof(QVideoSurfaceGstSinkClass),                    // class_size
          base_init,                                         // base_init
-         NULL,                                              // base_finalize
-         class_init,                                        // class_init
-         NULL,                                              // class_finalize
-         NULL,                                              // class_data
-         sizeof(QVideoSurfaceGstSink),                         // instance_size
+         nullptr,                                          // base_finalize
+         class_init,                                       // class_init
+         nullptr,                                          // class_finalize
+         nullptr,                                          // class_data
+         sizeof(QVideoSurfaceGstSink),                      // instance_size
          0,                                                 // n_preallocs
          instance_init,                                     // instance_init
-         0                                                  // value_table
+         nullptr                                           // value_table
       };
 
       type = g_type_register_static(
@@ -423,10 +423,9 @@ void QVideoSurfaceGstSink::instance_init(GTypeInstance *instance, gpointer g_cla
 
    Q_UNUSED(g_class);
 
-   sink->delegate = 0;
-
-   sink->lastRequestedCaps = 0;
-   sink->lastBufferCaps = 0;
+   sink->delegate          = nullptr;
+   sink->lastRequestedCaps = nullptr;
+   sink->lastBufferCaps    = nullptr;
    sink->lastSurfaceFormat = new QVideoSurfaceFormat;
 }
 
@@ -435,17 +434,17 @@ void QVideoSurfaceGstSink::finalize(GObject *object)
    VO_SINK(object);
 
    delete sink->lastSurfaceFormat;
-   sink->lastSurfaceFormat = 0;
+   sink->lastSurfaceFormat = nullptr;
 
    if (sink->lastBufferCaps) {
       gst_caps_unref(sink->lastBufferCaps);
    }
-   sink->lastBufferCaps = 0;
+   sink->lastBufferCaps = nullptr;
 
    if (sink->lastRequestedCaps) {
       gst_caps_unref(sink->lastRequestedCaps);
    }
-   sink->lastRequestedCaps = 0;
+   sink->lastRequestedCaps = nullptr;
 
    delete sink->delegate;
 
@@ -460,11 +459,11 @@ void QVideoSurfaceGstSink::handleShowPrerollChange(GObject *o, GParamSpec *p, gp
    QVideoSurfaceGstSink *sink = reinterpret_cast<QVideoSurfaceGstSink *>(d);
 
    gboolean showPrerollFrame = true; // "show-preroll-frame" property is true by default
-   g_object_get(G_OBJECT(sink), "show-preroll-frame", &showPrerollFrame, NULL);
+   g_object_get(G_OBJECT(sink), "show-preroll-frame", &showPrerollFrame, nullptr);
 
    if (!showPrerollFrame) {
       GstState state = GST_STATE_VOID_PENDING;
-      gst_element_get_state(GST_ELEMENT(sink), &state, NULL, GST_CLOCK_TIME_NONE);
+      gst_element_get_state(GST_ELEMENT(sink), &state, nullptr, GST_CLOCK_TIME_NONE);
       // show-preroll-frame being set to 'false' while in GST_STATE_PAUSED means
       // the QMediaPlayer was stopped from the paused state.
       // We need to flush the current frame.
@@ -479,7 +478,7 @@ GstStateChangeReturn QVideoSurfaceGstSink::change_state(GstElement *element, Gst
    QVideoSurfaceGstSink *sink = reinterpret_cast<QVideoSurfaceGstSink *>(element);
 
    gboolean showPrerollFrame = true; // "show-preroll-frame" property is true by default
-   g_object_get(G_OBJECT(element), "show-preroll-frame", &showPrerollFrame, NULL);
+   g_object_get(G_OBJECT(element), "show-preroll-frame", &showPrerollFrame, nullptr);
 
    // If show-preroll-frame is 'false' when transitioning from GST_STATE_PLAYING to
    // GST_STATE_PAUSED, it means the QMediaPlayer was stopped.
@@ -553,7 +552,7 @@ gboolean QVideoSurfaceGstSink::set_caps(GstBaseSink *base, GstCaps *caps)
       if (sink->lastRequestedCaps) {
          gst_caps_unref(sink->lastRequestedCaps);
       }
-      sink->lastRequestedCaps = 0;
+      sink->lastRequestedCaps = nullptr;
 
 #ifdef DEBUG_VIDEO_SURFACE_SINK
       qDebug() << "Starting video surface, format:";
@@ -583,7 +582,7 @@ GstFlowReturn QVideoSurfaceGstSink::buffer_alloc(
       return GST_FLOW_ERROR;
    }
 
-   *buffer = NULL;
+   *buffer = nullptr;
 
    if (!sink->delegate->pool()) {
       return GST_FLOW_OK;
@@ -705,7 +704,7 @@ GstFlowReturn QVideoSurfaceGstSink::preroll(GstBaseSink *base, GstBuffer *buffer
 {
    VO_SINK(base);
    gboolean showPrerollFrame = true;
-   g_object_get(G_OBJECT(sink), "show-preroll-frame", &showPrerollFrame, NULL);
+   g_object_get(G_OBJECT(sink), "show-preroll-frame", &showPrerollFrame, nullptr);
 
    if (showPrerollFrame) {
       return sink->delegate->render(buffer);

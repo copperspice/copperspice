@@ -47,8 +47,8 @@
 #include <qmediaresourceset_p.h>
 
 QGstreamerPlayerService::QGstreamerPlayerService(QObject *parent)
-   : QMediaService(parent), m_audioProbeControl(0), m_videoProbeControl(0), m_videoOutput(0)
-   , m_videoRenderer(0), m_videoWindow(0), m_videoWidget(0), m_videoReferenceCount(0)
+   : QMediaService(parent), m_audioProbeControl(nullptr), m_videoProbeControl(nullptr), m_videoOutput(nullptr),
+     m_videoRenderer(nullptr), m_videoWindow(nullptr), m_videoWidget(nullptr), m_videoReferenceCount(0)
 {
    m_session  = new QGstreamerPlayerSession(this);
    m_control  = new QGstreamerPlayerControl(m_session, this);
@@ -68,7 +68,7 @@ QGstreamerPlayerService::QGstreamerPlayerService(QObject *parent)
    // it won't work anyway.
    if (!m_videoWindow->videoSink()) {
       delete m_videoWindow;
-      m_videoWindow = 0;
+      m_videoWindow = nullptr;
    }
 
 
@@ -79,7 +79,7 @@ QGstreamerPlayerService::QGstreamerPlayerService(QObject *parent)
    // QVideoWidget will fall back to QVideoRendererControl in that case.
    if (!m_videoWidget->videoSink()) {
       delete m_videoWidget;
-      m_videoWidget = 0;
+      m_videoWidget = nullptr;
    }
 }
 
@@ -156,20 +156,20 @@ void QGstreamerPlayerService::releaseControl(QMediaControl *control)
       return;
 
    } else if (control == m_videoOutput) {
-      m_videoOutput = 0;
-      m_control->setVideoOutput(0);
+      m_videoOutput = nullptr;
+      m_control->setVideoOutput(nullptr);
       decreaseVideoRef();
 
    } else if (control == m_videoProbeControl && !m_videoProbeControl->ref.deref()) {
       m_session->removeProbe(m_videoProbeControl);
       delete m_videoProbeControl;
-      m_videoProbeControl = 0;
+      m_videoProbeControl = nullptr;
       decreaseVideoRef();
 
    } else if (control == m_audioProbeControl && !m_audioProbeControl->ref.deref()) {
       m_session->removeProbe(m_audioProbeControl);
       delete m_audioProbeControl;
-      m_audioProbeControl = 0;
+      m_audioProbeControl = nullptr;
    }
 }
 

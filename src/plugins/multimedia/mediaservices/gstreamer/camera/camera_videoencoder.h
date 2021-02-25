@@ -48,10 +48,10 @@ class CameraBinVideoEncoder : public QVideoEncoderSettingsControl
    virtual ~CameraBinVideoEncoder();
 
    QList<QSize> supportedResolutions(const QVideoEncoderSettings &settings = QVideoEncoderSettings(),
-                                     bool *continuous = 0) const;
+                                     bool *continuous = nullptr) const;
 
    QList< qreal > supportedFrameRates(const QVideoEncoderSettings &settings = QVideoEncoderSettings(),
-                                      bool *continuous = 0) const;
+                                      bool *continuous = nullptr) const;
 
    QPair<int, int> rateAsRational(qreal) const;
 

@@ -26,7 +26,7 @@
 #include <gst/gst.h>
 
 QGstreamerMessage::QGstreamerMessage()
-   : m_message(0)
+   : m_message(nullptr)
 {
 }
 
@@ -44,7 +44,7 @@ QGstreamerMessage::QGstreamerMessage(QGstreamerMessage const &m):
 
 QGstreamerMessage::~QGstreamerMessage()
 {
-   if (m_message != 0) {
+   if (m_message != nullptr) {
       gst_message_unref(m_message);
    }
 }
@@ -57,11 +57,11 @@ GstMessage *QGstreamerMessage::rawMessage() const
 QGstreamerMessage &QGstreamerMessage::operator=(QGstreamerMessage const &rhs)
 {
    if (rhs.m_message != m_message) {
-      if (rhs.m_message != 0) {
+      if (rhs.m_message != nullptr) {
          gst_message_ref(rhs.m_message);
       }
 
-      if (m_message != 0) {
+      if (m_message != nullptr) {
          gst_message_unref(m_message);
       }
 

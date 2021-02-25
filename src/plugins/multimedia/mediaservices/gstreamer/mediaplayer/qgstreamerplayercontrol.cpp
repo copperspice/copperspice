@@ -43,7 +43,7 @@
 QGstreamerPlayerControl::QGstreamerPlayerControl(QGstreamerPlayerSession *session, QObject *parent)
    : QMediaPlayerControl(parent), m_session(session), m_userRequestedState(QMediaPlayer::StoppedState)
    , m_currentState(QMediaPlayer::StoppedState), m_mediaStatus(QMediaPlayer::NoMedia), m_bufferProgress(-1)
-   , m_pendingSeekPosition(-1), m_setMediaPending(false), m_stream(0)
+   , m_pendingSeekPosition(-1), m_setMediaPending(false), m_stream(nullptr)
 {
    m_resources = QMediaResourcePolicy::createResourceSet<QMediaPlayerResourceSetInterface>();
    Q_ASSERT(m_resources);

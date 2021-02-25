@@ -42,7 +42,7 @@
 
 CameraBinImageCapture::CameraBinImageCapture(CameraBinSession *session)
    : QCameraImageCaptureControl(session), m_encoderProbe(this), m_muxerProbe(this), m_session(session),
-     m_jpegEncoderElement(0), m_metadataMuxerElement(0), m_requestId(0), m_ready(false)
+     m_jpegEncoderElement(nullptr), m_metadataMuxerElement(nullptr), m_requestId(0), m_ready(false)
 {
    connect(m_session, &CameraBinSession::statusChanged, this, &CameraBinImageCapture::updateState);
    connect(m_session, &CameraBinSession::imageExposed,  this, &CameraBinImageCapture::imageExposed);

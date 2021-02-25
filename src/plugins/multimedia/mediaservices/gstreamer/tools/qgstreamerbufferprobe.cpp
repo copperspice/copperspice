@@ -27,12 +27,14 @@
 QGstreamerBufferProbe::QGstreamerBufferProbe(Flags flags)
 
 #if GST_CHECK_VERSION(1,0,0)
-   : m_capsProbeId(-1)
+   : m_capsProbeId(-1),
+
 #else
-   : m_caps(0)
+   : m_caps(nullptr),
+
 #endif
-   , m_bufferProbeId(-1)
-   , m_flags(flags)
+
+     m_bufferProbeId(-1), m_flags(flags)
 {
 }
 
@@ -89,7 +91,7 @@ void QGstreamerBufferProbe::removeProbeFromPad(GstPad *pad)
       m_bufferProbeId = -1;
       if (m_caps) {
          gst_caps_unref(m_caps);
-         m_caps = 0;
+         m_caps = nullptr;
       }
    }
 #endif

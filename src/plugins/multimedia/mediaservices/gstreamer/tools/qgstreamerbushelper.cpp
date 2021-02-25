@@ -49,12 +49,12 @@ class QGstreamerBusHelperPrivate : public QObject
          m_intervalTimer->start();
 
       } else {
-         m_tag = gst_bus_add_watch_full(bus, G_PRIORITY_DEFAULT, busCallback, this, NULL);
+         m_tag = gst_bus_add_watch_full(bus, G_PRIORITY_DEFAULT, busCallback, this, nullptr);
       }
    }
 
    ~QGstreamerBusHelperPrivate() {
-      m_helper = 0;
+      m_helper = nullptr;
       delete m_intervalTimer;
 
       if (m_tag) {
@@ -116,7 +116,7 @@ void QGstreamerBusHelperPrivate::interval()
 {
    GstMessage *message;
 
-   while ((message = gst_bus_poll(m_bus, GST_MESSAGE_ANY, 0)) != 0) {
+   while ((message = gst_bus_poll(m_bus, GST_MESSAGE_ANY, 0)) != nullptr) {
       processMessage(message);
       gst_message_unref(message);
    }
@@ -143,7 +143,7 @@ QGstreamerBusHelper::QGstreamerBusHelper(GstBus *bus, QObject *parent)
    d = new QGstreamerBusHelperPrivate(this, bus);
 
 #if GST_CHECK_VERSION(1,0,0)
-   gst_bus_set_sync_handler(bus, (GstBusSyncHandler)syncGstBusFilter, d, 0);
+   gst_bus_set_sync_handler(bus, (GstBusSyncHandler)syncGstBusFilter, d, nullptr);
 #else
    gst_bus_set_sync_handler(bus, (GstBusSyncHandler)syncGstBusFilter, d);
 #endif
@@ -154,9 +154,9 @@ QGstreamerBusHelper::QGstreamerBusHelper(GstBus *bus, QObject *parent)
 QGstreamerBusHelper::~QGstreamerBusHelper()
 {
 #if GST_CHECK_VERSION(1,0,0)
-   gst_bus_set_sync_handler(d->bus(), 0, 0, 0);
+   gst_bus_set_sync_handler(d->bus(), nullptr, nullptr, nullptr);
 #else
-   gst_bus_set_sync_handler(d->bus(), 0, 0);
+   gst_bus_set_sync_handler(d->bus(), nullptr, nullptr);
 #endif
    gst_object_unref(GST_OBJECT(d->bus()));
 }

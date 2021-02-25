@@ -29,7 +29,7 @@
 #include <qgstutils_p.h>
 
 QGstreamerVideoInputDeviceControl::QGstreamerVideoInputDeviceControl(QObject *parent)
-   : QVideoDeviceSelectorControl(parent), m_factory(0), m_selectedDevice(0)
+   : QVideoDeviceSelectorControl(parent), m_factory(nullptr), m_selectedDevice(0)
 {
 }
 

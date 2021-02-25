@@ -47,7 +47,7 @@ static const ElementMap elementMap[] = {
 QGstreamerVideoOverlay::QGstreamerVideoOverlay(QObject *parent, const QByteArray &elementName)
    : QObject(parent)
    , QGstreamerBufferProbe(QGstreamerBufferProbe::ProbeCaps)
-   , m_videoSink(0)
+   , m_videoSink(nullptr)
    , m_isActive(false)
    , m_hasForceAspectRatio(false)
    , m_hasBrightness(false)
@@ -63,7 +63,7 @@ QGstreamerVideoOverlay::QGstreamerVideoOverlay(QObject *parent, const QByteArray
    , m_saturation(0)
 {
    if (!elementName.isEmpty()) {
-      m_videoSink = gst_element_factory_make(elementName.constData(), NULL);
+      m_videoSink = gst_element_factory_make(elementName.constData(), nullptr);
    } else {
       m_videoSink = findBestVideoSink();
    }
@@ -111,41 +111,41 @@ static bool qt_gst_element_is_functioning(GstElement *element)
 
 GstElement *QGstreamerVideoOverlay::findBestVideoSink() const
 {
-   GstElement *choice = 0;
+   GstElement *choice = nullptr;
    QString platform = QGuiApplication::platformName();
 
    // We need a native window ID to use the GstVideoOverlay interface.
    // Bail out if the platform plugin in use cannot provide a sensible WId.
    if (platform != "xcb") {
-      return 0;
+      return nullptr;
    }
 
    // First, try some known video sinks, depending on the Qt platform plugin in use.
    for (quint32 i = 0; i < (sizeof(elementMap) / sizeof(ElementMap)); ++i) {
 
       if (platform == QString::fromLatin1(elementMap[i].qtPlatform) &&
-         (choice = gst_element_factory_make(elementMap[i].gstreamerElement, NULL))) {
+         (choice = gst_element_factory_make(elementMap[i].gstreamerElement, nullptr))) {
 
          if (qt_gst_element_is_functioning(choice)) {
             return choice;
          }
 
          gst_object_unref(choice);
-         choice = 0;
+         choice = nullptr;
       }
    }
 
    // If none of the known video sinks are available, try to find one that implements the
    // GstVideoOverlay interface and has autoplugging rank.
    GList *list = qt_gst_video_sinks();
-   for (GList *item = list; item != NULL; item = item->next) {
+   for (GList *item = list; item != nullptr; item = item->next) {
       GstElementFactory *f = GST_ELEMENT_FACTORY(item->data);
 
-      if (!gst_element_factory_has_interface(f, QT_GSTREAMER_VIDEOOVERLAY_INTERFACE_NAME)) {
+      if (! gst_element_factory_has_interface(f, QT_GSTREAMER_VIDEOOVERLAY_INTERFACE_NAME)) {
          continue;
       }
 
-      if (GstElement *el = gst_element_factory_create(f, NULL)) {
+      if (GstElement *el = gst_element_factory_create(f, nullptr)) {
          if (qt_gst_element_is_functioning(el)) {
             choice = el;
             break;
@@ -304,7 +304,7 @@ void QGstreamerVideoOverlay::updateIsActive()
    gboolean showPreroll = true;
 
    if (m_hasShowPrerollFrame) {
-      g_object_get(G_OBJECT(m_videoSink), "show-preroll-frame", &showPreroll, NULL);
+      g_object_get(G_OBJECT(m_videoSink), "show-preroll-frame", &showPreroll, nullptr);
    }
 
    bool newIsActive = (state == GST_STATE_PLAYING || (state == GST_STATE_PAUSED && showPreroll));
@@ -326,7 +326,7 @@ Qt::AspectRatioMode QGstreamerVideoOverlay::aspectRatioMode() const
 
    if (m_hasForceAspectRatio) {
       gboolean forceAR = false;
-      g_object_get(G_OBJECT(m_videoSink), "force-aspect-ratio", &forceAR, NULL);
+      g_object_get(G_OBJECT(m_videoSink), "force-aspect-ratio", &forceAR, nullptr);
       if (!forceAR) {
          mode = Qt::IgnoreAspectRatio;
       }
@@ -338,10 +338,7 @@ Qt::AspectRatioMode QGstreamerVideoOverlay::aspectRatioMode() const
 void QGstreamerVideoOverlay::setAspectRatioMode(Qt::AspectRatioMode mode)
 {
    if (m_hasForceAspectRatio) {
-      g_object_set(G_OBJECT(m_videoSink),
-         "force-aspect-ratio",
-         (mode == Qt::KeepAspectRatio),
-         (const char *)NULL);
+      g_object_set(G_OBJECT(m_videoSink), "force-aspect-ratio", (mode == Qt::KeepAspectRatio), nullptr);
    }
 
    m_aspectRatioMode = mode;
@@ -352,7 +349,7 @@ int QGstreamerVideoOverlay::brightness() const
    int brightness = 0;
 
    if (m_hasBrightness) {
-      g_object_get(G_OBJECT(m_videoSink), "brightness", &brightness, NULL);
+      g_object_get(G_OBJECT(m_videoSink), "brightness", &brightness, nullptr);
    }
 
    return brightness / 10;
@@ -361,7 +358,7 @@ int QGstreamerVideoOverlay::brightness() const
 void QGstreamerVideoOverlay::setBrightness(int brightness)
 {
    if (m_hasBrightness) {
-      g_object_set(G_OBJECT(m_videoSink), "brightness", brightness * 10, NULL);
+      g_object_set(G_OBJECT(m_videoSink), "brightness", brightness * 10, nullptr);
       emit brightnessChanged(brightness);
    }
 
@@ -373,7 +370,7 @@ int QGstreamerVideoOverlay::contrast() const
    int contrast = 0;
 
    if (m_hasContrast) {
-      g_object_get(G_OBJECT(m_videoSink), "contrast", &contrast, NULL);
+      g_object_get(G_OBJECT(m_videoSink), "contrast", &contrast, nullptr);
    }
 
    return contrast / 10;
@@ -382,7 +379,7 @@ int QGstreamerVideoOverlay::contrast() const
 void QGstreamerVideoOverlay::setContrast(int contrast)
 {
    if (m_hasContrast) {
-      g_object_set(G_OBJECT(m_videoSink), "contrast", contrast * 10, NULL);
+      g_object_set(G_OBJECT(m_videoSink), "contrast", contrast * 10, nullptr);
       emit contrastChanged(contrast);
    }
 
@@ -394,7 +391,7 @@ int QGstreamerVideoOverlay::hue() const
    int hue = 0;
 
    if (m_hasHue) {
-      g_object_get(G_OBJECT(m_videoSink), "hue", &hue, NULL);
+      g_object_get(G_OBJECT(m_videoSink), "hue", &hue, nullptr);
    }
 
    return hue / 10;
@@ -403,7 +400,7 @@ int QGstreamerVideoOverlay::hue() const
 void QGstreamerVideoOverlay::setHue(int hue)
 {
    if (m_hasHue) {
-      g_object_set(G_OBJECT(m_videoSink), "hue", hue * 10, NULL);
+      g_object_set(G_OBJECT(m_videoSink), "hue", hue * 10, nullptr);
       emit hueChanged(hue);
    }
 
@@ -415,7 +412,7 @@ int QGstreamerVideoOverlay::saturation() const
    int saturation = 0;
 
    if (m_hasSaturation) {
-      g_object_get(G_OBJECT(m_videoSink), "saturation", &saturation, NULL);
+      g_object_get(G_OBJECT(m_videoSink), "saturation", &saturation, nullptr);
    }
 
    return saturation / 10;
@@ -424,7 +421,7 @@ int QGstreamerVideoOverlay::saturation() const
 void QGstreamerVideoOverlay::setSaturation(int saturation)
 {
    if (m_hasSaturation) {
-      g_object_set(G_OBJECT(m_videoSink), "saturation", saturation * 10, NULL);
+      g_object_set(G_OBJECT(m_videoSink), "saturation", saturation * 10, nullptr);
       emit saturationChanged(saturation);
    }
 

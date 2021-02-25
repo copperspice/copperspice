@@ -41,7 +41,7 @@ class CameraBinImageEncoder : public QImageEncoderControl
    virtual ~CameraBinImageEncoder();
 
    QList<QSize> supportedResolutions(const QImageEncoderSettings &settings = QImageEncoderSettings(),
-                                     bool *continuous = 0) const;
+                                     bool *continuous = nullptr) const;
 
    QStringList supportedImageCodecs() const;
    QString imageCodecDescription(const QString &formatName) const;

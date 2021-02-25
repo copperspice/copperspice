@@ -30,7 +30,7 @@
 #include <gst/gst.h>
 
 QGstreamerVideoRenderer::QGstreamerVideoRenderer(QObject *parent)
-   : QVideoRendererControl(parent), m_videoSink(0), m_surface(0)
+   : QVideoRendererControl(parent), m_videoSink(nullptr), m_surface(nullptr)
 {
 }
 
@@ -71,7 +71,7 @@ void QGstreamerVideoRenderer::setSurface(QAbstractVideoSurface *surface)
          gst_object_unref(GST_OBJECT(m_videoSink));
       }
 
-      m_videoSink = 0;
+      m_videoSink = nullptr;
 
       if (m_surface) {
          disconnect(m_surface.data(), SIGNAL(supportedFormatsChanged()), this, SLOT(handleFormatChange()));
@@ -101,6 +101,6 @@ void QGstreamerVideoRenderer::handleFormatChange()
       gst_object_unref(GST_OBJECT(m_videoSink));
    }
 
-   m_videoSink = 0;
+   m_videoSink = nullptr;
    emit sinkChanged();
 }

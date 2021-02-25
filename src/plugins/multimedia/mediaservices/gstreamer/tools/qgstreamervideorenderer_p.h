@@ -46,7 +46,7 @@ class QGstreamerVideoRenderer : public QVideoRendererControl, public QGstreamerV
 
    void stopRenderer() override;
    bool isReady() const override {
-      return m_surface != 0;
+      return m_surface != nullptr;
    }
 
    CS_SIGNAL_1(Public, void sinkChanged())

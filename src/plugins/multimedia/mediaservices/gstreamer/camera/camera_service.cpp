@@ -59,17 +59,18 @@
 #include <qmediaserviceprovider_p.h>
 
 CameraBinService::CameraBinService(GstElementFactory *sourceFactory, QObject *parent)
-   : QMediaService(parent), m_cameraInfoControl(0), m_viewfinderSettingsControl(0), m_viewfinderSettingsControl2(0)
+   : QMediaService(parent), m_cameraInfoControl(nullptr), m_viewfinderSettingsControl(nullptr),
+     m_viewfinderSettingsControl2(nullptr)
 {
-   m_captureSession      = 0;
-   m_metaDataControl     = 0;
-   m_audioInputSelector  = 0;
-   m_videoInputDevice    = 0;
-   m_videoOutput         = 0;
-   m_videoRenderer       = 0;
-   m_videoWindow         = 0;
-   m_videoWidgetControl  = 0;
-   m_imageCaptureControl = 0;
+   m_captureSession      = nullptr;
+   m_metaDataControl     = nullptr;
+   m_audioInputSelector  = nullptr;
+   m_videoInputDevice    = nullptr;
+   m_videoOutput         = nullptr;
+   m_videoRenderer       = nullptr;
+   m_videoWindow         = nullptr;
+   m_videoWidgetControl  = nullptr;
+   m_imageCaptureControl = nullptr;
 
    m_captureSession      = new CameraBinSession(sourceFactory, this);
    m_videoInputDevice    = new QGstreamerVideoInputDeviceControl(sourceFactory, m_captureSession);
@@ -240,8 +241,8 @@ QMediaControl *CameraBinService::requestControl(const QString &name)
 void CameraBinService::releaseControl(QMediaControl *control)
 {
    if (control && control == m_videoOutput) {
-      m_videoOutput = 0;
-      m_captureSession->setViewfinder(0);
+      m_videoOutput = nullptr;
+      m_captureSession->setViewfinder(nullptr);
    }
 }
 

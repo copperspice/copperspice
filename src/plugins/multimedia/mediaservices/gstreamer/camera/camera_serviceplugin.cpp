@@ -38,7 +38,7 @@ static int lengthOf(const T(&)[N])
 }
 
 CameraBinServicePlugin::CameraBinServicePlugin()
-   : m_sourceFactory(0)
+   : m_sourceFactory(nullptr)
 {
 }
 

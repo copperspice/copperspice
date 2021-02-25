@@ -124,7 +124,7 @@ uchar *QGstVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
       return m_buffer->data;
 
    } else {
-      return 0;
+      return nullptr;
    }
 }
 
@@ -141,6 +141,7 @@ void QGstVideoBuffer::unmap()
       }
    }
 #endif
+
    m_mode = NotMapped;
 }
 

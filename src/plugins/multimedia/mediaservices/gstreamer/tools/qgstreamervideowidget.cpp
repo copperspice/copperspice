@@ -30,8 +30,9 @@
 class QGstreamerVideoWidget : public QWidget
 {
  public:
-   QGstreamerVideoWidget(QWidget *parent = 0)
-      : QWidget(parent) {
+   QGstreamerVideoWidget(QWidget *parent = nullptr)
+      : QWidget(parent)
+   {
       setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       QPalette palette;
       palette.setColor(QPalette::Background, Qt::black);
@@ -73,7 +74,7 @@ class QGstreamerVideoWidget : public QWidget
 QGstreamerVideoWidgetControl::QGstreamerVideoWidgetControl(QObject *parent, const QByteArray &elementName)
    : QVideoWidgetControl(parent)
    , m_videoOverlay(this, !elementName.isEmpty() ? elementName : qgetenv("QT_GSTREAMER_WIDGET_VIDEOSINK"))
-   , m_widget(0)
+   , m_widget(nullptr)
    , m_stopped(false)
    , m_windowId(0)
    , m_fullScreen(false)
