@@ -34,12 +34,12 @@
 #endif
 
 QPpdPrintDevice::QPpdPrintDevice()
-   : QPlatformPrintDevice(), m_cupsDest(0), m_ppd(0)
+   : QPlatformPrintDevice(), m_cupsDest(nullptr), m_ppd(nullptr)
 {
 }
 
 QPpdPrintDevice::QPpdPrintDevice(const QString &id)
-   : QPlatformPrintDevice(id), m_cupsDest(0), m_ppd(0)
+   : QPlatformPrintDevice(id), m_cupsDest(nullptr), m_ppd(nullptr)
 {
    if (! id.isEmpty()) {
 
@@ -81,11 +81,13 @@ QPpdPrintDevice::~QPpdPrintDevice()
    if (m_ppd) {
       ppdClose(m_ppd);
    }
+
    if (m_cupsDest) {
       cupsFreeDests(1, m_cupsDest);
    }
-   m_cupsDest = 0;
-   m_ppd = 0;
+
+   m_cupsDest = nullptr;
+   m_ppd      = nullptr;
 }
 
 bool QPpdPrintDevice::isValid() const
@@ -468,12 +470,12 @@ void QPpdPrintDevice::loadPrinter()
    // Just to be safe, check if existing printer needs closing
    if (m_ppd) {
       ppdClose(m_ppd);
-      m_ppd = 0;
+      m_ppd = nullptr;
    }
 
    if (m_cupsDest) {
       cupsFreeDests(1, m_cupsDest);
-      m_cupsDest = 0;
+      m_cupsDest = nullptr;
    }
 
    // Get the print instance and PPD file
@@ -492,8 +494,8 @@ void QPpdPrintDevice::loadPrinter()
 
       } else {
          cupsFreeDests(1, m_cupsDest);
-         m_cupsDest = 0;
-         m_ppd = 0;
+         m_cupsDest = nullptr;
+         m_ppd      = nullptr;
       }
    }
 }

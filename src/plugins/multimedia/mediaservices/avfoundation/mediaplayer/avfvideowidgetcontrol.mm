@@ -38,7 +38,7 @@ AVFVideoWidgetControl::AVFVideoWidgetControl(QObject *parent)
    , m_hue(0)
    , m_saturation(0)
 {
-   m_videoWidget = new AVFVideoWidget(0);
+   m_videoWidget = new AVFVideoWidget(nullptr);
 }
 
 AVFVideoWidgetControl::~AVFVideoWidgetControl()

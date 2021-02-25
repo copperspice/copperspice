@@ -108,7 +108,7 @@ static CVReturn CVDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 #endif
 
 AVFDisplayLink::AVFDisplayLink(QObject *parent)
-   : QObject(parent), m_displayLink(0), m_pendingDisplayLinkEvent(false), m_isActive(false)
+   : QObject(parent), m_displayLink(nullptr), m_pendingDisplayLinkEvent(false), m_isActive(false)
 {
 #if defined(Q_OS_IOS)
    m_displayLink = [[DisplayLinkObserver alloc] initWithAVFDisplayLink: this];
@@ -138,13 +138,13 @@ AVFDisplayLink::~AVFDisplayLink()
 #else
       CVDisplayLinkRelease(m_displayLink);
 #endif
-      m_displayLink = NULL;
+      m_displayLink = nullptr;
    }
 }
 
 bool AVFDisplayLink::isValid() const
 {
-   return m_displayLink != 0;
+   return m_displayLink != nullptr;
 }
 
 bool AVFDisplayLink::isActive() const

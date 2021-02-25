@@ -88,7 +88,7 @@ class TextureVideoBuffer : public QAbstractVideoBuffer
       return NotMapped;
    }
    uchar *map(MapMode, int *, int *) {
-      return 0;
+      return nullptr;
    }
    void unmap() {}
 
@@ -102,8 +102,8 @@ class TextureVideoBuffer : public QAbstractVideoBuffer
 #endif
 
 AVFVideoRendererControl::AVFVideoRendererControl(QObject *parent)
-   : QVideoRendererControl(parent), m_surface(0), m_playerLayer(0)
-   , m_frameRenderer(0), m_enableOpenGL(false)
+   : QVideoRendererControl(parent), m_surface(nullptr), m_playerLayer(nullptr),
+     m_frameRenderer(nullptr), m_enableOpenGL(false)
 {
    m_displayLink = new AVFDisplayLink(this);
    connect(m_displayLink, &AVFDisplayLink::tick, this, &AVFVideoRendererControl::updateVideoFrame);
@@ -145,10 +145,10 @@ void AVFVideoRendererControl::setSurface(QAbstractVideoSurface *surface)
 
    //If the surface changed, then the current frame renderer is no longer valid
    delete m_frameRenderer;
-   m_frameRenderer = 0;
+   m_frameRenderer = nullptr;
 
    //If there is now no surface to render too
-   if (m_surface == 0) {
+   if (m_surface == nullptr) {
       m_displayLink->stop();
       return;
    }
@@ -195,7 +195,7 @@ void AVFVideoRendererControl::setLayer(void *playerLayer)
 #endif
 
    //If there is no layer to render, stop scheduling updates
-   if (m_playerLayer == 0) {
+   if (m_playerLayer == nullptr) {
       m_displayLink->stop();
       return;
    }

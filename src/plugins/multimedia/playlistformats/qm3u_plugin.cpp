@@ -52,8 +52,8 @@ class QM3uPlaylistReader : public QMediaPlaylistReader
 
       } else {
          delete f;
-         m_device = 0;
-         m_textStream = 0;
+         m_device     = nullptr;
+         m_textStream = nullptr;
       }
    }
 

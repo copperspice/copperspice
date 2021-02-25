@@ -34,7 +34,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 AVFMediaPlayerService::AVFMediaPlayerService(QObject *parent)
-   : QMediaService(parent), m_videoOutput(0), m_enableRenderControl(true)
+   : QMediaService(parent), m_videoOutput(nullptr), m_enableRenderControl(true)
 {
    m_session = new AVFMediaPlayerSession(this);
    m_control = new AVFMediaPlayerControl(this);
@@ -102,7 +102,7 @@ QMediaControl *AVFMediaPlayerService::requestControl(const QString &name)
       return m_videoOutput;
    }
 
-   return 0;
+   return nullptr;
 }
 
 void AVFMediaPlayerService::releaseControl(QMediaControl *control)
@@ -115,11 +115,11 @@ void AVFMediaPlayerService::releaseControl(QMediaControl *control)
       AVFVideoRendererControl *renderControl = qobject_cast<AVFVideoRendererControl *>(m_videoOutput);
 
       if (renderControl) {
-         renderControl->setSurface(0);
+         renderControl->setSurface(nullptr);
       }
 
-      m_videoOutput = 0;
-      m_session->setVideoOutput(0);
+      m_videoOutput = nullptr;
+      m_session->setVideoOutput(nullptr);
 
       delete control;
    }

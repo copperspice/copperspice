@@ -127,7 +127,11 @@ class AVFMediaPlayerSession : public QObject
    class ResourceHandler
    {
     public:
-      ResourceHandler(): resource(0) {}
+      ResourceHandler()
+         : resource(nullptr)
+      {
+      }
+
       ~ResourceHandler() {
          clear();
       }
@@ -142,11 +146,11 @@ class AVFMediaPlayerSession : public QObject
          resource = new QResource(file);
       }
       bool isValid() const {
-         return resource && resource->isValid() && resource->data() != 0;
+         return resource && resource->isValid() && resource->data() != nullptr;
       }
       const uchar *data() {
          if (!isValid()) {
-            return 0;
+            return nullptr;
          }
          if (resource->isCompressed()) {
             if (rawData.size() == 0) {
@@ -157,7 +161,7 @@ class AVFMediaPlayerSession : public QObject
          return resource->data();
       }
       qint64 size() {
-         if (data() == 0) {
+         if (data() == nullptr) {
             return 0;
          }
          return resource->isCompressed() ? rawData.size() : resource->size();

@@ -129,18 +129,18 @@ static void *AVFMediaPlayerSessionObserverCurrentItemObservationContext = &AVFMe
       [[NSNotificationCenter defaultCenter] removeObserver: self
                                                       name: AVPlayerItemTimeJumpedNotification
                                                     object: m_playerItem];
-      m_playerItem = 0;
+      m_playerItem = nullptr;
    }
    if (m_player) {
       [m_player setRate: 0.0];
       [m_player removeObserver: self forKeyPath: AVF_CURRENT_ITEM_KEY];
       [m_player removeObserver: self forKeyPath: AVF_RATE_KEY];
       [m_player release];
-      m_player = 0;
+      m_player = nullptr;
    }
    if (m_playerLayer) {
       [m_playerLayer release];
-      m_playerLayer = 0;
+      m_playerLayer = nullptr;
    }
 }
 
@@ -332,7 +332,7 @@ static void *AVFMediaPlayerSessionObserverCurrentItemObservationContext = &AVFMe
 #ifdef QT_DEBUG_AVF
    qDebug() << Q_FUNC_INFO;
 #endif
-   m_session = 0;
+   m_session = nullptr;
 }
 
 - (void) dealloc
@@ -354,10 +354,10 @@ static void *AVFMediaPlayerSessionObserverCurrentItemObservationContext = &AVFMe
 AVFMediaPlayerSession::AVFMediaPlayerSession(AVFMediaPlayerService *service, QObject *parent)
    : QObject(parent)
    , m_service(service)
-   , m_videoOutput(0)
+   , m_videoOutput(nullptr)
    , m_state(QMediaPlayer::StoppedState)
    , m_mediaStatus(QMediaPlayer::NoMedia)
-   , m_mediaStream(0)
+   , m_mediaStream(nullptr)
 #ifdef Q_OS_IOS
    , m_volumeSupported(QSysInfo::MacintoshVersion >= QSysInfo::MV_IOS_7_0)
 #else
@@ -398,7 +398,7 @@ void AVFMediaPlayerSession::setVideoOutput(AVFVideoOutput *output)
 
    //Set the current output layer to null to stop rendering
    if (m_videoOutput) {
-      m_videoOutput->setLayer(0);
+      m_videoOutput->setLayer(nullptr);
    }
 
    m_videoOutput = output;
@@ -734,7 +734,7 @@ void AVFMediaPlayerSession::stop()
    setPosition(0);
 
    if (m_videoOutput) {
-      m_videoOutput->setLayer(0);
+      m_videoOutput->setLayer(nullptr);
    }
 
    processLoadStateChange();
@@ -805,7 +805,7 @@ void AVFMediaPlayerSession::processEOS()
    // At this point, frames should not be rendered anymore.
    // Clear the output layer to make sure of that.
    if (m_videoOutput) {
-      m_videoOutput->setLayer(0);
+      m_videoOutput->setLayer(nullptr);
    }
 
    Q_EMIT mediaStatusChanged(m_mediaStatus);

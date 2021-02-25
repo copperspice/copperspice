@@ -34,8 +34,8 @@ AVFVideoWindowControl::AVFVideoWindowControl(QObject *parent)
    , m_hue(0)
    , m_saturation(0)
    , m_aspectRatioMode(Qt::IgnoreAspectRatio)
-   , m_playerLayer(0)
-   , m_nativeView(0)
+   , m_playerLayer(nullptr)
+   , m_nativeView(nullptr)
 { }
 
 AVFVideoWindowControl::~AVFVideoWindowControl()

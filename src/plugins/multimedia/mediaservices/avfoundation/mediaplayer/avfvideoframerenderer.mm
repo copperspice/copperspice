@@ -35,11 +35,11 @@
 #import <AVFoundation/AVFoundation.h>
 
 AVFVideoFrameRenderer::AVFVideoFrameRenderer(QAbstractVideoSurface *surface, QObject *parent)
-   : QObject(parent), m_videoLayerRenderer(0), m_surface(surface), m_offscreenSurface(0),
-     m_glContext(0), m_currentBuffer(1), m_isContextShared(true)
+   : QObject(parent), m_videoLayerRenderer(nullptr), m_surface(surface), m_offscreenSurface(nullptr),
+     m_glContext(nullptr), m_currentBuffer(1), m_isContextShared(true)
 {
-   m_fbo[0] = 0;
-   m_fbo[1] = 0;
+   m_fbo[0] = nullptr;
+   m_fbo[1] = nullptr;
 }
 
 AVFVideoFrameRenderer::~AVFVideoFrameRenderer()
@@ -119,7 +119,8 @@ QOpenGLFramebufferObject *AVFVideoFrameRenderer::initRenderer(AVPlayerLayer *lay
       m_offscreenSurface->create();
 
       //Create OpenGL context and set share context from surface
-      QOpenGLContext *shareContext = 0;
+      QOpenGLContext *shareContext = nullptr;
+
       if (m_surface) {
          //QOpenGLContext *renderThreadContext = 0;
          shareContext = qobject_cast<QOpenGLContext *>(m_surface->property("GLContext").value<QObject *>());
@@ -138,7 +139,7 @@ QOpenGLFramebufferObject *AVFVideoFrameRenderer::initRenderer(AVPlayerLayer *lay
       }
       if (!m_glContext->create()) {
          qWarning("failed to create QOpenGLContext");
-         return 0;
+         return nullptr;
       }
    }
 
@@ -197,7 +198,7 @@ void AVFVideoFrameRenderer::renderLayerToFBO(AVPlayerLayer *layer, QOpenGLFrameb
    glPushMatrix();
    glLoadIdentity();
 
-   [m_videoLayerRenderer beginFrameAtTime: CACurrentMediaTime() timeStamp: NULL];
+   [m_videoLayerRenderer beginFrameAtTime: CACurrentMediaTime() timeStamp: nullptr];
    [m_videoLayerRenderer addUpdateRect: layer.bounds];
    [m_videoLayerRenderer render];
    [m_videoLayerRenderer endFrame];

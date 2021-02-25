@@ -29,7 +29,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 AVFMediaPlayerMetaDataControl::AVFMediaPlayerMetaDataControl(AVFMediaPlayerSession *session, QObject *parent)
-   : QMetaDataReaderControl(parent), m_session(session), m_asset(0)
+   : QMetaDataReaderControl(parent), m_session(session), m_asset(nullptr)
 {
    QObject::connect(m_session, &AVFMediaPlayerSession::mediaStatusChanged, this, &AVFMediaPlayerMetaDataControl::updateTags);
 }

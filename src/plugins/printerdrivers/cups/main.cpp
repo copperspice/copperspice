@@ -51,6 +51,6 @@ QPlatformPrinterSupport *QCupsPrinterSupportPlugin::create(const QString &key)
       return new QCupsPrinterSupport;
    }
 
-   return 0;
+   return nullptr;
 }
 
