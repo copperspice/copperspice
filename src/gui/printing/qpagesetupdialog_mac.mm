@@ -86,8 +86,9 @@ class QMacPageSetupDialogPrivate : public QPageSetupDialogPrivate
 
  public:
     QMacPageSetupDialogPrivate(QPrinter *printer)
-        :  QPageSetupDialogPrivate(printer), printInfo(0), pageLayout(0)
-   {}
+        :  QPageSetupDialogPrivate(printer), printInfo(nullptr), pageLayout(nullptr)
+   {
+   }
 
     ~QMacPageSetupDialogPrivate() {
     }
@@ -144,9 +145,9 @@ void QMacPageSetupDialogPrivate::openCocoaPageLayout(Qt::WindowModality modality
 void QMacPageSetupDialogPrivate::closeCocoaPageLayout()
 {
     [printInfo release];
-    printInfo = 0;
+    printInfo  = nullptr;
     [pageLayout release];
-    pageLayout = 0;
+    pageLayout = nullptr;
 }
 
 QPageSetupDialog::QPageSetupDialog(QPrinter *printer, QWidget *parent)
@@ -157,7 +158,7 @@ QPageSetupDialog::QPageSetupDialog(QPrinter *printer, QWidget *parent)
 }
 
 QPageSetupDialog::QPageSetupDialog(QWidget *parent)
-    : QDialog(*(new QMacPageSetupDialogPrivate(0)), parent)
+    : QDialog(*(new QMacPageSetupDialogPrivate(nullptr)), parent)
 {
     setWindowTitle(QCoreApplication::translate("QPrintPreviewDialog", "Page Setup"));
     setAttribute(Qt::WA_DontShowOnScreen);
@@ -171,7 +172,7 @@ void QPageSetupDialog::setVisible(bool visible)
       return;
    }
 
-    bool isCurrentlyVisible = (static_cast <QMacPageSetupDialogPrivate*>(d)->pageLayout != 0);
+    bool isCurrentlyVisible = (static_cast <QMacPageSetupDialogPrivate*>(d)->pageLayout != nullptr);
 
    if (!visible == !isCurrentlyVisible) {
       return;

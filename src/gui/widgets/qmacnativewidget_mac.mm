@@ -71,7 +71,7 @@ NSView *getEmbeddableView(QWindow *qtWindow)
 
 
 QMacNativeWidget::QMacNativeWidget(NSView *parentView)
-    : QWidget(0)
+    : QWidget(nullptr)
 {
     //d_func()->topData()->embedded = true;
     setPalette(QPalette(Qt::transparent));

@@ -250,7 +250,7 @@ bool QToolBarPrivate::mousePressEvent(QMouseEvent *event)
       if (QMainWindow *mainWindow = qobject_cast<QMainWindow *>(q->parent())) {
          if (mainWindow->toolBarArea(q) == Qt::TopToolBarArea
             && mainWindow->unifiedTitleAndToolBarOnMac()
-            && q->childAt(event->pos()) == 0) {
+            && q->childAt(event->pos()) == nullptr) {
             macWindowDragging = true;
             macWindowDragPressPosition = event->pos();
             return true;

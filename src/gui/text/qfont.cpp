@@ -1558,7 +1558,7 @@ bool QFontInfo::fixedPitch() const
       int l = 2;
 
       static const QString imStr = QString("im");
-      engine->stringToCMap(imStr, &g, &l, 0);
+      engine->stringToCMap(imStr, &g, &l, nullptr);
 
       engine->fontDef.fixedPitch = g.advances[0] == g.advances[1];
       engine->fontDef.fixedPitchComputed = true;

@@ -934,7 +934,7 @@ bool QJpegHandlerPrivate::readJpegHeader(QIODevice *device)
          format = QImage::Format_Invalid;
          read_jpeg_format(format, &info);
          QByteArray exifData;
-         for (jpeg_saved_marker_ptr marker = info.marker_list; marker != NULL; marker = marker->next) {
+         for (jpeg_saved_marker_ptr marker = info.marker_list; marker != nullptr; marker = marker->next) {
             if (marker->marker == JPEG_COM) {
                QString key, value;
                QString s = QString::fromLatin1((const char *)marker->data, marker->data_length);

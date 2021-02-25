@@ -86,7 +86,7 @@ class QRelatedTableModel : public QSqlTableModel
 
 void QRelation::init(QSqlRelationalTableModel *parent, const QSqlRelation &relation)
 {
-   Q_ASSERT(parent != NULL);
+   Q_ASSERT(parent != nullptr);
    m_parent = parent;
    rel = relation;
 }
@@ -96,7 +96,7 @@ void QRelation::populateModel()
    if (!isValid()) {
       return;
    }
-   Q_ASSERT(m_parent != NULL);
+   Q_ASSERT(m_parent != nullptr);
 
    if (!model) {
       model = new QRelatedTableModel(this, m_parent, m_parent->database());
@@ -116,7 +116,7 @@ void QRelation::populateDictionary()
       return;
    }
 
-   if (model ==  NULL) {
+   if (model == nullptr) {
       populateModel();
    }
 
@@ -157,7 +157,7 @@ void QRelation::clear()
 
 bool QRelation::isValid()
 {
-   return (rel.isValid() && m_parent != NULL);
+   return (rel.isValid() && m_parent != nullptr);
 }
 
 QRelatedTableModel::QRelatedTableModel(QRelation *rel, QObject *parent, QSqlDatabase db) :

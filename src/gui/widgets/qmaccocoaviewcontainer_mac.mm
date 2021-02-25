@@ -63,7 +63,7 @@ class QMacCocoaViewContainerPrivate : public QWidgetPrivate
 };
 
 QMacCocoaViewContainerPrivate::QMacCocoaViewContainerPrivate()
-   : nsview(0)
+   : nsview(nullptr)
 {
 }
 

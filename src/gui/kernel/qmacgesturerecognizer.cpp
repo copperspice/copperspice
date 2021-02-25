@@ -130,8 +130,8 @@ QMacPinchGestureRecognizer::recognize(QGesture *gesture, QObject *obj, QEvent *e
 void QMacPinchGestureRecognizer::reset(QGesture *gesture)
 {
     QPinchGesture *g = static_cast<QPinchGesture *>(gesture);
-    g->setChangeFlags(0);
-    g->setTotalChangeFlags(0);
+    g->setChangeFlags(nullptr);
+    g->setTotalChangeFlags(nullptr);
     g->setScaleFactor(1.0f);
     g->setTotalScaleFactor(1.0f);
     g->setLastScaleFactor(1.0f);
@@ -160,7 +160,7 @@ QGesture *QMacPanGestureRecognizer::create(QObject *target)
         w->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents);
         return new QPanGesture;
     }
-    return 0;
+    return nullptr;
 }
 
 QGestureRecognizer::Result

@@ -3544,7 +3544,7 @@ QSize QMdiSubWindow::minimumSizeHint() const
 
 #if defined(Q_OS_DARWIN) && !defined(QT_NO_STYLE_MAC)
    else if (parent() && qobject_cast<QMacStyle *>(style()) && !d->sizeGrip) {
-      sizeGripHeight = style()->pixelMetric(QStyle::PM_SizeGripSize, 0, this);
+      sizeGripHeight = style()->pixelMetric(QStyle::PM_SizeGripSize, nullptr, this);
    }
 
 #endif

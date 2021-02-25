@@ -142,8 +142,8 @@ void QBoxLayoutPrivate::effectiveMargins(int *left, int *top, int *right, int *b
 #ifdef Q_OS_DARWIN
    Q_Q(const QBoxLayout);
    if (horz(dir)) {
-      QBoxLayoutItem *leftBox = 0;
-      QBoxLayoutItem *rightBox = 0;
+      QBoxLayoutItem *leftBox  = nullptr;
+      QBoxLayoutItem *rightBox = nullptr;
 
       if (left || right) {
          leftBox = list.value(0);
@@ -192,9 +192,11 @@ void QBoxLayoutPrivate::effectiveMargins(int *left, int *top, int *right, int *b
             }
          }
       }
-   } else {    // vertical layout
-      QBoxLayoutItem *topBox = 0;
-      QBoxLayoutItem *bottomBox = 0;
+
+   } else {
+      // vertical layout
+      QBoxLayoutItem *topBox    = nullptr;
+      QBoxLayoutItem *bottomBox = nullptr;
 
       if (top || bottom) {
          topBox = list.value(0);

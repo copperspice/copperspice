@@ -171,7 +171,7 @@ bool QFontEngine::supportsScript(QChar::Script script) const
    // in AAT fonts, 'gsub' table is effectively replaced by 'mort'/'morx' table
    uint len;
 
-   if (getSfntTableData(MAKE_TAG('m', 'o', 'r', 't'), 0, &len) || getSfntTableData(MAKE_TAG('m', 'o', 'r', 'x'), 0, &len)) {
+   if (getSfntTableData(MAKE_TAG('m', 'o', 'r', 't'), nullptr, &len) || getSfntTableData(MAKE_TAG('m', 'o', 'r', 'x'), nullptr, &len)) {
       return true;
    }
 #endif

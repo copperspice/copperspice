@@ -2049,7 +2049,7 @@ void QComboBoxPrivate::cleanupNativePopup()
    }
 
    delete m_platformMenu;
-   m_platformMenu = 0;
+   m_platformMenu = nullptr;
 }
 
 bool QComboBoxPrivate::showNativePopup()
@@ -2067,7 +2067,7 @@ bool QComboBoxPrivate::showNativePopup()
    int itemsCount = q->count();
    m_platformMenu->setTag(quintptr(itemsCount));
 
-   QPlatformMenuItem *currentItem = 0;
+   QPlatformMenuItem *currentItem = nullptr;
    int currentIndex = q->currentIndex();
 
    for (int i = 0; i < itemsCount; ++i) {
@@ -2091,7 +2091,7 @@ bool QComboBoxPrivate::showNativePopup()
       IndexSetter setter = { i, q };
       QObject::connect(item, &QPlatformMenuItem::activated, q, setter);
 
-      m_platformMenu->insertMenuItem(item, 0);
+      m_platformMenu->insertMenuItem(item, nullptr);
       m_platformMenu->syncMenuItem(item);
    }
 

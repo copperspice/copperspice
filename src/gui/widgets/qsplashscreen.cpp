@@ -160,7 +160,7 @@ inline static bool waitForWindowExposed(QWindow *window, int timeout = 1000)
       Sleep(uint(TimeOutMs));
 #else
       struct timespec ts = { TimeOutMs / 1000, (TimeOutMs % 1000) * 1000 * 1000 };
-      nanosleep(&ts, NULL);
+      nanosleep(&ts, nullptr);
 #endif
    }
    return window->isExposed();

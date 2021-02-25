@@ -150,7 +150,7 @@ class QMacStylePrivate : public QCommonStylePrivate
    static ThemeDrawState getDrawState(QStyle::State flags);
 
    QAquaWidgetSize aquaSizeConstrain(const QStyleOption *option, const QWidget *widg,
-      QStyle::ContentsType ct = QStyle::CT_CustomBase, QSize szHint = QSize(-1, -1), QSize *insz = 0) const;
+      QStyle::ContentsType ct = QStyle::CT_CustomBase, QSize szHint = QSize(-1, -1), QSize *insz = nullptr) const;
 
    void getSliderInfo(QStyle::ComplexControl cc, const QStyleOptionSlider *slider,
       HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe) const;
