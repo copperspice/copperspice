@@ -30,12 +30,26 @@ TEST_CASE("QSet clear", "[qset]")
    REQUIRE(set.size() == 0);
 }
 
-TEST_CASE("QSet contains", "[qset]")
+TEST_CASE("QSet contains_a", "[qset]")
 {
    QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
 
    REQUIRE(set.contains("pear"));
    REQUIRE(! set.contains("mango"));
+}
+
+TEST_CASE("QSet contains_b", "[qset]")
+{
+   QSet<QString> set1 = { "watermelon", "apple", "pear", "grapefruit" };
+   QSet<QString> set2 = { "grape", "orange", "apple" };
+
+   REQUIRE(set1.contains(set1) == true);
+   REQUIRE(set1.contains(set2) == false);      // FAILS
+
+   set1.insert("orange");
+   set1.insert("grape");
+
+   REQUIRE(set1.contains(set2) == true);
 }
 
 TEST_CASE("QSet empty", "[qset]")

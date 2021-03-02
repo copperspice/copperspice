@@ -353,7 +353,7 @@ inline QSet<T> &QSet<T>::subtract(const QSet<T> &other)
 template <class T>
 inline bool QSet<T>::contains(const QSet<T> &other) const
 {
-   for (const auto &item : m_data) {
+   for (const auto &item : other.m_data) {
       if (! contains(item)) {
          return false;
       }
