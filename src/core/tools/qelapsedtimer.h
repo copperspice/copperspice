@@ -26,6 +26,8 @@
 
 #include <qglobal.h>
 
+#include <limits>
+
 class Q_CORE_EXPORT QElapsedTimer
 {
  public:
@@ -36,6 +38,12 @@ class Q_CORE_EXPORT QElapsedTimer
       MachAbsoluteTime,
       PerformanceCounter
    };
+
+   constexpr QElapsedTimer()
+        : t1(std::numeric_limits<qint64>::lowest()), t2(std::numeric_limits<qint64>::lowest())
+   {
+   }
+
    static ClockType clockType();
    static bool isMonotonic();
 

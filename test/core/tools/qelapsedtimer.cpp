@@ -57,7 +57,7 @@ TEST_CASE("QElapsedTimer valid", "[qelapsedtimer]")
 {
    QElapsedTimer timer;
 
-   REQUIRE(timer.isValid() == true);
+   REQUIRE(timer.isValid() == false);
 
    timer.start();
    REQUIRE(timer.isValid() == true);
@@ -65,8 +65,5 @@ TEST_CASE("QElapsedTimer valid", "[qelapsedtimer]")
    timer.invalidate();
    REQUIRE(timer.isValid() == false);
 }
-
-
-
 
 
