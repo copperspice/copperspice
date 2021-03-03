@@ -71,7 +71,7 @@ QSvgStructureNode::QSvgStructureNode(QSvgNode *parent)
 QSvgNode *QSvgStructureNode::scopeNode(const QString &id) const
 {
    QSvgTinyDocument *doc = document();
-   return doc ? doc->namedNode(id) : 0;
+   return doc ? doc->namedNode(id) : nullptr;
 }
 
 void QSvgStructureNode::addChild(QSvgNode *child, const QString &id)
@@ -349,7 +349,7 @@ QRectF QSvgStructureNode::bounds(QPainter *p, QSvgExtraStates &states) const
 
 QSvgNode *QSvgStructureNode::previousSiblingNode(QSvgNode *n) const
 {
-   QSvgNode *prev = 0;
+   QSvgNode *prev = nullptr;
    QList<QSvgNode *>::const_iterator itr = m_renderers.constBegin();
    for (; itr != m_renderers.constEnd(); ++itr) {
       QSvgNode *node = *itr;

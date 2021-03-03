@@ -39,12 +39,8 @@
 
 
 QSvgTinyDocument::QSvgTinyDocument()
-   : QSvgStructureNode(0)
-   , m_widthPercent(false)
-   , m_heightPercent(false)
-   , m_animated(false)
-   , m_animationDuration(0)
-   , m_fps(30)
+   : QSvgStructureNode(nullptr), m_widthPercent(false), m_heightPercent(false)
+   , m_animated(false), m_animationDuration(0), m_fps(30)
 {
 }
 
@@ -75,17 +71,18 @@ QByteArray qt_inflateGZipDataFrom(QIODevice *device)
 
    // Initialize zlib stream struct
    z_stream zlibStream;
-   zlibStream.next_in = Z_NULL;
-   zlibStream.avail_in = 0;
+   zlibStream.next_in   = nullptr;
+   zlibStream.avail_in  = 0;
    zlibStream.avail_out = 0;
-   zlibStream.zalloc = Z_NULL;
-   zlibStream.zfree = Z_NULL;
-   zlibStream.opaque = Z_NULL;
+   zlibStream.zalloc    = nullptr;
+   zlibStream.zfree     = nullptr;
+   zlibStream.opaque    = nullptr;
 
    // Adding 16 to the window size gives us gzip decoding
    if (inflateInit2(&zlibStream, MAX_WBITS + 16) != Z_OK) {
-      qWarning("Cannot initialize zlib, because: %s",
-               (zlibStream.msg != NULL ? zlibStream.msg : "Unknown error"));
+      qWarning("Unable to initialize zlib, because: %s",
+               (zlibStream.msg != nullptr ? zlibStream.msg : "Unknown error"));
+
       return QByteArray();
    }
 
@@ -149,10 +146,11 @@ QSvgTinyDocument *QSvgTinyDocument::load(const QString &fileName)
 {
    QFile file(fileName);
 
-   if (!file.open(QFile::ReadOnly)) {
-      qWarning("Cannot open file '%s', because: %s",
-               qPrintable(fileName), qPrintable(file.errorString()));
-      return 0;
+   if (! file.open(QFile::ReadOnly)) {
+      qWarning("Unable to open file '%s', because: %s",
+               csPrintable(fileName), csPrintable(file.errorString()));
+
+      return nullptr;
    }
 
 #ifndef QT_NO_COMPRESS
@@ -162,7 +160,7 @@ QSvgTinyDocument *QSvgTinyDocument::load(const QString &fileName)
    }
 #endif
 
-   QSvgTinyDocument *doc = 0;
+   QSvgTinyDocument *doc = nullptr;
    QSvgHandler handler(&file);
 
    if (handler.ok()) {
@@ -187,7 +185,8 @@ QSvgTinyDocument *QSvgTinyDocument::load(const QByteArray &contents)
 
    QSvgHandler handler(contents);
 
-   QSvgTinyDocument *doc = 0;
+   QSvgTinyDocument *doc = nullptr;
+
    if (handler.ok()) {
       doc = handler.document();
       doc->m_animationDuration = handler.animationDuration();
@@ -199,7 +198,8 @@ QSvgTinyDocument *QSvgTinyDocument::load(QXmlStreamReader *contents)
 {
    QSvgHandler handler(contents);
 
-   QSvgTinyDocument *doc = 0;
+   QSvgTinyDocument *doc = nullptr;
+
    if (handler.ok()) {
       doc = handler.document();
       doc->m_animationDuration = handler.animationDuration();
@@ -430,7 +430,7 @@ bool QSvgTinyDocument::elementExists(const QString &id) const
 {
    QSvgNode *node = scopeNode(id);
 
-   return (node != 0);
+   return (node != nullptr);
 }
 
 QMatrix QSvgTinyDocument::matrixForElement(const QString &id) const

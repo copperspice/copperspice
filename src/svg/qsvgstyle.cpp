@@ -36,8 +36,8 @@
 #include <qsvgnode_p.h>
 
 QSvgExtraStates::QSvgExtraStates()
-   : fillOpacity(1.0), strokeOpacity(1.0), svgFont(0), textAnchor(Qt::AlignLeft), fontWeight(400)
-   , fillRule(Qt::WindingFill), strokeDashOffset(0), vectorEffect(false)
+   : fillOpacity(1.0), strokeOpacity(1.0), svgFont(nullptr), textAnchor(Qt::AlignLeft), fontWeight(400),
+     fillRule(Qt::WindingFill), strokeDashOffset(0), vectorEffect(false)
 {
 }
 
@@ -70,8 +70,8 @@ void QSvgQualityStyle::revert(QPainter *, QSvgExtraStates &)
 }
 
 QSvgFillStyle::QSvgFillStyle()
-   : m_style(0), m_fillRule(Qt::WindingFill), m_oldFillRule(Qt::WindingFill), m_fillOpacity(1.0)
-   , m_oldFillOpacity(0), m_gradientResolved(1), m_fillRuleSet(0), m_fillOpacitySet(0), m_fillSet(0)
+   : m_style(nullptr), m_fillRule(Qt::WindingFill), m_oldFillRule(Qt::WindingFill), m_fillOpacity(1.0),
+     m_oldFillOpacity(0), m_gradientResolved(1), m_fillRuleSet(0), m_fillOpacitySet(0), m_fillSet(0)
 {
 }
 
@@ -96,7 +96,7 @@ void QSvgFillStyle::setFillStyle(QSvgFillStyleProperty *style)
 void QSvgFillStyle::setBrush(QBrush brush)
 {
    m_fill = brush;
-   m_style = 0;
+   m_style   = nullptr;
    m_fillSet = 1;
 }
 
@@ -157,8 +157,8 @@ QSvgFontStyle::QSvgFontStyle(QSvgFont *font, QSvgTinyDocument *doc)
 }
 
 QSvgFontStyle::QSvgFontStyle()
-   : m_svgFont(0), m_doc(0), m_familySet(0), m_sizeSet(0), m_styleSet(0)
-   , m_variantSet(0), m_weightSet(0), m_textAnchorSet(0)
+   : m_svgFont(nullptr), m_doc(nullptr), m_familySet(0), m_sizeSet(0), m_styleSet(0),
+     m_variantSet(0), m_weightSet(0), m_textAnchorSet(0)
 {
 }
 
@@ -240,10 +240,10 @@ void QSvgFontStyle::revert(QPainter *p, QSvgExtraStates &states)
 }
 
 QSvgStrokeStyle::QSvgStrokeStyle()
-   : m_strokeOpacity(1.0), m_oldStrokeOpacity(0.0), m_strokeDashOffset(0), m_oldStrokeDashOffset(0)
-   , m_style(0), m_gradientResolved(1), m_vectorEffect(0), m_oldVectorEffect(0), m_strokeSet(0)
-   , m_strokeDashArraySet(0), m_strokeDashOffsetSet(0), m_strokeLineCapSet(0), m_strokeLineJoinSet(0)
-   , m_strokeMiterLimitSet(0), m_strokeOpacitySet(0), m_strokeWidthSet(0), m_vectorEffectSet(0)
+   : m_strokeOpacity(1.0), m_oldStrokeOpacity(0.0), m_strokeDashOffset(0), m_oldStrokeDashOffset(0),
+     m_style(nullptr), m_gradientResolved(1), m_vectorEffect(0), m_oldVectorEffect(0), m_strokeSet(0),
+     m_strokeDashArraySet(0), m_strokeDashOffsetSet(0), m_strokeLineCapSet(0), m_strokeLineJoinSet(0),
+     m_strokeMiterLimitSet(0), m_strokeOpacitySet(0), m_strokeWidthSet(0), m_vectorEffectSet(0)
 {
 }
 

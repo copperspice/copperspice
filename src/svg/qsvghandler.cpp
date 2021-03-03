@@ -496,7 +496,8 @@ class QSvgStyleSelector : public QCss::StyleSelector
              n->type() == QSvgNode::SWITCH)) {
          return (QSvgStructureNode *)n;
       }
-      return 0;
+
+      return nullptr;
    }
 
    inline QSvgStructureNode *svgStructure(NodePtr node) const {
@@ -702,7 +703,7 @@ static qreal toDouble(QString::const_iterator &str, QString::const_iterator end)
 
    } else {
       bool ok = false;
-      val = qstrtod(temp, 0, &ok);
+      val = qstrtod(temp, nullptr, &ok);
    }
 
    return val;
@@ -1438,7 +1439,7 @@ static void parseFont(QSvgNode *node, const QSvgAttributes &attributes, QSvgHand
    }
 
    QSvgTinyDocument *doc = node->document();
-   QSvgFontStyle *fontStyle = 0;
+   QSvgFontStyle *fontStyle = nullptr;
 
    if (!attributes.fontFamily.isEmpty()) {
       QSvgFont *svgFont = doc->svgFont(attributes.fontFamily);
@@ -3364,7 +3365,7 @@ static QSvgStyleProperty *createSolidColorNode(QSvgNode *parent, const QXmlStrea
 
    QColor color;
    if (! constructColor(solidColorStr, solidOpacityStr, color, handler)) {
-      return 0;
+      return nullptr;
    }
    QSvgSolidColorStyle *style = new QSvgSolidColorStyle(color);
 
@@ -3667,7 +3668,7 @@ static QSvgNode *createUseNode(QSvgNode *parent, const QXmlStreamAttributes &att
    }
 
    qWarning("link %s hasn't been detected!", qPrintable(linkId));
-   return 0;
+   return nullptr;
 }
 
 static QSvgNode *createVideoNode(QSvgNode *parent, const QXmlStreamAttributes &attributes,
@@ -3683,7 +3684,7 @@ typedef QSvgNode *(*FactoryMethod)(QSvgNode *, const QXmlStreamAttributes &, QSv
 static FactoryMethod findGroupFactory(const QString &name)
 {
    if (name.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    QStringView ref(name.begin() + 1, name.end());
@@ -3721,7 +3722,7 @@ static FactoryMethod findGroupFactory(const QString &name)
 static FactoryMethod findGraphicsFactory(const QString &name)
 {
    if (name.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    QStringView ref(name.begin() + 1, name.end());
@@ -3792,7 +3793,8 @@ static FactoryMethod findGraphicsFactory(const QString &name)
       default:
          break;
    }
-   return 0;
+
+   return nullptr;
 }
 
 typedef bool (*ParseMethod)(QSvgNode *, const QXmlStreamAttributes &, QSvgHandler *);
@@ -3800,7 +3802,7 @@ typedef bool (*ParseMethod)(QSvgNode *, const QXmlStreamAttributes &, QSvgHandle
 static ParseMethod findUtilFactory(const QString &name)
 {
    if (name.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    QStringView ref(name.begin() + 1, name.end());
@@ -3883,7 +3885,8 @@ static ParseMethod findUtilFactory(const QString &name)
       default:
          break;
    }
-   return 0;
+
+   return nullptr;
 }
 
 typedef QSvgStyleProperty *(*StyleFactoryMethod)(QSvgNode *,
@@ -3893,7 +3896,7 @@ typedef QSvgStyleProperty *(*StyleFactoryMethod)(QSvgNode *,
 static StyleFactoryMethod findStyleFactoryMethod(const QString &name)
 {
    if (name.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    QStringView ref(name.begin() + 1, name.end());
@@ -3925,7 +3928,8 @@ static StyleFactoryMethod findStyleFactoryMethod(const QString &name)
       default:
          break;
    }
-   return 0;
+
+   return nullptr;
 }
 
 typedef bool (*StyleParseMethod)(QSvgStyleProperty *, const QXmlStreamAttributes &, QSvgHandler *);
@@ -3933,7 +3937,7 @@ typedef bool (*StyleParseMethod)(QSvgStyleProperty *, const QXmlStreamAttributes
 static StyleParseMethod findStyleUtilFactoryMethod(const QString &name)
 {
    if (name.isEmpty()) {
-      return 0;
+      return nullptr;
    }
 
    QStringView ref(name.begin() + 1, name.end());
@@ -3971,7 +3975,8 @@ static StyleParseMethod findStyleUtilFactoryMethod(const QString &name)
       default:
          break;
    }
-   return 0;
+
+   return nullptr;
 }
 
 QSvgHandler::QSvgHandler(QIODevice *device)
@@ -3994,8 +3999,8 @@ QSvgHandler::QSvgHandler(QXmlStreamReader *const reader)
 
 void QSvgHandler::init()
 {
-   m_doc = 0;
-   m_style = 0;
+   m_doc     = nullptr;
+   m_style   = nullptr;
    m_animEnd = 0;
    m_defaultCoords = LT_PX;
    m_defaultPen = QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap, Qt::SvgMiterJoin);
@@ -4029,7 +4034,7 @@ void QSvgHandler::parse()
 
             if (! startElement(xml->name().toString(), xml->attributes())) {
                delete m_doc;
-               m_doc = 0;
+               m_doc = nullptr;
                return;
             }
             break;
@@ -4095,7 +4100,7 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
 
    if (FactoryMethod method = findGroupFactory(localName)) {
       //group
-      node = method(m_doc ? m_nodes.top() : 0, attributes, this);
+      node = method(m_doc ? m_nodes.top() : nullptr, attributes, this);
       Q_ASSERT(node);
 
       if (! m_doc) {
@@ -4148,14 +4153,14 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
                } else {
                   qWarning("\'text\' or \'textArea\' element contains invalid element type.");
                   delete node;
-                  node = 0;
+                  node = nullptr;
                }
                break;
 
             default:
                qWarning("Could not add child element to parent element because the types are incorrect.");
                delete node;
-               node = 0;
+               node = nullptr;
                break;
          }
 
@@ -4236,7 +4241,7 @@ bool QSvgHandler::endElement(QStringView localName)
    if (node == Graphics) {
       m_nodes.pop();
    } else if (m_style && !m_skipNodes.isEmpty() && m_skipNodes.top() != Style) {
-      m_style = 0;
+      m_style = nullptr;
    }
 
    return true;
@@ -4440,7 +4445,7 @@ QSvgHandler::~QSvgHandler()
 {
 #ifndef QT_NO_CSSPARSER
    delete m_selector;
-   m_selector = 0;
+   m_selector = nullptr;
 #endif
 
    if (m_ownsReader) {

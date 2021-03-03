@@ -37,7 +37,8 @@ class QSvgRendererPrivate
 
  public:
    explicit QSvgRendererPrivate()
-      : render(0), timer(0), fps(30) {
+      : render(nullptr), timer(nullptr), fps(30)
+   {
    }
 
    virtual ~QSvgRendererPrivate() {

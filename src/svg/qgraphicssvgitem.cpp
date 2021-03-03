@@ -38,7 +38,8 @@ class QGraphicsSvgItemPrivate : public QGraphicsItemPrivate
    Q_DECLARE_PUBLIC(QGraphicsSvgItem)
 
    QGraphicsSvgItemPrivate()
-      : renderer(0), shared(false) {
+      : renderer(nullptr), shared(false)
+   {
    }
 
    void init(QGraphicsItem *parent) {
