@@ -30,9 +30,8 @@ class DirectShowPostedEvent
 {
  public:
    DirectShowPostedEvent(QObject *receiver, QEvent *event)
-      : receiver(receiver)
-      , event(event)
-      , next(0) {
+      : receiver(receiver), event(event), next(nullptr)
+   {
    }
 
    ~DirectShowPostedEvent() {
@@ -45,11 +44,8 @@ class DirectShowPostedEvent
 };
 
 DirectShowEventLoop::DirectShowEventLoop(QObject *parent)
-   : QObject(parent)
-   , m_postsHead(0)
-   , m_postsTail(0)
-   , m_eventHandle(::CreateEvent(0, 0, 0, 0))
-   , m_waitHandle(::CreateEvent(0, 0, 0, 0))
+   : QObject(parent), m_postsHead(nullptr), m_postsTail(nullptr),
+     m_eventHandle(::CreateEvent(nullptr, 0, 0, nullptr)), m_waitHandle(::CreateEvent(nullptr, 0, 0, nullptr))
 {
 }
 
@@ -121,8 +117,8 @@ void DirectShowEventLoop::processEvents()
       DirectShowPostedEvent *post = m_postsHead;
       m_postsHead = m_postsHead->next;
 
-      if (!m_postsHead) {
-         m_postsTail = 0;
+      if (! m_postsHead) {
+         m_postsTail = nullptr;
       }
 
       locker.unlock();

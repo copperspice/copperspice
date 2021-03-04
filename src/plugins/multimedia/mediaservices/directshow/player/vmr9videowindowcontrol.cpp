@@ -96,7 +96,7 @@ void Vmr9VideoWindowControl::setDisplayRect(const QRect &rect)
       RECT sourceRect = { 0, 0, 0, 0 };
       RECT displayRect = { rect.left(), rect.top(), rect.right() + 1, rect.bottom() + 1 };
 
-      control->GetNativeVideoSize(&sourceRect.right, &sourceRect.bottom, 0, 0);
+      control->GetNativeVideoSize(&sourceRect.right, &sourceRect.bottom, nullptr, nullptr);
 
       if (m_aspectRatioMode == Qt::KeepAspectRatioByExpanding) {
          QSize clippedSize = rect.size();
@@ -165,7 +165,7 @@ QSize Vmr9VideoWindowControl::nativeSize() const
       LONG width;
       LONG height;
 
-      if (control->GetNativeVideoSize(&width, &height, 0, 0) == S_OK) {
+      if (control->GetNativeVideoSize(&width, &height, nullptr, nullptr) == S_OK) {
          size = QSize(width, height);
       }
       control->Release();

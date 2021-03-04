@@ -30,7 +30,7 @@ class DirectShowTimedSample
 {
  public:
    DirectShowTimedSample(IMediaSample *sample)
-      : m_next(0)
+      : m_next(nullptr)
       , m_sample(sample)
       , m_cookie(0)
       , m_lastSample(false) {
@@ -113,15 +113,15 @@ bool DirectShowTimedSample::isReady(IReferenceClock *clock) const
 DirectShowSampleScheduler::DirectShowSampleScheduler(IUnknown *pin, QObject *parent)
    : QObject(parent)
    , m_pin(pin)
-   , m_clock(0)
-   , m_allocator(0)
-   , m_head(0)
-   , m_tail(0)
+   , m_clock(nullptr)
+   , m_allocator(nullptr)
+   , m_head(nullptr)
+   , m_tail(nullptr)
    , m_maximumSamples(1)
    , m_state(Stopped)
    , m_startTime(0)
-   , m_timeoutEvent(::CreateEvent(0, 0, 0, 0))
-   , m_flushEvent(::CreateEvent(0, 0, 0, 0))
+   , m_timeoutEvent(::CreateEvent(nullptr, 0, 0, nullptr))
+   , m_flushEvent(::CreateEvent(nullptr, 0, 0, nullptr))
 {
    m_semaphore.release(m_maximumSamples);
 }
@@ -180,7 +180,7 @@ HRESULT DirectShowSampleScheduler::NotifyAllocator(IMemAllocator *pAllocator, BO
          m_allocator->Release();
       }
 
-      m_allocator = 0;
+      m_allocator = nullptr;
 
       return S_OK;
    } else if ((hr = pAllocator->GetProperties(&properties)) != S_OK) {
@@ -350,8 +350,8 @@ void DirectShowSampleScheduler::stop()
       m_semaphore.release(1);
    }
 
-   m_head = 0;
-   m_tail = 0;
+   m_head = nullptr;
+   m_tail = nullptr;
 
    ::SetEvent(m_flushEvent);
 }
@@ -371,8 +371,9 @@ void DirectShowSampleScheduler::setFlushing(bool flushing)
 
             m_semaphore.release(1);
          }
-         m_head = 0;
-         m_tail = 0;
+
+         m_head = nullptr;
+         m_tail = nullptr;
 
          ::SetEvent(m_flushEvent);
       } else {
@@ -413,14 +414,14 @@ IMediaSample *DirectShowSampleScheduler::takeSample(bool *eos)
       m_head = m_head->remove();
 
       if (!m_head) {
-         m_tail = 0;
+         m_tail = nullptr;
       }
 
       m_semaphore.release(1);
 
       return sample;
    } else {
-      return 0;
+      return nullptr;
    }
 }
 

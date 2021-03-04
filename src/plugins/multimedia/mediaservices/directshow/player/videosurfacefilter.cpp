@@ -45,8 +45,8 @@ VideoSurfaceFilter::VideoSurfaceFilter(
    , m_state(State_Stopped)
    , m_surface(surface)
    , m_loop(loop)
-   , m_graph(0)
-   , m_peerPin(0)
+   , m_graph(nullptr)
+   , m_peerPin(nullptr)
    , m_bytesPerLine(0)
    , m_startResult(S_OK)
    , m_pinId(QString::fromLatin1("reference"))
@@ -82,7 +82,7 @@ HRESULT VideoSurfaceFilter::QueryInterface(REFIID riid, void **ppvObject)
    } else if (riid == IID_IMemInputPin) {
       *ppvObject = static_cast<IMemInputPin *>(&m_sampleScheduler);
    } else {
-      *ppvObject = 0;
+      *ppvObject = nullptr;
 
       return E_NOINTERFACE;
    }
@@ -340,10 +340,10 @@ HRESULT VideoSurfaceFilter::Disconnect()
 
    m_mediaType.clear();
 
-   m_sampleScheduler.NotifyAllocator(0, FALSE);
+   m_sampleScheduler.NotifyAllocator(nullptr, FALSE);
 
    m_peerPin->Release();
-   m_peerPin = 0;
+   m_peerPin = nullptr;
 
    return S_OK;
 }
@@ -600,9 +600,9 @@ void VideoSurfaceFilter::supportedFormatsChanged()
    type.bTemporalCompression = FALSE;
    type.lSampleSize = 0;
    type.formattype = GUID_NULL;
-   type.pUnk = 0;
+   type.pUnk = nullptr;
    type.cbFormat = 0;
-   type.pbFormat = 0;
+   type.pbFormat = nullptr;
 
    for (QVideoFrame::PixelFormat format : formats) {
       type.subtype = DirectShowMediaType::convertPixelFormat(format);

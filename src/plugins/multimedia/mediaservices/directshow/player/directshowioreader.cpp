@@ -37,7 +37,7 @@ class DirectShowSampleRequest
  public:
    DirectShowSampleRequest(
       IMediaSample *sample, DWORD_PTR userData, LONGLONG position, LONG length, BYTE *buffer)
-      : next(0)
+      : next(nullptr)
       , sample(sample)
       , userData(userData)
       , position(position)
@@ -66,14 +66,14 @@ DirectShowIOReader::DirectShowIOReader(
    : m_source(source)
    , m_device(device)
    , m_loop(loop)
-   , m_pendingHead(0)
-   , m_pendingTail(0)
-   , m_readyHead(0)
-   , m_readyTail(0)
+   , m_pendingHead(nullptr)
+   , m_pendingTail(nullptr)
+   , m_readyHead(nullptr)
+   , m_readyTail(nullptr)
    , m_synchronousPosition(0)
    , m_synchronousLength(0)
    , m_synchronousBytesRead(0)
-   , m_synchronousBuffer(0)
+   , m_synchronousBuffer(nullptr)
    , m_synchronousResult(S_OK)
    , m_totalLength(0)
    , m_availableLength(0)
@@ -138,7 +138,7 @@ HRESULT DirectShowIOReader::RequestAllocator(
             }
          }
       }
-      ppActual = 0;
+      ppActual = nullptr;
 
       return E_FAIL;
    }
@@ -202,22 +202,22 @@ HRESULT DirectShowIOReader::WaitForNext(
          m_readyHead = request->next;
 
          if (!m_readyHead) {
-            m_readyTail = 0;
+            m_readyTail = nullptr;
          }
 
          delete request;
 
          return hr;
       } else if (m_flushing) {
-         *ppSample = 0;
-         *pdwUser = 0;
+         *ppSample = nullptr;
+         *pdwUser  = 0;
 
          return VFW_E_WRONG_STATE;
       }
    } while (m_wait.wait(&m_mutex, dwTimeout));
 
-   *ppSample = 0;
-   *pdwUser = 0;
+   *ppSample = nullptr;
+   *pdwUser  = 0;
 
    return VFW_E_TIMEOUT;
 }
@@ -259,7 +259,7 @@ HRESULT DirectShowIOReader::SyncReadAligned(IMediaSample *pSample)
 
             m_wait.wait(&m_mutex);
 
-            m_synchronousBuffer = 0;
+            m_synchronousBuffer = nullptr;
 
             if (SUCCEEDED(m_synchronousResult)) {
                pSample->SetActualDataLength(m_synchronousBytesRead);
@@ -291,7 +291,7 @@ HRESULT DirectShowIOReader::SyncRead(LONGLONG llPosition, LONG lLength, BYTE *pB
 
          m_wait.wait(&m_mutex);
 
-         m_synchronousBuffer = 0;
+         m_synchronousBuffer = nullptr;
 
          return m_synchronousResult;
       }
@@ -386,10 +386,10 @@ void DirectShowIOReader::readyRead()
 
          m_pendingHead = m_pendingHead->next;
 
-         m_readyTail->next = 0;
+         m_readyTail->next = nullptr;
 
          if (!m_pendingHead) {
-            m_pendingTail = 0;
+            m_pendingTail = nullptr;
          }
 
          if (!m_readyHead) {
@@ -484,10 +484,10 @@ void DirectShowIOReader::flushRequests()
 
       m_pendingHead = m_pendingHead->next;
 
-      m_readyTail->next = 0;
+      m_readyTail->next = nullptr;
 
       if (!m_pendingHead) {
-         m_pendingTail = 0;
+         m_pendingTail = nullptr;
       }
 
       if (!m_readyHead) {

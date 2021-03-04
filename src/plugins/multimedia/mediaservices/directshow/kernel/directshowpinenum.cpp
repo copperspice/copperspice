@@ -47,8 +47,9 @@ HRESULT DirectShowPinEnum::QueryInterface(REFIID riid, void **ppvObject)
       *ppvObject = static_cast<IEnumPins *>(this);
 
       return S_OK;
+
    } else {
-      *ppvObject = 0;
+      *ppvObject = nullptr;
 
       return E_NOINTERFACE;
    }

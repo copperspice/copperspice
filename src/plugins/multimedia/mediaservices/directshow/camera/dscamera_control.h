@@ -35,7 +35,7 @@ class DSCameraControl : public QCameraControl
    CS_OBJECT(DSCameraControl)
 
  public:
-   DSCameraControl(QObject *parent = 0);
+   DSCameraControl(QObject *parent = nullptr);
    ~DSCameraControl();
 
    QCamera::State state() const {

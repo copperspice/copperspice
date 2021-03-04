@@ -90,7 +90,7 @@ DEFINE_PROPERTYKEY(PKEY_Video_Director, 0x64440492, 0x4C8B, 0x11D1, 0x8B, 0x70, 
 DEFINE_PROPERTYKEY(PKEY_Media_Writer, 0x64440492, 0x4C8B, 0x11D1, 0x8B, 0x70, 0x08, 0x00, 0x36, 0xB1, 0x1A, 0x03, 23);
 
 typedef HRESULT (WINAPI *q_SHCreateItemFromParsingName)(PCWSTR, IBindCtx *, const GUID &, void **);
-static q_SHCreateItemFromParsingName sHCreateItemFromParsingName = 0;
+static q_SHCreateItemFromParsingName sHCreateItemFromParsingName = nullptr;
 #endif
 
 #if defined(QT_USE_WMSDK)
@@ -366,7 +366,7 @@ static QString convertBSTR(BSTR *string)
    QString value = QString::fromStdWString(tmp);
 
    ::SysFreeString(*string);
-   string = 0;
+   string = nullptr;
 
    return value;
 }
@@ -398,9 +398,9 @@ void DirectShowMetaDataControl::updateMetadata(IFilterGraph2 *graph, IBaseFilter
 
       std::wstring tmp = fileSrc.toStdWString();
 
-      if (sHCreateItemFromParsingName(tmp.data(), 0, IID_PPV_ARGS(&shellItem)) == S_OK) {
+      if (sHCreateItemFromParsingName(tmp.data(), nullptr, IID_PPV_ARGS(&shellItem)) == S_OK) {
 
-         IPropertyStore *pStore = 0;
+         IPropertyStore *pStore = nullptr;
          if (shellItem->GetPropertyStore(GPS_DEFAULT, IID_PPV_ARGS(&pStore)) == S_OK) {
             DWORD cProps;
 
@@ -567,7 +567,7 @@ void DirectShowMetaDataControl::updateMetadata(IFilterGraph2 *graph, IBaseFilter
       }
 
       if (content) {
-         BSTR string = 0;
+         BSTR string = nullptr;
 
          if (content->get_AuthorName(&string) == S_OK) {
             m_metadata.insert(QMediaMetaData::Author, convertBSTR(&string));

@@ -48,12 +48,12 @@ static const GUID directshow_subtypes[] = {
 DirectShowIOSource::DirectShowIOSource(DirectShowEventLoop *loop)
    : m_ref(1)
    , m_state(State_Stopped)
-   , m_reader(0)
+   , m_reader(nullptr)
    , m_loop(loop)
-   , m_graph(0)
-   , m_clock(0)
-   , m_allocator(0)
-   , m_peerPin(0)
+   , m_graph(nullptr)
+   , m_clock(nullptr)
+   , m_allocator(nullptr)
+   , m_peerPin(nullptr)
    , m_pinId(QLatin1String("Data"))
    , m_queriedForAsyncReader(false)
 {
@@ -72,9 +72,9 @@ DirectShowIOSource::DirectShowIOSource(DirectShowEventLoop *loop)
       FALSE,             // bTemporalCompression
       1,                 // lSampleSize
       GUID_NULL,         // formattype
-      0,                 // pUnk
+      nullptr,          // pUnk
       0,                 // cbFormat
-      0,                 // pbFormat
+      nullptr,          // pbFormat
    };
 
    static const int count = sizeof(directshow_subtypes) / sizeof(GUID);
@@ -141,7 +141,7 @@ HRESULT DirectShowIOSource::QueryInterface(REFIID riid, void **ppvObject)
       m_queriedForAsyncReader = true;
       *ppvObject = static_cast<IAsyncReader *>(m_reader);
    } else {
-      *ppvObject = 0;
+      *ppvObject = nullptr;
 
       return E_NOINTERFACE;
    }
@@ -242,7 +242,7 @@ HRESULT DirectShowIOSource::GetSyncSource(IReferenceClock **ppClock)
       return E_POINTER;
    } else {
       if (!m_clock) {
-         *ppClock = 0;
+         *ppClock = nullptr;
 
          return S_FALSE;
       } else {
@@ -281,7 +281,7 @@ HRESULT DirectShowIOSource::FindPin(LPCWSTR Id, IPin **ppPin)
 
          return S_OK;
       } else {
-         *ppPin = 0;
+         *ppPin = nullptr;
 
          return VFW_E_NOT_FOUND;
       }
@@ -416,7 +416,7 @@ HRESULT DirectShowIOSource::Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt)
       pReceivePin->Disconnect();
       if (m_allocator) {
          m_allocator->Release();
-         m_allocator = 0;
+         m_allocator = nullptr;
       }
       if (!m_queriedForAsyncReader) {
          hr = VFW_E_NO_TRANSPORT;
@@ -454,11 +454,11 @@ HRESULT DirectShowIOSource::Disconnect()
 
       if (m_allocator) {
          m_allocator->Release();
-         m_allocator = 0;
+         m_allocator = nullptr;
       }
 
       m_peerPin->Release();
-      m_peerPin = 0;
+      m_peerPin = nullptr;
 
       return S_OK;
    }
@@ -472,7 +472,7 @@ HRESULT DirectShowIOSource::ConnectedTo(IPin **ppPin)
       QMutexLocker locker(&m_mutex);
 
       if (!m_peerPin) {
-         *ppPin = 0;
+         *ppPin = nullptr;
 
          return VFW_E_NOT_CONNECTED;
       } else {
@@ -494,7 +494,7 @@ HRESULT DirectShowIOSource::ConnectionMediaType(AM_MEDIA_TYPE *pmt)
       QMutexLocker locker(&m_mutex);
 
       if (!m_peerPin) {
-         pmt = 0;
+         pmt = nullptr;
          return VFW_E_NOT_CONNECTED;
 
       } else {

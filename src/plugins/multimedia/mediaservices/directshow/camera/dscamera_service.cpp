@@ -34,7 +34,7 @@
 #include <dsvideo_devicecontrol.h>
 
 DSCameraService::DSCameraService(QObject *parent)
-   : QMediaService(parent), m_videoRenderer(0)
+   : QMediaService(parent), m_videoRenderer(nullptr)
 {
    m_session      = new DSCameraSession(this);
    m_control      = new DSCameraControl(m_session);

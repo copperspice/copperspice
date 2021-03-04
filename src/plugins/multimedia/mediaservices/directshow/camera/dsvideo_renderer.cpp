@@ -25,7 +25,7 @@
 #include <dsvideo_renderer.h>
 
 DSVideoRendererControl::DSVideoRendererControl(DSCameraSession *session, QObject *parent)
-   : QVideoRendererControl(parent), m_surface(0), m_session(session)
+   : QVideoRendererControl(parent), m_surface(nullptr), m_session(session)
 {
 }
 

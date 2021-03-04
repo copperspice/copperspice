@@ -76,7 +76,7 @@ HRESULT DirectShowMediaTypeEnum::QueryInterface(REFIID riid, void **ppvObject)
       || riid == IID_IEnumMediaTypes) {
       *ppvObject = static_cast<IEnumMediaTypes *>(this);
    } else {
-      *ppvObject = 0;
+      *ppvObject = nullptr;
 
       return E_NOINTERFACE;
    }

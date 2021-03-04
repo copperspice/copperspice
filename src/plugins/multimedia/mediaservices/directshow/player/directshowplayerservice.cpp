@@ -78,24 +78,24 @@ class DirectShowPlayerServiceThread : public QThread
 
 DirectShowPlayerService::DirectShowPlayerService(QObject *parent)
    : QMediaService(parent)
-   , m_playerControl(0)
-   , m_metaDataControl(0)
-   , m_videoRendererControl(0)
-   , m_videoWindowControl(0)
-   , m_audioEndpointControl(0)
-   , m_taskThread(0)
+   , m_playerControl(nullptr)
+   , m_metaDataControl(nullptr)
+   , m_videoRendererControl(nullptr)
+   , m_videoWindowControl(nullptr)
+   , m_audioEndpointControl(nullptr)
+   , m_taskThread(nullptr)
    , m_loop(qt_directShowEventLoop())
    , m_pendingTasks(0)
    , m_executingTask(0)
    , m_executedTasks(0)
-   , m_taskHandle(::CreateEvent(0, 0, 0, 0))
-   , m_eventHandle(0)
+   , m_taskHandle(::CreateEvent(nullptr, 0, 0, nullptr))
+   , m_eventHandle(nullptr)
    , m_graphStatus(NoMedia)
-   , m_stream(0)
-   , m_graph(0)
-   , m_source(0)
-   , m_audioOutput(0)
-   , m_videoOutput(0)
+   , m_stream(nullptr)
+   , m_graph(nullptr)
+   , m_source(nullptr)
+   , m_audioOutput(nullptr)
+   , m_videoOutput(nullptr)
    , m_rate(1.0)
    , m_position(0)
    , m_seekPosition(-1)
@@ -129,12 +129,12 @@ DirectShowPlayerService::~DirectShowPlayerService()
 
    if (m_audioOutput) {
       m_audioOutput->Release();
-      m_audioOutput = 0;
+      m_audioOutput = nullptr;
    }
 
    if (m_videoOutput) {
       m_videoOutput->Release();
-      m_videoOutput = 0;
+      m_videoOutput = nullptr;
    }
 
    delete m_playerControl;
@@ -203,16 +203,16 @@ void DirectShowPlayerService::releaseControl(QMediaControl *control)
       qWarning("QMediaService::releaseControl(): Attempted release of null control");
 
    } else if (control == m_videoRendererControl) {
-      setVideoOutput(0);
+      setVideoOutput(nullptr);
 
       delete m_videoRendererControl;
-      m_videoRendererControl = 0;
+      m_videoRendererControl = nullptr;
 
    } else if (control == m_videoWindowControl) {
-      setVideoOutput(0);
+      setVideoOutput(nullptr);
 
       delete m_videoWindowControl;
-      m_videoWindowControl = 0;
+      m_videoWindowControl = nullptr;
 
    }
 }
@@ -278,7 +278,7 @@ void DirectShowPlayerService::load(const QMediaContent &media, QIODevice *stream
 
 void DirectShowPlayerService::doSetUrlSource(QMutexLocker *locker)
 {
-   IBaseFilter *source = 0;
+   IBaseFilter *source = nullptr;
 
    QMediaResource resource = m_resources.takeFirst();
    m_url = resource.url();
@@ -298,14 +298,14 @@ void DirectShowPlayerService::doSetUrlSource(QMutexLocker *locker)
          locker->unlock();
 
          std::wstring tmp = m_url.toString().toStdWString();
-         hr = fileSource->Load(tmp.data(), 0);
+         hr = fileSource->Load(tmp.data(), nullptr);
 
          if (SUCCEEDED(hr)) {
             source = com_cast<IBaseFilter>(fileSource, IID_IBaseFilter);
 
             if (! SUCCEEDED(hr = m_graph->AddFilter(source, L"Source")) && source) {
                source->Release();
-               source = 0;
+               source = nullptr;
             }
          }
          fileSource->Release();
@@ -438,18 +438,19 @@ void DirectShowPlayerService::doRender(QMutexLocker *locker)
    HRESULT renderHr = S_OK;
 
    while (!filters.isEmpty()) {
-      IEnumPins *pins = 0;
+      IEnumPins *pins = nullptr;
       IBaseFilter *filter = filters[filters.size() - 1];
       filters.removeLast();
 
       if (!(m_pendingTasks & ReleaseFilters) && SUCCEEDED(filter->EnumPins(&pins))) {
          int outputs = 0;
-         for (IPin *pin = 0; pins->Next(1, &pin, 0) == S_OK; pin->Release()) {
+
+         for (IPin *pin = nullptr; pins->Next(1, &pin, nullptr) == S_OK; pin->Release()) {
             PIN_DIRECTION direction;
             if (pin->QueryDirection(&direction) == S_OK && direction == PINDIR_OUTPUT) {
                ++outputs;
 
-               IPin *peer = 0;
+               IPin *peer = nullptr;
                if (pin->ConnectedTo(&peer) == S_OK) {
                   PIN_INFO peerInfo;
                   if (SUCCEEDED(peer->QueryPinInfo(&peerInfo))) {
@@ -459,8 +460,7 @@ void DirectShowPlayerService::doRender(QMutexLocker *locker)
                } else {
                   locker->unlock();
                   HRESULT hr;
-                  if (SUCCEEDED(hr = graph->RenderEx(
-                              pin, /*AM_RENDEREX_RENDERTOEXISTINGRENDERERS*/ 1, 0))) {
+                  if (SUCCEEDED(hr = graph->RenderEx(pin, 1, nullptr))) {
                      rendered = true;
                   } else if (renderHr == S_OK || renderHr == VFW_E_NO_DECOMPRESSOR) {
                      renderHr = hr;
@@ -599,13 +599,13 @@ void DirectShowPlayerService::doReleaseGraph(QMutexLocker *locker)
 
    if (m_source) {
       m_source->Release();
-      m_source = 0;
+      m_source = nullptr;
    }
 
-   m_eventHandle = 0;
+   m_eventHandle = nullptr;
 
    m_graph->Release();
-   m_graph = 0;
+   m_graph = nullptr;
 
    m_loop->wake();
 }
@@ -619,19 +619,19 @@ int DirectShowPlayerService::findStreamTypes(IBaseFilter *source) const
    int streamTypes = 0;
 
    while (! filters.isEmpty()) {
-      IEnumPins *pins = 0;
+      IEnumPins *pins = nullptr;
       IBaseFilter *filter = filters[filters.size() - 1];
       filters.removeLast();
 
       if (SUCCEEDED(filter->EnumPins(&pins))) {
-         for (IPin *pin = 0; pins->Next(1, &pin, 0) == S_OK; pin->Release()) {
+         for (IPin *pin = nullptr; pins->Next(1, &pin, nullptr) == S_OK; pin->Release()) {
             PIN_DIRECTION direction;
 
             if (pin->QueryDirection(&direction) == S_OK && direction == PINDIR_OUTPUT) {
                AM_MEDIA_TYPE connectionType;
 
                if (SUCCEEDED(pin->ConnectionMediaType(&connectionType))) {
-                  IPin *peer = 0;
+                  IPin *peer = nullptr;
 
                   if (connectionType.majortype == MEDIATYPE_Audio) {
                      streamTypes |= AudioStream;
@@ -668,8 +668,7 @@ int DirectShowPlayerService::findStreamType(IPin *pin) const
       bool audio = false;
       bool other = false;
 
-      for (AM_MEDIA_TYPE *type = 0;
-         types->Next(1, &type, 0) == S_OK;
+      for (AM_MEDIA_TYPE *type = nullptr; types->Next(1, &type, nullptr) == S_OK;
          DirectShowMediaType::deleteType(type)) {
          if (type->majortype == MEDIATYPE_Audio) {
             audio = true;
@@ -970,8 +969,7 @@ void DirectShowPlayerService::doSeek(QMutexLocker *locker)
          : QMediaTimeRange();
 
       locker->unlock();
-      seeking->SetPositions(
-         &seekPosition, AM_SEEKING_AbsolutePositioning, 0, AM_SEEKING_NoPositioning);
+      seeking->SetPositions(&seekPosition, AM_SEEKING_AbsolutePositioning, nullptr, AM_SEEKING_NoPositioning);
       locker->relock();
 
       if (!m_dontCacheNextSeekResult) {
@@ -1144,7 +1142,7 @@ void DirectShowPlayerService::doReleaseVideoOutput(QMutexLocker *locker)
       control->Release();
    }
 
-   IBaseFilter *intermediate = 0;
+   IBaseFilter *intermediate = nullptr;
    if (!SUCCEEDED(m_graph->FindFilterByName(L"Color Space Converter", &intermediate))) {
       intermediate = m_videoOutput;
       intermediate->AddRef();
@@ -1329,13 +1327,15 @@ bool DirectShowPlayerService::isConnected(IBaseFilter *filter, PIN_DIRECTION dir
 {
    bool connected = false;
 
-   IEnumPins *pins = 0;
+   IEnumPins *pins = nullptr;
 
    if (SUCCEEDED(filter->EnumPins(&pins))) {
-      for (IPin *pin = 0; pins->Next(1, &pin, 0) == S_OK; pin->Release()) {
+      for (IPin *pin = nullptr; pins->Next(1, &pin, nullptr) == S_OK; pin->Release()) {
          PIN_DIRECTION dir;
+
          if (SUCCEEDED(pin->QueryDirection(&dir)) && dir == direction) {
-            IPin *peer = 0;
+            IPin *peer = nullptr;
+
             if (SUCCEEDED(pin->ConnectedTo(&peer))) {
                connected = true;
 
@@ -1350,15 +1350,15 @@ bool DirectShowPlayerService::isConnected(IBaseFilter *filter, PIN_DIRECTION dir
 
 IBaseFilter *DirectShowPlayerService::getConnected(IBaseFilter *filter, PIN_DIRECTION direction) const
 {
-   IBaseFilter *connected = 0;
-   IEnumPins *pins = 0;
+   IBaseFilter *connected = nullptr;
+   IEnumPins *pins = nullptr;
 
    if (SUCCEEDED(filter->EnumPins(&pins))) {
-      for (IPin *pin = 0; pins->Next(1, &pin, 0) == S_OK; pin->Release()) {
+      for (IPin *pin = nullptr; pins->Next(1, &pin, nullptr) == S_OK; pin->Release()) {
          PIN_DIRECTION dir;
 
          if (SUCCEEDED(pin->QueryDirection(&dir)) && dir == direction) {
-            IPin *peer = 0;
+            IPin *peer = nullptr;
 
             if (SUCCEEDED(pin->ConnectedTo(&peer))) {
                PIN_INFO info;
