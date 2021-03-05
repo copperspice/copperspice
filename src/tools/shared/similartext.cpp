@@ -21,17 +21,12 @@
 *
 ***********************************************************************/
 
-#include "simtexth.h"
-#include "translator.h"
+#include <similartext.h>
 
-#include <QByteArray>
-#include <QString>
-#include <QList>
-
-
-QT_BEGIN_NAMESPACE
-
-typedef QList<TranslatorMessage> TML;
+#include <translator.h>
+#include <qbytearray.h>
+#include <qstring.h>
+#include <qlist.h>
 
 /*
   How similar are two texts?  The approach used here relies on co-occurrence
@@ -114,73 +109,71 @@ static const int bitCount[256] = {
    4,  5,  5,  6,  5,  6,  6,  7,  5,  6,  6,  7,  6,  7,  7,  8
 };
 
-struct CoMatrix {
+static inline void setCoOccurence(CoMatrix &m, char c, char d)
+{
+   int k = indexOf[(uchar) c] + 20 * indexOf[(uchar) d];
+   m.b[k >> 3] |= (1 << (k & 0x7));
+}
+
+CoMatrix::CoMatrix(const QString &str)
+{
+   QByteArray ba = str.toUtf8();
+   const char *text = ba.constData();
+   char c = '\0', d;
+   memset( b, 0, 52 );
+
    /*
-     The matrix has 20 * 20 = 400 entries.  This requires 50 bytes, or 13
-     words.  Some operations are performed on words for more efficiency.
+     The Knuth books are not in the office only for show; they help make
+     loops 30% faster and 20% as readable.
    */
-   union {
-      quint8 b[52];
-      quint32 w[13];
-   };
 
-   CoMatrix() {
-      memset( b, 0, 52 );
-   }
+   while ( (d = *text) != '\0' ) {
+      setCoOccurence(*this, c, d);
 
-   CoMatrix(const QString &str) {
-      QByteArray ba = str.toUtf8();
-      const char *text = ba.constData();
-      char c = '\0', d;
-      memset( b, 0, 52 );
-      /*
-        The Knuth books are not in the office only for show; they help make
-        loops 30% faster and 20% as readable.
-      */
-      while ( (d = *text) != '\0' ) {
-         setCoOccurence( c, d );
-         if ( (c = *++text) != '\0' ) {
-            setCoOccurence( d, c );
-            text++;
-         }
+      if ( (c = *++text) != '\0' ) {
+         setCoOccurence(*this, d, c);
+         text++;
       }
    }
+}
 
-   void setCoOccurence( char c, char d ) {
-      int k = indexOf[(uchar) c] + 20 * indexOf[(uchar) d];
-      b[k >> 3] |= (1 << (k & 0x7));
+
+static inline int worth(const CoMatrix &m)
+{
+   int w = 0;
+
+   for ( int i = 0; i < 50; i++ ) {
+      w += bitCount[m.b[i]];
    }
 
-   int worth() const {
-      int w = 0;
-      for ( int i = 0; i < 50; i++ ) {
-         w += bitCount[b[i]];
-      }
-      return w;
-   }
-};
+   return w;
+}
 
 static inline CoMatrix reunion(const CoMatrix &m, const CoMatrix &n)
 {
    CoMatrix p;
+
    for (int i = 0; i < 13; ++i) {
       p.w[i] = m.w[i] | n.w[i];
    }
+
    return p;
 }
 
 static inline CoMatrix intersection(const CoMatrix &m, const CoMatrix &n)
 {
    CoMatrix p;
+
    for (int i = 0; i < 13; ++i) {
       p.w[i] = m.w[i] & n.w[i];
    }
+
    return p;
 }
 
 StringSimilarityMatcher::StringSimilarityMatcher(const QString &stringToMatch)
+   : m_cm(stringToMatch)
 {
-   m_cm = new CoMatrix(stringToMatch);
    m_length = stringToMatch.length();
 }
 
@@ -188,49 +181,27 @@ int StringSimilarityMatcher::getSimilarityScore(const QString &strCandidate)
 {
    CoMatrix cmTarget(strCandidate);
    int delta = qAbs(m_length - strCandidate.size());
-   int score = ( (intersection(*m_cm, cmTarget).worth() + 1) << 10 ) /
-               ( reunion(*m_cm, cmTarget).worth() + (delta << 1) + 1 );
-   return score;
-}
 
-StringSimilarityMatcher::~StringSimilarityMatcher()
-{
-   delete m_cm;
-}
-
-/**
- * Checks how similar two strings are.
- * The return value is the score, and a higher score is more similar
- * than one with a low score.
- * Linguist considers a score over 190 to be a good match.
- * \sa StringSimilarityMatcher
- */
-int getSimilarityScore(const QString &str1, const QString &str2)
-{
-   CoMatrix cmTarget(str2);
-   CoMatrix cm(str1);
-   int delta = qAbs(str1.size() - str2.size());
-
-   int score = ( (intersection(cm, cmTarget).worth() + 1) << 10 )
-               / ( reunion(cm, cmTarget).worth() + (delta << 1) + 1 );
+   int score = ( (worth(intersection(m_cm, cmTarget)) + 1) << 10 ) /
+               ( worth(reunion(m_cm, cmTarget)) + (delta << 1) + 1 );
 
    return score;
 }
 
-CandidateList similarTextHeuristicCandidates(const Translator *tor,
-      const QString &text, int maxCandidates)
+QList<Candidate> similarTextHeuristicCandidates(const Translator *tor, const QString &text, int maxCandidates)
 {
    QList<int> scores;
-   CandidateList candidates;
+
+   QList<Candidate> candidates;
+   StringSimilarityMatcher matcher(text);
 
    for (const TranslatorMessage &mtm : tor->messages()) {
-      if (mtm.type() == TranslatorMessage::Unfinished
-            || mtm.translation().isEmpty()) {
+      if (mtm.type() == TranslatorMessage::Unfinished || mtm.translation().isEmpty()) {
          continue;
       }
 
       QString s = mtm.sourceText();
-      int score = getSimilarityScore(s, text);
+      int score = matcher.getSimilarityScore(s);
 
       if (candidates.size() == maxCandidates && score > scores[maxCandidates - 1] ) {
          candidates.removeLast();
@@ -246,6 +217,7 @@ CandidateList similarTextHeuristicCandidates(const Translator *tor,
                   if (candidates.at(i) == cand) {
                      goto continue_outer_loop;
                   }
+
                } else {
                   break;
                }
@@ -254,10 +226,10 @@ CandidateList similarTextHeuristicCandidates(const Translator *tor,
          scores.insert(i, score);
          candidates.insert(i, cand);
       }
+
    continue_outer_loop:
       ;
    }
+
    return candidates;
 }
-
-QT_END_NAMESPACE

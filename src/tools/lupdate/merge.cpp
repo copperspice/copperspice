@@ -23,7 +23,7 @@
 
 #include "lupdate.h"
 
-#include "simtexth.h"
+#include <similartext.h>
 #include "translator.h"
 
 #include <QCoreApplication>

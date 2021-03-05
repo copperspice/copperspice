@@ -25,7 +25,7 @@ include_directories(
 
 target_sources(lupdate${TOOLS_SUFFIX}
    PRIVATE
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/simtexth.cpp
+   ${CMAKE_SOURCE_DIR}/src/tools/shared/similartext.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/merge.cpp

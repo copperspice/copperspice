@@ -21,20 +21,20 @@
 *
 ***********************************************************************/
 
-#ifndef SIMTEXTH_H
-#define SIMTEXTH_H
+#ifndef SIMILARTEXT_H
+#define SIMILARTEXT_H
 
-const int textSimilarityThreshold = 190;
-
-#include <QString>
-#include <QList>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qlist.h>
 
 class Translator;
 
+constexpr const int textSimilarityThreshold = 190;
+
 struct Candidate {
-   Candidate() {}
+   Candidate() {
+   }
+
    Candidate(const QString &source0, const QString &target0)
       : source(source0), target(target0) {
    }
@@ -47,14 +47,25 @@ inline bool operator==( const Candidate &c, const Candidate &d )
 {
    return c.target == d.target && c.source == d.source;
 }
+
 inline bool operator!=( const Candidate &c, const Candidate &d )
 {
    return !operator==( c, d );
 }
 
-typedef QList<Candidate> CandidateList;
+struct CoMatrix {
+   CoMatrix(const QString &str);
+   CoMatrix() {}
 
-struct CoMatrix;
+   /*
+     The matrix has 20 * 20 = 400 entries.  This requires 50 bytes, or 13
+     words.  Some operations are performed on words for more efficiency.
+   */
+   union {
+      quint8 b[52];
+      quint32 w[13];
+   };
+};
 /**
  * This class is more efficient for searching through a large array of candidate strings, since we only
  * have to construct the CoMatrix for the \a stringToMatch once,
@@ -65,20 +76,19 @@ class StringSimilarityMatcher
 {
  public:
    StringSimilarityMatcher(const QString &stringToMatch);
-   ~StringSimilarityMatcher();
+
    int getSimilarityScore(const QString &strCandidate);
 
  private:
-   CoMatrix *m_cm;
+   CoMatrix m_cm;
    int m_length;
 };
 
-int getSimilarityScore(const QString &str1, const QString &str2);
+static inline int getSimilarityScore(const QString &str1, const QString &str2)
+{
+   return StringSimilarityMatcher(str1).getSimilarityScore(str2);
+}
 
-CandidateList similarTextHeuristicCandidates( const Translator *tor,
-      const QString &text,
-      int maxCandidates );
-
-QT_END_NAMESPACE
+QList<Candidate> similarTextHeuristicCandidates(const Translator *tor, const QString &text, int maxCandidates);
 
 #endif

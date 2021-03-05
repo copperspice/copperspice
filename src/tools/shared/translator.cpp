@@ -22,10 +22,10 @@
 ***********************************************************************/
 
 #include "translator.h"
-#include "simtexth.h"
 
 #include <iostream>
 #include <stdio.h>
+#include <similartext.h>
 
 #ifdef Q_OS_WIN
 // required for _setmode, to avoid _O_TEXT streams...
