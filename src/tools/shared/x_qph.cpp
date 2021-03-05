@@ -168,7 +168,7 @@ static bool saveQPH(const Translator &translator, QIODevice &dev, ConversionData
    }
    t << ">\n";
 
-   for (const TranslatorMessage & msg : translator.messages()) {
+   for (const TranslatorMessage &msg : translator.messages()) {
       t << "<phrase>\n";
       t << "    <source>" << protect(msg.sourceText()) << "</source>\n";
 

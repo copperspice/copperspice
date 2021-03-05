@@ -25,7 +25,6 @@ include_directories(
 
 target_sources(lrelease${TOOLS_SUFFIX}
    PRIVATE
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/ioutils.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
    $<TARGET_OBJECTS:sharedtools>
 )

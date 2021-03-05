@@ -89,7 +89,7 @@ class FindTrCalls: protected AST::Visitor
       m_bSource.clear();
       if (AST::IdentifierExpression *idExpr = AST::cast<AST::IdentifierExpression *>(node->base)) {
          if (idExpr->name->asString() == QLatin1String("qsTr") ||
-            idExpr->name->asString() == QLatin1String("QT_TR_NOOP")) {
+               idExpr->name->asString() == QLatin1String("QT_TR_NOOP")) {
             if (!node->arguments) {
                return;
             }
@@ -127,16 +127,16 @@ class FindTrCalls: protected AST::Visitor
                }
 
                TranslatorMessage msg(m_component, source,
-                  comment, QString(), m_fileName,
-                  node->firstSourceLocation().startLine, QStringList(),
-                  TranslatorMessage::Unfinished, plural);
+                                     comment, QString(), m_fileName,
+                                     node->firstSourceLocation().startLine, QStringList(),
+                                     TranslatorMessage::Unfinished, plural);
                msg.setExtraComment(extracomment.simplified());
                msg.setId(id);
                msg.setExtras(extra);
                m_translator->extend(msg);
             }
          } else if (idExpr->name->asString() == QLatin1String("qsTranslate") ||
-            idExpr->name->asString() == QLatin1String("QT_TRANSLATE_NOOP")) {
+                    idExpr->name->asString() == QLatin1String("QT_TRANSLATE_NOOP")) {
             if (node->arguments && AST::cast<AST::StringLiteral *>(node->arguments->expression)) {
                AST::StringLiteral *literal = AST::cast<AST::StringLiteral *>(node->arguments->expression);
                const QString context = literal->value->asString();
@@ -182,16 +182,16 @@ class FindTrCalls: protected AST::Visitor
                }
 
                TranslatorMessage msg(context, source,
-                  comment, QString(), m_fileName,
-                  node->firstSourceLocation().startLine, QStringList(),
-                  TranslatorMessage::Unfinished, plural);
+                                     comment, QString(), m_fileName,
+                                     node->firstSourceLocation().startLine, QStringList(),
+                                     TranslatorMessage::Unfinished, plural);
                msg.setExtraComment(extracomment.simplified());
                msg.setId(id);
                msg.setExtras(extra);
                m_translator->extend(msg);
             }
          } else if (idExpr->name->asString() == QLatin1String("qsTrId") ||
-            idExpr->name->asString() == QLatin1String("QT_TRID_NOOP")) {
+                    idExpr->name->asString() == QLatin1String("QT_TRID_NOOP")) {
             if (!node->arguments) {
                return;
             }
@@ -213,9 +213,9 @@ class FindTrCalls: protected AST::Visitor
                bool plural = node->arguments->next;
 
                TranslatorMessage msg(QString(), sourcetext,
-                  QString(), QString(), m_fileName,
-                  node->firstSourceLocation().startLine, QStringList(),
-                  TranslatorMessage::Unfinished, plural);
+                                     QString(), QString(), m_fileName,
+                                     node->firstSourceLocation().startLine, QStringList(),
+                                     TranslatorMessage::Unfinished, plural);
                msg.setExtraComment(extracomment.simplified());
                msg.setId(id);
                msg.setExtras(extra);
@@ -296,8 +296,8 @@ QString createErrorString(const QString &filename, const QString &code, Parser &
       }
 
       QString error = filename + QLatin1Char(':') + QString::number(m.loc.startLine)
-         + QLatin1Char(':') + QString::number(m.loc.startColumn) + QLatin1String(": error: ")
-         + m.message + QLatin1Char('\n');
+                      + QLatin1Char(':') + QString::number(m.loc.startColumn) + QLatin1String(": error: ")
+                      + m.message + QLatin1Char('\n');
 
       int line = 0;
       if (m.loc.startLine > 0) {

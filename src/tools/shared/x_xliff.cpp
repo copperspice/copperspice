@@ -85,14 +85,14 @@ static QString dataType(const TranslatorMessage &m)
       case COMBINE4CHARS(0, 'h', '+', '+'):
          return QString("cpp");
 
-      case COMBINE4CHARS(0, 0 , 0 , 'c'):
-      case COMBINE4CHARS(0, 0 , 0 , 'h'):
-      case COMBINE4CHARS(0, 0 , 'c', 'c'):
-      case COMBINE4CHARS(0, 0 , 'c', 'h'):
-      case COMBINE4CHARS(0, 0 , 'h', 'h'):
+      case COMBINE4CHARS(0, 0, 0, 'c'):
+      case COMBINE4CHARS(0, 0, 0, 'h'):
+      case COMBINE4CHARS(0, 0, 'c', 'c'):
+      case COMBINE4CHARS(0, 0, 'c', 'h'):
+      case COMBINE4CHARS(0, 0, 'h', 'h'):
          return QString("c");
 
-      case COMBINE4CHARS(0, 0 , 'u', 'i'):
+      case COMBINE4CHARS(0, 0, 'u', 'i'):
          return QString::fromLatin1(dataTypeUIFile);   //### form?
 
       default:
@@ -218,7 +218,7 @@ static void writeLineNumber(QTextStream &ts, const TranslatorMessage &msg, int i
    ts << "<context-group purpose=\"location\"><context context-type=\"linenumber\">"
       << msg.lineNumber() << "</context></context-group>\n";
 
-   for (const TranslatorMessage::Reference & ref : msg.extraReferences()) {
+   for (const TranslatorMessage::Reference &ref : msg.extraReferences()) {
       writeIndent(ts, indent);
       ts << "<context-group purpose=\"location\">";
 
@@ -842,7 +842,7 @@ bool XLIFFHandler::finalizeMessage(bool isPlural)
 bool XLIFFHandler::fatalError(const QXmlParseException &exception)
 {
    QString msg = QString("XML error: Parse error at line %1, column %2 (%3).\n")
-               .formatArg(exception.lineNumber()).formatArg(exception.columnNumber()).formatArg(exception.message());
+                 .formatArg(exception.lineNumber()).formatArg(exception.columnNumber()).formatArg(exception.message());
 
    m_cd.appendError(msg);
 
@@ -878,7 +878,7 @@ bool saveXLIFF(const Translator &translator, QIODevice &dev, ConversionData &cd)
    QHash<QString, QList<QString>> contextOrder;
    QList<QString> fileOrder;
 
-   for (const TranslatorMessage & msg : translator.messages()) {
+   for (const TranslatorMessage &msg : translator.messages()) {
       QString fn = msg.fileName();
 
       if (fn.isEmpty() && msg.type() == TranslatorMessage::Obsolete) {
@@ -917,7 +917,7 @@ bool saveXLIFF(const Translator &translator, QIODevice &dev, ConversionData &cd)
    QString languageCode = translator.languageCode();
    languageCode.replace(QLatin1Char('_'), QLatin1Char('-'));
 
-   for (const QString & fn : fileOrder) {
+   for (const QString &fn : fileOrder) {
       writeIndent(ts, indent);
       ts << "<file original=\"" << fn << "\""
          << " datatype=\"" << dataType(messageOrder[fn].begin()->first()) << "\""
@@ -926,7 +926,7 @@ bool saveXLIFF(const Translator &translator, QIODevice &dev, ConversionData &cd)
          << "><body>\n";
       ++indent;
 
-      for (const QString & ctx : contextOrder[fn]) {
+      for (const QString &ctx : contextOrder[fn]) {
          if (! ctx.isEmpty()) {
             writeIndent(ts, indent);
             ts << "<group restype=\"" << restypeContext << "\""
@@ -934,7 +934,7 @@ bool saveXLIFF(const Translator &translator, QIODevice &dev, ConversionData &cd)
             ++indent;
          }
 
-         for (const TranslatorMessage & msg : messageOrder[fn][ctx]) {
+         for (const TranslatorMessage &msg : messageOrder[fn][ctx]) {
             writeMessage(ts, msg, drops, indent);
          }
 

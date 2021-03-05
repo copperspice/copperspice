@@ -14,14 +14,8 @@ list(APPEND SHAREDTOOLS_INCLUDES
 )
 
 list(APPEND SHAREDTOOLS_HEADERS
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/numerus.h
     ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.h
     ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/qm.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/qph.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/po.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/ts.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/xliff.h
 )
 
 target_sources(sharedtools
@@ -29,11 +23,9 @@ target_sources(sharedtools
    ${CMAKE_SOURCE_DIR}/src/tools/shared/numerus.cpp
    ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.cpp
    ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.cpp
+
    ${CMAKE_SOURCE_DIR}/src/tools/shared/qm.cpp
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/qph.cpp
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/po.cpp
    ${CMAKE_SOURCE_DIR}/src/tools/shared/ts.cpp
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/xliff.cpp
 )
 
 function_variable_fixup("${SHAREDTOOLS_EXTRA_CXXFLAGS}" SHAREDTOOLS_EXTRA_CXXFLAGS)

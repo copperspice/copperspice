@@ -25,16 +25,14 @@ include_directories(
 
 target_sources(lupdate${TOOLS_SUFFIX}
    PRIVATE
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/ioutils.cpp
    ${CMAKE_SOURCE_DIR}/src/tools/shared/simtexth.cpp
+
    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/merge.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/cpp.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/java.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/qscript.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/ui.cpp
    $<TARGET_OBJECTS:sharedtools>
-
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "(OpenBSD|FreeBSD|NetBSD)")

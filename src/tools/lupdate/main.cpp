@@ -241,9 +241,6 @@ static void processSources(Translator &fetchedTor, const QStringList &sourceFile
          || it->endsWith(QLatin1String(".jui"), Qt::CaseInsensitive)) {
          loadUI(fetchedTor, *it, cd);
 
-      } else if (it->endsWith(QLatin1String(".js"), Qt::CaseInsensitive)
-         || it->endsWith(QLatin1String(".qs"), Qt::CaseInsensitive)) {
-         loadQScript(fetchedTor, *it, cd);
       }
 
 #ifdef NEVER
