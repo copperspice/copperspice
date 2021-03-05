@@ -219,7 +219,18 @@ QString16::const_iterator QString16::cs_internal_rfind_fast(const QString16 &str
 void QString16::chop(size_type numOfChars)
 {
    if (numOfChars > 0) {
-      auto iter = end() - numOfChars;
+      auto iter = end();
+
+      for (size_type cnt = 0; cnt < numOfChars; ++cnt) {
+
+         if (iter == cbegin()) {
+            clear();
+            return;
+         }
+
+         --iter;
+      }
+
       erase(iter, end());
    }
 }
