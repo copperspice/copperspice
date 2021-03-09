@@ -21,34 +21,25 @@
 *
 ***********************************************************************/
 
-#include "translatormessage.h"
+#include <translatormessage.h>
 
 #include <qplatformdefs.h>
-
-#ifndef QT_NO_TRANSLATION
-
-#include <QDataStream>
-#include <QDebug>
+#include <qdatastream.h>
+#include <qdebug.h>
 
 #include <stdlib.h>
 
-
-QT_BEGIN_NAMESPACE
-
 TranslatorMessage::TranslatorMessage()
-   : m_lineNumber(-1), m_type(Unfinished), m_utf8(false), m_nonUtf8(false), m_plural(false)
+   : m_lineNumber(-1), m_type(Unfinished), m_plural(false)
 {
 }
 
-TranslatorMessage::TranslatorMessage(const QString &context,
-                                     const QString &sourceText, const QString &comment,
-                                     const QString &userData,
-                                     const QString &fileName, int lineNumber, const QStringList &translations,
-                                     Type type, bool plural)
-   : m_context(context), m_sourcetext(sourceText), m_comment(comment),
-     m_userData(userData),
+TranslatorMessage::TranslatorMessage(const QString &context, const QString &sourceText, const QString &comment,
+            const QString &userData, const QString &fileName, int lineNumber,
+            const QStringList &translations, Type type, bool plural)
+   : m_context(context), m_sourcetext(sourceText), m_comment(comment), m_userData(userData),
      m_translations(translations), m_fileName(fileName), m_lineNumber(lineNumber),
-     m_type(type), m_utf8(false), m_nonUtf8(false), m_plural(plural)
+     m_type(type), m_plural(plural)
 {
 }
 
@@ -57,6 +48,7 @@ void TranslatorMessage::addReference(const QString &fileName, int lineNumber)
    if (m_fileName.isEmpty()) {
       m_fileName = fileName;
       m_lineNumber = lineNumber;
+
    } else {
       m_extraRefs.append(Reference(fileName, lineNumber));
    }
@@ -74,7 +66,7 @@ void TranslatorMessage::addReferenceUniq(const QString &fileName, int lineNumber
       }
 
       if (! m_extraRefs.isEmpty()) // Rather common case, so special-case it
-         for (const Reference & ref : m_extraRefs) {
+         for (const Reference &ref : m_extraRefs) {
             if (fileName == ref.fileName() && lineNumber == ref.lineNumber()) {
                return;
             }
@@ -90,46 +82,32 @@ void TranslatorMessage::clearReferences()
    m_extraRefs.clear();
 }
 
-void TranslatorMessage::setReferences(const TranslatorMessage::References &refs0)
+void TranslatorMessage::setReferences(const QList<TranslatorMessage::Reference> &refs0)
 {
    if (!refs0.isEmpty()) {
-      References refs = refs0;
+      QList<TranslatorMessage::Reference> refs = refs0;
       const Reference &ref = refs.takeFirst();
-      m_fileName = ref.fileName();
+
+      m_fileName   = ref.fileName();
       m_lineNumber = ref.lineNumber();
-      m_extraRefs = refs;
+      m_extraRefs  = refs;
+
    } else {
       clearReferences();
    }
 }
 
-TranslatorMessage::References TranslatorMessage::allReferences() const
+QList<TranslatorMessage::Reference> TranslatorMessage::allReferences() const
 {
-   References refs;
-   if (!m_fileName.isEmpty()) {
+   QList<TranslatorMessage::Reference> refs;
+
+   if (! m_fileName.isEmpty()) {
       refs.append(Reference(m_fileName, m_lineNumber));
       refs += m_extraRefs;
    }
+
    return refs;
 }
-
-static bool needs8BitHelper(const QString &ba)
-{
-   for (int i = ba.size(); --i >= 0; )
-      if (ba.at(i).unicode() >= 0x80) {
-         return true;
-      }
-   return false;
-}
-
-bool TranslatorMessage::needs8Bit() const
-{
-   //dump();
-   return needs8BitHelper(m_sourcetext)
-          || needs8BitHelper(m_comment)
-          || needs8BitHelper(m_context);
-}
-
 
 bool TranslatorMessage::hasExtra(const QString &key) const
 {
@@ -168,8 +146,3 @@ void TranslatorMessage::dump() const
          << "\nPlural            : " << m_plural
          << "\nExtra             : " << m_extra;
 }
-
-
-QT_END_NAMESPACE
-
-#endif // QT_NO_TRANSLATION

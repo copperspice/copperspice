@@ -2,8 +2,9 @@
  ! 
  ! Some notes to the DTD:
  !
- ! The location element is set as optional since it was introduced first in Qt 4.2.
- ! The userdata element is set as optional since it was introduced first in Qt 4.4.
+ ! The location element is set as optional 
+ ! The userdata element is set as optional
+ ! The vanished message type was introduced 
  !
   -->
 <!-- 
@@ -27,7 +28,7 @@
  !   extra-loc-blank
   -->
 <!ELEMENT extra-* %evilstring; >
-<!ELEMENT TS (defaultcodec?, extra-**, (context|message)+) > 
+<!ELEMENT TS (defaultcodec?, extra-**, dependencies?, (context|message)+) >
 <!ATTLIST TS
           version CDATA #IMPLIED
           sourcelanguage CDATA #IMPLIED
@@ -37,6 +38,9 @@
 <!ELEMENT context (name, comment?, (context|message)+) >
 <!ATTLIST context
           encoding CDATA #IMPLIED>
+<!ELEMENT dependencies (dependency+) >
+<!ATTLIST dependency
+          catalog CDATA #IMPLIED>
 <!ELEMENT name %evilstring; >
 <!-- This is "disambiguation" in the (new) API, or "msgctxt" in gettext speak -->
 <!ELEMENT comment %evilstring; >
@@ -85,7 +89,7 @@
  ! variants may not be yes if the message has numerus yes.
   -->
 <!ATTLIST translation
-          type (unfinished|obsolete) #IMPLIED
+          type (unfinished|vanished|obsolete) #IMPLIED
           variants (yes|no) "no">
 <!-- Deprecated. Use extra-* -->
 <!ELEMENT userdata (#PCDATA)* >
