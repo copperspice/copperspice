@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "translator.h"
+#include <translator.h>
 
 #include <qcoreapplication.h>
 #include <qdebug.h>
@@ -32,11 +32,6 @@
 
 #include <iostream>
 
-class LC
-{
-   Q_DECLARE_TR_FUNCTIONS(LConvert)
-};
-
 static int usage(const QStringList &args)
 {
    (void) args;
@@ -44,73 +39,69 @@ static int usage(const QStringList &args)
    QString loaders;
    QString line("    %1 - %2\n");
 
-   for (Translator::FileFormat format : Translator::registeredFileFormats()) {
+   for (const Translator::FileFormat &format : Translator::registeredFileFormats()) {
       loaders += line.formatArg(format.extension, -5).formatArg(format.description);
    }
 
-   std::cout << qPrintable(LC::tr("\nUsage:\n"
-            "    lconvert [options] <infile> [<infile>...]\n\n"
-            "lconvert is part of Linguist tool chain. It can be used as a\n"
-            "stand-alone tool to convert and filter translation data files.\n"
-            "The following file formats are supported:\n\n%1\n"
-            "If multiple input files are specified, they are merged with\n"
-            "translations from later files taking precedence.\n\n"
-            "Options:\n"
-            "    -h\n"
-            "    --help  Display this information and exit.\n\n"
-            "    -i <infile>\n"
-            "    --input-file <infile>\n"
-            "           Specify input file. Use if <infile> might start with a dash.\n"
-            "           This option can be used several times to merge inputs.\n"
-            "           May be '-' (standard input) for use in a pipe.\n\n"
-            "    -o <outfile>\n"
-            "    --output-file <outfile>\n"
-            "           Specify output file. Default is '-' (standard output).\n\n"
-            "    -if <informat>\n"
-            "    --input-format <format>\n"
-            "           Specify input format for subsequent <infile>s.\n"
-            "           The format is auto-detected from the file name and defaults to 'ts'.\n\n"
-            "    -of <outformat>\n"
-            "    --output-format <outformat>\n"
-            "           Specify output format. See -if.\n\n"
-            "    --input-codec <codec>\n"
-            "           Specify encoding for QM and PO input files. Default is 'Latin1'\n"
-            "           for QM and 'UTF-8' for PO files. UTF-8 is always tried as well for\n"
-            "           QM, corresponding to the possible use of the trUtf8() function.\n\n"
-            "    --output-codec <codec>\n"
-            "           Specify encoding for PO output files. Default is 'UTF-8'.\n\n"
-            "    --drop-tags <regexp>\n"
-            "           Drop named extra tags when writing TS or XLIFF files.\n"
-            "           May be specified repeatedly.\n\n"
-            "    --drop-translations\n"
-            "           Drop existing translations and reset the status to 'unfinished'.\n"
-            "           Note: this implies --no-obsolete.\n\n"
-            "    --source-language <language>[_<region>]\n"
-            "           Specify/override the language of the source strings. Defaults to\n"
-            "           POSIX if not specified and the file does not name it yet.\n\n"
-            "    --target-language <language>[_<region>]\n"
-            "           Specify/override the language of the translation.\n"
-            "           The target language is guessed from the file name if this option\n"
-            "           is not specified and the file contents name no language yet.\n\n"
-            "    --no-obsolete\n"
-            "           Drop obsolete messages.\n\n"
-            "    --no-finished\n"
-            "           Drop finished messages.\n\n"
-            "    --sort-contexts\n"
-            "           Sort contexts in output TS file alphabetically.\n\n"
-            "    --locations {absolute|relative|none}\n"
-            "           Override how source code references are saved in TS files.\n"
-            "           Default is absolute.\n\n"
-            "    --no-ui-lines\n"
-            "           Drop line numbers from references to UI files.\n\n"
-            "    --verbose\n"
-            "           be a bit more verbose\n\n"
-            "Long options can be specified with only one leading dash, too.\n\n"
-            "Return value:\n"
-            "    0 on success\n"
-            "    1 on command line parse failures\n"
-            "    2 on read failures\n"
-            "    3 on write failures\n").formatArg(loaders));
+   std::cout << csPrintable(QString(
+         "\nUsage:\n"
+         "    lconvert [options] <infile> [<infile>...]\n\n"
+         "lconvert is part of Linguist tool chain. It can be used as a\n"
+         "stand-alone tool to convert and filter translation data files.\n"
+         "The following file formats are supported:\n\n%1\n"
+         "If multiple input files are specified, they are merged with\n"
+         "translations from later files taking precedence.\n\n"
+         "Options:\n"
+         "    -h\n"
+         "    --help  Display this information and exit.\n\n"
+         "    -i <infile>\n"
+         "    --input-file <infile>\n"
+         "           Specify input file. Use if <infile> might start with a dash.\n"
+         "           This option can be used several times to merge inputs.\n"
+         "           May be '-' (standard input) for use in a pipe.\n\n"
+         "    -o <outfile>\n"
+         "    --output-file <outfile>\n"
+         "           Specify output file. Default is '-' (standard output).\n\n"
+         "    -if <informat>\n"
+         "    --input-format <format>\n"
+         "           Specify input format for subsequent <infile>s.\n"
+         "           The format is auto-detected from the file name and defaults to 'ts'.\n\n"
+         "    -of <outformat>\n"
+         "    --output-format <outformat>\n"
+         "           Specify output format. See -if.\n\n"
+         "    --drop-tags <regexp>\n"
+         "           Drop named extra tags when writing TS or XLIFF files.\n"
+         "           May be specified repeatedly.\n\n"
+         "    --drop-translations\n"
+         "           Drop existing translations and reset the status to 'unfinished'.\n"
+         "           Note: this implies --no-obsolete.\n\n"
+         "    --source-language <language>[_<region>]\n"
+         "           Specify/override the language of the source strings. Defaults to\n"
+         "           POSIX if not specified and the file does not name it yet.\n\n"
+         "    --target-language <language>[_<region>]\n"
+         "           Specify/override the language of the translation.\n"
+         "           The target language is guessed from the file name if this option\n"
+         "           is not specified and the file contents name no language yet.\n\n"
+         "    --no-obsolete\n"
+         "           Drop obsolete messages.\n\n"
+         "    --no-finished\n"
+         "           Drop finished messages.\n\n"
+         "    --sort-contexts\n"
+         "           Sort contexts in output TS file alphabetically.\n\n"
+         "    --locations {absolute|relative|none}\n"
+         "           Override how source code references are saved in TS files.\n"
+         "           Default is absolute.\n\n"
+         "    --no-ui-lines\n"
+         "           Drop line numbers from references to UI files.\n\n"
+         "    --verbose\n"
+         "           be a bit more verbose\n\n"
+         "Long options can be specified with only one leading dash, too.\n\n"
+         "Return value:\n"
+         "    0 on success\n"
+         "    1 on command line parse failures\n"
+         "    2 on read failures\n"
+         "    3 on write failures\n").formatArg(loaders));
+
    return 1;
 }
 
@@ -186,19 +177,7 @@ int main(int argc, char *argv[])
          }
          inFormat = args[i];
 
-      } else if (args[i] == "-input-codec") {
-         if (++i >= args.size()) {
-            return usage(args);
-         }
-         cd.m_codecForSource = args[i].toLatin1();
-
-      } else if (args[i] == "-output-codec") {
-         if (++i >= args.size()) {
-            return usage(args);
-         }
-         cd.m_outputCodec = args[i].toLatin1();
-
-      } else if (args[i] == "-drop-tag") {
+      } else if (args[i] == "-drop-tags") {
          if (++i >= args.size()) {
             return usage(args);
          }
@@ -291,35 +270,42 @@ int main(int argc, char *argv[])
       }
    }
 
-   if (!targetLanguage.isEmpty()) {
+   if (! targetLanguage.isEmpty()) {
       tr.setLanguageCode(targetLanguage);
    }
-   if (!sourceLanguage.isEmpty()) {
+
+   if (! sourceLanguage.isEmpty()) {
       tr.setSourceLanguageCode(sourceLanguage);
    }
+
    if (noObsolete) {
       tr.stripObsoleteMessages();
    }
+
    if (noFinished) {
       tr.stripFinishedMessages();
    }
+
    if (dropTranslations) {
       tr.dropTranslations();
    }
+
    if (noUiLines) {
       tr.dropUiLines();
    }
+
    if (locations != Translator::DefaultLocations) {
       tr.setLocationsType(locations);
    }
 
    tr.normalizeTranslations(cd);
-   if (!cd.errors().isEmpty()) {
-      std::cerr << qPrintable(cd.error());
+   if (! cd.errors().isEmpty()) {
+      std::cerr << csPrintable(cd.error());
       cd.clearErrors();
    }
-   if (!tr.save(outFileName, cd, outFormat)) {
-      std::cerr << qPrintable(cd.error());
+
+   if (! tr.save(outFileName, cd, outFormat)) {
+      std::cerr << csPrintable(cd.error());
       return 3;
    }
 

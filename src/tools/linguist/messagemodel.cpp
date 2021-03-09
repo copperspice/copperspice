@@ -243,32 +243,32 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
 
    QHash<QString, int> contexts;
 
-   m_srcWords = 0;
-   m_srcChars = 0;
+   m_srcWords    = 0;
+   m_srcChars    = 0;
    m_srcCharsSpc = 0;
 
    for (const TranslatorMessage & msg : tor.messages()) {
-      if (!contexts.contains(msg.context())) {
+      if (! contexts.contains(msg.context())) {
          contexts.insert(msg.context(), m_contextList.size());
          m_contextList.append(ContextItem(msg.context()));
       }
 
       ContextItem *c = contextItem(contexts.value(msg.context()));
-      if (msg.sourceText() == QLatin1String(ContextComment)) {
-         c->appendToComment(msg.comment());
-      } else {
-         MessageItem tmp(msg);
-         if (msg.type() == TranslatorMessage::Finished) {
-            c->incrementFinishedCount();
-         }
-         if (msg.type() != TranslatorMessage::Obsolete) {
-            doCharCounting(tmp.text(), m_srcWords, m_srcChars, m_srcCharsSpc);
-            doCharCounting(tmp.pluralText(), m_srcWords, m_srcChars, m_srcCharsSpc);
-            c->incrementNonobsoleteCount();
-         }
-         c->appendMessage(tmp);
-         ++m_numMessages;
+
+      MessageItem tmp(msg);
+
+      if (msg.type() == TranslatorMessage::Finished) {
+         c->incrementFinishedCount();
       }
+
+      if (msg.type() != TranslatorMessage::Obsolete) {
+         doCharCounting(tmp.text(), m_srcWords, m_srcChars, m_srcCharsSpc);
+         doCharCounting(tmp.pluralText(), m_srcWords, m_srcChars, m_srcCharsSpc);
+         c->incrementNonobsoleteCount();
+      }
+
+      c->appendMessage(tmp);
+      ++m_numMessages;
    }
 
    // Try to detect the correct language in the following order

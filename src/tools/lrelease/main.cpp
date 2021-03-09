@@ -35,11 +35,6 @@
 #include <qtextstream.h>
 #include <qlibraryinfo.h>
 
-class LR
-{
-   Q_DECLARE_TR_FUNCTIONS(LRelease)
-};
-
 static void printOut(const QString &out)
 {
    QTextStream stream(stdout);
@@ -54,32 +49,30 @@ static void printErr(const QString &out)
 
 static void printUsage()
 {
-   printOut(LR::tr(
-               "Usage:\n"
-               "    lrelease [options] project-file\n"
-               "    lrelease [options] ts-files [-qm qm-file]\n\n"
-               "lrelease is part of Qt's Linguist tool chain. It can be used as a\n"
-               "stand-alone tool to convert XML-based translations files in the TS\n"
-               "format into the 'compiled' QM format used by QTranslator objects.\n\n"
-               "Options:\n"
-               "    -help  Display this information and exit\n"
-               "    -idbased\n"
-               "           Use IDs instead of source strings for message keying\n"
-               "    -compress\n"
-               "           Compress the QM files\n"
-               "    -nounfinished\n"
-               "           Do not include unfinished translations\n"
-               "    -removeidentical\n"
-               "           If the translated text is the same as\n"
-               "           the source text, do not include the message\n"
-               "    -markuntranslated <prefix>\n"
-               "           If a message has no real translation, use the source text\n"
-               "           prefixed with the given string instead\n"
-               "    -silent\n"
-               "           Do not explain what is being done\n"
-               "    -version\n"
-               "           Display the version of lrelease and exit\n"
-            ));
+   printOut("Usage:\n"
+            "    lrelease [options] project-file\n"
+            "    lrelease [options] ts-files [-qm qm-file]\n\n"
+            "lrelease is part of Qt's Linguist tool chain. It can be used as a\n"
+            "stand-alone tool to convert XML-based translations files in the TS\n"
+            "format into the 'compiled' QM format used by QTranslator objects.\n\n"
+            "Options:\n"
+            "    -help  Display this information and exit\n"
+            "    -idbased\n"
+            "           Use IDs instead of source strings for message keying\n"
+            "    -compress\n"
+            "           Compress the QM files\n"
+            "    -nounfinished\n"
+            "           Do not include unfinished translations\n"
+            "    -removeidentical\n"
+            "           If the translated text is the same as\n"
+            "           the source text, do not include the message\n"
+            "    -markuntranslated <prefix>\n"
+            "           If a message has no real translation, use the source text\n"
+            "           prefixed with the given string instead\n"
+            "    -silent\n"
+            "           Do not explain what is being done\n"
+            "    -version\n"
+            "           Display the version of lrelease and exit\n");
 }
 
 static bool loadTsFile(Translator &tor, const QString &tsFileName, bool /* verbose */)
@@ -88,7 +81,7 @@ static bool loadTsFile(Translator &tor, const QString &tsFileName, bool /* verbo
    bool ok = tor.load(tsFileName, cd, "auto");
 
    if (!ok) {
-      printErr(LR::tr("lrelease error: %1").formatArg(cd.error()));
+      printErr(QString("lrelease error: %1").formatArg(cd.error()));
 
    } else {
       if (!cd.errors().isEmpty()) {
@@ -101,24 +94,24 @@ static bool loadTsFile(Translator &tor, const QString &tsFileName, bool /* verbo
    return ok;
 }
 
-static bool releaseTranslator(Translator &tor, const QString &qmFileName,
-                              ConversionData &cd, bool removeIdentical)
+static bool releaseTranslator(Translator &tor, const QString &qmFileName, ConversionData &cd, bool removeIdentical)
 {
    tor.reportDuplicates(tor.resolveDuplicates(), qmFileName, cd.isVerbose());
 
    if (cd.isVerbose()) {
-      printOut(LR::tr("Updating '%1'...\n").formatArg(qmFileName));
+      printOut(QString("Updating '%1'...\n").formatArg(qmFileName));
    }
+
    if (removeIdentical) {
       if (cd.isVerbose()) {
-         printOut(LR::tr("Removing translations equal to source text in '%1'...\n").formatArg(qmFileName));
+         printOut(QString("Removing translations equal to source text in '%1'...\n").formatArg(qmFileName));
       }
       tor.stripIdenticalSourceTranslations();
    }
 
    QFile file(qmFileName);
    if (! file.open(QIODevice::WriteOnly)) {
-      printErr(LR::tr("lrelease error: cannot create '%1': %2\n").formatArg(qmFileName).formatArg(file.errorString()));
+      printErr(QString("lrelease error: Unable to create '%1': %2\n").formatArg(qmFileName).formatArg(file.errorString()));
       return false;
    }
 
@@ -127,8 +120,8 @@ static bool releaseTranslator(Translator &tor, const QString &qmFileName,
    file.close();
 
    if (!ok) {
-      printErr(LR::tr("lrelease error: cannot save '%1': %2").formatArg(qmFileName).formatArg(cd.error()));
-   } else if (!cd.errors().isEmpty()) {
+      printErr(QString("lrelease error: Unable to save '%1': %2").formatArg(qmFileName).formatArg(cd.error()));
+   } else if (! cd.errors().isEmpty()) {
       printOut(cd.error());
    }
 
@@ -139,18 +132,18 @@ static bool releaseTranslator(Translator &tor, const QString &qmFileName,
 static bool releaseTsFile(const QString &tsFileName, ConversionData &cd, bool removeIdentical)
 {
    Translator tor;
-   if (!loadTsFile(tor, tsFileName, cd.isVerbose())) {
+   if (! loadTsFile(tor, tsFileName, cd.isVerbose())) {
       return false;
    }
 
    QString qmFileName = tsFileName;
-   for (const Translator::FileFormat & fmt: Translator::registeredFileFormats()) {
-      if (qmFileName.endsWith(QLatin1Char('.') + fmt.extension)) {
+   for (const Translator::FileFormat &fmt : Translator::registeredFileFormats()) {
+      if (qmFileName.endsWith('.' + fmt.extension)) {
          qmFileName.chop(fmt.extension.length() + 1);
          break;
       }
    }
-   qmFileName += QLatin1String(".qm");
+   qmFileName += ".qm";
 
    return releaseTranslator(tor, qmFileName, cd, removeIdentical);
 }
@@ -162,7 +155,8 @@ int main(int argc, char **argv)
 #ifndef Q_OS_WIN32
    QTranslator translator;
    QTranslator qtTranslator;
-   QString sysLocale = QLocale::system().name();
+
+   QString sysLocale   = QLocale::system().name();
    QString resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
 
    if (translator.load("linguist_" + sysLocale, resourceDir) && qtTranslator.load("qt_" + sysLocale, resourceDir)) {
@@ -192,41 +186,41 @@ int main(int argc, char **argv)
          cd.m_saveMode = SaveEverything;
          continue;
 
-      } else if (!strcmp(argv[i], "-removeidentical")) {
+      } else if (! strcmp(argv[i], "-removeidentical")) {
          removeIdentical = true;
          continue;
 
-      } else if (!strcmp(argv[i], "-nounfinished")) {
+      } else if (! strcmp(argv[i], "-nounfinished")) {
          cd.m_ignoreUnfinished = true;
          continue;
 
-      } else if (!strcmp(argv[i], "-markuntranslated")) {
+      } else if (! strcmp(argv[i], "-markuntranslated")) {
          if (i == argc - 1) {
             printUsage();
             return 1;
          }
          cd.m_unTrPrefix = QString::fromUtf8(argv[++i]);
 
-      } else if (!strcmp(argv[i], "-silent")) {
+      } else if (! strcmp(argv[i], "-silent")) {
          cd.m_verbose = false;
          continue;
 
-      } else if (!strcmp(argv[i], "-verbose")) {
+      } else if (! strcmp(argv[i], "-verbose")) {
          cd.m_verbose = true;
          continue;
 
-      } else if (!strcmp(argv[i], "-version")) {
-         printOut(LR::tr("lrelease version %1\n").formatArg(QLatin1String(CS_VERSION_STR)));
+      } else if (! strcmp(argv[i], "-version")) {
+         printOut(QString("lrelease version %1\n").formatArg(CS_VERSION_STR));
          return 0;
 
-      } else if (!strcmp(argv[i], "-qm")) {
+      } else if (! strcmp(argv[i], "-qm")) {
          if (i == argc - 1) {
             printUsage();
             return 1;
          }
          outputFile = QString::fromUtf8(argv[++i]);
 
-      } else if (!strcmp(argv[i], "-help")) {
+      } else if (! strcmp(argv[i], "-help")) {
          printUsage();
          return 0;
 
@@ -244,7 +238,7 @@ int main(int argc, char **argv)
       return 1;
    }
 
-   for (const QString & inputFile : inputFiles) {
+   for (const QString &inputFile : inputFiles) {
 
       if (outputFile.isEmpty()) {
          if (!releaseTsFile(inputFile, cd, removeIdentical)) {
@@ -256,7 +250,6 @@ int main(int argc, char **argv)
             return 1;
          }
       }
-
    }
 
    if (! outputFile.isEmpty()) {
