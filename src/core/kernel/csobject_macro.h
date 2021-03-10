@@ -95,19 +95,9 @@ class cs_number<0>
 
 #endif // doxypress
 
-
-#ifdef QT_NO_TEXTCODEC
 # define CS_TR_FUNCTIONS \
    static inline QString tr(const char *s, const char *c = nullptr, int n = -1) \
       { return staticMetaObject().tr(s, c, n); }
-#else
-# define CS_TR_FUNCTIONS \
-   static inline QString tr(const char *s, const char *c = nullptr, int n = -1) \
-      { return staticMetaObject().tr(s, c, n); } \
-   static inline QString trUtf8(const char *s, const char *c = nullptr, int n = -1) \
-      { return staticMetaObject().trUtf8(s, c, n); }
-#endif
-
 
 // ** cs_object
 #define CS_OBJECT(classNameX)         \

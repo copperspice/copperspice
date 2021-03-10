@@ -462,13 +462,7 @@ int QMetaObject::propertyOffset() const
 QString QMetaObject::tr(const char *text, const char *notes, int n) const
 {
    const char *context = csPrintable(className());
-   return QCoreApplication::translate(context, text, notes, QCoreApplication::CodecForTr, n);
-}
-
-QString QMetaObject::trUtf8(const char *text, const char *notes, int n) const
-{
-   const char *context = csPrintable(className());
-   return QCoreApplication::translate(context, text, notes, QCoreApplication::UnicodeUTF8, n);
+   return QCoreApplication::translate(context, text, notes, n);
 }
 
 QMetaProperty QMetaObject::userProperty() const

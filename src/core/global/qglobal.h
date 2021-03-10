@@ -1037,11 +1037,8 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 #define Q_Q(Class) Class * const q = q_func()
 
 #define QT_TR_NOOP(x) (x)
-#define QT_TR_NOOP_UTF8(x) (x)
 #define QT_TRANSLATE_NOOP(scope, x) (x)
-#define QT_TRANSLATE_NOOP_UTF8(scope, x) (x)
 #define QT_TRANSLATE_NOOP3(scope, x, comment) {x, comment}
-#define QT_TRANSLATE_NOOP3_UTF8(scope, x, comment) {x, comment}
 
 #ifndef QT_NO_TRANSLATION
 
