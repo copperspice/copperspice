@@ -626,9 +626,8 @@ JSC::JSValue JSC_HOST_CALL functionQsTranslate(JSC::ExecState *exec, JSC::JSObje
    JSC::UString result;
 
    // pass the encoding
-   result = QCoreApplication::translate(context.UTF8String().c_str(),
-         text.UTF8String().c_str(), comment.UTF8String().c_str(),
-         QCoreApplication::UnicodeUTF8, n);
+   result = QCoreApplication::translate(context.UTF8String().c_str(), text.UTF8String().c_str(),
+            comment.UTF8String().c_str(), n);
 
    return JSC::jsString(exec, result);
 }
@@ -688,10 +687,8 @@ JSC::JSValue JSC_HOST_CALL functionQsTr(JSC::ExecState *exec, JSC::JSObject *, J
 
    JSC::UString result;
 
-   result = QCoreApplication::translate(context.UTF8String().c_str(),
-         text.UTF8String().c_str(),
-         comment.UTF8String().c_str(),
-         QCoreApplication::UnicodeUTF8, n);
+   result = QCoreApplication::translate(context.UTF8String().c_str(), text.UTF8String().c_str(),
+            comment.UTF8String().c_str(), n);
 
    return JSC::jsString(exec, result);
 }

@@ -922,7 +922,7 @@ void FrameLoaderClientQt::committedLoad(WebCore::DocumentLoader* loader, const c
 WebCore::ResourceError FrameLoaderClientQt::cancelledError(const WebCore::ResourceRequest& request)
 {
     ResourceError error = ResourceError("QtNetwork", QNetworkReply::OperationCanceledError, request.url().prettyURL(),
-            QCoreApplication::translate("QWebFrame", "Request canceled", 0, QCoreApplication::UnicodeUTF8));
+            QCoreApplication::translate("QWebFrame", "Request canceled", nullptr));
     error.setIsCancellation(true);
     return error;
 }
@@ -942,38 +942,38 @@ enum {
 WebCore::ResourceError FrameLoaderClientQt::blockedError(const WebCore::ResourceRequest& request)
 {
     return ResourceError("WebKitErrorDomain", WebKitErrorCannotUseRestrictedPort, request.url().prettyURL(),
-            QCoreApplication::translate("QWebFrame", "Request blocked", 0, QCoreApplication::UnicodeUTF8));
+            QCoreApplication::translate("QWebFrame", "Request blocked", nullptr));
 }
 
 
 WebCore::ResourceError FrameLoaderClientQt::cannotShowURLError(const WebCore::ResourceRequest& request)
 {
     return ResourceError("WebKitErrorDomain", WebKitErrorCannotShowURL, request.url().string(),
-            QCoreApplication::translate("QWebFrame", "Cannot show URL", 0, QCoreApplication::UnicodeUTF8));
+            QCoreApplication::translate("QWebFrame", "Cannot show URL", nullptr));
 }
 
 WebCore::ResourceError FrameLoaderClientQt::interruptForPolicyChangeError(const WebCore::ResourceRequest& request)
 {
     return ResourceError("WebKitErrorDomain", WebKitErrorFrameLoadInterruptedByPolicyChange, request.url().string(),
-            QCoreApplication::translate("QWebFrame", "Frame load interrupted by policy change", 0, QCoreApplication::UnicodeUTF8));
+            QCoreApplication::translate("QWebFrame", "Frame load interrupted by policy change", nullptr));
 }
 
 WebCore::ResourceError FrameLoaderClientQt::cannotShowMIMETypeError(const WebCore::ResourceResponse& response)
 {
     return ResourceError("WebKitErrorDomain", WebKitErrorCannotShowMIMEType, response.url().string(),
-            QCoreApplication::translate("QWebFrame", "Cannot show mimetype", 0, QCoreApplication::UnicodeUTF8));
+            QCoreApplication::translate("QWebFrame", "Cannot show mimetype", nullptr));
 }
 
 WebCore::ResourceError FrameLoaderClientQt::fileDoesNotExistError(const WebCore::ResourceResponse& response)
 {
     return ResourceError("QtNetwork", QNetworkReply::ContentNotFoundError, response.url().string(),
-            QCoreApplication::translate("QWebFrame", "File does not exist", 0, QCoreApplication::UnicodeUTF8));
+            QCoreApplication::translate("QWebFrame", "File does not exist", nullptr));
 }
 
 WebCore::ResourceError FrameLoaderClientQt::pluginWillHandleLoadError(const WebCore::ResourceResponse& response)
 {
     return ResourceError("WebKit", WebKitErrorPluginWillHandleLoad, response.url().string(),
-                         QCoreApplication::translate("QWebFrame", "Loading is handled by the media engine", 0, QCoreApplication::UnicodeUTF8));
+                         QCoreApplication::translate("QWebFrame", "Loading is handled by the media engine", nullptr));
 }
 
 bool FrameLoaderClientQt::shouldFallBack(const WebCore::ResourceError&)

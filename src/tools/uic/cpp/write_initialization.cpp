@@ -2668,11 +2668,6 @@ QString WriteInitialization::trCall(const QString &str, const QString &commentHi
    result += ", ";
    result += comment;
 
-   if (m_option.translateFunction.isEmpty()) {
-      result += ", ";
-      result += "QApplication::UnicodeUTF8";
-   }
-
    result += ')';
 
    return result;
