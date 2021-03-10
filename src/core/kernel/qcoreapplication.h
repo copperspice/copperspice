@@ -142,6 +142,10 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static void removeTranslator(QTranslator *messageFile);
 #endif
 
+   // interim usage
+   static QString translate(const char *context, const char *key, const char *disambiguation, int n) {
+      return translate(context, key, disambiguation, Encoding::UnicodeUTF8, n);
+   }
    enum Encoding { CodecForTr, UnicodeUTF8, DefaultCodec = CodecForTr };
 
    static QString translate(const char *context, const char *key, const char *disambiguation = nullptr,
