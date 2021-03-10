@@ -21,35 +21,27 @@
 *
 ***********************************************************************/
 
-#include "lupdate.h"
-
+#include <lupdate.h>
 #include <translator.h>
 
-#include <QCoreApplication>
-#include <QDebug>
-#include <QFile>
-#include <QString>
-
-#include <QXmlAttributes>
-#include <QXmlDefaultHandler>
-#include <QXmlLocator>
-#include <QXmlParseException>
-
-class LU
-{
-   Q_DECLARE_TR_FUNCTIONS(LUpdate)
-};
+#include <qcoreapplication.h>
+#include <qdebug.h>
+#include <qfile.h>
+#include <qstring.h>
+#include <qxmlattributes.h>
+#include <qxmldefaulthandler.h>
+#include <qxmllocator.h>
+#include <qxmlparseexception.h>
 
 class UiReader : public QXmlDefaultHandler
 {
  public:
    UiReader(Translator &translator, ConversionData &cd)
-      : m_translator(translator), m_cd(cd), m_lineNumber(-1), m_isTrString(false),
-        m_needUtf8(translator.codecName() != "UTF-8") {
+      : m_translator(translator), m_cd(cd), m_lineNumber(-1), m_isTrString(false), m_insideStringList(false) {
    }
 
    bool startElement(const QString &namespaceURI, const QString &localName,
-      const QString &qName, const QXmlAttributes &atts);
+                     const QString &qName, const QXmlAttributes &atts);
 
    bool endElement(const QString &namespaceURI, const QString &localName, const QString &qName);
    bool characters(const QString &ch);
@@ -61,6 +53,7 @@ class UiReader : public QXmlDefaultHandler
 
  private:
    void flush();
+   void readTranslationAttributes(const QXmlAttributes &atts);
 
    Translator &m_translator;
    ConversionData &m_cd;
@@ -73,31 +66,27 @@ class UiReader : public QXmlDefaultHandler
    QString m_accum;
    int m_lineNumber;
    bool m_isTrString;
-   bool m_needUtf8;
+   bool m_insideStringList;
 };
 
 bool UiReader::startElement(const QString &namespaceURI, const QString &localName,
-            const QString &qName, const QXmlAttributes &atts)
+                            const QString &qName, const QXmlAttributes &atts)
 {
-   Q_UNUSED(namespaceURI);
-   Q_UNUSED(localName);
+   (void) namespaceURI;
+   (void) localName;
 
    if (qName == "string") {
       flush();
 
-      if (atts.value("notr").isEmpty() || atts.value("notr") != "true") {
-         m_isTrString = true;
-
-         m_comment      = atts.value("comment");
-         m_extracomment = atts.value("extracomment");
-
-         if (! m_cd.m_noUiLines) {
-            m_lineNumber = m_locator->lineNumber();
-         }
-
-      } else {
-         m_isTrString = false;
+      if (! m_insideStringList) {
+         readTranslationAttributes(atts);
       }
+
+   } else if (qName == "stringlist") {
+      flush();
+      m_insideStringList = true;
+      readTranslationAttributes(atts);
+
    }
 
    m_accum.clear();
@@ -125,6 +114,8 @@ bool UiReader::endElement(const QString &namespaceURI, const QString &localName,
    } else if (qName == "comment") {
       m_comment = m_accum;
       flush();
+   } else if (qName == "stringlist") {
+      m_insideStringList = false;
 
    } else {
       flush();
@@ -142,8 +133,8 @@ bool UiReader::characters(const QString &ch)
 
 bool UiReader::fatalError(const QXmlParseException &exception)
 {
-   QString msg = LU::tr("XML error: Parse error at line %1, column %2 (%3).")
-      .formatArg(exception.lineNumber()).formatArg(exception.columnNumber()).formatArg(exception.message());
+   QString msg = QString("XML error: Parse error at line %1, column %2 (%3).")
+                 .formatArg(exception.lineNumber()).formatArg(exception.columnNumber()).formatArg(exception.message());
 
    m_cd.appendError(msg);
 
@@ -155,33 +146,50 @@ void UiReader::flush()
    if (! m_context.isEmpty() && !m_source.isEmpty()) {
 
       TranslatorMessage msg(m_context, m_source, m_comment, QString(),
-                  m_cd.m_sourceFileName, m_lineNumber, QStringList());
+                            m_cd.m_sourceFileName, m_lineNumber, QStringList());
 
       msg.setExtraComment(m_extracomment);
-
-      if (m_needUtf8 && msg.needs8Bit()) {
-         msg.setUtf8(true);
-      }
-      m_translator.extend(msg);
+      m_translator.extend(msg, m_cd);
    }
 
    m_source.clear();
-   m_comment.clear();
-   m_extracomment.clear();
+
+   if (! m_insideStringList) {
+      m_comment.clear();
+      m_extracomment.clear();
+   }
 }
 
+void UiReader::readTranslationAttributes(const QXmlAttributes &atts)
+{
+   const QString notr = atts.value("notr");
+
+   if (notr.isEmpty() || notr != "true") {
+      m_isTrString = true;
+      m_comment = atts.value("comment");
+      m_extracomment = atts.value("extracomment");
+
+      if (! m_cd.m_noUiLines) {
+         m_lineNumber = m_locator->lineNumber();
+      }
+
+   } else {
+      m_isTrString = false;
+   }
+}
 bool loadUI(Translator &translator, const QString &filename, ConversionData &cd)
 {
    cd.m_sourceFileName = filename;
    QFile file(filename);
 
    if (! file.open(QIODevice::ReadOnly)) {
-      cd.appendError(LU::tr("Unable to open %1: %2").formatArgs(filename, file.errorString()));
+      cd.appendError(QString("Unable to open %1: %2").formatArgs(filename, file.errorString()));
       return false;
    }
 
    QXmlInputSource in(&file);
    QXmlSimpleReader reader;
+
    reader.setFeature("http://xml.org/sax/features/namespaces", false);
    reader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
    reader.setFeature("http://copperspice.com/xml/features/report-whitespace-only-CharData", false);
@@ -193,11 +201,11 @@ bool loadUI(Translator &translator, const QString &filename, ConversionData &cd)
    bool result = reader.parse(in);
 
    if (! result) {
-      cd.appendError(LU::tr("Parse error in UI file"));
+      cd.appendError("Parse error in UI file");
    }
 
-   reader.setContentHandler(0);
-   reader.setErrorHandler(0);
+   reader.setContentHandler(nullptr);
+   reader.setErrorHandler(nullptr);
 
    return result;
 }

@@ -50,13 +50,16 @@ enum UpdateOption {
 Q_DECLARE_FLAGS(UpdateOptions, UpdateOption)
 Q_DECLARE_OPERATORS_FOR_FLAGS(UpdateOptions)
 
-Translator merge(const Translator &tor, const Translator &virginTor, UpdateOptions options, QString &err);
+Translator merge(const Translator &tor, const Translator &virginTor, const QList<Translator> &aliens,
+                 UpdateOptions options, QString &err);
 
-void fetchtrInlinedCpp(const QString &in, Translator &translator, const QString &context);
 void loadCPP(Translator &translator, const QStringList &filenames, ConversionData &cd);
 bool loadJava(Translator &translator, const QString &filename, ConversionData &cd);
-bool loadQScript(Translator &translator, const QString &filename, ConversionData &cd);
 bool loadUI(Translator &translator, const QString &filename, ConversionData &cd);
+
+#ifdef QT_QML
+bool loadQScript(Translator &translator, const QString &filename, ConversionData &cd);
 bool loadQml(Translator &translator, const QString &filename, ConversionData &cd);
+#endif
 
 #endif
