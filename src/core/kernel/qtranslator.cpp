@@ -24,8 +24,6 @@
 #include <qplatformdefs.h>
 #include <qtranslator.h>
 
-#ifndef QT_NO_TRANSLATION
-
 #include <qfileinfo.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -882,4 +880,3 @@ bool QTranslator::isEmpty() const
           !d->offsetArray && !d->contextArray;
 }
 
-#endif // QT_NO_TRANSLATION

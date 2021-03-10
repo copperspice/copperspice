@@ -561,8 +561,6 @@ JSC::JSValue JSC_HOST_CALL functionVersion(JSC::ExecState *exec, JSC::JSObject *
    return JSC::JSValue(exec, 1);
 }
 
-#ifndef QT_NO_TRANSLATION
-
 static JSC::JSValue JSC_HOST_CALL functionQsTranslate(JSC::ExecState *, JSC::JSObject *, JSC::JSValue,
    const JSC::ArgList &);
 static JSC::JSValue JSC_HOST_CALL functionQsTranslateNoOp(JSC::ExecState *, JSC::JSObject *, JSC::JSValue,
@@ -727,7 +725,6 @@ JSC::JSValue JSC_HOST_CALL functionQsTrIdNoOp(JSC::ExecState *, JSC::JSObject *,
    }
    return args.at(0);
 }
-#endif // QT_NO_TRANSLATION
 
 static JSC::JSValue JSC_HOST_CALL stringProtoFuncArg(JSC::ExecState *, JSC::JSObject *, JSC::JSValue,
    const JSC::ArgList &);
@@ -3406,7 +3403,6 @@ void QScriptEngine::installTranslatorFunctions(const QScriptValue &object)
    }
    //    unsigned attribs = JSC::DontEnum;
 
-#ifndef QT_NO_TRANSLATION
    JSC::asObject(jscObject)->putDirectFunction(exec, new (exec)JSC::NativeFunctionWrapper(exec,
          glob->prototypeFunctionStructure(), 5, JSC::Identifier(exec, "qsTranslate"), QScript::functionQsTranslate));
    JSC::asObject(jscObject)->putDirectFunction(exec, new (exec)JSC::NativeFunctionWrapper(exec,
@@ -3419,7 +3415,6 @@ void QScriptEngine::installTranslatorFunctions(const QScriptValue &object)
          glob->prototypeFunctionStructure(), 1, JSC::Identifier(exec, "qsTrId"), QScript::functionQsTrId));
    JSC::asObject(jscObject)->putDirectFunction(exec, new (exec)JSC::NativeFunctionWrapper(exec,
          glob->prototypeFunctionStructure(), 1, JSC::Identifier(exec, "QT_TRID_NOOP"), QScript::functionQsTrIdNoOp));
-#endif
 
    glob->stringPrototype()->putDirectFunction(exec, new (exec)JSC::NativeFunctionWrapper(exec,
          glob->prototypeFunctionStructure(), 1, JSC::Identifier(exec, "arg"), QScript::stringProtoFuncArg));

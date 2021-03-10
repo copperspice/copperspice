@@ -1320,8 +1320,6 @@ void QCoreApplication::quit()
    exit(0);
 }
 
-#ifndef QT_NO_TRANSLATION
-
 void QCoreApplication::installTranslator(QTranslator *translationFile)
 {
    if (! translationFile) {
@@ -1335,11 +1333,9 @@ void QCoreApplication::installTranslator(QTranslator *translationFile)
    QCoreApplicationPrivate *d = self->d_func();
    d->translators.prepend(translationFile);
 
-#ifndef QT_NO_TRANSLATION_BUILDER
    if (translationFile->isEmpty()) {
       return;
    }
-#endif
 
    QEvent ev(QEvent::LanguageChange);
    QCoreApplication::sendEvent(self, &ev);
@@ -1446,8 +1442,6 @@ bool QCoreApplicationPrivate::isTranslatorInstalled(QTranslator *translator)
    return QCoreApplication::self
           && QCoreApplication::self->d_func()->translators.contains(translator);
 }
-
-#endif //QT_NO_TRANSLATE
 
 QString QCoreApplication::applicationDirPath()
 {

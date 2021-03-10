@@ -1028,7 +1028,7 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
     inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(Dptr); } \
     friend class Class##Private;
 
-#define Q_DECLARE_PUBLIC(Class)                                     \
+#define Q_DECLARE_PUBLIC(Class)  \
     inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
     inline const Class* q_func() const { return static_cast<const Class *>(q_ptr); } \
     friend class Class;
@@ -1040,16 +1040,11 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 #define QT_TRANSLATE_NOOP(scope, x) (x)
 #define QT_TRANSLATE_NOOP3(scope, x, comment) {x, comment}
 
-#ifndef QT_NO_TRANSLATION
+#define QT_TRID_NOOP(id) id
 
-// Defined in qcoreapplication.cpp
-// better name for qTrId() is reserved for an upcoming function which would return a more
-// more powerful QStringFormatter instead of a QString
-
+// defined in qcoreapplication.cpp
 Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
 
-#define QT_TRID_NOOP(id) id
-#endif
 
 // copy & move constructor and copy & move assignment operator = delete
 #define Q_DISABLE_COPY(ClassName)           \

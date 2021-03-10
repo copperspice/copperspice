@@ -28,8 +28,6 @@
 #include <qbytearray.h>
 #include <qscopedpointer.h>
 
-#ifndef QT_NO_TRANSLATION
-
 class QLocale;
 class QTranslatorPrivate;
 
@@ -62,7 +60,5 @@ class Q_CORE_EXPORT QTranslator : public QObject
  private:
    Q_DECLARE_PRIVATE(QTranslator)
 };
-
-#endif // QT_NO_TRANSLATION
 
 #endif

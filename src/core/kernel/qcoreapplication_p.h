@@ -93,10 +93,8 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
 
    static QString qmljsDebugArguments();          // access arguments from other libraries
 
-#ifndef QT_NO_TRANSLATION
    QTranslatorList translators;
    static bool isTranslatorInstalled(QTranslator *translator);
-#endif
 
    QCoreApplicationPrivate::Type application_type;
 

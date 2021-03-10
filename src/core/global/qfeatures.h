@@ -247,9 +247,6 @@
 // QToolTip
 //#define QT_NO_TOOLTIP
 
-// Translation
-//#define QT_NO_TRANSLATION
-
 // QUdpSocket
 //#define QT_NO_UDPSOCKET
 
@@ -414,11 +411,6 @@
 // OdfWriter
 #if ! defined(QT_NO_TEXTODFWRITER) && (0)   // removed test which was always false
 #define QT_NO_TEXTODFWRITER
-#endif
-
-// Translation (UTF-8 representation)
-#if !defined(QT_NO_TRANSLATION_UTF8) && (defined(QT_NO_TRANSLATION) || defined(QT_NO_TEXTCODEC))
-#define QT_NO_TRANSLATION_UTF8
 #endif
 
 // QUndoGroup

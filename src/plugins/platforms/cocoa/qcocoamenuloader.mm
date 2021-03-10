@@ -293,8 +293,6 @@ class QCFString;
 
 - (void)qtTranslateApplicationMenu
 {
-
-#ifndef QT_NO_TRANSLATION
    [servicesItem setTitle: QCFString::toNSString(qt_mac_applicationmenu_string(0))];
    [hideItem setTitle: QCFString::toNSString(qt_mac_applicationmenu_string(1).formatArg(qt_mac_applicationName()))];
    [hideAllOthersItem setTitle: QCFString::toNSString(qt_mac_applicationmenu_string(2))];
@@ -302,7 +300,6 @@ class QCFString;
    [preferencesItem setTitle: QCFString::toNSString(qt_mac_applicationmenu_string(4))];
    [quitItem setTitle: QCFString::toNSString(qt_mac_applicationmenu_string(5).formatArg(qt_mac_applicationName()))];
    [aboutItem setTitle: QCFString::toNSString(qt_mac_applicationmenu_string(6).formatArg(qt_mac_applicationName()))];
-#endif
 }
 
 - (IBAction)qtDispatcherToQPAMenuItem: (id)sender

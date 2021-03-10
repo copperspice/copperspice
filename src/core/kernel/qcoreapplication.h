@@ -137,10 +137,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static void addLibraryPath(const QString &);
    static void removeLibraryPath(const QString &);
 
-#ifndef QT_NO_TRANSLATION
    static void installTranslator(QTranslator *messageFile);
    static void removeTranslator(QTranslator *messageFile);
-#endif
 
    // interim usage
    static QString translate(const char *context, const char *key, const char *disambiguation, int n) {
