@@ -87,16 +87,7 @@ function(FUNCTION_GENERATE_RESOURCES LIB_APP)
       get_filename_component(resource_ext  ${resource} EXT)
       get_filename_component(resource_name ${resource} NAME_WE)
 
-      if(resource_ext STREQUAL ".ui")
-         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/ui_${resource_name}.h)
-
-         add_custom_command(
-            OUTPUT ${resource_out}
-            COMMAND uic${TOOLS_SUFFIX} "${resource}" -o "${resource_out}"
-            MAIN_DEPENDENCY "${resource}"
-         )
-
-      elseif(resource_ext STREQUAL ".qrc")
+      if(resource_ext STREQUAL ".qrc")
          set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/qrc_${resource_name}.cpp)
          set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/qrc_{$resource_name}.cpp PROPERTIES GENERATED 1)
 
@@ -106,8 +97,27 @@ function(FUNCTION_GENERATE_RESOURCES LIB_APP)
             MAIN_DEPENDENCY ${resource}
          )
 
+      elseif(resource_ext STREQUAL ".ts")
+         set(resource_out ${CMAKE_CURRENT_SOURCE_DIR}/${resource_name}.qm)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND lrelease${TOOLS_SUFFIX} "${resource}" -qm "${resource_out}"
+            MAIN_DEPENDENCY ${resource}
+         )
+
+      elseif(resource_ext STREQUAL ".ui")
+         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/ui_${resource_name}.h)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND uic${TOOLS_SUFFIX} "${resource}" -o "${resource_out}"
+            MAIN_DEPENDENCY ${resource}
+         )
+
          set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
-     endif()
+
+      endif()
 
    endforeach()
 endfunction()
