@@ -44,6 +44,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <optional>
 #include <type_traits>
 
 #define QT_PREPEND_NAMESPACE(name)       ::name
@@ -1043,7 +1044,7 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 #define QT_TRID_NOOP(id) id
 
 // defined in qcoreapplication.cpp
-Q_CORE_EXPORT QString qtTrId(const char *id, int n = -1);
+Q_CORE_EXPORT QString qtTrId(const char *id, std::optional<int> n = std::optional<int>());
 
 
 // copy & move constructor and copy & move assignment operator = delete

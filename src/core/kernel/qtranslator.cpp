@@ -21,32 +21,36 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
 #include <qtranslator.h>
 
-#include <qfileinfo.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <qplatformdefs.h>
+#include <qalgorithms.h>
 #include <qcoreapplication.h>
-#include <qcoreapplication_p.h>
 #include <qdatastream.h>
 #include <qdir.h>
+#include <qendian.h>
 #include <qfile.h>
-#include <qmap.h>
-#include <qalgorithms.h>
+#include <qfileinfo.h>
 #include <qhash.h>
-#include <qtranslator_p.h>
 #include <qlocale.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qmap.h>
 #include <qresource.h>
 
+#include <qcoreapplication_p.h>
+#include <qtranslator_p.h>
+
 #if defined(Q_OS_UNIX)
+
 #define QT_USE_MMAP
 #include <qcore_unix_p.h>
 #endif
 
 // most of the headers below are already included in qplatformdefs.h
-// also this lacks Large File support but that's probably irrelevant
+// this lacks Large File support but that's probably irrelevant
 #if defined(QT_USE_MMAP)
+
 // for mmap
 #include <sys/mman.h>
 #include <errno.h>
@@ -55,8 +59,8 @@
 #include <stdlib.h>
 
 enum Tag { Tag_End = 1, Tag_SourceText16, Tag_Translation, Tag_Context16, Tag_Obsolete1,
-           Tag_SourceText, Tag_Context, Tag_Comment, Tag_Obsolete2
-         };
+           Tag_SourceText, Tag_Context, Tag_Comment, Tag_Obsolete2 };
+
 /*
 $ mcookie
 3cb86418caef9c95cd211cbf60a1bddd
@@ -70,48 +74,115 @@ static const uchar magic[MagicLength] = {
    0xcd, 0x21, 0x1c, 0xbf, 0x60, 0xa1, 0xbd, 0xdd
 };
 
-static bool match(const uchar *found, const char *target, uint len)
+static bool match(const uchar *found, uint foundLen, const char *target, uint targetLen)
 {
    // catch the case if \a found has a zero-terminating symbol and \a len includes it.
    // (normalize it to be without the zero-terminating symbol)
-   if (len > 0 && found[len - 1] == '\0') {
-      --len;
+   if (foundLen > 0 && found[foundLen - 1] == '\0') {
+      --foundLen;
    }
-   return (memcmp(found, target, len) == 0 && target[len] == '\0');
+
+   return ((targetLen == foundLen) && memcmp(found, target, foundLen) == 0);
+}
+
+static void elfHash_start(const char *name, uint &h)
+{
+   const uchar *k;
+   uint g;
+
+
+   k = (const uchar *) name;
+
+   while (*k) {
+      h = (h << 4) + *k++;
+
+      if ((g = (h & 0xf0000000)) != 0) {
+         h ^= g >> 24;
+      }
+
+      h &= ~g;
+   }
+
+}
+
+static void elfHash_finish(uint &h)
+{
+   if (h == 0) {
+      h = 1;
+   }
 }
 
 static uint elfHash(const char *name)
 {
-   const uchar *k;
-   uint h = 0;
-   uint g;
+   uint hash = 0;
 
-   if (name) {
-      k = (const uchar *) name;
-      while (*k) {
-         h = (h << 4) + *k++;
-         if ((g = (h & 0xf0000000)) != 0) {
-            h ^= g >> 24;
-         }
-         h &= ~g;
-      }
-   }
-   if (!h) {
-      h = 1;
-   }
-   return h;
+   elfHash_start(name, hash);
+   elfHash_finish(hash);
+
+   return hash;
 }
 
-static int numerusHelper(int n, const uchar *rules, int rulesSize)
+static bool isValidNumerusRules(const uchar *rules, uint rulesSize)
 {
-#define CHECK_RANGE \
-    do { \
-        if (i >= rulesSize) \
-            return -1; \
-    } while (false)
+   // Disabled computation of maximum numerus return value
+   // quint32 numerus = 0;
 
-   int result = 0;
-   int i = 0;
+   if (rulesSize == 0) {
+     return true;
+   }
+
+   quint32 offset = 0;
+
+   do {
+     uchar opcode = rules[offset];
+     uchar op = opcode & Q_OP_MASK;
+
+     if (opcode & 0x80) {
+         return false; // Bad op
+     }
+
+     ++offset;
+
+     if (offset == rulesSize) {
+         return false; // Missing operand
+     }
+
+     // right operand
+     ++offset;
+
+     switch (op) {
+     case Q_EQ:
+        case Q_LT:
+        case Q_LEQ:
+            break;
+
+        case Q_BETWEEN:
+            if (offset != rulesSize) {
+                // third operand
+                ++offset;
+                break;
+            }
+            return false; // Missing operand
+
+        default:
+            return false; // Bad op (0)
+     }
+
+     if (offset == rulesSize) {
+         return true;
+     }
+
+   } while (((rules[offset] == Q_AND) || (rules[offset] == Q_OR) ||
+         (rules[offset] == Q_NEWRULE)) && ++offset != rulesSize);
+
+   // Bad op
+   return false;
+}
+
+static uint numerusHelper(int n, const uchar *rules, uint rulesSize)
+{
+   uint result = 0;
+   uint i = 0;
 
    if (rulesSize == 0) {
       return 0;
@@ -126,14 +197,16 @@ static int numerusHelper(int n, const uchar *rules, int rulesSize)
          for (;;) {
             bool truthValue = true;
 
-            CHECK_RANGE;
             int opcode = rules[i++];
 
             int leftOperand = n;
+
             if (opcode & Q_MOD_10) {
                leftOperand %= 10;
+
             } else if (opcode & Q_MOD_100) {
                leftOperand %= 100;
+
             } else if (opcode & Q_LEAD_1000) {
                while (leftOperand >= 1000) {
                   leftOperand /= 1000;
@@ -142,24 +215,24 @@ static int numerusHelper(int n, const uchar *rules, int rulesSize)
 
             int op = opcode & Q_OP_MASK;
 
-            CHECK_RANGE;
             int rightOperand = rules[i++];
 
             switch (op) {
-               default:
-                  return -1;
                case Q_EQ:
                   truthValue = (leftOperand == rightOperand);
                   break;
+
                case Q_LT:
                   truthValue = (leftOperand < rightOperand);
                   break;
+
                case Q_LEQ:
                   truthValue = (leftOperand <= rightOperand);
                   break;
+
                case Q_BETWEEN:
                   int bottom = rightOperand;
-                  CHECK_RANGE;
+
                   int top = rules[i++];
                   truthValue = (leftOperand >= bottom && leftOperand <= top);
             }
@@ -194,11 +267,9 @@ static int numerusHelper(int n, const uchar *rules, int rulesSize)
          return result;
       }
 
-      if (rules[i++] != Q_NEWRULE) {
-         break;
-      }
+      ++i;
    }
-   return -1;
+   return 0;
 }
 
 class QTranslatorPrivate
@@ -206,22 +277,29 @@ class QTranslatorPrivate
    Q_DECLARE_PUBLIC(QTranslator)
 
  public:
-   enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69, NumerusRules = 0x88 };
+   enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69, NumerusRules = 0x88, Dependencies = 0x96 };
 
    QTranslatorPrivate()
       : used_mmap(0), unmapPointer(nullptr), unmapLength(0), resource(nullptr),
         messageArray(nullptr), offsetArray(nullptr), contextArray(nullptr), numerusRulesArray(nullptr),
-        messageLength(0), offsetLength(0), contextLength(0), numerusRulesLength(0) {}
+        messageLength(0), offsetLength(0), contextLength(0), numerusRulesLength(0)
+   {
+   }
 
-   virtual ~QTranslatorPrivate() {}
+   virtual ~QTranslatorPrivate()
+   {
+   }
 
-   // for mmap'ed files, this is what needs to be unmapped.
-   bool used_mmap : 1;
+
+   bool used_mmap;
    char *unmapPointer;
-   unsigned int unmapLength;
+   quint32 unmapLength;
 
    // The resource object in case we loaded the translations from a resource
    QResource *resource;
+
+   // used if the translator has dependencies
+   QList<QTranslator*> subTranslators;
 
    // for squeezed but non-file data, this is what needs to be deleted
    const uchar *messageArray;
@@ -233,9 +311,9 @@ class QTranslatorPrivate
    uint contextLength;
    uint numerusRulesLength;
 
-   bool do_load(const QString &filename);
-   bool do_load(const uchar *data, int len);
-   QString do_translate(const char *context, const char *sourceText, const char *comment, int n) const;
+   bool do_load(const QString &filename, const QString &directory);
+   bool do_load(const uchar *data, int len, const QString &directory);
+   QString do_translate(const char *context, const char *sourceText, const char *comment, std::optional<int> numArg) const;
    void clear();
 
  protected:
@@ -249,59 +327,15 @@ QTranslator::QTranslator(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-
-/*!
-    Destroys the object and frees any allocated resources.
-*/
-
 QTranslator::~QTranslator()
 {
    if (QCoreApplication::instance()) {
       QCoreApplication::removeTranslator(this);
    }
+
    Q_D(QTranslator);
    d->clear();
 }
-
-/*!
-
-    Loads \a filename + \a suffix (".qm" if the \a suffix is not
-    specified), which may be an absolute file name or relative to \a
-    directory. Returns true if the translation is successfully loaded;
-    otherwise returns false.
-
-    If \a directory is not specified, the directory of the
-    application's executable is used (i.e., as
-    \l{QCoreApplication::}{applicationDirPath()}).
-
-    The previous contents of this translator object are discarded.
-
-    If the file name does not exist, other file names are tried
-    in the following order:
-
-    \list 1
-    \o File name without \a suffix appended.
-    \o File name with text after a character in \a search_delimiters
-       stripped ("_." is the default for \a search_delimiters if it is
-       an empty string) and \a suffix.
-    \o File name stripped without \a suffix appended.
-    \o File name stripped further, etc.
-    \endlist
-
-    For example, an application running in the fr_CA locale
-    (French-speaking Canada) might call load("foo.fr_ca",
-    "/opt/foolib"). load() would then try to open the first existing
-    readable file from this list:
-
-    \list 1
-    \o \c /opt/foolib/foo.fr_ca.qm
-    \o \c /opt/foolib/foo.fr_ca
-    \o \c /opt/foolib/foo.fr.qm
-    \o \c /opt/foolib/foo.fr
-    \o \c /opt/foolib/foo.qm
-    \o \c /opt/foolib/foo
-    \endlist
-*/
 
 bool QTranslator::load(const QString &filename, const QString &directory,
                        const QString &search_delimiters, const QString &suffix)
@@ -309,7 +343,6 @@ bool QTranslator::load(const QString &filename, const QString &directory,
    Q_D(QTranslator);
    d->clear();
 
-   QString fname = filename;
    QString prefix;
 
    if (QFileInfo(filename).isRelative()) {
@@ -320,6 +353,7 @@ bool QTranslator::load(const QString &filename, const QString &directory,
       }
    }
 
+   QString fname = filename;
    QString realname;
    QString delims;
    delims = search_delimiters.isEmpty() ? QString("_.") : search_delimiters;
@@ -356,12 +390,11 @@ bool QTranslator::load(const QString &filename, const QString &directory,
    }
 
    // realname is now the fully qualified name of a readable file.
-   return d->do_load(realname);
+   return d->do_load(realname, directory);
 }
 
-bool QTranslatorPrivate::do_load(const QString &realname)
+bool QTranslatorPrivate::do_load(const QString &realname, const QString &directory)
 {
-   QTranslatorPrivate *d = this;
    bool ok = false;
 
    const bool isResourceFile = realname.startsWith(':');
@@ -370,86 +403,111 @@ bool QTranslatorPrivate::do_load(const QString &realname)
       // If the translation is in a non-compressed resource file, the data is already in
       // memory, so no need to use QFile to copy it again.
 
-      Q_ASSERT(!d->resource);
-      d->resource = new QResource(realname);
+      Q_ASSERT(! resource);
+      resource = new QResource(realname);
 
-      if (d->resource->isValid() && ! d->resource->isCompressed()) {
-         d->unmapLength = d->resource->size();
-         d->unmapPointer = reinterpret_cast<char *>(const_cast<uchar *>(d->resource->data()));
-         d->used_mmap = false;
+      if (resource->isValid() && ! resource->isCompressed() && resource->size() > MagicLength
+            && ! memcmp(resource->data(), magic, MagicLength)) {
+
+         unmapLength  = resource->size();
+         unmapPointer = reinterpret_cast<char *>(const_cast<uchar *>(resource->data()));
+         used_mmap = false;
          ok = true;
 
       } else {
-         delete d->resource;
-         d->resource = nullptr;
+         delete resource;
+         resource = nullptr;
       }
    }
 
+   if (! ok) {
+      QFile file(realname);
+      if (! file.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
+         return false;
+      }
+
+      qint64 fileSize = file.size();
+
+      if (fileSize <= MagicLength || quint32(-1) <= fileSize) {
+         return false;
+      }
+
+      {
+         char magicBuffer[MagicLength];
+
+         if (MagicLength != file.read(magicBuffer, MagicLength) || memcmp(magicBuffer, magic, MagicLength)) {
+             return false;
+         }
+      }
+
+      unmapLength = quint32(fileSize);
 #ifdef QT_USE_MMAP
 
 #ifndef MAP_FILE
 #define MAP_FILE 0
 #endif
+
 #ifndef MAP_FAILED
 #define MAP_FAILED -1
 #endif
 
-   else {
-      int fd = QT_OPEN(QFile::encodeName(realname).constData(), O_RDONLY,
-#if defined(Q_OS_WIN)
-                       _S_IREAD | _S_IWRITE
-#else
-                       0666
-#endif
-                      );
+      int fd = file.handle();
 
       if (fd >= 0) {
-         QT_STATBUF st;
 
-         if (! QT_FSTAT(fd, &st)) {
-            char *ptr;
-            ptr = reinterpret_cast<char *>(
-                     mmap(nullptr, st.st_size,             // any address, whole file
-                          PROT_READ,                 // read-only memory
-                          MAP_FILE | MAP_PRIVATE,    // swap-backed map from file
-                          fd, 0));                   // from offset 0 of fd
-            if (ptr && ptr != reinterpret_cast<char *>(MAP_FAILED)) {
-               d->used_mmap = true;
-               d->unmapPointer = ptr;
-               d->unmapLength = st.st_size;
+         char *ptr;
+         ptr = reinterpret_cast<char *>(mmap(nullptr, unmapLength, PROT_READ,
+               MAP_FILE | MAP_PRIVATE, fd, 0));
+
+         if (ptr && ptr != reinterpret_cast<char *>(MAP_FAILED)) {
+            file.close();
+
+            used_mmap    = true;
+            unmapPointer = ptr;
+
+            ok = true;
+         }
+      }
+#endif // QT_USE_MMAP
+
+      if (! ok) {
+         unmapPointer = new char[unmapLength];
+
+         if (unmapPointer) {
+            file.seek(0);
+            qint64 readResult = file.read(unmapPointer, unmapLength);
+
+            if (readResult == qint64(unmapLength)) {
                ok = true;
             }
          }
-         ::close(fd);
-      }
-   }
-#endif // QT_USE_MMAP
-
-   if (!ok) {
-      QFile file(realname);
-      d->unmapLength = file.size();
-      if (!d->unmapLength) {
-         return false;
-      }
-      d->unmapPointer = new char[d->unmapLength];
-
-      if (file.open(QIODevice::ReadOnly)) {
-         ok = (d->unmapLength == (uint)file.read(d->unmapPointer, d->unmapLength));
-      }
-
-      if (! ok) {
-         delete [] d->unmapPointer;
-         d->unmapPointer = nullptr;
-         d->unmapLength = 0;
-         return false;
       }
    }
 
-   return d->do_load(reinterpret_cast<const uchar *>(d->unmapPointer), d->unmapLength);
+   if (ok && do_load(reinterpret_cast<const uchar *>(unmapPointer), unmapLength, directory)) {
+      return true;
+   }
+#if defined(QT_USE_MMAP)
+    if (used_mmap) {
+        used_mmap = false;
+        munmap(unmapPointer, unmapLength);
+    } else
+#endif
+
+       if (! resource) {
+           delete [] unmapPointer;
+       }
+
+   delete resource;
+   resource = nullptr;
+
+   unmapPointer = nullptr;
+   unmapLength  = 0;
+   return false;
 }
 
 static QString find_translation(const QLocale &locale, const QString &filename, const QString &prefix,
-                  const QString &directory, const QString &suffix)
+            const QString &directory, const QString &suffix)
 {
    QString path;
 
@@ -457,7 +515,7 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
       path = directory;
 
       if (! path.isEmpty() && ! path.endsWith('/')) {
-         path += QLatin1Char('/');
+         path += '/';
       }
    }
 
@@ -473,6 +531,7 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
    for (int i = languages.size() - 1; i >= 0; --i) {
       QString lang = languages.at(i);
       QString lowerLang = lang.toLower();
+
       if (lang != lowerLang) {
          languages.insert(i + 1, lowerLang);
       }
@@ -481,9 +540,9 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
 
    // try explicit locales names first
    for (QString localeName : languages) {
-      localeName.replace(QLatin1Char('-'), QLatin1Char('_'));
+      localeName.replace(QChar('-'), QChar('_'));
 
-      realname = path + filename + prefix + localeName + (suffix.isEmpty() ? QLatin1String(".qm") : suffix);
+      realname = path + filename + prefix + localeName + (suffix.isEmpty() ? QString(".qm") : suffix);
       fi.setFile(realname);
       if (fi.isReadable() && fi.isFile()) {
          return realname;
@@ -508,7 +567,7 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
          }
          localeName.truncate(rightmost);
 
-         realname = path + filename + prefix + localeName + (suffix.isEmpty() ? QLatin1String(".qm") : suffix);
+         realname = path + filename + prefix + localeName + (suffix.isEmpty() ? QString(".qm") : suffix);
          fi.setFile(realname);
          if (fi.isReadable() && fi.isFile()) {
             return realname;
@@ -546,24 +605,28 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
    return QString();
 }
 
-bool QTranslator::load(const QLocale &locale,
-                       const QString &filename,
-                       const QString &prefix,
-                       const QString &directory,
-                       const QString &suffix)
+bool QTranslator::load(const QLocale &locale, const QString &filename, const QString &prefix,
+            const QString &directory, const QString &suffix)
 {
    Q_D(QTranslator);
+
    d->clear();
    QString fname = find_translation(locale, filename, prefix, directory, suffix);
-   return !fname.isEmpty() && d->do_load(fname);
+
+   return ! fname.isEmpty() && d->do_load(fname, directory);
 }
 
-bool QTranslator::load(const uchar *data, int len)
+bool QTranslator::load(const uchar *data, int len, const QString &directory)
 {
    Q_D(QTranslator);
+
    d->clear();
 
-   return d->do_load(data, len);
+   if (! data || len < MagicLength || memcmp(data, magic, MagicLength)) {
+      return false;
+   }
+
+   return d->do_load(data, len, directory);
 }
 
 static quint8 read8(const uchar *data)
@@ -573,37 +636,33 @@ static quint8 read8(const uchar *data)
 
 static quint16 read16(const uchar *data)
 {
-   return (data[0] << 8) | (data[1]);
+   return qFromBigEndian<quint16>(data);
 }
 
 static quint32 read32(const uchar *data)
 {
-   return (data[0] << 24)
-          | (data[1] << 16)
-          | (data[2] << 8)
-          | (data[3]);
+   return qFromBigEndian<quint32>(data);
 }
 
-bool QTranslatorPrivate::do_load(const uchar *data, int len)
+bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &directory)
 {
-   if (! data || len < MagicLength || memcmp(data, magic, MagicLength)) {
-      return false;
-   }
-
    bool ok = true;
    const uchar *end = data + len;
 
    data += MagicLength;
+
+   QStringList dependencies;
 
    while (data < end - 4) {
       quint8 tag = read8(data++);
       quint32 blockLen = read32(data);
 
       data += 4;
-      if (! tag || !blockLen) {
+      if (! tag || ! blockLen) {
          break;
       }
-      if (data + blockLen > end) {
+
+      if (quint32(end - data) < blockLen) {
          ok = false;
          break;
       }
@@ -623,20 +682,71 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len)
       } else if (tag == QTranslatorPrivate::NumerusRules) {
          numerusRulesArray = data;
          numerusRulesLength = blockLen;
+      } else if (tag == QTranslatorPrivate::Dependencies) {
+         QDataStream stream(QByteArray::fromRawData((const char*)data, blockLen));
+         QString dep;
+
+         while (! stream.atEnd()) {
+            stream >> dep;
+            dependencies.append(dep);
+         }
       }
 
       data += blockLen;
    }
 
+   if (dependencies.isEmpty() && (! offsetArray || ! messageArray)) {
+      ok = false;
+   }
+
+   if (ok && !isValidNumerusRules(numerusRulesArray, numerusRulesLength)) {
+      ok = false;
+   }
+
+   if (ok) {
+      const int dependenciesCount = dependencies.count();
+
+      for (int i = 0 ; i < dependenciesCount; ++i) {
+         QTranslator *translator = new QTranslator;
+         subTranslators.append(translator);
+
+         ok = translator->load(dependencies.at(i), directory);
+         if (! ok) {
+            break;
+         }
+      }
+
+      // In case some dependencies fail to load, unload all the other ones too.
+      if (! ok) {
+         qDeleteAll(subTranslators);
+         subTranslators.clear();
+      }
+    }
+   if (! ok) {
+      messageArray       = nullptr;
+      contextArray       = nullptr;
+      offsetArray        = nullptr;
+      numerusRulesArray  = nullptr;
+
+      messageLength      = 0;
+      contextLength      = 0;
+      offsetLength       = 0;
+      numerusRulesLength = 0;
+    }
    return ok;
 }
 
 static QString getMessage(const uchar *m, const uchar *end, const char *context, const char *sourceText,
-                  const char *comment, int numerus)
+            const char *comment, uint numerus)
 {
+   QString retval;
+
    const uchar *tn    = nullptr;
    uint tn_length     = 0;
-   int currentNumerus = -1;
+
+   const uint sourceTextLen = uint(strlen(sourceText));
+   const uint contextLen    = uint(strlen(context));
+   const uint commentLen    = uint(strlen(comment));
 
    bool done = false;
 
@@ -657,15 +767,17 @@ static QString getMessage(const uchar *m, const uchar *end, const char *context,
             int len = read32(m);
 
             if (len % 1) {
-               return QString();
+               return retval;
             }
 
             m += 4;
 
-            if (++currentNumerus == numerus) {
+            if (numerus == 0) {
                tn_length = len;
                tn = m;
             }
+
+            --numerus;
 
             m += len;
             break;
@@ -679,8 +791,8 @@ static QString getMessage(const uchar *m, const uchar *end, const char *context,
             quint32 len = read32(m);
             m += 4;
 
-            if (! match(m, sourceText, len)) {
-               return QString();
+            if (! match(m, len, sourceText, sourceTextLen)) {
+               return retval;
             }
 
             m += len;
@@ -691,8 +803,8 @@ static QString getMessage(const uchar *m, const uchar *end, const char *context,
             quint32 len = read32(m);
             m += 4;
 
-            if (! match(m, context, len)) {
-               return QString();
+            if (! match(m, len, context, contextLen)) {
+               return retval;
             }
 
             m += len;
@@ -703,8 +815,8 @@ static QString getMessage(const uchar *m, const uchar *end, const char *context,
             quint32 len = read32(m);
             m += 4;
 
-            if (*m && !match(m, comment, len)) {
-               return QString();
+            if (*m && ! match(m, len, comment, commentLen)) {
+               return retval;
             }
 
             m += len;
@@ -712,12 +824,12 @@ static QString getMessage(const uchar *m, const uchar *end, const char *context,
          }
 
          default:
-            return QString();
+            return retval;
       }
    }
 
    if (! tn) {
-      return QString();
+      return retval;
    }
 
    QString str = QString::fromUtf8((const char *)tn, tn_length);
@@ -725,8 +837,11 @@ static QString getMessage(const uchar *m, const uchar *end, const char *context,
    return str;
 }
 
-QString QTranslatorPrivate::do_translate(const char *context, const char *sourceText, const char *comment, int n) const
+QString QTranslatorPrivate::do_translate(const char *context, const char *sourceText, const char *comment,
+            std::optional<int> numArg) const
 {
+   QString retval;
+
    if (context == nullptr) {
       context = "";
    }
@@ -739,61 +854,77 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
       comment = "";
    }
 
-   if (!offsetLength) {
-      return QString();
+   uint numerus    = 0;
+   size_t numItems = 0;
+
+   if (! offsetLength) {
+      goto searchDependencies;
    }
 
-   /*
-       Check if the context belongs to this QTranslator. If many
-       translators are installed, this step is necessary.
-   */
+   // Check if the context belongs to this QTranslator. If many
+   // translators are installed, this step is necessary.
+
    if (contextLength) {
       quint16 hTableSize = read16(contextArray);
       uint g = elfHash(context) % hTableSize;
+
       const uchar *c = contextArray + 2 + (g << 1);
       quint16 off = read16(c);
       c += 2;
 
       if (off == 0) {
-         return QString();
+         return retval;
       }
+
       c = contextArray + (2 + (hTableSize << 1) + (off << 1));
 
+      const uint contextLen = uint(strlen(context));
       for (;;) {
          quint8 len = read8(c++);
+
          if (len == 0) {
-            return QString();
+            return retval;
          }
-         if (match(c, context, len)) {
+
+         if (match(c, len, context, contextLen)) {
             break;
          }
+
          c += len;
       }
    }
 
-   size_t numItems = offsetLength / (2 * sizeof(quint32));
-   if (!numItems) {
-      return QString();
+   numItems = offsetLength / (2 * sizeof(quint32));
+
+   if (numItems == 0) {
+      goto searchDependencies;
    }
 
-   int numerus = 0;
-   if (n >= 0) {
-      numerus = numerusHelper(n, numerusRulesArray, numerusRulesLength);
+   if (numArg.has_value()) {
+      numerus = numerusHelper(numArg.value(), numerusRulesArray, numerusRulesLength);
    }
 
    for (;;) {
-      quint32 h = elfHash(QByteArray(QByteArray(sourceText) + comment).constData());
+      quint32 h = 0;
+
+      elfHash_start(sourceText, h);
+      elfHash_start(comment, h);
+      elfHash_finish(h);
 
       const uchar *start = offsetArray;
-      const uchar *end = start + ((numItems - 1) << 3);
+      const uchar *end   = start + ((numItems - 1) << 3);
+
       while (start <= end) {
          const uchar *middle = start + (((end - start) >> 4) << 3);
          uint hash = read32(middle);
+
          if (h == hash) {
             start = middle;
             break;
+
          } else if (hash < h) {
             start = middle + 8;
+
          } else {
             end = middle - 8;
          }
@@ -811,6 +942,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
             if (rh != h) {
                break;
             }
+
             quint32 ro = read32(start);
             start += 4;
 
@@ -822,28 +954,39 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
          }
       }
 
-      if (!comment[0]) {
+      if (! comment[0]) {
          break;
       }
 
       comment = "";
    }
 
-   return QString();
+searchDependencies:
+   for (QTranslator *translator : subTranslators) {
+      QString tn = translator->translate(context, sourceText, comment, numArg);
+
+      if (! tn.isEmpty()) {
+         retval = tn;
+         break;
+      }
+    }
+
+   return retval;
 }
 
 void QTranslatorPrivate::clear()
 {
    Q_Q(QTranslator);
 
-   if (unmapPointer && unmapLength) {
+   if (unmapPointer != nullptr && unmapLength != 0) {
 
 #if defined(QT_USE_MMAP)
       if (used_mmap) {
+         used_mmap = false;
          munmap(unmapPointer, unmapLength);
       } else
 #endif
-         if (!resource) {
+         if (resource == nullptr) {
             delete [] unmapPointer;
          }
    }
@@ -852,31 +995,74 @@ void QTranslatorPrivate::clear()
 
    resource           = nullptr;
    unmapPointer       = nullptr;
-   unmapLength        = 0;
    messageArray       = nullptr;
    contextArray       = nullptr;
    offsetArray        = nullptr;
    numerusRulesArray  = nullptr;
+
+   unmapLength        = 0;
    messageLength      = 0;
    contextLength      = 0;
    offsetLength       = 0;
    numerusRulesLength = 0;
 
+   qDeleteAll(subTranslators);
+   subTranslators.clear();
    if (QCoreApplicationPrivate::isTranslatorInstalled(q)) {
       QCoreApplication::postEvent(QCoreApplication::instance(), new QEvent(QEvent::LanguageChange));
    }
 }
 
-QString QTranslator::translate(const char *context, const char *sourceText, const char *disambiguation, int n) const
+QString QTranslator::replacePercentN(QString text, int numArg)
+{
+   // %Ln or %n
+
+   int percentPos = 0;
+   int len = 0;
+
+   while ((percentPos = text.indexOf('%', percentPos + len)) != -1) {
+      len = 1;
+      QString fmt;
+
+      if (text.at(percentPos + len) == 'L') {
+         fmt = QString("%L1");
+         ++len;
+
+      } else {
+         fmt = QString("%1");
+
+      }
+
+      if (text.at(percentPos + len) == 'n') {
+         fmt = fmt.formatArg(numArg);
+         ++len;
+
+         text.replace(percentPos, len, fmt);
+         len = fmt.length();
+      }
+   }
+
+   return text;
+}
+
+QString QTranslator::translate(const char *context, const char *sourceText, const char *disambiguation,
+      std::optional<int> numArg) const
 {
    Q_D(const QTranslator);
-   return d->do_translate(context, sourceText, disambiguation, n);
+
+   QString retval = d->do_translate(context, sourceText, disambiguation, numArg);
+
+   if (! retval.isEmpty() && numArg.has_value()) {
+      retval = replacePercentN(retval, numArg.value());
+   }
+
+   return retval;
 }
 
 bool QTranslator::isEmpty() const
 {
    Q_D(const QTranslator);
-   return !d->unmapPointer && !d->unmapLength && !d->messageArray &&
-          !d->offsetArray && !d->contextArray;
-}
 
+   return ! d->unmapPointer && ! d->unmapLength && ! d->messageArray &&
+          ! d->offsetArray && ! d->contextArray && d->subTranslators.isEmpty();
+}

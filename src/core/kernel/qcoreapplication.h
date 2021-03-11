@@ -140,14 +140,8 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static void installTranslator(QTranslator *messageFile);
    static void removeTranslator(QTranslator *messageFile);
 
-   // interim usage
-   static QString translate(const char *context, const char *key, const char *disambiguation, int n) {
-      return translate(context, key, disambiguation, Encoding::UnicodeUTF8, n);
-   }
-   enum Encoding { CodecForTr, UnicodeUTF8, DefaultCodec = CodecForTr };
-
    static QString translate(const char *context, const char *key, const char *disambiguation = nullptr,
-                  Encoding encoding = CodecForTr, int n = -1);
+            std::optional<int> numArg = std::optional<int>());
 
    static void flush();
    void installNativeEventFilter(QAbstractNativeEventFilter *filterObj);
@@ -265,38 +259,13 @@ inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *ev
       event->spont = true;
    }
    return self ? self->notifyInternal(receiver, event) : false;
+
 }
-
-// * *
-#ifdef QT_NO_TRANSLATION
-
-// 1
-inline QString QCoreApplication::translate(const char *, const char *sourceText, const char *, Encoding encoding)
-{
-#ifndef QT_NO_TEXTCODEC
-   if (encoding == UnicodeUTF8) {
-      return QString::fromUtf8(sourceText);
-   }
-#endif
-
-   return QString::fromLatin1(sourceText);
-}
-
-// 2
-inline QString QCoreApplication::translate(const char *, const char *sourceText, const char *, Encoding encoding, int)
-{
-#ifndef QT_NO_TEXTCODEC
-   if (encoding == UnicodeUTF8) {
-      return QString::fromUtf8(sourceText);
-   }
-#endif
-   return QString::fromLatin1(sourceText);
-}
-#endif
 
 #define Q_DECLARE_TR_FUNCTIONS(context) \
  public: \
-    static inline QString tr(const char *sourceText, const char *disambiguation = nullptr, int n = -1) \
+   static QString tr(const char *sourceText, const char *disambiguation = nullptr, \
+            std::optional<int> n = std::optional<int>()) \
         { return QCoreApplication::translate(#context, sourceText, disambiguation, n); } \
  private:
 

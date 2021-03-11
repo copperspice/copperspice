@@ -1358,81 +1358,39 @@ void QCoreApplication::removeTranslator(QTranslator *translationFile)
    }
 }
 
-static void replacePercentN(QString *result, int n)
+QString QCoreApplication::translate(const char *context, const char *sourceText, const char *disambiguation,
+            std::optional<int> numArg)
 {
-   if (n >= 0) {
-      int percentPos = 0;
-      int len = 0;
-
-      while ((percentPos = result->indexOf(QChar('%'), percentPos + len)) != -1) {
-         len = 1;
-         QString fmt;
-
-         if (result->at(percentPos + len) == QChar('L')) {
-            ++len;
-            fmt = QString("%L1");
-         } else {
-            fmt = QString("%1");
-         }
-
-         if (result->at(percentPos + len) == QChar('n')) {
-            fmt = fmt.formatArg(n);
-            ++len;
-            result->replace(percentPos, len, fmt);
-            len = fmt.length();
-         }
-      }
-   }
-}
-
-QString QCoreApplication::translate(const char *context, const char *sourceText,
-                  const char *disambiguation, Encoding encoding, int n)
-{
-   QString result;
+   QString retval;
 
    if (! sourceText) {
-      return result;
+      return retval;
    }
 
-   if (self && ! self->d_func()->translators.isEmpty()) {
-      QList<QTranslator *>::const_iterator it;
-      QTranslator *translationFile;
+   if (self != nullptr) {
 
-      for (it = self->d_func()->translators.constBegin(); it != self->d_func()->translators.constEnd(); ++it) {
-         translationFile = *it;
+      for (auto item : self->d_func()->translators) {
+         retval = item->translate(context, sourceText, disambiguation, numArg);
 
-         result = translationFile->translate(context, sourceText, disambiguation, n);
-
-         if (! result.isEmpty()) {
+         if (! retval.isEmpty()) {
             break;
          }
       }
    }
 
-   if (result.isEmpty()) {
+   if (retval.isEmpty()) {
+      retval = QString::fromUtf8(sourceText);
 
-#ifdef QT_NO_TEXTCODEC
-      // nothing
-#else
-      if (encoding == UnicodeUTF8) {
-         result = QString::fromUtf8(sourceText);
-
-      } else if (QTextCodec::codecForTr() != nullptr) {
-         result = QTextCodec::codecForTr()->toUnicode(sourceText);
-
-      } else
-#endif
-
-      result = QString::fromLatin1(sourceText);
+      if (numArg.has_value()) {
+         retval = QTranslator::replacePercentN(retval, numArg.value());
+      }
    }
 
-   replacePercentN(&result, n);
-
-   return result;
+   return retval;
 }
 
 // Declared in qglobal.h
-QString qtTrId(const char *id, int n)
+QString qtTrId(const char *id, std::optional<int> n)
 {
    return QCoreApplication::translate(nullptr, id, nullptr, n);
 }
