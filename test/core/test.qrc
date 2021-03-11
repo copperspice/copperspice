@@ -1,0 +1,5 @@
+<RCC>
+   <qresource prefix="/test_translator">
+      <file>test_de.qm</file>
+   </qresource>
+</RCC>

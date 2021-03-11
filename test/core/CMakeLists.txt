@@ -1,5 +1,3 @@
-set(CMAKE_CURRENT_BINARY_DIR "${CMAKE_BINARY_DIR}/bin/")
-
 include(Load_Catch2)
 include(CTest)
 
@@ -71,6 +69,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobject.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qobject.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpointer.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedpointer.cpp
@@ -106,7 +105,26 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsizef.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
+
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/test_de.ts
+
+   ${CMAKE_CURRENT_SOURCE_DIR}/test.qrc
+   ${CMAKE_CURRENT_BINARY_DIR}/qrc_test.cpp
 )
+
+function_generate_resources(CsCoreTest)
+
+# generate new qrc if required (adds to existinig cusom command)
+set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/qrc_test.cpp)
+
+add_custom_command(
+   OUTPUT ${resource_out}
+   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/test_de.qm
+   APPEND
+)
+
+# sets working dir for CTest, positioned after qrc generation
+set(CMAKE_CURRENT_BINARY_DIR "${CMAKE_BINARY_DIR}/bin/")
 
 include(ParseAndAddCatchTests)
 ParseAndAddCatchTests(CsCoreTest)
