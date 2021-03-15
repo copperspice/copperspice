@@ -746,6 +746,6 @@ uint QVariant::registerType()
    }
 
 #define Q_DECLARE_METATYPE(TYPE)                   \
-   static_assert(false, "Macro Q_DECLARE_METATYPE(TYPE) is obsolete, use CS_DECLARE_METATYPE(TYPE)")
+   static_assert(false, "Macro Q_DECLARE_METATYPE(TYPE) is obsolete, use CS_DECLARE_METATYPE(TYPE)");
 
 #endif
