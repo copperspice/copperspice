@@ -634,7 +634,7 @@ class Q_CORE_EXPORT QSysInfo
    static QString machineHostName();
 };
 
-Q_CORE_EXPORT const char *qVersion();
+Q_CORE_EXPORT const char *csVersion();
 
 // avoid "unused parameter" warnings
 #define Q_UNUSED(x) (void)x;

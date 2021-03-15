@@ -3869,13 +3869,12 @@ QString QWebPage::userAgentForUrl(const QUrl&) const
         if (!appVer.isEmpty())
             appName.append(QLatin1Char('/') + appVer);
     } else {
-        // Qt version
-        appName = QString::fromLatin1("Qt/") + QString::fromLatin1(qVersion());
+        // CS version
+        appName = "CopperSpice/" + QString::fromLatin1(csVersion());
     }
 
     return firstPart + secondPart + appName + thirdPart;
 }
-
 
 void QWebPagePrivate::_q_onLoadProgressChanged(int)
 {

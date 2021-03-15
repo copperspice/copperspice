@@ -42,7 +42,7 @@
 #include <unistd.h>
 #endif
 
-const char *qVersion()
+const char *csVersion()
 {
    return CS_VERSION_STR;
 }
