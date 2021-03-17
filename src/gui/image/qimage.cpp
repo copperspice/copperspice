@@ -76,8 +76,7 @@ QImageData::QImageData()
    : ref(0), width(0), height(0), depth(0), nbytes(0), devicePixelRatio(1.0), data(nullptr),
      format(QImage::Format_ARGB32), bytes_per_line(0),
      ser_no(qimage_serial_number.fetchAndAddRelaxed(1)), detach_no(0),
-     dpmx(qt_defaultDpiX() * 100 / qreal(2.54)),
-     dpmy(qt_defaultDpiY() * 100 / qreal(2.54)),
+     dpmx(qt_defaultDpiX() * 100 / qreal(2.54)), dpmy(qt_defaultDpiY() * 100 / qreal(2.54)),
      offset(0, 0), own_data(true), ro_data(false), has_alpha_clut(false),
      is_cached(false), is_locked(false), cleanupFunction(nullptr), cleanupInfo(nullptr), paintEngine(nullptr)
 {
@@ -134,6 +133,7 @@ QImageData *QImageData::create(const QSize &size, QImage::Format format)
    }
 
    d->ref.ref();
+
    return d.take();
 }
 
@@ -184,6 +184,7 @@ bool QImageData::checkForAlphaPixels() const
          }
       }
       break;
+
       case QImage::Format_RGBA8888:
       case QImage::Format_RGBA8888_Premultiplied: {
          uchar *bits = data;
@@ -197,6 +198,7 @@ bool QImageData::checkForAlphaPixels() const
          }
       }
       break;
+
       case QImage::Format_A2BGR30_Premultiplied:
       case QImage::Format_A2RGB30_Premultiplied: {
          uchar *bits = data;

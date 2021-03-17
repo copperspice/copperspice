@@ -179,17 +179,20 @@ void QOutlineMapper::endOutline()
          QPointF &e = elements[i];
          e = QPointF(e.x() + m_dx, e.y() + m_dy);
       }
+
    } else if (m_txop == QTransform::TxScale) {
       for (int i = 0; i < m_elements.size(); ++i) {
          QPointF &e = elements[i];
          e = QPointF(m_m11 * e.x() + m_dx, m_m22 * e.y() + m_dy);
       }
+
    } else if (m_txop < QTransform::TxProject) {
       for (int i = 0; i < m_elements.size(); ++i) {
          QPointF &e = elements[i];
          e = QPointF(m_m11 * e.x() + m_m21 * e.y() + m_dx,
                m_m22 * e.y() + m_m12 * e.x() + m_dy);
       }
+
    } else {
       const QVectorPath vp((qreal *)elements, m_elements.size(),
          m_element_types.size() ? m_element_types.data() : nullptr);

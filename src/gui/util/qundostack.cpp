@@ -102,7 +102,6 @@ void QUndoCommand::setText(const QString &text)
    }
 }
 
-
 int QUndoCommand::childCount() const
 {
    return d->child_list.count();
@@ -217,7 +216,6 @@ bool QUndoStackPrivate::checkUndoLimit()
    return true;
 }
 
-
 QUndoStack::QUndoStack(QObject *parent)
    : QObject(parent), d_ptr(new QUndoStackPrivate)
 {
@@ -228,9 +226,7 @@ QUndoStack::QUndoStack(QObject *parent)
       group->addStack(this);
    }
 #endif
-
 }
-
 
 QUndoStack::~QUndoStack()
 {
@@ -240,9 +236,9 @@ QUndoStack::~QUndoStack()
       d->group->removeStack(this);
    }
 #endif
+
    clear();
 }
-
 
 void QUndoStack::clear()
 {
@@ -272,7 +268,6 @@ void QUndoStack::clear()
    }
 }
 
-
 void QUndoStack::push(QUndoCommand *cmd)
 {
    Q_D(QUndoStack);
@@ -287,13 +282,16 @@ void QUndoStack::push(QUndoCommand *cmd)
       if (!macro_cmd->d->child_list.isEmpty()) {
          cur = macro_cmd->d->child_list.last();
       }
+
    } else {
       if (d->index > 0) {
          cur = d->command_list.at(d->index - 1);
       }
+
       while (d->index < d->command_list.size()) {
          delete d->command_list.takeLast();
       }
+
       if (d->clean_index > d->index) {
          d->clean_index = -1;   // we've deleted the clean state
       }
@@ -313,6 +311,7 @@ void QUndoStack::push(QUndoCommand *cmd)
          emit canRedoChanged(canRedo());
          emit redoTextChanged(redoText());
       }
+
    } else {
       if (macro) {
          d->macro_stack.last()->d->child_list.append(cmd);
@@ -323,7 +322,6 @@ void QUndoStack::push(QUndoCommand *cmd)
       }
    }
 }
-
 
 
 void QUndoStack::setClean()
@@ -422,7 +420,6 @@ void QUndoStack::redo()
    d->setIndex(d->index + 1, false);
 }
 
-
 int QUndoStack::count() const
 {
    Q_D(const QUndoStack);
@@ -435,7 +432,6 @@ int QUndoStack::index() const
    Q_D(const QUndoStack);
    return d->index;
 }
-
 
 void QUndoStack::setIndex(int idx)
 {
@@ -461,8 +457,6 @@ void QUndoStack::setIndex(int idx)
 
    d->setIndex(idx, false);
 }
-
-
 
 bool QUndoStack::canUndo() const
 {
@@ -523,9 +517,11 @@ QString QUndoStack::redoText() const
    if (!d->macro_stack.isEmpty()) {
       return QString();
    }
+
    if (d->index < d->command_list.size()) {
       return d->command_list.at(d->index)->actionText();
    }
+
    return QString();
 }
 
@@ -593,8 +589,6 @@ void QUndoStack::beginMacro(const QString &text)
    }
 }
 
-
-
 void QUndoStack::endMacro()
 {
    Q_D(QUndoStack);
@@ -618,6 +612,7 @@ const QUndoCommand *QUndoStack::command(int index) const
    if (index < 0 || index >= d->command_list.count()) {
       return nullptr;
    }
+
    return d->command_list.at(index);
 }
 
@@ -634,9 +629,9 @@ QString QUndoStack::text(int idx) const
    if (idx < 0 || idx >= d->command_list.size()) {
       return QString();
    }
+
    return d->command_list.at(idx)->text();
 }
-
 
 void QUndoStack::setUndoLimit(int limit)
 {

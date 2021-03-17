@@ -32,10 +32,17 @@ struct QRBTree
 {
     struct Node
     {
-        inline ~Node() {if (left) delete left; if (right) delete right;}
         Node()
            : parent(nullptr), left(nullptr), right(nullptr), red(true)
         {
+        }
+
+        inline ~Node() {
+          if (left)
+            delete left;
+
+          if (right)
+            delete right;
         }
 
         T data;
@@ -70,6 +77,8 @@ struct QRBTree
     int order(Node *left, Node *right);
     inline bool validate() const;
 
+    Node *root;
+
 private:
     void rotateLeft(Node *node);
     void rotateRight(Node *node);
@@ -87,9 +96,6 @@ private:
     // 'node' must be black. rebalance will reduce the depth of black nodes by one in the sibling tree.
     void rebalance(Node *node);
 
-public:
-    Node *root;
-private:
     Node *freeList;
 };
 

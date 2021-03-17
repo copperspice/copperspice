@@ -120,7 +120,6 @@ class QPMCache : public QObject, public QCache<QPixmapCache::Key, QPixmapCacheEn
    bool t;
 };
 
-
 Q_GLOBAL_STATIC(QPMCache, pm_cache)
 
 uint qHash(const QPixmapCache::Key &k)
@@ -139,7 +138,6 @@ QPMCache::~QPMCache()
    clear();
    free(keyArray);
 }
-
 
 bool QPMCache::flushDetachedPixmaps(bool nt)
 {
@@ -176,7 +174,6 @@ void QPMCache::timerEvent(QTimerEvent *)
    }
 }
 
-
 QPixmap *QPMCache::object(const QString &key) const
 {
    QPixmapCache::Key cacheKey = cacheKeys.value(key);
@@ -184,11 +181,13 @@ QPixmap *QPMCache::object(const QString &key) const
       const_cast<QPMCache *>(this)->cacheKeys.remove(key);
       return nullptr;
    }
+
    QPixmap *ptr = QCache<QPixmapCache::Key, QPixmapCacheEntry>::object(cacheKey);
    //We didn't find the pixmap in the cache, the key is not valid anymore
    if (!ptr) {
       const_cast<QPMCache *>(this)->cacheKeys.remove(key);
    }
+
    return ptr;
 }
 
@@ -337,6 +336,7 @@ void QPMCache::clear()
    for (int i = 0; i < keys.size(); ++i) {
       keys.at(i).d->isValid = false;
    }
+
    QCache<QPixmapCache::Key, QPixmapCacheEntry>::clear();
 }
 
@@ -396,12 +396,10 @@ bool QPixmapCache::insert(const QString &key, const QPixmap &pixmap)
    return pm_cache()->insert(key, pixmap, pixmap.width() * pixmap.height() * pixmap.depth() / 8);
 }
 
-
 QPixmapCache::Key QPixmapCache::insert(const QPixmap &pixmap)
 {
    return pm_cache()->insert(pixmap, pixmap.width() * pixmap.height() * pixmap.depth() / 8);
 }
-
 
 bool QPixmapCache::replace(const Key &key, const QPixmap &pixmap)
 {

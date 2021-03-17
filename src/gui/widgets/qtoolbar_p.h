@@ -47,7 +47,8 @@ class QToolBarPrivate : public QWidgetPrivate
 #ifdef Q_OS_DARWIN
       , macWindowDragging(false)
 #endif
-   { }
+   {
+   }
 
    void init();
    void actionTriggered();
@@ -98,7 +99,5 @@ class QToolBarPrivate : public QWidgetPrivate
 };
 
 #endif // QT_NO_TOOLBAR
-
-
 
 #endif // QDYNAMICTOOLBAR_P_H

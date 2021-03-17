@@ -879,7 +879,7 @@ QColorPicker::QColorPicker(QWidget *parent)
    setCol(150, 255);
 
    setAttribute(Qt::WA_NoSystemBackground);
-   setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
+   setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 }
 
 QColorPicker::~QColorPicker()

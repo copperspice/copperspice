@@ -490,17 +490,11 @@ void QWhatsThisPrivate::say(QWidget *widget, const QString &text, int x, int y)
    }
 
    // make a fresh widget, and set it up
-
-
-
-   // okay, now to find a suitable location
    QWhatsThat *whatsThat = new QWhatsThat(text, nullptr, widget);
 
+   // find a suitable location
    int scr = (widget ?
-         QApplication::desktop()->screenNumber(widget) :
-         QApplication::desktop()->screenNumber(QPoint(x, y))
-
-      );
+         QApplication::desktop()->screenNumber(widget) : QApplication::desktop()->screenNumber(QPoint(x, y)));
 
    QRect screen = QApplication::desktop()->screenGeometry(scr);
 

@@ -293,11 +293,13 @@ int QFontMetrics::width(const QString &text, int len) const
 int QFontMetrics::width(const QString &text, int len, int flags) const
 {
    int pos = text.indexOf(QLatin1Char('\x9c'));
+
    if (pos != -1) {
       len = (len < 0) ? pos : qMin(pos, len);
    } else if (len < 0) {
       len = text.length();
    }
+
    if (len == 0) {
       return 0;
    }
@@ -504,7 +506,6 @@ QFontMetricsF::QFontMetricsF(const QFontMetrics &fontMetrics)
 {
 }
 
-
 QFontMetricsF &QFontMetricsF::operator=(const QFontMetrics &other)
 {
    d = other.d.data();
@@ -529,13 +530,13 @@ QFontMetricsF::QFontMetricsF(const QFont &font, QPaintDevice *paintdevice)
    } else {
       d = font.d.data();
    }
-
 }
 
 QFontMetricsF::QFontMetricsF(const QFontMetricsF &fm)
    : d(fm.d.data())
 {
 }
+
 QFontMetricsF::~QFontMetricsF()
 {
 }
@@ -690,6 +691,7 @@ bool QFontMetricsF::inFont(QChar ch) const
 {
    return inFontUcs4(ch.unicode());
 }
+
 bool QFontMetricsF::inFontUcs4(char32_t ch) const
 {
    const int script = QChar(ch).script();

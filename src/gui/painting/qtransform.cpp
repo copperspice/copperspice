@@ -902,13 +902,13 @@ QDataStream &operator>>(QDataStream &s, QTransform &t)
    s >> m31;
    s >> m32;
    s >> m33;
+
    t.setMatrix(m11, m12, m13,
-      m21, m22, m23,
-      m31, m32, m33);
+               m21, m22, m23,
+               m31, m32, m33);
+
    return s;
 }
-
-
 
 QDebug operator<<(QDebug dbg, const QTransform &m)
 {

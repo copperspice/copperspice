@@ -42,6 +42,7 @@ static inline void initBitMapInfoHeader(int width, int height, bool topToBottom,
    bih->biCompression = BI_RGB;
    bih->biSizeImage   = width * height * 4;
 }
+
 static inline void initBitMapInfo(int width, int height, bool topToBottom, BITMAPINFO *bmi)
 {
    initBitMapInfoHeader(width, height, topToBottom, &bmi->bmiHeader);
@@ -60,6 +61,7 @@ static inline uchar *getDiBits(HDC hdc, HBITMAP bitmap, int width, int height, b
    }
    return result;
 }
+
 static inline void copyImageDataCreateAlpha(const uchar *data, QImage *target)
 {
    const uint mask = target->format() == QImage::Format_RGB32 ? 0xff000000 : 0;
@@ -164,13 +166,16 @@ Q_GUI_EXPORT HBITMAP qt_pixmapToWinHBITMAP(const QPixmap &p, int hbitmapFormat =
 
    // Copy over the data
    QImage::Format imageFormat = QImage::Format_RGB32;
+
    if (hbitmapFormat == HBitmapAlpha) {
       imageFormat = QImage::Format_ARGB32;
    } else if (hbitmapFormat == HBitmapPremultipliedAlpha) {
       imageFormat = QImage::Format_ARGB32_Premultiplied;
    }
+
    const QImage image = rasterImage->convertToFormat(imageFormat);
    const int bytes_per_line = w * 4;
+
    for (int y = 0; y < h; ++y) {
       memcpy(pixels + y * bytes_per_line, image.scanLine(y), bytes_per_line);
    }
@@ -185,6 +190,7 @@ Q_GUI_EXPORT QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat =
    memset(&bitmap_info, 0, sizeof(BITMAP));
 
    const int res = GetObject(bitmap, sizeof(BITMAP), &bitmap_info);
+
    if (!res) {
       qErrnoWarning("QPixmap::fromWinHBITMAP(), failed to get bitmap info");
       return QPixmap();
@@ -293,6 +299,7 @@ static inline bool hasAlpha(const QImage &image)
          }
       }
    }
+
    return false;
 }
 
@@ -350,4 +357,3 @@ Q_GUI_EXPORT QPixmap qt_pixmapFromWinHICON(HICON icon)
 
    return QPixmap::fromImage(image);
 }
-

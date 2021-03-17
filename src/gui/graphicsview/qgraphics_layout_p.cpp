@@ -31,7 +31,6 @@
 #include <qgraphicswidget.h>
 #include <qapplication.h>
 
-
 void QGraphicsLayoutPrivate::reparentChildItems(QGraphicsItem *newParent)
 {
    Q_Q(QGraphicsLayout);
@@ -197,8 +196,5 @@ void QGraphicsLayoutPrivate::activateRecursive(QGraphicsLayoutItem *item)
       layout->d_func()->activated = true;
    }
 }
-
-
-
 
 #endif //QT_NO_GRAPHICSVIEW

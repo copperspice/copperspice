@@ -26,9 +26,6 @@
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include <qpagesetupdialog_unix_p.h>
-#include <qprintdevice_p.h>
-#include <qcups_p.h>
 #include <qpainter.h>
 #include <qprintdialog.h>
 #include <qdialogbuttonbox.h>
@@ -38,6 +35,9 @@
 #include <ui_qpagesetupwidget.h>
 
 #include <qprinter_p.h>
+#include <qpagesetupdialog_unix_p.h>
+#include <qprintdevice_p.h>
+#include <qcups_p.h>
 
 // Disabled until we have support for papersources on unix
 // #define PSD_ENABLE_PAPERSOURCE
@@ -202,7 +202,6 @@ QPageSetupWidget::QPageSetupWidget(QWidget *parent)
      m_units(QPageSize::Unit::Point), m_blockSignals(false)
 {
    m_ui.setupUi(this);
-
 
    QVBoxLayout *lay = new QVBoxLayout(m_ui.preview);
    m_ui.preview->setLayout(lay);
@@ -621,6 +620,7 @@ int QPageSetupDialog::exec()
    if (ret == Accepted) {
       static_cast <QUnixPageSetupDialogPrivate *>(d)->widget->setupPrinter();
    }
+
    return ret;
 }
 

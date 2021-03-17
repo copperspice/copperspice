@@ -39,18 +39,15 @@ class QPlatformOpenGLContextPrivate
 QPlatformOpenGLContext::QPlatformOpenGLContext()
    : d_ptr(new QPlatformOpenGLContextPrivate)
 {
-
 }
 
 QPlatformOpenGLContext::~QPlatformOpenGLContext()
 {
-
 }
 
 void QPlatformOpenGLContext::initialize()
 {
 }
-
 
 GLuint QPlatformOpenGLContext::defaultFramebufferObject(QPlatformSurface *) const
 {
@@ -115,6 +112,3 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
 
    return (majorOk && minorOk);
 }
-
-
-

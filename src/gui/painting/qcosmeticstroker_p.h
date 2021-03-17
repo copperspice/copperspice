@@ -24,12 +24,11 @@
 #ifndef QCOSMETICSTROKER_P_H
 #define QCOSMETICSTROKER_P_H
 
+#include <qpen.h>
+
 #include <qdrawhelper_p.h>
 #include <qvectorpath_p.h>
 #include <qpaintengine_raster_p.h>
-#include <qpen.h>
-
-
 
 class QCosmeticStroker;
 
@@ -84,7 +83,6 @@ class QCosmeticStroker
    void drawPath(const QVectorPath &path);
    void drawPoints(const QPoint *points, int num);
    void drawPoints(const QPointF *points, int num);
-
 
    QRasterPaintEngineState *state;
    QRect deviceRect;

@@ -7762,7 +7762,7 @@ QPixmap QGraphicsItemEffectSourcePrivate::pixmap(Qt::CoordinateSystem system, QP
 
    return pixmap;
 }
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
 
 static void formatGraphicsItemHelper(QDebug debug, const QGraphicsItem *item)
 {

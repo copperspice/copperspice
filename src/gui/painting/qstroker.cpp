@@ -141,13 +141,11 @@ class QSubpathFlatIterator
          Q_ASSERT(m_pos < m_path->size());
 
          m_curve = QBezier::fromPoints(QPointF(qt_fixed_to_real(m_path->at(m_pos - 1).x),
-                  qt_fixed_to_real(m_path->at(m_pos - 1).y)),
-               QPointF(qt_fixed_to_real(e.x),
-                  qt_fixed_to_real(e.y)),
-               QPointF(qt_fixed_to_real(m_path->at(m_pos + 1).x),
-                  qt_fixed_to_real(m_path->at(m_pos + 1).y)),
-               QPointF(qt_fixed_to_real(m_path->at(m_pos + 2).x),
+                  qt_fixed_to_real(m_path->at(m_pos - 1).y)), QPointF(qt_fixed_to_real(e.x),
+                  qt_fixed_to_real(e.y)), QPointF(qt_fixed_to_real(m_path->at(m_pos + 1).x),
+                  qt_fixed_to_real(m_path->at(m_pos + 1).y)), QPointF(qt_fixed_to_real(m_path->at(m_pos + 2).x),
                   qt_fixed_to_real(m_path->at(m_pos + 2).y))).toPolygon(m_curve_threshold);
+
          m_curve_index = 1;
          e.type = QPainterPath::LineToElement;
          e.x = m_curve.at(0).x();

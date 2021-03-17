@@ -56,6 +56,7 @@ class QDialogPrivate : public QWidgetPrivate
    bool setNativeDialogVisible(bool visible);
    QVariant styleHint(QPlatformDialogHelper::StyleHint hint) const;
    void deletePlatformHelper();
+
    QPointer<QPushButton> mainDef;
    Qt::Orientation orientation;
    QWidget *extension;
@@ -74,8 +75,6 @@ class QDialogPrivate : public QWidgetPrivate
    void hideDefault();
    void resetModalitySetByOpen();
 
-
-
    int rescode;
    int resetModalityTo;
    bool wasModalitySet;
@@ -93,6 +92,5 @@ class QDialogPrivate : public QWidgetPrivate
    mutable QPlatformDialogHelper *m_platformHelper;
    mutable bool m_platformHelperCreated;
 };
-
 
 #endif

@@ -48,7 +48,7 @@
 static const int defaultShowTime = 1500;
 
 // wait at least the minWaitTime long before attempting to make a prediction
-static const int minWaitTime = 50;
+static const int minWaitTime         = 50;
 static const int LABEL_INDEX         = 0;
 static const int PROGRESS_BAR_INDEX  = 1;
 static const int CANCEL_BUTTON_INDEX = 2;
@@ -151,6 +151,7 @@ QString QProgressDialog::labelText() const
 
    return QString();
 }
+
 void QProgressDialog::reset()
 {
 

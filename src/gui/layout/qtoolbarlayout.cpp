@@ -42,10 +42,8 @@
 
 #ifndef QT_NO_TOOLBAR
 
-
 // qmainwindow.cpp
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
-
 
 QToolBarItem::QToolBarItem(QWidget *widget)
    : QWidgetItem(widget), action(nullptr), customWidget(false)
@@ -83,6 +81,7 @@ QToolBarLayout::~QToolBarLayout()
             widgetAction->releaseWidget(item->widget());
          }
       }
+
       delete item;
    }
 }
@@ -90,14 +89,18 @@ QToolBarLayout::~QToolBarLayout()
 void QToolBarLayout::updateMarginAndSpacing()
 {
    QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
+
    if (!tb) {
       return;
    }
+
    QStyle *style = tb->style();
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
+
    setMargin(style->pixelMetric(QStyle::PM_ToolBarItemMargin, &opt, tb)
       + style->pixelMetric(QStyle::PM_ToolBarFrameWidth, &opt, tb));
+
    setSpacing(style->pixelMetric(QStyle::PM_ToolBarItemSpacing, &opt, tb));
 }
 
@@ -122,12 +125,10 @@ void QToolBarLayout::setUsePopupMenu(bool set)
       popupMenu = nullptr;
 
    } else {
-      QObject::disconnect(extension, &QToolBarExtension::clicked, this,
-                  &QToolBarLayout::setExpanded);
-
+      QObject::disconnect(extension, &QToolBarExtension::clicked, this, &QToolBarLayout::setExpanded);
       extension->setPopupMode(QToolButton::InstantPopup);
 
-      if (!popupMenu) {
+      if (! popupMenu) {
          popupMenu = new QMenu(extension);
       }
 
@@ -203,6 +204,7 @@ int QToolBarLayout::indexOf(QAction *action) const
          return i;
       }
    }
+
    return -1;
 }
 
@@ -230,10 +232,13 @@ Qt::Orientations QToolBarLayout::expandingDirections() const
    if (dirty) {
       updateGeomArray();
    }
+
    QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
+
    if (!tb) {
       return Qt::EmptyFlag;
    }
+
    Qt::Orientation o = tb->orientation();
    return expanding ? Qt::Orientations(o) : Qt::EmptyFlag;
 }
@@ -257,9 +262,11 @@ void QToolBarLayout::updateGeomArray() const
    QToolBarLayout *that = const_cast<QToolBarLayout *>(this);
 
    QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
+
    if (!tb) {
       return;
    }
+
    QStyle *style = tb->style();
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
@@ -596,6 +603,7 @@ bool QToolBarLayout::layoutActions(const QSize &size)
    for (int i = 0; i < showWidgets.count(); ++i) {
       showWidgets.at(i)->show();
    }
+
    for (int i = 0; i < hideWidgets.count(); ++i) {
       hideWidgets.at(i)->hide();
    }
@@ -643,6 +651,7 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
    }
    int space = total_w / rows + spacing + extensionExtent;
    space = qMax(space, min_w - 2 * margin - handleExtent);
+
    if (win != nullptr) {
       space = qMin(space, pick(o, win->size()) - 2 * margin - handleExtent);
    }
@@ -650,6 +659,7 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
    int w = 0;
    int h = 0;
    int i = 0;
+
    while (i < items.count()) {
       int count = 0;
       int size = 0;
@@ -681,6 +691,7 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
 
    w += 2 * margin + handleExtent + spacing + extensionExtent;
    w = qMax(w, min_w);
+
    if (win != nullptr) {
       w = qMin(w, pick(o, win->size()));
    }
@@ -689,6 +700,7 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
    QSize result;
    rpick(o, result) = w;
    rperp(o, result) = h;
+
    return result;
 }
 

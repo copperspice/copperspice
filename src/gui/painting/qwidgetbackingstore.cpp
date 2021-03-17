@@ -301,6 +301,7 @@ bool QWidgetBackingStore::flushPaint(QWidget *widget, const QRegion &rgn)
    QWidgetBackingStore::showYellowThing(widget, rgn, delay * 10, true);
    return true;
 }
+
 void QWidgetBackingStore::unflushPaint(QWidget *widget, const QRegion &rgn)
 {
    if (widget->d_func()->paintOnScreen() || rgn.isEmpty()) {
@@ -365,7 +366,7 @@ void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBacking
 void QWidgetBackingStore::endPaint(const QRegion &cleaned, QBackingStore *backingStore, BeginPaintInfo *beginPaintInfo)
 {
 #ifndef QT_NO_PAINT_DEBUG
-   if (!beginPaintInfo->wasFlushed) {
+   if (! beginPaintInfo->wasFlushed) {
       backingStore->endPaint();
    } else {
       QWidgetBackingStore::unflushPaint(tlw, cleaned);
@@ -374,8 +375,8 @@ void QWidgetBackingStore::endPaint(const QRegion &cleaned, QBackingStore *backin
 
    backingStore->endPaint();
 #endif
-   flush();
 
+   flush();
 }
 
 QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
@@ -1193,24 +1194,29 @@ bool QWidgetBackingStore::syncAllowed()
 {
 #ifndef QT_NO_OPENGL
    QTLWExtra *tlwExtra = tlw->d_func()->maybeTopData();
+
    if (textureListWatcher && !textureListWatcher->isLocked()) {
       textureListWatcher->deleteLater();
       textureListWatcher = nullptr;
 
    } else if (!tlwExtra->widgetTextures.isEmpty()) {
       bool skipSync = false;
+
       for (QPlatformTextureList *tl : tlwExtra->widgetTextures) {
          if (tl->isLocked()) {
             if (!textureListWatcher) {
                textureListWatcher = new QPlatformTextureListWatcher(this);
             }
+
             if (!textureListWatcher->isLocked()) {
                textureListWatcher->watch(tl);
             }
             skipSync = true;
          }
       }
-      if (skipSync) { // cannot compose due to widget textures being in use
+
+      if (skipSync) {
+         // cannot compose due to widget textures being in use
          return false;
       }
    }
@@ -1535,6 +1541,7 @@ void QWidgetBackingStore::doSync()
       resetWidget(w);
 
       QPoint offset(tlwOffset);
+
       if (w != tlw) {
          offset += w->mapTo(tlw, QPoint());
       }
@@ -1547,7 +1554,6 @@ void QWidgetBackingStore::doSync()
       const int flags = QWidgetPrivate::DrawAsRoot | QWidgetPrivate::DrawRecursive;
       tlw->d_func()->drawWidget(store->paintDevice(), dirtyCopy, tlwOffset, flags, nullptr, this);
    }
-
 
    endPaint(toClean, store, &beginPaintInfo);
 }
@@ -1562,8 +1568,7 @@ void QWidgetBackingStore::flush(QWidget *widget)
    const bool hasDirtyOnScreenWidgets = dirtyOnScreenWidgets && !dirtyOnScreenWidgets->isEmpty();
    bool flushed = false;
 
-
-   if (!dirtyOnScreen.isEmpty()) {
+   if (! dirtyOnScreen.isEmpty()) {
       QWidget *target = widget ? widget : tlw;
 
       qt_flush(target, dirtyOnScreen, store, tlw, tlwOffset, widgetTexturesFor(tlw, tlw), this);
@@ -1574,7 +1579,7 @@ void QWidgetBackingStore::flush(QWidget *widget)
    // Render-to-texture widgets are not in dirtyOnScreen so flush if we have not done it above.
    if (!flushed && !hasDirtyOnScreenWidgets) {
 #ifndef QT_NO_OPENGL
-      if (!tlw->d_func()->topData()->widgetTextures.isEmpty()) {
+      if (! tlw->d_func()->topData()->widgetTextures.isEmpty()) {
          QPlatformTextureList *tl = widgetTexturesFor(tlw, tlw);
          if (tl) {
             QWidget *target = widget ? widget : tlw;
@@ -1626,19 +1631,19 @@ static inline bool discardInvalidateBufferRequest(QWidget *widget, QTLWExtra *tl
 void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const QSize &oldSize)
 {
    Q_Q(QWidget);
+
    Q_ASSERT(!q->isWindow());
    Q_ASSERT(q->parentWidget());
 
    const bool staticContents = q->testAttribute(Qt::WA_StaticContents);
-   const bool sizeDecreased = (data.crect.width() < oldSize.width())
-      || (data.crect.height() < oldSize.height());
+   const bool sizeDecreased = (data.crect.width() < oldSize.width()) || (data.crect.height() < oldSize.height());
 
    const QPoint offset(data.crect.x() - oldPos.x(), data.crect.y() - oldPos.y());
    const bool parentAreaExposed = !offset.isNull() || sizeDecreased;
    const QRect newWidgetRect(q->rect());
    const QRect oldWidgetRect(0, 0, oldSize.width(), oldSize.height());
 
-   if (!staticContents || graphicsEffect) {
+   if (! staticContents || graphicsEffect) {
       QRegion staticChildren;
       QWidgetBackingStore *bs = nullptr;
 

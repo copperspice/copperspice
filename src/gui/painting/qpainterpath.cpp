@@ -205,6 +205,7 @@ void QPainterPath::ensureData_helper()
 {
    QPainterPathPrivate *data = new QPainterPathData;
    data->elements.reserve(16);
+
    QPainterPath::Element e = { 0, 0, QPainterPath::MoveToElement };
    data->elements << e;
    d_ptr.reset(data);
@@ -397,11 +398,8 @@ void QPainterPath::arcTo(const QRectF &rect, qreal startAngle, qreal sweepLength
 
    lineTo(curve_start);
    for (int i = 0; i < point_count; i += 3) {
-      cubicTo(pts[i].x(), pts[i].y(),
-         pts[i + 1].x(), pts[i + 1].y(),
-         pts[i + 2].x(), pts[i + 2].y());
+      cubicTo(pts[i].x(), pts[i].y(), pts[i + 1].x(), pts[i + 1].y(), pts[i + 2].x(), pts[i + 2].y());
    }
-
 }
 
 void QPainterPath::arcMoveTo(const QRectF &rect, qreal angle)

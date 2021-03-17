@@ -36,6 +36,7 @@ bool QGraphicsGridLayoutEngineItem::isHidden() const
    if (QGraphicsItem *item = q_layoutItem->graphicsItem()) {
       return QGraphicsItemPrivate::get(item)->explicitlyHidden;
    }
+
    return false;
 }
 
@@ -65,11 +66,12 @@ Qt::Orientation QGraphicsGridLayoutEngineItem::dynamicConstraintOrientation() co
 {
    if (QGraphicsLayoutItemPrivate::get(q_layoutItem)->hasHeightForWidth()) {
       return Qt::Vertical;
-   } else { //if (QGraphicsLayoutItemPrivate::get(q_layoutItem)->hasWidthForHeight())
+
+   } else {
+      // if (QGraphicsLayoutItemPrivate::get(q_layoutItem)->hasWidthForHeight())
       return Qt::Horizontal;
    }
 }
-
 
 void QGraphicsGridLayoutEngine::setAlignment(QGraphicsLayoutItem *graphicsLayoutItem, Qt::Alignment alignment)
 {
@@ -103,8 +105,8 @@ int QGraphicsGridLayoutEngine::stretchFactor(QGraphicsLayoutItem *layoutItem, Qt
    if (QGraphicsGridLayoutEngineItem *item = findLayoutItem(layoutItem)) {
       return item->stretchFactor(orientation);
    }
+
    return 0;
 }
-
 
 #endif // QT_NO_GRAPHICSVIEW

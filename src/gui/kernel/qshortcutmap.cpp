@@ -35,8 +35,6 @@
 
 #ifndef QT_NO_SHORTCUT
 
-
-
 // To enable verbose output uncomment below
 //#define DEBUG_QSHORTCUTMAP
 
@@ -62,6 +60,7 @@ struct QShortcutEntry {
    bool correctContext() const {
       return contextMatcher(owner, context);
    }
+
    bool operator<(const QShortcutEntry &f) const {
       return keyseq < f.keyseq;
    }
@@ -639,10 +638,14 @@ void QShortcutMap::dispatchEvent(QKeyEvent *e)
       d->ambigCount = 0;
       d->prevSequence = curKey;
    }
+
    // Find next
-   int i = 0, enabledShortcuts = 0;
    const QShortcutEntry *current = nullptr;
    const QShortcutEntry *next    = nullptr;
+
+   int i = 0;
+   int enabledShortcuts = 0;
+
    while (i < d->identicals.size()) {
       current = d->identicals.at(i);
       if (current->enabled || !next) {

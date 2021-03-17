@@ -40,8 +40,6 @@
 #include <qtimer.h>
 #include <qhash.h>
 
-
-
 class ExtendedInformation;
 class QFileSystemModelPrivate;
 class QFileIconProvider;

@@ -87,6 +87,7 @@ class QAccessibleTabButton: public QAccessibleInterface, public QAccessibleActio
       }
       return parent()->state();
    }
+
    QRect rect() const override {
       if (!isValid()) {
          return QRect();
@@ -105,9 +106,11 @@ class QAccessibleTabButton: public QAccessibleInterface, public QAccessibleActio
    QAccessibleInterface *childAt(int, int) const override {
       return nullptr;
    }
+
    int childCount() const override {
       return 0;
    }
+
    int indexOfChild(const QAccessibleInterface *) const override  {
       return -1;
    }
@@ -311,7 +314,6 @@ int QAccessibleComboBox::indexOfChild(const QAccessibleInterface *child) const
    return -1;
 }
 
-/*! \reimp */
 QString QAccessibleComboBox::text(QAccessible::Text t) const
 {
    QString str;
@@ -333,17 +335,21 @@ QString QAccessibleComboBox::text(QAccessible::Text t) const
             str = comboBox()->currentText();
          }
          break;
+
 #ifndef QT_NO_SHORTCUT
       case QAccessible::Accelerator:
          str = QKeySequence(Qt::Key_Down).toString(QKeySequence::NativeText);
          break;
 #endif
+
       default:
          break;
    }
+
    if (str.isEmpty()) {
       str = QAccessibleWidget::text(t);
    }
+
    return str;
 }
 
@@ -357,6 +363,7 @@ QString QAccessibleComboBox::localizedActionDescription(const QString &actionNam
    if (actionName == showMenuAction() || actionName == pressAction()) {
       return QComboBox::tr("Open the combo box selection popup");
    }
+
    return QString();
 }
 
@@ -379,7 +386,7 @@ QStringList QAccessibleComboBox::keyBindingsForAction(const QString &/*actionNam
 #endif // QT_NO_COMBOBOX
 
 #ifndef QT_NO_SCROLLAREA
-// ======================= QAccessibleAbstractScrollArea =======================
+
 QAccessibleAbstractScrollArea::QAccessibleAbstractScrollArea(QWidget *widget)
    : QAccessibleWidget(widget, QAccessible::Client)
 {

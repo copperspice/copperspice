@@ -581,9 +581,11 @@ bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
             if (d->formatMajor < 4) {
                s >> ip >> pixmap;
                painter->drawPixmap(ip, pixmap);
+
             } else if (d->formatMajor <= 5) {
                s >> ir >> pixmap;
                painter->drawPixmap(ir, pixmap);
+
             } else {
                QRectF sr;
                if (d->in_memory_only) {

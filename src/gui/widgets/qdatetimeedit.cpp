@@ -67,7 +67,6 @@ QDateTimeEdit::QDateTimeEdit(const QDateTime &datetime, QWidget *parent)
          QDATETIMEEDIT_TIME_MIN));
 }
 
-
 QDateTimeEdit::QDateTimeEdit(const QDate &date, QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
 {
@@ -91,7 +90,6 @@ QDateTimeEdit::QDateTimeEdit(const QVariant &var, QVariant::Type parserType, QWi
    d->init(var);
 }
 
-
 QDateTimeEdit::~QDateTimeEdit()
 {
 }
@@ -105,15 +103,16 @@ QDateTime QDateTimeEdit::dateTime() const
 void QDateTimeEdit::setDateTime(const QDateTime &datetime)
 {
    Q_D(QDateTimeEdit);
+
    if (datetime.isValid()) {
       d->clearCache();
+
       if (!(d->sections & DateSections_Mask)) {
          setDateRange(datetime.date(), datetime.date());
       }
       d->setValue(QDateTime(datetime.date(), datetime.time(), d->spec), EmitIfChanged);
    }
 }
-
 
 QDate QDateTimeEdit::date() const
 {
@@ -1123,6 +1122,7 @@ void QDateTimeEdit::fixup(QString &input) const
 QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
 {
    Q_D(const QDateTimeEdit);
+
    if (d->readOnly) {
       return Qt::EmptyFlag;
    }
@@ -1138,6 +1138,7 @@ QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
       if (d->wrapping) {
          return StepEnabled(StepUpEnabled | StepDownEnabled);
       }
+
       // 3 cases.  date, time, datetime.  each case look
       // at just the relavant component.
       QVariant max, min, val;
@@ -1146,26 +1147,32 @@ QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
          max = d->maximum.toTime();
          min = d->minimum.toTime();
          val = d->value.toTime();
+
       } else if (!(d->sections & TimeSections_Mask)) {
          // date only, no time
          max = d->maximum.toDate();
          min = d->minimum.toDate();
          val = d->value.toDate();
+
       } else {
          // both
          max = d->maximum;
          min = d->minimum;
          val = d->value;
       }
+
       if (val != min) {
          ret |= QAbstractSpinBox::StepDownEnabled;
       }
+
       if (val != max) {
          ret |= QAbstractSpinBox::StepUpEnabled;
       }
+
       return ret;
    }
 #endif
+
    switch (d->sectionType(d->currentSectionIndex)) {
       case QDateTimeParser::NoSection:
       case QDateTimeParser::FirstSection:
@@ -1175,6 +1182,7 @@ QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
       default:
          break;
    }
+
    if (d->wrapping) {
       return StepEnabled(StepDownEnabled | StepUpEnabled);
    }
@@ -1183,18 +1191,15 @@ QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
    if (v != d->value) {
       ret |= QAbstractSpinBox::StepUpEnabled;
    }
+
    v = d->stepBy(d->currentSectionIndex, -1, true);
+
    if (v != d->value) {
       ret |= QAbstractSpinBox::StepDownEnabled;
    }
 
    return ret;
 }
-
-
-/*!
-  \reimp
-*/
 
 void QDateTimeEdit::mousePressEvent(QMouseEvent *event)
 {
@@ -1206,9 +1211,11 @@ void QDateTimeEdit::mousePressEvent(QMouseEvent *event)
    d->updateHoverControl(event->pos());
    if (d->hoverControl == QStyle::SC_ComboBoxArrow) {
       event->accept();
+
       if (d->readOnly) {
          return;
       }
+
       d->updateArrow(QStyle::State_Sunken);
       d->initCalendarPopup();
       d->positionCalendarPopup();
@@ -1245,6 +1252,7 @@ QDateEdit::QDateEdit(const QDate &date, QWidget *parent)
    : QDateTimeEdit(date, QVariant::Date, parent)
 {
 }
+
 QDateEdit::~QDateEdit()
 {
 }
@@ -1252,22 +1260,25 @@ QDateEdit::~QDateEdit()
 QDateTimeEditPrivate::QDateTimeEditPrivate()
    : QDateTimeParser(QVariant::DateTime, QDateTimeParser::DateTimeEdit)
 {
-   hasHadFocus = false;
+   hasHadFocus         = false;
    formatExplicitlySet = false;
-   cacheGuard = false;
-   fixday = true;
-   type = QVariant::DateTime;
-   cachedDay = -1;
-   currentSectionIndex = FirstSectionIndex;
+   cacheGuard          = false;
+   fixday              = true;
+   calendarPopup       = false;
+
+   type       = QVariant::DateTime;
    sections   = Qt::EmptyFlag;
+   cachedDay  = -1;
+   first.pos  = 0;
 
-   first.pos = 0;
+   currentSectionIndex = FirstSectionIndex;
 
-   calendarPopup = false;
    minimum = QDATETIMEEDIT_COMPAT_DATETIME_MIN;
    maximum = QDATETIMEEDIT_DATETIME_MAX;
-   arrowState = QStyle::State_None;
+
+   arrowState    = QStyle::State_None;
    monthCalendar = nullptr;
+
    readLocaleSettings();
 
 #ifdef QT_KEYPAD_NAVIGATION
@@ -1278,6 +1289,7 @@ QDateTimeEditPrivate::QDateTimeEditPrivate()
 QDateTimeEditPrivate::~QDateTimeEditPrivate()
 {
 }
+
 void QDateTimeEditPrivate::updateTimeSpec()
 {
    minimum = minimum.toDateTime().toTimeSpec(spec);
@@ -1885,8 +1897,8 @@ QDateTimeEdit::Section QDateTimeEditPrivate::convertToPublic(QDateTimeParser::Se
 
       case MonthSection:
          return QDateTimeEdit::MonthSection;
-      case YearSection2Digits:
 
+      case YearSection2Digits:
       case YearSection:
          return QDateTimeEdit::YearSection;
 
@@ -1899,6 +1911,7 @@ QDateTimeEdit::Section QDateTimeEditPrivate::convertToPublic(QDateTimeParser::Se
       case LastSection:
          break;
    }
+
    return QDateTimeEdit::NoSection;
 }
 
@@ -1909,9 +1922,11 @@ QDateTimeEdit::Sections QDateTimeEditPrivate::convertSections(QDateTimeParser::S
    if (s & QDateTimeParser::MSecSection) {
       ret |= QDateTimeEdit::MSecSection;
    }
+
    if (s & QDateTimeParser::SecondSection) {
       ret |= QDateTimeEdit::SecondSection;
    }
+
    if (s & QDateTimeParser::MinuteSection) {
       ret |= QDateTimeEdit::MinuteSection;
    }

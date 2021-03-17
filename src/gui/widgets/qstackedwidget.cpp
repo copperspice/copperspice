@@ -30,7 +30,6 @@
 
 #include <qframe_p.h>
 
-
 class QStackedWidgetPrivate : public QFramePrivate
 {
    Q_DECLARE_PUBLIC(QStackedWidget)
@@ -55,7 +54,6 @@ QStackedWidget::QStackedWidget(QWidget *parent)
    connect(d->layout, SIGNAL(currentChanged(int)), this, SLOT(currentChanged(int)));
 }
 
-
 QStackedWidget::~QStackedWidget()
 {
 }
@@ -70,12 +68,10 @@ int QStackedWidget::insertWidget(int index, QWidget *widget)
    return d_func()->layout->insertWidget(index, widget);
 }
 
-
 void QStackedWidget::removeWidget(QWidget *widget)
 {
    d_func()->layout->removeWidget(widget);
 }
-
 
 void QStackedWidget::setCurrentIndex(int index)
 {
@@ -87,12 +83,10 @@ int QStackedWidget::currentIndex() const
    return d_func()->layout->currentIndex();
 }
 
-
 QWidget *QStackedWidget::currentWidget() const
 {
    return d_func()->layout->currentWidget();
 }
-
 
 void QStackedWidget::setCurrentWidget(QWidget *widget)
 {
@@ -104,12 +98,10 @@ void QStackedWidget::setCurrentWidget(QWidget *widget)
    d->layout->setCurrentWidget(widget);
 }
 
-
 int QStackedWidget::indexOf(QWidget *widget) const
 {
    return d_func()->layout->indexOf(widget);
 }
-
 
 QWidget *QStackedWidget::widget(int index) const
 {
@@ -121,7 +113,6 @@ int QStackedWidget::count() const
    return d_func()->layout->count();
 }
 
-/*! \reimp */
 bool QStackedWidget::event(QEvent *e)
 {
    return QFrame::event(e);

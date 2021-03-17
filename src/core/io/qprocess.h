@@ -40,51 +40,7 @@
 
 class QProcessPrivate;
 class QProcessEnvironmentPrivate;
-
-class Q_CORE_EXPORT QProcessEnvironment
-{
- public:
-   QProcessEnvironment();
-   QProcessEnvironment(const QProcessEnvironment &other);
-   ~QProcessEnvironment();
-
-   QProcessEnvironment &operator=(QProcessEnvironment && other)  {
-      swap(other);
-      return *this;
-   }
-
-   QProcessEnvironment &operator=(const QProcessEnvironment &other);
-
-   bool operator==(const QProcessEnvironment &other) const;
-   inline bool operator!=(const QProcessEnvironment &other) const {
-      return !(*this == other);
-   }
-
-   bool isEmpty() const;
-   void clear();
-
-   bool contains(const QString &name) const;
-   void insert(const QString &name, const QString &value);
-   void remove(const QString &name);
-   QString value(const QString &name, const QString &defaultValue = QString()) const;
-
-   QStringList toStringList() const;
-
-   QStringList keys() const;
-
-   void insert(const QProcessEnvironment &e);
-
-   static QProcessEnvironment systemEnvironment();
-
-   void swap(QProcessEnvironment &other) {
-      qSwap(d, other.d);
-   }
-
- private:
-   friend class QProcessPrivate;
-   friend class QProcessEnvironmentPrivate;
-   QSharedDataPointer<QProcessEnvironmentPrivate> d;
-};
+class QProcessEnvironment;
 
 class Q_CORE_EXPORT QProcess : public QIODevice
 {
@@ -269,6 +225,52 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    CORE_CS_SLOT_2(_q_processDied)
 
    friend class QProcessManager;
+};
+
+class Q_CORE_EXPORT QProcessEnvironment
+{
+ public:
+   QProcessEnvironment();
+   QProcessEnvironment(const QProcessEnvironment &other);
+   ~QProcessEnvironment();
+
+   QProcessEnvironment &operator=(QProcessEnvironment && other)  {
+      swap(other);
+      return *this;
+   }
+
+   QProcessEnvironment &operator=(const QProcessEnvironment &other);
+
+   bool operator==(const QProcessEnvironment &other) const;
+   inline bool operator!=(const QProcessEnvironment &other) const {
+      return !(*this == other);
+   }
+
+   bool isEmpty() const;
+   void clear();
+
+   bool contains(const QString &name) const;
+   void insert(const QString &name, const QString &value);
+   void remove(const QString &name);
+   QString value(const QString &name, const QString &defaultValue = QString()) const;
+
+   QStringList toStringList() const;
+
+   QStringList keys() const;
+
+   void insert(const QProcessEnvironment &e);
+
+   static QProcessEnvironment systemEnvironment();
+
+   void swap(QProcessEnvironment &other) {
+      qSwap(d, other.d);
+   }
+
+ private:
+   friend class QProcessPrivate;
+   friend class QProcessEnvironmentPrivate;
+
+   QSharedDataPointer<QProcessEnvironmentPrivate> d;
 };
 
 #endif // QT_NO_PROCESS

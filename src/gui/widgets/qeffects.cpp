@@ -24,6 +24,7 @@
 #include <qapplication.h>
 
 #ifndef QT_NO_EFFECTS
+
 #include <qdesktopwidget.h>
 #include <qeffects_p.h>
 #include <qevent.h>
@@ -243,30 +244,31 @@ void QAlphaWidget::render()
    }
 
 #if defined(Q_OS_WIN)
-   if (alpha >= 1 || !showWidget) {
+   if (alpha >= 1 || ! showWidget) {
       anim.stop();
       qApp->removeEventFilter(this);
       widget->setWindowOpacity(1);
+
       q_blend = nullptr;
       deleteLater();
+
    } else {
       widget->setWindowOpacity(alpha);
    }
+
 #else
-   if (alpha >= 1 || !showWidget) {
+   if (alpha >= 1 || ! showWidget) {
       anim.stop();
       qApp->removeEventFilter(this);
 
-      if (widget) {
-         if (!showWidget) {
-#ifdef Q_OS_WIN
-            setEnabled(true);
-            setFocus();
-#endif
+      if (widget != nullptr) {
+
+         if (! showWidget) {
             widget->hide();
+
          } else {
-            //Since we are faking the visibility of the widget
-            //we need to unset the hidden state on it before calling show
+            // since we are faking the visibility of the widget
+            // we need to unset the hidden state on it before calling show
             widget->setAttribute(Qt::WA_WState_Hidden, true);
             widget->show();
             lower();
@@ -275,12 +277,13 @@ void QAlphaWidget::render()
 
       q_blend = nullptr;
       deleteLater();
+
    } else {
       alphaBlend();
       pm = QPixmap::fromImage(mixedImage);
       repaint();
    }
-#endif // defined(Q_OS_WIN)
+#endif
 }
 
 /*
@@ -294,6 +297,7 @@ void QAlphaWidget::alphaBlend()
    const int sw = frontImage.width();
    const int sh = frontImage.height();
    const int bpl = frontImage.bytesPerLine();
+
    switch (frontImage.depth()) {
       case 32: {
          uchar *mixed_data = mixedImage.bits();

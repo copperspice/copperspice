@@ -1404,43 +1404,6 @@ bool QUrlPrivate::validateComponent(QUrlPrivate::Section section, const QString 
    return true;
 }
 
-#if 0
-inline void QUrlPrivate::validate() const
-{
-   QUrlPrivate *that = (QUrlPrivate *)this;
-   that->encodedOriginal = that->toEncoded(); // may detach
-   parse(ParseOnly);
-
-   QURL_SETFLAG(that->stateFlags, Validated);
-
-   if (! isValid) {
-      return;
-   }
-
-   QString auth = authority(); // causes the non-encoded forms to be valid
-
-   // authority() calls canonicalHost() which sets this
-   if (!isHostValid) {
-      return;
-   }
-
-   if (scheme == QLatin1String("mailto")) {
-      if (!host.isEmpty() || port != -1 || !userName.isEmpty() || !password.isEmpty()) {
-         that->isValid = false;
-
-         that->errorInfo.setParams(0, QT_TRANSLATE_NOOP(QUrl, "expected empty host, username,"
-                                   "port and password"), 0, 0);
-      }
-
-   } else if (scheme == ftpScheme() || scheme == httpScheme()) {
-      if (host.isEmpty() && !(path.isEmpty() && encodedPath.isEmpty())) {
-         that->isValid = false;
-         that->errorInfo.setParams(0, QT_TRANSLATE_NOOP(QUrl, "host is empty, but not the path"), 0, 0);
-      }
-   }
-}
-#endif
-
 QUrl::QUrl(const QString &url, ParsingMode parsingMode)
    : d(nullptr)
 {

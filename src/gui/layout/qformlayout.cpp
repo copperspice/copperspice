@@ -26,11 +26,12 @@
 #include <qdebug.h>
 #include <qformlayout.h>
 #include <qlabel.h>
-#include <qlayout_p.h>
-#include <qlayoutengine_p.h>
 #include <qrect.h>
 #include <qvector.h>
 #include <qwidget.h>
+
+#include <qlayout_p.h>
+#include <qlayoutengine_p.h>
 
 namespace {
 
@@ -679,6 +680,7 @@ static inline int spacingHelper(QWidget *parent, QStyle *style, int userVSpacing
             spacing = qMax(spacing, spacing2);
          }
       }
+
    } else {
       if (prevItem1) {
          QWidget *wid = prevItem1->item->widget();
@@ -744,6 +746,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
    // sizeHint/minSize, since we don't count label/field pairs that
    // are split.
    maxLabelWidth = 0;
+
    if (!wrapAllRows) {
       for (int i = 0; i < rr; ++i) {
          const QFormLayoutItem *label = m_matrix(i, 0);
@@ -752,6 +755,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
             maxLabelWidth = qMax(maxLabelWidth, label->sizeHint.width());
          }
       }
+
    } else {
       maxLabelWidth = width;
    }
@@ -907,6 +911,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
       } else {
          vLayouts[0].init(0, 0);
       }
+
    } else {
       vLayouts[0].init(0, 0);
    }
@@ -931,7 +936,7 @@ void QFormLayoutPrivate::setupHorizontalLayoutData(int width)
       QFormLayoutItem *field = m_matrix(i, 1);
 
       // Totally ignore empty rows...
-      if (!label && !field) {
+      if (! label && ! field) {
          continue;
       }
 
@@ -994,9 +999,9 @@ void QFormLayoutPrivate::calcSizeHints()
       mh += vLayouts.at(i).minimumSize + spacing;
    }
 
-   minSize.rwidth() = qMin(mw, QLAYOUTSIZE_MAX);
-   minSize.rheight() = qMin(mh, QLAYOUTSIZE_MAX);
-   prefSize.rwidth() = qMin(w, QLAYOUTSIZE_MAX);
+   minSize.rwidth()   = qMin(mw, QLAYOUTSIZE_MAX);
+   minSize.rheight()  = qMin(mh, QLAYOUTSIZE_MAX);
+   prefSize.rwidth()  = qMin(w, QLAYOUTSIZE_MAX);
    prefSize.rheight() = qMin(h, QLAYOUTSIZE_MAX);
 }
 
@@ -1022,7 +1027,7 @@ void QFormLayoutPrivate::insertRows(int row, int count)
 bool QFormLayoutPrivate::setItem(int row, QFormLayout::ItemRole role, QLayoutItem *item)
 {
    const bool fullRow = role == QFormLayout::SpanningRole;
-   const int column =  role == QFormLayout::SpanningRole ? 1 : static_cast<int>(role);
+   const int column   = role == QFormLayout::SpanningRole ? 1 : static_cast<int>(role);
 
    if (uint(row) >= uint(m_matrix.rowCount()) || uint(column) > 1U) {
       qWarning("QFormLayoutPrivate::setItem: Invalid cell (%d, %d)", row, column);
@@ -1114,7 +1119,6 @@ QFormLayout::QFormLayout(QWidget *parent)
    : QLayout(*new QFormLayoutPrivate, nullptr, parent)
 {
 }
-
 
 QFormLayout::~QFormLayout()
 {
@@ -1261,7 +1265,6 @@ void QFormLayout::insertRow(int row, const QString &labelText, QWidget *field)
    insertRow(row, label, field);
 }
 
-
 void QFormLayout::insertRow(int row, const QString &labelText, QLayout *field)
 {
    Q_D(QFormLayout);
@@ -1335,6 +1338,7 @@ QLayoutItem *QFormLayout::itemAt(int index) const
    if (QFormLayoutItem *formItem = d->m_things.value(index)) {
       return formItem->item;
    }
+
    return nullptr;
 }
 
@@ -1383,6 +1387,7 @@ QLayoutItem *QFormLayout::takeAt(int index)
 Qt::Orientations QFormLayout::expandingDirections() const
 {
    Q_D(const QFormLayout);
+
    QFormLayoutPrivate *e = const_cast<QFormLayoutPrivate *>(d);
    e->updateSizes();
 
@@ -1394,6 +1399,7 @@ Qt::Orientations QFormLayout::expandingDirections() const
    if (e->expandVertical) {
       o |= Qt::Vertical;
    }
+
    return o;
 }
 
@@ -1541,6 +1547,7 @@ QLayoutItem *QFormLayout::itemAt(int row, ItemRole role) const
                return item->item;
             }
          break;
+
       case LabelRole:
       case FieldRole:
          if (QFormLayoutItem *item = d->m_matrix(row, (role == LabelRole) ? 0 : 1)) {
@@ -1586,6 +1593,7 @@ void QFormLayout::getLayoutPosition(QLayout *layout, int *rowPtr, ItemRole *role
 {
    int n = count();
    int index = 0;
+
    while (index < n) {
       if (itemAt(index) == layout) {
          break;
@@ -1629,6 +1637,7 @@ QWidget *QFormLayout::labelForField(QWidget *field) const
          return label->widget();
       }
    }
+
    return nullptr;
 }
 
@@ -1649,6 +1658,7 @@ QWidget *QFormLayout::labelForField(QLayout *field) const
          return label->widget();
       }
    }
+
    return nullptr;
 }
 

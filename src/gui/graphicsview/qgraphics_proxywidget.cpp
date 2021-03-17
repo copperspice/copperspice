@@ -235,13 +235,14 @@ QWidget *QGraphicsProxyWidgetPrivate::findFocusChild(QWidget *child, bool next) 
    uint focus_flag = qt_tab_all_widgets() ? Qt::TabFocus : Qt::StrongFocus;
 
    do {
-      if (child->isEnabled()
-         && child->isVisibleTo(widget)
-         && ((child->focusPolicy() & focus_flag) == focus_flag)
-         && !(child->d_func()->extra && child->d_func()->extra->focus_proxy)) {
+      if (child->isEnabled() && child->isVisibleTo(widget)
+            && ((child->focusPolicy() & focus_flag) == focus_flag)
+            && !(child->d_func()->extra && child->d_func()->extra->focus_proxy)) {
          return child;
       }
+
       child = next ? child->d_func()->focus_next : child->d_func()->focus_prev;
+
    } while (child != oldChild && !(next && child == widget) && !(!next && child == widget->d_func()->focus_prev));
 
    return nullptr;
@@ -251,7 +252,8 @@ QWidget *QGraphicsProxyWidgetPrivate::findFocusChild(QWidget *child, bool next) 
 void QGraphicsProxyWidgetPrivate::_q_removeWidgetSlot()
 {
    Q_Q(QGraphicsProxyWidget);
-   if (!widget.isNull()) {
+
+   if (! widget.isNull()) {
       if (QWExtra *extra = widget->d_func()->extra) {
          extra->proxyWidget = nullptr;
       }
@@ -351,6 +353,7 @@ void QGraphicsProxyWidgetPrivate::unembedSubWindow(QWidget *subWin)
                proxy->setWidget(nullptr);
                scene->removeItem(proxy);
                delete proxy;
+
                return;
             }
          }
@@ -445,14 +448,17 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
 #ifndef QT_NO_CURSOR
       q->unsetCursor();
 #endif
+
       q->setAcceptHoverEvents(false);
       if (!newWidget) {
          q->update();
       }
    }
+
    if (! newWidget) {
       return;
    }
+
    if (!newWidget->isWindow()) {
       QWExtra *extra = newWidget->parentWidget()->d_func()->extra;
       if (!extra || !extra->proxyWidget)  {
@@ -1197,6 +1203,7 @@ void QGraphicsProxyWidget::focusInEvent(QFocusEvent *event)
             focusChild->setFocus(event->reason());
          }
          break;
+
       default:
          if (d->widget && d->widget->focusWidget()) {
             d->widget->focusWidget()->setFocus(event->reason());

@@ -49,8 +49,6 @@ class QMenuBarPrivate : public QWidgetPrivate
       delete platformMenuBar;
    }
 
-
-
    void init();
    QAction *getNextAction(const int start, const int increment) const;
 
@@ -113,8 +111,6 @@ class QMenuBarPrivate : public QWidgetPrivate
    inline int indexOf(QAction *act) const {
       return q_func()->actions().indexOf(act);
    }
-
-
 };
 
 #endif // QT_NO_MENUBAR

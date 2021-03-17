@@ -43,8 +43,6 @@
 #include <qformlayout.h>
 #include <QCoreApplication>
 
-
-
 #ifndef QT_NO_PRINTPREVIEWDIALOG
 
 class QPrintPreviewMainWindow : public QMainWindow

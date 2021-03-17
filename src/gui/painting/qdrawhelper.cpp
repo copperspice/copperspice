@@ -1120,9 +1120,15 @@ QPixelLayout qPixelLayouts[QImage::NImageFormats] = {
 
    // Technically using convertPassThrough to convert from ARGB32PM to RGB32 is wrong,
    // but everywhere this generic conversion would be wrong is currently overloaded.
-   { 8, 16, 8,  8, 8,  0, 0,  0, false, QPixelLayout::BPP32, convertPassThrough, convertPassThrough, convertPassThrough, convertRGB32ToRGB64 }, // Format_RGB32
-   { 8, 16, 8,  8, 8,  0, 8, 24, false, QPixelLayout::BPP32, convertARGB32ToARGB32PM, convertARGB32FromARGB32PM, convertPassThrough, convertARGB32ToARGB64PM }, // Format_ARGB32
-   { 8, 16, 8,  8, 8,  0, 8, 24,  true, QPixelLayout::BPP32, convertPassThrough, convertPassThrough, convertPassThrough, convertARGB32PMToARGB64PM }, // Format_ARGB32_Premultiplied
+
+   // Format_RGB32
+   { 8, 16, 8,  8, 8,  0, 0,  0, false, QPixelLayout::BPP32, convertPassThrough, convertPassThrough, convertPassThrough, convertRGB32ToRGB64 },
+
+   // Format_ARGB32
+   { 8, 16, 8,  8, 8,  0, 8, 24, false, QPixelLayout::BPP32, convertARGB32ToARGB32PM, convertARGB32FromARGB32PM, convertPassThrough, convertARGB32ToARGB64PM },
+
+   // Format_ARGB32_Premultiplied
+   { 8, 16, 8,  8, 8,  0, 8, 24,  true, QPixelLayout::BPP32, convertPassThrough, convertPassThrough, convertPassThrough, convertARGB32PMToARGB64PM },
 
    pixelLayoutRGB<QImage::Format_RGB16>(),
    pixelLayoutARGBPM<QImage::Format_ARGB8565_Premultiplied>(),
@@ -1136,17 +1142,34 @@ QPixelLayout qPixelLayouts[QImage::NImageFormats] = {
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
    { 8, 24, 8, 16, 8,  8, 0,  0, false, QPixelLayout::BPP32, convertRGBA8888PMToARGB32PM, convertRGBXFromARGB32PM, convertRGBXFromRGB32, convertRGBA8888PMToARGB64PM }, // Format_RGBX8888
+
    { 8, 24, 8, 16, 8,  8, 8,  0, false, QPixelLayout::BPP32, convertRGBA8888ToARGB32PM, convertRGBA8888FromARGB32PM, convertRGBXFromRGB32, convertRGBA8888ToARGB64PM }, // Format_RGBA8888
+
    { 8, 24, 8, 16, 8,  8, 8,  0,  true, QPixelLayout::BPP32, convertRGBA8888PMToARGB32PM, convertRGBA8888PMFromARGB32PM, convertRGBXFromRGB32, convertRGBA8888PMToARGB64PM}, // Format_RGBA8888_Premultiplied
+
 #else
    { 8,  0, 8,  8, 8, 16, 0, 24, false, QPixelLayout::BPP32, convertRGBA8888PMToARGB32PM, convertRGBXFromARGB32PM, convertRGBXFromRGB32, convertRGBA8888PMToARGB64PM }, // Format_RGBX8888
+
    { 8,  0, 8,  8, 8, 16, 8, 24, false, QPixelLayout::BPP32, convertRGBA8888ToARGB32PM, convertRGBA8888FromARGB32PM, convertRGBXFromRGB32, convertRGBA8888ToARGB64PM }, // Format_RGBA8888 (ABGR32)
+
    { 8,  0, 8,  8, 8, 16, 8, 24,  true, QPixelLayout::BPP32, convertRGBA8888PMToARGB32PM, convertRGBA8888PMFromARGB32PM, convertRGBXFromRGB32, convertRGBA8888PMToARGB64PM },  // Format_RGBA8888_Premultiplied
 #endif
-   { 10,  20, 10,  10, 10, 0, 0, 30, false, QPixelLayout::BPP32, convertA2RGB30PMToARGB32PM<PixelOrderBGR>, convertRGB30FromARGB32PM<PixelOrderBGR>, convertRGB30FromRGB32<PixelOrderBGR>, convertA2RGB30PMToARGB64PM<PixelOrderBGR> }, // Format_BGR30
-   { 10,  20, 10,  10, 10, 0, 2, 30,  true, QPixelLayout::BPP32, convertA2RGB30PMToARGB32PM<PixelOrderBGR>, convertA2RGB30PMFromARGB32PM<PixelOrderBGR>, convertRGB30FromRGB32<PixelOrderBGR>, convertA2RGB30PMToARGB64PM<PixelOrderBGR> },  // Format_A2BGR30_Premultiplied
-   { 10,  0, 10,  10, 10, 20, 0, 30, false, QPixelLayout::BPP32, convertA2RGB30PMToARGB32PM<PixelOrderRGB>, convertRGB30FromARGB32PM<PixelOrderRGB>, convertRGB30FromRGB32<PixelOrderRGB>, convertA2RGB30PMToARGB64PM<PixelOrderRGB> }, // Format_RGB30
-   { 10,  0, 10,  10, 10, 20, 2, 30,  true, QPixelLayout::BPP32, convertA2RGB30PMToARGB32PM<PixelOrderRGB>, convertA2RGB30PMFromARGB32PM<PixelOrderRGB>, convertRGB30FromRGB32<PixelOrderRGB>, convertA2RGB30PMToARGB64PM<PixelOrderRGB> },  // Format_A2RGB30_Premultiplied
+
+   // Format_BGR30
+   { 10,  20, 10,  10, 10, 0, 0, 30, false, QPixelLayout::BPP32, convertA2RGB30PMToARGB32PM<PixelOrderBGR>,
+            convertRGB30FromARGB32PM<PixelOrderBGR>, convertRGB30FromRGB32<PixelOrderBGR>, convertA2RGB30PMToARGB64PM<PixelOrderBGR> },
+
+   // Format_A2BGR30_Premultiplied
+   { 10,  20, 10,  10, 10, 0, 2, 30,  true, QPixelLayout::BPP32, convertA2RGB30PMToARGB32PM<PixelOrderBGR>,
+            convertA2RGB30PMFromARGB32PM<PixelOrderBGR>, convertRGB30FromRGB32<PixelOrderBGR>, convertA2RGB30PMToARGB64PM<PixelOrderBGR> },
+
+   // Format_RGB30
+   { 10,  0, 10,  10, 10, 20, 0, 30, false, QPixelLayout::BPP32, convertA2RGB30PMToARGB32PM<PixelOrderRGB>, convertRGB30FromARGB32PM<PixelOrderRGB>,
+            convertRGB30FromRGB32<PixelOrderRGB>, convertA2RGB30PMToARGB64PM<PixelOrderRGB> },
+
+   // Format_A2RGB30_Premultiplied
+   { 10,  0, 10,  10, 10, 20, 2, 30,  true, QPixelLayout::BPP32, convertA2RGB30PMToARGB32PM<PixelOrderRGB>, convertA2RGB30PMFromARGB32PM<PixelOrderRGB>,
+            convertRGB30FromRGB32<PixelOrderRGB>, convertA2RGB30PMToARGB64PM<PixelOrderRGB> },
 
    // Format_Alpha8
    { 0, 0,  0, 0,  0, 0,  8, 0, false, QPixelLayout::BPP8, convertAlpha8ToRGB32, convertAlpha8FromARGB32PM, nullptr, convertAlpha8ToRGB64 },
@@ -1158,34 +1181,34 @@ QPixelLayout qPixelLayouts[QImage::NImageFormats] = {
 
 const FetchPixelsFunc qFetchPixels[QPixelLayout::BPPCount] = {
    nullptr,                             // BPPNone
-   fetchPixels<QPixelLayout::BPP1MSB>, // BPP1MSB
-   fetchPixels<QPixelLayout::BPP1LSB>, // BPP1LSB
-   fetchPixels<QPixelLayout::BPP8>, // BPP8
-   fetchPixels<QPixelLayout::BPP16>, // BPP16
-   fetchPixels<QPixelLayout::BPP24>, // BPP24
-   fetchPixels<QPixelLayout::BPP32> // BPP32
+   fetchPixels<QPixelLayout::BPP1MSB>,  // BPP1MSB
+   fetchPixels<QPixelLayout::BPP1LSB>,  // BPP1LSB
+   fetchPixels<QPixelLayout::BPP8>,     // BPP8
+   fetchPixels<QPixelLayout::BPP16>,    // BPP16
+   fetchPixels<QPixelLayout::BPP24>,    // BPP24
+   fetchPixels<QPixelLayout::BPP32>     // BPP32
 };
 
 const StorePixelsFunc qStorePixels[QPixelLayout::BPPCount] = {
    nullptr,                             // BPPNone
-   storePixels<QPixelLayout::BPP1MSB>, // BPP1MSB
-   storePixels<QPixelLayout::BPP1LSB>, // BPP1LSB
-   storePixels<QPixelLayout::BPP8>, // BPP8
-   storePixels<QPixelLayout::BPP16>, // BPP16
-   storePixels<QPixelLayout::BPP24>, // BPP24
-   storePixels<QPixelLayout::BPP32> // BPP32
+   storePixels<QPixelLayout::BPP1MSB>,  // BPP1MSB
+   storePixels<QPixelLayout::BPP1LSB>,  // BPP1LSB
+   storePixels<QPixelLayout::BPP8>,     // BPP8
+   storePixels<QPixelLayout::BPP16>,    // BPP16
+   storePixels<QPixelLayout::BPP24>,    // BPP24
+   storePixels<QPixelLayout::BPP32>     // BPP32
 };
 
 typedef uint (*FetchPixelFunc)(const uchar *src, int index);
 
 static const FetchPixelFunc qFetchPixel[QPixelLayout::BPPCount] = {
    nullptr,                             // BPPNone
-   fetchPixel<QPixelLayout::BPP1MSB>, // BPP1MSB
-   fetchPixel<QPixelLayout::BPP1LSB>, // BPP1LSB
-   fetchPixel<QPixelLayout::BPP8>, // BPP8
-   fetchPixel<QPixelLayout::BPP16>, // BPP16
-   fetchPixel<QPixelLayout::BPP24>, // BPP24
-   fetchPixel<QPixelLayout::BPP32> // BPP32
+   fetchPixel<QPixelLayout::BPP1MSB>,   // BPP1MSB
+   fetchPixel<QPixelLayout::BPP1LSB>,   // BPP1LSB
+   fetchPixel<QPixelLayout::BPP8>,      // BPP8
+   fetchPixel<QPixelLayout::BPP16>,     // BPP16
+   fetchPixel<QPixelLayout::BPP24>,     // BPP24
+   fetchPixel<QPixelLayout::BPP32>      // BPP32
 };
 
 /*
@@ -1198,11 +1221,13 @@ static uint *destFetchMono(uint *buffer, QRasterBuffer *rasterBuffer, int x, int
    uchar *__restrict data = (uchar *)rasterBuffer->scanLine(y);
    uint *start = buffer;
    const uint *end = buffer + length;
+
    while (buffer < end) {
       *buffer = data[x >> 3] & (0x80 >> (x & 7)) ? rasterBuffer->destColor1 : rasterBuffer->destColor0;
       ++buffer;
       ++x;
    }
+
    return start;
 }
 
@@ -1211,11 +1236,13 @@ static uint *destFetchMonoLsb(uint *buffer, QRasterBuffer *rasterBuffer, int x, 
    uchar *__restrict data = (uchar *)rasterBuffer->scanLine(y);
    uint *start = buffer;
    const uint *end = buffer + length;
+
    while (buffer < end) {
       *buffer = data[x >> 3] & (0x1 << (x & 7)) ? rasterBuffer->destColor1 : rasterBuffer->destColor0;
       ++buffer;
       ++x;
    }
+
    return start;
 }
 
@@ -1230,6 +1257,7 @@ static uint *destFetchRGB16(uint *buffer, QRasterBuffer *rasterBuffer, int x, in
    for (int i = 0; i < length; ++i) {
       buffer[i] = qConvertRgb16To32(data[i]);
    }
+
    return buffer;
 }
 
@@ -1341,6 +1369,7 @@ static inline QRgb findNearestColor(QRgb color, QRasterBuffer *rbuf)
    if (dist_0 < dist_1) {
       return color_0;
    }
+
    return color_1;
 }
 
@@ -1351,6 +1380,7 @@ static inline QRgb findNearestColor(QRgb color, QRasterBuffer *rbuf)
 static void destStoreMono(QRasterBuffer *rasterBuffer, int x, int y, const uint *buffer, int length)
 {
    uchar *__restrict data = (uchar *)rasterBuffer->scanLine(y);
+
    if (rasterBuffer->monoDestinationWithClut) {
       for (int i = 0; i < length; ++i) {
          if (buffer[i] == rasterBuffer->destColor0) {
@@ -1364,6 +1394,7 @@ static void destStoreMono(QRasterBuffer *rasterBuffer, int x, int y, const uint 
          }
          ++x;
       }
+
    } else {
       for (int i = 0; i < length; ++i) {
          if (qGray(buffer[i]) < int(qt_bayer_matrix[y & 15][x & 15])) {
@@ -1418,6 +1449,7 @@ static void destStore(QRasterBuffer *rasterBuffer, int x, int y, const uint *buf
    const QPixelLayout *layout = &qPixelLayouts[rasterBuffer->format];
    StorePixelsFunc store = qStorePixels[layout->bpp];
    uchar *dest = rasterBuffer->scanLine(y);
+
    while (length) {
       int l = qMin(length, buffer_size);
       const uint *ptr = nullptr;
@@ -1427,6 +1459,7 @@ static void destStore(QRasterBuffer *rasterBuffer, int x, int y, const uint *buf
       } else {
          ptr = layout->convertFromARGB32PM(buf, buffer, l, layout, nullptr);
       }
+
       store(dest, ptr, x, l);
       length -= l;
       buffer += l;
@@ -1447,6 +1480,7 @@ static void destStore64(QRasterBuffer *rasterBuffer, int x, int y, const QRgba64
    const QPixelLayout *layout = &qPixelLayouts[rasterBuffer->format];
    StorePixelsFunc store = qStorePixels[layout->bpp];
    uchar *dest = rasterBuffer->scanLine(y);
+
    while (length) {
       int l = qMin(length, buffer_size);
       const uint *ptr = nullptr;
@@ -1457,6 +1491,7 @@ static void destStore64(QRasterBuffer *rasterBuffer, int x, int y, const QRgba64
       } else {
          ptr = layout->convertFromARGB32PM(buf, buf, l, layout, nullptr);
       }
+
       store(dest, ptr, x, l);
       length -= l;
       buffer += l;
@@ -1472,6 +1507,7 @@ static inline void qConvertARGB64PMToA2RGB30PM_sse2(uint *dest, const QRgba64 *b
    const __m128i cmask = _mm_set1_epi32(0x000003ff);
    int i = 0;
    __m128i vr, vg, vb, va;
+
    for (; i < count && (const uintptr_t)buffer & 0xF; ++i) {
       *dest++ = qConvertRgb64ToRgb30<PixelOrder>(*buffer++);
    }
@@ -1481,11 +1517,13 @@ static inline void qConvertARGB64PMToA2RGB30PM_sse2(uint *dest, const QRgba64 *b
       // so we try to avoid it by checking if it is needed 16 samples at a time.
       __m128i vOr = _mm_set1_epi32(0);
       __m128i vAnd = _mm_set1_epi32(0xffffffff);
+
       for (int j = 0; j < 16; j += 2) {
          __m128i vs = _mm_load_si128((const __m128i *)(buffer + j));
          vOr = _mm_or_si128(vOr, vs);
          vAnd = _mm_and_si128(vAnd, vs);
       }
+
       const quint16 orAlpha = ((uint)_mm_extract_epi16(vOr, 3)) | ((uint)_mm_extract_epi16(vOr, 7));
       const quint16 andAlpha = ((uint)_mm_extract_epi16(vAnd, 3)) & ((uint)_mm_extract_epi16(vAnd, 7));
 
@@ -1500,17 +1538,20 @@ static inline void qConvertARGB64PMToA2RGB30PM_sse2(uint *dest, const QRgba64 *b
             vg = _mm_and_si128(vg, gmask);
             vb = _mm_and_si128(vb, cmask);
             va = _mm_srli_epi64(vs, 48 + 14);
+
             if (PixelOrder == PixelOrderRGB) {
                vr = _mm_slli_epi32(vr, 20);
             } else {
                vb = _mm_slli_epi32(vb, 20);
             }
+
             va = _mm_slli_epi32(va, 30);
             __m128i vd = _mm_or_si128(_mm_or_si128(vr, vg), _mm_or_si128(vb, va));
             vd = _mm_shuffle_epi32(vd, _MM_SHUFFLE(3, 1, 2, 0));
             _mm_storel_epi64((__m128i *)dest, vd);
             dest += 2;
          }
+
       } else if (orAlpha == 0) {
          for (int j = 0; j < 16; ++j) {
             *dest++ = 0;
@@ -1640,7 +1681,7 @@ enum TextureBlendType {
 };
 
 static const uint *fetchUntransformed(uint *buffer, const Operator *,
-   const QSpanData *data, int y, int x, int length)
+               const QSpanData *data, int y, int x, int length)
 {
    const QPixelLayout *layout = &qPixelLayouts[data->texture.format];
    const uint *ptr = qFetchPixels[layout->bpp](buffer, data->texture.scanLine(y), x, length);
@@ -1649,17 +1690,17 @@ static const uint *fetchUntransformed(uint *buffer, const Operator *,
 }
 
 static const uint *fetchUntransformedARGB32PM(uint *, const Operator *,
-   const QSpanData *data, int y, int x, int)
+            const QSpanData *data, int y, int x, int)
 {
    const uchar *scanLine = data->texture.scanLine(y);
    return ((const uint *)scanLine) + x;
 }
 
 static const uint *fetchUntransformedRGB16(uint *buffer, const Operator *,
-   const QSpanData *data, int y, int x,
-   int length)
+            const QSpanData *data, int y, int x, int length)
 {
    const quint16 *scanLine = (const quint16 *)data->texture.scanLine(y) + x;
+
 #ifdef QT_COMPILER_SUPPORTS_MIPS_DSPR2
    qConvertRgb16To32_asm_mips_dspr2(buffer, scanLine, length);
 #else
@@ -2232,6 +2273,7 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
             }
 
             if (blendType != BlendTransformedBilinearTiled) {
+
 #if defined(__SSE2__)
                const __m128i disty_ = _mm_set1_epi16(disty);
                const __m128i idisty_ = _mm_set1_epi16(idisty);
@@ -2262,6 +2304,7 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                   rRB = _mm_srli_epi16(rRB, 8);
                   _mm_storeu_si128((__m128i *)(&intermediate_buffer[0][f]), rRB);
                }
+
 #elif defined(__ARM_NEON__)
                const int16x8_t disty_ = vdupq_n_s16(disty);
                const int16x8_t idisty_ = vdupq_n_s16(idisty);
@@ -3431,6 +3474,7 @@ static SourceFetchProc sourceFetch[NBlendTypes][QImage::NImageFormats] = {
       fetchUntransformed,         // Alpha8
       fetchUntransformed,         // Grayscale8
    },
+
    // Tiled
    {
       nullptr,                    // Invalid
@@ -3514,6 +3558,7 @@ static SourceFetchProc sourceFetch[NBlendTypes][QImage::NImageFormats] = {
       fetchTransformed<BlendTransformedTiled>,            // Alpha8
       fetchTransformed<BlendTransformedTiled>,            // Grayscale8
    },
+
    {
       nullptr,                                                    // Bilinear
       fetchTransformedBilinear<BlendTransformedBilinear>,         // Mono
@@ -3541,6 +3586,7 @@ static SourceFetchProc sourceFetch[NBlendTypes][QImage::NImageFormats] = {
       fetchTransformedBilinear<BlendTransformedBilinear>,         // Alpha8
       fetchTransformedBilinear<BlendTransformedBilinear>,         // Grayscale8
    },
+
    {
       nullptr,                                                            // BilinearTiled
       fetchTransformedBilinear<BlendTransformedBilinearTiled>,            // Mono
@@ -3599,6 +3645,7 @@ static SourceFetchProc64 sourceFetch64[NBlendTypes][QImage::NImageFormats] = {
       fetchUntransformed64,         // Alpha8
       fetchUntransformed64,         // Grayscale8
    },
+
    // Tiled
    {
       nullptr,                      // Invalid
@@ -3627,6 +3674,7 @@ static SourceFetchProc64 sourceFetch64[NBlendTypes][QImage::NImageFormats] = {
       fetchUntransformed64,         // Alpha8
       fetchUntransformed64,         // Grayscale8
    },
+
    // Transformed
    {
       nullptr,                                     // Invalid
@@ -3655,6 +3703,7 @@ static SourceFetchProc64 sourceFetch64[NBlendTypes][QImage::NImageFormats] = {
       fetchTransformed64<BlendTransformed>,         // Alpah8
       fetchTransformed64<BlendTransformed>,         // Grayscale8
    },
+
    {
       nullptr,                                             // TransformedTiled
       fetchTransformed64<BlendTransformedTiled>,            // Mono
@@ -3682,6 +3731,7 @@ static SourceFetchProc64 sourceFetch64[NBlendTypes][QImage::NImageFormats] = {
       fetchTransformed64<BlendTransformedTiled>,            // Alpha8
       fetchTransformed64<BlendTransformedTiled>,            // Grayscale8
    },
+
    {
       nullptr,                                                     // Bilinear
       fetchTransformedBilinear64<BlendTransformedBilinear>,         // Mono
@@ -3709,6 +3759,7 @@ static SourceFetchProc64 sourceFetch64[NBlendTypes][QImage::NImageFormats] = {
       fetchTransformedBilinear64<BlendTransformedBilinear>,         // Alpha8
       fetchTransformedBilinear64<BlendTransformedBilinear>,         // Grayscale8
    },
+
    {
       nullptr,                                                             // BilinearTiled
       fetchTransformedBilinear64<BlendTransformedBilinearTiled>,            // Mono
@@ -4072,28 +4123,33 @@ static inline Operator getOperator(const QSpanData *data, const QSpan *spans, in
          op.srcFetch   = nullptr;
          op.srcFetch64 = nullptr;
          break;
+
       case QSpanData::LinearGradient:
          solidSource = !data->gradient.alphaColor;
          getLinearGradientValues(&op.linear, data);
          op.srcFetch = qt_fetch_linear_gradient;
          op.srcFetch64 = qt_fetch_linear_gradient_rgb64;
          break;
+
       case QSpanData::RadialGradient:
          solidSource = !data->gradient.alphaColor;
          getRadialGradientValues(&op.radial, data);
          op.srcFetch = qt_fetch_radial_gradient;
          op.srcFetch64 = qt_fetch_radial_gradient_rgb64;
          break;
+
       case QSpanData::ConicalGradient:
          solidSource = !data->gradient.alphaColor;
          op.srcFetch = qt_fetch_conical_gradient;
          op.srcFetch64 = qt_fetch_conical_gradient_rgb64;
          break;
+
       case QSpanData::Texture:
          solidSource = !data->texture.hasAlpha;
          op.srcFetch = sourceFetch[getBlendType(data)][data->texture.format];
          op.srcFetch64 = sourceFetch64[getBlendType(data)][data->texture.format];
          break;
+
       default:
          // error, may want to throw
          break;
@@ -4127,6 +4183,7 @@ static inline Operator getOperator(const QSpanData *data, const QSpan *spans, in
                }
                ++spans;
             }
+
             if (!alphaSpans) {
                op.destFetch = nullptr;
             }
@@ -4348,7 +4405,8 @@ void handleSpans(int count, const QSpan *spans, const QSpanData *data, T &handle
          const typename T::BlendType *src = handler.fetch(process_x, y, process_length);
          int offset = 0;
          while (l > 0) {
-            if (x == spans->x) { // new span?
+            if (x == spans->x) {
+               // new span?
                coverage = (spans->coverage * const_alpha) >> 8;
             }
 
@@ -4366,6 +4424,7 @@ void handleSpans(int count, const QSpan *spans, const QSpanData *data, T &handle
                --count;
             }
          }
+
          handler.store(process_x, y, process_length);
       }
    }
@@ -4374,6 +4433,7 @@ void handleSpans(int count, const QSpan *spans, const QSpanData *data, T &handle
 template<typename T>
 struct QBlendBase {
    typedef T BlendType;
+
    QBlendBase(QSpanData *d, Operator o)
       : data(d), op(o), dest(nullptr)
    { }
@@ -4391,7 +4451,8 @@ class BlendSrcGeneric : public QBlendBase<uint>
 {
  public:
    BlendSrcGeneric(QSpanData *d, Operator o)
-      : QBlendBase<uint>(d, o) {
+      : QBlendBase<uint>(d, o)
+   {
    }
 
    const uint *fetch(int x, int y, int len) {
@@ -6608,6 +6669,7 @@ DrawHelper qDrawHelper[QImage::NImageFormats] = {
       nullptr,
       qt_rectfill_rgb30<PixelOrderBGR>
    },
+
    // Format_A2BGR30_Premultiplied
    {
       blend_color_generic_rgb64,
@@ -6617,6 +6679,7 @@ DrawHelper qDrawHelper[QImage::NImageFormats] = {
       nullptr,
       qt_rectfill_rgb30<PixelOrderBGR>
    },
+
    // Format_RGB30
    {
       blend_color_generic_rgb64,
@@ -6636,6 +6699,7 @@ DrawHelper qDrawHelper[QImage::NImageFormats] = {
       nullptr,
       qt_rectfill_rgb30<PixelOrderRGB>
    },
+
    // Format_Alpha8
    {
       blend_color_generic,

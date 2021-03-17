@@ -620,7 +620,7 @@ QGraphicsAnchorLayoutPrivate::QGraphicsAnchorLayoutPrivate()
       interpolationProgress[i] = -1;
 
       spacings[i] = -1;
-      graphHasConflicts[i] = false;
+      graphHasConflicts[i]   = false;
 
       layoutFirstVertex[i]   = nullptr;
       layoutCentralVertex[i] = nullptr;
@@ -1542,7 +1542,6 @@ void QGraphicsAnchorLayoutPrivate::removeCenterAnchors(
    }
 }
 
-
 void QGraphicsAnchorLayoutPrivate::removeCenterConstraints(QGraphicsLayoutItem *item,
    Orientation orientation)
 {
@@ -1721,9 +1720,7 @@ void QGraphicsAnchorLayoutPrivate::addAnchor_helper(QGraphicsLayoutItem *firstIt
 }
 
 QGraphicsAnchor *QGraphicsAnchorLayoutPrivate::getAnchor(QGraphicsLayoutItem *firstItem,
-   Qt::AnchorPoint firstEdge,
-   QGraphicsLayoutItem *secondItem,
-   Qt::AnchorPoint secondEdge)
+   Qt::AnchorPoint firstEdge, QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge)
 {
    // Do not expose internal anchors
    if (firstItem == secondItem) {
@@ -1982,6 +1979,7 @@ QLayoutStyleInfo &QGraphicsAnchorLayoutPrivate::styleInfo() const
 {
    if (styleInfoDirty) {
       Q_Q(const QGraphicsAnchorLayout);
+
       //### Fix this if QGV ever gets support for Metal style or different Aqua sizes.
       QWidget *wid = nullptr;
 

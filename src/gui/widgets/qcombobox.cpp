@@ -102,19 +102,24 @@ QStyleOptionMenuItem QComboMenuDelegate::getStyleOption(const QStyleOptionViewIt
 
    menuOption.palette = resolvedpalette;
    menuOption.state = QStyle::State_None;
+
    if (mCombo->window()->isActiveWindow()) {
       menuOption.state = QStyle::State_Active;
    }
+
    if ((option.state & QStyle::State_Enabled) && (index.model()->flags(index) & Qt::ItemIsEnabled)) {
       menuOption.state |= QStyle::State_Enabled;
    } else {
       menuOption.palette.setCurrentColorGroup(QPalette::Disabled);
    }
+
    if (option.state & QStyle::State_Selected) {
       menuOption.state |= QStyle::State_Selected;
    }
+
    menuOption.checkType = QStyleOptionMenuItem::NonExclusive;
    menuOption.checked = mCombo->currentIndex() == index.row();
+
    if (QComboBoxDelegate::isSeparator(index)) {
       menuOption.menuItemType = QStyleOptionMenuItem::Separator;
    } else {
@@ -367,11 +372,14 @@ void QComboBoxPrivate::updateLayoutDirection()
    Q_Q(const QComboBox);
    QStyleOptionComboBox opt;
    q->initStyleOption(&opt);
+
    Qt::LayoutDirection dir = Qt::LayoutDirection(
          q->style()->styleHint(QStyle::SH_ComboBox_LayoutDirection, &opt, q));
+
    if (lineEdit) {
       lineEdit->setLayoutDirection(dir);
    }
+
    if (container) {
       container->setLayoutDirection(dir);
    }
@@ -496,16 +504,19 @@ void QComboBoxPrivateContainer::updateScrollers()
          > (view->verticalScrollBar()->minimum() + topMargin());
       bool needBottom = view->verticalScrollBar()->value()
          < (view->verticalScrollBar()->maximum() - bottomMargin() - topMargin());
+
       if (needTop) {
          top->show();
       } else {
          top->hide();
       }
+
       if (needBottom) {
          bottom->show();
       } else {
          bottom->hide();
       }
+
    } else {
       top->hide();
       bottom->hide();
@@ -1039,13 +1050,14 @@ void QComboBoxPrivate::updateLineEditGeometry()
    Q_Q(QComboBox);
    QStyleOptionComboBox opt;
    q->initStyleOption(&opt);
+
    QRect editRect = q->style()->subControlRect(QStyle::CC_ComboBox, &opt,
          QStyle::SC_ComboBoxEditField, q);
+
    if (!q->itemIcon(q->currentIndex()).isNull()) {
       QRect comboRect(editRect);
       editRect.setWidth(editRect.width() - q->iconSize().width() - 4);
-      editRect = QStyle::alignedRect(q->layoutDirection(), Qt::AlignRight,
-            editRect.size(), comboRect);
+      editRect = QStyle::alignedRect(q->layoutDirection(), Qt::AlignRight, editRect.size(), comboRect);
    }
    lineEdit->setGeometry(editRect);
 }
@@ -1319,7 +1331,6 @@ Qt::CaseSensitivity QComboBox::autoCompletionCaseSensitivity() const
    return d->autoCompletionCaseSensitivity;
 }
 
-
 void QComboBox::setAutoCompletionCaseSensitivity(Qt::CaseSensitivity sensitivity)
 {
    Q_D(QComboBox);
@@ -1478,13 +1489,16 @@ void QComboBox::setEditable(bool editable)
 
    QStyleOptionComboBox opt;
    initStyleOption(&opt);
+
    if (editable) {
       if (style()->styleHint(QStyle::SH_ComboBox_Popup, &opt, this)) {
          d->viewContainer()->updateScrollers();
          view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
       }
+
       QLineEdit *le = new QLineEdit(this);
       setLineEdit(le);
+
    } else {
       if (style()->styleHint(QStyle::SH_ComboBox_Popup, &opt, this)) {
          d->viewContainer()->updateScrollers();
@@ -1599,7 +1613,8 @@ const QValidator *QComboBox::validator() const
 void QComboBox::setCompleter(QCompleter *c)
 {
    Q_D(QComboBox);
-   if (!d->lineEdit) {
+
+   if (! d->lineEdit) {
       return;
    }
 
@@ -2291,11 +2306,14 @@ void QComboBox::showPopup()
 
    } else if (!boundToScreen || listRect.height() <= belowHeight) {
       listRect.moveTopLeft(below);
+
    } else if (listRect.height() <= aboveHeight) {
       listRect.moveBottomLeft(above);
+
    } else if (belowHeight >= aboveHeight) {
       listRect.setHeight(belowHeight);
       listRect.moveTopLeft(below);
+
    } else {
       listRect.setHeight(aboveHeight);
       listRect.moveBottomLeft(above);
@@ -2307,11 +2325,14 @@ void QComboBox::showPopup()
 
    QScrollBar *sb = view()->horizontalScrollBar();
    Qt::ScrollBarPolicy policy = view()->horizontalScrollBarPolicy();
+
    bool needHorizontalScrollBar = (policy == Qt::ScrollBarAsNeeded || policy == Qt::ScrollBarAlwaysOn)
       && sb->minimum() < sb->maximum();
+
    if (needHorizontalScrollBar) {
       listRect.adjust(0, 0, 0, sb->height());
    }
+
    container->setGeometry(listRect);
 
 #ifndef Q_OS_DARWIN
@@ -2375,9 +2396,10 @@ void QComboBox::hidePopup()
       d->container->itemView()->blockSignals(true);
       d->container->blockSignals(true);
 
-      // Flash selected/triggered item (if any).
+      // Flash selected/triggered item (if any)
       if (style()->styleHint(QStyle::SH_Menu_FlashTriggeredItem)) {
          QItemSelectionModel *selectionModel = view() ? view()->selectionModel() : nullptr;
+
          if (selectionModel && selectionModel->hasSelection()) {
             QEventLoop eventLoop;
             const QItemSelection selection = selectionModel->selection();

@@ -218,8 +218,6 @@ QStyleOptionTab::QStyleOptionTab(int version)
 {
 }
 
-
-
 #endif // QT_NO_TABBAR
 
 QStyleOptionProgressBar::QStyleOptionProgressBar()
@@ -229,7 +227,6 @@ QStyleOptionProgressBar::QStyleOptionProgressBar()
 {
 }
 
-
 QStyleOptionProgressBar::QStyleOptionProgressBar(int version)
    : QStyleOption(version, SO_ProgressBar),
      minimum(0), maximum(0), progress(0), textAlignment(Qt::AlignLeft), textVisible(false),
@@ -237,8 +234,6 @@ QStyleOptionProgressBar::QStyleOptionProgressBar(int version)
      orientation(Qt::Horizontal), invertedAppearance(false), bottomToTop(false)
 {
 }
-
-
 
 QStyleOptionMenuItem::QStyleOptionMenuItem()
    : QStyleOption(QStyleOptionMenuItem::Version, SO_MenuItem), menuItemType(Normal),
@@ -357,10 +352,6 @@ QStyleOptionToolBox::QStyleOptionToolBox(int version)
 {
 }
 
-
-
-
-
 #ifndef QT_NO_RUBBERBAND
 
 QStyleOptionRubberBand::QStyleOptionRubberBand()
@@ -423,9 +414,6 @@ QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame(int version)
 {
 }
 
-
-
-
 #endif // QT_NO_TABWIDGET
 
 #ifndef QT_NO_TABBAR
@@ -442,7 +430,6 @@ QStyleOptionTabBarBase::QStyleOptionTabBarBase(int version)
      documentMode(false)
 {
 }
-
 
 #endif // QT_NO_TABBAR
 
@@ -492,7 +479,6 @@ QStyleHintReturn::QStyleHintReturn(int version, int type)
 
 QStyleHintReturn::~QStyleHintReturn()
 {
-
 }
 
 QStyleHintReturnMask::QStyleHintReturnMask() : QStyleHintReturn(Version, Type)
@@ -509,6 +495,7 @@ QStyleHintReturnVariant::QStyleHintReturnVariant() : QStyleHintReturn(Version, T
 QStyleHintReturnVariant::~QStyleHintReturnVariant()
 {
 }
+
 QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
 {
 #if ! defined(QT_NO_DEBUG)
@@ -517,27 +504,35 @@ QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
       case QStyleOption::SO_Default:
          debug << "SO_Default";
          break;
+
       case QStyleOption::SO_FocusRect:
          debug << "SO_FocusRect";
          break;
+
       case QStyleOption::SO_Button:
          debug << "SO_Button";
          break;
+
       case QStyleOption::SO_Tab:
          debug << "SO_Tab";
          break;
+
       case QStyleOption::SO_MenuItem:
          debug << "SO_MenuItem";
          break;
+
       case QStyleOption::SO_Frame:
          debug << "SO_Frame";
          break;
+
       case QStyleOption::SO_ProgressBar:
          debug << "SO_ProgressBar";
          break;
+
       case QStyleOption::SO_ToolBox:
          debug << "SO_ToolBox";
          break;
+
       case QStyleOption::SO_Header:
          debug << "SO_Header";
          break;
@@ -549,27 +544,34 @@ QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
       case QStyleOption::SO_ViewItem:
          debug << "SO_ViewItem";
          break;
+
       case QStyleOption::SO_TabWidgetFrame:
          debug << "SO_TabWidgetFrame";
          break;
+
       case QStyleOption::SO_TabBarBase:
          debug << "SO_TabBarBase";
          break;
+
       case QStyleOption::SO_RubberBand:
          debug << "SO_RubberBand";
          break;
+
       case QStyleOption::SO_Complex:
          debug << "SO_Complex";
          break;
+
       case QStyleOption::SO_Slider:
          debug << "SO_Slider";
          break;
       case QStyleOption::SO_SpinBox:
          debug << "SO_SpinBox";
          break;
+
       case QStyleOption::SO_ToolButton:
          debug << "SO_ToolButton";
          break;
+
       case QStyleOption::SO_ComboBox:
          debug << "SO_ComboBox";
          break;
@@ -577,21 +579,27 @@ QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
       case QStyleOption::SO_TitleBar:
          debug << "SO_TitleBar";
          break;
+
       case QStyleOption::SO_CustomBase:
          debug << "SO_CustomBase";
          break;
+
       case QStyleOption::SO_GroupBox:
          debug << "SO_GroupBox";
          break;
+
       case QStyleOption::SO_ToolBar:
          debug << "SO_ToolBar";
          break;
+
       case QStyleOption::SO_ComplexCustomBase:
          debug << "SO_ComplexCustomBase";
          break;
+
       case QStyleOption::SO_SizeGrip:
          debug << "SO_SizeGrip";
          break;
+
       case QStyleOption::SO_GraphicsItem:
          debug << "SO_GraphicsItem";
          break;

@@ -58,7 +58,9 @@ bool QTableModel::insertRows(int row, int count, const QModelIndex &)
    } else {
       tableItems.insert(tableIndex(row, 0), cc * count, nullptr);
    }
+
    endInsertRows();
+
    return true;
 }
 
@@ -72,13 +74,18 @@ bool QTableModel::insertColumns(int column, int count, const QModelIndex &)
    int rc = verticalHeaderItems.count();
    int cc = horizontalHeaderItems.count();
    horizontalHeaderItems.insert(column, count, nullptr);
+
    if (cc == 0) {
       tableItems.resize(rc * count);
-   } else
+
+   } else {
       for (int row = 0; row < rc; ++row) {
          tableItems.insert(tableIndex(row, column), count, nullptr);
       }
+   }
+
    endInsertColumns();
+
    return true;
 }
 
@@ -108,8 +115,10 @@ bool QTableModel::removeRows(int row, int count, const QModelIndex &)
       }
       delete oldItem;
    }
+
    verticalHeaderItems.remove(row, count);
    endRemoveRows();
+
    return true;
 }
 
@@ -126,6 +135,7 @@ bool QTableModel::removeColumns(int column, int count, const QModelIndex &)
       int i = tableIndex(row, column);
       for (int j = i; j < i + count; ++j) {
          oldItem = tableItems.at(j);
+
          if (oldItem) {
             oldItem->view = nullptr;
          }
@@ -133,6 +143,7 @@ bool QTableModel::removeColumns(int column, int count, const QModelIndex &)
       }
       tableItems.remove(i, count);
    }
+
    for (int h = column; h < column + count; ++h) {
       oldItem = horizontalHeaderItems.at(h);
       if (oldItem) {
@@ -140,8 +151,10 @@ bool QTableModel::removeColumns(int column, int count, const QModelIndex &)
       }
       delete oldItem;
    }
+
    horizontalHeaderItems.remove(column, count);
    endRemoveColumns();
+
    return true;
 }
 
@@ -193,10 +206,12 @@ void QTableModel::setItem(int row, int column, QTableWidgetItem *item)
          emit layoutAboutToBeChanged();
          // move the items @ row to sortedRow
          int cc = columnCount();
+
          QVector<QTableWidgetItem *> rowItems(cc);
          for (int j = 0; j < cc; ++j) {
             rowItems[j] = tableItems.at(tableIndex(row, j));
          }
+
          tableItems.remove(tableIndex(row, 0), cc);
          tableItems.insert(tableIndex(sortedRow, 0), cc, nullptr);
          for (int j = 0; j < cc; ++j) {
@@ -280,6 +295,7 @@ void QTableModel::setHorizontalHeaderItem(int section, QTableWidgetItem *item)
    if (section < 0 || section >= horizontalHeaderItems.count()) {
       return;
    }
+
    QTableWidgetItem *oldItem = horizontalHeaderItems.at(section);
    if (item == oldItem) {
       return;
@@ -296,6 +312,7 @@ void QTableModel::setHorizontalHeaderItem(int section, QTableWidgetItem *item)
       item->view = view;
       item->itemFlags = Qt::ItemFlags(int(item->itemFlags) | ItemIsHeaderItem);
    }
+
    horizontalHeaderItems[section] = item;
    emit headerDataChanged(Qt::Horizontal, section, section);
 }
@@ -305,6 +322,7 @@ void QTableModel::setVerticalHeaderItem(int section, QTableWidgetItem *item)
    if (section < 0 || section >= verticalHeaderItems.count()) {
       return;
    }
+
    QTableWidgetItem *oldItem = verticalHeaderItems.at(section);
    if (item == oldItem) {
       return;
@@ -352,6 +370,7 @@ QTableWidgetItem *QTableModel::takeVerticalHeaderItem(int section)
       itm->itemFlags &= ~ItemIsHeaderItem;
       verticalHeaderItems[section] = nullptr;
    }
+
    return itm;
 }
 
@@ -370,16 +389,23 @@ QModelIndex QTableModel::index(const QTableWidgetItem *item) const
    if (!item) {
       return QModelIndex();
    }
+
    int i = -1;
    const int id = item->d->id;
+
    if (id >= 0 && id < tableItems.count() && tableItems.at(id) == item) {
       i = id;
-   } else { // we need to search for the item
+
+   } else {
+      // we need to search for the item
       i = tableItems.indexOf(const_cast<QTableWidgetItem *>(item));
-      if (i == -1) { // not found
+
+      if (i == -1) {
+         // not found
          return QModelIndex();
       }
    }
+
    int row = i / columnCount();
    int col = i % columnCount();
    return QAbstractTableModel::index(row, col);
@@ -391,6 +417,7 @@ void QTableModel::setRowCount(int rows)
    if (rows < 0 || rc == rows) {
       return;
    }
+
    if (rc < rows) {
       insertRows(qMax(rc, 0), rows - rc);
    } else {
@@ -480,6 +507,7 @@ bool QTableModel::setItemData(const QModelIndex &index, const QMap<int, QVariant
 
    QTableWidget *view = qobject_cast<QTableWidget *>(QObject::parent());
    QTableWidgetItem *itm = item(index);
+
    if (itm) {
       itm->view = nullptr;    // prohibits item from calling itemChanged()
       bool changed = false;
@@ -692,6 +720,7 @@ QVector<QTableWidgetItem *> QTableModel::columnItems(int column) const
       }
       items.append(itm);
    }
+
    return items;
 }
 
@@ -968,14 +997,12 @@ void QTableWidgetItem::setFlags(Qt::ItemFlags aflags)
    }
 }
 
-
 QTableWidgetItem::QTableWidgetItem(int type)
    :  rtti(type), view(nullptr), d(new QTableWidgetItemPrivate(this)),
       itemFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable
          | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled)
 {
 }
-
 
 QTableWidgetItem::QTableWidgetItem(const QString &text, int type)
    :  rtti(type), view(nullptr), d(new QTableWidgetItemPrivate(this)),
@@ -1070,8 +1097,6 @@ bool QTableWidgetItem::operator<(const QTableWidgetItem &other) const
    const QVariant v1 = data(Qt::DisplayRole), v2 = other.data(Qt::DisplayRole);
    return QAbstractItemModelPrivate::variantLessThan(v1, v2);
 }
-
-
 
 void QTableWidgetItem::read(QDataStream &in)
 {
@@ -1387,11 +1412,11 @@ void QTableWidget::setVerticalHeaderItem(int row, QTableWidgetItem *item)
    }
 }
 
-
 QTableWidgetItem *QTableWidget::takeVerticalHeaderItem(int row)
 {
    Q_D(QTableWidget);
    QTableWidgetItem *itm = d->tableModel()->takeVerticalHeaderItem(row);
+
    if (itm) {
       itm->view = nullptr;
    }
@@ -1430,6 +1455,7 @@ QTableWidgetItem *QTableWidget::takeHorizontalHeaderItem(int column)
 {
    Q_D(QTableWidget);
    QTableWidgetItem *itm = d->tableModel()->takeHorizontalHeaderItem(column);
+
    if (itm) {
       itm->view = nullptr;
    }

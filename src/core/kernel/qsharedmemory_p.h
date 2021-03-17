@@ -33,7 +33,7 @@
 
 namespace QSharedMemoryPrivate {
    int createUnixKeyFile(const QString &fileName);
-   QString makePlatformSafeKey(const QString &key, const QString &prefix = QString("qipc_sharedmemory_");
+   QString makePlatformSafeKey(const QString &key, const QString &prefix = QString("qipc_sharedmemory_"));
 }
 
 #endif
@@ -58,16 +58,17 @@ class QSharedMemoryLocker
       Q_ASSERT(q_sm);
    }
 
-   inline ~QSharedMemoryLocker() {
+   ~QSharedMemoryLocker() {
       if (q_sm) {
          q_sm->unlock();
       }
    }
 
-   inline bool lock() {
+   bool lock() {
       if (q_sm && q_sm->lock()) {
          return true;
       }
+
       q_sm = nullptr;
       return false;
    }
@@ -117,9 +118,9 @@ class QSharedMemoryPrivate
    void setErrorString(const QString &function);
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
-   inline bool tryLocker(QSharedMemoryLocker *locker, const QString &function) {
+   bool tryLocker(QSharedMemoryLocker *locker, const QString &function) {
 
-      if (!locker->lock()) {
+      if (! locker->lock()) {
          errorString = QSharedMemory::tr("%1: unable to lock").formatArg(function);
          error = QSharedMemory::LockError;
          return false;

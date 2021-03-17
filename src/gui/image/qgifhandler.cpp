@@ -117,18 +117,20 @@ class QGIFFormat
 */
 QGIFFormat::QGIFFormat()
 {
-   lncols = 0;
-   gncols = 0;
-   disposal = NoDisposal;
    globalcmap    = nullptr;
    localcmap     = nullptr;
+   lncols        = 0;
+   gncols        = 0;
+   disposal      = NoDisposal;
+
    out_of_bounds = false;
-   disposed = true;
-   frame = -1;
-   state = Header;
-   count = 0;
-   lcmap = false;
-   newFrame = false;
+   disposed      = true;
+   frame         = -1;
+   state         = Header;
+   count         = 0;
+   lcmap         = false;
+   newFrame      = false;
+
    partialNewFrame = false;
 
    table[0] = nullptr;
@@ -529,6 +531,7 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
 
                      *sp++ = firstcode = table[1][code];
                      code = max_code;
+
                      if (code < (1 << max_lzw_bits)) {
                         table[0][code] = oldcode;
                         table[1][code] = firstcode;
@@ -539,9 +542,11 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
                            code_size++;
                         }
                      }
+
                      oldcode = incode;
                      const int h = image->height();
                      QRgb *line = nullptr;
+
                      if (!out_of_bounds && h > y) {
                         line = (QRgb *)FAST_SCAN_LINE(bits, bpl, y);
                      }

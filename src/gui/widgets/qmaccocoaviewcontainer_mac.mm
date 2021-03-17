@@ -31,11 +31,7 @@
 
 #include <qwidget_p.h>
 
-
-
-
 namespace {
-// TODO use QtMacExtras copy of this function when available.
 
 inline QPlatformNativeInterface::FP_Integration resolvePlatformFunction(const QByteArray &functionName)
 {
@@ -51,6 +47,7 @@ inline QPlatformNativeInterface::FP_Integration resolvePlatformFunction(const QB
 }
 
 } //namespsace
+
 class QMacCocoaViewContainerPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QMacCocoaViewContainer)
@@ -98,7 +95,7 @@ QMacCocoaViewContainer::~QMacCocoaViewContainer()
 NSView *QMacCocoaViewContainer::cocoaView() const
 {
    Q_D(const QMacCocoaViewContainer);
-    return d->nsview;
+   return d->nsview;
 }
 
 /*!
@@ -122,4 +119,3 @@ void QMacCocoaViewContainer::setCocoaView(NSView *view)
 
     [oldView release];
 }
-

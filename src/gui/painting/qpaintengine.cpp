@@ -54,13 +54,11 @@ qreal QTextItem::width() const
    return ti->width.toReal();
 }
 
-
 QTextItem::RenderFlags QTextItem::renderFlags() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
    return ti->flags;
 }
-
 
 QString QTextItem::text() const
 {
@@ -68,13 +66,11 @@ QString QTextItem::text() const
    return QString(ti->m_iter, ti->m_end);
 }
 
-
 QFont QTextItem::font() const
 {
    const QTextItemInt *ti = static_cast<const QTextItemInt *>(this);
    return ti->f ? *ti->f : QGuiApplication::font();
 }
-
 
 void QPaintEngine::syncState()
 {
@@ -97,6 +93,7 @@ void QPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDra
 {
    Q_ASSERT_X(qt_polygon_recursion != this, "QPaintEngine::drawPolygon",
       "At least one drawPolygon function must be implemented");
+
    qt_polygon_recursion = this;
    Q_ASSERT(sizeof(QT_Point) == sizeof(QPoint));
    QVarLengthArray<QT_Point> p(pointCount);
@@ -119,6 +116,7 @@ void QPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDraw
 {
    Q_ASSERT_X(qt_polygon_recursion != this, "QPaintEngine::drawPolygon",
       "At least one drawPolygon function must be implemented");
+
    qt_polygon_recursion = this;
 
    Q_ASSERT(sizeof(QT_PointF) == sizeof(QPointF));
@@ -128,15 +126,15 @@ void QPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDraw
       p[i].x = points[i].x();
       p[i].y = points[i].y();
    }
+
    drawPolygon((QPointF *)p.data(), pointCount, mode);
    qt_polygon_recursion = nullptr;
 }
 
-
 void QPaintEngine::drawPoints(const QPointF *points, int pointCount)
 {
    QPainter *p = painter();
-   if (!p) {
+   if (! p) {
       return;
    }
 
@@ -190,11 +188,11 @@ void QPaintEngine::drawPoints(const QPoint *points, int pointCount)
    }
 }
 
-
 void QPaintEngine::drawEllipse(const QRectF &rect)
 {
    QPainterPath path;
    path.addEllipse(rect);
+
    if (hasFeature(PainterPaths)) {
       drawPath(path);
    } else {
@@ -212,16 +210,17 @@ void QPaintEngine::drawEllipse(const QRect &rect)
    drawEllipse(QRectF(rect));
 }
 
-
 void qt_fill_tile(QPixmap *tile, const QPixmap &pixmap)
 {
    QPainter p(tile);
    p.drawPixmap(0, 0, pixmap);
    int x = pixmap.width();
+
    while (x < tile->width()) {
       p.drawPixmap(x, 0, *tile, 0, 0, x, pixmap.height());
       x *= 2;
    }
+
    int y = pixmap.height();
    while (y < tile->height()) {
       p.drawPixmap(0, y, *tile, 0, 0, tile->width(), y);
@@ -235,13 +234,16 @@ void qt_draw_tile(QPaintEngine *gc, qreal x, qreal y, qreal w, qreal h,
    qreal yPos, xPos, drawH, drawW, yOff, xOff;
    yPos = y;
    yOff = yOffset;
+
    while (yPos < y + h) {
       drawH = pixmap.height() - yOff;        // Cropping first row
       if (yPos + drawH > y + h) {            // Cropping last row
          drawH = y + h - yPos;
       }
+
       xPos = x;
       xOff = xOffset;
+
       while (xPos < x + w) {
          drawW = pixmap.width() - xOff;      // Cropping first column
          if (xPos + drawW > x + w) {         // Cropping last column
@@ -257,7 +259,6 @@ void qt_draw_tile(QPaintEngine *gc, qreal x, qreal y, qreal w, qreal h,
       yOff = 0;
    }
 }
-
 
 void QPaintEngine::drawTiledPixmap(const QRectF &rect, const QPixmap &pixmap, const QPointF &p)
 {
@@ -281,8 +282,10 @@ void QPaintEngine::drawTiledPixmap(const QRectF &rect, const QPixmap &pixmap, co
             tile.fill(Qt::transparent);
          }
       }
+
       qt_fill_tile(&tile, pixmap);
       qt_draw_tile(this, rect.x(), rect.y(), rect.width(), rect.height(), tile, p.x(), p.y());
+
    } else {
       qt_draw_tile(this, rect.x(), rect.y(), rect.width(), rect.height(), pixmap, p.x(), p.y());
    }
@@ -293,13 +296,14 @@ void QPaintEngine::drawImage(const QRectF &r, const QImage &image, const QRectF 
 {
    QRectF baseSize(0, 0, image.width(), image.height());
    QImage im = image;
-   if (baseSize != sr)
-      im = im.copy(qFloor(sr.x()), qFloor(sr.y()),
-            qCeil(sr.width()), qCeil(sr.height()));
+
+   if (baseSize != sr) {
+      im = im.copy(qFloor(sr.x()), qFloor(sr.y()), qCeil(sr.width()), qCeil(sr.height()));
+   }
+
    QPixmap pm = QPixmap::fromImage(im, flags);
    drawPixmap(r, pm, QRectF(QPointF(0, 0), pm.size()));
 }
-
 
 QPaintEngine::QPaintEngine(PaintEngineFeatures caps)
    : state(nullptr), gccaps(caps), active(0), selfDestruct(false), extended(false),
@@ -308,26 +312,22 @@ QPaintEngine::QPaintEngine(PaintEngineFeatures caps)
    d_ptr->q_ptr = this;
 }
 
-/*!
-  \internal
-*/
-
+// internal
 QPaintEngine::QPaintEngine(QPaintEnginePrivate &dptr, PaintEngineFeatures caps)
    : state(nullptr), gccaps(caps), active(0), selfDestruct(false), extended(false), d_ptr(&dptr)
 {
    d_ptr->q_ptr = this;
 }
 
-
 QPaintEngine::~QPaintEngine()
 {
 }
-
 
 QPainter *QPaintEngine::painter() const
 {
    return state ? state->painter() : nullptr;
 }
+
 void QPaintEngine::drawPath(const QPainterPath &)
 {
    if (hasFeature(PainterPaths)) {
@@ -335,16 +335,12 @@ void QPaintEngine::drawPath(const QPainterPath &)
    }
 }
 
-
 void QPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
 {
    const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
 
    QPainterPath path;
-
-
    path.setFillRule(Qt::WindingFill);
-
 
    if (ti.glyphs.numGlyphs) {
       ti.fontEngine->addOutlineToPath(0, 0, ti.glyphs, &path, ti.flags);

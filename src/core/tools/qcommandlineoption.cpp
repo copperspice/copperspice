@@ -108,13 +108,13 @@ void QCommandLineOptionPrivate::setNames(const QStringList &nameList)
          const QChar c = name.at(0);
 
          if (c == '-') {
-            qWarning("QCommandLineOption: Option names cannot start with a '-'");
+            qWarning("QCommandLineOption: Option names can not start with a '-'");
 
          } else if (c == '/') {
-            qWarning("QCommandLineOption: Option names cannot start with a '/'");
+            qWarning("QCommandLineOption: Option names can not start with a '/'");
 
          } else if (name.contains('=')) {
-            qWarning("QCommandLineOption: Option names cannot contain a '='");
+            qWarning("QCommandLineOption: Option names can not contain a '='");
 
          } else {
             names.append(name);

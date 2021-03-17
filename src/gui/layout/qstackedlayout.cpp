@@ -50,35 +50,37 @@ QLayoutItem *QStackedLayoutPrivate::replaceAt(int idx, QLayoutItem *newitem)
    if (idx < 0 || idx >= list.size() || !newitem) {
       return nullptr;
    }
+
    QWidget *wdg = newitem->widget();
    if (!wdg) {
       qWarning("QStackedLayout::replaceAt: Only widgets can be added");
       return nullptr;
    }
+
    QLayoutItem *orgitem = list.at(idx);
    list.replace(idx, newitem);
+
    if (idx == index) {
       q->setCurrentIndex(index);
    }
+
    return orgitem;
 }
+
 QStackedLayout::QStackedLayout()
    : QLayout(*new QStackedLayoutPrivate, nullptr, nullptr)
 {
 }
-
 
 QStackedLayout::QStackedLayout(QWidget *parent)
    : QLayout(*new QStackedLayoutPrivate, nullptr, parent)
 {
 }
 
-
 QStackedLayout::QStackedLayout(QLayout *parentLayout)
    : QLayout(*new QStackedLayoutPrivate, parentLayout, nullptr)
 {
 }
-
 
 QStackedLayout::~QStackedLayout()
 {
@@ -140,6 +142,7 @@ QLayoutItem *QStackedLayout::takeAt(int index)
    QLayoutItem *item = d->list.takeAt(index);
    if (index == d->index) {
       d->index = -1;
+
       if ( d->list.count() > 0 ) {
          int newIndex = (index == d->list.count()) ? index - 1 : index;
          setCurrentIndex(newIndex);
@@ -209,10 +212,12 @@ void QStackedLayout::setCurrentIndex(int index)
                   if (((i->focusPolicy() & Qt::TabFocus) == Qt::TabFocus)
                         && !i->focusProxy() && i->isVisibleTo(next) && i->isEnabled()
                         && next->isAncestorOf(i)) {
+
                      i->setFocus();
                      break;
                   }
                }
+
                // third best: incoming widget
                if (i == fw ) {
                   next->setFocus();
@@ -225,6 +230,7 @@ void QStackedLayout::setCurrentIndex(int index)
    if (reenableUpdates) {
       parent->setUpdatesEnabled(true);
    }
+
    emit currentChanged(index);
 }
 
@@ -269,6 +275,7 @@ QWidget *QStackedLayout::widget(int index) const
    if (index < 0 || index >= d->list.size()) {
       return nullptr;
    }
+
    return d->list.at(index)->widget();
 }
 
@@ -283,7 +290,6 @@ int QStackedLayout::count() const
    Q_D(const QStackedLayout);
    return d->list.size();
 }
-
 
 /*!
     \reimp

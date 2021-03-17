@@ -53,42 +53,55 @@ QString QJsonParseError::errorString() const
       case NoError:
          sz = JSONERR_OK;
          break;
+
       case UnterminatedObject:
          sz = JSONERR_UNTERM_OBJ;
          break;
+
       case MissingNameSeparator:
          sz = JSONERR_MISS_NSEP;
          break;
+
       case UnterminatedArray:
          sz = JSONERR_UNTERM_AR;
          break;
+
       case MissingValueSeparator:
          sz = JSONERR_MISS_VSEP;
          break;
+
       case IllegalValue:
          sz = JSONERR_ILLEGAL_VAL;
          break;
+
       case TerminationByNumber:
          sz = JSONERR_END_OF_NUM;
          break;
+
       case IllegalNumber:
          sz = JSONERR_ILLEGAL_NUM;
          break;
+
       case IllegalEscapeSequence:
          sz = JSONERR_STR_ESC_SEQ;
          break;
+
       case IllegalUTF8String:
          sz = JSONERR_STR_UTF8;
          break;
+
       case UnterminatedString:
          sz = JSONERR_UTERM_STR;
          break;
+
       case MissingObject:
          sz = JSONERR_MISS_OBJ;
          break;
+
       case DeepNesting:
          sz = JSONERR_DEEP_NEST;
          break;
+
       case DocumentTooLarge:
          sz = JSONERR_DOC_LARGE;
          break;

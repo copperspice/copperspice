@@ -29,15 +29,13 @@
 #include <qpainter.h>
 #include <qpainterpath.h>
 #include <qvector.h>
-
-#include <qbezier_p.h>
-
 #include <qbitarray.h>
 #include <qvarlengtharray.h>
 #include <qqueue.h>
 #include <qglobal.h>
 #include <qpoint.h>
 
+#include <qbezier_p.h>
 #include <qopengl_extensions_p.h>
 #include <qopenglcontext_p.h>
 #include <qrbtree_p.h>

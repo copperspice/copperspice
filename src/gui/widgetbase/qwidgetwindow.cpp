@@ -27,14 +27,13 @@
 #include <qplatform_theme.h>
 #include <qplatform_window.h>
 
-#include <qapplication_p.h>
-#include <qwidget_p.h>
-#include <qwidgetwindow_p.h>
-
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
 
+#include <qapplication_p.h>
+#include <qwidget_p.h>
+#include <qwidgetwindow_p.h>
 #include <qwidgetbackingstore_p.h>
 #include <qwindowsysteminterface_p.h>
 #include <qgesturemanager_p.h>
@@ -362,25 +361,33 @@ void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
       return;
    }
 #endif
+
    if (event->type() == QEvent::Leave) {
       QWidget *enter = nullptr;
+
       // Check from window system event queue if the next queued enter targets a window
       // in the same window hierarchy (e.g. enter a child of this window). If so,
       // remove the enter event from queue and handle both in single dispatch.
+
       QWindowSystemInterfacePrivate::EnterEvent *systemEvent =
          static_cast<QWindowSystemInterfacePrivate::EnterEvent *>
          (QWindowSystemInterfacePrivate::peekWindowSystemEvent(QWindowSystemInterfacePrivate::Enter));
+
       const QPointF globalPosF = systemEvent ? systemEvent->globalPos : QGuiApplicationPrivate::lastCursorPosition;
+
       if (systemEvent) {
          if (QWidgetWindow *enterWindow = qobject_cast<QWidgetWindow *>(systemEvent->enter)) {
             QWindow *thisParent = this;
             QWindow *enterParent = enterWindow;
+
             while (thisParent->parent()) {
                thisParent = thisParent->parent();
             }
+
             while (enterParent->parent()) {
                enterParent = enterParent->parent();
             }
+
             if (thisParent == enterParent) {
                QGuiApplicationPrivate::currentMouseWindow = enterWindow;
                enter = enterWindow->widget();
@@ -388,6 +395,7 @@ void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
             }
          }
       }
+
       // Enter-leave between sibling widgets is ignored when there is a mousegrabber - this makes
       // both native and non-native widgets work similarly.
       // When mousegrabbing, leaves are only generated if leaving the parent window.
@@ -401,6 +409,7 @@ void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
          QApplicationPrivate::dispatchEnterLeave(enter, leave, globalPosF);
          qt_last_mouse_receiver = enter;
       }
+
    } else {
       const QEnterEvent *ee = static_cast<QEnterEvent *>(event);
       QWidget *child = m_widget->childAt(ee->pos());
@@ -413,6 +422,7 @@ void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
          // action on first-level menu.
          leave = qt_last_mouse_receiver;
       }
+
       QApplicationPrivate::dispatchEnterLeave(receiver, leave, ee->screenPos());
       qt_last_mouse_receiver = receiver;
    }
@@ -447,6 +457,7 @@ void QWidgetWindow::handleFocusInEvent(QFocusEvent *e)
 
    if (e->reason() == Qt::BacktabFocusReason) {
       focusWidget = getFocusWidget(LastFocusWidget);
+
    } else if (e->reason() == Qt::TabFocusReason) {
       focusWidget = getFocusWidget(FirstFocusWidget);
    }
@@ -474,6 +485,7 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
       if (activePopupWidget != m_widget) {
          mapped = activePopupWidget->mapFromGlobal(event->globalPos());
       }
+
       bool releaseAfter = false;
       QWidget *popupChild  = activePopupWidget->childAt(mapped);
 
@@ -504,11 +516,13 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
          qt_replay_popup_mouse_event = false;
          QWidget *receiver = activePopupWidget;
          QPoint widgetPos = mapped;
+
          if (qt_button_down) {
             receiver = qt_button_down;
          } else if (popupChild) {
             receiver = popupChild;
          }
+
          if (receiver != activePopupWidget) {
             widgetPos = receiver->mapFromGlobal(event->globalPos());
          }
@@ -537,8 +551,10 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
          QMouseEvent e(event->type(), widgetPos, event->windowPos(), event->screenPos(),
             event->button(), event->buttons(), event->modifiers(), event->source());
          e.setTimestamp(event->timestamp());
+
          QApplicationPrivate::sendMouseEvent(receiver, &e, receiver, receiver->window(),
                   &qt_button_down, qt_last_mouse_receiver);
+
          qt_last_mouse_receiver = receiver;
 
       } else {
@@ -653,11 +669,15 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
       // creation of a MouseButtonDblClick event. QTBUG-25831
       QMouseEvent translated(event->type(), mapped, event->windowPos(), event->screenPos(),
          event->button(), event->buttons(), event->modifiers(), event->source());
+
       translated.setTimestamp(event->timestamp());
+
       QApplicationPrivate::sendMouseEvent(receiver, &translated, widget, m_widget,
          &qt_button_down, qt_last_mouse_receiver);
+
       event->setAccepted(translated.isAccepted());
    }
+
 #ifndef QT_NO_CONTEXTMENU
    if (event->type() == contextMenuTrigger && event->button() == Qt::RightButton
       && m_widget->rect().contains(event->pos())) {
@@ -875,6 +895,7 @@ void QWidgetWindow::handleDragEnterMoveEvent(QDragMoveEvent *event)
    if (!widget) {
       widget = m_widget;
    }
+
    for ( ; widget && !widget->isWindow() && !widget->acceptDrops(); widget = widget->parentWidget()) ;
    if (widget && !widget->acceptDrops()) {
       widget = nullptr;
@@ -898,20 +919,24 @@ void QWidgetWindow::handleDragEnterMoveEvent(QDragMoveEvent *event)
       event->setDropAction(translated.dropAction());
       return;
    }
+
    // Target widget changed: Send DragLeave to previous, DragEnter to new if there is any
    if (m_dragTarget.data()) {
       QDragLeaveEvent le;
       QGuiApplication::sendSpontaneousEvent(m_dragTarget.data(), &le);
       m_dragTarget = nullptr;
    }
+
    if (!widget) {
       event->ignore();
       return;
    }
+
    m_dragTarget = widget;
    const QPoint mapped = widget->mapFromGlobal(m_widget->mapToGlobal(event->pos()));
    QDragEnterEvent translated(mapped, event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers());
    QGuiApplication::sendSpontaneousEvent(widget, &translated);
+
    if (translated.isAccepted()) {
       event->accept();
    } else {
@@ -1076,9 +1101,11 @@ void QWidgetWindow::handleGestureEvent(QNativeGestureEvent *e)
       QWidget *popupFocusWidget = popup->focusWidget();
       receiver = popupFocusWidget ? popupFocusWidget : popup;
    }
+
    if (!receiver) {
       receiver = QApplication::widgetAt(e->globalPos());
    }
+
    if (!receiver) {
       receiver = m_widget;   // last resort
    }

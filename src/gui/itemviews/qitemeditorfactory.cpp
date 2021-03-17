@@ -183,19 +183,23 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
          ed->setFrame(false);
          return ed;
       }
+
       case QVariant::Time: {
          QDateTimeEdit *ed = new QTimeEdit(parent);
          ed->setFrame(false);
          return ed;
       }
+
       case QVariant::DateTime: {
          QDateTimeEdit *ed = new QDateTimeEdit(parent);
          ed->setFrame(false);
          return ed;
       }
 #endif
+
       case QVariant::Pixmap:
          return new QLabel(parent);
+
 #ifndef QT_NO_SPINBOX
       case QVariant::Double: {
          QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
@@ -205,6 +209,7 @@ QWidget *QDefaultItemEditorFactory::createEditor(QVariant::Type type, QWidget *p
          return sb;
       }
 #endif
+
 #ifndef QT_NO_LINEEDIT
       case QVariant::String:
       default: {
@@ -309,6 +314,7 @@ void QExpandingLineEdit::changeEvent(QEvent *e)
       case QEvent::ContentsRectChange:
          updateMinimumWidth();
          break;
+
       default:
          break;
    }

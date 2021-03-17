@@ -110,9 +110,9 @@ static QString standardLibraryErrorString(int errorCode)
    if (s) {
       ret = QString::fromLatin1(s);
    }
+
    return ret.trimmed();
 }
-
 
 QString QSystemError::toString()
 {

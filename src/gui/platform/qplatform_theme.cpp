@@ -484,13 +484,16 @@ static inline int maybeSwapShortcut(int shortcut)
    if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
       uint oldshortcut = shortcut;
       shortcut &= ~(Qt::CTRL | Qt::META);
+
       if (oldshortcut & Qt::CTRL) {
          shortcut |= Qt::META;
       }
+
       if (oldshortcut & Qt::META) {
          shortcut |= Qt::CTRL;
       }
    }
+
    return shortcut;
 }
 #endif
@@ -600,6 +603,7 @@ QString QPlatformTheme::defaultStandardButtonText(int button)
       default:
          break;
    }
+
    return QString();
 }
 
@@ -607,11 +611,13 @@ unsigned QPlatformThemePrivate::currentKeyPlatforms()
 {
    const uint keyboardScheme = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::KeyboardScheme).toInt();
    unsigned result = 1u << keyboardScheme;
+
    if (keyboardScheme == QPlatformTheme::KdeKeyboardScheme
       || keyboardScheme == QPlatformTheme::GnomeKeyboardScheme
       || keyboardScheme == QPlatformTheme::CdeKeyboardScheme) {
       result |= KB_X11;
    }
+
    return result;
 }
 

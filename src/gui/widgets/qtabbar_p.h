@@ -37,8 +37,6 @@
 
 #include <qstyleoption.h>
 
-
-
 class QMovableTabWidget : public QWidget
 {
  public:
@@ -51,6 +49,7 @@ class QMovableTabWidget : public QWidget
  private:
    QPixmap m_pixmap;
 };
+
 class QTabBarPrivate  : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QTabBar)
@@ -221,7 +220,6 @@ class QTabBarPrivate  : public QWidgetPrivate
    int switchTabTimerId;
 
    QMovableTabWidget *movingTab;
-
 
    // shared by tabwidget and qtabbar
    static void initStyleBaseOption(QStyleOptionTabBarBase *optTabBase, QTabBar *tabbar, QSize size) {

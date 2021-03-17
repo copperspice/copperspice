@@ -527,8 +527,8 @@ MemRotateFunc qMemRotateFunctions[QImage::NImageFormats][3] =
    { qt_memrotate90_32, qt_memrotate180_32, qt_memrotate270_32 },      // Format_A2BGR30_Premultiplied,
    { qt_memrotate90_32, qt_memrotate180_32, qt_memrotate270_32 },      // Format_RGB30,
    { qt_memrotate90_32, qt_memrotate180_32, qt_memrotate270_32 },      // Format_A2RGB30_Premultiplied,
-   { qt_memrotate90_8,  qt_memrotate180_8,  qt_memrotate270_8 },       // Format_Alpha8,
-   { qt_memrotate90_8,  qt_memrotate180_8,  qt_memrotate270_8 },       // Format_Grayscale8,
+   { qt_memrotate90_8,  qt_memrotate180_8,  qt_memrotate270_8  },      // Format_Alpha8,
+   { qt_memrotate90_8,  qt_memrotate180_8,  qt_memrotate270_8  },      // Format_Grayscale8,
 };
 
 void QDrawHelperFunctions::initMemRotate()

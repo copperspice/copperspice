@@ -333,10 +333,9 @@ QStackedWidget *QAccessibleStackedWidget::stackedWidget() const
 {
    return static_cast<QStackedWidget *>(object());
 }
-#endif // QT_NO_STACKEDWIDGET
+#endif
 
 #ifndef QT_NO_TOOLBOX
-
 QAccessibleToolBox::QAccessibleToolBox(QWidget *widget)
    : QAccessibleWidget(widget, QAccessible::LayeredPane)
 {
@@ -347,7 +346,7 @@ QToolBox *QAccessibleToolBox::toolBox() const
 {
    return static_cast<QToolBox *>(object());
 }
-#endif // QT_NO_TOOLBOX
+#endif
 
 #ifndef QT_NO_MDIAREA
 QAccessibleMdiArea::QAccessibleMdiArea(QWidget *widget)
@@ -470,10 +469,13 @@ QRect QAccessibleMdiSubWindow::rect() const
    if (mdiSubWindow()->isHidden()) {
       return QRect();
    }
+
    if (!mdiSubWindow()->parent()) {
       return QAccessibleWidget::rect();
    }
+
    const QPoint pos = mdiSubWindow()->mapToGlobal(QPoint(0, 0));
+
    return QRect(pos, mdiSubWindow()->size());
 }
 
@@ -491,9 +493,9 @@ QAccessibleDialogButtonBox::QAccessibleDialogButtonBox(QWidget *widget)
    Q_ASSERT(qobject_cast<QDialogButtonBox *>(widget));
 }
 
-#endif // QT_NO_DIALOGBUTTONBOX
+#endif
 
-#if !defined(QT_NO_TEXTBROWSER) && !defined(QT_NO_CURSOR)
+#if ! defined(QT_NO_TEXTBROWSER) && ! defined(QT_NO_CURSOR)
 QAccessibleTextBrowser::QAccessibleTextBrowser(QWidget *widget)
    : QAccessibleTextEdit(widget)
 {
@@ -504,7 +506,7 @@ QAccessible::Role QAccessibleTextBrowser::role() const
 {
    return QAccessible::StaticText;
 }
-#endif // QT_NO_TEXTBROWSER && QT_NO_CURSOR
+#endif
 
 #ifndef QT_NO_CALENDARWIDGET
 
@@ -524,9 +526,11 @@ int QAccessibleCalendarWidget::indexOfChild(const QAccessibleInterface *child) c
    if (!child || !child->object() || childCount() <= 0) {
       return -1;
    }
+
    if (qobject_cast<QAbstractItemView *>(child->object())) {
       return childCount() - 1;   // FIXME
    }
+
    return 0;
 }
 
@@ -569,7 +573,7 @@ QWidget *QAccessibleCalendarWidget::navigationBar() const
 
    return nullptr;
 }
-#endif // QT_NO_CALENDARWIDGET
+#endif
 
 #ifndef QT_NO_DOCKWIDGET
 
@@ -594,6 +598,7 @@ int QAccessibleDockWidget::childCount() const
    if (dockWidget()->titleBarWidget()) {
       return dockWidget()->widget() ? 2 : 1;
    }
+
    return dockWidgetLayout()->count();
 }
 
@@ -656,10 +661,9 @@ QString QAccessibleDockWidget::text(QAccessible::Text t) const
    }
    return QString();
 }
-#endif // QT_NO_DOCKWIDGET
+#endif
 
 #ifndef QT_NO_CURSOR
-
 QAccessibleTextWidget::QAccessibleTextWidget(QWidget *o, QAccessible::Role r, const QString &name):
    QAccessibleWidget(o, r, name)
 {
@@ -692,12 +696,15 @@ QRect QAccessibleTextWidget::characterRect(int offset) const
 
       QTextCharFormat format;
       QTextBlock::iterator iter = block.begin();
+
       if (iter.atEnd()) {
          format = block.charFormat();
+
       } else {
          while (!iter.atEnd() && !iter.fragment().contains(offset)) {
             ++iter;
          }
+
          if (iter.atEnd()) { // newline should have same format as preceding character
             --iter;
          }
@@ -706,13 +713,14 @@ QRect QAccessibleTextWidget::characterRect(int offset) const
 
       QFontMetrics fm(format.font());
       const QString ch = text(offset, offset + 1);
+
       if (!ch.isEmpty()) {
          int w = fm.width(ch);
          int h = fm.height();
-         r = QRect(layoutPosition.x() + x, layoutPosition.y() + line.y() + line.ascent() + fm.descent() - h,
-               w, h);
+         r = QRect(layoutPosition.x() + x, layoutPosition.y() + line.y() + line.ascent() + fm.descent() - h, w, h);
          r.moveTo(viewport()->mapToGlobal(r.topLeft()));
       }
+
       r.translate(-scrollBarPosition());
    }
 
@@ -724,6 +732,7 @@ int QAccessibleTextWidget::offsetAtPoint(const QPoint &point) const
    QPoint p = viewport()->mapFromGlobal(point);
    // convert to document coordinates
    p += scrollBarPosition();
+
    return textDocument()->documentLayout()->hitTest(p, Qt::ExactHit);
 }
 
@@ -767,6 +776,7 @@ QString QAccessibleTextWidget::attributes(int offset, int *startOffset, int *end
 
    QTextBlock::iterator iter = block.begin();
    int lastFragmentIndex = blockStart;
+
    while (!iter.atEnd()) {
       QTextFragment f = iter.fragment();
       if (f.contains(offset)) {
@@ -984,7 +994,6 @@ QString QAccessibleTextWidget::textBeforeOffset(int offset, QAccessible::TextBou
    return text(boundaries.first, boundaries.second);
 }
 
-
 QString QAccessibleTextWidget::textAfterOffset(int offset, QAccessible::TextBoundaryType boundaryType,
    int *startOffset, int *endOffset) const
 {
@@ -1089,8 +1098,7 @@ void QAccessibleTextWidget::replaceText(int startOffset, int endOffset, const QS
    cursor.removeSelectedText();
    cursor.insertText(text);
 }
-#endif // QT_NO_CURSOR
-
+#endif
 
 #ifndef QT_NO_MAINWINDOW
 QAccessibleMainWindow::QAccessibleMainWindow(QWidget *widget)

@@ -24,16 +24,13 @@
 #ifndef QPAGESETUPDIALOG_P_H
 #define QPAGESETUPDIALOG_P_H
 
-
-
 #include <qdialog_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include "qbytearray.h"
-#include "qpagesetupdialog.h"
-#include "qpointer.h"
-
+#include <qbytearray.h>
+#include <qpagesetupdialog.h>
+#include <qpointer.h>
 
 class QPrinter;
 
@@ -51,8 +48,6 @@ class QPageSetupDialogPrivate : public QDialogPrivate
    QPointer<QObject> receiverToDisconnectOnClose;
    QString memberToDisconnectOnClose;
 };
-
-
 
 #endif // QT_NO_PRINTDIALOG
 

@@ -243,6 +243,7 @@ void QGraphicsLinearLayout::removeItem(QGraphicsLayoutItem *item)
 void QGraphicsLinearLayout::removeAt(int index)
 {
    Q_D(QGraphicsLinearLayout);
+
    if (index < 0 || index >= d->engine.itemCount()) {
       qWarning("QGraphicsLinearLayout::removeAt: invalid index %d", index);
       return;
@@ -252,6 +253,7 @@ void QGraphicsLinearLayout::removeAt(int index)
       if (QGraphicsLayoutItem *layoutItem = gridItem->layoutItem()) {
          layoutItem->setParentLayoutItem(nullptr);
       }
+
       d->removeGridItem(gridItem);
       delete gridItem;
       invalidate();
@@ -377,7 +379,6 @@ Qt::Alignment QGraphicsLinearLayout::alignment(QGraphicsLayoutItem *item) const
    Q_D(const QGraphicsLinearLayout);
    return d->engine.alignment(item);
 }
-
 
 /*!
     \reimp

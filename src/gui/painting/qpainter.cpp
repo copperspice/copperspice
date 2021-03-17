@@ -1212,7 +1212,7 @@ bool QPainter::begin(QPaintDevice *pd)
          QPixmap *pm = static_cast<QPixmap *>(pd);
          Q_ASSERT(pm);
          if (pm->isNull()) {
-            qWarning("QPainter::begin: Cannot paint on a null pixmap");
+            qWarning("QPainter::begin: Unable to paint using a null pixmap");
             qt_cleanup_painter_state(d);
             return false;
          }
@@ -1227,22 +1227,26 @@ bool QPainter::begin(QPaintDevice *pd)
       case QInternal::Image: {
          QImage *img = static_cast<QImage *>(pd);
          Q_ASSERT(img);
+
          if (img->isNull()) {
-            qWarning("QPainter::begin: Cannot paint on a null image");
+            qWarning("QPainter::begin: Unable to paint using a null pixmap");
             qt_cleanup_painter_state(d);
             return false;
+
          } else if (img->format() == QImage::Format_Indexed8) {
             // Painting on indexed8 images is not supported.
             qWarning("QPainter::begin: Cannot paint on an image with the QImage::Format_Indexed8 format");
             qt_cleanup_painter_state(d);
             return false;
          }
+
          if (img->depth() == 1) {
             d->state->pen = QPen(Qt::color1);
             d->state->brush = QBrush(Qt::color0);
          }
          break;
       }
+
       default:
          break;
    }
@@ -4268,9 +4272,8 @@ static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const 
 }
 
 Q_GUI_EXPORT void qt_draw_decoration_for_glyphs(QPainter *painter, const glyph_t *glyphArray,
-   const QFixedPoint *positions, int glyphCount,
-   QFontEngine *fontEngine, const QFont &font,
-   const QTextCharFormat &charFormat)
+      const QFixedPoint *positions, int glyphCount, QFontEngine *fontEngine, const QFont &font,
+      const QTextCharFormat &charFormat)
 {
    if (!(font.underline() || font.strikeOut() || font.overline())) {
       return;
@@ -4539,9 +4542,7 @@ void QPainter::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPo
 #ifdef QT_DEBUG_DRAW
    if (qt_show_painter_debug_output)
       printf("QPainter::drawTiledPixmap(), target=[%.2f,%.2f,%.2f,%.2f], pix=[%d,%d], offset=[%.2f,%.2f]\n",
-         r.x(), r.y(), r.width(), r.height(),
-         pixmap.width(), pixmap.height(),
-         sp.x(), sp.y());
+         r.x(), r.y(), r.width(), r.height(), pixmap.width(), pixmap.height(), sp.x(), sp.y());
 #endif
 
    Q_D(QPainter);

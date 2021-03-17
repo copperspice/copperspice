@@ -122,6 +122,7 @@ class QGraphicsSceneMouseEventPrivate : public QGraphicsSceneEventPrivate
    QMap<Qt::MouseButton, QPointF> buttonDownPos;
    QMap<Qt::MouseButton, QPointF> buttonDownScenePos;
    QMap<Qt::MouseButton, QPoint> buttonDownScreenPos;
+
    Qt::MouseButton button;
    Qt::MouseButtons buttons;
    Qt::KeyboardModifiers modifiers;
@@ -197,7 +198,6 @@ void QGraphicsSceneMouseEvent::setScreenPos(const QPoint &pos)
    d->screenPos = pos;
 }
 
-
 QPointF QGraphicsSceneMouseEvent::buttonDownPos(Qt::MouseButton button) const
 {
    Q_D(const QGraphicsSceneMouseEvent);
@@ -237,7 +237,6 @@ void QGraphicsSceneMouseEvent::setButtonDownScreenPos(Qt::MouseButton button, co
    Q_D(QGraphicsSceneMouseEvent);
    d->buttonDownScreenPos.insert(button, pos);
 }
-
 
 QPointF QGraphicsSceneMouseEvent::lastPos() const
 {
@@ -331,12 +330,12 @@ Qt::KeyboardModifiers QGraphicsSceneMouseEvent::modifiers() const
    return d->modifiers;
 }
 
-
 Qt::MouseEventSource QGraphicsSceneMouseEvent::source() const
 {
    Q_D(const QGraphicsSceneMouseEvent);
    return d->source;
 }
+
 void QGraphicsSceneMouseEvent::setSource(Qt::MouseEventSource source)
 {
    Q_D(QGraphicsSceneMouseEvent);
@@ -373,6 +372,7 @@ class QGraphicsSceneWheelEventPrivate : public QGraphicsSceneEventPrivate
    QPointF pos;
    QPointF scenePos;
    QPoint screenPos;
+
    Qt::MouseButtons buttons;
    Qt::KeyboardModifiers modifiers;
    int delta;
@@ -515,6 +515,7 @@ void QGraphicsSceneWheelEvent::setOrientation(Qt::Orientation orientation)
 class QGraphicsSceneContextMenuEventPrivate : public QGraphicsSceneEventPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsSceneContextMenuEvent)
+
  public:
    QGraphicsSceneContextMenuEventPrivate()
       : modifiers(Qt::EmptyFlag), reason(QGraphicsSceneContextMenuEvent::Other)
@@ -864,6 +865,7 @@ void QGraphicsSceneHelpEvent::setScreenPos(const QPoint &pos)
 class QGraphicsSceneDragDropEventPrivate : public QGraphicsSceneEventPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsSceneDragDropEvent)
+
  public:
    inline QGraphicsSceneDragDropEventPrivate()
       : source(nullptr), mimeData(nullptr)

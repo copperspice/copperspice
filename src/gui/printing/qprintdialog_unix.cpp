@@ -228,6 +228,7 @@ void QPrintPropertiesDialog::selectPrinter(QPrinter::OutputFormat outputFormat, 
 {
    widget.pageSetup->selectPrinter(outputFormat, printerName);
 }
+
 QPrintDialogPrivate::QPrintDialogPrivate()
    : top(nullptr), bottom(nullptr), buttons(nullptr), collapseButton(nullptr)
 {
@@ -518,14 +519,12 @@ void QPrintDialogPrivate::setTabs(const QList<QWidget *> &tabWidgets)
    }
 }
 
-
 QPrintDialog::QPrintDialog(QPrinter *printer, QWidget *parent)
    : QAbstractPrintDialog(*(new QPrintDialogPrivate), printer, parent)
 {
    Q_D(QPrintDialog);
    d->init();
 }
-
 
 QPrintDialog::QPrintDialog(QWidget *parent)
    : QAbstractPrintDialog(*(new QPrintDialogPrivate), nullptr, parent)
@@ -582,6 +581,7 @@ QUnixPrintWidgetPrivate::QUnixPrintWidgetPrivate(QUnixPrintWidget *p, QPrinter *
    QStringList printers;
    QString defaultPrinter;
    QPlatformPrinterSupport *ps = QPlatformPrinterSupportPlugin::get();
+
    if (ps) {
       printers = ps->availablePrintDeviceIds();
       defaultPrinter = ps->defaultPrintDeviceId();
@@ -616,6 +616,7 @@ QUnixPrintWidgetPrivate::QUnixPrintWidgetPrivate(QUnixPrintWidget *p, QPrinter *
 void QUnixPrintWidgetPrivate::updateWidget()
 {
    const bool printToFile = (q == nullptr) || q->isOptionEnabled(QPrintDialog::PrintToFile);
+
    if (printToFile && !filePrintersAdded) {
       if (widget.printers->count()) {
          widget.printers->insertSeparator(widget.printers->count());
@@ -711,12 +712,14 @@ void QUnixPrintWidgetPrivate::setOptionsPane(QPrintDialogPrivate *pane)
 void QUnixPrintWidgetPrivate::_q_btnBrowseClicked()
 {
    QString filename = widget.filename->text();
+
 #ifndef QT_NO_FILEDIALOG
    filename = QFileDialog::getSaveFileName(parent, QPrintDialog::tr("Print To File ..."), filename,
          QString(), nullptr, QFileDialog::DontConfirmOverwrite);
 #else
    filename.clear();
 #endif
+
    if (!filename.isEmpty()) {
       widget.filename->setText(filename);
       widget.printers->setCurrentIndex(widget.printers->count() - 1); // the pdf one
@@ -879,6 +882,7 @@ void QUnixPrintWidgetPrivate::_q_btnPropertiesClicked()
       delete propertiesDialog;
       propertiesDialog = nullptr;
       propertiesDialogShown = false;
+
    } else {
       propertiesDialogShown = true;
    }
@@ -889,15 +893,19 @@ void QUnixPrintWidgetPrivate::setupPrinter()
    const int printerCount = widget.printers->count();
    const int index = widget.printers->currentIndex();
 
-   if (filePrintersAdded && index == printerCount - 1) { // PDF
+   if (filePrintersAdded && index == printerCount - 1) {
+      // PDF
       printer->setPrinterName(QString());
       Q_ASSERT(index != printerCount - 2); // separator
+
       printer->setOutputFormat(QPrinter::PdfFormat);
       QString path = widget.filename->text();
       if (QDir::isRelativePath(path)) {
          path = QDir::homePath() + QDir::separator() + path;
       }
+
       printer->setOutputFileName(path);
+
    } else {
       printer->setPrinterName(widget.printers->currentText());
       printer->setOutputFileName(QString());

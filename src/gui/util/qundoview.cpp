@@ -30,6 +30,7 @@
 #include <qabstractitemmodel.h>
 #include <qpointer.h>
 #include <qicon.h>
+
 #include <qlistview_p.h>
 
 class QUndoModel : public QAbstractItemModel
@@ -273,6 +274,7 @@ QIcon QUndoModel::cleanIcon() const
 class QUndoViewPrivate : public QListViewPrivate
 {
    Q_DECLARE_PUBLIC(QUndoView)
+
  public:
 
 #ifdef QT_NO_UNDOGROUP
@@ -288,7 +290,9 @@ class QUndoViewPrivate : public QListViewPrivate
    }
 
    QPointer<QUndoGroup> group;
+
 #endif
+
    QUndoModel *model;
 
    void init();
@@ -377,6 +381,7 @@ QUndoStack *QUndoView::stack() const
 void QUndoView::setStack(QUndoStack *stack)
 {
    Q_D(QUndoView);
+
 #ifndef QT_NO_UNDOGROUP
    setGroup(nullptr);
 #endif
@@ -434,7 +439,6 @@ void QUndoView::setCleanIcon(const QIcon &icon)
 {
    Q_D(const QUndoView);
    d->model->setCleanIcon(icon);
-
 }
 
 QIcon QUndoView::cleanIcon() const

@@ -25,6 +25,7 @@
 #include <qdebug.h>
 
 #ifndef QT_NO_ACTION
+
 #include <qwidgetaction_p.h>
 
 QWidgetAction::QWidgetAction(QObject *parent)
@@ -35,11 +36,15 @@ QWidgetAction::QWidgetAction(QObject *parent)
 QWidgetAction::~QWidgetAction()
 {
    Q_D(QWidgetAction);
-   for (int i = 0; i < d->createdWidgets.count(); ++i)
+
+   for (int i = 0; i < d->createdWidgets.count(); ++i) {
       disconnect(d->createdWidgets.at(i), SIGNAL(destroyed(QObject *)),
          this, SLOT(_q_widgetDestroyed(QObject *)));
+   }
+
    QList<QWidget *> widgetsToDelete = d->createdWidgets;
    d->createdWidgets.clear();
+
    qDeleteAll(widgetsToDelete);
    delete d->defaultWidget;
 }
@@ -47,11 +52,14 @@ QWidgetAction::~QWidgetAction()
 void QWidgetAction::setDefaultWidget(QWidget *widget)
 {
    Q_D(QWidgetAction);
+
    if (widget == d->defaultWidget || d->defaultWidgetInUse) {
       return;
    }
+
    delete d->defaultWidget;
    d->defaultWidget = widget;
+
    if (!widget) {
       return;
    }
@@ -60,6 +68,7 @@ void QWidgetAction::setDefaultWidget(QWidget *widget)
    d->defaultWidget->hide();
    d->defaultWidget->setParent(nullptr);
    d->defaultWidgetInUse = false;
+
    if (!isEnabled()) {
       d->defaultWidget->setEnabled(false);
    }
@@ -88,18 +97,20 @@ QWidget *QWidgetAction::requestWidget(QWidget *parent)
    Q_D(QWidgetAction);
 
    QWidget *w = createWidget(parent);
+
    if (!w) {
       if (d->defaultWidgetInUse || !d->defaultWidget) {
          return nullptr;
       }
+
       d->defaultWidget->setParent(parent);
       d->defaultWidgetInUse = true;
       return d->defaultWidget;
    }
 
-   connect(w, SIGNAL(destroyed(QObject *)),
-      this, SLOT(_q_widgetDestroyed(QObject *)));
+   connect(w, SIGNAL(destroyed(QObject *)), this, SLOT(_q_widgetDestroyed(QObject *)));
    d->createdWidgets.append(w);
+
    return w;
 }
 
@@ -126,8 +137,7 @@ void QWidgetAction::releaseWidget(QWidget *widget)
       return;
    }
 
-   disconnect(widget, SIGNAL(destroyed(QObject *)),
-      this, SLOT(_q_widgetDestroyed(QObject *)));
+   disconnect(widget, SIGNAL(destroyed(QObject *)), this, SLOT(_q_widgetDestroyed(QObject *)));
    d->createdWidgets.removeAll(widget);
    deleteWidget(widget);
 }
@@ -138,14 +148,17 @@ void QWidgetAction::releaseWidget(QWidget *widget)
 bool QWidgetAction::event(QEvent *event)
 {
    Q_D(QWidgetAction);
+
    if (event->type() == QEvent::ActionChanged) {
       if (d->defaultWidget) {
          d->defaultWidget->setEnabled(isEnabled());
       }
+
       for (int i = 0; i < d->createdWidgets.count(); ++i) {
          d->createdWidgets.at(i)->setEnabled(isEnabled());
       }
    }
+
    return QAction::event(event);
 }
 
@@ -167,7 +180,8 @@ bool QWidgetAction::eventFilter(QObject *obj, QEvent *event)
 */
 QWidget *QWidgetAction::createWidget(QWidget *parent)
 {
-   Q_UNUSED(parent)
+   (void) parent;
+
    return nullptr;
 }
 

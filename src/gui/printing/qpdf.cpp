@@ -381,8 +381,6 @@ QByteArray QPdf::generateDashes(const QPen &pen)
     return result;
 }
 
-
-
 static const char* const pattern_for_brush[] = {
     nullptr,    // NoBrush
     nullptr,    // SolidPattern
@@ -393,7 +391,7 @@ static const char* const pattern_for_brush[] = {
     "4 8 l\n"
     "0 4 m\n"
     "8 4 l\n"
-    "S\n", // Dense1Pattern
+    "S\n",       // Dense1Pattern
 
     "0 J\n"
     "2 w\n"
@@ -412,7 +410,7 @@ static const char* const pattern_for_brush[] = {
     "[6 2] -3 d\n"
     "4 0 m\n"
     "4 8 l\n"
-    "S\n", // Dense2Pattern
+    "S\n",       // Dense2Pattern
 
     "0 J\n"
     "2 w\n"
@@ -431,7 +429,7 @@ static const char* const pattern_for_brush[] = {
     "[6 2] -3 d\n"
     "4 0 m\n"
     "4 8 l\n"
-    "S\n", // Dense3Pattern
+    "S\n",       // Dense3Pattern
 
     "0 J\n"
     "2 w\n"
@@ -450,7 +448,7 @@ static const char* const pattern_for_brush[] = {
     "[2 2] 1 d\n"
     "4 0 m\n"
     "4 8 l\n"
-    "S\n", // Dense4Pattern
+    "S\n",       // Dense4Pattern
 
     "0 J\n"
     "2 w\n"
@@ -469,7 +467,7 @@ static const char* const pattern_for_brush[] = {
     "[2 6] 3 d\n"
     "4 0 m\n"
     "4 8 l\n"
-    "S\n", // Dense5Pattern
+    "S\n",       // Dense5Pattern
 
     "0 J\n"
     "2 w\n"
@@ -482,7 +480,7 @@ static const char* const pattern_for_brush[] = {
     "[2 6] 3 d\n"
     "4 0 m\n"
     "4 8 l\n"
-    "S\n", // Dense6Pattern
+    "S\n",       // Dense6Pattern
 
     "0 J\n"
     "2 w\n"
@@ -491,38 +489,38 @@ static const char* const pattern_for_brush[] = {
     "0 8 l\n"
     "8 0 m\n"
     "8 8 l\n"
-    "S\n", // Dense7Pattern
+    "S\n",       // Dense7Pattern
 
     "1 w\n"
     "0 4 m\n"
     "8 4 l\n"
-    "S\n", // HorPattern
+    "S\n",       // HorPattern
 
     "1 w\n"
     "4 0 m\n"
     "4 8 l\n"
-    "S\n", // VerPattern
+    "S\n",       // VerPattern
 
     "1 w\n"
     "4 0 m\n"
     "4 8 l\n"
     "0 4 m\n"
     "8 4 l\n"
-    "S\n", // CrossPattern
+    "S\n",       // CrossPattern
 
     "1 w\n"
     "-1 5 m\n"
     "5 -1 l\n"
     "3 9 m\n"
     "9 3 l\n"
-    "S\n", // BDiagPattern
+    "S\n",       // BDiagPattern
 
     "1 w\n"
     "-1 3 m\n"
     "5 9 l\n"
     "3 -1 m\n"
     "9 5 l\n"
-    "S\n", // FDiagPattern
+    "S\n",       // FDiagPattern
 
     "1 w\n"
     "-1 3 m\n"
@@ -533,7 +531,7 @@ static const char* const pattern_for_brush[] = {
     "5 -1 l\n"
     "3 9 m\n"
     "9 3 l\n"
-    "S\n", // DiagCrossPattern
+    "S\n",       // DiagCrossPattern
 };
 
 QByteArray QPdf::patternForBrush(const QBrush &b)
@@ -543,7 +541,6 @@ QByteArray QPdf::patternForBrush(const QBrush &b)
         return QByteArray();
     return pattern_for_brush[style];
 }
-
 
 static void moveToHook(qfixed x, qfixed y, void *data)
 {
@@ -564,17 +561,17 @@ static void lineToHook(qfixed x, qfixed y, void *data)
     *t->stream << x << y << "l\n";
 }
 
-static void cubicToHook(qfixed c1x, qfixed c1y,
-                        qfixed c2x, qfixed c2y,
-                        qfixed ex, qfixed ey,
-                        void *data)
+static void cubicToHook(qfixed c1x, qfixed c1y, qfixed c2x, qfixed c2y,
+            qfixed ex, qfixed ey, void *data)
 {
     QPdf::Stroker *t = (QPdf::Stroker *)data;
+
     if (!t->cosmeticPen) {
         t->matrix.map(c1x, c1y, &c1x, &c1y);
         t->matrix.map(c2x, c2y, &c2x, &c2y);
         t->matrix.map(ex, ey, &ex, &ey);
     }
+
     *t->stream << c1x << c1y
                << c2x << c2y
                << ex << ey
@@ -1358,8 +1355,8 @@ QPdfEnginePrivate::QPdfEnginePrivate()
       outDevice(nullptr), ownsDevice(false), embedFonts(true), grayscale(false),
       m_pageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF(10, 10, 10, 10))
 {
-    resolution = 1200;
-    currentObject = 1;
+    resolution     = 1200;
+    currentObject  = 1;
     currentPage    = nullptr;
     stroker.stream = nullptr;
 

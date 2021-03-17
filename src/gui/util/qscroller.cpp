@@ -264,12 +264,10 @@ typedef QSet<QScroller *> ScrollerSet;
 Q_GLOBAL_STATIC(ScrollerHash, qt_allScrollers)
 Q_GLOBAL_STATIC(ScrollerSet, qt_activeScrollers)
 
-
 bool QScroller::hasScroller(QObject *target)
 {
    return (qt_allScrollers()->value(target));
 }
-
 
 QScroller *QScroller::scroller(QObject *target)
 {
@@ -284,9 +282,9 @@ QScroller *QScroller::scroller(QObject *target)
 
    QScroller *s = new QScroller(target);
    qt_allScrollers()->insert(target, s);
+
    return s;
 }
-
 
 const QScroller *QScroller::scroller(const QObject *target)
 {
@@ -875,12 +873,9 @@ void QScroller::setSnapPositionsY(qreal first, qreal interval)
    d->recalcScrollingSegments();
 }
 
-
-
-// -------------- private ------------
-
 QScrollerPrivate::QScrollerPrivate(QScroller *q, QObject *_target)
    : target(_target)
+
 #ifndef QT_NO_GESTURES
      , recognizer(nullptr), recognizerType(Qt::CustomGesture)
 #endif
@@ -891,6 +886,7 @@ QScrollerPrivate::QScrollerPrivate(QScroller *q, QObject *_target)
 #ifndef QT_NO_ANIMATION
    , scrollTimer(new QScrollTimer(this))
 #endif
+
    , q_ptr(q)
 {
    connect(target, SIGNAL(destroyed(QObject *)), this, SLOT(targetDestroyed()));

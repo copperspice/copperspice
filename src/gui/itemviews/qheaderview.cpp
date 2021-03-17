@@ -24,6 +24,7 @@
 #include <qheaderview.h>
 
 #ifndef QT_NO_ITEMVIEWS
+
 #include <qbitarray.h>
 #include <qbrush.h>
 #include <qdebug.h>
@@ -1635,6 +1636,7 @@ bool QHeaderView::event(QEvent *e)
          }
          break;
       }
+
       case QEvent::Leave:
       case QEvent::HoverLeave: {
          if (d->hover != -1) {
@@ -1643,6 +1645,7 @@ bool QHeaderView::event(QEvent *e)
          d->hover = -1;
          break;
       }
+
       case QEvent::HoverMove: {
          QHoverEvent *he = static_cast<QHoverEvent *>(e);
          int oldHover = d->hover;

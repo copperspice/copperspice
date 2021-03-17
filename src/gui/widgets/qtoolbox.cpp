@@ -247,7 +247,6 @@ void QToolBoxButton::initStyleOption(QStyleOptionToolBox *option) const
    } else {
       option->selectedPosition = QStyleOptionToolBox::NotAdjacent;
    }
-
 }
 
 void QToolBoxButton::paintEvent(QPaintEvent *)

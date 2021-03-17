@@ -29,7 +29,7 @@
 
 // Font routines
 static hb_bool_t cs_font_get_glyph(hb_font_t *font, void *font_data, hb_codepoint_t unicode,
-      hb_codepoint_t variation_selector, hb_codepoint_t *glyph, void *unused2)
+      hb_codepoint_t variation_selector, hb_codepoint_t *glyph, void *unused)
 {
    QFontEngine *fe = static_cast<QFontEngine *>(font_data);
    Q_ASSERT(fe);
@@ -68,7 +68,7 @@ static hb_position_t cs_font_get_glyph_h_advance(hb_font_t *font, void *font_dat
    return advance.value();
 }
 
-static hb_position_t cs_font_get_glyph_v_advance(hb_font_t *font, void *font_Data,
+static hb_position_t cs_font_get_glyph_v_advance(hb_font_t *font, void *font_data,
    hb_codepoint_t glyph, void *user_data)
 {
    qCritical("cs_font_get_glyph_v_advance: vertical writing is not supported");
@@ -162,7 +162,7 @@ static hb_bool_t cs_font_get_glyph_name(hb_font_t *font, void *font_data,
    return false;
 }
 
-static hb_bool_t cs_font_get_glyph_from_name(hb_font_t *font, void *font_data, const char *name, int len,
+static hb_bool_t cs_font_get_glyph_from_name(hb_font_t *font, void *font_data, const char *name, int,
    hb_codepoint_t *glyph, void *user_data)
 {
    qCritical("hb_qt_font_get_glyph_from_name: not implemented");

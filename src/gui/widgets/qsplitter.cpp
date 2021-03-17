@@ -688,6 +688,7 @@ void QSplitterPrivate::setGeo(QSplitterLayoutStruct *sls, int p, int s, bool all
    QWidget *w = sls->widget;
    QRect r;
    QRect contents = q->contentsRect();
+
    if (orient == Qt::Horizontal) {
       r.setRect(p, contents.y(), s, contents.height());
    } else {
@@ -1055,8 +1056,6 @@ int QSplitter::count() const
    return d->list.count();
 }
 
-
-
 void QSplitter::childEvent(QChildEvent *c)
 {
    Q_D(QSplitter);
@@ -1216,7 +1215,6 @@ void QSplitter::getRange(int index, int *min, int *max) const
    d->getRange(index, min, nullptr, nullptr, max);
 }
 
-
 int QSplitter::closestLegalPosition(int pos, int index)
 {
    Q_D(QSplitter);
@@ -1224,13 +1222,11 @@ int QSplitter::closestLegalPosition(int pos, int index)
    return d->adjustPos(pos, index, &u, &n, &i, &x);
 }
 
-
 bool QSplitter::opaqueResize() const
 {
    Q_D(const QSplitter);
    return d->opaqueResizeSet ? d->opaque : style()->styleHint(QStyle::SH_Splitter_OpaqueResize, nullptr, this);
 }
-
 
 void QSplitter::setOpaqueResize(bool on)
 {
@@ -1248,6 +1244,7 @@ QSize QSplitter::sizeHint() const
    ensurePolished();
    int l = 0;
    int t = 0;
+
    for (int i = 0; i < d->list.size(); ++i) {
       QWidget *w = d->list.at(i)->widget;
       if (w->isHidden()) {
@@ -1261,11 +1258,6 @@ QSize QSplitter::sizeHint() const
    }
    return orientation() == Qt::Horizontal ? QSize(l, t) : QSize(t, l);
 }
-
-
-/*!
-    \reimp
-*/
 
 QSize QSplitter::minimumSizeHint() const
 {

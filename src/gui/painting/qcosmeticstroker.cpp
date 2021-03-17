@@ -187,27 +187,35 @@ static StrokeLine strokeLine(int strokeSelection)
       case Aliased|Solid|RegularDraw:
          stroke = &QT_PREPEND_NAMESPACE(drawLine)<drawPixel, NoDasher>;
          break;
+
       case Aliased|Solid|FastDraw:
          stroke = &QT_PREPEND_NAMESPACE(drawLine)<drawPixelARGB32Opaque, NoDasher>;
          break;
+
       case Aliased|Dashed|RegularDraw:
          stroke = &QT_PREPEND_NAMESPACE(drawLine)<drawPixel, Dasher>;
          break;
+
       case Aliased|Dashed|FastDraw:
          stroke = &QT_PREPEND_NAMESPACE(drawLine)<drawPixelARGB32Opaque, Dasher>;
          break;
+
       case AntiAliased|Solid|RegularDraw:
          stroke = &QT_PREPEND_NAMESPACE(drawLineAA)<drawPixel, NoDasher>;
          break;
+
       case AntiAliased|Solid|FastDraw:
          stroke = &QT_PREPEND_NAMESPACE(drawLineAA)<drawPixelARGB32, NoDasher>;
          break;
+
       case AntiAliased|Dashed|RegularDraw:
          stroke = &QT_PREPEND_NAMESPACE(drawLineAA)<drawPixel, Dasher>;
          break;
+
       case AntiAliased|Dashed|FastDraw:
          stroke = &QT_PREPEND_NAMESPACE(drawLineAA)<drawPixelARGB32, Dasher>;
          break;
+
       default:
          Q_ASSERT(false);
          stroke = nullptr;
@@ -224,11 +232,10 @@ void QCosmeticStroker::setup()
    }
 
    int strokeSelection = 0;
-   if (blend == state->penData.unclipped_blend
-      && state->penData.type == QSpanData::Solid
-      && (state->penData.rasterBuffer->format == QImage::Format_ARGB32_Premultiplied
-         || state->penData.rasterBuffer->format == QImage::Format_RGB32)
-      && state->compositionMode() == QPainter::CompositionMode_SourceOver) {
+   if (blend == state->penData.unclipped_blend && state->penData.type == QSpanData::Solid
+            && (state->penData.rasterBuffer->format == QImage::Format_ARGB32_Premultiplied
+            || state->penData.rasterBuffer->format == QImage::Format_RGB32)
+            && state->compositionMode() == QPainter::CompositionMode_SourceOver) {
       strokeSelection |= FastDraw;
    }
 
@@ -239,32 +246,38 @@ void QCosmeticStroker::setup()
    const QVector<qreal> &penPattern = state->lastPen.dashPattern();
    if (penPattern.isEmpty()) {
       Q_ASSERT(!pattern && !reversePattern);
-      patternLength = 0;
-      patternSize = 0;
       pattern        = nullptr;
       reversePattern = nullptr;
+      patternLength  = 0;
+      patternSize    = 0;
+
    } else {
       pattern = (int *)malloc(penPattern.size() * sizeof(int));
       reversePattern = (int *)malloc(penPattern.size() * sizeof(int));
-      patternSize = penPattern.size();
+      patternSize    = penPattern.size();
 
       patternLength = 0;
+
       for (int i = 0; i < patternSize; ++i) {
-         patternLength += (int) qMax(1., penPattern.at(i) * 64.);
+         patternLength += (int) qMax(1.0, penPattern.at(i) * 64.0);
          pattern[i] = patternLength;
       }
+
       patternLength = 0;
+
       for (int i = 0; i < patternSize; ++i) {
-         patternLength += (int) qMax(1., penPattern.at(patternSize - 1 - i) * 64.);
+         patternLength += (int) qMax(1.0, penPattern.at(patternSize - 1 - i) * 64.0);
          reversePattern[i] = patternLength;
       }
+
       strokeSelection |= Dashed;
-      //        qDebug() << "setup: size=" << patternSize << "length=" << patternLength/64.;
+      // qDebug() << "setup: size=" << patternSize << "length=" << patternLength/64.;
    }
 
    stroke = strokeLine(strokeSelection);
 
    qreal width = state->lastPen.widthF();
+
    if (width == 0) {
       opacity = 256;
    } else if (qt_pen_is_cosmetic(state->lastPen, state->renderHints))  {
@@ -272,6 +285,7 @@ void QCosmeticStroker::setup()
    } else {
       opacity = (int) 256 * width * state->txscale;
    }
+
    opacity = qBound(0, opacity, 256);
 
    drawCaps = state->lastPen.capStyle() != Qt::FlatCap;

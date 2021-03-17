@@ -1125,15 +1125,18 @@ QTouchEvent::QTouchEvent(QEvent::Type eventType, QTouchDevice *device, Qt::Keybo
             Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints)
    : QInputEvent(eventType, modifiers), _window(nullptr), _target(nullptr), _device(device),
      _touchPointStates(touchPointStates), _touchPoints(touchPoints)
-{}
+{
+}
 
 QTouchEvent::~QTouchEvent()
-{}
+{
+}
 
 // internal
 QTouchEvent::TouchPoint::TouchPoint(int id)
    : d(new QTouchEventTouchPointPrivate(id))
-{ }
+{
+}
 
 // internal
 QTouchEvent::TouchPoint::TouchPoint(const QTouchEvent::TouchPoint &other)

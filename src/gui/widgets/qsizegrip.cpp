@@ -120,10 +120,11 @@ Qt::Corner QSizeGripPrivate::corner() const
 {
    Q_Q(const QSizeGrip);
 
-   QWidget *tlw = qt_sizegrip_topLevelWidget(const_cast<QSizeGrip *>(q));
-   const QPoint sizeGripPos = q->mapTo(tlw, QPoint(0, 0));
-   bool isAtBottom = sizeGripPos.y() >= tlw->height() / 2;
-   bool isAtLeft = sizeGripPos.x() <= tlw->width() / 2;
+   QWidget *tmp = qt_sizegrip_topLevelWidget(const_cast<QSizeGrip *>(q));
+   const QPoint sizeGripPos = q->mapTo(tmp, QPoint(0, 0));
+
+   bool isAtBottom = sizeGripPos.y() >= tmp->height() / 2;
+   bool isAtLeft   = sizeGripPos.x() <= tmp->width() / 2;
 
    if (isAtLeft) {
       return isAtBottom ? Qt::BottomLeftCorner : Qt::TopLeftCorner;

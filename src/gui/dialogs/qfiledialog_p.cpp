@@ -763,10 +763,13 @@ void QFileDialogPrivate::init(const QUrl &directory, const QString &nameFilter, 
    if (!nativeDialogInUse) {
       createWidgets();
    }
+
    q->setFileMode(QFileDialog::AnyFile);
+
    if (!nameFilter.isEmpty()) {
       q->setNameFilter(nameFilter);
    }
+
    q->setDirectoryUrl(workingDirectory(directory));
    q->selectFile(initialSelection(directory));
 
@@ -1621,6 +1624,7 @@ void QFileDialogPrivate::_q_emitUrlSelected(const QUrl &file)
 void QFileDialogPrivate::_q_emitUrlsSelected(const QList<QUrl> &files)
 {
    Q_Q(QFileDialog);
+
    emit q->urlsSelected(files);
    QStringList localFiles;
 
@@ -1638,7 +1642,9 @@ void QFileDialogPrivate::_q_emitUrlsSelected(const QList<QUrl> &files)
 void QFileDialogPrivate::_q_nativeCurrentChanged(const QUrl &file)
 {
    Q_Q(QFileDialog);
+
    emit q->currentUrlChanged(file);
+
    if (file.isLocalFile()) {
       emit q->currentChanged(file.toLocalFile());
    }
@@ -1647,8 +1653,11 @@ void QFileDialogPrivate::_q_nativeCurrentChanged(const QUrl &file)
 void QFileDialogPrivate::_q_nativeEnterDirectory(const QUrl &directory)
 {
    Q_Q(QFileDialog);
+
    emit q->directoryUrlEntered(directory);
-   if (!directory.isEmpty()) { // Windows native dialogs occasionally emit signals with empty strings.
+
+   if (!directory.isEmpty()) {
+      // Windows native dialogs occasionally emit signals with empty strings.
       *cs_internal_lastVisitedDir() = directory;
 
       if (directory.isLocalFile()) {

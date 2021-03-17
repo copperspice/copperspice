@@ -39,8 +39,6 @@
 #include <qabstractitemmodel_p.h>
 #include <qdebug.h>
 
-
-
 class QDirModelPrivate : public QAbstractItemModelPrivate
 {
    Q_DECLARE_PUBLIC(QDirModel)
@@ -253,8 +251,8 @@ QModelIndex QDirModel::parent(const QModelIndex &child) const
    }
 
    // get the parent's row
-   const QVector<QDirModelPrivate::QDirNode> children =
-      par->parent ? par->parent->children : d->root.children;
+   const QVector<QDirModelPrivate::QDirNode> children = par->parent ? par->parent->children : d->root.children;
+
    Q_ASSERT(children.count() > 0);
    int row = (par - & (children.at(0)));
    Q_ASSERT(row >= 0);
@@ -1182,6 +1180,7 @@ QVector<QDirModelPrivate::QDirNode> QDirModelPrivate::children(QDirNode *parent,
    if (parent == &root) {
       parent = nullptr;
       infoList = QDir::drives();
+
    } else if (parent->info.isDir()) {
       //resolve directory links only if requested.
       if (parent->info.isSymLink() && resolveSymlinks) {

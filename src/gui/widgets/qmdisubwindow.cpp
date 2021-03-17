@@ -568,8 +568,8 @@ ControlContainer::ControlContainer(QMdiSubWindow *mdiChild)
 #ifndef QT_NO_MENU
    connect(m_menuLabel, SIGNAL(_q_clicked()), mdiChild, SLOT(showSystemMenu()));
 #endif
-   connect(m_menuLabel, SIGNAL(_q_doubleClicked()), mdiChild, SLOT(close()));
 
+   connect(m_menuLabel, SIGNAL(_q_doubleClicked()), mdiChild, SLOT(close()));
 }
 
 ControlContainer::~ControlContainer()
@@ -626,6 +626,7 @@ void ControlContainer::showButtonsInMenuBar(QMenuBar *menuBar)
       }
       m_menuLabel->show();
    }
+
    ControllerWidget *controllerWidget = qobject_cast<ControllerWidget *>(m_controllerWidget);
    if (controllerWidget && controllerWidget->hasVisibleControls()) {
       QWidget *currentRight = menuBar->cornerWidget(Qt::TopRightCorner);
@@ -638,6 +639,7 @@ void ControlContainer::showButtonsInMenuBar(QMenuBar *menuBar)
       }
       m_controllerWidget->show();
    }
+
    mdiChild->d_func()->setNewWindowTitle();
 }
 
@@ -854,15 +856,18 @@ void QMdiSubWindowPrivate::removeBaseWidget()
 
    Q_Q(QMdiSubWindow);
    baseWidget->removeEventFilter(q);
+
    if (layout) {
       layout->removeWidget(baseWidget);
    }
+
    if (baseWidget->windowTitle() == q->windowTitle()) {
       ignoreWindowTitleChange = true;
       q->setWindowTitle(QString());
       ignoreWindowTitleChange = false;
       q->setWindowModified(false);
    }
+
    lastChildWindowTitle.clear();
    baseWidget->setParent(nullptr);
    baseWidget = nullptr;
@@ -1443,9 +1448,11 @@ void QMdiSubWindowPrivate::processClickedSubControl()
 #endif
          q->showMaximized();
          break;
+
       case QStyle::SC_TitleBarCloseButton:
          q->close();
          break;
+
       default:
          break;
    }
@@ -1668,7 +1675,7 @@ void QMdiSubWindowPrivate::sizeParameters(int *margin, int *minWidth) const
 
    Qt::WindowFlags flags = q->windowFlags();
    if (! q->parent() || flags & Qt::FramelessWindowHint) {
-      *margin = 0;
+      *margin   = 0;
       *minWidth = 0;
       return;
    }
@@ -1681,17 +1688,20 @@ void QMdiSubWindowPrivate::sizeParameters(int *margin, int *minWidth) const
 
    QStyleOptionTitleBar opt = this->titleBarOptions();
    int tempWidth = 0;
+
    for (int i = 0; i < NumSubControls; ++i) {
       if (SubControls[i] == QStyle::SC_TitleBarLabel) {
          tempWidth += 30;
          continue;
       }
+
       QRect rect = q->style()->subControlRect(QStyle::CC_TitleBar, &opt, SubControls[i], q);
       if (!rect.isValid()) {
          continue;
       }
       tempWidth += rect.width();
    }
+
    *minWidth = tempWidth;
 }
 
@@ -1806,7 +1816,7 @@ void QMdiSubWindowPrivate::removeButtonsFromMenuBar()
       topLevelWindow->setWindowModified(false);
    }
 
-   originalTitle = "";
+   originalTitle = QString();
 }
 
 #endif // QT_NO_MENUBAR

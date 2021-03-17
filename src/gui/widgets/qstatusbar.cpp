@@ -167,8 +167,6 @@ QStatusBar::~QStatusBar()
    }
 }
 
-
-
 void QStatusBar::addWidget(QWidget *widget, int stretch)
 {
    if (!widget) {
@@ -297,8 +295,6 @@ void QStatusBar::removeWidget(QWidget *widget)
 #endif
 }
 
-
-
 bool QStatusBar::isSizeGripEnabled() const
 {
 #ifdef QT_NO_SIZEGRIP
@@ -322,6 +318,7 @@ void QStatusBar::setSizeGripEnabled(bool enabled)
          d->resizer->hide();
          d->resizer->installEventFilter(this);
          d->showSizeGrip = true;
+
       } else {
          delete d->resizer;
          d->resizer = nullptr;
@@ -345,11 +342,13 @@ void QStatusBar::setSizeGripEnabled(bool enabled)
 void QStatusBar::reformat()
 {
    Q_D(QStatusBar);
+
    if (d->box) {
       delete d->box;
    }
 
    QBoxLayout *vbox;
+
 #ifndef QT_NO_SIZEGRIP
    if (d->resizer) {
       d->box = new QHBoxLayout(this);
@@ -362,6 +361,7 @@ void QStatusBar::reformat()
       vbox = d->box = new QVBoxLayout(this);
       d->box->setMargin(0);
    }
+
    vbox->addSpacing(3);
    QBoxLayout *l = new QHBoxLayout;
    vbox->addLayout(l);
@@ -390,10 +390,12 @@ void QStatusBar::reformat()
       if (!item) {
          break;
       }
+
       l->addWidget(item->w, item->s);
       int itemH = qMin(qSmartMinSize(item->w).height(), item->w->maximumHeight());
       maxH = qMax(maxH, itemH);
    }
+
 #ifndef QT_NO_SIZEGRIP
    if (d->resizer) {
       maxH = qMax(maxH, d->resizer->sizeHint().height());
@@ -401,13 +403,13 @@ void QStatusBar::reformat()
       d->box->addWidget(d->resizer, 0, Qt::AlignBottom);
    }
 #endif
+
    l->addStrut(maxH);
    d->savedStrut = maxH;
    vbox->addSpacing(2);
    d->box->activate();
    update();
 }
-
 
 void QStatusBar::showMessage(const QString &message, int timeout)
 {
@@ -432,7 +434,6 @@ void QStatusBar::showMessage(const QString &message, int timeout)
 
    hideOrShow();
 }
-
 
 void QStatusBar::clearMessage()
 {

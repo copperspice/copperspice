@@ -58,12 +58,10 @@ QGraphicsLayoutStyleInfo *QGraphicsGridLayoutPrivate::styleInfo() const
    return m_styleInfo.data();
 }
 
-
 QGraphicsGridLayout::QGraphicsGridLayout(QGraphicsLayoutItem *parent)
    : QGraphicsLayout(*new QGraphicsGridLayoutPrivate(), parent)
 {
 }
-
 
 QGraphicsGridLayout::~QGraphicsGridLayout()
 {
@@ -73,6 +71,7 @@ QGraphicsGridLayout::~QGraphicsGridLayout()
       // from the layout more efficiently than the implementation of
       // ~QGraphicsLayoutItem.
       removeAt(i);
+
       if (item) {
          item->setParentLayoutItem(nullptr);
          if (item->ownedByLayout()) {
@@ -488,6 +487,7 @@ int QGraphicsGridLayout::count() const
 QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
 {
    Q_D(const QGraphicsGridLayout);
+
    if (index < 0 || index >= d->engine.itemCount()) {
       qWarning("QGraphicsGridLayout::itemAt: invalid index %d", index);
       return nullptr;
@@ -497,6 +497,7 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
    if (QGraphicsGridLayoutEngineItem *engineItem = static_cast<QGraphicsGridLayoutEngineItem *>(d->engine.itemAt(index))) {
       item = engineItem->layoutItem();
    }
+
    return item;
 }
 
@@ -530,7 +531,6 @@ void QGraphicsGridLayout::removeAt(int index)
       invalidate();
    }
 }
-
 
 void QGraphicsGridLayout::removeItem(QGraphicsLayoutItem *item)
 {
@@ -572,6 +572,7 @@ void QGraphicsGridLayout::setGeometry(const QRectF &rect)
    getContentsMargins(&left, &top, &right, &bottom);
    Qt::LayoutDirection visualDir = d->visualDirection();
    d->engine.setVisualDirection(visualDir);
+
    if (visualDir == Qt::RightToLeft) {
       qSwap(left, right);
    }
@@ -600,7 +601,5 @@ QSizeF QGraphicsGridLayout::sizeHint(Qt::SizeHint which, const QSizeF &constrain
    const QSizeF extraMargins(left + right, top + bottom);
    return d->engine.sizeHint(which, constraint - extraMargins, d->styleInfo()) + extraMargins;
 }
-
-
 
 #endif

@@ -61,8 +61,6 @@
 
 #define CALLBACK_CALL_TYPE
 
-
-
 #define Q_INTERNAL_WIN_NO_THROW
 
 // avoid going through QImage::scanLine() which calls detach
@@ -94,6 +92,7 @@ class QPngHandlerPrivate
    float gamma;
    float fileGamma;
    int quality;
+
    QString description;
    QSize scaledSize;
    QStringList readTexts;
@@ -127,11 +126,13 @@ class QPngHandlerPrivate
          delete [] outRow;
          outRow = nullptr;
       }
+
       png_byte **row_pointers;
       quint32 *accRow;
       png_byte *inRow;
       uchar *outRow;
    };
+
    AllocatedMemoryPointers amp;
    State state;
 
@@ -197,9 +198,7 @@ extern "C" {
       }
    }
 
-
-   static
-   void CALLBACK_CALL_TYPE qpiw_write_fn(png_structp png_ptr, png_bytep data, png_size_t length)
+   static void CALLBACK_CALL_TYPE qpiw_write_fn(png_structp png_ptr, png_bytep data, png_size_t length)
    {
       QPNGImageWriter *qpiw = (QPNGImageWriter *)png_get_io_ptr(png_ptr);
       QIODevice *out = qpiw->device();
@@ -211,9 +210,7 @@ extern "C" {
       }
    }
 
-
-   static
-   void CALLBACK_CALL_TYPE qpiw_flush_fn(png_structp /* png_ptr */)
+   static void CALLBACK_CALL_TYPE qpiw_flush_fn(png_structp /* png_ptr */)
    {
    }
 }
@@ -246,12 +243,14 @@ static void setup_qt(QImage &image, png_structp png_ptr, png_infop info_ptr, QSi
       if (bit_depth == 1 && png_get_channels(png_ptr, info_ptr) == 1) {
          png_set_invert_mono(png_ptr);
          png_read_update_info(png_ptr, info_ptr);
+
          if (image.size() != QSize(width, height) || image.format() != QImage::Format_Mono) {
             image = QImage(width, height, QImage::Format_Mono);
             if (image.isNull()) {
                return;
             }
          }
+
          image.setColorCount(2);
          image.setColor(1, qRgb(0, 0, 0));
          image.setColor(0, qRgb(255, 255, 255));
@@ -506,15 +505,12 @@ static void read_image_scaled(QImage *outImage, png_structp png_ptr, png_infop i
 
 }
 
-
 extern "C" {
    static void CALLBACK_CALL_TYPE qt_png_warning(png_structp /*png_ptr*/, png_const_charp message)
    {
       qWarning("Image libpng warning: %s", message);
    }
 }
-
-
 
 /*!
     \internal
@@ -599,7 +595,9 @@ bool Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngHeader()
       png_get_gAMA(png_ptr, info_ptr, &file_gamma);
       fileGamma = file_gamma;
    }
+
    state = ReadHeader;
+
    return true;
 }
 
@@ -661,7 +659,6 @@ bool Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngImage(QImage *outImage)
          amp.row_pointers[y] = data + y * bpl;
       }
 
-
       png_read_image(png_ptr, amp.row_pointers);
       amp.deallocate();
 
@@ -679,6 +676,7 @@ bool Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngImage(QImage *outImage)
          for (int y = 0; y < (int)height; ++y) {
             uchar *p = FAST_SCAN_LINE(data, bpl, y);
             uchar *end = p + width;
+
             while (p < end) {
                if (*p >= color_table_size) {
                   *p = 0;
@@ -688,6 +686,7 @@ bool Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngImage(QImage *outImage)
          }
       }
    }
+
    state = ReadingEnd;
    png_read_end(png_ptr, end_info);
 
@@ -712,8 +711,10 @@ QImage::Format QPngHandlerPrivate::readImageFormat()
 {
    QImage::Format format = QImage::Format_Invalid;
    png_uint_32 width, height;
+
    int bit_depth, color_type;
    png_colorp palette;
+
    int num_palette;
    png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, nullptr, nullptr, nullptr);
 
@@ -728,20 +729,21 @@ QImage::Format QPngHandlerPrivate::readImageFormat()
       } else {
          format = QImage::Format_Indexed8;
       }
+
    } else if (color_type == PNG_COLOR_TYPE_PALETTE
-      && png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette)
-      && num_palette <= 256) {
+         && png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette)
+         && num_palette <= 256) {
       // 1-bit and 8-bit color
       format = bit_depth == 1 ? QImage::Format_Mono : QImage::Format_Indexed8;
 
    } else {
       // 32-bit
 
-
       format = QImage::Format_ARGB32;
+
       // Only add filler if no alpha, or we can get 5 channel data.
       if (!(color_type & PNG_COLOR_MASK_ALPHA)
-         && !png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
+            && !png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS)) {
          // We want 4 bytes, but it isn't an alpha channel
          format = QImage::Format_RGB32;
       }
@@ -784,11 +786,10 @@ void QPNGImageWriter::setGamma(float g)
    gamma = g;
 }
 
-
-static void set_text(const QImage &image, png_structp png_ptr, png_infop info_ptr,
-   const QString &description)
+static void set_text(const QImage &image, png_structp png_ptr, png_infop info_ptr, const QString &description)
 {
    QMap<QString, QString> text;
+
    for (const QString &key : image.textKeys()) {
       if (!key.isEmpty()) {
          text.insert(key, image.text(key));
@@ -857,16 +858,18 @@ static void set_text(const QImage &image, png_structp png_ptr, png_infop info_pt
    }
 
    png_set_text(png_ptr, info_ptr, text_ptr, i);
+
    for (i = 0; i < text.size(); ++i) {
       delete [] text_ptr[i].key;
       delete [] text_ptr[i].text;
+
 #ifdef PNG_iTXt_SUPPORTED
       delete [] text_ptr[i].lang_key;
 #endif
+
    }
    delete [] text_ptr;
 }
-
 
 bool QPNGImageWriter::writeImage(const QImage &image, int off_x, int off_y)
 {
@@ -912,7 +915,6 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
 
    png_set_write_fn(png_ptr, (void *)this, qpiw_write_fn, qpiw_flush_fn);
 
-
    int color_type = 0;
    if (image.colorCount()) {
       if (image.isGrayscale()) {
@@ -928,7 +930,6 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
       color_type = PNG_COLOR_TYPE_RGB;
    }
 
-
    png_set_IHDR(png_ptr, info_ptr, image.width(), image.height(),
       image.depth() == 1 ? 1 : 8, // per channel
       color_type, 0, 0, 0);       // sets #channels
@@ -936,7 +937,6 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
    if (gamma != 0.0) {
       png_set_gAMA(png_ptr, info_ptr, 1.0 / gamma);
    }
-
 
    if (image.format() == QImage::Format_MonoLSB) {
       png_set_packswap(png_ptr);
@@ -949,6 +949,7 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
       png_color palette[256];
       png_byte trans[256];
       int num_trans = 0;
+
       for (int i = 0; i < num_palette; i++) {
          QRgb rgba = image.color(i);
          palette[i].red = qRed(rgba);
@@ -987,11 +988,8 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
    }
 
    if (image.dotsPerMeterX() > 0 || image.dotsPerMeterY() > 0) {
-      png_set_pHYs(png_ptr, info_ptr,
-         image.dotsPerMeterX(), image.dotsPerMeterY(),
-         PNG_RESOLUTION_METER);
+      png_set_pHYs(png_ptr, info_ptr, image.dotsPerMeterX(), image.dotsPerMeterY(), PNG_RESOLUTION_METER);
    }
-
 
    set_text(image, png_ptr, info_ptr, description);
 
@@ -1003,8 +1001,7 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
 
    if (color_type == PNG_COLOR_TYPE_RGB && image.format() != QImage::Format_RGB888)
       png_set_filler(png_ptr, 0,
-         QSysInfo::ByteOrder == QSysInfo::BigEndian ?
-         PNG_FILLER_BEFORE : PNG_FILLER_AFTER);
+         QSysInfo::ByteOrder == QSysInfo::BigEndian ? PNG_FILLER_BEFORE : PNG_FILLER_AFTER);
 
    if (looping >= 0 && frames_written == 0) {
       uchar data[13] = "NETSCAPE2.0";
@@ -1013,6 +1010,7 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
       data[0xC] = looping / 0x100;
       png_write_chunk(png_ptr, const_cast<png_bytep>((const png_byte *)"gIFx"), data, 13);
    }
+
    if (ms_delay >= 0 || disposal != Unspecified) {
       uchar data[4];
       data[0] = disposal;
@@ -1024,6 +1022,7 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
 
    int height = image.height();
    int width = image.width();
+
    switch (image.format()) {
       case QImage::Format_Mono:
       case QImage::Format_MonoLSB:
@@ -1040,10 +1039,12 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
          delete [] row_pointers;
       }
       break;
+
       default: {
          QImage::Format fmt = image.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32;
          QImage row;
          png_bytep row_pointers[1];
+
          for (int y = 0; y < height; y++) {
             row = image.copy(0, y, width, 1).convertToFormat(fmt);
             row_pointers[0] = const_cast<png_bytep>(row.constScanLine(0));
@@ -1065,11 +1066,14 @@ static bool write_png_image(const QImage &image, QIODevice *device,
    int quality, float gamma, const QString &description)
 {
    QPNGImageWriter writer(device);
+
    if (quality >= 0) {
       quality = qMin(quality, 100);
       quality = (100 - quality) * 9 / 91; // map [0,100] -> [9,0]
    }
+
    writer.setGamma(gamma);
+
    return writer.writeImage(image, quality, description);
 }
 
@@ -1156,6 +1160,7 @@ QVariant QPngHandler::option(ImageOption option) const
    } else if (option == ImageFormat) {
       return d->readImageFormat();
    }
+
    return QVariant();
 }
 

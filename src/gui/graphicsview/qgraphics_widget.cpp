@@ -99,6 +99,7 @@ class QGraphicsWidgetStyles
    QHash<const QGraphicsWidget *, QStyle *> styles;
    mutable QMutex mutex;
 };
+
 Q_GLOBAL_STATIC(QGraphicsWidgetStyles, widgetStyles)
 
 /*!
@@ -107,6 +108,7 @@ Q_GLOBAL_STATIC(QGraphicsWidgetStyles, widgetStyles)
 QGraphicsWidget::~QGraphicsWidget()
 {
    Q_D(QGraphicsWidget);
+
 #ifndef QT_NO_ACTION
    // Remove all actions from this widget
    for (int i = 0; i < d->actions.size(); ++i) {
@@ -135,10 +137,10 @@ QGraphicsWidget::~QGraphicsWidget()
    //we check if we have a layout previously
    if (d->layout) {
       QGraphicsLayout *temp = d->layout;
+
       for (QGraphicsItem *item : childItems()) {
          // In case of a custom layout which doesn't remove and delete items, we ensure that
-         // the parent layout item does not point to the deleted layout. This code is here to
-         // avoid regression from 4.4 to 4.5, because according to 4.5 docs it is not really needed.
+         // the parent layout item does not point to the deleted layout.
          if (item->isWidget()) {
             QGraphicsWidget *widget = static_cast<QGraphicsWidget *>(item);
             if (widget->parentLayoutItem() == d->layout) {
@@ -165,7 +167,6 @@ void QGraphicsWidget::resize(const QSizeF &size)
 {
    setGeometry(QRectF(pos(), size));
 }
-
 
 void QGraphicsWidget::setGeometry(const QRectF &rect)
 {
@@ -250,6 +251,7 @@ void QGraphicsWidget::setGeometry(const QRectF &rect)
    }
 
    emit geometryChanged();
+
 relayoutChildrenAndReturn:
    if (QGraphicsLayout::instantInvalidatePropagation()) {
       if (QGraphicsLayout *lay = wd->layout) {
@@ -261,8 +263,6 @@ relayoutChildrenAndReturn:
    }
 }
 
-
-
 void QGraphicsWidget::setContentsMargins(qreal left, qreal top, qreal right, qreal bottom)
 {
    Q_D(QGraphicsWidget);
@@ -270,7 +270,9 @@ void QGraphicsWidget::setContentsMargins(qreal left, qreal top, qreal right, qre
    if (!d->margins && left == 0 && top == 0 && right == 0 && bottom == 0) {
       return;
    }
+
    d->ensureMargins();
+
    if (left == d->margins[d->Left]
       && top == d->margins[d->Top]
       && right == d->margins[d->Right]
@@ -414,6 +416,7 @@ void QGraphicsWidget::unsetWindowFrameMargins()
 QRectF QGraphicsWidget::windowFrameGeometry() const
 {
    Q_D(const QGraphicsWidget);
+
    return d->windowFrameMargins
       ? geometry().adjusted(-d->windowFrameMargins[d->Left], -d->windowFrameMargins[d->Top],
          d->windowFrameMargins[d->Right], d->windowFrameMargins[d->Bottom])
@@ -531,13 +534,11 @@ QSizeF QGraphicsWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) c
    return sh;
 }
 
-
 QGraphicsLayout *QGraphicsWidget::layout() const
 {
    Q_D(const QGraphicsWidget);
    return d->layout;
 }
-
 
 void QGraphicsWidget::setLayout(QGraphicsLayout *l)
 {
@@ -583,7 +584,6 @@ void QGraphicsWidget::adjustSize()
    }
 }
 
-
 Qt::LayoutDirection QGraphicsWidget::layoutDirection() const
 {
    return testAttribute(Qt::WA_RightToLeft) ? Qt::RightToLeft : Qt::LeftToRight;
@@ -600,7 +600,6 @@ void QGraphicsWidget::unsetLayoutDirection()
    setAttribute(Qt::WA_SetLayoutDirection, false);
    d->resolveLayoutDirection();
 }
-
 
 QStyle *QGraphicsWidget::style() const
 {
@@ -674,6 +673,7 @@ bool QGraphicsWidget::autoFillBackground() const
    Q_D(const QGraphicsWidget);
    return d->autoFillBackground;
 }
+
 void QGraphicsWidget::setAutoFillBackground(bool enabled)
 {
    Q_D(QGraphicsWidget);
@@ -984,21 +984,27 @@ bool QGraphicsWidget::event(QEvent *event)
       case QEvent::LayoutDirectionChange:
          changeEvent(event);
          break;
+
       case QEvent::Close:
          closeEvent((QCloseEvent *)event);
          break;
+
       case QEvent::GrabMouse:
          grabMouseEvent(event);
          break;
+
       case QEvent::UngrabMouse:
          ungrabMouseEvent(event);
          break;
+
       case QEvent::GrabKeyboard:
          grabKeyboardEvent(event);
          break;
+
       case QEvent::UngrabKeyboard:
          ungrabKeyboardEvent(event);
          break;
+
       case QEvent::GraphicsSceneMousePress:
          if (d->hasDecoration() && windowFrameEvent(event)) {
             return true;
@@ -1013,6 +1019,7 @@ bool QGraphicsWidget::event(QEvent *event)
             return windowFrameEvent(event);
          }
          break;
+
       case QEvent::GraphicsSceneHoverEnter:
       case QEvent::GraphicsSceneHoverMove:
       case QEvent::GraphicsSceneHoverLeave:
@@ -1025,6 +1032,7 @@ bool QGraphicsWidget::event(QEvent *event)
             }
          }
          break;
+
       default:
          break;
    }
@@ -1332,6 +1340,7 @@ Qt::WindowFlags QGraphicsWidget::windowFlags() const
    Q_D(const QGraphicsWidget);
    return d->windowFlags;
 }
+
 void QGraphicsWidget::setWindowFlags(Qt::WindowFlags wFlags)
 {
    Q_D(QGraphicsWidget);
@@ -1399,6 +1408,7 @@ void QGraphicsWidget::setFocusPolicy(Qt::FocusPolicy policy)
    if (hasFocus() && policy == Qt::NoFocus) {
       clearFocus();
    }
+
    setFlag(ItemIsFocusable, policy != Qt::NoFocus);
 }
 
@@ -1420,6 +1430,7 @@ int QGraphicsWidget::grabShortcut(const QKeySequence &sequence, Qt::ShortcutCont
    if (sequence.isEmpty()) {
       return 0;
    }
+
    // ### setAttribute(Qt::WA_GrabbedShortcut);
    return qApp->d_func()->shortcutMap.addShortcut(this, sequence, context, qWidgetShortcutContextMatcher);
 }
@@ -1826,7 +1837,6 @@ QPainterPath QGraphicsWidget::shape() const
    return path;
 }
 
-
 bool QGraphicsWidget::close()
 {
    QCloseEvent closeEvent;
@@ -1843,7 +1853,5 @@ bool QGraphicsWidget::close()
    }
    return true;
 }
-
-
 
 #endif //QT_NO_GRAPHICSVIEW

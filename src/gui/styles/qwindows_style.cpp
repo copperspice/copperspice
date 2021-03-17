@@ -541,7 +541,8 @@ QPixmap QWindowsStyle::standardPixmap(StandardPixmap standardPixmap, const QStyl
       return desktopIcon;
    }
 
-#endif // Q_OS_WIN
+#endif
+
    return QCommonStyle::standardPixmap(standardPixmap, opt, widget);
 }
 
@@ -606,7 +607,7 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
                }
                // Otherwise draw underlines if the toplevel widget has seen an alt-press
             } else
-#endif // QT_NO_MENUBAR
+#endif
                if (d->hasSeenAlt(widget)) {
                   ret = 1;
                }
@@ -621,8 +622,10 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
          break;
       }
 #endif
+
       case SH_Menu_SubMenuSloppyCloseTimeout:
       case SH_Menu_SubMenuPopupDelay: {
+
 #if defined(Q_OS_WIN)
          DWORD delay;
          if (SystemParametersInfo(SPI_GETMENUSHOWDELAY, 0, &delay, 0)) {
@@ -650,7 +653,7 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
             }
          }
          break;
-#endif // QT_NO_RUBBERBAND
+#endif
 
 #ifndef QT_NO_WIZARD
       case SH_WizardStyle:
@@ -851,8 +854,7 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
             p->setPen(opt->palette.text().color());
          }
       }
-
-      // Fall through!
+      [[fallthrough]];
 
       case PE_IndicatorViewItemCheck:
 
@@ -1068,6 +1070,7 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
          }
          break;
       }
+
       case PE_FrameWindow: {
          QPalette popupPal = opt->palette;
          popupPal.setColor(QPalette::Light, opt->palette.background().color());
@@ -1163,9 +1166,9 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
             return;
          }
          break;
-#endif // QT_NO_RUBBERBAND
+#endif
 
-#if !defined(QT_NO_MENU) && !defined(QT_NO_MAINWINDOW)
+#if ! defined(QT_NO_MENU) && !defined(QT_NO_MAINWINDOW)
       case CE_MenuBarEmptyArea:
          if (widget && qobject_cast<const QMainWindow *>(widget->parentWidget())) {
             p->fillRect(opt->rect, opt->palette.button());
@@ -1176,6 +1179,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
          }
          break;
 #endif
+
 #ifndef QT_NO_MENU
       case CE_MenuItem:
          if (const QStyleOptionMenuItem *menuitem = qstyleoption_cast<const QStyleOptionMenuItem *>(opt)) {
@@ -1323,6 +1327,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
          }
          break;
 #endif // QT_NO_MENU
+
 #ifndef QT_NO_MENUBAR
       case CE_MenuBarItem:
          if (const QStyleOptionMenuItem *mbi = qstyleoption_cast<const QStyleOptionMenuItem *>(opt)) {
@@ -1348,7 +1353,8 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
             QCommonStyle::drawControl(ce, &newMbi, p, widget);
          }
          break;
-#endif // QT_NO_MENUBAR
+#endif
+
 #ifndef QT_NO_TABBAR
       case CE_TabBarTabShape:
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {

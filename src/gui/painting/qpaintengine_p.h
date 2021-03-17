@@ -41,7 +41,8 @@ class QPaintEnginePrivate
    }
 
    virtual ~QPaintEnginePrivate()
-   { }
+   {
+   }
 
    QPaintDevice *pdev;
    QPaintEngine *q_ptr;

@@ -73,8 +73,10 @@ bool convert_ARGB_to_ARGB_PM_inplace_sse2(QImageData *data, Qt::ImageConversionF
       QRgb *pe = p + spare;
 
       for (; p != pe; ++p) {
+
          if (*p < 0x00ffffff) {
             *p = 0;
+
          } else if (*p < 0xff000000) {
             *p = qPremultiply(*p);
          }

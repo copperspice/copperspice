@@ -221,11 +221,13 @@ struct QBrushDataPointerDeleter {
          case Qt::TexturePattern:
             delete static_cast<QTexturedBrushData *>(d);
             break;
+
          case Qt::LinearGradientPattern:
          case Qt::RadialGradientPattern:
          case Qt::ConicalGradientPattern:
             delete static_cast<QGradientBrushData *>(d);
             break;
+
          default:
             delete d;
       }
@@ -248,6 +250,7 @@ class QNullBrushData
       brush->style = Qt::BrushStyle(0);
       brush->color = Qt::black;
    }
+
    ~QNullBrushData() {
       if (!brush->ref.deref()) {
          delete brush;
@@ -634,9 +637,7 @@ void QBrush::setTextureImage(const QImage &image)
 */
 const QGradient *QBrush::gradient() const
 {
-   if (d->style == Qt::LinearGradientPattern
-      || d->style == Qt::RadialGradientPattern
-      || d->style == Qt::ConicalGradientPattern) {
+   if (d->style == Qt::LinearGradientPattern || d->style == Qt::RadialGradientPattern || d->style == Qt::ConicalGradientPattern) {
       return &static_cast<const QGradientBrushData *>(d.data())->gradient;
    }
 
@@ -953,6 +954,7 @@ QDataStream &operator>>(QDataStream &s, QBrush &b)
          lg.setCoordinateMode(cmode);
          lg.setInterpolationMode(imode);
          b = QBrush(lg);
+
       } else if (type == QGradient::RadialGradient) {
          QPointF center, focal;
          double radius;
@@ -965,6 +967,7 @@ QDataStream &operator>>(QDataStream &s, QBrush &b)
          rg.setCoordinateMode(cmode);
          rg.setInterpolationMode(imode);
          b = QBrush(rg);
+
       } else { // type == QGradient::ConicalGradient
          QPointF center;
          double angle;
@@ -1002,6 +1005,7 @@ void QGradient::setColorAt(qreal pos, const QColor &color)
    }
 
    int index = 0;
+
    if (!qIsNaN(pos))
       while (index < m_stops.size() && m_stops.at(index).first < pos) {
          ++index;
@@ -1038,11 +1042,11 @@ QGradientStops QGradient::stops() const
       tmp << QGradientStop(0, Qt::black) << QGradientStop(1, Qt::white);
       return tmp;
    }
+
    return m_stops;
 }
 
 #define Q_DUMMY_ACCESSOR union {void *p; uint i;}; p = dummy;
-
 
 QGradient::CoordinateMode QGradient::coordinateMode() const
 {
@@ -1063,7 +1067,6 @@ void QGradient::setCoordinateMode(CoordinateMode mode)
    i |= uint(mode);
    dummy = p;
 }
-
 
 QGradient::InterpolationMode QGradient::interpolationMode() const
 {

@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qpagesetupdialog.h"
+#include <qpagesetupdialog.h>
 #include <qpagesetupdialog_p.h>
+
 #include <qprinter.h>
+
 #ifndef QT_NO_PRINTDIALOG
-
-
 
 QPageSetupDialogPrivate::QPageSetupDialogPrivate(QPrinter *prntr)
    : printer(nullptr), ownsPrinter(false)
@@ -53,17 +53,14 @@ void QPageSetupDialogPrivate::setPrinter(QPrinter *newPrinter)
 
 }
 
-
 void QPageSetupDialog::open(QObject *receiver, const QString &member)
 {
    Q_D(QPageSetupDialog);
    connect(this, SIGNAL(accepted()), receiver, member);
    d->receiverToDisconnectOnClose = receiver;
-   d->memberToDisconnectOnClose = member;
+   d->memberToDisconnectOnClose   = member;
    QDialog::open();
 }
-
-
 
 QPageSetupDialog::~QPageSetupDialog()
 {
@@ -72,22 +69,23 @@ QPageSetupDialog::~QPageSetupDialog()
       delete d->printer;
    }
 }
+
 QPrinter *QPageSetupDialog::printer()
 {
    Q_D(QPageSetupDialog);
    return d->printer;
 }
+
 void QPageSetupDialog::done(int result)
 {
    Q_D(QPageSetupDialog);
    QDialog::done(result);
+
    if (d->receiverToDisconnectOnClose) {
-      disconnect(this, SIGNAL(accepted()),
-         d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
+      disconnect(this, SIGNAL(accepted()), d->receiverToDisconnectOnClose, d->memberToDisconnectOnClose);
       d->receiverToDisconnectOnClose = nullptr;
    }
    d->memberToDisconnectOnClose.clear();
 }
-
 
 #endif

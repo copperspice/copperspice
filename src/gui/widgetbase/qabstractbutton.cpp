@@ -50,15 +50,18 @@ QAbstractButtonPrivate::QAbstractButtonPrivate(QSizePolicy::ControlType type)
 #ifndef QT_NO_SHORTCUT
    shortcutId(0),
 #endif
+
    checkable(false), checked(false), autoRepeat(false), autoExclusive(false),
    down(false), blockRefresh(false), pressed(false),
+
 #ifndef QT_NO_BUTTONGROUP
    group(nullptr),
 #endif
 
    autoRepeatDelay(AUTO_REPEAT_DELAY), autoRepeatInterval(AUTO_REPEAT_INTERVAL),
    controlType(type)
-{}
+{
+}
 
 QList<QAbstractButton *>QAbstractButtonPrivate::queryButtonList() const
 {
@@ -100,6 +103,7 @@ QAbstractButton *QAbstractButtonPrivate::queryCheckedButton() const
 
    Q_Q(const QAbstractButton);
    QList<QAbstractButton *> buttonList = queryButtonList();
+
    if (!autoExclusive || buttonList.count() == 1) {
       // no group
       return nullptr;
@@ -400,7 +404,6 @@ QAbstractButton::~QAbstractButton()
 #endif
 }
 
-
 /*! \internal
  */
 QAbstractButton::QAbstractButton(QAbstractButtonPrivate &dd, QWidget *parent)
@@ -416,14 +419,18 @@ void QAbstractButton::setText(const QString &text)
    if (d->text == text) {
       return;
    }
+
    d->text = text;
+
 #ifndef QT_NO_SHORTCUT
    QKeySequence newMnemonic = QKeySequence::mnemonic(text);
    setShortcut(newMnemonic);
 #endif
+
    d->sizeHint = QSize();
    update();
    updateGeometry();
+
 #ifndef QT_NO_ACCESSIBILITY
    QAccessibleEvent event(this, QAccessible::NameChanged);
    QAccessible::updateAccessibility(&event);
@@ -1123,10 +1130,13 @@ void QAbstractButton::changeEvent(QEvent *e)
 QSize QAbstractButton::iconSize() const
 {
    Q_D(const QAbstractButton);
+
    if (d->iconSize.isValid()) {
       return d->iconSize;
    }
+
    int e = style()->pixelMetric(QStyle::PM_ButtonIconSize, nullptr, this);
+
    return QSize(e, e);
 }
 

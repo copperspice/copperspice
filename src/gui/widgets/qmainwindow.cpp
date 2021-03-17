@@ -52,15 +52,16 @@ class QMainWindowPrivate : public QWidgetPrivate
  public:
    inline QMainWindowPrivate()
       : layout(nullptr), explicitIconSize(false), toolButtonStyle(Qt::ToolButtonIconOnly)
+
 #ifdef Q_OS_DARWIN
       , useUnifiedToolBar(false)
 #endif
 
-
 #if !defined(QT_NO_DOCKWIDGET) && !defined(QT_NO_CURSOR)
       , hasOldCursor(false), cursorAdjusted(false)
 #endif
-   { }
+   {
+   }
 
    QMainWindowLayout *layout;
    QSize iconSize;
@@ -215,6 +216,7 @@ void QMainWindow::setIconSize(const QSize &iconSize)
 {
    Q_D(QMainWindow);
    QSize sz = iconSize;
+
    if (!sz.isValid()) {
       const int metric = style()->pixelMetric(QStyle::PM_ToolBarIconSize, nullptr, this);
       sz = QSize(metric, metric);
@@ -254,7 +256,6 @@ QMenuBar *QMainWindow::menuBar() const
    return menuBar;
 }
 
-
 void QMainWindow::setMenuBar(QMenuBar *menuBar)
 {
    QLayout *topLayout = layout();
@@ -292,7 +293,6 @@ QWidget *QMainWindow::menuWidget() const
    return menuBar;
 }
 
-
 void QMainWindow::setMenuWidget(QWidget *menuBar)
 {
    Q_D(QMainWindow);
@@ -308,6 +308,7 @@ void QMainWindow::setMenuWidget(QWidget *menuBar)
 QStatusBar *QMainWindow::statusBar() const
 {
    QStatusBar *statusbar = d_func()->layout->statusBar();
+
    if (!statusbar) {
       QMainWindow *self = const_cast<QMainWindow *>(this);
       statusbar = new QStatusBar(self);
@@ -320,6 +321,7 @@ QStatusBar *QMainWindow::statusBar() const
 void QMainWindow::setStatusBar(QStatusBar *statusbar)
 {
    Q_D(QMainWindow);
+
    if (d->layout->statusBar() && d->layout->statusBar() != statusbar) {
       d->layout->statusBar()->hide();
       d->layout->statusBar()->deleteLater();
@@ -360,7 +362,9 @@ void QMainWindow::setCentralWidget(QWidget *widget)
 QWidget *QMainWindow::takeCentralWidget()
 {
    Q_D(QMainWindow);
+
    QWidget *oldcentralwidget = d->layout->centralWidget();
+
    if (oldcentralwidget) {
       oldcentralwidget->setParent(nullptr);
       d->layout->setCentralWidget(nullptr);
@@ -788,9 +792,11 @@ QCursor QMainWindowPrivate::separatorCursor(const QList<int> &path) const
          case QInternal::LeftDock:
          case QInternal::RightDock:
             return Qt::SplitHCursor;
+
          case QInternal::TopDock:
          case QInternal::BottomDock:
             return Qt::SplitVCursor;
+
          default:
             break;
       }

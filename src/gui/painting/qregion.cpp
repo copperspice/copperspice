@@ -45,10 +45,6 @@ void QRegion::detach()
    if (d->ref.isShared()) {
       *this = copy();
    }
-
-
-
-
 }
 
 // duplicates in qregion_win.cpp and qregion_wce.cpp
@@ -633,9 +629,7 @@ bool QRegionPrivate::mergeFromLeft(QRect *right, const QRect *left)
    return false;
 }
 
-static inline bool canMergeFromBelow(const QRect *top, const QRect *bottom,
-   const QRect *nextToTop,
-   const QRect *nextToBottom)
+static inline bool canMergeFromBelow(const QRect *top, const QRect *bottom, const QRect *nextToTop, const QRect *nextToBottom)
 {
    if (nextToTop && nextToTop->y() == top->y()) {
       return false;
@@ -649,20 +643,19 @@ static inline bool canMergeFromBelow(const QRect *top, const QRect *bottom,
          && top->right() == bottom->right());
 }
 
-bool QRegionPrivate::mergeFromBelow(QRect *top, const QRect *bottom,
-   const QRect *nextToTop,
-   const QRect *nextToBottom)
+bool QRegionPrivate::mergeFromBelow(QRect *top, const QRect *bottom, const QRect *nextToTop, const QRect *nextToBottom)
 {
    if (canMergeFromBelow(top, bottom, nextToTop, nextToBottom)) {
       top->setBottom(bottom->bottom());
       updateInnerRect(*top);
       return true;
    }
+
    return false;
 }
 
 bool QRegionPrivate::mergeFromAbove(QRect *bottom, const QRect *top,
-   const QRect *nextToBottom, const QRect *nextToTop)
+            const QRect *nextToBottom, const QRect *nextToTop)
 {
    if (canMergeFromBelow(top, bottom, nextToTop, nextToBottom)) {
       bottom->setTop(top->top());
@@ -733,6 +726,7 @@ void QRegionPrivate::intersect(const QRect &rect)
             }
          }
       }
+
       updateInnerRect(*dest);
       ++dest;
       ++numRects;
@@ -852,10 +846,9 @@ void QRegionPrivate::append(const QRegionPrivate *r)
    // update extents
    destRect = &extents;
    srcRect  = &r->extents;
-   extents.setCoords(qMin(destRect->left(), srcRect->left()),
-      qMin(destRect->top(), srcRect->top()),
-      qMax(destRect->right(), srcRect->right()),
-      qMax(destRect->bottom(), srcRect->bottom()));
+
+   extents.setCoords(qMin(destRect->left(), srcRect->left()), qMin(destRect->top(), srcRect->top()),
+            qMax(destRect->right(), srcRect->right()), qMax(destRect->bottom(), srcRect->bottom()));
 
 #ifdef QT_REGION_DEBUG
    selfTest();
@@ -896,11 +889,13 @@ void QRegionPrivate::prepend(const QRegionPrivate *r)
          if (numRects  > 1) {
             nextToFirst = (numRects > 2 ? myFirst + 2 : nullptr);
             rNextToLast = (numPrepend > 0 ? rLast : nullptr);
+
             if (mergeFromAbove(myFirst + 1, myFirst, nextToFirst, rNextToLast)) {
                --numRects;
                ++numSkip;
             }
          }
+
       } else if (mergeFromAbove(myFirst, rLast, nextToFirst, rNextToLast)) {
          --numPrepend;
       }
@@ -2721,6 +2716,7 @@ static void CreateETandAET(int count, const QPoint *pts,
          bottom = PrevPt;
          top = CurrPt;
          pETEs->ClockWise = 0;
+
       } else {
          bottom = CurrPt;
          top = PrevPt;
@@ -2816,7 +2812,8 @@ static void computeWAET(EdgeTableEntry *AET)
 
    AET->nextWETE = nullptr;
    pWETE = AET;
-   AET = AET->next;
+   AET   = AET->next;
+
    while (AET) {
       if (AET->ClockWise) {
          ++isInside;

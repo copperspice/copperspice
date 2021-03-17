@@ -22,10 +22,10 @@
 ***********************************************************************/
 
 #include <qkeysequence.h>
-#include <qkeysequence_p.h>
 
 #include <qplatform_theme.h>
 
+#include <qkeysequence_p.h>
 #include <qapplication_p.h>
 
 #ifndef QT_NO_SHORTCUT
@@ -35,18 +35,15 @@
 #include <qhashfunc.h>
 #include <qdatastream.h>
 
-
 #include <qshortcut.h>
 #include <qregularexpression.h>
 #include <qvariant.h>
 
 #include <algorithm>
 
-
 #ifdef Q_OS_DARWIN
 #include <qcore_mac_p.h>
 #include <Carbon/Carbon.h>
-
 
 static bool qt_sequence_no_mnemonics = true;
 
@@ -122,8 +119,10 @@ static int qtkeyForMacSymbol(const QChar ch)
       const MacSpecialKey &entry = entries[i];
       if (entry.macSymbol == unicode) {
          int key = entry.key;
+
          if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)
-            && (unicode == kControlUnicode || unicode == kCommandUnicode)) {
+             && (unicode == kControlUnicode || unicode == kCommandUnicode)) {
+
             if (unicode == kControlUnicode) {
                key = Qt::Key_Control;
             } else {
@@ -132,8 +131,7 @@ static int qtkeyForMacSymbol(const QChar ch)
          }
          return key;
       }
-   }
-   return -1;
+   }   return -1;
 }
 
 #else
@@ -428,8 +426,6 @@ static const struct {
 };
 static constexpr int numKeyNames = sizeof keyname / sizeof * keyname;
 
-
-
 QKeySequence::QKeySequence(StandardKey key)
 {
    const QList <QKeySequence> bindings = keyBindings(key);
@@ -471,13 +467,10 @@ QKeySequence::QKeySequence(const QKeySequence &keysequence)
    d->ref.ref();
 }
 
-
-
 QList<QKeySequence> QKeySequence::keyBindings(StandardKey key)
 {
    return QGuiApplicationPrivate::platformTheme()->keyBindings(key);
 }
-
 
 QKeySequence::~QKeySequence()
 {
@@ -647,34 +640,39 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
 
 #ifdef Q_OS_DARWIN
          const bool dontSwap = qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta);
+
          if (dontSwap) {
-            *gmodifs << QModifKeyName(Qt::META, QChar(kCommandUnicode));
+            *gmodifs << QModifKeyName(Qt::META, kCommandUnicode);
          } else {
-            *gmodifs << QModifKeyName(Qt::CTRL, QChar(kCommandUnicode));
+            *gmodifs << QModifKeyName(Qt::CTRL, kCommandUnicode);
          }
-         *gmodifs << QModifKeyName(Qt::ALT, QChar(kOptionUnicode));
+
+         *gmodifs << QModifKeyName(Qt::ALT, kOptionUnicode);
+
          if (dontSwap) {
-            *gmodifs << QModifKeyName(Qt::CTRL, QChar(kControlUnicode));
+            *gmodifs << QModifKeyName(Qt::CTRL, kControlUnicode);
          } else {
-            *gmodifs << QModifKeyName(Qt::META, QChar(kControlUnicode));
+            *gmodifs << QModifKeyName(Qt::META, kControlUnicode);
          }
-         *gmodifs << QModifKeyName(Qt::SHIFT, QChar(kShiftUnicode));
+
+         *gmodifs << QModifKeyName(Qt::SHIFT, kShiftUnicode);
 #endif
-         *gmodifs << QModifKeyName(Qt::CTRL, QLatin1String("ctrl+"))
-            << QModifKeyName(Qt::SHIFT, QLatin1String("shift+"))
-            << QModifKeyName(Qt::ALT, QLatin1String("alt+"))
-            << QModifKeyName(Qt::META, QLatin1String("meta+"))
-            << QModifKeyName(Qt::KeypadModifier, QLatin1String("num+"));
+         *gmodifs << QModifKeyName(Qt::CTRL,           "ctrl+")
+                  << QModifKeyName(Qt::SHIFT,          "shift+")
+                  << QModifKeyName(Qt::ALT,            "alt+")
+                  << QModifKeyName(Qt::META,           "meta+")
+                  << QModifKeyName(Qt::KeypadModifier, "num+");
       }
 
    } else {
       gmodifs = globalPortableModifs();
+
       if (gmodifs->isEmpty()) {
-         *gmodifs << QModifKeyName(Qt::CTRL, QLatin1String("ctrl+"))
-            << QModifKeyName(Qt::SHIFT, QLatin1String("shift+"))
-            << QModifKeyName(Qt::ALT, QLatin1String("alt+"))
-            << QModifKeyName(Qt::META, QLatin1String("meta+"))
-            << QModifKeyName(Qt::KeypadModifier, QLatin1String("num+"));
+         *gmodifs << QModifKeyName(Qt::CTRL,           "ctrl+")
+                  << QModifKeyName(Qt::SHIFT,          "shift+")
+                  << QModifKeyName(Qt::ALT,            "alt+")
+                  << QModifKeyName(Qt::META,           "meta+")
+                  << QModifKeyName(Qt::KeypadModifier, "num+");
       }
    }
 
@@ -682,14 +680,13 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
       return ret;
    }
 
-
    QVector<QModifKeyName> modifs;
    if (nativeText) {
-      modifs << QModifKeyName(Qt::CTRL, QCoreApplication::translate("QShortcut", "Ctrl").toLower().append(QLatin1Char('+')))
-         << QModifKeyName(Qt::SHIFT, QCoreApplication::translate("QShortcut", "Shift").toLower().append(QLatin1Char('+')))
-         << QModifKeyName(Qt::ALT, QCoreApplication::translate("QShortcut", "Alt").toLower().append(QLatin1Char('+')))
-         << QModifKeyName(Qt::META, QCoreApplication::translate("QShortcut", "Meta").toLower().append(QLatin1Char('+')))
-         << QModifKeyName(Qt::KeypadModifier, QCoreApplication::translate("QShortcut", "Num").toLower().append(QLatin1Char('+')));
+      modifs << QModifKeyName(Qt::CTRL,  QCoreApplication::translate("QShortcut", "Ctrl").toLower().append(QChar('+')))
+             << QModifKeyName(Qt::SHIFT, QCoreApplication::translate("QShortcut", "Shift").toLower().append(QChar('+')))
+             << QModifKeyName(Qt::ALT,   QCoreApplication::translate("QShortcut", "Alt").toLower().append(QChar('+')))
+             << QModifKeyName(Qt::META,  QCoreApplication::translate("QShortcut", "Meta").toLower().append(QChar('+')))
+             << QModifKeyName(Qt::KeypadModifier, QCoreApplication::translate("QShortcut", "Num").toLower().append(QChar('+')));
    }
    modifs += *gmodifs; // Test non-translated ones last
 
@@ -710,7 +707,7 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
    int i     = 0;
    int lastI = 0;
 
-   while ((i = sl.indexOf(QLatin1Char('+'), i + 1)) != -1) {
+   while ((i = sl.indexOf(QChar('+'), i + 1)) != -1) {
       const QStringView sub = sl.midView(lastI, i - lastI + 1);
 
       // If we get here the shortcuts contains at least one '+'. We break up
@@ -724,7 +721,7 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
       // Only '+' can have length 1.
       if (sub.length() == 1) {
          // Make sure we only encounter a single '+' at the end of the accel
-         if (accel.lastIndexOf(QLatin1Char('+')) != accel.length() - 1) {
+         if (accel.lastIndexOf(QChar('+')) != accel.length() - 1) {
             return Qt::Key_unknown;
          }
 
@@ -783,9 +780,13 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
          }
 
          for (int i = 0; i < numKeyNames; ++i) {
-            QString keyName(tran == 0
-               ? QCoreApplication::translate("QShortcut", keyname[i].name)
-               : QString::fromLatin1(keyname[i].name));
+            QString keyName;
+
+            if (tran == 0) {
+               keyName = QCoreApplication::translate("QShortcut", keyname[i].name);
+            } else {
+               keyName = QString::fromLatin1(keyname[i].name);
+            }
 
             if (accel == keyName.toLower()) {
                ret |= keyname[i].key;
@@ -816,9 +817,11 @@ QString QKeySequence::encodeString(int key)
 
 static inline void addKey(QString &str, const QString &theKey, QKeySequence::SequenceFormat format)
 {
-   if (!str.isEmpty())
+   if (! str.isEmpty()) {
       str += (format == QKeySequence::NativeText) ? QCoreApplication::translate("QShortcut", "+")
          : QString::fromLatin1("+");
+   }
+
    str += theKey;
 }
 
@@ -1067,28 +1070,29 @@ QKeySequence QKeySequence::fromString(const QString &str, SequenceFormat format)
 
 QList<QKeySequence> QKeySequence::listFromString(const QString &str, SequenceFormat format)
 {
-   QList<QKeySequence> result;
+   QList<QKeySequence> retval;
 
-   QStringList strings = str.split(QLatin1String("; "));
-   for (const QString &string : strings) {
-      result << fromString(string, format);
+   QStringList list = str.split("; ");
+
+   for (const QString &item : list) {
+      retval.append(fromString(item, format));
    }
 
-   return result;
+   return retval;
 }
 
 QString QKeySequence::listToString(const QList<QKeySequence> &list, SequenceFormat format)
 {
-   QString result;
+   QString retval;
 
-   for (const QKeySequence &sequence : list) {
-      result += sequence.toString(format);
-      result += "; ";
+   for (const QKeySequence &item : list) {
+      retval.append(item.toString(format));
+      retval.append("; ");
    }
 
-   result.truncate(result.length() - 2);
+   retval.chop(2);
 
-   return result;
+   return retval;
 }
 
 QDataStream &operator<<(QDataStream &s, const QKeySequence &keysequence)
@@ -1119,7 +1123,6 @@ QDataStream &operator>>(QDataStream &s, QKeySequence &keysequence)
    return s;
 }
 
-
 QDebug operator<<(QDebug dbg, const QKeySequence &p)
 {
    QDebugStateSaver saver(dbg);
@@ -1129,6 +1132,3 @@ QDebug operator<<(QDebug dbg, const QKeySequence &p)
 }
 
 #endif // QT_NO_SHORTCUT
-
-
-

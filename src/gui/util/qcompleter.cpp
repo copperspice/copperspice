@@ -1421,12 +1421,15 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
 void QCompleter::complete(const QRect &rect)
 {
    Q_D(QCompleter);
+
    QModelIndex idx = d->proxy->currentIndex(false);
    d->hiddenBecauseNoMatch = false;
+
    if (d->mode == QCompleter::InlineCompletion) {
       if (idx.isValid()) {
          d->_q_complete(idx, true);
       }
+
       return;
    }
 
@@ -1438,6 +1441,7 @@ void QCompleter::complete(const QRect &rect)
       if (d->popup) {
          d->popup->hide();   // no suggestion, hide
       }
+
       d->hiddenBecauseNoMatch = true;
       return;
    }

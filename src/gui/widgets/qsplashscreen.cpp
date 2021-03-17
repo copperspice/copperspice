@@ -67,7 +67,6 @@ QSplashScreen::QSplashScreen(QWidget *parent, const QPixmap &pixmap, Qt::WindowF
    setPixmap(d_func()->pixmap);  // Does an implicit repaint
 }
 
-
 QSplashScreen::~QSplashScreen()
 {
 }
@@ -128,7 +127,6 @@ void QSplashScreen::showMessage(const QString &message, int alignment,
    repaint();
 }
 
-
 QString QSplashScreen::message() const
 {
    Q_D(const QSplashScreen);
@@ -163,6 +161,7 @@ inline static bool waitForWindowExposed(QWindow *window, int timeout = 1000)
       nanosleep(&ts, nullptr);
 #endif
    }
+
    return window->isExposed();
 }
 
@@ -176,7 +175,6 @@ void QSplashScreen::finish(QWidget *mainWin)
    }
    close();
 }
-
 
 void QSplashScreen::setPixmap(const QPixmap &pixmap)
 {
@@ -198,7 +196,6 @@ const QPixmap QSplashScreen::pixmap() const
 {
    return d_func()->pixmap;
 }
-
 
 inline QSplashScreenPrivate::QSplashScreenPrivate() : currAlign(Qt::AlignLeft)
 {

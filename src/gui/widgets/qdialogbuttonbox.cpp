@@ -36,7 +36,6 @@
 #include <qwidget_p.h>
 #include <qguiapplication_p.h>
 
-
 class QDialogButtonBoxPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QDialogButtonBox)
@@ -82,6 +81,7 @@ void QDialogButtonBoxPrivate::initLayout()
 
    if (createNewLayout) {
       delete buttonLayout;
+
       if (orientation == Qt::Horizontal) {
          buttonLayout = new QHBoxLayout(q);
       } else {
@@ -298,6 +298,7 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
       case QDialogButtonBox::No:
          icon = QStyle::SP_DialogNoButton;
          break;
+
       case QDialogButtonBox::YesToAll:
       case QDialogButtonBox::NoToAll:
       case QDialogButtonBox::SaveAll:
@@ -306,8 +307,8 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
       case QDialogButtonBox::Ignore:
       case QDialogButtonBox::RestoreDefaults:
          break;
+
       case QDialogButtonBox::NoButton:
-         ;
          return nullptr;
    }
 
@@ -317,7 +318,9 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
    if (style->styleHint(QStyle::SH_DialogButtonBox_ButtonsHaveIcons, nullptr, q) && icon != 0) {
       button->setIcon(style->standardIcon(QStyle::StandardPixmap(icon), nullptr, q));
    }
-   if (style != QApplication::style()) { // Propagate style
+
+   if (style != QApplication::style()) {
+      // Propagate style
       button->setStyle(style);
    }
 
@@ -330,7 +333,6 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
       qWarning("QDialogButtonBox::createButton: Invalid ButtonRole, button not added");
    }
 
-
    return button;
 }
 
@@ -338,7 +340,8 @@ void QDialogButtonBoxPrivate::addButton(QAbstractButton *button, QDialogButtonBo
    bool doLayout)
 {
    Q_Q(QDialogButtonBox);
-   QObject::connect(button, SIGNAL(clicked()), q, SLOT(_q_handleButtonClicked()));
+
+   QObject::connect(button, SIGNAL(clicked()),   q, SLOT(_q_handleButtonClicked()));
    QObject::connect(button, SIGNAL(destroyed()), q, SLOT(_q_handleButtonDestroyed()));
    buttonLists[role].append(button);
 
@@ -374,13 +377,11 @@ void QDialogButtonBoxPrivate::retranslateStrings()
    }
 }
 
-
 QDialogButtonBox::QDialogButtonBox(QWidget *parent)
    : QWidget(*new QDialogButtonBoxPrivate(Qt::Horizontal), parent, Qt::EmptyFlag)
 {
    d_func()->initLayout();
 }
-
 
 QDialogButtonBox::QDialogButtonBox(Qt::Orientation orientation, QWidget *parent)
    : QWidget(*new QDialogButtonBoxPrivate(orientation), parent, Qt::EmptyFlag)
@@ -401,7 +402,6 @@ QDialogButtonBox::QDialogButtonBox(StandardButtons buttons, Qt::Orientation orie
    d_func()->initLayout();
    d_func()->createStandardButtons(buttons);
 }
-
 
 QDialogButtonBox::~QDialogButtonBox()
 {
@@ -520,7 +520,6 @@ void QDialogButtonBox::addButton(QAbstractButton *button, ButtonRole role)
    d->addButton(button, role);
 }
 
-
 QPushButton *QDialogButtonBox::addButton(const QString &text, ButtonRole role)
 {
    Q_D(QDialogButtonBox);
@@ -528,11 +527,11 @@ QPushButton *QDialogButtonBox::addButton(const QString &text, ButtonRole role)
       qWarning("QDialogButtonBox::addButton: Invalid ButtonRole, button not added");
       return nullptr;
    }
+
    QPushButton *button = new QPushButton(text, this);
    d->addButton(button, role);
    return button;
 }
-
 
 QPushButton *QDialogButtonBox::addButton(StandardButton button)
 {
@@ -569,7 +568,6 @@ QPushButton *QDialogButtonBox::button(StandardButton which) const
    Q_D(const QDialogButtonBox);
    return d->standardButtonHash.key(which);
 }
-
 
 QDialogButtonBox::StandardButton QDialogButtonBox::standardButton(QAbstractButton *button) const
 {
@@ -650,11 +648,15 @@ void QDialogButtonBox::changeEvent(QEvent *event)
    typedef QHash<QPushButton *, QDialogButtonBox::StandardButton> StandardButtonHash;
 
    Q_D(QDialogButtonBox);
+
    switch (event->type()) {
-      case QEvent::StyleChange:  // Propagate style
+      case QEvent::StyleChange:
+         // Propagate style
+
          if (!d->standardButtonHash.empty()) {
             QStyle *newStyle = style();
             const StandardButtonHash::iterator end = d->standardButtonHash.end();
+
             for (StandardButtonHash::iterator it = d->standardButtonHash.begin(); it != end; ++it) {
                it.key()->setStyle(newStyle);
             }
@@ -666,6 +668,7 @@ void QDialogButtonBox::changeEvent(QEvent *event)
          d->resetLayout();
          QWidget::changeEvent(event);
          break;
+
       default:
          QWidget::changeEvent(event);
          break;
@@ -678,12 +681,14 @@ void QDialogButtonBox::changeEvent(QEvent *event)
 bool QDialogButtonBox::event(QEvent *event)
 {
    Q_D(QDialogButtonBox);
+
    if (event->type() == QEvent::Show) {
       QList<QAbstractButton *> acceptRoleList = d->buttonLists[AcceptRole];
       QPushButton *firstAcceptButton = acceptRoleList.isEmpty() ? nullptr : qobject_cast<QPushButton *>(acceptRoleList.at(0));
       bool hasDefault = false;
       QWidget *dialog = nullptr;
       QWidget *p = this;
+
       while (p && !p->isWindow()) {
          p = p->parentWidget();
          if ((dialog = qobject_cast<QDialog *>(p))) {

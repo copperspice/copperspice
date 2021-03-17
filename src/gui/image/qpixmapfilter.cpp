@@ -103,8 +103,6 @@ QRectF QPixmapFilter::boundingRectFor(const QRectF &rect) const
    return rect;
 }
 
-
-
 class QPixmapConvolutionFilterPrivate : public QPixmapFilterPrivate
 {
  public:
@@ -371,19 +369,16 @@ void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const Q
 
       convolute(target, p + offset, src.toImage(), srcRect, QPainter::CompositionMode_SourceOver, d->convolutionKernel, d->kernelWidth,
          d->kernelHeight);
+
    } else {
       QRect srect = srcRect.isNull() ? src.rect() : srcRect.toRect();
       QRect rect = boundingRectFor(srect).toRect();
       QImage result = QImage(rect.size(), QImage::Format_ARGB32_Premultiplied);
       QPoint offset = srect.topLeft() - rect.topLeft();
-      convolute(&result,
-         offset,
-         src.toImage(),
-         srect,
-         QPainter::CompositionMode_Source,
-         d->convolutionKernel,
-         d->kernelWidth,
-         d->kernelHeight);
+
+      convolute(&result, offset, src.toImage(), srect, QPainter::CompositionMode_Source, d->convolutionKernel,
+               d->kernelWidth, d->kernelHeight);
+
       painter->drawImage(p - offset, result);
    }
 }

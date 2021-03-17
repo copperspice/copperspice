@@ -41,13 +41,13 @@
 #include <qdialog_p.h>
 
 #include <queue>
-
 #include <stdio.h>
 #include <stdlib.h>
 
 class QErrorMessagePrivate : public QDialogPrivate
 {
    Q_DECLARE_PUBLIC(QErrorMessage)
+
  public:
    QPushButton *ok;
    QCheckBox *again;
@@ -86,11 +86,6 @@ QSize QErrorMessageTextView::sizeHint() const
 {
    return QSize(250, 75);
 }
-
-
-
-
-
 
 static QErrorMessage *qtMessageHandler = nullptr;
 
@@ -218,7 +213,6 @@ void QErrorMessage::done(int a)
       }
    }
 }
-
 
 QErrorMessage *QErrorMessage::qtHandler()
 {

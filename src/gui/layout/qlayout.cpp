@@ -48,6 +48,7 @@ static int menuBarHeightForWidth(QWidget *menubar, int w)
          return result;
       }
    }
+
    return 0;
 }
 
@@ -119,8 +120,10 @@ void QLayoutPrivate::getMargin(int *result, int userMargin, QStyle::PixelMetric 
 
    if (userMargin >= 0) {
       *result = userMargin;
+
    } else if (!topLevel) {
       *result = 0;
+
    } else if (QWidget *pw = q->parentWidget()) {
       *result = pw->style()->pixelMetric(pm, nullptr, pw);
 
@@ -136,10 +139,12 @@ QLayoutPrivate::QSpacerItemFactoryMethod QLayoutPrivate::spacerItemFactoryMethod
 
 QWidgetItem *QLayoutPrivate::createWidgetItem(const QLayout *layout, QWidget *widget)
 {
-   if (widgetItemFactoryMethod)
+   if (widgetItemFactoryMethod) {
       if (QWidgetItem *wi = (*widgetItemFactoryMethod)(layout, widget)) {
          return wi;
       }
+   }
+
    return new QWidgetItemV2(widget);
 }
 
@@ -651,7 +656,6 @@ void QLayout::addChildLayout(QLayout *l)
    if (QWidget *mw = parentWidget()) {
       l->d_func()->reparentChildWidgets(mw);
    }
-
 }
 
 /*!
@@ -832,8 +836,6 @@ QWidget *QLayout::menuBar() const
    return d->menubar;
 }
 
-
-
 QSize QLayout::minimumSize() const
 {
    return QSize(0, 0);
@@ -843,7 +845,6 @@ QSize QLayout::maximumSize() const
 {
    return QSize(QLAYOUTSIZE_MAX, QLAYOUTSIZE_MAX);
 }
-
 
 Qt::Orientations QLayout::expandingDirections() const
 {
@@ -930,12 +931,15 @@ bool QLayout::activate()
          // will trigger resize
          mw->setFixedSize(totalSizeHint());
          break;
+
       case SetMinimumSize:
          mw->setMinimumSize(totalMinimumSize());
          break;
+
       case SetMaximumSize:
          mw->setMaximumSize(totalMaximumSize());
          break;
+
       case SetMinAndMaxSize:
          mw->setMinimumSize(totalMinimumSize());
          mw->setMaximumSize(totalMaximumSize());
@@ -947,6 +951,7 @@ bool QLayout::activate()
 
          if (mw->isWindow()) {
             QSize ms = totalMinimumSize();
+
             if (widthSet) {
                ms.setWidth(mw->minimumSize().width());
             }
@@ -961,6 +966,7 @@ bool QLayout::activate()
             if (!widthSet) {
                ms.setWidth(0);
             }
+
             if (!heightSet) {
                ms.setHeight(0);
             }
@@ -968,6 +974,7 @@ bool QLayout::activate()
          }
          break;
       }
+
       case SetNoConstraint:
          break;
    }
@@ -987,12 +994,14 @@ bool QLayout::activate()
 QLayoutItem *QLayout::replaceWidget(QWidget *from, QWidget *to, Qt::FindChildOptions options)
 {
    Q_D(QLayout);
+
    if (!from || !to) {
       return nullptr;
    }
 
    int index = -1;
    QLayoutItem *item = nullptr;
+
    for (int u = 0; u < count(); ++u) {
       item = itemAt(u);
       if (!item) {
@@ -1011,6 +1020,7 @@ QLayoutItem *QLayout::replaceWidget(QWidget *from, QWidget *to, Qt::FindChildOpt
          }
       }
    }
+
    if (index == -1) {
       return nullptr;
    }
@@ -1019,13 +1029,13 @@ QLayoutItem *QLayout::replaceWidget(QWidget *from, QWidget *to, Qt::FindChildOpt
    QLayoutItem *newitem = new QWidgetItem(to);
    newitem->setAlignment(item->alignment());
    QLayoutItem *r = d->replaceAt(index, newitem);
+
    if (!r) {
       delete newitem;
    }
+
    return r;
 }
-
-
 
 int QLayout::indexOf(QWidget *widget) const
 {
@@ -1039,6 +1049,7 @@ int QLayout::indexOf(QWidget *widget) const
       ++i;
       item = itemAt(i);
    }
+
    return -1;
 }
 
@@ -1059,7 +1070,6 @@ QLayout::SizeConstraint QLayout::sizeConstraint() const
    return d->constraint;
 }
 
-
 QRect QLayout::alignmentRect(const QRect &r) const
 {
    QSize s = sizeHint();
@@ -1075,13 +1085,13 @@ QRect QLayout::alignmentRect(const QRect &r) const
    QSize ms = that->maximumSize();
    that->setAlignment(a);
 
-   if ((expandingDirections() & Qt::Horizontal) ||
-      !(a & Qt::AlignHorizontal_Mask)) {
+   if ((expandingDirections() & Qt::Horizontal) || !(a & Qt::AlignHorizontal_Mask)) {
       s.setWidth(qMin(r.width(), ms.width()));
    }
-   if ((expandingDirections() & Qt::Vertical) ||
-      !(a & Qt::AlignVertical_Mask)) {
+
+   if ((expandingDirections() & Qt::Vertical) || !(a & Qt::AlignVertical_Mask)) {
       s.setHeight(qMin(r.height(), ms.height()));
+
    } else if (hasHeightForWidth()) {
       int hfw = heightForWidth(s.width());
       if (hfw < s.height()) {
@@ -1109,7 +1119,6 @@ QRect QLayout::alignmentRect(const QRect &r) const
 
    return QRect(x, y, s.width(), s.height());
 }
-
 
 void QLayout::removeWidget(QWidget *widget)
 {

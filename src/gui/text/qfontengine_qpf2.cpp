@@ -109,14 +109,17 @@ static inline const uchar *verifyTag(const uchar *tagPtr, const uchar *endPtr)
       switch (tagTypes[tag]) {
          case QFontEngineQPF2::BitFieldType:
          case QFontEngineQPF2::StringType:
-            // can't do anything...
+            // do nothing
             break;
+
          case QFontEngineQPF2::UInt32Type:
             VERIFY_TAG(length == sizeof(quint32));
             break;
+
          case QFontEngineQPF2::FixedType:
             VERIFY_TAG(length == sizeof(quint32));
             break;
+
          case QFontEngineQPF2::UInt8Type:
             VERIFY_TAG(length == sizeof(quint8));
             break;
@@ -125,6 +128,7 @@ static inline const uchar *verifyTag(const uchar *tagPtr, const uchar *endPtr)
 #if defined(DEBUG_HEADER)
       if (length == 1) {
          qDebug() << "tag data" << hex << *tagPtr;
+
       } else if (length == 4) {
          qDebug() << "tag data" << hex << tagPtr[0] << tagPtr[1] << tagPtr[2] << tagPtr[3];
       }
@@ -154,6 +158,7 @@ const QFontEngineQPF2::Glyph *QFontEngineQPF2::findGlyph(glyph_t g) const
          return nullptr;
       }
    }
+
    return reinterpret_cast<const Glyph *>(fontData + glyphDataOffset + glyphPos);
 }
 
@@ -162,6 +167,7 @@ bool QFontEngineQPF2::verifyHeader(const uchar *data, int size)
    VERIFY(quintptr(data) % Q_ALIGNOF(Header) == 0);
    VERIFY(size >= int(sizeof(Header)));
    const Header *header = reinterpret_cast<const Header *>(data);
+
    if (header->magic[0] != 'Q'
       || header->magic[1] != 'P'
       || header->magic[2] != 'F'
@@ -175,12 +181,14 @@ bool QFontEngineQPF2::verifyHeader(const uchar *data, int size)
 
    const uchar *tagPtr    = data + sizeof(Header);
    const uchar *tagEndPtr = tagPtr + dataSize;
+
    while (tagPtr < tagEndPtr - 3) {
       tagPtr = verifyTag(tagPtr, tagEndPtr);
       VERIFY(tagPtr);
    }
 
    VERIFY(tagPtr <= tagEndPtr);
+
    return true;
 }
 
@@ -219,15 +227,17 @@ QVariant QFontEngineQPF2::extractHeaderField(const uchar *data, HeaderTag reques
 QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
    : QFontEngine(QPF2), fontData(reinterpret_cast<const uchar *>(data.constData())), dataSize(data.size())
 {
-   fontDef = def;
+   fontDef    = def;
    cache_cost = 100;
    cmap       = nullptr;
    cmapOffset = 0;
-   cmapSize = 0;
-   glyphMapOffset = 0;
+   cmapSize   = 0;
+
+   glyphMapOffset  = 0;
    glyphMapEntries = 0;
    glyphDataOffset = 0;
-   glyphDataSize = 0;
+   glyphDataSize   = 0;
+
    kerning_pairs_loaded = false;
    readOnly = true;
 

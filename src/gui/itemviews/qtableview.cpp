@@ -908,6 +908,7 @@ int QTableViewPrivate::widthHintForIndex(const QModelIndex &index, int hint, con
 
    return hint;
 }
+
 int QTableViewPrivate::heightHintForIndex(const QModelIndex &index, int hint, QStyleOptionViewItem &option) const
 {
    Q_Q(const QTableView);
@@ -1145,13 +1146,13 @@ void QTableView::setVerticalHeader(QHeaderView *header)
    connect(d->verticalHeader, SIGNAL(sectionResized(int, int, int)),  this, SLOT(rowResized(int, int, int)));
    connect(d->verticalHeader, SIGNAL(sectionMoved(int, int, int)),    this, SLOT(rowMoved(int, int, int)));
    connect(d->verticalHeader, SIGNAL(sectionCountChanged(int, int)),  this, SLOT(rowCountChanged(int, int)));
-   connect(d->verticalHeader, SIGNAL(sectionPressed(int)),           this, SLOT(selectRow(int)));
-   connect(d->verticalHeader, SIGNAL(sectionEntered(int)),           this, SLOT(_q_selectRow(int)));
+   connect(d->verticalHeader, SIGNAL(sectionPressed(int)),            this, SLOT(selectRow(int)));
+   connect(d->verticalHeader, SIGNAL(sectionEntered(int)),            this, SLOT(_q_selectRow(int)));
 
    connect(d->verticalHeader, SIGNAL(sectionHandleDoubleClicked(int)),
       this, SLOT(resizeRowToContents(int)));
 
-   connect(d->verticalHeader, SIGNAL(geometriesChanged()),           this, SLOT(updateGeometries()));
+   connect(d->verticalHeader, SIGNAL(geometriesChanged()),            this, SLOT(updateGeometries()));
 }
 
 /*!

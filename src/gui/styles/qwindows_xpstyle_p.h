@@ -459,7 +459,6 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate, public QWindowsUxThe
    bool fixAlphaChannel(const QRect &rect);
    bool swapAlphaChannel(const QRect &rect, bool allPixels = false);
 
-
    QRgb groupBoxTextColor;
    QRgb groupBoxTextColorDisabled;
    QRgb sliderTickColor;
@@ -473,7 +472,8 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate, public QWindowsUxThe
    static bool isItemViewDelegateLineEdit(const QWidget *widget);
    static bool isLineEditBaseColorSet(const QStyleOption *option, const QWidget *widget);
 
-   QIcon dockFloat, dockClose;
+   QIcon dockFloat;
+   QIcon dockClose;
 
  private:
 
@@ -501,6 +501,7 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate, public QWindowsUxThe
 inline QSizeF XPThemeData::size()
 {
    QSizeF result(0, 0);
+
    if (isValid()) {
       SIZE size;
       if (SUCCEEDED(QWindowsXPStylePrivate::pGetThemePartSize(handle(), nullptr, partId, stateId, nullptr, TS_TRUE, &size))) {
@@ -521,6 +522,7 @@ inline QMarginsF XPThemeData::margins(const QRect &qRect, int propId)
          result = QMargins(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
       }
    }
+
    return result;
 }
 
@@ -534,6 +536,7 @@ inline QMarginsF XPThemeData::margins(int propId)
          result = QMargins(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
       }
    }
+
    return result;
 }
 

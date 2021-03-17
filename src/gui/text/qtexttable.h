@@ -36,15 +36,22 @@ class Q_GUI_EXPORT QTextTableCell
 {
 
  public:
-   ~QTextTableCell() {}
-   QTextTableCell(const QTextTableCell &o) : table(o.table), fragment(o.fragment) {}
    QTextTableCell()
       : table(nullptr)
    {
    }
 
+   ~QTextTableCell()
+   {
+   }
+
+   QTextTableCell(const QTextTableCell &o)
+      : table(o.table), fragment(o.fragment)
+   {
+   }
+
    QTextTableCell &operator=(const QTextTableCell &o) {
-      table = o.table;
+      table    = o.table;
       fragment = o.fragment;
       return *this;
    }

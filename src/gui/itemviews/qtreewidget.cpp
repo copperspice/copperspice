@@ -288,6 +288,7 @@ int QTreeModel::columnCount(const QModelIndex &index) const
    if (!headerItem) {
       return 0;
    }
+
    return headerItem->columnCount();
 }
 
@@ -876,6 +877,7 @@ void QTreeModel::sortItems(QList<QTreeWidgetItem *> *items, int column, Qt::Sort
          }
       }
    }
+
    changePersistentIndexList(fromList, toList);
 }
 
@@ -887,7 +889,6 @@ void QTreeModel::timerEvent(QTimerEvent *ev)
       QAbstractItemModel::timerEvent(ev);
    }
 }
-
 
 QTreeWidgetItem::QTreeWidgetItem(int type)
    : rtti(type), view(nullptr), d(new QTreeWidgetItemPrivate(this)), par(nullptr),
@@ -1013,6 +1014,7 @@ QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem *parent, const QStringList &str
    for (int i = 0; i < strings.count(); ++i) {
       setText(i, strings.at(i));
    }
+
    if (parent) {
       parent->addChild(this);
    }
@@ -1049,10 +1051,12 @@ QTreeWidgetItem::~QTreeWidgetItem()
 {
    QTreeModel *model = (view ? qobject_cast<QTreeModel *>(view->model()) : nullptr);
    bool wasSkipSort = false;
+
    if (model) {
       wasSkipSort = model->skipPendingSort;
       model->skipPendingSort = true;
    }
+
    if (par) {
       int i = par->children.indexOf(this);
 
@@ -1090,10 +1094,13 @@ QTreeWidgetItem::~QTreeWidgetItem()
          }
       }
    }
+
    // at this point the persistent indexes for the children should also be invalidated
    // since we invalidated the parent
+
    for (int i = 0; i < children.count(); ++i) {
       QTreeWidgetItem *child = children.at(i);
+
       // make sure the child does not try to remove itself from our children list
       child->par = nullptr;
 
@@ -1104,6 +1111,7 @@ QTreeWidgetItem::~QTreeWidgetItem()
 
    children.clear();
    delete d;
+
    if (model) {
       model->skipPendingSort = wasSkipSort;
    }
@@ -1162,6 +1170,7 @@ void QTreeWidgetItem::setChildIndicatorPolicy(QTreeWidgetItem::ChildIndicatorPol
    if (d->policy == policy) {
       return;
    }
+
    d->policy = policy;
 
    if (!view) {
@@ -1235,6 +1244,7 @@ void QTreeWidgetItemPrivate::propagateDisabled(QTreeWidgetItem *item)
 
    QStack<QTreeWidgetItem *> parents;
    parents.push(item);
+
    while (!parents.isEmpty()) {
       QTreeWidgetItem *parent = parents.pop();
       if (!parent->d->disabled) { // if not explicitly disabled
@@ -1330,6 +1340,7 @@ void QTreeWidgetItem::setData(int column, int role, const QVariant &value)
                   break;
                }
             }
+
             if (!found) {
                values[column].append(QWidgetItemData(role, value));
             }
@@ -1386,6 +1397,7 @@ QVariant QTreeWidgetItem::data(int column, int role) const
                }
          }
    }
+
    return QVariant();
 }
 
@@ -1457,31 +1469,38 @@ void QTreeWidgetItem::insertChild(int index, QTreeWidgetItem *child)
       } else {
          child->par = this;
       }
+
       if (view->isSortingEnabled()) {
          // do a delayed sort instead
          if (!model->sortPendingTimer.isActive()) {
             model->sortPendingTimer.start(0, model);
          }
       }
+
       model->beginInsertItems(this, index, 1);
       int cols = model->columnCount();
       QStack<QTreeWidgetItem *> stack;
       stack.push(child);
+
       while (!stack.isEmpty()) {
          QTreeWidgetItem *i = stack.pop();
          i->view = view;
          i->values.reserve(cols);
+
          for (int c = 0; c < i->children.count(); ++c) {
             stack.push(i->children.at(c));
          }
       }
+
       children.insert(index, child);
       model->endInsertItems();
       model->skipPendingSort = wasSkipSort;
+
    } else {
       child->par = this;
       children.insert(index, child);
    }
+
    if (child->par) {
       d->propagateDisabled(child);
    }
@@ -1545,7 +1564,6 @@ void QTreeWidgetItem::addChildren(const QList<QTreeWidgetItem *> &children)
    insertChildren(this->children.count(), children);
 }
 
-
 void QTreeWidgetItem::insertChildren(int index, const QList<QTreeWidgetItem *> &children)
 {
    if (view && view->isSortingEnabled()) {
@@ -1558,6 +1576,7 @@ void QTreeWidgetItem::insertChildren(int index, const QList<QTreeWidgetItem *> &
    QTreeModel *model = (view ? qobject_cast<QTreeModel *>(view->model()) : nullptr);
    QStack<QTreeWidgetItem *> stack;
    QList<QTreeWidgetItem *> itemsToInsert;
+
    for (int n = 0; n < children.count(); ++n) {
       QTreeWidgetItem *child = children.at(n);
       if (child->view || child->par) {
@@ -1604,6 +1623,7 @@ void QTreeWidgetItem::insertChildren(int index, const QList<QTreeWidgetItem *> &
 QList<QTreeWidgetItem *> QTreeWidgetItem::takeChildren()
 {
    QList<QTreeWidgetItem *> removed;
+
    if (children.count() > 0) {
       QTreeModel *model = (view ? qobject_cast<QTreeModel *>(view->model()) : nullptr);
       if (model) {
@@ -1613,14 +1633,17 @@ QList<QTreeWidgetItem *> QTreeWidgetItem::takeChildren()
          // is updated in case we take an item that is selected.
          model->executePendingSort();
       }
+
       if (model) {
          model->beginRemoveItems(this, 0, children.count());
       }
+
       for (int n = 0; n < children.count(); ++n) {
          QTreeWidgetItem *item = children.at(n);
          item->par = nullptr;
          QStack<QTreeWidgetItem *> stack;
          stack.push(item);
+
          while (!stack.isEmpty()) {
             QTreeWidgetItem *i = stack.pop();
             i->view = nullptr;
@@ -1727,7 +1750,6 @@ QVariant QTreeWidgetItem::childrenCheckState(int column) const
       return QVariant();   // value was not defined
    }
 }
-
 
 void QTreeWidgetItem::emitDataChanged()
 {
@@ -2348,6 +2370,7 @@ QTreeWidgetItem *QTreeWidget::itemBelow(const QTreeWidgetItem *item) const
    if (item == d->treeModel()->headerItem) {
       return nullptr;
    }
+
    const QModelIndex index = d->index(item);
    const QModelIndex below = indexBelow(index);
    return d->item(below);
@@ -2404,7 +2427,6 @@ void QTreeWidget::collapseItem(const QTreeWidgetItem *item)
    collapse(d->index(item));
 }
 
-
 void QTreeWidget::clear()
 {
    Q_D(QTreeWidget);
@@ -2412,12 +2434,10 @@ void QTreeWidget::clear()
    d->treeModel()->clear();
 }
 
-
 QStringList QTreeWidget::mimeTypes() const
 {
    return model()->QAbstractItemModel::mimeTypes();
 }
-
 
 QMimeData *QTreeWidget::mimeData(const QList<QTreeWidgetItem *> &items) const
 {
@@ -2425,6 +2445,7 @@ QMimeData *QTreeWidget::mimeData(const QList<QTreeWidgetItem *> &items) const
 
    if (d->treeModel()->cachedIndexes.isEmpty()) {
       QList<QModelIndex> indexes;
+
       for (int i = 0; i < items.count(); ++i) {
          QTreeWidgetItem *item = items.at(i);
          if (!item) {
@@ -2443,9 +2464,9 @@ QMimeData *QTreeWidget::mimeData(const QList<QTreeWidgetItem *> &items) const
       }
       return d->model->QAbstractItemModel::mimeData(indexes);
    }
+
    return d->treeModel()->internalMimeData();
 }
-
 
 bool QTreeWidget::dropMimeData(QTreeWidgetItem *parent, int index,
    const QMimeData *data, Qt::DropAction action)

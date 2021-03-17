@@ -24,12 +24,13 @@
 #include <qlayout.h>
 
 #include <qapplication.h>
-#include <qlayoutengine_p.h>
 #include <qmenubar.h>
 #include <qtoolbar.h>
 #include <qevent.h>
 #include <qstyle.h>
 #include <qvariant.h>
+
+#include <qlayoutengine_p.h>
 #include <qwidget_p.h>
 
 inline static QRect fromLayoutItemRect(QWidgetPrivate *priv, const QRect &rect)
@@ -62,6 +63,7 @@ void QLayoutItem::setAlignment(Qt::Alignment alignment)
 QSpacerItem::~QSpacerItem()
 {
 }
+
 void QSpacerItem::changeSize(int w, int h, QSizePolicy::Policy hPolicy,
    QSizePolicy::Policy vPolicy)
 {
@@ -73,6 +75,7 @@ void QSpacerItem::changeSize(int w, int h, QSizePolicy::Policy hPolicy,
 QWidgetItem::~QWidgetItem()
 {
 }
+
 QLayoutItem::~QLayoutItem()
 {
 }
@@ -395,7 +398,6 @@ bool QWidgetItem::isEmpty() const
    return (wid->isHidden() && !wid->sizePolicy().retainSizeWhenHidden()) || wid->isWindow();
 }
 
-
 QSizePolicy::ControlTypes QWidgetItem::controlTypes() const
 {
    return wid->sizePolicy().controlType();
@@ -406,7 +408,8 @@ QWidgetItemV2::QWidgetItemV2(QWidget *widget)
      q_cachedMaximumSize(Dirty, Dirty), q_firstCachedHfw(0), q_hfwCacheSize(0), d(nullptr)
 {
    QWidgetPrivate *wd = wid->d_func();
-   if (!wd->widgetItem) {
+
+   if (! wd->widgetItem) {
       wd->widgetItem = this;
    }
 }

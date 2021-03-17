@@ -303,9 +303,10 @@ QOpenGLContext *QOpenGLContextPrivate::setCurrentContext(QOpenGLContext *context
    QGuiGLThreadContext *threadContext = qwindow_context_storage()->localData();
    if (!threadContext) {
       if (!QThread::currentThread()) {
-         qWarning("No QTLS available. currentContext won't work");
+         qWarning("No QTLS available. currentContext will not work");
          return nullptr;
       }
+
       threadContext = new QGuiGLThreadContext;
       qwindow_context_storage()->setLocalData(threadContext);
    }
@@ -382,9 +383,11 @@ int QOpenGLContextPrivate::maxTextureSize()
 QOpenGLContext *QOpenGLContext::currentContext()
 {
    QGuiGLThreadContext *threadContext = qwindow_context_storage()->localData();
+
    if (threadContext) {
       return threadContext->context;
    }
+
    return nullptr;
 }
 
@@ -416,9 +419,11 @@ QPlatformOpenGLContext *QOpenGLContext::handle() const
 QPlatformOpenGLContext *QOpenGLContext::shareHandle() const
 {
    Q_D(const QOpenGLContext);
+
    if (d->shareContext) {
       return d->shareContext->handle();
    }
+
    return nullptr;
 }
 
@@ -463,6 +468,7 @@ void QOpenGLContext::setScreen(QScreen *screen)
 void QOpenGLContextPrivate::_q_screenDestroyed(QObject *object)
 {
    Q_Q(QOpenGLContext);
+
    if (object == static_cast<QObject *>(screen)) {
       screen = nullptr;
       q->setScreen(nullptr);
@@ -553,21 +559,27 @@ QVariant QOpenGLContext::nativeHandle() const
 bool QOpenGLContext::create()
 {
    Q_D(QOpenGLContext);
+
    if (d->platformGLContext) {
       destroy();
    }
 
    d->platformGLContext = QGuiApplicationPrivate::platformIntegration()->createPlatformOpenGLContext(this);
+
    if (!d->platformGLContext) {
       return false;
    }
+
    d->platformGLContext->initialize();
    d->platformGLContext->setContext(this);
+
    if (!d->platformGLContext->isSharing()) {
       d->shareContext = nullptr;
    }
+
    d->shareGroup = d->shareContext ? d->shareContext->shareGroup() : new QOpenGLContextGroup;
    d->shareGroup->d_func()->addContext(this);
+
    return isValid();
 }
 
@@ -592,19 +604,26 @@ bool QOpenGLContext::create()
 void QOpenGLContext::destroy()
 {
    deleteQGLContext();
+
    Q_D(QOpenGLContext);
+
    if (d->platformGLContext) {
       emit aboutToBeDestroyed();
    }
+
    if (QOpenGLContext::currentContext() == this) {
       doneCurrent();
    }
+
    if (d->shareGroup) {
       d->shareGroup->d_func()->removeContext(this);
    }
+
    d->shareGroup = nullptr;
+
    delete d->platformGLContext;
    d->platformGLContext = nullptr;
+
    delete d->functions;
    d->functions = nullptr;
 
@@ -613,6 +632,7 @@ void QOpenGLContext::destroy()
       func_d->owningContext = nullptr;
       func_d->initialized = false;
    }
+
    d->externalVersionFunctions.clear();
    qDeleteAll(d->versionFunctions);
    d->versionFunctions.clear();
@@ -673,9 +693,11 @@ bool QOpenGLContext::isValid() const
 QOpenGLFunctions *QOpenGLContext::functions() const
 {
    Q_D(const QOpenGLContext);
+
    if (!d->functions) {
       const_cast<QOpenGLFunctions *&>(d->functions) = new QOpenGLExtensions(QOpenGLContext::currentContext());
    }
+
    return d->functions;
 }
 
@@ -749,11 +771,12 @@ QOpenGLExtraFunctions *QOpenGLContext::extraFunctions() const
 QAbstractOpenGLFunctions *QOpenGLContext::versionFunctions(const QOpenGLVersionProfile &versionProfile) const
 {
 #ifndef QT_OPENGL_ES_2
+
    if (isOpenGLES()) {
       qWarning("versionFunctions: Not supported on OpenGL ES");
       return nullptr;
    }
-#endif // QT_OPENGL_ES_2
+#endif
 
    Q_D(const QOpenGLContext);
    const QSurfaceFormat f = format();
@@ -806,6 +829,7 @@ QAbstractOpenGLFunctions *QOpenGLContext::versionFunctions(const QOpenGLVersionP
 QSet<QByteArray> QOpenGLContext::extensions() const
 {
    Q_D(const QOpenGLContext);
+
    if (d->extensionNames.isEmpty()) {
       QOpenGLExtensionMatcher matcher;
       d->extensionNames = matcher.extensions();
@@ -853,12 +877,12 @@ bool QOpenGLContext::hasExtension(const QByteArray &extension) const
 */
 GLuint QOpenGLContext::defaultFramebufferObject() const
 {
-   if (!isValid()) {
+   if (! isValid()) {
       return 0;
    }
 
    Q_D(const QOpenGLContext);
-   if (!d->surface || !d->surface->surfaceHandle()) {
+   if (! d->surface || !d->surface->surfaceHandle()) {
       return 0;
    }
 
@@ -1485,6 +1509,7 @@ QOpenGLMultiGroupSharedResource::~QOpenGLMultiGroupSharedResource()
 #ifdef QT_GL_CONTEXT_RESOURCE_DEBUG
    qDebug("Deleting context group resource %p. Group size: %d.", this, m_groups.size());
 #endif
+
    for (int i = 0; i < m_groups.size(); ++i) {
       if (!m_groups.at(i)->shares().isEmpty()) {
          QOpenGLContext *context = m_groups.at(i)->shares().first();
@@ -1496,6 +1521,7 @@ QOpenGLMultiGroupSharedResource::~QOpenGLMultiGroupSharedResource()
       m_groups.at(i)->d_func()->m_resources.remove(this);
       active.deref();
    }
+
 #ifndef QT_NO_DEBUG
    if (active.load() != 0) {
       qWarning("QtGui: Resources are still available at program shutdown.\n"

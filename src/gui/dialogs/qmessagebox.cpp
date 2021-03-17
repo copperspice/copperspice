@@ -91,7 +91,7 @@ void cs_require_version(int argc, char *argv[], const char *str)
       }
 
       QString errMsg = QApplication::tr("%1 requires CopperSpice version %2\n\nFound CopperSpice version %3\n")
-         .formatArg(qAppName()).formatArg(req_version).formatArg(cur_version);
+               .formatArg(qAppName()).formatArg(req_version).formatArg(cur_version);
 
       QMessageBox box(QMessageBox::Critical, QApplication::tr("Incompatible Library"),
                errMsg, QMessageBox::Abort, nullptr);
@@ -108,7 +108,6 @@ void cs_require_version(int argc, char *argv[], const char *str)
 
 class QMessageBoxDetailsText : public QWidget
 {
-
    GUI_CS_OBJECT(QMessageBoxDetailsText)
 
  public:
@@ -216,7 +215,6 @@ class DetailButton : public QPushButton
       return ret;
    }
 };
-
 
 class QMessageBoxPrivate : public QDialogPrivate
 {
@@ -1537,7 +1535,6 @@ void QMessageBox::setDetailedText(const QString &text)
 }
 #endif // QT_NO_TEXTEDIT
 
-
 QString QMessageBox::informativeText() const
 {
    Q_D(const QMessageBox);
@@ -1547,6 +1544,7 @@ QString QMessageBox::informativeText() const
 void QMessageBox::setInformativeText(const QString &text)
 {
    Q_D(QMessageBox);
+
    if (text.isEmpty()) {
       if (d->informativeLabel) {
          d->informativeLabel->hide();

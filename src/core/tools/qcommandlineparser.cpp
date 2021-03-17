@@ -104,7 +104,7 @@ QStringList QCommandLineParserPrivate::aliases(const QString &optionName) const
 {
    const NameHash_t::const_iterator it = nameHash.find(optionName);
    if (it == nameHash.end()) {
-      qWarning("QCommandLineParser: option not defined: \"%s\"", qPrintable(optionName));
+      qWarning("QCommandLineParser: option not defined: \"%s\"", csPrintable(optionName));
       return QStringList();
    }
    return commandLineOptionList.at(*it).names();
@@ -162,7 +162,10 @@ bool QCommandLineParser::addOption(const QCommandLineOption &option)
 QCommandLineOption QCommandLineParser::addVersionOption()
 {
    d->builtinVersionOption = true;
-   QCommandLineOption opt(QStringList() << QString("v") << QString("version"), tr("Displays version information."));
+
+   QStringList list = { "v", "version" };
+   QCommandLineOption opt(list, tr("Displays version information."));
+
    addOption(opt);
    return opt;
 }
@@ -170,13 +173,18 @@ QCommandLineOption QCommandLineParser::addVersionOption()
 QCommandLineOption QCommandLineParser::addHelpOption()
 {
    d->builtinHelpOption = true;
-   QCommandLineOption opt(QStringList()
+
+   QStringList list;
 
 #ifdef Q_OS_WIN
-                          << QString("?")
+      list.append("?");
 #endif
-                          << QString("h")
-                          << QString("help"), tr("Displays this help."));
+
+   list.append("h");
+   list.append("help");
+
+   QCommandLineOption opt(list, tr("Displays this help."));
+
    addOption(opt);
    return opt;
 }
@@ -223,22 +231,23 @@ QString QCommandLineParser::errorText() const
    if (d->unknownOptionNames.count() > 1) {
       return tr("Unknown options: %1.").formatArg(d->unknownOptionNames.join(QString(", ")));
    }
+
    return QString();
 }
 
 void QCommandLineParser::process(const QStringList &arguments)
 {
-   if (!d->parse(arguments)) {
-      fprintf(stderr, "%s\n", qPrintable(errorText()));
+   if (! d->parse(arguments)) {
+      fprintf(stderr, "%s\n", csPrintable(errorText()));
       ::exit(EXIT_FAILURE);
    }
 
-   if (d->builtinVersionOption && isSet(QString("version"))) {
-      printf("%s %s\n", qPrintable(QCoreApplication::applicationName()), qPrintable(QCoreApplication::applicationVersion()));
+   if (d->builtinVersionOption && isSet("version")) {
+      printf("%s %s\n", csPrintable(QCoreApplication::applicationName()), csPrintable(QCoreApplication::applicationVersion()));
       ::exit(EXIT_SUCCESS);
    }
 
-   if (d->builtinHelpOption && isSet(QString("help"))) {
+   if (d->builtinHelpOption && isSet("help")) {
       showHelp(EXIT_SUCCESS);
    }
 }
@@ -484,16 +493,19 @@ QStringList QCommandLineParser::values(const QString &optionName) const
 {
    d->checkParsed("values");
    const NameHash_t::const_iterator it = d->nameHash.find(optionName);
+
    if (it != d->nameHash.end()) {
       const int optionOffset = *it;
       QStringList values = d->optionValuesHash.value(optionOffset);
+
       if (values.isEmpty()) {
          values = d->commandLineOptionList.at(optionOffset).defaultValues();
       }
+
       return values;
    }
 
-   qWarning("QCommandLineParser: option not defined: \"%s\"", qPrintable(optionName));
+   qWarning("QCommandLineParser: option not defined: \"%s\"", csPrintable(optionName));
    return QStringList();
 }
 
@@ -594,15 +606,10 @@ QStringList QCommandLineParser::unknownOptionNames() const
 */
 void QCommandLineParser::showHelp(int exitCode)
 {
-   fprintf(stdout, "%s", qPrintable(d->helpText()));
+   fprintf(stdout, "%s", csPrintable(d->helpText()));
    ::exit(exitCode);
 }
 
-/*!
-    Returns a string containing the complete help information.
-
-    \sa showHelp()
-*/
 QString QCommandLineParser::helpText() const
 {
    return d->helpText();
@@ -644,14 +651,16 @@ static QString wrapText(const QString &names, int longestOptionNameString, const
 
       if (breakAt != -1) {
          const int numChars = breakAt - lineStart;
-         //qDebug() << "breakAt=" << description.at(breakAt) << "breakAtSpace=" << breakAtSpace << lineStart << "to" << breakAt << description.mid(lineStart, numChars);
+
          if (lineStart > 0) {
             text += QString(indent, QLatin1Char(' '));
          }
+
          text += description.mid(lineStart, numChars) + nl;
          x = 0;
          lastBreakable = -1;
          lineStart = nextLineStart;
+
          if (lineStart < len && description.at(lineStart).isSpace()) {
             ++lineStart;   // don't start a line with a space
          }
@@ -682,6 +691,7 @@ QString QCommandLineParserPrivate::helpText() const
    if (!description.isEmpty()) {
       text += description + nl;
    }
+
    text += nl;
    if (!commandLineOptionList.isEmpty()) {
       text += QCommandLineParser::tr("Options:") + nl;
@@ -700,6 +710,7 @@ QString QCommandLineParserPrivate::helpText() const
             optionNames.append(QString("--") + optionName);
          }
       }
+
       QString optionNamesString = optionNames.join(QString(", "));
       if (!option.valueName().isEmpty()) {
          optionNamesString += QString(" <") + option.valueName() + QLatin1Char('>');

@@ -30,12 +30,11 @@
 
 #include <qguiapplication_p.h>
 
-
 #ifndef QT_NO_SYSTEMTRAYICON
 
 QSystemTrayIconPrivate::QSystemTrayIconPrivate()
-   : qpa_sys(QGuiApplicationPrivate::platformTheme()->createPlatformSystemTrayIcon())
-   , visible(false)
+   : qpa_sys(QGuiApplicationPrivate::platformTheme()->createPlatformSystemTrayIcon()),
+     visible(false)
 {
 }
 

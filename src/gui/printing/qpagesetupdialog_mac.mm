@@ -23,8 +23,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "qpagesetupdialog.h"
-
+#include <qpagesetupdialog.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
@@ -32,7 +31,6 @@
 
 #include <qplatform_nativeinterface.h>
 #include <qprintengine.h>
-
 
 @class QCocoaPageLayoutDelegate;
 
@@ -90,8 +88,9 @@ class QMacPageSetupDialogPrivate : public QPageSetupDialogPrivate
    {
    }
 
-    ~QMacPageSetupDialogPrivate() {
-    }
+    ~QMacPageSetupDialogPrivate()
+   {
+   }
 
    void openCocoaPageLayout(Qt::WindowModality modality);
    void closeCocoaPageLayout();

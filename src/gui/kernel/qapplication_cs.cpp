@@ -122,7 +122,6 @@ QApplicationPrivate::QApplicationPrivate(int &argc, char **argv, int flags)
 #endif
 }
 
-
 QWidget *QApplication::topLevelWidgetAt(const QPoint &pos)
 {
    if (const QWindow *window = QApplication::topLevelWindowAt(pos)) {
@@ -135,11 +134,8 @@ QWidget *QApplication::topLevelWidgetAt(const QPoint &pos)
    return nullptr;
 }
 
-
-
-
-bool QApplicationPrivate::overrides_native_style = false; // whether native QApplication style is
 QStyle *QApplicationPrivate::app_style = nullptr;           // default application style
+bool QApplicationPrivate::overrides_native_style = false;   // whether native QApplication style is
 
 // overridden, i.e. not native
 #ifndef QT_NO_STYLE_STYLESHEET
@@ -449,7 +445,6 @@ void QApplicationPrivate::initializeWidgetFontHash()
    }
 }
 
-
 QWidget *QApplication::activePopupWidget()
 {
    return QApplicationPrivate::popupWidgets && !QApplicationPrivate::popupWidgets->isEmpty() ?
@@ -462,7 +457,6 @@ QWidget *QApplication::activeModalWidget()
    return widgetWindow ? widgetWindow->widget() : nullptr;
 }
 
-
 #if defined(Q_OS_WIN)
 // #fixme: Remove
 static HDC displayDC = nullptr;             // display device context
@@ -473,6 +467,7 @@ Q_GUI_EXPORT HDC qt_win_display_dc()        // get display DC
    if (! displayDC) {
       displayDC = GetDC(nullptr);
    }
+
    return displayDC;
 }
 #endif
@@ -491,7 +486,6 @@ void qt_cleanup()
    }
 #endif
 }
-
 
 QWidget *QApplication::widgetAt(const QPoint &p)
 {
@@ -542,7 +536,6 @@ QWidget *QApplication::widgetAt(const QPoint &p)
    return window;
 }
 
-
 bool QApplication::compressEvent(QEvent *event, QObject *receiver, QPostEventList *postedEvents)
 {
    if ((event->type() == QEvent::UpdateRequest
@@ -557,17 +550,22 @@ bool QApplication::compressEvent(QEvent *event, QObject *receiver, QPostEventLis
          if (cur.receiver != receiver || cur.event == nullptr || cur.event->type() != event->type()) {
             continue;
          }
-         if (cur.event->type() == QEvent::LayoutRequest
-            || cur.event->type() == QEvent::UpdateRequest) {
-            ;
+
+         if (cur.event->type() == QEvent::LayoutRequest || cur.event->type() == QEvent::UpdateRequest) {
+            // do nothing
+
          } else if (cur.event->type() == QEvent::Resize) {
             ((QResizeEvent *)(cur.event))->s = ((QResizeEvent *)event)->s;
+
          } else if (cur.event->type() == QEvent::Move) {
             ((QMoveEvent *)(cur.event))->p = ((QMoveEvent *)event)->p;
+
          } else if (cur.event->type() == QEvent::LanguageChange) {
-            ;
+            // do nothing
+
          } else {
             continue;
+
          }
 
          delete event;
@@ -1115,6 +1113,7 @@ void QApplication::setActiveWindow(QWidget *act)
                toBeDeactivated.append(w);
             }
          }
+
       } else {
          toBeDeactivated.append(QApplicationPrivate::active_window);
       }
@@ -1134,16 +1133,18 @@ void QApplication::setActiveWindow(QWidget *act)
    if (QApplicationPrivate::active_window) {
       if (style()->styleHint(QStyle::SH_Widget_ShareActivation, nullptr, QApplicationPrivate::active_window)) {
          QWidgetList list = topLevelWidgets();
+
          for (int i = 0; i < list.size(); ++i) {
             QWidget *w = list.at(i);
+
             if (w->isVisible() && w->isActiveWindow()) {
                toBeActivated.append(w);
             }
          }
+
       } else {
          toBeActivated.append(QApplicationPrivate::active_window);
       }
-
    }
 
    // first the activation/deactivation events
@@ -1171,15 +1172,19 @@ void QApplication::setActiveWindow(QWidget *act)
 
       } else if (QApplicationPrivate::active_window) {
          QWidget *w = QApplicationPrivate::active_window->focusWidget();
-         if (w && w->isVisible() /*&& w->focusPolicy() != QWidget::NoFocus*/) {
+
+         if (w && w->isVisible()) {
             w->setFocus(Qt::ActiveWindowFocusReason);
+
          } else {
             w = QApplicationPrivate::focusNextPrevChild_helper(QApplicationPrivate::active_window, true);
             if (w) {
                w->setFocus(Qt::ActiveWindowFocusReason);
+
             } else {
                // If the focus widget is not in the activate_window, clear the focus
                w = QApplicationPrivate::focus_widget;
+
                if (!w && QApplicationPrivate::active_window->focusPolicy() != Qt::NoFocus) {
                   QApplicationPrivate::setFocusWidget(QApplicationPrivate::active_window, Qt::ActiveWindowFocusReason);
                } else if (!QApplicationPrivate::active_window->isAncestorOf(w)) {
@@ -1196,6 +1201,7 @@ QWidget *qt_tlw_for_window(QWindow *wnd)
    // QTBUG-32177, wnd might be a QQuickView embedded via window container.
    while (wnd && !wnd->isTopLevel()) {
       QWindow *parent = wnd->parent();
+
       // Don't end up in windows not belonging to this application
       if (parent && parent->type() != Qt::ForeignWindow) {
          wnd = wnd->parent();
@@ -1204,11 +1210,12 @@ QWidget *qt_tlw_for_window(QWindow *wnd)
       }
    }
 
-   if (wnd)
+   if (wnd) {
       for (QWidget *tlw : qApp->topLevelWidgets())
          if (tlw->windowHandle() == wnd) {
             return tlw;
          }
+   }
 
    return nullptr;
 }
@@ -1250,7 +1257,7 @@ QWidget *QApplicationPrivate::focusNextPrevChild_helper(QWidget *toplevel, bool 
 
    QWidget *f = toplevel->focusWidget();
 
-   if (!f) {
+   if (! f) {
       f = toplevel;
    }
 
@@ -1265,18 +1272,21 @@ QWidget *QApplicationPrivate::focusNextPrevChild_helper(QWidget *toplevel, bool 
       }
 
       if ((test->focusPolicy() & focus_flag) == focus_flag
-         && !(test->d_func()->extra && test->d_func()->extra->focus_proxy)
-         && test->isVisibleTo(toplevel) && test->isEnabled()
-         && !(w->windowType() == Qt::SubWindow && !w->isAncestorOf(test))
-         && (toplevel->windowType() != Qt::SubWindow || toplevel->isAncestorOf(test))) {
+            && !(test->d_func()->extra && test->d_func()->extra->focus_proxy)
+            && test->isVisibleTo(toplevel) && test->isEnabled()
+            && !(w->windowType() == Qt::SubWindow && !w->isAncestorOf(test))
+            && (toplevel->windowType() != Qt::SubWindow || toplevel->isAncestorOf(test))) {
          w = test;
+
          if (seenWindow) {
             focusWidgetAfterWindow = true;
          }
+
          if (next) {
             break;
          }
       }
+
       test = test->d_func()->focus_next;
    }
 
@@ -1289,8 +1299,10 @@ QWidget *QApplicationPrivate::focusNextPrevChild_helper(QWidget *toplevel, bool 
          w->window()->setAttribute(Qt::WA_KeyboardFocusChange);
          w->update();
       }
+
       return nullptr;
    }
+
    return w;
 }
 
@@ -1387,9 +1399,12 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
 
          if (w->testAttribute(Qt::WA_Hover) &&
                (! QApplication::activePopupWidget() || QApplication::activePopupWidget() == w->window())) {
+
             Q_ASSERT(instance());
-            QHoverEvent he(QEvent::HoverLeave, QPoint(-1, -1), w->mapFromGlobal(QApplicationPrivate::instance()->hoverGlobalPos),
-               QApplication::keyboardModifiers());
+
+            QHoverEvent he(QEvent::HoverLeave, QPoint(-1, -1),
+               w->mapFromGlobal(QApplicationPrivate::instance()->hoverGlobalPos), QApplication::keyboardModifiers());
+
             qApp->d_func()->notify_helper(w, &he);
          }
       }
@@ -1398,20 +1413,21 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
    if (!enterList.isEmpty()) {
       // Guard against QGuiApplicationPrivate::lastCursorPosition initialized to qInf(), qInf().
       const QPoint globalPos = std::isinf(globalPosF.x())
-         ? QPoint(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX)
-         : globalPosF.toPoint();
+         ? QPoint(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX) : globalPosF.toPoint();
 
       const QPoint windowPos = enterList.front()->window()->mapFromGlobal(globalPos);
+
       for (int i = 0; i < enterList.size(); ++i) {
          w = enterList.at(i);
          if (! QApplication::activeModalWidget() || QApplicationPrivate::tryModalHelper(w, nullptr)) {
             const QPointF localPos = w->mapFromGlobal(globalPos);
             QEnterEvent enterEvent(localPos, windowPos, globalPosF);
             QApplication::sendEvent(w, &enterEvent);
+
             if (w->testAttribute(Qt::WA_Hover) &&
-               (!QApplication::activePopupWidget() || QApplication::activePopupWidget() == w->window())) {
-               QHoverEvent he(QEvent::HoverEnter, localPos, QPoint(-1, -1),
-                  QApplication::keyboardModifiers());
+                  (! QApplication::activePopupWidget() || QApplication::activePopupWidget() == w->window())) {
+
+               QHoverEvent he(QEvent::HoverEnter, localPos, QPoint(-1, -1), QApplication::keyboardModifiers());
                qApp->d_func()->notify_helper(w, &he);
             }
          }
@@ -1431,23 +1447,27 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
       if (!isAlien(w)) {
          break;
       }
+
       if (w->testAttribute(Qt::WA_SetCursor)) {
          QWidget *parent = w->parentWidget();
          while (parent && parent->d_func()->data.in_destructor) {
             parent = parent->parentWidget();
          }
+
          parentOfLeavingCursor = parent;
-         //continue looping, we need to find the downest alien widget with a cursor.
+
+         // continue looping, we need to find the downest alien widget with a cursor.
          // (downest on the screen)
       }
    }
 
    //check that we will not call qt_x11_enforce_cursor twice with the same native widget
-   if (parentOfLeavingCursor && (!enterOnAlien
-         || parentOfLeavingCursor->effectiveWinId() != enter->effectiveWinId())) {
+   if (parentOfLeavingCursor && (!enterOnAlien || parentOfLeavingCursor->effectiveWinId() != enter->effectiveWinId())) {
+
 #ifndef QT_NO_GRAPHICSVIEW
       if (!parentOfLeavingCursor->window()->graphicsProxyWidget())
 #endif
+
       {
          if (enter == QApplication::desktop()) {
             cs_internal_set_cursor(enter, true);
@@ -1458,7 +1478,8 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
    }
    if (enterOnAlien) {
       QWidget *cursorWidget = enter;
-      while (!cursorWidget->isWindow() && !cursorWidget->isEnabled()) {
+
+      while (! cursorWidget->isWindow() && ! cursorWidget->isEnabled()) {
          cursorWidget = cursorWidget->parentWidget();
       }
 
@@ -1491,6 +1512,7 @@ bool QApplicationPrivate::isBlockedByModal(QWidget *widget)
 {
    widget = widget->window();
    QWindow *window = widget->windowHandle();
+
    return window && self->isWindowBlocked(window);
 }
 
@@ -1526,15 +1548,19 @@ bool QApplicationPrivate::isWindowBlocked(QWindow *window, QWindow **blockingWin
       {
          // check if the modal window is our window or a (transient) parent of our window
          QWindow *w = window;
+
          while (w) {
             if (w == modalWindow) {
                *blockingWindow = nullptr;
                return false;
             }
+
             QWindow *p = w->parent();
-            if (!p) {
+
+            if (! p) {
                p = w->transientParent();
             }
+
             w = p;
          }
 
@@ -1542,6 +1568,7 @@ bool QApplicationPrivate::isWindowBlocked(QWindow *window, QWindow **blockingWin
          // so check the native parent chain, too.
          const QPlatformWindow *platWin = window->handle();
          const QPlatformWindow *modalPlatWin = modalWindow->handle();
+
          if (platWin && modalPlatWin && platWin->isEmbedded(modalPlatWin)) {
             return false;
          }
@@ -1563,9 +1590,9 @@ bool QApplicationPrivate::isWindowBlocked(QWindow *window, QWindow **blockingWin
                m = m->window();
             }
          }
+
          windowModality = (m && m->testAttribute(Qt::WA_GroupLeader))
-            ? Qt::WindowModal
-            : Qt::ApplicationModal;
+               ? Qt::WindowModal : Qt::ApplicationModal;
       }
 
       switch (windowModality) {
@@ -1577,23 +1604,28 @@ bool QApplicationPrivate::isWindowBlocked(QWindow *window, QWindow **blockingWin
             }
 
             if (groupLeaderForWidget) {
-               // if \a widget has WA_GroupLeader, it can only be blocked by ApplicationModal children
+               // if widget has WA_GroupLeader, it can only be blocked by ApplicationModal children
                QWidget *m = modalWidgetWindow ? modalWidgetWindow->widget() : nullptr;
+
                while (m && m != groupLeaderForWidget && ! m->testAttribute(Qt::WA_GroupLeader)) {
                   m = m->parentWidget();
                }
+
                if (m == groupLeaderForWidget) {
                   *blockingWindow = m->windowHandle();
                   return true;
                }
+
             } else if (modalWindow != window) {
                *blockingWindow = modalWindow;
                return true;
             }
             break;
          }
+
          case Qt::WindowModal: {
             QWindow *w = window;
+
             do {
                QWindow *m = modalWindow;
                do {
@@ -1601,20 +1633,29 @@ bool QApplicationPrivate::isWindowBlocked(QWindow *window, QWindow **blockingWin
                      *blockingWindow = m;
                      return true;
                   }
+
                   QWindow *p = m->parent();
-                  if (!p) {
+                  if (! p) {
                      p = m->transientParent();
                   }
+
                   m = p;
+
                } while (m);
+
                QWindow *p = w->parent();
-               if (!p) {
+
+               if (! p) {
                   p = w->transientParent();
                }
+
                w = p;
+
             } while (w);
+
             break;
          }
+
          default:
             Q_ASSERT_X(false, "QApplication", "internal error, a modal window cannot be modeless");
             break;
@@ -1656,6 +1697,7 @@ bool qt_try_modal(QWidget *widget, QEvent::Type type)
    bool block_event  = false;
 
    switch (type) {
+
 #if 0
       case QEvent::Focus:
          if (!static_cast<QWSFocusEvent *>(event)->simpleData.get_focus) {
@@ -1663,13 +1705,15 @@ bool qt_try_modal(QWidget *widget, QEvent::Type type)
          }
          // drop through
 #endif
+
       case QEvent::MouseButtonPress:                        // disallow mouse/key events
       case QEvent::MouseButtonRelease:
       case QEvent::MouseMove:
       case QEvent::KeyPress:
       case QEvent::KeyRelease:
-         block_event         = true;
+         block_event = true;
          break;
+
       default:
          break;
    }
@@ -1678,7 +1722,7 @@ bool qt_try_modal(QWidget *widget, QEvent::Type type)
       top->raise();
    }
 
-   return !block_event;
+   return ! block_event;
 }
 
 bool QApplicationPrivate::modalState()
@@ -1690,9 +1734,7 @@ bool QApplicationPrivate::modalState()
    \internal
 */
 QWidget *QApplicationPrivate::pickMouseReceiver(QWidget *candidate, const QPoint &windowPos,
-   QPoint *pos, QEvent::Type type,
-   Qt::MouseButtons buttons, QWidget *buttonDown,
-   QWidget *alienWidget)
+            QPoint *pos, QEvent::Type type, Qt::MouseButtons buttons, QWidget *buttonDown, QWidget *alienWidget)
 {
    Q_ASSERT(candidate);
 
@@ -1715,22 +1757,22 @@ QWidget *QApplicationPrivate::pickMouseReceiver(QWidget *candidate, const QPoint
    if (mouseGrabber && mouseGrabber != candidate) {
       receiver = mouseGrabber;
       *pos = receiver->mapFromGlobal(candidate->mapToGlobal(windowPos));
+
 #ifdef ALIEN_DEBUG
       qDebug() << "  ** receiver adjusted to:" << receiver << "pos:" << pos;
 #endif
+
    }
 
    return receiver;
-
 }
 
 /*
    \internal
 */
 bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
-   QWidget *alienWidget, QWidget *nativeWidget,
-   QWidget **buttonDown, QPointer<QWidget> &lastMouseReceiver,
-   bool spontaneous)
+            QWidget *alienWidget, QWidget *nativeWidget, QWidget **buttonDown,
+            QPointer<QWidget> &lastMouseReceiver, bool spontaneous)
 {
    Q_ASSERT(receiver);
    Q_ASSERT(event);
@@ -1764,21 +1806,23 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
          if ((alienWidget || !receiver->internalWinId()) && !leaveAfterRelease && !QWidget::mouseGrabber()) {
             leaveAfterRelease = *buttonDown;
          }
+
          if (event->type() == QEvent::MouseButtonRelease && !event->buttons()) {
             *buttonDown = nullptr;
          }
       }
+
    } else if (lastMouseReceiver && widgetUnderMouse) {
       // Dispatch enter/leave if we move:
       // 1) from an alien widget to another alien widget or
       //    from a native widget to an alien widget (first OR case)
       // 2) from an alien widget to a native widget (second OR case)
-      if ((alienWidget && alienWidget != lastMouseReceiver)
-         || (isAlien(lastMouseReceiver) && !alienWidget)) {
+      if ((alienWidget && alienWidget != lastMouseReceiver) || (isAlien(lastMouseReceiver) && !alienWidget)) {
          if (activePopupWidget) {
             if (!QWidget::mouseGrabber()) {
                dispatchEnterLeave(alienWidget ? alienWidget : nativeWidget, lastMouseReceiver, event->screenPos());
             }
+
          } else {
             dispatchEnterLeave(receiver, lastMouseReceiver, event->screenPos());
          }
@@ -1797,6 +1841,7 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
    // leaveAfterRelease is set to null, but we shall not update lastMouseReceiver.
    const bool wasLeaveAfterRelease = (leaveAfterRelease != nullptr);
    bool result;
+
    if (spontaneous) {
       result = QApplication::sendSpontaneousEvent(receiver, event);
    } else {
@@ -1812,12 +1857,16 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
 
       if (nativeGuard) {
          enter = alienGuard ? alienWidget : nativeWidget;
-      } else { // The receiver is typically deleted on mouse release with drag'n'drop.
+
+      } else {
+         // The receiver is typically deleted on mouse release with drag'n'drop.
          enter = QApplication::widgetAt(event->globalPos());
       }
+
       dispatchEnterLeave(enter, leaveAfterRelease, event->screenPos());
       leaveAfterRelease = nullptr;
       lastMouseReceiver = enter;
+
    } else if (!wasLeaveAfterRelease) {
       if (activePopupWidget) {
          if (!QWidget::mouseGrabber()) {
@@ -1895,8 +1944,6 @@ void QApplicationPrivate::sendSyntheticEnterLeave(QWidget *widget)
 #endif // QT_NO_CURSOR
 }
 
-
-
 void QApplication::setStartDragTime(int ms)
 {
    QGuiApplication::styleHints()->setStartDragTime(ms);
@@ -1945,7 +1992,6 @@ int QApplication::startDragDistance()
    return QGuiApplication::styleHints()->startDragDistance();
 }
 
-
 bool QApplicationPrivate::shouldQuit()
 {
    /* if there is no non-withdrawn primary window left (except
@@ -1975,6 +2021,7 @@ static inline void closeAllPopups()
    // we give up after 1024 attempts (to avoid an infinite loop).
    int maxiter = 1024;
    QWidget *popup;
+
    while ((popup = QApplication::activePopupWidget()) && maxiter--) {
       popup->close();
    }
@@ -2015,12 +2062,14 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             QApplicationPrivate::mouse_buttons |= me->button();
             break;
          }
+
          case QEvent::MouseButtonDblClick: {
             QMouseEvent *me = static_cast<QMouseEvent *>(e);
             QApplicationPrivate::modifier_buttons = me->modifiers();
             QApplicationPrivate::mouse_buttons |= me->button();
             break;
          }
+
          case QEvent::MouseButtonRelease: {
             QMouseEvent *me = static_cast<QMouseEvent *>(e);
             QApplicationPrivate::modifier_buttons = me->modifiers();
@@ -2155,6 +2204,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             QKeyEvent *key = static_cast<QKeyEvent *>(e);
             bool def = key->isAccepted();
             QPointer<QObject> pr = receiver;
+
             while (receiver) {
                if (def) {
                   key->accept();
@@ -2182,10 +2232,11 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                      propagating (because the original receiver will
                      be destroyed if one of its ancestors is)
                   */
-                  || !pr
-                  || (isWidget && (w->isWindow() || !w->parentWidget()))
+
+                  || ! pr || (isWidget && (w->isWindow() || ! w->parentWidget()))
+
 #ifndef QT_NO_GRAPHICSVIEW
-                  || (isGraphicsWidget && (gw->isWindow() || !gw->parentWidget()))
+                  || (isGraphicsWidget && (gw->isWindow() || ! gw->parentWidget()))
 #endif
                ) {
                   break;
@@ -2200,6 +2251,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             qt_in_tab_key_event = false;
          }
          break;
+
          case QEvent::MouseButtonPress:
          case QEvent::MouseButtonRelease:
          case QEvent::MouseButtonDblClick:
@@ -2214,7 +2266,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                   QApplicationPrivate::giveFocusAccordingToFocusPolicy(w, e, relpos);
                }
 
-               // ### Qt 5 These dynamic tool tips should be an OPT-IN feature. Some platforms
+               // ### These dynamic tool tips should be an OPT-IN feature. Some platforms
                // like OS X (probably others too), can optimize their views by not
                // dispatching mouse move events. We have attributes to control hover,
                // and mouse tracking, but as long as we are deciding to implement this
@@ -2222,11 +2274,12 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                // tracking enabled. Therefore, the other properties give a false sense of
                // performance enhancement.
 
-               if (e->type() == QEvent::MouseMove && mouse->buttons() == 0
-                  && w->rect().contains(relpos)) { // Outside due to mouse grab?
+               if (e->type() == QEvent::MouseMove && mouse->buttons() == 0 && w->rect().contains(relpos)) {
+                  // Outside due to mouse grab?
                   d->toolTipWidget = w;
                   d->toolTipPos = relpos;
                   d->toolTipGlobalPos = mouse->globalPos();
+
                   QStyle *s = d->toolTipWidget->style();
                   int wakeDelay = s->styleHint(QStyle::SH_ToolTip_WakeUpDelay, nullptr, d->toolTipWidget, nullptr);
                   d->toolTipWakeUp.start(d->toolTipFallAsleep.isActive() ? 20 : wakeDelay, this);
@@ -2608,13 +2661,17 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                QPointer<QWidget> p = widget;
                res = acceptTouchEvents && d->notify_helper(widget, touchEvent);
                eventAccepted = touchEvent->isAccepted();
+
                if (p.isNull()) {
                   // widget was deleted
                   widget = nullptr;
+
                } else {
                   widget->setAttribute(Qt::WA_WState_AcceptedTouchBeginEvent, res && eventAccepted);
                }
+
                touchEvent->spont = false;
+
                if (res && eventAccepted) {
                   // the first widget to accept the TouchBegin gets an implicit grab.
                   d->activateImplicitTouchGrab(widget, touchEvent);
@@ -2839,6 +2896,7 @@ bool QApplicationPrivate::notify_helper(QObject *receiver, QEvent *e)
    // deliver the event
    bool consumed = receiver->event(e);
    QCoreApplicationPrivate::setEventSpontaneous(e, false);
+
    return consumed;
 }
 
@@ -2871,8 +2929,10 @@ static void grabForPopup(QWidget *popup)
 {
    Q_ASSERT(popup->testAttribute(Qt::WA_WState_Created));
    popupGrabOk = qt_widget_private(popup)->stealKeyboardGrab(true);
+
    if (popupGrabOk) {
       popupGrabOk = qt_widget_private(popup)->stealMouseGrab(true);
+
       if (!popupGrabOk) {
          // transfer grab back to the keyboard grabber if any
          ungrabKeyboardForPopup(popup);
@@ -2904,12 +2964,14 @@ void QApplicationPrivate::closePopup(QWidget *popup)
          popupGrabOk = false;
 
          if (popup->geometry().contains(QPoint(QGuiApplicationPrivate::mousePressX,
-                  QGuiApplicationPrivate::mousePressY))
-            || popup->testAttribute(Qt::WA_NoMouseReplay)) {
+                  QGuiApplicationPrivate::mousePressY)) || popup->testAttribute(Qt::WA_NoMouseReplay)) {
             // mouse release event or inside
             qt_replay_popup_mouse_event = false;
-         } else { // mouse press event
+
+         } else {
+            // mouse press event
             qt_replay_popup_mouse_event = true;
+
          }
 
          // transfer grab back to mouse grabber if any, otherwise release the grab
@@ -2923,6 +2985,7 @@ void QApplicationPrivate::closePopup(QWidget *popup)
          if (QWidget *fw = active_window->focusWidget()) {
             if (fw != QApplication::focusWidget()) {
                fw->setFocus(Qt::PopupFocusReason);
+
             } else {
                QFocusEvent e(QEvent::FocusIn, Qt::PopupFocusReason);
                QCoreApplication::sendEvent(fw, &e);
@@ -2941,7 +3004,6 @@ void QApplicationPrivate::closePopup(QWidget *popup)
          grabForPopup(aw);
       }
    }
-
 }
 
 int openPopupCount = 0;
@@ -2981,7 +3043,6 @@ Qt::NavigationMode QApplication::navigationMode()
 {
    return QApplicationPrivate::navigationMode;
 }
-
 
 void QApplication::setKeypadNavigationEnabled(bool enable)
 {
@@ -3259,6 +3320,7 @@ void QApplicationPrivate::giveFocusAccordingToFocusPolicy(QWidget *widget, QEven
             return;
          }
          break;
+
       case QEvent::MouseButtonRelease:
       case QEvent::TouchEnd:
          if (!setFocusOnRelease) {
@@ -3270,18 +3332,20 @@ void QApplicationPrivate::giveFocusAccordingToFocusPolicy(QWidget *widget, QEven
             return;
          }
          break;
+
       case QEvent::Wheel:
          focusPolicy = Qt::WheelFocus;
          break;
+
       default:
          return;
    }
 
    QWidget *focusWidget = widget;
    while (focusWidget) {
-      if (focusWidget->isEnabled()
-         && focusWidget->rect().contains(localPos)
-         && QApplicationPrivate::shouldSetFocus(focusWidget, focusPolicy)) {
+
+      if (focusWidget->isEnabled() && focusWidget->rect().contains(localPos)
+                  && QApplicationPrivate::shouldSetFocus(focusWidget, focusPolicy)) {
          focusWidget->setFocus(Qt::MouseFocusReason);
          break;
       }
@@ -3294,6 +3358,7 @@ void QApplicationPrivate::giveFocusAccordingToFocusPolicy(QWidget *widget, QEven
       if (focusWidget->d_func()->extra && focusWidget->d_func()->extra->focus_proxy) {
          f = focusWidget->d_func()->extra->focus_proxy;
       }
+
       // if it has, stop here.
       // otherwise a click on the focused widget would remove its focus if ClickFocus isn't set
       if (f->hasFocus()) {
@@ -3308,6 +3373,7 @@ void QApplicationPrivate::giveFocusAccordingToFocusPolicy(QWidget *widget, QEven
 bool QApplicationPrivate::shouldSetFocus(QWidget *w, Qt::FocusPolicy policy)
 {
    QWidget *f = w;
+
    while (f->d_func()->extra && f->d_func()->extra->focus_proxy) {
       f = f->d_func()->extra->focus_proxy;
    }
@@ -3315,9 +3381,11 @@ bool QApplicationPrivate::shouldSetFocus(QWidget *w, Qt::FocusPolicy policy)
    if ((w->focusPolicy() & policy) != policy) {
       return false;
    }
+
    if (w != f && (f->focusPolicy() & policy) != policy) {
       return false;
    }
+
    return true;
 }
 
@@ -3366,16 +3434,20 @@ QWidget *QApplicationPrivate::findClosestTouchPointTarget(QTouchDevice *device, 
 {
    const QPointF screenPos = touchPoint.screenPos();
    int closestTouchPointId = -1;
-   qreal closestDistance = qreal(0.);
-   QHash<ActiveTouchPointsKey, ActiveTouchPointsValue>::const_iterator it = activeTouchPoints.constBegin(),
-                                                                       ite = activeTouchPoints.constEnd();
    QObject *closestTarget  = nullptr;
+   qreal closestDistance   = qreal(0.0);
+
+   auto it  = activeTouchPoints.constBegin();
+   auto ite = activeTouchPoints.constEnd();
+
    while (it != ite) {
       if (it.key().device == device && it.key().touchPointId != touchPoint.id()) {
          const QTouchEvent::TouchPoint &touchPoint = it->touchPoint;
+
          qreal dx = screenPos.x() - touchPoint.screenPos().x();
          qreal dy = screenPos.y() - touchPoint.screenPos().y();
          qreal distance = dx * dx + dy * dy;
+
          if (closestTouchPointId == -1 || distance < closestDistance) {
             closestTouchPointId = touchPoint.id();
             closestDistance = distance;
@@ -3426,7 +3498,7 @@ bool QApplicationPrivate::translateRawTouchEvent(QWidget *window, QTouchDevice *
                : d->activeTouchPoints.constBegin().value().target;
          }
 
-         if (!target) {
+         if (! target) {
             // determine which widget this event will go to
 
             if (! window) {
@@ -3484,8 +3556,9 @@ bool QApplicationPrivate::translateRawTouchEvent(QWidget *window, QTouchDevice *
    }
 
    bool accepted = false;
-   QHash<QWidget *, StatesAndTouchPoints>::const_iterator it = widgetsNeedingEvents.constBegin();
-   const QHash<QWidget *, StatesAndTouchPoints>::const_iterator end = widgetsNeedingEvents.constEnd();
+   auto it  = widgetsNeedingEvents.constBegin();
+   auto end = widgetsNeedingEvents.constEnd();
+
    for (; it != end; ++it) {
       const QPointer<QWidget> widget = it.key();
       if (! QApplicationPrivate::tryModalHelper(widget, nullptr)) {
@@ -3493,26 +3566,27 @@ bool QApplicationPrivate::translateRawTouchEvent(QWidget *window, QTouchDevice *
       }
 
       QEvent::Type eventType;
+
       switch (it.value().first) {
          case Qt::TouchPointPressed:
             eventType = QEvent::TouchBegin;
             break;
+
          case Qt::TouchPointReleased:
             eventType = QEvent::TouchEnd;
             break;
+
          case Qt::TouchPointStationary:
             // don't send the event if nothing changed
             continue;
+
          default:
             eventType = QEvent::TouchUpdate;
             break;
       }
 
-      QTouchEvent touchEvent(eventType,
-         device,
-         QApplication::keyboardModifiers(),
-         it.value().first,
-         it.value().second);
+      QTouchEvent touchEvent(eventType, device, QApplication::keyboardModifiers(), it.value().first, it.value().second);
+
       bool containsPress = updateTouchPointsForWidget(widget, &touchEvent);
       touchEvent.setTimestamp(timestamp);
       touchEvent.setWindow(window->windowHandle());
@@ -3528,12 +3602,13 @@ bool QApplicationPrivate::translateRawTouchEvent(QWidget *window, QTouchDevice *
             // has been implicitly accepted and continue to send touch events
             if (QApplication::sendSpontaneousEvent(widget, &touchEvent) && touchEvent.isAccepted()) {
                accepted = true;
-               if (!widget.isNull()) {
+               if (! widget.isNull()) {
                   widget->setAttribute(Qt::WA_WState_AcceptedTouchBeginEvent);
                }
             }
             break;
          }
+
          default:
             if (widget->testAttribute(Qt::WA_WState_AcceptedTouchBeginEvent)
 #ifndef QT_NO_GESTURES
@@ -3543,6 +3618,7 @@ bool QApplicationPrivate::translateRawTouchEvent(QWidget *window, QTouchDevice *
                if (QApplication::sendSpontaneousEvent(widget, &touchEvent) && touchEvent.isAccepted()) {
                   accepted = true;
                }
+
                // widget can be deleted on TouchEnd
                if (touchEvent.type() == QEvent::TouchEnd && !widget.isNull()) {
                   widget->setAttribute(Qt::WA_WState_AcceptedTouchBeginEvent, false);
@@ -3604,6 +3680,7 @@ QGestureManager *QGestureManager::instance()
    if (! qAppPriv->gestureManager) {
       qAppPriv->gestureManager = new QGestureManager(qApp);
    }
+
    return qAppPriv->gestureManager;
 }
 #endif
@@ -3621,5 +3698,3 @@ QPixmap QApplicationPrivate::applyQIconStyleHelper(QIcon::Mode mode, const QPixm
 
    return QApplication::style()->generatedIconPixmap(mode, base, &opt);
 }
-
-

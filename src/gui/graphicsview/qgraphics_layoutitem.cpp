@@ -119,7 +119,6 @@ void QGraphicsLayoutItemPrivate::init()
    sizeHintWithConstraintCacheDirty = true;
 }
 
-
 QSizeF *QGraphicsLayoutItemPrivate::effectiveSizeHints(const QSizeF &constraint) const
 {
    Q_Q(const QGraphicsLayoutItem);
@@ -183,7 +182,6 @@ QSizeF *QGraphicsLayoutItemPrivate::effectiveSizeHints(const QSizeF &constraint)
    }
    return sizeHintCache;
 }
-
 
 /*!
     \internal

@@ -728,6 +728,7 @@ QPlainTextEditPrivate::QPlainTextEditPrivate()
    showCursorOnInitialShow = true;
    backgroundVisible       = false;
    centerOnScroll          = false;
+
    inDrag = false;
 }
 
@@ -760,9 +761,8 @@ void QPlainTextEditPrivate::init(const QString &txt)
 
    QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(updateMicroFocus()));
 
-   // set a null page size initially to avoid any relayouting until the textedit
-   // is shown. relayoutDocument() will take care of setting the page size to the
-   // viewport dimensions later.
+   // set a null page size initially to avoid any relayouting until the textedit is shown
+   // relayoutDocument() will take care of setting the page size to the viewport dimensions later.
 
    doc->setTextWidth(-1);
    doc->documentLayout()->setPaintDevice(viewport);
@@ -1030,6 +1030,7 @@ QPlainTextEdit::QPlainTextEdit(const QString &text, QWidget *parent)
 QPlainTextEdit::~QPlainTextEdit()
 {
    Q_D(QPlainTextEdit);
+
    if (d->documentLayoutPtr) {
       if (d->documentLayoutPtr->priv()->mainViewPrivate == d) {
          d->documentLayoutPtr->priv()->mainViewPrivate = nullptr;

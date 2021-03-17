@@ -278,7 +278,7 @@ void QLineEdit::setValidator(const QValidator *v)
    Q_D(QLineEdit);
    d->control->setValidator(v);
 }
-#endif // QT_NO_VALIDATOR
+#endif
 
 #ifndef QT_NO_COMPLETER
 
@@ -981,11 +981,13 @@ bool QLineEdit::event(QEvent *e)
 
    } else if (e->type() == QEvent::WindowActivate) {
       QTimer::singleShot(0, this, SLOT(_q_handleWindowActivate()));
+
 #ifndef QT_NO_SHORTCUT
    } else if (e->type() == QEvent::ShortcutOverride) {
       QKeyEvent *ke = static_cast<QKeyEvent *>(e);
       d->control->processShortcutOverrideEvent(ke);
 #endif
+
    } else if (e->type() == QEvent::KeyRelease) {
       d->control->setCursorBlinkPeriod(QApplication::cursorFlashTime());
 
@@ -1004,6 +1006,7 @@ bool QLineEdit::event(QEvent *e)
 
    } else if (e->type() == QEvent::ActionRemoved) {
       d->removeAction(static_cast<QActionEvent *>(e)->action());
+
    } else if (e->type() == QEvent::Resize) {
       d->positionSideWidgets();
    }
@@ -1364,7 +1367,7 @@ void QLineEdit::focusInEvent(QFocusEvent *e)
       initStyleOption(&opt);
 
       if ((! hasSelectedText() && d->control->preeditAreaText().isEmpty())
-         || style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, this)) {
+               || style()->styleHint(QStyle::SH_BlinkCursorWhenTextSelected, &opt, this)) {
          d->setCursorVisible(true);
       }
 
@@ -1385,15 +1388,12 @@ void QLineEdit::focusInEvent(QFocusEvent *e)
    update();
 }
 
-/*!\reimp
-*/
-
 void QLineEdit::focusOutEvent(QFocusEvent *e)
 {
    Q_D(QLineEdit);
+
    if (d->control->passwordEchoEditing()) {
-      // Reset the echomode back to PasswordEchoOnEdit when the widget loses
-      // focus.
+      // Reset the echomode back to PasswordEchoOnEdit when the widget loses focus
       d->updatePasswordEchoEditing(false);
    }
 
@@ -1405,17 +1405,18 @@ void QLineEdit::focusOutEvent(QFocusEvent *e)
 
    d->setCursorVisible(false);
    d->control->setCursorBlinkPeriod(0);
+
 #ifdef QT_KEYPAD_NAVIGATION
    // editingFinished() is already emitted on LeaveEditFocus
-   if (!QApplication::keypadNavigationEnabled())
+   if (! QApplication::keypadNavigationEnabled())
 #endif
+
       if (reason != Qt::PopupFocusReason
-         || !(QApplication::activePopupWidget() && QApplication::activePopupWidget()->parentWidget() == this)) {
+            || ! (QApplication::activePopupWidget() && QApplication::activePopupWidget()->parentWidget() == this)) {
          if (hasAcceptableInput() || d->control->fixup()) {
             emit editingFinished();
          }
       }
-
 
 #ifdef QT_KEYPAD_NAVIGATION
    d->control->setCancelText(QString());
@@ -1430,8 +1431,6 @@ void QLineEdit::focusOutEvent(QFocusEvent *e)
    QWidget::focusOutEvent(e);
 }
 
-/*!\reimp
-*/
 void QLineEdit::paintEvent(QPaintEvent *)
 {
    Q_D(QLineEdit);
@@ -1452,18 +1451,22 @@ void QLineEdit::paintEvent(QPaintEvent *)
 
    QFontMetrics fm = fontMetrics();
    Qt::Alignment va = QStyle::visualAlignment(d->control->layoutDirection(), QFlag(d->alignment));
+
    switch (va & Qt::AlignVertical_Mask) {
       case Qt::AlignBottom:
          d->vscroll = r.y() + r.height() - fm.height() - d->verticalMargin;
          break;
+
       case Qt::AlignTop:
          d->vscroll = r.y() + d->verticalMargin;
          break;
+
       default:
          //center
          d->vscroll = r.y() + (r.height() - fm.height() + 1) / 2;
          break;
    }
+
    QRect lineRect(r.x() + d->horizontalMargin, d->vscroll, r.width() - 2 * d->horizontalMargin, fm.height());
 
    if (d->shouldShowPlaceholderText()) {

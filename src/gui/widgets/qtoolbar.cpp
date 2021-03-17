@@ -169,10 +169,10 @@ void QToolBarPrivate::initDrag(const QPoint &pos)
       return;
    }
 
-   state = new DragState;
-   state->pressPos = pos;
-   state->dragging = false;
-   state->moving = false;
+   state             = new DragState;
+   state->pressPos   = pos;
+   state->dragging   = false;
+   state->moving     = false;
    state->widgetItem = nullptr;
 
    if (q->isRightToLeft()) {
@@ -202,7 +202,7 @@ void QToolBarPrivate::startDrag(bool moving)
    }
 
    state->dragging = !moving;
-   state->moving = moving;
+   state->moving   = moving;
 }
 
 void QToolBarPrivate::endDrag()
@@ -277,7 +277,9 @@ bool QToolBarPrivate::mouseReleaseEvent(QMouseEvent *)
    if (state != nullptr) {
       endDrag();
       return true;
+
    } else {
+
 #ifdef Q_OS_DARWIN
       if (!macWindowDragging) {
          return false;
@@ -286,6 +288,7 @@ bool QToolBarPrivate::mouseReleaseEvent(QMouseEvent *)
       macWindowDragPressPosition = QPoint();
       return true;
 #endif
+
       return false;
    }
 }
@@ -322,8 +325,7 @@ bool QToolBarPrivate::mouseMoveEvent(QMouseEvent *event)
 
       const bool wasDragging = state->dragging;
       const bool moving = !q->isWindow() && (orientation == Qt::Vertical ?
-            event->x() >= 0 && event->x() < q->width() :
-            event->y() >= 0 && event->y() < q->height());
+            event->x() >= 0 && event->x() < q->width() : event->y() >= 0 && event->y() < q->height());
 
       startDrag(moving);
       if (!moving && !wasDragging) {
@@ -334,8 +336,7 @@ bool QToolBarPrivate::mouseMoveEvent(QMouseEvent *event)
 
    if (state->dragging) {
       QPoint pos = event->globalPos();
-      // if we are right-to-left, we move so as to keep the right edge the same distance
-      // from the mouse
+      // if we are right-to-left, we move so as to keep the right edge the same distance from the mouse
       if (q->isLeftToRight()) {
          pos -= state->pressPos;
       } else {
@@ -625,12 +626,16 @@ QRect QToolBar::actionGeometry(QAction *action) const
 QAction *QToolBar::actionAt(const QPoint &p) const
 {
    Q_D(const QToolBar);
+
    QWidget *widget = childAt(p);
    int index = d->layout->indexOf(widget);
+
    if (index == -1) {
       return nullptr;
    }
+
    QLayoutItem *item = d->layout->itemAt(index);
+
    return static_cast<QToolBarItem *>(item)->action;
 }
 
@@ -687,6 +692,7 @@ void QToolBar::changeEvent(QEvent *event)
       case QEvent::WindowTitleChange:
          d->toggleViewAction->setText(windowTitle());
          break;
+
       case QEvent::StyleChange:
          d->layout->invalidate();
          if (!d->explicitIconSize) {
@@ -694,9 +700,11 @@ void QToolBar::changeEvent(QEvent *event)
          }
          d->layout->updateMarginAndSpacing();
          break;
+
       case QEvent::LayoutDirectionChange:
          d->layout->invalidate();
          break;
+
       default:
          break;
    }
@@ -978,4 +986,4 @@ bool QToolBar::cs_isMainWindow() const
    return (qobject_cast<QMainWindow *>(parentWidget()) != nullptr);
 }
 
-#endif // QT_NO_TOOLBAR
+#endif  // QT_NO_TOOLBAR

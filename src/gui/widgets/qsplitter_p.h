@@ -27,26 +27,18 @@
 #include <qframe_p.h>
 #include <qrubberband.h>
 
-
-
 static const uint Default = 2;
 
 class QSplitterLayoutStruct
 {
-
  public:
-   QRect rect;
-   int sizer;
-   uint collapsed : 1;
-   uint collapsible : 2;
-   QWidget *widget;
-   QSplitterHandle *handle;
-
    QSplitterLayoutStruct()
       : sizer(-1), collapsed(false), collapsible(Default), widget(nullptr), handle(nullptr)
    {
    }
-   ~QSplitterLayoutStruct() {
+
+   ~QSplitterLayoutStruct()
+   {
       delete handle;
    }
 
@@ -56,6 +48,13 @@ class QSplitterLayoutStruct
    int pick(const QSize &size, Qt::Orientation orient) {
       return (orient == Qt::Horizontal) ? size.width() : size.height();
    }
+
+   QRect rect;
+   int sizer;
+   uint collapsed : 1;
+   uint collapsible : 2;
+   QWidget *widget;
+   QSplitterHandle *handle;
 };
 
 class QSplitterPrivate : public QFramePrivate
@@ -120,7 +119,6 @@ class QSplitterPrivate : public QFramePrivate
    int findWidgetJustBeforeOrJustAfter(int index, int delta, int &collapsibleSize) const;
    void updateHandles();
    void setSizes_helper(const QList<int> &sizes, bool clampNegativeSize = false);
-
 };
 
 class QSplitterHandlePrivate : public QWidgetPrivate

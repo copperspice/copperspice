@@ -56,7 +56,7 @@
 #    include <qeventdispatcher_cf_p.h>
 #    include <qeventdispatcher_unix_p.h>
 #  else
-#    if !defined(QT_NO_GLIB)
+#    if ! defined(QT_NO_GLIB)
 #    include <qeventdispatcher_glib_p.h>
 #    endif
 
@@ -228,7 +228,7 @@ void qAddPostRoutine(QtCleanUpFunction p)
 {
    QVFuncList *list = postRList();
 
-   if (!list) {
+   if (! list) {
       return;
    }
 
@@ -269,9 +269,8 @@ void Q_CORE_EXPORT qt_call_post_routines()
       list = postRList();
 
    } catch (const std::bad_alloc &) {
-      // ignore - if we can't allocate a post routine list,
-      // there's a high probability that there's no post
-      // routine to be executed :)
+      // ignore - if we can not allocate a post routine list,
+      // there's a high probability that there's no post routine to be executed
    }
 
    if (!list) {
@@ -291,7 +290,6 @@ bool QCoreApplicationPrivate::is_app_closing = false;
 
 // initialized in qcoreapplication and in qtextstream autotest when setlocale is called.
 Q_CORE_EXPORT bool qt_locale_initialized = false;
-
 
 //  Create an instance of cs.conf. Ensures the settings will not be thrown out of QSetting's cache for unused settings.
 Q_GLOBAL_STATIC_WITH_ARGS(QSettings, static_CopperSpiceConf, (QSettings::UserScope, QString("CopperSpice")))
@@ -460,7 +458,7 @@ void QCoreApplicationPrivate::checkReceiverThread(QObject *receiver)
    QThread *thr = receiver->thread();
 
    Q_ASSERT_X(currentThread == thr || ! thr, "QCoreApplication::sendEvent",
-              QString::fromLatin1("Can not send events to objects owned by a different thread. "
+              QString::fromLatin1("Unable to send events to objects owned by a different thread. "
                                   "Current thread %1. Receiver '%2' (of type '%3') was created in thread %4")
               .formatArg(QString::number((quintptr) currentThread, 16))
               .formatArg(receiver->objectName())
@@ -511,14 +509,14 @@ void QCoreApplicationPrivate::initLocale()
     setlocale(LC_ALL, "");
 #endif
 }
+
 // internal
 QCoreApplication::QCoreApplication(QCoreApplicationPrivate &p)
    : QObject(nullptr), d_ptr(&p)
 {
    d_ptr->q_ptr = this;
 
-   // note: it is the subclasses' job to call
-   // QCoreApplicationPrivate::eventDispatcher->startingUp();
+   // subclasses should call QCoreApplicationPrivate::eventDispatcher->startingUp();
 }
 
 void QCoreApplication::flush()
@@ -778,10 +776,7 @@ bool QCoreApplicationPrivate::sendThroughObjectEventFilters(QObject *receiver, Q
    return false;
 }
 
-/*!\internal
-
-  Helper function called by notify()
- */
+// internal methods called by notify()
 bool QCoreApplicationPrivate::notify_helper(QObject *receiver, QEvent *event)
 {
    // send to all application event filters
@@ -975,7 +970,7 @@ void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
 
 /*!
   \internal
-  Returns true if \a event was compressed away (possibly deleted) and should not be added to the list.
+  Returns true if event was compressed away (possibly deleted) and should not be added to the list.
 */
 bool QCoreApplication::compressEvent(QEvent *event, QObject *receiver, QPostEventList *postedEvents)
 {
@@ -1195,8 +1190,7 @@ void QCoreApplication::removePostedEvents(QObject *receiver, int eventType)
 
    // the QObject destructor calls this function directly.  this can
    // happen while the event loop is in the middle of posting events,
-   // and when we get here, we may not have any more posted events
-   // for this object.
+   // and when we get here, we may not have any more posted events for this object
    int peCount = CSInternalEvents::get_m_PostedEvents(receiver);
 
    if (receiver && peCount == 0) {
@@ -1347,11 +1341,12 @@ void QCoreApplication::removeTranslator(QTranslator *translationFile)
       return;
    }
 
-   if (!QCoreApplicationPrivate::checkInstance("removeTranslator")) {
+   if (! QCoreApplicationPrivate::checkInstance("removeTranslator")) {
       return;
    }
 
    QCoreApplicationPrivate *d = self->d_func();
+
    if (d->translators.removeAll(translationFile) && ! self->closingDown()) {
       QEvent ev(QEvent::LanguageChange);
       QCoreApplication::sendEvent(self, &ev);
@@ -1397,14 +1392,13 @@ QString qtTrId(const char *id, std::optional<int> n)
 
 bool QCoreApplicationPrivate::isTranslatorInstalled(QTranslator *translator)
 {
-   return QCoreApplication::self
-          && QCoreApplication::self->d_func()->translators.contains(translator);
+   return QCoreApplication::self && QCoreApplication::self->d_func()->translators.contains(translator);
 }
 
 QString QCoreApplication::applicationDirPath()
 {
    if (! self) {
-      qWarning("QCoreApplication::applicationDirPath: Please instantiate the QApplication object first");
+      qWarning("QCoreApplication::applicationDirPath: QApplication must be instantiated before calling this method");
       return QString();
    }
 

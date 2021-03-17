@@ -220,7 +220,7 @@ bool QTextDocumentWriter::write(const QTextDocument *document)
 #endif
       return writer.writeAll();
    }
-#endif // QT_NO_TEXTODFWRITER
+#endif
 
 #ifndef QT_NO_TEXTHTMLPARSER
    if (format == "html" || format == "htm") {
@@ -228,7 +228,9 @@ bool QTextDocumentWriter::write(const QTextDocument *document)
          qWarning() << "QTextDocumentWriter::write: the device can not be opened for writing";
          return false;
       }
+
       QTextStream ts(d->device);
+
 #ifndef QT_NO_TEXTCODEC
       ts.setCodec(d->codec);
       ts << document->toHtml(d->codec->name());
@@ -242,12 +244,16 @@ bool QTextDocumentWriter::write(const QTextDocument *document)
          qWarning() << "QTextDocumentWriter::write: the device can not be opened for writing";
          return false;
       }
+
       QTextStream ts(d->device);
+
 #ifndef QT_NO_TEXTCODEC
       ts.setCodec(d->codec);
 #endif
+
       ts << document->toPlainText();
       d->device->close();
+
       return true;
    }
 
@@ -283,6 +289,7 @@ void QTextDocumentWriter::setCodec(QTextCodec *codec)
    if (codec == nullptr) {
       codec = QTextCodec::codecForName("UTF-8");
    }
+
    Q_ASSERT(codec);
    d->codec = codec;
 }
@@ -297,7 +304,6 @@ QTextCodec *QTextDocumentWriter::codec() const
    return d->codec;
 }
 #endif
-
 
 QList<QByteArray> QTextDocumentWriter::supportedDocumentFormats()
 {

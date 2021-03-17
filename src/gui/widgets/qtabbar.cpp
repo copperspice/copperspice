@@ -2445,5 +2445,4 @@ void QTabBarPrivate::Tab::TabBarAnimation::updateState(QAbstractAnimation::State
 }
 #endif
 
-
 #endif // QT_NO_TABBAR

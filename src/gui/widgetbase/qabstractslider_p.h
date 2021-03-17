@@ -29,8 +29,6 @@
 #include <qwidget_p.h>
 #include <qstyle.h>
 
-
-
 class QAbstractSliderPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QAbstractSlider)

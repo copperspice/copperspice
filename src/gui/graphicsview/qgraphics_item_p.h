@@ -35,12 +35,10 @@
 #include <qgraphics_transform_p.h>
 #include <qgraphicseffect_p.h>
 
-
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-
-
 class QGraphicsItemPrivate;
+
 class QGraphicsItemCache
 {
  public:

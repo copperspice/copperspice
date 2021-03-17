@@ -242,7 +242,7 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
    int defaultSectionSize;
    int minimumSectionSize;
    int maximumSectionSize;
-   int lastSectionSize;           // $$$
+   int lastSectionSize;
    int sectionIndicatorOffset;
 
    Qt::Alignment defaultAlignment;

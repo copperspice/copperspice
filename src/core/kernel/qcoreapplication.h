@@ -69,7 +69,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
  public:
    enum { ApplicationFlags = CS_VERSION | 0x01000000 };
 
-   QCoreApplication(int &argc, char **argv, int = ApplicationFlags );
+   QCoreApplication(int &argc, char **argv, int = ApplicationFlags);
 
    QCoreApplication(const QCoreApplication &) = delete;
    QCoreApplication &operator=(const QCoreApplication &) = delete;
@@ -198,58 +198,59 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 void QCoreApplication::cs_setApplicationName(const QString &application)
 {
    QCoreApplication::setApplicationName(application);
-};
+}
 
 QString QCoreApplication::cs_applicationName() const
 {
    return QCoreApplication::applicationName();
-};
+}
 
 void QCoreApplication::cs_setOrganizationName(const QString &orgName)
 {
    QCoreApplication::setOrganizationName(orgName);
-};
+}
 
 QString QCoreApplication::cs_organizationName() const
 {
    return QCoreApplication::organizationName();
-};
+}
 
 void QCoreApplication::cs_setApplicationVersion(const QString &version)
 {
    QCoreApplication::setApplicationVersion(version);
-};
+}
 
 QString QCoreApplication::cs_applicationVersion() const
 {
    return QCoreApplication::applicationVersion();
-};
+}
 
 void QCoreApplication::cs_setOrganizationDomain(const QString &orgDomain)
 {
    QCoreApplication::setOrganizationDomain(orgDomain);
-};
+}
 
 QString QCoreApplication::cs_organizationDomain() const
 {
    return QCoreApplication::organizationDomain();
-};
+}
 
 bool QCoreApplication::cs_isQuitLockEnabled() const
 {
    return QCoreApplication::isQuitLockEnabled();
-};
+}
 
 void QCoreApplication::cs_setQuitLockEnabled(bool enabled)
 {
    return QCoreApplication::setQuitLockEnabled(enabled);
-};
+}
 
 inline bool QCoreApplication::sendEvent(QObject *receiver, QEvent *event)
 {
    if (event) {
       event->spont = false;
    }
+
    return self ? self->notifyInternal(receiver, event) : false;
 }
 
@@ -258,8 +259,8 @@ inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *ev
    if (event) {
       event->spont = true;
    }
-   return self ? self->notifyInternal(receiver, event) : false;
 
+   return self ? self->notifyInternal(receiver, event) : false;
 }
 
 #define Q_DECLARE_TR_FUNCTIONS(context) \
@@ -270,8 +271,8 @@ inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *ev
  private:
 
 
-   using QtStartUpFunction = void (*)();
-   using QtCleanUpFunction = void (*)();
+using QtStartUpFunction = void (*)();
+using QtCleanUpFunction = void (*)();
 
 Q_CORE_EXPORT void qAddPreRoutine(QtStartUpFunction);
 Q_CORE_EXPORT void qAddPostRoutine(QtCleanUpFunction);

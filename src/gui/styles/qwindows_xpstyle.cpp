@@ -207,8 +207,6 @@ HTHEME XPThemeData::handle()
       htheme = QWindowsXPStylePrivate::createTheme(theme, QWindowsXPStylePrivate::winId(widget));
    }
 
-
-
    return htheme;
 }
 
@@ -236,9 +234,11 @@ HRGN XPThemeData::mask(QWidget *widget)
 
    HRGN hrgn;
    HDC dc = nullptr;
+
    if (widget) {
       dc = hdcForWidgetBackingStore(widget);
    }
+
    RECT nativeRect = toRECT(rect);
    QWindowsXPStylePrivate::pGetThemeBackgroundRegion(handle(), dc, partId, stateId, &nativeRect, &hrgn);
 
@@ -257,6 +257,7 @@ QAtomicInt QWindowsXPStylePrivate::ref{-1};     // -1 based refcounting
 static void qt_add_rect(HRGN &winRegion, QRect r)
 {
    HRGN rgn = CreateRectRgn(r.left(), r.top(), r.x() + r.width(), r.y() + r.height());
+
    if (rgn) {
       HRGN dest = CreateRectRgn(0, 0, 0, 0);
       int result = CombineRgn(dest, winRegion, rgn, RGN_OR);
@@ -271,6 +272,7 @@ static void qt_add_rect(HRGN &winRegion, QRect r)
 static HRGN qt_hrgn_from_qregion(const QRegion &region)
 {
    HRGN hRegion = CreateRectRgn(0, 0, 0, 0);
+
    if (region.rectCount() == 1) {
       qt_add_rect(hRegion, region.boundingRect());
       return hRegion;
@@ -279,6 +281,7 @@ static HRGN qt_hrgn_from_qregion(const QRegion &region)
    for (const QRect &rect : region.rects()) {
       qt_add_rect(hRegion, rect);
    }
+
    return hRegion;
 }
 
@@ -526,6 +529,7 @@ const QPixmap *QWindowsXPStylePrivate::tabBody(QWidget *widget)
       QPainter painter(tabbody);
       theme.rect = QRect(QPoint(0, 0), size);
       drawBackground(theme);
+
       // We fill with the last line of the themedata, that
       // way we don't get a tiled pixmap inside big tabs
       QPixmap temp(size.width(), 1);
@@ -889,6 +893,7 @@ bool QWindowsXPStylePrivate::drawBackground(XPThemeData &themeData)
          case QInternal::Widget:
             canDrawDirectly = true;
             break;
+
          case QInternal::Image:
             // Ensure the backing store has received as resize and is initialized.
             if (QBackingStore *bs = backingStoreForWidget(themeData.widget)) {
@@ -904,7 +909,9 @@ bool QWindowsXPStylePrivate::drawBackground(XPThemeData &themeData)
    const bool result = dc
       ? drawBackgroundDirectly(dc, themeData, aditionalDevicePixelRatio)
       : drawBackgroundThruNativeBuffer(themeData, aditionalDevicePixelRatio);
+
    painter->restore();
+
    return result;
 }
 

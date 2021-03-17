@@ -380,9 +380,9 @@ QTextFrame::iterator QTextFrame::end() const
 */
 QTextFrame::iterator::iterator()
 {
-   b = 0;
-   e = 0;
    f  = nullptr;
+   b  = 0;
+   e  = 0;
    cf = nullptr;
    cb = 0;
 }
@@ -392,9 +392,9 @@ QTextFrame::iterator::iterator()
 */
 QTextFrame::iterator::iterator(QTextFrame *frame, int block, int begin, int end)
 {
-   f = frame;
-   b = begin;
-   e = end;
+   f  = frame;
+   b  = begin;
+   e  = end;
    cf = nullptr;
    cb = block;
 }
@@ -404,9 +404,9 @@ QTextFrame::iterator::iterator(QTextFrame *frame, int block, int begin, int end)
 */
 QTextFrame::iterator::iterator(const iterator &other)
 {
-   f = other.f;
-   b = other.b;
-   e = other.e;
+   f  = other.f;
+   b  = other.b;
+   e  = other.e;
    cf = other.cf;
    cb = other.cb;
 }
@@ -463,6 +463,7 @@ QTextFrame::iterator &QTextFrame::iterator::operator++()
       int end = cf->lastPosition() + 1;
       cb = map.findNode(end);
       cf = nullptr;
+
    } else if (cb) {
       cb = map.next(cb);
       if (cb == e) {
@@ -541,6 +542,7 @@ bool QTextBlock::isValid() const
 {
    return p != nullptr && p->blockMap().isValid(n);
 }
+
 int QTextBlock::position() const
 {
    if (! p || !n) {
@@ -739,6 +741,7 @@ QVector<QTextLayout::FormatRange> QTextBlock::textFormats() const
 
    return formats;
 }
+
 const QTextDocument *QTextBlock::document() const
 {
    return p ? p->document() : nullptr;
@@ -763,6 +766,7 @@ QTextBlockUserData *QTextBlock::userData() const
    }
 
    const QTextBlockData *b = p->blockMap().fragment(n);
+
    return b->userData;
 }
 
@@ -776,6 +780,7 @@ void QTextBlock::setUserData(QTextBlockUserData *data)
    if (data != b->userData) {
       delete b->userData;
    }
+
    b->userData = data;
 }
 

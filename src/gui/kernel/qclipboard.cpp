@@ -41,7 +41,6 @@ QClipboard::QClipboard(QObject *parent)
 {
 }
 
-
 QClipboard::~QClipboard()
 {
 }
@@ -138,8 +137,10 @@ const QMimeData *QClipboard::mimeData(Mode mode) const
    if (!clipboard->supportsMode(mode)) {
       return nullptr;
    }
+
    return clipboard->mimeData(mode);
 }
+
 void QClipboard::setMimeData(QMimeData *src, Mode mode)
 {
    QPlatformClipboard *clipboard = QGuiApplicationPrivate::platformIntegration()->clipboard();
@@ -156,6 +157,7 @@ void QClipboard::clear(Mode mode)
 {
    setMimeData(nullptr, mode);
 }
+
 bool QClipboard::supportsSelection() const
 {
    return supportsMode(Selection);

@@ -24,6 +24,7 @@
 #include <qabstractspinbox.h>
 
 #include <qplatformdefs.h>
+
 #include <qabstractspinbox_p.h>
 #include <qdatetimeparser_p.h>
 #include <qdatetime_p.h>
@@ -54,14 +55,12 @@
 #  define QASBDEBUG if (false) qDebug
 #endif
 
-
 QAbstractSpinBox::QAbstractSpinBox(QWidget *parent)
    : QWidget(*new QAbstractSpinBoxPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QAbstractSpinBox);
    d->init();
 }
-
 
 QAbstractSpinBox::QAbstractSpinBox(QAbstractSpinBoxPrivate &dd, QWidget *parent)
    : QWidget(dd, parent, Qt::EmptyFlag)
@@ -70,11 +69,9 @@ QAbstractSpinBox::QAbstractSpinBox(QAbstractSpinBoxPrivate &dd, QWidget *parent)
    d->init();
 }
 
-
 QAbstractSpinBox::~QAbstractSpinBox()
 {
 }
-
 
 QAbstractSpinBox::ButtonSymbols QAbstractSpinBox::buttonSymbols() const
 {
@@ -483,23 +480,28 @@ void QAbstractSpinBox::changeEvent(QEvent *event)
          d->reset();
          d->updateEditFieldGeometry();
          break;
+
       case QEvent::EnabledChange:
          if (!isEnabled()) {
             d->reset();
          }
          break;
+
       case QEvent::ActivationChange:
          if (!isActiveWindow()) {
             d->reset();
+
             if (d->pendingEmit) {
                // pendingEmit can be true even if it has npt changed.
                d->interpret(EmitIfChanged);   // E.g. 10 to 10.0
             }
          }
          break;
+
       default:
          break;
    }
+
    QWidget::changeEvent(event);
 }
 
@@ -648,6 +650,7 @@ void QAbstractSpinBox::keyPressEvent(QKeyEvent *event)
          if (!(stepEnabled() & (up ? StepUpEnabled : StepDownEnabled))) {
             return;
          }
+
          if (!up) {
             steps *= -1;
          }
@@ -655,9 +658,11 @@ void QAbstractSpinBox::keyPressEvent(QKeyEvent *event)
          if (style()->styleHint(QStyle::SH_SpinBox_AnimateButton, nullptr, this)) {
             d->buttonState = (Keyboard | (up ? Up : Down));
          }
+
          if (d->spinClickTimerId == -1) {
             stepBy(steps);
          }
+
          if (event->isAutoRepeat() && !isPgUpOrDown) {
             if (d->spinClickThresholdTimerId == -1 && d->spinClickTimerId == -1) {
                d->updateState(up, true);
@@ -1062,9 +1067,11 @@ QAbstractSpinBoxPrivate::~QAbstractSpinBoxPrivate()
 bool QAbstractSpinBoxPrivate::updateHoverControl(const QPoint &pos)
 {
    Q_Q(QAbstractSpinBox);
+
    QRect lastHoverRect = hoverRect;
    QStyle::SubControl lastHoverControl = hoverControl;
    bool doesHover = q->testAttribute(Qt::WA_Hover);
+
    if (lastHoverControl != newHoverControl(pos) && doesHover) {
       q->update(lastHoverRect);
       q->update(hoverRect);

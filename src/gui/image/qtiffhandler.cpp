@@ -227,11 +227,13 @@ bool QTiffHandler::read(QImage *image)
          if (!image->isNull()) {
             const uint16 tableSize = 256;
             QVector<QRgb> qtColorTable(tableSize);
+
             if (grayscale) {
                for (int i = 0; i < tableSize; ++i) {
                   const int c = (photometric == PHOTOMETRIC_MINISBLACK) ? i : (255 - i);
                   qtColorTable[i] = qRgb(c, c, c);
                }
+
             } else {
                // create the color table
                uint16 *redTable   = nullptr;

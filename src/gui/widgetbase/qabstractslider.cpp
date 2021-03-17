@@ -76,7 +76,6 @@ void QAbstractSlider::setRange(int min, int max)
    }
 }
 
-
 void QAbstractSliderPrivate::setSteps(int single, int page)
 {
    Q_Q(QAbstractSlider);

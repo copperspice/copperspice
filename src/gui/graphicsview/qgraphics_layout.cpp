@@ -59,9 +59,11 @@ QGraphicsLayout::QGraphicsLayout(QGraphicsLayoutPrivate &dd, QGraphicsLayoutItem
    : QGraphicsLayoutItem(dd)
 {
    setParentLayoutItem(parent);
+
    if (parent && !parent->isLayout()) {
       // If a layout has a parent that is not a layout it must be a QGraphicsWidget.
       QGraphicsItem *itemParent = parent->graphicsItem();
+
       if (itemParent && itemParent->isWidget()) {
          static_cast<QGraphicsWidget *>(itemParent)->d_func()->setLayout_helper(this);
       } else {
@@ -69,6 +71,7 @@ QGraphicsLayout::QGraphicsLayout(QGraphicsLayoutPrivate &dd, QGraphicsLayoutItem
             " neither a QGraphicsWidget nor QGraphicsLayout");
       }
    }
+
    d_func()->sizePolicy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, QSizePolicy::DefaultType);
    setOwnedByLayout(true);
 }

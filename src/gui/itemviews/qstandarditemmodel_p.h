@@ -34,8 +34,6 @@
 #include <qvariant.h>
 #include <qvector.h>
 
-
-
 class QStandardItemData
 {
  public:
@@ -47,6 +45,7 @@ class QStandardItemData
       return role == other.role && value == other.value;
    }
 };
+
 inline QDataStream &operator>>(QDataStream &in, QStandardItemData &data)
 {
    in >> data.role;
@@ -60,6 +59,7 @@ inline QDataStream &operator<<(QDataStream &out, const QStandardItemData &data)
    out << data.value;
    return out;
 }
+
 class QStandardItemPrivate
 {
    Q_DECLARE_PUBLIC(QStandardItem)
@@ -69,6 +69,7 @@ class QStandardItemPrivate
       : model(nullptr), parent(nullptr), rows(0), columns(0), q_ptr(nullptr), lastIndexOf(2)
    {
    }
+
    virtual ~QStandardItemPrivate();
 
    inline int childIndex(int row, int column) const {
@@ -86,12 +87,14 @@ class QStandardItemPrivate
       }
       return lastIndexOf;
    }
+
    QPair<int, int> position() const;
    void setChild(int row, int column, QStandardItem *item,
       bool emitChanged = false);
    inline int rowCount() const {
       return rows;
    }
+
    inline int columnCount() const {
       return columns;
    }
@@ -144,9 +147,11 @@ class QStandardItemModelPrivate : public QAbstractItemModelPrivate
 
    inline QStandardItem *itemFromIndex(const QModelIndex &index) const {
       Q_Q(const QStandardItemModel);
+
       if (!index.isValid()) {
          return root.data();
       }
+
       if (index.model() != q) {
          return nullptr;
       }
@@ -155,6 +160,7 @@ class QStandardItemModelPrivate : public QAbstractItemModelPrivate
       if (parent == nullptr) {
          return nullptr;
       }
+
       return parent->child(index.row(), index.column());
    }
 

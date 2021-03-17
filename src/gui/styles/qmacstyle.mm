@@ -733,11 +733,11 @@ static bool qt_macWindowMainWindow(const QWidget *window)
 /*****************************************************************************
   QMacCGStyle globals
  *****************************************************************************/
-const int qt_mac_hitheme_version = 0; //the HITheme version we speak
-const int macItemFrame         = 2;    // menu item frame width
-const int macItemHMargin       = 3;    // menu item hor text margin
-const int macRightBorder       = 12;   // right border on mac
-const ThemeWindowType QtWinType = kThemeDocumentWindow; // Window type we use for QTitleBar.
+const int qt_mac_hitheme_version  = 0;                     // HITheme version we speak
+const int macItemFrame            = 2;                     // menu item frame width
+const int macItemHMargin          = 3;                     // menu item hor text margin
+const int macRightBorder          = 12;                    // right border on mac
+const ThemeWindowType QtWinType   = kThemeDocumentWindow;  // Window type we use for QTitleBar.
 QPixmap *qt_mac_backgroundPattern = nullptr;               // stores the standard widget background.
 
 /*****************************************************************************
@@ -2515,6 +2515,7 @@ int QMacStyle::pixelMetric(PixelMetric metric, const QStyleOption * opt, const Q
       case PM_TabCloseIndicatorHeight:
          ret = closeButtonSize;
          break;
+
       case PM_ToolBarIconSize:
          ret = proxy()->pixelMetric(PM_LargeIconSize);
          break;
@@ -2527,6 +2528,7 @@ int QMacStyle::pixelMetric(PixelMetric metric, const QStyleOption * opt, const Q
       case PM_DialogButtonsSeparator:
          ret = -5;
          break;
+
       case PM_DialogButtonsButtonHeight: {
          QSize sz;
          ret = d->aquaSizeConstrain(opt, nullptr, QStyle::CT_PushButton, QSize(-1, -1), &sz);
@@ -2568,6 +2570,7 @@ int QMacStyle::pixelMetric(PixelMetric metric, const QStyleOption * opt, const Q
       case PM_RadioButtonLabelSpacing:
          ret = 2;
          break;
+
       case PM_MenuScrollerHeight:
 #if 0
          SInt16 ash, asw;
@@ -2577,6 +2580,7 @@ int QMacStyle::pixelMetric(PixelMetric metric, const QStyleOption * opt, const Q
          ret = 15; // I hate having magic numbers in here...
 #endif
          break;
+
       case PM_DefaultFrameWidth:
 #ifndef QT_NO_MAINWINDOW
          if (widget && (widget->isWindow() || !widget->parentWidget()
@@ -4698,11 +4702,13 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
             if (active) {
                mdi.state |= kThemeMenuSelected;
             }
+
             QRect contentRect;
             if (mi->menuItemType == QStyleOptionMenuItem::Separator) {
                // First arg should be &menurect, but wacky stuff happens then.
                CS_HIThemeDrawMenuSeparator(&itemRect, &itemRect, &mdi, cg, kHIThemeOrientationNormal);
                break;
+
             } else {
                HIRect cr;
                bool needAlpha = mi->palette.color(QPalette::Button) == Qt::transparent;
@@ -4710,11 +4716,12 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
                   CGContextSaveGState(cg);
                   CGContextSetAlpha(cg, 0.0);
                }
-               CS_HIThemeDrawMenuItem(&menuRect, &itemRect, &mdi,
-                                      cg, kHIThemeOrientationNormal, &cr);
+
+               CS_HIThemeDrawMenuItem(&menuRect, &itemRect, &mdi, cg, kHIThemeOrientationNormal, &cr);
                if (needAlpha) {
                   CGContextRestoreGState(cg);
                }
+
                if (ce == CE_MenuEmptyArea) {
                   break;
                }
@@ -4936,9 +4943,10 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
             bdi.state = kThemeMenuBarNormal;
             bdi.attributes = 0;
             HIRect hirect = qt_hirectForQRect(mi->rect);
-            CS_HIThemeDrawMenuBarBackground(&hirect, &bdi, cg,                                          kHIThemeOrientationNormal);
+            CS_HIThemeDrawMenuBarBackground(&hirect, &bdi, cg, kHIThemeOrientationNormal);
             break;
          }
+
       case CE_ProgressBarContents:
          if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
             HIThemeTrackDrawInfo tdi;
@@ -5442,20 +5450,25 @@ QRect QMacStyle::subElementRect(SubElement sr, const QStyleOption *opt, const QW
          // hack because QStyleOptionFrame doesn't have a frameStyle member
          if (const QFrame *frame = qobject_cast<const QFrame *>(widget)) {
             rect = opt->rect;
+
             switch (frame->frameStyle() & QFrame::Shape_Mask) {
                case QFrame::HLine:
                   rect.adjust(0, +1, 0, -1);
                   break;
+
                case QFrame::VLine:
                   rect.adjust(+1, 0, -1, 0);
                   break;
+
                default:
                   ;
             }
          }
          break;
+
       case SE_GroupBoxLayoutItem:
          rect = opt->rect;
+
          if (const QStyleOptionGroupBox *groupBoxOpt =
              qstyleoption_cast<const QStyleOptionGroupBox *>(opt)) {
             /*
@@ -5463,9 +5476,9 @@ QRect QMacStyle::subElementRect(SubElement sr, const QStyleOption *opt, const QW
                 Basically, we make sure that (non-checkable) group boxes
                 and tab widgets look good when laid out side by side.
             */
-            if (groupBoxOpt->subControls & (QStyle::SC_GroupBoxCheckBox
-                                            | QStyle::SC_GroupBoxLabel)) {
+            if (groupBoxOpt->subControls & (QStyle::SC_GroupBoxCheckBox | QStyle::SC_GroupBoxLabel)) {
                int delta;
+
                if (groupBoxOpt->subControls & QStyle::SC_GroupBoxCheckBox) {
                   delta = SIZE(8, 4, 4);       // guess
                } else {
@@ -5499,8 +5512,7 @@ QRect QMacStyle::subElementRect(SubElement sr, const QStyleOption *opt, const QW
          int buttonMargin = proxy()->pixelMetric(PM_DockWidgetTitleBarButtonMargin, opt, widget);
          QRect srect = opt->rect;
 
-         const QStyleOptionDockWidget *dwOpt
-               = qstyleoption_cast<const QStyleOptionDockWidget *>(opt);
+         const QStyleOptionDockWidget *dwOpt = qstyleoption_cast<const QStyleOptionDockWidget *>(opt);
          bool canClose = (dwOpt == nullptr) ? true : dwOpt->closable;
          bool canFloat = (dwOpt == nullptr) ? false : dwOpt->floatable;
 
@@ -5900,12 +5912,17 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                      } else if (tdi.trackInfo.slider.thumbDir == kThemeThumbUpward) {
                         tdi.bounds.origin.y += 3;
                      }
+
                   } else {
                      tdi.bounds.size.height -= 2;
                      tdi.bounds.origin.y += 1;
-                     if (tdi.trackInfo.slider.thumbDir == kThemeThumbDownward) { // pointing right
+
+                     if (tdi.trackInfo.slider.thumbDir == kThemeThumbDownward) {
+                        // pointing right
                         tdi.bounds.origin.x -= 4;
-                     } else if (tdi.trackInfo.slider.thumbDir == kThemeThumbUpward) { // pointing left
+
+                     } else if (tdi.trackInfo.slider.thumbDir == kThemeThumbUpward) {
+                        // pointing left
                         tdi.bounds.origin.x += 2;
                      }
                   }
@@ -5926,15 +5943,19 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                                                   CGContextTranslateCTM(ctx, rect.size.width, 0);
                                                   CGContextScaleCTM(ctx, -1, 1);
                                                }
+
                                             } else if (!isHorizontal) {
                                                CGContextTranslateCTM(ctx, 0, rect.size.height);
                                                CGContextScaleCTM(ctx, 1, -1);
                                             }
+
                                             [sl.cell drawBarInside: NSRectFromCGRect(tdi.bounds) flipped: NO];
                                             // No need to restore the CTM later, the context has been saved
                                             // and will be restored at the end of drawNSViewInRect()
                                          });
+
                      tdi.attributes |= kThemeTrackHideTrack;
+
                   } else {
                      tdi.attributes &= ~(kThemeTrackShowThumb | kThemeTrackHasFocus);
                      CS_HIThemeDrawTrack(&tdi, tracking ? nullptr : &macRect, cg, kHIThemeOrientationNormal);
@@ -5989,21 +6010,19 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                   if (tdi.trackInfo.slider.thumbDir == kThemeThumbPlain) {
                      // They asked for both, so we'll give it to them.
                      tdi.trackInfo.slider.thumbDir = kThemeThumbDownward;
-                     CS_HIThemeDrawTrackTickMarks(&tdi, numMarks,
-                                                  cg, kHIThemeOrientationNormal);
+                     CS_HIThemeDrawTrackTickMarks(&tdi, numMarks, cg, kHIThemeOrientationNormal);
                      tdi.trackInfo.slider.thumbDir = kThemeThumbUpward;
 
                      if (slider->orientation == Qt::Vertical) {
                         tdi.bounds.origin.x -= 2;
                      }
 
-                     CS_HIThemeDrawTrackTickMarks(&tdi, numMarks,
-                                                  cg, kHIThemeOrientationNormal);
+                     CS_HIThemeDrawTrackTickMarks(&tdi, numMarks, cg, kHIThemeOrientationNormal);
                      // Reset to plain thumb to be drawn further down
                      tdi.trackInfo.slider.thumbDir = kThemeThumbPlain;
+
                   } else {
-                     CS_HIThemeDrawTrackTickMarks(&tdi, numMarks,
-                                                  cg, kHIThemeOrientationNormal);
+                     CS_HIThemeDrawTrackTickMarks(&tdi, numMarks, cg, kHIThemeOrientationNormal);
                   }
 
                   tdi.bounds = bounds;
@@ -6024,6 +6043,7 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
             }
          }
          break;
+
       case CC_SpinBox:
          if (const QStyleOptionSpinBox *sb = qstyleoption_cast<const QStyleOptionSpinBox *>(opt)) {
             QStyleOptionSpinBox newSB = *sb;
@@ -6042,6 +6062,7 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                HIRect hirect = qt_hirectForQRect(lineeditRect);
                CS_HIThemeDrawFrame(&hirect, &fdi, cg, kHIThemeOrientationNormal);
             }
+
             if (sb->subControls & (SC_SpinBoxUp | SC_SpinBoxDown)) {
                HIThemeButtonDrawInfo bdi;
                bdi.version = qt_mac_hitheme_version;
@@ -6051,29 +6072,33 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                   case QAquaSizeLarge:
                      bdi.kind = kThemeIncDecButton;
                      break;
+
                   case QAquaSizeMini:
                      bdi.kind = kThemeIncDecButtonMini;
                      break;
+
                   case QAquaSizeSmall:
                      bdi.kind = kThemeIncDecButtonSmall;
                      break;
                }
-               if (!(sb->stepEnabled & (QAbstractSpinBox::StepUpEnabled
-                                        | QAbstractSpinBox::StepDownEnabled))) {
+
+               if (!(sb->stepEnabled & (QAbstractSpinBox::StepUpEnabled | QAbstractSpinBox::StepDownEnabled))) {
                   tds = kThemeStateUnavailable;
                }
-               if (sb->activeSubControls == SC_SpinBoxDown
-                   && (sb->state & State_Sunken)) {
+
+               if (sb->activeSubControls == SC_SpinBoxDown && (sb->state & State_Sunken)) {
                   tds = kThemeStatePressedDown;
-               } else if (sb->activeSubControls == SC_SpinBoxUp
-                          && (sb->state & State_Sunken)) {
+
+               } else if (sb->activeSubControls == SC_SpinBoxUp && (sb->state & State_Sunken)) {
                   tds = kThemeStatePressedUp;
                }
+
                if (tds == kThemeStateInactive) {
                   bdi.state = kThemeStateActive;
                } else {
                   bdi.state = tds;
                }
+
                bdi.value = kThemeButtonOff;
                bdi.adornment = kThemeAdornmentNone;
 
@@ -6091,6 +6116,7 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                                int(outRect.size.height - newRect.size.height));
 
                newRect = qt_hirectForQRect(updown, off_rct);
+
                if (tds == kThemeStateInactive) {
                   d->drawColorlessButton(newRect, &bdi, p, sb);
                } else {
@@ -6450,11 +6476,11 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
 }
 
 QStyle::SubControl QMacStyle::hitTestComplexControl(ComplexControl cc,
-                                                    const QStyleOptionComplex *opt,
-                                                    const QPoint &pt, const QWidget *widget) const
+            const QStyleOptionComplex *opt, const QPoint &pt, const QWidget *widget) const
 {
    Q_D(const QMacStyle);
    SubControl sc = QStyle::SC_None;
+
    switch (cc) {
       case CC_ComboBox:
          if (const QStyleOptionComboBox *cmb = qstyleoption_cast<const QStyleOptionComboBox *>(opt)) {
@@ -6464,6 +6490,7 @@ QStyle::SubControl QMacStyle::hitTestComplexControl(ComplexControl cc,
             }
          }
          break;
+
       case CC_Slider:
          if (const QStyleOptionSlider *slider = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
             HIThemeTrackDrawInfo tdi;
@@ -6480,6 +6507,7 @@ QStyle::SubControl QMacStyle::hitTestComplexControl(ComplexControl cc,
             }
          }
          break;
+
       case CC_ScrollBar:
          if (const QStyleOptionSlider *sb = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
             HIScrollBarTrackInfo sbi;
@@ -6508,6 +6536,7 @@ QStyle::SubControl QMacStyle::hitTestComplexControl(ComplexControl cc,
 
             bool reverseHorizontal = (sb->direction == Qt::RightToLeft && sb->orientation == Qt::Horizontal);
             if (CS_HIThemeHitTestScrollBarArrows(&macSBRect, &sbi, sb->orientation == Qt::Horizontal, &pos, nullptr, &part)) {
+
                if (part == kControlUpButtonPart) {
                   sc = reverseHorizontal ? SC_ScrollBarAddLine : SC_ScrollBarSubLine;
                } else if (part == kControlDownButtonPart) {
@@ -6614,13 +6643,12 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
             } else {
                ControlPartCode cpc;
                if (sc == SC_ScrollBarSubPage || sc == SC_ScrollBarAddPage) {
-                  cpc = sc == SC_ScrollBarSubPage ? kControlPageDownPart
-                                                  : kControlPageUpPart;
+                  cpc = sc == SC_ScrollBarSubPage ? kControlPageDownPart : kControlPageUpPart;
+
                } else {
-                  cpc = sc == SC_ScrollBarSubLine ? kControlUpButtonPart
-                                                  : kControlDownButtonPart;
-                  if (slider->direction == Qt::RightToLeft
-                      && slider->orientation == Qt::Horizontal) {
+                  cpc = sc == SC_ScrollBarSubLine ? kControlUpButtonPart : kControlDownButtonPart;
+
+                  if (slider->direction == Qt::RightToLeft && slider->orientation == Qt::Horizontal) {
                      if (cpc == kControlDownButtonPart) {
                         cpc = kControlUpButtonPart;
                      } else if (cpc == kControlUpButtonPart) {
@@ -7330,12 +7358,15 @@ void QMacStyle::drawItemText(QPainter *p, const QRect &r, int flags, const QPale
 bool QMacStyle::event(QEvent *e)
 {
    Q_D(QMacStyle);
+
    if (e->type() == QEvent::FocusIn) {
       QWidget *f = nullptr;
       QWidget *focusWidget = QApplication::focusWidget();
+
 #ifndef QT_NO_GRAPHICSVIEW
       if (QGraphicsView *graphicsView = qobject_cast<QGraphicsView *>(focusWidget)) {
          QGraphicsItem *focusItem = graphicsView->scene() ? graphicsView->scene()->focusItem() : nullptr;
+
          if (focusItem && focusItem->type() == QGraphicsProxyWidget::Type) {
             QGraphicsProxyWidget *proxy = static_cast<QGraphicsProxyWidget *>(focusItem);
             if (proxy->widget()) {
@@ -7344,15 +7375,18 @@ bool QMacStyle::event(QEvent *e)
          }
       }
 #endif
+
       if (focusWidget && focusWidget->testAttribute(Qt::WA_MacShowFocusRect)) {
          f = focusWidget;
          QWidget *top = f->parentWidget();
          while (top && !top->isWindow() && !(top->windowType() == Qt::SubWindow)) {
             top = top->parentWidget();
          }
+
 #ifndef QT_NO_MAINWINDOW
          if (qobject_cast<QMainWindow *>(top)) {
             QWidget *central = static_cast<QMainWindow *>(top)->centralWidget();
+
             for (const QWidget *par = f; par; par = par->parentWidget()) {
                if (par == central) {
                   top = central;
@@ -7364,15 +7398,18 @@ bool QMacStyle::event(QEvent *e)
             }
          }
 #endif
+
       }
       if (f) {
          if (!d->focusWidget) {
             d->focusWidget = new QFocusFrame(f);
          }
          d->focusWidget->setWidget(f);
+
       } else if (d->focusWidget) {
          d->focusWidget->setWidget(nullptr);
       }
+
    } else if (e->type() == QEvent::FocusOut) {
       if (d->focusWidget) {
          d->focusWidget->setWidget(nullptr);
@@ -7381,12 +7418,9 @@ bool QMacStyle::event(QEvent *e)
    return false;
 }
 
-QIcon QMacStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption *opt,
-                              const QWidget *widget) const
+QIcon QMacStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption *opt, const QWidget *widget) const
 {
    switch (standardIcon) {
-      default:
-         return QCommonStyle::standardIcon(standardIcon, opt, widget);
       case SP_ToolBarHorizontalExtensionButton:
       case SP_ToolBarVerticalExtensionButton: {
          QPixmap pixmap(":/copperspice/styles/macstyle/images/toolbar-ext.png");
@@ -7403,14 +7437,14 @@ QIcon QMacStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption *o
          }
          return pixmap;
       }
+
+      default:
+         return QCommonStyle::standardIcon(standardIcon, opt, widget);
    }
 }
 
-int QMacStyle::layoutSpacing(QSizePolicy::ControlType control1,
-                             QSizePolicy::ControlType control2,
-                             Qt::Orientation orientation,
-                             const QStyleOption *option,
-                             const QWidget *widget) const
+int QMacStyle::layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
+               Qt::Orientation orientation, const QStyleOption *option, const QWidget *widget) const
 {
    const int ButtonMask = QSizePolicy::ButtonBox | QSizePolicy::PushButton;
    bool isMetal = (widget && widget->testAttribute(Qt::WA_MacBrushedMetal));
@@ -7422,7 +7456,7 @@ int QMacStyle::layoutSpacing(QSizePolicy::ControlType control1,
           boxes and the row of buttons. The 20 pixel comes from
           Builder.
       */
-      if (isMetal                                         // (AHIG, guess, guess)
+      if (isMetal                                     // (AHIG, guess, guess)
           || (control1 & (QSizePolicy::Frame          // guess
                           | QSizePolicy::GroupBox     // (AHIG, guess, guess)
                           | QSizePolicy::TabWidget    // guess
@@ -7534,7 +7568,8 @@ static void qt_mac_clip_cg(CGContextRef hd, const QRegion &rgn, CGAffineTransfor
    }
    CGContextClip(hd);
 
-   if (orig_xform) {//reset xforms
+   if (orig_xform) {
+      //reset xforms
       CGContextConcatCTM(hd, CGAffineTransformInvert(CGContextGetCTM(hd)));
       CGContextConcatCTM(hd, old_xform);
    }
@@ -7566,10 +7601,8 @@ QMacCGContext::QMacCGContext(QPainter *p)
    context = nullptr;
 
    int devType = p->device()->devType();
-   if (pe->type() == QPaintEngine::Raster
-       && (devType == QInternal::Widget ||
-           devType == QInternal::Pixmap ||
-           devType == QInternal::Image)) {
+   if (pe->type() == QPaintEngine::Raster && (devType == QInternal::Widget || devType == QInternal::Pixmap
+            || devType == QInternal::Image)) {
 
       CGColorSpaceRef colorspace = qt_mac_colorSpaceForDeviceType(pe->paintDevice());
       uint flags = kCGImageAlphaPremultipliedFirst;
@@ -7597,6 +7630,7 @@ QMacCGContext::QMacCGContext(QPainter *p)
             QRegion r = p->clipRegion();               // get painter clip, which is in device-independent pixels
             qt_mac_scale_region(&r, devicePixelRatio); // scale painter clip to device pixels
             r.translate(native.dx(), native.dy());
+
             if (clip.isEmpty()) {
                clip = r;
             } else {
@@ -7609,10 +7643,12 @@ QMacCGContext::QMacCGContext(QPainter *p)
          // Scale the context so that painting happens in device-independet pixels.
          CGContextScaleCTM(context, devicePixelRatio, devicePixelRatio);
          CGContextTranslateCTM(context, native.dx() / devicePixelRatio, native.dy() / devicePixelRatio);
+
       } else {
          // Scale to paint in device-independent pixels.
          CGContextScaleCTM(context, devicePixelRatio, devicePixelRatio);
       }
+
    } else {
       qDebug() << "QMacCGContext:: Unsupported painter devtype type" << devType;
    }

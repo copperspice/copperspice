@@ -41,12 +41,10 @@
 #include <qscrollbar_p.h>
 #include <qapplication_p.h>
 
-
 #ifdef Q_OS_WIN
 #  include <qlibrary.h>
 #  include <qt_windows.h>
 #endif
-
 
 QAbstractScrollAreaPrivate::QAbstractScrollAreaPrivate()
    : hbar(nullptr), vbar(nullptr), vbarpolicy(Qt::ScrollBarAsNeeded), hbarpolicy(Qt::ScrollBarAsNeeded),
@@ -637,9 +635,11 @@ QMargins QAbstractScrollArea::viewportMargins() const
    Q_D(const QAbstractScrollArea);
    return QMargins(d->left, d->top, d->right, d->bottom);
 }
+
 bool QAbstractScrollArea::eventFilter(QObject *o, QEvent *e)
 {
    Q_D(QAbstractScrollArea);
+
    if ((o == d->hbar || o == d->vbar) && (e->type() == QEvent::HoverEnter || e->type() == QEvent::HoverLeave)) {
       if (d->hbarpolicy == Qt::ScrollBarAsNeeded && d->vbarpolicy == Qt::ScrollBarAsNeeded) {
          QScrollBar *sbar = static_cast<QScrollBar *>(o);
@@ -680,6 +680,7 @@ bool QAbstractScrollArea::event(QEvent *e)
             d->inResize = false;
          }
          break;
+
       case QEvent::Show:
          if (!d->shownOnce && d->sizeAdjustPolicy == QAbstractScrollArea::AdjustToContentsOnFirstShow) {
             d->sizeHint = QSize();
@@ -687,6 +688,7 @@ bool QAbstractScrollArea::event(QEvent *e)
          }
          d->shownOnce = true;
          return QFrame::event(e);
+
       case QEvent::Paint: {
          QStyleOption option;
          option.initFrom(this);
@@ -735,10 +737,12 @@ bool QAbstractScrollArea::event(QEvent *e)
       case QEvent::Gesture: {
          QGestureEvent *ge = static_cast<QGestureEvent *>(e);
          QPanGesture *g = static_cast<QPanGesture *>(ge->gesture(Qt::PanGesture));
+
          if (g) {
             QScrollBar *hBar = horizontalScrollBar();
             QScrollBar *vBar = verticalScrollBar();
             QPointF delta = g->delta();
+
             if (!delta.isNull()) {
                if (QApplication::isRightToLeft()) {
                   delta.rx() *= -1;
@@ -750,9 +754,11 @@ bool QAbstractScrollArea::event(QEvent *e)
             }
             return true;
          }
+
          return false;
       }
 #endif // QT_NO_GESTURES
+
       case QEvent::ScrollPrepare: {
          QScrollPrepareEvent *se = static_cast<QScrollPrepareEvent *>(e);
          if (d->canStartScrollingAt(se->startPos().toPoint())) {

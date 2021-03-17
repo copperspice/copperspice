@@ -522,8 +522,8 @@ void QOpenGLFramebufferObjectPrivate::initTexture(int idx)
                                GL_RGBA, pixelType, nullptr);
         }
     }
-    funcs.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + idx,
-                                 target, texture, 0);
+
+    funcs.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + idx, target, texture, 0);
 
     QT_CHECK_GLERROR();
     funcs.glBindTexture(target, 0);
@@ -592,7 +592,7 @@ void QOpenGLFramebufferObjectPrivate::initDepthStencilAttachments(QOpenGLContext
     depth_buffer_guard    = nullptr;
     stencil_buffer_guard  = nullptr;
 
-    GLuint depth_buffer = 0;
+    GLuint depth_buffer   = 0;
     GLuint stencil_buffer = 0;
 
     // In practice, a combined depth-stencil buffer is supported by all desktop platforms, while a

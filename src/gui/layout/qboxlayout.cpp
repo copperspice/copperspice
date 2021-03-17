@@ -460,13 +460,16 @@ void QBoxLayoutPrivate::calcHfw(int w)
 QLayoutItem *QBoxLayoutPrivate::replaceAt(int index, QLayoutItem *item)
 {
    Q_Q(QBoxLayout);
+
    if (!item) {
       return nullptr;
    }
+
    QBoxLayoutItem *b = list.value(index);
    if (!b) {
       return nullptr;
    }
+
    QLayoutItem *r = b->item;
 
    b->item = item;
@@ -490,8 +493,10 @@ QBoxLayout::~QBoxLayout()
 int QBoxLayout::spacing() const
 {
    Q_D(const QBoxLayout);
+
    if (d->spacing >= 0) {
       return d->spacing;
+
    } else {
       return qSmartSpacing(this, d->dir == LeftToRight || d->dir == RightToLeft
             ? QStyle::PM_LayoutHorizontalSpacing
@@ -551,6 +556,7 @@ QSize QBoxLayout::maximumSize() const
    if (alignment() & Qt::AlignHorizontal_Mask) {
       s.setWidth(QLAYOUTSIZE_MAX);
    }
+
    if (alignment() & Qt::AlignVertical_Mask) {
       s.setHeight(QLAYOUTSIZE_MAX);
    }
@@ -639,8 +645,10 @@ QLayoutItem *QBoxLayout::takeAt(int index)
    if (index < 0 || index >= d->list.count()) {
       return nullptr;
    }
+
    QBoxLayoutItem *b = d->list.takeAt(index);
    QLayoutItem *item = b->item;
+
    b->item = nullptr;
    delete b;
 

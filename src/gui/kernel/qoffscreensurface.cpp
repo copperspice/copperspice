@@ -249,6 +249,7 @@ void QOffscreenSurface::setScreen(QScreen *newScreen)
    if (!newScreen) {
       newScreen = QGuiApplication::primaryScreen();
    }
+
    if (newScreen != d->screen) {
       const bool wasCreated = d->platformOffscreenSurface != nullptr || d->offscreenWindow != nullptr;
       if (wasCreated) {

@@ -73,9 +73,11 @@ QPicturePaintEngine::~QPicturePaintEngine()
 bool QPicturePaintEngine::begin(QPaintDevice *pd)
 {
    Q_D(QPicturePaintEngine);
+
 #ifdef QT_PICTURE_DEBUG
    qDebug() << "QPicturePaintEngine::begin()";
 #endif
+
    Q_ASSERT(pd);
    QPicture *pic = static_cast<QPicture *>(pd);
 

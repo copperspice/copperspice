@@ -30,7 +30,6 @@
 #include <qevent.h>
 #include <qlist.h>
 
-
 class QActionGroupPrivate
 {
    Q_DECLARE_PUBLIC(QActionGroup)
@@ -45,13 +44,13 @@ class QActionGroupPrivate
    uint enabled : 1;
    uint visible : 1;
 
+ protected:
+   QActionGroup *q_ptr;
+
  private:
    void _q_actionTriggered();  //private slot
    void _q_actionChanged();    //private slot
    void _q_actionHovered();    //private slot
-
- protected:
-   QActionGroup *q_ptr;
 };
 
 void QActionGroupPrivate::_q_actionChanged()
@@ -100,7 +99,6 @@ QActionGroup::QActionGroup(QObject *parent)
 {
    d_ptr->q_ptr = this;
 }
-
 
 QActionGroup::~QActionGroup()
 {

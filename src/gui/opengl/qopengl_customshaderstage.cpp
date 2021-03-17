@@ -37,11 +37,8 @@ public:
     }
 
     QPointer<QOpenGLEngineShaderManager> m_manager;
-    QByteArray              m_source;
+    QByteArray m_source;
 };
-
-
-
 
 QOpenGLCustomShaderStage::QOpenGLCustomShaderStage()
     : d_ptr(new QOpenGLCustomShaderStagePrivate)
@@ -119,4 +116,3 @@ void QOpenGLCustomShaderStage::setSource(const QByteArray& s)
     Q_D(QOpenGLCustomShaderStage);
     d->m_source = s;
 }
-

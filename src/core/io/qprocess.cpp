@@ -23,11 +23,7 @@
 
 //#define QPROCESS_DEBUG
 
-#include <ctype.h>
-#include <errno.h>
-
 #include <qprocess.h>
-#include <qprocess_p.h>
 
 #include <qcoreapplication.h>
 #include <qbytearray.h>
@@ -38,11 +34,16 @@
 #include <qstring.h>
 #include <qtimer.h>
 
+#include <qprocess_p.h>
+
 #ifdef Q_OS_WIN
 #include <qwineventnotifier.h>
 #else
 #include <qcore_unix_p.h>
 #endif
+
+#include <ctype.h>
+#include <errno.h>
 
 #if defined QPROCESS_DEBUG
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
@@ -1515,10 +1516,12 @@ QByteArray QProcess::readAllStandardError()
 void QProcess::start(const QString &program, const QStringList &arguments, OpenMode mode)
 {
    Q_D(QProcess);
+
    if (d->processState != NotRunning) {
       qWarning("QProcess::start: Process is already running");
       return;
    }
+
    if (program.isEmpty()) {
       d->setErrorAndEmit(QProcess::FailedToStart, tr("No program defined"));
       return;

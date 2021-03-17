@@ -293,6 +293,7 @@ void QMenuBarPrivate::setKeyboardMode(bool b)
       }
       focusFirstAction();
       q->setFocus(Qt::MenuBarFocusReason);
+
    } else {
       if (!popupState) {
          setCurrentAction(nullptr);
@@ -313,6 +314,7 @@ void QMenuBarPrivate::popupAction(QAction *action, bool activateFirst)
    if (!action || !action->menu() || closePopupMode) {
       return;
    }
+
    popupState = true;
    if (action->isEnabled() && action->menu()->isEnabled()) {
       closePopupMode = 0;
@@ -373,10 +375,13 @@ void QMenuBarPrivate::setCurrentAction(QAction *action, bool popup, bool activat
    autoReleaseTimer.stop();
 
    doChildEffects = (popup && !activeMenu);
+
    Q_Q(QMenuBar);
    QWidget *fw = nullptr;
+
    if (QMenu *menu = activeMenu) {
       activeMenu = nullptr;
+
       if (popup) {
          fw = q->window()->focusWidget();
          q->setFocus(Qt::NoFocusReason);
@@ -389,6 +394,7 @@ void QMenuBarPrivate::setCurrentAction(QAction *action, bool popup, bool activat
    }
 
    popupState = popup;
+
 #ifndef QT_NO_STATUSTIP
    QAction *previousAction = currentAction;
 #endif
@@ -441,6 +447,7 @@ void QMenuBarPrivate::calcActionRects(int max_width, int start) const
 
    for (int i = 0; i < actions.count(); i++) {
       QAction *action = actions.at(i);
+
       if (!action->isVisible()) {
          continue;
       }
@@ -835,6 +842,7 @@ void QMenuBar::paintEvent(QPaintEvent *e)
       borderReg += QRect(0, height() - fw, width(), fw); //bottom
       p.setClipRegion(borderReg);
       emptyArea -= borderReg;
+
       QStyleOptionFrame frame;
       frame.rect = rect();
       frame.palette = palette();
@@ -843,6 +851,7 @@ void QMenuBar::paintEvent(QPaintEvent *e)
       frame.midLineWidth = 0;
       style()->drawPrimitive(QStyle::PE_PanelMenuBar, &frame, &p, this);
    }
+
    p.setClipRegion(emptyArea);
    QStyleOptionMenuItem menuOpt;
    menuOpt.palette = palette();
@@ -1028,6 +1037,7 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
 
                      if (act == d->currentAction) {
                         currentSelected = act;
+
                      } else if (!firstAfterCurrent && currentSelected) {
                         firstAfterCurrent = act;
                      }
@@ -1038,6 +1048,7 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
       }
 
       QAction *next_action = nullptr;
+
       if (clashCount >= 1) {
          if (clashCount == 1 || !d->currentAction || (currentSelected && !firstAfterCurrent)) {
             next_action = first;
@@ -1271,20 +1282,13 @@ void QMenuBarPrivate::handleReparent()
       } else {
          platformMenuBar->handleReparent(nullptr);
       }
-
-
    }
-
-
 }
 
-
-/*!
-  \reimp
-*/
 void QMenuBar::changeEvent(QEvent *e)
 {
    Q_D(QMenuBar);
+
    if (e->type() == QEvent::StyleChange) {
       d->itemsDirty = true;
       setMouseTracking(style()->styleHint(QStyle::SH_MenuBar_MouseTracking, nullptr, this));
@@ -1663,7 +1667,6 @@ void QMenuBarPrivate::_q_updateLayout()
    }
 }
 
-
 void QMenuBar::setCornerWidget(QWidget *w, Qt::Corner corner)
 {
    Q_D(QMenuBar);
@@ -1694,18 +1697,21 @@ void QMenuBar::setCornerWidget(QWidget *w, Qt::Corner corner)
    d->_q_updateLayout();
 }
 
-
 QWidget *QMenuBar::cornerWidget(Qt::Corner corner) const
 {
    Q_D(const QMenuBar);
+
    QWidget *w = nullptr;
+
    switch (corner) {
       case Qt::TopLeftCorner:
          w = d->leftWidget;
          break;
+
       case Qt::TopRightCorner:
          w = d->rightWidget;
          break;
+
       default:
          qWarning("QMenuBar::cornerWidget: Only TopLeftCorner and TopRightCorner are supported");
          break;
@@ -1713,7 +1719,6 @@ QWidget *QMenuBar::cornerWidget(Qt::Corner corner) const
 
    return w;
 }
-
 
 void QMenuBar::setNativeMenuBar(bool nativeMenuBar)
 {

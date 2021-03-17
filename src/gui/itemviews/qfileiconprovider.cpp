@@ -380,6 +380,7 @@ QIcon QFileIconProvider::icon(const QFileInfo &info) const
          }
       }
    }
+
    return QIcon();
 }
 
@@ -392,6 +393,7 @@ QString QFileIconProvider::type(const QFileInfo &info) const
    if (info.isRoot()) {
       return QApplication::translate("QFileDialog", "Drive");
    }
+
    if (info.isFile()) {
       if (!info.suffix().isEmpty()) {
          //: %1 is a file name suffix, for example txt

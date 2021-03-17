@@ -24,11 +24,12 @@
 #include <qpropertyanimation.h>
 #include <qwidget.h>
 #include <qstyle.h>
-#include <qmainwindowlayout_p.h>
 
+#include <qmainwindowlayout_p.h>
 #include <qwidgetanimator_p.h>
 
-QWidgetAnimator::QWidgetAnimator(QMainWindowLayout *layout) : m_mainWindowLayout(layout)
+QWidgetAnimator::QWidgetAnimator(QMainWindowLayout *layout)
+   : m_mainWindowLayout(layout)
 {
 }
 

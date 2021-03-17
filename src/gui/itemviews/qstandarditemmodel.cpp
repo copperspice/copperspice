@@ -1316,16 +1316,19 @@ QStandardItem *QStandardItemModel::itemFromIndex(const QModelIndex &index) const
    if ((index.row() < 0) || (index.column() < 0) || (index.model() != this)) {
       return nullptr;
    }
+
    QStandardItem *parent = static_cast<QStandardItem *>(index.internalPointer());
    if (parent == nullptr) {
       return nullptr;
    }
+
    QStandardItem *item = parent->child(index.row(), index.column());
    // lazy part
    if (item == nullptr) {
       item = d->createItem();
       parent->d_func()->setChild(index.row(), index.column(), item);
    }
+
    return item;
 }
 
@@ -1677,6 +1680,7 @@ QStandardItem *QStandardItemModel::takeVerticalHeaderItem(int row)
    if ((row < 0) || (row >= rowCount())) {
       return nullptr;
    }
+
    QStandardItem *headerItem = d->rowHeaderItems.at(row);
    if (headerItem) {
       headerItem->d_func()->setParentAndModel(nullptr, nullptr);
@@ -1736,10 +1740,12 @@ Qt::ItemFlags QStandardItemModel::flags(const QModelIndex &index) const
    if (!d->indexValid(index)) {
       return d->root->flags();
    }
+
    QStandardItem *item = d->itemFromIndex(index);
    if (item) {
       return item->flags();
    }
+
    return Qt::ItemIsSelectable
       | Qt::ItemIsEnabled
       | Qt::ItemIsEditable
@@ -1760,9 +1766,9 @@ bool QStandardItemModel::hasChildren(const QModelIndex &parent) const
 QVariant QStandardItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    Q_D(const QStandardItemModel);
-   if ((section < 0)
-      || ((orientation == Qt::Horizontal) && (section >= columnCount()))
-      || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
+
+   if ((section < 0) || ((orientation == Qt::Horizontal) && (section >= columnCount()))
+            || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
       return QVariant();
    }
 
@@ -1772,6 +1778,7 @@ QVariant QStandardItemModel::headerData(int section, Qt::Orientation orientation
    } else if (orientation == Qt::Vertical) {
       headerItem = d->rowHeaderItems.at(section);
    }
+
    return headerItem ? headerItem->data(role)
       : QAbstractItemModel::headerData(section, orientation, role);
 }
@@ -1798,6 +1805,7 @@ QModelIndex QStandardItemModel::index(int row, int column, const QModelIndex &pa
             || (row >= parentItem->rowCount()) || (column >= parentItem->columnCount())) {
       return QModelIndex();
    }
+
    return createIndex(row, column, parentItem);
 }
 
@@ -1812,6 +1820,7 @@ bool QStandardItemModel::insertColumns(int column, int count, const QModelIndex 
    if (item == nullptr) {
       return false;
    }
+
    return item->d_func()->insertColumns(column, count, QList<QStandardItem *>());
 }
 
@@ -1826,6 +1835,7 @@ bool QStandardItemModel::insertRows(int row, int count, const QModelIndex &paren
    if (item == nullptr) {
       return false;
    }
+
    return item->d_func()->insertRows(row, count, QList<QStandardItem *>());
 }
 
@@ -1867,7 +1877,9 @@ bool QStandardItemModel::removeColumns(int column, int count, const QModelIndex 
    if ((item == nullptr) || (count < 1) || (column < 0) || ((column + count) > item->columnCount())) {
       return false;
    }
+
    item->removeColumns(column, count);
+
    return true;
 }
 
@@ -1877,12 +1889,15 @@ bool QStandardItemModel::removeColumns(int column, int count, const QModelIndex 
 bool QStandardItemModel::removeRows(int row, int count, const QModelIndex &parent)
 {
    Q_D(QStandardItemModel);
+
    QStandardItem *item = d->itemFromIndex(parent);
 
    if ((item == nullptr) || (count < 1) || (row < 0) || ((row + count) > item->rowCount())) {
       return false;
    }
+
    item->removeRows(row, count);
+
    return true;
 }
 
@@ -1918,6 +1933,7 @@ bool QStandardItemModel::setData(const QModelIndex &index, const QVariant &value
 bool QStandardItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
    Q_D(QStandardItemModel);
+
    if ((section < 0)
       || ((orientation == Qt::Horizontal) && (section >= columnCount()))
       || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
@@ -1944,10 +1960,12 @@ bool QStandardItemModel::setHeaderData(int section, Qt::Orientation orientation,
          d->rowHeaderItems.replace(section, headerItem);
       }
    }
+
    if (headerItem) {
       headerItem->setData(value, role);
       return true;
    }
+
    return false;
 }
 
@@ -1995,6 +2013,7 @@ QMimeData *QStandardItemModel::mimeData(const QModelIndexList &indexes) const
    if (!mimeTypes().contains(format)) {
       return data;
    }
+
    QByteArray encoded;
    QDataStream stream(&encoded, QIODevice::WriteOnly);
 

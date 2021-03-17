@@ -659,6 +659,7 @@ void QImageReader::setDevice(QIODevice *device)
    if (d->device && d->deleteDevice) {
       delete d->device;
    }
+
    d->device = device;
    d->deleteDevice = false;
    delete d->handler;
@@ -731,7 +732,6 @@ QString QImageReader::text(const QString &key) const
    return d->text.value(key);
 }
 
-
 void QImageReader::setClipRect(const QRect &rect)
 {
    d->clipRect = rect;
@@ -746,7 +746,6 @@ void QImageReader::setScaledSize(const QSize &size)
 {
    d->scaledSize = size;
 }
-
 
 QSize QImageReader::scaledSize() const
 {

@@ -36,6 +36,7 @@ QPaintDevice::~QPaintDevice()
       qWarning("QPaintDevice: Can not destroy paint device which is being painted");
    }
 }
+
 void QPaintDevice::initPainter(QPainter *) const
 {
 }

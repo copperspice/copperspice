@@ -39,14 +39,15 @@ class QFSCompleter :  public QCompleter
       setCaseSensitivity(Qt::CaseInsensitive);
 #endif
    }
+
    QString pathFromIndex(const QModelIndex &index) const override;
    QStringList splitPath(const QString &path) const override;
 
    QAbstractProxyModel *proxyModel;
    QFileSystemModel *sourceModel;
 };
-#endif // QT_NO_FSCOMPLETER
 
+#endif // QT_NO_FSCOMPLETER
 
 #endif
 

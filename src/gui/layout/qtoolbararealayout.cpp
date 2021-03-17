@@ -43,6 +43,7 @@ QSize QToolBarAreaLayoutItem::minimumSize() const
    if (skip()) {
       return QSize(0, 0);
    }
+
    return qSmartMinSize(static_cast<QWidgetItem *>(widgetItem));
 }
 
@@ -60,14 +61,17 @@ QSize QToolBarAreaLayoutItem::realSizeHint() const
 {
    QWidget *wid = widgetItem->widget();
    QSize s = wid->sizeHint().expandedTo(wid->minimumSizeHint());
+
    if (wid->sizePolicy().horizontalPolicy() == QSizePolicy::Ignored) {
       s.setWidth(0);
    }
+
    if (wid->sizePolicy().verticalPolicy() == QSizePolicy::Ignored) {
       s.setHeight(0);
    }
-   s = s.boundedTo(wid->maximumSize())
-      .expandedTo(wid->minimumSize());
+
+   s = s.boundedTo(wid->maximumSize()).expandedTo(wid->minimumSize());
+
    return s;
 }
 
@@ -873,9 +877,9 @@ void QToolBarAreaLayout::moveToolBar(QToolBar *toolbar, int p)
    if (pos == QInternal::DockCount) {
       return;
    }
+
    docks[pos].moveToolBar(toolbar, p);
 }
-
 
 void QToolBarAreaLayout::insertItem(QInternal::DockPosition pos, QLayoutItem *item)
 {
@@ -1148,14 +1152,17 @@ QToolBarAreaLayoutItem *QToolBarAreaLayout::item(const QList<int> &path)
    if (path.at(0) < 0 || path.at(0) >= QInternal::DockCount) {
       return nullptr;
    }
+
    QToolBarAreaLayoutInfo &info = docks[path.at(0)];
    if (path.at(1) < 0 || path.at(1) >= info.lines.count()) {
       return nullptr;
    }
+
    QToolBarAreaLayoutLine &line = info.lines[path.at(1)];
    if (path.at(2) < 0 || path.at(2) >= line.toolBarItems.count()) {
       return nullptr;
    }
+
    return &(line.toolBarItems[path.at(2)]);
 }
 
@@ -1164,19 +1171,22 @@ QRect QToolBarAreaLayout::itemRect(const QList<int> &path) const
    const int i = path.first();
 
    QRect r = docks[i].itemRect(path.mid(1));
-   if (docks[i].o == Qt::Horizontal)
-      r = QStyle::visualRect(mainWindow->layoutDirection(),
-            docks[i].rect, r);
+   if (docks[i].o == Qt::Horizontal) {
+      r = QStyle::visualRect(mainWindow->layoutDirection(), docks[i].rect, r);
+   }
+
    return r;
 }
 
 QLayoutItem *QToolBarAreaLayout::plug(const QList<int> &path)
 {
    QToolBarAreaLayoutItem *item = this->item(path);
+
    if (!item) {
       qWarning() << "No item at" << path;
       return nullptr;
    }
+
    Q_ASSERT(item->gap);
    Q_ASSERT(item->widgetItem != nullptr);
    item->gap = false;
@@ -1187,6 +1197,7 @@ QLayoutItem *QToolBarAreaLayout::unplug(const QList<int> &path, QToolBarAreaLayo
 {
    //other needs to be update as well
    Q_ASSERT(path.count() == 3);
+
    QToolBarAreaLayoutItem *item = this->item(path);
    Q_ASSERT(item);
 
@@ -1381,6 +1392,7 @@ bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar 
          bool floating = false;
          uint geom0, geom1;
          geom0 = getInt(stream);
+
          if (tmarker == ToolBarStateMarkerEx) {
             geom1 = getInt(stream);
             rect = unpackRect(geom0, geom1, &floating);

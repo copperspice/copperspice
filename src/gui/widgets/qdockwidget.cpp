@@ -132,6 +132,7 @@ QSize QDockWidgetTitleButton::sizeHint() const
    ensurePolished();
 
    int size = 2 * style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, nullptr, this);
+
    if (!icon().isNull()) {
       int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, this);
       QSize sz = icon().actualSize(QSize(iconSize, iconSize));
@@ -209,25 +210,20 @@ bool QDockWidgetLayout::nativeWindowDeco() const
    return nativeWindowDeco(floating);
 }
 
-
 bool QDockWidgetLayout::wmSupportsNativeWindowDeco()
 {
    static const bool xcb = !QGuiApplication::platformName().compare(QLatin1String("xcb"), Qt::CaseInsensitive);
    return ! xcb;
-
 }
 
 bool QDockWidgetLayout::nativeWindowDeco(bool floating) const
 {
-
-
    return wmSupportsNativeWindowDeco() && floating && item_list.at(QDockWidgetLayout::TitleBar) == nullptr;
 }
 
-
 void QDockWidgetLayout::addItem(QLayoutItem *)
 {
-   qWarning("QDockWidgetLayout::addItem(): please use QDockWidgetLayout::setWidget()");
+   qWarning("QDockWidgetLayout::addItem(): Use QDockWidgetLayout::setWidget()");
    return;
 }
 
@@ -239,10 +235,12 @@ QLayoutItem *QDockWidgetLayout::itemAt(int index) const
       if (item == nullptr) {
          continue;
       }
+
       if (index == cnt++) {
          return item;
       }
    }
+
    return nullptr;
 }
 
@@ -254,24 +252,30 @@ QLayoutItem *QDockWidgetLayout::takeAt(int index)
       if (item == nullptr) {
          continue;
       }
+
       if (index == j) {
          item_list[i] = nullptr;
          invalidate();
+
          return item;
       }
+
       ++j;
    }
+
    return nullptr;
 }
 
 int QDockWidgetLayout::count() const
 {
    int result = 0;
+
    for (int i = 0; i < item_list.count(); ++i) {
       if (item_list.at(i)) {
          ++result;
       }
    }
+
    return result;
 }
 
@@ -282,6 +286,7 @@ QSize QDockWidgetLayout::sizeFromContent(const QSize &content, bool floating) co
    if (verticalTitleBar) {
       result.setHeight(qMax(result.height(), minimumTitleWidth()));
       result.setWidth(qMax(content.width(), 0));
+
    } else {
       result.setHeight(qMax(result.height(), 0));
       result.setWidth(qMax(content.width(), minimumTitleWidth()));
@@ -314,7 +319,8 @@ QSize QDockWidgetLayout::sizeFromContent(const QSize &content, bool floating) co
 
    int left, top, right, bottom;
    w->getContentsMargins(&left, &top, &right, &bottom);
-   //we need to substract the contents margin (it will be added by the caller)
+
+   // we need to substract the contents margin (it will be added by the caller)
    QSize min = w->minimumSize() - QSize(left + right, top + bottom);
    QSize max = w->maximumSize() - QSize(left + right, top + bottom);
 
@@ -326,6 +332,7 @@ QSize QDockWidgetLayout::sizeFromContent(const QSize &content, bool floating) co
 
    uint explicitMin = 0;
    uint explicitMax = 0;
+
    if (w->d_func()->extra != nullptr) {
       explicitMin = w->d_func()->extra->explicitMinSize;
       explicitMax = w->d_func()->extra->explicitMaxSize;
@@ -334,6 +341,7 @@ QSize QDockWidgetLayout::sizeFromContent(const QSize &content, bool floating) co
    if (!(explicitMin & Qt::Horizontal) || min.width() == 0) {
       min.setWidth(-1);
    }
+
    if (!(explicitMin & Qt::Vertical) || min.height() == 0) {
       min.setHeight(-1);
    }
@@ -341,6 +349,7 @@ QSize QDockWidgetLayout::sizeFromContent(const QSize &content, bool floating) co
    if (!(explicitMax & Qt::Horizontal)) {
       max.setWidth(QWIDGETSIZE_MAX);
    }
+
    if (!(explicitMax & Qt::Vertical)) {
       max.setHeight(QWIDGETSIZE_MAX);
    }
@@ -368,7 +377,6 @@ QSize QDockWidgetLayout::maximumSize() const
    } else {
       return parentWidget()->maximumSize();
    }
-
 }
 
 QSize QDockWidgetLayout::minimumSize() const
@@ -581,7 +589,6 @@ QSize QDockWidgetItem::maximumSize() const
    }
 }
 
-
 QSize QDockWidgetItem::sizeHint() const
 {
    if (QLayoutItem *item = dockWidgetChildItem()) {
@@ -590,7 +597,6 @@ QSize QDockWidgetItem::sizeHint() const
       return QWidgetItem::sizeHint();
    }
 }
-
 
 void QDockWidgetPrivate::init()
 {
@@ -649,6 +655,7 @@ void QDockWidget::initStyleOption(QStyleOptionDockWidget *option) const
 void QDockWidgetPrivate::_q_toggleView(bool b)
 {
    Q_Q(QDockWidget);
+
    if (b == q->isHidden()) {
       if (b) {
          q->show();
@@ -695,7 +702,6 @@ void QDockWidgetPrivate::updateButtons()
 #endif
 
    q->setAttribute(Qt::WA_ContentsPropagated, (canFloat || canClose) && !hideButtons);
-
    layout->invalidate();
 }
 
@@ -780,8 +786,11 @@ void QDockWidgetPrivate::endDrag(bool abort)
                delete state->widgetItem;
                state->widgetItem = nullptr;
             }
+
             mwLayout->restore();
+
             QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(layout);
+
             if (!dwLayout->nativeWindowDeco()) {
                // get rid of the X11BypassWindowManager window flag and activate the resizer
                Qt::WindowFlags flags = q->windowFlags();
@@ -801,6 +810,7 @@ void QDockWidgetPrivate::endDrag(bool abort)
          }
       }
    }
+
    delete state;
    state = nullptr;
 }
@@ -885,7 +895,7 @@ bool QDockWidgetPrivate::mouseMoveEvent(QMouseEvent *event)
 {
    bool ret = false;
 
-#if !defined(QT_NO_MAINWINDOW)
+#if ! defined(QT_NO_MAINWINDOW)
    Q_Q(QDockWidget);
 
    if (!state) {
@@ -893,7 +903,6 @@ bool QDockWidgetPrivate::mouseMoveEvent(QMouseEvent *event)
    }
 
    QDockWidgetLayout *dwlayout = qobject_cast<QDockWidgetLayout *>(layout);
-
    QMainWindowLayout *mwlayout = qt_mainwindow_layout_from_dock(q);
 
    if (! dwlayout->nativeWindowDeco()) {
@@ -985,6 +994,7 @@ void QDockWidgetPrivate::nonClientAreaMouseEvent(QMouseEvent *event)
 
          startDrag();
          break;
+
       case QEvent::NonClientAreaMouseMove:
          if (state == nullptr || ! state->dragging) {
             break;
@@ -1008,6 +1018,7 @@ void QDockWidgetPrivate::nonClientAreaMouseEvent(QMouseEvent *event)
       case QEvent::NonClientAreaMouseButtonDblClick:
          _q_toggleTopLevel();
          break;
+
       default:
          break;
    }
@@ -1026,7 +1037,6 @@ void QDockWidgetPrivate::moveEvent(QMoveEvent *event)
    }
 
    // When the native window frame is being dragged, all we get is these mouse  move events
-
    if (state->ctrlDrag) {
       return;
    }
@@ -1049,7 +1059,6 @@ void QDockWidgetPrivate::unplug(const QRect &rect)
    if (dwLayout->nativeWindowDeco(true)) {
       r.adjust(0, dwLayout->titleHeight(), 0, 0);
    }
-
 
    setWindowState(true, true, r);
 }
@@ -1383,6 +1392,7 @@ bool QDockWidget::event(QEvent *event)
       case QEvent::ParentChange:
          d->updateButtons();
          break;
+
       case QEvent::ZOrderChange: {
          bool onTop = false;
          if (win != nullptr) {
@@ -1399,6 +1409,7 @@ bool QDockWidget::event(QEvent *event)
       case QEvent::WindowDeactivate:
          update(qobject_cast<QDockWidgetLayout *>(this->layout())->titleArea());
          break;
+
       case QEvent::ContextMenu:
          if (d->state) {
             event->accept();
