@@ -1042,7 +1042,8 @@ void MainWindow::findAgain()
                switch (m_foundWhere) {
                   case 0:
                      m_foundWhere = DataModel::SourceText;
-                  // fall-through to search source text
+                     [[fallthrough]];
+
                   case DataModel::SourceText:
                      if (searchItem(m->text())) {
                         break;
@@ -1051,13 +1052,15 @@ void MainWindow::findAgain()
                         break;
                      }
                      m_foundWhere = DataModel::Translations;
-                  // fall-through to search translation
+                     [[fallthrough]];
+
                   case DataModel::Translations:
                      if (searchItem(m->translation())) {
                         break;
                      }
                      m_foundWhere = DataModel::Comments;
-                  // fall-through to search comment
+                     [[fallthrough]];
+
                   case DataModel::Comments:
                      if (searchItem(m->comment())) {
                         break;

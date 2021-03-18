@@ -85,7 +85,7 @@ class NodeIndexStorage
    void reset() {
       data = 0;
       additionalData = 0;
-      model = 0;
+      model = nullptr;
    }
 };
 }

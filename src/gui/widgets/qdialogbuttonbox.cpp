@@ -661,8 +661,10 @@ void QDialogButtonBox::changeEvent(QEvent *event)
                it.key()->setStyle(newStyle);
             }
          }
-         // fallthrough intended
+
 #ifdef Q_OS_DARWIN
+         [[fallthrough]];
+
       case QEvent::MacSizeChange:
 #endif
          d->resetLayout();

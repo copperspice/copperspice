@@ -45,7 +45,7 @@
 // this could become a list of all languages used for each writing
 // system, instead of using the single most common language.
 static const char *languageForWritingSystem[] = {
-   0,     // Any
+   nullptr,   // Any
    "en",  // Latin
    "el",  // Greek
    "ru",  // Cyrillic
@@ -75,7 +75,7 @@ static const char *languageForWritingSystem[] = {
    "ja",      // Japanese
    "ko",      // Korean
    "vi",      // Vietnamese
-   0,         // Symbol
+   nullptr,   // Symbol
    "sga",     // Ogham
    "non",     // Runic
    "man"      // N'Ko
@@ -543,6 +543,8 @@ static QString familyNameFromPostScriptName(NSString *psName)
 QStringList QCoreTextFontDatabase::fallbacksForFamily(const QString &family, QFont::Style style, QFont::StyleHint styleHint,
    QChar::Script script) const
 {
+   (void) style;
+   (void) script;
    QMacAutoReleasePool pool;
 
    static QHash<QString, QStringList> fallbackLists;

@@ -569,7 +569,8 @@ void QMacPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
             d->m_pageLayout.setMode(QPageLayout::StandardMode);
          }
          break;
-      case PPK_CopyCount: // fallthrough
+
+      case PPK_CopyCount:
       case PPK_NumberOfCopies:
          PMSetCopies(d->settings(), value.toInt(), false);
          break;

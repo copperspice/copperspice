@@ -208,8 +208,8 @@ QCoreTextFontEngine::~QCoreTextFontEngine()
 
 void QCoreTextFontEngine::init()
 {
-   Q_ASSERT(ctfont != NULL);
-   Q_ASSERT(cgFont != NULL);
+   Q_ASSERT(ctfont != nullptr);
+   Q_ASSERT(cgFont != nullptr);
 
    face_id.index    = 0;
    QCFString name   = CTFontCopyName(ctfont, kCTFontUniqueNameKey);

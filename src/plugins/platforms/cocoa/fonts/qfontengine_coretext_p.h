@@ -90,6 +90,7 @@ class QCoreTextFontEngine : public QFontEngine
    QFontEngine *cloneWithSize(qreal pixelSize) const override;
    Qt::HANDLE handle() const override;
    int glyphMargin(QFontEngine::GlyphFormat format) override {
+      (void) format;
       return 0;
    }
 
