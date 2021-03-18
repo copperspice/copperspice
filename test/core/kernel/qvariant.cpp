@@ -384,9 +384,9 @@ TEST_CASE("QVariant map", "[qvariant]")
    REQUIRE(map1 == map2);
    REQUIRE(map2.value("orange").toInt() == 17);
 
-   map2 = data.toMap();
-   REQUIRE(map1 == map2);
-   REQUIRE(map2.value("orange").toInt() == 17);
+   QVariantMap map3 = data.toMap();
+   REQUIRE(map1 == map3);
+   REQUIRE(map3.value("orange").toInt() == 17);
 }
 
 TEST_CASE("QVariant hash", "[qvariant]")
@@ -399,9 +399,9 @@ TEST_CASE("QVariant hash", "[qvariant]")
    REQUIRE(hash1 == hash2);
    REQUIRE(hash2.value("orange").toInt() == 17);
 
-   hash2 = data.toHash();
-   REQUIRE(hash1 == hash2);
-   REQUIRE(hash2.value("orange").toInt() == 17);
+   QVariantHash hash3 = data.toHash();
+   REQUIRE(hash1 == hash3);
+   REQUIRE(hash3.value("orange").toInt() == 17);
 }
 
 TEST_CASE("QVariant url", "[qvariant]")

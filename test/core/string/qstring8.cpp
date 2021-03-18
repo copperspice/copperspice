@@ -73,9 +73,30 @@ TEST_CASE("QString8 chop", "[qstring]")
 {
    QString str = "A wacky fox and sizeable pig";
 
-   str.chop(8);
+   SECTION ("chop_a") {
+      str.chop(8);
+      REQUIRE(str == "A wacky fox and size");
+   }
 
-   REQUIRE(str == "A wacky fox and size");
+   SECTION ("chop_b") {
+      str.chop(25);
+      REQUIRE(str == "A w");
+   }
+
+   SECTION ("chop_c") {
+      str.chop(27);
+      REQUIRE(str == "A");
+   }
+
+   SECTION ("chop_d") {
+      str.chop(28);
+      REQUIRE(str == "");
+   }
+
+   SECTION ("chop_e") {
+      str.chop(50);
+      REQUIRE(str == "");
+   }
 }
 
 TEST_CASE("QString8 contains", "[qstring]")

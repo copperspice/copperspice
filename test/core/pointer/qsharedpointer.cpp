@@ -89,3 +89,34 @@ TEST_CASE("QSharedPointer reset", "[qsharedpointer]")
    REQUIRE(ptr == nullptr);
    REQUIRE(ptr.isNull() == true);
 }
+
+TEST_CASE("QSharedPointer swap", "[qsharedpointer]")
+{
+   QSharedPointer<int> ptr1 = QMakeShared<int>(8);
+   QSharedPointer<int> ptr2 = QMakeShared<int>(17);
+
+   REQUIRE(*ptr1 == 8);
+   REQUIRE(*ptr2 == 17);
+
+   ptr1.swap(ptr2);
+
+   REQUIRE(*ptr1 == 17);
+   REQUIRE(*ptr2 == 8);
+
+   ptr1.reset();
+   ptr1.swap(ptr2);
+
+   REQUIRE(*ptr1 == 8);
+   REQUIRE(ptr2 == nullptr);
+
+   ptr1.swap(ptr1);
+
+   REQUIRE(*ptr1 == 8);
+   REQUIRE(ptr2 == nullptr);
+
+   ptr2.swap(ptr2);
+
+   REQUIRE(*ptr1 == 8);
+   REQUIRE(ptr2 == nullptr);
+
+}
