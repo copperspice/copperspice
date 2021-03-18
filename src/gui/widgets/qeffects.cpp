@@ -222,12 +222,6 @@ void QAlphaWidget::closeEvent(QCloseEvent *e)
    QWidget::closeEvent(e);
 }
 
-/*
-  Render alphablending for the time elapsed.
-
-  Show the blended widget and free all allocated source
-  if the blending is finished.
-*/
 void QAlphaWidget::render()
 {
    int tempel = checkTime.elapsed();
@@ -286,9 +280,6 @@ void QAlphaWidget::render()
 #endif
 }
 
-/*
-  Calculate an alphablended image.
-*/
 void QAlphaWidget::alphaBlend()
 {
    const int a = qRound(alpha * 256);

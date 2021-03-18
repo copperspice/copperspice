@@ -54,14 +54,6 @@ QAbstractSliderPrivate::~QAbstractSliderPrivate()
 {
 }
 
-/*!
-    Sets the slider's minimum to \a min and its maximum to \a max.
-
-    If \a max is smaller than \a min, \a min becomes the only legal
-    value.
-
-    \sa minimum maximum
-*/
 void QAbstractSlider::setRange(int min, int max)
 {
    Q_D(QAbstractSlider);
@@ -84,15 +76,6 @@ void QAbstractSliderPrivate::setSteps(int single, int page)
    q->sliderChange(QAbstractSlider::SliderStepsChange);
 }
 
-/*!
-    Constructs an abstract slider.
-
-    The \a parent argument is sent to the QWidget constructor.
-
-    The \l minimum defaults to 0, the \l maximum to 99, with a \l
-    singleStep size of 1 and a \l pageStep size of 10, and an initial
-    \l value of 0.
-*/
 QAbstractSlider::QAbstractSlider(QWidget *parent)
    : QWidget(*new QAbstractSliderPrivate, parent, Qt::EmptyFlag)
 {
@@ -104,20 +87,10 @@ QAbstractSlider::QAbstractSlider(QAbstractSliderPrivate &dd, QWidget *parent)
 {
 }
 
-/*!
-    Destroys the slider.
-*/
 QAbstractSlider::~QAbstractSlider()
 {
 }
 
-/*!
-    \property QAbstractSlider::orientation
-    \brief the orientation of the slider
-
-    The orientation must be \l Qt::Vertical (the default) or \l
-    Qt::Horizontal.
-*/
 void QAbstractSlider::setOrientation(Qt::Orientation orientation)
 {
    Q_D(QAbstractSlider);

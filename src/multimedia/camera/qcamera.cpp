@@ -302,12 +302,6 @@ QCamera::QCamera(QObject *parent)
    }
 }
 
-/*!
-    Construct a QCamera from \a deviceName and \a parent.
-
-    If no camera with that \a deviceName exists, the camera object will
-    be invalid.
-*/
 
 QCamera::QCamera(const QByteArray &deviceName, QObject *parent):
    QMediaObject(*new QCameraPrivate, parent,
@@ -332,12 +326,6 @@ QCamera::QCamera(const QByteArray &deviceName, QObject *parent):
    }
 }
 
-/*!
-    \since 5.3
-
-    Construct a QCamera from a camera description \a cameraInfo and \a parent.
-*/
-
 QCamera::QCamera(const QCameraInfo &cameraInfo, QObject *parent)
    : QMediaObject(*new QCameraPrivate,
                   parent,
@@ -357,17 +345,6 @@ QCamera::QCamera(const QCameraInfo &cameraInfo, QObject *parent)
    }
 }
 
-/*!
-    \since 5.3
-
-    Construct a QCamera which uses a hardware camera located a the specified \a position.
-
-    For example on a mobile phone it can be used to easily choose between front-facing and
-    back-facing cameras.
-
-    If no camera is available at the specified \a position or if \a position is
-    QCamera::UnspecifiedPosition, the default camera is used.
-*/
 
 QCamera::QCamera(QCamera::Position position, QObject *parent)
    : QMediaObject(*new QCameraPrivate,
@@ -396,19 +373,12 @@ QCamera::QCamera(QCamera::Position position, QObject *parent)
    }
 }
 
-/*!
-    Destroys the camera object.
-*/
-
 QCamera::~QCamera()
 {
    Q_D(QCamera);
    d->clear();
 }
 
-/*!
-    Returns the availability state of the camera service.
-*/
 QMultimedia::AvailabilityStatus QCamera::availability() const
 {
    Q_D(const QCamera);

@@ -71,9 +71,6 @@ QSplashScreen::~QSplashScreen()
 {
 }
 
-/*!
-    \reimp
-*/
 void QSplashScreen::mousePressEvent(QMouseEvent *)
 {
    hide();
@@ -91,31 +88,6 @@ void QSplashScreen::repaint()
    QApplication::flush();
 }
 
-/*!
-    \fn QSplashScreen::messageChanged(const QString &message)
-
-    This signal is emitted when the message on the splash screen
-    changes. \a message is the new message and is a null-string
-    when the message has been removed.
-
-    \sa showMessage(), clearMessage()
-*/
-
-
-
-/*!
-    Draws the \a message text onto the splash screen with color \a
-    color and aligns the text according to the flags in \a alignment.
-
-    To make sure the splash screen is repainted immediately, you can
-    call \l{QCoreApplication}'s
-    \l{QCoreApplication::}{processEvents()} after the call to
-    showMessage(). You usually want this to make sure that the message
-    is kept up to date with what your application is doing (e.g.,
-    loading files).
-
-    \sa Qt::Alignment, clearMessage()
-*/
 void QSplashScreen::showMessage(const QString &message, int alignment,
    const QColor &color)
 {

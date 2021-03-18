@@ -1510,10 +1510,6 @@ void QGraphicsScenePrivate::updatePalette(const QPalette &palette)
    QApplication::sendEvent(q, &event);
 }
 
-/*!
-    Constructs a QGraphicsScene object. The \a parent parameter is
-    passed to QObject's constructor.
-*/
 QGraphicsScene::QGraphicsScene(QObject *parent)
    : QObject(parent), d_ptr(new QGraphicsScenePrivate)
 {
@@ -1521,13 +1517,6 @@ QGraphicsScene::QGraphicsScene(QObject *parent)
    d_func()->init();
 }
 
-/*!
-    Constructs a QGraphicsScene object, using \a sceneRect for its
-    scene rectangle. The \a parent parameter is passed to QObject's
-    constructor.
-
-    \sa sceneRect
-*/
 QGraphicsScene::QGraphicsScene(const QRectF &sceneRect, QObject *parent)
    : QObject(parent), d_ptr(new QGraphicsScenePrivate)
 {
@@ -1537,14 +1526,6 @@ QGraphicsScene::QGraphicsScene(const QRectF &sceneRect, QObject *parent)
    setSceneRect(sceneRect);
 }
 
-/*!
-    Constructs a QGraphicsScene object, using the rectangle specified
-    by (\a x, \a y), and the given \a width and \a height for its
-    scene rectangle. The \a parent parameter is passed to QObject's
-    constructor.
-
-    \sa sceneRect
-*/
 QGraphicsScene::QGraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject *parent)
    : QObject(parent), d_ptr(new QGraphicsScenePrivate)
 {
@@ -2297,39 +2278,12 @@ void QGraphicsScene::removeItem(QGraphicsItem *item)
    d->updateInputMethodSensitivityInViews();
 }
 
-/*!
-    When the scene is active, this functions returns the scene's current focus
-    item, or 0 if no item currently has focus. When the scene is inactive, this
-    functions returns the item that will gain input focus when the scene becomes
-    active.
-
-    The focus item receives keyboard input when the scene receives a
-    key event.
-
-    \sa setFocusItem(), QGraphicsItem::hasFocus(), isActive()
-*/
 QGraphicsItem *QGraphicsScene::focusItem() const
 {
    Q_D(const QGraphicsScene);
    return isActive() ? d->focusItem : d->passiveFocusItem;
 }
 
-/*!
-    Sets the scene's focus item to \a item, with the focus reason \a
-    focusReason, after removing focus from any previous item that may have had
-    focus.
-
-    If \a item is 0, or if it either does not accept focus (i.e., it does not
-    have the QGraphicsItem::ItemIsFocusable flag enabled), or is not visible
-    or not enabled, this function only removes focus from any previous
-    focusitem.
-
-    If item is not 0, and the scene does not currently have focus (i.e.,
-    hasFocus() returns false), this function will call setFocus()
-    automatically.
-
-    \sa focusItem(), hasFocus(), setFocus()
-*/
 void QGraphicsScene::setFocusItem(QGraphicsItem *item, Qt::FocusReason focusReason)
 {
    Q_D(QGraphicsScene);
@@ -2340,29 +2294,12 @@ void QGraphicsScene::setFocusItem(QGraphicsItem *item, Qt::FocusReason focusReas
    }
 }
 
-/*!
-    Returns true if the scene has focus; otherwise returns false. If the scene
-    has focus, it will will forward key events from QKeyEvent to any item that
-    has focus.
-
-    \sa setFocus(), setFocusItem()
-*/
 bool QGraphicsScene::hasFocus() const
 {
    Q_D(const QGraphicsScene);
    return d->hasFocus;
 }
 
-/*!
-    Sets focus on the scene by sending a QFocusEvent to the scene, passing \a
-    focusReason as the reason. If the scene regains focus after having
-    previously lost it while an item had focus, the last focus item will
-    receive focus with \a focusReason as the reason.
-
-    If the scene already has focus, this function does nothing.
-
-    \sa hasFocus(), clearFocus(), setFocusItem()
-*/
 void QGraphicsScene::setFocus(Qt::FocusReason focusReason)
 {
    Q_D(QGraphicsScene);
@@ -2373,15 +2310,6 @@ void QGraphicsScene::setFocus(Qt::FocusReason focusReason)
    QCoreApplication::sendEvent(this, &event);
 }
 
-/*!
-    Clears focus from the scene. If any item has focus when this function is
-    called, it will lose focus, and regain focus again once the scene regains
-    focus.
-
-    A scene that does not have focus ignores key events.
-
-    \sa hasFocus(), setFocus(), setFocusItem()
-*/
 void QGraphicsScene::clearFocus()
 {
    Q_D(QGraphicsScene);
@@ -2392,24 +2320,6 @@ void QGraphicsScene::clearFocus()
    }
 }
 
-/*!
-    \property QGraphicsScene::stickyFocus
-    \brief whether clicking into the scene background will clear focus
-
-    \since 4.6
-
-    In a QGraphicsScene with stickyFocus set to true, focus will remain
-    unchanged when the user clicks into the scene background or on an item
-    that does not accept focus. Otherwise, focus will be cleared.
-
-    By default, this property is false.
-
-    Focus changes in response to a mouse press. You can reimplement
-    mousePressEvent() in a subclass of QGraphicsScene to toggle this property
-    based on where the user has clicked.
-
-    \sa clearFocus(), setFocusItem()
-*/
 void QGraphicsScene::setStickyFocus(bool enabled)
 {
    Q_D(QGraphicsScene);
@@ -2422,50 +2332,12 @@ bool QGraphicsScene::stickyFocus() const
    return d->stickyFocus;
 }
 
-/*!
-    Returns the current mouse grabber item, or 0 if no item is currently
-    grabbing the mouse. The mouse grabber item is the item that receives all
-    mouse events sent to the scene.
-
-    An item becomes a mouse grabber when it receives and accepts a
-    mouse press event, and it stays the mouse grabber until either of
-    the following events occur:
-
-    \list
-    \o If the item receives a mouse release event when there are no other
-    buttons pressed, it loses the mouse grab.
-    \o If the item becomes invisible (i.e., someone calls \c {item->setVisible(false)}),
-    or if it becomes disabled (i.e., someone calls \c {item->setEnabled(false)}),
-    it loses the mouse grab.
-    \o If the item is removed from the scene, it loses the mouse grab.
-    \endlist
-
-    If the item loses its mouse grab, the scene will ignore all mouse events
-    until a new item grabs the mouse (i.e., until a new item receives a mouse
-    press event).
-*/
 QGraphicsItem *QGraphicsScene::mouseGrabberItem() const
 {
    Q_D(const QGraphicsScene);
    return !d->mouseGrabberItems.isEmpty() ? d->mouseGrabberItems.last() : nullptr;
 }
 
-/*!
-    \property QGraphicsScene::backgroundBrush
-    \brief the background brush of the scene.
-
-    Set this property to changes the scene's background to a different color,
-    gradient or texture. The default background brush is Qt::NoBrush. The
-    background is drawn before (behind) the items.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsscene.cpp 3
-
-    QGraphicsScene::render() calls drawBackground() to draw the scene
-    background. For more detailed control over how the background is drawn,
-    you can reimplement drawBackground() in a subclass of QGraphicsScene.
-*/
 QBrush QGraphicsScene::backgroundBrush() const
 {
    Q_D(const QGraphicsScene);
@@ -2482,26 +2354,6 @@ void QGraphicsScene::setBackgroundBrush(const QBrush &brush)
    update();
 }
 
-/*!
-    \property QGraphicsScene::foregroundBrush
-    \brief the foreground brush of the scene.
-
-    Change this property to set the scene's foreground to a different
-    color, gradient or texture.
-
-    The foreground is drawn after (on top of) the items. The default
-    foreground brush is Qt::NoBrush ( i.e. the foreground is not
-    drawn).
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsscene.cpp 4
-
-    QGraphicsScene::render() calls drawForeground() to draw the scene
-    foreground. For more detailed control over how the foreground is
-    drawn, you can reimplement the drawForeground() function in a
-    QGraphicsScene subclass.
-*/
 QBrush QGraphicsScene::foregroundBrush() const
 {
    Q_D(const QGraphicsScene);
@@ -2611,16 +2463,6 @@ QList <QGraphicsView *> QGraphicsScene::views() const
    return d->views;
 }
 
-/*!
-    This slot \e advances the scene by one step, by calling
-    QGraphicsItem::advance() for all items on the scene. This is done in two
-    phases: in the first phase, all items are notified that the scene is about
-    to change, and in the second phase all items are notified that they can
-    move. In the first phase, QGraphicsItem::advance() is called passing a
-    value of 0 as an argument, and 1 is passed in the second phase.
-
-    \sa QGraphicsItem::advance(), QGraphicsItemAnimation, QTimeLine
-*/
 void QGraphicsScene::advance()
 {
    for (int i = 0; i < 2; ++i) {
@@ -2630,24 +2472,6 @@ void QGraphicsScene::advance()
    }
 }
 
-/*!
-    Processes the event \a event, and dispatches it to the respective
-    event handlers.
-
-    In addition to calling the convenience event handlers, this
-    function is responsible for converting mouse move events to hover
-    events for when there is no mouse grabber item. Hover events are
-    delivered directly to items; there is no convenience function for
-    them.
-
-    Unlike QWidget, QGraphicsScene does not have the convenience functions
-    \l{QWidget::}{enterEvent()} and \l{QWidget::}{leaveEvent()}. Use this
-    function to obtain those events instead.
-
-    \sa contextMenuEvent(), keyPressEvent(), keyReleaseEvent(),
-    mousePressEvent(), mouseMoveEvent(), mouseReleaseEvent(),
-    mouseDoubleClickEvent(), focusInEvent(), focusOutEvent()
-*/
 bool QGraphicsScene::event(QEvent *event)
 {
    Q_D(QGraphicsScene);
@@ -2890,15 +2714,6 @@ bool QGraphicsScene::eventFilter(QObject *watched, QEvent *event)
    return false;
 }
 
-/*!
-    This event handler, for event \a contextMenuEvent, can be reimplemented in
-    a subclass to receive context menu events. The default implementation
-    forwards the event to the topmost item that accepts context menu events at
-    the position of the event. If no items accept context menu events at this
-    position, the event is ignored.
-
-    \sa QGraphicsItem::contextMenuEvent()
-*/
 void QGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
    Q_D(QGraphicsScene);
@@ -2923,16 +2738,6 @@ void QGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMen
    }
 }
 
-/*!
-    This event handler, for event \a event, can be reimplemented in a subclass
-    to receive drag enter events for the scene.
-
-    The default implementation accepts the event and prepares the scene to
-    accept drag move events.
-
-    \sa QGraphicsItem::dragEnterEvent(), dragMoveEvent(), dragLeaveEvent(),
-    dropEvent()
-*/
 void QGraphicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
    Q_D(QGraphicsScene);
@@ -2941,13 +2746,6 @@ void QGraphicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
    event->accept();
 }
 
-/*!
-    This event handler, for event \a event, can be reimplemented in a subclass
-    to receive drag move events for the scene.
-
-    \sa QGraphicsItem::dragMoveEvent(), dragEnterEvent(), dragLeaveEvent(),
-    dropEvent()
-*/
 void QGraphicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
    Q_D(QGraphicsScene);
@@ -3098,15 +2896,6 @@ void QGraphicsScene::focusInEvent(QFocusEvent *focusEvent)
    }
 }
 
-/*!
-    This event handler, for event \a focusEvent, can be reimplemented in a
-    subclass to receive focus out events.
-
-    The default implementation removes focus from any focus item, then removes
-    focus from the scene.
-
-    \sa QGraphicsItem::focusInEvent()
-*/
 void QGraphicsScene::focusOutEvent(QFocusEvent *focusEvent)
 {
    Q_D(QGraphicsScene);
@@ -3121,19 +2910,6 @@ void QGraphicsScene::focusOutEvent(QFocusEvent *focusEvent)
    }
 }
 
-/*!
-    This event handler, for event \a helpEvent, can be
-    reimplemented in a subclass to receive help events. The events
-    are of type QEvent::ToolTip, which are created when a tooltip is
-    requested.
-
-    The default implementation shows the tooltip of the topmost
-    item, i.e., the item with the highest z-value, at the mouse
-    cursor position. If no item has a tooltip set, this function
-    does nothing.
-
-   \sa QGraphicsItem::toolTip(), QGraphicsSceneHelpEvent
-*/
 void QGraphicsScene::helpEvent(QGraphicsSceneHelpEvent *helpEvent)
 {
 #ifdef QT_NO_TOOLTIP
@@ -3302,13 +3078,6 @@ void QGraphicsScenePrivate::leaveScene(QWidget *viewport)
    }
 }
 
-/*!
-    This event handler, for event \a keyEvent, can be reimplemented in a
-    subclass to receive keypress events. The default implementation forwards
-    the event to current focus item.
-
-    \sa QGraphicsItem::keyPressEvent(), focusItem()
-*/
 void QGraphicsScene::keyPressEvent(QKeyEvent *keyEvent)
 {
    // ### Merge this function with keyReleaseEvent; they are identical
@@ -3375,23 +3144,6 @@ void QGraphicsScene::keyReleaseEvent(QKeyEvent *keyEvent)
    }
 }
 
-/*!
-    This event handler, for event \a mouseEvent, can be reimplemented
-    in a subclass to receive mouse press events for the scene.
-
-    The default implementation depends on the state of the scene. If
-    there is a mouse grabber item, then the event is sent to the mouse
-    grabber. Otherwise, it is forwarded to the topmost item that
-    accepts mouse events at the scene position from the event, and
-    that item promptly becomes the mouse grabber item.
-
-    If there is no item at the given position on the scene, the
-    selection area is reset, any focus item loses its input focus, and
-    the event is then ignored.
-
-    \sa QGraphicsItem::mousePressEvent(),
-    QGraphicsItem::setAcceptedMouseButtons()
-*/
 void QGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
    Q_D(QGraphicsScene);
@@ -3435,19 +3187,6 @@ void QGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
    mouseEvent->accept();
 }
 
-/*!
-    This event handler, for event \a mouseEvent, can be reimplemented
-    in a subclass to receive mouse release events for the scene.
-
-    The default implementation depends on the mouse grabber state.  If
-    there is no mouse grabber, the event is ignored.  Otherwise, if
-    there is a mouse grabber item, the event is sent to the mouse
-    grabber. If this mouse release represents the last pressed button
-    on the mouse, the mouse grabber item then loses the mouse grab.
-
-    \sa QGraphicsItem::mousePressEvent(), QGraphicsItem::mouseMoveEvent(),
-    QGraphicsItem::mouseDoubleClickEvent(), QGraphicsItem::setAcceptedMouseButtons()
-*/
 void QGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
    Q_D(QGraphicsScene);
@@ -3478,40 +3217,12 @@ void QGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
    }
 }
 
-/*!
-    This event handler, for event \a mouseEvent, can be reimplemented
-    in a subclass to receive mouse doubleclick events for the scene.
-
-    If someone doubleclicks on the scene, the scene will first receive
-    a mouse press event, followed by a release event (i.e., a click),
-    then a doubleclick event, and finally a release event. If the
-    doubleclick event is delivered to a different item than the one
-    that received the first press and release, it will be delivered as
-    a press event. However, tripleclick events are not delivered as
-    doubleclick events in this case.
-
-    The default implementation is similar to mousePressEvent().
-
-    \sa QGraphicsItem::mousePressEvent(), QGraphicsItem::mouseMoveEvent(),
-    QGraphicsItem::mouseReleaseEvent(), QGraphicsItem::setAcceptedMouseButtons()
-*/
 void QGraphicsScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
    Q_D(QGraphicsScene);
    d->mousePressEventHandler(mouseEvent);
 }
 
-/*!
-    This event handler, for event \a wheelEvent, can be reimplemented in a
-    subclass to receive mouse wheel events for the scene.
-
-    By default, the event is delivered to the topmost visible item under the
-    cursor. If ignored, the event propagates to the item beneath, and again
-    until the event is accepted, or it reaches the scene. If no items accept
-    the event, it is ignored.
-
-    \sa QGraphicsItem::wheelEvent()
-*/
 void QGraphicsScene::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent)
 {
    Q_D(QGraphicsScene);

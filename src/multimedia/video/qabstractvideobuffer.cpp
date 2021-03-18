@@ -41,19 +41,12 @@ QAbstractVideoBuffer::QAbstractVideoBuffer(HandleType type)
 {
 }
 
-/*!
-    \internal
-*/
-
+// internal
 QAbstractVideoBuffer::QAbstractVideoBuffer(QAbstractVideoBufferPrivate &dd, HandleType type)
    : d_ptr(&dd), m_type(type)
 {
    d_ptr->q_ptr = this;
 }
-
-/*!
-    Destroys an abstract video buffer.
-*/
 
 QAbstractVideoBuffer::~QAbstractVideoBuffer()
 {

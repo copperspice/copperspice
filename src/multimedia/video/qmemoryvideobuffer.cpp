@@ -39,18 +39,6 @@ class QMemoryVideoBufferPrivate : public QAbstractVideoBufferPrivate
    QByteArray data;
 };
 
-/*!
-    \class QMemoryVideoBuffer
-    \brief The QMemoryVideoBuffer class provides a system memory allocated video data buffer.
-    \internal
-
-    QMemoryVideoBuffer is the default video buffer for allocating system memory.  It may be used to
-    allocate memory for a QVideoFrame without implementing your own QAbstractVideoBuffer.
-*/
-
-/*!
-    Constructs a video buffer with an image stride of \a bytesPerLine from a byte \a array.
-*/
 QMemoryVideoBuffer::QMemoryVideoBuffer(const QByteArray &array, int bytesPerLine)
    : QAbstractVideoBuffer(*new QMemoryVideoBufferPrivate, NoHandle)
 {
@@ -60,24 +48,15 @@ QMemoryVideoBuffer::QMemoryVideoBuffer(const QByteArray &array, int bytesPerLine
    d->bytesPerLine = bytesPerLine;
 }
 
-/*!
-    Destroys a system memory allocated video buffer.
-*/
 QMemoryVideoBuffer::~QMemoryVideoBuffer()
 {
 }
 
-/*!
-    \reimp
-*/
 QAbstractVideoBuffer::MapMode QMemoryVideoBuffer::mapMode() const
 {
    return d_func()->mapMode;
 }
 
-/*!
-    \reimp
-*/
 uchar *QMemoryVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
 {
    Q_D(QMemoryVideoBuffer);
@@ -99,9 +78,6 @@ uchar *QMemoryVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
    }
 }
 
-/*!
-    \reimp
-*/
 void QMemoryVideoBuffer::unmap()
 {
    d_func()->mapMode = NotMapped;

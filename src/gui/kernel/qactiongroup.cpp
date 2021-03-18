@@ -104,16 +104,6 @@ QActionGroup::~QActionGroup()
 {
 }
 
-/*!
-    \fn QAction *QActionGroup::addAction(QAction *action)
-
-    Adds the \a action to this group, and returns it.
-
-    Normally an action is added to a group by creating it with the
-    group as its parent, so this function is not usually used.
-
-    \sa QAction::setActionGroup()
-*/
 QAction *QActionGroup::addAction(QAction *a)
 {
    Q_D(QActionGroup);

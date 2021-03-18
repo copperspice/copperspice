@@ -50,14 +50,7 @@ class QPixmapFilterPrivate
    QPixmapFilter *q_ptr;
 };
 
-/*!
-    Constructs a default QPixmapFilter with the given \a type.
-
-    This constructor should be used when subclassing QPixmapFilter to
-    create custom user filters.
-
-    \internal
-*/
+// internal
 QPixmapFilter::QPixmapFilter(FilterType type, QObject *parent)
    : QObject(parent), d_ptr(new QPixmapFilterPrivate)
 {
@@ -65,10 +58,7 @@ QPixmapFilter::QPixmapFilter(FilterType type, QObject *parent)
    d_func()->type = type;
 }
 
-
-/*!
-   \internal
-*/
+// internal
 QPixmapFilter::QPixmapFilter(QPixmapFilterPrivate &d, QPixmapFilter::FilterType type, QObject *parent)
    : QObject(parent), d_ptr(&d)
 {
@@ -80,24 +70,14 @@ QPixmapFilter::~QPixmapFilter()
 {
 }
 
-/*!
-    Returns the type of the filter. All standard pixmap filter classes
-    are associated with a unique value.
-
-    \internal
-*/
+// internal
 QPixmapFilter::FilterType QPixmapFilter::type() const
 {
    Q_D(const QPixmapFilter);
    return d->type;
 }
 
-/*!
-    Returns the bounding rectangle that is affected by the pixmap
-    filter if the filter is applied to the specified \a rect.
-
-    \internal
-*/
+// internal
 QRectF QPixmapFilter::boundingRectFor(const QRectF &rect) const
 {
    return rect;
@@ -121,14 +101,7 @@ class QPixmapConvolutionFilterPrivate : public QPixmapFilterPrivate
    bool convoluteAlpha;
 };
 
-
-/*!
-    Constructs a pixmap convolution filter.
-
-    By default there is no convolution kernel.
-
-    \internal
-*/
+// internal
 QPixmapConvolutionFilter::QPixmapConvolutionFilter(QObject *parent)
    : QPixmapFilter(*new QPixmapConvolutionFilterPrivate, ConvolutionFilter, parent)
 {
@@ -383,30 +356,7 @@ void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const Q
    }
 }
 
-/*!
-    \class QPixmapBlurFilter
-    \since 4.6
-    \ingroup multimedia
-
-    \brief The QPixmapBlurFilter class provides blur filtering
-    for pixmaps.
-
-    QPixmapBlurFilter implements a blur pixmap filter,
-    which is applied when \l{QPixmapFilter::}{draw()} is called.
-
-    The filter lets you specialize the radius of the blur as well
-    as hints as to whether to prefer performance or quality.
-
-    By default, the blur effect is produced by applying an exponential
-    filter generated from the specified blurRadius().  Paint engines
-    may override this with a custom blur that is faster on the
-    underlying hardware.
-
-    \sa {Pixmap Filters Example}, QPixmapConvolutionFilter, QPixmapDropShadowFilter
-
-    \internal
-*/
-
+// internal
 class QPixmapBlurFilterPrivate : public QPixmapFilterPrivate
 {
  public:
@@ -416,31 +366,18 @@ class QPixmapBlurFilterPrivate : public QPixmapFilterPrivate
    QGraphicsBlurEffect::BlurHints hints;
 };
 
-
-/*!
-    Constructs a pixmap blur filter.
-
-    \internal
-*/
+// internal
 QPixmapBlurFilter::QPixmapBlurFilter(QObject *parent)
    : QPixmapFilter(*new QPixmapBlurFilterPrivate, BlurFilter, parent)
 {
 }
 
-/*!
-    Destructor of pixmap blur filter.
-
-    \internal
-*/
+// internal
 QPixmapBlurFilter::~QPixmapBlurFilter()
 {
 }
 
-/*!
-    Sets the radius of the blur filter. Higher radius produces increased blurriness.
-
-    \internal
-*/
+// internal
 void QPixmapBlurFilter::setRadius(qreal radius)
 {
    Q_D(QPixmapBlurFilter);

@@ -250,25 +250,12 @@ void QStackedLayout::setCurrentWidget(QWidget *widget)
    setCurrentIndex(index);
 }
 
-
-/*!
-    Returns the current widget, or 0 if there are no widgets in this
-    layout.
-
-    \sa currentIndex(), setCurrentWidget()
-*/
 QWidget *QStackedLayout::currentWidget() const
 {
    Q_D(const QStackedLayout);
    return d->index >= 0 ? d->list.at(d->index)->widget() : nullptr;
 }
 
-/*!
-    Returns the widget at the given \a index, or 0 if there is no
-    widget at the given position.
-
-    \sa currentWidget(), indexOf()
-*/
 QWidget *QStackedLayout::widget(int index) const
 {
    Q_D(const QStackedLayout);
@@ -279,12 +266,6 @@ QWidget *QStackedLayout::widget(int index) const
    return d->list.at(index)->widget();
 }
 
-/*!
-    \property QStackedLayout::count
-    \brief the number of widgets contained in the layout
-
-    \sa currentIndex(), widget()
-*/
 int QStackedLayout::count() const
 {
    Q_D(const QStackedLayout);

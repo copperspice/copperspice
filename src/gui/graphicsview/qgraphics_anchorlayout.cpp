@@ -69,10 +69,6 @@ void QGraphicsAnchor::unsetSpacing()
    d->unsetSpacing();
 }
 
-/*!
-    Constructs a QGraphicsAnchorLayout instance.  \a parent is passed to
-    QGraphicsLayout's constructor.
-  */
 QGraphicsAnchorLayout::QGraphicsAnchorLayout(QGraphicsLayoutItem *parent)
    : QGraphicsLayout(*new QGraphicsAnchorLayoutPrivate(), parent)
 {
@@ -80,9 +76,6 @@ QGraphicsAnchorLayout::QGraphicsAnchorLayout(QGraphicsLayoutItem *parent)
    d->createLayoutEdges();
 }
 
-/*!
-    Destroys the QGraphicsAnchorLayout object.
-*/
 QGraphicsAnchorLayout::~QGraphicsAnchorLayout()
 {
    Q_D(QGraphicsAnchorLayout);
@@ -116,10 +109,6 @@ QGraphicsAnchor *QGraphicsAnchorLayout::addAnchor(QGraphicsLayoutItem *firstItem
    return a;
 }
 
-/*!
-    Returns the anchor between the anchor points defined by \a firstItem and \a firstEdge and
-    \a secondItem and \a secondEdge. If there is no such anchor, the function will return 0.
-*/
 QGraphicsAnchor *QGraphicsAnchorLayout::anchor(QGraphicsLayoutItem *firstItem, Qt::AnchorPoint firstEdge,
    QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge)
 {
@@ -127,28 +116,6 @@ QGraphicsAnchor *QGraphicsAnchorLayout::anchor(QGraphicsLayoutItem *firstItem, Q
    return d->getAnchor(firstItem, firstEdge, secondItem, secondEdge);
 }
 
-/*!
-    Creates two anchors between \a firstItem and \a secondItem specified by the corners,
-    \a firstCorner and \a secondCorner, where one is for the horizontal edge and another
-    one for the vertical edge.
-
-    This is a convenience function, since anchoring corners can be expressed as anchoring
-    two edges. For instance:
-
-    \snippet examples/graphicsview/simpleanchorlayout/main.cpp adding a corner anchor in two steps
-
-    This can also be achieved with the following line of code:
-
-    \snippet examples/graphicsview/simpleanchorlayout/main.cpp adding a corner anchor
-
-    If there is already an anchor between the edge pairs, it will be replaced by the anchors that
-    this function specifies.
-
-    \a firstItem and \a secondItem are automatically added to the layout if they are not part of the
-    layout. This means that count() can increase by up to 2.
-
-    \sa addAnchor(), addAnchors()
-*/
 void QGraphicsAnchorLayout::addCornerAnchors(QGraphicsLayoutItem *firstItem,
    Qt::Corner firstCorner,
    QGraphicsLayoutItem *secondItem,
@@ -169,22 +136,6 @@ void QGraphicsAnchorLayout::addCornerAnchors(QGraphicsLayoutItem *firstItem,
    }
 }
 
-/*!
-    Anchors two or four edges of \a firstItem with the corresponding
-    edges of \a secondItem, so that \a firstItem has the same size as
-    \a secondItem in the dimensions specified by \a orientations.
-
-    For example, the following example anchors the left and right edges of two items
-    to match their widths:
-
-    \snippet examples/graphicsview/simpleanchorlayout/main.cpp adding anchors to match sizes in two steps
-
-    This can also be achieved using the following line of code:
-
-    \snippet examples/graphicsview/simpleanchorlayout/main.cpp adding anchors to match sizes
-
-    \sa addAnchor(), addCornerAnchors()
-*/
 void QGraphicsAnchorLayout::addAnchors(QGraphicsLayoutItem *firstItem,
    QGraphicsLayoutItem *secondItem,
    Qt::Orientations orientations)
@@ -203,11 +154,6 @@ void QGraphicsAnchorLayout::addAnchors(QGraphicsLayoutItem *firstItem,
    }
 }
 
-/*!
-    Sets the default horizontal spacing for the anchor layout to \a spacing.
-
-    \sa horizontalSpacing(), setVerticalSpacing(), setSpacing()
-*/
 void QGraphicsAnchorLayout::setHorizontalSpacing(qreal spacing)
 {
    Q_D(QGraphicsAnchorLayout);
@@ -216,11 +162,6 @@ void QGraphicsAnchorLayout::setHorizontalSpacing(qreal spacing)
    invalidate();
 }
 
-/*!
-    Sets the default vertical spacing for the anchor layout to \a spacing.
-
-    \sa verticalSpacing(), setHorizontalSpacing(), setSpacing()
-*/
 void QGraphicsAnchorLayout::setVerticalSpacing(qreal spacing)
 {
    Q_D(QGraphicsAnchorLayout);
@@ -229,17 +170,6 @@ void QGraphicsAnchorLayout::setVerticalSpacing(qreal spacing)
    invalidate();
 }
 
-/*!
-    Sets the default horizontal and the default vertical spacing for the anchor layout to \a spacing.
-
-    If an item is anchored with no spacing associated with the anchor, it will use the default
-    spacing.
-
-    QGraphicsAnchorLayout does not support negative spacings. Setting a negative value will unset the
-    previous spacing and make the layout use the spacing provided by the current widget style.
-
-    \sa setHorizontalSpacing(), setVerticalSpacing()
-*/
 void QGraphicsAnchorLayout::setSpacing(qreal spacing)
 {
    Q_D(QGraphicsAnchorLayout);
@@ -248,31 +178,18 @@ void QGraphicsAnchorLayout::setSpacing(qreal spacing)
    invalidate();
 }
 
-/*!
-    Returns the default horizontal spacing for the anchor layout.
-
-    \sa verticalSpacing(), setHorizontalSpacing()
-*/
 qreal QGraphicsAnchorLayout::horizontalSpacing() const
 {
    Q_D(const QGraphicsAnchorLayout);
    return d->styleInfo().defaultSpacing(Qt::Horizontal);
 }
 
-/*!
-    Returns the default vertical spacing for the anchor layout.
-
-    \sa horizontalSpacing(), setVerticalSpacing()
-*/
 qreal QGraphicsAnchorLayout::verticalSpacing() const
 {
    Q_D(const QGraphicsAnchorLayout);
    return d->styleInfo().defaultSpacing(Qt::Vertical);
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsAnchorLayout::setGeometry(const QRectF &geom)
 {
    Q_D(QGraphicsAnchorLayout);
@@ -283,14 +200,6 @@ void QGraphicsAnchorLayout::setGeometry(const QRectF &geom)
    d->setItemsGeometries(geom);
 }
 
-/*!
-    Removes the layout item at \a index without destroying it. Ownership of
-    the item is transferred to the caller.
-
-    Removing an item will also remove any of the anchors associated with it.
-
-    \sa itemAt(), count()
-*/
 void QGraphicsAnchorLayout::removeAt(int index)
 {
    Q_D(QGraphicsAnchorLayout);
@@ -310,27 +219,18 @@ void QGraphicsAnchorLayout::removeAt(int index)
    invalidate();
 }
 
-/*!
-    \reimp
-*/
 int QGraphicsAnchorLayout::count() const
 {
    Q_D(const QGraphicsAnchorLayout);
    return d->items.size();
 }
 
-/*!
-    \reimp
-*/
 QGraphicsLayoutItem *QGraphicsAnchorLayout::itemAt(int index) const
 {
    Q_D(const QGraphicsAnchorLayout);
    return d->items.value(index);
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsAnchorLayout::invalidate()
 {
    Q_D(QGraphicsAnchorLayout);
@@ -339,9 +239,6 @@ void QGraphicsAnchorLayout::invalidate()
    d->styleInfoDirty = true;
 }
 
-/*!
-    \reimp
-*/
 QSizeF QGraphicsAnchorLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
    (void) constraint;

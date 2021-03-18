@@ -653,13 +653,6 @@ void QMediaPlayer::setPlaylist(QMediaPlaylist *playlist)
    setMedia(m);
 }
 
-/*!
-    Sets the network access points for remote media playback.
-    \a configurations contains, in ascending preferential order, a list of
-    configuration  that can be used for network access.
-
-    This will invalidate the choice of previous configurations.
-*/
 void QMediaPlayer::setNetworkConfigurations(const QList<QNetworkConfiguration> &configurations)
 {
    Q_D(QMediaPlayer);
@@ -846,10 +839,6 @@ void QMediaPlayer::pause()
    }
 }
 
-/*!
-    Stop playing, and reset the play position to the beginning.
-*/
-
 void QMediaPlayer::stop()
 {
    Q_D(QMediaPlayer);
@@ -916,23 +905,6 @@ void QMediaPlayer::setPlaybackRate(qreal rate)
       d->control->setPlaybackRate(rate);
    }
 }
-
-/*!
-    Sets the current \a media source.
-
-    If a \a stream is supplied; media data will be read from it instead of resolving the media
-    source. In this case the media source may still be used to resolve additional information
-    about the media such as mime type. The \a stream must be open and readable.
-
-    Setting the media to a null QMediaContent will cause the player to discard all
-    information relating to the current media source and to cease all I/O operations related
-    to that media.
-
-    \note This function returns immediately after recording the specified source of the media.
-    It does not wait for the media to finish loading and does not check for errors. Listen for
-    the mediaStatusChanged() and error() signals to be notified when the media is loaded and
-    when an error occurs during loading.
-*/
 
 void QMediaPlayer::setMedia(const QMediaContent &media, QIODevice *stream)
 {

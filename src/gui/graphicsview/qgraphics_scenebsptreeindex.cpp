@@ -37,9 +37,6 @@ static inline int intmaxlog(int n)
    return  (n > 0 ? qMax(qCeil(qLn(qreal(n)) / qLn(qreal(2))), 5) : 0);
 }
 
-/*!
-    Constructs a private scene bsp index.
-*/
 QGraphicsSceneBspTreeIndexPrivate::QGraphicsSceneBspTreeIndexPrivate(QGraphicsScene *scene)
    : QGraphicsSceneIndexPrivate(scene),
      bspTreeDepth(0),
@@ -53,15 +50,6 @@ QGraphicsSceneBspTreeIndexPrivate::QGraphicsSceneBspTreeIndexPrivate(QGraphicsSc
 {
 }
 
-
-/*!
-    This method will update the BSP index by removing the items from the temporary
-    unindexed list and add them in the indexedItems list. This will also
-    update the growingItemsBoundingRect if needed. This will update the BSP
-    implementation as well.
-
-    \internal
-*/
 void QGraphicsSceneBspTreeIndexPrivate::_q_updateIndex()
 {
    Q_Q(QGraphicsSceneBspTreeIndex);
@@ -127,12 +115,6 @@ void QGraphicsSceneBspTreeIndexPrivate::_q_updateIndex()
    unindexedItems.clear();
 }
 
-
-/*!
-    \internal
-
-    Removes stale pointers from all data structures.
-*/
 void QGraphicsSceneBspTreeIndexPrivate::purgeRemovedItems()
 {
    if (!purgePending && removedItems.isEmpty()) {
@@ -152,11 +134,6 @@ void QGraphicsSceneBspTreeIndexPrivate::purgeRemovedItems()
    purgePending = false;
 }
 
-/*!
-    \internal
-
-    Starts or restarts the timer used for reindexing unindexed items.
-*/
 void QGraphicsSceneBspTreeIndexPrivate::startIndexTimer(int interval)
 {
    Q_Q(QGraphicsSceneBspTreeIndex);
@@ -167,9 +144,6 @@ void QGraphicsSceneBspTreeIndexPrivate::startIndexTimer(int interval)
    }
 }
 
-/*!
-    \internal
-*/
 void QGraphicsSceneBspTreeIndexPrivate::resetIndex()
 {
    purgeRemovedItems();
@@ -187,9 +161,6 @@ void QGraphicsSceneBspTreeIndexPrivate::resetIndex()
    startIndexTimer();
 }
 
-/*!
-    \internal
-*/
 void QGraphicsSceneBspTreeIndexPrivate::climbTree(QGraphicsItem *item, int *stackingOrder)
 {
    if (!item->d_ptr->children.isEmpty()) {
@@ -214,9 +185,6 @@ void QGraphicsSceneBspTreeIndexPrivate::climbTree(QGraphicsItem *item, int *stac
    }
 }
 
-/*!
-    \internal
-*/
 void QGraphicsSceneBspTreeIndexPrivate::_q_updateSortCache()
 {
    Q_Q(QGraphicsSceneBspTreeIndex);
@@ -244,9 +212,6 @@ void QGraphicsSceneBspTreeIndexPrivate::_q_updateSortCache()
    }
 }
 
-/*!
-    \internal
-*/
 void QGraphicsSceneBspTreeIndexPrivate::invalidateSortCache()
 {
    Q_Q(QGraphicsSceneBspTreeIndex);
@@ -372,11 +337,6 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndexPrivate::estimateItems(const QR
    return rectItems;
 }
 
-/*!
-    Sort a list of \a itemList in a specific \a order and use the cache if requested.
-
-    \internal
-*/
 void QGraphicsSceneBspTreeIndexPrivate::sortItems(QList<QGraphicsItem *> *itemList, Qt::SortOrder order,
    bool sortCacheEnabled, bool onlyTopLevelItems)
 {
@@ -408,9 +368,6 @@ void QGraphicsSceneBspTreeIndexPrivate::sortItems(QList<QGraphicsItem *> *itemLi
    }
 }
 
-/*!
-    Constructs a BSP scene index for the given \a scene.
-*/
 QGraphicsSceneBspTreeIndex::QGraphicsSceneBspTreeIndex(QGraphicsScene *scene)
    : QGraphicsSceneIndex(*new QGraphicsSceneBspTreeIndexPrivate(scene), scene)
 {
@@ -429,10 +386,6 @@ QGraphicsSceneBspTreeIndex::~QGraphicsSceneBspTreeIndex()
    }
 }
 
-/*!
-    \internal
-    Clear the all the BSP index.
-*/
 void QGraphicsSceneBspTreeIndex::clear()
 {
    Q_D(QGraphicsSceneBspTreeIndex);
@@ -452,28 +405,19 @@ void QGraphicsSceneBspTreeIndex::clear()
    d->regenerateIndex = true;
 }
 
-/*!
-    Add the \a item into the BSP index.
-*/
 void QGraphicsSceneBspTreeIndex::addItem(QGraphicsItem *item)
 {
    Q_D(QGraphicsSceneBspTreeIndex);
    d->addItem(item);
 }
 
-/*!
-    Remove the \a item from the BSP index.
-*/
+
 void QGraphicsSceneBspTreeIndex::removeItem(QGraphicsItem *item)
 {
    Q_D(QGraphicsSceneBspTreeIndex);
    d->removeItem(item);
 }
 
-/*!
-    \internal
-    Update the BSP when the \a item 's bounding rect has changed.
-*/
 void QGraphicsSceneBspTreeIndex::prepareBoundingRectChange(const QGraphicsItem *item)
 {
    if (!item) {
@@ -494,13 +438,6 @@ void QGraphicsSceneBspTreeIndex::prepareBoundingRectChange(const QGraphicsItem *
    }
 }
 
-/*!
-    Returns an estimation visible items that are either inside or
-    intersect with the specified \a rect and return a list sorted using \a order.
-
-    \a deviceTransform is the transformation apply to the view.
-
-*/
 QList<QGraphicsItem *> QGraphicsSceneBspTreeIndex::estimateItems(const QRectF &rect, Qt::SortOrder order) const
 {
    Q_D(const QGraphicsSceneBspTreeIndex);
@@ -513,11 +450,6 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndex::estimateTopLevelItems(const Q
    return const_cast<QGraphicsSceneBspTreeIndexPrivate *>(d)->estimateItems(rect, order, /*onlyTopLevels=*/true);
 }
 
-/*!
-    \fn QList<QGraphicsItem *> QGraphicsSceneBspTreeIndex::items(Qt::SortOrder order = Qt::DescendingOrder) const;
-
-    Return all items in the BSP index and sort them using \a order.
-*/
 QList<QGraphicsItem *> QGraphicsSceneBspTreeIndex::items(Qt::SortOrder order) const
 {
    Q_D(const QGraphicsSceneBspTreeIndex);
@@ -563,12 +495,6 @@ void QGraphicsSceneBspTreeIndex::setBspTreeDepth(int depth)
    d->resetIndex();
 }
 
-/*!
-    \internal
-
-    This method react to the  \a rect change of the scene and
-    reset the BSP tree index.
-*/
 void QGraphicsSceneBspTreeIndex::updateSceneRect(const QRectF &rect)
 {
    Q_D(QGraphicsSceneBspTreeIndex);
@@ -576,12 +502,6 @@ void QGraphicsSceneBspTreeIndex::updateSceneRect(const QRectF &rect)
    d->resetIndex();
 }
 
-/*!
-    \internal
-
-    This method react to the \a change of the \a item and use the \a value to
-    update the BSP tree if necessary.
-*/
 void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphicsItem::GraphicsItemChange change,
    const void *const value)
 {
@@ -637,13 +557,7 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
          break;
    }
 }
-/*!
-    \reimp
 
-    Used to catch the timer event.
-
-    \internal
-*/
 bool QGraphicsSceneBspTreeIndex::event(QEvent *event)
 {
    Q_D(QGraphicsSceneBspTreeIndex);

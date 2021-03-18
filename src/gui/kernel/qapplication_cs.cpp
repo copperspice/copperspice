@@ -1954,38 +1954,10 @@ int QApplication::startDragTime()
    return QGuiApplication::styleHints()->startDragTime();
 }
 
-/*
-    Sets the distance after which a drag should start to \a l pixels.
-
-    \sa startDragDistance()
-*/
-
 void QApplication::setStartDragDistance(int l)
 {
    QGuiApplication::styleHints()->setStartDragDistance(l);
 }
-
-/*!
-    \property QApplication::startDragDistance
-
-    If you support drag and drop in your application, and want to start a drag
-    and drop operation after the user has moved the cursor a certain distance
-    with a button held down, you should use this property's value as the
-    minimum distance required.
-
-    For example, if the mouse position of the click is stored in \c startPos
-    and the current position (e.g. in the mouse move event) is \c currentPos,
-    you can find out if a drag should be started with code like this:
-
-    \snippet code/src_gui_kernel_qapplication.cpp 6
-
-    Qt uses this value internally, e.g. in QFileDialog.
-
-    The default value (if the platform doesn't provide a different default)
-    is 10 pixels.
-
-    \sa startDragTime(), QPoint::manhattanLength(), {Drag and Drop}
-*/
 
 int QApplication::startDragDistance()
 {
@@ -3249,19 +3221,6 @@ void QApplication::setEffectEnabled(Qt::UIEffect effect, bool enable)
    }
 }
 
-/*!
-    \fn bool QApplication::isEffectEnabled(Qt::UIEffect effect)
-
-    Returns \c true if \a effect is enabled; otherwise returns \c false.
-
-    By default, Qt will try to use the desktop settings. To prevent this, call
-    setDesktopSettingsAware(false).
-
-    \note All effects are disabled on screens running at less than 16-bit color
-    depth.
-
-    \sa setEffectEnabled(), Qt::UIEffect
-*/
 bool QApplication::isEffectEnabled(Qt::UIEffect effect)
 {
    CHECK_QAPP_INSTANCE(false)
@@ -3270,35 +3229,10 @@ bool QApplication::isEffectEnabled(Qt::UIEffect effect)
       && (QApplicationPrivate::enabledAnimations & uiEffectToFlag(effect));
 }
 
-/*!
-    \fn void QApplication::beep()
-
-    Sounds the bell, using the default volume and sound. The function is \e not
-    available in Qt for Embedded Linux.
-*/
 void QApplication::beep()
 {
    QMetaObject::invokeMethod(QGuiApplication::platformNativeInterface(), "beep");
 }
-
-/*!
-    \macro qApp
-    \relates QApplication
-
-    A global pointer referring to the unique application object. It is
-    equivalent to QCoreApplication::instance(), but cast as a QApplication pointer,
-    so only valid when the unique application object is a QApplication.
-
-    \sa QCoreApplication::instance(), qGuiApp
-*/
-
-/*!
-    \fn QLocale QApplication::keyboardInputLocale()
-    \since 4.2
-    \obsolete
-
-    Returns the current keyboard input locale. Replaced with QInputMethod::locale()
-*/
 
 bool qt_sendSpontaneousEvent(QObject *receiver, QEvent *event)
 {

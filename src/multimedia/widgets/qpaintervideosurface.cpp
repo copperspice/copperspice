@@ -1338,13 +1338,7 @@ QAbstractVideoSurface::Error QVideoSurfaceGlslPainter::paint(
 
 #endif
 
-/*!
-    \class QPainterVideoSurface
-    \internal
-*/
-
-/*!
-*/
+// internal
 QPainterVideoSurface::QPainterVideoSurface(QObject *parent)
    : QAbstractVideoSurface(parent), m_painter(nullptr),
 
@@ -1357,8 +1351,6 @@ QPainterVideoSurface::QPainterVideoSurface(QObject *parent)
 {
 }
 
-/*!
-*/
 QPainterVideoSurface::~QPainterVideoSurface()
 {
    if (isActive()) {
@@ -1368,8 +1360,6 @@ QPainterVideoSurface::~QPainterVideoSurface()
    delete m_painter;
 }
 
-/*!
-*/
 QList<QVideoFrame::PixelFormat> QPainterVideoSurface::supportedPixelFormats(
    QAbstractVideoBuffer::HandleType handleType) const
 {
@@ -1380,8 +1370,6 @@ QList<QVideoFrame::PixelFormat> QPainterVideoSurface::supportedPixelFormats(
    return m_painter->supportedPixelFormats(handleType);
 }
 
-/*!
-*/
 bool QPainterVideoSurface::isFormatSupported(const QVideoSurfaceFormat &format) const
 {
    if (!m_painter) {
@@ -1643,34 +1631,16 @@ void QPainterVideoSurface::setGLContext(QGLContext *context)
    }
 }
 
-/*!
-    \enum QPainterVideoSurface::ShaderType
-
-    \value NoShaders
-    \value FragmentProgramShader
-    \value HlslShader
-*/
-
-/*!
-    \typedef QPainterVideoSurface::ShaderTypes
-*/
-
-/*!
-*/
 QPainterVideoSurface::ShaderTypes QPainterVideoSurface::supportedShaderTypes() const
 {
    return m_shaderTypes;
 }
 
-/*!
-*/
 QPainterVideoSurface::ShaderType QPainterVideoSurface::shaderType() const
 {
    return m_shaderType;
 }
 
-/*!
-*/
 void QPainterVideoSurface::setShaderType(ShaderType type)
 {
    if (!(type & m_shaderTypes)) {

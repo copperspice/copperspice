@@ -81,10 +81,6 @@ QGraphicsGridLayout::~QGraphicsGridLayout()
    }
 }
 
-/*!
-    Adds \a item to the grid on \a row and \a column. You can specify a
-    \a rowSpan and \a columnSpan and an optional \a alignment.
-*/
 void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column,
    int rowSpan, int columnSpan, Qt::Alignment alignment)
 {
@@ -115,7 +111,6 @@ void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column
    invalidate();
 }
 
-
 void QGraphicsGridLayout::setHorizontalSpacing(qreal spacing)
 {
    Q_D(QGraphicsGridLayout);
@@ -123,16 +118,12 @@ void QGraphicsGridLayout::setHorizontalSpacing(qreal spacing)
    invalidate();
 }
 
-
 qreal QGraphicsGridLayout::horizontalSpacing() const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.spacing(Qt::Horizontal, d->styleInfo());
 }
 
-/*!
-    Sets the default vertical spacing for the grid layout to \a spacing.
-*/
 void QGraphicsGridLayout::setVerticalSpacing(qreal spacing)
 {
    Q_D(QGraphicsGridLayout);
@@ -140,21 +131,12 @@ void QGraphicsGridLayout::setVerticalSpacing(qreal spacing)
    invalidate();
 }
 
-/*!
-    Returns the default vertical spacing for the grid layout.
-*/
 qreal QGraphicsGridLayout::verticalSpacing() const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.spacing(Qt::Vertical, d->styleInfo());
 }
 
-/*!
-    Sets the grid layout's default spacing, both vertical and
-    horizontal, to \a spacing.
-
-    \sa rowSpacing(), columnSpacing()
-*/
 void QGraphicsGridLayout::setSpacing(qreal spacing)
 {
    Q_D(QGraphicsGridLayout);
@@ -162,9 +144,6 @@ void QGraphicsGridLayout::setSpacing(qreal spacing)
    invalidate();
 }
 
-/*!
-    Sets the spacing for \a row to \a spacing.
-*/
 void QGraphicsGridLayout::setRowSpacing(int row, qreal spacing)
 {
    Q_D(QGraphicsGridLayout);
@@ -172,18 +151,12 @@ void QGraphicsGridLayout::setRowSpacing(int row, qreal spacing)
    invalidate();
 }
 
-/*!
-    Returns the row spacing for \a row.
-*/
 qreal QGraphicsGridLayout::rowSpacing(int row) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowSpacing(row, Qt::Vertical);
 }
 
-/*!
-    Sets the spacing for \a column to \a spacing.
-*/
 void QGraphicsGridLayout::setColumnSpacing(int column, qreal spacing)
 {
    Q_D(QGraphicsGridLayout);
@@ -191,18 +164,12 @@ void QGraphicsGridLayout::setColumnSpacing(int column, qreal spacing)
    invalidate();
 }
 
-/*!
-    Returns the column spacing for \a column.
-*/
 qreal QGraphicsGridLayout::columnSpacing(int column) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowSpacing(column, Qt::Horizontal);
 }
 
-/*!
-    Sets the stretch factor for \a row to \a stretch.
-*/
 void QGraphicsGridLayout::setRowStretchFactor(int row, int stretch)
 {
    Q_D(QGraphicsGridLayout);
@@ -210,18 +177,12 @@ void QGraphicsGridLayout::setRowStretchFactor(int row, int stretch)
    invalidate();
 }
 
-/*!
-    Returns the stretch factor for \a row.
-*/
 int QGraphicsGridLayout::rowStretchFactor(int row) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowStretchFactor(row, Qt::Vertical);
 }
 
-/*!
-    Sets the stretch factor for \a column to \a stretch.
-*/
 void QGraphicsGridLayout::setColumnStretchFactor(int column, int stretch)
 {
    Q_D(QGraphicsGridLayout);
@@ -229,18 +190,12 @@ void QGraphicsGridLayout::setColumnStretchFactor(int column, int stretch)
    invalidate();
 }
 
-/*!
-    Returns the stretch factor for \a column.
-*/
 int QGraphicsGridLayout::columnStretchFactor(int column) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowStretchFactor(column, Qt::Horizontal);
 }
 
-/*!
-    Sets the minimum height for row, \a row, to \a height.
-*/
 void QGraphicsGridLayout::setRowMinimumHeight(int row, qreal height)
 {
    Q_D(QGraphicsGridLayout);
@@ -248,18 +203,12 @@ void QGraphicsGridLayout::setRowMinimumHeight(int row, qreal height)
    invalidate();
 }
 
-/*!
-    Returns the minimum height for row, \a row.
-*/
 qreal QGraphicsGridLayout::rowMinimumHeight(int row) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowSizeHint(Qt::MinimumSize, row, Qt::Vertical);
 }
 
-/*!
-    Sets the preferred height for row, \a row, to \a height.
-*/
 void QGraphicsGridLayout::setRowPreferredHeight(int row, qreal height)
 {
    Q_D(QGraphicsGridLayout);
@@ -267,18 +216,12 @@ void QGraphicsGridLayout::setRowPreferredHeight(int row, qreal height)
    invalidate();
 }
 
-/*!
-    Returns the preferred height for row, \a row.
-*/
 qreal QGraphicsGridLayout::rowPreferredHeight(int row) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowSizeHint(Qt::PreferredSize, row, Qt::Vertical);
 }
 
-/*!
-    Sets the maximum height for row, \a row, to \a height.
-*/
 void QGraphicsGridLayout::setRowMaximumHeight(int row, qreal height)
 {
    Q_D(QGraphicsGridLayout);
@@ -286,18 +229,12 @@ void QGraphicsGridLayout::setRowMaximumHeight(int row, qreal height)
    invalidate();
 }
 
-/*!
-    Returns the maximum height for row, \a row.
-*/
 qreal QGraphicsGridLayout::rowMaximumHeight(int row) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowSizeHint(Qt::MaximumSize, row, Qt::Vertical);
 }
 
-/*!
-    Sets the fixed height for row, \a row, to \a height.
-*/
 void QGraphicsGridLayout::setRowFixedHeight(int row, qreal height)
 {
    Q_D(QGraphicsGridLayout);
@@ -306,9 +243,6 @@ void QGraphicsGridLayout::setRowFixedHeight(int row, qreal height)
    invalidate();
 }
 
-/*!
-    Sets the minimum width for \a column to \a width.
-*/
 void QGraphicsGridLayout::setColumnMinimumWidth(int column, qreal width)
 {
    Q_D(QGraphicsGridLayout);
@@ -316,18 +250,12 @@ void QGraphicsGridLayout::setColumnMinimumWidth(int column, qreal width)
    invalidate();
 }
 
-/*!
-    Returns the minimum width for \a column.
-*/
 qreal QGraphicsGridLayout::columnMinimumWidth(int column) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowSizeHint(Qt::MinimumSize, column, Qt::Horizontal);
 }
 
-/*!
-    Sets the preferred width for \a column to \a width.
-*/
 void QGraphicsGridLayout::setColumnPreferredWidth(int column, qreal width)
 {
    Q_D(QGraphicsGridLayout);
@@ -335,18 +263,12 @@ void QGraphicsGridLayout::setColumnPreferredWidth(int column, qreal width)
    invalidate();
 }
 
-/*!
-    Returns the preferred width for \a column.
-*/
 qreal QGraphicsGridLayout::columnPreferredWidth(int column) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowSizeHint(Qt::PreferredSize, column, Qt::Horizontal);
 }
 
-/*!
-    Sets the maximum width of \a column to \a width.
-*/
 void QGraphicsGridLayout::setColumnMaximumWidth(int column, qreal width)
 {
    Q_D(QGraphicsGridLayout);
@@ -354,18 +276,12 @@ void QGraphicsGridLayout::setColumnMaximumWidth(int column, qreal width)
    invalidate();
 }
 
-/*!
-    Returns the maximum width for \a column.
-*/
 qreal QGraphicsGridLayout::columnMaximumWidth(int column) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowSizeHint(Qt::MaximumSize, column, Qt::Horizontal);
 }
 
-/*!
-    Sets the fixed width of \a column to \a width.
-*/
 void QGraphicsGridLayout::setColumnFixedWidth(int column, qreal width)
 {
    Q_D(QGraphicsGridLayout);
@@ -374,9 +290,6 @@ void QGraphicsGridLayout::setColumnFixedWidth(int column, qreal width)
    invalidate();
 }
 
-/*!
-    Sets the alignment of \a row to \a alignment.
-*/
 void QGraphicsGridLayout::setRowAlignment(int row, Qt::Alignment alignment)
 {
    Q_D(QGraphicsGridLayout);
@@ -384,18 +297,12 @@ void QGraphicsGridLayout::setRowAlignment(int row, Qt::Alignment alignment)
    invalidate();
 }
 
-/*!
-    Returns the alignment of \a row.
-*/
 Qt::Alignment QGraphicsGridLayout::rowAlignment(int row) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowAlignment(row, Qt::Vertical);
 }
 
-/*!
-    Sets the alignment for \a column to \a alignment.
-*/
 void QGraphicsGridLayout::setColumnAlignment(int column, Qt::Alignment alignment)
 {
    Q_D(QGraphicsGridLayout);
@@ -403,18 +310,12 @@ void QGraphicsGridLayout::setColumnAlignment(int column, Qt::Alignment alignment
    invalidate();
 }
 
-/*!
-    Returns the alignment for \a column.
-*/
 Qt::Alignment QGraphicsGridLayout::columnAlignment(int column) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.rowAlignment(column, Qt::Horizontal);
 }
 
-/*!
-    Sets the alignment for \a item to \a alignment.
-*/
 void QGraphicsGridLayout::setAlignment(QGraphicsLayoutItem *item, Qt::Alignment alignment)
 {
    Q_D(QGraphicsGridLayout);
@@ -422,40 +323,24 @@ void QGraphicsGridLayout::setAlignment(QGraphicsLayoutItem *item, Qt::Alignment 
    invalidate();
 }
 
-/*!
-    Returns the alignment for \a item.
-*/
 Qt::Alignment QGraphicsGridLayout::alignment(QGraphicsLayoutItem *item) const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.alignment(item);
 }
 
-/*!
-    Returns the number of rows in the grid layout. This is always one more
-    than the index of the last row that is occupied by a layout item (empty
-    rows are counted except for those at the end).
-*/
 int QGraphicsGridLayout::rowCount() const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.effectiveLastRow(Qt::Vertical) + 1;
 }
 
-/*!
-    Returns the number of columns in the grid layout. This is always one more
-    than the index of  the last column that is occupied by a layout item (empty
-    columns are counted except for those at the end).
-*/
 int QGraphicsGridLayout::columnCount() const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.effectiveLastRow(Qt::Horizontal) + 1;
 }
 
-/*!
-    Returns a pointer to the layout item at (\a row, \a column).
-*/
 QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int row, int column) const
 {
    Q_D(const QGraphicsGridLayout);
@@ -471,19 +356,12 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int row, int column) const
    return nullptr;
 }
 
-/*!
-    Returns the number of layout items in this grid layout.
-*/
 int QGraphicsGridLayout::count() const
 {
    Q_D(const QGraphicsGridLayout);
    return d->engine.itemCount();
 }
 
-/*!
-    Returns the layout item at \a index, or 0 if there is no layout item at
-    this index.
-*/
 QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
 {
    Q_D(const QGraphicsGridLayout);
@@ -538,9 +416,7 @@ void QGraphicsGridLayout::removeItem(QGraphicsLayoutItem *item)
    int index = d->engine.indexOf(item);
    removeAt(index);
 }
-/*!
-    \reimp
-*/
+
 void QGraphicsGridLayout::invalidate()
 {
    Q_D(QGraphicsGridLayout);
@@ -560,9 +436,6 @@ void QGraphicsGridLayoutPrivate::dump(int indent) const
 }
 #endif
 
-/*!
-    Sets the bounding geometry of the grid layout to \a rect.
-*/
 void QGraphicsGridLayout::setGeometry(const QRectF &rect)
 {
    Q_D(QGraphicsGridLayout);
@@ -590,9 +463,6 @@ void QGraphicsGridLayout::setGeometry(const QRectF &rect)
 #endif
 }
 
-/*!
-    \reimp
-*/
 QSizeF QGraphicsGridLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
    Q_D(const QGraphicsGridLayout);

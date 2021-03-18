@@ -52,9 +52,6 @@ QGraphicsLayout::QGraphicsLayout(QGraphicsLayoutItem *parent)
    setOwnedByLayout(true);
 }
 
-/*!
-    \internal
-*/
 QGraphicsLayout::QGraphicsLayout(QGraphicsLayoutPrivate &dd, QGraphicsLayoutItem *parent)
    : QGraphicsLayoutItem(dd)
 {
@@ -76,26 +73,10 @@ QGraphicsLayout::QGraphicsLayout(QGraphicsLayoutPrivate &dd, QGraphicsLayoutItem
    setOwnedByLayout(true);
 }
 
-/*!
-    Destroys the QGraphicsLayout object.
-*/
 QGraphicsLayout::~QGraphicsLayout()
 {
 }
 
-/*!
-    Sets the contents margins to \a left, \a top, \a right and \a bottom. The
-    default contents margins for toplevel layouts are style dependent
-    (by querying the pixelMetric for QStyle::PM_LayoutLeftMargin,
-    QStyle::PM_LayoutTopMargin, QStyle::PM_LayoutRightMargin and
-    QStyle::PM_LayoutBottomMargin).
-
-    For sublayouts the default margins are 0.
-
-    Changing the contents margins automatically invalidates the layout.
-
-    \sa invalidate()
-*/
 void QGraphicsLayout::setContentsMargins(qreal left, qreal top, qreal right, qreal bottom)
 {
    Q_D(QGraphicsLayout);
@@ -109,9 +90,6 @@ void QGraphicsLayout::setContentsMargins(qreal left, qreal top, qreal right, qre
    invalidate();
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsLayout::getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const
 {
    Q_D(const QGraphicsLayout);
@@ -121,22 +99,6 @@ void QGraphicsLayout::getContentsMargins(qreal *left, qreal *top, qreal *right, 
    d->getMargin(bottom, d->bottom, QStyle::PM_LayoutBottomMargin);
 }
 
-/*!
-    Activates the layout, causing all items in the layout to be immediately
-    rearranged. This function is based on calling count() and itemAt(), and
-    then calling setGeometry() on all items sequentially. When activated,
-    the layout will adjust its geometry to its parent's contentsRect().
-    The parent will then invalidate any layout of its own.
-
-    If called in sequence or recursively, e.g., by one of the arranged items
-    in response to being resized, this function will do nothing.
-
-    Note that the layout is free to use geometry caching to optimize this
-    process.  To forcefully invalidate any such cache, you can call
-    invalidate() before calling activate().
-
-    \sa invalidate()
-*/
 void QGraphicsLayout::activate()
 {
    Q_D(QGraphicsLayout);
@@ -176,13 +138,11 @@ void QGraphicsLayout::activate()
    }
 }
 
-
 bool QGraphicsLayout::isActivated() const
 {
    Q_D(const QGraphicsLayout);
    return d->activated;
 }
-
 
 void QGraphicsLayout::invalidate()
 {
@@ -220,9 +180,6 @@ void QGraphicsLayout::invalidate()
    }
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsLayout::updateGeometry()
 {
    Q_D(QGraphicsLayout);
@@ -252,19 +209,6 @@ void QGraphicsLayout::updateGeometry()
    }
 }
 
-/*!
-    This virtual event handler receives all events for the managed
-    widget. QGraphicsLayout uses this event handler to listen for layout
-    related events such as geometry changes, layout changes or layout
-    direction changes.
-
-    \a e is a pointer to the event.
-
-    You can reimplement this event handler to track similar events for your
-    own custom layout.
-
-    \sa QGraphicsWidget::event(), QGraphicsItem::sceneEvent()
-*/
 void QGraphicsLayout::widgetEvent(QEvent *e)
 {
    switch (e->type()) {
@@ -286,7 +230,6 @@ void QGraphicsLayout::widgetEvent(QEvent *e)
    }
 }
 
-
 void QGraphicsLayout::addChildLayoutItem(QGraphicsLayoutItem *layoutItem)
 {
    Q_D(QGraphicsLayout);
@@ -295,18 +238,14 @@ void QGraphicsLayout::addChildLayoutItem(QGraphicsLayoutItem *layoutItem)
 
 static bool g_instantInvalidatePropagation = false;
 
-
 void QGraphicsLayout::setInstantInvalidatePropagation(bool enable)
 {
    g_instantInvalidatePropagation = enable;
 }
 
-
 bool QGraphicsLayout::instantInvalidatePropagation()
 {
    return g_instantInvalidatePropagation;
 }
-
-
 
 #endif

@@ -1026,15 +1026,6 @@ void QGradient::setStops(const QGradientStops &stops)
    }
 }
 
-
-/*!
-    Returns the stop points for this gradient.
-
-    If no stop points have been specified, a gradient of black at 0 to white
-    at 1 is used.
-
-    \sa setStops(), setColorAt()
-*/
 QGradientStops QGradient::stops() const
 {
    if (m_stops.isEmpty()) {
@@ -1054,12 +1045,6 @@ QGradient::CoordinateMode QGradient::coordinateMode() const
    return CoordinateMode(i & 0x03);
 }
 
-/*!
-    \since 4.4
-
-    Sets the coordinate mode of this gradient to \a mode. The default
-    mode is LogicalMode.
-*/
 void QGradient::setCoordinateMode(CoordinateMode mode)
 {
    Q_DUMMY_ACCESSOR

@@ -384,10 +384,6 @@ QIcon QFileIconProvider::icon(const QFileInfo &info) const
    return QIcon();
 }
 
-/*!
-  Returns the type of the file described by \a info.
-*/
-
 QString QFileIconProvider::type(const QFileInfo &info) const
 {
    if (info.isRoot()) {

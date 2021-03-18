@@ -252,25 +252,6 @@ QIcon QUndoModel::cleanIcon() const
    return m_clean_icon;
 }
 
-/*!
-    \class QUndoView
-    \brief The QUndoView class displays the contents of a QUndoStack.
-    \since 4.2
-
-    \ingroup advanced
-
-    QUndoView is a QListView which displays the list of commands pushed on an undo stack.
-    The most recently executed command is always selected. Selecting a different command
-    results in a call to QUndoStack::setIndex(), rolling the state of the document
-    backwards or forward to the new command.
-
-    The stack can be set explicitly with setStack(). Alternatively, a QUndoGroup object can
-    be set with setGroup(). The view will then update itself automatically whenever the
-    active stack of the group changes.
-
-    \image qundoview.png
-*/
-
 class QUndoViewPrivate : public QListViewPrivate
 {
    Q_DECLARE_PUBLIC(QUndoView)
@@ -307,20 +288,12 @@ void QUndoViewPrivate::init()
    q->setSelectionModel(model->selectionModel());
 }
 
-/*!
-    Constructs a new view with parent \a parent.
-*/
-
 QUndoView::QUndoView(QWidget *parent)
    : QListView(*new QUndoViewPrivate(), parent)
 {
    Q_D(QUndoView);
    d->init();
 }
-
-/*!
-    Constructs a new view with parent \a parent and sets the observed stack to \a stack.
-*/
 
 QUndoView::QUndoView(QUndoStack *stack, QWidget *parent)
    : QListView(*new QUndoViewPrivate(), parent)
@@ -332,12 +305,6 @@ QUndoView::QUndoView(QUndoStack *stack, QWidget *parent)
 
 #ifndef QT_NO_UNDOGROUP
 
-/*!
-    Constructs a new view with parent \a parent and sets the observed group to \a group.
-
-    The view will update itself autmiatically whenever the active stack of the group changes.
-*/
-
 QUndoView::QUndoView(QUndoGroup *group, QWidget *parent)
    : QListView(*new QUndoViewPrivate(), parent)
 {
@@ -346,37 +313,17 @@ QUndoView::QUndoView(QUndoGroup *group, QWidget *parent)
    setGroup(group);
 }
 
-#endif // QT_NO_UNDOGROUP
-
-/*!
-    Destroys this view.
-*/
+#endif
 
 QUndoView::~QUndoView()
 {
 }
-
-/*!
-    Returns the stack currently displayed by this view. If the view is looking at a
-    QUndoGroup, this the group's active stack.
-
-    \sa setStack() setGroup()
-*/
 
 QUndoStack *QUndoView::stack() const
 {
    Q_D(const QUndoView);
    return d->model->stack();
 }
-
-/*!
-    Sets the stack displayed by this view to \a stack. If \a stack is 0, the view
-    will be empty.
-
-    If the view was previously looking at a QUndoGroup, the group is set to 0.
-
-    \sa stack() setGroup()
-*/
 
 void QUndoView::setStack(QUndoStack *stack)
 {

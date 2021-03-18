@@ -479,13 +479,6 @@ QKeySequence::~QKeySequence()
    }
 }
 
-/*!
-    \internal
-    KeySequences should never be modified, but rather just created.
-    Internally though we do need to modify to keep pace in event
-    delivery.
-*/
-
 void QKeySequence::setKey(int key, int index)
 {
    Q_ASSERT_X(index >= 0 && index < QKeySequencePrivate::MaxKeyCount, "QKeySequence::setKey", "index out of range");

@@ -1032,13 +1032,7 @@ void QAbstractSpinBox::mouseReleaseEvent(QMouseEvent *event)
    event->accept();
 }
 
-// --- QAbstractSpinBoxPrivate ---
-
-/*!
-    \internal
-    Constructs a QAbstractSpinBoxPrivate object
-*/
-
+// internal
 QAbstractSpinBoxPrivate::QAbstractSpinBoxPrivate()
    : edit(nullptr), type(QVariant::Invalid), spinClickTimerId(-1), spinClickTimerInterval(100),
      spinClickThresholdTimerId(-1), spinClickThresholdTimerInterval(-1), effectiveSpinRepeatRate(1),
@@ -1051,19 +1045,10 @@ QAbstractSpinBoxPrivate::QAbstractSpinBoxPrivate()
 {
 }
 
-/*
-   \internal
-   Called when the QAbstractSpinBoxPrivate is destroyed
-*/
 QAbstractSpinBoxPrivate::~QAbstractSpinBoxPrivate()
 {
 }
 
-/*!
-    \internal
-    Updates the old and new hover control. Does nothing if the hover
-    control has not changed.
-*/
 bool QAbstractSpinBoxPrivate::updateHoverControl(const QPoint &pos)
 {
    Q_Q(QAbstractSpinBox);
@@ -1080,11 +1065,6 @@ bool QAbstractSpinBoxPrivate::updateHoverControl(const QPoint &pos)
    return !doesHover;
 }
 
-/*!
-    \internal
-    Returns the hover control at \a pos.
-    This will update the hoverRect and hoverControl.
-*/
 QStyle::SubControl QAbstractSpinBoxPrivate::newHoverControl(const QPoint &pos)
 {
    Q_Q(QAbstractSpinBox);
@@ -1096,11 +1076,6 @@ QStyle::SubControl QAbstractSpinBoxPrivate::newHoverControl(const QPoint &pos)
    hoverRect = q->style()->subControlRect(QStyle::CC_SpinBox, &opt, hoverControl, q);
    return hoverControl;
 }
-
-/*!
-    \internal
-    Strips any prefix/suffix from \a text.
-*/
 
 QString QAbstractSpinBoxPrivate::stripped(const QString &t, int *pos) const
 {

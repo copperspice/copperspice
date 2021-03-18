@@ -696,11 +696,6 @@ void QGuiApplicationPrivate::hideModalWindow(QWindow *window)
    }
 }
 
-
-/*!
-    Returns the QWindow that receives events tied to focus,
-    such as key events.
-*/
 QWindow *QApplication::focusWindow()
 {
    return QGuiApplicationPrivate::focus_window;
@@ -747,10 +742,6 @@ QScreen *QApplication::primaryScreen()
    return QGuiApplicationPrivate::screen_list.at(0);
 }
 
-/*!
-    Returns a list of all the screens associated with the
-    windowing system the application is connected to.
-*/
 QList<QScreen *> QApplication::screens()
 {
    return QGuiApplicationPrivate::screen_list;
@@ -2970,14 +2961,6 @@ QCursor *QApplication::overrideCursor()
    return qGuiApp->d_func()->cursor_list.isEmpty() ? nullptr : &qGuiApp->d_func()->cursor_list.first();
 }
 
-/*!
-    Changes the currently active application override cursor to \a cursor.
-
-    This function has no effect if setOverrideCursor() was not called.
-
-    \sa setOverrideCursor(), overrideCursor(), restoreOverrideCursor(),
-    QWidget::setCursor()
- */
 void QApplication::changeOverrideCursor(const QCursor &cursor)
 {
    CHECK_QAPP_INSTANCE()

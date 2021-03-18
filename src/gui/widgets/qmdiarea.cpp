@@ -1696,10 +1696,6 @@ void QMdiAreaPrivate::refreshTabBar()
 }
 #endif // QT_NO_TABBAR
 
-/*!
-    Constructs an empty mdi area. \a parent is passed to QWidget's
-    constructor.
-*/
 QMdiArea::QMdiArea(QWidget *parent)
    : QAbstractScrollArea(*new QMdiAreaPrivate, parent)
 {
@@ -1713,9 +1709,6 @@ QMdiArea::QMdiArea(QWidget *parent)
    QApplication::instance()->installEventFilter(this);
 }
 
-/*!
-    Destroys the MDI area.
-*/
 QMdiArea::~QMdiArea()
 {
    Q_D(QMdiArea);
@@ -1786,15 +1779,6 @@ QSize QMdiArea::minimumSizeHint() const
    return size.expandedTo(QApplication::globalStrut());
 }
 
-/*!
-    Returns a pointer to the current subwindow, or 0 if there is
-    no current subwindow.
-
-    This function will return the same as activeSubWindow() if
-    the QApplication containing QMdiArea is active.
-
-    \sa activeSubWindow(), QApplication::activeWindow()
-*/
 QMdiSubWindow *QMdiArea::currentSubWindow() const
 {
    Q_D(const QMdiArea);
@@ -1827,12 +1811,6 @@ QMdiSubWindow *QMdiArea::activeSubWindow() const
    return d->active;
 }
 
-/*!
-    Activates the subwindow \a window. If \a window is 0, any
-    current active window is deactivated.
-
-    \sa activeSubWindow()
-*/
 void QMdiArea::setActiveSubWindow(QMdiSubWindow *window)
 {
    Q_D(QMdiArea);
@@ -1855,11 +1833,6 @@ void QMdiArea::setActiveSubWindow(QMdiSubWindow *window)
    d->activateWindow(window);
 }
 
-/*!
-    Closes the active subwindow.
-
-    \sa closeAllSubWindows()
-*/
 void QMdiArea::closeActiveSubWindow()
 {
    Q_D(QMdiArea);

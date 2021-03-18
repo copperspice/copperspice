@@ -562,11 +562,6 @@ QIcon::QIcon(const QString &fileName)
    addFile(fileName);
 }
 
-
-/*!
-    Creates an icon with a specific icon \a engine. The icon takes
-    ownership of the engine.
-*/
 QIcon::QIcon(QIconEngine *engine)
    : d(new QIconPrivate)
 {

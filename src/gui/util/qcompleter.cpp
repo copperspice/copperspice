@@ -1455,37 +1455,19 @@ void QCompleter::complete(const QRect &rect)
    d->popupRect = rect;
 }
 
-/*!
-    Sets the current row to the \a row specified. Returns true if successful;
-    otherwise returns false.
-
-    This function may be used along with currentCompletion() to iterate
-    through all the possible completions.
-
-    \sa currentCompletion(), completionCount()
-*/
 bool QCompleter::setCurrentRow(int row)
 {
    Q_D(QCompleter);
    return d->proxy->setCurrentRow(row);
 }
 
-/*!
-    Returns the current row.
-
-    \sa setCurrentRow()
-*/
 int QCompleter::currentRow() const
 {
    Q_D(const QCompleter);
    return d->proxy->currentRow();
 }
 
-/*!
-    Returns the number of completions for the current prefix. For an unsorted
-    model with a large number of items this can be expensive. Use setCurrentRow()
-    and currentCompletion() to iterate through all the completions.
-*/
+
 int QCompleter::completionCount() const
 {
    Q_D(const QCompleter);

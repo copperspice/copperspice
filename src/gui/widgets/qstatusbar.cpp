@@ -332,13 +332,6 @@ void QStatusBar::setSizeGripEnabled(bool enabled)
 #endif
 }
 
-
-/*!
-    Changes the status bar's appearance to account for item changes.
-
-    Special subclasses may need this function, but geometry management
-    will usually take care of any necessary rearrangements.
-*/
 void QStatusBar::reformat()
 {
    Q_D(QStatusBar);

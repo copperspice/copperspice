@@ -650,10 +650,8 @@ QRectF QGridLayoutItem::geometryWithin(qreal x, qreal y, qreal width, qreal heig
       default:
          break;
    }
+
    return QRectF(x, y, width, height);
-
-
-
 }
 
 void QGridLayoutItem::transpose()
@@ -673,14 +671,7 @@ void QGridLayoutItem::insertOrRemoveRows(int row, int delta, Qt::Orientation ori
    }
 }
 
-/*!
-    \internal
-    returns the effective maximumSize, will take the sizepolicy into
-    consideration. (i.e. if sizepolicy does not have QSizePolicy::Grow, then
-    maxSizeHint will be the preferredSize)
-    Note that effectiveSizeHint does not take sizePolicy into consideration,
-    (since it only evaluates the hints, as the name implies)
-*/
+// internal
 QSizeF QGridLayoutItem::effectiveMaxSize(const QSizeF &constraint) const
 {
    QSizeF size = constraint;
@@ -806,7 +797,6 @@ QGridLayoutItem *QGridLayoutEngine::itemAt(int index) const
    return q_items.at(index);
 }
 
-
 int QGridLayoutEngine::effectiveFirstRow(Qt::Orientation orientation) const
 {
    ensureEffectiveFirstAndLastRows();
@@ -891,7 +881,6 @@ int QGridLayoutEngine::rowStretchFactor(int row, Qt::Orientation orientation) co
    return 0;
 }
 
-
 void QGridLayoutEngine::setRowSizeHint(Qt::SizeHint which, int row, qreal size,
    Qt::Orientation orientation)
 {
@@ -932,7 +921,6 @@ Qt::Alignment QGridLayoutEngine::rowAlignment(int row, Qt::Orientation orientati
    return q_infos[orientation == Qt::Vertical].alignments.value(row);
 }
 
-
 Qt::Alignment QGridLayoutEngine::effectiveAlignment(const QGridLayoutItem *layoutItem) const
 {
    Qt::Alignment align = layoutItem->alignment();
@@ -952,12 +940,7 @@ Qt::Alignment QGridLayoutEngine::effectiveAlignment(const QGridLayoutItem *layou
    return align;
 }
 
-/*!
-    \internal
-    The \a index is only used by QGraphicsLinearLayout to ensure that itemAt() reflects the order
-    of visual arrangement. Strictly speaking it does not have to, but most people expect it to.
-    (And if it didn't we would have to add itemArrangedAt(int index) or something..)
- */
+// internal
 void QGridLayoutEngine::insertItem(QGridLayoutItem *item, int index)
 {
    maybeExpandGrid(item->lastRow(), item->lastColumn());
@@ -999,7 +982,6 @@ void QGridLayoutEngine::removeItem(QGridLayoutItem *item)
 
    q_items.removeAll(item);
 }
-
 
 QGridLayoutItem *QGridLayoutEngine::itemAt(int row, int column, Qt::Orientation orientation) const
 {

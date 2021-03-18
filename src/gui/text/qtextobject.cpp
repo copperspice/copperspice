@@ -784,11 +784,6 @@ void QTextBlock::setUserData(QTextBlockUserData *data)
    b->userData = data;
 }
 
-/*!
-    \since 4.1
-
-    Returns the integer value previously set with setUserState() or -1.
-*/
 int QTextBlock::userState() const
 {
    if (!p || !n) {
@@ -799,12 +794,6 @@ int QTextBlock::userState() const
    return b->userState;
 }
 
-/*!
-    \since 4.1
-
-    Stores the specified \a state integer value in the text block. This may be
-    useful for example in a syntax highlighter to store a text parsing state.
-*/
 void QTextBlock::setUserState(int state)
 {
    if (!p || !n) {
@@ -815,13 +804,6 @@ void QTextBlock::setUserState(int state)
    b->userState = state;
 }
 
-/*!
-    \since 4.4
-
-    Returns the blocks revision.
-
-    \sa setRevision(), QTextDocument::revision()
-*/
 int QTextBlock::revision() const
 {
    if (!p || !n) {
@@ -832,13 +814,6 @@ int QTextBlock::revision() const
    return b->revision;
 }
 
-/*!
-    \since 4.4
-
-    Sets a blocks revision to \a rev.
-
-    \sa revision(), QTextDocument::revision()
-*/
 void QTextBlock::setRevision(int rev)
 {
    if (!p || !n) {
@@ -849,13 +824,6 @@ void QTextBlock::setRevision(int rev)
    b->revision = rev;
 }
 
-/*!
-    \since 4.4
-
-    Returns true if the block is visible; otherwise returns false.
-
-    \sa setVisible()
-*/
 bool QTextBlock::isVisible() const
 {
    if (!p || !n) {

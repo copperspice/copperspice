@@ -1265,9 +1265,6 @@ void QWidgetBackingStore::sync(QWidget *exposedWidget, const QRegion &exposedReg
    }
 }
 
-/*!
-    Synchronizes the backing store, i.e. dirty areas are repainted and flushed.
-*/
 void QWidgetBackingStore::sync()
 {
    updateRequestSent = false;
@@ -1558,11 +1555,6 @@ void QWidgetBackingStore::doSync()
    endPaint(toClean, store, &beginPaintInfo);
 }
 
-/*!
-    Flushes the contents of the backing store into the top-level widget.
-    If the \a widget is non-zero, the content is flushed to the \a widget.
-    If the \a surface is non-zero, the content of the \a surface is flushed.
-*/
 void QWidgetBackingStore::flush(QWidget *widget)
 {
    const bool hasDirtyOnScreenWidgets = dirtyOnScreenWidgets && !dirtyOnScreenWidgets->isEmpty();

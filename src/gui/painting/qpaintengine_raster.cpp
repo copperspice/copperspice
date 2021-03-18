@@ -322,9 +322,6 @@ QRasterPaintEngine::~QRasterPaintEngine()
    qt_ft_grays_raster.raster_done(*d->grayRaster.data());
 }
 
-/*!
-    \reimp
-*/
 bool QRasterPaintEngine::begin(QPaintDevice *device)
 {
    Q_D(QRasterPaintEngine);

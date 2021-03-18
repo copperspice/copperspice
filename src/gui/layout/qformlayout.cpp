@@ -1527,12 +1527,6 @@ int QFormLayout::rowCount() const
    return d->m_matrix.rowCount();
 }
 
-/*!
-    Returns the layout item in the given \a row with the specified \a
-    role (column). Returns 0 if there is no such item.
-
-    \sa QLayout::itemAt(), setItem()
-*/
 QLayoutItem *QFormLayout::itemAt(int row, ItemRole role) const
 {
    Q_D(const QFormLayout);

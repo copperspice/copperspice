@@ -99,9 +99,7 @@ QToolButton::QToolButton(QWidget *parent)
    d->init();
 }
 
-
-/*  Set-up code common to all the constructors */
-
+//  Set-up code common to all the constructors
 void QToolButtonPrivate::init()
 {
    Q_Q(QToolButton);
@@ -348,9 +346,6 @@ void QToolButton::paintEvent(QPaintEvent *)
    p.drawComplexControl(QStyle::CC_ToolButton, opt);
 }
 
-/*!
-    \reimp
- */
 void QToolButton::actionEvent(QActionEvent *event)
 {
    Q_D(QToolButton);
@@ -544,15 +539,7 @@ bool QToolButton::hitButton(const QPoint &pos) const
 }
 
 #ifndef QT_NO_MENU
-/*!
-    Associates the given \a menu with this tool button.
 
-    The menu will be shown according to the button's \l popupMode.
-
-    Ownership of the menu is not transferred to the tool button.
-
-    \sa menu()
-*/
 void QToolButton::setMenu(QMenu *menu)
 {
    Q_D(QToolButton);

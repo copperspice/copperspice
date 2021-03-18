@@ -201,10 +201,6 @@ void QPaintEngine::drawEllipse(const QRectF &rect)
    }
 }
 
-/*!
-    The default implementation of this function calls the floating
-    point version of this function
-*/
 void QPaintEngine::drawEllipse(const QRect &rect)
 {
    drawEllipse(QRectF(rect));

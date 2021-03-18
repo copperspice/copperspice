@@ -158,10 +158,6 @@ QAbstractVideoBuffer::HandleType QVideoFrame::handleType() const
    return d->buffer ? d->buffer->handleType() : QAbstractVideoBuffer::NoHandle;
 }
 
-/*!
-    Returns the size of a video frame.
-*/
-
 QSize QVideoFrame::size() const
 {
    return d->size;
@@ -318,15 +314,6 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
    return true;
 }
 
-/*!
-    Releases the memory mapped by the map() function.
-
-    If the \l {QAbstractVideoBuffer::MapMode}{MapMode} included the QAbstractVideoBuffer::WriteOnly
-    flag this will persist the current content of the mapped memory to the video frame.
-
-    \sa map()
-*/
-
 void QVideoFrame::unmap()
 {
    QMutexLocker lock(&d->mapMutex);
@@ -351,17 +338,6 @@ void QVideoFrame::unmap()
       d->buffer->unmap();
    }
 }
-
-/*!
-    Returns the number of bytes in a scan line.
-
-    \note This is the bytes per line of the first plane only.  The bytes per line of subsequent
-    planes should be calculated as per the frame type.
-
-    This value is only valid while the frame data is \l {map()}{mapped}.
-
-    \sa bits(), map(), mappedBytes()
-*/
 
 int QVideoFrame::bytesPerLine() const
 {
@@ -430,10 +406,6 @@ qint64 QVideoFrame::endTime() const
    return d->endTime;
 }
 
-/*!
-    Sets the presentation \a time when a frame should stop being displayed.
-*/
-
 void QVideoFrame::setEndTime(qint64 time)
 {
    d->endTime = time;
@@ -482,11 +454,6 @@ QVideoFrame::PixelFormat QVideoFrame::pixelFormatFromImageFormat(QImage::Format 
          return Format_Invalid;
    }
 }
-
-/*!
-    Returns an image format equivalent to a video frame pixel \a format.  If there is no equivalent
-    format QImage::Format_Invalid is returned instead.
-*/
 
 QImage::Format QVideoFrame::imageFormatFromPixelFormat(PixelFormat format)
 {

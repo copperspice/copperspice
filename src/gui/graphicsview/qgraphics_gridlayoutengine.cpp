@@ -40,22 +40,13 @@ bool QGraphicsGridLayoutEngineItem::isHidden() const
    return false;
 }
 
-/*!
-  \internal
-
-  If this returns true, the layout will arrange just as if the item was never added to the layout.
-  (Note that this shouldn't lead to a "double spacing" where the item was hidden)
-  ### Qt6: Move to QGraphicsLayoutItem and make virtual
-*/
+// internal
+// Qt6: Move to QGraphicsLayoutItem and make virtual
 bool QGraphicsGridLayoutEngineItem::isIgnored() const
 {
    return isHidden() && ! q_layoutItem->sizePolicy().retainSizeWhenHidden();
 }
 
-/*
-  returns \c true if the size policy returns \c true for either hasHeightForWidth()
-  or hasWidthForHeight()
- */
 bool QGraphicsGridLayoutEngineItem::hasDynamicConstraint() const
 {
    return QGraphicsLayoutItemPrivate::get(q_layoutItem)->hasHeightForWidth()

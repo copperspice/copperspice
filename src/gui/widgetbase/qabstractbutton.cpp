@@ -391,9 +391,6 @@ QAbstractButton::QAbstractButton(QWidget *parent)
    d->init();
 }
 
-/*!
-    Destroys the button.
- */
 QAbstractButton::~QAbstractButton()
 {
 #ifndef QT_NO_BUTTONGROUP

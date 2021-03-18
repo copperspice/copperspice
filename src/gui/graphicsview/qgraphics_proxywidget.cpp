@@ -207,10 +207,7 @@ void QGraphicsProxyWidgetPrivate::removeSubFocusHelper(QWidget *widget, Qt::Focu
    }
 }
 
-/*!
-    \internal
-    Some of the logic is shared with QApplicationPrivate::focusNextPrevChild_helper
-*/
+// internal
 QWidget *QGraphicsProxyWidgetPrivate::findFocusChild(QWidget *child, bool next) const
 {
    if (! widget) {
@@ -321,13 +318,7 @@ void QGraphicsProxyWidgetPrivate::updateProxyInputMethodAcceptanceFromWidget()
       focusWidget->testAttribute(Qt::WA_InputMethodEnabled));
 }
 
-/*!
-    \internal
-
-    Embeds \a subWin as a subwindow of this proxy widget. \a subWin must be a top-level
-    widget and a descendant of the widget managed by this proxy. A separate subproxy
-    will be created as a child of this proxy widget to manage \a subWin.
-*/
+// internal
 void QGraphicsProxyWidgetPrivate::embedSubWindow(QWidget *subWin)
 {
    QWExtra *extra;
@@ -337,13 +328,7 @@ void QGraphicsProxyWidgetPrivate::embedSubWindow(QWidget *subWin)
    }
 }
 
-/*!
-    \internal
-
-    Removes ("unembeds") \a subWin and deletes the proxy holder item. This can
-    happen when QWidget::setParent() reparents the embedded window out of
-    "embedded space".
-*/
+// internal
 void QGraphicsProxyWidgetPrivate::unembedSubWindow(QWidget *subWin)
 {
    for (QGraphicsItem *child : children) {

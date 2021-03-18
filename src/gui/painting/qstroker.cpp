@@ -168,10 +168,6 @@ class QSubpathFlatIterator
 template <class Iterator> bool qt_stroke_side(Iterator *it, QStroker *stroker,
    bool capFirst, QLineF *startTangent);
 
-/*
- * QLineF::angle gives us the smalles angle between two lines. Here we
- * want to identify the line's angle direction on the unit circle.
-*/
 static inline qreal adapted_angle_on_x(const QLineF &line)
 {
    qreal angle = line.angle(QLineF(0, 0, 1, 0));

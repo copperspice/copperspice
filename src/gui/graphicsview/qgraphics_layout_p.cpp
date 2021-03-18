@@ -124,17 +124,6 @@ static bool removeLayoutItemFromLayout(QGraphicsLayout *lay, QGraphicsLayoutItem
    return false;
 }
 
-/*!
-    \internal
-
-    This function is called from subclasses to add a layout item \a layoutItem
-    to a layout.
-
-    It takes care of automatically reparenting graphics items, if needed.
-
-    If \a layoutItem is a  is already in a layout, it will remove it  from that layout.
-
-*/
 void QGraphicsLayoutPrivate::addChildLayoutItem(QGraphicsLayoutItem *layoutItem)
 {
    Q_Q(QGraphicsLayout);

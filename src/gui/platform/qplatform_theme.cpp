@@ -453,26 +453,13 @@ QPlatformMenuBar *QPlatformTheme::createPlatformMenuBar() const
 }
 
 #ifndef QT_NO_SYSTEMTRAYICON
-/*!
-   Factory function for QSystemTrayIcon. This function will return 0 if the platform
-   integration does not support creating any system tray icon.
-*/
+
 QPlatformSystemTrayIcon *QPlatformTheme::createPlatformSystemTrayIcon() const
 {
    return nullptr;
 }
 #endif
 
-/*!
-   Factory function for the QIconEngine used by QIcon::fromTheme(). By default this
-   function returns a QIconLoaderEngine, but subclasses can reimplement it to
-   provide their own.
-
-   It is especially useful to benefit from some platform specific facilities or
-   optimizations like an inter-process cache in systems mostly built with Qt.
-
-   \since 5.1
-*/
 QIconEngine *QPlatformTheme::createIconEngine(const QString &iconName) const
 {
    return new QIconLoaderEngine(iconName);
@@ -519,11 +506,6 @@ struct ByStandardKey {
    }
 };
 
-/*!
-   Returns the key sequence that should be used for a standard action.
-
-  \since 5.2
- */
 QList<QKeySequence> QPlatformTheme::keyBindings(QKeySequence::StandardKey key) const
 {
    const uint platform = QPlatformThemePrivate::currentKeyPlatforms();

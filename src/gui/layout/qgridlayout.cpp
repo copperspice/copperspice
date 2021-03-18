@@ -1169,16 +1169,6 @@ QGridLayout::QGridLayout()
    d->expand(1, 1);
 }
 
-
-/*!
-\internal (mostly)
-
-Sets the positioning mode used by addItem(). If \a orient is
-Qt::Horizontal, this layout is expanded to \a n columns, and items
-will be added columns-first. Otherwise it is expanded to \a n rows and
-items will be added rows-first.
-*/
-
 void QGridLayout::setDefaultPositioning(int n, Qt::Orientation orient)
 {
    Q_D(QGridLayout);
@@ -1191,13 +1181,6 @@ void QGridLayout::setDefaultPositioning(int n, Qt::Orientation orient)
    }
 }
 
-
-/*!
-    Destroys the grid layout. Geometry management is terminated if
-    this is a top-level grid.
-
-    The layout's widgets aren't destroyed.
-*/
 QGridLayout::~QGridLayout()
 {
    Q_D(QGridLayout);
@@ -1245,12 +1228,6 @@ void QGridLayout::setSpacing(int spacing)
    invalidate();
 }
 
-/*!
-    If the vertical spacing is equal to the horizontal spacing,
-    this function returns that value; otherwise it return -1.
-
-    \sa setSpacing(), verticalSpacing(), horizontalSpacing()
-*/
 int QGridLayout::spacing() const
 {
    int hSpacing = horizontalSpacing();
@@ -1261,18 +1238,12 @@ int QGridLayout::spacing() const
    }
 }
 
-/*!
-    Returns the number of rows in this grid.
-*/
 int QGridLayout::rowCount() const
 {
    Q_D(const QGridLayout);
    return d->numRows();
 }
 
-/*!
-    Returns the number of columns in this grid.
-*/
 int QGridLayout::columnCount() const
 {
    Q_D(const QGridLayout);

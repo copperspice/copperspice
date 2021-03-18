@@ -808,12 +808,6 @@ void QLayout::addChildWidget(QWidget *w)
    }
 }
 
-
-/*!
-    Tells the geometry manager to place the menu bar \a widget at the
-    top of parentWidget(), outside QWidget::contentsMargins(). All
-    child widgets are placed below the bottom edge of the menu bar.
-*/
 void QLayout::setMenuBar(QWidget *widget)
 {
    Q_D(QLayout);
@@ -824,11 +818,6 @@ void QLayout::setMenuBar(QWidget *widget)
 
    d->menubar = widget;
 }
-
-/*!
-    Returns the menu bar set for this layout, or 0 if no menu bar is
-    set.
-*/
 
 QWidget *QLayout::menuBar() const
 {
@@ -865,15 +854,6 @@ void QLayout::activateRecursiveHelper(QLayoutItem *item)
    }
 }
 
-/*!
-  Updates the layout for parentWidget().
-
-  You should generally not need to call this because it is
-  automatically called at the most appropriate times.
-
-  \sa activate(), invalidate()
-*/
-
 void QLayout::update()
 {
    QLayout *layout = this;
@@ -892,15 +872,6 @@ void QLayout::update()
    }
 }
 
-/*!
-    Redoes the layout for parentWidget() if necessary.
-
-    You should generally not need to call this because it is
-    automatically called at the most appropriate times. It returns
-    true if the layout was redone.
-
-    \sa update(), QWidget::updateGeometry()
-*/
 bool QLayout::activate()
 {
    Q_D(QLayout);

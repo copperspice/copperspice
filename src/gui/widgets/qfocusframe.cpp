@@ -97,13 +97,6 @@ void QFocusFramePrivate::updateSize()
    }
 }
 
-/*!
-    Initialize \a option with the values from this QFocusFrame. This method is useful
-    for subclasses when they need a QStyleOption, but don't want to fill
-    in all the information themselves.
-
-    \sa QStyleOption::initFrom()
-*/
 void QFocusFrame::initStyleOption(QStyleOption *option) const
 {
    if (!option) {
@@ -122,22 +115,9 @@ QFocusFrame::QFocusFrame(QWidget *parent)
    setAttribute(Qt::WA_AcceptDrops, style()->styleHint(QStyle::SH_FocusFrame_AboveWidget, nullptr, this));
 }
 
-/*!
-    Destructor.
-*/
-
 QFocusFrame::~QFocusFrame()
 {
 }
-
-/*!
-  QFocusFrame will track changes to \a widget and resize itself automatically.
-  If the monitored widget's parent changes, QFocusFrame will follow the widget
-  and place itself around the widget automatically. If the monitored widget is deleted,
-  QFocusFrame will set it to zero.
-
-  \sa QFocusFrame::widget()
-*/
 
 void QFocusFrame::setWidget(QWidget *widget)
 {

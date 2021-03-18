@@ -942,10 +942,6 @@ void QMenuPrivate::updateLayoutDirection()
    }
 }
 
-
-/*!
-    Returns the action associated with this menu.
-*/
 QAction *QMenu::menuAction() const
 {
    return d_func()->menuAction;
@@ -1495,14 +1491,6 @@ bool QMenuPrivate::hasMouseMoved(const QPoint &globalPos)
       QApplication::startDragDistance() < (mousePopupPos - globalPos).manhattanLength();
 }
 
-
-/*!
-    Initialize \a option with the values from this menu and information from \a action. This method
-    is useful for subclasses when they need a QStyleOptionMenuItem, but don't want
-    to fill in all the information themselves.
-
-    \sa QStyleOption::initFrom() QMenuBar::initStyleOption()
-*/
 void QMenu::initStyleOption(QStyleOptionMenuItem *option, const QAction *action) const
 {
    if (!option || !action) {
@@ -2235,9 +2223,6 @@ QAction *QMenu::exec(const QList<QAction *> &actions, const QPoint &pos, QAction
    return menu.exec(pos, at);
 }
 
-/*!
-  \reimp
-*/
 void QMenu::hideEvent(QHideEvent *)
 {
    Q_D(QMenu);
@@ -2276,9 +2261,6 @@ void QMenu::hideEvent(QHideEvent *)
    }
 }
 
-/*!
-  \reimp
-*/
 void QMenu::paintEvent(QPaintEvent *e)
 {
    Q_D(QMenu);

@@ -1012,11 +1012,6 @@ QTableWidgetItem::QTableWidgetItem(const QString &text, int type)
    setData(Qt::DisplayRole, text);
 }
 
-/*!
-    Constructs a table item with the given \a icon and \a text.
-
-    \sa type()
-*/
 QTableWidgetItem::QTableWidgetItem(const QIcon &icon, const QString &text, int type)
    :  rtti(type), view(nullptr), d(new QTableWidgetItemPrivate(this)),
       itemFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable
@@ -1026,9 +1021,6 @@ QTableWidgetItem::QTableWidgetItem(const QIcon &icon, const QString &text, int t
    setData(Qt::DisplayRole, text);
 }
 
-/*!
-    Destroys the table item.
-*/
 QTableWidgetItem::~QTableWidgetItem()
 {
    if (QTableModel *model = (view ? qobject_cast<QTableModel *>(view->model()) : nullptr)) {
@@ -1039,9 +1031,6 @@ QTableWidgetItem::~QTableWidgetItem()
    delete d;
 }
 
-/*!
-    Creates a copy of the item.
-*/
 QTableWidgetItem *QTableWidgetItem::clone() const
 {
    return new QTableWidgetItem(*this);

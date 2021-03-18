@@ -897,15 +897,6 @@ QTreeWidgetItem::QTreeWidgetItem(int type)
 {
 }
 
-
-/*!
-    Constructs a tree widget item of the specified \a type. The item
-    must be inserted into a tree widget.
-    The given list of \a strings will be set as the item text for each
-    column in the item.
-
-    \sa type()
-*/
 QTreeWidgetItem::QTreeWidgetItem(const QStringList &strings, int type)
    : rtti(type), view(nullptr), d(new QTreeWidgetItemPrivate(this)), par(nullptr),
      itemFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled
@@ -915,15 +906,6 @@ QTreeWidgetItem::QTreeWidgetItem(const QStringList &strings, int type)
       setText(i, strings.at(i));
    }
 }
-
-/*!
-    \fn QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *parent, int type)
-
-    Constructs a tree widget item of the specified \a type and appends it
-    to the items in the given \a parent.
-
-    \sa type()
-*/
 
 QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *view, int type)
    : rtti(type), view(nullptr), d(new QTreeWidgetItemPrivate(this)), par(nullptr),
@@ -936,16 +918,6 @@ QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *view, int type)
       values.reserve(model->headerItem->columnCount());
    }
 }
-
-/*!
-  \fn QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *parent, const QStringList &strings, int type)
-
-  Constructs a tree widget item of the specified \a type and appends it
-  to the items in the given \a parent. The given list of \a strings will be set as
-  the item text for each column in the item.
-
-  \sa type()
-*/
 
 QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *view, const QStringList &strings, int type)
    : rtti(type), view(nullptr), d(new QTreeWidgetItemPrivate(this)), par(nullptr),
@@ -962,14 +934,6 @@ QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *view, const QStringList &strings, 
    }
 }
 
-/*!
-    \fn QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *parent, QTreeWidgetItem *preceding, int type)
-
-    Constructs a tree widget item of the specified \a type and inserts it into
-    the given \a parent after the \a preceding item.
-
-    \sa type()
-*/
 QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *view, QTreeWidgetItem *after, int type)
    : rtti(type), view(nullptr), d(new QTreeWidgetItemPrivate(this)), par(nullptr),
      itemFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled
@@ -985,11 +949,6 @@ QTreeWidgetItem::QTreeWidgetItem(QTreeWidget *view, QTreeWidgetItem *after, int 
    }
 }
 
-/*!
-    Constructs a tree widget item and append it to the given \a parent.
-
-    \sa type()
-*/
 QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem *parent, int type)
    : rtti(type), view(nullptr), d(new QTreeWidgetItemPrivate(this)), par(nullptr),
      itemFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled
@@ -1000,12 +959,6 @@ QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem *parent, int type)
    }
 }
 
-/*!
-    Constructs a tree widget item and append it to the given \a parent.
-    The given list of \a strings will be set as the item text for each column in the item.
-
-    \sa type()
-*/
 QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem *parent, const QStringList &strings, int type)
    : rtti(type), view(nullptr), d(new QTreeWidgetItemPrivate(this)), par(nullptr),
      itemFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled
@@ -1020,14 +973,6 @@ QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem *parent, const QStringList &str
    }
 }
 
-/*!
-    \fn QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem *parent, QTreeWidgetItem *preceding, int type)
-
-    Constructs a tree widget item of the specified \a type that is inserted
-    into the \a parent after the \a preceding child item.
-
-    \sa type()
-*/
 QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem *parent, QTreeWidgetItem *after, int type)
    : rtti(type), view(nullptr), d(new QTreeWidgetItemPrivate(this)), par(nullptr),
      itemFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled
@@ -1038,14 +983,6 @@ QTreeWidgetItem::QTreeWidgetItem(QTreeWidgetItem *parent, QTreeWidgetItem *after
       parent->insertChild(i, this);
    }
 }
-
-/*!
-  Destroys this tree widget item.
-
-  The item will be removed from \l{QTreeWidget}s to which it has
-  been added. This makes it safe to delete an item at any time.
-
-*/
 
 QTreeWidgetItem::~QTreeWidgetItem()
 {
@@ -1117,9 +1054,6 @@ QTreeWidgetItem::~QTreeWidgetItem()
    }
 }
 
-/*!
-    Creates a deep copy of the item and of its children.
-*/
 QTreeWidgetItem *QTreeWidgetItem::clone() const
 {
    QTreeWidgetItem *copy = nullptr;
@@ -1180,25 +1114,11 @@ void QTreeWidgetItem::setChildIndicatorPolicy(QTreeWidgetItem::ChildIndicatorPol
    view->scheduleDelayedItemsLayout();
 }
 
-/*!
-   Returns the item indicator policy. This policy decides when the
-   tree branch expand/collapse indicator is shown.
-
-   \sa setChildIndicatorPolicy()
-*/
 QTreeWidgetItem::ChildIndicatorPolicy QTreeWidgetItem::childIndicatorPolicy() const
 {
    return d->policy;
 }
 
-/*!
-    \fn void QTreeWidgetItem::setFlags(Qt::ItemFlags flags)
-
-    Sets the flags for the item to the given \a flags. These determine whether
-    the item can be selected or modified.  This is often used to disable an item.
-
-    \sa flags()
-*/
 void QTreeWidgetItem::setFlags(Qt::ItemFlags flags)
 {
    const bool enable = (flags & Qt::ItemIsEnabled);
@@ -1265,18 +1185,7 @@ void QTreeWidgetItemPrivate::propagateDisabled(QTreeWidgetItem *item)
       }
    }
 }
-/*!
-    \fn Qt::ItemFlags QTreeWidgetItem::flags() const
 
-    Returns the flags used to describe the item. These determine whether
-    the item can be checked, edited, and selected.
-
-    The default value for flags is
-    Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled.
-    If the item was constructed with a parent, flags will in addition contain Qt::ItemIsDropEnabled.
-
-    \sa setFlags()
-*/
 Qt::ItemFlags QTreeWidgetItem::flags() const
 {
    return itemFlags;
@@ -1449,11 +1358,6 @@ void QTreeWidgetItem::addChild(QTreeWidgetItem *child)
    }
 }
 
-/*!
-  Inserts the \a child item at \a index in the list of children.
-
-  If the child has already been inserted somewhere else it wont be inserted again.
-*/
 void QTreeWidgetItem::insertChild(int index, QTreeWidgetItem *child)
 {
    if (index < 0 || index > children.count() || child == nullptr || child->view != nullptr || child->par != nullptr) {

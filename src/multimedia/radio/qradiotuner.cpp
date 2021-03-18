@@ -125,11 +125,6 @@ int QRadioTuner::frequency() const
     return 0;
 }
 
-/*!
-    Returns the number of Hertz to increment the frequency by when stepping through frequencies
-    within a given \a band.
-*/
-
 int QRadioTuner::frequencyStep(QRadioTuner::Band band) const
 {
     Q_D(const QRadioTuner);
@@ -140,10 +135,6 @@ int QRadioTuner::frequencyStep(QRadioTuner::Band band) const
 
     return 0;
 }
-
-/*!
-    Returns a frequency \a band's minimum and maximum frequency.
-*/
 
 QPair<int,int> QRadioTuner::frequencyRange(QRadioTuner::Band band) const
 {
@@ -156,11 +147,6 @@ QPair<int,int> QRadioTuner::frequencyRange(QRadioTuner::Band band) const
     return qMakePair<int,int>(0,0);
 }
 
-/*!
-    \property QRadioTuner::stereo
-    \brief whether a radio tuner is receiving a stereo signal.
-*/
-
 bool QRadioTuner::isStereo() const
 {
     Q_D(const QRadioTuner);
@@ -171,12 +157,6 @@ bool QRadioTuner::isStereo() const
 
     return false;
 }
-
-
-/*!
-    \property QRadioTuner::stereoMode
-    \brief the stereo mode of a radio tuner.
-*/
 
 QRadioTuner::StereoMode QRadioTuner::stereoMode() const
 {
@@ -198,12 +178,6 @@ void QRadioTuner::setStereoMode(QRadioTuner::StereoMode mode)
     }
 }
 
-/*!
-    Identifies if a frequency \a band is supported by a radio tuner.
-
-    Returns true if the band is supported, and false if it is not.
-*/
-
 bool QRadioTuner::isBandSupported(QRadioTuner::Band band) const
 {
     Q_D(const QRadioTuner);
@@ -215,10 +189,6 @@ bool QRadioTuner::isBandSupported(QRadioTuner::Band band) const
     return false;
 }
 
-/*!
-    Activate the radio device.
-*/
-
 void QRadioTuner::start()
 {
     Q_D(const QRadioTuner);
@@ -228,10 +198,6 @@ void QRadioTuner::start()
     }
 }
 
-/*!
-    Deactivate the radio device.
-*/
-
 void QRadioTuner::stop()
 {
     Q_D(const QRadioTuner);
@@ -240,11 +206,6 @@ void QRadioTuner::stop()
         d->control->stop();
     }
 }
-
-/*!
-    \property QRadioTuner::signalStrength
-    \brief the strength of the current radio signal as a percentage.
-*/
 
 int QRadioTuner::signalStrength() const
 {
@@ -257,12 +218,6 @@ int QRadioTuner::signalStrength() const
     return 0;
 }
 
-/*!
-    \property QRadioTuner::volume
-    \brief the volume of a radio tuner's audio output as a percentage.
-*/
-
-
 int QRadioTuner::volume() const
 {
     Q_D(const QRadioTuner);
@@ -273,11 +228,6 @@ int QRadioTuner::volume() const
 
     return 0;
 }
-
-/*!
-    \property QRadioTuner::muted
-    \brief whether a radio tuner's audio output is muted.
-*/
 
 bool QRadioTuner::isMuted() const
 {
@@ -290,12 +240,6 @@ bool QRadioTuner::isMuted() const
     return false;
 }
 
-/*!
-    Sets a radio tuner's frequency \a band.
-
-    Changing the band will reset the \l frequency to the new band's minimum frequency.
-*/
-
 void QRadioTuner::setBand(QRadioTuner::Band band)
 {
     Q_D(QRadioTuner);
@@ -304,13 +248,6 @@ void QRadioTuner::setBand(QRadioTuner::Band band)
         d->control->setBand(band);
     }
 }
-
-/*!
-    Sets a radio tuner's \a frequency.
-
-    If the tuner is set to a frequency outside the current \l band, the band will be changed to
-    one occupied by the new frequency.
-*/
 
 void QRadioTuner::setFrequency(int frequency)
 {
@@ -339,13 +276,6 @@ void QRadioTuner::setMuted(bool muted)
     }
 }
 
-/*!
-    \property QRadioTuner::searching
-    \brief whether a radio tuner is currently scanning for a signal.
-
-    \sa searchForward(), searchBackward(), cancelSearch()
-*/
-
 bool QRadioTuner::isSearching() const
 {
     Q_D(const QRadioTuner);
@@ -357,10 +287,6 @@ bool QRadioTuner::isSearching() const
     return false;
 }
 
-/*!
-    \property QRadioTuner::antennaConnected
-    \brief whether there is an antenna connected
-*/
 bool QRadioTuner::isAntennaConnected() const
 {
     Q_D(const QRadioTuner);
@@ -372,12 +298,6 @@ bool QRadioTuner::isAntennaConnected() const
     return false;
 }
 
-/*!
-    Starts a forward scan for a signal, starting from the current \l frequency.
-
-    \sa searchBackward(), cancelSearch(), searching
-*/
-
 void QRadioTuner::searchForward()
 {
     Q_D(QRadioTuner);
@@ -386,12 +306,6 @@ void QRadioTuner::searchForward()
         d->control->searchForward();
     }
 }
-
-/*!
-    Starts a backwards scan for a signal, starting from the current \l frequency.
-
-    \sa searchForward(), cancelSearch(), searching
-*/
 
 void QRadioTuner::searchBackward()
 {
@@ -402,26 +316,6 @@ void QRadioTuner::searchBackward()
     }
 }
 
-/*!
-    \enum QRadioTuner::SearchMode
-
-    Enumerates how the radio tuner should search for stations.
-
-    \value SearchFast           Use only signal strength when searching.
-    \value SearchGetStationId   After finding a strong signal, wait for the RDS station id (PI) before continuing.
-*/
-
-/*!
-    Search all stations in current band
-
-    Emits QRadioTuner::stationFound(int, QString) for every found station.
-    After searching is completed, QRadioTuner::searchingChanged(bool) is
-    emitted (false). If \a searchMode is set to SearchGetStationId, searching
-    waits for station id (PI) on each frequency.
-
-    \sa searchForward(), searchBackward(), searching
-*/
-
 void QRadioTuner::searchAllStations(QRadioTuner::SearchMode searchMode)
 {
     Q_D(const QRadioTuner);
@@ -430,12 +324,6 @@ void QRadioTuner::searchAllStations(QRadioTuner::SearchMode searchMode)
         d->control->searchAllStations(searchMode);
     }
 }
-
-/*!
-    Stops scanning for a signal.
-
-    \sa searchForward(), searchBackward(), searching
-*/
 
 void QRadioTuner::cancelSearch()
 {

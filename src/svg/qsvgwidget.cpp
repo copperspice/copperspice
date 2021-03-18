@@ -67,10 +67,6 @@ QSvgRenderer *QSvgWidget::renderer() const
    return d->renderer;
 }
 
-
-/*!
-    \reimp
-*/
 QSize QSvgWidget::sizeHint() const
 {
    Q_D(const QSvgWidget);
@@ -81,10 +77,6 @@ QSize QSvgWidget::sizeHint() const
    }
 }
 
-
-/*!
-    \reimp
-*/
 void QSvgWidget::paintEvent(QPaintEvent *)
 {
    Q_D(QSvgWidget);
@@ -92,18 +84,12 @@ void QSvgWidget::paintEvent(QPaintEvent *)
    d->renderer->render(&p);
 }
 
-/*!
-    Loads the contents of the specified SVG \a file and updates the widget.
-*/
 void QSvgWidget::load(const QString &file)
 {
    Q_D(const QSvgWidget);
    d->renderer->load(file);
 }
 
-/*!
-    Loads the specified SVG format \a contents and updates the widget.
-*/
 void QSvgWidget::load(const QByteArray &contents)
 {
    Q_D(const QSvgWidget);

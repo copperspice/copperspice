@@ -869,9 +869,6 @@ bool QListWidget::isSortingEnabled() const
    return d->sortingEnabled;
 }
 
-/*!
-    \internal
-*/
 Qt::SortOrder QListWidget::sortOrder() const
 {
    Q_D(const QListWidget);
@@ -898,11 +895,6 @@ void QListWidget::closePersistentEditor(QListWidgetItem *item)
    QAbstractItemView::closePersistentEditor(index);
 }
 
-/*!
-    \since 4.1
-
-    Returns the widget displayed in the given \a item.
-*/
 QWidget *QListWidget::itemWidget(QListWidgetItem *item) const
 {
    Q_D(const QListWidget);
@@ -924,14 +916,6 @@ bool QListWidget::isItemSelected(const QListWidgetItem *item) const
    return selectionModel()->isSelected(index);
 }
 
-/*!
-    Selects or deselects the given \a item depending on whether \a select is
-    true of false.
-
-    \obsolete
-
-    This function is deprecated. Use QListWidgetItem::setSelected() instead.
-*/
 void QListWidget::setItemSelected(const QListWidgetItem *item, bool select)
 {
    Q_D(QListWidget);
@@ -948,10 +932,6 @@ void QListWidget::setItemSelected(const QListWidgetItem *item, bool select)
 
 }
 
-/*!
-    Returns a list of all selected items in the list widget.
-*/
-
 QList<QListWidgetItem *> QListWidget::selectedItems() const
 {
    Q_D(const QListWidget);
@@ -964,11 +944,6 @@ QList<QListWidgetItem *> QListWidget::selectedItems() const
    }
    return items;
 }
-
-/*!
-    Finds items with the text that matches the string \a text using the given
-    \a flags.
-*/
 
 QList<QListWidgetItem *> QListWidget::findItems(const QString &text, Qt::MatchFlags flags) const
 {

@@ -350,32 +350,11 @@ bool QUndoStack::isClean() const
    return d->clean_index == d->index;
 }
 
-/*!
-    Returns the clean index. This is the index at which setClean() was called.
-
-    A stack may not have a clean index. This happens if a document is saved,
-    some commands are undone, then a new command is pushed. Since
-    push() deletes all the undone commands before pushing the new command, the stack
-    can't return to the clean state again. In this case, this function returns -1.
-
-    \sa isClean() setClean()
-*/
-
 int QUndoStack::cleanIndex() const
 {
    Q_D(const QUndoStack);
    return d->clean_index;
 }
-
-/*!
-    Undoes the command below the current command by calling QUndoCommand::undo().
-    Decrements the current command index.
-
-    If the stack is empty, or if the bottom command on the stack has already been
-    undone, this function does nothing.
-
-    \sa redo() index()
-*/
 
 void QUndoStack::undo()
 {
@@ -393,16 +372,6 @@ void QUndoStack::undo()
    d->command_list.at(idx)->undo();
    d->setIndex(idx, false);
 }
-
-/*!
-    Redoes the current command by calling QUndoCommand::redo(). Increments the current
-    command index.
-
-    If the stack is empty, or if the top command on the stack has already been
-    redone, this function does nothing.
-
-    \sa undo() index()
-*/
 
 void QUndoStack::redo()
 {
@@ -467,17 +436,6 @@ bool QUndoStack::canUndo() const
    return d->index > 0;
 }
 
-/*!
-    Returns true if there is a command available for redo; otherwise returns false.
-
-    This function returns false if the stack is empty or if the top command
-    on the stack has already been redone.
-
-    Synonymous with index() == count().
-
-    \sa index() canUndo()
-*/
-
 bool QUndoStack::canRedo() const
 {
    Q_D(const QUndoStack);
@@ -486,12 +444,6 @@ bool QUndoStack::canRedo() const
    }
    return d->index < d->command_list.size();
 }
-
-/*!
-    Returns the text of the command which will be undone in the next call to undo().
-
-    \sa QUndoCommand::actionText() redoText()
-*/
 
 QString QUndoStack::undoText() const
 {
@@ -504,12 +456,6 @@ QString QUndoStack::undoText() const
    }
    return QString();
 }
-
-/*!
-    Returns the text of the command which will be redone in the next call to redo().
-
-    \sa QUndoCommand::actionText() undoText()
-*/
 
 QString QUndoStack::redoText() const
 {
@@ -615,12 +561,6 @@ const QUndoCommand *QUndoStack::command(int index) const
 
    return d->command_list.at(index);
 }
-
-/*!
-    Returns the text of the command at index \a idx.
-
-    \sa beginMacro()
-*/
 
 QString QUndoStack::text(int idx) const
 {

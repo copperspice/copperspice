@@ -705,9 +705,6 @@ void QTabBarPrivate::refresh()
    }
 }
 
-/*!
-    Creates a new tab bar with the given \a parent.
-*/
 QTabBar::QTabBar(QWidget *parent)
    : QWidget(*new QTabBarPrivate, parent, Qt::EmptyFlag)
 {
@@ -715,21 +712,9 @@ QTabBar::QTabBar(QWidget *parent)
    d->init();
 }
 
-
-/*!
-    Destroys the tab bar.
-*/
 QTabBar::~QTabBar()
 {
 }
-
-/*!
-    \property QTabBar::shape
-    \brief the shape of the tabs in the tab bar
-
-    Possible values for this property are described by the Shape enum.
-*/
-
 
 QTabBar::Shape QTabBar::shape() const
 {
@@ -2116,11 +2101,14 @@ void QTabBar::changeEvent(QEvent *event)
          if (!d->useScrollButtonsSetByUser) {
             d->useScrollButtons = !style()->styleHint(QStyle::SH_TabBar_PreferNoArrows, nullptr, this);
          }
-      // fallthrough
+
+         [[fallthrough]];
+
       case QEvent::FontChange:
          d->textSizes.clear();
          d->refresh();
          break;
+
       default:
          break;
    }

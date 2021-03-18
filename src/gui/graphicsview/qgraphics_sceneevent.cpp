@@ -53,51 +53,28 @@ class QGraphicsSceneEventPrivate
    QGraphicsSceneEvent *q_ptr;
 };
 
-/*!
-    \internal
-
-    Constructs a generic graphics scene event of the specified \a type.
-*/
 QGraphicsSceneEvent::QGraphicsSceneEvent(Type type)
    : QEvent(type), d_ptr(new QGraphicsSceneEventPrivate)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    \internal
-
-    Constructs a generic graphics scene event.
-*/
 QGraphicsSceneEvent::QGraphicsSceneEvent(QGraphicsSceneEventPrivate &dd, Type type)
    : QEvent(type), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Destroys the event.
-*/
 QGraphicsSceneEvent::~QGraphicsSceneEvent()
 {
 }
 
-/*!
-    Returns the widget where the event originated, or 0 if the event
-    originates from another application.
-*/
 QWidget *QGraphicsSceneEvent::widget() const
 {
    return d_ptr->widget;
 }
 
-/*!
-    \internal
-
-    Sets the \a widget related to this event.
-
-    \sa widget()
-*/
+// internal
 void QGraphicsSceneEvent::setWidget(QWidget *widget)
 {
    d_ptr->widget = widget;
@@ -130,48 +107,29 @@ class QGraphicsSceneMouseEventPrivate : public QGraphicsSceneEventPrivate
    Qt::MouseEventFlags flags;
 };
 
-/*!
-    \internal
-
-    Constructs a generic graphics scene mouse event of the specified \a type.
-*/
+// internal
 QGraphicsSceneMouseEvent::QGraphicsSceneMouseEvent(Type type)
    : QGraphicsSceneEvent(*new QGraphicsSceneMouseEventPrivate, type)
 {
 }
 
-/*!
-    Destroys the event.
-*/
 QGraphicsSceneMouseEvent::~QGraphicsSceneMouseEvent()
 {
 }
 
-/*!
-    Returns the mouse cursor position in item coordinates.
-
-    \sa scenePos(), screenPos(), lastPos()
-*/
 QPointF QGraphicsSceneMouseEvent::pos() const
 {
    Q_D(const QGraphicsSceneMouseEvent);
    return d->pos;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneMouseEvent::setPos(const QPointF &pos)
 {
    Q_D(QGraphicsSceneMouseEvent);
    d->pos = pos;
 }
 
-/*!
-    Returns the mouse cursor position in scene coordinates.
-
-    \sa pos(), screenPos(), lastScenePos()
-*/
 QPointF QGraphicsSceneMouseEvent::scenePos() const
 {
    Q_D(const QGraphicsSceneMouseEvent);
@@ -277,53 +235,32 @@ void QGraphicsSceneMouseEvent::setLastScreenPos(const QPoint &pos)
    d->lastScreenPos = pos;
 }
 
-/*!
-    Returns the combination of mouse buttons that were pressed at the
-    time the event was sent.
-
-    \sa button(), modifiers()
-*/
 Qt::MouseButtons QGraphicsSceneMouseEvent::buttons() const
 {
    Q_D(const QGraphicsSceneMouseEvent);
    return d->buttons;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneMouseEvent::setButtons(Qt::MouseButtons buttons)
 {
    Q_D(QGraphicsSceneMouseEvent);
    d->buttons = buttons;
 }
 
-/*!
-    Returns the mouse button (if any) that caused the event.
-
-    \sa buttons(), modifiers()
-*/
 Qt::MouseButton QGraphicsSceneMouseEvent::button() const
 {
    Q_D(const QGraphicsSceneMouseEvent);
    return d->button;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneMouseEvent::setButton(Qt::MouseButton button)
 {
    Q_D(QGraphicsSceneMouseEvent);
    d->button = button;
 }
 
-/*!
-    Returns the keyboard modifiers in use at the time the event was
-    sent.
-
-    \sa buttons(), button()
-*/
 Qt::KeyboardModifiers QGraphicsSceneMouseEvent::modifiers() const
 {
    Q_D(const QGraphicsSceneMouseEvent);
@@ -379,39 +316,23 @@ class QGraphicsSceneWheelEventPrivate : public QGraphicsSceneEventPrivate
    Qt::Orientation orientation;
 };
 
-/*!
-    \internal
-
-    Constructs a QGraphicsSceneWheelEvent of type \a type, which
-    is always QEvent::GraphicsSceneWheel.
-*/
+// internal
 QGraphicsSceneWheelEvent::QGraphicsSceneWheelEvent(Type type)
    : QGraphicsSceneEvent(*new QGraphicsSceneWheelEventPrivate, type)
 {
 }
 
-/*!
-    Destroys the QGraphicsSceneWheelEvent.
-*/
 QGraphicsSceneWheelEvent::~QGraphicsSceneWheelEvent()
 {
 }
 
-/*!
-    Returns the position of the cursor in item coordinates when the
-    wheel event occurred.
-
-    \sa scenePos(), screenPos()
-*/
 QPointF QGraphicsSceneWheelEvent::pos() const
 {
    Q_D(const QGraphicsSceneWheelEvent);
    return d->pos;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneWheelEvent::setPos(const QPointF &pos)
 {
    Q_D(QGraphicsSceneWheelEvent);
@@ -470,42 +391,26 @@ void QGraphicsSceneWheelEvent::setModifiers(Qt::KeyboardModifiers modifiers)
    d->modifiers = modifiers;
 }
 
-/*!
-    Returns the distance that the wheel is rotated, in eighths (1/8s)
-    of a degree. A positive value indicates that the wheel was
-    rotated forwards away from the user; a negative value indicates
-    that the wheel was rotated backwards toward the user.
-
-    Most mouse types work in steps of 15 degrees, in which case the delta
-    value is a multiple of 120 (== 15 * 8).
-*/
 int QGraphicsSceneWheelEvent::delta() const
 {
    Q_D(const QGraphicsSceneWheelEvent);
    return d->delta;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneWheelEvent::setDelta(int delta)
 {
    Q_D(QGraphicsSceneWheelEvent);
    d->delta = delta;
 }
 
-/*!
-    Returns the wheel orientation.
-*/
 Qt::Orientation QGraphicsSceneWheelEvent::orientation() const
 {
    Q_D(const QGraphicsSceneWheelEvent);
    return d->orientation;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneWheelEvent::setOrientation(Qt::Orientation orientation)
 {
    Q_D(QGraphicsSceneWheelEvent);
@@ -529,54 +434,28 @@ class QGraphicsSceneContextMenuEventPrivate : public QGraphicsSceneEventPrivate
    QGraphicsSceneContextMenuEvent::Reason reason;
 };
 
-/*!
-    \internal
-
-    Constructs a graphics scene context menu event of the specified \a type.
-*/
+// internal
 QGraphicsSceneContextMenuEvent::QGraphicsSceneContextMenuEvent(Type type)
    : QGraphicsSceneEvent(*new QGraphicsSceneContextMenuEventPrivate, type)
 {
 }
 
-/*!
-    Destroys the event.
-*/
 QGraphicsSceneContextMenuEvent::~QGraphicsSceneContextMenuEvent()
 {
 }
 
-/*!
-    Returns the position of the mouse cursor in item coordinates at the moment
-    the context menu was requested.
-
-    \sa scenePos(), screenPos()
-*/
 QPointF QGraphicsSceneContextMenuEvent::pos() const
 {
    Q_D(const QGraphicsSceneContextMenuEvent);
    return d->pos;
 }
 
-/*!
-    \fn void QGraphicsSceneContextMenuEvent::setPos(const QPointF &point)
-    \internal
-
-    Sets the position associated with the context menu to the given \a point
-    in item coordinates.
-*/
 void QGraphicsSceneContextMenuEvent::setPos(const QPointF &pos)
 {
    Q_D(QGraphicsSceneContextMenuEvent);
    d->pos = pos;
 }
 
-/*!
-    Returns the position of the mouse cursor in scene coordinates at the moment the
-    the context menu was requested.
-
-    \sa pos(), screenPos()
-*/
 QPointF QGraphicsSceneContextMenuEvent::scenePos() const
 {
    Q_D(const QGraphicsSceneContextMenuEvent);
@@ -590,12 +469,6 @@ void QGraphicsSceneContextMenuEvent::setScenePos(const QPointF &pos)
    d->scenePos = pos;
 }
 
-/*!
-    Returns the position of the mouse cursor in screen coordinates at the moment the
-    the context menu was requested.
-
-    \sa pos(), scenePos()
-*/
 QPoint QGraphicsSceneContextMenuEvent::screenPos() const
 {
    Q_D(const QGraphicsSceneContextMenuEvent);
@@ -669,12 +542,6 @@ void QGraphicsSceneHoverEvent::setPos(const QPointF &pos)
    d->pos = pos;
 }
 
-/*!
-    Returns the position of the mouse cursor in scene coordinates at the
-    moment the hover event was sent.
-
-    \sa pos(), screenPos()
-*/
 QPointF QGraphicsSceneHoverEvent::scenePos() const
 {
    Q_D(const QGraphicsSceneHoverEvent);
@@ -688,12 +555,6 @@ void QGraphicsSceneHoverEvent::setScenePos(const QPointF &pos)
    d->scenePos = pos;
 }
 
-/*!
-    Returns the position of the mouse cursor in screen coordinates at the
-    moment the hover event was sent.
-
-    \sa pos(), scenePos()
-*/
 QPoint QGraphicsSceneHoverEvent::screenPos() const
 {
    Q_D(const QGraphicsSceneHoverEvent);
@@ -707,13 +568,6 @@ void QGraphicsSceneHoverEvent::setScreenPos(const QPoint &pos)
    d->screenPos = pos;
 }
 
-/*!
-    \since 4.4
-
-    Returns the last recorded mouse cursor position in item coordinates.
-
-    \sa lastScenePos(), lastScreenPos(), pos()
-*/
 QPointF QGraphicsSceneHoverEvent::lastPos() const
 {
    Q_D(const QGraphicsSceneHoverEvent);
@@ -729,15 +583,6 @@ void QGraphicsSceneHoverEvent::setLastPos(const QPointF &pos)
    d->lastPos = pos;
 }
 
-/*!
-    \since 4.4
-
-    Returns the last recorded, the scene coordinates of the previous mouse or
-    hover event received by the view, that created the event mouse cursor
-    position in scene coordinates.
-
-    \sa lastPos(), lastScreenPos(), scenePos()
-*/
 QPointF QGraphicsSceneHoverEvent::lastScenePos() const
 {
    Q_D(const QGraphicsSceneHoverEvent);
@@ -753,15 +598,6 @@ void QGraphicsSceneHoverEvent::setLastScenePos(const QPointF &pos)
    d->lastScenePos = pos;
 }
 
-/*!
-    \since 4.4
-
-    Returns the last recorded mouse cursor position in screen coordinates. The
-    last recorded position is the position of the previous mouse or hover
-    event received by the view that created the event.
-
-    \sa lastPos(), lastScenePos(), screenPos()
-*/
 QPoint QGraphicsSceneHoverEvent::lastScreenPos() const
 {
    Q_D(const QGraphicsSceneHoverEvent);
@@ -777,23 +613,12 @@ void QGraphicsSceneHoverEvent::setLastScreenPos(const QPoint &pos)
    d->lastScreenPos = pos;
 }
 
-/*!
-    \since 4.4
-
-    Returns the keyboard modifiers at the moment the hover event was sent.
-*/
 Qt::KeyboardModifiers QGraphicsSceneHoverEvent::modifiers() const
 {
    Q_D(const QGraphicsSceneHoverEvent);
    return d->modifiers;
 }
 
-/*!
-    \fn void QGraphicsSceneHoverEvent::setModifiers(Qt::KeyboardModifiers modifiers)
-    \internal
-
-    Sets the modifiers for the current hover event to \a modifiers.
-*/
 void QGraphicsSceneHoverEvent::setModifiers(Qt::KeyboardModifiers modifiers)
 {
    Q_D(QGraphicsSceneHoverEvent);
@@ -807,29 +632,16 @@ class QGraphicsSceneHelpEventPrivate : public QGraphicsSceneEventPrivate
    QPoint screenPos;
 };
 
-/*!
-    \internal
-
-    Constructs a graphics scene help event of the specified \a type.
-*/
+// internal
 QGraphicsSceneHelpEvent::QGraphicsSceneHelpEvent(Type type)
    : QGraphicsSceneEvent(*new QGraphicsSceneHelpEventPrivate, type)
 {
 }
 
-/*!
-    Destroys the event.
-*/
 QGraphicsSceneHelpEvent::~QGraphicsSceneHelpEvent()
 {
 }
 
-/*!
-    Returns the position of the mouse cursor in scene coordinates at the
-    moment the help event was sent.
-
-    \sa screenPos()
-*/
 QPointF QGraphicsSceneHelpEvent::scenePos() const
 {
    Q_D(const QGraphicsSceneHelpEvent);
@@ -843,12 +655,6 @@ void QGraphicsSceneHelpEvent::setScenePos(const QPointF &pos)
    d->scenePos = pos;
 }
 
-/*!
-    Returns the position of the mouse cursor in screen coordinates at the
-    moment the help event was sent.
-
-  \sa scenePos()
-*/
 QPoint QGraphicsSceneHelpEvent::screenPos() const
 {
    Q_D(const QGraphicsSceneHelpEvent);
@@ -884,58 +690,29 @@ class QGraphicsSceneDragDropEventPrivate : public QGraphicsSceneEventPrivate
    const QMimeData *mimeData;
 };
 
-/*!
-    \internal
-
-    Constructs a new QGraphicsSceneDragDropEvent of the
-    specified \a type. The type can be either
-    QEvent::GraphicsSceneDragEnter, QEvent::GraphicsSceneDragLeave,
-    QEvent::GraphicsSceneDragMove, or QEvent::GraphicsSceneDrop.
-*/
+// internal
 QGraphicsSceneDragDropEvent::QGraphicsSceneDragDropEvent(Type type)
    : QGraphicsSceneEvent(*new QGraphicsSceneDragDropEventPrivate, type)
 {
 }
 
-/*!
-    Destroys the object.
-*/
 QGraphicsSceneDragDropEvent::~QGraphicsSceneDragDropEvent()
 {
 }
 
-/*!
-    Returns the mouse position of the event relative to the
-    view that sent the event.
-
-    \sa QGraphicsView, screenPos(), scenePos()
-*/
 QPointF QGraphicsSceneDragDropEvent::pos() const
 {
    Q_D(const QGraphicsSceneDragDropEvent);
    return d->pos;
 }
 
-/*!
-    \internal
-    Sets the position of the mouse to \a pos; this should be
-    relative to the widget that generated the event, which normally
-    is a QGraphicsView.
-
-    \sa pos(), setScenePos(), setScreenPos()
-*/
-
+// internal
 void QGraphicsSceneDragDropEvent::setPos(const QPointF &pos)
 {
    Q_D(QGraphicsSceneDragDropEvent);
    d->pos = pos;
 }
 
-/*!
-    Returns the position of the mouse in scene coordinates.
-
-    \sa pos(), screenPos()
-*/
 QPointF QGraphicsSceneDragDropEvent::scenePos() const
 {
    Q_D(const QGraphicsSceneDragDropEvent);
@@ -949,11 +726,6 @@ void QGraphicsSceneDragDropEvent::setScenePos(const QPointF &pos)
    d->scenePos = pos;
 }
 
-/*!
-    Returns the position of the mouse relative to the screen.
-
-    \sa pos(), scenePos()
-*/
 QPoint QGraphicsSceneDragDropEvent::screenPos() const
 {
    Q_D(const QGraphicsSceneDragDropEvent);
@@ -967,64 +739,31 @@ void QGraphicsSceneDragDropEvent::setScreenPos(const QPoint &pos)
    d->screenPos = pos;
 }
 
-/*!
-    Returns a Qt::MouseButtons value indicating which buttons
-    were pressed on the mouse when this mouse event was
-    generated.
-
-    \sa Qt::MouseButtons
-*/
 Qt::MouseButtons QGraphicsSceneDragDropEvent::buttons() const
 {
    Q_D(const QGraphicsSceneDragDropEvent);
    return d->buttons;
 }
 
-/*!
-    \internal
-    Sets the mouse buttons that were pressed when the event was
-    created to \a buttons.
-
-    \sa Qt::MouseButtons, buttons()
-*/
+// internal
 void QGraphicsSceneDragDropEvent::setButtons(Qt::MouseButtons buttons)
 {
    Q_D(QGraphicsSceneDragDropEvent);
    d->buttons = buttons;
 }
 
-/*!
-    Returns the keyboard modifiers that were pressed when the drag
-    and drop event was created.
-
-    \sa Qt::KeyboardModifiers
-*/
 Qt::KeyboardModifiers QGraphicsSceneDragDropEvent::modifiers() const
 {
    Q_D(const QGraphicsSceneDragDropEvent);
    return d->modifiers;
 }
 
-/*!
-    \internal
-    Sets the keyboard modifiers that were pressed when the event
-    was created to \a modifiers.
-
-    \sa Qt::KeyboardModifiers, modifiers()
-*/
-
+// internal
 void QGraphicsSceneDragDropEvent::setModifiers(Qt::KeyboardModifiers modifiers)
 {
    Q_D(QGraphicsSceneDragDropEvent);
    d->modifiers = modifiers;
 }
-
-/*!
-    Returns the possible drop actions that the drag and
-    drop can result in.
-
-    \sa Qt::DropActions
-*/
 
 Qt::DropActions QGraphicsSceneDragDropEvent::possibleActions() const
 {
@@ -1032,26 +771,12 @@ Qt::DropActions QGraphicsSceneDragDropEvent::possibleActions() const
    return d->possibleActions;
 }
 
-/*!
-    \internal
-    Sets the possible drop actions that the drag can
-    result in to \a actions.
-
-    \sa Qt::DropActions, possibleActions()
-*/
+// internal
 void QGraphicsSceneDragDropEvent::setPossibleActions(Qt::DropActions actions)
 {
    Q_D(QGraphicsSceneDragDropEvent);
    d->possibleActions = actions;
 }
-
-/*!
-    Returns the drop action that is proposed, i.e., preferred.
-    The action must be one of the possible actions as defined by
-    \c possibleActions().
-
-    \sa Qt::DropAction, possibleActions()
-*/
 
 Qt::DropAction QGraphicsSceneDragDropEvent::proposedAction() const
 {
@@ -1059,14 +784,7 @@ Qt::DropAction QGraphicsSceneDragDropEvent::proposedAction() const
    return d->proposedAction;
 }
 
-/*!
-    \internal
-    Sets the proposed action to \a action. The proposed action
-    is a Qt::DropAction that is one of the possible actions as
-    given by \c possibleActions().
-
-    \sa proposedAction(), Qt::DropAction, possibleActions()
-*/
+// internal
 
 void QGraphicsSceneDragDropEvent::setProposedAction(Qt::DropAction action)
 {
@@ -1074,30 +792,11 @@ void QGraphicsSceneDragDropEvent::setProposedAction(Qt::DropAction action)
    d->proposedAction = action;
 }
 
-/*!
-    Sets the proposed action as accepted, i.e, the drop action
-    is set to the proposed action. This is equal to:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicssceneevent.cpp 0
-
-    When using this function, one should not call \c accept().
-
-    \sa dropAction(), setDropAction(), proposedAction()
-*/
-
 void QGraphicsSceneDragDropEvent::acceptProposedAction()
 {
    Q_D(QGraphicsSceneDragDropEvent);
    d->dropAction = d->proposedAction;
 }
-
-/*!
-    Returns the action that was performed in this drag and drop.
-    This should be set by the receiver of the drop and is
-    returned by QDrag::exec().
-
-    \sa setDropAction(), acceptProposedAction()
-*/
 
 Qt::DropAction QGraphicsSceneDragDropEvent::dropAction() const
 {
@@ -1105,56 +804,32 @@ Qt::DropAction QGraphicsSceneDragDropEvent::dropAction() const
    return d->dropAction;
 }
 
-/*!
-    This function lets the receiver of the drop set the drop
-    action that was performed to \a action, which should be one
-    of the
-    \l{QGraphicsSceneDragDropEvent::possibleActions()}{possible
-    actions}. Call \c accept() in stead of \c
-    acceptProposedAction() if you use this function.
-
-    \sa dropAction(), accept(), possibleActions()
-*/
 void QGraphicsSceneDragDropEvent::setDropAction(Qt::DropAction action)
 {
    Q_D(QGraphicsSceneDragDropEvent);
    d->dropAction = action;
 }
 
-/*!
-    This function returns the QGraphicsView that created the
-    QGraphicsSceneDragDropEvent.
-*/
 QWidget *QGraphicsSceneDragDropEvent::source() const
 {
    Q_D(const QGraphicsSceneDragDropEvent);
    return d->source;
 }
 
-/*!
-    \internal
-    This function set the source widget, i.e., the widget that
-    created the drop event, to \a source.
-*/
+// internal
 void QGraphicsSceneDragDropEvent::setSource(QWidget *source)
 {
    Q_D(QGraphicsSceneDragDropEvent);
    d->source = source;
 }
 
-/*!
-    This function returns the MIME data of the event.
-*/
 const QMimeData *QGraphicsSceneDragDropEvent::mimeData() const
 {
    Q_D(const QGraphicsSceneDragDropEvent);
    return d->mimeData;
 }
 
-/*!
-    \internal
-    This function sets the MIME data for the event.
-*/
+// internal
 void QGraphicsSceneDragDropEvent::setMimeData(const QMimeData *data)
 {
    Q_D(QGraphicsSceneDragDropEvent);
@@ -1164,6 +839,7 @@ void QGraphicsSceneDragDropEvent::setMimeData(const QMimeData *data)
 class QGraphicsSceneResizeEventPrivate : public QGraphicsSceneEventPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsSceneResizeEvent)
+
  public:
    inline QGraphicsSceneResizeEventPrivate() {
    }
@@ -1172,56 +848,35 @@ class QGraphicsSceneResizeEventPrivate : public QGraphicsSceneEventPrivate
    QSizeF newSize;
 };
 
-/*!
-    Constructs a QGraphicsSceneResizeEvent.
-*/
 QGraphicsSceneResizeEvent::QGraphicsSceneResizeEvent()
    : QGraphicsSceneEvent(*new QGraphicsSceneResizeEventPrivate, QEvent::GraphicsSceneResize)
 {
 }
 
-/*!
-    Destroys the QGraphicsSceneResizeEvent.
-*/
 QGraphicsSceneResizeEvent::~QGraphicsSceneResizeEvent()
 {
 }
 
-/*!
-    Returns the old size (i.e., the size immediately before the widget was
-    resized).
-
-    \sa newSize(), QGraphicsWidget::resize()
-*/
 QSizeF QGraphicsSceneResizeEvent::oldSize() const
 {
    Q_D(const QGraphicsSceneResizeEvent);
    return d->oldSize;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneResizeEvent::setOldSize(const QSizeF &size)
 {
    Q_D(QGraphicsSceneResizeEvent);
    d->oldSize = size;
 }
 
-/*!
-    Returns the new size (i.e., the current size).
-
-    \sa oldSize(), QGraphicsWidget::resize()
-*/
 QSizeF QGraphicsSceneResizeEvent::newSize() const
 {
    Q_D(const QGraphicsSceneResizeEvent);
    return d->newSize;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneResizeEvent::setNewSize(const QSizeF &size)
 {
    Q_D(QGraphicsSceneResizeEvent);
@@ -1231,6 +886,7 @@ void QGraphicsSceneResizeEvent::setNewSize(const QSizeF &size)
 class QGraphicsSceneMoveEventPrivate : public QGraphicsSceneEventPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsSceneMoveEvent)
+
  public:
    inline QGraphicsSceneMoveEventPrivate() {
    }
@@ -1239,56 +895,35 @@ class QGraphicsSceneMoveEventPrivate : public QGraphicsSceneEventPrivate
    QPointF newPos;
 };
 
-/*!
-    Constructs a QGraphicsSceneMoveEvent.
-*/
 QGraphicsSceneMoveEvent::QGraphicsSceneMoveEvent()
    : QGraphicsSceneEvent(*new QGraphicsSceneMoveEventPrivate, QEvent::GraphicsSceneMove)
 {
 }
 
-/*!
-    Destroys the QGraphicsSceneMoveEvent.
-*/
 QGraphicsSceneMoveEvent::~QGraphicsSceneMoveEvent()
 {
 }
 
-/*!
-    Returns the old position (i.e., the position immediately before the widget
-    was moved).
-
-    \sa newPos(), QGraphicsItem::setPos()
-*/
 QPointF QGraphicsSceneMoveEvent::oldPos() const
 {
    Q_D(const QGraphicsSceneMoveEvent);
    return d->oldPos;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneMoveEvent::setOldPos(const QPointF &pos)
 {
    Q_D(QGraphicsSceneMoveEvent);
    d->oldPos = pos;
 }
 
-/*!
-    Returns the new position (i.e., the current position).
-
-    \sa oldPos(), QGraphicsItem::setPos()
-*/
 QPointF QGraphicsSceneMoveEvent::newPos() const
 {
    Q_D(const QGraphicsSceneMoveEvent);
    return d->newPos;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsSceneMoveEvent::setNewPos(const QPointF &pos)
 {
    Q_D(QGraphicsSceneMoveEvent);

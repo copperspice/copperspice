@@ -150,15 +150,6 @@ bool QCommandLineParser::addOption(const QCommandLineOption &option)
    return false;
 }
 
-/*!
-    Adds the \c{-v} / \c{--version} option, which displays the version string of the application.
-
-    This option is handled automatically by QCommandLineParser.
-
-    You can set the actual version string by using QCoreApplication::setApplicationVersion().
-
-    Returns the option instance, which can be used to call isSet().
-*/
 QCommandLineOption QCommandLineParser::addVersionOption()
 {
    d->builtinVersionOption = true;
@@ -410,22 +401,6 @@ bool QCommandLineParserPrivate::parse(const QStringList &args)
    return !error;
 }
 
-/*!
-    Checks whether the option \a name was passed to the application.
-
-    Returns true if the option \a name was set, false otherwise.
-
-    This is the recommended way to check for options with no values.
-
-    The name provided can be any long or short name of any option that was
-    added with \c addOption(). All the options names are treated as being
-    equivalent. If the name is not recognized or that option was not present,
-    false is returned.
-
-    Example:
-    \snippet code/src_corelib_tools_qcommandlineparser.cpp 0
- */
-
 bool QCommandLineParser::isSet(const QString &name) const
 {
    d->checkParsed("isSet");
@@ -441,24 +416,6 @@ bool QCommandLineParser::isSet(const QString &name) const
    return false;
 }
 
-/*!
-    Returns the option value found for the given option name \a optionName, or
-    an empty string if not found.
-
-    The name provided can be any long or short name of any option that was
-    added with \c addOption(). All the option names are treated as being
-    equivalent. If the name is not recognized or that option was not present, an
-    empty string is returned.
-
-    For options found by the parser, the last value found for
-    that option is returned. If the option wasn't specified on the command line,
-    the default value is returned.
-
-    An empty string is returned if the option does not take a value.
-
-    \sa values()
- */
-
 QString QCommandLineParser::value(const QString &optionName) const
 {
    d->checkParsed("value");
@@ -470,24 +427,6 @@ QString QCommandLineParser::value(const QString &optionName) const
 
    return QString();
 }
-
-/*!
-    Returns a list of option values found for the given option name \a
-    optionName, or an empty list if not found.
-
-    The name provided can be any long or short name of any option that was
-    added with \c addOption(). All the options names are treated as being
-    equivalent. If the name is not recognized or that option was not present, an
-    empty list is returned.
-
-    For options found by the parser, the list will contain an entry for
-    each time the option was encountered by the parser. If the option wasn't
-    specified on the command line, the default values are returned.
-
-    An empty list is returned if the option does not take a value.
-
-    \sa value()
- */
 
 QStringList QCommandLineParser::values(const QString &optionName) const
 {
@@ -509,41 +448,20 @@ QStringList QCommandLineParser::values(const QString &optionName) const
    return QStringList();
 }
 
-/*!
-    \overload
-    Returns true if the \a option was set, false otherwise.
-*/
 bool QCommandLineParser::isSet(const QCommandLineOption &option) const
 {
    return isSet(option.names().first());
 }
 
-/*!
-    \overload
-    Returns the option value found for the given \a option, or
-    an empty string if not found.
-*/
 QString QCommandLineParser::value(const QCommandLineOption &option) const
 {
    return value(option.names().first());
 }
 
-/*!
-    \overload
-    Returns a list of option values found for the given \a option,
-    or an empty list if not found.
-*/
 QStringList QCommandLineParser::values(const QCommandLineOption &option) const
 {
    return values(option.names().first());
 }
-
-/*!
-    Returns a list of positional arguments.
-
-    These are all of the arguments that were not recognized as part of an
-    option.
- */
 
 QStringList QCommandLineParser::positionalArguments() const
 {
@@ -551,41 +469,11 @@ QStringList QCommandLineParser::positionalArguments() const
    return d->positionalArgumentList;
 }
 
-/*!
-    Returns a list of option names that were found.
-
-    This returns a list of all the recognized option names found by the
-    parser, in the order in which they were found. For any long options
-    that were in the form {--option=value}, the value part will have been
-    dropped.
-
-    The names in this list do not include the preceding dash characters.
-    Names may appear more than once in this list if they were encountered
-    more than once by the parser.
-
-    Any entry in the list can be used with \c value() or with
-    \c values() to get any relevant option values.
- */
-
 QStringList QCommandLineParser::optionNames() const
 {
    d->checkParsed("optionNames");
    return d->optionNames;
 }
-
-/*!
-    Returns a list of unknown option names.
-
-    This list will include both long an short name options that were not
-    recognized. For any long options that were in the form {--option=value},
-    the value part will have been dropped and only the long name is added.
-
-    The names in this list do not include the preceding dash characters.
-    Names may appear more than once in this list if they were encountered
-    more than once by the parser.
-
-    \sa optionNames()
- */
 
 QStringList QCommandLineParser::unknownOptionNames() const
 {
@@ -593,17 +481,6 @@ QStringList QCommandLineParser::unknownOptionNames() const
    return d->unknownOptionNames;
 }
 
-/*!
-    Displays the help information, and exits the application.
-    This is automatically triggered by the --help option, but can also
-    be used to display the help when the user is not invoking the
-    application correctly.
-    The exit code is set to \a exitCode. It should be set to 0 if the
-    user requested to see the help, and to any other value in case of
-    an error.
-
-    \sa helpText()
-*/
 void QCommandLineParser::showHelp(int exitCode)
 {
    fprintf(stdout, "%s", csPrintable(d->helpText()));

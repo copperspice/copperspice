@@ -281,12 +281,6 @@ void QMainWindow::setMenuBar(QMenuBar *menuBar)
    topLayout->setMenuBar(menuBar);
 }
 
-/*!
-    \since 4.2
-
-    Returns the menu bar for the main window. This function returns
-    null if a menu bar hasn't been constructed yet.
-*/
 QWidget *QMainWindow::menuWidget() const
 {
    QWidget *menuBar = d_func()->layout->menuBar();
@@ -330,25 +324,11 @@ void QMainWindow::setStatusBar(QStatusBar *statusbar)
 }
 #endif // QT_NO_STATUSBAR
 
-/*!
-    Returns the central widget for the main window. This function
-    returns zero if the central widget has not been set.
-
-    \sa setCentralWidget()
-*/
 QWidget *QMainWindow::centralWidget() const
 {
    return d_func()->layout->centralWidget();
 }
 
-/*!
-    Sets the given \a widget to be the main window's central widget.
-
-    Note: QMainWindow takes ownership of the \a widget pointer and
-    deletes it at the appropriate time.
-
-    \sa centralWidget()
-*/
 void QMainWindow::setCentralWidget(QWidget *widget)
 {
    Q_D(QMainWindow);

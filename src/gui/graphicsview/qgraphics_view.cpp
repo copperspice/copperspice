@@ -85,9 +85,7 @@ void QGraphicsViewPrivate::translateTouchEvent(QGraphicsViewPrivate *d, QTouchEv
    touchEvent->setTouchPoints(touchPoints);
 }
 
-/*!
-    \internal
-*/
+// internal
 QGraphicsViewPrivate::QGraphicsViewPrivate()
    : renderHints(QPainter::TextAntialiasing), dragMode(QGraphicsView::NoDrag),
      sceneInteractionAllowed(true), hasSceneRect(false), connectedToScene(false),
@@ -257,9 +255,6 @@ void QGraphicsViewPrivate::recalculateContentSize()
    }
 }
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::centerView(QGraphicsView::ViewportAnchor anchor)
 {
    Q_Q(QGraphicsView);
@@ -286,21 +281,12 @@ void QGraphicsViewPrivate::centerView(QGraphicsView::ViewportAnchor anchor)
    }
 }
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::updateLastCenterPoint()
 {
    Q_Q(QGraphicsView);
    lastCenterPoint = q->mapToScene(viewport->rect().center());
 }
 
-/*!
-    \internal
-
-    Returns the horizontal scroll value (the X value of the left edge of the
-    viewport).
-*/
 qint64 QGraphicsViewPrivate::horizontalScroll() const
 {
    if (dirtyScroll) {
@@ -309,12 +295,6 @@ qint64 QGraphicsViewPrivate::horizontalScroll() const
    return scrollX;
 }
 
-/*!
-    \internal
-
-    Returns the vertical scroll value (the X value of the top edge of the
-    viewport).
-*/
 qint64 QGraphicsViewPrivate::verticalScroll() const
 {
    if (dirtyScroll) {
@@ -323,11 +303,6 @@ qint64 QGraphicsViewPrivate::verticalScroll() const
    return scrollY;
 }
 
-/*!
-    \internal
-
-    Maps the given rectangle to the scene using QTransform::mapRect()
-*/
 QRectF QGraphicsViewPrivate::mapRectToScene(const QRect &rect) const
 {
    if (dirtyScroll) {
@@ -337,12 +312,6 @@ QRectF QGraphicsViewPrivate::mapRectToScene(const QRect &rect) const
    return identityMatrix ? scrolled : matrix.inverted().mapRect(scrolled);
 }
 
-
-/*!
-    \internal
-
-    Maps the given rectangle from the scene using QTransform::mapRect()
-*/
 QRectF QGraphicsViewPrivate::mapRectFromScene(const QRectF &rect) const
 {
    if (dirtyScroll) {
@@ -351,9 +320,6 @@ QRectF QGraphicsViewPrivate::mapRectFromScene(const QRectF &rect) const
    return (identityMatrix ? rect : matrix.mapRect(rect)).translated(-scrollX, -scrollY);
 }
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::updateScroll()
 {
    Q_Q(QGraphicsView);
@@ -373,9 +339,6 @@ void QGraphicsViewPrivate::updateScroll()
    dirtyScroll = false;
 }
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::replayLastMouseEvent()
 {
    if (!useLastMouseEvent || !scene) {
@@ -384,9 +347,6 @@ void QGraphicsViewPrivate::replayLastMouseEvent()
    mouseMoveEventHandler(&lastMouseEvent);
 }
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::storeMouseEvent(QMouseEvent *event)
 {
    useLastMouseEvent = true;
@@ -473,9 +433,6 @@ void QGraphicsViewPrivate::mouseMoveEventHandler(QMouseEvent *event)
 #endif
 }
 
-/*!
-    \internal
-*/
 #ifndef QT_NO_RUBBERBAND
 QRegion QGraphicsViewPrivate::rubberBandRegion(const QWidget *widget, const QRect &rect) const
 {
@@ -559,9 +516,6 @@ void QGraphicsViewPrivate::updateRubberBand(const QMouseEvent *event)
 }
 #endif
 
-/*!
-    \internal
-*/
 #ifndef QT_NO_CURSOR
 void QGraphicsViewPrivate::_q_setViewportCursor(const QCursor &cursor)
 {
@@ -573,9 +527,6 @@ void QGraphicsViewPrivate::_q_setViewportCursor(const QCursor &cursor)
 }
 #endif
 
-/*!
-    \internal
-*/
 #ifndef QT_NO_CURSOR
 void QGraphicsViewPrivate::_q_unsetViewportCursor()
 {
@@ -599,9 +550,6 @@ void QGraphicsViewPrivate::_q_unsetViewportCursor()
 }
 #endif
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::storeDragDropEvent(const QGraphicsSceneDragDropEvent *event)
 {
    delete lastDragDropEvent;
@@ -618,9 +566,6 @@ void QGraphicsViewPrivate::storeDragDropEvent(const QGraphicsSceneDragDropEvent 
    lastDragDropEvent->setSource(event->source());
 }
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::populateSceneDragDropEvent(QGraphicsSceneDragDropEvent *dest,
    QDropEvent *source)
 {
@@ -640,9 +585,6 @@ void QGraphicsViewPrivate::populateSceneDragDropEvent(QGraphicsSceneDragDropEven
 #endif
 }
 
-/*!
-    \internal
-*/
 QRect QGraphicsViewPrivate::mapToViewRect(const QGraphicsItem *item, const QRectF &rect) const
 {
    Q_Q(const QGraphicsView);
@@ -691,9 +633,6 @@ QRect QGraphicsViewPrivate::mapToViewRect(const QGraphicsItem *item, const QRect
    return r.toAlignedRect();
 }
 
-/*!
-    \internal
-*/
 QRegion QGraphicsViewPrivate::mapToViewRegion(const QGraphicsItem *item, const QRectF &rect) const
 {
    Q_Q(const QGraphicsView);
@@ -706,9 +645,6 @@ QRegion QGraphicsViewPrivate::mapToViewRegion(const QGraphicsItem *item, const Q
    return item->boundingRegion(itv) & itv.mapRect(rect).toAlignedRect();
 }
 
-/*!
-    \internal
-*/
 void QGraphicsViewPrivate::processPendingUpdates()
 {
    if (!scene) {
@@ -747,11 +683,6 @@ static inline void QRect_unite(QRect *rect, const QRect &other)
    }
 }
 
-/*
-   Calling this function results in update rects being clipped to the item's
-   bounding rect. Note that updates prior to this function call is not clipped.
-   The clip is removed by passing 0.
-*/
 void QGraphicsViewPrivate::setUpdateClip(QGraphicsItem *item)
 {
    Q_Q(QGraphicsView);
@@ -959,13 +890,6 @@ QList<QGraphicsItem *> QGraphicsViewPrivate::findItems(const QRegion &exposedReg
          Qt::AscendingOrder, viewTransform);
 }
 
-/*!
-    \internal
-
-    Enables input methods for the view if and only if the current focus item of
-    the scene accepts input methods. Call function whenever that condition has
-    potentially changed.
-*/
 void QGraphicsViewPrivate::updateInputMethodSensitivity()
 {
    Q_Q(QGraphicsView);
@@ -999,9 +923,6 @@ void QGraphicsViewPrivate::updateInputMethodSensitivity()
    }
 }
 
-/*!
-    Constructs a QGraphicsView. \a parent is passed to QWidget's constructor.
-*/
 QGraphicsView::QGraphicsView(QWidget *parent)
    : QAbstractScrollArea(*new QGraphicsViewPrivate, parent)
 {
@@ -1013,10 +934,6 @@ QGraphicsView::QGraphicsView(QWidget *parent)
    viewport()->setAttribute(Qt::WA_InputMethodEnabled);
 }
 
-/*!
-    Constructs a QGraphicsView and sets the visualized scene to \a
-    scene. \a parent is passed to QWidget's constructor.
-*/
 QGraphicsView::QGraphicsView(QGraphicsScene *scene, QWidget *parent)
    : QAbstractScrollArea(*new QGraphicsViewPrivate, parent)
 {
@@ -1029,9 +946,7 @@ QGraphicsView::QGraphicsView(QGraphicsScene *scene, QWidget *parent)
    viewport()->setAttribute(Qt::WA_InputMethodEnabled);
 }
 
-/*!
-  \internal
- */
+// internal
 QGraphicsView::QGraphicsView(QGraphicsViewPrivate &dd, QWidget *parent)
    : QAbstractScrollArea(dd, parent)
 {
@@ -1043,9 +958,6 @@ QGraphicsView::QGraphicsView(QGraphicsViewPrivate &dd, QWidget *parent)
    viewport()->setAttribute(Qt::WA_InputMethodEnabled);
 }
 
-/*!
-    Destructs the QGraphicsView object.
-*/
 QGraphicsView::~QGraphicsView()
 {
    Q_D(QGraphicsView);
@@ -1056,9 +968,6 @@ QGraphicsView::~QGraphicsView()
    delete d->lastDragDropEvent;
 }
 
-/*!
-    \reimp
-*/
 QSize QGraphicsView::sizeHint() const
 {
    Q_D(const QGraphicsView);
@@ -1071,21 +980,6 @@ QSize QGraphicsView::sizeHint() const
    return QAbstractScrollArea::sizeHint();
 }
 
-/*!
-    \property QGraphicsView::renderHints
-    \brief the default render hints for the view
-
-    These hints are
-    used to initialize QPainter before each visible item is drawn. QPainter
-    uses render hints to toggle rendering features such as antialiasing and
-    smooth pixmap transformation.
-
-    QPainter::TextAntialiasing is enabled by default.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsview.cpp 1
-*/
 QPainter::RenderHints QGraphicsView::renderHints() const
 {
    Q_D(const QGraphicsView);
@@ -1103,12 +997,6 @@ void QGraphicsView::setRenderHints(QPainter::RenderHints hints)
    d->updateAll();
 }
 
-/*!
-    If \a enabled is true, the render hint \a hint is enabled; otherwise it
-    is disabled.
-
-    \sa renderHints
-*/
 void QGraphicsView::setRenderHint(QPainter::RenderHint hint, bool enabled)
 {
    Q_D(QGraphicsView);
@@ -1123,18 +1011,6 @@ void QGraphicsView::setRenderHint(QPainter::RenderHint hint, bool enabled)
    }
 }
 
-/*!
-    \property QGraphicsView::alignment
-    \brief the alignment of the scene in the view when the whole
-    scene is visible.
-
-    If the whole scene is visible in the view, (i.e., there are no visible
-    scroll bars,) the view's alignment will decide where the scene will be
-    rendered in the view. For example, if the alignment is Qt::AlignCenter,
-    which is default, the scene will be centered in the view, and if the
-    alignment is (Qt::AlignLeft | Qt::AlignTop), the scene will be rendered in
-    the top-left corner of the view.
-*/
 Qt::Alignment QGraphicsView::alignment() const
 {
    Q_D(const QGraphicsView);
@@ -1168,22 +1044,6 @@ void QGraphicsView::setTransformationAnchor(ViewportAnchor anchor)
    }
 }
 
-/*!
-    \property QGraphicsView::resizeAnchor
-    \brief how the view should position the scene when the view is resized.
-
-    QGraphicsView uses this property to decide how to position the scene in
-    the viewport when the viewport widget's size changes. The default
-    behavior, NoAnchor, leaves the scene's position unchanged during a resize;
-    the top-left corner of the view will appear to be anchored while resizing.
-
-    Note that the effect of this property is noticeable when only a part of the
-    scene is visible (i.e., when there are scroll bars). Otherwise, if the
-    whole scene fits in the view, QGraphicsScene uses the view \l alignment to
-    position the scene in the view.
-
-    \sa alignment, transformationAnchor, Qt::WNorthWestGravity
-*/
 QGraphicsView::ViewportAnchor QGraphicsView::resizeAnchor() const
 {
    Q_D(const QGraphicsView);
@@ -1202,24 +1062,6 @@ void QGraphicsView::setResizeAnchor(ViewportAnchor anchor)
    }
 }
 
-/*!
-    \property QGraphicsView::viewportUpdateMode
-    \brief how the viewport should update its contents.
-
-    \since 4.3
-
-    QGraphicsView uses this property to decide how to update areas of the
-    scene that have been reexposed or changed. Usually you do not need to
-    modify this property, but there are some cases where doing so can improve
-    rendering performance. See the ViewportUpdateMode documentation for
-    specific details.
-
-    The default value is MinimalViewportUpdate, where QGraphicsView will
-    update as small an area of the viewport as possible when the contents
-    change.
-
-    \sa ViewportUpdateMode, cacheMode
-*/
 QGraphicsView::ViewportUpdateMode QGraphicsView::viewportUpdateMode() const
 {
    Q_D(const QGraphicsView);
@@ -1231,24 +1073,6 @@ void QGraphicsView::setViewportUpdateMode(ViewportUpdateMode mode)
    d->viewportUpdateMode = mode;
 }
 
-/*!
-    \property QGraphicsView::optimizationFlags
-    \brief flags that can be used to tune QGraphicsView's performance.
-
-    \since 4.3
-
-    QGraphicsView uses clipping, extra bounding rect adjustments, and certain
-    other aids to improve rendering quality and performance for the common
-    case graphics scene. However, depending on the target platform, the scene,
-    and the viewport in use, some of these operations can degrade performance.
-
-    The effect varies from flag to flag; see the OptimizationFlags
-    documentation for details.
-
-    By default, no optimization flags are enabled.
-
-    \sa setOptimizationFlag()
-*/
 QGraphicsView::OptimizationFlags QGraphicsView::optimizationFlags() const
 {
    Q_D(const QGraphicsView);
@@ -1261,11 +1085,6 @@ void QGraphicsView::setOptimizationFlags(OptimizationFlags flags)
    d->optimizationFlags = flags;
 }
 
-/*!
-    Enables \a flag if \a enabled is true; otherwise disables \a flag.
-
-    \sa optimizationFlags
-*/
 void QGraphicsView::setOptimizationFlag(OptimizationFlag flag, bool enabled)
 {
    Q_D(QGraphicsView);
@@ -1276,20 +1095,6 @@ void QGraphicsView::setOptimizationFlag(OptimizationFlag flag, bool enabled)
    }
 }
 
-/*!
-    \property QGraphicsView::dragMode
-    \brief the behavior for dragging the mouse over the scene while
-    the left mouse button is pressed.
-
-    This property defines what should happen when the user clicks on the scene
-    background and drags the mouse (e.g., scrolling the viewport contents
-    using a pointing hand cursor, or selecting multiple items with a rubber
-    band). The default value, NoDrag, does nothing.
-
-    This behavior only affects mouse clicks that are not handled by any item.
-    You can define a custom behavior by creating a subclass of QGraphicsView
-    and reimplementing mouseMoveEvent().
-*/
 QGraphicsView::DragMode QGraphicsView::dragMode() const
 {
    Q_D(const QGraphicsView);
@@ -1329,19 +1134,7 @@ void QGraphicsView::setDragMode(DragMode mode)
 }
 
 #ifndef QT_NO_RUBBERBAND
-/*!
-    \property QGraphicsView::rubberBandSelectionMode
-    \brief the behavior for selecting items with a rubber band selection rectangle.
-    \since 4.3
 
-    This property defines how items are selected when using the RubberBandDrag
-    drag mode.
-
-    The default value is Qt::IntersectsItemShape; all items whose shape
-    intersects with or is contained by the rubber band are selected.
-
-    \sa dragMode, items()
-*/
 Qt::ItemSelectionMode QGraphicsView::rubberBandSelectionMode() const
 {
    Q_D(const QGraphicsView);
@@ -1518,12 +1311,6 @@ void QGraphicsView::setSceneRect(const QRectF &rect)
    d->recalculateContentSize();
 }
 
-/*!
-    Returns the current transformation matrix for the view. If no current
-    transformation is set, the identity matrix is returned.
-
-    \sa setMatrix(), transform(), rotate(), scale(), shear(), translate()
-*/
 QMatrix QGraphicsView::matrix() const
 {
    Q_D(const QGraphicsView);
@@ -1535,21 +1322,11 @@ void QGraphicsView::setMatrix(const QMatrix &matrix, bool combine)
    setTransform(QTransform(matrix), combine);
 }
 
-/*!
-    Resets the view transformation matrix to the identity matrix.
-
-    \sa resetTransform()
-*/
 void QGraphicsView::resetMatrix()
 {
    resetTransform();
 }
 
-/*!
-    Rotates the current view transformation \a angle degrees clockwise.
-
-    \sa setTransform(), transform(), scale(), shear(), translate()
-*/
 void QGraphicsView::rotate(qreal angle)
 {
    Q_D(QGraphicsView);
@@ -1558,11 +1335,6 @@ void QGraphicsView::rotate(qreal angle)
    setTransform(matrix);
 }
 
-/*!
-    Scales the current view transformation by (\a sx, \a sy).
-
-    \sa setTransform(), transform(), rotate(), shear(), translate()
-*/
 void QGraphicsView::scale(qreal sx, qreal sy)
 {
    Q_D(QGraphicsView);
@@ -1571,11 +1343,6 @@ void QGraphicsView::scale(qreal sx, qreal sy)
    setTransform(matrix);
 }
 
-/*!
-    Shears the current view transformation by (\a sh, \a sv).
-
-    \sa setTransform(), transform(), rotate(), scale(), translate()
-*/
 void QGraphicsView::shear(qreal sh, qreal sv)
 {
    Q_D(QGraphicsView);
@@ -1584,11 +1351,6 @@ void QGraphicsView::shear(qreal sh, qreal sv)
    setTransform(matrix);
 }
 
-/*!
-    Translates the current view transformation by (\a dx, \a dy).
-
-    \sa setTransform(), transform(), rotate(), shear()
-*/
 void QGraphicsView::translate(qreal dx, qreal dy)
 {
    Q_D(QGraphicsView);
@@ -1597,18 +1359,6 @@ void QGraphicsView::translate(qreal dx, qreal dy)
    setTransform(matrix);
 }
 
-/*!
-    Scrolls the contents of the viewport to ensure that the scene
-    coordinate \a pos, is centered in the view.
-
-    Because \a pos is a floating point coordinate, and the scroll bars operate
-    on integer coordinates, the centering is only an approximation.
-
-    \note If the item is close to or outside the border, it will be visible
-    in the view, but not centered.
-
-    \sa ensureVisible()
-*/
 void QGraphicsView::centerOn(const QPointF &pos)
 {
    Q_D(QGraphicsView);
@@ -1634,36 +1384,11 @@ void QGraphicsView::centerOn(const QPointF &pos)
    d->lastCenterPoint = oldCenterPoint;
 }
 
-/*!
-    \fn QGraphicsView::centerOn(qreal x, qreal y)
-    \overload
-
-    This function is provided for convenience. It's equivalent to calling
-    centerOn(QPointF(\a x, \a y)).
-*/
-
-/*!
-    \overload
-
-    Scrolls the contents of the viewport to ensure that \a item
-    is centered in the view.
-
-    \sa ensureVisible()
-*/
 void QGraphicsView::centerOn(const QGraphicsItem *item)
 {
    centerOn(item->sceneBoundingRect().center());
 }
 
-/*!
-    Scrolls the contents of the viewport so that the scene rectangle \a rect
-    is visible, with margins specified in pixels by \a xmargin and \a
-    ymargin. If the specified rect cannot be reached, the contents are
-    scrolled to the nearest valid position. The default value for both margins
-    is 50 pixels.
-
-    \sa centerOn()
-*/
 void QGraphicsView::ensureVisible(const QRectF &rect, int xmargin, int ymargin)
 {
    Q_D(QGraphicsView);
@@ -1862,13 +1587,6 @@ void QGraphicsView::render(QPainter *painter, const QRectF &target, const QRect 
    painter->restore();
 }
 
-/*!
-    Returns a list of all the items in the associated scene, in descending
-    stacking order (i.e., the first item in the returned list is the uppermost
-    item).
-
-    \sa QGraphicsScene::items(), {QGraphicsItem#Sorting}{Sorting}
-*/
 QList<QGraphicsItem *> QGraphicsView::items() const
 {
    Q_D(const QGraphicsView);
@@ -1878,20 +1596,6 @@ QList<QGraphicsItem *> QGraphicsView::items() const
    return d->scene->items();
 }
 
-/*!
-    Returns a list of all the items at the position \a pos in the view. The
-    items are listed in descending stacking order (i.e., the first item in the
-    list is the uppermost item, and the last item is the lowermost item). \a
-    pos is in viewport coordinates.
-
-    This function is most commonly called from within mouse event handlers in
-    a subclass in QGraphicsView. \a pos is in untransformed viewport
-    coordinates, just like QMouseEvent::pos().
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsview.cpp 5
-
-    \sa QGraphicsScene::items(), {QGraphicsItem#Sorting}{Sorting}
-*/
 QList<QGraphicsItem *> QGraphicsView::items(const QPoint &pos) const
 {
    Q_D(const QGraphicsView);
@@ -1916,28 +1620,6 @@ QList<QGraphicsItem *> QGraphicsView::items(const QPoint &pos) const
          viewportTransform());
 }
 
-/*!
-    \fn QGraphicsView::items(int x, int y) const
-
-    This function is provided for convenience. It's equivalent to calling
-    items(QPoint(\a x, \a y)).
-*/
-
-/*!
-    \overload
-
-    Returns a list of all the items that, depending on \a mode, are either
-    contained by or intersect with \a rect. \a rect is in viewport
-    coordinates.
-
-    The default value for \a mode is Qt::IntersectsItemShape; all items whose
-    exact shape intersects with or is contained by \a rect are returned.
-
-    The items are sorted in descending stacking order (i.e., the first item in
-    the returned list is the uppermost item).
-
-    \sa itemAt(), items(), mapToScene(), {QGraphicsItem#Sorting}{Sorting}
-*/
 QList<QGraphicsItem *> QGraphicsView::items(const QRect &rect, Qt::ItemSelectionMode mode) const
 {
    Q_D(const QGraphicsView);
@@ -1956,18 +1638,6 @@ QList<QGraphicsItem *> QGraphicsView::items(const QPolygon &polygon, Qt::ItemSel
    return d->scene->items(mapToScene(polygon), mode, Qt::DescendingOrder, viewportTransform());
 }
 
-/*!
-    \overload
-
-    Returns a list of all the items that, depending on \a mode, are either
-    contained by or intersect with \a path. \a path is in viewport
-    coordinates.
-
-    The default value for \a mode is Qt::IntersectsItemShape; all items whose
-    exact shape intersects with or is contained by \a path are returned.
-
-    \sa itemAt(), items(), mapToScene(), {QGraphicsItem#Sorting}{Sorting}
-*/
 QList<QGraphicsItem *> QGraphicsView::items(const QPainterPath &path, Qt::ItemSelectionMode mode) const
 {
    Q_D(const QGraphicsView);
@@ -1977,17 +1647,6 @@ QList<QGraphicsItem *> QGraphicsView::items(const QPainterPath &path, Qt::ItemSe
    return d->scene->items(mapToScene(path), mode, Qt::DescendingOrder, viewportTransform());
 }
 
-/*!
-    Returns the item at position \a pos, which is in viewport coordinates.
-    If there are several items at this position, this function returns
-    the topmost item.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicsview.cpp 6
-
-    \sa items(), {QGraphicsItem#Sorting}{Sorting}
-*/
 QGraphicsItem *QGraphicsView::itemAt(const QPoint &pos) const
 {
    Q_D(const QGraphicsView);
@@ -1999,23 +1658,6 @@ QGraphicsItem *QGraphicsView::itemAt(const QPoint &pos) const
    return itemsAtPos.isEmpty() ? nullptr : itemsAtPos.first();
 }
 
-/*!
-    \overload
-    \fn QGraphicsItem *QGraphicsView::itemAt(int x, int y) const
-
-    This function is provided for convenience. It's equivalent to
-    calling itemAt(QPoint(\a x, \a y)).
-*/
-
-/*!
-    Returns the viewport coordinate \a point mapped to scene coordinates.
-
-    Note: It can be useful to map the whole rectangle covered by the pixel at
-    \a point instead of the point itself. To do this, you can call
-    mapToScene(QRect(\a point, QSize(2, 2))).
-
-    \sa mapFromScene()
-*/
 QPointF QGraphicsView::mapToScene(const QPoint &point) const
 {
    Q_D(const QGraphicsView);
@@ -2025,19 +1667,6 @@ QPointF QGraphicsView::mapToScene(const QPoint &point) const
    return d->identityMatrix ? p : d->matrix.inverted().map(p);
 }
 
-/*!
-    \fn QGraphicsView::mapToScene(int x, int y) const
-
-    This function is provided for convenience. It's equivalent to calling
-    mapToScene(QPoint(\a x, \a y)).
-*/
-
-/*!
-    Returns the viewport rectangle \a rect mapped to a scene coordinate
-    polygon.
-
-    \sa mapFromScene()
-*/
 QPolygonF QGraphicsView::mapToScene(const QRect &rect) const
 {
    Q_D(const QGraphicsView);
@@ -2068,19 +1697,6 @@ QPolygonF QGraphicsView::mapToScene(const QRect &rect) const
    return poly;
 }
 
-/*!
-    \fn QGraphicsView::mapToScene(int x, int y, int w, int h) const
-
-    This function is provided for convenience. It's equivalent to calling
-    mapToScene(QRect(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Returns the viewport polygon \a polygon mapped to a scene coordinate
-    polygon.
-
-    \sa mapFromScene()
-*/
 QPolygonF QGraphicsView::mapToScene(const QPolygon &polygon) const
 {
    QPolygonF poly;
@@ -2091,12 +1707,6 @@ QPolygonF QGraphicsView::mapToScene(const QPolygon &polygon) const
    return poly;
 }
 
-/*!
-    Returns the viewport painter path \a path mapped to a scene coordinate
-    painter path.
-
-    \sa mapFromScene()
-*/
 QPainterPath QGraphicsView::mapToScene(const QPainterPath &path) const
 {
    Q_D(const QGraphicsView);
@@ -2105,11 +1715,6 @@ QPainterPath QGraphicsView::mapToScene(const QPainterPath &path) const
    return matrix.map(path);
 }
 
-/*!
-    Returns the scene coordinate \a point to viewport coordinates.
-
-    \sa mapToScene()
-*/
 QPoint QGraphicsView::mapFromScene(const QPointF &point) const
 {
    Q_D(const QGraphicsView);
@@ -2119,19 +1724,6 @@ QPoint QGraphicsView::mapFromScene(const QPointF &point) const
    return p.toPoint();
 }
 
-/*!
-    \fn QGraphicsView::mapFromScene(qreal x, qreal y) const
-
-    This function is provided for convenience. It's equivalent to
-    calling mapFromScene(QPointF(\a x, \a y)).
-*/
-
-/*!
-    Returns the scene rectangle \a rect to a viewport coordinate
-    polygon.
-
-    \sa mapToScene()
-*/
 QPolygon QGraphicsView::mapFromScene(const QRectF &rect) const
 {
    Q_D(const QGraphicsView);
@@ -2165,19 +1757,6 @@ QPolygon QGraphicsView::mapFromScene(const QRectF &rect) const
    return poly;
 }
 
-/*!
-    \fn QGraphicsView::mapFromScene(qreal x, qreal y, qreal w, qreal h) const
-
-    This function is provided for convenience. It's equivalent to
-    calling mapFromScene(QRectF(\a x, \a y, \a w, \a h)).
-*/
-
-/*!
-    Returns the scene coordinate polygon \a polygon to a viewport coordinate
-    polygon.
-
-    \sa mapToScene()
-*/
 QPolygon QGraphicsView::mapFromScene(const QPolygonF &polygon) const
 {
    QPolygon poly;
@@ -2187,12 +1766,6 @@ QPolygon QGraphicsView::mapFromScene(const QPolygonF &polygon) const
    return poly;
 }
 
-/*!
-    Returns the scene coordinate painter path \a path to a viewport coordinate
-    painter path.
-
-    \sa mapToScene()
-*/
 QPainterPath QGraphicsView::mapFromScene(const QPainterPath &path) const
 {
    Q_D(const QGraphicsView);
@@ -2201,9 +1774,6 @@ QPainterPath QGraphicsView::mapFromScene(const QPainterPath &path) const
    return matrix.map(path);
 }
 
-/*!
-    \reimp
-*/
 QVariant QGraphicsView::inputMethodQuery(Qt::InputMethodQuery query) const
 {
    Q_D(const QGraphicsView);
@@ -2224,19 +1794,6 @@ QVariant QGraphicsView::inputMethodQuery(Qt::InputMethodQuery query) const
    return value;
 }
 
-/*!
-    \property QGraphicsView::backgroundBrush
-    \brief the background brush of the scene.
-
-    This property sets the background brush for the scene in this view. It is
-    used to override the scene's own background, and defines the behavior of
-    drawBackground(). To provide custom background drawing for this view, you
-    can reimplement drawBackground() instead.
-
-    By default, this property contains a brush with the Qt::NoBrush pattern.
-
-    \sa QGraphicsScene::backgroundBrush, foregroundBrush
-*/
 QBrush QGraphicsView::backgroundBrush() const
 {
    Q_D(const QGraphicsView);
@@ -2254,19 +1811,6 @@ void QGraphicsView::setBackgroundBrush(const QBrush &brush)
    }
 }
 
-/*!
-    \property QGraphicsView::foregroundBrush
-    \brief the foreground brush of the scene.
-
-    This property sets the foreground brush for the scene in this view. It is
-    used to override the scene's own foreground, and defines the behavior of
-    drawForeground(). To provide custom foreground drawing for this view, you
-    can reimplement drawForeground() instead.
-
-    By default, this property contains a brush with the Qt::NoBrush pattern.
-
-    \sa QGraphicsScene::foregroundBrush, backgroundBrush
-*/
 QBrush QGraphicsView::foregroundBrush() const
 {
    Q_D(const QGraphicsView);
@@ -2279,11 +1823,6 @@ void QGraphicsView::setForegroundBrush(const QBrush &brush)
    d->updateAll();
 }
 
-/*!
-    Schedules an update of the scene rectangles \a rects.
-
-    \sa QGraphicsScene::changed()
-*/
 void QGraphicsView::updateScene(const QList<QRectF> &rects)
 {
    // this slot is only called if the user explicitly
@@ -2362,13 +1901,6 @@ void QGraphicsView::updateScene(const QList<QRectF> &rects)
    }
 }
 
-/*!
-    Notifies QGraphicsView that the scene's scene rect has changed.  \a rect
-    is the new scene rect. If the view already has an explicitly set scene
-    rect, this function does nothing.
-
-    \sa sceneRect, QGraphicsScene::sceneRectChanged()
-*/
 void QGraphicsView::updateSceneRect(const QRectF &rect)
 {
    Q_D(QGraphicsView);
@@ -2378,13 +1910,6 @@ void QGraphicsView::updateSceneRect(const QRectF &rect)
    }
 }
 
-/*!
-    This slot is called by QAbstractScrollArea after setViewport() has been
-    called. Reimplement this function in a subclass of QGraphicsView to
-    initialize the new viewport \a widget before it is used.
-
-    \sa setViewport()
-*/
 void QGraphicsView::setupViewport(QWidget *widget)
 {
    Q_D(QGraphicsView);
@@ -2431,9 +1956,6 @@ void QGraphicsView::setupViewport(QWidget *widget)
    widget->setAcceptDrops(acceptDrops());
 }
 
-/*!
-    \reimp
-*/
 bool QGraphicsView::event(QEvent *event)
 {
    Q_D(QGraphicsView);
@@ -2478,9 +2000,6 @@ bool QGraphicsView::event(QEvent *event)
    return QAbstractScrollArea::event(event);
 }
 
-/*!
-    \reimp
-*/
 bool QGraphicsView::viewportEvent(QEvent *event)
 {
    Q_D(QGraphicsView);
@@ -2630,9 +2149,6 @@ bool QGraphicsView::viewportEvent(QEvent *event)
 }
 
 #ifndef QT_NO_CONTEXTMENU
-/*!
-    \reimp
-*/
 void QGraphicsView::contextMenuEvent(QContextMenuEvent *event)
 {
    Q_D(QGraphicsView);
@@ -2659,9 +2175,6 @@ void QGraphicsView::contextMenuEvent(QContextMenuEvent *event)
 #endif
 
 
-/*!
-    \reimp
-*/
 void QGraphicsView::dropEvent(QDropEvent *event)
 {
 #ifndef QT_NO_DRAGANDDROP
@@ -2692,9 +2205,6 @@ void QGraphicsView::dropEvent(QDropEvent *event)
 #endif
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::dragEnterEvent(QDragEnterEvent *event)
 {
 #ifndef QT_NO_DRAGANDDROP
@@ -2724,9 +2234,6 @@ void QGraphicsView::dragEnterEvent(QDragEnterEvent *event)
 #endif
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::dragLeaveEvent(QDragLeaveEvent *event)
 {
 #ifndef QT_NO_DRAGANDDROP
@@ -2766,9 +2273,6 @@ void QGraphicsView::dragLeaveEvent(QDragLeaveEvent *event)
 #endif
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::dragMoveEvent(QDragMoveEvent *event)
 {
 #ifndef QT_NO_DRAGANDDROP
@@ -2795,10 +2299,6 @@ void QGraphicsView::dragMoveEvent(QDragMoveEvent *event)
 
 #endif
 }
-
-/*!
-    \reimp
-*/
 void QGraphicsView::focusInEvent(QFocusEvent *event)
 {
    Q_D(QGraphicsView);
@@ -2813,29 +2313,21 @@ void QGraphicsView::focusInEvent(QFocusEvent *event)
    }
 }
 
-/*!
-    \reimp
-*/
 bool QGraphicsView::focusNextPrevChild(bool next)
 {
    return QAbstractScrollArea::focusNextPrevChild(next);
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::focusOutEvent(QFocusEvent *event)
 {
    Q_D(QGraphicsView);
    QAbstractScrollArea::focusOutEvent(event);
+
    if (d->scene) {
       QApplication::sendEvent(d->scene, event);
    }
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::keyPressEvent(QKeyEvent *event)
 {
    Q_D(QGraphicsView);
@@ -2849,9 +2341,6 @@ void QGraphicsView::keyPressEvent(QKeyEvent *event)
    }
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::keyReleaseEvent(QKeyEvent *event)
 {
    Q_D(QGraphicsView);
@@ -2864,9 +2353,6 @@ void QGraphicsView::keyReleaseEvent(QKeyEvent *event)
    }
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
    Q_D(QGraphicsView);
@@ -2909,9 +2395,6 @@ void QGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
    d->lastMouseEvent.setAccepted(isAccepted);
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::mousePressEvent(QMouseEvent *event)
 {
    Q_D(QGraphicsView);
@@ -2998,9 +2481,6 @@ void QGraphicsView::mousePressEvent(QMouseEvent *event)
       }
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
    Q_D(QGraphicsView);
@@ -3022,9 +2502,6 @@ void QGraphicsView::mouseMoveEvent(QMouseEvent *event)
    d->mouseMoveEventHandler(event);
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
    Q_D(QGraphicsView);
@@ -3108,9 +2585,6 @@ void QGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 }
 
 #ifndef QT_NO_WHEELEVENT
-/*!
-    \reimp
-*/
 void QGraphicsView::wheelEvent(QWheelEvent *event)
 {
    Q_D(QGraphicsView);
@@ -3138,9 +2612,6 @@ void QGraphicsView::wheelEvent(QWheelEvent *event)
 }
 #endif
 
-/*!
-    \reimp
-*/
 void QGraphicsView::paintEvent(QPaintEvent *event)
 {
    Q_D(QGraphicsView);
@@ -3319,9 +2790,6 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
    d->scene->d_func()->painterStateProtection = true;
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::resizeEvent(QResizeEvent *event)
 {
    Q_D(QGraphicsView);
@@ -3347,9 +2815,6 @@ void QGraphicsView::resizeEvent(QResizeEvent *event)
    }
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::scrollContentsBy(int dx, int dy)
 {
    Q_D(QGraphicsView);
@@ -3406,9 +2871,6 @@ void QGraphicsView::scrollContentsBy(int dx, int dy)
    }
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::showEvent(QShowEvent *event)
 {
    Q_D(QGraphicsView);
@@ -3417,9 +2879,6 @@ void QGraphicsView::showEvent(QShowEvent *event)
    QAbstractScrollArea::showEvent(event);
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsView::inputMethodEvent(QInputMethodEvent *event)
 {
    Q_D(QGraphicsView);
@@ -3428,23 +2887,6 @@ void QGraphicsView::inputMethodEvent(QInputMethodEvent *event)
    }
 }
 
-/*!
-    Draws the background of the scene using \a painter, before any items and
-    the foreground are drawn. Reimplement this function to provide a custom
-    background for this view.
-
-    If all you want is to define a color, texture or gradient for the
-    background, you can call setBackgroundBrush() instead.
-
-    All painting is done in \e scene coordinates. \a rect is the exposed
-    rectangle.
-
-    The default implementation fills \a rect using the view's backgroundBrush.
-    If no such brush is defined (the default), the scene's drawBackground()
-    function is called instead.
-
-    \sa drawForeground(), QGraphicsScene::drawBackground()
-*/
 void QGraphicsView::drawBackground(QPainter *painter, const QRectF &rect)
 {
    Q_D(QGraphicsView);
@@ -3456,23 +2898,6 @@ void QGraphicsView::drawBackground(QPainter *painter, const QRectF &rect)
    painter->fillRect(rect, d->backgroundBrush);
 }
 
-/*!
-    Draws the foreground of the scene using \a painter, after the background
-    and all items are drawn. Reimplement this function to provide a custom
-    foreground for this view.
-
-    If all you want is to define a color, texture or gradient for the
-    foreground, you can call setForegroundBrush() instead.
-
-    All painting is done in \e scene coordinates. \a rect is the exposed
-    rectangle.
-
-    The default implementation fills \a rect using the view's foregroundBrush.
-    If no such brush is defined (the default), the scene's drawForeground()
-    function is called instead.
-
-    \sa drawBackground(), QGraphicsScene::drawForeground()
-*/
 void QGraphicsView::drawForeground(QPainter *painter, const QRectF &rect)
 {
    Q_D(QGraphicsView);
@@ -3484,23 +2909,7 @@ void QGraphicsView::drawForeground(QPainter *painter, const QRectF &rect)
    painter->fillRect(rect, d->foregroundBrush);
 }
 
-/*!
-    \obsolete
-
-    Draws the items \a items in the scene using \a painter, after the
-    background and before the foreground are drawn. \a numItems is the number
-    of items in \a items and options in \a options. \a options is a list of
-    styleoptions; one for each item. Reimplement this function to provide
-    custom item drawing for this view.
-
-    The default implementation calls the scene's drawItems() function.
-
-    Since Qt 4.6, this function is not called anymore unless
-    the QGraphicsView::IndirectPainting flag is given as an Optimization
-    flag.
-
-    \sa drawForeground(), drawBackground(), QGraphicsScene::drawItems()
-*/
+// obsolete
 void QGraphicsView::drawItems(QPainter *painter, int numItems,
    QGraphicsItem *items[],
    const QStyleOptionGraphicsItem options[])
@@ -3512,23 +2921,12 @@ void QGraphicsView::drawItems(QPainter *painter, int numItems,
    }
 }
 
-/*!
-    Returns the current transformation matrix for the view. If no current
-    transformation is set, the identity matrix is returned.
-
-    \sa setTransform(), rotate(), scale(), shear(), translate()
-*/
 QTransform QGraphicsView::transform() const
 {
    Q_D(const QGraphicsView);
    return d->matrix;
 }
 
-/*!
-    Returns a matrix that maps viewport coordinates to scene coordinates.
-
-    \sa mapToScene(), mapFromScene()
-*/
 QTransform QGraphicsView::viewportTransform() const
 {
    Q_D(const QGraphicsView);
@@ -3536,14 +2934,6 @@ QTransform QGraphicsView::viewportTransform() const
    return d->identityMatrix ? moveMatrix : d->matrix * moveMatrix;
 }
 
-/*!
-    \since 4.6
-
-    Returns true if the view is transformed (i.e., a non-identity transform
-    has been assigned, or the scrollbars are adjusted).
-
-    \sa setTransform(), horizontalScrollBar(), verticalScrollBar()
-*/
 bool QGraphicsView::isTransformed() const
 {
    Q_D(const QGraphicsView);
@@ -3582,11 +2972,6 @@ void QGraphicsView::setTransform(const QTransform &matrix, bool combine )
    d->updateAll();
 }
 
-/*!
-    Resets the view transformation to the identity matrix.
-
-    \sa transform(), setTransform()
-*/
 void QGraphicsView::resetTransform()
 {
    setTransform(QTransform());

@@ -93,26 +93,17 @@ static void normalizeHints(qreal &minimum, qreal &preferred, qreal &maximum, qre
    }
 }
 
-/*!
-    \internal
-*/
 QGraphicsLayoutItemPrivate::QGraphicsLayoutItemPrivate(QGraphicsLayoutItem *par, bool layout)
    : parent(par), userSizeHints(nullptr), isLayout(layout), ownedByLayout(false), graphicsItem(nullptr)
 {
 }
 
-/*!
-    \internal
-*/
 QGraphicsLayoutItemPrivate::~QGraphicsLayoutItemPrivate()
 {
    // Remove any lazily allocated data
    delete[] userSizeHints;
 }
 
-/*!
-    \internal
-*/
 void QGraphicsLayoutItemPrivate::init()
 {
    sizeHintCacheDirty = true;
@@ -183,22 +174,6 @@ QSizeF *QGraphicsLayoutItemPrivate::effectiveSizeHints(const QSizeF &constraint)
    return sizeHintCache;
 }
 
-/*!
-    \internal
-
-    Returns the parent item of this layout, or 0 if this layout is
-    not installed on any widget.
-
-    If this is the item that the layout is installed on, it will return "itself".
-
-    If the layout is a sub-layout, this function returns the parent
-    widget of the parent layout.
-
-    Note that it will traverse up the layout item hierarchy instead of just calling
-    QGraphicsItem::parentItem(). This is on purpose.
-
-    \sa parent()
-*/
 QGraphicsItem *QGraphicsLayoutItemPrivate::parentItem() const
 {
    Q_Q(const QGraphicsLayoutItem);
@@ -210,12 +185,6 @@ QGraphicsItem *QGraphicsLayoutItemPrivate::parentItem() const
    return parent ? parent->graphicsItem() : nullptr;
 }
 
-/*!
-    \internal
-
-     Ensures that userSizeHints is allocated.
-     This function must be called before any dereferencing.
-*/
 void QGraphicsLayoutItemPrivate::ensureUserSizeHints()
 {
    if (!userSizeHints) {
@@ -223,11 +192,6 @@ void QGraphicsLayoutItemPrivate::ensureUserSizeHints()
    }
 }
 
-/*!
-    \internal
-
-    Sets the user size hint \a which to \a size. Use an invalid size to unset the size hint.
- */
 void QGraphicsLayoutItemPrivate::setSize(Qt::SizeHint which, const QSizeF &size)
 {
    Q_Q(QGraphicsLayoutItem);
@@ -245,11 +209,6 @@ void QGraphicsLayoutItemPrivate::setSize(Qt::SizeHint which, const QSizeF &size)
    q->updateGeometry();
 }
 
-/*!
-    \internal
-
-    Sets the width of the user size hint \a which to \a width.
- */
 void QGraphicsLayoutItemPrivate::setSizeComponent(
    Qt::SizeHint which, SizeComponent component, qreal value)
 {
@@ -264,7 +223,6 @@ void QGraphicsLayoutItemPrivate::setSizeComponent(
    userValue = value;
    q->updateGeometry();
 }
-
 
 bool QGraphicsLayoutItemPrivate::hasHeightForWidth() const
 {
@@ -317,9 +275,6 @@ QGraphicsLayoutItem::QGraphicsLayoutItem(QGraphicsLayoutItem *parent, bool isLay
    d->q_ptr = this;
 }
 
-/*!
-    \internal
-*/
 QGraphicsLayoutItem::QGraphicsLayoutItem(QGraphicsLayoutItemPrivate &dd)
    : d_ptr(&dd)
 {
@@ -327,7 +282,6 @@ QGraphicsLayoutItem::QGraphicsLayoutItem(QGraphicsLayoutItemPrivate &dd)
    d->init();
    d->q_ptr = this;
 }
-
 
 QGraphicsLayoutItem::~QGraphicsLayoutItem()
 {
@@ -344,7 +298,6 @@ QGraphicsLayoutItem::~QGraphicsLayoutItem()
    }
 }
 
-
 void QGraphicsLayoutItem::setSizePolicy(const QSizePolicy &policy)
 {
    Q_D(QGraphicsLayoutItem);
@@ -355,14 +308,6 @@ void QGraphicsLayoutItem::setSizePolicy(const QSizePolicy &policy)
    updateGeometry();
 }
 
-/*!
-    \overload
-
-    This function is equivalent to calling
-    setSizePolicy(QSizePolicy(\a hPolicy, \a vPolicy, \a controlType)).
-
-    \sa sizePolicy(), QWidget::sizePolicy()
-*/
 void QGraphicsLayoutItem::setSizePolicy(QSizePolicy::Policy hPolicy,
    QSizePolicy::Policy vPolicy,
    QSizePolicy::ControlType controlType)
@@ -370,179 +315,71 @@ void QGraphicsLayoutItem::setSizePolicy(QSizePolicy::Policy hPolicy,
    setSizePolicy(QSizePolicy(hPolicy, vPolicy, controlType));
 }
 
-/*!
-    Returns the current size policy.
-
-    \sa setSizePolicy(), QWidget::sizePolicy()
-*/
 QSizePolicy QGraphicsLayoutItem::sizePolicy() const
 {
    Q_D(const QGraphicsLayoutItem);
    return d->sizePolicy;
 }
 
-/*!
-    Sets the minimum size to \a size. This property overrides sizeHint() for
-    Qt::MinimumSize and ensures that effectiveSizeHint() will never return
-    a size smaller than \a size. In order to unset the minimum size, use an
-    invalid size.
-
-    \sa minimumSize(), maximumSize(), preferredSize(), Qt::MinimumSize,
-    sizeHint(), setMinimumWidth(), setMinimumHeight()
-*/
 void QGraphicsLayoutItem::setMinimumSize(const QSizeF &size)
 {
    d_ptr->setSize(Qt::MinimumSize, size);
 }
 
-/*!
-    \fn QGraphicsLayoutItem::setMinimumSize(qreal w, qreal h)
-
-    This convenience function is equivalent to calling
-    setMinimumSize(QSizeF(\a w, \a h)).
-
-    \sa minimumSize(), setMaximumSize(), setPreferredSize(), sizeHint()
-*/
-
-/*!
-    Returns the minimum size.
-
-    \sa setMinimumSize(), preferredSize(), maximumSize(), Qt::MinimumSize,
-    sizeHint()
-*/
 QSizeF QGraphicsLayoutItem::minimumSize() const
 {
    return effectiveSizeHint(Qt::MinimumSize);
 }
 
-/*!
-    Sets the minimum width to \a width.
-
-    \sa minimumWidth(), setMinimumSize(), minimumSize()
-*/
 void QGraphicsLayoutItem::setMinimumWidth(qreal width)
 {
    d_ptr->setSizeComponent(Qt::MinimumSize, d_ptr->Width, width);
 }
 
-/*!
-    Sets the minimum height to \a height.
-
-    \sa minimumHeight(), setMinimumSize(), minimumSize()
-*/
 void QGraphicsLayoutItem::setMinimumHeight(qreal height)
 {
    d_ptr->setSizeComponent(Qt::MinimumSize, d_ptr->Height, height);
 }
 
-
-/*!
-    Sets the preferred size to \a size. This property overrides sizeHint() for
-    Qt::PreferredSize and provides the default value for effectiveSizeHint().
-    In order to unset the preferred size, use an invalid size.
-
-    \sa preferredSize(), minimumSize(), maximumSize(), Qt::PreferredSize,
-    sizeHint()
-*/
 void QGraphicsLayoutItem::setPreferredSize(const QSizeF &size)
 {
    d_ptr->setSize(Qt::PreferredSize, size);
 }
 
-/*!
-    \fn QGraphicsLayoutItem::setPreferredSize(qreal w, qreal h)
-
-    This convenience function is equivalent to calling
-    setPreferredSize(QSizeF(\a w, \a h)).
-
-    \sa preferredSize(), setMaximumSize(), setMinimumSize(), sizeHint()
-*/
-
-/*!
-    Returns the preferred size.
-
-    \sa setPreferredSize(), minimumSize(), maximumSize(), Qt::PreferredSize,
-    sizeHint()
-*/
 QSizeF QGraphicsLayoutItem::preferredSize() const
 {
    return effectiveSizeHint(Qt::PreferredSize);
 }
 
-/*!
-    Sets the preferred height to \a height.
-
-    \sa preferredWidth(), setPreferredSize(), preferredSize()
-*/
 void QGraphicsLayoutItem::setPreferredHeight(qreal height)
 {
    d_ptr->setSizeComponent(Qt::PreferredSize, d_ptr->Height, height);
 }
 
-/*!
-    Sets the preferred width to \a width.
-
-    \sa preferredHeight(), setPreferredSize(), preferredSize()
-*/
 void QGraphicsLayoutItem::setPreferredWidth(qreal width)
 {
    d_ptr->setSizeComponent(Qt::PreferredSize, d_ptr->Width, width);
 }
 
-/*!
-    Sets the maximum size to \a size. This property overrides sizeHint() for
-    Qt::MaximumSize and ensures that effectiveSizeHint() will never return a
-    size larger than \a size. In order to unset the maximum size, use an
-    invalid size.
-
-    \sa maximumSize(), minimumSize(), preferredSize(), Qt::MaximumSize,
-    sizeHint()
-*/
 void QGraphicsLayoutItem::setMaximumSize(const QSizeF &size)
 {
    d_ptr->setSize(Qt::MaximumSize, size);
 }
 
-/*!
-    \fn QGraphicsLayoutItem::setMaximumSize(qreal w, qreal h)
-
-    This convenience function is equivalent to calling
-    setMaximumSize(QSizeF(\a w, \a h)).
-
-    \sa maximumSize(), setMinimumSize(), setPreferredSize(), sizeHint()
-*/
-
-/*!
-    Returns the maximum size.
-
-    \sa setMaximumSize(), minimumSize(), preferredSize(), Qt::MaximumSize,
-    sizeHint()
-*/
 QSizeF QGraphicsLayoutItem::maximumSize() const
 {
    return effectiveSizeHint(Qt::MaximumSize);
 }
 
-/*!
-    Sets the maximum width to \a width.
-
-    \sa maximumWidth(), setMaximumSize(), maximumSize()
-*/
 void QGraphicsLayoutItem::setMaximumWidth(qreal width)
 {
    d_ptr->setSizeComponent(Qt::MaximumSize, d_ptr->Width, width);
 }
 
-/*!
-    Sets the maximum height to \a height.
-
-    \sa maximumHeight(), setMaximumSize(), maximumSize()
-*/
 void QGraphicsLayoutItem::setMaximumHeight(qreal height)
 {
    d_ptr->setSizeComponent(Qt::MaximumSize, d_ptr->Height, height);
 }
-
 
 void QGraphicsLayoutItem::setGeometry(const QRectF &rect)
 {
@@ -558,14 +395,6 @@ QRectF QGraphicsLayoutItem::geometry() const
    return d->geom;
 }
 
-/*!
-    This virtual function provides the \a left, \a top, \a right and \a bottom
-    contents margins for this QGraphicsLayoutItem. The default implementation
-    assumes all contents margins are 0. The parameters point to values stored
-    in qreals. If any of the pointers is 0, that value will not be updated.
-
-    \sa QGraphicsWidget::setContentsMargins()
-*/
 void QGraphicsLayoutItem::getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const
 {
    if (left) {
@@ -601,7 +430,6 @@ QSizeF QGraphicsLayoutItem::effectiveSizeHint(Qt::SizeHint which, const QSizeF &
    return d_ptr->effectiveSizeHints(constraint)[which];
 }
 
-
 void QGraphicsLayoutItem::updateGeometry()
 {
    Q_D(QGraphicsLayoutItem);
@@ -609,80 +437,39 @@ void QGraphicsLayoutItem::updateGeometry()
    d->sizeHintWithConstraintCacheDirty = true;
 }
 
-/*!
-    Returns the parent of this QGraphicsLayoutItem, or 0 if there is no parent,
-    or if the parent does not inherit from QGraphicsLayoutItem
-    (QGraphicsLayoutItem is often used through multiple inheritance with
-    QObject-derived classes).
-
-    \sa setParentLayoutItem()
-*/
 QGraphicsLayoutItem *QGraphicsLayoutItem::parentLayoutItem() const
 {
    return d_func()->parent;
 }
-
 
 void QGraphicsLayoutItem::setParentLayoutItem(QGraphicsLayoutItem *parent)
 {
    d_func()->parent = parent;
 }
 
-/*!
-    Returns true if this QGraphicsLayoutItem is a layout (e.g., is inherited
-    by an object that arranges other QGraphicsLayoutItem objects); otherwise
-    returns false.
-
-    \sa QGraphicsLayout
-*/
 bool QGraphicsLayoutItem::isLayout() const
 {
    return d_func()->isLayout;
 }
 
-
 bool QGraphicsLayoutItem::ownedByLayout() const
 {
    return d_func()->ownedByLayout;
 }
-/*!
-    \since 4.6
 
-    Sets whether a layout should delete this item in its destructor or not.
-    \a ownership must be true to in order for the layout to delete it.
-    \sa ownedByLayout()
-*/
 void QGraphicsLayoutItem::setOwnedByLayout(bool ownership)
 {
    d_func()->ownedByLayout = ownership;
 }
 
-/*!
- * Returns the QGraphicsItem that this layout item represents.
- * For QGraphicsWidget it will return itself. For custom items it can return an
- * aggregated value.
- *
- * \sa setGraphicsItem()
- */
 QGraphicsItem *QGraphicsLayoutItem::graphicsItem() const
 {
    return d_func()->graphicsItem;
 }
 
-/*!
- * If the QGraphicsLayoutItem represents a QGraphicsItem, and it wants to take
- * advantage of the automatic reparenting capabilities of QGraphicsLayout it
- * should set this value.
- * Note that if you delete \a item and not delete the layout item, you are
- * responsible of calling setGraphicsItem(0) in order to avoid having a
- * dangling pointer.
- *
- * \sa graphicsItem()
- */
 void QGraphicsLayoutItem::setGraphicsItem(QGraphicsItem *item)
 {
    d_func()->graphicsItem = item;
 }
-
 
 #endif //QT_NO_GRAPHICSVIEW

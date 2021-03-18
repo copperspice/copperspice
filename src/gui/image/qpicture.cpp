@@ -1098,10 +1098,6 @@ void QPictureIO::init()
    d->iodev      = nullptr;
 }
 
-/*!
-    Destroys the object and all related data.
-*/
-
 QPictureIO::~QPictureIO()
 {
    if (d->parameters) {

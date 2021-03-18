@@ -544,10 +544,7 @@ void Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngTexts(png_info *info)
 
 }
 
-
-/*!
-    \internal
-*/
+// internal
 bool Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngHeader()
 {
    state = Error;

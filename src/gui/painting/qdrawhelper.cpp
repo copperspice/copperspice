@@ -1340,10 +1340,6 @@ static DestFetchProc64 destFetchProc64[QImage::NImageFormats] = {
    destFetch64,        // Format_Grayscale8
 };
 
-/*
-   Returns the color in the mono destination color table
-   that is the "nearest" to /color/.
-*/
 static inline QRgb findNearestColor(QRgb color, QRasterBuffer *rbuf)
 {
    QRgb color_0 = qPremultiply(rbuf->destColor0);
@@ -1372,10 +1368,6 @@ static inline QRgb findNearestColor(QRgb color, QRasterBuffer *rbuf)
 
    return color_1;
 }
-
-/*
-  Destination store.
-*/
 
 static void destStoreMono(QRasterBuffer *rasterBuffer, int x, int y, const uint *buffer, int length)
 {

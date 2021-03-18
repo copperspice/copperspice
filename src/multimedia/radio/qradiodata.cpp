@@ -78,17 +78,11 @@ QRadioData::~QRadioData()
     delete d_ptr;
 }
 
-/*!
-  \reimp
-*/
 QMediaObject *QRadioData::mediaObject() const
 {
     return d_func()->mediaObject;
 }
 
-/*!
-  \reimp
-*/
 bool QRadioData::setMediaObject(QMediaObject *mediaObject)
 {
     Q_D(QRadioData);
@@ -150,7 +144,6 @@ QMultimedia::AvailabilityStatus QRadioData::availability() const
 
     return d->mediaObject->availability();
 }
-
 
 QString QRadioData::stationId() const
 {

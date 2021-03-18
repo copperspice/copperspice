@@ -57,11 +57,7 @@ QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
    d->init(parent, wFlags);
 }
 
-/*!
-    \internal
-
-    Constructs a new QGraphicsWidget, using \a dd as parent.
-*/
+// internal
 QGraphicsWidget::QGraphicsWidget(QGraphicsWidgetPrivate &dd, QGraphicsItem *parent, Qt::WindowFlags wFlags)
    : QGraphicsObject(dd, nullptr), QGraphicsLayoutItem(nullptr, false)
 {
@@ -69,15 +65,7 @@ QGraphicsWidget::QGraphicsWidget(QGraphicsWidgetPrivate &dd, QGraphicsItem *pare
    d->init(parent, wFlags);
 }
 
-/*
-    \internal
-    \class QGraphicsWidgetStyles
-
-    We use this thread-safe class to maintain a hash of styles for widgets
-    styles. Note that QApplication::style() itself isn't thread-safe, QStyle
-    isn't thread-safe, and we don't have a thread-safe factory for creating
-    the default style, nor cloning a style.
-*/
+// internal
 class QGraphicsWidgetStyles
 {
  public:
@@ -102,9 +90,6 @@ class QGraphicsWidgetStyles
 
 Q_GLOBAL_STATIC(QGraphicsWidgetStyles, widgetStyles)
 
-/*!
-    Destroys the QGraphicsWidget instance.
-*/
 QGraphicsWidget::~QGraphicsWidget()
 {
    Q_D(QGraphicsWidget);
@@ -295,13 +280,6 @@ void QGraphicsWidget::setContentsMargins(qreal left, qreal top, qreal right, qre
    QApplication::sendEvent(this, &e);
 }
 
-/*!
-    Gets the widget's contents margins. The margins are stored in \a left, \a
-    top, \a right and \a bottom, as pointers to qreals. Each argument can
-    be \e {omitted} by passing 0.
-
-    \sa setContentsMargins()
-*/
 void QGraphicsWidget::getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const
 {
    Q_D(const QGraphicsWidget);
@@ -322,16 +300,6 @@ void QGraphicsWidget::getContentsMargins(qreal *left, qreal *top, qreal *right, 
    }
 }
 
-/*!
-    Sets the widget's window frame margins to \a left, \a top, \a right and
-    \a bottom. The default frame margins are provided by the style, and they
-    depend on the current window flags.
-
-    If you would like to draw your own window decoration, you can set your
-    own frame margins to override the default margins.
-
-    \sa unsetWindowFrameMargins(), getWindowFrameMargins(), windowFrameRect()
-*/
 void QGraphicsWidget::setWindowFrameMargins(qreal left, qreal top, qreal right, qreal bottom)
 {
    Q_D(QGraphicsWidget);
@@ -358,13 +326,6 @@ void QGraphicsWidget::setWindowFrameMargins(qreal left, qreal top, qreal right, 
    d->setWindowFrameMargins = true;
 }
 
-/*!
-    Gets the widget's window frame margins. The margins are stored in \a left,
-    \a top, \a right and \a bottom as pointers to qreals. Each argument can
-    be \e {omitted} by passing 0.
-
-    \sa setWindowFrameMargins(), windowFrameRect()
-*/
 void QGraphicsWidget::getWindowFrameMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const
 {
    Q_D(const QGraphicsWidget);
@@ -385,11 +346,6 @@ void QGraphicsWidget::getWindowFrameMargins(qreal *left, qreal *top, qreal *righ
    }
 }
 
-/*!
-    Resets the window frame margins to the default value, provided by the style.
-
-    \sa setWindowFrameMargins(), getWindowFrameMargins(), windowFrameRect()
-*/
 void QGraphicsWidget::unsetWindowFrameMargins()
 {
    Q_D(QGraphicsWidget);
@@ -407,12 +363,6 @@ void QGraphicsWidget::unsetWindowFrameMargins()
    d->setWindowFrameMargins = false;
 }
 
-/*!
-    Returns the widget's geometry in parent coordinates including any window
-    frame.
-
-    \sa windowFrameRect(), getWindowFrameMargins(), setWindowFrameMargins()
-*/
 QRectF QGraphicsWidget::windowFrameGeometry() const
 {
    Q_D(const QGraphicsWidget);
@@ -423,11 +373,6 @@ QRectF QGraphicsWidget::windowFrameGeometry() const
       : geometry();
 }
 
-/*!
-    Returns the widget's local rect including any window frame.
-
-    \sa windowFrameGeometry(), getWindowFrameMargins(), setWindowFrameMargins()
-*/
 QRectF QGraphicsWidget::windowFrameRect() const
 {
    Q_D(const QGraphicsWidget);
@@ -567,14 +512,6 @@ void QGraphicsWidget::setLayout(QGraphicsLayout *l)
    emit layoutChanged();
 }
 
-/*!
-    Adjusts the size of the widget to its effective preferred size hint.
-
-    This function is called implicitly when the item is shown for the first
-    time.
-
-    \sa effectiveSizeHint(), Qt::MinimumSize
-*/
 void QGraphicsWidget::adjustSize()
 {
    QSizeF sz = effectiveSizeHint(Qt::PreferredSize);
@@ -652,22 +589,6 @@ void QGraphicsWidget::setPalette(const QPalette &palette)
    d->setPalette_helper(resolvedPalette);
 }
 
-/*!
-    \property QGraphicsWidget::autoFillBackground
-    \brief whether the widget background is filled automatically
-    \since 4.7
-
-    If enabled, this property will cause Qt to fill the background of the
-    widget before invoking the paint() method. The color used is defined by the
-    QPalette::Window color role from the widget's \l{QPalette}{palette}.
-
-    In addition, Windows are always filled with QPalette::Window, unless the
-    WA_OpaquePaintEvent or WA_NoSystemBackground attributes are set.
-
-    By default, this property is false.
-
-    \sa Qt::WA_OpaquePaintEvent, Qt::WA_NoSystemBackground,
-*/
 bool QGraphicsWidget::autoFillBackground() const
 {
    Q_D(const QGraphicsWidget);
@@ -683,15 +604,6 @@ void QGraphicsWidget::setAutoFillBackground(bool enabled)
    }
 }
 
-/*!
-    If this widget is currently managed by a layout, this function notifies
-    the layout that the widget's size hints have changed and the layout
-    may need to resize and reposition the widget accordingly.
-
-    Call this function if the widget's sizeHint() has changed.
-
-    \sa QGraphicsLayout::invalidate()
-*/
 void QGraphicsWidget::updateGeometry()
 {
    QGraphicsLayoutItem::updateGeometry();
@@ -807,45 +719,13 @@ QVariant QGraphicsWidget::itemChange(GraphicsItemChange change, const QVariant &
    return QGraphicsItem::itemChange(change, value);
 }
 
-/*!
-    \internal
-
-    This virtual function is used to notify changes to any property (both
-    dynamic properties, and registered with Q_PROPERTY) in the
-    widget. Depending on the property itself, the notification can be
-    delivered before or after the value has changed.
-
-    \a propertyName is the name of the property (e.g., "size" or "font"), and
-    \a value is the (proposed) new value of the property. The function returns
-    the new value, which may be different from \a value if the notification
-    supports adjusting the property value. The base implementation simply
-    returns \a value for any \a propertyName.
-
-    QGraphicsWidget delivers notifications for the following properties:
-
-    \table     \o propertyName        \o Property
-    \row       \o layoutDirection     \o QGraphicsWidget::layoutDirection
-    \row       \o size                \o QGraphicsWidget::size
-    \row       \o font                \o QGraphicsWidget::font
-    \row       \o palette             \o QGraphicsWidget::palette
-    \endtable
-
-    \sa itemChange()
-*/
+// internal
 QVariant QGraphicsWidget::propertyChange(const QString &propertyName, const QVariant &value)
 {
    Q_UNUSED(propertyName);
    return value;
 }
 
-/*!
-    QGraphicsWidget's implementation of sceneEvent() simply passes \a event to
-    QGraphicsWidget::event(). You can handle all events for your widget in
-    event() or in any of the convenience functions; you should not have to
-    reimplement this function in a subclass of QGraphicsWidget.
-
-    \sa QGraphicsItem::sceneEvent()
-*/
 bool QGraphicsWidget::sceneEvent(QEvent *event)
 {
    return QGraphicsItem::sceneEvent(event);
@@ -1039,16 +919,6 @@ bool QGraphicsWidget::event(QEvent *event)
    return QObject::event(event);
 }
 
-/*!
-   This event handler can be reimplemented to handle state changes.
-
-   The state being changed in this event can be retrieved through \a event.
-
-   Change events include: QEvent::ActivationChange, QEvent::EnabledChange,
-   QEvent::FontChange, QEvent::StyleChange, QEvent::PaletteChange,
-   QEvent::ParentChange, QEvent::LayoutDirectionChange, and
-   QEvent::ContentsRectChange.
-*/
 void QGraphicsWidget::changeEvent(QEvent *event)
 {
    Q_D(QGraphicsWidget);
@@ -1082,21 +952,11 @@ void QGraphicsWidget::changeEvent(QEvent *event)
    }
 }
 
-/*!
-    This event handler, for \a event, can be reimplemented in a subclass to
-    receive widget close events.  The default implementation accepts the
-    event.
-
-    \sa close(), QCloseEvent
-*/
 void QGraphicsWidget::closeEvent(QCloseEvent *event)
 {
    event->accept();
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsWidget::focusInEvent(QFocusEvent *event)
 {
    Q_UNUSED(event);
@@ -1105,25 +965,6 @@ void QGraphicsWidget::focusInEvent(QFocusEvent *event)
    }
 }
 
-/*!
-    Finds a new widget to give the keyboard focus to, as appropriate for Tab
-    and Shift+Tab, and returns true if it can find a new widget; returns false
-    otherwise. If \a next is true, this function searches forward; if \a next
-    is false, it searches backward.
-
-    Sometimes, you will want to reimplement this function to provide special
-    focus handling for your widget and its subwidgets. For example, a web
-    browser might reimplement it to move its current active link forward or
-    backward, and call the base implementation only when it reaches the last
-    or first link on the page.
-
-    Child widgets call focusNextPrevChild() on their parent widgets, but only
-    the window that contains the child widgets decides where to redirect
-    focus. By reimplementing this function for an object, you gain control of
-    focus traversal for all child widgets.
-
-    \sa focusPolicy()
-*/
 bool QGraphicsWidget::focusNextPrevChild(bool next)
 {
    Q_D(QGraphicsWidget);
@@ -1147,9 +988,6 @@ bool QGraphicsWidget::focusNextPrevChild(bool next)
    return false;
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsWidget::focusOutEvent(QFocusEvent *event)
 {
    Q_UNUSED(event);
@@ -1158,18 +996,6 @@ void QGraphicsWidget::focusOutEvent(QFocusEvent *event)
    }
 }
 
-/*!
-    This event handler, for \l{QEvent::Hide}{Hide} events, is delivered after
-    the widget has been hidden, for example, setVisible(false) has been called
-    for the widget or one of its ancestors when the widget was previously
-    shown.
-
-    You can reimplement this event handler to detect when your widget is
-    hidden. Calling QEvent::accept() or QEvent::ignore() on \a event has no
-    effect.
-
-    \sa showEvent(), QWidget::hideEvent(), ItemVisibleChange
-*/
 void QGraphicsWidget::hideEvent(QHideEvent *event)
 {
    ///### focusNextPrevChild(true), don't lose focus when the focus widget
@@ -1177,164 +1003,61 @@ void QGraphicsWidget::hideEvent(QHideEvent *event)
    Q_UNUSED(event);
 }
 
-/*!
-    This event handler, for \l{QEvent::GraphicsSceneMove}{GraphicsSceneMove}
-    events, is delivered after the widget has moved (e.g., its local position
-    has changed).
-
-    This event is only delivered when the item is moved locally. Calling
-    setTransform() or moving any of the item's ancestors does not affect the
-    item's local position.
-
-    You can reimplement this event handler to detect when your widget has
-    moved. Calling QEvent::accept() or QEvent::ignore() on \a event has no
-    effect.
-
-    \sa ItemPositionChange, ItemPositionHasChanged
-*/
 void QGraphicsWidget::moveEvent(QGraphicsSceneMoveEvent *event)
 {
    // ### Last position is always == current position
    Q_UNUSED(event);
 }
 
-/*!
-    This event is delivered to the item by the scene at some point after it
-    has been constructed, but before it is shown or otherwise accessed through
-    the scene. You can use this event handler to do last-minute initializations
-    of the widget which require the item to be fully constructed.
-
-    The base implementation does nothing.
-*/
 void QGraphicsWidget::polishEvent()
 {
 }
 
-/*!
-    This event handler, for
-    \l{QEvent::GraphicsSceneResize}{GraphicsSceneResize} events, is
-    delivered after the widget has been resized (i.e., its local size has
-    changed). \a event contains both the old and the new size.
-
-    This event is only delivered when the widget is resized locally; calling
-    setTransform() on the widget or any of its ancestors or view, does not
-    affect the widget's local size.
-
-    You can reimplement this event handler to detect when your widget has been
-    resized. Calling QEvent::accept() or QEvent::ignore() on \a event has no
-    effect.
-
-    \sa geometry(), setGeometry()
-*/
 void QGraphicsWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
    Q_UNUSED(event);
 }
 
-/*!
-    This event handler, for \l{QEvent::Show}{Show} events, is delivered before
-    the widget has been shown, for example, setVisible(true) has been called
-    for the widget or one of its ancestors when the widget was previously
-    hidden.
-
-    You can reimplement this event handler to detect when your widget is
-    shown. Calling QEvent::accept() or QEvent::ignore() on \a event has no
-    effect.
-
-    \sa hideEvent(), QWidget::showEvent(), ItemVisibleChange
-*/
 void QGraphicsWidget::showEvent(QShowEvent *event)
 {
    Q_UNUSED(event);
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
    Q_UNUSED(event);
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
    QGraphicsObject::hoverLeaveEvent(event);
 }
 
-/*!
-    This event handler, for \a event, can be reimplemented in a subclass to
-    receive notifications for QEvent::GrabMouse events.
-
-    \sa grabMouse(), grabKeyboard()
-*/
 void QGraphicsWidget::grabMouseEvent(QEvent *event)
 {
    Q_UNUSED(event);
 }
 
-/*!
-    This event handler, for \a event, can be reimplemented in a subclass to
-    receive notifications for QEvent::UngrabMouse events.
-
-    \sa ungrabMouse(), ungrabKeyboard()
-*/
 void QGraphicsWidget::ungrabMouseEvent(QEvent *event)
 {
    Q_UNUSED(event);
 }
 
-/*!
-    This event handler, for \a event, can be reimplemented in a subclass to
-    receive notifications for QEvent::GrabKeyboard events.
-
-    \sa grabKeyboard(), grabMouse()
-*/
 void QGraphicsWidget::grabKeyboardEvent(QEvent *event)
 {
    Q_UNUSED(event);
 }
 
-/*!
-    This event handler, for \a event, can be reimplemented in a subclass to
-    receive notifications for QEvent::UngrabKeyboard events.
-
-    \sa ungrabKeyboard(), ungrabMouse()
-*/
 void QGraphicsWidget::ungrabKeyboardEvent(QEvent *event)
 {
    Q_UNUSED(event);
 }
 
-/*!
-    Returns the widgets window type.
-
-    \sa windowFlags(), isWindow(), isPanel()
-*/
 Qt::WindowType QGraphicsWidget::windowType() const
 {
    return Qt::WindowType(int(windowFlags()) & Qt::WindowType_Mask);
 }
 
-/*!
-    \property QGraphicsWidget::windowFlags
-    \brief the widget's window flags
-
-    Window flags are a combination of a window type (e.g., Qt::Dialog) and
-    several flags giving hints on the behavior of the window. The behavior
-    is platform-dependent.
-
-    By default, this property contains no window flags.
-
-    Windows are panels. If you set the Qt::Window flag, the ItemIsPanel flag
-    will be set automatically. If you clear the Qt::Window flag, the
-    ItemIsPanel flag is also cleared. Note that the ItemIsPanel flag can be
-    set independently of Qt::Window.
-
-    \sa isWindow(), isPanel()
-*/
 Qt::WindowFlags QGraphicsWidget::windowFlags() const
 {
    Q_D(const QGraphicsWidget);
@@ -1503,17 +1226,6 @@ void QGraphicsWidget::insertAction(QAction *before, QAction *action)
    QApplication::sendEvent(this, &e);
 }
 
-/*!
-    \since 4.5
-
-    Inserts the actions \a actions to this widget's list of actions,
-    before the action \a before. It appends the action if \a before is 0 or
-    \a before is not a valid action for this widget.
-
-    A QGraphicsWidget can have at most one of each action.
-
-    \sa removeAction(), QMenu, insertAction(), QWidget::insertActions()
-*/
 void QGraphicsWidget::insertActions(QAction *before, QList<QAction *> actions)
 {
    for (int i = 0; i < actions.count(); ++i) {
@@ -1521,13 +1233,6 @@ void QGraphicsWidget::insertActions(QAction *before, QList<QAction *> actions)
    }
 }
 
-/*!
-    \since 4.5
-
-    Removes the action \a action from this widget's list of actions.
-
-    \sa insertAction(), actions(), insertAction(), QWidget::removeAction()
-*/
 void QGraphicsWidget::removeAction(QAction *action)
 {
    if (!action) {
@@ -1545,14 +1250,6 @@ void QGraphicsWidget::removeAction(QAction *action)
    }
 }
 
-/*!
-    \since 4.5
-
-    Returns the (possibly empty) list of this widget's actions.
-
-    \sa insertAction(), removeAction(), QWidget::actions(),
-    QAction::associatedWidgets(), QAction::associatedGraphicsWidgets()
-*/
 QList<QAction *> QGraphicsWidget::actions() const
 {
    Q_D(const QGraphicsWidget);
@@ -1560,30 +1257,6 @@ QList<QAction *> QGraphicsWidget::actions() const
 }
 #endif
 
-/*!
-    Moves the \a second widget around the ring of focus widgets so that
-    keyboard focus moves from the \a first widget to the \a second widget when
-    the Tab key is pressed.
-
-    Note that since the tab order of the \a second widget is changed, you
-    should order a chain like this:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicswidget.cpp 1
-
-    \e not like this:
-
-    \snippet doc/src/snippets/code/src_gui_graphicsview_qgraphicswidget.cpp 2
-
-    If \a first is 0, this indicates that \a second should be the first widget
-    to receive input focus should the scene gain Tab focus (i.e., the user
-    hits Tab so that focus passes into the scene). If \a second is 0, this
-    indicates that \a first should be the first widget to gain focus if the
-    scene gained BackTab focus.
-
-    By default, tab order is defined implicitly using widget creation order.
-
-    \sa focusPolicy, {Keyboard Focus}
-*/
 void QGraphicsWidget::setTabOrder(QGraphicsWidget *first, QGraphicsWidget *second)
 {
    if (!first && !second) {
@@ -1640,15 +1313,6 @@ void QGraphicsWidget::setTabOrder(QGraphicsWidget *first, QGraphicsWidget *secon
 
 }
 
-/*!
-    If \a on is true, this function enables \a attribute; otherwise
-    \a attribute is disabled.
-
-    See the class documentation for QGraphicsWidget for a complete list of
-    which attributes are supported, and what they are for.
-
-    \sa testAttribute(), QWidget::setAttribute()
-*/
 void QGraphicsWidget::setAttribute(Qt::WidgetAttribute attribute, bool on)
 {
    Q_D(QGraphicsWidget);
@@ -1658,29 +1322,17 @@ void QGraphicsWidget::setAttribute(Qt::WidgetAttribute attribute, bool on)
    d->setAttribute(attribute, on);
 }
 
-/*!
-    Returns true if \a attribute is enabled for this widget; otherwise,
-    returns false.
-
-    \sa setAttribute()
-*/
 bool QGraphicsWidget::testAttribute(Qt::WidgetAttribute attribute) const
 {
    Q_D(const QGraphicsWidget);
    return d->testAttribute(attribute);
 }
 
-/*!
-    \reimp
-*/
 int QGraphicsWidget::type() const
 {
    return Type;
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
    Q_UNUSED(painter);
@@ -1688,17 +1340,6 @@ void QGraphicsWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
    Q_UNUSED(widget);
 }
 
-/*!
-    This virtual function is called by QGraphicsScene to draw the window frame
-    for windows using \a painter, \a option, and \a widget, in local
-    coordinates. The base implementation uses the current style to render the
-    frame and title bar.
-
-    You can reimplement this function in a subclass of QGraphicsWidget to
-    provide custom rendering of the widget's window frame.
-
-    \sa QGraphicsItem::paint()
-*/
 void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option,
    QWidget *widget)
 {
@@ -1819,17 +1460,11 @@ void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGrap
 #endif
 }
 
-/*!
-    \reimp
-*/
 QRectF QGraphicsWidget::boundingRect() const
 {
    return windowFrameRect();
 }
 
-/*!
-    \reimp
-*/
 QPainterPath QGraphicsWidget::shape() const
 {
    QPainterPath path;

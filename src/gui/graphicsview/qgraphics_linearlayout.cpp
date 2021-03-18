@@ -95,28 +95,16 @@ QGraphicsLayoutStyleInfo *QGraphicsLinearLayoutPrivate::styleInfo() const
    return m_styleInfo.data();
 }
 
-/*!
-    Constructs a QGraphicsLinearLayout instance. You can pass the
-    \a orientation for the layout, either horizontal or vertical, and
-    \a parent is passed to QGraphicsLayout's constructor.
-*/
 QGraphicsLinearLayout::QGraphicsLinearLayout(Qt::Orientation orientation, QGraphicsLayoutItem *parent)
    : QGraphicsLayout(*new QGraphicsLinearLayoutPrivate(orientation), parent)
 {
 }
 
-/*!
-    Constructs a QGraphicsLinearLayout instance using Qt::Horizontal
-    orientation. \a parent is passed to QGraphicsLayout's constructor.
-*/
 QGraphicsLinearLayout::QGraphicsLinearLayout(QGraphicsLayoutItem *parent)
    : QGraphicsLayout(*new QGraphicsLinearLayoutPrivate(Qt::Horizontal), parent)
 {
 }
 
-/*!
-    Destroys the QGraphicsLinearLayout object.
-*/
 QGraphicsLinearLayout::~QGraphicsLinearLayout()
 {
    for (int i = count() - 1; i >= 0; --i) {
@@ -125,6 +113,7 @@ QGraphicsLinearLayout::~QGraphicsLinearLayout()
       // from the layout more efficiently than the implementation of
       // ~QGraphicsLayoutItem.
       removeAt(i);
+
       if (item) {
          item->setParentLayoutItem(nullptr);
          if (item->ownedByLayout()) {
@@ -134,12 +123,6 @@ QGraphicsLinearLayout::~QGraphicsLinearLayout()
    }
 }
 
-/*!
-  Change the layout orientation to \a orientation. Changing the layout
-  orientation will automatically invalidate the layout.
-
-  \sa orientation()
-*/
 void QGraphicsLinearLayout::setOrientation(Qt::Orientation orientation)
 {
    Q_D(QGraphicsLinearLayout);
@@ -150,36 +133,12 @@ void QGraphicsLinearLayout::setOrientation(Qt::Orientation orientation)
    }
 }
 
-/*!
-  Returns the layout orientation.
-  \sa setOrientation()
- */
 Qt::Orientation QGraphicsLinearLayout::orientation() const
 {
    Q_D(const QGraphicsLinearLayout);
    return d->orientation;
 }
 
-/*!
-    \fn void QGraphicsLinearLayout::addItem(QGraphicsLayoutItem *item)
-
-    This convenience function is equivalent to calling
-    insertItem(-1, \a item).
-*/
-
-/*!
-    \fn void QGraphicsLinearLayout::addStretch(int stretch)
-
-    This convenience function is equivalent to calling
-    insertStretch(-1, \a stretch).
-*/
-
-/*!
-    Inserts \a item into the layout at \a index, or before any item that is
-    currently at \a index.
-
-    \sa addItem(), itemAt(), insertStretch(), setItemSpacing()
-*/
 void QGraphicsLinearLayout::insertItem(int index, QGraphicsLayoutItem *item)
 {
    Q_D(QGraphicsLinearLayout);
@@ -202,12 +161,6 @@ void QGraphicsLinearLayout::insertItem(int index, QGraphicsLayoutItem *item)
    invalidate();
 }
 
-/*!
-    Inserts a stretch of \a stretch at \a index, or before any item that is
-    currently at \a index.
-
-    \sa addStretch(), setStretchFactor(), setItemSpacing(), insertItem()
-*/
 void QGraphicsLinearLayout::insertStretch(int index, int stretch)
 {
    Q_D(QGraphicsLinearLayout);
@@ -217,12 +170,6 @@ void QGraphicsLinearLayout::insertStretch(int index, int stretch)
    invalidate();
 }
 
-/*!
-    Removes \a item from the layout without destroying it. Ownership of
-    \a item is transferred to the caller.
-
-    \sa removeAt(), insertItem()
-*/
 void QGraphicsLinearLayout::removeItem(QGraphicsLayoutItem *item)
 {
    Q_D(QGraphicsLinearLayout);
@@ -234,12 +181,6 @@ void QGraphicsLinearLayout::removeItem(QGraphicsLayoutItem *item)
    }
 }
 
-/*!
-    Removes the item at \a index without destroying it. Ownership of the item
-    is transferred to the caller.
-
-    \sa removeItem(), insertItem()
-*/
 void QGraphicsLinearLayout::removeAt(int index)
 {
    Q_D(QGraphicsLinearLayout);
@@ -260,12 +201,6 @@ void QGraphicsLinearLayout::removeAt(int index)
    }
 }
 
-/*!
-  Sets the layout's spacing to \a spacing. Spacing refers to the
-  vertical and horizontal distances between items.
-
-   \sa setItemSpacing(), setStretchFactor(), QGraphicsGridLayout::setSpacing()
-*/
 void QGraphicsLinearLayout::setSpacing(qreal spacing)
 {
    Q_D(QGraphicsLinearLayout);
@@ -277,45 +212,25 @@ void QGraphicsLinearLayout::setSpacing(qreal spacing)
    invalidate();
 }
 
-/*!
-  Returns the layout's spacing. Spacing refers to the
-  vertical and horizontal distances between items.
-
-  \sa setSpacing()
- */
 qreal QGraphicsLinearLayout::spacing() const
 {
    Q_D(const QGraphicsLinearLayout);
    return d->engine.spacing(d->orientation, d->styleInfo());
 }
 
-/*!
-    Sets the spacing after item at \a index to \a spacing.
-*/
 void QGraphicsLinearLayout::setItemSpacing(int index, qreal spacing)
 {
    Q_D(QGraphicsLinearLayout);
    d->engine.setRowSpacing(index, spacing, d->orientation);
    invalidate();
 }
-/*!
-    Returns the spacing after item at \a index.
-*/
+
 qreal QGraphicsLinearLayout::itemSpacing(int index) const
 {
    Q_D(const QGraphicsLinearLayout);
    return d->engine.rowSpacing(index, d->orientation);
 }
 
-/*!
-    Sets the stretch factor for \a item to \a stretch. If an item's stretch
-    factor changes, this function will invalidate the layout.
-
-    Setting \a stretch to 0 removes the stretch factor from the item, and is
-    effectively equivalent to setting \a stretch to 1.
-
-    \sa stretchFactor()
-*/
 void QGraphicsLinearLayout::setStretchFactor(QGraphicsLayoutItem *item, int stretch)
 {
    Q_D(QGraphicsLinearLayout);
@@ -331,12 +246,6 @@ void QGraphicsLinearLayout::setStretchFactor(QGraphicsLayoutItem *item, int stre
    invalidate();
 }
 
-/*!
-    Returns the stretch factor for \a item. The default stretch factor is 0,
-    meaning that the item has no assigned stretch factor.
-
-    \sa setStretchFactor()
-*/
 int QGraphicsLinearLayout::stretchFactor(QGraphicsLayoutItem *item) const
 {
    Q_D(const QGraphicsLinearLayout);
@@ -348,12 +257,6 @@ int QGraphicsLinearLayout::stretchFactor(QGraphicsLayoutItem *item) const
    return d->engine.stretchFactor(item, d->orientation);
 }
 
-/*!
-    Sets the alignment of \a item to \a alignment. If \a item's alignment
-    changes, the layout is automatically invalidated.
-
-    \sa alignment(), invalidate()
-*/
 void QGraphicsLinearLayout::setAlignment(QGraphicsLayoutItem *item, Qt::Alignment alignment)
 {
    Q_D(QGraphicsLinearLayout);
@@ -364,35 +267,18 @@ void QGraphicsLinearLayout::setAlignment(QGraphicsLayoutItem *item, Qt::Alignmen
    invalidate();
 }
 
-/*!
-    Returns the alignment for \a item. The default alignment is
-    Qt::AlignTop | Qt::AlignLeft.
-
-    The alignment decides how the item is positioned within its assigned space
-    in the case where there's more space available in the layout than the
-    widgets can occupy.
-
-    \sa setAlignment()
-*/
 Qt::Alignment QGraphicsLinearLayout::alignment(QGraphicsLayoutItem *item) const
 {
    Q_D(const QGraphicsLinearLayout);
    return d->engine.alignment(item);
 }
 
-/*!
-    \reimp
-*/
 int QGraphicsLinearLayout::count() const
 {
    Q_D(const QGraphicsLinearLayout);
    return d->engine.itemCount();
 }
 
-/*!
-    \reimp
-    When iterating from 0 and up, it will return the items in the visual arranged order.
-*/
 QGraphicsLayoutItem *QGraphicsLinearLayout::itemAt(int index) const
 {
    Q_D(const QGraphicsLinearLayout);
@@ -409,9 +295,6 @@ QGraphicsLayoutItem *QGraphicsLinearLayout::itemAt(int index) const
    return item;
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsLinearLayout::setGeometry(const QRectF &rect)
 {
    Q_D(QGraphicsLinearLayout);
@@ -433,9 +316,6 @@ void QGraphicsLinearLayout::setGeometry(const QRectF &rect)
    d->engine.setGeometries(effectiveRect, d->styleInfo());
 }
 
-/*!
-    \reimp
-*/
 QSizeF QGraphicsLinearLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
    Q_D(const QGraphicsLinearLayout);
@@ -447,9 +327,6 @@ QSizeF QGraphicsLinearLayout::sizeHint(Qt::SizeHint which, const QSizeF &constra
    return d->engine.sizeHint(which, constraint - extraMargins, d->styleInfo()) + extraMargins;
 }
 
-/*!
-    \reimp
-*/
 void QGraphicsLinearLayout::invalidate()
 {
    Q_D(QGraphicsLinearLayout);
@@ -462,9 +339,7 @@ void QGraphicsLinearLayout::invalidate()
    QGraphicsLayout::invalidate();
 }
 
-/*!
-    \internal
-*/
+// internal
 void QGraphicsLinearLayout::dump(int indent) const
 {
    (void) indent;

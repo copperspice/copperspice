@@ -208,17 +208,6 @@ QScrollBar::QScrollBar(QWidget *parent)
    d_func()->init();
 }
 
-/*!
-    Constructs a scroll bar with the given \a orientation.
-
-    The \a parent argument is passed to the QWidget constructor.
-
-    The \l {QAbstractSlider::minimum} {minimum} defaults to 0, the
-    \l {QAbstractSlider::maximum} {maximum} to 99, with a
-    \l {QAbstractSlider::singleStep} {singleStep} size of 1 and a
-    \l {QAbstractSlider::pageStep} {pageStep} size of 10, and an
-    initial \l {QAbstractSlider::value} {value} of 0.
-*/
 QScrollBar::QScrollBar(Qt::Orientation orientation, QWidget *parent)
    : QAbstractSlider(*new QScrollBarPrivate, parent)
 {
@@ -226,11 +215,6 @@ QScrollBar::QScrollBar(Qt::Orientation orientation, QWidget *parent)
    d_func()->init();
 }
 
-
-
-/*!
-    Destroys the scroll bar.
-*/
 QScrollBar::~QScrollBar()
 {
 }
