@@ -21,18 +21,18 @@
 *
 ***********************************************************************/
 
+#include <qvideosurfacegstsink_p.h>
+
 #include <qabstractvideosurface.h>
 #include <qvideoframe.h>
-#include <QDebug>
-#include <QMap>
-#include <QDebug>
-#include <QThread>
+#include <qdebug.h>
+#include <qmap.h>
+#include <qdebug.h>
+#include <qthread.h>
 
 #include <qfactoryloader_p.h>
 #include <qgstvideobuffer_p.h>
-
 #include <qgstutils_p.h>
-#include <qvideosurfacegstsink_p.h>
 
 #if GST_VERSION_MAJOR >=1
 #include <gst/video/video.h>

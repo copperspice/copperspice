@@ -28,9 +28,9 @@
 #include <qlocale.h>
 #include <qdebug.h>
 
-#include "qsvgnode_p.h"
-#include "qsvgstyle_p.h"
-#include "qsvgtinydocument_p.h"
+#include <qsvgnode_p.h>
+#include <qsvgstyle_p.h>
+#include <qsvgtinydocument_p.h>
 
 QSvgG::QSvgG(QSvgNode *parent)
    : QSvgStructureNode(parent)
@@ -351,6 +351,7 @@ QSvgNode *QSvgStructureNode::previousSiblingNode(QSvgNode *n) const
 {
    QSvgNode *prev = nullptr;
    QList<QSvgNode *>::const_iterator itr = m_renderers.constBegin();
+
    for (; itr != m_renderers.constEnd(); ++itr) {
       QSvgNode *node = *itr;
       if (node == n) {
@@ -358,6 +359,7 @@ QSvgNode *QSvgStructureNode::previousSiblingNode(QSvgNode *n) const
       }
       prev = node;
    }
+
    return prev;
 }
 

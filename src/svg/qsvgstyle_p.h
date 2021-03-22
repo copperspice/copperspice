@@ -25,13 +25,12 @@
 #define QSVGSTYLE_P_H
 
 #include <qpainter.h>
-
-#include "QtGui/qpainter.h"
-#include "QtGui/qpen.h"
-#include "QtGui/qbrush.h"
-#include "QtGui/qmatrix.h"
-#include "QtGui/qcolor.h"
-#include "QtGui/qfont.h"
+#include <qpainter.h>
+#include <qpen.h>
+#include <qbrush.h>
+#include <qmatrix.h>
+#include <qcolor.h>
+#include <qfont.h>
 #include <qdebug.h>
 
 class QSvgNode;
@@ -722,6 +721,7 @@ class QSvgStyle
         opacity(nullptr), compop(nullptr)
    {
    }
+
    ~QSvgStyle();
 
    void apply(QPainter *p, const QSvgNode *node, QSvgExtraStates &states);

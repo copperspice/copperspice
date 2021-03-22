@@ -26,12 +26,10 @@
 
 #include <dshow.h>
 
-#include "qmediacontent.h"
-#include "qmediaplayercontrol.h"
-
 #include <qcoreevent.h>
-
-#include "directshowplayerservice.h"
+#include <qmediacontent.h>
+#include <qmediaplayercontrol.h>
+#include <directshowplayerservice.h>
 
 class DirectShowPlayerControl : public QMediaPlayerControl
 {

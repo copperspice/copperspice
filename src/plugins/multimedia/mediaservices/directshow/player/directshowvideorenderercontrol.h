@@ -26,7 +26,7 @@
 
 #include <dshow.h>
 
-#include "qvideorenderercontrol.h"
+#include <qvideorenderercontrol.h>
 
 class DirectShowEventLoop;
 
@@ -55,6 +55,7 @@ class DirectShowVideoRendererControl : public QVideoRendererControl
    DirectShowEventLoop *m_loop;
    QAbstractVideoSurface *m_surface;
    IBaseFilter *m_filter;
+
 #ifdef HAVE_EVR
    EVRCustomPresenter *m_evrPresenter;
 #endif

@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qmemoryvideobuffer_p.h>
-#include <qabstractvideobuffer_p.h>
+
 #include <qbytearray.h>
 
+#include <qabstractvideobuffer_p.h>
 
 class QMemoryVideoBufferPrivate : public QAbstractVideoBufferPrivate
 {
@@ -73,6 +74,7 @@ uchar *QMemoryVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
       }
 
       return reinterpret_cast<uchar *>(d->data.data());
+
    } else {
       return nullptr;
    }

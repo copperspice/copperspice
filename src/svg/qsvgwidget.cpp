@@ -27,9 +27,8 @@
 
 #include <qsvgrenderer.h>
 #include <qpainter.h>
+
 #include <qwidget_p.h>
-
-
 
 class QSvgWidgetPrivate : public QWidgetPrivate
 {

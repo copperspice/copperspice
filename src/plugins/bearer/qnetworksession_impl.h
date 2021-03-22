@@ -24,7 +24,8 @@
 #ifndef QNETWORKSESSION_IMPL_H
 #define QNETWORKSESSION_IMPL_H
 
-#include "qbearerengine_impl.h"
+#include <qbearerengine_impl.h>
+
 #include <qnetworkconfigmanager_p.h>
 #include <qnetworksession_p.h>
 

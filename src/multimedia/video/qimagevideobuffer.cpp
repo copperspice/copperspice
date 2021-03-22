@@ -22,11 +22,11 @@
 ***********************************************************************/
 
 #include <qimagevideobuffer_p.h>
-#include <qabstractvideobuffer_p.h>
+
 #include <qimage.h>
 #include <qvariant.h>
 
-
+#include <qabstractvideobuffer_p.h>
 
 class QImageVideoBufferPrivate : public QAbstractVideoBufferPrivate
 {
@@ -72,6 +72,7 @@ uchar *QImageVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
       }
 
       return d->image.bits();
+
    } else {
       return nullptr;
    }
@@ -83,4 +84,3 @@ void QImageVideoBuffer::unmap()
 
    d->mapMode = NotMapped;
 }
-

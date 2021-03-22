@@ -27,13 +27,12 @@
 
 #include <qtimer.h>
 #include <qfontdatabase.h>
+#include <qcocoaeventdispatcher.h>
 
 #include <qfont_p.h>
 #include <qfontengine_p.h>
 #include <qfontengine_coretext_p.h>
-
 #include <qcocoahelpers.h>
-#include <qcocoaeventdispatcher.h>
 
 #import <AppKit/AppKit.h>
 
@@ -86,6 +85,7 @@ static QFont qfontForCocoaFont(NSFont *cocoaFont, const QFont &resolveFont)
       newFont.setUnderline(resolveFont.underline());
       newFont.setStrikeOut(resolveFont.strikeOut());
    }
+
    return newFont;
 }
 
