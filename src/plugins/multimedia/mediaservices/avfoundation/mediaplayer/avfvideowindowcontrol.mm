@@ -24,6 +24,7 @@
 #include "avfvideowindowcontrol.h"
 
 #include <AVFoundation/AVFoundation.h>
+#include <AppKit/NSView.h>
 
 AVFVideoWindowControl::AVFVideoWindowControl(QObject *parent)
    : QVideoWindowControl(parent)
