@@ -387,7 +387,7 @@ void QSample::decoderError()
 
    cleanup();
    m_state = QSample::Error;
-   qobject_cast<QSampleCache *>(m_parent)->loadingRelease();
+   dynamic_cast<QSampleCache *>(m_parent)->loadingRelease();
    emit error();
 }
 
@@ -403,7 +403,7 @@ void QSample::onReady()
    m_audioFormat = m_waveDecoder->audioFormat();
    cleanup();
    m_state = QSample::Ready;
-   qobject_cast<QSampleCache *>(m_parent)->loadingRelease();
+   dynamic_cast<QSampleCache *>(m_parent)->loadingRelease();
    emit ready();
 }
 

@@ -141,9 +141,8 @@ QString QScriptClass::name() const
 
   \sa property()
 */
-QScriptClass::QueryFlags QScriptClass::queryProperty(
-   const QScriptValue &object, const QScriptString &name,
-   QueryFlags flags, uint *id)
+QScriptClass::QueryFlags QScriptClass::queryProperty(const QScriptValue &object,
+            const QScriptString &name, QueryFlags flags, uint *id)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);
@@ -164,8 +163,7 @@ QScriptClass::QueryFlags QScriptClass::queryProperty(
 
   \sa setProperty(), propertyFlags()
 */
-QScriptValue QScriptClass::property(const QScriptValue &object,
-   const QScriptString &name, uint id)
+QScriptValue QScriptClass::property(const QScriptValue &object, const QScriptString &name, uint id)
 {
    Q_UNUSED(object);
    Q_UNUSED(name);

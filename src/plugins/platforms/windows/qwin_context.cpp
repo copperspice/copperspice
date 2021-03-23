@@ -805,7 +805,7 @@ QByteArray QWindowsContext::comErrorString(HRESULT hr)
 
 static inline QWindowsInputContext *windowsInputContext()
 {
-   return qobject_cast<QWindowsInputContext *>(QWindowsIntegration::instance()->inputContext());
+   return dynamic_cast<QWindowsInputContext *>(QWindowsIntegration::instance()->inputContext());
 }
 
 /*!

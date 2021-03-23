@@ -639,7 +639,7 @@ void CameraBinSession::setViewfinder(QObject *viewfinder)
       m_viewfinderInterface->stopRenderer();
    }
 
-   m_viewfinderInterface = qobject_cast<QGstreamerVideoRendererInterface *>(viewfinder);
+   m_viewfinderInterface = dynamic_cast<QGstreamerVideoRendererInterface *>(viewfinder);
    if (!m_viewfinderInterface) {
       viewfinder = nullptr;
    }

@@ -150,8 +150,10 @@ HRESULT DirectShowIOReader::Request(IMediaSample *pSample, DWORD_PTR dwUser)
 
    if (!pSample) {
       return E_POINTER;
+
    } else if (m_flushing) {
       return VFW_E_WRONG_STATE;
+
    } else {
       REFERENCE_TIME startTime = 0;
       REFERENCE_TIME endTime = 0;
@@ -480,8 +482,7 @@ void DirectShowIOReader::flushRequests()
          m_readyTail->next = m_pendingHead;
       }
 
-      m_readyTail = m_pendingHead;
-
+      m_readyTail   = m_pendingHead;
       m_pendingHead = m_pendingHead->next;
 
       m_readyTail->next = nullptr;
@@ -490,7 +491,7 @@ void DirectShowIOReader::flushRequests()
          m_pendingTail = nullptr;
       }
 
-      if (!m_readyHead) {
+      if (! m_readyHead) {
          m_readyHead = m_readyTail;
       }
    }

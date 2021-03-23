@@ -40,8 +40,6 @@ class QCameraViewfinderSettingsControl2;
 
 class QCameraPrivate : public QMediaObjectPrivate
 {
-   Q_DECLARE_NON_CONST_PUBLIC(QCamera)
-
  public:
    QCameraPrivate()
       : QMediaObjectPrivate(), provider(nullptr), control(nullptr), deviceControl(nullptr),
@@ -53,10 +51,9 @@ class QCameraPrivate : public QMediaObjectPrivate
    {
    }
 
+   void clear();
    void init();
    void initControls();
-
-   void clear();
 
    QMediaServiceProvider *provider;
 
@@ -102,6 +99,9 @@ class QCameraPrivate : public QMediaObjectPrivate
    void _q_preparePropertyChange(int changeType);
    void _q_restartCamera();
    void updateLockStatus();
+
+ private:
+   Q_DECLARE_NON_CONST_PUBLIC(QCamera)
 };
 
 #endif

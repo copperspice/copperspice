@@ -128,18 +128,20 @@ HRESULT DirectShowIOSource::QueryInterface(REFIID riid, void **ppvObject)
 
    if (!ppvObject) {
       return E_POINTER;
-   } else if (riid == IID_IUnknown
-      || riid == IID_IPersist
-      || riid == IID_IMediaFilter
-      || riid == IID_IBaseFilter) {
+
+   } else if (riid == IID_IUnknown || riid == IID_IPersist || riid == IID_IMediaFilter || riid == IID_IBaseFilter) {
       *ppvObject = static_cast<IBaseFilter *>(this);
+
    } else if (riid == iid_IAmFilterMiscFlags) {
       *ppvObject = static_cast<IAMFilterMiscFlags *>(this);
+
    } else if (riid == IID_IPin) {
       *ppvObject = static_cast<IPin *>(this);
+
    } else if (riid == IID_IAsyncReader) {
       m_queriedForAsyncReader = true;
       *ppvObject = static_cast<IAsyncReader *>(m_reader);
+
    } else {
       *ppvObject = nullptr;
 
@@ -240,6 +242,7 @@ HRESULT DirectShowIOSource::GetSyncSource(IReferenceClock **ppClock)
 {
    if (!ppClock) {
       return E_POINTER;
+
    } else {
       if (!m_clock) {
          *ppClock = nullptr;
@@ -280,6 +283,7 @@ HRESULT DirectShowIOSource::FindPin(LPCWSTR Id, IPin **ppPin)
          *ppPin = this;
 
          return S_OK;
+
       } else {
          *ppPin = nullptr;
 
@@ -543,10 +547,12 @@ HRESULT DirectShowIOSource::QueryId(LPWSTR *Id)
 
 HRESULT DirectShowIOSource::QueryAccept(const AM_MEDIA_TYPE *pmt)
 {
-   if (!pmt) {
+   if (! pmt) {
       return E_POINTER;
+
    } else if (pmt->majortype == MEDIATYPE_Stream) {
       return S_OK;
+
    } else {
       return S_FALSE;
    }
@@ -554,8 +560,9 @@ HRESULT DirectShowIOSource::QueryAccept(const AM_MEDIA_TYPE *pmt)
 
 HRESULT DirectShowIOSource::EnumMediaTypes(IEnumMediaTypes **ppEnum)
 {
-   if (!ppEnum) {
+   if (! ppEnum) {
       return E_POINTER;
+
    } else {
       *ppEnum = createMediaTypeEnum();
 
@@ -599,6 +606,7 @@ HRESULT DirectShowIOSource::QueryDirection(PIN_DIRECTION *pPinDir)
 {
    if (!pPinDir) {
       return E_POINTER;
+
    } else {
       *pPinDir = PINDIR_OUTPUT;
 

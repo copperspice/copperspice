@@ -99,8 +99,7 @@ QMultimedia::AvailabilityStatus QRadioTuner::availability() const
 
 QRadioTuner::State QRadioTuner::state() const
 {
-    return d_func()->control ?
-            d_func()->control->state() : QRadioTuner::StoppedState;
+    return d_func()->control ? d_func()->control->state() : QRadioTuner::StoppedState;
 }
 
 QRadioTuner::Band QRadioTuner::band() const
@@ -360,4 +359,3 @@ QRadioData *QRadioTuner::radioData() const
 {
     return d_func()->radioData;
 }
-

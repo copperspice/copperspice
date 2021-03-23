@@ -210,14 +210,11 @@ GstFlowReturn QVideoSurfaceGstDelegate::render(GstBuffer *buffer)
       videoBuffer = m_pool->prepareVideoBuffer(buffer, m_bytesPerLine);
    }
 
-   if (!videoBuffer) {
+   if (! videoBuffer) {
       videoBuffer = new QGstVideoBuffer(buffer, m_bytesPerLine);
    }
 
-   m_frame = QVideoFrame(
-         videoBuffer,
-         m_format.frameSize(),
-         m_format.pixelFormat());
+   m_frame = QVideoFrame(videoBuffer, m_format.frameSize(), m_format.pixelFormat());
 
    QGstUtils::setFrameTimeStamps(&m_frame, buffer);
 
@@ -277,18 +274,22 @@ void QVideoSurfaceGstDelegate::queuedRender()
    if (m_surface.isNull()) {
       qWarning() << "Rendering video frame to deleted surface, skip the frame";
       m_renderReturn = GST_FLOW_OK;
+
    } else if (m_surface->present(m_frame)) {
       m_renderReturn = GST_FLOW_OK;
+
    } else {
       switch (m_surface->error()) {
          case QAbstractVideoSurface::NoError:
             m_renderReturn = GST_FLOW_OK;
             break;
+
          case QAbstractVideoSurface::StoppedError:
             //It's likely we are in process of changing video output
             //and the surface is already stopped, ignore the frame
             m_renderReturn = GST_FLOW_OK;
             break;
+
          default:
             qWarning() << "Failed to render video frame:" << m_surface->error();
             m_renderReturn = GST_FLOW_OK;
@@ -322,6 +323,7 @@ void QVideoSurfaceGstDelegate::updateSupportedFormats()
 
    m_supportedPixelFormats.clear();
    m_supportedPoolPixelFormats.clear();
+
    if (m_surface) {
       m_supportedPixelFormats = m_surface->supportedPixelFormats();
       if (m_pool) {
@@ -352,7 +354,7 @@ GType QVideoSurfaceGstSink::get_type()
 
    if (type == 0) {
       static const GTypeInfo info = {
-         sizeof(QVideoSurfaceGstSinkClass),                    // class_size
+         sizeof(QVideoSurfaceGstSinkClass),                 // class_size
          base_init,                                         // base_init
          nullptr,                                          // base_finalize
          class_init,                                       // class_init
@@ -364,8 +366,7 @@ GType QVideoSurfaceGstSink::get_type()
          nullptr                                           // value_table
       };
 
-      type = g_type_register_static(
-            GST_TYPE_VIDEO_SINK, "QVideoSurfaceGstSink", &info, GTypeFlags(0));
+      type = g_type_register_static(GST_TYPE_VIDEO_SINK, "QVideoSurfaceGstSink", &info, GTypeFlags(0));
    }
 
    return type;

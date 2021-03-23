@@ -43,7 +43,8 @@ class QVideoOutputControl;
 class QVideoWidgetControlInterface
 {
  public:
-   virtual ~QVideoWidgetControlInterface() {}
+   virtual ~QVideoWidgetControlInterface()
+   { }
 
    virtual void setBrightness(int brightness) = 0;
    virtual void setContrast(int contrast) = 0;

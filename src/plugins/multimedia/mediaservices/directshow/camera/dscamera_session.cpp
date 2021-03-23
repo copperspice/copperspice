@@ -580,7 +580,7 @@ failed:
 
 bool DSCameraSession::stopPreview()
 {
-   if (!m_previewStarted) {
+   if (! m_previewStarted) {
       return true;
    }
 
@@ -588,6 +588,7 @@ bool DSCameraSession::stopPreview()
 
    IMediaControl *pControl = nullptr;
    HRESULT hr = m_filterGraph->QueryInterface(IID_IMediaControl, (void **)&pControl);
+
    if (FAILED(hr)) {
       qWarning() << "failed to get stream control";
       goto failed;
@@ -595,6 +596,7 @@ bool DSCameraSession::stopPreview()
 
    hr = pControl->Stop();
    pControl->Release();
+
    if (FAILED(hr)) {
       qWarning() << "failed to stop";
       goto failed;
@@ -908,8 +910,10 @@ bool DSCameraSession::configurePreviewFormat()
 
    for (const QCameraViewfinderSettings &s : m_supportedViewfinderSettings) {
       if ((m_viewfinderSettings.resolution().isEmpty() || m_viewfinderSettings.resolution() == s.resolution())
-            && (qFuzzyIsNull(m_viewfinderSettings.minimumFrameRate()) || qFuzzyCompare((float)m_viewfinderSettings.minimumFrameRate(), (float)s.minimumFrameRate()))
-            && (qFuzzyIsNull(m_viewfinderSettings.maximumFrameRate()) || qFuzzyCompare((float)m_viewfinderSettings.maximumFrameRate(), (float)s.maximumFrameRate()))
+            && (qFuzzyIsNull(m_viewfinderSettings.minimumFrameRate()) || qFuzzyCompare((float)m_viewfinderSettings.minimumFrameRate(),
+                  (float)s.minimumFrameRate()))
+            && (qFuzzyIsNull(m_viewfinderSettings.maximumFrameRate()) || qFuzzyCompare((float)m_viewfinderSettings.maximumFrameRate(),
+                  (float)s.maximumFrameRate()))
             && (m_viewfinderSettings.pixelFormat() == QVideoFrame::Format_Invalid || m_viewfinderSettings.pixelFormat() == s.pixelFormat())
             && (m_viewfinderSettings.pixelAspectRatio().isEmpty() || m_viewfinderSettings.pixelAspectRatio() == s.pixelAspectRatio())) {
          resolvedViewfinderSettings = s;
@@ -945,9 +949,8 @@ bool DSCameraSession::configurePreviewFormat()
 
    m_previewPixelFormat = QVideoFrame::Format_RGB32;
    m_previewSize = resolvedViewfinderSettings.resolution();
-   m_previewSurfaceFormat = QVideoSurfaceFormat(m_previewSize,
-                            m_previewPixelFormat,
-                            QAbstractVideoBuffer::NoHandle);
+   m_previewSurfaceFormat = QVideoSurfaceFormat(m_previewSize, m_previewPixelFormat, QAbstractVideoBuffer::NoHandle);
+
    m_previewSurfaceFormat.setScanLineDirection(QVideoSurfaceFormat::BottomToTop);
 
    HRESULT hr;
@@ -976,6 +979,7 @@ bool DSCameraSession::configurePreviewFormat()
    grabberFormat.subtype = MEDIASUBTYPE_RGB32;
    grabberFormat.formattype = FORMAT_VideoInfo;
    hr = m_previewSampleGrabber->SetMediaType(&grabberFormat);
+
    if (FAILED(hr)) {
       qWarning() << "Failed to set video format on grabber";
       return false;
@@ -986,7 +990,7 @@ bool DSCameraSession::configurePreviewFormat()
 
 void DSCameraSession::updateImageProcessingParametersInfos()
 {
-   if (!m_graphBuilder) {
+   if (! m_graphBuilder) {
       qWarning() << "failed to access to the graph builder";
       return;
    }
@@ -1166,7 +1170,7 @@ void DSCameraSession::updateSourceCapabilities()
    IAMVideoControl *pVideoControl = nullptr;
 
    hr = m_graphBuilder->FindInterface(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video,
-                                      m_sourceFilter, IID_IAMVideoControl, (void **)&pVideoControl);
+               m_sourceFilter, IID_IAMVideoControl, (void **)&pVideoControl);
 
    if (FAILED(hr)) {
       qWarning() << "Failed to get the video control";
@@ -1177,16 +1181,20 @@ void DSCameraSession::updateSourceCapabilities()
 
       if (FAILED(hr)) {
          qWarning() << "Failed to get the pin for the video control";
+
       } else {
          long supportedModes;
          hr = pVideoControl->GetCaps(pPin, &supportedModes);
+
          if (FAILED(hr)) {
             qWarning() << "Failed to get the supported modes of the video control";
+
          } else if (supportedModes & VideoControlFlag_FlipHorizontal) {
             long mode;
             hr = pVideoControl->GetMode(pPin, &mode);
             if (FAILED(hr)) {
                qWarning() << "Failed to get the mode of the video control";
+
             } else if (supportedModes & VideoControlFlag_FlipHorizontal) {
                m_needsHorizontalMirroring = (mode & VideoControlFlag_FlipHorizontal);
             }
@@ -1197,8 +1205,8 @@ void DSCameraSession::updateSourceCapabilities()
    }
 
    hr = m_graphBuilder->FindInterface(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video,
-                                      m_sourceFilter,
-                                      IID_IAMStreamConfig, (void **)&pConfig);
+               m_sourceFilter, IID_IAMStreamConfig, (void **)&pConfig);
+
    if (FAILED(hr)) {
       qWarning() << "failed to get config on capture device";
       return;
@@ -1207,6 +1215,7 @@ void DSCameraSession::updateSourceCapabilities()
    int iCount;
    int iSize;
    hr = pConfig->GetNumberOfCapabilities(&iCount, &iSize);
+
    if (FAILED(hr)) {
       qWarning() << "failed to get capabilities";
       return;
@@ -1217,8 +1226,7 @@ void DSCameraSession::updateSourceCapabilities()
       if (hr == S_OK) {
          QVideoFrame::PixelFormat pixelFormat = pixelFormatFromMediaSubtype(pmt->subtype);
 
-         if (pmt->majortype == MEDIATYPE_Video
-               && pmt->formattype == FORMAT_VideoInfo
+         if (pmt->majortype == MEDIATYPE_Video && pmt->formattype == FORMAT_VideoInfo
                && pixelFormat != QVideoFrame::Format_Invalid) {
 
             pvi = reinterpret_cast<VIDEOINFOHEADER *>(pmt->pbFormat);
@@ -1232,6 +1240,7 @@ void DSCameraSession::updateSourceCapabilities()
 
                if (FAILED(hr)) {
                   qWarning() << "Failed to get the pin for the video control";
+
                } else {
                   long listSize = 0;
                   LONGLONG *frameRates = nullptr;
@@ -1295,6 +1304,7 @@ HRESULT getPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
    while (pEnum->Next(1, &pPin, nullptr) == S_OK) {
       PIN_DIRECTION ThisPinDir;
       pPin->QueryDirection(&ThisPinDir);
+
       if (ThisPinDir == PinDir) {
          pEnum->Release();
          *ppPin = pPin;
@@ -1302,6 +1312,8 @@ HRESULT getPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
       }
       pPin->Release();
    }
+
    pEnum->Release();
+
    return E_FAIL;
 }

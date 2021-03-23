@@ -343,8 +343,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
          MediaServiceData d = mediaServiceData.value(service);
 
          if (d.plugin) {
-            QMediaServiceFeaturesInterface *iface =
-               qobject_cast<QMediaServiceFeaturesInterface *>(d.plugin);
+            QMediaServiceFeaturesInterface *iface = dynamic_cast<QMediaServiceFeaturesInterface *>(d.plugin);
 
             if (iface) {
                return iface->supportedFeatures(d.type);

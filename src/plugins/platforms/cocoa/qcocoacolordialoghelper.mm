@@ -27,7 +27,6 @@
 
 #include <qdebug.h>
 #include <qtimer.h>
-
 #include <qcocoahelpers.h>
 #include <qcocoaeventdispatcher.h>
 

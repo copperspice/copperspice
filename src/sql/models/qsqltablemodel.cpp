@@ -1084,14 +1084,17 @@ Qt::ItemFlags QSqlTableModel::flags(const QModelIndex &index) const
    if (index.internalPointer() || index.column() < 0 || index.column() >= d->rec.count() || index.row() < 0) {
       return Qt::EmptyFlag;
    }
+
    bool editable = true;
 
    if (d->rec.field(index.column()).isReadOnly()) {
       editable = false;
    } else {
       const QSqlTableModelPrivate::ModifiedRow mrow = d->cache.value(index.row());
+
       if (mrow.op() == QSqlTableModelPrivate::Delete) {
          editable = false;
+
       } else if (d->strategy == OnFieldChange) {
          if (mrow.op() != QSqlTableModelPrivate::Insert)
             if (!isDirty(index) && isDirty()) {
@@ -1103,14 +1106,13 @@ Qt::ItemFlags QSqlTableModel::flags(const QModelIndex &index) const
          }
       }
    }
+
    if (!editable) {
       return QSqlQueryModel::flags(index);
    } else {
       return QSqlQueryModel::flags(index) | Qt::ItemIsEditable;
    }
 }
-
-
 
 QSqlRecord QSqlTableModel::record() const
 {

@@ -238,17 +238,19 @@ QString QMacPasteboardMimePlainTextFallback::convertorName()
 
 QString QMacPasteboardMimePlainTextFallback::flavorFor(const QString &mime)
 {
-   if (mime == QLatin1String("text/plain")) {
-      return QLatin1String("public.text");
+   if (mime == "text/plain") {
+      return QString("public.text");
    }
+
    return QString();
 }
 
 QString QMacPasteboardMimePlainTextFallback::mimeFor(QString flav)
 {
-   if (flav == QLatin1String("public.text")) {
-      return QLatin1String("text/plain");
+   if (flav == "public.text") {
+      return QString("text/plain");
    }
+
    return QString();
 }
 
@@ -263,7 +265,7 @@ QVariant QMacPasteboardMimePlainTextFallback::convertToMime(const QString &mimet
       qWarning("QMacPasteboardMimePlainTextFallback: Cannot handle multiple member data");
    }
 
-   if (flavor == QLatin1String("public.text")) {
+   if (flavor == "public.text") {
       // Note that public.text is documented by Apple to have an undefined encoding. From
       // testing it seems that utf8 is normally used, at least by Safari on iOS.
       const QByteArray &firstData = data.first();
@@ -274,8 +276,9 @@ QVariant QMacPasteboardMimePlainTextFallback::convertToMime(const QString &mimet
       return tmp.toQString();
 
    } else {
-      qWarning("QMime::convertToMime: unhandled mimetype: %s", qPrintable(mimetype));
+      qWarning("QMime::convertToMime: unhandled mimetype: %s", csPrintable(mimetype));
    }
+
    return QVariant();
 }
 
@@ -283,9 +286,11 @@ QList<QByteArray> QMacPasteboardMimePlainTextFallback::convertFromMime(const QSt
 {
    QList<QByteArray> ret;
    QString string = data.toString();
-   if (flavor == QLatin1String("public.text")) {
+
+   if (flavor == "public.text") {
       ret.append(string.toUtf8());
    }
+
    return ret;
 }
 
@@ -309,9 +314,10 @@ QString QMacPasteboardMimeUnicodeText::convertorName()
 
 QString QMacPasteboardMimeUnicodeText::flavorFor(const QString &mime)
 {
-   if (mime == QLatin1String("text/plain")) {
-      return QLatin1String("public.utf16-plain-text");
+   if (mime == "text/plain") {
+      return QString("public.utf16-plain-text");
    }
+
    int i = mime.indexOf(QLatin1String("charset="));
    if (i >= 0) {
       QString cs(mime.mid(i + 8).toLower());

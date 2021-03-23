@@ -41,7 +41,8 @@ class QSvgRendererPrivate
    {
    }
 
-   virtual ~QSvgRendererPrivate() {
+   virtual ~QSvgRendererPrivate()
+   {
       delete render;
    }
 

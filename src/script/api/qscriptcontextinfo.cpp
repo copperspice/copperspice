@@ -131,18 +131,23 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *conte
             JSC::JITCode code = codeBlock->getJITCode();
             uintptr_t jitOffset = reinterpret_cast<uintptr_t>(JSC::ReturnAddressPtr(returnPC).value()) -
                reinterpret_cast<uintptr_t>(code.addressForCall().executableAddress());
+
             // We can only use the JIT code offset if it's smaller than the JIT size;
             // otherwise calling getBytecodeIndex() is meaningless.
+
             if (jitOffset < code.size()) {
                unsigned bytecodeOffset = codeBlock->getBytecodeIndex(frame, JSC::ReturnAddressPtr(returnPC));
-#else
-            unsigned bytecodeOffset = returnPC - codeBlock->instructions().begin();
-#endif
+
                bytecodeOffset--; //because returnPC is on the next instruction. We want the current one
                lineNumber = codeBlock->lineNumberForBytecodeOffset(const_cast<JSC::ExecState *>(frame), bytecodeOffset);
-#if ENABLE(JIT)
             }
+#else
+            unsigned bytecodeOffset = returnPC - codeBlock->instructions().begin();
+            bytecodeOffset--; //because returnPC is on the next instruction. We want the current one
+            lineNumber = codeBlock->lineNumberForBytecodeOffset(const_cast<JSC::ExecState *>(frame), bytecodeOffset);
+
 #endif
+
          }
       }
    }

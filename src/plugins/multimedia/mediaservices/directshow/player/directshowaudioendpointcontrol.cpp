@@ -133,8 +133,7 @@ void DirectShowAudioEndpointControl::updateEndpoints()
                moniker->AddRef();
                m_devices.insert(deviceId, moniker);
 
-               if (m_defaultEndpoint.isEmpty()
-                  || deviceId.endsWith(QLatin1String("Default DirectSound Device"))) {
+               if (m_defaultEndpoint.isEmpty() || deviceId.endsWith("Default DirectSound Device")) {
                   m_defaultEndpoint = deviceId;
                }
             }

@@ -161,7 +161,7 @@ static float getTraitValue(CFDictionaryRef allTraits, CFStringRef trait)
       return v;
    }
 
-   return 0;
+   return 0.0;
 }
 
 int QCoreTextFontEngine::antialiasingThreshold = 0;
@@ -173,6 +173,7 @@ CGAffineTransform qt_transform_from_fontdef(const QFontDef &fontDef)
    if (fontDef.stretch != 100) {
       transform = CGAffineTransformMakeScale(float(fontDef.stretch) / float(100), 1);
    }
+
    return transform;
 }
 
@@ -237,6 +238,7 @@ void QCoreTextFontEngine::init()
    CFDictionaryRef allTraits = CTFontCopyTraits(ctfont);
    fontDef.weight = QCoreTextFontEngine::qtWeightFromCFWeight(getTraitValue(allTraits, kCTFontWeightTrait));
    int slant = static_cast<int>(getTraitValue(allTraits, kCTFontSlantTrait) * 500 + 500);
+
    if (slant > 500 && !(traits & kCTFontItalicTrait)) {
       fontDef.style = QFont::StyleOblique;
    }
@@ -884,4 +886,3 @@ QFontEngine::Properties QCoreTextFontEngine::properties() const
 
    return result;
 }
-

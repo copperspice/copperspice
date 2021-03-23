@@ -685,6 +685,7 @@ class QXcbConnection : public QObject
       Qt::MouseButtons buttons;
       qint64 serialId;
       bool inProximity;
+
       struct ValuatorClassInfo {
          ValuatorClassInfo() : minVal(0.), maxVal(0.), curVal(0.) { }
          double minVal;
@@ -694,6 +695,7 @@ class QXcbConnection : public QObject
       };
       QHash<int, ValuatorClassInfo> valuatorInfo;
    };
+
    bool xi2HandleTabletEvent(void *event, TabletData *tabletData, QXcbWindowEventListener *eventListener);
    void xi2ReportTabletEvent(TabletData &tabletData, void *event);
    QVector<TabletData> m_tabletData;
@@ -714,6 +716,7 @@ class QXcbConnection : public QObject
       Qt::Orientations legacyOrientations;
       QPointF lastScrollPosition;
    };
+
    void updateScrollingDevice(ScrollingDevice &scrollingDevice, int num_classes, void *classes);
    void xi2HandleScrollEvent(void *event, ScrollingDevice &scrollingDevice);
    QHash<int, ScrollingDevice> m_scrollingDevices;

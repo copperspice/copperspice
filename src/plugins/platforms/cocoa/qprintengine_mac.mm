@@ -86,6 +86,7 @@ bool QMacPrintEngine::begin(QPaintDevice *dev)
    d->state = QPrinter::Active;
    setActive(true);
    d->newPage_helper();
+
    return true;
 }
 
@@ -532,36 +533,45 @@ void QMacPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
       case PPK_CollateCopies:
          PMSetCollate(d->settings(), value.toBool());
          break;
+
       case PPK_Creator:
          d->m_creator = value.toString();
          break;
+
       case PPK_DocumentName:
          PMPrintSettingsSetJobName(d->settings(), QCFString(value.toString()).toCFStringRef());
          break;
+
       case PPK_Duplex: {
          QPrint::DuplexMode mode = QPrint::DuplexMode(value.toInt());
          if (mode == property(PPK_Duplex).toInt() || !d->m_printDevice->supportedDuplexModes().contains(mode)) {
             break;
          }
+
          switch (mode) {
             case QPrinter::DuplexNone:
                PMSetDuplex(d->settings(), kPMDuplexNone);
                break;
+
             case QPrinter::DuplexAuto:
                PMSetDuplex(d->settings(), d->m_pageLayout.orientation() == QPageLayout::Landscape ? kPMDuplexTumble : kPMDuplexNoTumble);
                break;
+
             case QPrinter::DuplexLongSide:
                PMSetDuplex(d->settings(), kPMDuplexNoTumble);
                break;
+
             case QPrinter::DuplexShortSide:
                PMSetDuplex(d->settings(), kPMDuplexTumble);
                break;
+
             default:
                // Don't change
                break;
          }
          break;
       }
+
       case PPK_FullPage:
          if (value.toBool()) {
             d->m_pageLayout.setMode(QPageLayout::FullPageMode);
@@ -574,6 +584,7 @@ void QMacPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
       case PPK_NumberOfCopies:
          PMSetCopies(d->settings(), value.toInt(), false);
          break;
+
       case PPK_Orientation: {
          // First try set the Mac format orientation, then set our orientation to match result
          QPageLayout::Orientation newOrientation = QPageLayout::Orientation(value.toInt());
@@ -584,19 +595,24 @@ void QMacPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
          d->m_pageLayout.setOrientation(macOrientation == kPMLandscape ? QPageLayout::Landscape : QPageLayout::Portrait);
          break;
       }
+
       case PPK_OutputFileName:
          d->outputFilename = value.toString();
          break;
+
       case PPK_PageSize:
          d->setPageSize(QPageSize(QPageSize::PageSizeId(value.toInt())));
          break;
+
       case PPK_PaperName:
          // Get the named page size from the printer if supported
          d->setPageSize(d->m_printDevice->supportedPageSize(value.toString()));
          break;
+
       case PPK_WindowsPageSize:
          d->setPageSize(QPageSize(QPageSize::id(value.toInt())));
          break;
+
       case PPK_PrinterName: {
          QString id = value.toString();
          if (id.isEmpty()) {
@@ -604,6 +620,7 @@ void QMacPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
          } else if (!QCocoaPrinterSupport().availablePrintDeviceIds().contains(id)) {
             break;
          }
+
          d->m_printDevice.reset(new QCocoaPrintDevice(id));
          PMPrinter printer = d->m_printDevice->macPrinter();
          PMRetain(printer);
@@ -611,9 +628,11 @@ void QMacPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
          // TODO Do we need to check if the page size, etc, are valid on new printer?
          break;
       }
+
       case PPK_CustomPaperSize:
          d->setPageSize(QPageSize(value.toSizeF(), QPageSize::Point));
          break;
+
       case PPK_PageMargins: {
          QList<QVariant> margins(value.toList());
          Q_ASSERT(margins.size() == 4);
@@ -621,9 +640,11 @@ void QMacPrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &va
                margins.at(2).toReal(), margins.at(3).toReal()));
          break;
       }
+
       case PPK_QPageSize:
          d->setPageSize(value.value<QPageSize>());
          break;
+
       case PPK_QPageMargins: {
          QPair<QMarginsF, QPageLayout::Unit> pair = value.value<QPair<QMarginsF, QPageLayout::Unit>>();
          d->m_pageLayout.setUnits(pair.second);
@@ -661,17 +682,21 @@ QVariant QMacPrintEngine::property(PrintEnginePropertyKey key) const
       case PPK_ColorMode:
          ret = QPrinter::Color;
          break;
+
       case PPK_CustomBase:
          // Special case, leave null
          break;
+
       case PPK_PageOrder:
          // TODO Check if can be supported via Cups Options
          ret = QPrinter::FirstPageFirst;
          break;
+
       case PPK_PaperSource:
          // TODO Check if can be supported via Cups Options
          ret = QPrinter::Auto;
          break;
+
       case PPK_PaperSources: {
          // TODO Check if can be supported via Cups Options
          QList<QVariant> out;
@@ -682,6 +707,7 @@ QVariant QMacPrintEngine::property(PrintEnginePropertyKey key) const
       case PPK_PrinterProgram:
          ret = QString();
          break;
+
       case PPK_SelectionOption:
          ret = QString();
          break;
@@ -690,21 +716,25 @@ QVariant QMacPrintEngine::property(PrintEnginePropertyKey key) const
       case PPK_FontEmbedding:
          ret = d->embedFonts;
          break;
+
       case PPK_CollateCopies: {
          Boolean status;
          PMGetCollate(d->settings(), &status);
          ret = bool(status);
          break;
       }
+
       case PPK_Creator:
          ret = d->m_creator;
          break;
+
       case PPK_DocumentName: {
          CFStringRef name;
          PMPrintSettingsGetJobName(d->settings(), &name);
          ret = QCFString::toQString(name);
          break;
       }
+
       case PPK_Duplex: {
          PMDuplexMode mode = kPMDuplexNone;
          PMGetDuplex(d->settings(), &mode);

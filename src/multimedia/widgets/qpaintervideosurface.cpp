@@ -329,12 +329,15 @@ QList<QVideoFrame::PixelFormat> QVideoSurfaceGLPainter::supportedPixelFormats(
    switch (handleType) {
       case QAbstractVideoBuffer::NoHandle:
          return m_imagePixelFormats;
+
       case QAbstractVideoBuffer::QPixmapHandle:
       case QAbstractVideoBuffer::GLTextureHandle:
          return m_glPixelFormats;
+
       default:
-         ;
+         break;
    }
+
    return QList<QVideoFrame::PixelFormat>();
 }
 
@@ -342,15 +345,18 @@ bool QVideoSurfaceGLPainter::isFormatSupported(const QVideoSurfaceFormat &format
 {
    if (format.frameSize().isEmpty()) {
       return false;
+
    } else {
       switch (format.handleType()) {
          case QAbstractVideoBuffer::NoHandle:
             return m_imagePixelFormats.contains(format.pixelFormat());
+
          case QAbstractVideoBuffer::QPixmapHandle:
          case QAbstractVideoBuffer::GLTextureHandle:
             return m_glPixelFormats.contains(format.pixelFormat());
+
          default:
-            ;
+            break;
       }
    }
    return false;
@@ -373,27 +379,24 @@ QAbstractVideoSurface::Error QVideoSurfaceGLPainter::setCurrentFrame(const QVide
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
    } else if (m_frame.map(QAbstractVideoBuffer::ReadOnly)) {
       m_context->makeCurrent();
 
       for (int i = 0; i < m_textureCount; ++i) {
          glBindTexture(GL_TEXTURE_2D, m_textureIds[i]);
-         glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            m_textureInternalFormat,
-            m_textureWidths[i],
-            m_textureHeights[i],
-            0,
-            m_textureFormat,
-            m_textureType,
-            m_frame.bits() + m_textureOffsets[i]);
+
+         glTexImage2D(GL_TEXTURE_2D, 0, m_textureInternalFormat, m_textureWidths[i], m_textureHeights[i],
+            0, m_textureFormat, m_textureType, m_frame.bits() + m_textureOffsets[i]);
+
          glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
          glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
          glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
          glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
       }
+
       m_frame.unmap();
+
    } else if (m_handleType != QAbstractVideoBuffer::QPixmapHandle && m_frame.isValid()) {
       return QAbstractVideoSurface::IncorrectFormatError;
    }
@@ -404,7 +407,7 @@ QAbstractVideoSurface::Error QVideoSurfaceGLPainter::setCurrentFrame(const QVide
 QAbstractVideoSurface::Error QVideoSurfaceGLPainter::paint(
    const QRectF &target, QPainter *painter, const QRectF &source)
 {
-   if (!m_frame.isValid()) {
+   if (! m_frame.isValid()) {
       painter->fillRect(target, Qt::black);
       return QAbstractVideoSurface::NoError;
    }
@@ -722,47 +725,58 @@ QAbstractVideoSurface::Error QVideoSurfaceArbFpPainter::start(const QVideoSurfac
             initRgbTextureInfo(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, format.frameSize());
             program = qt_arbfp_xrgbShaderProgram;
             break;
+
          case QVideoFrame::Format_BGR32:
             initRgbTextureInfo(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, format.frameSize());
             program = qt_arbfp_rgbShaderProgram;
             break;
+
          case QVideoFrame::Format_ARGB32:
             initRgbTextureInfo(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, format.frameSize());
             program = qt_arbfp_argbShaderProgram;
             break;
+
          case QVideoFrame::Format_RGB24:
             initRgbTextureInfo(GL_RGB8, GL_RGBA, GL_UNSIGNED_BYTE, format.frameSize());
             program = qt_arbfp_rgbShaderProgram;
             break;
+
          case QVideoFrame::Format_BGR24:
             initRgbTextureInfo(GL_RGB8, GL_RGBA, GL_UNSIGNED_BYTE, format.frameSize());
             program = qt_arbfp_xrgbShaderProgram;
             break;
+
          case QVideoFrame::Format_RGB565:
             initRgbTextureInfo(GL_RGB, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, format.frameSize());
             program = qt_arbfp_rgbShaderProgram;
             break;
+
          case QVideoFrame::Format_YUV444:
             initRgbTextureInfo(GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, format.frameSize());
             program = qt_arbfp_xyuvShaderProgram;
             m_yuv = true;
             break;
+
          case QVideoFrame::Format_AYUV444:
             initRgbTextureInfo(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, format.frameSize());
             program = qt_arbfp_ayuvShaderProgram;
             m_yuv = true;
             break;
+
          case QVideoFrame::Format_YV12:
             initYv12TextureInfo(format.frameSize());
             program = qt_arbfp_yuvPlanarShaderProgram;
             break;
+
          case QVideoFrame::Format_YUV420P:
             initYuv420PTextureInfo(format.frameSize());
             program = qt_arbfp_yuvPlanarShaderProgram;
             break;
+
          default:
             break;
       }
+
    } else if (format.handleType() == QAbstractVideoBuffer::GLTextureHandle) {
       switch (format.pixelFormat()) {
          case QVideoFrame::Format_RGB32:
@@ -777,9 +791,11 @@ QAbstractVideoSurface::Error QVideoSurfaceArbFpPainter::start(const QVideoSurfac
                program = qt_arbfp_rgbShaderProgram;
             }
             break;
+
          default:
             break;
       }
+
    } else if (format.handleType() == QAbstractVideoBuffer::QPixmapHandle) {
       m_handleType = QAbstractVideoBuffer::QPixmapHandle;
       return QAbstractVideoSurface::NoError;
@@ -787,8 +803,11 @@ QAbstractVideoSurface::Error QVideoSurfaceArbFpPainter::start(const QVideoSurfac
 
    if (!program) {
       error = QAbstractVideoSurface::UnsupportedFormatError;
+
    } else {
-      while (glGetError() != GL_NO_ERROR) { } // clear previous unrelated errors
+      // clear previous unrelated errors
+      while (glGetError() != GL_NO_ERROR) {
+      }
 
       glGenProgramsARB(1, &m_programId);
 
@@ -799,26 +818,25 @@ QAbstractVideoSurface::Error QVideoSurfaceArbFpPainter::start(const QVideoSurfac
          m_programId = 0;
 
          error = QAbstractVideoSurface::ResourceError;
+
       } else {
          glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, m_programId);
-         glProgramStringARB(
-            GL_FRAGMENT_PROGRAM_ARB,
-            GL_PROGRAM_FORMAT_ASCII_ARB,
-            qstrlen(program),
-            reinterpret_cast<const GLvoid *>(program));
+         glProgramStringARB(GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ASCII_ARB,
+               qstrlen(program), reinterpret_cast<const GLvoid *>(program));
 
          if ((glError = glGetError()) != GL_NO_ERROR) {
             const GLubyte *errorString = glGetString(GL_PROGRAM_ERROR_STRING_ARB);
 
-            qWarning("QPainterVideoSurface: ARBfp Shader compile error %x, %s",
-               int(glError),
+            qWarning("QPainterVideoSurface: ARBfp Shader compile error %x, %s", int(glError),
                reinterpret_cast<const char *>(errorString));
+
             glDeleteProgramsARB(1, &m_programId);
 
             m_textureCount = 0;
             m_programId = 0;
 
             error = QAbstractVideoSurface::ResourceError;
+
          } else {
             m_handleType = format.handleType();
             m_scanLineDirection = format.scanLineDirection();
@@ -1067,24 +1085,27 @@ QVideoSurfaceGlslPainter::QVideoSurfaceGlslPainter(QGLContext *context)
 {
    m_imagePixelFormats
          << QVideoFrame::Format_RGB32
-            << QVideoFrame::Format_BGR32
-            << QVideoFrame::Format_ARGB32;
-   if (!context->contextHandle()->isOpenGLES()) {
+         << QVideoFrame::Format_BGR32
+         << QVideoFrame::Format_ARGB32;
+
+   if (! context->contextHandle()->isOpenGLES()) {
       m_imagePixelFormats
-            << QVideoFrame::Format_RGB24
-               << QVideoFrame::Format_BGR24;
+         << QVideoFrame::Format_RGB24
+         << QVideoFrame::Format_BGR24;
    }
+
    m_imagePixelFormats
          << QVideoFrame::Format_RGB565
-            << QVideoFrame::Format_YUV444
-            << QVideoFrame::Format_AYUV444
-            << QVideoFrame::Format_YV12
-            << QVideoFrame::Format_YUV420P;
+         << QVideoFrame::Format_YUV444
+         << QVideoFrame::Format_AYUV444
+         << QVideoFrame::Format_YV12
+         << QVideoFrame::Format_YUV420P;
+
    m_glPixelFormats
          << QVideoFrame::Format_RGB32
-            << QVideoFrame::Format_ARGB32
-            << QVideoFrame::Format_BGR32
-            << QVideoFrame::Format_BGRA32;
+         << QVideoFrame::Format_ARGB32
+         << QVideoFrame::Format_BGR32
+         << QVideoFrame::Format_BGRA32;
 }
 
 QAbstractVideoSurface::Error QVideoSurfaceGlslPainter::start(const QVideoSurfaceFormat &format)
@@ -1643,7 +1664,7 @@ QPainterVideoSurface::ShaderType QPainterVideoSurface::shaderType() const
 
 void QPainterVideoSurface::setShaderType(ShaderType type)
 {
-   if (!(type & m_shaderTypes)) {
+   if (! (type & m_shaderTypes)) {
       type = NoShaders;
    }
 

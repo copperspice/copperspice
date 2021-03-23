@@ -188,13 +188,16 @@ void Vmr9VideoWindowControl::setAspectRatioMode(Qt::AspectRatioMode mode)
          case Qt::IgnoreAspectRatio:
             control->SetAspectRatioMode(VMR9ARMode_None);
             break;
+
          case Qt::KeepAspectRatio:
             control->SetAspectRatioMode(VMR9ARMode_LetterBox);
             break;
+
          case Qt::KeepAspectRatioByExpanding:
             control->SetAspectRatioMode(VMR9ARMode_LetterBox);
             setDisplayRect(m_displayRect);
             break;
+
          default:
             break;
       }
@@ -277,14 +280,17 @@ void Vmr9VideoWindowControl::setProcAmpValues()
          procAmp.Brightness = scaleProcAmpValue(
                control, ProcAmpControl9_Brightness, m_brightness);
       }
+
       if (m_dirtyValues & ProcAmpControl9_Contrast) {
          procAmp.Contrast = scaleProcAmpValue(
                control, ProcAmpControl9_Contrast, m_contrast);
       }
+
       if (m_dirtyValues & ProcAmpControl9_Hue) {
          procAmp.Hue = scaleProcAmpValue(
                control, ProcAmpControl9_Hue, m_hue);
       }
+
       if (m_dirtyValues & ProcAmpControl9_Saturation) {
          procAmp.Saturation = scaleProcAmpValue(
                control, ProcAmpControl9_Saturation, m_saturation);

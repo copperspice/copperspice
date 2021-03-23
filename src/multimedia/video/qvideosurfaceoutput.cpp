@@ -61,14 +61,16 @@ bool QVideoSurfaceOutput::setMediaObject(QMediaObject *object)
       m_control.data()->setSurface(nullptr);
       m_service.data()->releaseControl(m_control.data());
    }
+
    m_control.clear();
    m_service.clear();
    m_object.clear();
 
    if (object) {
       if (QMediaService *service = object->service()) {
+
          if (QMediaControl *control = service->requestControl(QVideoRendererControl_iid)) {
-            if ((m_control = qobject_cast<QVideoRendererControl *>(control))) {
+            if ((m_control = dynamic_cast<QVideoRendererControl *>(control))) {
                m_service = service;
                m_object = object;
                m_control.data()->setSurface(m_surface.data());
@@ -79,5 +81,6 @@ bool QVideoSurfaceOutput::setMediaObject(QMediaObject *object)
          }
       }
    }
+
    return false;
 }

@@ -22,9 +22,9 @@
 ***********************************************************************/
 
 #include <qaudiodevicefactory_p.h>
+
 #include <qaudiosystem.h>
 #include <qaudiodeviceinfo.h>
-
 #include <qmap.h>
 
 class QAudioDeviceInfoPrivate : public QSharedData
@@ -32,9 +32,12 @@ class QAudioDeviceInfoPrivate : public QSharedData
  public:
    QAudioDeviceInfoPrivate()
       : mode(QAudio::AudioOutput), info(nullptr)
-   { }
+   {
+   }
+
    QAudioDeviceInfoPrivate(const QString &r, const QString &h, QAudio::Mode m):
-      realm(r), handle(h), mode(m) {
+      realm(r), handle(h), mode(m)
+   {
       if (! handle.isEmpty()) {
          info = QAudioDeviceFactory::audioDeviceInfo(realm, handle, mode);
       } else {

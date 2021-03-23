@@ -359,7 +359,7 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
    QMutexLocker locker(&mutex);
 
    if (firstUpdate) {
-      if (qobject_cast<QBearerEngine *>(sender())) {
+      if (dynamic_cast<QBearerEngine *>(sender())) {
          return;
       }
 
@@ -407,7 +407,7 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
       }
    }
 
-   QBearerEngine *engine = qobject_cast<QBearerEngine *>(sender());
+   QBearerEngine *engine = dynamic_cast<QBearerEngine *>(sender());
 
    if (engine && !updatingEngines.isEmpty()) {
       updatingEngines.remove(engine);

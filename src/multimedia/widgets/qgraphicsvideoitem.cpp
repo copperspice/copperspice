@@ -191,7 +191,7 @@ bool QGraphicsVideoItem::setMediaObject(QMediaObject *object)
          QMediaControl *control = d->service->requestControl(QVideoRendererControl_iid);
 
          if (control) {
-            d->rendererControl = qobject_cast<QVideoRendererControl *>(control);
+            d->rendererControl = dynamic_cast<QVideoRendererControl *>(control);
 
             if (d->rendererControl) {
                // do not set the surface untill the item is painted

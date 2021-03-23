@@ -51,19 +51,16 @@
 #include "quriloader_p.h"
 #include "qvariableloader_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QXmlQueryPrivate
 {
  public:
 
-   inline QXmlQueryPrivate(const QXmlNamePool &np = QXmlNamePool()) : namePool(np)
-      , messageHandler(0)
-      , uriResolver(0)
-      , queryLanguage(QXmlQuery::XQuery10)
-      , m_networkAccessDelegator(new QPatternist::NetworkAccessDelegator(0, 0)) {
-      m_networkAccessDelegator->m_variableURIManager = new QPatternist::URILoader(ownerObject(), namePool.d,
-            variableLoader());
+   inline QXmlQueryPrivate(const QXmlNamePool &np = QXmlNamePool())
+      : namePool(np), messageHandler(nullptr), uriResolver(nullptr), queryLanguage(QXmlQuery::XQuery10),
+        m_networkAccessDelegator(new QPatternist::NetworkAccessDelegator(nullptr, nullptr))
+   {
+      m_networkAccessDelegator->m_variableURIManager = new QPatternist::URILoader(ownerObject(),
+            namePool.d, variableLoader());
    }
 
    void detach() {
@@ -72,15 +69,13 @@ class QXmlQueryPrivate
       }
 
       delete m_networkAccessDelegator->m_variableURIManager;
-      m_networkAccessDelegator->m_variableURIManager = new QPatternist::URILoader(ownerObject(), namePool.d,
-            m_variableLoader);
+      m_networkAccessDelegator->m_variableURIManager = new QPatternist::URILoader(ownerObject(), namePool.d, m_variableLoader);
 
       if (m_resourceLoader) {
-         const QPatternist::AccelTreeResourceLoader::Ptr nev(new QPatternist::AccelTreeResourceLoader(namePool.d,
-               m_networkAccessDelegator));
+         const QPatternist::AccelTreeResourceLoader::Ptr nev(new QPatternist::AccelTreeResourceLoader(namePool.d, m_networkAccessDelegator));
+
          m_resourceLoader = QPatternist::ResourceLoader::Ptr(new QPatternist::ResourceDelegator(m_resourceLoader->deviceURIs(),
-                            m_resourceLoader,
-                            nev));
+               m_resourceLoader, nev));
       }
    }
 
@@ -146,7 +141,7 @@ class QXmlQueryPrivate
       return m_staticContext;
    }
 
-   inline QPatternist::DynamicContext::Ptr dynamicContext(QAbstractXmlReceiver *const callback = 0) {
+   inline QPatternist::DynamicContext::Ptr dynamicContext(QAbstractXmlReceiver *const callback = nullptr) {
       const QPatternist::StaticContext::Ptr statContext(staticContext());
       Q_ASSERT(statContext);
 
@@ -205,7 +200,7 @@ class QXmlQueryPrivate
       }
    }
 
-   QPatternist::Expression::Ptr expression(QIODevice *const queryDevice = 0) {
+   QPatternist::Expression::Ptr expression(QIODevice *const queryDevice = nullptr) {
       if (m_expr && !queryDevice) {
          return m_expr;
       }
@@ -290,7 +285,5 @@ class QXmlQueryPrivate
 
    QList<QXmlName>                             m_additionalNamespaceBindings;
 };
-
-QT_END_NAMESPACE
 
 #endif

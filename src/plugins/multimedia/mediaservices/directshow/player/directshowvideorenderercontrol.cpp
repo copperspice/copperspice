@@ -47,6 +47,7 @@ DirectShowVideoRendererControl::~DirectShowVideoRendererControl()
       m_evrPresenter->Release();
    }
 #endif
+
    if (m_filter) {
       m_filter->Release();
    }
@@ -83,7 +84,8 @@ void DirectShowVideoRendererControl::setSurface(QAbstractVideoSurface *surface)
 #ifdef HAVE_EVR
       m_filter = com_new<IBaseFilter>(clsid_EnhancedVideoRenderer);
       m_evrPresenter = new EVRCustomPresenter(m_surface);
-      if (!m_evrPresenter->isValid() || !qt_evr_setCustomPresenter(m_filter, m_evrPresenter)) {
+
+      if (! m_evrPresenter->isValid() || !qt_evr_setCustomPresenter(m_filter, m_evrPresenter)) {
          m_filter->Release();
          m_filter = nullptr;
 
@@ -91,7 +93,7 @@ void DirectShowVideoRendererControl::setSurface(QAbstractVideoSurface *surface)
          m_evrPresenter = nullptr;
       }
 
-      if (!m_filter)
+      if (! m_filter)
 #endif
       {
          m_filter = new VideoSurfaceFilter(m_surface, m_loop);

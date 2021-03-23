@@ -107,10 +107,13 @@ QMediaPlaylist *QMediaPlayerPrivate::parentPlaylist(QMediaPlaylist *pls)
    // Every item in the chain comes from currentMedia() of its parent.
    // We don't need to travers the whole tree of playlists,
    // but only the subtree of active ones.
-   for (QMediaPlaylist *current = rootMedia.playlist(); current && current != pls; current = current->currentMedia().playlist())
+
+   for (QMediaPlaylist *current = rootMedia.playlist(); current && current != pls; current = current->currentMedia().playlist()) {
       if (current->currentMedia().playlist() == pls) {
          return current;
       }
+   }
+
    return nullptr;
 }
 
@@ -118,10 +121,12 @@ bool QMediaPlayerPrivate::isInChain(QUrl url)
 {
    // Check whether a URL is already in the chain of playlists.
    // Also see a comment in parentPlaylist().
-   for (QMediaPlaylist *current = rootMedia.playlist(); current && current != playlist; current = current->currentMedia().playlist())
+   for (QMediaPlaylist *current = rootMedia.playlist(); current && current != playlist; current = current->currentMedia().playlist()) {
       if (current->currentMedia().canonicalUrl() == url) {
          return true;
       }
+   }
+
    return false;
 }
 
@@ -246,6 +251,7 @@ void QMediaPlayerPrivate::_q_updateMedia(const QMediaContent &media)
          emit q->currentMediaChanged(media);
          _q_handlePlaylistLoaded();
          return;
+
       } else if (playlist) {
          playlist->next();
       }
@@ -261,9 +267,11 @@ void QMediaPlayerPrivate::_q_updateMedia(const QMediaContent &media)
          case QMediaPlayer::PlayingState:
             control->play();
             break;
+
          case QMediaPlayer::PausedState:
             control->pause();
             break;
+
          default:
             break;
       }
@@ -574,7 +582,7 @@ QMediaPlayer::QMediaPlayer(QObject *parent, QMediaPlayer::Flags flags)
 
          d->hasStreamPlaybackFeature = d->provider->supportedFeatures(d->service).testFlag(QMediaServiceProviderHint::StreamPlayback);
 
-         d->audioRoleControl = qobject_cast<QAudioRoleControl *>(d->service->requestControl(QAudioRoleControl_iid));
+         d->audioRoleControl = dynamic_cast<QAudioRoleControl *>(d->service->requestControl(QAudioRoleControl_iid));
          if (d->audioRoleControl) {
             connect(d->audioRoleControl, &QAudioRoleControl::audioRoleChanged, this, &QMediaPlayer::audioRoleChanged);
          }
@@ -1077,4 +1085,3 @@ void QMediaPlayer::_q_handlePlaylistLoadFailed()
    Q_D(QMediaPlayer);
    d->_q_handlePlaylistLoadFailed();
 }
-

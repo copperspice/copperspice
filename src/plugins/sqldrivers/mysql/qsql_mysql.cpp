@@ -484,23 +484,21 @@ bool QMYSQLResult::fetch(int i)
       mysql_stmt_data_seek(d->stmt, i);
       int nRC = mysql_stmt_fetch(d->stmt);
 
-      if (nRC) {
+      if (nRC != 0) {
 
 #ifdef MYSQL_DATA_TRUNCATED
          if (nRC == 1 || nRC == MYSQL_DATA_TRUNCATED) {
             setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult",
                      "Unable to fetch data"), QSqlError::StatementError, d->stmt));
-            return false;
          }
-
 #else
          if (nRC == 1) {
             setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult",
                      "Unable to fetch data"), QSqlError::StatementError, d->stmt));
-            return false;
          }
 #endif
 
+         return false;
       }
 
    } else {
@@ -515,6 +513,7 @@ bool QMYSQLResult::fetch(int i)
    setAt(i);
    return true;
 }
+
 bool QMYSQLResult::fetchNext()
 {
    if (! d->driver) {
@@ -524,22 +523,22 @@ bool QMYSQLResult::fetchNext()
    if (d->preparedQuery) {
       int nRC = mysql_stmt_fetch(d->stmt);
 
-      if (nRC) {
+      if (nRC != 0) {
 
 #ifdef MYSQL_DATA_TRUNCATED
-         if (nRC == 1 || nRC == MYSQL_DATA_TRUNCATED)
+         if (nRC == 1 || nRC == MYSQL_DATA_TRUNCATED)  {
             setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult",
-                     "Unable to fetch data"), QSqlError::StatementError, d->stmt));
-         return false;
-      }
+                  "Unable to fetch data"), QSqlError::StatementError, d->stmt));
+         }
 #else
          if (nRC == 1) {
             setLastError(qMakeStmtError(QCoreApplication::translate("QMYSQLResult",
-                     "Unable to fetch data"), QSqlError::StatementError, d->stmt));
-            return false;
+                  "Unable to fetch data"), QSqlError::StatementError, d->stmt));
          }
 #endif
 
+         return false;
+      }
 
    } else {
       d->row = mysql_fetch_row(d->result);

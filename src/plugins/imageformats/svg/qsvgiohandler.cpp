@@ -66,7 +66,7 @@ bool QSvgIOHandlerPrivate::load(QIODevice *device)
     // # The SVG renderer doesn't handle trailing, unrelated data, so we must
     // assume that all available data in the device is to be read.
     bool res = false;
-    QBuffer *buf = qobject_cast<QBuffer *>(device);
+    QBuffer *buf = dynamic_cast<QBuffer *>(device);
     if (buf) {
         const QByteArray &ba = buf->data();
         res = r.load(QByteArray::fromRawData(ba.constData() + buf->pos(), ba.size() - buf->pos()));

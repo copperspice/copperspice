@@ -354,7 +354,7 @@ QSQLiteResult::~QSQLiteResult()
 {
    const QSqlDriver *sqlDriver = driver();
    if (sqlDriver) {
-      const_cast<QSQLiteDriverPrivate *>(qobject_cast<const QSQLiteDriver *>(sqlDriver)->d_func())->results.removeOne(this);
+      const_cast<QSQLiteDriverPrivate *>(dynamic_cast<const QSQLiteDriver *>(sqlDriver)->d_func())->results.removeOne(this);
    }
 
    d->cleanup();

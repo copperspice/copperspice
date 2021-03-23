@@ -56,6 +56,7 @@ class QSvgNode
       USE,
       VIDEO
    };
+
    enum DisplayMode {
       InlineMode,
       BlockMode,

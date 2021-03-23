@@ -72,7 +72,7 @@ void QCameraImageProcessingPrivate::initControls()
 
    QMediaService *service = camera->service();
    if (service) {
-      imageControl = qobject_cast<QCameraImageProcessingControl *>(service->requestControl(QCameraImageProcessingControl_iid));
+      imageControl = dynamic_cast<QCameraImageProcessingControl *>(service->requestControl(QCameraImageProcessingControl_iid));
    }
 
    available = (imageControl != nullptr);

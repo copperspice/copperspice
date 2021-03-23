@@ -291,7 +291,7 @@ void QCameraPrivate::_q_updateLockStatus(QCamera::LockType type, QCamera::LockSt
 
 QCamera::QCamera(QObject *parent)
    : QMediaObject(*new QCameraPrivate, parent,
-                  QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_CAMERA))
+        QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_CAMERA))
 {
    Q_D(QCamera);
    d->init();
@@ -303,10 +303,9 @@ QCamera::QCamera(QObject *parent)
 }
 
 
-QCamera::QCamera(const QByteArray &deviceName, QObject *parent):
-   QMediaObject(*new QCameraPrivate, parent,
-                QMediaServiceProvider::defaultServiceProvider()->
-                requestService(Q_MEDIASERVICE_CAMERA, QMediaServiceProviderHint(deviceName)))
+QCamera::QCamera(const QByteArray &deviceName, QObject *parent)
+   : QMediaObject(*new QCameraPrivate, parent,
+        QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_CAMERA, QMediaServiceProviderHint(deviceName)))
 {
    Q_D(QCamera);
    d->init();
@@ -327,10 +326,9 @@ QCamera::QCamera(const QByteArray &deviceName, QObject *parent):
 }
 
 QCamera::QCamera(const QCameraInfo &cameraInfo, QObject *parent)
-   : QMediaObject(*new QCameraPrivate,
-                  parent,
-                  QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_CAMERA,
-                        QMediaServiceProviderHint(cameraInfo.deviceName().toLatin1())))
+   : QMediaObject(*new QCameraPrivate, parent,
+        QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_CAMERA,
+        QMediaServiceProviderHint(cameraInfo.deviceName().toLatin1())))
 {
    Q_D(QCamera);
    d->init();
@@ -347,9 +345,8 @@ QCamera::QCamera(const QCameraInfo &cameraInfo, QObject *parent)
 
 
 QCamera::QCamera(QCamera::Position position, QObject *parent)
-   : QMediaObject(*new QCameraPrivate,
-                  parent,
-                  QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_CAMERA, QMediaServiceProviderHint(position)))
+   : QMediaObject(*new QCameraPrivate, parent,
+        QMediaServiceProvider::defaultServiceProvider()->requestService(Q_MEDIASERVICE_CAMERA, QMediaServiceProviderHint(position)))
 {
    Q_D(QCamera);
    d->init();

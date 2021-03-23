@@ -2075,13 +2075,13 @@ void QFtpPrivate::_q_startNextCommand()
    }
    emit q->commandStarted(c->id);
 
-   // Proxy support, replace the Login argument in place, then fall through.
+   // Proxy support, replace the Login argument in place, then fall through
    if (c->command == QFtp::Login && ! proxyHost.isEmpty()) {
       QString loginString = c->rawCmds.first().trimmed();
       loginString += QChar('@') + host;
 
       if (port && port != 21) {
-         loginString += QLatin1Char(':') + QString::number(port);
+         loginString += QChar(':') + QString::number(port);
       }
 
       loginString.append("\r\n");
@@ -2096,7 +2096,7 @@ void QFtpPrivate::_q_startNextCommand()
       proxyPort = c->rawCmds[1].toInteger<uint>();
 
       c->rawCmds.clear();
-      _q_piFinished(QLatin1String("Proxy set to ") + proxyHost + QLatin1Char(':') + QString::number(proxyPort));
+      _q_piFinished("Proxy set to " + proxyHost + ':' + QString::number(proxyPort));
 
    } else if (c->command == QFtp::ConnectToHost) {
 

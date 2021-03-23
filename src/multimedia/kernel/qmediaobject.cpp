@@ -204,7 +204,7 @@ void QMediaObject::setupControls()
    Q_D(QMediaObject);
 
    if (d->service != nullptr) {
-      d->metaDataControl = qobject_cast<QMetaDataReaderControl *>(d->service->requestControl(QMetaDataReaderControl_iid));
+      d->metaDataControl = dynamic_cast<QMetaDataReaderControl *>(d->service->requestControl(QMetaDataReaderControl_iid));
 
       if (d->metaDataControl) {
 

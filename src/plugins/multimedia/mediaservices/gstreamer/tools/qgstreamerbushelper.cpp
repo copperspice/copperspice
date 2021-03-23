@@ -163,7 +163,7 @@ QGstreamerBusHelper::~QGstreamerBusHelper()
 
 void QGstreamerBusHelper::installMessageFilter(QObject *filter)
 {
-   QGstreamerSyncMessageFilter *syncFilter = qobject_cast<QGstreamerSyncMessageFilter *>(filter);
+   QGstreamerSyncMessageFilter *syncFilter = dynamic_cast<QGstreamerSyncMessageFilter *>(filter);
    if (syncFilter) {
       QMutexLocker lock(&d->filterMutex);
       if (!d->syncFilters.contains(syncFilter)) {
@@ -171,7 +171,7 @@ void QGstreamerBusHelper::installMessageFilter(QObject *filter)
       }
    }
 
-   QGstreamerBusMessageFilter *busFilter = qobject_cast<QGstreamerBusMessageFilter *>(filter);
+   QGstreamerBusMessageFilter *busFilter = dynamic_cast<QGstreamerBusMessageFilter *>(filter);
    if (busFilter && !d->busFilters.contains(busFilter)) {
       d->busFilters.append(busFilter);
    }
@@ -179,13 +179,13 @@ void QGstreamerBusHelper::installMessageFilter(QObject *filter)
 
 void QGstreamerBusHelper::removeMessageFilter(QObject *filter)
 {
-   QGstreamerSyncMessageFilter *syncFilter = qobject_cast<QGstreamerSyncMessageFilter *>(filter);
+   QGstreamerSyncMessageFilter *syncFilter = dynamic_cast<QGstreamerSyncMessageFilter *>(filter);
    if (syncFilter) {
       QMutexLocker lock(&d->filterMutex);
       d->syncFilters.removeAll(syncFilter);
    }
 
-   QGstreamerBusMessageFilter *busFilter = qobject_cast<QGstreamerBusMessageFilter *>(filter);
+   QGstreamerBusMessageFilter *busFilter = dynamic_cast<QGstreamerBusMessageFilter *>(filter);
    if (busFilter) {
       d->busFilters.removeAll(busFilter);
    }

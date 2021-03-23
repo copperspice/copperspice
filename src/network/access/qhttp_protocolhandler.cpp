@@ -47,7 +47,7 @@ void QHttpProtocolHandler::_q_receiveReply()
    // only run when the QHttpNetworkConnection is not currently being destructed, e.g.
    // this function is called from _q_disconnected which is called because
    // of ~QHttpNetworkConnectionPrivate
-   if (! qobject_cast<QHttpNetworkConnection *>(m_connection)) {
+   if (! dynamic_cast<QHttpNetworkConnection *>(m_connection)) {
       return;
    }
 
@@ -369,7 +369,7 @@ bool QHttpProtocolHandler::sendRequest()
          const qint64 socketWriteMaxSize = 16 * 1024;
 
 #ifdef QT_SSL
-         QSslSocket *sslSocket = qobject_cast<QSslSocket *>(m_socket);
+         QSslSocket *sslSocket = dynamic_cast<QSslSocket *>(m_socket);
          // if it is really an ssl socket, check more than just bytesToWrite()
          while ((m_socket->bytesToWrite() + (sslSocket ? sslSocket->encryptedBytesToWrite() : 0))
                 <= socketBufferFill && m_channel->bytesTotal != m_channel->written)

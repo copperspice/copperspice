@@ -896,7 +896,7 @@ QAbstractSocketEngine *QHttpSocketEngineHandler::createSocketEngine(QAbstractSoc
    }
 
    // we only accept active sockets
-   if (!qobject_cast<QAbstractSocket *>(parent)) {
+   if (!dynamic_cast<QAbstractSocket *>(parent)) {
       return nullptr;
    }
 

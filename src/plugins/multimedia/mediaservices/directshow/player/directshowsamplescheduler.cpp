@@ -409,8 +409,7 @@ IMediaSample *DirectShowSampleScheduler::takeSample(bool *eos)
       IMediaSample *sample = m_head->sample();
       sample->AddRef();
 
-      *eos =  m_head->isLast();
-
+      *eos   =  m_head->isLast();
       m_head = m_head->remove();
 
       if (!m_head) {
@@ -420,6 +419,7 @@ IMediaSample *DirectShowSampleScheduler::takeSample(bool *eos)
       m_semaphore.release(1);
 
       return sample;
+
    } else {
       return nullptr;
    }
@@ -444,6 +444,7 @@ bool DirectShowSampleScheduler::event(QEvent *event)
       emit sampleReady();
 
       return true;
+
    } else {
       return QObject::event(event);
    }

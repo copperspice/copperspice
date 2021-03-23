@@ -838,9 +838,7 @@ void QGstreamerPlayerSession::finishVideoOutputChange()
 
 #ifdef DEBUG_VO_BIN_DUMP
    gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_playbin),
-      GstDebugGraphDetails(
-         GST_DEBUG_GRAPH_SHOW_ALL /* | GST_DEBUG_GRAPH_SHOW_MEDIA_TYPE | GST_DEBUG_GRAPH_SHOW_NON_DEFAULT_PARAMS | GST_DEBUG_GRAPH_SHOW_STATES */),
-      "playbin_finish");
+      GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "playbin_finish");
 #endif
 }
 
@@ -851,7 +849,9 @@ void QGstreamerPlayerSession::insertColorSpaceElement(GstElement *element, gpoin
 #ifdef DEBUG_PLAYBIN
    qDebug() << Q_FUNC_INFO;
 #endif
+
    Q_UNUSED(element);
+
    QGstreamerPlayerSession *session = reinterpret_cast<QGstreamerPlayerSession *>(data);
 
    if (session->m_usingColorspaceElement) {

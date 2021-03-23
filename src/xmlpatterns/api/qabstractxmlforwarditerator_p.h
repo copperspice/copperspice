@@ -59,7 +59,11 @@ class QAbstractXmlForwardIterator : public QSharedData
    typedef QList<QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<T> > > List;
    typedef QVector<QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<T> > > Vector;
 
-   inline QAbstractXmlForwardIterator() : d_ptr(0) {}
+   inline QAbstractXmlForwardIterator()
+      : d_ptr(nullptr)
+   {
+   }
+
    virtual ~QAbstractXmlForwardIterator() {}
 
    virtual T next() = 0;

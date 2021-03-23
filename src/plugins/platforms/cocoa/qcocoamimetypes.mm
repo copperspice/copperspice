@@ -69,6 +69,7 @@ QVariant QMacPasteboardMimeTraditionalMacPlainText::convertToMime(const QString 
    if (data.count() > 1) {
       qWarning("QMacPasteboardMimeTraditionalMacPlainText: Cannot handle multiple member data");
    }
+
    const QByteArray &firstData = data.first();
    QVariant ret;
 
@@ -83,6 +84,7 @@ QVariant QMacPasteboardMimeTraditionalMacPlainText::convertToMime(const QString 
    } else {
       qWarning("QMime::convertToMime: unhandled mimetype: %s", qPrintable(mimetype));
    }
+
    return ret;
 }
 
@@ -90,9 +92,11 @@ QList<QByteArray> QMacPasteboardMimeTraditionalMacPlainText::convertFromMime(con
 {
    QList<QByteArray> ret;
    QString string = data.toString();
-   if (flavor == QLatin1String("com.apple.traditional-mac-plain-text")) {
-      ret.append(string.toLatin1());
+
+   if (flavor == "com.apple.traditional-mac-plain-text") {
+      ret.append(string.toUtf8());
    }
+
    return ret;
 }
 

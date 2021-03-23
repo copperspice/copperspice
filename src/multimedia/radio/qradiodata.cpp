@@ -109,7 +109,7 @@ bool QRadioData::setMediaObject(QMediaObject *mediaObject)
         QMediaService *service = mediaObject->service();
 
         if (service) {
-            d->control = qobject_cast<QRadioDataControl*>(service->requestControl(QRadioDataControl_iid));
+            d->control = dynamic_cast<QRadioDataControl*>(service->requestControl(QRadioDataControl_iid));
 
             if (d->control) {
                connect(d->control, &QRadioDataControl::stationIdChanged,                     this, &QRadioData::stationIdChanged);

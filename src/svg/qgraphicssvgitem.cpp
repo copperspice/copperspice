@@ -46,8 +46,8 @@ class QGraphicsSvgItemPrivate : public QGraphicsItemPrivate
       Q_Q(QGraphicsSvgItem);
       q->setParentItem(parent);
       renderer = new QSvgRenderer(q);
-      QObject::connect(renderer, SIGNAL(repaintNeeded()),
-                       q, SLOT(_q_repaintItem()));
+
+      QObject::connect(renderer, SIGNAL(repaintNeeded()), q, SLOT(_q_repaintItem()));
       q->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
       q->setMaximumCacheSize(QSize(1024, 768));
    }

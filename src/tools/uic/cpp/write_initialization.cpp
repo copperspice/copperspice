@@ -1054,7 +1054,7 @@ void WriteInitialization::acceptLayout(DomLayout *node)
    if (isGroupBox) {
       const QString tempName = m_driver->unique("boxlayout");
 
-      m_output << m_indent << "QBoxLayout *" << tempName << " = qobject_cast<QBoxLayout *>(" <<
+      m_output << m_indent << "QBoxLayout *" << tempName << " = dynamic_cast<QBoxLayout *>(" <<
          m_driver->findOrInsertWidget(m_widgetChain.top()) << "->layout());\n";
 
       m_output << m_indent << "if (" << tempName << ")\n";

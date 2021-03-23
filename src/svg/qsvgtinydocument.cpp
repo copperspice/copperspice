@@ -168,8 +168,9 @@ QSvgTinyDocument *QSvgTinyDocument::load(const QString &fileName)
       doc->m_animationDuration = handler.animationDuration();
    } else {
       qWarning("Cannot read file '%s', because: %s (line %d)",
-               qPrintable(fileName), qPrintable(handler.errorString()), handler.lineNumber());
+               csPrintable(fileName), csPrintable(handler.errorString()), handler.lineNumber());
    }
+
    return doc;
 }
 
@@ -191,6 +192,7 @@ QSvgTinyDocument *QSvgTinyDocument::load(const QByteArray &contents)
       doc = handler.document();
       doc->m_animationDuration = handler.animationDuration();
    }
+
    return doc;
 }
 
@@ -204,6 +206,7 @@ QSvgTinyDocument *QSvgTinyDocument::load(QXmlStreamReader *contents)
       doc = handler.document();
       doc->m_animationDuration = handler.animationDuration();
    }
+
    return doc;
 }
 
@@ -228,14 +231,17 @@ void QSvgTinyDocument::draw(QPainter *p, const QRectF &bounds)
    p->setBrush(Qt::black);
    p->setRenderHint(QPainter::Antialiasing);
    p->setRenderHint(QPainter::SmoothPixmapTransform);
+
    QList<QSvgNode *>::iterator itr = m_renderers.begin();
    applyStyle(p, m_states);
 
    while (itr != m_renderers.end()) {
       QSvgNode *node = *itr;
+
       if ((node->isVisible()) && (node->displayMode() != QSvgNode::NoneMode)) {
          node->draw(p, m_states);
       }
+
       ++itr;
    }
 
@@ -252,6 +258,7 @@ void QSvgTinyDocument::draw(QPainter *p, const QString &id, const QRectF &bounds
       qDebug("Couldn't find node %s. Skipping rendering.", qPrintable(id));
       return;
    }
+
    if (m_time.isNull()) {
       m_time.start();
    }
@@ -406,13 +413,11 @@ void QSvgTinyDocument::mapSourceToTarget(QPainter *p, const QRectF &targetRect, 
 
    if (source != target && !source.isNull()) {
       QTransform transform;
-      transform.scale(target.width() / source.width(),
-                      target.height() / source.height());
+      transform.scale(target.width() / source.width(), target.height() / source.height());
+
       QRectF c2 = transform.mapRect(source);
-      p->translate(target.x() - c2.x(),
-                   target.y() - c2.y());
-      p->scale(target.width() / source.width(),
-               target.height() / source.height());
+      p->translate(target.x() - c2.x(), target.y() - c2.y());
+      p->scale(target.width() / source.width(), target.height() / source.height());
    }
 }
 

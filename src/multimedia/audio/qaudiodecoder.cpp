@@ -84,7 +84,7 @@ QAudioDecoder::QAudioDecoder(QObject *parent)
    d->provider = QMediaServiceProvider::defaultServiceProvider();
 
    if (d->service) {
-      d->control = qobject_cast<QAudioDecoderControl *>(d->service->requestControl(QAudioDecoderControl_Key));
+      d->control = dynamic_cast<QAudioDecoderControl *>(d->service->requestControl(QAudioDecoderControl_Key));
 
       if (d->control != nullptr) {
          connect(d->control, &QAudioDecoderControl::stateChanged,           this, &QAudioDecoder::_q_stateChanged);
@@ -204,6 +204,7 @@ QAudioFormat QAudioDecoder::audioFormat() const
    if (d->control) {
       return d->control->audioFormat();
    }
+
    return QAudioFormat();
 }
 
@@ -230,8 +231,7 @@ void QAudioDecoder::unbind(QObject *obj)
    QMediaObject::unbind(obj);
 }
 
-QMultimedia::SupportEstimate QAudioDecoder::hasSupport(const QString &mimeType,
-   const QStringList &codecs)
+QMultimedia::SupportEstimate QAudioDecoder::hasSupport(const QString &mimeType, const QStringList &codecs)
 {
    return QMediaServiceProvider::defaultServiceProvider()->hasSupport(QByteArray
          (Q_MEDIASERVICE_AUDIODECODER), mimeType, codecs);
@@ -240,27 +240,33 @@ QMultimedia::SupportEstimate QAudioDecoder::hasSupport(const QString &mimeType,
 bool QAudioDecoder::bufferAvailable() const
 {
    Q_D(const QAudioDecoder);
+
    if (d->control) {
       return d->control->bufferAvailable();
    }
+
    return false;
 }
 
 qint64 QAudioDecoder::position() const
 {
    Q_D(const QAudioDecoder);
+
    if (d->control) {
       return d->control->position();
    }
+
    return -1;
 }
 
 qint64 QAudioDecoder::duration() const
 {
    Q_D(const QAudioDecoder);
+
    if (d->control) {
       return d->control->duration();
    }
+
    return -1;
 }
 

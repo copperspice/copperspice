@@ -42,7 +42,7 @@ class Q_MULTIMEDIA_EXPORT QMediaResourcePolicy
 template<typename T>
 T *QMediaResourcePolicy::createResourceSet()
 {
-   return qobject_cast<T *>(QMediaResourcePolicy::createResourceSet(T::iid()));
+   return dynamic_cast<T *>(QMediaResourcePolicy::createResourceSet(T::iid()));
 }
 
 #endif

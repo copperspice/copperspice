@@ -219,8 +219,10 @@ void QRendererVideoWidgetBackend::paintEvent(QPaintEvent *event)
       m_surface->paint(&painter, m_boundingRect, m_sourceRect);
 
       m_surface->setReady(true);
+
    } else {
-#if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && !defined(QT_OPENGL_ES_1)
+
+#if ! defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && !defined(QT_OPENGL_ES_1)
       if (m_updatePaintDevice && (painter.paintEngine()->type() == QPaintEngine::OpenGL
             || painter.paintEngine()->type() == QPaintEngine::OpenGL2)) {
          m_updatePaintDevice = false;
@@ -234,7 +236,6 @@ void QRendererVideoWidgetBackend::paintEvent(QPaintEvent *event)
       }
 #endif
    }
-
 }
 
 void QRendererVideoWidgetBackend::formatChanged(const QVideoSurfaceFormat &format)
@@ -453,7 +454,7 @@ void QVideoWidgetPrivate::clearService()
 bool QVideoWidgetPrivate::createWidgetBackend()
 {
    if (QMediaControl *control = service->requestControl(QVideoWidgetControl_iid)) {
-      if (QVideoWidgetControl *widgetControl = qobject_cast<QVideoWidgetControl *>(control)) {
+      if (QVideoWidgetControl *widgetControl = dynamic_cast<QVideoWidgetControl *>(control)) {
          widgetBackend = new QVideoWidgetControlBackend(service, widgetControl, q_func());
 
          setCurrentControl(widgetBackend);
@@ -462,13 +463,14 @@ bool QVideoWidgetPrivate::createWidgetBackend()
       }
       service->releaseControl(control);
    }
+
    return false;
 }
 
 bool QVideoWidgetPrivate::createWindowBackend()
 {
    if (QMediaControl *control = service->requestControl(QVideoWindowControl_iid)) {
-      if (QVideoWindowControl *windowControl = qobject_cast<QVideoWindowControl *>(control)) {
+      if (QVideoWindowControl *windowControl = dynamic_cast<QVideoWindowControl *>(control)) {
          windowBackend = new QWindowVideoWidgetBackend(service, windowControl, q_func());
          currentBackend = windowBackend;
 
@@ -484,7 +486,7 @@ bool QVideoWidgetPrivate::createWindowBackend()
 bool QVideoWidgetPrivate::createRendererBackend()
 {
    if (QMediaControl *control = service->requestControl(QVideoRendererControl_iid)) {
-      if (QVideoRendererControl *rendererControl = qobject_cast<QVideoRendererControl *>(control)) {
+      if (QVideoRendererControl *rendererControl = dynamic_cast<QVideoRendererControl *>(control)) {
          rendererBackend = new QRendererVideoWidgetBackend(service, rendererControl, q_func());
          currentBackend = rendererBackend;
 
@@ -494,6 +496,7 @@ bool QVideoWidgetPrivate::createRendererBackend()
       }
       service->releaseControl(control);
    }
+
    return false;
 }
 
@@ -546,7 +549,7 @@ void QVideoWidgetPrivate::_q_saturationChanged(int s)
 
 void QVideoWidgetPrivate::_q_fullScreenChanged(bool fullScreen)
 {
-   if (!fullScreen && q_func()->isFullScreen()) {
+   if (! fullScreen && q_func()->isFullScreen()) {
       q_func()->showNormal();
    }
 }
@@ -861,6 +864,7 @@ bool QVideoWidget::event(QEvent *event)
          if (!d->wasFullScreen) {
             emit fullScreenChanged(d->wasFullScreen = true);
          }
+
       } else {
          if (d->currentControl) {
             d->currentControl->setFullScreen(false);

@@ -99,11 +99,13 @@ bool QVideoProbe::setSource(QMediaRecorder *mediaRecorder)
     QMediaObject *source = mediaRecorder ? mediaRecorder->mediaObject() : nullptr;
     bool result = setSource(source);
 
-    if (!mediaRecorder)
-        return true;
+    if (! mediaRecorder) {
+       return true;
+    }
 
-    if (mediaRecorder && ! source)
-        return false;
+    if (mediaRecorder && ! source) {
+       return false;
+    }
 
     return result;
 }

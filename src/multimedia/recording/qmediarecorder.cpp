@@ -141,7 +141,7 @@ void QMediaRecorderPrivate::_q_availabilityChanged(QMultimedia::AvailabilityStat
 void QMediaRecorderPrivate::restartCamera()
 {
    //restart camera if it can't apply new settings in the Active state
-   QCamera *camera = qobject_cast<QCamera *>(mediaObject);
+   QCamera *camera = dynamic_cast<QCamera *>(mediaObject);
 
    if (camera && camera->captureMode() == QCamera::CaptureVideo) {
       QMetaObject::invokeMethod(camera, "_q_preparePropertyChange",
@@ -240,14 +240,18 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
                   (&QMetaDataWriterControl::metaDataChanged), this,
                   static_cast<void (QMediaRecorder::*)(const QString &, const QVariant &)>(&QMediaRecorder::metaDataChanged));
 
-            disconnect(d->metaDataControl, &QMetaDataWriterControl::metaDataAvailableChanged, this, &QMediaRecorder::metaDataAvailableChanged);
-            disconnect(d->metaDataControl, &QMetaDataWriterControl::writableChanged,          this, &QMediaRecorder::metaDataWritableChanged);
+            disconnect(d->metaDataControl, &QMetaDataWriterControl::metaDataAvailableChanged,
+                 this, &QMediaRecorder::metaDataAvailableChanged);
+
+            disconnect(d->metaDataControl, &QMetaDataWriterControl::writableChanged,
+                  this, &QMediaRecorder::metaDataWritableChanged);
 
             service->releaseControl(d->metaDataControl);
          }
 
          if (d->availabilityControl) {
-            disconnect(d->availabilityControl, &QMediaAvailabilityControl::availabilityChanged, this, &QMediaRecorder::_q_availabilityChanged);
+            disconnect(d->availabilityControl, &QMediaAvailabilityControl::availabilityChanged,
+                  this, &QMediaRecorder::_q_availabilityChanged);
 
             service->releaseControl(d->availabilityControl);
          }
@@ -293,16 +297,19 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
                         (&QMetaDataWriterControl::metaDataChanged), this,
                         static_cast<void (QMediaRecorder::*)(const QString &, const QVariant &)>(&QMediaRecorder::metaDataChanged));
 
+                  connect(d->metaDataControl, &QMetaDataWriterControl::metaDataAvailableChanged,
+                        this, &QMediaRecorder::metaDataAvailableChanged);
 
-                  connect(d->metaDataControl, &QMetaDataWriterControl::metaDataAvailableChanged, this, &QMediaRecorder::metaDataAvailableChanged);
-                  connect(d->metaDataControl, &QMetaDataWriterControl::writableChanged,          this, &QMediaRecorder::metaDataWritableChanged);
+                  connect(d->metaDataControl, &QMetaDataWriterControl::writableChanged,
+                        this, &QMediaRecorder::metaDataWritableChanged);
                }
             }
 
             d->availabilityControl = service->requestControl<QMediaAvailabilityControl *>();
 
             if (d->availabilityControl) {
-               connect(d->availabilityControl, &QMediaAvailabilityControl::availabilityChanged, this, &QMediaRecorder::_q_availabilityChanged);
+               connect(d->availabilityControl, &QMediaAvailabilityControl::availabilityChanged,
+                        this, &QMediaRecorder::_q_availabilityChanged);
             }
 
             connect(d->control, &QMediaRecorderControl::stateChanged,    this, &QMediaRecorder::_q_stateChanged);

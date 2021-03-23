@@ -66,7 +66,6 @@ void QSvgQualityStyle::apply(QPainter *, const QSvgNode *, QSvgExtraStates &)
 
 void QSvgQualityStyle::revert(QPainter *, QSvgExtraStates &)
 {
-
 }
 
 QSvgFillStyle::QSvgFillStyle()
@@ -95,7 +94,7 @@ void QSvgFillStyle::setFillStyle(QSvgFillStyleProperty *style)
 
 void QSvgFillStyle::setBrush(QBrush brush)
 {
-   m_fill = brush;
+   m_fill    = brush;
    m_style   = nullptr;
    m_fillSet = 1;
 }
@@ -151,8 +150,8 @@ void QSvgViewportFillStyle::revert(QPainter *p, QSvgExtraStates &)
 }
 
 QSvgFontStyle::QSvgFontStyle(QSvgFont *font, QSvgTinyDocument *doc)
-   : m_svgFont(font), m_doc(doc), m_familySet(0), m_sizeSet(0), m_styleSet(0)
-   , m_variantSet(0), m_weightSet(0), m_textAnchorSet(0)
+   : m_svgFont(font), m_doc(doc), m_familySet(0), m_sizeSet(0), m_styleSet(0),
+     m_variantSet(0), m_weightSet(0), m_textAnchorSet(0)
 {
 }
 

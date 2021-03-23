@@ -70,11 +70,12 @@ DirectShowMediaTypeEnum::~DirectShowMediaTypeEnum()
 
 HRESULT DirectShowMediaTypeEnum::QueryInterface(REFIID riid, void **ppvObject)
 {
-   if (!ppvObject) {
+   if (! ppvObject) {
       return E_POINTER;
-   } else if (riid == IID_IUnknown
-      || riid == IID_IEnumMediaTypes) {
+
+   } else if (riid == IID_IUnknown || riid == IID_IEnumMediaTypes) {
       *ppvObject = static_cast<IEnumMediaTypes *>(this);
+
    } else {
       *ppvObject = nullptr;
 
@@ -126,7 +127,6 @@ HRESULT DirectShowMediaTypeEnum::Clone(IEnumMediaTypes **ppEnum)
    return m_list->cloneMediaType(m_mediaTypeToken, m_index, ppEnum);
 }
 
-
 DirectShowMediaTypeList::DirectShowMediaTypeList()
    : m_mediaTypeToken(0)
 {
@@ -141,14 +141,12 @@ IEnumMediaTypes *DirectShowMediaTypeList::createMediaTypeEnum()
    return new DirectShowMediaTypeEnum(this, m_mediaTypeToken, 0);
 }
 
-
 void DirectShowMediaTypeList::setMediaTypes(const QVector<AM_MEDIA_TYPE> &types)
 {
    ++m_mediaTypeToken;
 
    m_mediaTypes = types;
 }
-
 
 int DirectShowMediaTypeList::currentMediaTypeToken()
 {

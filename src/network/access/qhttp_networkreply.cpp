@@ -1023,7 +1023,7 @@ QSslConfiguration QHttpNetworkReply::sslConfiguration() const
       return QSslConfiguration();
    }
 
-   QSslSocket *sslSocket = qobject_cast<QSslSocket *>(d->connectionChannel->socket);
+   QSslSocket *sslSocket = dynamic_cast<QSslSocket *>(d->connectionChannel->socket);
    if (!sslSocket) {
       return QSslConfiguration();
    }

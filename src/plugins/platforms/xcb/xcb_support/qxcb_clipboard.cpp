@@ -383,7 +383,7 @@ void QXcbClipboard::setMimeData(QMimeData *data, QClipboard::Mode mode)
    QXcbClipboardMime *xClipboard = 0;
    // verify if there is data to be cleared on global X Clipboard.
    if (!data) {
-      xClipboard = qobject_cast<QXcbClipboardMime *>(mimeData(mode));
+      xClipboard = dynamic_cast<QXcbClipboardMime *>(mimeData(mode));
       if (xClipboard) {
          if (xClipboard->isEmpty()) {
             return;

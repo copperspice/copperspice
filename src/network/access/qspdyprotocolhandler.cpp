@@ -318,7 +318,7 @@ void QSpdyProtocolHandler::_q_receiveReply()
    // only run when the QHttpNetworkConnection is not currently being destructed, e.g.
    // this function is called from _q_disconnected which is called because
    // of ~QHttpNetworkConnectionPrivate
-   if (!qobject_cast<QHttpNetworkConnection *>(m_connection)) {
+   if (!dynamic_cast<QHttpNetworkConnection *>(m_connection)) {
       return;
    }
 
@@ -747,7 +747,7 @@ bool QSpdyProtocolHandler::uploadData(qint32 streamID)
 
 void QSpdyProtocolHandler::_q_uploadDataReadyRead()
 {
-   QNonContiguousByteDevice *device = qobject_cast<QNonContiguousByteDevice *>(sender());
+   QNonContiguousByteDevice *device = dynamic_cast<QNonContiguousByteDevice *>(sender());
    Q_ASSERT(device);
    qint32 streamID = device->property("SPDYStreamID").toInt();
    Q_ASSERT(streamID > 0);

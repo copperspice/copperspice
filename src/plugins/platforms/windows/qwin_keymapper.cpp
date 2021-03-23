@@ -1127,7 +1127,7 @@ bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &ms
 
       if (uch.isNull() && msgType == WM_IME_KEYDOWN) {
          const QWindowsInputContext *windowsInputContext =
-            qobject_cast<const QWindowsInputContext *>(QWindowsIntegration::instance()->inputContext());
+            dynamic_cast<const QWindowsInputContext *>(QWindowsIntegration::instance()->inputContext());
 
          if (! (windowsInputContext && windowsInputContext->isComposing())) {
             vk_key = ImmGetVirtualKey(reinterpret_cast<HWND>(window->winId()));

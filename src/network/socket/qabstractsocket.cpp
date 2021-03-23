@@ -1829,7 +1829,7 @@ void QAbstractSocket::abort()
    }
 
 #ifdef QT_SSL
-   if (QSslSocket *socket = qobject_cast<QSslSocket *>(this)) {
+   if (QSslSocket *socket = dynamic_cast<QSslSocket *>(this)) {
       socket->abort();
       return;
    }
@@ -1862,7 +1862,7 @@ bool QAbstractSocket::flush()
 
 #ifdef QT_SSL
    // Manual polymorphism; flush() isn't virtual, but QSslSocket overloads it.
-   if (QSslSocket *socket = qobject_cast<QSslSocket *>(this)) {
+   if (QSslSocket *socket = dynamic_cast<QSslSocket *>(this)) {
       return socket->flush();
    }
 #endif

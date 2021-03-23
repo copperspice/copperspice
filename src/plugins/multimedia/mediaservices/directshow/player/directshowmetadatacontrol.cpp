@@ -409,9 +409,11 @@ void DirectShowMetaDataControl::updateMetadata(IFilterGraph2 *graph, IBaseFilter
                   PROPERTYKEY key;
                   PROPVARIANT var;
                   PropVariantInit(&var);
+
                   if (FAILED(pStore->GetAt(i, &key))) {
                      continue;
                   }
+
                   if (FAILED(pStore->GetValue(key, &var))) {
                      continue;
                   }
@@ -529,18 +531,22 @@ void DirectShowMetaDataControl::updateMetadata(IFilterGraph2 *graph, IBaseFilter
             if (key.qtName == QMediaMetaData::Duration) {
                // duration is provided in 100-nanosecond units, convert to milliseconds
                var = (var.toLongLong() + 10000) / 10000;
+
             } else if (key.qtName == QMediaMetaData::Resolution) {
                QSize res;
                res.setHeight(var.toUInt());
                res.setWidth(getValue(info, L"WM/VideoWidth").toUInt());
                var = res;
+
             } else if (key.qtName == QMediaMetaData::VideoFrameRate) {
                var = var.toReal() / 1000.f;
+
             } else if (key.qtName == QMediaMetaData::PixelAspectRatio) {
                QSize aspectRatio;
                aspectRatio.setWidth(var.toUInt());
                aspectRatio.setHeight(getValue(info, L"AspectRatioY").toUInt());
                var = aspectRatio;
+
             } else if (key.qtName == QMediaMetaData::UserRating) {
                var = (var.toUInt() - 1) / qreal(98) * 100;
             }
@@ -561,8 +567,7 @@ void DirectShowMetaDataControl::updateMetadata(IFilterGraph2 *graph, IBaseFilter
       IAMMediaContent *content = nullptr;
 
       if ((! graph || graph->QueryInterface(IID_IAMMediaContent, reinterpret_cast<void **>(&content)) != S_OK)
-         && (! source || source->QueryInterface(IID_IAMMediaContent,
-               reinterpret_cast<void **>(&content)) != S_OK)) {
+         && (! source || source->QueryInterface(IID_IAMMediaContent, reinterpret_cast<void **>(&content)) != S_OK)) {
          content = nullptr;
       }
 

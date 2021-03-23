@@ -475,10 +475,13 @@ static const char *QSvgStyleSelector_nodeString[] = {
 class QSvgStyleSelector : public QCss::StyleSelector
 {
  public:
-   QSvgStyleSelector() {
+   QSvgStyleSelector()
+   {
       nameCaseSensitivity = Qt::CaseInsensitive;
    }
-   virtual ~QSvgStyleSelector() {
+
+   virtual ~QSvgStyleSelector()
+   {
    }
 
    inline QString nodeToName(QSvgNode *node) const {
@@ -488,6 +491,7 @@ class QSvgStyleSelector : public QCss::StyleSelector
    inline QSvgNode *svgNode(NodePtr node) const {
       return (QSvgNode *)node.ptr;
    }
+
    inline QSvgStructureNode *nodeToStructure(QSvgNode *n) const {
       if (n &&
             (n->type() == QSvgNode::DOC ||
@@ -3733,26 +3737,31 @@ static FactoryMethod findGraphicsFactory(const QString &name)
             return createAnimationNode;
          }
          break;
+
       case 'c':
          if (ref == QString("ircle")) {
             return createCircleNode;
          }
          break;
+
       case 'e':
          if (ref == QString("llipse")) {
             return createEllipseNode;
          }
          break;
+
       case 'i':
          if (ref == QString("mage")) {
             return createImageNode;
          }
          break;
+
       case 'l':
          if (ref == QString("ine")) {
             return createLineNode;
          }
          break;
+
       case 'p':
          if (ref == QString("ath")) {
             return createPathNode;
@@ -3764,11 +3773,13 @@ static FactoryMethod findGraphicsFactory(const QString &name)
             return createPolylineNode;
          }
          break;
+
       case 'r':
          if (ref == QString("ect")) {
             return createRectNode;
          }
          break;
+
       case 't':
          if (ref == QString("ext")) {
             return createTextNode;
@@ -3780,16 +3791,19 @@ static FactoryMethod findGraphicsFactory(const QString &name)
             return createTspanNode;
          }
          break;
+
       case 'u':
          if (ref == QString("se")) {
             return createUseNode;
          }
          break;
+
       case 'v':
          if (ref == QString("ideo")) {
             return createVideoNode;
          }
          break;
+
       default:
          break;
    }
@@ -3837,11 +3851,13 @@ static ParseMethod findUtilFactory(const QString &name)
             return parseDiscardNode;
          }
          break;
+
       case 'f':
          if (ref == QString("oreignObject")) {
             return parseForeignObjectNode;
          }
          break;
+
       case 'h':
          if (ref == QString("andler")) {
             return parseHandlerNode;
@@ -3850,6 +3866,7 @@ static ParseMethod findUtilFactory(const QString &name)
             return parseHkernNode;
          }
          break;
+
       case 'm':
          if (ref == QString("etadata")) {
             return parseMetadataNode;
@@ -3858,11 +3875,13 @@ static ParseMethod findUtilFactory(const QString &name)
             return parseMpathNode;
          }
          break;
+
       case 'p':
          if (ref == QString("refetch")) {
             return parsePrefetchNode;
          }
          break;
+
       case 's':
          if (ref == QString("cript")) {
             return parseScriptNode;
@@ -3874,6 +3893,7 @@ static ParseMethod findUtilFactory(const QString &name)
             return parseStyleNode;
          }
          break;
+
       case 't':
          if (ref == QString("break")) {
             return parseTbreakNode;
@@ -3882,6 +3902,7 @@ static ParseMethod findUtilFactory(const QString &name)
             return parseTitleNode;
          }
          break;
+
       default:
          break;
    }
@@ -3925,6 +3946,7 @@ static StyleFactoryMethod findStyleFactoryMethod(const QString &name)
             return createSolidColorNode;
          }
          break;
+
       default:
          break;
    }
@@ -3957,21 +3979,25 @@ static StyleParseMethod findStyleUtilFactoryMethod(const QString &name)
             return parseFontFaceUriNode;
          }
          break;
+
       case 'g':
          if (ref == QString("lyph")) {
             return parseGlyphNode;
          }
          break;
+
       case 'm':
          if (ref == QString("issing-glyph")) {
             return parseMissingGlyphNode;
          }
          break;
+
       case 's':
          if (ref == QString("top")) {
             return parseStopNode;
          }
          break;
+
       default:
          break;
    }
@@ -4002,7 +4028,9 @@ void QSvgHandler::init()
    m_doc     = nullptr;
    m_style   = nullptr;
    m_animEnd = 0;
+
    m_defaultCoords = LT_PX;
+
    m_defaultPen = QPen(Qt::black, 1, Qt::SolidLine, Qt::FlatCap, Qt::SvgMiterJoin);
    m_defaultPen.setMiterLimit(4);
    parse();
@@ -4146,6 +4174,7 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
                group->addChild(node, someId(attributes));
             }
             break;
+
             case QSvgNode::TEXT:
             case QSvgNode::TEXTAREA:
                if (node->type() == QSvgNode::TSPAN) {
@@ -4240,6 +4269,7 @@ bool QSvgHandler::endElement(QStringView localName)
 
    if (node == Graphics) {
       m_nodes.pop();
+
    } else if (m_style && !m_skipNodes.isEmpty() && m_skipNodes.top() != Style) {
       m_style = nullptr;
    }
@@ -4256,12 +4286,15 @@ void QSvgHandler::resolveGradients(QSvgNode *node)
    QSvgStructureNode *structureNode = static_cast<QSvgStructureNode *>(node);
 
    QList<QSvgNode *> ren = structureNode->renderers();
+
    for (QList<QSvgNode *>::iterator it = ren.begin(); it != ren.end(); ++it) {
 
       QSvgFillStyle *fill = static_cast<QSvgFillStyle *>((*it)->styleProperty(QSvgStyleProperty::FILL));
-      if (fill && !fill->isGradientResolved()) {
+
+      if (fill && ! fill->isGradientResolved()) {
          QString id = fill->gradientId();
          QSvgFillStyleProperty *style = structureNode->styleProperty(id);
+
          if (style) {
             fill->setFillStyle(style);
          } else {
@@ -4274,6 +4307,7 @@ void QSvgHandler::resolveGradients(QSvgNode *node)
       if (stroke && !stroke->isGradientResolved()) {
          QString id = stroke->gradientId();
          QSvgFillStyleProperty *style = structureNode->styleProperty(id);
+
          if (style) {
             stroke->setStyle(style);
          } else {
@@ -4294,6 +4328,7 @@ bool QSvgHandler::characters(QStringView str)
       QCss::StyleSheet sheet;
       QCss::Parser(css).parse(&sheet);
       m_selector->styleSheets.append(sheet);
+
       return true;
     }
 #endif
@@ -4452,5 +4487,3 @@ QSvgHandler::~QSvgHandler()
       delete xml;
    }
 }
-
-

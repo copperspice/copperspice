@@ -39,28 +39,35 @@ static QBearerEngineImpl *getEngineFromId(const QString &id)
     QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
 
     for (QBearerEngine *engine : priv->engines()) {
-        QBearerEngineImpl *engineImpl = qobject_cast<QBearerEngineImpl *>(engine);
+        QBearerEngineImpl *engineImpl = dynamic_cast<QBearerEngineImpl *>(engine);
 
         if (engineImpl && engineImpl->hasIdentifier(id))
             return engineImpl;
     }
 
-    return 0;
+    return nullptr;
 }
 
 class QNetworkSessionManagerPrivate : public QObject
 {
-    Q_OBJECT
+   CS_OBJECT(QNetworkSessionManagerPrivate)
 
-public:
-    QNetworkSessionManagerPrivate(QObject *parent = nullptr) : QObject(parent) {}
-    ~QNetworkSessionManagerPrivate() {}
+ public:
+   QNetworkSessionManagerPrivate(QObject *parent = nullptr)
+      : QObject(parent)
+   {
+   }
 
-    inline void forceSessionClose(const QNetworkConfiguration &config)
-    { emit forcedSessionClose(config); }
+   ~QNetworkSessionManagerPrivate()
+   {
+   }
 
-Q_SIGNALS:
-    void forcedSessionClose(const QNetworkConfiguration &config);
+   void forceSessionClose(const QNetworkConfiguration &config) {
+      emit forcedSessionClose(config);
+   }
+
+   CS_SIGNAL_1(Public, forcedSessionClose(const QNetworkConfiguration &config))
+   CS_SIGNAL_2(forcedSessionClose, &config)
 };
 
 Q_GLOBAL_STATIC(QNetworkSessionManagerPrivate, sessionManager);
@@ -100,7 +107,7 @@ void QNetworkSessionPrivateImpl::syncStateWithInterface()
            [[fallthrough]];
 
        default:
-           engine = 0;
+           engine = nullptr;
     }
 
     networkConfigurationsChanged();
@@ -154,6 +161,7 @@ void QNetworkSessionPrivateImpl::stop()
     if (serviceConfig.isValid()) {
         lastError = QNetworkSession::OperationNotSupportedError;
         emit QNetworkSessionPrivate::error(lastError);
+
     } else {
         if ((activeConfig.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active) {
             state = QNetworkSession::Closing;
@@ -232,18 +240,23 @@ void QNetworkSessionPrivateImpl::setSessionProperty(const QString &key, const QV
 QString QNetworkSessionPrivateImpl::errorString() const
 {
     switch (lastError) {
-    case QNetworkSession::UnknownSessionError:
-        return tr("Unknown session error.");
-    case QNetworkSession::SessionAbortedError:
-        return tr("The session was aborted by the user or system.");
-    case QNetworkSession::OperationNotSupportedError:
-        return tr("The requested operation is not supported by the system.");
-    case QNetworkSession::InvalidConfigurationError:
-        return tr("The specified configuration cannot be used.");
-    case QNetworkSession::RoamingError:
-        return tr("Roaming was aborted or is not possible.");
-    default:
-        break;
+       case QNetworkSession::UnknownSessionError:
+           return tr("Unknown session error.");
+
+       case QNetworkSession::SessionAbortedError:
+           return tr("The session was aborted by the user or system.");
+
+       case QNetworkSession::OperationNotSupportedError:
+           return tr("The requested operation is not supported by the system.");
+
+       case QNetworkSession::InvalidConfigurationError:
+           return tr("The specified configuration cannot be used.");
+
+       case QNetworkSession::RoamingError:
+           return tr("Roaming was aborted or is not possible.");
+
+       default:
+           break;
     }
 
     return QString();

@@ -35,7 +35,6 @@ int QAbstractVideoBufferPrivate::map(
    return data[0] ? 1 : 0;
 }
 
-
 QAbstractVideoBuffer::QAbstractVideoBuffer(HandleType type)
    : d_ptr(nullptr), m_type(type)
 {
@@ -52,7 +51,6 @@ QAbstractVideoBuffer::~QAbstractVideoBuffer()
 {
    delete d_ptr;
 }
-
 
 void QAbstractVideoBuffer::release()
 {
@@ -74,39 +72,42 @@ int QAbstractVideoBuffer::mapPlanes(MapMode mode, int *numBytes, int bytesPerLin
    }
 }
 
-
 QVariant QAbstractVideoBuffer::handle() const
 {
    return QVariant();
 }
 
-
-int QAbstractPlanarVideoBufferPrivate::map(
-   QAbstractVideoBuffer::MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4])
+int QAbstractPlanarVideoBufferPrivate::map(QAbstractVideoBuffer::MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4])
 {
    return q_func()->map(mode, numBytes, bytesPerLine, data);
 }
+
 QAbstractPlanarVideoBuffer::QAbstractPlanarVideoBuffer(HandleType type)
    : QAbstractVideoBuffer(*new QAbstractPlanarVideoBufferPrivate, type)
 {
 }
-QAbstractPlanarVideoBuffer::QAbstractPlanarVideoBuffer(
-   QAbstractPlanarVideoBufferPrivate &dd, HandleType type)
+
+QAbstractPlanarVideoBuffer::QAbstractPlanarVideoBuffer(QAbstractPlanarVideoBufferPrivate &dd, HandleType type)
    : QAbstractVideoBuffer(dd, type)
 {
 }
+
 QAbstractPlanarVideoBuffer::~QAbstractPlanarVideoBuffer()
 {
 }
+
 uchar *QAbstractPlanarVideoBuffer::map(MapMode mode, int *numBytes, int *bytesPerLine)
 {
    uchar *data[4];
    int strides[4];
+
    if (map(mode, numBytes, strides, data) > 0) {
       if (bytesPerLine) {
          *bytesPerLine = strides[0];
       }
+
       return data[0];
+
    } else {
       return nullptr;
    }
@@ -115,17 +116,23 @@ QDebug operator<<(QDebug dbg, QAbstractVideoBuffer::HandleType type)
 {
    QDebugStateSaver saver(dbg);
    dbg.nospace();
+
    switch (type) {
       case QAbstractVideoBuffer::NoHandle:
          return dbg << "NoHandle";
+
       case QAbstractVideoBuffer::GLTextureHandle:
          return dbg << "GLTextureHandle";
+
       case QAbstractVideoBuffer::XvShmImageHandle:
          return dbg << "XvShmImageHandle";
+
       case QAbstractVideoBuffer::CoreImageHandle:
          return dbg << "CoreImageHandle";
+
       case QAbstractVideoBuffer::QPixmapHandle:
          return dbg << "QPixmapHandle";
+
       default:
          return dbg << "UserHandle(" << int(type) << ')';
    }
@@ -134,15 +141,18 @@ QDebug operator<<(QDebug dbg, QAbstractVideoBuffer::MapMode mode)
 {
    QDebugStateSaver saver(dbg);
    dbg.nospace();
+
    switch (mode) {
       case QAbstractVideoBuffer::ReadOnly:
          return dbg << "ReadOnly";
+
       case QAbstractVideoBuffer::ReadWrite:
          return dbg << "ReadWrite";
+
       case QAbstractVideoBuffer::WriteOnly:
          return dbg << "WriteOnly";
+
       default:
          return dbg << "NotMapped";
    }
 }
-

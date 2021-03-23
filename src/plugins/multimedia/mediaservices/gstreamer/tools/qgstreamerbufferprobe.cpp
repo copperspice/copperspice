@@ -81,14 +81,17 @@ void QGstreamerBufferProbe::removeProbeFromPad(GstPad *pad)
       gst_pad_remove_probe(pad, m_capsProbeId);
       m_capsProbeId = -1;
    }
+
    if (m_bufferProbeId != -1) {
       gst_pad_remove_probe(pad, m_bufferProbeId);
       m_bufferProbeId = -1;
    }
+
 #else
    if (m_bufferProbeId != -1) {
       gst_pad_remove_buffer_probe(pad, m_bufferProbeId);
       m_bufferProbeId = -1;
+
       if (m_caps) {
          gst_caps_unref(m_caps);
          m_caps = nullptr;

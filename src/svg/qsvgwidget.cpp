@@ -42,22 +42,18 @@ QSvgWidget::QSvgWidget(QWidget *parent)
    : QWidget(*new QSvgWidgetPrivate, parent, Qt::EmptyFlag)
 {
    d_func()->renderer = new QSvgRenderer(this);
-   QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()),
-                    this, SLOT(update()));
+   QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()), this, SLOT(update()));
 }
-
 
 QSvgWidget::QSvgWidget(const QString &file, QWidget *parent)
    : QWidget(*new QSvgWidgetPrivate, parent, Qt::EmptyFlag)
 {
    d_func()->renderer = new QSvgRenderer(file, this);
-   QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()),
-                    this, SLOT(update()));
+   QObject::connect(d_func()->renderer, SIGNAL(repaintNeeded()), this, SLOT(update()));
 }
 
 QSvgWidget::~QSvgWidget()
 {
-
 }
 
 QSvgRenderer *QSvgWidget::renderer() const
@@ -69,6 +65,7 @@ QSvgRenderer *QSvgWidget::renderer() const
 QSize QSvgWidget::sizeHint() const
 {
    Q_D(const QSvgWidget);
+
    if (d->renderer->isValid()) {
       return d->renderer->defaultSize();
    } else {

@@ -207,7 +207,7 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
 {
    QMutexLocker lock(&d->mapMutex);
 
-   if (!d->buffer) {
+   if (! d->buffer) {
       return false;
    }
 
@@ -237,7 +237,8 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
    }
 
    if (d->planeCount > 1) {
-      // If the plane count is derive the additional planes for planar formats.
+      // If the plane count is derive the additional planes for planar formats
+
    } else
       switch (d->pixelFormat) {
          case Format_Invalid:
@@ -268,6 +269,7 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
          case Format_User:
             // Single plane or opaque format.
             break;
+
          case Format_YUV420P:
          case Format_YV12: {
             // The UV stride is usually half the Y stride and is 32-bit aligned.
@@ -286,6 +288,7 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
             d->data[2] = d->data[1] + (uvStride * height / 2);
             break;
          }
+
          case Format_NV12:
          case Format_NV21:
          case Format_IMC2:
@@ -296,6 +299,7 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
             d->data[1] = d->data[0] + (d->bytesPerLine[0] * d->size.height());
             break;
          }
+
          case Format_IMC1:
          case Format_IMC3: {
             // Three planes, the second and third vertically and horizontally subsumpled,
@@ -306,6 +310,7 @@ bool QVideoFrame::map(QAbstractVideoBuffer::MapMode mode)
             d->data[2] = d->data[1] + (d->bytesPerLine[1] * d->size.height() / 2);
             break;
          }
+
          default:
             break;
       }
@@ -327,11 +332,12 @@ void QVideoFrame::unmap()
       return;
    }
 
-   d->mappedCount--;
+   --d->mappedCount;
 
    if (d->mappedCount == 0) {
       d->mappedBytes = 0;
-      d->planeCount = 0;
+      d->planeCount  = 0;
+
       memset(d->bytesPerLine, 0, sizeof(d->bytesPerLine));
       memset(d->data, 0, sizeof(d->data));
 
@@ -343,11 +349,11 @@ int QVideoFrame::bytesPerLine() const
 {
    return d->bytesPerLine[0];
 }
+
 int QVideoFrame::bytesPerLine(int plane) const
 {
    return plane >= 0 && plane < d->planeCount ? d->bytesPerLine[plane] : 0;
 }
-
 
 uchar *QVideoFrame::bits()
 {
@@ -359,7 +365,6 @@ uchar *QVideoFrame::bits(int plane)
    return plane >= 0 && plane < d->planeCount ? d->data[plane] : nullptr;
 }
 
-
 const uchar *QVideoFrame::bits() const
 {
    return d->data[0];
@@ -369,7 +374,6 @@ const uchar *QVideoFrame::bits(int plane) const
 {
    return plane >= 0 && plane < d->planeCount ?  d->data[plane] : nullptr;
 }
-
 
 int QVideoFrame::mappedBytes() const
 {
@@ -386,20 +390,15 @@ QVariant QVideoFrame::handle() const
    return d->buffer != nullptr ? d->buffer->handle() : QVariant();
 }
 
-
 qint64 QVideoFrame::startTime() const
 {
    return d->startTime;
 }
 
-
-
 void QVideoFrame::setStartTime(qint64 time)
 {
    d->startTime = time;
 }
-
-
 
 qint64 QVideoFrame::endTime() const
 {
@@ -436,20 +435,27 @@ QVideoFrame::PixelFormat QVideoFrame::pixelFormatFromImageFormat(QImage::Format 
       case QImage::Format_RGB32:
       case QImage::Format_RGBX8888:
          return Format_RGB32;
+
       case QImage::Format_ARGB32:
       case QImage::Format_RGBA8888:
          return Format_ARGB32;
+
       case QImage::Format_ARGB32_Premultiplied:
       case QImage::Format_RGBA8888_Premultiplied:
          return Format_ARGB32_Premultiplied;
+
       case QImage::Format_RGB16:
          return Format_RGB565;
+
       case QImage::Format_ARGB8565_Premultiplied:
          return Format_ARGB8565_Premultiplied;
+
       case QImage::Format_RGB555:
          return Format_RGB555;
+
       case QImage::Format_RGB888:
          return Format_RGB24;
+
       default:
          return Format_Invalid;
    }
@@ -460,25 +466,34 @@ QImage::Format QVideoFrame::imageFormatFromPixelFormat(PixelFormat format)
    switch (format) {
       case Format_Invalid:
          return QImage::Format_Invalid;
+
       case Format_ARGB32:
          return QImage::Format_ARGB32;
+
       case Format_ARGB32_Premultiplied:
          return QImage::Format_ARGB32_Premultiplied;
+
       case Format_RGB32:
          return QImage::Format_RGB32;
+
       case Format_RGB24:
          return QImage::Format_RGB888;
+
       case Format_RGB565:
          return QImage::Format_RGB16;
+
       case Format_RGB555:
          return QImage::Format_RGB555;
+
       case Format_ARGB8565_Premultiplied:
          return QImage::Format_ARGB8565_Premultiplied;
+
       case Format_BGRA32:
       case Format_BGRA32_Premultiplied:
       case Format_BGR32:
       case Format_BGR24:
          return QImage::Format_Invalid;
+
       case Format_BGR565:
       case Format_BGR555:
       case Format_BGRA5658_Premultiplied:
@@ -501,10 +516,12 @@ QImage::Format QVideoFrame::imageFormatFromPixelFormat(PixelFormat format)
       case Format_CameraRaw:
       case Format_AdobeDng:
          return QImage::Format_Invalid;
+
       case Format_User:
       default:
          return QImage::Format_Invalid;
    }
+
    return QImage::Format_Invalid;
 }
 
