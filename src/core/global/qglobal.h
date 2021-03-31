@@ -1037,11 +1037,44 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 #define Q_D(Class) Class##Private * const d = d_func()
 #define Q_Q(Class) Class * const q = q_func()
 
-#define QT_TR_NOOP(x) (x)
-#define QT_TRANSLATE_NOOP(scope, x) (x)
-#define QT_TRANSLATE_NOOP3(scope, x, comment) {x, comment}
 
-#define QT_TRID_NOOP(id) id
+// not used in copperspice
+#define QT_TR_NOOP(text)                            cs_mark_tr_old(text)
+#define QT_TRANSLATE_NOOP3(context, text, comment)  cs_mark_tr_old(text, comment)
+
+// used internally
+#define QT_TRANSLATE_NOOP(context, text)            cs_mark_tr_old(text)
+
+// not used in copperspice
+#define QT_TRID_NOOP(id)                            cs_mark_tr_old(id)
+
+
+[[deprecated]] constexpr const char * cs_mark_tr_old(const char *text) {
+   return text;
+}
+
+[[deprecated]] constexpr std::pair<const char *, const char *> cs_mark_tr_old(const char *text, const char *comment) {
+   return {text, comment};
+}
+
+constexpr const char * cs_mark_tr(const char *text) {
+   return text;
+}
+
+// used internally in cs
+constexpr const char * cs_mark_tr(const char *context, const char *text) {
+   (void) context;
+   return text;
+}
+
+constexpr std::pair<const char *, const char *> cs_mark_tr(const char *context, const char *text, const char *comment) {
+   (void) context;
+   return {text, comment};
+}
+
+constexpr const char * cs_mark_tr_id(const char *id) {
+   return id;
+}
 
 // defined in qcoreapplication.cpp
 Q_CORE_EXPORT QString qtTrId(const char *id, std::optional<int> n = std::optional<int>());
