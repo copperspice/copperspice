@@ -142,7 +142,7 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
 }
 
 const char *QDnsLookupPrivate::msgNoIpV6NameServerAdresses =
-   QT_TRANSLATE_NOOP("QDnsLookupRunnable", "IPv6 addresses for nameservers are currently not supported");
+   cs_mark_tr("QDnsLookupRunnable", "IPv6 addresses for nameservers are currently not supported");
 
 QDnsLookup::QDnsLookup(QObject *parent)
    : QObject(parent), d_ptr(new QDnsLookupPrivate)

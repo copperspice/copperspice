@@ -1875,137 +1875,138 @@ QString QFontDatabase::writingSystemName(WritingSystem writingSystem)
 
    switch (writingSystem) {
       case Any:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Any");
+         name = cs_mark_tr("QFontDatabase", "Any");
          break;
 
       case Latin:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Latin");
+         name = cs_mark_tr("QFontDatabase", "Latin");
          break;
 
       case Greek:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Greek");
+         name = cs_mark_tr("QFontDatabase", "Greek");
          break;
 
       case Cyrillic:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Cyrillic");
+         name = cs_mark_tr("QFontDatabase", "Cyrillic");
          break;
 
       case Armenian:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Armenian");
+         name = cs_mark_tr("QFontDatabase", "Armenian");
          break;
 
       case Hebrew:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Hebrew");
+         name = cs_mark_tr("QFontDatabase", "Hebrew");
          break;
+
       case Arabic:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Arabic");
+         name = cs_mark_tr("QFontDatabase", "Arabic");
          break;
 
       case Syriac:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Syriac");
+         name = cs_mark_tr("QFontDatabase", "Syriac");
          break;
 
       case Thaana:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Thaana");
+         name = cs_mark_tr("QFontDatabase", "Thaana");
          break;
 
       case Devanagari:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Devanagari");
+         name = cs_mark_tr("QFontDatabase", "Devanagari");
          break;
 
       case Bengali:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Bengali");
+         name = cs_mark_tr("QFontDatabase", "Bengali");
          break;
 
       case Gurmukhi:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Gurmukhi");
+         name = cs_mark_tr("QFontDatabase", "Gurmukhi");
          break;
 
       case Gujarati:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Gujarati");
+         name = cs_mark_tr("QFontDatabase", "Gujarati");
          break;
 
       case Oriya:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Oriya");
+         name = cs_mark_tr("QFontDatabase", "Oriya");
          break;
 
       case Tamil:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Tamil");
+         name = cs_mark_tr("QFontDatabase", "Tamil");
          break;
 
       case Telugu:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Telugu");
+         name = cs_mark_tr("QFontDatabase", "Telugu");
          break;
 
       case Kannada:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Kannada");
+         name = cs_mark_tr("QFontDatabase", "Kannada");
          break;
 
       case Malayalam:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Malayalam");
+         name = cs_mark_tr("QFontDatabase", "Malayalam");
          break;
 
       case Sinhala:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Sinhala");
+         name = cs_mark_tr("QFontDatabase", "Sinhala");
          break;
 
       case Thai:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Thai");
+         name = cs_mark_tr("QFontDatabase", "Thai");
          break;
       case Lao:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Lao");
+         name = cs_mark_tr("QFontDatabase", "Lao");
          break;
 
       case Tibetan:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Tibetan");
+         name = cs_mark_tr("QFontDatabase", "Tibetan");
          break;
 
       case Myanmar:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Myanmar");
+         name = cs_mark_tr("QFontDatabase", "Myanmar");
          break;
 
       case Georgian:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Georgian");
+         name = cs_mark_tr("QFontDatabase", "Georgian");
          break;
 
       case Khmer:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Khmer");
+         name = cs_mark_tr("QFontDatabase", "Khmer");
          break;
 
       case SimplifiedChinese:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Simplified Chinese");
+         name = cs_mark_tr("QFontDatabase", "Simplified Chinese");
          break;
 
       case TraditionalChinese:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Traditional Chinese");
+         name = cs_mark_tr("QFontDatabase", "Traditional Chinese");
          break;
 
       case Japanese:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Japanese");
+         name = cs_mark_tr("QFontDatabase", "Japanese");
          break;
 
       case Korean:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Korean");
+         name = cs_mark_tr("QFontDatabase", "Korean");
          break;
 
       case Vietnamese:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Vietnamese");
+         name = cs_mark_tr("QFontDatabase", "Vietnamese");
          break;
 
       case Symbol:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Symbol");
+         name = cs_mark_tr("QFontDatabase", "Symbol");
          break;
 
       case Ogham:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Ogham");
+         name = cs_mark_tr("QFontDatabase", "Ogham");
          break;
 
       case Runic:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "Runic");
+         name = cs_mark_tr("QFontDatabase", "Runic");
          break;
 
       case Nko:
-         name = QT_TRANSLATE_NOOP("QFontDatabase", "N'Ko");
+         name = cs_mark_tr("QFontDatabase", "N'Ko");
          break;
 
       default:

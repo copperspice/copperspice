@@ -33,13 +33,13 @@ QString msgAboutCs()
 }
 
 static const char *application_menu_strings[] = {
-   QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU", "Services"),
-   QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU", "Hide %1"),
-   QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU", "Hide Others"),
-   QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU", "Show All"),
-   QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU", "Preferences..."),
-   QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU", "Quit %1"),
-   QT_TRANSLATE_NOOP("MAC_APPLICATION_MENU", "About %1")
+   cs_mark_tr("MAC_APPLICATION_MENU", "Services"),
+   cs_mark_tr("MAC_APPLICATION_MENU", "Hide %1"),
+   cs_mark_tr("MAC_APPLICATION_MENU", "Hide Others"),
+   cs_mark_tr("MAC_APPLICATION_MENU", "Show All"),
+   cs_mark_tr("MAC_APPLICATION_MENU", "Preferences..."),
+   cs_mark_tr("MAC_APPLICATION_MENU", "Quit %1"),
+   cs_mark_tr("MAC_APPLICATION_MENU", "About %1")
 };
 
 QString qt_mac_applicationmenu_string(int type)

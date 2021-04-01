@@ -74,10 +74,9 @@ class QHostInfoAgent : public QObject
 class QHostInfoPrivate
 {
  public:
-   inline QHostInfoPrivate()
-      : err(QHostInfo::NoError),
-        errorStr(QLatin1String(QT_TRANSLATE_NOOP("QHostInfo", "Unknown error"))),
-        lookupId(0) {
+   QHostInfoPrivate()
+      : err(QHostInfo::NoError), errorStr(QString::fromLatin1(cs_mark_tr("QHostInfo", "Unknown error"))), lookupId(0)
+   {
    }
 
 #ifndef QT_NO_BEARERMANAGEMENT

@@ -55,13 +55,10 @@ QSocketEngineHandler::~QSocketEngineHandler()
 }
 
 QAbstractSocketEnginePrivate::QAbstractSocketEnginePrivate()
-   : socketError(QAbstractSocket::UnknownSocketError)
-   , hasSetSocketError(false)
-   , socketErrorString(QLatin1String(QT_TRANSLATE_NOOP(QSocketLayer, "Unknown error")))
-   , socketState(QAbstractSocket::UnconnectedState)
-   , socketType(QAbstractSocket::UnknownSocketType)
-   , socketProtocol(QAbstractSocket::UnknownNetworkLayerProtocol)
-   , localPort(0), peerPort(0), receiver(nullptr)
+   : socketError(QAbstractSocket::UnknownSocketError), hasSetSocketError(false),
+     socketErrorString(QString::fromLatin1(cs_mark_tr("QSocketLayer", "Unknown error"))),
+     socketState(QAbstractSocket::UnconnectedState), socketType(QAbstractSocket::UnknownSocketType),
+     socketProtocol(QAbstractSocket::UnknownNetworkLayerProtocol), localPort(0), peerPort(0), receiver(nullptr)
 {
 }
 

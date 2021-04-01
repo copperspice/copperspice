@@ -85,9 +85,6 @@
         return (returnValue); \
     } } while (false)
 
-#define Q_TR(a) QT_TRANSLATE_NOOP(QNativeSocketEngine, a)
-
-
 QNativeSocketEnginePrivate::QNativeSocketEnginePrivate()
    : socketDescriptor(-1), readNotifier(nullptr), writeNotifier(nullptr), exceptNotifier(nullptr)
 {

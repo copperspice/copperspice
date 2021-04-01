@@ -3460,20 +3460,20 @@ const struct QUnicodeControlCharacter {
    const char *text;
    ushort character;
 } qt_controlCharacters[NUM_CONTROL_CHARACTERS] = {
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "LRM Left-to-right mark"), 0x200e },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "RLM Right-to-left mark"), 0x200f },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "ZWJ Zero width joiner"), 0x200d },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "ZWNJ Zero width non-joiner"), 0x200c },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "ZWSP Zero width space"), 0x200b },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "LRE Start of left-to-right embedding"), 0x202a },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "RLE Start of right-to-left embedding"), 0x202b },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "LRO Start of left-to-right override"), 0x202d },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "RLO Start of right-to-left override"), 0x202e },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "PDF Pop directional formatting"), 0x202c },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "LRI Left-to-right isolate"), 0x2066 },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "RLI Right-to-left isolate"), 0x2067 },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "FSI First strong isolate"), 0x2068 },
-   { QT_TRANSLATE_NOOP("QUnicodeControlCharacterMenu", "PDI Pop directional isolate"), 0x2069 }
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "LRM Left-to-right mark"), 0x200e },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "RLM Right-to-left mark"), 0x200f },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "ZWJ Zero width joiner"), 0x200d },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "ZWNJ Zero width non-joiner"), 0x200c },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "ZWSP Zero width space"), 0x200b },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "LRE Start of left-to-right embedding"), 0x202a },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "RLE Start of right-to-left embedding"), 0x202b },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "LRO Start of left-to-right override"), 0x202d },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "RLO Start of right-to-left override"), 0x202e },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "PDF Pop directional formatting"), 0x202c },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "LRI Left-to-right isolate"), 0x2066 },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "RLI Right-to-left isolate"), 0x2067 },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "FSI First strong isolate"), 0x2068 },
+   { cs_mark_tr("QUnicodeControlCharacterMenu", "PDI Pop directional isolate"), 0x2069 }
 };
 
 QUnicodeControlCharacterMenu::QUnicodeControlCharacterMenu(QObject *_editWidget, QWidget *parent)
