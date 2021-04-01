@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>AbstractFindWidget</name>
     <message>
@@ -20,51 +20,51 @@
         <translation>M&amp;ots complets</translation>
     </message>
     <message>
-        <source>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
-        <translation>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Recherche à partir du début</translation>
+        <source>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
+        <translation>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Recherche à partir du début</translation>
     </message>
 </context>
 <context>
     <name>AbstractItemEditor</name>
     <message>
         <source>Selectable</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnable</translation>
     </message>
     <message>
         <source>Editable</source>
-        <translation type="unfinished"></translation>
+        <translation>Éditable</translation>
     </message>
     <message>
         <source>DragEnabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Glisser activé</translation>
     </message>
     <message>
         <source>DropEnabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Déposer activé</translation>
     </message>
     <message>
         <source>UserCheckable</source>
-        <translation type="unfinished"></translation>
+        <translation>Cochable par l&apos;utilisateur</translation>
     </message>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Activé</translation>
     </message>
     <message>
         <source>Tristate</source>
-        <translation type="unfinished"></translation>
+        <translation>Trois états</translation>
     </message>
     <message>
         <source>Unchecked</source>
-        <translation type="unfinished"></translation>
+        <translation>Non coché</translation>
     </message>
     <message>
         <source>PartiallyChecked</source>
-        <translation type="unfinished"></translation>
+        <translation>Coché partiellement</translation>
     </message>
     <message>
         <source>Checked</source>
-        <translation type="unfinished"></translation>
+        <translation>Coché</translation>
     </message>
 </context>
 <context>
@@ -105,7 +105,6 @@
     </message>
     <message>
         <source>The font file &apos;%1&apos; could not be loaded.</source>
-        <translatorcomment>passé composé plutôt</translatorcomment>
         <translation>Le fichier de la police &apos;%1&apos; n&apos;a pas pu chargé.</translation>
     </message>
     <message>
@@ -153,7 +152,6 @@
     </message>
     <message>
         <source>Error Removing Fonts</source>
-        <translatorcomment>s/de/des/  pour être cohérent avec le suivant...</translatorcomment>
         <translation>Erreur lors de la suppression des polices</translation>
     </message>
     <message>
@@ -199,7 +197,6 @@
     </message>
     <message>
         <source>Solid</source>
-        <translatorcomment>c&apos;est plutôt continu ou &quot;trait continu&quot; pour moi</translatorcomment>
         <translation>Trait continu</translation>
     </message>
     <message>
@@ -270,58 +267,6 @@
 <context>
     <name>Command</name>
     <message>
-        <source>Change signal</source>
-        <translation>Modifier le signal</translation>
-    </message>
-    <message>
-        <source>Change slot</source>
-        <translation>Modifier le slot</translation>
-    </message>
-    <message>
-        <source>Change signal-slot connection</source>
-        <translation>Modfier la connection signal-slot</translation>
-    </message>
-    <message>
-        <source>Change sender</source>
-        <translatorcomment>expéditeur/source</translatorcomment>
-        <translation>Modifier l&apos;envoyeur</translation>
-    </message>
-    <message>
-        <source>Change receiver</source>
-        <translatorcomment>destinataire++/cible?</translatorcomment>
-        <translation>Modifier le destinataire</translation>
-    </message>
-    <message>
-        <source>Create button group</source>
-        <translation>Créer un groupe de boutons</translation>
-    </message>
-    <message>
-        <source>Break button group</source>
-        <translation>Dissocier le groupe de bouton</translation>
-    </message>
-    <message>
-        <source>Break button group &apos;%1&apos;</source>
-        <translation>Dissossier le groupe de bouton &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Add buttons to group</source>
-        <translation>Ajouter les boutons au groupe</translation>
-    </message>
-    <message>
-        <source>Add &apos;%1&apos; to &apos;%2&apos;</source>
-        <extracomment>Command description for adding buttons to a QButtonGroup</extracomment>
-        <translation>Ajouter &apos;%1&apos; à &apos;%2&apos;</translation>
-    </message>
-    <message>
-        <source>Remove buttons from group</source>
-        <translation>Retirer les boutons du groupe</translation>
-    </message>
-    <message>
-        <source>Remove &apos;%1&apos; from &apos;%2&apos;</source>
-        <extracomment>Command description for removing buttons from a QButtonGroup</extracomment>
-        <translation>Retirer &apos;%1&apos; de &apos;%2&apos;</translation>
-    </message>
-    <message>
         <source>Add connection</source>
         <translation>Ajouter une connexion</translation>
     </message>
@@ -342,6 +287,11 @@
         <translation>Modifier la cible</translation>
     </message>
     <message>
+        <source>Add &apos;%1&apos; to &apos;%2&apos;</source>
+        <extracomment>Command description for adding buttons to a QButtonGroup</extracomment>
+        <translation>Ajouter &apos;%1&apos; à &apos;%2&apos;</translation>
+    </message>
+    <message>
         <source>Morph %1/&apos;%2&apos; into %3</source>
         <extracomment>MorphWidgetCommand description</extracomment>
         <translation>Transformer %1/&apos;%2&apos; en %3</translation>
@@ -352,7 +302,6 @@
     </message>
     <message>
         <source>Change Z-order of &apos;%1&apos;</source>
-        <translatorcomment>l&apos;ordre de &apos;%1&apos; sur l&apos;axe z? profondeur ?</translatorcomment>
         <translation>Modifier la profondeur de &apos;%1&apos;</translation>
     </message>
     <message>
@@ -388,16 +337,12 @@
         <translation>Mettre en page verticalement</translation>
     </message>
     <message>
-        <source>Lay out horizontaly</source>
-        <translation type="obsolete">Mettre en page horizontalement</translation>
-    </message>
-    <message>
         <source>Lay out horizontally</source>
         <translation>Mettre en page horizontalement</translation>
     </message>
     <message>
         <source>Break layout</source>
-        <translation>Casser la mise en page</translation>
+        <translation>Casser le layout</translation>
     </message>
     <message>
         <source>Simplify Grid Layout</source>
@@ -464,16 +409,8 @@
         <translation>Supprimer la sous-fenêtre</translation>
     </message>
     <message>
-        <source>page</source>
-        <translation type="obsolete">page</translation>
-    </message>
-    <message>
         <source>Insert Subwindow</source>
         <translation>Insérer une sous-fenêtre</translation>
-    </message>
-    <message>
-        <source>subwindow</source>
-        <translation type="obsolete">sous-fenêtre</translation>
     </message>
     <message>
         <source>Subwindow</source>
@@ -517,7 +454,7 @@
     </message>
     <message>
         <source>Change layout alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier l&apos;alignement de la mise en page</translation>
     </message>
     <message>
         <source>Set action text</source>
@@ -584,12 +521,53 @@
         </translation>
     </message>
     <message>
-        <source>Change script</source>
-        <translation>Modifier le script</translation>
-    </message>
-    <message>
         <source>Change signals/slots</source>
         <translation>Modifier signaux/slots</translation>
+    </message>
+    <message>
+        <source>Change signal</source>
+        <translation>Modifier le signal</translation>
+    </message>
+    <message>
+        <source>Change slot</source>
+        <translation>Modifier le slot</translation>
+    </message>
+    <message>
+        <source>Change signal-slot connection</source>
+        <translation>Modfier la connection signal-slot</translation>
+    </message>
+    <message>
+        <source>Change sender</source>
+        <translation>Modifier l&apos;envoyeur</translation>
+    </message>
+    <message>
+        <source>Change receiver</source>
+        <translation>Modifier le destinataire</translation>
+    </message>
+    <message>
+        <source>Create button group</source>
+        <translation>Créer un groupe de boutons</translation>
+    </message>
+    <message>
+        <source>Break button group</source>
+        <translation>Dissocier le groupe de bouton</translation>
+    </message>
+    <message>
+        <source>Break button group &apos;%1&apos;</source>
+        <translation>Dissossier le groupe de bouton &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Add buttons to group</source>
+        <translation>Ajouter les boutons au groupe</translation>
+    </message>
+    <message>
+        <source>Remove buttons from group</source>
+        <translation>Retirer les boutons du groupe</translation>
+    </message>
+    <message>
+        <source>Remove &apos;%1&apos; from &apos;%2&apos;</source>
+        <extracomment>Command description for removing buttons from a QButtonGroup</extracomment>
+        <translation>Retirer &apos;%1&apos; de &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -641,66 +619,11 @@
     <message>
         <source>High (192 x 192)</source>
         <extracomment>Embedded device high definition screen resolution</extracomment>
-        <translatorcomment>&quot;haute resolution&quot; would be missleading</translatorcomment>
         <translation>Grand (192 x 192)</translation>
     </message>
 </context>
 <context>
     <name>Designer</name>
-    <message>
-        <source>Qt Designer</source>
-        <translation>Qt Designer</translation>
-    </message>
-    <message>
-        <source>This file contains top level spacers.&lt;br&gt;They have &lt;b&gt;NOT&lt;/b&gt; been saved into the form.</source>
-        <translation>Ce fichier contient des ressorts de premier niveau. &lt;br&gt;Ils ne sont &lt;b&gt;PAS&lt;/b&gt; sauvegardé dans le formulaire.</translation>
-    </message>
-    <message>
-        <source>Perhaps you forgot to create a layout?</source>
-        <translation>Peut-être avez-vous oublié de créer un layout ?</translation>
-    </message>
-    <message>
-        <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
-        <translation>Fichier UI invalide. L&apos;élément racine &lt;ui&gt; est manquant.</translation>
-    </message>
-    <message>
-        <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
-        <translation>Une erreur est survenue lors de la lecture du fichier UI à la ligne %1, colonne %2 : %3</translation>
-    </message>
-    <message>
-        <source>This file cannot be read because it was created using %1.</source>
-        <translation>Ce fichier ne peut pas être lu car il a été créé à l&apos;aide de %1.</translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
-        <translation>Ce fichier a été créé à l&apos;aide du Designer de Qt-%1 et ne peut être lu.</translation>
-    </message>
-    <message>
-        <source>The converted file could not be read.</source>
-        <translation>Le fichier converti ne peut pas être lu.</translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and will be converted to a new form by Qt Designer.</source>
-        <translation>Ce fichier a été créé par le Designer de Qt-%1 et sera converti au nouveau format par Qt Designer.</translation>
-    </message>
-    <message>
-        <source>The old form has not been touched, but you will have to save the form under a new name.</source>
-        <translation>L&apos;ancienne interface n&apos;a pas été modifiée, vous devez sauvergarder l&apos;interface sous un nouveau nom.</translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and could not be read:
-%2</source>
-        <translation>Le fichier a été créé à l&apos;aide de Designer de Qt-%1 et ne peut pas être lu :
-%2</translation>
-    </message>
-    <message>
-        <source>Please run it through &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; to convert it to Qt-4&apos;s ui format.</source>
-        <translation>Veuillez le faire passer par &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; pour le convertir au format de fichier de Qt 4.</translation>
-    </message>
-    <message>
-        <source>This file cannot be read because the extra info extension failed to load.</source>
-        <translation>Ce fichier ne peut pas être lu car les informations d&apos;extension n&apos;ont pu être chargées.</translation>
-    </message>
     <message>
         <source>Unable to launch %1.</source>
         <translation>Impossible de lancer %1.</translation>
@@ -716,6 +639,14 @@
     <message>
         <source>Promoted Widgets</source>
         <translation>Widgets promus</translation>
+    </message>
+    <message>
+        <source>Qt Designer</source>
+        <translation>Qt Designer</translation>
+    </message>
+    <message>
+        <source>This file cannot be read because the extra info extension failed to load.</source>
+        <translation>Ce fichier ne peut pas être lu car les informations d&apos;extension n&apos;ont pu être chargées.</translation>
     </message>
 </context>
 <context>
@@ -885,16 +816,12 @@
     <name>FormBuilder</name>
     <message>
         <source>Invalid stretch value for &apos;%1&apos;: &apos;%2&apos;</source>
-        <extracomment>Parsing layout stretch values
-----------
-Parsing layout stretch values</extracomment>
+        <extracomment>Parsing layout stretch values</extracomment>
         <translation>Valeur d&apos;extension invalide pour &apos;%1&apos; : &apos;%2&apos;</translation>
     </message>
     <message>
         <source>Invalid minimum size for &apos;%1&apos;: &apos;%2&apos;</source>
-        <extracomment>Parsing grid layout minimum size values
-----------
-Parsing grid layout minimum size values</extracomment>
+        <extracomment>Parsing grid layout minimum size values</extracomment>
         <translation>Taille minimum invalide pour &apos;%1&apos; : &apos;%2&apos;</translation>
     </message>
 </context>
@@ -943,7 +870,6 @@ Parsing grid layout minimum size values</extracomment>
     </message>
     <message>
         <source>&amp;Buddy:</source>
-        <translatorcomment>copain c&apos;est un peu beaucoup ptet</translatorcomment>
         <translation>&amp;Copain :</translation>
     </message>
     <message>
@@ -1187,25 +1113,26 @@ Parsing grid layout minimum size values</extracomment>
     </message>
 </context>
 <context>
-    <name>Q3WizardContainer</name>
-    <message>
-        <source>Page</source>
-        <translation>Page</translation>
-    </message>
-</context>
-<context>
     <name>QAbstractFormBuilder</name>
-    <message>
-        <source>Unexpected element &lt;%1&gt;</source>
-        <translation>Élément imprévu &lt;%1&gt;</translation>
-    </message>
     <message>
         <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
         <translation>Une erreur s&apos;est produite lors de la lecture du fichier UI à la ligne %1, colonne %2 : %3</translation>
     </message>
     <message>
+        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
+        <translation>Ce fichier a été créé à l&apos;aide du Designer de Qt-%1 et ne peut être lu.</translation>
+    </message>
+    <message>
+        <source>This file cannot be read because it was created using %1.</source>
+        <translation>Ce fichier ne peut pas être lu car il a été créé à l&apos;aide de %1.</translation>
+    </message>
+    <message>
         <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
         <translation>Fichier UI invalide : l&apos;élément racine &lt;ui&gt; est manquant.</translation>
+    </message>
+    <message>
+        <source>Invalid UI file</source>
+        <translation>Fichier UI invalide</translation>
     </message>
     <message>
         <source>The creation of a widget of the class &apos;%1&apos; failed.</source>
@@ -1236,10 +1163,6 @@ Ceci indique une incohérence dans le fichier ui.</translation>
     <message>
         <source>Invalid QButtonGroup reference &apos;%1&apos; referenced by &apos;%2&apos;.</source>
         <translation>Référence invalide &apos;%1&apos; à QButtonGroup, référencé par &apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <source>This version of the uitools library is linked without script support.</source>
-        <translation>Cette version de la bibliothèque uitools n&apos;a pas le support des scripts.</translation>
     </message>
 </context>
 <context>
@@ -1314,34 +1237,12 @@ Ceci indique une incohérence dans le fichier ui.</translation>
         <source>Cannot set an empty include file.</source>
         <translation>Impossible de créer un fichier include vide.</translation>
     </message>
-    <message>
-        <source>Exception at line %1: %2</source>
-        <translation>Exception à la ligne %1 : %2</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation>Erreur inconnue</translation>
-    </message>
-    <message>
-        <source>An error occurred while running the script for %1: %2
-Script: %3</source>
-        <translation>Une erreur s&apos;est produite lors de l&apos;exécution du script de %1 : %2
-Script : %3</translation>
-    </message>
 </context>
 <context>
     <name>QDesigner</name>
     <message>
         <source>%1 - warning</source>
         <translation>Avertissement - %1</translation>
-    </message>
-    <message>
-        <source>Qt Designer</source>
-        <translation>Qt Designer</translation>
-    </message>
-    <message>
-        <source>This application cannot be used for the Console edition of Qt</source>
-        <translation>Cette application ne peut pas être utilisée avec l&apos;édition console de Qt</translation>
     </message>
 </context>
 <context>
@@ -1445,10 +1346,6 @@ Voulez-vous le remplacer ?</translation>
         <translation>Aide du widget courant</translation>
     </message>
     <message>
-        <source>What&apos;s New in Qt Designer?</source>
-        <translation>Quoi de neuf dans Qt Designer ?</translation>
-    </message>
-    <message>
         <source>About Plugins</source>
         <translation>À propos des plugins</translation>
     </message>
@@ -1509,6 +1406,10 @@ Voulez vous mettre à jour l&apos;emplacement du fichier ou générer un nouveau
     <message>
         <source>&amp;New Form</source>
         <translation>&amp;Nouveau formulaire</translation>
+    </message>
+    <message>
+        <source>Qt Designer</source>
+        <translation>Qt Designer</translation>
     </message>
     <message>
         <source>Save Form?</source>
@@ -1635,10 +1536,6 @@ Voulez-vous réessayer ?</translation>
 </context>
 <context>
     <name>QDesignerFormBuilder</name>
-    <message>
-        <source>Script errors occurred:</source>
-        <translation>Erreurs du script :</translation>
-    </message>
     <message>
         <source>The preview failed to build.</source>
         <translation>La construction de la prévisualisation a échoué.</translation>
@@ -1810,7 +1707,6 @@ Les pages du conteneur ne devraient être ajoutées que par spécification dans 
     </message>
     <message>
         <source>Resource Browser</source>
-        <translatorcomment>plural</translatorcomment>
         <translation>Explorateur de ressources</translation>
     </message>
     <message>
@@ -1829,12 +1725,8 @@ Les pages du conteneur ne devraient être ajoutées que par spécification dans 
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation type="obsolete">Édition</translation>
-    </message>
-    <message>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Édition</translation>
     </message>
     <message>
         <source>F&amp;orm</source>
@@ -1900,21 +1792,15 @@ Les pages du conteneur ne devraient être ajoutées que par spécification dans 
         <translation>La dernière session de Designer n&apos;a pas été fermée correctement. Des fichiers de sauvegarde existent. Voulez-vous les charger ?</translation>
     </message>
     <message>
-        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened.</source>
-        <translation>Le fichier &lt;b&gt;%1&lt;/b&gt; n&apos;a pas pu être ouvert.</translation>
-    </message>
-    <message>
-        <source>The file &lt;b&gt;%1&lt;/b&gt; is not a valid Designer UI file.</source>
-        <translation>Le fichier &lt;b&gt;%1&lt;/b&gt; n&apos;est pas un fichier valide d&apos;UI de Designer.</translation>
+        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened: %2</source>
+        <translation>Le fichier &lt;b&gt;%1&lt;/b&gt; ne peut pas être ouvert : %2</translation>
     </message>
 </context>
 <context>
     <name>QFormBuilder</name>
     <message>
         <source>An empty class name was passed on to %1 (object name: &apos;%2&apos;).</source>
-        <extracomment>Empty class name passed to widget factory method
-----------
-Empty class name passed to widget factory method</extracomment>
+        <extracomment>Empty class name passed to widget factory method</extracomment>
         <translation>Un nom de classe vide a été passé à %1 (nom d&apos;objet &apos;%2&apos;).</translation>
     </message>
     <message>
@@ -2558,17 +2444,10 @@ Empty class name passed to widget factory method</extracomment>
     </message>
 </context>
 <context>
-    <name>QtKeySequenceEdit</name>
-    <message>
-        <source>Clear Shortcut</source>
-        <translation>Effacer les racourcis</translation>
-    </message>
-</context>
-<context>
     <name>QtLocalePropertyManager</name>
     <message>
         <source>&lt;Invalid&gt;</source>
-        <translation type="unfinished">&lt;Invalide&gt;</translation>
+        <translation>&lt;Invalide&gt;</translation>
     </message>
     <message>
         <source>%1, %2</source>
@@ -2694,7 +2573,7 @@ Empty class name passed to widget factory method</extracomment>
     </message>
     <message>
         <source>I</source>
-        <translation></translation>
+        <translation>I</translation>
     </message>
     <message>
         <source>New Resource</source>
@@ -2913,6 +2792,10 @@ vers
         <source>Copy Path</source>
         <translation>Copier le chemin</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtre</translation>
+    </message>
 </context>
 <context>
     <name>QtResourceViewDialog</name>
@@ -3130,15 +3013,6 @@ Voulez-vous le remplacer ?</translation>
     </message>
 </context>
 <context>
-    <name>ScriptErrorDialog</name>
-    <message>
-        <source>An error occurred while running the scripts for &quot;%1&quot;:
-</source>
-        <translation>Une erreur est apparue lors de l&apos;execution des scripts de &quot;%1&quot; :
-</translation>
-    </message>
-</context>
-<context>
     <name>SelectSignalDialog</name>
     <message>
         <source>Go to slot</source>
@@ -3268,47 +3142,8 @@ Voulez-vous le remplacer ?</translation>
         <translation>&lt;br/&gt;Qt Designer est une interface de création d&apos;interface graphique pour les applications Qt.&lt;br/&gt;</translation>
     </message>
     <message>
-        <source>%1&lt;br/&gt;Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).</source>
-        <translation>%1&lt;br/&gt;Copyright (C) 2012 Nokia Corporation et/ou ses filiales.</translation>
-    </message>
-</context>
-<context>
-    <name>VideoPlayerTaskMenu</name>
-    <message>
-        <source>Available Mime Types</source>
-        <translation>Types MIME disponibles</translation>
-    </message>
-    <message>
-        <source>Display supported mime types...</source>
-        <translation>Afficher les types MIME supportés...</translation>
-    </message>
-    <message>
-        <source>Load...</source>
-        <translation>Ouvrir...</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Lecture</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation>Pause</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation>Arrêter</translation>
-    </message>
-    <message>
-        <source>Choose Video Player Media Source</source>
-        <translation>Choisir une source de média pour le lecteur video</translation>
-    </message>
-    <message>
-        <source>An error has occurred in &apos;%1&apos;: %2</source>
-        <translation>Une erreur s&apos;est produite dans &apos;%1&apos; : %2</translation>
-    </message>
-    <message>
-        <source>Video Player Error</source>
-        <translation>Erreur du lecteur video</translation>
+        <source>%1&lt;br/&gt;Copyright (C) %2 The Qt Company Ltd.</source>
+        <translation>%1&lt;br/&gt;Copyright (C) %2 The Qt Company Ltd.</translation>
     </message>
 </context>
 <context>
@@ -3316,6 +3151,13 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <source>The file contains a custom widget &apos;%1&apos; whose base class (%2) differs from the current entry in the widget database (%3). The widget database is left unchanged.</source>
         <translation>Le fichier contient un widget personnalisé &apos;%1&apos; dont la classe de base (%2) est différente de l&apos;entrée dans la base de données de widget (%3). La base de données de widget n&apos;a pas été modifiée.</translation>
+    </message>
+</context>
+<context>
+    <name>qdesigner_internal</name>
+    <message>
+        <source>%1 Widget</source>
+        <translation>%1 Widget</translation>
     </message>
 </context>
 <context>
@@ -3369,6 +3211,10 @@ Voulez-vous le remplacer ?</translation>
         <translation>Vue détaillée</translation>
     </message>
     <message>
+        <source>Filter</source>
+        <translation>Filtre</translation>
+    </message>
+    <message>
         <source>New action</source>
         <translation>Nouvelle action</translation>
     </message>
@@ -3414,29 +3260,6 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <source>ToolTip</source>
         <translation>Info-bulle</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::BrushManagerProxy</name>
-    <message>
-        <source>The element &apos;%1&apos; is missing the required attribute &apos;%2&apos;.</source>
-        <translation>L&apos;attribut requis &apos;%2&apos; est manquant pour l&apos;élément &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Empty brush name encountered.</source>
-        <translation>Un nom vide de pinceau a été rencontré.</translation>
-    </message>
-    <message>
-        <source>An unexpected element &apos;%1&apos; was encountered.</source>
-        <translation>L&apos;élément inattendu &apos;%1&apos; a été rencontré.</translation>
-    </message>
-    <message>
-        <source>An error occurred when reading the brush definition file &apos;%1&apos; at line line %2, column %3: %4</source>
-        <translation>Une erreur est apparue lors de la lecture du fichier &apos;%1&apos; de définition des pinceaux à la ligne %2, colonne %3 : %4</translation>
-    </message>
-    <message>
-        <source>An error occurred when reading the resource file &apos;%1&apos; at line %2, column %3: %4</source>
-        <translation>Une erreur est survenue lors de la lecture du fichier de ressource &apos;%1&apos; à la ligne %2, colonne %3 : %4</translation>
     </message>
 </context>
 <context>
@@ -3705,6 +3528,18 @@ Voulez-vous le remplacer ?</translation>
 <context>
     <name>qdesigner_internal::DesignerPropertyManager</name>
     <message>
+        <source>translatable</source>
+        <translation>Traduisible</translation>
+    </message>
+    <message>
+        <source>disambiguation</source>
+        <translation>désambiguation</translation>
+    </message>
+    <message>
+        <source>comment</source>
+        <translation>commentaire</translation>
+    </message>
+    <message>
         <source>AlignLeft</source>
         <translation>AlignementGauche</translation>
     </message>
@@ -3745,12 +3580,11 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Inherited</source>
-        <translatorcomment>pour la palette</translatorcomment>
         <translation>Héritée</translation>
     </message>
     <message>
         <source>[Theme] %1</source>
-        <translation type="unfinished"></translation>
+        <translation>[Thème] %1</translation>
     </message>
     <message>
         <source>Horizontal</source>
@@ -3762,7 +3596,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème</translation>
     </message>
     <message>
         <source>Normal Off</source>
@@ -3795,18 +3629,6 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <source>Selected On</source>
         <translation>Marche sélectionné</translation>
-    </message>
-    <message>
-        <source>translatable</source>
-        <translation>Traduisible</translation>
-    </message>
-    <message>
-        <source>disambiguation</source>
-        <translation>désambiguation</translation>
-    </message>
-    <message>
-        <source>comment</source>
-        <translation>commentaire</translation>
     </message>
 </context>
 <context>
@@ -3939,21 +3761,6 @@ Voulez-vous le remplacer ?</translation>
     </message>
 </context>
 <context>
-    <name>qdesigner_internal::FilterWidget</name>
-    <message>
-        <source>&lt;Filter&gt;</source>
-        <translation type="obsolete">&lt;Filtre&gt;</translation>
-    </message>
-    <message>
-        <source>Filter</source>
-        <translation>Filtre</translation>
-    </message>
-    <message>
-        <source>Clear text</source>
-        <translation>Effacer le texte</translation>
-    </message>
-</context>
-<context>
     <name>qdesigner_internal::FormEditor</name>
     <message>
         <source>Resource File Changed</source>
@@ -3990,12 +3797,12 @@ Voulez-vous le remplacer ?</translation>
         <translation>Redimensionner</translation>
     </message>
     <message>
-        <source>Key Move</source>
-        <translation>Déplacement au clavier</translation>
-    </message>
-    <message>
         <source>Key Resize</source>
         <translation>Redimensionnement au clavier</translation>
+    </message>
+    <message>
+        <source>Key Move</source>
+        <translation>Déplacement au clavier</translation>
     </message>
     <message numerus="yes">
         <source>Paste %n action(s)</source>
@@ -4061,6 +3868,14 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <source>Delete</source>
         <translation>Supprimer</translation>
+    </message>
+    <message>
+        <source>Invalid form</source>
+        <translation>Formulaire invalide</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;This file contains top level spacers.&lt;br/&gt;They will &lt;b&gt;not&lt;/b&gt; be saved.&lt;/p&gt;&lt;p&gt;Perhaps you forgot to create a layout?&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Ce fichier contient des espaceurs de premier niveau.&lt;br/&gt;Ils &lt;b&gt;ne seront pas&lt;/b&gt; sauvegardés.&lt;/p&gt;&lt;p&gt;Peut-être que vous avez oublié de créer un layout ?&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -4138,14 +3953,6 @@ Voulez-vous le remplacer ?</translation>
         <translation>Mettre en page horizontalement les widgets sélectionnés</translation>
     </message>
     <message>
-        <source>Lays out the selected widgets horizontally in a splitter</source>
-        <translation>Met en page les widgets sélectionnés horizontalement à l&apos;aide d&apos;un séparateur</translation>
-    </message>
-    <message>
-        <source>Lays out the selected widgets horizontaly</source>
-        <translation type="obsolete">Mettre en page horizontalement les widgets sélectionnés</translation>
-    </message>
-    <message>
         <source>Lay Out &amp;Vertically</source>
         <translation>Mettre en page &amp;verticalement</translation>
     </message>
@@ -4174,8 +3981,8 @@ Voulez-vous le remplacer ?</translation>
         <translation>Mettre en page horizontalement avec un sé&amp;parateur</translation>
     </message>
     <message>
-        <source>Lays out the selected widgets horizontaly in a splitter</source>
-        <translation type="obsolete">Met en page les widgets sélectionnés horizontalement à l&apos;aide d&apos;un séparateur</translation>
+        <source>Lays out the selected widgets horizontally in a splitter</source>
+        <translation>Met en page les widgets sélectionnés horizontalement à l&apos;aide d&apos;un séparateur</translation>
     </message>
     <message>
         <source>Lay Out Vertically in Sp&amp;litter</source>
@@ -4366,11 +4173,11 @@ Voulez-vous le remplacer ?</translation>
     <name>qdesigner_internal::IconThemeDialog</name>
     <message>
         <source>Set Icon From Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir l&apos;icône à partir du thème</translation>
     </message>
     <message>
         <source>Input icon name from the current theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer le nom de l&apos;icône à partir du thème courant :</translation>
     </message>
 </context>
 <context>
@@ -4519,40 +4326,28 @@ Voulez-vous le remplacer ?</translation>
         <translation>&amp;Nom de l&apos;objet :</translation>
     </message>
     <message>
-        <source>&amp;Icon:</source>
-        <translation>&amp;Icône :</translation>
-    </message>
-    <message>
-        <source>Shortcut:</source>
-        <translation type="obsolete">Raccourci :</translation>
-    </message>
-    <message>
-        <source>Checkable:</source>
-        <translation type="obsolete">Peut être cochée :</translation>
-    </message>
-    <message>
-        <source>ToolTip:</source>
-        <translation type="obsolete">Info-bulle :</translation>
+        <source>T&amp;oolTip:</source>
+        <translation>I&amp;nfo-bulle :</translation>
     </message>
     <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <source>T&amp;oolTip:</source>
-        <translation type="unfinished"></translation>
+        <source>Icon th&amp;eme:</source>
+        <translation>Icône du thème :</translation>
     </message>
     <message>
-        <source>Icon th&amp;eme:</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;Icon:</source>
+        <translation>&amp;Icône :</translation>
     </message>
     <message>
         <source>&amp;Checkable:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cochable :</translation>
     </message>
     <message>
         <source>&amp;Shortcut:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Raccourci :</translation>
     </message>
 </context>
 <context>
@@ -4701,13 +4496,6 @@ Veuillez sélectionner un autre nom.</translation>
     </message>
 </context>
 <context>
-    <name>qdesigner_internal::ObjectInspector::ObjectInspectorPrivate</name>
-    <message>
-        <source>Change Current Page</source>
-        <translation type="obsolete">Modifier la page courante</translation>
-    </message>
-</context>
-<context>
     <name>qdesigner_internal::OrderDialog</name>
     <message>
         <source>Change Page Order</source>
@@ -4811,7 +4599,7 @@ Veuillez sélectionner un autre nom.</translation>
     </message>
     <message>
         <source>Set Icon From Theme...</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir l&apos;icône à partir du thème...</translation>
     </message>
     <message>
         <source>Copy Path</source>
@@ -4827,7 +4615,7 @@ Veuillez sélectionner un autre nom.</translation>
     </message>
     <message>
         <source>[Theme] %1</source>
-        <translation type="unfinished"></translation>
+        <translation>[Thème] %1</translation>
     </message>
 </context>
 <context>
@@ -4857,11 +4645,11 @@ Veuillez sélectionner un autre nom.</translation>
     </message>
     <message>
         <source>Loaded Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins chargés</translation>
     </message>
     <message>
         <source>Failed Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins en échec</translation>
     </message>
     <message>
         <source>Qt Designer couldn&apos;t find any plugins</source>
@@ -4925,35 +4713,6 @@ Veuillez sélectionner un autre nom.</translation>
     </message>
 </context>
 <context>
-    <name>qdesigner_internal::PreviewConfigurationWidget::PreviewConfigurationWidgetPrivate</name>
-    <message>
-        <source>Load Custom Device Skin</source>
-        <translation type="obsolete">Charger le revêtement d&apos;appareil personnalisé</translation>
-    </message>
-    <message>
-        <source>All QVFB Skins (*.%1)</source>
-        <translation type="obsolete">Tous les revêtements QVFB (*.%1)</translation>
-    </message>
-    <message>
-        <source>%1 - Duplicate Skin</source>
-        <translation type="obsolete">%1 - Revêtement doublon</translation>
-    </message>
-    <message>
-        <source>The skin &apos;%1&apos; already exists.</source>
-        <translation type="obsolete">Le revêtement &apos;%1&apos; existe déjà.</translation>
-    </message>
-    <message>
-        <source>%1 - Error</source>
-        <translation type="obsolete">%1 - -Erreur</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid skin directory:
-%2</source>
-        <translation type="obsolete">%1 n&apos;est pas un répertoire de revêtements valide :
-%2</translation>
-    </message>
-</context>
-<context>
     <name>qdesigner_internal::PreviewDeviceSkin</name>
     <message>
         <source>&amp;Portrait</source>
@@ -4995,46 +4754,57 @@ je préfère les mines de Pompéi.</translation>
     <name>qdesigner_internal::PreviewWidget</name>
     <message>
         <source>Preview Window</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Fenêtre de prévisualisation</translation>
     </message>
     <message>
         <source>LineEdit</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>LineEdit</translation>
     </message>
     <message>
         <source>ComboBox</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>ComboBox</translation>
     </message>
     <message>
         <source>PushButton</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>PushButton</translation>
     </message>
     <message>
         <source>ButtonGroup2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>ButtonGroup2</translation>
     </message>
     <message>
         <source>CheckBox1</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>CheckBox1</translation>
     </message>
     <message>
         <source>CheckBox2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>CheckBox2</translation>
     </message>
     <message>
         <source>ButtonGroup</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>ButtonGroup</translation>
     </message>
     <message>
         <source>RadioButton1</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>RadioButton1</translation>
     </message>
     <message>
         <source>RadioButton2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>RadioButton2</translation>
     </message>
     <message>
         <source>RadioButton3</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>BoutonRadio1</translation>
     </message>
 </context>
@@ -5123,6 +4893,10 @@ je préfère les mines de Pompéi.</translation>
         <translation>Configurer l&apos;éditeur de propriétés</translation>
     </message>
     <message>
+        <source>Filter</source>
+        <translation>Filtre</translation>
+    </message>
+    <message>
         <source>Object: %1
 Class: %2</source>
         <translation>Objet : %1
@@ -5182,39 +4956,39 @@ Classe : %2</translation>
     <name>qdesigner_internal::QDesignerTaskMenu</name>
     <message>
         <source>Layout Alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Alignement de la mise en page</translation>
     </message>
     <message>
         <source>No Horizontal Alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas d&apos;alignement horizontal</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Gauche</translation>
     </message>
     <message>
         <source>Center Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrer horizontalement</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Droite</translation>
     </message>
     <message>
         <source>No Vertical Alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas d&apos;alignement vertical</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Haut</translation>
     </message>
     <message>
         <source>Center Vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrer verticalement</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <source>Change objectName...</source>
@@ -5247,10 +5021,6 @@ Classe : %2</translation>
     <message>
         <source>Remove Status Bar</source>
         <translation>Supprimer la barre de status</translation>
-    </message>
-    <message>
-        <source>Change script...</source>
-        <translation>Modifier le script...</translation>
     </message>
     <message>
         <source>Change signals/slots...</source>
@@ -5311,22 +5081,6 @@ Classe : %2</translation>
 <context>
     <name>qdesigner_internal::QDesignerWidgetBox</name>
     <message>
-        <source>An error has been encountered at line %1 of %2: %3</source>
-        <translation>Une erreur a été rencontrée à la ligne %1 de %2 : %3</translation>
-    </message>
-    <message>
-        <source>Unexpected element &lt;%1&gt; encountered when parsing for &lt;widget&gt; or &lt;ui&gt;</source>
-        <translation>L&apos;élément inattendu &lt;%1&gt; a été rencontré lors de l&apos;analyse des élements &lt;widget&gt; et &lt;ui&gt;</translation>
-    </message>
-    <message>
-        <source>Unexpected end of file encountered when parsing widgets.</source>
-        <translation>Fin de fichier inattendue lors de l&apos;analyse grammaticale des widgets.</translation>
-    </message>
-    <message>
-        <source>A widget element could not be found.</source>
-        <translation>Un élement de widget n&apos;a pas pu être trouvé.</translation>
-    </message>
-    <message>
         <source>Unexpected element &lt;%1&gt;</source>
         <translation>Élément &lt;%1&gt; inattendu</translation>
     </message>
@@ -5341,6 +5095,22 @@ Classe : %2</translation>
 %2</source>
         <translation>Le code XML spécifié pour le widget %1 ne contient aucun élément widget.
 %2</translation>
+    </message>
+    <message>
+        <source>An error has been encountered at line %1 of %2: %3</source>
+        <translation>Une erreur a été rencontrée à la ligne %1 de %2 : %3</translation>
+    </message>
+    <message>
+        <source>Unexpected element &lt;%1&gt; encountered when parsing for &lt;widget&gt; or &lt;ui&gt;</source>
+        <translation>L&apos;élément inattendu &lt;%1&gt; a été rencontré lors de l&apos;analyse des élements &lt;widget&gt; et &lt;ui&gt;</translation>
+    </message>
+    <message>
+        <source>Unexpected end of file encountered when parsing widgets.</source>
+        <translation>Fin de fichier inattendue lors de l&apos;analyse grammaticale des widgets.</translation>
+    </message>
+    <message>
+        <source>A widget element could not be found.</source>
+        <translation>Un élement de widget n&apos;a pas pu être trouvé.</translation>
     </message>
 </context>
 <context>
@@ -5468,6 +5238,10 @@ Classe : %2</translation>
         <translation>Justifier</translation>
     </message>
     <message>
+        <source>Right to Left</source>
+        <translation>De droite à gauche</translation>
+    </message>
+    <message>
         <source>Superscript</source>
         <translation>Exposant</translation>
     </message>
@@ -5485,29 +5259,7 @@ Classe : %2</translation>
     </message>
     <message>
         <source>Simplify Rich Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::ScriptDialog</name>
-    <message>
-        <source>Edit script</source>
-        <translation>Éditer le script</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;Enter a Qt Script snippet to be executed while loading the form.&lt;br&gt;The widget and its children are accessible via the variables &lt;i&gt;widget&lt;/i&gt; and &lt;i&gt;childWidgets&lt;/i&gt;, respectively.</source>
-        <translation>&lt;html&gt;Entrez un snippet de code Qt Script à exécuter lors du chargement du formulaire.&lt;br&gt;Le widget et ses enfants sont accessibles via les variables &lt;i&gt;widget&lt;/i&gt; et &lt;i&gt;childWidgets&lt;/i&gt;, respectivement.</translation>
-    </message>
-    <message>
-        <source>Syntax error</source>
-        <translation>Erreur de syntaxe</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::ScriptErrorDialog</name>
-    <message>
-        <source>Script errors</source>
-        <translation>Erreurs de script</translation>
+        <translation>Simplifier le texte riche</translation>
     </message>
 </context>
 <context>
@@ -5864,6 +5616,10 @@ Classe : %2</translation>
 <context>
     <name>qdesigner_internal::WidgetBox</name>
     <message>
+        <source>Filter</source>
+        <translation>Filtre</translation>
+    </message>
+    <message>
         <source>Warning: Widget creation failed in the widget box. This could be caused by invalid custom widget XML.</source>
         <translation>Avertissement : La création du widget a échoué dans la boîte de widget. Ceci peut être causé par un code XML invalide d&apos;un widget personnalisé.</translation>
     </message>
@@ -5926,10 +5682,6 @@ Classe : %2</translation>
     <message>
         <source>A class name mismatch occurred when creating a widget using the custom widget factory registered for widgets of class %1. It returned a widget of class %2.</source>
         <translation>Une discordance de nom de classe est apparue lors de la création d&apos;un nouveau widget à l&apos;aide de la fabrique de widget personnalisé enregistrée pour la classe %1. La fabrique a retourné un widget de classe %2.</translation>
-    </message>
-    <message>
-        <source>%1 Widget</source>
-        <translation>%1 Widget</translation>
     </message>
     <message>
         <source>The current page of the container &apos;%1&apos; (%2) could not be determined while creating a layout.This indicates an inconsistency in the ui-file, probably a layout being constructed on a container widget.</source>

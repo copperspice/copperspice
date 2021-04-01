@@ -1,48 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="hu_HU">
+<TS version="2.1" language="hu_HU">
 <context>
     <name>AbstractFindWidget</name>
     <message>
-        <location filename="../tools/shared/findwidget/abstractfindwidget.cpp" line="+127"/>
         <source>&amp;Previous</source>
         <translation>&amp;Előző</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>&amp;Next</source>
-        <translation>&amp;Következő</translation>
+        <translation>&amp;Következő </translation>
     </message>
     <message>
-        <location line="+24"/>
         <source>&amp;Case sensitive</source>
-        <translation>Kis/&amp;nagybetű érzékeny</translation>
+        <translation>Kis- és &amp;nagybetű érzékeny</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Whole &amp;words</source>
-        <translation>&amp;Teljes szó</translation>
+        <translation>&amp;Teljes szavak</translation>
     </message>
     <message>
-        <location line="+12"/>
-        <source>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
-        <translation>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;A keresés befejeződött</translation>
+        <source>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
+        <translation>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;A keresés körbeért</translation>
+    </message>
+</context>
+<context>
+    <name>AbstractItemEditor</name>
+    <message>
+        <source>Selectable</source>
+        <translation>Kiválasztható</translation>
+    </message>
+    <message>
+        <source>Editable</source>
+        <translation>Szerkeszthető</translation>
+    </message>
+    <message>
+        <source>DragEnabled</source>
+        <translation>Húzás engedélyezve</translation>
+    </message>
+    <message>
+        <source>DropEnabled</source>
+        <translation>Ejtés engedélyezve</translation>
+    </message>
+    <message>
+        <source>UserCheckable</source>
+        <translation>Felhasználó bejelölheti</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>Engedélyezve</translation>
+    </message>
+    <message>
+        <source>Tristate</source>
+        <translation>Három állapotú</translation>
+    </message>
+    <message>
+        <source>Unchecked</source>
+        <translation>Nem bejelölt</translation>
+    </message>
+    <message>
+        <source>PartiallyChecked</source>
+        <translation>Részlegesen bejelölt</translation>
+    </message>
+    <message>
+        <source>Checked</source>
+        <translation>Bejelölt</translation>
     </message>
 </context>
 <context>
     <name>AddLinkDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/addlinkdialog.ui"/>
         <source>Insert Link</source>
-        <translation>Link beszúrása</translation>
+        <translation>Hivatkozás beszúrása</translation>
     </message>
     <message>
-        <location/>
         <source>Title:</source>
         <translation>Cím:</translation>
     </message>
     <message>
-        <location/>
         <source>URL:</source>
         <translation>URL:</translation>
     </message>
@@ -50,4199 +85,3383 @@
 <context>
     <name>AppFontDialog</name>
     <message>
-        <location filename="../tools/designer/src/designer/appfontdialog.cpp" line="+418"/>
         <source>Additional Fonts</source>
-        <translation>További betűtípusok</translation>
+        <translation>További betűkészletek</translation>
     </message>
 </context>
 <context>
     <name>AppFontManager</name>
     <message>
-        <location line="-267"/>
         <source>&apos;%1&apos; is not a file.</source>
-        <translation>&apos;%1&apos; nem egy fájl.</translation>
+        <translation>A(z) „%1” nem egy fájl.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The font file &apos;%1&apos; does not have read permissions.</source>
-        <translation>A(z) &apos;%1&apos; font fájlon nincs olvasási jog.</translation>
+        <translation>A(z) „%1” betűkészletfájlon nincs olvasási jog.</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>The font file &apos;%1&apos; is already loaded.</source>
-        <translation>A(z) &apos;%1&apos; betűtípus már be van töltve.</translation>
+        <translation>A(z) „%1” betűkészletfájl már be van töltve.</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>The font file &apos;%1&apos; could not be loaded.</source>
-        <translation>A(z) &apos;%1&apos; betűtípus nem tölthető be.</translation>
+        <translation>A(z) „%1” betűkészletfájlt nem sikerült betölteni.</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>&apos;%1&apos; is not a valid font id.</source>
-        <translation>&apos;%1&apos; nem egy érvényes betűtípus azonosító.</translation>
+        <translation>A(z) „%1” nem érvényes betűkészlet-azonosító.</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>There is no loaded font matching the id &apos;%1&apos;.</source>
-        <translation>Nincs &apos;%1&apos; azonosítójú betűtípus betöltve.</translation>
+        <translation>Nincs „%1” azonosítóra illeszkedő betűkészlet betöltve.</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>The font &apos;%1&apos; (%2) could not be unloaded.</source>
-        <translation>A(z) &apos;%1&apos; (%2) betűtípus nem távolítható el.</translation>
+        <translation>A(z) „%1” (%2) betűkészletet nem sikerült eltávolítani.</translation>
     </message>
 </context>
 <context>
     <name>AppFontWidget</name>
     <message>
-        <location line="+26"/>
         <source>Fonts</source>
-        <translation>Betűtípusok</translation>
+        <translation>Betűkészletek</translation>
     </message>
     <message>
-        <location line="+58"/>
         <source>Add font files</source>
-        <translation>Betűtípus fájl hozzáadása</translation>
+        <translation>Betűkészletfájlok hozzáadása</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Remove current font file</source>
-        <translation>A jelenlegi betűtípus fájl eltávolítása</translation>
+        <translation>Jelenlegi betűkészletfájl eltávolítása</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Remove all font files</source>
-        <translation>Minden betűtłpus fájl eltávolítása</translation>
+        <translation>Minden betűkészletfájl eltávolítása</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Add Font Files</source>
-        <translation>Betűtípus fájl hozzáadása</translation>
+        <translation>Betűkészletfájlok hozzáadása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Font files (*.ttf)</source>
-        <translation>Betűtípus fájlok (*.ttf)</translation>
+        <translation>Betűkészletfájlok (*.ttf)</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Error Adding Fonts</source>
-        <translation>Hiba a betűtípus fájlok hozzáadásakor</translation>
+        <translation>Hiba a betűkészlet hozzáadásakor</translation>
     </message>
     <message>
-        <location line="+24"/>
         <source>Error Removing Fonts</source>
-        <translation>Hiba a betűtípus fájlok eltávolításakor</translation>
+        <translation>Hiba a betűkészlet eltávolításakor</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>Remove Fonts</source>
-        <translation>Betűtípus fájl eltávolítása</translation>
+        <translation>Betűkészletek eltávolítása</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Would you like to remove all fonts?</source>
-        <translation>Minden betűtípust eltávolít?</translation>
+        <translation>Az összes betűkészletet el szeretné távolítani?</translation>
     </message>
 </context>
 <context>
     <name>AppearanceOptionsWidget</name>
     <message>
-        <location filename="../tools/designer/src/designer/qdesigner_appearanceoptions.ui"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Űrlap</translation>
     </message>
     <message>
-        <location/>
         <source>User Interface Mode</source>
-        <translation>Felhasználói felület mód</translation>
+        <translation>Felhasználói felület módja</translation>
     </message>
 </context>
 <context>
     <name>AssistantClient</name>
     <message>
-        <location filename="../tools/designer/src/designer/assistantclient.cpp" line="+100"/>
         <source>Unable to send request: Assistant is not responding.</source>
-        <translation>A kérés elküldése nem sikerült: az Assistant nem válaszol.</translation>
+        <translation>Nem küldhető el a kérés: az Asszisztens nem válaszol.</translation>
     </message>
     <message>
-        <location line="+39"/>
         <source>The binary &apos;%1&apos; does not exist.</source>
-        <translation>A(z) &apos;%1&apos; bináris nem létezik.</translation>
+        <translation>A(z) „%1” bináris nem létezik.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Unable to launch assistant (%1).</source>
-        <translation>Az Assistant (%1) elindítása sikertelen.</translation>
+        <translation>Nem indítható el az Asszisztens (%1)</translation>
     </message>
 </context>
 <context>
     <name>BrushPropertyManager</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/brushpropertymanager.cpp" line="+52"/>
         <source>No brush</source>
         <translation>Nincs ecset</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Solid</source>
-        <translation>Lágy</translation>
+        <translation>Tömör</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Dense 1</source>
         <translation>Sűrű 1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Dense 2</source>
         <translation>Sűrű 2</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Dense 3</source>
         <translation>Sűrű 3</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Dense 4</source>
         <translation>Sűrű 4</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Dense 5</source>
         <translation>Sűrű 5</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Dense 6</source>
         <translation>Sűrű 6</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Dense 7</source>
         <translation>Sűrű 7</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Horizontal</source>
         <translation>Vízszintes</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Vertical</source>
         <translation>Függőleges</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Cross</source>
         <translation>Kereszt</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Backward diagonal</source>
         <translation>Fordított átlós</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Forward diagonal</source>
-        <translation>Átlós</translation>
+        <translation>Előre átlós</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Crossing diagonal</source>
         <translation>Keresztátlós</translation>
     </message>
     <message>
-        <location line="+93"/>
         <source>Style</source>
         <translation>Stílus</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Color</source>
         <translation>Szín</translation>
     </message>
     <message>
-        <location line="+105"/>
         <source>[%1, %2]</source>
-        <translation></translation>
+        <translation>[%1, %2]</translation>
     </message>
 </context>
 <context>
     <name>Command</name>
     <message>
-        <location filename="../tools/designer/src/components/signalsloteditor/signalsloteditor.cpp" line="+208"/>
-        <location line="+258"/>
-        <source>Change signal</source>
-        <translation>Jelzés megváltoztatása</translation>
-    </message>
-    <message>
-        <location line="-256"/>
-        <location line="+268"/>
-        <source>Change slot</source>
-        <translation>Slot megváltoztatása</translation>
-    </message>
-    <message>
-        <location line="-220"/>
-        <source>Change signal-slot connection</source>
-        <translation>Jelzés-slot kapcsolat megváltoztatása</translation>
-    </message>
-    <message>
-        <location line="+234"/>
-        <source>Change sender</source>
-        <translation>Küldő megváltoztatása</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>Change receiver</source>
-        <translation>Fogadó megváltoztatása</translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/components/taskmenu/button_taskmenu.cpp" line="+221"/>
-        <source>Create button group</source>
-        <translation>Gombcsoport létrehozása</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Break button group</source>
-        <translation>Gombcsoport széttörése</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Break button group &apos;%1&apos;</source>
-        <translation>A(z) &apos;%1&apos; gombcsoport széttörése</translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source>Add buttons to group</source>
-        <translation>Gomb(ok) hozzáadása a csoporthoz</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location filename="../tools/designer/src/lib/shared/formlayoutmenu.cpp" line="+458"/>
-        <source>Add &apos;%1&apos; to &apos;%2&apos;</source>
-        <extracomment>Command description for adding buttons to a QButtonGroup</extracomment>
-        <translation>&apos;%1&apos; hozzáadása ehhez: &apos;%2&apos;</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Remove buttons from group</source>
-        <translation>Gomb(ok) eltávolítása a csoportból</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>Remove &apos;%1&apos; from &apos;%2&apos;</source>
-        <extracomment>Command description for removing buttons from a QButtonGroup</extracomment>
-        <translation>&apos;%1&apos; eltávolítása innen: &apos;%2&apos;</translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/connectionedit.cpp" line="+143"/>
         <source>Add connection</source>
         <translation>Kapcsolat hozzáadása</translation>
     </message>
     <message>
-        <location line="+54"/>
         <source>Adjust connection</source>
         <translation>Kapcsolat módosítása</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Delete connections</source>
         <translation>Kapcsolatok törlése</translation>
     </message>
     <message>
-        <location line="+58"/>
         <source>Change source</source>
-        <translation>Forrás megváltoztatása</translation>
+        <translation>Forrás módosítása</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Change target</source>
-        <translation>Cél megváltoztatása</translation>
+        <translation>Cél módosítása</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/shared/morphmenu.cpp" line="+349"/>
+        <source>Add &apos;%1&apos; to &apos;%2&apos;</source>
+        <extracomment>Command description for adding buttons to a QButtonGroup</extracomment>
+        <translation>„%1” hozzáadása ehhez: „%2”</translation>
+    </message>
+    <message>
         <source>Morph %1/&apos;%2&apos; into %3</source>
         <extracomment>MorphWidgetCommand description</extracomment>
-        <translation>%1/&apos;%2&apos; átalakítása erre: %3</translation>
+        <translation>%1/„%2” átalakítása erre: %3</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_command.cpp" line="+149"/>
         <source>Insert &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; beszúrása</translation>
+        <translation>„%1” beszúrása</translation>
     </message>
     <message>
-        <location line="+133"/>
         <source>Change Z-order of &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; Z sorrendjének megváltoztatása</translation>
+        <translation>„%1” mélységének módosítása</translation>
     </message>
     <message>
-        <location line="+34"/>
         <source>Raise &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; előrehozása</translation>
+        <translation>„%1” előrébb hozása</translation>
     </message>
     <message>
-        <location line="+33"/>
         <source>Lower &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; hátrébbküldése</translation>
+        <translation>„%1” hátrébb küldése</translation>
     </message>
     <message>
-        <location line="+113"/>
         <source>Delete &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; törlése</translation>
+        <translation>„%1” törlése</translation>
     </message>
     <message>
-        <location line="+119"/>
         <source>Reparent &apos;%1&apos;</source>
-        <translation type="unfinished">&apos;%1&apos; szülőjének megváltoztatása</translation>
+        <translation>„%1” szülőjének módosítása</translation>
     </message>
     <message>
-        <location line="+53"/>
         <source>Promote to custom widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetés egyéni felületi elemmé</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Demote from custom widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Lefokozás egyéni felületi elemről</translation>
     </message>
     <message>
-        <location line="+79"/>
         <source>Lay out using grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés rács használatával</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Lay out vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés függőlegesen</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Lay out horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés vízszintesen</translation>
     </message>
     <message>
-        <location line="+41"/>
         <source>Break layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés feltörése</translation>
     </message>
     <message>
-        <location line="+105"/>
         <source>Simplify Grid Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Rács elrendezés egyszerűsítése</translation>
     </message>
     <message>
-        <location line="+135"/>
-        <location line="+235"/>
-        <location line="+78"/>
         <source>Move Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal áthelyezése</translation>
     </message>
     <message>
-        <location line="-279"/>
-        <location line="+123"/>
-        <location line="+188"/>
-        <location line="+666"/>
         <source>Delete Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal törlése</translation>
     </message>
     <message>
-        <location line="-939"/>
-        <location line="+123"/>
         <source>Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal</translation>
     </message>
     <message>
-        <location line="+860"/>
-        <source>page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-978"/>
-        <location line="+123"/>
-        <location line="+186"/>
-        <location line="+667"/>
         <source>Insert Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal beszúrása</translation>
     </message>
     <message>
-        <location line="-647"/>
         <source>Change Tab order</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapsorrend módosítása</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Create Menu Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Menüsor létrehozása</translation>
     </message>
     <message>
-        <location line="+44"/>
         <source>Delete Menu Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Menüsor törlése</translation>
     </message>
     <message>
-        <location line="+47"/>
         <source>Create Status Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Állapotsor létrehozása</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Delete Status Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Állapotsor törlése</translation>
     </message>
     <message>
-        <location line="+45"/>
         <source>Add Tool Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszköztár hozzáadása</translation>
     </message>
     <message>
-        <location line="+59"/>
         <source>Add Dock Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokkablak hozzáadása</translation>
     </message>
     <message>
-        <location line="+53"/>
         <source>Adjust Size of &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” méretének beállítása</translation>
     </message>
     <message>
-        <location line="+57"/>
         <source>Change Form Layout Item Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlapelrendezés elem geometriájának módosítása</translation>
     </message>
     <message>
-        <location line="+95"/>
         <source>Change Layout Item Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés elem geometriájának módosítása</translation>
     </message>
     <message>
-        <location line="+138"/>
         <source>Delete Subwindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyermekablak törlése</translation>
     </message>
     <message>
-        <location line="+44"/>
         <source>Insert Subwindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyermekablak beszúrása</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>subwindow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>Subwindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyermekablak</translation>
     </message>
     <message>
-        <location line="+391"/>
         <source>Change Table Contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Táblázat tartalmának módosítása</translation>
     </message>
     <message>
-        <location line="+107"/>
         <source>Change Tree Contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Fa tartalmának módosítása</translation>
     </message>
     <message>
-        <location line="+74"/>
-        <location line="+146"/>
         <source>Add action</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet hozzáadása</translation>
     </message>
     <message>
-        <location line="-120"/>
-        <location line="+126"/>
         <source>Remove action</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet eltávolítása</translation>
     </message>
     <message>
-        <location line="+53"/>
         <source>Add menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menü hozzáadása</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Remove menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menü eltávolítása</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Create submenu</source>
-        <translation type="unfinished"></translation>
+        <translation>Almenü létrehozása</translation>
     </message>
     <message>
-        <location line="+31"/>
         <source>Delete Tool Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszköztár törlése</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_command2.cpp" line="+154"/>
         <source>Change layout of &apos;%1&apos; from %2 to %3</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” elrendezésének módosítása: %2 → %3</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_menu.cpp" line="+1194"/>
+        <source>Change layout alignment</source>
+        <translation>Elrendezés igazításának módosítása</translation>
+    </message>
+    <message>
         <source>Set action text</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet szövegének beállítása</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Insert action</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet beszúrása</translation>
     </message>
     <message>
-        <location line="+89"/>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_menubar.cpp" line="+915"/>
         <source>Move action</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet áthelyezése</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_menubar.cpp" line="-432"/>
         <source>Change Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Cím módosítása</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Insert Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menü beszúrása</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_propertycommand.cpp" line="+1225"/>
         <source>Changed &apos;%1&apos; of &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%2” objektum „%1” tulajdonsága megváltoztatva</translation>
     </message>
     <message numerus="yes">
-        <location line="+3"/>
         <source>Changed &apos;%1&apos; of %n objects</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n objektum „%1” tulajdonsága megváltoztatva</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+84"/>
         <source>Reset &apos;%1&apos; of &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%2” objektum „%1” tulajdonsága visszaállítva</translation>
     </message>
     <message numerus="yes">
-        <location line="+3"/>
         <source>Reset &apos;%1&apos; of %n objects</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n objektum „%1” tulajdonsága visszaállítva</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+89"/>
         <source>Add dynamic property &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” dinamikus tulajdonság hozzáadása a(z) „%2” objektumhoz</translation>
     </message>
     <message numerus="yes">
-        <location line="+3"/>
         <source>Add dynamic property &apos;%1&apos; to %n objects</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>A(z) „%1” dinamikus tulajdonság hozzáadása %n objektumhoz</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+86"/>
         <source>Remove dynamic property &apos;%1&apos; from &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” dinamikus tulajdonság eltávolítása a(z) „%2” objektumból</translation>
     </message>
     <message numerus="yes">
-        <location line="+3"/>
         <source>Remove dynamic property &apos;%1&apos; from %n objects</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>A(z) „%1” dinamikus tulajdonság eltávolítása %n objektumból</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/shared/scriptcommand.cpp" line="+55"/>
-        <source>Change script</source>
-        <translation type="unfinished"></translation>
+        <source>Change signals/slots</source>
+        <translation>Jelzések és tárolóhelyek módosítása</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/shared/signalslotdialog.cpp" line="+202"/>
-        <source>Change signals/slots</source>
-        <translation type="unfinished"></translation>
+        <source>Change signal</source>
+        <translation>Jelzés módosítása</translation>
+    </message>
+    <message>
+        <source>Change slot</source>
+        <translation>Tárolóhely módosítása</translation>
+    </message>
+    <message>
+        <source>Change signal-slot connection</source>
+        <translation>Jelzés-tárolóhely kapcsolat módosítása</translation>
+    </message>
+    <message>
+        <source>Change sender</source>
+        <translation>Küldő módosítása</translation>
+    </message>
+    <message>
+        <source>Change receiver</source>
+        <translation>Fogadó módosítása</translation>
+    </message>
+    <message>
+        <source>Create button group</source>
+        <translation>Gombcsoport létrehozása</translation>
+    </message>
+    <message>
+        <source>Break button group</source>
+        <translation>Gombcsoport feltörése</translation>
+    </message>
+    <message>
+        <source>Break button group &apos;%1&apos;</source>
+        <translation>A(z) „%1” gombcsoport feltörése</translation>
+    </message>
+    <message>
+        <source>Add buttons to group</source>
+        <translation>Gombok hozzáadása a csoporthoz</translation>
+    </message>
+    <message>
+        <source>Remove buttons from group</source>
+        <translation>Gombok eltávolítása a csoportból</translation>
+    </message>
+    <message>
+        <source>Remove &apos;%1&apos; from &apos;%2&apos;</source>
+        <extracomment>Command description for removing buttons from a QButtonGroup</extracomment>
+        <translation>„%1” eltávolítása innen: „%2”</translation>
     </message>
 </context>
 <context>
     <name>ConnectDialog</name>
     <message>
-        <location filename="../tools/designer/src/components/signalsloteditor/connectdialog.ui"/>
         <source>Configure Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapcsolatok beállítása</translation>
     </message>
     <message>
-        <location/>
         <source>GroupBox</source>
-        <translation type="unfinished"></translation>
+        <translation>Csoporttároló doboz</translation>
     </message>
     <message>
-        <location/>
         <source>Edit...</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerkesztés…</translation>
     </message>
     <message>
-        <location/>
         <source>Show signals and slots inherited from QWidget</source>
-        <translation type="unfinished"></translation>
+        <translation>A QWidget objektumból származtatott jelzések és tárolóhelyek megjelenítése</translation>
     </message>
 </context>
 <context>
     <name>ConnectionDelegate</name>
     <message>
-        <location filename="../tools/designer/src/components/signalsloteditor/signalsloteditorwindow.cpp" line="+644"/>
         <source>&lt;object&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;objektum&gt;</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>&lt;signal&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;jelzés&gt;</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>&lt;slot&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;tárolóhely&gt;</translation>
     </message>
 </context>
 <context>
     <name>DPI_Chooser</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/dpi_chooser.cpp" line="+69"/>
         <source>Standard (96 x 96)</source>
         <extracomment>Embedded device standard screen resolution</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Szabványos (96 x 96)</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Greenphone (179 x 185)</source>
         <extracomment>Embedded device screen resolution</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Greenphone (179 x 185)</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>High (192 x 192)</source>
         <extracomment>Embedded device high definition screen resolution</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Nagy (192 x 192)</translation>
     </message>
 </context>
 <context>
     <name>Designer</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/qdesigner_resource.cpp" line="+446"/>
-        <source>Qt Designer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>This file contains top level spacers.&lt;br&gt;They have &lt;b&gt;NOT&lt;/b&gt; been saved into the form.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Perhaps you forgot to create a layout?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+173"/>
-        <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>This file cannot be read because it was created using %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>The converted file could not be read.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>This file was created using Designer from Qt-%1 and will be converted to a new form by Qt Designer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>The old form has not been touched, but you will have to save the form under a new name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>This file was created using Designer from Qt-%1 and could not be read:
-%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Please run it through &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; to convert it to Qt-4&apos;s ui format.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+31"/>
-        <source>This file cannot be read because the extra info extension failed to load.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/qsimpleresource.cpp" line="+339"/>
-        <source>Custom Widgets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>Promoted Widgets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_utils.cpp" line="+682"/>
         <source>Unable to launch %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 nem indítható el.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>%1 timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 túllépte az időkorlátot.</translation>
+    </message>
+    <message>
+        <source>Custom Widgets</source>
+        <translation>Egyéni felületi elemek</translation>
+    </message>
+    <message>
+        <source>Promoted Widgets</source>
+        <translation>Előléptetett felület elemek</translation>
+    </message>
+    <message>
+        <source>Qt Designer</source>
+        <translation>Qt Tervező</translation>
+    </message>
+    <message>
+        <source>This file cannot be read because the extra info extension failed to load.</source>
+        <translation>Ez a fájl nem olvasható, mert a további információs kiterjesztést nem sikerült betölteni.</translation>
     </message>
 </context>
 <context>
     <name>DesignerMetaEnum</name>
     <message>
-        <location line="-513"/>
         <source>%1 is not a valid enumeration value of &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 nem a(z) „%2” felsorolt típus érvényes értéke.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>&apos;%1&apos; could not be converted to an enumeration value of type &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” átalakítása nem sikerült egy „%2” típusú felsorolásértékre.</translation>
     </message>
 </context>
 <context>
     <name>DesignerMetaFlags</name>
     <message>
-        <location line="+78"/>
         <source>&apos;%1&apos; could not be converted to a flag value of type &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” átalakítása nem sikerült egy „%2” típusú jelzőértékre.</translation>
     </message>
 </context>
 <context>
     <name>DeviceProfile</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/deviceprofile.cpp" line="+397"/>
         <source>&apos;%1&apos; is not a number.</source>
         <extracomment>Reading a number for an embedded device profile</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” nem szám.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>An invalid tag &lt;%1&gt; was encountered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy érvénytelen &lt;%1&gt; címke fordult elő.</translation>
     </message>
 </context>
 <context>
     <name>DeviceProfileDialog</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/deviceprofiledialog.ui"/>
         <source>&amp;Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Betűcs&amp;alád</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Point Size</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pontméret</translation>
     </message>
     <message>
-        <location/>
         <source>Style</source>
-        <translation type="unfinished">Stílus</translation>
+        <translation>Stílus</translation>
     </message>
     <message>
-        <location/>
         <source>Device DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszköz DPI</translation>
     </message>
     <message>
-        <location/>
         <source>Name</source>
-        <translation type="unfinished">Név</translation>
+        <translation>Név</translation>
     </message>
 </context>
 <context>
     <name>DeviceSkin</name>
     <message>
-        <location filename="../tools/shared/deviceskin/deviceskin.cpp" line="+79"/>
         <source>The image file &apos;%1&apos; could not be loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült betölteni a(z) „%1” képfájlt.</translation>
     </message>
     <message>
-        <location line="+64"/>
         <source>The skin directory &apos;%1&apos; does not contain a configuration file.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” felszínkönyvtár nem tartalmaz beállítófájlt.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The skin configuration file &apos;%1&apos; could not be opened.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” felszínbeállító-fájlt nem sikerült megnyitni.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>The skin configuration file &apos;%1&apos; could not be read: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” felszínbeállító-fájlt nem sikerült beolvasni: %2</translation>
     </message>
     <message>
-        <location line="+70"/>
         <source>Syntax error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Szintaktikai hiba: %1</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>The skin &quot;up&quot; image file &apos;%1&apos; does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>A felszín „fel” képfájlja („%1”) nem létezik.</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>The skin &quot;down&quot; image file &apos;%1&apos; does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>A felszín „le” képfájlja („%1”) nem létezik.</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>The skin &quot;closed&quot; image file &apos;%1&apos; does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>A felszín „lezárt” képfájlja („%1”) nem létezik.</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>The skin cursor image file &apos;%1&apos; does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>A felszín kurzor képfájlja („%1”) nem létezik.</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>Syntax error in area definition: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Szintaktikai hiba a terület-meghatározásban: %1</translation>
     </message>
     <message>
-        <location line="+38"/>
         <source>Mismatch in number of areas, expected %1, got %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eltérés a területek számában: a várt érték %1, a kapott %2.</translation>
     </message>
 </context>
 <context>
     <name>EmbeddedOptionsControl</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/embeddedoptionspage.cpp" line="+307"/>
         <source>&lt;html&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Font&lt;/b&gt;&lt;/td&gt;&lt;td&gt;%1, %2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Style&lt;/b&gt;&lt;/td&gt;&lt;td&gt;%3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Resolution&lt;/b&gt;&lt;/td&gt;&lt;td&gt;%4 x %5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/html&gt;</source>
         <extracomment>Format embedded device profile description</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Betűkészlet&lt;/b&gt;&lt;/td&gt;&lt;td&gt;%1, %2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Stílus&lt;/b&gt;&lt;/td&gt;&lt;td&gt;%3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Felbontás&lt;/b&gt;&lt;/td&gt;&lt;td&gt;%4 x %5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>EmbeddedOptionsPage</name>
     <message>
-        <location line="+103"/>
         <source>Embedded Design</source>
         <extracomment>Tab in preferences dialog</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Beágyazott terv</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Device Profiles</source>
         <extracomment>EmbeddedOptionsControl group box&quot;</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Eszközprofilok</translation>
     </message>
 </context>
 <context>
     <name>FontPanel</name>
     <message>
-        <location filename="../tools/shared/fontpanel/fontpanel.cpp" line="+63"/>
         <source>Font</source>
-        <translation type="unfinished">Betűtípus</translation>
+        <translation>Betűkészlet</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>&amp;Writing system</source>
-        <translation type="unfinished"></translation>
+        <translation>Írás&amp;rendszer</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>&amp;Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Betűcs&amp;alád</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>&amp;Style</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Stílus</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>&amp;Point size</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pontméret</translation>
     </message>
 </context>
 <context>
     <name>FontPropertyManager</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/fontpropertymanager.cpp" line="+62"/>
         <source>PreferDefault</source>
-        <translation type="unfinished"></translation>
+        <translation>Alapértelmezés előnyben részesítése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>NoAntialias</source>
-        <translation type="unfinished"></translation>
+        <translation>Nincs élsimítás</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>PreferAntialias</source>
-        <translation type="unfinished"></translation>
+        <translation>Élsimítás előnyben részesítése</translation>
     </message>
     <message>
-        <location line="+61"/>
         <source>Antialiasing</source>
-        <translation type="unfinished"></translation>
+        <translation>Élsimítás</translation>
     </message>
 </context>
 <context>
     <name>FormBuilder</name>
     <message>
-        <location filename="../tools/designer/src/lib/uilib/formbuilderextra.cpp" line="+375"/>
         <source>Invalid stretch value for &apos;%1&apos;: &apos;%2&apos;</source>
         <extracomment>Parsing layout stretch values</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Érvénytelen nyújtás a(z) „%1” objektumnál: „%2”</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>Invalid minimum size for &apos;%1&apos;: &apos;%2&apos;</source>
         <extracomment>Parsing grid layout minimum size values</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Érvénytelen minimális méret a(z) „%1” objektumnál: „%2”</translation>
     </message>
 </context>
 <context>
     <name>FormEditorOptionsPage</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/formeditor_optionspage.cpp" line="+91"/>
         <source>%1 %</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Zoom percentage</extracomment>
+        <translation>%1 %</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Preview Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyítás előnézete</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Default Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Alapértelmezett nagyítás</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Forms</source>
         <extracomment>Tab in preferences dialog</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Űrlapok</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Default Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Alapértelmezett rács</translation>
     </message>
 </context>
 <context>
     <name>FormLayoutRowDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/formlayoutrowdialog.ui"/>
         <source>Add Form Layout Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Új űrlapelrendezés-sor hozzáadása</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Label text:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Címkeszöveg:</translation>
     </message>
     <message>
-        <location/>
         <source>Field &amp;type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mező&amp;típus:</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Field name:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mezőnév:</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Buddy:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Partner:</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Row:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sor:</translation>
     </message>
     <message>
-        <location/>
         <source>Label &amp;name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Címke&amp;név:</translation>
     </message>
 </context>
 <context>
     <name>FormWindow</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/formwindow.cpp" line="+1754"/>
         <source>Unexpected element &lt;%1&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Váratlan &lt;%1&gt; elem</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Error while pasting clipboard contents at line %1, column %2: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba a vágólap tartalmának beillesztésekor a(z) %1. sor %2. oszlopában: %3</translation>
     </message>
 </context>
 <context>
     <name>FormWindowSettings</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/formwindowsettings.ui"/>
         <source>Form Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap beállítások</translation>
     </message>
     <message>
-        <location/>
         <source>Layout &amp;Default</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Alapértelmezett elrendezése</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Spacing:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Térköz:</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Margó:</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Layout Function</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Elrendezési függvény</translation>
     </message>
     <message>
-        <location/>
         <source>Ma&amp;rgin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ma&amp;rgó:</translation>
     </message>
     <message>
-        <location/>
         <source>Spa&amp;cing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tér&amp;köz:</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Pixmap Function</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kép függvény</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Include Hints</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Felvételi tippek</translation>
     </message>
     <message>
-        <location/>
         <source>Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Rács</translation>
     </message>
     <message>
-        <location/>
         <source>Embedded Design</source>
-        <translation type="unfinished"></translation>
+        <translation>Beágyazott terv</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Author</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Szerző</translation>
     </message>
 </context>
 <context>
     <name>IconSelector</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/iconselector.cpp" line="+352"/>
+        <source>The pixmap file &apos;%1&apos; cannot be read.</source>
+        <translation>A(z) „%1” képfájl nem olvasható.</translation>
+    </message>
+    <message>
+        <source>The file &apos;%1&apos; does not appear to be a valid pixmap file: %2</source>
+        <translation>A(z) „%1” fájl nem tűnik érvényes képfájlnak: %2</translation>
+    </message>
+    <message>
+        <source>The file &apos;%1&apos; could not be read: %2</source>
+        <translation>A(z) %1 fájlt nem sikerült beolvasni: %2</translation>
+    </message>
+    <message>
         <source>All Pixmaps (</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes képfájl (</translation>
+    </message>
+    <message>
+        <source>Choose a Pixmap</source>
+        <translation>Válasszon egy képfájlt</translation>
+    </message>
+    <message>
+        <source>Pixmap Read Error</source>
+        <translation>Képolvasási hiba</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation>…</translation>
+    </message>
+    <message>
+        <source>Normal Off</source>
+        <translation>Normál ki</translation>
+    </message>
+    <message>
+        <source>Normal On</source>
+        <translation>Normál be</translation>
+    </message>
+    <message>
+        <source>Disabled Off</source>
+        <translation>Letiltott ki</translation>
+    </message>
+    <message>
+        <source>Disabled On</source>
+        <translation>Letiltott be</translation>
+    </message>
+    <message>
+        <source>Active Off</source>
+        <translation>Aktív ki</translation>
+    </message>
+    <message>
+        <source>Active On</source>
+        <translation>Aktív be</translation>
+    </message>
+    <message>
+        <source>Selected Off</source>
+        <translation>Kijelölt ki</translation>
+    </message>
+    <message>
+        <source>Selected On</source>
+        <translation>Kijelölt be</translation>
+    </message>
+    <message>
+        <source>Choose Resource...</source>
+        <translation>Erőforrás kiválasztása…</translation>
+    </message>
+    <message>
+        <source>Choose File...</source>
+        <translation>Fájl kiválasztása…</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation>Visszaállítás</translation>
+    </message>
+    <message>
+        <source>Reset All</source>
+        <translation>Összes visszaállítása</translation>
     </message>
 </context>
 <context>
     <name>ItemPropertyBrowser</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/itemlisteditor.cpp" line="+66"/>
         <source>XX Icon Selected off</source>
         <extracomment>Sample string to determinate the width for the first column of the list item property browser</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>XX ikon kijelölese ki</translation>
     </message>
 </context>
 <context>
     <name>MainWindowBase</name>
     <message>
-        <location filename="../tools/designer/src/designer/mainwindow.cpp" line="+121"/>
         <source>Main</source>
         <extracomment>Not currently used (main tool bar)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Fő</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>File</source>
-        <translation type="unfinished">Fájl</translation>
+        <translation>Fájl</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Edit</source>
-        <translation type="unfinished">Szerkesztés</translation>
+        <translation>Szerkesztés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszközök</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Qt Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt Tervező</translation>
     </message>
 </context>
 <context>
     <name>NewForm</name>
     <message>
-        <location filename="../tools/designer/src/designer/newform.cpp" line="+78"/>
         <source>Show this Dialog on Startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelenlen meg ez az ablak indításkor</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>C&amp;reate</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Létrehozás</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Recent</source>
-        <translation type="unfinished">Előző</translation>
+        <translation>Legutóbbi</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>New Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Új űrlap</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bezárás</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Megnyitás…</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>&amp;Recent Forms</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Legutóbbi űrlapok</translation>
     </message>
     <message>
-        <location line="+64"/>
         <source>Read error</source>
-        <translation type="unfinished"></translation>
+        <translation>Olvasási hiba</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>A temporary form file could not be created in %1.</source>
-        <translation type="unfinished">Az ideiglenes űrlap fájl nem hozható létre a(z) %1 helyen.</translation>
+        <translation>Egy átmeneti űrlapfájlt nem sikerült létrehozni ebben: %1.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>The temporary form file %1 could not be written.</source>
-        <translation type="unfinished">A(z) %1 ideiglenes űrlap fájl nem írható.</translation>
+        <translation>A(z) %1 átmeneti űrlapfájlt nem sikerült kiírni.</translation>
     </message>
 </context>
 <context>
     <name>ObjectInspectorModel</name>
     <message>
-        <location filename="../tools/designer/src/components/objectinspector/objectinspectormodel.cpp" line="+360"/>
         <source>Object</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektum</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Class</source>
-        <translation type="unfinished"></translation>
+        <translation>Osztály</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>separator</source>
-        <translation type="unfinished"></translation>
+        <translation>elválasztó</translation>
     </message>
     <message>
-        <location line="+98"/>
         <source>&lt;noname&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;névtelen&gt;</translation>
     </message>
 </context>
 <context>
     <name>ObjectNameDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_taskmenu.cpp" line="+158"/>
         <source>Change Object Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektumnév módosítása</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Object Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektumnév</translation>
     </message>
 </context>
 <context>
     <name>PluginDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/plugindialog.ui"/>
         <source>Plugin Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Bővítményinformációk</translation>
     </message>
     <message>
-        <location/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
 </context>
 <context>
     <name>PreferencesDialog</name>
     <message>
-        <location filename="../tools/designer/src/designer/preferencesdialog.ui"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Beállítások</translation>
     </message>
 </context>
 <context>
     <name>PreviewConfigurationWidget</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/previewconfigurationwidget.ui"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap</translation>
     </message>
     <message>
-        <location/>
         <source>Print/Preview Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyomtatási és előnézeti beállítások</translation>
     </message>
     <message>
-        <location/>
         <source>Style</source>
-        <translation type="unfinished">Stílus</translation>
+        <translation>Stílus</translation>
     </message>
     <message>
-        <location/>
         <source>Style sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Stíluslap</translation>
     </message>
     <message>
-        <location/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
     </message>
     <message>
-        <location/>
         <source>Device skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszközfelszín</translation>
     </message>
 </context>
 <context>
     <name>PromotionModel</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/promotionmodel.cpp" line="+112"/>
         <source>Not used</source>
         <extracomment>Usage of promoted widgets</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Q3WizardContainer</name>
-    <message>
-        <location filename="../tools/designer/src/plugins/widgets/q3wizard/q3wizard_container.cpp" line="+172"/>
-        <location line="+5"/>
-        <source>Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem használt</translation>
     </message>
 </context>
 <context>
     <name>QAbstractFormBuilder</name>
     <message>
-        <location filename="../tools/designer/src/lib/uilib/abstractformbuilder.cpp" line="+206"/>
-        <source>Unexpected element &lt;%1&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
         <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt a felhasználói felület fájl olvasása közben a(z) %1. sor %2. oszlopában: %3</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
+        <translation>Ezt a fájlt a Qt-%1 verziójában lévő Tervező használatával hozták létre, és nem lehet beolvasni.</translation>
+    </message>
+    <message>
+        <source>This file cannot be read because it was created using %1.</source>
+        <translation>Ezt a fájlt nem lehet beolvasni, mert a(z) %1 használatával hozták létre.</translation>
+    </message>
+    <message>
         <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Érvénytelen felhasználói felület fájl: az &lt;ui&gt; gyökérelem hiányzik.</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <source>Invalid UI file</source>
+        <translation>Érvénytelen felhasználói felület fájl</translation>
+    </message>
+    <message>
         <source>The creation of a widget of the class &apos;%1&apos; failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” osztályú felületi elem létrehozása sikertelen.</translation>
     </message>
     <message>
-        <location line="+296"/>
         <source>Attempt to add child that is not of class QWizardPage to QWizard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy olyan gyermek hozzáadásának kísérlete a QWizard objektumhoz, amely nem QWizardPage osztályú.</translation>
     </message>
     <message>
-        <location line="+86"/>
         <source>Attempt to add a layout to a widget &apos;%1&apos; (%2) which already has a layout of non-box type %3.
 This indicates an inconsistency in the ui-file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy elrendezés hozzáadásának kísérlet egy olyan „%1” (%2) felületi elemhez, amelynek már van egy %3 nem doboz típusú elrendezése.
+Ez következetlenséget jelez a felhasználói felület fájlban.</translation>
     </message>
     <message>
-        <location line="+144"/>
         <source>Empty widget item in %1 &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Üres felületi elem a következőben: %1 „%2”.</translation>
     </message>
     <message>
-        <location line="+680"/>
         <source>Flags property are not supported yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelző tulajdonságok még nem támogatottak.</translation>
     </message>
     <message>
-        <location line="+81"/>
         <source>While applying tab stops: The widget &apos;%1&apos; could not be found.</source>
-        <translation type="unfinished"></translation>
+        <translation>A bejárási pontok alkalmazásakor: a(z) „%1” felületi elem nem található.</translation>
     </message>
     <message>
-        <location line="+908"/>
         <source>Invalid QButtonGroup reference &apos;%1&apos; referenced by &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+511"/>
-        <source>This version of the uitools library is linked without script support.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%2” érvénytelen „%1” QButtonGroup hivatkozásra hivatkozik.</translation>
     </message>
 </context>
 <context>
     <name>QAxWidgetPlugin</name>
     <message>
-        <location filename="../tools/designer/src/plugins/activeqt/qaxwidgetplugin.cpp" line="+75"/>
         <source>ActiveX control</source>
-        <translation type="unfinished"></translation>
+        <translation>ActiveX-vezérlő</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>ActiveX control widget</source>
-        <translation type="unfinished"></translation>
+        <translation>ActiveX-vezérlő felületi elem</translation>
     </message>
 </context>
 <context>
     <name>QAxWidgetTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/plugins/activeqt/qaxwidgettaskmenu.cpp" line="+119"/>
         <source>Set Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Vezérlő beállítása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Reset Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Vezérlő visszaállítása</translation>
     </message>
     <message>
-        <location line="+41"/>
         <source>Licensed Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Licencelt vezérlő</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The control requires a design-time license</source>
-        <translation type="unfinished"></translation>
+        <translation>A vezérlő egy tervezésidejű licencet igényel</translation>
     </message>
 </context>
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_promotion.cpp" line="+83"/>
         <source>%1 is not a promoted class.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 nem egy előléptetett osztály.</translation>
     </message>
     <message>
-        <location line="+65"/>
         <source>The base class %1 is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 alaposztály érvénytelen.</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>The class %1 already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 osztály már létezik.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Promoted Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetett felület elemek</translation>
     </message>
     <message>
-        <location line="+126"/>
         <source>The class %1 cannot be removed</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 osztályt nem lehet eltávolítani</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The class %1 cannot be removed because it is still referenced.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 osztályt nem lehet eltávolítani, mert még hivatkoznak rá.</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>The class %1 cannot be renamed</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 osztályt nem lehet átnevezni</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>The class %1 cannot be renamed to an empty name.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 osztályt nem lehet átnevezni üres névre.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>There is already a class named %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Már van egy %1 nevű osztály.</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Cannot set an empty include file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/lib/uilib/formscriptrunner.cpp" line="+88"/>
-        <source>Exception at line %1: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <source>Unknown error</source>
-        <translation type="unfinished">Ismeretlen hiba</translation>
-    </message>
-    <message>
-        <location line="+50"/>
-        <source>An error occurred while running the script for %1: %2
-Script: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem lehet beállítani egy üres felvételi fájlt.</translation>
     </message>
 </context>
 <context>
     <name>QDesigner</name>
     <message>
-        <location filename="../tools/designer/src/designer/qdesigner.cpp" line="+141"/>
         <source>%1 - warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+96"/>
-        <source>Qt Designer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>This application cannot be used for the Console edition of Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 – figyelmeztetés</translation>
     </message>
 </context>
 <context>
     <name>QDesignerActions</name>
     <message>
-        <location filename="../tools/designer/src/designer/qdesigner_actions.cpp" line="+130"/>
         <source>Saved %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 elmentve.</translation>
     </message>
     <message>
-        <location line="+26"/>
         <source>%1 already exists.
 Do you want to replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 már létezik.
+Szeretné lecserélni?</translation>
     </message>
     <message>
-        <location line="+24"/>
         <source>Edit Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Felületi elemek szerkesztése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;New...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ú&amp;j…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Megnyitás…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Menté&amp;s</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mentés má&amp;sként…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Save A&amp;ll</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Összes mentése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Save As &amp;Template...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mentés s&amp;ablonként…</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+925"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bezárás</translation>
     </message>
     <message>
-        <location line="-924"/>
         <source>Save &amp;Image...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ké&amp;p mentése…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished">&amp;Nyomtatás...</translation>
+        <translation>&amp;Nyomtatás…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kilépés</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>View &amp;Code...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kód megtekintése…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;Minimize</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kis méret</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Bring All to Front</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes előtérbe hozása</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Preferences...</source>
-        <translation type="unfinished">Beállítások...</translation>
+        <translation>Beállítások…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Additional Fonts...</source>
-        <translation type="unfinished"></translation>
+        <translation>További betűkészletek…</translation>
     </message>
     <message>
-        <location line="+72"/>
         <source>ALT+CTRL+S</source>
-        <translation type="unfinished"></translation>
+        <translation>ALT+CTRL+S</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>CTRL+SHIFT+S</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+SHIFT+S</translation>
     </message>
     <message>
-        <location line="+127"/>
         <source>CTRL+R</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+R</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>CTRL+M</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+M</translation>
     </message>
     <message>
-        <location line="+31"/>
         <source>Qt Designer &amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt Tervező &amp;súgó</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Current Widget Help</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi felületi elem súgója</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>What&apos;s New in Qt Designer?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
         <source>About Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Bővítmények névjegye</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <location line="+601"/>
         <source>About Qt Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>A Qt Tervező névjegye</translation>
     </message>
     <message>
-        <location line="-595"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>A Qt névjegye</translation>
     </message>
     <message>
-        <location line="+38"/>
         <source>Clear &amp;Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Menü törlése</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>&amp;Recent Forms</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Legutóbbi űrlapok</translation>
     </message>
     <message>
-        <location line="+77"/>
-        <location line="+197"/>
         <source>Open Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap megnyitása</translation>
     </message>
     <message>
-        <location line="-196"/>
-        <location line="+37"/>
-        <location line="+160"/>
         <source>Designer UI files (*.%1);;All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tervező felületi elem fájlok (*.%1);;Összes fájl (*)</translation>
     </message>
     <message>
-        <location line="-160"/>
-        <location line="+248"/>
         <source>Save Form As</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap mentése másként</translation>
     </message>
     <message>
-        <location line="-161"/>
         <source>Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tervező</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Feature not implemented yet!</source>
-        <translation type="unfinished"></translation>
+        <translation>A funkció még nincs megvalósítva!</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Code generation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>A kódelőállítás sikertelen</translation>
     </message>
     <message>
-        <location line="+44"/>
         <source>Read error</source>
-        <translation type="unfinished"></translation>
+        <translation>Olvasási hiba</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>%1
 Do you want to update the file location or generate a new form?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1
+Frissíteni szeretné a fájl helyét, vagy előállít egy új űrlapot?</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>&amp;Update</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Frissítés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;New Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Ú&amp;j űrlap</translation>
     </message>
     <message>
-        <location line="+77"/>
-        <location line="+40"/>
+        <source>Qt Designer</source>
+        <translation>Qt Tervező</translation>
+    </message>
+    <message>
         <source>Save Form?</source>
-        <translation type="unfinished"></translation>
+        <translation>Menti az űrlapot?</translation>
     </message>
     <message>
-        <location line="-39"/>
         <source>Could not open file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült megnyitni a fájlt</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The file %1 could not be opened.
 Reason: %2
 Would you like to retry or select a different file?</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 fájlt nem sikerült megnyitni.
+Ok: %2
+Szeretné megpróbálni újra, vagy választ egy másik fájlt?</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Select New File</source>
-        <translation type="unfinished"></translation>
+        <translation>Másik fájl választása</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Could not write file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült írni a fájlt</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>It was not possible to write the entire file %1 to disk.
 Reason:%2
 Would you like to retry?</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem volt lehetséges a teljes %1 fájlt kiírni a lemezre.
+Ok: %2
+Szeretné megpróbálni újra?</translation>
     </message>
     <message>
-        <location line="+158"/>
-        <location line="+34"/>
         <source>Assistant</source>
-        <translation type="unfinished"></translation>
+        <translation>Asszisztens</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>&amp;Close Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Előnézet &amp;bezárása</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <location line="+23"/>
         <source>The backup file %1 could not be written.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 biztonsági mentés fájlt nem sikerült kiírni.</translation>
     </message>
     <message>
-        <location line="+107"/>
         <source>The backup directory %1 could not be created.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 biztonsági mentési könyvtárat nem sikerül létrehozni.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>The temporary backup directory %1 could not be created.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 átmeneti biztonsági másolat könyvtárat nem sikerült létrehozni.</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Preview failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Az előnézet sikertelen</translation>
     </message>
     <message>
-        <location line="+24"/>
         <source>Image files (*.%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Képfájlok (*.%1)</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+17"/>
         <source>Save Image</source>
-        <translation type="unfinished"></translation>
+        <translation>Kép mentése</translation>
     </message>
     <message>
-        <location line="-4"/>
         <source>Saved image %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 kép elmentve.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The file %1 could not be written.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 fájlt nem sikerült kiírni.</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Please close all forms to enable the loading of additional fonts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zárja be az összes űrlapot a további betűkészletek betöltésének engedélyezéséhez.</translation>
     </message>
     <message>
-        <location line="+52"/>
         <source>Printed %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 kinyomtatva.</translation>
     </message>
 </context>
 <context>
     <name>QDesignerAppearanceOptionsPage</name>
     <message>
-        <location filename="../tools/designer/src/designer/qdesigner_appearanceoptions.cpp" line="+138"/>
         <source>Appearance</source>
         <extracomment>Tab in preferences dialog</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Megjelenés</translation>
     </message>
 </context>
 <context>
     <name>QDesignerAppearanceOptionsWidget</name>
     <message>
-        <location line="-53"/>
         <source>Docked Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokkolt ablak</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Multiple Top-Level Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Több felsőszintű ablak</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Toolwindow Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszközablak betűkészlete</translation>
     </message>
 </context>
 <context>
     <name>QDesignerAxWidget</name>
     <message>
-        <location filename="../tools/designer/src/plugins/activeqt/qaxwidgettaskmenu.cpp" line="-71"/>
         <source>Reset control</source>
-        <translation type="unfinished"></translation>
+        <translation>Vezérlő visszaállítása</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Set control</source>
-        <translation type="unfinished"></translation>
+        <translation>Vezérlő beállítása</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/plugins/activeqt/qdesigneraxwidget.cpp" line="+179"/>
         <source>Control loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Vezérlő betöltve</translation>
     </message>
     <message>
-        <location line="+40"/>
         <source>A COM exception occurred when executing a meta call of type %1, index %2 of &quot;%3&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy COM kivétel történt a(z) %1 típusú metahíváskor a(z) „%3” objektum %2 indexénél.</translation>
     </message>
 </context>
 <context>
     <name>QDesignerFormBuilder</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_formbuilder.cpp" line="+89"/>
-        <source>Script errors occurred:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+307"/>
         <source>The preview failed to build.</source>
-        <translation type="unfinished"></translation>
+        <translation>Az előnézet összeállítása sikertelen.</translation>
     </message>
     <message>
-        <location line="+65"/>
         <source>Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tervező</translation>
     </message>
 </context>
 <context>
     <name>QDesignerFormWindow</name>
     <message>
-        <location filename="../tools/designer/src/designer/qdesigner_formwindow.cpp" line="+217"/>
         <source>%1 - %2[*]</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 – %2[*]</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Save Form?</source>
-        <translation type="unfinished"></translation>
+        <translation>Menti az űrlapot?</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Do you want to save the changes to this document before closing?</source>
-        <translation type="unfinished"></translation>
+        <translation>Szeretné menteni a változtatásokat ebbe a dokumentumba a bezárás előtt?</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>If you don&apos;t save, your changes will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha nem menti, akkor a változtatások el fognak veszni.</translation>
     </message>
 </context>
 <context>
     <name>QDesignerMenu</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_menu.cpp" line="-1179"/>
         <source>Type Here</source>
-        <translation type="unfinished"></translation>
+        <translation>Írjon ide</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Add Separator</source>
-        <translation type="unfinished"></translation>
+        <translation>Elválasztó hozzáadása</translation>
     </message>
     <message>
-        <location line="+371"/>
         <source>Insert separator</source>
-        <translation type="unfinished"></translation>
+        <translation>Elválasztó beszúrása</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Remove separator</source>
-        <translation type="unfinished"></translation>
+        <translation>Elválasztó eltávolítása</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Remove action &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” művelet eltávolítása</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location line="+648"/>
         <source>Add separator</source>
-        <translation type="unfinished"></translation>
+        <translation>Elválasztó hozzáadása</translation>
     </message>
     <message>
-        <location line="-348"/>
         <source>Insert action</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet beszúrása</translation>
     </message>
 </context>
 <context>
     <name>QDesignerMenuBar</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_menubar.cpp" line="-375"/>
         <source>Type Here</source>
-        <translation type="unfinished"></translation>
+        <translation>Írjon ide</translation>
     </message>
     <message>
-        <location line="+298"/>
         <source>Remove Menu &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” menü eltávolítása</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Remove Menu Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Menüsor eltávolítása</translation>
     </message>
     <message>
-        <location line="+70"/>
         <source>Menu</source>
-        <translation type="unfinished">Menü</translation>
+        <translation>Menü</translation>
     </message>
 </context>
 <context>
     <name>QDesignerPluginManager</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/pluginmanager.cpp" line="+271"/>
         <source>An XML error was encountered when parsing the XML of the custom widget %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>XML hiba történt a(z) %1 egyéni felületi elem XML kódjának feldolgozásakor: %2</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>A required attribute (&apos;%1&apos;) is missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy szükséges attribútum („%1”) hiányzik.</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>An invalid property specification (&apos;%1&apos;) was encountered. Supported types: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
         <source>&apos;%1&apos; is not a valid string property specification.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” nem érvényes karakterlánc-tulajdonság specifikáció.</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <source>An invalid property specification (&apos;%1&apos;) was encountered. Supported types: %2</source>
+        <translation>Egy érvénytelen tulajdonság specifikáció („%1”) fordult elő. Támogatott típusok: %2</translation>
+    </message>
+    <message>
         <source>The XML of the custom widget %1 does not contain any of the elements &lt;widget&gt; or &lt;ui&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 felületi elem XML kódja nem tartalmaz sem &lt;widget&gt;, sem &lt;ui&gt; elemet.</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>The class attribute for the class %1 is missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Az osztályattribútum hiányzik a(z) %1 osztálynál.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The class attribute for the class %1 does not match the class name %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Az osztályattribútum a(z) %1 osztálynál nem egyezik a(z) %2 osztálynévvel.</translation>
     </message>
 </context>
 <context>
     <name>QDesignerPropertySheet</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_propertysheet.cpp" line="+758"/>
         <source>Dynamic Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Dinamikus tulajdonságok</translation>
     </message>
 </context>
 <context>
     <name>QDesignerResource</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/qdesigner_resource.cpp" line="+461"/>
         <source>The layout type &apos;%1&apos; is not supported, defaulting to grid.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” elrendezéstípus nem támogatott, visszatérés rácsra.</translation>
     </message>
     <message>
-        <location line="+239"/>
         <source>The container extension of the widget &apos;%1&apos; (%2) returned a widget not managed by Designer &apos;%3&apos; (%4) when queried for page #%5.
 Container pages should only be added by specifying them in XML returned by the domXml() method of the custom widget.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” (%2) felületi elem konténerkiterjesztése egy olyan felületi elemet adott vissza a(z) %5. oldal lekérdezésekor, amelyet nem a(z) „%3” (%4) Tervező kezel.
+Konténeroldalak csak az egyéni felületi elem domXml() metódusa által visszaadott XML-ben történő meghatározással adhatók hozzá.</translation>
     </message>
     <message>
-        <location line="+545"/>
         <source>Unexpected element &lt;%1&gt;</source>
         <extracomment>Parsing clipboard contents</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Váratlan &lt;%1&gt; elem</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Error while pasting clipboard contents at line %1, column %2: %3</source>
         <extracomment>Parsing clipboard contents</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Hiba a vágólap tartalmának beillesztésekor a(z) %1. sor %2. oszlopában: %3</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Error while pasting clipboard contents: The root element &lt;ui&gt; is missing.</source>
         <extracomment>Parsing clipboard contents</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Hiba a vágólap tartalmának beillesztésekor: az &lt;ui&gt; gyökérelem hiányzik.</translation>
     </message>
 </context>
 <context>
     <name>QDesignerSharedSettings</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/shared_settings.cpp" line="+83"/>
         <source>The template path %1 could not be created.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 sablonútvonalat nem sikerült létrehozni.</translation>
     </message>
     <message>
-        <location line="+184"/>
         <source>An error has been encountered while parsing device profile XML: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt az eszközprofil XML feldolgozásakor: %1</translation>
     </message>
 </context>
 <context>
     <name>QDesignerToolWindow</name>
     <message>
-        <location filename="../tools/designer/src/designer/qdesigner_toolwindow.cpp" line="+190"/>
         <source>Property Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulajdonság-szerkesztő</translation>
     </message>
     <message>
-        <location line="+54"/>
         <source>Action Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Műveletszerkesztő</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Object Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektumvizsgáló</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Resource Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrás-tallózó</translation>
     </message>
     <message>
-        <location line="+34"/>
         <source>Signal/Slot Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzés és tárolóhely szerkesztő</translation>
     </message>
     <message>
-        <location line="+41"/>
         <source>Widget Box</source>
-        <translation type="unfinished"></translation>
+        <translation>Felületi elem doboz</translation>
     </message>
 </context>
 <context>
     <name>QDesignerWorkbench</name>
     <message>
-        <location filename="../tools/designer/src/designer/qdesigner_workbench.cpp" line="+199"/>
         <source>&amp;File</source>
-        <translation type="unfinished">&amp;Fájl</translation>
+        <translation>&amp;Fájl</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Edit</source>
-        <translation type="unfinished">Szerkesztés</translation>
+        <source>&amp;Edit</source>
+        <translation>S&amp;zerkesztés</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>F&amp;orm</source>
-        <translation type="unfinished"></translation>
+        <translation>Ű&amp;rlap</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Preview in</source>
-        <translation type="unfinished"></translation>
+        <translation>Előnézet ebben</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>&amp;View</source>
-        <translation type="unfinished">&amp;Nézet</translation>
+        <translation>&amp;Nézet</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Beállítások</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ablak</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Súgó</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Toolbars</source>
-        <translation type="unfinished">Eszköztárak</translation>
+        <translation>Eszköztárak</translation>
     </message>
     <message>
-        <location line="+177"/>
         <source>Widget Box</source>
-        <translation type="unfinished"></translation>
+        <translation>Felületi elem doboz</translation>
     </message>
     <message>
-        <location line="+289"/>
         <source>Save Forms?</source>
-        <translation type="unfinished"></translation>
+        <translation>Menti az űrlapokat?</translation>
     </message>
     <message numerus="yes">
-        <location line="+1"/>
         <source>There are %n forms with unsaved changes. Do you want to review these changes before quitting?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n mentetlen változtatással rendelkező űrlap van. Szeretné átnézni ezeket a változtatásokat a kilépés előtt?</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>If you do not review your documents, all your changes will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha nem nézi át a dokumentumokat, akkor minden változtatás el fog veszni.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Discard Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Változtatások eldobása</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Review Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Változtatások átnézése</translation>
     </message>
     <message>
-        <location line="+95"/>
         <source>Backup Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Biztonsági mentés információk</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The last session of Designer was not terminated correctly. Backup files were left behind. Do you want to load them?</source>
-        <translation type="unfinished"></translation>
+        <translation>A Tervező utolsó munkamenete nem megfelelően fejeződött be. Biztonsági mentés fájlok maradtak utána. Szeretné betölteni ezeket?</translation>
     </message>
     <message>
-        <location line="+111"/>
-        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>The file &lt;b&gt;%1&lt;/b&gt; is not a valid Designer UI file.</source>
-        <translation type="unfinished"></translation>
+        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened: %2</source>
+        <translation>A(z) &lt;b&gt;%1&lt;/b&gt; fájlt nem sikerült megnyitni: %2</translation>
     </message>
 </context>
 <context>
     <name>QFormBuilder</name>
     <message>
-        <location filename="../tools/designer/src/lib/uilib/formbuilder.cpp" line="+168"/>
         <source>An empty class name was passed on to %1 (object name: &apos;%2&apos;).</source>
         <extracomment>Empty class name passed to widget factory method</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Egy üres osztálynév lett átadva a(z) %1 metódusnak (objektumnév: „%2”).</translation>
     </message>
     <message>
-        <location line="+56"/>
         <source>QFormBuilder was unable to create a custom widget of the class &apos;%1&apos;; defaulting to base class &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>A QFormBuilder nem tudott „%1” osztályú egyéni felületi elemet létrehozni. Visszatérés a(z) „%2” alaposztályra.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>QFormBuilder was unable to create a widget of the class &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>A QFormBuilder nem tudott „%1” osztályú felületi elemet létrehozni.</translation>
     </message>
     <message>
-        <location line="+61"/>
         <source>The layout type `%1&apos; is not supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” elrendezéstípus nem támogatott.</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/uilib/properties.cpp" line="+106"/>
         <source>The set-type property %1 could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 halmaz típusú tulajdonságot nem sikerült beolvasni.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The enumeration-type property %1 could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 felsorolás típusú tulajdonságot nem sikerült beolvasni.</translation>
     </message>
     <message>
-        <location line="+190"/>
         <source>Reading properties of the type %1 is not supported yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 típusú tulajdonságok olvasása még nem támogatott.</translation>
     </message>
     <message>
-        <location line="+266"/>
         <source>The property %1 could not be written. The type %2 is not supported yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 tulajdonságot nem sikerült kiírni. A(z) %2 típus még nem támogatott.</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/lib/uilib/properties_p.h" line="+132"/>
         <source>The enumeration-value &apos;%1&apos; is invalid. The default value &apos;%2&apos; will be used instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” felsorolás érték érvénytelen. Helyette a(z) „%2” alapértelmezett érték lesz használva.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The flag-value &apos;%1&apos; is invalid. Zero will be used instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” jelzőérték érvénytelen. Helyette nulla lesz használva.</translation>
     </message>
 </context>
 <context>
     <name>QStackedWidgetEventFilter</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_stackedbox.cpp" line="+194"/>
         <source>Previous Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Előző oldal</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Next Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Következő oldal</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Törlés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Before Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi oldal elé</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>After Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi oldal után</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change Page Order...</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldalsorrend módosítása…</translation>
     </message>
     <message>
-        <location line="+72"/>
         <source>Change Page Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldalsorrend módosítása</translation>
     </message>
     <message>
-        <location line="+49"/>
         <source>Page %1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/%2 oldal</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location line="+4"/>
         <source>Insert Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal beszúrása</translation>
     </message>
 </context>
 <context>
     <name>QStackedWidgetPreviewEventFilter</name>
     <message>
-        <location line="-153"/>
         <source>Go to previous page of %1 &apos;%2&apos; (%3/%4).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ugrás a(z) %1 „%2” előző oldalára (%3/%4).</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Go to next page of %1 &apos;%2&apos; (%3/%4).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ugrás a(z) %1 „%2” következő oldalára (%3/%4).</translation>
     </message>
 </context>
 <context>
     <name>QTabWidgetEventFilter</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_tabwidget.cpp" line="+89"/>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Törlés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Before Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi oldal elé</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>After Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi oldal után</translation>
     </message>
     <message>
-        <location line="+283"/>
         <source>Page %1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/%2 oldal</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <location line="+4"/>
         <source>Insert Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal beszúrása</translation>
     </message>
 </context>
 <context>
     <name>QToolBoxHelper</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_toolbox.cpp" line="+64"/>
         <source>Delete Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal törlése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Before Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi oldal elé</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>After Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi oldal után</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change Page Order...</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldalsorrend módosítása…</translation>
     </message>
     <message>
-        <location line="+116"/>
         <source>Change Page Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldalsorrend módosítása</translation>
     </message>
     <message>
-        <location line="+44"/>
         <source>Page %1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/%2 oldal</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Insert Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal beszúrása</translation>
     </message>
 </context>
 <context>
     <name>QtBoolEdit</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertybrowserutils.cpp" line="+255"/>
-        <location line="+10"/>
-        <location line="+25"/>
         <source>True</source>
-        <translation type="unfinished">Igaz</translation>
+        <translation>Igaz</translation>
     </message>
     <message>
-        <location line="-25"/>
-        <location line="+25"/>
         <source>False</source>
-        <translation type="unfinished">Hamis</translation>
+        <translation>Hamis</translation>
     </message>
 </context>
 <context>
     <name>QtBoolPropertyManager</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertymanager.cpp" line="+1507"/>
         <source>True</source>
-        <translation type="unfinished">Igaz</translation>
+        <translation>Igaz</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>False</source>
-        <translation type="unfinished">Hamis</translation>
+        <translation>Hamis</translation>
     </message>
 </context>
 <context>
     <name>QtCharEdit</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qteditorfactory.cpp" line="+1584"/>
         <source>Clear Char</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter törlése</translation>
     </message>
 </context>
 <context>
     <name>QtColorEditWidget</name>
     <message>
-        <location line="+605"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
     </message>
 </context>
 <context>
     <name>QtColorPropertyManager</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertymanager.cpp" line="+4718"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Vörös</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Zöld</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Kék</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation>Alfa</translation>
     </message>
 </context>
 <context>
     <name>QtCursorDatabase</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertybrowserutils.cpp" line="-234"/>
         <source>Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyíl</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Up Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Felfelé nyíl</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Cross</source>
-        <translation type="unfinished">Kereszt</translation>
+        <translation>Kereszt</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Wait</source>
-        <translation type="unfinished"></translation>
+        <translation>Várakozás</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>IBeam</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiányjel</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Size Vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Függőleges méretezés</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Size Horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>Vízszintes méretezés</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Size Backslash</source>
-        <translation type="unfinished"></translation>
+        <translation>Fordított perjel méretezés</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Size Slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Perjel méretezés</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Size All</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes méretezése</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Blank</source>
-        <translation type="unfinished"></translation>
+        <translation>Üres</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Split Vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Függőleges felosztás</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Split Horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>Vízszintes felosztás</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Pointing Hand</source>
-        <translation type="unfinished"></translation>
+        <translation>Mutató kéz</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Forbidden</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiltott</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Open Hand</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyitott kéz</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Closed Hand</source>
-        <translation type="unfinished"></translation>
+        <translation>Csukott kéz</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>What&apos;s This</source>
-        <translation type="unfinished"></translation>
+        <translation>Mi ez</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Busy</source>
-        <translation type="unfinished"></translation>
+        <translation>Foglalt</translation>
     </message>
 </context>
 <context>
     <name>QtFontEditWidget</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qteditorfactory.cpp" line="+198"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>Select Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Betűkészlet kiválasztása</translation>
     </message>
 </context>
 <context>
     <name>QtFontPropertyManager</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertymanager.cpp" line="-351"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Betűcsalád</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Point Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Pontméret</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Bold</source>
-        <translation type="unfinished">Félkövér</translation>
+        <translation>Félkövér</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Italic</source>
-        <translation type="unfinished">Dőlt</translation>
+        <translation>Dőlt</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Underline</source>
-        <translation type="unfinished">Aláhúzott</translation>
+        <translation>Aláhúzott</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Strikeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Áthúzott</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Kerning</source>
-        <translation type="unfinished"></translation>
+        <translation>Alávágás</translation>
     </message>
 </context>
 <context>
     <name>QtGradientDialog</name>
     <message>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientdialog.ui"/>
         <source>Edit Gradient</source>
-        <translation type="unfinished"></translation>
+        <translation>Színátmenet szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>QtGradientEditor</name>
     <message>
-        <location filename="../tools/shared/qtgradienteditor/qtgradienteditor.cpp" line="+431"/>
-        <source>Start X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Start Y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Final X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Final Y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <location line="+24"/>
-        <source>Central X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-20"/>
-        <location line="+24"/>
-        <source>Central Y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-20"/>
-        <source>Focal X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Focal Y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Radius</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Angle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+288"/>
-        <source>Linear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Radial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Conical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Pad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Repeat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Reflect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/shared/qtgradienteditor/qtgradienteditor.ui"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap</translation>
     </message>
     <message>
-        <location/>
         <source>Gradient Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Színátmenet szerkesztő</translation>
     </message>
     <message>
-        <location/>
         <source>This area shows a preview of the gradient being edited. It also allows you to edit parameters specific to the gradient&apos;s type such as start and final point, radius, etc. by drag &amp; drop.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ez a terület a szerkesztett színátmenet előnézetét jeleníti meg. Lehetővé teszi továbbá a színátmenet típusára jellemző paraméterek fogd és vidd módon történő szerkesztését, mint például a kezdő és befejező pont, sugár, stb.</translation>
     </message>
     <message>
-        <location/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
-        <location/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation>2</translation>
     </message>
     <message>
-        <location/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation>3</translation>
     </message>
     <message>
-        <location/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation>4</translation>
     </message>
     <message>
-        <location/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation>5</translation>
     </message>
     <message>
-        <location/>
         <source>Gradient Stops Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Színátmeneti végpont szerkesztő</translation>
     </message>
     <message>
-        <location/>
         <source>This area allows you to edit gradient stops. Double click on the existing stop handle to duplicate it. Double click outside of the existing stop handles to create a new stop. Drag &amp; drop the handle to reposition it. Use right mouse button to popup context menu with extra actions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ez a terület lehetővé teszi a színátmeneti határok szerkesztését. Kettőzéshez kattintson duplán a meglévő határfogantyúra. A meglévő határfogantyúkon kívülre történő dupla kattintással új határt hozhat létre. Fogd és vidd módon a fogantyú áthelyezhető. A jobb egérgomb használatával további műveleteket tartalmazó helyi menüt jeleníthet meg.</translation>
     </message>
     <message>
-        <location/>
         <source>Zoom</source>
-        <translation type="unfinished">Nagyítás</translation>
+        <translation>Nagyítás</translation>
     </message>
     <message>
-        <location/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyítás visszaállítása</translation>
     </message>
     <message>
-        <location/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Helyzet</translation>
     </message>
     <message>
-        <location/>
         <source>Hue</source>
-        <translation type="unfinished"></translation>
+        <translation>Árny</translation>
     </message>
     <message>
-        <location/>
         <source>H</source>
-        <translation type="unfinished"></translation>
+        <translation>H</translation>
     </message>
     <message>
-        <location/>
         <source>Saturation</source>
-        <translation type="unfinished"></translation>
+        <translation>Telítettség</translation>
     </message>
     <message>
-        <location/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>S</translation>
     </message>
     <message>
-        <location/>
         <source>Sat</source>
-        <translation type="unfinished"></translation>
+        <translation>Tel</translation>
     </message>
     <message>
-        <location/>
         <source>Value</source>
-        <translation type="unfinished">Érték</translation>
+        <translation>Érték</translation>
     </message>
     <message>
-        <location/>
         <source>V</source>
-        <translation type="unfinished"></translation>
+        <translation>V</translation>
     </message>
     <message>
-        <location/>
         <source>Val</source>
-        <translation type="unfinished"></translation>
+        <translation>Ért</translation>
     </message>
     <message>
-        <location/>
         <source>Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation>Alfa</translation>
     </message>
     <message>
-        <location/>
         <source>A</source>
-        <translation type="unfinished"></translation>
+        <translation>A</translation>
     </message>
     <message>
-        <location/>
         <source>Type</source>
-        <translation type="unfinished">Típus</translation>
+        <translation>Típus</translation>
     </message>
     <message>
-        <location/>
         <source>Spread</source>
-        <translation type="unfinished"></translation>
+        <translation>Hízlalás</translation>
     </message>
     <message>
-        <location/>
         <source>Color</source>
-        <translation type="unfinished">Szín</translation>
+        <translation>Szín</translation>
     </message>
     <message>
-        <location/>
         <source>Current stop&apos;s color</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelenlegi határ színe</translation>
     </message>
     <message>
-        <location/>
         <source>Show HSV specification</source>
-        <translation type="unfinished"></translation>
+        <translation>HSV specifikáció megjelenítése</translation>
     </message>
     <message>
-        <location/>
         <source>HSV</source>
-        <translation type="unfinished"></translation>
+        <translation>HSV</translation>
     </message>
     <message>
-        <location/>
         <source>Show RGB specification</source>
-        <translation type="unfinished"></translation>
+        <translation>RGB specifikáció megjelenítése</translation>
     </message>
     <message>
-        <location/>
         <source>RGB</source>
-        <translation type="unfinished"></translation>
+        <translation>RGB</translation>
     </message>
     <message>
-        <location/>
         <source>Current stop&apos;s position</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelenlegi határ helyzete</translation>
     </message>
     <message>
-        <location/>
         <source>%</source>
-        <translation type="unfinished"></translation>
+        <translation>%</translation>
     </message>
     <message>
-        <location/>
         <source>Zoom In</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyítás</translation>
     </message>
     <message>
-        <location/>
         <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Kicsinyítés</translation>
     </message>
     <message>
-        <location/>
         <source>Toggle details extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Részletek kiterjesztés be- és kikapcsolása</translation>
     </message>
     <message>
-        <location/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
-        <location/>
         <source>Linear Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineáris típus</translation>
     </message>
     <message>
-        <location/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
     </message>
     <message>
-        <location/>
         <source>Radial Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Sugáriranyú típus</translation>
     </message>
     <message>
-        <location/>
         <source>Conical Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Kúpos típus</translation>
     </message>
     <message>
-        <location/>
         <source>Pad Spread</source>
-        <translation type="unfinished"></translation>
+        <translation>Hizlalás kitöltése</translation>
     </message>
     <message>
-        <location/>
         <source>Repeat Spread</source>
-        <translation type="unfinished"></translation>
+        <translation>Hizlalás ismétlése</translation>
     </message>
     <message>
-        <location/>
         <source>Reflect Spread</source>
-        <translation type="unfinished"></translation>
+        <translation>Hizlalás tükröződése</translation>
+    </message>
+    <message>
+        <source>Start X</source>
+        <translation>Kezdő X</translation>
+    </message>
+    <message>
+        <source>Start Y</source>
+        <translation>Kezdő Y</translation>
+    </message>
+    <message>
+        <source>Final X</source>
+        <translation>Végső X</translation>
+    </message>
+    <message>
+        <source>Final Y</source>
+        <translation>Végső Y</translation>
+    </message>
+    <message>
+        <source>Central X</source>
+        <translation>Közép X</translation>
+    </message>
+    <message>
+        <source>Central Y</source>
+        <translation>Közép Y</translation>
+    </message>
+    <message>
+        <source>Focal X</source>
+        <translation>Fókusz X</translation>
+    </message>
+    <message>
+        <source>Focal Y</source>
+        <translation>Fókusz Y</translation>
+    </message>
+    <message>
+        <source>Radius</source>
+        <translation>Sugár</translation>
+    </message>
+    <message>
+        <source>Angle</source>
+        <translation>Szög</translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation>Lineáis</translation>
+    </message>
+    <message>
+        <source>Radial</source>
+        <translation>Sugárirányú</translation>
+    </message>
+    <message>
+        <source>Conical</source>
+        <translation>Kúpos</translation>
+    </message>
+    <message>
+        <source>Pad</source>
+        <translation>Kitöltés</translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation>Ismétlés</translation>
+    </message>
+    <message>
+        <source>Reflect</source>
+        <translation>Tükröződés</translation>
     </message>
 </context>
 <context>
     <name>QtGradientStopsWidget</name>
     <message>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientstopswidget.cpp" line="+947"/>
         <source>New Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Új határ</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Törlés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Flip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes tükrözése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Select All</source>
-        <translation type="unfinished">Összes kijelölése</translation>
+        <translation>Összes kijelölése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Zoom In</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyítás</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Kicsinyítés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Reset Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyítás visszaállítása</translation>
     </message>
 </context>
 <context>
     <name>QtGradientView</name>
     <message>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientview.cpp" line="+107"/>
-        <source>Grad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>Remove Gradient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Are you sure you want to remove the selected gradient?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientview.ui"/>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientview.cpp" line="+74"/>
-        <source>New...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientview.cpp" line="+1"/>
-        <source>Edit...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientview.cpp" line="+1"/>
-        <source>Rename</source>
-        <translation type="unfinished">Átnevezés</translation>
-    </message>
-    <message>
-        <location/>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientview.cpp" line="+1"/>
-        <source>Remove</source>
-        <translation type="unfinished">Törlés</translation>
-    </message>
-    <message>
-        <location/>
         <source>Gradient View</source>
-        <translation type="unfinished"></translation>
+        <translation>Színátmenet nézet</translation>
+    </message>
+    <message>
+        <source>New...</source>
+        <translation>Új…</translation>
+    </message>
+    <message>
+        <source>Edit...</source>
+        <translation>Szerkesztés…</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>Átnevezés</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Eltávolítás</translation>
+    </message>
+    <message>
+        <source>Grad</source>
+        <translation>Színátmenet</translation>
+    </message>
+    <message>
+        <source>Remove Gradient</source>
+        <translation>Színátmenet eltávolítása</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to remove the selected gradient?</source>
+        <translation>Biztosan el szeretné távolítani a kijelölt színátmenetet?</translation>
     </message>
 </context>
 <context>
     <name>QtGradientViewDialog</name>
     <message>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientviewdialog.ui"/>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientviewdialog.h" line="+62"/>
         <source>Select Gradient</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QtKeySequenceEdit</name>
-    <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertybrowserutils.cpp" line="+249"/>
-        <source>Clear Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Színátmenet kiválasztása</translation>
     </message>
 </context>
 <context>
     <name>QtLocalePropertyManager</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertymanager.cpp" line="-3541"/>
+        <source>&lt;Invalid&gt;</source>
+        <translation>&lt;érvénytelen&gt;</translation>
+    </message>
+    <message>
         <source>%1, %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1, %2</translation>
     </message>
     <message>
-        <location line="+53"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyelv</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Ország</translation>
     </message>
 </context>
 <context>
     <name>QtPointFPropertyManager</name>
     <message>
-        <location line="+411"/>
         <source>(%1, %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>(%1, %2)</translation>
     </message>
     <message>
-        <location line="+71"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
 </context>
 <context>
     <name>QtPointPropertyManager</name>
     <message>
-        <location line="-320"/>
         <source>(%1, %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>(%1, %2)</translation>
     </message>
     <message>
-        <location line="+37"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
 </context>
 <context>
     <name>QtPropertyBrowserUtils</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertybrowserutils.cpp" line="-156"/>
         <source>[%1, %2, %3] (%4)</source>
-        <translation type="unfinished"></translation>
+        <translation>[%1, %2, %3] (%4)</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>[%1, %2]</source>
-        <translation type="unfinished"></translation>
+        <translation>[%1, %2]</translation>
     </message>
 </context>
 <context>
     <name>QtRectFPropertyManager</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertymanager.cpp" line="+1706"/>
         <source>[(%1, %2), %3 x %4]</source>
-        <translation type="unfinished"></translation>
+        <translation>[(%1, %2), %3 x %4]</translation>
     </message>
     <message>
-        <location line="+156"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Szélesség</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Magasság</translation>
     </message>
 </context>
 <context>
     <name>QtRectPropertyManager</name>
     <message>
-        <location line="-612"/>
         <source>[(%1, %2), %3 x %4]</source>
-        <translation type="unfinished"></translation>
+        <translation>[(%1, %2), %3 x %4]</translation>
     </message>
     <message>
-        <location line="+120"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Szélesség</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Magasság</translation>
     </message>
 </context>
 <context>
     <name>QtResourceEditorDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qtresourceeditordialog.cpp" line="+76"/>
+        <source>Dialog</source>
+        <translation>Párbeszédablak</translation>
+    </message>
+    <message>
+        <source>New File</source>
+        <translation>Új fájl</translation>
+    </message>
+    <message>
+        <source>N</source>
+        <translation>N</translation>
+    </message>
+    <message>
+        <source>Remove File</source>
+        <translation>Fájl eltávolítása</translation>
+    </message>
+    <message>
+        <source>R</source>
+        <translation>R</translation>
+    </message>
+    <message>
+        <source>I</source>
+        <translation>I</translation>
+    </message>
+    <message>
+        <source>New Resource</source>
+        <translation>Új erőforrás</translation>
+    </message>
+    <message>
+        <source>A</source>
+        <translation>A</translation>
+    </message>
+    <message>
+        <source>Remove Resource or File</source>
+        <translation>Erőforrás vagy fájl eltávolítása</translation>
+    </message>
+    <message>
         <source>%1 already exists.
 Do you want to replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 már létezik.
+Szeretné lecserélni?</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The file does not appear to be a resource file; element &apos;%1&apos; was found where &apos;%2&apos; was expected.</source>
-        <translation type="unfinished"></translation>
+        <translation>A fájl nem tűnik erőforrásfájlnak: a(z) „%1” elem volt megtalálható, ahol „%2” várt.</translation>
     </message>
     <message>
-        <location line="+902"/>
         <source>%1 [read-only]</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 [csak olvasható]</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+198"/>
         <source>%1 [missing]</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 [hiányzik]</translation>
     </message>
     <message>
-        <location line="-72"/>
         <source>&lt;no prefix&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;nincs előtag&gt;</translation>
     </message>
     <message>
-        <location line="+320"/>
-        <location line="+566"/>
         <source>New Resource File</source>
-        <translation type="unfinished"></translation>
+        <translation>Új erőforrásfájl</translation>
     </message>
     <message>
-        <location line="-564"/>
-        <location line="+25"/>
         <source>Resource files (*.qrc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrásfájlok (*.qrc)</translation>
     </message>
     <message>
-        <location line="-2"/>
         <source>Import Resource File</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrásfájl importálása</translation>
     </message>
     <message>
-        <location line="+112"/>
         <source>newPrefix</source>
-        <translation type="unfinished"></translation>
+        <translation>új előtag</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>&lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; The file&lt;/p&gt;&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;is outside of the current resource file&apos;s parent directory.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;&lt;b&gt;Figyelmeztetés:&lt;/b&gt; a megadott&lt;/p&gt;&lt;p&gt;%1 fájl&lt;/p&gt;a jelenlegi erőforrásfájl szülőkönyvtárán kívül van.&lt;p&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>&lt;p&gt;To resolve the issue, press:&lt;/p&gt;&lt;table&gt;&lt;tr&gt;&lt;th align=&quot;left&quot;&gt;Copy&lt;/th&gt;&lt;td&gt;to copy the file to the resource file&apos;s parent directory.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th align=&quot;left&quot;&gt;Copy As...&lt;/th&gt;&lt;td&gt;to copy the file into a subdirectory of the resource file&apos;s parent directory.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th align=&quot;left&quot;&gt;Keep&lt;/th&gt;&lt;td&gt;to use its current location.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;A probléma megoldásához válasszon a következők közül:&lt;/p&gt;&lt;table&gt;&lt;tr&gt;&lt;th align=&quot;left&quot;&gt;Másolás&lt;/th&gt;&lt;td&gt;a fájl másolása az erőforrásfájl szülőkönyvtárába.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th align=&quot;left&quot;&gt;Másolás másként…&lt;/th&gt;&lt;td&gt;a fájl másolása az erőforrásfájl szülőkönyvtárának egyik alkönyvtárba.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th align=&quot;left&quot;&gt;Megtartás&lt;/th&gt;&lt;td&gt;a fájl jelenlegi helyének használata.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>Add Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájlok hozzáadása</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Incorrect Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Hibás útvonal</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+19"/>
-        <location line="+212"/>
-        <location line="+7"/>
         <source>Copy</source>
-        <translation type="unfinished">Másolás</translation>
+        <translation>Másolás</translation>
     </message>
     <message>
-        <location line="-236"/>
         <source>Copy As...</source>
-        <translation type="unfinished"></translation>
+        <translation>Másolás másként…</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Keep</source>
-        <translation type="unfinished">Meghagy</translation>
+        <translation>Megtartás</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Kihagyás</translation>
     </message>
     <message>
-        <location line="+87"/>
         <source>Clone Prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Előtag klónozása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enter the suffix which you want to add to the names of the cloned files.
 This could for example be a language extension like &quot;_de&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adja meg az utótagot, amelyet a klónozott fájlok neveihez szeretne hozzáadni.
+Ez lehet például egy nyelvi kiterjesztés, úgymint „_hu”.</translation>
     </message>
     <message>
-        <location line="+113"/>
-        <location line="+4"/>
         <source>Copy As</source>
-        <translation type="unfinished"></translation>
+        <translation>Másolás másként</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&lt;p&gt;The selected file:&lt;/p&gt;&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;is outside of the current resource file&apos;s directory:&lt;/p&gt;&lt;p&gt;%2&lt;/p&gt;&lt;p&gt;Please select another path within this directory.&lt;p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;A kiválasztott fájl:&lt;/p&gt;&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;a jelenlegi erőforrásfájl könyvtárán kívül van:&lt;/p&gt;&lt;p&gt;%2&lt;/p&gt;&lt;p&gt;Válasszon egy másik útvonalat ezen a könyvtáron belül.&lt;p&gt;</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>Could not overwrite %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült a(z) %1 felülírása.</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Could not copy
 %1
 to
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem másolható
+%1
+ide:
+%2</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>A parse error occurred at line %1, column %2 of %3:
 %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Feldolgozási hiba történt a(z) %3 %1. sorának %2. oszlopában:
+%4</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Save Resource File</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrásfájl mentése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Could not write %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült a(z) %1 kiírása: %2</translation>
     </message>
     <message>
-        <location line="+33"/>
         <source>Edit Resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrások szerkesztése</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>New...</source>
-        <translation type="unfinished"></translation>
+        <translation>Új…</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>Megnyitás…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Open Resource File</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrásfájl megnyitása</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+11"/>
         <source>Remove</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
-        <location line="-10"/>
-        <location line="+11"/>
         <source>Move Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Mozgatás fel</translation>
     </message>
     <message>
-        <location line="-10"/>
-        <location line="+11"/>
         <source>Move Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Mozgatás le</translation>
     </message>
     <message>
-        <location line="-9"/>
-        <location line="+1"/>
         <source>Add Prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Előtag hozzáadása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Add Files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájlok hozzáadása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change Prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Előtag módosítása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyelv módosítása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Álnév módosítása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Clone Prefix...</source>
-        <translation type="unfinished"></translation>
+        <translation>Előtag klónozása…</translation>
     </message>
     <message>
-        <location line="+37"/>
         <source>Prefix / Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Előtag / útvonal</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Language / Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyelv / álnév</translation>
     </message>
     <message>
-        <location line="+117"/>
         <source>&lt;html&gt;&lt;p&gt;&lt;b&gt;Warning:&lt;/b&gt; There have been problems while reloading the resources:&lt;/p&gt;&lt;pre&gt;%1&lt;/pre&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;p&gt;&lt;b&gt;Figyelmeztetés:&lt;/b&gt; hibák történtek az erőforrás újratöltése közben:&lt;/p&gt;&lt;pre&gt;%1&lt;/pre&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Resource Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/qtresourceeditordialog.ui"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>New File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>N</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Remove File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>R</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>I</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>New Resource</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Remove Resource or File</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrás figyelmeztetés</translation>
     </message>
 </context>
 <context>
     <name>QtResourceView</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qtresourceview.cpp" line="+567"/>
         <source>Size: %1 x %2
 %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Méret: %1 x %2
+%3</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>Edit Resources...</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrások szerkesztése…</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Reload</source>
-        <translation type="unfinished">Újratöltés</translation>
+        <translation>Újratöltés</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Copy Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Útvonal másolása</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Szűrő</translation>
     </message>
 </context>
 <context>
     <name>QtResourceViewDialog</name>
     <message>
-        <location line="+252"/>
         <source>Select Resource</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrás kiválasztása</translation>
     </message>
 </context>
 <context>
     <name>QtSizeFPropertyManager</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qtpropertymanager.cpp" line="-535"/>
         <source>%1 x %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 x %2</translation>
     </message>
     <message>
-        <location line="+130"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Szélesség</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Magasság</translation>
     </message>
 </context>
 <context>
     <name>QtSizePolicyPropertyManager</name>
     <message>
-        <location line="+1709"/>
-        <location line="+1"/>
         <source>&lt;Invalid&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;Érvénytelen&gt;</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>[%1, %2, %3, %4]</source>
-        <translation type="unfinished"></translation>
+        <translation>[%1, %2, %3, %4]</translation>
     </message>
     <message>
-        <location line="+45"/>
         <source>Horizontal Policy</source>
-        <translation type="unfinished"></translation>
+        <translation>Vízszintes irányelv</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Vertical Policy</source>
-        <translation type="unfinished"></translation>
+        <translation>Függőleges irányelv</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Horizontal Stretch</source>
-        <translation type="unfinished"></translation>
+        <translation>Vízszintes nyújtás</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Vertical Stretch</source>
-        <translation type="unfinished"></translation>
+        <translation>Függőleges nyújtás</translation>
     </message>
 </context>
 <context>
     <name>QtSizePropertyManager</name>
     <message>
-        <location line="-2286"/>
         <source>%1 x %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 x %2</translation>
     </message>
     <message>
-        <location line="+96"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Szélesség</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Magasság</translation>
     </message>
 </context>
 <context>
     <name>QtToolBarDialog</name>
     <message>
-        <location filename="../tools/shared/qttoolbardialog/qttoolbardialog.cpp" line="+1240"/>
-        <source>Custom Toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+544"/>
-        <source>&lt; S E P A R A T O R &gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/shared/qttoolbardialog/qttoolbardialog.ui"/>
         <source>Customize Toolbars</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszköztárak személyre szabása</translation>
     </message>
     <message>
-        <location/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
-        <location/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Műveletek</translation>
     </message>
     <message>
-        <location/>
         <source>Toolbars</source>
-        <translation type="unfinished">Eszköztárak</translation>
+        <translation>Eszköztárak</translation>
     </message>
     <message>
-        <location/>
         <source>Add new toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Új eszköztár hozzáadása</translation>
     </message>
     <message>
-        <location/>
         <source>New</source>
-        <translation type="unfinished">Új</translation>
+        <translation>Új</translation>
     </message>
     <message>
-        <location/>
         <source>Remove selected toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölt eszköztár eltávolítása</translation>
     </message>
     <message>
-        <location/>
         <source>Remove</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
-        <location/>
         <source>Rename toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszköztár átnevezése</translation>
     </message>
     <message>
-        <location/>
         <source>Rename</source>
-        <translation type="unfinished">Átnevezés</translation>
+        <translation>Átnevezés</translation>
     </message>
     <message>
-        <location/>
         <source>Move action up</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet mozgatása fel</translation>
     </message>
     <message>
-        <location/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
-        <location/>
         <source>Remove action from toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet eltávolítása az eszköztárról</translation>
     </message>
     <message>
-        <location/>
         <source>&lt;-</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;-</translation>
     </message>
     <message>
-        <location/>
         <source>Add action to toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet hozzáadása az eszköztárhoz</translation>
     </message>
     <message>
-        <location/>
         <source>-&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>-&gt;</translation>
     </message>
     <message>
-        <location/>
         <source>Move action down</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet mozgatása le</translation>
     </message>
     <message>
-        <location/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Le</translation>
     </message>
     <message>
-        <location/>
         <source>Current Toolbar Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelenlegi eszköztár műveletek</translation>
+    </message>
+    <message>
+        <source>Custom Toolbar</source>
+        <translation>Egyéni eszköztár</translation>
+    </message>
+    <message>
+        <source>&lt; S E P A R A T O R &gt;</source>
+        <translation>&lt; E L V Á L A S Z T Ó &gt;</translation>
     </message>
 </context>
 <context>
     <name>QtTreePropertyBrowser</name>
     <message>
-        <location filename="../tools/shared/qtpropertybrowser/qttreepropertybrowser.cpp" line="+442"/>
         <source>Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulajdonság</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Value</source>
-        <translation type="unfinished">Érték</translation>
+        <translation>Érték</translation>
     </message>
 </context>
 <context>
     <name>SaveFormAsTemplate</name>
     <message>
-        <location filename="../tools/designer/src/designer/saveformastemplate.cpp" line="+72"/>
+        <source>Save Form As Template</source>
+        <translation>Űrlap mentése sablonként</translation>
+    </message>
+    <message>
+        <source>&amp;Name:</source>
+        <translation>&amp;Név:</translation>
+    </message>
+    <message>
+        <source>&amp;Category:</source>
+        <translation>&amp;Kategória:</translation>
+    </message>
+    <message>
         <source>Add path...</source>
-        <translation type="unfinished"></translation>
+        <translation>Útvonal hozzáadása…</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Template Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>A sablon létezik</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A template with the name %1 already exists.
 Do you want overwrite the template?</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy %1 nevű sablon már létezik.
+Szeretné felülírni a sablont?</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Overwrite Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Sablon felülírása</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Open Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Megnyitási hiba</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>There was an error opening template %1 for writing. Reason: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt a(z) %1 sablon írásra való megnyitása során. Ok: %2</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Write Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Írási hiba</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>There was an error writing the template %1 to disk. Reason: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt a(z) %1 sablon lemezre írása során. Ok: %2</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Pick a directory to save templates in</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/designer/saveformastemplate.ui"/>
-        <source>Save Form As Template</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>&amp;Name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>&amp;Category:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ScriptErrorDialog</name>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/scripterrordialog.cpp" line="+59"/>
-        <source>An error occurred while running the scripts for &quot;%1&quot;:
-</source>
-        <translation type="unfinished"></translation>
+        <translation>Válasszon egy könyvtárat, amelybe a sablonokat menti</translation>
     </message>
 </context>
 <context>
     <name>SelectSignalDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/selectsignaldialog.ui"/>
         <source>Go to slot</source>
-        <translation type="unfinished"></translation>
+        <translation>Ugrás a tárolóhelyhez</translation>
     </message>
     <message>
-        <location/>
         <source>Select signal</source>
-        <translation type="unfinished"></translation>
+        <translation>Válasszon jelzést</translation>
     </message>
     <message>
-        <location/>
         <source>signal</source>
-        <translation type="unfinished"></translation>
+        <translation>jelzés</translation>
     </message>
     <message>
-        <location/>
         <source>class</source>
-        <translation type="unfinished"></translation>
+        <translation>osztály</translation>
     </message>
 </context>
 <context>
     <name>SignalSlotConnection</name>
     <message>
-        <location filename="../tools/designer/src/components/signalsloteditor/signalsloteditor.cpp" line="-358"/>
         <source>SENDER(%1), SIGNAL(%2), RECEIVER(%3), SLOT(%4)</source>
-        <translation type="unfinished"></translation>
+        <translation>KÜLDŐ(%1), JELZÉS(%2), FOGADÓ(%3), TÁROLÓHELY(%4)</translation>
     </message>
 </context>
 <context>
     <name>SignalSlotDialogClass</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/signalslotdialog.ui"/>
         <source>Signals and slots</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzések és tárolóhelyek</translation>
     </message>
     <message>
-        <location/>
         <source>Slots</source>
-        <translation type="unfinished"></translation>
+        <translation>Tárolóhelyek</translation>
     </message>
     <message>
-        <location/>
         <source>Add</source>
-        <translation type="unfinished">Hozzáadás</translation>
+        <translation>Hozzáadás</translation>
     </message>
     <message>
-        <location/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
     </message>
     <message>
-        <location/>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Törlés</translation>
     </message>
     <message>
-        <location/>
         <source>Signals</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzések</translation>
     </message>
 </context>
 <context>
     <name>Spacer</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/spacer_widget.cpp" line="+275"/>
         <source>Horizontal Spacer &apos;%1&apos;, %2 x %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Vízszintes helyőrző: „%1”, %2 x %3</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Vertical Spacer &apos;%1&apos;, %2 x %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Függőleges helyőrző: „%1”, %2 x %3</translation>
     </message>
 </context>
 <context>
     <name>TemplateOptionsPage</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/templateoptionspage.cpp" line="+156"/>
         <source>Template Paths</source>
         <extracomment>Tab in preferences dialog</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Sablonok útvonalai</translation>
     </message>
 </context>
 <context>
     <name>ToolBarManager</name>
     <message>
-        <location filename="../tools/designer/src/designer/mainwindow.cpp" line="+89"/>
         <source>Configure Toolbars...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszköztárak személyre szabása…</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Window</source>
-        <translation type="unfinished">Ablak</translation>
+        <translation>Ablak</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Help</source>
-        <translation type="unfinished">Segítség</translation>
+        <translation>Súgó</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Style</source>
-        <translation type="unfinished">Stílus</translation>
+        <translation>Stílus</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Dock views</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokknézetek</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>File</source>
-        <translation type="unfinished">Fájl</translation>
+        <translation>Fájl</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Edit</source>
-        <translation type="unfinished">Szerkesztés</translation>
+        <translation>Szerkesztés</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszközök</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Toolbars</source>
-        <translation type="unfinished">Eszköztárak</translation>
+        <translation>Eszköztárak</translation>
     </message>
 </context>
 <context>
     <name>VersionDialog</name>
     <message>
-        <location filename="../tools/designer/src/designer/versiondialog.cpp" line="+170"/>
         <source>&lt;h3&gt;%1&lt;/h3&gt;&lt;br/&gt;&lt;br/&gt;Version %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h3&gt;%1&lt;/h3&gt;&lt;br/&gt;&lt;br/&gt;%2. verzió</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Qt Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt Tervező</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&lt;br/&gt;Qt Designer is a graphical user interface designer for Qt applications.&lt;br/&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br/&gt;A Qt Tervező egy grafikus felhasználói felület tervező a Qt alkalmazásokhoz.&lt;br/&gt;</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>%1&lt;br/&gt;Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).</source>
-        <translation type="unfinished"></translation>
+        <source>%1&lt;br/&gt;Copyright (C) %2 The Qt Company Ltd.</source>
+        <translation>%1&lt;br/&gt;Copyright (C) %2 The Qt Company Ltd.</translation>
     </message>
 </context>
 <context>
     <name>WidgetDataBase</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/widgetdatabase.cpp" line="+814"/>
+        <source>A custom widget plugin whose class name (%1) matches that of an existing class has been found.</source>
+        <translation>Egy egyéni felületi elem bővítmény, amely osztályneve (%1) megegyezik azzal, hogy egy létező osztály található.</translation>
+    </message>
+    <message>
         <source>The file contains a custom widget &apos;%1&apos; whose base class (%2) differs from the current entry in the widget database (%3). The widget database is left unchanged.</source>
-        <translation type="unfinished"></translation>
+        <translation>A fájl egy egyéni felületi elemet tartalmaz („%1”), amelynek alaposztálya (%2) eltér a jelenlegi bejegyzéstől a felületi elem adatbázisban (%3). A felületi elem adatbázis változatlanul lett hagyva.</translation>
+    </message>
+</context>
+<context>
+    <name>qdesigner_internal</name>
+    <message>
+        <source>%1 Widget</source>
+        <translation>%1 felületi elem</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ActionEditor</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/actioneditor.cpp" line="+123"/>
         <source>New...</source>
-        <translation type="unfinished"></translation>
+        <translation>Új…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Edit...</source>
-        <translation type="unfinished"></translation>
+        <translation>Szerkesztés…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Go to slot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ugrás a tárolóhelyhez…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Copy</source>
-        <translation type="unfinished">Másolás</translation>
+        <translation>Másolás</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Cut</source>
-        <translation type="unfinished">Kivágás</translation>
+        <translation>Kivágás</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Paste</source>
-        <translation type="unfinished">Beillesztés</translation>
+        <translation>Beillesztés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Select all</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes kijelölése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Törlés</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Műveletek</translation>
     </message>
     <message>
-        <location line="+49"/>
         <source>Configure Action Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Műveletszerkesztő beállítása</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Icon View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikon nézet</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Detailed View</source>
-        <translation type="unfinished"></translation>
+        <translation>Részletes nézet</translation>
     </message>
     <message>
-        <location line="+246"/>
+        <source>Filter</source>
+        <translation>Szűrő</translation>
+    </message>
+    <message>
         <source>New action</source>
-        <translation type="unfinished"></translation>
+        <translation>Új művelet</translation>
     </message>
     <message>
-        <location line="+98"/>
         <source>Edit action</source>
-        <translation type="unfinished"></translation>
+        <translation>Művelet szerkesztése</translation>
     </message>
     <message>
-        <location line="+69"/>
         <source>Remove action &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” művelet eltávolítása</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Remove actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Műveletek eltávolítása</translation>
     </message>
     <message>
-        <location line="+186"/>
         <source>Used In</source>
-        <translation type="unfinished"></translation>
+        <translation>Használat helye</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ActionModel</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/actionrepository.cpp" line="+89"/>
         <source>Name</source>
-        <translation type="unfinished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Használatban</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Szöveg</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyorsbillentyű</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Checkable</source>
-        <translation type="unfinished"></translation>
+        <translation>Bejelölhető</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>ToolTip</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::BrushManagerProxy</name>
-    <message>
-        <location filename="../tools/designer/src/components/formeditor/brushmanagerproxy.cpp" line="+219"/>
-        <source>The element &apos;%1&apos; is missing the required attribute &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Empty brush name encountered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>An unexpected element &apos;%1&apos; was encountered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>An error occurred when reading the brush definition file &apos;%1&apos; at line line %2, column %3: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+43"/>
-        <source>An error occurred when reading the resource file &apos;%1&apos; at line %2, column %3: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Buboréksúgó</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::BuddyEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/buddyeditor/buddyeditor.cpp" line="+261"/>
         <source>Add buddy</source>
-        <translation type="unfinished"></translation>
+        <translation>Partner hozzáadása</translation>
     </message>
     <message>
-        <location line="+52"/>
         <source>Remove buddies</source>
-        <translation type="unfinished"></translation>
+        <translation>Partnerek eltávolítása</translation>
     </message>
     <message numerus="yes">
-        <location line="+24"/>
         <source>Remove %n buddies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n partner eltávolítása</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location line="+51"/>
         <source>Add %n buddies</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n partner hozzáadása</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+47"/>
         <source>Set automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatikus beállítás</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::BuddyEditorPlugin</name>
     <message>
-        <location filename="../tools/designer/src/components/buddyeditor/buddyeditor_plugin.cpp" line="+73"/>
         <source>Edit Buddies</source>
-        <translation type="unfinished"></translation>
+        <translation>Partnerek szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::BuddyEditorTool</name>
     <message>
-        <location filename="../tools/designer/src/components/buddyeditor/buddyeditor_tool.cpp" line="+56"/>
         <source>Edit Buddies</source>
-        <translation type="unfinished"></translation>
+        <translation>Partnerek szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ButtonGroupMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/button_taskmenu.cpp" line="+7"/>
         <source>Select members</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagok kijelölése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Break</source>
-        <translation type="unfinished"></translation>
+        <translation>Feltörés</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ButtonTaskMenu</name>
     <message>
-        <location line="+121"/>
         <source>Assign to button group</source>
-        <translation type="unfinished"></translation>
+        <translation>Hozzárendelés gombcsoporthoz</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Button group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gombcsoport</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>New button group</source>
-        <translation type="unfinished"></translation>
+        <translation>Új gombcsoport</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change text...</source>
-        <translation type="unfinished"></translation>
+        <translation>Szöveg módosítása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>None</source>
-        <translation type="unfinished">Nincs</translation>
+        <translation>Nincs</translation>
     </message>
     <message>
-        <location line="+101"/>
         <source>Button group &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” gombcsoport</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::CodeDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/codedialog.cpp" line="+95"/>
         <source>Save...</source>
-        <translation>Mentés...</translation>
+        <translation>Mentés…</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Copy All</source>
-        <translation>Mindent másol</translation>
+        <translation>Összes másolása</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>&amp;Find in Text...</source>
-        <translation>&amp;Keresés a szövegben...</translation>
+        <translation>Ke&amp;resés a szövegben…</translation>
     </message>
     <message>
-        <location line="+75"/>
         <source>A temporary form file could not be created in %1.</source>
-        <translation>Az ideiglenes űrlap fájl nem hozható létre a(z) %1 helyen.</translation>
+        <translation>Egy átmeneti űrlapfájlt nem sikerült létrehozni ebben: %1.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>The temporary form file %1 could not be written.</source>
-        <translation>A(z) %1 ideiglenes űrlap fájl nem írható.</translation>
+        <translation>A(z) %1 átmeneti űrlapfájlt nem sikerült kiírni.</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>%1 - [Code]</source>
-        <translation>%1 - [Kód]</translation>
+        <translation>%1 – [Kód]</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Save Code</source>
         <translation>Kód mentése</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Header Files (*.%1)</source>
-        <translation>Fejléc fájlok (*.%1)</translation>
+        <translation>Fejlécfájlok (*.%1)</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>The file %1 could not be opened: %2</source>
-        <translation>A(z) %1 fájl nem nyitható meg: %2</translation>
+        <translation>A(z) %1 fájlt nem sikerült megnyitni: %2</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The file %1 could not be written: %2</source>
-        <translation>A(z) %1 fájl nem írható: %2</translation>
+        <translation>A(z) %1 fájlt nem sikerült kiírni: %2</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>%1 - Error</source>
-        <translation>%1 - Hiba</translation>
+        <translation>%1 – Hiba</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ColorAction</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/richtexteditor.cpp" line="+246"/>
         <source>Text Color</source>
         <translation>Szövegszín</translation>
     </message>
@@ -4250,2758 +3469,2242 @@ Do you want overwrite the template?</source>
 <context>
     <name>qdesigner_internal::ComboBoxTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/combobox_taskmenu.cpp" line="+68"/>
         <source>Edit Items...</source>
-        <translation>Elem szerkesztése...</translation>
+        <translation>Elemek szerkesztése…</translation>
     </message>
     <message>
-        <location line="+38"/>
         <source>Change Combobox Contents</source>
-        <translatorcomment>CHECKIT: too long...</translatorcomment>
-        <translation type="unfinished">Legördülő doboz tartalmának megváltoztatása</translation>
+        <translation>Legördülő menü tartalmának módosítása</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::CommandLinkButtonTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/button_taskmenu.cpp" line="+156"/>
         <source>Change description...</source>
-        <translation type="unfinished"></translation>
+        <translation>Leírás módosítása…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ConnectionEdit</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/connectionedit.cpp" line="+1313"/>
         <source>Select All</source>
-        <translation type="unfinished">Összes kijelölése</translation>
+        <translation>Összes kijelölése</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Deselect All</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölés megszüntetése</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Törlés</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ConnectionModel</name>
     <message>
-        <location filename="../tools/designer/src/components/signalsloteditor/signalsloteditorwindow.cpp" line="-465"/>
         <source>Sender</source>
-        <translation type="unfinished"></translation>
+        <translation>Küldő</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Receiver</source>
-        <translation type="unfinished"></translation>
+        <translation>Fogadó</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Slot</source>
-        <translation type="unfinished"></translation>
+        <translation>Tárolóhely</translation>
     </message>
     <message>
-        <location line="+90"/>
         <source>&lt;sender&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;küldő&gt;</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&lt;signal&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;jelzés&gt;</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&lt;receiver&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;fogadó&gt;</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&lt;slot&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;tárolóhely&gt;</translation>
     </message>
     <message>
-        <location line="+108"/>
         <source>The connection already exists!&lt;br&gt;%1</source>
-        <translation type="unfinished"></translation>
+        <translation>A kapcsolat már létezik!&lt;br&gt;%1</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Signal and Slot Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzés és tárolóhely szerkesztő</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ContainerWidgetTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/containerwidget_taskmenu.cpp" line="+79"/>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Törlés</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>Insert</source>
-        <translation type="unfinished">Beszúrás</translation>
+        <translation>Beszúrás</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Insert Page Before Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal beszúrása a jelenlegi oldal elé</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Insert Page After Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal beszúrása a jelenlegi oldal után</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Add Subwindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyermekablak hozzáadása</translation>
     </message>
     <message>
-        <location line="+38"/>
         <source>Subwindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyermekablak</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Page %1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/%2 oldal</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::DPI_Chooser</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/dpi_chooser.cpp" line="+27"/>
         <source>System (%1 x %2)</source>
         <extracomment>System resolution</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Rendszer (%1 × %2)</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>User defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Felhasználó által megadott</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source> x </source>
         <extracomment>DPI X/Y separator</extracomment>
-        <translation type="unfinished"></translation>
+        <translation> x </translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::DesignerPropertyManager</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/designerpropertymanager.cpp" line="+647"/>
-        <location line="+6"/>
+        <source>translatable</source>
+        <translation>lefordítható</translation>
+    </message>
+    <message>
+        <source>disambiguation</source>
+        <translation>egyértelműsítés</translation>
+    </message>
+    <message>
+        <source>comment</source>
+        <translation>megjegyzés</translation>
+    </message>
+    <message>
         <source>AlignLeft</source>
-        <translation type="unfinished"></translation>
+        <translation>Igazítás balra</translation>
     </message>
     <message>
-        <location line="-5"/>
         <source>AlignHCenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Igazítás vízszintesen középre</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>AlignRight</source>
-        <translation type="unfinished"></translation>
+        <translation>Igazítás jobbra</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>AlignJustify</source>
-        <translation type="unfinished"></translation>
+        <translation>Igazítás sorkizártan</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>AlignTop</source>
-        <translation type="unfinished"></translation>
+        <translation>Igazítás felülre</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+4"/>
         <source>AlignVCenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Igazítás függőlegesen középre</translation>
     </message>
     <message>
-        <location line="-3"/>
         <source>AlignBottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Igazítás alulra</translation>
     </message>
     <message>
-        <location line="+565"/>
         <source>%1, %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1, %2</translation>
     </message>
     <message numerus="yes">
-        <location line="+6"/>
         <source>Customized (%n roles)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Személyre szabott (%n szerep)</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Inherited</source>
-        <translation type="unfinished"></translation>
+        <translation>Öröklött</translation>
     </message>
     <message>
-        <location line="+566"/>
+        <source>[Theme] %1</source>
+        <translation>[Téma] %1</translation>
+    </message>
+    <message>
         <source>Horizontal</source>
-        <translation type="unfinished">Vízszintes</translation>
+        <translation>Vízszintes</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Vertical</source>
-        <translation type="unfinished">Függőleges</translation>
+        <translation>Függőleges</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <source>Theme</source>
+        <translation>Téma</translation>
+    </message>
+    <message>
         <source>Normal Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Normál ki</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Normal On</source>
-        <translation type="unfinished"></translation>
+        <translation>Normál be</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Disabled Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Letiltott ki</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Disabled On</source>
-        <translation type="unfinished"></translation>
+        <translation>Letiltott be</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Active Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktív ki</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Active On</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktív be</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Selected Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölt ki</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Selected On</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <location line="+21"/>
-        <source>translatable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-15"/>
-        <location line="+21"/>
-        <source>disambiguation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-15"/>
-        <location line="+21"/>
-        <source>comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölt be</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::DeviceProfileDialog</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/deviceprofiledialog.cpp" line="+63"/>
         <source>Device Profiles (*.%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszközprofilok (*.%1)</translation>
     </message>
     <message>
-        <location line="+31"/>
         <source>Default</source>
-        <translation type="unfinished">Alapértelmezett</translation>
+        <translation>Alapértelmezett</translation>
     </message>
     <message>
-        <location line="+67"/>
         <source>Save Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil mentése</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Save Profile - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil mentése – Hiba</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Unable to open the file &apos;%1&apos; for writing: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem nyitható meg a(z) „%1” fájl írásra: %2</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Open profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil megnyitása</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <location line="+6"/>
         <source>Open Profile - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil megnyitása – Hiba</translation>
     </message>
     <message>
-        <location line="-6"/>
         <source>Unable to open the file &apos;%1&apos; for reading: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem nyitható meg a(z) „%1” fájl olvasásra: %2</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>&apos;%1&apos; is not a valid profile: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” nem érvényes profil: %2</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::Dialog</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/stringlisteditor.ui"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Párbeszédablak</translation>
     </message>
     <message>
-        <location/>
         <source>StringList</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterlánclista</translation>
     </message>
     <message>
-        <location/>
         <source>New String</source>
-        <translation type="unfinished"></translation>
+        <translation>Új karakterlánc</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>Ú&amp;j</translation>
     </message>
     <message>
-        <location/>
         <source>Delete String</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterlánc törlése</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Törlés</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Érték:</translation>
     </message>
     <message>
-        <location/>
         <source>Move String Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterlánc mozgatása fel</translation>
     </message>
     <message>
-        <location/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
-        <location/>
         <source>Move String Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterlánc mozgatása le</translation>
     </message>
     <message>
-        <location/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Le</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::EmbeddedOptionsControl</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/embeddedoptionspage.cpp" line="-260"/>
         <source>None</source>
-        <translation type="unfinished">Nincs</translation>
+        <translation>Nincs</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Add a profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy profil hozzáadása</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Edit the selected profile</source>
-        <translation type="unfinished"></translation>
+        <translation>A kijelölt profil szerkesztése</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Delete the selected profile</source>
-        <translation type="unfinished"></translation>
+        <translation>A kijelölt profil törlése</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>Add Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil hozzáadása</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>New profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Új profil</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Edit Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil szerkesztése</translation>
     </message>
     <message>
-        <location line="+26"/>
         <source>Delete Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil törlése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Would you like to delete the profile &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Törölni szeretné a következő profilt: „%1”?</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>Default</source>
-        <translation type="unfinished">Alapértelmezett</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::FilterWidget</name>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/filterwidget.cpp" line="+163"/>
-        <source>Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <source>Clear text</source>
-        <translation type="unfinished"></translation>
+        <translation>Alapértelmezett</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::FormEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/formeditor.cpp" line="+190"/>
         <source>Resource File Changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Az erőforrásfájl megváltozott</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The file &quot;%1&quot; has changed outside Designer. Do you want to reload it?</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” fájlt a Tervezőn kívül módosították. Szeretné újratölteni?</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::FormLayoutMenu</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/formlayoutmenu.cpp" line="+24"/>
         <source>Add form layout row...</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlapelrendezés-sor hozzáadása…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::FormWindow</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/formwindow.cpp" line="-1322"/>
         <source>Edit contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Tartalom szerkesztése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>F2</source>
-        <translation type="unfinished"></translation>
+        <translation>F2</translation>
     </message>
     <message>
-        <location line="+775"/>
         <source>Insert widget &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” felületi elem beszúrása</translation>
     </message>
     <message>
-        <location line="+65"/>
         <source>Resize</source>
-        <translation type="unfinished"></translation>
+        <translation>Átméretezés</translation>
     </message>
     <message>
-        <location line="+248"/>
-        <source>Key Move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
         <source>Key Resize</source>
-        <translation type="unfinished"></translation>
+        <translation>Átméretezés billentyűvel</translation>
+    </message>
+    <message>
+        <source>Key Move</source>
+        <translation>Áthelyezés billentyűvel</translation>
     </message>
     <message numerus="yes">
-        <location line="+252"/>
         <source>Paste %n action(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n művelet beillesztése</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location line="+2"/>
         <source>Paste %n widget(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n felületi elem beillesztése</numerusform>
         </translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Paste (%1 widgets, %2 actions)</source>
-        <translation type="unfinished"></translation>
+        <translation>Beillesztés (%1 felületi elem, %2 művelet)</translation>
     </message>
     <message>
-        <location line="+56"/>
         <source>Cannot paste widgets. Designer could not find a container without a layout to paste into.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem lehet felületi elemeket beilleszteni. A Tervező nem talál elrendezés nélküli konténert a beillesztéshez.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Break the layout of the container you want to paste into, select this container and then paste again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Törje fel annak a konténernek az elrendezését, amelybe be szeretné illeszteni, jelölje ki a konténert, és illessze be ismét.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Paste error</source>
-        <translation type="unfinished"></translation>
+        <translation>Beillesztési hiba</translation>
     </message>
     <message>
-        <location line="+181"/>
         <source>Raise widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Felületi elemek előrébb hozása</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Lower widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Felületi elemek hátrébb küldése</translation>
     </message>
     <message>
-        <location line="+204"/>
         <source>Select Ancestor</source>
-        <translation type="unfinished"></translation>
+        <translation>Ős kiválasztása</translation>
     </message>
     <message>
-        <location line="+46"/>
         <source>Lay out</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés</translation>
     </message>
     <message>
-        <location line="+485"/>
-        <location line="+55"/>
         <source>Drop widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Felületi elem eldobása</translation>
     </message>
     <message>
-        <location line="-13"/>
         <source>A QMainWindow-based form does not contain a central widget.</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy QMainWindow alapú űrlap nem tartalmaz központi felületi elemet.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::FormWindowBase</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/formwindowbase.cpp" line="+404"/>
         <source>Delete &apos;%1&apos;</source>
-        <translation type="unfinished">&apos;%1&apos; törlése</translation>
+        <translation>„%1” törlése</translation>
     </message>
     <message>
-        <location line="+0"/>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Törlés</translation>
+    </message>
+    <message>
+        <source>Invalid form</source>
+        <translation>Érvénytelen űrlap</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;This file contains top level spacers.&lt;br/&gt;They will &lt;b&gt;not&lt;/b&gt; be saved.&lt;/p&gt;&lt;p&gt;Perhaps you forgot to create a layout?&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Ez a fájl felsőszintű helyőrzőket tartalmaz.&lt;br/&gt;Ezek &lt;b&gt;nem&lt;/b&gt; lesznek mentve.&lt;/p&gt;&lt;p&gt;Talán elfelejtett elrendezést létrehozni?&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::FormWindowManager</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/formwindowmanager.cpp" line="+365"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kivágás</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Cuts the selected widgets and puts them on the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Kivágja a kijelölt felületi elemeket, és beteszi azokat a vágólapra</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Másolás</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Copies the selected widgets to the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Lemásolja a kijelölt felületi elemeket a vágólapra</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Beillesztés</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Pastes the clipboard&apos;s contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Beilleszti a vágólap tartalmát</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Törlés</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Deletes the selected widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Törli a kijelölt felületi elemeket</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Select &amp;All</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Összes kijelölése</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Selects all widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelöli az összes felületi elemet</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Bring to &amp;Front</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Előtérbe hozás</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+1"/>
         <source>Raises the selected widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Előre hozza a kijelölt felületi elemeket</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Send to &amp;Back</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Háttérbe küldés</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+1"/>
         <source>Lowers the selected widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Hátraküldi a kijelölt felületi elemeket</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Adjust &amp;Size</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Méret igazítása</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Adjusts the size of the selected widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Beállítja a kijelölt felületi elemek méretét</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Lay Out &amp;Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés &amp;vízszintesen</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Lays out the selected widgets horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Vízszintesen rendezi el a kijelölt felületi elemeket</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Lay Out &amp;Vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés &amp;függőlegesen</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Lays out the selected widgets vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Függőlegesen rendezi el a kijelölt felületi elemeket</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Lay Out in a &amp;Form Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés egy űrl&amp;apelrendezésen</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Lays out the selected widgets in a form layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlapszerűen rendezi el a kijelölt felületi elemeket</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Lay Out in a &amp;Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés egy &amp;rácson</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Lays out the selected widgets in a grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Rácsba rendezi a kijelölt felületi elemeket</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Lay Out Horizontally in S&amp;plitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés vízszintesen egy &amp;szétválasztóban</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Lays out the selected widgets horizontally in a splitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Vízszintesen rendezi el a kijelölt felületi elemeket egy szétválasztóban</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Lay Out Vertically in Sp&amp;litter</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés függőlegesen egy s&amp;zétválasztóban</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Lays out the selected widgets vertically in a splitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Függőlegesen rendezi el a kijelölt felületi elemeket egy szétválasztóban</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>&amp;Break Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés fel&amp;törése</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Breaks the selected layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Feltöri a kijelölt elrendezést</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Si&amp;mplify Grid Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Rács elrendezés &amp;egyszerűsítése</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Removes empty columns and rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Eltávolítja az üres oszlopokat és sorokat</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>&amp;Preview...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Előnézet…</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Preview current form</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi űrlap előnézete</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Form &amp;Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap&amp;beállítások…</translation>
     </message>
     <message>
-        <location line="+94"/>
         <source>Break Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Elrendezés feltörése</translation>
     </message>
     <message>
-        <location line="+26"/>
         <source>Adjust Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Méret igazítása</translation>
     </message>
     <message>
-        <location line="+43"/>
         <source>Could not create form preview</source>
         <comment>Title of warning message box</comment>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült létrehozni az űrlap előnézetét</translation>
     </message>
     <message>
-        <location line="+341"/>
         <source>Form Settings - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlapbeállítások – %1</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::FormWindowSettings</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/formwindowsettings.cpp" line="+193"/>
         <source>None</source>
-        <translation type="unfinished">Nincs</translation>
+        <translation>Nincs</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Device Profile: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszközprofil: %1</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::GridPanel</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/gridpanel.ui"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap</translation>
     </message>
     <message>
-        <location/>
         <source>Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Rács</translation>
     </message>
     <message>
-        <location/>
         <source>Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Látható</translation>
     </message>
     <message>
-        <location/>
         <source>Grid &amp;X</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;X rács</translation>
     </message>
     <message>
-        <location/>
         <source>Snap</source>
-        <translation type="unfinished"></translation>
+        <translation>Illesztés</translation>
     </message>
     <message>
-        <location/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Visszaállítás</translation>
     </message>
     <message>
-        <location/>
         <source>Grid &amp;Y</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Y rács</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::GroupBoxTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/groupbox_taskmenu.cpp" line="+82"/>
         <source>Change title...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cím módosítása…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::HtmlTextEdit</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/richtexteditor.cpp" line="-58"/>
         <source>Insert HTML entity</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML entitás beszúrása</translation>
     </message>
 </context>
 <context>
-    <name>qdesigner_internal::IconSelector</name>
+    <name>qdesigner_internal::IconThemeDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/iconselector.cpp" line="-24"/>
-        <source>The pixmap file &apos;%1&apos; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <source>Set Icon From Theme</source>
+        <translation>Ikon beállítása témából</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>The file &apos;%1&apos; does not appear to be a valid pixmap file: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>The file &apos;%1&apos; could not be read: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+33"/>
-        <source>Choose a Pixmap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Pixmap Read Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+54"/>
-        <source>...</source>
-        <translation type="unfinished">...</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Normal Off</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Normal On</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Disabled Off</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Disabled On</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Active Off</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Active On</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Selected Off</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Selected On</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Choose Resource...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Choose File...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Reset All</source>
-        <translation type="unfinished"></translation>
+        <source>Input icon name from the current theme:</source>
+        <translation>Adja meg az ikon nevét a jelenlegi témából:</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ItemListEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/itemlisteditor.cpp" line="+358"/>
-        <source>Properties &amp;&lt;&lt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/components/taskmenu/itemlisteditor.ui"/>
-        <location filename="../tools/designer/src/components/taskmenu/itemlisteditor.cpp" line="+2"/>
-        <source>Properties &amp;&gt;&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
         <source>Items List</source>
-        <translation type="unfinished"></translation>
+        <translation>Elemek listája</translation>
     </message>
     <message>
-        <location/>
         <source>New Item</source>
-        <translation type="unfinished"></translation>
+        <translation>Új elem</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>Ú&amp;j</translation>
     </message>
     <message>
-        <location/>
         <source>Delete Item</source>
-        <translation type="unfinished"></translation>
+        <translation>Elem törlése</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Törlés</translation>
     </message>
     <message>
-        <location/>
         <source>Move Item Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Elem mozgatása fel</translation>
     </message>
     <message>
-        <location/>
         <source>U</source>
-        <translation type="unfinished"></translation>
+        <translation>F</translation>
     </message>
     <message>
-        <location/>
         <source>Move Item Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Elem mozgatása le</translation>
     </message>
     <message>
-        <location/>
         <source>D</source>
-        <translation type="unfinished"></translation>
+        <translation>L</translation>
+    </message>
+    <message>
+        <source>Properties &amp;&gt;&gt;</source>
+        <translation>Tulajdonságok &amp;&gt;&gt;</translation>
+    </message>
+    <message>
+        <source>Properties &amp;&lt;&lt;</source>
+        <translation>Tulajdonságok &amp;&lt;&lt;</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::LabelTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/label_taskmenu.cpp" line="+85"/>
         <source>Change rich text...</source>
-        <translation type="unfinished"></translation>
+        <translation>Formázott szöveg módosítása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change plain text...</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyszerű szöveg módosítása…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::LanguageResourceDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/iconselector.cpp" line="-343"/>
         <source>Choose Resource</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrás kiválasztása</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::LineEditTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/lineedit_taskmenu.cpp" line="+80"/>
         <source>Change text...</source>
-        <translation type="unfinished"></translation>
+        <translation>Szöveg módosítása…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ListWidgetEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/listwidgeteditor.cpp" line="+69"/>
         <source>New Item</source>
-        <translation type="unfinished"></translation>
+        <translation>Új elem</translation>
     </message>
     <message>
-        <location line="+32"/>
         <source>Edit List Widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista felületi elem szerkesztése</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Edit Combobox</source>
-        <translation type="unfinished"></translation>
+        <translation>Legördülő menü szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ListWidgetTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/listwidget_taskmenu.cpp" line="+67"/>
         <source>Edit Items...</source>
-        <translation type="unfinished">Elem szerkesztése...</translation>
+        <translation>Elemek szerkesztése…</translation>
     </message>
     <message>
-        <location line="+38"/>
         <source>Change List Contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Listatartalom módosítása</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::MdiContainerWidgetTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/containerwidget_taskmenu.cpp" line="+118"/>
         <source>Next Subwindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Következő gyermekablak</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Previous Subwindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Előző gyermekablak</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Tile</source>
-        <translation type="unfinished">Mozaikszerű</translation>
+        <translation>Csempe</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Cascade</source>
-        <translation type="unfinished">Lépcsőzetes</translation>
+        <translation>Lépcsőzetes</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::MenuTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/menutaskmenu.cpp" line="+56"/>
         <source>Remove</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Eltávolítás</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::MorphMenu</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/morphmenu.cpp" line="+264"/>
         <source>Morph into</source>
-        <translation type="unfinished"></translation>
+        <translation>Átalakítás erre</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::NewActionDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/newactiondialog.ui"/>
         <source>New Action...</source>
-        <translation type="unfinished"></translation>
+        <translation>Új művelet…</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Text:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Szöveg:</translation>
     </message>
     <message>
-        <location/>
         <source>Object &amp;name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektum &amp;neve:</translation>
     </message>
     <message>
-        <location/>
-        <source>&amp;Icon:</source>
-        <translation type="unfinished"></translation>
+        <source>T&amp;oolTip:</source>
+        <translation>&amp;Buboréksúgó:</translation>
     </message>
     <message>
-        <location/>
-        <source>Shortcut:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Checkable:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>ToolTip:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
+    </message>
+    <message>
+        <source>Icon th&amp;eme:</source>
+        <translation>Ikon &amp;téma:</translation>
+    </message>
+    <message>
+        <source>&amp;Icon:</source>
+        <translation>&amp;Ikon:</translation>
+    </message>
+    <message>
+        <source>&amp;Checkable:</source>
+        <translation>&amp;Bejelölhető:</translation>
+    </message>
+    <message>
+        <source>&amp;Shortcut:</source>
+        <translation>&amp;Gyorsbillentyű:</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::NewDynamicPropertyDialog</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/newdynamicpropertydialog.cpp" line="+134"/>
-        <source>Set Property Name</source>
-        <translation type="unfinished"></translation>
+        <source>Create Dynamic Property</source>
+        <translation>Dinamikus tulajdonság létrehozása</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <source>Property Name</source>
+        <translation>Tulajdonságnév</translation>
+    </message>
+    <message>
+        <source>horizontalSpacer</source>
+        <translation>Vízszintes helyőrző</translation>
+    </message>
+    <message>
+        <source>Property Type</source>
+        <translation>Tulajdonságtípus</translation>
+    </message>
+    <message>
+        <source>Set Property Name</source>
+        <translation>Tulajdonságnév beállítása</translation>
+    </message>
+    <message>
         <source>The current object already has a property named &apos;%1&apos;.
 Please select another, unique one.</source>
-        <translation type="unfinished"></translation>
+        <translation>A jelenlegi objektumnak már van egy „%1” nevű tulajdonsága.
+Válasszon egy másik, egyedi nevet.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The &apos;_q_&apos; prefix is reserved for the Qt library.
 Please select another name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/components/propertyeditor/newdynamicpropertydialog.ui"/>
-        <source>Create Dynamic Property</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Property Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>horizontalSpacer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Property Type</source>
-        <translation type="unfinished"></translation>
+        <translation>A „_q_” előtag a Qt függvénykönyvtár számára van fenntartva.
+Válasszon egy másik nevet.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::NewFormWidget</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/newformwidget.cpp" line="+104"/>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <source>Choose a template for a preview</source>
+        <translation>Válasszon sablont az előnézethez</translation>
+    </message>
+    <message>
+        <source>Embedded Design</source>
+        <translation>Beágyazott terv</translation>
+    </message>
+    <message>
+        <source>Device:</source>
+        <translation>Eszköz:</translation>
+    </message>
+    <message>
+        <source>Screen Size:</source>
+        <translation>Képernyőméret:</translation>
+    </message>
+    <message>
         <source>Default size</source>
-        <translation type="unfinished"></translation>
+        <translation>Alapértelmezett méret</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>QVGA portrait (240x320)</source>
-        <translation type="unfinished"></translation>
+        <translation>QVGA álló (240x320)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>QVGA landscape (320x240)</source>
-        <translation type="unfinished"></translation>
+        <translation>QVGA fekvő (320x240)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>VGA portrait (480x640)</source>
-        <translation type="unfinished"></translation>
+        <translation>VGA álló (480x640)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>VGA landscape (640x480)</source>
-        <translation type="unfinished"></translation>
+        <translation>VGA fekvő (640x480)</translation>
     </message>
     <message>
-        <location line="+66"/>
         <source>Widgets</source>
         <extracomment>New Form Dialog Categories</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Felületi elemek</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Custom Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyéni felületi elemek</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>None</source>
-        <translation type="unfinished">Nincs</translation>
+        <translation>Nincs</translation>
     </message>
     <message>
-        <location line="+57"/>
         <source>Error loading form</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba az űrlap beöltésekor</translation>
     </message>
     <message>
-        <location line="+244"/>
         <source>Unable to open the form template file &apos;%1&apos;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem nyitható meg a(z) „%1” űrlapsablonfájl: %2</translation>
     </message>
     <message>
-        <location line="+67"/>
         <source>Internal error: No template selected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/newformwidget.ui"/>
-        <source>0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Choose a template for a preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Embedded Design</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Device:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <source>Screen Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Belső hiba: nem lett kiválasztva sablon.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::NewPromotedClassPanel</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_promotiondialog.cpp" line="+92"/>
         <source>Add</source>
-        <translation type="unfinished">Hozzáadás</translation>
+        <translation>Hozzáadás</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>New Promoted Class</source>
-        <translation type="unfinished"></translation>
+        <translation>Új előléptetett osztály</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Base class name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alaposztály neve:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Promoted class name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetett osztály neve:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Header file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fejlécfájl:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Global include</source>
-        <translation type="unfinished"></translation>
+        <translation>Globális felvétel</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Visszaállítás</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ObjectInspector</name>
     <message>
-        <location filename="../tools/designer/src/components/objectinspector/objectinspector.cpp" line="+316"/>
         <source>Change Current Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelenlegi oldal módosítása</translation>
     </message>
     <message>
-        <location line="+438"/>
         <source>&amp;Find in Text...</source>
-        <translation type="unfinished">&amp;Keresés a szövegben...</translation>
+        <translation>Ke&amp;resés a szövegben…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::OrderDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/orderdialog.cpp" line="+109"/>
-        <source>Index %1 (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>%1 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/orderdialog.ui"/>
         <source>Change Page Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldalsorrend módosítása</translation>
     </message>
     <message>
-        <location/>
         <source>Page Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldalsorrend</translation>
     </message>
     <message>
-        <location/>
         <source>Move page up</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal mozgatása fel</translation>
     </message>
     <message>
-        <location/>
         <source>Move page down</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldal mozgatása le</translation>
+    </message>
+    <message>
+        <source>Index %1 (%2)</source>
+        <translation>Index %1 (%2)</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PaletteEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/paletteeditor.ui"/>
         <source>Edit Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Paletta szerkesztése</translation>
     </message>
     <message>
-        <location/>
         <source>Tune Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Paletta hangolása</translation>
     </message>
     <message>
-        <location/>
         <source>Show Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Részletek megjelenítése</translation>
     </message>
     <message>
-        <location/>
         <source>Compute Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Részletek kiszámítása</translation>
     </message>
     <message>
-        <location/>
         <source>Quick</source>
-        <translation type="unfinished"></translation>
+        <translation>Gyors</translation>
     </message>
     <message>
-        <location/>
         <source>Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Előnézet</translation>
     </message>
     <message>
-        <location/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Letiltva</translation>
     </message>
     <message>
-        <location/>
         <source>Inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktív</translation>
     </message>
     <message>
-        <location/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktív</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PaletteEditorButton</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/paletteeditorbutton.cpp" line="+57"/>
         <source>Change Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Paletta módosítása</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PaletteModel</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/paletteeditor.cpp" line="+374"/>
         <source>Color Role</source>
-        <translation type="unfinished"></translation>
+        <translation>Színszabály</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktív</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktív</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Letiltva</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PixmapEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/designerpropertymanager.cpp" line="-1541"/>
         <source>Choose Resource...</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrás kiválasztása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Choose File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájl kiválasztása…</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <source>Set Icon From Theme...</source>
+        <translation>Ikon beállítása témából…</translation>
+    </message>
+    <message>
         <source>Copy Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Útvonal másolása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Paste Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Útvonal beillesztése</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <location line="+16"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
+    </message>
+    <message>
+        <source>[Theme] %1</source>
+        <translation>[Téma] %1</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PlainTextEditorDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/plaintexteditor.cpp" line="+65"/>
         <source>Edit text</source>
-        <translation type="unfinished"></translation>
+        <translation>Szöveg szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PluginDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/plugindialog.cpp" line="+72"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Összetevők</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Plugin Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Bővítményinformációk</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Frissítés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Scan for newly installed custom widget plugins.</source>
-        <translation type="unfinished"></translation>
+        <translation>Újonnan telepített egyéni felületi elem bővítmények keresése.</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <source>Loaded Plugins</source>
+        <translation>Betöltött bővítmények</translation>
+    </message>
+    <message>
+        <source>Failed Plugins</source>
+        <translation>Hibás bővítmények</translation>
+    </message>
+    <message>
         <source>Qt Designer couldn&apos;t find any plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>A Qt Tervező nem talált semmilyen bővítményt</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Qt Designer found the following plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>A Qt Tervező a következő bővítményeket találta</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>New custom widget plugins have been found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Új egyéni felületi elem bővítmények találhatók.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PreviewActionGroup</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/previewactiongroup.cpp" line="+95"/>
         <source>%1 Style</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 stílus</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PreviewConfigurationWidget</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/previewconfigurationwidget.cpp" line="+139"/>
         <source>Default</source>
-        <translation type="unfinished">Alapértelmezett</translation>
+        <translation>Alapértelmezett</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>None</source>
-        <translation type="unfinished">Nincs</translation>
+        <translation>Nincs</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Browse...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tallózás…</translation>
     </message>
     <message>
-        <location line="+118"/>
         <source>Load Custom Device Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyéni eszközfelszín betöltése</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>All QVFB Skins (*.%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes QVFB felszín (*.%1)</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>%1 - Duplicate Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 – Kettőzött felszín</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The skin &apos;%1&apos; already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 felszín már létezik.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>%1 - Error</source>
-        <translation type="unfinished">%1 - Hiba</translation>
+        <translation>%1 – Hiba</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>%1 is not a valid skin directory:
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 nem érvényes felszínkönyvtár:
+%2</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PreviewDeviceSkin</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/previewmanager.cpp" line="+259"/>
         <source>&amp;Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Álló</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Landscape (&amp;CCW)</source>
         <extracomment>Rotate form preview counter-clockwise</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Fekvő (&amp;balra forgatva)</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&amp;Landscape (CW)</source>
         <extracomment>Rotate form preview clockwise</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fekvő (jobbra forgatva)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bezárás</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PreviewManager</name>
     <message>
-        <location line="+426"/>
         <source>%1 - [Preview]</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 – [Előnézet]</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PreviewMdiArea</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/previewframe.cpp" line="+72"/>
         <source>The moose in the noose
 ate the goose who was loose.</source>
         <extracomment>Palette editor background</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A gyapjas jak apja gyapja
+gyakran gyatra gyapjas jak apa gyapja.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PreviewWidget</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/previewwidget.ui"/>
         <source>Preview Window</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>Előnézeti ablak</translation>
     </message>
     <message>
-        <location/>
         <source>LineEdit</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>Sorszerkesztés</translation>
     </message>
     <message>
-        <location/>
         <source>ComboBox</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>Legördülő menü</translation>
     </message>
     <message>
-        <location/>
         <source>PushButton</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>Nyomógomb</translation>
     </message>
     <message>
-        <location/>
         <source>ButtonGroup2</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>2. gombcsoport</translation>
     </message>
     <message>
-        <location/>
         <source>CheckBox1</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>1. jelölőnégyzet</translation>
     </message>
     <message>
-        <location/>
         <source>CheckBox2</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>2. jelölőnégyzet</translation>
     </message>
     <message>
-        <location/>
         <source>ButtonGroup</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>Gombcsoport</translation>
     </message>
     <message>
-        <location/>
         <source>RadioButton1</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>1. választógomb</translation>
     </message>
     <message>
-        <location/>
         <source>RadioButton2</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>2. választógomb</translation>
     </message>
     <message>
-        <location/>
         <source>RadioButton3</source>
-        <translation type="unfinished"></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>3. választógomb</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PromotionModel</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/promotionmodel.cpp" line="+17"/>
         <source>Name</source>
-        <translation type="unfinished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Header file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fejlécfájl</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Global include</source>
-        <translation type="unfinished"></translation>
+        <translation>Globális felvétel</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>Használat</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PromotionTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/promotiontaskmenu.cpp" line="+85"/>
         <source>Promoted widgets...</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetett felületi elemek…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Promote to ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetés erre…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change signals/slots...</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzések és tárolóhelyek módosítása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Promote to</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetés erre</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Demote to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Lefokozás erre: %1</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PropertyEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/propertyeditor.cpp" line="+231"/>
         <source>Add Dynamic Property...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dinamikus tulajdonság hozzáadása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Remove Dynamic Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Dinamikus tulajdonság eltávolítása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Sorting</source>
-        <translation type="unfinished"></translation>
+        <translation>Rendezés</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Color Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Csoportok színezése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Tree View</source>
-        <translation type="unfinished"></translation>
+        <translation>Fa nézet</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Drop Down Button View</source>
-        <translation type="unfinished"></translation>
+        <translation>Legördülő gomb nézet</translation>
     </message>
     <message>
-        <location line="+45"/>
         <source>String...</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterlánc…</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Bool...</source>
-        <translation type="unfinished"></translation>
+        <translation>Logikai…</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Other...</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyéb…</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Configure Property Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulajdonság-szerkesztő beállításai</translation>
     </message>
     <message>
-        <location line="+539"/>
+        <source>Filter</source>
+        <translation>Szűrő</translation>
+    </message>
+    <message>
         <source>Object: %1
 Class: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektum: %1
+Osztály: %2</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PropertyLineEdit</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/propertylineedit.cpp" line="+88"/>
         <source>Insert line break</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortörés beszúrása</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::QDesignerPromotionDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_promotiondialog.cpp" line="+85"/>
         <source>Promoted Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetett felület elemek</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Promoted Classes</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetett osztályok</translation>
     </message>
     <message>
-        <location line="+60"/>
         <source>Promote</source>
-        <translation type="unfinished"></translation>
+        <translation>Előléptetés</translation>
     </message>
     <message>
-        <location line="+152"/>
         <source>Change signals/slots...</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzések és tárolóhelyek módosítása…</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>%1 - Error</source>
-        <translation type="unfinished">%1 - Hiba</translation>
+        <translation>%1 – Hiba</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::QDesignerResource</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/qdesigner_resource.cpp" line="+277"/>
         <source>Loading qrc file</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy qrc fájl betöltése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The specified qrc file &lt;p&gt;&lt;b&gt;%1&lt;/b&gt;&lt;/p&gt;&lt;p&gt;could not be found. Do you want to update the file location?&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>A megadott qrc fájl &lt;p&gt;&lt;b&gt;%1&lt;/b&gt;&lt;/p&gt;&lt;p&gt; nem található. Szeretné frissíteni a fájl helyét?&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>New location for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 új útvonala</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Resource files (*.qrc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrásfájlok (*.qrc)</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::QDesignerTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_taskmenu.cpp" line="+68"/>
+        <source>Layout Alignment</source>
+        <translation>Elrendezés igazítása</translation>
+    </message>
+    <message>
+        <source>No Horizontal Alignment</source>
+        <translation>Nincs vízszintes igazítás</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Balra</translation>
+    </message>
+    <message>
+        <source>Center Horizontally</source>
+        <translation>Vízszintesen középre</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Jobbra</translation>
+    </message>
+    <message>
+        <source>No Vertical Alignment</source>
+        <translation>Nincs függőleges igazítás</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Fentre</translation>
+    </message>
+    <message>
+        <source>Center Vertically</source>
+        <translation>Függőlegesen középre</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Lentre</translation>
+    </message>
+    <message>
         <source>Change objectName...</source>
-        <translation type="unfinished"></translation>
+        <translation>Objektumnév módosítása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change toolTip...</source>
-        <translation type="unfinished"></translation>
+        <translation>Buboréksúgó módosítása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change whatsThis...</source>
-        <translation type="unfinished"></translation>
+        <translation>„Mi ez?” módosítása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change styleSheet...</source>
-        <translation type="unfinished"></translation>
+        <translation>Stíluslap módosítása…</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Create Menu Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Menüsor létrehozása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Add Tool Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Eszköztár hozzáadása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create Status Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Állapotsor létrehozása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Remove Status Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Állapotsor eltávolítása</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Change script...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>Change signals/slots...</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzések és tárolóhelyek módosítása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Go to slot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ugrás a tárolóhelyhez…</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Size Constraints</source>
-        <translation type="unfinished"></translation>
+        <translation>Méretkorlátozások</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Set Minimum Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Legkisebb szélesség beállítása</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Set Minimum Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Legkisebb magasság beállítása</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Set Minimum Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Legkisebb méret beállítása</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Set Maximum Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Legnagyobb szélesség beállítása</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Set Maximum Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Legnagyobb magasság beállítása</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Set Maximum Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Legnagyobb méret beállítása</translation>
     </message>
     <message>
-        <location line="+235"/>
         <source>Edit ToolTip</source>
-        <translation type="unfinished"></translation>
+        <translation>Buboréksúgó szerkesztése</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Edit WhatsThis</source>
-        <translation type="unfinished"></translation>
+        <translation>„Mi ez?” szerkesztése</translation>
     </message>
     <message>
-        <location line="+144"/>
         <source>no signals available</source>
-        <translation type="unfinished"></translation>
+        <translation>nincsenek elérhető jelzések</translation>
     </message>
     <message numerus="yes">
-        <location line="+67"/>
         <source>Set size constraint on %n widget(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Méretkorlátozás beállítása %n felületi elemen</numerusform>
         </translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::QDesignerWidgetBox</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_widgetbox.cpp" line="+123"/>
-        <location line="+13"/>
         <source>Unexpected element &lt;%1&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Váratlan &lt;%1&gt; elem</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>A parse error occurred at line %1, column %2 of the XML code specified for the widget %3: %4
 %5</source>
-        <translation type="unfinished"></translation>
+        <translation>Feldolgozási hiba történt a(z) %3 felületi elemhez megadott XML kód %1. sorának %2. oszlopában: %4
+%5</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The XML code specified for the widget %1 does not contain any widget elements.
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 felületi elemhez megadott XML kód nem tartalmaz egyetlen felületi elemet sem.
+%2</translation>
     </message>
     <message>
-        <location filename="../tools/designer/src/components/widgetbox/widgetboxtreewidget.cpp" line="+349"/>
         <source>An error has been encountered at line %1 of %2: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba történt a(z) %2 %1. sorában: %3</translation>
     </message>
     <message>
-        <location line="+139"/>
         <source>Unexpected element &lt;%1&gt; encountered when parsing for &lt;widget&gt; or &lt;ui&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Váratlan &lt;%1&gt; elem fordult elő a &lt;widget&gt; vagy az &lt;ui&gt; címkék feldolgozásakor</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Unexpected end of file encountered when parsing widgets.</source>
-        <translation type="unfinished"></translation>
+        <translation>Váratlan fájlvég fordult elő a felületi elemek feldolgozásakor.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>A widget element could not be found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy felületi elem nem található.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::QtGradientStopsController</name>
     <message>
-        <location filename="../tools/shared/qtgradienteditor/qtgradientstopscontroller.cpp" line="+173"/>
         <source>H</source>
-        <translation type="unfinished"></translation>
+        <translation>H</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>S</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>V</source>
-        <translation type="unfinished"></translation>
+        <translation>V</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <location line="+4"/>
         <source>Hue</source>
-        <translation type="unfinished"></translation>
+        <translation>Árny</translation>
     </message>
     <message>
-        <location line="-3"/>
         <source>Sat</source>
-        <translation type="unfinished"></translation>
+        <translation>Tel</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Val</source>
-        <translation type="unfinished"></translation>
+        <translation>Ért</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Saturation</source>
-        <translation type="unfinished"></translation>
+        <translation>Telítettség</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Value</source>
-        <translation type="unfinished">Érték</translation>
+        <translation>Érték</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>R</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>G</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Vörös</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Zöld</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Kék</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::RichTextEditorDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/richtexteditor.cpp" line="+436"/>
         <source>Edit text</source>
-        <translation type="unfinished"></translation>
+        <translation>Szöveg szerkesztése</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Rich Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Formázott szöveg</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrás</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>&amp;OK</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;OK</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mégse</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::RichTextEditorToolBar</name>
     <message>
-        <location line="-302"/>
         <source>Bold</source>
-        <translation type="unfinished">Félkövér</translation>
+        <translation>Félkövér</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>CTRL+B</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+B</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Italic</source>
-        <translation type="unfinished">Dőlt</translation>
+        <translation>Dőlt</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>CTRL+I</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+I</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Underline</source>
-        <translation type="unfinished">Aláhúzott</translation>
+        <translation>Aláhúzott</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>CTRL+U</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+U</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Left Align</source>
-        <translation type="unfinished"></translation>
+        <translation>Balra igazítás</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Középre igazítás</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Right Align</source>
-        <translation type="unfinished"></translation>
+        <translation>Jobbra igazítás</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Justify</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorkizárás</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <source>Right to Left</source>
+        <translation>Jobbról balra</translation>
+    </message>
+    <message>
         <source>Superscript</source>
-        <translation type="unfinished"></translation>
+        <translation>Felső index</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Subscript</source>
-        <translation type="unfinished"></translation>
+        <translation>Alsó index</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Insert &amp;Link</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hivatkozás beszúrása</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Insert &amp;Image</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::ScriptDialog</name>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/scriptdialog.cpp" line="+66"/>
-        <source>Edit script</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kép beszúrása</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>&lt;html&gt;Enter a Qt Script snippet to be executed while loading the form.&lt;br&gt;The widget and its children are accessible via the variables &lt;i&gt;widget&lt;/i&gt; and &lt;i&gt;childWidgets&lt;/i&gt;, respectively.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+51"/>
-        <source>Syntax error</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::ScriptErrorDialog</name>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/scripterrordialog.cpp" line="+27"/>
-        <source>Script errors</source>
-        <translation type="unfinished"></translation>
+        <source>Simplify Rich Text</source>
+        <translation>Formázott szöveg egyszerűsítése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::SignalSlotDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/signalslotdialog.cpp" line="+199"/>
         <source>There is already a slot with the signature &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Már létezik egy tárolóhely a(z) „%1” aláírással.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>There is already a signal with the signature &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Már létezik egy jelzés a(z) „%1” aláírással.</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>%1 - Duplicate Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 – Kettőzött aláírás</translation>
     </message>
     <message>
-        <location line="+21"/>
-        <location line="+76"/>
         <source>Signals/Slots of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 jelzései és tárolóhelyei</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::SignalSlotEditorPlugin</name>
     <message>
-        <location filename="../tools/designer/src/components/signalsloteditor/signalsloteditor_plugin.cpp" line="+72"/>
         <source>Edit Signals/Slots</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzések és tárolóhelyek szerkesztése</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>F4</source>
-        <translation type="unfinished"></translation>
+        <translation>F4</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::SignalSlotEditorTool</name>
     <message>
-        <location filename="../tools/designer/src/components/signalsloteditor/signalsloteditor_tool.cpp" line="+58"/>
         <source>Edit Signals/Slots</source>
-        <translation type="unfinished"></translation>
+        <translation>Jelzések és tárolóhelyek szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::StatusBarTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/toolbar_taskmenu.cpp" line="+81"/>
         <source>Remove</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Eltávolítás</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::StringListEditorButton</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/stringlisteditorbutton.cpp" line="+56"/>
         <source>Change String List</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterlánclista módosítása</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::StyleSheetEditorDialog</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/stylesheeteditor.cpp" line="+90"/>
-        <location line="+280"/>
         <source>Valid Style Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Érvényes stíluslap</translation>
     </message>
     <message>
-        <location line="-278"/>
         <source>Add Resource...</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrás hozzáadása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Add Gradient...</source>
-        <translation type="unfinished"></translation>
+        <translation>Színátmenet hozzáadása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Add Color...</source>
-        <translation type="unfinished"></translation>
+        <translation>Szín hozzáadása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Add Font...</source>
-        <translation type="unfinished"></translation>
+        <translation>Betűkészlet hozzáadása…</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Edit Style Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Stíluslap szerkesztése</translation>
     </message>
     <message>
-        <location line="+276"/>
         <source>Invalid Style Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>Érvénytelen stíluslap</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TabOrderEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/tabordereditor/tabordereditor.cpp" line="+363"/>
         <source>Start from Here</source>
-        <translation type="unfinished"></translation>
+        <translation>Kezdés innen</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Újrakezdés</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Tab Order List...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapsorrend lista…</translation>
     </message>
     <message>
-        <location line="+44"/>
         <source>Tab Order List</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapsorrend lista</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Tab Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapsorrend</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TabOrderEditorPlugin</name>
     <message>
-        <location filename="../tools/designer/src/components/tabordereditor/tabordereditor_plugin.cpp" line="+73"/>
         <source>Edit Tab Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapsorrend szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TabOrderEditorTool</name>
     <message>
-        <location filename="../tools/designer/src/components/tabordereditor/tabordereditor_tool.cpp" line="+57"/>
         <source>Edit Tab Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapsorrend szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TableWidgetEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/tablewidgeteditor.cpp" line="+67"/>
-        <source>New Column</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>New Row</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>&amp;Columns</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>&amp;Rows</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+137"/>
-        <source>Properties &amp;&lt;&lt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/components/taskmenu/tablewidgeteditor.ui"/>
-        <location filename="../tools/designer/src/components/taskmenu/tablewidgeteditor.cpp" line="+2"/>
-        <source>Properties &amp;&gt;&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
         <source>Edit Table Widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Táblázat felületi elem szerkesztése</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Items</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Elemek</translation>
     </message>
     <message>
-        <location/>
         <source>Table Items</source>
-        <translation type="unfinished"></translation>
+        <translation>Táblázatelemek</translation>
+    </message>
+    <message>
+        <source>Properties &amp;&gt;&gt;</source>
+        <translation>Tulajdonságok &amp;&gt;&gt;</translation>
+    </message>
+    <message>
+        <source>New Column</source>
+        <translation>Új oszlop</translation>
+    </message>
+    <message>
+        <source>New Row</source>
+        <translation>Új sor</translation>
+    </message>
+    <message>
+        <source>&amp;Columns</source>
+        <translation>&amp;Oszlopok</translation>
+    </message>
+    <message>
+        <source>&amp;Rows</source>
+        <translation>&amp;Sorok</translation>
+    </message>
+    <message>
+        <source>Properties &amp;&lt;&lt;</source>
+        <translation>Tulajdonságok &amp;&lt;&lt;</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TableWidgetTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/tablewidget_taskmenu.cpp" line="+64"/>
         <source>Edit Items...</source>
-        <translation type="unfinished">Elem szerkesztése...</translation>
+        <translation>Elemek szerkesztése…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TemplateOptionsWidget</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/templateoptionspage.cpp" line="-18"/>
-        <source>Pick a directory to save templates in</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/components/formeditor/templateoptionspage.ui"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Űrlap</translation>
     </message>
     <message>
-        <location/>
         <source>Additional Template Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>További sablonútvonalak</translation>
     </message>
     <message>
-        <location/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
+    </message>
+    <message>
+        <source>Pick a directory to save templates in</source>
+        <translation>Válasszon egy könyvtárat, amelybe a sablonokat menti</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TextEditTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/textedit_taskmenu.cpp" line="+58"/>
         <source>Edit HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML szerkesztése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change HTML...</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML módosítása…</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Edit Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Szöveg szerkesztése</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Change Plain Text...</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyszerű szöveg módosítása…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TextEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/propertyeditor/designerpropertymanager.cpp" line="-204"/>
         <source>Choose Resource...</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőforrás kiválasztása…</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Choose File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájl kiválasztása…</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>…</translation>
     </message>
     <message>
-        <location line="+118"/>
         <source>Choose a File</source>
-        <translation type="unfinished"></translation>
+        <translation>Válasszon egy fájlt</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ToolBarEventFilter</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/qdesigner_toolbar.cpp" line="+148"/>
         <source>Insert Separator before &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Elválasztó beszúrása a(z) „%1” elé</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Append Separator</source>
-        <translation type="unfinished"></translation>
+        <translation>Elválasztó hozzáfűzése</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Remove action &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” művelet eltávolítása</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Remove Toolbar &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” eszköztár eltávolítása</translation>
     </message>
     <message>
-        <location line="+58"/>
         <source>Insert Separator</source>
-        <translation type="unfinished"></translation>
+        <translation>Elválasztó beszúrása</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TreeWidgetEditor</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/treewidgeteditor.cpp" line="+68"/>
-        <source>New Column</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>&amp;Columns</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+69"/>
-        <source>Per column properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Common properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/components/taskmenu/treewidgeteditor.ui"/>
-        <location filename="../tools/designer/src/components/taskmenu/treewidgeteditor.cpp" line="+53"/>
-        <source>New Item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
-        <location filename="../tools/designer/src/components/taskmenu/treewidgeteditor.cpp" line="+19"/>
-        <source>New Subitem</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/components/taskmenu/treewidgeteditor.cpp" line="+175"/>
-        <source>Properties &amp;&lt;&lt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/designer/src/components/taskmenu/treewidgeteditor.ui"/>
-        <location filename="../tools/designer/src/components/taskmenu/treewidgeteditor.cpp" line="+2"/>
-        <source>Properties &amp;&gt;&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location/>
         <source>Edit Tree Widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Fa felületi elem szerkesztése</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Items</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Elemek</translation>
     </message>
     <message>
-        <location/>
         <source>Tree Items</source>
-        <translation type="unfinished"></translation>
+        <translation>Faelemek</translation>
     </message>
     <message>
-        <location/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
-        <location/>
+        <source>New Item</source>
+        <translation>Új elem</translation>
+    </message>
+    <message>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>Ú&amp;j</translation>
     </message>
     <message>
-        <location/>
+        <source>New Subitem</source>
+        <translation>Új alelem</translation>
+    </message>
+    <message>
         <source>New &amp;Subitem</source>
-        <translation type="unfinished"></translation>
+        <translation>Új &amp;alelem</translation>
     </message>
     <message>
-        <location/>
         <source>Delete Item</source>
-        <translation type="unfinished"></translation>
+        <translation>Elem törlése</translation>
     </message>
     <message>
-        <location/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Törlés</translation>
     </message>
     <message>
-        <location/>
         <source>Move Item Left (before Parent Item)</source>
-        <translation type="unfinished"></translation>
+        <translation>Elem mozgatása balra (a szülőelem elé)</translation>
     </message>
     <message>
-        <location/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message>
-        <location/>
         <source>Move Item Right (as a First Subitem of the Next Sibling Item)</source>
-        <translation type="unfinished"></translation>
+        <translation>Elem mozgatása jobbra (a következő testvérelem első alelemeként)</translation>
     </message>
     <message>
-        <location/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>J</translation>
     </message>
     <message>
-        <location/>
         <source>Move Item Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Elem mozgatása fel</translation>
     </message>
     <message>
-        <location/>
         <source>U</source>
-        <translation type="unfinished"></translation>
+        <translation>F</translation>
     </message>
     <message>
-        <location/>
         <source>Move Item Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Elem mozgatása le</translation>
     </message>
     <message>
-        <location/>
         <source>D</source>
-        <translation type="unfinished"></translation>
+        <translation>L</translation>
+    </message>
+    <message>
+        <source>Properties &amp;&gt;&gt;</source>
+        <translation>Tulajdonságok &amp;&gt;&gt;</translation>
+    </message>
+    <message>
+        <source>New Column</source>
+        <translation>Új oszlop</translation>
+    </message>
+    <message>
+        <source>&amp;Columns</source>
+        <translation>&amp;Oszlopok</translation>
+    </message>
+    <message>
+        <source>Per column properties</source>
+        <translation>Oszloponkénti tulajdonságok</translation>
+    </message>
+    <message>
+        <source>Common properties</source>
+        <translation>Közös tulajdonságok</translation>
+    </message>
+    <message>
+        <source>Properties &amp;&lt;&lt;</source>
+        <translation>Tulajdonságok &amp;&lt;&lt;</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::TreeWidgetTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/treewidget_taskmenu.cpp" line="+63"/>
         <source>Edit Items...</source>
-        <translation type="unfinished">Elem szerkesztése...</translation>
+        <translation>Elemek szerkesztése…</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::WidgetBox</name>
     <message>
-        <location filename="../tools/designer/src/components/widgetbox/widgetbox_dnditem.cpp" line="+115"/>
+        <source>Filter</source>
+        <translation>Szűrő</translation>
+    </message>
+    <message>
         <source>Warning: Widget creation failed in the widget box. This could be caused by invalid custom widget XML.</source>
-        <translation type="unfinished"></translation>
+        <translation>Figyelmeztetés: a felületi elem létrehozása sikertelen a felületi elem dobozban. Ezt egy érvénytelen egyéni felületi elem XML okozhatta.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::WidgetBoxTreeWidget</name>
     <message>
-        <location filename="../tools/designer/src/components/widgetbox/widgetboxtreewidget.cpp" line="-268"/>
         <source>Scratchpad</source>
-        <translation type="unfinished"></translation>
+        <translation>Jegyzettömb</translation>
     </message>
     <message>
-        <location line="+370"/>
         <source>Custom Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyéni felületi elemek</translation>
     </message>
     <message>
-        <location line="+263"/>
         <source>Expand all</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes kinyitása</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Collapse all</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes összecsukása</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>List View</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista nézet</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Icon View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikon nézet</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Remove</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Edit name</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::WidgetDataBase</name>
-    <message>
-        <location filename="../tools/designer/src/lib/shared/widgetdatabase.cpp" line="-411"/>
-        <source>A custom widget plugin whose class name (%1) matches that of an existing class has been found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Név szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::WidgetEditorTool</name>
     <message>
-        <location filename="../tools/designer/src/components/formeditor/tool_widgeteditor.cpp" line="+67"/>
         <source>Edit Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Felületi elemek szerkesztése</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::WidgetFactory</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/widgetfactory.cpp" line="+263"/>
         <source>The custom widget factory registered for widgets of class %1 returned 0.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) %1 osztályú felületi elemekhez regisztrált egyéni felületi elem gyár 0-val tért vissza.</translation>
     </message>
     <message>
-        <location line="+44"/>
         <source>A class name mismatch occurred when creating a widget using the custom widget factory registered for widgets of class %1. It returned a widget of class %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Osztálynév eltérés történt a felületi elem létrehozásánál a(z) %1 osztályú felületi elemekhez regisztrált egyéni felületi elem gyár használatakor. A gyár %2 osztályú felületi elemet adott vissza.</translation>
     </message>
     <message>
-        <location line="+99"/>
-        <source>%1 Widget</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+90"/>
         <source>The current page of the container &apos;%1&apos; (%2) could not be determined while creating a layout.This indicates an inconsistency in the ui-file, probably a layout being constructed on a container widget.</source>
-        <translation type="unfinished"></translation>
+        <translation>A(z) „%1” (%2) konténer jelenlegi oldalát nem sikerült meghatározni az elrendezés létrehozása során. Ez a felhasználói felület fájlban lévő következetlenséget jelzi, valószínűleg egy elrendezés hoztak létre egy konténer felületi elemen.</translation>
     </message>
     <message>
-        <location line="+53"/>
         <source>Attempt to add a layout to a widget &apos;%1&apos; (%2) which already has an unmanaged layout of type %3.
 This indicates an inconsistency in the ui-file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy olyan „%1” (%2) felületi elemhez próbál elrendezést hozzáadni, amely már tartalmaz egy %3 típusú kezeletlen elrendezést.
+Ez a felhasználói felület fájlban lévő következetlenséget jelzi.</translation>
     </message>
     <message>
-        <location line="+211"/>
         <source>Cannot create style &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem hozható létre a(z) „%1” stílus.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::WizardContainerWidgetTaskMenu</name>
     <message>
-        <location filename="../tools/designer/src/components/taskmenu/containerwidget_taskmenu.cpp" line="-49"/>
         <source>Next</source>
-        <translation type="unfinished">Következő</translation>
+        <translation>Következő</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Back</source>
-        <translation type="unfinished">Vissza</translation>
+        <translation>Vissza</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ZoomMenu</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/zoomwidget.cpp" line="+84"/>
         <source>%1 %</source>
         <extracomment>Zoom factor</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 %</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ZoomablePreviewDeviceSkin</name>
     <message>
-        <location filename="../tools/designer/src/lib/shared/previewmanager.cpp" line="-270"/>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nagyítás</translation>
     </message>
 </context>
 </TS>

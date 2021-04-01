@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru">
+<TS version="2.1" language="ru">
 <context>
     <name>AbstractFindWidget</name>
     <message>
@@ -20,8 +20,8 @@
         <translation>Слова &amp;целиком</translation>
     </message>
     <message>
-        <source>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
-        <translation>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Поиск с начала</translation>
+        <source>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
+        <translation>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Поиск с начала</translation>
     </message>
 </context>
 <context>
@@ -93,31 +93,31 @@
     <name>AppFontManager</name>
     <message>
         <source>&apos;%1&apos; is not a file.</source>
-        <translation>&apos;%1&apos; не является файлом.</translation>
+        <translation>«%1» не является файлом.</translation>
     </message>
     <message>
         <source>The font file &apos;%1&apos; does not have read permissions.</source>
-        <translation>Файл шрифтов &apos;%1&apos; не доступен для чтения.</translation>
+        <translation>Файл шрифтов «%1» недоступен для чтения.</translation>
     </message>
     <message>
         <source>The font file &apos;%1&apos; is already loaded.</source>
-        <translation>Файл шрифтов &apos;%1&apos;уже загружен.</translation>
+        <translation>Файл шрифтов «%1» уже загружен.</translation>
     </message>
     <message>
         <source>The font file &apos;%1&apos; could not be loaded.</source>
-        <translation>Файл шрифтов &apos;%1&apos; не может быть загружен.</translation>
+        <translation>Не удалось загрузить файл шрифтов «%1».</translation>
     </message>
     <message>
         <source>&apos;%1&apos; is not a valid font id.</source>
-        <translation>&apos;%1&apos; не является корректным идентификатором шрифта.</translation>
+        <translation>«%1» не является корректным идентификатором шрифта.</translation>
     </message>
     <message>
         <source>There is no loaded font matching the id &apos;%1&apos;.</source>
-        <translation>Нет загруженного шрифта, соответствующего идентификатору &apos;%1&apos;.</translation>
+        <translation>Среди загруженных шрифтов нет соответствующего идентификатору «%1».</translation>
     </message>
     <message>
         <source>The font &apos;%1&apos; (%2) could not be unloaded.</source>
-        <translation>Шрифт &apos;%1&apos; (%2) не может быть выгружен.</translation>
+        <translation>Не удалось выгрузить шрифт «%1» (%2).</translation>
     </message>
 </context>
 <context>
@@ -182,7 +182,7 @@
     </message>
     <message>
         <source>The binary &apos;%1&apos; does not exist.</source>
-        <translation>Исполняемый файл &apos;%1&apos; не существует.</translation>
+        <translation>Исполняемый файл «%1» не существует.</translation>
     </message>
     <message>
         <source>Unable to launch assistant (%1).</source>
@@ -296,7 +296,7 @@
     </message>
     <message>
         <source>Break button group &apos;%1&apos;</source>
-        <translation>Разбить группу кнопок &apos;%1&apos;</translation>
+        <translation>Разбить группу кнопок «%1»</translation>
     </message>
     <message>
         <source>Add buttons to group</source>
@@ -305,7 +305,7 @@
     <message>
         <source>Add &apos;%1&apos; to &apos;%2&apos;</source>
         <extracomment>Command description for adding buttons to a QButtonGroup</extracomment>
-        <translation>Добавить &apos;%1&apos; в &apos;%2&apos;</translation>
+        <translation>Добавить «%1» в «%2»</translation>
     </message>
     <message>
         <source>Remove buttons from group</source>
@@ -314,7 +314,7 @@
     <message>
         <source>Remove &apos;%1&apos; from &apos;%2&apos;</source>
         <extracomment>Command description for removing buttons from a QButtonGroup</extracomment>
-        <translation>Удалить &apos;%1&apos; из &apos;%2&apos;</translation>
+        <translation>Удалить «%1» из «%2»</translation>
     </message>
     <message>
         <source>Add connection</source>
@@ -339,31 +339,31 @@
     <message>
         <source>Morph %1/&apos;%2&apos; into %3</source>
         <extracomment>MorphWidgetCommand description</extracomment>
-        <translation>Преобразовать %1/&apos;%2&apos; в %3</translation>
+        <translation>Преобразовать %1/«%2» в %3</translation>
     </message>
     <message>
         <source>Insert &apos;%1&apos;</source>
-        <translation>Вставить &apos;%1&apos;</translation>
+        <translation>Вставить «%1»</translation>
     </message>
     <message>
         <source>Change Z-order of &apos;%1&apos;</source>
-        <translation>Изменить порядок удалённости &apos;%1&apos;</translation>
+        <translation>Изменить порядок удалённости «%1»</translation>
     </message>
     <message>
         <source>Raise &apos;%1&apos;</source>
-        <translation>Поднять &apos;%1&apos;</translation>
+        <translation>Поднять «%1»</translation>
     </message>
     <message>
         <source>Lower &apos;%1&apos;</source>
-        <translation>Опустить &apos;%1&apos;</translation>
+        <translation>Опустить «%1»</translation>
     </message>
     <message>
         <source>Delete &apos;%1&apos;</source>
-        <translation>Удалить &apos;%1&apos;</translation>
+        <translation>Удалить «%1»</translation>
     </message>
     <message>
         <source>Reparent &apos;%1&apos;</source>
-        <translation>Сменить владельца у &apos;%1&apos;</translation>
+        <translation>Сменить владельца у «%1»</translation>
     </message>
     <message>
         <source>Promote to custom widget</source>
@@ -439,7 +439,7 @@
     </message>
     <message>
         <source>Adjust Size of &apos;%1&apos;</source>
-        <translation>Подогнать размер &apos;%1&apos;</translation>
+        <translation>Подогнать размер «%1»</translation>
     </message>
     <message>
         <source>Change Form Layout Item Geometry</source>
@@ -495,7 +495,7 @@
     </message>
     <message>
         <source>Change layout of &apos;%1&apos; from %2 to %3</source>
-        <translation>Изменить компоновку &apos;%1&apos; с %2 на %3</translation>
+        <translation>Изменить компоновку «%1» с %2 на %3</translation>
     </message>
     <message>
         <source>Change layout alignment</source>
@@ -523,55 +523,51 @@
     </message>
     <message>
         <source>Changed &apos;%1&apos; of &apos;%2&apos;</source>
-        <translation>Изменено &apos;%1&apos; у &apos;%2&apos;</translation>
+        <translation>Изменено «%1» у «%2»</translation>
     </message>
     <message numerus="yes">
         <source>Changed &apos;%1&apos; of %n objects</source>
         <translation>
-            <numerusform>Изменено &apos;%1&apos; у %n объекта</numerusform>
-            <numerusform>Изменено &apos;%1&apos; у %n объектов</numerusform>
-            <numerusform>Изменено &apos;%1&apos; у %n объектов</numerusform>
+            <numerusform>Изменено «%1» у %n объекта</numerusform>
+            <numerusform>Изменено «%1» у %n объектов</numerusform>
+            <numerusform>Изменено «%1» у %n объектов</numerusform>
         </translation>
     </message>
     <message>
         <source>Reset &apos;%1&apos; of &apos;%2&apos;</source>
-        <translation>Восстановлено &apos;%1&apos; у &apos;%2&apos;</translation>
+        <translation>Восстановлено «%1» у «%2»</translation>
     </message>
     <message numerus="yes">
         <source>Reset &apos;%1&apos; of %n objects</source>
         <translation>
-            <numerusform>Восстановлено &apos;%1&apos; у %n объекта</numerusform>
-            <numerusform>Восстановлено &apos;%1&apos; у %n объектов</numerusform>
-            <numerusform>Восстановлено &apos;%1&apos; у %n объектов</numerusform>
+            <numerusform>Восстановлено «%1» у %n объекта</numerusform>
+            <numerusform>Восстановлено «%1» у %n объектов</numerusform>
+            <numerusform>Восстановлено «%1» у %n объектов</numerusform>
         </translation>
     </message>
     <message>
         <source>Add dynamic property &apos;%1&apos; to &apos;%2&apos;</source>
-        <translation>Добавлено динамическое свойство &apos;%1&apos; &apos;%2&apos;</translation>
+        <translation>Добавлено динамическое свойство «%1» «%2»</translation>
     </message>
     <message numerus="yes">
         <source>Add dynamic property &apos;%1&apos; to %n objects</source>
         <translation>
-            <numerusform>Добавлено динамическое свойство &apos;%1&apos; %n объекту</numerusform>
-            <numerusform>Добавлено динамическое свойство &apos;%1&apos; %n объектам</numerusform>
-            <numerusform>Добавлено динамическое свойство &apos;%1&apos; %n объектам</numerusform>
+            <numerusform>Добавлено динамическое свойство «%1» %n объекту</numerusform>
+            <numerusform>Добавлено динамическое свойство «%1» %n объектам</numerusform>
+            <numerusform>Добавлено динамическое свойство «%1» %n объектам</numerusform>
         </translation>
     </message>
     <message>
         <source>Remove dynamic property &apos;%1&apos; from &apos;%2&apos;</source>
-        <translation>Удалено динамическое свойство &apos;%1&apos; у &apos;%2&apos;</translation>
+        <translation>Удалено динамическое свойство «%1» у «%2»</translation>
     </message>
     <message numerus="yes">
         <source>Remove dynamic property &apos;%1&apos; from %n objects</source>
         <translation>
-            <numerusform>Удалено динамическое свойство &apos;%1&apos; у %n объекта</numerusform>
-            <numerusform>Удалено динамическое свойство &apos;%1&apos; у %n объектов</numerusform>
-            <numerusform>Удалено динамическое свойство &apos;%1&apos; у %n объектов</numerusform>
+            <numerusform>Удалено динамическое свойство «%1» у %n объекта</numerusform>
+            <numerusform>Удалено динамическое свойство «%1» у %n объектов</numerusform>
+            <numerusform>Удалено динамическое свойство «%1» у %n объектов</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Change script</source>
-        <translation>Изменить сценарий</translation>
     </message>
     <message>
         <source>Change signals/slots</source>
@@ -637,52 +633,6 @@
         <translation>Qt Designer</translation>
     </message>
     <message>
-        <source>This file contains top level spacers.&lt;br&gt;They have &lt;b&gt;NOT&lt;/b&gt; been saved into the form.</source>
-        <translation>Этот файл содержит верхнеуровневые разделители.&lt;br&gt;Они &lt;b&gt;НЕ&lt;/b&gt; были сохранены в форме.</translation>
-    </message>
-    <message>
-        <source>Perhaps you forgot to create a layout?</source>
-        <translation>Возможно, вы забыли создать компоновщик?</translation>
-    </message>
-    <message>
-        <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
-        <translation>Некорректный файл UI: Отсутствует корневой элемент &lt;ui&gt;.</translation>
-    </message>
-    <message>
-        <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
-        <translation>При чтении файла UI в строке %1 позиции %2 возникла ошибка: %3</translation>
-    </message>
-    <message>
-        <source>This file cannot be read because it was created using %1.</source>
-        <translation>Не удалось прочитать файл, так как он был создан с использованием %1.</translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
-        <translation>Не удалось прочитать файл, так как он был создан с использованием Designer из Qt-%1.</translation>
-    </message>
-    <message>
-        <source>The converted file could not be read.</source>
-        <translation>Не удалось прочитать преобразованный файл.</translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and will be converted to a new form by Qt Designer.</source>
-        <translation>Этот файл был создан с использованием Designer из Qt-%1 и будет преобразован в новый формат.</translation>
-    </message>
-    <message>
-        <source>The old form has not been touched, but you will have to save the form under a new name.</source>
-        <translation>Старая форма была изменена, но вы можете сохранить форму под новым именем.</translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and could not be read:
-%2</source>
-        <translation>Не удалось прочитать файл, так как он был создан с использованием Designer из Qt-%1:
-%2</translation>
-    </message>
-    <message>
-        <source>Please run it through &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; to convert it to Qt-4&apos;s ui format.</source>
-        <translation>Пожалуйста, пропустите его через &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; для преобразования в формат ui для Qt-4.</translation>
-    </message>
-    <message>
         <source>This file cannot be read because the extra info extension failed to load.</source>
         <translation>Не удалось прочитать файл, так как возникла ошибка при загрузке расширения дополнительной информации.</translation>
     </message>
@@ -707,18 +657,18 @@
     <name>DesignerMetaEnum</name>
     <message>
         <source>%1 is not a valid enumeration value of &apos;%2&apos;.</source>
-        <translation>%1 не является корректным перечислением типа &apos;%2&apos;.</translation>
+        <translation>%1 не является корректным перечислением типа «%2».</translation>
     </message>
     <message>
         <source>&apos;%1&apos; could not be converted to an enumeration value of type &apos;%2&apos;.</source>
-        <translation>Не удалось преобразовать &apos;%1&apos; к значению перечисления &apos;%2&apos;.</translation>
+        <translation>Не удалось преобразовать «%1» к значению перечисления «%2».</translation>
     </message>
 </context>
 <context>
     <name>DesignerMetaFlags</name>
     <message>
         <source>&apos;%1&apos; could not be converted to a flag value of type &apos;%2&apos;.</source>
-        <translation>Не удалось преобразовать &apos;%1&apos; к флаговому значению типа &apos;%2&apos;.</translation>
+        <translation>Не удалось преобразовать «%1» к флаговому значению типа «%2».</translation>
     </message>
 </context>
 <context>
@@ -726,7 +676,7 @@
     <message>
         <source>&apos;%1&apos; is not a number.</source>
         <extracomment>Reading a number for an embedded device profile</extracomment>
-        <translation>&apos;%1&apos; не является числом.</translation>
+        <translation>«%1» не является числом.</translation>
     </message>
     <message>
         <source>An invalid tag &lt;%1&gt; was encountered.</source>
@@ -760,19 +710,19 @@
     <name>DeviceSkin</name>
     <message>
         <source>The image file &apos;%1&apos; could not be loaded.</source>
-        <translation>Не удалось загрузить файл изображения &apos;%1&apos;.</translation>
+        <translation>Не удалось загрузить файл изображения «%1».</translation>
     </message>
     <message>
         <source>The skin directory &apos;%1&apos; does not contain a configuration file.</source>
-        <translation>Каталог &apos;%1&apos; не содержит файла настроек обложки.</translation>
+        <translation>Каталог «%1» не содержит файла настроек обложки.</translation>
     </message>
     <message>
         <source>The skin configuration file &apos;%1&apos; could not be opened.</source>
-        <translation>Не удалось открыть файл настроек обложки &apos;%1&apos;.</translation>
+        <translation>Не удалось открыть файл настроек обложки «%1».</translation>
     </message>
     <message>
         <source>The skin configuration file &apos;%1&apos; could not be read: %2</source>
-        <translation>Не удалось прочитать файл настроек обложки &apos;%1&apos;: %2</translation>
+        <translation>Не удалось прочитать файл настроек обложки «%1»: %2</translation>
     </message>
     <message>
         <source>Syntax error: %1</source>
@@ -780,19 +730,19 @@
     </message>
     <message>
         <source>The skin &quot;up&quot; image file &apos;%1&apos; does not exist.</source>
-        <translation>Отсутствует файл изображения &quot;up&quot; обложки &apos;%1&apos;.</translation>
+        <translation>Отсутствует файл изображения «up» обложки «%1».</translation>
     </message>
     <message>
         <source>The skin &quot;down&quot; image file &apos;%1&apos; does not exist.</source>
-        <translation>Отсутствует файл изображения &quot;down&quot; обложки &apos;%1&apos;.</translation>
+        <translation>Отсутствует файл изображения «down» обложки «%1».</translation>
     </message>
     <message>
         <source>The skin &quot;closed&quot; image file &apos;%1&apos; does not exist.</source>
-        <translation>Отсутствует файл изображения обложки &quot;closed&quot; &apos;%1&apos;.</translation>
+        <translation>Отсутствует файл изображения обложки «closed» «%1».</translation>
     </message>
     <message>
         <source>The skin cursor image file &apos;%1&apos; does not exist.</source>
-        <translation>Отсутствует файл изображения курсора обложки &apos;%1&apos;.</translation>
+        <translation>Отсутствует файл изображения курсора обложки «%1».</translation>
     </message>
     <message>
         <source>Syntax error in area definition: %1</source>
@@ -870,17 +820,13 @@
     <name>FormBuilder</name>
     <message>
         <source>Invalid stretch value for &apos;%1&apos;: &apos;%2&apos;</source>
-        <extracomment>Parsing layout stretch values
-----------
-Parsing layout stretch values</extracomment>
-        <translation>Некорректный коэффициент растяжения для &apos;%1&apos;: &apos;%2&apos;</translation>
+        <extracomment>Parsing layout stretch values</extracomment>
+        <translation>Некорректный коэффициент растяжения для «%1»: «%2»</translation>
     </message>
     <message>
         <source>Invalid minimum size for &apos;%1&apos;: &apos;%2&apos;</source>
-        <extracomment>Parsing grid layout minimum size values
-----------
-Parsing grid layout minimum size values</extracomment>
-        <translation>Некорректный минимальный размер для &apos;%1&apos;: &apos;%2&apos;</translation>
+        <extracomment>Parsing grid layout minimum size values</extracomment>
+        <translation>Некорректный минимальный размер для «%1»: «%2»</translation>
     </message>
 </context>
 <context>
@@ -990,7 +936,7 @@ Parsing grid layout minimum size values</extracomment>
     </message>
     <message>
         <source>&amp;Pixmap Function</source>
-        <translation type="unfinished">&amp;Загрузчик изображений</translation>
+        <translation>&amp;Загрузчик изображений</translation>
     </message>
     <message>
         <source>Grid</source>
@@ -1171,29 +1117,30 @@ Parsing grid layout minimum size values</extracomment>
     </message>
 </context>
 <context>
-    <name>Q3WizardContainer</name>
-    <message>
-        <source>Page</source>
-        <translation>Страница</translation>
-    </message>
-</context>
-<context>
     <name>QAbstractFormBuilder</name>
-    <message>
-        <source>Unexpected element &lt;%1&gt;</source>
-        <translation>Неожиданный элемент &lt;%1&gt;</translation>
-    </message>
     <message>
         <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
         <translation>Возникла ошибка при чтении файла UI в строке %1 позиции %2: %3</translation>
+    </message>
+    <message>
+        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
+        <translation>Не удалось прочитать файл, так как он был создан с использованием Designer из Qt-%1.</translation>
+    </message>
+    <message>
+        <source>This file cannot be read because it was created using %1.</source>
+        <translation>Не удалось прочитать файл, так как он был создан с использованием %1.</translation>
     </message>
     <message>
         <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
         <translation>Некорректный файл UI: отсутствует корневой элемент &lt;ui&gt;.</translation>
     </message>
     <message>
+        <source>Invalid UI file</source>
+        <translation>Некорректный файл UI</translation>
+    </message>
+    <message>
         <source>The creation of a widget of the class &apos;%1&apos; failed.</source>
-        <translation>Не удалось создание виджета класса &apos;%1&apos;.</translation>
+        <translation>Не удалось создание виджета класса «%1».</translation>
     </message>
     <message>
         <source>Attempt to add child that is not of class QWizardPage to QWizard.</source>
@@ -1202,12 +1149,12 @@ Parsing grid layout minimum size values</extracomment>
     <message>
         <source>Attempt to add a layout to a widget &apos;%1&apos; (%2) which already has a layout of non-box type %3.
 This indicates an inconsistency in the ui-file.</source>
-        <translation>Попытка добавить компоновщик виджету &apos;%1&apos; (%2), у которого уже имеется компоновщик типа %3.
+        <translation>Попытка добавить компоновщик виджету «%1» (%2), у которого уже имеется компоновщик типа %3.
 Это указывает на некорректность файла UI.</translation>
     </message>
     <message>
         <source>Empty widget item in %1 &apos;%2&apos;.</source>
-        <translation>Пустой элемент виджета в %1 &apos;%2&apos;.</translation>
+        <translation>Пустой элемент виджета в %1 «%2».</translation>
     </message>
     <message>
         <source>Flags property are not supported yet.</source>
@@ -1215,45 +1162,41 @@ This indicates an inconsistency in the ui-file.</source>
     </message>
     <message>
         <source>While applying tab stops: The widget &apos;%1&apos; could not be found.</source>
-        <translation>При применении позиций табуляции: не удалось найти виджет &apos;%1&apos;.</translation>
+        <translation>При применении позиций табуляции: не удалось найти виджет «%1».</translation>
     </message>
     <message>
         <source>Invalid QButtonGroup reference &apos;%1&apos; referenced by &apos;%2&apos;.</source>
-        <translation>&apos;%2&apos; содержит некорректную ссылку на QButtonGroup &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>This version of the uitools library is linked without script support.</source>
-        <translation>Данная версия библиотеки uitools собрана без поддержки сценариев.</translation>
+        <translation>«%2» содержит некорректную ссылку на QButtonGroup «%1».</translation>
     </message>
 </context>
 <context>
     <name>QAxWidgetPlugin</name>
     <message>
         <source>ActiveX control</source>
-        <translation>Элемент управления ActiveX</translation>
+        <translation>Элемент ActiveX</translation>
     </message>
     <message>
         <source>ActiveX control widget</source>
-        <translation>Виджет элемента управления ActiveX</translation>
+        <translation>Виджет элемента ActiveX</translation>
     </message>
 </context>
 <context>
     <name>QAxWidgetTaskMenu</name>
     <message>
         <source>Set Control</source>
-        <translation>Задать элемент управления</translation>
+        <translation>Задать элемент</translation>
     </message>
     <message>
         <source>Reset Control</source>
-        <translation>Сбросить элемент управления</translation>
+        <translation>Сбросить элемент</translation>
     </message>
     <message>
         <source>Licensed Control</source>
-        <translation>Лицензионный элемент управления</translation>
+        <translation>Лицензируемый элемент</translation>
     </message>
     <message>
         <source>The control requires a design-time license</source>
-        <translation>Компонент требует лицензию периода разработки</translation>
+        <translation>Для элемента необходима лицензия разработчика</translation>
     </message>
 </context>
 <context>
@@ -1264,7 +1207,7 @@ This indicates an inconsistency in the ui-file.</source>
     </message>
     <message>
         <source>The base class %1 is invalid.</source>
-        <translation>Неверный базовый класс %1.</translation>
+        <translation>Некорректный базовый класс %1.</translation>
     </message>
     <message>
         <source>The class %1 already exists.</source>
@@ -1299,34 +1242,12 @@ This indicates an inconsistency in the ui-file.</source>
         <translatorcomment>перевод близко к тексту - буквальный совсем глаз режет</translatorcomment>
         <translation>Пустое имя у подключаемого файла не допустимо.</translation>
     </message>
-    <message>
-        <source>Exception at line %1: %2</source>
-        <translation>Исключение в строке %1: %2</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation>Неизвестная ошибка</translation>
-    </message>
-    <message>
-        <source>An error occurred while running the script for %1: %2
-Script: %3</source>
-        <translation>При выполнении сценария %1 возникла ошибка: %2
-Сценарий: %3</translation>
-    </message>
 </context>
 <context>
     <name>QDesigner</name>
     <message>
         <source>%1 - warning</source>
         <translation>%1 - предупреждение</translation>
-    </message>
-    <message>
-        <source>Qt Designer</source>
-        <translation>Qt Designer</translation>
-    </message>
-    <message>
-        <source>This application cannot be used for the Console edition of Qt</source>
-        <translation>Это приложение не может быть использовано для консольной версии Qt</translation>
     </message>
 </context>
 <context>
@@ -1361,15 +1282,15 @@ Script: %3</source>
     </message>
     <message>
         <source>CTRL+SHIFT+S</source>
-        <translation></translation>
+        <translation>CTRL+SHIFT+S</translation>
     </message>
     <message>
         <source>CTRL+R</source>
-        <translation></translation>
+        <translation>CTRL+R</translation>
     </message>
     <message>
         <source>CTRL+M</source>
-        <translation></translation>
+        <translation>CTRL+M</translation>
     </message>
     <message>
         <source>Qt Designer &amp;Help</source>
@@ -1378,10 +1299,6 @@ Script: %3</source>
     <message>
         <source>Current Widget Help</source>
         <translation>Справка по виджету</translation>
-    </message>
-    <message>
-        <source>What&apos;s New in Qt Designer?</source>
-        <translation>Что нового в Qt Designer?</translation>
     </message>
     <message>
         <source>About Plugins</source>
@@ -1442,6 +1359,10 @@ Do you want to update the file location or generate a new form?</source>
     <message>
         <source>&amp;New Form</source>
         <translation>&amp;Новая форма</translation>
+    </message>
+    <message>
+        <source>Qt Designer</source>
+        <translation>Qt Designer</translation>
     </message>
     <message>
         <source>Save Form?</source>
@@ -1505,7 +1426,7 @@ Do you want to update the file location or generate a new form?</source>
     </message>
     <message>
         <source>ALT+CTRL+S</source>
-        <translation></translation>
+        <translation>ALT+CTRL+S</translation>
     </message>
     <message>
         <source>Save Form As</source>
@@ -1603,27 +1524,23 @@ Would you like to retry?</source>
     <name>QDesignerAxWidget</name>
     <message>
         <source>Reset control</source>
-        <translation>Сбросить элемент управления</translation>
+        <translation>Сбросить элемент</translation>
     </message>
     <message>
         <source>Set control</source>
-        <translation>Задать элемент управления</translation>
+        <translation>Задать элемент</translation>
     </message>
     <message>
         <source>Control loaded</source>
-        <translation>Элемент управления загружен</translation>
+        <translation>Элемент загружен</translation>
     </message>
     <message>
         <source>A COM exception occurred when executing a meta call of type %1, index %2 of &quot;%3&quot;.</source>
-        <translation>Возникло исключение COM при выполнении мета-вызова типа %1, индекс %2 в &quot;%3&quot;.</translation>
+        <translation>Произошло исключение COM при выполнении мета-вызова %1 с индексом %2 в виджете «%3».</translation>
     </message>
 </context>
 <context>
     <name>QDesignerFormBuilder</name>
-    <message>
-        <source>Script errors occurred:</source>
-        <translation>Возникла ошибка сценария:</translation>
-    </message>
     <message>
         <source>The preview failed to build.</source>
         <translation>Не удалось создать предпросмотр.</translation>
@@ -1672,7 +1589,7 @@ Would you like to retry?</source>
     </message>
     <message>
         <source>Remove action &apos;%1&apos;</source>
-        <translation>Удалить действие &apos;%1&apos;</translation>
+        <translation>Удалить действие «%1»</translation>
     </message>
     <message>
         <source>Add separator</source>
@@ -1691,7 +1608,7 @@ Would you like to retry?</source>
     </message>
     <message>
         <source>Remove Menu &apos;%1&apos;</source>
-        <translation>Удалить меню &apos;%1&apos;</translation>
+        <translation>Удалить меню «%1»</translation>
     </message>
     <message>
         <source>Remove Menu Bar</source>
@@ -1710,15 +1627,15 @@ Would you like to retry?</source>
     </message>
     <message>
         <source>A required attribute (&apos;%1&apos;) is missing.</source>
-        <translation>Отсутствует необходимый атрибут (&apos;%1&apos;).</translation>
+        <translation>Отсутствует необходимый атрибут («%1»).</translation>
     </message>
     <message>
         <source>An invalid property specification (&apos;%1&apos;) was encountered. Supported types: %2</source>
-        <translation>Обнаружена неверная спецификация (&apos;%1&apos;) свойства. Поддерживаются типы: %2</translation>
+        <translation>Обнаружена некорректная спецификация («%1») свойства. Поддерживаются типы: %2</translation>
     </message>
     <message>
         <source>&apos;%1&apos; is not a valid string property specification.</source>
-        <translation>&apos;%1&apos; не является корректной спецификацией строкового свойства.</translation>
+        <translation>«%1» не является корректной спецификацией строкового свойства.</translation>
     </message>
     <message>
         <source>The XML of the custom widget %1 does not contain any of the elements &lt;widget&gt; or &lt;ui&gt;.</source>
@@ -1744,12 +1661,12 @@ Would you like to retry?</source>
     <name>QDesignerResource</name>
     <message>
         <source>The layout type &apos;%1&apos; is not supported, defaulting to grid.</source>
-        <translation>Компоновка типа &apos;%1&apos; не поддерживается, заменена на компоновку сеткой.</translation>
+        <translation>Компоновка типа «%1» не поддерживается, заменена на компоновку сеткой.</translation>
     </message>
     <message>
         <source>The container extension of the widget &apos;%1&apos; (%2) returned a widget not managed by Designer &apos;%3&apos; (%4) when queried for page #%5.
 Container pages should only be added by specifying them in XML returned by the domXml() method of the custom widget.</source>
-        <translation>Контейнерное расширение виджета &apos;%1&apos; (%2) возвратило виджет, который не управляется Qt Designer &apos;%3&apos; (%4), при запросе страницы №%5.
+        <translation>Контейнерное расширение виджета «%1» (%2) возвратило виджет, который не управляется Qt Designer «%3» (%4), при запросе страницы №%5.
 Страницы контейнера должны быть добавлены указанием их в XML, который возвращается методом domXml() пользовательского виджета.</translation>
     </message>
     <message>
@@ -1881,34 +1798,28 @@ Container pages should only be added by specifying them in XML returned by the d
         <translation>Последняя сессия Qt Designer не была завершена корректно. Остались резервные копии файлов. Желаете загрузить их?</translation>
     </message>
     <message>
-        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened.</source>
-        <translation>Не удалось открыть файл &lt;b&gt;%1&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <source>The file &lt;b&gt;%1&lt;/b&gt; is not a valid Designer UI file.</source>
-        <translation>Файл &lt;b&gt;%1&lt;/b&gt; не является корректным UI файлом Qt Designer.</translation>
+        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened: %2</source>
+        <translation>Не удалось открыть файл &lt;b&gt;%1&lt;/b&gt;: %2</translation>
     </message>
 </context>
 <context>
     <name>QFormBuilder</name>
     <message>
         <source>An empty class name was passed on to %1 (object name: &apos;%2&apos;).</source>
-        <extracomment>Empty class name passed to widget factory method
-----------
-Empty class name passed to widget factory method</extracomment>
-        <translation>Методу %1 (объекта &apos;%2&apos;) было передано пустое имя класса.</translation>
+        <extracomment>Empty class name passed to widget factory method</extracomment>
+        <translation>Методу %1 (объекта «%2») было передано пустое имя класса.</translation>
     </message>
     <message>
         <source>QFormBuilder was unable to create a custom widget of the class &apos;%1&apos;; defaulting to base class &apos;%2&apos;.</source>
-        <translation>QFormBuilder не смог создать пользовательский виджет класса &apos;%1&apos;; был создан базовый класс &apos;%2&apos;.</translation>
+        <translation>QFormBuilder не смог создать пользовательский виджет класса «%1»; был создан базовый класс «%2».</translation>
     </message>
     <message>
         <source>QFormBuilder was unable to create a widget of the class &apos;%1&apos;.</source>
-        <translation>QFormBuilder не смог создать пользовательский виджет класса &apos;%1&apos;.</translation>
+        <translation>QFormBuilder не смог создать пользовательский виджет класса «%1».</translation>
     </message>
     <message>
         <source>The layout type `%1&apos; is not supported.</source>
-        <translation>Компоновка типа &apos;%1&apos; не поддерживается.</translation>
+        <translation>Компоновка типа «%1» не поддерживается.</translation>
     </message>
     <message>
         <source>The set-type property %1 could not be read.</source>
@@ -1928,11 +1839,11 @@ Empty class name passed to widget factory method</extracomment>
     </message>
     <message>
         <source>The enumeration-value &apos;%1&apos; is invalid. The default value &apos;%2&apos; will be used instead.</source>
-        <translation>Значение &apos;%1&apos; перечисляемого типа некорректно. Будет использовано значение по умолчанию &apos;%2&apos;.</translation>
+        <translation>Значение «%1» перечисляемого типа некорректно. Будет использовано значение по умолчанию «%2».</translation>
     </message>
     <message>
         <source>The flag-value &apos;%1&apos; is invalid. Zero will be used instead.</source>
-        <translation>Значение флага &apos;%1&apos; перечисляемого типа некорректно. Будет использовано значение &apos;0&apos; (нуль).</translation>
+        <translation>Значение флага «%1» перечисляемого типа некорректно. Будет использовано нулевое значение.</translation>
     </message>
 </context>
 <context>
@@ -1978,11 +1889,11 @@ Empty class name passed to widget factory method</extracomment>
     <name>QStackedWidgetPreviewEventFilter</name>
     <message>
         <source>Go to previous page of %1 &apos;%2&apos; (%3/%4).</source>
-        <translation>Перейти к предыдущей странице из %1 &apos;%2&apos; (%3/%4).</translation>
+        <translation>Перейти к предыдущей странице из %1 «%2» (%3/%4).</translation>
     </message>
     <message>
         <source>Go to next page of %1 &apos;%2&apos; (%3/%4).</source>
-        <translation>Перейти к следующей странице из %1 &apos;%2&apos; (%3/%4).</translation>
+        <translation>Перейти к следующей странице из %1 «%2» (%3/%4).</translation>
     </message>
 </context>
 <context>
@@ -2539,13 +2450,6 @@ Empty class name passed to widget factory method</extracomment>
     </message>
 </context>
 <context>
-    <name>QtKeySequenceEdit</name>
-    <message>
-        <source>Clear Shortcut</source>
-        <translation>Удалить комбинацию горячих клавиш</translation>
-    </message>
-</context>
-<context>
     <name>QtLocalePropertyManager</name>
     <message>
         <source>&lt;Invalid&gt;</source>
@@ -2661,7 +2565,7 @@ Do you want to replace it?</source>
     </message>
     <message>
         <source>The file does not appear to be a resource file; element &apos;%1&apos; was found where &apos;%2&apos; was expected.</source>
-        <translation>Похоже, файл не является файлом ресурсов, так как вместо элемента &apos;%2&apos; стоит &apos;%1&apos;.</translation>
+        <translation>Похоже, файл не является файлом ресурсов, так как вместо элемента «%2» стоит «%1».</translation>
     </message>
     <message>
         <source>%1 [read-only]</source>
@@ -2705,7 +2609,7 @@ Do you want to replace it?</source>
     </message>
     <message>
         <source>Incorrect Path</source>
-        <translation>Неверный путь</translation>
+        <translation>Некорректный путь</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -2835,7 +2739,7 @@ to
     </message>
     <message>
         <source>Resource Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <source>Dialog</source>
@@ -2893,6 +2797,10 @@ to
     <message>
         <source>Copy Path</source>
         <translation>Скопировать путь</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Фильтр</translation>
     </message>
 </context>
 <context>
@@ -3111,15 +3019,6 @@ Do you want overwrite the template?</source>
     </message>
 </context>
 <context>
-    <name>ScriptErrorDialog</name>
-    <message>
-        <source>An error occurred while running the scripts for &quot;%1&quot;:
-</source>
-        <translation>При выполнения сценариев для &quot;%1&quot; возникла ошибка:
-</translation>
-    </message>
-</context>
-<context>
     <name>SelectSignalDialog</name>
     <message>
         <source>Go to slot</source>
@@ -3176,11 +3075,11 @@ Do you want overwrite the template?</source>
     <name>Spacer</name>
     <message>
         <source>Horizontal Spacer &apos;%1&apos;, %2 x %3</source>
-        <translation>Горизонтальный разделитель &apos;%1&apos;, %2 x %3</translation>
+        <translation>Горизонтальный разделитель «%1», %2 x %3</translation>
     </message>
     <message>
         <source>Vertical Spacer &apos;%1&apos;, %2 x %3</source>
-        <translation>Вертикальный разделитель &apos;%1&apos;, %2 x %3</translation>
+        <translation>Вертикальный разделитель «%1», %2 x %3</translation>
     </message>
 </context>
 <context>
@@ -3250,54 +3149,22 @@ Do you want overwrite the template?</source>
         <translation>&lt;br/&gt;Qt Designer - дизайнер графического интерфейса пользователя для Qt-приложений.&lt;br/&gt;</translation>
     </message>
     <message>
-        <source>%1&lt;br/&gt;Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).</source>
-        <translation>%1&lt;br/&gt;Copyright (C) 2012 Корпорация Nokia и/или её дочерние подразделения.</translation>
-    </message>
-</context>
-<context>
-    <name>VideoPlayerTaskMenu</name>
-    <message>
-        <source>Available Mime Types</source>
-        <translation>Доступные типы данных</translation>
-    </message>
-    <message>
-        <source>Display supported mime types...</source>
-        <translation>Показать поддерживаемые типы данных...</translation>
-    </message>
-    <message>
-        <source>Load...</source>
-        <translation>Загрузить...</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Воспроизвести</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation>Пауза</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation>Остановить</translation>
-    </message>
-    <message>
-        <source>Choose Video Player Media Source</source>
-        <translation>Выберите источник медиа-данных</translation>
-    </message>
-    <message>
-        <source>An error has occurred in &apos;%1&apos;: %2</source>
-        <translation>В &quot;%1&quot; произошла ошибка: %2</translation>
-    </message>
-    <message>
-        <source>Video Player Error</source>
-        <translation>Ошибка видеоплеера</translation>
+        <source>%1&lt;br/&gt;Copyright (C) %2 The Qt Company Ltd.</source>
+        <translation>%1&lt;br/&gt;Copyright (C) %2 The Qt Company Ltd.</translation>
     </message>
 </context>
 <context>
     <name>WidgetDataBase</name>
     <message>
         <source>The file contains a custom widget &apos;%1&apos; whose base class (%2) differs from the current entry in the widget database (%3). The widget database is left unchanged.</source>
-        <translation>Файл содержит пользовательский виджет &apos;%1&apos;, базовый класс (%2) которого отличается от текущей записи в базе виджетов (%3). База виджетов оставлена без изменений.</translation>
+        <translation>Файл содержит пользовательский виджет «%1», базовый класс (%2) которого отличается от текущей записи в базе виджетов (%3). База виджетов оставлена без изменений.</translation>
+    </message>
+</context>
+<context>
+    <name>qdesigner_internal</name>
+    <message>
+        <source>%1 Widget</source>
+        <translation>Виджет %1</translation>
     </message>
 </context>
 <context>
@@ -3351,6 +3218,10 @@ Do you want overwrite the template?</source>
         <translation>Подробно</translation>
     </message>
     <message>
+        <source>Filter</source>
+        <translation>Фильтр</translation>
+    </message>
+    <message>
         <source>New action</source>
         <translation>Новое действие</translation>
     </message>
@@ -3360,7 +3231,7 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>Remove action &apos;%1&apos;</source>
-        <translation>Удалить действие &apos;%1&apos;</translation>
+        <translation>Удалить действие «%1»</translation>
     </message>
     <message>
         <source>Remove actions</source>
@@ -3396,29 +3267,6 @@ Do you want overwrite the template?</source>
     <message>
         <source>ToolTip</source>
         <translation>Подсказка</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::BrushManagerProxy</name>
-    <message>
-        <source>The element &apos;%1&apos; is missing the required attribute &apos;%2&apos;.</source>
-        <translation>У элемента &apos;%1&apos; отсутствует необходимый атрибут &apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <source>Empty brush name encountered.</source>
-        <translation>Обнаружено пустое название кисти.</translation>
-    </message>
-    <message>
-        <source>An unexpected element &apos;%1&apos; was encountered.</source>
-        <translation>Обнаружен неожиданный элемент &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>An error occurred when reading the brush definition file &apos;%1&apos; at line line %2, column %3: %4</source>
-        <translation>При чтении файла описания кистей &apos;%1&apos; возникла ошибка разбора строки %2 в позиции %3: %4</translation>
-    </message>
-    <message>
-        <source>An error occurred when reading the resource file &apos;%1&apos; at line %2, column %3: %4</source>
-        <translation>При чтении файла ресурсов &apos;%1&apos; возникла ошибка разбора строки %2 в позиции %3: %4</translation>
     </message>
 </context>
 <context>
@@ -3540,11 +3388,11 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>The file %1 could not be opened: %2</source>
-        <translation>Не удалось открыть файл %1: %2</translation>
+        <translation>Не удалось открыть файл «%1»: %2</translation>
     </message>
     <message>
         <source>The file %1 could not be written: %2</source>
-        <translation>Не удалось записать файл %1: %2</translation>
+        <translation>Не удалось записать файл «%1»: %2</translation>
     </message>
     <message>
         <source>%1 - Error</source>
@@ -3750,35 +3598,35 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>Normal Off</source>
-        <translation type="unfinished">Нормальный, выкл</translation>
+        <translation>Нормальный, выкл</translation>
     </message>
     <message>
         <source>Normal On</source>
-        <translation type="unfinished">Нормальный, вкл</translation>
+        <translation>Нормальный, вкл</translation>
     </message>
     <message>
         <source>Disabled Off</source>
-        <translation type="unfinished">Выключенный, выкл</translation>
+        <translation>Выключенный, выкл</translation>
     </message>
     <message>
         <source>Disabled On</source>
-        <translation type="unfinished">Выключенный, вкл</translation>
+        <translation>Выключенный, вкл</translation>
     </message>
     <message>
         <source>Active Off</source>
-        <translation type="unfinished">Активный, выкл</translation>
+        <translation>Активный, выкл</translation>
     </message>
     <message>
         <source>Active On</source>
-        <translation type="unfinished">Активный, вкл</translation>
+        <translation>Активный, вкл</translation>
     </message>
     <message>
         <source>Selected Off</source>
-        <translation type="unfinished">Выбранный, выкл</translation>
+        <translation>Выбранный, выкл</translation>
     </message>
     <message>
         <source>Selected On</source>
-        <translation type="unfinished">Выбранный, вкл</translation>
+        <translation>Выбранный, вкл</translation>
     </message>
     <message>
         <source>translatable</source>
@@ -3813,7 +3661,7 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>Unable to open the file &apos;%1&apos; for writing: %2</source>
-        <translation>Не удалось открыть файл &apos;%1&apos; для записи: %2</translation>
+        <translation>Не удалось открыть файл «%1» для записи: %2</translation>
     </message>
     <message>
         <source>Open profile</source>
@@ -3825,11 +3673,11 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>Unable to open the file &apos;%1&apos; for reading: %2</source>
-        <translation>Не удалось открыть файл &apos;%1&apos; для чтения: %2</translation>
+        <translation>Не удалось открыть файл «%1» для чтения: %2</translation>
     </message>
     <message>
         <source>&apos;%1&apos; is not a valid profile: %2</source>
-        <translation>&apos;%1&apos; не является корректным профилем: %2</translation>
+        <translation>«%1» не является корректным профилем: %2</translation>
     </message>
 </context>
 <context>
@@ -3915,22 +3763,11 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>Would you like to delete the profile &apos;%1&apos;?</source>
-        <translation>Желаете удалить профиль &apos;%1&apos;?</translation>
+        <translation>Желаете удалить профиль «%1»?</translation>
     </message>
     <message>
         <source>Default</source>
         <translation>По умолчанию</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::FilterWidget</name>
-    <message>
-        <source>Filter</source>
-        <translation>Фильтр</translation>
-    </message>
-    <message>
-        <source>Clear text</source>
-        <translation>Очистить текст</translation>
     </message>
 </context>
 <context>
@@ -3941,7 +3778,7 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>The file &quot;%1&quot; has changed outside Designer. Do you want to reload it?</source>
-        <translation>Файл &quot;%1&quot; был изменён вне Qt Designer. Желаете перезагрузить его?</translation>
+        <translation>Файл «%1» был изменён вне Qt Designer. Желаете перезагрузить его?</translation>
     </message>
 </context>
 <context>
@@ -3963,7 +3800,7 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>Insert widget &apos;%1&apos;</source>
-        <translation>Вставить виджет &apos;%1&apos;</translation>
+        <translation>Вставить виджет «%1»</translation>
     </message>
     <message>
         <source>Resize</source>
@@ -4038,11 +3875,19 @@ Do you want overwrite the template?</source>
     <name>qdesigner_internal::FormWindowBase</name>
     <message>
         <source>Delete &apos;%1&apos;</source>
-        <translation>Удалить &apos;%1&apos;</translation>
+        <translation>Удалить «%1»</translation>
     </message>
     <message>
         <source>Delete</source>
         <translation>Удалить</translation>
+    </message>
+    <message>
+        <source>Invalid form</source>
+        <translation>Некорректная форма</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;This file contains top level spacers.&lt;br/&gt;They will &lt;b&gt;not&lt;/b&gt; be saved.&lt;/p&gt;&lt;p&gt;Perhaps you forgot to create a layout?&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Этот файл содержит верхнеуровневые разделители.&lt;br/&gt;Они &lt;b&gt;не&lt;/b&gt; будут сохранены в форме.&lt;/p&gt;&lt;p&gt;Возможно, вы забыли создать компоновку.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -4265,15 +4110,15 @@ Do you want overwrite the template?</source>
     <name>qdesigner_internal::IconSelector</name>
     <message>
         <source>The pixmap file &apos;%1&apos; cannot be read.</source>
-        <translation>Невозможно прочитать файл растрового изображения &apos;%1&apos;.</translation>
+        <translation>Невозможно прочитать файл растрового изображения «%1».</translation>
     </message>
     <message>
         <source>The file &apos;%1&apos; does not appear to be a valid pixmap file: %2</source>
-        <translation>Файл &apos;%1&apos; не похож на корректный файл растрового изображения: %2</translation>
+        <translation>Файл «%1» не похож на корректный файл растрового изображения: %2</translation>
     </message>
     <message>
         <source>The file &apos;%1&apos; could not be read: %2</source>
-        <translation>Не удалось прочитать файл %1: %2</translation>
+        <translation>Не удалось прочитать файл «%1»: %2</translation>
     </message>
     <message>
         <source>Choose a Pixmap</source>
@@ -4289,35 +4134,35 @@ Do you want overwrite the template?</source>
     </message>
     <message>
         <source>Normal Off</source>
-        <translation type="unfinished">Нормальный, выкл</translation>
+        <translation>Нормальный, выкл</translation>
     </message>
     <message>
         <source>Normal On</source>
-        <translation type="unfinished">Нормальный, вкл</translation>
+        <translation>Нормальный, вкл</translation>
     </message>
     <message>
         <source>Disabled Off</source>
-        <translation type="unfinished">Выключенный, выкл</translation>
+        <translation>Выключенный, выкл</translation>
     </message>
     <message>
         <source>Disabled On</source>
-        <translation type="unfinished">Выключенный, вкл</translation>
+        <translation>Выключенный, вкл</translation>
     </message>
     <message>
         <source>Active Off</source>
-        <translation type="unfinished">Активный, выкл</translation>
+        <translation>Активный, выкл</translation>
     </message>
     <message>
         <source>Active On</source>
-        <translation type="unfinished">Активный, вкл</translation>
+        <translation>Активный, вкл</translation>
     </message>
     <message>
         <source>Selected Off</source>
-        <translation type="unfinished">Выбранный, выкл</translation>
+        <translation>Выбранный, выкл</translation>
     </message>
     <message>
         <source>Selected On</source>
-        <translation type="unfinished">Выбранный, вкл</translation>
+        <translation>Выбранный, вкл</translation>
     </message>
     <message>
         <source>Choose Resource...</source>
@@ -4526,13 +4371,13 @@ Do you want overwrite the template?</source>
     <message>
         <source>The current object already has a property named &apos;%1&apos;.
 Please select another, unique one.</source>
-        <translation>Объект уже содержит свойство с именем &apos;%1&apos;.
+        <translation>Объект уже содержит свойство с именем «%1».
 Укажите другое имя.</translation>
     </message>
     <message>
         <source>The &apos;_q_&apos; prefix is reserved for the Qt library.
 Please select another name.</source>
-        <translation>Приставка &apos;_q_&apos; зарезервирована для целей библиотеки Qt.
+        <translation>Приставка «_q_» зарезервирована для целей библиотеки Qt.
 Укажите другое имя.</translation>
     </message>
     <message>
@@ -4593,7 +4438,7 @@ Please select another name.</source>
     </message>
     <message>
         <source>Unable to open the form template file &apos;%1&apos;: %2</source>
-        <translation>Невозможно открыть файл шаблона формы &apos;%1&apos;: %2</translation>
+        <translation>Невозможно открыть файл шаблона формы «%1»: %2</translation>
     </message>
     <message>
         <source>Internal error: No template selected.</source>
@@ -4866,7 +4711,7 @@ Please select another name.</source>
     </message>
     <message>
         <source>The skin &apos;%1&apos; already exists.</source>
-        <translation>Обложка &apos;%1&apos; уже существует.</translation>
+        <translation>Обложка «%1» уже существует.</translation>
     </message>
     <message>
         <source>%1 - Error</source>
@@ -4920,46 +4765,57 @@ ate the goose who was loose.</source>
     <name>qdesigner_internal::PreviewWidget</name>
     <message>
         <source>Preview Window</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Окно предпросмотра</translation>
     </message>
     <message>
         <source>LineEdit</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>LineEdit</translation>
     </message>
     <message>
         <source>ComboBox</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>ComboBox</translation>
     </message>
     <message>
         <source>PushButton</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>PushButton</translation>
     </message>
     <message>
         <source>ButtonGroup2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>ButtonGroup2</translation>
     </message>
     <message>
         <source>CheckBox1</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>CheckBox1</translation>
     </message>
     <message>
         <source>CheckBox2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>CheckBox2</translation>
     </message>
     <message>
         <source>ButtonGroup</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>ButtonGroup</translation>
     </message>
     <message>
         <source>RadioButton1</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>RadioButton1</translation>
     </message>
     <message>
         <source>RadioButton2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>RadioButton2</translation>
     </message>
     <message>
         <source>RadioButton3</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>RadioButton3</translation>
     </message>
 </context>
@@ -5046,6 +4902,10 @@ ate the goose who was loose.</source>
     <message>
         <source>Configure Property Editor</source>
         <translation>Настроить радактор свойств</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Фильтр</translation>
     </message>
     <message>
         <source>Object: %1
@@ -5172,10 +5032,6 @@ Class: %2</source>
     <message>
         <source>Remove Status Bar</source>
         <translation>Удалить строку состояния</translation>
-    </message>
-    <message>
-        <source>Change script...</source>
-        <translation>Изменить сценарий...</translation>
     </message>
     <message>
         <source>Change signals/slots...</source>
@@ -5394,6 +5250,10 @@ Class: %2</source>
         <translation>По ширине</translation>
     </message>
     <message>
+        <source>Right to Left</source>
+        <translation>Справа налево</translation>
+    </message>
+    <message>
         <source>Superscript</source>
         <translation>Верхний индекс</translation>
     </message>
@@ -5415,36 +5275,14 @@ Class: %2</source>
     </message>
 </context>
 <context>
-    <name>qdesigner_internal::ScriptDialog</name>
-    <message>
-        <source>Edit script</source>
-        <translation>Правка сценария</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;Enter a Qt Script snippet to be executed while loading the form.&lt;br&gt;The widget and its children are accessible via the variables &lt;i&gt;widget&lt;/i&gt; and &lt;i&gt;childWidgets&lt;/i&gt;, respectively.</source>
-        <translation>&lt;html&gt;Укажите сценарий Qt, который должен выполняться при загрузке формы.&lt;br&gt;Виджет и его дочерние виджеты доступны через переменные &lt;i&gt;widget&lt;/i&gt; и &lt;i&gt;childWidgets&lt;/i&gt;.</translation>
-    </message>
-    <message>
-        <source>Syntax error</source>
-        <translation>Синтаксическая ошибка</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::ScriptErrorDialog</name>
-    <message>
-        <source>Script errors</source>
-        <translation>Ошибки сценария</translation>
-    </message>
-</context>
-<context>
     <name>qdesigner_internal::SignalSlotDialog</name>
     <message>
         <source>There is already a slot with the signature &apos;%1&apos;.</source>
-        <translation>Уже есть слот с сигнатурой &apos;%1&apos;.</translation>
+        <translation>Уже есть слот с сигнатурой «%1».</translation>
     </message>
     <message>
         <source>There is already a signal with the signature &apos;%1&apos;.</source>
-        <translation>Уже есть сигнал с сигнатурой &apos;%1&apos;.</translation>
+        <translation>Уже есть сигнал с сигнатурой «%1».</translation>
     </message>
     <message>
         <source>%1 - Duplicate Signature</source>
@@ -5662,7 +5500,7 @@ Class: %2</source>
     <name>qdesigner_internal::ToolBarEventFilter</name>
     <message>
         <source>Insert Separator before &apos;%1&apos;</source>
-        <translation>Вставить разделитель перед &apos;%1&apos;</translation>
+        <translation>Вставить разделитель перед «%1»</translation>
     </message>
     <message>
         <source>Append Separator</source>
@@ -5670,11 +5508,11 @@ Class: %2</source>
     </message>
     <message>
         <source>Remove action &apos;%1&apos;</source>
-        <translation>Удалить действие &apos;%1&apos;</translation>
+        <translation>Удалить действие «%1»</translation>
     </message>
     <message>
         <source>Remove Toolbar &apos;%1&apos;</source>
-        <translation>Удалить панель инструментов &apos;%1&apos;</translation>
+        <translation>Удалить панель инструментов «%1»</translation>
     </message>
     <message>
         <source>Insert Separator</source>
@@ -5793,6 +5631,10 @@ Class: %2</source>
         <source>Warning: Widget creation failed in the widget box. This could be caused by invalid custom widget XML.</source>
         <translation>Предупреждение: Не удалось создать виджет. Это могло произойти из-за некорректного XML пользовательского виджета.</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Фильтр</translation>
+    </message>
 </context>
 <context>
     <name>qdesigner_internal::WidgetBoxTreeWidget</name>
@@ -5854,22 +5696,18 @@ Class: %2</source>
         <translation>Обнаружено несоответствие имени класса при создании виджета с использованием пользовательской фабрики виджетов, зарегистрированной для класса %1. Она вернула виджет класса %2.</translation>
     </message>
     <message>
-        <source>%1 Widget</source>
-        <translation>Виджет %1</translation>
-    </message>
-    <message>
         <source>The current page of the container &apos;%1&apos; (%2) could not be determined while creating a layout.This indicates an inconsistency in the ui-file, probably a layout being constructed on a container widget.</source>
-        <translation>При создании компоновщика не удалось определить текущую страницу контейнера &apos;%1&apos; (%2). Это указывает на некорректность файла ui - возможно, компоновщик был создан для виджета контейнерного типа.</translation>
+        <translation>При создании компоновщика не удалось определить текущую страницу контейнера «%1» (%2). Это указывает на некорректность файла ui - возможно, компоновщик был создан для виджета контейнерного типа.</translation>
     </message>
     <message>
         <source>Attempt to add a layout to a widget &apos;%1&apos; (%2) which already has an unmanaged layout of type %3.
 This indicates an inconsistency in the ui-file.</source>
-        <translation>Попытка добавить компоновщик виджету &apos;%1&apos; (%2), у которого уже есть компоновщик типа %3.
+        <translation>Попытка добавить компоновщик виджету «%1» (%2), у которого уже есть компоновщик типа %3.
 Это указывает на некорректность файла ui.</translation>
     </message>
     <message>
         <source>Cannot create style &apos;%1&apos;.</source>
-        <translation>Не удалось создать стиль &apos;%1&apos;.</translation>
+        <translation>Не удалось создать стиль «%1».</translation>
     </message>
 </context>
 <context>

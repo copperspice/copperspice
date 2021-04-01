@@ -1,84 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="he" sourcelanguage="en">
+<TS version="2.0" language="sk_SK">
 <context>
     <name>AboutDialog</name>
     <message>
         <source>Qt Linguist</source>
-        <translation></translation>
+        <translation>Qt Linguist</translation>
     </message>
 </context>
 <context>
     <name>BatchTranslationDialog</name>
     <message>
         <source>Qt Linguist - Batch Translation</source>
-        <translation>‏Qt Linguist - תרגום אצווה</translation>
+        <translation>Qt Linguist  - dávkový preklad</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation>אפשרויות</translation>
+        <translation>Možnosti</translation>
     </message>
     <message>
         <source>Set translated entries to finished</source>
-        <translation>קבע רשומות מתורגמות למוגמרות</translation>
+        <translation>Označiť preložené položky ako dokončené</translation>
     </message>
     <message>
         <source>Retranslate entries with existing translation</source>
-        <translation>תרגם מחדש רשומות עם תרגום קיים</translation>
+        <translation>Znovu preložiť záznamy s existujúcim prekladom</translation>
     </message>
     <message>
         <source>Note that the modified entries will be reset to unfinished if &apos;Set translated entries to finished&apos; above is unchecked</source>
-        <translation>לתשומת לבך, הרשומות שהשתנו יחזרו למצב לא מוגמרות אם &apos;קבע רשומות מתורגמות למוגמרות&apos; לא מסומן</translation>
+        <translation>Všimnite si, že zmenené položky budú označené ako nedokončené, ak nebude zaškrtnutá voľba &apos;Označiť preložené položky ako dokončené&apos;</translation>
     </message>
     <message>
         <source>Translate also finished entries</source>
-        <translation>תרגם גם רשומות מוגמרות</translation>
+        <translation>Preložiť tiež dokončené položky</translation>
     </message>
     <message>
         <source>Phrase book preference</source>
-        <translation>העדפות פנקס ביטויים</translation>
+        <translation>Slovníkový odkaz</translation>
     </message>
     <message>
         <source>Move up</source>
-        <translation>הזז מעלה</translation>
+        <translation>Posunúť vyššie</translation>
     </message>
     <message>
         <source>Move down</source>
-        <translation>הזז מטה</translation>
+        <translation>Posunúť nižšie</translation>
     </message>
     <message>
         <source>The batch translator will search through the selected phrase books in the order given above</source>
-        <translation>מתרגם אצווה זה יחפש בפנקסי הביטויים הנבחרים בסדר המנוי לעיל</translation>
+        <translation>Dávkový preklad bude prehľadávať vybrané slovníky podľa vyššie uvedeného poradia</translation>
     </message>
     <message>
         <source>&amp;Run</source>
-        <translation>&amp;הרץ</translation>
+        <translation>S&amp;pustiť</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>ביטול</translation>
+        <translation>Zrušiť</translation>
     </message>
     <message>
         <source>Batch Translation of &apos;%1&apos; - Qt Linguist</source>
-        <translation>תרגום אצווה של &apos;%1&apos; - ‏Qt Linguist</translation>
+        <translation>Dávkový preklad  &apos;%1&apos; - Qt Linguist</translation>
     </message>
     <message>
         <source>Searching, please wait...</source>
-        <translation>כעת מחפש, אנא המתן...</translation>
+        <translation>Vyhľadáva sa, prosím čakajte…</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;ביטול</translation>
+        <translation>&amp;Zrušiť</translation>
     </message>
     <message>
         <source>Linguist batch translator</source>
-        <translation>מתרגם אצווה Linguist</translation>
+        <translation>Dávkový preklad (Linguist)</translation>
     </message>
     <message numerus="yes">
         <source>Batch translated %n entries</source>
         <translation>
-            <numerusform>תורגם בבת־אחת ערך אחד</numerusform>
-            <numerusform>תורגמו בבת־אחת %n ערכים</numerusform>
+            <numerusform>1 položka bola dávkovo preložená</numerusform>
+            <numerusform>%n položky boli dávkovo preložené</numerusform>
+            <numerusform>%n položiek boli dávkovo preložených</numerusform>
         </translation>
     </message>
 </context>
@@ -86,152 +87,151 @@
     <name>DataModel</name>
     <message>
         <source>The translation file &apos;%1&apos; will not be loaded because it is empty.</source>
-        <translation>קובץ תרגום &apos;%1&apos; לא ייטען בגלל שהוא ריק.</translation>
+        <translation>Súbor s prekladom &apos;%1&apos; nebude načítaný pretože je prázdny.</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Duplicate messages found in &apos;%1&apos;:</source>
-        <translation>&lt;qt&gt;הודעות כפולות נמצאו בתוך &apos;%1&apos;:</translation>
+        <translation>&lt;qt&gt;Duplikované správy nájdene v &apos;%1&apos;:</translation>
     </message>
     <message>
         <source>&lt;p&gt;[more duplicates omitted]</source>
-        <translation>&lt;p&gt;[עוד כפולים הושמטו]</translation>
+        <translation>&lt;p&gt;[viacero duplikátov bolo vynechaných]</translation>
     </message>
     <message>
         <source>&lt;p&gt;* ID: %1</source>
-        <translation>&lt;p&gt;* מזהה: %1</translation>
+        <translation>&lt;p&gt;* ID: %1</translation>
     </message>
     <message>
         <source>&lt;p&gt;* Context: %1&lt;br&gt;* Source: %2</source>
-        <translation>&lt;p&gt;* הקשר: %1&lt;br&gt;* מקור: %2</translation>
+        <translation>&lt;p&gt;* Kontext: %1&lt;br&gt;* Zdroj: %2</translation>
     </message>
     <message>
         <source>&lt;br&gt;* Comment: %3</source>
-        <translation>&lt;br&gt;* הערה: %3</translation>
+        <translation>&lt;br&gt;* Komentár: %3</translation>
     </message>
     <message>
         <source>Linguist does not know the plural rules for &apos;%1&apos;.
 Will assume a single universal form.</source>
-        <translation>Linguist לא מכיר את צורת הרבים של &apos;%1&apos;.
-יניח צורת יחיד אוניברסאלית.</translation>
+        <translation>Linguist nepozná pravidlá pre množné čísla pre &apos;%1&apos;.
+Predpokladá univerzálny jednotný tvar.</translation>
     </message>
     <message>
         <source>Cannot create &apos;%2&apos;: %1</source>
-        <translation>אין אפשרות ליצור &apos;%2&apos;: %1</translation>
+        <translation>Nie je možné &apos;%2&apos;: %1</translation>
     </message>
     <message>
         <source>Universal Form</source>
-        <translation>צורה אוניברסאלית</translation>
+        <translation>Univerzálny tvar</translation>
     </message>
 </context>
 <context>
     <name>ErrorsView</name>
     <message>
         <source>Accelerator possibly superfluous in translation.</source>
-        <translation>קיצור דרך בתוך תרגום עשוי להיות מיותר.</translation>
+        <translation>V preklade je pravdepodobne nadbytočný akcelerátor.</translation>
     </message>
     <message>
         <source>Accelerator possibly missing in translation.</source>
-        <translation>קיצור דרך בתוך תרגום עשוי להיות חסר.</translation>
+        <translation>V preklade pravdepodobne chýba akcelerátor.</translation>
     </message>
     <message>
         <source>Translation does not end with the same punctuation as the source text.</source>
-        <translation>תרגום לא מסתיים עם אותו פיסוק כמו בטקסט מקור.</translation>
+        <translation>Preklad nekončí s rovnakou interpunkciou ako zdrojový text.</translation>
     </message>
     <message>
         <source>A phrase book suggestion for &apos;%1&apos; was ignored.</source>
-        <translation>הצעת פנקס ביטויים עבור &apos;%1&apos; לא נלקחה בחשבון.</translation>
+        <translation>Odporúčanie zo slovníka pre &apos;%1&apos; bolo ignorované.</translation>
     </message>
     <message>
         <source>Translation does not refer to the same place markers as in the source text.</source>
-        <translation>תרגום לא מפנה אל אותם מצייני מקום כמו בטקסט מקור.</translation>
+        <translation>Preklad neodkazuje na rovnaký zástupný znak ako v zdrojovom texte.</translation>
     </message>
     <message>
         <source>Translation does not contain the necessary %n place marker.</source>
-        <translation>תרגום לא מכיל את מציין המקום %n הנחוץ.</translation>
+        <translation>Preklad neobsahuje potrebný zástupný znak %n.</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation>שגיאה לא מוכרת</translation>
+        <translation>Neznáma chyba</translation>
     </message>
 </context>
 <context>
     <name>FindDialog</name>
     <message>
         <source>Find</source>
-        <translation>חיפוש</translation>
+        <translation>Hľadať</translation>
     </message>
     <message>
         <source>This window allows you to search for some text in the translation source file.</source>
-        <translation>חלון זה מאפשר לך לחפש טקסט מסוים בתוך קובץ מקור תרגום.</translation>
+        <translation>Toto okno umožňuje vyhľadávať text v zdrojovom súbore prekladu.</translation>
     </message>
     <message>
         <source>&amp;Find what:</source>
-        <translation>&amp;מה למצוא:</translation>
+        <translation>&amp;Hľadať:</translation>
     </message>
     <message>
         <source>Type in the text to search for.</source>
-        <translation>הקלד את הטקסט לחיפוש.</translation>
+        <translation>Zadajte text, ktorý sa má vyhľadať.</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation>אפשרויות</translation>
+        <translation>Možnosti</translation>
     </message>
     <message>
         <source>Source texts are searched when checked.</source>
-        <translation>חיפוש כולל טקסטי מקור כאשר מסומן.</translation>
+        <translation>Ak je zapnuté, hľadá sa v zdrojových textoch.</translation>
     </message>
     <message>
         <source>&amp;Source texts</source>
-        <translation>&amp;טקסטי מקור</translation>
+        <translation>&amp;Zdrojové texty</translation>
     </message>
     <message>
         <source>Translations are searched when checked.</source>
-        <translation>חיפוש כולל תרגומים כאשר מסומן.</translation>
+        <translation>Ak je zapnuté, hľadá sa v prekladoch.</translation>
     </message>
     <message>
         <source>&amp;Translations</source>
-        <translation>&amp;תרגומים</translation>
+        <translation>Pre&amp;klady</translation>
     </message>
     <message>
         <source>Texts such as &apos;TeX&apos; and &apos;tex&apos; are considered as different when checked.</source>
-        <translation>טקסטים כגון &apos;TeX&apos; וגם &apos;tex&apos; נחשבים כשונים כאשר מסומן.</translation>
+        <translation>Ak je zapnuté, tak texty ako &apos;TeX&apos; a &apos;tex&apos; sa považujú za rozdielne.</translation>
     </message>
     <message>
         <source>&amp;Match case</source>
-        <translation>התאם &amp;רישיות</translation>
+        <translation>Zhoda malý&amp;ch a veľkých písmen</translation>
     </message>
     <message>
         <source>Comments and contexts are searched when checked.</source>
-        <translation>חיפוש כולל הערות והקשרים כאשר מסומן.</translation>
+        <translation>Ak je zapnuté, hľadá sa v komentároch a kontexte.</translation>
     </message>
     <message>
         <source>&amp;Comments</source>
-        <translation>&amp;הערות</translation>
+        <translation>&amp;Komentáre</translation>
     </message>
     <message>
         <source>Ignore &amp;accelerators</source>
-        <translation>התעלם מ&amp;קיצורי דרך</translation>
+        <translation>Ignorovať &amp;akcelerátory</translation>
     </message>
     <message>
         <source>Click here to find the next occurrence of the text you typed in.</source>
-        <translation>לחץ כאן כדי למצוא את המופע הבא של הטקסט שהקלדת בפנים.</translation>
+        <translation>Sem kliknite pre vyhľadanie ďalšieho výskytu hľadaného textu.</translation>
     </message>
     <message>
         <source>Find Next</source>
-        <translation>הלאה</translation>
+        <translation>Nájsť nasledujúci</translation>
     </message>
     <message>
         <source>Click here to close this window.</source>
-        <translation>לחץ כאן כדי לסגור חלון זה.</translation>
+        <translation>Sem kliknite pre zatvorenie tohoto okna.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>ביטול</translation>
+        <translation>Zrušiť</translation>
     </message>
     <message>
         <source></source>
         <comment>Choose Edit|Find from the menu bar or press Ctrl+F to pop up the Find dialog</comment>
-        <translatorcomment>בחר עריכה|חיפוש משורת התפריטים או לחץ Ctrl+F כדי להקפיץ את תיבת החיפוש</translatorcomment>
         <translation></translation>
     </message>
 </context>
@@ -240,25 +240,26 @@ Will assume a single universal form.</source>
     <message>
         <source>Alt+Delete</source>
         <extracomment>translate, but don&apos;t change</extracomment>
-        <translation></translation>
+        <translation>Alt+Delete</translation>
     </message>
     <message>
         <source>Shift+Alt+Insert</source>
         <extracomment>translate, but don&apos;t change</extracomment>
-        <translation></translation>
+        <translation>Shift+Alt+Insert</translation>
     </message>
     <message>
         <source>Alt+Insert</source>
         <extracomment>translate, but don&apos;t change</extracomment>
-        <translation></translation>
+        <translation>Alt+Insert</translation>
     </message>
     <message>
         <source>Confirmation - Qt Linguist</source>
-        <translation>אימות - Qt Linguist</translation>
+        <translatorcomment>Potvrdenie - Qt Linguist</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <source>Delete non-empty length variant?</source>
-        <translation>למחוק נוסח שאינו ריק?</translation>
+        <translation>Odstrániť neprázdny variant?</translation>
     </message>
 </context>
 <context>
@@ -351,7 +352,95 @@ Return value:
     2 on read failures
     3 on write failures
 </source>
-        <translation></translation>
+        <translation>
+Použitie:
+    lconvert [voľby] &lt;infile&gt; [&lt;infile&gt;...]
+
+lconvert je súčasť nástrojov pre Qt Linguist. Je možné ho používať ako 
+samostatný nástroj na konverziu a filtrovanie súborov s prekladovými dátami.
+Podporované sú nasledujúce formáty:
+
+%1
+Pokiaľ je zadaných viac vstupných súborov, tak tie sú zlúčené s prekladmi
+neskorších súborov, ktoré majú prednosť.
+
+Voľby:
+    -h
+    --help  Zobraziť túto informáciu a skončiť.
+
+    -i &lt;infile&gt;
+    --input-file &lt;infile&gt;
+           Zadajte vstupný súbor. Použite, ak &lt;infile&gt; by mohol začať
+           s pomlčkou. Túto voľbu je možné použiť niekoľko krát na zlúčenie
+           vstupných súborov.
+           Môže byť &apos;-&apos; (štandardný vstup) pre použitie v rúre(pipe).
+
+    -o &lt;outfile&gt;
+    --output-file &lt;outfile&gt;
+           Zadajte výstupný súbor. Prednastavený je &apos;-&apos; (štandardný výstup).
+
+    -if &lt;informat&gt;
+    --input-format &lt;format&gt;
+           Zadajte vstupný formát pre nasledujúci &lt;infile&gt;.
+           The format is auto-detected from the file name and defaults to &apos;ts&apos;.
+
+    -of &lt;outformat&gt;
+    --output-format &lt;outformat&gt;
+           Zadajte výstupný formát. Pozrite -if.
+
+    --input-codec &lt;codec&gt;
+           Zadajte kódovanie pre QM a PO vstupné súbory. Prednastavené je
+           &apos;Latin1&apos; pre QM a &apos;UTF-8&apos; pre PO súbory. UTF-8 sa vždy skúša tiež
+           pre QM, zodpovedá možnému použitiu funkcie trUtf8().
+
+    --output-codec &lt;codec&gt;
+           Zadajte kódovanie pre výstupné PO súbory. Prednastavené je &apos;UTF-8&apos;.
+
+    --drop-tags &lt;regexp&gt;
+           Odstrániť pomenované extra značky pri zápise TS alebo XLIFF súborov.
+           Môže byť zadané opakovane.
+
+    --drop-translations
+           Odstrániť existujúce preklady a nastaviť status na &apos;nedokončené&apos;.
+           Poznámka: z tohoto vypláva --no-obsolete.
+
+    --source-language &lt;language&gt;[_&lt;region&gt;]
+           Zadať/prepísať jazyk zdrojových reťazcov. Prednastavený je POSIX 
+           pokiaľ je zadaný a súbor ho ešte nemenuje.
+
+    --target-language &lt;language&gt;[_&lt;region&gt;]
+           Zadať/prepísať jazyk prekladu.
+           Cieľový jazyk je odhadnutý z názvu súboru, pokiaľ táto voľba nie
+           je zadaná a súbor ešte neobsahuje názov jazyka.
+
+    --no-obsolete
+           Odstrániť zastaralé položky.
+
+    --no-finished
+           Odstrániť dokončené položky.
+
+    --sort-contexts
+           Abecedne zoradiť kontext v výstupnom TS súbore.
+
+    --locations {absolute|relative|none}
+           {absolútne|relatívne|žiadne}
+           Prepíše ako sú uložené odkazy na zdrojový kód v TS súboroch.
+           Prednastavené je absolútne(absolute).
+
+    --no-ui-lines
+           Odstrániť čísla riadkov z odkazov na UI súbory.
+
+    --verbose
+           Viac podrobností
+
+Dlhé voľby tiež môžu byť zadané iba s jednou pomlčkou.
+
+Návratová hodnota:
+    0 pri úspechu
+    1 pri chybách v spracovaní príkazového riadku
+    2 pri chybách v čítaní
+    3 pri chybách v zápisu
+</translation>
     </message>
 </context>
 <context>
@@ -384,73 +473,111 @@ Options:
     -version
            Display the version of lrelease and exit
 </source>
-        <translation></translation>
+        <translation>Použitie:
+    lrelease [voľby] projektový-súbor
+    lrelease [voľby] ts-súbory [-qm qm-súbor]
+
+lrelease je súčasť nástrojov pre Qt Linguist. Je možné ho používať ako 
+samostatný nástroj na konverziu XML prekladových súborov vo formáte TS
+do skompilovaného QM formátu, ktorý používajú QTranslator objekty.
+
+Voľby:
+    -help  Zobraziť túto informáciu a skončiť
+    -idbased
+           Použiť ID namiesto zdrojových reťazcov na kľúčovanie správ
+    -compress
+           Komprimovať QM súbory
+    -nounfinished
+           Nezaradiť nedokončené preklady
+    -removeidentical
+           Ak je preložený text identický so zdrojovým textom, tak ho
+           nezaradiť do výstupu
+    -markuntranslated &lt;prefix&gt;
+           Ak text nemá skutočný preklad, použiť namiesto neho 
+           zdrojový text so zadaným prefixom
+    -silent
+           Nevysvetľovať, čo sa deje
+    -version
+           Zobraziť verziu lrelease a skončiť</translation>
     </message>
     <message>
         <source>lrelease error: %1</source>
-        <translation></translation>
+        <translation>lrelease chyba: %1</translation>
     </message>
     <message>
         <source>Updating &apos;%1&apos;...
 </source>
-        <translation></translation>
+        <translation>Aktualizuje sa &apos;%1&apos;…</translation>
     </message>
     <message>
         <source>Removing translations equal to source text in &apos;%1&apos;...
 </source>
-        <translation></translation>
+        <translation>Odstraňovanie totožných prekladov so zdrojovým textom v &apos;%1&apos;…</translation>
     </message>
     <message>
         <source>lrelease error: cannot create &apos;%1&apos;: %2
 </source>
-        <translation></translation>
+        <translation>lrelease chyba: nie je možné vytvoriť &apos;%1&apos;: %2
+</translation>
     </message>
     <message>
         <source>lrelease error: cannot save &apos;%1&apos;: %2</source>
-        <translation></translation>
+        <translation>lrelease chyba: nie je možné uložiť &apos;%1&apos;: %2</translation>
     </message>
     <message>
         <source>lrelease version %1
 </source>
-        <translation></translation>
+        <translation>lrelease verzia %1
+</translation>
     </message>
     <message>
         <source>lrelease error: cannot read project file &apos;%1&apos;.
 </source>
-        <translation></translation>
+        <translation>lrelease chyba: nie je možné čítať projektový súbor &apos;%1&apos;.
+</translation>
     </message>
     <message>
         <source>lrelease error: cannot process project file &apos;%1&apos;.
 </source>
-        <translation></translation>
+        <translation>lrelease chyba: nie je možné spracovať projektový súbor &apos;%1&apos;.
+</translation>
     </message>
     <message>
         <source>lrelease warning: Met no &apos;TRANSLATIONS&apos; entry in project file &apos;%1&apos;
 </source>
-        <translation></translation>
+        <translation>lrelease varovanie: V projektovom súbore &apos;%1&apos; bolo nájdené žiadne položky &apos;TRANSLATIONS&apos;
+</translation>
     </message>
     <message numerus="yes">
         <source>Dropped %n message(s) which had no ID.</source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>Bol odstránený záznam bez ID.</numerusform>
+            <numerusform>Boli odstránené %n záznamy bez ID.</numerusform>
+            <numerusform>Bolo odstránených %n záznamov bez ID.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>Excess context/disambiguation dropped from %n message(s).</source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>Bol odstránený nadbytočný kontext/viacznačnosť z jednej správy.</numerusform>
+            <numerusform>Bol odstránený nadbytočný kontext/viacznačnosť z %n správ.</numerusform>
+            <numerusform>Bol odstránený nadbytočný kontext/viacznačnosť z %n správ.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>    Generated %n translation(s) (%1 finished and %2 unfinished)</source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>    Vygenerovaný jeden preklad (%1 dokončených a %2 nedokončených)</numerusform>
+            <numerusform>    Vygenerované %n preklady (%1 dokončených a %2 nedokončených)</numerusform>
+            <numerusform>    Vygenerovaných %n prekladov (%1 dokončených a %2 nedokončených)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>    Ignored %n untranslated source text(s)</source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>    Ignorovaný jeden nepreložený zdrojový text</numerusform>
+            <numerusform>    Ignorované %n nepreložené zdrojové texty</numerusform>
+            <numerusform>    Ignorovaných %n nepreložených zdrojových textov</numerusform>
         </translation>
     </message>
 </context>
@@ -459,161 +586,181 @@ Options:
     <message>
         <source>Parenthesis/bracket/brace mismatch between #if and #else branches; using #if branch
 </source>
-        <translation></translation>
+        <translation>Nezhoda v zátvorkách/hranatých zátvorkách/zložených zátvorkách medzi vetvami #if a #else; použije sa vetva #if</translation>
     </message>
     <message>
         <source>Parenthesis/brace mismatch between #if and #else branches; using #if branch
 </source>
-        <translation></translation>
+        <translation>Nezhoda v zátvorkách/zložených zátvorkách medzi vetvami #if a #else; použije sa vetva #if</translation>
     </message>
     <message>
         <source>Unterminated C++ comment
 </source>
-        <translation></translation>
+        <translation>Neukončený C++ komentár
+</translation>
     </message>
     <message>
         <source>Unterminated C++ string
 </source>
-        <translation></translation>
+        <translation>Neukončený C++ reťazec
+</translation>
     </message>
     <message>
         <source>Excess closing brace in C++ code (or abuse of the C++ preprocessor)
 </source>
-        <translation></translation>
+        <translation>Príliš veľa uzatváracích zátvoriek v C++ kóde (alebo nesprávne použitie C++ preprocesora)</translation>
     </message>
     <message>
         <source>Excess closing parenthesis in C++ code (or abuse of the C++ preprocessor)
 </source>
-        <translation></translation>
+        <translation>Príliš veľa uzatváracích okrúhlych zátvoriek v C++ kóde (alebo nesprávne použitie C++ preprocesora)</translation>
     </message>
     <message>
         <source>Excess closing bracket in C++ code (or abuse of the C++ preprocessor)
 </source>
-        <translation></translation>
+        <translation>Príliš veľa uzatváracích hranatých zátvoriek v C++ kóde (alebo nesprávne použitie C++ preprocesora)</translation>
     </message>
     <message>
         <source>Cannot open %1: %2
 </source>
-        <translation></translation>
+        <translation>Nie je možné otvoriť: %1: %2
+</translation>
     </message>
     <message>
         <source>//% cannot be used with tr() / QT_TR_NOOP(). Ignoring
 </source>
-        <translation></translation>
+        <translation>//% nemôže byť použité s tr() / QT_TR_NOOP(). Ignoruje sa
+</translation>
     </message>
     <message>
         <source>Qualifying with unknown namespace/class %1::%2
 </source>
-        <translation></translation>
+        <translation>Kvalifikovanie s neznámym menným priestorom/triedou %1::%2
+</translation>
     </message>
     <message>
         <source>tr() cannot be called without context
 </source>
-        <translation></translation>
+        <translation>tr() nemôže byť volané bez kontextu
+</translation>
     </message>
     <message>
         <source>Class &apos;%1&apos; lacks Q_OBJECT macro
 </source>
-        <translation></translation>
+        <translation>Triede &apos;%1&apos; chýba makro Q_OBJECT</translation>
     </message>
     <message>
         <source>It is not recommended to call tr() from within a constructor &apos;%1::%2&apos;
 </source>
-        <translation></translation>
+        <translation>Nedoporučuje sa volať tr() z vnútra konštruktora &apos;%1::%2&apos;
+</translation>
     </message>
     <message>
         <source>//% cannot be used with translate() / QT_TRANSLATE_NOOP(). Ignoring
 </source>
-        <translation></translation>
+        <translation>//% nemôže byť použité s translate() / QT_TRANSLATE_NOOP(). Ignoruje sa
+</translation>
     </message>
     <message>
         <source>//= cannot be used with qtTrId() / QT_TRID_NOOP(). Ignoring
 </source>
-        <translation></translation>
+        <translation>//= nemôže byť použité s qtTrId() / QT_TRID_NOOP(). Ignoruje sa
+</translation>
     </message>
     <message>
         <source>Unexpected character in meta string
 </source>
-        <translation></translation>
+        <translation>Neočakávaný znak v meta reťazci
+</translation>
     </message>
     <message>
         <source>Unterminated meta string
 </source>
-        <translation></translation>
+        <translation>Neukončený meta reťazec
+</translation>
     </message>
     <message>
         <source>Cannot invoke tr() like this
 </source>
-        <translation></translation>
+        <translation>Nie je možné použiť tr() takto</translation>
     </message>
     <message>
         <source>Discarding unconsumed meta data
 </source>
-        <translation></translation>
+        <translation>Vyraďujú sa nepoužité meta dáta</translation>
     </message>
     <message>
         <source>Unbalanced opening brace in C++ code (or abuse of the C++ preprocessor)
 </source>
-        <translation></translation>
+        <translation>Nevyvážené otváracie zložené zátvorky v C++ kóde (alebo nesprávne použitie C++ preprocesora)
+</translation>
     </message>
     <message>
         <source>Unbalanced opening parenthesis in C++ code (or abuse of the C++ preprocessor)
 </source>
-        <translation></translation>
+        <translation>Nevyvážené otváracie zátvorky v C++ kóde (alebo nesprávne použitie C++ preprocesora)
+</translation>
     </message>
     <message>
         <source>Unbalanced opening bracket in C++ code (or abuse of the C++ preprocessor)
 </source>
-        <translation></translation>
+        <translation>Nevyvážené otváracie hranaté zátvorky v C++ kóde (alebo nesprávne použitie C++ preprocesora)
+</translation>
     </message>
     <message>
         <source>Cannot open %1: %2</source>
-        <translation></translation>
+        <translation>Nie je možné otvoriť: %1: %2</translation>
     </message>
     <message>
         <source>Unterminated Java comment.
 </source>
-        <translation></translation>
+        <translation>Neukončený Java komentár.
+</translation>
     </message>
     <message>
         <source>Invalid Unicode value.
 </source>
-        <translation></translation>
+        <translation>Neplatná Unicode hodnota.
+</translation>
     </message>
     <message>
         <source>Unterminated string.
 </source>
-        <translation></translation>
+        <translation>Neukončený reťazec.
+</translation>
     </message>
     <message>
         <source>String used in translation can contain only literals concatenated with other literals, not expressions or numbers.
 </source>
-        <translation></translation>
+        <translation>Reťazec používaný v preklade môže obsahovať iba zreťazené písmená s inými písmenami, ale nie výrazy alebo čísla.</translation>
     </message>
     <message>
         <source>&apos;class&apos; must be followed by a class name.
 </source>
-        <translation></translation>
+        <translation>&apos;class&apos; musí byť nasledovaný názvom triedy.</translation>
     </message>
     <message>
         <source>Excess closing brace.
 </source>
-        <translation></translation>
+        <translation>Príliš veľa uzatváracích zátvoriek.</translation>
     </message>
     <message>
         <source>&apos;package&apos; must be followed by package name.
 </source>
-        <translation></translation>
+        <translation>&apos;package&apos; musí byť nasledovaný názvom balíčka.
+</translation>
     </message>
     <message>
         <source>Unbalanced opening brace.
 </source>
-        <translation></translation>
+        <translation>Nevyvážené otváracie zložené zátvorky.
+</translation>
     </message>
     <message>
         <source>Unbalanced opening parenthesis.
 </source>
-        <translation></translation>
+        <translation>Nevyvážené otváracie zátvorky.
+</translation>
     </message>
     <message>
         <source>Usage:
@@ -656,6 +803,8 @@ Options:
     -pro &lt;filename&gt;
            Name of a .pro file. Useful for files with .pro file syntax but
            different file suffix. Projects are recursed into and merged.
+    -pro-out &lt;directory&gt;
+           Virtual output directory for processing subsequent .pro files.
     -source-language &lt;language&gt;[_&lt;region&gt;]
            Specify the language of the source strings for new files.
            Defaults to POSIX if not specified.
@@ -670,1163 +819,1262 @@ Options:
     -version
            Display the version of lupdate and exit.
     @lst-file
-           Read additional file names (one per line) from lst-file.
+           Read additional file names (one per line) or includepaths (one per
+           line, and prefixed with -I) from lst-file.
 </source>
-        <translation></translation>
+        <translation>Použitie:
+    lupdate [voľby] [projektový-súbor]...
+    lupdate [voľby] [zdrojový-súbor|cesta|@lst-súbor]... -ts ts-súbory|@lst-súbor
+
+lupdate je súčasť nástrojov pre Qt Linguist. Extrahuje preložiteľné správy
+z QT UI súborov, C++, Java a JavaScript/QtScript zdrojového kódu.
+Extrahované správy sú uložené v textových zdrojových súboroch prekladu
+(typicky Qt TS XML). Nové a modifikované správy môžu byť zlúčené
+do existujúcich TS súborov.
+
+Voľby:
+    -help  Zobraziť túto informáciu a skončiť.
+    -no-obsolete
+           Odstrániť zastaralé položky.
+    -extensions &lt;prípona&gt;[,&lt;prípona&gt;]...
+           Spracovať iba súbory so zadanými príponami.
+           Prípony musia byť oddelené čiarkami bez medzier.
+           Prednastavené: &apos;%1&apos;.
+    -pluralonly
+           Zahrnú iba správy s tvarmi množného čísla.
+    -silent
+           Nevysvetľovať, čo sa deje.
+    -no-sort
+           Nezoraďovať kontext v TS súboroch.
+    -no-recursive
+           Neskenovať nasledujúce priečinky rekurzívne.
+    -recursive
+           Skenovať nasledujúce priečinky rekurzívne (prednastavené).
+    -I &lt;includepath&gt; alebo -I&lt;includepath&gt;
+           Ďalšie umiestnenie, kde hľadať súbory na zaradenie.
+           Môže byť použité opakovane.
+    -locations {absolute|relative|none}
+           {absolútne|relatívne|žiadne}
+           Zadať/prepísať ako sú uložené odkazy na zdrojový kód v TS súboroch.
+           Prednastavené je absolútne(absolute).
+    -no-ui-lines
+           Nezaznamenávať čísla riadkov v odkazoch na UI súbory.
+    -disable-heuristic {sametext|similartext|number}
+           {rovnaký text|podobný text|číslo}
+           Zakázať označenú heuristiku pri zlučovaní.
+           Môže byť použité opakovane.
+    -pro &lt;názov_súboru&gt;
+           Názov .pro súboru. Užitočné pre súbory so syntaxou .pro súboru, ale 
+           inou príponou súboru. Projekty sa &quot;zrekurzivujú&quot; a spoja.
+    -pro-out &lt;priečinok&gt;
+           Virtuálny výstupný priečinok pre spracovanie následných
+           .pro súborov.
+    -source-language &lt;jazyk&gt;[_&lt;región&gt;]
+           Zadajte jazyk pre zdrojové reťazce v nových súboroch.
+           Ak nie je zadané, použije sa POSIX
+    -target-language &lt;jazyk&gt;[_&lt;región&gt;]
+           Zadajte jazyk prekladu v nových súboroch.
+           Ak nie je zadané, cieľový jazyk bude odhadnutý z názvu súboru.
+    -ts &lt;ts-súbor&gt;...
+           Zadajte názov výstupných súborov. Táto voľba prepíše TRANSLATIONS
+           a vynuluje CODECFORTR zo zadaných projektových súborov.
+    -codecfortr &lt;codec&gt;
+           Zadajte predpokladaný kodek pre volania tr(). Má vplyv iba s -ts.
+    -version
+           Zobraziť verziu lupdate a skončiť.
+    @lst-súbor
+           Načítať ďalšie názvy súborov (jeden na riadok) alebo includepaths (jedna na
+           na riadok s prefixom -I) z lst-súboru.</translation>
     </message>
     <message>
         <source>lupdate warning: Codec for tr() &apos;%1&apos; disagrees with existing file&apos;s codec &apos;%2&apos;. Expect trouble.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: Kodek pre tr() &apos;%1&apos; nesúhlasí s existujúcim kodekom súboru &apos;%2&apos;. Dajú sa očakávať problémy.
+</translation>
     </message>
     <message>
         <source>lupdate warning: Specified target language &apos;%1&apos; disagrees with existing file&apos;s language &apos;%2&apos;. Ignoring.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: Zadaný cieľový jazyk &apos;%1&apos; nesúhlasí s existujúcim jazykom súboru &apos;%2&apos;. Ignoruje sa.
+</translation>
     </message>
     <message>
         <source>lupdate warning: Specified source language &apos;%1&apos; disagrees with existing file&apos;s language &apos;%2&apos;. Ignoring.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: Zadaný zdrojový jazyk &apos;%1&apos; nesúhlasí s existujúcim jazykom súboru &apos;%2&apos;. Ignoruje sa.
+</translation>
     </message>
     <message>
         <source>Updating &apos;%1&apos;...
 </source>
-        <translation></translation>
+        <translation>Aktualizuje sa &apos;%1&apos;…</translation>
     </message>
     <message>
         <source>Stripping non plural forms in &apos;%1&apos;...
 </source>
-        <translation></translation>
+        <translation>Odoberajú sa tvary, ktoré nie sú v množnom čísle v &apos;%1&apos;…</translation>
+    </message>
+    <message>
+        <source>lupdate warning: Some files have been ignored due to missing qml/javascript support
+</source>
+        <translation>lupdate varovanie: Niektoré súbory boli ignorované kvôli chýbajúcej podpore pre qml/javascript
+</translation>
     </message>
     <message>
         <source>lupdate warning: Codec for source &apos;%1&apos; is invalid. Falling back to codec for tr().
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: Kodek pre zdroj &apos;%1&apos; nie je platný. Použije sa kodek pre tr().
+</translation>
     </message>
     <message>
         <source>lupdate warning: TS files from command line will override TRANSLATIONS in %1.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: TS súbory z príkazového riadku prepíšu TRANSLATIONS v %1.
+</translation>
     </message>
     <message>
         <source>lupdate warning: TS files from command line prevent recursing into %1.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: TS súbory z príkazového riadku zabránia rekurzií do %1.
+</translation>
     </message>
     <message>
         <source>lupdate warning: no TS files specified. Only diagnostics will be produced for &apos;%1&apos;.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: neboli zadané žiadne TS súbory. Pre &apos;%1&apos; bude vytvorené iba diagnostika.
+</translation>
     </message>
     <message>
         <source>The option -target-language requires a parameter.
 </source>
-        <translation></translation>
+        <translation>Voľba -target-language vyžaduje parameter.
+</translation>
     </message>
     <message>
         <source>The option -source-language requires a parameter.
 </source>
-        <translation></translation>
+        <translation>Voľba -source-language vyžaduje parameter.
+</translation>
     </message>
     <message>
         <source>The option -disable-heuristic requires a parameter.
 </source>
-        <translation></translation>
+        <translation>Voľba -disable-heuristic vyžaduje parameter.
+</translation>
     </message>
     <message>
         <source>Invalid heuristic name passed to -disable-heuristic.
 </source>
-        <translation></translation>
+        <translation>Bol zadaný neplatný heuristický názov pre -disable-heuristic.
+</translation>
     </message>
     <message>
         <source>The option -locations requires a parameter.
 </source>
-        <translation></translation>
+        <translation>Voľba -locations vyžaduje parameter.
+</translation>
     </message>
     <message>
         <source>Invalid parameter passed to -locations.
 </source>
-        <translation></translation>
+        <translation>Bol zadaný neplatný parameter pre -locations.
+</translation>
     </message>
     <message>
         <source>The -codecfortr option should be followed by a codec name.
 </source>
-        <translation></translation>
+        <translation>Voľba -codecfortr by mala byť nasledovaná názvom kodeku.</translation>
     </message>
     <message>
         <source>The -extensions option should be followed by an extension list.
 </source>
-        <translation></translation>
+        <translation>Voľba -extensions by mala byť nasledovaná zoznamom prípon.</translation>
     </message>
     <message>
         <source>The -pro option should be followed by a filename of .pro file.
 </source>
-        <translation></translation>
+        <translation>Voľba -pro by mala byť nasledovaná názvom .pro súboru.
+</translation>
+    </message>
+    <message>
+        <source>The -pro-out option should be followed by a directory name.
+</source>
+        <translation>Voľba -pro-out by mala byť nasledovaná názvom priečinku.
+</translation>
     </message>
     <message>
         <source>The -I option should be followed by a path.
 </source>
-        <translation></translation>
+        <translation>Voľba -I by mala byť nasledovaná cestou.</translation>
     </message>
     <message>
         <source>Unrecognized option &apos;%1&apos;.
 </source>
-        <translation></translation>
+        <translation>Neočakávaná voľba &apos;%1&apos;.
+</translation>
     </message>
     <message>
         <source>lupdate error: List file &apos;%1&apos; is not readable.
 </source>
-        <translation></translation>
+        <translation>lupdate chyba: Súbor zoznamu &apos;%1&apos; nie je čitateľný.
+</translation>
     </message>
     <message>
         <source>lupdate warning: For some reason, &apos;%1&apos; is not writable.
 </source>
-        <translation></translation>
+        <translation>lupdate warning: Z nejakého dôvodu, nie je &apos;%1&apos; zapisovateľný.
+</translation>
     </message>
     <message>
         <source>lupdate error: File &apos;%1&apos; has no recognized extension.
 </source>
-        <translation></translation>
+        <translation>lupdate chyba: Súbor &apos;%1&apos; nemá známu príponu.
+</translation>
     </message>
     <message>
         <source>lupdate error: File &apos;%1&apos; does not exist.
 </source>
-        <translation></translation>
+        <translation>lupdate chyba: Súbor &apos;%1&apos; neexistuje.
+</translation>
     </message>
     <message>
         <source>Scanning directory &apos;%1&apos;...
 </source>
-        <translation></translation>
+        <translation>Prehľadáva sa priečinok &apos;%1&apos;…</translation>
     </message>
     <message>
         <source>lupdate warning: -target-language usually only makes sense with exactly one TS file.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: -target-language zvyčajne dáva zmysel iba s jedným TS súborom.</translation>
     </message>
     <message>
         <source>lupdate warning: -codecfortr has no effect without -ts.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: -codecfortr nemá bez -ts žiadny účinok.
+</translation>
     </message>
     <message>
         <source>lupdate warning: no TS files specified. Only diagnostics will be produced.
 </source>
-        <translation></translation>
+        <translation>lupdate varovanie: neboli zadané žiadne TS súbory. Bude vytvorená iba diagnostika.
+</translation>
     </message>
     <message>
         <source>lupdate error: Both project and source files / include paths specified.
 </source>
-        <translation></translation>
+        <translation>lupdate chyba: Boli zadané aj projekt aj zdrojové súbory/cesty.
+</translation>
     </message>
     <message numerus="yes">
         <source>    Found %n source text(s) (%1 new and %2 already existing)
 </source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>    Nájdený jeden zdrojový text (%1 nový a %2 už existujúce)
+</numerusform>
+            <numerusform>    Nájdené %n  zdrojové texty (%1 nové a %2 už existujúce)
+</numerusform>
+            <numerusform>    Nájdených %n  zdrojových textov (%1 nových a %2 už existujúce)
+</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>    Removed %n obsolete entries
 </source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>    Odstránená jedna zastaraná položka
+</numerusform>
+            <numerusform>    Odstránené %n zastarané položka
+</numerusform>
+            <numerusform>    Odstránených %n zastaraných položiek
+</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>    Kept %n obsolete entries
 </source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>    Ponechaná jedna zastaraná položka
+</numerusform>
+            <numerusform>    Ponechané %n zastarané položky
+</numerusform>
+            <numerusform>    Ponechaných %n zastaraných položiek
+</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>    Number heuristic provided %n translation(s)
 </source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>    Číselná heuristika poskytla jeden preklad
+</numerusform>
+            <numerusform>    Číselná heuristika poskytla %n preklady
+</numerusform>
+            <numerusform>    Číselná heuristika poskytla %n prekladov
+</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>    Same-text heuristic provided %n translation(s)
 </source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>    Heuristika s rovnakým textom poskytla jeden preklad
+</numerusform>
+            <numerusform>    Heuristika s rovnakým textom poskytla %n preklady
+</numerusform>
+            <numerusform>    Heuristika s rovnakým textom poskytla %n prekladov
+</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>    Similar-text heuristic provided %n translation(s)
 </source>
         <translation>
-            <numerusform></numerusform>
+            <numerusform>    Heuristika s podobným textom poskytla jeden preklad
+</numerusform>
+            <numerusform>    Heuristika s podobným textom poskytla %n preklady
+</numerusform>
+            <numerusform>    Heuristika s podobným textom poskytla %n prekladov
+</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Illegal character</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Unclosed string at end of line</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Illegal escape sequence</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Illegal unicode escape sequence</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Unclosed comment at end of file</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Illegal syntax for exponential number</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Identifier cannot start with numeric literal</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Unterminated regular expression literal</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>//% cannot be used with %1(). Ignoring
-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>%1() requires at least two arguments.
-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>%1(): both arguments must be literal strings.
-</source>
-        <translation></translation>
     </message>
     <message>
         <source>%1() requires at least one argument.
 </source>
-        <translation></translation>
+        <translation>%1() vyžaduje aspoň jeden argument.
+</translation>
     </message>
     <message>
         <source>%1(): text to translate must be a literal string.
 </source>
-        <translation></translation>
+        <translation>%1(): text prekladu musí byť písmenový reťazec.
+</translation>
     </message>
     <message>
-        <source>//= cannot be used with %1(). Ignoring
+        <source>//% cannot be used with %1(). Ignoring
 </source>
-        <translation></translation>
+        <translation>//% nemôže byť použité s %1(). Ignoruje sa
+</translation>
+    </message>
+    <message>
+        <source>%1() requires at least two arguments.
+</source>
+        <translation>%1() vyžaduje aspoň dva argumenty.
+</translation>
+    </message>
+    <message>
+        <source>%1(): both arguments must be literal strings.
+</source>
+        <translation>%1(): oba argumenty musia byť písmenové reťazce.
+</translation>
     </message>
     <message>
         <source>%1(): identifier must be a literal string.
 </source>
-        <translation></translation>
+        <translation>%1(): identifikátor musí byť písmenový reťazec.
+</translation>
     </message>
     <message>
-        <source>Expected </source>
-        <extracomment>Beginning of the string that contains comma-separated list of expected tokens</extracomment>
-        <translation></translation>
+        <source>//= cannot be used with %1(). Ignoring
+</source>
+        <translation>//= nemôže byť použité s %1(). Ignoruje sa
+</translation>
     </message>
     <message>
         <source>XML error: Parse error at line %1, column %2 (%3).</source>
-        <translation></translation>
+        <translation>XML chyba: Chyba pri spracovaní na riadku %1, stĺpec %2 (%3).</translation>
     </message>
     <message>
         <source>Parse error in UI file</source>
-        <translation></translation>
+        <translation>Chyba pri spracovaní UI súboru</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>חלון ראשי</translation>
+        <translation>Hlavné okno</translation>
     </message>
     <message>
         <source>&amp;Phrases</source>
-        <translation>&amp;ביטויים</translation>
+        <translation>&amp;Slovníky</translation>
     </message>
     <message>
         <source>&amp;Close Phrase Book</source>
-        <translation>&amp;סגור פנקס ביטויים</translation>
+        <translation>&amp;Zatvoriť slovník</translation>
     </message>
     <message>
         <source>&amp;Edit Phrase Book</source>
-        <translation>&amp;ערוך פנקס ביטויים</translation>
+        <translation>&amp;Upraviť slovník</translation>
     </message>
     <message>
         <source>&amp;Print Phrase Book</source>
-        <translation>&amp;הדפס פנקס ביטויים</translation>
+        <translation>&amp;Vytlačiť slovník</translation>
     </message>
     <message>
         <source>V&amp;alidation</source>
-        <translation>&amp;אימות</translation>
+        <translation>&amp;Kontrola</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>ת&amp;צוגה</translation>
+        <translation>&amp;Zobrazenie</translation>
     </message>
     <message>
         <source>Vie&amp;ws</source>
-        <translation>&amp;תצוגות</translation>
+        <translation>Z&amp;obrazenia</translation>
     </message>
     <message>
         <source>&amp;Toolbars</source>
-        <translation>ס&amp;רגלי כלים</translation>
+        <translation>Ná&amp;strojové panely</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;עזרה</translation>
+        <translation>&amp;Pomocník</translation>
     </message>
     <message>
         <source>&amp;Translation</source>
-        <translation>&amp;תרגום</translation>
+        <translation>&amp;Preklad</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;קובץ</translation>
+        <translation>&amp;Súbor</translation>
     </message>
     <message>
         <source>Recently Opened &amp;Files</source>
-        <translation>&amp;קבצים שנפתחו לאחרונה</translation>
+        <translation>Posledné otvorené sú&amp;bory</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>ע&amp;ריכה</translation>
+        <translation>&amp;Upraviť</translation>
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation>&amp;פתח...</translation>
+        <translation>&amp;Otvoriť…</translation>
     </message>
     <message>
         <source>Open a Qt translation source file (TS file) for editing</source>
-        <translation>פתח קובץ מקור תרגום Qt (קובץ TS) לשם עריכה</translation>
+        <translation>Otvoriť Qt zdrojový súbor prekladu (TS súbor) pre úpravy</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>י&amp;ציאה</translation>
+        <translation>&amp;Koniec</translation>
     </message>
     <message>
         <source>Close this window and exit.</source>
-        <translation>סגור חלון זה וצא.</translation>
+        <translation>Zatvoriť toto okno a skončiť.</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>שמירה</translation>
+        <translation>Uložiť</translation>
     </message>
     <message>
         <source>Save changes made to this Qt translation source file</source>
-        <translation>שמור שינויים שנעשו לקובץ מקור תרגום Qt זה</translation>
+        <translation>Uložiť zmeny urobené v tomto QT zdrojovom súbore prekladu</translation>
     </message>
     <message>
         <source>Save &amp;As...</source>
-        <translation>שמור &amp;בשם...</translation>
+        <translation>Uložiť &amp;ako…</translation>
     </message>
     <message>
         <source>Save As...</source>
-        <translation>שמירה בתור...</translation>
+        <translation>Uložiť ako...</translation>
     </message>
     <message>
         <source>Save changes made to this Qt translation source file into a new file.</source>
-        <translation>שמור שינויים שנעשו לקובץ מקור תרגום Qt זה לתוך קובץ חדש.</translation>
+        <translation>Uložiť zmeny urobené v tomto QT zdrojovom súbore prekladu do nového súboru.</translation>
     </message>
     <message>
         <source>Release</source>
-        <translation>שחרור</translation>
+        <translation>Publikovať</translation>
     </message>
     <message>
         <source>Create a Qt message file suitable for released applications from the current message file.</source>
-        <translation>יצירת קובץ הודעות Qt המתאים ליישומים ששוחררו עם קובץ ההודעות הנוכחי.</translation>
+        <translation>Vytvoriť súbor s Qt správami, ktorý je vhodný zverejnené aplikácie, z aktuálneho súboru správ.</translation>
     </message>
     <message>
         <source>&amp;Print...</source>
-        <translation>&amp;הדפס...</translation>
+        <translation>&amp;Tlač…</translation>
     </message>
     <message>
         <source>Print a list of all the translation units in the current translation source file.</source>
-        <translation>הדפסת רשימה של כל יחידות התרגום בקובץ מקור התרגום הנוכחי.</translation>
+        <translation>Vytlačiť všetky prekladové jednotky v aktuálnom zdrojovom súbore s prekladom.</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation></translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <source>&amp;Undo</source>
-        <translation>&amp;בטל</translation>
+        <translation>&amp;Späť</translation>
     </message>
     <message>
         <source>Undo the last editing operation performed on the current translation.</source>
-        <translation>ביטול פעולת העריכה האחרונה שהתבצעה בתרגום הנוכחי.</translation>
+        <translation>Vrátiť späť poslednú úpravu vykonanú na preklade.</translation>
     </message>
     <message>
         <source>Ctrl+Z</source>
-        <translation></translation>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <source>&amp;Redo</source>
-        <translation>בצע &amp;שוב</translation>
+        <translation>&amp;Znovu</translation>
     </message>
     <message>
         <source>Redo an undone editing operation performed on the translation.</source>
-        <translation>ביצוע שוב של פעולת העריכה האחרונה שהתבצעה בתרגום הנוכחי ובוטלה.</translation>
+        <translation>Vrátiť späť poslednú vrátenú zmenu vykonanú na preklade.</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation></translation>
+        <translation>Ctrl+Y</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
-        <translation>&amp;גזור</translation>
+        <translation>Vys&amp;trihnúť</translation>
     </message>
     <message>
         <source>Copy the selected translation text to the clipboard and deletes it.</source>
-        <translation>העתק טקסט תרגום נבחר אל לוח הגזירים ומחק אותו.</translation>
+        <translation>Skopírovať označený text prekladu do schránky a zmazať ho.</translation>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation></translation>
+        <translation>Ctrl+X</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>ה&amp;עתק</translation>
+        <translation>&amp;Kopírovať</translation>
     </message>
     <message>
         <source>Copy the selected translation text to the clipboard.</source>
-        <translation>העתק טקסט תרגום נבחר אל לוח הגזירים.</translation>
+        <translation>Skopírovať označený text prekladu do schránky.</translation>
     </message>
     <message>
         <source>Ctrl+C</source>
-        <translation></translation>
+        <translation>Ctrl+C</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>ה&amp;דבק</translation>
+        <translation>&amp;Vložiť</translation>
     </message>
     <message>
         <source>Paste the clipboard text into the translation.</source>
-        <translation>הדבק טקסט מלוח הגזירים אל התרגום.</translation>
+        <translation>Vložiť text zo schránky do prekladu.</translation>
     </message>
     <message>
         <source>Ctrl+V</source>
-        <translation></translation>
+        <translation>Ctrl+V</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
-        <translation>בחר ה&amp;כל</translation>
+        <translation>Vybrať &amp;všetko</translation>
     </message>
     <message>
         <source>Select the whole translation text.</source>
-        <translation>בחר טקסט תרגום בשלמותו.</translation>
+        <translation>Vybrať celý text s prekladom.</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation></translation>
+        <translation>Ctrl+A</translation>
     </message>
     <message>
         <source>&amp;Find...</source>
-        <translation>&amp;חפש...</translation>
+        <translation>&amp;Hľadať…</translation>
     </message>
     <message>
         <source>Search for some text in the translation source file.</source>
-        <translation>חפש טקסט מסוים בתוך קובץ מקור תרגום.</translation>
+        <translation>Vyhľadať text v súbore s prekladom.</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation></translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <source>Find &amp;Next</source>
-        <translation>&amp;מצא את הבא</translation>
+        <translation>Nájsť nasledu&amp;júci</translation>
     </message>
     <message>
         <source>Continue the search where it was left.</source>
-        <translation>המשך את החיפוש מן המקום בו הופסק.</translation>
+        <translation>Pokračovať v hľadaní, tak kde skončilo.</translation>
     </message>
     <message>
         <source>F3</source>
-        <translation></translation>
+        <translation>F3</translation>
     </message>
     <message>
         <source>&amp;Prev Unfinished</source>
-        <translation>לא מוגמר ה&amp;קודם</translation>
+        <translation>&amp;Predchádzajúci neukončený</translation>
     </message>
     <message>
         <source>Previous unfinished item</source>
-        <translation>פריט לא מוגמר הקודם</translation>
+        <translation>Predchádzajúca nedokončená položka</translation>
     </message>
     <message>
         <source>Move to the previous unfinished item.</source>
-        <translation>עבור אל הפריט הקודם שלא הוגמר.</translation>
+        <translation>Prejsť na predchádzajúcu nedokončenú položku.</translation>
     </message>
     <message>
         <source>Ctrl+K</source>
-        <translation></translation>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <source>&amp;Next Unfinished</source>
-        <translation>לא מוגמר ה&amp;בא</translation>
+        <translation>&amp;Nasledujúci neukončený</translation>
     </message>
     <message>
         <source>Next unfinished item</source>
-        <translation>פריט לא מוגמר הבא</translation>
+        <translation>Nasledujúca neukončená položka</translation>
     </message>
     <message>
         <source>Move to the next unfinished item.</source>
-        <translation>עבור אל הפריט הבא שלא הוגמר.</translation>
+        <translation>Prejsť na nasledujúcu nedokončenú položku.</translation>
     </message>
     <message>
         <source>Ctrl+J</source>
-        <translation></translation>
+        <translation>Ctrl+J</translation>
     </message>
     <message>
         <source>P&amp;rev</source>
-        <translation>הקו&amp;דם</translation>
+        <translation>P&amp;redchádzajúci</translation>
     </message>
     <message>
         <source>Move to previous item</source>
-        <translation>עבור אל פריט קודם</translation>
+        <translation>Prejsť na predchádzajúcu položku</translation>
     </message>
     <message>
         <source>Move to the previous item.</source>
-        <translation>עבור אל הפריט הקודם.</translation>
+        <translation>Prejsť na predchádzajúcu položku.</translation>
     </message>
     <message>
         <source>Ctrl+Shift+K</source>
-        <translation></translation>
+        <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
         <source>Ne&amp;xt</source>
-        <translation>&amp;הבא</translation>
+        <translation>Nas&amp;ledujúci</translation>
     </message>
     <message>
         <source>Next item</source>
-        <translation>פריט הבא</translation>
+        <translation>Nasledujúca položka</translation>
     </message>
     <message>
         <source>Move to the next item.</source>
-        <translation>עבור אל הפריט הבא.</translation>
+        <translation>Prejsť na nasledujúcu položku.</translation>
     </message>
     <message>
         <source>Ctrl+Shift+J</source>
-        <translation></translation>
+        <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
         <source>&amp;Done and Next</source>
-        <translation>&amp;סיים והמשך</translation>
+        <translation>&amp;Hotovo a ďalší</translation>
     </message>
     <message>
         <source>Mark item as done and move to the next unfinished item</source>
-        <translation>סמן פריט בתור מוגמר ועבור אל פריט לא מוגמר הבא</translation>
+        <translation>Označiť položku ako hotovú a prejsť na nasledujúcu nedokončenú položku</translation>
     </message>
     <message>
         <source>Mark this item as done and move to the next unfinished item.</source>
-        <translation>סמן פריט זה בתור מוגמר ועבור אל פריט לא מוגמר הבא.</translation>
+        <translation>Označiť túto položku ako hotovú a prejsť na nasledujúcu nedokončenú položku.</translation>
     </message>
     <message>
         <source>Copy from source text</source>
-        <translation>העתק מתוך טקסט מקור</translation>
+        <translation>Skopírovať zdrojový text</translation>
     </message>
     <message>
         <source>Copies the source text into the translation field</source>
-        <translation>העתק טקסט מקור לתוך שדה תרגום</translation>
+        <translation>Skopíruje zdrojový text do prekladového poľa</translation>
     </message>
     <message>
         <source>Copies the source text into the translation field.</source>
-        <translation>העתק טקסט מקור לתוך שדה תרגום.</translation>
+        <translation>Skopíruje zdrojový text do prekladového poľa.</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
-        <translation></translation>
+        <translation>Ctrl+B</translation>
     </message>
     <message>
         <source>&amp;Accelerators</source>
-        <translation>&amp;קיצורי דרך</translation>
+        <translation>&amp;Akcelerátory</translation>
     </message>
     <message>
         <source>Toggle the validity check of accelerators</source>
-        <translation>הדלקה/כיבוי של בדיקות תקינות של קיצורי דרך</translation>
+        <translation>Prepne overovanie akcelerátorov</translation>
     </message>
     <message>
         <source>Toggle the validity check of accelerators, i.e. whether the number of ampersands in the source and translation text is the same. If the check fails, a message is shown in the warnings window.</source>
-        <translation>הדלקה/כיבוי של בדיקות תקינות של קיצורי דרך, כלומר, כאשר מספר תוי &amp; במקור ובתרגום אינם תואמים. במידה והבדיקה נכשלת, מופיעה הודעה בחלון האזהרות.</translation>
+        <translation>Prepínanie overovania akcelerátorov, napr. či sa zhoduje počet znakov &amp;&amp; v zdrojovom texte a preklade. Ak kontrola zlyhá, v okne Varovania sa zobrazí upozornenie.</translation>
     </message>
     <message>
         <source>&amp;Ending Punctuation</source>
-        <translation>&amp;ניקוד מסיים</translation>
+        <translation>Ukončovacie &amp;interpunkčné znamienka</translation>
     </message>
     <message>
         <source>Toggle the validity check of ending punctuation</source>
-        <translation>הדלקה/כיבוי של בדיקת תקינות של ניקוד מסיים</translation>
+        <translation>Prepne overovanie interpunkcie na konci textu</translation>
     </message>
     <message>
         <source>Toggle the validity check of ending punctuation. If the check fails, a message is shown in the warnings window.</source>
-        <translation>הדלקה/כיבוי של בדיקת תקינות של ניקוד מסיים. במידה והבדיקה נכשלת, מופיעה הודעה בחלון האזהרות.</translation>
+        <translation>Prepínanie overovania interpunkcie na konci textu. Ak kontrola zlyhá, v okne Varovania sa zobrazí upozornenie.</translation>
     </message>
     <message>
         <source>&amp;Phrase matches</source>
-        <translation>התאמות &amp;ביטוי</translation>
+        <translation>&amp;Zhodné frázy</translation>
     </message>
     <message>
         <source>Toggle checking that phrase suggestions are used</source>
-        <translation>הדלקה/כיבוי של בדיקה שנעשה שימוש בהצעות פנקס הביטויים</translation>
+        <translation>Prepne overovanie použitia navrhovaného prekladu zo slovníka</translation>
     </message>
     <message>
         <source>Toggle checking that phrase suggestions are used. If the check fails, a message is shown in the warnings window.</source>
-        <translation>הדלקה/כיבוי של בדיקה שנעשה שימוש בהצעות פנקס הביטויים. במידה והבדיקה נכשלת, מופיעה הודעה בחלון האזהרות.</translation>
+        <translation>Prepínanie overovania použitia navrhovaného prekladu zo slovníka. Ak kontrola zlyhá, v okne Varovania sa zobrazí upozornenie.</translation>
     </message>
     <message>
         <source>Place &amp;Marker Matches</source>
-        <translation>התאמות &amp;מצייני מקום</translation>
+        <translation>Z&amp;hoda zástupných znakov</translation>
     </message>
     <message>
         <source>Toggle the validity check of place markers</source>
-        <translation>הדלקה/כיבוי של בדיקת תקינות של מצייני מקום</translation>
+        <translation>Prepne overovanie zástupných znakov</translation>
     </message>
     <message>
         <source>Toggle the validity check of place markers, i.e. whether %1, %2, ... are used consistently in the source text and translation text. If the check fails, a message is shown in the warnings window.</source>
-        <translation>הדלקה/כיבוי של בדיקת תקינות של מצייני מקום. כלומר, אם השימוש של %1, %2, ... עקבי בין טקסט המקור והתרגום. במידה והבדיקה נכשלת, מופיעה הודעה בחלון האזהרות.</translation>
+        <translation>Prepínanie overovania zástupných znakov, napr. či sa zhoduje použitie  %1, %2, …  v zdrojovom texte a preklade. Ak kontrola zlyhá, v okne Varovania sa zobrazí upozornenie.</translation>
     </message>
     <message>
         <source>&amp;New Phrase Book...</source>
-        <translation>פנקס ביטויים &amp;חדש...</translation>
+        <translation>&amp;Nový slovník…</translation>
     </message>
     <message>
         <source>Create a new phrase book.</source>
-        <translation>צור פנקס ביטויים חדש.</translation>
+        <translation>Vytvoriť nový slovník.</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation></translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <source>&amp;Open Phrase Book...</source>
-        <translation>&amp;פתח פנקס ביטויים...</translation>
+        <translation>&amp;Otvoriť slovník…</translation>
     </message>
     <message>
         <source>Open a phrase book to assist translation.</source>
-        <translation>פתח פנקס ביטויים כדי להקל על מלאכת תרגום.</translation>
+        <translation>Otvorí slovník pre uľahčenie prekladu.</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation></translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Reset Sorting</source>
-        <translation>&amp;אפס מיון</translation>
+        <translation>&amp;Zrušiť zoraďovanie</translation>
     </message>
     <message>
         <source>Sort the items back in the same order as in the message file.</source>
-        <translation>מיין את הפריטים בחזרה באותו הסדר בו הם מופיעים בקובץ הודעות.</translation>
+        <translation>Zoradiť položky v rovnakom poradí, ako sú v súbore.</translation>
     </message>
     <message>
         <source>&amp;Display guesses</source>
-        <translation>&amp;הצג ניחושים</translation>
+        <translation>Zobraziť &amp;návrhy</translation>
     </message>
     <message>
         <source>Set whether or not to display translation guesses.</source>
-        <translation>קבע אם להציג או לא להציג ניחושי תרגום.</translation>
+        <translation>Nastaviť, či sa majú alebo nie zobraziť návrhy k prekladu.</translation>
     </message>
     <message>
         <source>&amp;Statistics</source>
-        <translation>&amp;סטטיסטיקות</translation>
+        <translation>Š&amp;tatistiky</translation>
     </message>
     <message>
         <source>Display translation statistics.</source>
-        <translation>הצג סטטיסטיקות תרגום.</translation>
+        <translation>Zobraziť štatistiku prekladu.</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation>&amp;מדריך</translation>
+        <translation>&amp;Manuál</translation>
     </message>
     <message>
         <source>F1</source>
-        <translation></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <source>About Qt Linguist</source>
-        <translation>אודות Qt Linguist</translation>
+        <translation>O Qt Linguist</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation>אודות Qt</translation>
+        <translation>O Qt</translation>
     </message>
     <message>
         <source>Display information about the Qt toolkit by Digia.</source>
-        <translation>הצג מידע אודות ערכת כלים Qt מאת Digia.</translation>
+        <translation>Zobraziť informácie o Qt sade nástrojov od spoločnosti Digia.</translation>
     </message>
     <message>
         <source>&amp;What&apos;s This?</source>
-        <translation>&amp;מה זה?</translation>
+        <translation>Č&amp;o je toto?</translation>
     </message>
     <message>
         <source>What&apos;s This?</source>
-        <translation>מה זה?</translation>
+        <translation>Čo je toto?</translation>
     </message>
     <message>
         <source>Enter What&apos;s This? mode.</source>
-        <translation>כניסה למצב &quot;מה זה?&quot;.</translation>
+        <translation>Zapnúť režim &apos;Čo je toto?&apos;.</translation>
     </message>
     <message>
         <source>Shift+F1</source>
-        <translation></translation>
+        <translation>Shift+F1</translation>
     </message>
     <message>
         <source>&amp;Search And Translate...</source>
-        <translation>&amp;חפש ותרגם...</translation>
+        <translation>&amp;Hľadať a preložiť…</translation>
     </message>
     <message>
         <source>Replace the translation on all entries that matches the search source text.</source>
-        <translation>החלפת התרגום בכל הרשומות שמתאימות לחיפוש בטקסט המקור.</translation>
+        <translation>Nahradiť preklad na všetkých položkách, ktoré zodpovedajú hľadanému textu.</translation>
     </message>
     <message>
         <source>&amp;Batch Translation...</source>
-        <translation>תרגום &amp;אצווה...</translation>
+        <translation>&amp;Dávkový preklad…</translation>
     </message>
     <message>
         <source>Batch translate all entries using the information in the phrase books.</source>
-        <translation>תרגום אצווה של כל הרשומות באמצעות המידע בפנקס הביטויים.</translation>
+        <translation>Dávkový preklad všetkých položiek s použitím informácií v slovníkoch.</translation>
     </message>
     <message>
         <source>Release As...</source>
-        <translation>שחרר בשם...</translation>
+        <translation>Publikovať ako…</translation>
     </message>
     <message>
         <source>Create a Qt message file suitable for released applications from the current message file. The filename will automatically be determined from the name of the TS file.</source>
-        <translation>יצירת קובץ הודעות Qt המתאים ליישומים ששוחררו עם קובץ ההודעות הנוכחי. שם הקובץ ייקבע אוטומטית לפי השם של קובץ ה־TS.</translation>
+        <translation>Vytvoriť súbor s Qt správami, ktorý je vhodný zverejnené aplikácie, z aktuálneho súboru správ. Názov súbor bude automaticky odvodený z názvu TS súboru.</translation>
     </message>
     <message>
         <source>File</source>
-        <translation>קובץ</translation>
+        <translation>Súbor</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>עריכה</translation>
+        <translation>Upraviť</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation>תרגום</translation>
+        <translation>Preklad</translation>
     </message>
     <message>
         <source>Validation</source>
-        <translation>אימות</translation>
+        <translation>Kontrola</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation>עזרה</translation>
+        <translation>Pomocník</translation>
     </message>
     <message>
         <source>Open/Refresh Form &amp;Preview</source>
-        <translation>פתח/רענן מתוך &amp;תצוגה מקדימה</translation>
+        <translation>Otvoriť/Obnoviť &amp;náhľad na formulár</translation>
     </message>
     <message>
         <source>Form Preview Tool</source>
-        <translation>כלי תצוגה מוקדמת של טופס</translation>
+        <translation>Nástroj pre náhľad na formulár</translation>
     </message>
     <message>
         <source>F5</source>
-        <translation></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <source>Translation File &amp;Settings...</source>
-        <translation>&amp;הגדרות קובץ תרגום...</translation>
+        <translation>&amp;Nastavenia súboru s prekladom…</translation>
     </message>
     <message>
         <source>&amp;Add to Phrase Book</source>
-        <translation>הוסף &amp;אל פנקס ביטויים</translation>
+        <translation>&amp;Pridať do slovníka</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation></translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <source>Open Read-O&amp;nly...</source>
-        <translation>פתח לקריאה &amp;בלבד...</translation>
+        <translation>Otvoriť &amp;iba na čítanie…</translation>
     </message>
     <message>
         <source>&amp;Save All</source>
-        <translation>&amp;שמור הכל</translation>
+        <translation>&amp;Uložiť všetko</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <source>&amp;Release All</source>
-        <translation>ש&amp;חרר הכל</translation>
+        <translation>Publikovať &amp;všetko</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>סגור</translation>
+        <translation>Zavrieť</translation>
     </message>
     <message>
         <source>&amp;Close All</source>
-        <translation>&amp;סגור הכל</translation>
+        <translation>&amp;Zavrieť všetko</translation>
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation></translation>
+        <translation>Ctrl+W</translation>
     </message>
     <message>
         <source>Length Variants</source>
-        <translation>נוסחי אורך</translation>
+        <translation>Varianty dĺžky</translation>
     </message>
     <message>
         <source></source>
         <comment>This is the application&apos;s main window.</comment>
-        <translatorcomment>זהו החלון הראשי של היישום</translatorcomment>
         <translation></translation>
     </message>
     <message>
         <source>Source text</source>
-        <translation>טקסט מקור</translation>
+        <translation>Zdrojový text</translation>
     </message>
     <message>
         <source>Index</source>
-        <translation>אינדקס</translation>
+        <translation>Index</translation>
     </message>
     <message>
         <source>Context</source>
-        <translation>הקשר</translation>
+        <translation>Kontext</translation>
     </message>
     <message>
         <source>Items</source>
-        <translation>פריטים</translation>
+        <translation>Položky</translation>
     </message>
     <message>
         <source>This panel lists the source contexts.</source>
-        <translation>לוח זה מציג הקשרי מקור.</translation>
+        <translation>Tento panel zobrazuje kontext v zdrojových súboroch.</translation>
     </message>
     <message>
         <source>Strings</source>
-        <translation>מחרוזות</translation>
+        <translation>Reťazce</translation>
     </message>
     <message>
         <source>Phrases and guesses</source>
-        <translation>ביטויים וניחושים</translation>
+        <translation>Slovníky a návrhy</translation>
     </message>
     <message>
         <source>Sources and Forms</source>
-        <translation>מקורות וטפסים</translation>
+        <translation>Zdrojové súbory a formuláre</translation>
     </message>
     <message>
         <source>Warnings</source>
-        <translation>אזהרות</translation>
+        <translation>Varovania</translation>
     </message>
     <message>
         <source> MOD </source>
         <comment>status bar: file(s) modified</comment>
-        <translation>השתנה</translation>
+        <translation>Zmenené</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation>כעת טוען...</translation>
+        <translation>Načítava sa…</translation>
     </message>
     <message>
         <source>Loading File - Qt Linguist</source>
-        <translation>טעינת קובץ - Qt Linguist</translation>
+        <translation>Načítava sa súbor - Qt Linguist</translation>
     </message>
     <message>
         <source>The file &apos;%1&apos; does not seem to be related to the currently open file(s) &apos;%2&apos;.
 
 Close the open file(s) first?</source>
-        <translation>הקובץ &apos;%1&apos; לא נראה קשור לקובץ(ים) הפתוח(ים) &apos;%2&apos;.
+        <translation>Nezdá sa, že by súbor &apos;%1&apos; súvisel s aktuálne otvorenými súbormi &apos;%2&apos;.
 
-האם לסגור את הקובץ(ים) הפתוח(ים) קודם?</translation>
+Zatvoriť najskôr už otvorené súbory?</translation>
     </message>
     <message>
         <source>The file &apos;%1&apos; does not seem to be related to the file &apos;%2&apos; which is being loaded as well.
 
 Skip loading the first named file?</source>
-        <translation>הקובץ &apos;%1&apos; לא נראה קשור לקובץ &apos;%2&apos;, שגם הוא נטען כעת.
+        <translation>Nezdá sa, že by súbor &apos;%1&apos; súvisel s už načítaným súborom &apos;%2&apos;.
 
-האם לדלג על טעינת הקובץ הראשון?</translation>
+Preskočiť načítanie prvého menovaného súboru?</translation>
     </message>
     <message numerus="yes">
         <source>%n translation unit(s) loaded.</source>
         <translation>
-            <numerusform>יחידת תרגום אחת נטענה.</numerusform>
-            <numerusform>%n יחידות תרגום נטענו.</numerusform>
+            <numerusform>Jedna prekladová jednotka načítaná.</numerusform>
+            <numerusform>%n prekladové jednotky načítané.</numerusform>
+            <numerusform>%n prekladových jednotiek načítaných.</numerusform>
         </translation>
     </message>
     <message>
         <source>Related files (%1);;</source>
-        <translation>קבצים קשורים (%1);;</translation>
+        <translation>Súvisiace súbory (%1);;</translation>
     </message>
     <message>
         <source>Open Translation Files</source>
-        <translation>פתיחת קבצי תרגום</translation>
+        <translation>Otvoriť súbor s prekladom</translation>
     </message>
     <message>
         <source>File saved.</source>
-        <translation>קובץ נשמר.</translation>
+        <translation>Súbor uložený.</translation>
     </message>
     <message>
         <source>Qt message files for released applications (*.qm)
 All files (*)</source>
-        <translation>קבצי הודעות Qt עבור יישומים ששוחררו (‎*.qm)
-כל הקבצים (*)</translation>
+        <translation>Qt súbory so správami pre zverejnené aplikácie (*.qm)
+Všetky súbory (*)</translation>
     </message>
     <message>
         <source>File created.</source>
-        <translation>קובץ נוצר.</translation>
+        <translation>Súbor bol vytvorený.</translation>
     </message>
     <message>
         <source>Printing...</source>
-        <translation>מדפיס כעת...</translation>
+        <translation>Tlačím…</translation>
     </message>
     <message>
         <source>Context: %1</source>
-        <translation>הקשר: %1</translation>
+        <translation>Kontext: %1</translation>
     </message>
     <message>
         <source>finished</source>
-        <translation>מוגמר</translation>
+        <translation>skončené</translation>
     </message>
     <message>
         <source>unresolved</source>
-        <translation>לא נפתר</translation>
+        <translation>nevyriešené</translation>
     </message>
     <message>
         <source>obsolete</source>
-        <translation>מיושן</translation>
+        <translation>zastaralé</translation>
     </message>
     <message>
         <source>Printing... (page %1)</source>
-        <translation>מדפיס כעת... (עמוד %1)</translation>
+        <translation>Tlač… (strana %1)</translation>
     </message>
     <message>
         <source>Printing completed</source>
-        <translation>הדפסה הושלמה</translation>
+        <translation>Tlač dokončená</translation>
     </message>
     <message>
         <source>Printing aborted</source>
-        <translation>הדפסה בוטלה</translation>
+        <translation>Tlač prerušená</translation>
     </message>
     <message>
         <source>Search wrapped.</source>
-        <translation>חיפוש קפץ להתחלה.</translation>
+        <translation>Vyhľadávanie začína zhora.</translation>
     </message>
     <message>
         <source>Qt Linguist</source>
-        <translation></translation>
+        <translation>Qt Linguist</translation>
     </message>
     <message>
         <source>Cannot find the string &apos;%1&apos;.</source>
-        <translation>לא מסוגל למצוא את המחרוזת &apos;%1&apos;.</translation>
+        <translation>Nie je možné nájsť reťazec &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Search And Translate in &apos;%1&apos; - Qt Linguist</source>
-        <translation>חיפוש ותרגום בתוך &apos;%1&apos; - ‏Qt Linguist</translation>
+        <translation>Hľadať a prekladať v &apos;%1&apos; - Qt Linguist</translation>
     </message>
     <message>
         <source>Translate - Qt Linguist</source>
-        <translation>תרגום - Qt Linguist</translation>
+        <translation>Preklad - Qt Linguist</translation>
     </message>
     <message numerus="yes">
         <source>Translated %n entry(s)</source>
         <translation>
-            <numerusform>תורגמה רשומה אחת</numerusform>
-            <numerusform>תורגמו %n רשומות</numerusform>
+            <numerusform>Preložená jedna položka</numerusform>
+            <numerusform>%n položky preložené</numerusform>
+            <numerusform>%n položiek preložených</numerusform>
         </translation>
     </message>
     <message>
         <source>No more occurrences of &apos;%1&apos;. Start over?</source>
-        <translation>אין עוד מופעים של &apos;%1&apos;. להתחיל מחדש?</translation>
+        <translation>Žiadne ďalšie výskyty &apos;%1&apos; už nie sp. Začať od začiatku?</translation>
     </message>
     <message>
         <source>Create New Phrase Book</source>
-        <translation>יצירת פנקס ביטויים חדש</translation>
+        <translation>Vytvoriť nový slovník</translation>
     </message>
     <message>
         <source>Qt phrase books (*.qph)
 All files (*)</source>
-        <translation>פנקס ביטויים של Qt‏ (‎*.qph)
-כל הקבצים (*)</translation>
+        <translation>Qt slovníky (*.qph)
+Všetky súbory (*)</translation>
     </message>
     <message>
         <source>Phrase book created.</source>
-        <translation>פנקס ביטויים נוצר.</translation>
+        <translation>Slovník vytvorený.</translation>
     </message>
     <message>
         <source>Open Phrase Book</source>
-        <translation>פתיחת פנקס ביטויים</translation>
+        <translation>Otvoriť slovník</translation>
     </message>
     <message>
         <source>Qt phrase books (*.qph);;All files (*)</source>
-        <translation>פנקס ביטויים של Qt‏ (‎*.qph);;כל הקבצים (*)</translation>
+        <translation>Qt slovníky (*.qph);;Všetky súbory (*)</translation>
     </message>
     <message numerus="yes">
         <source>%n phrase(s) loaded.</source>
         <translation>
-            <numerusform>ביטוי אחד נטען.</numerusform>
-            <numerusform>%n ביטויים נטענו.</numerusform>
+            <numerusform>Jedna fráza načítaná.</numerusform>
+            <numerusform>%n frázy načítané.</numerusform>
+            <numerusform>%n fráz načítaných.</numerusform>
         </translation>
     </message>
     <message>
         <source>Add to phrase book</source>
-        <translation>הוסף אל פנקס ביטויים</translation>
+        <translation>Pridať do slovníku</translation>
     </message>
     <message>
         <source>No appropriate phrasebook found.</source>
-        <translation>לא נמצא פנקס ביטויים מתאים.</translation>
+        <translation>Nie je možné nájsť vhodný slovník.</translation>
     </message>
     <message>
         <source>Adding entry to phrasebook %1</source>
-        <translation>הוספת רשומה לפנקס הביטויים %1</translation>
+        <translation>Pridať položku do slovníku %1</translation>
     </message>
     <message>
         <source>Select phrase book to add to</source>
-        <translation>בחר פנקס ביטויים להוסיף אליו</translation>
+        <translation>Vybrať slovník, do ktorého sa má pridať</translation>
     </message>
     <message>
         <source>Unable to launch Qt Assistant (%1)</source>
-        <translation>כשלון בהפעלת Qt Assistant ‏(%1)</translation>
+        <translation>Nie je možné spustiť Qt Assistant (%1)</translation>
     </message>
     <message>
         <source>Version %1</source>
-        <translation>גירסה %1</translation>
+        <translation>Verzia %1</translation>
     </message>
     <message>
-        <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).</source>
-        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p dir=&quot;rtl&quot;&gt;Qt Linguist הוא כלי להוספת תרגומים ליישומי Qt.&lt;/p&gt;&lt;p dir=&quot;ltr&quot;&gt;Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).</translation>
+        <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) 2015 The Qt Company Ltd.</source>
+        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist je nástroj na pridanie prekladov do Qt aplikácií.&lt;/p&gt;&lt;p&gt;Copyright (C) 2015 The Qt Company Ltd a/alebo jej pobočky.</translation>
     </message>
     <message>
         <source>Do you want to save the modified files?</source>
-        <translation>האם ברצונך לשמור את הקבצים שהשתנו?</translation>
+        <translation>Chcete uložiť zmenené súbory?</translation>
     </message>
     <message>
         <source>Do you want to save &apos;%1&apos;?</source>
-        <translation>האם ברצונך לשמור את &apos;%1&apos;?</translation>
+        <translation>Chcete uložiť &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Qt Linguist[*]</source>
-        <translation></translation>
+        <translation>Qt Linguist[*]</translation>
     </message>
     <message>
         <source>%1[*] - Qt Linguist</source>
-        <translation></translation>
+        <translation>%1[*] - Qt Linguist</translation>
     </message>
     <message>
         <source>No untranslated translation units left.</source>
-        <translation>לא נשארו יחידות תרגום שאינן מתורגמות.</translation>
+        <translation>Nezostali žiadne nepreložené prekladové jednotky.</translation>
     </message>
     <message>
         <source>&amp;Window</source>
-        <translation>&amp;חלון</translation>
+        <translation>&amp;Okno</translation>
     </message>
     <message>
         <source>Minimize</source>
-        <translation>מזער</translation>
+        <translation>Minimalizovať</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>Display the manual for %1.</source>
-        <translation>הצג את המדריך עבור %1.</translation>
+        <translation>Zobraziť manuál pre %1.</translation>
     </message>
     <message>
         <source>Display information about %1.</source>
-        <translation>הצג מידע אודות %1.</translation>
+        <translation>Zobraziť informácie o %1.</translation>
     </message>
     <message>
         <source>&amp;Save &apos;%1&apos;</source>
-        <translation>&amp;שמור את &apos;%1&apos;</translation>
+        <translation>&amp;Uložiť &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Save &apos;%1&apos; &amp;As...</source>
-        <translation>שמור את &apos;%1&apos; &amp;בתור...</translation>
+        <translation>Uložiť &apos;%1&apos; &amp;ako…</translation>
     </message>
     <message>
         <source>Release &apos;%1&apos;</source>
-        <translation>שחרר את &apos;%1&apos;</translation>
+        <translation>Publikovať &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Release &apos;%1&apos; As...</source>
-        <translation>שחרר את &apos;%1&apos; בתור...</translation>
+        <translation>Publikovať &apos;%1&apos; ako…</translation>
     </message>
     <message>
         <source>&amp;Close &apos;%1&apos;</source>
-        <translation>&amp;סגור &apos;%1&apos;</translation>
+        <translation>&amp;Zavrieť &apos;%1&apos;</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation>&amp;שמור</translation>
+        <translation>&amp;Uložiť</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;סגור</translation>
+        <translation>&amp;Zavrieť</translation>
     </message>
     <message>
         <source>Save All</source>
-        <translation>שמור הכל</translation>
+        <translation>Uložiť všetko</translation>
     </message>
     <message>
         <source>Close All</source>
-        <translation>סגור הכל</translation>
+        <translation>Zavrieť všetko</translation>
     </message>
     <message>
         <source>&amp;Release</source>
-        <translation>ש&amp;חרר</translation>
+        <translation>&amp;Publikovať</translation>
     </message>
     <message>
         <source>Translation File &amp;Settings for &apos;%1&apos;...</source>
-        <translation>&amp;הגדרות קובץ תרגום עבור &apos;%1&apos;...</translation>
+        <translation>Nastavenie &amp;súboru s prekladom pre &apos;%1&apos;…</translation>
     </message>
     <message>
         <source>&amp;Batch Translation of &apos;%1&apos;...</source>
-        <translation>תרגום &amp;אצווה של &apos;%1&apos;...</translation>
+        <translation>&amp;Dávkový preklad &apos;%1&apos;…</translation>
     </message>
     <message>
         <source>Search And &amp;Translate in &apos;%1&apos;...</source>
-        <translation>חפש ו&amp;תרגם בתוך &apos;%1&apos;...</translation>
+        <translation>Hľadať a &amp;prekladať v &apos;%1&apos;…</translation>
     </message>
     <message>
         <source>Search And &amp;Translate...</source>
-        <translation>חפש ו&amp;תרגם...</translation>
+        <translation>Hľadať a &amp;prekladať…</translation>
     </message>
     <message>
         <source>Cannot read from phrase book &apos;%1&apos;.</source>
-        <translation>לא ניתן לקרוא מפנקס הביטויים &apos;%1&apos;.</translation>
+        <translation>Nie je možné čítať so slovníka &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Close this phrase book.</source>
-        <translation>סגור פנקס ביטויים זה.</translation>
+        <translation>Zatvoriť tento slovník.</translation>
     </message>
     <message>
         <source>Enables you to add, modify, or delete entries in this phrase book.</source>
-        <translation>מאפשר לך להוסיף, לשנות או למחוק רשומות בפנקס ביטויים זה.</translation>
+        <translation>Umožní vám pridať, zmeniť alebo odstrániť položky v slovníku.</translation>
     </message>
     <message>
         <source>Print the entries in this phrase book.</source>
-        <translation>הדפסת הערכים בפנקס ביטויים זה.</translation>
+        <translation>Vytlačiť položky v tomto slovníku.</translation>
     </message>
     <message>
         <source>Cannot create phrase book &apos;%1&apos;.</source>
-        <translation>אין אפשרות ליצור פנקס ביטויים &apos;%1&apos;.</translation>
+        <translation>Nie je možné vytvoriť slovník &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Do you want to save phrase book &apos;%1&apos;?</source>
-        <translation>האם ברצונך לשמור פנקס ביטויים &apos;%1&apos;?</translation>
+        <translation>Chcete uložiť slovník &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>All</source>
-        <translation>הכל</translation>
+        <translation>Všetko</translation>
     </message>
 </context>
 <context>
@@ -1838,178 +2086,178 @@ All files (*)</source>
     </message>
     <message>
         <source>Russian</source>
-        <translation>רוסית</translation>
+        <translation>Rusky</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>גרמנית</translation>
+        <translation>Nemecky</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation>יפנית</translation>
+        <translation>Japonsky</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>צרפתית</translation>
+        <translation>Francúzsky</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>פולנית</translation>
+        <translation>Poľsky</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>סינית</translation>
+        <translation>Čínsky</translation>
     </message>
     <message>
         <source>This whole panel allows you to view and edit the translation of some source text.</source>
-        <translation>פאנל זה מאפשר לך לצפות ולערוך את התרגום של טקסט מקור כלשהו.</translation>
+        <translation>Celý tento panel umožňuje zobraziť a upraviť preklad zdrojového textu.</translation>
     </message>
     <message>
         <source>Source text</source>
-        <translation>טקסט מקור</translation>
+        <translation>Zdrojový text</translation>
     </message>
     <message>
         <source>This area shows the source text.</source>
-        <translation>אזור זה מציג טקסט מקור.</translation>
+        <translation>Táto oblasť zobrazuje zdrojový text.</translation>
     </message>
     <message>
         <source>Source text (Plural)</source>
-        <translation>טקסט מקור (רבים)</translation>
+        <translation>Zdrojový text (množné číslo)</translation>
     </message>
     <message>
         <source>This area shows the plural form of the source text.</source>
-        <translation>אזור זה מציג גוף רבים של טקסט מקור.</translation>
+        <translation>Táto oblasť zobrazuje tvary množného čísla zdrojového textu.</translation>
     </message>
     <message>
         <source>Developer comments</source>
-        <translation>הערות מפתח</translation>
+        <translation>Poznámky vývojárov</translation>
     </message>
     <message>
         <source>This area shows a comment that may guide you, and the context in which the text occurs.</source>
-        <translation>אזור זה מציג הערה אשר עשויה להדריך אותך, וגם הקשר בו טקסט מופיע.</translation>
+        <translation>Táto oblasť zobrazuje komentár, ktorý vás môže viesť a kontext, v ktorom sa text vyskytuje.</translation>
     </message>
     <message>
         <source>Here you can enter comments for your own use. They have no effect on the translated applications.</source>
-        <translation>כאן באפשרותך להזין הערות לשימושך האישי. אין להן שום השפעה על היישום המתורגם.</translation>
+        <translation>Sem môžete zadať komentáre pre vlastnú potrebu. Nemajú žiadny vplyv na preložené aplikácie.</translation>
     </message>
     <message>
         <source>%1 translation (%2)</source>
-        <translation>תרגום %1 ‏(%2)</translation>
+        <translation>Preklad %1 (%2)</translation>
     </message>
     <message>
         <source>This is where you can enter or modify the translation of the above source text.</source>
-        <translation>זה המקום בו באפשרותך להזין או להתאים תרגום של טקסט מקור.</translation>
+        <translation>Toto je miesto, kde môžete zadať alebo upraviť preklad vyššie uvedeného zdrojového textu.</translation>
     </message>
     <message>
         <source>%1 translation</source>
-        <translation>תרגום %1</translation>
+        <translation>Preklad: %1</translation>
     </message>
     <message>
         <source>%1 translator comments</source>
-        <translation>הערות מתרגם %1</translation>
+        <translation>Poznámky prekladateľa: %1</translation>
     </message>
     <message>
         <source>&apos;%1&apos;
 Line: %2</source>
         <translation>&apos;%1&apos;
-שורה: %2</translation>
+Riadok: %2</translation>
     </message>
 </context>
 <context>
     <name>MessageModel</name>
     <message>
         <source>Completion status for %1</source>
-        <translation>מצב השלמה של %1</translation>
+        <translation>Stav spracovania pre %1</translation>
     </message>
     <message>
         <source>&lt;file header&gt;</source>
-        <translation>&lt;כותרת קובץ&gt;</translation>
+        <translation>&lt;hlavička súboru&gt;</translation>
     </message>
     <message>
         <source>&lt;context comment&gt;</source>
-        <translation>&lt;הערת הקשר&gt;</translation>
+        <translation>&lt;kontextový komentár&gt;</translation>
     </message>
     <message>
         <source>&lt;unnamed context&gt;</source>
-        <translation>&lt;הקשר בלי שם&gt;</translation>
+        <translation>&lt;nepomenovaný kontext&gt;</translation>
     </message>
 </context>
 <context>
     <name>PhraseBook</name>
     <message>
         <source>Parse error at line %1, column %2 (%3).</source>
-        <translation>שגיאת ניתוח בשורה %1, טור %2 (%3).</translation>
+        <translation>Chyba pri spracovaní riadku %1, stĺpec %2 (%3).</translation>
     </message>
 </context>
 <context>
     <name>PhraseBookBox</name>
     <message>
         <source>Edit Phrase Book</source>
-        <translation>ערוך פנקס ביטויים</translation>
+        <translation>Upraviť slovník</translation>
     </message>
     <message>
         <source>This window allows you to add, modify, or delete entries in a phrase book.</source>
-        <translation>חלון זה מתיר לך להוסיף, להתאים, או למחוק רשומות בתוך פנקס ביטויים.</translation>
+        <translation>Toto okno vám umožňuje vložiť, zmeniť, alebo odstrániť položky zo slovníka.</translation>
     </message>
     <message>
         <source>&amp;Translation:</source>
-        <translation>&amp;תרגום:</translation>
+        <translation>&amp;Preklad:</translation>
     </message>
     <message>
         <source>This is the phrase in the target language corresponding to the source phrase.</source>
-        <translation>זהו הביטוי בשפת היעד המתאים לביטוי המקור.</translation>
+        <translation>Toto je fráza, ktorá v cieľovom jazyku zodpovedá zdrojovému textu.</translation>
     </message>
     <message>
         <source>S&amp;ource phrase:</source>
-        <translation>&amp;ביטוי מקור:</translation>
+        <translation>&amp;Zdrojová fráza:</translation>
     </message>
     <message>
         <source>This is a definition for the source phrase.</source>
-        <translation>זוהי ההגדרה לביטוי מקור.</translation>
+        <translation>Toto je definícia pre zdrojovú frázu.</translation>
     </message>
     <message>
         <source>This is the phrase in the source language.</source>
-        <translation>זהו הביטוי בשפת המקור.</translation>
+        <translation>Toto je fráza v zdrojovom jazyku.</translation>
     </message>
     <message>
         <source>&amp;Definition:</source>
-        <translation>&amp;הגדרה:</translation>
+        <translation>&amp;Definícia:</translation>
     </message>
     <message>
         <source>Click here to add the phrase to the phrase book.</source>
-        <translation>לחץ כאן כדי להוסיף את הביטוי אל פנקס הביטויים.</translation>
+        <translation>Sem kliknite na pridanie frázy do slovníka.</translation>
     </message>
     <message>
         <source>&amp;New Entry</source>
-        <translation>רשומה &amp;חדשה</translation>
+        <translation>&amp;Nová položka</translation>
     </message>
     <message>
         <source>Click here to remove the entry from the phrase book.</source>
-        <translation>לחץ כאן כדי להסיר את הרשומה מתוך פנקס הביטויים.</translation>
+        <translation>Sem kliknite pre odstránenie položky zo slovníka.</translation>
     </message>
     <message>
         <source>&amp;Remove Entry</source>
-        <translation>הס&amp;ר רשומה</translation>
+        <translation>&amp;Odstrániť položku</translation>
     </message>
     <message>
         <source>Settin&amp;gs...</source>
-        <translation>ה&amp;גדרות...</translation>
+        <translation>&amp;Nastavenia…</translation>
     </message>
     <message>
         <source>Click here to save the changes made.</source>
-        <translation>לחץ כאן כדי לשמור את השינויים שנעשו.</translation>
+        <translation>Sem kliknite pre uloženie vykonaných zmien.</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation>&amp;שמור</translation>
+        <translation>&amp;Uložiť</translation>
     </message>
     <message>
         <source>Click here to close this window.</source>
-        <translation>לחץ כאן כדי לסגור חלון זה.</translation>
+        <translation>Sem kliknite pre zatvorenie tohoto okna.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>סגור</translation>
+        <translation>Zavrieť</translation>
     </message>
     <message>
         <source></source>
@@ -2018,242 +2266,241 @@ Line: %2</source>
     </message>
     <message>
         <source>(New Entry)</source>
-        <translation>(רשומה חדשה)</translation>
+        <translation>(Nová položka)</translation>
     </message>
     <message>
         <source>%1[*] - Qt Linguist</source>
-        <translation></translation>
+        <translation>%1[*] - Qt Linguist</translation>
     </message>
     <message>
         <source>Qt Linguist</source>
-        <translation></translation>
+        <translation>Qt Linguist</translation>
     </message>
     <message>
         <source>Cannot save phrase book &apos;%1&apos;.</source>
-        <translation>אין אפשרות לשמור פנקס ביטויים &apos;%1&apos;.</translation>
+        <translation>Nie je možné uložiť slovník &apos;%1&apos;.</translation>
     </message>
 </context>
 <context>
     <name>PhraseModel</name>
     <message>
         <source>Source phrase</source>
-        <translation>ביטוי מקור</translation>
+        <translation>Zdrojová fráza</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation>תרגום</translation>
+        <translation>Preklad</translation>
     </message>
     <message>
         <source>Definition</source>
-        <translation>הגדרה</translation>
+        <translation>Definícia</translation>
     </message>
 </context>
 <context>
     <name>PhraseView</name>
     <message>
         <source>Insert</source>
-        <translation>הכנס</translation>
+        <translation>Vložiť</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>ערוך</translation>
+        <translation>Upraviť</translation>
     </message>
     <message>
         <source>Guess (%1)</source>
-        <translation>ניחוש (%1)</translation>
+        <translation>Návrh (%1)</translation>
     </message>
     <message>
         <source>Guess</source>
-        <translation>ניחוש</translation>
+        <translation>Návrh</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>GNU Gettext localization files</source>
-        <translation>קבצי תרגום של GNU Gettext</translation>
+        <translation>Prekladové súbory GNU Gettext</translation>
     </message>
     <message>
         <source>GNU Gettext localization template files</source>
-        <translation>קבצי תבנית לתרגום של GNU Gettext</translation>
+        <translation>Súbory s prekladovými šablónami GNU Gettext</translation>
     </message>
     <message>
         <source>Compiled Qt translations</source>
-        <translation>תרגומי Qt מהודרים</translation>
+        <translation>Skompilované Qt preklady</translation>
     </message>
     <message>
         <source>Qt Linguist &apos;Phrase Book&apos;</source>
-        <translation>&apos;פנקס ביטויים&apos; של Qt Linguist</translation>
+        <translation>Qt Linguist &apos;Slovník&apos;</translation>
     </message>
     <message>
         <source>Qt translation sources (format 1.1)</source>
-        <translation>מקורות תרגום Qt (פורמט 1.1)</translation>
+        <translation>Qt prekladové súbory (formát 1.1)</translation>
     </message>
     <message>
         <source>Qt translation sources (format 2.0)</source>
-        <translation>מקורות תרגום Qt (פורמט 2.0)</translation>
+        <translation>Qt prekladové súbory (formát 2.0)</translation>
     </message>
     <message>
         <source>Qt translation sources (latest format)</source>
-        <translation>מקורות תרגום Qt (פורמט אחרון)</translation>
+        <translation>Qt prekladové súbory (najnovší formát)</translation>
     </message>
     <message>
         <source>XLIFF localization files</source>
-        <translation>קבצי תרגום של XLIFF</translation>
+        <translation>Prekladové súbory XLIFF</translation>
     </message>
     <message>
         <source>lupdate version %1
 </source>
-        <translation>גרסת lupdate ‏%1
-</translation>
+        <translation>lupdate verzia %1</translation>
     </message>
     <message>
         <source>Translation files (%1);;</source>
-        <translation>קבצי תרגום (%1);;</translation>
+        <translation>Prekladové súbory (%1);;</translation>
     </message>
     <message>
         <source>All files (*)</source>
-        <translation>כל הקבצים (*)</translation>
+        <translation>Všetky súbory (*)</translation>
     </message>
     <message>
         <source>Qt Linguist</source>
-        <translation></translation>
+        <translation>Qt Linguist</translation>
     </message>
 </context>
 <context>
     <name>SourceCodeView</name>
     <message>
         <source>&lt;i&gt;Source code not available&lt;/i&gt;</source>
-        <translation>&lt;i&gt;קוד מקור לא זמין&lt;/i&gt;</translation>
+        <translation>&lt;i&gt;Zdrojový kód nie je dostupný&lt;/i&gt;</translation>
     </message>
     <message>
         <source>&lt;i&gt;File %1 not available&lt;/i&gt;</source>
-        <translation>&lt;i&gt;קובץ %1 לא זמין&lt;/i&gt;</translation>
+        <translation>&lt;i&gt;Súbor %1 nie je dostupný&lt;/i&gt;</translation>
     </message>
     <message>
         <source>&lt;i&gt;File %1 not readable&lt;/i&gt;</source>
-        <translation>&lt;i&gt;קובץ %1 לא קריא&lt;/i&gt;</translation>
+        <translation>&lt;i&gt;Súbor %1 nie je čitateľný&lt;/i&gt;</translation>
     </message>
 </context>
 <context>
     <name>Statistics</name>
     <message>
         <source>Statistics</source>
-        <translation>סטטיסטיקות</translation>
+        <translation>Štatistiky</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>סגור</translation>
+        <translation>Zavrieť</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation>תרגום</translation>
+        <translation>Preklad</translation>
     </message>
     <message>
         <source>Source</source>
-        <translation>מקור</translation>
+        <translation>Zdroj</translation>
     </message>
     <message>
         <source>0</source>
-        <translation></translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Words:</source>
-        <translation>מילים:</translation>
+        <translation>Slová: </translation>
     </message>
     <message>
         <source>Characters:</source>
-        <translation>תווים:</translation>
+        <translation>Znaky:</translation>
     </message>
     <message>
         <source>Characters (with spaces):</source>
-        <translation>תווים (עם רווחים):</translation>
+        <translation>Znaky (s medzerami):</translation>
     </message>
 </context>
 <context>
     <name>TranslateDialog</name>
     <message>
         <source>This window allows you to search for some text in the translation source file.</source>
-        <translation>חלון זה מתיר לך לחפש טקסט מסוים בתוך קובץ מקור תרגום.</translation>
+        <translation>Toto okno umožňuje vyhľadávať text v zdrojovom súbore prekladu.</translation>
     </message>
     <message>
         <source>Type in the text to search for.</source>
-        <translation>הקלד את הטקסט לחיפוש.</translation>
+        <translation>Vložte sem text, ktorý sa má vyhľadať.</translation>
     </message>
     <message>
         <source>Find &amp;source text:</source>
-        <translation>מצא טקסט &amp;מקור:</translation>
+        <translation>Hľadať &amp;zdrojový text:</translation>
     </message>
     <message>
         <source>&amp;Translate to:</source>
-        <translation>&amp;תרגם אל:</translation>
+        <translation>&amp;Preklad do:</translation>
     </message>
     <message>
         <source>Search options</source>
-        <translation>אפשרויות חיפוש</translation>
+        <translation>Možnosti hľadania</translation>
     </message>
     <message>
         <source>Texts such as &apos;TeX&apos; and &apos;tex&apos; are considered as different when checked.</source>
-        <translation>טקסטים כגון &apos;TeX&apos; וגם &apos;tex&apos; נחשבים כשונים כאשר מסומן.</translation>
+        <translation>Ak je zapnuté, tak texty ako &apos;TeX&apos; a &apos;tex&apos; sa považujú za rozdielne.</translation>
     </message>
     <message>
         <source>Match &amp;case</source>
-        <translation>התאם &amp;רישיות</translation>
+        <translation>Zhoda malý&amp;ch a veľkých písmen</translation>
     </message>
     <message>
         <source>Mark new translation as &amp;finished</source>
-        <translation>סמן תרגומים חדשים בתוך לא מו&amp;גמרים</translation>
+        <translation>Označiť nový preklad ako do&amp;končený</translation>
     </message>
     <message>
         <source>Click here to find the next occurrence of the text you typed in.</source>
-        <translation>לחץ כאן כדי למצוא את המופע הבא של הטקסט שהקלדת.</translation>
+        <translation>Sem kliknite pre vyhľadanie ďalšieho výskytu hľadaného textu.</translation>
     </message>
     <message>
         <source>Find Next</source>
-        <translation>הלאה</translation>
+        <translation>Nájsť nasledujúci</translation>
     </message>
     <message>
         <source>Translate</source>
-        <translation>תרגם</translation>
+        <translation>Preložiť</translation>
     </message>
     <message>
         <source>Translate All</source>
-        <translation>תרגם הכל</translation>
+        <translation>Preložiť všetko</translation>
     </message>
     <message>
         <source>Click here to close this window.</source>
-        <translation>לחץ כאן כדי לסגור חלון זה.</translation>
+        <translation>Sem kliknite pre zatvorenie tohoto okna.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>ביטול</translation>
+        <translation>Zrušiť</translation>
     </message>
 </context>
 <context>
     <name>TranslationSettingsDialog</name>
     <message>
         <source>Source language</source>
-        <translation>שפת מקור</translation>
+        <translation>Zdrojový jazyk</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>שפה</translation>
+        <translation>Jazyk</translation>
     </message>
     <message>
         <source>Country/Region</source>
-        <translation>ארץ/מחוז</translation>
+        <translation>Krajina/Región</translation>
     </message>
     <message>
         <source>Target language</source>
-        <translation>שפת יעד</translation>
+        <translation>Cieľový jazyk</translation>
     </message>
     <message>
         <source>Settings for &apos;%1&apos; - Qt Linguist</source>
-        <translation>הגדרות עבור &apos;%1&apos; - ‏Qt Linguist</translation>
+        <translation>Nastavenia pre &apos;%1&apos; - Qt Linguist</translation>
     </message>
     <message>
         <source>Any Country</source>
-        <translation>כל מדינה</translation>
+        <translation>Akákoľvek krajina</translation>
     </message>
 </context>
 </TS>

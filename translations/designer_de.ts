@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de">
+<TS version="2.1" language="de">
 <context>
     <name>AbstractFindWidget</name>
     <message>
@@ -20,8 +20,8 @@
         <translation>Nur ganze &amp;Worte</translation>
     </message>
     <message>
-        <source>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
-        <translation>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Die Suche hat das Ende erreicht</translation>
+        <source>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
+        <translation>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Die Suche hat das Ende erreicht</translation>
     </message>
 </context>
 <context>
@@ -117,7 +117,7 @@
     </message>
     <message>
         <source>The font &apos;%1&apos; (%2) could not be unloaded.</source>
-        <translation>Die Schriftart  &apos;%1&apos; (%2) konnte nicht entladen werden.</translation>
+        <translation>Die Schriftart &apos;%1&apos; (%2) konnte nicht entladen werden.</translation>
     </message>
 </context>
 <context>
@@ -363,10 +363,6 @@
         <translation>Seite</translation>
     </message>
     <message>
-        <source>page</source>
-        <translation type="obsolete">Seite</translation>
-    </message>
-    <message>
         <source>Insert Page</source>
         <translation>Seite einfügen</translation>
     </message>
@@ -475,10 +471,6 @@
         <translation>Subfenster einfügen</translation>
     </message>
     <message>
-        <source>subwindow</source>
-        <translation type="obsolete">subwindow</translation>
-    </message>
-    <message>
         <source>Subwindow</source>
         <translation>Subwindow</translation>
     </message>
@@ -532,10 +524,6 @@
         <source>Remove &apos;%1&apos; from &apos;%2&apos;</source>
         <extracomment>Command description for removing buttons from a QButtonGroup</extracomment>
         <translation> &apos;%1&apos; aus &apos;%2&apos; entfernen</translation>
-    </message>
-    <message>
-        <source>Change script</source>
-        <translation>Skript ändern</translation>
     </message>
     <message>
         <source>Changed &apos;%1&apos; of &apos;%2&apos;</source>
@@ -652,54 +640,8 @@
         <translation>Zeitüberschreitung bei der Ausführung von %1.</translation>
     </message>
     <message>
-        <source>This file contains top level spacers.&lt;br&gt;They have &lt;b&gt;NOT&lt;/b&gt; been saved into the form.</source>
-        <translation>Das Formular enthält freistehende Layoutelemente, die  &lt;b&gt;nicht&lt;/b&gt; gespeichert wurden.</translation>
-    </message>
-    <message>
-        <source>Perhaps you forgot to create a layout?</source>
-        <translation>Haben Sie ein Layout eingefügt?</translation>
-    </message>
-    <message>
-        <source>This file cannot be read because it was created using %1.</source>
-        <translation>Die Datei kann nicht gelesen werden, da sie mit %1 erzeugt wurde.</translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
-        <translation>Die Datei kann nicht gelesen werden, da sie mit dem Designer der Version %1 erzeugt wurde.</translation>
-    </message>
-    <message>
         <source>This file cannot be read because the extra info extension failed to load.</source>
         <translation>Die Datei kann nicht gelesen werden (Fehler beim Laden der Daten der ExtraInfoExtension).</translation>
-    </message>
-    <message>
-        <source>The converted file could not be read.</source>
-        <translation>Die konvertierte Datei konnte nicht gelesen werden.</translation>
-    </message>
-    <message>
-        <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
-        <translation>Fehler beim Lesen der ui-Datei: Das Wurzelelement &lt;ui&gt; fehlt.</translation>
-    </message>
-    <message>
-        <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
-        <translation>Fehler beim Lesen der ui-Datei bei Zeile %1, Spalte %2: %3</translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and will be converted to a new form by Qt Designer.</source>
-        <translation>Die Datei wurde mit dem Designer der Version %1 erzeugt und wird zu einem neuen Formular konvertiert.</translation>
-    </message>
-    <message>
-        <source>The old form has not been touched, but you will have to save the form under a new name.</source>
-        <translation>Sie bleibt unverändert.Das neue Formular  muss unter einem neuen Namen abgespeichert werden. </translation>
-    </message>
-    <message>
-        <source>This file was created using Designer from Qt-%1 and could not be read:
-%2</source>
-        <translation>Das Lesen der von Designer %1 erzeugten Datei schlug fehl:
-%2</translation>
-    </message>
-    <message>
-        <source>Please run it through &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; to convert it to Qt-4&apos;s ui format.</source>
-        <translation>Bitte wandeln Sie sie mit dem Befehl &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; zum Format von Qt 4.</translation>
     </message>
     <message>
         <source>Custom Widgets</source>
@@ -877,21 +819,13 @@
     <name>FormBuilder</name>
     <message>
         <source>Invalid stretch value for &apos;%1&apos;: &apos;%2&apos;</source>
-        <extracomment>Parsing layout stretch values
-----------
-Parsing layout stretch values
-----------
-Parsing layout stretch values</extracomment>
+        <extracomment>Parsing layout stretch values</extracomment>
         <translation>Ungültiger Stretch-Wert für &apos;%1&apos;: &apos;%2&apos;</translation>
     </message>
     <message>
         <source>Invalid minimum size for &apos;%1&apos;: &apos;%2&apos;</source>
-        <extracomment>Parsing grid layout minimum size values
-----------
-Parsing grid layout minimum size values
-----------
-Parsing grid layout minimum size values</extracomment>
-        <translation></translation>
+        <extracomment>Parsing grid layout minimum size values</extracomment>
+        <translation>Ungültige Minimalgröße für &apos;%1&apos;: &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -1182,25 +1116,26 @@ Parsing grid layout minimum size values</extracomment>
     </message>
 </context>
 <context>
-    <name>Q3WizardContainer</name>
-    <message>
-        <source>Page</source>
-        <translation>Seite</translation>
-    </message>
-</context>
-<context>
     <name>QAbstractFormBuilder</name>
-    <message>
-        <source>Unexpected element &lt;%1&gt;</source>
-        <translation>Ungültiges Element &lt;%1&gt;</translation>
-    </message>
     <message>
         <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
         <translation>Fehler beim Lesen der ui-Datei bei Zeile %1, Spalte %2: %3</translation>
     </message>
     <message>
+        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
+        <translation>Diese Datei wurde mit Designer Version %1 erstellt und kann nicht gelesen werden.</translation>
+    </message>
+    <message>
+        <source>This file cannot be read because it was created using %1.</source>
+        <translation>Die Datei kann nicht gelesen werden, da sie mit %1 erzeugt wurde.</translation>
+    </message>
+    <message>
         <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
         <translation>Fehler beim Lesen der ui-Datei: Das Wurzelelement &lt;ui&gt; fehlt.</translation>
+    </message>
+    <message>
+        <source>Invalid UI file</source>
+        <translation>Ungültige UI-Datei</translation>
     </message>
     <message>
         <source>The creation of a widget of the class &apos;%1&apos; failed.</source>
@@ -1231,10 +1166,6 @@ This indicates an inconsistency in the ui-file.</source>
         <source>Invalid QButtonGroup reference &apos;%1&apos; referenced by &apos;%2&apos;.</source>
         <translation>Ungültige Referenz der Buttongruppe &apos;%1&apos;, referenziert von &apos;%2&apos;.</translation>
     </message>
-    <message>
-        <source>This version of the uitools library is linked without script support.</source>
-        <translation>Dies Version der uitools-Bibliothek unterstützt keine Skripte.</translation>
-    </message>
 </context>
 <context>
     <name>QAxWidgetPlugin</name>
@@ -1259,11 +1190,11 @@ This indicates an inconsistency in the ui-file.</source>
     </message>
     <message>
         <source>Licensed Control</source>
-        <translation>Lizensiertes Steuerelement</translation>
+        <translation>Steuerelement erfordert Lizenz</translation>
     </message>
     <message>
         <source>The control requires a design-time license</source>
-        <translation>Das Steuerelement erfordert eine Lizenz zur Entwurfszeit</translation>
+        <translation>Dieses Steuerelement erfordert eine Lizenz zur Entwurfszeit</translation>
     </message>
 </context>
 <context>
@@ -1308,33 +1239,12 @@ This indicates an inconsistency in the ui-file.</source>
         <source>Cannot set an empty include file.</source>
         <translation>Der Name der Include-Datei darf nicht leer sein.</translation>
     </message>
-    <message>
-        <source>Exception at line %1: %2</source>
-        <translation>Ausnahmefehler bei Zeile %1: %2</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation>Unbekannter Fehler</translation>
-    </message>
-    <message>
-        <source>An error occurred while running the script for %1: %2
-Script: %3</source>
-        <translation>Bei der Ausführung des Skripts für %1 trat ein Fehler auf: %2Skript: %3</translation>
-    </message>
 </context>
 <context>
     <name>QDesigner</name>
     <message>
         <source>%1 - warning</source>
         <translation>%1 - Warnung</translation>
-    </message>
-    <message>
-        <source>Qt Designer</source>
-        <translation>Qt Designer</translation>
-    </message>
-    <message>
-        <source>This application cannot be used for the Console edition of Qt</source>
-        <translation>Diese Anwendung kann in der Qt-Konsolen-Edition nicht benutzt werden</translation>
     </message>
 </context>
 <context>
@@ -1382,10 +1292,6 @@ Script: %3</source>
     <message>
         <source>Current Widget Help</source>
         <translation>Hilfe zum ausgewählten Widget</translation>
-    </message>
-    <message>
-        <source>What&apos;s New in Qt Designer?</source>
-        <translation>Was gibt es Neues beim Qt Designer?</translation>
     </message>
     <message>
         <source>About Plugins</source>
@@ -1446,6 +1352,10 @@ Möchten Sie einen anderen Namen eingeben oder ein neues Formular erzeugen?</tra
     <message>
         <source>&amp;New Form</source>
         <translation>&amp;Neues Formular</translation>
+    </message>
+    <message>
+        <source>Qt Designer</source>
+        <translation>Qt Designer</translation>
     </message>
     <message>
         <source>Save Form?</source>
@@ -1623,15 +1533,11 @@ Möchten Sie es noch einmal versuchen?</translation>
     </message>
     <message>
         <source>A COM exception occurred when executing a meta call of type %1, index %2 of &quot;%3&quot;.</source>
-        <translation>Beim Methodenaufruf des Typs %1, index %2 von &quot;%3&quot; trat eine COM-Ausnahme auf.</translation>
+        <translation>Beim Ausführen eines Meta-Aufrufs des Typs %1, Index %2 von &quot;%3&quot; trat eine eine COM-Ausnahme auf.</translation>
     </message>
 </context>
 <context>
     <name>QDesignerFormBuilder</name>
-    <message>
-        <source>Script errors occurred:</source>
-        <translation>Es sind Skriptfehler aufgetreten:</translation>
-    </message>
     <message>
         <source>The preview failed to build.</source>
         <translation>Es konnte keine Vorschau erzeugt werden.</translation>
@@ -1837,10 +1743,6 @@ Container-Seiten sollten ausschließlich im XML der domXML()-Methode spezifizier
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation type="obsolete">Bearbeiten</translation>
-    </message>
-    <message>
         <source>Toolbars</source>
         <translation>Werkzeugleisten</translation>
     </message>
@@ -1885,12 +1787,8 @@ Container-Seiten sollten ausschließlich im XML der domXML()-Methode spezifizier
         <translation>Designer wurde offenbar nicht ordnungsgemäß beendet; es existieren noch Dateien von der Hintergrundsicherung. Möchten Sie sie laden?</translation>
     </message>
     <message>
-        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened.</source>
-        <translation>Die Datei &lt;b&gt;%1&lt;/b&gt; konnte nicht geöffnet werden.</translation>
-    </message>
-    <message>
-        <source>The file &lt;b&gt;%1&lt;/b&gt; is not a valid Designer UI file.</source>
-        <translation>Die Datei &lt;b&gt;%1&lt;/b&gt; ist keine gültige Designer-Datei.</translation>
+        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened: %2</source>
+        <translation>Die Datei &lt;b&gt;%1&lt;/b&gt; konnte nicht geöffnet werden: %2</translation>
     </message>
     <message numerus="yes">
         <source>There are %n forms with unsaved changes. Do you want to review these changes before quitting?</source>
@@ -1904,11 +1802,7 @@ Container-Seiten sollten ausschließlich im XML der domXML()-Methode spezifizier
     <name>QFormBuilder</name>
     <message>
         <source>An empty class name was passed on to %1 (object name: &apos;%2&apos;).</source>
-        <extracomment>Empty class name passed to widget factory method
-----------
-Empty class name passed to widget factory method
-----------
-Empty class name passed to widget factory method</extracomment>
+        <extracomment>Empty class name passed to widget factory method</extracomment>
         <translation>Der Methode %1 wurde ein leerer Klassennamen übergeben (Name &apos;%2&apos;).</translation>
     </message>
     <message>
@@ -2552,13 +2446,6 @@ Empty class name passed to widget factory method</extracomment>
     </message>
 </context>
 <context>
-    <name>QtKeySequenceEdit</name>
-    <message>
-        <source>Clear Shortcut</source>
-        <translation>Tastenkürzel löschen</translation>
-    </message>
-</context>
-<context>
     <name>QtLocalePropertyManager</name>
     <message>
         <source>&lt;Invalid&gt;</source>
@@ -2907,6 +2794,10 @@ Dies kann zum Beispiel eine Sprachkennung wie &quot;_de&quot; sein.</translation
         <source>Copy Path</source>
         <translation>Pfad kopieren</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filter</translation>
+    </message>
 </context>
 <context>
     <name>QtResourceViewDialog</name>
@@ -3124,23 +3015,14 @@ Möchten Sie sie überschreiben?</translation>
     </message>
 </context>
 <context>
-    <name>ScriptErrorDialog</name>
-    <message>
-        <source>An error occurred while running the scripts for &quot;%1&quot;:
-</source>
-        <translation>Bei der Ausführung der Skripte für &quot;%1&quot; sind Fehler aufgetreten:
-</translation>
-    </message>
-</context>
-<context>
     <name>SelectSignalDialog</name>
     <message>
         <source>Go to slot</source>
-        <translation></translation>
+        <translation>Slot anzeigen</translation>
     </message>
     <message>
         <source>Select signal</source>
-        <translation></translation>
+        <translation>Signal auswählen</translation>
     </message>
     <message>
         <source>signal</source>
@@ -3259,50 +3141,11 @@ Möchten Sie sie überschreiben?</translation>
     </message>
     <message>
         <source>&lt;br/&gt;Qt Designer is a graphical user interface designer for Qt applications.&lt;br/&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br/&gt;Qt Designer is a graphical user interface designer for Qt applications.&lt;br/&gt;</translation>
     </message>
     <message>
-        <source>%1&lt;br/&gt;Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>VideoPlayerTaskMenu</name>
-    <message>
-        <source>Available Mime Types</source>
-        <translation>Verfügbare Mime-Typen</translation>
-    </message>
-    <message>
-        <source>Display supported mime types...</source>
-        <translation>Verfügbare Mime-Typen anzeigen...</translation>
-    </message>
-    <message>
-        <source>Load...</source>
-        <translation>Laden...</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Wiedergabe</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation>Pause</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation>Stop</translation>
-    </message>
-    <message>
-        <source>Choose Video Player Media Source</source>
-        <translation>Medienquelle wählen</translation>
-    </message>
-    <message>
-        <source>An error has occurred in &apos;%1&apos;: %2</source>
-        <translation>In &apos;%1&apos; ist ein Fehler aufgetreten: %2</translation>
-    </message>
-    <message>
-        <source>Video Player Error</source>
-        <translation>Video Player Fehler</translation>
+        <source>%1&lt;br/&gt;Copyright (C) %2 The Qt Company Ltd.</source>
+        <translation>%1&lt;br/&gt;Copyright (C) %2 The Qt Company Ltd.</translation>
     </message>
 </context>
 <context>
@@ -3310,6 +3153,13 @@ Möchten Sie sie überschreiben?</translation>
     <message>
         <source>The file contains a custom widget &apos;%1&apos; whose base class (%2) differs from the current entry in the widget database (%3). The widget database is left unchanged.</source>
         <translation>Die Datei enthält ein benutzerdefiniertes Widget &apos;%1&apos; dessen Basisklasse (%2) nicht mit dem Eintrag in der Widget-Datenbank übereinstimmt. Die Widget-Datenbank wird nicht geändert.</translation>
+    </message>
+</context>
+<context>
+    <name>qdesigner_internal</name>
+    <message>
+        <source>%1 Widget</source>
+        <translation>%1 Widget</translation>
     </message>
 </context>
 <context>
@@ -3367,6 +3217,10 @@ Möchten Sie sie überschreiben?</translation>
         <translation>Detaillierte Ansicht</translation>
     </message>
     <message>
+        <source>Filter</source>
+        <translation>Filter</translation>
+    </message>
+    <message>
         <source>Remove actions</source>
         <translation> Aktionen löschen</translation>
     </message>
@@ -3408,29 +3262,6 @@ Möchten Sie sie überschreiben?</translation>
     <message>
         <source>ToolTip</source>
         <translation>ToolTip</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::BrushManagerProxy</name>
-    <message>
-        <source>The element &apos;%1&apos; is missing the required attribute &apos;%2&apos;.</source>
-        <translation>Bei dem Element fehlt das erforderliche Attribut &apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <source>Empty brush name encountered.</source>
-        <translation>Fehlender Name bei der Brush-Definition.</translation>
-    </message>
-    <message>
-        <source>An unexpected element &apos;%1&apos; was encountered.</source>
-        <translation>Ein ungültiges Element &apos;%1&apos; wurde festgestellt.</translation>
-    </message>
-    <message>
-        <source>An error occurred when reading the brush definition file &apos;%1&apos; at line line %2, column %3: %4</source>
-        <translation>Fehler beim Lesen der Brush-Datei &apos;%1&apos; bei Zeile %2, Spalte %3: %4</translation>
-    </message>
-    <message>
-        <source>An error occurred when reading the resource file &apos;%1&apos; at line %2, column %3: %4</source>
-        <translation>Fehler beim Lesen der Ressourcen-Datei &apos;%1&apos; bei Zeile %2, Spalte %3: %4</translation>
     </message>
 </context>
 <context>
@@ -3609,7 +3440,7 @@ Möchten Sie sie überschreiben?</translation>
     </message>
     <message>
         <source>Signal</source>
-        <translation></translation>
+        <translation>Signal</translation>
     </message>
     <message>
         <source>Receiver</source>
@@ -3932,17 +3763,6 @@ Möchten Sie sie überschreiben?</translation>
     </message>
 </context>
 <context>
-    <name>qdesigner_internal::FilterWidget</name>
-    <message>
-        <source>Filter</source>
-        <translation>Filter</translation>
-    </message>
-    <message>
-        <source>Clear text</source>
-        <translation>Text löschen</translation>
-    </message>
-</context>
-<context>
     <name>qdesigner_internal::FormEditor</name>
     <message>
         <source>Resource File Changed</source>
@@ -4050,6 +3870,14 @@ Möchten Sie sie überschreiben?</translation>
     <message>
         <source>Delete &apos;%1&apos;</source>
         <translation> &apos;%1&apos; löschen</translation>
+    </message>
+    <message>
+        <source>Invalid form</source>
+        <translation>Ungültiges Formular</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;This file contains top level spacers.&lt;br/&gt;They will &lt;b&gt;not&lt;/b&gt; be saved.&lt;/p&gt;&lt;p&gt;Perhaps you forgot to create a layout?&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Das Formular enthält freistehende Layoutelemente.&lt;br/&gt;Sie werden &lt;b&gt;nicht&lt;/b&gt; gespeichert.&lt;/p&gt;&lt;p&gt;Haben Sie möglicherweise vergessen, ein Layout zu erstellen?&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -4496,18 +4324,6 @@ Möchten Sie sie überschreiben?</translation>
         <translation>&amp;Text:</translation>
     </message>
     <message>
-        <source>Shortcut:</source>
-        <translation type="obsolete">Tastenkürzel</translation>
-    </message>
-    <message>
-        <source>Checkable:</source>
-        <translation type="obsolete">Ankreuzbar:</translation>
-    </message>
-    <message>
-        <source>ToolTip:</source>
-        <translation type="obsolete">ToolTip:</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4567,7 +4383,7 @@ Please select another name.</source>
     </message>
     <message>
         <source>horizontalSpacer</source>
-        <translation></translation>
+        <translation>horizontalSpacer</translation>
     </message>
 </context>
 <context>
@@ -4931,54 +4747,66 @@ Please select another name.</source>
         <source>The moose in the noose
 ate the goose who was loose.</source>
         <extracomment>Palette editor background</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The moose in the noose
+ate the goose who was loose.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::PreviewWidget</name>
     <message>
         <source>Preview Window</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Vorschaufenster</translation>
     </message>
     <message>
         <source>LineEdit</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>LineEdit</translation>
     </message>
     <message>
         <source>ComboBox</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>ComboBox</translation>
     </message>
     <message>
         <source>PushButton</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>PushButton</translation>
     </message>
     <message>
         <source>ButtonGroup2</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>ButtonGroup2</translation>
     </message>
     <message>
         <source>CheckBox1</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>CheckBox1</translation>
     </message>
     <message>
         <source>CheckBox2</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>CheckBox2</translation>
     </message>
     <message>
         <source>ButtonGroup</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>ButtonGroup</translation>
     </message>
     <message>
         <source>RadioButton1</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>RadioButton1</translation>
     </message>
     <message>
         <source>RadioButton2</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>RadioButton2</translation>
     </message>
     <message>
         <source>RadioButton3</source>
-        <translation></translation>
+        <extracomment>Palette Editor Preview Widget</extracomment>
+        <translation>RadioButton3</translation>
     </message>
 </context>
 <context>
@@ -5040,6 +4868,10 @@ ate the goose who was loose.</source>
     <message>
         <source>Drop Down Button View</source>
         <translation>Detailansicht</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filter</translation>
     </message>
     <message>
         <source>Object: %1
@@ -5154,10 +4986,6 @@ Klasse: %2</translation>
     <message>
         <source>Remove Status Bar</source>
         <translation>Statuszeile löschen</translation>
-    </message>
-    <message>
-        <source>Change script...</source>
-        <translation>Skript ändern...</translation>
     </message>
     <message>
         <source>Change signals/slots...</source>
@@ -5410,6 +5238,10 @@ Klasse: %2</translation>
         <translation>Blocksatz</translation>
     </message>
     <message>
+        <source>Right to Left</source>
+        <translation>Schreibrichtung rechts nach links</translation>
+    </message>
+    <message>
         <source>Superscript</source>
         <translation>Hochstellung</translation>
     </message>
@@ -5428,28 +5260,6 @@ Klasse: %2</translation>
     <message>
         <source>Simplify Rich Text</source>
         <translation>Formatierbaren Text vereinfachen</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::ScriptDialog</name>
-    <message>
-        <source>Edit script</source>
-        <translation>Skript bearbeiten</translation>
-    </message>
-    <message>
-        <source>Syntax error</source>
-        <translation>Syntaxfehler</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;Enter a Qt Script snippet to be executed while loading the form.&lt;br&gt;The widget and its children are accessible via the variables &lt;i&gt;widget&lt;/i&gt; and &lt;i&gt;childWidgets&lt;/i&gt;, respectively.</source>
-        <translation>&lt;html&gt;Geben Sie ein Qt-Skript zur Ausführung während des Formularaufbaus ein.&lt;br&gt;Auf das Widget und seine untergeordneten Widgets kann durch die Variablen &lt;i&gt;widget&lt;/i&gt; und &lt;i&gt;childWidgets&lt;/i&gt; zugegriffen werden.</translation>
-    </message>
-</context>
-<context>
-    <name>qdesigner_internal::ScriptErrorDialog</name>
-    <message>
-        <source>Script errors</source>
-        <translation>Skriptfehler</translation>
     </message>
 </context>
 <context>
@@ -5625,7 +5435,7 @@ Klasse: %2</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation></translation>
+        <translation>Form</translation>
     </message>
     <message>
         <source>Additional Template Paths</source>
@@ -5667,7 +5477,7 @@ Klasse: %2</translation>
     </message>
     <message>
         <source>Choose a File</source>
-        <translation></translation>
+        <translation>Wählen Sie eine Datei</translation>
     </message>
     <message>
         <source>...</source>
@@ -5733,7 +5543,7 @@ Klasse: %2</translation>
     </message>
     <message>
         <source>&amp;Items</source>
-        <translation>&amp;Inhalt</translation>
+        <translation>&amp;Elemente</translation>
     </message>
     <message>
         <source>Tree Items</source>
@@ -5741,7 +5551,7 @@ Klasse: %2</translation>
     </message>
     <message>
         <source>New Subitem</source>
-        <translation></translation>
+        <translation>Neues untergeordnetes Element</translation>
     </message>
     <message>
         <source>New &amp;Subitem</source>
@@ -5808,6 +5618,10 @@ Klasse: %2</translation>
     <message>
         <source>Warning: Widget creation failed in the widget box. This could be caused by invalid custom widget XML.</source>
         <translation>Warnung: Die Erzeugung des Widgets in der Widget-Box schlug fehl. Das könnte durch fehlerhaften XML-Code benutzerdefinierter Widgets verursacht worden sein.</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filter</translation>
     </message>
 </context>
 <context>
@@ -5881,10 +5695,6 @@ This indicates an inconsistency in the ui-file.</source>
     <message>
         <source>Cannot create style &apos;%1&apos;.</source>
         <translation>Der Stil &apos;%1&apos; konnte nicht erzeugt werden.</translation>
-    </message>
-    <message>
-        <source>%1 Widget</source>
-        <translation>%1 Widget</translation>
     </message>
 </context>
 <context>

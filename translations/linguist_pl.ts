@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl">
+<TS version="2.1" language="pl">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -234,6 +234,14 @@ Przyjmie on uniwersalną formę liczby pojedynczej.</translation>
         <comment>Choose Edit|Find from the menu bar or press Ctrl+F to pop up the Find dialog</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>Obsoleted messages are skipped when checked.</source>
+        <translation>Pomija zdezaktualizowane wyrażenia.</translation>
+    </message>
+    <message>
+        <source>Skip &amp;obsolete</source>
+        <translation>P&amp;omiń zdezaktualizowane</translation>
+    </message>
 </context>
 <context>
     <name>FormMultiWidget</name>
@@ -262,99 +270,6 @@ Przyjmie on uniwersalną formę liczby pojedynczej.</translation>
     </message>
 </context>
 <context>
-    <name>LConvert</name>
-    <message>
-        <source>
-Usage:
-    lconvert [options] &lt;infile&gt; [&lt;infile&gt;...]
-
-lconvert is part of Qt&apos;s Linguist tool chain. It can be used as a
-stand-alone tool to convert and filter translation data files.
-The following file formats are supported:
-
-%1
-If multiple input files are specified, they are merged with
-translations from later files taking precedence.
-
-Options:
-    -h
-    --help  Display this information and exit.
-
-    -i &lt;infile&gt;
-    --input-file &lt;infile&gt;
-           Specify input file. Use if &lt;infile&gt; might start with a dash.
-           This option can be used several times to merge inputs.
-           May be &apos;-&apos; (standard input) for use in a pipe.
-
-    -o &lt;outfile&gt;
-    --output-file &lt;outfile&gt;
-           Specify output file. Default is &apos;-&apos; (standard output).
-
-    -if &lt;informat&gt;
-    --input-format &lt;format&gt;
-           Specify input format for subsequent &lt;infile&gt;s.
-           The format is auto-detected from the file name and defaults to &apos;ts&apos;.
-
-    -of &lt;outformat&gt;
-    --output-format &lt;outformat&gt;
-           Specify output format. See -if.
-
-    --input-codec &lt;codec&gt;
-           Specify encoding for QM and PO input files. Default is &apos;Latin1&apos;
-           for QM and &apos;UTF-8&apos; for PO files. UTF-8 is always tried as well for
-           QM, corresponding to the possible use of the trUtf8() function.
-
-    --output-codec &lt;codec&gt;
-           Specify encoding for PO output files. Default is &apos;UTF-8&apos;.
-
-    --drop-tags &lt;regexp&gt;
-           Drop named extra tags when writing TS or XLIFF files.
-           May be specified repeatedly.
-
-    --drop-translations
-           Drop existing translations and reset the status to &apos;unfinished&apos;.
-           Note: this implies --no-obsolete.
-
-    --source-language &lt;language&gt;[_&lt;region&gt;]
-           Specify/override the language of the source strings. Defaults to
-           POSIX if not specified and the file does not name it yet.
-
-    --target-language &lt;language&gt;[_&lt;region&gt;]
-           Specify/override the language of the translation.
-           The target language is guessed from the file name if this option
-           is not specified and the file contents name no language yet.
-
-    --no-obsolete
-           Drop obsolete messages.
-
-    --no-finished
-           Drop finished messages.
-
-    --sort-contexts
-           Sort contexts in output TS file alphabetically.
-
-    --locations {absolute|relative|none}
-           Override how source code references are saved in TS files.
-           Default is absolute.
-
-    --no-ui-lines
-           Drop line numbers from references to UI files.
-
-    --verbose
-           be a bit more verbose
-
-Long options can be specified with only one leading dash, too.
-
-Return value:
-    0 on success
-    1 on command line parse failures
-    2 on read failures
-    3 on write failures
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>LRelease</name>
     <message numerus="yes">
         <source>Dropped %n message(s) which had no ID.</source>
@@ -367,9 +282,9 @@ Return value:
     <message numerus="yes">
         <source>Excess context/disambiguation dropped from %n message(s).</source>
         <translation>
-            <numerusform>Opuszczono nadmiarowy kontekst / ujednoznacznienie w %n wyrażeniu.</numerusform>
-            <numerusform>Opuszczono nadmiarowe konteksty / ujednoznacznienia w %n wyrażeniach.</numerusform>
-            <numerusform>Opuszczono nadmiarowe konteksty / ujednoznacznienia w %n wyrażeniach.</numerusform>
+            <numerusform>Opuszczono nadmiarowy kontekst/ujednoznacznienie w %n wyrażeniu.</numerusform>
+            <numerusform>Opuszczono nadmiarowe konteksty/ujednoznacznienia w %n wyrażeniach.</numerusform>
+            <numerusform>Opuszczono nadmiarowe konteksty/ujednoznacznienia w %n wyrażeniach.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -388,669 +303,32 @@ Return value:
             <numerusform>    Pominięto %n nieprzetłumaczonych tekstów źródłowy￼ch</numerusform>
         </translation>
     </message>
-    <message>
-        <source>Usage:
-    lrelease [options] project-file
-    lrelease [options] ts-files [-qm qm-file]
-
-lrelease is part of Qt&apos;s Linguist tool chain. It can be used as a
-stand-alone tool to convert XML-based translations files in the TS
-format into the &apos;compiled&apos; QM format used by QTranslator objects.
-
-Options:
-    -help  Display this information and exit
-    -idbased
-           Use IDs instead of source strings for message keying
-    -compress
-           Compress the QM files
-    -nounfinished
-           Do not include unfinished translations
-    -removeidentical
-           If the translated text is the same as
-           the source text, do not include the message
-    -markuntranslated &lt;prefix&gt;
-           If a message has no real translation, use the source text
-           prefixed with the given string instead
-    -silent
-           Do not explain what is being done
-    -version
-           Display the version of lrelease and exit
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>lrelease error: %1</source>
-        <translation>Błąd lrelease: %1</translation>
-    </message>
-    <message>
-        <source>Updating &apos;%1&apos;...
-</source>
-        <translation>Uaktualnianie &quot;%1&quot;...
-</translation>
-    </message>
-    <message>
-        <source>Removing translations equal to source text in &apos;%1&apos;...
-</source>
-        <translation>Usuwanie tłumaczeń tożsamych z tekstem źródłowym w &quot;%1&quot;...
-</translation>
-    </message>
-    <message>
-        <source>lrelease error: cannot create &apos;%1&apos;: %2
-</source>
-        <translation>Błąd lrelease: nie można utworzyć &quot;%1&quot;: %2
-</translation>
-    </message>
-    <message>
-        <source>lrelease error: cannot save &apos;%1&apos;: %2</source>
-        <translation>Błąd lrelease: nie można zachować &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>lrelease version %1
-</source>
-        <translation>Wersja lrelease %1
-</translation>
-    </message>
-    <message>
-        <source>lrelease error: cannot read project file &apos;%1&apos;.
-</source>
-        <translation>Błąd lrelease: nie można odczytać pliku projektu &quot;%1&quot;.
-</translation>
-    </message>
-    <message>
-        <source>lrelease error: cannot process project file &apos;%1&apos;.
-</source>
-        <translation>Błąd lrelease: nie można przetworzyć pliku projektu &quot;%1&quot;.
-</translation>
-    </message>
-    <message>
-        <source>lrelease warning: Met no &apos;TRANSLATIONS&apos; entry in project file &apos;%1&apos;
-</source>
-        <translation>Ostrzeżenie lrelease: Brak &quot;TRANSLATIONS&quot; w pliku projektu &quot;%1&quot;
-</translation>
-    </message>
 </context>
 <context>
-    <name>LUpdate</name>
+    <name>Linguist</name>
     <message>
-        <source>Parenthesis/bracket/brace mismatch between #if and #else branches; using #if branch
-</source>
-        <translation>Niezgodność nawiasów pomiędzy #if a #else w gałęzi #if
-</translation>
+        <source>GNU Gettext localization files</source>
+        <translation>Pliki GNU Gettext</translation>
     </message>
     <message>
-        <source>Parenthesis/brace mismatch between #if and #else branches; using #if branch
-</source>
-        <translation>Niezgodność nawiasów okrągłych/klamrowych pomiędzy #if a #else w gałęzi #if
-</translation>
+        <source>GNU Gettext localization template files</source>
+        <translation>Szablony plików GNU Gettext</translation>
     </message>
     <message>
-        <source>Unterminated C++ comment
-</source>
-        <translation>Niedokończony komentarz C++
-</translation>
+        <source>Compiled Qt translations</source>
+        <translation>Skompilowane tłumaczenia Qt</translation>
     </message>
     <message>
-        <source>Unterminated C++ string
-</source>
-        <translation>Niedokończony ciąg C++
-</translation>
+        <source>Qt Linguist &apos;Phrase Book&apos;</source>
+        <translation>&quot;Książka wyrażeń&quot; Qt Linguista</translation>
     </message>
     <message>
-        <source>Excess closing brace in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Nadmiar zamykających nawiasów klamrowych w kodzie C++ (lub nadużycie preprocesora C++)
-</translation>
+        <source>Qt translation sources</source>
+        <translation>Źródła tłumaczeń Qt</translation>
     </message>
     <message>
-        <source>Excess closing parenthesis in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Nadmiar zamykających nawiasów okrągłych w kodzie C++ (lub nadużycie preprocesora C++)
-</translation>
-    </message>
-    <message>
-        <source>Excess closing bracket in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Nadmiar zamykających nawiasów kwadratowych w kodzie C++ (lub nadużycie preprocesora C++)
-</translation>
-    </message>
-    <message>
-        <source>Cannot open %1: %2
-</source>
-        <translation>Nie można otworzyć %1: %2
-</translation>
-    </message>
-    <message>
-        <source>//% cannot be used with tr() / QT_TR_NOOP(). Ignoring
-</source>
-        <translation>//% nie można użyć z tr() / QT_TR_NOOP() i zostanie pominięte
-</translation>
-    </message>
-    <message>
-        <source>Qualifying with unknown namespace/class %1::%2
-</source>
-        <translation>Kwalifikowanie z nieznaną przestrzenią nazw/klasą %1::%2
-</translation>
-    </message>
-    <message>
-        <source>tr() cannot be called without context
-</source>
-        <translation>Nie można użyć tr() bez kontekstu
-</translation>
-    </message>
-    <message>
-        <source>Class &apos;%1&apos; lacks Q_OBJECT macro
-</source>
-        <translation>Brak makra &quot;Q_OBJECT&quot; w klasie &quot;%1&quot;
-</translation>
-    </message>
-    <message>
-        <source>It is not recommended to call tr() from within a constructor &apos;%1::%2&apos;
-</source>
-        <translation>Nie jest rekomendowane użycie tr() w konstruktorze &quot;%1::%2&quot;
-</translation>
-    </message>
-    <message>
-        <source>//% cannot be used with translate() / QT_TRANSLATE_NOOP(). Ignoring
-</source>
-        <translation>//% nie można użyć z translate() / QT_TRANSLATE_NOOP() i zostanie pominięte
-</translation>
-    </message>
-    <message>
-        <source>//= cannot be used with qtTrId() / QT_TRID_NOOP(). Ignoring
-</source>
-        <translation>//= nie można użyć z qtTrId() / QT_TRID_NOOP() i zostanie pominięte
-</translation>
-    </message>
-    <message>
-        <source>Unexpected character in meta string
-</source>
-        <translation>Nieoczekiwany znak w ciągu meta
-</translation>
-    </message>
-    <message>
-        <source>Unterminated meta string
-</source>
-        <translation>Niedokończony ciąg meta
-</translation>
-    </message>
-    <message>
-        <source>Cannot invoke tr() like this
-</source>
-        <translation>W ten sposób nie można wywołać tr()
-</translation>
-    </message>
-    <message>
-        <source>Discarding unconsumed meta data
-</source>
-        <translation>Nieskonsumowane metadane zostają porzucone
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening brace in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Niezbalansowane otwierające nawiasy klamrowe w kodzie C++ (lub nadużycie preprocesora C++)
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening parenthesis in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Niezbalansowane otwierające nawiasy okrągłe w kodzie C++ (lub nadużycie preprocesora C++)
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening bracket in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Niezbalansowane otwierające nawiasy kwadratowe w kodzie C++ (lub nadużycie preprocesora C++)
-</translation>
-    </message>
-    <message>
-        <source>Cannot open %1: %2</source>
-        <translation>Nie można otworzyc %1: %2</translation>
-    </message>
-    <message>
-        <source>Unterminated Java comment.
-</source>
-        <translation>Niedokończony komentarz Java.
-</translation>
-    </message>
-    <message>
-        <source>Invalid Unicode value.
-</source>
-        <translation>Niepoprawna wartość Unicode.
-</translation>
-    </message>
-    <message>
-        <source>Unterminated string.
-</source>
-        <translation>Niedokończony ciąg.
-</translation>
-    </message>
-    <message>
-        <source>String used in translation can contain only literals concatenated with other literals, not expressions or numbers.
-</source>
-        <translation>Ciągi użyte w tłumaczeniach mogą zawierać jedynie literały połączone z innymi literałami, nie mogą być to wyrażenia ani liczby.
-</translation>
-    </message>
-    <message>
-        <source>&apos;class&apos; must be followed by a class name.
-</source>
-        <translation>Po &quot;class&quot; musi następować nazwa klasy.
-</translation>
-    </message>
-    <message>
-        <source>Excess closing brace.
-</source>
-        <translation>Nadmiar zamykających nawiasów.
-</translation>
-    </message>
-    <message>
-        <source>&apos;package&apos; must be followed by package name.
-</source>
-        <translation>Po &quot;package&quot; musi nasępować nazwa pakietu.
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening brace.
-</source>
-        <translation>Niezbalansowana ilość otwierających nawiasów.
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening parenthesis.
-</source>
-        <translation>Niezbalansowana ilość otwierających cudzysłowów.
-</translation>
-    </message>
-    <message>
-        <source>Usage:
-    lupdate [options] [project-file]...
-    lupdate [options] [source-file|path|@lst-file]... -ts ts-files|@lst-file
-
-lupdate is part of Qt&apos;s Linguist tool chain. It extracts translatable
-messages from Qt UI files, C++, Java and JavaScript/QtScript source code.
-Extracted messages are stored in textual translation source files (typically
-Qt TS XML). New and modified messages can be merged into existing TS files.
-
-Options:
-    -help  Display this information and exit.
-    -no-obsolete
-           Drop all obsolete strings.
-    -extensions &lt;ext&gt;[,&lt;ext&gt;]...
-           Process files with the given extensions only.
-           The extension list must be separated with commas, not with whitespace.
-           Default: &apos;%1&apos;.
-    -pluralonly
-           Only include plural form messages.
-    -silent
-           Do not explain what is being done.
-    -no-sort
-           Do not sort contexts in TS files.
-    -no-recursive
-           Do not recursively scan the following directories.
-    -recursive
-           Recursively scan the following directories (default).
-    -I &lt;includepath&gt; or -I&lt;includepath&gt;
-           Additional location to look for include files.
-           May be specified multiple times.
-    -locations {absolute|relative|none}
-           Specify/override how source code references are saved in TS files.
-           Default is absolute.
-    -no-ui-lines
-           Do not record line numbers in references to UI files.
-    -disable-heuristic {sametext|similartext|number}
-           Disable the named merge heuristic. Can be specified multiple times.
-    -pro &lt;filename&gt;
-           Name of a .pro file. Useful for files with .pro file syntax but
-           different file suffix. Projects are recursed into and merged.
-    -source-language &lt;language&gt;[_&lt;region&gt;]
-           Specify the language of the source strings for new files.
-           Defaults to POSIX if not specified.
-    -target-language &lt;language&gt;[_&lt;region&gt;]
-           Specify the language of the translations for new files.
-           Guessed from the file name if not specified.
-    -ts &lt;ts-file&gt;...
-           Specify the output file(s). This will override the TRANSLATIONS
-           and nullify the CODECFORTR from possibly specified project files.
-    -codecfortr &lt;codec&gt;
-           Specify the codec assumed for tr() calls. Effective only with -ts.
-    -version
-           Display the version of lupdate and exit.
-    @lst-file
-           Read additional file names (one per line) from lst-file.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>lupdate warning: Codec for tr() &apos;%1&apos; disagrees with existing file&apos;s codec &apos;%2&apos;. Expect trouble.
-</source>
-        <translation>Ostrzeżenie lupdate: Kodek dla tr() &quot;%1&quot; nie zgadza się z istniejącym kodekiem pliku &quot;%2&quot;. Spodziewaj się problemów.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: Specified target language &apos;%1&apos; disagrees with existing file&apos;s language &apos;%2&apos;. Ignoring.
-</source>
-        <translation>Ostrzeżenie lupdate: Podany język docelowy &quot;%1&quot; nie zgadza się z istniejącym językiem pliku &quot;%2&quot; i zostanie pominięty.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: Specified source language &apos;%1&apos; disagrees with existing file&apos;s language &apos;%2&apos;. Ignoring.
-</source>
-        <translation>Ostrzeżenie lupdate: Podany język źródłowy &quot;%1&quot; nie zgadza się z istniejącym językiem pliku &quot;%2&quot; i zostanie pominięty.
-</translation>
-    </message>
-    <message>
-        <source>Updating &apos;%1&apos;...
-</source>
-        <translation>Uaktualnianie &quot;%1&quot;...
-</translation>
-    </message>
-    <message>
-        <source>Stripping non plural forms in &apos;%1&apos;...
-</source>
-        <translation>Rozbieranie niemnogich form w &quot;%1&quot;...
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: Codec for source &apos;%1&apos; is invalid. Falling back to codec for tr().
-</source>
-        <translation>Ostrzeżenie lupdate: Kodek dla źródła &quot;%1&quot; nie jest poprawny. Przywracanie kodeka dla tr().
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: TS files from command line will override TRANSLATIONS in %1.
-</source>
-        <translation>Ostrzeżenie lupdate: Pliki TS z linii komend nadpiszą TRANSLATIONS w %1.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: TS files from command line prevent recursing into %1.
-</source>
-        <translation>Ostrzeżenie lupdate: Pliki TS z linii komend zapobiegają rekursji %1.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: no TS files specified. Only diagnostics will be produced for &apos;%1&apos;.
-</source>
-        <translation>Ostrzeżenie lupdate: Brak podanych plików TS. Zostaną utworzone tylko wyniki diagnostyki dla &quot;%1&quot;.
-</translation>
-    </message>
-    <message>
-        <source>The option -target-language requires a parameter.
-</source>
-        <translation>Opcja -target-language wymaga podania parametru.
-</translation>
-    </message>
-    <message>
-        <source>The option -source-language requires a parameter.
-</source>
-        <translation>Opcja -source-language wymaga podania parametru.
-</translation>
-    </message>
-    <message>
-        <source>The option -disable-heuristic requires a parameter.
-</source>
-        <translation>Opcja -disable-heuristic wymaga podania parametru.
-</translation>
-    </message>
-    <message>
-        <source>Invalid heuristic name passed to -disable-heuristic.
-</source>
-        <translation>Niepoprawna nazwa heurystyki przekazana do -disable-heuristic.
-</translation>
-    </message>
-    <message>
-        <source>The option -locations requires a parameter.
-</source>
-        <translation>Opcja -locations wymaga podania parametru.
-</translation>
-    </message>
-    <message>
-        <source>Invalid parameter passed to -locations.
-</source>
-        <translation>Niepoprawny parametr przekazany do -locations.
-</translation>
-    </message>
-    <message>
-        <source>The -codecfortr option should be followed by a codec name.
-</source>
-        <translation>Po opcji -codecfortr powinna następować nazwa kodeka.
-</translation>
-    </message>
-    <message>
-        <source>The -extensions option should be followed by an extension list.
-</source>
-        <translation>Po opcji -extenstions powinna następować lista rozszerzeń.
-</translation>
-    </message>
-    <message>
-        <source>The -pro option should be followed by a filename of .pro file.
-</source>
-        <translation>Po opcji -pro powinna następować nazwa pliku .pro.
-</translation>
-    </message>
-    <message>
-        <source>The -I option should be followed by a path.
-</source>
-        <translation>Po opcji -I powinna następować ścieżka.
-</translation>
-    </message>
-    <message>
-        <source>Unrecognized option &apos;%1&apos;.
-</source>
-        <translation>Nierozpoznana opcja &quot;%1&quot;.
-</translation>
-    </message>
-    <message>
-        <source>lupdate error: List file &apos;%1&apos; is not readable.
-</source>
-        <translation>Błąd lrelease: plik listy &quot;%1&quot; nie jest do odczytu.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: For some reason, &apos;%1&apos; is not writable.
-</source>
-        <translation>Ostrzeżenie lupdate: &quot;%1&quot; nie jest zapisywalny.
-</translation>
-    </message>
-    <message>
-        <source>lupdate error: File &apos;%1&apos; has no recognized extension.
-</source>
-        <translation>Błąd lupdate: Plik &quot;%1&quot; nie posiada rozpoznawalnego rozszerzenia.
-</translation>
-    </message>
-    <message>
-        <source>lupdate error: File &apos;%1&apos; does not exist.
-</source>
-        <translation>Błąs lupdate: Plik &quot;%1&quot; nie istnieje.
-</translation>
-    </message>
-    <message>
-        <source>Scanning directory &apos;%1&apos;...
-</source>
-        <translation>Skanowanie katalogu &quot;%1&quot;...
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: -target-language usually only makes sense with exactly one TS file.
-</source>
-        <translation>Ostrzeżenie lupdate: zwykle opcja -target-language ma sens tylko z dokładnie jednym plikiem TS.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: -codecfortr has no effect without -ts.
-</source>
-        <translation>Ostrzeżenie lupdate: opcja -codecfortr nie działa bez -ts.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: no TS files specified. Only diagnostics will be produced.
-</source>
-        <translation>Ostrzeżenie lupdate: Brak podanych plików TS. Utworzone zostaną tylko wyniki diagnostyki.
-</translation>
-    </message>
-    <message>
-        <source>lupdate error: Both project and source files / include paths specified.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>    Found %n source text(s) (%1 new and %2 already existing)
-</source>
-        <translation>
-            <numerusform>    Znaleziono %n tekst źródłowy (%1 nowych oraz %2 istniejących)
-</numerusform>
-            <numerusform>    Znaleziono %n teksty źródłowe (%1 nowych oraz %2 istniejących)
-</numerusform>
-            <numerusform>    Znaleziono %n tekstów źródłowych (%1 nowych oraz %2 istniejących)
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Removed %n obsolete entries
-</source>
-        <translation>
-            <numerusform>    Usunięto %n zdezaktualizowany wpis
-</numerusform>
-            <numerusform>    Usunięto %n zdezaktualizowane wpisy
-</numerusform>
-            <numerusform>    Usunięto %n zdezaktualizowanych wpisów
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Kept %n obsolete entries
-</source>
-        <translation>
-            <numerusform>    Zachowano %n zdezaktualizowany wpis
-</numerusform>
-            <numerusform>    Zachowano %n zdezaktualizowane wpisy
-</numerusform>
-            <numerusform>    Zachowano %n zdezaktualizowanych wpisów
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Number heuristic provided %n translation(s)
-</source>
-        <translation>
-            <numerusform>    Heurystyka liczbowa dostarczyła %n tłumaczenie
-</numerusform>
-            <numerusform>    Heurystyka liczbowa dostarczyła %n tłumaczeń
-</numerusform>
-            <numerusform>    Heurystyka liczbowa dostarczyła %n tłumaczeń
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Same-text heuristic provided %n translation(s)
-</source>
-        <translation>
-            <numerusform>    Heurystyka &quot;ten sam tekst&quot; dostarczyła %n tłumaczenie
-</numerusform>
-            <numerusform>    Heurystyka &quot;ten sam tekst&quot; dostarczyła %n tłumaczeń
-</numerusform>
-            <numerusform>    Heurystyka &quot;ten sam tekst&quot; dostarczyła %n tłumaczeń
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Similar-text heuristic provided %n translation(s)
-</source>
-        <translation>
-            <numerusform>    Heurystyka &quot;podobny tekst&quot; dostarczyła %n tłumaczenie
-</numerusform>
-            <numerusform>    Heurystyka &quot;podobny tekst&quot; dostarczyła %n tłumaczeń
-</numerusform>
-            <numerusform>    Heurystyka &quot;podobny tekst&quot; dostarczyła %n tłumaczeń
-</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Illegal character</source>
-        <translation>Niepoprawny znak</translation>
-    </message>
-    <message>
-        <source>Unclosed string at end of line</source>
-        <translation>Niedomknięty ciąg na końcu linii</translation>
-    </message>
-    <message>
-        <source>Illegal escape sequence</source>
-        <translation>Niepoprawna sekwencja escape</translation>
-    </message>
-    <message>
-        <source>Illegal unicode escape sequence</source>
-        <translation>Niepoprawna sekwencja escape unicode</translation>
-    </message>
-    <message>
-        <source>Unclosed comment at end of file</source>
-        <translation>Niedomknięty komentarz na końcu pliku</translation>
-    </message>
-    <message>
-        <source>Illegal syntax for exponential number</source>
-        <translation>Niepoprawna składnia liczby wykładniczej</translation>
-    </message>
-    <message>
-        <source>Identifier cannot start with numeric literal</source>
-        <translation>Identyfikator nie może rozpoczynać się literałem liczbowym</translation>
-    </message>
-    <message>
-        <source>Unterminated regular expression literal</source>
-        <translation>Niedokończone wyrażenie regularne</translation>
-    </message>
-    <message>
-        <source>//% cannot be used with %1(). Ignoring
-</source>
-        <translation>//% nie można użyć z %1() i zostanie pominięte
-</translation>
-    </message>
-    <message>
-        <source>%1() requires at least two arguments.
-</source>
-        <translation>%1() wymaga przynajmniej dwóch argumentów.
-</translation>
-    </message>
-    <message>
-        <source>%1(): both arguments must be literal strings.
-</source>
-        <translation>%1(): oba argumenty muszą być literałami znakowymi.
-</translation>
-    </message>
-    <message>
-        <source>%1() requires at least one argument.
-</source>
-        <translation>%1() wymaga przynajmniej jednego argumentu.
-</translation>
-    </message>
-    <message>
-        <source>%1(): text to translate must be a literal string.
-</source>
-        <translation>%1(): tekst do przetłumaczenia musi być literałem znakowym.
-</translation>
-    </message>
-    <message>
-        <source>//= cannot be used with %1(). Ignoring
-</source>
-        <translation>//= nie można użyć z %1() i zostanie pominięte
-</translation>
-    </message>
-    <message>
-        <source>%1(): identifier must be a literal string.
-</source>
-        <translation>%1(): identyfikator musi być literałem znakowym.
-</translation>
-    </message>
-    <message>
-        <source>Expected </source>
-        <extracomment>Beginning of the string that contains comma-separated list of expected tokens</extracomment>
-        <translation>Oczekiwano </translation>
-    </message>
-    <message>
-        <source>XML error: Parse error at line %1, column %2 (%3).</source>
-        <translation>Błąd XML: Błąd parsowania w linii %1, w kolumnie %2 (%3).</translation>
-    </message>
-    <message>
-        <source>Parse error in UI file</source>
-        <translation>Błąd parsowania w pliku UI</translation>
+        <source>XLIFF localization files</source>
+        <translation>Pliki XLIFF</translation>
     </message>
 </context>
 <context>
@@ -1422,10 +700,6 @@ Czy chcesz pominąć pierwszy plik?</translation>
         <translation>Plik zachowany.</translation>
     </message>
     <message>
-        <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Release</source>
         <translation>Wydaj</translation>
     </message>
@@ -1457,7 +731,7 @@ Wszystkie pliki (*)</translation>
     </message>
     <message>
         <source>obsolete</source>
-        <translation>przestarzały</translation>
+        <translation>zdezaktualizowany</translation>
     </message>
     <message>
         <source>Printing... (page %1)</source>
@@ -1556,6 +830,10 @@ Wszystkie pliki (*)</translation>
     <message>
         <source>Version %1</source>
         <translation>Wersja %1</translation>
+    </message>
+    <message>
+        <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) %2 The Qt Company Ltd.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Do you want to save the modified files?</source>
@@ -1663,7 +941,7 @@ Wszystkie pliki (*)</translation>
     </message>
     <message>
         <source>Close this phrase book.</source>
-        <translation>Zamknij tą książkę wyrażeń.</translation>
+        <translation>Zamknij tę książkę wyrażeń.</translation>
     </message>
     <message>
         <source>Enables you to add, modify, or delete entries in this phrase book.</source>
@@ -1938,8 +1216,44 @@ Wszystkie pliki (*)</translation>
         <translation>Warianty tłumaczeń</translation>
     </message>
     <message>
-        <source>Display information about the Qt toolkit by Nokia.</source>
-        <translation>Pokaż informacje o pakiecie narzędziowym Qt oferowanym przez Nokię.</translation>
+        <source>&amp;Zoom</source>
+        <translation>&amp;Powiększenie</translation>
+    </message>
+    <message>
+        <source>Display information about the Qt toolkit by Digia.</source>
+        <translation>Pokaż informacje o Qt.</translation>
+    </message>
+    <message>
+        <source>Visualize whitespace</source>
+        <translation>Pokazuj białe znaki</translation>
+    </message>
+    <message>
+        <source>Toggle visualize whitespace in editors</source>
+        <translation>Przełącza pokazywanie białych znaków w edytorach</translation>
+    </message>
+    <message>
+        <source>Increase</source>
+        <translation>Zwiększ</translation>
+    </message>
+    <message>
+        <source>Ctrl++</source>
+        <translation>Ctrl++</translation>
+    </message>
+    <message>
+        <source>Decrease</source>
+        <translation>Zmniejsz</translation>
+    </message>
+    <message>
+        <source>Ctrl+-</source>
+        <translation>Ctrl+-</translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation>Przywróć domyślne</translation>
+    </message>
+    <message>
+        <source>Ctrl+0</source>
+        <translation>Ctrl+0</translation>
     </message>
 </context>
 <context>
@@ -2191,10 +1505,6 @@ Linia: %2</translation>
 <context>
     <name>QObject</name>
     <message>
-        <source>Compiled Qt translations</source>
-        <translation>Skompilowane tłumaczenia Qt</translation>
-    </message>
-    <message>
         <source>Translation files (%1);;</source>
         <translation>Pliki z tłumaczeniami (%1);;</translation>
     </message>
@@ -2205,40 +1515,6 @@ Linia: %2</translation>
     <message>
         <source>Qt Linguist</source>
         <translation>Qt Linguist</translation>
-    </message>
-    <message>
-        <source>GNU Gettext localization files</source>
-        <translation>Pliki GNU Gettext</translation>
-    </message>
-    <message>
-        <source>GNU Gettext localization template files</source>
-        <translation>Szablony plików GNU Gettext</translation>
-    </message>
-    <message>
-        <source>Qt translation sources (format 1.1)</source>
-        <translation>Źródła tłumaczeń Qt (format 1.1)</translation>
-    </message>
-    <message>
-        <source>Qt translation sources (format 2.0)</source>
-        <translation>Źródła tłumaczeń Qt (format 2.0)</translation>
-    </message>
-    <message>
-        <source>Qt translation sources (latest format)</source>
-        <translation>Źródła tłumaczeń Qt (najnowszy format)</translation>
-    </message>
-    <message>
-        <source>XLIFF localization files</source>
-        <translation>Pliki XLIFF</translation>
-    </message>
-    <message>
-        <source>Qt Linguist &apos;Phrase Book&apos;</source>
-        <translation>Qt Linguist &quot;Książka wyrażeń&quot;</translation>
-    </message>
-    <message>
-        <source>lupdate version %1
-</source>
-        <translation>Wersja lrelease %1
-</translation>
     </message>
 </context>
 <context>

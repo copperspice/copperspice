@@ -1380,57 +1380,6 @@ Parsing grid layout minimum size values</extracomment>
     </message>
 </context>
 <context>
-    <name>Oubliette</name>
-    <message>
-        <source>Inventory</source>
-        <translation type="obsolete">項目清單</translation>
-    </message>
-    <message>
-        <source>You have &lt;B&gt;No&lt;/B&gt; Items</source>
-        <translation type="obsolete">您沒有任何項目</translation>
-    </message>
-    <message numerus="yes">
-        <source>You have %1 of %2 items</source>
-        <translation type="obsolete">
-            <numerusform>您有 %2 個項目中的 %1 個</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">確定</translation>
-    </message>
-    <message>
-        <source>Easter Egg Found</source>
-        <translation type="obsolete">找到復活節彩蛋</translation>
-    </message>
-    <message>
-        <source>Welcome to the Trolltech Business Card Hunt
-Use the direction keys to move around and find the business cards for all the trolls.</source>
-        <translation type="obsolete">歡迎來到 Trolltech 名片中心
-請使用方向鍵來尋找名片。</translation>
-    </message>
-    <message>
-        <source>You Did It!</source>
-        <translation type="obsolete">您做到了！</translation>
-    </message>
-    <message>
-        <source>That&apos;s rather anti-climatic</source>
-        <translation type="obsolete">這好像有點怪怪的。</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation type="obsolete">離開</translation>
-    </message>
-    <message numerus="yes">
-        <source>You&apos;ve collected all the Trolltech cards. It took you %n steps.
-There&apos;s nothing more here. You should get back to work.</source>
-        <translation type="obsolete">
-            <numerusform>您已經收集所有的 Trolltech 的卡片。花了您 %n 個步驟。
-這裡沒有東西了，您可以回去工作了。</numerusform>
-        </translation>
-    </message>
-</context>
-<context>
     <name>PluginDialog</name>
     <message>
         <source>Plugin Information</source>

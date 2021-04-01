@@ -1540,57 +1540,6 @@ The old form has been untouched, but you will have to save this form under a new
     </message>
 </context>
 <context>
-    <name>Oubliette</name>
-    <message>
-        <source>Inventory</source>
-        <translation type="obsolete">详细目录</translation>
-    </message>
-    <message>
-        <source>You have &lt;B&gt;No&lt;/B&gt; Items</source>
-        <translation type="obsolete">您&lt;B&gt;没有&lt;/b&gt;项</translation>
-    </message>
-    <message numerus="yes">
-        <source>You have %1 of %2 items</source>
-        <translation type="obsolete">
-            <numerusform>您拥有 %2 项中的 %1</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">确定</translation>
-    </message>
-    <message>
-        <source>Easter Egg Found</source>
-        <translation type="obsolete">找到了复活节彩蛋</translation>
-    </message>
-    <message>
-        <source>Welcome to the Trolltech Business Card Hunt
-Use the direction keys to move around and find the business cards for all the trolls.</source>
-        <translation type="obsolete">欢迎来到 Trolltech 名片搜索游戏。
-请使用方向键进行移动并且找到所有 Troll 的名片。</translation>
-    </message>
-    <message>
-        <source>You Did It!</source>
-        <translation type="obsolete">您做到了！</translation>
-    </message>
-    <message>
-        <source>That&apos;s rather anti-climatic</source>
-        <translation type="obsolete">这真的有点反常</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation type="obsolete">退出</translation>
-    </message>
-    <message numerus="yes">
-        <source>You&apos;ve collected all the Trolltech cards. It took you %n steps.
-There&apos;s nothing more here. You should get back to work.</source>
-        <translation type="obsolete">
-            <numerusform>您已经收集了所有的 Trolltech 名片。您一共用了 %n 步。
-没有其它的了。您应该回去接着工作了。</numerusform>
-        </translation>
-    </message>
-</context>
-<context>
     <name>PluginDialog</name>
     <message>
         <location filename="../tools/designer/src/lib/shared/plugindialog.ui"/>

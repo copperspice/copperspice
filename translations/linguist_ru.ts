@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru">
+<TS version="2.1" language="ru">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>Batch Translation of &apos;%1&apos; - Qt Linguist</source>
-        <translation>Пакетный перевод &apos;%1&apos; - Qt Linguist</translation>
+        <translation>Пакетный перевод «%1» - Qt Linguist</translation>
     </message>
     <message>
         <source>Searching, please wait...</source>
@@ -76,7 +76,7 @@
     </message>
     <message>
         <source>Note that the modified entries will be reset to unfinished if &apos;Set translated entries to finished&apos; above is unchecked</source>
-        <translation>Имейте в виду, что изменённые записи будут отмечены как незавершённые, если не включен параметр &quot;Помечать переведенные записи как завершённые&quot;</translation>
+        <translation>Имейте в виду, что изменённые записи будут отмечены как незавершённые, если не включён параметр «Помечать переведённые записи как завершённые»</translation>
     </message>
     <message>
         <source>The batch translator will search through the selected phrase books in the order given above</source>
@@ -87,11 +87,11 @@
     <name>DataModel</name>
     <message>
         <source>The translation file &apos;%1&apos; will not be loaded because it is empty.</source>
-        <translation>Невозможно загрузить файл перевода &quot;%1&quot;, так как он пуст.</translation>
+        <translation>Невозможно загрузить файл перевода «%1», так как он пуст.</translation>
     </message>
     <message>
         <source>&lt;qt&gt;Duplicate messages found in &apos;%1&apos;:</source>
-        <translation>&lt;qt&gt;В &apos;%1&apos; обнаружены повторяющиеся сообщения:</translation>
+        <translation>&lt;qt&gt;В «%1» обнаружены повторяющиеся сообщения:</translation>
     </message>
     <message>
         <source>&lt;p&gt;[more duplicates omitted]</source>
@@ -112,12 +112,12 @@
     <message>
         <source>Linguist does not know the plural rules for &apos;%1&apos;.
 Will assume a single universal form.</source>
-        <translation>Qt Linguist не знает правила множественных форм для &apos;%1&apos;.
+        <translation>Qt Linguist не знает правила множественных форм для «%1».
 Будет использована универсальная единичная форма.</translation>
     </message>
     <message>
         <source>Cannot create &apos;%2&apos;: %1</source>
-        <translation>Не удалось создать &apos;%2&apos;: %1</translation>
+        <translation>Не удалось создать «%2»: %1</translation>
     </message>
     <message>
         <source>Universal Form</source>
@@ -140,7 +140,7 @@ Will assume a single universal form.</source>
     </message>
     <message>
         <source>A phrase book suggestion for &apos;%1&apos; was ignored.</source>
-        <translation>Предложение глоссария для &apos;%1&apos; пропущено.</translation>
+        <translation>Предложение глоссария для «%1» пропущено.</translation>
     </message>
     <message>
         <source>Translation does not refer to the same place markers as in the source text.</source>
@@ -200,7 +200,7 @@ Will assume a single universal form.</source>
     </message>
     <message>
         <source>Texts such as &apos;TeX&apos; and &apos;tex&apos; are considered as different when checked.</source>
-        <translation>Если отмечено, строки &quot;ПрИмЕр&quot; и &quot;пример&quot; будет считаться разными.</translation>
+        <translation>Если включено, строки «ПрИмЕр» и «пример» будут считаться разными.</translation>
     </message>
     <message>
         <source>&amp;Match case</source>
@@ -234,23 +234,31 @@ Will assume a single universal form.</source>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
+    <message>
+        <source>Obsoleted messages are skipped when checked.</source>
+        <translation>Если включено, то пропускать устаревшие сообщения.</translation>
+    </message>
+    <message>
+        <source>Skip &amp;obsolete</source>
+        <translation>Пропускать &amp;устаревшие</translation>
+    </message>
 </context>
 <context>
     <name>FormMultiWidget</name>
     <message>
         <source>Alt+Delete</source>
         <extracomment>translate, but don&apos;t change</extracomment>
-        <translation></translation>
+        <translation>Alt+Delete</translation>
     </message>
     <message>
         <source>Shift+Alt+Insert</source>
         <extracomment>translate, but don&apos;t change</extracomment>
-        <translation></translation>
+        <translation>Shift+Alt+Insert</translation>
     </message>
     <message>
         <source>Alt+Insert</source>
         <extracomment>translate, but don&apos;t change</extracomment>
-        <translation></translation>
+        <translation>Alt+Insert</translation>
     </message>
     <message>
         <source>Confirmation - Qt Linguist</source>
@@ -259,191 +267,6 @@ Will assume a single universal form.</source>
     <message>
         <source>Delete non-empty length variant?</source>
         <translation>Удалить вариант перевода?</translation>
-    </message>
-</context>
-<context>
-    <name>LConvert</name>
-    <message>
-        <source>
-Usage:
-    lconvert [options] &lt;infile&gt; [&lt;infile&gt;...]
-
-lconvert is part of Qt&apos;s Linguist tool chain. It can be used as a
-stand-alone tool to convert and filter translation data files.
-The following file formats are supported:
-
-%1
-If multiple input files are specified, they are merged with
-translations from later files taking precedence.
-
-Options:
-    -h
-    --help  Display this information and exit.
-
-    -i &lt;infile&gt;
-    --input-file &lt;infile&gt;
-           Specify input file. Use if &lt;infile&gt; might start with a dash.
-           This option can be used several times to merge inputs.
-           May be &apos;-&apos; (standard input) for use in a pipe.
-
-    -o &lt;outfile&gt;
-    --output-file &lt;outfile&gt;
-           Specify output file. Default is &apos;-&apos; (standard output).
-
-    -if &lt;informat&gt;
-    --input-format &lt;format&gt;
-           Specify input format for subsequent &lt;infile&gt;s.
-           The format is auto-detected from the file name and defaults to &apos;ts&apos;.
-
-    -of &lt;outformat&gt;
-    --output-format &lt;outformat&gt;
-           Specify output format. See -if.
-
-    --input-codec &lt;codec&gt;
-           Specify encoding for QM and PO input files. Default is &apos;Latin1&apos;
-           for QM and &apos;UTF-8&apos; for PO files. UTF-8 is always tried as well for
-           QM, corresponding to the possible use of the trUtf8() function.
-
-    --output-codec &lt;codec&gt;
-           Specify encoding for PO output files. Default is &apos;UTF-8&apos;.
-
-    --drop-tags &lt;regexp&gt;
-           Drop named extra tags when writing TS or XLIFF files.
-           May be specified repeatedly.
-
-    --drop-translations
-           Drop existing translations and reset the status to &apos;unfinished&apos;.
-           Note: this implies --no-obsolete.
-
-    --source-language &lt;language&gt;[_&lt;region&gt;]
-           Specify/override the language of the source strings. Defaults to
-           POSIX if not specified and the file does not name it yet.
-
-    --target-language &lt;language&gt;[_&lt;region&gt;]
-           Specify/override the language of the translation.
-           The target language is guessed from the file name if this option
-           is not specified and the file contents name no language yet.
-
-    --no-obsolete
-           Drop obsolete messages.
-
-    --no-finished
-           Drop finished messages.
-
-    --sort-contexts
-           Sort contexts in output TS file alphabetically.
-
-    --locations {absolute|relative|none}
-           Override how source code references are saved in TS files.
-           Default is absolute.
-
-    --no-ui-lines
-           Drop line numbers from references to UI files.
-
-    --verbose
-           be a bit more verbose
-
-Long options can be specified with only one leading dash, too.
-
-Return value:
-    0 on success
-    1 on command line parse failures
-    2 on read failures
-    3 on write failures
-</source>
-        <translation>
-Использование:
-    lconvert [параметры] &lt;входной файл&gt; [&lt;входной файл&gt;...]
-
-lconvert - это один из инструментов Qt Linguist. Он может быть использован как
-для преобразования файлов переводов, так и для обработки файлов переводов.
-
-Поддерживаются файлы следующих форматов:
-
-%1
-Если задано несколько входных файлов, то они будут объединены, причем, каждый
-последующий файл имеет приоритет над предыдущим.
-
-Параметры:
-    -h
-    --help  Отображение данной справки и выход.
-
-    -i &lt;файл&gt;
-    --input-file &lt;файл&gt;
-           Указание входного файл. Следует использовать, если &lt;входной файл&gt;
-           начинается с дефиса. Этот параметр может быть использован несколько
-           раз для объединения файлов.
-           Допустимо значение &quot;-&quot; (стандартный ввод) для использования каналов.
-
-    -o &lt;файл&gt;
-    --output-file &lt;файл&gt;
-           Указание выходного файла.
-           По умолчанию значение &quot;-&quot; (стандартный вывод).
-
-    -if &lt;формат&gt;
-    --input-format &lt;формат&gt;
-           Указание формата для последующих входных файлов.
-           Формат определяется автоматически из имени файла.
-           По умолчанию предполагается &quot;ts&quot;.
-
-    -of &lt;формат&gt;
-    --output-format &lt;формат&gt;
-           Указание формата выходного файла. См. -if.
-
-    --input-codec &lt;кодировка&gt;
-           Указание кодировки входных файлов QM и PO. По умолчанию,
-           используется &quot;Latin1&quot; для QM и &quot;UTF-8&quot; для PO файлов. Так же UTF-8
-           всегда применяется для QM, где возможно использование
-           функции trUtf8().
-
-    --output-codec &lt;кодировка&gt;
-           Указание кодировки выходных файлов формата PO. По умолчанию &quot;UTF-8&quot;.
-
-    --drop-tags &lt;regexp&gt;
-           Опустить дополнительные теги, соответствующие регулярному выражению
-           regexp, при записи файлов TS или XLIFF.
-           Можно указывать несколько раз.
-
-    --drop-translations
-           Опустить существующие переводы и сбросить их статус в &quot;незавершено&quot;.
-           Включает действие --no-obsolete.
-
-    --source-language &lt;язык&gt;[_&lt;регион&gt;]
-           Задание/изменение языка исходных строк. По умолчанию POSIX, если не
-           указано и файл не содержит язык исходных строк в своём имени.
-
-    --target-language &lt;язык&gt;[_&lt;регион&gt;]
-           Задание/изменение языка переводов.
-           Этот язык определяется из имени файла, если этот параметр не задан
-           или язык не указан внутри файла.
-
-    --no-obsolete
-           Опустить устаревшие переводы.
-
-    --no-finished
-           Опустить завершённые переводы.
-
-    --sort-contexts
-           Упорядочить по алфавиту контекст выходного TS файла.
-
-    --locations {absolute|relative|none}
-           Изменение метода сохранения ссылок на исходные тексты в TS файлах.
-           По умолчанию absolute.
-
-    --no-ui-lines
-           Опустить номера строк в ссылках на UI файлы.
-
-    --verbose
-           Выводить чуть больше информации.
-
-Длинные параметры также можно указывать и с одним дефисом.
-
-Возвращаемые результаты:
-    0 в случае успеха
-    1 в случае ошибки в командной строке
-    2 при ошибке чтения
-    3 при ошибки записи
-</translation>
     </message>
 </context>
 <context>
@@ -480,762 +303,32 @@ lconvert - это один из инструментов Qt Linguist. Он мо�
             <numerusform>    Пропущено %n непереведённых исходных текстов</numerusform>
         </translation>
     </message>
-    <message>
-        <source>Usage:
-    lrelease [options] project-file
-    lrelease [options] ts-files [-qm qm-file]
-
-lrelease is part of Qt&apos;s Linguist tool chain. It can be used as a
-stand-alone tool to convert XML-based translations files in the TS
-format into the &apos;compiled&apos; QM format used by QTranslator objects.
-
-Options:
-    -help  Display this information and exit
-    -idbased
-           Use IDs instead of source strings for message keying
-    -compress
-           Compress the QM files
-    -nounfinished
-           Do not include unfinished translations
-    -removeidentical
-           If the translated text is the same as
-           the source text, do not include the message
-    -markuntranslated &lt;prefix&gt;
-           If a message has no real translation, use the source text
-           prefixed with the given string instead
-    -silent
-           Do not explain what is being done
-    -version
-           Display the version of lrelease and exit
-</source>
-        <translation>Использование:
-    lrelease [параметры] &lt;файл-проекта&gt;
-    lrelease [параметры] &lt;ts-файлы&gt; [-qm &lt;qm-файлы&gt;]
-
-lrelease - это один из инструментов Qt Linguist. Он может быть использован для
-преобразования переводов, основанных на формате TS в &quot;скомпилированный&quot;
-формат QM, используемый объектами QTranslator.
-
-Параметры:
-    -help
-           Отобразить данную справку и выйти
-    -idbased
-           Использовать ID вместо исходных строк для индексирования сообщений
-    -compress
-           Сжать файл QM
-    -nounfinished
-           Не включать незавершённые переводы
-    -removeidentical
-           Не включать переводы, совпадающие с исходным текстом
-    -markuntranslated &lt;приставка&gt;
-           Если сообщение не имеет перевода, то использовать исходный текст
-           с указанной приставкой
-    -silent
-           Не отчитываться о производимых действиях
-    -version
-           Отобразить текущую версию lrelease и выйти
-</translation>
-    </message>
-    <message>
-        <source>lrelease error: %1</source>
-        <translation>lrelease ошибка: %1</translation>
-    </message>
-    <message>
-        <source>Updating &apos;%1&apos;...
-</source>
-        <translation>Обновление &apos;%1&apos;...
-</translation>
-    </message>
-    <message>
-        <source>Removing translations equal to source text in &apos;%1&apos;...
-</source>
-        <translation>Удаление переводов для &apos;%1&apos;...
-</translation>
-    </message>
-    <message>
-        <source>lrelease error: cannot create &apos;%1&apos;: %2
-</source>
-        <translation>lrelease ошибка: не удалось создать &apos;%1&apos;: %2</translation>
-    </message>
-    <message>
-        <source>lrelease error: cannot save &apos;%1&apos;: %2</source>
-        <translation>lrelease ошибка: не удалось сохранить &apos;%1&apos;: %2</translation>
-    </message>
-    <message>
-        <source>lrelease version %1
-</source>
-        <translation>lrelease версия %1
-</translation>
-    </message>
-    <message>
-        <source>lrelease error: cannot read project file &apos;%1&apos;.
-</source>
-        <translation>lrelease ошибка: не удалось прочитать файл проекта &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>lrelease error: cannot process project file &apos;%1&apos;.
-</source>
-        <translation>lrelease ошибка: не удалось обработать файл проекта &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>lrelease warning: Met no &apos;TRANSLATIONS&apos; entry in project file &apos;%1&apos;
-</source>
-        <translation>lrelease ошибка: в файле проекта &apos;%1&apos; отсутствует запись &apos;TRANSLATIONS&apos;</translation>
-    </message>
 </context>
 <context>
-    <name>LUpdate</name>
+    <name>Linguist</name>
     <message>
-        <source>Parenthesis/bracket/brace mismatch between #if and #else branches; using #if branch
-</source>
-        <translation>Несовпадение скобок (круглых, квадратных или фигурных) между ветками #if и #else; используется ветка #if
-</translation>
+        <source>GNU Gettext localization files</source>
+        <translation>Файлы локализации GNU Gettext</translation>
     </message>
     <message>
-        <source>Parenthesis/brace mismatch between #if and #else branches; using #if branch
-</source>
-        <translation>Несовпадение скобок (круглых или фигурных) между ветками #if и #else; используется ветка #if
-</translation>
+        <source>GNU Gettext localization template files</source>
+        <translation>Файлы шаблонов локализации GNU Gettext</translation>
     </message>
     <message>
-        <source>Unterminated C++ comment
-</source>
-        <translation>Незавершённый комментарий C++
-</translation>
+        <source>Compiled Qt translations</source>
+        <translation>Скомпилированные переводы Qt</translation>
     </message>
     <message>
-        <source>Unterminated C++ string
-</source>
-        <translation>Незавершённая строка C++
-</translation>
+        <source>Qt Linguist &apos;Phrase Book&apos;</source>
+        <translation>«Глоссарий» Qt Linguist</translation>
     </message>
     <message>
-        <source>Excess closing brace in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Лишняя закрывающая фигурная скобка в C++ коде (или злоупотребление препроцессором C++)
-</translation>
+        <source>Qt translation sources</source>
+        <translation>Исходники переводов Qt</translation>
     </message>
     <message>
-        <source>Excess closing parenthesis in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Лишняя закрывающая круглая скобка в C++ коде (или злоупотребление препроцессором C++)
-</translation>
-    </message>
-    <message>
-        <source>Excess closing bracket in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Лишняя закрывающая квадратная скобка в C++ коде (или злоупотребление препроцессором C++)
-</translation>
-    </message>
-    <message>
-        <source>circular inclusion of %1
-</source>
-        <translation>цикличное включение %1
-</translation>
-    </message>
-    <message>
-        <source>Cannot open %1: %2
-</source>
-        <translation>Невозможно открыть %1: %2
-</translation>
-    </message>
-    <message>
-        <source>//% cannot be used with tr() / QT_TR_NOOP(). Ignoring
-</source>
-        <translation>//% не может быть использовано совместно с tr() / QT_TR_NOOP(). Пропускается
-</translation>
-    </message>
-    <message>
-        <source>Qualifying with unknown namespace/class %1::%2
-</source>
-        <translation>Уточнение с неизвестным пространством имён/классом %1::%2
-</translation>
-    </message>
-    <message>
-        <source>tr() cannot be called without context
-</source>
-        <translation>tr() не может быть вызван без контекста
-</translation>
-    </message>
-    <message>
-        <source>Class &apos;%1&apos; lacks Q_OBJECT macro
-</source>
-        <translation>У класса &quot;%1&quot; отсутствует макрос Q_OBJECT
-</translation>
-    </message>
-    <message>
-        <source>It is not recommended to call tr() from within a constructor &apos;%1::%2&apos;
-</source>
-        <translation>Не рекомендуется вызывать tr() в теле конструктора &quot;%1::%2&quot;
-</translation>
-    </message>
-    <message>
-        <source>//% cannot be used with translate() / QT_TRANSLATE_NOOP(). Ignoring
-</source>
-        <translation>//% не может быть использовано совместно с translate() / QT_TRANSLATE_NOOP(). Пропускается
-</translation>
-    </message>
-    <message>
-        <source>//= cannot be used with qtTrId() / QT_TRID_NOOP(). Ignoring
-</source>
-        <translation>//= не может быть использовано совместно с qtTrId() / QT_TRID_NOOP(). Пропускается
-</translation>
-    </message>
-    <message>
-        <source>Unexpected character in meta string
-</source>
-        <translation>Неожиданный символ в мета-строке
-</translation>
-    </message>
-    <message>
-        <source>Unterminated meta string
-</source>
-        <translation>Незавершённая мета-строка
-</translation>
-    </message>
-    <message>
-        <source>Cannot invoke tr() like this
-</source>
-        <translation>Использование tr() в том виде, как здесь, не допускается
-</translation>
-    </message>
-    <message>
-        <source>Discarding unconsumed meta data
-</source>
-        <translation>Отбрасываются неиспользуемые мета-данные
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening brace in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Лишняя открывающая фигурная скобка в C++ коде (или злоупотребление препроцессором C++)
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening parenthesis in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Лишняя открывающая круглая скобка в C++ коде (или злоупотребление препроцессором C++)
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening bracket in C++ code (or abuse of the C++ preprocessor)
-</source>
-        <translation>Лишняя открывающая квадратная скобка в C++ коде (или злоупотребление препроцессором C++)
-</translation>
-    </message>
-    <message>
-        <source>Cannot open %1: %2</source>
-        <translation>Невозможно открыть %1: %2</translation>
-    </message>
-    <message>
-        <source>Unterminated Java comment.
-</source>
-        <translation>Незавершённый комментарий Java.
-</translation>
-    </message>
-    <message>
-        <source>Invalid Unicode value.
-</source>
-        <translation>Неверное значение Unicode.
-</translation>
-    </message>
-    <message>
-        <source>Unterminated string.
-</source>
-        <translation>Незавершённая строка.
-</translation>
-    </message>
-    <message>
-        <source>String used in translation can contain only literals concatenated with other literals, not expressions or numbers.
-</source>
-        <translation>Строка, используемая в переводе, может содержать только строковые литералы (возможно, соединённые с другими литералами), но не выражения или числа.
-</translation>
-    </message>
-    <message>
-        <source>&apos;class&apos; must be followed by a class name.
-</source>
-        <translation>После слова &quot;class&quot; должно идти имя класса.
-</translation>
-    </message>
-    <message>
-        <source>Excess closing brace.
-</source>
-        <translation>Лишняя закрывающая фигурная скобка.
-</translation>
-    </message>
-    <message>
-        <source>&apos;package&apos; must be followed by package name.
-</source>
-        <translation>После слова &quot;package&quot; должно идти имя пакета.
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening brace.
-</source>
-        <translation>Лишняя открывающая фигурная скобка.
-</translation>
-    </message>
-    <message>
-        <source>Unbalanced opening parenthesis.
-</source>
-        <translation>Лишняя открывающая круглая скобка.
-</translation>
-    </message>
-    <message>
-        <source>Usage:
-    lupdate [options] [project-file]...
-    lupdate [options] [source-file|path|@lst-file]... -ts ts-files|@lst-file
-
-lupdate is part of Qt&apos;s Linguist tool chain. It extracts translatable
-messages from Qt UI files, C++, Java and JavaScript/QtScript source code.
-Extracted messages are stored in textual translation source files (typically
-Qt TS XML). New and modified messages can be merged into existing TS files.
-
-Options:
-    -help  Display this information and exit.
-    -no-obsolete
-           Drop all obsolete strings.
-    -extensions &lt;ext&gt;[,&lt;ext&gt;]...
-           Process files with the given extensions only.
-           The extension list must be separated with commas, not with whitespace.
-           Default: &apos;%1&apos;.
-    -pluralonly
-           Only include plural form messages.
-    -silent
-           Do not explain what is being done.
-    -no-sort
-           Do not sort contexts in TS files.
-    -no-recursive
-           Do not recursively scan the following directories.
-    -recursive
-           Recursively scan the following directories (default).
-    -I &lt;includepath&gt; or -I&lt;includepath&gt;
-           Additional location to look for include files.
-           May be specified multiple times.
-    -locations {absolute|relative|none}
-           Specify/override how source code references are saved in TS files.
-           Default is absolute.
-    -no-ui-lines
-           Do not record line numbers in references to UI files.
-    -disable-heuristic {sametext|similartext|number}
-           Disable the named merge heuristic. Can be specified multiple times.
-    -pro &lt;filename&gt;
-           Name of a .pro file. Useful for files with .pro file syntax but
-           different file suffix. Projects are recursed into and merged.
-    -source-language &lt;language&gt;[_&lt;region&gt;]
-           Specify the language of the source strings for new files.
-           Defaults to POSIX if not specified.
-    -target-language &lt;language&gt;[_&lt;region&gt;]
-           Specify the language of the translations for new files.
-           Guessed from the file name if not specified.
-    -ts &lt;ts-file&gt;...
-           Specify the output file(s). This will override the TRANSLATIONS
-           and nullify the CODECFORTR from possibly specified project files.
-    -codecfortr &lt;codec&gt;
-           Specify the codec assumed for tr() calls. Effective only with -ts.
-    -version
-           Display the version of lupdate and exit.
-    @lst-file
-           Read additional file names (one per line) from lst-file.
-</source>
-        <translation>Использование:
-    lupdate [параметры] [файл-проекта]...
-    lupdate [параметры] [исходный-файл|путь|@lst-файл]... -ts ts-файлы|@lst-файл
-
-lupdate - это один из инструментов Qt Linguist. Он извлекает переводимые строки
-из файлов Qt UI, исходных текстов C++, Java и JavaScript/QtScript. Эти строки
-сохраняются в текстовых исходных файлах перевода (обычно, Qt TS XML). Новые
-или изменённые сообщения могут быть добавлены в существующие TS файлы.
-
-Параметры:
-    -help  Отобразить эту информацию и выйти.
-    -no-obsolete
-           Удалить все устаревшие строки.
-    -extensions &lt;ext&gt;[,&lt;ext&gt;]...
-           Обрабатывать файлы, имеющие только указанные расширения.
-           Список расширений должен быть разделён запятыми, а не пробелами.
-           По умолчанию:
-           &quot;%1&quot;.
-    -pluralonly
-           Включать только множественную форму сообщений.
-    -silent
-           Не показывать выполняемые действия.
-    -no-sort
-           Не упорядочивать контекст в TS файлах.
-    -no-recursive
-           Не сканировать каталоги рекурсивно.
-    -recursive
-           Сканировать каталоги рекурсивно (по умолчанию).
-    -I &lt;путь&gt; or -I&lt;путь&gt;
-           Дополнительное расположение подключаемых файлов.
-           Можно указать несколько раз.
-    -locations {absolute|relative|none}
-           Изменение метода сохранения ссылок на исходные тексты в TS файлах.
-           По умолчанию absolute.
-    -no-ui-lines
-           Не сохранять номера строк в ссылках на UI файлы.
-    -disable-heuristic {sametext|similartext|number}
-           Отключить указанный метод объединения:
-           sametext - тот же текст
-           similartext - похожий текст
-           number - числа
-           Может указываться несколько раз.
-    -pro &lt;имя файла&gt;
-           Название .pro файла. Используется для файлов в формате .pro, но
-           имеющих другое расширение. Проекты будут объединены и обработаны
-           рекурсивно.
-    --source-language &lt;язык&gt;[_&lt;регион&gt;]
-           Задание/замена языка исходных строк. По умолчанию, POSIX, если не
-           указано, и файл не содержит его в своём имени.
-    --target-language &lt;язык&gt;[_&lt;регион&gt;]
-           Задание/замена языка переводов.
-           Этот язык определяется из имени файла, если этот параметр не задан
-           или язык не указан внутри файла.
-    -ts &lt;ts-файл&gt;...
-           Указание выходного файла(ов). В этом случае будет заменена
-           переменная TRANSLATIONS и обнулена CODECFORTR в указанном файле
-           проекта.
-    -codecfortr &lt;кодировка&gt;
-           Указание кодировки, применимой к tr().
-           Используется только вместе с -ts.
-    -version
-           Отобразить версию lupdate и выйти.
-    @lst-файл
-           Прочитать дополнительные имена файлов (по одному на строке) из
-           файла lst-файл.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: Codec for tr() &apos;%1&apos; disagrees with existing file&apos;s codec &apos;%2&apos;. Expect trouble.
-</source>
-        <translation>Предупреждение lupdate: Кодировка для tr() &quot;%1&quot; не совпадает с кодировкой существующего файла &quot;%2&quot;. Возможны проблемы.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: Specified target language &apos;%1&apos; disagrees with existing file&apos;s language &apos;%2&apos;. Ignoring.
-</source>
-        <translation>Предупреждение lupdate: Указанный целевой язык &quot;%1&quot; не совпадает с языком существующего файла &quot;%2&quot;. Пропускается.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: Specified source language &apos;%1&apos; disagrees with existing file&apos;s language &apos;%2&apos;. Ignoring.
-</source>
-        <translation>Предупреждение lupdate: Указанный исходный язык &quot;%1&quot; не совпадает с языком существующего файла &quot;%2&quot;. Пропускается.
-</translation>
-    </message>
-    <message>
-        <source>Updating &apos;%1&apos;...
-</source>
-        <translation>Обновление &quot;%1&quot;...
-</translation>
-    </message>
-    <message>
-        <source>Stripping non plural forms in &apos;%1&apos;...
-</source>
-        <translation>Удаление немножественных форм из &quot;%1&quot;...
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: Codec for source &apos;%1&apos; is invalid. Falling back to codec for tr().
-</source>
-        <translation>Предупреждение lupdate: Некорректная кодировка для исходника &quot;%1&quot;. Используется кодировка для tr().
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: TS files from command line will override TRANSLATIONS in %1.
-</source>
-        <translation>Предупреждение lupdate: TS файлы командной строки заменят TRANSLATIONS в %1.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: TS files from command line prevent recursing into %1.
-</source>
-        <translation>Предупреждение lupdate: TS файлы командной строки отключают рекурсию в %1.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: no TS files specified. Only diagnostics will be produced for &apos;%1&apos;.
-</source>
-        <translation>Предупреждение lupdate: TS файлы не указаны. Будет произведена только диагностика &quot;%1&quot;.
-</translation>
-    </message>
-    <message>
-        <source>The option -target-language requires a parameter.
-</source>
-        <translation>Параметр -target-language требует значение.
-</translation>
-    </message>
-    <message>
-        <source>The option -source-language requires a parameter.
-</source>
-        <translation>Параметр -source-language требует значение.
-</translation>
-    </message>
-    <message>
-        <source>The option -disable-heuristic requires a parameter.
-</source>
-        <translation>Параметр -disable-heuristic требует значение.
-</translation>
-    </message>
-    <message>
-        <source>Invalid heuristic name passed to -disable-heuristic.
-</source>
-        <translation>Неверное имя метода передано в -disable-heuristic.
-</translation>
-    </message>
-    <message>
-        <source>The option -locations requires a parameter.
-</source>
-        <translation>Параметр -locations требует значения.</translation>
-    </message>
-    <message>
-        <source>Invalid parameter passed to -locations.
-</source>
-        <translation>Неверное значение передано в -locations.
-</translation>
-    </message>
-    <message>
-        <source>The -codecfortr option should be followed by a codec name.
-</source>
-        <translation>Параметру -codecfortr требуется название кодировки.
-</translation>
-    </message>
-    <message>
-        <source>The -extensions option should be followed by an extension list.
-</source>
-        <translation>Параметру -extensions требуется список расширений.
-</translation>
-    </message>
-    <message>
-        <source>The -pro option should be followed by a filename of .pro file.
-</source>
-        <translation>Параметру -pro требуется имя .pro файла.
-</translation>
-    </message>
-    <message>
-        <source>The -I option should be followed by a path.
-</source>
-        <translation>Параметру -I требуется путь.
-</translation>
-    </message>
-    <message>
-        <source>Unrecognized option &apos;%1&apos;.
-</source>
-        <translation>Неопознанный параметр &quot;%1&quot;.
-</translation>
-    </message>
-    <message>
-        <source>lupdate error: List file &apos;%1&apos; is not readable.
-</source>
-        <translation>Ошибка lupdate: Не удалось прочитать файл списка &quot;%1&quot;.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: For some reason, &apos;%1&apos; is not writable.
-</source>
-        <translation>Предупреждение lupdate: По какой-то причине не удалось записать в &quot;%1&quot;.
-</translation>
-    </message>
-    <message>
-        <source>lupdate error: File &apos;%1&apos; has no recognized extension.
-</source>
-        <translation>Ошибка lupdate: Расширение файла &quot;%1&quot; не опознано.
-</translation>
-    </message>
-    <message>
-        <source>lupdate error: File &apos;%1&apos; does not exist.
-</source>
-        <translation>Ошибка lupdate: Файл &quot;%1&quot; не существует.
-</translation>
-    </message>
-    <message>
-        <source>Scanning directory &apos;%1&apos;...
-</source>
-        <translation>Сканирование каталога &quot;%1&quot;...
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: -target-language usually only makes sense with exactly one TS file.
-</source>
-        <translation>Предупреждение lupdate: -target-language имеет смысл для одного TS файла.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: -codecfortr has no effect without -ts.
-</source>
-        <translation>Предупреждение lupdate: -codecfortr не имеет смысла без -ts.
-</translation>
-    </message>
-    <message>
-        <source>lupdate warning: no TS files specified. Only diagnostics will be produced.
-</source>
-        <translation>Предупреждение lupdate: TS файлы не указаны. Будет произведена только диагностика.
-</translation>
-    </message>
-    <message>
-        <source>lupdate error: Both project and source files / include paths specified.
-</source>
-        <translation>Ошибка lupdate: Указаны и проект, и исходный файл / включаемые пути.
-</translation>
-    </message>
-    <message numerus="yes">
-        <source>    Found %n source text(s) (%1 new and %2 already existing)
-</source>
-        <translation>
-            <numerusform>    Обнаружен %n исходный текст (%1 новых и %2 уже имеющихся)
-</numerusform>
-            <numerusform>    Обнаружено %n исходных текста (%1 новых и %2 уже имеющихся)
-</numerusform>
-            <numerusform>    Обнаружено %n исходных текстов (%1 новых и %2 уже имеющихся)
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Removed %n obsolete entries
-</source>
-        <translation>
-            <numerusform>Удалена %n устаревшая запись
-</numerusform>
-            <numerusform>Удалены %n устаревших записи
-</numerusform>
-            <numerusform>Удалено %n устаревших записей
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Kept %n obsolete entries
-</source>
-        <translation>
-            <numerusform>Сохранена %n устаревшая запись
-</numerusform>
-            <numerusform>Сохранены %n устаревшие записи
-</numerusform>
-            <numerusform>Сохранено %n устаревших записей
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Number heuristic provided %n translation(s)
-</source>
-        <translation>
-            <numerusform>    Эвристика number добавила %n перевод
-</numerusform>
-            <numerusform>    Эвристика number добавила %n перевода
-</numerusform>
-            <numerusform>    Эвристика number добавила %n переводов
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Same-text heuristic provided %n translation(s)
-</source>
-        <translation>
-            <numerusform>    Эвристика same-text добавила %n перевод
-</numerusform>
-            <numerusform>    Эвристика same-text добавила %n перевода
-</numerusform>
-            <numerusform>    Эвристика same-text добавила %n переводов
-</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>    Similar-text heuristic provided %n translation(s)
-</source>
-        <translation>
-            <numerusform>    Эвристика similar-text добавила %n перевод
-</numerusform>
-            <numerusform>    Эвристика similar-text добавила %n перевода
-</numerusform>
-            <numerusform>    Эвристика similar-text добавила %n переводов
-</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Illegal character</source>
-        <translation>Недопустимый символ</translation>
-    </message>
-    <message>
-        <source>Unclosed string at end of line</source>
-        <translation>Незавершенный текст в конце строки</translation>
-    </message>
-    <message>
-        <source>Illegal escape sequence</source>
-        <translation>Неверная esc-последовательность</translation>
-    </message>
-    <message>
-        <source>Illegal unicode escape sequence</source>
-        <translation>Неверная esc-последовательность unicode</translation>
-    </message>
-    <message>
-        <source>Unclosed comment at end of file</source>
-        <translation>Незакрытый комментарий в конце файла</translation>
-    </message>
-    <message>
-        <source>Illegal syntax for exponential number</source>
-        <translation>Неверный синтаксис для числа в экспоненциальной форме</translation>
-    </message>
-    <message>
-        <source>Identifier cannot start with numeric literal</source>
-        <translation>Идентификатор не может начинаться с цифры</translation>
-    </message>
-    <message>
-        <source>Unterminated regular expression literal</source>
-        <translation>Незавершённый литерал регулярного выражения</translation>
-    </message>
-    <message>
-        <source>//% cannot be used with %1(). Ignoring
-</source>
-        <translation>//% не может быть использовано совместно с %1(). Пропускается
-</translation>
-    </message>
-    <message>
-        <source>%1() requires at least two arguments.
-</source>
-        <translation>для %1() требуется как минимум два параметра.
-</translation>
-    </message>
-    <message>
-        <source>%1(): both arguments must be literal strings.
-</source>
-        <translation>%1(): оба параметра должны быть строковыми литералами.
-</translation>
-    </message>
-    <message>
-        <source>%1() requires at least one argument.
-</source>
-        <translation>для %1() требуется как минимум один параметр.
-</translation>
-    </message>
-    <message>
-        <source>%1(): text to translate must be a literal string.
-</source>
-        <translation>%1(): переводимый текст должен быть строковым литералом.
-</translation>
-    </message>
-    <message>
-        <source>//= cannot be used with %1(). Ignoring
-</source>
-        <translation>//= не может быть использовано совместно с %1(). Пропускается
-</translation>
-    </message>
-    <message>
-        <source>%1(): identifier must be a literal string.
-</source>
-        <translation>%1(): идентификатор должен быть строковым литералом.
-</translation>
-    </message>
-    <message>
-        <source>Expected </source>
-        <extracomment>Beginning of the string that contains comma-separated list of expected tokens</extracomment>
-        <translation>Ожидается </translation>
-    </message>
-    <message>
-        <source>XML error: Parse error at line %1, column %2 (%3).</source>
-        <translation>Ошибка XML: Ошибка разбора в строке %1, столбце %2 (%3).</translation>
-    </message>
-    <message>
-        <source>Parse error in UI file</source>
-        <translation>Ошибка разбора UI файла</translation>
+        <source>XLIFF localization files</source>
+        <translation>Файлы локализации XLIFF</translation>
     </message>
 </context>
 <context>
@@ -1299,7 +392,7 @@ lupdate - это один из инструментов Qt Linguist. Он изв
         <source>The file &apos;%1&apos; does not seem to be related to the currently open file(s) &apos;%2&apos;.
 
 Close the open file(s) first?</source>
-        <translation>Файл &apos;%1&apos;, похоже, не связан с открытым файлом(ами) &apos;%2&apos;.
+        <translation>Файл «%1», похоже, не связан с открытым файлом(ами) «%2».
 
 Закрыть открытые файлы?</translation>
     </message>
@@ -1307,7 +400,7 @@ Close the open file(s) first?</source>
         <source>The file &apos;%1&apos; does not seem to be related to the file &apos;%2&apos; which is being loaded as well.
 
 Skip loading the first named file?</source>
-        <translation>Файл &apos;%1&apos;, похоже, не связан с загруженным файлом &apos;%2&apos;.
+        <translation>Файл «%1», похоже, не связан с загруженным файлом «%2».
 
 Пропустить загрузку файла?</translation>
     </message>
@@ -1387,11 +480,11 @@ All files (*)</source>
     </message>
     <message>
         <source>Cannot find the string &apos;%1&apos;.</source>
-        <translation>Не удалось найти строку &apos;%1&apos;.</translation>
+        <translation>Не удалось найти строку «%1».</translation>
     </message>
     <message>
         <source>Search And Translate in &apos;%1&apos; - Qt Linguist</source>
-        <translation>Поиск и перевод &apos;%1&apos; - Qt Linguist</translation>
+        <translation>Поиск и перевод «%1» - Qt Linguist</translation>
     </message>
     <message>
         <source>Translate - Qt Linguist</source>
@@ -1407,7 +500,7 @@ All files (*)</source>
     </message>
     <message>
         <source>No more occurrences of &apos;%1&apos;. Start over?</source>
-        <translation>Нет больше совпадений с &apos;%1&apos;. Начать заново?</translation>
+        <translation>Нет больше совпадений с «%1». Начать заново?</translation>
     </message>
     <message>
         <source>Create New Phrase Book</source>
@@ -1464,8 +557,8 @@ All files (*)</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).</source>
-        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist - инструмент для добавления переводов в приложения на основе Qt.&lt;/p&gt;&lt;p&gt;Copyright (C) 2012 Корпорация Nokia и/или её дочерние подразделения.</translation>
+        <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) %2 The Qt Company Ltd.</source>
+        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist – утилита для добавления переводов приложений Qt.&lt;/p&gt;&lt;p&gt;Copyright (C) %2 The Qt Company Ltd.</translation>
     </message>
     <message>
         <source>Do you want to save the modified files?</source>
@@ -1473,7 +566,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Do you want to save &apos;%1&apos;?</source>
-        <translation>Желаете сохранить &apos;%1&apos;?</translation>
+        <translation>Желаете сохранить «%1»?</translation>
     </message>
     <message>
         <source>Qt Linguist[*]</source>
@@ -1509,23 +602,23 @@ All files (*)</source>
     </message>
     <message>
         <source>&amp;Save &apos;%1&apos;</source>
-        <translation>&amp;Сохранить&apos;%1&apos;</translation>
+        <translation>&amp;Сохранить «%1»</translation>
     </message>
     <message>
         <source>Save &apos;%1&apos; &amp;As...</source>
-        <translation>Сохранить&apos;%1&apos; &amp;как...</translation>
+        <translation>Сохранить «%1» &amp;как...</translation>
     </message>
     <message>
         <source>Release &apos;%1&apos;</source>
-        <translation>Скомпилировать &apos;%1&apos;</translation>
+        <translation>Скомпилировать «%1»</translation>
     </message>
     <message>
         <source>Release &apos;%1&apos; As...</source>
-        <translation>Скомпилировать &apos;%1&apos; как...</translation>
+        <translation>Скомпилировать «%1» как...</translation>
     </message>
     <message>
         <source>&amp;Close &apos;%1&apos;</source>
-        <translation>&amp;Закрыть &apos;%1&apos;</translation>
+        <translation>&amp;Закрыть «%1»</translation>
     </message>
     <message>
         <source>&amp;Save</source>
@@ -1561,15 +654,15 @@ All files (*)</source>
     </message>
     <message>
         <source>Translation File &amp;Settings for &apos;%1&apos;...</source>
-        <translation>&amp;Параметры файла перевода для &apos;%1&apos;...</translation>
+        <translation>&amp;Параметры файла перевода для «%1»...</translation>
     </message>
     <message>
         <source>&amp;Batch Translation of &apos;%1&apos;...</source>
-        <translation>Пак&amp;етный перевод &apos;%1&apos;...</translation>
+        <translation>Пак&amp;етный перевод «%1»...</translation>
     </message>
     <message>
         <source>Search And &amp;Translate in &apos;%1&apos;...</source>
-        <translation>&amp;Найти и перевести в &apos;%1&apos;...</translation>
+        <translation>&amp;Найти и перевести в «%1»...</translation>
     </message>
     <message>
         <source>Translation File &amp;Settings...</source>
@@ -1605,7 +698,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Cannot read from phrase book &apos;%1&apos;.</source>
-        <translation>Не удалось прочитать из глоссария &apos;%1&apos;.</translation>
+        <translation>Не удалось прочитать из глоссария «%1».</translation>
     </message>
     <message>
         <source>Close this phrase book.</source>
@@ -1621,11 +714,11 @@ All files (*)</source>
     </message>
     <message>
         <source>Cannot create phrase book &apos;%1&apos;.</source>
-        <translation>Не удалось создать глоссарий &apos;%1&apos;.</translation>
+        <translation>Не удалось создать глоссарий «%1».</translation>
     </message>
     <message>
         <source>Do you want to save phrase book &apos;%1&apos;?</source>
-        <translation>Желаете сохранить глоссарий &apos;%1&apos;?</translation>
+        <translation>Желаете сохранить глоссарий «%1»?</translation>
     </message>
     <message>
         <source>All</source>
@@ -1697,7 +790,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
@@ -1709,7 +802,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>Save</source>
@@ -1741,7 +834,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation></translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <source>&amp;Undo</source>
@@ -1753,7 +846,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+Z</source>
-        <translation></translation>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <source>&amp;Redo</source>
@@ -1765,7 +858,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation></translation>
+        <translation>Ctrl+Y</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
@@ -1777,7 +870,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation></translation>
+        <translation>Ctrl+X</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
@@ -1789,7 +882,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+C</source>
-        <translation></translation>
+        <translation>Ctrl+C</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
@@ -1801,7 +894,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+V</source>
-        <translation></translation>
+        <translation>Ctrl+V</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
@@ -1813,7 +906,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation></translation>
+        <translation>Ctrl+A</translation>
     </message>
     <message>
         <source>&amp;Find...</source>
@@ -1825,7 +918,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation></translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <source>Find &amp;Next</source>
@@ -1837,7 +930,7 @@ All files (*)</source>
     </message>
     <message>
         <source>F3</source>
-        <translation></translation>
+        <translation>F3</translation>
     </message>
     <message>
         <source>&amp;Prev Unfinished</source>
@@ -1857,7 +950,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+K</source>
-        <translation></translation>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <source>&amp;Next Unfinished</source>
@@ -1869,7 +962,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+J</source>
-        <translation></translation>
+        <translation>Ctrl+J</translation>
     </message>
     <message>
         <source>P&amp;rev</source>
@@ -1881,7 +974,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+Shift+K</source>
-        <translation></translation>
+        <translation>Ctrl+Shift+K</translation>
     </message>
     <message>
         <source>Ne&amp;xt</source>
@@ -1893,7 +986,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+Shift+J</source>
-        <translation></translation>
+        <translation>Ctrl+Shift+J</translation>
     </message>
     <message>
         <source>&amp;Done and Next</source>
@@ -1913,7 +1006,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+B</source>
-        <translation></translation>
+        <translation>Ctrl+B</translation>
     </message>
     <message>
         <source>&amp;Accelerators</source>
@@ -1957,7 +1050,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation></translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <source>&amp;Open Phrase Book...</source>
@@ -1969,11 +1062,11 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation></translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Reset Sorting</source>
-        <translation>&amp;Сброс сортировки</translation>
+        <translation>С&amp;брос сортировки</translation>
     </message>
     <message>
         <source>Sort the items back in the same order as in the message file.</source>
@@ -2001,7 +1094,7 @@ All files (*)</source>
     </message>
     <message>
         <source>F1</source>
-        <translation></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <source>About Qt Linguist</source>
@@ -2025,7 +1118,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Shift+F1</source>
-        <translation></translation>
+        <translation>Shift+F1</translation>
     </message>
     <message>
         <source>&amp;Search And Translate...</source>
@@ -2049,7 +1142,7 @@ All files (*)</source>
     </message>
     <message>
         <source>F5</source>
-        <translation></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <source>&amp;Add to Phrase Book</source>
@@ -2057,7 +1150,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation></translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <source>Open Read-O&amp;nly...</source>
@@ -2069,7 +1162,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <source>Close</source>
@@ -2081,7 +1174,7 @@ All files (*)</source>
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation></translation>
+        <translation>Ctrl+W</translation>
     </message>
     <message>
         <source>Previous unfinished item</source>
@@ -2124,8 +1217,44 @@ All files (*)</source>
         <translation>Переключение проверки маркеров форматирования</translation>
     </message>
     <message>
-        <source>Display information about the Qt toolkit by Nokia.</source>
-        <translation>Показать информацию об инструментарии Qt от Nokia.</translation>
+        <source>Display information about the Qt toolkit by Digia.</source>
+        <translation>Показать информацию об инструментарии Qt от Digia.</translation>
+    </message>
+    <message>
+        <source>&amp;Zoom</source>
+        <translation>&amp;Масштаб</translation>
+    </message>
+    <message>
+        <source>Visualize whitespace</source>
+        <translation>Отображать пробелы</translation>
+    </message>
+    <message>
+        <source>Toggle visualize whitespace in editors</source>
+        <translation>Переключение режима отображения в редакторах непечатаемых символов</translation>
+    </message>
+    <message>
+        <source>Increase</source>
+        <translation>Увеличить</translation>
+    </message>
+    <message>
+        <source>Ctrl++</source>
+        <translation>Ctrl++</translation>
+    </message>
+    <message>
+        <source>Decrease</source>
+        <translation>Уменьшить</translation>
+    </message>
+    <message>
+        <source>Ctrl+-</source>
+        <translation>Ctrl+-</translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation>По умолчанию</translation>
+    </message>
+    <message>
+        <source>Ctrl+0</source>
+        <translation>Ctrl+0</translation>
     </message>
 </context>
 <context>
@@ -2211,7 +1340,7 @@ All files (*)</source>
     <message>
         <source>&apos;%1&apos;
 Line: %2</source>
-        <translation>&apos;%1&apos;
+        <translation>«%1»
 Строка: %2</translation>
     </message>
 </context>
@@ -2262,7 +1391,7 @@ Line: %2</source>
     </message>
     <message>
         <source>Cannot save phrase book &apos;%1&apos;.</source>
-        <translation>Не удалось сохранить глоссарий &apos;%1&apos;.</translation>
+        <translation>Не удалось сохранить глоссарий «%1».</translation>
     </message>
     <message>
         <source>Edit Phrase Book</source>
@@ -2381,44 +1510,6 @@ Line: %2</source>
         <source>Qt Linguist</source>
         <translation>Qt Linguist</translation>
     </message>
-    <message>
-        <source>GNU Gettext localization files</source>
-        <translation>Файлы локализации GNU Gettext</translation>
-    </message>
-    <message>
-        <source>GNU Gettext localization template files</source>
-        <translation>Файлы шаблонов локализации GNU Gettext</translation>
-    </message>
-    <message>
-        <source>Compiled Qt translations</source>
-        <translation>Скомпилированные переводы Qt</translation>
-    </message>
-    <message>
-        <source>Qt Linguist &apos;Phrase Book&apos;</source>
-        <translation>&apos;Глоссарий&apos; Qt Linguist</translation>
-    </message>
-    <message>
-        <source>Qt translation sources (format 1.1)</source>
-        <translation>Исходные файлы перевода Qt (формат 1.1)</translation>
-    </message>
-    <message>
-        <source>Qt translation sources (format 2.0)</source>
-        <translation>Исходные файлы перевода Qt (формат 2.0)</translation>
-    </message>
-    <message>
-        <source>Qt translation sources (latest format)</source>
-        <translation>Исходные файлы перевода Qt (последний формат)</translation>
-    </message>
-    <message>
-        <source>XLIFF localization files</source>
-        <translation>Файлы локализации XLIFF</translation>
-    </message>
-    <message>
-        <source>lupdate version %1
-</source>
-        <translation>lupdate версия %1
-</translation>
-    </message>
 </context>
 <context>
     <name>SourceCodeView</name>
@@ -2494,7 +1585,7 @@ Line: %2</source>
     </message>
     <message>
         <source>Texts such as &apos;TeX&apos; and &apos;tex&apos; are considered as different when checked.</source>
-        <translation>Если отмечено, строки &quot;ПрИмЕр&quot; и &quot;пример&quot; будет считаться разными.</translation>
+        <translation>Если включено, строки «ПрИмЕр» и «пример» будут считаться разными.</translation>
     </message>
     <message>
         <source>Match &amp;case</source>
@@ -2553,7 +1644,7 @@ Line: %2</source>
     </message>
     <message>
         <source>Settings for &apos;%1&apos; - Qt Linguist</source>
-        <translation>Настройки для &apos;%1&apos; - Qt Linguist</translation>
+        <translation>Настройки для «%1» - Qt Linguist</translation>
     </message>
 </context>
 </TS>

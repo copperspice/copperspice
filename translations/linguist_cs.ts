@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Set translated entries to finished</source>
-        <translation>Označit přeložené záznamy jako hotové</translation>
+        <translation>Označit přeložené záznamy jako dokončené</translation>
     </message>
     <message>
         <source>Retranslate entries with existing translation</source>
@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>Translate also finished entries</source>
-        <translation>Přeložit i hotové záznamy</translation>
+        <translation>Přeložit i dokončené záznamy</translation>
     </message>
     <message>
         <source>Phrase book preference</source>
@@ -76,7 +76,7 @@
     </message>
     <message>
         <source>Note that the modified entries will be reset to unfinished if &apos;Set translated entries to finished&apos; above is unchecked</source>
-        <translation>Všimněte si, že změněné záznamy budou znovu nastaveny na nevyřízené, pokud není zapnuto nahoře zmíněné nastavení &apos;Označit přeložené záznamy jako hotové&apos;</translation>
+        <translation>Všimněte si, že změněné záznamy budou znovu nastaveny na nedokončené, pokud není zapnuto nahoře zmíněné nastavení &apos;Označit přeložené záznamy jako dokončené&apos;</translation>
     </message>
     <message>
         <source>The batch translator will search through the selected phrase books in the order given above</source>
@@ -234,6 +234,14 @@ Pracuje se s jednoduchým všeobecným tvarem.</translation>
         <comment>Choose Edit|Find from the menu bar or press Ctrl+F to pop up the Find dialog</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>Obsoleted messages are skipped when checked.</source>
+        <translation>Zastaralé zprávy jsou přeskočeny, když zaškrtnuto.</translation>
+    </message>
+    <message>
+        <source>Skip &amp;obsolete</source>
+        <translation>Přeskočit &amp;zastaralé</translation>
+    </message>
 </context>
 <context>
     <name>FormMultiWidget</name>
@@ -360,8 +368,8 @@ nástroj na převádění a filtrování souborů s daty překladů.
 Jsou podporovány následující formáty souborů:
 
 %1
-Pokud je zadáno více vstupních souborů, jsou sloučeny s překlady
-z pozdějších souborů maje přednost.
+Pokud je zadáno více vstupních souborů, jsou sloučeny, přitom překlady
+z pozdějších souborů mají přednost.
 
 Volby:
     -h
@@ -379,12 +387,12 @@ Volby:
 
     -if &lt;informat&gt;
     --input-format &lt;format&gt;
-           Zadejte vstupní soubor pro subsequent &lt;infile&gt;s.
-           Formát je určen automaticky z názvu souboru a je výchozí pro &apos;ts&apos;.
+           Zadejte formát pro následné vstupní soubory &lt;infile&gt;.
+           Formát je určen automaticky z názvu souboru, výchozím je &apos;ts&apos;.
 
     -of &lt;outformat&gt;
     --output-format &lt;outformat&gt;
-           Zadejte výstupní soubor. Viz -if.
+           Zadejte výstupní formát. Viz -if.
 
     --input-codec &lt;codec&gt;
            Zadat kódování pro vstupní soubory QM a PO. Výchozí je &apos;Latin1&apos;
@@ -400,7 +408,7 @@ Volby:
 
     --drop-translations
            Smazat stávající překlady a stav nastavit na &apos;unfinished&apos;.
-           Poznámka: toto znamená --no-obsolete.
+           Poznámka: tato volba zahrnuje --no-obsolete.
 
     --source-language &lt;language&gt;[_&lt;region&gt;]
            Zadat/Přepsat jazyk zdrojových řetězců. Výchozí pro
@@ -429,7 +437,7 @@ Volby:
            Smazat čísla řádků z odkazů do souborů UI.
 
     --verbose
-           Být trochu podrobnější
+           Být trochu podrobnější.
 
 Dlouhé volby lze také zadat jen s jednou čárkou na začátku.
 
@@ -448,7 +456,7 @@ Návratová hodnota:
         <translation>
             <numerusform>Byl smazán záznam bez identifikátoru.</numerusform>
             <numerusform>Byly smazány %n záznamy bez identifikátoru.</numerusform>
-            <numerusform>Byly smazány %n záznamy bez identifikátoru.</numerusform>
+            <numerusform>Bylo smazáno %n záznamů bez identifikátoru.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -462,17 +470,17 @@ Návratová hodnota:
     <message numerus="yes">
         <source>    Generated %n translation(s) (%1 finished and %2 unfinished)</source>
         <translation>
-            <numerusform>    Vytvořen jeden překlad (%1 dokončeno a %2 nedokončeno)</numerusform>
-            <numerusform>    Vytvořeny %n překlady (%1 dokončeno a %2 nedokončeno)</numerusform>
-            <numerusform>    Vytvořeno %n překladů (%1 dokončeno a %2 nedokončeno)</numerusform>
+            <numerusform>    Byl vytvořen jeden překlad (%1 dokončeno a %2 nedokončeno)</numerusform>
+            <numerusform>    Byly vytvořeny %n překlady (%1 dokončeno a %2 nedokončeno)</numerusform>
+            <numerusform>    Bylo vytvořeno %n překladů (%1 dokončeno a %2 nedokončeno)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>    Ignored %n untranslated source text(s)</source>
         <translation>
-            <numerusform>    Opomenut jeden nepřeložený zdrojový text</numerusform>
-            <numerusform>    Opomenuty %n nepřeložené zdrojové texty</numerusform>
-            <numerusform>    Opomenuto %n nepřeložených zdrojových textů</numerusform>
+            <numerusform>    Na jeden nepřeložený text nebyl brán zřetel</numerusform>
+            <numerusform>    Na %n nepřeložené texty nebyl brán zřetel</numerusform>
+            <numerusform>    Na %n nepřeložených textů nebyl brán zřetel</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -548,7 +556,7 @@ Volby:
            zprávu nezahrnovat
     -markuntranslated &lt;prefix&gt;
            Pokud překlad nemá skutečný překlad, použít namísto něj
-           zdrojový text předeslaný zadaným řetězcem
+           zdrojový text připojený za zadanou předponu
     -silent
            Nevysvětlovat, co se dělá
     -version
@@ -651,7 +659,7 @@ Volby:
     <message>
         <source>circular inclusion of %1
 </source>
-        <translation>Cyklické zařazení %1
+        <translation type="obsolete">Cyklické zařazení %1
 </translation>
     </message>
     <message>
@@ -687,7 +695,7 @@ Volby:
     <message>
         <source>It is not recommended to call tr() from within a constructor &apos;%1::%2&apos;
 </source>
-        <translation>Nedoporučuje se volat tr() zevnitř stavitele &apos;%1::%2&apos;
+        <translation>Nedoporučuje se volat tr() zevnitř konstruktoru &apos;%1::%2&apos;
 </translation>
     </message>
     <message>
@@ -859,7 +867,7 @@ Options:
     @lst-file
            Read additional file names (one per line) from lst-file.
 </source>
-        <translation>Použití:
+        <translation type="obsolete">Použití:
     lupdate [volby] [projektový-soubor]...
     lupdate [volby] [zdrojový-soubor|cesta|@lst-soubor]... -ts ts-soubory|@lst-soubor
 
@@ -917,6 +925,126 @@ Volby:
 </translation>
     </message>
     <message>
+        <source>Usage:
+    lupdate [options] [project-file]...
+    lupdate [options] [source-file|path|@lst-file]... -ts ts-files|@lst-file
+
+lupdate is part of Qt&apos;s Linguist tool chain. It extracts translatable
+messages from Qt UI files, C++, Java and JavaScript/QtScript source code.
+Extracted messages are stored in textual translation source files (typically
+Qt TS XML). New and modified messages can be merged into existing TS files.
+
+Options:
+    -help  Display this information and exit.
+    -no-obsolete
+           Drop all obsolete strings.
+    -extensions &lt;ext&gt;[,&lt;ext&gt;]...
+           Process files with the given extensions only.
+           The extension list must be separated with commas, not with whitespace.
+           Default: &apos;%1&apos;.
+    -pluralonly
+           Only include plural form messages.
+    -silent
+           Do not explain what is being done.
+    -no-sort
+           Do not sort contexts in TS files.
+    -no-recursive
+           Do not recursively scan the following directories.
+    -recursive
+           Recursively scan the following directories (default).
+    -I &lt;includepath&gt; or -I&lt;includepath&gt;
+           Additional location to look for include files.
+           May be specified multiple times.
+    -locations {absolute|relative|none}
+           Specify/override how source code references are saved in TS files.
+           Default is absolute.
+    -no-ui-lines
+           Do not record line numbers in references to UI files.
+    -disable-heuristic {sametext|similartext|number}
+           Disable the named merge heuristic. Can be specified multiple times.
+    -pro &lt;filename&gt;
+           Name of a .pro file. Useful for files with .pro file syntax but
+           different file suffix. Projects are recursed into and merged.
+    -pro-out &lt;directory&gt;
+           Virtual output directory for processing subsequent .pro files.
+    -source-language &lt;language&gt;[_&lt;region&gt;]
+           Specify the language of the source strings for new files.
+           Defaults to POSIX if not specified.
+    -target-language &lt;language&gt;[_&lt;region&gt;]
+           Specify the language of the translations for new files.
+           Guessed from the file name if not specified.
+    -ts &lt;ts-file&gt;...
+           Specify the output file(s). This will override the TRANSLATIONS
+           and nullify the CODECFORTR from possibly specified project files.
+    -codecfortr &lt;codec&gt;
+           Specify the codec assumed for tr() calls. Effective only with -ts.
+    -version
+           Display the version of lupdate and exit.
+    @lst-file
+           Read additional file names (one per line) or includepaths (one per
+           line, and prefixed with -I) from lst-file.
+</source>
+        <translation>Použití:
+    lupdate [volby] [projektový-soubor]...
+    lupdate [volby] [zdrojový-soubor|cesta|@lst-soubor]... -ts ts-soubory|@lst-soubor
+
+lupdate je částí řetězce nástrojů pro Qt Linguist. Vytahuje překládatelné zprávy
+ze souborů pro uživatelské rozhraní ze zdrojového kódu Qt UI, C++, Java a JavaScript/QtScript.
+Vytažené zprávy jsou ukládány do textových překladových zdrojových souborů (typicky
+Qt TS XML). Nové a změněné zprávy lze sloučit se stávajícími soubory TS.
+
+Volby:
+    -help  Zobrazit tuto informaci a ukončit.
+    -no-obsolete
+           Vypustit všechny zastaralé řetězce.
+    -extensions &lt;ext&gt;[,&lt;ext&gt;]...
+           Zpracovat pouze soubory s danou příponou.
+           Přípony v seznamu přípon musí být odděleny čárkami, ne mezerami.
+           Výchozí: &apos;%1&apos;.
+    -pluralonly
+           Zahrnout pouze zprávy s množným číslem.
+    -silent
+           Nevysvětlovat, co se právě dělá.
+    -no-sort
+           Netřídit souvislosti v souborech TS.
+    -no-recursive
+           Pro následující adresáře neprohledávat podadresáře.
+    -recursive
+           Prohledávat následující adresáře včetně podsložek (výchozí).
+    -I &lt;includepath&gt; or -I&lt;includepath&gt;
+           Dodatečné umístění pro hledání zařazených souborů.
+           Lze stanovit vícekrát.
+    -locations {absolute|relative|none}
+           Určit či pozměnit, jak jsou v souborech TS uloženy odkazy odkazy na zdrojový kód.
+           Výchozí je absolutní.
+    -no-ui-lines
+           Nezaznamenávat čísla řádků v odkazech na soubory UI.
+    -disable-heuristic {sametext|similartext|number}
+           Zakázat uvedený slučovací heuristický postup. Lze stanovit vícekrát.
+    -pro &lt;filename&gt;
+           Název souboru .pro. Užitečné pro soubory se skladbou souboru .pro, ale
+           s odlišnou příponou souboru. Projekty jsou zpracovány rekurzivně a sloučeny.
+    -pro-out &lt;directory&gt;
+           Virtuální výstupní adresář pro zpracování následujících souborů .pro
+    -source-language &lt;language&gt;[_&lt;region&gt;]
+           Stanovit jazyk zdrojových řetězců pro nové soubory.
+           Výchozí je POSIX, pokud není určeno.
+    -target-language &lt;language&gt;[_&lt;region&gt;]
+           Stanovit jazyk překladů pro nové soubory.
+           Odhadnuto z názvu souboru, pokud není stanoveno.
+    -ts &lt;ts-file&gt;...
+           Stanovit výstupní soubor(y). Toto potlačí TRANSLATIONS
+           a zruší CODECFORTR z možná určených projektových souborů.
+    -codecfortr &lt;codec&gt;
+           Stanovit kodek předpokládaný při volání tr() calls. Účinné pouze s -ts.
+    -version
+           Zobrazit verzi lupdate a ukončit.
+    @lst-file
+           Číst další názvy souborů (jeden na řádek) nebo includepaths (jeden na
+           řádek, a s prefixem -I) ze lst-file.
+</translation>
+    </message>
+    <message>
         <source>lupdate warning: Codec for tr() &apos;%1&apos; disagrees with existing file&apos;s codec &apos;%2&apos;. Expect trouble.
 </source>
         <translation>Varování lupdate: Kodek pro tr() &apos;%1&apos; nesouhlasí se stávajícím kodekem souboru &apos;%2&apos;. Dají se očekávat potíže.
@@ -943,7 +1071,13 @@ Volby:
     <message>
         <source>Stripping non plural forms in &apos;%1&apos;...
 </source>
-        <translation>Odkrývají se tvary, které nejsou množným číslem v &apos;%1&apos;...
+        <translation>Odstraňují se tvary, které nejsou množným číslem v &apos;%1&apos;...
+</translation>
+    </message>
+    <message>
+        <source>lupdate warning: Some files have been ignored due to missing qml/javascript support
+</source>
+        <translation>Varování lupdate: Některé soubory přehlíženy kvůli chybějící podpoře pro qml/javascript
 </translation>
     </message>
     <message>
@@ -1022,6 +1156,12 @@ Volby:
         <source>The -pro option should be followed by a filename of .pro file.
 </source>
         <translation>Volba -pro by měla být následována souborovým názvem souboru .pro.
+</translation>
+    </message>
+    <message>
+        <source>The -pro-out option should be followed by a directory name.
+</source>
+        <translation>Volba -pro-out by měla být následována názvem adresáře.
 </translation>
     </message>
     <message>
@@ -1156,11 +1296,11 @@ Volby:
     </message>
     <message>
         <source>Illegal character</source>
-        <translation>Neplatný znak</translation>
+        <translation type="obsolete">Neplatný znak</translation>
     </message>
     <message>
         <source>Unclosed string at end of line</source>
-        <translation>Neuzavřený řetězec na konci řádku</translation>
+        <translation type="obsolete">Neuzavřený řetězec na konci řádku</translation>
     </message>
     <message>
         <source>Illegal escape squence</source>
@@ -1168,27 +1308,27 @@ Volby:
     </message>
     <message>
         <source>Illegal escape sequence</source>
-        <translation>Neplatná úniková posloupnost</translation>
+        <translation type="obsolete">Neplatná úniková posloupnost</translation>
     </message>
     <message>
         <source>Illegal unicode escape sequence</source>
-        <translation>Neplatná úniková posloupnost unicode</translation>
+        <translation type="obsolete">Neplatná úniková posloupnost unicode</translation>
     </message>
     <message>
         <source>Unclosed comment at end of file</source>
-        <translation>Neuzavřená poznámka na konci souboru</translation>
+        <translation type="obsolete">Neuzavřená poznámka na konci souboru</translation>
     </message>
     <message>
         <source>Illegal syntax for exponential number</source>
-        <translation>Neplatná skladba exponenciálního čísla</translation>
+        <translation type="obsolete">Neplatná skladba exponenciálního čísla</translation>
     </message>
     <message>
         <source>Identifier cannot start with numeric literal</source>
-        <translation>Identifikátor nemůže začínat s číselným písmenem</translation>
+        <translation type="obsolete">Identifikátor nemůže začínat s číselným písmenem</translation>
     </message>
     <message>
         <source>Unterminated regular expression literal</source>
-        <translation>Neskončený regulární výraz</translation>
+        <translation type="obsolete">Neskončený regulární výraz</translation>
     </message>
     <message>
         <source>//% cannot be used with %1(). Ignoring
@@ -1235,7 +1375,7 @@ Volby:
     <message>
         <source>Expected </source>
         <extracomment>Beginning of the string that contains comma-separated list of expected tokens</extracomment>
-        <translation>Očekáváno </translation>
+        <translation type="obsolete">Očekáváno </translation>
     </message>
     <message>
         <source>XML error: Parse error at line %1, column %2 (%3).</source>
@@ -1244,6 +1384,33 @@ Volby:
     <message>
         <source>Parse error in UI file</source>
         <translation>Chyba při zpracování v souboru UI</translation>
+    </message>
+</context>
+<context>
+    <name>Linguist</name>
+    <message>
+        <source>GNU Gettext localization files</source>
+        <translation>Překladové soubory GNU Gettext</translation>
+    </message>
+    <message>
+        <source>GNU Gettext localization template files</source>
+        <translation>Soubory s předlohami pro překlad GNU Gettext</translation>
+    </message>
+    <message>
+        <source>Compiled Qt translations</source>
+        <translation>Sestavené překlady Qt</translation>
+    </message>
+    <message>
+        <source>Qt Linguist &apos;Phrase Book&apos;</source>
+        <translation>Slovník Qt Linguist</translation>
+    </message>
+    <message>
+        <source>Qt translation sources</source>
+        <translation>Zdroje s překlady Qt</translation>
+    </message>
+    <message>
+        <source>XLIFF localization files</source>
+        <translation>Překladové soubory XLIFF</translation>
     </message>
 </context>
 <context>
@@ -1270,7 +1437,7 @@ Volby:
     </message>
     <message>
         <source>V&amp;alidation</source>
-        <translation>&amp;Schválení</translation>
+        <translation>&amp;Ověření</translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -1578,7 +1745,7 @@ Volby:
     </message>
     <message>
         <source>&amp;Phrase matches</source>
-        <translation>&amp;Slovník</translation>
+        <translation>Návrhy &amp;slovníku</translation>
     </message>
     <message>
         <source>Place &amp;Marker Matches</source>
@@ -1602,7 +1769,7 @@ Volby:
     </message>
     <message>
         <source>Open a phrase book to assist translation.</source>
-        <translation>Otevřít slovník kvůli podpoře při překladu.</translation>
+        <translation>Otevřít slovník pro pomoc s překladem.</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
@@ -1646,7 +1813,7 @@ Volby:
     </message>
     <message>
         <source>About Qt</source>
-        <translation>O Qt</translation>
+        <translation>O nástrojích Qt</translation>
     </message>
     <message>
         <source>Display information about the Qt toolkit by Trolltech.</source>
@@ -1763,7 +1930,7 @@ Přeskočit nahrávání prve jmenovaného souboru?</translation>
         <translation>
             <numerusform>Nahrána jedna překladová jednotka.</numerusform>
             <numerusform>Nahrány %n překladové jednotky.</numerusform>
-            <numerusform>Nahrány %n překladové jednotky.</numerusform>
+            <numerusform>Nahráno %n překladových jednotek.</numerusform>
         </translation>
     </message>
     <message>
@@ -1849,7 +2016,7 @@ Všechny soubory (*)</translation>
         <translation>
             <numerusform>Přeložen jeden záznam</numerusform>
             <numerusform>Přeloženy %n záznamy</numerusform>
-            <numerusform>Přeloženy %n záznamy</numerusform>
+            <numerusform>Přeloženo %n záznamů</numerusform>
         </translation>
     </message>
     <message>
@@ -1881,9 +2048,9 @@ Všechny soubory (*)</translation>
     <message numerus="yes">
         <source>%n phrase(s) loaded.</source>
         <translation>
-            <numerusform>Nahrán jeden záznam ve slovníku.</numerusform>
-            <numerusform>Nahrány %n záznamy ve slovníku.</numerusform>
-            <numerusform>Nahrány %n záznamy ve slovníku.</numerusform>
+            <numerusform>Nahrán jeden záznam ze slovníku.</numerusform>
+            <numerusform>Nahrány %n záznamy ze slovníku.</numerusform>
+            <numerusform>Nahráno %n záznamů ze slovníku.</numerusform>
         </translation>
     </message>
     <message>
@@ -1911,8 +2078,16 @@ Všechny soubory (*)</translation>
         <translation>Verze %1</translation>
     </message>
     <message>
+        <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) 2015 The Qt Company Ltd.</source>
+        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist je nástrojem pro přidávání překladů do programů Qt.&lt;/p&gt;&lt;p&gt;Copyright (C) 2015 The Qt Company Ltd anebo její dceřinné společnosti.</translation>
+    </message>
+    <message>
+        <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) 2015 The Qt Company Ltd.</source>
+        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist je nástrojem pro přidávání překladů do programů Qt.&lt;/p&gt;&lt;p&gt;Copyright (C) 2015 The Qt Company Ltd anebo její dceřinné společnosti.</translation>
+    </message>
+    <message>
         <source>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist is a tool for adding translations to Qt applications.&lt;/p&gt;&lt;p&gt;Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).</source>
-        <translation>&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist je nástrojem pro přidávání překladů do programů Qt.&lt;/p&gt;&lt;p&gt;Copyright (C) 2012 Nokia Corporation a/nebo její dceřinná společnost(i).</translation>
+        <translation type="obsolete">&lt;center&gt;&lt;img src=&quot;:/images/splash.png&quot;/&gt;&lt;/img&gt;&lt;p&gt;%1&lt;/p&gt;&lt;/center&gt;&lt;p&gt;Qt Linguist je nástrojem pro přidávání překladů do programů Qt.&lt;/p&gt;&lt;p&gt;Copyright (C) 2012 Nokia Corporation a/nebo její dceřinná společnost(i).</translation>
     </message>
     <message>
         <source>Do you want to save the modified files?</source>
@@ -2136,7 +2311,19 @@ Všechny soubory (*)</translation>
     </message>
     <message>
         <source>Display information about the Qt toolkit by Nokia.</source>
-        <translation>Zobrazit informace o sadě nástrojů Qt od Nokie.</translation>
+        <translation type="obsolete">Zobrazit informace o sadě nástrojů Qt od Nokie.</translation>
+    </message>
+    <message>
+        <source>Display information about the Qt toolkit by Digia.</source>
+        <translation>Zobrazit informace o sadě nástrojů Qt od firmy Digia.</translation>
+    </message>
+    <message>
+        <source>Visualize whitespace</source>
+        <translation>Zviditelnit bílé znaky</translation>
+    </message>
+    <message>
+        <source>Toggle visualize whitespace in editors</source>
+        <translation>Přepnout zviditelnění bílých znaků v editorech</translation>
     </message>
 </context>
 <context>
@@ -2196,7 +2383,7 @@ Všechny soubory (*)</translation>
     </message>
     <message>
         <source>This area shows a comment that may guide you, and the context in which the text occurs.</source>
-        <translation>Tato oblast ukazuje případn poznámky, jež vás mohou vést, a souvislosti, v nichž se text vyskytuje.</translation>
+        <translation>Tato oblast ukazuje případné doprovodné poznámky a souvislosti týkající se textu.</translation>
     </message>
     <message>
         <source>Here you can enter comments for your own use. They have no effect on the translated applications.</source>
@@ -2237,7 +2424,7 @@ Line: %2</source>
     </message>
     <message>
         <source>&lt;context comment&gt;</source>
-        <translation>&lt;související poznámka&gt;</translation>
+        <translation>&lt;poznámka pro souvislost&gt;</translation>
     </message>
     <message>
         <source>&lt;unnamed context&gt;</source>
@@ -2516,7 +2703,7 @@ Line: %2</source>
     </message>
     <message>
         <source>Match &amp;case</source>
-        <translation>Dbát na &amp;psaní velkých a malých písmen</translation>
+        <translation>&amp;Dbát na psaní velkých a malých písmen</translation>
     </message>
     <message>
         <source>Mark new translation as &amp;finished</source>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>AbstractFindWidget</name>
     <message>
@@ -20,8 +20,12 @@
         <translation>Celá &amp;slova</translation>
     </message>
     <message>
+        <source>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
+        <translation>&lt;img src=&quot;:/qt-project.org/shared/images/wrap.png&quot;&gt;&amp;nbsp;Hledání přesáhlo konce</translation>
+    </message>
+    <message>
         <source>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Search wrapped</source>
-        <translation>&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Hledání dosáhlo konce</translation>
+        <translation type="obsolete">&lt;img src=&quot;:/trolltech/shared/images/wrap.png&quot;&gt;&amp;nbsp;Hledání dosáhlo konce</translation>
     </message>
 </context>
 <context>
@@ -535,7 +539,7 @@
     </message>
     <message>
         <source>Change script</source>
-        <translation>Změnit skript</translation>
+        <translation type="obsolete">Změnit skript</translation>
     </message>
     <message>
         <source>Changed &apos;%1&apos; of &apos;%2&apos;</source>
@@ -657,19 +661,19 @@
     </message>
     <message>
         <source>This file contains top level spacers.&lt;br&gt;They have &lt;b&gt;NOT&lt;/b&gt; been saved into the form.</source>
-        <translation>Formulář obsahuje volně stojící rozpínavé mezery, které &lt;b&gt;NEBYLY&lt;/b&gt; uloženy do formuláře.</translation>
+        <translation type="obsolete">Formulář obsahuje volně stojící rozpínavé mezery, které &lt;b&gt;NEBYLY&lt;/b&gt; uloženy do formuláře.</translation>
     </message>
     <message>
         <source>Perhaps you forgot to create a layout?</source>
-        <translation>Přidal jste rozvržení?</translation>
+        <translation type="obsolete">Přidal jste rozvržení?</translation>
     </message>
     <message>
         <source>This file cannot be read because it was created using %1.</source>
-        <translation>Soubor nelze přečíst, protože byl vytvořen %1.</translation>
+        <translation type="obsolete">Soubor nelze přečíst, protože byl vytvořen %1.</translation>
     </message>
     <message>
         <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
-        <translation>Soubor nelze přečíst, protože byl vytvořen programem Designer ve verzi %1.</translation>
+        <translation type="obsolete">Soubor nelze přečíst, protože byl vytvořen programem Designer ve verzi %1.</translation>
     </message>
     <message>
         <source>This file cannot be read because the extra info extension failed to load.</source>
@@ -677,33 +681,33 @@
     </message>
     <message>
         <source>The converted file could not be read.</source>
-        <translation>Převedený soubor se nepodařilo přečíst.</translation>
+        <translation type="obsolete">Převedený soubor se nepodařilo přečíst.</translation>
     </message>
     <message>
         <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
-        <translation>Chyba při čtení souboru s rozhraním: Kořenový prvek &lt;ui&gt; chybí.</translation>
+        <translation type="obsolete">Chyba při čtení souboru s rozhraním: Kořenový prvek &lt;ui&gt; chybí.</translation>
     </message>
     <message>
         <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
-        <translation>Chyba při čtení souboru s rozhraním, řádek %1, sloupec %2: %3</translation>
+        <translation type="obsolete">Chyba při čtení souboru s rozhraním, řádek %1, sloupec %2: %3</translation>
     </message>
     <message>
         <source>This file was created using Designer from Qt-%1 and will be converted to a new form by Qt Designer.</source>
-        <translation>Soubor byl vytvořen programem Designer ve verzi %1 a bude převeden na nový formulář pomocí programu Qt Designer.</translation>
+        <translation type="obsolete">Soubor byl vytvořen programem Designer ve verzi %1 a bude převeden na nový formulář pomocí programu Qt Designer.</translation>
     </message>
     <message>
         <source>The old form has not been touched, but you will have to save the form under a new name.</source>
-        <translation>Starý formulář zůstává nezměněn. Nový formulář musí být uložen pod novým názvem.</translation>
+        <translation type="obsolete">Starý formulář zůstává nezměněn. Nový formulář musí být uložen pod novým názvem.</translation>
     </message>
     <message>
         <source>This file was created using Designer from Qt-%1 and could not be read:
 %2</source>
-        <translation>Čtení Designerem %1 vytvořeného souboru se nezdařilo:
+        <translation type="obsolete">Čtení Designerem %1 vytvořeného souboru se nezdařilo:
 %2</translation>
     </message>
     <message>
         <source>Please run it through &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; to convert it to Qt-4&apos;s ui format.</source>
-        <translation>Přeměňte to, prosím, příkazem &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; na formát rozhraní Qt 4.</translation>
+        <translation type="obsolete">Přeměňte to, prosím, příkazem &lt;b&gt;uic3&amp;nbsp;-convert&lt;/b&gt; na formát rozhraní Qt 4.</translation>
     </message>
     <message>
         <source>Custom Widgets</source>
@@ -881,16 +885,12 @@
     <name>FormBuilder</name>
     <message>
         <source>Invalid stretch value for &apos;%1&apos;: &apos;%2&apos;</source>
-        <extracomment>Parsing layout stretch values
-----------
-Parsing layout stretch values</extracomment>
+        <extracomment>Parsing layout stretch values</extracomment>
         <translation>Neplatná hodnota roztažení pro &apos;%1&apos;: &apos;%2&apos;</translation>
     </message>
     <message>
         <source>Invalid minimum size for &apos;%1&apos;: &apos;%2&apos;</source>
-        <extracomment>Parsing grid layout minimum size values
-----------
-Parsing grid layout minimum size values</extracomment>
+        <extracomment>Parsing grid layout minimum size values</extracomment>
         <translation>Neplatná nejmenší velikost pro &apos;%1&apos;: &apos;%2&apos;</translation>
     </message>
 </context>
@@ -1185,22 +1185,34 @@ Parsing grid layout minimum size values</extracomment>
     <name>Q3WizardContainer</name>
     <message>
         <source>Page</source>
-        <translation>Strana</translation>
+        <translation type="obsolete">Strana</translation>
     </message>
 </context>
 <context>
     <name>QAbstractFormBuilder</name>
     <message>
         <source>Unexpected element &lt;%1&gt;</source>
-        <translation>Neplatný prvek &lt;%1&gt;</translation>
+        <translation type="obsolete">Neplatný prvek &lt;%1&gt;</translation>
     </message>
     <message>
         <source>An error has occurred while reading the UI file at line %1, column %2: %3</source>
         <translation>Chyba při čtení souboru s rozhraním, řádek %1, sloupec %2: %3</translation>
     </message>
     <message>
+        <source>This file was created using Designer from Qt-%1 and cannot be read.</source>
+        <translation>Soubor nelze přečíst, protože byl vytvořen programem Designer z Qt verze %1.</translation>
+    </message>
+    <message>
+        <source>This file cannot be read because it was created using %1.</source>
+        <translation>Soubor nelze přečíst, protože byl vytvořen %1.</translation>
+    </message>
+    <message>
         <source>Invalid UI file: The root element &lt;ui&gt; is missing.</source>
         <translation>Chyba při čtení souboru s rozhraním: Kořenový prvek &lt;ui&gt; chybí.</translation>
+    </message>
+    <message>
+        <source>Invalid UI file</source>
+        <translation>Neplatný soubor rozhraní</translation>
     </message>
     <message>
         <source>The creation of a widget of the class &apos;%1&apos; failed.</source>
@@ -1233,7 +1245,7 @@ This indicates an inconsistency in the ui-file.</source>
     </message>
     <message>
         <source>This version of the uitools library is linked without script support.</source>
-        <translation>Tato verze knihovny uitools nepodporuje skripty.</translation>
+        <translation type="obsolete">Tato verze knihovny uitools nepodporuje skripty.</translation>
     </message>
 </context>
 <context>
@@ -1263,7 +1275,7 @@ This indicates an inconsistency in the ui-file.</source>
     </message>
     <message>
         <source>The control requires a design-time license</source>
-        <translation>Ovládací prvek vyžaduje licenci k času návrhu</translation>
+        <translation>Ovládací prvek vyžaduje vývojářskou licenci</translation>
     </message>
 </context>
 <context>
@@ -1310,16 +1322,16 @@ This indicates an inconsistency in the ui-file.</source>
     </message>
     <message>
         <source>Exception at line %1: %2</source>
-        <translation>Chyba výjimky na řádku %1: %2</translation>
+        <translation type="obsolete">Chyba výjimky na řádku %1: %2</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation>Neznámá chyba</translation>
+        <translation type="obsolete">Neznámá chyba</translation>
     </message>
     <message>
         <source>An error occurred while running the script for %1: %2
 Script: %3</source>
-        <translation>Při provádění skriptu pro %1 se vyskytla chyba: %2Skript: %3</translation>
+        <translation type="obsolete">Při provádění skriptu pro %1 se vyskytla chyba: %2Skript: %3</translation>
     </message>
 </context>
 <context>
@@ -1446,6 +1458,10 @@ Chcete zadat jiný název pro soubor, nebo vytvořit nový formulář?</translat
     <message>
         <source>&amp;New Form</source>
         <translation>&amp;Nový formulář</translation>
+    </message>
+    <message>
+        <source>Qt Designer</source>
+        <translation>Qt Designer</translation>
     </message>
     <message>
         <source>Save Form?</source>
@@ -1623,14 +1639,14 @@ Chcete to zkusit ještě jednou?</translation>
     </message>
     <message>
         <source>A COM exception occurred when executing a meta call of type %1, index %2 of &quot;%3&quot;.</source>
-        <translation>Při vyvolání postupu typu %1 se vyskytla výjimka COM, rejstřík %2 &quot;%3&quot;.</translation>
+        <translation>Při vyvolání postupu typu %1 se vyskytla výjimka COM, index %2 &quot;%3&quot;.</translation>
     </message>
 </context>
 <context>
     <name>QDesignerFormBuilder</name>
     <message>
         <source>Script errors occurred:</source>
-        <translation>Vyskytly se chyby ve skriptech:</translation>
+        <translation type="obsolete">Vyskytly se chyby ve skriptech:</translation>
     </message>
     <message>
         <source>The preview failed to build.</source>
@@ -1739,6 +1755,10 @@ Chcete to zkusit ještě jednou?</translation>
     <message>
         <source>The class attribute for the class %1 does not match the class name %2.</source>
         <translation>Vlastnost třídy pro třídu %1 neodpovídá názvu třídy (%2).</translation>
+    </message>
+    <message>
+        <source>Not loaded due to potential symbol clashes (QTCREATORBUG-10273)</source>
+        <translation>Nenahráno z důvodu možného střetu symbolů (QTCREATORBUG-10273)</translation>
     </message>
 </context>
 <context>
@@ -1885,12 +1905,20 @@ Kontejnerové stránky by měly být zadány výhradně v XML vrácené metodě 
         <translation>Designer zřejmě nebyl řádně ukončen; existují soubory z ukládání na pozadí. Chcete je nahrát?</translation>
     </message>
     <message>
+        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened: %2</source>
+        <translation>Soubor &lt;b&gt;%2&lt;/b&gt; se nepodařilo otevřít: %2</translation>
+    </message>
+    <message>
+        <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened: %1</source>
+        <translation>Soubor &lt;b&gt;%1&lt;/b&gt; se nepodařilo otevřít: %1</translation>
+    </message>
+    <message>
         <source>The file &lt;b&gt;%1&lt;/b&gt; could not be opened.</source>
-        <translation>Soubor &lt;b&gt;%1&lt;/b&gt; se nepodařilo otevřít.</translation>
+        <translation type="obsolete">Soubor &lt;b&gt;%1&lt;/b&gt; se nepodařilo otevřít.</translation>
     </message>
     <message>
         <source>The file &lt;b&gt;%1&lt;/b&gt; is not a valid Designer UI file.</source>
-        <translation>Soubor &lt;b&gt;%1&lt;/b&gt; není platným souborem rozhraní programu Designer.</translation>
+        <translation type="obsolete">Soubor &lt;b&gt;%1&lt;/b&gt; není platným souborem rozhraní programu Designer.</translation>
     </message>
     <message numerus="yes">
         <source>There are %n forms with unsaved changes. Do you want to review these changes before quitting?</source>
@@ -1905,9 +1933,7 @@ Kontejnerové stránky by měly být zadány výhradně v XML vrácené metodě 
     <name>QFormBuilder</name>
     <message>
         <source>An empty class name was passed on to %1 (object name: &apos;%2&apos;).</source>
-        <extracomment>Empty class name passed to widget factory method
-----------
-Empty class name passed to widget factory method</extracomment>
+        <extracomment>Empty class name passed to widget factory method</extracomment>
         <translation>Metodě %1 byl předán prázdný název třídy (název objektu &apos;%2&apos;).</translation>
     </message>
     <message>
@@ -2906,6 +2932,10 @@ Může to být například jazykové rozšíření &quot;_cs&quot;.</translation
         <source>Copy Path</source>
         <translation>Kopírovat cestu</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtr</translation>
+    </message>
 </context>
 <context>
     <name>QtResourceViewDialog</name>
@@ -3127,7 +3157,7 @@ Chcete tuto předlohu přepsat?</translation>
     <message>
         <source>An error occurred while running the scripts for &quot;%1&quot;:
 </source>
-        <translation>Při provádění skriptu &quot;%1&quot; se vyskytly chyby:
+        <translation type="obsolete">Při provádění skriptu &quot;%1&quot; se vyskytly chyby:
 </translation>
     </message>
 </context>
@@ -3261,47 +3291,55 @@ Chcete tuto předlohu přepsat?</translation>
         <translation>&lt;br/&gt;Qt Designer je obrazový návrhář uživatelského rozhraní pro programy Qt.&lt;br/&gt;</translation>
     </message>
     <message>
+        <source>%1&lt;br/&gt;Copyright (C) 2015 The Qt Company Ltd.</source>
+        <translation>%1&lt;br/&gt;Autorské právo (C) 2015 The Qt Company Ltd a/nebo její dceřinná společnost(i).</translation>
+    </message>
+    <message>
+        <source>%1&lt;br/&gt;Copyright (C) 2015 The Qt Company Ltd.</source>
+        <translation>%1&lt;br/&gt;Autorské právo (C) 2015 The Qt Company Ltd a/nebo její dceřinná společnost(i).</translation>
+    </message>
+    <message>
         <source>%1&lt;br/&gt;Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).</source>
-        <translation>%1&lt;br/&gt;Autorské právo (C) 2012 Nokia Corporation a/nebo její dceřinná společnost(i).</translation>
+        <translation type="obsolete">%1&lt;br/&gt;Autorské právo (C) 2012 Nokia Corporation a/nebo její dceřinná společnost(i).</translation>
     </message>
 </context>
 <context>
     <name>VideoPlayerTaskMenu</name>
     <message>
         <source>Available Mime Types</source>
-        <translation>Dostupné MIME typy</translation>
+        <translation type="obsolete">Dostupné MIME typy</translation>
     </message>
     <message>
         <source>Display supported mime types...</source>
-        <translation>Zobrazit podporované MIME typy...</translation>
+        <translation type="obsolete">Zobrazit podporované MIME typy...</translation>
     </message>
     <message>
         <source>Load...</source>
-        <translation>Nahrát...</translation>
+        <translation type="obsolete">Nahrát...</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Přehrát</translation>
+        <translation type="obsolete">Přehrát</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Pozastavit</translation>
+        <translation type="obsolete">Pozastavit</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Zastavit</translation>
+        <translation type="obsolete">Zastavit</translation>
     </message>
     <message>
         <source>Choose Video Player Media Source</source>
-        <translation>Vybrat zdroje se soubory pro přehrávač videa</translation>
+        <translation type="obsolete">Vybrat zdroje se soubory pro přehrávač videa</translation>
     </message>
     <message>
         <source>An error has occurred in &apos;%1&apos;: %2</source>
-        <translation>V &apos;%1&apos;: %2 se vyskytla chyba</translation>
+        <translation type="obsolete">V &apos;%1&apos;: %2 se vyskytla chyba</translation>
     </message>
     <message>
         <source>Video Player Error</source>
-        <translation>Chyba v přehrávači videa</translation>
+        <translation type="obsolete">Chyba v přehrávači videa</translation>
     </message>
 </context>
 <context>
@@ -3309,6 +3347,13 @@ Chcete tuto předlohu přepsat?</translation>
     <message>
         <source>The file contains a custom widget &apos;%1&apos; whose base class (%2) differs from the current entry in the widget database (%3). The widget database is left unchanged.</source>
         <translation>Soubor obsahuje uživatelsky stanovený prvek &apos;%1&apos;, jehož základní třída (%2) se neshoduje se současným záznamem v databázi prvků (%3). databáze prvků se nemění.</translation>
+    </message>
+</context>
+<context>
+    <name>qdesigner_internal</name>
+    <message>
+        <source>%1 Widget</source>
+        <translation>%1 prvek</translation>
     </message>
 </context>
 <context>
@@ -3366,6 +3411,10 @@ Chcete tuto předlohu přepsat?</translation>
         <translation>Podrobný pohled</translation>
     </message>
     <message>
+        <source>Filter</source>
+        <translation>Filtr</translation>
+    </message>
+    <message>
         <source>Remove actions</source>
         <translation>Odstranit činnosti</translation>
     </message>
@@ -3413,23 +3462,23 @@ Chcete tuto předlohu přepsat?</translation>
     <name>qdesigner_internal::BrushManagerProxy</name>
     <message>
         <source>The element &apos;%1&apos; is missing the required attribute &apos;%2&apos;.</source>
-        <translation>U prvku &apos;%1&apos; chybí vyžadovaná vlastnost &apos;%2&apos;..</translation>
+        <translation type="obsolete">U prvku &apos;%1&apos; chybí vyžadovaná vlastnost &apos;%2&apos;..</translation>
     </message>
     <message>
         <source>Empty brush name encountered.</source>
-        <translation>Chybějící název u vymezení štětce.</translation>
+        <translation type="obsolete">Chybějící název u vymezení štětce.</translation>
     </message>
     <message>
         <source>An unexpected element &apos;%1&apos; was encountered.</source>
-        <translation>Byl zjištěn neplatný prvek &apos;%1&apos;.</translation>
+        <translation type="obsolete">Byl zjištěn neplatný prvek &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>An error occurred when reading the brush definition file &apos;%1&apos; at line line %2, column %3: %4</source>
-        <translation>Chyba při čtení souboru s vymezením štětce &apos;%1&apos; na řádku %2, sloupec %3: %4</translation>
+        <translation type="obsolete">Chyba při čtení souboru s vymezením štětce &apos;%1&apos; na řádku %2, sloupec %3: %4</translation>
     </message>
     <message>
         <source>An error occurred when reading the resource file &apos;%1&apos; at line %2, column %3: %4</source>
-        <translation>Chyba při čtení souboru s prostředky &apos;%1&apos; na řádku %2, sloupec %3: %4</translation>
+        <translation type="obsolete">Chyba při čtení souboru s prostředky &apos;%1&apos; na řádku %2, sloupec %3: %4</translation>
     </message>
 </context>
 <context>
@@ -4058,6 +4107,18 @@ Chcete tuto předlohu přepsat?</translation>
     <message>
         <source>Delete &apos;%1&apos;</source>
         <translation>Smazat &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Invalid form</source>
+        <translation>Neplatný formulář</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;This file contains top level spacers.&lt;br/&gt;They will &lt;b&gt;not&lt;/b&gt; be saved.&lt;/p&gt;&lt;p&gt;Perhaps you forgot to create a layout?&lt;/p&gt;</source>
+        <translation>Formulář obsahuje volně stojící rozpínavé mezery, které &lt;b&gt;NEBUDOU&lt;/b&gt; uloženy do formuláře.&lt;/p&gt;&lt;p&gt;Nezapomněli jste vytvořit rozvržení?&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;This file contains top level spacers.&lt;br&gt;They will &lt;b&gt;not&lt;/b&gt; be saved.&lt;/p&gt;&lt;p&gt;Perhaps you forgot to create a layout?&lt;/p&gt;</source>
+        <translation>Formulář obsahuje volně stojící rozpínavé mezery, které &lt;b&gt;NEBUDOU&lt;/b&gt; uloženy do formuláře.&lt;/p&gt;&lt;p&gt;Nezapomněli jste vytvořit rozvržení?&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -4984,46 +5045,57 @@ která byla volně puštěná.</translation>
     <name>qdesigner_internal::PreviewWidget</name>
     <message>
         <source>Preview Window</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Náhledové okno</translation>
     </message>
     <message>
         <source>LineEdit</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Upravitelný řádek</translation>
     </message>
     <message>
         <source>ComboBox</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Rozbalovací seznam</translation>
     </message>
     <message>
         <source>PushButton</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Tlačítko</translation>
     </message>
     <message>
         <source>ButtonGroup2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Skupina tlačítek 2</translation>
     </message>
     <message>
         <source>CheckBox1</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Zaškrtávací pole 1</translation>
     </message>
     <message>
         <source>CheckBox2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Zaškrtávací pole 2</translation>
     </message>
     <message>
         <source>ButtonGroup</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Skupina tlačítek</translation>
     </message>
     <message>
         <source>RadioButton1</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Přepínač 1</translation>
     </message>
     <message>
         <source>RadioButton2</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Přepínač 2</translation>
     </message>
     <message>
         <source>RadioButton3</source>
+        <extracomment>Palette Editor Preview Widget</extracomment>
         <translation>Přepínač 3</translation>
     </message>
 </context>
@@ -5086,6 +5158,10 @@ která byla volně puštěná.</translation>
     <message>
         <source>Drop Down Button View</source>
         <translation>Rozbalovací pohled</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtr</translation>
     </message>
     <message>
         <source>Object: %1
@@ -5203,7 +5279,7 @@ Třída: %2</translation>
     </message>
     <message>
         <source>Change script...</source>
-        <translation>Změnit skript...</translation>
+        <translation type="obsolete">Změnit skript...</translation>
     </message>
     <message>
         <source>Change signals/slots...</source>
@@ -5458,6 +5534,10 @@ Třída: %2</translation>
         <translation>Zarovnat do bloku</translation>
     </message>
     <message>
+        <source>Right to Left</source>
+        <translation>Zprava doleva</translation>
+    </message>
+    <message>
         <source>Superscript</source>
         <translation>Horní index</translation>
     </message>
@@ -5482,22 +5562,22 @@ Třída: %2</translation>
     <name>qdesigner_internal::ScriptDialog</name>
     <message>
         <source>Edit script</source>
-        <translation>Upravit skript</translation>
+        <translation type="obsolete">Upravit skript</translation>
     </message>
     <message>
         <source>Syntax error</source>
-        <translation>Chyba ve skladbě</translation>
+        <translation type="obsolete">Chyba ve skladbě</translation>
     </message>
     <message>
         <source>&lt;html&gt;Enter a Qt Script snippet to be executed while loading the form.&lt;br&gt;The widget and its children are accessible via the variables &lt;i&gt;widget&lt;/i&gt; and &lt;i&gt;childWidgets&lt;/i&gt;, respectively.</source>
-        <translation>&lt;html&gt;Zadejte kousek Qt skriptu, jenž bude spuštěn při nahrávání formuláře.&lt;br&gt;Prvek a jemu podřízené prvky jsou přístupné prostřednictvím proměnných &lt;i&gt;widget&lt;/i&gt; a &lt;i&gt;childWidgets&lt;/i&gt;.</translation>
+        <translation type="obsolete">&lt;html&gt;Zadejte kousek Qt skriptu, jenž bude spuštěn při nahrávání formuláře.&lt;br&gt;Prvek a jemu podřízené prvky jsou přístupné prostřednictvím proměnných &lt;i&gt;widget&lt;/i&gt; a &lt;i&gt;childWidgets&lt;/i&gt;.</translation>
     </message>
 </context>
 <context>
     <name>qdesigner_internal::ScriptErrorDialog</name>
     <message>
         <source>Script errors</source>
-        <translation>Chyby ve skriptu</translation>
+        <translation type="obsolete">Chyby ve skriptu</translation>
     </message>
 </context>
 <context>
@@ -5856,6 +5936,10 @@ Třída: %2</translation>
     <message>
         <source>Warning: Widget creation failed in the widget box. This could be caused by invalid custom widget XML.</source>
         <translation>Upozornění: Vytvoření prvku v krabici s prvky se nezdařilo. Mohlo by to být zapříčiněno chybným XML kódem uživatelsky stanoveného prvku.</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtr</translation>
     </message>
 </context>
 <context>
