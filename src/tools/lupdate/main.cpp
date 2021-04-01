@@ -277,7 +277,7 @@ static void processSources(Translator &fetchedTor, const QStringList &sourceFile
 
       } else if (item.endsWith(".js", Qt::CaseInsensitive) || item.endsWith(".qs", Qt::CaseInsensitive)) {
          // loadQScript(fetchedTor, item, cd);
-         printErr(QString("Unsupported file type \n").formatArg(QStringView(item.lastIndexOfFast('.'), item.end())));
+         printErr(QString("Unsupported file type %1\n").formatArg(item));
 
       } else if (! processTs(fetchedTor, item, cd)) {
          sourceFilesCpp << item;
