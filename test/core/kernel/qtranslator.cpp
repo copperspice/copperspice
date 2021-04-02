@@ -62,3 +62,16 @@ TEST_CASE("QTranslator plural", "[qtranslator]")
    REQUIRE(obj.translate("QThing", "Attending %n conference(s)", nullptr, 1) == "Teilnahme an 1 Konferenz");
    REQUIRE(obj.translate("QThing", "Attending %n conference(s)", nullptr, 2) == "Teilnahme an 2 Konferenzen");
 }
+
+TEST_CASE("QTranslator macros", "[qtranslator]")
+{
+   const char *source = cs_mark_tr("QIODevice", "Too many open files");
+
+   REQUIRE(QString::fromLatin1(source) == "Too many open files");
+
+   //
+   QTranslator obj;
+   obj.load(":/test_translator/test_de");
+
+   REQUIRE(obj.translate("QIODevice", source) == "Zu viele Dateien geöffnet");
+}
