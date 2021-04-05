@@ -276,7 +276,9 @@ class QNativeSocketEnginePrivate : public QAbstractSocketEnginePrivate
 
             *sockAddrSize = sizeof(sockaddr_in);
         }
-    }
+   }
+
+   bool check_valid_socketlayer(const char *function) const;
 
  private:
    Q_DECLARE_PUBLIC(QNativeSocketEngine)
