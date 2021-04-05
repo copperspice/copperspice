@@ -2229,8 +2229,7 @@ void QWizard::setField(const QString &name, const QVariant &value)
    if (index != -1) {
       const QWizardField &field = d->fields.at(index);
       if (!field.object->setProperty(field.property, value))
-         qWarning("QWizard::setField: Couldn't write to property '%s'",
-            field.property.constData());
+         qWarning("QWizard::setField: Unable to write to property '%s'", field.property.constData());
       return;
    }
 

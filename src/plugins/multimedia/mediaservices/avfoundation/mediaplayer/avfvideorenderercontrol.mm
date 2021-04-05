@@ -215,7 +215,7 @@ void AVFVideoRendererControl::updateVideoFrame(const CVTimeStamp &ts)
    AVPlayerLayer *playerLayer = (AVPlayerLayer *)m_playerLayer;
 
    if (!playerLayer) {
-      qWarning("updateVideoFrame called without AVPlayerLayer (which shouldn't happen");
+      qWarning("updateVideoFrame called without AVPlayerLayer");
       return;
    }
 

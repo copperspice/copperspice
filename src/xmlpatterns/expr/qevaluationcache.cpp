@@ -91,13 +91,12 @@ Item::Iterator::Ptr EvaluationCache<IsForGlobal>::evaluateSequence(const Dynamic
 
       case ItemSequenceCacheCell::PartiallyPopulated: {
          cell.inUse = false;
-         Q_ASSERT_X(cells.at(m_varSlot).sourceIterator, Q_FUNC_INFO,
-                    "This trigger for a cache bug which hasn't yet been analyzed.");
+         Q_ASSERT_X(cells.at(m_varSlot).sourceIterator, Q_FUNC_INFO, "Cache inconsistency.");
          return Item::Iterator::Ptr(new CachingIterator(cells, m_varSlot, IsForGlobal ? topFocusContext(context) : context));
       }
 
       default: {
-         Q_ASSERT_X(false, Q_FUNC_INFO, "This path is not supposed to be run.");
+         Q_ASSERT_X(false, Q_FUNC_INFO, "This path is invalid.");
          return Item::Iterator::Ptr();
       }
    }

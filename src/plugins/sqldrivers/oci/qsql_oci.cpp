@@ -174,7 +174,7 @@ struct QOCIResultPrivate {
             0);
 #ifdef QOCI_DEBUG
       if (r != 0) {
-         qWarning("QOCIResultPrivate::setCharset: Couldn't set OCI_ATTR_CHARSET_FORM.");
+         qWarning("QOCIResultPrivate::setCharset: Unable to set OCI_ATTR_CHARSET_FORM.");
       }
 #endif
 #endif
@@ -188,7 +188,7 @@ struct QOCIResultPrivate {
             OCI_ATTR_CHARSET_ID,
             err);
       if (r != 0) {
-         qOraWarning("QOCIResultPrivate::setCharsetI Couldn't set OCI_ATTR_CHARSET_ID: ", err);
+         qOraWarning("QOCIResultPrivate::setCharsetI Unable to set OCI_ATTR_CHARSET_ID: ", err);
       }
 
    }
@@ -208,8 +208,7 @@ void QOCIResultPrivate::setStatementAttributes()
             OCI_ATTR_PREFETCH_ROWS,
             err);
       if (r != 0)
-         qOraWarning("QOCIResultPrivate::setStatementAttributes:"
-            " Couldn't set OCI_ATTR_PREFETCH_ROWS: ", err);
+         qOraWarning("QOCIResultPrivate::setStatementAttributes: Unable to set OCI_ATTR_PREFETCH_ROWS: ", err);
    }
    if (prefetchMem >= 0) {
       r = OCIAttrSet(sql,
@@ -219,8 +218,7 @@ void QOCIResultPrivate::setStatementAttributes()
             OCI_ATTR_PREFETCH_MEMORY,
             err);
       if (r != 0)
-         qOraWarning("QOCIResultPrivate::setStatementAttributes:"
-            " Couldn't set OCI_ATTR_PREFETCH_MEMORY: ", err);
+         qOraWarning("QOCIResultPrivate::setStatementAttributes: Unable to set OCI_ATTR_PREFETCH_MEMORY: ", err);
    }
 }
 
@@ -1627,7 +1625,7 @@ int qReadLob(T &buf, const QOCIResultPrivate *d, OCILobLocator *lob)
    // Read this from the database, don't assume we know what it is set to
    r = OCILobCharSetForm(d->env, d->err, lob, &csfrm);
    if (r != OCI_SUCCESS) {
-      qOraWarning("OCIResultPrivate::readLobs: Couldn't get LOB char set form: ", d->err);
+      qOraWarning("OCIResultPrivate::readLobs: Unable to retrieve LOB char set form: ", d->err);
       csfrm = 0;
    }
 
@@ -1640,7 +1638,7 @@ int qReadLob(T &buf, const QOCIResultPrivate *d, OCILobLocator *lob)
          return OCI_SUCCESS;
       }
    } else {
-      qOraWarning("OCIResultPrivate::readLobs: Couldn't get LOB length: ", d->err);
+      qOraWarning("OCIResultPrivate::readLobs: Unable to retrieve LOB length: ", d->err);
       return r;
    }
 

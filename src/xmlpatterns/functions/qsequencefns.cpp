@@ -313,8 +313,7 @@ Expression::Ptr DocFN::typeCheck(const StaticContext::Ptr &context,
    const QUrl uri(context->resolveURI(mayRela, staticBaseURI()));
 
    /* The URI is supplied statically, so, let's try to be clever. */
-   Q_ASSERT_X(context->resourceLoader(), Q_FUNC_INFO,
-              "No resource loader is set in the StaticContext.");
+   Q_ASSERT_X(context->resourceLoader(), Q_FUNC_INFO, "No resource loader is set in the StaticContext.");
    m_type = context->resourceLoader()->announceDocument(uri, ResourceLoader::MayUse);
 
    if (m_type) {

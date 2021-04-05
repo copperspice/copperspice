@@ -67,7 +67,7 @@ inline static QString fromSQLTCHAR(const QVarLengthArray<SQLTCHAR> &input, int s
          result = QString::fromUcs4((const uint *)input.constData(), realsize);
          break;
       default:
-         qCritical() << "sizeof(SQLTCHAR) is " << sizeof(SQLTCHAR) << "Don't know how to handle this";
+         qCritical() << "sizeof(SQLTCHAR) is " << sizeof(SQLTCHAR) << "Unable to handle this data type";
    }
    return result;
 }
@@ -87,9 +87,10 @@ inline static QVarLengthArray<SQLTCHAR> toSQLTCHAR(const QString &input)
          memcpy(result.data(), input.toUcs4().data(), input.size() * 4);
          break;
       default:
-         qCritical() << "sizeof(SQLTCHAR) is " << sizeof(SQLTCHAR) << "Don't know how to handle this";
+         qCritical() << "sizeof(SQLTCHAR) is " << sizeof(SQLTCHAR) << "Unable to handle this data type";
    }
-   result.append(0); // make sure it's null terminated, doesn't matter if it already is, it does if it isn't.
+
+   result.append(0);    // make sure it's null terminated
    return result;
 }
 
@@ -1572,7 +1573,7 @@ bool QODBCResult::exec()
                         qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
                         SQL_C_TCHAR,
                         strSize > 254 ? SQL_WLONGVARCHAR : SQL_WVARCHAR,
-                        0, // god knows... don't change this!
+                        0,    // do not change this value
                         0,
                         (void *)a.constData(),
                         a.size(),
@@ -1955,7 +1956,7 @@ bool QODBCDriver::open(const QString &db,
    }
 
    if (!d->checkDriver()) {
-      setLastError(qMakeError(tr("Unable to connect - Driver doesn't support all "
+      setLastError(qMakeError(tr("Unable to connect - Driver does not support all "
                "functionality required"), QSqlError::ConnectionError, d));
       setOpenError(true);
       return false;
@@ -2101,8 +2102,8 @@ bool QODBCDriverPrivate::checkDriver() const
          return false;
       }
       if (sup == SQL_FALSE) {
-         qWarning () << "QODBCDriver::open: Warning - Driver doesn't support all needed functionality (" << reqFunc[i] <<
-            ").\nPlease look at the Qt SQL Module Driver documentation for more information.";
+         qWarning () << "QODBCDriver::open: Warning - Driver does not support all needed functionality (" << reqFunc[i] <<
+            ").\nRefer to the SQL Driver documentation for more information.";
          return false;
       }
    }
@@ -2113,12 +2114,11 @@ bool QODBCDriverPrivate::checkDriver() const
       r = SQLGetFunctions(hDbc, optFunc[i], &sup);
 
       if (r != SQL_SUCCESS) {
-         qSqlWarning(QLatin1String("QODBCDriver::checkDriver: Cannot get list of supported functions"), this);
+         qSqlWarning(QLatin1String("QODBCDriver::checkDriver: Unable to retrieve list of supported functions"), this);
          return false;
       }
       if (sup == SQL_FALSE) {
-         qWarning() << "QODBCDriver::checkDriver: Warning - Driver doesn't support some non-critical functions (" << optFunc[i]
-            << ')';
+         qWarning() << "QODBCDriver::checkDriver: Driver is missing some optional functions (" << optFunc[i] << ')';
          return true;
       }
    }
@@ -2188,7 +2188,7 @@ void QODBCDriverPrivate::checkHasSQLFetchScroll()
    if ((r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) || sup != SQL_TRUE) {
       hasSQLFetchScroll = false;
       qWarning() <<
-         "QODBCDriver::checkHasSQLFetchScroll: Warning - Driver doesn't support scrollable result sets, use forward only mode for queries";
+         "QODBCDriver::checkHasSQLFetchScroll: Warning - Driver does not support scrollable result sets, use forward only mode for queries";
    }
 }
 

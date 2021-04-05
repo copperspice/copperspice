@@ -310,7 +310,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
 
 #if defined(DEBUG_QSHORTCUTMAP)
    if (graphicsWidgets.isEmpty()) {
-      qDebug() << a << "not connected to any widgets; won't trigger";
+      qDebug() << a << " is not connected to any widgets and will not trigger";
    }
 #endif
 

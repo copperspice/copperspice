@@ -342,9 +342,7 @@ static GstFlowReturn gst_video_connector_chain (GstPad * pad, GstBuffer * buf)
 
             GST_DEBUG_OBJECT (element, "Pushing new segment event");
             if (!gst_pad_push_event (element->srcpad, ev)) {
-                GST_WARNING_OBJECT (element,
-                                    "Newsegment handling failed in %" GST_PTR_FORMAT,
-                                    element->srcpad);
+                GST_WARNING_OBJECT (element, "New segment handling failed in %" GST_PTR_FORMAT, element->srcpad);
             }
 
             if (element->latest_buffer) {

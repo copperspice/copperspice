@@ -29,7 +29,7 @@
 
 QString msgAboutCs()
 {
-   return QCoreApplication::translate("QCocoaMenuItem", "About Cs");
+   return QCoreApplication::translate("QCocoaMenuItem", "About CS");
 }
 
 static const char *application_menu_strings[] = {

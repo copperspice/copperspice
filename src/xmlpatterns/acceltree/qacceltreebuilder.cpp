@@ -185,7 +185,7 @@ void AccelTreeBuilder<FromDocument>::attribute(const QXmlName &name, QStringView
 
          /* If we're building from an XML Document(e.g, we're fed from QXmlStreamReader, we raise FODC0002,
           * otherwise XQDY0091. */
-         m_context->error(QtXmlPatterns::tr("An %1-attribute must have a valid %2 as value, which %3 isn't.")
+         m_context->error(QtXmlPatterns::tr("An %1-attribute must have a valid %2 as value, which %3 is not.")
                   .formatArgs(formatKeyword("xml:id"),
                   formatType(m_namePool, BuiltinTypes::xsNCName), formatData(value.toString())),
                   FromDocument ? ReportContext::FODC0002 : ReportContext::XQDY0091, this);

@@ -430,7 +430,7 @@ bool QLocalSocket::waitForDisconnected(int msecs)
    }
 
    if (!openMode().testFlag(QIODevice::ReadOnly)) {
-      qWarning("QLocalSocket::waitForDisconnected isn't supported for write only pipes.");
+      qWarning("QLocalSocket::waitForDisconnected is not supported for write only pipes");
       return false;
    }
 

@@ -294,7 +294,7 @@ void QXmlSerializer::startElement(const QXmlName &name)
          d->state = InsideDocumentElement;
 
       } else if (d->state != InsideDocumentElement) {
-         d->query.d->staticContext()->error(QtXmlPatterns::tr("Element %1 can't be serialized because it appears outside "
+         d->query.d->staticContext()->error(QtXmlPatterns::tr("Element %1 can not be serialized because it appears outside "
                   "the document element.").formatArgs(formatKeyword(d->np, name)), ReportContext::SENR0001, d->query.d->expression().data());
       }
    }
@@ -349,7 +349,7 @@ void QXmlSerializer::attribute(const QXmlName &name, QStringView value)
 
    if (atDocumentRoot()) {
       Q_UNUSED(d);
-      d->query.d->staticContext()->error(QtXmlPatterns::tr("Attribute %1 can't be serialized because it appears at "
+      d->query.d->staticContext()->error(QtXmlPatterns::tr("Attribute %1 can not be serialized because it appears at "
                   "the top level.").formatArg(formatKeyword(d->np, name)), ReportContext::SENR0001, d->query.d->expression().data());
    } else {
       d->write(' ');
@@ -412,14 +412,10 @@ void QXmlSerializer::namespaceBinding(const QXmlName &nb)
     */
 
    Q_D(QXmlSerializer);
-   Q_ASSERT_X(!nb.isNull(), Q_FUNC_INFO,
-              "It makes no sense to pass a null QXmlName.");
+   Q_ASSERT_X(! nb.isNull(), Q_FUNC_INFO, "Unable to bind a null QXmlName.");
 
-   Q_ASSERT_X((nb.namespaceURI() != StandardNamespaces::empty) ||
-              (nb.prefix() == StandardPrefixes::empty),
-              Q_FUNC_INFO,
-              "Undeclarations of prefixes aren't allowed in XML 1.0 "
-              "and aren't supposed to be received.");
+   Q_ASSERT_X((nb.namespaceURI() != StandardNamespaces::empty) || (nb.prefix() == StandardPrefixes::empty),
+              Q_FUNC_INFO, "Undeclarations of prefixes are not allowed in XML 1.0.");
 
    if (nb.namespaceURI() == QPatternist::StandardNamespaces::StopNamespaceInheritance) {
       return;

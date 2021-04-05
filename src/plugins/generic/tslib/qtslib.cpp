@@ -61,7 +61,7 @@ QTsLibMouseHandler::QTsLibMouseHandler(const QString &key,
         m_notify = new QSocketNotifier(fd, QSocketNotifier::Read, this);
         connect(m_notify, SIGNAL(activated(int)), this, SLOT(readMouseData()));
     } else {
-        qWarning("Cannot open mouse input device '%s': %s", device.constData(), strerror(errno));
+        qWarning("Unable to open mouse input device '%s': %s", device.constData(), strerror(errno));
         return;
     }
 }

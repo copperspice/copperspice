@@ -603,7 +603,6 @@ GstFlowReturn QVideoSurfaceGstSink::buffer_alloc(
    }
 
    if (sink->delegate->supportedPixelFormats(pool->handleType()).isEmpty()) {
-      //qDebug() << "sink doesn't support native pool buffers, skip buffers allocation";
       return GST_FLOW_OK;
    }
 
@@ -650,7 +649,7 @@ GstFlowReturn QVideoSurfaceGstSink::buffer_alloc(
    QVideoSurfaceFormat surfaceFormat = sink->delegate->surfaceFormat();
 
    if (!pool->isFormatSupported(surfaceFormat)) {
-      qDebug() << "sink doesn't support native pool format, skip custom buffers allocation";
+      qDebug() << "sink does not support native pool format, skip custom buffers allocation";
       return GST_FLOW_OK;
    }
 

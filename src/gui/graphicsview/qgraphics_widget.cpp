@@ -472,7 +472,7 @@ QSizeF QGraphicsWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) c
             sh = QSizeF(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
             break;
          default:
-            qWarning("QGraphicsWidget::sizeHint(): Don't know how to handle the value of 'which'");
+            qWarning("QGraphicsWidget::sizeHint(): Value of 'which' is not valid");
             break;
       }
    }

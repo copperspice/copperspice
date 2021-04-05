@@ -219,7 +219,7 @@ void QNetworkAccessFileBackend::closeDownstreamChannel()
 void QNetworkAccessFileBackend::downstreamReadyWrite()
 {
    Q_ASSERT_X(operation() == QNetworkAccessManager::GetOperation, "QNetworkAccessFileBackend",
-              "We're being told to download data but operation isn't GET!");
+               "Attempt to download data using non GET operation");
 
    readMoreFromFile();
 }
@@ -234,8 +234,8 @@ bool QNetworkAccessFileBackend::loadFileInfo()
    metaDataChanged();
 
    if (fi.isDir()) {
-      error(QNetworkReply::ContentOperationNotPermittedError,
-            QCoreApplication::translate("QNetworkAccessFileBackend", "Can not open %1: Path is a directory").formatArg(url().toString()));
+      error(QNetworkReply::ContentOperationNotPermittedError, QCoreApplication::translate("QNetworkAccessFileBackend",
+               "Unable to open %1: Path is a directory").formatArg(url().toString()));
       finished();
       return false;
    }

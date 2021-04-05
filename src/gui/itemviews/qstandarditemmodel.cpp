@@ -108,8 +108,7 @@ void QStandardItemPrivate::setChild(int row, int column, QStandardItem *item,
 {
    Q_Q(QStandardItem);
    if (item == q) {
-      qWarning("QStandardItem::setChild: Can't make an item a child of itself %p",
-         item);
+      qWarning("QStandardItem::setChild: Unable to make an item a child of itself %p", item);
       return;
    }
    if ((row < 0) || (column < 0)) {

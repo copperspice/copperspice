@@ -1676,7 +1676,7 @@ bool QPSQLDriver::subscribeToNotification(const QString &name)
 
    if (d->seid.contains(name)) {
       qWarning("QPSQLDriver::subscribeToNotificationImplementation: already subscribing to '%s'.",
-         qPrintable(name));
+         csPrintable(name));
       return false;
    }
 
@@ -1718,7 +1718,7 @@ bool QPSQLDriver::unsubscribeFromNotification(const QString &name)
 
    if (! d->seid.contains(name)) {
       qWarning("QPSQLDriver::unsubscribeFromNotificationImplementation(): Not subscribed to '%s'.",
-         qPrintable(name));
+         csPrintable(name));
       return false;
    }
 

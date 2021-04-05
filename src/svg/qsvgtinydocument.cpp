@@ -255,7 +255,7 @@ void QSvgTinyDocument::draw(QPainter *p, const QString &id, const QRectF &bounds
    QSvgNode *node = scopeNode(id);
 
    if (!node) {
-      qDebug("Couldn't find node %s. Skipping rendering.", qPrintable(id));
+      qDebug("Unable to find node %s, skipping rendering.", csPrintable(id));
       return;
    }
 
@@ -443,7 +443,7 @@ QMatrix QSvgTinyDocument::matrixForElement(const QString &id) const
    QSvgNode *node = scopeNode(id);
 
    if (!node) {
-      qDebug("Couldn't find node %s. Skipping rendering.", qPrintable(id));
+      qDebug("Unable to find node %s, skipping rendering.", csPrintable(id));
       return QMatrix();
    }
 

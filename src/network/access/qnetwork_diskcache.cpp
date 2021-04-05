@@ -192,7 +192,7 @@ void QNetworkDiskCache::insert(QIODevice *device)
 
    QHash<QIODevice *, QCacheItem *>::iterator it = d->inserting.find(device);
    if (it == d->inserting.end()) {
-      qWarning() << "QNetworkDiskCache::insert() called on a device we don't know about" << device;
+      qWarning() << "QNetworkDiskCache::insert() called on a device which is unknown " << device;
       return;
    }
 
@@ -225,7 +225,7 @@ void QNetworkDiskCachePrivate::storeItem(QCacheItem *cacheItem)
 
    if (QFile::exists(fileName)) {
       if (!QFile::remove(fileName)) {
-         qWarning() << "QNetworkDiskCache: couldn't remove the cache file " << fileName;
+         qWarning() << "QNetworkDiskCache: could not remove the cache file " << fileName;
          return;
       }
    }

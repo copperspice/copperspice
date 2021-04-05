@@ -406,7 +406,7 @@ static ReturnOrderBy *locateReturnClause(const Expression::Ptr &expr)
    } else if (id == Expression::IDReturnOrderBy) {
       return expr->as<ReturnOrderBy>();
    } else {
-      return 0;
+      return nullptr;
    }
 }
 
@@ -1848,7 +1848,7 @@ static const char *const yytname[] = {
    "SchemaAttributeTest", "ElementTest", "OptionalQuestionMark",
    "SchemaElementTest", "EmptyParanteses", "AttributeName", "ElementName",
    "TypeName", "FunctionName", "NCName", "LexicalName", "PragmaName",
-   "URILiteral", "StringLiteral", "QName", 0
+   "URILiteral", "StringLiteral", "QName", nullptr
 };
 #endif
 
@@ -3127,7 +3127,7 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
       return 0;
    } else {
       int yytype = YYTRANSLATE (yychar);
-      YYSIZE_T yysize0 = yytnamerr (0, yytname[yytype]);
+      YYSIZE_T yysize0 = yytnamerr (nullptr, yytname[yytype]);
       YYSIZE_T yysize = yysize0;
       YYSIZE_T yysize1;
       int yysize_overflow = 0;
@@ -3176,7 +3176,7 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
                break;
             }
             yyarg[yycount++] = yytname[yyx];
-            yysize1 = yysize + yytnamerr (0, yytname[yyx]);
+            yysize1 = yysize + yytnamerr (nullptr, yytname[yyx]);
             yysize_overflow |= (yysize1 < yysize);
             yysize = yysize1;
             yyfmt = yystpcpy (yyfmt, yyprefix);
@@ -3862,7 +3862,7 @@ yyreduce:
          {
             const AtomicValue::Ptr val(Decimal::fromLexical((yyvsp[(2) - (2)].sval)));
             if (val->hasError()) {
-               parseInfo->staticContext->error(QtXmlPatterns::tr("The value of attribute %1 must be of type %2, which %3 isn't.")
+               parseInfo->staticContext->error(QtXmlPatterns::tr("Value of attribute %1 must be of type %2, has type %3.")
                   .formatArgs(formatKeyword("priority"),
                   formatType(parseInfo->staticContext->namePool(), BuiltinTypes::xsDecimal),
                   formatData((yyvsp[(2) - (2)].sval))), ReportContext::XTSE0530, fromYYLTYPE((yyloc), parseInfo));

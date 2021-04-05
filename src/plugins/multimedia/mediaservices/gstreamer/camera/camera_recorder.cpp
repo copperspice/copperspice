@@ -252,6 +252,6 @@ void CameraBinRecorder::setMuted(bool muted)
 void CameraBinRecorder::setVolume(qreal volume)
 {
    if (!qFuzzyCompare(volume, qreal(1.0))) {
-      qWarning() << "Media service doesn't support recorder audio gain.";
+      qWarning() << "Media service does not support recorder audio gain.";
    }
 }

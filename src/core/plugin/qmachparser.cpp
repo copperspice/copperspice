@@ -203,7 +203,7 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
    //    // No Qt section was found, but at least we know that where the proper architecture's boundaries are
    //    return NoQtSection;
    if (errorString) {
-      *errorString = QLibrary::tr("'%1' is not a Qt plugin").formatArg(library);
+      *errorString = QLibrary::tr("'%1' is not a CS plugin").formatArg(library);
    }
 
    return NotSuitable;

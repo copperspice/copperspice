@@ -2425,9 +2425,9 @@ void QObjectConnectionManager::execute(int slotIndex, void **argv)
    Q_ASSERT(slot.isObject());
 
    if (engine->isCollecting()) {
-      qWarning("QtScript: can't execute signal handler during GC");
-      // we can't do a script function call during GC,
-      // so we're forced to ignore this signal
+      qWarning("CsScript: Unable to execute signal handler");
+
+      // we can't do a script function call during GC, so we're forced to ignore this signal
       return;
    }
 

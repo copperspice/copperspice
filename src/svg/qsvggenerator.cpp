@@ -238,7 +238,7 @@ class QSvgPaintEngine : public QPaintEngine
    }
 
    void saveConicalGradientBrush(const QGradient *) {
-      qWarning("svg's don't support conical gradients!");
+      qWarning("Conical gradients are not supported");
    }
 
    void saveGradientStops(QTextStream &str, const QGradient *g) {
@@ -730,12 +730,13 @@ bool QSvgPaintEngine::begin(QPaintDevice *)
    if (!d->outputDevice->isOpen()) {
       if (!d->outputDevice->open(QIODevice::WriteOnly | QIODevice::Text)) {
          qWarning("QSvgPaintEngine::begin(), could not open output device: '%s'",
-                  qPrintable(d->outputDevice->errorString()));
+                  csPrintable(d->outputDevice->errorString()));
          return false;
       }
+
    } else if (!d->outputDevice->isWritable()) {
       qWarning("QSvgPaintEngine::begin(), could not write to read-only output device: '%s'",
-               qPrintable(d->outputDevice->errorString()));
+               csPrintable(d->outputDevice->errorString()));
       return false;
    }
 

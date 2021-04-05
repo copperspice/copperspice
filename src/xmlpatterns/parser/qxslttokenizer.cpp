@@ -2263,7 +2263,7 @@ void XSLTTokenizer::insideStylesheetModule()
 
                if (namespaceUri().isEmpty()) {
                   error(QtXmlPatterns::tr("Top level stylesheet elements must be "
-                                          "in a non-null namespace, which %1 isn't.").formatArg(formatKeyword(name())),
+                                          "in a non null namespace, which %1 is not.").formatArg(formatKeyword(name())),
                         ReportContext::XTSE0130);
                } else {
                   skipSubTree();

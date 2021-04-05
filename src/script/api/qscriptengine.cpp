@@ -2657,7 +2657,7 @@ void QScriptEngine::popContext()
    QScript::APIShim shim(d);
    if (d->currentFrame->returnPC() != 0 || d->currentFrame->codeBlock() != 0
       || !currentContext()->parentContext()) {
-      qWarning("QScriptEngine::popContext() doesn't match with pushContext()");
+      qWarning("QScriptEngine::popContext() does not match with pushContext()");
       return;
    }
 

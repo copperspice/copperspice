@@ -854,8 +854,8 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                   state = Intermediate;
                } else {
                   state = Invalid;
-                  QDTPDEBUG << "invalid because" << sectiontext << "can't become a uint" << last << ok;
                }
+
             } else {
                num += last;
                const FieldInfo fi = fieldInfo(sectionIndex);

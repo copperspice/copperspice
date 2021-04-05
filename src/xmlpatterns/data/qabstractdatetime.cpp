@@ -92,7 +92,7 @@ QDateTime AbstractDateTime::create(AtomicValue::Ptr &errorMessage, const QString
       } else if (QDate::isValid(DefaultYear, month, day)) {
          /* We can't use the badData() macro here because we need a different
           * error code: FODT0001 instead of FORG0001. */
-         errorMessage = ValidationError::createError(QtXmlPatterns::tr("Overflow: Can't represent date %1.")
+         errorMessage = ValidationError::createError(QtXmlPatterns::tr("Overflow: Can not represent date %1.")
                   .formatArg(formatData(QLatin1String("%1-%2-%3"))
                   .formatArg(year).formatArg(month).formatArg(day)), ReportContext::FODT0001);
          return QDateTime();
@@ -264,7 +264,7 @@ bool AbstractDateTime::isRangeValid(const QDate &date,
    if (date.isValid()) {
       return true;
    } else {
-      message = QtXmlPatterns::tr("Overflow: Date can't be represented.");
+      message = QtXmlPatterns::tr("Overflow: Date can not be represented.");
       return false;
    }
 }

@@ -748,7 +748,7 @@ void WindowCreationData::initialize(const QWindow *w, HWND hwnd, bool frameChang
       if ((flags & Qt::WindowStaysOnTopHint) || (type == Qt::ToolTip)) {
          SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, swpFlags);
          if (flags & Qt::WindowStaysOnBottomHint) {
-            qWarning() << "QWidget: Incompatible window flags: the window can't be on top and on bottom at the same time";
+            qWarning() << "QWidget: Incompatible window flags, window can not be on top and on bottom at the same time";
          }
       } else if (flags & Qt::WindowStaysOnBottomHint) {
          SetWindowPos(hwnd, HWND_BOTTOM, 0, 0, 0, 0, swpFlags);
@@ -1411,11 +1411,11 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
       setGeometry_sys(rect);
 
       if (m_data.geometry != rect) {
-         qWarning("QWindowsWindow::setGeometry(): Unable to set geometry %dx%d+%d+%d on %s/'%s'.\n"
+         qWarning("QWindowsWindow::setGeometry(): Unable to set geometry %dx%d+%d+%d in %s\n"
             "Resulting geometry = %dx%d+%d+%d, Frame = %d, %d, %d, %d \n"
             "Custom margin = %d, %d, %d, %d, Minimum size = %dx%d, Maximum size = %dx%d)\n",
             rect.width(), rect.height(), rect.x(), rect.y(),
-            csPrintable(window()->metaObject()->className()), csPrintable(window()->objectName()),
+            csPrintable(window()->objectName()),
             m_data.geometry.width(), m_data.geometry.height(),
             m_data.geometry.x(), m_data.geometry.y(),
             m_data.frame.left(), m_data.frame.top(),

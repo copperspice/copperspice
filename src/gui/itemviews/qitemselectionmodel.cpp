@@ -199,7 +199,7 @@ void QItemSelection::select(const QModelIndex &topLeft, const QModelIndex &botto
 
    if ((topLeft.model() != bottomRight.model())
       || topLeft.parent() != bottomRight.parent()) {
-      qWarning("Can't select indexes from different model or with different parents");
+      qWarning("Unable to select indexes from different model or with different parents");
       return;
    }
    if (topLeft.row() > bottomRight.row() || topLeft.column() > bottomRight.column()) {

@@ -1326,11 +1326,13 @@ void QSocks5SocketEnginePrivate::_q_udpSocketReadNotification()
       }
       QSocks5RevivedDatagram datagram;
       if (buf[pos++] != 0 || buf[pos++] != 0) {
-         QSOCKS5_D_DEBUG << "invalid datagram discarding";
+         QSOCKS5_D_DEBUG << "Invalid datagram, discarding";
          return;
       }
-      if (buf[pos++] != 0) { //### add fragmentation reading support
-         QSOCKS5_D_DEBUG << "don't support fragmentation yet disgarding";
+
+      if (buf[pos++] != 0) {
+         //### add fragmentation reading support
+         QSOCKS5_D_DEBUG << "Fragmentation is unsupported";
          return;
       }
 

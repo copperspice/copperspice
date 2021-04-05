@@ -244,13 +244,13 @@ QString QNetworkSessionPrivateImpl::errorString() const
            return tr("Unknown session error.");
 
        case QNetworkSession::SessionAbortedError:
-           return tr("The session was aborted by the user or system.");
+           return tr("Session was aborted by the user or system.");
 
        case QNetworkSession::OperationNotSupportedError:
-           return tr("The requested operation is not supported by the system.");
+           return tr("Requested operation is not supported by the system.");
 
        case QNetworkSession::InvalidConfigurationError:
-           return tr("The specified configuration cannot be used.");
+           return tr("Specified configuration can not be used.");
 
        case QNetworkSession::RoamingError:
            return tr("Roaming was aborted or is not possible.");

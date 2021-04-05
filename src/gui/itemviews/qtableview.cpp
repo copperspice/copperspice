@@ -627,7 +627,7 @@ void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan
       return;
 
    } else if (rowSpan == 1 && columnSpan == 1) {
-      qWarning("QTableView::setSpan: single cell span won't be added");
+      qWarning("QTableView::setSpan: Single cell span will not be added");
       return;
    }
 

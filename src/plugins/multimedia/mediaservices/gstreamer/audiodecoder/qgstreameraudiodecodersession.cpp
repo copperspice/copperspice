@@ -213,7 +213,7 @@ bool QGstreamerAudioDecoderSession::processBusMessage(const QGstreamerMessage &m
                gst_message_parse_error(gm, &err, &debug);
 
                if (err->domain == GST_STREAM_ERROR && err->code == GST_STREAM_ERROR_CODEC_NOT_FOUND) {
-                  processInvalidMedia(QAudioDecoder::FormatError, tr("Cannot play stream of type: <unknown>"));
+                  processInvalidMedia(QAudioDecoder::FormatError, tr("Unable to play stream of type: <unknown>"));
                } else {
                   processInvalidMedia(QAudioDecoder::ResourceError, QString::fromUtf8(err->message));
                }

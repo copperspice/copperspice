@@ -262,7 +262,7 @@ bool QMacPasteboardMimePlainTextFallback::canConvert(const QString &mime, QStrin
 QVariant QMacPasteboardMimePlainTextFallback::convertToMime(const QString &mimetype, QList<QByteArray> data, QString flavor)
 {
    if (data.count() > 1) {
-      qWarning("QMacPasteboardMimePlainTextFallback: Cannot handle multiple member data");
+      qWarning("QMacPasteboardMimePlainTextFallback: Unable to handle multiple member data elements");
    }
 
    if (flavor == "public.text") {

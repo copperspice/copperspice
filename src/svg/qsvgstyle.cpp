@@ -52,7 +52,7 @@ void QSvgFillStyleProperty::apply(QPainter *, const QSvgNode *, QSvgExtraStates 
 
 void QSvgFillStyleProperty::revert(QPainter *, QSvgExtraStates &)
 {
-   Q_ASSERT(! "This method should not be called");
+   Q_ASSERT(! "Revert() method should not be called");
 }
 
 QSvgQualityStyle::QSvgQualityStyle(int color)
@@ -923,7 +923,7 @@ void QSvgGradientStyle::resolveStops()
             m_gradientStopsSet = st->gradientStopsSet();
          }
       } else {
-         qWarning("Could not resolve property : %s", qPrintable(m_link));
+         qWarning("Could not resolve property : %s", csPrintable(m_link));
       }
       m_link = QString();
    }
