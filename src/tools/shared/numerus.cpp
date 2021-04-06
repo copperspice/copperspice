@@ -465,7 +465,7 @@ bool getNumerusInfo(QLocale::Language language, QLocale::Country country,
    return false;
 }
 
-QString getNumerusInfoString()
+QString getCountInfoString()
 {
    QStringList langs;
 

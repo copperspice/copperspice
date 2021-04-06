@@ -300,7 +300,7 @@ class Translator
 bool getNumerusInfo(QLocale::Language language, QLocale::Country country,
                     QByteArray *rules, QStringList *forms, const char **gettextRules);
 
-QString getNumerusInfoString();
+QString getCountInfoString();
 
 bool saveQM(const Translator &translator, QIODevice &dev, ConversionData &cd);
 

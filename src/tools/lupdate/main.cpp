@@ -341,7 +341,7 @@ int main(int argc, char **argv)
          return 0;
 
       } else if (arg == "-list-languages") {
-         printOut(getNumerusInfoString());
+         printOut(getCountInfoString());
          return 0;
 
       } else if (arg == "-pluralonly") {
