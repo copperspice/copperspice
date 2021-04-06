@@ -249,7 +249,7 @@ static bool processTs(Translator &fetchedTor, const QString &file, ConversionDat
 
          if (tor.load(file, cd, fmt.extension)) {
             for (TranslatorMessage msg : tor.messages()) {
-               msg.setType(TranslatorMessage::Unfinished);
+               msg.setType(TranslatorMessage::Type::Unfinished);
                msg.setTranslations(QStringList());
                msg.setTranslatorComment(QString());
                fetchedTor.extend(msg, cd);

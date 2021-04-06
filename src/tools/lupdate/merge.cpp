@@ -216,10 +216,12 @@ int applyNumberHeuristic(Translator &tor)
    for (int i = 0; i < tor.messageCount(); ++i) {
       const TranslatorMessage &msg = tor.message(i);
       bool hasTranslation = msg.isTranslated();
-      if (msg.type() == TranslatorMessage::Unfinished) {
+
+      if (msg.type() == TranslatorMessage::Type::Unfinished) {
          if (!hasTranslation) {
             untranslated[i] = true;
          }
+
       } else if (hasTranslation && msg.translations().count() == 1) {
          const QString &key = zeroKey(msg.sourceText());
          if (!key.isEmpty()) {
@@ -267,7 +269,7 @@ int applySameTextHeuristic(Translator &tor)
    for (int i = 0; i < tor.messageCount(); ++i) {
       const TranslatorMessage &msg = tor.message(i);
       if (!msg.isTranslated()) {
-         if (msg.type() == TranslatorMessage::Unfinished) {
+         if (msg.type() == TranslatorMessage::Type::Unfinished) {
             untranslated[i] = true;
          }
 
@@ -331,7 +333,7 @@ Translator merge(const Translator &tor, const Translator &virginTor, const QList
      are updated according to the virgin translator.
    */
    for (TranslatorMessage m : tor.messages()) {
-      TranslatorMessage::Type newType = TranslatorMessage::Finished;
+      TranslatorMessage::Type newType = TranslatorMessage::Type::Finished;
 
       if (m.sourceText().isEmpty() && m.id().isEmpty()) {
          // context/file comment
@@ -353,14 +355,14 @@ Translator merge(const Translator &tor, const Translator &virginTor, const QList
             makeObsolete:
 
                switch (m.type()) {
-                  case TranslatorMessage::Finished:
-                     newType = TranslatorMessage::Vanished;
+                  case TranslatorMessage::Type::Finished:
+                     newType = TranslatorMessage::Type::Vanished;
                      ++obsoleted;
                      break;
 
-                  case TranslatorMessage::Unfinished:
+                  case TranslatorMessage::Type::Unfinished:
 
-                     newType = TranslatorMessage::Obsolete;
+                     newType = TranslatorMessage::Type::Obsolete;
                      ++obsoleted;
                      break;
 
@@ -395,7 +397,7 @@ Translator merge(const Translator &tor, const Translator &virginTor, const QList
                // Mark it as unfinished. (Since the source text
                // was changed it might require re-translating...)
 
-               newType = TranslatorMessage::Unfinished;
+               newType = TranslatorMessage::Type::Unfinished;
                ++similarTextHeuristicCount;
                ++neww;
 
@@ -411,7 +413,7 @@ Translator merge(const Translator &tor, const Translator &virginTor, const QList
                       || mv->sourceText() != m.sourceText()
                       || mv->comment() != m.comment())) {
                known++;
-               newType = TranslatorMessage::Unfinished;
+               newType = TranslatorMessage::Type::Unfinished;
                m.setContext(mv->context());
                m.setComment(mv->comment());
 
@@ -429,29 +431,29 @@ Translator merge(const Translator &tor, const Translator &virginTor, const QList
 
             } else {
                switch (m.type()) {
-                  case TranslatorMessage::Finished:
+                  case TranslatorMessage::Type::Finished:
                   default:
                      if (m.isPlural() == mv->isPlural()) {
-                        newType = TranslatorMessage::Finished;
+                        newType = TranslatorMessage::Type::Finished;
                      } else {
-                        newType = TranslatorMessage::Unfinished;
+                        newType = TranslatorMessage::Type::Unfinished;
                      }
 
                      ++known;
                      break;
 
-                  case TranslatorMessage::Unfinished:
-                     newType = TranslatorMessage::Unfinished;
+                  case TranslatorMessage::Type::Unfinished:
+                     newType = TranslatorMessage::Type::Unfinished;
                      ++known;
                      break;
 
-                  case TranslatorMessage::Vanished:
-                     newType = TranslatorMessage::Finished;
+                  case TranslatorMessage::Type::Vanished:
+                     newType = TranslatorMessage::Type::Finished;
                      ++neww;
                      break;
 
-                  case TranslatorMessage::Obsolete:
-                     newType = TranslatorMessage::Unfinished;
+                  case TranslatorMessage::Type::Obsolete:
+                     newType = TranslatorMessage::Type::Unfinished;
                      ++neww;
                      break;
                }
@@ -530,7 +532,7 @@ Translator merge(const Translator &tor, const Translator &virginTor, const QList
          if (mvi >= 0) {
             TranslatorMessage &tm = outTor.message(mvi);
 
-            if (tm.type() != TranslatorMessage::Finished && ! tm.isTranslated()) {
+            if (tm.type() != TranslatorMessage::Type::Finished && ! tm.isTranslated()) {
                tm.setTranslations(mv.translations());
                --neww;
                ++known;
@@ -543,8 +545,8 @@ Translator merge(const Translator &tor, const Translator &virginTor, const QList
 
 
             mv.clearReferences();
-            mv.setType(mv.type() == TranslatorMessage::Finished
-                       ? TranslatorMessage::Vanished : TranslatorMessage::Obsolete);
+            mv.setType(mv.type() == TranslatorMessage::Type::Finished
+                       ? TranslatorMessage::Type::Vanished : TranslatorMessage::Type::Obsolete);
 
             if (options & NoLocations) {
                outTor.append(mv);

@@ -662,10 +662,10 @@ bool loadPO(Translator &translator, QIODevice &dev, ConversionData &cd)
             msg.setType(TranslatorMessage::Obsolete);
 
          } else if (item.isFuzzy || (!msg.sourceText().isEmpty() && !msg.isTranslated())) {
-            msg.setType(TranslatorMessage::Unfinished);
+            msg.setType(TranslatorMessage::Type::Unfinished);
 
          } else {
-            msg.setType(TranslatorMessage::Finished);
+            msg.setType(TranslatorMessage::Type::Finished);
 
          }
 
@@ -923,7 +923,7 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
       bool noWrap = false;
       bool skipFormat = false;
       QStringList flags;
-      if (msg.type() == TranslatorMessage::Unfinished && msg.isTranslated()) {
+      if (msg.type() == TranslatorMessage::Type::Unfinished && msg.isTranslated()) {
          flags.append(QLatin1String("fuzzy"));
       }
       TranslatorMessage::ExtraData::const_iterator itr =

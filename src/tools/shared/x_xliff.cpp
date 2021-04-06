@@ -310,7 +310,7 @@ static void writeTransUnits(QTextStream &ts, const TranslatorMessage &msg, const
          if (!msg.isPlural()) {
             attribs = " translate=\"no\"";
          }
-      } else if (msg.type() == TranslatorMessage::Finished) {
+      } else if (msg.type() == TranslatorMessage::Type::Finished) {
          attribs = " approved=\"yes\"";
       } else if (transit != transend && !transit->isEmpty()) {
          state = " state=\"needs-review-translation\"";
@@ -480,7 +480,7 @@ class XLIFFHandler : public QXmlDefaultHandler
 };
 
 XLIFFHandler::XLIFFHandler(Translator &translator, ConversionData &cd)
-   : m_translator(translator), m_cd(cd), m_type(TranslatorMessage::Finished), m_lineNumber(-1),
+   : m_translator(translator), m_cd(cd), m_type(TranslatorMessage::Type::Finished), m_lineNumber(-1),
      m_URITT(QString::fromLatin1(TrollTsNamespaceURI)), m_URI(QString::fromLatin1(XLIFF11namespaceURI)),
      m_URI12(QString::fromLatin1(XLIFF12namespaceURI))
 {}
@@ -580,7 +580,7 @@ bool XLIFFHandler::startElement(const QString &namespaceURI,
 
       if (m_type != TranslatorMessage::Obsolete &&
             atts.value(QLatin1String("approved")) != "yes") {
-         m_type = TranslatorMessage::Unfinished;
+         m_type = TranslatorMessage::Type::Unfinished;
       }
       pushContext(XC_trans_unit);
       m_hadAlt = false;
@@ -834,7 +834,7 @@ bool XLIFFHandler::finalizeMessage(bool isPlural)
    m_translatorComment.clear();
    m_extra.clear();
    m_refs.clear();
-   m_type = TranslatorMessage::Finished;
+   m_type = TranslatorMessage::Type::Finished;
 
    return true;
 }

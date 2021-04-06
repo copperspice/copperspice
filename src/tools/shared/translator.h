@@ -41,7 +41,7 @@ class ConversionData
  public:
    ConversionData()
       : m_verbose(false), m_ignoreUnfinished(false), m_sortContexts(false),
-        m_noUiLines(false), m_idBased(false), m_saveMode(SaveEverything) {
+        m_noUiLines(false), m_idBased(false), m_saveMode(TranslatorMessage::SaveMode::Everything) {
    }
 
    // tag manipulation
@@ -103,7 +103,8 @@ class ConversionData
    bool m_sortContexts;
    bool m_noUiLines;
    bool m_idBased;
-   TranslatorSaveMode m_saveMode;
+
+   TranslatorMessage::SaveMode m_saveMode;
 };
 
 class TMMKey

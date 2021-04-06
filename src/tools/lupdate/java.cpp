@@ -492,7 +492,7 @@ static void recordMessage(Translator *tor, const QString &context, const QString
    const QString &extracomment, bool plural, ConversionData &cd)
 {
    TranslatorMessage msg(context, text, comment, QString(), yyFileName, yyLineNo, QStringList(),
-            TranslatorMessage::Unfinished, plural);
+            TranslatorMessage::Type::Unfinished, plural);
 
    msg.setExtraComment(extracomment.simplified());
    tor->extend(msg, cd);

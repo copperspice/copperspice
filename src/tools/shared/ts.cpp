@@ -335,7 +335,7 @@ bool TSReader::read(Translator &translator)
                      TranslatorMessage msg;
                      msg.setId(attributes().value(text_id).toString());
                      msg.setContext(context);
-                     msg.setType(TranslatorMessage::Finished);
+                     msg.setType(TranslatorMessage::Type::Finished);
                      msg.setPlural(attributes().value(text_numerus) == text_yes);
 
                      while (! atEnd()) {
@@ -420,13 +420,13 @@ bool TSReader::read(Translator &translator)
                            QStringView type = atts.value(text_type);
 
                            if (type == text_unfinished) {
-                              msg.setType(TranslatorMessage::Unfinished);
+                              msg.setType(TranslatorMessage::Type::Unfinished);
 
                            } else if (type == text_vanished) {
-                              msg.setType(TranslatorMessage::Vanished);
+                              msg.setType(TranslatorMessage::Type::Vanished);
 
                            } else if (type == text_obsolete) {
-                              msg.setType(TranslatorMessage::Obsolete);
+                              msg.setType(TranslatorMessage::Type::Obsolete);
 
                            }
 
@@ -633,7 +633,7 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd)
 
    for (const TranslatorMessage &msg : translator.messages()) {
 
-      if ((msg.type() == TranslatorMessage::Obsolete || msg.type() == TranslatorMessage::Vanished) &&
+      if ((msg.type() == TranslatorMessage::Type::Obsolete || msg.type() == TranslatorMessage::Type::Vanished) &&
             msg.translation().isEmpty()) {
          continue;
       }
@@ -760,13 +760,13 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd)
 
          t << "        <translation";
 
-         if (msg.type() == TranslatorMessage::Unfinished) {
+         if (msg.type() == TranslatorMessage::Type::Unfinished) {
             t << " type=\"unfinished\"";
 
-         } else if (msg.type() == TranslatorMessage::Vanished) {
+         } else if (msg.type() == TranslatorMessage::Type::Vanished) {
             t << " type=\"vanished\"";
 
-         } else if (msg.type() == TranslatorMessage::Obsolete) {
+         } else if (msg.type() == TranslatorMessage::Type::Obsolete) {
             t << " type=\"obsolete\"";
          }
 

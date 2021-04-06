@@ -196,7 +196,7 @@ QList<Candidate> similarTextHeuristicCandidates(const Translator *tor, const QSt
    StringSimilarityMatcher matcher(text);
 
    for (const TranslatorMessage &mtm : tor->messages()) {
-      if (mtm.type() == TranslatorMessage::Unfinished || mtm.translation().isEmpty()) {
+      if (mtm.type() == TranslatorMessage::Type::Unfinished || mtm.translation().isEmpty()) {
          continue;
       }
 

@@ -445,7 +445,7 @@ int Translator::find(const QString &context) const
 void Translator::stripObsoleteMessages()
 {
    for (auto it = m_messages.begin(); it != m_messages.end(); ) {
-      if (it->type() == TranslatorMessage::Obsolete || it->type() == TranslatorMessage::Vanished) {
+      if (it->type() == TranslatorMessage::Type::Obsolete || it->type() == TranslatorMessage::Type::Vanished) {
          it = m_messages.erase(it);
 
       } else {
@@ -459,7 +459,7 @@ void Translator::stripObsoleteMessages()
 void Translator::stripFinishedMessages()
 {
    for (auto it = m_messages.begin(); it != m_messages.end(); ) {
-      if (it->type() == TranslatorMessage::Finished) {
+      if (it->type() == TranslatorMessage::Type::Finished) {
          it = m_messages.erase(it);
       } else {
          ++it;
@@ -504,8 +504,8 @@ void Translator::stripIdenticalSourceTranslations()
 void Translator::dropTranslations()
 {
    for (auto it = m_messages.begin(); it != m_messages.end(); ++it) {
-      if (it->type() == TranslatorMessage::Finished) {
-         it->setType(TranslatorMessage::Unfinished);
+      if (it->type() == TranslatorMessage::Type::Finished) {
+         it->setType(TranslatorMessage::Type::Unfinished);
       }
       it->setTranslation(QString());
    }

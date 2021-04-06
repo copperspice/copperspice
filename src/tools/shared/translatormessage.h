@@ -28,12 +28,20 @@
 #include <qstringlist.h>
 #include <qhash.h>
 
-enum TranslatorSaveMode { SaveEverything, SaveStripped };
-
 class TranslatorMessage
 {
  public:
-   enum Type { Unfinished, Finished, Vanished, Obsolete };
+   enum class Type {
+      Unfinished,
+      Finished,
+      Vanished,
+      Obsolete
+   };
+
+   enum class SaveMode {
+      Everything,
+      Stripped
+   };
 
    class Reference
    {
@@ -62,11 +70,10 @@ class TranslatorMessage
 
    TranslatorMessage();
 
-   TranslatorMessage(const QString &context, const QString &sourceText,
-                     const QString &comment, const QString &userData,
-                     const QString &fileName, int lineNumber,
-                     const QStringList &translations = QStringList(),
-                     Type type = Unfinished, bool plural = false);
+   TranslatorMessage(const QString &context, const QString &sourceText, const QString &comment,
+            const QString &userData, const QString &fileName, int lineNumber,
+            const QStringList &translations = QStringList(),
+            Type type = TranslatorMessage::Type::Unfinished, bool plural = false);
 
    uint hash() const;
 

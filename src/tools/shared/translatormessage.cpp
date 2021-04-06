@@ -30,7 +30,7 @@
 #include <stdlib.h>
 
 TranslatorMessage::TranslatorMessage()
-   : m_lineNumber(-1), m_type(Unfinished), m_plural(false)
+   : m_lineNumber(-1), m_type(TranslatorMessage::Type::Unfinished), m_plural(false)
 {
 }
 
@@ -142,7 +142,7 @@ void TranslatorMessage::dump() const
          << "\nTranslations      : " << m_translations
          << "\nFileName          : " << m_fileName
          << "\nLineNumber        : " << m_lineNumber
-         << "\nType              : " << m_type
+         << "\nType              : " << int(m_type)
          << "\nPlural            : " << m_plural
          << "\nExtra             : " << m_extra;
 }

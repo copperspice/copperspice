@@ -2212,7 +2212,7 @@ void QScriptParser::processComment(const QChar *chars, int length)
                         trcontext, QString(),
                         comment, QString(),
                         fileName(), lexer->startLineNo(), QStringList(),
-                        TranslatorMessage::Finished, /*plural=*/false);
+                        TranslatorMessage::Type::Finished, false);
                 msg.setExtraComment(extracomment.simplified());
                 extracomment.clear();
                 translator->append(msg);

@@ -1849,7 +1849,7 @@ void CppParser::recordMessage(int line, const QString &context, const QString &t
                               const QString &extracomment, const QString &msgid, const QHash<QString, QString> &extra, bool plural)
 {
    TranslatorMessage msg(transcode(context), transcode(text), transcode(comment), QString(),
-                         yyFileName, line, QStringList(), TranslatorMessage::Unfinished, plural);
+                         yyFileName, line, QStringList(), TranslatorMessage::Type::Unfinished, plural);
 
    msg.setExtraComment(transcode(extracomment.simplified()));
    msg.setId(msgid);
@@ -2719,7 +2719,7 @@ void CppParser::processComment()
             comment.erase(comment.begin(), tmpIter + 1);
 
             TranslatorMessage msg( transcode(context), QString(), transcode(comment), QString(),
-                                   yyFileName, yyLineNo, QStringList(), TranslatorMessage::Finished, false);
+                                   yyFileName, yyLineNo, QStringList(), TranslatorMessage::Type::Finished, false);
 
             msg.setExtraComment(transcode(extracomment.simplified()));
             extracomment.clear();

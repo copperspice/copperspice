@@ -54,7 +54,7 @@ enum Tag {
    Tag_Obsolete2    = 9
 };
 
-enum Prefix {
+enum class TranslatorPrefix {
    NoPrefix,
    Hash,
    HashContext,
@@ -170,7 +170,7 @@ class Releaser
    void insert(const TranslatorMessage &msg, const QStringList &tlns, bool forceComment);
    void insertIdBased(const TranslatorMessage &message, const QStringList &tlns);
 
-   void squeeze(TranslatorSaveMode mode);
+   void squeeze(TranslatorMessage::SaveMode mode);
 
    void setNumerusRules(const QByteArray &rules);
    void setDependencies(const QStringList &dependencies);
@@ -180,12 +180,12 @@ class Releaser
    // on turn should be the same as passed to the actual tr(...) calls
    QByteArray originalBytes(const QString &str) const;
 
-   static Prefix commonPrefix(const ByteTranslatorMessage &m1, const ByteTranslatorMessage &m2);
+   static TranslatorPrefix commonPrefix(const ByteTranslatorMessage &m1, const ByteTranslatorMessage &m2);
 
    static uint msgHash(const ByteTranslatorMessage &msg);
 
    void writeMessage(const ByteTranslatorMessage &msg, QDataStream &stream,
-                     TranslatorSaveMode strip, Prefix prefix) const;
+                     TranslatorMessage::SaveMode strip, TranslatorPrefix prefix) const;
 
    // for squeezed but non-file data, this is what needs to be deleted
    QByteArray m_messageArray;
@@ -213,50 +213,50 @@ uint Releaser::msgHash(const ByteTranslatorMessage &msg)
    return elfHash(msg.sourceText() + msg.comment());
 }
 
-Prefix Releaser::commonPrefix(const ByteTranslatorMessage &m1, const ByteTranslatorMessage &m2)
+TranslatorPrefix Releaser::commonPrefix(const ByteTranslatorMessage &m1, const ByteTranslatorMessage &m2)
 {
    if (msgHash(m1) != msgHash(m2)) {
-      return NoPrefix;
+      return TranslatorPrefix::NoPrefix;
    }
 
    if (m1.context() != m2.context()) {
-      return Hash;
+      return TranslatorPrefix::Hash;
    }
 
    if (m1.sourceText() != m2.sourceText()) {
-      return HashContext;
+      return TranslatorPrefix::HashContext;
    }
 
    if (m1.comment() != m2.comment()) {
-      return HashContextSourceText;
+      return TranslatorPrefix::HashContextSourceText;
    }
 
-   return HashContextSourceTextComment;
+   return TranslatorPrefix::HashContextSourceTextComment;
 }
 
 void Releaser::writeMessage(const ByteTranslatorMessage &msg, QDataStream &stream,
-                            TranslatorSaveMode mode, Prefix prefix) const
+                            TranslatorMessage::SaveMode mode, TranslatorPrefix prefix) const
 {
    for (int i = 0; i < msg.translations().count(); ++i) {
       stream << quint8(Tag_Translation) << msg.translations().at(i);
    }
 
-   if (mode == SaveEverything) {
-      prefix = HashContextSourceTextComment;
+   if (mode == TranslatorMessage::SaveMode::Everything) {
+      prefix = TranslatorPrefix::HashContextSourceTextComment;
    }
 
    // lrelease produces "wrong" QM files for QByteArrays that are .isNull().
    switch (prefix) {
       default:
-      case HashContextSourceTextComment:
+      case TranslatorPrefix::HashContextSourceTextComment:
          stream << quint8(Tag_Comment) << msg.comment();
          [[fallthrough]];
 
-      case HashContextSourceText:
+      case TranslatorPrefix::HashContextSourceText:
          stream << quint8(Tag_SourceText) << msg.sourceText();
          [[fallthrough]];
 
-      case HashContext:
+      case TranslatorPrefix::HashContext:
          stream << quint8(Tag_Context) << msg.context();
          break;
    }
@@ -302,7 +302,7 @@ bool Releaser::save(QIODevice *iod)
    return true;
 }
 
-void Releaser::squeeze(TranslatorSaveMode mode)
+void Releaser::squeeze(TranslatorMessage::SaveMode mode)
 {
    m_dependencyArray.clear();
 
@@ -312,7 +312,7 @@ void Releaser::squeeze(TranslatorSaveMode mode)
       depstream << dep;
    }
 
-   if (m_messages.isEmpty() && mode == SaveEverything) {
+   if (m_messages.isEmpty() && mode == TranslatorMessage::SaveMode::Everything) {
       return;
    }
 
@@ -340,11 +340,11 @@ void Releaser::squeeze(TranslatorSaveMode mode)
          cpNext = 0;
 
       } else {
-         cpNext = commonPrefix(it.key(), next.key());
+         cpNext = static_cast<int>(commonPrefix(it.key(), next.key()));
       }
 
       offsets.insert(Offset(msgHash(it.key()), ms.device()->pos()), nullptr);
-      writeMessage(it.key(), ms, mode, Prefix(qMax(cpPrev, cpNext + 1)));
+      writeMessage(it.key(), ms, mode, TranslatorPrefix(qMax(cpPrev, cpNext + 1)));
    }
 
    QMap<Offset, void *>::iterator offset;
@@ -358,7 +358,7 @@ void Releaser::squeeze(TranslatorSaveMode mode)
       ds << quint32(k.h) << quint32(k.o);
    }
 
-   if (mode == SaveStripped) {
+   if (mode == TranslatorMessage::SaveMode::Stripped) {
       QMap<QByteArray, int> contextSet;
       for (it = messages.constBegin(); it != messages.constEnd(); ++it) {
          ++contextSet[it.key().context()];
@@ -664,7 +664,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
 
    end:
       TranslatorMessage msg;
-      msg.setType(TranslatorMessage::Finished);
+      msg.setType(TranslatorMessage::Type::Finished);
 
       if (translations.count() > 1) {
          // If guessPlurals is not false here, plural form discard messages will be spewn out later
@@ -729,13 +729,13 @@ bool saveQM(const Translator &translator, QIODevice &dev, ConversionData &cd)
       const TranslatorMessage &msg = translator.message(i);
       TranslatorMessage::Type typ  = msg.type();
 
-      if (typ != TranslatorMessage::Obsolete && typ != TranslatorMessage::Vanished) {
+      if (typ != TranslatorMessage::Type::Obsolete && typ != TranslatorMessage::Type::Vanished) {
          if (cd.m_idBased && msg.id().isEmpty()) {
             ++missingIds;
             continue;
          }
 
-         if (typ == TranslatorMessage::Unfinished) {
+         if (typ == TranslatorMessage::Type::Unfinished) {
             if (msg.translation().isEmpty() && ! cd.m_idBased && cd.m_unTrPrefix.isEmpty()) {
                ++untranslated;
                continue;
@@ -753,7 +753,7 @@ bool saveQM(const Translator &translator, QIODevice &dev, ConversionData &cd)
 
          QStringList tlns = msg.translations();
 
-         if (msg.type() == TranslatorMessage::Unfinished && (cd.m_idBased || ! cd.m_unTrPrefix.isEmpty())) {
+         if (msg.type() == TranslatorMessage::Type::Unfinished && (cd.m_idBased || ! cd.m_unTrPrefix.isEmpty())) {
             for (int j = 0; j < tlns.size(); ++j) {
                if (tlns.at(j).isEmpty()) {
                   tlns[j] = cd.m_unTrPrefix + msg.sourceText();

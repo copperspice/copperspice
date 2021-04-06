@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 
    for (int i = 1; i < argc; ++i) {
       if (! strcmp(argv[i], "-compress")) {
-         cd.m_saveMode = SaveStripped;
+         cd.m_saveMode = TranslatorMessage::SaveMode::Stripped;
          continue;
 
       } else if (! strcmp(argv[i], "-idbased")) {
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
          continue;
 
       } else if (! strcmp(argv[i], "-nocompress")) {
-         cd.m_saveMode = SaveEverything;
+         cd.m_saveMode = TranslatorMessage::SaveMode::Everything;
          continue;
 
       } else if (! strcmp(argv[i], "-removeidentical")) {
