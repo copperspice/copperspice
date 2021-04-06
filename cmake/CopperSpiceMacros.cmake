@@ -22,7 +22,7 @@ macro(COPPERSPICE_RESOURCES RESOURCES)
       get_filename_component(rscext ${resource}  EXT)
       get_filename_component(rscname ${resource} NAME_WE)
 
-      if(${rscext} STREQUAL ".qrc")
+      if("${rscext}" STREQUAL ".qrc")
          set(rscout ${CMAKE_CURRENT_BINARY_DIR}/qrc_${rscname}.cpp)
 
          add_custom_command(
@@ -34,8 +34,13 @@ macro(COPPERSPICE_RESOURCES RESOURCES)
 
          set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${rscout})
 
-      elseif(${rscext} STREQUAL ".ts")
-         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname}.qm)
+      elseif("${rscext}" STREQUAL ".ts")
+
+         if("${TS_OUTPUT_DIR}" STREQUAL "")
+            set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname}.qm)
+         else()
+            set(rscout ${TS_OUTPUT_DIR}/${rscname}.qm)
+         endif()
 
          add_custom_command(
             OUTPUT ${rscout}
@@ -43,7 +48,7 @@ macro(COPPERSPICE_RESOURCES RESOURCES)
             MAIN_DEPENDENCY "${resource}"
          )
 
-      elseif(${rscext} STREQUAL ".ui")
+      elseif("${rscext}" STREQUAL ".ui")
          set(rscout ${CMAKE_CURRENT_BINARY_DIR}/ui_${rscname}.h)
 
          add_custom_command(
