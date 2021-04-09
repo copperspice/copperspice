@@ -208,7 +208,7 @@ QList<Candidate> similarTextHeuristicCandidates(const Translator *tor, const QSt
       }
 
       if (candidates.size() < maxCandidates && score >= textSimilarityThreshold) {
-         Candidate cand( s, mtm.translation() );
+         Candidate cand(s, mtm.translation() );
 
          int i;
          for (i = 0; i < candidates.size(); i++) {

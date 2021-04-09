@@ -111,17 +111,17 @@ void TSReader::handleError()
       return;
    }
 
-   const QString loc = QString("at %3:%1:%2").formatArg(lineNumber()).formatArg(columnNumber()).formatArg(m_cd.m_sourceFileName);
+   const QString loc = QString("in %1 at Line: %2 Column: %3").formatArg(m_cd.m_sourceFileName).formatArg(lineNumber()).formatArg(columnNumber());
 
    switch (tokenType()) {
       case NoToken:
       case Invalid:
       default:
-         raiseError(QString("Parse error %1: %2").formatArg(loc).formatArg(errorString()));
+         raiseError(QString("Parse error %1: \n%2").formatArg(loc).formatArg(errorString()));
          break;
 
       case StartElement:
-         raiseError(QString("Unexpected tag <%1> %2").formatArg(name().toString()).formatArg(loc));
+         raiseError(QString("Unexpected tag <%1> \n%2").formatArg(name().toString()).formatArg(loc));
          break;
 
       case Characters: {
@@ -374,6 +374,7 @@ bool TSReader::read(Translator &translator)
                            // <location/>
                            maybeAbsolute = true;
                            QXmlStreamAttributes atts = attributes();
+
                            QString fileName = atts.value(text_filename).toString();
 
                            if (fileName.isEmpty()) {
@@ -384,6 +385,7 @@ bool TSReader::read(Translator &translator)
                               if (refs.isEmpty()) {
                                  currentFile = fileName;
                               }
+
                               currentMsgFile = fileName;
                            }
 

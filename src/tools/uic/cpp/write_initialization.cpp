@@ -1813,6 +1813,7 @@ QString  WriteInitialization::writeSizePolicy(const DomSizePolicy *sp)
 
    return spName;
 }
+
 // Check for a font with the given properties in the FontPropertiesNameMap
 // or create a new one. Returns the name.
 

@@ -184,7 +184,7 @@ class Releaser
 QByteArray Releaser::originalBytes(const QString &str) const
 {
    if (str.isEmpty()) {
-      // Do not use QByteArray() here as the result of the serialization will be different.
+      // do not use QByteArray() without the quotes, result of the serialization will be different
       return QByteArray("");
    }
 
@@ -228,7 +228,7 @@ void Releaser::writeMessage(const ByteTranslatorMessage &msg, QDataStream &strea
       prefix = TranslatorPrefix::HashContextSourceTextComment;
    }
 
-   // lrelease produces "wrong" QM files for QByteArrays that are .isNull().
+   // lrelease produces an invalid qm file for QByteArrays which are null
    switch (prefix) {
       default:
       case TranslatorPrefix::HashContextSourceTextComment:
@@ -331,24 +331,26 @@ void Releaser::squeeze(TranslatorMessage::SaveMode mode)
    QMap<Offset, void *> offsets;
 
    QDataStream ms(&m_messageArray, QIODevice::WriteOnly);
-   QMap<ByteTranslatorMessage, void *>::const_iterator it, next;
+   QMap<ByteTranslatorMessage, void *>::const_iterator iter;
+   QMap<ByteTranslatorMessage, void *>::const_iterator next;
+
    int cpPrev = 0;
    int cpNext = 0;
 
-   for (it = messages.constBegin(); it != messages.constEnd(); ++it) {
+   for (iter = messages.cbegin(); iter != messages.cend(); ++iter) {
       cpPrev = cpNext;
-      next = it;
+      next   = iter;
       ++next;
 
       if (next == messages.constEnd()) {
          cpNext = 0;
 
       } else {
-         cpNext = static_cast<int>(commonPrefix(it.key(), next.key()));
+         cpNext = static_cast<int>(commonPrefix(iter.key(), next.key()));
       }
 
-      offsets.insert(Offset(msgHash(it.key()), ms.device()->pos()), nullptr);
-      writeMessage(it.key(), ms, mode, TranslatorPrefix(qMax(cpPrev, cpNext + 1)));
+      offsets.insert(Offset(msgHash(iter.key()), ms.device()->pos()), nullptr);
+      writeMessage(iter.key(), ms, mode, TranslatorPrefix(qMax(cpPrev, cpNext + 1)));
    }
 
    QMap<Offset, void *>::iterator offset;
@@ -364,11 +366,13 @@ void Releaser::squeeze(TranslatorMessage::SaveMode mode)
 
    if (mode == TranslatorMessage::SaveMode::Stripped) {
       QMap<QByteArray, int> contextSet;
-      for (it = messages.constBegin(); it != messages.constEnd(); ++it) {
-         ++contextSet[it.key().context()];
+
+      for (iter = messages.cbegin(); iter != messages.cend(); ++iter) {
+         ++contextSet[iter.key().context()];
       }
 
       quint16 hTableSize;
+
       if (contextSet.size() < 200) {
          hTableSize = (contextSet.size() < 60) ? 151 : 503;
 
@@ -382,7 +386,7 @@ void Releaser::squeeze(TranslatorMessage::SaveMode mode)
       QMultiMap<int, QByteArray> hashMap;
       QMap<QByteArray, int>::const_iterator c;
 
-      for (c = contextSet.constBegin(); c != contextSet.constEnd(); ++c) {
+      for (c = contextSet.cbegin(); c != contextSet.cend(); ++c) {
          hashMap.insert(elfHash(c.key()) % hTableSize, c.key());
       }
 
@@ -408,6 +412,7 @@ void Releaser::squeeze(TranslatorMessage::SaveMode mode)
         contexts stored there, until we find it or we meet the
         empty string.
       */
+
       m_contextArray.resize(2 + (hTableSize << 1));
       QDataStream t(&m_contextArray, QIODevice::WriteOnly);
 
@@ -505,9 +510,9 @@ static void fromBytes(const char *str, int len, QString *out, bool *utf8Fail)
    static QTextCodec *utf8Codec = QTextCodec::codecForName("UTF-8");
 
    QTextCodec::ConverterState cvtState;
-   *out = utf8Codec->toUnicode(str, len, &cvtState);
-   *utf8Fail = cvtState.invalidChars;
 
+   *out      = utf8Codec->toUnicode(str, len, &cvtState);
+   *utf8Fail = cvtState.invalidChars;
 }
 
 bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
@@ -524,6 +529,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
    // for squeezed but non-file data, this is what needs to be deleted
    const uchar *messageArray = nullptr;
    const uchar *offsetArray  = nullptr;
+
    uint offsetLength = 0;
 
    bool ok = true;
@@ -572,6 +578,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
 
    size_t numItems = offsetLength / (2 * sizeof(quint32));
    QString strProN = "%n";
+
    QLocale::Language l;
    QLocale::Country c;
 
@@ -610,7 +617,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                int len = read32(m);
 
                if (len % 1) {
-                  cd.appendError("QM-Format error");
+                  cd.appendError("QM format error");
                   return false;
                }
 
@@ -634,7 +641,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                quint32 len = read32(m);
                m += 4;
 
-               fromBytes((const char *)m, len,  &sourcetext, &utf8Fail);
+               fromBytes((const char *)m, len, &sourcetext, &utf8Fail);
 
                m += len;
                break;
@@ -660,7 +667,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
             }
 
             default:
-               //qDebug() << "UNKNOWN TAG" << tag;
+               // "unknown tag"
                break;
          }
       }
@@ -673,7 +680,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
          msg.setPlural(true);
 
       } else if (guessPlurals) {
-         // This might cause false positives, so it is a fallback only.
+         // might cause false positives, so it is a fallback only
          if (sourcetext.contains(strProN)) {
             msg.setPlural(true);
          }
@@ -783,13 +790,15 @@ bool saveQM(const Translator &translator, QIODevice &dev, ConversionData &cd)
       }
    }
 
-   if (missingIds)
-      cd.appendError(QCoreApplication::translate("LRelease", "Dropped %n message(s) which had no ID.",
+   if (missingIds) {
+      cd.appendError(QCoreApplication::translate("lrelease", "Dropped %n message(s) which had no ID.",
                      nullptr, missingIds));
+   }
 
-   if (droppedData)
-      cd.appendError(QCoreApplication::translate("LRelease", "Excess context/disambiguation dropped from %n message(s).",
+   if (droppedData) {
+      cd.appendError(QCoreApplication::translate("lrelease", "Excess context/disambiguation dropped from %n message(s).",
                      nullptr, droppedData));
+   }
 
    releaser.setDependencies(translator.dependencies());
    releaser.squeeze(cd.m_saveMode);
@@ -799,11 +808,11 @@ bool saveQM(const Translator &translator, QIODevice &dev, ConversionData &cd)
    if (saved && cd.isVerbose()) {
       int generatedCount = finished + unfinished;
 
-      cd.appendError(QCoreApplication::translate("LRelease", "    Generated %n translation(s) (%1 finished and %2 unfinished)",
+      cd.appendError(QCoreApplication::translate("lrelease", "    Generated %n translation(s) (%1 finished and %2 unfinished)",
                      nullptr, generatedCount).formatArg(finished).formatArg(unfinished));
 
       if (untranslated) {
-         cd.appendError(QCoreApplication::translate("LRelease", "    Ignored %n untranslated source text(s)",
+         cd.appendError(QCoreApplication::translate("lrelease", "    Ignored %n untranslated source text(s)",
                         nullptr, untranslated));
       }
    }

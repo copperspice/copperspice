@@ -282,7 +282,7 @@ class Translator
 
    // A string beginning with a 2 or 3 letter language code (ISO 639-1
    // or ISO-639-2), followed by the optional country variant to distinguish
-   //  between country-specific variations of the language. The language code
+   // between country-specific variations of the language. The language code
    // and country code are always separated by '_'
    // Note that the language part can also be a 3-letter ISO 639-2 code.
    // Legal examples:
@@ -309,4 +309,3 @@ QString getCountInfoString();
 bool saveQM(const Translator &translator, QIODevice &dev, ConversionData &cd);
 
 #endif
-

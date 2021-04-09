@@ -47,8 +47,8 @@ class TranslatorMessage
    {
 
     public:
-      Reference(const QString &n, int l)
-         : m_fileName(n), m_lineNumber(l) {
+      Reference(const QString &fname, int l)
+         : m_fileName(fname), m_lineNumber(l) {
       }
 
       bool operator==(const Reference &other) const {

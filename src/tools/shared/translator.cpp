@@ -310,7 +310,8 @@ bool Translator::load(const QString &filename, ConversionData &cd, const QString
 
    } else {
       file.setFileName(filename);
-      if (!file.open(QIODevice::ReadOnly)) {
+
+      if (! file.open(QIODevice::ReadOnly)) {
          cd.appendError(QString("Unable to open %1: %2").formatArgs(filename, file.errorString()));
          return false;
       }
@@ -325,6 +326,7 @@ bool Translator::load(const QString &filename, ConversionData &cd, const QString
          }
 
          cd.appendError(QString("No loader for format %1 found").formatArg(fmt));
+
          return false;
       }
    }
@@ -742,9 +744,11 @@ QStringList Translator::normalizedTranslations(const TranslatorMessage &msg, int
 void Translator::normalizeTranslations(ConversionData &cd)
 {
    bool truncated = false;
+
    QLocale::Language l;
    QLocale::Country c;
    languageAndCountry(languageCode(), &l, &c);
+
    int numPlurals = 1;
 
    if (l != QLocale::C) {
