@@ -750,7 +750,7 @@ void Translator::normalizeTranslations(ConversionData &cd)
    if (l != QLocale::C) {
       QStringList forms;
 
-      if (getNumerusInfo(l, c, nullptr, &forms, nullptr)) {
+      if (getCountInfo(l, c, nullptr, &forms, nullptr)) {
          numPlurals = forms.count();   // includes singular
       }
    }

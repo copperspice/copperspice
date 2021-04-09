@@ -58,9 +58,6 @@
 
 #include <stdlib.h>
 
-enum Tag { Tag_End = 1, Tag_SourceText16, Tag_Translation, Tag_Context16, Tag_Obsolete1,
-           Tag_SourceText, Tag_Context, Tag_Comment, Tag_Obsolete2 };
-
 /*
 $ mcookie
 3cb86418caef9c95cd211cbf60a1bddd
@@ -76,7 +73,7 @@ static const uchar magic[MagicLength] = {
 
 static bool match(const uchar *found, uint foundLen, const char *target, uint targetLen)
 {
-   // catch the case if \a found has a zero-terminating symbol and \a len includes it.
+   // catch the case if found has a zero-terminating symbol and len includes it.
    // (normalize it to be without the zero-terminating symbol)
    if (foundLen > 0 && found[foundLen - 1] == '\0') {
       --foundLen;
@@ -122,10 +119,9 @@ static uint elfHash(const char *name)
    return hash;
 }
 
-static bool isValidNumerusRules(const uchar *rules, uint rulesSize)
+static bool isValidCountRules(const QVector<std::variant<CountGuide, int>> &data)
 {
-   // Disabled computation of maximum numerus return value
-   // quint32 numerus = 0;
+   uint rulesSize = data.size();
 
    if (rulesSize == 0) {
      return true;
@@ -133,128 +129,164 @@ static bool isValidNumerusRules(const uchar *rules, uint rulesSize)
 
    quint32 offset = 0;
 
-   do {
-     uchar opcode = rules[offset];
-     uchar op = opcode & Q_OP_MASK;
+   try {
 
-     if (opcode & 0x80) {
-         return false; // Bad op
-     }
+      while (true) {
+         CountGuide opcode = std::get<CountGuide>(data[offset]);
+         CountGuide option = static_cast<CountGuide>(opcode & CountGuide::OperatorMask);
 
-     ++offset;
+         if (opcode & CountGuide::OperatorInvalid) {
+            return false;                  // Bad operation
+         }
 
-     if (offset == rulesSize) {
-         return false; // Missing operand
-     }
+         ++offset;
 
-     // right operand
-     ++offset;
+         if (offset == rulesSize) {
+            return false;                  // Missing operand
+         }
 
-     switch (op) {
-     case Q_EQ:
-        case Q_LT:
-        case Q_LEQ:
+        // right operand
+        ++offset;
+
+        switch (option) {
+           case CountGuide::Equal:
+           case CountGuide::LessThan:
+           case CountGuide::LessThanEqual:
+               break;
+
+           case CountGuide::Between:
+               if (offset != rulesSize) {
+                   // third operand
+                   ++offset;
+                   break;
+               }
+               return false;               // Missing operand
+
+           default:
+               return false;               // Bad option (0)
+         }
+
+         if (offset == rulesSize) {
+            return true;
+         }
+
+         CountGuide tmp = std::get<CountGuide>(data[offset]);
+
+         if ((tmp == CountGuide::And) || (tmp == CountGuide::Or) || (tmp == CountGuide::LastEntry)) {
+            // keep going
+
+         } else {
+            // something is not correct
             break;
+         }
 
-        case Q_BETWEEN:
-            if (offset != rulesSize) {
-                // third operand
-                ++offset;
-                break;
-            }
-            return false; // Missing operand
+         ++offset;
 
-        default:
-            return false; // Bad op (0)
-     }
+         if (offset == rulesSize) {
+            break;
+         }
+      }
 
-     if (offset == rulesSize) {
-         return true;
-     }
+   } catch (std::bad_variant_access e) {
+      // fall through
 
-   } while (((rules[offset] == Q_AND) || (rules[offset] == Q_OR) ||
-         (rules[offset] == Q_NEWRULE)) && ++offset != rulesSize);
+   }
 
-   // Bad op
+   // bad option
    return false;
 }
 
-static uint numerusHelper(int n, const uchar *rules, uint rulesSize)
+static uint countHelper(int n, const QVector<std::variant<CountGuide, int>> &data)
 {
    uint result = 0;
-   uint i = 0;
+   uint cnt    = 0;
+
+   uint rulesSize = data.size();
 
    if (rulesSize == 0) {
-      return 0;
+     return result;
    }
 
-   for (;;) {
+   while (true) {
       bool orExprTruthValue = false;
 
-      for (;;) {
+      while (true) {
          bool andExprTruthValue = true;
 
-         for (;;) {
+         while (true) {
             bool truthValue = true;
 
-            int opcode = rules[i++];
+            CountGuide opcode = std::get<CountGuide>(data[cnt]);
+            int leftOperand   = n;
 
-            int leftOperand = n;
+            ++cnt;
 
-            if (opcode & Q_MOD_10) {
+            if (opcode & CountGuide::Remainder_10) {
                leftOperand %= 10;
 
-            } else if (opcode & Q_MOD_100) {
+            } else if (opcode & CountGuide::Remainder_100) {
                leftOperand %= 100;
 
-            } else if (opcode & Q_LEAD_1000) {
+            } else if (opcode & CountGuide::Divide_1000) {
                while (leftOperand >= 1000) {
                   leftOperand /= 1000;
                }
             }
 
-            int op = opcode & Q_OP_MASK;
+            CountGuide op = static_cast<CountGuide>(opcode & CountGuide::OperatorMask);
 
-            int rightOperand = rules[i++];
+            int rightOperand = std::get<int>(data[cnt]);
+            ++cnt;
 
             switch (op) {
-               case Q_EQ:
+               case CountGuide::Equal:
                   truthValue = (leftOperand == rightOperand);
                   break;
 
-               case Q_LT:
+               case CountGuide::LessThan:
                   truthValue = (leftOperand < rightOperand);
                   break;
 
-               case Q_LEQ:
+               case CountGuide::LessThanEqual:
                   truthValue = (leftOperand <= rightOperand);
                   break;
 
-               case Q_BETWEEN:
+               case CountGuide::Between: {
                   int bottom = rightOperand;
 
-                  int top = rules[i++];
+                  int top    = std::get<int>(data[cnt]);
                   truthValue = (leftOperand >= bottom && leftOperand <= top);
+
+                  ++cnt;
+
+                  break;
+                }
+
+               default:
+                  // not a valid case
+                  break;
             }
 
-            if (opcode & Q_NOT) {
-               truthValue = !truthValue;
+            if (opcode & CountGuide::Not) {
+               truthValue = ! truthValue;
             }
 
             andExprTruthValue = andExprTruthValue && truthValue;
 
-            if (i == rulesSize || rules[i] != Q_AND) {
+            if (cnt == rulesSize || std::get<CountGuide>(data[cnt]) != CountGuide::And) {
                break;
             }
-            ++i;
+
+            ++cnt;
          }
 
          orExprTruthValue = orExprTruthValue || andExprTruthValue;
 
-         if (i == rulesSize || rules[i] != Q_OR) {
+         if (cnt == rulesSize || std::get<CountGuide>(data[cnt]) != CountGuide::Or) {
             break;
          }
-         ++i;
+
+         ++cnt;
       }
 
       if (orExprTruthValue) {
@@ -263,12 +295,13 @@ static uint numerusHelper(int n, const uchar *rules, uint rulesSize)
 
       ++result;
 
-      if (i == rulesSize) {
+      if (cnt == rulesSize) {
          return result;
       }
 
-      ++i;
+      ++cnt;
    }
+
    return 0;
 }
 
@@ -277,19 +310,16 @@ class QTranslatorPrivate
    Q_DECLARE_PUBLIC(QTranslator)
 
  public:
-   enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69, NumerusRules = 0x88, Dependencies = 0x96 };
-
    QTranslatorPrivate()
       : used_mmap(0), unmapPointer(nullptr), unmapLength(0), resource(nullptr),
-        messageArray(nullptr), offsetArray(nullptr), contextArray(nullptr), numerusRulesArray(nullptr),
-        messageLength(0), offsetLength(0), contextLength(0), numerusRulesLength(0)
+        messageArray(nullptr), offsetArray(nullptr), contextArray(nullptr),
+        messageLength(0), offsetLength(0), contextLength(0)
    {
    }
 
    virtual ~QTranslatorPrivate()
    {
    }
-
 
    bool used_mmap;
    char *unmapPointer;
@@ -305,11 +335,12 @@ class QTranslatorPrivate
    const uchar *messageArray;
    const uchar *offsetArray;
    const uchar *contextArray;
-   const uchar *numerusRulesArray;
+
+   QVector<std::variant<CountGuide, int>> m_countRules;
+
    uint messageLength;
    uint offsetLength;
    uint contextLength;
-   uint numerusRulesLength;
 
    bool do_load(const QString &filename, const QString &directory);
    bool do_load(const uchar *data, int len, const QString &directory);
@@ -318,7 +349,6 @@ class QTranslatorPrivate
 
  protected:
    QTranslator *q_ptr;
-
 };
 
 QTranslator::QTranslator(QObject *parent)
@@ -441,6 +471,7 @@ bool QTranslatorPrivate::do_load(const QString &realname, const QString &directo
       }
 
       unmapLength = quint32(fileSize);
+
 #ifdef QT_USE_MMAP
 
 #ifndef MAP_FILE
@@ -487,6 +518,7 @@ bool QTranslatorPrivate::do_load(const QString &realname, const QString &directo
    if (ok && do_load(reinterpret_cast<const uchar *>(unmapPointer), unmapLength, directory)) {
       return true;
    }
+
 #if defined(QT_USE_MMAP)
     if (used_mmap) {
         used_mmap = false;
@@ -647,18 +679,20 @@ static quint32 read32(const uchar *data)
 bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &directory)
 {
    bool ok = true;
-   const uchar *end = data + len;
-
-   data += MagicLength;
 
    QStringList dependencies;
 
-   while (data < end - 4) {
-      quint8 tag = read8(data++);
-      quint32 blockLen = read32(data);
+   const uchar *end = data + len;
+   data += MagicLength;
 
+   while (data < end - 4) {
+      TranslatorCategory tag = static_cast<TranslatorCategory>(read8(data));
+      ++data;
+
+      quint32 blockLen = read32(data);
       data += 4;
-      if (! tag || ! blockLen) {
+
+      if (tag == TranslatorCategory::Invalid || blockLen == 0) {
          break;
       }
 
@@ -667,22 +701,36 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &dire
          break;
       }
 
-      if (tag == QTranslatorPrivate::Contexts) {
-         contextArray = data;
+      if (tag == TranslatorCategory::Contexts) {
+         contextArray  = data;
          contextLength = blockLen;
 
-      } else if (tag == QTranslatorPrivate::Hashes) {
-         offsetArray = data;
+      } else if (tag == TranslatorCategory::Hashes) {
+         offsetArray  = data;
          offsetLength = blockLen;
 
-      } else if (tag == QTranslatorPrivate::Messages) {
-         messageArray = data;
+      } else if (tag == TranslatorCategory::Messages) {
+         messageArray  = data;
          messageLength = blockLen;
 
-      } else if (tag == QTranslatorPrivate::NumerusRules) {
-         numerusRulesArray = data;
-         numerusRulesLength = blockLen;
-      } else if (tag == QTranslatorPrivate::Dependencies) {
+      } else if (tag == TranslatorCategory::CountRules) {
+
+         for (quint32 cnt = 0; cnt < blockLen; cnt += 2)  {
+            quint8 which = data[cnt];
+
+            // retrieve and enum or int ( some rule )
+            switch (which) {
+               case 0:
+                  m_countRules.append(static_cast<CountGuide>(data[cnt +1]));
+                  break;
+
+               case 1:
+                  m_countRules.append(static_cast<int>(data[cnt +1]));
+                  break;
+            }
+         }
+
+      } else if (tag == TranslatorCategory::Dependencies) {
          QDataStream stream(QByteArray::fromRawData((const char*)data, blockLen));
          QString dep;
 
@@ -699,7 +747,7 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &dire
       ok = false;
    }
 
-   if (ok && !isValidNumerusRules(numerusRulesArray, numerusRulesLength)) {
+   if (ok && ! isValidCountRules(m_countRules)) {
       ok = false;
    }
 
@@ -721,28 +769,30 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &dire
          qDeleteAll(subTranslators);
          subTranslators.clear();
       }
-    }
+   }
+
    if (! ok) {
       messageArray       = nullptr;
       contextArray       = nullptr;
       offsetArray        = nullptr;
-      numerusRulesArray  = nullptr;
+
+      m_countRules.clear();
 
       messageLength      = 0;
       contextLength      = 0;
       offsetLength       = 0;
-      numerusRulesLength = 0;
-    }
+   }
+
    return ok;
 }
 
-static QString getMessage(const uchar *m, const uchar *end, const char *context, const char *sourceText,
+static QString getMessage(const uchar *data, const uchar *end, const char *context, const char *sourceText,
             const char *comment, uint numerus)
 {
    QString retval;
 
-   const uchar *tn    = nullptr;
-   uint tn_length     = 0;
+   const uchar *tn = nullptr;
+   uint tn_length = 0;
 
    const uint sourceTextLen = uint(strlen(sourceText));
    const uint contextLen    = uint(strlen(context));
@@ -751,79 +801,83 @@ static QString getMessage(const uchar *m, const uchar *end, const char *context,
    bool done = false;
 
    while (! done) {
-      uchar tag = 0;
+      TranslatorTag tag;
 
-      if (m < end) {
-         tag = read8(m);
-         ++m;
+      if (data < end) {
+         tag = static_cast<TranslatorTag>(read8(data));
+         ++data;
+
+      } else {
+         return retval;
       }
 
-      switch (static_cast<Tag>(tag)) {
-         case Tag_End:
+      switch (tag) {
+         case TranslatorTag::End:
             done = true;
             break;
 
-         case Tag_Translation: {
-            int len = read32(m);
+         case TranslatorTag::Translation: {
+            int len = read32(data);
 
             if (len % 1) {
                return retval;
             }
 
-            m += 4;
+            data += 4;
 
             if (numerus == 0) {
                tn_length = len;
-               tn = m;
+               tn = data;
             }
 
             --numerus;
 
-            m += len;
+            data += len;
             break;
          }
 
-         case Tag_Obsolete1:
-            m += 4;
+         case TranslatorTag::Obsolete1:
+            data += 4;
             break;
 
-         case Tag_SourceText: {
-            quint32 len = read32(m);
-            m += 4;
+         case TranslatorTag::SourceText: {
+            quint32 len = read32(data);
+            data += 4;
 
-            if (! match(m, len, sourceText, sourceTextLen)) {
+            if (! match(data, len, sourceText, sourceTextLen)) {
                return retval;
             }
 
-            m += len;
-            break;
-         }
-
-         case Tag_Context: {
-            quint32 len = read32(m);
-            m += 4;
-
-            if (! match(m, len, context, contextLen)) {
-               return retval;
-            }
-
-            m += len;
+            data += len;
             break;
          }
 
-         case Tag_Comment: {
-            quint32 len = read32(m);
-            m += 4;
+         case TranslatorTag::Context: {
+            quint32 len = read32(data);
+            data += 4;
 
-            if (*m && ! match(m, len, comment, commentLen)) {
+            if (! match(data, len, context, contextLen)) {
                return retval;
             }
 
-            m += len;
+            data += len;
+            break;
+         }
+
+         case TranslatorTag::Comment: {
+            quint32 len = read32(data);
+            data += 4;
+
+            if (*data != 0 && ! match(data, len, comment, commentLen)) {
+               return retval;
+            }
+
+            data += len;
             break;
          }
 
          default:
+            // "unknown tag"
             return retval;
       }
    }
@@ -864,7 +918,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
    // Check if the context belongs to this QTranslator. If many
    // translators are installed, this step is necessary.
 
-   if (contextLength) {
+   if (contextLength != 0) {
       quint16 hTableSize = read16(contextArray);
       uint g = elfHash(context) % hTableSize;
 
@@ -901,10 +955,10 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
    }
 
    if (numArg.has_value()) {
-      numerus = numerusHelper(numArg.value(), numerusRulesArray, numerusRulesLength);
+      numerus = countHelper(numArg.value(), m_countRules);
    }
 
-   for (;;) {
+   while (true) {
       quint32 h = 0;
 
       elfHash_start(sourceText, h);
@@ -998,15 +1052,16 @@ void QTranslatorPrivate::clear()
    messageArray       = nullptr;
    contextArray       = nullptr;
    offsetArray        = nullptr;
-   numerusRulesArray  = nullptr;
+
+   m_countRules.clear();
 
    unmapLength        = 0;
    messageLength      = 0;
    contextLength      = 0;
    offsetLength       = 0;
-   numerusRulesLength = 0;
 
    qDeleteAll(subTranslators);
+
    subTranslators.clear();
    if (QCoreApplicationPrivate::isTranslatorInstalled(q)) {
       QCoreApplication::postEvent(QCoreApplication::instance(), new QEvent(QEvent::LanguageChange));

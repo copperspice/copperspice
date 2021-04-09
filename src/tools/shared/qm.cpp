@@ -40,20 +40,6 @@ static const uchar magic[MagicLength] = {
    0xcd, 0x21, 0x1c, 0xbf, 0x60, 0xa1, 0xbd, 0xdd
 };
 
-namespace {
-
-enum Tag {
-   Tag_End          = 1,
-   Tag_SourceText16 = 2,
-   Tag_Translation  = 3,
-   Tag_Context16    = 4,
-   Tag_Obsolete1    = 5,
-   Tag_SourceText   = 6,
-   Tag_Context      = 7,
-   Tag_Comment      = 8,
-   Tag_Obsolete2    = 9
-};
-
 enum class TranslatorPrefix {
    NoPrefix,
    Hash,
@@ -61,8 +47,6 @@ enum class TranslatorPrefix {
    HashContextSourceText,
    HashContextSourceTextComment
 };
-
-} // namespace
 
 static uint elfHash(const QByteArray &ba)
 {
@@ -157,8 +141,6 @@ class Releaser
       uint o;
    };
 
-   enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69, NumerusRules = 0x88, Dependencies = 0x96 };
-
    Releaser() {
    }
 
@@ -172,7 +154,7 @@ class Releaser
 
    void squeeze(TranslatorMessage::SaveMode mode);
 
-   void setNumerusRules(const QByteArray &rules);
+   void setCountRules(const QVector<std::variant<CountGuide, int>> &rules);
    void setDependencies(const QStringList &dependencies);
 
  private:
@@ -192,9 +174,10 @@ class Releaser
    QByteArray m_offsetArray;
    QByteArray m_contextArray;
    QMap<ByteTranslatorMessage, void *> m_messages;
-   QByteArray m_numerusRules;
    QStringList m_dependencies;
    QByteArray m_dependencyArray;
+
+   QVector<std::variant<CountGuide, int>> m_countRules;
 
 };
 
@@ -238,7 +221,7 @@ void Releaser::writeMessage(const ByteTranslatorMessage &msg, QDataStream &strea
                             TranslatorMessage::SaveMode mode, TranslatorPrefix prefix) const
 {
    for (int i = 0; i < msg.translations().count(); ++i) {
-      stream << quint8(Tag_Translation) << msg.translations().at(i);
+      stream << quint8(TranslatorTag::Translation) << msg.translations().at(i);
    }
 
    if (mode == TranslatorMessage::SaveMode::Everything) {
@@ -249,19 +232,19 @@ void Releaser::writeMessage(const ByteTranslatorMessage &msg, QDataStream &strea
    switch (prefix) {
       default:
       case TranslatorPrefix::HashContextSourceTextComment:
-         stream << quint8(Tag_Comment) << msg.comment();
+         stream << quint8(TranslatorTag::Comment) << msg.comment();
          [[fallthrough]];
 
       case TranslatorPrefix::HashContextSourceText:
-         stream << quint8(Tag_SourceText) << msg.sourceText();
+         stream << quint8(TranslatorTag::SourceText) << msg.sourceText();
          [[fallthrough]];
 
       case TranslatorPrefix::HashContext:
-         stream << quint8(Tag_Context) << msg.context();
+         stream << quint8(TranslatorTag::Context) << msg.context();
          break;
    }
 
-   stream << quint8(Tag_End);
+   stream << quint8(TranslatorTag::End);
 }
 
 bool Releaser::save(QIODevice *iod)
@@ -270,33 +253,54 @@ bool Releaser::save(QIODevice *iod)
    s.writeRawData((const char *)magic, MagicLength);
 
    if (! m_dependencyArray.isEmpty()) {
-      quint32 das = quint32(m_dependencyArray.size());
-      s << quint8(Dependencies) << das;
-      s.writeRawData(m_dependencyArray.constData(), das);
+      quint32 arraySize = quint32(m_dependencyArray.size());
+
+      s << static_cast<quint8>(TranslatorCategory::Dependencies) << arraySize;
+      s.writeRawData(m_dependencyArray.constData(), arraySize);
    }
 
-   if (!m_offsetArray.isEmpty()) {
-      quint32 oas = quint32(m_offsetArray.size());
-      s << quint8(Hashes) << oas;
-      s.writeRawData(m_offsetArray.constData(), oas);
+   if (! m_offsetArray.isEmpty()) {
+      quint32 arraySize = quint32(m_offsetArray.size());
+
+      s << static_cast<quint8>(TranslatorCategory::Hashes) << arraySize;
+      s.writeRawData(m_offsetArray.constData(), arraySize);
    }
 
-   if (!m_messageArray.isEmpty()) {
-      quint32 mas = quint32(m_messageArray.size());
-      s << quint8(Messages) << mas;
-      s.writeRawData(m_messageArray.constData(), mas);
+   if (! m_messageArray.isEmpty()) {
+      quint32 arraySize = quint32(m_messageArray.size());
+
+      s << static_cast<quint8>(TranslatorCategory::Messages) << arraySize;
+      s.writeRawData(m_messageArray.constData(), arraySize);
    }
 
    if (! m_contextArray.isEmpty()) {
-      quint32 cas = quint32(m_contextArray.size());
-      s << quint8(Contexts) << cas;
-      s.writeRawData(m_contextArray.constData(), cas);
+      quint32 arraySize = quint32(m_contextArray.size());
+
+      s << static_cast<quint8>(TranslatorCategory::Contexts) << arraySize;
+      s.writeRawData(m_contextArray.constData(), arraySize);
    }
 
-   if (! m_numerusRules.isEmpty()) {
-      quint32 nrs = m_numerusRules.size();
-      s << quint8(NumerusRules) << nrs;
-      s.writeRawData(m_numerusRules.constData(), nrs);
+   if (! m_countRules.isEmpty()) {
+      quint32 arraySize = m_countRules.size();
+
+      s << static_cast<quint8>(TranslatorCategory::CountRules) << arraySize * 2;
+
+      for (auto item : m_countRules) {
+         quint8 which = item.index();
+
+         // indicator for what the data will be
+         s << static_cast<quint8>(which);
+
+         switch (which) {
+            case 0:
+               s << static_cast<quint8>(std::get<CountGuide>(item));
+               break;
+
+            case 1:
+               s << static_cast<quint8>(std::get<int>(item));
+               break;
+         }
+      }
    }
 
    return true;
@@ -476,9 +480,9 @@ void Releaser::insertIdBased(const TranslatorMessage &message, const QStringList
    m_messages.insert(bmsg, nullptr);
 }
 
-void Releaser::setNumerusRules(const QByteArray &rules)
+void Releaser::setCountRules(const QVector<std::variant<CountGuide, int>> &data)
 {
-   m_numerusRules = rules;
+   m_countRules = data;
 }
 
 void Releaser::setDependencies(const QStringList &dependencies)
@@ -517,8 +521,6 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
       return false;
    }
 
-   enum { Contexts = 0x2f, Hashes = 0x42, Messages = 0x69, NumerusRules = 0x88, Dependencies = 0x96 };
-
    // for squeezed but non-file data, this is what needs to be deleted
    const uchar *messageArray = nullptr;
    const uchar *offsetArray  = nullptr;
@@ -530,13 +532,13 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
    data += MagicLength;
 
    while (data < end - 4) {
-      quint8 tag = read8(data++);
-      quint32 blockLen = read32(data);
+      TranslatorCategory tag = static_cast<TranslatorCategory>(read8(data));
+      ++data;
 
-      // qDebug() << "TAG:" << tag <<  "BLOCKLEN:" << blockLen;
+      quint32 blockLen = read32(data);
       data += 4;
 
-      if (! tag || ! blockLen) {
+      if (tag == TranslatorCategory::Invalid || blockLen == 0) {
          break;
       }
 
@@ -545,16 +547,14 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
          break;
       }
 
-      if (tag == Hashes) {
-         offsetArray = data;
+      if (tag == TranslatorCategory::Hashes) {
+         offsetArray  = data;
          offsetLength = blockLen;
-         //qDebug() << "HASHES: " << blockLen << QByteArray((const char *)data, blockLen).toHex();
 
-      } else if (tag == Messages) {
+      } else if (tag == TranslatorCategory::Messages) {
          messageArray = data;
-         //qDebug() << "MESSAGES: " << blockLen << QByteArray((const char *)data, blockLen).toHex();
 
-      } else if (tag == Dependencies) {
+      } else if (tag == TranslatorCategory::Dependencies) {
          QStringList dependencies;
          QDataStream stream(QByteArray::fromRawData((const char *)data, blockLen));
          QString dep;
@@ -579,7 +579,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
    QStringList numerusForms;
    bool guessPlurals = true;
 
-   if (getNumerusInfo(l, c, nullptr, &numerusForms, nullptr)) {
+   if (getCountInfo(l, c, nullptr, &numerusForms, nullptr)) {
       guessPlurals = (numerusForms.count() == 1);
    }
 
@@ -595,15 +595,18 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
       quint32 ro     = read32(start + 4);
       const uchar *m = messageArray + ro;
 
-      for (;;) {
-         uchar tag = read8(m);
+      bool done = false;
+
+      while (! done) {
+         TranslatorTag tag = static_cast<TranslatorTag>(read8(m));
          ++m;
 
          switch (tag) {
-            case Tag_End:
-               goto end;
+            case TranslatorTag::End:
+               done = true;
+               break;
 
-            case Tag_Translation: {
+            case TranslatorTag::Translation: {
                int len = read32(m);
 
                if (len % 1) {
@@ -623,11 +626,11 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                break;
             }
 
-            case Tag_Obsolete1:
+            case TranslatorTag::Obsolete1:
                m += 4;
                break;
 
-            case Tag_SourceText: {
+            case TranslatorTag::SourceText: {
                quint32 len = read32(m);
                m += 4;
 
@@ -637,7 +640,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                break;
             }
 
-            case Tag_Context: {
+            case TranslatorTag::Context: {
                quint32 len = read32(m);
                m += 4;
 
@@ -647,7 +650,7 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                break;
             }
 
-            case Tag_Comment: {
+            case TranslatorTag::Comment: {
                quint32 len = read32(m);
                m += 4;
                fromBytes((const char *)m, len, &comment, &utf8Fail);
@@ -662,7 +665,6 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
          }
       }
 
-   end:
       TranslatorMessage msg;
       msg.setType(TranslatorMessage::Type::Finished);
 
@@ -713,10 +715,10 @@ bool saveQM(const Translator &translator, QIODevice &dev, ConversionData &cd)
    QLocale::Country c;
 
    Translator::languageAndCountry(translator.languageCode(), &l, &c);
-   QByteArray rules;
+   QVector<std::variant<CountGuide, int>> data;
 
-   if (getNumerusInfo(l, c, &rules, nullptr, nullptr)) {
-      releaser.setNumerusRules(rules);
+   if (getCountInfo(l, c, &data, nullptr, nullptr)) {
+      releaser.setCountRules(data);
    }
 
    int finished     = 0;

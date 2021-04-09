@@ -33,6 +33,10 @@
 #include <qstring.h>
 #include <qset.h>
 
+#include <qtranslator_p.h>
+
+#include <variant>
+
 class QIODevice;
 
 // A struct of "interesting" data passed to and from the load and save routines
@@ -297,8 +301,8 @@ class Translator
    mutable QHash<TMMKey, int> m_msgIdx;
 };
 
-bool getNumerusInfo(QLocale::Language language, QLocale::Country country,
-                    QByteArray *rules, QStringList *forms, const char **gettextRules);
+bool getCountInfo(QLocale::Language language, QLocale::Country country,
+            QVector<std::variant<CountGuide, int>> *data, QStringList *forms, const char **gettextRules);
 
 QString getCountInfoString();
 
