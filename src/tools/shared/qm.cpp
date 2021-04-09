@@ -623,11 +623,9 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
 
                m += 4;
 
-               QTextCodec *codec = QTextCodec::codecForName("UTF-16BE");
-               QString str = codec->toUnicode((const char *)m, len);
-
-
+               QString str = QString::fromUtf8((const char *)m, len);
                translations << str;
+
                m += len;
 
                break;
