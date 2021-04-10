@@ -1,7 +1,7 @@
 add_executable(lupdate${TOOLS_SUFFIX} "")
 add_executable(CopperSpice::lupdate ALIAS lupdate${TOOLS_SUFFIX})
 
-list(APPEND EXTRA_LUPDATE_LIBS
+set(EXTRA_LUPDATE_LIBS
    CsCore
    CsXml
 )

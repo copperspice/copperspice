@@ -6,7 +6,7 @@ add_definitions(
    -DPROEVALUATOR_INIT_PROPS
 )
 
-list(APPEND EXTRA_LCONVERT_LIBS
+set(EXTRA_LCONVERT_LIBS
    CsCore
    CsXml
 )
@@ -35,19 +35,21 @@ target_sources(lconvert${TOOLS_SUFFIX}
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "DARWIN")
-   set(EXTRA_LCONVERT_LDFLAGS  ${EXTRA_LCONVERT_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+   list(APPEND EXTRA_LCONVERT_LDFLAGS  '-Wl,-rpath,$ORIGIN/../lib')
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "(OpenBSD|FreeBSD|NetBSD)")
-   set(EXTRA_LCONVERT_LDFLAGS  ${EXTRA_LCONVERT_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+   list(APPEND EXTRA_LCONVERT_LDFLAGS  '-Wl,-rpath,$ORIGIN/../lib')
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-   set(EXTRA_LCONVERT_LDFLAGS  ${EXTRA_LCONVERT_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+   list(APPEND EXTRA_LCONVERT_LDFLAGS  '-Wl,-rpath,$ORIGIN/../lib')
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-   set(EXTRA_LCONVERT_LIBS ${EXTRA_LCONVERT_LIBS} uuid)
+   list(APPEND EXTRA_LCONVERT_LIBS
+      uuid
+   )
 endif()
 
 function_variable_fixup("${EXTRA_LCONVERT_CXXFLAGS}" EXTRA_LCONVERT_CXXFLAGS)

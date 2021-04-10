@@ -1,10 +1,9 @@
 add_executable(rcc${TOOLS_SUFFIX} "")
 add_executable(CopperSpice::rcc ALIAS rcc${TOOLS_SUFFIX})
 
-list(APPEND EXTRA_RCC_LIBS
+set(EXTRA_RCC_LIBS
    CsCore
    CsXml
-   ${CMAKE_THREAD_LIBS_INIT}
 )
 
 set(EXTRA_RCC_CXXFLAGS)
@@ -32,19 +31,19 @@ target_sources(rcc${TOOLS_SUFFIX}
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "DARWIN")
-   set(EXTRA_RCC_LDFLAGS  ${EXTRA_RCC_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+   list(APPEND EXTRA_RCC_LDFLAGS '-Wl,-rpath,$ORIGIN/../lib')
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "(OpenBSD|FreeBSD|NetBSD)")
-   set(EXTRA_RCC_LDFLAGS  ${EXTRA_RCC_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+   list(APPEND EXTRA_RCC_LDFLAGS '-Wl,-rpath,$ORIGIN/../lib')
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-   set(EXTRA_RCC_LDFLAGS  ${EXTRA_RCC_LDFLAGS} '-Wl,-rpath,$ORIGIN/../lib')
+   list(APPEND EXTRA_RCC_LDFLAGS '-Wl,-rpath,$ORIGIN/../lib')
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-   set(EXTRA_RCC_LIBS ${EXTRA_RCC_LIBS} uuid)
+   list(APPEND EXTRA_RCC_LIBS uuid)
 endif()
 
 function_variable_fixup("${EXTRA_RCC_CXXFLAGS}" EXTRA_RCC_CXXFLAGS)
@@ -64,4 +63,3 @@ install(
    EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
    DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
