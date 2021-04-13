@@ -26,12 +26,9 @@
 
 #include <quiloader_p.h>
 
-#include <QHash>
-#include <QList>
-
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
+#include <qhash.h>
+#include <qlist.h>
+#include <qmainwindow.h>
 
 class MultiDataModel;
 class FormFrame;
@@ -61,6 +58,7 @@ enum TranslatableEntryType {
 
 struct TranslatableEntry {
    TranslatableEntryType type;
+
    union {
       QObject *object;
       QComboBox *comboBox;
@@ -70,9 +68,11 @@ struct TranslatableEntry {
       QTableWidgetItem *tableWidgetItem;
       QTreeWidgetItem *treeWidgetItem;
    } target;
+
    union {
       char *name;
       int index;
+
       struct {
          short index; // Known to be below 1000
          short column;
@@ -80,11 +80,12 @@ struct TranslatableEntry {
    } prop;
 };
 
-typedef QHash<QUiTranslatableStringValue, QList<TranslatableEntry> > TargetsHash;
+using TargetsHash = QHash<QUiTranslatableStringValue, QList<TranslatableEntry>>;
 
 class FormPreviewView : public QMainWindow
 {
-   Q_OBJECT
+   CS_OBJECT(FormPreviewView)
+
  public:
    FormPreviewView(QWidget *parent, MultiDataModel *dataModel);
 
@@ -105,6 +106,4 @@ class FormPreviewView : public QMainWindow
    int m_lastModel;
 };
 
-QT_END_NAMESPACE
-
-#endif // FORMPREVIEWVIEW_H
+#endif
