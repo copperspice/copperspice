@@ -21,17 +21,16 @@
 *
 ***********************************************************************/
 
-#ifndef TRANSLATEDIALOG_H
-#define TRANSLATEDIALOG_H
+#ifndef TRANSLATE_DIALOG_H
+#define TRANSLATE_DIALOG_H
 
-#include "ui_translatedialog.h"
-#include <QDialog>
+#include <ui_translate_dialog.h>
 
-QT_BEGIN_NAMESPACE
+#include <qdialog.h>
 
 class TranslateDialog : public QDialog
 {
-   Q_OBJECT
+   CS_OBJECT(TranslateDialog)
 
  public:
    enum {
@@ -41,38 +40,49 @@ class TranslateDialog : public QDialog
    };
 
    TranslateDialog(QWidget *parent = nullptr);
+   ~TranslateDialog();
 
    bool markFinished() const {
-      return m_ui.ckMarkFinished->isChecked();
-   }
-   Qt::CaseSensitivity caseSensitivity() const {
-      return m_ui.ckMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
-   }
-   QString findText() const {
-      return m_ui.ledFindWhat->text();
-   }
-   QString replaceText() const {
-      return m_ui.ledTranslateTo->text();
+      return m_ui->ckMarkFinished->isChecked();
    }
 
- signals:
-   void requestMatchUpdate(bool &hit);
-   void activated(int mode);
+   Qt::CaseSensitivity caseSensitivity() const {
+      return m_ui->ckMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+   }
+
+   QString findText() const {
+      return m_ui->ledFindWhat->text();
+   }
+
+   QString replaceText() const {
+      return m_ui->ledTranslateTo->text();
+   }
+
+   CS_SIGNAL_1(Public, void requestMatchUpdate(bool &hit))
+   CS_SIGNAL_2(requestMatchUpdate,hit)
+
+   CS_SIGNAL_1(Public, void activated(int mode))
+   CS_SIGNAL_2(activated,mode)
 
  protected:
    virtual void showEvent(QShowEvent *event);
 
- private slots:
-   void emitFindNext();
-   void emitTranslateAndFindNext();
-   void emitTranslateAll();
-   void verifyText();
-
  private:
-   Ui::TranslateDialog m_ui;
+   Ui::TranslateDialog *m_ui;
+
+   CS_SLOT_1(Private, void emitFindNext())
+   CS_SLOT_2(emitFindNext)
+
+   CS_SLOT_1(Private, void emitTranslateAndFindNext())
+   CS_SLOT_2(emitTranslateAndFindNext)
+
+   CS_SLOT_1(Private, void emitTranslateAll())
+   CS_SLOT_2(emitTranslateAll)
+
+   CS_SLOT_1(Private, void verifyText())
+   CS_SLOT_2(verifyText)
+
 };
 
-
-QT_END_NAMESPACE
-#endif  //TRANSLATEDIALOG_H
+#endif
 
