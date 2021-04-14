@@ -21,43 +21,43 @@
 *
 ***********************************************************************/
 
-#ifndef TRANSLATIONSETTINGSDIALOG_H
-#define TRANSLATIONSETTINGSDIALOG_H
+#ifndef SETTINGS_DIALOG_H
+#define SETTINGS_DIALOG_H
 
-#include "ui_translationsettings.h"
+#include <ui_settings_dialog.h>
 
-#include <QLocale>
-#include <QDialog>
-
-QT_BEGIN_NAMESPACE
+#include <qlocale.h>
+#include <qdialog.h>
 
 class DataModel;
 class PhraseBook;
 
-class TranslationSettingsDialog : public QDialog
+class SettingsDialog : public QDialog
 {
-   Q_OBJECT
+   CS_OBJECT(SettingsDialog)
 
  public:
-   TranslationSettingsDialog(QWidget *parent = nullptr);
+   SettingsDialog(QWidget *parent = nullptr);
+   ~SettingsDialog();
+
    void setDataModel(DataModel *model);
    void setPhraseBook(PhraseBook *phraseBook);
 
  private:
    virtual void showEvent(QShowEvent *e);
+   Ui::SettingsDialog *m_ui;
 
- private slots:
-   void on_buttonBox_accepted();
-   void on_srcCbLanguageList_currentIndexChanged(int idx);
-   void on_tgtCbLanguageList_currentIndexChanged(int idx);
-
- private:
-   Ui::TranslationSettingsDialog m_ui;
    DataModel *m_dataModel;
    PhraseBook *m_phraseBook;
 
+   CS_SLOT_1(Private, void on_buttonBox_accepted())
+   CS_SLOT_2(on_buttonBox_accepted)
+
+   CS_SLOT_1(Private, void on_srcCbLanguageList_currentIndexChanged(int idx))
+   CS_SLOT_2(on_srcCbLanguageList_currentIndexChanged)
+
+   CS_SLOT_1(Private, void on_tgtCbLanguageList_currentIndexChanged(int idx))
+   CS_SLOT_2(on_tgtCbLanguageList_currentIndexChanged)
 };
 
-QT_END_NAMESPACE
-
-#endif // TRANSLATIONSETTINGSDIALOG_H
+#endif
