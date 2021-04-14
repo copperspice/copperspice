@@ -21,31 +21,35 @@
 *
 ***********************************************************************/
 
-#ifndef FINDDIALOG_H
-#define FINDDIALOG_H
+#ifndef FIND_DIALOG_H
+#define FIND_DIALOG_H
 
-#include "ui_finddialog.h"
-#include "messagemodel.h"
+#include <ui_find_dialog.h>
+#include <messagemodel.h>
 
-#include <QDialog>
+#include <qdialog.h>
 
-QT_BEGIN_NAMESPACE
-
-class FindDialog : public QDialog, public Ui::FindDialog
+class FindDialog : public QDialog
 {
-   Q_OBJECT
+   CS_OBJECT(FindDialog)
+
  public:
    FindDialog(QWidget *parent = nullptr);
+   ~FindDialog();
 
- signals:
-   void findNext(const QString &text, DataModel::FindLocation where, bool matchCase, bool ignoreAccelerators);
+   CS_SIGNAL_1(Public, void findNext(const QString & text, DataModel::FindLocation where,
+               bool matchCase, bool ignoreAccelerators, bool skipObsolete))
+   CS_SIGNAL_2(findNext, text, where, matchCase, ignoreAccelerators, skipObsolete)
 
- private slots:
-   void emitFindNext();
-   void verifyText(const QString &);
+   // slot
    void find();
-};
 
-QT_END_NAMESPACE
+ private:
+   Ui::FindDialog *m_ui;
+
+   // slot
+   void emitFindNext();
+   void verifyText(const QString &text);
+};
 
 #endif
