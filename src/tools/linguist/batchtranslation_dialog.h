@@ -21,16 +21,14 @@
 *
 ***********************************************************************/
 
-#ifndef BATCHTRANSLATIONDIALOG_H
-#define BATCHTRANSLATIONDIALOG_H
+#ifndef BATCHTRANSLATION_DIALOG_H
+#define BATCHTRANSLATION_DIALOG_H
 
-#include "ui_batchtranslation.h"
-#include "phrase.h"
+#include <ui_batchtranslation.h>
+#include <phrase.h>
 
-#include <QDialog>
-#include <QStandardItemModel>
-
-QT_BEGIN_NAMESPACE
+#include <qdialog.h>
+#include <qstandarditemmodel.h>
 
 class MultiDataModel;
 
@@ -43,27 +41,29 @@ class CheckableListModel : public QStandardItemModel
 
 class BatchTranslationDialog : public QDialog
 {
-   Q_OBJECT
+   CS_OBJECT(BatchTranslationDialog)
+
  public:
-   BatchTranslationDialog(MultiDataModel *model, QWidget *w = 0);
+   BatchTranslationDialog(MultiDataModel *model, QWidget *w = nullptr);
+   ~BatchTranslationDialog();
+
    void setPhraseBooks(const QList<PhraseBook *> &phrasebooks, int modelIndex);
 
- signals:
-   void finished();
-
- private slots:
-   void startTranslation();
-   void movePhraseBookUp();
-   void movePhraseBookDown();
+   CS_SIGNAL_1(Public, void finished())
+   CS_SIGNAL_2(finished)
 
  private:
-   Ui::BatchTranslationDialog m_ui;
+   Ui::BatchTranslationDialog *m_ui;
+
    CheckableListModel m_model;
    MultiDataModel *m_dataModel;
    QList<PhraseBook *> m_phrasebooks;
    int m_modelIndex;
+
+   // slots
+   void startTranslation();
+   void movePhraseBookUp();
+   void movePhraseBookDown();
 };
 
-QT_END_NAMESPACE
-
-#endif // BATCHTRANSLATIONDIALOG_H
+#endif
