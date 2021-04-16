@@ -28,7 +28,6 @@
 #include <QHash>
 #include <QPlainTextEdit>
 
-
 class SourceCodeView : public QPlainTextEdit
 {
    CS_OBJECT(SourceCodeView)
@@ -36,7 +35,6 @@ class SourceCodeView : public QPlainTextEdit
  public:
    SourceCodeView(QWidget *parent = nullptr);
    void setSourceContext(const QString &fileName, const int lineNum);
-   void setCodecName(const QByteArray &codecName);
 
    CS_SLOT_1(Public, void setActivated(bool activated))
    CS_SLOT_2(setActivated)
@@ -48,10 +46,8 @@ class SourceCodeView : public QPlainTextEdit
    QString m_fileToLoad;
    int m_lineNumToLoad;
    QString m_currentFileName;
-   QByteArray m_codecName;
 
    QHash<QString, QString> fileHash;
 };
 
-
-#endif // SOURCECODEVIEW_H
+#endif

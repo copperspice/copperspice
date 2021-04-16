@@ -59,11 +59,6 @@ void SourceCodeView::setSourceContext(const QString &fileName, const int lineNum
    }
 }
 
-void SourceCodeView::setCodecName(const QByteArray &codecName)
-{
-   m_codecName = codecName;
-}
-
 void SourceCodeView::setActivated(bool activated)
 {
    m_isActive = activated;
@@ -93,9 +88,8 @@ void SourceCodeView::showSourceCode(const QString &absFileName, const int lineNu
          appendHtml(tr("<i>File %1 not readable</i>").arg(absFileName));
          return;
       }
-      const QTextCodec *codec = QTextCodec::codecForName(m_codecName);
-      const QByteArray contents = file.readAll();
-      fileText = codec ? codec->toUnicode(contents) : QString::fromUtf8(contents);
+
+      fileText = QString::fromUtf8(file.readAll());
       fileHash.insert(absFileName, fileText);
    }
 

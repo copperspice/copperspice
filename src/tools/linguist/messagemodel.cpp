@@ -237,7 +237,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
    }
 
    m_srcFileName = fileName;
-   m_codecName = tor.codecName();
+
    m_relativeLocations = (tor.locationsType() == Translator::RelativeLocations);
    m_extra = tor.extras();
    m_contextList.clear();
@@ -333,7 +333,7 @@ bool DataModel::save(const QString &fileName, QWidget *parent)
 
    tor.setLanguageCode(Translator::makeLanguageCode(m_language, m_country));
    tor.setSourceLanguageCode(Translator::makeLanguageCode(m_sourceLanguage, m_sourceCountry));
-   tor.setCodecName(m_codecName);
+
    tor.setLocationsType(m_relativeLocations ? Translator::RelativeLocations
                         : Translator::AbsoluteLocations);
    tor.setExtras(m_extra);

@@ -302,9 +302,6 @@ class DataModel : public QObject
    QLocale::Country sourceCountry() const {
       return m_sourceCountry;
    }
-   QByteArray codecName() const {
-      return m_codecName;
-   }
 
    const QString &localizedLanguage() const {
       return m_localizedLanguage;
@@ -364,7 +361,7 @@ class DataModel : public QObject
    QLocale::Language m_sourceLanguage;
    QLocale::Country m_country;
    QLocale::Country m_sourceCountry;
-   QByteArray m_codecName;
+
    bool m_relativeLocations;
    Translator::ExtraData m_extra;
 
