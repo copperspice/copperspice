@@ -55,7 +55,7 @@ struct MessageEditorData {
 
 class MessageEditor : public QScrollArea
 {
-   Q_OBJECT
+   CS_OBJECT(MessageEditor)
 
  public:
    MessageEditor(MultiDataModel *dataModel, QMainWindow *parent = 0);
@@ -72,46 +72,104 @@ class MessageEditor : public QScrollArea
    void setUnfinishedEditorFocus();
    bool focusNextUnfinished();
 
- signals:
-   void translationChanged(const QStringList &translations);
-   void translatorCommentChanged(const QString &comment);
-   void activeModelChanged(int model);
 
-   void undoAvailable(bool avail);
-   void redoAvailable(bool avail);
-   void cutAvailable(bool avail);
-   void copyAvailable(bool avail);
-   void pasteAvailable(bool avail);
-   void beginFromSourceAvailable(bool enable);
+   CS_SIGNAL_1(Public, void translationChanged(const QStringList & translations))
+   CS_SIGNAL_2(translationChanged,translations)
 
- public slots:
-   void undo();
-   void redo();
-   void cut();
-   void copy();
-   void paste();
-   void selectAll();
-   void beginFromSource();
-   void setEditorFocus();
-   void setTranslation(int latestModel, const QString &translation);
-   void setLengthVariants(bool on);
+   CS_SIGNAL_1(Public, void translatorCommentChanged(const QString & comment))
+   CS_SIGNAL_2(translatorCommentChanged,comment)
 
- private slots:
-   void editorCreated(QTextEdit *);
-   void editorDestroyed();
-   void selectionChanged(QTextEdit *);
-   void resetHoverSelection();
-   void emitTranslationChanged(QTextEdit *);
-   void emitTranslatorCommentChanged(QTextEdit *);
-   void updateCanPaste();
-   void clipboardChanged();
-   void messageModelAppended();
-   void messageModelDeleted(int model);
-   void allModelsDeleted();
-   void setTargetLanguage(int model);
-   void reallyFixTabOrder();
+   CS_SIGNAL_1(Public, void activeModelChanged(int model))
+   CS_SIGNAL_2(activeModelChanged,model)
+
+   CS_SIGNAL_1(Public, void undoAvailable(bool avail))
+   CS_SIGNAL_2(undoAvailable,avail)
+
+   CS_SIGNAL_1(Public, void redoAvailable(bool avail))
+   CS_SIGNAL_2(redoAvailable,avail)
+
+   CS_SIGNAL_1(Public, void cutAvailable(bool avail))
+   CS_SIGNAL_2(cutAvailable,avail)
+
+   CS_SIGNAL_1(Public, void copyAvailable(bool avail))
+   CS_SIGNAL_2(copyAvailable,avail)
+
+   CS_SIGNAL_1(Public, void pasteAvailable(bool avail))
+   CS_SIGNAL_2(pasteAvailable,avail)
+
+   CS_SIGNAL_1(Public, void beginFromSourceAvailable(bool enable))
+   CS_SIGNAL_2(beginFromSourceAvailable,enable)
+
+   CS_SLOT_1(Public, void undo())
+   CS_SLOT_2(undo)
+
+   CS_SLOT_1(Public, void redo())
+   CS_SLOT_2(redo)
+
+   CS_SLOT_1(Public, void cut())
+   CS_SLOT_2(cut)
+
+   CS_SLOT_1(Public, void copy())
+   CS_SLOT_2(copy)
+
+   CS_SLOT_1(Public, void paste())
+   CS_SLOT_2(paste)
+
+   CS_SLOT_1(Public, void selectAll())
+   CS_SLOT_2(selectAll)
+
+   CS_SLOT_1(Public, void beginFromSource())
+   CS_SLOT_2(beginFromSource)
+
+   CS_SLOT_1(Public, void setEditorFocus())
+   CS_SLOT_2(setEditorFocus)
+
+   CS_SLOT_1(Public, void setTranslation(int model, const QString & translation))
+   CS_SLOT_2(setTranslation)
+
+   CS_SLOT_1(Public, void setLengthVariants(bool on))
+   CS_SLOT_2(setLengthVariants)
+
+   CS_SLOT_1(Public, void increaseFontSize())
+   CS_SLOT_2(increaseFontSize)
+
+   CS_SLOT_1(Public, void decreaseFontSize())
+   CS_SLOT_2(decreaseFontSize)
+
+   CS_SLOT_1(Public, void resetFontSize())
+   CS_SLOT_2(resetFontSize)
 
  private:
+   CS_SLOT_1(Private, void editorCreated(QTextEdit * un_named_arg1))
+   CS_SLOT_2(editorCreated)
+
+   CS_SLOT_1(Private, void editorDestroyed())
+   CS_SLOT_2(editorDestroyed)
+
+   CS_SLOT_1(Private, void selectionChanged(QTextEdit * un_named_arg1))
+   CS_SLOT_2(selectionChanged)
+
+   CS_SLOT_1(Private, void resetHoverSelection())
+   CS_SLOT_2(resetHoverSelection)
+   CS_SLOT_1(Private, void emitTranslationChanged(QTextEdit * un_named_arg1))
+   CS_SLOT_2(emitTranslationChanged)
+   CS_SLOT_1(Private, void emitTranslatorCommentChanged(QTextEdit * un_named_arg1))
+   CS_SLOT_2(emitTranslatorCommentChanged)
+   CS_SLOT_1(Private, void updateCanPaste())
+   CS_SLOT_2(updateCanPaste)
+   CS_SLOT_1(Private, void clipboardChanged())
+   CS_SLOT_2(clipboardChanged)
+   CS_SLOT_1(Private, void messageModelAppended())
+   CS_SLOT_2(messageModelAppended)
+   CS_SLOT_1(Private, void messageModelDeleted(int model))
+   CS_SLOT_2(messageModelDeleted)
+   CS_SLOT_1(Private, void allModelsDeleted())
+   CS_SLOT_2(allModelsDeleted)
+   CS_SLOT_1(Private, void setTargetLanguage(int model))
+   CS_SLOT_2(setTargetLanguage)
+   CS_SLOT_1(Private, void reallyFixTabOrder())
+   CS_SLOT_2(reallyFixTabOrder)
+
    void setupEditorPage();
    void setEditingEnabled(int model, bool enabled);
    bool focusNextUnfinished(int start);

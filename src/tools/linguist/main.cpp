@@ -44,7 +44,7 @@
 #ifdef Q_OS_DARWIN
 class ApplicationEventFilter : public QObject
 {
-   Q_OBJECT
+   CS_OBJECT(ApplicationEventFilter)
 
  public:
    ApplicationEventFilter()

@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 
 class RecentFiles : public QObject
 {
-   Q_OBJECT
+   CS_OBJECT(RecentFiles)
 
  public:
    explicit RecentFiles(const int maxEntries);
@@ -54,7 +54,7 @@ class RecentFiles : public QObject
    void readConfig();
    void writeConfig() const;
 
- public slots:
+   // slot
    void closeGroup();
 
  private:

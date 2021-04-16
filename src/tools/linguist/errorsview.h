@@ -34,7 +34,7 @@ class MultiDataModel;
 
 class ErrorsView : public QListView
 {
-   Q_OBJECT
+   CS_OBJECT(ErrorsView)
  public:
    enum ErrorType {
       SuperfluousAccelerator,

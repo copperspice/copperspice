@@ -32,14 +32,15 @@ QT_BEGIN_NAMESPACE
 
 class SourceCodeView : public QPlainTextEdit
 {
-   Q_OBJECT
+   CS_OBJECT(SourceCodeView)
+
  public:
    SourceCodeView(QWidget *parent = nullptr);
    void setSourceContext(const QString &fileName, const int lineNum);
    void setCodecName(const QByteArray &codecName);
 
- public slots:
-   void setActivated(bool activated);
+   CS_SLOT_1(Public, void setActivated(bool activated))
+   CS_SLOT_2(setActivated)
 
  private:
    void showSourceCode(const QString &fileName, const int lineNum);

@@ -240,7 +240,8 @@ class DataModelIterator : public DataIndex
 
 class DataModel : public QObject
 {
-   Q_OBJECT
+   CS_OBJECT(DataModel)
+
  public:
    DataModel(QObject *parent = nullptr);
 
@@ -331,11 +332,17 @@ class DataModel : public QObject
       return m_srcCharsSpc;
    }
 
- signals:
-   void statsChanged(int words, int characters, int cs, int words2, int characters2, int cs2);
-   void progressChanged(int finishedCount, int oldFinishedCount);
-   void languageChanged();
-   void modifiedChanged();
+   CS_SIGNAL_1(Public, void statsChanged(int words,int characters,int cs,int words2,int characters2,int cs2))
+   CS_SIGNAL_2(statsChanged,words,characters,cs,words2,characters2,cs2)
+
+   CS_SIGNAL_1(Public, void progressChanged(int finishedCount,int oldFinishedCount))
+   CS_SIGNAL_2(progressChanged,finishedCount,oldFinishedCount)
+
+   CS_SIGNAL_1(Public, void languageChanged())
+   CS_SIGNAL_2(languageChanged)
+
+   CS_SIGNAL_1(Public, void modifiedChanged())
+   CS_SIGNAL_2(modifiedChanged)
 
  private:
    friend class DataModelIterator;
@@ -568,7 +575,7 @@ class MessageModel;
 
 class MultiDataModel : public QObject
 {
-   Q_OBJECT
+   CS_OBJECT(MultiDataModel)
 
  public:
    MultiDataModel(QObject *parent = nullptr);
@@ -658,26 +665,44 @@ class MultiDataModel : public QObject
 
    QBrush brushForModel(int model) const;
 
- signals:
-   void modelAppended();
-   void modelDeleted(int model);
-   void allModelsDeleted();
-   void languageChanged(int model);
-   void statsChanged(int words, int characters, int cs, int words2, int characters2, int cs2);
-   void modifiedChanged(bool);
-   void multiContextDataChanged(const MultiDataIndex &index);
-   void contextDataChanged(const MultiDataIndex &index);
-   void messageDataChanged(const MultiDataIndex &index);
-   void translationChanged(const MultiDataIndex &index); // Only the primary one
+   CS_SIGNAL_1(Public, void modelAppended())
+   CS_SIGNAL_2(modelAppended)
 
- private slots:
-   void onModifiedChanged();
-   void onLanguageChanged();
+   CS_SIGNAL_1(Public, void modelDeleted(int model))
+   CS_SIGNAL_2(modelDeleted,model)
+
+   CS_SIGNAL_1(Public, void allModelsDeleted())
+   CS_SIGNAL_2(allModelsDeleted)
+
+   CS_SIGNAL_1(Public, void languageChanged(int model))
+   CS_SIGNAL_2(languageChanged,model)
+
+   CS_SIGNAL_1(Public, void statsChanged(int words,int characters,int cs,int words2,int characters2,int cs2))
+   CS_SIGNAL_2(statsChanged,words,characters,cs,words2,characters2,cs2)
+
+   CS_SIGNAL_1(Public, void modifiedChanged(bool un_named_arg1))
+   CS_SIGNAL_2(modifiedChanged,un_named_arg1)
+
+   CS_SIGNAL_1(Public, void multiContextDataChanged(const MultiDataIndex & index))
+   CS_SIGNAL_2(multiContextDataChanged,index)
+
+   CS_SIGNAL_1(Public, void contextDataChanged(const MultiDataIndex & index))
+   CS_SIGNAL_2(contextDataChanged,index)
+
+   CS_SIGNAL_1(Public, void messageDataChanged(const MultiDataIndex & index))
+   CS_SIGNAL_2(messageDataChanged,index)
+
+   CS_SIGNAL_1(Public, void translationChanged(const MultiDataIndex & index))
+   CS_SIGNAL_2(translationChanged,index)  // Only the primary one
 
  private:
+   CS_SLOT_1(Private, void onModifiedChanged())
+   CS_SLOT_2(onModifiedChanged)
    friend class MultiDataModelIterator;
    friend class MessageModel;
 
+   CS_SLOT_1(Private, void onLanguageChanged())
+   CS_SLOT_2(onLanguageChanged)
    int findContextIndex(const QString &context) const;
    MultiContextItem *findContext(const QString &context) const;
 
@@ -717,7 +742,7 @@ class MultiDataModel : public QObject
 
 class MessageModel : public QAbstractItemModel
 {
-   Q_OBJECT
+   CS_OBJECT(MessageModel)
 
  public:
    enum { SortRole = Qt::UserRole };
@@ -738,20 +763,23 @@ class MessageModel : public QAbstractItemModel
    }
    QModelIndex modelIndex(const MultiDataIndex &index);
 
- private slots:
-   void reset() {
-      QAbstractItemModel::reset();
-   }
-   void multiContextItemChanged(const MultiDataIndex &index);
-   void contextItemChanged(const MultiDataIndex &index);
-   void messageItemChanged(const MultiDataIndex &index);
 
  private:
    friend class MultiDataModel;
 
    MultiDataModel *m_data; // not owned
-};
 
+   CS_SLOT_1(Private, void multiContextItemChanged(const MultiDataIndex & index))
+   CS_SLOT_2(multiContextItemChanged)
+
+   CS_SLOT_1(Private, void contextItemChanged(const MultiDataIndex & index))
+   CS_SLOT_2(contextItemChanged)
+
+   CS_SLOT_1(Private, void messageItemChanged(const MultiDataIndex & index))
+   CS_SLOT_2(messageItemChanged)
+
+   friend class MultiDataModel;
+};
 QT_END_NAMESPACE
 
 #endif // MESSAGEMODEL_H

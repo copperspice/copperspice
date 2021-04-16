@@ -82,7 +82,7 @@ class QphHandler;
 
 class PhraseBook : public QObject
 {
-   Q_OBJECT
+   CS_OBJECT(PhraseBook)
 
  public:
    PhraseBook();
@@ -117,9 +117,11 @@ class PhraseBook : public QObject
       return m_sourceCountry;
    }
 
- signals:
-   void modifiedChanged(bool changed);
-   void listChanged();
+   CS_SIGNAL_1(Public, void modifiedChanged(bool changed))
+   CS_SIGNAL_2(modifiedChanged,changed)
+
+   CS_SIGNAL_1(Public, void listChanged())
+   CS_SIGNAL_2(listChanged)
 
  private:
    // Prevent copying

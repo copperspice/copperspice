@@ -31,7 +31,7 @@ QT_BEGIN_NAMESPACE
 /* Message highlighter based on HtmlSyntaxHighlighter from designer */
 class MessageHighlighter : public QSyntaxHighlighter
 {
-   Q_OBJECT
+   CS_OBJECT(MessageHighlighter)
 
  public:
    MessageHighlighter(QTextEdit *textEdit);

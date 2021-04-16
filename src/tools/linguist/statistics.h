@@ -31,19 +31,20 @@ QT_BEGIN_NAMESPACE
 
 class Statistics : public QDialog, public Ui::Statistics
 {
-   Q_OBJECT
+   CS_OBJECT(Statistics)
 
  public:
    Statistics(QWidget *parent = nullptr, Qt::WindowFlags fl = 0);
    ~Statistics() {}
 
- public slots:
-   virtual void updateStats(int w1, int c1, int cs1, int w2, int c2, int cs2);
 
- protected slots:
-   virtual void languageChange();
-};
+   CS_SLOT_1(Public, virtual void updateStats(int w1,int c1,int cs1,int w2,int c2,int cs2))
+   CS_SLOT_2(updateStats)
 
 QT_END_NAMESPACE
+ protected:
+   CS_SLOT_1(Protected, virtual void languageChange())
+   CS_SLOT_2(languageChange)
+};
 
 #endif // STATISTICS_H

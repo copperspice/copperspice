@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 
 class PhraseModel : public QAbstractTableModel
 {
-   Q_OBJECT
+   CS_OBJECT(PhraseModel)
 
  public:
    PhraseModel(QObject *parent = nullptr)

@@ -59,19 +59,21 @@ class GuessShortcut : public QShortcut
 
 class PhraseView : public QTreeView
 {
-   Q_OBJECT
+   CS_OBJECT(PhraseView)
 
  public:
    PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase *> > > *phraseDict, QWidget *parent = nullptr);
    ~PhraseView();
    void setSourceText(int model, const QString &sourceText);
 
- public slots:
-   void toggleGuessing();
-   void update();
+   CS_SLOT_1(Public, void toggleGuessing())
+   CS_SLOT_2(toggleGuessing)
 
- signals:
-   void phraseSelected(int latestModel, const QString &phrase);
+   CS_SLOT_1(Public, void update())
+   CS_SLOT_2(update)
+
+   CS_SIGNAL_1(Public, void phraseSelected(int latestModel,const QString & phrase))
+   CS_SIGNAL_2(phraseSelected,latestModel,phrase)
 
  protected:
    // QObject
@@ -79,13 +81,13 @@ class PhraseView : public QTreeView
    // QAbstractItemView
    virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
- private slots:
-   void guessShortcut(int nkey);
-   void selectPhrase(const QModelIndex &index);
-   void selectPhrase();
+ private:
+   // slots
+   void guessShortcut(int id);
+   void selectPhrase(const QModelIndex & index);
+   void selectCurrentPhrase();
    void editPhrase();
 
- private:
    QList<Phrase *> getPhrases(int model, const QString &sourceText);
    void deleteGuesses();
 
