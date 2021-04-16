@@ -63,8 +63,10 @@ PhraseView::PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase 
    setRootIsDecorated(false);
    setItemsExpandable(false);
 
-   for (int i = 0; i < 10; i++) {
-      (void) new GuessShortcut(i, this, SLOT(guessShortcut(int)));
+   for (int id = 0; id < 10; ++id) {
+      // user pressed ctrl + n, apply that translation
+      QShortcut *hotKey = new QShortcut( Qt::CTRL + (Qt::Key_1 + id), this);
+      connect(hotKey, &QShortcut::activated, this, [this, id] () { guessShortcut(id); });
    }
 
    header()->setResizeMode(QHeaderView::Interactive);
