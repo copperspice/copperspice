@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "globals.h"
+#include <globals.h>
 
 const QString &settingsPrefix()
 {

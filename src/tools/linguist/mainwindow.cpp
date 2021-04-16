@@ -28,57 +28,57 @@
 
 #include "mainwindow.h"
 
-#include "batchtranslationdialog.h"
-#include "errorsview.h"
-#include "finddialog.h"
-#include "formpreviewview.h"
-#include "globals.h"
-#include "messageeditor.h"
-#include "messagemodel.h"
-#include "phrasebookbox.h"
-#include "phrasemodel.h"
-#include "phraseview.h"
-#include "printout.h"
-#include "sourcecodeview.h"
-#include "statistics.h"
-#include "translatedialog.h"
-#include "translationsettingsdialog.h"
+#include <batchtranslation_dialog.h>
+#include <errorsview.h>
+#include <find_dialog.h>
+#include <globals.h>
+#include <messageeditor.h>
+#include <messagemodel.h>
+#include <phrasebookbox.h>
+#include <phrasemodel.h>
+#include <phraseview.h>
+#include <printout.h>
+#include <settings_dialog.h>
+#include <sourcecodeview.h>
+#include <statistics.h>
+#include <translate_dialog.h>
 
-#include <QAction>
-#include <QApplication>
-#include <QBitmap>
-#include <QCloseEvent>
-#include <QDebug>
-#include <QDesktopWidget>
-#include <QDockWidget>
-#include <QFile>
-#include <QFileDialog>
-#include <QFileInfo>
-#include <QHeaderView>
-#include <QInputDialog>
-#include <QItemDelegate>
-#include <QLabel>
-#include <QLayout>
-#include <QLibraryInfo>
-#include <QMenu>
-#include <QMenuBar>
-#include <QMessageBox>
-#include <QPrintDialog>
-#include <QPrinter>
-#include <QProcess>
-#include <QRegExp>
-#include <QSettings>
-#include <QSortFilterProxyModel>
-#include <QStackedWidget>
-#include <QStatusBar>
-#include <QTextStream>
-#include <QToolBar>
-#include <QUrl>
-#include <QWhatsThis>
+// #include "formpreviewview.h"
+
+#include <qaction.h>
+#include <qalgorithms.h>
+#include <qapplication.h>
+#include <qcloseevent.h>
+#include <qdebug.h>
+#include <qdesktopservices.h>
+#include <qdesktopwidget.h>
+#include <qdockwidget.h>
+#include <qfiledialog.h>
+#include <qfileinfo.h>
+#include <qheaderview.h>
+#include <qinputdialog.h>
+#include <qitemdelegate.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlibraryinfo.h>
+#include <qmenu.h>
+#include <qmenubar.h>
+#include <qmessagebox.h>
+#include <qmimedata.h>
+#include <qprintdialog.h>
+#include <qprinter.h>
+#include <qprocess.h>
+#include <qregularexpression.h>
+#include <qsettings.h>
+#include <qsortfilterproxymodel.h>
+#include <qstackedwidget.h>
+#include <qstatusbar.h>
+#include <qtextstream.h>
+#include <qtoolbar.h>
+#include <qurl.h>
 
 #include <ctype.h>
 
-QT_BEGIN_NAMESPACE
 
 static const int MessageMS = 2500;
 
@@ -2869,4 +2869,3 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
    return false;
 }
 
-QT_END_NAMESPACE

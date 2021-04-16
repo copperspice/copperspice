@@ -24,16 +24,16 @@
 #include "phrase.h"
 #include "translator.h"
 
-#include <QApplication>
-#include <QFile>
-#include <QFileInfo>
-#include <QMessageBox>
-#include <QRegExp>
-#include <QTextCodec>
-#include <QTextStream>
-#include <QXmlAttributes>
-#include <QXmlDefaultHandler>
-#include <QXmlParseException>
+#include <qapplication.h>
+#include <qalgorithms.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qmessagebox.h>
+#include <qtextcodec.h>
+#include <qtextstream.h>
+#include <qxmlattributes.h>
+#include <qxmldefaulthandler.h>
+#include <qxmlparseexception.h>
 
 static QString protect(const QString &str)
 {

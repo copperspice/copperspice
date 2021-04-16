@@ -28,7 +28,7 @@
 
 #include "messageeditor.h"
 #include "messageeditorwidgets.h"
-#include "simtexth.h"
+#include "similartext.h"
 #include "phrasemodel.h"
 
 #include <QApplication>
@@ -43,7 +43,6 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-QT_BEGIN_NAMESPACE
 
 #ifdef NEVER_TRUE
 // Allow translators to provide localized names for QLocale::languageToString
@@ -930,4 +929,3 @@ bool MessageEditor::focusNextUnfinished()
    return focusNextUnfinished(m_currentModel + 1);
 }
 
-QT_END_NAMESPACE

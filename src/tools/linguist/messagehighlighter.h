@@ -24,9 +24,9 @@
 #ifndef MESSAGEHIGHLIGHTER_H
 #define MESSAGEHIGHLIGHTER_H
 
-#include <QSyntaxHighlighter>
+#include <qtextedit.h>
+#include <qsyntaxhighlighter.h>
 
-QT_BEGIN_NAMESPACE
 
 /* Message highlighter based on HtmlSyntaxHighlighter from designer */
 class MessageHighlighter : public QSyntaxHighlighter
@@ -60,6 +60,5 @@ class MessageHighlighter : public QSyntaxHighlighter
    QTextCharFormat m_formats[LastConstruct + 1];
 };
 
-QT_END_NAMESPACE
 
 #endif // MESSAGEHIGHLIGHTER_H

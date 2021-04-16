@@ -24,12 +24,13 @@
 #ifndef PHRASEBOOKBOX_H
 #define PHRASEBOOKBOX_H
 
-#include "ui_phrasebookbox.h"
-#include "phrase.h"
-#include "phrasemodel.h"
-#include <QDialog>
+#include <ui_phrasebookbox.h>
+#include <phrase.h>
+#include <phrasemodel.h>
 
-class TranslationSettingsDialog;
+#include <qdialog.h>
+
+class SettingsDialog;
 class QSortFilterProxyModel;
 
 class PhraseBookBox : public QDialog, public Ui::PhraseBookBox

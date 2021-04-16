@@ -24,21 +24,19 @@
 #ifndef MESSAGEMODEL_H
 #define MESSAGEMODEL_H
 
-#include "translator.h"
+#include <translator.h>
 
-#include <QAbstractItemModel>
-#include <QList>
-#include <QHash>
-#include <QLocale>
-#include <QColor>
-#include <QBitmap>
-#include <QXmlDefaultHandler>
-
-
-QT_BEGIN_NAMESPACE
+#include <qabstractitemmodel.h>
+#include <qlist.h>
+#include <qhash.h>
+#include <qlocale.h>
+#include <qcolor.h>
+#include <qbitmap.h>
+#include <qxmldefaulthandler.h>
 
 class DataModel;
 class MultiDataModel;
+class MessageModel;
 
 class MessageItem
 {
@@ -780,6 +778,5 @@ class MessageModel : public QAbstractItemModel
 
    friend class MultiDataModel;
 };
-QT_END_NAMESPACE
 
 #endif // MESSAGEMODEL_H

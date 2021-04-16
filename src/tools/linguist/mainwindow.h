@@ -24,17 +24,17 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "phrase.h"
-#include "ui_mainwindow.h"
-#include "recentfiles.h"
-#include "messagemodel.h"
+#include <ui_mainwindow.h>
 
-#include <QHash>
-#include <QLocale>
+#include <phrase.h>
+#include <recentfiles.h>
+#include <messagemodel.h>
 
-#include <QMainWindow>
+#include <qhash.h>
+#include <qlocale.h>
+#include <qmainwindow.h>
 
-QT_BEGIN_NAMESPACE
+#include <optional>
 
 class QPixmap;
 class QAction;
@@ -53,13 +53,14 @@ class BatchTranslationDialog;
 class ErrorsView;
 class FindDialog;
 class FocusWatcher;
-class FormPreviewView;
 class MessageEditor;
 class PhraseView;
 class SourceCodeView;
 class Statistics;
 class TranslateDialog;
-class TranslationSettingsDialog;
+class SettingsDialog;
+
+// class FormPreviewView;
 
 class MainWindow : public QMainWindow
 {
@@ -367,6 +368,5 @@ class MainWindow : public QMainWindow
    Statistics *m_statistics;
 };
 
-QT_END_NAMESPACE
 
 #endif

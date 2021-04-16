@@ -24,12 +24,11 @@
 #ifndef PHRASEVIEW_H
 #define PHRASEVIEW_H
 
-#include <QList>
-#include <QShortcut>
-#include <QTreeView>
-#include "phrase.h"
+#include <phrase.h>
 
-QT_BEGIN_NAMESPACE
+#include <qlist.h>
+#include <qshortcut.h>
+#include <qtreeview.h>
 
 class MultiDataModel;
 class PhraseModel;
@@ -100,6 +99,5 @@ class PhraseView : public QTreeView
    bool m_doGuesses;
 };
 
-QT_END_NAMESPACE
 
 #endif // PHRASEVIEW_H

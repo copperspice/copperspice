@@ -28,7 +28,6 @@
 #include <QHash>
 #include <QPlainTextEdit>
 
-QT_BEGIN_NAMESPACE
 
 class SourceCodeView : public QPlainTextEdit
 {
@@ -54,6 +53,5 @@ class SourceCodeView : public QPlainTextEdit
    QHash<QString, QString> fileHash;
 };
 
-QT_END_NAMESPACE
 
 #endif // SOURCECODEVIEW_H

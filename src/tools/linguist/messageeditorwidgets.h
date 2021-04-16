@@ -24,16 +24,16 @@
 #ifndef MESSAGEEDITORWIDGETS_H
 #define MESSAGEEDITORWIDGETS_H
 
-#include <QIcon>
-#include <QImage>
-#include <QLabel>
-#include <QMap>
-#include <QTextEdit>
-#include <QUrl>
-#include <QWidget>
-#include <qstringfwd.h>
+class MessageHighlighter;
 
-QT_BEGIN_NAMESPACE
+#include <qicon.h>
+#include <qimage.h>
+#include <qlabel.h>
+#include <qmap.h>
+#include <qtextedit.h>
+#include <qurl.h>
+#include <qwidget.h>
+#include <qstringfwd.h>
 
 class QAbstractButton;
 class QAction;
@@ -43,7 +43,6 @@ class QMenu;
 class QSizeF;
 class QVariant;
 
-class MessageHighlighter;
 
 /*
   Automatically adapt height to document contents
@@ -195,7 +194,6 @@ class FormMultiWidget : public QWidget
    bool m_multiEnabled;
    QIcon m_plusIcon, m_minusIcon;
 
-QT_END_NAMESPACE
    CS_SLOT_1(Private, void minusButtonClicked())
    CS_SLOT_2(minusButtonClicked)
 

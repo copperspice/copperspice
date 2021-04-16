@@ -21,20 +21,22 @@
 *
 ***********************************************************************/
 
-#include "messagemodel.h"
+#include <messagemodel.h>
 
-#include <QCoreApplication>
-#include <QDebug>
-#include <QTextCodec>
-#include <QMessageBox>
-#include <QPainter>
-#include <QPixmap>
-#include <QTextDocument>
+#include <qapplication.h>
+#include <qcoreapplication.h>
+#include <qalgorithms.h>
+#include <qdebug.h>
+#include <qtextcodec.h>
+#include <qmessagebox.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qtextdocument.h>
+
 #include <qtranslator_p.h>
 
 #include <limits.h>
 
-QT_BEGIN_NAMESPACE
 
 /******************************************************************************
  *
@@ -1474,4 +1476,3 @@ MultiDataIndex MessageModel::dataIndex(const QModelIndex &index, int model) cons
    return MultiDataIndex(model, index.internalId() - 1, index.row());
 }
 
-QT_END_NAMESPACE

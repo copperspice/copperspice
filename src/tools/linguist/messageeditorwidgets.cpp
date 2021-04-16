@@ -41,7 +41,6 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-QT_BEGIN_NAMESPACE
 
 ExpandingTextEdit::ExpandingTextEdit(QWidget *parent)
    : QTextEdit(parent)
@@ -456,4 +455,3 @@ void FormMultiWidget::insertEditor(int idx)
    emit textChanged(m_editors.at(idx));
 }
 
-QT_END_NAMESPACE

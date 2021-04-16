@@ -21,19 +21,18 @@
 *
 ***********************************************************************/
 
+#include <phrasebookbox.h>
+#include <settings_dialog.h>
 /*  TRANSLATOR PhraseBookBox
 
   Go to Phrase > Edit Phrase Book, The dialog that pops up is a PhraseBookBox.
 */
 
-#include "phrasebookbox.h"
-#include "translationsettingsdialog.h"
-
-#include <QtEvents>
-#include <QLineEdit>
-#include <QMessageBox>
-#include <QHeaderView>
-#include <QSortFilterProxyModel>
+#include <qevent.h>
+#include <qlineedit.h>
+#include <qmessagebox.h>
+#include <qheaderview.h>
+#include <qsortfilterproxymodel.h>
 
 PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
    : QDialog(parent), m_phraseBook(phraseBook), m_translationSettingsDialog(0)

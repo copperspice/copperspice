@@ -21,12 +21,11 @@
 *
 ***********************************************************************/
 
-#include "printout.h"
+#include <printout.h>
 
 #include <QPrinter>
 #include <QFontMetrics>
 
-QT_BEGIN_NAMESPACE
 
 PrintOut::PrintOut(QPrinter *printer)
    : pr(printer), nextRule(NoRule), page(0)
@@ -199,4 +198,3 @@ void PrintOut::drawRule(Rule rule)
    }
 }
 
-QT_END_NAMESPACE

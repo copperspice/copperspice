@@ -31,8 +31,6 @@
 #include <QList>
 #include <QDateTime>
 
-QT_BEGIN_NAMESPACE
-
 class QPrinter;
 class QFontMetrics;
 
@@ -97,7 +95,5 @@ class PrintOut
    int hsize;
    int vsize;
 };
-
-QT_END_NAMESPACE
 
 #endif

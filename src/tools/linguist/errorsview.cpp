@@ -26,16 +26,14 @@
 #include "messagemodel.h"
 
 #include <QList>
-#include <QString>
-#include <QUrl>
-
 #include <QListView>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QString>
 #include <QTextEdit>
+#include <QUrl>
 #include <QVBoxLayout>
 
-QT_BEGIN_NAMESPACE
 
 ErrorsView::ErrorsView(MultiDataModel *dataModel, QWidget *parent) :
    QListView(parent),
@@ -98,4 +96,3 @@ void ErrorsView::addError(int model, const QString &error)
    m_list->appendRow(QList<QStandardItem *>() << item);
 }
 
-QT_END_NAMESPACE

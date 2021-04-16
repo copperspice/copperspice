@@ -26,7 +26,6 @@
 
 #include <QListView>
 
-QT_BEGIN_NAMESPACE
 
 class QStandardItemModel;
 
@@ -55,6 +54,5 @@ class ErrorsView : public QListView
    MultiDataModel *m_dataModel;
 };
 
-QT_END_NAMESPACE
 
 #endif // ERRORSVIEW_H

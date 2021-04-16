@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include "mainwindow.h"
-#include "globals.h"
+#include <mainwindow.h>
+#include <globals.h>
 
 #include <QFile>
 #include <QLibraryInfo>
@@ -34,7 +34,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPixmap>
-#include <QSplashScreen>
 
 #ifdef Q_OS_DARWIN
 #include <QUrl>

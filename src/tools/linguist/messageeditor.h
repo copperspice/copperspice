@@ -26,13 +26,10 @@
 
 #include "messagemodel.h"
 
-#include <QLocale>
-#include <QTimer>
-
-#include <QFrame>
-#include <QScrollArea>
-
-QT_BEGIN_NAMESPACE
+#include <qlocale.h>
+#include <qtimer.h>
+#include <qframe.h>
+#include <qscrollarea.h>
 
 class QBoxLayout;
 class QMainWindow;
@@ -218,6 +215,5 @@ class MessageEditor : public QScrollArea
    QTimer m_tabOrderTimer;
 };
 
-QT_END_NAMESPACE
 
 #endif // MESSAGEEDITOR_H

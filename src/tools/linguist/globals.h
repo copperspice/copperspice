@@ -24,7 +24,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include <QString>
+#include <qstring.h>
 
 const QString &settingsPrefix();
 QString settingPath(const char *path);

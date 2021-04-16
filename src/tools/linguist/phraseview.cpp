@@ -27,14 +27,15 @@
 #include "phrase.h"
 #include "phraseview.h"
 #include "phrasemodel.h"
-#include "simtexth.h"
+#include "similartext.h"
 
-#include <QHeaderView>
-#include <QKeyEvent>
-#include <QSettings>
-#include <QTreeView>
-#include <QWidget>
-#include <QDebug>
+#include <qalgorithms.h>
+#include <qheaderview.h>
+#include <qkeyevent.h>
+#include <qsettings.h>
+#include <qtreeview.h>
+#include <qwidget.h>
+#include <qdebug.h>
 
 // Maximum number of guesses to display
 static const int MaxCandidates = 5;

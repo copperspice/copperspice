@@ -24,14 +24,13 @@
 #ifndef PHRASE_H
 #define PHRASE_H
 
-#include <QObject>
-#include <QString>
-#include <QList>
-#include <QLocale>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qstring.h>
+#include <qlist.h>
+#include <qlocale.h>
 
 class PhraseBook;
+class QphHandler;
 
 class Phrase
 {
@@ -77,8 +76,6 @@ inline bool operator!=(const Phrase &p, const Phrase &q)
 {
    return !(p == q);
 }
-
-class QphHandler;
 
 class PhraseBook : public QObject
 {
@@ -144,6 +141,5 @@ class PhraseBook : public QObject
    friend class Phrase;
 };
 
-QT_END_NAMESPACE
 
 #endif

@@ -24,10 +24,9 @@
 #ifndef STATISTICS_H
 #define STATISTICS_H
 
-#include "ui_statistics.h"
-#include <QVariant>
+#include <ui_statistics.h>
 
-QT_BEGIN_NAMESPACE
+#include <qvariant.h>
 
 class Statistics : public QDialog, public Ui::Statistics
 {
@@ -41,7 +40,6 @@ class Statistics : public QDialog, public Ui::Statistics
    CS_SLOT_1(Public, virtual void updateStats(int w1,int c1,int cs1,int w2,int c2,int cs2))
    CS_SLOT_2(updateStats)
 
-QT_END_NAMESPACE
  protected:
    CS_SLOT_1(Protected, virtual void languageChange())
    CS_SLOT_2(languageChange)

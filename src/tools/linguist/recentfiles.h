@@ -24,11 +24,9 @@
 #ifndef RECENTFILES_H
 #define RECENTFILES_H
 
-#include <QString>
-#include <QStringList>
-#include <QTimer>
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qtimer.h>
 
 class RecentFiles : public QObject
 {
@@ -65,6 +63,5 @@ class RecentFiles : public QObject
    QTimer m_timer;
 };
 
-QT_END_NAMESPACE
 
 #endif // RECENTFILES_H

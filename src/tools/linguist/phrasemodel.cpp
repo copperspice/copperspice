@@ -21,9 +21,7 @@
 *
 ***********************************************************************/
 
-#include "phrasemodel.h"
-
-QT_BEGIN_NAMESPACE
+#include <phrasemodel.h>
 
 void PhraseModel::removePhrases()
 {
@@ -183,4 +181,3 @@ QVariant PhraseModel::data(const QModelIndex &index, int role) const
    return QVariant();
 }
 
-QT_END_NAMESPACE

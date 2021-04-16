@@ -24,12 +24,10 @@
 #ifndef PHRASEMODEL_H
 #define PHRASEMODEL_H
 
-#include "phrase.h"
+#include <phrase.h>
 
-#include <QList>
-#include <QAbstractItemModel>
-
-QT_BEGIN_NAMESPACE
+#include <qlist.h>
+#include <qabstractitemmodel.h>
 
 class PhraseModel : public QAbstractTableModel
 {
@@ -75,6 +73,5 @@ class PhraseModel : public QAbstractTableModel
    QList<Phrase *> plist;
 };
 
-QT_END_NAMESPACE
 
 #endif // PHRASEMODEL_H

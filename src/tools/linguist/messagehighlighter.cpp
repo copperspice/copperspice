@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include "messagehighlighter.h"
+#include <messagehighlighter.h>
 
-#include <QTextStream>
-
-QT_BEGIN_NAMESPACE
+#include <qtextstream.h>
 
 MessageHighlighter::MessageHighlighter(QTextEdit *textEdit)
    : QSyntaxHighlighter(textEdit)
@@ -196,4 +194,3 @@ void MessageHighlighter::highlightBlock(const QString &text)
    setCurrentBlockState(state);
 }
 
-QT_END_NAMESPACE

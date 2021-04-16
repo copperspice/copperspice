@@ -21,18 +21,15 @@
 *
 ***********************************************************************/
 
-#include "sourcecodeview.h"
+#include <sourcecodeview.h>
 
 #include <QFile>
 #include <QFileInfo>
-#include <QTextCodec>
 #include <QTextStream>
-
 #include <QTextCharFormat>
 #include <QTextBlock>
 #include <QTextCursor>
 
-QT_BEGIN_NAMESPACE
 
 SourceCodeView::SourceCodeView(QWidget *parent)
    : QPlainTextEdit(parent),
@@ -132,4 +129,3 @@ void SourceCodeView::showSourceCode(const QString &absFileName, const int lineNu
    setExtraSelections(QList<QTextEdit::ExtraSelection>() << selectedLine);
 }
 
-QT_END_NAMESPACE
