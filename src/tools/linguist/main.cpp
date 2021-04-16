@@ -129,18 +129,6 @@ int main(int argc, char **argv)
    QWidget tmp;
    tmp.restoreGeometry(config.value(settingPath("Geometry/WindowGeometry")).toByteArray());
 
-   QSplashScreen *splash = 0;
-   int screenId = QApplication::desktop()->screenNumber(tmp.geometry().center());
-   splash = new QSplashScreen(QApplication::desktop()->screen(screenId),
-                              QPixmap(QLatin1String(":/images/splash.png")));
-
-   if (QApplication::desktop()->isVirtualDesktop()) {
-      QRect srect(0, 0, splash->width(), splash->height());
-      splash->move(QApplication::desktop()->availableGeometry(screenId).center() - srect.center());
-   }
-   splash->setAttribute(Qt::WA_DeleteOnClose);
-   splash->show();
-
    MainWindow mw;
 
 #ifdef Q_OS_DARWIN
@@ -148,7 +136,6 @@ int main(int argc, char **argv)
 #endif
 
    mw.show();
-   splash->finish(&mw);
    QApplication::restoreOverrideCursor();
 
    mw.openFiles(files, true);

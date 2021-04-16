@@ -495,40 +495,7 @@ MessageEditorData *MessageEditor::modelForWidget(const QObject *o)
       }
    }
 
-   return nullptr
-}
-
-static bool applyFont(MessageEditorData *med)
-{
-   QFont font;
-   font.setPointSize(static_cast<int>(med->fontSize));
-
-   for (int i = 0; i < med->transTexts.count(); ++i) {
-      for (QTextEdit * te : med->transTexts[i]->getEditors())
-         te->setFont(font);
-      }
-   }
-
-   med->transCommentText->getEditor()->setFont(font);
-   return true;
-}
-
-static bool incFont(MessageEditorData *med)
-{
-   if (!med || med->fontSize >= 32) {
-      return true;
-   }
-   med->fontSize *= 1.2;
-   return applyFont(med);
-}
-
-static bool decFont(MessageEditorData *med)
-{
-   if (!med || med->fontSize <= 8) {
-      return true;
-   }
-   med->fontSize /= 1.2;
-   return applyFont(med);
+   return nullptr;
 }
 
 bool MessageEditor::eventFilter(QObject *o, QEvent *e)

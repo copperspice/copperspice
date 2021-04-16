@@ -281,8 +281,6 @@ class MainWindow : public QMainWindow
    QModelIndex prevContext(const QModelIndex &index) const;
    QModelIndex nextMessage(const QModelIndex &currentIndex, bool checkUnfinished = false) const;
    QModelIndex prevMessage(const QModelIndex &currentIndex, bool checkUnfinished = false) const;
-   bool next(bool checkUnfinished);
-   bool prev(bool checkUnfinished);
 
    void updateStatistics();
    void initViewHeaders();
@@ -325,7 +323,7 @@ class MainWindow : public QMainWindow
    PhraseView *m_phraseView;
    QStackedWidget *m_sourceAndFormView;
    SourceCodeView *m_sourceCodeView;
-   FormPreviewView *m_formPreviewView;
+   // FormPreviewView *m_formPreviewView;
    ErrorsView *m_errorsView;
    QLabel *m_progressLabel;
    QLabel *m_modifiedLabel;

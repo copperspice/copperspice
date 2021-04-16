@@ -360,12 +360,10 @@ MainWindow::MainWindow()
    m_sourceAndFormDock->setWindowTitle(tr("Sources and Forms"));
    m_sourceAndFormView = new QStackedWidget(this);
    m_sourceAndFormDock->setWidget(m_sourceAndFormView);
-   //connect(m_sourceAndDock, SIGNAL(visibilityChanged(bool)),
-   //    m_sourceCodeView, SLOT(setActivated(bool)));
-   m_formPreviewView = new FormPreviewView(0, m_dataModel);
    m_sourceCodeView = new SourceCodeView(0);
+   // not used
+   // connect(m_sourceAndDock, SIGNAL(visibilityChanged(bool)), m_sourceCodeView, SLOT(setActivated(bool)));
    m_sourceAndFormView->addWidget(m_sourceCodeView);
-   m_sourceAndFormView->addWidget(m_formPreviewView);
 
    // Set up errors dock widget
    m_errorsDock = new QDockWidget(this);
@@ -554,7 +552,7 @@ void MainWindow::modelCountChanged()
    m_ui.actionFind->setEnabled(m_dataModel->contextCount() > 0);
    m_ui.actionFindNext->setEnabled(false);
 
-   m_formPreviewView->setSourceContext(-1, 0);
+   // m_formPreviewView->setSourceContext(-1, 0);
 }
 
 struct OpenedFile {
@@ -1391,31 +1389,9 @@ void MainWindow::resetSorting()
 
 void MainWindow::manual()
 {
-   if (!m_assistantProcess) {
-      m_assistantProcess = new QProcess();
+
+
    }
-
-   if (m_assistantProcess->state() != QProcess::Running) {
-      QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
-#if !defined(Q_OS_DARWIN)
-      app += QLatin1String("assistant");
-#else
-      app += QLatin1String("Assistant.app/Contents/MacOS/Assistant");
-#endif
-
-      m_assistantProcess->start(app, QStringList() << QLatin1String("-enableRemoteControl"));
-      if (!m_assistantProcess->waitForStarted()) {
-         QMessageBox::critical(this, tr("Linguist"), tr("Unable to launch Assistant (%1)").arg(app));
-         return;
-      }
-   }
-
-   QTextStream str(m_assistantProcess);
-   str << QLatin1String("SetSource help://com.copperspice.linguist.")
-       << (CS_VERSION >> 16) << ((CS_VERSION >> 8) & 0xFF)
-       << (CS_VERSION & 0xFF)
-       << QLatin1String("/docs/linguist-manual.html")
-       << QLatin1Char('\n') << endl;
 }
 
 void MainWindow::about()
@@ -1433,11 +1409,6 @@ void MainWindow::about()
    box.setWindowTitle(QApplication::translate("AboutDialog", "Linguist"));
    box.setIcon(QMessageBox::NoIcon);
    box.exec();
-}
-
-void MainWindow::aboutQt()
-{
-   QMessageBox::aboutQt(this, tr("Qt Linguist"));
 }
 
 void MainWindow::setupPhrase()
@@ -1590,30 +1561,11 @@ void MainWindow::selectedMessageChanged(const QModelIndex &sortedIndex, const QM
          }
          m_phraseView->setSourceText(-1, QString());
       }
-      if (m && !m->fileName().isEmpty()) {
-         if (hasFormPreview(m->fileName())) {
-            m_sourceAndFormView->setCurrentWidget(m_formPreviewView);
-            m_formPreviewView->setSourceContext(model, m);
-         } else {
-            m_sourceAndFormView->setCurrentWidget(m_sourceCodeView);
-            QDir dir = QFileInfo(m_dataModel->srcFileName(model)).dir();
-            QString fileName = QDir::cleanPath(dir.absoluteFilePath(m->fileName()));
-            m_sourceCodeView->setCodecName(m_dataModel->model(model)->codecName());
-            m_sourceCodeView->setSourceContext(fileName, m->lineNumber());
-         }
-         m_errorsView->setEnabled(true);
-      } else {
-         m_sourceAndFormView->setCurrentWidget(m_sourceCodeView);
-         m_sourceCodeView->setSourceContext(QString(), 0);
-         m_errorsView->setEnabled(false);
-      }
       updateDanger(m_currentIndex, true);
    } else {
       m_currentIndex = MultiDataIndex();
       m_messageEditor->showNothing();
       m_phraseView->setSourceText(-1, QString());
-      m_sourceAndFormView->setCurrentWidget(m_sourceCodeView);
-      m_sourceCodeView->setSourceContext(QString(), 0);
    }
 
    updatePhraseBookActions();
@@ -1631,10 +1583,13 @@ void MainWindow::translationChanged(const MultiDataIndex &index)
    m_messageEditor->showMessage(index);
    updateDanger(index, true);
 
-   MessageItem *m = m_dataModel->messageItem(index);
-   if (hasFormPreview(m->fileName())) {
-      m_formPreviewView->setSourceContext(index.model(), m);
+/*
+   MessageItem *msgCargo = m_dataModel->getMessageItem(index);
+
+   if (hasFormPreview(msgCargo->fileName())) {
+      m_formPreviewView->setSourceContext(index.model(), msgCargo);
    }
+*/
 }
 
 // This and the following function operate directly on the messageitem,
@@ -1650,9 +1605,13 @@ void MainWindow::updateTranslation(const QStringList &translations)
    }
 
    m->setTranslations(translations);
-   if (!m->fileName().isEmpty() && hasFormPreview(m->fileName())) {
-      m_formPreviewView->setSourceContext(m_currentIndex.model(), m);
+
+/*
+   if (! msgCargo->fileName().isEmpty() && hasFormPreview(msgCargom->fileName())) {
+      m_formPreviewView->setSourceContext(m_currentIndex.model(), msgCargo);
    }
+*/
+
    updateDanger(m_currentIndex, true);
 
    if (m->isFinished()) {
@@ -1840,15 +1799,6 @@ void MainWindow::prevUnfinished()
    }
 }
 
-void MainWindow::prev()
-{
-   prev(false);
-}
-
-void MainWindow::next()
-{
-   next(false);
-}
 
 bool MainWindow::prev(bool checkUnfinished)
 {
@@ -2094,9 +2044,6 @@ void MainWindow::updateLatestModel(int model)
 
       if (m_currentIndex.isValid()) {
          if (MessageItem *item = m_dataModel->messageItem(m_currentIndex)) {
-            if (!item->fileName().isEmpty() && hasFormPreview(item->fileName())) {
-               m_formPreviewView->setSourceContext(model, item);
-            }
             if (enableRw && !item->isObsolete()) {
                m_phraseView->setSourceText(model, item->text());
             } else {
@@ -2216,11 +2163,6 @@ void MainWindow::showErrorDock()
    m_errorsDock->raise();
 }
 
-void MainWindow::onWhatsThis()
-{
-   QWhatsThis::enterWhatsThisMode();
-}
-
 void MainWindow::setupToolBars()
 {
    QToolBar *filet = new QToolBar(this);
@@ -2282,7 +2224,6 @@ void MainWindow::setupToolBars()
    validationt->addAction(m_ui.actionPhraseMatches);
    validationt->addAction(m_ui.actionPlaceMarkerMatches);
 
-   helpt->addAction(m_ui.actionWhatsThis);
 }
 
 QModelIndex MainWindow::setMessageViewRoot(const QModelIndex &index)

@@ -33,29 +33,6 @@
 class MultiDataModel;
 class PhraseModel;
 
-class GuessShortcut : public QShortcut
-{
-   Q_OBJECT
- public:
-   GuessShortcut(int nkey, QWidget *parent, const char *member)
-      : QShortcut(parent), nrkey(nkey) {
-      setKey(Qt::CTRL + (Qt::Key_1 + nrkey));
-      connect(this, SIGNAL(activated()), this, SLOT(keyActivated()));
-      connect(this, SIGNAL(activated(int)), parent, member);
-   }
-
- private slots:
-   void keyActivated() {
-      emit activated(nrkey);
-   }
-
- signals:
-   void activated(int nkey);
-
- private:
-   int nrkey;
-};
-
 class PhraseView : public QTreeView
 {
    CS_OBJECT(PhraseView)
