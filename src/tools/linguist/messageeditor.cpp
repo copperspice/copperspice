@@ -346,7 +346,8 @@ void MessageEditor::selectionChanged(QTextEdit *te)
          clearSelection(m_selectionHolder);
          disconnect(this, SLOT(editorDestroyed()));
       }
-      m_selectionHolder = (te->textCursor().hasSelection() ? te : 0);
+
+      m_selectionHolder = (te->textCursor().hasSelection() ? te : nullptr);
       if (FormatTextEdit *fte = qobject_cast<FormatTextEdit *>(m_selectionHolder)) {
          connect(fte, SIGNAL(editorDestroyed()), SLOT(editorDestroyed()));
       }
@@ -368,7 +369,7 @@ void MessageEditor::resetSelection()
    if (m_selectionHolder) {
       clearSelection(m_selectionHolder);
       disconnect(this, SLOT(editorDestroyed()));
-      m_selectionHolder = 0;
+      m_selectionHolder = nullptr;
       updateCanCutCopy();
    }
 }
@@ -402,7 +403,7 @@ void MessageEditor::activeModelAndNumerus(int *model, int *numerus) const
 QTextEdit *MessageEditor::activeTranslation() const
 {
    if (m_currentNumerus < 0) {
-      return 0;
+      return nullptr;
    }
    const QList<FormatTextEdit *> &editors = m_editors[m_currentModel].transTexts[m_currentNumerus]->getEditors();
 
@@ -431,7 +432,7 @@ QTextEdit *MessageEditor::activeOr1stTranslation() const
 QTextEdit *MessageEditor::activeTransComment() const
 {
    if (m_currentModel < 0 || m_currentNumerus >= 0) {
-      return 0;
+      return nullptr;
    }
    return m_editors[m_currentModel].transCommentText->getEditor();
 }
@@ -457,7 +458,7 @@ void MessageEditor::setTargetLanguage(int model)
    const QStringList &numerusForms = m_dataModel->model(model)->numerusForms();
    const QString &langLocalized = m_dataModel->model(model)->localizedLanguage();
    for (int i = 0; i < numerusForms.count(); ++i) {
-      const QString &label = tr("%1 translation (%2)").arg(langLocalized, numerusForms[i]);
+      const QString &label = tr("%1 translation (%2)").formatArgs(langLocalized, numerusForms[i]);
       if (!i) {
          m_editors[model].firstForm = label;
       }
@@ -474,8 +475,9 @@ void MessageEditor::setTargetLanguage(int model)
    for (int j = m_editors[model].transTexts.count() - numerusForms.count(); j > 0; --j) {
       delete m_editors[model].transTexts.takeLast();
    }
-   m_editors[model].invariantForm = tr("%1 translation").arg(langLocalized);
-   m_editors[model].transCommentText->setLabel(tr("%1 translator comments").arg(langLocalized));
+
+   m_editors[model].invariantForm = tr("%1 translation").formatArg(langLocalized);
+   m_editors[model].transCommentText->setLabel(tr("%1 translator comments").formatArg(langLocalized));
 }
 
 MessageEditorData *MessageEditor::modelForWidget(const QObject *o)
@@ -800,7 +802,7 @@ void MessageEditor::updateCanPaste()
 void MessageEditor::clipboardChanged()
 {
    // this is expensive, so move it out of the common path in updateCanPaste
-   m_clipboardEmpty = qApp->clipboard()->text().isNull();
+   m_clipboardEmpty = qApp->clipboard()->text().isEmpty();
    updateCanPaste();
 }
 
@@ -863,7 +865,7 @@ void MessageEditor::setEditorFocus(int model)
          resetSelection();
          m_currentNumerus = -1;
          m_currentModel = -1;
-         m_focusWidget = 0;
+         m_focusWidget    = nullptr;
          emit activeModelChanged(activeModel());
          updateBeginFromSource();
          updateUndoRedo();

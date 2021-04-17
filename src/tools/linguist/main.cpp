@@ -47,7 +47,7 @@ class ApplicationEventFilter : public QObject
 
  public:
    ApplicationEventFilter()
-      : m_mainWindow(0) {
+      : m_mainWindow(nullptr) {
    }
 
    void setMainWindow(MainWindow *mw) {

@@ -99,10 +99,10 @@ class MessageItem
    }
 
    bool isFinished() const {
-      return type() == TranslatorMessage::Finished;
+      return type() == TranslatorMessage::Type::Finished;
    }
    bool isObsolete() const {
-      return type() == TranslatorMessage::Obsolete;
+      return type() == TranslatorMessage::Type::Obsolete || type() == TranslatorMessage::Type::Vanished;
    }
    const TranslatorMessage &message() const {
       return m_message;

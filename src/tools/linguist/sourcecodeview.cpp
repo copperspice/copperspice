@@ -72,7 +72,8 @@ void SourceCodeView::showSourceCode(const QString &absFileName, const int lineNu
 {
    QString fileText = fileHash.value(absFileName);
 
-   if (fileText.isNull()) { // File not in hash
+   if (fileText.isEmpty()) {
+      // File not in hash
       m_currentFileName.clear();
 
       // Assume fileName is relative to directory
@@ -80,12 +81,12 @@ void SourceCodeView::showSourceCode(const QString &absFileName, const int lineNu
 
       if (!file.exists()) {
          clear();
-         appendHtml(tr("<i>File %1 not available</i>").arg(absFileName));
+         appendHtml(tr("<i>File %1 not available</i>").formatArg(absFileName));
          return;
       }
       if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
          clear();
-         appendHtml(tr("<i>File %1 not readable</i>").arg(absFileName));
+         appendHtml(tr("<i>File %1 not readable</i>").formatArg(absFileName));
          return;
       }
 

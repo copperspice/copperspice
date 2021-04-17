@@ -252,18 +252,11 @@ bool FocusWatcher::eventFilter(QObject *, QEvent *event)
 }
 
 MainWindow::MainWindow()
-   : QMainWindow(0, Qt::Window),
-     m_assistantProcess(0),
-     m_printer(0),
-     m_findMatchCase(Qt::CaseInsensitive),
-     m_findIgnoreAccelerators(true),
-     m_findWhere(DataModel::NoLocation),
-     m_foundWhere(DataModel::NoLocation),
-     m_translationSettingsDialog(0),
-     m_settingCurrentMessage(false),
-     m_fileActiveModel(-1),
-     m_editActiveModel(-1),
-     m_statistics(0)
+   : QMainWindow(nullptr, Qt::Window), m_assistantProcess(nullptr), m_printer(nullptr),
+     m_findMatchCase(Qt::CaseInsensitive), m_findIgnoreAccelerators(true),
+     m_findSkipObsolete(false), m_findWhere(DataModel::NoLocation),
+     m_settingsDialog(nullptr), m_settingCurrentMessage(false),
+     m_fileActiveModel(-1), m_editActiveModel(-1), m_statistics(nullptr)
 {
    setUnifiedTitleAndToolBarOnMac(true);
    m_ui.setupUi(this);
@@ -360,9 +353,11 @@ MainWindow::MainWindow()
    m_sourceAndFormDock->setWindowTitle(tr("Sources and Forms"));
    m_sourceAndFormView = new QStackedWidget(this);
    m_sourceAndFormDock->setWidget(m_sourceAndFormView);
-   m_sourceCodeView = new SourceCodeView(0);
+
    // not used
    // connect(m_sourceAndDock, SIGNAL(visibilityChanged(bool)), m_sourceCodeView, SLOT(setActivated(bool)));
+
+   m_sourceCodeView = new SourceCodeView(nullptr);
    m_sourceAndFormView->addWidget(m_sourceCodeView);
 
    // Set up errors dock widget
@@ -472,8 +467,8 @@ MainWindow::MainWindow()
    resize(QSize(1000, 800).boundedTo(as));
    show();
    readConfig();
-   m_statistics = 0;
 
+   m_statistics = nullptr;
    connect(m_ui.actionLengthVariants, SIGNAL(toggled(bool)),
            m_messageEditor, SLOT(setLengthVariants(bool)));
    m_messageEditor->setLengthVariants(m_ui.actionLengthVariants->isChecked());
@@ -961,13 +956,16 @@ void MainWindow::print()
                   pout.addBox(4);
                   QString type;
                   switch (m->message().type()) {
-                     case TranslatorMessage::Finished:
+                     case TranslatorMessage::Type::Finished:
                         type = tr("finished");
                         break;
+
                      case TranslatorMessage::Unfinished:
                         type = m->danger() ? tr("unresolved") : QLatin1String("unfinished");
                         break;
-                     case TranslatorMessage::Obsolete:
+
+                     case TranslatorMessage::Type::Obsolete:
+                     case TranslatorMessage::Type::Vanished:
                         type = tr("obsolete");
                         break;
                   }
@@ -1102,9 +1100,7 @@ void MainWindow::findAgain()
    }
 
    qApp->beep();
-   QMessageBox::warning(m_findDialog, tr("Qt Linguist"),
-                        tr("Cannot find the string '%1'.").arg(m_findText));
-   m_foundWhere  = DataModel::NoLocation;
+   QMessageBox::warning(m_findDialog, tr("Linguist"), tr("Unable to find the string '%1'.").formatArg(m_findText));
 }
 
 void MainWindow::showBatchTranslateDialog()
@@ -1124,7 +1120,7 @@ void MainWindow::showTranslateDialog()
    QModelIndex idx2 = m_sortedMessagesModel->index(idx.row(), m_currentIndex.model() + 1, idx.parent());
    m_messageView->setCurrentIndex(idx2);
    QString fn = QFileInfo(m_dataModel->srcFileName(m_currentIndex.model())).baseName();
-   m_translateDialog->setWindowTitle(tr("Search And Translate in '%1' - Qt Linguist").arg(fn));
+   m_translateDialog->setWindowTitle(tr("Search And Translate in '%1' Linguist").formatArg(fn));
    m_translateDialog->exec();
 }
 
@@ -1159,8 +1155,7 @@ void MainWindow::translate(int mode)
       }
       if (translatedCount) {
          refreshItemViews();
-         QMessageBox::warning(m_translateDialog, tr("Translate - Qt Linguist"),
-                              tr("Translated %n entry(s)", 0, translatedCount));
+         QMessageBox::warning(m_translateDialog, tr("Translate"), tr("Translated %n entry(s)", nullptr, translatedCount));
       }
    } else {
       if (mode == TranslateDialog::Translate) {
@@ -1259,7 +1254,7 @@ void MainWindow::openPhraseBook()
       if (!isPhraseBookOpen(name)) {
          if (PhraseBook *phraseBook = openPhraseBook(name)) {
             int n = phraseBook->phrases().count();
-            statusBar()->showMessage(tr("%n phrase(s) loaded.", 0, n), MessageMS);
+            statusBar()->showMessage(tr("%n phrase(s) loaded.", nullptr, n), MessageMS);
          }
       }
    }

@@ -62,7 +62,7 @@ void ErrorsView::addError(int model, const ErrorType type, const QString &arg)
          addError(model, tr("Translation does not end with the same punctuation as the source text."));
          break;
       case IgnoredPhrasebook:
-         addError(model, tr("A phrase book suggestion for '%1' was ignored.").arg(arg));
+         addError(model, tr("Phrase book suggestion for '%1' was ignored.").formatArg(arg));
          break;
       case PlaceMarkersDiffer:
          addError(model, tr("Translation does not refer to the same place markers as in the source text."));

@@ -55,7 +55,7 @@ class MessageEditor : public QScrollArea
    CS_OBJECT(MessageEditor)
 
  public:
-   MessageEditor(MultiDataModel *dataModel, QMainWindow *parent = 0);
+   MessageEditor(MultiDataModel *dataModel, QMainWindow *parent = nullptr);
 
    void showNothing();
    void showMessage(const MultiDataIndex &index);

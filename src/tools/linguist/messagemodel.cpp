@@ -90,7 +90,8 @@ MessageItem *ContextItem::messageItem(int i) const
       return const_cast<MessageItem *>(&msgItemList[i]);
    }
    Q_ASSERT(i >= 0 && i < msgItemList.count());
-   return 0;
+
+   return nullptr;
 }
 
 MessageItem *ContextItem::findMessage(const QString &sourcetext, const QString &comment) const
@@ -101,14 +102,9 @@ MessageItem *ContextItem::findMessage(const QString &sourcetext, const QString &
          return mi;
       }
    }
-   return 0;
-}
 
-/******************************************************************************
- *
- * DataModel
- *
- *****************************************************************************/
+   return nullptr;
+}
 
 DataModel::DataModel(QObject *parent)
    : QObject(parent),
@@ -134,7 +130,8 @@ ContextItem *DataModel::contextItem(int context) const
       return const_cast<ContextItem *>(&m_contextList[context]);
    }
    Q_ASSERT(context >= 0 && context < m_contextList.count());
-   return 0;
+
+   return nullptr;
 }
 
 MessageItem *DataModel::messageItem(const DataIndex &index) const
@@ -142,7 +139,8 @@ MessageItem *DataModel::messageItem(const DataIndex &index) const
    if (ContextItem *c = contextItem(index.context())) {
       return c->messageItem(index.message());
    }
-   return 0;
+
+   return nullptr;
 }
 
 ContextItem *DataModel::findContext(const QString &context) const
@@ -153,7 +151,8 @@ ContextItem *DataModel::findContext(const QString &context) const
          return ctx;
       }
    }
-   return 0;
+
+   return nullptr;
 }
 
 MessageItem *DataModel::findMessage(const QString &context,
@@ -162,7 +161,8 @@ MessageItem *DataModel::findMessage(const QString &context,
    if (ContextItem *ctx = findContext(context)) {
       return ctx->findMessage(sourcetext, comment);
    }
-   return 0;
+
+   return nullptr;
 }
 
 static int calcMergeScore(const DataModel *one, const DataModel *two)
@@ -210,14 +210,15 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
 
    Translator::Duplicates dupes = tor.resolveDuplicates();
    if (!dupes.byId.isEmpty() || !dupes.byContents.isEmpty()) {
-      QString err = tr("<qt>Duplicate messages found in '%1':").arg(Qt::escape(fileName));
+      QString err = tr("Duplicate messages found in '%1':").formatArg(fileName.toHtmlEscaped());
       int numdups = 0;
       for (int i : dupes.byId) {
          if (++numdups >= 5) {
             err += tr("<p>[more duplicates omitted]");
             goto doWarn;
          }
-         err += tr("<p>* ID: %1").arg(Qt::escape(tor.message(i).id()));
+
+         err += tr("<p>* ID: %1").formatArg(tor.message(i).id().toHtmlEscaped());
       }
 
       for (int j : dupes.byContents) {
@@ -549,16 +550,16 @@ MultiContextItem::MultiContextItem(int oldCount, ContextItem *ctx, bool writable
    for (int j = 0; j < ctx->messageCount(); ++j) {
       MessageItem *m = ctx->messageItem(j);
       mList.append(m);
-      eList.append(0);
+      eList.append(nullptr);
       m_multiMessageList.append(MultiMessageItem(m));
    }
    for (int i = 0; i < oldCount; ++i) {
       m_messageLists.append(eList);
-      m_writableMessageLists.append(0);
-      m_contextList.append(0);
+      m_writableMessageLists.append(nullptr);
+      m_contextList.append(nullptr);
    }
    m_messageLists.append(mList);
-   m_writableMessageLists.append(writable ? &m_messageLists.last() : 0);
+   m_writableMessageLists.append(writable ? &m_messageLists.last() : nullptr);
    m_contextList.append(ctx);
 }
 
@@ -566,11 +567,12 @@ void MultiContextItem::appendEmptyModel()
 {
    QList<MessageItem *> eList;
    for (int j = 0; j < messageCount(); ++j) {
-      eList.append(0);
+      eList.append(nullptr);
    }
+
    m_messageLists.append(eList);
-   m_writableMessageLists.append(0);
-   m_contextList.append(0);
+   m_writableMessageLists.append(nullptr);
+   m_contextList.append(nullptr);
 }
 
 void MultiContextItem::assignLastModel(ContextItem *ctx, bool writable)
@@ -606,7 +608,7 @@ void MultiContextItem::appendMessageItems(const QList<MessageItem *> &m)
 {
    QList<MessageItem *> nullItems = m; // Basically, just a reservation
    for (int i = 0; i < nullItems.count(); ++i) {
-      nullItems[i] = 0;
+      nullItems[i] = nullptr;
    }
    for (int i = 0; i < m_messageLists.count() - 1; ++i) {
       m_messageLists[i] += nullItems;
@@ -991,7 +993,8 @@ MultiContextItem *MultiDataModel::findContext(const QString &context) const
          return const_cast<MultiContextItem *>(&mc);
       }
    }
-   return 0;
+
+   return nullptr;
 }
 
 MessageItem *MultiDataModel::messageItem(const MultiDataIndex &index, int model) const
@@ -1004,7 +1007,8 @@ MessageItem *MultiDataModel::messageItem(const MultiDataIndex &index, int model)
    }
    Q_ASSERT(model >= 0 && model < modelCount());
    Q_ASSERT(index.context() < contextCount());
-   return 0;
+
+   return nullptr;
 }
 
 void MultiDataModel::setTranslation(const MultiDataIndex &index, const QString &translation)
@@ -1310,7 +1314,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
    int numLangs = m_data->modelCount();
 
    if (role == Qt::ToolTipRole && column < numLangs) {
-      return tr("Completion status for %1").arg(m_data->model(column)->localizedLanguage());
+      return tr("Completion status for %1").formatArg(m_data->model(column)->localizedLanguage());
    } else if (index.internalId()) {
       // this is a message
       int crow = index.internalId() - 1;
@@ -1338,7 +1342,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
       } else if (role == Qt::DecorationRole && column < numLangs) {
          if (MessageItem *msgItem = mci->messageItem(column, row)) {
             switch (msgItem->message().type()) {
-               case TranslatorMessage::Unfinished:
+               case TranslatorMessage::Type::Unfinished:
                   if (msgItem->translation().isEmpty()) {
                      return pxEmpty;
                   }
@@ -1346,7 +1350,8 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
                      return pxDanger;
                   }
                   return pxOff;
-               case TranslatorMessage::Finished:
+
+               case TranslatorMessage::Type::Finished:
                   if (msgItem->danger()) {
                      return pxWarning;
                   }
@@ -1405,8 +1410,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
                return mci->context().simplified();
             }
             case 1: {
-               QString s;
-               s.sprintf("%d/%d", mci->getNumFinished(), mci->getNumEditable());
+               QString s = QString("%1/%2").formatArg(mci->getNumFinished()).formatArg(mci->getNumEditable());
                return s;
             }
             default:

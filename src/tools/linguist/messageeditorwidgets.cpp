@@ -243,8 +243,7 @@ FormMultiWidget::FormMultiWidget(const QString &label, QWidget *parent)
    m_label->setFont(fnt);
    m_label->setText(label);
 
-   m_plusButtons.append(
-      new ButtonWrapper(makeButton(m_plusIcon, SLOT(plusButtonClicked())), 0));
+   m_plusButtons.append(new ButtonWrapper(makeButton(m_plusIcon, "plusButtonClicked()"), nullptr));
 }
 
 QAbstractButton *FormMultiWidget::makeButton(const QIcon &icon, const char *slot)
@@ -350,7 +349,7 @@ void FormMultiWidget::slotSelectionChanged()
 
 void FormMultiWidget::setTranslation(const QString &text, bool userAction)
 {
-   QStringList texts = text.split(QChar(Translator::BinaryVariantSeparator), QString::KeepEmptyParts);
+   QStringList texts = text.split(QChar(Translator::BinaryVariantSeparator), QStringParser::KeepEmptyParts);
 
    while (m_editors.count() > texts.count()) {
       delete m_minusButtons.takeLast();

@@ -33,7 +33,7 @@ class Statistics : public QDialog, public Ui::Statistics
    CS_OBJECT(Statistics)
 
  public:
-   Statistics(QWidget *parent = nullptr, Qt::WindowFlags fl = 0);
+   Statistics(QWidget *parent = nullptr, Qt::WindowFlags fl = Qt::EmptyFlag);
    ~Statistics() {}
 
 

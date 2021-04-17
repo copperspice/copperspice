@@ -41,7 +41,7 @@ class RecentFiles : public QObject
    void addFiles(const QStringList &names);
    QString lastOpenedFile() const {
       if (m_strLists.isEmpty() || m_strLists.first().isEmpty()) {
-         return QString::null;
+         return QString();
       }
       return m_strLists.at(0).at(0);
    }
