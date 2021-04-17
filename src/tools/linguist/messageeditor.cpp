@@ -49,12 +49,12 @@
 // At least the own language should be translated ... This is a "hack" until
 // functionality is provided within Qt (see task 196275).
 static const char *language_strings[] = {
-   QT_TRANSLATE_NOOP("MessageEditor", "Russian"),
-   QT_TRANSLATE_NOOP("MessageEditor", "German"),
-   QT_TRANSLATE_NOOP("MessageEditor", "Japanese"),
-   QT_TRANSLATE_NOOP("MessageEditor", "French"),
-   QT_TRANSLATE_NOOP("MessageEditor", "Polish"),
-   QT_TRANSLATE_NOOP("MessageEditor", "Chinese")
+   cs_mark_tr("MessageEditor", "Russian"),
+   cs_mark_tr("MessageEditor", "German"),
+   cs_mark_tr("MessageEditor", "Japanese"),
+   cs_mark_tr("MessageEditor", "French"),
+   cs_mark_tr("MessageEditor", "Polish"),
+   cs_mark_tr("MessageEditor", "Chinese")
 };
 #endif
 
