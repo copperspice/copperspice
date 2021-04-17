@@ -31,7 +31,7 @@ const QString &settingsPrefix()
    return prefix;
 }
 
-QString settingPath(const char *path)
+QString settingPath(const QString &path)
 {
-   return settingsPrefix() + QLatin1String(path);
+   return settingsPrefix() + path;
 }
