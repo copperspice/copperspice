@@ -43,8 +43,8 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
+#if 0
 
-#ifdef NEVER_TRUE
 // Allow translators to provide localized names for QLocale::languageToString
 // At least the own language should be translated ... This is a "hack" until
 // functionality is provided within Qt (see task 196275).

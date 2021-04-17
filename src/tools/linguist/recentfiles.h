@@ -63,5 +63,4 @@ class RecentFiles : public QObject
    QTimer m_timer;
 };
 
-
-#endif // RECENTFILES_H
+#endif

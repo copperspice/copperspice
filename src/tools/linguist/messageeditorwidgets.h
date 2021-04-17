@@ -201,4 +201,4 @@ class FormMultiWidget : public QWidget
    CS_SLOT_2(plusButtonClicked)
 };
 
-#endif // MESSAGEEDITORWIDGETS_H
+#endif

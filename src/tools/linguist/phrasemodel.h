@@ -73,5 +73,4 @@ class PhraseModel : public QAbstractTableModel
    QList<Phrase *> plist;
 };
 
-
-#endif // PHRASEMODEL_H
+#endif

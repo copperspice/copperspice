@@ -60,5 +60,4 @@ class MessageHighlighter : public QSyntaxHighlighter
    QTextCharFormat m_formats[LastConstruct + 1];
 };
 
-
-#endif // MESSAGEHIGHLIGHTER_H
+#endif

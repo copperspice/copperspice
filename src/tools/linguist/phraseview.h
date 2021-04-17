@@ -76,5 +76,4 @@ class PhraseView : public QTreeView
    bool m_doGuesses;
 };
 
-
-#endif // PHRASEVIEW_H
+#endif

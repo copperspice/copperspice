@@ -45,4 +45,4 @@ class Statistics : public QDialog, public Ui::Statistics
    CS_SLOT_2(languageChange)
 };
 
-#endif // STATISTICS_H
+#endif

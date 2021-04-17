@@ -54,5 +54,4 @@ class ErrorsView : public QListView
    MultiDataModel *m_dataModel;
 };
 
-
-#endif // ERRORSVIEW_H
+#endif

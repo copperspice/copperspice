@@ -215,5 +215,4 @@ class MessageEditor : public QScrollArea
    QTimer m_tabOrderTimer;
 };
 
-
-#endif // MESSAGEEDITOR_H
+#endif

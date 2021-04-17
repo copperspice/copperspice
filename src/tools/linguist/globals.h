@@ -29,4 +29,4 @@
 const QString &settingsPrefix();
 QString settingPath(const QString &path);
 
-#endif // GLOBALS_H
+#endif

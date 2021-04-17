@@ -776,4 +776,4 @@ class MessageModel : public QAbstractItemModel
    friend class MultiDataModel;
 };
 
-#endif // MESSAGEMODEL_H
+#endif

@@ -38,9 +38,7 @@
 #ifdef Q_OS_DARWIN
 #include <QUrl>
 #include <QFileOpenEvent>
-#endif
 
-#ifdef Q_OS_DARWIN
 class ApplicationEventFilter : public QObject
 {
    CS_OBJECT(ApplicationEventFilter)
