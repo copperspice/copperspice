@@ -388,32 +388,28 @@ MainWindow::MainWindow()
 
    // Set up shortcuts for the dock widgets
    QShortcut *contextShortcut = new QShortcut(QKeySequence(Qt::Key_F6), this);
-   connect(contextShortcut, SIGNAL(activated()), this, SLOT(showContextDock()));
+   connect(contextShortcut, &QShortcut::activated,    this, &MainWindow::showContextDock);
+
    QShortcut *messagesShortcut = new QShortcut(QKeySequence(Qt::Key_F7), this);
-   connect(messagesShortcut, SIGNAL(activated()), this, SLOT(showMessagesDock()));
+   connect(messagesShortcut, &QShortcut::activated,   this, &MainWindow::showMessagesDock);
+
    QShortcut *errorsShortcut = new QShortcut(QKeySequence(Qt::Key_F8), this);
-   connect(errorsShortcut, SIGNAL(activated()), this, SLOT(showErrorDock()));
+   connect(errorsShortcut, &QShortcut::activated,     this, &MainWindow::showErrorDock);
+
    QShortcut *sourceCodeShortcut = new QShortcut(QKeySequence(Qt::Key_F9), this);
-   connect(sourceCodeShortcut, SIGNAL(activated()), this, SLOT(showSourceCodeDock()));
+   connect(sourceCodeShortcut, &QShortcut::activated, this, &MainWindow::showSourceCodeDock);
+
    QShortcut *phrasesShortcut = new QShortcut(QKeySequence(Qt::Key_F10), this);
-   connect(phrasesShortcut, SIGNAL(activated()), this, SLOT(showPhrasesDock()));
+   connect(phrasesShortcut, &QShortcut::activated,    this, &MainWindow::showPhrasesDock);
 
-   connect(m_phraseView, SIGNAL(phraseSelected(int, QString)),
-           m_messageEditor, SLOT(setTranslation(int, QString)));
-   connect(m_contextView->selectionModel(),
-           SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-           this, SLOT(selectedContextChanged(QModelIndex, QModelIndex)));
-   connect(m_messageView->selectionModel(),
-           SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-           this, SLOT(selectedMessageChanged(QModelIndex, QModelIndex)));
-   connect(m_contextView->selectionModel(),
-           SIGNAL(currentColumnChanged(QModelIndex, QModelIndex)),
-           SLOT(updateLatestModel(QModelIndex)));
-   connect(m_messageView->selectionModel(),
-           SIGNAL(currentColumnChanged(QModelIndex, QModelIndex)),
-           SLOT(updateLatestModel(QModelIndex)));
+   connect(m_phraseView,                    &PhraseView::phraseSelected,                m_messageEditor, &MessageEditor::setTranslation);
+   connect(m_contextView->selectionModel(), &QItemSelectionModel::currentRowChanged,    this, &MainWindow::selectedContextChanged);
+   connect(m_messageView->selectionModel(), &QItemSelectionModel::currentRowChanged,    this, &MainWindow::selectedMessageChanged);
 
-   connect(m_messageEditor, SIGNAL(activeModelChanged(int)), SLOT(updateActiveModel(int)));
+   connect(m_contextView->selectionModel(), &QItemSelectionModel::currentColumnChanged, this, &MainWindow::updateModelIndex);
+   connect(m_messageView->selectionModel(), &QItemSelectionModel::currentColumnChanged, this, &MainWindow::updateModelIndex);
+
+   connect(m_messageEditor, &MessageEditor::activeModelChanged, this, &MainWindow::updateActiveModel);
 
    m_translateDialog = new TranslateDialog(this);
    m_batchTranslateDialog = new BatchTranslationDialog(m_dataModel, this);
@@ -431,36 +427,26 @@ MainWindow::MainWindow()
    initViewHeaders();
    resetSorting();
 
-   connect(m_dataModel, SIGNAL(modifiedChanged(bool)),
-           this, SLOT(setWindowModified(bool)));
-   connect(m_dataModel, SIGNAL(modifiedChanged(bool)),
-           m_modifiedLabel, SLOT(setVisible(bool)));
-   connect(m_dataModel, SIGNAL(multiContextDataChanged(MultiDataIndex)),
-           SLOT(updateProgress()));
-   connect(m_dataModel, SIGNAL(messageDataChanged(MultiDataIndex)),
-           SLOT(maybeUpdateStatistics(MultiDataIndex)));
-   connect(m_dataModel, SIGNAL(translationChanged(MultiDataIndex)),
-           SLOT(translationChanged(MultiDataIndex)));
-   connect(m_dataModel, SIGNAL(languageChanged(int)),
-           SLOT(updatePhraseDict(int)));
+   connect(m_dataModel, &MultiDataModel::modifiedChanged,         this,            &MainWindow::setWindowModified);
+   connect(m_dataModel, &MultiDataModel::modifiedChanged,         m_modifiedLabel, &QLabel::setVisible);
+   connect(m_dataModel, &MultiDataModel::multiContextDataChanged, this,            &MainWindow::updateProgress);
+   connect(m_dataModel, &MultiDataModel::messageDataChanged,      this,            &MainWindow::maybeUpdateStatistics);
+   connect(m_dataModel, &MultiDataModel::translationChanged,      this,            &MainWindow::translationChanged);
+   connect(m_dataModel, &MultiDataModel::languageChanged,         this,            &MainWindow::updatePhraseDict);
 
    setWindowModified(m_dataModel->isModified());
    m_modifiedLabel->setVisible(m_dataModel->isModified());
 
-   connect(m_messageView, SIGNAL(clicked(QModelIndex)),
-           this, SLOT(toggleFinished(QModelIndex)));
-   connect(m_messageView, SIGNAL(activated(QModelIndex)),
-           m_messageEditor, SLOT(setEditorFocus()));
-   connect(m_contextView, SIGNAL(activated(QModelIndex)),
-           m_messageView, SLOT(setFocus()));
-   connect(m_messageEditor, SIGNAL(translationChanged(QStringList)),
-           this, SLOT(updateTranslation(QStringList)));
-   connect(m_messageEditor, SIGNAL(translatorCommentChanged(QString)),
-           this, SLOT(updateTranslatorComment(QString)));
-   connect(m_findDialog, SIGNAL(findNext(QString, DataModel::FindLocation, bool, bool)),
-           this, SLOT(findNext(QString, DataModel::FindLocation, bool, bool)));
-   connect(m_translateDialog, SIGNAL(requestMatchUpdate(bool &)), SLOT(updateTranslateHit(bool &)));
-   connect(m_translateDialog, SIGNAL(activated(int)), SLOT(translate(int)));
+   connect(m_messageView, &QTreeView::clicked,   this,            &MainWindow::toggleFinished);
+   connect(m_messageView, &QTreeView::activated, m_messageEditor, &MessageEditor::setEditorFocus);
+
+   connect(m_contextView, &QTreeView::activated, m_messageView,   cs_mp_cast<>(&QTreeView::setFocus));
+
+   connect(m_messageEditor,   &MessageEditor::translationChanged,       this, &MainWindow::updateTranslation);
+   connect(m_messageEditor,   &MessageEditor::translatorCommentChanged, this, &MainWindow::updateTranslatorComment);
+   connect(m_findDialog,      &FindDialog::findNext,                    this, &MainWindow::findNext);
+   connect(m_translateDialog, &TranslateDialog::requestMatchUpdate,     this, &MainWindow::updateTranslateHit);
+   connect(m_translateDialog, &TranslateDialog::activated,              this, &MainWindow::translate);
 
    QSize as(qApp->desktop()->size());
    as -= QSize(30, 30);
@@ -469,9 +455,8 @@ MainWindow::MainWindow()
    readConfig();
 
    m_statistics = nullptr;
-   connect(m_ui.actionLengthVariants, SIGNAL(toggled(bool)),
-           m_messageEditor, SLOT(setLengthVariants(bool)));
-   m_messageEditor->setLengthVariants(m_ui.actionLengthVariants->isChecked());
+
+   connect(m_ui.actionLengthVariants, &QAction::toggled, m_messageEditor, &MessageEditor::setLengthVariants);
 
    m_focusWatcher = new FocusWatcher(m_messageEditor, this);
    m_contextView->installEventFilter(m_focusWatcher);
@@ -1903,79 +1888,86 @@ void MainWindow::setupMenuBar()
    m_ui.actionWhatsThis->setIcon(QIcon(resourcePrefix() + QLatin1String("/whatsthis.png")));
 
    // File menu
-   connect(m_ui.menuFile, SIGNAL(aboutToShow()), SLOT(fileAboutToShow()));
-   connect(m_ui.actionOpen, SIGNAL(triggered()), this, SLOT(open()));
-   connect(m_ui.actionOpenAux, SIGNAL(triggered()), this, SLOT(openAux()));
-   connect(m_ui.actionSaveAll, SIGNAL(triggered()), this, SLOT(saveAll()));
-   connect(m_ui.actionSave, SIGNAL(triggered()), this, SLOT(save()));
-   connect(m_ui.actionSaveAs, SIGNAL(triggered()), this, SLOT(saveAs()));
-   connect(m_ui.actionReleaseAll, SIGNAL(triggered()), this, SLOT(releaseAll()));
-   connect(m_ui.actionRelease, SIGNAL(triggered()), this, SLOT(release()));
-   connect(m_ui.actionReleaseAs, SIGNAL(triggered()), this, SLOT(releaseAs()));
-   connect(m_ui.actionPrint, SIGNAL(triggered()), this, SLOT(print()));
-   connect(m_ui.actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
-   connect(m_ui.actionCloseAll, SIGNAL(triggered()), this, SLOT(closeAll()));
-   connect(m_ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
+   connect(m_ui.menuFile,         SIGNAL(aboutToShow()), this, SLOT(fileAboutToShow()));
+   connect(m_ui.actionOpen,       SIGNAL(triggered()),   this, SLOT(open()));
+   connect(m_ui.actionOpenAux,    SIGNAL(triggered()),   this, SLOT(openAux()));
+   connect(m_ui.actionSaveAll,    SIGNAL(triggered()),   this, SLOT(saveAll()));
+   connect(m_ui.actionSave,       SIGNAL(triggered()),   this, SLOT(save()));
+   connect(m_ui.actionSaveAs,     SIGNAL(triggered()),   this, SLOT(saveAs()));
+   connect(m_ui.actionReleaseAll, SIGNAL(triggered()),   this, SLOT(releaseAll()));
+   connect(m_ui.actionRelease,    SIGNAL(triggered()),   this, SLOT(release()));
+   connect(m_ui.actionReleaseAs,  SIGNAL(triggered()),   this, SLOT(releaseAs()));
+   connect(m_ui.actionPrint,      SIGNAL(triggered()),   this, SLOT(print()));
+   connect(m_ui.actionClose,      SIGNAL(triggered()),   this, SLOT(closeFile()));
+   connect(m_ui.actionCloseAll,   SIGNAL(triggered()),   this, SLOT(closeAll()));
+   connect(m_ui.actionExit,       SIGNAL(triggered()),   this, SLOT(close()));
 
-   // Edit menu
-   connect(m_ui.menuEdit, SIGNAL(aboutToShow()), SLOT(editAboutToShow()));
+   // edit menu
+   connect(m_ui.menuEdit,    &QMenu::aboutToShow,              this,             &MainWindow::editAboutToShow);
 
-   connect(m_ui.actionUndo, SIGNAL(triggered()), m_messageEditor, SLOT(undo()));
-   connect(m_messageEditor, SIGNAL(undoAvailable(bool)), m_ui.actionUndo, SLOT(setEnabled(bool)));
+   connect(m_ui.actionUndo,  &QAction::triggered,              m_messageEditor,  &MessageEditor::undo);
+   connect(m_messageEditor,  &MessageEditor::undoAvailable,    m_ui.actionUndo,  &QAction::setEnabled);
 
-   connect(m_ui.actionRedo, SIGNAL(triggered()), m_messageEditor, SLOT(redo()));
-   connect(m_messageEditor, SIGNAL(redoAvailable(bool)), m_ui.actionRedo, SLOT(setEnabled(bool)));
+   connect(m_ui.actionRedo,  &QAction::triggered,              m_messageEditor,  &MessageEditor::redo);
+   connect(m_messageEditor,  &MessageEditor::redoAvailable,    m_ui.actionRedo,  &QAction::setEnabled);
 
-   connect(m_ui.actionCopy, SIGNAL(triggered()), m_messageEditor, SLOT(copy()));
-   connect(m_messageEditor, SIGNAL(copyAvailable(bool)), m_ui.actionCopy, SLOT(setEnabled(bool)));
+   connect(m_ui.actionCopy,  &QAction::triggered,              m_messageEditor,  &MessageEditor::copy);
+   connect(m_messageEditor,  &MessageEditor::copyAvailable,    m_ui.actionCopy,  &QAction::setEnabled);
 
-   connect(m_messageEditor, SIGNAL(cutAvailable(bool)), m_ui.actionCut, SLOT(setEnabled(bool)));
-   connect(m_ui.actionCut, SIGNAL(triggered()), m_messageEditor, SLOT(cut()));
+   connect(m_ui.actionCut,   &QAction::triggered,              m_messageEditor,  &MessageEditor::cut);
+   connect(m_messageEditor,  &MessageEditor::cutAvailable,     m_ui.actionCut,   &QAction::setEnabled);
 
-   connect(m_messageEditor, SIGNAL(pasteAvailable(bool)), m_ui.actionPaste, SLOT(setEnabled(bool)));
-   connect(m_ui.actionPaste, SIGNAL(triggered()), m_messageEditor, SLOT(paste()));
+   connect(m_ui.actionPaste, &QAction::triggered,              m_messageEditor,  &MessageEditor::paste);
+   connect(m_messageEditor,  &MessageEditor::pasteAvailable,   m_ui.actionPaste, &QAction::setEnabled);
 
-   connect(m_ui.actionSelectAll, SIGNAL(triggered()), m_messageEditor, SLOT(selectAll()));
-   connect(m_ui.actionFind, SIGNAL(triggered()), m_findDialog, SLOT(find()));
-   connect(m_ui.actionFindNext, SIGNAL(triggered()), this, SLOT(findAgain()));
-   connect(m_ui.actionSearchAndTranslate, SIGNAL(triggered()), this, SLOT(showTranslateDialog()));
-   connect(m_ui.actionBatchTranslation, SIGNAL(triggered()), this, SLOT(showBatchTranslateDialog()));
-   connect(m_ui.actionTranslationFileSettings, SIGNAL(triggered()), this, SLOT(showTranslationSettings()));
+   connect(m_ui.actionSelectAll,          &QAction::triggered, m_messageEditor,  &MessageEditor::selectAll);
+   connect(m_ui.actionFind,               &QAction::triggered, m_findDialog,     &FindDialog::find);
 
-   connect(m_batchTranslateDialog, SIGNAL(finished()), SLOT(refreshItemViews()));
+   connect(m_ui.actionFindNext,           &QAction::triggered, this,             &MainWindow::findAgain);
+
+   connect(m_ui.actionSearchAndTranslate, &QAction::triggered, this,             &MainWindow::searchTranslateDialog);
+   connect(m_ui.actionBatchTranslate,     &QAction::triggered, this,             &MainWindow::batchTranslateDialog);
+
+   connect(m_ui.actionSettings,           &QAction::triggered, this, [this] () { settingsDialog(); } );
+   connect(m_batchTranslateDialog,        &BatchTranslationDialog::finished, this, &MainWindow::refreshItemViews);
 
    // Translation menu
-   // when updating the accelerators, remember the status bar
-   connect(m_ui.actionPrevUnfinished, SIGNAL(triggered()), this, SLOT(prevUnfinished()));
-   connect(m_ui.actionNextUnfinished, SIGNAL(triggered()), this, SLOT(nextUnfinished()));
-   connect(m_ui.actionNext, SIGNAL(triggered()), this, SLOT(next()));
-   connect(m_ui.actionPrev, SIGNAL(triggered()), this, SLOT(prev()));
-   connect(m_ui.actionDoneAndNext, SIGNAL(triggered()), this, SLOT(doneAndNext()));
-   connect(m_ui.actionBeginFromSource, SIGNAL(triggered()), m_messageEditor, SLOT(beginFromSource()));
-   connect(m_messageEditor, SIGNAL(beginFromSourceAvailable(bool)), m_ui.actionBeginFromSource, SLOT(setEnabled(bool)));
+   // when updating the accelerators remember the status bar
+   connect(m_ui.actionPrevUnfinished,     &QAction::triggered,  this,            &MainWindow::prevUnfinished);
+   connect(m_ui.actionNextUnfinished,     &QAction::triggered,  this,            &MainWindow::nextUnfinished);
+   connect(m_ui.actionNext,               &QAction::triggered,  this,            &MainWindow::next);
+   connect(m_ui.actionPrev,               &QAction::triggered,  this,            &MainWindow::previous);
+   connect(m_ui.actionDoneAndNext,        &QAction::triggered,  this,            &MainWindow::doneAndNext);
+
+   connect(m_ui.actionBeginFromSource,    &QAction::triggered, m_messageEditor, &MessageEditor::beginFromSource);
+   connect(m_messageEditor,               &MessageEditor::beginFromSourceAvailable, m_ui.actionBeginFromSource, &QAction::setEnabled);
 
    // Phrasebook menu
-   connect(m_ui.actionNewPhraseBook, SIGNAL(triggered()), this, SLOT(newPhraseBook()));
-   connect(m_ui.actionOpenPhraseBook, SIGNAL(triggered()), this, SLOT(openPhraseBook()));
-   connect(m_ui.menuClosePhraseBook, SIGNAL(triggered(QAction *)),
-           this, SLOT(closePhraseBook(QAction *)));
-   connect(m_ui.menuEditPhraseBook, SIGNAL(triggered(QAction *)),
-           this, SLOT(editPhraseBook(QAction *)));
-   connect(m_ui.menuPrintPhraseBook, SIGNAL(triggered(QAction *)),
-           this, SLOT(printPhraseBook(QAction *)));
-   connect(m_ui.actionAddToPhraseBook, SIGNAL(triggered()), this, SLOT(addToPhraseBook()));
+   connect(m_ui.actionNewPhraseBook,      &QAction::triggered, this,             &MainWindow::newPhraseBook);
+   connect(m_ui.actionSelectPhraseBook,   &QAction::triggered, this,             &MainWindow::selectPhraseBook);
+   connect(m_ui.menuClosePhraseBook,      &QMenu::triggered,   this,             &MainWindow::closePhraseBook);
+   connect(m_ui.menuEditPhraseBook,       &QMenu::triggered,   this,             &MainWindow::editPhraseBook);
+   connect(m_ui.menuPrintPhraseBook,      &QMenu::triggered,   this,             &MainWindow::printPhraseBook);
+   connect(m_ui.actionAddToPhraseBook,    &QAction::triggered, this,             &MainWindow::addToPhraseBook);
 
    // Validation menu
-   connect(m_ui.actionAccelerators, SIGNAL(triggered()), this, SLOT(revalidate()));
-   connect(m_ui.actionEndingPunctuation, SIGNAL(triggered()), this, SLOT(revalidate()));
-   connect(m_ui.actionPhraseMatches, SIGNAL(triggered()), this, SLOT(revalidate()));
-   connect(m_ui.actionPlaceMarkerMatches, SIGNAL(triggered()), this, SLOT(revalidate()));
+   connect(m_ui.actionAccelerators,       &QAction::triggered, this,             &MainWindow::revalidate);
+   connect(m_ui.actionEndingPunctuation,  &QAction::triggered, this,             &MainWindow::revalidate);
+   connect(m_ui.actionPhraseMatches,      &QAction::triggered, this,             &MainWindow::revalidate);
+   connect(m_ui.actionPlaceMarkerMatches, &QAction::triggered, this,             &MainWindow::revalidate);
 
    // View menu
-   connect(m_ui.actionResetSorting, SIGNAL(triggered()), this, SLOT(resetSorting()));
-   connect(m_ui.actionDisplayGuesses, SIGNAL(triggered()), m_phraseView, SLOT(toggleGuessing()));
-   connect(m_ui.actionStatistics, SIGNAL(triggered()), this, SLOT(toggleStatistics()));
-   connect(m_ui.menuView, SIGNAL(aboutToShow()), this, SLOT(updateViewMenu()));
+   connect(m_ui.actionResetSorting,       &QAction::triggered,  this,            &MainWindow::resetSorting);
+   connect(m_ui.actionDisplayGuesses,     &QAction::triggered,  m_phraseView,    &PhraseView::toggleGuessing);
+   connect(m_ui.actionStatistics,         &QAction::triggered,  this,            &MainWindow::toggleStatistics);
+
+   connect(m_ui.actionVisualizeWhitespace, &QAction::triggered, this,            &MainWindow::toggleVisualizeWhitespace);
+
+   connect(m_ui.menuView,                 &QMenu::aboutToShow,  this,            &MainWindow::updateViewMenu);
+   connect(m_ui.actionIncreaseZoom,       &QAction::triggered,  m_messageEditor, &MessageEditor::increaseFontSize);
+   connect(m_ui.actionDecreaseZoom,       &QAction::triggered,  m_messageEditor, &MessageEditor::decreaseFontSize);
+   connect(m_ui.actionResetZoomToDefault, &QAction::triggered,  m_messageEditor, &MessageEditor::resetFontSize);
+
    m_ui.menuViewViews->addAction(m_contextDock->toggleViewAction());
    m_ui.menuViewViews->addAction(m_messagesDock->toggleViewAction());
    m_ui.menuViewViews->addAction(m_phrasesDock->toggleViewAction());
@@ -1992,12 +1984,10 @@ void MainWindow::setupMenuBar()
 
    // Help
    connect(m_ui.actionManual, SIGNAL(triggered()), this, SLOT(manual()));
-   connect(m_ui.actionAbout, SIGNAL(triggered()), this, SLOT(about()));
-   connect(m_ui.actionAboutQt, SIGNAL(triggered()), this, SLOT(aboutQt()));
-   connect(m_ui.actionWhatsThis, SIGNAL(triggered()), this, SLOT(onWhatsThis()));
+   connect(m_ui.actionAbout,  SIGNAL(triggered()), this, SLOT(about()));
 
-   connect(m_ui.menuRecentlyOpenedFiles, SIGNAL(triggered(QAction *)), this,
-           SLOT(recentFileActivated(QAction *)));
+   connect(m_ui.menuRecentlyOpenedFiles, &QMenu::triggered, this, &MainWindow::recentFileActivated);
+
 
    m_ui.actionManual->setWhatsThis(tr("Display the manual for %1.").arg(tr("Qt Linguist")));
    m_ui.actionAbout->setWhatsThis(tr("Display information about %1.").arg(tr("Qt Linguist")));

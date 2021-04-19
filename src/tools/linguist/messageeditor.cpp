@@ -85,16 +85,11 @@ MessageEditor::MessageEditor(MultiDataModel *dataModel, QMainWindow *parent)
    setupEditorPage();
 
    // Signals
-   connect(qApp->clipboard(), SIGNAL(dataChanged()),
-           SLOT(clipboardChanged()));
-   connect(m_dataModel, SIGNAL(modelAppended()),
-           SLOT(messageModelAppended()));
-   connect(m_dataModel, SIGNAL(modelDeleted(int)),
-           SLOT(messageModelDeleted(int)));
-   connect(m_dataModel, SIGNAL(allModelsDeleted()),
-           SLOT(allModelsDeleted()));
-   connect(m_dataModel, SIGNAL(languageChanged(int)),
-           SLOT(setTargetLanguage(int)));
+   connect(qApp->clipboard(), SIGNAL(dataChanged()),    SLOT(clipboardChanged()));
+   connect(m_dataModel, SIGNAL(modelAppended()),        SLOT(messageModelAppended()));
+   connect(m_dataModel, SIGNAL(modelDeleted(int)),      SLOT(messageModelDeleted(int)));
+   connect(m_dataModel, SIGNAL(allModelsDeleted()),     SLOT(allModelsDeleted()));
+   connect(m_dataModel, SIGNAL(languageChanged(int)),   SLOT(setTargetLanguage(int)));
 
    m_tabOrderTimer.setSingleShot(true);
    connect(&m_tabOrderTimer, SIGNAL(timeout()), SLOT(reallyFixTabOrder()));
@@ -114,14 +109,14 @@ void MessageEditor::setupEditorPage()
    m_source = new FormWidget(tr("Source text"), false);
    m_source->setHideWhenEmpty(true);
    m_source->setWhatsThis(tr("This area shows the source text."));
-   connect(m_source, SIGNAL(selectionChanged(QTextEdit *)),
-           SLOT(selectionChanged(QTextEdit *)));
+
+   connect(m_source, &FormWidget::selectionChanged, this, &MessageEditor::selectionChanged);
 
    m_pluralSource = new FormWidget(tr("Source text (Plural)"), false);
    m_pluralSource->setHideWhenEmpty(true);
    m_pluralSource->setWhatsThis(tr("This area shows the plural form of the source text."));
-   connect(m_pluralSource, SIGNAL(selectionChanged(QTextEdit *)),
-           SLOT(selectionChanged(QTextEdit *)));
+
+   connect(m_pluralSource, &FormWidget::selectionChanged, this, &MessageEditor::selectionChanged);
 
    m_commentText = new FormWidget(tr("Developer comments"), false);
    m_commentText->setHideWhenEmpty(true);
@@ -129,6 +124,7 @@ void MessageEditor::setupEditorPage()
    m_commentText->setWhatsThis(tr("This area shows a comment that"
                                   " may guide you, and the context in which the text"
                                   " occurs.") );
+   connect(m_commentText, &FormWidget::selectionChanged, this, &MessageEditor::selectionChanged);
 
    QBoxLayout *subLayout = new QVBoxLayout;
 
@@ -188,12 +184,13 @@ void MessageEditor::messageModelAppended()
    ed.transCommentText->setWhatsThis(tr("Here you can enter comments for your own use."
                                         " They have no effect on the translated applications.") );
    ed.transCommentText->getEditor()->installEventFilter(this);
-   connect(ed.transCommentText, SIGNAL(selectionChanged(QTextEdit *)),
-           SLOT(selectionChanged(QTextEdit *)));
-   connect(ed.transCommentText, SIGNAL(textChanged(QTextEdit *)),
-           SLOT(emitTranslatorCommentChanged(QTextEdit *)));
-   connect(ed.transCommentText, SIGNAL(textChanged(QTextEdit *)), SLOT(resetHoverSelection()));
-   connect(ed.transCommentText, SIGNAL(cursorPositionChanged()), SLOT(resetHoverSelection()));
+   ed.transCommentText->getEditor()->setVisualizeWhitespace(m_visualizeWhitespace);
+
+   connect(ed.transCommentText, SIGNAL(selectionChanged(QTextEdit *)), SLOT(selectionChanged(QTextEdit *)));
+   connect(ed.transCommentText, SIGNAL(textChanged(QTextEdit *)),      SLOT(emitTranslatorCommentChanged(QTextEdit *)));
+   connect(ed.transCommentText, SIGNAL(textChanged(QTextEdit *)),      SLOT(resetHoverSelection()));
+   connect(ed.transCommentText, SIGNAL(cursorPositionChanged()),       SLOT(resetHoverSelection()));
+
    fixTabOrder();
    QBoxLayout *box = new QVBoxLayout(ed.container);
    box->setMargin(5);

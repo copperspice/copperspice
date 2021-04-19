@@ -73,7 +73,7 @@ PhraseView::PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase 
    header()->setClickable(true);
    header()->restoreState(QSettings().value(phraseViewHeaderKey()).toByteArray());
 
-   connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(selectPhrase(QModelIndex)));
+   connect(this, &PhraseView::activated, this, &PhraseView::selectPhrase);
 }
 
 PhraseView::~PhraseView()
@@ -104,10 +104,10 @@ void PhraseView::contextMenuEvent(QContextMenuEvent *event)
    QMenu *contextMenu = new QMenu(this);
 
    QAction *insertAction = new QAction(tr("Insert"), contextMenu);
-   connect(insertAction, SIGNAL(triggered()), this, SLOT(selectPhrase()));
+   connect(insertAction, &QAction::triggered, this, &PhraseView::selectCurrentPhrase);
 
    QAction *editAction = new QAction(tr("Edit"), contextMenu);
-   connect(editAction, SIGNAL(triggered()), this, SLOT(editPhrase()));
+   connect(editAction,   &QAction::triggered, this, &PhraseView::editPhrase);
    editAction->setEnabled(model()->flags(index) & Qt::ItemIsEditable);
 
    contextMenu->addAction(insertAction);

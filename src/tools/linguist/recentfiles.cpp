@@ -42,7 +42,8 @@ RecentFiles::RecentFiles(const int maxEntries)
 {
    m_timer.setSingleShot(true);
    m_timer.setInterval(3 * 60 * 1000);
-   connect(&m_timer, SIGNAL(timeout()), SLOT(closeGroup()));
+
+   connect(&m_timer, &QTimer::timeout, this, &RecentFiles::closeGroup);
 }
 
 /*

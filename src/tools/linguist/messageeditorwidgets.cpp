@@ -51,8 +51,9 @@ ExpandingTextEdit::ExpandingTextEdit(QWidget *parent)
    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
    QAbstractTextDocumentLayout *docLayout = document()->documentLayout();
-   connect(docLayout, SIGNAL(documentSizeChanged(QSizeF)), SLOT(updateHeight(QSizeF)));
-   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(reallyEnsureCursorVisible()));
+
+   connect(docLayout, &QAbstractTextDocumentLayout::documentSizeChanged, this, &ExpandingTextEdit::updateHeight);
+   connect(this,      &ExpandingTextEdit::cursorPositionChanged,         this, &ExpandingTextEdit::reallyEnsureCursorVisible);
 
    m_minimumHeight = qRound(docLayout->documentSize().height()) + frameWidth() * 2;
 }
@@ -170,9 +171,9 @@ FormWidget::FormWidget(const QString &label, bool isEditable, QWidget *parent)
 
    setLayout(layout);
 
-   connect(m_editor, SIGNAL(textChanged()), SLOT(slotTextChanged()));
-   connect(m_editor, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-   connect(m_editor, SIGNAL(cursorPositionChanged()), SIGNAL(cursorPositionChanged()));
+   connect(m_editor, &FormatTextEdit::textChanged,           this, &FormWidget::slotTextChanged);
+   connect(m_editor, &FormatTextEdit::selectionChanged,      this, &FormWidget::slotSelectionChanged);
+   connect(m_editor, &FormatTextEdit::cursorPositionChanged, this, &FormWidget::cursorPositionChanged);
 }
 
 void FormWidget::slotTextChanged()
@@ -252,7 +253,9 @@ QAbstractButton *FormMultiWidget::makeButton(const QIcon &icon, const char *slot
    btn->setIcon(icon);
    btn->setFixedSize(icon.availableSizes().first() /* + something */);
    btn->setFocusPolicy(Qt::NoFocus);
-   connect(btn, SIGNAL(clicked()), slot);
+
+   connect(btn, SIGNAL(clicked()), this, slotMethod);
+
    return btn;
 }
 
@@ -264,10 +267,10 @@ void FormMultiWidget::addEditor(int idx)
    m_minusButtons.insert(idx, makeButton(m_minusIcon, SLOT(minusButtonClicked())));
    m_plusButtons.insert(idx + 1,
                         new ButtonWrapper(makeButton(m_plusIcon, SLOT(plusButtonClicked())), editor));
+   connect(editor, &FormatTextEdit::textChanged,           this, &FormMultiWidget::slotTextChanged);
+   connect(editor, &FormatTextEdit::selectionChanged,      this, &FormMultiWidget::slotSelectionChanged);
+   connect(editor, &FormatTextEdit::cursorPositionChanged, this, &FormMultiWidget::cursorPositionChanged);
 
-   connect(editor, SIGNAL(textChanged()), SLOT(slotTextChanged()));
-   connect(editor, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-   connect(editor, SIGNAL(cursorPositionChanged()), SIGNAL(cursorPositionChanged()));
    editor->installEventFilter(this);
 
    emit editorCreated(editor);

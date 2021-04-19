@@ -67,7 +67,7 @@ PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
    connect(removeBut,     &QAbstractButton::clicked,    this, &PhraseBookBox::removePhrase);
    connect(settingsBut,   &QAbstractButton::clicked,    this, &PhraseBookBox::settings);
    connect(saveBut,       &QAbstractButton::clicked,    this, &PhraseBookBox::save);
-   connect(m_phraseBook,  &PhraseBook:modifiedChanged,  this, &PhraseBookBox::setWindowModified);
+   connect(m_phraseBook,  &PhraseBook::modifiedChanged, this, &PhraseBookBox::setWindowModified);
 
    sourceLed->installEventFilter(this);
    targetLed->installEventFilter(this);

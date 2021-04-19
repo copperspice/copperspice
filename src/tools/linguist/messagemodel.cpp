@@ -785,9 +785,11 @@ void MultiDataModel::append(DataModel *dm, bool readWrite)
    }
    dm->setWritable(readWrite);
    updateCountsOnAdd(modelCount() - 1, readWrite);
-   connect(dm, SIGNAL(modifiedChanged()), SLOT(onModifiedChanged()));
-   connect(dm, SIGNAL(languageChanged()), SLOT(onLanguageChanged()));
-   connect(dm, SIGNAL(statsChanged(int, int, int, int, int, int)), SIGNAL(statsChanged(int, int, int, int, int, int)));
+
+   connect(dm, &DataModel::modifiedChanged, this, &MultiDataModel::onModifiedChanged);
+   connect(dm, &DataModel::languageChanged, this, &MultiDataModel::onLanguageChanged);
+   connect(dm, &DataModel::statsChanged,    this, &MultiDataModel::statsChanged);
+
    emit modelAppended();
 }
 
@@ -1221,12 +1223,10 @@ MessageModel::MessageModel(QObject *parent, MultiDataModel *data)
    : QAbstractItemModel(parent), m_data(data)
 {
    data->m_msgModel = this;
-   connect(m_data, SIGNAL(multiContextDataChanged(MultiDataIndex)),
-           SLOT(multiContextItemChanged(MultiDataIndex)));
-   connect(m_data, SIGNAL(contextDataChanged(MultiDataIndex)),
-           SLOT(contextItemChanged(MultiDataIndex)));
-   connect(m_data, SIGNAL(messageDataChanged(MultiDataIndex)),
-           SLOT(messageItemChanged(MultiDataIndex)));
+
+   connect(m_data, &MultiDataModel::multiContextDataChanged, this, &MessageModel::multiContextItemChanged);
+   connect(m_data, &MultiDataModel::contextDataChanged,      this, &MessageModel::contextItemChanged);
+   connect(m_data, &MultiDataModel::messageDataChanged,      this, &MessageModel::messageItemChanged);
 }
 
 QModelIndex MessageModel::index(int row, int column, const QModelIndex &parent) const
