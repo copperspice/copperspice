@@ -90,18 +90,25 @@ int main(int argc, char **argv)
 #endif
 
    QStringList files;
-   QString resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-   QStringList args = app.arguments();
+   QStringList argList = app.arguments();
 
-   for (int i = 1; i < args.count(); ++i) {
-      QString argument = args.at(i);
-      if (argument == QLatin1String("-resourcedir")) {
-         if (i + 1 < args.count()) {
-            resourceDir = QFile::decodeName(args.at(++i).toLocal8Bit());
+   // remove first entry which is the program name
+   argList.removeFirst();
+
+   QString resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+
+   while (! argList.isEmpty()) {
+      QString argument = argList.takeFirst();
+
+      if (argument == "-resourcedir") {
+         if (argList.isEmpty()) {
+            // show warning
+
          } else {
-            // issue a warning
+            resourceDir = argList.takeFirst();
          }
-      } else if (!files.contains(argument)) {
+
+      } else if (! files.contains(argument)) {
          files.append(argument);
       }
    }
