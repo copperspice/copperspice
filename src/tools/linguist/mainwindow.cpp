@@ -1372,8 +1372,12 @@ void MainWindow::resetSorting()
 
 void MainWindow::manual()
 {
+   QString url("https://www.copperspice.com/docs/cs_api/tools-linguist.html");
 
+   bool ok = QDesktopServices::openUrl(QUrl(url));
 
+   if (! ok)  {
+      // csError("Linguist Documentation", "Unable to open Documentation\n" + url);
    }
 }
 
@@ -1381,13 +1385,15 @@ void MainWindow::about()
 {
    QMessageBox box(this);
    box.setTextFormat(Qt::RichText);
-   QString version = tr("Version %1");
-   version = version.arg(QLatin1String(QT_VERSION_STR));
 
-   box.setText(tr("<center><img src=\":/images/splash.png\"/></img><p>%1</p></center>"
-                  "<p>Linguist is a tool for adding translations to CopperSpice applications.</p>"
-                  "<p>Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies)."
-                 ).arg(version));
+   QString version = tr("Version %1").formatArg(CS_VERSION_STR);
+
+   box.setText(tr("<p>Linguist is a program to add or modify translations in a TS file. The compiled file "
+            "can be used in CopperSpice applications to provide internationalization.</p>"
+            "<p>Copyright (c) 2012-2021 Barbara Geller and Ansel Sermersheim</p>"
+            "<p>Copyright (c) 2015 The Qt Company Ltd</p>"
+            "<p>Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies)</p>"
+            "<p>Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).").formatArg(version));
 
    box.setWindowTitle(QApplication::translate("AboutDialog", "Linguist"));
    box.setIcon(QMessageBox::NoIcon);
