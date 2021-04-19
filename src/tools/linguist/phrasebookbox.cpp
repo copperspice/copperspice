@@ -129,10 +129,8 @@ void PhraseBookBox::settings()
 void PhraseBookBox::save()
 {
    const QString &fileName = m_phraseBook->fileName();
-   if (!m_phraseBook->save(fileName))
-      QMessageBox::warning(this,
-                           tr("Qt Linguist"),
-                           tr("Cannot save phrase book '%1'.").arg(fileName));
+   if (! m_phraseBook->save(fileName))
+      QMessageBox::warning(this, tr("Linguist"), tr("Unable to savephrase book '%1'.").formatArg(fileName));
 }
 
 void PhraseBookBox::sourceChanged(const QString &source)

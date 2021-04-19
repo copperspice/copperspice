@@ -435,10 +435,8 @@ void FormMultiWidget::deleteEditor(int idx)
       c.removeSelectedText();
    } else {
       if (!m_editors.at(idx)->toPlainText().isEmpty()) {
-         if (QMessageBox::question(topLevelWidget(), tr("Confirmation - Qt Linguist"),
-                                   tr("Delete non-empty length variant?"),
-                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)
-               != QMessageBox::Yes) {
+         if (QMessageBox::question(topLevelWidget(), tr("Confirm"), tr("Delete non empty length variant?"),
+               QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) != QMessageBox::Yes) {
             return;
          }
       }

@@ -177,13 +177,15 @@ bool QphHandler::characters(const QString &ch)
 
 bool QphHandler::fatalError(const QXmlParseException &exception)
 {
-   if (ferrorCount++ == 0) {
-      QString msg = PhraseBook::tr("Parse error at line %1, column %2 (%3).")
-                    .arg(exception.lineNumber()).arg(exception.columnNumber())
-                    .arg(exception.message());
-      QMessageBox::information(0,
-                               QObject::tr("Qt Linguist"), msg);
+   if (ferrorCount == 0) {
+      QString msg = PhraseBook::tr("Parse error at line %1, column %2 \n%3.")
+               .formatArg(exception.lineNumber()).formatArg(exception.columnNumber()).formatArg(exception.message());
+
+      QMessageBox::information(nullptr, QObject::tr("Linguist"), msg);
    }
+
+   ++ferrorCount;
+
    return false;
 }
 

@@ -588,13 +588,14 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
          if (!m_dataModel->isWellMergeable(dm)) {
             QApplication::restoreOverrideCursor();
             waitCursor = false;
-            switch (QMessageBox::information(this, tr("Loading File - Qt Linguist"),
-                                             tr("The file '%1' does not seem to be related to the currently open file(s) '%2'.\n\n"
-                                                "Close the open file(s) first?")
-                                             .arg(DataModel::prettifyPlainFileName(name), m_dataModel->condensedSrcFileNames(true)),
-                                             QMessageBox::Yes | QMessageBox::Default,
-                                             QMessageBox::No,
-                                             QMessageBox::Cancel | QMessageBox::Escape)) {
+
+            int result = QMessageBox::information(this, tr("Loading File"),
+               tr("File '%1' does not seem to be related to the currently open file(s) '%2'.\n\n"
+               "Close the open file(s) first?")
+               .formatArgs(DataModel::prettifyPlainFileName(fname), m_dataModel->condensedSrcFileNames(true)),
+               QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+
+            switch (result) {
                case QMessageBox::Cancel:
                   delete dm;
                   return false;
@@ -610,11 +611,13 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
             QApplication::restoreOverrideCursor();
             waitCursor = false;
 
-            switch (QMessageBox::information(this, tr("Loading File Linguist"),
-                  tr("The file '%1' does not seem to be related to the file '%2' which is being loaded.\n\n"
-                  "Skip loading the first named file?")
-                  .arg(DataModel::prettifyPlainFileName(name), opened.first().dataModel->srcFileName(true)),
-                  QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape)) {
+            int result = QMessageBox::information(this, tr("Loading File"),
+               tr("File '%1' is not related to the file '%2' which is being loaded.\n\n"
+               "Skip loading the first named file?")
+               .formatArgs(DataModel::prettifyPlainFileName(fname), opened.first().dataModel->srcFileName(true)),
+               QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+
+            switch (result) {
 
                case QMessageBox::Cancel:
                   delete dm;
@@ -1165,9 +1168,10 @@ void MainWindow::translate(int mode)
             }
 
             m_remainingCount = m_dataModel->messageCount() - 1;
-            if (QMessageBox::question(m_translateDialog, tr("Translate - Qt Linguist"),
-                                      tr("No more occurrences of '%1'. Start over?").arg(findText),
-                                      QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes) {
+
+            if (QMessageBox::question(m_translateDialog, tr("Translate"),
+                  tr("No more occurrences of '%1'. Start over?").formatArg(findText),
+                  QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes) {
                return;
             }
             m_remainingCount -= prevRemained;
@@ -1341,13 +1345,12 @@ void MainWindow::addToPhraseBook()
    }
 
    if (phraseBookList.isEmpty()) {
-      QMessageBox::warning(this, tr("Add to phrase book"),
-                           tr("No appropriate phrasebook found."));
+      QMessageBox::warning(this, tr("Add to phrase book"), tr("No appropriate phrasebook found."));
+
    } else if (phraseBookList.size() == 1) {
       if (QMessageBox::information(this, tr("Add to phrase book"),
-                                   tr("Adding entry to phrasebook %1").arg(phraseBookList.at(0)),
-                                   QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)
-            == QMessageBox::Ok) {
+               tr("Adding entry to phrasebook %1").formatArg(phraseBookList.at(0)),
+               QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Ok) {
          phraseBookHash.value(phraseBookList.at(0))->append(phrase);
       }
    } else {
@@ -1414,11 +1417,10 @@ bool MainWindow::maybeSaveAll()
       return true;
    }
 
-   switch (QMessageBox::information(this, tr("Qt Linguist"),
-                                    tr("Do you want to save the modified files?"),
-                                    QMessageBox::Yes | QMessageBox::Default,
-                                    QMessageBox::No,
-                                    QMessageBox::Cancel | QMessageBox::Escape)) {
+   int result = QMessageBox::information(this, tr("Linguist"), tr("Do you want to save the modified files?"),
+            QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+
+   switch (result) {
       case QMessageBox::Cancel:
          return false;
       case QMessageBox::Yes:
@@ -1436,11 +1438,12 @@ bool MainWindow::maybeSave(int model)
       return true;
    }
 
-   switch (QMessageBox::information(this, tr("Qt Linguist"),
-                                    tr("Do you want to save '%1'?").arg(m_dataModel->srcFileName(model, true)),
-                                    QMessageBox::Yes | QMessageBox::Default,
-                                    QMessageBox::No,
-                                    QMessageBox::Cancel | QMessageBox::Escape)) {
+   int result = QMessageBox::information(this, tr("Linguist"),
+            tr("Do you want to save '%1'?").formatArg(m_dataModel->srcFileName(model, true)),
+            QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+
+   switch (result) {
+
       case QMessageBox::Cancel:
          return false;
       case QMessageBox::Yes:
@@ -2261,11 +2264,11 @@ PhraseBook *MainWindow::openPhraseBook(const QString &name)
 {
    PhraseBook *pb = new PhraseBook();
    bool langGuessed;
-   if (!pb->load(name, &langGuessed)) {
-      QMessageBox::warning(this, tr("Qt Linguist"),
-                           tr("Cannot read from phrase book '%1'.").arg(name));
+
+   if (! pb->load(name, &langGuessed)) {
+      QMessageBox::warning(this, tr("Linguist"), tr("Unable to read from phrase book '%1'.").formatArg(name));
       delete pb;
-      return 0;
+      return nullptr;
    }
    if (langGuessed) {
       if (!m_translationSettingsDialog) {
@@ -2303,9 +2306,9 @@ bool MainWindow::savePhraseBook(QString *name, PhraseBook &pb)
       *name += QLatin1String(".qph");
    }
 
-   if (!pb.save(*name)) {
-      QMessageBox::warning(this, tr("Qt Linguist"),
-                           tr("Cannot create phrase book '%1'.").arg(*name));
+   if (! pb.save(*name)) {
+      QMessageBox::warning(this, tr("Linguist"),
+                           tr("Unable to create phrase book '%1'.").formatArg(*name));
       return false;
    }
    return true;
@@ -2313,12 +2316,13 @@ bool MainWindow::savePhraseBook(QString *name, PhraseBook &pb)
 
 bool MainWindow::maybeSavePhraseBook(PhraseBook *pb)
 {
-   if (pb->isModified())
-      switch (QMessageBox::information(this, tr("Qt Linguist"),
-                                       tr("Do you want to save phrase book '%1'?").arg(pb->friendlyPhraseBookName()),
-                                       QMessageBox::Yes | QMessageBox::Default,
-                                       QMessageBox::No,
-                                       QMessageBox::Cancel | QMessageBox::Escape)) {
+   if (pb->isModified()) {
+
+      int result = QMessageBox::information(this, tr("Linguist"),
+               tr("Do you want to save phrase book '%1'?").formatArg(pb->friendlyPhraseBookName()),
+               QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+
+      switch (result) {
          case QMessageBox::Cancel:
             return false;
          case QMessageBox::Yes:
