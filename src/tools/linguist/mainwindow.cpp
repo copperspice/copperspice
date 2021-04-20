@@ -1350,7 +1350,7 @@ void MainWindow::printPhraseBook(QAction *action)
       PrintOut pout(printer());
       pout.setRule(PrintOut::ThinRule);
 
-      for (const Phrase * p, :phraseBook->phrases()) {
+      for (const Phrase *p : phraseBook->phrases()) {
          pout.setGuide(p->source());
          pout.addBox(29, p->source());
          pout.addBox(4);

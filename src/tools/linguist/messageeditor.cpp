@@ -297,7 +297,7 @@ void MessageEditor::reallyFixTabOrder()
 {
    QWidget *prev = this;
    for (const MessageEditorData & med :  m_editors) {
-      for (FormMultiWidget * fmw, med.transTexts) {
+      for (FormMultiWidget * fmw : med.transTexts) {
 
          for (QTextEdit * te : fmw->getEditors()) {
             setTabOrder(prev, te);
@@ -406,7 +406,7 @@ QTextEdit *MessageEditor::activeTranslation() const
 
    const QList<FormatTextEdit *> &editors = m_editors[m_currentModel].transTexts[m_currentNumerus]->getEditors();
 
-   for  (QTextEdit * te, editors) {
+   for (QTextEdit * te : editors) {
       if (te->hasFocus()) {
          return te;
       }
