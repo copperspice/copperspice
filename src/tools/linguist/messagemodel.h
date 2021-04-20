@@ -46,6 +46,7 @@ class MessageItem
    bool danger() const {
       return m_danger;
    }
+
    void setDanger(bool danger) {
       m_danger = danger;
    }
@@ -57,36 +58,47 @@ class MessageItem
    QString context() const {
       return m_message.context();
    }
+
    QString text() const {
       return m_message.sourceText();
    }
+
    QString pluralText() const {
       return m_message.extra(QLatin1String("po-msgid_plural"));
    }
+
    QString comment() const {
       return m_message.comment();
    }
+
    QString fileName() const {
       return m_message.fileName();
    }
+
    QString extraComment() const {
       return m_message.extraComment();
    }
+
    QString translatorComment() const {
       return m_message.translatorComment();
    }
+
    void setTranslatorComment(const QString &cmt) {
       m_message.setTranslatorComment(cmt);
    }
+
    int lineNumber() const {
       return m_message.lineNumber();
    }
+
    QString translation() const {
       return m_message.translation();
    }
+
    QStringList translations() const {
       return m_message.translations();
    }
+
    void setTranslations(const QStringList &translations) {
       m_message.setTranslations(translations);
    }
@@ -94,6 +106,7 @@ class MessageItem
    TranslatorMessage::Type type() const {
       return m_message.type();
    }
+
    void setType(TranslatorMessage::Type type) {
       m_message.setType(type);
    }
@@ -101,21 +114,21 @@ class MessageItem
    bool isFinished() const {
       return type() == TranslatorMessage::Type::Finished;
    }
+
    bool isObsolete() const {
       return type() == TranslatorMessage::Type::Obsolete || type() == TranslatorMessage::Type::Vanished;
    }
+
    const TranslatorMessage &message() const {
       return m_message;
    }
 
-   bool compare(const QString &findText, bool matchSubstring,
-                Qt::CaseSensitivity cs) const;
+   bool compare(const QString &findText, bool matchSubstring, Qt::CaseSensitivity cs) const;
 
  private:
    TranslatorMessage m_message;
    bool m_danger;
 };
-
 
 class ContextItem
 {
@@ -125,6 +138,7 @@ class ContextItem
    int finishedDangerCount() const {
       return m_finishedDangerCount;
    }
+
    int unfinishedDangerCount() const {
       return m_unfinishedDangerCount;
    }
@@ -132,9 +146,11 @@ class ContextItem
    int finishedCount() const {
       return m_finishedCount;
    }
+
    int unfinishedCount() const {
       return m_nonobsoleteCount - m_finishedCount;
    }
+
    int nonobsoleteCount() const {
       return m_nonobsoleteCount;
    }
@@ -142,22 +158,26 @@ class ContextItem
    QString context() const {
       return m_context;
    }
+
    QString comment() const {
       return m_comment;
    }
+
    QString fullContext() const {
       return m_comment.trimmed();
    }
 
-   // For item status in context list
+   // for item status in context list
    bool isObsolete() const {
       return !nonobsoleteCount();
    }
+
    bool isFinished() const {
       return unfinishedCount() == 0;
    }
 
    MessageItem *messageItem(int i) const;
+
    int messageCount() const {
       return msgItemList.count();
    }
@@ -170,6 +190,7 @@ class ContextItem
    void appendMessage(const MessageItem &msg) {
       msgItemList.append(msg);
    }
+
    void appendToComment(const QString &x);
    void incrementFinishedCount() {
       ++m_finishedCount;
@@ -177,18 +198,21 @@ class ContextItem
    void decrementFinishedCount() {
       --m_finishedCount;
    }
+
    void incrementFinishedDangerCount() {
       ++m_finishedDangerCount;
    }
    void decrementFinishedDangerCount() {
       --m_finishedDangerCount;
    }
+
    void incrementUnfinishedDangerCount() {
       ++m_unfinishedDangerCount;
    }
    void decrementUnfinishedDangerCount() {
       --m_unfinishedDangerCount;
    }
+
    void incrementNonobsoleteCount() {
       ++m_nonobsoleteCount;
    }
@@ -202,34 +226,42 @@ class ContextItem
    QList<MessageItem> msgItemList;
 };
 
-
 class DataIndex
 {
  public:
-   DataIndex() : m_context(-1), m_message(-1) {}
+   DataIndex()
+      : m_context(-1), m_message(-1)
+   {
+   }
+
    DataIndex(int context, int message) : m_context(context), m_message(message) {}
+
    int context() const {
       return m_context;
    }
+
    int message() const {
       return m_message;
    }
+
    bool isValid() const {
       return m_context >= 0;
    }
+
  protected:
    int m_context;
    int m_message;
 };
 
-
 class DataModelIterator : public DataIndex
 {
  public:
    DataModelIterator(DataModel *model, int contextNo = 0, int messageNo = 0);
+
    MessageItem *current() const;
    bool isValid() const;
    void operator++();
+
  private:
    DataModelIterator() {}
    DataModel *m_model; // not owned
@@ -241,34 +273,43 @@ class DataModel : public QObject
    CS_OBJECT(DataModel)
 
  public:
-   DataModel(QObject *parent = nullptr);
+   enum FindLocation {
+      NoLocation   = 0,
+      SourceText   = 0x1,
+      Translations = 0x2,
+      Comments     = 0x4
+   };
 
-   enum FindLocation { NoLocation = 0, SourceText = 0x1, Translations = 0x2, Comments = 0x4 };
+   DataModel(QObject *parent = nullptr);
 
    // Specializations
    int contextCount() const {
       return m_contextList.count();
    }
-   ContextItem *findContext(const QString &context) const;
-   MessageItem *findMessage(const QString &context, const QString &sourcetext,
-                            const QString &comment) const;
 
-   ContextItem *contextItem(int index) const;
+   ContextItem *findContext(const QString &context) const;
+   MessageItem *findMessage(const QString &context, const QString &sourcetext, const QString &comment) const;
+
    MessageItem *messageItem(const DataIndex &index) const;
 
    int messageCount() const {
       return m_numMessages;
    }
+
    bool isEmpty() const {
       return m_numMessages == 0;
    }
+
    bool isModified() const {
       return m_modified;
    }
+
    void setModified(bool dirty);
+
    bool isWritable() const {
       return m_writable;
    }
+
    void setWritable(bool writable) {
       m_writable = writable;
    }
@@ -278,6 +319,7 @@ class DataModel : public QObject
    bool save(QWidget *parent) {
       return save(m_srcFileName, parent);
    }
+
    bool saveAs(const QString &newFileName, QWidget *parent);
    bool release(const QString &fileName, bool verbose,
                 bool ignoreUnfinished, TranslatorSaveMode mode, QWidget *parent);
@@ -292,13 +334,17 @@ class DataModel : public QObject
    QLocale::Language language() const {
       return m_language;
    }
+
    QLocale::Country country() const {
       return m_country;
    }
+
    void setSourceLanguageAndCountry(QLocale::Language lang, QLocale::Country country);
+
    QLocale::Language sourceLanguage() const {
       return m_sourceLanguage;
    }
+
    QLocale::Country sourceCountry() const {
       return m_sourceCountry;
    }
@@ -306,9 +352,11 @@ class DataModel : public QObject
    const QString &localizedLanguage() const {
       return m_localizedLanguage;
    }
+
    const QStringList &numerusForms() const {
       return m_numerusForms;
    }
+
    const QList<bool> &countRefNeeds() const {
       return m_countRefNeeds;
    }
@@ -320,9 +368,11 @@ class DataModel : public QObject
    int getSrcWords() const {
       return m_srcWords;
    }
+
    int getSrcChars() const {
       return m_srcChars;
    }
+
    int getSrcCharsSpc() const {
       return m_srcCharsSpc;
    }
@@ -370,36 +420,42 @@ class DataModel : public QObject
    QList<bool> m_countRefNeeds;
 };
 
-
-struct MultiMessageItem {
+struct MultiMessageItem
+{
  public:
    MultiMessageItem(const MessageItem *m);
    QString text() const {
       return m_text;
    }
+
    QString pluralText() const {
       return m_pluralText;
    }
+
    QString comment() const {
       return m_comment;
    }
+
    bool isEmpty() const {
       return !m_nonnullCount;
    }
-   // The next two include also read-only
+
    bool isObsolete() const {
       return m_nonnullCount && !m_nonobsoleteCount;
    }
+
    int countNonobsolete() const {
       return m_nonobsoleteCount;
    }
-   // The next three include only read-write
+
    int countEditable() const {
       return m_editableCount;
    }
+
    bool isUnfinished() const {
       return m_unfinishedCount != 0;
    }
+
    int countUnfinished() const {
       return m_unfinishedCount;
    }
@@ -409,24 +465,31 @@ struct MultiMessageItem {
    void incrementNonnullCount() {
       ++m_nonnullCount;
    }
+
    void decrementNonnullCount() {
       --m_nonnullCount;
    }
+
    void incrementNonobsoleteCount() {
       ++m_nonobsoleteCount;
    }
+
    void decrementNonobsoleteCount() {
       --m_nonobsoleteCount;
    }
+
    void incrementEditableCount() {
       ++m_editableCount;
    }
+
    void decrementEditableCount() {
       --m_editableCount;
    }
+
    void incrementUnfinishedCount() {
       ++m_unfinishedCount;
    }
+
    void decrementUnfinishedCount() {
       --m_unfinishedCount;
    }
@@ -434,13 +497,15 @@ struct MultiMessageItem {
    QString m_text;
    QString m_pluralText;
    QString m_comment;
-   int m_nonnullCount; // all
-   int m_nonobsoleteCount; // all
-   int m_editableCount; // read-write
-   int m_unfinishedCount; // read-write
+
+   int m_nonnullCount;        // all
+   int m_nonobsoleteCount;    // all
+   int m_editableCount;       // read-write
+   int m_unfinishedCount;     // read-write
 };
 
-struct MultiContextItem {
+struct MultiContextItem
+{
  public:
    MultiContextItem(int oldCount, ContextItem *ctx, bool writable);
 
@@ -451,31 +516,38 @@ struct MultiContextItem {
    MultiMessageItem *multiMessageItem(int msgIdx) const {
       return const_cast<MultiMessageItem *>(&m_multiMessageList[msgIdx]);
    }
+
    MessageItem *messageItem(int model, int msgIdx) const {
       return m_messageLists[model][msgIdx];
    }
+
    int firstNonobsoleteMessageIndex(int msgIdx) const;
    int findMessage(const QString &sourcetext, const QString &comment) const;
 
    QString context() const {
       return m_context;
    }
+
    QString comment() const {
       return m_comment;
    }
+
    int messageCount() const {
       return m_messageLists.isEmpty() ? 0 : m_messageLists[0].count();
    }
+
    // For item count in context list
    int getNumFinished() const {
       return m_finishedCount;
    }
+
    int getNumEditable() const {
       return m_editableCount;
    }
+
    // For background in context list
    bool isObsolete() const {
-      return messageCount() && !m_nonobsoleteCount;
+      return messageCount() && ! m_nonobsoleteCount;
    }
 
  private:
@@ -487,21 +559,27 @@ struct MultiContextItem {
    void putMessageItem(int pos, MessageItem *m);
    void appendMessageItems(const QList<MessageItem *> &m);
    void removeMultiMessageItem(int pos);
+
    void incrementFinishedCount() {
       ++m_finishedCount;
    }
+
    void decrementFinishedCount() {
       --m_finishedCount;
    }
+
    void incrementEditableCount() {
       ++m_editableCount;
    }
+
    void decrementEditableCount() {
       --m_editableCount;
    }
+
    void incrementNonobsoleteCount() {
       ++m_nonobsoleteCount;
    }
+
    void decrementNonobsoleteCount() {
       --m_nonobsoleteCount;
    }
@@ -510,6 +588,7 @@ struct MultiContextItem {
    QString m_comment;
    QList<MultiMessageItem> m_multiMessageList;
    QList<ContextItem *> m_contextList;
+
    // The next two could be in the MultiMessageItems, but are here for efficiency
    QList<QList<MessageItem *> > m_messageLists;
    QList<QList<MessageItem *> *> m_writableMessageLists;
@@ -518,53 +597,66 @@ struct MultiContextItem {
    int m_nonobsoleteCount; // all (note: this counts messages, not multi-messages)
 };
 
-
 class MultiDataIndex
 {
  public:
-   MultiDataIndex() : m_model(-1), m_context(-1), m_message(-1) {}
+   MultiDataIndex()
+      : m_model(-1), m_context(-1), m_message(-1)
+   {
+   }
+
    MultiDataIndex(int model, int context, int message)
-      : m_model(model), m_context(context), m_message(message) {}
+      : m_model(model), m_context(context), m_message(message)
+   {
+   }
+
    void setModel(int model) {
       m_model = model;
    }
+
    int model() const {
       return m_model;
    }
+
    int context() const {
       return m_context;
    }
+
    int message() const {
       return m_message;
    }
+
    bool isValid() const {
       return m_context >= 0;
    }
+
    bool operator==(const MultiDataIndex &other) const {
       return m_model == other.m_model && m_context == other.m_context && m_message == other.m_message;
    }
+
    bool operator!=(const MultiDataIndex &other) const {
       return !(*this == other);
    }
+
  protected:
    int m_model;
    int m_context;
    int m_message;
 };
 
-
 class MultiDataModelIterator : public MultiDataIndex
 {
  public:
    MultiDataModelIterator(MultiDataModel *model, int modelNo, int contextNo = 0, int messageNo = 0);
+
    MessageItem *current() const;
    bool isValid() const;
    void operator++();
+
  private:
    MultiDataModelIterator() {}
    MultiDataModel *m_dataModel; // not owned
 };
-
 
 class MessageModel;
 
@@ -578,9 +670,11 @@ class MultiDataModel : public QObject
 
    bool isWellMergeable(const DataModel *dm) const;
    void append(DataModel *dm, bool readWrite);
+
    bool save(int model, QWidget *parent) {
       return m_dataModels[model]->save(parent);
    }
+
    bool saveAs(int model, const QString &newFileName, QWidget *parent) {
       return m_dataModels[model]->saveAs(newFileName, parent);
    }
@@ -588,29 +682,36 @@ class MultiDataModel : public QObject
                 QWidget *parent) {
       return m_dataModels[model]->release(fileName, verbose, ignoreUnfinished, mode, parent);
    }
+
    void close(int model);
    void closeAll();
    int isFileLoaded(const QString &name) const;
-   void moveModel(int oldPos, int
-                  newPos); // newPos is *before* removing at oldPos; note that this does not emit update signals
+
+   // newPos is *before* removing at oldPos; note that this does not emit update signals
+   void moveModel(int oldPos, int newPos);
 
    // Entire multi-model
    int modelCount() const {
       return m_dataModels.count();
    }
+
    int contextCount() const {
       return m_multiContextList.count();
    }
+
    int messageCount() const {
       return m_numMessages;
    }
+
    // Next two needed for progress indicator in main window
    int getNumFinished() const {
       return m_numFinished;
    }
+
    int getNumEditable() const {
       return m_numEditable;
    }
+
    bool isModified() const;
    QStringList srcFileNames(bool pretty = false) const;
    QString condensedSrcFileNames(bool pretty = false) const;
@@ -619,18 +720,23 @@ class MultiDataModel : public QObject
    QString srcFileName(int model, bool pretty = false) const {
       return m_dataModels[model]->srcFileName(pretty);
    }
+
    bool isModelWritable(int model) const {
       return m_dataModels[model]->isWritable();
    }
+
    bool isModified(int model) const {
       return m_dataModels[model]->isModified();
    }
+
    void setModified(int model, bool dirty) {
       m_dataModels[model]->setModified(dirty);
    }
+
    QLocale::Language language(int model) const {
       return m_dataModels[model]->language();
    }
+
    QLocale::Language sourceLanguage(int model) const {
       return m_dataModels[model]->sourceLanguage();
    }
@@ -644,9 +750,11 @@ class MultiDataModel : public QObject
    DataModel *model(int i) {
       return m_dataModels[i];
    }
+
    MultiContextItem *multiContextItem(int ctxIdx) const {
       return const_cast<MultiContextItem *>(&m_multiContextList[ctxIdx]);
    }
+
    MultiMessageItem *multiMessageItem(const MultiDataIndex &index) const {
       return multiContextItem(index.context())->multiMessageItem(index.message());
    }
@@ -693,13 +801,9 @@ class MultiDataModel : public QObject
  private:
    CS_SLOT_1(Private, void onModifiedChanged())
    CS_SLOT_2(onModifiedChanged)
-   friend class MultiDataModelIterator;
-   friend class MessageModel;
 
    CS_SLOT_1(Private, void onLanguageChanged())
    CS_SLOT_2(onLanguageChanged)
-   int findContextIndex(const QString &context) const;
-   MultiContextItem *findContext(const QString &context) const;
 
    ContextItem *contextItem(const MultiDataIndex &index) const {
       return multiContextItem(index.context())->contextItem(index.model());
@@ -707,18 +811,25 @@ class MultiDataModel : public QObject
 
    void updateCountsOnAdd(int model, bool writable);
    void updateCountsOnRemove(int model, bool writable);
+
    void incrementFinishedCount() {
       ++m_numFinished;
    }
+
    void decrementFinishedCount() {
       --m_numFinished;
    }
+
    void incrementEditableCount() {
       ++m_numEditable;
    }
+
    void decrementEditableCount() {
       --m_numEditable;
    }
+
+   int findContextIndex(const QString &context) const;
+   MultiContextItem *findContext(const QString &context) const;
 
    int m_numFinished;
    int m_numEditable;
@@ -733,6 +844,9 @@ class MultiDataModel : public QObject
 
    QColor m_colors[7];
    QBitmap m_bitmap;
+
+   friend class MultiDataModelIterator;
+   friend class MessageModel;
 };
 
 class MessageModel : public QAbstractItemModel
@@ -753,11 +867,12 @@ class MessageModel : public QAbstractItemModel
 
    // Convenience
    MultiDataIndex dataIndex(const QModelIndex &index, int model) const;
+
    MultiDataIndex dataIndex(const QModelIndex &index) const {
       return dataIndex(index, index.column() - 1 < m_data->modelCount() ? index.column() - 1 : -1);
    }
-   QModelIndex modelIndex(const MultiDataIndex &index);
 
+   QModelIndex modelIndex(const MultiDataIndex &index);
 
  private:
    friend class MultiDataModel;

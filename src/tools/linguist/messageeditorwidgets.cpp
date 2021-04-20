@@ -41,7 +41,6 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-
 ExpandingTextEdit::ExpandingTextEdit(QWidget *parent)
    : QTextEdit(parent)
 {
@@ -79,6 +78,7 @@ void ExpandingTextEdit::reallyEnsureCursorVisible()
    QObject *ancestor = parent();
    while (ancestor) {
       QScrollArea *scrollArea = qobject_cast<QScrollArea *>(ancestor);
+
       if (scrollArea &&
             (scrollArea->verticalScrollBarPolicy() != Qt::ScrollBarAlwaysOff &&
              scrollArea->horizontalScrollBarPolicy() != Qt::ScrollBarAlwaysOff)) {
@@ -87,6 +87,7 @@ void ExpandingTextEdit::reallyEnsureCursorVisible()
          scrollArea->ensureVisible(c.x(), c.y());
          break;
       }
+
       ancestor = ancestor->parent();
    }
 }
@@ -145,28 +146,31 @@ void FormatTextEdit::setPlainText(const QString &text, bool userAction)
       m_highlighter->rehighlight();
       document()->setUndoRedoEnabled(true);
       blockSignals(oldBlockState);
+
    } else {
       ExpandingTextEdit::setPlainText(text);
    }
 }
 
 FormWidget::FormWidget(const QString &label, bool isEditable, QWidget *parent)
-   : QWidget(parent),
-     m_hideWhenEmpty(false)
+   : QWidget(parent), m_hideWhenEmpty(false)
 {
    QVBoxLayout *layout = new QVBoxLayout;
    layout->setMargin(0);
 
    m_label = new QLabel(this);
+
    QFont fnt;
    fnt.setBold(true);
+
    m_label->setFont(fnt);
    m_label->setText(label);
    layout->addWidget(m_label);
 
    m_editor = new FormatTextEdit(this);
    m_editor->setEditable(isEditable);
-   //m_textEdit->setWhatsThis(tr("This area shows text from an auxillary translation."));
+
+   // m_textEdit->setWhatsThis(tr("This area shows text from an auxillary translation."));
    layout->addWidget(m_editor);
 
    setLayout(layout);
@@ -232,13 +236,11 @@ class ButtonWrapper : public QWidget
 };
 
 FormMultiWidget::FormMultiWidget(const QString &label, QWidget *parent)
-   : QWidget(parent),
-     m_hideWhenEmpty(false),
-     m_multiEnabled(false),
-     m_plusIcon(QIcon(QLatin1String(":/images/plus.png"))),  // make static
-     m_minusIcon(QIcon(QLatin1String(":/images/minus.png")))
+   : QWidget(parent), m_hideWhenEmpty(false), m_multiEnabled(false),
+     m_plusIcon(QIcon(":/images/plus.png")), m_minusIcon(QIcon(":/images/minus.png"))
 {
    m_label = new QLabel(this);
+
    QFont fnt;
    fnt.setBold(true);
    m_label->setFont(fnt);
@@ -251,7 +253,7 @@ QAbstractButton *FormMultiWidget::makeButton(const QIcon &icon, const char *slot
 {
    QAbstractButton *btn = new QToolButton(this);
    btn->setIcon(icon);
-   btn->setFixedSize(icon.availableSizes().first() /* + something */);
+   btn->setFixedSize(icon.availableSizes().first());
    btn->setFocusPolicy(Qt::NoFocus);
 
    connect(btn, SIGNAL(clicked()), this, slotMethod);
@@ -279,20 +281,26 @@ void FormMultiWidget::addEditor(int idx)
 bool FormMultiWidget::eventFilter(QObject *watched, QEvent *event)
 {
    int i = 0;
+
    while (m_editors.at(i) != watched)
-      if (++i >= m_editors.count()) { // Happens when deleting an editor
+      if (++i >= m_editors.count()) {
+         // Happens when deleting an editor
          return false;
       }
+
    if (event->type() == QEvent::FocusOut) {
       m_minusButtons.at(i)->setToolTip(QString());
       m_plusButtons.at(i)->setToolTip(QString());
       m_plusButtons.at(i + 1)->setToolTip(QString());
+
    } else if (event->type() == QEvent::FocusIn) {
       m_minusButtons.at(i)->setToolTip(/*: translate, but don't change */ tr("Alt+Delete"));
       m_plusButtons.at(i)->setToolTip(/*: translate, but don't change */ tr("Shift+Alt+Insert"));
       m_plusButtons.at(i + 1)->setToolTip(/*: translate, but don't change */ tr("Alt+Insert"));
+
    } else if (event->type() == QEvent::KeyPress) {
       QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+
       if (ke->modifiers() & Qt::AltModifier) {
          if (ke->key() == Qt::Key_Delete) {
             deleteEditor(i);
@@ -306,6 +314,7 @@ bool FormMultiWidget::eventFilter(QObject *watched, QEvent *event)
          }
       }
    }
+
    return false;
 }
 
@@ -365,7 +374,7 @@ void FormMultiWidget::setTranslation(const QString &text, bool userAction)
    updateLayout();
 
    for (int i = 0; i < texts.count(); ++i)
-      // XXX this will emit n textChanged signals
+      // this will emit n textChanged signals
    {
       m_editors.at(i)->setPlainText(texts.at(i), userAction);
    }
@@ -433,6 +442,7 @@ void FormMultiWidget::deleteEditor(int idx)
       QTextCursor c = m_editors.first()->textCursor();
       c.select(QTextCursor::Document);
       c.removeSelectedText();
+
    } else {
       if (!m_editors.at(idx)->toPlainText().isEmpty()) {
          if (QMessageBox::question(topLevelWidget(), tr("Confirm"), tr("Delete non empty length variant?"),

@@ -26,14 +26,13 @@
 
 #include <QListView>
 
-
 class QStandardItemModel;
-
 class MultiDataModel;
 
 class ErrorsView : public QListView
 {
    CS_OBJECT(ErrorsView)
+
  public:
    enum ErrorType {
       SuperfluousAccelerator,
@@ -48,6 +47,7 @@ class ErrorsView : public QListView
    void clear();
    void addError(int model, const ErrorType type, const QString &arg = QString());
    QString firstError();
+
  private:
    void addError(int model, const QString &error);
    QStandardItemModel *m_list;

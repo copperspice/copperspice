@@ -34,8 +34,10 @@ class Statistics : public QDialog, public Ui::Statistics
 
  public:
    Statistics(QWidget *parent = nullptr, Qt::WindowFlags fl = Qt::EmptyFlag);
-   ~Statistics() {}
 
+   ~Statistics()
+   {
+   }
 
    CS_SLOT_1(Public, virtual void updateStats(int w1,int c1,int cs1,int w2,int c2,int cs2))
    CS_SLOT_2(updateStats)

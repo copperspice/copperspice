@@ -63,23 +63,24 @@ MessageHighlighter::MessageHighlighter(QTextEdit *textEdit)
 
 void MessageHighlighter::highlightBlock(const QString &text)
 {
-   static const QLatin1Char tab = QLatin1Char('\t');
-   static const QLatin1Char space = QLatin1Char(' ');
-   static const QLatin1Char amp = QLatin1Char('&');
-   static const QLatin1Char endTag = QLatin1Char('>');
-   static const QLatin1Char quot = QLatin1Char('"');
-   static const QLatin1Char apos = QLatin1Char('\'');
-   static const QLatin1Char semicolon = QLatin1Char(';');
-   static const QLatin1Char equals = QLatin1Char('=');
-   static const QLatin1Char percent = QLatin1Char('%');
-   static const QLatin1String startComment = QLatin1String("<!--");
-   static const QLatin1String endComment = QLatin1String("-->");
-   static const QLatin1String endElement = QLatin1String("/>");
+   static const QChar tab            = '\t';
+   static const QChar space          = ' ';
+   static const QChar amp            = '&';
+   static const QChar endTag         = '>';
+   static const QChar quot           = '"';
+   static const QChar apos           = '\'';
+   static const QChar semicolon      = ';';
+   static const QChar equals         = '=';
+   static const QChar percent        = '%';
+
+   static const QString startComment = "<!--";
+   static const QString endComment   = "-->";
+   static const QString endElement   = "/>";
 
    int state = previousBlockState();
-   int len = text.length();
+   int len   = text.length();
    int start = 0;
-   int pos = 0;
+   int pos   = 0;
 
    while (pos < len) {
       switch (state) {
@@ -87,26 +88,29 @@ void MessageHighlighter::highlightBlock(const QString &text)
          default:
             while (pos < len) {
                QChar ch = text.at(pos);
-               if (ch == QLatin1Char('<')) {
+
+               if (ch == '<') {
                   if (text.mid(pos, 4) == startComment) {
                      state = InComment;
+
                   } else {
                      state = InTag;
                      start = pos;
-                     while (pos < len && text.at(pos) != space
-                            && text.at(pos) != endTag
-                            && text.at(pos) != tab
-                            && text.mid(pos, 2) != endElement) {
+
+                     while (pos < len && text.at(pos) != space && text.at(pos) != endTag &&
+                              text.at(pos) != tab && text.mid(pos, 2) != endElement) {
                         ++pos;
                      }
+
                      if (text.mid(pos, 2) == endElement) {
                         ++pos;
                      }
-                     setFormat(start, pos - start,
-                               m_formats[Tag]);
+
+                     setFormat(start, pos - start, m_formats[Tag]);
                      break;
                   }
                   break;
+
                } else if (ch == amp && pos + 1 < len) {
                   // Default is Accelerator
                   if (text.at(pos + 1).isLetterOrNumber()) {
@@ -115,71 +119,89 @@ void MessageHighlighter::highlightBlock(const QString &text)
 
                   // When a semicolon follows assume an Entity
                   start = pos;
-                  ch = text.at(++pos);
+                  ch    = text.at(++pos);
+
                   while (pos + 1 < len && ch != semicolon && ch.isLetterOrNumber()) {
                      ch = text.at(++pos);
                   }
+
                   if (ch == semicolon) {
                      setFormat(start, pos - start + 1, m_formats[Entity]);
                   }
+
                } else if (ch == percent) {
                   start = pos;
+
                   // %[1-9]*
                   for (++pos; pos < len && text.at(pos).isDigit(); ++pos) {}
+
                   // %n
-                  if (pos < len && pos == start + 1 && text.at(pos) == QLatin1Char('n')) {
+                  if (pos < len && pos == start + 1 && text.at(pos) == 'n') {
                      ++pos;
                   }
+
                   setFormat(start, pos - start, m_formats[Variable]);
+
                } else {
                   // No tag, comment or entity started, continue...
                   ++pos;
                }
             }
             break;
+
          case InComment:
             start = pos;
+
             while (pos < len) {
                if (text.mid(pos, 3) == endComment) {
                   pos += 3;
                   state = NormalState;
                   break;
+
                } else {
                   ++pos;
                }
             }
+
             setFormat(start, pos - start, m_formats[Comment]);
             break;
+
          case InTag:
             QChar quote = QChar::Null;
+
             while (pos < len) {
                QChar ch = text.at(pos);
+
                if (quote.isNull()) {
                   start = pos;
                   if (ch == apos || ch == quot) {
                      quote = ch;
+
                   } else if (ch == endTag) {
                      ++pos;
                      setFormat(start, pos - start, m_formats[Tag]);
                      state = NormalState;
                      break;
+
                   } else if (text.mid(pos, 2) == endElement) {
                      pos += 2;
                      setFormat(start, pos - start, m_formats[Tag]);
                      state = NormalState;
                      break;
+
                   } else if (ch != space && text.at(pos) != tab) {
                      // Tag not ending, not a quote and no whitespace, so
                      // we must be dealing with an attribute.
                      ++pos;
-                     while (pos < len && text.at(pos) != space
-                            && text.at(pos) != tab
-                            && text.at(pos) != equals) {
+
+                     while (pos < len && text.at(pos) != space && text.at(pos) != tab && text.at(pos) != equals) {
                         ++pos;
                      }
+
                      setFormat(start, pos - start, m_formats[Attribute]);
                      start = pos;
                   }
+
                } else if (ch == quote) {
                   quote = QChar::Null;
 
@@ -191,6 +213,6 @@ void MessageHighlighter::highlightBlock(const QString &text)
             break;
       }
    }
+
    setCurrentBlockState(state);
 }
-

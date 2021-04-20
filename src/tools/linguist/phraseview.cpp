@@ -46,13 +46,9 @@ static QString phraseViewHeaderKey()
 }
 
 PhraseView::PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase *> > > *phraseDict, QWidget *parent)
-   : QTreeView(parent),
-     m_dataModel(model),
-     m_phraseDict(phraseDict),
-     m_modelIndex(-1),
-     m_doGuesses(true)
+   : QTreeView(parent), m_dataModel(model), m_phraseDict(phraseDict), m_modelIndex(-1), m_doGuesses(true)
 {
-   setObjectName(QLatin1String("phrase list view"));
+   setObjectName("phrase list view");
 
    m_phraseModel = new PhraseModel(this);
 
@@ -93,11 +89,10 @@ void PhraseView::update()
    setSourceText(m_modelIndex, m_sourceText);
 }
 
-
 void PhraseView::contextMenuEvent(QContextMenuEvent *event)
 {
    QModelIndex index = indexAt(event->pos());
-   if (!index.isValid()) {
+   if (! index.isValid()) {
       return;
    }
 
@@ -120,7 +115,7 @@ void PhraseView::contextMenuEvent(QContextMenuEvent *event)
 void PhraseView::mouseDoubleClickEvent(QMouseEvent *event)
 {
    QModelIndex index = indexAt(event->pos());
-   if (!index.isValid()) {
+   if (! index.isValid()) {
       return;
    }
 
@@ -130,10 +125,11 @@ void PhraseView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void PhraseView::guessShortcut(int key)
 {
-   for (const Phrase * phrase : m_phraseModel->phraseList())
-   if (phrase->shortcut() == key) {
-      emit phraseSelected(m_modelIndex, phrase->target());
-      return;
+   for (const Phrase * phrase : m_phraseModel->phraseList()) {
+      if (phrase->shortcut() == key) {
+         emit phraseSelected(m_modelIndex, phrase->target());
+         return;
+      }
    }
 }
 
@@ -158,17 +154,17 @@ static CandidateList similarTextHeuristicCandidates(MultiDataModel *model, int m
    QList<int> scores;
    CandidateList candidates;
 
-   StringSimilarityMatcher stringmatcher(QString::fromLatin1(text));
+   StringSimilarityMatcher stringmatcher(text);
 
    for (MultiDataModelIterator it(model, mi); it.isValid(); ++it) {
       MessageItem *m = it.current();
-      if (!m) {
+
+      if (! m) {
          continue;
       }
 
       TranslatorMessage mtm = m->message();
-      if (mtm.type() == TranslatorMessage::Unfinished
-            || mtm.translation().isEmpty()) {
+      if (mtm.type() == TranslatorMessage::Type::Unfinished || mtm.translation().isEmpty()) {
          continue;
       }
 
@@ -185,10 +181,12 @@ static CandidateList similarTextHeuristicCandidates(MultiDataModel *model, int m
          int i;
          for (i = 0; i < candidates.size(); ++i) {
             if (score >= scores.at(i)) {
+
                if (score == scores.at(i)) {
                   if (candidates.at(i) == cand) {
                      goto continue_outer_loop;
                   }
+
                } else {
                   break;
                }
@@ -200,9 +198,9 @@ static CandidateList similarTextHeuristicCandidates(MultiDataModel *model, int m
    continue_outer_loop:
       ;
    }
+
    return candidates;
 }
-
 
 void PhraseView::setSourceText(int model, const QString &sourceText)
 {
@@ -232,6 +230,7 @@ void PhraseView::setSourceText(int model, const QString &sourceText)
          Phrase *guess = new Phrase(candidate.source, candidate.target, def, n);
          m_guesses.append(guess);
          m_phraseModel->addPhrase(guess);
+
          ++n;
       }
    }
@@ -241,17 +240,20 @@ QList<Phrase *> PhraseView::getPhrases(int model, const QString &source)
 {
    QList<Phrase *> phrases;
    QString f = MainWindow::friendlyString(source);
-   QStringList lookupWords = f.split(QLatin1Char(' '));
+   QStringList lookupWords = f.split(' ');
 
    for (const QString & s : lookupWords) {
       if (m_phraseDict->at(model).contains(s)) {
+
          for (Phrase * p : m_phraseDict->at(model).value(s)) {
             if (f.contains(MainWindow::friendlyString(p->source()))) {
                phrases.append(p);
             }
          }
+
       }
    }
+
    return phrases;
 }
 

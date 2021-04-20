@@ -36,29 +36,35 @@ class Phrase
 {
  public:
    Phrase();
-   Phrase(const QString &source, const QString &target,
-          const QString &definition, int sc = -1);
-   Phrase(const QString &source, const QString &target,
-          const QString &definition, PhraseBook *phraseBook);
+   Phrase(const QString &source, const QString &target, const QString &definition, int sc = -1);
+   Phrase(const QString &source, const QString &target, const QString &definition, PhraseBook *phraseBook);
 
    QString source() const {
       return s;
    }
+
    void setSource(const QString &ns);
+
    QString target() const {
       return t;
    }
+
    void setTarget(const QString &nt);
+
    QString definition() const {
       return d;
    }
+
    void setDefinition (const QString &nd);
+
    int shortcut() const {
       return shrtc;
    }
+
    PhraseBook *phraseBook() const {
       return m_phraseBook;
    }
+
    void setPhraseBook(PhraseBook *book) {
       m_phraseBook = book;
    }
@@ -72,6 +78,7 @@ class Phrase
 };
 
 bool operator==(const Phrase &p, const Phrase &q);
+
 inline bool operator!=(const Phrase &p, const Phrase &q)
 {
    return !(p == q);
@@ -86,14 +93,18 @@ class PhraseBook : public QObject
    ~PhraseBook();
    bool load(const QString &fileName, bool *langGuessed);
    bool save(const QString &fileName);
+
    QList<Phrase *> phrases() const {
       return m_phrases;
    }
+
    void append(Phrase *phrase);
    void remove(Phrase *phrase);
+
    QString fileName() const {
       return m_fileName;
    }
+
    QString friendlyPhraseBookName() const;
    bool isModified() const {
       return m_changed;
@@ -103,13 +114,16 @@ class PhraseBook : public QObject
    QLocale::Language language() const {
       return m_language;
    }
+
    QLocale::Country country() const {
       return m_country;
    }
+
    void setSourceLanguageAndCountry(QLocale::Language lang, QLocale::Country country);
    QLocale::Language sourceLanguage() const {
       return m_sourceLanguage;
    }
+
    QLocale::Country sourceCountry() const {
       return m_sourceCountry;
    }
@@ -140,6 +154,5 @@ class PhraseBook : public QObject
    friend class QphHandler;
    friend class Phrase;
 };
-
 
 #endif

@@ -26,6 +26,7 @@
 void PhraseModel::removePhrases()
 {
    int r = plist.count();
+
    if (r > 0) {
       plist.clear();
       reset();
@@ -96,8 +97,10 @@ QVariant PhraseModel::headerData(int section, Qt::Orientation orientation, int r
       switch (section) {
          case 0:
             return tr("Source phrase");
+
          case 1:
             return tr("Translation");
+
          case 2:
             return tr("Definition");
       }
@@ -108,15 +111,17 @@ QVariant PhraseModel::headerData(int section, Qt::Orientation orientation, int r
 
 Qt::ItemFlags PhraseModel::flags(const QModelIndex &index) const
 {
-   if (!index.isValid()) {
+   if (! index.isValid()) {
       return Qt::EmptyFlag;
    }
+
    Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+
    // Edit is allowed for source & translation if item is from phrasebook
-   if (plist.at(index.row())->phraseBook()
-         && (index.column() != 2)) {
+   if (plist.at(index.row())->phraseBook() && (index.column() != 2)) {
       flags |= Qt::ItemIsEditable;
    }
+
    return flags;
 }
 
@@ -135,12 +140,15 @@ bool PhraseModel::setData(const QModelIndex &index, const QVariant &value, int r
       case 0:
          phrase->setSource(value.toString());
          break;
+
       case 1:
          phrase->setTarget(value.toString());
          break;
+
       case 2:
          phrase->setDefinition(value.toString());
          break;
+
       default:
          return false;
    }
@@ -164,8 +172,10 @@ QVariant PhraseModel::data(const QModelIndex &index, int role) const
       switch (column) {
          case 0: // source phrase
             return phrase->source().simplified();
+
          case 1: // translation
             return phrase->target().simplified();
+
          case 2: // definition
             return phrase->definition();
       }
@@ -173,6 +183,7 @@ QVariant PhraseModel::data(const QModelIndex &index, int role) const
       switch (column) {
          case 0: // source phrase
             return phrase->source();
+
          case 1: // translation
             return phrase->target();
       }

@@ -23,10 +23,6 @@
 
 #include <phrasebookbox.h>
 #include <settings_dialog.h>
-/*  TRANSLATOR PhraseBookBox
-
-  Go to Phrase > Edit Phrase Book, The dialog that pops up is a PhraseBookBox.
-*/
 
 #include <qevent.h>
 #include <qlineedit.h>
@@ -37,7 +33,8 @@
 PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
    : QDialog(parent), m_phraseBook(phraseBook), m_translationSettingsDialog(0)
 {
-   // This definition needs to be within class context for lupdate to find it
+
+// definition needs to be within class context for lupdate to find it
 #define NewPhrase tr("(New Entry)")
 
    setupUi(this);
@@ -84,8 +81,7 @@ PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
 
 bool PhraseBookBox::eventFilter(QObject *obj, QEvent *event)
 {
-   if (event->type() == QEvent::KeyPress &&
-         (obj == sourceLed || obj == targetLed || obj == definitionLed)) {
+   if (event->type() == QEvent::KeyPress && (obj == sourceLed || obj == targetLed || obj == definitionLed)) {
       const QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
       const int key = keyEvent->key();
 
@@ -97,6 +93,7 @@ bool PhraseBookBox::eventFilter(QObject *obj, QEvent *event)
             return QApplication::sendEvent(phraseList, event);
       }
    }
+
    return QDialog::eventFilter(obj, event);
 }
 
@@ -144,6 +141,7 @@ void PhraseBookBox::sourceChanged(const QString &source)
 void PhraseBookBox::targetChanged(const QString &target)
 {
    QModelIndex index = currentPhraseIndex();
+
    if (index.isValid()) {
       phrMdl->setData(phrMdl->index(index.row(), 1), target);
    }
@@ -152,6 +150,7 @@ void PhraseBookBox::targetChanged(const QString &target)
 void PhraseBookBox::definitionChanged(const QString &definition)
 {
    QModelIndex index = currentPhraseIndex();
+
    if (index.isValid()) {
       phrMdl->setData(phrMdl->index(index.row(), 2), definition);
    }

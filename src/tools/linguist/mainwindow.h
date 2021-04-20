@@ -65,8 +65,9 @@ class SettingsDialog;
 class MainWindow : public QMainWindow
 {
    CS_OBJECT(MainWindow)
+
  public:
-   enum {PhraseCloseMenu, PhraseEditMenu, PhrasePrintMenu};
+   enum { PhraseCloseMenu, PhraseEditMenu, PhrasePrintMenu};
 
    MainWindow();
    ~MainWindow();
@@ -279,6 +280,7 @@ class MainWindow : public QMainWindow
 
    QModelIndex nextContext(const QModelIndex &index) const;
    QModelIndex prevContext(const QModelIndex &index) const;
+
    QModelIndex nextMessage(const QModelIndex &currentIndex, bool checkUnfinished = false) const;
    QModelIndex prevMessage(const QModelIndex &currentIndex, bool checkUnfinished = false) const;
 
@@ -289,10 +291,13 @@ class MainWindow : public QMainWindow
    void setupToolBars();
    void setCurrentMessage(const QModelIndex &index);
    void setCurrentMessage(const QModelIndex &index, int model);
+
    QModelIndex setMessageViewRoot(const QModelIndex &index);
    QModelIndex currentContextIndex() const;
    QModelIndex currentMessageIndex() const;
+
    PhraseBook *openPhraseBook(const QString &name);
+
    bool isPhraseBookOpen(const QString &name);
    bool savePhraseBook(QString *name, PhraseBook &pb);
    bool maybeSavePhraseBook(PhraseBook *phraseBook);
@@ -307,33 +312,45 @@ class MainWindow : public QMainWindow
 
    QPrinter *printer();
 
-   // FIXME: move to DataModel
+   // may want to move to DataModel
    void updateDanger(const MultiDataIndex &index, bool verbose);
 
    bool searchItem(const QString &searchWhat);
 
-   QProcess *m_assistantProcess;
+   QProcess  *m_assistantProcess;
    QTreeView *m_contextView;
    QTreeView *m_messageView;
+   QPrinter  *m_printer;
+
    MultiDataModel *m_dataModel;
-   MessageModel *m_messageModel;
+   MessageModel   *m_messageModel;
+   MessageEditor  *m_messageEditor;
+   PhraseView     *m_phraseView;
+   SourceCodeView *m_sourceCodeView;
+   FocusWatcher   *m_focusWatcher;
+
+   QDockWidget *m_contextDock;
+   QDockWidget *m_messagesDock;
+   QDockWidget *m_phrasesDock;
+   QDockWidget *m_sourceAndFormDock;
+   QDockWidget *m_errorsDock;
+
+   QStackedWidget *m_sourceAndFormView;
+
    QSortFilterProxyModel *m_sortedContextsModel;
    QSortFilterProxyModel *m_sortedMessagesModel;
-   MessageEditor *m_messageEditor;
-   PhraseView *m_phraseView;
-   QStackedWidget *m_sourceAndFormView;
-   SourceCodeView *m_sourceCodeView;
+
    // FormPreviewView *m_formPreviewView;
    ErrorsView *m_errorsView;
    QLabel *m_progressLabel;
    QLabel *m_modifiedLabel;
-   FocusWatcher *m_focusWatcher;
+
    QString m_phraseBookDir;
+
    // model : keyword -> list of appropriate phrases in the phrasebooks
    QList<QHash<QString, QList<Phrase *> > > m_phraseDict;
    QList<PhraseBook *> m_phraseBooks;
    QMap<QAction *, PhraseBook *> m_phraseBookMenu[3];
-   QPrinter *m_printer;
 
    FindDialog *m_findDialog;
    QString m_findText;
@@ -356,15 +373,8 @@ class MainWindow : public QMainWindow
    int m_editActiveModel;
    MultiDataIndex m_currentIndex;
 
-   QDockWidget *m_contextDock;
-   QDockWidget *m_messagesDock;
-   QDockWidget *m_phrasesDock;
-   QDockWidget *m_sourceAndFormDock;
-   QDockWidget *m_errorsDock;
-
-   Ui::MainWindow m_ui;    // menus and actions
+   Ui::MainWindow m_ui;         // menus and actions
    Statistics *m_statistics;
 };
-
 
 #endif

@@ -27,8 +27,7 @@
 #include <qtextedit.h>
 #include <qsyntaxhighlighter.h>
 
-
-/* Message highlighter based on HtmlSyntaxHighlighter from designer */
+// Message highlighter based on HtmlSyntaxHighlighter from designer
 class MessageHighlighter : public QSyntaxHighlighter
 {
    CS_OBJECT(MessageHighlighter)

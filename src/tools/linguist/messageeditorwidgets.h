@@ -43,10 +43,8 @@ class QMenu;
 class QSizeF;
 class QVariant;
 
+// Automatically adapt height to document contents
 
-/*
-  Automatically adapt height to document contents
- */
 class ExpandingTextEdit : public QTextEdit
 {
    CS_OBJECT(ExpandingTextEdit)
@@ -66,9 +64,6 @@ class ExpandingTextEdit : public QTextEdit
    CS_SLOT_2(reallyEnsureCursorVisible)
 };
 
-/*
-  Format markup & control characters
-*/
 class FormatTextEdit : public ExpandingTextEdit
 {
    CS_OBJECT(FormatTextEdit)
@@ -76,6 +71,7 @@ class FormatTextEdit : public ExpandingTextEdit
  public:
    FormatTextEdit(QWidget *parent = nullptr);
    ~FormatTextEdit();
+
    void setEditable(bool editable);
 
    CS_SIGNAL_1(Public, void editorDestroyed())
@@ -88,29 +84,31 @@ class FormatTextEdit : public ExpandingTextEdit
    MessageHighlighter *m_highlighter;
 };
 
-/*
-  Displays text field & associated label
-*/
 class FormWidget : public QWidget
 {
    CS_OBJECT(FormWidget)
 
  public:
    FormWidget(const QString &label, bool isEditable, QWidget *parent = nullptr);
+
    void setLabel(const QString &label) {
       m_label->setText(label);
    }
+
    void setTranslation(const QString &text, bool userAction = false);
    void clearTranslation() {
       setTranslation(QString(), false);
    }
+
    QString getTranslation() {
       return m_editor->toPlainText();
    }
+
    void setEditingEnabled(bool enable);
    void setHideWhenEmpty(bool optional) {
       m_hideWhenEmpty = optional;
    }
+
    FormatTextEdit *getEditor() {
       return m_editor;
    }
@@ -134,9 +132,6 @@ class FormWidget : public QWidget
    void slotTextChanged();
 };
 
-/*
-  Displays text fields & associated label
-*/
 class FormMultiWidget : public QWidget
 {
    CS_OBJECT(FormMultiWidget)
@@ -146,10 +141,12 @@ class FormMultiWidget : public QWidget
    void setLabel(const QString &label) {
       m_label->setText(label);
    }
+
    void setTranslation(const QString &text, bool userAction = false);
    void clearTranslation() {
       setTranslation(QString(), false);
    }
+
    QString getTranslation() const;
    void setEditingEnabled(bool enable);
    void setMultiEnabled(bool enable);

@@ -49,6 +49,7 @@ class PhraseModel : public QAbstractTableModel
    Phrase *phrase(const QModelIndex &index) const;
    void setPhrase(const QModelIndex &indx, Phrase *ph);
    QModelIndex index(Phrase *const phr) const;
+
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const {
       return QAbstractTableModel::index(row, column, parent);
    }
@@ -57,16 +58,13 @@ class PhraseModel : public QAbstractTableModel
    int rowCount(const QModelIndex &) const;
    int columnCount(const QModelIndex &) const;
    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-   QVariant headerData(int section, Qt::Orientation orientation,
-                       int role = Qt::DisplayRole) const;
+   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
    Qt::ItemFlags flags(const QModelIndex &index) const;
-   bool setData(const QModelIndex &index, const QVariant &value,
-                int role = Qt::EditRole);
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-   // HACK: This model will be displayed in a _TreeView_
-   // which has a tendency to expand 'children' on double click
+   // This model will be displayed in a _TreeView_  which has a tendency to expand 'children' on double click
    bool hasChildren(const QModelIndex &parent) const {
-      return !parent.isValid();
+      return ! parent.isValid();
    }
 
  private:

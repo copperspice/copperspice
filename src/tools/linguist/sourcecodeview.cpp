@@ -30,11 +30,8 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-
 SourceCodeView::SourceCodeView(QWidget *parent)
-   : QPlainTextEdit(parent),
-     m_isActive(true),
-     m_lineNumToLoad(0)
+   : QPlainTextEdit(parent), m_isActive(true), m_lineNumToLoad(0)
 {
    setReadOnly(true);
 }
@@ -62,7 +59,7 @@ void SourceCodeView::setSourceContext(const QString &fileName, const int lineNum
 void SourceCodeView::setActivated(bool activated)
 {
    m_isActive = activated;
-   if (activated && !m_fileToLoad.isEmpty()) {
+   if (activated && ! m_fileToLoad.isEmpty()) {
       showSourceCode(m_fileToLoad, m_lineNumToLoad);
       m_fileToLoad.clear();
    }
@@ -79,12 +76,13 @@ void SourceCodeView::showSourceCode(const QString &absFileName, const int lineNu
       // Assume fileName is relative to directory
       QFile file(absFileName);
 
-      if (!file.exists()) {
+      if (! file.exists()) {
          clear();
          appendHtml(tr("<i>File %1 not available</i>").formatArg(absFileName));
          return;
       }
-      if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+
+      if (! file.open(QIODevice::ReadOnly | QIODevice::Text)) {
          clear();
          appendHtml(tr("<i>File %1 not readable</i>").formatArg(absFileName));
          return;
@@ -104,6 +102,7 @@ void SourceCodeView::showSourceCode(const QString &absFileName, const int lineNu
    cursor.setPosition(document()->findBlockByNumber(lineNum - 1).position());
    setTextCursor(cursor);
    centerCursor();
+
    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
 
@@ -113,6 +112,7 @@ void SourceCodeView::showSourceCode(const QString &absFileName, const int lineNu
    // Define custom color for line selection
    const QColor fg = palette().color(QPalette::Highlight);
    const QColor bg = palette().color(QPalette::Base);
+
    QColor col;
    const qreal ratio = 0.25;
    col.setRedF(fg.redF() * ratio + bg.redF() * (1 - ratio));

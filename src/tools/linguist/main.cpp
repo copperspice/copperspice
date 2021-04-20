@@ -50,7 +50,8 @@ class ApplicationEventFilter : public QObject
 
    void setMainWindow(MainWindow *mw) {
       m_mainWindow = mw;
-      if (!m_filesToOpen.isEmpty() && m_mainWindow) {
+
+      if (! m_filesToOpen.isEmpty() && m_mainWindow) {
          m_mainWindow->openFiles(m_filesToOpen);
          m_filesToOpen.clear();
       }
@@ -61,13 +62,15 @@ class ApplicationEventFilter : public QObject
       if (object == qApp && event->type() == QEvent::FileOpen) {
          QFileOpenEvent *e = static_cast<QFileOpenEvent *>(event);
          QString file = e->url().toLocalFile();
-         if (!m_mainWindow) {
+
+         if (! m_mainWindow) {
             m_filesToOpen << file;
          } else {
             m_mainWindow->openFiles(QStringList() << file);
          }
          return true;
       }
+
       return QObject::eventFilter(object, event);
    }
 
@@ -117,7 +120,7 @@ int main(int argc, char **argv)
    QTranslator qtTranslator;
    QString sysLocale = QLocale::system().name();
 
-   if (translator.load(QLatin1String("linguist_") + sysLocale, resourceDir)) {
+   if (translator.load(QString("linguist_") + sysLocale, resourceDir)) {
       app.installTranslator(&translator);
       if (qtTranslator.load(QLatin1String("qt_") + sysLocale, resourceDir)) {
          app.installTranslator(&qtTranslator);

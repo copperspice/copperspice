@@ -38,8 +38,9 @@ class PhraseView : public QTreeView
    CS_OBJECT(PhraseView)
 
  public:
-   PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase *> > > *phraseDict, QWidget *parent = nullptr);
+   PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase *>>> *phraseDict, QWidget *parent = nullptr);
    ~PhraseView();
+
    void setSourceText(int model, const QString &sourceText);
 
    CS_SLOT_1(Public, void toggleGuessing())
@@ -54,6 +55,7 @@ class PhraseView : public QTreeView
  protected:
    // QObject
    virtual void contextMenuEvent(QContextMenuEvent *event);
+
    // QAbstractItemView
    virtual void mouseDoubleClickEvent(QMouseEvent *event);
 

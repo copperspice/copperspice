@@ -36,9 +36,7 @@ static QString configKey()
 }
 
 RecentFiles::RecentFiles(const int maxEntries)
-   : m_groupOpen(false),
-     m_clone1st(false),
-     m_maxEntries(maxEntries)
+   : m_groupOpen(false), m_clone1st(false), m_maxEntries(maxEntries)
 {
    m_timer.setSingleShot(true);
    m_timer.setInterval(3 * 60 * 1000);
@@ -69,11 +67,11 @@ RecentFiles::RecentFiles(const int maxEntries)
 void RecentFiles::addFiles(const QStringList &names)
 {
    if (m_strLists.isEmpty() || names != m_strLists.first()) {
-      if (m_groupOpen && !m_clone1st)
+      if (m_groupOpen && !m_clone1st) {
          // Group being open implies at least one item in the list
-      {
          m_strLists.removeFirst();
       }
+
       m_groupOpen = true;
 
       // We do *not* sort the actual entries, as that would destroy the user's
@@ -83,13 +81,16 @@ void RecentFiles::addFiles(const QStringList &names)
       for (int i = 0; i < sortedLists.size(); ++i) {
          sortedLists[i].sort();
       }
+
       QStringList sortedNames = names;
       sortedNames.sort();
 
       int index = sortedLists.indexOf(sortedNames);
+
       if (index >= 0) {
          m_strLists.removeAt(index);
          m_clone1st = true;
+
       } else {
          if (m_strLists.count() >= m_maxEntries) {
             m_strLists.removeLast();
@@ -98,6 +99,7 @@ void RecentFiles::addFiles(const QStringList &names)
       }
       m_strLists.prepend(names);
    }
+
    m_timer.start();
 }
 
@@ -123,8 +125,11 @@ void RecentFiles::readConfig()
 void RecentFiles::writeConfig() const
 {
    QList<QVariant> vals;
-   for (const QStringList & sl : m_strLists)
-   vals << sl;
+
+   for (const QStringList & sl : m_strLists) {
+      vals << sl;
+   }
+
    QSettings().setValue(configKey(), vals);
 }
 
