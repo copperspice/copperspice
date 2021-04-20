@@ -122,15 +122,16 @@ int main(int argc, char **argv)
 
    if (translator.load(QString("linguist_") + sysLocale, resourceDir)) {
       app.installTranslator(&translator);
-      if (qtTranslator.load(QLatin1String("qt_") + sysLocale, resourceDir)) {
+
+      if (qtTranslator.load(QString("cs_") + sysLocale, resourceDir)) {
          app.installTranslator(&qtTranslator);
       } else {
          app.removeTranslator(&translator);
       }
    }
 
-   app.setOrganizationName(QLatin1String("CopperSpice"));
-   app.setApplicationName(QLatin1String("Linguist"));
+   app.setOrganizationName("CopperSpice");
+   app.setApplicationName("Linguist");
 
    QSettings config;
 

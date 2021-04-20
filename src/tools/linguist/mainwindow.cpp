@@ -795,12 +795,12 @@ static QString fileFilters(bool allFirst)
 
    for (const Translator::FileFormat & format : Translator::registeredFileFormats()) {
       if (format.fileType == Translator::FileFormat::TranslationSource && format.priority >= 0) {
-         filter.append(pattern.arg(format.description).arg(format.extension));
-         allExtensions.append(QLatin1String("*.") + format.extension);
+         filter.append(pattern.formatArg(format.description).formatArg(format.extension));
+         allExtensions.append("*." + format.extension);
       }
    }
 
-   QString allFilter = QObject::tr("Translation files (%1);;").arg(allExtensions.join(QLatin1String(" ")));
+   QString allFilter = QObject::tr("Translation files (%1);;").formatArg(allExtensions.join(" "));
 
    if (allFirst) {
       filter.prepend(allFilter);
@@ -828,7 +828,7 @@ QStringList MainWindow::pickTranslationFiles()
 
       if (pos > 0) {
          varFilt = tr("Related files (%1);;")
-                   .arg(mainFileBase.left(pos) + QLatin1String("_*.") + mainFile.completeSuffix());
+               .formatArg(mainFileBase.left(pos) + "_*." + mainFile.completeSuffix());
       }
    }
 
@@ -893,7 +893,8 @@ void MainWindow::releaseAs()
    QString newFilename = oldFile.path() + "/" + oldFile.completeBaseName() + ".qm";
 
    newFilename = QFileDialog::getSaveFileName(this, tr("Release"), newFilename,
-                 tr("Qt message files for released applications (*.qm)\nAll files (*)"));
+                 tr("Message files for released applications (*.qm)\nAll files (*)"));
+
    if (!newFilename.isEmpty()) {
       if (m_dataModel->release(m_currentIndex.model(), newFilename, false, false, SaveEverything, this)) {
          statusBar()->showMessage(tr("File created."), MessageMS);
@@ -955,8 +956,7 @@ void MainWindow::print()
          pout.vskip();
          pout.setRule(PrintOut::ThickRule);
          pout.setGuide(mc->context());
-         pout.addBox(100, tr("Context: %1").arg(mc->context()),
-                     PrintOut::Strong);
+         pout.addBox(100, tr("Context: %1").formatArg(mc->context()), PrintOut::Strong);
          pout.flushLine();
          pout.addBox(4);
          pout.addBox(92, mc->comment(), PrintOut::Emphasis);
@@ -1013,8 +1013,7 @@ void MainWindow::print()
 
             if (pout.pageNum() != pageNum) {
                pageNum = pout.pageNum();
-               statusBar()->showMessage(tr("Printing... (page %1)")
-                                        .arg(pageNum));
+               statusBar()->showMessage(tr("Printing... (page %1)").formatArg(pageNum));
             }
          }
       }
@@ -1246,15 +1245,16 @@ void MainWindow::translate(int mode)
 
    if (! translatedCount) {
       qApp->beep();
-      QMessageBox::warning(m_translateDialog, tr("Translate - Qt Linguist"),
-                           tr("Cannot find the string '%1'.").arg(findText));
+      QMessageBox::warning(m_translateDialog, tr("Translate"),
+                           tr("Unable to find the string '%1'.").formatArg(findText));
    }
 }
 
 void MainWindow::newPhraseBook()
 {
    QString name = QFileDialog::getSaveFileName(this, tr("Create New Phrase Book"),
-                  m_phraseBookDir, tr("Qt phrase books (*.qph)\nAll files (*)"));
+                  m_phraseBookDir, tr("Phrase books (*.qph)\nAll files (*)"));
+
    if (!name.isEmpty()) {
       PhraseBook pb;
       if (!m_translationSettingsDialog) {
@@ -1287,8 +1287,8 @@ bool MainWindow::isPhraseBookOpen(const QString &name)
 
 void MainWindow::openPhraseBook()
 {
-   QString name = QFileDialog::getOpenFileName(this, tr("Open Phrase Book"),
-                  m_phraseBookDir, tr("Qt phrase books (*.qph);;All files (*)"));
+   QString name = QFileDialog::getOpenFileName(this, tr("Select Phrase Book"),
+                  m_phraseBookDir, tr("Phrase books (*.qph);;All files (*)"));
 
    if (! name.isEmpty()) {
       m_phraseBookDir = QFileInfo(name).absolutePath();
@@ -1360,7 +1360,7 @@ void MainWindow::printPhraseBook(QAction *action)
 
          if (pout.pageNum() != pageNum) {
             pageNum = pout.pageNum();
-            statusBar()->showMessage(tr("Printing... (page %1)").arg(pageNum));
+            statusBar()->showMessage(tr("Printing (page %1)").formatArg(pageNum));
          }
          pout.setRule(PrintOut::NoRule);
          pout.flushLine(true);
@@ -1414,8 +1414,7 @@ void MainWindow::addToPhraseBook()
       bool okPressed = false;
 
       QString selection = QInputDialog::getItem(this, tr("Add to phrase book"),
-                          tr("Select phrase book to add to"),
-                          phraseBookList, 0, false, &okPressed);
+               tr("Select phrase book to add to"), phraseBookList, 0, false, &okPressed);
 
       if (okPressed) {
          phraseBookHash.value(selection)->append(phrase);
@@ -1555,10 +1554,10 @@ void MainWindow::updateCaption()
    // Ensure that the action labels get updated
    m_fileActiveModel = m_editActiveModel = -2;
 
-   if (!enable) {
-      cap = tr("Qt Linguist[*]");
+   if (! enable) {
+      cap = tr("Linguist[*]");
    } else {
-      cap = tr("%1[*] - Qt Linguist").arg(m_dataModel->condensedSrcFileNames(true));
+      cap = tr("%1[*]").formatArg(m_dataModel->condensedSrcFileNames(true));
    }
    setWindowTitle(cap);
 }
@@ -2079,8 +2078,7 @@ void MainWindow::setupMenuBar()
    // Window menu
    QMenu *windowMenu = new QMenu(tr("&Window"), this);
    menuBar()->insertMenu(m_ui.menuHelp->menuAction(), windowMenu);
-   windowMenu->addAction(tr("Minimize"), this,
-                         SLOT(showMinimized()), QKeySequence(tr("Ctrl+M")));
+   windowMenu->addAction(tr("Minimize"), this, "showMinimized()", QKeySequence(tr("Ctrl+M")));
 #endif
 
    // Help
@@ -2089,9 +2087,9 @@ void MainWindow::setupMenuBar()
 
    connect(m_ui.menuRecentlyOpenedFiles, &QMenu::triggered, this, &MainWindow::recentFileActivated);
 
+   m_ui.actionManual->setWhatsThis(tr("Display the manual for %1.").formatArg(tr("Linguist")));
+   m_ui.actionAbout->setWhatsThis(tr("Display information about %1.").formatArg(tr("Linguist")));
 
-   m_ui.actionManual->setWhatsThis(tr("Display the manual for %1.").arg(tr("Qt Linguist")));
-   m_ui.actionAbout->setWhatsThis(tr("Display information about %1.").arg(tr("Qt Linguist")));
    m_ui.actionDoneAndNext->setShortcuts(QList<QKeySequence>()
                << QKeySequence("Ctrl+Return") << QKeySequence("Ctrl+Enter"));
 
@@ -2160,16 +2158,16 @@ void MainWindow::fileAboutToShow()
       if (m_dataModel->modelCount() > 1) {
          if (m_currentIndex.model() >= 0) {
             QString fn = QFileInfo(m_dataModel->srcFileName(m_currentIndex.model())).baseName();
-            m_ui.actionSave->setText(tr("&Save '%1'").arg(fn));
-            m_ui.actionSaveAs->setText(tr("Save '%1' &As...").arg(fn));
-            m_ui.actionRelease->setText(tr("Release '%1'").arg(fn));
-            m_ui.actionReleaseAs->setText(tr("Release '%1' As...").arg(fn));
-            m_ui.actionClose->setText(tr("&Close '%1'").arg(fn));
+            m_ui.actionSave->setText(tr("&Save %1").formatArg(fn));
+            m_ui.actionSaveAs->setText(tr("Save %1 &As").formatArg(fn));
+            m_ui.actionRelease->setText(tr("Release %1").formatArg(fn));
+            m_ui.actionReleaseAs->setText(tr("Release %1 As").formatArg(fn));
+            m_ui.actionClose->setText(tr("&Close %1").formatArg(fn));
          } else {
             m_ui.actionSave->setText(tr("&Save"));
-            m_ui.actionSaveAs->setText(tr("Save &As..."));
+            m_ui.actionSaveAs->setText(tr("Save &As"));
             m_ui.actionRelease->setText(tr("Release"));
-            m_ui.actionReleaseAs->setText(tr("Release As..."));
+            m_ui.actionReleaseAs->setText(tr("Release As"));
             m_ui.actionClose->setText(tr("&Close"));
          }
 
@@ -2178,8 +2176,8 @@ void MainWindow::fileAboutToShow()
          m_ui.actionCloseAll->setText(tr("Close All"));
          en = true;
       } else {
-         m_ui.actionSaveAs->setText(tr("Save &As..."));
-         m_ui.actionReleaseAs->setText(tr("Release As..."));
+         m_ui.actionSaveAs->setText(tr("Save &As"));
+         m_ui.actionReleaseAs->setText(tr("Release As"));
 
          m_ui.actionSaveAll->setText(tr("&Save"));
          m_ui.actionReleaseAll->setText(tr("&Release"));
@@ -2200,13 +2198,17 @@ void MainWindow::editAboutToShow()
 
       if (m_currentIndex.model() >= 0 && m_dataModel->modelCount() > 1) {
          QString fn = QFileInfo(m_dataModel->srcFileName(m_currentIndex.model())).baseName();
-         m_ui.actionTranslationFileSettings->setText(tr("Translation File &Settings for '%1'...").arg(fn));
-         m_ui.actionBatchTranslation->setText(tr("&Batch Translation of '%1'...").arg(fn));
-         m_ui.actionSearchAndTranslate->setText(tr("Search And &Translate in '%1'...").arg(fn));
+
+         m_ui.actionSettings->setText(tr("File &Settings for %1").formatArg(fn));
+
+         m_ui.actionBatchTranslate->setText(tr("&Batch Translation of %1").formatArg(fn));
+         m_ui.actionSearchAndTranslate->setText(tr("Search And &Translate in %1").formatArg(fn));
+
       } else {
-         m_ui.actionTranslationFileSettings->setText(tr("Translation File &Settings..."));
-         m_ui.actionBatchTranslation->setText(tr("&Batch Translation..."));
-         m_ui.actionSearchAndTranslate->setText(tr("Search And &Translate..."));
+         m_ui.actionSettings->setText(tr("File &Settings"));
+
+         m_ui.actionBatchTranslate->setText(tr("&Batch Translation"));
+         m_ui.actionSearchAndTranslate->setText(tr("Search And &Translate"));
       }
 
       m_editActiveModel = m_currentIndex.model();
@@ -2459,8 +2461,8 @@ void MainWindow::updateProgress()
    if (! m_dataModel->modelCount()) {
       m_progressLabel->setText("    ");
    } else
-      m_progressLabel->setText(QString(QLatin1String(" %1/%2 "))
-                               .arg(numFinished).arg(numEditable));
+      m_progressLabel->setText(QString(" %1/%2 ").formatArg(numFinished).formatArg(numEditable));
+
    bool enable = numFinished != numEditable;
    m_ui.actionPrevUnfinished->setEnabled(enable);
    m_ui.actionNextUnfinished->setEnabled(enable);

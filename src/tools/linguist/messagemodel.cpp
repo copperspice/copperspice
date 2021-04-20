@@ -210,14 +210,15 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
             err += tr("<p>[more duplicates omitted]");
             break;
          }
-         err += tr("<p>* Context: %1<br>* Source: %2")
-                .arg(Qt::escape(msg.context()), Qt::escape(msg.sourceText()));
-         if (!msg.comment().isEmpty()) {
-            err += tr("<br>* Comment: %3").arg(Qt::escape(msg.comment()));
+
+         err += tr("<p>* Context: %1<br>* Source: %2").formatArgs(msg.context().toHtmlEscaped(), msg.sourceText().toHtmlEscaped());
+
+         if (! msg.comment().isEmpty()) {
+            err += tr("<br>* Comment: %3").formatArg(msg.comment().toHtmlEscaped());
          }
       }
    doWarn:
-      QMessageBox::warning(parent, QObject::tr("Qt Linguist"), err);
+      QMessageBox::warning(parent, QObject::tr("Linguist"), err);
    }
 
    m_srcFileName = fileName;
@@ -290,10 +291,9 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
       *langGuessed = true;
    }
    if (!setLanguageAndCountry(l, c))
-      QMessageBox::warning(parent, QObject::tr("Qt Linguist"),
-                           tr("Linguist does not know the plural rules for '%1'.\n"
-                              "Will assume a single universal form.")
-                           .arg(m_localizedLanguage));
+      QMessageBox::warning(parent, QObject::tr("Linguist"),
+               tr("Linguist does not know the plural rules for %1.\n"
+               "Using a single universal form.").formatArg(m_localizedLanguage));
    // Try to detect the correct source language in the following order
    // 1. Look for the language attribute in the ts
    //   if that fails
@@ -352,8 +352,8 @@ bool DataModel::release(const QString &fileName, bool verbose, bool ignoreUnfini
 {
    QFile file(fileName);
    if (!file.open(QIODevice::WriteOnly)) {
-      QMessageBox::warning(parent, QObject::tr("Qt Linguist"),
-                           tr("Cannot create '%2': %1").arg(file.errorString()).arg(fileName));
+      QMessageBox::warning(parent, QObject::tr("Linguist"),
+                           tr("Unable to create '%2': %1").formatArg(file.errorString()).formatArg(fileName));
       return false;
    }
 
@@ -371,7 +371,7 @@ bool DataModel::release(const QString &fileName, bool verbose, bool ignoreUnfini
 
    bool ok = saveQM(tor, file, cd);
    if (! ok) {
-      QMessageBox::warning(parent, QObject::tr("Qt Linguist"), cd.error());
+      QMessageBox::warning(parent, QObject::tr("Linguist"), cd.error());
    }
    return ok;
 }

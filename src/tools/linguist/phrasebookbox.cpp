@@ -38,7 +38,7 @@ PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
 #define NewPhrase tr("(New Entry)")
 
    setupUi(this);
-   setWindowTitle(tr("%1[*] - Linguist").arg(m_phraseBook->friendlyPhraseBookName()));
+   setWindowTitle(tr("%1[*]").formatArg(m_phraseBook->friendlyPhraseBookName()));
    setWindowModified(m_phraseBook->isModified());
 
    phrMdl = new PhraseModel(this);

@@ -174,8 +174,9 @@ void MessageEditor::messageModelAppended()
    ed.transCommentText = new FormWidget(QString(), true);
    ed.transCommentText->setEditingEnabled(writable);
    ed.transCommentText->setHideWhenEmpty(!writable);
-   ed.transCommentText->setWhatsThis(tr("Here you can enter comments for your own use."
-                                        " They have no effect on the translated applications.") );
+   ed.transCommentText->setWhatsThis(tr("Enter comments for your own records."
+           " They have no effect on the translated applications.") );
+
    ed.transCommentText->getEditor()->installEventFilter(this);
    ed.transCommentText->getEditor()->setVisualizeWhitespace(m_visualizeWhitespace);
 
