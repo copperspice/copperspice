@@ -606,7 +606,8 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
 
       bool langGuessed;
       DataModel *dm = new DataModel(m_dataModel);
-      if (!dm->load(name, &langGuessed, this)) {
+
+      if (! dm->load(fname, &langGuessed, this, waitCursor)) {
          delete dm;
          continue;
       }

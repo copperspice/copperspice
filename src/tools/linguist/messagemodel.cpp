@@ -172,20 +172,32 @@ bool DataModel::isWellMergeable(const DataModel *other) const
    return calcMergeScore(this, other) + calcMergeScore(other, this) > 90;
 }
 
-bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent)
+bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent, bool &waitCursor)
 {
    Translator tor;
    ConversionData cd;
-   bool ok = tor.load(fileName, cd, QLatin1String("auto"));
-   if (!ok) {
-      QMessageBox::warning(parent, QObject::tr("Qt Linguist"), cd.error());
+
+   bool ok = tor.load(fileName, cd, "auto");
+
+   if (! ok) {
+      if (waitCursor) {
+         QApplication::restoreOverrideCursor();
+         waitCursor = false;
+      }
+
+      QMessageBox::warning(parent, QObject::tr("Linguist"), cd.error());
       return false;
    }
 
-   if (!tor.messageCount()) {
-      QMessageBox::warning(parent, QObject::tr("Qt Linguist"),
-                           tr("The translation file '%1' will not be loaded because it is empty.")
-                           .arg(Qt::escape(fileName)));
+   if (! tor.messageCount()) {
+      if (waitCursor) {
+         QApplication::restoreOverrideCursor();
+         waitCursor = false;
+      }
+
+      QMessageBox::warning(parent, QObject::tr("Linguist"),
+               tr("Translation file %1 is empty and will not be loaded.").formatArg(fileName.toHtmlEscaped()));
+
       return false;
    }
 
@@ -217,7 +229,13 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
             err += tr("<br>* Comment: %3").formatArg(msg.comment().toHtmlEscaped());
          }
       }
+
    doWarn:
+      if (waitCursor) {
+         QApplication::restoreOverrideCursor();
+         waitCursor = false;
+      }
+
       QMessageBox::warning(parent, QObject::tr("Linguist"), err);
    }
 
@@ -234,27 +252,27 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
    m_srcChars    = 0;
    m_srcCharsSpc = 0;
 
-   for (const TranslatorMessage & msg : tor.messages()) {
-      if (! contexts.contains(msg.context())) {
-         contexts.insert(msg.context(), m_contextList.size());
-         m_contextList.append(ContextItem(msg.context()));
+   for (const TranslatorMessage &item : tor.messages()) {
+      if (! contexts.contains(item.context())) {
+         contexts.insert(item.context(), m_contextList.size());
+         m_contextList.append(ContextItem(item.context()));
       }
 
-      ContextItem *c = contextItem(contexts.value(msg.context()));
+      ContextItem *subject = getContextItem(contexts.value(item.context()));
 
-      MessageItem tmp(msg);
+      MessageItem msgCargo(item);
 
-      if (msg.type() == TranslatorMessage::Finished) {
-         c->incrementFinishedCount();
+      if (item.type() == TranslatorMessage::Type::Finished) {
+         subject->incrementFinishedCount();
       }
 
-      if (msg.type() != TranslatorMessage::Obsolete) {
-         doCharCounting(tmp.text(), m_srcWords, m_srcChars, m_srcCharsSpc);
-         doCharCounting(tmp.pluralText(), m_srcWords, m_srcChars, m_srcCharsSpc);
-         c->incrementNonobsoleteCount();
+      if (item.type() == TranslatorMessage::Type::Finished || item.type() == TranslatorMessage::Type::Unfinished) {
+         doCharCounting(msgCargo.text(), m_srcWords, m_srcChars, m_srcCharsSpc);
+         doCharCounting(msgCargo.pluralText(), m_srcWords, m_srcChars, m_srcCharsSpc);
+         subject->incrementNonobsoleteCount();
       }
 
-      c->appendMessage(tmp);
+      subject->appendMessage(msgCargo);
       ++m_numMessages;
    }
 
@@ -281,19 +299,31 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
 
       *langGuessed = true;
    }
-   QLocale::Language l;
-   QLocale::Country c;
-   Translator::languageAndCountry(lang, &l, &c);
-   if (l == QLocale::C) {
+
+   QLocale::Language langLocale;
+   QLocale::Country  countryLocale;
+
+   Translator::languageAndCountry(lang, &langLocale, &countryLocale);
+
+   if (langLocale == QLocale::C) {
       QLocale sys;
-      l = sys.language();
-      c = sys.country();
+      langLocale    = sys.language();
+      countryLocale = sys.country();
+
       *langGuessed = true;
    }
-   if (!setLanguageAndCountry(l, c))
+
+   if (! setLanguageAndCountry(langLocale, countryLocale)) {
+      if (waitCursor) {
+         QApplication::restoreOverrideCursor();
+         waitCursor = false;
+      }
+
       QMessageBox::warning(parent, QObject::tr("Linguist"),
                tr("Linguist does not know the plural rules for %1.\n"
                "Using a single universal form.").formatArg(m_localizedLanguage));
+   }
+
    // Try to detect the correct source language in the following order
    // 1. Look for the language attribute in the ts
    //   if that fails
@@ -302,13 +332,14 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
    lang = tor.sourceLanguageCode();
 
    if (lang.isEmpty()) {
-      l = QLocale::C;
-      c = QLocale::AnyCountry;
-   } else {
-      Translator::languageAndCountry(lang, &l, &c);
-   }
-   setSourceLanguageAndCountry(l, c);
+      langLocale    = QLocale::C;
+      countryLocale = QLocale::AnyCountry;
 
+   } else {
+      Translator::languageAndCountry(lang, &langLocale, &countryLocale);
+   }
+
+   setSourceLanguageAndCountry(langLocale, countryLocale);
    setModified(false);
 
    return true;

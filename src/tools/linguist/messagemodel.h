@@ -315,7 +315,9 @@ class DataModel : public QObject
    }
 
    bool isWellMergeable(const DataModel *other) const;
-   bool load(const QString &fileName, bool *langGuessed, QWidget *parent);
+
+   bool load(const QString &fileName, bool *langGuessed, QWidget *parent, bool &waitCursor);
+
    bool save(QWidget *parent) {
       return save(m_srcFileName, parent);
    }
