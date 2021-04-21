@@ -261,7 +261,7 @@ class FocusWatcher : public QObject
 bool FocusWatcher::eventFilter(QObject *, QEvent *event)
 {
    if (event->type() == QEvent::FocusIn) {
-      m_messageEditor->setEditorFocus(-1);
+      m_messageEditor->setEditorFocusModel(-1);
    }
    return false;
 }
@@ -2353,7 +2353,7 @@ void MainWindow::setCurrentMessage(const QModelIndex &index, int model)
 {
    const QModelIndex &theIndex = m_messageModel->index(index.row(), model + 1, index.parent());
    setCurrentMessage(theIndex);
-   m_messageEditor->setEditorFocus(model);
+   m_messageEditor->setEditorFocusModel(model);
 }
 
 QModelIndex MainWindow::currentContextIndex() const

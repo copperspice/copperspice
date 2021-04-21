@@ -65,7 +65,8 @@ class MessageEditor : public QScrollArea
    int activeModel() const {
       return (m_editors.count() != 1) ? m_currentModel : 0;
    }
-   void setEditorFocus(int model);
+
+   void setEditorFocusModel(int model);
    void setUnfinishedEditorFocus();
    bool focusNextUnfinished();
 

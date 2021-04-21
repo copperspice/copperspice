@@ -874,7 +874,7 @@ void MessageEditor::setEditorFocus()
       }
 }
 
-void MessageEditor::setEditorFocus(int model)
+void MessageEditor::setEditorFocusModel(int model)
 {
    if (m_currentModel != model) {
 
