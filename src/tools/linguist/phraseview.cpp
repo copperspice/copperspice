@@ -148,11 +148,11 @@ void PhraseView::editPhrase()
    edit(currentIndex());
 }
 
-static CandidateList similarTextHeuristicCandidates(MultiDataModel *model, int mi,
-      const char *text, int maxCandidates)
+static QList<Candidate> similarTextHeuristicCandidates(MultiDataModel *model, int mi,
+      const QString &text, int maxCandidates)
 {
    QList<int> scores;
-   CandidateList candidates;
+   QList<Candidate> candidates;
 
    StringSimilarityMatcher stringmatcher(text);
 
@@ -217,8 +217,7 @@ void PhraseView::setSourceText(int model, const QString &sourceText)
    m_phraseModel->addPhrase(p);
 
    if (!sourceText.isEmpty() && m_doGuesses) {
-      CandidateList cl = similarTextHeuristicCandidates(m_dataModel, model,
-                         sourceText.toLatin1(), MaxCandidates);
+      QList<Candidate> cl = similarTextHeuristicCandidates(m_dataModel, model, sourceText, MaxCandidates);
       int n = 0;
       for (const Candidate & candidate : cl) {
          QString def;

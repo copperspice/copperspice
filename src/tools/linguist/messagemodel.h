@@ -415,7 +415,8 @@ class DataModel : public QObject
    QLocale::Country m_sourceCountry;
 
    bool m_relativeLocations;
-   Translator::ExtraData m_extra;
+
+   QHash<QString, QString> m_extra;
 
    QString m_localizedLanguage;
    QStringList m_numerusForms;
