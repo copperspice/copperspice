@@ -308,7 +308,7 @@ MainWindow::MainWindow()
    m_contextView->setSortingEnabled(true);
    m_contextView->setWhatsThis(tr("This panel lists the source contexts."));
    m_contextView->setModel(m_sortedContextsModel);
-   m_contextView->header()->setMovable(false);
+   m_contextView->header()->setSectionsMovable(false);
    m_contextView->setColumnHidden(0, true);
    m_contextView->header()->setStretchLastSection(false);
 
@@ -336,7 +336,7 @@ MainWindow::MainWindow()
    m_messageView->setAllColumnsShowFocus(true);
    m_messageView->setItemsExpandable(false);
    m_messageView->setModel(m_sortedMessagesModel);
-   m_messageView->header()->setMovable(false);
+   m_messageView->header()->setSectionsMovable(false);
    m_messageView->setColumnHidden(0, true);
 
    m_messagesDock->setWidget(m_messageView);
@@ -502,8 +502,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::initViewHeaders()
 {
-   m_contextView->header()->setResizeMode(1, QHeaderView::Stretch);
-   m_contextView->header()->setResizeMode(2, QHeaderView::ResizeToContents);
+   m_contextView->header()->setSectionResizeMode(1, QHeaderView::Stretch);
+   m_contextView->header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
    m_messageView->setColumnHidden(2, true);
    // last visible column auto-stretches
 }
@@ -513,10 +513,10 @@ void MainWindow::modelCountChanged()
    int mc = m_dataModel->modelCount();
 
    for (int i = 0; i < mc; ++i) {
-      m_contextView->header()->setResizeMode(i + 1, QHeaderView::Fixed);
+      m_contextView->header()->setSectionResizeMode(i + 1, QHeaderView::Fixed);
       m_contextView->header()->resizeSection(i + 1, 24);
 
-      m_messageView->header()->setResizeMode(i + 1, QHeaderView::Fixed);
+      m_messageView->header()->setSectionResizeMode(i + 1, QHeaderView::Fixed);
       m_messageView->header()->resizeSection(i + 1, 24);
    }
 

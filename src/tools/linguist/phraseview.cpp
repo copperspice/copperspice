@@ -65,8 +65,8 @@ PhraseView::PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase 
       connect(hotKey, &QShortcut::activated, this, [this, id] () { guessShortcut(id); });
    }
 
-   header()->setResizeMode(QHeaderView::Interactive);
-   header()->setClickable(true);
+   header()->setSectionResizeMode(QHeaderView::Interactive);
+   header()->setSectionsClickable(true);
    header()->restoreState(QSettings().value(phraseViewHeaderKey()).toByteArray());
 
    connect(this, &PhraseView::activated, this, &PhraseView::selectPhrase);

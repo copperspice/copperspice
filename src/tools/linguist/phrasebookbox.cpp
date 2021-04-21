@@ -51,7 +51,7 @@ PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
 
    phraseList->setModel(m_sortedPhraseModel);
    phraseList->header()->setDefaultSectionSize(150);
-   phraseList->header()->setResizeMode(QHeaderView::Interactive);
+   phraseList->header()->setSectionResizeMode(QHeaderView::Interactive);
 
    connect(sourceLed,     &QLineEdit::textChanged,      this, &PhraseBookBox::sourceChanged);
    connect(targetLed,     &QLineEdit::textChanged,      this, &PhraseBookBox::targetChanged);
