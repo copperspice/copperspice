@@ -303,7 +303,7 @@ class MainWindow : public QMainWindow
    bool maybeSavePhraseBook(PhraseBook *phraseBook);
    bool maybeSavePhraseBooks();
    QStringList pickTranslationFiles();
-   void showTranslationSettings(int model);
+
    void updateLatestModel(int model);
    void updatePhraseBookActions();
    void updatePhraseDictInternal(int model);
@@ -367,7 +367,7 @@ class MainWindow : public QMainWindow
    int m_hitCount;
 
    BatchTranslationDialog *m_batchTranslateDialog;
-   TranslationSettingsDialog *m_translationSettingsDialog;
+   SettingsDialog *m_settingsDialog;
 
    bool m_settingCurrentMessage;
    int m_fileActiveModel;

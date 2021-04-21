@@ -76,7 +76,7 @@ class PhraseBookBox : public QDialog, public Ui::PhraseBookBox
    PhraseBook *m_phraseBook;
    PhraseModel *phrMdl;
    QSortFilterProxyModel *m_sortedPhraseModel;
-   TranslationSettingsDialog *m_translationSettingsDialog;
+   SettingsDialog *m_settingsDialog;
 };
 
 #endif

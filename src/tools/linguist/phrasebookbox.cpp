@@ -31,7 +31,7 @@
 #include <qsortfilterproxymodel.h>
 
 PhraseBookBox::PhraseBookBox(PhraseBook *phraseBook, QWidget *parent)
-   : QDialog(parent), m_phraseBook(phraseBook), m_translationSettingsDialog(0)
+   : QDialog(parent), m_phraseBook(phraseBook), m_settingsDialog(nullptr)
 {
 
 // definition needs to be within class context for lupdate to find it
@@ -116,11 +116,12 @@ void PhraseBookBox::removePhrase()
 
 void PhraseBookBox::settings()
 {
-   if (!m_translationSettingsDialog) {
-      m_translationSettingsDialog = new TranslationSettingsDialog(this);
+   if (! m_settingsDialog) {
+      m_settingsDialog = new SettingsDialog(this);
    }
-   m_translationSettingsDialog->setPhraseBook(m_phraseBook);
-   m_translationSettingsDialog->exec();
+
+   m_settingsDialog->setPhraseBook(m_phraseBook);
+   m_settingsDialog->exec();
 }
 
 void PhraseBookBox::save()

@@ -688,17 +688,19 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
       }
    }
 
-   for (const OpenedFile & op : opened) {
-      if (op.langGuessed) {
+   for (const OpenedFile &item : opened) {
+      if (item.langGuessed) {
          if (waitCursor) {
             QApplication::restoreOverrideCursor();
             waitCursor = false;
          }
-         if (!m_translationSettingsDialog) {
-            m_translationSettingsDialog = new TranslationSettingsDialog(this);
+
+         if (! m_settingsDialog) {
+            m_settingsDialog = new SettingsDialog(this);
          }
-         m_translationSettingsDialog->setDataModel(op.dataModel);
-         m_translationSettingsDialog->exec();
+
+         m_settingsDialog->setDataModel(item.dataModel);
+         m_settingsDialog->exec();
       }
    }
 
@@ -1259,11 +1261,12 @@ void MainWindow::newPhraseBook()
 
    if (!name.isEmpty()) {
       PhraseBook pb;
-      if (!m_translationSettingsDialog) {
-         m_translationSettingsDialog = new TranslationSettingsDialog(this);
+      if (! m_settingsDialog) {
+         m_settingsDialog = new SettingsDialog(this);
       }
-      m_translationSettingsDialog->setPhraseBook(&pb);
-      if (!m_translationSettingsDialog->exec()) {
+
+      m_settingsDialog->setPhraseBook(&pb);
+      if (!m_settingsDialog->exec()) {
          return;
       }
 
@@ -2375,11 +2378,12 @@ PhraseBook *MainWindow::openPhraseBook(const QString &name)
    }
 
    if (langGuessed) {
-      if (!m_translationSettingsDialog) {
-         m_translationSettingsDialog = new TranslationSettingsDialog(this);
+      if (! m_settingsDialog) {
+         m_settingsDialog = new SettingsDialog(this);
       }
-      m_translationSettingsDialog->setPhraseBook(pb);
-      m_translationSettingsDialog->exec();
+
+      m_settingsDialog->setPhraseBook(pb);
+      m_settingsDialog->exec();
    }
 
    m_phraseBooks.append(pb);
@@ -2861,18 +2865,14 @@ void MainWindow::updateStatistics()
    m_dataModel->model(m_currentIndex.model())->updateStatistics();
 }
 
-void MainWindow::showTranslationSettings(int model)
+void MainWindow::settingsDialog(std::optional<int> model)
 {
-   if (!m_translationSettingsDialog) {
-      m_translationSettingsDialog = new TranslationSettingsDialog(this);
+   if (! m_settingsDialog) {
+      m_settingsDialog = new SettingsDialog(this);
    }
-   m_translationSettingsDialog->setDataModel(m_dataModel->model(model));
-   m_translationSettingsDialog->exec();
-}
 
-void MainWindow::showTranslationSettings()
-{
-   showTranslationSettings(m_currentIndex.model());
+   m_settingsDialog->setDataModel(m_dataModel->model(model.value_or(m_currentIndex.model())));
+   m_settingsDialog->exec();
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
