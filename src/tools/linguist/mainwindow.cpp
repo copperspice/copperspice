@@ -1028,9 +1028,9 @@ void MainWindow::print()
    }
 }
 
-bool MainWindow::searchItem(const QString &searchWhat)
+bool MainWindow::searchItem(DataModel::FindLocation where, const QString &searchWhat)
 {
-   if ((m_findWhere & m_foundWhere) == 0) {
+   if ((m_findWhere & where) == 0) {
       return false;
    }
 
@@ -1060,50 +1060,51 @@ void MainWindow::findAgain()
       bool hadMessage = false;
 
       for (int i = 0; i < m_dataModel->modelCount(); ++i) {
-         if (MessageItem *m = m_dataModel->messageItem(dataIndex, i)) {
-            if (hadMessage) {
-               m_foundWhere = DataModel::Translations;
-               if (!searchItem(m->translation())) {
-                  m_foundWhere = DataModel::NoLocation;
+         MessageItem *msgCargo = m_dataModel->getMessageItem(dataIndex, i);
+
+         if (msgCargo != nullptr) {
+            if (m_findSkipObsolete && msgCargo->isObsolete()) {
+               continue;
+            }
+
+            bool found   = true;
+            bool bypass = false;
+
+            if (! hadMessage) {
+               if (searchItem(DataModel::SourceText, msgCargo->text())) {
+                  break;
                }
-            } else {
-               switch (m_foundWhere) {
-                  case 0:
-                     m_foundWhere = DataModel::SourceText;
-                     [[fallthrough]];
 
-                  case DataModel::SourceText:
-                     if (searchItem(m->text())) {
-                        break;
-                     }
-                     if (searchItem(m->pluralText())) {
-                        break;
-                     }
-                     m_foundWhere = DataModel::Translations;
-                     [[fallthrough]];
+               if (searchItem(DataModel::SourceText, msgCargo->pluralText())) {
+                  break;
+               }
 
-                  case DataModel::Translations:
-                     if (searchItem(m->translation())) {
-                        break;
-                     }
-                     m_foundWhere = DataModel::Comments;
-                     [[fallthrough]];
+               if (searchItem(DataModel::Comments, msgCargo->comment())) {
+                  break;
+               }
 
-                  case DataModel::Comments:
-                     if (searchItem(m->comment())) {
-                        break;
-                     }
-                     if (searchItem(m->extraComment())) {
-                        break;
-                     }
-                     if (searchItem(m->translatorComment())) {
-                        break;
-                     }
-                     m_foundWhere = DataModel::NoLocation;
-                     // did not find the search string in this message
+               if (searchItem(DataModel::Comments, msgCargo->extraComment())) {
+                  break;
                }
             }
-            if (m_foundWhere != DataModel::NoLocation) {
+
+            for (const QString &trans : msgCargo->translations()) {
+               if (searchItem(DataModel::Translations, trans)) {
+                  bypass = true;
+                  break;
+               }
+            }
+
+            if (! bypass) {
+               if (searchItem(DataModel::Comments, msgCargo->translatorComment())) {
+                  break;
+               }
+
+               // did not find the search string in this message
+               found = false;
+            }
+
+            if (found) {
                setCurrentMessage(realIndex, i);
 
                // determine whether the search wrapped

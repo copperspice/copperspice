@@ -315,7 +315,7 @@ class MainWindow : public QMainWindow
    // may want to move to DataModel
    void updateDanger(const MultiDataIndex &index, bool verbose);
 
-   bool searchItem(const QString &searchWhat);
+   bool searchItem(DataModel::FindLocation where, const QString &searchWhat);
 
    QProcess  *m_assistantProcess;
    QTreeView *m_contextView;
@@ -356,8 +356,9 @@ class MainWindow : public QMainWindow
    QString m_findText;
    Qt::CaseSensitivity m_findMatchCase;
    bool m_findIgnoreAccelerators;
+   bool m_findSkipObsolete;
+
    DataModel::FindLocation m_findWhere;
-   DataModel::FindLocation m_foundWhere;
 
    TranslateDialog *m_translateDialog;
    QString m_latestFindText;
