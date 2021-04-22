@@ -778,7 +778,7 @@ void MultiDataModel::append(DataModel *dm, bool readWrite)
    m_dataModels.append(dm);
 
    for (int j = 0; j < contextCount(); ++j) {
-      m_msgModel->beginInsertColumns(m_msgModel->createIndex(j, 0, 0), insCol, insCol);
+      m_msgModel->beginInsertColumns(m_msgModel->createIndex(j, 0), insCol, insCol);
       m_multiContextList[j].appendEmptyModel();
       m_msgModel->endInsertColumns();
    }
@@ -804,8 +804,8 @@ void MultiDataModel::append(DataModel *dm, bool readWrite)
          }
          if (!appendItems.isEmpty()) {
             int msgCnt = mc->messageCount();
-            m_msgModel->beginInsertRows(m_msgModel->createIndex(mcx, 0, 0),
-                                        msgCnt, msgCnt + appendItems.size() - 1);
+            m_msgModel->beginInsertRows(m_msgModel->createIndex(mcx, 0), msgCnt, msgCnt + appendItems.size() - 1);
+
             mc->appendMessageItems(appendItems);
             m_msgModel->endInsertRows();
             m_numMessages += appendItems.size();
@@ -845,7 +845,7 @@ void MultiDataModel::close(int model)
       m_msgModel->beginRemoveColumns(QModelIndex(), delCol, delCol);
 
       for (int i = m_multiContextList.size(); --i >= 0;) {
-         m_msgModel->beginRemoveColumns(m_msgModel->createIndex(i, 0, 0), delCol, delCol);
+         m_msgModel->beginRemoveColumns(m_msgModel->createIndex(i, 0), delCol, delCol);
          m_multiContextList[i].removeModel(model);
          m_msgModel->endRemoveColumns();
       }
@@ -1327,7 +1327,7 @@ MessageModel::MessageModel(QObject *parent, MultiDataModel *data)
 QModelIndex MessageModel::index(int row, int column, const QModelIndex &parent) const
 {
    if (! parent.isValid()) {
-      return createIndex(row, column, 0);
+      return createIndex(row, column);
    }
    if (!parent.internalId()) {
       return createIndex(row, column, parent.row() + 1);
@@ -1339,20 +1339,21 @@ QModelIndex MessageModel::index(int row, int column, const QModelIndex &parent) 
 QModelIndex MessageModel::parent(const QModelIndex &index) const
 {
    if (index.internalId()) {
-      return createIndex(index.internalId() - 1, 0, 0);
+      return createIndex(index.internalId() - 1, 0);
    }
+
    return QModelIndex();
 }
 
 void MessageModel::multiContextItemChanged(const MultiDataIndex &index)
 {
-   QModelIndex idx = createIndex(index.context(), m_data->modelCount() + 2, 0);
+   QModelIndex idx = createIndex(index.context(), m_data->modelCount() + 2);
    emit dataChanged(idx, idx);
 }
 
 void MessageModel::contextItemChanged(const MultiDataIndex &index)
 {
-   QModelIndex idx = createIndex(index.context(), index.model() + 1, 0);
+   QModelIndex idx = createIndex(index.context(), index.model() + 1);
    emit dataChanged(idx, idx);
 }
 
@@ -1366,7 +1367,7 @@ QModelIndex MessageModel::modelIndex(const MultiDataIndex &index)
 {
    if (index.message() < 0) {
       // Should be unused case
-      return createIndex(index.context(), index.model() + 1, 0);
+      return createIndex(index.context(), index.model() + 1);
    }
 
    return createIndex(index.message(), index.model() + 1, index.context() + 1);
