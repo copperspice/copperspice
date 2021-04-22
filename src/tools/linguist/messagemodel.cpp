@@ -877,13 +877,16 @@ void MultiDataModel::close(int model)
 
 void MultiDataModel::closeAll()
 {
+   m_msgModel->beginResetModel();
    m_numFinished = 0;
    m_numEditable = 0;
    m_numMessages = 0;
+
    qDeleteAll(m_dataModels);
+
    m_dataModels.clear();
    m_multiContextList.clear();
-   m_msgModel->reset();
+   m_msgModel->endResetModel();
 
    emit allModelsDeleted();
    onModifiedChanged();
@@ -1329,7 +1332,8 @@ QModelIndex MessageModel::index(int row, int column, const QModelIndex &parent) 
    if (! parent.isValid()) {
       return createIndex(row, column);
    }
-   if (!parent.internalId()) {
+
+   if (! parent.internalId()) {
       return createIndex(row, column, parent.row() + 1);
    }
 
@@ -1388,9 +1392,13 @@ int MessageModel::rowCount(const QModelIndex &parent) const
    return 0;
 }
 
-int MessageModel::columnCount(const QModelIndex &) const
+int MessageModel::columnCount(const QModelIndex &parent) const
 {
-   return m_data->modelCount() + 3;
+   if (! parent.isValid())  {
+      return m_data->modelCount() + 3;
+   }
+
+   return m_data->modelCount() + 2;
 }
 
 QVariant MessageModel::data(const QModelIndex &index, int role) const

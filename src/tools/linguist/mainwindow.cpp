@@ -1150,7 +1150,7 @@ void MainWindow::findAgain()
    QMessageBox::warning(m_findDialog, tr("Linguist"), tr("Unable to find the string '%1'.").formatArg(m_findText));
 }
 
-void MainWindow::showBatchTranslateDialog()
+void MainWindow::batchTranslateDialog()
 {
    m_messageModel->blockSignals(true);
    m_batchTranslateDialog->setPhraseBooks(m_phraseBooks, m_currentIndex.model());
@@ -1162,7 +1162,7 @@ void MainWindow::showBatchTranslateDialog()
    // else signal finished() calls refreshItemViews()
 }
 
-void MainWindow::showTranslateDialog()
+void MainWindow::searchTranslateDialog()
 {
    m_latestCaseSensitivity = -1;
    QModelIndex idx = m_messageView->currentIndex();
@@ -1305,7 +1305,7 @@ bool MainWindow::isPhraseBookOpen(const QString &name)
    return false;
 }
 
-void MainWindow::openPhraseBook()
+void MainWindow::selectPhraseBook()
 {
    QString name = QFileDialog::getOpenFileName(this, tr("Select Phrase Book"),
                   m_phraseBookDir, tr("Phrase books (*.qph);;All files (*)"));
@@ -1891,7 +1891,7 @@ void MainWindow::prevUnfinished()
    }
 }
 
-bool MainWindow::prev(bool checkUnfinished)
+bool MainWindow::previous(bool checkUnfinished)
 {
    QModelIndex index = prevMessage(m_messageView->currentIndex(), checkUnfinished);
 
@@ -1925,7 +1925,7 @@ bool MainWindow::next(bool checkUnfinished)
    return index.isValid();
 }
 
-void MainWindow::findNext(const QString &text, DataModel::FindLocation where, bool matchCase, bool ignoreAccelerators)
+void MainWindow::findNext(const QString &text, DataModel::FindLocation where, bool matchCase, bool ignoreAccelerators, bool skipObsolete)
 {
    if (text.isEmpty()) {
       return;
@@ -1935,7 +1935,9 @@ void MainWindow::findNext(const QString &text, DataModel::FindLocation where, bo
    m_findWhere = where;
    m_findMatchCase = matchCase ? Qt::CaseSensitive : Qt::CaseInsensitive;
    m_findIgnoreAccelerators = ignoreAccelerators;
+   m_findSkipObsolete = skipObsolete;
    m_ui.actionFindNext->setEnabled(true);
+
    findAgain();
 }
 
@@ -1953,12 +1955,16 @@ void MainWindow::revalidate()
 QString MainWindow::friendlyString(const QString &str)
 {
    QString f = str.toLower();
-   f.replace(QRegExp(QString(QLatin1String("[.,:;!?()-]"))), QString(QLatin1String(" ")));
-   f.remove(QLatin1Char('&'));
+
+   QRegularExpression regexp("[.,:;!?()-]");
+
+   f.replace(regexp, " ");
+   f.remove('&');
+
    return f.simplified();
 }
 
-static inline void setThemeIcon(QAction *action, const char *name, const char *fallback)
+static inline void setThemeIcon(QAction *action, const QString &name, const QString &fallback)
 {
    const QIcon fallbackIcon(MainWindow::resourcePrefix() + fallback);
 
@@ -2127,7 +2133,7 @@ void MainWindow::updateActiveModel(int model)
 }
 
 // using this method implies that the messageEditor does not have focus
-void MainWindow::updateLatestModel(const QModelIndex &index)
+void MainWindow::updateModelIndex(const QModelIndex &index)
 {
    if (index.column() && (index.column() - 1 < m_dataModel->modelCount())) {
       updateLatestModel(index.column() - 1);
@@ -2311,7 +2317,7 @@ void MainWindow::setupToolBars()
    filet->addAction(m_ui.actionSaveAll);
    filet->addAction(m_ui.actionPrint);
    filet->addSeparator();
-   filet->addAction(m_ui.actionOpenPhraseBook);
+   filet->addAction(m_ui.actionSelectPhraseBook);
 
    editt->addAction(m_ui.actionUndo);
    editt->addAction(m_ui.actionRedo);

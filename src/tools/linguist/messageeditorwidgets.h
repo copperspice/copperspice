@@ -175,7 +175,7 @@ class FormMultiWidget : public QWidget
  private:
    void addEditor(int idx);
    void updateLayout();
-   QAbstractButton *makeButton(const QIcon &icon, const char *slot);
+   QAbstractButton *makeButton(const QIcon &icon, const QString &slotMethod);
    void insertEditor(int idx);
    void deleteEditor(int idx);
 

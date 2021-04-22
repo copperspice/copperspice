@@ -28,8 +28,9 @@ void PhraseModel::removePhrases()
    int r = plist.count();
 
    if (r > 0) {
+      beginResetModel();
       plist.clear();
-      reset();
+      endResetModel();
    }
 }
 

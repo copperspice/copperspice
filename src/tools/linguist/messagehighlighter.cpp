@@ -26,7 +26,7 @@
 #include <qtextstream.h>
 
 MessageHighlighter::MessageHighlighter(QTextEdit *textEdit)
-   : QSyntaxHighlighter(textEdit)
+   : QSyntaxHighlighter(textEdit->document())
 {
    QTextCharFormat entityFormat;
    entityFormat.setForeground(Qt::red);
