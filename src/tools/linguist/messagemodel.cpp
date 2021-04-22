@@ -670,6 +670,18 @@ int MultiContextItem::findMessage(const QString &sourcetext, const QString &comm
    return -1;
 }
 
+int MultiContextItem::findMessageById(const QString &id) const
+{
+    for (int i = 0, cnt = messageCount(); i < cnt; ++i) {
+        MultiMessageItem *mm = multiMessageItem(i);
+
+        if (mm->id() == id) {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 static const uchar paletteRGBs[7][3] = {
    { 236, 244, 255 }, // blue

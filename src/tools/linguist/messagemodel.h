@@ -55,6 +55,10 @@ class MessageItem
       m_message.setTranslation(translation);
    }
 
+   QString id() const {
+      return m_message.id();
+   }
+
    QString context() const {
       return m_message.context();
    }
@@ -427,6 +431,11 @@ struct MultiMessageItem
 {
  public:
    MultiMessageItem(const MessageItem *m);
+
+   QString id() const {
+      return m_id;
+   }
+
    QString text() const {
       return m_text;
    }
@@ -497,6 +506,7 @@ struct MultiMessageItem
       --m_unfinishedCount;
    }
 
+   QString m_id;
    QString m_text;
    QString m_pluralText;
    QString m_comment;
@@ -526,6 +536,7 @@ struct MultiContextItem
 
    int firstNonobsoleteMessageIndex(int msgIdx) const;
    int findMessage(const QString &sourcetext, const QString &comment) const;
+   int findMessageById(const QString &id) const;
 
    QString context() const {
       return m_context;
