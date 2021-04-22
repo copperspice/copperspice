@@ -727,7 +727,7 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
       totalCount += item.dataModel->messageCount();
    }
 
-   statusBar()->showMessage(tr("%n translation unit(s) loaded.", 0, totalCount), MessageMS);
+   statusBar()->showMessage(tr("%n translation unit(s) loaded.", nullptr, totalCount), MessageMS);
    modelCountChanged();
    recentFiles().addFiles(m_dataModel->srcFileNames());
 
@@ -903,7 +903,7 @@ void MainWindow::releaseAs()
                  tr("Message files for released applications (*.qm)\nAll files (*)"));
 
    if (!newFilename.isEmpty()) {
-      if (m_dataModel->release(m_currentIndex.model(), newFilename, false, false, SaveEverything, this)) {
+      if (m_dataModel->release(m_currentIndex.model(), newFilename, false, false, TranslatorMessage::SaveMode::Everything, this)) {
          statusBar()->showMessage(tr("File created."), MessageMS);
       }
    }
@@ -915,7 +915,7 @@ void MainWindow::releaseInternal(int model)
    QString newFilename = oldFile.path() + '/' + oldFile.completeBaseName() + ".qm";
 
    if (! newFilename.isEmpty()) {
-      if (m_dataModel->release(model, newFilename, false, false, SaveEverything, this)) {
+      if (m_dataModel->release(model, newFilename, false, false, TranslatorMessage::SaveMode::Everything, this)) {
          statusBar()->showMessage(tr("File created."), MessageMS);
       }
    }
@@ -1228,8 +1228,10 @@ void MainWindow::translate(int mode)
       int prevRemained = m_remainingCount;
 
       while (true) {
-         if (--m_remainingCount <= 0) {
-            if (!m_hitCount) {
+         --m_remainingCount;
+
+         if (m_remainingCount <= 0) {
+            if (! m_hitCount) {
                break;
             }
 
@@ -2193,6 +2195,7 @@ void MainWindow::fileAboutToShow()
          m_ui.actionReleaseAll->setText(tr("&Release All"));
          m_ui.actionCloseAll->setText(tr("Close All"));
          en = true;
+
       } else {
          m_ui.actionSaveAs->setText(tr("Save &As"));
          m_ui.actionReleaseAs->setText(tr("Release As"));
@@ -2457,6 +2460,7 @@ bool MainWindow::maybeSavePhraseBook(PhraseBook *pb)
          case QMessageBox::No:
             break;
       }
+   }
 
    return true;
 }
@@ -2494,8 +2498,10 @@ void MainWindow::updateProgress()
 void MainWindow::updatePhraseBookActions()
 {
    bool phraseBookLoaded = (m_currentIndex.model() >= 0) && !m_phraseBooks.isEmpty();
-   m_ui.actionBatchTranslation->setEnabled(m_dataModel->contextCount() > 0 && phraseBookLoaded
-                                           && m_dataModel->isModelWritable(m_currentIndex.model()));
+
+   m_ui.actionBatchTranslate->setEnabled(m_dataModel->contextCount() > 0 && phraseBookLoaded
+               && m_dataModel->isModelWritable(m_currentIndex.model()));
+
    m_ui.actionAddToPhraseBook->setEnabled(currentMessageIndex().isValid() && phraseBookLoaded);
 }
 
@@ -2521,8 +2527,9 @@ void MainWindow::updatePhraseDictInternal(int model)
          QString f = friendlyString(p->source());
 
          if (f.length() > 0) {
-            f = f.split(QLatin1Char(' ')).first();
-            if (!pd.contains(f)) {
+            f = f.split(' ').first();
+
+            if (! pd.contains(f)) {
                pd.insert(f, QList<Phrase *>());
             }
 
@@ -2645,10 +2652,17 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
          }
 
          if (m_ui.actionEndingPunctuation->isChecked()) {
-            bool endingok = true;
-            for (int i = 0; i < translations.count() && endingok; ++i) {
-               endingok &= (ending(source, m_dataModel->sourceLanguage(mi)) ==
-                            ending(translations[i], m_dataModel->language(mi)));
+            bool endingOk = true;
+
+            for (int i = 0; i < translations.count(); ++i) {
+
+               bool a = ending(source, m_dataModel->sourceLanguage(mi));
+               bool b = ending(translations[i], m_dataModel->language(mi));
+
+                if (a != b) {
+                   endingOk = false;
+                   break;
+                }
             }
 
             if (! endingOk) {

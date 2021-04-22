@@ -379,7 +379,7 @@ bool DataModel::saveAs(const QString &newFileName, QWidget *parent)
 }
 
 bool DataModel::release(const QString &fileName, bool verbose, bool ignoreUnfinished,
-                        TranslatorSaveMode mode, QWidget *parent)
+                        TranslatorMessage::SaveMode mode, QWidget *parent)
 {
    QFile file(fileName);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -546,14 +546,9 @@ MessageItem *DataModelIterator::current() const
    return m_model->messageItem(*this);
 }
 
-MultiMessageItem::MultiMessageItem(const MessageItem *m)
-   : m_text(m->text()),
-     m_pluralText(m->pluralText()),
-     m_comment(m->comment()),
-     m_nonnullCount(0),
-     m_nonobsoleteCount(0),
-     m_editableCount(0),
-     m_unfinishedCount(0)
+MultiMessageItem::MultiMessageItem(const MessageItem *msgCargo)
+   : m_id(msgCargo->id()), m_text(msgCargo->text()), m_pluralText(msgCargo->pluralText()), m_comment(msgCargo->comment()),
+     m_nonnullCount(0), m_nonobsoleteCount(0), m_editableCount(0), m_unfinishedCount(0)
 {
 }
 
@@ -665,8 +660,9 @@ int MultiContextItem::firstNonobsoleteMessageIndex(int msgIdx) const
 int MultiContextItem::findMessage(const QString &sourcetext, const QString &comment) const
 {
    for (int i = 0, cnt = messageCount(); i < cnt; ++i) {
-      MultiMessageItem *m = multiMessageItem(i);
-      if (m->text() == sourcetext && m->comment() == comment) {
+      MultiMessageItem *mm = multiMessageItem(i);
+
+      if (mm->text() == sourcetext && mm->comment() == comment) {
          return i;
       }
    }
@@ -742,12 +738,16 @@ bool MultiDataModel::isWellMergeable(const DataModel *dm) const
 
    int newRatio  = inBothNew * 100 / dm->messageCount();
    int inBothOld = 0;
-   for (int k = 0; k < contextCount(); ++k) {
-      MultiContextItem *mc = multiContextItem(k);
-      if (ContextItem *c = dm->findContext(mc->context())) {
+
+   for (int index = 0; index < contextCount(); ++index) {
+      MultiContextItem *mc = multiContextItem(index);
+
+      if (ContextItem *subject = dm->findContext(mc->context())) {
+
          for (int j = 0; j < mc->messageCount(); ++j) {
-            MultiMessageItem *m = mc->multiMessageItem(j);
-            if (c->findMessage(m->text(), m->comment())) {
+            MultiMessageItem *mm = mc->multiMessageItem(j);
+
+            if (subject->findMessage(mm->text(), mm->comment()) != nullptr) {
                ++inBothOld;
             }
          }
@@ -982,10 +982,20 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
 
 QStringList MultiDataModel::srcFileNames(bool pretty) const
 {
-   QStringList names;
-   for (DataModel * dm : m_dataModels)
-   names << (dm->isWritable() ? QString() : QString::fromLatin1("=")) + dm->srcFileName(pretty);
-   return names;
+   QStringList retval;
+
+   for (DataModel *item : m_dataModels) {
+
+      if (item->isWritable()) {
+          retval.append(item->srcFileName(pretty));
+
+      } else {
+         retval.append("=" + item->srcFileName(pretty));
+
+      }
+   }
+
+   return retval;
 }
 
 QString MultiDataModel::condensedSrcFileNames(bool pretty) const
@@ -1097,7 +1107,8 @@ void MultiDataModel::setFinished(const MultiDataIndex &index, bool finished)
    if (type == TranslatorMessage::Unfinished && finished) {
       m->setType(TranslatorMessage::Finished);
       mm->decrementUnfinishedCount();
-      if (!mm->countUnfinished()) {
+
+      if (! mm->countUnfinished()) {
          incrementFinishedCount();
          mc->incrementFinishedCount();
          emit multiContextDataChanged(index);
@@ -1178,34 +1189,44 @@ void MultiDataModel::updateCountsOnAdd(int model, bool writable)
 {
    for (int i = 0; i < m_multiContextList.size(); ++i) {
       MultiContextItem &mc = m_multiContextList[i];
-      for (int j = 0; j < mc.messageCount(); ++j)
-         if (MessageItem *m = mc.messageItem(model, j)) {
+
+      for (int j = 0; j < mc.messageCount(); ++j) {
+         MessageItem *msgCargo = mc.messageItem(model, j);
+
+         if (msgCargo != nullptr) {
             MultiMessageItem *mm = mc.multiMessageItem(j);
             mm->incrementNonnullCount();
-            if (!m->isObsolete()) {
+
+            if (! msgCargo->isObsolete()) {
                if (writable) {
-                  if (!mm->countEditable()) {
+                  if (! mm->countEditable()) {
                      mc.incrementEditableCount();
                      incrementEditableCount();
-                     if (m->isFinished()) {
+
+                     if (msgCargo->isFinished()) {
                         mc.incrementFinishedCount();
                         incrementFinishedCount();
+
                      } else {
                         mm->incrementUnfinishedCount();
                      }
-                  } else if (!m->isFinished()) {
-                     if (!mm->isUnfinished()) {
+
+                  } else if (! msgCargo->isFinished()) {
+                     if (! mm->isUnfinished()) {
                         mc.decrementFinishedCount();
                         decrementFinishedCount();
                      }
+
                      mm->incrementUnfinishedCount();
                   }
                   mm->incrementEditableCount();
                }
+
                mc.incrementNonobsoleteCount();
                mm->incrementNonobsoleteCount();
             }
          }
+      }
    }
 }
 
@@ -1213,27 +1234,36 @@ void MultiDataModel::updateCountsOnRemove(int model, bool writable)
 {
    for (int i = 0; i < m_multiContextList.size(); ++i) {
       MultiContextItem &mc = m_multiContextList[i];
-      for (int j = 0; j < mc.messageCount(); ++j)
-         if (MessageItem *m = mc.messageItem(model, j)) {
+
+      for (int j = 0; j < mc.messageCount(); ++j) {
+         MessageItem *msgCargo = mc.messageItem(model, j);
+
+         if (msgCargo != nullptr) {
             MultiMessageItem *mm = mc.multiMessageItem(j);
             mm->decrementNonnullCount();
-            if (!m->isObsolete()) {
+
+            if (! msgCargo->isObsolete()) {
                mm->decrementNonobsoleteCount();
                mc.decrementNonobsoleteCount();
+
                if (writable) {
                   mm->decrementEditableCount();
-                  if (!mm->countEditable()) {
+
+                  if (! mm->countEditable()) {
                      mc.decrementEditableCount();
                      decrementEditableCount();
-                     if (m->isFinished()) {
+
+                     if (msgCargo->isFinished()) {
                         mc.decrementFinishedCount();
                         decrementFinishedCount();
                      } else {
                         mm->decrementUnfinishedCount();
                      }
-                  } else if (!m->isFinished()) {
+
+                  } else if (! msgCargo->isFinished()) {
                      mm->decrementUnfinishedCount();
-                     if (!mm->isUnfinished()) {
+
+                     if (! mm->isUnfinished()) {
                         mc.incrementFinishedCount();
                         incrementFinishedCount();
                      }
@@ -1241,6 +1271,7 @@ void MultiDataModel::updateCountsOnRemove(int model, bool writable)
                }
             }
          }
+      }
    }
 }
 

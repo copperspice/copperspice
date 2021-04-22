@@ -138,7 +138,7 @@ void PhraseView::selectPhrase(const QModelIndex &index)
    emit phraseSelected(m_modelIndex, m_phraseModel->phrase(index)->target());
 }
 
-void PhraseView::selectPhrase()
+void PhraseView::selectCurrentPhrase()
 {
    emit phraseSelected(m_modelIndex, m_phraseModel->phrase(currentIndex())->target());
 }
@@ -175,6 +175,9 @@ static QList<Candidate> similarTextHeuristicCandidates(MultiDataModel *model, in
       if (candidates.count() == maxCandidates && score > scores[maxCandidates - 1]) {
          candidates.removeLast();
       }
+
+      bool done = false;
+
       if (candidates.count() < maxCandidates && score >= textSimilarityThreshold ) {
          Candidate cand(s, mtm.translation());
 
@@ -184,7 +187,8 @@ static QList<Candidate> similarTextHeuristicCandidates(MultiDataModel *model, in
 
                if (score == scores.at(i)) {
                   if (candidates.at(i) == cand) {
-                     goto continue_outer_loop;
+                     done = true;
+                     break;
                   }
 
                } else {
@@ -192,11 +196,14 @@ static QList<Candidate> similarTextHeuristicCandidates(MultiDataModel *model, in
                }
             }
          }
+
+         if (done) {
+            continue;
+         }
+
          scores.insert(i, score);
          candidates.insert(i, cand);
       }
-   continue_outer_loop:
-      ;
    }
 
    return candidates;
@@ -216,14 +223,15 @@ void PhraseView::setSourceText(int model, const QString &sourceText)
    for (Phrase * p : getPhrases(model, sourceText))
    m_phraseModel->addPhrase(p);
 
-   if (!sourceText.isEmpty() && m_doGuesses) {
+   if (! sourceText.isEmpty() && m_doGuesses) {
       QList<Candidate> cl = similarTextHeuristicCandidates(m_dataModel, model, sourceText, MaxCandidates);
+
       int n = 0;
       for (const Candidate &item : cl) {
          QString def;
 
          if (n < 9) {
-            def = tr("Guess (%1)").arg(QString(QKeySequence(Qt::CTRL | (Qt::Key_0 + (n + 1)))));
+            def = tr("Guess (%1)").formatArg( QKeySequence(Qt::CTRL | (Qt::Key_0 + (n + 1))).toString() );
          } else {
             def = tr("Guess");
          }

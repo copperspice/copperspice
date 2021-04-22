@@ -264,9 +264,8 @@ class DataModelIterator : public DataIndex
    void operator++();
 
  private:
-   DataModel *m_model; // not owned
+   DataModel *m_model;        // not owned
 };
-
 
 class DataModel : public QObject
 {
@@ -323,8 +322,9 @@ class DataModel : public QObject
    }
 
    bool saveAs(const QString &newFileName, QWidget *parent);
-   bool release(const QString &fileName, bool verbose,
-                bool ignoreUnfinished, TranslatorSaveMode mode, QWidget *parent);
+   bool release(const QString &fileName, bool verbose, bool ignoreUnfinished,
+            TranslatorMessage::SaveMode mode, QWidget *parent);
+
    QString srcFileName(bool pretty = false) const {
       return pretty ? prettifyPlainFileName(m_srcFileName) : m_srcFileName;
    }
@@ -658,7 +658,7 @@ class MultiDataModelIterator : public MultiDataIndex
    void operator++();
 
  private:
-   MultiDataModel *m_dataModel; // not owned
+   MultiDataModel *m_dataModel;  // not owned
 };
 
 class MultiDataModel : public QObject
@@ -679,8 +679,10 @@ class MultiDataModel : public QObject
    bool saveAs(int model, const QString &newFileName, QWidget *parent) {
       return m_dataModels[model]->saveAs(newFileName, parent);
    }
-   bool release(int model, const QString &fileName, bool verbose, bool ignoreUnfinished, TranslatorSaveMode mode,
-                QWidget *parent) {
+
+   bool release(int model, const QString &fileName, bool verbose, bool ignoreUnfinished,
+               TranslatorMessage::SaveMode mode, QWidget *parent) {
+
       return m_dataModels[model]->release(fileName, verbose, ignoreUnfinished, mode, parent);
    }
 

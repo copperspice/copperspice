@@ -266,9 +266,9 @@ void FormMultiWidget::addEditor(int idx)
    FormatTextEdit *editor = new FormatTextEdit(this);
    m_editors.insert(idx, editor);
 
-   m_minusButtons.insert(idx, makeButton(m_minusIcon, SLOT(minusButtonClicked())));
-   m_plusButtons.insert(idx + 1,
-                        new ButtonWrapper(makeButton(m_plusIcon, SLOT(plusButtonClicked())), editor));
+   m_minusButtons.insert(idx, makeButton(m_minusIcon, "minusButtonClicked()"));
+   m_plusButtons.insert(idx + 1, new ButtonWrapper(makeButton(m_plusIcon, "plusButtonClicked()"), editor));
+
    connect(editor, &FormatTextEdit::textChanged,           this, &FormMultiWidget::slotTextChanged);
    connect(editor, &FormatTextEdit::selectionChanged,      this, &FormMultiWidget::slotSelectionChanged);
    connect(editor, &FormatTextEdit::cursorPositionChanged, this, &FormMultiWidget::cursorPositionChanged);
