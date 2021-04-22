@@ -256,6 +256,7 @@ class DataIndex
 class DataModelIterator : public DataIndex
 {
  public:
+   DataModelIterator() = delete;
    DataModelIterator(DataModel *model, int contextNo = 0, int messageNo = 0);
 
    MessageItem *current() const;
@@ -263,7 +264,6 @@ class DataModelIterator : public DataIndex
    void operator++();
 
  private:
-   DataModelIterator() {}
    DataModel *m_model; // not owned
 };
 
@@ -650,6 +650,7 @@ class MultiDataIndex
 class MultiDataModelIterator : public MultiDataIndex
 {
  public:
+   MultiDataModelIterator() = delete;
    MultiDataModelIterator(MultiDataModel *model, int modelNo, int contextNo = 0, int messageNo = 0);
 
    MessageItem *current() const;
@@ -657,11 +658,8 @@ class MultiDataModelIterator : public MultiDataIndex
    void operator++();
 
  private:
-   MultiDataModelIterator() {}
    MultiDataModel *m_dataModel; // not owned
 };
-
-class MessageModel;
 
 class MultiDataModel : public QObject
 {
@@ -878,8 +876,6 @@ class MessageModel : public QAbstractItemModel
    QModelIndex modelIndex(const MultiDataIndex &index);
 
  private:
-   friend class MultiDataModel;
-
    MultiDataModel *m_data; // not owned
 
    CS_SLOT_1(Private, void multiContextItemChanged(const MultiDataIndex & index))
