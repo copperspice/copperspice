@@ -1489,16 +1489,21 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
          }
 
       } else if (role == Qt::DecorationRole && column < numLangs) {
-         if (ContextItem *contextItem = mci->contextItem(column)) {
-            if (contextItem->isObsolete()) {
+         ContextItem *subject = mci->contextItem(column);
+
+         if (subject != nullptr) {
+            if (subject->isObsolete()) {
                return pxObsolete;
             }
-            if (contextItem->isFinished()) {
-               return contextItem->finishedDangerCount() > 0 ? pxWarning : pxOn;
+
+            if (subject->isFinished()) {
+               return subject->finishedDangerCount() > 0 ? pxWarning : pxOn;
             }
-            return contextItem->unfinishedDangerCount() > 0 ? pxDanger : pxOff;
+            return subject->unfinishedDangerCount() > 0 ? pxDanger : pxOff;
          }
+
          return QVariant();
+
       } else if (role == SortRole) {
          switch (column - numLangs) {
             case 0:
@@ -1508,20 +1513,28 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
             case 1:
                // Items
                return mci->getNumEditable();
-            default: // Percent
-               if (ContextItem *contextItem = mci->contextItem(column)) {
-                  int totalItems = contextItem->nonobsoleteCount();
-                  int percent = totalItems ? (100 * contextItem->finishedCount()) / totalItems : 100;
-                  int rslt = percent * (((1 << 28) - 1) / 100) + totalItems;
-                  if (contextItem->isObsolete()) {
+
+            default:
+               // Percent
+               ContextItem *subject = mci->contextItem(column);
+
+               if (subject != nullptr) {
+                  int totalItems = subject->nonobsoleteCount();
+                  int percent    = totalItems ? (100 * subject->finishedCount()) / totalItems : 100;
+                  int rslt       = percent * (((1 << 28) - 1) / 100) + totalItems;
+
+                  if (subject->isObsolete()) {
                      rslt |= (1 << 30);
-                  } else if (contextItem->isFinished()) {
+
+                  } else if (subject->isFinished()) {
                      rslt |= (1 << 29);
-                     if (!contextItem->finishedDangerCount()) {
+
+                     if (! subject->finishedDangerCount()) {
                         rslt |= (1 << 28);
                      }
+
                   } else {
-                     if (!contextItem->unfinishedDangerCount()) {
+                     if (! subject->unfinishedDangerCount()) {
                         rslt |= (1 << 28);
                      }
                   }

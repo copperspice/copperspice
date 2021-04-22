@@ -219,14 +219,16 @@ void PhraseView::setSourceText(int model, const QString &sourceText)
    if (!sourceText.isEmpty() && m_doGuesses) {
       QList<Candidate> cl = similarTextHeuristicCandidates(m_dataModel, model, sourceText, MaxCandidates);
       int n = 0;
-      for (const Candidate & candidate : cl) {
+      for (const Candidate &item : cl) {
          QString def;
+
          if (n < 9) {
             def = tr("Guess (%1)").arg(QString(QKeySequence(Qt::CTRL | (Qt::Key_0 + (n + 1)))));
          } else {
             def = tr("Guess");
          }
-         Phrase *guess = new Phrase(candidate.source, candidate.target, def, n);
+
+         Phrase *guess = new Phrase(item.source, item.target, def, n);
          m_guesses.append(guess);
          m_phraseModel->addPhrase(guess);
 

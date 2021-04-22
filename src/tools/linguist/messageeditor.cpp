@@ -490,10 +490,10 @@ void MessageEditor::setTargetLanguage(int model)
 MessageEditorData *MessageEditor::modelForWidget(const QObject *o)
 {
    for (int j = 0; j < m_editors.count(); ++j) {
-      for (int i = 0; i < m_editors[j].transTexts.count(); ++i) }
+      for (int i = 0; i < m_editors[j].transTexts.count(); ++i) {
 
-         for (QTextEdit * te : m_editors[j].transTexts[i]->getEditors()) {
-            if (te == o) {
+         for (QTextEdit * item : m_editors[j].transTexts[i]->getEditors()) {
+            if (item == o) {
                return &m_editors[j];
             }
          }
@@ -698,7 +698,7 @@ void MessageEditor::setTranslation(int model, const QString &translation, int nu
    updateBeginFromSource();
 }
 
-void MessageEditor::setTranslation(int latestModel, const QString &translation)
+void MessageEditor::setTranslation(int model, const QString &translation)
 {
    int numerus;
 
@@ -706,10 +706,11 @@ void MessageEditor::setTranslation(int latestModel, const QString &translation)
       numerus = 0;
 
    } else {
-      latestModel = m_currentModel;
+      model   = m_currentModel;
       numerus = m_currentNumerus;
    }
-   FormMultiWidget *transForm = m_editors[latestModel].transTexts[numerus];
+
+   FormMultiWidget *transForm = m_editors[model].transTexts[numerus];
    transForm->getEditors().first()->setFocus();
    transForm->setTranslation(translation, true);
 

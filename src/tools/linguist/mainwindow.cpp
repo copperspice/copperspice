@@ -585,22 +585,25 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
    QList<OpenedFile> opened;
    bool closeOld = false;
 
-   for (QString name : names) {
+   for (QString fname : names) {
       if (! waitCursor) {
          QApplication::setOverrideCursor(Qt::WaitCursor);
          waitCursor = true;
       }
 
       bool readWrite = globalReadWrite;
-      if (name.startsWith(QLatin1Char('='))) {
-         name.remove(0, 1);
+      if (fname.startsWith('=')) {
+         fname.remove(0, 1);
          readWrite = false;
       }
-      QFileInfo fi(name);
-      if (fi.exists()) { // Make the loader error out instead of reading stdin
-         name = fi.canonicalFilePath();
+
+      QFileInfo fi(fname);
+      if (fi.exists()) {
+         // make the loader error out instead of reading stdin
+         fname = fi.canonicalFilePath();
       }
-      if (m_dataModel->isFileLoaded(name) >= 0) {
+
+      if (m_dataModel->isFileLoaded(fname) >= 0) {
          continue;
       }
 
@@ -713,14 +716,15 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
 
    int totalCount = 0;
 
-   for (const OpenedFile & op : opened) {
-      m_phraseDict.append(QHash<QString, QList<Phrase *> >());
-      m_dataModel->append(op.dataModel, op.readWrite);
+   for (const OpenedFile &item : opened) {
+      m_phraseDict.append(QHash<QString, QList<Phrase *>>());
+      m_dataModel->append(item.dataModel, item.readWrite);
 
-      if (op.readWrite) {
+      if (item.readWrite) {
          updatePhraseDictInternal(m_phraseDict.size() - 1);
       }
-      totalCount += op.dataModel->messageCount();
+
+      totalCount += item.dataModel->messageCount();
    }
 
    statusBar()->showMessage(tr("%n translation unit(s) loaded.", 0, totalCount), MessageMS);
@@ -970,31 +974,39 @@ void MainWindow::print()
             pout.setRule(PrintOut::ThinRule);
             bool printedSrc = false;
             QString comment;
+
             for (int k = 0; k < m_dataModel->modelCount(); ++k) {
-               if (const MessageItem *m = mc->messageItem(k, j)) {
-                  if (!printedSrc) {
-                     pout.addBox(40, m->text());
+               const MessageItem *msgCargo = mc->messageItem(k, j);
+
+               if (msgCargo != nullptr) {
+                  if (! printedSrc) {
+                     pout.addBox(40, msgCargo->text());
                      pout.addBox(4);
-                     comment = m->comment();
+                     comment = msgCargo->comment();
                      printedSrc = true;
+
                   } else {
-                     pout.addBox(44); // Maybe put the name of the translation here
+                     pout.addBox(44);
                   }
-                  if (m->message().isPlural() && m_dataModel->language(k) != QLocale::C) {
-                     QStringList transls = m->translations();
-                     pout.addBox(40, transls.join(QLatin1String("\n")));
+
+                  if (msgCargo->message().isPlural() && m_dataModel->language(k) != QLocale::C) {
+                     QStringList transls = msgCargo->translations();
+                     pout.addBox(40, transls.join("\n"));
+
                   } else {
-                     pout.addBox(40, m->translation());
+                     pout.addBox(40, msgCargo->translation());
                   }
+
                   pout.addBox(4);
                   QString type;
-                  switch (m->message().type()) {
+
+                  switch (msgCargo->message().type()) {
                      case TranslatorMessage::Type::Finished:
                         type = tr("finished");
                         break;
 
-                     case TranslatorMessage::Unfinished:
-                        type = m->danger() ? tr("unresolved") : QLatin1String("unfinished");
+                     case TranslatorMessage::Type::Unfinished:
+                        type = msgCargo->danger() ? tr("unresolved") : QString("unfinished");
                         break;
 
                      case TranslatorMessage::Type::Obsolete:
@@ -1180,9 +1192,10 @@ void MainWindow::translate(int mode)
 
    if (mode == TranslateDialog::TranslateAll) {
       for (MultiDataModelIterator it(m_dataModel, m_currentIndex.model()); it.isValid(); ++it) {
-         MessageItem *m = it.current();
-         if (m && !m->isObsolete() && m->compare(findText, false, caseSensitivity)) {
-            if (!translatedCount) {
+         MessageItem *msgCargo = it.current();
+
+         if (msgCargo != nullptr && ! msgCargo->isObsolete() && msgCargo->compare(findText, false, caseSensitivity)) {
+            if (! translatedCount) {
                m_messageModel->blockSignals(true);
             }
 
@@ -1926,8 +1939,8 @@ void MainWindow::findNext(const QString &text, DataModel::FindLocation where, bo
 
 void MainWindow::revalidate()
 {
-   for (MultiDataModelIterator it(m_dataModel, -1); it.isValid(); ++it) {
-      updateDanger(it, false);
+   for (MultiDataModelIterator iter(m_dataModel, -1); iter.isValid(); ++iter) {
+      updateDanger(iter, false);
    }
 
    if (m_currentIndex.isValid()) {
