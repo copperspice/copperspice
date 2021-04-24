@@ -71,6 +71,8 @@ class MessageEditor : public QScrollArea
    bool focusNextUnfinished();
 
    void setVisualizeWhitespace(bool value);
+   void setFontSize(const float fontSize);
+   float fontSize();
 
    CS_SIGNAL_1(Public, void translationChanged(const QStringList & translations))
    CS_SIGNAL_2(translationChanged,translations)
@@ -190,6 +192,7 @@ class MessageEditor : public QScrollArea
    void addPluralForm(int model, const QString &label, bool writable);
    void fixTabOrder();
    QPalette paletteForModel(int model) const;
+   void applyFontSize();
 
    MultiDataModel *m_dataModel;
 
@@ -198,6 +201,7 @@ class MessageEditor : public QScrollArea
    int m_currentNumerus;
 
    bool m_lengthVariants;
+   float m_fontSize;
 
    bool m_undoAvail;
    bool m_redoAvail;

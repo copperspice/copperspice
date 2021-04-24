@@ -56,19 +56,13 @@ static const char *language_strings[] = {
 
 //  Handles layout of dock windows and the editor page
 MessageEditor::MessageEditor(MultiDataModel *dataModel, QMainWindow *parent)
-   : QScrollArea(parent->centralWidget()),
-     m_dataModel(dataModel),
-     m_currentModel(-1),
-     m_currentNumerus(-1),
-     m_lengthVariants(false),
-     m_undoAvail(false),
-     m_redoAvail(false),
-     m_cutAvail(false),
-     m_copyAvail(false),
-     m_selectionHolder(0),
-     m_focusWidget(0)
+   : QScrollArea(parent->centralWidget()), m_dataModel(dataModel), m_currentModel(-1),
+     m_currentNumerus(-1), m_lengthVariants(false), m_fontSize(font().pointSize()),
+     m_undoAvail(false), m_redoAvail(false), m_cutAvail(false),
+     m_copyAvail(false), m_visualizeWhitespace(true),
+     m_selectionHolder(nullptr), m_focusWidget(nullptr)
 {
-   setObjectName(QLatin1String("scroll area"));
+   setObjectName("scroll area");
 
    QPalette p;
    p.setBrush(QPalette::Window, p.brush(QPalette::Active, QPalette::Base));
@@ -159,8 +153,9 @@ void MessageEditor::messageModelAppended()
    m_editors.append(MessageEditorData());
    MessageEditorData &ed = m_editors.last();
    ed.pluralEditMode = false;
-   ed.fontSize = font().pointSize();
+   ed.fontSize = m_fontSize;
    ed.container = new QWidget;
+
    if (model > 0) {
       ed.container->setPalette(paletteForModel(model));
       ed.container->setAutoFillBackground(true);
@@ -265,15 +260,27 @@ void MessageEditor::addPluralForm(int model, const QString &label, bool writable
 
 void MessageEditor::editorCreated(QTextEdit *te)
 {
+   QFont font;
+   font.setPointSize(static_cast<int>(m_fontSize));
    FormMultiWidget *snd = static_cast<FormMultiWidget *>(sender());
+
    for (int model = 0; ; ++model) {
       MessageEditorData med = m_editors.at(model);
-      if (med.transTexts.contains(snd)) {
-         QFont font;
-         font.setPointSize(static_cast<int>(med.fontSize));
-         te->setFont(font);
+      med.transCommentText->getEditor()->setFont(font);
 
-         te->installEventFilter(this);
+      if (med.transTexts.contains(snd)) {
+            te->setFont(font);
+
+            te->installEventFilter(this);
+
+            if (m_visualizeWhitespace) {
+                QTextOption option = te->document()->defaultTextOption();
+
+                option.setFlags(option.flags()
+                                | QTextOption::ShowLineAndParagraphSeparators
+                                | QTextOption::ShowTabsAndSpaces);
+                te->document()->setDefaultTextOption(option);
+            }
 
          fixTabOrder();
          return;
@@ -937,3 +944,58 @@ void MessageEditor::setVisualizeWhitespace(bool value)
    }
 }
 
+void MessageEditor::setFontSize(const float fontSize)
+{
+    if (m_fontSize != fontSize) {
+        m_fontSize = fontSize;
+        applyFontSize();
+    }
+}
+
+float MessageEditor::fontSize()
+{
+    return m_fontSize;
+}
+
+void MessageEditor::applyFontSize()
+{
+    QFont font;
+    font.setPointSize(static_cast<int>(m_fontSize));
+
+    m_source->getEditor()->setFont(font);
+    m_pluralSource->getEditor()->setFont(font);
+    m_commentText->getEditor()->setFont(font);
+
+    for (MessageEditorData med : m_editors) {
+        for (int i = 0; i < med.transTexts.count(); ++i) {
+            for (QTextEdit *te : med.transTexts[i]->getEditors()) {
+                te->setFont(font);
+            }
+        }
+        med.transCommentText->getEditor()->setFont(font);
+    }
+}
+
+void MessageEditor::increaseFontSize()
+{
+   if (m_fontSize >= 32) {
+      return;
+   }
+
+   m_fontSize *= 1.2f;
+   applyFontSize();
+}
+
+void MessageEditor::decreaseFontSize()
+{
+    if (m_fontSize > 8) {
+       m_fontSize /= 1.2f;
+       applyFontSize();
+    }
+}
+
+void MessageEditor::resetFontSize()
+{
+    m_fontSize = font().pointSize();
+    applyFontSize();
+}
