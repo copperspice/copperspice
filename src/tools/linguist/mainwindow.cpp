@@ -477,6 +477,7 @@ MainWindow::MainWindow()
 
    connect(m_ui.actionLengthVariants, &QAction::toggled, m_messageEditor, &MessageEditor::setLengthVariants);
 
+   m_messageEditor->setVisualizeWhitespace(m_ui.actionVisualizeWhitespace->isChecked());
    m_focusWatcher = new FocusWatcher(m_messageEditor, this);
    m_contextView->installEventFilter(m_focusWatcher);
    m_messageView->installEventFilter(m_focusWatcher);
@@ -2879,6 +2880,11 @@ void MainWindow::toggleStatistics()
    } else if (m_statistics) {
       m_statistics->close();
    }
+}
+
+void MainWindow::toggleVisualizeWhitespace()
+{
+   m_messageEditor->setVisualizeWhitespace(m_ui.actionVisualizeWhitespace->isChecked());
 }
 
 void MainWindow::maybeUpdateStatistics(const MultiDataIndex &index)

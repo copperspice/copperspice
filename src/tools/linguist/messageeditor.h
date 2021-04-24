@@ -70,6 +70,7 @@ class MessageEditor : public QScrollArea
    void setUnfinishedEditorFocus();
    bool focusNextUnfinished();
 
+   void setVisualizeWhitespace(bool value);
 
    CS_SIGNAL_1(Public, void translationChanged(const QStringList & translations))
    CS_SIGNAL_2(translationChanged,translations)
@@ -204,6 +205,7 @@ class MessageEditor : public QScrollArea
    bool m_copyAvail;
 
    bool m_clipboardEmpty;
+   bool m_visualizeWhitespace;
 
    QTextEdit *m_selectionHolder;
    QWidget *m_focusWidget;

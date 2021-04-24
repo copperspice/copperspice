@@ -919,3 +919,21 @@ bool MessageEditor::focusNextUnfinished()
    return focusNextUnfinished(m_currentModel + 1);
 }
 
+void MessageEditor::setVisualizeWhitespace(bool value)
+{
+   m_visualizeWhitespace = value;
+   m_source->getEditor()->setVisualizeWhitespace(value);
+   m_pluralSource->getEditor()->setVisualizeWhitespace(value);
+   m_commentText->getEditor()->setVisualizeWhitespace(value);
+
+   for (const MessageEditorData &med : m_editors) {
+      med.transCommentText->getEditor()->setVisualizeWhitespace(value);
+
+      for (FormMultiWidget *widget : med.transTexts) {
+         for (FormatTextEdit *te : widget->getEditors()) {
+             te->setVisualizeWhitespace(value);
+         }
+      }
+   }
+}
+

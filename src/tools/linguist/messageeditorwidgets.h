@@ -80,6 +80,9 @@ class FormatTextEdit : public ExpandingTextEdit
    CS_SLOT_1(Public, void setPlainText(const QString & text,bool userAction))
    CS_SLOT_2(setPlainText)
 
+   CS_SLOT_1(Public, void setVisualizeWhitespace(bool value))
+   CS_SLOT_2(setVisualizeWhitespace)
+
  private:
    MessageHighlighter *m_highlighter;
 };

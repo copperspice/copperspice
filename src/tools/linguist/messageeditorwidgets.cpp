@@ -151,6 +151,22 @@ void FormatTextEdit::setPlainText(const QString &text, bool userAction)
       ExpandingTextEdit::setPlainText(text);
    }
 }
+void FormatTextEdit::setVisualizeWhitespace(bool value)
+{
+    QTextOption option = document()->defaultTextOption();
+
+    if (value) {
+        option.setFlags(option.flags()
+                        | QTextOption::ShowLineAndParagraphSeparators
+                        | QTextOption::ShowTabsAndSpaces);
+    } else {
+        option.setFlags(option.flags()
+                        & ~QTextOption::ShowLineAndParagraphSeparators
+                        & ~QTextOption::ShowTabsAndSpaces);
+    }
+
+    document()->setDefaultTextOption(option);
+}
 
 FormWidget::FormWidget(const QString &label, bool isEditable, QWidget *parent)
    : QWidget(parent), m_hideWhenEmpty(false)
