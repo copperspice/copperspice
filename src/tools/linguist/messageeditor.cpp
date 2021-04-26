@@ -621,9 +621,9 @@ void MessageEditor::showMessage(const MultiDataIndex &index)
    for (int j = 0; j < m_editors.size(); ++j) {
 
       MessageEditorData &ed = m_editors[j];
+      MessageItem *msgCargo = m_dataModel->getMessageItem(index, j);
 
-      MessageItem *item = m_dataModel->messageItem(index, j);
-      if (!item) {
+      if (! msgCargo) {
          ed.container->hide();
          continue;
       }
@@ -632,11 +632,12 @@ void MessageEditor::showMessage(const MultiDataIndex &index)
       if (! hadMsg) {
 
          // Source text form
-         m_source->setTranslation(item->text());
-         m_pluralSource->setTranslation(item->pluralText());
+         m_source->setTranslation(msgCargo->text());
+         m_pluralSource->setTranslation(msgCargo->pluralText());
+
          // Use location from first non-obsolete message
-         if (!item->fileName().isEmpty()) {
-            QString toolTip = tr("'%1'\nLine: %2").arg(item->fileName(), QString::number(item->lineNumber()));
+         if (! msgCargo->fileName().isEmpty()) {
+            QString toolTip = tr("'%1'\nLine: %2").formatArgs(msgCargo->fileName(), QString::number(msgCargo->lineNumber()));
             m_source->setToolTip(toolTip);
 
          } else {
@@ -644,13 +645,13 @@ void MessageEditor::showMessage(const MultiDataIndex &index)
          }
 
          // Comment field
-         QString commentText = item->comment().simplified();
+         QString commentText = msgCargo->comment().simplified();
 
-         if (!item->extraComment().isEmpty()) {
-            if (!commentText.isEmpty()) {
-               commentText += QLatin1String("\n");
+         if (! msgCargo->extraComment().isEmpty()) {
+            if (! commentText.isEmpty()) {
+               commentText += "\n";
             }
-            commentText += item->extraComment().simplified();
+            commentText += msgCargo->extraComment().simplified();
          }
 
          m_commentText->setTranslation(commentText);
@@ -659,22 +660,25 @@ void MessageEditor::showMessage(const MultiDataIndex &index)
       }
 
       setEditingEnabled(j, m_dataModel->isModelWritable(j)
-                        && item->message().type() != TranslatorMessage::Obsolete);
+                        && msgCargo->message().type() != TranslatorMessage::Type::Obsolete
+                        && msgCargo->message().type() != TranslatorMessage::Type::Vanished);
 
       // Translation label
-      ed.pluralEditMode = item->translations().count() > 1;
+      ed.pluralEditMode = msgCargo->translations().count() > 1;
       ed.transTexts.first()->setLabel(ed.pluralEditMode ? ed.firstForm : ed.invariantForm);
 
       // Translation forms
-      if (item->text().isEmpty() && !item->context().isEmpty()) {
+      if (msgCargo->text().isEmpty() && ! msgCargo->context().isEmpty()) {
          for (int i = 0; i < ed.transTexts.size(); ++i) {
             ed.transTexts.at(i)->setVisible(false);
          }
+
       } else {
-         QStringList normalizedTranslations =
-            m_dataModel->model(j)->normalizedTranslations(*item);
+         QStringList normalizedTranslations = m_dataModel->model(j)->normalizedTranslations(*msgCargo);
+
          for (int i = 0; i < ed.transTexts.size(); ++i) {
             bool shouldShow = (i < normalizedTranslations.count());
+
             if (shouldShow) {
                setTranslationNumerus(j, normalizedTranslations.at(i), i);
             } else {
@@ -685,7 +689,7 @@ void MessageEditor::showMessage(const MultiDataIndex &index)
          }
       }
 
-      ed.transCommentText->setTranslation(item->translatorComment().trimmed(), false);
+      ed.transCommentText->setTranslation(msgCargo->translatorComment().trimmed(), false);
    }
 
    updateUndoRedo();
@@ -868,10 +872,10 @@ void MessageEditor::updateBeginFromSource()
 
 void MessageEditor::beginFromSource()
 {
-   MessageItem *item = m_dataModel->messageItem(m_currentIndex, m_currentModel);
-   setTranslation(m_currentModel,
-                  m_currentNumerus > 0 && !item->pluralText().isEmpty() ?
-                  item->pluralText() : item->text());
+   MessageItem *msgCargo = m_dataModel->getMessageItem(m_currentIndex, m_currentModel);
+
+   setTranslation(m_currentModel, m_currentNumerus > 0 &&
+               ! msgCargo->pluralText().isEmpty() ? msgCargo->pluralText() : msgCargo->text());
 }
 
 void MessageEditor::setEditorFocus()
@@ -906,13 +910,20 @@ void MessageEditor::setEditorFocusModel(int model)
 
 bool MessageEditor::focusNextUnfinished(int start)
 {
-   for (int j = start; j < m_editors.count(); ++j)
-      if (m_dataModel->isModelWritable(j))
-         if (MessageItem *item = m_dataModel->messageItem(m_currentIndex, j))
-            if (item->type() == TranslatorMessage::Unfinished) {
+   for (int j = start; j < m_editors.count(); ++j) {
+
+      if (m_dataModel->isModelWritable(j)) {
+         MessageItem *msgCargo = m_dataModel->getMessageItem(m_currentIndex, j);
+
+         if (msgCargo != nullptr) {
+            if (msgCargo->type() == TranslatorMessage::Type::Unfinished) {
                m_editors[j].transTexts.first()->getEditors().first()->setFocus();
                return true;
             }
+         }
+      }
+   }
+
    return false;
 }
 

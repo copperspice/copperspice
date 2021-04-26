@@ -1169,6 +1169,7 @@ void MainWindow::searchTranslateDialog()
    QModelIndex idx = m_messageView->currentIndex();
    QModelIndex idx2 = m_sortedMessagesModel->index(idx.row(), m_currentIndex.model() + 1, idx.parent());
    m_messageView->setCurrentIndex(idx2);
+
    QString fn = QFileInfo(m_dataModel->srcFileName(m_currentIndex.model())).baseName();
    m_translateDialog->setWindowTitle(tr("Search And Translate in '%1' Linguist").formatArg(fn));
    m_translateDialog->exec();
@@ -1176,16 +1177,17 @@ void MainWindow::searchTranslateDialog()
 
 void MainWindow::updateTranslateHit(bool &hit)
 {
-   MessageItem *m;
-   hit = (m = m_dataModel->messageItem(m_currentIndex))
-         && !m->isObsolete()
-         && m->compare(m_translateDialog->findText(), false, m_translateDialog->caseSensitivity());
+   MessageItem *msgCargo = m_dataModel->getMessageItem(m_currentIndex);
+
+   hit = (msgCargo != nullptr && ! msgCargo->isObsolete() &&
+               msgCargo->compare(m_translateDialog->findText(), false, m_translateDialog->caseSensitivity()));
 }
 
 void MainWindow::translate(int mode)
 {
    QString findText = m_translateDialog->findText();
    QString replaceText = m_translateDialog->replaceText();
+
    bool markFinished = m_translateDialog->markFinished();
    Qt::CaseSensitivity caseSensitivity = m_translateDialog->caseSensitivity();
 
@@ -1251,9 +1253,10 @@ void MainWindow::translate(int mode)
 
          QModelIndex realIndex    = m_sortedMessagesModel->mapToSource(index);
          MultiDataIndex dataIndex = m_messageModel->dataIndex(realIndex, m_currentIndex.model());
-         if (MessageItem *m = m_dataModel->messageItem(dataIndex))
-         {
-            if (!m->isObsolete() && m->compare(findText, false, caseSensitivity)) {
+         MessageItem *msgCargo    = m_dataModel->getMessageItem(dataIndex);
+
+         if (msgCargo != nullptr) {
+            if (! msgCargo->isObsolete() && msgCargo->compare(findText, false, caseSensitivity)) {
                setCurrentMessage(realIndex, m_currentIndex.model());
                ++translatedCount;
                ++m_hitCount;
@@ -1397,8 +1400,9 @@ void MainWindow::printPhraseBook(QAction *action)
 
 void MainWindow::addToPhraseBook()
 {
-   MessageItem *currentMessage = m_dataModel->messageItem(m_currentIndex);
-   Phrase *phrase = new Phrase(currentMessage->text(), currentMessage->translation(), QString());
+   MessageItem *msgCargo = m_dataModel->getMessageItem(m_currentIndex);
+   Phrase *phrase        = new Phrase(msgCargo->text(), msgCargo->translation(), QString());
+
    QStringList phraseBookList;
    QHash<QString, PhraseBook *> phraseBookHash;
 
@@ -1615,29 +1619,41 @@ void MainWindow::selectedMessageChanged(const QModelIndex &sortedIndex, const QM
       return;
    }
 
+   int model = -1;
+   MessageItem *msgCargo = nullptr;
+
    QModelIndex index = m_sortedMessagesModel->mapToSource(sortedIndex);
+
    if (index.isValid()) {
-      int model = (index.column() && (index.column() - 1 < m_dataModel->modelCount())) ?
+      model = (index.column() && (index.column() - 1 < m_dataModel->modelCount())) ?
                   index.column() - 1 : m_currentIndex.model();
+
       m_currentIndex = m_messageModel->dataIndex(index, model);
       m_messageEditor->showMessage(m_currentIndex);
-      MessageItem *m = 0;
-      if (model >= 0 && (m = m_dataModel->messageItem(m_currentIndex))) {
-         if (m_dataModel->isModelWritable(model) && !m->isObsolete()) {
-            m_phraseView->setSourceText(m_currentIndex.model(), m->text());
+
+      if (model >= 0 && (msgCargo = m_dataModel->getMessageItem(m_currentIndex))) {
+
+         if (m_dataModel->isModelWritable(model) && ! msgCargo->isObsolete()) {
+            m_phraseView->setSourceText(m_currentIndex.model(), msgCargo->text());
+
          } else {
             m_phraseView->setSourceText(-1, QString());
          }
+
       } else {
          if (model < 0) {
-            model = m_dataModel->multiContextItem(m_currentIndex.context())
-                    ->firstNonobsoleteMessageIndex(m_currentIndex.message());
+            model = m_dataModel->multiContextItem(
+                  m_currentIndex.context())->firstNonobsoleteMessageIndex(m_currentIndex.message());
+
             if (model >= 0) {
-               m = m_dataModel->messageItem(m_currentIndex, model);
+               msgCargo = m_dataModel->getMessageItem(m_currentIndex, model);
             }
          }
+
          m_phraseView->setSourceText(-1, QString());
       }
+
+      m_errorsView->setEnabled(msgCargo != nullptr);
       updateDanger(m_currentIndex, true);
 
    } else {
@@ -1673,15 +1689,17 @@ void MainWindow::translationChanged(const MultiDataIndex &index)
 // so the model does not emit modification notifications.
 void MainWindow::updateTranslation(const QStringList &translations)
 {
-   MessageItem *m = m_dataModel->messageItem(m_currentIndex);
-   if (!m) {
-      return;
-   }
-   if (translations == m->translations()) {
+   MessageItem *msgCargo = m_dataModel->getMessageItem(m_currentIndex);
+
+   if (msgCargo == nullptr) {
       return;
    }
 
-   m->setTranslations(translations);
+   if (translations == msgCargo->translations()) {
+      return;
+   }
+
+   msgCargo->setTranslations(translations);
 
 /*
    if (! msgCargo->fileName().isEmpty() && hasFormPreview(msgCargom->fileName())) {
@@ -1691,7 +1709,7 @@ void MainWindow::updateTranslation(const QStringList &translations)
 
    updateDanger(m_currentIndex, true);
 
-   if (m->isFinished()) {
+   if (msgCargo->isFinished()) {
       m_dataModel->setFinished(m_currentIndex, false);
    } else {
       m_dataModel->setModified(m_currentIndex.model(), true);
@@ -1700,15 +1718,17 @@ void MainWindow::updateTranslation(const QStringList &translations)
 
 void MainWindow::updateTranslatorComment(const QString &comment)
 {
-   MessageItem *m = m_dataModel->messageItem(m_currentIndex);
-   if (!m) {
-      return;
-   }
-   if (comment == m->translatorComment()) {
+   MessageItem *msgCargo = m_dataModel->getMessageItem(m_currentIndex);
+
+   if (msgCargo == nullptr) {
       return;
    }
 
-   m->setTranslatorComment(comment);
+   if (comment == msgCargo->translatorComment()) {
+      return;
+   }
+
+   msgCargo->setTranslatorComment(comment);
 
    m_dataModel->setModified(m_currentIndex.model(), true);
 }
@@ -1746,13 +1766,14 @@ void MainWindow::toggleFinished(const QModelIndex &index)
    QModelIndex item = m_sortedMessagesModel->mapToSource(index);
 
    MultiDataIndex dataIndex = m_messageModel->dataIndex(item);
-   MessageItem *m = m_dataModel->messageItem(dataIndex);
+   MessageItem *msgCargo    = m_dataModel->getMessageItem(dataIndex);
 
-   if (!m || m->message().type() == TranslatorMessage::Obsolete) {
+   if (msgCargo == nullptr || msgCargo->message().type() == TranslatorMessage::Type::Obsolete ||
+         msgCargo->message().type() == TranslatorMessage::Type::Vanished) {
       return;
    }
 
-   m_dataModel->setFinished(dataIndex, !m->isFinished());
+   m_dataModel->setFinished(dataIndex, ! msgCargo->isFinished());
 }
 
 /*
@@ -2146,19 +2167,27 @@ void MainWindow::updateLatestModel(int model)
    m_currentIndex = MultiDataIndex(model, m_currentIndex.context(), m_currentIndex.message());
    bool enable   = false;
    bool enableRw = false;
+
+   MessageItem *msgCargo = nullptr;
+
    if (model >= 0) {
       enable = true;
+
       if (m_dataModel->isModelWritable(model)) {
          enableRw = true;
       }
 
       if (m_currentIndex.isValid()) {
-         if (MessageItem *item = m_dataModel->messageItem(m_currentIndex)) {
-            if (enableRw && !item->isObsolete()) {
-               m_phraseView->setSourceText(model, item->text());
+         msgCargo = m_dataModel->getMessageItem(m_currentIndex);
+
+         if (msgCargo != nullptr) {
+
+            if (enableRw && ! msgCargo->isObsolete()) {
+               m_phraseView->setSourceText(model, msgCargo->text());
             } else {
                m_phraseView->setSourceText(-1, QString());
             }
+
          } else {
             m_phraseView->setSourceText(-1, QString());
          }
@@ -2612,20 +2641,23 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
       }
 
       curIdx.setModel(mi);
-      MessageItem *m = m_dataModel->messageItem(curIdx);
-      if (!m || m->isObsolete()) {
+      MessageItem *msgCargo = m_dataModel->getMessageItem(curIdx);
+
+      if (msgCargo == nullptr || msgCargo->isObsolete()) {
          continue;
       }
 
       bool danger = false;
-      if (m->message().isTranslated()) {
+      if (msgCargo->message().isTranslated()) {
          if (source.isEmpty()) {
-            source = m->pluralText();
+            source = msgCargo->pluralText();
+
             if (source.isEmpty()) {
-               source = m->text();
+               source = msgCargo->text();
             }
          }
-         QStringList translations = m->translations();
+
+         QStringList translations = msgCargo->translations();
 
          // Truncated variants are permitted to be "denormalized"
          for (int i = 0; i < translations.count(); ++i) {
@@ -2764,13 +2796,13 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
             }
 
             // Piggy-backed on the general place markers, we check the plural count marker.
-            if (m->message().isPlural()) {
+            if (msgCargo->message().isPlural()) {
                for (int i = 0; i < numTranslations; ++i)
-                  if (m_dataModel->model(mi)->countRefNeeds().at(i)
-                        && !translations[i].contains(QLatin1String("%n"))) {
+                  if (m_dataModel->model(mi)->countRefNeeds().at(i) && ! translations[i].contains("%n")) {
                      if (verbose) {
                         m_errorsView->addError(mi, ErrorsView::NumerusMarkerMissing);
                      }
+
                      danger = true;
                      break;
                   }
@@ -2778,7 +2810,7 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
          }
       }
 
-      if (danger != m->danger()) {
+      if (danger != msgCargo->danger()) {
          m_dataModel->setDanger(curIdx, danger);
       }
    }

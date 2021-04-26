@@ -293,7 +293,8 @@ class DataModel : public QObject
    ContextItem *findContext(const QString &context) const;
    MessageItem *findMessage(const QString &context, const QString &sourcetext, const QString &comment) const;
 
-   MessageItem *messageItem(const DataIndex &index) const;
+   ContextItem *getContextItem(int index) const;
+   MessageItem *getMessageItem(const DataIndex &index) const;
 
    int messageCount() const {
       return m_numMessages;
@@ -772,9 +773,11 @@ class MultiDataModel : public QObject
    MultiMessageItem *multiMessageItem(const MultiDataIndex &index) const {
       return multiContextItem(index.context())->multiMessageItem(index.message());
    }
-   MessageItem *messageItem(const MultiDataIndex &index, int model) const;
-   MessageItem *messageItem(const MultiDataIndex &index) const {
-      return messageItem(index, index.model());
+
+   MessageItem *getMessageItem(const MultiDataIndex &index, int model) const;
+
+   MessageItem *getMessageItem(const MultiDataIndex &index) const {
+      return getMessageItem(index, index.model());
    }
 
    static QString condenseFileNames(const QStringList &names);
@@ -819,7 +822,7 @@ class MultiDataModel : public QObject
    CS_SLOT_1(Private, void onLanguageChanged())
    CS_SLOT_2(onLanguageChanged)
 
-   ContextItem *contextItem(const MultiDataIndex &index) const {
+   ContextItem *getContextItem(const MultiDataIndex &index) const {
       return multiContextItem(index.context())->contextItem(index.model());
    }
 

@@ -103,7 +103,7 @@ QStringList DataModel::normalizedTranslations(const MessageItem &m) const
    return Translator::normalizedTranslations(m.message(), m_numerusForms.count());
 }
 
-ContextItem *DataModel::contextItem(int context) const
+ContextItem *DataModel::getContextItem(int context) const
 {
    if (context >= 0 && context < m_contextList.count()) {
       return const_cast<ContextItem *>(&m_contextList[context]);
@@ -114,10 +114,10 @@ ContextItem *DataModel::contextItem(int context) const
    return nullptr;
 }
 
-MessageItem *DataModel::messageItem(const DataIndex &index) const
+MessageItem *DataModel::getMessageItem(const DataIndex &index) const
 {
-   if (ContextItem *c = contextItem(index.context())) {
-      return c->messageItem(index.message());
+   if (ContextItem *subject = getContextItem(index.context())) {
+      return subject->messageItem(index.message());
    }
 
    return nullptr;
@@ -125,10 +125,11 @@ MessageItem *DataModel::messageItem(const DataIndex &index) const
 
 ContextItem *DataModel::findContext(const QString &context) const
 {
-   for (int c = 0; c < m_contextList.count(); ++c) {
-      ContextItem *ctx = contextItem(c);
-      if (ctx->context() == context) {
-         return ctx;
+   for (int index = 0; index < m_contextList.count(); ++index) {
+      ContextItem *subject = getContextItem(index);
+
+      if (subject->context() == context) {
+         return subject;
       }
    }
 
@@ -148,12 +149,17 @@ MessageItem *DataModel::findMessage(const QString &context, const QString &sourc
 static int calcMergeScore(const DataModel *one, const DataModel *two)
 {
    int inBoth = 0;
-   for (int i = 0; i < two->contextCount(); ++i) {
-      ContextItem *oc = two->contextItem(i);
-      if (ContextItem *c = one->findContext(oc->context())) {
-         for (int j = 0; j < oc->messageCount(); ++j) {
-            MessageItem *m = oc->messageItem(j);
-            if (c->findMessage(m->text(), m->comment()) >= 0) {
+
+   for (int index = 0; index < two->contextCount(); ++index) {
+      ContextItem *subject1 = two->getContextItem(index);
+      ContextItem *subject2 = one->findContext(subject1->context());
+
+      if (subject2 != nullptr) {
+
+         for (int j = 0; j < subject1->messageCount(); ++j) {
+            MessageItem *msgCargo = subject1->messageItem(j);
+
+            if (subject2->findMessage(msgCargo->text(), msgCargo->comment()) != nullptr) {
                ++inBoth;
             }
          }
@@ -543,7 +549,7 @@ void DataModelIterator::operator++()
 
 MessageItem *DataModelIterator::current() const
 {
-   return m_model->messageItem(*this);
+   return m_model->getMessageItem(*this);
 }
 
 MultiMessageItem::MultiMessageItem(const MessageItem *msgCargo)
@@ -736,12 +742,17 @@ bool MultiDataModel::isWellMergeable(const DataModel *dm) const
    }
 
    int inBothNew = 0;
-   for (int i = 0; i < dm->contextCount(); ++i) {
-      ContextItem *c = dm->contextItem(i);
-      if (MultiContextItem *mc = findContext(c->context())) {
-         for (int j = 0; j < c->messageCount(); ++j) {
-            MessageItem *m = c->messageItem(j);
-            if (mc->findMessage(m->text(), m->comment()) >= 0) {
+
+   for (int index = 0; index < dm->contextCount(); ++index) {
+      ContextItem *subject = dm->getContextItem(index);
+      MultiContextItem *mc = findContext(subject->context());
+
+      if (mc != nullptr) {
+
+         for (int j = 0; j < subject->messageCount(); ++j) {
+            MessageItem *msgCargo = subject->messageItem(j);
+
+            if (mc->findMessage(msgCargo->text(), msgCargo->comment()) >= 0) {
                ++inBothNew;
             }
          }
@@ -787,22 +798,38 @@ void MultiDataModel::append(DataModel *dm, bool readWrite)
    int appendedContexts = 0;
 
    for (int i = 0; i < dm->contextCount(); ++i) {
-      ContextItem *c = dm->contextItem(i);
-      int mcx = findContextIndex(c->context());
+      ContextItem *subject = dm->getContextItem(i);
+
+      int mcx = findContextIndex(subject->context());
+
       if (mcx >= 0) {
          MultiContextItem *mc = multiContextItem(mcx);
-         mc->assignLastModel(c, readWrite);
+
+         mc->assignLastModel(subject, readWrite);
          QList<MessageItem *> appendItems;
-         for (int j = 0; j < c->messageCount(); ++j) {
-            MessageItem *m = c->messageItem(j);
-            int msgIdx = mc->findMessage(m->text(), m->comment());
+
+         for (int j = 0; j < subject->messageCount(); ++j) {
+            MessageItem *msgCargo = subject->messageItem(j);
+
+            int msgIdx = -1;
+
+            if (! msgCargo->id().isEmpty())  {
+               // id based translation
+               msgIdx = mc->findMessageById(msgCargo->id());
+            }
+
+            if (msgIdx == -1) {
+               msgIdx = mc->findMessage(msgCargo->text(), msgCargo->comment());
+            }
+
             if (msgIdx >= 0) {
-               mc->putMessageItem(msgIdx, m);
+               mc->putMessageItem(msgIdx, msgCargo);
             } else {
-               appendItems << m;
+               appendItems.append(msgCargo);
             }
          }
-         if (!appendItems.isEmpty()) {
+
+         if (! appendItems.isEmpty()) {
             int msgCnt = mc->messageCount();
             m_msgModel->beginInsertRows(m_msgModel->createIndex(mcx, 0), msgCnt, msgCnt + appendItems.size() - 1);
 
@@ -810,9 +837,10 @@ void MultiDataModel::append(DataModel *dm, bool readWrite)
             m_msgModel->endInsertRows();
             m_numMessages += appendItems.size();
          }
+
       } else {
-         m_multiContextList << MultiContextItem(modelCount() - 1, c, readWrite);
-         m_numMessages += c->messageCount();
+         m_multiContextList << MultiContextItem(modelCount() - 1, subject, readWrite);
+         m_numMessages += subject->messageCount();
          ++appendedContexts;
       }
    }
@@ -1085,7 +1113,7 @@ MultiContextItem *MultiDataModel::findContext(const QString &context) const
    return nullptr;
 }
 
-MessageItem *MultiDataModel::messageItem(const MultiDataIndex &index, int model) const
+MessageItem *MultiDataModel::getMessageItem(const MultiDataIndex &index, int model) const
 {
    if (index.context() < contextCount() && model >= 0 && model < modelCount()) {
       MultiContextItem *mc = multiContextItem(index.context());
@@ -1103,11 +1131,13 @@ MessageItem *MultiDataModel::messageItem(const MultiDataIndex &index, int model)
 
 void MultiDataModel::setTranslation(const MultiDataIndex &index, const QString &translation)
 {
-   MessageItem *m = messageItem(index);
-   if (translation == m->translation()) {
+   MessageItem *msgCargo = getMessageItem(index);
+
+   if (translation == msgCargo->translation()) {
       return;
    }
-   m->setTranslation(translation);
+
+   msgCargo->setTranslation(translation);
    setModified(index.model(), true);
    emit translationChanged(index);
 }
@@ -1116,11 +1146,14 @@ void MultiDataModel::setFinished(const MultiDataIndex &index, bool finished)
 {
    MultiContextItem *mc = multiContextItem(index.context());
    MultiMessageItem *mm = mc->multiMessageItem(index.message());
-   ContextItem *c = contextItem(index);
-   MessageItem *m = messageItem(index);
-   TranslatorMessage::Type type = m->type();
-   if (type == TranslatorMessage::Unfinished && finished) {
-      m->setType(TranslatorMessage::Finished);
+
+   ContextItem *subject  = getContextItem(index);
+   MessageItem *msgCargo = getMessageItem(index);
+
+   TranslatorMessage::Type type = msgCargo->type();
+
+   if (type == TranslatorMessage::Type::Unfinished && finished) {
+      msgCargo->setType(TranslatorMessage::Type::Finished);
       mm->decrementUnfinishedCount();
 
       if (! mm->countUnfinished()) {
@@ -1128,38 +1161,48 @@ void MultiDataModel::setFinished(const MultiDataIndex &index, bool finished)
          mc->incrementFinishedCount();
          emit multiContextDataChanged(index);
       }
-      c->incrementFinishedCount();
-      if (m->danger()) {
-         c->incrementFinishedDangerCount();
-         c->decrementUnfinishedDangerCount();
-         if (!c->unfinishedDangerCount()
-               || c->finishedCount() == c->nonobsoleteCount()) {
+
+      subject->incrementFinishedCount();
+
+      if (msgCargo->danger()) {
+         subject->incrementFinishedDangerCount();
+         subject->decrementUnfinishedDangerCount();
+
+         if (! subject->unfinishedDangerCount() || subject->finishedCount() == subject->nonobsoleteCount()) {
             emit contextDataChanged(index);
          }
-      } else if (c->finishedCount() == c->nonobsoleteCount()) {
+
+      } else if (subject->finishedCount() == subject->nonobsoleteCount()) {
          emit contextDataChanged(index);
       }
+
       emit messageDataChanged(index);
       setModified(index.model(), true);
-   } else if (type == TranslatorMessage::Finished && !finished) {
-      m->setType(TranslatorMessage::Unfinished);
+
+   } else if (type == TranslatorMessage::Type::Finished && !finished) {
+      msgCargo->setType(TranslatorMessage::Type::Unfinished);
       mm->incrementUnfinishedCount();
+
       if (mm->countUnfinished() == 1) {
          decrementFinishedCount();
          mc->decrementFinishedCount();
          emit multiContextDataChanged(index);
       }
-      c->decrementFinishedCount();
-      if (m->danger()) {
-         c->decrementFinishedDangerCount();
-         c->incrementUnfinishedDangerCount();
-         if (c->unfinishedDangerCount() == 1
-               || c->finishedCount() + 1 == c->nonobsoleteCount()) {
+
+      subject->decrementFinishedCount();
+
+      if (msgCargo->danger()) {
+         subject->decrementFinishedDangerCount();
+         subject->incrementUnfinishedDangerCount();
+
+         if (subject->unfinishedDangerCount() == 1 || subject->finishedCount() + 1 == subject->nonobsoleteCount()) {
             emit contextDataChanged(index);
          }
-      } else if (c->finishedCount() + 1 == c->nonobsoleteCount()) {
+
+      } else if (subject->finishedCount() + 1 == subject->nonobsoleteCount()) {
          emit contextDataChanged(index);
       }
+
       emit messageDataChanged(index);
       setModified(index.model(), true);
    }
@@ -1167,36 +1210,47 @@ void MultiDataModel::setFinished(const MultiDataIndex &index, bool finished)
 
 void MultiDataModel::setDanger(const MultiDataIndex &index, bool danger)
 {
-   ContextItem *c = contextItem(index);
-   MessageItem *m = messageItem(index);
-   if (!m->danger() && danger) {
-      if (m->isFinished()) {
-         c->incrementFinishedDangerCount();
-         if (c->finishedDangerCount() == 1) {
+   ContextItem *subject  = getContextItem(index);
+   MessageItem *msgCargo = getMessageItem(index);
+
+   if (! msgCargo->danger() && danger) {
+
+      if (msgCargo->isFinished()) {
+         subject->incrementFinishedDangerCount();
+
+         if (subject->finishedDangerCount() == 1) {
             emit contextDataChanged(index);
          }
+
       } else {
-         c->incrementUnfinishedDangerCount();
-         if (c->unfinishedDangerCount() == 1) {
+         subject->incrementUnfinishedDangerCount();
+
+         if (subject->unfinishedDangerCount() == 1) {
             emit contextDataChanged(index);
          }
       }
+
       emit messageDataChanged(index);
-      m->setDanger(danger);
-   } else if (m->danger() && !danger) {
-      if (m->isFinished()) {
-         c->decrementFinishedDangerCount();
-         if (!c->finishedDangerCount()) {
+      msgCargo->setDanger(danger);
+
+   } else if (msgCargo->danger() && ! danger) {
+      if (msgCargo->isFinished()) {
+         subject->decrementFinishedDangerCount();
+
+         if (! subject->finishedDangerCount()) {
             emit contextDataChanged(index);
          }
+
       } else {
-         c->decrementUnfinishedDangerCount();
-         if (!c->unfinishedDangerCount()) {
+         subject->decrementUnfinishedDangerCount();
+
+         if (! subject->unfinishedDangerCount()) {
             emit contextDataChanged(index);
          }
       }
+
       emit messageDataChanged(index);
-      m->setDanger(danger);
+      msgCargo->setDanger(danger);
    }
 }
 
@@ -1314,7 +1368,7 @@ bool MultiDataModelIterator::isValid() const
 
 MessageItem *MultiDataModelIterator::current() const
 {
-   return m_dataModel->messageItem(*this);
+   return m_dataModel->getMessageItem(*this);
 }
 
 MessageModel::MessageModel(QObject *parent, MultiDataModel *data)
