@@ -61,7 +61,8 @@ class MessageEditor : public QScrollArea
    void showMessage(const MultiDataIndex &index);
    void setNumerusForms(int model, const QStringList &numerusForms);
    bool eventFilter(QObject *, QEvent *);
-   void setTranslation(int model, const QString &translation, int numerus);
+   void setTranslationNumerus(int model, const QString &translation, int numerus);
+
    int activeModel() const {
       return (m_editors.count() != 1) ? m_currentModel : 0;
    }

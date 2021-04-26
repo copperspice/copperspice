@@ -676,9 +676,9 @@ void MessageEditor::showMessage(const MultiDataIndex &index)
          for (int i = 0; i < ed.transTexts.size(); ++i) {
             bool shouldShow = (i < normalizedTranslations.count());
             if (shouldShow) {
-               setTranslation(j, normalizedTranslations.at(i), i);
+               setTranslationNumerus(j, normalizedTranslations.at(i), i);
             } else {
-               setTranslation(j, QString(), i);
+               setTranslationNumerus(j, QString(), i);
             }
 
             ed.transTexts.at(i)->setVisible(i == 0 || shouldShow);
@@ -691,7 +691,7 @@ void MessageEditor::showMessage(const MultiDataIndex &index)
    updateUndoRedo();
 }
 
-void MessageEditor::setTranslation(int model, const QString &translation, int numerus)
+void MessageEditor::setTranslationNumerus(int model, const QString &translation, int numerus)
 {
    MessageEditorData &ed = m_editors[model];
 
