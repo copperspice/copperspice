@@ -84,10 +84,12 @@ enum Ending {
    End_Ellipsis
 };
 
+/*
 static bool hasFormPreview(const QString &fileName)
 {
    return fileName.endsWith(".ui") || fileName.endsWith(".jui");
 }
+*/
 
 static Ending ending(QString str, QLocale::Language lang)
 {
@@ -378,6 +380,9 @@ MainWindow::MainWindow()
    m_sourceCodeView = new SourceCodeView(nullptr);
    m_sourceAndFormView->addWidget(m_sourceCodeView);
 
+   // m_formPreviewView = new FormPreviewView(0, m_dataModel);
+   // m_sourceAndFormView->addWidget(m_formPreviewView);
+
    // errors dock widget
    m_errorsDock = new QDockWidget(this);
    m_errorsDock->setObjectName("ErrorsDockWidget");
@@ -477,6 +482,7 @@ MainWindow::MainWindow()
 
    connect(m_ui.actionLengthVariants, &QAction::toggled, m_messageEditor, &MessageEditor::setLengthVariants);
 
+   m_messageEditor->setLengthVariants(m_ui.actionLengthVariants->isChecked());
    m_messageEditor->setVisualizeWhitespace(m_ui.actionVisualizeWhitespace->isChecked());
    m_focusWatcher = new FocusWatcher(m_messageEditor, this);
    m_contextView->installEventFilter(m_focusWatcher);
@@ -2035,7 +2041,6 @@ void MainWindow::setupMenuBar()
    m_ui.actionPrev->setIcon(QIcon(resourcePrefix()               + "/prev.png"));
    m_ui.actionPrevUnfinished->setIcon(QIcon(resourcePrefix()     + "/prevunfinished.png"));
    m_ui.actionPlaceMarkerMatches->setIcon(QIcon(resourcePrefix() + "/validateplacemarkers.png"));
-   m_ui.actionWhatsThis->setIcon(QIcon(resourcePrefix() + QLatin1String("/whatsthis.png")));
 
    // File menu
    connect(m_ui.menuFile,         SIGNAL(aboutToShow()), this, SLOT(fileAboutToShow()));
@@ -2203,8 +2208,9 @@ void MainWindow::updateLatestModel(int model)
    m_ui.actionRelease->setEnabled(enableRw);
    m_ui.actionReleaseAs->setEnabled(enableRw);
    m_ui.actionClose->setEnabled(enable);
-   m_ui.actionTranslationFileSettings->setEnabled(enableRw);
+   m_ui.actionSettings->setEnabled(enableRw);
    m_ui.actionSearchAndTranslate->setEnabled(enableRw);
+
    // cut & paste - edit only
    updatePhraseBookActions();
    updateStatistics();
@@ -2867,6 +2873,8 @@ void MainWindow::readConfig()
    m_ui.actionPhraseMatches->setChecked(config.value(settingPath("Validators/PhraseMatch"), true).toBool());
    m_ui.actionPlaceMarkerMatches->setChecked(config.value(settingPath("Validators/PlaceMarkers"), true).toBool());
    m_ui.actionLengthVariants->setChecked(config.value(settingPath("Options/LengthVariants"), false).toBool());
+   m_ui.actionVisualizeWhitespace->setChecked(config.value(settingPath("Options/VisualizeWhitespace"), true).toBool());
+   m_messageEditor->setFontSize(config.value(settingPath("Options/EditorFontsize"), font().pointSize()).toReal());
 
    recentFiles().readConfig();
 
@@ -2890,9 +2898,11 @@ void MainWindow::writeConfig()
    config.setValue(settingPath("Validators/PhraseMatch"),       m_ui.actionPhraseMatches->isChecked());
    config.setValue(settingPath("Validators/PlaceMarkers"),      m_ui.actionPlaceMarkerMatches->isChecked());
    config.setValue(settingPath("Options/LengthVariants"),       m_ui.actionLengthVariants->isChecked());
+   config.setValue(settingPath("Options/VisualizeWhitespace"),  m_ui.actionVisualizeWhitespace->isChecked());
    config.setValue(settingPath("MainWindowState"),              saveState());
    recentFiles().writeConfig();
 
+   config.setValue(settingPath("Options/EditorFontsize"),       m_messageEditor->fontSize());
 
    config.beginWriteArray(settingPath("OpenedPhraseBooks"),     m_phraseBooks.size());
 
