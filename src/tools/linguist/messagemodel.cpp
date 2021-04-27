@@ -453,15 +453,50 @@ bool DataModel::setLanguageAndCountry(QLocale::Language lang, QLocale::Country c
       // default
       lang = QLocale::English;
    }
-   QByteArray rules;
-   bool ok = getNumerusInfo(lang, country, &rules, &m_numerusForms, 0);
 
-   m_localizedLanguage = QCoreApplication::translate("MessageEditor", QLocale::languageToString(lang).toLatin1());
+   QVector<std::variant<CountGuide, int>> data;
+   bool ok = getCountInfo(lang, country, &data, &m_numerusForms, nullptr);
+
+   m_localizedLanguage = QCoreApplication::translate("MessageEditor", QLocale::languageToString(lang).constData());
    m_countRefNeeds.clear();
 
-   for (int i = 0; i < rules.size(); ++i) {
-      m_countRefNeeds.append(!(rules.at(i) == Q_EQ && (i == (rules.size() - 2) || rules.at(i + 2) == (char)Q_NEWRULE)));
-      while (++i < rules.size() && rules.at(i) != (char)Q_NEWRULE) {}
+   for (int index = 0; index < data.size(); ++index) {
+      bool x1 = true;
+      bool x2 = false;
+
+      const CountGuide *ptr = std::get_if<CountGuide>(&data.at(index));
+
+      if (ptr != nullptr && *ptr == CountGuide::Equal) {
+         x1 = false;
+      }
+
+      if (! x1) {
+         int tmpSize = data.size() - 2;
+
+         if (index != tmpSize) {
+            const CountGuide *ptr = std::get_if<CountGuide>(&data.at(index + 2));
+
+            if (ptr != nullptr && *ptr != CountGuide::LastEntry) {
+               x2 = true;
+            }
+         }
+      }
+
+      m_countRefNeeds.append(x1 || x2);
+
+      while (true) {
+         ++index;
+
+         if (index >= data.size()) {
+            break;
+         }
+
+         const CountGuide *ptr = std::get_if<CountGuide>(&data.at(index));
+
+         if (ptr != nullptr && *ptr == CountGuide::LastEntry) {
+            break;
+         }
+      }
    }
 
    m_countRefNeeds.append(true);
