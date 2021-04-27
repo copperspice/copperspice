@@ -536,29 +536,14 @@ bool MessageEditor::eventFilter(QObject *o, QEvent *e)
       }
 
    } else if (e->type() == QEvent::KeyPress) {
+      // Ctrl-Tab is still passed through to the textedit and causes a tab to be inserted.
       QKeyEvent *ke = static_cast<QKeyEvent *>(e);
-      if (ke->modifiers() & Qt::ControlModifier) {
-         if (ke->key() == Qt::Key_Plus || ke->key() == Qt::Key_Equal) {
-            return incFont(modelForWidget(o));
-         }
-         if (ke->key() == Qt::Key_Minus) {
-            return decFont(modelForWidget(o));
-         }
-      } else {
-         // Ctrl-Tab is still passed through to the textedit and causes a tab to be inserted.
-         if (ke->key() == Qt::Key_Tab) {
-            focusNextChild();
-            return true;
-         }
+
+      if (ke->key() == Qt::Key_Tab && ! (ke->modifiers() & Qt::ControlModifier)) {
+         focusNextChild();
+         return true;
       }
-   } else if (e->type() == QEvent::Wheel) {
-      QWheelEvent *we = static_cast<QWheelEvent *>(e);
-      if (we->modifiers() & Qt::ControlModifier) {
-         if (we->delta() > 0) {
-            return incFont(modelForWidget(o));
-         }
-         return decFont(modelForWidget(o));
-      }
+
    } else if (e->type() == QEvent::FocusIn) {
       QWidget *widget = static_cast<QWidget *>(o);
       if (widget != m_focusWidget) {
