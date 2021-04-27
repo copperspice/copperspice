@@ -1663,6 +1663,8 @@ void MainWindow::selectedMessageChanged(const QModelIndex &sortedIndex, const QM
 
    }
 
+   updateSourceView(model, msgCargo);
+
    updatePhraseBookActions();
    m_ui.actionSelectAll->setEnabled(index.isValid());
 }
@@ -2193,6 +2195,9 @@ void MainWindow::updateLatestModel(int model)
          }
       }
    }
+
+   updateSourceView(model, msgCargo);
+
    m_ui.actionSave->setEnabled(enableRw);
    m_ui.actionSaveAs->setEnabled(enableRw);
    m_ui.actionRelease->setEnabled(enableRw);
@@ -2205,6 +2210,35 @@ void MainWindow::updateLatestModel(int model)
    updateStatistics();
 }
 
+void MainWindow::updateSourceView(int model, MessageItem *msgCargo)
+{
+    if (msgCargo != nullptr && ! msgCargo->fileName().isEmpty()) {
+
+/*
+        if (hasFormPreview(msgCargo->fileName())) {
+            m_sourceAndFormView->setCurrentWidget(m_formPreviewView);
+            m_formPreviewView->setSourceContext(model, msgCargo);
+        } else {
+*/
+
+      m_sourceAndFormView->setCurrentWidget(m_sourceCodeView);
+
+      QDir dir = QFileInfo(m_dataModel->srcFileName(model)).dir();
+      QString fileName = QDir::cleanPath(dir.absoluteFilePath(msgCargo->fileName()));
+
+      m_sourceCodeView->setSourceContext(fileName, msgCargo->lineNumber());
+
+      // update title bar
+      m_sourceAndFormDock->setWindowTitle(tr("Source Code [") + fileName + "]");
+
+    } else {
+      m_sourceAndFormView->setCurrentWidget(m_sourceCodeView);
+      m_sourceCodeView->setSourceContext(QString(), 0);
+
+      // update title bar
+      m_sourceAndFormDock->setWindowTitle(tr("Source Code"));
+    }
+}
 
 void MainWindow::fileAboutToShow()
 {

@@ -305,6 +305,7 @@ class MainWindow : public QMainWindow
    QStringList pickTranslationFiles();
 
    void updateLatestModel(int model);
+   void updateSourceView(int model, MessageItem *item);
    void updatePhraseBookActions();
    void updatePhraseDictInternal(int model);
    void releaseInternal(int model);
