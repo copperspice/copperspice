@@ -365,12 +365,18 @@ bool DataModel::save(const QString &fileName, QWidget *parent)
                         : Translator::AbsoluteLocations);
    tor.setExtras(m_extra);
    ConversionData cd;
-   bool ok = tor.save(fileName, cd, QLatin1String("auto"));
+
+   tor.normalizeTranslations(cd);
+
+   bool ok = tor.save(fileName, cd, "auto");
    if (ok) {
       setModified(false);
-   } else {
-      QMessageBox::warning(parent, QObject::tr("Qt Linguist"), cd.error());
    }
+
+   if (! cd.error().isEmpty()) {
+      QMessageBox::warning(parent, QObject::tr("Linguist"), cd.error());
+   }
+
    return ok;
 }
 
@@ -882,19 +888,25 @@ void MultiDataModel::close(int model)
 
       m_msgModel->endRemoveColumns();
       emit modelDeleted(model);
-      for (int i = m_multiContextList.size(); --i >= 0;) {
-         MultiContextItem &mc = m_multiContextList[i];
-         QModelIndex contextIdx = m_msgModel->createIndex(i, 0, 0);
-         for (int j = mc.messageCount(); --j >= 0;)
+
+      for (int index = m_multiContextList.size()-1; index >= 0; --index) {
+
+         MultiContextItem &mc   = m_multiContextList[index];
+         QModelIndex contextIdx = m_msgModel->createIndex(index, 0);
+
+         for (int j = mc.messageCount() - 1; j >= 0; --j) {
             if (mc.multiMessageItem(j)->isEmpty()) {
                m_msgModel->beginRemoveRows(contextIdx, j, j);
                mc.removeMultiMessageItem(j);
                m_msgModel->endRemoveRows();
+
                --m_numMessages;
             }
-         if (!mc.messageCount()) {
-            m_msgModel->beginRemoveRows(QModelIndex(), i, i);
-            m_multiContextList.removeAt(i);
+         }
+
+         if (mc.messageCount() == 0) {
+            m_msgModel->beginRemoveRows(QModelIndex(), index, index);
+            m_multiContextList.removeAt(index);
             m_msgModel->endRemoveRows();
          }
       }
