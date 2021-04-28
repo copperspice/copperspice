@@ -2640,22 +2640,35 @@ void MainWindow::updatePhraseDicts()
 
 static bool haveMnemonic(const QString &str)
 {
-   for (const ushort *p = (ushort *)str.constData();; ) { // Assume null-termination
-      ushort c = *p++;
-      if (!c) {
-         break;
-      }
-      if (c == '&') {
-         c = *p++;
-         if (!c) {
+   auto iter = str.cbegin();
+   const auto iter_end = str.cend();
+
+   while (iter != iter_end) {
+      QChar ch = *iter;
+      ++iter;
+
+      if (ch == '&') {
+
+         if (iter == iter_end) {
             return false;
          }
-         // "Nobody" ever really uses these alt-space, and they are highly annoying
-         // because we get a lot of false positives.
-         if (c != '&' && c != ' ' && QChar(c).isPrint()) {
-            const ushort *pp = p;
-            for (; *p < 256 && isalpha(*p); p++) ;
-            if (pp == p || *p != ';') {
+
+         ch = *iter;
+         ++iter;
+
+         if (ch != '&' && ! ch.isSpace() && ch.isPrint()) {
+            const auto iter_tmp = iter;
+
+            while (iter != iter_end) {
+
+               if (! iter->isLetter()) {
+                  break;
+               }
+
+               ++iter;
+            }
+
+            if (iter == iter_tmp || iter == iter_end || *iter != ';') {
                return true;
             }
 
@@ -2798,29 +2811,41 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
             int numTranslations = translations.count();
 
             for (int pass = 0; pass < numTranslations + 1; ++pass) {
-               const QChar *uc_begin = source.unicode();
-               const QChar *uc_end = uc_begin + source.length();
+               auto iter_begin = source.cbegin();
+               auto iter_end   = source.cend();
+
                if (pass >= 1) {
                   translation = translations[pass - 1];
-                  uc_begin = translation.unicode();
-                  uc_end = uc_begin + translation.length();
+                  iter_begin = translation.cbegin();
+                  iter_end   = translation.cend();
                }
-               const QChar *c = uc_begin;
-               while (c < uc_end) {
-                  if (c->unicode() == '%') {
-                     const QChar *escape_start = ++c;
-                     while (c->isDigit()) {
-                        ++c;
+
+               auto iter = iter_begin;
+
+               while (iter < iter_end) {
+                  if (*iter == '%') {
+                     ++iter;
+
+                     auto iter_start = iter;
+
+                     while (iter->isDigit()) {
+                        ++iter;
                      }
-                     const QChar *escape_end = c;
+
+                     auto iter_end = iter;
                      bool ok = true;
-                     int markerIndex = QString::fromRawData(
-                                          escape_start, escape_end - escape_start).toInt(&ok);
+                     int markerIndex = QString(iter_start, iter_end).toInteger<int>(&ok);
+
                      if (ok) {
-                        placeMarkerIndexes[markerIndex] += (pass == 0 ? numTranslations : -1);
+                        if (pass == 0) {
+                           placeMarkerIndexes[markerIndex] += numTranslations;
+                        } else {
+                           placeMarkerIndexes[markerIndex] -= 1;
+                        }
                      }
                   }
-                  ++c;
+
+                  ++iter;
                }
             }
 
