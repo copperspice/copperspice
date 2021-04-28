@@ -9,7 +9,6 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
         <key>CFBundleGetInfoString</key>
-	<string>Created by Qt/QMake</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
@@ -27,7 +26,7 @@
                     <string>qph</string>
                 </array>
                 <key>CFBundleTypeName</key>
-                <string>Qt Linguist 'Phrase Book'</string>
+                <string>Linguist 'Phrase Book'</string>
                 <key>LSHandlerRank</key>
                 <string>Default</string>
             </dict>
@@ -41,7 +40,7 @@
                     <string>ts</string>
                 </array>
                 <key>CFBundleTypeName</key>
-                <string>Qt Translation Source</string>
+                <string>Translation Source</string>
                 <key>LSHandlerRank</key>
                 <string>Default</string>
             </dict>

@@ -464,7 +464,8 @@ MainWindow::MainWindow()
    connect(m_messageView, &QTreeView::clicked,   this,            &MainWindow::toggleFinished);
    connect(m_messageView, &QTreeView::activated, m_messageEditor, &MessageEditor::setEditorFocus);
 
-   connect(m_contextView, &QTreeView::activated, m_messageView,   cs_mp_cast<>(&QTreeView::setFocus));
+// connect(m_contextView, &QTreeView::activated, m_messageView,   cs_mp_cast<>(&QTreeView::setFocus));
+   connect(m_contextView, &QTreeView::activated, m_messageView,   static_cast<void (QTreeView::*)()>(&QTreeView::setFocus));
 
    connect(m_messageEditor,   &MessageEditor::translationChanged,       this, &MainWindow::updateTranslation);
    connect(m_messageEditor,   &MessageEditor::translatorCommentChanged, this, &MainWindow::updateTranslatorComment);

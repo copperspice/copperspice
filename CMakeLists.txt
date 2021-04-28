@@ -558,6 +558,7 @@ endif()
 if (WITH_XML AND WITH_GUI)
    add_subdirectory(src/tools/rcc)
    add_subdirectory(src/tools/uic)
+   add_subdirectory(src/tools/linguist)
 endif()
 
 # platform plugins
