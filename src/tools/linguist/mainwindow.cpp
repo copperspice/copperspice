@@ -3047,13 +3047,35 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
       return true;
 
    } else if (event->type() == QEvent::KeyPress) {
-      if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_Escape) {
-         if (object == m_messageEditor) {
-            m_messageView->setFocus();
-         } else if (object == m_messagesDock) {
-            m_contextView->setFocus();
-         }
-      }
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+
+        if (ke->key() == Qt::Key_Escape) {
+
+            if (object == m_messageEditor) {
+                m_messageView->setFocus();
+
+            } else if (object == m_messagesDock) {
+                m_contextView->setFocus();
+            }
+
+        } else if ((ke->key() == Qt::Key_Plus || ke->key() == Qt::Key_Equal)
+                   && (ke->modifiers() & Qt::ControlModifier)) {
+            m_messageEditor->increaseFontSize();
+
+        } else if (ke->key() == Qt::Key_Minus && (ke->modifiers() & Qt::ControlModifier)) {
+            m_messageEditor->decreaseFontSize();
+        }
+
+   } else if (event->type() == QEvent::Wheel) {
+       QWheelEvent *we = static_cast<QWheelEvent *>(event);
+
+       if (we->modifiers() & Qt::ControlModifier) {
+          if (we->delta() > 0) {
+             m_messageEditor->increaseFontSize();
+          } else {
+             m_messageEditor->decreaseFontSize();
+          }
+       }
    }
 
    return false;
