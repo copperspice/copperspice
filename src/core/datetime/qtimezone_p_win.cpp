@@ -580,11 +580,12 @@ QTimeZonePrivate::Data QWinTimeZonePrivate::data(qint64 forMSecsSinceEpoch) cons
    // Convert MSecs to year to get transitions for, assumes no transitions around 31 Dec/1 Jan
    int year = msecsToDate(forMSecsSinceEpoch).year();
 
-   qint64 first;
-   qint64 second;
-   qint64 next = maxMSecs();
-   qint64 stdMSecs;
-   qint64 dstMSecs;
+   qint64 first      = 0;
+   qint64 second     = 0;
+   qint64 next       = maxMSecs();
+   qint64 stdMSecs   = 0;
+   qint64 dstMSecs   = 0;
+
    QWinTransitionRule rule;
    do {
       // Convert the transition rules into msecs for the year we want to try
@@ -642,11 +643,13 @@ QTimeZonePrivate::Data QWinTimeZonePrivate::nextTransition(qint64 afterMSecsSinc
 
    // Otherwise we have a valid rule for the required year that can be used
    // to calculate this year or next
-   qint64 first;
-   qint64 second;
-   qint64 next = minMSecs();
-   qint64 stdMSecs;
-   qint64 dstMSecs;
+
+   qint64 first      = 0;
+   qint64 second     = 0;
+   qint64 next       = minMSecs();
+   qint64 stdMSecs   = 0;
+   qint64 dstMSecs   = 0;
+
    do {
       // Convert the transition rules into msecs for the year we want to try
       rule = ruleForYear(year);
@@ -696,11 +699,12 @@ QTimeZonePrivate::Data QWinTimeZonePrivate::previousTransition(qint64 beforeMSec
       }
    }
 
-   qint64 first;
-   qint64 second;
-   qint64 next = maxMSecs();
-   qint64 stdMSecs;
-   qint64 dstMSecs;
+   qint64 first      = 0;
+   qint64 second     = 0;
+   qint64 next       = maxMSecs();
+   qint64 stdMSecs   = 0;
+   qint64 dstMSecs   = 0;
+
    do {
       // Convert the transition rules into msecs for the year we want to try
       rule = ruleForYear(year);
