@@ -89,8 +89,7 @@ QPixmap qt_xcb_pixmapFromXPixmap(QXcbConnection *connection, xcb_pixmap_t pixmap
       xcb_get_image_unchecked(conn, XCB_IMAGE_FORMAT_Z_PIXMAP, pixmap,
          0, 0, width, height, 0xffffffff);
 
-   xcb_get_image_reply_t *image_reply =
-      xcb_get_image_reply(conn, get_image_cookie, NULL);
+   xcb_get_image_reply_t *image_reply = xcb_get_image_reply(conn, get_image_cookie, nullptr);
 
    if (!image_reply) {
       return QPixmap();
@@ -188,7 +187,7 @@ xcb_pixmap_t qt_xcb_XPixmapFromBitmap(QXcbScreen *screen, const QImage &image)
       memcpy(buf + (destLineSize * i), map + (bytesPerLine * i), destLineSize);
    }
    xcb_pixmap_t pm = xcb_create_pixmap_from_bitmap_data(conn, screen->root(), buf,
-         width, height, 1, 0, 0, 0);
+         width, height, 1, 0, 0, nullptr);
    delete[] buf;
    return pm;
 }
@@ -200,7 +199,8 @@ xcb_cursor_t qt_xcb_createCursorXRender(QXcbScreen *screen, const QImage &image,
    xcb_connection_t *conn = screen->xcb_connection();
    const int w = image.width();
    const int h = image.height();
-   xcb_generic_error_t *error = 0;
+
+   xcb_generic_error_t *error = nullptr;
    xcb_render_query_pict_formats_cookie_t formatsCookie = xcb_render_query_pict_formats(conn);
    xcb_render_query_pict_formats_reply_t *formatsReply = xcb_render_query_pict_formats_reply(conn,
          formatsCookie,
@@ -223,9 +223,9 @@ xcb_cursor_t qt_xcb_createCursorXRender(QXcbScreen *screen, const QImage &image,
    xcb_image_t *xi = xcb_image_create(w, h, XCB_IMAGE_FORMAT_Z_PIXMAP,
          32, 32, 32, 32,
          QSysInfo::ByteOrder == QSysInfo::BigEndian ? XCB_IMAGE_ORDER_MSB_FIRST : XCB_IMAGE_ORDER_LSB_FIRST,
-         XCB_IMAGE_ORDER_MSB_FIRST,
-         0, 0, 0);
-   if (!xi) {
+         XCB_IMAGE_ORDER_MSB_FIRST, nullptr, 0, nullptr);
+
+   if (! xi) {
       qWarning("qt_xcb_createCursorXRender: xcb_image_create failed");
       free(formatsReply);
       return XCB_NONE;
@@ -243,10 +243,10 @@ xcb_cursor_t qt_xcb_createCursorXRender(QXcbScreen *screen, const QImage &image,
    xcb_create_pixmap(conn, 32, pix, screen->root(), w, h);
 
    xcb_render_picture_t pic = xcb_generate_id(conn);
-   xcb_render_create_picture(conn, pic, pix, fmt->id, 0, 0);
+   xcb_render_create_picture(conn, pic, pix, fmt->id, 0, nullptr);
 
    xcb_gcontext_t gc = xcb_generate_id(conn);
-   xcb_create_gc(conn, gc, pix, 0, 0);
+   xcb_create_gc(conn, gc, pix, 0, nullptr);
    xcb_image_put(conn, pix, gc, xi, 0, 0, 0);
    xcb_free_gc(conn, gc);
 

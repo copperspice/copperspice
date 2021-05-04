@@ -38,11 +38,9 @@ static constexpr bool s_isDebug = false;
 #include <X11/extensions/XInput2.h>
 #include <X11/extensions/XI2proto.h>
 
-struct XInput2TouchDeviceData {
-   XInput2TouchDeviceData()
-      : xiDeviceInfo(0)
-      , qtTouchDevice(0)
-      , providesTouchOrientation(false) {
+struct XInput2TouchDeviceData {XInput2TouchDeviceData()
+   : xiDeviceInfo(nullptr), qtTouchDevice(nullptr), providesTouchOrientation(false)
+   {
    }
    XIDeviceInfo *xiDeviceInfo;
    QTouchDevice *qtTouchDevice;
@@ -416,7 +414,7 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
       dev->xiDeviceInfo = XIQueryDevice(static_cast<Display *>(m_xlib_display), id, &nrDevices);
       if (nrDevices <= 0) {
          delete dev;
-         return 0;
+         return nullptr;
       }
       int type = -1;
       int maxTouchPoints = 1;
@@ -499,7 +497,7 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
       } else {
          XIFreeDeviceInfo(dev->xiDeviceInfo);
          delete dev;
-         dev = 0;
+         dev = nullptr;
       }
    }
    return dev;
@@ -517,9 +515,10 @@ void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
    xi2PrepareXIGenericDeviceEvent(event);
    xXIGenericDeviceEvent *xiEvent = reinterpret_cast<xXIGenericDeviceEvent *>(event);
    int sourceDeviceId = xiEvent->deviceid; // may be the master id
-   xXIDeviceEvent *xiDeviceEvent = 0;
-   xXIEnterEvent *xiEnterEvent = 0;
-   QXcbWindowEventListener *eventListener = 0;
+
+   xXIDeviceEvent *xiDeviceEvent = nullptr;
+   xXIEnterEvent *xiEnterEvent   = nullptr;
+   QXcbWindowEventListener *eventListener = nullptr;
 
    switch (xiEvent->evtype) {
       case XI_ButtonPress:

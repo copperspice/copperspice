@@ -148,9 +148,9 @@ static void updateFormatFromContext(QSurfaceFormat &format)
 
 QGLXContext::QGLXContext(QXcbScreen *screen, const QSurfaceFormat &format, QPlatformOpenGLContext *share,
    const QVariant &nativeHandle)
-   : QPlatformOpenGLContext(), m_display(DISPLAY_FROM_XCB(screen)), m_config(0), m_context(0)
-   , m_shareContext(0), m_format(format), m_isPBufferCurrent(false), m_swapInterval(-1)
-   , m_ownsContext(! nativeHandle.isValid())
+   : QPlatformOpenGLContext(), m_display(DISPLAY_FROM_XCB(screen)), m_config(nullptr), m_context(nullptr)
+   , m_shareContext(nullptr), m_format(format), m_isPBufferCurrent(false), m_swapInterval(-1),
+     m_ownsContext(! nativeHandle.isValid())
 {
    if (! nativeHandle.isValid()) {
       init(screen, share);
@@ -277,9 +277,10 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
             m_context = glXCreateContextAttribsARB(m_display, config, m_shareContext, true, contextAttributes.data());
             if (!m_context && m_shareContext) {
                // re-try without a shared glx context
-               m_context = glXCreateContextAttribsARB(m_display, config, 0, true, contextAttributes.data());
+               m_context = glXCreateContextAttribsARB(m_display, config, nullptr, true, contextAttributes.data());
+
                if (m_context) {
-                  m_shareContext = 0;
+                  m_shareContext = nullptr;
                }
             }
          }
@@ -295,9 +296,9 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
          m_context = glXCreateNewContext(m_display, config, GLX_RGBA_TYPE, m_shareContext, true);
          if (!m_context && m_shareContext) {
             // re-try without a shared glx context
-            m_context = glXCreateNewContext(m_display, config, GLX_RGBA_TYPE, 0, true);
+            m_context = glXCreateNewContext(m_display, config, GLX_RGBA_TYPE, nullptr, true);
             if (m_context) {
-               m_shareContext = 0;
+               m_shareContext = nullptr;
             }
          }
       }
@@ -324,7 +325,7 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share)
       m_context = glXCreateContext(m_display, visualInfo, m_shareContext, true);
       if (!m_context && m_shareContext) {
          // re-try without a shared glx context
-         m_shareContext = 0;
+         m_shareContext = nullptr;
          m_context = glXCreateContext(m_display, visualInfo, nullptr, true);
       }
 
@@ -393,13 +394,13 @@ void QGLXContext::init(QXcbScreen *screen, QPlatformOpenGLContext *share, const 
       vinfo = XGetVisualInfo(dpy, VisualScreenMask | VisualIDMask, &v, &n);
       if (n < 1) {
          XFree(vinfo);
-         vinfo = 0;
+         vinfo = nullptr;
       }
    }
 
    // For contexts created with an FBConfig using the modern functions providing the
    // visual or window is not mandatory. Just query the config from the context.
-   GLXFBConfig config = 0;
+   GLXFBConfig config = nullptr;
 
    if (! vinfo) {
       int configId = 0;
@@ -523,8 +524,9 @@ bool QGLXContext::makeCurrent(QPlatformSurface *surface)
          m_swapInterval = interval;
          typedef void (*qt_glXSwapIntervalEXT)(Display *, GLXDrawable, int);
          typedef void (*qt_glXSwapIntervalMESA)(unsigned int);
-         static qt_glXSwapIntervalEXT glXSwapIntervalEXT = 0;
-         static qt_glXSwapIntervalMESA glXSwapIntervalMESA = 0;
+
+         static qt_glXSwapIntervalEXT glXSwapIntervalEXT   = nullptr;
+         static qt_glXSwapIntervalMESA glXSwapIntervalMESA = nullptr;
          static bool resolved = false;
          if (!resolved) {
             resolved = true;
@@ -551,9 +553,9 @@ bool QGLXContext::makeCurrent(QPlatformSurface *surface)
 void QGLXContext::doneCurrent()
 {
    if (m_isPBufferCurrent) {
-      glXMakeContextCurrent(m_display, 0, 0, 0);
+      glXMakeContextCurrent(m_display, 0, 0, nullptr);
    } else {
-      glXMakeCurrent(m_display, 0, 0);
+      glXMakeCurrent(m_display, 0, nullptr);
    }
    m_isPBufferCurrent = false;
 }
@@ -583,20 +585,25 @@ void (*QGLXContext::getProcAddress(const QByteArray &procName)) ()
 {
 #ifdef QT_STATIC
    return glXGetProcAddressARB(reinterpret_cast<const GLubyte *>(procName.constData()));
+
 #else
    typedef void *(*qt_glXGetProcAddressARB)(const GLubyte *);
-   static qt_glXGetProcAddressARB glXGetProcAddressARB = 0;
+
+   static qt_glXGetProcAddressARB glXGetProcAddressARB = nullptr;
    static bool resolved = false;
 
    if (resolved && !glXGetProcAddressARB) {
-      return 0;
+      return nullptr;
    }
+
    if (! glXGetProcAddressARB) {
       QList<QByteArray> glxExt = QByteArray(glXGetClientString(m_display, GLX_EXTENSIONS)).split(' ');
 
       if (glxExt.contains("GLX_ARB_get_proc_address")) {
+
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
-         void *handle = dlopen(NULL, RTLD_LAZY);
+         void *handle = dlopen(nullptr, RTLD_LAZY);
+
          if (handle) {
             glXGetProcAddressARB = (qt_glXGetProcAddressARB) dlsym(handle, "glXGetProcAddressARB");
             dlclose(handle);
@@ -618,7 +625,7 @@ void (*QGLXContext::getProcAddress(const QByteArray &procName)) ()
    }
 
    if (!glXGetProcAddressARB) {
-      return 0;
+      return nullptr;
    }
 
    return (void (*)())glXGetProcAddressARB(reinterpret_cast<const GLubyte *>(procName.constData()));
@@ -632,12 +639,12 @@ QSurfaceFormat QGLXContext::format() const
 
 bool QGLXContext::isSharing() const
 {
-   return m_shareContext != 0;
+   return m_shareContext != nullptr;
 }
 
 bool QGLXContext::isValid() const
 {
-   return m_context != 0;
+   return m_context != nullptr;
 }
 
 bool QGLXContext::m_queriedDummyContext = false;
@@ -728,7 +735,7 @@ void QGLXContext::queryDummyContext()
 
    if (const char *renderer = (const char *) glGetString(GL_RENDERER)) {
       for (int i = 0; qglx_threadedgl_blacklist_renderer[i]; ++i) {
-         if (strstr(renderer, qglx_threadedgl_blacklist_renderer[i]) != 0) {
+         if (strstr(renderer, qglx_threadedgl_blacklist_renderer[i]) != nullptr) {
             m_supportsThreading = false;
             break;
          }
@@ -737,7 +744,7 @@ void QGLXContext::queryDummyContext()
 
    if (glxvendor) {
       for (int i = 0; qglx_threadedgl_blacklist_vendor[i]; ++i) {
-         if (strstr(glxvendor, qglx_threadedgl_blacklist_vendor[i]) != 0) {
+         if (strstr(glxvendor, qglx_threadedgl_blacklist_vendor[i]) != nullptr) {
             m_supportsThreading = false;
             break;
          }

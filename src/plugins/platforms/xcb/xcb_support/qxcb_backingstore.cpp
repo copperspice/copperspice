@@ -148,12 +148,9 @@ QXcbShmImage::QXcbShmImage(QXcbScreen *screen, const QSize &size, uint depth, QI
    Q_ASSERT(fmt != fmtend);
 
    m_xcb_image = xcb_image_create(size.width(), size.height(),
-         XCB_IMAGE_FORMAT_Z_PIXMAP,
-         fmt->scanline_pad,
-         fmt->depth, fmt->bits_per_pixel, 0,
+         XCB_IMAGE_FORMAT_Z_PIXMAP, fmt->scanline_pad, fmt->depth, fmt->bits_per_pixel, 0,
          QSysInfo::ByteOrder == QSysInfo::BigEndian ? XCB_IMAGE_ORDER_MSB_FIRST : XCB_IMAGE_ORDER_LSB_FIRST,
-         XCB_IMAGE_ORDER_MSB_FIRST,
-         0, ~0, 0);
+         XCB_IMAGE_ORDER_MSB_FIRST, nullptr, ~0, nullptr);
 
    const int segmentSize = m_xcb_image->stride * m_xcb_image->height;
    if (!segmentSize) {
@@ -165,14 +162,16 @@ QXcbShmImage::QXcbShmImage(QXcbScreen *screen, const QSize &size, uint depth, QI
       qWarning("QXcbShmImage: shmget() failed (%d: %s) for size %d (%dx%d)",
          errno, strerror(errno), segmentSize, size.width(), size.height());
    } else {
-      m_shm_info.shmaddr = m_xcb_image->data = (quint8 *)shmat(id, 0, 0);
+      m_shm_info.shmaddr = m_xcb_image->data = (quint8 *)shmat(id, nullptr, 0);
    }
+
    m_shm_info.shmid = id;
    m_shm_info.shmseg = xcb_generate_id(xcb_connection());
 
    const xcb_query_extension_reply_t *shm_reply = xcb_get_extension_data(xcb_connection(), &xcb_shm_id);
-   bool shm_present = shm_reply != NULL && shm_reply->present;
-   xcb_generic_error_t *error = NULL;
+   bool shm_present = shm_reply != nullptr && shm_reply->present;
+   xcb_generic_error_t *error = nullptr;
+
    if (shm_present) {
       error = xcb_request_check(xcb_connection(), xcb_shm_attach_checked(xcb_connection(), m_shm_info.shmseg, m_shm_info.shmid, false));
    }
@@ -181,13 +180,14 @@ QXcbShmImage::QXcbShmImage(QXcbScreen *screen, const QSize &size, uint depth, QI
 
       if (id != -1) {
          shmdt(m_shm_info.shmaddr);
-         shmctl(m_shm_info.shmid, IPC_RMID, 0);
+         shmctl(m_shm_info.shmid, IPC_RMID, nullptr);
       }
-      m_shm_info.shmaddr = 0;
+      m_shm_info.shmaddr = nullptr;
 
       m_xcb_image->data = (uint8_t *)malloc(segmentSize);
+
    } else {
-      if (shmctl(m_shm_info.shmid, IPC_RMID, 0) == -1) {
+      if (shmctl(m_shm_info.shmid, IPC_RMID, nullptr) == -1) {
          qWarning() << "QXcbBackingStore: Error while marking the shared memory segment to be destroyed";
       }
    }
@@ -211,7 +211,7 @@ void QXcbShmImage::destroy()
    if (segmentSize) {
       if (m_shm_info.shmaddr) {
          shmdt(m_shm_info.shmaddr);
-         shmctl(m_shm_info.shmid, IPC_RMID, 0);
+         shmctl(m_shm_info.shmid, IPC_RMID, nullptr);
       } else {
          free(m_xcb_image->data);
       }
@@ -235,7 +235,7 @@ void QXcbShmImage::put(xcb_window_t window, const QPoint &target, const QRect &s
       }
 
       m_gc = xcb_generate_id(xcb_connection());
-      Q_XCB_CALL(xcb_create_gc(xcb_connection(), m_gc, window, 0, 0));
+      Q_XCB_CALL(xcb_create_gc(xcb_connection(), m_gc, window, 0, nullptr));
 
       m_gc_window = window;
    }
@@ -284,15 +284,9 @@ void QXcbShmImage::put(xcb_window_t window, const QPoint &target, const QRect &s
          int rows = (std::min)(height, rows_per_put);
 
          xcb_image_t *subimage = xcb_image_subimage(converted_image, src_x, src_y, width, rows,
-               0, 0, 0);
-         xcb_image_put(xcb_connection(),
-            window,
-            m_gc,
-            subimage,
-            target_x,
-            target_y,
-            0);
+               nullptr, 0, nullptr);
 
+         xcb_image_put(xcb_connection(), window, m_gc, subimage, target_x, target_y, 0);
          xcb_image_destroy(subimage);
 
          src_y += rows;
@@ -319,8 +313,7 @@ void QXcbShmImage::preparePaint(const QRegion &region)
 }
 
 QXcbBackingStore::QXcbBackingStore(QWindow *window)
-   : QPlatformBackingStore(window)
-   , m_image(0)
+   : QPlatformBackingStore(window), m_image(nullptr)
 {
    QXcbScreen *screen = static_cast<QXcbScreen *>(window->screen()->handle());
    setConnection(screen->connection());
@@ -334,7 +327,7 @@ QXcbBackingStore::~QXcbBackingStore()
 QPaintDevice *QXcbBackingStore::paintDevice()
 {
    if (!m_image) {
-      return 0;
+      return nullptr;
    }
    return m_rgbImage.isNull() ? m_image->image() : &m_rgbImage;
 }
@@ -462,8 +455,9 @@ void QXcbBackingStore::resize(const QSize &size, const QRegion &)
    Q_XCB_NOOP(connection());
 
 
-   QXcbScreen *screen = window()->screen() ? static_cast<QXcbScreen *>(window()->screen()->handle()) : 0;
+   QXcbScreen *screen = window()->screen() ? static_cast<QXcbScreen *>(window()->screen()->handle()) : nullptr;
    QPlatformWindow *pw = window()->handle();
+
    if (!pw) {
       window()->create();
       pw = window()->handle();
@@ -472,7 +466,7 @@ void QXcbBackingStore::resize(const QSize &size, const QRegion &)
 
    delete m_image;
    if (!screen) {
-      m_image = 0;
+      m_image = nullptr;
       m_size = size;
       return;
    }

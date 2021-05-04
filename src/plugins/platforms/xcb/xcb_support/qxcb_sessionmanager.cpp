@@ -53,7 +53,7 @@ class QSmSocketReceiver : public QObject
    CS_SLOT_2(socketActivated)
 };
 
-static SmcConn smcConnection = 0;
+static SmcConn smcConnection = nullptr;
 static bool sm_interactionActive;
 static bool sm_smActive;
 static int sm_interactStyle;
@@ -66,7 +66,7 @@ static bool sm_in_phase2;
 
 bool qt_sm_blockUserInput = false;
 
-static QSmSocketReceiver *sm_receiver = 0;
+static QSmSocketReceiver *sm_receiver = nullptr;
 
 static void resetSmState();
 static void sm_setProperty(const char *name, const char *type, int num_vals, SmPropValue *vals);
@@ -180,7 +180,7 @@ static void sm_performSaveYourself(QXcbSessionManager *sm)
 
    // generate a new session key
    timeval tv;
-   gettimeofday(&tv, 0);
+   gettimeofday(&tv, nullptr);
    sm->setSessionKey(QString::number(quint64(tv.tv_sec)) + '_' + QString::number(quint64(tv.tv_usec)));
 
    QStringList arguments = QCoreApplication::arguments();
@@ -329,22 +329,21 @@ static void sm_saveYourselfPhase2Callback(SmcConn smcConn, SmPointer clientData)
    sm_performSaveYourself((QXcbSessionManager *) clientData);
 }
 
-
 void QSmSocketReceiver::socketActivated(int)
 {
-   IceProcessMessages(SmcGetIceConnection(smcConnection), 0, 0);
+   IceProcessMessages(SmcGetIceConnection(smcConnection), nullptr, nullptr);
 }
 
 
 // QXcbSessionManager starts here
 
 QXcbSessionManager::QXcbSessionManager(const QString &id, const QString &key)
-   : QPlatformSessionManager(id, key)
-   , m_eventLoop(0)
+   : QPlatformSessionManager(id, key), m_eventLoop(nullptr)
 {
    resetSmState();
    char cerror[256];
-   char *myId = 0;
+   char *myId = nullptr;
+
    QByteArray b_id = id.toLatin1();
    char *prevId = b_id.data();
 
@@ -363,7 +362,7 @@ QXcbSessionManager::QXcbSessionManager(const QString &id, const QString &key)
       return;
    }
 
-   smcConnection = SmcOpenConnection(0, 0, 1, 0,
+   smcConnection = SmcOpenConnection(nullptr, nullptr, 1, 0,
          SmcSaveYourselfProcMask | SmcDieProcMask | SmcSaveCompleteProcMask | SmcShutdownCancelledProcMask,
          &cb, prevId, &myId, 256, cerror);
 
@@ -381,9 +380,10 @@ QXcbSessionManager::QXcbSessionManager(const QString &id, const QString &key)
 QXcbSessionManager::~QXcbSessionManager()
 {
    if (smcConnection) {
-      SmcCloseConnection(smcConnection, 0, 0);
+      SmcCloseConnection(smcConnection, 0, nullptr);
    }
-   smcConnection = 0;
+
+   smcConnection = nullptr;
    delete sm_receiver;
 }
 
@@ -413,7 +413,7 @@ bool QXcbSessionManager::allowsInteraction()
       QEventLoop eventLoop;
       m_eventLoop = &eventLoop;
       eventLoop.exec();
-      m_eventLoop = 0;
+      m_eventLoop = nullptr;
 
       sm_waitingForInteraction = false;
       if (sm_smActive) { // not cancelled
@@ -445,7 +445,7 @@ bool QXcbSessionManager::allowsErrorInteraction()
       QEventLoop eventLoop;
       m_eventLoop = &eventLoop;
       eventLoop.exec();
-      m_eventLoop = 0;
+      m_eventLoop = nullptr;
 
       sm_waitingForInteraction = false;
       if (sm_smActive) { // not cancelled

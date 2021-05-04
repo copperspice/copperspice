@@ -350,7 +350,7 @@ class QXcbWindowEventListener
 #endif
 
    virtual QXcbWindow *toWindow() {
-      return 0;
+      return nullptr;
    }
 };
 
@@ -821,13 +821,15 @@ xcb_generic_event_t *QXcbConnection::checkEvent(T &checker)
    for (int i = 0; i < eventqueue->size(); ++i) {
       xcb_generic_event_t *event = eventqueue->at(i);
       if (checker.checkEvent(event)) {
-         (*eventqueue)[i] = 0;
+         (*eventqueue)[i] = nullptr;
          m_reader->unlock();
          return event;
       }
    }
+
    m_reader->unlock();
-   return 0;
+
+   return nullptr;
 }
 
 class QXcbConnectionGrabber

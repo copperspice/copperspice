@@ -112,11 +112,10 @@ void QXcbVirtualDesktop::subscribeToXFixesSelectionNotify()
 QRect QXcbVirtualDesktop::getWorkArea() const
 {
    QRect r;
-   xcb_get_property_reply_t *workArea =
-      xcb_get_property_reply(xcb_connection(),
+   xcb_get_property_reply_t *workArea = xcb_get_property_reply(xcb_connection(),
          xcb_get_property_unchecked(xcb_connection(), false, screen()->root,
-            atom(QXcbAtom::_NET_WORKAREA),
-            XCB_ATOM_CARDINAL, 0, 1024), NULL);
+         atom(QXcbAtom::_NET_WORKAREA), XCB_ATOM_CARDINAL, 0, 1024), nullptr);
+
    if (workArea && workArea->type == XCB_ATOM_CARDINAL && workArea->format == 32 && workArea->value_len >= 4) {
       // If workArea->value_len > 4, the remaining ones seem to be for WM's virtual desktops
       // (don't mess with QXcbVirtualDesktop which represents an X screen).
@@ -320,7 +319,7 @@ QWindow *QXcbScreen::topLevelWindowAt(const QPoint &p) const
          xcb_translate_coordinates_reply(xcb_connection(), translate_cookie, NULL);
 
       if (!translate_reply) {
-         return 0;
+         return nullptr;
       }
 
       parent = child;
@@ -331,7 +330,7 @@ QWindow *QXcbScreen::topLevelWindowAt(const QPoint &p) const
       free(translate_reply);
 
       if (!child || child == root) {
-         return 0;
+         return nullptr;
       }
 
       QPlatformWindow *platformWindow = connection()->platformWindowFromId(child);
@@ -340,7 +339,7 @@ QWindow *QXcbScreen::topLevelWindowAt(const QPoint &p) const
       }
    } while (parent != child);
 
-   return 0;
+   return nullptr;
 }
 
 void QXcbScreen::windowShown(QXcbWindow *window)
@@ -383,7 +382,7 @@ const xcb_visualtype_t *QXcbScreen::visualForId(xcb_visualid_t visualid) const
 {
    QMap<xcb_visualid_t, xcb_visualtype_t>::const_iterator it = m_visuals.find(visualid);
    if (it == m_visuals.constEnd()) {
-      return 0;
+      return nullptr;
    }
    return &*it;
 }
@@ -691,7 +690,7 @@ QPixmap QXcbScreen::grabWindow(WId window, int x, int y, int width, int height) 
       reply = root_reply;
    } else {
       free(root_reply);
-      root_reply = 0;
+      root_reply = nullptr;
    }
 
    xcb_get_window_attributes_reply_t *attributes_reply =
@@ -727,7 +726,7 @@ QPixmap QXcbScreen::grabWindow(WId window, int x, int y, int width, int height) 
 
 static bool parseXftInt(const QByteArray &stringValue, int *value)
 {
-   Q_ASSERT(value != 0);
+   Q_ASSERT(value != nullptr);
    bool ok;
    *value = stringValue.toInt(&ok);
    return ok;

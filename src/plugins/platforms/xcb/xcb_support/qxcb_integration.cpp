@@ -123,7 +123,7 @@ QXcbIntegration::QXcbIntegration(const QStringList &parameters, int &argc, char 
    m_nativeInterface.reset(new QXcbNativeInterface);
 
    // Parse arguments
-   const char *displayName = 0;
+   const char *displayName = nullptr;
    bool noGrabArg = false;
    bool doGrabArg = false;
 
@@ -363,7 +363,7 @@ Qt::KeyboardModifiers QXcbIntegration::queryKeyboardModifiers() const
 {
    int keybMask = 0;
    QXcbConnection *conn = m_connections.at(0);
-   QXcbCursor::queryPointer(conn, 0, 0, &keybMask);
+   QXcbCursor::queryPointer(conn, nullptr, nullptr, &keybMask);
    return conn->keyboard()->translateModifiers(keybMask);
 }
 

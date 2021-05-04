@@ -221,7 +221,7 @@ QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
          true,
          settings_atom_for_screen.length(),
          settings_atom_for_screen.constData());
-   xcb_generic_error_t *error = 0;
+   xcb_generic_error_t *error = nullptr;
    xcb_intern_atom_reply_t *atom_reply = xcb_intern_atom_reply(screen->xcb_connection(), atom_cookie, &error);
    if (error) {
       free(error);
@@ -259,7 +259,7 @@ QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
 QXcbXSettings::~QXcbXSettings()
 {
    delete d_ptr;
-   d_ptr = 0;
+   d_ptr = nullptr;
 }
 
 bool QXcbXSettings::initialized() const

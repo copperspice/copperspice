@@ -70,7 +70,7 @@ class Q_XCB_EXPORT QXcbWindow : public QObject, public QXcbObject, public QXcbWi
    void setParent(const QPlatformWindow *window) override;
 
    bool isExposed() const override;
-   bool isEmbedded(const QPlatformWindow *parentWindow = 0) const override;
+   bool isEmbedded(const QPlatformWindow *parentWindow = nullptr) const override;
    QPoint mapToGlobal(const QPoint &pos) const override;
    QPoint mapFromGlobal(const QPoint &pos) const override;
 
@@ -168,7 +168,7 @@ class Q_XCB_EXPORT QXcbWindow : public QObject, public QXcbObject, public QXcbWi
 
    void postSyncWindowRequest();
    void clearSyncWindowRequest() {
-      m_pendingSyncRequest = 0;
+      m_pendingSyncRequest = nullptr;
    }
 
    QXcbScreen *xcbScreen() const;

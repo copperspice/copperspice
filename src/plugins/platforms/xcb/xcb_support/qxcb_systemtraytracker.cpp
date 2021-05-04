@@ -45,15 +45,15 @@ QXcbSystemTrayTracker *QXcbSystemTrayTracker::create(QXcbConnection *connection)
 {
    // Selection, tray atoms for GNOME, NET WM Specification
    const xcb_atom_t trayAtom = connection->atom(QXcbAtom::_NET_SYSTEM_TRAY_OPCODE);
-   if (!trayAtom) {
-      return 0;
+   if (! trayAtom) {
+      return nullptr;
    }
 
    const QByteArray netSysTray = "_NET_SYSTEM_TRAY_S" + QByteArray::number(connection->primaryScreenNumber());
    const xcb_atom_t selection = connection->internAtom(netSysTray.constData());
 
    if (!selection) {
-      return 0;
+      return nullptr;
    }
 
    return new QXcbSystemTrayTracker(connection, trayAtom, selection);
@@ -73,8 +73,9 @@ QXcbSystemTrayTracker::QXcbSystemTrayTracker(QXcbConnection *connection,
 xcb_window_t QXcbSystemTrayTracker::locateTrayWindow(const QXcbConnection *connection, xcb_atom_t selection)
 {
    xcb_get_selection_owner_cookie_t cookie = xcb_get_selection_owner(connection->xcb_connection(), selection);
-   xcb_get_selection_owner_reply_t *reply = xcb_get_selection_owner_reply(connection->xcb_connection(), cookie, 0);
-   if (!reply) {
+   xcb_get_selection_owner_reply_t *reply  = xcb_get_selection_owner_reply(connection->xcb_connection(), cookie, nullptr);
+
+   if (! reply) {
       return 0;
    }
    const xcb_window_t result = reply->owner;
@@ -120,15 +121,16 @@ QRect QXcbSystemTrayTracker::systemTrayWindowGlobalGeometry(xcb_window_t window)
 {
 
    xcb_connection_t *conn = m_connection->xcb_connection();
-   xcb_get_geometry_reply_t *geomReply =
-      xcb_get_geometry_reply(conn, xcb_get_geometry(conn, window), 0);
-   if (!geomReply) {
+   xcb_get_geometry_reply_t *geomReply = xcb_get_geometry_reply(conn, xcb_get_geometry(conn, window), nullptr);
+
+   if (! geomReply) {
       return QRect();
    }
 
    xcb_translate_coordinates_reply_t *translateReply =
-      xcb_translate_coordinates_reply(conn, xcb_translate_coordinates(conn, window, m_connection->rootWindow(), 0, 0), 0);
-   if (!translateReply) {
+      xcb_translate_coordinates_reply(conn, xcb_translate_coordinates(conn, window, m_connection->rootWindow(), 0, 0), nullptr);
+
+   if (! translateReply) {
       free(geomReply);
       return QRect();
    }
@@ -177,7 +179,7 @@ bool QXcbSystemTrayTracker::visualHasAlphaChannel()
 
    systray_atom_cookie = xcb_get_property_unchecked(m_connection->xcb_connection(), false, m_trayWindow,
          tray_atom, XCB_ATOM_VISUALID, 0, 1);
-   systray_atom_reply = xcb_get_property_reply(m_connection->xcb_connection(), systray_atom_cookie, 0);
+   systray_atom_reply = xcb_get_property_reply(m_connection->xcb_connection(), systray_atom_cookie, nullptr);
 
    if (!systray_atom_reply) {
       return false;

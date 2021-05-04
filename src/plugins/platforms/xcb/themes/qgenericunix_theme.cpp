@@ -120,7 +120,7 @@ const QFont *QGenericUnixTheme::font(Font type) const
       case QPlatformTheme::FixedFont:
          return &d->fixedFont;
       default:
-         return 0;
+         return nullptr;
    }
 }
 
@@ -464,7 +464,7 @@ QFont *QKdeThemePrivate::kdeFont(const QVariant &fontValue)
          }
       }
    }
-   return 0;
+   return nullptr;
 }
 
 
@@ -534,13 +534,11 @@ QPlatformTheme *QKdeTheme::createKdeTheme()
    const QByteArray kdeVersionBA = qgetenv("KDE_SESSION_VERSION");
    const int kdeVersion = kdeVersionBA.toInt();
    if (kdeVersion < 4) {
-      return 0;
+      return nullptr;
    }
 
-   if (kdeVersion > 4)
-      // Plasma 5 follows XDG spec
-      // but uses the same config file format:
-   {
+   if (kdeVersion > 4) {
+      // Plasma 5 follows XDG spec, but uses the same config file format:
       return new QKdeTheme(QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation), kdeVersion);
    }
 
@@ -587,7 +585,7 @@ QPlatformTheme *QKdeTheme::createKdeTheme()
    kdeDirs.removeDuplicates();
    if (kdeDirs.isEmpty()) {
       qWarning("Unable to determine KDE dirs");
-      return 0;
+      return nullptr;
    }
 
    return new QKdeTheme(kdeDirs, kdeVersion);
@@ -693,7 +691,7 @@ const QFont *QGnomeTheme::font(Font type) const
          return d->fixedFont;
 
       default:
-         return 0;
+         return nullptr;
    }
 }
 

@@ -64,7 +64,7 @@ class QXcbCursor : public QXcbObject, public QPlatformCursor
    QPoint pos() const override;
    void setPos(const QPoint &pos) override;
 
-   static void queryPointer(QXcbConnection *c, QXcbVirtualDesktop **virtualDesktop, QPoint *pos, int *keybMask = 0);
+   static void queryPointer(QXcbConnection *c, QXcbVirtualDesktop **virtualDesktop, QPoint *pos, int *keybMask = nullptr);
 
  private:
 

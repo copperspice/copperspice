@@ -30,11 +30,11 @@
 struct QGLXNativeContext
 {
    QGLXNativeContext()
-      : m_context(0), m_display(0), m_window(0), m_visualId(0)
+      : m_context(nullptr), m_display(nullptr), m_window(0), m_visualId(0)
    {
    }
 
-   QGLXNativeContext(GLXContext ctx, Display *dpy = 0, Window wnd = 0, VisualID vid = 0)
+   QGLXNativeContext(GLXContext ctx, Display *dpy = nullptr, Window wnd = 0, VisualID vid = 0)
       : m_context(ctx), m_display(dpy), m_window(wnd), m_visualId(vid)
    {
    }

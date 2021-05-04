@@ -624,8 +624,8 @@ void QXcbKeyboard::readXKBConfig()
    // ### TODO some X servers don't set _XKB_RULES_NAMES at all, in these cases it is filled
    // with gibberish, we would need to do some kind of sanity check
 
-   char *names[5] = { 0, 0, 0, 0, 0 };
    char *p = xkb_config, *end = p + length;
+   char *names[5] = { nullptr, nullptr, nullptr, nullptr, nullptr };
    int i = 0;
    // The result from xcb_get_property_value() is not necessarily \0-terminated,
    // we need to make sure that too many or missing '\0' symbols are handled safely.
@@ -713,9 +713,9 @@ void QXcbKeyboard::updateKeymap()
 
    // update xkb keymap object
    xkb_keymap_unref(xkb_keymap);
-   xkb_keymap = 0;
+   xkb_keymap = nullptr;
 
-   struct xkb_state *new_state = 0;
+   struct xkb_state *new_state = nullptr;
 
 #ifndef QT_NO_XKB
    if (connection()->hasXKB()) {
@@ -937,8 +937,9 @@ xkb_keysym_t QXcbKeyboard::lookupLatinKeysym(xkb_keycode_t keycode) const
    xkb_mod_mask_t lockedMods = xkb_state_serialize_mods(xkb_state, XKB_STATE_MODS_LOCKED);
 
    if (sym == XKB_KEY_NoSymbol && !m_hasLatinLayout) {
-      if (!latin_keymap) {
-         const struct xkb_rule_names names = { xkb_names.rules, xkb_names.model, "us", 0, 0 };
+      if (! latin_keymap) {
+         const struct xkb_rule_names names = { xkb_names.rules, xkb_names.model, "us", nullptr, nullptr };
+
          latin_keymap = xkb_keymap_new_from_names(xkb_context, &names, (xkb_keymap_compile_flags)0);
          static bool printFailure = true;
 
@@ -1174,13 +1175,8 @@ int QXcbKeyboard::keysymToQtKey(xcb_keysym_t keysym, Qt::KeyboardModifiers &modi
 }
 
 QXcbKeyboard::QXcbKeyboard(QXcbConnection *connection)
-   : QXcbObject(connection)
-   , m_autorepeat_code(0)
-   , xkb_context(0)
-   , xkb_keymap(0)
-   , xkb_state(0)
-   , latin_keymap(0)
-   , m_hasLatinLayout(false)
+   : QXcbObject(connection), m_autorepeat_code(0), xkb_context(nullptr), xkb_keymap(nullptr),
+     xkb_state(nullptr), latin_keymap(nullptr), m_hasLatinLayout(false)
 {
    memset(&xkb_names, 0, sizeof(xkb_names));
 
@@ -1230,8 +1226,8 @@ void QXcbKeyboard::updateVModMapping()
          XCB_XKB_ID_USE_CORE_KBD,
          XCB_XKB_NAME_DETAIL_VIRTUAL_MOD_NAMES);
 
-   name_reply = xcb_xkb_get_names_reply(xcb_connection(), names_cookie, 0);
-   if (!name_reply) {
+   name_reply = xcb_xkb_get_names_reply(xcb_connection(), names_cookie, nullptr);
+   if (! name_reply) {
       qWarning("Failed to retrieve the virtual modifier names from XKB");
       return;
    }
@@ -1254,7 +1250,7 @@ void QXcbKeyboard::updateVModMapping()
    vmod_mask = name_reply->virtualMods;
    // find the virtual modifiers for which names are defined.
    for (bit = 1; vmod_mask; bit <<= 1) {
-      vmod_name = 0;
+      vmod_name = nullptr;
 
       if (!(vmod_mask & bit)) {
          continue;
@@ -1303,7 +1299,7 @@ void QXcbKeyboard::updateVModToRModMapping()
          XCB_XKB_MAP_PART_VIRTUAL_MODS,
          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-   map_reply = xcb_xkb_get_map_reply(xcb_connection(), map_cookie, 0);
+   map_reply = xcb_xkb_get_map_reply(xcb_connection(), map_cookie, nullptr);
    if (!map_reply) {
       qWarning("Failed to retrieve the virtual modifier map from XKB");
       return;
@@ -1368,7 +1364,7 @@ void QXcbKeyboard::updateModifiers()
    // process for all modifiers whenever any part of the modifier mapping is changed.
    memset(&rmod_masks, 0, sizeof(rmod_masks));
 
-   xcb_generic_error_t *error = 0;
+   xcb_generic_error_t *error = nullptr;
    xcb_connection_t *conn = xcb_connection();
    xcb_get_modifier_mapping_cookie_t modMapCookie = xcb_get_modifier_mapping(conn);
    xcb_get_modifier_mapping_reply_t *modMapReply =

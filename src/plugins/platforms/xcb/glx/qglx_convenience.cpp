@@ -122,7 +122,7 @@ GLXFBConfig qglx_findConfig(Display *display, int screen , const QSurfaceFormat 
         qputenv("LIBGL_ALWAYS_SOFTWARE", QByteArray("1"));
 
     bool reduced = true;
-    GLXFBConfig chosenConfig = 0;
+    GLXFBConfig chosenConfig = nullptr;
     QSurfaceFormat reducedFormat = format;
 
     while (!chosenConfig && reduced) {
@@ -178,7 +178,7 @@ XVisualInfo *qglx_findVisualInfo(Display *display, int screen, QSurfaceFormat *f
 {
     Q_ASSERT(format);
 
-    XVisualInfo *visualInfo = 0;
+    XVisualInfo *visualInfo = nullptr;
 
     GLXFBConfig config = qglx_findConfig(display,screen,*format);
     if (config) {

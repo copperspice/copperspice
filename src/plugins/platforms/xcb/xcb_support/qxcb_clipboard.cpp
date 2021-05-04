@@ -138,7 +138,7 @@ class QXcbClipboardMime : public QXcbMime
 
 class INCRTransaction;
 typedef QMap<xcb_window_t, INCRTransaction *> TransactionMap;
-static TransactionMap *transactions = 0;
+static TransactionMap *transactions = nullptr;
 
 //#define INCR_DEBUG
 
@@ -175,7 +175,7 @@ class INCRTransaction : public QObject
          qDebug("INCRTransaction: no more INCR transactions left in the TransactionMap");
 #endif
          delete transactions;
-         transactions = 0;
+         transactions = nullptr;
          conn->clipboard()->setProcessIncr(false);
       }
    }
@@ -207,7 +207,7 @@ class INCRTransaction : public QObject
             qDebug("INCRTransaction: INCR transaction %p completed", this);
 #endif
             xcb_change_property(c, XCB_PROP_MODE_REPLACE, win, property,
-               target, format, 0, (const void *)0);
+               target, format, 0, nullptr);
             const quint32 values[] = { XCB_EVENT_MASK_NO_EVENT };
             xcb_change_window_attributes(conn->xcb_connection(), win,
                XCB_CW_EVENT_MASK, values);
@@ -255,8 +255,9 @@ QXcbClipboard::QXcbClipboard(QXcbConnection *c)
 {
    Q_ASSERT(QClipboard::Clipboard == 0);
    Q_ASSERT(QClipboard::Selection == 1);
-   m_clientClipboard[QClipboard::Clipboard] = 0;
-   m_clientClipboard[QClipboard::Selection] = 0;
+
+   m_clientClipboard[QClipboard::Clipboard] = nullptr;
+   m_clientClipboard[QClipboard::Selection] = nullptr;
    m_timestamp[QClipboard::Clipboard] = XCB_CURRENT_TIME;
    m_timestamp[QClipboard::Selection] = XCB_CURRENT_TIME;
    m_owner = connection()->getQtSelectionOwner();
@@ -291,7 +292,8 @@ QXcbClipboard::~QXcbClipboard()
 
       // First we check if there is a clipboard manager.
       xcb_get_selection_owner_cookie_t cookie = xcb_get_selection_owner(xcb_connection(), atom(QXcbAtom::CLIPBOARD_MANAGER));
-      xcb_get_selection_owner_reply_t *reply = xcb_get_selection_owner_reply(xcb_connection(), cookie, 0);
+      xcb_get_selection_owner_reply_t *reply  = xcb_get_selection_owner_reply(xcb_connection(), cookie, nullptr);
+
       if (reply && reply->owner != XCB_NONE) {
          // we delete the property so the manager saves all TARGETS.
          xcb_delete_property(xcb_connection(), m_owner, atom(QXcbAtom::_QT_SELECTION));
@@ -359,7 +361,7 @@ QClipboard::Mode QXcbClipboard::modeForAtom(xcb_atom_t a) const
 QMimeData *QXcbClipboard::mimeData(QClipboard::Mode mode)
 {
    if (mode > QClipboard::Selection) {
-      return 0;
+      return nullptr;
    }
 
    xcb_window_t clipboardOwner = getSelectionOwner(atomForMode(mode));
@@ -380,7 +382,8 @@ void QXcbClipboard::setMimeData(QMimeData *data, QClipboard::Mode mode)
       return;
    }
 
-   QXcbClipboardMime *xClipboard = 0;
+   QXcbClipboardMime *xClipboard = nullptr;
+
    // verify if there is data to be cleared on global X Clipboard.
    if (!data) {
       xClipboard = dynamic_cast<QXcbClipboardMime *>(mimeData(mode));
@@ -402,7 +405,8 @@ void QXcbClipboard::setMimeData(QMimeData *data, QClipboard::Mode mode)
       if (m_clientClipboard[QClipboard::Clipboard] != m_clientClipboard[QClipboard::Selection]) {
          delete m_clientClipboard[mode];
       }
-      m_clientClipboard[mode] = 0;
+
+      m_clientClipboard[mode] = nullptr;
       m_timestamp[mode] = XCB_CURRENT_TIME;
    }
 
@@ -468,7 +472,7 @@ xcb_window_t QXcbClipboard::requestor() const
             XCB_WINDOW_CLASS_INPUT_OUTPUT,              // window class
             platformScreen->screen()->root_visual,      // visual
             0,                                          // value mask
-            0));                                        // value list
+            nullptr));                                 // value list
 
 #ifndef QT_NO_DEBUG
       QByteArray ba("Qt clipboard requestor window");
@@ -599,7 +603,8 @@ void QXcbClipboard::handleSelectionClearRequest(xcb_selection_clear_event_t *eve
       if (m_clientClipboard[QClipboard::Clipboard] != m_clientClipboard[QClipboard::Selection]) {
          delete m_clientClipboard[mode];
       }
-      m_clientClipboard[mode] = 0;
+
+      m_clientClipboard[mode] = nullptr;
       m_timestamp[mode] = XCB_CURRENT_TIME;
    }
 }
@@ -649,7 +654,8 @@ void QXcbClipboard::handleSelectionRequest(xcb_selection_request_event_t *req)
    struct AtomPair {
       xcb_atom_t target;
       xcb_atom_t property;
-   } *multi = 0;
+   } *multi = nullptr;
+
    xcb_atom_t multi_type = XCB_NONE;
    int multi_format = 0;
    int nmulti = 0;
@@ -658,10 +664,8 @@ void QXcbClipboard::handleSelectionRequest(xcb_selection_request_event_t *req)
 
    if (req->target == multipleAtom) {
       QByteArray multi_data;
-      if (req->property == XCB_NONE
-         || !clipboardReadProperty(req->requestor, req->property, false, &multi_data,
-            0, &multi_type, &multi_format)
-         || multi_format != 32) {
+      if (req->property == XCB_NONE || !clipboardReadProperty(req->requestor, req->property, false, &multi_data,
+            nullptr, &multi_type, &multi_format) || multi_format != 32) {
          // MULTIPLE property not formatted correctly
          xcb_send_event(xcb_connection(), false, req->requestor, XCB_EVENT_MASK_NO_EVENT, (const char *)&event);
          return;
@@ -779,8 +783,8 @@ bool QXcbClipboard::clipboardReadProperty(xcb_window_t win, xcb_atom_t property,
    // Don't read anything, just get the size of the property data
    xcb_get_property_cookie_t cookie = Q_XCB_CALL(xcb_get_property(xcb_connection(), false, win, property, XCB_GET_PROPERTY_TYPE_ANY, 0,
             0));
-   xcb_get_property_reply_t *reply = xcb_get_property_reply(xcb_connection(), cookie, 0);
-   if (!reply || reply->type == XCB_NONE) {
+   xcb_get_property_reply_t *reply = xcb_get_property_reply(xcb_connection(), cookie, nullptr);
+   if (! reply || reply->type == XCB_NONE) {
       free(reply);
       buffer->resize(0);
       return false;
@@ -805,8 +809,10 @@ bool QXcbClipboard::clipboardReadProperty(xcb_window_t win, xcb_atom_t property,
 
          xcb_get_property_cookie_t cookie = Q_XCB_CALL(xcb_get_property(xcb_connection(), false, win, property, XCB_GET_PROPERTY_TYPE_ANY,
                   offset, maxsize / 4));
-         reply = xcb_get_property_reply(xcb_connection(), cookie, 0);
-         if (!reply || reply->type == XCB_NONE) {
+
+         reply = xcb_get_property_reply(xcb_connection(), cookie, nullptr);
+
+         if (! reply || reply->type == XCB_NONE) {
             free(reply);
             break;
          }
@@ -923,10 +929,11 @@ xcb_generic_event_t *QXcbClipboard::waitForClipboardEvent(xcb_window_t win, int 
 
       if (checkManager) {
          xcb_get_selection_owner_cookie_t cookie = xcb_get_selection_owner(xcb_connection(), atom(QXcbAtom::CLIPBOARD_MANAGER));
-         xcb_get_selection_owner_reply_t *reply = xcb_get_selection_owner_reply(xcb_connection(), cookie, 0);
-         if (!reply || reply->owner == XCB_NONE) {
+         xcb_get_selection_owner_reply_t *reply = xcb_get_selection_owner_reply(xcb_connection(), cookie, nullptr);
+
+         if (! reply || reply->owner == XCB_NONE) {
             free(reply);
-            return 0;
+            return nullptr;
          }
          free(reply);
       }
@@ -945,10 +952,10 @@ xcb_generic_event_t *QXcbClipboard::waitForClipboardEvent(xcb_window_t win, int 
       struct timeval usleep_tv;
       usleep_tv.tv_sec = 0;
       usleep_tv.tv_usec = 50000;
-      select(0, 0, 0, 0, &usleep_tv);
+      select(0, nullptr, nullptr, nullptr, &usleep_tv);
    } while (timer.elapsed() < timeout);
 
-   return 0;
+   return nullptr;
 }
 
 QByteArray QXcbClipboard::clipboardReadIncrementalProperty(xcb_window_t win, xcb_atom_t property, int nbytes, bool nullterm)
@@ -983,7 +990,7 @@ QByteArray QXcbClipboard::clipboardReadIncrementalProperty(xcb_window_t win, xcb
       }
       prev_time = event->time;
 
-      if (clipboardReadProperty(win, property, true, &tmp_buf, &length, 0, 0)) {
+      if (clipboardReadProperty(win, property, true, &tmp_buf, &length, nullptr, nullptr)) {
          if (length == 0) {                // no more data, we're done
             if (nullterm) {
                buf.resize(offset + 1);
@@ -1046,7 +1053,8 @@ QByteArray QXcbClipboard::getSelection(xcb_atom_t selection, xcb_atom_t target, 
    }
 
    xcb_atom_t type;
-   if (clipboardReadProperty(win, property, true, &buf, 0, &type, 0)) {
+
+   if (clipboardReadProperty(win, property, true, &buf, nullptr, &type, nullptr)) {
       if (type == atom(QXcbAtom::INCR)) {
          int nbytes = buf.size() >= 4 ? *((int *)buf.data()) : 0;
          buf = clipboardReadIncrementalProperty(win, property, nbytes, false);

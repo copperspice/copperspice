@@ -130,7 +130,7 @@ xcb_window_t QXcbNativeInterface::locateSystemTray(xcb_connection_t *conn, const
       const QString net_sys_tray = QString("_NET_SYSTEM_TRAY_S%1").formatArg(screen->screenNumber());
 
       xcb_intern_atom_cookie_t intern_c = xcb_intern_atom_unchecked(conn, true, net_sys_tray.size_storage(), net_sys_tray.constData());
-      xcb_intern_atom_reply_t *intern_r = xcb_intern_atom_reply(conn, intern_c, 0);
+      xcb_intern_atom_reply_t *intern_r = xcb_intern_atom_reply(conn, intern_c, nullptr);
 
       if (!intern_r) {
          return XCB_WINDOW_NONE;
@@ -141,7 +141,7 @@ xcb_window_t QXcbNativeInterface::locateSystemTray(xcb_connection_t *conn, const
    }
 
    xcb_get_selection_owner_cookie_t sel_owner_c = xcb_get_selection_owner_unchecked(conn, m_sysTraySelectionAtom);
-   xcb_get_selection_owner_reply_t *sel_owner_r = xcb_get_selection_owner_reply(conn, sel_owner_c, 0);
+   xcb_get_selection_owner_reply_t *sel_owner_r = xcb_get_selection_owner_reply(conn, sel_owner_c, nullptr);
 
    if (!sel_owner_r) {
       return XCB_WINDOW_NONE;
@@ -249,7 +249,7 @@ void *QXcbNativeInterface::nativeResourceForScreen(const QByteArray &resourceStr
          result = getTimestamp(xcbScreen);
          break;
       case NoFontHinting:
-         result = xcbScreen->noFontHinting() ? this : 0; //qboolptr...
+         result = xcbScreen->noFontHinting() ? this : nullptr;
          break;
       case RootWindow:
          result = reinterpret_cast<void *>(xcbScreen->root());
@@ -307,7 +307,7 @@ QPlatformNativeInterface::FP_Integration QXcbNativeInterface::nativeResourceFunc
    if (lowerCaseResource == "setstartupid") {
       return FP_Integration(setStartupId);
    }
-   return 0;
+   return nullptr;
 }
 
 QPlatformNativeInterface::FP_Context QXcbNativeInterface::nativeResourceFunctionForContext(
@@ -341,7 +341,7 @@ QPlatformNativeInterface::FP_Screen QXcbNativeInterface::nativeResourceFunctionF
 
    }
 
-   return 0;
+   return nullptr;
 }
 
 QPlatformNativeInterface::FP_Window QXcbNativeInterface::nativeResourceFunctionForWindow(
@@ -446,7 +446,7 @@ void *QXcbNativeInterface::startupId()
    if (defaultConnection) {
       return reinterpret_cast<void *>(const_cast<char *>(defaultConnection->startupId().constData()));
    }
-   return 0;
+   return nullptr;
 }
 
 void *QXcbNativeInterface::x11Screen()
@@ -456,7 +456,7 @@ void *QXcbNativeInterface::x11Screen()
    if (defaultConnection) {
       return reinterpret_cast<void *>(defaultConnection->primaryScreenNumber());
    }
-   return 0;
+   return nullptr;
 }
 
 void *QXcbNativeInterface::rootWindow()
@@ -466,7 +466,7 @@ void *QXcbNativeInterface::rootWindow()
    if (defaultConnection) {
       return reinterpret_cast<void *>(defaultConnection->rootWindow());
    }
-   return 0;
+   return nullptr;
 }
 
 void *QXcbNativeInterface::display()
@@ -494,10 +494,10 @@ void *QXcbNativeInterface::atspiBus()
    if (defaultConnection) {
       xcb_atom_t atspiBusAtom = defaultConnection->internAtom("AT_SPI_BUS");
       xcb_get_property_cookie_t cookie = Q_XCB_CALL(xcb_get_property(defaultConnection->xcb_connection(), false,
-               defaultConnection->rootWindow(),
-               atspiBusAtom,
-               XCB_ATOM_STRING, 0, 128));
-      xcb_get_property_reply_t *reply = Q_XCB_CALL(xcb_get_property_reply(defaultConnection->xcb_connection(), cookie, 0));
+               defaultConnection->rootWindow(), atspiBusAtom, XCB_ATOM_STRING, 0, 128));
+
+      xcb_get_property_reply_t *reply = Q_XCB_CALL(xcb_get_property_reply(defaultConnection->xcb_connection(), cookie, nullptr));
+
       Q_ASSERT(!reply->bytes_after);
       char *data = (char *)xcb_get_property_value(reply);
       int length = xcb_get_property_value_length(reply);
@@ -505,7 +505,7 @@ void *QXcbNativeInterface::atspiBus()
       free(reply);
       return busAddress;
    }
-   return 0;
+   return nullptr;
 }
 
 void QXcbNativeInterface::setAppTime(QScreen *screen, xcb_timestamp_t time)
