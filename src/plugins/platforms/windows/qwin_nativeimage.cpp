@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qwin_nativeimage.h>
+
 #include <qwin_context.h>
 
 #include <qpaintengine_p.h>
@@ -36,10 +37,11 @@ typedef struct {
 
 static inline HDC createDC()
 {
-   HDC display_dc = GetDC(0);
+   HDC display_dc = GetDC(nullptr);
    HDC hdc = CreateCompatibleDC(display_dc);
-   ReleaseDC(0, display_dc);
+   ReleaseDC(nullptr, display_dc);
    Q_ASSERT(hdc);
+
    return hdc;
 }
 
@@ -69,17 +71,19 @@ static inline HBITMAP createDIB(HDC hdc, int width, int height, QImage::Format f
 
    uchar *bits = nullptr;
    HBITMAP bitmap = CreateDIBSection(hdc, reinterpret_cast<BITMAPINFO *>(&bmi),
-         DIB_RGB_COLORS, reinterpret_cast<void **>(&bits), 0, 0);
-   if (!bitmap || !bits) {
+         DIB_RGB_COLORS, reinterpret_cast<void **>(&bits), nullptr, 0);
+
+   if (! bitmap || !bits) {
       qFatal("%s: CreateDIBSection failed.", __FUNCTION__);
    }
 
    *bitsIn = bits;
+
    return bitmap;
 }
 
 QWindowsNativeImage::QWindowsNativeImage(int width, int height, QImage::Format format)
-   : m_hdc(createDC()), m_bitmap(0), m_null_bitmap(0)
+   : m_hdc(createDC()), m_bitmap(nullptr), m_null_bitmap(nullptr)
 {
    if (width != 0 && height != 0) {
       uchar *bits;

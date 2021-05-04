@@ -38,7 +38,7 @@ class Array
    using const_iterator = T*;
 
    explicit Array(size_t size = 0)
-      : data(0), m_capacity(0), m_size(0) {
+      : data(nullptr), m_capacity(0), m_size(0) {
 
       if (size) {
          resize(size);

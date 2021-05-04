@@ -159,9 +159,9 @@ class QWindowsContext
    int defaultDPI() const;
 
    QString registerWindowClass(const QWindow *w);
-   QString registerWindowClass(QString cname, WNDPROC proc, unsigned style = 0, HBRUSH brush = 0, bool icon = false);
+   QString registerWindowClass(QString cname, WNDPROC proc, unsigned style = 0, HBRUSH brush = nullptr, bool icon = false);
 
-   HWND createDummyWindow(const QString &classNameIn, const wchar_t *windowName, WNDPROC wndProc = 0, DWORD style = WS_OVERLAPPED);
+   HWND createDummyWindow(const QString &classNameIn, const wchar_t *windowName, WNDPROC wndProc = nullptr, DWORD style = WS_OVERLAPPED);
    HDC displayContext() const;
    int screenDepth() const;
 

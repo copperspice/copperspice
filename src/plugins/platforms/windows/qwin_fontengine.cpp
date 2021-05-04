@@ -65,7 +65,7 @@
 // common DC for all fonts
 
 typedef BOOL (WINAPI *PtrGetCharWidthI)(HDC, UINT, UINT, LPWORD, LPINT);
-static PtrGetCharWidthI ptrGetCharWidthI = 0;
+static PtrGetCharWidthI ptrGetCharWidthI = nullptr;
 static bool resolvedGetCharWidthI = false;
 
 static void resolveGetCharWidthI()
@@ -101,9 +101,10 @@ QFixed QWindowsFontEngine::lineThickness() const
 static OUTLINETEXTMETRIC *getOutlineTextMetric(HDC hdc)
 {
    int size;
-   size = GetOutlineTextMetrics(hdc, 0, 0);
+   size = GetOutlineTextMetrics(hdc, 0, nullptr);
    OUTLINETEXTMETRIC *otm = (OUTLINETEXTMETRIC *)malloc(size);
    GetOutlineTextMetrics(hdc, size, otm);
+
    return otm;
 }
 
@@ -111,28 +112,28 @@ bool QWindowsFontEngine::hasCFFTable() const
 {
    HDC hdc = m_fontEngineData->hdc;
    SelectObject(hdc, hfont);
-   return GetFontData(hdc, MAKE_TAG('C', 'F', 'F', ' '), 0, 0, 0) != GDI_ERROR;
+   return GetFontData(hdc, MAKE_TAG('C', 'F', 'F', ' '), 0, nullptr, 0) != GDI_ERROR;
 }
 
 bool QWindowsFontEngine::hasCMapTable() const
 {
    HDC hdc = m_fontEngineData->hdc;
    SelectObject(hdc, hfont);
-   return GetFontData(hdc, MAKE_TAG('c', 'm', 'a', 'p'), 0, 0, 0) != GDI_ERROR;
+   return GetFontData(hdc, MAKE_TAG('c', 'm', 'a', 'p'), 0, nullptr, 0) != GDI_ERROR;
 }
 
 bool QWindowsFontEngine::hasGlyfTable() const
 {
    HDC hdc = m_fontEngineData->hdc;
    SelectObject(hdc, hfont);
-   return GetFontData(hdc, MAKE_TAG('g', 'l', 'y', 'f'), 0, 0, 0) != GDI_ERROR;
+   return GetFontData(hdc, MAKE_TAG('g', 'l', 'y', 'f'), 0, nullptr, 0) != GDI_ERROR;
 }
 
 bool QWindowsFontEngine::hasEbdtTable() const
 {
    HDC hdc = m_fontEngineData->hdc;
    SelectObject(hdc, hfont);
-   return GetFontData(hdc, MAKE_TAG('E', 'B', 'D', 'T'), 0, 0, 0) != GDI_ERROR;
+   return GetFontData(hdc, MAKE_TAG('E', 'B', 'D', 'T'), 0, nullptr, 0) != GDI_ERROR;
 }
 
 static inline QString stringFromOutLineTextMetric(const OUTLINETEXTMETRIC *otm, PSTR offset)
@@ -232,10 +233,10 @@ int QWindowsFontEngine::getGlyphIndexes(QStringView strView, QGlyphLayout *glyph
 QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
    const QSharedPointer<QWindowsFontEngineData> &fontEngineData)
 
-   : QFontEngine(Win), m_fontEngineData(fontEngineData), _name(name), hfont(0),
-     m_logfont(lf), ttf(0), hasOutline(0), cmap(0), cmapSize(0), lbearing(SHRT_MIN),
+   : QFontEngine(Win), m_fontEngineData(fontEngineData), _name(name), hfont(nullptr),
+     m_logfont(lf), ttf(0), hasOutline(0), cmap(nullptr), cmapSize(0), lbearing(SHRT_MIN),
      rbearing(SHRT_MIN), x_height(-1), synthesized_flags(-1), lineWidth(-1),
-     widthCache(0), widthCacheSize(0), designAdvances(0), designAdvancesSize(0)
+     widthCache(nullptr), widthCacheSize(0), designAdvances(nullptr), designAdvancesSize(0)
 {
 
 #if defined(CS_SHOW_DEBUG)
@@ -361,13 +362,13 @@ bool QWindowsFontEngine::stringToCMap(QStringView strView, QGlyphLayout *glyphs,
 inline void calculateTTFGlyphWidth(HDC hdc, UINT glyph, int &width)
 {
    if (ptrGetCharWidthI) {
-      ptrGetCharWidthI(hdc, glyph, 1, 0, &width);
+      ptrGetCharWidthI(hdc, glyph, 1, nullptr, &width);
    }
 }
 
 void QWindowsFontEngine::recalcAdvances(QGlyphLayout *glyphs, QFontEngine::ShaperFlags flags) const
 {
-   HGDIOBJ oldFont = 0;
+   HGDIOBJ oldFont = nullptr;
    HDC hdc = m_fontEngineData->hdc;
 
    if (ttf && (flags & DesignMetrics)) {
@@ -467,7 +468,7 @@ glyph_metrics_t QWindowsFontEngine::boundingBox(const QGlyphLayout &glyphs)
 
 bool QWindowsFontEngine::getOutlineMetrics(glyph_t glyph, const QTransform &t, glyph_metrics_t *metrics) const
 {
-   Q_ASSERT(metrics != 0);
+   Q_ASSERT(metrics != nullptr);
 
    HDC hdc = m_fontEngineData->hdc;
 
@@ -499,12 +500,14 @@ bool QWindowsFontEngine::getOutlineMetrics(glyph_t glyph, const QTransform &t, g
    if (ttf) {
       format |= GGO_GLYPH_INDEX;
    }
-   res = GetGlyphOutline(hdc, glyph, format, &gm, 0, 0, &mat);
+
+   res = GetGlyphOutline(hdc, glyph, format, &gm, 0, nullptr, &mat);
 
    if (t.type() > QTransform::TxTranslate) {
       XFORM xform;
       xform.eM11 = xform.eM22 = 1;
       xform.eM12 = xform.eM21 = xform.eDx = xform.eDy = 0;
+
       SetWorldTransform(hdc, &xform);
       SetGraphicsMode(hdc, GM_COMPATIBLE);
    }
@@ -644,7 +647,7 @@ qreal QWindowsFontEngine::minRightBearing() const
       HDC hdc = m_fontEngineData->hdc;
       SelectObject(hdc, hfont);
       if (ttf) {
-         ABC *abc = 0;
+         ABC *abc = nullptr;
          int n = tm.tmLastChar - tm.tmFirstChar;
          if (n <= max_font_count) {
             abc = new ABC[n + 1];
@@ -665,9 +668,11 @@ qreal QWindowsFontEngine::minRightBearing() const
             }
          }
          delete [] abc;
+
       } else {
-         ABCFLOAT *abc = 0;
+         ABCFLOAT *abc = nullptr;
          int n = tm.tmLastChar - tm.tmFirstChar + 1;
+
          if (n <= max_font_count) {
             abc = new ABCFLOAT[n];
             GetCharABCWidthsFloat(hdc, tm.tmFirstChar, tm.tmLastChar, abc);
@@ -712,7 +717,7 @@ static inline QPointF qt_to_qpointf(const POINTFX &pt, qreal scale)
 #endif
 
 static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
-   QPainterPath *path, bool ttf, glyph_metrics_t *metric = 0, qreal scale = 1)
+   QPainterPath *path, bool ttf, glyph_metrics_t *metric = nullptr, qreal scale = 1)
 {
    MAT2 mat;
    mat.eM11.value = mat.eM22.value = 1;
@@ -731,9 +736,11 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
       if (ttf) {
          format |= GGO_GLYPH_INDEX;
       }
-      if (GetGlyphOutline(hdc, glyph, format, &gMetric, 0, 0, &mat) == GDI_ERROR) {
+
+      if (GetGlyphOutline(hdc, glyph, format, &gMetric, 0, nullptr, &mat) == GDI_ERROR) {
          return false;
       }
+
       // #### obey scale
       *metric = glyph_metrics_t(gMetric.gmptGlyphOrigin.x, -gMetric.gmptGlyphOrigin.y,
             int(gMetric.gmBlackBoxX), int(gMetric.gmBlackBoxY),
@@ -746,7 +753,7 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
       glyphFormat |= GGO_GLYPH_INDEX;
    }
 
-   const DWORD bufferSize = GetGlyphOutline(hdc, glyph, glyphFormat, &gMetric, 0, 0, &mat);
+   const DWORD bufferSize = GetGlyphOutline(hdc, glyph, glyphFormat, &gMetric, 0, nullptr, &mat);
    if (bufferSize == GDI_ERROR) {
       return false;
    }
@@ -835,7 +842,7 @@ void QWindowsFontEngine::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions
    HGDIOBJ oldfont = SelectObject(hdc, hf);
 
    for (int i = 0; i < nglyphs; ++i) {
-      if (!addGlyphToPath(glyphs[i], positions[i], hdc, path, ttf, /*metric*/0,
+      if (!addGlyphToPath(glyphs[i], positions[i], hdc, path, ttf, nullptr,
             qreal(fontDef.pixelSize) / unitsPerEm)) {
          // Some windows fonts, like "Modern", are vector stroke
          // fonts, which are reported as TMPF_VECTOR but do not
@@ -984,7 +991,7 @@ QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph,
    int ih = gm.height.toInt();
 
    if (iw <= 0 || ih <= 0) {
-      return 0;
+      return nullptr;
    }
 
    bool has_transformation = t.type() > QTransform::TxTranslate;
@@ -1012,7 +1019,7 @@ QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph,
       memset(&mat, 0, sizeof(mat));
       mat.eM11.value = mat.eM22.value = 1;
 
-      const DWORD result = GetGlyphOutline(hdc, glyph, ggo_options, &tgm, 0, 0, &mat);
+      const DWORD result = GetGlyphOutline(hdc, glyph, ggo_options, &tgm, 0, nullptr, &mat);
 
       XFORM identity = {1, 0, 0, 1, 0, 0};
       SetWorldTransform(hdc, &identity);
@@ -1023,7 +1030,7 @@ QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph,
          const int errorCode = int(GetLastError());
          qErrnoWarning(errorCode, "QWinFontEngine: unable to query transformed glyph metrics (GetGlyphOutline() failed, error %d)...",
             errorCode);
-         return 0;
+         return nullptr;
       }
 
       iw = int(tgm.gmBlackBoxX);
@@ -1056,10 +1063,10 @@ QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph,
    if (has_transformation) {
       SetGraphicsMode(hdc, GM_ADVANCED);
       SetWorldTransform(hdc, &xform);
-      ExtTextOut(hdc, 0, 0, options, 0, reinterpret_cast<LPCWSTR>(&glyph), 1, 0);
+      ExtTextOut(hdc, 0, 0, options, nullptr, reinterpret_cast<LPCWSTR>(&glyph), 1, nullptr);
 
    } else {
-      ExtTextOut(hdc, -gx + margin, -gy + margin, options, 0, reinterpret_cast<LPCWSTR>(&glyph), 1, 0);
+      ExtTextOut(hdc, -gx + margin, -gy + margin, options, nullptr, reinterpret_cast<LPCWSTR>(&glyph), 1, nullptr);
    }
 
    SelectObject(hdc, old_font);
@@ -1092,7 +1099,7 @@ QImage QWindowsFontEngine::alphaMapForGlyph(glyph_t glyph, const QTransform &xfo
    mask_format = QImage::Format_RGB32;
 
    const QWindowsNativeImage *mask = drawGDIGlyph(font, glyph, 0, xform, mask_format);
-   if (mask == 0) {
+   if (mask == nullptr) {
       if (m_fontEngineData->clearTypeEnabled) {
          DeleteObject(font);
       }
@@ -1147,7 +1154,7 @@ QImage QWindowsFontEngine::alphaRGBMapForGlyph(glyph_t glyph, QFixed, const QTra
    QWindowsNativeImage *mask = drawGDIGlyph(font, glyph, margin, t, QImage::Format_RGB32);
    SystemParametersInfo(SPI_SETFONTSMOOTHINGCONTRAST, 0, reinterpret_cast<void *>(quintptr(contrast)), 0);
 
-   if (mask == 0) {
+   if (mask == nullptr) {
       return QImage();
    }
 

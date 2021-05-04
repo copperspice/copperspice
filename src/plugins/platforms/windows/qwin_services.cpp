@@ -39,7 +39,8 @@ static inline bool shellExecute(const QUrl &url)
       ? QDir::toNativeSeparators(url.toLocalFile())
       : url.toString(QUrl::FullyEncoded);
 
-   const quintptr result = reinterpret_cast<quintptr>(ShellExecute(0, 0, nativeFilePath.toStdWString().data(), 0, 0, SW_SHOWNORMAL));
+   const quintptr result = reinterpret_cast<quintptr>(ShellExecute(nullptr, nullptr, nativeFilePath.toStdWString().data(),
+                nullptr, nullptr, SW_SHOWNORMAL));
 
    // ShellExecute returns a value greater than 32 if successful
    if (result <= 32) {
@@ -66,7 +67,8 @@ static inline QString mailCommand()
 
    if (!RegOpenKeyEx(HKEY_CURRENT_USER, mailUserKey, 0, KEY_READ, &handle)) {
       DWORD bufferSize = BufferSize;
-      if (!RegQueryValueEx(handle, L"Progid", 0, 0, reinterpret_cast<unsigned char *>(command), &bufferSize)) {
+
+      if (! RegQueryValueEx(handle, L"Progid", nullptr, nullptr, reinterpret_cast<unsigned char *>(command), &bufferSize)) {
          keyName = QString::fromStdWString(std::wstring(command));
       }
       RegCloseKey(handle);
@@ -86,7 +88,7 @@ static inline QString mailCommand()
    if (! RegOpenKeyExW(HKEY_CLASSES_ROOT, keyName.toStdWString().data(), 0, KEY_READ, &handle)) {
 
       DWORD bufferSize = BufferSize;
-      RegQueryValueEx(handle, L"", 0, 0, reinterpret_cast<unsigned char *>(command), &bufferSize);
+      RegQueryValueEx(handle, L"", nullptr, nullptr, reinterpret_cast<unsigned char *>(command), &bufferSize);
       RegCloseKey(handle);
    }
 
@@ -138,7 +140,7 @@ static inline bool launchMail(const QUrl &url)
 
    std::wstring tmp = command.toStdWString();
 
-   if (! CreateProcess(NULL, &tmp[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+   if (! CreateProcess(nullptr, &tmp[0], nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi)) {
       qErrnoWarning("Unable to launch '%s'", csPrintable(command));
       return false;
    }

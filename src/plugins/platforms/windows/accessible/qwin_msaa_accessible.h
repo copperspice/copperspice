@@ -112,7 +112,7 @@ protected:
          QAccessibleInterface *iface = QAccessible::accessibleInterface(id);
          if (iface && iface->isValid())
              return iface;
-         return 0;
+         return nullptr;
     }
 
     static QAccessibleInterface *childPointer(QAccessibleInterface *parent, VARIANT varID)
@@ -120,7 +120,7 @@ protected:
         // -1 since windows API always uses 1 for the first child
         Q_ASSERT(parent);
 
-        QAccessibleInterface *acc = 0;
+        QAccessibleInterface *acc = nullptr;
         int childIndex = varID.lVal;
 
         if (childIndex == 0) {

@@ -379,9 +379,9 @@ namespace QWindowsDialogs {
 
 void eatMouseMove()
 {
-   MSG msg = {0, 0, 0, 0, 0, {0, 0} };
+   MSG msg = {nullptr, 0, 0, 0, 0, {0, 0} };
 
-   while (PeekMessage(&msg, 0, WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE)) {
+   while (PeekMessage(&msg, nullptr, WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE)) {
       // do nothing here
    }
 
@@ -407,7 +407,7 @@ class QWindowsNativeDialogBase : public QObject
       return m_executed;
    }
 
-   void exec(HWND owner = 0) {
+   void exec(HWND owner = nullptr) {
       doExec(owner);
       m_executed = true;
    }
@@ -425,13 +425,13 @@ class QWindowsNativeDialogBase : public QObject
    QWindowsNativeDialogBase() : m_executed(false) {}
 
  private:
-   virtual void doExec(HWND owner = 0) = 0;
+   virtual void doExec(HWND owner = nullptr) = 0;
 
    bool m_executed;
 };
 
-template <class BaseClass> QWindowsDialogHelperBase<BaseClass>::QWindowsDialogHelperBase() :
-   m_nativeDialog(0), m_ownerWindow(0), m_timerId(0), m_thread(0)
+template <class BaseClass> QWindowsDialogHelperBase<BaseClass>::QWindowsDialogHelperBase()
+   : m_nativeDialog(nullptr), m_ownerWindow(nullptr), m_timerId(0), m_thread(nullptr)
 {
 }
 
@@ -456,7 +456,7 @@ void QWindowsDialogHelperBase<BaseClass>::cleanupThread()
       }
 
       delete m_thread;
-      m_thread = 0;
+      m_thread = nullptr;
    }
 }
 
@@ -465,8 +465,9 @@ QWindowsNativeDialogBase *QWindowsDialogHelperBase<BaseClass>::nativeDialog() co
 {
    if (m_nativeDialog.isNull()) {
       qWarning("%s invoked with no native dialog present.", __FUNCTION__);
-      return 0;
+      return nullptr;
    }
+
    return m_nativeDialog.data();
 }
 
@@ -528,7 +529,7 @@ bool QWindowsDialogHelperBase<BaseClass>::show(Qt::WindowFlags,
    if (parent) {
       m_ownerWindow = QWindowsWindow::handleOf(parent);
    } else {
-      m_ownerWindow = 0;
+      m_ownerWindow = nullptr;
    }
 
 #if defined(CS_SHOW_DEBUG)
@@ -584,7 +585,7 @@ void QWindowsDialogHelperBase<BaseClass>::stopTimer()
 
 struct FindDialogContext {
    explicit FindDialogContext(const QString &titleIn)
-      : title(titleIn.toStdWString()), processId(GetCurrentProcessId()), hwnd(0)
+      : title(titleIn.toStdWString()), processId(GetCurrentProcessId()), hwnd(nullptr)
    { }
 
    const std::wstring title;
@@ -625,7 +626,7 @@ void QWindowsDialogHelperBase<BaseClass>::hide()
       m_nativeDialog->close();
    }
 
-   m_ownerWindow = 0;
+   m_ownerWindow = nullptr;
 }
 
 template <class BaseClass>
@@ -743,9 +744,10 @@ class QWindowsNativeFileDialogEventHandler : public IFileDialogEvents
    // IUnknown methods
    IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv) {
       if (riid != IID_IUnknown && riid != IID_IFileDialogEvents) {
-         *ppv = NULL;
+         *ppv = nullptr;
          return ResultFromScode(E_NOINTERFACE);
       }
+
       *ppv = this;
       AddRef();
       return NOERROR;
@@ -794,9 +796,10 @@ IFileDialogEvents *QWindowsNativeFileDialogEventHandler::create(QWindowsNativeFi
 {
    IFileDialogEvents *result;
    QWindowsNativeFileDialogEventHandler *eventHandler = new QWindowsNativeFileDialogEventHandler(nativeFileDialog);
+
    if (FAILED(eventHandler->QueryInterface(IID_IFileDialogEvents, reinterpret_cast<void **>(&result)))) {
       qErrnoWarning("Unable to obtain IFileDialogEvents");
-      return 0;
+      return nullptr;
    }
    eventHandler->Release();
    return result;
@@ -836,7 +839,7 @@ class QWindowsNativeFileDialogBase : public QWindowsNativeDialogBase
    }
 
    inline QString directory() const;
-   void doExec(HWND owner = 0) override;
+   void doExec(HWND owner = nullptr) override;
 
    virtual void setNameFilters(const QStringList &f);
    inline void selectNameFilter(const QString &filter);
@@ -897,7 +900,7 @@ class QWindowsNativeFileDialogBase : public QWindowsNativeDialogBase
    static QString itemPath(IShellItem *item);
    static QList<QUrl> libraryItemFolders(IShellItem *item);
    static QString libraryItemDefaultSaveFolder(IShellItem *item);
-   static int itemPaths(IShellItemArray *items, QList<QUrl> *fileResult = 0);
+   static int itemPaths(IShellItemArray *items, QList<QUrl> *fileResult = nullptr);
    static IShellItem *shellItem(const QUrl &url);
 
    const QWindowsFileDialogSharedData &data() const {
@@ -918,9 +921,9 @@ class QWindowsNativeFileDialogBase : public QWindowsNativeDialogBase
    QString m_title;
 };
 
-QWindowsNativeFileDialogBase::QWindowsNativeFileDialogBase(const QWindowsFileDialogSharedData &data) :
-   m_fileDialog(0), m_dialogEvents(0), m_cookie(0), m_hideFiltersDetails(false),
-   m_hasDefaultSuffix(false), m_data(data)
+QWindowsNativeFileDialogBase::QWindowsNativeFileDialogBase(const QWindowsFileDialogSharedData &data)
+   : m_fileDialog(nullptr), m_dialogEvents(nullptr), m_cookie(0), m_hideFiltersDetails(false),
+     m_hasDefaultSuffix(false), m_data(data)
 {
 }
 
@@ -941,7 +944,7 @@ QWindowsNativeFileDialogBase::~QWindowsNativeFileDialogBase()
 
 bool QWindowsNativeFileDialogBase::init(const CLSID &clsId, const IID &iid)
 {
-   HRESULT hr = CoCreateInstance(clsId, NULL, CLSCTX_INPROC_SERVER,
+   HRESULT hr = CoCreateInstance(clsId, nullptr, CLSCTX_INPROC_SERVER,
          iid, reinterpret_cast<void **>(&m_fileDialog));
 
    if (FAILED(hr)) {
@@ -987,7 +990,7 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
       const QString native = QDir::toNativeSeparators(url.toLocalFile());
 
       const HRESULT hr = QWindowsContext::shell32dll.sHCreateItemFromParsingName(native.toStdWString().data(),
-                  NULL, IID_IShellItem, reinterpret_cast<void **>(&result));
+                  nullptr, IID_IShellItem, reinterpret_cast<void **>(&result));
 
       if (FAILED(hr)) {
          qErrnoWarning("%s: SHCreateItemFromParsingName(%s)) failed", __FUNCTION__, qPrintable(url.toString()));
@@ -1013,7 +1016,8 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
       }
 
       PIDLIST_ABSOLUTE idList;
-      HRESULT hr = QWindowsContext::shell32dll.sHGetKnownFolderIDList(uuid, 0, 0, &idList);
+      HRESULT hr = QWindowsContext::shell32dll.sHGetKnownFolderIDList(uuid, 0, nullptr, &idList);
+
       if (FAILED(hr)) {
          qErrnoWarning("%s: SHGetKnownFolderIDList(%s)) failed", __FUNCTION__, qPrintable(url.toString()));
          return nullptr;
@@ -1031,7 +1035,7 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
       qWarning() << __FUNCTION__ << ": Unhandled scheme: " << url.scheme();
    }
 
-   return 0;
+   return nullptr;
 }
 
 void QWindowsNativeFileDialogBase::setDirectory(const QUrl &directory)
@@ -1048,7 +1052,7 @@ QString QWindowsNativeFileDialogBase::directory() const
 {
    QString result;
 
-   IShellItem *item = 0;
+   IShellItem *item = nullptr;
    if (m_fileDialog && SUCCEEDED(m_fileDialog->GetFolder(&item)) && item) {
       result = QWindowsNativeFileDialogBase::itemPath(item);
       item->Release();
@@ -1130,9 +1134,10 @@ static IShellLibrary *sHLoadLibraryFromItem(IShellItem *libraryItem, DWORD mode)
    static const CLSID classId_ShellLibrary = {0xd9b3211d, 0xe57f, 0x4426, {0xaa, 0xef, 0x30, 0xa8, 0x6, 0xad, 0xd3, 0x97}};
    static const IID   iId_IShellLibrary    = {0x11a66efa, 0x382e, 0x451a, {0x92, 0x34, 0x1e, 0xe, 0x12, 0xef, 0x30, 0x85}};
 
-   IShellLibrary *helper = 0;
-   IShellLibrary *result = 0;
-   if (SUCCEEDED(CoCreateInstance(classId_ShellLibrary, NULL, CLSCTX_INPROC_SERVER, iId_IShellLibrary,
+   IShellLibrary *helper = nullptr;
+   IShellLibrary *result = nullptr;
+
+   if (SUCCEEDED(CoCreateInstance(classId_ShellLibrary, nullptr, CLSCTX_INPROC_SERVER, iId_IShellLibrary,
             reinterpret_cast<void **>(&helper))))
       if (SUCCEEDED(helper->LoadLibraryFromItem(libraryItem, mode))) {
          helper->QueryInterface(iId_IShellLibrary, reinterpret_cast<void **>(&result));
@@ -1148,13 +1153,15 @@ QList<QUrl> QWindowsNativeFileDialogBase::libraryItemFolders(IShellItem *item)
 {
    QList<QUrl> result;
    if (IShellLibrary *library = sHLoadLibraryFromItem(item, STGM_READ | STGM_SHARE_DENY_WRITE)) {
-      IShellItemArray *itemArray = 0;
+      IShellItemArray *itemArray = nullptr;
+
       if (SUCCEEDED(library->GetFolders(LFF_FORCEFILESYSTEM, IID_IShellItemArray, reinterpret_cast<void **>(&itemArray)))) {
          QWindowsNativeFileDialogBase::itemPaths(itemArray, &result);
          itemArray->Release();
       }
       library->Release();
    }
+
    return result;
 }
 
@@ -1162,8 +1169,10 @@ QList<QUrl> QWindowsNativeFileDialogBase::libraryItemFolders(IShellItem *item)
 QString QWindowsNativeFileDialogBase::libraryItemDefaultSaveFolder(IShellItem *item)
 {
    QString result;
+
    if (IShellLibrary *library = sHLoadLibraryFromItem(item, STGM_READ | STGM_SHARE_DENY_WRITE)) {
-      IShellItem *item = 0;
+      IShellItem *item = nullptr;
+
       if (SUCCEEDED(library->GetDefaultSaveFolder(DSFT_DETECT, IID_IShellItem, reinterpret_cast<void **>(&item)))) {
          result = QWindowsNativeFileDialogBase::itemPath(item);
          item->Release();
@@ -1196,7 +1205,7 @@ QString QWindowsNativeFileDialogBase::itemPath(IShellItem *item)
    }
 
    if (attributes & SFGAO_FILESYSTEM) {
-      LPWSTR name = 0;
+      LPWSTR name = nullptr;
       QString result;
 
       if (SUCCEEDED(item->GetDisplayName(SIGDN_FILESYSPATH, &name))) {
@@ -1228,7 +1237,7 @@ int QWindowsNativeFileDialogBase::itemPaths(IShellItemArray *items, QList<QUrl> 
    if (result && itemCount) {
 
       for (DWORD i = 0; i < itemCount; ++i) {
-         IShellItem *item = 0;
+         IShellItem *item = nullptr;
          if (SUCCEEDED(items->GetItemAt(i, &item))) {
             result->push_back(QUrl::fromLocalFile(QWindowsNativeFileDialogBase::itemPath(item)));
          }
@@ -1563,18 +1572,22 @@ void QWindowsNativeSaveFileDialog::setNameFilters(const QStringList &f)
 QList<QUrl> QWindowsNativeSaveFileDialog::dialogResult() const
 {
    QList<QUrl> result;
-   IShellItem *item = 0;
+   IShellItem *item = nullptr;
+
    if (SUCCEEDED(fileDialog()->GetResult(&item)) && item) {
       result.push_back(QUrl::fromLocalFile(QWindowsNativeFileDialogBase::itemPath(item)));
    }
+
    return result;
 }
 
 QList<QUrl> QWindowsNativeSaveFileDialog::selectedFiles() const
 {
    QList<QUrl> result;
-   IShellItem *item = 0;
+   IShellItem *item = nullptr;
+
    const HRESULT hr = fileDialog()->GetCurrentSelection(&item);
+
    if (SUCCEEDED(hr) && item) {
       result.push_back(QUrl::fromLocalFile(QWindowsNativeSaveFileDialog::itemPath(item)));
       item->Release();
@@ -1599,7 +1612,8 @@ class QWindowsNativeOpenFileDialog : public QWindowsNativeFileDialogBase
 QList<QUrl> QWindowsNativeOpenFileDialog::dialogResult() const
 {
    QList<QUrl> result;
-   IShellItemArray *items = 0;
+   IShellItemArray *items = nullptr;
+
    if (SUCCEEDED(openFileDialog()->GetResults(&items)) && items) {
       QWindowsNativeFileDialogBase::itemPaths(items, &result);
    }
@@ -1609,7 +1623,7 @@ QList<QUrl> QWindowsNativeOpenFileDialog::dialogResult() const
 QList<QUrl> QWindowsNativeOpenFileDialog::selectedFiles() const
 {
    QList<QUrl> result;
-   IShellItemArray *items = 0;
+   IShellItemArray *items = nullptr;
    const HRESULT hr = openFileDialog()->GetSelectedItems(&items);
    if (SUCCEEDED(hr) && items) {
       QWindowsNativeFileDialogBase::itemPaths(items, &result);
@@ -1617,22 +1631,24 @@ QList<QUrl> QWindowsNativeOpenFileDialog::selectedFiles() const
    return result;
 }
 
-
 QWindowsNativeFileDialogBase *QWindowsNativeFileDialogBase::create(QFileDialogOptions::AcceptMode am,
    const QWindowsFileDialogSharedData &data)
 {
-   QWindowsNativeFileDialogBase *result = 0;
+   QWindowsNativeFileDialogBase *result = nullptr;
+
    if (am == QFileDialogOptions::AcceptOpen) {
       result = new QWindowsNativeOpenFileDialog(data);
       if (!result->init(CLSID_FileOpenDialog, IID_IFileOpenDialog)) {
          delete result;
-         return 0;
+         return nullptr;
       }
+
    } else {
       result = new QWindowsNativeSaveFileDialog(data);
+
       if (!result->init(CLSID_FileSaveDialog, IID_IFileSaveDialog)) {
          delete result;
-         return 0;
+         return nullptr;
       }
    }
    return result;
@@ -1674,8 +1690,9 @@ QWindowsNativeDialogBase *QWindowsFileDialogHelper::createNativeDialog()
 {
    QWindowsNativeFileDialogBase *result = QWindowsNativeFileDialogBase::create(options()->acceptMode(), m_data);
    if (!result) {
-      return 0;
+      return nullptr;
    }
+
    QObject::connect(result, &QWindowsNativeDialogBase::accepted, this, &QPlatformDialogHelper::accept);
    QObject::connect(result, &QWindowsNativeDialogBase::rejected, this, &QPlatformDialogHelper::reject);
 
@@ -1816,7 +1833,7 @@ class QWindowsXpNativeFileDialog : public QWindowsNativeDialogBase
    void setWindowTitle(const QString &t) override {
       m_title =  t;
    }
-   void doExec(HWND owner = 0) override;
+   void doExec(HWND owner = nullptr) override;
 
    int existingDirCallback(HWND hwnd, UINT uMsg, LPARAM lParam);
 
@@ -1840,8 +1857,8 @@ class QWindowsXpNativeFileDialog : public QWindowsNativeDialogBase
    static PtrGetSaveFileNameW m_getSaveFileNameW;
 };
 
-QWindowsXpNativeFileDialog::PtrGetOpenFileNameW QWindowsXpNativeFileDialog::m_getOpenFileNameW = 0;
-QWindowsXpNativeFileDialog::PtrGetSaveFileNameW QWindowsXpNativeFileDialog::m_getSaveFileNameW = 0;
+QWindowsXpNativeFileDialog::PtrGetOpenFileNameW QWindowsXpNativeFileDialog::m_getOpenFileNameW = nullptr;
+QWindowsXpNativeFileDialog::PtrGetSaveFileNameW QWindowsXpNativeFileDialog::m_getSaveFileNameW = nullptr;
 
 QWindowsXpNativeFileDialog *QWindowsXpNativeFileDialog::create(const OptionsPtr &options, const QWindowsFileDialogSharedData &data)
 {
@@ -1858,7 +1875,7 @@ QWindowsXpNativeFileDialog *QWindowsXpNativeFileDialog::create(const OptionsPtr 
       return new QWindowsXpNativeFileDialog(options, data);
    }
 
-   return 0;
+   return nullptr;
 }
 
 QWindowsXpNativeFileDialog::QWindowsXpNativeFileDialog(const OptionsPtr &options,
@@ -1948,10 +1965,10 @@ QList<QUrl> QWindowsXpNativeFileDialog::execExistingDir(HWND owner)
    BROWSEINFO bi;
    wchar_t initPath[MAX_PATH];
 
-   initPath[0] = 0;
+   initPath[0]  = 0;
    bi.hwndOwner = owner;
-   bi.pidlRoot = NULL;
-   bi.lpszTitle = 0;
+   bi.pidlRoot  = nullptr;
+   bi.lpszTitle = nullptr;
    bi.pszDisplayName = initPath;
    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT | BIF_NEWDIALOGSTYLE;
    bi.lpfn = xpFileDialogGetExistingDirCallbackProc;
@@ -1991,10 +2008,10 @@ void QWindowsXpNativeFileDialog::populateOpenFileName(OPENFILENAME *ofn, HWND ow
 
    for (const FilterSpec &spec : specs) {
       fileData.filter.append(spec.description.toStdWString());
-      fileData.filter.append(0);
+      fileData.filter.append(nullptr);
 
       fileData.filter.append(spec.filter.toStdWString());
-      fileData.filter.append(0);
+      fileData.filter.append(nullptr);
    }
 
    ofn->lpstrFilter = fileData.filter.data();
@@ -2101,7 +2118,8 @@ class QWindowsXpFileDialogHelper : public QWindowsDialogHelperBase<QPlatformFile
  public:
    QWindowsXpFileDialogHelper() {}
 
-   bool supportsNonModalDialog(const QWindow * /* parent */ = 0) const override {
+   bool supportsNonModalDialog(const QWindow *parent = nullptr) const override {
+      (void) parent;
       return false;
    }
 
@@ -2135,7 +2153,8 @@ QWindowsNativeDialogBase *QWindowsXpFileDialogHelper::createNativeDialog()
       QObject::connect(result, &QWindowsNativeDialogBase::rejected, this, &QPlatformDialogHelper::reject);
       return result;
    }
-   return 0;
+
+   return nullptr;
 }
 
 void QWindowsXpFileDialogHelper::setDirectory(const QUrl &directory)
@@ -2318,7 +2337,7 @@ QPlatformDialogHelper *createHelper(QPlatformTheme::DialogType type)
 {
 
    if (QWindowsIntegration::instance()->options() & QWindowsIntegration::NoNativeDialogs) {
-      return 0;
+      return nullptr;
    }
 
    switch (type) {
@@ -2349,7 +2368,7 @@ QPlatformDialogHelper *createHelper(QPlatformTheme::DialogType type)
          break;
    }
 
-   return 0;
+   return nullptr;
 }
 
 } // namespace QWindowsDialogs

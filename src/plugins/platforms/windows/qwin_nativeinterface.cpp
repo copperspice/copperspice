@@ -71,7 +71,7 @@ void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resourc
 {
    if (! window || ! window->handle()) {
       qWarning("%s: '%s' requested for null window or window without handle.", __FUNCTION__, resource.constData());
-      return 0;
+      return nullptr;
    }
 
    QWindowsWindow *bw = static_cast<QWindowsWindow *>(window->handle());
@@ -90,7 +90,7 @@ void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resourc
 
          if (type == ReleaseDCType) {
             bw->releaseDC();
-            return 0;
+            return nullptr;
          }
          break;
 

@@ -274,7 +274,7 @@ static inline QPalette menuPalette(const QPalette &systemPalette)
 
 static inline QPalette *menuBarPalette(const QPalette &menuPalette)
 {
-   QPalette *result = 0;
+   QPalette *result = nullptr;
 
    if (booleanSystemParametersInfo(SPI_GETFLATMENU, false)) {
       result = new QPalette(menuPalette);
@@ -289,13 +289,13 @@ static inline QPalette *menuBarPalette(const QPalette &menuPalette)
 }
 
 QString QWindowsTheme::name = "windows";
-QWindowsTheme *QWindowsTheme::m_instance = 0;
+QWindowsTheme *QWindowsTheme::m_instance = nullptr;
 
 QWindowsTheme::QWindowsTheme()
 {
    m_instance = this;
-   std::fill(m_fonts, m_fonts + NFonts, static_cast<QFont *>(0));
-   std::fill(m_palettes, m_palettes + NPalettes, static_cast<QPalette *>(0));
+   std::fill(m_fonts, m_fonts + NFonts, static_cast<QFont *>(nullptr));
+   std::fill(m_palettes, m_palettes + NPalettes, static_cast<QPalette *>(nullptr));
    refresh();
    refreshIconPixmapSizes();
 }
@@ -304,7 +304,7 @@ QWindowsTheme::~QWindowsTheme()
 {
    clearPalettes();
    clearFonts();
-   m_instance = 0;
+   m_instance = nullptr;
 }
 
 static inline QStringList iconThemeSearchPaths()
@@ -397,7 +397,7 @@ QVariant QWindowsTheme::themeHint(ThemeHint hint) const
 void QWindowsTheme::clearPalettes()
 {
    qDeleteAll(m_palettes, m_palettes + NPalettes);
-   std::fill(m_palettes, m_palettes + NPalettes, static_cast<QPalette *>(0));
+   std::fill(m_palettes, m_palettes + NPalettes, static_cast<QPalette *>(nullptr));
 }
 
 void QWindowsTheme::refreshPalettes()
@@ -415,7 +415,7 @@ void QWindowsTheme::refreshPalettes()
 void QWindowsTheme::clearFonts()
 {
    qDeleteAll(m_fonts, m_fonts + NFonts);
-   std::fill(m_fonts, m_fonts + NFonts, static_cast<QFont *>(0));
+   std::fill(m_fonts, m_fonts + NFonts, static_cast<QFont *>(nullptr));
 }
 
 void QWindowsTheme::refreshFonts()
@@ -529,7 +529,8 @@ static QPixmap loadIconFromShell32(int resourceId, QSizeF size)
 QPixmap QWindowsTheme::standardPixmap(StandardPixmap sp, const QSizeF &pixmapSize) const
 {
    int resourceId = -1;
-   LPCTSTR iconName = 0;
+   LPCTSTR iconName = nullptr;
+
    switch (sp) {
       case DriveCDIcon:
       case DriveDVDIcon:
@@ -621,7 +622,7 @@ QPixmap QWindowsTheme::standardPixmap(StandardPixmap sp, const QSizeF &pixmapSiz
    }
 
    if (iconName) {
-      HICON iconHandle = LoadIcon(NULL, iconName);
+      HICON iconHandle = LoadIcon(nullptr, iconName);
       QPixmap pixmap = qt_pixmapFromWinHICON(iconHandle);
       DestroyIcon(iconHandle);
       if (!pixmap.isNull()) {
@@ -712,7 +713,7 @@ QPixmap QWindowsTheme::fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &s
 {
    /* We don't use the variable, but by storing it statically, we
     * ensure CoInitialize is only called once. */
-   static HRESULT comInit = CoInitialize(NULL);
+   static HRESULT comInit = CoInitialize(nullptr);
    Q_UNUSED(comInit);
 
    static QCache<QString, FakePointer<int>> dirIconEntryCache(1000);

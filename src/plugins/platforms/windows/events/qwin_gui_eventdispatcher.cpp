@@ -159,7 +159,8 @@ static inline const MessageDebugEntry *messageDebugEntry(UINT msg)
     for (size_t i = 0; i < sizeof(messageDebugEntries)/sizeof(MessageDebugEntry); i++)
         if (messageDebugEntries[i].message == msg)
             return messageDebugEntries + i;
-    return 0;
+
+    return nullptr;
 }
 
 const char *QWindowsGuiEventDispatcher::windowsMessageName(UINT msg)

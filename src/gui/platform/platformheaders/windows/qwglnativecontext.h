@@ -30,22 +30,21 @@
 class QWGLNativeContext
 {
 public:
-    QWGLNativeContext()
-        : m_context(0),
-          m_window(0)
-    { }
+   QWGLNativeContext()
+      : m_context(nullptr), m_window(nullptr)
+   { }
 
-    QWGLNativeContext(HGLRC ctx, HWND wnd)
-        : m_context(ctx),
-          m_window(wnd)
-    { }
+   QWGLNativeContext(HGLRC ctx, HWND wnd)
+      : m_context(ctx), m_window(wnd)
+   {
+   }
 
-    HGLRC context() const { return m_context; }
-    HWND window() const { return m_window; }
+   HGLRC context() const { return m_context; }
+   HWND window() const { return m_window; }
 
 private:
-    HGLRC m_context;
-    HWND m_window;
+   HGLRC m_context;
+   HWND m_window;
 };
 
 CS_DECLARE_METATYPE(QWGLNativeContext)

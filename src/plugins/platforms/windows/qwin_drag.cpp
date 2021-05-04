@@ -53,7 +53,7 @@
 class QWindowsDragCursorWindow : public QRasterWindow
 {
  public:
-   explicit QWindowsDragCursorWindow(QWindow *parent = 0);
+   explicit QWindowsDragCursorWindow(QWindow *parent = nullptr);
 
    void setPixmap(const QPixmap &p);
 
@@ -239,8 +239,8 @@ class QWindowsOleDropSource : public IDropSource
 };
 
 QWindowsOleDropSource::QWindowsOleDropSource(QWindowsDrag *drag)
-   : m_mode(QWindowsCursor::cursorState() != QWindowsCursor::CursorSuppressed ? MouseDrag : TouchDrag)
-   , m_drag(drag), m_currentButtons(Qt::NoButton), m_touchDragWindow(0), m_refs(1)
+   : m_mode(QWindowsCursor::cursorState() != QWindowsCursor::CursorSuppressed ? MouseDrag : TouchDrag),
+     m_drag(drag), m_currentButtons(Qt::NoButton), m_touchDragWindow(nullptr), m_refs(1)
 {
 }
 
@@ -371,7 +371,7 @@ STDMETHODIMP QWindowsOleDropSource::QueryInterface(REFIID iid, void FAR *FAR *pp
       ++m_refs;
       return NOERROR;
    }
-   *ppv = NULL;
+   *ppv = nullptr;
    return ResultFromScode(E_NOINTERFACE);
 }
 
@@ -505,7 +505,7 @@ STDMETHODIMP QWindowsOleDropTarget::QueryInterface(REFIID iid, void FAR *FAR *pp
       AddRef();
       return NOERROR;
    }
-   *ppv = NULL;
+   *ppv = nullptr;
    return ResultFromScode(E_NOINTERFACE);
 }
 
@@ -590,7 +590,7 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropTarget::DragLeave()
       dh->DragLeave();
    }
 
-   QWindowSystemInterface::handleDrag(m_window, 0, QPoint(), Qt::IgnoreAction);
+   QWindowSystemInterface::handleDrag(m_window, nullptr, QPoint(), Qt::IgnoreAction);
    QWindowsDrag::instance()->releaseDropDataObject();
 
    return NOERROR;
@@ -636,12 +636,13 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropTarget::Drop(LPDATAO
             memset(&medium, 0, sizeof(STGMEDIUM));
             medium.tymed = TYMED_HGLOBAL;
             medium.hGlobal = hData;
+
             FORMATETC format;
             format.cfFormat = CLIPFORMAT(RegisterClipboardFormat(CFSTR_PERFORMEDDROPEFFECT));
-            format.tymed = TYMED_HGLOBAL;
-            format.ptd = 0;
+            format.tymed    = TYMED_HGLOBAL;
+            format.ptd      = nullptr;
             format.dwAspect = 1;
-            format.lindex = -1;
+            format.lindex   = -1;
             windowsDrag->dropDataObject()->SetData(&format, &medium, true);
          }
       } else {
@@ -664,8 +665,8 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropTarget::Drop(LPDATAO
     \ingroup qt-lighthouse-win
 */
 
-QWindowsDrag::QWindowsDrag() :
-   m_dropDataObject(0), m_cachedDropTargetHelper(0)
+QWindowsDrag::QWindowsDrag()
+   : m_dropDataObject(nullptr), m_cachedDropTargetHelper(nullptr)
 {
 }
 
@@ -694,9 +695,8 @@ QMimeData *QWindowsDrag::dropData()
 IDropTargetHelper *QWindowsDrag::dropHelper()
 {
    if (!m_cachedDropTargetHelper) {
-      CoCreateInstance(CLSID_DragDropHelper, 0, CLSCTX_INPROC_SERVER,
-         IID_IDropTargetHelper,
-         reinterpret_cast<void **>(&m_cachedDropTargetHelper));
+      CoCreateInstance(CLSID_DragDropHelper, nullptr, CLSCTX_INPROC_SERVER,
+         IID_IDropTargetHelper, reinterpret_cast<void **>(&m_cachedDropTargetHelper));
    }
    return m_cachedDropTargetHelper;
 }
@@ -750,7 +750,6 @@ void QWindowsDrag::releaseDropDataObject()
 {
    if (m_dropDataObject) {
       m_dropDataObject->Release();
-      m_dropDataObject = 0;
+      m_dropDataObject = nullptr;
    }
 }
-

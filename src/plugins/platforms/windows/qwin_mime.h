@@ -70,7 +70,7 @@ class QWindowsMimeConverter
    QVector<FORMATETC> allFormatsForMime(const QMimeData *mimeData) const;
 
    QVariant convertToMime(const QStringList &mimeTypes, IDataObject *pDataObj, QVariant::Type preferredType,
-      QString *format = 0) const;
+      QString *format = nullptr) const;
 
    void registerMime(QWindowsMime *mime);
    void unregisterMime(QWindowsMime *mime) {

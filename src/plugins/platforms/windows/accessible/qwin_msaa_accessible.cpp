@@ -76,7 +76,8 @@ private:
 
 HRESULT STDMETHODCALLTYPE QWindowsEnumerate::QueryInterface(REFIID id, LPVOID *iface)
 {
-    *iface = 0;
+    *iface = nullptr;
+
     if (id == IID_IUnknown)
         *iface = static_cast<IUnknown *>(this);
     else if (id == IID_IEnumVARIANT)
@@ -106,8 +107,8 @@ ULONG STDMETHODCALLTYPE QWindowsEnumerate::Release()
 
 HRESULT STDMETHODCALLTYPE QWindowsEnumerate::Clone(IEnumVARIANT **ppEnum)
 {
-    QWindowsEnumerate *penum = 0;
-    *ppEnum = 0;
+    QWindowsEnumerate *penum = nullptr;
+    *ppEnum = nullptr;
 
     penum = new QWindowsEnumerate(array);
     if (!penum)
@@ -115,6 +116,7 @@ HRESULT STDMETHODCALLTYPE QWindowsEnumerate::Clone(IEnumVARIANT **ppEnum)
     penum->current = current;
     penum->array = array;
     penum->AddRef();
+
     *ppEnum = penum;
 
     return S_OK;
@@ -171,7 +173,7 @@ void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleIn
  **************************************************************/
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::QueryInterface(REFIID id, LPVOID *iface)
 {
-    *iface = 0;
+    *iface = nullptr;
 
     QByteArray strIID = IIDToString(id);
     if (!strIID.isEmpty()) {
@@ -225,7 +227,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetTypeInfoCount(unsigned int 
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetTypeInfo(unsigned int, unsigned long, ITypeInfo **pptinfo)
 {
     // We don't use a type library
-    *pptinfo = 0;
+    *pptinfo = nullptr;
     return S_OK;
 }
 
@@ -484,7 +486,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accHitTest(long xLeft, long yT
     const QPoint pos = QHighDpi::fromNativeLocalPosition(QPoint(xLeft, yTop),
                                                          QWindowsAccessibility::windowHelper(accessible));
     QAccessibleInterface *child = accessible->childAt(pos.x(), pos.y());
-    if (child == 0) {
+
+    if (child == nullptr) {
         // no child found, return this item if it contains the coordinates
         if (accessible->rect().contains(xLeft, yTop)) {
             (*pvarID).vt = VT_I4;
@@ -544,7 +547,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accNavigate(long navDir, VARIA
     if (!accessible)
         return E_FAIL;
 
-    QAccessibleInterface *acc = 0;
+    QAccessibleInterface *acc = nullptr;
+
     switch (navDir) {
     case NAVDIR_FIRSTCHILD:
         acc = accessible->child(0);
@@ -580,11 +584,12 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accNavigate(long navDir, VARIA
             const int indexOfOurself = pIface->indexOfChild(accessible);
             QRect startg = accessible->rect();
             QPoint startc = startg.center();
-            QAccessibleInterface *candidate = 0;
+            QAccessibleInterface *candidate = nullptr;
             unsigned mindist = UINT_MAX;    // will work on screen sizes at least up to 46340x46340
             const int sibCount = pIface->childCount();
+
             for (int i = 0; i < sibCount; ++i) {
-                QAccessibleInterface *sibling = 0;
+                QAccessibleInterface *sibling = nullptr;
                 sibling = pIface->child(i);
                 Q_ASSERT(sibling);
                 if (i == indexOfOurself || sibling->state().invisible) {
@@ -712,7 +717,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accParent(IDispatch** ppdi
         }
     }
 
-    *ppdispParent = 0;
+    *ppdispParent = nullptr;
     return S_FALSE;
 }
 
@@ -745,7 +750,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accDefaultAction(VARIANT v
     if (!accessible)
         return E_FAIL;
 
-    *pszDefaultAction = 0;
+    *pszDefaultAction = nullptr;
+
     if (QAccessibleActionInterface *actionIface = accessible->actionInterface()) {
         const QString def = actionIface->actionNames().value(0);
         if (!def.isEmpty())
@@ -776,7 +782,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accDescription(VARIANT var
         return S_OK;
     }
 
-    *pszDescription = 0;
+    *pszDescription = nullptr;
+
     return S_FALSE;
 }
 
@@ -801,7 +808,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accHelp(VARIANT varID, BST
         return S_OK;
     }
 
-    *pszHelp = 0;
+    *pszHelp = nullptr;
+
     return S_FALSE;
 }
 
@@ -818,7 +826,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accKeyboardShortcut(VARIAN
     if (!accessible)
         return E_FAIL;
 
-    *pszKeyboardShortcut = 0;
+    *pszKeyboardShortcut = nullptr;
+
     if (QAccessibleActionInterface *actionIface = accessible->actionInterface()) {
         const QString def = actionIface->actionNames().value(0);
         if (!def.isEmpty()) {
@@ -875,7 +884,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accName(VARIANT varID, BST
         return S_OK;
     }
 
-    *pszName = 0;
+    *pszName = nullptr;
+
     return S_FALSE;
 }
 
@@ -1026,7 +1036,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accValue(VARIANT varID, BS
         return S_OK;
     }
 
-    *pszValue = 0;
+    *pszValue = nullptr;
+
     qDebug() << "return S_FALSE";
 
     return S_FALSE;
@@ -1154,7 +1165,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accSelection(VARIANT *pvar
  **************************************************************/
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetWindow(HWND *phwnd)
 {
-    *phwnd = 0;
+    *phwnd = nullptr;
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
     if (!accessible)

@@ -305,17 +305,18 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::supportedRenderers()
 
 bool QWindowsOpenGLTester::testDesktopGL()
 {
-#if !defined(QT_NO_OPENGL) && !defined(Q_OS_WINCE)
-   HMODULE lib = 0;
-   HWND wnd = 0;
-   HDC dc = 0;
-   HGLRC context = 0;
+#if ! defined(QT_NO_OPENGL)
+   HMODULE lib = nullptr;
+   HWND wnd = nullptr;
+   HDC dc   = nullptr;
+   HGLRC context = nullptr;
+
    LPCTSTR className = L"qtopengltest";
 
-   HGLRC (WINAPI * CreateContext)(HDC dc) = 0;
-   BOOL (WINAPI * DeleteContext)(HGLRC context) = 0;
-   BOOL (WINAPI * MakeCurrent)(HDC dc, HGLRC context) = 0;
-   PROC (WINAPI * WGL_GetProcAddress)(LPCSTR name) = 0;
+   HGLRC (WINAPI * CreateContext)(HDC dc) = nullptr;
+   BOOL (WINAPI * DeleteContext)(HGLRC context) = nullptr;
+   BOOL (WINAPI * MakeCurrent)(HDC dc, HGLRC context) = nullptr;
+   PROC (WINAPI * WGL_GetProcAddress)(LPCSTR name) = nullptr;
 
    bool result = false;
 
@@ -341,14 +342,14 @@ bool QWindowsOpenGLTester::testDesktopGL()
       }
 
       WNDCLASS wclass;
-      wclass.cbClsExtra = 0;
-      wclass.cbWndExtra = 0;
-      wclass.hInstance = static_cast<HINSTANCE>(GetModuleHandle(0));
-      wclass.hIcon = 0;
-      wclass.hCursor = 0;
+      wclass.cbClsExtra    = 0;
+      wclass.cbWndExtra    = 0;
+      wclass.hInstance     = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
+      wclass.hIcon         = nullptr;
+      wclass.hCursor       = nullptr;
       wclass.hbrBackground = HBRUSH(COLOR_BACKGROUND);
-      wclass.lpszMenuName = 0;
-      wclass.lpfnWndProc = DefWindowProc;
+      wclass.lpszMenuName  = nullptr;
+      wclass.lpfnWndProc   = DefWindowProc;
       wclass.lpszClassName = className;
       wclass.style = CS_OWNDC;
       if (!RegisterClass(&wclass)) {
@@ -432,7 +433,7 @@ bool QWindowsOpenGLTester::testDesktopGL()
 
 cleanup:
    if (MakeCurrent) {
-      MakeCurrent(0, 0);
+      MakeCurrent(nullptr, nullptr);
    }
    if (context) {
       DeleteContext(context);
@@ -442,7 +443,7 @@ cleanup:
    }
    if (wnd) {
       DestroyWindow(wnd);
-      UnregisterClass(className, GetModuleHandle(0));
+      UnregisterClass(className, GetModuleHandle(nullptr));
    }
    // No FreeLibrary. Some implementations, Mesa in particular, deadlock when trying to unload.
 

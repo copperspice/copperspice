@@ -68,7 +68,7 @@
 static void clearKeyRecorderOnApplicationInActive(Qt::ApplicationState state);
 
 QWindowsKeyMapper::QWindowsKeyMapper()
-   : m_useRTLExtensions(false), m_keyGrabber(0)
+   : m_useRTLExtensions(false), m_keyGrabber(nullptr)
 {
    memset(keyLayout, 0, sizeof(keyLayout));
    QApplication *app = static_cast<QApplication *>(QApplication::instance());
@@ -136,7 +136,8 @@ static void clearKeyRecorderOnApplicationInActive(Qt::ApplicationState state)
 
 KeyRecord *KeyRecorder::findKey(int code, bool remove)
 {
-   KeyRecord *result = 0;
+   KeyRecord *result = nullptr;
+
    for (int i = 0; i < nrecs; ++i) {
       if (records[i].code == code) {
          if (remove) {
@@ -527,7 +528,7 @@ inline quint32 winceKeyBend(quint32 keyCode)
 }
 
 // Translate a VK into a key code or unicode character
-static inline quint32 toKeyOrUnicode(quint32 vk, quint32 scancode, unsigned char *kbdBuffer, bool *isDeadkey = 0)
+static inline quint32 toKeyOrUnicode(quint32 vk, quint32 scancode, unsigned char *kbdBuffer, bool *isDeadkey = nullptr)
 {
    Q_ASSERT(vk > 0 && vk < 256);
    quint32 code = 0;
@@ -780,9 +781,8 @@ static void showSystemMenu(QWindow *w)
    const QPoint pos = QHighDpi::toNativePixels(topLevel->geometry().topLeft(), topLevel);
    const int ret = TrackPopupMenuEx(menu,
          TPM_LEFTALIGN  | TPM_TOPALIGN | TPM_NONOTIFY | TPM_RETURNCMD,
-         pos.x(), pos.y(),
-         topLevelHwnd,
-         0);
+         pos.x(), pos.y(), topLevelHwnd, nullptr);
+
    if (ret) {
       qWindowsWndProc(topLevelHwnd, WM_SYSCOMMAND, WPARAM(ret), 0);
    }
@@ -1068,7 +1068,7 @@ bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &ms
 
       if (rec && rec->state != state) {
          key_recorder.findKey(int(msg.wParam), true);
-         rec = 0;
+         rec = nullptr;
       }
 
       // Find unicode character from Windows Message Queue
@@ -1079,7 +1079,7 @@ bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &ms
       char16_t ch_value;
       QChar uch;
 
-      if (PeekMessage(&wm_char, 0, charType, charType, PM_REMOVE)) {
+      if (PeekMessage(&wm_char, nullptr, charType, charType, PM_REMOVE)) {
          // found a ?_CHAR
          ch_value = char16_t(ushort(wm_char.wParam));
 

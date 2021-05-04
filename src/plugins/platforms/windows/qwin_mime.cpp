@@ -306,7 +306,7 @@ static FORMATETC setCf(int cf)
    formatetc.cfFormat = CLIPFORMAT(cf);
    formatetc.dwAspect = DVASPECT_CONTENT;
    formatetc.lindex = -1;
-   formatetc.ptd = NULL;
+   formatetc.ptd = nullptr;
    formatetc.tymed = TYMED_HGLOBAL;
    return formatetc;
 }
@@ -323,7 +323,7 @@ static bool setData(const QByteArray &data, STGMEDIUM *pmedium)
    GlobalUnlock(hData);
    pmedium->tymed = TYMED_HGLOBAL;
    pmedium->hGlobal = hData;
-   pmedium->pUnkForRelease = 0;
+   pmedium->pUnkForRelease = nullptr;
 
    return true;
 }
@@ -348,7 +348,7 @@ static QByteArray getData(int cf, IDataObject *pDataObj, int lindex = -1)
          ULONG actualRead = 0;
          LARGE_INTEGER pos = {{0, 0}};
          //Move to front (can fail depending on the data model implemented)
-         HRESULT hr = s.pstm->Seek(pos, STREAM_SEEK_SET, NULL);
+         HRESULT hr = s.pstm->Seek(pos, STREAM_SEEK_SET, nullptr);
          while (SUCCEEDED(hr)) {
             hr = s.pstm->Read(szBuffer, sizeof(szBuffer), &actualRead);
             if (SUCCEEDED(hr) && actualRead > 0) {
@@ -1149,13 +1149,13 @@ bool QWindowsMimeImage::convertFromMime(const FORMATETC &formatetc, const QMimeD
 bool QWindowsMimeImage::hasOriginalDIBV5(IDataObject *pDataObj) const
 {
    bool isSynthesized = true;
-   IEnumFORMATETC *pEnum = NULL;
+   IEnumFORMATETC *pEnum = nullptr;
    HRESULT res = pDataObj->EnumFormatEtc(1, &pEnum);
 
    if (res == S_OK && pEnum) {
       FORMATETC fc;
 
-      while ((res = pEnum->Next(1, &fc, 0)) == S_OK) {
+      while ((res = pEnum->Next(1, &fc, nullptr)) == S_OK) {
          if (fc.ptd) {
             CoTaskMemFree(fc.ptd);
          }
@@ -1607,7 +1607,7 @@ QStringList QWindowsMimeConverter::allMimesForFormats(IDataObject *pDataObj) con
    if (hr == NOERROR) {
       FORMATETC fmtetc;
 
-      while (S_OK == fmtenum->Next(1, &fmtetc, 0)) {
+      while (S_OK == fmtenum->Next(1, &fmtetc, nullptr)) {
 
          for (int i = m_mimes.size() - 1; i >= 0; --i) {
             QString format = m_mimes.at(i)->mimeForFormat(fmtetc);
@@ -1642,7 +1642,7 @@ QWindowsMime *QWindowsMimeConverter::converterFromMime(const FORMATETC &formatet
          return m_mimes.at(i);
       }
    }
-   return 0;
+   return nullptr;
 }
 
 QVector<FORMATETC> QWindowsMimeConverter::allFormatsForMime(const QMimeData *mimeData) const

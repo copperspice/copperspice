@@ -124,7 +124,7 @@ class EmbeddedFont
    }
 
    TableDirectory *tableDirectoryEntry(const QByteArray &tagName);
-   QString familyName(TableDirectory *nameTableDirectory = 0);
+   QString familyName(TableDirectory *nameTableDirectory = nullptr);
 
  private:
    QByteArray m_fontData;
@@ -138,7 +138,7 @@ TableDirectory *EmbeddedFont::tableDirectoryEntry(const QByteArray &tagName)
    const size_t fontDataSize = m_fontData.size();
 
    if (fontDataSize < sizeof(OffsetSubTable)) {
-      return 0;
+      return nullptr;
    }
 
    OffsetSubTable *offsetSubTable = reinterpret_cast<OffsetSubTable *>(m_fontData.data());
@@ -146,29 +146,31 @@ TableDirectory *EmbeddedFont::tableDirectoryEntry(const QByteArray &tagName)
 
    const size_t tableCount = qFromBigEndian<quint16>(offsetSubTable->numTables);
    if (fontDataSize < sizeof(OffsetSubTable) + sizeof(TableDirectory) * tableCount) {
-      return 0;
+      return nullptr;
    }
 
    TableDirectory *tableDirectoryEnd = tableDirectory + tableCount;
+
    for (TableDirectory *entry = tableDirectory; entry < tableDirectoryEnd; ++entry) {
       if (entry->identifier == tagId) {
          return entry;
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 QString EmbeddedFont::familyName(TableDirectory *nameTableDirectoryEntry)
 {
    QString name;
 
-   if (nameTableDirectoryEntry == 0) {
+   if (nameTableDirectoryEntry == nullptr) {
       nameTableDirectoryEntry = tableDirectoryEntry("name");
    }
 
-   if (nameTableDirectoryEntry != 0) {
+   if (nameTableDirectoryEntry != nullptr) {
       quint32 offset = qFromBigEndian<quint32>(nameTableDirectoryEntry->offset);
+
       if (quint32(m_fontData.size()) < offset + sizeof(NameTable)) {
          return QString();
       }
@@ -213,7 +215,8 @@ QString EmbeddedFont::familyName(TableDirectory *nameTableDirectoryEntry)
 QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
 {
    TableDirectory *nameTableDirectoryEntry = tableDirectoryEntry("name");
-   if (nameTableDirectoryEntry == 0) {
+
+   if (nameTableDirectoryEntry == nullptr) {
       return QString();
    }
 
@@ -307,9 +310,9 @@ QWindowsFontEngineData::QWindowsFontEngineData()
       pow_gamma[i] = uint(qRound(qPow(i / qreal(255.), gray_gamma) * 2047));
    }
 
-   HDC displayDC = GetDC(0);
+   HDC displayDC = GetDC(nullptr);
    hdc = CreateCompatibleDC(displayDC);
-   ReleaseDC(0, displayDC);
+   ReleaseDC(nullptr, displayDC);
 }
 
 QWindowsFontEngineData::~QWindowsFontEngineData()
@@ -561,7 +564,7 @@ QString getEnglishName(const QString &familyName)
 {
    QString i18n_name;
 
-   HDC hdc = GetDC( 0 );
+   HDC hdc = GetDC(nullptr);
    LOGFONT lf;
 
    memset(&lf, 0, sizeof(LOGFONT));
@@ -573,7 +576,7 @@ QString getEnglishName(const QString &familyName)
    HFONT hfont = CreateFontIndirect(&lf);
 
    if (! hfont) {
-      ReleaseDC(0, hdc);
+      ReleaseDC(nullptr, hdc);
       return QString();
    }
 
@@ -582,9 +585,10 @@ QString getEnglishName(const QString &familyName)
    const DWORD name_tag = MAKE_TAG( 'n', 'a', 'm', 'e' );
 
    // get the name table
-   unsigned char *table = 0;
+   unsigned char *table = nullptr;
 
-   DWORD bytes = GetFontData( hdc, name_tag, 0, 0, 0 );
+   DWORD bytes = GetFontData(hdc, name_tag, 0, nullptr, 0);
+
    if ( bytes == GDI_ERROR ) {
       // int err = GetLastError();
       goto error;
@@ -602,7 +606,7 @@ error:
    delete [] table;
    SelectObject( hdc, oldobj );
    DeleteObject( hfont );
-   ReleaseDC( 0, hdc );
+   ReleaseDC(nullptr, hdc);
 
    return i18n_name;
 }
@@ -752,7 +756,7 @@ void QWindowsFontDatabase::populateFamily(const QString &familyName, bool regist
       return;
    }
 
-   HDC dummy = GetDC(0);
+   HDC dummy = GetDC(nullptr);
    LOGFONT lf;
    lf.lfCharSet = DEFAULT_CHARSET;
 
@@ -771,7 +775,7 @@ void QWindowsFontDatabase::populateFamily(const QString &familyName, bool regist
       Q_ASSERT_X(false, "QWindowsfontdatabase(): No font families were found for ", csPrintable(familyName));
    }
 
-   ReleaseDC(0, dummy);
+   ReleaseDC(nullptr, dummy);
 }
 
 void QWindowsFontDatabase::populateFamily(const QString &familyName)
@@ -832,7 +836,8 @@ void QWindowsFontDatabase::populateFontDatabase()
 {
    removeApplicationFonts();
 
-   HDC dummy = GetDC(0);
+   HDC dummy = GetDC(nullptr);
+
    LOGFONT lf;
    lf.lfCharSet        = DEFAULT_CHARSET;
    lf.lfFaceName[0]    = 0;
@@ -840,7 +845,7 @@ void QWindowsFontDatabase::populateFontDatabase()
 
    PopulateFamiliesContext context(QWindowsFontDatabase::systemDefaultFont().family());
    EnumFontFamiliesEx(dummy, &lf, populateFontFamilies, reinterpret_cast<LPARAM>(&context), 0);
-   ReleaseDC(0, dummy);
+   ReleaseDC(nullptr, dummy);
 
    // Work around EnumFontFamiliesEx() not listing the system font.
    if (! context.m_seenSystemDefaultFont) {
@@ -904,7 +909,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QFontDef &fontDef, void *han
 QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference)
 {
    EmbeddedFont font(fontData);
-   QFontEngine *fontEngine = 0;
+   QFontEngine *fontEngine = nullptr;
 
    GUID guid;
    CoCreateGuid(&guid);
@@ -919,20 +924,21 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
 
    if (actualFontName.isEmpty()) {
       qWarning("%s: Unable to change family name of font", __FUNCTION__);
-      return 0;
+      return nullptr;
    }
 
    DWORD count = 0;
+
    QByteArray newFontData = font.data();
    HANDLE fontHandle = AddFontMemResourceEx(const_cast<char *>(newFontData.constData()),
-         DWORD(newFontData.size()), 0, &count);
+         DWORD(newFontData.size()), nullptr, &count);
 
-   if (count == 0 && fontHandle != 0) {
+   if (count == 0 && fontHandle != nullptr) {
       RemoveFontMemResourceEx(fontHandle);
-      fontHandle = 0;
+      fontHandle = nullptr;
    }
 
-   if (fontHandle == 0) {
+   if (fontHandle == nullptr) {
       qWarning("%s: AddFontMemResourceEx failed", __FUNCTION__);
 
    } else {
@@ -954,7 +960,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
                delete fontEngine;
             }
 
-            fontEngine = 0;
+            fontEngine = nullptr;
 
          } else {
             Q_ASSERT(fontEngine->ref.load() == 0);
@@ -967,6 +973,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
             uniqueData.refCount.ref();
             m_uniqueFontData[uniqueFamilyName] = uniqueData;
          }
+
       } else {
          RemoveFontMemResourceEx(fontHandle);
       }
@@ -974,11 +981,11 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
 
 
    // Get style and weight info
-   if (fontEngine != 0) {
+   if (fontEngine != nullptr) {
       TableDirectory *os2TableEntry = font.tableDirectoryEntry("OS/2");
-      if (os2TableEntry != 0) {
-         const OS2Table *os2Table =
-            reinterpret_cast<const OS2Table *>(fontData.constData()
+
+      if (os2TableEntry != nullptr) {
+         const OS2Table *os2Table = reinterpret_cast<const OS2Table *>(fontData.constData()
                + qFromBigEndian<quint32>(os2TableEntry->offset));
 
          bool italic = qFromBigEndian<quint16>(os2Table->selection) & 1;
@@ -1036,7 +1043,8 @@ static void getFontTable(const uchar *fileBegin, const uchar *data, quint32 tag,
          return;
       }
    }
-   *table = 0;
+
+   *table  = nullptr;
    *length = 0;
    return;
 }
@@ -1103,16 +1111,16 @@ QStringList QWindowsFontDatabase::addApplicationFont(const QByteArray &fontData,
       }
 
       DWORD dummy = 0;
-      font.handle = AddFontMemResourceEx(const_cast<char *>(fontData.constData()), DWORD(fontData.size()), 0, &dummy);
+      font.handle = AddFontMemResourceEx(const_cast<char *>(fontData.constData()), DWORD(fontData.size()), nullptr, &dummy);
 
-      if (font.handle == 0) {
+      if (font.handle == nullptr) {
          return QStringList();
       }
 
       // Memory fonts won't show up in enumeration, so do add them the hard way.
       for (int j = 0; j < families.count(); ++j) {
          const QString familyName = families.at(j);
-         HDC hdc = GetDC(0);
+         HDC hdc = GetDC(nullptr);
          LOGFONT lf;
 
          memset(&lf, 0, sizeof(LOGFONT));
@@ -1131,7 +1139,7 @@ QStringList QWindowsFontDatabase::addApplicationFont(const QByteArray &fontData,
 
          SelectObject(hdc, oldobj);
          DeleteObject(hfont);
-         ReleaseDC(0, hdc);
+         ReleaseDC(nullptr, hdc);
       }
 
    } else {
@@ -1143,16 +1151,16 @@ QStringList QWindowsFontDatabase::addApplicationFont(const QByteArray &fontData,
       QByteArray data = f.readAll();
       f.close();
 
-      getFamiliesAndSignatures(data, &families, 0);
+      getFamiliesAndSignatures(data, &families, nullptr);
       if (families.isEmpty()) {
          return families;
       }
 
-      if (AddFontResourceExW(fileName.toStdWString().c_str(), FR_PRIVATE, 0) == 0) {
+      if (AddFontResourceExW(fileName.toStdWString().c_str(), FR_PRIVATE, nullptr) == 0) {
          return QStringList();
       }
 
-      font.handle = 0;
+      font.handle = nullptr;
 
       // Fonts based on files are added via populate, as they will show up in font enumeration.
       for (int j = 0; j < families.count(); ++j) {
@@ -1171,7 +1179,7 @@ void QWindowsFontDatabase::removeApplicationFonts()
       if (font.handle) {
          RemoveFontMemResourceEx(font.handle);
       } else {
-         RemoveFontResourceExW(font.fileName.toStdWString().c_str(), FR_PRIVATE, 0);
+         RemoveFontResourceExW(font.fileName.toStdWString().c_str(), FR_PRIVATE, nullptr);
       }
    }
 
@@ -1226,7 +1234,7 @@ static const char *other_tryFonts[] = {
    "SimSun",
    "PMingLiU",
    "Arial Unicode MS",
-   0
+   nullptr
 };
 
 static const char *jp_tryFonts [] = {
@@ -1236,7 +1244,7 @@ static const char *jp_tryFonts [] = {
    "SimSun",
    "PMingLiU",
    "Arial Unicode MS",
-   0
+   nullptr
 };
 
 static const char *ch_CN_tryFonts [] = {
@@ -1246,7 +1254,7 @@ static const char *ch_CN_tryFonts [] = {
    "Gulim",
    "MS UI Gothic",
    "Arial Unicode MS",
-   0
+   nullptr
 };
 
 static const char *ch_TW_tryFonts [] = {
@@ -1256,7 +1264,7 @@ static const char *ch_TW_tryFonts [] = {
    "Gulim",
    "MS UI Gothic",
    "Arial Unicode MS",
-   0
+   nullptr
 };
 
 static const char *kr_tryFonts[] = {
@@ -1266,10 +1274,10 @@ static const char *kr_tryFonts[] = {
    "SimSun",
    "MS UI Gothic",
    "Arial Unicode MS",
-   0
+   nullptr
 };
 
-static const char **tryFonts = 0;
+static const char **tryFonts = nullptr;
 
 LOGFONT QWindowsFontDatabase::fontDefToLOGFONT(const QFontDef &request)
 {
@@ -1483,7 +1491,7 @@ QStringList QWindowsFontDatabase::fallbacksForFamily(const QString &family, QFon
 QFontEngine *QWindowsFontDatabase::createEngine(const QFontDef &request, int dpi,
    const QSharedPointer<QWindowsFontEngineData> &data)
 {
-   QFontEngine *fe = 0;
+   QFontEngine *fe = nullptr;
 
    LOGFONT lf = fontDefToLOGFONT(request);
    const bool preferClearTypeAA = lf.lfQuality == CLEARTYPE_QUALITY;

@@ -314,7 +314,7 @@ void QWindowsFontDatabaseFT::populateFamily(const QString &familyName)
       return;
    }
 
-   HDC dummy = GetDC(0);
+   HDC dummy = GetDC(nullptr);
    LOGFONT lf;
    lf.lfCharSet = DEFAULT_CHARSET;
 
@@ -325,7 +325,7 @@ void QWindowsFontDatabaseFT::populateFamily(const QString &familyName)
    lf.lfPitchAndFamily = 0;
 
    EnumFontFamiliesEx(dummy, &lf, storeFont, 0, 0);
-   ReleaseDC(0, dummy);
+   ReleaseDC(nullptr, dummy);
 }
 
 namespace {
@@ -392,7 +392,8 @@ static int QT_WIN_CALLBACK populateFontFamilies(const LOGFONT *logFont, const TE
 
 void QWindowsFontDatabaseFT::populateFontDatabase()
 {
-   HDC dummy = GetDC(0);
+   HDC dummy = GetDC(nullptr);
+
    LOGFONT lf;
    lf.lfCharSet = DEFAULT_CHARSET;
    lf.lfFaceName[0] = 0;
@@ -400,7 +401,7 @@ void QWindowsFontDatabaseFT::populateFontDatabase()
 
    PopulateFamiliesContext context(QWindowsFontDatabase::systemDefaultFont().family());
    EnumFontFamiliesEx(dummy, &lf, populateFontFamilies, reinterpret_cast<LPARAM>(&context), 0);
-   ReleaseDC(0, dummy);
+   ReleaseDC(nullptr, dummy);
 
    // Work around EnumFontFamiliesEx() not listing the system font
    if (!context.seenSystemDefaultFont) {

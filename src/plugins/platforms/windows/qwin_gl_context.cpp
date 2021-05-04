@@ -130,7 +130,7 @@ QWindowsOpengl32DLL QOpenGLStaticContext::opengl32;
 
 void *QWindowsOpengl32DLL::resolve(const char *name)
 {
-   void *proc = m_lib ? (void *) ::GetProcAddress(m_lib, name) : 0;
+   void *proc = m_lib ? (void *) ::GetProcAddress(m_lib, name) : nullptr;
 
    if (! proc) {
       qErrnoWarning(::GetLastError(), "Failed to resolve OpenGL function %s", name);
@@ -413,7 +413,7 @@ static inline bool isAcceptableFormat(const QWindowsOpenGLAdditionalFormat &addi
 
 static void describeFormats(HDC hdc)
 {
-   const int pfiMax = DescribePixelFormat(hdc, 0, 0, NULL);
+   const int pfiMax = DescribePixelFormat(hdc, 0, 0, nullptr);
 
    for (int i = 0; i < pfiMax; i++) {
       PIXELFORMATDESCRIPTOR pfd;
@@ -430,7 +430,7 @@ static void describeFormats(HDC hdc)
 // Classic GDI API
 namespace GDI {
 static QSurfaceFormat qSurfaceFormatFromPixelFormat(const PIXELFORMATDESCRIPTOR &pfd,
-   QWindowsOpenGLAdditionalFormat *additionalIn = 0)
+   QWindowsOpenGLAdditionalFormat *additionalIn = nullptr)
 {
    QSurfaceFormat format;
    format.setRenderableType(QSurfaceFormat::OpenGL);
@@ -535,7 +535,7 @@ static int choosePixelFormat(HDC hdc, const QSurfaceFormat &format,
       }
    }
    // 2) No matching format found, manual search loop.
-   const int pfiMax = DescribePixelFormat(hdc, 0, 0, NULL);
+   const int pfiMax = DescribePixelFormat(hdc, 0, 0, nullptr);
    int bestScore = -1;
    int bestPfi = -1;
    const bool stereoRequested = format.stereo();
@@ -589,7 +589,7 @@ static inline HGLRC createContext(HDC hdc, HGLRC shared)
    HGLRC result = QOpenGLStaticContext::opengl32.wglCreateContext(hdc);
    if (!result) {
       qErrnoWarning("%s: wglCreateContext failed.", __FUNCTION__);
-      return 0;
+      return nullptr;
    }
    if (shared && !QOpenGLStaticContext::opengl32.wglShareLists(shared, result)) {
       qErrnoWarning("%s: wglShareLists() failed.", __FUNCTION__);
@@ -692,10 +692,8 @@ static int choosePixelFormat(HDC hdc, const QOpenGLStaticContext &staticContext,
    int pixelFormat = 0;
    uint numFormats = 0;
    while (true) {
-      const bool valid =
-         staticContext.wglChoosePixelFormatARB(hdc, iAttributes, 0, 1,
-            &pixelFormat, &numFormats)
-         && numFormats >= 1;
+      const bool valid = staticContext.wglChoosePixelFormatARB(hdc, iAttributes, nullptr, 1,
+               &pixelFormat, &numFormats) && numFormats >= 1;
       if (valid || !sampleBuffersRequested) {
          break;
       }
@@ -752,7 +750,7 @@ static int choosePixelFormat(HDC hdc, const QOpenGLStaticContext &staticContext,
 }
 
 static QSurfaceFormat qSurfaceFormatFromHDC(const QOpenGLStaticContext &staticContext,
-   HDC hdc, int pixelFormat, QWindowsOpenGLAdditionalFormat *additionalIn = 0)
+   HDC hdc, int pixelFormat, QWindowsOpenGLAdditionalFormat *additionalIn = nullptr)
 {
    enum { attribSize = 40 };
 
@@ -819,12 +817,12 @@ static QSurfaceFormat qSurfaceFormatFromHDC(const QOpenGLStaticContext &staticCo
 }
 
 static HGLRC createContext(const QOpenGLStaticContext &staticContext,
-   HDC hdc, const QSurfaceFormat &format, const QWindowsOpenGLAdditionalFormat &, HGLRC shared = 0)
+   HDC hdc, const QSurfaceFormat &format, const QWindowsOpenGLAdditionalFormat &, HGLRC shared = nullptr)
 {
    enum { attribSize = 11 };
 
    if (! staticContext.hasExtensions()) {
-      return 0;
+      return nullptr;
    }
 
    int attributes[attribSize];
@@ -896,14 +894,14 @@ static inline HWND createDummyGLWindow()
 {
    return QWindowsContext::instance()->
       createDummyWindow(QString("QtOpenGLDummyWindow"),
-         L"OpenGLDummyWindow", 0, WS_OVERLAPPED | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
+         L"OpenGLDummyWindow", nullptr, WS_OVERLAPPED | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 }
 
 // Create a dummy GL context (see QOpenGLTemporaryContext).
 static inline HGLRC createDummyGLContext(HDC dc)
 {
-   if (!dc) {
-      return 0;
+   if (! dc) {
+      return nullptr;
    }
    PIXELFORMATDESCRIPTOR pixelFormDescriptor;
    initPixelFormatDescriptor(&pixelFormDescriptor);
@@ -913,16 +911,16 @@ static inline HGLRC createDummyGLContext(HDC dc)
    const int pixelFormat = ChoosePixelFormat(dc, &pixelFormDescriptor);
    if (!pixelFormat) {
       qErrnoWarning("%s: ChoosePixelFormat failed.", __FUNCTION__);
-      return 0;
+      return nullptr;
    }
    if (!QOpenGLStaticContext::opengl32.setPixelFormat(dc, pixelFormat, &pixelFormDescriptor)) {
       qErrnoWarning("%s: SetPixelFormat failed.", __FUNCTION__);
-      return 0;
+      return nullptr;
    }
    HGLRC rc = QOpenGLStaticContext::opengl32.wglCreateContext(dc);
    if (!rc) {
       qErrnoWarning("%s: wglCreateContext failed.", __FUNCTION__);
-      return 0;
+      return nullptr;
    }
    return rc;
 }
@@ -1079,7 +1077,7 @@ QOpenGLStaticContext *QOpenGLStaticContext::create(bool softwareRendering)
 {
    if (!opengl32.init(softwareRendering)) {
       qWarning("Failed to load and resolve WGL/OpenGL functions");
-      return 0;
+      return nullptr;
    }
 
    // We need a current context for wglGetProcAdress()/getGLString() to work.
@@ -1098,9 +1096,9 @@ QOpenGLStaticContext *QOpenGLStaticContext::create(bool softwareRendering)
 }
 
 QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenGLContext *context)
-   : m_staticContext(staticContext), m_context(context), m_renderingContext(0),
+   : m_staticContext(staticContext), m_context(context), m_renderingContext(nullptr),
      m_pixelFormat(0), m_extensionsUsed(false), m_swapInterval(-1), m_ownsContext(true),
-     m_getGraphicsResetStatus(0), m_lost(false)
+     m_getGraphicsResetStatus(nullptr), m_lost(false)
 {
    if (!m_staticContext) { // Something went very wrong. Stop here, isValid() will return false.
       return;
@@ -1146,7 +1144,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
       if (ok) {
          m_ownsContext = false;
       } else {
-         m_renderingContext = 0;
+         m_renderingContext = nullptr;
       }
 
       return;
@@ -1172,9 +1170,11 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
    // SetPixelFormat (as of Windows 7) requires a real window.
    // Create a dummy one as we are not associated with a window yet.
    // Try to find a suitable pixel format using preferably ARB extensions
-   // (default to GDI) and store that.
-   HWND dummyWindow = 0;
-   HDC hdc = 0;
+   // (default to GDI) and store it
+
+   HWND dummyWindow = nullptr;
+   HDC hdc = nullptr;
+
    bool tryExtensions = false;
    int obtainedSwapInterval = -1;
    do {
@@ -1226,7 +1226,8 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
          break;
       }
       // Create context with sharing, again preferably using ARB.
-      HGLRC sharingRenderingContext = 0;
+      HGLRC sharingRenderingContext = nullptr;
+
       if (const QPlatformOpenGLContext *sc = context->shareHandle()) {
          sharingRenderingContext = static_cast<const QWindowsGLContext *>(sc)->renderingContext();
       }
@@ -1256,7 +1257,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
    // Make the HGLRC retrievable via QOpenGLContext::nativeHandle().
    // Do not provide the window since it is the dummy one and it is about to disappear.
    if (m_renderingContext) {
-      context->setNativeHandle(QVariant::fromValue<QWGLNativeContext>(QWGLNativeContext(m_renderingContext, 0)));
+      context->setNativeHandle(QVariant::fromValue<QWGLNativeContext>(QWGLNativeContext(m_renderingContext, nullptr)));
    }
 
    if (hdc) {
@@ -1452,7 +1453,7 @@ void QWindowsGLContext::doneCurrent()
    }
 #endif
 
-   QOpenGLStaticContext::opengl32.wglMakeCurrent(0, 0);
+   QOpenGLStaticContext::opengl32.wglMakeCurrent(nullptr, nullptr);
    releaseDCs();
 }
 

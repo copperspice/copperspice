@@ -80,7 +80,10 @@ struct QWindowCreationContext {
 };
 
 struct QWindowsWindowData {
-   QWindowsWindowData() : hwnd(0), embedded(false) {}
+   QWindowsWindowData()
+      : hwnd(nullptr), embedded(false)
+   {
+   }
 
    Qt::WindowFlags flags;
    QRect geometry;
@@ -142,7 +145,7 @@ class QWindowsWindow : public QPlatformWindow
       return testFlag(Exposed);
    }
    bool isActive() const override;
-   bool isEmbedded(const QPlatformWindow *parentWindow = 0) const override;
+   bool isEmbedded(const QPlatformWindow *parentWindow = nullptr) const override;
    QPoint mapToGlobal(const QPoint &pos) const override;
    QPoint mapFromGlobal(const QPoint &pos) const override;
 
@@ -279,7 +282,7 @@ class QWindowsWindow : public QPlatformWindow
    void destroyWindow();
 
    inline bool isDropSiteEnabled() const {
-      return m_dropTarget != 0;
+      return m_dropTarget != nullptr;
    }
    void setDropSiteEnabled(bool enabled);
    void updateDropSite(bool topLevel);
@@ -349,7 +352,7 @@ QWindowsWindow *QWindowsWindow::baseWindowOf(const QWindow *w)
       if (QPlatformWindow *pw = w->handle()) {
          return static_cast<QWindowsWindow *>(pw);
       }
-   return 0;
+   return nullptr;
 }
 
 HWND QWindowsWindow::handleOf(const QWindow *w)
@@ -357,7 +360,8 @@ HWND QWindowsWindow::handleOf(const QWindow *w)
    if (const QWindowsWindow *bw = QWindowsWindow::baseWindowOf(w)) {
       return bw->handle();
    }
-   return 0;
+
+   return nullptr;
 }
 
 void *QWindowsWindow::userDataOf(HWND hwnd)
@@ -374,11 +378,12 @@ inline void QWindowsWindow::destroyIcon()
 {
    if (m_iconBig) {
       DestroyIcon(m_iconBig);
-      m_iconBig = 0;
+      m_iconBig = nullptr;
    }
+
    if (m_iconSmall) {
       DestroyIcon(m_iconSmall);
-      m_iconSmall = 0;
+      m_iconSmall = nullptr;
    }
 }
 

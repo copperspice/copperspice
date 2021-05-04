@@ -119,7 +119,7 @@ void QWindowsAccessibility::notifyAccessibilityUpdate(QAccessibleEvent *event)
 
         if (! file.isEmpty()) {
             std::wstring tmp = soundName.toStdWString();
-            PlaySound(tmp.data(), 0, SND_ALIAS | SND_ASYNC | SND_NODEFAULT | SND_NOWAIT);
+            PlaySound(tmp.data(), nullptr, SND_ALIAS | SND_ASYNC | SND_NODEFAULT | SND_NOWAIT);
         }
     }
 
@@ -171,8 +171,8 @@ QWindow *QWindowsAccessibility::windowHelper(const QAccessibleInterface *iface)
 */
 IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
 {
-    if (!acc)
-        return 0;
+    if (! acc)
+        return nullptr;
 
     // ### FIXME: maybe we should accept double insertions into the cache
     if (!QAccessible::uniqueId(acc))
@@ -180,7 +180,7 @@ IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
 
     QWindowsMsaaAccessible *wacc = new QWindowsMsaaAccessible(acc);
 
-    IAccessible *iacc = 0;
+    IAccessible *iacc = nullptr;
     wacc->QueryInterface(IID_IAccessible, reinterpret_cast<void **>(&iacc));
 
     return iacc;
@@ -200,7 +200,7 @@ bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, W
             return false;
 
         typedef LRESULT (WINAPI *PtrLresultFromObject)(REFIID, WPARAM, LPUNKNOWN);
-        static PtrLresultFromObject ptrLresultFromObject = 0;
+        static PtrLresultFromObject ptrLresultFromObject = nullptr;
         static bool oleaccChecked = false;
 
         if (! oleaccChecked) {

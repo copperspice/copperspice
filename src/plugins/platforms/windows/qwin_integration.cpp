@@ -407,7 +407,8 @@ QPlatformOpenGLContext *QWindowsIntegration::createPlatformOpenGLContext(QOpenGL
          return result.take();
       }
    }
-   return 0;
+
+   return nullptr;
 }
 
 QOpenGLContext::OpenGLModuleType QWindowsIntegration::openGLModuleType()
@@ -427,8 +428,8 @@ QOpenGLContext::OpenGLModuleType QWindowsIntegration::openGLModuleType()
 QWindowsStaticOpenGLContext *QWindowsIntegration::staticOpenGLContext()
 {
    QWindowsIntegration *integration = QWindowsIntegration::instance();
-   if (!integration) {
-      return 0;
+   if (! integration) {
+      return nullptr;
    }
    QWindowsIntegrationPrivate *d = integration->d.data();
    QMutexLocker lock(&d->m_staticContextLock);

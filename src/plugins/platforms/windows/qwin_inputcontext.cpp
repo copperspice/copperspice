@@ -94,10 +94,10 @@ static inline LCID currentInputLanguageId()
 
 Q_CORE_EXPORT QLocale qt_localeFromLCID(LCID id); // from qlocale_win.cpp
 
-HIMC QWindowsInputContext::m_defaultContext = 0;
+HIMC QWindowsInputContext::m_defaultContext = nullptr;
 
 QWindowsInputContext::CompositionContext::CompositionContext()
-   : hwnd(0), haveCaret(false), position(0), isComposing(false), factor(1)
+   : hwnd(nullptr), haveCaret(false), position(0), isComposing(false), factor(1)
 {
 }
 
@@ -185,7 +185,7 @@ void QWindowsInputContext::setWindowsImeEnabled(QWindowsWindow *platformWindow, 
       platformWindow->clearFlag(QWindowsWindow::InputMethodDisabled);
    } else {
       // Disable Windows IME by associating 0 context. Store context first time.
-      const HIMC oldImC = ImmAssociateContext(platformWindow->handle(), 0);
+      const HIMC oldImC = ImmAssociateContext(platformWindow->handle(), nullptr);
       platformWindow->setFlag(QWindowsWindow::InputMethodDisabled);
       if (!QWindowsInputContext::m_defaultContext && oldImC) {
          QWindowsInputContext::m_defaultContext = oldImC;
@@ -426,7 +426,7 @@ bool QWindowsInputContext::composition(HWND hwnd, LPARAM lParamIn)
       // attribute sequence specifying the formatting of the converted part.
       int selStart, selLength;
       m_compositionContext.composition = getCompositionString(himc, GCS_COMPSTR);
-      m_compositionContext.position = ImmGetCompositionString(himc, GCS_CURSORPOS, 0, 0);
+      m_compositionContext.position = ImmGetCompositionString(himc, GCS_CURSORPOS, nullptr, 0);
       getCompositionStringConvertedRange(himc, &selStart, &selLength);
       if ((lParam & CS_INSERTCHAR) && (lParam & CS_NOMOVECARET)) {
          // make Korean work correctly. Hope this is correct for all IMEs
@@ -499,7 +499,8 @@ void QWindowsInputContext::initContext(HWND hwnd, qreal factor, QObject *focusOb
    // Create a hidden caret which is kept at the microfocus
    // position in update(). This is important for some
    // Chinese input methods.
-   m_compositionContext.haveCaret = CreateCaret(hwnd, 0, 1, 1);
+
+   m_compositionContext.haveCaret = CreateCaret(hwnd, nullptr, 1, 1);
    HideCaret(hwnd);
    update(Qt::ImQueryAll);
    m_compositionContext.isComposing = false;
@@ -511,14 +512,16 @@ void QWindowsInputContext::doneContext()
    if (!m_compositionContext.hwnd) {
       return;
    }
+
    if (m_compositionContext.haveCaret) {
       DestroyCaret();
    }
-   m_compositionContext.hwnd = 0;
+
+   m_compositionContext.hwnd = nullptr;
    m_compositionContext.composition.clear();
-   m_compositionContext.position = 0;
+   m_compositionContext.position    = 0;
    m_compositionContext.isComposing = m_compositionContext.haveCaret = false;
-   m_compositionContext.focusObject = 0;
+   m_compositionContext.focusObject = nullptr;
 }
 
 bool QWindowsInputContext::handleIME_Request(WPARAM wParam,

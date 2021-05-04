@@ -48,7 +48,7 @@ QWindowsOleDataObject::~QWindowsOleDataObject()
 
 void QWindowsOleDataObject::releaseQt()
 {
-   data = 0;
+   data = nullptr;
 }
 
 QMimeData *QWindowsOleDataObject::mimeData() const
@@ -72,7 +72,9 @@ STDMETHODIMP QWindowsOleDataObject::QueryInterface(REFIID iid, void FAR *FAR *pp
       AddRef();
       return NOERROR;
    }
-   *ppv = NULL;
+
+   *ppv = nullptr;
+
    return ResultFromScode(E_NOINTERFACE);
 }
 
@@ -138,7 +140,7 @@ STDMETHODIMP QWindowsOleDataObject::QueryGetData(LPFORMATETC pformatetc)
 
 STDMETHODIMP QWindowsOleDataObject::GetCanonicalFormatEtc(LPFORMATETC, LPFORMATETC pformatetcOut)
 {
-   pformatetcOut->ptd = NULL;
+   pformatetcOut->ptd = nullptr;
    return ResultFromScode(E_NOTIMPL);
 }
 
@@ -187,7 +189,7 @@ STDMETHODIMP QWindowsOleDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFORMA
       formatetc.cfFormat = CLIPFORMAT(CF_PERFORMEDDROPEFFECT);
       formatetc.dwAspect = DVASPECT_CONTENT;
       formatetc.lindex = -1;
-      formatetc.ptd = NULL;
+      formatetc.ptd = nullptr;
       formatetc.tymed = TYMED_HGLOBAL;
       fmtetcs.append(formatetc);
    }
@@ -196,7 +198,7 @@ STDMETHODIMP QWindowsOleDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFORMA
    *ppenumFormatEtc = enumFmtEtc;
    if (enumFmtEtc->isNull()) {
       delete enumFmtEtc;
-      *ppenumFormatEtc = NULL;
+      *ppenumFormatEtc = nullptr;
       sc = E_OUTOFMEMORY;
    }
 
@@ -297,7 +299,7 @@ STDMETHODIMP QWindowsOleEnumFmtEtc::QueryInterface(REFIID riid, void FAR *FAR *p
       AddRef();
       return NOERROR;
    }
-   *ppvObj = NULL;
+   *ppvObj = nullptr;
    return ResultFromScode(E_NOINTERFACE);
 }
 
@@ -323,7 +325,7 @@ STDMETHODIMP QWindowsOleEnumFmtEtc::Next(ULONG celt, LPFORMATETC rgelt, ULONG FA
    ULONG i = 0;
    ULONG nOffset;
 
-   if (rgelt == NULL) {
+   if (rgelt == nullptr) {
       return ResultFromScode(E_INVALIDARG);
    }
 
@@ -340,7 +342,7 @@ STDMETHODIMP QWindowsOleEnumFmtEtc::Next(ULONG celt, LPFORMATETC rgelt, ULONG FA
 
    m_nIndex += i;
 
-   if (pceltFetched != NULL) {
+   if (pceltFetched != nullptr) {
       *pceltFetched = i;
    }
 
@@ -383,7 +385,7 @@ STDMETHODIMP QWindowsOleEnumFmtEtc::Reset()
 
 STDMETHODIMP QWindowsOleEnumFmtEtc::Clone(LPENUMFORMATETC FAR *newEnum)
 {
-   if (newEnum == NULL) {
+   if (newEnum == nullptr) {
       return ResultFromScode(E_INVALIDARG);
    }
 
@@ -402,7 +404,7 @@ STDMETHODIMP QWindowsOleEnumFmtEtc::Clone(LPENUMFORMATETC FAR *newEnum)
 
 bool QWindowsOleEnumFmtEtc::copyFormatEtc(LPFORMATETC dest, const FORMATETC *src) const
 {
-   if (dest == NULL || src == NULL) {
+   if (dest == nullptr || src == nullptr) {
       return false;
    }
 

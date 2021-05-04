@@ -66,8 +66,10 @@ QWindowsPixmapCursorCacheKey::QWindowsPixmapCursorCacheKey(const QCursor &c)
 
 HCURSOR QWindowsCursor::createPixmapCursor(QPixmap pixmap, const QPoint &hotSpot, qreal scaleFactor)
 {
-   HCURSOR cur = 0;
+   HCURSOR cur = nullptr;
+
    const qreal pixmapScaleFactor = scaleFactor / pixmap.devicePixelRatioF();
+
    if (!qFuzzyCompare(pixmapScaleFactor, 1)) {
       pixmap = pixmap.scaled((pixmapScaleFactor * QSizeF(pixmap.size())).toSize(),
             Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -134,7 +136,7 @@ static HCURSOR createBitmapCursor(const QImage &bbits, const QImage &mbits,
       }
    }
 
-   return CreateCursor(GetModuleHandle(0), hotSpot.x(), hotSpot.y(), width, height, xBits.data(), xMask.data());
+   return CreateCursor(GetModuleHandle(nullptr), hotSpot.x(), hotSpot.y(), width, height, xBits.data(), xMask.data());
 }
 
 // Create a cursor from image and mask of the format QImage::Format_Mono.
@@ -548,13 +550,13 @@ HCURSOR QWindowsCursor::createCursorFromShape(Qt::CursorShape cursorShape, const
 
    for (const QWindowsStandardCursorMapping *s = standardCursors; s < sEnd; ++s) {
       if (s->shape == cursorShape) {
-         return static_cast<HCURSOR>(LoadImage(0, s->resource, IMAGE_CURSOR, 0, 0, LR_DEFAULTSIZE | LR_SHARED));
+         return static_cast<HCURSOR>(LoadImage(nullptr, s->resource, IMAGE_CURSOR, 0, 0, LR_DEFAULTSIZE | LR_SHARED));
       }
    }
 
    qWarning("QWindowsCursor::createCursorFromShape(): Invalid cursor shape %d", cursorShape);
 
-   return 0;
+   return nullptr;
 }
 
 CursorHandlePtr QWindowsCursor::standardWindowCursor(Qt::CursorShape shape)
@@ -736,14 +738,14 @@ QPixmap QWindowsCursor::dragDefaultCursor(Qt::DropAction action) const
 
    if (m_ignoreDragCursor.isNull()) {
 
-      HCURSOR cursor = LoadCursor(NULL, IDC_NO);
-      ICONINFO iconInfo = {0, 0, 0, 0, 0};
+      HCURSOR cursor = LoadCursor(nullptr, IDC_NO);
+      ICONINFO iconInfo = {0, 0, 0, nullptr, nullptr};
       GetIconInfo(cursor, &iconInfo);
-      BITMAP bmColor = {0, 0, 0, 0, 0, 0, 0};
 
-      if (iconInfo.hbmColor
-         && GetObject(iconInfo.hbmColor, sizeof(BITMAP), &bmColor)
-         && bmColor.bmWidth == bmColor.bmWidthBytes / 4) {
+      BITMAP bmColor = {0, 0, 0, 0, 0, 0, nullptr};
+
+      if (iconInfo.hbmColor && GetObject(iconInfo.hbmColor, sizeof(BITMAP), &bmColor)
+                  && bmColor.bmWidth == bmColor.bmWidthBytes / 4) {
          const int colorBitsLength = bmColor.bmHeight * bmColor.bmWidthBytes;
          uchar *colorBits = new uchar[colorBitsLength];
          GetBitmapBits(iconInfo.hbmColor, colorBitsLength, colorBits);

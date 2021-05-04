@@ -51,7 +51,10 @@ struct QWindowsOpenGLAdditionalFormat {
 // Per-window data for active OpenGL contexts.
 struct QOpenGLContextData {
    QOpenGLContextData(HGLRC r, HWND h, HDC d) : renderingContext(r), hwnd(h), hdc(d) {}
-   QOpenGLContextData() : renderingContext(0), hwnd(0), hdc(0) {}
+   QOpenGLContextData()
+      : renderingContext(nullptr), hwnd(nullptr), hdc(nullptr)
+   {
+   }
 
    HGLRC renderingContext;
    HWND hwnd;
@@ -259,7 +262,7 @@ class QWindowsGLContext : public QWindowsOpenGLContext
 
  private:
    inline void releaseDCs();
-   bool updateObtainedParams(HDC hdc, int *obtainedSwapInterval = 0);
+   bool updateObtainedParams(HDC hdc, int *obtainedSwapInterval = nullptr);
 
    QOpenGLStaticContext *m_staticContext;
    QOpenGLContext *m_context;

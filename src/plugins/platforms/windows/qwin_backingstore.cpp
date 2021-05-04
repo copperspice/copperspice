@@ -74,20 +74,23 @@ void QWindowsBackingStore::flush(QWindow *window, const QRegion &region, const Q
       POINT ptDst = {r.x(), r.y()};
       POINT ptSrc = {0, 0};
       BLENDFUNCTION blend = {AC_SRC_OVER, 0, BYTE(qRound(255.0 * rw->opacity())), AC_SRC_ALPHA};
+
       if (QWindowsContext::user32dll.updateLayeredWindowIndirect) {
          RECT dirty = {dirtyRect.x(), dirtyRect.y(),
                  dirtyRect.x() + dirtyRect.width(), dirtyRect.y() + dirtyRect.height()
               };
-         UPDATELAYEREDWINDOWINFO info = {sizeof(info), NULL, &ptDst, &size, m_image->hdc(), &ptSrc, 0, &blend, ULW_ALPHA, &dirty};
+         UPDATELAYEREDWINDOWINFO info = {sizeof(info), nullptr, &ptDst, &size, m_image->hdc(), &ptSrc, 0, &blend, ULW_ALPHA, &dirty};
          const BOOL result = QWindowsContext::user32dll.updateLayeredWindowIndirect(rw->handle(), &info);
+
          if (!result)
             qErrnoWarning("UpdateLayeredWindowIndirect failed for ptDst=(%d, %d),"
                " size=(%dx%d), dirty=(%dx%d %d, %d)", r.x(), r.y(),
                r.width(), r.height(), dirtyRect.width(), dirtyRect.height(),
                dirtyRect.x(), dirtyRect.y());
       } else {
-         QWindowsContext::user32dll.updateLayeredWindow(rw->handle(), NULL, &ptDst, &size, m_image->hdc(), &ptSrc, 0, &blend, ULW_ALPHA);
+         QWindowsContext::user32dll.updateLayeredWindow(rw->handle(), nullptr, &ptDst, &size, m_image->hdc(), &ptSrc, 0, &blend, ULW_ALPHA);
       }
+
    } else {
 
       const HDC dc = rw->getDC();
@@ -206,7 +209,8 @@ HDC QWindowsBackingStore::getDC() const
    if ( !m_image.isNull()) {
       return m_image->hdc();
    }
-   return 0;
+
+   return nullptr;
 }
 
 #ifndef QT_NO_OPENGL

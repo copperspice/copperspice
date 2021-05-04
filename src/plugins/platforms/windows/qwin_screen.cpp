@@ -81,7 +81,7 @@ static bool monitorData(HMONITOR hMonitor, QWindowsScreenData *data)
    } else {
       // Windows CE just supports one Display and expects to get only DISPLAY,
       // instead of DISPLAY0 and so on, which are passed by info.szDevice
-      HDC hdc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
+      HDC hdc = CreateDC(TEXT("DISPLAY"), nullptr, nullptr, nullptr);
 
       if (hdc) {
          const QDpi dpi = monitorDPI(hMonitor);
@@ -145,7 +145,7 @@ BOOL QT_WIN_CALLBACK monitorEnumCallback(HMONITOR hMonitor, HDC, LPRECT, LPARAM 
 static inline WindowsScreenDataList monitorData()
 {
    WindowsScreenDataList result;
-   EnumDisplayMonitors(0, 0, monitorEnumCallback, reinterpret_cast<LPARAM>(&result));
+   EnumDisplayMonitors(nullptr, nullptr, monitorEnumCallback, reinterpret_cast<LPARAM>(&result));
 
    return result;
 }
@@ -208,7 +208,7 @@ QPixmap QWindowsScreen::grabWindow(WId window, int x, int y, int width, int heig
    }
 
    // Create and setup bitmap
-   HDC display_dc = GetDC(0);
+   HDC display_dc = GetDC(nullptr);
    HDC bitmap_dc = CreateCompatibleDC(display_dc);
    HBITMAP bitmap = CreateCompatibleBitmap(display_dc, width, height);
    HGDIOBJ null_bitmap = SelectObject(bitmap_dc, bitmap);
@@ -225,7 +225,7 @@ QPixmap QWindowsScreen::grabWindow(WId window, int x, int y, int width, int heig
    const QPixmap pixmap = qt_pixmapFromWinHBITMAP(bitmap);
 
    DeleteObject(bitmap);
-   ReleaseDC(0, display_dc);
+   ReleaseDC(nullptr, display_dc);
 
    return pixmap;
 }

@@ -62,7 +62,7 @@ class QWindowsMouseHandler
    }
 
    void clearWindowUnderMouse() {
-      m_windowUnderMouse = 0;
+      m_windowUnderMouse = nullptr;
    }
 
  private:
