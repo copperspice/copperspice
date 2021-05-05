@@ -32,12 +32,8 @@ class QGLBufferPrivate
 {
  public:
    QGLBufferPrivate(QGLBuffer::Type t)
-      : ref(1),
-        type(t),
-        guard(0),
-        usagePattern(QGLBuffer::StaticDraw),
-        actualUsagePattern(QGLBuffer::StaticDraw),
-        funcs(0) {
+      : ref(1), type(t), guard(nullptr), usagePattern(QGLBuffer::StaticDraw),
+        actualUsagePattern(QGLBuffer::StaticDraw), funcs(nullptr) {
    }
 
    QAtomicInt ref;
@@ -216,7 +212,7 @@ void QGLBuffer::destroy()
    Q_D(QGLBuffer);
    if (d->guard) {
       d->guard->free();
-      d->guard = 0;
+      d->guard = nullptr;
    }
 }
 
@@ -409,9 +405,11 @@ void *QGLBuffer::map(QGLBuffer::Access access)
    }
 
 #endif
-   if (!d->guard || !d->guard->id()) {
-      return 0;
+
+   if (! d->guard || !d->guard->id()) {
+      return nullptr;
    }
+
    return d->funcs->glMapBuffer(d->type, access);
 }
 

@@ -200,7 +200,7 @@ QGLContext *QGLWidgetGLPaintDevice::context() const
 // returns the QGLPaintDevice for the given QPaintDevice
 QGLPaintDevice *QGLPaintDevice::getDevice(QPaintDevice *pd)
 {
-   QGLPaintDevice *glpd = 0;
+   QGLPaintDevice *glpd = nullptr;
 
    switch (pd->devType()) {
       case QInternal::Widget:

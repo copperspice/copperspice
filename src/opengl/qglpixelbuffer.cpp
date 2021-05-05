@@ -264,7 +264,7 @@ Qt::HANDLE QGLPixelBuffer::handle() const
 {
    Q_D(const QGLPixelBuffer);
    if (d->invalid) {
-      return 0;
+      return nullptr;
    }
    return (Qt::HANDLE) d->pbuf;
 }
@@ -412,19 +412,23 @@ QGLFormat QGLPixelBuffer::format() const
 
 bool QGLPixelBufferPrivate::init(const QSize &, const QGLFormat &f, QGLWidget *shareWidget)
 {
-   widget = new QGLWidget(f, 0, shareWidget);
+   widget = new QGLWidget(f, nullptr, shareWidget);
    widget->resize(1, 1);
    qctx = const_cast<QGLContext *>(widget->context());
    return widget->isValid();
 }
+
 bool QGLPixelBufferPrivate::cleanup()
 {
    delete fbo;
-   fbo = 0;
+   fbo = nullptr;
+
    delete blit_fbo;
-   blit_fbo = 0;
+   blit_fbo = nullptr;
+
    delete widget;
-   widget = 0;
+   widget = nullptr;
+
    return true;
 }
 bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
@@ -463,7 +467,7 @@ GLuint QGLPixelBuffer::generateDynamicTexture() const
    funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
    funcs->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, d->req_size.width(), d->req_size.height(), 0,
-      GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
    return texture;
 }

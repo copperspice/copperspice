@@ -24,7 +24,7 @@
 #include <qglcolormap.h>
 
 
-QGLColormap::QGLColormapData QGLColormap::shared_null = { 1, 0, 0 };
+QGLColormap::QGLColormapData QGLColormap::shared_null = { 1, nullptr, nullptr };
 
 QGLColormap::QGLColormap()
    : d(&shared_null)
@@ -49,7 +49,7 @@ QGLColormap::~QGLColormap()
 void QGLColormap::cleanup(QGLColormap::QGLColormapData *x)
 {
    delete x->cells;
-   x->cells = 0;
+   x->cells = nullptr;
    delete x;
 }
 
@@ -77,8 +77,8 @@ void QGLColormap::detach_helper()
 {
    QGLColormapData *x = new QGLColormapData;
    x->ref.store(1);
-   x->cmapHandle = 0;
-   x->cells = 0;
+   x->cmapHandle = nullptr;
+   x->cells = nullptr;
    if (d->cells) {
       x->cells = new QVector<QRgb>(256);
       *x->cells = *d->cells;
@@ -170,7 +170,7 @@ QColor QGLColormap::entryColor(int idx) const
 */
 bool QGLColormap::isEmpty() const
 {
-   return d == &shared_null || d->cells == 0 || d->cells->size() == 0 || d->cmapHandle == 0;
+   return d == &shared_null || d->cells == nullptr || d->cells->size() == 0 || d->cmapHandle == nullptr;
 }
 
 

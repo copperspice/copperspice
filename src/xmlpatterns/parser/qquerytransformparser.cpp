@@ -7680,7 +7680,7 @@ yyerrlab:
       yyerror (&yylloc, parseInfo, YY_("syntax error"));
 #else
       {
-         YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
+         YYSIZE_T yysize = yysyntax_error (nullptr, yystate, yychar);
          if (yymsg_alloc < yysize && yymsg_alloc < YYSTACK_ALLOC_MAXIMUM) {
             YYSIZE_T yyalloc = 2 * yysize;
             if (! (yysize <= yyalloc && yyalloc <= YYSTACK_ALLOC_MAXIMUM)) {

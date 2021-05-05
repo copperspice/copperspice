@@ -50,7 +50,7 @@ public:
     void invalidateResource() override
     {
         delete m_shaders;
-        m_shaders = 0;
+        m_shaders = nullptr;
     }
 
     void freeResource(QOpenGLContext *) override
@@ -75,7 +75,7 @@ class QGLShaderStorage
         QGLEngineSharedShadersResource *resource =
             shaders->value<QGLEngineSharedShadersResource>(context->contextHandle());
 
-        return resource ? resource->shaders() : 0;
+        return resource ? resource->shaders() : nullptr;
     }
 
  private:
@@ -92,7 +92,7 @@ QGLEngineSharedShaders *QGLEngineSharedShaders::shadersForContext(const QGLConte
 QStringList QGLEngineSharedShaders::qShaderSnippets;
 
 QGLEngineSharedShaders::QGLEngineSharedShaders(const QGLContext *context)
-    : blitShaderProg(0), simpleShaderProg(0)
+    : blitShaderProg(nullptr), simpleShaderProg(nullptr)
 {
    /*
        Rather than having the shader source array statically initialised, it is initialised
@@ -186,21 +186,21 @@ QGLEngineSharedShaders::QGLEngineSharedShaders(const QGLContext *context)
    fragSource.append(qShaderSnippets[MainFragmentShader]);
    fragSource.append(qShaderSnippets[ShockingPinkSrcFragmentShader]);
 
-   simpleShaderProg = new QGLShaderProgram(context, 0);
+   simpleShaderProg = new QGLShaderProgram(context, nullptr);
 
    CachedShader simpleShaderCache(fragSource, vertexSource);
 
    bool inCache = simpleShaderCache.load(simpleShaderProg, context);
 
    if (! inCache) {
-      vertexShader = new QGLShader(QGLShader::Vertex, context, 0);
+      vertexShader = new QGLShader(QGLShader::Vertex, context, nullptr);
       shaders.append(vertexShader);
 
       if (! vertexShader->compileSourceCode(vertexSource)) {
          qWarning("Vertex shader for simpleShaderProg (MainVertexShader & PositionOnlyVertexShader) failed to compile");
       }
 
-      fragShader = new QGLShader(QGLShader::Fragment, context, 0);
+      fragShader = new QGLShader(QGLShader::Fragment, context, nullptr);
       shaders.append(fragShader);
 
       if (! fragShader->compileSourceCode(fragSource)) {
@@ -236,20 +236,20 @@ QGLEngineSharedShaders::QGLEngineSharedShaders(const QGLContext *context)
    fragSource.append(qShaderSnippets[MainFragmentShader]);
    fragSource.append(qShaderSnippets[ImageSrcFragmentShader]);
 
-   blitShaderProg = new QGLShaderProgram(context, 0);
+   blitShaderProg = new QGLShaderProgram(context, nullptr);
 
    CachedShader blitShaderCache(fragSource, vertexSource);
 
    inCache = blitShaderCache.load(blitShaderProg, context);
 
    if (! inCache) {
-      vertexShader = new QGLShader(QGLShader::Vertex, context, 0);
+      vertexShader = new QGLShader(QGLShader::Vertex, context, nullptr);
       shaders.append(vertexShader);
       if (!vertexShader->compileSourceCode(vertexSource)) {
          qWarning("Vertex shader for blitShaderProg (MainWithTexCoordsVertexShader & UntransformedPositionVertexShader) failed to compile");
       }
 
-      fragShader = new QGLShader(QGLShader::Fragment, context, 0);
+      fragShader = new QGLShader(QGLShader::Fragment, context, nullptr);
       shaders.append(fragShader);
       if (!fragShader->compileSourceCode(fragSource)) {
          qWarning("Fragment shader for blitShaderProg (MainFragmentShader & ImageSrcFragmentShader) failed to compile");
@@ -289,12 +289,12 @@ QGLEngineSharedShaders::~QGLEngineSharedShaders()
 
    if (blitShaderProg) {
       delete blitShaderProg;
-      blitShaderProg = 0;
+      blitShaderProg = nullptr;
    }
 
    if (simpleShaderProg) {
       delete simpleShaderProg;
-      simpleShaderProg = 0;
+      simpleShaderProg = nullptr;
    }
 }
 
@@ -489,15 +489,9 @@ void QGLEngineSharedShaders::cleanupCustomStage(QGLCustomShaderStage *stage)
 
 
 QGLEngineShaderManager::QGLEngineShaderManager(QGLContext *context)
-   : ctx(context),
-     shaderProgNeedsChanging(true),
-     complexGeometry(false),
-     srcPixelType(Qt::NoBrush),
-     opacityMode(NoOpacity),
-     maskType(NoMask),
-     compositionMode(QPainter::CompositionMode_SourceOver),
-     customSrcStage(0),
-     currentShaderProg(0)
+   : ctx(context), shaderProgNeedsChanging(true), complexGeometry(false),
+     srcPixelType(Qt::NoBrush), opacityMode(NoOpacity), maskType(NoMask),
+     compositionMode(QPainter::CompositionMode_SourceOver), customSrcStage(nullptr), currentShaderProg(nullptr)
 {
    sharedShaders = QGLEngineSharedShaders::shadersForContext(context);
 }
@@ -624,7 +618,8 @@ void QGLEngineShaderManager::removeCustomStage()
    if (customSrcStage) {
       customSrcStage->setInactive();
    }
-   customSrcStage = 0;
+
+   customSrcStage = nullptr;
    shaderProgNeedsChanging = true;
 }
 
@@ -675,7 +670,7 @@ bool QGLEngineShaderManager::useCorrectShaderProg()
       return false;
    }
 
-   bool useCustomSrc = customSrcStage != 0;
+   bool useCustomSrc = (customSrcStage != nullptr);
    if (useCustomSrc && srcPixelType != QGLEngineShaderManager::ImageSrc && srcPixelType != Qt::TexturePattern) {
       useCustomSrc = false;
       qWarning("QGLEngineShaderManager - Ignoring custom shader stage for non image src");

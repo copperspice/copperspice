@@ -104,7 +104,7 @@ QString ReportContext::codeFromURI(const QString &typeURI, QString &uri)
 
 QString ReportContext::codeToString(const ReportContext::ErrorCode code)
 {
-   const char *result = 0;
+   const char *result = nullptr;
 
    switch (code) {
       /* Alphabetically. */

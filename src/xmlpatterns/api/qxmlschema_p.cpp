@@ -32,13 +32,10 @@
 QT_BEGIN_NAMESPACE
 
 QXmlSchemaPrivate::QXmlSchemaPrivate(const QXmlNamePool &namePool)
-   : m_namePool(namePool)
-   , m_userMessageHandler(0)
-   , m_uriResolver(0)
-   , m_userNetworkAccessManager(0)
-   , m_schemaContext(new QPatternist::XsdSchemaContext(m_namePool.d))
-   , m_schemaParserContext(new QPatternist::XsdSchemaParserContext(m_namePool.d, m_schemaContext))
-   , m_schemaIsValid(false)
+   : m_namePool(namePool), m_userMessageHandler(nullptr), m_uriResolver(nullptr), m_userNetworkAccessManager(nullptr),
+     m_schemaContext(new QPatternist::XsdSchemaContext(m_namePool.d)),
+     m_schemaParserContext(new QPatternist::XsdSchemaParserContext(m_namePool.d, m_schemaContext)),
+     m_schemaIsValid(false)
 {
    m_networkAccessManager = new QPatternist::ReferenceCountedValue<QNetworkAccessManager>(new QNetworkAccessManager());
    m_messageHandler = new QPatternist::ReferenceCountedValue<QAbstractMessageHandler>(new
@@ -46,13 +43,10 @@ QXmlSchemaPrivate::QXmlSchemaPrivate(const QXmlNamePool &namePool)
 }
 
 QXmlSchemaPrivate::QXmlSchemaPrivate(const QPatternist::XsdSchemaContext::Ptr &schemaContext)
-   : m_namePool(QXmlNamePool(schemaContext->namePool().data()))
-   , m_userMessageHandler(0)
-   , m_uriResolver(0)
-   , m_userNetworkAccessManager(0)
-   , m_schemaContext(schemaContext)
-   , m_schemaParserContext(new QPatternist::XsdSchemaParserContext(m_namePool.d, m_schemaContext))
-   , m_schemaIsValid(false)
+   : m_namePool(QXmlNamePool(schemaContext->namePool().data())), m_userMessageHandler(nullptr),
+     m_uriResolver(nullptr), m_userNetworkAccessManager(nullptr), m_schemaContext(schemaContext),
+     m_schemaParserContext(new QPatternist::XsdSchemaParserContext(m_namePool.d, m_schemaContext)),
+     m_schemaIsValid(false)
 {
    m_networkAccessManager = new QPatternist::ReferenceCountedValue<QNetworkAccessManager>(new QNetworkAccessManager());
    m_messageHandler = new QPatternist::ReferenceCountedValue<QAbstractMessageHandler>(new

@@ -113,7 +113,7 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache
    }
 
    inline const QOpenGLContextGroup *contextGroup() const {
-      return m_textureResource ? m_textureResource->group() : 0;
+      return m_textureResource ? m_textureResource->group() : nullptr;
    }
 
    int serialNumber() const {

@@ -106,9 +106,11 @@ class QGLFBOGLPaintDevice : public QGLPaintDevice
 class QGLFramebufferObjectPrivate
 {
  public:
-   QGLFramebufferObjectPrivate() : fbo_guard(0), texture_guard(0), depth_buffer_guard(0)
-              , stencil_buffer_guard(0), color_buffer_guard(0), valid(false), engine(0)
-   {}
+   QGLFramebufferObjectPrivate()
+      : fbo_guard(nullptr), texture_guard(nullptr), depth_buffer_guard(nullptr),
+        stencil_buffer_guard(nullptr), color_buffer_guard(nullptr), valid(false), engine(nullptr)
+   {
+   }
 
    ~QGLFramebufferObjectPrivate() {}
 

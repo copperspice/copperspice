@@ -156,7 +156,7 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
    };
 
    QGL2PaintEngineExPrivate(QGL2PaintEngineEx *q_ptr)
-      : q(q_ptr), shaderManager(0), width(0), height(0), ctx(0), useSystemClip(true),
+      : q(q_ptr), shaderManager(nullptr), width(0), height(0), ctx(nullptr), useSystemClip(true),
         elementIndicesVBOId(0), snapToPixelGrid(false), nativePaintingActive(false),
         inverseScale(1), lastMaskTextureUsed(0), translateZ(0)
     { }

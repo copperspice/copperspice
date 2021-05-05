@@ -347,7 +347,10 @@ class Q_OPENGL_EXPORT QGLEngineSharedShaders
 class QGLEngineShaderProg
 {
  public:
-   QGLEngineShaderProg() : program(0) {}
+   QGLEngineShaderProg()
+      : program(nullptr)
+   {
+   }
 
    ~QGLEngineShaderProg() {
       if (program) {

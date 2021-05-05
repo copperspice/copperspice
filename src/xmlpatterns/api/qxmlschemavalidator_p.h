@@ -37,10 +37,9 @@ class QXmlSchemaValidatorPrivate
 {
  public:
    QXmlSchemaValidatorPrivate(const QXmlSchema &schema)
-      : m_namePool(schema.namePool())
-      , m_userMessageHandler(0)
-      , m_uriResolver(0)
-      , m_userNetworkAccessManager(0) {
+      : m_namePool(schema.namePool()), m_userMessageHandler(nullptr), m_uriResolver(nullptr),
+        m_userNetworkAccessManager(nullptr)
+   {
       setSchema(schema);
 
       const QXmlSchemaPrivate *p = schema.d;

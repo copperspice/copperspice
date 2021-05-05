@@ -88,7 +88,7 @@ class Q_OPENGL_EXPORT QGLBuffer
 
    void allocate(const void *data, int count);
    inline void allocate(int count) {
-      allocate(0, count);
+      allocate(nullptr, count);
    }
 
    void *map(QGLBuffer::Access access);

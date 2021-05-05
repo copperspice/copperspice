@@ -90,7 +90,7 @@ class QGLShaderPrivate
 
  public:
    QGLShaderPrivate(const QGLContext *ctx, QGLShader::ShaderType type)
-      : shaderGuard(0), shaderType(type), compiled(false),
+      : shaderGuard(nullptr), shaderType(type), compiled(false),
         glfuncs(new QOpenGLFunctions(ctx->contextHandle()))
    { }
 
@@ -214,7 +214,7 @@ void QGLShaderPrivate::deleteShader()
 {
    if (shaderGuard) {
       shaderGuard->free();
-      shaderGuard = 0;
+      shaderGuard = nullptr;
    }
 }
 
@@ -432,8 +432,7 @@ class ShaderProgramOpenGLFunctions : public QOpenGLFunctions
 {
  public:
    ShaderProgramOpenGLFunctions()
-      : QOpenGLFunctions()
-      , glProgramParameteri(0) {
+      : QOpenGLFunctions(), glProgramParameteri(nullptr) {
    }
 
    typedef void (QOPENGLF_APIENTRYP type_glProgramParameteri)(GLuint program, GLenum pname, GLint value);
@@ -459,8 +458,8 @@ class QGLShaderProgramPrivate
 
  public:
    QGLShaderProgramPrivate(const QGLContext *context)
-      : programGuard(0), linked(false), inited(false), removingShaders(false), geometryVertexCount(64)
-      , geometryInputType(0), geometryOutputType(0), glfuncs(new ShaderProgramOpenGLFunctions)
+      : programGuard(nullptr), linked(false), inited(false), removingShaders(false), geometryVertexCount(64),
+        geometryInputType(0), geometryOutputType(0), glfuncs(new ShaderProgramOpenGLFunctions)
    {
       (void) context;
    }

@@ -70,7 +70,7 @@ class QGraphicsShaderEffectPrivate : public QGraphicsEffectPrivate
    QGraphicsShaderEffectPrivate()
       : pixelShaderFragment(qglslDefaultImageFragmentShader)
 #ifdef QGL_HAVE_CUSTOM_SHADERS
-      , customShaderStage(0)
+      , customShaderStage(nullptr)
 #endif
    {
    }
@@ -117,7 +117,7 @@ void QGraphicsShaderEffect::setPixelShaderFragment(const QByteArray &code)
       d->pixelShaderFragment = code;
 #ifdef QGL_HAVE_CUSTOM_SHADERS
       delete d->customShaderStage;
-      d->customShaderStage = 0;
+      d->customShaderStage = nullptr;
 #endif
    }
 }

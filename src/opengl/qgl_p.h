@@ -290,7 +290,8 @@ class Q_OPENGL_EXPORT QGLShareContextScope
 {
  public:
    QGLShareContextScope(const QGLContext *ctx)
-      : m_oldContext(0) {
+      : m_oldContext(nullptr)
+   {
       QGLContext *currentContext = const_cast<QGLContext *>(QGLContext::currentContext());
       if (currentContext != ctx && !QGLContext::areSharing(ctx, currentContext)) {
          m_oldContext = currentContext;
@@ -355,7 +356,7 @@ class Q_OPENGL_EXPORT QGLSignalProxy : public QObject
 class QGLTexture
 {
  public:
-   explicit QGLTexture(QGLContext *ctx = 0, GLuint tx_id = 0, GLenum tx_target = GL_TEXTURE_2D,
+   explicit QGLTexture(QGLContext *ctx = nullptr, GLuint tx_id = 0, GLenum tx_target = GL_TEXTURE_2D,
       QGLContext::BindOptions opt = QGLContext::DefaultBindOption)
       : context(ctx),
         id(tx_id),
@@ -368,7 +369,7 @@ class QGLTexture
       if (options & QGLContext::MemoryManagedBindOption) {
          Q_ASSERT(context);
 
-         QPlatformPixmap *boundPixmap = 0;
+         QPlatformPixmap *boundPixmap = nullptr;
          context->d_ptr->texture_destroyer->emitFreeTexture(context, boundPixmap, id);
       }
    }
@@ -381,10 +382,10 @@ class QGLTexture
 
    bool canBindCompressedTexture
    (const char *buf, int len, const char *format, bool *hasAlpha);
-   QSize bindCompressedTexture
-   (const QString &fileName, const char *format = 0);
-   QSize bindCompressedTexture
-   (const char *buf, int len, const char *format = 0);
+
+   QSize bindCompressedTexture(const QString &fileName, const char *format = nullptr);
+   QSize bindCompressedTexture(const char *buf, int len, const char *format = nullptr);
+
    QSize bindCompressedTextureDDS(const char *buf, int len);
    QSize bindCompressedTexturePVR(const char *buf, int len);
 };

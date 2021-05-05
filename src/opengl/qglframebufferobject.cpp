@@ -470,7 +470,8 @@ void QGLFramebufferObjectPrivate::init(QGLFramebufferObject *q, const QSize &sz,
       funcs.glGenTextures(1, &texture);
       funcs.glBindTexture(target, texture);
       funcs.glTexImage2D(target, 0, internal_format, size.width(), size.height(), 0,
-         GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+               GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
       if (mipmap) {
          int width = size.width();
          int height = size.height();
@@ -480,7 +481,7 @@ void QGLFramebufferObjectPrivate::init(QGLFramebufferObject *q, const QSize &sz,
             height = qMax(1, height >> 1);
             ++level;
             funcs.glTexImage2D(target, level, internal_format, width, height, 0,
-               GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+               GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
          }
       }
 
@@ -991,7 +992,7 @@ bool QGLFramebufferObject::bindDefault()
 #endif
    }
 
-   return ctx != 0;
+   return ctx != nullptr;
 }
 
 /*!

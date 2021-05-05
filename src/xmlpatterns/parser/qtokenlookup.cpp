@@ -412,7 +412,7 @@ TokenLookup::value (const char *str, unsigned int len)
          }
       }
    }
-   return 0;
+   return nullptr;
 }
 #line 219 "TokenLookup.gperf"
 

@@ -341,7 +341,7 @@ bool AccelTreeResourceLoader::retrieveUnparsedText(const QUrl &uri,
 
 bool AccelTreeResourceLoader::isUnparsedTextAvailable(const QUrl &uri, const QString &encoding)
 {
-   return retrieveUnparsedText(uri, encoding, ReportContext::Ptr(), 0);
+   return retrieveUnparsedText(uri, encoding, ReportContext::Ptr(), nullptr);
 }
 
 Item AccelTreeResourceLoader::openUnparsedText(const QUrl &uri, const QString &encoding,

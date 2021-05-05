@@ -116,7 +116,7 @@ QByteArray qt_inflateGZipDataFrom(QIODevice *device)
             case Z_MEM_ERROR: {
                inflateEnd(&zlibStream);
                qWarning("Error while inflating gzip file: %s",
-                        (zlibStream.msg != NULL ? zlibStream.msg : "Unknown error"));
+                        (zlibStream.msg != nullptr ? zlibStream.msg : "Unknown error"));
                destination.chop(zlibStream.avail_out);
                return destination;
             }

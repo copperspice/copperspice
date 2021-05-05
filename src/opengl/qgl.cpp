@@ -99,7 +99,7 @@ QOpenGLExtensions *qgl_extensions()
    }
 
    Q_ASSERT(false);
-   return 0;
+   return nullptr;
 }
 
 QOpenGLFunctions *qgl_functions()
@@ -333,6 +333,7 @@ QSurfaceFormat QGLFormat::toSurfaceFormat(const QGLFormat &format)
    if (format.profile() == QGLFormat::CompatibilityProfile) {
       retFormat.setOption(QSurfaceFormat::DeprecatedFunctions);
    }
+
    return retFormat;
 }
 
@@ -350,8 +351,7 @@ void QGLContextPrivate::setupSharing()
 
 void QGLContextPrivate::refreshCurrentFbo()
 {
-   QOpenGLContextPrivate *guiGlContextPrivate =
-      guiGlContext ? QOpenGLContextPrivate::get(guiGlContext) : 0;
+   QOpenGLContextPrivate *guiGlContextPrivate = guiGlContext ? QOpenGLContextPrivate::get(guiGlContext) : nullptr;
 
    // if QOpenGLFramebufferObjects have been used in the mean-time, we've lost our cached value
    if (guiGlContextPrivate && guiGlContextPrivate->qgl_current_fbo_invalid) {
@@ -369,8 +369,7 @@ void QGLContextPrivate::setCurrentFbo(GLuint fbo)
 {
    current_fbo = fbo;
 
-   QOpenGLContextPrivate *guiGlContextPrivate =
-      guiGlContext ? QOpenGLContextPrivate::get(guiGlContext) : 0;
+   QOpenGLContextPrivate *guiGlContextPrivate = guiGlContext ? QOpenGLContextPrivate::get(guiGlContext) : nullptr;
 
    if (guiGlContextPrivate) {
       guiGlContextPrivate->qgl_current_fbo_invalid = false;
@@ -980,7 +979,7 @@ QGLFormat::OpenGLVersionFlags QGLFormat::openGLVersionFlags()
    static OpenGLVersionFlags defaultVersionFlags = OpenGL_Version_None;
 
    QGLContext *currentCtx = const_cast<QGLContext *>(QGLContext::currentContext());
-   QGLTemporaryContext *tmpContext = 0;
+   QGLTemporaryContext *tmpContext = nullptr;
 
    if (currentCtx && currentCtx->d_func()->version_flags_cached) {
       return currentCtx->d_func()->version_flags;
@@ -1126,8 +1125,8 @@ QGLContextGroup::~QGLContextGroup()
 }
 const QGLContext *qt_gl_transfer_context(const QGLContext *ctx)
 {
-   if (!ctx) {
-      return 0;
+   if (! ctx) {
+      return nullptr;
    }
 
    QList<const QGLContext *> shares
@@ -1136,15 +1135,12 @@ const QGLContext *qt_gl_transfer_context(const QGLContext *ctx)
    if (shares.size() >= 2) {
       return (ctx == shares.at(0)) ? shares.at(1) : shares.at(0);
    } else {
-      return 0;
+      return nullptr;
    }
 }
 
 QGLContextPrivate::QGLContextPrivate(QGLContext *context)
-   : internal_context(false)
-   , q_ptr(context)
-   , texture_destroyer(0)
-   , functions(0)
+   : internal_context(false), q_ptr(context), texture_destroyer(nullptr), functions(nullptr)
 {
    group = new QGLContextGroup(context);
    texture_destroyer = new QGLTextureDestroyer;
@@ -1168,7 +1164,7 @@ void QGLContextPrivate::init(QPaintDevice *dev, const QGLFormat &format)
    valid = false;
    q->setDevice(dev);
 
-   guiGlContext = 0;
+   guiGlContext = nullptr;
    ownContext = false;
 
    fbo = 0;
@@ -1181,7 +1177,8 @@ void QGLContextPrivate::init(QPaintDevice *dev, const QGLFormat &format)
 
    current_fbo = 0;
    default_fbo = 0;
-   active_engine = 0;
+   active_engine = nullptr;
+
    workaround_needsFullClearOnEveryFrame = false;
    workaround_brokenFBOReadBack = false;
    workaround_brokenTexSubImage = false;
@@ -1198,7 +1195,7 @@ void QGLContextPrivate::init(QPaintDevice *dev, const QGLFormat &format)
    }
 }
 
-QGLContext *QGLContext::currentCtx = 0;
+QGLContext *QGLContext::currentCtx = nullptr;
 class QGLTemporaryContextPrivate
 {
  public:
@@ -1498,7 +1495,7 @@ QGLContext::QGLContext(const QGLFormat &format)
    : d_ptr(new QGLContextPrivate(this))
 {
    Q_D(QGLContext);
-   d->init(0, format);
+   d->init(nullptr, format);
 }
 
 static void qDeleteQGLContext(void *handle)
@@ -1511,7 +1508,7 @@ QGLContext::QGLContext(QOpenGLContext *context)
    : d_ptr(new QGLContextPrivate(this))
 {
    Q_D(QGLContext);
-   d->init(0, QGLFormat::fromSurfaceFormat(context->format()));
+   d->init(nullptr, QGLFormat::fromSurfaceFormat(context->format()));
    d->guiGlContext = context;
    d->guiGlContext->setQGLContextHandle(this, qDeleteQGLContext);
    d->ownContext = false;
@@ -1528,7 +1525,7 @@ QOpenGLContext *QGLContext::contextHandle() const
 QGLContext *QGLContext::fromOpenGLContext(QOpenGLContext *context)
 {
    if (!context) {
-      return 0;
+      return nullptr;
    }
    if (context->qGLContextHandle()) {
       return reinterpret_cast<QGLContext *>(context->qGLContextHandle());
@@ -1731,7 +1728,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       if (image.paintingActive()) {
          // A QPainter is active on the image - take the safe route and replace the texture.
          q->deleteTexture(texture->id);
-         texture = 0;
+         texture = nullptr;
       } else {
          qgl_functions()->glBindTexture(target, texture->id);
          return texture;
@@ -2029,7 +2026,7 @@ QGLTexture *QGLContextPrivate::textureCacheLookup(const qint64 key, GLenum targe
       && (texture->context == q || QGLContext::areSharing(q, texture->context))) {
       return texture;
    }
-   return 0;
+   return nullptr;
 }
 
 // internal
@@ -2044,7 +2041,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target,
       if (pixmap.paintingActive()) {
          // A QPainter is active on the pixmap - take the safe route and replace the texture.
          q->deleteTexture(texture->id);
-         texture = 0;
+         texture = nullptr;
       } else {
          qgl_functions()->glBindTexture(target, texture->id);
          return texture;
@@ -2063,7 +2060,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target,
          // For performance reasons, we don't want that here, so we temporarily redirect the paint engine.
 
          QPaintDevice *currentPaintDevice = paintEngine->paintDevice();
-         paintEngine->setPaintDevice(0);
+         paintEngine->setPaintDevice(nullptr);
          image = pixmap.toImage();
          paintEngine->setPaintDevice(currentPaintDevice);
       }
@@ -2106,7 +2103,7 @@ int QGLContextPrivate::maxTextureSize()
 
       GLint size;
       GLint next = 64;
-      funcs->glTexImage2D(proxy, 0, GL_RGBA, next, next, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+      funcs->glTexImage2D(proxy, 0, GL_RGBA, next, next, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
       QOpenGLFunctions_1_1 *gl1funcs = qgl1_functions();
       gl1funcs->glGetTexLevelParameteriv(proxy, 0, GL_TEXTURE_WIDTH, &size);
 
@@ -2122,7 +2119,7 @@ int QGLContextPrivate::maxTextureSize()
             break;
          }
 
-         funcs->glTexImage2D(proxy, 0, GL_RGBA, next, next, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+         funcs->glTexImage2D(proxy, 0, GL_RGBA, next, next, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
          gl1funcs->glGetTexLevelParameteriv(proxy, 0, GL_TEXTURE_WIDTH, &next);
       } while (next > size);
 
@@ -2765,7 +2762,7 @@ const QGLContext *QGLContext::currentContext()
       return QGLContext::fromOpenGLContext(const_cast<QOpenGLContext *>(threadContext));
    }
 
-   return 0;
+   return nullptr;
 }
 
 void QGLContextPrivate::setCurrentContext(QGLContext *context)
@@ -2810,14 +2807,14 @@ bool QGLContext::chooseContext(const QGLContext *shareContext)
          delete d->guiGlContext;
       }
       d->ownContext = true;
-      QOpenGLContext *shareGlContext = shareContext ? shareContext->d_func()->guiGlContext : 0;
+      QOpenGLContext *shareGlContext = shareContext ? shareContext->d_func()->guiGlContext : nullptr;
       d->guiGlContext = new QOpenGLContext;
       d->guiGlContext->setFormat(winFormat);
       d->guiGlContext->setShareContext(shareGlContext);
       d->valid = d->guiGlContext->create();
 
       if (d->valid) {
-         d->guiGlContext->setQGLContextHandle(this, 0);
+         d->guiGlContext->setQGLContextHandle(this, nullptr);
       }
 
       d->glFormat = QGLFormat::fromSurfaceFormat(d->guiGlContext->format());
@@ -2854,9 +2851,9 @@ void QGLContext::reset()
             d->guiGlContext->deleteLater();
          }
       } else {
-         d->guiGlContext->setQGLContextHandle(0, 0);
+         d->guiGlContext->setQGLContextHandle(nullptr, nullptr);
       }
-      d->guiGlContext = 0;
+      d->guiGlContext = nullptr;
    }
    d->ownContext = false;
 }
@@ -2960,7 +2957,7 @@ QGLWidget::~QGLWidget()
    Q_D(QGLWidget);
 
    delete d->glcx;
-   d->glcx = 0;
+   d->glcx = nullptr;
    d->cleanupColormaps();
 }
 
@@ -3037,7 +3034,7 @@ void QGLWidget::swapBuffers()
 */
 const QGLContext *QGLWidget::overlayContext() const
 {
-   return 0;
+   return nullptr;
 }
 
 
@@ -3098,13 +3095,16 @@ void QGLWidget::setContext(QGLContext *context,
    bool deleteOldContext)
 {
    Q_D(QGLWidget);
-   if (context == 0) {
-      qWarning("QGLWidget::setContext: Cannot set null context");
+
+   if (context == nullptr) {
+      qWarning("QGLWidget::setContext: Unable to set null context");
       return;
    }
 
-   if (context->device() == 0) { // a context may refere to more than 1 window.
-      context->setDevice(this);   //but its better to point to 1 of them than none of them.
+   if (context->device() == nullptr) {
+      //context may refer to more than 1 window.
+      //it is better to point to 1 of them than none of them.
+      context->setDevice(this);
    }
 
    QGLContext *oldcx = d->glcx;
@@ -3826,13 +3826,13 @@ void QGLWidgetPrivate::initContext(QGLContext *context, const QGLWidget *shareWi
 
    glDevice.setWidget(q);
 
-   glcx = 0;
+   glcx = nullptr;
    autoSwap = true;
 
    if (context && !context->device()) {
       context->setDevice(q);
    }
-   q->setContext(context, shareWidget ? shareWidget->context() : 0);
+   q->setContext(context, shareWidget ? shareWidget->context() : nullptr);
 
    if (!glcx) {
       glcx = new QGLContext(QGLFormat::defaultFormat(), q);

@@ -50,11 +50,13 @@ bool QAbstractXmlNodeModel::isIgnorableInDeepEqual(const QXmlNodeModelIndex &n)
 
 using namespace QPatternist;
 
-QAbstractXmlNodeModel::QAbstractXmlNodeModel() : d_ptr(0)
+QAbstractXmlNodeModel::QAbstractXmlNodeModel()
+   : d_ptr(nullptr)
 {
 }
 
-QAbstractXmlNodeModel::QAbstractXmlNodeModel(QAbstractXmlNodeModelPrivate *d) : d_ptr(d)
+QAbstractXmlNodeModel::QAbstractXmlNodeModel(QAbstractXmlNodeModelPrivate *d)
+   : d_ptr(d)
 {
 }
 
@@ -527,7 +529,7 @@ QXmlItem::QXmlItem(const QVariant &atomicValue)
       m_atomicValue = temp.asAtomicValue();
 
    } else {
-      m_atomicValue = 0;
+      m_atomicValue = nullptr;
    }
 }
 

@@ -55,7 +55,7 @@ struct QGLFunctionsPrivateEx : public QGLFunctionsPrivate, public QOpenGLSharedR
 
 Q_GLOBAL_STATIC(QOpenGLMultiGroupSharedResource, qt_gl_functions_resource)
 
-static QGLFunctionsPrivateEx *qt_gl_functions(const QGLContext *context = 0)
+static QGLFunctionsPrivateEx *qt_gl_functions(const QGLContext *context = nullptr)
 {
    if (!context) {
       context = QGLContext::currentContext();
@@ -75,7 +75,7 @@ static QGLFunctionsPrivateEx *qt_gl_functions(const QGLContext *context = 0)
     \sa initializeGLFunctions()
 */
 QGLFunctions::QGLFunctions()
-   : d_ptr(0)
+   : d_ptr(nullptr)
 {
 }
 
@@ -247,7 +247,7 @@ void QGLFunctions::initializeGLFunctions(const QGLContext *context)
 }
 
 QGLFunctionsPrivate::QGLFunctionsPrivate(const QGLContext *)
-   : funcs(0)
+   : funcs(nullptr)
 {
 }
 

@@ -32,10 +32,7 @@ QT_BEGIN_NAMESPACE
 using namespace QPatternist;
 
 XsdSchemaContext::XsdSchemaContext(const NamePool::Ptr &namePool)
-   : m_namePool(namePool)
-   , m_networkAccessManager(0)
-   , m_uriResolver(0)
-   , m_messageHandler(0)
+   : m_namePool(namePool), m_networkAccessManager(nullptr), m_uriResolver(nullptr), m_messageHandler(nullptr)
 {
 }
 

@@ -74,7 +74,7 @@ class XsdTypeChecker
    static QString normalizedValue(const QString &value, const XsdFacet::Hash &facets);
 
    bool isValidString(const QString &normalizedString, const AnySimpleType::Ptr &type, QString &errorMsg,
-                      AnySimpleType::Ptr *boundType = 0) const;
+                      AnySimpleType::Ptr *boundType = nullptr) const;
 
    bool valuesAreEqual(const QString &value, const QString &otherValue, const AnySimpleType::Ptr &type) const;
 
