@@ -151,7 +151,7 @@ QCameraViewfinderSettings AVFCameraViewfinderSettingsControl2::viewfinderSetting
     settings.setMinimumFrameRate(fps.first);
     settings.setMaximumFrameRate(fps.second);
 
-    AVCaptureVideoDataOutput *videoOutput = m_service->videoOutput() ? m_service->videoOutput()->videoDataOutput() : 0;
+    AVCaptureVideoDataOutput *videoOutput = m_service->videoOutput() ? m_service->videoOutput()->videoDataOutput() : nullptr;
     if (videoOutput) {
         NSObject *obj = [videoOutput.videoSettings objectForKey:(id)kCVPixelBufferPixelFormatTypeKey];
         if (obj && [obj isKindOfClass:[NSNumber class]]) {
@@ -268,7 +268,7 @@ QVector<QVideoFrame::PixelFormat> AVFCameraViewfinderSettingsControl2::viewfinde
 {
     QVector<QVideoFrame::PixelFormat> qtFormats;
 
-    AVCaptureVideoDataOutput *videoOutput = m_service->videoOutput() ? m_service->videoOutput()->videoDataOutput() : 0;
+    AVCaptureVideoDataOutput *videoOutput = m_service->videoOutput() ? m_service->videoOutput()->videoDataOutput() : nullptr;
     if (!videoOutput) {
         qDebugCamera() << Q_FUNC_INFO << "no video output found";
         return qtFormats;
@@ -349,8 +349,7 @@ bool AVFCameraViewfinderSettingsControl2::applySettings(const QCameraViewfinderS
         // We still can update the pixel format at least.
     }
 
-
-    AVCaptureVideoDataOutput *videoOutput = m_service->videoOutput() ? m_service->videoOutput()->videoDataOutput() : 0;
+    AVCaptureVideoDataOutput *videoOutput = m_service->videoOutput() ? m_service->videoOutput()->videoDataOutput() : nullptr;
     if (videoOutput) {
         unsigned avfPixelFormat = 0;
         if (!convertPixelFormatIfSupported(settings.pixelFormat(), avfPixelFormat)) {

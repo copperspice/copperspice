@@ -87,7 +87,7 @@ void AVFCameraDeviceControl::setSelectedDevice(int index)
 AVCaptureDevice *AVFCameraDeviceControl::createCaptureDevice()
 {
     m_dirty = false;
-    AVCaptureDevice *device = 0;
+    AVCaptureDevice *device = nullptr;
 
     QString deviceId = deviceName(m_selectedDevice);
     if (!deviceId.isEmpty()) {

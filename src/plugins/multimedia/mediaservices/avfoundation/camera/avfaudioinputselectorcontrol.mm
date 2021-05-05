@@ -83,7 +83,7 @@ void AVFAudioInputSelectorControl::setActiveInput(const QString &name)
 AVCaptureDevice *AVFAudioInputSelectorControl::createCaptureDevice()
 {
     m_dirty = false;
-    AVCaptureDevice *device = 0;
+    AVCaptureDevice *device = nullptr;
 
     if (!m_activeInput.isEmpty()) {
         device = [AVCaptureDevice deviceWithUniqueID:

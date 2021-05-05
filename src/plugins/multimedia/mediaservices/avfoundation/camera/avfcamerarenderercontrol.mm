@@ -108,7 +108,7 @@ public:
             m_mode = mode;
             return (uchar*)CVPixelBufferGetBaseAddress(m_buffer);
         } else {
-            return 0;
+            return nullptr;
         }
     }
 
@@ -231,10 +231,8 @@ private:
 
 
 AVFCameraRendererControl::AVFCameraRendererControl(QObject *parent)
-   : QVideoRendererControl(parent)
-   , m_surface(0)
-   , m_supportsTextures(false)
-   , m_needsHorizontalMirroring(false)
+   : QVideoRendererControl(parent), m_surface(nullptr), m_supportsTextures(false),
+     m_needsHorizontalMirroring(false)
 #ifdef Q_OS_IOS
    , m_textureCache(0)
 #endif
@@ -246,6 +244,7 @@ AVFCameraRendererControl::~AVFCameraRendererControl()
 {
     [m_cameraSession->captureSession() removeOutput:m_videoDataOutput];
     [m_viewfinderFramesDelegate release];
+
     if (m_delegateQueue)
         dispatch_release(m_delegateQueue);
 #ifdef Q_OS_IOS
@@ -283,7 +282,8 @@ void AVFCameraRendererControl::configureAVCaptureSession(AVFCameraSession *camer
     m_videoDataOutput = [[[AVCaptureVideoDataOutput alloc] init] autorelease];
 
     // Configure video output
-    m_delegateQueue = dispatch_queue_create("vf_queue", NULL);
+    m_delegateQueue = dispatch_queue_create("vf_queue", nullptr);
+
     [m_videoDataOutput
             setSampleBufferDelegate:m_viewfinderFramesDelegate
             queue:m_delegateQueue];

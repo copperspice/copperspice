@@ -32,8 +32,8 @@
 #include <AVFoundation/AVFoundation.h>
 
 AVFCameraFlashControl::AVFCameraFlashControl(AVFCameraService *service)
-    : m_service(service), m_session(0),
-      m_supportedModes(QCameraExposure::FlashOff), m_flashMode(QCameraExposure::FlashOff)
+    : m_service(service), m_session(nullptr), m_supportedModes(QCameraExposure::FlashOff),
+      m_flashMode(QCameraExposure::FlashOff)
 {
     Q_ASSERT(service);
     m_session = m_service->session();

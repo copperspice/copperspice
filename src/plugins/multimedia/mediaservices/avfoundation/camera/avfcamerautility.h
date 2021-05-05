@@ -98,8 +98,13 @@ template<>
 class AVFScopedPointer<dispatch_queue_t>
 {
  public:
-   AVFScopedPointer() : m_queue(0) {}
-   explicit AVFScopedPointer(dispatch_queue_t q) : m_queue(q) {
+   AVFScopedPointer()
+      : m_queue(nullptr)
+   {
+   }
+
+   explicit AVFScopedPointer(dispatch_queue_t q)
+      : m_queue(q) {
    }
 
    AVFScopedPointer(const AVFScopedPointer &) = delete;
@@ -120,10 +125,11 @@ class AVFScopedPointer<dispatch_queue_t>
       return m_queue;
    }
 
-   void reset(dispatch_queue_t q = 0) {
+   void reset(dispatch_queue_t q = nullptr) {
       if (m_queue) {
          dispatch_release(m_queue);
       }
+
       m_queue = q;
    }
 

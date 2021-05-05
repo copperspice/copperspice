@@ -51,7 +51,7 @@
 #include <qmediaplaylistnavigator_p.h>
 
 AVFCameraService::AVFCameraService(QObject *parent)
-   : QMediaService(parent), m_videoOutput(0)
+   : QMediaService(parent), m_videoOutput(nullptr)
 {
     m_session            = new AVFCameraSession(this);
     m_cameraControl      = new AVFCameraControl(this);
@@ -69,8 +69,8 @@ AVFCameraService::AVFCameraService(QObject *parent)
     m_imageCaptureControl = new AVFImageCaptureControl(this);
     m_cameraFocusControl  = new AVFCameraFocusControl(this);
 
-    m_cameraExposureControl = 0;
-    m_cameraZoomControl     = 0;
+    m_cameraExposureControl = nullptr;
+    m_cameraZoomControl     = nullptr;
 
     m_viewfinderSettingsControl2 = new AVFCameraViewfinderSettingsControl2(this);
     m_viewfinderSettingsControl = new AVFCameraViewfinderSettingsControl(this);
@@ -86,9 +86,9 @@ AVFCameraService::~AVFCameraService()
     m_cameraControl->setState(QCamera::UnloadedState);
 
     if (m_videoOutput) {
-        m_session->setVideoOutput(0);
+        m_session->setVideoOutput(nullptr);
         delete m_videoOutput;
-        m_videoOutput = 0;
+        m_videoOutput = nullptr;
     }
 
     // delete controls before session,
@@ -193,7 +193,7 @@ void AVFCameraService::releaseControl(QMediaControl *control)
         delete videoProbe;
 
     } else if (m_videoOutput == control) {
-        m_session->setVideoOutput(0);
+        m_session->setVideoOutput(nullptr);
         delete m_videoOutput;
         m_videoOutput = nullptr;
     }

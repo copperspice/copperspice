@@ -42,10 +42,10 @@ class AVFVideoEncoderSettingsControl : public QVideoEncoderSettingsControl
    explicit AVFVideoEncoderSettingsControl(AVFCameraService *service);
 
    QList<QSize> supportedResolutions(const QVideoEncoderSettings &requestedVideoSettings,
-                                     bool *continuous = 0) const override;
+            bool *continuous = nullptr) const override;
 
    QList<qreal> supportedFrameRates(const QVideoEncoderSettings &requestedVideoSettings,
-                                    bool *continuous = 0) const override;
+            bool *continuous = nullptr) const override;
 
    QStringList supportedVideoCodecs() const override;
    QString videoCodecDescription(const QString &codecName) const override;
