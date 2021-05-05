@@ -276,6 +276,7 @@ NSArray *unignoredChildren(QAccessibleInterface *interface)
    }
    return NSAccessibilityUnignoredChildren(kids);
 }
+
 /*
     Translates a predefined QAccessibleActionInterface action to a Mac action constant.
     Returns 0 if the Action has no mac equivalent. Ownership of the NSString is not transferred
@@ -308,9 +309,8 @@ NSString *getTranslatedAction(const QString &qtAction)
    //      NSAccessibilityCancelAction;
    //      NSAccessibilityDeleteAction;
 
-   return 0;
+   return nullptr;
 }
-
 
 /*
     Translates between a Mac action constant and a QAccessibleActionInterface action

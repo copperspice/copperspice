@@ -33,7 +33,7 @@ QColor qt_mac_colorForTheme(ThemeBrush brush)
 {
    QMacAutoReleasePool pool;
 
-   QCFType<CGColorRef> cgClr = 0;
+   QCFType<CGColorRef> cgClr = nullptr;
    HIThemeBrushCreateCGColor(brush, &cgClr);
    return qt_mac_toQColor(cgClr);
 }

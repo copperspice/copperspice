@@ -161,7 +161,7 @@ QWindow *QCocoaScreen::topLevelWindowAt(const QPoint &point) const
 
       // Continue the search if the window does not belong to this process.
       NSWindow *nsWindow = [NSApp windowWithWindowNumber: topWindowNumber];
-      if (nsWindow == 0) {
+      if (nsWindow == nullptr) {
          continue;
       }
 
@@ -275,7 +275,7 @@ static QCocoaIntegration::Options parseOptions(const QStringList &paramList)
    return options;
 }
 
-QCocoaIntegration *QCocoaIntegration::mInstance = 0;
+QCocoaIntegration *QCocoaIntegration::mInstance = nullptr;
 
 QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
    : mOptions(parseOptions(paramList))
@@ -289,7 +289,7 @@ QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
    , mServices(new QCocoaServices)
    , mKeyboardMapper(new QCocoaKeyMapper)
 {
-   if (mInstance != 0) {
+   if (mInstance != nullptr) {
       qWarning("Creating multiple Cocoa platform integrations is not supported");
    }
 
@@ -357,7 +357,7 @@ QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
 
 QCocoaIntegration::~QCocoaIntegration()
 {
-   mInstance = 0;
+   mInstance = nullptr;
 
    qt_resetNSApplicationSendEvent();
 
@@ -367,7 +367,7 @@ QCocoaIntegration::~QCocoaIntegration()
       QCocoaApplicationDelegate *delegate = [QCocoaApplicationDelegate sharedDelegate];
       [delegate removeAppleEventHandlers];
       // reset the application delegate
-      [[NSApplication sharedApplication] setDelegate: 0];
+      [[NSApplication sharedApplication] setDelegate: nullptr];
    }
 
    // Delete the clipboard integration and destroy mime type converters.
@@ -428,7 +428,8 @@ void QCocoaIntegration::updateScreens()
          }
       }
 
-      QCocoaScreen *screen = NULL;
+      QCocoaScreen *screen = nullptr;
+
       for (QCocoaScreen *existingScr : mScreens)
          // NSScreen documentation says do not cache the array returned from [NSScreen screens].
          // However in practice, we can identify a screen by its pointer: if resolution changes,
@@ -471,7 +472,7 @@ QCocoaScreen *QCocoaIntegration::screenAtIndex(int index)
    // It is possible that the screen got removed while updateScreens was called
    // so we do a sanity check to be certain
    if (index >= mScreens.count()) {
-      return 0;
+      return nullptr;
    }
    return mScreens.at(index);
 }
@@ -626,15 +627,16 @@ void QCocoaIntegration::pushPopupWindow(QCocoaWindow *window)
 QCocoaWindow *QCocoaIntegration::popPopupWindow()
 {
    if (m_popupWindowStack.isEmpty()) {
-      return 0;
+      return nullptr;
    }
+
    return m_popupWindowStack.takeLast();
 }
 
 QCocoaWindow *QCocoaIntegration::activePopupWindow() const
 {
    if (m_popupWindowStack.isEmpty()) {
-      return 0;
+      return nullptr;
    }
    return m_popupWindowStack.front();
 }

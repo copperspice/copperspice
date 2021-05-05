@@ -101,7 +101,7 @@ bool QMacPrintEngine::end()
    if (d->paintEngine->type() == QPaintEngine::CoreGraphics) {
       // We don't need the paint engine to call restoreGraphicsState()
       static_cast<QCoreGraphicsPaintEngine *>(d->paintEngine)->d_func()->stackCount = 0;
-      static_cast<QCoreGraphicsPaintEngine *>(d->paintEngine)->d_func()->hd = 0;
+      static_cast<QCoreGraphicsPaintEngine *>(d->paintEngine)->d_func()->hd = nullptr;
    }
 
    d->paintEngine->end();
@@ -278,7 +278,7 @@ void QMacPrintEnginePrivate::releaseSession()
    PMSessionEndPageNoDialog(session());
    PMSessionEndDocumentNoDialog(session());
    [printInfo release];
-   printInfo = 0;
+   printInfo = nullptr;
 }
 
 bool QMacPrintEnginePrivate::newPage_helper()
@@ -299,7 +299,7 @@ bool QMacPrintEnginePrivate::newPage_helper()
       cgEngine->d_func()->restoreGraphicsState();
    }
 
-   OSStatus status = PMSessionBeginPageNoDialog(session(), format(), 0);
+   OSStatus status = PMSessionBeginPageNoDialog(session(), format(), nullptr);
    if (status != noErr) {
       state = QPrinter::Error;
       return false;
@@ -329,7 +329,8 @@ bool QMacPrintEnginePrivate::newPage_helper()
    }
 
    cgEngine->d_func()->orig_xform = CGContextGetCTM(cgContext);
-   cgEngine->d_func()->setClip(0);
+   cgEngine->d_func()->setClip(nullptr);
+
    cgEngine->state->dirtyFlags = QPaintEngine::DirtyFlag(QPaintEngine::AllDirty
          & ~(QPaintEngine::DirtyClipEnabled | QPaintEngine::DirtyClipRegion | QPaintEngine::DirtyClipPath));
 
@@ -355,7 +356,7 @@ void QMacPrintEnginePrivate::setPageSize(const QPageSize &pageSize)
    // Get the PMPaper and check it is valid
    PMPaper macPaper = m_printDevice->macPaper(usePageSize);
 
-   if (macPaper == 0) {
+   if (macPaper == nullptr) {
       qWarning() << "QMacPrintEngine: Invalid PMPaper returned for " << pageSize;
       return;
    }

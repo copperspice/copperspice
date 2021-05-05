@@ -181,7 +181,7 @@ QCocoaGLContext::QCocoaGLContext(const QSurfaceFormat &format, QPlatformOpenGLCo
 QCocoaGLContext::~QCocoaGLContext()
 {
    if (m_currentWindow && m_currentWindow.data()->handle()) {
-      static_cast<QCocoaWindow *>(m_currentWindow.data()->handle())->setCurrentContext(0);
+      static_cast<QCocoaWindow *>(m_currentWindow.data()->handle())->setCurrentContext(nullptr);
    }
 
    [m_context release];
@@ -237,7 +237,7 @@ void QCocoaGLContext::setActiveWindow(QWindow *window)
    }
 
    if (m_currentWindow && m_currentWindow.data()->handle()) {
-      static_cast<QCocoaWindow *>(m_currentWindow.data()->handle())->setCurrentContext(0);
+      static_cast<QCocoaWindow *>(m_currentWindow.data()->handle())->setCurrentContext(nullptr);
    }
 
    Q_ASSERT(window->handle());
@@ -340,7 +340,7 @@ void QCocoaGLContext::updateSurfaceFormat()
 void QCocoaGLContext::doneCurrent()
 {
    if (m_currentWindow && m_currentWindow.data()->handle()) {
-      static_cast<QCocoaWindow *>(m_currentWindow.data()->handle())->setCurrentContext(0);
+      static_cast<QCocoaWindow *>(m_currentWindow.data()->handle())->setCurrentContext(nullptr);
    }
 
    m_currentWindow.clear();

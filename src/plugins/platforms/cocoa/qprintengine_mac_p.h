@@ -107,7 +107,10 @@ class QMacPrintEnginePrivate : public QPaintEnginePrivate
 
    QMacPrintEnginePrivate() : mode(QPrinter::ScreenResolution), state(QPrinter::Idle),
       m_pageLayout(QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF(0, 0, 0, 0))),
-      printInfo(0), paintEngine(0), embedFonts(true) {}
+      printInfo(nullptr), paintEngine(nullptr), embedFonts(true)
+   {
+   }
+
    ~QMacPrintEnginePrivate();
 
    void initialize();
@@ -115,7 +118,7 @@ class QMacPrintEnginePrivate : public QPaintEnginePrivate
    bool newPage_helper();
    void setPageSize(const QPageSize &pageSize);
    inline bool isPrintSessionInitialized() const {
-      return printInfo != 0;
+      return printInfo != nullptr;
    }
 
    PMPageFormat format() const {

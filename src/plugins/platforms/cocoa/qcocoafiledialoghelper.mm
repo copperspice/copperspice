@@ -107,7 +107,7 @@ typedef QSharedPointer<QFileDialogOptions> SharedPointerFileDialogOptions;
    } else {
       mSavePanel = [NSSavePanel savePanel];
       [mSavePanel setCanSelectHiddenExtension: YES];
-      mOpenPanel = 0;
+      mOpenPanel = nullptr;
    }
 
    if ([mSavePanel respondsToSelector: @selector(setLevel:)]) {
@@ -281,7 +281,7 @@ static QString strippedText(QString s)
    CFBooleanRef isHidden;
    Boolean errorOrHidden = false;
 
-   if (!CFURLCopyResourcePropertyForKey(url, kCFURLIsHiddenKey, &isHidden, NULL)) {
+   if (!CFURLCopyResourcePropertyForKey(url, kCFURLIsHiddenKey, &isHidden, nullptr)) {
       errorOrHidden = true;
    } else {
       if (CFBooleanGetValue(isHidden)) {
@@ -585,7 +585,7 @@ static QString strippedText(QString s)
 @end
 
 QCocoaFileDialogHelper::QCocoaFileDialogHelper()
-   : mDelegate(0)
+   : mDelegate(nullptr)
 {
 }
 
@@ -596,7 +596,7 @@ QCocoaFileDialogHelper::~QCocoaFileDialogHelper()
    }
    QMacAutoReleasePool pool;
    [mDelegate release];
-   mDelegate = 0;
+   mDelegate = nullptr;
 }
 
 void QCocoaFileDialogHelper::QNSOpenSavePanelDelegate_selectionChanged(const QString &newPath)

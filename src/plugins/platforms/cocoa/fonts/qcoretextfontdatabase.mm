@@ -240,8 +240,8 @@ void QCoreTextFontDatabase::populateFamily(const QString &familyName)
    CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, tmp.toCFStringRef());
    QCFType<CTFontDescriptorRef> nameOnlyDescriptor = CTFontDescriptorCreateWithAttributes(attributes);
 
-   // A single family might match several different fonts with different styles
-   QCFType<CFArrayRef> matchingFonts = (CFArrayRef) CTFontDescriptorCreateMatchingFontDescriptors(nameOnlyDescriptor, 0);
+   // a single family might match several different fonts with different styles
+   QCFType<CFArrayRef> matchingFonts = (CFArrayRef) CTFontDescriptorCreateMatchingFontDescriptors(nameOnlyDescriptor, nullptr);
 
    if (! matchingFonts) {
       qWarning() << "QCoreTextFontDatabase::populateFamily(): No matching fonts for family" << familyName;
@@ -279,7 +279,7 @@ static void getFontDescription(CTFontDescriptorRef font, FontDescription *fd)
    fd->stretch    = QFont::Unstretched;
    fd->fixedPitch = false;
 
-   if (QCFType<CTFontRef> tempFont = CTFontCreateWithFontDescriptor(font, 0.0, 0)) {
+   if (QCFType<CTFontRef> tempFont = CTFontCreateWithFontDescriptor(font, 0.0, nullptr)) {
       uint tag = MAKE_TAG('O', 'S', '/', '2');
       CTFontRef tempFontRef = tempFont;
       void *userData = reinterpret_cast<void *>(&tempFontRef);
@@ -363,7 +363,7 @@ static void getFontDescription(CTFontDescriptorRef font, FontDescription *fd)
             continue;
          }
 
-         QCFString lang = CFStringCreateWithCString(NULL, languageForWritingSystem[i], kCFStringEncodingASCII);
+         QCFString lang = CFStringCreateWithCString(nullptr, languageForWritingSystem[i], kCFStringEncodingASCII);
          if (CFArrayContainsValue(languages, CFRangeMake(0, length), lang.toCFStringRef())) {
             fd->writingSystems.setSupported(QFontDatabase::WritingSystem(i));
          }
@@ -449,7 +449,7 @@ QFontEngine *QCoreTextFontDatabase::fontEngine(const QFontDef &f, void *usrPtr)
       return engine;
    }
 
-   return NULL;
+   return nullptr;
 }
 
 static void releaseFontData(void *info, const void *data, size_t size)
@@ -493,8 +493,9 @@ QFontEngine *QCoreTextFontDatabase::fontEngine(const QByteArray &fontData, qreal
 
    CGFontRef cgFont = CGFontCreateWithDataProvider(dataProvider);
 
-   QFontEngine *fontEngine = NULL;
-   if (cgFont == NULL) {
+   QFontEngine *fontEngine = nullptr;
+
+   if (cgFont == nullptr) {
       qWarning("QCoreTextFontDatabase::fontEngine: CGFontCreateWithDataProvider failed");
    } else {
       QFontDef def;
@@ -561,7 +562,7 @@ QStringList QCoreTextFontDatabase::fallbacksForFamily(const QString &family, QFo
       CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, tmp.toCFStringRef());
 
       if (QCFType<CTFontDescriptorRef> fontDescriptor = CTFontDescriptorCreateWithAttributes(attributes)) {
-         if (QCFType<CTFontRef> font = CTFontCreateWithFontDescriptor(fontDescriptor, 12.0, 0)) {
+         if (QCFType<CTFontRef> font = CTFontCreateWithFontDescriptor(fontDescriptor, 12.0, nullptr)) {
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSArray *languages = [defaults stringArrayForKey: @"AppleLanguages"];
 
@@ -700,7 +701,7 @@ QStringList QCoreTextFontDatabase::addApplicationFont(const QByteArray &fontData
    QStringList families;
 
    if (&CTFontManagerRegisterGraphicsFont) {
-      CFErrorRef error = 0;
+      CFErrorRef error = nullptr;
 
       if (! fontData.isEmpty()) {
          QByteArray *fontDataCopy = new QByteArray(fontData);
@@ -712,7 +713,7 @@ QStringList QCoreTextFontDatabase::addApplicationFont(const QByteArray &fontData
 
          if (cgFont) {
             if (CTFontManagerRegisterGraphicsFont(cgFont, &error)) {
-               QCFType<CTFontRef> font = CTFontCreateWithGraphicsFont(cgFont, 0.0, NULL, NULL);
+               QCFType<CTFontRef> font = CTFontCreateWithGraphicsFont(cgFont, 0.0, nullptr, nullptr);
                fonts = createDescriptorArrayForFont(font
 
 #if defined(QT_USE_FREETYPE)
@@ -724,7 +725,7 @@ QStringList QCoreTextFontDatabase::addApplicationFont(const QByteArray &fontData
          }
 
       } else {
-         QCFType<CFURLRef> fontURL = CFURLCreateWithFileSystemPath(NULL, QCFString(fileName).toCFStringRef(), kCFURLPOSIXPathStyle, false);
+         QCFType<CFURLRef> fontURL = CFURLCreateWithFileSystemPath(nullptr, QCFString(fileName).toCFStringRef(), kCFURLPOSIXPathStyle, false);
 
          if (CTFontManagerRegisterFontsForURL(fontURL, kCTFontManagerScopeProcess, &error)) {
 
@@ -738,7 +739,7 @@ QStringList QCoreTextFontDatabase::addApplicationFont(const QByteArray &fontData
 
                CFDictionaryAddValue(attributes, kCTFontURLAttribute, fontURL);
                QCFType<CTFontDescriptorRef> descriptor = CTFontDescriptorCreateWithAttributes(attributes);
-               QCFType<CTFontRef> font = CTFontCreateWithFontDescriptor(descriptor, 0.0, NULL);
+               QCFType<CTFontRef> font = CTFontCreateWithFontDescriptor(descriptor, 0.0, nullptr);
                fonts = createDescriptorArrayForFont(font);
             }
 
@@ -888,7 +889,8 @@ static CTFontDescriptorRef fontDescriptorFromTheme(QPlatformTheme::Font f)
 
    // OSX default case and iOS fallback case
    CTFontUIFontType fontType = fontTypeFromTheme(f);
-   QCFType<CTFontRef> ctFont = CTFontCreateUIFontForLanguage(fontType, 0.0, NULL);
+   QCFType<CTFontRef> ctFont = CTFontCreateUIFontForLanguage(fontType, 0.0, nullptr);
+
    return CTFontCopyFontDescriptor(ctFont);
 }
 
@@ -924,7 +926,7 @@ QFont *QCoreTextFontDatabase::themeFont(QPlatformTheme::Font f) const
 QFont QCoreTextFontDatabase::defaultFont() const
 {
    if (defaultFontName.isEmpty()) {
-      QCFType<CTFontRef> font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 12.0, NULL);
+      QCFType<CTFontRef> font = CTFontCreateUIFontForLanguage(kCTFontUIFontSystem, 12.0, nullptr);
       defaultFontName = QCFString(CTFontCopyFullName(font)).toQString();
    }
 

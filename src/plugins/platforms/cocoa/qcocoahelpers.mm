@@ -70,7 +70,7 @@ CGDataProviderRef qt_mac_CGDataProvider(const QImage &image)
 CGImageRef qt_mac_toCGImage(const QImage &inImage)
 {
    if (inImage.isNull()) {
-      return 0;
+      return nullptr;
    }
 
    QImage image = inImage;
@@ -105,17 +105,16 @@ CGImageRef qt_mac_toCGImage(const QImage &inImage)
    }
 
    QCFType<CGDataProviderRef> dataProvider = qt_mac_CGDataProvider(image);
-   return CGImageCreate(image.width(), image.height(), 8, 32,
-         image.bytesPerLine(),
-         qt_mac_genericColorSpace(),
-         cgflags, dataProvider, 0, false, kCGRenderingIntentDefault);
+
+   return CGImageCreate(image.width(), image.height(), 8, 32, image.bytesPerLine(),
+         qt_mac_genericColorSpace(), cgflags, dataProvider, nullptr, false, kCGRenderingIntentDefault);
 }
 
 CGImageRef qt_mac_toCGImageMask(const QImage &image)
 {
    QCFType<CGDataProviderRef> dataProvider = qt_mac_CGDataProvider(image);
    return CGImageMaskCreate(image.width(), image.height(), 8, image.depth(),
-         image.bytesPerLine(), dataProvider, NULL, false);
+         image.bytesPerLine(), dataProvider, nullptr, false);
 }
 
 NSImage *qt_mac_cgimage_to_nsimage(CGImageRef image)
@@ -127,7 +126,7 @@ NSImage *qt_mac_cgimage_to_nsimage(CGImageRef image)
 NSImage *qt_mac_create_nsimage(const QPixmap &pm)
 {
    if (pm.isNull()) {
-      return 0;
+      return nullptr;
    }
    QImage image = pm.toImage();
    CGImageRef cgImage = qt_mac_toCGImage(image);
@@ -381,7 +380,7 @@ QString qt_mac_removeMnemonics(const QString &str)
    return retval;
 }
 
-static CGColorSpaceRef m_genericColorSpace = 0;
+static CGColorSpaceRef m_genericColorSpace = nullptr;
 static QHash<CGDirectDisplayID, CGColorSpaceRef> m_displayColorSpaceHash;
 static bool m_postRoutineRegistered = false;
 
@@ -401,7 +400,7 @@ CGColorSpaceRef qt_mac_genericColorSpace()
 
 #else
    // Just return the main display colorspace for the moment.
-   return qt_mac_displayColorSpace(0);
+   return qt_mac_displayColorSpace(nullptr);
 #endif
 }
 
@@ -414,7 +413,7 @@ CGColorSpaceRef qt_mac_displayColorSpace(const QWidget *widget)
    CGColorSpaceRef colorSpace;
 
    CGDirectDisplayID displayID;
-   if (widget == 0) {
+   if (widget == nullptr) {
       displayID = CGMainDisplayID();
 
    } else {
@@ -435,11 +434,12 @@ CGColorSpaceRef qt_mac_displayColorSpace(const QWidget *widget)
    }
 
    colorSpace = CGDisplayCopyColorSpace(displayID);
-   if (colorSpace == 0) {
+   if (colorSpace == nullptr) {
       colorSpace = CGColorSpaceCreateDeviceRGB();
    }
 
    m_displayColorSpaceHash.insert(displayID, colorSpace);
+
    if (!m_postRoutineRegistered) {
       m_postRoutineRegistered = true;
       void qt_mac_cleanUpMacColorSpaces();
@@ -452,7 +452,7 @@ void qt_mac_cleanUpMacColorSpaces()
 {
    if (m_genericColorSpace) {
       CFRelease(m_genericColorSpace);
-      m_genericColorSpace = 0;
+      m_genericColorSpace = nullptr;
    }
 
    QHash<CGDirectDisplayID, CGColorSpaceRef>::const_iterator it = m_displayColorSpaceHash.constBegin();
@@ -566,11 +566,11 @@ bool qt_mac_execute_apple_script(const char *script, long script_len, AEDesc *re
 {
    OSStatus err;
    AEDesc scriptTextDesc;
-   ComponentInstance theComponent = 0;
+   ComponentInstance theComponent = nullptr;
    OSAID scriptID = kOSANullScript, resultID = kOSANullScript;
 
    // set up locals to a known state
-   AECreateDesc(typeNull, 0, 0, &scriptTextDesc);
+   AECreateDesc(typeNull, nullptr, 0, &scriptTextDesc);
    scriptID = kOSANullScript;
    resultID = kOSANullScript;
 
@@ -598,7 +598,8 @@ bool qt_mac_execute_apple_script(const char *script, long script_len, AEDesc *re
 
    // collect the results - if any
    if (ret) {
-      AECreateDesc(typeNull, 0, 0, ret);
+      AECreateDesc(typeNull, nullptr, 0, ret);
+
       if (err == errOSAScriptError) {
          OSAScriptError(theComponent, kOSAErrorMessage, typeChar, ret);
       } else if (err == noErr && resultID != kOSANullScript) {
@@ -670,14 +671,14 @@ CGContextRef qt_mac_cg_context(QPaintDevice *pdev)
    }
 
    if (! image) {
-      return 0;   // Context type not supported
+      return nullptr;   // Context type not supported
    }
 
    CGColorSpaceRef colorspace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
 
    uint flags = kCGImageAlphaPremultipliedFirst;
    flags |= kCGBitmapByteOrder32Host;
-   CGContextRef ret = 0;
+   CGContextRef ret = nullptr;
 
    ret = CGBitmapContextCreate(image->bits(), image->width(), image->height(),
          8, image->bytesPerLine(), colorspace, flags);

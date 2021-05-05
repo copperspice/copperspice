@@ -151,7 +151,7 @@ class QCFString;
 
    // Grab the app menu out of the current menu
    int numItems = [mainMenu numberOfItems];
-   NSMenuItem *oldAppMenuItem = 0;
+   NSMenuItem *oldAppMenuItem = nullptr;
 
    for (int i = 0; i < numItems; ++i) {
       NSMenuItem *item = [mainMenu itemAtIndex: i];

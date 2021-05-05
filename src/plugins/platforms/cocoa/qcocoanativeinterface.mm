@@ -63,7 +63,7 @@ QCocoaNativeInterface::QCocoaNativeInterface()
 void *QCocoaNativeInterface::nativeResourceForContext(const QByteArray &resourceString, QOpenGLContext *context)
 {
    if (!context) {
-      return 0;
+      return nullptr;
    }
    if (resourceString.toLower() == "nsopenglcontext") {
       return nsOpenGLContextForContext(context);
@@ -72,14 +72,14 @@ void *QCocoaNativeInterface::nativeResourceForContext(const QByteArray &resource
       return cglContextForContext(context);
    }
 
-   return 0;
+   return nullptr;
 }
 #endif
 
 void *QCocoaNativeInterface::nativeResourceForWindow(const QByteArray &resourceString, QWindow *window)
 {
    if (!window->handle()) {
-      return 0;
+      return nullptr;
    }
 
    if (resourceString == "nsview") {
@@ -91,7 +91,7 @@ void *QCocoaNativeInterface::nativeResourceForWindow(const QByteArray &resourceS
    } else if (resourceString == "nswindow") {
       return static_cast<QCocoaWindow *>(window->handle())->m_nsWindow;
    }
-   return 0;
+   return nullptr;
 }
 
 QPlatformNativeInterface::FP_Integration QCocoaNativeInterface::nativeResourceFunctionForIntegration(const QByteArray &resource)
@@ -164,7 +164,7 @@ QPlatformNativeInterface::FP_Integration QCocoaNativeInterface::nativeResourceFu
       return FP_Integration(QCocoaNativeInterface::testContentBorderPosition);
    }
 
-   return 0;
+   return nullptr;
 }
 
 void QCocoaNativeInterface::beep()
@@ -194,14 +194,16 @@ QPixmap QCocoaNativeInterface::defaultBackgroundPixmapForQWizard()
    const int ExpectedImageWidth = 242;
    const int ExpectedImageHeight = 414;
 
-   if (LSFindApplicationForInfo(kLSUnknownCreator, CFSTR("com.apple.KeyboardSetupAssistant"), 0, 0, &url) == noErr) {
+   if (LSFindApplicationForInfo(kLSUnknownCreator, CFSTR("com.apple.KeyboardSetupAssistant"), nullptr, nullptr, &url) == noErr) {
       QCFType<CFBundleRef> bundle = CFBundleCreate(kCFAllocatorDefault, url);
 
       if (bundle) {
-         url = CFBundleCopyResourceURL(bundle, CFSTR("Background"), CFSTR("png"), 0);
+         url = CFBundleCopyResourceURL(bundle, CFSTR("Background"), CFSTR("png"), nullptr);
+
          if (url) {
-            QCFType<CGImageSourceRef> imageSource = CGImageSourceCreateWithURL(url, 0);
-            QCFType<CGImageRef> image = CGImageSourceCreateImageAtIndex(imageSource, 0, 0);
+            QCFType<CGImageSourceRef> imageSource = CGImageSourceCreateWithURL(url, nullptr);
+            QCFType<CGImageRef> image = CGImageSourceCreateImageAtIndex(imageSource, 0, nullptr);
+
             if (image) {
                int width = CGImageGetWidth(image);
                int height = CGImageGetHeight(image);
@@ -234,7 +236,7 @@ void *QCocoaNativeInterface::cglContextForContext(QOpenGLContext *context)
       return [nsOpenGLContext CGLContextObj];
    }
 
-   return 0;
+   return nullptr;
 }
 
 void *QCocoaNativeInterface::nsOpenGLContextForContext(QOpenGLContext *context)
@@ -247,7 +249,7 @@ void *QCocoaNativeInterface::nsOpenGLContextForContext(QOpenGLContext *context)
       }
    }
 
-   return 0;
+   return nullptr;
 }
 #endif
 

@@ -49,7 +49,7 @@
 QString QCocoaTheme::name = "cocoa";
 
 QCocoaTheme::QCocoaTheme()
-   : m_systemPalette(0)
+   : m_systemPalette(nullptr)
 {
 }
 
@@ -92,7 +92,7 @@ QPlatformDialogHelper *QCocoaTheme::createPlatformDialogHelper(DialogType dialog
          return new QCocoaFontDialogHelper();
 #endif
       default:
-         return 0;
+         return nullptr;
    }
 }
 
@@ -114,9 +114,10 @@ const QPalette *QCocoaTheme::palette(Palette type) const
       if (m_palettes.isEmpty()) {
          m_palettes = qt_mac_createRolePalettes();
       }
-      return m_palettes.value(type, 0);
+      return m_palettes.value(type, nullptr);
    }
-   return 0;
+
+   return nullptr;
 }
 
 QHash<QPlatformTheme::Font, QFont *> qt_mac_createRoleFonts()
@@ -130,7 +131,8 @@ const QFont *QCocoaTheme::font(Font type) const
    if (m_fonts.isEmpty()) {
       m_fonts = qt_mac_createRoleFonts();
    }
-   return m_fonts.value(type, 0);
+
+   return m_fonts.value(type, nullptr);
 }
 
 //! \internal

@@ -116,29 +116,30 @@ static bool _q_dontOverrideCtrlLMB = false;
 - (id) init
 {
    self = [super initWithFrame: NSMakeRect(0, 0, 300, 300)];
+
    if (self) {
-      m_backingStore      = 0;
-      m_maskImage         = 0;
+      m_backingStore      = nullptr;
+      m_maskImage         = nullptr;
       m_shouldInvalidateWindowShadow = false;
-      m_window            = 0;
+      m_window            = nullptr;
       m_buttons           = Qt::NoButton;
       m_frameStrutButtons = Qt::NoButton;
       m_sendKeyEvent      = false;
       m_subscribesForGlobalFrameNotifications = false;
 
 #ifndef QT_NO_OPENGL
-      m_glContext = 0;
+      m_glContext = nullptr;
       m_shouldSetGLContextinDrawRect = false;
 #endif
 
-      currentCustomDragTypes = 0;
-      m_sendUpAsRightButton = false;
-      m_inputSource     = 0;
+      currentCustomDragTypes = nullptr;
+      m_sendUpAsRightButton  = false;
+      m_inputSource     = nullptr;
       m_mouseMoveHelper = [[QNSViewMouseMoveHelper alloc] initWithView: self];
       m_resendKeyEvent  = false;
       m_scrolling       = false;
       m_updatingDrag    = false;
-      m_currentlyInterpretedKeyEvent = 0;
+      m_currentlyInterpretedKeyEvent = nullptr;
 
       if (!touchDevice) {
          touchDevice = new QTouchDevice;
@@ -157,8 +158,9 @@ static bool _q_dontOverrideCtrlLMB = false;
 {
    CGImageRelease(m_maskImage);
    [m_trackingArea release];
-   m_maskImage = 0;
-   m_window = 0;
+   m_maskImage = nullptr;
+   m_window    = nullptr;
+
    m_subscribesForGlobalFrameNotifications = false;
    [m_inputSource release];
    [[NSNotificationCenter defaultCenter] removeObserver: self];
@@ -173,7 +175,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 {
    self = [self init];
    if (! self) {
-      return 0;
+      return nullptr;
    }
 
    m_window = window;
@@ -213,8 +215,8 @@ static bool _q_dontOverrideCtrlLMB = false;
 
 - (void) clearQWindowPointers
 {
-   m_window = 0;
-   m_platformWindow = 0;
+   m_window = nullptr;
+   m_platformWindow = nullptr;
 }
 
 #ifndef QT_NO_OPENGL
@@ -394,7 +396,7 @@ static bool _q_dontOverrideCtrlLMB = false;
       if (! m_platformWindow->m_inSetGeometry) {
          QWindowSystemInterface::flushWindowSystemEvents();
       } else if (isResize) {
-         m_backingStore = 0;
+         m_backingStore = nullptr;
       }
    }
 }
@@ -433,7 +435,7 @@ static bool _q_dontOverrideCtrlLMB = false;
       if (!keyWindow) {
          // no new key window, go ahead and set the active window to zero
          if (!m_platformWindow->windowIsPopupType() && ! m_isMenuView) {
-            QWindowSystemInterface::handleWindowActivated(0);
+            QWindowSystemInterface::handleWindowActivated(nullptr);
          }
       }
 
@@ -532,13 +534,13 @@ static bool _q_dontOverrideCtrlLMB = false;
 - (void)clearBackingStore: (QCocoaBackingStore *)backingStore
 {
    if (backingStore == m_backingStore) {
-      m_backingStore = 0;
+      m_backingStore = nullptr;
    }
 }
 
 - (BOOL) hasMask
 {
-   return m_maskImage != 0;
+   return m_maskImage != nullptr;
 }
 
 - (BOOL) isOpaque
@@ -556,7 +558,7 @@ static bool _q_dontOverrideCtrlLMB = false;
       CGImageRelease(m_maskImage);
    }
    if (region->isEmpty()) {
-      m_maskImage = 0;
+      m_maskImage = nullptr;
       return;
    }
 
@@ -627,7 +629,7 @@ static bool _q_dontOverrideCtrlLMB = false;
    CGContextScaleCTM(cgContext, 1, -1);
 
    // If a mask is set, modify the sub image accordingly:
-   CGImageRef subMask = 0;
+   CGImageRef subMask = nullptr;
    if (m_maskImage) {
       subMask = CGImageCreateWithImageInRect(m_maskImage, dirtyWindowRect);
       CGContextClipToMask(cgContext, dirtyWindowRect, subMask);
@@ -1044,7 +1046,7 @@ static bool _q_dontOverrideCtrlLMB = false;
    }
 
    QWindowSystemInterface::handleLeaveEvent(m_platformWindow->m_enterLeaveTargetWindow);
-   m_platformWindow->m_enterLeaveTargetWindow = 0;
+   m_platformWindow->m_enterLeaveTargetWindow = nullptr;
 }
 
 - (void)rightMouseDown: (NSEvent *)theEvent
@@ -1646,7 +1648,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
                // pass the key event to the input method. note that m_sendKeyEvent may be set to false during this call
                m_currentlyInterpretedKeyEvent = nsevent;
                [self interpretKeyEvents: [NSArray arrayWithObject: nsevent]];
-               m_currentlyInterpretedKeyEvent = 0;
+               m_currentlyInterpretedKeyEvent = nullptr;
             }
          }
       }
@@ -2009,8 +2011,9 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 {
    QMacAutoReleasePool pool;
    QStringList customTypes = qt_mac_enabledDraggedTypes();
-   if (currentCustomDragTypes == 0 || *currentCustomDragTypes != customTypes) {
-      if (currentCustomDragTypes == 0) {
+
+   if (currentCustomDragTypes == nullptr || *currentCustomDragTypes != customTypes) {
+      if (currentCustomDragTypes == nullptr) {
          currentCustomDragTypes = new QStringList();
       }
       *currentCustomDragTypes = customTypes;
@@ -2122,11 +2125,10 @@ static QPoint mapWindowCoordinates(QWindow *source, QWindow *target, QPoint poin
    }
 
    const QPoint mousePos(QCursor::pos());
-   CGEventRef moveEvent(CGEventCreateMouseEvent(
-         NULL, kCGEventMouseMoved,
-         CGPointMake(mousePos.x(), mousePos.y()),
-         kCGMouseButtonLeft // ignored
-      ));
+
+   CGEventRef moveEvent(CGEventCreateMouseEvent(nullptr, kCGEventMouseMoved,
+         CGPointMake(mousePos.x(), mousePos.y()), kCGMouseButtonLeft));
+
    CGEventPost(kCGHIDEventTap, moveEvent);
    CFRelease(moveEvent);
 }
@@ -2187,7 +2189,7 @@ static QPoint mapWindowCoordinates(QWindow *source, QWindow *target, QPoint poin
    QPoint qt_windowPoint(windowPoint.x, windowPoint.y);
 
    // Send 0 mime data to indicate drag exit
-   QWindowSystemInterface::handleDrag(target, 0, mapWindowCoordinates(m_window, target, qt_windowPoint), Qt::IgnoreAction);
+   QWindowSystemInterface::handleDrag(target, nullptr, mapWindowCoordinates(m_window, target, qt_windowPoint), Qt::IgnoreAction);
 }
 
 // called on drop, send the drop to CS and return if it was accepted.

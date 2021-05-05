@@ -48,7 +48,7 @@ QPlatformIntegration *QCocoaIntegrationPlugin::create(const QString &system, con
       return new QCocoaIntegration(paramList);
    }
 
-   return 0;
+   return nullptr;
 }
 
 

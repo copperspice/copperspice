@@ -45,12 +45,12 @@ static QPrint::DuplexMode macToDuplexMode(const PMDuplexMode &mode)
 }
 
 QCocoaPrintDevice::QCocoaPrintDevice()
-   : QPlatformPrintDevice(), m_printer(0), m_session(0), m_ppd(0)
+   : QPlatformPrintDevice(), m_printer(nullptr), m_session(nullptr), m_ppd(nullptr)
 {
 }
 
 QCocoaPrintDevice::QCocoaPrintDevice(const QString &id)
-   : QPlatformPrintDevice(id), m_printer(0), m_session(0), m_ppd(0)
+   : QPlatformPrintDevice(id), m_printer(nullptr), m_session(nullptr), m_ppd(nullptr)
 {
    if (!id.isEmpty()) {
       m_printer = PMPrinterCreateFromPrinterID(QCFString::toCFStringRef(id));
@@ -516,11 +516,11 @@ bool QCocoaPrintDevice::openPpdFile()
       ppdClose(m_ppd);
    }
 
-   m_ppd = 0;
-   CFURLRef ppdURL = NULL;
+   m_ppd = nullptr;
+   CFURLRef ppdURL = nullptr;
    char ppdPath[MAXPATHLEN];
 
-   if (PMPrinterCopyDescriptionURL(m_printer, kPMPPDDescriptionType, &ppdURL) == noErr && ppdURL != NULL) {
+   if (PMPrinterCopyDescriptionURL(m_printer, kPMPPDDescriptionType, &ppdURL) == noErr && ppdURL != nullptr) {
       if (CFURLGetFileSystemRepresentation(ppdURL, true, (UInt8 *)ppdPath, sizeof(ppdPath))) {
          m_ppd = ppdOpenFile(ppdPath);
       }
@@ -549,7 +549,7 @@ PMPaper QCocoaPrintDevice::macPaper(const QPageSize &pageSize) const
    }
 
    // For any other page size, whether custom or just unsupported, needs to be a custom PMPaper
-   PMPaper paper = 0;
+   PMPaper paper = nullptr;
    PMPaperMargins paperMargins;
    paperMargins.left = m_customMargins.left();
    paperMargins.right = m_customMargins.right();

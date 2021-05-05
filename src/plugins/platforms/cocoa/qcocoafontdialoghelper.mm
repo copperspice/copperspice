@@ -119,10 +119,10 @@ static QFont qfontForCocoaFont(NSFont *cocoaFont, const QFont &resolveFont)
 {
    self = [super init];
    mFontPanel = [NSFontPanel sharedFontPanel];
-   mHelper = 0;
-   mStolenContentView = 0;
-   mOkButton     = 0;
-   mCancelButton = 0;
+   mHelper = nullptr;
+   mStolenContentView = nullptr;
+   mOkButton     = nullptr;
+   mCancelButton = nullptr;
    mResultCode   = NSModalResponseCancel;
    mDialogIsExecuting = false;
    mResultSet = false;
@@ -157,7 +157,7 @@ static QFont qfontForCocoaFont(NSFont *cocoaFont, const QFont &resolveFont)
       // steal the font panel's contents view
       mStolenContentView = [mFontPanel contentView];
       [mStolenContentView retain];
-      [mFontPanel setContentView: 0];
+      [mFontPanel setContentView: nullptr];
 
       // create a new content view and add the stolen one as a subview
       NSRect frameRect = { { 0.0, 0.0 }, { 0.0, 0.0 } };
@@ -202,9 +202,9 @@ static QFont qfontForCocoaFont(NSFont *cocoaFont, const QFont &resolveFont)
       [mOkButton release];
       [mCancelButton release];
       [ourContentView release];
-      mOkButton = 0;
-      mCancelButton = 0;
-      mStolenContentView = 0;
+      mOkButton = nullptr;
+      mCancelButton = nullptr;
+      mStolenContentView = nullptr;
    }
 }
 
@@ -392,7 +392,7 @@ class QCocoaFontPanel
 
    void cleanup(QCocoaFontDialogHelper *helper) {
       if (mDelegate->mHelper == helper) {
-         mDelegate->mHelper = 0;
+         mDelegate->mHelper = nullptr;
       }
    }
 
@@ -423,7 +423,7 @@ class QCocoaFontPanel
 
    void setCurrentFont(const QFont &font) {
       NSFontManager *mgr = [NSFontManager sharedFontManager];
-      const NSFont *nsFont = 0;
+      const NSFont *nsFont = nullptr;
 
       int weight = 5;
       NSFontTraitMask mask = 0;

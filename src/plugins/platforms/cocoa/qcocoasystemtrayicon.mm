@@ -133,7 +133,7 @@ QRect QCocoaSystemTrayIcon::geometry() const
 void QCocoaSystemTrayIcon::cleanup()
 {
    delete m_sys;
-   m_sys = 0;
+   m_sys = nullptr;
 }
 
 static bool heightCompareFunction (QSize a, QSize b)
@@ -352,7 +352,7 @@ void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &mess
    self = [super init];
    if (self) {
       item = [[[NSStatusBar systemStatusBar] statusItemWithLength: NSSquareStatusItemLength] retain];
-      menu = 0;
+      menu = nullptr;
       systray = sys;
       imageCell = [[QNSImageView alloc] initWithParent: self];
       [item setView: imageCell];

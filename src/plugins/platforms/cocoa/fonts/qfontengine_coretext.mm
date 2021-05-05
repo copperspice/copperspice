@@ -184,7 +184,7 @@ QCoreTextFontEngine::QCoreTextFontEngine(CTFontRef font, const QFontDef &def)
    transform = qt_transform_from_fontdef(fontDef);
    ctfont = font;
    CFRetain(ctfont);
-   cgFont = CTFontCopyGraphicsFont(font, NULL);
+   cgFont = CTFontCopyGraphicsFont(font, nullptr);
    init();
 }
 
@@ -197,7 +197,7 @@ QCoreTextFontEngine::QCoreTextFontEngine(CGFontRef font, const QFontDef &def)
 
    // Keep reference count balanced
    CFRetain(cgFont);
-   ctfont = CTFontCreateWithGraphicsFont(font, fontDef.pixelSize, &transform, NULL);
+   ctfont = CTFontCreateWithGraphicsFont(font, fontDef.pixelSize, &transform, nullptr);
    init();
 }
 
@@ -371,7 +371,7 @@ glyph_metrics_t QCoreTextFontEngine::boundingBox(glyph_t glyph)
    glyph_metrics_t ret;
    CGGlyph g = glyph;
 
-   CGRect rect = CTFontGetBoundingRectsForGlyphs(ctfont, kCTFontOrientationHorizontal, &g, 0, 1);
+   CGRect rect = CTFontGetBoundingRectsForGlyphs(ctfont, kCTFontOrientationHorizontal, &g, nullptr, 1);
 
    if (synthesisFlags & QFontEngine::SynthesizedItalic) {
       rect.size.width += rect.size.height * SYNTHETIC_ITALIC_SKEW;

@@ -150,12 +150,13 @@ QVariant QMacPasteboardMimeTiff::convertToMime(const QString &mime, QList<QByteA
    }
    const QByteArray &a = data.first();
    QCFType<CGImageRef> image;
-   QCFType<CFDataRef> tiffData = CFDataCreateWithBytesNoCopy(0,
-         reinterpret_cast<const UInt8 *>(a.constData()),
-         a.size(), kCFAllocatorNull);
-   QCFType<CGImageSourceRef> imageSource = CGImageSourceCreateWithData(tiffData, 0);
-   image = CGImageSourceCreateImageAtIndex(imageSource, 0, 0);
-   if (image != 0) {
+   QCFType<CFDataRef> tiffData = CFDataCreateWithBytesNoCopy(nullptr,
+         reinterpret_cast<const UInt8 *>(a.constData()), a.size(), kCFAllocatorNull);
+
+   QCFType<CGImageSourceRef> imageSource = CGImageSourceCreateWithData(tiffData, nullptr);
+   image = CGImageSourceCreateImageAtIndex(imageSource, 0, nullptr);
+
+   if (image != nullptr) {
       ret = QVariant(qt_mac_toQImage(image));
    }
    return ret;
@@ -171,9 +172,10 @@ QList<QByteArray> QMacPasteboardMimeTiff::convertFromMime(const QString &mime, Q
    QImage img = variant.value<QImage>();
    QCFType<CGImageRef> cgimage = qt_mac_toCGImage(img);
 
-   QCFType<CFMutableDataRef> data = CFDataCreateMutable(0, 0);
-   QCFType<CGImageDestinationRef> imageDestination = CGImageDestinationCreateWithData(data, kUTTypeTIFF, 1, 0);
-   if (imageDestination != 0) {
+   QCFType<CFMutableDataRef> data = CFDataCreateMutable(nullptr, 0);
+   QCFType<CGImageDestinationRef> imageDestination = CGImageDestinationCreateWithData(data, kUTTypeTIFF, 1, nullptr);
+
+   if (imageDestination != nullptr) {
       CFTypeRef keys[2];
       QCFType<CFTypeRef> values[2];
       QCFType<CFDictionaryRef> options;
@@ -181,11 +183,12 @@ QList<QByteArray> QMacPasteboardMimeTiff::convertFromMime(const QString &mime, Q
       keys[1] = kCGImagePropertyPixelHeight;
       int width = img.width();
       int height = img.height();
-      values[0] = CFNumberCreate(0, kCFNumberIntType, &width);
-      values[1] = CFNumberCreate(0, kCFNumberIntType, &height);
-      options = CFDictionaryCreate(0, reinterpret_cast<const void **>(keys),
-            reinterpret_cast<const void **>(values), 2,
-            &kCFTypeDictionaryKeyCallBacks,
+
+      values[0]  = CFNumberCreate(nullptr, kCFNumberIntType, &width);
+      values[1]  = CFNumberCreate(nullptr, kCFNumberIntType, &height);
+
+      options = CFDictionaryCreate(nullptr, reinterpret_cast<const void **>(keys),
+            reinterpret_cast<const void **>(values), 2, &kCFTypeDictionaryKeyCallBacks,
             &kCFTypeDictionaryValueCallBacks);
       CGImageDestinationAddImage(imageDestination, cgimage, options);
       CGImageDestinationFinalize(imageDestination);

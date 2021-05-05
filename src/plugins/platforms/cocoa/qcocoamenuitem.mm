@@ -88,20 +88,10 @@ NSUInteger keySequenceModifierMask(const QKeySequence &accel)
    return constructModifierMask(accel[0]);
 }
 
-QCocoaMenuItem::QCocoaMenuItem() :
-   m_native(NULL),
-   m_itemView(nil),
-   m_menu(NULL),
-   m_role(NoRole),
-   m_tag(0),
-   m_iconSize(16),
-   m_textSynced(false),
-   m_isVisible(true),
-   m_enabled(true),
-   m_parentEnabled(true),
-   m_isSeparator(false),
-   m_checked(false),
-   m_merged(false)
+QCocoaMenuItem::QCocoaMenuItem()
+   : m_native(nullptr), m_itemView(nil), m_menu(nullptr), m_role(NoRole), m_tag(0), m_iconSize(16),
+     m_textSynced(false), m_isVisible(true), m_enabled(true), m_parentEnabled(true),
+     m_isSeparator(false), m_checked(false), m_merged(false)
 {
 }
 
@@ -110,7 +100,7 @@ QCocoaMenuItem::~QCocoaMenuItem()
    QMacAutoReleasePool pool;
 
    if (m_menu && m_menu->menuParent() == this) {
-      m_menu->setMenuParent(0);
+      m_menu->setMenuParent(nullptr);
    }
 
    if (m_merged) {
@@ -143,7 +133,7 @@ void QCocoaMenuItem::setMenu(QPlatformMenu *menu)
    }
 
    if (m_menu && m_menu->menuParent() == this) {
-      m_menu->setMenuParent(0);
+      m_menu->setMenuParent(nullptr);
 
       // Free the menu from its parent's influence
       m_menu->propagateEnabledState(true);
@@ -270,7 +260,7 @@ NSMenuItem *QCocoaMenuItem::sync()
          case TextHeuristicRole: {
             QObject *p = menuParent();
             int depth = 1;
-            QCocoaMenuBar *menubar = 0;
+            QCocoaMenuBar *menubar = nullptr;
 
             while (depth < 3 && p && !(menubar = qobject_cast<QCocoaMenuBar *>(p))) {
                ++depth;

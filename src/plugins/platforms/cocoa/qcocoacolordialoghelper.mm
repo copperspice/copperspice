@@ -77,10 +77,10 @@ static NSButton *macCreateButton(const char *text, NSView *superview)
 {
    self = [super init];
    mColorPanel = [NSColorPanel sharedColorPanel];
-   mHelper            = 0;
-   mStolenContentView = 0;
-   mOkButton          = 0;
-   mCancelButton      = 0;
+   mHelper            = nullptr;
+   mStolenContentView = nullptr;
+   mOkButton          = nullptr;
+   mCancelButton      = nullptr;
    mResultCode        = NSModalResponseCancel;
    mDialogIsExecuting = false;
    mResultSet         = false;
@@ -121,7 +121,7 @@ static NSButton *macCreateButton(const char *text, NSView *superview)
       // steal the color panel's contents view
       mStolenContentView = [mColorPanel contentView];
       [mStolenContentView retain];
-      [mColorPanel setContentView: 0];
+      [mColorPanel setContentView: nullptr];
 
       // create a new content view and add the stolen one as a subview
       NSRect frameRect = { { 0.0, 0.0 }, { 0.0, 0.0 } };
@@ -184,9 +184,9 @@ static NSButton *macCreateButton(const char *text, NSView *superview)
       [mOkButton release];
       [mCancelButton release];
       [ourContentView release];
-      mOkButton = 0;
-      mCancelButton = 0;
-      mStolenContentView = 0;
+      mOkButton = nullptr;
+      mCancelButton = nullptr;
+      mStolenContentView = nullptr;
    }
 }
 
@@ -392,7 +392,7 @@ class QCocoaColorPanel
 
    void cleanup(QCocoaColorDialogHelper *helper) {
       if (mDelegate->mHelper == helper) {
-         mDelegate->mHelper = 0;
+         mDelegate->mHelper = nullptr;
       }
    }
 

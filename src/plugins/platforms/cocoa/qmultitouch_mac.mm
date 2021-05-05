@@ -86,7 +86,7 @@ QCocoaTouch *QCocoaTouch::findQCocoaTouch(NSTouch *nstouch)
    if (_currentTouches.contains(identity)) {
       return _currentTouches.value(identity);
    }
-   return 0;
+   return nullptr;
 }
 
 Qt::TouchPointState QCocoaTouch::toTouchPointState(NSTouchPhase nsState)

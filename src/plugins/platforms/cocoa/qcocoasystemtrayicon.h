@@ -36,7 +36,10 @@ class QSystemTrayIconSys;
 class Q_GUI_EXPORT QCocoaSystemTrayIcon : public QPlatformSystemTrayIcon
 {
  public:
-   QCocoaSystemTrayIcon() : m_sys(0) {}
+   QCocoaSystemTrayIcon()
+      : m_sys(nullptr)
+   {
+   }
 
    void init() override;
    void cleanup() override;

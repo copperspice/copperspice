@@ -61,7 +61,7 @@ void QCocoaCursor::setPos(const QPoint &position)
    pos.x = position.x();
    pos.y = position.y();
 
-   CGEventRef e = CGEventCreateMouseEvent(0, kCGEventMouseMoved, pos, kCGMouseButtonLeft);
+   CGEventRef e = CGEventCreateMouseEvent(nullptr, kCGEventMouseMoved, pos, kCGMouseButtonLeft);
    CGEventPost(kCGHIDEventTap, e);
    CFRelease(e);
 }
@@ -69,7 +69,7 @@ void QCocoaCursor::setPos(const QPoint &position)
 NSCursor *QCocoaCursor::convertCursor(QCursor *cursor)
 {
    if (cursor == nullptr) {
-      return 0;
+      return nullptr;
    }
 
    const Qt::CursorShape newShape = cursor->shape();
@@ -120,11 +120,13 @@ NSCursor *QCocoaCursor::convertCursor(QCursor *cursor)
          cocoaCursor = m_cursors.value(newShape);
          if (cocoaCursor && cursor->shape() == Qt::BitmapCursor) {
             [cocoaCursor release];
-            cocoaCursor = 0;
+            cocoaCursor = nullptr;
          }
-         if (cocoaCursor == 0) {
+
+         if (cocoaCursor == nullptr) {
             cocoaCursor = createCursorData(cursor);
-            if (cocoaCursor == 0) {
+
+            if (cocoaCursor == nullptr) {
                return [NSCursor arrowCursor];
             }
 
@@ -205,8 +207,9 @@ NSCursor *QCocoaCursor::createCursorData(QCursor *cursor)
       0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0
    };
 #endif
-   const uchar *cursorData = 0;
-   const uchar *cursorMaskData = 0;
+
+   const uchar *cursorData     = nullptr;
+   const uchar *cursorMaskData = nullptr;
    QPoint hotspot = cursor->hotSpot();
 
    switch (cursor->shape()) {
@@ -281,7 +284,7 @@ NSCursor *QCocoaCursor::createCursorData(QCursor *cursor)
 #endif
       default:
          qWarning("QCursor::update: Invalid cursor shape %d", cursor->shape());
-         return 0;
+         return nullptr;
    }
 
    // Create an NSCursor from image data if this a self-provided cursor.
@@ -291,7 +294,7 @@ NSCursor *QCocoaCursor::createCursorData(QCursor *cursor)
       return (createCursorFromBitmap(&bitmap, &mask, hotspot));
    }
 
-   return 0; // should not happen, all cases covered above
+   return nullptr;          // should not happen, all cases covered above
 }
 
 NSCursor *QCocoaCursor::createCursorFromBitmap(const QBitmap *bitmap, const QBitmap *mask, const QPoint hotspot)

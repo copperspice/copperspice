@@ -95,7 +95,7 @@ static const QByteArray q_macLocalEventType = "mac_generic_NSEvent";
 
 - (BOOL) qt_filterEvent: (NSEvent *)event
 {
-   if (qApp && qApp->eventDispatcher()->filterNativeEvent(q_macLocalEventType, static_cast<void *>(event), 0)) {
+   if (qApp && qApp->eventDispatcher()->filterNativeEvent(q_macLocalEventType, static_cast<void *>(event), nullptr)) {
       return true;
    }
 

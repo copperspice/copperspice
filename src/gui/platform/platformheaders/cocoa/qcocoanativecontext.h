@@ -29,7 +29,7 @@
 struct QCocoaNativeContext
 {
     QCocoaNativeContext()
-        : m_context(0)
+        : m_context(nullptr)
     { }
 
     QCocoaNativeContext(NSOpenGLContext *ctx)

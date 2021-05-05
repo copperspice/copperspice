@@ -95,8 +95,8 @@ class QMacCGContext
  public:
    QMacCGContext(QPainter *p);                             // qpaintengine_mac.mm
 
-   inline QMacCGContext() {
-      context = 0;
+   QMacCGContext() {
+      context = nullptr;
    }
 
    inline QMacCGContext(const QPaintDevice *pdev) {
@@ -111,7 +111,8 @@ class QMacCGContext
       }
    }
 
-   inline QMacCGContext(const QMacCGContext &copy) : context(0) {
+   QMacCGContext(const QMacCGContext &copy)
+      : context(nullptr) {
       *this = copy;
    }
    inline ~QMacCGContext() {

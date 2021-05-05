@@ -254,13 +254,9 @@ static inline QCocoaMenuLoader *getMenuLoader()
 
 @end
 
-QCocoaMenu::QCocoaMenu() :
-   m_attachedItem(0),
-   m_tag(0),
-   m_enabled(true),
-   m_parentEnabled(true),
-   m_visible(true),
-   m_isOpen(false)
+QCocoaMenu::QCocoaMenu()
+   : m_attachedItem(nullptr), m_tag(0), m_enabled(true), m_parentEnabled(true),
+     m_visible(true), m_isOpen(false)
 {
    QMacAutoReleasePool pool;
 
@@ -273,7 +269,7 @@ QCocoaMenu::~QCocoaMenu()
 {
    for (QCocoaMenuItem *item : m_menuItems) {
       if (item->menuParent() == this) {
-         item->setMenuParent(0);
+         item->setMenuParent(nullptr);
       }
    }
 
@@ -388,7 +384,7 @@ void QCocoaMenu::removeMenuItem(QPlatformMenuItem *menuItem)
    }
 
    if (cocoaItem->menuParent() == this) {
-      cocoaItem->setMenuParent(0);
+      cocoaItem->setMenuParent(nullptr);
    }
 
    // Ignore any parent enabled state
@@ -407,7 +403,7 @@ void QCocoaMenu::removeMenuItem(QPlatformMenuItem *menuItem)
 QCocoaMenuItem *QCocoaMenu::itemOrNull(int index) const
 {
    if ((index < 0) || (index >= m_menuItems.size())) {
-      return 0;
+      return nullptr;
    }
 
    return m_menuItems.at(index);
@@ -514,7 +510,8 @@ void QCocoaMenu::showPopup(const QWindow *parentWindow, const QRect &targetRect,
    QMacAutoReleasePool pool;
 
    QPoint pos =  QPoint(targetRect.left(), targetRect.top() + targetRect.height());
-   QCocoaWindow *cocoaWindow = parentWindow ? static_cast<QCocoaWindow *>(parentWindow->handle()) : 0;
+   QCocoaWindow *cocoaWindow = parentWindow ? static_cast<QCocoaWindow *>(parentWindow->handle()) : nullptr;
+
    NSView *view = cocoaWindow ? cocoaWindow->contentView() : nil;
    NSMenuItem *nsItem = item ? ((QCocoaMenuItem *)item)->nsItem() : nil;
 
@@ -588,7 +585,7 @@ void QCocoaMenu::showPopup(const QWindow *parentWindow, const QRect &targetRect,
          [NSMenu popUpContextMenu: m_nativeMenu withEvent: menuEvent forView: view];
 
       } else {
-         [m_nativeMenu popUpMenuPositioningItem: nsItem atLocation: nsPos inView: 0];
+         [m_nativeMenu popUpMenuPositioningItem: nsItem atLocation: nsPos inView: nullptr];
       }
    }
 
@@ -610,7 +607,7 @@ QPlatformMenuItem *QCocoaMenu::menuItemAt(int position) const
       return m_menuItems.at(position);
    }
 
-   return 0;
+   return nullptr;
 }
 
 QPlatformMenuItem *QCocoaMenu::menuItemForTag(quintptr tag) const
@@ -621,7 +618,7 @@ QPlatformMenuItem *QCocoaMenu::menuItemForTag(quintptr tag) const
       }
    }
 
-   return 0;
+   return nullptr;
 }
 
 QList<QCocoaMenuItem *> QCocoaMenu::items() const

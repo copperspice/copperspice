@@ -317,6 +317,7 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
       if (key >= 0xf704 && key <= 0xf726) {
          return Qt::Key_F1 + (key.unicode() - 0xf704) ;
       }
+
       for (int i = 0; qt_mac_private_unicode[i].qt_code; i++) {
          if (qt_mac_private_unicode[i].mac_code == key) {
             return qt_mac_private_unicode[i].qt_code;
@@ -335,8 +336,8 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
 QCocoaKeyMapper::QCocoaKeyMapper()
 {
    memset(keyLayout, 0, sizeof(keyLayout));
-   keyboard_layout_format.unicode = 0;
-   currentInputSource = 0;
+   keyboard_layout_format.unicode = nullptr;
+   currentInputSource = nullptr;
 }
 
 QCocoaKeyMapper::~QCocoaKeyMapper()
@@ -351,15 +352,16 @@ Qt::KeyboardModifiers QCocoaKeyMapper::queryKeyboardModifiers()
 
 bool QCocoaKeyMapper::updateKeyboard()
 {
-   const UCKeyboardLayout *uchrData = 0;
+   const UCKeyboardLayout *uchrData = nullptr;
    QCFType<TISInputSourceRef> source = TISCopyCurrentKeyboardInputSource();
+
    if (keyboard_mode != NullMode && source == currentInputSource) {
       return false;
    }
-   Q_ASSERT(source != 0);
-   CFDataRef data = static_cast<CFDataRef>(TISGetInputSourceProperty(source,
-            kTISPropertyUnicodeKeyLayoutData));
-   uchrData = data ? reinterpret_cast<const UCKeyboardLayout *>(CFDataGetBytePtr(data)) : 0;
+
+   Q_ASSERT(source != nullptr);
+   CFDataRef data = static_cast<CFDataRef>(TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData));
+   uchrData = data ? reinterpret_cast<const UCKeyboardLayout *>(CFDataGetBytePtr(data)) : nullptr;
 
    keyboard_kind = LMGetKbdType();
    if (uchrData) {
@@ -380,6 +382,7 @@ bool QCocoaKeyMapper::updateKeyboard()
       keyboardInputLocale = QLocale::c();
       keyboardInputDirection = Qt::LeftToRight;
    }
+
    return true;
 }
 
@@ -389,7 +392,7 @@ void QCocoaKeyMapper::deleteLayouts()
    for (int i = 0; i < 255; ++i) {
       if (keyLayout[i]) {
          delete keyLayout[i];
-         keyLayout[i] = 0;
+         keyLayout[i] = nullptr;
       }
    }
 }
