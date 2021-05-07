@@ -46,7 +46,7 @@ QWindowsOleDataObject::~QWindowsOleDataObject()
 {
 }
 
-void QWindowsOleDataObject::releaseQt()
+void QWindowsOleDataObject::releaseData()
 {
    data = nullptr;
 }
@@ -88,7 +88,7 @@ STDMETHODIMP_(ULONG)
 QWindowsOleDataObject::Release(void)
 {
    if (--m_refs == 0) {
-      releaseQt();
+      releaseData();
       delete this;
       return 0;
    }

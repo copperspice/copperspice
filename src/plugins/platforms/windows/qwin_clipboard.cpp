@@ -142,7 +142,8 @@ void QWindowsClipboard::releaseIData()
 {
    if (m_data) {
       delete m_data->mimeData();
-      m_data->releaseQt();
+
+      m_data->releaseData();
       m_data->Release();
       m_data = nullptr;
    }

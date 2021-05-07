@@ -40,7 +40,7 @@ class QWindowsOleDataObject : public IDataObject
    explicit QWindowsOleDataObject(QMimeData *mimeData);
    virtual ~QWindowsOleDataObject();
 
-   void releaseQt();
+   void releaseData();
    QMimeData *mimeData() const;
    DWORD reportedPerformedEffect() const;
 

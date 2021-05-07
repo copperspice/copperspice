@@ -734,7 +734,7 @@ Qt::DropAction QWindowsDrag::drag(QDrag *drag)
       }
    }
    // clean up
-   dropDataObject->releaseQt();
+   dropDataObject->releaseData();
    dropDataObject->Release();           // Will delete obj if refcount becomes 0
    windowDropSource->Release();         // Will delete src if refcount becomes 0
 
