@@ -103,8 +103,9 @@ else()
    set(target "${CMAKE_SYSTEM}")
 endif()
 
-set(CPACK_PACKAGE_NAME   ${PROJECT_NAME})
-set(CPACK_PACKAGE_VENDOR "CopperSpice")
+set(CPACK_PACKAGE_NAME    ${PROJECT_NAME})
+set(CPACK_PACKAGE_VENDOR  "CopperSpice")
+set(CPACK_PACKAGE_CONTACT "info@copperspice.com")
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${BUILD_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${BUILD_MINOR})
@@ -213,7 +214,7 @@ foreach(component ${CS_OPTIONAL_COMPONENTS})
    option(WITH_${uppercomp} "Build ${component} component" ON)
 endforeach()
 
-# start if output
+# start output messages
 message("")
 message("Configuring CMake for CopperSpice\n\n")
 message("Searching for required packages\n")
@@ -532,7 +533,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # files must be used to deal with very long linker command lines.
 set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
 
-# check components dependencies  BROOM
+# check components dependencies
 if (WITH_MULTIMEDIA AND NOT WITH_GUI)
    message(SEND_ERROR "Multimedia component requires Gui component")
 
