@@ -234,7 +234,9 @@ set_package_properties(ZLIB PROPERTIES
    TYPE RECOMMENDED
 )
 
-if (NOT ZLIB_FOUND)
+if (ZLIB_FOUND)
+   message(STATUS "ZLIB was found, path is ${ZLIB_LIBRARIES}\n")
+else()
    message(STATUS "ZLIB was not found, bundled library will be used\n")
 endif()
 

@@ -77,6 +77,11 @@ if (ZLIB_FOUND)
       ${ZLIB_LIBRARIES}
    )
 
+   target_include_directories(CsCore
+      PRIVATE
+      ${ZLIB_INCLUDE_DIR}
+   )
+
 else()
    target_sources(CsCore
       PRIVATE
