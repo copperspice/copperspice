@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
 
-cmake_policy(VERSION 3.8..3.13)
+cmake_policy(VERSION 3.8..3.20)
 
 # support using rpath on Mac OS X
 cmake_policy(SET CMP0042 NEW)
