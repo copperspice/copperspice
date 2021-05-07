@@ -289,8 +289,15 @@ set_package_properties(PostgreSQL PROPERTIES
    TYPE RECOMMENDED
 )
 
-if (NOT PostgreSQL_FOUND)
+if (CMAKE_DISABLE_FIND_PACKAGE_PostgreSQL)
+   message(STATUS "PostgreSQL disabled, CopperSpice plugin will not be built\n")
+
+elseif (NOT PostgreSQL_FOUND)
    message(STATUS "PostgreSQL was not found, CopperSpice plugin will not be built\n")
+
+else()
+   message(STATUS "PostgreSQL was found, CopperSpice plugin will be built\n")
+
 endif()
 
 
@@ -304,7 +311,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "Windows" AND PostgreSQL_FOUND)
 
          message(WARNING "")
          message(WARNING "------------------------------------------------------------")
-         message(WARNING "WARNING WARNING WARNING")
+         message(WARNING "WARNING WARNING")
          message(WARNING "The '${fname}' directory contains a file called pthread.h")
          message(WARNING "")
          message(WARNING "A conflict exists between pthread.h and the standard library ")
@@ -315,7 +322,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "Windows" AND PostgreSQL_FOUND)
          # force to not found
          set(PostgreSQL_FOUND false)
 
-         message(STATUS "PostgreSQL client library was found, plugin will not be built")
+         message(STATUS "PostgreSQL client library was found, CopperSpice plugin will not be built")
          message(STATUS "")
       endif()
 
@@ -330,8 +337,12 @@ set_package_properties(MySQL PROPERTIES
    TYPE RECOMMENDED
 )
 
-if (NOT MySQL_FOUND)
+if (CMAKE_DISABLE_FIND_PACKAGE_MySQL)
+   message(STATUS "MySQL disabled, CopperSpice plugin will not be built\n")
+
+elseif (NOT MySQL_FOUND)
    message(STATUS "MySQL was not found, CopperSpice plugin will not be built\n")
+
 endif()
 
 
