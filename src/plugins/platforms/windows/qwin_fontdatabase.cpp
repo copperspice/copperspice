@@ -32,6 +32,7 @@
 #include <qmath.h>
 #include <qdebug.h>
 #include <qendian.h>
+#include <qtextcodec.h>
 #include <qthreadstorage.h>
 
 #include <qhighdpiscaling_p.h>
@@ -162,7 +163,7 @@ TableDirectory *EmbeddedFont::tableDirectoryEntry(const QByteArray &tagName)
 
 QString EmbeddedFont::familyName(TableDirectory *nameTableDirectoryEntry)
 {
-   QString name;
+   QString retval;
 
    if (nameTableDirectoryEntry == nullptr) {
       nameTableDirectoryEntry = tableDirectoryEntry("name");
@@ -172,7 +173,7 @@ QString EmbeddedFont::familyName(TableDirectory *nameTableDirectoryEntry)
       quint32 offset = qFromBigEndian<quint32>(nameTableDirectoryEntry->offset);
 
       if (quint32(m_fontData.size()) < offset + sizeof(NameTable)) {
-         return QString();
+         return retval;
       }
 
       NameTable *nameTable   = reinterpret_cast<NameTable *>(m_fontData.data() + offset);
@@ -180,8 +181,10 @@ QString EmbeddedFont::familyName(TableDirectory *nameTableDirectoryEntry)
 
       quint16 nameTableCount = qFromBigEndian<quint16>(nameTable->count);
       if (quint32(m_fontData.size()) < offset + sizeof(NameRecord) * nameTableCount) {
-         return QString();
+         return retval;
       }
+
+      QTextCodec *codec = QTextCodec::codecForName("UTF-16BE");
 
       for (int i = 0; i < nameTableCount; ++i, ++nameRecord) {
          if (qFromBigEndian<quint16>(nameRecord->nameID) == 1
@@ -193,23 +196,18 @@ QString EmbeddedFont::familyName(TableDirectory *nameTableDirectoryEntry)
             quint16 nameLength = qFromBigEndian<quint16>(nameRecord->length);
 
             if (quint32(m_fontData.size()) < offset + stringOffset + nameOffset + nameLength) {
-               return QString();
+               return retval;
             }
 
-            const void *ptr = reinterpret_cast<const quint8 *>(nameTable) + stringOffset + nameOffset;
+            const char *ptr  = reinterpret_cast<const char *>(nameTable) + stringOffset + nameOffset;
+            retval = codec->toUnicode(ptr, nameLength);
 
-            const quint16 *s = reinterpret_cast<const quint16 *>(ptr);
-            const quint16 *e = s + nameLength / sizeof(quint16);
-
-            while (s != e) {
-               name += QChar( qFromBigEndian<quint16>(*s++));
-            }
             break;
          }
       }
    }
 
-   return name;
+   return retval;
 }
 
 QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
@@ -237,6 +235,8 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
 
    QByteArray newNameTable(fullSize, char(0));
 
+   QTextCodec *codec = QTextCodec::codecForName("UTF-16BE");
+
    {
       NameTable *nameTable = reinterpret_cast<NameTable *>(newNameTable.data());
       nameTable->count = qbswap<quint16>(requiredRecordCount);
@@ -259,21 +259,15 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
       }
 
       // nameRecord now points to string data
-      quint16 *stringStorage = reinterpret_cast<quint16 *>(nameRecord);
-      std::wstring tmp = newFamilyName.toStdWString();
+      char *stringStorage = reinterpret_cast<char *>(nameRecord);
+      QByteArray tmp     = codec->fromUnicode(newFamilyName);
 
-      int i = 0;
-      for (auto item : tmp) {
-         stringStorage[i++] = qbswap<quint16>(item);
-      }
+      std::memcpy(stringStorage, tmp.constData(), tmp.size());
 
       stringStorage += tmp.size();
-      tmp = regularString.toStdWString();
+      tmp = codec->fromUnicode(regularString);
 
-      i = 0;
-      for (auto item : tmp) {
-         stringStorage[i++] = qbswap<quint16>(item);
-      }
+      std::memcpy(stringStorage, tmp.constData(), tmp.size());
    }
 
    quint32 *p = reinterpret_cast<quint32 *>(newNameTable.data());
