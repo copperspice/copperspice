@@ -119,19 +119,23 @@ QString QMacPasteboardMimeAny::convertorName()
 QString QMacPasteboardMimeAny::flavorFor(const QString &mime)
 {
    // do not handle the mime type name in the drag pasteboard
-   if (mime == QLatin1String("application/x-qt-mime-type-name")) {
+   if (mime == "application/x-qt-mime-type-name") {
       return QString();
    }
-   QString ret = QLatin1String("com.trolltech.anymime.") + mime;
-   return ret.replace(QLatin1Char('/'), QLatin1String("--"));
+
+   QString retval = "com.copperspice.cs.anymime." + mime;
+
+   return retval.replace('/', "--");
 }
 
 QString QMacPasteboardMimeAny::mimeFor(QString flav)
 {
-   const QString any_prefix = QLatin1String("com.trolltech.anymime.");
+   const QString any_prefix = "com.copperspice.cs.anymime.";
+
    if (flav.size() > any_prefix.length() && flav.startsWith(any_prefix)) {
-      return flav.mid(any_prefix.length()).replace(QLatin1String("--"), QLatin1String("/"));
+      return flav.mid(any_prefix.length()).replace("--", "/");
    }
+
    return QString();
 }
 
@@ -189,9 +193,10 @@ QString QMacPasteboardMimeTypeName::convertorName()
 
 QString QMacPasteboardMimeTypeName::flavorFor(const QString &mime)
 {
-   if (mime == QLatin1String("application/x-qt-mime-type-name")) {
-      return QLatin1String("com.trolltech.qt.MimeTypeName");
+   if (mime == "application/x-qt-mime-type-name") {
+      return "com.copperspice.cs.MimeTypeName";
    }
+
    return QString();
 }
 

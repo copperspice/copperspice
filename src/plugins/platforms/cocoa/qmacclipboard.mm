@@ -129,7 +129,7 @@ OSStatus QMacPasteboard::promiseKeeper(PasteboardRef paste, PasteboardItemID id,
       }
    }
 
-   if (!promise.itemId && flavorAsQString == QLatin1String("com.trolltech.qt.MimeTypeName")) {
+   if (! promise.itemId && flavorAsQString == "com.copperspice.cs.MimeTypeName") {
       // we have promised this data, but won't be able to convert, so return null data.
       // This helps in making the application/x-qt-mime-type-name hidden from normal use.
       QByteArray ba;

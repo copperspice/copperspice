@@ -2017,7 +2017,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
          currentCustomDragTypes = new QStringList();
       }
       *currentCustomDragTypes = customTypes;
-      const NSString *mimeTypeGeneric = @"com.trolltech.qt.MimeTypeName";
+      const NSString *mimeTypeGeneric = @"com.copperspice.cs.MimeTypeName";
       NSMutableArray *supportedTypes = [NSMutableArray arrayWithObjects: NSColorPboardType,
                                         NSFilenamesPboardType, NSStringPboardType,
                                         NSFilenamesPboardType, NSPostScriptPboardType, NSTIFFPboardType,
