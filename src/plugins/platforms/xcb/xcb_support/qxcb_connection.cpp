@@ -782,8 +782,7 @@ QXcbWindow *QXcbConnection::platformWindowFromId(xcb_window_t id)
         if (!handled) \
             eventListener->handler(e); \
     } \
-} \
-break;
+}
 
 #define HANDLE_KEYBOARD_EVENT(event_t, handler) \
 { \
@@ -793,8 +792,7 @@ break;
         if (!handled) \
             m_keyboard->handler(e); \
     } \
-} \
-break;
+}
 
 //#define XCB_EVENT_DEBUG
 
@@ -1169,6 +1167,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
       switch (response_type) {
          case XCB_EXPOSE:
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_expose_event_t, window, handleExposeEvent);
+            break;
 
          // press/release/motion is only delivered here when XI 2.2+ is _not_ in use
          case XCB_BUTTON_PRESS: {
@@ -1185,6 +1184,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
             }
 
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_button_press_event_t, event, handleButtonPressEvent);
+            break;
          }
 
          case XCB_BUTTON_RELEASE: {
@@ -1197,6 +1197,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
                qDebug("legacy mouse release, button %d state %X", ev->detail, static_cast<unsigned int>(m_buttons));
             }
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_button_release_event_t, event, handleButtonReleaseEvent);
+            break;
          }
 
          case XCB_MOTION_NOTIFY: {
@@ -1209,19 +1210,29 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
                   ev->detail, static_cast<unsigned int>(m_buttons));
 
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_motion_notify_event_t, event, handleMotionNotifyEvent);
+            break;
          }
 
          case XCB_CONFIGURE_NOTIFY:
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_configure_notify_event_t, event, handleConfigureNotifyEvent);
+            break;
+
          case XCB_MAP_NOTIFY:
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_map_notify_event_t, event, handleMapNotifyEvent);
+            break;
+
          case XCB_UNMAP_NOTIFY:
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_unmap_notify_event_t, event, handleUnmapNotifyEvent);
+            break;
+
          case XCB_DESTROY_NOTIFY:
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_destroy_notify_event_t, event, handleDestroyNotifyEvent);
+            break;
+
          case XCB_CLIENT_MESSAGE:
             handleClientMessageEvent((xcb_client_message_event_t *)event);
             break;
+
          case XCB_ENTER_NOTIFY:
 
 #ifdef XCB_USE_XINPUT22
@@ -1230,6 +1241,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
             }
 #endif
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_enter_notify_event_t, event, handleEnterNotifyEvent);
+            break;
 
          case XCB_LEAVE_NOTIFY:
 #ifdef XCB_USE_XINPUT22
@@ -1239,22 +1251,34 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
 #endif
             m_keyboard->updateXKBStateFromCore(((xcb_leave_notify_event_t *)event)->state);
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_leave_notify_event_t, event, handleLeaveNotifyEvent);
+            break;
+
          case XCB_FOCUS_IN:
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_focus_in_event_t, event, handleFocusInEvent);
+            break;
+
          case XCB_FOCUS_OUT:
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_focus_out_event_t, event, handleFocusOutEvent);
+            break;
+
          case XCB_KEY_PRESS: {
             xcb_key_press_event_t *kp = (xcb_key_press_event_t *)event;
             m_keyboard->updateXKBStateFromCore(kp->state);
             setTime(kp->time);
+
             HANDLE_KEYBOARD_EVENT(xcb_key_press_event_t, handleKeyPressEvent);
+            break;
          }
+
          case XCB_KEY_RELEASE:
             m_keyboard->updateXKBStateFromCore(((xcb_key_release_event_t *)event)->state);
             HANDLE_KEYBOARD_EVENT(xcb_key_release_event_t, handleKeyReleaseEvent);
+            break;
+
          case XCB_MAPPING_NOTIFY:
             m_keyboard->handleMappingNotifyEvent((xcb_mapping_notify_event_t *)event);
             break;
+
          case XCB_SELECTION_REQUEST: {
             xcb_selection_request_event_t *sr = (xcb_selection_request_event_t *)event;
 
@@ -1290,6 +1314,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
                }
             } else {
                HANDLE_PLATFORM_WINDOW_EVENT(xcb_property_notify_event_t, window, handlePropertyNotifyEvent);
+               break;
             }
             break;
          }
