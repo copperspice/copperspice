@@ -414,13 +414,16 @@ QPlatformOpenGLContext *QWindowsIntegration::createPlatformOpenGLContext(QOpenGL
 QOpenGLContext::OpenGLModuleType QWindowsIntegration::openGLModuleType()
 {
 #if defined(QT_OPENGL_ES_2)
+
    return QOpenGLContext::LibGLES;
 #elif !defined(QT_OPENGL_DYNAMIC)
    return QOpenGLContext::LibGL;
+
 #else
    if (const QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext()) {
       return staticOpenGLContext->moduleType();
    }
+
    return QOpenGLContext::LibGL;
 #endif
 }
@@ -431,11 +434,14 @@ QWindowsStaticOpenGLContext *QWindowsIntegration::staticOpenGLContext()
    if (! integration) {
       return nullptr;
    }
+
    QWindowsIntegrationPrivate *d = integration->d.data();
    QMutexLocker lock(&d->m_staticContextLock);
+
    if (d->m_staticOpenGLContext.isNull()) {
       d->m_staticOpenGLContext.reset(QWindowsStaticOpenGLContext::create());
    }
+
    return d->m_staticOpenGLContext.data();
 }
 

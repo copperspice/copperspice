@@ -449,11 +449,13 @@ QCocoaWindow::QCocoaWindow(QWindow *tlw)
 #ifdef QT_COCOA_ENABLE_WINDOW_DEBUG
    qDebug() << "QCocoaWindow::QCocoaWindow" << this;
 #endif
+
    QMacAutoReleasePool pool;
 
    if (tlw->type() == Qt::ForeignWindow) {
       NSView *foreignView = (NSView *)WId(tlw->property("_q_foreignWinId").value<WId>());
       setContentView(foreignView);
+
    } else {
       m_qtView = [[QNSView alloc] initWithQWindow: tlw platformWindow: this];
       m_contentView = m_qtView;
@@ -462,15 +464,17 @@ QCocoaWindow::QCocoaWindow(QWindow *tlw)
       // overriding any glViewport calls in application code. This is usually not a
       // problem, except if the appilcation wants to have a "custom" viewport.
       // (like the hellogl example)
+
       if (tlw->supportsOpenGL()) {
          BOOL enable = qt_mac_resolveOption(YES, tlw, "_q_mac_wantsBestResolutionOpenGLSurface",
                "QT_MAC_WANTS_BEST_RESOLUTION_OPENGL_SURFACE");
          [m_contentView setWantsBestResolutionOpenGLSurface: enable];
       }
-      BOOL enable = qt_mac_resolveOption(NO, tlw, "_q_mac_wantsLayer",
-            "QT_MAC_WANTS_LAYER");
+
+      BOOL enable = qt_mac_resolveOption(NO, tlw, "_q_mac_wantsLayer", "QT_MAC_WANTS_LAYER");
       [m_contentView setWantsLayer: enable];
    }
+
    setGeometry(tlw->geometry());
    recreateWindow(parent());
    tlw->setGeometry(geometry());
@@ -715,15 +719,16 @@ void QCocoaWindow::show(bool becauseOfAncestor)
       m_hiddenByAncestor = true; // Parent still hidden, don't show now
 
    } else if ((becauseOfAncestor == m_hiddenByAncestor) && ! m_hiddenByClipping) {
-      // Was NEITHER explicitly hidden
-      // ... NOR clipped
+      // Was neithr explicitly hidden nor clipped
 
       if (m_isNSWindowChild) {
          m_hiddenByAncestor = false;
          setCocoaGeometry(windowGeometry());
       }
-      if (!m_hiddenByClipping) { // setCocoaGeometry() can change the clipping status
+
+      if (! m_hiddenByClipping) { // setCocoaGeometry() can change the clipping status
          [m_nsWindow orderFront: nil];
+
          if (m_isNSWindowChild) {
             m_parentCocoaWindow->reinsertChildWindow(this);
          }
@@ -802,11 +807,13 @@ void QCocoaWindow::setVisible(bool visible)
 
             if ((window()->modality() == Qt::WindowModal || window()->type() == Qt::Sheet) && parentCocoaWindow) {
                // show the window as a sheet
-               [NSApp beginSheet: m_nsWindow modalForWindow: parentCocoaWindow->m_nsWindow modalDelegate: nil didEndSelector: nil contextInfo: nil];
+               [NSApp beginSheet: m_nsWindow modalForWindow: parentCocoaWindow->m_nsWindow
+                    modalDelegate: nil didEndSelector: nil contextInfo: nil];
 
             } else if (window()->modality() != Qt::NonModal) {
                // show the window as application modal
-               QCocoaEventDispatcher *cocoaEventDispatcher = qobject_cast<QCocoaEventDispatcher *>(QApplication::instance()->eventDispatcher());
+               QCocoaEventDispatcher *cocoaEventDispatcher = qobject_cast<QCocoaEventDispatcher *>
+                     (QApplication::instance()->eventDispatcher());
 
                Q_ASSERT(cocoaEventDispatcher != nullptr);
 
@@ -835,12 +842,14 @@ void QCocoaWindow::setVisible(bool visible)
                   removeMonitor();
 
                   monitor = [NSEvent addGlobalMonitorForEventsMatchingMask: NSEventMaskLeftMouseDown | NSEventMaskRightMouseDown |
-                  NSEventMaskOtherMouseDown | NSEventMaskMouseMoved handler: ^ (NSEvent * e) {
+                        NSEventMaskOtherMouseDown | NSEventMaskMouseMoved
+                        handler: ^ (NSEvent * e) {
 
-                             QPointF localPoint = qt_mac_flipPoint([NSEvent mouseLocation]);
-                                                       QWindowSystemInterface::handleMouseEvent(window(), window()->mapFromGlobal(localPoint.toPoint()), localPoint,
-                        cocoaButton2QtButton([e buttonNumber]));
+                     QPointF localPoint = qt_mac_flipPoint([NSEvent mouseLocation]);
+                     QWindowSystemInterface::handleMouseEvent(window(), window()->mapFromGlobal(localPoint.toPoint()),
+                        localPoint, cocoaButton2QtButton([e buttonNumber]));
                   }];
+
                }
             }
          }
@@ -946,6 +955,7 @@ NSInteger QCocoaWindow::windowLevel(Qt::WindowFlags flags)
    if (type != Qt::Window) {
       const QWindow *const transientParent = window()->transientParent();
       const QCocoaWindow *const transientParentWindow = transientParent ? static_cast<QCocoaWindow *>(transientParent->handle()) : nullptr;
+
       if (transientParentWindow) {
          windowLevel = qMax([transientParentWindow->m_nsWindow level], windowLevel);
       }
@@ -1401,6 +1411,7 @@ NSWindow *QCocoaWindow::nativeWindow() const
 void QCocoaWindow::setEmbeddedInForeignView(bool embedded)
 {
    m_contentViewIsToBeEmbedded = embedded;
+
    // Release any previosly created NSWindow.
    [m_nsWindow closeAndRelease];
    m_nsWindow = nullptr;
@@ -1675,6 +1686,7 @@ QCocoaNSWindow *QCocoaWindow::createNSWindow()
       window  = [[QNSPanel alloc] initWithContentRect: frame
                                             styleMask: styleMask
                                       qPlatformWindow: this];
+
       if ((type & Qt::Popup) == Qt::Popup) {
          [window setHasShadow: YES];
       }
@@ -1771,6 +1783,7 @@ QRect QCocoaWindow::nativeWindowGeometry() const
    QPlatformScreen *onScreen = QPlatformScreen::platformScreenForWindow(window());
    int flippedY = onScreen->geometry().height() - rect.origin.y - rect.size.height;  // account for nswindow inverted y.
    QRect qRect = QRect(rect.origin.x, flippedY, rect.size.width, rect.size.height);
+
    return qRect;
 }
 

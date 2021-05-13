@@ -59,14 +59,9 @@ QXcbSystemTrayTracker *QXcbSystemTrayTracker::create(QXcbConnection *connection)
    return new QXcbSystemTrayTracker(connection, trayAtom, selection);
 }
 
-QXcbSystemTrayTracker::QXcbSystemTrayTracker(QXcbConnection *connection,
-   xcb_atom_t trayAtom,
-   xcb_atom_t selection)
-   : QObject(connection)
-   , m_selection(selection)
-   , m_trayAtom(trayAtom)
-   , m_connection(connection)
-   , m_trayWindow(0)
+QXcbSystemTrayTracker::QXcbSystemTrayTracker(QXcbConnection *connection, xcb_atom_t trayAtom, xcb_atom_t selection)
+   : QObject(connection), m_selection(selection), m_trayAtom(trayAtom),
+     m_connection(connection), m_trayWindow(0)
 {
 }
 
@@ -78,8 +73,10 @@ xcb_window_t QXcbSystemTrayTracker::locateTrayWindow(const QXcbConnection *conne
    if (! reply) {
       return 0;
    }
+
    const xcb_window_t result = reply->owner;
    free(reply);
+
    return result;
 }
 
@@ -102,7 +99,7 @@ void QXcbSystemTrayTracker::requestSystemTrayWindowDock(xcb_window_t window) con
 // API for QPlatformNativeInterface/QPlatformSystemTrayIcon: Return tray window.
 xcb_window_t QXcbSystemTrayTracker::trayWindow()
 {
-   if (!m_trayWindow) {
+   if (! m_trayWindow) {
       m_trayWindow = QXcbSystemTrayTracker::locateTrayWindow(m_connection, m_selection);
       if (m_trayWindow) { // Listen for DestroyNotify on tray.
          m_connection->addWindowEventListener(m_trayWindow, this);
@@ -111,6 +108,7 @@ xcb_window_t QXcbSystemTrayTracker::trayWindow()
          Q_XCB_CALL2(xcb_change_window_attributes(m_connection->xcb_connection(), m_trayWindow, mask, &value), m_connection);
       }
    }
+
    return m_trayWindow;
 }
 
@@ -137,6 +135,7 @@ QRect QXcbSystemTrayTracker::systemTrayWindowGlobalGeometry(xcb_window_t window)
 
    const QRect result(QPoint(translateReply->dst_x, translateReply->dst_y), QSize(geomReply->width, geomReply->height));
    free(translateReply);
+
    return result;
 }
 
@@ -179,6 +178,7 @@ bool QXcbSystemTrayTracker::visualHasAlphaChannel()
 
    systray_atom_cookie = xcb_get_property_unchecked(m_connection->xcb_connection(), false, m_trayWindow,
          tray_atom, XCB_ATOM_VISUALID, 0, 1);
+
    systray_atom_reply = xcb_get_property_reply(m_connection->xcb_connection(), systray_atom_cookie, nullptr);
 
    if (!systray_atom_reply) {

@@ -220,16 +220,19 @@ static inline XTextProperty *qstringToXTP(Display *dpy, const QString &s)
       char *tl[2];
       tl[0] = mapped.data();
       tl[1] = nullptr;
+
       errCode = XmbTextListToTextProperty(dpy, tl, 1, XStdICCTextStyle, &tp);
       if (errCode < 0) {
          qDebug("XmbTextListToTextProperty result code %d", errCode);
       }
    }
+
    if (!mapper || errCode < 0) {
       mapper = QTextCodec::codecForName("latin1");
-      if (!mapper || !mapper->canEncode(s)) {
+      if (! mapper || !mapper->canEncode(s)) {
          return nullptr;
       }
+
       static QByteArray qcs;
       qcs = s.toLatin1();
       tp.value = (uchar *)qcs.data();
@@ -965,7 +968,7 @@ void QXcbWindow::doFocusIn()
       return;
    }
 
-   QWindowPrivate *winPrivate  = QWindowPrivate::get(window());
+   QWindowPrivate *winPrivate = QWindowPrivate::get(window());
    QWindow *w = winPrivate->eventReceiver();
 
    connection()->setFocusWindow(static_cast<QXcbWindow *>(w->handle()));
@@ -2917,6 +2920,7 @@ static bool activeWindowChangeQueued(const QWindow *window)
    QWindowSystemInterfacePrivate::ActivatedWindowEvent *systemEvent =
       static_cast<QWindowSystemInterfacePrivate::ActivatedWindowEvent *>
       (QWindowSystemInterfacePrivate::peekWindowSystemEvent(QWindowSystemInterfacePrivate::ActivatedWindow));
+
    return systemEvent && systemEvent->activated != window;
 }
 
@@ -2927,6 +2931,7 @@ void QXcbWindow::handleXEmbedMessage(const xcb_client_message_event_t *event)
       case XEMBED_WINDOW_ACTIVATE:
       case XEMBED_WINDOW_DEACTIVATE:
          break;
+
       case XEMBED_EMBEDDED_NOTIFY:
          Q_XCB_CALL(xcb_map_window(xcb_connection(), m_window));
          xcbScreen()->windowShown(this);
@@ -2936,23 +2941,29 @@ void QXcbWindow::handleXEmbedMessage(const xcb_client_message_event_t *event)
          Q_XCB_CALL(xcb_clear_area(xcb_connection(), false, m_window, 0, 0, geometry().width(), geometry().height()));
          xcb_flush(xcb_connection());
          break;
+
       case XEMBED_FOCUS_IN:
          Qt::FocusReason reason;
+
          switch (event->data.data32[2]) {
             case XEMBED_FOCUS_FIRST:
                reason = Qt::TabFocusReason;
                break;
+
             case XEMBED_FOCUS_LAST:
                reason = Qt::BacktabFocusReason;
                break;
+
             case XEMBED_FOCUS_CURRENT:
             default:
                reason = Qt::OtherFocusReason;
                break;
          }
+
          connection()->setFocusWindow(static_cast<QXcbWindow *>(window()->handle()));
          QWindowSystemInterface::handleWindowActivated(window(), reason);
          break;
+
       case XEMBED_FOCUS_OUT:
          if (window() == QApplication::focusWindow()
             && ! activeWindowChangeQueued(window())) {
@@ -2966,16 +2977,17 @@ void QXcbWindow::handleXEmbedMessage(const xcb_client_message_event_t *event)
 static inline xcb_rectangle_t qRectToXCBRectangle(const QRect &r)
 {
    xcb_rectangle_t result;
-   result.x = qMax(SHRT_MIN, r.x());
-   result.y = qMax(SHRT_MIN, r.y());
-   result.width = qMin((int)USHRT_MAX, r.width());
+   result.x      = qMax(SHRT_MIN, r.x());
+   result.y      = qMax(SHRT_MIN, r.y());
+   result.width  = qMin((int)USHRT_MAX, r.width());
    result.height = qMin((int)USHRT_MAX, r.height());
+
    return result;
 }
 
 void QXcbWindow::setOpacity(qreal level)
 {
-   if (!m_window) {
+   if (! m_window) {
       return;
    }
 
@@ -2996,6 +3008,7 @@ void QXcbWindow::setMask(const QRegion &region)
    if (!connection()->hasXShape()) {
       return;
    }
+
    if (region.isEmpty()) {
       xcb_shape_mask(connection()->xcb_connection(), XCB_SHAPE_SO_SET,
          XCB_SHAPE_SK_BOUNDING, xcb_window(), 0, 0, XCB_NONE);

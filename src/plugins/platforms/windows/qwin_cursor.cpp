@@ -74,6 +74,7 @@ HCURSOR QWindowsCursor::createPixmapCursor(QPixmap pixmap, const QPoint &hotSpot
       pixmap = pixmap.scaled((pixmapScaleFactor * QSizeF(pixmap.size())).toSize(),
             Qt::KeepAspectRatio, Qt::SmoothTransformation);
    }
+
    QBitmap mask = pixmap.mask();
    if (mask.isNull()) {
       mask = QBitmap(pixmap.size());
@@ -99,8 +100,7 @@ HCURSOR QWindowsCursor::createPixmapCursor(QPixmap pixmap, const QPoint &hotSpot
 
 // Create a cursor from image and mask of the format QImage::Format_Mono.
 static HCURSOR createBitmapCursor(const QImage &bbits, const QImage &mbits,
-   QPoint hotSpot = QPoint(-1, -1),
-   bool invb = false, bool invm = false)
+            QPoint hotSpot = QPoint(-1, -1), bool invb = false, bool invm = false)
 {
    const int width = bbits.width();
    const int height = bbits.height();
@@ -165,20 +165,24 @@ static HCURSOR createBitmapCursor(const QCursor &cursor, qreal scaleFactor = 1)
 static QSize systemCursorSize(const QPlatformScreen *screen = nullptr)
 {
    const QSize primaryScreenCursorSize(GetSystemMetrics(SM_CXCURSOR), GetSystemMetrics(SM_CYCURSOR));
+
    if (screen) {
       // Correct the size if the DPI value of the screen differs from
       // that of the primary screen.
       if (const QScreen *primaryQScreen = QApplication::primaryScreen()) {
          const QPlatformScreen *primaryScreen = primaryQScreen->handle();
+
          if (screen != primaryScreen) {
             const qreal logicalDpi = screen->logicalDpi().first;
             const qreal primaryScreenLogicalDpi = primaryScreen->logicalDpi().first;
+
             if (!qFuzzyCompare(logicalDpi, primaryScreenLogicalDpi)) {
                return (QSizeF(primaryScreenCursorSize) * logicalDpi / primaryScreenLogicalDpi).toSize();
             }
          }
       }
    }
+
    return primaryScreenCursorSize;
 }
 
@@ -749,11 +753,13 @@ QPixmap QWindowsCursor::dragDefaultCursor(Qt::DropAction action) const
          const int colorBitsLength = bmColor.bmHeight * bmColor.bmWidthBytes;
          uchar *colorBits = new uchar[colorBitsLength];
          GetBitmapBits(iconInfo.hbmColor, colorBitsLength, colorBits);
+
          const QImage colorImage(colorBits, bmColor.bmWidth, bmColor.bmHeight,
             bmColor.bmWidthBytes, QImage::Format_ARGB32);
 
          m_ignoreDragCursor = QPixmap::fromImage(colorImage);
          delete [] colorBits;
+
       } else {
          m_ignoreDragCursor = QPixmap(ignoreDragCursorXpmC);
       }
@@ -763,6 +769,7 @@ QPixmap QWindowsCursor::dragDefaultCursor(Qt::DropAction action) const
       DestroyCursor(cursor);
 
    }
+
    return m_ignoreDragCursor;
 }
 

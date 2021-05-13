@@ -253,7 +253,7 @@ QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
    HDC hdc = m_fontEngineData->hdc;
    SelectObject(hdc, hfont);
    const BOOL res = GetTextMetrics(hdc, &tm);
-   if (!res) {
+   if (! res) {
       qErrnoWarning("QWindowsFontEngine(): GetTextMetrics failed");
       ZeroMemory(&tm, sizeof(TEXTMETRIC));
    }
@@ -514,9 +514,9 @@ bool QWindowsFontEngine::getOutlineMetrics(glyph_t glyph, const QTransform &t, g
 
    if (res != GDI_ERROR) {
       *metrics = glyph_metrics_t(gm.gmptGlyphOrigin.x, -gm.gmptGlyphOrigin.y,
-            int(gm.gmBlackBoxX), int(gm.gmBlackBoxY),
-            gm.gmCellIncX, gm.gmCellIncY);
+            int(gm.gmBlackBoxX), int(gm.gmBlackBoxY), gm.gmCellIncX, gm.gmCellIncY);
       return true;
+
    } else {
       return false;
    }
@@ -644,14 +644,18 @@ qreal QWindowsFontEngine::minRightBearing() const
    if (rbearing == SHRT_MIN) {
       int ml = 0;
       int mr = 0;
+
       HDC hdc = m_fontEngineData->hdc;
       SelectObject(hdc, hfont);
+
       if (ttf) {
          ABC *abc = nullptr;
          int n = tm.tmLastChar - tm.tmFirstChar;
+
          if (n <= max_font_count) {
             abc = new ABC[n + 1];
             GetCharABCWidths(hdc, tm.tmFirstChar, tm.tmLastChar, abc);
+
          } else {
             abc = new ABC[char_table_entries + 1];
             for (int i = 0; i < char_table_entries; i++) {
@@ -659,8 +663,10 @@ qreal QWindowsFontEngine::minRightBearing() const
             }
             n = char_table_entries;
          }
+
          ml = abc[0].abcA;
          mr = abc[0].abcC;
+
          for (int i = 1; i < n; i++) {
             if (abc[i].abcA + abc[i].abcB + abc[i].abcC != 0) {
                ml = qMin(ml, abc[i].abcA);
@@ -676,6 +682,7 @@ qreal QWindowsFontEngine::minRightBearing() const
          if (n <= max_font_count) {
             abc = new ABCFLOAT[n];
             GetCharABCWidthsFloat(hdc, tm.tmFirstChar, tm.tmLastChar, abc);
+
          } else {
             abc = new ABCFLOAT[char_table_entries];
             for (int i = 0; i < char_table_entries; i++) {
@@ -683,18 +690,22 @@ qreal QWindowsFontEngine::minRightBearing() const
             }
             n = char_table_entries;
          }
+
          float fml = abc[0].abcfA;
          float fmr = abc[0].abcfC;
+
          for (int i = 1; i < n; i++) {
             if (abc[i].abcfA + abc[i].abcfB + abc[i].abcfC != 0) {
                fml = qMin(fml, abc[i].abcfA);
                fmr = qMin(fmr, abc[i].abcfC);
             }
          }
+
          ml = int(fml - 0.9999);
          mr = int(fmr - 0.9999);
          delete [] abc;
       }
+
       lbearing = ml;
       rbearing = mr;
    }
@@ -776,8 +787,10 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
       QPointF lastPoint(qt_to_qpointf(ttph->pfxStart, scale));
       path->moveTo(lastPoint + oset);
       offset += sizeof(TTPOLYGONHEADER);
+
       while (offset < headerOffset + ttph->cb) {
          const TTPOLYCURVE *curve = reinterpret_cast<const TTPOLYCURVE *>(dataBuffer + offset);
+
          switch (curve->wType) {
             case TT_PRIM_LINE: {
                for (int i = 0; i < curve->cpfx; ++i) {
@@ -786,10 +799,12 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
                }
                break;
             }
+
             case TT_PRIM_QSPLINE: {
                const QPainterPath::Element &elm = path->elementAt(path->elementCount() - 1);
                QPointF prev(elm.x, elm.y);
                QPointF endPoint;
+
                for (int i = 0; i < curve->cpfx - 1; ++i) {
                   QPointF p1 = qt_to_qpointf(curve->apfx[i], scale) + oset;
                   QPointF p2 = qt_to_qpointf(curve->apfx[i + 1], scale) + oset;
@@ -805,6 +820,7 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
 
                break;
             }
+
             case TT_PRIM_CSPLINE: {
                for (int i = 0; i < curve->cpfx; ) {
                   QPointF p2 = qt_to_qpointf(curve->apfx[i++], scale) + oset;
@@ -814,21 +830,24 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
                }
                break;
             }
+
             default:
                qWarning("QFontEngineWin::addOutlineToPath, unhandled switch case");
          }
          offset += sizeof(TTPOLYCURVE) + (curve->cpfx - 1) * sizeof(POINTFX);
       }
+
       path->closeSubpath();
       headerOffset += ttph->cb;
    }
+
    delete [] dataBuffer;
 
    return true;
 }
 
 void QWindowsFontEngine::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
-   QPainterPath *path, QTextItem::RenderFlags)
+            QPainterPath *path, QTextItem::RenderFlags)
 {
    LOGFONT lf = m_logfont;
    // The sign must be negative here to make sure we match against character height instead of
@@ -837,6 +856,7 @@ void QWindowsFontEngine::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions
    // font at the correct pixel size.
    lf.lfHeight = -unitsPerEm;
    lf.lfWidth = 0;
+
    HFONT hf = CreateFontIndirect(&lf);
    HDC hdc = m_fontEngineData->hdc;
    HGDIOBJ oldfont = SelectObject(hdc, hf);
@@ -844,10 +864,12 @@ void QWindowsFontEngine::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions
    for (int i = 0; i < nglyphs; ++i) {
       if (!addGlyphToPath(glyphs[i], positions[i], hdc, path, ttf, nullptr,
             qreal(fontDef.pixelSize) / unitsPerEm)) {
+
          // Some windows fonts, like "Modern", are vector stroke
          // fonts, which are reported as TMPF_VECTOR but do not
          // support GetGlyphOutline, and thus we set this bit so
-         // that addOutLineToPath can check it and return safely...
+         // that addOutLineToPath can check it and return safely
+
          hasOutline = false;
          break;
       }
@@ -977,10 +999,10 @@ bool QWindowsFontEngine::getSfntTableData(uint tag, uchar *buffer, uint *length)
 #endif
 
 QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph, int margin,
-   const QTransform &t,
-   QImage::Format mask_format)
+   const QTransform &t, QImage::Format mask_format)
 {
    Q_UNUSED(mask_format)
+
    glyph_metrics_t gm = boundingBox(glyph);
 
    //     printf(" -> for glyph %4x\n", glyph);
@@ -1028,7 +1050,7 @@ QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph,
 
       if (result == GDI_ERROR) {
          const int errorCode = int(GetLastError());
-         qErrnoWarning(errorCode, "QWinFontEngine: unable to query transformed glyph metrics (GetGlyphOutline() failed, error %d)...",
+         qErrnoWarning(errorCode, "QWinFontEngine: unable to query transformed glyph metrics (GetGlyphOutline() failed, error %d)",
             errorCode);
          return nullptr;
       }
@@ -1079,9 +1101,11 @@ glyph_metrics_t QWindowsFontEngine::alphaMapBoundingBox(glyph_t glyph, QFixed, c
    if (format == QFontEngine::Format_A32 || format == QFontEngine::Format_ARGB) {
       margin = glyphMargin(QFontEngine::Format_A32);
    }
+
    glyph_metrics_t gm = boundingBox(glyph, matrix);
-   gm.width += margin * 2;
+   gm.width  += margin * 2;
    gm.height += margin * 2;
+
    return gm;
 }
 
@@ -1139,8 +1163,8 @@ QImage QWindowsFontEngine::alphaMapForGlyph(glyph_t glyph, const QTransform &xfo
    return alphaMap;
 }
 
-#define SPI_GETFONTSMOOTHINGCONTRAST           0x200C
-#define SPI_SETFONTSMOOTHINGCONTRAST           0x200D
+#define SPI_GETFONTSMOOTHINGCONTRAST  0x200C
+#define SPI_SETFONTSMOOTHINGCONTRAST  0x200D
 
 QImage QWindowsFontEngine::alphaRGBMapForGlyph(glyph_t glyph, QFixed, const QTransform &t)
 {

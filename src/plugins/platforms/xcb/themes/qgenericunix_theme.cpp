@@ -66,7 +66,7 @@ void ResourceHelper::clear()
 
 QString QGenericUnixTheme::m_name = "generic";
 
-// Default system font, corresponding to the value returned by 4.8 for
+// Default system font
 // XRender/FontConfig which we can now assume as default.
 
 static const QString defaultSystemFontNameC = "Sans Serif";
@@ -97,7 +97,8 @@ class QGenericUnixThemePrivate : public QPlatformThemePrivate
  public:
    QGenericUnixThemePrivate()
       : QPlatformThemePrivate(), systemFont(defaultSystemFontNameC, defaultSystemFontSize),
-        fixedFont("monospace", systemFont.pointSize()) {
+        fixedFont("monospace", systemFont.pointSize())
+   {
       fixedFont.setStyleHint(QFont::TypeWriter);
    }
 
@@ -117,8 +118,10 @@ const QFont *QGenericUnixTheme::font(Font type) const
    switch (type) {
       case QPlatformTheme::SystemFont:
          return &d->systemFont;
+
       case QPlatformTheme::FixedFont:
          return &d->fixedFont;
+
       default:
          return nullptr;
    }
@@ -423,14 +426,6 @@ void QKdeThemePrivate::readKdeSystemPalette(const QStringList &kdeDirs, int kdeV
    pal->setBrush(QPalette::Dark, buttonBrushDark);
 }
 
-/*!
-    \class QKdeTheme
-    \brief QKdeTheme is a theme implementation for the KDE desktop (version 4 or higher).
-    \since 5.0
-    \internal
-    \ingroup qpa
-*/
-
 QString QKdeTheme::m_name = "kde";
 
 QKdeTheme::QKdeTheme(const QStringList &kdeDirs, int kdeVersion)
@@ -448,15 +443,19 @@ QFont *QKdeThemePrivate::kdeFont(const QVariant &fontValue)
       // causing recursion.
       QString fontDescription;
       QString fontFamily;
+
       if (fontValue.type() == QVariant::StringList) {
          const QStringList list = fontValue.toStringList();
-         if (!list.isEmpty()) {
+
+         if (! list.isEmpty()) {
             fontFamily = list.first();
             fontDescription = list.join(QLatin1Char(','));
          }
+
       } else {
          fontDescription = fontFamily = fontValue.toString();
       }
+
       if (!fontDescription.isEmpty()) {
          QFont font(fontFamily);
          if (font.fromString(fontDescription)) {
@@ -464,6 +463,7 @@ QFont *QKdeThemePrivate::kdeFont(const QVariant &fontValue)
          }
       }
    }
+
    return nullptr;
 }
 
@@ -479,6 +479,7 @@ QStringList QKdeThemePrivate::kdeIconThemeSearchPaths(const QStringList &kdeDirs
          paths.append(fi.absoluteFilePath());
       }
    }
+
    return paths;
 }
 
@@ -489,31 +490,44 @@ QVariant QKdeTheme::themeHint(QPlatformTheme::ThemeHint hint) const
    switch (hint) {
       case QPlatformTheme::UseFullScreenForPopupMenu:
          return QVariant(true);
+
       case QPlatformTheme::DialogButtonBoxButtonsHaveIcons:
          return QVariant(true);
+
       case QPlatformTheme::DialogButtonBoxLayout:
          return QVariant(QPlatformDialogHelper::KdeLayout);
+
       case QPlatformTheme::ToolButtonStyle:
          return QVariant(d->toolButtonStyle);
+
       case QPlatformTheme::ToolBarIconSize:
          return QVariant(d->toolBarIconSize);
+
       case QPlatformTheme::SystemIconThemeName:
          return QVariant(d->iconThemeName);
+
       case QPlatformTheme::SystemIconFallbackThemeName:
          return QVariant(d->iconFallbackThemeName);
+
       case QPlatformTheme::IconThemeSearchPaths:
          return QVariant(d->kdeIconThemeSearchPaths(d->kdeDirs));
+
       case QPlatformTheme::StyleNames:
          return QVariant(d->styleNames);
+
       case QPlatformTheme::KeyboardScheme:
          return QVariant(int(KdeKeyboardScheme));
+
       case QPlatformTheme::ItemViewActivateItemOnSingleClick:
          return QVariant(d->singleClick);
+
       case QPlatformTheme::WheelScrollLines:
          return QVariant(d->wheelScrollLines);
+
       default:
          break;
    }
+
    return QPlatformTheme::themeHint(hint);
 }
 
@@ -610,7 +624,8 @@ class QGnomeThemePrivate : public QPlatformThemePrivate
 {
  public:
    QGnomeThemePrivate() : systemFont(nullptr), fixedFont(nullptr)
-   {}
+   {
+   }
 
    ~QGnomeThemePrivate() {
       delete systemFont;
@@ -736,9 +751,6 @@ QString QGnomeTheme::standardButtonText(int button) const
    return QPlatformTheme::standardButtonText(button);
 }
 
-/*!
-    \brief Creates a UNIX theme according to the detected desktop environment.
-*/
 
 QPlatformTheme *QGenericUnixTheme::createUnixTheme(const QString &name)
 {

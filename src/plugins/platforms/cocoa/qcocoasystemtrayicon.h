@@ -57,6 +57,6 @@ class Q_GUI_EXPORT QCocoaSystemTrayIcon : public QPlatformSystemTrayIcon
    QSystemTrayIconSys *m_sys;
 };
 
-#endif // QT_NO_SYSTEMTRAYICON
+#endif
 
-#endif // QCOCOASYSTEMTRAYICON_P_H
+#endif

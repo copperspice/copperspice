@@ -90,11 +90,13 @@ QMacPasteboard::QMacPasteboard(CFStringRef name, uchar mt)
 
    paste = nullptr;
    OSStatus err = PasteboardCreate(name, &paste);
+
    if (err == noErr) {
       PasteboardSetPromiseKeeper(paste, promiseKeeper, this);
    } else {
       qDebug("PasteBoard: Error creating pasteboard: %s [%d]", QCFString::toQString(name).toLatin1().constData(), (int)err);
    }
+
    resolvingBeforeDestruction = false;
 }
 
@@ -132,6 +134,7 @@ OSStatus QMacPasteboard::promiseKeeper(PasteboardRef paste, PasteboardItemID id,
    if (! promise.itemId && flavorAsQString == "com.copperspice.cs.MimeTypeName") {
       // we have promised this data, but won't be able to convert, so return null data.
       // This helps in making the application/x-qt-mime-type-name hidden from normal use.
+
       QByteArray ba;
       QCFType<CFDataRef> data = CFDataCreate(nullptr, (UInt8 *)ba.constData(), ba.size());
       PasteboardPutItemFlavor(paste, id, flavor, data, kPasteboardFlavorNoFlags);
@@ -141,13 +144,13 @@ OSStatus QMacPasteboard::promiseKeeper(PasteboardRef paste, PasteboardItemID id,
    if (!promise.itemId) {
       // There was no promise that could deliver data for the
       // given id and flavor. This should not happend.
-      qDebug("Pasteboard: %d: Request for %ld, %s, but no promise found!", __LINE__, promise_id, qPrintable(flavorAsQString));
+      qDebug("Pasteboard: %d: Request for %ld, %s, but no promise found!", __LINE__, promise_id, csPrintable(flavorAsQString));
       return cantGetFlavorErr;
    }
 
 #ifdef DEBUG_PASTEBOARD
-   qDebug("PasteBoard: Calling in promise for %s[%ld] [%s] (%s) [%d]", qPrintable(promise.mime), promise_id,
-      qPrintable(flavorAsQString), qPrintable(promise.convertor->convertorName()), promise.offset);
+   qDebug("PasteBoard: Calling in promise for %s[%ld] [%s] (%s) [%d]", csPrintable(promise.mime), promise_id,
+      csPrintable(flavorAsQString), csPrintable(promise.convertor->convertorName()), promise.offset);
 #endif
 
    // Get the promise data. If this is a "lazy" promise call variantData()
@@ -168,6 +171,7 @@ OSStatus QMacPasteboard::promiseKeeper(PasteboardRef paste, PasteboardItemID id,
    const QByteArray &ba = md[promise.offset];
    QCFType<CFDataRef> data = CFDataCreate(nullptr, (UInt8 *)ba.constData(), ba.size());
    PasteboardPutItemFlavor(paste, id, flavor, data, kPasteboardFlavorNoFlags);
+
    return noErr;
 }
 
@@ -236,7 +240,7 @@ bool QMacPasteboard::hasFlavor(QString c_flavor) const
    }
 
 #ifdef DEBUG_PASTEBOARD
-   qDebug("PasteBoard: hasFlavor [%s]", qPrintable(c_flavor));
+   qDebug("PasteBoard: hasFlavor [%s]", csPrintable(c_flavor));
 #endif
    for (uint index = 1; index <= cnt; ++index) {
 
@@ -344,7 +348,7 @@ void QMacPasteboard::setMimeData(QMimeData *mime_src, DataRequestType dataReques
 
 #ifdef DEBUG_PASTEBOARD
                   qDebug(" -  adding %d %s [%s] <%s> [%d]",
-                     itemID, qPrintable(mimeType), qPrintable(flavor), qPrintable(c->convertorName()), item);
+                     itemID, csPrintable(mimeType), csPrintable(flavor), csPrintable(c->convertorName()), item);
 #endif
                }
             }
@@ -386,12 +390,12 @@ QStringList QMacPasteboard::formats() const
       for (int i = 0; i < type_count; ++i) {
          const QString flavor = QCFString::toQString((CFStringRef)CFArrayGetValueAtIndex(types, i));
 #ifdef DEBUG_PASTEBOARD
-         qDebug(" -%s", qPrintable(QString(flavor)));
+         qDebug(" -%s", csPrintable(QString(flavor)));
 #endif
          QString mimeType = QMacInternalPasteboardMime::flavorToMime(mime_type, flavor);
          if (!mimeType.isEmpty() && !ret.contains(mimeType)) {
 #ifdef DEBUG_PASTEBOARD
-            qDebug("   -<%d> %s [%s]", ret.size(), qPrintable(mimeType), qPrintable(QString(flavor)));
+            qDebug("   -<%d> %s [%s]", ret.size(), csPrintable(mimeType), csPrintable(QString(flavor)));
 #endif
             ret << mimeType;
          }
@@ -414,7 +418,7 @@ bool QMacPasteboard::hasFormat(const QString &format) const
    }
 
 #ifdef DEBUG_PASTEBOARD
-   qDebug("PasteBoard: hasFormat [%s]", qPrintable(format));
+   qDebug("PasteBoard: hasFormat [%s]", csPrintable(format));
 #endif
    for (uint index = 1; index <= cnt; ++index) {
 
@@ -432,12 +436,12 @@ bool QMacPasteboard::hasFormat(const QString &format) const
       for (int i = 0; i < type_count; ++i) {
          const QString flavor = QCFString::toQString((CFStringRef)CFArrayGetValueAtIndex(types, i));
 #ifdef DEBUG_PASTEBOARD
-         qDebug(" -%s [0x%x]", qPrintable(QString(flavor)), mime_type);
+         qDebug(" -%s [0x%x]", csPrintable(QString(flavor)), mime_type);
 #endif
          QString mimeType = QMacInternalPasteboardMime::flavorToMime(mime_type, flavor);
 #ifdef DEBUG_PASTEBOARD
          if (!mimeType.isEmpty()) {
-            qDebug("   - %s", qPrintable(mimeType));
+            qDebug("   - %s", csPrintable(mimeType));
          }
 #endif
          if (mimeType == format) {
@@ -462,27 +466,33 @@ QVariant QMacPasteboard::retrieveData(const QString &format, QVariant::Type) con
    }
 
 #ifdef DEBUG_PASTEBOARD
-   qDebug("Pasteboard: retrieveData [%s]", qPrintable(format));
+   qDebug("Pasteboard: retrieveData [%s]", csPrintable(format));
 #endif
+
    const QList<QMacInternalPasteboardMime *> mimes = QMacInternalPasteboardMime::all(mime_type);
+
    for (int mime = 0; mime < mimes.size(); ++mime) {
       QMacInternalPasteboardMime *c = mimes.at(mime);
       QString c_flavor = c->flavorFor(format);
+
       if (!c_flavor.isEmpty()) {
          // Handle text/plain a little differently. Try handling Unicode first.
-         bool checkForUtf16 = (c_flavor == QLatin1String("com.apple.traditional-mac-plain-text")
-               || c_flavor == QLatin1String("public.utf8-plain-text"));
-         if (checkForUtf16 || c_flavor == QLatin1String("public.utf16-plain-text")) {
+
+         bool checkForUtf16 = (c_flavor == "com.apple.traditional-mac-plain-text") ||
+               (c_flavor == "public.utf8-plain-text");
+
+         if (checkForUtf16 || c_flavor == "public.utf16-plain-text") {
             // Try to get the NSStringPboardType from NSPasteboard, newlines are mapped
             // correctly (as '\n') in this data. The 'public.utf16-plain-text' type
             // usually maps newlines to '\r' instead.
+
             QString str = qt_mac_get_pasteboardString(paste);
             if (!str.isEmpty()) {
                return str;
             }
          }
-         if (checkForUtf16 && hasFlavor(QLatin1String("public.utf16-plain-text"))) {
-            c_flavor = QLatin1String("public.utf16-plain-text");
+         if (checkForUtf16 && hasFlavor("public.utf16-plain-text")) {
+            c_flavor = "public.utf16-plain-text";
          }
 
          QVariant ret;
@@ -507,7 +517,7 @@ QVariant QMacPasteboard::retrieveData(const QString &format, QVariant::Type) con
                      QByteArray buffer((const char *)CFDataGetBytePtr(macBuffer), CFDataGetLength(macBuffer));
                      if (!buffer.isEmpty()) {
 #ifdef DEBUG_PASTEBOARD
-                        qDebug("  - %s [%s] (%s)", qPrintable(format), qPrintable(QCFString::toQString(flavor)), qPrintable(c->convertorName()));
+                        qDebug("  - %s [%s] (%s)", csPrintable(format), csPrintable(QCFString::toQString(flavor)), csPrintable(c->convertorName()));
 #endif
                         buffer.detach(); //detach since we release the macBuffer
                         retList.append(buffer);
@@ -516,7 +526,7 @@ QVariant QMacPasteboard::retrieveData(const QString &format, QVariant::Type) con
                   }
                } else {
 #ifdef DEBUG_PASTEBOARD
-                  qDebug("  - NoMatch %s [%s] (%s)", qPrintable(c_flavor), qPrintable(QCFString::toQString(flavor)), qPrintable(c->convertorName()));
+                  qDebug("  - NoMatch %s [%s] (%s)", csPrintable(c_flavor), csPrintable(QCFString::toQString(flavor)), csPrintable(c->convertorName()));
 #endif
                }
             }

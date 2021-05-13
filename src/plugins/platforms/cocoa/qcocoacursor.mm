@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qcocoacursor.h"
-#include "qcocoawindow.h"
-#include "qcocoahelpers.h"
+#include <qcocoacursor.h>
 
+#include <qcocoawindow.h>
+#include <qcocoahelpers.h>
 #include <qbitmap.h>
 
 QCocoaCursor::QCocoaCursor()
@@ -35,6 +35,7 @@ QCocoaCursor::~QCocoaCursor()
 {
    // release cursors
    QHash<Qt::CursorShape, NSCursor *>::const_iterator i = m_cursors.constBegin();
+
    while (i != m_cursors.constEnd()) {
       [*i release];
       ++i;
@@ -88,28 +89,36 @@ NSCursor *QCocoaCursor::convertCursor(QCursor *cursor)
       case Qt::IBeamCursor:
          cocoaCursor = [NSCursor IBeamCursor];
          break;
-      case Qt::WhatsThisCursor: //for now just use the pointing hand
+
+      case Qt::WhatsThisCursor: // for now just use the pointing hand
       case Qt::PointingHandCursor:
          cocoaCursor = [NSCursor pointingHandCursor];
          break;
+
       case Qt::SplitVCursor:
          cocoaCursor = [NSCursor resizeUpDownCursor];
          break;
+
       case Qt::SplitHCursor:
          cocoaCursor = [NSCursor resizeLeftRightCursor];
          break;
+
       case Qt::OpenHandCursor:
          cocoaCursor = [NSCursor openHandCursor];
          break;
+
       case Qt::ClosedHandCursor:
          cocoaCursor = [NSCursor closedHandCursor];
          break;
+
       case Qt::DragMoveCursor:
          cocoaCursor = [NSCursor crosshairCursor];
          break;
+
       case Qt::DragCopyCursor:
          cocoaCursor = [NSCursor crosshairCursor];
          break;
+
       case Qt::DragLinkCursor:
          cocoaCursor = [NSCursor dragLinkCursor];
          break;
@@ -151,6 +160,7 @@ NSCursor *QCocoaCursor::createCursorData(QCursor *cursor)
     * 0x00 x 0x00 == fully transparent
     */
 #define QT_USE_APPROXIMATE_CURSORS
+
 #ifdef QT_USE_APPROXIMATE_CURSORS
    static const uchar cur_ver_bits[] = {
       0x00, 0x00, 0x00, 0x00, 0x01, 0x80, 0x03, 0xc0, 0x07, 0xe0, 0x0f, 0xf0,
@@ -261,27 +271,32 @@ NSCursor *QCocoaCursor::createCursorData(QCursor *cursor)
          cursorMaskData = mcur_ver_bits;
          hotspot = QPoint(8, 8);
          break;
+
       case Qt::SizeHorCursor:
          cursorData = cur_hor_bits;
          cursorMaskData = mcur_hor_bits;
          hotspot = QPoint(8, 8);
          break;
+
       case Qt::SizeBDiagCursor:
          cursorData = cur_fdiag_bits;
          cursorMaskData = mcur_fdiag_bits;
          hotspot = QPoint(8, 8);
          break;
+
       case Qt::SizeFDiagCursor:
          cursorData = cur_bdiag_bits;
          cursorMaskData = mcur_bdiag_bits;
          hotspot = QPoint(8, 8);
          break;
+
       case Qt::UpArrowCursor:
          cursorData = cur_up_arrow_bits;
          cursorMaskData = mcur_up_arrow_bits;
          hotspot = QPoint(8, 0);
          break;
 #endif
+
       default:
          qWarning("QCursor::update: Invalid cursor shape %d", cursor->shape());
          return nullptr;
@@ -307,6 +322,7 @@ NSCursor *QCocoaCursor::createCursorFromBitmap(const QBitmap *bitmap, const QBit
       QRgb *bmData = reinterpret_cast<QRgb *>(bmi.scanLine(row));
       QRgb *bmmData = reinterpret_cast<QRgb *>(bmmi.scanLine(row));
       QRgb *finalData = reinterpret_cast<QRgb *>(finalCursor.scanLine(row));
+
       for (int col = 0; col < finalCursor.width(); ++col) {
          if (bmmData[col] == 0xff000000 && bmData[col] == 0xffffffff) {
             finalData[col] = 0xffffffff;

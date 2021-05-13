@@ -29,12 +29,12 @@
 #include <qwin_screen.h>
 
 #include <qwindowsysteminterface.h>
-#include <QApplication>
-#include <QScreen>
-#include <QWindow>
-#include <QCursor>
-#include <QDebug>
-#include <QScopedArrayPointer>
+#include <qapplication.h>
+#include <qscreen.h>
+#include <qwindow.h>
+#include <qcursor.h>
+#include <qdebug.h>
+#include <qscopedarraypointer.h>
 
 #include <windowsx.h>
 
@@ -67,10 +67,12 @@ static inline void compressMouseMove(MSG *msg)
                      done = true;
                      break;
                   }
+
                } else {
                   break; // no key event before the WM_MOUSEMOVE event
                }
             }
+
             if (done) {
                break;
             }
@@ -81,19 +83,21 @@ static inline void compressMouseMove(MSG *msg)
             if (mouseMsg.wParam != msg.wParam) {
                break;   // leave the message in the queue because
             }
+
             // the key state has changed
 #endif
             // Update the passed in MSG structure with the
             // most recent one.
             msg->lParam = mouseMsg.lParam;
             msg->wParam = mouseMsg.wParam;
+
             // Extract the x,y coordinates from the lParam as we do in the WndProc
             msg->pt.x = GET_X_LPARAM(mouseMsg.lParam);
             msg->pt.y = GET_Y_LPARAM(mouseMsg.lParam);
             ClientToScreen(msg->hwnd, &(msg->pt));
+
             // Remove the mouse move message
-            PeekMessage(&mouseMsg, msg->hwnd, WM_MOUSEMOVE,
-               WM_MOUSEMOVE, PM_REMOVE);
+            PeekMessage(&mouseMsg, msg->hwnd, WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE);
          } else {
             break; // there was no more WM_MOUSEMOVE event
          }
@@ -140,16 +144,6 @@ static inline QTouchDevice *createTouchDevice()
    result->setMaximumTouchPoints(maxTouchPoints);
    return result;
 }
-
-/*!
-    \class QWindowsMouseHandler
-    \brief Windows mouse handler
-
-    Dispatches mouse and touch events. Separate for code cleanliness.
-
-    \internal
-    \ingroup qt-lighthouse-win
-*/
 
 // internal
 QWindowsMouseHandler::QWindowsMouseHandler()
@@ -393,8 +387,10 @@ bool QWindowsMouseHandler::translateMouseEvent(QWindow *window, HWND hwnd,
       QWindowsKeyMapper::queryKeyboardModifiers(), source);
 
    m_previousCaptureWindow = hasCapture ? window : nullptr;
+
    // QTBUG-48117, force synchronous handling for the extra buttons so that WM_APPCOMMAND
    // is sent for unhandled WM_XBUTTONDOWN.
+
    return (msg.message != WM_XBUTTONUP && msg.message != WM_XBUTTONDOWN && msg.message != WM_XBUTTONDBLCLK)
       || QWindowSystemInterface::flushWindowSystemEvents();
 }

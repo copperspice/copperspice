@@ -624,9 +624,12 @@ void QXcbKeyboard::readXKBConfig()
    // ### TODO some X servers don't set _XKB_RULES_NAMES at all, in these cases it is filled
    // with gibberish, we would need to do some kind of sanity check
 
-   char *p = xkb_config, *end = p + length;
    char *names[5] = { nullptr, nullptr, nullptr, nullptr, nullptr };
+   char *p   = xkb_config;
+   char *end = p + length;
+
    int i = 0;
+
    // The result from xcb_get_property_value() is not necessarily \0-terminated,
    // we need to make sure that too many or missing '\0' symbols are handled safely.
    do {
@@ -912,24 +915,31 @@ xkb_keysym_t QXcbKeyboard::lookupLatinKeysym(xkb_keycode_t keycode) const
 {
    xkb_layout_index_t layout;
    xkb_keysym_t sym = XKB_KEY_NoSymbol;
+
    const xkb_layout_index_t layoutCount = xkb_keymap_num_layouts_for_key(xkb_keymap, keycode);
    const xkb_layout_index_t currentLayout = xkb_state_key_get_layout(xkb_state, keycode);
+
    // Look at user layouts in the order in which they are defined in system
    // settings to find a latin keysym.
+
    for (layout = 0; layout < layoutCount; ++layout) {
       if (layout == currentLayout) {
          continue;
       }
+
       const xkb_keysym_t *syms;
       xkb_level_index_t level = xkb_state_key_get_level(xkb_state, keycode, layout);
+
       if (xkb_keymap_key_get_syms_by_level(xkb_keymap, keycode, layout, level, &syms) != 1) {
          continue;
       }
+
       if (isLatin(syms[0])) {
          sym = syms[0];
          break;
       }
    }
+
    // If user layouts don't contain any layout that results in a latin key, we query a
    // key from "US" layout, this allows for latin-key-based shorcuts to work even when
    // users have only one (non-latin) layout set.
@@ -951,10 +961,13 @@ xkb_keysym_t QXcbKeyboard::lookupLatinKeysym(xkb_keycode_t keycode) const
                "non-Latin keyboard layouts may not be fully functional");
          }
       }
+
       if (latin_keymap) {
          struct xkb_state *latin_state = xkb_state_new(latin_keymap);
+
          if (latin_state) {
             xkb_state_update_mask(latin_state, 0, latchedMods, lockedMods, 0, 0, 0);
+
             sym = xkb_state_key_get_one_sym(latin_state, keycode);
             xkb_state_unref(latin_state);
          } else {
@@ -962,6 +975,7 @@ xkb_keysym_t QXcbKeyboard::lookupLatinKeysym(xkb_keycode_t keycode) const
          }
       }
    }
+
    if (sym == XKB_KEY_NoSymbol) {
       return sym;
    }
@@ -1182,6 +1196,7 @@ QXcbKeyboard::QXcbKeyboard(QXcbConnection *connection)
 
 #ifndef QT_NO_XKB
    core_device_id = 0;
+
    if (connection->hasXKB()) {
       updateVModMapping();
       updateVModToRModMapping();
@@ -1191,10 +1206,13 @@ QXcbKeyboard::QXcbKeyboard(QXcbConnection *connection)
          qWarning("Unable to obtain core keyboard device information");
          return;
       }
+
    } else {
+
 #endif
       m_key_symbols = xcb_key_symbols_alloc(xcb_connection());
       updateModifiers();
+
 #ifndef QT_NO_XKB
    }
 #endif
@@ -1246,13 +1264,15 @@ void QXcbKeyboard::updateVModMapping()
 
    int count = 0;
    uint vmod_mask, bit;
+
    char *vmod_name;
    vmod_mask = name_reply->virtualMods;
+
    // find the virtual modifiers for which names are defined.
    for (bit = 1; vmod_mask; bit <<= 1) {
       vmod_name = nullptr;
 
-      if (!(vmod_mask & bit)) {
+      if (! (vmod_mask & bit)) {
          continue;
       }
 
@@ -1272,12 +1292,16 @@ void QXcbKeyboard::updateVModMapping()
          vmod_masks.alt = bit;
       } else if (qstrcmp(vmod_name, "Meta") == 0) {
          vmod_masks.meta = bit;
+
       } else if (qstrcmp(vmod_name, "AltGr") == 0) {
          vmod_masks.altgr = bit;
+
       } else if (qstrcmp(vmod_name, "Super") == 0) {
          vmod_masks.super = bit;
+
       } else if (qstrcmp(vmod_name, "Hyper") == 0) {
          vmod_masks.hyper = bit;
+
       }
    }
 

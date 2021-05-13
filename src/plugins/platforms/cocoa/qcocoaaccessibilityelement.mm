@@ -21,13 +21,15 @@
 *
 ***********************************************************************/
 
-#include "qcocoaaccessibilityelement.h"
-#include "qcocoaaccessibility.h"
-#include "qcocoahelpers.h"
-#include "qcocoawindow.h"
-#include "qaccessiblecache_p.h"
-#include <qaccessiblebridgeutils_p.h>
+#include <qcocoaaccessibilityelement.h>
+
 #include <qaccessible.h>
+#include <qcocoaaccessibility.h>
+#include <qcocoahelpers.h>
+#include <qcocoawindow.h>
+
+#include <qaccessiblecache_p.h>
+#include <qaccessiblebridgeutils_p.h>
 
 #import <AppKit/NSAccessibility.h>
 

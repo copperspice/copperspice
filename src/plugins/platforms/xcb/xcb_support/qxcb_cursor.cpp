@@ -42,11 +42,12 @@ typedef char *(*PtrXcursorLibraryGetTheme)(void *);
 typedef int (*PtrXcursorLibrarySetTheme)(void *, const char *);
 typedef int (*PtrXcursorLibraryGetDefaultSize)(void *);
 
-#if defined(XCB_USE_XLIB) && !defined(QT_NO_LIBRARY)
+#if defined(XCB_USE_XLIB)
 #include <X11/Xlib.h>
 enum {
    XCursorShape = CursorShape
 };
+
 #undef CursorShape
 
 static PtrXcursorLibraryLoadCursor ptrXcursorLibraryLoadCursor = nullptr;
@@ -69,41 +70,49 @@ static const uint8_t cur_ver_bits[] = {
    0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0xf0, 0x0f,
    0xe0, 0x07, 0xc0, 0x03, 0x80, 0x01, 0x00, 0x00
 };
+
 static const uint8_t mcur_ver_bits[] = {
    0x00, 0x00, 0x80, 0x03, 0xc0, 0x07, 0xe0, 0x0f, 0xf0, 0x1f, 0xf8, 0x3f,
    0xfc, 0x7f, 0xc0, 0x07, 0xc0, 0x07, 0xc0, 0x07, 0xfc, 0x7f, 0xf8, 0x3f,
    0xf0, 0x1f, 0xe0, 0x0f, 0xc0, 0x07, 0x80, 0x03
 };
+
 static const uint8_t cur_hor_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x08, 0x30, 0x18,
    0x38, 0x38, 0xfc, 0x7f, 0xfc, 0x7f, 0x38, 0x38, 0x30, 0x18, 0x20, 0x08,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t mcur_hor_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x40, 0x04, 0x60, 0x0c, 0x70, 0x1c, 0x78, 0x3c,
    0xfc, 0x7f, 0xfe, 0xff, 0xfe, 0xff, 0xfe, 0xff, 0xfc, 0x7f, 0x78, 0x3c,
    0x70, 0x1c, 0x60, 0x0c, 0x40, 0x04, 0x00, 0x00
 };
+
 static const uint8_t cur_bdiag_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x3e, 0x00, 0x3c, 0x00, 0x3e,
    0x00, 0x37, 0x88, 0x23, 0xd8, 0x01, 0xf8, 0x00, 0x78, 0x00, 0xf8, 0x00,
    0xf8, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t mcur_bdiag_bits[] = {
    0x00, 0x00, 0xc0, 0x7f, 0x80, 0x7f, 0x00, 0x7f, 0x00, 0x7e, 0x04, 0x7f,
    0x8c, 0x7f, 0xdc, 0x77, 0xfc, 0x63, 0xfc, 0x41, 0xfc, 0x00, 0xfc, 0x01,
    0xfc, 0x03, 0xfc, 0x07, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t cur_fdiag_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf8, 0x01, 0xf8, 0x00, 0x78, 0x00,
    0xf8, 0x00, 0xd8, 0x01, 0x88, 0x23, 0x00, 0x37, 0x00, 0x3e, 0x00, 0x3c,
    0x00, 0x3e, 0x00, 0x3f, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t mcur_fdiag_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0xfc, 0x07, 0xfc, 0x03, 0xfc, 0x01, 0xfc, 0x00,
    0xfc, 0x41, 0xfc, 0x63, 0xdc, 0x77, 0x8c, 0x7f, 0x04, 0x7f, 0x00, 0x7e,
    0x00, 0x7f, 0x80, 0x7f, 0xc0, 0x7f, 0x00, 0x00
 };
+
 static const uint8_t *cursor_bits16[] = {
    cur_ver_bits, mcur_ver_bits, cur_hor_bits, mcur_hor_bits,
    cur_bdiag_bits, mcur_bdiag_bits, cur_fdiag_bits, mcur_fdiag_bits,
@@ -123,6 +132,7 @@ static const uint8_t vsplit_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t vsplitm_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00,
@@ -136,6 +146,7 @@ static const uint8_t vsplitm_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t hsplit_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -149,6 +160,7 @@ static const uint8_t hsplit_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t hsplitm_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -162,6 +174,7 @@ static const uint8_t hsplitm_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t whatsthis_bits[] = {
    0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x05, 0xf0, 0x07, 0x00,
    0x09, 0x18, 0x0e, 0x00, 0x11, 0x1c, 0x0e, 0x00, 0x21, 0x1c, 0x0e, 0x00,
@@ -175,6 +188,7 @@ static const uint8_t whatsthis_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
+
 static const uint8_t whatsthism_bits[] = {
    0x01, 0x00, 0x00, 0x00, 0x03, 0xf0, 0x07, 0x00, 0x07, 0xf8, 0x0f, 0x00,
    0x0f, 0xfc, 0x1f, 0x00, 0x1f, 0x3e, 0x1f, 0x00, 0x3f, 0x3e, 0x1f, 0x00,
@@ -188,6 +202,7 @@ static const uint8_t whatsthism_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
+
 static const uint8_t busy_bits[] = {
    0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00,
    0x09, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x21, 0x00, 0x00, 0x00,
@@ -201,6 +216,7 @@ static const uint8_t busy_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t busym_bits[] = {
    0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00,
    0x0f, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x00, 0x00,
@@ -239,16 +255,19 @@ static const uint8_t openhand_bits[] = {
    0x16, 0x90, 0x19, 0x80, 0x11, 0x40, 0x02, 0x40, 0x04, 0x40, 0x04, 0x20,
    0x08, 0x20, 0x10, 0x10, 0x20, 0x10, 0x00, 0x00
 };
+
 static const uint8_t openhandm_bits[] = {
    0x80, 0x01, 0xd8, 0x0f, 0xfc, 0x1f, 0xfc, 0x5f, 0xf8, 0xff, 0xf8, 0xff,
    0xf6, 0xff, 0xff, 0xff, 0xff, 0x7f, 0xfe, 0x7f, 0xfc, 0x7f, 0xfc, 0x3f,
    0xf8, 0x3f, 0xf0, 0x1f, 0xe0, 0x1f, 0x00, 0x00
 };
+
 static const uint8_t closedhand_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xb0, 0x0d, 0x48, 0x32, 0x08, 0x50,
    0x10, 0x40, 0x18, 0x40, 0x04, 0x40, 0x04, 0x20, 0x08, 0x20, 0x10, 0x10,
    0x20, 0x10, 0x20, 0x10, 0x00, 0x00, 0x00, 0x00
 };
+
 static const uint8_t closedhandm_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xb0, 0x0d, 0xf8, 0x3f, 0xf8, 0x7f,
    0xf0, 0x7f, 0xf8, 0x7f, 0xfc, 0x7f, 0xfc, 0x3f, 0xf8, 0x3f, 0xf0, 0x1f,
@@ -302,7 +321,7 @@ QXcbCursorCacheKey::QXcbCursorCacheKey(const QCursor &c)
    }
 }
 
-#endif // !QT_NO_CURSOR
+#endif
 
 QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
    : QXcbObject(conn), m_screen(screen), m_gtkCursorThemeInitialized(false)
@@ -315,15 +334,19 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
    const char *cursorStr = "cursor";
    xcb_open_font(xcb_connection(), cursorFont, strlen(cursorStr), cursorStr);
 
-#if defined(XCB_USE_XLIB) && !defined(QT_NO_LIBRARY)
+#if defined(XCB_USE_XLIB)
    static bool function_ptrs_not_initialized = true;
+
    if (function_ptrs_not_initialized) {
       QLibrary xcursorLib(QLatin1String("Xcursor"), 1);
       bool xcursorFound = xcursorLib.load();
-      if (!xcursorFound) { // try without the version number
+
+      if (! xcursorFound) {
+         // try without the version number
          xcursorLib.setFileName(QLatin1String("Xcursor"));
          xcursorFound = xcursorLib.load();
       }
+
       if (xcursorFound) {
          ptrXcursorLibraryLoadCursor =
             (PtrXcursorLibraryLoadCursor) xcursorLib.resolve("XcursorLibraryLoadCursor");
@@ -363,6 +386,7 @@ QXcbCursor::~QXcbCursor()
 void QXcbCursor::changeCursor(QCursor *cursor, QWindow *widget)
 {
    QXcbWindow *w = nullptr;
+
    if (widget && widget->handle()) {
       w = static_cast<QXcbWindow *>(widget->handle());
    } else
@@ -402,50 +426,64 @@ static int cursorIdForShape(int cshape)
       case Qt::ArrowCursor:
          cursorId = XC_left_ptr;
          break;
+
       case Qt::UpArrowCursor:
          cursorId = XC_center_ptr;
          break;
+
       case Qt::CrossCursor:
          cursorId = XC_crosshair;
          break;
+
       case Qt::WaitCursor:
          cursorId = XC_watch;
          break;
+
       case Qt::IBeamCursor:
          cursorId = XC_xterm;
          break;
+
       case Qt::SizeAllCursor:
          cursorId = XC_fleur;
          break;
       case Qt::PointingHandCursor:
          cursorId = XC_hand2;
          break;
+
       case Qt::SizeBDiagCursor:
          cursorId = XC_top_right_corner;
          break;
+
       case Qt::SizeFDiagCursor:
          cursorId = XC_bottom_right_corner;
          break;
+
       case Qt::SizeVerCursor:
       case Qt::SplitVCursor:
          cursorId = XC_sb_v_double_arrow;
          break;
+
       case Qt::SizeHorCursor:
       case Qt::SplitHCursor:
          cursorId = XC_sb_h_double_arrow;
          break;
+
       case Qt::WhatsThisCursor:
          cursorId = XC_question_arrow;
          break;
+
       case Qt::ForbiddenCursor:
          cursorId = XC_circle;
          break;
+
       case Qt::BusyCursor:
          cursorId = XC_watch;
          break;
+
       default:
          break;
    }
+
    return cursorId;
 }
 
@@ -457,47 +495,66 @@ xcb_cursor_t QXcbCursor::createNonStandardCursor(int cshape)
    if (cshape == Qt::BlankCursor) {
       xcb_pixmap_t cp = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(), cur_blank_bits, 16, 16,
             1, 0, 0, nullptr);
+
       xcb_pixmap_t mp = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(), cur_blank_bits, 16, 16,
             1, 0, 0, nullptr);
+
       cursor = xcb_generate_id(conn);
       xcb_create_cursor(conn, cursor, cp, mp, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, 8, 8);
+
    } else if (cshape >= Qt::SizeVerCursor && cshape < Qt::SizeAllCursor) {
       int i = (cshape - Qt::SizeVerCursor) * 2;
+
       xcb_pixmap_t pm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
             const_cast<uint8_t *>(cursor_bits16[i]), 16, 16, 1, 0, 0, nullptr);
+
       xcb_pixmap_t pmm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
             const_cast<uint8_t *>(cursor_bits16[i + 1]), 16, 16, 1, 0, 0, nullptr);
+
       cursor = xcb_generate_id(conn);
       xcb_create_cursor(conn, cursor, pm, pmm, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, 8, 8);
+
    } else if ((cshape >= Qt::SplitVCursor && cshape <= Qt::SplitHCursor)
          || cshape == Qt::WhatsThisCursor || cshape == Qt::BusyCursor) {
       int i = (cshape - Qt::SplitVCursor) * 2;
+
       xcb_pixmap_t pm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
             const_cast<uint8_t *>(cursor_bits32[i]), 32, 32, 1, 0, 0, nullptr);
+
       xcb_pixmap_t pmm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
             const_cast<uint8_t *>(cursor_bits32[i + 1]), 32, 32, 1, 0, 0, nullptr);
+
       int hs = (cshape == Qt::PointingHandCursor || cshape == Qt::WhatsThisCursor
             || cshape == Qt::BusyCursor) ? 0 : 16; cursor = xcb_generate_id(conn);
+
       xcb_create_cursor(conn, cursor, pm, pmm, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, hs, hs);
+
    } else if (cshape == Qt::ForbiddenCursor) {
       int i = (cshape - Qt::ForbiddenCursor) * 2;
       xcb_pixmap_t pm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
             const_cast<uint8_t *>(cursor_bits20[i]), 20, 20, 1, 0, 0, nullptr);
+
       xcb_pixmap_t pmm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
             const_cast<uint8_t *>(cursor_bits20[i + 1]), 20, 20, 1, 0, 0, nullptr);
+
       cursor = xcb_generate_id(conn);
       xcb_create_cursor(conn, cursor, pm, pmm, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, 10, 10);
+
    } else if (cshape == Qt::OpenHandCursor || cshape == Qt::ClosedHandCursor) {
       bool open = cshape == Qt::OpenHandCursor;
       xcb_pixmap_t pm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
             const_cast<uint8_t *>(open ? openhand_bits : closedhand_bits), 16, 16, 1, 0, 0, nullptr);
+
       xcb_pixmap_t pmm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
             const_cast<uint8_t *>(open ? openhandm_bits : closedhandm_bits), 16, 16, 1, 0, 0, nullptr);
+
       cursor = xcb_generate_id(conn);
       xcb_create_cursor(conn, cursor, pm, pmm, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, 8, 8);
+
    } else if (cshape == Qt::DragCopyCursor || cshape == Qt::DragMoveCursor
-      || cshape == Qt::DragLinkCursor) {
+         || cshape == Qt::DragLinkCursor) {
       QImage image = QApplicationPrivate::instance()->getPixmapCursor(static_cast<Qt::CursorShape>(cshape)).toImage();
+
       if (!image.isNull()) {
          xcb_pixmap_t pm = qt_xcb_XPixmapFromBitmap(m_screen, image);
          xcb_pixmap_t pmm = qt_xcb_XPixmapFromBitmap(m_screen, image.createAlphaMask());
@@ -511,13 +568,14 @@ xcb_cursor_t QXcbCursor::createNonStandardCursor(int cshape)
    return cursor;
 }
 
-#if defined(XCB_USE_XLIB) && !defined(QT_NO_LIBRARY)
+#if defined(XCB_USE_XLIB)
 bool updateCursorTheme(void *dpy, const QByteArray &theme)
 {
    if (!ptrXcursorLibraryGetTheme
       || !ptrXcursorLibrarySetTheme) {
       return false;
    }
+
    QByteArray oldTheme = ptrXcursorLibraryGetTheme(dpy);
    if (oldTheme == theme) {
       return false;
@@ -531,6 +589,7 @@ void QXcbCursor::cursorThemePropertyChanged(QXcbVirtualDesktop *screen, const QB
 {
    Q_UNUSED(screen);
    Q_UNUSED(name);
+
    QXcbCursor *self = static_cast<QXcbCursor *>(handle);
    updateCursorTheme(self->connection()->xlib_display(), property.toByteArray());
 }
@@ -541,25 +600,30 @@ static xcb_cursor_t loadCursor(void *dpy, int cshape)
    if (!ptrXcursorLibraryLoadCursor || !dpy) {
       return cursor;
    }
+
    switch (cshape) {
       case Qt::DragCopyCursor:
          cursor = ptrXcursorLibraryLoadCursor(dpy, "dnd-copy");
          break;
+
       case Qt::DragMoveCursor:
          cursor = ptrXcursorLibraryLoadCursor(dpy, "dnd-move");
          break;
+
       case Qt::DragLinkCursor:
          cursor = ptrXcursorLibraryLoadCursor(dpy, "dnd-link");
          break;
       default:
          break;
    }
+
    if (!cursor) {
       cursor = ptrXcursorLibraryLoadCursor(dpy, cursorNames[cshape]);
    }
+
    return cursor;
 }
-#endif //XCB_USE_XLIB / QT_NO_LIBRARY
+#endif
 
 xcb_cursor_t QXcbCursor::createFontCursor(int cshape)
 {
@@ -568,24 +632,30 @@ xcb_cursor_t QXcbCursor::createFontCursor(int cshape)
    xcb_cursor_t cursor = XCB_NONE;
 
    // Try Xcursor first
-#if defined(XCB_USE_XLIB) && !defined(QT_NO_LIBRARY)
+#if defined(XCB_USE_XLIB)
    if (cshape >= 0 && cshape <= Qt::LastCursor) {
       void *dpy = connection()->xlib_display();
+
       // special case for non-standard dnd-* cursors
       cursor = loadCursor(dpy, cshape);
-      if (!cursor && !m_gtkCursorThemeInitialized && m_screen->xSettings()->initialized()) {
+
+      if (! cursor && !m_gtkCursorThemeInitialized && m_screen->xSettings()->initialized()) {
          QByteArray gtkCursorTheme = m_screen->xSettings()->setting("Gtk/CursorThemeName").toByteArray();
+
          m_screen->xSettings()->registerCallbackForProperty("Gtk/CursorThemeName", cursorThemePropertyChanged, this);
          if (updateCursorTheme(dpy, gtkCursorTheme)) {
             cursor = loadCursor(dpy, cshape);
          }
+
          m_gtkCursorThemeInitialized = true;
       }
    }
+
    if (cursor) {
       return cursor;
    }
-   if (!cursor && cursorId) {
+
+   if (! cursor && cursorId) {
       cursor = XCreateFontCursor(DISPLAY_FROM_XCB(this), cursorId);
       if (cursor) {
          return cursor;
@@ -601,8 +671,7 @@ xcb_cursor_t QXcbCursor::createFontCursor(int cshape)
    if (!cursor && cursorId) {
       cursor = xcb_generate_id(conn);
       xcb_create_glyph_cursor(conn, cursor, cursorFont, cursorFont,
-         cursorId, cursorId + 1,
-         0xFFFF, 0xFFFF, 0xFFFF, 0, 0, 0);
+         cursorId, cursorId + 1, 0xFFFF, 0xFFFF, 0xFFFF, 0, 0, 0);
    }
 
    if (cursor && cshape >= 0 && cshape < Qt::LastCursor && connection()->hasXFixes()) {
@@ -618,15 +687,17 @@ xcb_cursor_t QXcbCursor::createBitmapCursor(QCursor *cursor)
    xcb_connection_t *conn = xcb_connection();
    QPoint spot = cursor->hotSpot();
    xcb_cursor_t c = XCB_NONE;
+
    if (cursor->pixmap().depth() > 1) {
       c = qt_xcb_createCursorXRender(m_screen, cursor->pixmap().toImage(), spot);
    }
+
    if (!c) {
       xcb_pixmap_t cp = qt_xcb_XPixmapFromBitmap(m_screen, cursor->bitmap()->toImage());
       xcb_pixmap_t mp = qt_xcb_XPixmapFromBitmap(m_screen, cursor->mask()->toImage());
       c = xcb_generate_id(conn);
-      xcb_create_cursor(conn, c, cp, mp, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF,
-         spot.x(), spot.y());
+
+      xcb_create_cursor(conn, c, cp, mp, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, spot.x(), spot.y());
       xcb_free_pixmap(conn, cp);
       xcb_free_pixmap(conn, mp);
    }
@@ -645,7 +716,7 @@ void QXcbCursor::queryPointer(QXcbConnection *c, QXcbVirtualDesktop **virtualDes
    xcb_generic_error_t *err = nullptr;
    xcb_query_pointer_reply_t *reply = xcb_query_pointer_reply(c->xcb_connection(), cookie, &err);
 
-   if (!err && reply) {
+   if (! err && reply) {
       if (virtualDesktop) {
          for (QXcbVirtualDesktop *vd : c->virtualDesktops()) {
             if (vd->root() == reply->root) {
@@ -654,15 +725,19 @@ void QXcbCursor::queryPointer(QXcbConnection *c, QXcbVirtualDesktop **virtualDes
             }
          }
       }
+
       if (pos) {
          *pos = QPoint(reply->root_x, reply->root_y);
       }
+
       if (keybMask) {
          *keybMask = reply->mask;
       }
+
       free(reply);
       return;
    }
+
    free(err);
    free(reply);
 }

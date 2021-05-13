@@ -29,7 +29,7 @@
 bool QWindowsInternalMimeData::hasFormat_sys(const QString &mime) const
 {
    IDataObject *pDataObj = retrieveDataObject();
-   if (!pDataObj) {
+   if (! pDataObj) {
       return false;
    }
 
@@ -65,7 +65,7 @@ QStringList QWindowsInternalMimeData::formats_sys() const
 QVariant QWindowsInternalMimeData::retrieveData_sys(const QString &mimeType, QVariant::Type type) const
 {
    IDataObject *pDataObj = retrieveDataObject();
-   if (!pDataObj) {
+   if (! pDataObj) {
       return QVariant();
    }
 

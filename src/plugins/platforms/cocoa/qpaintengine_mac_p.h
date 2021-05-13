@@ -120,9 +120,6 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
    static void cleanUpMacColorSpaces();
 };
 
-/*****************************************************************************
-  Private data
- *****************************************************************************/
 class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QCoreGraphicsPaintEngine)
@@ -154,7 +151,6 @@ class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
    QPointF pixelSize;
    float cosmeticPenSize;
 
-   //internal functions
    enum { CGStroke = 0x01, CGEOFill = 0x02, CGFill = 0x04 };
 
    void drawPath(uchar ops, CGMutablePathRef path = nullptr);
@@ -171,10 +167,12 @@ class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
    void setTransform(const QTransform *matrix = nullptr) {
       CGContextConcatCTM(hd, CGAffineTransformInvert(CGContextGetCTM(hd)));
       CGAffineTransform xform = orig_xform;
+
       if (matrix) {
          extern CGAffineTransform qt_mac_convert_transform_to_cg(const QTransform &);
          xform = CGAffineTransformConcat(qt_mac_convert_transform_to_cg(*matrix), xform);
       }
+
       CGContextConcatCTM(hd, xform);
       CGContextSetTextMatrix(hd, xform);
    }

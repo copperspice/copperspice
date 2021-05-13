@@ -512,7 +512,7 @@ QString QWindowsContext::registerWindowClass(QString cname, WNDPROC proc, unsign
    ATOM atom = RegisterClassEx(&wc);
 
    if (! atom)
-      qErrnoWarning("QApplication::regClass: Registering window class '%s' failed.", qPrintable(cname));
+      qErrnoWarning("QApplication::regClass: Registering window class '%s' failed.", csPrintable(cname));
 
    d->m_registeredWindowClassNames.insert(cname);
 
@@ -531,7 +531,7 @@ void QWindowsContext::unregisterWindowClasses()
 
    for (const QString &name : d->m_registeredWindowClassNames) {
       if (! UnregisterClass(name.toStdWString().data(), appInstance) && QWindowsContext::verbose) {
-         qErrnoWarning("UnregisterClass failed for '%s'", qPrintable(name));
+         qErrnoWarning("UnregisterClass failed for '%s'", csPrintable(name));
       }
    }
 
@@ -573,10 +573,12 @@ void QWindowsContext::addWindow(HWND hwnd, QWindowsWindow *w)
 void QWindowsContext::removeWindow(HWND hwnd)
 {
    const HandleBaseWindowHash::iterator it = d->m_windows.find(hwnd);
+
    if (it != d->m_windows.end()) {
       if (d->m_keyMapper.keyGrabber() == it.value()->window()) {
          d->m_keyMapper.setKeyGrabber(nullptr);
       }
+
       d->m_windows.erase(it);
    }
 }
@@ -592,9 +594,11 @@ QWindowsWindow *QWindowsContext::findClosestPlatformWindow(HWND hwnd) const
 
    // Requested hwnd may also be a child of a platform window in case of embedded native windows.
    // Find the closest parent that has a platform window.
-   if (!window) {
+
+   if (! window) {
       for (HWND w = hwnd; w; w = GetParent(w)) {
          window = d->m_windows.value(w);
+
          if (window) {
             break;
          }
@@ -623,18 +627,6 @@ void QWindowsContext::clearWindowUnderMouse()
    d->m_mouseHandler.clearWindowUnderMouse();
 }
 
-/*!
-    \brief Find a child window at a screen point.
-
-    Deep search for a QWindow at global point, skipping non-owned
-    windows (accessibility?). Implemented using ChildWindowFromPointEx()
-    instead of (historically used) WindowFromPoint() to get a well-defined
-    behaviour for hidden/transparent windows.
-
-    \a cwex_flags are flags of ChildWindowFromPointEx().
-    \a parent is the parent window, pass GetDesktopWindow() for top levels.
-*/
-
 static inline bool findPlatformWindowHelper(const POINT &screenPoint, unsigned cwexFlags,
    const QWindowsContext *context, HWND *hwnd, QWindowsWindow **result)
 {
@@ -644,12 +636,13 @@ static inline bool findPlatformWindowHelper(const POINT &screenPoint, unsigned c
    // Returns parent if inside & none matched.
    const HWND child = ChildWindowFromPointEx(*hwnd, point, cwexFlags);
 
-   if (!child || child == *hwnd) {
+   if (! child || child == *hwnd) {
       return false;
    }
    if (QWindowsWindow *window = context->findPlatformWindow(child)) {
       *result = window;
       *hwnd   = child;
+
       return true;
    }
 
@@ -671,6 +664,7 @@ static inline bool findPlatformWindowHelper(const POINT &screenPoint, unsigned c
    }
 
    *hwnd = child;
+
    return true;
 }
 
@@ -679,7 +673,10 @@ QWindowsWindow *QWindowsContext::findPlatformWindowAt(HWND parent,
 {
    QWindowsWindow *result = nullptr;
    const POINT screenPoint = { screenPointIn.x(), screenPointIn.y() };
-   while (findPlatformWindowHelper(screenPoint, cwex_flags, this, &parent, &result)) {}
+
+   while (findPlatformWindowHelper(screenPoint, cwex_flags, this, &parent, &result)) {
+   }
+
    return result;
 }
 
@@ -696,7 +693,7 @@ QWindowsScreenManager &QWindowsContext::screenManager()
 HWND QWindowsContext::createDummyWindow(const QString &classNameIn,
    const wchar_t *windowName, WNDPROC wndProc, DWORD style)
 {
-   if (!wndProc) {
+   if (! wndProc) {
       wndProc = DefWindowProc;
    }
 
@@ -840,6 +837,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
    // Run the native event filters.
    long filterResult = 0;
    QAbstractEventDispatcher *dispatcher = QAbstractEventDispatcher::instance();
+
    if (dispatcher && dispatcher->filterNativeEvent(d->m_eventType, &msg, &filterResult)) {
       *result = LRESULT(filterResult);
       return true;
@@ -848,17 +846,19 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
    QWindowsWindow *platformWindow = findPlatformWindow(hwnd);
    if (platformWindow) {
       filterResult = 0;
+
       if (QWindowSystemInterface::handleNativeEvent(platformWindow->window(), d->m_eventType, &msg, &filterResult)) {
          *result = LRESULT(filterResult);
          return true;
       }
    }
+
    if (et & QtWindows::InputMethodEventFlag) {
       QWindowsInputContext *windowsInputContext = ::windowsInputContext();
 
       // Disable IME assuming this is a special implementation hooking into keyboard input.
       // "Real" IME implementations should use a native event filter intercepting IME events.
-      if (!windowsInputContext) {
+      if (! windowsInputContext) {
          QWindowsInputContext::setWindowsImeEnabled(platformWindow, false);
          return false;
       }
@@ -1199,16 +1199,21 @@ void QWindowsContext::handleFocusEvent(QtWindows::WindowsEventType et,
          modalWindow->requestActivate();
          return;
       }
+
       // QTBUG-32867: Invoking WinAPI SetParent() can cause focus-in for the
       // window which is not desired for native child widgets.
+
       if (platformWindow->testFlag(QWindowsWindow::WithinSetParent)) {
          QWindow *currentFocusWindow = QApplication::focusWindow();
+
          if (currentFocusWindow && currentFocusWindow != platformWindow->window()) {
             currentFocusWindow->requestActivate();
             return;
          }
       }
+
       nextActiveWindow = platformWindow->window();
+
    } else {
       // Focus out: Is the next window known and different
       // from the receiving the focus out.
@@ -1218,6 +1223,7 @@ void QWindowsContext::handleFocusEvent(QtWindows::WindowsEventType et,
                nextActiveWindow = nextActivePlatformWindow->window();
             }
    }
+
    if (nextActiveWindow != d->m_lastActiveWindow) {
       d->m_lastActiveWindow = nextActiveWindow;
       QWindowSystemInterface::handleWindowActivated(nextActiveWindow);
@@ -1230,6 +1236,7 @@ bool QWindowsContext::handleContextMenuEvent(QWindow *window, const MSG &msg)
    bool mouseTriggered = false;
    QPoint globalPos;
    QPoint pos;
+
    if (msg.lParam != int(0xffffffff)) {
       mouseTriggered = true;
       globalPos.setX(msg.pt.x);
@@ -1237,6 +1244,7 @@ bool QWindowsContext::handleContextMenuEvent(QWindow *window, const MSG &msg)
       pos = QWindowsGeometryHint::mapFromGlobal(msg.hwnd, globalPos);
 
       RECT clientRect;
+
       if (GetClientRect(msg.hwnd, &clientRect)) {
          if (pos.x() < clientRect.left || pos.x() >= clientRect.right ||
             pos.y() < clientRect.top || pos.y() >= clientRect.bottom) {

@@ -147,27 +147,31 @@ KeyRecord *KeyRecorder::findKey(int code, bool remove)
                records[i] = records[i + 1];
                ++i;
             }
+
             --nrecs;
             result = &deleted_record;
+
          } else {
             result = &records[i];
          }
+
          break;
       }
    }
+
    return result;
 }
 
 void KeyRecorder::storeKey(int code, int ascii, int state, const QString &text)
 {
-   Q_ASSERT_X(nrecs != QT_MAX_KEY_RECORDINGS,
-      "Internal KeyRecorder",
+   Q_ASSERT_X(nrecs != QT_MAX_KEY_RECORDINGS, "Internal KeyRecorder",
       "Keyboard recorder buffer overflow, consider increasing QT_MAX_KEY_RECORDINGS");
 
    if (nrecs == QT_MAX_KEY_RECORDINGS) {
       qWarning("Internal keyboard buffer overflow");
       return;
    }
+
    records[nrecs++] = KeyRecord(code, ascii, state, text);
 }
 

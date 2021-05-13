@@ -44,7 +44,7 @@ static inline bool shellExecute(const QUrl &url)
 
    // ShellExecute returns a value greater than 32 if successful
    if (result <= 32) {
-      qWarning("ShellExecute '%s' failed (error %s).", qPrintable(url.toString()), qPrintable(QString::number(result)));
+      qWarning("ShellExecute '%s' failed (error %s).", csPrintable(url.toString()), csPrintable(QString::number(result)));
       return false;
    }
 
@@ -61,24 +61,27 @@ static inline QString mailCommand()
    const wchar_t mailUserKey[] = L"Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\mailto\\UserChoice";
 
    wchar_t command[MAX_PATH] = {0};
+
    // Check if user has set preference, otherwise use default.
    HKEY handle;
    QString keyName;
 
-   if (!RegOpenKeyEx(HKEY_CURRENT_USER, mailUserKey, 0, KEY_READ, &handle)) {
+   if (! RegOpenKeyEx(HKEY_CURRENT_USER, mailUserKey, 0, KEY_READ, &handle)) {
       DWORD bufferSize = BufferSize;
 
       if (! RegQueryValueEx(handle, L"Progid", nullptr, nullptr, reinterpret_cast<unsigned char *>(command), &bufferSize)) {
          keyName = QString::fromStdWString(std::wstring(command));
       }
+
       RegCloseKey(handle);
    }
 
    if (keyName.isEmpty()) {
-      keyName = QString("mailto");
+      keyName = "mailto";
    }
 
-   keyName += QString("\\Shell\\Open\\Command");
+   keyName += "\\Shell\\Open\\Command";
+
    if (debug) {
       qDebug() << __FUNCTION__ << "keyName=" << keyName;
    }

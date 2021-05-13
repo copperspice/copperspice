@@ -80,6 +80,7 @@ HRESULT STDMETHODCALLTYPE QWindowsEnumerate::QueryInterface(REFIID id, LPVOID *i
 
     if (id == IID_IUnknown)
         *iface = static_cast<IUnknown *>(this);
+
     else if (id == IID_IEnumVARIANT)
         *iface = static_cast<IEnumVARIANT *>(this);
 
@@ -98,10 +99,11 @@ ULONG STDMETHODCALLTYPE QWindowsEnumerate::AddRef()
 
 ULONG STDMETHODCALLTYPE QWindowsEnumerate::Release()
 {
-    if (!--ref) {
+    if (! --ref) {
         delete this;
         return 0;
     }
+
     return ref;
 }
 
@@ -111,8 +113,11 @@ HRESULT STDMETHODCALLTYPE QWindowsEnumerate::Clone(IEnumVARIANT **ppEnum)
     *ppEnum = nullptr;
 
     penum = new QWindowsEnumerate(array);
-    if (!penum)
+
+    if (! penum) {
         return E_OUTOFMEMORY;
+    }
+
     penum->current = current;
     penum->array = array;
     penum->AddRef();
@@ -180,14 +185,19 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::QueryInterface(REFIID id, LPVO
         qDebug() << "QWindowsIA2Accessible::QI() - IID:"
                                     << strIID << ", iface:" << accessibleInterface();
     }
+
     if (id == IID_IUnknown) {
         *iface =  static_cast<IUnknown *>(static_cast<IDispatch *>(this));
+
     } else if (id == IID_IDispatch) {
         *iface = static_cast<IDispatch *>(this);
+
     } else if (id == IID_IAccessible) {
         *iface = static_cast<IAccessible *>(this);
+
     } else if (id == IID_IOleWindow) {
         *iface = static_cast<IOleWindow *>(this);
+
     }
 
     if (*iface) {
@@ -485,6 +495,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accHitTest(long xLeft, long yT
 
     const QPoint pos = QHighDpi::fromNativeLocalPosition(QPoint(xLeft, yTop),
                                                          QWindowsAccessibility::windowHelper(accessible));
+
     QAccessibleInterface *child = accessible->childAt(pos.x(), pos.y());
 
     if (child == nullptr) {
@@ -494,6 +505,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accHitTest(long xLeft, long yT
             (*pvarID).lVal = CHILDID_SELF;
             return S_OK;
         }
+
     } else {
         IAccessible *iface = QWindowsAccessibility::wrap(child);
         if (iface) {
@@ -544,7 +556,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accNavigate(long navDir, VARIA
 {
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
-    if (!accessible)
+
+    if (! accessible)
         return E_FAIL;
 
     QAccessibleInterface *acc = nullptr;
@@ -553,12 +566,14 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accNavigate(long navDir, VARIA
     case NAVDIR_FIRSTCHILD:
         acc = accessible->child(0);
         break;
+
     case NAVDIR_LASTCHILD:
         acc = accessible->child(accessible->childCount() - 1);
         break;
+
     case NAVDIR_NEXT:
     case NAVDIR_PREVIOUS:
-        if (!varStart.lVal){
+        if (! varStart.lVal){
             QAccessibleInterface *parent = accessible->parent();
             if (parent && parent->isValid()) {
                 int index = parent->indexOfChild(accessible);
@@ -791,18 +806,23 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accHelp(VARIANT varID, BST
 {
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
+
     if (!accessible)
         return E_FAIL;
 
     QString help;
+
     if (varID.lVal) {
         QAccessibleInterface *child = childPointer(accessible, varID);
+
         if (!child || !child->isValid())
             return E_FAIL;
         help = child->text(QAccessible::Help);
+
     } else {
         help = accessible->text(QAccessible::Help);
     }
+
     if (help.size()) {
         *pszHelp = QStringToBSTR(help);
         return S_OK;
@@ -821,6 +841,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accHelpTopic(BSTR *, VARIA
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accKeyboardShortcut(VARIANT varID, BSTR *pszKeyboardShortcut)
 {
     Q_UNUSED(varID);
+
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
     if (!accessible)
@@ -830,6 +851,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accKeyboardShortcut(VARIAN
 
     if (QAccessibleActionInterface *actionIface = accessible->actionInterface()) {
         const QString def = actionIface->actionNames().value(0);
+
         if (!def.isEmpty()) {
             const QString keyBoardShortCut = actionIface->keyBindingsForAction(def).value(0);
             if (!keyBoardShortCut.isEmpty())
@@ -852,20 +874,24 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accName(VARIANT varID, BST
 {
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
-    if (!accessible)
+
+    if (! accessible)
         return E_FAIL;
 
     QString name;
+
     if (varID.lVal) {
         QAccessibleInterface *child = childPointer(accessible, varID);
-        if (!child || !child->isValid())
+        if (! child || !child->isValid())
             return E_FAIL;
+
         name = child->text(QAccessible::Name);
         if (name.isEmpty()) {
             if (QAccessibleInterface *labelInterface = relatedInterface(child, QAccessible::Label)) {
                 name = labelInterface->text(QAccessible::Name);
             }
         }
+
     } else {
         name = accessible->text(QAccessible::Name);
         if (name.isEmpty()) {
@@ -901,6 +927,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accRole(VARIANT varID, VAR
 {
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
+
     if (!accessible)
         return E_FAIL;
 
@@ -920,13 +947,16 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accRole(VARIANT varID, VAR
             // does not support IAccessible2, since it should prefer IA2::role() then.
             if (role == QAccessible::LayeredPane)
                 role = QAccessible::Pane;
+
             else if (role == QAccessible::WebDocument)
                 role = QAccessible::Document;
+
             else
                 role = QAccessible::Client;
         }
         (*pvarRole).vt = VT_I4;
         (*pvarRole).lVal = role;
+
     } else {
         (*pvarRole).vt = VT_EMPTY;
     }
@@ -938,10 +968,12 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accState(VARIANT varID, VA
 {
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
+
     if (!accessible)
         return E_FAIL;
 
     QAccessible::State state;
+
     if (varID.lVal) {
         QAccessibleInterface *child = childPointer(accessible, varID);
         if (!child || !child->isValid())
@@ -1055,6 +1087,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accSelect(long flagsSelect, VA
 {
     Q_UNUSED(flagsSelect);
     Q_UNUSED(varID);
+
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
     if (!accessible)
@@ -1126,31 +1159,40 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accSelection(VARIANT *pvar
 {
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
+
     if (!accessible)
         return E_FAIL;
 
     int cc = accessible->childCount();
     QVector<int> sel(cc);
     int selIndex = 0;
+
     for (int i = 0; i < cc; ++i) {
         bool isSelected = false;
         QAccessibleInterface *child = accessible->child(i);
+
         if (child) {
             isSelected = child->state().selected;
         }
-        if (isSelected)
-            sel[selIndex++] = i+1;
+
+        if (isSelected) {
+           sel[selIndex++] = i+1;
+        }
     }
+
     sel.resize(selIndex);
+
     if (sel.isEmpty()) {
         (*pvarChildren).vt = VT_EMPTY;
         return S_FALSE;
     }
+
     if (sel.size() == 1) {
         (*pvarChildren).vt = VT_I4;
         (*pvarChildren).lVal = sel[0];
         return S_OK;
     }
+
     IEnumVARIANT *iface = new QWindowsEnumerate(sel);
     IUnknown *uiface;
     iface->QueryInterface(IID_IUnknown, (void**)&uiface);

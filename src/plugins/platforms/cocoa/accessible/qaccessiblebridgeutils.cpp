@@ -72,7 +72,7 @@ bool performEffectiveAction(QAccessibleInterface *iface, const QString &actionNa
     const QVariant currentVariant = valueIface->currentValue();
     double stepSize = valueIface->minimumStepSize().toDouble(&success);
 
-    if (!success || qFuzzyIsNull(stepSize)) {
+    if (! success || qFuzzyIsNull(stepSize)) {
         const double min = valueIface->minimumValue().toDouble(&success);
         if (!success)
             return false;

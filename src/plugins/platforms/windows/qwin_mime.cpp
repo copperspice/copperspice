@@ -1159,6 +1159,7 @@ bool QWindowsMimeImage::hasOriginalDIBV5(IDataObject *pDataObj) const
          if (fc.ptd) {
             CoTaskMemFree(fc.ptd);
          }
+
          if (fc.cfFormat == CF_DIB) {
             break;
          } else if (fc.cfFormat == CF_DIBV5) {
@@ -1166,6 +1167,7 @@ bool QWindowsMimeImage::hasOriginalDIBV5(IDataObject *pDataObj) const
             break;
          }
       }
+
       pEnum->Release();
    }
 

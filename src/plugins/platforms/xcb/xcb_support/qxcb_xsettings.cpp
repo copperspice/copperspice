@@ -34,8 +34,8 @@
 
 enum XSettingsType {
    XSettingsTypeInteger = 0,
-   XSettingsTypeString = 1,
-   XSettingsTypeColor = 2
+   XSettingsTypeString  = 1,
+   XSettingsTypeColor   = 2
 };
 
 class QXcbXSettingsCallback
@@ -50,16 +50,20 @@ class QXcbXSettingsPropertyValue
  public:
    QXcbXSettingsPropertyValue()
       : last_change_serial(-1)
-   {}
+   {
+   }
 
    void updateValue(QXcbVirtualDesktop *screen, const QByteArray &name, const QVariant &value, int last_change_serial) {
       if (last_change_serial <= this->last_change_serial) {
          return;
       }
+
       this->value = value;
       this->last_change_serial = last_change_serial;
+
       QLinkedList<QXcbXSettingsCallback>::const_iterator it = callback_links.begin();
       for (; it != callback_links.end(); ++it) {
+
          it->func(screen, name, value, it->handle);
       }
    }
@@ -211,16 +215,15 @@ class QXcbXSettingsPrivate
    bool initialized;
 };
 
-
 QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
    : d_ptr(new QXcbXSettingsPrivate(screen))
 {
    QByteArray settings_atom_for_screen("_XSETTINGS_S");
    settings_atom_for_screen.append(QByteArray::number(screen->number()));
+
    xcb_intern_atom_cookie_t atom_cookie = xcb_intern_atom(screen->xcb_connection(),
-         true,
-         settings_atom_for_screen.length(),
-         settings_atom_for_screen.constData());
+         true, settings_atom_for_screen.length(), settings_atom_for_screen.constData());
+
    xcb_generic_error_t *error = nullptr;
    xcb_intern_atom_reply_t *atom_reply = xcb_intern_atom_reply(screen->xcb_connection(), atom_cookie, &error);
    if (error) {

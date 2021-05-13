@@ -123,6 +123,7 @@ QRect QXcbVirtualDesktop::getWorkArea() const
       // "docked" panel (with _NET_WM_STRUT_PARTIAL atom set) on just one desktop.
       // But for now just assume the first 4 values give us the geometry of the
       // "work area", AKA "available geometry"
+
       uint32_t *geom = (uint32_t *)xcb_get_property_value(workArea);
       r = QRect(geom[0], geom[1], geom[2], geom[3]);
    } else {
@@ -384,6 +385,7 @@ const xcb_visualtype_t *QXcbScreen::visualForId(xcb_visualid_t visualid) const
    if (it == m_visuals.constEnd()) {
       return nullptr;
    }
+
    return &*it;
 }
 
@@ -393,6 +395,7 @@ quint8 QXcbScreen::depthOfVisual(xcb_visualid_t visualid) const
    if (it == m_visualDepths.constEnd()) {
       return 0;
    }
+
    return *it;
 }
 
@@ -451,28 +454,6 @@ int QXcbScreen::virtualDesktopNumberStatic(const QScreen *screen)
    return 0;
 }
 
-/*!
-    \brief handle the XCB screen change event and update properties
-
-    On a mobile device, the ideal use case is that the accelerometer would
-    drive the orientation. This could be achieved by using QSensors to read the
-    accelerometer and adjusting the rotation in QML, or by reading the
-    orientation from the QScreen object and doing the same, or in many other
-    ways. However, on X we have the XRandR extension, which makes it possible
-    to have the whole screen rotated, so that individual apps DO NOT have to
-    rotate themselves. Apps could optionally use the
-    QScreen::primaryOrientation property to optimize layout though.
-    Furthermore, there is no support in X for accelerometer events anyway. So
-    it makes more sense on a Linux system running X to just run a daemon which
-    monitors the accelerometer and runs xrandr automatically to do the rotation,
-    then apps do not have to be aware of it (but probably the window manager
-    would resize them accordingly). updateGeometry() is written with this
-    design in mind. Therefore the physical geometry, available geometry,
-    virtual geometry, orientation and primaryOrientation should all change at
-    the same time.  On a system which cannot rotate the whole screen, it would
-    be correct for only the orientation (not the primary orientation) to
-    change.
-*/
 void QXcbScreen::handleScreenChange(xcb_randr_screen_change_notify_event_t *change_event)
 {
    // No need to do anything when screen rotation did not change - if any
@@ -491,6 +472,7 @@ void QXcbScreen::handleScreenChange(xcb_randr_screen_change_notify_event_t *chan
          m_virtualSizeMillimeters.setWidth(change_event->mwidth);
          m_virtualSizeMillimeters.setHeight(change_event->mheight);
          break;
+
       case XCB_RANDR_ROTATION_ROTATE_90: // xrandr --rotate left
          m_orientation = Qt::PortraitOrientation;
          m_virtualSize.setWidth(change_event->height);
@@ -498,6 +480,7 @@ void QXcbScreen::handleScreenChange(xcb_randr_screen_change_notify_event_t *chan
          m_virtualSizeMillimeters.setWidth(change_event->mheight);
          m_virtualSizeMillimeters.setHeight(change_event->mwidth);
          break;
+
       case XCB_RANDR_ROTATION_ROTATE_180: // xrandr --rotate inverted
          m_orientation = Qt::InvertedLandscapeOrientation;
          m_virtualSize.setWidth(change_event->width);
@@ -505,6 +488,7 @@ void QXcbScreen::handleScreenChange(xcb_randr_screen_change_notify_event_t *chan
          m_virtualSizeMillimeters.setWidth(change_event->mwidth);
          m_virtualSizeMillimeters.setHeight(change_event->mheight);
          break;
+
       case XCB_RANDR_ROTATION_ROTATE_270: // xrandr --rotate right
          m_orientation = Qt::InvertedPortraitOrientation;
          m_virtualSize.setWidth(change_event->height);
@@ -512,10 +496,11 @@ void QXcbScreen::handleScreenChange(xcb_randr_screen_change_notify_event_t *chan
          m_virtualSizeMillimeters.setWidth(change_event->mheight);
          m_virtualSizeMillimeters.setHeight(change_event->mwidth);
          break;
-      // We don't need to do anything with these, since QScreen doesn't store reflection state,
-      // and Qt-based applications probably don't need to care about it anyway.
+
+      // we do not need to handle X or Y since QScreen does not store reflection state
       case XCB_RANDR_ROTATION_REFLECT_X:
          break;
+
       case XCB_RANDR_ROTATION_REFLECT_Y:
          break;
    }
@@ -688,6 +673,7 @@ QPixmap QXcbScreen::grabWindow(WId window, int x, int y, int width, int height) 
       free(translate_reply);
       free(reply);
       reply = root_reply;
+
    } else {
       free(root_reply);
       root_reply = nullptr;
@@ -843,6 +829,7 @@ QDebug operator<<(QDebug debug, const QXcbScreen *screen)
    const QDebugStateSaver saver(debug);
    debug.nospace();
    debug << "QXcbScreen(" << (const void *)screen;
+
    if (screen) {
       debug << fixed << qSetRealNumberPrecision(1);
       debug << ", name=" << screen->name();
@@ -864,6 +851,7 @@ QDebug operator<<(QDebug debug, const QXcbScreen *screen)
       debug << ", root=" << hex << screen->root();
       debug << ", windowManagerName=" << screen->windowManagerName();
    }
+
    debug << ')';
    return debug;
 }

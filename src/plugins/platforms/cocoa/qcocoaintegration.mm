@@ -36,11 +36,11 @@
 #include "qcocoainputcontext.h"
 #include "qcocoamimetypes.h"
 #include "qcocoaaccessibility.h"
+#include <qcoreapplication.h>
+#include <qplatform_accessibility.h>
 
 #include <qplatform_inputcontextfactory_p.h>
-#include <qplatform_accessibility.h>
 #include <qplatform_inputcontextfactory_p.h>
-#include <qcoreapplication.h>
 
 #include <IOKit/graphics/IOGraphicsLib.h>
 
@@ -278,16 +278,13 @@ static QCocoaIntegration::Options parseOptions(const QStringList &paramList)
 QCocoaIntegration *QCocoaIntegration::mInstance = nullptr;
 
 QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
-   : mOptions(parseOptions(paramList))
-   , mFontDb(new QCoreTextFontDatabase(mOptions.testFlag(UseFreeTypeFontEngine)))
+   : mOptions(parseOptions(paramList)), mFontDb(new QCoreTextFontDatabase(mOptions.testFlag(UseFreeTypeFontEngine))),
 #ifndef QT_NO_ACCESSIBILITY
-   , mAccessibility(new QCocoaAccessibility)
+     mAccessibility(new QCocoaAccessibility),
 #endif
-   , mCocoaClipboard(new QCocoaClipboard)
-   , mCocoaDrag(new QCocoaDrag)
-   , mNativeInterface(new QCocoaNativeInterface)
-   , mServices(new QCocoaServices)
-   , mKeyboardMapper(new QCocoaKeyMapper)
+     mCocoaClipboard(new QCocoaClipboard), mCocoaDrag(new QCocoaDrag),
+     mNativeInterface(new QCocoaNativeInterface), mServices(new QCocoaServices),
+     mKeyboardMapper(new QCocoaKeyMapper)
 {
    if (mInstance != nullptr) {
       qWarning("Creating multiple Cocoa platform integrations is not supported");
@@ -296,8 +293,9 @@ QCocoaIntegration::QCocoaIntegration(const QStringList &paramList)
    mInstance = this;
 
    QString icStr = QPlatformInputContextFactory::requested();
+
    icStr.isEmpty() ? mInputContext.reset(new QCocoaInputContext)
-   : mInputContext.reset(QPlatformInputContextFactory::create(icStr));
+      : mInputContext.reset(QPlatformInputContextFactory::create(icStr));
 
    initResources();
    QMacAutoReleasePool pool;
@@ -394,20 +392,20 @@ QCocoaIntegration::Options QCocoaIntegration::options() const
    return mOptions;
 }
 
-/*!
-    \brief Synchronizes the screen list, adds new screens, removes deleted ones
-*/
 void QCocoaIntegration::updateScreens()
 {
    NSArray *scrs = [NSScreen screens];
    NSMutableArray *screens = [NSMutableArray arrayWithArray: scrs];
+
    if ([screens count] == 0)
       if ([NSScreen mainScreen]) {
          [screens addObject: [NSScreen mainScreen]];
       }
+
    if ([screens count] == 0) {
       return;
    }
+
    QSet<QCocoaScreen *> remainingScreens = QSet<QCocoaScreen *>::fromList(mScreens);
    QList<QPlatformScreen *> siblings;
    uint screenCount = [screens count];
@@ -474,6 +472,7 @@ QCocoaScreen *QCocoaIntegration::screenAtIndex(int index)
    if (index >= mScreens.count()) {
       return nullptr;
    }
+
    return mScreens.at(index);
 }
 
@@ -493,6 +492,7 @@ bool QCocoaIntegration::hasCapability(QPlatformIntegration::Capability cap) cons
       case ApplicationState:
       case ApplicationIcon:
          return true;
+
       default:
          return QPlatformIntegration::hasCapability(cap);
    }
@@ -507,9 +507,10 @@ QPlatformWindow *QCocoaIntegration::createPlatformWindow(QWindow *window) const
 QPlatformOpenGLContext *QCocoaIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
 {
    QCocoaGLContext *glContext = new QCocoaGLContext(context->format(),
-      context->shareHandle(),
-      context->nativeHandle());
+      context->shareHandle(), context->nativeHandle());
+
    context->setNativeHandle(glContext->nativeHandle());
+
    return glContext;
 }
 #endif
@@ -616,6 +617,7 @@ void QCocoaIntegration::clearToolbars()
       [it.value() release];
       ++it;
    }
+
    mToolbars.clear();
 }
 

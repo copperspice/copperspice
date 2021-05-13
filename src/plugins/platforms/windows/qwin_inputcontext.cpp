@@ -27,16 +27,15 @@
 #include <qwin_integration.h>
 #include <qwin_mousehandler.h>
 
-#include <QDebug>
-#include <QObject>
-#include <QRect>
-#include <QRectF>
-#include <QTextBoundaryFinder>
-
-#include <QInputMethodEvent>
-#include <QTextCharFormat>
-#include <QPalette>
-#include <QApplication>
+#include <qdebug.h>
+#include <qobject.h>
+#include <qrect.h>
+#include <qrectf.h>
+#include <qtextboundaryfinder.h>
+#include <qinputmethodevent.h>
+#include <qtextcharformat.h>
+#include <qpalette.h>
+#include <qapplication.h>
 
 #include <qhighdpiscaling_p.h>
 
@@ -45,27 +44,35 @@
 static inline QByteArray debugComposition(int lParam)
 {
    QByteArray str;
+
    if (lParam & GCS_RESULTSTR) {
       str += "RESULTSTR ";
    }
+
    if (lParam & GCS_COMPSTR) {
       str += "COMPSTR ";
    }
+
    if (lParam & GCS_COMPATTR) {
       str += "COMPATTR ";
    }
+
    if (lParam & GCS_CURSORPOS) {
       str += "CURSORPOS ";
    }
+
    if (lParam & GCS_COMPCLAUSE) {
       str += "COMPCLAUSE ";
    }
+
    if (lParam & CS_INSERTCHAR) {
       str += "INSERTCHAR ";
    }
+
    if (lParam & CS_NOMOVECARET) {
       str += "NOMOVECARET ";
    }
+
    return str;
 }
 
@@ -103,7 +110,7 @@ QWindowsInputContext::CompositionContext::CompositionContext()
 
 QWindowsInputContext::QWindowsInputContext()
    : m_WM_MSIME_MOUSE(RegisterWindowMessage(L"MSIMEMouseOperation")), m_endCompositionRecursionGuard(false),
-   m_languageId(currentInputLanguageId()), m_locale(qt_localeFromLCID(m_languageId))
+     m_languageId(currentInputLanguageId()), m_locale(qt_localeFromLCID(m_languageId))
 {
    connect(QApplication::inputMethod(), &QInputMethod::cursorRectangleChanged,
                   this, &QWindowsInputContext::cursorRectChanged);
@@ -163,45 +170,49 @@ void QWindowsInputContext::updateEnabled()
    if (!QApplication::focusObject()) {
       return;
    }
+
    const QWindow *window = QApplication::focusWindow();
+
    if (window && window->handle()) {
       QWindowsWindow *platformWindow = QWindowsWindow::baseWindowOf(window);
       const bool accepted = inputMethodAccepted();
+
       if (QWindowsContext::verbose > 1) {
          qDebug() << __FUNCTION__ << window << "accepted=" << accepted;
       }
+
       QWindowsInputContext::setWindowsImeEnabled(platformWindow, accepted);
    }
 }
 
 void QWindowsInputContext::setWindowsImeEnabled(QWindowsWindow *platformWindow, bool enabled)
 {
-   if (!platformWindow || platformWindow->testFlag(QWindowsWindow::InputMethodDisabled) == !enabled) {
+   if (! platformWindow || platformWindow->testFlag(QWindowsWindow::InputMethodDisabled) == !enabled) {
       return;
    }
+
    if (enabled) {
       // Re-enable Windows IME by associating default context saved on first disabling.
       ImmAssociateContext(platformWindow->handle(), QWindowsInputContext::m_defaultContext);
       platformWindow->clearFlag(QWindowsWindow::InputMethodDisabled);
+
    } else {
       // Disable Windows IME by associating 0 context. Store context first time.
       const HIMC oldImC = ImmAssociateContext(platformWindow->handle(), nullptr);
       platformWindow->setFlag(QWindowsWindow::InputMethodDisabled);
-      if (!QWindowsInputContext::m_defaultContext && oldImC) {
+
+      if (! QWindowsInputContext::m_defaultContext && oldImC) {
          QWindowsInputContext::m_defaultContext = oldImC;
       }
    }
 }
-
-/*!
-    \brief Moves the candidate window along with microfocus of the focus object.
-*/
 
 void QWindowsInputContext::update(Qt::InputMethodQueries queries)
 {
    if (queries & Qt::ImEnabled) {
       updateEnabled();
    }
+
    QPlatformInputContext::update(queries);
 }
 
@@ -422,17 +433,21 @@ bool QWindowsInputContext::composition(HWND hwnd, LPARAM lParamIn)
       if (!m_compositionContext.isComposing) {
          startContextComposition();
       }
+
       // Some intermediate composition result. Parametrize event with
       // attribute sequence specifying the formatting of the converted part.
+
       int selStart, selLength;
       m_compositionContext.composition = getCompositionString(himc, GCS_COMPSTR);
       m_compositionContext.position = ImmGetCompositionString(himc, GCS_CURSORPOS, nullptr, 0);
       getCompositionStringConvertedRange(himc, &selStart, &selLength);
+
       if ((lParam & CS_INSERTCHAR) && (lParam & CS_NOMOVECARET)) {
          // make Korean work correctly. Hope this is correct for all IMEs
          selStart = 0;
          selLength = m_compositionContext.composition.size();
       }
+
       if (!selLength) {
          selStart = 0;
       }
@@ -493,9 +508,11 @@ void QWindowsInputContext::initContext(HWND hwnd, qreal factor, QObject *focusOb
    if (m_compositionContext.hwnd) {
       doneContext();
    }
+
    m_compositionContext.hwnd = hwnd;
    m_compositionContext.focusObject = focusObject;
    m_compositionContext.factor = factor;
+
    // Create a hidden caret which is kept at the microfocus
    // position in update(). This is important for some
    // Chinese input methods.
@@ -641,5 +658,4 @@ int QWindowsInputContext::reconvertString(RECONVERTSTRING *reconv)
 
    return memSize;
 }
-
 

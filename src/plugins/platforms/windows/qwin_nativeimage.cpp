@@ -64,9 +64,9 @@ static inline HBITMAP createDIB(HDC hdc, int width, int height, QImage::Format f
    } else {
       bmi.bmiHeader.biBitCount    = 32;
       bmi.bmiHeader.biCompression = BI_RGB;
-      bmi.redMask = 0;
+      bmi.redMask   = 0;
       bmi.greenMask = 0;
-      bmi.blueMask = 0;
+      bmi.blueMask  = 0;
    }
 
    uchar *bits = nullptr;
@@ -90,8 +90,10 @@ QWindowsNativeImage::QWindowsNativeImage(int width, int height, QImage::Format f
       m_bitmap = createDIB(m_hdc, width, height, format, &bits);
       m_null_bitmap = static_cast<HBITMAP>(SelectObject(m_hdc, m_bitmap));
       m_image = QImage(bits, width, height, format);
+
       Q_ASSERT(m_image.paintEngine()->type() == QPaintEngine::Raster);
       static_cast<QRasterPaintEngine *>(m_image.paintEngine())->setDC(m_hdc);
+
    } else {
       m_image = QImage(width, height, format);
    }
@@ -108,6 +110,7 @@ QWindowsNativeImage::~QWindowsNativeImage()
          }
          DeleteObject(m_bitmap);
       }
+
       DeleteDC(m_hdc);
    }
 }

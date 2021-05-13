@@ -184,9 +184,6 @@ QXcbVirtualDesktop *QXcbConnection::virtualDesktopForRootWindow(xcb_window_t roo
    return nullptr;
 }
 
-/*!
-    \brief Synchronizes the screen list, adds new screens, removes deleted ones
-*/
 void QXcbConnection::updateScreens(const xcb_randr_notify_event_t *event)
 {
    if (event->subCode == XCB_RANDR_NOTIFY_CRTC_CHANGE) {
@@ -295,16 +292,19 @@ void QXcbConnection::updateScreens(const xcb_randr_notify_event_t *event)
 
 bool QXcbConnection::checkOutputIsPrimary(xcb_window_t rootWindow, xcb_randr_output_t output)
 {
-   xcb_randr_get_output_primary_cookie_t primaryCookie =
-      xcb_randr_get_output_primary(xcb_connection(), rootWindow);
    xcb_generic_error_t *error = nullptr;
+
+   xcb_randr_get_output_primary_cookie_t primaryCookie = xcb_randr_get_output_primary(xcb_connection(), rootWindow);
+
    QScopedPointer<xcb_randr_get_output_primary_reply_t, QScopedPointerPodDeleter> primary (
       xcb_randr_get_output_primary_reply(xcb_connection(), primaryCookie, &error));
-   if (!primary || error) {
+
+   if (! primary || error) {
       qWarning("failed to get the primary output of the screen");
       free(error);
       error = nullptr;
    }
+
    const bool isPrimary = primary ? (primary->output == output) : false;
 
    return isPrimary;
@@ -317,6 +317,7 @@ void QXcbConnection::updateScreen(QXcbScreen *screen, const xcb_randr_output_cha
    if (screen->mode() != outputChange.mode) {
       screen->updateRefreshRate(outputChange.mode);
    }
+
    // Only screen which belongs to the primary virtual desktop can be a primary screen
    if (screen->screenNumber() == m_primaryScreenNumber) {
       if (!screen->isPrimary() && checkOutputIsPrimary(outputChange.window, outputChange.output)) {
@@ -484,6 +485,7 @@ void QXcbConnection::initializeScreens()
                            if (primaryScreen) {
                               primaryScreen->setPrimary(false);
                            }
+
                            primaryScreen = screen;
                            primaryScreen->setPrimary(true);
                            siblings.prepend(siblings.takeLast());
@@ -493,6 +495,7 @@ void QXcbConnection::initializeScreens()
                }
             }
          }
+
       } else if (has_xinerama_extension) {
          // Xinerama is available
          xcb_xinerama_query_screens_cookie_t cookie = xcb_xinerama_query_screens(m_connection);
@@ -500,6 +503,7 @@ void QXcbConnection::initializeScreens()
 
          if (screens) {
             xcb_xinerama_screen_info_iterator_t it = xcb_xinerama_query_screens_screen_info_iterator(screens);
+
             while (it.rem) {
                xcb_xinerama_screen_info_t *screen_info = it.data;
                QXcbScreen *screen = new QXcbScreen(this, virtualDesktop, XCB_NONE, nullptr, screen_info, it.index);
@@ -779,7 +783,7 @@ QXcbWindow *QXcbConnection::platformWindowFromId(xcb_window_t id)
     event_t *e = (event_t *)event; \
     if (QXcbWindowEventListener *eventListener = windowEventListenerFromId(e->windowMember))  { \
         handled = eventListener->handleGenericEvent(event, &result); \
-        if (!handled) \
+        if (! handled) \
             eventListener->handler(e); \
     } \
 }
@@ -1029,18 +1033,18 @@ void QXcbConnection::handleXcbError(xcb_generic_error_t *error)
    int i = 0;
    for (; i < m_callLog.size(); ++i) {
       if (m_callLog.at(i).sequence == error->sequence) {
-         qDebug("Caused by: %s:%d", qPrintable(m_callLog.at(i).file), m_callLog.at(i).line);
+         qDebug("Caused by: %s:%d", csPrintable(m_callLog.at(i).file), m_callLog.at(i).line);
          break;
       } else if (m_callLog.at(i).sequence > error->sequence) {
-         qDebug("Caused some time before: %s:%d", qPrintable(m_callLog.at(i).file), m_callLog.at(i).line);
+         qDebug("Caused some time before: %s:%d", csPrintable(m_callLog.at(i).file), m_callLog.at(i).line);
          if (i > 0) {
-            qDebug("and after: %s:%d", qPrintable(m_callLog.at(i - 1).file), m_callLog.at(i - 1).line);
+            qDebug("and after: %s:%d", csPrintable(m_callLog.at(i - 1).file), m_callLog.at(i - 1).line);
          }
          break;
       }
    }
    if (i == m_callLog.size() && !m_callLog.isEmpty()) {
-      qDebug("Caused some time after: %s:%d", qPrintable(m_callLog.first().file), m_callLog.first().line);
+      qDebug("Caused some time after: %s:%d", csPrintable(m_callLog.first().file), m_callLog.first().line);
    }
 #endif
 }
@@ -1163,7 +1167,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
 
    uint response_type = event->response_type & ~0x80;
 
-   if (!handled) {
+   if (! handled) {
       switch (response_type) {
          case XCB_EXPOSE:
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_expose_event_t, window, handleExposeEvent);
@@ -1196,6 +1200,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
             if (s_isDebug) {
                qDebug("legacy mouse release, button %d state %X", ev->detail, static_cast<unsigned int>(m_buttons));
             }
+
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_button_release_event_t, event, handleButtonReleaseEvent);
             break;
          }
@@ -1205,9 +1210,10 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
             m_keyboard->updateXKBStateFromCore(ev->state);
             m_buttons = (m_buttons & ~0x7) | translateMouseButtons(ev->state);
 
-            if (s_isDebug)
+            if (s_isDebug) {
                qDebug("legacy mouse move %d,%d button %d state %X", ev->event_x, ev->event_y,
                   ev->detail, static_cast<unsigned int>(m_buttons));
+            }
 
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_motion_notify_event_t, event, handleMotionNotifyEvent);
             break;
@@ -1294,6 +1300,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
             }
             break;
          }
+
          case XCB_SELECTION_CLEAR:
             setTime(((xcb_selection_clear_event_t *)event)->time);
 #ifndef QT_NO_CLIPBOARD
@@ -1301,21 +1308,27 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
 #endif
             handled = true;
             break;
+
          case XCB_SELECTION_NOTIFY:
             setTime(((xcb_selection_notify_event_t *)event)->time);
             handled = false;
             break;
+
          case XCB_PROPERTY_NOTIFY: {
             xcb_property_notify_event_t *pn = (xcb_property_notify_event_t *)event;
+
             if (pn->atom == atom(QXcbAtom::_NET_WORKAREA)) {
                QXcbVirtualDesktop *virtualDesktop = virtualDesktopForRootWindow(pn->window);
+
                if (virtualDesktop) {
                   virtualDesktop->updateWorkArea();
                }
+
             } else {
                HANDLE_PLATFORM_WINDOW_EVENT(xcb_property_notify_event_t, window, handlePropertyNotifyEvent);
                break;
             }
+
             break;
          }
 #if defined(XCB_USE_XINPUT2)
@@ -1332,7 +1345,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
       }
    }
 
-   if (!handled) {
+   if (! handled) {
       if (response_type == xfixes_first_event + XCB_XFIXES_SELECTION_NOTIFY) {
          xcb_xfixes_selection_notify_event_t *notify_event = (xcb_xfixes_selection_notify_event_t *)event;
          setTime(notify_event->timestamp);
@@ -1346,9 +1359,11 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
          }
 
          handled = true;
+
       } else if (has_randr_extension && response_type == xrandr_first_event + XCB_RANDR_NOTIFY) {
          updateScreens((xcb_randr_notify_event_t *)event);
          handled = true;
+
       } else if (has_randr_extension && response_type == xrandr_first_event + XCB_RANDR_SCREEN_CHANGE_NOTIFY) {
          xcb_randr_screen_change_notify_event_t *change_event = (xcb_randr_screen_change_notify_event_t *)event;
 
@@ -1358,9 +1373,11 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
             }
          }
          handled = true;
+
 #ifndef QT_NO_XKB
       } else if (response_type == xkb_first_event) { // https://bugs.freedesktop.org/show_bug.cgi?id=51295
          _xkb_event *xkb_event = reinterpret_cast<_xkb_event *>(event);
+
          if (xkb_event->any.deviceID == m_keyboard->coreDeviceId()) {
             switch (xkb_event->any.xkbType) {
                // XkbNewKkdNotify and XkbMapNotify together capture all sorts of keymap
@@ -1369,10 +1386,12 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
                   m_keyboard->updateXKBState(&xkb_event->state_notify);
                   handled = true;
                   break;
+
                case XCB_XKB_MAP_NOTIFY:
                   m_keyboard->handleMappingNotifyEvent(&xkb_event->map_notify);
                   handled = true;
                   break;
+
                case XCB_XKB_NEW_KEYBOARD_NOTIFY: {
                   xcb_xkb_new_keyboard_notify_event_t *ev = &xkb_event->new_keyboard_notify;
                   if (ev->changed & XCB_XKB_NKN_DETAIL_KEYCODES) {
@@ -1380,6 +1399,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
                   }
                   break;
                }
+
                default:
                   break;
             }
@@ -1388,7 +1408,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
       }
    }
 
-   if (!handled && m_glIntegration) {
+   if (! handled && m_glIntegration) {
       handled = m_glIntegration->handleXcbEvent(event, response_type);
    }
 
@@ -1416,6 +1436,7 @@ void QXcbEventReader::start()
       connect(this, SIGNAL(eventPending()), m_connection, SLOT(processXcbEvents()), Qt::QueuedConnection);
       connect(this, SIGNAL(finished()), m_connection, SLOT(processXcbEvents()));
       QThread::start();
+
    } else {
       // Must be done after we have an event-dispatcher. By posting a method invocation
       // we are sure that by the time the method is called we have an event-dispatcher.
@@ -1426,11 +1447,11 @@ void QXcbEventReader::start()
 void QXcbEventReader::registerForEvents()
 {
    QSocketNotifier *notifier = new QSocketNotifier(xcb_get_file_descriptor(m_connection->xcb_connection()), QSocketNotifier::Read, this);
-   connect(notifier, SIGNAL(activated(int)), m_connection, SLOT(processXcbEvents()));
+   connect(notifier, SIGNAL(activated(int)),   m_connection, SLOT(processXcbEvents()));
 
    QAbstractEventDispatcher *dispatcher = QApplicationPrivate::eventDispatcher;
    connect(dispatcher, SIGNAL(aboutToBlock()), m_connection, SLOT(processXcbEvents()));
-   connect(dispatcher, SIGNAL(awake()), m_connection, SLOT(processXcbEvents()));
+   connect(dispatcher, SIGNAL(awake()),        m_connection, SLOT(processXcbEvents()));
 }
 
 void QXcbEventReader::registerEventDispatcher(QAbstractEventDispatcher *dispatcher)
@@ -1446,20 +1467,25 @@ void QXcbEventReader::registerEventDispatcher(QAbstractEventDispatcher *dispatch
 void QXcbEventReader::run()
 {
    xcb_generic_event_t *event;
+
    while (m_connection && (event = xcb_wait_for_event(m_connection->xcb_connection()))) {
       m_mutex.lock();
       addEvent(event);
+
       while (m_connection && (event = local_xcb_poll_for_queued_event(m_connection->xcb_connection()))) {
          addEvent(event);
       }
+
       m_mutex.unlock();
       emit eventPending();
    }
 
    m_mutex.lock();
+
    for (int i = 0; i < m_events.size(); ++i) {
       free(m_events.at(i));
    }
+
    m_events.clear();
    m_mutex.unlock();
 }
@@ -1477,11 +1503,13 @@ void QXcbEventReader::addEvent(xcb_generic_event_t *event)
 QXcbEventArray *QXcbEventReader::lock()
 {
    m_mutex.lock();
-   if (!local_xcb_poll_for_queued_event) {
+
+   if (! local_xcb_poll_for_queued_event) {
       while (xcb_generic_event_t *event = xcb_poll_for_event(m_connection->xcb_connection())) {
          m_events << event;
       }
    }
+
    return &m_events;
 }
 
@@ -1531,10 +1559,10 @@ void QXcbConnection::sendConnectionEvent(QXcbAtom::Atom a, uint id)
          XCB_WINDOW_CLASS_INPUT_ONLY, screen->root_visual, 0, nullptr));
 
    event.response_type = XCB_CLIENT_MESSAGE;
-   event.format = 32;
+   event.format   = 32;
    event.sequence = 0;
-   event.window = eventListener;
-   event.type = atom(a);
+   event.window   = eventListener;
+   event.type     = atom(a);
    event.data.data32[0] = id;
 
    Q_XCB_CALL(xcb_send_event(xcb_connection(), false, eventListener, XCB_EVENT_MASK_NO_EVENT, (const char *)&event));
@@ -1612,7 +1640,9 @@ xcb_window_t QXcbConnection::getQtSelectionOwner()
    if (!m_qtSelectionOwner) {
       xcb_screen_t *xcbScreen = primaryVirtualDesktop()->screen();
       int x = 0, y = 0, w = 3, h = 3;
+
       m_qtSelectionOwner = xcb_generate_id(xcb_connection());
+
       Q_XCB_CALL(xcb_create_window(xcb_connection(),
             XCB_COPY_FROM_PARENT,               // depth -- same as root
             m_qtSelectionOwner,                 // window id
@@ -1644,25 +1674,15 @@ xcb_window_t QXcbConnection::clientLeader()
 
 #ifndef QT_NO_DEBUG
       QByteArray ba("Qt client leader window");
-      Q_XCB_CALL(xcb_change_property(xcb_connection(),
-            XCB_PROP_MODE_REPLACE,
-            m_clientLeader,
-            atom(QXcbAtom::_NET_WM_NAME),
-            atom(QXcbAtom::UTF8_STRING),
-            8,
-            ba.length(),
-            ba.constData()));
-#endif
-      Q_XCB_CALL(xcb_change_property(xcb_connection(),
-            XCB_PROP_MODE_REPLACE,
-            m_clientLeader,
-            atom(QXcbAtom::WM_CLIENT_LEADER),
-            XCB_ATOM_WINDOW,
-            32,
-            1,
-            &m_clientLeader));
 
-#if !defined(QT_NO_SESSIONMANAGER) && defined(XCB_USE_SM)
+      Q_XCB_CALL(xcb_change_property(xcb_connection(), XCB_PROP_MODE_REPLACE, m_clientLeader,
+            atom(QXcbAtom::_NET_WM_NAME), atom(QXcbAtom::UTF8_STRING), 8, ba.length(), ba.constData()));
+#endif
+
+      Q_XCB_CALL(xcb_change_property(xcb_connection(), XCB_PROP_MODE_REPLACE, m_clientLeader,
+            atom(QXcbAtom::WM_CLIENT_LEADER), XCB_ATOM_WINDOW, 32, 1, &m_clientLeader));
+
+#if ! defined(QT_NO_SESSIONMANAGER) && defined(XCB_USE_SM)
       // If we are session managed, inform the window manager about it
       QByteArray session = qGuiApp->sessionId().toLatin1();
       if (!session.isEmpty()) {
@@ -1691,6 +1711,7 @@ void *QXcbConnection::createVisualInfoForDefaultVisualId() const
    if (m_defaultVisualId == UINT_MAX) {
       return nullptr;
    }
+
    XVisualInfo info;
    memset(&info, 0, sizeof info);
    info.visualid = m_defaultVisualId;
@@ -1698,6 +1719,7 @@ void *QXcbConnection::createVisualInfoForDefaultVisualId() const
    int count = 0;
    XVisualInfo *retVisual = XGetVisualInfo(DISPLAY_FROM_XCB(this), VisualIDMask, &info, &count);
    Q_ASSERT(count < 2);
+
    return retVisual;
 }
 
@@ -1716,6 +1738,7 @@ static inline bool isXIType(xcb_generic_event_t *event, int opCode, uint16_t typ
    return xiEvent->evtype == type;
 }
 #endif
+
 static inline bool isValid(xcb_generic_event_t *event)
 {
    return event && (event->response_type & ~0x80);
@@ -1818,8 +1841,9 @@ bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex,
 void QXcbConnection::processXcbEvents()
 {
    int connection_error = xcb_connection_has_error(xcb_connection());
+
    if (connection_error) {
-      qWarning("The X11 connection broke (error %d). Did the X11 server die?", connection_error);
+      qWarning("X11 connection broke (error %d). Verify X11 server is running", connection_error);
       exit(1);
    }
 
@@ -1827,13 +1851,15 @@ void QXcbConnection::processXcbEvents()
 
    for (int i = 0; i < eventqueue->size(); ++i) {
       xcb_generic_event_t *event = eventqueue->at(i);
-      if (!event) {
+
+      if (! event) {
          continue;
       }
+
       QScopedPointer<xcb_generic_event_t, QScopedPointerPodDeleter> eventGuard(event);
       (*eventqueue)[i] = nullptr;
 
-      if (!(event->response_type & ~0x80)) {
+      if (! (event->response_type & ~0x80)) {
          handleXcbError((xcb_generic_error_t *)event);
          continue;
       }
@@ -1846,6 +1872,7 @@ void QXcbConnection::processXcbEvents()
       if (clipboard()->processIncr()) {
          clipboard()->incrTransactionPeeker(event, accepted);
       }
+
       if (accepted) {
          continue;
       }
@@ -1860,6 +1887,7 @@ void QXcbConnection::processXcbEvents()
             ++it;
          }
       }
+
       m_reader->unlock();
       handleXcbEvent(event);
       m_reader->lock();
@@ -1874,6 +1902,7 @@ void QXcbConnection::processXcbEvents()
    for (PeekFunc f : m_peekFuncs) {
       f(this, nullptr);
    }
+
    m_peekFuncs.clear();
 
    xcb_flush(xcb_connection());
@@ -1910,6 +1939,7 @@ xcb_generic_event_t *QXcbConnection::checkEvent(int type)
 
    for (int i = 0; i < eventqueue->size(); ++i) {
       xcb_generic_event_t *event = eventqueue->at(i);
+
       if (event && event->response_type == type) {
          (*eventqueue)[i] = nullptr;
          m_reader->unlock();
@@ -2131,9 +2161,11 @@ void QXcbConnection::initializeAllAtoms()
    int i = 0;
    while (*ptr) {
       names[i++] = ptr;
+
       while (*ptr) {
          ++ptr;
       }
+
       ++ptr;
    }
 
@@ -2172,32 +2204,35 @@ xcb_atom_t QXcbConnection::internAtom(const char *name)
 
 QByteArray QXcbConnection::atomName(xcb_atom_t atom)
 {
-   if (!atom) {
+   if (! atom) {
       return QByteArray();
    }
 
    xcb_generic_error_t *error = nullptr;
    xcb_get_atom_name_cookie_t cookie = Q_XCB_CALL(xcb_get_atom_name(xcb_connection(), atom));
-   xcb_get_atom_name_reply_t *reply = xcb_get_atom_name_reply(xcb_connection(), cookie, &error);
+   xcb_get_atom_name_reply_t *reply  = xcb_get_atom_name_reply(xcb_connection(), cookie, &error);
+
    if (error) {
       qWarning() << "QXcbConnection::atomName: bad Atom" << atom;
       free(error);
    }
+
    if (reply) {
       QByteArray result(xcb_get_atom_name_name(reply), xcb_get_atom_name_name_length(reply));
       free(reply);
       return result;
    }
+
    return QByteArray();
 }
 
 const xcb_format_t *QXcbConnection::formatForDepth(uint8_t depth) const
 {
-   xcb_format_iterator_t iterator =
-      xcb_setup_pixmap_formats_iterator(m_setup);
+   xcb_format_iterator_t iterator = xcb_setup_pixmap_formats_iterator(m_setup);
 
    while (iterator.rem) {
       xcb_format_t *format = iterator.data;
+
       if (format->depth == depth) {
          return format;
       }
@@ -2218,21 +2253,24 @@ void QXcbConnection::initializeXFixes()
 {
    xcb_generic_error_t *error = nullptr;
    const xcb_query_extension_reply_t *reply = xcb_get_extension_data(m_connection, &xcb_xfixes_id);
-   if (!reply || !reply->present) {
+
+   if (! reply || !reply->present) {
       return;
    }
 
    xfixes_first_event = reply->first_event;
    xcb_xfixes_query_version_cookie_t xfixes_query_cookie = xcb_xfixes_query_version(m_connection,
-         XCB_XFIXES_MAJOR_VERSION,
-         XCB_XFIXES_MINOR_VERSION);
+         XCB_XFIXES_MAJOR_VERSION, XCB_XFIXES_MINOR_VERSION);
+
    xcb_xfixes_query_version_reply_t *xfixes_query = xcb_xfixes_query_version_reply (m_connection,
          xfixes_query_cookie, &error);
+
    if (!xfixes_query || error || xfixes_query->major_version < 2) {
       qWarning("QXcbConnection: Failed to initialize XFixes");
       free(error);
       xfixes_first_event = 0;
    }
+
    free(xfixes_query);
 }
 
@@ -2240,7 +2278,8 @@ void QXcbConnection::initializeXRender()
 {
 #ifdef XCB_USE_RENDER
    const xcb_query_extension_reply_t *reply = xcb_get_extension_data(m_connection, &xcb_render_id);
-   if (!reply || !reply->present) {
+   if (!
+reply || !reply->present) {
       return;
    }
 
@@ -2264,7 +2303,7 @@ void QXcbConnection::initializeXRender()
 void QXcbConnection::initializeXRandr()
 {
    const xcb_query_extension_reply_t *reply = xcb_get_extension_data(m_connection, &xcb_randr_id);
-   if (!reply || !reply->present) {
+   if (! reply || !reply->present) {
       return;
    }
 
@@ -2272,14 +2311,14 @@ void QXcbConnection::initializeXRandr()
 
    xcb_generic_error_t *error = nullptr;
    xcb_randr_query_version_cookie_t xrandr_query_cookie = xcb_randr_query_version(m_connection,
-         XCB_RANDR_MAJOR_VERSION,
-         XCB_RANDR_MINOR_VERSION);
+         XCB_RANDR_MAJOR_VERSION, XCB_RANDR_MINOR_VERSION);
 
    has_randr_extension = true;
 
    xcb_randr_query_version_reply_t *xrandr_query = xcb_randr_query_version_reply(m_connection,
          xrandr_query_cookie, &error);
-   if (!xrandr_query || error || (xrandr_query->major_version < 1 || (xrandr_query->major_version == 1 &&
+
+   if (! xrandr_query || error || (xrandr_query->major_version < 1 || (xrandr_query->major_version == 1 &&
             xrandr_query->minor_version < 2))) {
       qWarning("QXcbConnection: Failed to initialize XRandr");
       free(error);
@@ -2302,16 +2341,18 @@ void QXcbConnection::initializeXRandr()
 void QXcbConnection::initializeXinerama()
 {
    const xcb_query_extension_reply_t *reply = xcb_get_extension_data(m_connection, &xcb_xinerama_id);
-   if (!reply || !reply->present) {
+   if (! reply || ! reply->present) {
       return;
    }
 
    xcb_generic_error_t *error = nullptr;
    xcb_xinerama_is_active_cookie_t xinerama_query_cookie = xcb_xinerama_is_active(m_connection);
+
    xcb_xinerama_is_active_reply_t *xinerama_is_active = xcb_xinerama_is_active_reply(m_connection,
-         xinerama_query_cookie,
-         &error);
-   has_xinerama_extension = xinerama_is_active && !error && xinerama_is_active->state;
+         xinerama_query_cookie, &error);
+
+   has_xinerama_extension = xinerama_is_active && ! error && xinerama_is_active->state;
+
    free(error);
    free(xinerama_is_active);
 }
@@ -2329,10 +2370,12 @@ void QXcbConnection::initializeXShape()
 
    if (!shape_query) {
       qWarning("QXcbConnection: Failed to initialize SHAPE extension");
+
    } else if (shape_query->major_version > 1 || (shape_query->major_version == 1 && shape_query->minor_version >= 1)) {
       // The input shape is the only thing added in SHAPE 1.1
       has_input_shape = true;
    }
+
    free(shape_query);
 }
 
@@ -2340,11 +2383,13 @@ void QXcbConnection::initializeXKB()
 {
 #ifndef QT_NO_XKB
    const xcb_query_extension_reply_t *reply = xcb_get_extension_data(m_connection, &xcb_xkb_id);
+
    if (!reply || !reply->present) {
       qWarning() << "XKEYBOARD extension not present on the X server.";
       xkb_first_event = 0;
       return;
    }
+
    xkb_first_event = reply->first_event;
 
    xcb_connection_t *c = connection()->xcb_connection();
@@ -2354,7 +2399,7 @@ void QXcbConnection::initializeXKB()
    xkb_query_cookie = xcb_xkb_use_extension(c, XKB_X11_MIN_MAJOR_XKB_VERSION, XKB_X11_MIN_MINOR_XKB_VERSION);
    xkb_query = xcb_xkb_use_extension_reply(c, xkb_query_cookie, nullptr);
 
-   if (!xkb_query) {
+   if (! xkb_query) {
       qWarning("Failed to initialize XKB extension");
       return;
 
@@ -2364,6 +2409,7 @@ void QXcbConnection::initializeXKB()
          xkb_query->serverMajor, xkb_query->serverMinor);
 
       free(xkb_query);
+
       return;
    }
 

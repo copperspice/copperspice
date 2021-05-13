@@ -80,18 +80,16 @@ QImage::Format qt_xcb_imageFormatForVisual(QXcbConnection *connection, uint8_t d
 }
 
 QPixmap qt_xcb_pixmapFromXPixmap(QXcbConnection *connection, xcb_pixmap_t pixmap,
-   int width, int height, int depth,
-   const xcb_visualtype_t *visual)
+            int width, int height, int depth, const xcb_visualtype_t *visual)
 {
    xcb_connection_t *conn = connection->xcb_connection();
 
-   xcb_get_image_cookie_t get_image_cookie =
-      xcb_get_image_unchecked(conn, XCB_IMAGE_FORMAT_Z_PIXMAP, pixmap,
-         0, 0, width, height, 0xffffffff);
+   xcb_get_image_cookie_t get_image_cookie = xcb_get_image_unchecked(conn, XCB_IMAGE_FORMAT_Z_PIXMAP,
+         pixmap, 0, 0, width, height, 0xffffffff);
 
    xcb_get_image_reply_t *image_reply = xcb_get_image_reply(conn, get_image_cookie, nullptr);
 
-   if (!image_reply) {
+   if (! image_reply) {
       return QPixmap();
    }
 
@@ -120,10 +118,12 @@ QPixmap qt_xcb_pixmapFromXPixmap(QXcbConnection *connection, xcb_pixmap_t pixmap
                   }
                   break;
                }
-               case QImage::Format_RGB32: // fall-through
+
+               case QImage::Format_RGB32:
                case QImage::Format_ARGB32_Premultiplied: {
                   uint *p = (uint *)image.scanLine(i);
                   uint *end = p + image.width();
+
                   while (p < end) {
                      *p = ((*p << 24) & 0xff000000) | ((*p << 8) & 0x00ff0000)
                         | ((*p >> 8) & 0x0000ff00) | ((*p >> 24) & 0x000000ff);
@@ -146,8 +146,10 @@ QPixmap qt_xcb_pixmapFromXPixmap(QXcbConnection *connection, xcb_pixmap_t pixmap
             }
             p += bytes_per_line / 4;
          }
+
       } else if (format == QImage::Format_BGR30 || format == QImage::Format_RGB30) {
          QRgb *p = (QRgb *)image.bits();
+
          for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                p[x] |= 0xc0000000;
@@ -169,31 +171,36 @@ xcb_pixmap_t qt_xcb_XPixmapFromBitmap(QXcbScreen *screen, const QImage &image)
    QImage bitmap = image.convertToFormat(QImage::Format_MonoLSB);
    const QRgb c0 = QColor(Qt::black).rgb();
    const QRgb c1 = QColor(Qt::white).rgb();
+
    if (bitmap.color(0) == c0 && bitmap.color(1) == c1) {
       bitmap.invertPixels();
       bitmap.setColor(0, c1);
       bitmap.setColor(1, c0);
    }
+
    const int width = bitmap.width();
    const int height = bitmap.height();
    const int bytesPerLine = bitmap.bytesPerLine();
    int destLineSize = width / 8;
+
    if (width % 8) {
       ++destLineSize;
    }
+
    const uchar *map = bitmap.bits();
    uint8_t *buf = new uint8_t[height * destLineSize];
+
    for (int i = 0; i < height; i++) {
       memcpy(buf + (destLineSize * i), map + (bytesPerLine * i), destLineSize);
    }
+
    xcb_pixmap_t pm = xcb_create_pixmap_from_bitmap_data(conn, screen->root(), buf,
          width, height, 1, 0, 0, nullptr);
    delete[] buf;
    return pm;
 }
 
-xcb_cursor_t qt_xcb_createCursorXRender(QXcbScreen *screen, const QImage &image,
-   const QPoint &spot)
+xcb_cursor_t qt_xcb_createCursorXRender(QXcbScreen *screen, const QImage &image, const QPoint &spot)
 {
 #ifdef XCB_USE_RENDER
    xcb_connection_t *conn = screen->xcb_connection();
@@ -202,26 +209,28 @@ xcb_cursor_t qt_xcb_createCursorXRender(QXcbScreen *screen, const QImage &image,
 
    xcb_generic_error_t *error = nullptr;
    xcb_render_query_pict_formats_cookie_t formatsCookie = xcb_render_query_pict_formats(conn);
-   xcb_render_query_pict_formats_reply_t *formatsReply = xcb_render_query_pict_formats_reply(conn,
-         formatsCookie,
-         &error);
+   xcb_render_query_pict_formats_reply_t *formatsReply  = xcb_render_query_pict_formats_reply(conn,
+         formatsCookie, &error);
+
    if (!formatsReply || error) {
       qWarning("qt_xcb_createCursorXRender: query_pict_formats failed");
       free(formatsReply);
       free(error);
       return XCB_NONE;
    }
+
    xcb_render_pictforminfo_t *fmt = xcb_render_util_find_standard_format(formatsReply,
          XCB_PICT_STANDARD_ARGB_32);
-   if (!fmt) {
+
+   if (! fmt) {
       qWarning("qt_xcb_createCursorXRender: Failed to find format PICT_STANDARD_ARGB_32");
       free(formatsReply);
       return XCB_NONE;
    }
 
    QImage img = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-   xcb_image_t *xi = xcb_image_create(w, h, XCB_IMAGE_FORMAT_Z_PIXMAP,
-         32, 32, 32, 32,
+
+   xcb_image_t *xi = xcb_image_create(w, h, XCB_IMAGE_FORMAT_Z_PIXMAP, 32, 32, 32, 32,
          QSysInfo::ByteOrder == QSysInfo::BigEndian ? XCB_IMAGE_ORDER_MSB_FIRST : XCB_IMAGE_ORDER_LSB_FIRST,
          XCB_IMAGE_ORDER_MSB_FIRST, nullptr, 0, nullptr);
 
@@ -230,8 +239,10 @@ xcb_cursor_t qt_xcb_createCursorXRender(QXcbScreen *screen, const QImage &image,
       free(formatsReply);
       return XCB_NONE;
    }
+
    xi->data = (uint8_t *) malloc(xi->stride * h);
-   if (!xi->data) {
+
+   if (! xi->data) {
       qWarning("qt_xcb_createCursorXRender: Failed to malloc() image data");
       xcb_image_destroy(xi);
       free(formatsReply);

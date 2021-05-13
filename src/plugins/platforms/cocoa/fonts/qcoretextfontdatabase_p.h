@@ -30,12 +30,7 @@
 #include <qplatform_theme.h>
 #include <qcore_mac_p.h>
 
-#ifndef Q_OS_IOS
 #include <ApplicationServices/ApplicationServices.h>
-#else
-#include <CoreText/CoreText.h>
-#include <CoreGraphics/CoreGraphics.h>
-#endif
 
 class QCoreTextFontDatabase : public QPlatformFontDatabase
 {

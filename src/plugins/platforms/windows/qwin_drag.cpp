@@ -651,19 +651,12 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropTarget::Drop(LPDATAO
    } else {
       m_chosenEffect = DROPEFFECT_NONE;
    }
+
    *pdwEffect = m_chosenEffect;
 
    windowsDrag->releaseDropDataObject();
    return NOERROR;
 }
-
-
-/*!
-    \class QWindowsDrag
-    \brief Windows drag implementation.
-    \internal
-    \ingroup qt-lighthouse-win
-*/
 
 QWindowsDrag::QWindowsDrag()
    : m_dropDataObject(nullptr), m_cachedDropTargetHelper(nullptr)
@@ -677,10 +670,6 @@ QWindowsDrag::~QWindowsDrag()
    }
 }
 
-/*!
-    \brief Return data for a drop in process. If it stems from a current drag, use a shortcut.
-*/
-
 QMimeData *QWindowsDrag::dropData()
 {
    if (const QDrag *drag = currentDrag()) {
@@ -689,9 +678,6 @@ QMimeData *QWindowsDrag::dropData()
    return &m_dropData;
 }
 
-/*!
-    \brief May be used to handle extended cursors functionality for drags from outside the app.
-*/
 IDropTargetHelper *QWindowsDrag::dropHelper()
 {
    if (!m_cachedDropTargetHelper) {
@@ -718,6 +704,7 @@ Qt::DropAction QWindowsDrag::drag(QDrag *drag)
 
    const HRESULT r = DoDragDrop(dropDataObject, windowDropSource, allowedEffects, &resultEffect);
    const DWORD  reportedPerformedEffect = dropDataObject->reportedPerformedEffect();
+
    if (r == DRAGDROP_S_DROP) {
       if (reportedPerformedEffect == DROPEFFECT_MOVE && resultEffect != DROPEFFECT_MOVE) {
          dragResult = Qt::TargetMoveAction;
@@ -733,6 +720,7 @@ Qt::DropAction QWindowsDrag::drag(QDrag *drag)
          dragResult = Qt::CopyAction;
       }
    }
+
    // clean up
    dropDataObject->releaseData();
    dropDataObject->Release();           // Will delete obj if refcount becomes 0

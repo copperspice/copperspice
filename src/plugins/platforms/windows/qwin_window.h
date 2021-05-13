@@ -34,7 +34,10 @@ class QWindowsOleDropTarget;
 class QDebug;
 
 struct QWindowsGeometryHint {
-   QWindowsGeometryHint() {}
+   QWindowsGeometryHint()
+   {
+   }
+
    explicit QWindowsGeometryHint(const QWindow *w, const QMargins &customMargins);
    static QMargins frame(DWORD style, DWORD exStyle);
    static bool handleCalculateSize(const QMargins &customMargins, const MSG &msg, LRESULT *result);
@@ -87,8 +90,8 @@ struct QWindowsWindowData {
 
    Qt::WindowFlags flags;
    QRect geometry;
-   QMargins frame; // Do not use directly for windows, see FrameDirty.
-   QMargins customMargins; // User-defined, additional frame for NCCALCSIZE
+   QMargins frame;             // Do not use directly for windows, see FrameDirty.
+   QMargins customMargins;     // User-defined, additional frame for NCCALCSIZE
    HWND hwnd;
    bool embedded;
 
@@ -133,17 +136,21 @@ class QWindowsWindow : public QPlatformWindow
    QSurfaceFormat format() const override {
       return m_format;
    }
+
    void setGeometry(const QRect &rect) override;
    QRect geometry() const override {
       return m_data.geometry;
    }
+
    QRect normalGeometry() const override;
 
    void setVisible(bool visible) override;
    bool isVisible() const;
+
    bool isExposed() const override {
       return testFlag(Exposed);
    }
+
    bool isActive() const override;
    bool isEmbedded(const QPlatformWindow *parentWindow = nullptr) const override;
    QPoint mapToGlobal(const QPoint &pos) const override;
@@ -201,6 +208,7 @@ class QWindowsWindow : public QPlatformWindow
       return GetWindowLongPtr(m_data.hwnd, GWL_STYLE);
    }
    void setStyle(unsigned s) const;
+
    inline unsigned exStyle() const {
       return GetWindowLongPtr(m_data.hwnd, GWL_EXSTYLE);
    }
@@ -227,7 +235,6 @@ class QWindowsWindow : public QPlatformWindow
 
    void getSizeHints(MINMAXINFO *mmi) const;
    bool handleNonClientHitTest(const QPoint &globalPos, LRESULT *result) const;
-
 
 #ifndef QT_NO_CURSOR
    CursorHandlePtr cursor() const {
@@ -323,6 +330,7 @@ QPoint QWindowsGeometryHint::mapToGlobal(HWND hwnd, const QPoint &qp)
 {
    POINT p = { qp.x(), qp.y() };
    ClientToScreen(hwnd, &p);
+
    return QPoint(p.x, p.y);
 }
 
@@ -330,6 +338,7 @@ QPoint QWindowsGeometryHint::mapFromGlobal(const HWND hwnd, const QPoint &qp)
 {
    POINT p = { qp.x(), qp.y() };
    ScreenToClient(hwnd, &p);
+
    return QPoint(p.x, p.y);
 }
 
@@ -348,10 +357,12 @@ QPoint QWindowsGeometryHint::mapFromGlobal(const QWindow *w, const QPoint &p)
 
 QWindowsWindow *QWindowsWindow::baseWindowOf(const QWindow *w)
 {
-   if (w)
+   if (w) {
       if (QPlatformWindow *pw = w->handle()) {
          return static_cast<QWindowsWindow *>(pw);
       }
+   }
+
    return nullptr;
 }
 

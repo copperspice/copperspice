@@ -281,10 +281,11 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::detectSupportedRenderers(c
       qDebug() << "Disabling rotation: " << gpu;
       result |= DisableRotationFlag;
    }
-   srCache->insert(qgpu, result);
-   return result;
 
-#endif // !QT_NO_OPENGL
+   srCache->insert(qgpu, result);
+
+   return result;
+#endif
 }
 
 QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::supportedGlesRenderers()
@@ -292,6 +293,7 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::supportedGlesRenderers()
    const GpuDescription gpu = GpuDescription::detect();
    const QWindowsOpenGLTester::Renderers result = detectSupportedRenderers(gpu, true);
    qDebug() << __FUNCTION__ << gpu << "renderer: " << result;
+
    return result;
 }
 
@@ -300,6 +302,7 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::supportedRenderers()
    const GpuDescription gpu = GpuDescription::detect();
    const QWindowsOpenGLTester::Renderers result = detectSupportedRenderers(gpu, false);
    qDebug() << __FUNCTION__ << gpu << "renderer: " << result;
+
    return result;
 }
 
@@ -328,14 +331,17 @@ bool QWindowsOpenGLTester::testDesktopGL()
       if (!CreateContext) {
          goto cleanup;
       }
+
       DeleteContext = reinterpret_cast<BOOL (WINAPI *)(HGLRC)>(::GetProcAddress(lib, "wglDeleteContext"));
       if (!DeleteContext) {
          goto cleanup;
       }
+
       MakeCurrent = reinterpret_cast<BOOL (WINAPI *)(HDC, HGLRC)>(::GetProcAddress(lib, "wglMakeCurrent"));
       if (!MakeCurrent) {
          goto cleanup;
       }
+
       WGL_GetProcAddress = reinterpret_cast<PROC (WINAPI *)(LPCSTR)>(::GetProcAddress(lib, "wglGetProcAddress"));
       if (!WGL_GetProcAddress) {
          goto cleanup;
@@ -352,33 +358,42 @@ bool QWindowsOpenGLTester::testDesktopGL()
       wclass.lpfnWndProc   = DefWindowProc;
       wclass.lpszClassName = className;
       wclass.style = CS_OWNDC;
+
       if (!RegisterClass(&wclass)) {
          goto cleanup;
       }
+
       wnd = CreateWindow(className, L"qtopenglproxytest", WS_OVERLAPPED,
             0, 0, 640, 480, 0, 0, wclass.hInstance, 0);
-      if (!wnd) {
+
+      if (! wnd) {
          goto cleanup;
       }
+
       dc = GetDC(wnd);
-      if (!dc) {
+      if (! dc) {
          goto cleanup;
       }
 
       PIXELFORMATDESCRIPTOR pfd;
       memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+
       pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
       pfd.nVersion = 1;
       pfd.dwFlags = PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW | PFD_GENERIC_FORMAT;
       pfd.iPixelType = PFD_TYPE_RGBA;
+
       // Use the GDI functions. Under the hood this will call the wgl variants in opengl32.dll.
       int pixelFormat = ChoosePixelFormat(dc, &pfd);
+
       if (!pixelFormat) {
          goto cleanup;
       }
+
       if (!SetPixelFormat(dc, pixelFormat, &pfd)) {
          goto cleanup;
       }
+
       context = CreateContext(dc);
       if (!context) {
          goto cleanup;
@@ -392,12 +407,15 @@ bool QWindowsOpenGLTester::testDesktopGL()
       // Check the version. If we got 1.x then it's all hopeless and we can stop right here.
       typedef const GLubyte * (APIENTRY * GetString_t)(GLenum name);
       GetString_t GetString = reinterpret_cast<GetString_t>(::GetProcAddress(lib, "glGetString"));
+
       if (GetString) {
          if (const char *versionStr = reinterpret_cast<const char *>(GetString(GL_VERSION))) {
             const QByteArray version(versionStr);
             const int majorDot = version.indexOf('.');
+
             if (majorDot != -1) {
                int minorDot = version.indexOf('.', majorDot + 1);
+
                if (minorDot == -1) {
                   minorDot = version.size();
                }
@@ -408,12 +426,14 @@ bool QWindowsOpenGLTester::testDesktopGL()
                // Try to be as lenient as possible. Missing version, bogus values and
                // such are all accepted. The driver may still be functional. Only
                // check for known-bad cases, like versions "1.4.0 ...".
+
                if (major == 1) {
                   result = false;
                   qDebug("OpenGL version too low");
                }
             }
          }
+
       } else {
          result = false;
          qDebug("OpenGL 1.x entry points not found");
@@ -435,12 +455,15 @@ cleanup:
    if (MakeCurrent) {
       MakeCurrent(nullptr, nullptr);
    }
+
    if (context) {
       DeleteContext(context);
    }
+
    if (dc && wnd) {
       ReleaseDC(wnd, dc);
    }
+
    if (wnd) {
       DestroyWindow(wnd);
       UnregisterClass(className, GetModuleHandle(nullptr));
@@ -448,9 +471,10 @@ cleanup:
    // No FreeLibrary. Some implementations, Mesa in particular, deadlock when trying to unload.
 
    return result;
+
 #else
    return false;
-#endif // !QT_NO_OPENGL && !Q_OS_WINCE
+#endif
 }
 
 

@@ -31,8 +31,6 @@ class QWindowsOleDataObject;
 
 class QWindowsClipboardRetrievalMimeData : public QWindowsInternalMimeData
 {
- public:
-
  protected:
    IDataObject *retrieveDataObject() const override;
    void releaseDataObject(IDataObject *) const override;
@@ -44,7 +42,7 @@ class QWindowsClipboard : public QPlatformClipboard
    QWindowsClipboard();
    ~QWindowsClipboard();
 
-   void registerViewer(); // Call in initialization, when context is up.
+   void registerViewer();    // Call in initialization, when context is up.
    void cleanup();
 
    QMimeData *mimeData(QClipboard::Mode mode = QClipboard::Clipboard) override;
@@ -61,6 +59,7 @@ class QWindowsClipboard : public QPlatformClipboard
  private:
    void clear();
    void releaseIData();
+
    inline void propagateClipboardMessage(UINT message, WPARAM wParam, LPARAM lParam) const;
    inline void unregisterViewer();
    inline bool ownsClipboard() const;

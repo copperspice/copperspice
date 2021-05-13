@@ -25,8 +25,8 @@
 #include <qapplication.h>
 
 QCocoaClipboard::QCocoaClipboard()
-   : m_clipboard(new QMacPasteboard(kPasteboardClipboard, QMacInternalPasteboardMime::MIME_CLIP))
-   , m_find(new QMacPasteboard(kPasteboardFind, QMacInternalPasteboardMime::MIME_CLIP))
+   : m_clipboard(new QMacPasteboard(kPasteboardClipboard, QMacInternalPasteboardMime::MIME_CLIP)),
+     m_find(new QMacPasteboard(kPasteboardFind, QMacInternalPasteboardMime::MIME_CLIP))
 {
    connect(qApp, &QApplication::applicationStateChanged, this, &QCocoaClipboard::handleApplicationStateChanged);
 }
@@ -85,6 +85,7 @@ void QCocoaClipboard::handleApplicationStateChanged(Qt::ApplicationState state)
    if (m_clipboard->sync()) {
       emitChanged(QClipboard::Clipboard);
    }
+
    if (m_find->sync()) {
       emitChanged(QClipboard::FindBuffer);
    }

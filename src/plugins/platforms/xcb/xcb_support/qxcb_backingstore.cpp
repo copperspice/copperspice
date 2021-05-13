@@ -193,7 +193,7 @@ QXcbShmImage::QXcbShmImage(QXcbScreen *screen, const QSize &size, uint depth, QI
    }
 
    m_hasAlpha = QImage::toPixelFormat(format).alphaUsage() == QPixelFormat::UsesAlpha;
-   if (!m_hasAlpha) {
+   if (! m_hasAlpha) {
       format = qt_maybeAlphaVersionWithSameDepth(format);
    }
 
@@ -329,6 +329,7 @@ QPaintDevice *QXcbBackingStore::paintDevice()
    if (!m_image) {
       return nullptr;
    }
+
    return m_rgbImage.isNull() ? m_image->image() : &m_rgbImage;
 }
 
@@ -461,6 +462,7 @@ void QXcbBackingStore::resize(const QSize &size, const QRegion &)
    if (!pw) {
       window()->create();
       pw = window()->handle();
+
    }
    QXcbWindow *win = static_cast<QXcbWindow *>(pw);
 
@@ -470,7 +472,9 @@ void QXcbBackingStore::resize(const QSize &size, const QRegion &)
       m_size = size;
       return;
    }
+
    m_image = new QXcbShmImage(screen, size, win->depth(), win->imageFormat());
+
    // Slow path for bgr888 VNC: Create an additional image, paint into that and
    // swap R and B while copying to m_image after each paint.
    if (win->imageNeedsRgbSwap()) {
@@ -483,7 +487,7 @@ extern void qt_scrollRectInImage(QImage &img, const QRect &rect, const QPoint &o
 
 bool QXcbBackingStore::scroll(const QRegion &area, int dx, int dy)
 {
-   if (!m_image || m_image->image()->isNull()) {
+   if (! m_image || m_image->image()->isNull()) {
       return false;
    }
 

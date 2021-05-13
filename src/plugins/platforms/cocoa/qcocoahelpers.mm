@@ -24,13 +24,10 @@
 #include <qcocoahelpers.h>
 
 #include <qplatform_screen.h>
+#include <qwidget.h>
 
 #include <qapplication_p.h>
 #include <qwindow_p.h>
-
-#ifndef QT_NO_WIDGETS
-#include <qwidget.h>
-#endif
 
 #include <algorithm>
 
@@ -128,10 +125,12 @@ NSImage *qt_mac_create_nsimage(const QPixmap &pm)
    if (pm.isNull()) {
       return nullptr;
    }
+
    QImage image = pm.toImage();
    CGImageRef cgImage = qt_mac_toCGImage(image);
    NSImage *nsImage = qt_mac_cgimage_to_nsimage(cgImage);
    CGImageRelease(cgImage);
+
    return nsImage;
 }
 
@@ -445,6 +444,7 @@ CGColorSpaceRef qt_mac_displayColorSpace(const QWidget *widget)
       void qt_mac_cleanUpMacColorSpaces();
       qAddPostRoutine(qt_mac_cleanUpMacColorSpaces);
    }
+
    return colorSpace;
 }
 
@@ -460,8 +460,10 @@ void qt_mac_cleanUpMacColorSpaces()
       if (it.value()) {
          CFRelease(it.value());
       }
+
       ++it;
    }
+
    m_displayColorSpaceHash.clear();
 }
 

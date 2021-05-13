@@ -111,6 +111,7 @@ void QCocoaEventDispatcherPrivate::maybeStartCFRunLoopTimer()
       Q_ASSERT(runLoopTimerRef != nullptr);
 
       CFRunLoopAddTimer(mainRunLoop(), runLoopTimerRef, kCFRunLoopCommonModes);
+
    } else {
       // calculate when we need to wake up to process timers again
       CFAbsoluteTime ttf = CFAbsoluteTimeGetCurrent();
@@ -118,9 +119,11 @@ void QCocoaEventDispatcherPrivate::maybeStartCFRunLoopTimer()
 
       // Q: when should the timer first next?
       struct timespec tv;
+
       if (timerInfoList.timerWait(tv)) {
          // A: when we have timers to fire, of course
          interval = qMax(tv.tv_sec + tv.tv_nsec / 1000000000., 0.0000001);
+
       } else {
          // no timers can fire, but we cannot stop the CFRunLoopTimer, set the timer to fire at some
          // point in the distant future (the timer interval is one year)
@@ -146,7 +149,7 @@ void QCocoaEventDispatcherPrivate::maybeStopCFRunLoopTimer()
 void QCocoaEventDispatcher::registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *obj)
 {
 #ifndef QT_NO_DEBUG
-   if (timerId < 1 || interval < 0 || !obj) {
+   if (timerId < 1 || interval < 0 || ! obj) {
       qWarning("QCocoaEventDispatcher::registerTimer: invalid arguments");
       return;
    } else if (obj->thread() != thread() || thread() != QThread::currentThread()) {
@@ -329,7 +332,7 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
       NSEvent *event = nullptr;
 
       // First, send all previously excluded input events, if any:
-      if (!excludeUserEvents) {
+      if (! excludeUserEvents) {
          while (!d->queuedUserInputEvents.isEmpty()) {
             event = static_cast<NSEvent *>(d->queuedUserInputEvents.takeFirst());
 
@@ -859,11 +862,11 @@ QCocoaEventDispatcher::QCocoaEventDispatcher(QObject *parent)
    CFRunLoopObserverContext observerContext;
    bzero(&observerContext, sizeof(CFRunLoopObserverContext));
    observerContext.info = this;
+
    d->waitingObserver = CFRunLoopObserverCreate(kCFAllocatorDefault,
-         kCFRunLoopBeforeWaiting | kCFRunLoopAfterWaiting,
-         true, 0,
-         QCocoaEventDispatcherPrivate::waitingObserverCallback,
-         &observerContext);
+         kCFRunLoopBeforeWaiting | kCFRunLoopAfterWaiting, true, 0,
+         QCocoaEventDispatcherPrivate::waitingObserverCallback, &observerContext);
+
    CFRunLoopAddObserver(mainRunLoop(), d->waitingObserver, kCFRunLoopCommonModes);
 
    /* The first cycle in the loop adds the source and the events of the source
@@ -873,6 +876,7 @@ QCocoaEventDispatcher::QCocoaEventDispatcher(QObject *parent)
    CFRunLoopObserverContext firstTimeObserverContext;
    bzero(&firstTimeObserverContext, sizeof(CFRunLoopObserverContext));
    firstTimeObserverContext.info = d;
+
    d->firstTimeObserver = CFRunLoopObserverCreate(kCFAllocatorDefault,
          kCFRunLoopEntry,
          /* repeats = */ false,
@@ -917,6 +921,7 @@ void QCocoaEventDispatcherPrivate::processPostedEvents()
          if (currentModalSessionCached) {
             temporarilyStopAllModalSessions();
          }
+
          [NSApp stop: NSApp];
          cancelWaitForMoreEvents();
       }

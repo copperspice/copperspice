@@ -49,7 +49,9 @@ class QWindowsStaticOpenGLContext
    virtual void *createWindowSurface(void * /*nativeWindow*/, void * /*nativeConfig*/, int * /*err*/) {
       return nullptr;
    }
-   virtual void destroyWindowSurface(void * /*nativeSurface*/) { }
+
+   virtual void destroyWindowSurface(void * /*nativeSurface*/) {
+   }
 
  private:
    static QWindowsStaticOpenGLContext *doCreate();
@@ -68,6 +70,7 @@ class QWindowsOpenGLContext : public QPlatformOpenGLContext
    virtual void *nativeDisplay() const {
       return nullptr;
    }
+
    virtual void *nativeConfig() const {
       return nullptr;
    }

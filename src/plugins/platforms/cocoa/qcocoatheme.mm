@@ -65,16 +65,19 @@ bool QCocoaTheme::usePlatformNativeDialog(DialogType dialogType) const
    if (dialogType == QPlatformTheme::FileDialog) {
       return true;
    }
+
 #ifndef QT_NO_COLORDIALOG
    if (dialogType == QPlatformTheme::ColorDialog) {
       return true;
    }
 #endif
+
 #ifndef QT_NO_FONTDIALOG
    if (dialogType == QPlatformTheme::FontDialog) {
       return true;
    }
 #endif
+
    return false;
 }
 
@@ -83,14 +86,17 @@ QPlatformDialogHelper *QCocoaTheme::createPlatformDialogHelper(DialogType dialog
    switch (dialogType) {
       case QPlatformTheme::FileDialog:
          return new QCocoaFileDialogHelper();
+
 #ifndef QT_NO_COLORDIALOG
       case QPlatformTheme::ColorDialog:
          return new QCocoaColorDialogHelper();
 #endif
+
 #ifndef QT_NO_FONTDIALOG
       case QPlatformTheme::FontDialog:
          return new QCocoaFontDialogHelper();
 #endif
+
       default:
          return nullptr;
    }
@@ -110,6 +116,7 @@ const QPalette *QCocoaTheme::palette(Palette type) const
          m_systemPalette = qt_mac_createSystemPalette();
       }
       return m_systemPalette;
+
    } else {
       if (m_palettes.isEmpty()) {
          m_palettes = qt_mac_createRolePalettes();

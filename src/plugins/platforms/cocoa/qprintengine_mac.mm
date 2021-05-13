@@ -345,7 +345,7 @@ bool QMacPrintEnginePrivate::newPage_helper()
 
 void QMacPrintEnginePrivate::setPageSize(const QPageSize &pageSize)
 {
-   if (!pageSize.isValid()) {
+   if (! pageSize.isValid()) {
       return;
    }
 

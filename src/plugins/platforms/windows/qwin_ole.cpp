@@ -25,20 +25,20 @@
 #include <qwin_mime.h>
 #include <qwin_context.h>
 
-#include <QMouseEvent>
-#include <QWindow>
-#include <QPainter>
-#include <QCursor>
-#include <QApplication>
-#include <QMimeData>
-#include <QDebug>
+#include <qmouseevent.h>
+#include <qwindow.h>
+#include <qpainter.h>
+#include <qcursor.h>
+#include <qapplication.h>
+#include <qmimedata.h>
+#include <qdebug.h>
 
 #include <shlobj.h>
 
-QWindowsOleDataObject::QWindowsOleDataObject(QMimeData *mimeData) :
-   m_refs(1), data(mimeData),
-   CF_PERFORMEDDROPEFFECT(RegisterClipboardFormat(CFSTR_PERFORMEDDROPEFFECT)),
-   performedEffect(DROPEFFECT_NONE)
+QWindowsOleDataObject::QWindowsOleDataObject(QMimeData *mimeData)
+   : m_refs(1), data(mimeData),
+     CF_PERFORMEDDROPEFFECT(RegisterClipboardFormat(CFSTR_PERFORMEDDROPEFFECT)),
+     performedEffect(DROPEFFECT_NONE)
 {
 }
 
@@ -78,20 +78,20 @@ STDMETHODIMP QWindowsOleDataObject::QueryInterface(REFIID iid, void FAR *FAR *pp
    return ResultFromScode(E_NOINTERFACE);
 }
 
-STDMETHODIMP_(ULONG)
-QWindowsOleDataObject::AddRef(void)
+STDMETHODIMP_(ULONG) QWindowsOleDataObject::AddRef(void)
 {
    return ++m_refs;
 }
 
-STDMETHODIMP_(ULONG)
-QWindowsOleDataObject::Release(void)
+STDMETHODIMP_(ULONG) QWindowsOleDataObject::Release(void)
 {
    if (--m_refs == 0) {
       releaseData();
       delete this;
+
       return 0;
    }
+
    return m_refs;
 }
 
@@ -166,7 +166,6 @@ STDMETHODIMP QWindowsOleDataObject::SetData(LPFORMATETC pFormatetc, STGMEDIUM *p
    }
    return hr;
 }
-
 
 STDMETHODIMP QWindowsOleDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC FAR *ppenumFormatEtc)
 {
@@ -425,4 +424,3 @@ bool QWindowsOleEnumFmtEtc::copyFormatEtc(LPFORMATETC dest, const FORMATETC *src
 
    return true;
 }
-

@@ -432,12 +432,12 @@ static void populateFromPattern(FcPattern *pattern)
 
    familyName = QString::fromUtf8((const char *)value);
 
-   slant_value = FC_SLANT_ROMAN;
-   weight_value = FC_WEIGHT_REGULAR;
+   slant_value   = FC_SLANT_ROMAN;
+   weight_value  = FC_WEIGHT_REGULAR;
    spacing_value = FC_PROPORTIONAL;
-   indexValue = 0;
-   scalable = FcTrue;
    file_value    = nullptr;
+   indexValue    = 0;
+   scalable      = FcTrue;
 
    if (FcPatternGetInteger(pattern, FC_SLANT, 0, &slant_value) != FcResultMatch) {
       slant_value = FC_SLANT_ROMAN;
@@ -836,7 +836,7 @@ QStringList QFontconfigDatabase::fallbacksForFamily(const QString &family, QFont
    FcConfigSubstitute(nullptr, pattern, FcMatchPattern);
    FcDefaultSubstitute(pattern);
 
-   FcResult result = FcResultMatch;
+   FcResult result    = FcResultMatch;
    FcFontSet *fontSet = FcFontSort(nullptr, pattern, FcFalse, nullptr, &result);
    FcPatternDestroy(pattern);
 
@@ -910,15 +910,16 @@ QStringList QFontconfigDatabase::addApplicationFont(const QByteArray &fontData, 
       }
    }
 
-   int id = 0;
    FcBlanks *blanks = FcConfigGetBlanks(nullptr);
+
+   int id    = 0;
    int count = 0;
 
    FcPattern *pattern;
    do {
       pattern = queryFont((const FcChar8 *)QFile::encodeName(fileName).constData(),
             fontData, id, blanks, &count);
-      if (!pattern) {
+      if (! pattern) {
          return families;
       }
 
@@ -976,6 +977,7 @@ QFont QFontconfigDatabase::defaultFont() const
    FcResult res  = FcPatternGetString(dummy, FC_LANG, 0, &lang);
 
    FcPattern *pattern = FcPatternCreate();
+
    if (res == FcResultMatch) {
       // Make defaultFont pattern matching locale language aware, because
       // certain FC_LANG based custom rules may happen in FcConfigSubstitute()

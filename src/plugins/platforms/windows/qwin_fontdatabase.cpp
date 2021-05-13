@@ -187,13 +187,12 @@ QString EmbeddedFont::familyName(TableDirectory *nameTableDirectoryEntry)
       QTextCodec *codec = QTextCodec::codecForName("UTF-16BE");
 
       for (int i = 0; i < nameTableCount; ++i, ++nameRecord) {
-         if (qFromBigEndian<quint16>(nameRecord->nameID) == 1
-            && qFromBigEndian<quint16>(nameRecord->platformID) == 3 // Windows
-            && qFromBigEndian<quint16>(nameRecord->languageID) == 0x0409) { // US English
+         if (qFromBigEndian<quint16>(nameRecord->nameID) == 1 && qFromBigEndian<quint16>(nameRecord->platformID) == 3
+            && qFromBigEndian<quint16>(nameRecord->languageID) == 0x0409) {
 
             quint16 stringOffset = qFromBigEndian<quint16>(nameTable->stringOffset);
-            quint16 nameOffset = qFromBigEndian<quint16>(nameRecord->offset);
-            quint16 nameLength = qFromBigEndian<quint16>(nameRecord->length);
+            quint16 nameOffset   = qFromBigEndian<quint16>(nameRecord->offset);
+            quint16 nameLength   = qFromBigEndian<quint16>(nameRecord->length);
 
             if (quint32(m_fontData.size()) < offset + stringOffset + nameOffset + nameLength) {
                return retval;
@@ -220,7 +219,7 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
 
    QString oldFamilyName = familyName(nameTableDirectoryEntry);
 
-   // Reserve size for name table header, five required name records and string
+   // reserve size for name table header, five required name records and string
    const int requiredRecordCount = 5;
    quint16 nameIds[requiredRecordCount] = { 1, 2, 3, 4, 6 };
 
@@ -230,28 +229,28 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
    const QString regularString = QString::fromLatin1("Regular");
    int regularStringSize = regularString.size() * int(sizeof(quint16));
 
-   // Align table size of table to 32 bits (pad with 0)
+   // align table size of table to 32 bits (pad with 0)
    int fullSize = ((sizeOfHeader + newFamilyNameSize + regularStringSize) & ~3) + 4;
-
    QByteArray newNameTable(fullSize, char(0));
 
    QTextCodec *codec = QTextCodec::codecForName("UTF-16BE");
 
    {
       NameTable *nameTable = reinterpret_cast<NameTable *>(newNameTable.data());
-      nameTable->count = qbswap<quint16>(requiredRecordCount);
+
+      nameTable->count        = qbswap<quint16>(requiredRecordCount);
       nameTable->stringOffset = qbswap<quint16>(sizeOfHeader);
 
       NameRecord *nameRecord = reinterpret_cast<NameRecord *>(nameTable + 1);
 
       for (int i = 0; i < requiredRecordCount; ++i, nameRecord++) {
-         nameRecord->nameID = qbswap<quint16>(nameIds[i]);
+         nameRecord->nameID     = qbswap<quint16>(nameIds[i]);
          nameRecord->encodingID = qbswap<quint16>(1);
          nameRecord->languageID = qbswap<quint16>(0x0409);
          nameRecord->platformID = qbswap<quint16>(3);
-         nameRecord->length = qbswap<quint16>(newFamilyNameSize);
+         nameRecord->length     = qbswap<quint16>(newFamilyNameSize);
 
-         // Special case for sub-family
+         // special case for sub-family
          if (nameIds[i] == 4) {
             nameRecord->offset = qbswap<quint16>(newFamilyNameSize);
             nameRecord->length = qbswap<quint16>(regularStringSize);
@@ -574,23 +573,24 @@ QString getEnglishName(const QString &familyName)
       return QString();
    }
 
-   HGDIOBJ oldobj = SelectObject( hdc, hfont );
+   HGDIOBJ oldobj = SelectObject(hdc, hfont);
 
-   const DWORD name_tag = MAKE_TAG( 'n', 'a', 'm', 'e' );
+   const DWORD name_tag = MAKE_TAG('n', 'a', 'm', 'e');
 
    // get the name table
    unsigned char *table = nullptr;
 
    DWORD bytes = GetFontData(hdc, name_tag, 0, nullptr, 0);
 
-   if ( bytes == GDI_ERROR ) {
+   if (bytes == GDI_ERROR) {
       // int err = GetLastError();
       goto error;
    }
 
    table = new unsigned char[bytes];
    GetFontData(hdc, name_tag, 0, table, bytes);
-   if ( bytes == GDI_ERROR ) {
+
+   if (bytes == GDI_ERROR) {
       goto error;
    }
 
@@ -598,8 +598,8 @@ QString getEnglishName(const QString &familyName)
 
 error:
    delete [] table;
-   SelectObject( hdc, oldobj );
-   DeleteObject( hfont );
+   SelectObject(hdc, oldobj);
+   DeleteObject(hfont);
    ReleaseDC(nullptr, hdc);
 
    return i18n_name;
@@ -782,8 +782,10 @@ namespace {
 // which is normally not enumerated by EnumFontFamiliesEx()
 
 struct PopulateFamiliesContext {
-   PopulateFamiliesContext(const QString &f) : m_systemDefaultFont(f), m_seenSystemDefaultFont(false)
-   {}
+   PopulateFamiliesContext(const QString &f)
+      : m_systemDefaultFont(f), m_seenSystemDefaultFont(false)
+   {
+   }
 
    QString m_systemDefaultFont;
    bool m_seenSystemDefaultFont;
@@ -948,7 +950,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
       if (fontEngine) {
          if (request.family != fontEngine->fontDef.family) {
             qWarning("%s: Failed to load font, using fallback instead: %s",
-               __FUNCTION__, qPrintable(fontEngine->fontDef.family));
+               __FUNCTION__, csPrintable(fontEngine->fontDef.family));
 
             if (fontEngine->ref.load() == 0) {
                delete fontEngine;
@@ -982,7 +984,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
          const OS2Table *os2Table = reinterpret_cast<const OS2Table *>(fontData.constData()
                + qFromBigEndian<quint32>(os2TableEntry->offset));
 
-         bool italic = qFromBigEndian<quint16>(os2Table->selection) & 1;
+         bool italic  = qFromBigEndian<quint16>(os2Table->selection) & 1;
          bool oblique = qFromBigEndian<quint16>(os2Table->selection) & 128;
 
          if (italic) {
@@ -1016,21 +1018,27 @@ static QList<quint32> getTrueTypeFontOffsets(const uchar *fontData)
          && headerTag != MAKE_TAG('t', 'y', 'p', '1')) {
          return offsets;
       }
+
       offsets << 0;
       return offsets;
+
    }
+
    const quint32 numFonts = qFromBigEndian<quint32>(fontData + 8);
    for (uint i = 0; i < numFonts; ++i) {
       offsets << qFromBigEndian<quint32>(fontData + 12 + i * 4);
    }
+
    return offsets;
 }
 
 static void getFontTable(const uchar *fileBegin, const uchar *data, quint32 tag, const uchar **table, quint32 *length)
 {
    const quint16 numTables = qFromBigEndian<quint16>(data + 4);
+
    for (uint i = 0; i < numTables; ++i) {
       const quint32 offset = 12 + 16 * i;
+
       if (*reinterpret_cast<const quint32 *>(data + offset) == tag) {
          *table = fileBegin + qFromBigEndian<quint32>(data + offset + 8);
          *length = qFromBigEndian<quint32>(data + offset + 12);
@@ -1040,12 +1048,12 @@ static void getFontTable(const uchar *fileBegin, const uchar *data, quint32 tag,
 
    *table  = nullptr;
    *length = 0;
+
    return;
 }
 
 static void getFamiliesAndSignatures(const QByteArray &fontData,
-   QStringList *families,
-   QVector<FONTSIGNATURE> *signatures)
+   QStringList *families, QVector<FONTSIGNATURE> *signatures)
 {
    const uchar *data = reinterpret_cast<const uchar *>(fontData.constData());
 
@@ -1059,9 +1067,11 @@ static void getFamiliesAndSignatures(const QByteArray &fontData,
       const uchar *table;
       quint32 length;
       getFontTable(data, font, MAKE_TAG('n', 'a', 'm', 'e'), &table, &length);
+
       if (!table) {
          continue;
       }
+
       QString name = getEnglishName(table, length);
       if (name.isEmpty()) {
          continue;
@@ -1081,6 +1091,7 @@ static void getFamiliesAndSignatures(const QByteArray &fontData,
 
             signature.fsCsb[0] = qFromBigEndian<quint32>(table + 78);
             signature.fsCsb[1] = qFromBigEndian<quint32>(table + 82);
+
          } else {
             memset(&signature, 0, sizeof(signature));
          }
@@ -1368,7 +1379,7 @@ LOGFONT QWindowsFontDatabase::fontDefToLOGFONT(const QFontDef &request)
    QString fam = request.family;
 
    if (fam.size() >= LF_FACESIZE) {
-      qCritical("%s: Family name '%s' is too long.", __FUNCTION__, qPrintable(fam));
+      qCritical("%s: Family name '%s' is too long.", __FUNCTION__, csPrintable(fam));
       fam.truncate(LF_FACESIZE - 1);
    }
 
@@ -1399,20 +1410,26 @@ QStringList QWindowsFontDatabase::extraTryFontsForFamily(const QString &family)
    if (! db.writingSystems(family).contains(QFontDatabase::Symbol)) {
       if (! tryFonts) {
          LANGID lid = GetUserDefaultLangID();
+
          switch (lid & 0xff) {
-            case LANG_CHINESE: // Chinese
-               if ( lid == 0x0804 || lid == 0x1004) { // China mainland and Singapore
+            case LANG_CHINESE:
+               if ( lid == 0x0804 || lid == 0x1004) {
+                  // China mainland and Singapore
                   tryFonts = ch_CN_tryFonts;
                } else {
-                  tryFonts = ch_TW_tryFonts;   // Taiwan, Hong Kong and Macau
+                  tryFonts = ch_TW_tryFonts;
+                  // Taiwan, Hong Kong and Macau
                }
                break;
+
             case LANG_JAPANESE:
                tryFonts = jp_tryFonts;
                break;
+
             case LANG_KOREAN:
                tryFonts = kr_tryFonts;
                break;
+
             default:
                tryFonts = other_tryFonts;
                break;
@@ -1432,6 +1449,7 @@ QStringList QWindowsFontDatabase::extraTryFontsForFamily(const QString &family)
          ++tf;
       }
    }
+
    result.append(QString("Segoe UI Emoji"));
    result.append(QString("Segoe UI Symbol"));
 
@@ -1565,5 +1583,3 @@ QFont QWindowsFontDatabase::LOGFONT_to_QFont(const LOGFONT &logFont, int vertica
 
    return qFont;
 }
-
-

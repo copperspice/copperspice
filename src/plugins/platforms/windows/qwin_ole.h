@@ -41,6 +41,7 @@ class QWindowsOleDataObject : public IDataObject
    virtual ~QWindowsOleDataObject();
 
    void releaseData();
+
    QMimeData *mimeData() const;
    DWORD reportedPerformedEffect() const;
 
@@ -54,11 +55,9 @@ class QWindowsOleDataObject : public IDataObject
    STDMETHOD(GetDataHere)(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium);
    STDMETHOD(QueryGetData)(LPFORMATETC pformatetc);
    STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC pformatetc, LPFORMATETC pformatetcOut);
-   STDMETHOD(SetData)(LPFORMATETC pformatetc, STGMEDIUM FAR *pmedium,
-      BOOL fRelease);
+   STDMETHOD(SetData)(LPFORMATETC pformatetc, STGMEDIUM FAR *pmedium, BOOL fRelease);
    STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC FAR *ppenumFormatEtc);
-   STDMETHOD(DAdvise)(FORMATETC FAR *pFormatetc, DWORD advf,
-      LPADVISESINK pAdvSink, DWORD FAR *pdwConnection);
+   STDMETHOD(DAdvise)(FORMATETC FAR *pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD FAR *pdwConnection);
    STDMETHOD(DUnadvise)(DWORD dwConnection);
    STDMETHOD(EnumDAdvise)(LPENUMSTATDATA FAR *ppenumAdvise);
 
@@ -74,6 +73,7 @@ class QWindowsOleEnumFmtEtc : public IEnumFORMATETC
  public:
    explicit QWindowsOleEnumFmtEtc(const QVector<FORMATETC> &fmtetcs);
    explicit QWindowsOleEnumFmtEtc(const QVector<LPFORMATETC> &lpfmtetcs);
+
    virtual ~QWindowsOleEnumFmtEtc();
 
    bool isNull() const;
@@ -97,6 +97,5 @@ class QWindowsOleEnumFmtEtc : public IEnumFORMATETC
    QVector<LPFORMATETC> m_lpfmtetcs;
    bool m_isNull;
 };
-
 
 #endif

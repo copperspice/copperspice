@@ -93,20 +93,20 @@ class QMacCGContext
    CGContextRef context;
 
  public:
-   QMacCGContext(QPainter *p);                             // qpaintengine_mac.mm
+   QMacCGContext(QPainter *p);                             // implemented in qmacstyle_mac.cpp
 
    QMacCGContext() {
       context = nullptr;
    }
 
-   inline QMacCGContext(const QPaintDevice *pdev) {
+   QMacCGContext(const QPaintDevice *pdev) {
       extern CGContextRef qt_mac_cg_context(const QPaintDevice *);
       context = qt_mac_cg_context(pdev);
    }
 
-   inline QMacCGContext(CGContextRef cg, bool takeOwnership = false) {
+   QMacCGContext(CGContextRef cg, bool takeOwnership = false) {
       context = cg;
-      if (!takeOwnership) {
+      if (! takeOwnership) {
          CGContextRetain(context);
       }
    }
@@ -115,33 +115,38 @@ class QMacCGContext
       : context(nullptr) {
       *this = copy;
    }
-   inline ~QMacCGContext() {
+
+   ~QMacCGContext() {
       if (context) {
          CGContextRelease(context);
       }
    }
 
-   inline bool isNull() const {
+   bool isNull() const {
       return context;
    }
-   inline operator CGContextRef() {
+
+   operator CGContextRef() {
       return context;
    }
-   inline QMacCGContext &operator=(const QMacCGContext &copy) {
+
+   QMacCGContext &operator=(const QMacCGContext &copy) {
       if (context) {
          CGContextRelease(context);
       }
+
       context = copy.context;
       CGContextRetain(context);
       return *this;
    }
 
-   inline QMacCGContext &operator=(CGContextRef cg) {
+   QMacCGContext &operator=(CGContextRef cg) {
       if (context) {
          CGContextRelease(context);
       }
+
       context = cg;
-      CGContextRetain(context); //we do not take ownership
+      CGContextRetain(context);    // do not take ownership
       return *this;
    }
 };
@@ -149,9 +154,9 @@ class QMacCGContext
 class QMacInternalPasteboardMime;
 class QMimeData;
 
-extern QPaintDevice *qt_mac_safe_pdev;                          // qapplication_mac.cpp
+extern QPaintDevice *qt_mac_safe_pdev;                          // implemented in qmacstyle_mac.cpp
 
-extern OSWindowRef qt_mac_window_for(const QWidget *);          // qwidget_mac.mm
+extern OSWindowRef qt_mac_window_for(const QWidget *);          // implemented in qwidget_mac.mm
 extern OSViewRef qt_mac_nativeview_for(const QWidget *);
 extern QPoint qt_mac_nativeMapFromParent(const QWidget *child, const QPoint &pt);
 

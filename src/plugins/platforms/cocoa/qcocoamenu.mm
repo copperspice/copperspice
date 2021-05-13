@@ -22,19 +22,18 @@
 ***********************************************************************/
 
 #include <qcocoamenu.h>
-#include <qcocoahelpers.h>
 
+#include <qcocoahelpers.h>
 #include <qdebug.h>
 #include <qmetaobject.h>
 #include <qvarlengtharray.h>
-
-#include <qthread_p.h>
-#include <qapplication_p.h>
-
 #include <qcocoaapplication.h>
 #include <qcocoamenuloader.h>
 #include <qcocoamenubar.h>
 #include <qcocoawindow.h>
+
+#include <qthread_p.h>
+#include <qapplication_p.h>
 
 #import <qnsview.h>
 

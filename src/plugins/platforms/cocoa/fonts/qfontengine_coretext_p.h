@@ -27,12 +27,9 @@
 #include <qfontengine_p.h>
 #include <qcore_mac_p.h>
 
-#ifndef Q_OS_IOS
+
 #include <ApplicationServices/ApplicationServices.h>
-#else
-#include <CoreText/CoreText.h>
-#include <CoreGraphics/CoreGraphics.h>
-#endif
+
 
 class QCoreTextFontEngine : public QFontEngine
 {
@@ -69,6 +66,7 @@ class QCoreTextFontEngine : public QFontEngine
    int synthesized() const override {
       return synthesisFlags;
    }
+
    bool supportsSubPixelPositions() const override {
       return true;
    }
@@ -89,6 +87,7 @@ class QCoreTextFontEngine : public QFontEngine
 
    QFontEngine *cloneWithSize(qreal pixelSize) const override;
    Qt::HANDLE handle() const override;
+
    int glyphMargin(QFontEngine::GlyphFormat format) override {
       (void) format;
       return 0;

@@ -167,7 +167,8 @@ static void sm_saveYourselfCallback(SmcConn smcConn, SmPointer clientData,
    }
 
    sm_performSaveYourself((QXcbSessionManager *) clientData);
-   if (!sm_isshutdown) { // we cannot expect a confirmation message in that case
+   if (! sm_isshutdown) {
+      // we cannot expect a confirmation message in that case
       resetSmState();
    }
 }
@@ -234,27 +235,33 @@ static void sm_performSaveYourself(QXcbSessionManager *sm)
    switch (sm_saveType) {
       case SmSaveBoth:
          sm->appCommitData();
+
          if (sm_isshutdown && sm_cancel) {
             break;   // we cancelled the shutdown, no need to save state
          }
-      // fall through
+         [[fallthrough]];
+
       case SmSaveLocal:
          sm->appSaveState();
          break;
+
       case SmSaveGlobal:
          sm->appCommitData();
          break;
+
       default:
          break;
    }
 
-   if (sm_phase2 && !sm_in_phase2) {
+   if (sm_phase2 && ! sm_in_phase2) {
       SmcRequestSaveYourselfPhase2(smcConnection, sm_saveYourselfPhase2Callback, (SmPointer *) sm);
       qt_sm_blockUserInput = false;
+
    } else {
       // close eventual interaction monitors and cancel the
       // shutdown, if required. Note that we can only cancel when
       // performing a shutdown, it does not work for checkpoints
+
       if (sm_interactionActive) {
          SmcInteractDone(smcConnection, sm_isshutdown && sm_cancel);
          sm_interactionActive = false;
@@ -286,6 +293,7 @@ static void sm_dieCallback(SmcConn smcConn, SmPointer /* clientData */)
    if (smcConn != smcConnection) {
       return;
    }
+
    resetSmState();
    QEvent quitEvent(QEvent::Quit);
    QApplication::sendEvent(qApp, &quitEvent);
@@ -296,9 +304,11 @@ static void sm_shutdownCancelledCallback(SmcConn smcConn, SmPointer clientData)
    if (smcConn != smcConnection) {
       return;
    }
+
    if (sm_waitingForInteraction) {
       ((QXcbSessionManager *) clientData)->exitEventLoop();
    }
+
    resetSmState();
 }
 
@@ -307,6 +317,7 @@ static void sm_saveCompleteCallback(SmcConn smcConn, SmPointer /*clientData */)
    if (smcConn != smcConnection) {
       return;
    }
+
    resetSmState();
 }
 
@@ -315,6 +326,7 @@ static void sm_interactCallback(SmcConn smcConn, SmPointer clientData)
    if (smcConn != smcConnection) {
       return;
    }
+
    if (sm_waitingForInteraction) {
       ((QXcbSessionManager *) clientData)->exitEventLoop();
    }
@@ -325,6 +337,7 @@ static void sm_saveYourselfPhase2Callback(SmcConn smcConn, SmPointer clientData)
    if (smcConn != smcConnection) {
       return;
    }
+
    sm_in_phase2 = true;
    sm_performSaveYourself((QXcbSessionManager *) clientData);
 }
@@ -333,9 +346,6 @@ void QSmSocketReceiver::socketActivated(int)
 {
    IceProcessMessages(SmcGetIceConnection(smcConnection), nullptr, nullptr);
 }
-
-
-// QXcbSessionManager starts here
 
 QXcbSessionManager::QXcbSessionManager(const QString &id, const QString &key)
    : QPlatformSessionManager(id, key), m_eventLoop(nullptr)
@@ -371,7 +381,7 @@ QXcbSessionManager::QXcbSessionManager(const QString &id, const QString &key)
 
    QString error = QString::fromUtf8(cerror);
    if (! smcConnection) {
-      qWarning("Session management error: %s", qPrintable(error));
+      qWarning("Session management error: %s", csPrintable(error));
    } else {
       sm_receiver = new QSmSocketReceiver(IceConnectionNumber(SmcGetIceConnection(smcConnection)));
    }
@@ -405,10 +415,9 @@ bool QXcbSessionManager::allowsInteraction()
 
    if (sm_interactStyle == SmInteractStyleAny) {
       sm_waitingForInteraction = SmcInteractRequest(smcConnection,
-            SmDialogNormal,
-            sm_interactCallback,
-            (SmPointer *) this);
+            SmDialogNormal, sm_interactCallback, (SmPointer *) this);
    }
+
    if (sm_waitingForInteraction) {
       QEventLoop eventLoop;
       m_eventLoop = &eventLoop;
@@ -416,12 +425,15 @@ bool QXcbSessionManager::allowsInteraction()
       m_eventLoop = nullptr;
 
       sm_waitingForInteraction = false;
-      if (sm_smActive) { // not cancelled
+
+      if (sm_smActive) {
+         // not cancelled
          sm_interactionActive = true;
          qt_sm_blockUserInput = false;
          return true;
       }
    }
+
    return false;
 }
 
@@ -437,10 +449,9 @@ bool QXcbSessionManager::allowsErrorInteraction()
 
    if (sm_interactStyle == SmInteractStyleAny || sm_interactStyle == SmInteractStyleErrors) {
       sm_waitingForInteraction = SmcInteractRequest(smcConnection,
-            SmDialogError,
-            sm_interactCallback,
-            (SmPointer *) this);
+            SmDialogError, sm_interactCallback, (SmPointer *) this);
    }
+
    if (sm_waitingForInteraction) {
       QEventLoop eventLoop;
       m_eventLoop = &eventLoop;
@@ -448,12 +459,15 @@ bool QXcbSessionManager::allowsErrorInteraction()
       m_eventLoop = nullptr;
 
       sm_waitingForInteraction = false;
-      if (sm_smActive) { // not cancelled
+
+      if (sm_smActive) {
+         // not cancelled
          sm_interactionActive = true;
          qt_sm_blockUserInput = false;
          return true;
       }
    }
+
    return false;
 }
 
@@ -462,6 +476,7 @@ void QXcbSessionManager::release()
    if (sm_interactionActive) {
       SmcInteractDone(smcConnection, False);
       sm_interactionActive = false;
+
       if (sm_smActive && sm_isshutdown) {
          qt_sm_blockUserInput = true;
       }

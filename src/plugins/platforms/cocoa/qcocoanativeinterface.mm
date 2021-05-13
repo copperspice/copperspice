@@ -22,6 +22,8 @@
 ***********************************************************************/
 
 #include <qcocoanativeinterface.h>
+
+#include <qcocoaprintersupport.h>
 #include <qcocoawindow.h>
 #include <qcocoamenu.h>
 #include <qcocoamenubar.h>
@@ -29,29 +31,23 @@
 #include <qcocoaapplication.h>
 #include <qcocoaintegration.h>
 #include <qcocoaeventdispatcher.h>
-
+#include <qapplication.h>
+#include <qdebug.h>
 #include <qbytearray.h>
 #include <qwindow.h>
 #include <qpixmap.h>
 #include <qplatform_window.h>
+#include <qplatform_printersupport.h>
 #include <qsurfaceformat.h>
+#include <platformheaders/qcocoawindowfunctions.h>
+
+#include <qprintengine_mac_p.h>
 
 #ifndef QT_NO_OPENGL
 #include <qplatform_openglcontext.h>
 #include <qopenglcontext.h>
 #include <qcocoaglcontext.h>
 #endif
-
-#include <qapplication.h>
-#include <qdebug.h>
-
-#ifndef QT_NO_WIDGETS
-#include <qcocoaprintersupport.h>
-#include <qprintengine_mac_p.h>
-#include <qplatform_printersupport.h>
-#endif
-
-#include <platformheaders/qcocoawindowfunctions.h>
 
 #include <Cocoa/Cocoa.h>
 
@@ -62,12 +58,14 @@ QCocoaNativeInterface::QCocoaNativeInterface()
 #ifndef QT_NO_OPENGL
 void *QCocoaNativeInterface::nativeResourceForContext(const QByteArray &resourceString, QOpenGLContext *context)
 {
-   if (!context) {
+   if (! context) {
       return nullptr;
    }
+
    if (resourceString.toLower() == "nsopenglcontext") {
       return nsOpenGLContextForContext(context);
    }
+
    if (resourceString.toLower() == "cglcontextobj") {
       return cglContextForContext(context);
    }
@@ -78,19 +76,22 @@ void *QCocoaNativeInterface::nativeResourceForContext(const QByteArray &resource
 
 void *QCocoaNativeInterface::nativeResourceForWindow(const QByteArray &resourceString, QWindow *window)
 {
-   if (!window->handle()) {
+   if (! window->handle()) {
       return nullptr;
    }
 
    if (resourceString == "nsview") {
       return static_cast<QCocoaWindow *>(window->handle())->m_contentView;
+
 #ifndef QT_NO_OPENGL
    } else if (resourceString == "nsopenglcontext") {
       return static_cast<QCocoaWindow *>(window->handle())->currentContext()->nsOpenGLContext();
 #endif
+
    } else if (resourceString == "nswindow") {
       return static_cast<QCocoaWindow *>(window->handle())->m_nsWindow;
    }
+
    return nullptr;
 }
 

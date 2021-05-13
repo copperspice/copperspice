@@ -157,12 +157,13 @@ void QWindowsClipboard::registerViewer()
    // Try format listener API (Vista onwards) first.
    if (QWindowsContext::user32dll.addClipboardFormatListener && QWindowsContext::user32dll.removeClipboardFormatListener) {
       m_formatListenerRegistered = QWindowsContext::user32dll.addClipboardFormatListener(m_clipboardViewer);
+
       if (! m_formatListenerRegistered) {
          qErrnoWarning("AddClipboardFormatListener() failed.");
       }
    }
 
-   if (!m_formatListenerRegistered) {
+   if (! m_formatListenerRegistered) {
       m_nextClipboardViewer = SetClipboardViewer(m_clipboardViewer);
    }
 
@@ -321,10 +322,10 @@ void QWindowsClipboard::setMimeData(QMimeData *mimeData, QClipboard::Mode mode)
    const HRESULT src = OleSetClipboard(m_data);
 
    if (src != S_OK) {
-      QString mimeDataFormats = mimeData ? mimeData->formats().join(QString(", ")) : QString("NULL");
+      QString mimeDataFormats = mimeData ? mimeData->formats().join(", ") : "NULL";
 
       qErrnoWarning("OleSetClipboard: Failed to set mime data (%s) on clipboard: %s",
-         qPrintable(mimeDataFormats), QWindowsContext::comErrorString(src).constData());
+         csPrintable(mimeDataFormats), QWindowsContext::comErrorString(src).constData());
 
       releaseIData();
       return;

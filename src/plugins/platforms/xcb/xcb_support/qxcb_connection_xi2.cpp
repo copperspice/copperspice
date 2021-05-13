@@ -42,6 +42,7 @@ struct XInput2TouchDeviceData {XInput2TouchDeviceData()
    : xiDeviceInfo(nullptr), qtTouchDevice(nullptr), providesTouchOrientation(false)
    {
    }
+
    XIDeviceInfo *xiDeviceInfo;
    QTouchDevice *qtTouchDevice;
    QHash<int, QWindowSystemInterface::TouchPoint> touchPoints;
@@ -385,7 +386,7 @@ void QXcbConnection::xi2Select(xcb_window_t window)
       XISelectEvents(xDisplay, window, xiEventMask.data(), i);
    }
 #else
-   Q_UNUSED(xiBitMask);
+   (void) xiBitMask;
 #endif
 
    {
@@ -404,6 +405,7 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
 {
    XInput2TouchDeviceData *dev = nullptr;
    QHash<int, XInput2TouchDeviceData *>::const_iterator devIt = m_touchDevices.constFind(id);
+
    if (devIt != m_touchDevices.cend()) {
       dev = devIt.value();
 
@@ -412,10 +414,12 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
       QTouchDevice::Capabilities caps = Qt::EmptyFlag;
       dev = new XInput2TouchDeviceData;
       dev->xiDeviceInfo = XIQueryDevice(static_cast<Display *>(m_xlib_display), id, &nrDevices);
+
       if (nrDevices <= 0) {
          delete dev;
          return nullptr;
       }
+
       int type = -1;
       int maxTouchPoints = 1;
       bool hasRelativeCoords = false;
@@ -434,6 +438,7 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
                   case XIDependentTouch:
                      type = QTouchDevice::TouchPad;
                      break;
+
                   case XIDirectTouch:
                      type = QTouchDevice::TouchScreen;
                      break;
@@ -445,34 +450,46 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
                XIValuatorClassInfo *vci = reinterpret_cast<XIValuatorClassInfo *>(classinfo);
                // Some devices (mice) report a resolution of 0; they will be excluded later,
                // for now just prevent a division by zero
+
                const int vciResolution = vci->resolution ? vci->resolution : 1;
+
                if (vci->label == atom(QXcbAtom::AbsMTPositionX)) {
                   caps |= QTouchDevice::Position | QTouchDevice::NormalizedPosition;
+
                } else if (vci->label == atom(QXcbAtom::AbsMTTouchMajor)) {
                   caps |= QTouchDevice::Area;
+
                } else if (vci->label == atom(QXcbAtom::AbsMTOrientation)) {
                   dev->providesTouchOrientation = true;
+
                } else if (vci->label == atom(QXcbAtom::AbsMTPressure) || vci->label == atom(QXcbAtom::AbsPressure)) {
                   caps |= QTouchDevice::Pressure;
+
                } else if (vci->label == atom(QXcbAtom::RelX)) {
                   hasRelativeCoords = true;
                   dev->size.setWidth((vci->max - vci->min) * 1000.0 / vciResolution);
+
                } else if (vci->label == atom(QXcbAtom::RelY)) {
                   hasRelativeCoords = true;
                   dev->size.setHeight((vci->max - vci->min) * 1000.0 / vciResolution);
+
                } else if (vci->label == atom(QXcbAtom::AbsX)) {
                   caps |= QTouchDevice::Position;
                   dev->size.setHeight((vci->max - vci->min) * 1000.0 / vciResolution);
+
                } else if (vci->label == atom(QXcbAtom::AbsY)) {
                   caps |= QTouchDevice::Position;
                   dev->size.setWidth((vci->max - vci->min) * 1000.0 / vciResolution);
                }
+
                break;
             }
+
             default:
                break;
          }
       }
+
       if (type < 0 && caps && hasRelativeCoords) {
          type = QTouchDevice::TouchPad;
          if (dev->size.width() < 10 || dev->size.height() < 10 ||
@@ -480,7 +497,8 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
             dev->size = QSizeF(130, 110);
          }
       }
-      if (!isAtLeastXI22() || type == QTouchDevice::TouchPad) {
+
+      if (! isAtLeastXI22() || type == QTouchDevice::TouchPad) {
          caps |= QTouchDevice::MouseEmulation;
       }
 
@@ -490,16 +508,20 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
          dev->qtTouchDevice->setType((QTouchDevice::DeviceType)type);
          dev->qtTouchDevice->setCapabilities(caps);
          dev->qtTouchDevice->setMaximumTouchPoints(maxTouchPoints);
+
          if (caps != 0) {
             QWindowSystemInterface::registerTouchDevice(dev->qtTouchDevice);
          }
+
          m_touchDevices[id] = dev;
+
       } else {
          XIFreeDeviceInfo(dev->xiDeviceInfo);
          delete dev;
          dev = nullptr;
       }
    }
+
    return dev;
 }
 
@@ -524,6 +546,7 @@ void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
       case XI_ButtonPress:
       case XI_ButtonRelease:
       case XI_Motion:
+
 #ifdef XCB_USE_XINPUT22
       case XI_TouchBegin:
       case XI_TouchUpdate:

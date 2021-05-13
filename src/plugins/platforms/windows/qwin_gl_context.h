@@ -44,13 +44,17 @@ struct QWindowsOpenGLAdditionalFormat {
       : formatFlags(formatFlagsIn), pixmapDepth(pixmapDepthIn)
    { }
 
-   unsigned formatFlags; // QWindowsGLFormatFlags.
-   unsigned pixmapDepth; // for QWindowsGLRenderToPixmap
+   unsigned formatFlags;    // QWindowsGLFormatFlags.
+   unsigned pixmapDepth;    // for QWindowsGLRenderToPixmap
 };
 
 // Per-window data for active OpenGL contexts.
 struct QOpenGLContextData {
-   QOpenGLContextData(HGLRC r, HWND h, HDC d) : renderingContext(r), hwnd(h), hdc(d) {}
+   QOpenGLContextData(HGLRC r, HWND h, HDC d)
+      : renderingContext(r), hwnd(h), hdc(d)
+   {
+   }
+
    QOpenGLContextData()
       : renderingContext(nullptr), hwnd(nullptr), hdc(nullptr)
    {

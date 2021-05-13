@@ -336,18 +336,23 @@ static inline int uiEffects()
    if (booleanSystemParametersInfo(SPI_GETUIEFFECTS, false)) {
       result |= QPlatformTheme::GeneralUiEffect;
    }
+
    if (booleanSystemParametersInfo(SPI_GETMENUANIMATION, false)) {
       result |= QPlatformTheme::AnimateMenuUiEffect;
    }
+
    if (booleanSystemParametersInfo(SPI_GETMENUFADE, false)) {
       result |= QPlatformTheme::FadeMenuUiEffect;
    }
+
    if (booleanSystemParametersInfo(SPI_GETCOMBOBOXANIMATION, false)) {
       result |= QPlatformTheme::AnimateComboUiEffect;
    }
+
    if (booleanSystemParametersInfo(SPI_GETTOOLTIPANIMATION, false)) {
       result |= QPlatformTheme::AnimateTooltipUiEffect;
    }
+
    return result;
 }
 
@@ -356,38 +361,51 @@ QVariant QWindowsTheme::themeHint(ThemeHint hint) const
    switch (hint) {
       case UseFullScreenForPopupMenu:
          return QVariant(true);
+
       case DialogButtonBoxLayout:
          return QVariant(QPlatformDialogHelper::WinLayout);
+
       case IconThemeSearchPaths:
          return QVariant(iconThemeSearchPaths());
+
       case StyleNames:
          return QVariant(styleNames());
 
       case TextCursorWidth:
          return QVariant(int(dWordSystemParametersInfo(SPI_GETCARETWIDTH, 1u)));
+
       case DropShadow:
          return QVariant(booleanSystemParametersInfo(SPI_GETDROPSHADOW, false));
 
       case MaximumScrollBarDragDistance:
          return QVariant(qRound(qreal(QWindowsContext::instance()->defaultDPI()) * 1.375));
+
       case KeyboardScheme:
          return QVariant(int(WindowsKeyboardScheme));
+
       case UiEffects:
          return QVariant(uiEffects());
+
       case IconPixmapSizes:
          return m_fileIconSizes;
+
       case DialogSnapToDefaultButton:
          return QVariant(booleanSystemParametersInfo(SPI_GETSNAPTODEFBUTTON, false));
+
       case ContextMenuOnMouseRelease:
          return QVariant(true);
+
       case WheelScrollLines: {
          int result = 3;
          const DWORD scrollLines = dWordSystemParametersInfo(SPI_GETWHEELSCROLLLINES, DWORD(result));
-         if (scrollLines != DWORD(-1)) { // Special value meaning "scroll one screen", unimplemented in Qt.
+
+         if (scrollLines != DWORD(-1)) {
+            // Special value meaning "scroll one screen", unimplemented
             result = int(scrollLines);
          }
          return QVariant(result);
       }
+
       default:
          break;
    }

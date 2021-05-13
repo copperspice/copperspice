@@ -50,7 +50,7 @@
 #include <accessibilityinspector.h>
 #endif
 
-static QTouchDevice *touchDevice = nullptr;
+static QTouchDevice *touchDevice   = nullptr;
 static bool _q_dontOverrideCtrlLMB = false;
 
 @interface NSEvent (Qt_Compile_Leopard_DeviceDelta)
@@ -151,6 +151,7 @@ static bool _q_dontOverrideCtrlLMB = false;
       m_isMenuView = false;
       self.focusRingType = NSFocusRingTypeNone;
    }
+
    return self;
 }
 
@@ -1652,6 +1653,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
             }
          }
       }
+
       if (m_resendKeyEvent) {
          m_sendKeyEvent = true;
       }
@@ -2016,8 +2018,10 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
       if (currentCustomDragTypes == nullptr) {
          currentCustomDragTypes = new QStringList();
       }
+
       *currentCustomDragTypes = customTypes;
       const NSString *mimeTypeGeneric = @"com.copperspice.cs.MimeTypeName";
+
       NSMutableArray *supportedTypes = [NSMutableArray arrayWithObjects: NSColorPboardType,
                                         NSFilenamesPboardType, NSStringPboardType,
                                         NSFilenamesPboardType, NSPostScriptPboardType, NSTIFFPboardType,
@@ -2031,6 +2035,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
       for (int i = 0; i < customTypes.size(); i++) {
          [supportedTypes addObject: QCFString::toNSString(customTypes[i])];
       }
+
       [self registerForDraggedTypes: supportedTypes];
    }
 }
@@ -2038,7 +2043,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 static QWindow *findEventTargetWindow(QWindow *candidate)
 {
    while (candidate) {
-      if (!(candidate->flags() & Qt::WindowTransparentForInput)) {
+      if (! (candidate->flags() & Qt::WindowTransparentForInput)) {
          return candidate;
       }
       candidate = candidate->parent();
