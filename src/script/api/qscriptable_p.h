@@ -24,8 +24,6 @@
 #ifndef QSCRIPTABLE_P_H
 #define QSCRIPTABLE_P_H
 
-
-
 class QScriptable;
 
 class QScriptablePrivate
@@ -34,7 +32,7 @@ class QScriptablePrivate
 
  public:
    inline QScriptablePrivate()
-      : engine(0) {
+      : engine(nullptr) {
    }
 
    static inline QScriptablePrivate *get(QScriptable *q) {
@@ -45,7 +43,5 @@ class QScriptablePrivate
 
    QScriptable *q_ptr;
 };
-
-
 
 #endif

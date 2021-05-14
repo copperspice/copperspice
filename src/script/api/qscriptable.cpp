@@ -60,7 +60,7 @@ QScriptContext *QScriptable::context() const
       return e->currentContext();
    }
 
-   return 0;
+   return nullptr;
 }
 
 /*!

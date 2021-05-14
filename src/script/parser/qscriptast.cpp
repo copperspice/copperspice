@@ -32,17 +32,17 @@ namespace AST {
 
 ExpressionNode *Node::expressionCast()
 {
-   return 0;
+   return nullptr;
 }
 
 BinaryExpression *Node::binaryExpressionCast()
 {
-   return 0;
+   return nullptr;
 }
 
 Statement *Node::statementCast()
 {
-   return 0;
+   return nullptr;
 }
 
 ExpressionNode *ExpressionNode::expressionCast()

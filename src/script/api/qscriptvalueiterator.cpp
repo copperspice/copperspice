@@ -94,7 +94,7 @@ class QScriptValueIteratorPrivate
   first property).
 */
 QScriptValueIterator::QScriptValueIterator(const QScriptValue &object)
-   : d_ptr(0)
+   : d_ptr(nullptr)
 {
    if (object.isObject()) {
       d_ptr.reset(new QScriptValueIteratorPrivate());

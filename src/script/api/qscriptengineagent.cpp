@@ -35,7 +35,7 @@
 void QScriptEngineAgentPrivate::attach()
 {
    if (engine->originalGlobalObject()->debugger()) {
-      engine->originalGlobalObject()->setDebugger(0);
+      engine->originalGlobalObject()->setDebugger(nullptr);
    }
 
    JSC::Debugger::attach(engine->originalGlobalObject());

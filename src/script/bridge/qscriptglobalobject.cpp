@@ -36,7 +36,7 @@ ASSERT_CLASS_FITS_IN_CELL(QScript::OriginalGlobalObjectProxy);
 namespace QScript {
 
 GlobalObject::GlobalObject()
-   : JSC::JSGlobalObject(), customGlobalObject(0)
+   : JSC::JSGlobalObject(), customGlobalObject(nullptr)
 {
 }
 

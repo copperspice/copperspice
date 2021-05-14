@@ -55,7 +55,7 @@ QScript::Lexer::Lexer(QScriptEnginePrivate *eng)
    buffer8  = new char[size8];
    buffer16 = new QChar[size16];
 
-   pattern  = 0;
+   pattern  = nullptr;
    flags    = 0;
 }
 
@@ -732,8 +732,10 @@ int QScript::Lexer::lex()
 
    double dval = 0;
    if (state == Number) {
-      dval = qstrtod(buffer8, 0, 0);
-   } else if (state == Hex) { // scan hex numbers
+      dval = qstrtod(buffer8, nullptr, nullptr);
+
+   } else if (state == Hex) {
+      // scan hex numbers
       dval = QScript::integerFromString(buffer8, pos8, 16);
       state = Number;
    } else if (state == Octal) {   // scan octal number
@@ -775,9 +777,9 @@ int QScript::Lexer::lex()
             /* TODO: close leak on parse error. same holds true for String */
             if (driver) {
                Q_ASSERT_X(false, Q_FUNC_INFO, "not implemented");
-               qsyylval.ustr = 0; // driver->intern(buffer16, pos16);
+               qsyylval.ustr = nullptr;                            // driver->intern(buffer16, pos16);
             } else {
-               qsyylval.ustr = 0;
+               qsyylval.ustr = nullptr;
             }
             return QScriptGrammar::T_IDENTIFIER;
          }
@@ -795,9 +797,10 @@ int QScript::Lexer::lex()
       case String:
          if (driver) {
             Q_ASSERT_X(false, Q_FUNC_INFO, "not implemented");
-            qsyylval.ustr = 0; // driver->intern(buffer16, pos16);
+            qsyylval.ustr = nullptr;             // driver->intern(buffer16, pos16);
+
          } else {
-            qsyylval.ustr = 0;
+            qsyylval.ustr = nullptr;
          }
          return QScriptGrammar::T_STRING_LITERAL;
       case Number:
@@ -1111,9 +1114,9 @@ bool QScript::Lexer::scanRegExp(RegExpBodyPrefix prefix)
       } else {
          if (driver) {
             Q_ASSERT_X(false, Q_FUNC_INFO, "not implemented");
-            pattern = 0; // driver->intern(buffer16, pos16);
+            pattern = nullptr;       // driver->intern(buffer16, pos16);
          } else {
-            pattern = 0;
+            pattern = nullptr;
          }
          pos16 = 0;
          shift(1);

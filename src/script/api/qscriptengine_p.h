@@ -134,11 +134,11 @@ class QScriptEnginePrivate
    virtual ~QScriptEnginePrivate();
 
    static QScriptEnginePrivate *get(QScriptEngine *q) {
-      return q ? q->d_func() : 0;
+      return q ? q->d_func() : nullptr;
    }
 
    static QScriptEngine *get(QScriptEnginePrivate *d) {
-      return d ? d->q_func() : 0;
+      return d ? d->q_func() : nullptr;
    }
 
    static inline bool isArray(JSC::JSValue);
@@ -438,7 +438,7 @@ class UStringSourceProviderWithFeedback: public JSC::UStringSourceProvider
       if (JSC::Debugger *debugger = this->debugger()) {
          debugger->scriptUnload(asID());
       }
-      m_ptr = 0;
+      m_ptr = nullptr;
    }
 
    int columnNumberFromOffset(int offset) const {
@@ -467,7 +467,7 @@ class UStringSourceProviderWithFeedback: public JSC::UStringSourceProvider
       //if m_ptr is null it mean that QScriptEnginePrivate was destroyed and scriptUnload was called
       //else m_ptr is stable and we can use it as normal pointer without hesitation
       if (!m_ptr) {
-         return 0;   //we are in ~QScriptEnginePrivate
+         return nullptr;   //we are in ~QScriptEnginePrivate
       } else {
          return m_ptr->originalGlobalObject()->debugger();   //QScriptEnginePrivate is still alive
       }
@@ -594,7 +594,7 @@ inline void QScriptEnginePrivate::freeScriptValuePrivate(QScriptValuePrivate *p)
 
 inline void QScriptEnginePrivate::registerScriptValue(QScriptValuePrivate *value)
 {
-   value->prev = 0;
+   value->prev = nullptr;
    value->next = registeredScriptValues;
    if (registeredScriptValues) {
       registeredScriptValues->prev = value;
@@ -613,8 +613,8 @@ inline void QScriptEnginePrivate::unregisterScriptValue(QScriptValuePrivate *val
    if (value == registeredScriptValues) {
       registeredScriptValues = value->next;
    }
-   value->prev = 0;
-   value->next = 0;
+   value->prev = nullptr;
+   value->next = nullptr;
 }
 
 inline JSC::JSValue QScriptEnginePrivate::jscValueFromVariant(JSC::ExecState *exec, const QVariant &data)
@@ -685,7 +685,7 @@ inline QScriptValuePrivate::~QScriptValuePrivate()
 inline void QScriptValuePrivate::initFrom(JSC::JSValue value)
 {
    if (value.isCell()) {
-      Q_ASSERT(engine != 0);
+      Q_ASSERT(engine != nullptr);
       value = engine->toUsableValue(value);
    }
    type = JavaScriptCore;
@@ -836,7 +836,7 @@ inline void QScriptEnginePrivate::restoreException(JSC::ExecState *exec, JSC::JS
 inline void QScriptEnginePrivate::registerScriptString(QScriptStringPrivate *value)
 {
    Q_ASSERT(value->type == QScriptStringPrivate::HeapAllocated);
-   value->prev = 0;
+   value->prev = nullptr;
    value->next = registeredScriptStrings;
    if (registeredScriptStrings) {
       registeredScriptStrings->prev = value;
@@ -856,8 +856,8 @@ inline void QScriptEnginePrivate::unregisterScriptString(QScriptStringPrivate *v
    if (value == registeredScriptStrings) {
       registeredScriptStrings = value->next;
    }
-   value->prev = 0;
-   value->next = 0;
+   value->prev = nullptr;
+   value->next = nullptr;
 }
 
 inline QScriptContext *QScriptEnginePrivate::contextForFrame(JSC::ExecState *frame)
@@ -1095,7 +1095,7 @@ inline QObject *QScriptEnginePrivate::toQObject(JSC::ExecState *exec, JSC::JSVal
       QScriptObjectDelegate *delegate = object->delegate();
 
       if (! delegate) {
-         return 0;
+         return nullptr;
       }
 
       if (delegate->type() == QScriptObjectDelegate::QtObject) {
@@ -1130,7 +1130,7 @@ inline const QMetaObject *QScriptEnginePrivate::toQMetaObject(JSC::ExecState *, 
       return static_cast<QScript::QMetaObjectWrapperObject *>(JSC::asObject(value))->value();
    }
 
-   return 0;
+   return nullptr;
 }
 
 inline QVariant &QScriptEnginePrivate::variantValue(JSC::JSValue value)
@@ -1154,13 +1154,13 @@ inline void QScriptEnginePrivate::setVariantValue(JSC::JSValue objectValue, cons
 inline QScriptDeclarativeClass *QScriptEnginePrivate::declarativeClass(JSC::JSValue v)
 {
    if (!QScriptEnginePrivate::isObject(v) || !v.inherits(&QScriptObject::info)) {
-      return 0;
+      return nullptr;
    }
 
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(v));
    QScriptObjectDelegate *delegate = scriptObject->delegate();
    if (!delegate || (delegate->type() != QScriptObjectDelegate::DeclarativeClassObject)) {
-      return 0;
+      return nullptr;
    }
 
    return static_cast<QScript::DeclarativeObjectDelegate *>(delegate)->scriptClass();
@@ -1169,13 +1169,13 @@ inline QScriptDeclarativeClass *QScriptEnginePrivate::declarativeClass(JSC::JSVa
 inline QScriptDeclarativeClass::Object *QScriptEnginePrivate::declarativeObject(JSC::JSValue v)
 {
    if (!QScriptEnginePrivate::isObject(v) || !v.inherits(&QScriptObject::info)) {
-      return 0;
+      return nullptr;
    }
 
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(v));
    QScriptObjectDelegate *delegate = scriptObject->delegate();
    if (!delegate || (delegate->type() != QScriptObjectDelegate::DeclarativeClassObject)) {
-      return 0;
+      return nullptr;
    }
 
    return static_cast<QScript::DeclarativeObjectDelegate *>(delegate)->object();

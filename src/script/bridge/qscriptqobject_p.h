@@ -31,7 +31,6 @@
 
 #include "InternalFunction.h"
 
-
 namespace QScript {
 
 enum AttributeExtension {
@@ -225,7 +224,7 @@ class QtFunction: public JSC::InternalFunction
    int initialIndex() const;
    int specificIndex(const QScriptContext *context) const;
    bool maybeOverloaded() const;
-   int mostGeneralMethod(QMetaMethod *out = 0) const;
+   int mostGeneralMethod(QMetaMethod *out = nullptr) const;
 
    QList<int> overloadedIndexes() const;
 

@@ -29,7 +29,7 @@
 #include <qscriptengine_p.h>
 
 QScriptString::QScriptString()
-   : d_ptr(0)
+   : d_ptr(nullptr)
 {
 }
 

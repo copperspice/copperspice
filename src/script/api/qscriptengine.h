@@ -256,7 +256,7 @@ template <class T> QScriptValue QScriptEngine::scriptValueFromQMetaObject()
    ConstructPtr cptr = qscriptQMetaObjectConstructor<T>;
 
    return newQMetaObject(&T::staticMetaObject,
-         newFunction(reinterpret_cast<FunctionWithArgSignature>(cptr), 0));
+         newFunction(reinterpret_cast<FunctionWithArgSignature>(cptr), nullptr));
 }
 
 inline QScriptValue qScriptValueFromValue_helper(QScriptEngine *engine, const QVariant &data)
@@ -316,8 +316,7 @@ inline void qScriptRegisterMetaType_helper(QScriptEngine *eng, uint type, QScrip
 
 template<typename T>
 uint qScriptRegisterMetaType(QScriptEngine *eng, QScriptValue (*toScriptValue)(QScriptEngine *, const T &t),
-   void (*fromScriptValue)(const QScriptValue &, T &t),
-   const QScriptValue &prototype = QScriptValue(), T * /* dummy */ = 0  )
+   void (*fromScriptValue)(const QScriptValue &, T &t), const QScriptValue &prototype = QScriptValue(), T * = nullptr )
 {
    const uint id = QVariant::typeToTypeId<T>();
 

@@ -33,7 +33,7 @@ const char *const QScriptGrammar::spell [] = {
    "if", "in", "instanceof", "{", "[", "<=", "(", "<", "<<", "<<=",
    "-", "-=", "--", "new", "!", "!=", "!==", "numeric literal", "|", "|=",
    "||", "+", "+=", "++", "?", "}", "]", "%", "%=", "return",
-   ")", ";", 0, "*", "*=", "string literal", "switch", "this", "throw", "~",
+   ")", ";", nullptr, "*", "*=", "string literal", "switch", "this", "throw", "~",
    "try", "typeof", "var", "void", "while", "with", "^", "^=", "null", "true",
    "false", "const", "debugger", "reserved word",
 #ifndef QLALR_NO_QSCRIPTGRAMMAR_DEBUG_INFO

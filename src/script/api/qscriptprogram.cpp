@@ -34,7 +34,7 @@
 
 QScriptProgramPrivate::QScriptProgramPrivate(const QString &src, const QString &fn, int ln)
    : sourceCode(src), fileName(fn), firstLineNumber(ln),
-     engine(0), _executable(0), sourceId(-1), isCompiled(false)
+     engine(nullptr), _executable(nullptr), sourceId(-1), isCompiled(false)
 {
 }
 
@@ -82,11 +82,11 @@ void QScriptProgramPrivate::detachFromEngine()
    _executable.clear();
    sourceId = -1;
    isCompiled = false;
-   engine = 0;
+   engine = nullptr;
 }
 
 QScriptProgram::QScriptProgram()
-   : d_ptr(0)
+   : d_ptr(nullptr)
 {
 }
 
@@ -115,7 +115,7 @@ QScriptProgram &QScriptProgram::operator=(const QScriptProgram &other)
 bool QScriptProgram::isNull() const
 {
    Q_D(const QScriptProgram);
-   return (d == 0);
+   return (d == nullptr);
 }
 
 /*!

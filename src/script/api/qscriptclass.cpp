@@ -204,7 +204,7 @@ void QScriptClass::setProperty(QScriptValue &object, const QScriptString &name,
 QScriptClassPropertyIterator *QScriptClass::newIterator(const QScriptValue &object)
 {
    Q_UNUSED(object);
-   return 0;
+   return nullptr;
 }
 
 bool QScriptClass::supportsExtension(Extension extension) const

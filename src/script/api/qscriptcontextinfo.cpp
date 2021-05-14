@@ -188,7 +188,7 @@ QScriptContextInfoPrivate::QScriptContextInfoPrivate(const QScriptContext *conte
       functionMetaIndex = static_cast<QScript::QtFunction *>(callee)->specificIndex(context);
       const QMetaObject *meta = static_cast<QScript::QtFunction *>(callee)->metaObject();
 
-      if (meta != 0) {
+      if (meta != nullptr) {
          QMetaMethod method     = meta->method(functionMetaIndex);
          QList<QString> formals = method.parameterNames();
 
@@ -220,7 +220,7 @@ QScriptContextInfoPrivate::~QScriptContextInfoPrivate()
   previously created QScriptContextInfo.
 */
 QScriptContextInfo::QScriptContextInfo(const QScriptContext *context)
-   : d_ptr(0)
+   : d_ptr(nullptr)
 {
    if (context) {
       d_ptr = new QScriptContextInfoPrivate(context);
@@ -242,7 +242,7 @@ QScriptContextInfo::QScriptContextInfo(const QScriptContextInfo &other)
   \sa isNull()
 */
 QScriptContextInfo::QScriptContextInfo()
-   : d_ptr(0)
+   : d_ptr(nullptr)
 {
 }
 
@@ -441,7 +441,7 @@ int QScriptContextInfo::functionMetaIndex() const
 bool QScriptContextInfo::isNull() const
 {
    Q_D(const QScriptContextInfo);
-   return (d == 0);
+   return (d == nullptr);
 }
 
 /*!

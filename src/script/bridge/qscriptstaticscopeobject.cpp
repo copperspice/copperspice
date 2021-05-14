@@ -28,7 +28,7 @@ namespace JSC {
 ASSERT_CLASS_FITS_IN_CELL(QT_PREPEND_NAMESPACE(QScriptStaticScopeObject));
 }
 
-const JSC::ClassInfo QScriptStaticScopeObject::info = { "QScriptStaticScopeObject", 0, 0, 0 };
+const JSC::ClassInfo QScriptStaticScopeObject::info = { "QScriptStaticScopeObject", nullptr, nullptr, nullptr };
 
 /*!
     Creates a static scope object with a fixed set of undeletable properties.

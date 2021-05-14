@@ -640,7 +640,7 @@ static JSC::JSValue delegateQtMethod(JSC::ExecState *exec, QMetaMethod::MethodTy
       }
 
       QScriptMetaType retType = mtd.returnType();
-      args[0] = QVariant(retType.typeId(), (void *)0);    // the result
+      args[0] = QVariant(retType.typeId(), (void *)nullptr);    // the result
 
       // try to convert arguments
       bool converted    = true;
@@ -1107,7 +1107,7 @@ struct QtMethodCaller {
       }
 
       if (callType == QMetaMethod::Constructor) {
-         Q_ASSERT(meta != 0);
+         Q_ASSERT(meta != nullptr);
 
          /* emerald (script, hold)
               meta->static_metacall(QMetaObject::CreateInstance, chosenIndex, params);
@@ -1183,7 +1183,7 @@ JSC::JSValue QtFunction::execute(JSC::ExecState *exec, JSC::JSValue thisValue,
    QScriptEnginePrivate *engine = scriptEngineFromExec(exec);
 
    const QMetaObject *meta = qobj->metaObject();
-   QObject *thisQObject    = 0;
+   QObject *thisQObject = nullptr;
 
    thisValue = engine->toUsableValue(thisValue);
 
@@ -1217,7 +1217,7 @@ JSC::JSValue QtFunction::execute(JSC::ExecState *exec, JSC::JSValue thisValue,
          data->maybeOverloaded);
 }
 
-const JSC::ClassInfo QtFunction::info = { "QtFunction", &InternalFunction::info, 0, 0 };
+const JSC::ClassInfo QtFunction::info = { "QtFunction", &InternalFunction::info, nullptr, nullptr };
 
 JSC::JSValue JSC_HOST_CALL QtFunction::call(JSC::ExecState *exec, JSC::JSObject *callee,
    JSC::JSValue thisValue, const JSC::ArgList &args)
@@ -1269,7 +1269,7 @@ int QtFunction::specificIndex(const QScriptContext *context) const
    return result.asInt32();
 }
 
-const JSC::ClassInfo QtPropertyFunction::info = { "QtPropertyFunction", &InternalFunction::info, 0, 0 };
+const JSC::ClassInfo QtPropertyFunction::info = { "QtPropertyFunction", &InternalFunction::info, nullptr, nullptr };
 
 QtPropertyFunction::QtPropertyFunction(const QMetaObject *meta, int index,
    JSC::JSGlobalData *data,
@@ -2096,7 +2096,7 @@ QObjectPrototype::QObjectPrototype(JSC::ExecState *exec, WTF::PassRefPtr<JSC::St
    this->structure()->setHasGetterSetterProperties(true);
 }
 
-const JSC::ClassInfo QMetaObjectWrapperObject::info = { "QMetaObject", 0, 0, 0 };
+const JSC::ClassInfo QMetaObjectWrapperObject::info = { "QMetaObject", nullptr, nullptr, nullptr };
 
 QMetaObjectWrapperObject::QMetaObjectWrapperObject(
    JSC::ExecState *exec, const QMetaObject *metaObject, JSC::JSValue ctor,
@@ -2308,7 +2308,7 @@ JSC::JSObject *QMetaObjectWrapperObject::construct(JSC::ExecState *exec, JSC::JS
    eng_p->popContext();
    eng_p->currentFrame = previousFrame;
    if (!result || !result.isObject()) {
-      return 0;
+      return nullptr;
    }
    return JSC::asObject(result);
 }
@@ -2337,8 +2337,8 @@ JSC::JSValue QMetaObjectWrapperObject::execute(JSC::ExecState *exec,
    } else {
       const QMetaObject *meta = data->value;
       if (meta->constructorCount() > 0) {
-         JSC::JSValue result = callQtMethod(exec, QMetaMethod::Constructor, /*thisQObject=*/0,
-               args, meta, meta->constructorCount() - 1, /*maybeOverloaded=*/true);
+         JSC::JSValue result = callQtMethod(exec, QMetaMethod::Constructor, nullptr,
+               args, meta, meta->constructorCount() - 1, true);
 
          if (!exec->hadException()) {
             Q_ASSERT(result && result.inherits(&QScriptObject::info));
@@ -2604,7 +2604,7 @@ bool QObjectConnectionManager::removeSignalHandler(QObject *sender, int signalIn
 }
 
 QObjectData::QObjectData(QScriptEnginePrivate *eng)
-   : engine(eng), connectionManager(0)
+   : engine(eng), connectionManager(nullptr)
 {
 }
 
@@ -2612,7 +2612,7 @@ QObjectData::~QObjectData()
 {
    if (connectionManager) {
       delete connectionManager;
-      connectionManager = 0;
+      connectionManager = nullptr;
    }
 }
 
@@ -2681,7 +2681,8 @@ QScriptObject *QObjectData::findWrapper(QScriptEngine::ValueOwnership ownership,
          return info.object;
       }
    }
-   return 0;
+
+   return nullptr;
 }
 
 void QObjectData::registerWrapper(QScriptObject *wrapper, QScriptEngine::ValueOwnership ownership,

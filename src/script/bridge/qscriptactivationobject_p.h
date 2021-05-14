@@ -33,7 +33,7 @@ namespace QScript {
 class QScriptActivationObject : public JSC::JSVariableObject
 {
  public:
-   QScriptActivationObject(JSC::ExecState *callFrame, JSC::JSObject *delegate = 0);
+   QScriptActivationObject(JSC::ExecState *callFrame, JSC::JSObject *delegate = nullptr);
    virtual ~QScriptActivationObject();
    virtual bool isDynamicScope() const {
       return true;

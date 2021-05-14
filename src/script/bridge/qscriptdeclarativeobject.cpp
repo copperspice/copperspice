@@ -67,11 +67,12 @@ bool DeclarativeObjectDelegate::getOwnPropertySlot(QScriptObject *object, JSC::E
 
    if (flags & QScriptClass::HandlesReadAccess) {
       QScriptDeclarativeClass::Value val = m_class->property(m_object, identifier);
-      p->context = 0;
+      p->context = nullptr;
       slot.setValue((const JSC::JSValue &)val);
       return true;
    }
-   p->context = 0;
+
+   p->context = nullptr;
 
    return QScriptObjectDelegate::getOwnPropertySlot(object, exec, propertyName, slot);
 }
@@ -89,10 +90,11 @@ void DeclarativeObjectDelegate::put(QScriptObject *object, JSC::ExecState *exec,
 
    if (flags & QScriptClass::HandlesWriteAccess) {
       m_class->setProperty(m_object, identifier, engine->scriptValueFromJSCValue(value));
-      p->context = 0;
+      p->context = nullptr;
       return;
    }
-   p->context = 0;
+
+   p->context = nullptr;
 
    QScriptObjectDelegate::put(object, exec, propertyName, value, slot);
 }

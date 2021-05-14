@@ -77,9 +77,9 @@ class QScriptStaticScopeObject : public JSC::JSVariableObject
 
    struct Data : public JSVariableObjectData {
       Data(bool canGrow_)
-         : JSVariableObjectData(&symbolTable, /*registers=*/0),
-           canGrow(canGrow_), registerArraySize(0) {
+         : JSVariableObjectData(&symbolTable, nullptr), canGrow(canGrow_), registerArraySize(0) {
       }
+
       bool canGrow;
       int registerArraySize;
       JSC::SymbolTable symbolTable;

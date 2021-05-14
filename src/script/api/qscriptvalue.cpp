@@ -48,7 +48,8 @@ void QScriptValuePrivate::detachFromEngine()
    if (isJSC()) {
       jscValue = JSC::JSValue();
    }
-   engine = 0;
+
+   engine = nullptr;
 }
 
 // internal
@@ -58,7 +59,7 @@ QScriptValue::QScriptValue(QScriptValuePrivate *d)
 }
 
 QScriptValue::QScriptValue()
-   : d_ptr(0)
+   : d_ptr(nullptr)
 {
 }
 
@@ -174,7 +175,7 @@ QScriptValue::QScriptValue(QScriptEngine *engine, const QString &val)
 }
 
 QScriptValue::QScriptValue(SpecialValue value)
-   : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
+   : d_ptr(new (nullptr) QScriptValuePrivate(nullptr))
 {
    switch (value) {
       case NullValue:
@@ -187,31 +188,31 @@ QScriptValue::QScriptValue(SpecialValue value)
 }
 
 QScriptValue::QScriptValue(bool value)
-   : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
+   : d_ptr(new (nullptr) QScriptValuePrivate(nullptr))
 {
    d_ptr->initFrom(JSC::jsBoolean(value));
 }
 
 QScriptValue::QScriptValue(int value)
-   : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
+   : d_ptr(new (nullptr) QScriptValuePrivate(nullptr))
 {
    d_ptr->initFrom(value);
 }
 
 QScriptValue::QScriptValue(uint value)
-   : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
+   : d_ptr(new (nullptr) QScriptValuePrivate(nullptr))
 {
    d_ptr->initFrom(value);
 }
 
 QScriptValue::QScriptValue(qsreal value)
-   : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
+   : d_ptr(new (nullptr) QScriptValuePrivate(nullptr))
 {
    d_ptr->initFrom(value);
 }
 
 QScriptValue::QScriptValue(const QString &value)
-   : d_ptr(new (/*engine=*/0)QScriptValuePrivate(/*engine=*/0))
+   : d_ptr(new (nullptr) QScriptValuePrivate(nullptr))
 {
    d_ptr->initFrom(value);
 }
@@ -415,7 +416,8 @@ static QScriptValue ToPrimitive(const QScriptValue &object, JSC::PreferredPrimit
 {
    Q_ASSERT(object.isObject());
    QScriptValuePrivate *pp = QScriptValuePrivate::get(object);
-   Q_ASSERT(pp->engine != 0);
+
+   Q_ASSERT(pp->engine != nullptr);
    QScript::APIShim shim(pp->engine);
    JSC::ExecState *exec = pp->engine->currentFrame;
    JSC::JSValue savedException;
@@ -683,7 +685,7 @@ bool QScriptValue::strictlyEquals(const QScriptValue &other) const
    switch (d->type) {
       case QScriptValuePrivate::JavaScriptCore: {
          QScriptEnginePrivate *eng_p = d->engine ? d->engine : other.d_ptr->engine;
-         JSC::ExecState *exec = eng_p ? eng_p->currentFrame : 0;
+         JSC::ExecState *exec = eng_p ? eng_p->currentFrame : nullptr;
          return JSC::JSValue::strictEqual(exec, d->jscValue, other.d_ptr->jscValue);
       }
       case QScriptValuePrivate::Number:
@@ -718,7 +720,7 @@ QString QScriptValue::toString() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toString(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toString(0, d->jscValue);
+            return QScriptEnginePrivate::toString(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -753,7 +755,7 @@ qsreal QScriptValue::toNumber() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toNumber(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toNumber(0, d->jscValue);
+            return QScriptEnginePrivate::toNumber(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -781,7 +783,7 @@ bool QScriptValue::toBoolean() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toBool(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toBool(0, d->jscValue);
+            return QScriptEnginePrivate::toBool(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -818,7 +820,7 @@ bool QScriptValue::toBool() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toBool(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toBool(0, d->jscValue);
+            return QScriptEnginePrivate::toBool(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -853,7 +855,7 @@ qint32 QScriptValue::toInt32() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toInt32(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toInt32(0, d->jscValue);
+            return QScriptEnginePrivate::toInt32(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -888,7 +890,7 @@ quint32 QScriptValue::toUInt32() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toUInt32(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toUInt32(0, d->jscValue);
+            return QScriptEnginePrivate::toUInt32(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -923,7 +925,7 @@ quint16 QScriptValue::toUInt16() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toUInt16(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toUInt16(0, d->jscValue);
+            return QScriptEnginePrivate::toUInt16(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -958,7 +960,7 @@ qsreal QScriptValue::toInteger() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toInteger(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toInteger(0, d->jscValue);
+            return QScriptEnginePrivate::toInteger(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -1003,7 +1005,7 @@ QVariant QScriptValue::toVariant() const
             QScript::APIShim shim(d->engine);
             return QScriptEnginePrivate::toVariant(d->engine->currentFrame, d->jscValue);
          } else {
-            return QScriptEnginePrivate::toVariant(0, d->jscValue);
+            return QScriptEnginePrivate::toVariant(nullptr, d->jscValue);
          }
       }
       case QScriptValuePrivate::Number:
@@ -1064,7 +1066,7 @@ QObject *QScriptValue::toQObject() const
 {
    Q_D(const QScriptValue);
    if (!d || !d->engine) {
-      return 0;
+      return nullptr;
    }
    QScript::APIShim shim(d->engine);
    return QScriptEnginePrivate::toQObject(d->engine->currentFrame, d->jscValue);
@@ -1080,7 +1082,7 @@ const QMetaObject *QScriptValue::toQMetaObject() const
 {
    Q_D(const QScriptValue);
    if (!d || !d->engine) {
-      return 0;
+      return nullptr;
    }
    QScript::APIShim shim(d->engine);
    return QScriptEnginePrivate::toQMetaObject(d->engine->currentFrame, d->jscValue);
@@ -1563,7 +1565,7 @@ QScriptEngine *QScriptValue::engine() const
 {
    Q_D(const QScriptValue);
    if (!d) {
-      return 0;
+      return nullptr;
    }
    return QScriptEnginePrivate::get(d->engine);
 }
@@ -1810,13 +1812,14 @@ void QScriptValue::setData(const QScriptValue &data)
 QScriptClass *QScriptValue::scriptClass() const
 {
    Q_D(const QScriptValue);
-   if (!d || !d->isJSC() || !d->jscValue.inherits(&QScriptObject::info)) {
-      return 0;
+   if (! d || ! d->isJSC() || !d->jscValue.inherits(&QScriptObject::info)) {
+      return nullptr;
    }
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(d->jscValue));
    QScriptObjectDelegate *delegate = scriptObject->delegate();
-   if (!delegate || (delegate->type() != QScriptObjectDelegate::ClassObject)) {
-      return 0;
+
+   if (! delegate || (delegate->type() != QScriptObjectDelegate::ClassObject)) {
+      return nullptr;
    }
    return static_cast<QScript::ClassObjectDelegate *>(delegate)->scriptClass();
 }
@@ -1836,7 +1839,7 @@ void QScriptValue::setScriptClass(QScriptClass *scriptClass)
    QScriptObject *scriptObject = static_cast<QScriptObject *>(JSC::asObject(d->jscValue));
 
    if (! scriptClass) {
-      scriptObject->setDelegate(0);
+      scriptObject->setDelegate(nullptr);
 
    } else {
       QScriptObjectDelegate *delegate = scriptObject->delegate();

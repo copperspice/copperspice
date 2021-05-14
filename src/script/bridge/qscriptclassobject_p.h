@@ -79,7 +79,7 @@ inline QScriptClass *ClassObjectDelegate::scriptClass() const
 
 inline void ClassObjectDelegate::setScriptClass(QScriptClass *scriptClass)
 {
-   Q_ASSERT(scriptClass != 0);
+   Q_ASSERT(scriptClass != nullptr);
    m_scriptClass = scriptClass;
 }
 

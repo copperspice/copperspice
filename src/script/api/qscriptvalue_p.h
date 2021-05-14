@@ -70,7 +70,7 @@ class QScriptValuePrivate : public QSharedData
 
    static inline QScriptEnginePrivate *getEngine(const QScriptValue &q) {
       if (! q.d_ptr) {
-         return 0;
+         return nullptr;
       }
       return q.d_ptr->engine;
    }
@@ -115,7 +115,7 @@ class QScriptValuePrivate : public QSharedData
 };
 
 inline QScriptValuePrivate::QScriptValuePrivate(QScriptEnginePrivate *e)
-   : engine(e), prev(0), next(0)
+   : engine(e), prev(nullptr), next(nullptr)
 {
 }
 

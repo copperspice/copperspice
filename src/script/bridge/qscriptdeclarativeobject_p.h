@@ -33,7 +33,10 @@ class QScriptClass;
 class QScriptDeclarativeClassPrivate
 {
  public:
-   QScriptDeclarativeClassPrivate() : engine(0), q_ptr(0), context(0), supportsCall(false) {}
+   QScriptDeclarativeClassPrivate()
+      : engine(nullptr), q_ptr(nullptr), context(nullptr), supportsCall(false)
+   {
+   }
 
    QScriptEngine *engine;
    QScriptDeclarativeClass *q_ptr;
