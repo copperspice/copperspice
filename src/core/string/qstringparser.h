@@ -35,6 +35,7 @@
 #include <cctype>
 #include <ios>
 #include <iomanip>
+#include <limits>
 #include <locale>
 #include <sstream>
 

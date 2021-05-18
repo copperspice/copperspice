@@ -27,6 +27,7 @@
 #ifndef CS_REGEX_TRAITS_DEFAULTS_H
 #define CS_REGEX_TRAITS_DEFAULTS_H
 
+#include <limits>
 #include <type_traits>
 
 #include "regex/r_config.h"

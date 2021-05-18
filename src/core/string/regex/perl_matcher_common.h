@@ -28,6 +28,7 @@
 #define CS_PERL_MATCHER_COMMON_H
 
 #include <cassert>
+#include <limits>
 
 namespace cs_regex_ns {
 

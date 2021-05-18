@@ -28,6 +28,7 @@
 #define CS_PERL_MATCHER_NON_RECURSIVE_H
 
 #include <cassert>
+#include <limits>
 #include <new>
 
 #include "regex/r_states.h"
