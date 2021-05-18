@@ -100,16 +100,13 @@ QNetworkConfigurationManager::QNetworkConfigurationManager(QObject *parent)
 {
    QNetworkConfigurationManagerPrivate *priv = qNetworkConfigurationManagerPrivate();
 
-   connect(priv, static_cast<void (QNetworkConfigurationManagerPrivate::*)(const QNetworkConfiguration &)>
-           (&QNetworkConfigurationManagerPrivate::configurationAdded),
+   connect(priv, cs_mp_cast<const QNetworkConfiguration &>(&QNetworkConfigurationManagerPrivate::configurationAdded),
            this, &QNetworkConfigurationManager::configurationAdded);
 
-   connect(priv, static_cast<void (QNetworkConfigurationManagerPrivate::*)(const QNetworkConfiguration &)>
-           (&QNetworkConfigurationManagerPrivate::configurationRemoved),
+   connect(priv, cs_mp_cast<const QNetworkConfiguration &>(&QNetworkConfigurationManagerPrivate::configurationRemoved),
            this, &QNetworkConfigurationManager::configurationRemoved);
 
-   connect(priv, static_cast<void (QNetworkConfigurationManagerPrivate::*)(const QNetworkConfiguration &)>
-           (&QNetworkConfigurationManagerPrivate::configurationChanged),
+   connect(priv, cs_mp_cast<const QNetworkConfiguration &>(&QNetworkConfigurationManagerPrivate::configurationChanged),
            this, &QNetworkConfigurationManager::configurationChanged);
 
    connect(priv, &QNetworkConfigurationManagerPrivate::onlineStateChanged,

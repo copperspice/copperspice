@@ -71,9 +71,9 @@ class QUIntSpinBox : public QSpinBox
 
  public:
    explicit QUIntSpinBox(QWidget *parent = nullptr)
-      : QSpinBox(parent) {
-      connect(this, static_cast<void (QUIntSpinBox::*)(int)>(&QUIntSpinBox::valueChanged),
-          this, &QUIntSpinBox::uintValueChanged);
+      : QSpinBox(parent)
+   {
+      connect(this, cs_mp_cast<int>(&QUIntSpinBox::valueChanged), this, &QUIntSpinBox::uintValueChanged);
    }
 
    uint uintValue() const {

@@ -316,8 +316,7 @@ void QInputDialogPrivate::ensureComboBox()
 
       comboBox->hide();
       QObject::connect(comboBox, &QComboBox::editTextChanged, q, &QInputDialog::_q_textChanged);
-      QObject::connect(comboBox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
-                  q, &QInputDialog::_q_textChanged);
+      QObject::connect(comboBox, cs_mp_cast<const QString &>(&QComboBox::currentIndexChanged), q, &QInputDialog::_q_textChanged);
    }
 }
 

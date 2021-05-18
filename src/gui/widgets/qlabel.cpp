@@ -1224,9 +1224,7 @@ void QLabelPrivate::ensureTextControl() const
       control->setPalette(q->palette());
       control->setFocus(q->hasFocus());
 
-      QObject::connect(control, &QTextControl::updateRequest,  q,
-                  static_cast<void (QLabel::*)()>(&QLabel::update));
-
+      QObject::connect(control, &QTextControl::updateRequest,  q, cs_mp_cast<>(&QLabel::update));
       QObject::connect(control, &QTextControl::linkHovered,    q, &QLabel::_q_linkHovered);
       QObject::connect(control, &QTextControl::linkActivated,  q, &QLabel::linkActivated);
 

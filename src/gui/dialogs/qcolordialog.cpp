@@ -1887,9 +1887,7 @@ void QColorDialogPrivate::initWidgets()
    pickLay->addStretch();
 #endif
 
-   QObject::connect(cp, &QColorPicker::newCol, lp,
-                  static_cast<void (QColorLuminancePicker::*)(int, int)>(&QColorLuminancePicker::setCol));
-
+   QObject::connect(cp, &QColorPicker::newCol,          lp, cs_mp_cast<int, int>(&QColorLuminancePicker::setCol));
    QObject::connect(lp, &QColorLuminancePicker::newHsv, q,  &QColorDialog::_q_newHsv);
 
    rightLay->addStretch();

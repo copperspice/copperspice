@@ -1311,8 +1311,8 @@ void QComboBox::setAutoCompletion(bool enable)
       }
 
       d->completer = new QCompleter(d->model, d->lineEdit);
-      connect(d->completer.data(), static_cast<void (QCompleter::*)(const QModelIndex &)>(&QCompleter::activated),
-                  this, &QComboBox::_q_completerActivated);
+
+      connect(d->completer.data(), cs_mp_cast<const QModelIndex &>(&QCompleter::activated), this, &QComboBox::_q_completerActivated);
 
       d->completer->setCaseSensitivity(d->autoCompletionCaseSensitivity);
       d->completer->setCompletionMode(QCompleter::InlineCompletion);
@@ -1621,7 +1621,8 @@ void QComboBox::setCompleter(QCompleter *c)
    d->lineEdit->setCompleter(c);
 
    if (c) {
-      connect(c, static_cast<void (QCompleter::*)(const QModelIndex &)>(&QCompleter::activated), this, &QComboBox::_q_completerActivated);
+      connect(c, cs_mp_cast<const QModelIndex &>(&QCompleter::activated), this, &QComboBox::_q_completerActivated);
+
       c->setWidget(this);
    }
 }

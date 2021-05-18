@@ -831,9 +831,7 @@ void QFileDialogPrivate::createWidgets()
    QObject::connect(qFileDialogUi->buttonBox, &QDialogButtonBox::rejected, q, &QFileDialog::reject);
 
    qFileDialogUi->lookInCombo->setFileDialogPrivate(this);
-
-   QObject::connect(qFileDialogUi->lookInCombo, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::activated),
-            q, &QFileDialog::_q_goToDirectory);
+   QObject::connect(qFileDialogUi->lookInCombo, cs_mp_cast<const QString &>(&QComboBox::activated), q, &QFileDialog::_q_goToDirectory);
 
    qFileDialogUi->lookInCombo->setInsertPolicy(QComboBox::NoInsert);
    qFileDialogUi->lookInCombo->setDuplicatesEnabled(false);
@@ -859,11 +857,8 @@ void QFileDialogPrivate::createWidgets()
    qFileDialogUi->fileTypeCombo->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
    qFileDialogUi->fileTypeCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-   QObject::connect(qFileDialogUi->fileTypeCombo, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-                  q, &QFileDialog::_q_useNameFilter);
-
-   QObject::connect(qFileDialogUi->fileTypeCombo, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::activated),
-                  q, &QFileDialog::filterSelected);
+   QObject::connect(qFileDialogUi->fileTypeCombo, cs_mp_cast<int>(&QComboBox::activated), q, &QFileDialog::_q_useNameFilter);
+   QObject::connect(qFileDialogUi->fileTypeCombo, cs_mp_cast<const QString &>(&QComboBox::activated), q, &QFileDialog::filterSelected);
 
    qFileDialogUi->listView->setFileDialogPrivate(this);
    qFileDialogUi->listView->setModel(model);

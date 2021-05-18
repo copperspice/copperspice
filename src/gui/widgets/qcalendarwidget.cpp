@@ -1835,7 +1835,7 @@ void QCalendarWidgetPrivate::setNavigatorEnabled(bool enable)
       m_navigator->setWidget(q);
 
       q->connect(m_navigator, &QCalendarTextNavigator::dateChanged,        q,
-                  static_cast<void (QCalendarWidget::*)(const QDate &)>(&QCalendarWidget::_q_slotChangeDate));
+               cs_mp_cast<const QDate &>(&QCalendarWidget::_q_slotChangeDate));
 
       q->connect(m_navigator, &QCalendarTextNavigator::editingFinished,    q, &QCalendarWidget::_q_editingFinished);
       m_view->installEventFilter(m_navigator);
@@ -1844,7 +1844,7 @@ void QCalendarWidgetPrivate::setNavigatorEnabled(bool enable)
       m_navigator->setWidget(nullptr);
 
       q->disconnect(m_navigator, &QCalendarTextNavigator::dateChanged,     q,
-                  static_cast<void (QCalendarWidget::*)(const QDate &)>(&QCalendarWidget::_q_slotChangeDate));
+               cs_mp_cast<const QDate &>(&QCalendarWidget::_q_slotChangeDate));
 
       q->disconnect(m_navigator, &QCalendarTextNavigator::editingFinished, q, &QCalendarWidget::_q_editingFinished);
       m_view->removeEventFilter(m_navigator);
@@ -2169,13 +2169,13 @@ QCalendarWidget::QCalendarWidget(QWidget *parent)
    setFocusProxy(d->m_view);
    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
-   connect(d->m_view,     &QCalendarView::showDate,            this, &QCalendarWidget::_q_slotShowDate);
+   connect(d->m_view,     &QCalendarView::showDate,        this, &QCalendarWidget::_q_slotShowDate);
 
-   connect(d->m_view,     &QCalendarView::changeDate,          this,
-                  static_cast<void (QCalendarWidget::*)(const QDate &)>(&QCalendarWidget::_q_slotChangeDate));
+   connect(d->m_view,     &QCalendarView::changeDate,      this,
+                  cs_mp_cast<const QDate &>(&QCalendarWidget::_q_slotChangeDate));
 
-   connect(d->m_view,     &QCalendarView::clicked,             this, &QCalendarWidget::clicked);
-   connect(d->m_view,     &QCalendarView::editingFinished,     this, &QCalendarWidget::_q_editingFinished);
+   connect(d->m_view,     &QCalendarView::clicked,         this, &QCalendarWidget::clicked);
+   connect(d->m_view,     &QCalendarView::editingFinished, this, &QCalendarWidget::_q_editingFinished);
 
    connect(d->prevMonth,  &QToolButton::clicked,      this, &QCalendarWidget::_q_prevMonthClicked);
    connect(d->nextMonth,  &QToolButton::clicked,      this, &QCalendarWidget::_q_nextMonthClicked);

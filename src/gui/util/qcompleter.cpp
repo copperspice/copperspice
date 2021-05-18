@@ -1184,7 +1184,7 @@ void QCompleter::setPopup(QAbstractItemView *popup)
 #endif
 
    QObject::connect(popup, &QAbstractItemView::clicked, this, &QCompleter::_q_complete);
-   QObject::connect(this,  static_cast<void (QCompleter::*)(const QModelIndex &)>(&QCompleter::activated), popup, &QAbstractItemView::hide);
+   QObject::connect(this, cs_mp_cast<const QModelIndex &>(&QCompleter::activated), popup, &QAbstractItemView::hide);
 
    QObject::connect(popup->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QCompleter::_q_completionSelected);
 

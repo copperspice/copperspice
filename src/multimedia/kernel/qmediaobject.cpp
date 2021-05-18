@@ -208,12 +208,11 @@ void QMediaObject::setupControls()
 
       if (d->metaDataControl) {
 
-         connect(d->metaDataControl, static_cast<void (QMetaDataReaderControl::*)()>(&QMetaDataReaderControl::metaDataChanged),
-            this, static_cast<void (QMediaObject::*)()>(&QMediaObject::metaDataChanged));
+         connect(d->metaDataControl, cs_mp_cast<>(&QMetaDataReaderControl::metaDataChanged),
+               this, cs_mp_cast<>(&QMediaObject::metaDataChanged));
 
-         connect(d->metaDataControl, static_cast<void (QMetaDataReaderControl::*)(const QString &, const QVariant &)>
-            (&QMetaDataReaderControl::metaDataChanged),
-            this, static_cast<void (QMediaObject::*)(const QString &, const QVariant &)>(&QMediaObject::metaDataChanged));
+         connect(d->metaDataControl, cs_mp_cast<const QString &, const QVariant &>(&QMetaDataReaderControl::metaDataChanged),
+               this, cs_mp_cast<const QString &, const QVariant &>(&QMediaObject::metaDataChanged));
 
          connect(d->metaDataControl, &QMetaDataReaderControl::metaDataAvailableChanged, this, &QMediaObject::metaDataAvailableChanged);
       }

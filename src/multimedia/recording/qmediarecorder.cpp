@@ -232,16 +232,14 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
 
          if (d->metaDataControl) {
 
-            disconnect(d->metaDataControl, static_cast<void (QMetaDataWriterControl::*)()>
-                  (&QMetaDataWriterControl::metaDataChanged), this,
-                  static_cast<void (QMediaRecorder::*)()>(&QMediaRecorder::metaDataChanged));
+            disconnect(d->metaDataControl, cs_mp_cast<>(&QMetaDataWriterControl::metaDataChanged),
+                  this, cs_mp_cast<>(&QMediaRecorder::metaDataChanged));
 
-            disconnect(d->metaDataControl, static_cast<void (QMetaDataWriterControl::*)(const QString &, const QVariant &)>
-                  (&QMetaDataWriterControl::metaDataChanged), this,
-                  static_cast<void (QMediaRecorder::*)(const QString &, const QVariant &)>(&QMediaRecorder::metaDataChanged));
+            disconnect(d->metaDataControl, cs_mp_cast<const QString &, const QVariant &>(&QMetaDataWriterControl::metaDataChanged),
+                  this, cs_mp_cast<const QString &, const QVariant &>(&QMediaRecorder::metaDataChanged));
 
             disconnect(d->metaDataControl, &QMetaDataWriterControl::metaDataAvailableChanged,
-                 this, &QMediaRecorder::metaDataAvailableChanged);
+                  this, &QMediaRecorder::metaDataAvailableChanged);
 
             disconnect(d->metaDataControl, &QMetaDataWriterControl::writableChanged,
                   this, &QMediaRecorder::metaDataWritableChanged);
@@ -289,13 +287,11 @@ bool QMediaRecorder::setMediaObject(QMediaObject *object)
                   service->releaseControl(control);
 
                } else {
-                  connect(d->metaDataControl, static_cast<void (QMetaDataWriterControl::*)()>
-                        (&QMetaDataWriterControl::metaDataChanged), this,
-                        static_cast<void (QMediaRecorder::*)()>(&QMediaRecorder::metaDataChanged));
+                  connect(d->metaDataControl, cs_mp_cast<>(&QMetaDataWriterControl::metaDataChanged),
+                        this, cs_mp_cast<>(&QMediaRecorder::metaDataChanged));
 
-                  connect(d->metaDataControl, static_cast<void (QMetaDataWriterControl::*)(const QString &, const QVariant &)>
-                        (&QMetaDataWriterControl::metaDataChanged), this,
-                        static_cast<void (QMediaRecorder::*)(const QString &, const QVariant &)>(&QMediaRecorder::metaDataChanged));
+                  connect(d->metaDataControl, cs_mp_cast<const QString &, const QVariant &>(&QMetaDataWriterControl::metaDataChanged),
+                        this, cs_mp_cast<const QString &, const QVariant &>(&QMediaRecorder::metaDataChanged));
 
                   connect(d->metaDataControl, &QMetaDataWriterControl::metaDataAvailableChanged,
                         this, &QMediaRecorder::metaDataAvailableChanged);

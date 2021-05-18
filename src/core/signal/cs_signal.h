@@ -513,8 +513,37 @@ bool internal_disconnect(const Sender &sender, const Internal::BentoAbstract *si
    return retval;
 }
 
+}  // namespace
 
-}
+// method pointer cast used to resolve ambiguous method overloading for signals and slots
+
+// 1
+template<class... Args>
+class cs_mp_cast_internal
+{
+ public:
+   template<class className>
+   constexpr auto operator()(void (className::*methodPtr)(Args ...)) const {
+      return methodPtr;
+   }
+};
+
+template<class... Args>
+constexpr cs_mp_cast_internal<Args...> cs_mp_cast;
+
+
+// 2
+template<class... Args>
+class cs_cmp_cast_internal
+{
+ public:
+   template<class className>
+   constexpr auto operator()(void (className::*methodPtr)(Args ...) const) const {
+      return methodPtr;
+   }
+};
+
+template<class... Args>
+constexpr cs_cmp_cast_internal<Args...> cs_cmp_cast;
 
 #endif
-

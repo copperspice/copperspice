@@ -310,8 +310,8 @@ void QLineEdit::setCompleter(QCompleter *c)
    }
 
    if (hasFocus()) {
-      QObject::connect(d->control->completer(), static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::activated),   this, &QLineEdit::setText);
-      QObject::connect(d->control->completer(), static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::highlighted), this, &QLineEdit::_q_completionHighlighted);
+      QObject::connect(d->control->completer(), cs_mp_cast<const QString &>(&QCompleter::activated),   this, &QLineEdit::setText);
+      QObject::connect(d->control->completer(), cs_mp_cast<const QString &>(&QCompleter::highlighted), this, &QLineEdit::_q_completionHighlighted);
    }
 }
 
@@ -1380,8 +1380,8 @@ void QLineEdit::focusInEvent(QFocusEvent *e)
    if (d->control->completer()) {
       d->control->completer()->setWidget(this);
 
-      QObject::connect(d->control->completer(), static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::activated),   this, &QLineEdit::setText);
-      QObject::connect(d->control->completer(), static_cast<void (QCompleter::*)(const QString &)>(&QCompleter::highlighted), this, &QLineEdit::_q_completionHighlighted);
+      QObject::connect(d->control->completer(), cs_mp_cast<const QString &>(&QCompleter::activated),   this, &QLineEdit::setText);
+      QObject::connect(d->control->completer(), cs_mp_cast<const QString &>(&QCompleter::highlighted), this, &QLineEdit::_q_completionHighlighted);
    }
 
 #endif
