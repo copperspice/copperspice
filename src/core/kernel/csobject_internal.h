@@ -87,7 +87,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    kind = static_cast<CsSignal::ConnectionKind>(type & ~Qt::UniqueConnection);
 
    CsSignal::connect(*sender, signalMethod, *receiver, slotMethod, kind, uniqueConnection);
-   sender->connectNotify(signalMetaMethod);
+   sender->QObject::connectNotify(signalMetaMethod);
 
    return true;
 }
@@ -146,7 +146,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
    kind = static_cast<CsSignal::ConnectionKind>(type & ~Qt::UniqueConnection);
 
    CsSignal::connect(*sender, signalMethod, *receiver, slotLambda, kind, uniqueConnection);
-   sender->connectNotify(signalMetaMethod);
+   sender->QObject::connectNotify(signalMetaMethod);
 
    return true;
 }
@@ -170,7 +170,7 @@ bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)
 
       if (senderMetaObject) {
          QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
-         const_cast<Sender *>(sender)->disconnectNotify(signalMetaMethod);
+         const_cast<Sender *>(sender)->QObject::disconnectNotify(signalMetaMethod);
       }
    }
 
@@ -189,7 +189,7 @@ bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)
 
       if (senderMetaObject) {
          QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
-         const_cast<Sender *>(sender)->disconnectNotify(signalMetaMethod);
+         const_cast<Sender *>(sender)->QObject::disconnectNotify(signalMetaMethod);
       }
    }
 
