@@ -97,6 +97,9 @@ class QFtpDTP : public QObject
    NET_CS_SIGNAL_1(Public, void connectState(int un_named_arg1))
    NET_CS_SIGNAL_2(connectState, un_named_arg1)
 
+   NET_CS_SLOT_1(Public, void dataReadyRead())
+   NET_CS_SLOT_2(dataReadyRead)
+
  private:
    NET_CS_SLOT_1(Private, void socketConnected())
    NET_CS_SLOT_2(socketConnected)
@@ -115,9 +118,6 @@ class QFtpDTP : public QObject
 
    NET_CS_SLOT_1(Private, void setupSocket())
    NET_CS_SLOT_2(setupSocket)
-
-   NET_CS_SLOT_1(Private, void dataReadyRead())
-   NET_CS_SLOT_2(dataReadyRead)
 
    void clearData();
 
@@ -306,7 +306,8 @@ QFtpDTP::QFtpDTP(QFtpPI *p, QObject *parent)
 {
    clearData();
    listener.setObjectName(QLatin1String("QFtpDTP active state server"));
-   connect(&listener, SIGNAL(newConnection()), this, SLOT(setupSocket()));
+
+   connect(&listener, &QTcpServer::newConnection, this, &QFtpDTP::setupSocket);
 }
 
 void QFtpDTP::setData(QByteArray *ba)
@@ -345,13 +346,11 @@ void QFtpDTP::connectToHost(const QString &host, quint16 port)
 
    socket->setObjectName("QFtpDTP Passive state socket");
 
-   connect(socket, SIGNAL(connected()),          this,   SLOT(socketConnected()));
-   connect(socket, SIGNAL(readyRead()),          this,   SLOT(socketReadyRead()));
-
-   connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
-
-   connect(socket, SIGNAL(disconnected()),       this,   SLOT(socketConnectionClosed()));
-   connect(socket, SIGNAL(bytesWritten(qint64)), this,   SLOT(socketBytesWritten(qint64)));
+   connect(socket, &QTcpSocket::connected,    this, &QFtpDTP::socketConnected);
+   connect(socket, &QTcpSocket::readyRead,    this, &QFtpDTP::socketReadyRead);
+   connect(socket, &QTcpSocket::error,        this, &QFtpDTP::socketError);
+   connect(socket, &QTcpSocket::disconnected, this, &QFtpDTP::socketConnectionClosed);
+   connect(socket, &QTcpSocket::bytesWritten, this, &QFtpDTP::socketBytesWritten);
 
    socket->connectToHost(host, port);
 }
@@ -830,13 +829,11 @@ void QFtpDTP::setupSocket()
    socket = listener.nextPendingConnection();
    socket->setObjectName(QLatin1String("QFtpDTP Active state socket"));
 
-   connect(socket, SIGNAL(connected()),          this,  SLOT(socketConnected()));
-   connect(socket, SIGNAL(readyRead()),          this,  SLOT(socketReadyRead()));
-
-   connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this,    SLOT(socketError(QAbstractSocket::SocketError)));
-
-   connect(socket, SIGNAL(disconnected()),       this,  SLOT(socketConnectionClosed()));
-   connect(socket, SIGNAL(bytesWritten(qint64)), this,  SLOT(socketBytesWritten(qint64)));
+   connect(socket, &QTcpSocket::connected,    this, &QFtpDTP::socketConnected);
+   connect(socket, &QTcpSocket::readyRead,    this, &QFtpDTP::socketReadyRead);
+   connect(socket, &QTcpSocket::error,        this, &QFtpDTP::socketError);
+   connect(socket, &QTcpSocket::disconnected, this, &QFtpDTP::socketConnectionClosed);
+   connect(socket, &QTcpSocket::bytesWritten, this, &QFtpDTP::socketBytesWritten);
 
    listener.close();
 }
@@ -859,15 +856,15 @@ QFtpPI::QFtpPI(QObject *parent)
 {
    commandSocket.setObjectName("QFtpPI_socket");
 
-   connect(&commandSocket, SIGNAL(hostFound()),     this, SLOT(hostFound()));
-   connect(&commandSocket, SIGNAL(connected()),     this, SLOT(connected()));
-   connect(&commandSocket, SIGNAL(disconnected()),  this, SLOT(connectionClosed()));
-   connect(&commandSocket, SIGNAL(readyRead()),     this, SLOT(readyRead()));
+   connect(&commandSocket, &QTcpSocket::hostFound,    this, &QFtpPI::hostFound);
+   connect(&commandSocket, &QTcpSocket::connected,    this, &QFtpPI::connected);
+   connect(&commandSocket, &QTcpSocket::disconnected, this, &QFtpPI::connectionClosed);
+   connect(&commandSocket, &QTcpSocket::readyRead,    this, &QFtpPI::readyRead);
 
-   connect(&commandSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-           SLOT(error(QAbstractSocket::SocketError)));
+   connect(&commandSocket, cs_mp_cast<QAbstractSocket::SocketError>(&QTcpSocket::error),
+            this, cs_mp_cast<QAbstractSocket::SocketError>(&QFtpPI::error));
 
-   connect(&dtp, SIGNAL(connectState(int)),          this, SLOT(dtpConnectState(int)));
+   connect(&dtp,           &QFtpDTP::connectState,    this, &QFtpPI::dtpConnectState);
 }
 
 void QFtpPI::connectToHost(const QString &host, quint16 port)
@@ -1541,16 +1538,15 @@ QFtp::QFtp(QObject *parent)
 
    d->errorString = tr("Unknown error");
 
-   connect(&d->pi, SIGNAL(connectState(int)),      this, SLOT(_q_piConnectState(int)));
-   connect(&d->pi, SIGNAL(finished(QString )),     this, SLOT(_q_piFinished(QString)));
-   connect(&d->pi, SIGNAL(error(int, QString)),    this, SLOT(_q_piError(int, QString)));
-   connect(&d->pi, SIGNAL(rawFtpReply(int, QString )), this, SLOT(_q_piFtpReply(int, QString)));
-   connect(&d->pi.dtp, SIGNAL(readyRead()),            this, SLOT(readyRead()));
+   connect(&d->pi,     &QFtpPI::connectState,          this, &QFtp::_q_piConnectState);
+   connect(&d->pi,     &QFtpPI::finished,              this, &QFtp::_q_piFinished);
 
-   connect(&d->pi.dtp, SIGNAL(dataTransferProgress(qint64, qint64)), this,
-           SLOT(dataTransferProgress(qint64, qint64)));
+   connect(&d->pi,     cs_mp_cast<int, const QString &>(&QFtpPI::error), this, cs_mp_cast<int, const QString &>(&QFtp::_q_piError));
 
-   connect(&d->pi.dtp, SIGNAL(listInfo(QUrlInfo)),     this, SLOT(listInfo(QUrlInfo)));
+   connect(&d->pi,     &QFtpPI::rawFtpReply,           this, &QFtp::_q_piFtpReply);
+   connect(&d->pi.dtp, &QFtpDTP::readyRead,            this, &QFtp::readyRead);
+   connect(&d->pi.dtp, &QFtpDTP::dataTransferProgress, this, &QFtp::dataTransferProgress);
+   connect(&d->pi.dtp, &QFtpDTP::listInfo,             this, &QFtp::listInfo);
 }
 
 int QFtp::connectToHost(const QString &host, quint16 port)
@@ -2126,8 +2122,8 @@ void QFtpPrivate::_q_startNextCommand()
             if (c->data.dev->isSequential()) {
                pi.dtp.setBytesTotal(0);
 
-               pi.dtp.connect(c->data.dev, SIGNAL(readyRead()),           &pi.dtp, SLOT(dataReadyRead()));
-               pi.dtp.connect(c->data.dev, SIGNAL(readChannelFinished()), &pi.dtp, SLOT(dataReadyRead()));
+               pi.dtp.connect(c->data.dev, &QIODevice::readyRead,           &pi.dtp, &QFtpDTP::dataReadyRead);
+               pi.dtp.connect(c->data.dev, &QIODevice::readChannelFinished, &pi.dtp, &QFtpDTP::dataReadyRead);
 
             } else {
                pi.dtp.setBytesTotal(c->data.dev->size());

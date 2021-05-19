@@ -189,9 +189,9 @@ void QNetworkAccessFtpBackend::downstreamReadyWrite()
 void QNetworkAccessFtpBackend::ftpConnectionReady(QNetworkAccessCache::CacheableObject *o)
 {
    ftp = static_cast<QNetworkAccessCachedFtpConnection *>(o);
-   connect(ftp, SIGNAL(done(bool)),  this, SLOT(ftpDone()));
-   connect(ftp, SIGNAL(rawCommandReply(int, QString )), this, SLOT(ftpRawCommandReply(int, QString )));
-   connect(ftp, SIGNAL(readyRead()), this, SLOT(ftpReadyRead()));
+   connect(ftp.data(), &QNetworkAccessCachedFtpConnection::done,            this, &QNetworkAccessFtpBackend::ftpDone);
+   connect(ftp.data(), &QNetworkAccessCachedFtpConnection::rawCommandReply, this, &QNetworkAccessFtpBackend::ftpRawCommandReply);
+   connect(ftp.data(), &QNetworkAccessCachedFtpConnection::readyRead,       this, &QNetworkAccessFtpBackend::ftpReadyRead);
 
    // is the login process done already?
    if (ftp->state() == QFtp::LoggedIn) {

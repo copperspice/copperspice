@@ -331,54 +331,45 @@ void QHttpThreadDelegate::startRequest()
 
    // Connect the reply signals that we need to handle and then forward
    if (synchronous) {
-      connect(httpReply, SIGNAL(headerChanged()), this, SLOT(synchronousHeaderChangedSlot()));
-      connect(httpReply, SIGNAL(finished()), this, SLOT(synchronousFinishedSlot()));
-
-      connect(httpReply, SIGNAL(finishedWithError(QNetworkReply::NetworkError, const QString &)),
-               this, SLOT(synchronousFinishedWithErrorSlot(QNetworkReply::NetworkError, const QString &)));
-
-      connect(httpReply, SIGNAL(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)),
-               this, SLOT(synchronousAuthenticationRequiredSlot(QHttpNetworkRequest, QAuthenticator *)));
+      connect(httpReply, &QHttpNetworkReply::headerChanged,          this, &QHttpThreadDelegate::synchronousHeaderChangedSlot);
+      connect(httpReply, &QHttpNetworkReply::finished,               this, &QHttpThreadDelegate::synchronousFinishedSlot);
+      connect(httpReply, &QHttpNetworkReply::finishedWithError,      this, &QHttpThreadDelegate::synchronousFinishedWithErrorSlot);
+      connect(httpReply, &QHttpNetworkReply::authenticationRequired, this, &QHttpThreadDelegate::synchronousAuthenticationRequiredSlot);
 
 #ifndef QT_NO_NETWORKPROXY
-      connect(httpReply, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
-               this, SLOT(synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &, QAuthenticator *)));
+      connect(httpReply, &QHttpNetworkReply::proxyAuthenticationRequired, this,
+            &QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot);
 #endif
 
       // ignore SSL errors for now in the synchronous HTTP case.
 
    } else if (! synchronous) {
-      connect(httpReply, SIGNAL(headerChanged()), this, SLOT(headerChangedSlot()));
-      connect(httpReply, SIGNAL(finished()), this, SLOT(finishedSlot()));
-
-      connect(httpReply, SIGNAL(finishedWithError(QNetworkReply::NetworkError, const QString &)),
-               this, SLOT(finishedWithErrorSlot(QNetworkReply::NetworkError, const QString &)));
+      connect(httpReply, &QHttpNetworkReply::headerChanged,     this, &QHttpThreadDelegate::headerChangedSlot);
+      connect(httpReply, &QHttpNetworkReply::finished,          this, &QHttpThreadDelegate::finishedSlot);
+      connect(httpReply, &QHttpNetworkReply::finishedWithError, this, &QHttpThreadDelegate::finishedWithErrorSlot);
 
       // some signals are only interesting when normal asynchronous style is used
-      connect(httpReply, SIGNAL(readyRead()), this, SLOT(readyReadSlot()));
-      connect(httpReply, SIGNAL(dataReadProgress(qint64, qint64)), this, SLOT(dataReadProgressSlot(qint64, qint64)));
+      connect(httpReply, &QHttpNetworkReply::readyRead,         this, &QHttpThreadDelegate::readyReadSlot);
+      connect(httpReply, &QHttpNetworkReply::dataReadProgress,  this, &QHttpThreadDelegate::dataReadProgressSlot);
 
 #ifdef QT_SSL
-      connect(httpReply, SIGNAL(encrypted()), this, SLOT(encryptedSlot()));
-      connect(httpReply, SIGNAL(sslErrors(const QList<QSslError> &)), this, SLOT(sslErrorsSlot(const QList<QSslError> &)));
+      connect(httpReply, &QHttpNetworkReply::encrypted, this, &QHttpThreadDelegate::encryptedSlot);
+      connect(httpReply, &QHttpNetworkReply::sslErrors, this, &QHttpThreadDelegate::sslErrorsSlot);
 
-      connect(httpReply, SIGNAL(preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *)),
-               this, SLOT(preSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator *)));
+      connect(httpReply, &QHttpNetworkReply::preSharedKeyAuthenticationRequired,
+            this, &QHttpThreadDelegate::preSharedKeyAuthenticationRequiredSlot);
 
 #endif
       // In the asynchronous HTTP case we can just forward those signals
       // Connect the reply signals that we can directly forward
-      connect(httpReply, SIGNAL(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)),
-               this, SLOT(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)));
+      connect(httpReply, &QHttpNetworkReply::authenticationRequired, this, &QHttpThreadDelegate::authenticationRequired);
 
 #ifndef QT_NO_NETWORKPROXY
-      connect(httpReply, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
-               this, SLOT(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)));
+      connect(httpReply, &QHttpNetworkReply::proxyAuthenticationRequired, this, &QHttpThreadDelegate::proxyAuthenticationRequired);
 #endif
    }
 
-   connect(httpReply, SIGNAL(cacheCredentials(const QHttpNetworkRequest &, QAuthenticator *)),
-               this, SLOT(cacheCredentialsSlot(const QHttpNetworkRequest &, QAuthenticator *)));
+   connect(httpReply, &QHttpNetworkReply::cacheCredentials, this, &QHttpThreadDelegate::cacheCredentialsSlot);
 }
 
 // This gets called from the user thread or by the synchronous HTTP timeout timer
@@ -719,8 +710,8 @@ void QHttpThreadDelegate::synchronousAuthenticationRequiredSlot(const QHttpNetwo
    }
 
    // Disconnect this connection now since we only want to ask the authentication cache once.
-   QObject::disconnect(httpReply, SIGNAL(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)),
-               this, SLOT(synchronousAuthenticationRequiredSlot(QHttpNetworkRequest, QAuthenticator *)));
+   QObject::disconnect(httpReply, &QHttpNetworkReply::authenticationRequired, this,
+            &QHttpThreadDelegate::synchronousAuthenticationRequiredSlot);
 }
 
 #ifndef QT_NO_NETWORKPROXY
@@ -739,12 +730,12 @@ void  QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot(const QNet
    }
 
    // Disconnect this connection now since we only want to ask the authentication cache once.
-   QObject::disconnect(httpReply, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *)),
-               this, SLOT(synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &proxy, QAuthenticator *)));
+   QObject::disconnect(httpReply, &QHttpNetworkReply::proxyAuthenticationRequired, this,
+            &QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot);
 }
 #endif
 
-void QNonContiguousByteDeviceThreadForwardImpl::haveDataSlot(qint64 pos, QByteArray dataArray, bool dataAtEnd, qint64 dataSize)
+void QNonContiguousByteDeviceThreadForwardImpl::haveDataSlot(qint64 pos, const QByteArray &dataArray, bool dataAtEnd, qint64 dataSize)
 {
    if (pos != m_pos) {
       // Sometimes when re-sending a request in the qhttpnetwork* layer there is a pending haveData from the

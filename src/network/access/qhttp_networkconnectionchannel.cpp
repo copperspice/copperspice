@@ -89,9 +89,6 @@ void QHttpNetworkConnectionChannel::init()
    // because else we're falling into cases where we recurse back into the socket code
    // and mess up the state. Always going to the event loop (and expecting that when reading/writing)
    // is safer.
-   QObject::connect(socket, SIGNAL(bytesWritten(qint64)), this, SLOT(_q_bytesWritten(qint64)), Qt::QueuedConnection);
-   QObject::connect(socket, SIGNAL(connected()), this, SLOT(_q_connected()), Qt::QueuedConnection);
-   QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(_q_readyRead()), Qt::QueuedConnection);
 
    // The disconnected() and error() signals may already come
    // while calling connectToHost().
@@ -99,14 +96,16 @@ void QHttpNetworkConnectionChannel::init()
    // will then emit a signal to the user of QNetworkReply
    // but cannot be caught because the user did not have a chance yet
    // to connect to QNetworkReply's signals.
+   QObject::connect(socket, &QTcpSocket::bytesWritten, this, &QHttpNetworkConnectionChannel::_q_bytesWritten, Qt::QueuedConnection);
+   QObject::connect(socket, &QTcpSocket::connected,    this, &QHttpNetworkConnectionChannel::_q_connected,    Qt::QueuedConnection);
+   QObject::connect(socket, &QTcpSocket::readyRead,    this, &QHttpNetworkConnectionChannel::_q_readyRead,    Qt::QueuedConnection);
 
-   QObject::connect(socket, SIGNAL(disconnected()), this, SLOT(_q_disconnected()), Qt::QueuedConnection);
-   QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-                    SLOT(_q_error(QAbstractSocket::SocketError)), Qt::QueuedConnection);
+   QObject::connect(socket, &QTcpSocket::disconnected, this, &QHttpNetworkConnectionChannel::_q_disconnected, Qt::QueuedConnection);
+   QObject::connect(socket, &QTcpSocket::error,        this, &QHttpNetworkConnectionChannel::_q_error, Qt::QueuedConnection);
 
 #ifndef QT_NO_NETWORKPROXY
-   QObject::connect(socket, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
-                    this, SLOT(_q_proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)), Qt::DirectConnection);
+   QObject::connect(socket, &QTcpSocket::proxyAuthenticationRequired, this, &QHttpNetworkConnectionChannel::_q_proxyAuthenticationRequired,
+            Qt::DirectConnection);
 #endif
 
 #ifdef QT_SSL
@@ -114,17 +113,15 @@ void QHttpNetworkConnectionChannel::init()
 
    if (sslSocket) {
       // won't be a sslSocket if encrypt is false
-      QObject::connect(sslSocket, SIGNAL(encrypted()), this, SLOT(_q_encrypted()), Qt::QueuedConnection);
+      QObject::connect(sslSocket, &QSslSocket::encrypted, this, &QHttpNetworkConnectionChannel::_q_encrypted, Qt::QueuedConnection);
+      QObject::connect(sslSocket, &QSslSocket::sslErrors, this, &QHttpNetworkConnectionChannel::_q_sslErrors, Qt::DirectConnection);
 
-      QObject::connect(sslSocket, SIGNAL(sslErrors(const QList<QSslError> &)), this,
-                       SLOT(_q_sslErrors(const QList<QSslError> &)), Qt::DirectConnection);
+      QObject::connect(sslSocket, &QSslSocket::preSharedKeyAuthenticationRequired, this,
+            &QHttpNetworkConnectionChannel::_q_preSharedKeyAuthenticationRequired, Qt::DirectConnection);
 
-      QObject::connect(sslSocket, SIGNAL(preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *)),
-                       this, SLOT(_q_preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *)),
-                       Qt::DirectConnection);
+      QObject::connect(sslSocket, &QSslSocket::encryptedBytesWritten, this, &QHttpNetworkConnectionChannel::_q_encryptedBytesWritten,
+            Qt::QueuedConnection);
 
-      QObject::connect(sslSocket, SIGNAL(encryptedBytesWritten(qint64)), this, SLOT(_q_encryptedBytesWritten(qint64)),
-                       Qt::QueuedConnection);
       if (ignoreAllSslErrors) {
          sslSocket->ignoreSslErrors();
       }

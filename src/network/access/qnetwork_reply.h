@@ -153,7 +153,7 @@ class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
    NET_CS_SIGNAL_2(sslErrors, errors)
 #endif
 
-   NET_CS_SIGNAL_1(Public, void redirected(QUrl url))
+   NET_CS_SIGNAL_1(Public, void redirected(const QUrl &url))
    NET_CS_SIGNAL_2(redirected, url)
 
    NET_CS_SIGNAL_1(Public, void uploadProgress(qint64 bytesSent, qint64 bytesTotal))

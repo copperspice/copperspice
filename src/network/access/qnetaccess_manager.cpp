@@ -140,11 +140,8 @@ QNetworkAccessManager::QNetworkAccessManager(QObject *parent)
    // the QNetworkSession's signals if a request is already made.
    // we need to track current accessibility state by default
 
-   connect(&d->networkConfigurationManager, SIGNAL(onlineStateChanged(bool)), this,
-           SLOT(_q_onlineStateChanged(bool)));
-
-   connect(&d->networkConfigurationManager, SIGNAL(configurationChanged(const QNetworkConfiguration &)), this,
-           SLOT(_q_configurationChanged(const QNetworkConfiguration &)));
+   connect(&d->networkConfigurationManager, &QNetworkConfigurationManager::onlineStateChanged,   this, &QNetworkAccessManager::_q_onlineStateChanged);
+   connect(&d->networkConfigurationManager, &QNetworkConfigurationManager::configurationChanged, this, &QNetworkAccessManager::_q_configurationChanged);
 
 #endif
 }
@@ -622,7 +619,7 @@ QNetworkReply *QNetworkAccessManager::createRequest(QNetworkAccessManager::Opera
       QNetworkReplyHttpImpl *reply = new QNetworkReplyHttpImpl(this, request, op, outgoingData);
 
 #ifndef QT_NO_BEARERMANAGEMENT
-      connect(this, SIGNAL(networkSessionConnected()), reply, SLOT(_q_networkSessionConnected()));
+      connect(this, &QNetworkAccessManager::networkSessionConnected, reply, &QNetworkReplyHttpImpl::_q_networkSessionConnected);
 #endif
 
       return reply;
@@ -633,7 +630,7 @@ QNetworkReply *QNetworkAccessManager::createRequest(QNetworkAccessManager::Opera
 
 #ifndef QT_NO_BEARERMANAGEMENT
    if (! isLocalFile) {
-      connect(this, SIGNAL(networkSessionConnected()), reply, SLOT(_q_networkSessionConnected()));
+      connect(this, &QNetworkAccessManager::networkSessionConnected, reply, &QNetworkReplyImpl::_q_networkSessionConnected);
    }
 #endif
 
@@ -762,17 +759,16 @@ QNetworkReply *QNetworkAccessManagerPrivate::postProcess(QNetworkReply *reply)
    Q_Q(QNetworkAccessManager);
 
    QNetworkReplyPrivate::setManager(reply, q);
-   q->connect(reply, SIGNAL(finished()),   q, SLOT(_q_replyFinished()));
+   q->connect(reply, &QNetworkReply::finished,   q, &QNetworkAccessManager::_q_replyFinished);
 
 #ifdef QT_SSL
    // In case we are compiled without SSL support, we do not have this signal and we need to
    // avoid getting a connection error.
 
-   q->connect(reply, SIGNAL(encrypted()),                         q, SLOT(_q_replyEncrypted()));
-   q->connect(reply, SIGNAL(sslErrors(const QList<QSslError> &)), q, SLOT(_q_replySslErrors(const QList<QSslError> &)));
+   q->connect(reply, &QNetworkReply::encrypted, q, &QNetworkAccessManager::_q_replyEncrypted);
+   q->connect(reply, &QNetworkReply::sslErrors, q, &QNetworkAccessManager::_q_replySslErrors);
 
-   q->connect(reply, SIGNAL(preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *)),
-              q, SLOT(_q_replyPreSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *)));
+   q->connect(reply, &QNetworkReply::preSharedKeyAuthenticationRequired, q, &QNetworkAccessManager::_q_replyPreSharedKeyAuthenticationRequired);
 #endif
 
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -920,7 +916,7 @@ void QNetworkAccessManagerPrivate::clearCache(QNetworkAccessManager *manager)
       if (manager->d_func()->httpThread->isFinished()) {
          delete manager->d_func()->httpThread;
       } else {
-         QObject::connect(manager->d_func()->httpThread, SIGNAL(finished()), manager->d_func()->httpThread, SLOT(deleteLater()));
+         QObject::connect(manager->d_func()->httpThread, &QThread::finished, manager->d_func()->httpThread, &QThread::deleteLater);
       }
       manager->d_func()->httpThread = nullptr;
    }
@@ -935,8 +931,9 @@ QNetworkAccessManagerPrivate::~QNetworkAccessManagerPrivate()
       if (httpThread->isFinished()) {
          delete httpThread;
       } else {
-         QObject::connect(httpThread, SIGNAL(finished()), httpThread, SLOT(deleteLater()));
+         QObject::connect(httpThread, &QThread::finished, httpThread, &QThread::deleteLater);
       }
+
       httpThread = nullptr;
    }
 }
@@ -963,14 +960,14 @@ void QNetworkAccessManagerPrivate::createSession(const QNetworkConfiguration &co
       }
 
       //disconnect from old session
-      QObject::disconnect(networkSessionStrongRef.data(), SIGNAL(opened()), q, SLOT(networkSessionConnected()));
-      QObject::disconnect(networkSessionStrongRef.data(), SIGNAL(closed()), q, SLOT(_q_networkSessionClosed()));
+      QObject::disconnect(networkSessionStrongRef.data(), &QNetworkSession::opened, q, &QNetworkAccessManager::networkSessionConnected);
+      QObject::disconnect(networkSessionStrongRef.data(), &QNetworkSession::closed, q, &QNetworkAccessManager::_q_networkSessionClosed);
 
-      QObject::disconnect(networkSessionStrongRef.data(), SIGNAL(stateChanged(QNetworkSession::State)),
-                          q, SLOT(_q_networkSessionStateChanged(QNetworkSession::State)));
+      QObject::disconnect(networkSessionStrongRef.data(), &QNetworkSession::stateChanged, q,
+            &QNetworkAccessManager::_q_networkSessionStateChanged);
 
-      QObject::disconnect(networkSessionStrongRef.data(), SIGNAL(error(QNetworkSession::SessionError)),
-                          q, SLOT(_q_networkSessionFailed(QNetworkSession::SessionError)));
+      QObject::disconnect(networkSessionStrongRef.data(), &QNetworkSession::error, q,
+            &QNetworkAccessManager::_q_networkSessionFailed);
    }
 
    //switch to new session (null if config was invalid)
@@ -989,15 +986,18 @@ void QNetworkAccessManagerPrivate::createSession(const QNetworkConfiguration &co
    }
 
    //connect to new session
-   QObject::connect(networkSessionStrongRef.data(), SIGNAL(opened()), q, SLOT(networkSessionConnected()), Qt::QueuedConnection);
+   QObject::connect(networkSessionStrongRef.data(), &QNetworkSession::opened, q,
+            &QNetworkAccessManager::networkSessionConnected, Qt::QueuedConnection);
+
    //QueuedConnection is used to avoid deleting the networkSession inside its closed signal
-   QObject::connect(networkSessionStrongRef.data(), SIGNAL(closed()), q, SLOT(_q_networkSessionClosed()), Qt::QueuedConnection);
+   QObject::connect(networkSessionStrongRef.data(), &QNetworkSession::closed, q,
+            &QNetworkAccessManager::_q_networkSessionClosed, Qt::QueuedConnection);
 
-   QObject::connect(networkSessionStrongRef.data(), SIGNAL(stateChanged(QNetworkSession::State)),
-                    q, SLOT(_q_networkSessionStateChanged(QNetworkSession::State)), Qt::QueuedConnection);
+   QObject::connect(networkSessionStrongRef.data(), &QNetworkSession::stateChanged, q,
+            &QNetworkAccessManager::_q_networkSessionStateChanged, Qt::QueuedConnection);
 
-   QObject::connect(networkSessionStrongRef.data(), SIGNAL(error(QNetworkSession::SessionError)),
-                    q, SLOT(_q_networkSessionFailed(QNetworkSession::SessionError)));
+   QObject::connect(networkSessionStrongRef.data(), &QNetworkSession::error, q,
+            &QNetworkAccessManager::_q_networkSessionFailed);
 
    _q_networkSessionStateChanged(networkSessionStrongRef->state());
 }
@@ -1011,14 +1011,14 @@ void QNetworkAccessManagerPrivate::_q_networkSessionClosed()
       networkConfiguration = networkSession->configuration();
 
       //disconnect from old session
-      QObject::disconnect(networkSession.data(), SIGNAL(opened()), q, SLOT(networkSessionConnected()));
-      QObject::disconnect(networkSession.data(), SIGNAL(closed()), q, SLOT(_q_networkSessionClosed()));
+      QObject::disconnect(networkSession.data(), &QNetworkSession::opened, q, &QNetworkAccessManager::networkSessionConnected);
+      QObject::disconnect(networkSession.data(), &QNetworkSession::closed, q, &QNetworkAccessManager::_q_networkSessionClosed);
 
-      QObject::disconnect(networkSession.data(), SIGNAL(stateChanged(QNetworkSession::State)),
-                          q, SLOT(_q_networkSessionStateChanged(QNetworkSession::State)));
+      QObject::disconnect(networkSession.data(), &QNetworkSession::stateChanged, q,
+            &QNetworkAccessManager::_q_networkSessionStateChanged);
 
-      QObject::disconnect(networkSession.data(), SIGNAL(error(QNetworkSession::SessionError)),
-                          q, SLOT(_q_networkSessionFailed(QNetworkSession::SessionError)));
+      QObject::disconnect(networkSession.data(), &QNetworkSession::error, q,
+            &QNetworkAccessManager::_q_networkSessionFailed);
 
       networkSessionStrongRef.clear();
       networkSessionWeakRef.clear();

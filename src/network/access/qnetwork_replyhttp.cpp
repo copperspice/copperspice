@@ -614,7 +614,7 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
       // A synchronous HTTP request uses its own thread
       thread = new QThread();
       thread->setObjectName("HTTP Synchronous Thread");
-      QObject::connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+      QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
       thread->start();
 
    } else if (!managerPrivate->httpThread) {
@@ -784,7 +784,7 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
 
    // For the synchronous HTTP, this is the normal way the delegate gets deleted
    // For the asynchronous HTTP this is a safety measure, the delegate deletes itself when HTTP is finished
-   QObject::connect(thread, SIGNAL(finished()), delegate, SLOT(deleteLater()));
+   QObject::connect(thread, &QThread::finished, delegate, &QHttpThreadDelegate::deleteLater);
 
    // Set the properties it needs
    delegate->httpRequest = httpRequest;
@@ -826,58 +826,43 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
       delegate->pendingDownloadProgress = pendingDownloadProgressEmissions;
 
       // Connect the signals of the delegate to us
-      QObject::connect(delegate, SIGNAL(downloadData(QByteArray)),
-                  q, SLOT(replyDownloadData(QByteArray)), Qt::QueuedConnection);
-
-      QObject::connect(delegate, SIGNAL(downloadFinished()),
-                  q, SLOT(replyFinished()), Qt::QueuedConnection);
-
-      QObject::connect(delegate, SIGNAL(downloadMetaData(QList<QPair<QByteArray, QByteArray> >,
-                  int, QString, bool, QSharedPointer<char>, qint64, bool)),
-                  q, SLOT(replyDownloadMetaData(QList<QPair<QByteArray, QByteArray> >, int, QString, bool,
-                  QSharedPointer<char>, qint64, bool)), Qt::QueuedConnection);
-
-      QObject::connect(delegate, SIGNAL(downloadProgress(qint64, qint64)),
-                  q, SLOT(replyDownloadProgressSlot(qint64, qint64)), Qt::QueuedConnection);
-
-      QObject::connect(delegate, SIGNAL(error(QNetworkReply::NetworkError, QString)),
-                  q, SLOT(httpError(QNetworkReply::NetworkError, QString)), Qt::QueuedConnection);
-
-      QObject::connect(delegate, SIGNAL(redirected(QUrl, int, int)),
-                  q, SLOT(onRedirected(QUrl, int, int)), Qt::QueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::downloadData,     q, &QNetworkReplyHttpImpl::replyDownloadData, Qt::QueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::downloadFinished, q, &QNetworkReplyHttpImpl::replyFinished, Qt::QueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::downloadMetaData, q, &QNetworkReplyHttpImpl::replyDownloadMetaData, Qt::QueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::downloadProgress, q, &QNetworkReplyHttpImpl::replyDownloadProgressSlot, Qt::QueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::error,            q, &QNetworkReplyHttpImpl::httpError, Qt::QueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::redirected,       q, &QNetworkReplyHttpImpl::onRedirected, Qt::QueuedConnection);
 
 
 #ifdef QT_SSL
-      QObject::connect(delegate, SIGNAL(sslConfigurationChanged(QSslConfiguration)),
-                  q, SLOT(replySslConfigurationChanged(QSslConfiguration)), Qt::QueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::sslConfigurationChanged,     q,
+            &QNetworkReplyHttpImpl::replySslConfigurationChanged, Qt::QueuedConnection);
 #endif
 
       // Those need to report back, therefire BlockingQueuedConnection
-      QObject::connect(delegate, SIGNAL(authenticationRequired(QHttpNetworkRequest, QAuthenticator *)),
-                  q, SLOT(httpAuthenticationRequired(QHttpNetworkRequest, QAuthenticator *)), Qt::BlockingQueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::authenticationRequired,      q,
+            &QNetworkReplyHttpImpl::httpAuthenticationRequired, Qt::BlockingQueuedConnection);
 
 #ifndef QT_NO_NETWORKPROXY
-      QObject::connect(delegate, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
-                  q, SLOT(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)), Qt::BlockingQueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::proxyAuthenticationRequired, q,
+            &QNetworkReplyHttpImpl::proxyAuthenticationRequired, Qt::BlockingQueuedConnection);
 #endif
 
 #ifdef QT_SSL
-      QObject::connect(delegate, SIGNAL(encrypted()), q, SLOT(replyEncrypted()), Qt::BlockingQueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::encrypted, q, &QNetworkReplyHttpImpl::replyEncrypted, Qt::BlockingQueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::sslErrors, q, &QNetworkReplyHttpImpl::replySslErrors, Qt::BlockingQueuedConnection);
 
-      QObject::connect(delegate, SIGNAL(sslErrors(const QList<QSslError> &, bool *, QList<QSslError> *)),
-                  q, SLOT(replySslErrors(const QList<QSslError> &, bool *, QList<QSslError> *)), Qt::BlockingQueuedConnection);
-
-      QObject::connect(delegate, SIGNAL(preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *)),
-                  q, SLOT(replyPreSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator *)), Qt::BlockingQueuedConnection);
+      QObject::connect(delegate, &QHttpThreadDelegate::preSharedKeyAuthenticationRequired, q,
+            &QNetworkReplyHttpImpl::replyPreSharedKeyAuthenticationRequiredSlot, Qt::BlockingQueuedConnection);
 #endif
 
-      // this signal we will use to start the request
-      QObject::connect(q, SIGNAL(startHttpRequest()), delegate, SLOT(startRequest()));
-      QObject::connect(q, SIGNAL(abortHttpRequest()), delegate, SLOT(abortRequest()));
+      // used to start the request
+      QObject::connect(q, &QNetworkReplyHttpImpl::startHttpRequest,      delegate, &QHttpThreadDelegate::startRequest);
+      QObject::connect(q, &QNetworkReplyHttpImpl::abortHttpRequest,      delegate, &QHttpThreadDelegate::abortRequest);
 
       // to throttle the connection
-      QObject::connect(q, SIGNAL(readBufferSizeChanged(qint64)), delegate, SLOT(readBufferSizeChanged(qint64)));
-      QObject::connect(q, SIGNAL(readBufferFreed(qint64)),       delegate, SLOT(readBufferFreed(qint64)));
+      QObject::connect(q, &QNetworkReplyHttpImpl::readBufferSizeChanged, delegate, &QHttpThreadDelegate::readBufferSizeChanged);
+      QObject::connect(q, &QNetworkReplyHttpImpl::readBufferFreed,       delegate, &QHttpThreadDelegate::readBufferFreed);
 
       if (uploadByteDevice) {
          QNonContiguousByteDeviceThreadForwardImpl *forwardUploadDevice =
@@ -887,30 +872,30 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
          delegate->httpRequest.setUploadByteDevice(forwardUploadDevice);
 
          // If the device in the user thread claims it has more data, keep the flow to HTTP thread going
-         QObject::connect(uploadByteDevice.data(), SIGNAL(readyRead()),
-                          q, SLOT(uploadByteDeviceReadyReadSlot()), Qt::QueuedConnection);
+         QObject::connect(uploadByteDevice.data(), &QNonContiguousByteDevice::readyRead, q,
+               &QNetworkReplyHttpImpl::uploadByteDeviceReadyReadSlot, Qt::QueuedConnection);
 
          // From user thread to http thread:
-         QObject::connect(q, SIGNAL(haveUploadData(qint64, QByteArray, bool, qint64)),
-                          forwardUploadDevice, SLOT(haveDataSlot(qint64, QByteArray, bool, qint64)), Qt::QueuedConnection);
+         QObject::connect(q, &QNetworkReplyHttpImpl::haveUploadData, forwardUploadDevice,
+               &QNonContiguousByteDeviceThreadForwardImpl::haveDataSlot, Qt::QueuedConnection);
 
-         QObject::connect(uploadByteDevice.data(), SIGNAL(readyRead()),
-                          forwardUploadDevice, SLOT(readyRead()), Qt::QueuedConnection);
+         QObject::connect(uploadByteDevice.data(), &QNonContiguousByteDevice::readyRead, forwardUploadDevice,
+               &QNonContiguousByteDeviceThreadForwardImpl::readyRead, Qt::QueuedConnection);
 
          // From http thread to user thread:
-         QObject::connect(forwardUploadDevice, SIGNAL(wantData(qint64)),
-                          q, SLOT(wantUploadDataSlot(qint64)));
+         QObject::connect(forwardUploadDevice, &QNonContiguousByteDeviceThreadForwardImpl::wantData,
+               q, &QNetworkReplyHttpImpl::wantUploadDataSlot);
 
-         QObject::connect(forwardUploadDevice, SIGNAL(processedData(qint64, qint64)),
-                          q, SLOT(sentUploadDataSlot(qint64, qint64)));
+         QObject::connect(forwardUploadDevice, &QNonContiguousByteDeviceThreadForwardImpl::processedData,
+               q, &QNetworkReplyHttpImpl::sentUploadDataSlot);
 
-         QObject::connect(forwardUploadDevice, SIGNAL(resetData(bool *)), q, SLOT(resetUploadDataSlot(bool *)),
-                          Qt::BlockingQueuedConnection); // this is the only one with BlockingQueued!
+         QObject::connect(forwardUploadDevice, &QNonContiguousByteDeviceThreadForwardImpl::resetData,
+               q, &QNetworkReplyHttpImpl::resetUploadDataSlot, Qt::BlockingQueuedConnection);
       }
 
    } else if (synchronous) {
-      QObject::connect(q, SIGNAL(startHttpRequestSynchronously()), delegate, SLOT(startRequestSynchronously()),
-                       Qt::BlockingQueuedConnection);
+      QObject::connect(q, &QNetworkReplyHttpImpl::startHttpRequestSynchronously, delegate,
+            &QHttpThreadDelegate::startRequestSynchronously, Qt::BlockingQueuedConnection);
 
       if (uploadByteDevice) {
          // For the synchronous HTTP use case the use thread (this one here) is blocked
@@ -956,7 +941,7 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
       if (thread->isFinished()) {
          delete thread;
       } else {
-         QObject::connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+         QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
       }
 
       finished();
@@ -1001,7 +986,7 @@ void QNetworkReplyHttpImplPrivate::initCacheSaveDevice()
    cacheSaveDevice = managerPrivate->networkCache->prepare(metaData);
 
    if (cacheSaveDevice) {
-      q->connect(cacheSaveDevice, SIGNAL(aboutToClose()), SLOT(_q_cacheSaveDeviceAboutToClose()));
+      q->connect(cacheSaveDevice, &QIODevice::aboutToClose, q, &QNetworkReplyHttpImpl::_q_cacheSaveDeviceAboutToClose);
    }
 
    if (!cacheSaveDevice || (cacheSaveDevice && !cacheSaveDevice->isOpen())) {
@@ -1520,8 +1505,8 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    }
 
    cacheLoadDevice = contents;
-   q->connect(cacheLoadDevice, SIGNAL(readyRead()),           q, SLOT(_q_cacheLoadReadyRead()));
-   q->connect(cacheLoadDevice, SIGNAL(readChannelFinished()), q, SLOT(_q_cacheLoadReadyRead()));
+   q->connect(cacheLoadDevice, &QIODevice::readyRead,           q, &QNetworkReplyHttpImpl::_q_cacheLoadReadyRead);
+   q->connect(cacheLoadDevice, &QIODevice::readChannelFinished, q, &QNetworkReplyHttpImpl::_q_cacheLoadReadyRead);
 
    // This needs to be emitted in the event loop because it can be reached at
    // the direct code path of qnam.get(...) before the user has a chance
@@ -1779,8 +1764,8 @@ bool QNetworkReplyHttpImplPrivate::start(const QNetworkRequest &newHttpRequest)
    if (networkSession->isOpen() && networkSession->state() == QNetworkSession::Connected) {
       Q_Q(QNetworkReplyHttpImpl);
 
-      QObject::connect(networkSession.data(), SIGNAL(usagePoliciesChanged(QNetworkSession::UsagePolicies)),
-                       q, SLOT(_q_networkSessionUsagePoliciesChanged(QNetworkSession::UsagePolicies)));
+      QObject::connect(networkSession.data(), &QNetworkSession::usagePoliciesChanged, q,
+            &QNetworkReplyHttpImpl::_q_networkSessionUsagePoliciesChanged);
 
       postRequest(newHttpRequest);
       return true;
@@ -1831,8 +1816,8 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
       state = WaitingForSession;
 
       if (session) {
-         QObject::connect(session.data(), SIGNAL(error(QNetworkSession::SessionError)),
-                          q, SLOT(_q_networkSessionFailed()), Qt::QueuedConnection);
+         QObject::connect(session.data(), &QNetworkSession::error, q,
+               &QNetworkReplyHttpImpl::_q_networkSessionFailed, Qt::QueuedConnection);
 
          if (! session->isOpen()) {
             session->setSessionProperty("ConnectInBackground", isBackground);
@@ -1850,8 +1835,8 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
       }
 
    } else if (session) {
-      QObject::connect(session.data(), SIGNAL(stateChanged(QNetworkSession::State)),
-                       q, SLOT(_q_networkSessionStateChanged(QNetworkSession::State)), Qt::QueuedConnection);
+      QObject::connect(session.data(), &QNetworkSession::stateChanged, q,
+            &QNetworkReplyHttpImpl::_q_networkSessionStateChanged, Qt::QueuedConnection);
    }
 #else
 
@@ -1945,8 +1930,8 @@ void QNetworkReplyHttpImplPrivate::_q_bufferOutgoingDataFinished()
    }
 
    // disconnect signals
-   QObject::disconnect(outgoingData, SIGNAL(readyRead()), q, SLOT(_q_bufferOutgoingData()));
-   QObject::disconnect(outgoingData, SIGNAL(readChannelFinished()), q, SLOT(_q_bufferOutgoingDataFinished()));
+   QObject::disconnect(outgoingData, &QIODevice::readyRead,           q, &QNetworkReplyHttpImpl::_q_bufferOutgoingData);
+   QObject::disconnect(outgoingData, &QIODevice::readChannelFinished, q, &QNetworkReplyHttpImpl::_q_bufferOutgoingDataFinished);
 
    // finally, start the request
    QMetaObject::invokeMethod(q, "_q_startOperation", Qt::QueuedConnection);
@@ -1967,8 +1952,8 @@ void QNetworkReplyHttpImplPrivate::_q_bufferOutgoingData()
       // first call, create our buffer
       outgoingDataBuffer = QSharedPointer<QRingBuffer>::create();
 
-      QObject::connect(outgoingData, SIGNAL(readyRead()), q, SLOT(_q_bufferOutgoingData()));
-      QObject::connect(outgoingData, SIGNAL(readChannelFinished()), q, SLOT(_q_bufferOutgoingDataFinished()));
+      QObject::connect(outgoingData, &QIODevice::readyRead,           q, &QNetworkReplyHttpImpl::_q_bufferOutgoingData);
+      QObject::connect(outgoingData, &QIODevice::readChannelFinished, q, &QNetworkReplyHttpImpl::_q_bufferOutgoingDataFinished);
    }
 
    qint64 bytesBuffered = 0;
@@ -2121,8 +2106,7 @@ QNonContiguousByteDevice *QNetworkReplyHttpImplPrivate::createUploadByteDevice()
 
    // We want signal emissions only for normal asynchronous uploads
    if (!synchronous)
-      QObject::connect(uploadByteDevice.data(), SIGNAL(readProgress(qint64, qint64)),
-                       q, SLOT(emitReplyUploadProgress(qint64, qint64)));
+      QObject::connect(uploadByteDevice.data(), &QNonContiguousByteDevice::readProgress, q, &QNetworkReplyHttpImpl::emitReplyUploadProgress);
 
    return uploadByteDevice.data();
 }
@@ -2428,7 +2412,7 @@ void QNetworkReplyHttpImpl::_q_error(QNetworkReply::NetworkError un_named_arg1, 
    d->_q_error(un_named_arg1, un_named_arg2);
 }
 
-void QNetworkReplyHttpImpl::replyDownloadData(QByteArray un_named_arg1)
+void QNetworkReplyHttpImpl::replyDownloadData(const QByteArray &un_named_arg1)
 {
    Q_D(QNetworkReplyHttpImpl);
    d->replyDownloadData(un_named_arg1);
@@ -2440,8 +2424,8 @@ void QNetworkReplyHttpImpl::replyFinished()
    d->replyFinished();
 }
 
-void QNetworkReplyHttpImpl::replyDownloadMetaData(QList <QPair <QByteArray, QByteArray>> un_named_arg1,
-      int un_named_arg2, QString un_named_arg3, bool un_named_arg4, QSharedPointer <char> un_named_arg5,
+void QNetworkReplyHttpImpl::replyDownloadMetaData(const QList <QPair <QByteArray, QByteArray>> &un_named_arg1,
+      int un_named_arg2, const QString &un_named_arg3, bool un_named_arg4, QSharedPointer <char> un_named_arg5,
       qint64 un_named_arg6, bool un_named_arg7)
 {
    Q_D(QNetworkReplyHttpImpl);
@@ -2455,13 +2439,13 @@ void QNetworkReplyHttpImpl::replyDownloadProgressSlot(qint64 un_named_arg1, qint
    d->replyDownloadProgressSlot(un_named_arg1, un_named_arg2);
 }
 
-void QNetworkReplyHttpImpl::httpAuthenticationRequired(QHttpNetworkRequest un_named_arg1, QAuthenticator *un_named_arg2)
+void QNetworkReplyHttpImpl::httpAuthenticationRequired(const QHttpNetworkRequest &un_named_arg1, QAuthenticator *un_named_arg2)
 {
    Q_D(QNetworkReplyHttpImpl);
    d->httpAuthenticationRequired(un_named_arg1, un_named_arg2);
 }
 
-void QNetworkReplyHttpImpl::httpError(QNetworkReply::NetworkError un_named_arg1, QString un_named_arg2)
+void QNetworkReplyHttpImpl::httpError(QNetworkReply::NetworkError un_named_arg1, const QString &un_named_arg2)
 {
    Q_D(QNetworkReplyHttpImpl);
    d->httpError(un_named_arg1, un_named_arg2);
@@ -2481,7 +2465,7 @@ void QNetworkReplyHttpImpl::replySslErrors(const QList <QSslError> &un_named_arg
    d->replySslErrors(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QNetworkReplyHttpImpl::replySslConfigurationChanged(QSslConfiguration un_named_arg1)
+void QNetworkReplyHttpImpl::replySslConfigurationChanged(const QSslConfiguration &un_named_arg1)
 {
    Q_D(QNetworkReplyHttpImpl);
    d->replySslConfigurationChanged(un_named_arg1);
@@ -2546,7 +2530,7 @@ void QNetworkReplyHttpImpl::_q_metaDataChanged()
    d->_q_metaDataChanged();
 }
 
-void QNetworkReplyHttpImpl::onRedirected(QUrl un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QNetworkReplyHttpImpl::onRedirected(const QUrl &un_named_arg1, int un_named_arg2, int un_named_arg3)
 {
    Q_D(QNetworkReplyHttpImpl);
    d->onRedirected(un_named_arg1, un_named_arg2, un_named_arg3);

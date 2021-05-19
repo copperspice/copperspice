@@ -101,23 +101,23 @@ public:
     NET_CS_SLOT_2(_q_error)
 
     // From reply
-    NET_CS_SLOT_1(Private, void replyDownloadData(QByteArray un_named_arg1))
+    NET_CS_SLOT_1(Private, void replyDownloadData(const QByteArray &un_named_arg1))
     NET_CS_SLOT_2(replyDownloadData)
 
     NET_CS_SLOT_1(Private, void replyFinished())
     NET_CS_SLOT_2(replyFinished)
 
-    NET_CS_SLOT_1(Private, void replyDownloadMetaData(QList <QPair <QByteArray,QByteArray>> un_named_arg1,int un_named_arg2,
-                  QString un_named_arg3,bool un_named_arg4,QSharedPointer <char> un_named_arg5,qint64 un_named_arg6,bool un_named_arg7))
+    NET_CS_SLOT_1(Private, void replyDownloadMetaData(const QList <QPair <QByteArray,QByteArray>> &un_named_arg1, int un_named_arg2,
+            const QString &un_named_arg3, bool un_named_arg4, QSharedPointer <char> un_named_arg5, qint64 un_named_arg6, bool un_named_arg7))
     NET_CS_SLOT_2(replyDownloadMetaData)
 
     NET_CS_SLOT_1(Private, void replyDownloadProgressSlot(qint64 un_named_arg1,qint64 un_named_arg2))
     NET_CS_SLOT_2(replyDownloadProgressSlot)
 
-    NET_CS_SLOT_1(Private, void httpAuthenticationRequired(QHttpNetworkRequest un_named_arg1,QAuthenticator * un_named_arg2))
+    NET_CS_SLOT_1(Private, void httpAuthenticationRequired(const QHttpNetworkRequest &un_named_arg1, QAuthenticator *un_named_arg2))
     NET_CS_SLOT_2(httpAuthenticationRequired)
 
-    NET_CS_SLOT_1(Private, void httpError(QNetworkReply::NetworkError un_named_arg1, QString un_named_arg2))
+    NET_CS_SLOT_1(Private, void httpError(QNetworkReply::NetworkError un_named_arg1, const QString &un_named_arg2))
     NET_CS_SLOT_2(httpError)
 
 #ifdef QT_SSL
@@ -128,7 +128,7 @@ public:
                   QList <QSslError> * un_named_arg3))
     NET_CS_SLOT_2(replySslErrors)
 
-    NET_CS_SLOT_1(Private, void replySslConfigurationChanged(QSslConfiguration un_named_arg1))
+    NET_CS_SLOT_1(Private, void replySslConfigurationChanged(const QSslConfiguration &un_named_arg1))
     NET_CS_SLOT_2(replySslConfigurationChanged)
 
     NET_CS_SLOT_1(Private, void replyPreSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator * un_named_arg1))
@@ -161,7 +161,7 @@ public:
     NET_CS_SLOT_1(Private, void _q_metaDataChanged())
     NET_CS_SLOT_2(_q_metaDataChanged)
 
-    NET_CS_SLOT_1(Private, void onRedirected(QUrl un_named_arg1, int un_named_arg2, int un_named_arg3))
+    NET_CS_SLOT_1(Private, void onRedirected(const QUrl &un_named_arg1, int un_named_arg2, int un_named_arg3))
     NET_CS_SLOT_2(onRedirected)
 
     // To HTTP thread:
@@ -180,7 +180,7 @@ public:
     NET_CS_SIGNAL_1(Public, void startHttpRequestSynchronously())
     NET_CS_SIGNAL_2(startHttpRequestSynchronously)
 
-    NET_CS_SIGNAL_1(Public, void haveUploadData(qint64 pos, QByteArray dataArray, bool dataAtEnd, qint64 dataSize))
+    NET_CS_SIGNAL_1(Public, void haveUploadData(qint64 pos, const QByteArray &dataArray, bool dataAtEnd, qint64 dataSize))
     NET_CS_SIGNAL_2(haveUploadData,pos,dataArray,dataAtEnd,dataSize)
 
     Q_DECLARE_PRIVATE(QNetworkReplyHttpImpl)

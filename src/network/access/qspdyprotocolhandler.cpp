@@ -294,10 +294,10 @@ bool QSpdyProtocolHandler::sendRequest()
       currentReply->d_func()->connection = m_connection;
       currentReply->d_func()->connectionChannel = m_channel;
       m_inFlightStreams.insert(streamID, currentPair);
-      connect(currentReply, SIGNAL(destroyed(QObject *)), this, SLOT(_q_replyDestroyed(QObject *)));
 
       sendSYN_STREAM(currentPair, streamID, /* associatedToStreamID = */ 0);
       m_channel->spdyRequestsToSend.erase(it++);
+      connect(currentReply, &QHttpNetworkReply::destroyed, this, &QSpdyProtocolHandler::_q_replyDestroyed);
    }
    m_channel->state = QHttpNetworkConnectionChannel::IdleState;
    return true;
@@ -607,6 +607,7 @@ void QSpdyProtocolHandler::sendSYN_STREAM(HttpMessagePair messagePair,
       // no upload -> this is the last frame, send the FIN flag
       flags |= ControlFrame_FLAG_FIN;
       reply->d_func()->state = QHttpNetworkReplyPrivate::SPDYHalfClosed;
+
    } else {
       reply->d_func()->state = QHttpNetworkReplyPrivate::SPDYUploading;
 
@@ -614,8 +615,8 @@ void QSpdyProtocolHandler::sendSYN_STREAM(HttpMessagePair messagePair,
       // the signal for uploading we know which stream we are sending on
       request.uploadByteDevice()->setProperty("SPDYStreamID", streamID);
 
-      QObject::connect(request.uploadByteDevice(), SIGNAL(readyRead()), this,
-                       SLOT(_q_uploadDataReadyRead()), Qt::QueuedConnection);
+      QObject::connect(request.uploadByteDevice(), &QNonContiguousByteDevice::readyRead, this,
+            &QSpdyProtocolHandler::_q_uploadDataReadyRead, Qt::QueuedConnection);
    }
 
    QByteArray namesAndValues = composeHeader(request);

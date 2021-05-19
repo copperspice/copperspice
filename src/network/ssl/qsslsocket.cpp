@@ -1100,6 +1100,7 @@ void QSslConfigurationPrivate::deepCopyDefaultConfiguration(QSslConfigurationPri
 void QSslSocketPrivate::createPlainSocket(QIODevice::OpenMode openMode)
 {
    Q_Q(QSslSocket);
+
    q->setOpenMode(openMode); // <- from QIODevice
    q->setSocketState(QAbstractSocket::UnconnectedState);
    q->setSocketError(QAbstractSocket::UnknownSocketError);
@@ -1116,25 +1117,16 @@ void QSslSocketPrivate::createPlainSocket(QIODevice::OpenMode openMode)
    plainSocket->setProperty("_q_networksession", q->property("_q_networksession"));
 #endif
 
-   q->connect(plainSocket, SIGNAL(connected()), q, SLOT(_q_connectedSlot()), Qt::DirectConnection);
-
-   q->connect(plainSocket, SIGNAL(hostFound()), q, SLOT(_q_hostFoundSlot()), Qt::DirectConnection);
-
-   q->connect(plainSocket, SIGNAL(disconnected()), q, SLOT(_q_disconnectedSlot()), Qt::DirectConnection);
-
-   q->connect(plainSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-              q, SLOT(_q_stateChangedSlot(QAbstractSocket::SocketState)), Qt::DirectConnection);
-
-   q->connect(plainSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-              q, SLOT(_q_errorSlot(QAbstractSocket::SocketError)), Qt::DirectConnection);
-
-   q->connect(plainSocket, SIGNAL(readyRead()), q, SLOT(_q_readyReadSlot()), Qt::DirectConnection);
-
-   q->connect(plainSocket, SIGNAL(bytesWritten(qint64)), q, SLOT(_q_bytesWrittenSlot(qint64)), Qt::DirectConnection);
+   q->connect(plainSocket, &QTcpSocket::connected,    q, &QSslSocket::_q_connectedSlot, Qt::DirectConnection);
+   q->connect(plainSocket, &QTcpSocket::hostFound,    q, &QSslSocket::_q_hostFoundSlot, Qt::DirectConnection);
+   q->connect(plainSocket, &QTcpSocket::disconnected, q, &QSslSocket::_q_disconnectedSlot, Qt::DirectConnection);
+   q->connect(plainSocket, &QTcpSocket::stateChanged, q, &QSslSocket::_q_stateChangedSlot, Qt::DirectConnection);
+   q->connect(plainSocket, &QTcpSocket::error,        q, &QSslSocket::_q_errorSlot, Qt::DirectConnection);
+   q->connect(plainSocket, &QTcpSocket::readyRead,    q, &QSslSocket::_q_readyReadSlot, Qt::DirectConnection);
+   q->connect(plainSocket, &QTcpSocket::bytesWritten, q, &QSslSocket::_q_bytesWrittenSlot, Qt::DirectConnection);
 
 #ifndef QT_NO_NETWORKPROXY
-   q->connect(plainSocket, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)),
-              q, SLOT(proxyAuthenticationRequired(const QNetworkProxy &, QAuthenticator *)));
+   q->connect(plainSocket, &QTcpSocket::proxyAuthenticationRequired, q, &QSslSocket::proxyAuthenticationRequired);
 #endif
 
    buffer.clear();

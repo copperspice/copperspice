@@ -93,7 +93,7 @@ class QHttpThreadDelegate : public QObject
    QSharedPointer<QNetworkSession> networkSession;
 #endif
 
-   NET_CS_SIGNAL_1(Public, void authenticationRequired(QHttpNetworkRequest request, QAuthenticator *un_named_arg2))
+   NET_CS_SIGNAL_1(Public, void authenticationRequired(const QHttpNetworkRequest &request, QAuthenticator *un_named_arg2))
    NET_CS_SIGNAL_2(authenticationRequired, request, un_named_arg2)
 
 #ifndef QT_NO_NETWORKPROXY
@@ -108,15 +108,15 @@ class QHttpThreadDelegate : public QObject
    NET_CS_SIGNAL_1(Public, void sslErrors(const QList <QSslError> &un_named_arg1, bool *un_named_arg2, QList <QSslError> *un_named_arg3))
    NET_CS_SIGNAL_2(sslErrors, un_named_arg1, un_named_arg2, un_named_arg3)
 
-   NET_CS_SIGNAL_1(Public, void sslConfigurationChanged(QSslConfiguration un_named_arg1))
+   NET_CS_SIGNAL_1(Public, void sslConfigurationChanged(const QSslConfiguration &un_named_arg1))
    NET_CS_SIGNAL_2(sslConfigurationChanged, un_named_arg1)
 
    NET_CS_SIGNAL_1(Public, void preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *data))
    NET_CS_SIGNAL_2(preSharedKeyAuthenticationRequired, data)
 #endif
 
-   NET_CS_SIGNAL_1(Public, void downloadMetaData(QList <QPair <QByteArray, QByteArray>> list,
-                   int un_named_arg2, QString str, bool un_named_arg4,
+   NET_CS_SIGNAL_1(Public, void downloadMetaData(const QList <QPair <QByteArray, QByteArray>> &list,
+                   int un_named_arg2, const QString &str, bool un_named_arg4,
                    QSharedPointer <char> un_named_arg5, qint64 un_named_arg6, bool un_named_arg7))
 
    NET_CS_SIGNAL_2(downloadMetaData, list, un_named_arg2, str, un_named_arg4, un_named_arg5, un_named_arg6 ,un_named_arg7)
@@ -124,16 +124,16 @@ class QHttpThreadDelegate : public QObject
    NET_CS_SIGNAL_1(Public, void downloadProgress(qint64 un_named_arg1, qint64 un_named_arg2))
    NET_CS_SIGNAL_2(downloadProgress, un_named_arg1, un_named_arg2)
 
-   NET_CS_SIGNAL_1(Public, void downloadData(QByteArray un_named_arg1))
+   NET_CS_SIGNAL_1(Public, void downloadData(const QByteArray &un_named_arg1))
    NET_CS_SIGNAL_2(downloadData, un_named_arg1)
 
-   NET_CS_SIGNAL_1(Public, void error(QNetworkReply::NetworkError un_named_arg1, QString un_named_arg2))
+   NET_CS_SIGNAL_1(Public, void error(QNetworkReply::NetworkError un_named_arg1, const QString &un_named_arg2))
    NET_CS_SIGNAL_2(error, un_named_arg1, un_named_arg2)
 
    NET_CS_SIGNAL_1(Public, void downloadFinished())
    NET_CS_SIGNAL_2(downloadFinished)
 
-   NET_CS_SIGNAL_1(Public, void redirected(QUrl url, int httpStatus, int maxRedirectsRemainig))
+   NET_CS_SIGNAL_1(Public, void redirected(const QUrl &url, int httpStatus, int maxRedirectsRemainig))
    NET_CS_SIGNAL_2(redirected, url, httpStatus, maxRedirectsRemainig)
 
    // This are called via QueuedConnection from user thread
@@ -315,7 +315,7 @@ class QNonContiguousByteDeviceThreadForwardImpl : public QNonContiguousByteDevic
    }
 
    // From user thread
-   NET_CS_SLOT_1(Public, void haveDataSlot(qint64 pos, QByteArray dataArray, bool dataAtEnd, qint64 dataSize))
+   NET_CS_SLOT_1(Public, void haveDataSlot(qint64 pos, const QByteArray &dataArray, bool dataAtEnd, qint64 dataSize))
    NET_CS_SLOT_2(haveDataSlot)
 
    // to main thread

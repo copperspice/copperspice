@@ -134,7 +134,8 @@ void QNetworkAccessFileBackend::open()
       case QNetworkAccessManager::PutOperation:
          mode = QIODevice::WriteOnly | QIODevice::Truncate;
          uploadByteDevice = createUploadByteDevice();
-         QObject::connect(uploadByteDevice, SIGNAL(readyRead()), this, SLOT(uploadReadyReadSlot()));
+
+         QObject::connect(uploadByteDevice, &QNonContiguousByteDevice::readyRead, this, &QNetworkAccessFileBackend::uploadReadyReadSlot);
          QMetaObject::invokeMethod(this, "uploadReadyReadSlot", Qt::QueuedConnection);
          break;
 

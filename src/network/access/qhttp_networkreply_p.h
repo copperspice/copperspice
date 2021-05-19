@@ -157,10 +157,10 @@ class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
    NET_CS_SIGNAL_2(proxyAuthenticationRequired, proxy, authenticator)
 #endif
 
-   NET_CS_SIGNAL_1(Public, void authenticationRequired(QHttpNetworkRequest request, QAuthenticator *authenticator))
+   NET_CS_SIGNAL_1(Public, void authenticationRequired(const QHttpNetworkRequest &request, QAuthenticator *authenticator))
    NET_CS_SIGNAL_2(authenticationRequired, request, authenticator)
 
-   NET_CS_SIGNAL_1(Public, void redirected(QUrl url, int httpStatus, int maxRedirectsRemaining))
+   NET_CS_SIGNAL_1(Public, void redirected(const QUrl &url, int httpStatus, int maxRedirectsRemaining))
    NET_CS_SIGNAL_2(redirected, url, httpStatus, maxRedirectsRemaining)
 
  private:
