@@ -1411,7 +1411,7 @@ void QStateMachinePrivate::_q_animationFinished()
 
    QAbstractAnimation *anim = qobject_cast<QAbstractAnimation *>(q->sender());
    Q_ASSERT(anim != nullptr);
-   QObject::disconnect(anim, SIGNAL(finished()), q, SLOT(_q_animationFinished()));
+   QObject::disconnect(anim, &QAbstractAnimation::finished, q, &QStateMachine::_q_animationFinished);
 
    if (resetAnimationEndValues.contains(anim)) {
       qobject_cast<QVariantAnimation *>(anim)->setEndValue(QVariant()); // ### generalize
@@ -1467,7 +1467,7 @@ void QStateMachinePrivate::terminateActiveAnimations(QAbstractState *state,
 
     for (int i = 0; i < animations.size(); ++i) {
         QAbstractAnimation *anim = animations.at(i);
-        QObject::disconnect(anim, SIGNAL(finished()), q, SLOT(_q_animationFinished()));
+        QObject::disconnect(anim, &QAbstractAnimation::finished, q, &QStateMachine::_q_animationFinished);
         stateForAnimation.remove(anim);
 
         // Stop the (top-level) animation.
@@ -1527,7 +1527,7 @@ void QStateMachinePrivate::initializeAnimations(QAbstractState *state, const QLi
                     stateForAnimation.insert(a, state);
                     animationsForState[state].append(a);
                     // ### connect to just the top-level animation?
-                    QObject::connect(a, SIGNAL(finished()), q, SLOT(_q_animationFinished()), Qt::UniqueConnection);
+                    QObject::connect(a, &QAbstractAnimation::finished, q, &QStateMachine::_q_animationFinished, Qt::UniqueConnection);
                 }
                 if ((globalRestorePolicy == QState::RestoreProperties)
                         && !hasRestorable(state, assn.object, assn.propertyName)) {

@@ -169,7 +169,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
                   && processChannelMode != QProcess::ForwardedOutputChannel) {
                if (!stdoutChannel.reader) {
                   stdoutChannel.reader = new QWindowsPipeReader(q);
-                  q->connect(stdoutChannel.reader, SIGNAL(readyRead()), SLOT(_q_canReadStandardOutput()));
+                  q->connect(stdoutChannel.reader, &QWindowsPipeReader::readyRead, q, &QProcess::_q_canReadStandardOutput);
                }
             } else {
                duplicateStdWriteChannel(channel.pipe, STD_OUTPUT_HANDLE);
@@ -179,7 +179,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
                   && processChannelMode != QProcess::ForwardedErrorChannel) {
                if (!stderrChannel.reader) {
                   stderrChannel.reader = new QWindowsPipeReader(q);
-                  q->connect(stderrChannel.reader, SIGNAL(readyRead()), SLOT(_q_canReadStandardError()));
+                  q->connect(stderrChannel.reader, &QWindowsPipeReader::readyRead, q, &QProcess::_q_canReadStandardError);
                }
             } else {
                duplicateStdWriteChannel(channel.pipe, STD_ERROR_HANDLE);
@@ -563,7 +563,7 @@ void QProcessPrivate::startProcess()
    if (threadData->eventDispatcher) {
       processFinishedNotifier = new QWinEventNotifier(pid->hProcess, q);
 
-      QObject::connect(processFinishedNotifier, SIGNAL(activated(HANDLE)), q, SLOT(_q_processDied()));
+      QObject::connect(processFinishedNotifier, &QWinEventNotifier::activated, q, &QProcess::_q_processDied);
       processFinishedNotifier->setEnabled(true);
    }
 

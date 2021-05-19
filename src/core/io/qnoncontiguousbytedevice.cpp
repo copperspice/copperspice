@@ -48,8 +48,8 @@ QNonContiguousByteDeviceBufferImpl::QNonContiguousByteDeviceBufferImpl(QBuffer *
    arrayImpl = new QNonContiguousByteDeviceByteArrayImpl(&byteArray);
    arrayImpl->setParent(this);
 
-   connect(arrayImpl, SIGNAL(readyRead()), this, SLOT(readyRead()));
-   connect(arrayImpl, SIGNAL(readProgress(qint64, qint64)), this, SLOT(readProgress(qint64, qint64)));
+   connect(arrayImpl, &QNonContiguousByteDeviceByteArrayImpl::readyRead,    this, &QNonContiguousByteDeviceBufferImpl::readyRead);
+   connect(arrayImpl, &QNonContiguousByteDeviceByteArrayImpl::readProgress, this, &QNonContiguousByteDeviceBufferImpl::readProgress);
 }
 
 QNonContiguousByteDeviceBufferImpl::~QNonContiguousByteDeviceBufferImpl()
@@ -208,8 +208,9 @@ QNonContiguousByteDeviceIoDeviceImpl::QNonContiguousByteDeviceIoDeviceImpl(QIODe
 {
    device = d;
    initialPosition = d->pos();
-   connect(device, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::QueuedConnection);
-   connect(device, SIGNAL(readChannelFinished()), this, SLOT(readyRead()), Qt::QueuedConnection);
+
+   connect(device, &QIODevice::readyRead,           this, &QNonContiguousByteDeviceIoDeviceImpl::readyRead, Qt::QueuedConnection);
+   connect(device, &QIODevice::readChannelFinished, this, &QNonContiguousByteDeviceIoDeviceImpl::readyRead, Qt::QueuedConnection);
 }
 
 QNonContiguousByteDeviceIoDeviceImpl::~QNonContiguousByteDeviceIoDeviceImpl()
@@ -338,7 +339,7 @@ QByteDeviceWrappingIoDevice::QByteDeviceWrappingIoDevice(QNonContiguousByteDevic
    : QIODevice((QObject *)nullptr)
 {
    byteDevice = bd;
-   connect(bd, SIGNAL(readyRead()), this, SLOT(readyRead()));
+   connect(bd, &QNonContiguousByteDevice::readyRead, this, &QByteDeviceWrappingIoDevice::readyRead);
 
    open(ReadOnly);
 }

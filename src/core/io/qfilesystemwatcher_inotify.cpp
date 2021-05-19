@@ -237,7 +237,7 @@ QInotifyFileSystemWatcherEngine::~QInotifyFileSystemWatcherEngine()
 void QInotifyFileSystemWatcherEngine::run()
 {
    QSocketNotifier sn(inotifyFd, QSocketNotifier::Read, this);
-   connect(&sn, SIGNAL(activated(int)), this, SLOT(readFromInotify()));
+   connect(&sn, &QSocketNotifier::activated, this, &QInotifyFileSystemWatcherEngine::readFromInotify);
    (void) exec();
 }
 

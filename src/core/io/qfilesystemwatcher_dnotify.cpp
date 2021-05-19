@@ -162,7 +162,7 @@ void QDnotifySignalThread::startNotify()
 void QDnotifySignalThread::run()
 {
    QSocketNotifier sn(qfswd_fileChanged_pipe[0], QSocketNotifier::Read, this);
-   connect(&sn, SIGNAL(activated(int)), this, SLOT(readFromDnotify()));
+   connect(&sn, &QSocketNotifier::activated, this, &QDnotifySignalThread::readFromDnotify);
 
    QCoreApplication::instance()->postEvent(this, new QEvent(QEvent::User));
    (void) exec();
@@ -187,7 +187,7 @@ void QDnotifySignalThread::readFromDnotify()
 
 QDnotifyFileSystemWatcherEngine::QDnotifyFileSystemWatcherEngine()
 {
-   QObject::connect(dnotifySignal(), SIGNAL(fdChanged(int)), this, SLOT(refresh(int)), Qt::DirectConnection);
+   QObject::connect(dnotifySignal(), &QDnotifySignalThread::fdChanged, this, &QDnotifyFileSystemWatcherEngine::refresh, Qt::DirectConnection);
 }
 
 QDnotifyFileSystemWatcherEngine::~QDnotifyFileSystemWatcherEngine()
