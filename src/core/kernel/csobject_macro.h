@@ -96,8 +96,8 @@ class cs_number<0>
 #endif // doxypress
 
 # define CS_TR_FUNCTIONS \
-   static inline QString tr(const char *s, const char *c = nullptr, int n = -1) \
-      { return staticMetaObject().tr(s, c, n); }
+   static inline QString tr(const char *text, const char *comment = nullptr, std::optional<int> numArg = std::optional<int>()) \
+      { return staticMetaObject().tr(text, comment, numArg); }
 
 // ** cs_object
 #define CS_OBJECT(classNameX)         \

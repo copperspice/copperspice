@@ -43,7 +43,7 @@ class Q_CORE_EXPORT QTranslator : public QObject
 
    ~QTranslator();
 
-   virtual QString translate(const char *context, const char *sourceText, const char *disambiguation = nullptr,
+   virtual QString translate(const char *context, const char *text, const char *comment = nullptr,
          std::optional<int> numArg = std::optional<int>()) const;
 
    virtual bool isEmpty() const;

@@ -140,7 +140,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static void installTranslator(QTranslator *messageFile);
    static void removeTranslator(QTranslator *messageFile);
 
-   static QString translate(const char *context, const char *key, const char *disambiguation = nullptr,
+   static QString translate(const char *context, const char *text, const char *comment = nullptr,
             std::optional<int> numArg = std::optional<int>());
 
    static void flush();
@@ -265,9 +265,9 @@ inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *ev
 
 #define Q_DECLARE_TR_FUNCTIONS(context) \
  public: \
-   static QString tr(const char *sourceText, const char *disambiguation = nullptr, \
-            std::optional<int> n = std::optional<int>()) \
-        { return QCoreApplication::translate(#context, sourceText, disambiguation, n); } \
+   static QString tr(const char *text, const char *comment = nullptr, \
+            std::optional<int> numArg = std::optional<int>()) \
+        { return QCoreApplication::translate(#context, text, comment, numArg); } \
  private:
 
 

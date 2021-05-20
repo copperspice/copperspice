@@ -1353,19 +1353,19 @@ void QCoreApplication::removeTranslator(QTranslator *translationFile)
    }
 }
 
-QString QCoreApplication::translate(const char *context, const char *sourceText, const char *disambiguation,
+QString QCoreApplication::translate(const char *context, const char *text, const char *comment,
             std::optional<int> numArg)
 {
    QString retval;
 
-   if (! sourceText) {
+   if (! text) {
       return retval;
    }
 
    if (self != nullptr) {
 
       for (auto item : self->d_func()->translators) {
-         retval = item->translate(context, sourceText, disambiguation, numArg);
+         retval = item->translate(context, text, comment, numArg);
 
          if (! retval.isEmpty()) {
             break;
@@ -1374,7 +1374,7 @@ QString QCoreApplication::translate(const char *context, const char *sourceText,
    }
 
    if (retval.isEmpty()) {
-      retval = QString::fromUtf8(sourceText);
+      retval = QString::fromUtf8(text);
 
       if (numArg.has_value()) {
          retval = QTranslator::replacePercentN(retval, numArg.value());

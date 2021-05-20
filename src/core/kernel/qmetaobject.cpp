@@ -459,10 +459,10 @@ int QMetaObject::propertyOffset() const
    return retval;
 }
 
-QString QMetaObject::tr(const char *text, const char *notes, int n) const
+QString QMetaObject::tr(const char *text, const char *comment, std::optional<int> numArg) const
 {
-   const char *context = csPrintable(className());
-   return QCoreApplication::translate(context, text, notes, n);
+   const char *context = className().constData();
+   return QCoreApplication::translate(context, text, comment, numArg);
 }
 
 QMetaProperty QMetaObject::userProperty() const

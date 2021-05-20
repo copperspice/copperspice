@@ -344,7 +344,7 @@ class QTranslatorPrivate
 
    bool do_load(const QString &filename, const QString &directory);
    bool do_load(const uchar *data, int len, const QString &directory);
-   QString do_translate(const char *context, const char *sourceText, const char *comment, std::optional<int> numArg) const;
+   QString do_translate(const char *context, const char *text, const char *comment, std::optional<int> numArg) const;
    void clear();
 
  protected:
@@ -786,7 +786,7 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &dire
    return ok;
 }
 
-static QString getMessage(const uchar *data, const uchar *end, const char *context, const char *sourceText,
+static QString getMessage(const uchar *data, const uchar *end, const char *context, const char *text,
             const char *comment, uint numerus)
 {
    QString retval;
@@ -794,7 +794,7 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
    const uchar *tn = nullptr;
    uint tn_length = 0;
 
-   const uint sourceTextLen = uint(strlen(sourceText));
+   const uint sourceTextLen = uint(strlen(text));
    const uint contextLen    = uint(strlen(context));
    const uint commentLen    = uint(strlen(comment));
 
@@ -844,7 +844,7 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
             quint32 len = read32(data);
             data += 4;
 
-            if (! match(data, len, sourceText, sourceTextLen)) {
+            if (! match(data, len, text, sourceTextLen)) {
                return retval;
             }
 
@@ -891,7 +891,7 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
    return str;
 }
 
-QString QTranslatorPrivate::do_translate(const char *context, const char *sourceText, const char *comment,
+QString QTranslatorPrivate::do_translate(const char *context, const char *text, const char *comment,
             std::optional<int> numArg) const
 {
    QString retval;
@@ -900,8 +900,8 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
       context = "";
    }
 
-   if (sourceText == nullptr) {
-      sourceText = "";
+   if (text == nullptr) {
+      text = "";
    }
 
    if (comment == nullptr) {
@@ -961,7 +961,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
    while (true) {
       quint32 h = 0;
 
-      elfHash_start(sourceText, h);
+      elfHash_start(text, h);
       elfHash_start(comment, h);
       elfHash_finish(h);
 
@@ -1000,8 +1000,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
             quint32 ro = read32(start);
             start += 4;
 
-            QString tn = getMessage(messageArray + ro, messageArray + messageLength, context,
-                                    sourceText, comment, numerus);
+            QString tn = getMessage(messageArray + ro, messageArray + messageLength, context, text, comment, numerus);
             if (! tn.isEmpty()) {
                return tn;
             }
@@ -1017,7 +1016,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *source
 
 searchDependencies:
    for (QTranslator *translator : subTranslators) {
-      QString tn = translator->translate(context, sourceText, comment, numArg);
+      QString tn = translator->translate(context, text, comment, numArg);
 
       if (! tn.isEmpty()) {
          retval = tn;
@@ -1100,12 +1099,12 @@ QString QTranslator::replacePercentN(QString text, int numArg)
    return text;
 }
 
-QString QTranslator::translate(const char *context, const char *sourceText, const char *disambiguation,
+QString QTranslator::translate(const char *context, const char *text, const char *comment,
       std::optional<int> numArg) const
 {
    Q_D(const QTranslator);
 
-   QString retval = d->do_translate(context, sourceText, disambiguation, numArg);
+   QString retval = d->do_translate(context, text, comment, numArg);
 
    if (! retval.isEmpty() && numArg.has_value()) {
       retval = replacePercentN(retval, numArg.value());

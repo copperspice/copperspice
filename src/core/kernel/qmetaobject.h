@@ -87,7 +87,7 @@ class Q_CORE_EXPORT QMetaObject
 
    virtual const QMetaObject *superClass() const = 0;
 
-   QString tr(const char *s, const char *c = nullptr, int n = -1) const;
+   QString tr(const char *text, const char *comment = nullptr, std::optional<int> numArg = std::optional<int>()) const;
 
    QMetaProperty userProperty() const;
 
