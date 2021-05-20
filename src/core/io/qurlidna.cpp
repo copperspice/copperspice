@@ -2541,7 +2541,7 @@ QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot)
 
       if (simple) {
          // common case (non IDN-domains)
-         bool isStandard = qt_find_nonstd3(tmpLabel.begin(), tmpLabel.end(), Qt::CaseInsensitive) == tmpLabel.end();
+         bool isStandard = qt_find_nonstd3(tmpLabel.cbegin(), tmpLabel.cend(), Qt::CaseInsensitive) == tmpLabel.cend();
 
          if (! isStandard) {
             return QString();
@@ -2579,7 +2579,7 @@ QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot)
             retval.append(aceForm);
          }
 
-         bool isStandard = qt_find_nonstd3(aceForm.begin(), aceForm.end(), Qt::CaseInsensitive) == aceForm.end();
+         bool isStandard = qt_find_nonstd3(aceForm.cbegin(), aceForm.cend(), Qt::CaseInsensitive) == aceForm.cend();
 
          if (! isStandard) {
             return QString();

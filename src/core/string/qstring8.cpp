@@ -113,7 +113,7 @@ QString8::const_iterator QString8::cs_internal_find_fast(const QString8 &str, co
 
       if (iter->toCaseFolded() == QString8(strFolded[0]))  {
          auto text_iter    = iter + 1;
-         auto pattern_iter = strFolded.begin() + 1;
+         auto pattern_iter = strFolded.cbegin() + 1;
 
          while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
@@ -127,7 +127,7 @@ QString8::const_iterator QString8::cs_internal_find_fast(const QString8 &str, co
             }
          }
 
-         if (pattern_iter == strFolded.end()) {
+         if (pattern_iter == strFolded.cend()) {
             // found a match
             return iter;
          }
@@ -190,7 +190,7 @@ QString8::const_iterator QString8::cs_internal_rfind_fast(const QString8 &str, c
 
       if (iter->toCaseFolded() == QString8(strFolded[0]))  {
          auto text_iter    = iter + 1;
-         auto pattern_iter = strFolded.begin() + 1;
+         auto pattern_iter = strFolded.cbegin() + 1;
 
          while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
@@ -204,7 +204,7 @@ QString8::const_iterator QString8::cs_internal_rfind_fast(const QString8 &str, c
             }
          }
 
-         if (pattern_iter == strFolded.end()) {
+         if (pattern_iter == strFolded.cend()) {
             // found a match
             return iter;
          }
@@ -220,7 +220,7 @@ QString8::const_iterator QString8::cs_internal_rfind_fast(const QString8 &str, c
 void QString8::chop(size_type numOfChars)
 {
    if (numOfChars > 0) {
-      auto iter = end();
+      auto iter = cend();
 
       for (size_type cnt = 0; cnt < numOfChars; ++cnt) {
 
@@ -232,7 +232,7 @@ void QString8::chop(size_type numOfChars)
          --iter;
       }
 
-      erase(iter, end());
+      erase(iter, cend());
    }
 }
 
@@ -748,8 +748,8 @@ int QString8::localeAwareCompare(QStringView8 str1, QStringView8 str2)
    }
 
 #if defined(Q_OS_WIN32)
-   QString16 tmp1(str1.begin(), str1.end());
-   QString16 tmp2(str2.begin(), str2.end());
+   QString16 tmp1(str1.cbegin(), str1.cend());
+   QString16 tmp2(str2.cbegin(), str2.cend());
 
    int retval = CompareString(GetUserDefaultLCID(), 0, (wchar_t *)tmp1.constData(), tmp1.size_storage(),
         (wchar_t *)tmp2.constData(), tmp2.size_storage());
@@ -953,10 +953,10 @@ QString8 &QString8::replace(const QString8 &before, const QString8 &after, Qt::C
       return *this;
    }
 
-   auto iter     = indexOfFast(before, begin(), cs);
+   auto iter     = indexOfFast(before, cbegin(), cs);
    size_type len = before.size();
 
-   while (iter != end()) {
+   while (iter != cend()) {
       auto last = iter + len;
 
       iter = erase(iter, last);

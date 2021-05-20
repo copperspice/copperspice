@@ -482,7 +482,7 @@ QChar CppParser::getChar()
 
    while (true)  {
 
-      if (iter == yyInStr.end()) {
+      if (iter == yyInStr.cend()) {
          yyIter = iter;
          return EOF;
       }
@@ -2114,7 +2114,7 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
    prospectiveContext.clear();
    pendingContext.clear();
 
-   yyIter = yyInStr.begin();
+   yyIter = yyInStr.cbegin();
    yyCh   = getChar();
    yyTok  = getToken();
 
@@ -2633,11 +2633,11 @@ void CppParser::processComment()
 
    } else if (c == '%' && foundSpace) {
 
-      QString::const_iterator iter = yyWord.begin() + 2;
+      QString::const_iterator iter = yyWord.cbegin() + 2;
       QChar c;
 
       while (true) {
-         if (iter == yyWord.end()) {
+         if (iter == yyWord.cend()) {
             break;
          }
 
@@ -2655,7 +2655,7 @@ void CppParser::processComment()
 
          while (true) {
 
-            if (iter == yyWord.end()) {
+            if (iter == yyWord.cend()) {
                yyMsg() << "Unterminated meta string\n";
                break;
             }
@@ -2668,7 +2668,7 @@ void CppParser::processComment()
             }
 
             if (c == '\\') {
-               if (iter == yyWord.end()) {
+               if (iter == yyWord.cend()) {
                   yyMsg() << "Unterminated meta string\n";
                   break;
                }
@@ -2689,10 +2689,10 @@ void CppParser::processComment()
       }
 
    } else {
-      QString::const_iterator iter = yyWord.begin();
+      QString::const_iterator iter = yyWord.cbegin();
       QChar c;
 
-      while (iter != yyWord.end()) {
+      while (iter != yyWord.cend()) {
          c = *iter;
 
          if (c == ' ' || c == '\t' || c == '\n') {
@@ -2702,16 +2702,16 @@ void CppParser::processComment()
          }
       }
 
-      QStringView tmpWord(iter, yyWord.end());
+      QStringView tmpWord(iter, yyWord.cend());
 
       if (tmpWord.startsWith(MagicComment)) {
 
          iter += MagicComment.length();
-         comment = QString(iter, yyWord.end()).simplified();
+         comment = QString(iter, yyWord.cend()).simplified();
 
          auto tmpIter = comment.indexOfFast(' ');
 
-         if (tmpIter == comment.end()) {
+         if (tmpIter == comment.cend()) {
             context = comment;
 
          } else {
@@ -2750,7 +2750,7 @@ const ParseResults *CppParser::recordResults(bool isHeader)
             && results->rootNamespace.aliases.isEmpty() && results->rootNamespace.usings.isEmpty()) {
 
          // forwarding header
-         pr = *results->includes.begin();
+         pr = *results->includes.cbegin();
          delete results;
 
       } else {

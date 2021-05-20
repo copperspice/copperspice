@@ -380,7 +380,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(co
 
       if (iter->toCaseFolded() == S(strFolded[0]))  {
          auto text_iter    = iter + 1;
-         auto pattern_iter = strFolded.begin() + 1;
+         auto pattern_iter = strFolded.cbegin() + 1;
 
          while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
@@ -394,7 +394,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(co
             }
          }
 
-         if (pattern_iter == strFolded.end()) {
+         if (pattern_iter == strFolded.cend()) {
             // found a match
             return iter;
          }
@@ -460,7 +460,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_rfind_fast(c
 
       if (iter->toCaseFolded() == S(strFolded[0]))  {
          auto text_iter    = iter + 1;
-         auto pattern_iter = strFolded.begin() + 1;
+         auto pattern_iter = strFolded.cbegin() + 1;
 
          while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
@@ -474,7 +474,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_rfind_fast(c
             }
          }
 
-         if (pattern_iter == strFolded.end()) {
+         if (pattern_iter == strFolded.cend()) {
             // found a match
             return iter;
          }
@@ -892,7 +892,7 @@ QByteArray QStringView<S>::toUtf8() const
    QByteArray retval;
 
    for (value_type c : *this) {
-      CsString::utf8::insert(retval, retval.end(), c);
+      CsString::utf8::insert(retval, retval.cend(), c);
    }
 
    return retval;

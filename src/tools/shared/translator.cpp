@@ -804,11 +804,11 @@ QString Translator::guessLanguageCodeFromFileName(const QString &filename)
 
       auto pos = str.indexOfFast(regExp);
 
-      if (pos == str.end()) {
+      if (pos == str.cend()) {
          break;
       }
 
-      str = QString(pos + 1, str.end());
+      str = QString(pos + 1, str.cend());
    }
 
    return QString();

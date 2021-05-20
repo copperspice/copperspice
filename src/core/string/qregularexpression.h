@@ -349,7 +349,7 @@ class Q_CORE_EXPORT QRegularExpression
       QList<QRegularExpressionMatch<S>> globalMatch(const S &str) const {
 
          if (m_valid) {
-            return globalMatch(str, str.begin());
+            return globalMatch(str, str.cbegin());
          } else {
             return QList<QRegularExpressionMatch<S>>();
          }
@@ -359,7 +359,7 @@ class Q_CORE_EXPORT QRegularExpression
                   QMatchType matchType = QMatchType::NormalMatch, QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
       QList<QRegularExpressionMatch<S>> globalMatch(QStringView<S> str) const {
-         return globalMatch(str, str.begin());
+         return globalMatch(str, str.cbegin());
       }
 
       QList<QRegularExpressionMatch<S>> globalMatch(QStringView<S> str, typename S::const_iterator offset,
@@ -370,14 +370,14 @@ class Q_CORE_EXPORT QRegularExpression
       }
 
       QRegularExpressionMatch<S> match(const S &str) const {
-         return match(str, str.begin());
+         return match(str, str.cbegin());
       }
 
       QRegularExpressionMatch<S> match(const S &str, typename S::const_iterator offset, QMatchType matchType = QMatchType::NormalMatch,
                   QMatchOptionFlags matchOptions = QMatchOption::NoMatchOption) const;
 
       QRegularExpressionMatch<S> match(QStringView<S> str) const {
-         return match(str, str.begin());
+         return match(str, str.cbegin());
       }
 
       QRegularExpressionMatch<S> match(QStringView<S> str, typename S::const_iterator offset,
@@ -784,7 +784,7 @@ void QRegularExpression<S>::setPattern(const S &pattern)
    }
 
    try  {
-      m_regex.assign(m_pattern.begin(), m_pattern.end(), flags);
+      m_regex.assign(m_pattern.cbegin(), m_pattern.cend(), flags);
       m_valid = true;
 
    } catch (std::exception &err) {
@@ -1053,8 +1053,8 @@ S QRegularExpression<S>::convert_wildcard(const S &str, const bool enableEscapin
    // previous character is '\'
    bool isEscaping = false;
 
-   typename S::const_iterator iter = str.begin();
-   typename S::const_iterator end  = str.end();
+   typename S::const_iterator iter = str.cbegin();
+   typename S::const_iterator end  = str.cend();
 
    while (iter != end) {
       const QChar32 c = *iter;
@@ -1199,8 +1199,8 @@ static S wc2rx(const S &str, bool enableEscaping)
 
    bool isEscaping = false;                // the previous character is '\'
 
-   typename S::const_iterator iter = str.begin();
-   typename S::const_iterator end  = str.end();
+   typename S::const_iterator iter = str.cbegin();
+   typename S::const_iterator end  = str.cend();
 
    while (iter != end) {
       auto c = *iter;

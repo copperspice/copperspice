@@ -433,7 +433,7 @@ QStringList QCommandLineParser::values(const QString &optionName) const
    d->checkParsed("values");
    const NameHash_t::const_iterator it = d->nameHash.find(optionName);
 
-   if (it != d->nameHash.end()) {
+   if (it != d->nameHash.cend()) {
       const int optionOffset = *it;
       QStringList values = d->optionValuesHash.value(optionOffset);
 

@@ -112,7 +112,7 @@ QString16::const_iterator QString16::cs_internal_find_fast(const QString16 &str,
 
       if (iter->toCaseFolded16() == QString16(strFolded[0]))  {
          auto text_iter    = iter + 1;
-         auto pattern_iter = strFolded.begin() + 1;
+         auto pattern_iter = strFolded.cbegin() + 1;
 
          while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
@@ -126,7 +126,7 @@ QString16::const_iterator QString16::cs_internal_find_fast(const QString16 &str,
             }
          }
 
-         if (pattern_iter == strFolded.end()) {
+         if (pattern_iter == strFolded.cend()) {
             // found a match
             return iter;
          }
@@ -189,7 +189,7 @@ QString16::const_iterator QString16::cs_internal_rfind_fast(const QString16 &str
 
       if (iter->toCaseFolded16() == QString16(strFolded[0]))  {
          auto text_iter    = iter + 1;
-         auto pattern_iter = strFolded.begin() + 1;
+         auto pattern_iter = strFolded.cbegin() + 1;
 
          while (text_iter != iter_end && pattern_iter != strFolded.cend())  {
 
@@ -203,7 +203,7 @@ QString16::const_iterator QString16::cs_internal_rfind_fast(const QString16 &str
             }
          }
 
-         if (pattern_iter == strFolded.end()) {
+         if (pattern_iter == strFolded.cend()) {
             // found a match
             return iter;
          }
@@ -219,7 +219,7 @@ QString16::const_iterator QString16::cs_internal_rfind_fast(const QString16 &str
 void QString16::chop(size_type numOfChars)
 {
    if (numOfChars > 0) {
-      auto iter = end();
+      auto iter = cend();
 
       for (size_type cnt = 0; cnt < numOfChars; ++cnt) {
 
@@ -231,7 +231,7 @@ void QString16::chop(size_type numOfChars)
          --iter;
       }
 
-      erase(iter, end());
+      erase(iter, cend());
    }
 }
 
@@ -955,10 +955,10 @@ QString16 &QString16::replace(const QString16 &before, const QString16 &after, Q
       return *this;
    }
 
-   auto iter     = indexOfFast(before, begin(), cs);
+   auto iter     = indexOfFast(before, cbegin(), cs);
    size_type len = before.size();
 
-   while (iter != end()) {
+   while (iter != cend()) {
       auto last = iter + len;
 
       iter = erase(iter, last);

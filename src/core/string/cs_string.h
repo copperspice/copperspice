@@ -1340,7 +1340,7 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
 #endif
 
-   const_iterator iter_end = end();
+   const_iterator iter_end = cend();
 
    if (iter_begin == iter_end) {
       return iter_end;
@@ -1385,7 +1385,7 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
 #endif
 
-   const_iterator iter_end = end();
+   const_iterator iter_end = cend();
 
    if (iter_begin == iter_end) {
       return iter_end;
@@ -1404,7 +1404,7 @@ template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N]) const
 {
-   return find_fast(str, begin());
+   return find_fast(str, cbegin());
 }
 
 // for an array of chars

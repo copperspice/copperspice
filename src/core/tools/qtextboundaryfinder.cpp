@@ -82,12 +82,12 @@ static void init(QTextBoundaryFinder::BoundaryType type, const QString &str, QCh
 }
 
 QTextBoundaryFinder::QTextBoundaryFinder()
-    : m_type(Grapheme), iter_pos(m_str.begin()), m_valid(false), freePrivate(true), d(nullptr)
+    : m_type(Grapheme), iter_pos(m_str.cbegin()), m_valid(false), freePrivate(true), d(nullptr)
 {
 }
 
 QTextBoundaryFinder::QTextBoundaryFinder(BoundaryType type, const QString &str)
-    : m_type(type), m_str(str), iter_pos(m_str.begin()), m_valid(true), freePrivate(true), d(nullptr)
+    : m_type(type), m_str(str), iter_pos(m_str.cbegin()), m_valid(true), freePrivate(true), d(nullptr)
 {
    auto length = m_str.size();
 
@@ -102,7 +102,7 @@ QTextBoundaryFinder::QTextBoundaryFinder(BoundaryType type, const QString &str)
 QTextBoundaryFinder::QTextBoundaryFinder(const QTextBoundaryFinder &other)
     : m_type(other.m_type), m_str(other.m_str), m_valid(other.m_valid), freePrivate(true), d(nullptr)
 {
-   iter_pos = m_str.begin() + (other.iter_pos - other.m_str.begin());
+   iter_pos = m_str.cbegin() + (other.iter_pos - other.m_str.cbegin());
 
    if (other.d != nullptr) {
       auto length = m_str.size();
@@ -128,7 +128,7 @@ QTextBoundaryFinder &QTextBoundaryFinder::operator=(const QTextBoundaryFinder &o
 
     m_type   = other.m_type;
     m_str    = other.m_str;
-    iter_pos = m_str.begin() + (other.iter_pos - other.m_str.begin());
+    iter_pos = m_str.cbegin() + (other.iter_pos - other.m_str.cbegin());
     m_valid  = other.m_valid;
 
     auto length = other.m_str.size();
@@ -186,25 +186,25 @@ QTextBoundaryFinder::~QTextBoundaryFinder()
 
 void QTextBoundaryFinder::toStart()
 {
-   iter_pos = m_str.begin();
+   iter_pos = m_str.cbegin();
    m_valid  = true;
 }
 
 void QTextBoundaryFinder::toEnd()
 {
-   iter_pos = m_str.end();
+   iter_pos = m_str.cend();
    m_valid  = true;
 }
 
 int QTextBoundaryFinder::position() const
 {
-   return iter_pos - m_str.begin();
+   return iter_pos - m_str.cbegin();
 }
 
 void QTextBoundaryFinder::setPosition(int position)
 {
    int index = qBound(0, position, m_str.size());
-   iter_pos  = m_str.begin() + index;
+   iter_pos  = m_str.cbegin() + index;
    m_valid   = true;
 }
 
@@ -220,42 +220,42 @@ int QTextBoundaryFinder::toNextBoundary()
       return -1;
    }
 
-   if (! m_valid || iter_pos == m_str.end()) {
+   if (! m_valid || iter_pos == m_str.cend()) {
       m_valid = false;
       return -1;
    }
 
    ++iter_pos;
-   int index = iter_pos - m_str.begin();
+   int index = iter_pos - m_str.cbegin();
 
-   if (iter_pos == m_str.end()) {
+   if (iter_pos == m_str.cend()) {
       return index;
    }
 
    switch(m_type) {
       case Grapheme:
-        while (iter_pos != m_str.end() && ! d->attributes[index].graphemeBoundary) {
+        while (iter_pos != m_str.cend() && ! d->attributes[index].graphemeBoundary) {
             ++iter_pos;
             ++index;
         }
         break;
 
       case Word:
-        while (iter_pos != m_str.end() && ! d->attributes[index].wordBreak) {
+        while (iter_pos != m_str.cend() && ! d->attributes[index].wordBreak) {
             ++iter_pos;
             ++index;
         }
         break;
 
       case Sentence:
-        while (iter_pos != m_str.end() && ! d->attributes[index].sentenceBoundary) {
+        while (iter_pos != m_str.cend() && ! d->attributes[index].sentenceBoundary) {
             ++iter_pos;
             ++index;
         }
         break;
 
       case Line:
-        while (iter_pos != m_str.end() && ! d->attributes[index].lineBreak) {
+        while (iter_pos != m_str.cend() && ! d->attributes[index].lineBreak) {
             ++iter_pos;
             ++index;
         }
@@ -272,42 +272,42 @@ int QTextBoundaryFinder::toPreviousBoundary()
       return -1;
    }
 
-   if (! m_valid || iter_pos == m_str.begin() || iter_pos == m_str.end()) {
+   if (! m_valid || iter_pos == m_str.cbegin() || iter_pos == m_str.cend()) {
       m_valid = false;
       return -1;
    }
 
    --iter_pos;
-   int index = iter_pos - m_str.begin();
+   int index = iter_pos - m_str.cbegin();
 
-   if (iter_pos == m_str.begin()) {
+   if (iter_pos == m_str.cbegin()) {
       return index;
    }
 
    switch(m_type) {
       case Grapheme:
-         while (iter_pos != m_str.begin() && ! d->attributes[index].graphemeBoundary) {
+         while (iter_pos != m_str.cbegin() && ! d->attributes[index].graphemeBoundary) {
             --iter_pos;
             --index;
          }
          break;
 
       case Word:
-         while (iter_pos != m_str.begin() && ! d->attributes[index].wordBreak) {
+         while (iter_pos != m_str.cbegin() && ! d->attributes[index].wordBreak) {
             --iter_pos;
             --index;
          }
          break;
 
       case Sentence:
-         while (iter_pos != m_str.begin() && ! d->attributes[index].sentenceBoundary) {
+         while (iter_pos != m_str.cbegin() && ! d->attributes[index].sentenceBoundary) {
             --iter_pos;
             --index;
          }
          break;
 
       case Line:
-         while (iter_pos != m_str.begin() && !d ->attributes[index].lineBreak) {
+         while (iter_pos != m_str.cbegin() && !d ->attributes[index].lineBreak) {
             --iter_pos;
             --index;
          }
@@ -323,11 +323,11 @@ bool QTextBoundaryFinder::isAtBoundary() const
       return false;
    }
 
-   if (iter_pos == m_str.end()) {
+   if (iter_pos == m_str.cend()) {
       return true;
    }
 
-   int index = iter_pos - m_str.begin();
+   int index = iter_pos - m_str.cbegin();
 
    switch(m_type) {
        case Grapheme:
@@ -354,7 +354,7 @@ QTextBoundaryFinder::BoundaryReasons QTextBoundaryFinder::boundaryReasons() cons
       return reasons;
    }
 
-   int index = iter_pos - m_str.begin();
+   int index = iter_pos - m_str.cbegin();
 
    const QCharAttributes attr = d->attributes[index];
 
@@ -366,7 +366,7 @@ QTextBoundaryFinder::BoundaryReasons QTextBoundaryFinder::boundaryReasons() cons
             if (index == 0) {
                reasons &= (~EndOfItem);
 
-            } else if (iter_pos == m_str.end()) {
+            } else if (iter_pos == m_str.cend()) {
                reasons &= (~StartOfItem);
 
             }
@@ -394,7 +394,7 @@ QTextBoundaryFinder::BoundaryReasons QTextBoundaryFinder::boundaryReasons() cons
             if (index == 0) {
                reasons &= (~EndOfItem);
 
-            } else if (iter_pos == m_str.end()) {
+            } else if (iter_pos == m_str.cend()) {
                reasons &= (~StartOfItem);
             }
          }
@@ -410,7 +410,7 @@ QTextBoundaryFinder::BoundaryReasons QTextBoundaryFinder::boundaryReasons() cons
                if (index == 0) {
                   reasons &= (~EndOfItem);
 
-               } else if (iter_pos == m_str.end()) {
+               } else if (iter_pos == m_str.cend()) {
                   reasons &= (~StartOfItem);
                }
 

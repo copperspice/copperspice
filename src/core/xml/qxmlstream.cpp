@@ -483,7 +483,7 @@ inline uint QXmlStreamReaderPrivate::getChar()
    if (putStack.size() != 0) {
       c = atEnd ? 0 : putStack.pop();
 
-   } else if (readBuffer_Iter != readBuffer.end() ) {
+   } else if (readBuffer_Iter != readBuffer.cend() ) {
       c = readBuffer_Iter->unicode();
       ++readBuffer_Iter;
 
@@ -502,7 +502,7 @@ inline uint QXmlStreamReaderPrivate::peekChar()
    if (putStack.size() != 0) {
       c = putStack.top();
 
-   } else if (readBuffer_Iter != readBuffer.end() ) {
+   } else if (readBuffer_Iter != readBuffer.cend() ) {
          c = readBuffer_Iter->unicode();
 
    } else {
@@ -533,7 +533,7 @@ bool QXmlStreamReaderPrivate::scanUntil(const char *str, short tokenToInject)
          // fall through
          case '\n':
             ++lineNumber;
-            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
+            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.cbegin());
 
          // fall through
          case '\t':
@@ -735,7 +735,7 @@ inline int QXmlStreamReaderPrivate::fastScanLiteralContent()
          // fall through
          case '\n':
             ++lineNumber;
-            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
+            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.cbegin());
 
          // fall through
          case ' ':
@@ -782,7 +782,7 @@ inline int QXmlStreamReaderPrivate::fastScanSpace()
          // fall through
          case '\n':
             ++lineNumber;
-            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
+            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.cbegin());
 
          // fall through
          case ' ':
@@ -847,7 +847,7 @@ inline int QXmlStreamReaderPrivate::fastScanContentCharList()
          // fall through
          case '\n':
             ++lineNumber;
-            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.begin());
+            lastLineStart = characterOffset + (readBuffer_Iter - readBuffer.cbegin());
          // fall through
          case ' ':
          case '\t':
@@ -1074,7 +1074,7 @@ ushort QXmlStreamReaderPrivate::getChar_helper()
 {
    const int BUFFER_SIZE = 8192;
 
-   characterOffset = characterOffset + (readBuffer_Iter - readBuffer.begin());
+   characterOffset = characterOffset + (readBuffer_Iter - readBuffer.cbegin());
    readBuffer.resize(0);
 
    if (decoder)
@@ -1144,18 +1144,18 @@ ushort QXmlStreamReaderPrivate::getChar_helper()
    }
 
    decoder->toUnicode(&readBuffer, rawReadBuffer.constData(), nbytesread);
-   readBuffer_Iter = readBuffer.begin();
+   readBuffer_Iter = readBuffer.cbegin();
 
    if (lockEncoding && decoder->hasFailure()) {
       raiseWellFormedError(QXmlStream::tr("Encountered incorrectly encoded content."));
 
       readBuffer.clear();
-      readBuffer_Iter = readBuffer.begin();
+      readBuffer_Iter = readBuffer.cbegin();
 
       return 0;
    }
 
-   if (readBuffer_Iter != readBuffer.end()) {
+   if (readBuffer_Iter != readBuffer.cend()) {
       ushort c = readBuffer_Iter->unicode();
       ++readBuffer_Iter;
 
@@ -1486,7 +1486,7 @@ void QXmlStreamReaderPrivate::startDocument()
 
                decoder = codec->makeDecoder();
                decoder->toUnicode(&readBuffer, rawReadBuffer.data(), nbytesread);
-               readBuffer_Iter = readBuffer.begin();
+               readBuffer_Iter = readBuffer.cbegin();
 
             }
          }
@@ -1630,7 +1630,7 @@ qint64 QXmlStreamReader::lineNumber() const
 qint64 QXmlStreamReader::columnNumber() const
 {
    Q_D(const QXmlStreamReader);
-   return d->characterOffset - d->lastLineStart + (d->readBuffer_Iter - d->readBuffer.begin());
+   return d->characterOffset - d->lastLineStart + (d->readBuffer_Iter - d->readBuffer.cbegin());
 }
 
 /*! Returns the current character offset, starting with 0.
@@ -1640,7 +1640,7 @@ qint64 QXmlStreamReader::columnNumber() const
 qint64 QXmlStreamReader::characterOffset() const
 {
    Q_D(const QXmlStreamReader);
-   return d->characterOffset + (d->readBuffer_Iter - d->readBuffer.begin());
+   return d->characterOffset + (d->readBuffer_Iter - d->readBuffer.cbegin());
 }
 
 
@@ -1937,7 +1937,7 @@ QXmlStreamAttribute::QXmlStreamAttribute(const QString &namespaceUri, const QStr
 QXmlStreamAttribute::QXmlStreamAttribute(const QString &qualifiedName, const QString &value)
 {
    auto iter_colon = qualifiedName.indexOfFast(':') + 1;
-   m_name          = QStringView(iter_colon, qualifiedName.end());
+   m_name          = QStringView(iter_colon, qualifiedName.cend());
 
    m_qualifiedName = qualifiedName;
    m_value         = value;

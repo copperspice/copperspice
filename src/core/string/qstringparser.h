@@ -901,7 +901,7 @@ QList<T> QStringParser::split(const T &str, const Cs::QRegularExpression<T> &reg
       return retval;
    }
 
-   typename T::const_iterator start_iter = str.begin();
+   typename T::const_iterator start_iter = str.cbegin();
    typename T::const_iterator end_iter;
 
    Cs::QRegularExpressionMatch<T> match = regExp.match(str);
@@ -920,8 +920,8 @@ QList<T> QStringParser::split(const T &str, const Cs::QRegularExpression<T> &reg
    }
 
    // pick up remaining text
-   if (start_iter != str.end() || behavior == QStringParser::KeepEmptyParts)  {
-      retval.append( T(start_iter, str.end()) );
+   if (start_iter != str.cend() || behavior == QStringParser::KeepEmptyParts)  {
+      retval.append( T(start_iter, str.cend()) );
    }
 
    return retval;

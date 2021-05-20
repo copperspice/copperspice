@@ -1307,7 +1307,7 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
    QString::const_iterator iter = enumData.begin();
 
    // part 1, decipher tokens from enumData
-   while (iter != enumData.end()) {
+   while (iter != enumData.cend()) {
       QChar32 letter = *iter;
 
       if (letter.isSpace()) {
