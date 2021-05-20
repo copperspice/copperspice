@@ -109,9 +109,10 @@ QAction *QActionGroup::addAction(QAction *a)
    Q_D(QActionGroup);
    if (!d->actions.contains(a)) {
       d->actions.append(a);
-      QObject::connect(a, SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
-      QObject::connect(a, SIGNAL(changed()), this, SLOT(_q_actionChanged()));
-      QObject::connect(a, SIGNAL(hovered()), this, SLOT(_q_actionHovered()));
+
+      QObject::connect(a, &QAction::triggered, this, &QActionGroup::_q_actionTriggered);
+      QObject::connect(a, &QAction::changed,   this, &QActionGroup::_q_actionChanged);
+      QObject::connect(a, &QAction::hovered,   this, &QActionGroup::_q_actionHovered);
    }
    if (!a->d_func()->forceDisabled) {
       a->setEnabled(d->enabled);

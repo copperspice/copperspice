@@ -89,8 +89,9 @@ QPlatformDialogHelper *QDialogPrivate::platformHelper() const
          m_platformHelper = QGuiApplicationPrivate::platformTheme()
             ->createPlatformDialogHelper(static_cast<QPlatformTheme::DialogType>(type));
          if (m_platformHelper) {
-            QObject::connect(m_platformHelper, SIGNAL(accept()), dialog, SLOT(accept()));
-            QObject::connect(m_platformHelper, SIGNAL(reject()), dialog, SLOT(reject()));
+            QObject::connect(m_platformHelper, &QPlatformDialogHelper::accept, dialog, &QDialog::accept);
+            QObject::connect(m_platformHelper, &QPlatformDialogHelper::reject, dialog, &QDialog::reject);
+
             ncThis->initHelper(m_platformHelper);
          }
       }

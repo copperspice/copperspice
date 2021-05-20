@@ -1182,11 +1182,8 @@ void QMainWindowLayout::removeToolBar(QToolBar *toolbar)
       QMainWindow *obj = dynamic_cast<QMainWindow *>(parentWidget());
 
       if (obj != nullptr) {
-         QObject::disconnect(obj, &QMainWindow::iconSizeChanged, toolbar,
-                     &QToolBar::_q_updateIconSize);
-
-         QObject::disconnect(obj, &QMainWindow::toolButtonStyleChanged, toolbar,
-                     &QToolBar::_q_updateToolButtonStyle);
+         QObject::disconnect(obj, &QMainWindow::iconSizeChanged,        toolbar, &QToolBar::_q_updateIconSize);
+         QObject::disconnect(obj, &QMainWindow::toolButtonStyleChanged, toolbar, &QToolBar::_q_updateToolButtonStyle);
       }
 
       removeWidget(toolbar);
@@ -1666,8 +1663,8 @@ QTabBar *QMainWindowLayout::getTabBar()
       result->setDocumentMode(_documentMode);
       result->setMovable(true);
 
-      connect(result, SIGNAL(currentChanged(int)), this, SLOT(tabChanged()));
-      connect(result, &QTabBar::tabMoved, this, &QMainWindowLayout::tabMoved);
+      connect(result, &QTabBar::currentChanged, this, &QMainWindowLayout::tabChanged);
+      connect(result, &QTabBar::tabMoved,       this, &QMainWindowLayout::tabMoved);
    }
 
    usedTabBars.insert(result);

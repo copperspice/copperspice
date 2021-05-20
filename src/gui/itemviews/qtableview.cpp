@@ -551,9 +551,11 @@ void QTableViewPrivate::init()
 
    tabKeyNavigation = true;
 
-   cornerWidget = new QTableCornerButton(q);
+   QTableCornerButton *tmpObj = new QTableCornerButton(q);
+   cornerWidget = tmpObj;
    cornerWidget->setFocusPolicy(Qt::NoFocus);
-   QObject::connect(cornerWidget, SIGNAL(clicked()), q, SLOT(selectAll()));
+
+   QObject::connect(tmpObj, &QTableCornerButton::clicked, q, &QTableView::selectAll);
 }
 
 /*!
@@ -1105,16 +1107,14 @@ void QTableView::setHorizontalHeader(QHeaderView *header)
       }
    }
 
-   connect(d->horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(columnResized(int, int, int)));
-   connect(d->horizontalHeader, SIGNAL(sectionMoved(int, int, int)),   this, SLOT(columnMoved(int, int, int)));
-   connect(d->horizontalHeader, SIGNAL(sectionCountChanged(int, int)), this, SLOT(columnCountChanged(int, int)));
-   connect(d->horizontalHeader, SIGNAL(sectionPressed(int)),           this, SLOT(selectColumn(int)));
-   connect(d->horizontalHeader, SIGNAL(sectionEntered(int)),           this, SLOT(_q_selectColumn(int)));
 
-   connect(d->horizontalHeader, SIGNAL(sectionHandleDoubleClicked(int)),
-      this, SLOT(resizeColumnToContents(int)));
-
-   connect(d->horizontalHeader, SIGNAL(geometriesChanged()),          this, SLOT(updateGeometries()));
+   connect(d->horizontalHeader, &QHeaderView::sectionResized,             this, &QTableView::columnResized);
+   connect(d->horizontalHeader, &QHeaderView::sectionMoved,               this, &QTableView::columnMoved);
+   connect(d->horizontalHeader, &QHeaderView::sectionCountChanged,        this, &QTableView::columnCountChanged);
+   connect(d->horizontalHeader, &QHeaderView::sectionPressed,             this, &QTableView::selectColumn);
+   connect(d->horizontalHeader, &QHeaderView::sectionEntered,             this, &QTableView::_q_selectColumn);
+   connect(d->horizontalHeader, &QHeaderView::sectionHandleDoubleClicked, this, &QTableView::resizeColumnToContents);
+   connect(d->horizontalHeader, &QHeaderView::geometriesChanged,          this, &QTableView::updateGeometries);
 
    //update the sorting enabled states on the new header
    setSortingEnabled(d->sortingEnabled);
@@ -1143,16 +1143,13 @@ void QTableView::setVerticalHeader(QHeaderView *header)
       }
    }
 
-   connect(d->verticalHeader, SIGNAL(sectionResized(int, int, int)),  this, SLOT(rowResized(int, int, int)));
-   connect(d->verticalHeader, SIGNAL(sectionMoved(int, int, int)),    this, SLOT(rowMoved(int, int, int)));
-   connect(d->verticalHeader, SIGNAL(sectionCountChanged(int, int)),  this, SLOT(rowCountChanged(int, int)));
-   connect(d->verticalHeader, SIGNAL(sectionPressed(int)),            this, SLOT(selectRow(int)));
-   connect(d->verticalHeader, SIGNAL(sectionEntered(int)),            this, SLOT(_q_selectRow(int)));
-
-   connect(d->verticalHeader, SIGNAL(sectionHandleDoubleClicked(int)),
-      this, SLOT(resizeRowToContents(int)));
-
-   connect(d->verticalHeader, SIGNAL(geometriesChanged()),            this, SLOT(updateGeometries()));
+   connect(d->verticalHeader, &QHeaderView::sectionResized,             this, &QTableView::rowResized);
+   connect(d->verticalHeader, &QHeaderView::sectionMoved,               this, &QTableView::rowMoved);
+   connect(d->verticalHeader, &QHeaderView::sectionCountChanged,        this, &QTableView::rowCountChanged);
+   connect(d->verticalHeader, &QHeaderView::sectionPressed,             this, &QTableView::selectRow);
+   connect(d->verticalHeader, &QHeaderView::sectionEntered,             this, &QTableView::_q_selectRow);
+   connect(d->verticalHeader, &QHeaderView::sectionHandleDoubleClicked, this, &QTableView::resizeRowToContents);
+   connect(d->verticalHeader, &QHeaderView::geometriesChanged,          this, &QTableView::updateGeometries);
 }
 
 /*!
@@ -2451,20 +2448,18 @@ void QTableView::setSortingEnabled(bool enable)
    horizontalHeader()->setSortIndicatorShown(enable);
 
    if (enable) {
-      disconnect(d->horizontalHeader, SIGNAL(sectionEntered(int)), this, SLOT(_q_selectColumn(int)));
-      disconnect(horizontalHeader(), SIGNAL(sectionPressed(int)),  this, SLOT(selectColumn(int)));
+      disconnect(d->horizontalHeader, &QHeaderView::sectionEntered,       this, &QTableView::_q_selectColumn);
+      disconnect(horizontalHeader(),  &QHeaderView::sectionPressed,       this, &QTableView::selectColumn);
 
-      connect(horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-         this, SLOT(sortByColumn(int)), Qt::UniqueConnection);
+      connect(horizontalHeader(),     &QHeaderView::sortIndicatorChanged, this, cs_mp_cast<int>(&QTableView::sortByColumn), Qt::UniqueConnection);
 
       sortByColumn(horizontalHeader()->sortIndicatorSection(), horizontalHeader()->sortIndicatorOrder());
 
    } else {
-      connect(d->horizontalHeader, SIGNAL(sectionEntered(int)),    this, SLOT(_q_selectColumn(int)), Qt::UniqueConnection);
-      connect(horizontalHeader(), SIGNAL(sectionPressed(int)),     this, SLOT(selectColumn(int)), Qt::UniqueConnection);
+      connect(d->horizontalHeader,   &QHeaderView::sectionEntered,        this, &QTableView::_q_selectColumn, Qt::UniqueConnection);
+      connect(horizontalHeader(),    &QHeaderView::sectionPressed,        this, &QTableView::selectColumn, Qt::UniqueConnection);
 
-      disconnect(horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-         this, SLOT(sortByColumn(int)));
+      disconnect(horizontalHeader(), &QHeaderView::sortIndicatorChanged,  this, cs_mp_cast<int>(&QTableView::sortByColumn));
    }
 }
 

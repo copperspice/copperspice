@@ -155,8 +155,7 @@ QErrorMessage::QErrorMessage(QWidget *parent)
    d->ok     = new QPushButton(this);
 
    QGridLayout *grid = new QGridLayout(this);
-   connect(d->ok, SIGNAL(clicked()), this, SLOT(accept()));
-
+   connect(d->ok, &QPushButton::clicked, this, &QErrorMessage::accept);
 
    grid->addWidget(d->icon,   0,  0, Qt::AlignTop);
    grid->addWidget(d->errors, 0,  1);
