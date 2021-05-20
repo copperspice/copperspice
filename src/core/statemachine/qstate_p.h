@@ -26,7 +26,6 @@
 
 #include <qstate.h>
 #include <qlist.h>
-#include <qbytearray.h>
 #include <qpointer.h>
 #include <qvariant.h>
 
@@ -43,7 +42,7 @@ struct QPropertyAssignment {
       : object(nullptr), explicitlySet(true)
    { }
 
-   QPropertyAssignment(QObject *o, const QByteArray &n, const QVariant &v, bool es = true)
+   QPropertyAssignment(QObject *o, const QString &n, const QVariant &v, bool es = true)
       : object(o), propertyName(n), value(v), explicitlySet(es)
    { }
 
@@ -56,12 +55,12 @@ struct QPropertyAssignment {
       object->setProperty(propertyName, value);
    }
 
-   bool hasTarget(QObject *o, const QByteArray &pn) const {
+   bool hasTarget(QObject *o, const QString &pn) const {
       return object == o && propertyName == pn;
    }
 
    QPointer<QObject> object;
-   QByteArray propertyName;
+   QString propertyName;
    QVariant value;
    bool explicitlySet;
 };

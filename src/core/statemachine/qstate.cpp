@@ -148,12 +148,12 @@ QList<QAbstractTransition *> QStatePrivate::transitions() const
 
 #ifndef QT_NO_PROPERTIES
 
-void QState::assignProperty(QObject *object, const char *name, const QVariant &value)
+void QState::assignProperty(QObject *object, const QString &name, const QVariant &value)
 {
    Q_D(QState);
 
    if (! object) {
-      qWarning("QState::assignProperty(): Can not assign property '%s' of null object", name);
+      qWarning("QState::assignProperty(): Unable to assign property '%s' of null object", csPrintable(name));
       return;
    }
 

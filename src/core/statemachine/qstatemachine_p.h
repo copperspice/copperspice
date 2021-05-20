@@ -196,7 +196,7 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
    {
       QPointer<QObject> guard;
       QObject *obj;
-      QByteArray prop;
+      QString prop;
 
       // two overloads because friends can't have default arguments
       friend uint qHash(const RestorableId &key, uint seed) {
@@ -216,7 +216,7 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
       }
 
     public:
-      explicit RestorableId(QObject *o, QByteArray p)
+      explicit RestorableId(QObject *o, QString p)
          : guard(o), obj(o), prop(std::move(p))
       { }
 
@@ -224,19 +224,19 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
          return guard;
       }
 
-      QByteArray propertyName() const {
+      QString propertyName() const {
          return prop;
       }
    };
 
    QHash<QAbstractState *, QHash<RestorableId, QVariant>> registeredRestorablesForState;
-   bool hasRestorable(QAbstractState *state, QObject *object, const QByteArray &propertyName) const;
+   bool hasRestorable(QAbstractState *state, QObject *object, const QString &propertyName) const;
 
    QVariant savedValueForRestorable(const QList<QAbstractState *> &exitedStates_sorted,
-            QObject *object, const QByteArray &propertyName) const;
+            QObject *object, const QString &propertyName) const;
 
-   void registerRestorable(QAbstractState *state, QObject *object, const QByteArray &propertyName, const QVariant &value);
-   void unregisterRestorables(const QList<QAbstractState *> &states, QObject *object, const QByteArray &propertyName);
+   void registerRestorable(QAbstractState *state, QObject *object, const QString &propertyName, const QVariant &value);
+   void unregisterRestorables(const QList<QAbstractState *> &states, QObject *object, const QString &propertyName);
 
    QVector<QPropertyAssignment> restorablesToPropertyList(const QHash<RestorableId, QVariant> &restorables) const;
    QHash<RestorableId, QVariant> computePendingRestorables(const QList<QAbstractState *> &statesToExit_sorted) const;

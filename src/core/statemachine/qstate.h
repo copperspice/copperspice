@@ -88,7 +88,7 @@ class Q_CORE_EXPORT QState : public QAbstractState
    QAbstractState *errorState() const;
    void setErrorState(QAbstractState *state);
 
-   void assignProperty(QObject *object, const char *name, const QVariant &value);
+   void assignProperty(QObject *object, const QString &name, const QVariant &value);
 
    CORE_CS_SIGNAL_1(Public, void finished())
    CORE_CS_SIGNAL_2(finished)

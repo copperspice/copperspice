@@ -1149,14 +1149,14 @@ bool QStateMachinePrivate::isInFinalState(QAbstractState *s) const
 }
 
 bool QStateMachinePrivate::hasRestorable(QAbstractState *state, QObject *object,
-                                         const QByteArray &propertyName) const
+            const QString &propertyName) const
 {
-    RestorableId id(object, propertyName);
-    return registeredRestorablesForState.value(state).contains(id);
+   RestorableId id(object, propertyName);
+   return registeredRestorablesForState.value(state).contains(id);
 }
 
 QVariant QStateMachinePrivate::savedValueForRestorable(const QList<QAbstractState*> &exitedStates_sorted,
-                                                       QObject *object, const QByteArray &propertyName) const
+            QObject *object, const QString &propertyName) const
 {
 #ifdef QSTATEMACHINE_RESTORE_PROPERTIES_DEBUG
     qDebug() << q_func() << ": savedValueForRestorable(" << exitedStates_sorted << object << propertyName << ')';
@@ -1181,8 +1181,8 @@ QVariant QStateMachinePrivate::savedValueForRestorable(const QList<QAbstractStat
 
     return object->property(propertyName);
 }
-void QStateMachinePrivate::registerRestorable(QAbstractState *state, QObject *object, const QByteArray &propertyName,
-                                              const QVariant &value)
+void QStateMachinePrivate::registerRestorable(QAbstractState *state, QObject *object, const QString &propertyName,
+            const QVariant &value)
 {
 #ifdef QSTATEMACHINE_RESTORE_PROPERTIES_DEBUG
     qDebug() << q_func() << ": registerRestorable(" << state << object << propertyName << value << ')';
@@ -1200,7 +1200,7 @@ void QStateMachinePrivate::registerRestorable(QAbstractState *state, QObject *ob
 }
 
 void QStateMachinePrivate::unregisterRestorables(const QList<QAbstractState *> &states, QObject *object,
-                                                 const QByteArray &propertyName)
+            const QString &propertyName)
 {
 #ifdef QSTATEMACHINE_RESTORE_PROPERTIES_DEBUG
     qDebug() << q_func() << ": unregisterRestorables(" << states << object << propertyName << ')';
