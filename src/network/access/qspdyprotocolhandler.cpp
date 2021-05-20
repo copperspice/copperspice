@@ -279,12 +279,13 @@ bool QSpdyProtocolHandler::sendRequest()
 
    int requestsToSend = qMin(m_channel->spdyRequestsToSend.size(), maxPossibleRequests);
 
-   QMultiMap<int, HttpMessagePair>::iterator it = m_channel->spdyRequestsToSend.begin();
+   QMultiMap<int, HttpMessagePair>::iterator iter = m_channel->spdyRequestsToSend.begin();
+
    // requests will be ordered by priority (see QMultiMap doc)
    for (int a = 0; a < requestsToSend; ++a) {
-      HttpMessagePair currentPair = *it;
+      HttpMessagePair currentPair = *iter;
       QHttpNetworkRequest currentRequest = currentPair.first;
-      QHttpNetworkReply *currentReply = currentPair.second;
+      QHttpNetworkReply *currentReply    = currentPair.second;
 
       currentReply->setSpdyWasUsed(true);
       qint32 streamID = generateNextStreamID();
@@ -295,10 +296,13 @@ bool QSpdyProtocolHandler::sendRequest()
       currentReply->d_func()->connectionChannel = m_channel;
       m_inFlightStreams.insert(streamID, currentPair);
 
-      sendSYN_STREAM(currentPair, streamID, /* associatedToStreamID = */ 0);
-      m_channel->spdyRequestsToSend.erase(it++);
       connect(currentReply, &QHttpNetworkReply::destroyed, this, &QSpdyProtocolHandler::_q_replyDestroyed);
+
+      sendSYN_STREAM(currentPair, streamID, 0);
+
+      iter = m_channel->spdyRequestsToSend.erase(iter);
    }
+
    m_channel->state = QHttpNetworkConnectionChannel::IdleState;
    return true;
 }
