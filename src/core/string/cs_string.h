@@ -96,12 +96,17 @@ class CsBasicString
                   std::is_same<T, char *>::value>::type>
       CsBasicString(const T &str, size_type size, const A &a = A());
 
-
       // for an array of chars
       template <int N>
       CsBasicString(const char (&str)[N], size_type size, const A &a = A());
 
+
+      CsBasicString(const char16_t *str, const A &a = A());
+      CsBasicString(const char16_t *str, size_type size, const A &a = A());
+
       CsBasicString(const char32_t *str, const A &a = A());
+      CsBasicString(const char32_t *str, size_type size, const A &a = A());
+
 
       // substring constructors
       CsBasicString(const CsBasicString &str, size_type indexStart, const A &a = A());
@@ -695,12 +700,47 @@ CsBasicString<E, A>::CsBasicString(const char (&str)[N], size_type size, const A
 }
 
 template <typename E, typename A>
+CsBasicString<E, A>::CsBasicString(const char16_t *str, const A &a)
+{
+   *this = CsBasicString::fromUtf16(str, -1, a);
+}
+
+template <typename E, typename A>
+CsBasicString<E, A>::CsBasicString(const char16_t *str, size_type size, const A &a)
+{
+   *this = CsBasicString::fromUtf16(str, size, a);
+}
+
+template <typename E, typename A>
 CsBasicString<E, A>::CsBasicString(const char32_t *str, const A &a)
    : m_string(1, 0, a)
 {
    const char32_t *c = str;
 
    while (*c != 0) {
+      E::insert(m_string, m_string.end() - 1, *c);
+      ++c;
+   }
+}
+
+template <typename E, typename A>
+CsBasicString<E, A>::CsBasicString(const char32_t *str, size_type size, const A &a)
+   : m_string(1, 0, a)
+{
+   const char32_t *c = str;
+
+   size_type count = 0;
+
+   while (*c != 0) {
+
+      if (size >= 0) {
+         if (count >= size) {
+            break;
+         }
+
+         ++count;
+      }
+
       E::insert(m_string, m_string.end() - 1, *c);
       ++c;
    }
