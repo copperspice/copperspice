@@ -603,34 +603,14 @@ QString16 QString16::fromUtf8(const char *str, size_type numOfChars)
    return CsString::CsString_utf16::fromUtf8(str, numOfChars);
 }
 
-QString16 QString16::fromUtf16(const char16_t *str, size_type numOfChars)
-{
-   if (str == nullptr) {
-      return QString16();
-   }
-
-   if (numOfChars < 0) {
-      numOfChars = 0;
-
-      while (str[numOfChars] != 0) {
-         ++numOfChars;
-      }
-   }
-
-   // broom - partial, pending surrogates
-
-   QString16 retval;
-
-   for (int i = 0; i < numOfChars; ++i) {
-      retval.append(static_cast<char32_t>(str[i]));
-   }
-
-   return retval;
-}
-
 QString16 QString16::fromUtf8(const QString8 &str)
 {
    return fromUtf8(str.constData(), str.size_storage());
+}
+
+QString16 QString16::fromUtf16(const char16_t *str, size_type numOfChars)
+{
+   return CsString::CsString_utf16::fromUtf16(str, numOfChars);
 }
 
 QString16 QString16::fromStdWString(const std::wstring &str, size_type numOfChars)

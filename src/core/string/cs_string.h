@@ -2520,8 +2520,8 @@ CsBasicString<E,A> CsBasicString<E, A>::fromUtf16(const char16_t *str, size_type
 
       char16_t value = str[i];
 
-      if (value < 0xD800 || (value > 0xDFFF && value <= 0xFFFF)) {
-         // not a surrogate
+      if (value < 0xD800 || value > 0xDFFF) {
+         // not a surrogate, value must be less than 0xFFFF
 
          if (data == 0) {
             // do nothing

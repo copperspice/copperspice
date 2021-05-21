@@ -604,27 +604,7 @@ QString8 QString8::fromUtf8(const char *str, size_type numOfChars)
 
 QString8 QString8::fromUtf16(const char16_t *str, size_type numOfChars)
 {
-   if (str == nullptr) {
-      return QString8();
-   }
-
-   if (numOfChars < 0) {
-      numOfChars = 0;
-
-      while (str[numOfChars] != 0) {
-         ++numOfChars;
-      }
-   }
-
-   // broom - partial, pending surrogates
-
-   QString8 retval;
-
-   for (int i = 0; i < numOfChars; ++i) {
-      retval.append(static_cast<char32_t>(str[i]));
-   }
-
-   return retval;
+   return CsString::CsString::fromUtf16(str, numOfChars);
 }
 
 QString8 QString8::fromUtf16(const QString16 &str)
