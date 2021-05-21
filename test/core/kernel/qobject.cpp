@@ -30,11 +30,28 @@ class Ginger : public QObject
    public:
       void actionA(QString);
 
+      void bags(int value);
+      void bags(bool value, int offset);
+      void bags(int value) const;
+      void bags();
+
+      // set up for overloaded signal
+      CS_SIGNAL_1(Public, void cargo(bool var1, int var2))
+      CS_SIGNAL_OVERLOAD(cargo, (bool, int), var1, var2)
+
+      CS_SIGNAL_1(Public, void cargo(int var))
+      CS_SIGNAL_OVERLOAD(cargo, (int), var)
+
+      CS_SIGNAL_1(Public, void cargo())
+      CS_SIGNAL_OVERLOAD(cargo, ())
+
       CS_SIGNAL_1(Public, void titleChanged(QString str))
       CS_SIGNAL_2(titleChanged, str)
 
       QString m_titleA = "Title A (Original)";
       QString m_titleB = "Title B";
+
+      mutable int m_bags = 0;
 
    private:
       CS_SLOT_1(Private, void actionB(QString value))
@@ -49,6 +66,30 @@ void Ginger::actionA(QString value)
 void Ginger::actionB(QString value)
 {
    m_titleB = value;
+}
+
+void Ginger::bags(int value)
+{
+   m_bags = value + 5;
+}
+
+void Ginger::bags()
+{
+   m_bags = -1;
+}
+
+void Ginger::bags(bool value, int offset)
+{
+   if (value) {
+      m_bags = 1 + offset;
+   } else {
+      m_bags = 0 + offset;
+   }
+}
+
+void Ginger::bags(int value) const
+{
+   m_bags = value + 10;
 }
 
 TEST_CASE("QObject children", "[qobject]")
@@ -99,7 +140,7 @@ TEST_CASE("QObject object_name", "[qobject]")
    REQUIRE(obj.property<QString>("objectName") == "SomeObject");
 }
 
-TEST_CASE("QObject propertt", "[qobject]")
+TEST_CASE("QObject property", "[qobject]")
 {
    Ginger obj;
 
@@ -114,5 +155,56 @@ TEST_CASE("QObject propertt", "[qobject]")
       REQUIRE(list.size() == 1);
       REQUIRE(list.contains("newProperty") == true);
    }
+}
+
+TEST_CASE("QObject method_overload", "[qobject]")
+{
+   Ginger obj;
+
+   // overload 1
+   QObject::connect(&obj, cs_mp_cast<int>(&Ginger::cargo), &obj, cs_mp_cast<int>(&Ginger::bags));
+
+   obj.cargo(8);
+   REQUIRE(obj.m_bags == 13);
+
+   obj.cargo(17);
+   REQUIRE(obj.m_bags == 22);
+
+
+   // overload 2
+   QObject::connect(&obj, cs_mp_cast<bool, int>(&Ginger::cargo), &obj, cs_mp_cast<bool, int>(&Ginger::bags));
+
+   obj.cargo(true, 15);
+   REQUIRE(obj.m_bags == 16);
+
+   obj.cargo(false, 3);
+   REQUIRE(obj.m_bags == 3);
+
+
+   // overload 3a
+   QObject::connect(&obj, cs_mp_cast<int>(&Ginger::cargo), &obj, cs_mp_cast<int>(&Ginger::bags));
+
+   obj.cargo(9);
+   REQUIRE(obj.m_bags == 14);
+
+   obj.cargo(13);
+   REQUIRE(obj.m_bags == 18);
+
+
+   // overload 3b, slot is const
+   QObject::connect(&obj, cs_mp_cast<int>(&Ginger::cargo), &obj, cs_cmp_cast<int>(&Ginger::bags));
+
+   obj.cargo(2);
+   REQUIRE(obj.m_bags == 12);
+
+   obj.cargo(5);
+   REQUIRE(obj.m_bags == 15);
+
+
+   // overload 4
+   QObject::connect(&obj, cs_mp_cast<>(&Ginger::cargo), &obj, cs_mp_cast<>(&Ginger::bags));
+
+   obj.cargo();
+   REQUIRE(obj.m_bags == -1);
 }
 

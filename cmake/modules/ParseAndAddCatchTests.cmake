@@ -95,12 +95,19 @@ function(ParseAndAddCatchTests_ParseFile SourceFile TestTarget)
         ParseAndAddCatchTests_PrintDebugMessage("Detected OBJECT library: ${SourceFile} this will not be scanned for tests.")
         return()
     endif()
+
     # According to CMake docs EXISTS behavior is well-defined only for full paths.
     get_filename_component(SourceFile ${SourceFile} ABSOLUTE)
     if(NOT EXISTS ${SourceFile})
-        message(WARNING "Cannot find source file: ${SourceFile}")
+        get_property(isGenerated SOURCE ${SourceFile} PROPERTY GENERATED)
+
+        if(NOT isGenerated)
+           message(WARNING "Cannot find source file: ${SourceFile}")
+        endif()
+
         return()
     endif()
+
     ParseAndAddCatchTests_PrintDebugMessage("parsing ${SourceFile}")
     file(STRINGS ${SourceFile} Contents NEWLINE_CONSUME)
 

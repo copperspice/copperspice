@@ -275,6 +275,16 @@ TEST_CASE("QString8 normalized", "[qstring]")
       str1 = "\u00C5 \u00F4";
       str2 = str1.normalized( QString8::NormalizationForm_C );
 
+      REQUIRE(str2.size() == 3);
+      REQUIRE(str2.size_storage() == 5);
+      REQUIRE(str2.storage_end() - str2.storage_begin() == 5);
+
+      REQUIRE(str2[0] == U'\u00C5');
+      REQUIRE(str2[1] == ' ');
+      REQUIRE(str2[2] == U'\u00F4');
+
+      REQUIRE(sizeof("\u00C5 \u00F4") == 6);
+
       REQUIRE(str2 == "\u00C5 \u00F4");
    }
 
@@ -417,27 +427,27 @@ TEST_CASE("QString8 section", "[qstring]")
 
    {
       QString str2 = QStringParser::section(str1, ' ', 1, 2);
-      REQUIRE(str2 == "" );
+      REQUIRE(str2 == "");
    }
 
    {
       QString str2 = QStringParser::section(str1, '/', 3, 4);
-      REQUIRE(str2 == "bin/myapp" );
+      REQUIRE(str2 == "bin/myapp");
    }
 
    {
       QString str2 = QStringParser::section(str1, "/", 3, 4);
-      REQUIRE(str2 == "bin/myapp" );
+      REQUIRE(str2 == "bin/myapp");
    }
 
    {
       QString str2 = str1.section('/', 3, 4);
-      REQUIRE(str2 == "bin/myapp" );
+      REQUIRE(str2 == "bin/myapp");
    }
 
    {
       QString str2 = str1.section("/", 3, 4);
-      REQUIRE(str2 == "bin/myapp" );
+      REQUIRE(str2 == "bin/myapp");
    }
 }
 
@@ -652,5 +662,44 @@ TEST_CASE("QString8 storage_iterators", "[qstring]")
    REQUIRE(*(str.storage_rbegin() + 3) == 'e');
 }
 
+// test with u8
+
+TEST_CASE("QString8 u8_contains", "[qstring]")
+{
+   QString str = u8"A wacky fox and sizeable pig jumped halfway over a blue moon";
+
+   REQUIRE(str.contains(u8"jumped"));
+   REQUIRE(! str.contains(u8"lunch"));
+
+   REQUIRE(str.contains(u8'x'));
+   REQUIRE(! str.contains(u8'q'));
+}
+
+TEST_CASE("QString8 u8_count", "[qstring]")
+{
+   QString str = u8"A wacky fox and sizeable pig jumped halfway over a blue moon";
+
+   REQUIRE(str.count(u8"o") == 4);
+   REQUIRE(str.count(u8"q") == 0);
+}
+
+TEST_CASE("QString8 u8_prepend", "[qstring]")
+{
+   QString str = u8"a wacky fox and sizeable pig";
+
+   str.prepend(u8"One day, ");
+
+   REQUIRE(str == u8"One day, a wacky fox and sizeable pig");
+}
+
+TEST_CASE("QString8 u8_replace", "[qstring]")
+{
+   QString str1 = u8"ß";
+
+   QString str2 = str1;
+   str2.replace(u8"ß", u8"Found eszett");
+
+   REQUIRE(str2 == u8"Found eszett");
+}
 
 
