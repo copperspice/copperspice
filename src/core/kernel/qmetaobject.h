@@ -113,8 +113,8 @@ class Q_CORE_EXPORT QMetaObject
    template<class ...Ts>
    static bool invokeMethod(QObject *object, const QString &member, CSArgument<Ts>... Vs);
 
-   template<class MethodClass, class... MethodArgs>
-   QMetaMethod method( void (MethodClass::*methodPtr)(MethodArgs...) ) const;
+   template<class MethodClass, class... MethodArgs, class MethodReturn>
+   QMetaMethod method(MethodReturn (MethodClass::*methodPtr)(MethodArgs...) ) const;
 
    template<class ...Ts>
    QObject *newInstance(Ts... Vs) const;
@@ -158,18 +158,18 @@ QMetaEnum QMetaObject::findEnum()
    return data;
 }
 
-template<class MethodClass, class... MethodArgs>
-QMetaMethod QMetaObject::method( void (MethodClass::*methodPtr)(MethodArgs...) ) const
+template<class MethodClass, class... MethodArgs, class MethodReturn>
+QMetaMethod QMetaObject::method(MethodReturn (MethodClass::*methodPtr)(MethodArgs...) ) const
 {
    QMetaMethod retval;
    const int count = methodCount();
 
-   CSBento<void (MethodClass::*)(MethodArgs...)> temp = methodPtr;
+   CSBento<MethodReturn (MethodClass::*)(MethodArgs...)> tmp = methodPtr;
 
    for (int index = 0; index < count; ++index)  {
       QMetaMethod metaMethod = method(index);
 
-      bool ok = metaMethod.compare(temp);
+      bool ok = metaMethod.compare(tmp);
 
       if (ok) {
          // found QMetaMethod match
