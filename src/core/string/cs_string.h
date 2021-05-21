@@ -457,6 +457,7 @@ class CsBasicString
       CsChar front() const;
 
       static CsBasicString fromUtf8(const char *str, size_type numOfChars = -1, const A &a = A());
+      static CsBasicString fromUtf16(const char16_t *str, size_type numOfChars = -1, const A &a = A());
 
       A getAllocator() const;
 
@@ -2453,6 +2454,83 @@ CsBasicString<E,A> CsBasicString<E, A>::fromUtf8(const char *str, size_type numO
    }
 
    if (multi_size != 0) {
+      // invalid character at the end of the string
+      retval.append(UCHAR('\uFFFD'));
+   }
+
+   return retval;
+}
+
+template <typename E, typename A>
+CsBasicString<E,A> CsBasicString<E, A>::fromUtf16(const char16_t *str, size_type numOfChars, const A &a)
+{
+   CsBasicString retval(a);
+
+   if (str == nullptr) {
+      return retval;
+   }
+
+   if (numOfChars < 0) {
+      numOfChars = std::char_traits<char16_t>::length(str);
+   }
+
+   char32_t data = 0;
+
+   for (int i = 0; i < numOfChars; ++i) {
+
+      char16_t value = str[i];
+
+      if (value < 0xD800 || (value > 0xDFFF && value <= 0xFFFF)) {
+         // not a surrogate
+
+         if (data == 0) {
+            // do nothing
+
+         } else {
+            // invalid character
+            retval.append(UCHAR('\uFFFD'));
+            data = 0;
+         }
+
+         retval.append(static_cast<char32_t>(str[i]));
+
+      } else if (value >= 0xD800 && value <= 0xDBFF) {
+         // high surrogates
+
+         if (data == 0) {
+            // do nothing
+
+         } else {
+            // invalid character
+            retval.append(UCHAR('\uFFFD'));
+            data = 0;
+         }
+
+         data = static_cast<char32_t>(value) & 0x3FF;
+
+      } else if (value >= 0xDC00 && value <= 0xDFFF) {
+         // low surrogates
+
+         if (data == 0) {
+            // invalid character
+            retval.append(UCHAR('\uFFFD'));
+
+         } else {
+            data = (data << 10) | (static_cast<char32_t>(value) & 0x3FF);
+            data |= 0x010000;
+
+            retval.append(data);
+         }
+
+         data = 0;
+
+      } else {
+         // invalid character ( unreachable code )
+         retval.append(UCHAR('\uFFFD'));
+      }
+   }
+
+   if (data != 0) {
       // invalid character at the end of the string
       retval.append(UCHAR('\uFFFD'));
    }
