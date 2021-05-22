@@ -70,6 +70,12 @@ class Q_CORE_EXPORT QMetaObject
    int indexOfSignal(const QString &signal) const;
    int indexOfSlot(const QString &slot) const;
 
+   template<class SignalClass, class ...SignalArgs>
+   int indexOfSignal(void (SignalClass::*methodPtr)(SignalArgs...)) const;
+
+   template<class MethodClass, class ...MethodArgs, class MethodReturn>
+   int indexOfMethod(MethodReturn (MethodClass::*methodPtr)(MethodArgs...)) const;
+
    virtual QMetaMethod method(int index) const = 0;
    QMetaMethod method(const CSBentoAbstract &temp) const;
 
@@ -132,6 +138,52 @@ class Q_CORE_EXPORT QMetaObject
  private:
    static QString getType(const QString &fullName);
 };
+
+template<class SignalClass, class ...SignalArgs>
+int QMetaObject::indexOfSignal(void (SignalClass::*methodPtr)(SignalArgs...)) const
+{
+   int retval = -1;
+   const int count = methodCount();
+
+   CSBento<void (SignalClass::*)(SignalArgs...)> tmp = methodPtr;
+
+   for (int index = 0; index < count; ++index)  {
+      QMetaMethod metaMethod = method(index);
+
+      bool ok = metaMethod.compare(tmp);
+
+      if (ok && metaMethod.methodType() == QMetaMethod::Signal) {
+         // found QMetaMethod match
+         retval = index;
+         break;
+      }
+   }
+
+   return retval;
+}
+
+template<class MethodClass, class ...MethodArgs, class MethodReturn>
+int QMetaObject::indexOfMethod(MethodReturn (MethodClass::*methodPtr)(MethodArgs...)) const
+{
+   int retval = -1;
+   const int count = methodCount();
+
+   CSBento<MethodReturn (MethodClass::*)(MethodArgs...)> tmp = methodPtr;
+
+   for (int index = 0; index < count; ++index)  {
+      QMetaMethod metaMethod = method(index);
+
+      bool ok = metaMethod.compare(tmp);
+
+      if (ok) {
+         // found QMetaMethod match
+         retval = index;
+         break;
+      }
+   }
+
+   return retval;
+}
 
 template<class T>
 QMetaEnum QMetaObject::findEnum()
