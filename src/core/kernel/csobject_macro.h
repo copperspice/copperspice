@@ -28,6 +28,8 @@
 #include <cs_slot.h>
 #include <qglobal.h>
 
+#include <optional>
+
 class QMetaObject;
 
 #define qPrintable(string)          QString8(string).constData()
@@ -358,7 +360,7 @@ class cs_number<0>
          \
          cs_regTrigger(cs_number<cntValue + 1>{} );  \
       } \
-      template <class... Ts> \
+   template <class... Ts> \
    static QObject * CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)(Ts...Vs) \
       { \
          return new className{Vs...};  \

@@ -163,7 +163,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
    }
 
    if (channel.type == Channel::Normal) {
-      // we're piping this channel to our own process
+      // piping this channel to our own process
       if (qt_create_pipe(channel.pipe) != 0) {
          return false;
       }
@@ -336,12 +336,9 @@ void QProcessPrivate::startProcess()
    qDebug("QProcessPrivate::startProcess()");
 #endif
 
-
    // Initialize pipes
-   if (!openChannel(stdinChannel) ||
-         !openChannel(stdoutChannel) ||
-         !openChannel(stderrChannel) ||
-         qt_create_pipe(childStartedPipe) != 0) {
+   if (! openChannel(stdinChannel) || ! openChannel(stdoutChannel) ||
+            ! openChannel(stderrChannel) || qt_create_pipe(childStartedPipe) != 0) {
       setErrorAndEmit(QProcess::FailedToStart, qt_error_string(errno));
       cleanup();
       return;
@@ -416,6 +413,7 @@ void QProcessPrivate::startProcess()
    // Encode the working directory if it's non-empty, otherwise just pass 0.
    const char *workingDirPtr = nullptr;
    QByteArray encodedWorkingDirectory;
+
    if (! workingDirectory.isEmpty()) {
       encodedWorkingDirectory = QFile::encodeName(workingDirectory);
       workingDirPtr = encodedWorkingDirectory.constData();
@@ -488,7 +486,8 @@ void QProcessPrivate::startProcess()
 
       q->setProcessState(QProcess::NotRunning);
       setErrorAndEmit(QProcess::FailedToStart,
-                      QProcess::tr("Resource error (fork failure): %1").formatArg(qt_error_string(lastForkErrno)));
+            QProcess::tr("Resource error (fork failure): %1").formatArg(qt_error_string(lastForkErrno)));
+
       cleanup();
       return;
    }
@@ -501,8 +500,7 @@ void QProcessPrivate::startProcess()
 
    pid = Q_PID(childPid);
 
-   // parent
-   // close the ends we don't use and make all pipes non-blocking
+   // parent. close the ends we do not use and make all pipes non-blocking
 
    qt_safe_close(childStartedPipe[1]);
    childStartedPipe[1] = -1;

@@ -214,7 +214,7 @@ class Q_CORE_EXPORT QMetaProperty
 
    QVariant read(const QObject *obj) const;
 
-   // Note: Doxypress docs must currently be located here due to the overload with similar signatures
+   // Note: Doxypress docs must be located here due to an overload with similar signatures
 
    //! \brief .
    //!

@@ -40,7 +40,7 @@ void QNonContiguousByteDevice::disableReset()
    resetDisabled = true;
 }
 
-// FIXME we should scrap this whole implementation and instead change the ByteArrayImpl to be able to cope with sub-arrays?
+// FIX we should scrap this whole implementation and instead change the ByteArrayImpl to be able to cope with sub-arrays?
 QNonContiguousByteDeviceBufferImpl::QNonContiguousByteDeviceBufferImpl(QBuffer *b) : QNonContiguousByteDevice()
 {
    buffer = b;
@@ -201,10 +201,8 @@ qint64 QNonContiguousByteDeviceRingBufferImpl::pos()
 }
 
 QNonContiguousByteDeviceIoDeviceImpl::QNonContiguousByteDeviceIoDeviceImpl(QIODevice *d)
-   : QNonContiguousByteDevice(),
-     currentReadBuffer(nullptr), currentReadBufferSize(16 * 1024),
-     currentReadBufferAmount(0), currentReadBufferPosition(0), totalAdvancements(0),
-     eof(false)
+   : QNonContiguousByteDevice(), currentReadBuffer(nullptr), currentReadBufferSize(16 * 1024),
+     currentReadBufferAmount(0), currentReadBufferPosition(0), totalAdvancements(0), eof(false)
 {
    device = d;
    initialPosition = d->pos();
@@ -346,7 +344,6 @@ QByteDeviceWrappingIoDevice::QByteDeviceWrappingIoDevice(QNonContiguousByteDevic
 
 QByteDeviceWrappingIoDevice::~QByteDeviceWrappingIoDevice()
 {
-
 }
 
 bool QByteDeviceWrappingIoDevice::isSequential() const

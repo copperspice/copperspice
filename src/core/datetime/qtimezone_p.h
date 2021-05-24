@@ -161,8 +161,7 @@ class  QUtcTimeZonePrivate final : public QTimeZonePrivate
 
    // Create custom offset from UTC
    QUtcTimeZonePrivate(const QByteArray &zoneId, int offsetSeconds, const QString &name,
-      const QString &abbreviation, QLocale::Country country,
-      const QString &comment);
+      const QString &abbreviation, QLocale::Country country, const QString &comment);
 
    QUtcTimeZonePrivate(const QUtcTimeZonePrivate &other);
    virtual ~QUtcTimeZonePrivate();
@@ -174,9 +173,9 @@ class  QUtcTimeZonePrivate final : public QTimeZonePrivate
    QLocale::Country country() const override;
    QString comment() const override;
 
-   QString displayName(QTimeZone::TimeType timeType,
-      QTimeZone::NameType nameType,
+   QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType,
       const QLocale &locale) const override;
+
    QString abbreviation(qint64 atMSecsSinceEpoch) const override;
 
    int standardTimeOffset(qint64 atMSecsSinceEpoch) const override;
@@ -193,8 +192,7 @@ class  QUtcTimeZonePrivate final : public QTimeZonePrivate
  private:
    void init(const QByteArray &zoneId);
    void init(const QByteArray &zoneId, int offsetSeconds, const QString &name,
-      const QString &abbreviation, QLocale::Country country,
-      const QString &comment);
+      const QString &abbreviation, QLocale::Country country, const QString &comment);
 
    QString m_name;
    QString m_abbreviation;
@@ -232,9 +230,11 @@ class QTzTimeZonePrivate final : public QTimeZonePrivate
  public:
    // Create default time zone
    QTzTimeZonePrivate();
+
    // Create named time zone
    QTzTimeZonePrivate(const QByteArray &ianaId);
    QTzTimeZonePrivate(const QTzTimeZonePrivate &other);
+
    ~QTzTimeZonePrivate();
 
    QTimeZonePrivate *clone() override;
@@ -242,12 +242,12 @@ class QTzTimeZonePrivate final : public QTimeZonePrivate
    QLocale::Country country() const override;
    QString comment() const override;
 
-   QString displayName(qint64 atMSecsSinceEpoch,
-      QTimeZone::NameType nameType,
+   QString displayName(qint64 atMSecsSinceEpoch, QTimeZone::NameType nameType,
       const QLocale &locale) const override;
-   QString displayName(QTimeZone::TimeType timeType,
-      QTimeZone::NameType nameType,
+
+   QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType,
       const QLocale &locale) const override;
+
    QString abbreviation(qint64 atMSecsSinceEpoch) const override;
 
    int offsetFromUtc(qint64 atMSecsSinceEpoch) const override;
@@ -286,6 +286,7 @@ class QMacTimeZonePrivate final : public QTimeZonePrivate
  public:
    // Create default time zone
    QMacTimeZonePrivate();
+
    // Create named time zone
    QMacTimeZonePrivate(const QByteArray &ianaId);
    QMacTimeZonePrivate(const QMacTimeZonePrivate &other);
@@ -349,6 +350,7 @@ class QWinTimeZonePrivate final : public QTimeZonePrivate
 
    QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType,
       const QLocale &locale) const override;
+
    QString abbreviation(qint64 atMSecsSinceEpoch) const override;
 
    int offsetFromUtc(qint64 atMSecsSinceEpoch) const override;

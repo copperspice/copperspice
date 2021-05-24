@@ -352,7 +352,7 @@ class match_results
       std::swap(m_is_singular, that.m_is_singular);
    }
 
-   bool operator==(const match_results &that)const {
+   bool operator==(const match_results &that) const {
       if (m_is_singular) {
          return that.m_is_singular;
       } else if (that.m_is_singular) {
@@ -361,7 +361,7 @@ class match_results
       return (m_capture_list == that.m_capture_list) && (m_base == that.m_base) && (m_last_closed_paren == that.m_last_closed_paren);
    }
 
-   bool operator!=(const match_results &that)const {
+   bool operator!=(const match_results &that) const {
       return !(*this == that);
    }
 

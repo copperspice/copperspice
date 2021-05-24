@@ -241,9 +241,7 @@ void QInotifyFileSystemWatcherEngine::run()
    (void) exec();
 }
 
-QStringList QInotifyFileSystemWatcherEngine::addPaths(const QStringList &paths,
-      QStringList *files,
-      QStringList *directories)
+QStringList QInotifyFileSystemWatcherEngine::addPaths(const QStringList &paths, QStringList *files, QStringList *directories)
 {
    QMutexLocker locker(&mutex);
 
@@ -254,10 +252,12 @@ QStringList QInotifyFileSystemWatcherEngine::addPaths(const QStringList &paths,
       QString path = it.next();
       QFileInfo fi(path);
       bool isDir = fi.isDir();
+
       if (isDir) {
          if (directories->contains(path)) {
             continue;
          }
+
       } else {
          if (files->contains(path)) {
             continue;

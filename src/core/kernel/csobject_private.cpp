@@ -201,8 +201,8 @@ QList<QObject *> CSInternalSender::receiverList(const QObject *object, const QSt
 
 QList<QObject *> CSInternalSender::senderList(const QObject *object)
 {
-   if (! object) {
-      return QList<QObject *> {};
+   if (object == nullptr) {
+      return QList<QObject *>{};
    }
 
    return object->senderList();

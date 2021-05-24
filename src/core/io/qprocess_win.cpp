@@ -137,11 +137,6 @@ static void duplicateStdWriteChannel(Q_PIPE *pipe, DWORD nStdHandle)
    DuplicateHandle(hCurrentProcess, hStdWriteChannel, hCurrentProcess, &pipe[1], 0, TRUE, DUPLICATE_SAME_ACCESS);
 }
 
-/*
-    Create the pipes to a QProcessPrivate::Channel.
-
-    This function must be called in order: stdin, stdout, stderr
-*/
 bool QProcessPrivate::openChannel(Channel &channel)
 {
    Q_Q(QProcess);
@@ -156,35 +151,40 @@ bool QProcessPrivate::openChannel(Channel &channel)
       if (&channel == &stdinChannel) {
          if (inputChannelMode != QProcess::ForwardedInputChannel) {
             qt_create_pipe(channel.pipe, true);
+
          } else {
             channel.pipe[1] = INVALID_Q_PIPE;
             HANDLE hStdReadChannel = GetStdHandle(STD_INPUT_HANDLE);
             HANDLE hCurrentProcess = GetCurrentProcess();
+
             DuplicateHandle(hCurrentProcess, hStdReadChannel, hCurrentProcess,
                             &channel.pipe[0], 0, TRUE, DUPLICATE_SAME_ACCESS);
          }
+
       } else {
          if (&channel == &stdoutChannel) {
-            if (processChannelMode != QProcess::ForwardedChannels
-                  && processChannelMode != QProcess::ForwardedOutputChannel) {
-               if (!stdoutChannel.reader) {
+            if (processChannelMode != QProcess::ForwardedChannels && processChannelMode != QProcess::ForwardedOutputChannel) {
+               if (! stdoutChannel.reader) {
                   stdoutChannel.reader = new QWindowsPipeReader(q);
                   q->connect(stdoutChannel.reader, &QWindowsPipeReader::readyRead, q, &QProcess::_q_canReadStandardOutput);
                }
+
             } else {
                duplicateStdWriteChannel(channel.pipe, STD_OUTPUT_HANDLE);
             }
+
          } else { /* if (&channel == &stderrChannel) */
-            if (processChannelMode != QProcess::ForwardedChannels
-                  && processChannelMode != QProcess::ForwardedErrorChannel) {
-               if (!stderrChannel.reader) {
+            if (processChannelMode != QProcess::ForwardedChannels && processChannelMode != QProcess::ForwardedErrorChannel) {
+               if (! stderrChannel.reader) {
                   stderrChannel.reader = new QWindowsPipeReader(q);
                   q->connect(stderrChannel.reader, &QWindowsPipeReader::readyRead, q, &QProcess::_q_canReadStandardError);
                }
+
             } else {
                duplicateStdWriteChannel(channel.pipe, STD_ERROR_HANDLE);
             }
          }
+
          if (channel.reader) {
             qt_create_pipe(channel.pipe, false);
             channel.reader->setHandle(channel.pipe[0]);
@@ -193,6 +193,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
       }
 
       return true;
+
    } else if (channel.type == Channel::Redirect) {
       // we're redirecting the channel to/from a file
       SECURITY_ATTRIBUTES secAtt = { sizeof(SECURITY_ATTRIBUTES), nullptr, TRUE };

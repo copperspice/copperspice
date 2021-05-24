@@ -290,8 +290,8 @@ bool QMetaObject::invokeMethod(QObject *object, const QString &member, Qt::Conne
 
          int numOfChars = sig.indexOf('(') + 1;
 
-         QMetaMethod testMethod  = metaObject->method(k);
-         QString testSignature = testMethod.methodSignature();
+         QMetaMethod testMethod = metaObject->method(k);
+         QString testSignature  = testMethod.methodSignature();
 
          if (testSignature.leftView(numOfChars) == sig.leftView(numOfChars))  {
             msgList.append(testSignature);

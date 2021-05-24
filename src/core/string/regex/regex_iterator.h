@@ -122,22 +122,22 @@ class regex_iterator
       return *this;
    }
 
-   bool operator==(const regex_iterator &that)const {
+   bool operator==(const regex_iterator &that) const {
       if ((pdata.get() == nullptr) || (that.pdata.get() == nullptr)) {
          return pdata.get() == that.pdata.get();
       }
       return pdata->compare(*(that.pdata.get()));
    }
 
-   bool operator!=(const regex_iterator &that)const {
+   bool operator!=(const regex_iterator &that) const {
       return !(*this == that);
    }
 
-   const value_type &operator*()const {
+   const value_type &operator*() const {
       return pdata->get();
    }
 
-   const value_type *operator->()const {
+   const value_type *operator->() const {
       return &(pdata->get());
    }
 

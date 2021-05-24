@@ -35,6 +35,7 @@
 #include <qstring8.h>
 #include <qvector.h>
 
+#include <optional>
 #include <utility>
 #include <stdexcept>
 #include <typeindex>
@@ -50,7 +51,7 @@ class Q_CORE_EXPORT QMetaObject
    int classInfoOffset() const;
 
    virtual const QString &className() const = 0;
-   static void connectSlotsByName(QObject *o);
+   static void connectSlotsByName(QObject *object);
 
    virtual const QString &getInterface_iid() const = 0;
 
@@ -65,7 +66,7 @@ class Q_CORE_EXPORT QMetaObject
    int indexOfConstructor(const QString &constructor) const;
    int indexOfEnumerator(const QString &name) const;
    int indexOfMethod(const QString &method) const;
-   int indexOfMethod(const CsSignal::Internal::BentoAbstract &temp) const;
+   int indexOfMethod(const CsSignal::Internal::BentoAbstract &tmp) const;
    int indexOfProperty(const QString &name) const;
    int indexOfSignal(const QString &signal) const;
    int indexOfSlot(const QString &slot) const;
@@ -77,11 +78,11 @@ class Q_CORE_EXPORT QMetaObject
    int indexOfMethod(MethodReturn (MethodClass::*methodPtr)(MethodArgs...)) const;
 
    virtual QMetaMethod method(int index) const = 0;
-   QMetaMethod method(const CSBentoAbstract &temp) const;
+   QMetaMethod method(const CSBentoAbstract &tmp) const;
 
    // alternate name for method()
-   QMetaMethod lookUpMethod(const CSBentoAbstract &temp) const {
-      return method(temp);
+   QMetaMethod lookUpMethod(const CSBentoAbstract &tmp) const {
+      return method(tmp);
    }
 
    virtual int methodCount() const = 0;

@@ -222,6 +222,7 @@ class LIB_CS_STRING_EXPORT utf16
 
             value = *iter;
             if (value < 0xDC00 || value > 0xDFFF) {
+               // not a low surrogate
                --count;
             }
 
@@ -244,7 +245,7 @@ class LIB_CS_STRING_EXPORT utf16
             storage_unit value = *iter;
 
             if (value < 0xDC00 || value > 0xDFFF) {
-               // not a surrogate
+               // not a low surrogate
                ++retval;
             }
          }

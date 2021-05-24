@@ -1236,17 +1236,22 @@ QVector<QPropertyAssignment> QStateMachinePrivate::restorablesToPropertyList(con
 {
     QVector<QPropertyAssignment> result;
     QHash<RestorableId, QVariant>::const_iterator it;
+
     for (it = restorables.constBegin(); it != restorables.constEnd(); ++it) {
         const RestorableId &id = it.key();
-        if (!id.object()) {
+
+        if (! id.object()) {
             // Property object was deleted
             continue;
         }
+
 #ifdef QSTATEMACHINE_RESTORE_PROPERTIES_DEBUG
         qDebug() << q_func() << ": restoring" << id.object() << id.proertyName() << "to" << it.value();
 #endif
-        result.append(QPropertyAssignment(id.object(), id.propertyName(), it.value(), /*explicitlySet=*/false));
+
+        result.append(QPropertyAssignment(id.object(), id.propertyName(), it.value(), false));
     }
+
     return result;
 }
 
@@ -1275,12 +1280,14 @@ QHash<QAbstractState*, QVector<QPropertyAssignment> > QStateMachinePrivate::comp
 
     for (int i = 0; i < statesToEnter_sorted.size(); ++i) {
         QState *s = toStandardState(statesToEnter_sorted.at(i));
-        if (! s)
+        if (! s) {
             continue;
+        }
 
         QVector<QPropertyAssignment> &assignments = QStatePrivate::get(s)->propertyAssignments;
         for (int j = 0; j < assignments.size(); ++j) {
             const QPropertyAssignment &assn = assignments.at(j);
+
             if (assn.objectDeleted()) {
                 assignments.removeAt(j--);
             } else {
@@ -1373,8 +1380,7 @@ void QStateMachinePrivate::setError(QStateMachine::Error errorCode, QAbstractSta
 #ifndef QT_NO_ANIMATION
 
 QPair<QList<QAbstractAnimation *>, QList<QAbstractAnimation *>> QStateMachinePrivate::initializeAnimation(
-      QAbstractAnimation *abstractAnimation,
-      const QPropertyAssignment &prop)
+      QAbstractAnimation *abstractAnimation, const QPropertyAssignment &prop)
 {
    QList<QAbstractAnimation *> handledAnimations;
    QList<QAbstractAnimation *> localResetEndValues;
@@ -1388,10 +1394,11 @@ QPair<QList<QAbstractAnimation *>, QList<QAbstractAnimation *>> QStateMachinePri
          handledAnimations << ret.first;
          localResetEndValues << ret.second;
       }
+
    } else {
       QPropertyAnimation *animation = qobject_cast<QPropertyAnimation *>(abstractAnimation);
-      if (animation != nullptr
-         && prop.object == animation->targetObject()
+
+      if (animation != nullptr && prop.object == animation->targetObject()
          && prop.propertyName == animation->propertyName()) {
 
          // Only change end value if it is undefined
@@ -1420,12 +1427,15 @@ void QStateMachinePrivate::_q_animationFinished()
 
    QAbstractState *state = stateForAnimation.take(anim);
    Q_ASSERT(state != nullptr);
-    // Set the final property value.
-    QPropertyAssignment assn = propertyForAnimation.take(anim);
-    assn.write();
 
-    if (! assn.explicitlySet)
-        unregisterRestorables(QList<QAbstractState*>() << state, assn.object, assn.propertyName);
+   // Set the final property value.
+   QPropertyAssignment assn = propertyForAnimation.take(anim);
+   assn.write();
+
+   if (! assn.explicitlySet) {
+      unregisterRestorables(QList<QAbstractState*>() << state, assn.object, assn.propertyName);
+   }
+
    QHash<QAbstractState *, QList<QAbstractAnimation *>>::iterator it;
    it = animationsForState.find(state);
 
@@ -1470,11 +1480,12 @@ void QStateMachinePrivate::terminateActiveAnimations(QAbstractState *state,
         QObject::disconnect(anim, &QAbstractAnimation::finished, q, &QStateMachine::_q_animationFinished);
         stateForAnimation.remove(anim);
 
-        // Stop the (top-level) animation.
-        // ### Stopping nested animation has weird behavior.
+        // Stop the (top-level) animation, stopping nested animation has weird behavior
         QAbstractAnimation *topLevelAnim = anim;
-        while (QAnimationGroup *group = topLevelAnim->group())
+        while (QAnimationGroup *group = topLevelAnim->group()) {
             topLevelAnim = group;
+        }
+
         topLevelAnim->stop();
 
         if (resetAnimationEndValues.contains(anim)) {
@@ -1487,8 +1498,10 @@ void QStateMachinePrivate::terminateActiveAnimations(QAbstractState *state,
         // set the property to its target value.
         bool found = false;
         QHash<QAbstractState*, QVector<QPropertyAssignment> >::const_iterator it;
+
         for (it = assignmentsForEnteredStates.constBegin(); it != assignmentsForEnteredStates.constEnd(); ++it) {
             const QVector<QPropertyAssignment> &assignments = it.value();
+
             for (int j = 0; j < assignments.size(); ++j) {
                 if (assignments.at(j).hasTarget(assn.object, assn.propertyName)) {
                     found = true;
@@ -1496,49 +1509,62 @@ void QStateMachinePrivate::terminateActiveAnimations(QAbstractState *state,
                 }
             }
         }
-        if (!found) {
+
+        if (! found) {
             assn.write();
-            if (!assn.explicitlySet)
+            if (! assn.explicitlySet) {
                 unregisterRestorables(QList<QAbstractState*>() << state, assn.object, assn.propertyName);
+            }
         }
     }
 }
 
 void QStateMachinePrivate::initializeAnimations(QAbstractState *state, const QList<QAbstractAnimation *> &selectedAnimations,
-                                                const QList<QAbstractState*> &exitedStates_sorted,
-                                                QHash<QAbstractState*, QVector<QPropertyAssignment> > &assignmentsForEnteredStates)
+            const QList<QAbstractState*> &exitedStates_sorted,
+            QHash<QAbstractState*, QVector<QPropertyAssignment> > &assignmentsForEnteredStates)
 {
     Q_Q(QStateMachine);
-    if (!assignmentsForEnteredStates.contains(state))
+    if (! assignmentsForEnteredStates.contains(state)) {
         return;
+    }
+
     QVector<QPropertyAssignment> &assignments = assignmentsForEnteredStates[state];
+
     for (int i = 0; i < selectedAnimations.size(); ++i) {
         QAbstractAnimation *anim = selectedAnimations.at(i);
         QVector<QPropertyAssignment>::iterator it;
+
         for (it = assignments.begin(); it != assignments.end(); ) {
             QPair<QList<QAbstractAnimation*>, QList<QAbstractAnimation*> > ret;
             const QPropertyAssignment &assn = *it;
             ret = initializeAnimation(anim, assn);
+
             QList<QAbstractAnimation*> handlers = ret.first;
-            if (!handlers.isEmpty()) {
+
+            if (! handlers.isEmpty()) {
                 for (int j = 0; j < handlers.size(); ++j) {
                     QAbstractAnimation *a = handlers.at(j);
                     propertyForAnimation.insert(a, assn);
                     stateForAnimation.insert(a, state);
                     animationsForState[state].append(a);
+
                     // ### connect to just the top-level animation?
                     QObject::connect(a, &QAbstractAnimation::finished, q, &QStateMachine::_q_animationFinished, Qt::UniqueConnection);
                 }
+
                 if ((globalRestorePolicy == QState::RestoreProperties)
                         && !hasRestorable(state, assn.object, assn.propertyName)) {
                     QVariant value = savedValueForRestorable(exitedStates_sorted, assn.object, assn.propertyName);
                     unregisterRestorables(exitedStates_sorted, assn.object, assn.propertyName);
                     registerRestorable(state, assn.object, assn.propertyName, value);
                 }
+
                 it = assignments.erase(it);
+
             } else {
                 ++it;
             }
+
             for (int j = 0; j < ret.second.size(); ++j)
                 resetAnimationEndValues.insert(ret.second.at(j));
         }

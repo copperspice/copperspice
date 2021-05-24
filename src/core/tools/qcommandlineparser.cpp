@@ -26,17 +26,16 @@
 ** Copyright (c) 2013 David Faure <faure@kde.org>
 *****************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-
-
 #include <qcommandlineparser.h>
 #include <qcoreapplication.h>
 #include <qhash.h>
 #include <qstringparser.h>
 #include <qvector.h>
 
-typedef QHash<QString, int> NameHash_t;
+#include <stdio.h>
+#include <stdlib.h>
+
+using NameHash_t = QHash<QString, int>;
 
 class QCommandLineParserPrivate
 {
@@ -103,10 +102,12 @@ class QCommandLineParserPrivate
 QStringList QCommandLineParserPrivate::aliases(const QString &optionName) const
 {
    const NameHash_t::const_iterator it = nameHash.find(optionName);
+
    if (it == nameHash.end()) {
-      qWarning("QCommandLineParser: option not defined: \"%s\"", csPrintable(optionName));
+      qWarning("QCommandLineParser: Option was not defined: \"%s\"", csPrintable(optionName));
       return QStringList();
    }
+
    return commandLineOptionList.at(*it).names();
 }
 
@@ -115,24 +116,22 @@ QCommandLineParser::QCommandLineParser()
 {
 }
 
-
 QCommandLineParser::~QCommandLineParser()
 {
    delete d;
 }
 
-void QCommandLineParser::setSingleDashWordOptionMode(QCommandLineParser::SingleDashWordOptionMode
-      singleDashWordOptionMode)
+void QCommandLineParser::setSingleDashWordOptionMode(QCommandLineParser::SingleDashWordOptionMode singleDashWordOptionMode)
 {
    d->singleDashWordOptionMode = singleDashWordOptionMode;
 }
 
 bool QCommandLineParser::addOption(const QCommandLineOption &option)
 {
-   QStringList optionNames = option.names();
+   QStringList list = option.names();
 
-   if (!optionNames.isEmpty()) {
-      for (const QString & name : optionNames) {
+   if (! list.isEmpty()) {
+      for (const QString & name : list) {
          if (d->nameHash.contains(name)) {
             return false;
          }
@@ -141,8 +140,10 @@ bool QCommandLineParser::addOption(const QCommandLineOption &option)
       d->commandLineOptionList.append(option);
 
       const int offset = d->commandLineOptionList.size() - 1;
-      for (const QString & name : optionNames)
-      d->nameHash.insert(name, offset);
+
+      for (const QString & name : list) {
+         d->nameHash.insert(name, offset);
+      }
 
       return true;
    }
@@ -158,6 +159,7 @@ QCommandLineOption QCommandLineParser::addVersionOption()
    QCommandLineOption opt(list, tr("Displays version information."));
 
    addOption(opt);
+
    return opt;
 }
 
@@ -254,7 +256,7 @@ void QCommandLineParser::process(const QCoreApplication &)
 void QCommandLineParserPrivate::checkParsed(const char *method)
 {
    if (needsParsing) {
-      qWarning("QCommandLineParser: call process() or parse() before %s", method);
+      qWarning("QCommandLineParser: Call process() or parse() before %s", method);
    }
 }
 
@@ -263,6 +265,7 @@ bool QCommandLineParserPrivate::registerFoundOption(const QString &optionName)
    if (nameHash.contains(optionName)) {
       optionNames.append(optionName);
       return true;
+
    } else {
       unknownOptionNames.append(optionName);
       return false;
@@ -302,13 +305,14 @@ bool QCommandLineParserPrivate::parseOptionValue(const QString &optionName, cons
 bool QCommandLineParserPrivate::parse(const QStringList &args)
 {
    needsParsing = false;
-   bool error = false;
+   bool error   = false;
 
-   const QString     doubleDashString(QString("--"));
-   const QLatin1Char dashChar('-');
-   const QLatin1Char assignChar('=');
+   const QString doubleDashString(QString("--"));
+   const QChar dashChar('-');
+   const QChar assignChar('=');
 
    bool doubleDashFound = false;
+
    errorText.clear();
    positionalArgumentList.clear();
    optionNames.clear();
@@ -328,19 +332,24 @@ bool QCommandLineParserPrivate::parse(const QStringList &args)
 
       if (doubleDashFound) {
          positionalArgumentList.append(argument);
+
       } else if (argument.startsWith(doubleDashString)) {
          if (argument.length() > 2) {
             QString optionName = argument.mid(2).section(assignChar, 0, 0);
+
             if (registerFoundOption(optionName)) {
-               if (!parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
+               if (! parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
                   error = true;
                }
+
             } else {
                error = true;
             }
+
          } else {
             doubleDashFound = true;
          }
+
       } else if (argument.startsWith(dashChar)) {
          if (argument.size() == 1) { // single dash ("stdin")
             positionalArgumentList.append(argument);

@@ -153,9 +153,11 @@ void QDnotifySignalThread::startNotify()
    // QDnotifySignalThread singleton is deleted
    start();
    mutex.lock();
+
    while (!isExecing) {
       wait.wait(&mutex);
    }
+
    mutex.unlock();
 }
 
@@ -172,6 +174,7 @@ void QDnotifySignalThread::readFromDnotify()
 {
    int fd;
    int readrv = qt_safe_read(qfswd_fileChanged_pipe[0], reinterpret_cast<char *>(&fd), sizeof(int));
+
    // Only expect EAGAIN or EINTR.  Other errors are assumed to be impossible.
    if (readrv != -1) {
       Q_ASSERT(readrv == sizeof(int));
@@ -194,10 +197,9 @@ QDnotifyFileSystemWatcherEngine::~QDnotifyFileSystemWatcherEngine()
 {
    QMutexLocker locker(&mutex);
 
-   for (QHash<int, Directory>::const_iterator iter = fdToDirectory.constBegin();
-         iter != fdToDirectory.constEnd();
-         ++iter) {
+   for (auto iter = fdToDirectory.constBegin(); iter != fdToDirectory.constEnd(); ++iter) {
       qt_safe_close(iter->fd);
+
       if (iter->parentFd) {
          qt_safe_close(iter->parentFd);
       }

@@ -563,8 +563,7 @@ QList<QByteArray> QTimeZonePrivate::windowsIdToIanaIds(const QByteArray &windows
    return list;
 }
 
-QList<QByteArray> QTimeZonePrivate::windowsIdToIanaIds(const QByteArray &windowsId,
-   QLocale::Country country)
+QList<QByteArray> QTimeZonePrivate::windowsIdToIanaIds(const QByteArray &windowsId, QLocale::Country country)
 {
    const quint16 windowsIdKey = toWindowsIdKey(windowsId);
    for (int i = 0; i < zoneDataTableSize; ++i) {
@@ -597,6 +596,7 @@ QUtcTimeZonePrivate::QUtcTimeZonePrivate(const QByteArray &id)
    for (int i = 0; i < utcDataTableSize; ++i) {
       const QUtcData *data = utcData(i);
       const QByteArray uid = utcId(data);
+
       if (uid == id) {
          QString name = QString::fromUtf8(id);
          init(id, data->offsetFromUtc, name, name, QLocale::AnyCountry, name);
