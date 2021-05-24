@@ -143,7 +143,9 @@ class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
 };
 
 template<>
-QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone();
+inline QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone() {
+   return d->clone();
+}
 
 class  QUtcTimeZonePrivate final : public QTimeZonePrivate
 {
@@ -378,50 +380,5 @@ class QWinTimeZonePrivate final : public QTimeZonePrivate
    QList<QWinTransitionRule> m_tranRules;
 };
 #endif // Q_OS_WIN
-
-#ifdef Q_OS_ANDROID
-class QAndroidTimeZonePrivate final : public QTimeZonePrivate
-
-{
- public:
-   // Create default time zone
-   QAndroidTimeZonePrivate();
-   // Create named time zone
-   QAndroidTimeZonePrivate(const QByteArray &ianaId);
-   QAndroidTimeZonePrivate(const QAndroidTimeZonePrivate &other);
-   ~QAndroidTimeZonePrivate();
-
-   QTimeZonePrivate *clone() override;
-
-   QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType, const QLocale &locale) const override;
-   QString abbreviation(qint64 atMSecsSinceEpoch) const override
-
-   int offsetFromUtc(qint64 atMSecsSinceEpoch) const override;
-   int standardTimeOffset(qint64 atMSecsSinceEpoch) const override;
-   int daylightTimeOffset(qint64 atMSecsSinceEpoch) const override;
-
-   bool hasDaylightTime() const override;
-   bool isDaylightTime(qint64 atMSecsSinceEpoch) const override;
-
-   Data data(qint64 forMSecsSinceEpoch) const override;
-
-   bool hasTransitions() const override;
-   Data nextTransition(qint64 afterMSecsSinceEpoch) const override;
-   Data previousTransition(qint64 beforeMSecsSinceEpoch) const override;
-
-   Data dataForLocalTime(qint64 forLocalMSecs) const override;
-
-   QByteArray systemTimeZoneId() const override;
-
-   QList<QByteArray> availableTimeZoneIds() const override;
-
- private:
-   void init(const QByteArray &zoneId);
-
-   QJNIObjectPrivate androidTimeZone;
-
-};
-#endif // Q_OS_ANDROID
-
 
 #endif

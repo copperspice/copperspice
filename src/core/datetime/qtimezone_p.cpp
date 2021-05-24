@@ -578,12 +578,6 @@ QList<QByteArray> QTimeZonePrivate::windowsIdToIanaIds(const QByteArray &windows
    return QList<QByteArray>();
 }
 
-// Define template for derived classes to reimplement so QSharedDataPointer clone() works correctly
-template<> QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone()
-{
-   return d->clone();
-}
-
 /*
     UTC Offset implementation, used when QT_NO_SYSTEMLOCALE set
     or for QDateTimes with a Qt:Spec of Qt::OffsetFromUtc.
