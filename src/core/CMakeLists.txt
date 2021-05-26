@@ -157,6 +157,17 @@ if(MSVC)
       /bigobj
       /DNOMINMAX
    )
+
+   if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13.0")
+      # ensure method pointers have a unique address
+      target_link_options(CsCore
+         PUBLIC
+         /OPT:REF,NOICF
+      )
+   else()
+      message(FATAL_ERROR "CMake Version must be at least 3.13.0 for MSVC")
+
+   endif()
 endif()
 
 target_include_directories(CsCore
