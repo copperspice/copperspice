@@ -302,7 +302,7 @@ else()
 endif()
 
 
-if (CMAKE_SYSTEM_NAME MATCHES "Windows" AND PostgreSQL_FOUND)
+if (PostgreSQL_FOUND AND CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT MSVC)
 
    foreach (fname IN LISTS PostgreSQL_INCLUDE_DIRS)
       # testing for 'EXISTS', a query for if the file can be read or written
