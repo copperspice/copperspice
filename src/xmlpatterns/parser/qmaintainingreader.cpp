@@ -23,10 +23,11 @@
 
 template<typename TokenLookupClass, typename LookupKey>
 MaintainingReader<TokenLookupClass, LookupKey>::MaintainingReader(const typename ElementDescription<TokenLookupClass,
-                  LookupKey>::Hash &elementDescriptions, const QSet<typename TokenLookupClass::NodeName> &standardAttributes,
-                  const ReportContext::Ptr &context, QIODevice *const queryDevice)
+            LookupKey>::Hash &elementDescriptions,
+            const QSet<typename TokenLookupClass::NodeName> &standardAttributes,
+            const ReportContext::Ptr &context, QIODevice *const queryDevice)
    : QXmlStreamReader(queryDevice), m_hasHandledStandardAttributes(false), m_context(context),
-                  m_elementDescriptions(elementDescriptions), m_standardAttributes(standardAttributes)
+     m_elementDescriptions(elementDescriptions), m_standardAttributes(standardAttributes)
 {
    Q_ASSERT(m_context);
    Q_ASSERT(!m_elementDescriptions.isEmpty());
@@ -57,15 +58,17 @@ QXmlStreamReader::TokenType MaintainingReader<TokenLookupClass, LookupKey>::read
          m_currentAttributes = attributes();
          m_hasHandledStandardAttributes = false;
 
-         if (!m_currentAttributes.hasAttribute(QLatin1String("xml:space"))) {
+         if (! m_currentAttributes.hasAttribute("xml:space")) {
             m_stripWhitespace.push(m_stripWhitespace.top());
          }
          break;
       }
+
       case EndElement:
          m_currentElementName = TokenLookupClass::toToken(name());
          m_stripWhitespace.pop();
          break;
+
       default:
          break;
    }
@@ -184,8 +187,7 @@ void MaintainingReader<TokenLookupClass, LookupKey>::validateElement(const Looku
    }
 }
 
-template<typename TokenLookupClass,
-         typename LookupKey>
+template<typename TokenLookupClass, typename LookupKey>
 bool MaintainingReader<TokenLookupClass, LookupKey>::hasAttribute(const QString &namespaceURI,
       const QString &localName) const
 {
@@ -193,23 +195,20 @@ bool MaintainingReader<TokenLookupClass, LookupKey>::hasAttribute(const QString 
    return m_currentAttributes.hasAttribute(namespaceURI, localName);
 }
 
-template<typename TokenLookupClass,
-         typename LookupKey>
+template<typename TokenLookupClass, typename LookupKey>
 bool MaintainingReader<TokenLookupClass, LookupKey>::hasAttribute(const QString &localName) const
 {
    return hasAttribute(QString(), localName);
 }
 
-template<typename TokenLookupClass,
-         typename LookupKey>
+template<typename TokenLookupClass, typename LookupKey>
 QString MaintainingReader<TokenLookupClass, LookupKey>::readAttribute(const QString &localName,
       const QString &namespaceURI) const
 {
    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
 
    Q_ASSERT_X(m_currentAttributes.hasAttribute(namespaceURI, localName),
-              Q_FUNC_INFO,
-              "Validation must be done before this function is called.");
+              Q_FUNC_INFO, "Validation must be done before this function is called.");
 
    return m_currentAttributes.value(namespaceURI, localName).toString();
 }

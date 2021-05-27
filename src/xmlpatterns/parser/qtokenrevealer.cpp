@@ -58,17 +58,19 @@ Tokenizer::Token TokenRevealer::nextToken(YYLTYPE *const sourceLocator)
          m_result += m_indentationString;
          break;
       }
+
       case CURLY_RBRACE: {
          m_indentationString.chop(4);
          m_result += QLatin1Char('\n') + m_indentationString + asString;
          break;
       }
+
       case SEMI_COLON:
-      /* Fallthrough. */
       case COMMA: {
          m_result += asString + QLatin1Char('\n') + m_indentationString;
          break;
       }
+
       default:
          m_result += asString + QLatin1Char(' ');
    }

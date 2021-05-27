@@ -23,8 +23,6 @@
 
 #include "qschematype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SchemaType::SchemaType()
@@ -38,11 +36,11 @@ SchemaType::~SchemaType()
 bool SchemaType::isSimpleType() const
 {
    switch (category()) {
-      /* Fallthrough */
       case SimpleTypeAtomic:
       case SimpleTypeList:
       case SimpleTypeUnion:
          return true;
+
       default:
          return false;
    }
@@ -57,5 +55,3 @@ bool SchemaType::isDefinedBySchema() const
 {
    return false;
 }
-
-QT_END_NAMESPACE

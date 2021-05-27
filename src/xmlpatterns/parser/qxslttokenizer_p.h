@@ -359,8 +359,7 @@ class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLooku
    bool readToggleAttribute(const QString &attributeName, const QString &isTrue, const QString &isFalse,
                             const QXmlStreamAttributes *const atts = nullptr) const;
 
-   int readAlternativeAttribute(const QHash<QString, int> &alternatives,
-                                const QXmlStreamAttribute &attr) const;
+   int readAlternativeAttribute(const QHash<QString, int> &alternatives, const QXmlStreamAttribute &attr) const;
 
    /**
     * Returns @c true if the current text node can be skipped without

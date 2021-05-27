@@ -21,35 +21,26 @@
 *
 ***********************************************************************/
 
+#include "qdaytimeduration_p.h"
+
 #include "qabstractdatetime_p.h"
 #include "qbuiltintypes_p.h"
 #include "qcommonvalues_p.h"
 
-#include "qdaytimeduration_p.h"
-
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
-DayTimeDuration::DayTimeDuration(const bool isPositiveP,
-                                 const DayCountProperty daysP,
-                                 const HourProperty hoursP,
-                                 const MinuteProperty minutesP,
-                                 const SecondProperty secs,
-                                 const MSecondProperty msecs) : AbstractDuration(isPositiveP),
-   m_days(daysP),
-   m_hours(hoursP),
-   m_minutes(minutesP),
-   m_seconds(secs),
-   m_mseconds(msecs)
+DayTimeDuration::DayTimeDuration(const bool isPositiveP, const DayCountProperty daysP, const HourProperty hoursP,
+            const MinuteProperty minutesP, const SecondProperty secs, const MSecondProperty msecs)
+   : AbstractDuration(isPositiveP), m_days(daysP), m_hours(hoursP), m_minutes(minutesP),
+     m_seconds(secs), m_mseconds(msecs)
 {
 }
 
 DayTimeDuration::Ptr DayTimeDuration::fromLexical(const QString &lexical)
 {
    static const CaptureTable captureTable(
-      /* The extra paranthesis is a build fix for GCC 3.3. */
-      (QRegularExpression(QLatin1String(
+
+      QRegularExpression(
                   "^\\s*"                         /* Any preceding whitespace. */
                   "(-)?"                          /* Any minus sign. */
                   "P"                             /* Delimiter. */
@@ -60,48 +51,42 @@ DayTimeDuration::Ptr DayTimeDuration::fromLexical(const QString &lexical)
                   "(?:(\\d+)M)?"                  /* Minute part. */
                   "(?:(\\d+)(?:\\.(\\d+))?S)?"    /* Seconds & milli seconds. */
                   ")?"                            /* End of optional time part. */
-                  "\\s*$"                         /* Any terminating whitespace. */))),
-      /*yearP*/       -1,
-      /*monthP*/      -1,
-      /*dayP*/        2,
-      /*tDelimiterP*/ 3,
-      /*hourP*/       4,
-      /*minutesP*/    5,
-      /*secondsP*/    6,
-      /*msecondsP*/   7);
+                  "\\s*$"                         /* Any terminating whitespace. */),
 
-   DayCountProperty days = 0;
-   HourProperty hours = 0;
+      -1,       /*yearP*/
+      -1,       /*monthP*/
+       2,       /*dayP*/
+       3,       /*tDelimiterP*/
+       4,       /*hourP*/
+       5,       /*minutesP*/
+       6,       /*secondsP*/
+       7);      /*msecondsP*/
+
+   DayCountProperty days  = 0;
+   HourProperty hours     = 0;
    MinuteProperty minutes = 0;
-   SecondProperty sec = 0;
-   MSecondProperty msec = 0;
+   SecondProperty sec     = 0;
+   MSecondProperty msec   = 0;
+
    bool isPos;
 
    const DayTimeDuration::Ptr err(create(captureTable, lexical, &isPos, nullptr, nullptr, &days,
             &hours, &minutes, &sec, &msec));
-   return err ? err : DayTimeDuration::Ptr(new DayTimeDuration(isPos, days, hours, minutes,
-                                           sec, msec));
+
+   return err ? err : DayTimeDuration::Ptr(new DayTimeDuration(isPos, days, hours, minutes, sec, msec));
 }
 
-DayTimeDuration::Ptr DayTimeDuration::fromComponents(const bool isPositive,
-      const DayCountProperty days,
-      const HourProperty hours,
-      const MinuteProperty minutes,
-      const SecondProperty seconds,
+DayTimeDuration::Ptr DayTimeDuration::fromComponents(const bool isPositive, const DayCountProperty days,
+      const HourProperty hours, const MinuteProperty minutes, const SecondProperty seconds,
       const MSecondProperty mseconds)
 {
-   return DayTimeDuration::Ptr(new DayTimeDuration(isPositive,
-                               days,
-                               hours,
-                               minutes,
-                               seconds,
-                               mseconds));
+   return DayTimeDuration::Ptr(new DayTimeDuration(isPositive, days, hours, minutes, seconds, mseconds));
 }
 
-DayTimeDuration::Ptr DayTimeDuration::fromSeconds(const SecondCountProperty sourceSecs,
-      const MSecondProperty msecs)
+DayTimeDuration::Ptr DayTimeDuration::fromSeconds(const SecondCountProperty sourceSecs, const MSecondProperty msecs)
 {
    Q_ASSERT(msecs >= 0);
+
    const SecondCountProperty source = qAbs(sourceSecs);
    const bool isPos = sourceSecs >= 0;
    const SecondCountProperty secs = source % 60;
@@ -219,5 +204,3 @@ MSecondProperty DayTimeDuration::mseconds() const
 {
    return m_mseconds;
 }
-
-QT_END_NAMESPACE

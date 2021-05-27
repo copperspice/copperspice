@@ -141,10 +141,6 @@
 #define YYMALLOC malloc
 #define YYFREE free
 
-QT_BEGIN_NAMESPACE
-
-/* Due to Qt's QT_BEGIN_NAMESPACE magic, we can't use `using namespace', for some
- * undocumented reason. */
 namespace QPatternist {
 
 /**
@@ -853,18 +849,19 @@ static Expression::Ptr pushVariable(const QXmlName name,
          slot = parseInfo->staticContext->allocateRangeSlot();
          break;
       }
+
       case VariableDeclaration::PositionalVariable: {
          slot = parseInfo->allocatePositionalSlot();
          break;
       }
+
       case VariableDeclaration::TemplateParameter:
-      /* Fallthrough. We do nothing, template parameters
-       * doesn't use context slots at all, they're hashed
-       * on the name. */
+         // do nothing, template parameters doesn't use context slots, they are hashed on the name
+         break;
+
       case VariableDeclaration::ExternalVariable:
-         /* We do nothing, external variables doesn't use
-          *context slots/stack frames at all. */
-         ;
+         // do nothing, external variables doesn't use context slots/stack frames
+         break;
    }
 
    const VariableDeclaration::Ptr var(new VariableDeclaration(name, slot, type, seqType));
@@ -949,14 +946,18 @@ static Expression::Ptr resolveVariable(const QXmlName &name,
             retval = create(new RangeVariableReference(var->expression(), var->slot), sourceLocator, parseInfo);
             break;
          }
+
          case VariableDeclaration::GlobalVariable:
-         /* Fallthrough. From the perspective of an ExpressionVariableReference, it can't tell
+         /* From the perspective of an ExpressionVariableReference, it can't tell
           * a difference between a global and a local expression variable. However, the cache
           * mechanism must. */
+          [[fallthrough]];
+
          case VariableDeclaration::ExpressionVariable: {
             retval = create(new ExpressionVariableReference(var->slot, var.data()), sourceLocator, parseInfo);
             break;
          }
+
          case VariableDeclaration::FunctionArgument: {
             retval = create(new ArgumentReference(var->sequenceType, var->slot), sourceLocator, parseInfo);
             break;
@@ -7862,15 +7863,14 @@ QString Tokenizer::tokenToString(const Token &token)
 {
    switch (token.type) {
       case NCNAME:
-      /* Fallthrough. */
       case QNAME:
-      /* Fallthrough. */
       case NUMBER:
-      /* Fallthrough. */
       case XPATH2_NUMBER:
          return token.value;
+
       case STRING_LITERAL:
          return QLatin1Char('"') + token.value + QLatin1Char('"');
+
       default: {
          const QString raw(QString::fromLatin1(yytname[YYTRANSLATE(token.type)]));
 
@@ -7886,4 +7886,3 @@ QString Tokenizer::tokenToString(const Token &token)
 
 } /* namespace Patternist */
 
-QT_END_NAMESPACE

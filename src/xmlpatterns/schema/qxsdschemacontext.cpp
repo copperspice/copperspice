@@ -27,8 +27,6 @@
 #include "qderivedstring_p.h"
 #include "qxsdschematypesfactory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchemaContext::XsdSchemaContext(const NamePool::Ptr &namePool)
@@ -515,5 +513,3 @@ QHash<SchemaType::Ptr, XsdFacet::Hash> XsdSchemaContext::setupBuiltinTypesFacetL
 
    return hash;
 }
-
-QT_END_NAMESPACE

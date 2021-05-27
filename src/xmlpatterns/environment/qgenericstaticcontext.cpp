@@ -30,8 +30,6 @@
 
 #include "qgenericstaticcontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GenericStaticContext::GenericStaticContext(const NamePool::Ptr &np,
@@ -306,4 +304,3 @@ VariableSlotID GenericStaticContext::allocateRangeSlot()
    return m_rangeSlot;
 }
 
-QT_END_NAMESPACE

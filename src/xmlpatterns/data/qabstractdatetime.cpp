@@ -68,7 +68,7 @@ QDateTime AbstractDateTime::create(AtomicValue::Ptr &errorMessage, const QString
 
    YearProperty year = yearStr.isEmpty() ? DefaultYear : yearStr.toInteger<int>();
 
-   if (getCapt(yearSign) == QChar::fromLatin1('-')) {
+   if (getCapt(yearSign) == "-") {
       year = -year;
    }
 
@@ -230,7 +230,7 @@ ZOTotal AbstractDateTime::parseZoneOffset(ZoneOffsetParseResult &result,
    } else {
       ZOTotal zoneOffset = (zoHour * 60 + zoMins) * 60;
 
-      if (zoneOffsetSignStr == QChar::fromLatin1('-')) {
+      if (zoneOffsetSignStr == "-") {
          zoneOffset = -zoneOffset;
       }
 

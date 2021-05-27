@@ -51,16 +51,16 @@ template <const QXmlNodeModelIndex::NodeKind kind>
 ItemType::Ptr BuiltinNodeType<kind>::atomizedType() const
 {
    switch (kind) {
-      /* Fallthrough all these. */
       case QXmlNodeModelIndex::Attribute:
       case QXmlNodeModelIndex::Document:
       case QXmlNodeModelIndex::Element:
       case QXmlNodeModelIndex::Text:
          return BuiltinTypes::xsUntypedAtomic;
+
       case QXmlNodeModelIndex::ProcessingInstruction:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Comment:
          return BuiltinTypes::xsString;
+
       default: {
          Q_ASSERT_X(false, Q_FUNC_INFO, "Encountered invalid XPath Data Model node type.");
          return BuiltinTypes::xsUntypedAtomic;
@@ -108,22 +108,16 @@ PatternPriority BuiltinNodeType<kind>::patternPriority() const
 {
    /* See XSL Transformations (XSLT) Version 2.0, 6.4 Conflict Resolution for
     * Template Rules */
+
    switch (kind) {
       case QXmlNodeModelIndex::Text:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::ProcessingInstruction:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Comment:
-      /* "If the pattern is any other NodeTest, optionally preceded by a
-       * PatternAxis, then the priority is 0.5."
-       * Fallthrough. */
       case QXmlNodeModelIndex::Attribute:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Element:
-      /* Fallthrough. */
       case QXmlNodeModelIndex::Document:
-         /* "If the pattern has the form /, then the priority is -0.5.". */
          return -0.5;
+
       default: {
          Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown node type");
          return 0;

@@ -25,8 +25,6 @@
 
 #include "qanytype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AnyType::~AnyType()
@@ -83,4 +81,3 @@ SchemaType::DerivationConstraints AnyType::derivationConstraints() const
    return SchemaType::DerivationConstraints();
 }
 
-QT_END_NAMESPACE

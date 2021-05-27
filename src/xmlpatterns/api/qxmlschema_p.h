@@ -24,16 +24,16 @@
 #ifndef QXMLSCHEMA_P_H
 #define QXMLSCHEMA_P_H
 
-#include "qabstractmessagehandler.h"
-#include "qabstracturiresolver.h"
-#include "qcoloringmessagehandler_p.h"
-#include "qreferencecountedvalue_p.h"
-#include "qxsdschemacontext_p.h"
-#include "qxsdschemaparser_p.h"
-#include "qxsdschemaparsercontext_p.h"
-
+#include <qabstractmessagehandler.h>
+#include <qabstracturiresolver.h>
 #include <qshareddata.h>
 #include <qnetaccess_manager.h>
+
+#include <qcoloringmessagehandler_p.h>
+#include <qreferencecountedvalue_p.h>
+#include <qxsdschemacontext_p.h>
+#include <qxsdschemaparser_p.h>
+#include <qxsdschemaparsercontext_p.h>
 
 class QXmlSchemaPrivate : public QSharedData
 {

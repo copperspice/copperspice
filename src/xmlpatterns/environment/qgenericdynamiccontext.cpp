@@ -27,8 +27,6 @@
 
 #include "qgenericdynamiccontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GenericDynamicContext::GenericDynamicContext(const NamePool::Ptr &np,
@@ -181,4 +179,3 @@ QExplicitlySharedDataPointer<TemplateMode> GenericDynamicContext::currentTemplat
    return QExplicitlySharedDataPointer<TemplateMode>();
 }
 
-QT_END_NAMESPACE

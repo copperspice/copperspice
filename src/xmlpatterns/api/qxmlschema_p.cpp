@@ -29,8 +29,6 @@
 #include <QIODevice>
 #include <QUrl>
 
-QT_BEGIN_NAMESPACE
-
 QXmlSchemaPrivate::QXmlSchemaPrivate(const QXmlNamePool &namePool)
    : m_namePool(namePool), m_userMessageHandler(nullptr), m_uriResolver(nullptr), m_userNetworkAccessManager(nullptr),
      m_schemaContext(new QPatternist::XsdSchemaContext(m_namePool.d)),
@@ -184,5 +182,3 @@ QNetworkAccessManager *QXmlSchemaPrivate::networkAccessManager() const
 
    return m_networkAccessManager.data()->value;
 }
-
-QT_END_NAMESPACE

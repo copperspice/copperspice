@@ -36,8 +36,6 @@
 #include "qsubsequenceiterator_p.h"
 #include "qsequencefns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool BooleanFN::evaluateEBV(const DynamicContext::Ptr &context) const
@@ -45,8 +43,7 @@ bool BooleanFN::evaluateEBV(const DynamicContext::Ptr &context) const
    return m_operands.first()->evaluateEBV(context);
 }
 
-Expression::Ptr BooleanFN::typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType)
+Expression::Ptr BooleanFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    return EBVExtractor::typeCheck<FunctionCall>(context, reqType, this);
 }
@@ -54,21 +51,18 @@ Expression::Ptr BooleanFN::typeCheck(const StaticContext::Ptr &context,
 Item::Iterator::Ptr IndexOfFN::evaluateSequence(const DynamicContext::Ptr &context) const
 {
    return Item::Iterator::Ptr(new IndexOfIterator(m_operands.first()->evaluateSequence(context),
-                              m_operands.at(1)->evaluateSingleton(context),
-                              comparator(), context,
-                              ConstPtr(this)));
+            m_operands.at(1)->evaluateSingleton(context), comparator(), context, ConstPtr(this)));
 }
 
-Expression::Ptr IndexOfFN::typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType)
+Expression::Ptr IndexOfFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    const Expression::Ptr me(FunctionCall::typeCheck(context, reqType));
    const ItemType::Ptr t1(m_operands.first()->staticType()->itemType());
    const ItemType::Ptr t2(m_operands.at(1)->staticType()->itemType());
 
-   if (*CommonSequenceTypes::Empty == *t1 ||
-         *CommonSequenceTypes::Empty == *t2) {
+   if (*CommonSequenceTypes::Empty == *t1 || *CommonSequenceTypes::Empty == *t2) {
       return EmptySequence::create(this, context);
+
    } else {
       prepareComparison(fetchComparator(t1, t2, context));
       return me;
@@ -78,9 +72,7 @@ Expression::Ptr IndexOfFN::typeCheck(const StaticContext::Ptr &context,
 Item::Iterator::Ptr DistinctValuesFN::evaluateSequence(const DynamicContext::Ptr &context) const
 {
    return Item::Iterator::Ptr(new DistinctIterator(m_operands.first()->evaluateSequence(context),
-                              comparator(),
-                              ConstPtr(this),
-                              context));
+            comparator(), ConstPtr(this), context));
 }
 
 Expression::Ptr DistinctValuesFN::typeCheck(const StaticContext::Ptr &context,
@@ -91,10 +83,13 @@ Expression::Ptr DistinctValuesFN::typeCheck(const StaticContext::Ptr &context,
 
    if (*CommonSequenceTypes::Empty == *t1) {
       return EmptySequence::create(this, context);
+
    } else if (!m_operands.first()->staticType()->cardinality().allowsMany()) {
       return m_operands.first();
+
    } else if (BuiltinTypes::xsAnyAtomicType->xdtTypeMatches(t1)) {
       return me;
+
    } else {
       prepareComparison(fetchComparator(t1, t1, context));
       return me;
@@ -104,9 +99,9 @@ Expression::Ptr DistinctValuesFN::typeCheck(const StaticContext::Ptr &context,
 SequenceType::Ptr DistinctValuesFN::staticType() const
 {
    const SequenceType::Ptr t(m_operands.first()->staticType());
+
    return makeGenericSequenceType(t->itemType(),
-                                  t->cardinality().allowsMany() ? Cardinality::oneOrMore()
-                                  : Cardinality::exactlyOne());
+            t->cardinality().allowsMany() ? Cardinality::oneOrMore() : Cardinality::exactlyOne());
 }
 
 Item::Iterator::Ptr InsertBeforeFN::evaluateSequence(const DynamicContext::Ptr &context) const
@@ -133,8 +128,7 @@ SequenceType::Ptr InsertBeforeFN::staticType() const
    const SequenceType::Ptr t1(m_operands.first()->staticType());
    const SequenceType::Ptr t2(m_operands.last()->staticType());
 
-   return makeGenericSequenceType(t1->itemType() | t2->itemType(),
-                                  t1->cardinality() + t2->cardinality());
+   return makeGenericSequenceType(t1->itemType() | t2->itemType(), t1->cardinality() + t2->cardinality());
 }
 
 Item::Iterator::Ptr RemoveFN::evaluateSequence(const DynamicContext::Ptr &context) const
@@ -166,10 +160,10 @@ SequenceType::Ptr RemoveFN::staticType() const
 
    if (c.minimum() == 0) {
       return makeGenericSequenceType(opType->itemType(), c);
+
    } else {
       return makeGenericSequenceType(opType->itemType(),
-                                     Cardinality::fromRange(c.minimum() - 1,
-                                           c.maximum()));
+            Cardinality::fromRange(c.minimum() - 1, c.maximum()));
    }
 }
 
@@ -178,8 +172,7 @@ Item::Iterator::Ptr ReverseFN::evaluateSequence(const DynamicContext::Ptr &conte
    return m_operands.first()->evaluateSequence(context)->toReversed();
 }
 
-Expression::Ptr ReverseFN::typeCheck(const StaticContext::Ptr &context,
-                                     const SequenceType::Ptr &reqType)
+Expression::Ptr ReverseFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    if (m_operands.first()->staticType()->cardinality().allowsMany()) {
       return FunctionCall::typeCheck(context, reqType);
@@ -197,8 +190,7 @@ SubsequenceFN::SubsequenceFN() : m_hasTypeChecked(false)
 {
 }
 
-Expression::Ptr SubsequenceFN::typeCheck(const StaticContext::Ptr &context,
-      const SequenceType::Ptr &reqType)
+Expression::Ptr SubsequenceFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    m_hasTypeChecked = true;
    return FunctionCall::typeCheck(context, reqType);
@@ -277,19 +269,17 @@ SequenceType::Ptr SubsequenceFN::staticType() const
          m_operands.at(2)->isEvaluated()                                                      &&
          m_operands.at(1)->as<Literal>()->item().as<Numeric>()->round()->toInteger() == 1     &&
          m_operands.at(2)->as<Literal>()->item().as<Numeric>()->round()->toInteger() == 1) {
-      return makeGenericSequenceType(opType->itemType(),
-                                     opCard.toWithoutMany());
+      return makeGenericSequenceType(opType->itemType(), opCard.toWithoutMany());
+
    } else {
-      return makeGenericSequenceType(opType->itemType(),
-                                     opCard | Cardinality::zeroOrOne());
+      return makeGenericSequenceType(opType->itemType(), opCard | Cardinality::zeroOrOne());
    }
 }
 
-Expression::Ptr DocFN::typeCheck(const StaticContext::Ptr &context,
-                                 const SequenceType::Ptr &reqType)
+Expression::Ptr DocFN::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
-   /* See the documentation for this function to explain why this 
-    * this implementation is here, as opposed to in qsequencegeneratingfns.cpp. */
+   // refer to documentation to explain why this implementation is here,
+   // as opposed to in qsequencegeneratingfns.cpp
 
    Q_ASSERT(context);
 
@@ -297,7 +287,7 @@ Expression::Ptr DocFN::typeCheck(const StaticContext::Ptr &context,
 
    const Expression::Ptr uriOp(m_operands.first());
 
-   if (!uriOp->isEvaluated()) {
+   if (! uriOp->isEvaluated()) {
       return Expression::Ptr(FunctionCall::typeCheck(context, reqType));
    }
 
@@ -319,11 +309,12 @@ Expression::Ptr DocFN::typeCheck(const StaticContext::Ptr &context,
    if (m_type) {
       Q_ASSERT(CommonSequenceTypes::ZeroOrOneDocumentNode->matches(m_type));
       return Expression::Ptr(FunctionCall::typeCheck(context, reqType));
+
    } else {
       context->error(QtXmlPatterns::tr("It will not be possible to retrieve %1.").formatArg(formatURI(uri)),
-                     ReportContext::FODC0002, this);
+            ReportContext::FODC0002, this);
+
       return Expression::Ptr();
    }
 }
 
-QT_END_NAMESPACE

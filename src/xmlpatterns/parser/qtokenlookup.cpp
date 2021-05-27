@@ -54,9 +54,6 @@
 
 #line 107 "TokenLookup.gperf"
 
-
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 #line 101 "TokenLookup.gperf"
@@ -73,10 +70,11 @@ struct TokenMap {
 
 class TokenLookup
 {
- private:
-   static inline unsigned int hash (const char *str, unsigned int len);
  public:
    static const struct TokenMap *value (const char *str, unsigned int len);
+
+ private:
+   static inline unsigned int hash (const char *str, unsigned int len);
 };
 
 inline unsigned int
@@ -126,8 +124,7 @@ TokenLookup::hash (const char *str, unsigned int len)
    return hval + asso_values[(unsigned char)str[len - 1]];
 }
 
-const struct TokenMap *
-TokenLookup::value (const char *str, unsigned int len)
+const struct TokenMap * TokenLookup::value (const char *str, unsigned int len)
 {
    enum {
       TOTAL_KEYWORDS = 99,
@@ -412,6 +409,7 @@ TokenLookup::value (const char *str, unsigned int len)
          }
       }
    }
+
    return nullptr;
 }
 #line 219 "TokenLookup.gperf"
@@ -419,4 +417,3 @@ TokenLookup::value (const char *str, unsigned int len)
 
 } /* Close the QPatternist namespace. */
 
-QT_END_NAMESPACE

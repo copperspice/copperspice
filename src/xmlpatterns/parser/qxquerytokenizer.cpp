@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
+#include <qxquerytokenizer_p.h>
+
 #include <qbytearray.h>
+#include <qtokenlookup.cpp>
 
-#include "qquerytransformparser_p.h"
-#include "qxquerytokenizer_p.h"
-
-#include "qtokenlookup.cpp"
+#include <qquerytransformparser_p.h>
 
 namespace QPatternist {
 
