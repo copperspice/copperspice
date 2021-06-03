@@ -58,9 +58,9 @@ class QGraphicsScenePrivate
 
    static QGraphicsScenePrivate *get(QGraphicsScene *q);
 
-   int changedSignalIndex;
-   int processDirtyItemsIndex;
-   int polishItemsIndex;
+   QMetaMethod changedSignalMethod;
+   QMetaMethod processDirtyItemsMethod;
+   QMetaMethod polishItemsMethod;
 
    QGraphicsScene::ItemIndexMethod indexMethod;
    QGraphicsSceneIndex *index;

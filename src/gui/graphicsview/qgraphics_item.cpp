@@ -4419,12 +4419,9 @@ void QGraphicsItem::prepareGeometryChange()
 
       // For compatibility reasons, we have to update the item's old geometry
       // if someone is connected to the changed signal or the scene has no views.
-      // Note that this has to be done *after* markDirty to ensure that
-      // _q_processDirtyItems is called before _q_emitUpdated.
+      // This has to be done *after* markDirty to ensure that _q_processDirtyItems is called before _q_emitUpdated.
 
-      const QMetaMethod &metaMethod = d_ptr->scene->metaObject()->method(scenePrivate->changedSignalIndex);
-
-      if (d_ptr->scene->isSignalConnected(metaMethod) || scenePrivate->views.isEmpty()) {
+      if (d_ptr->scene->isSignalConnected(scenePrivate->changedSignalMethod) || scenePrivate->views.isEmpty()) {
 
          if (d_ptr->hasTranslateOnlySceneTransform()) {
             d_ptr->scene->update(boundingRect().translated(d_ptr->sceneTransform.dx(),
