@@ -275,7 +275,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    bool compareThreads() const override;
    void queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind) override;
 
-   QList<QObject *> receiverList(const QString &signal) const;
+   QList<QObject *> receiverList(const QMetaMethod &signalMetaMethod) const;
    QList<QObject *> senderList() const;
 
    void setThreadData_helper(QThreadData *currentData, QThreadData *targetData);
@@ -562,7 +562,7 @@ class Q_CORE_EXPORT CSInternalSender
 {
  private:
    static bool isSender(const QObject *object, const QObject *receiver, const QString &signal);
-   static QObjectList receiverList(const QObject *object, const QString &signal);
+   static QObjectList receiverList(const QObject *object, const QMetaMethod &signalMetaMethod);
    static QObjectList senderList(const QObject *object);
 
    friend class QACConnectionObject;

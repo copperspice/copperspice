@@ -190,13 +190,13 @@ bool CSInternalSender::isSender(const QObject *object, const QObject *receiver, 
    return object->isSender(receiver, signal);
 }
 
-QList<QObject *> CSInternalSender::receiverList(const QObject *object, const QString &signal)
+QList<QObject *> CSInternalSender::receiverList(const QObject *object, const QMetaMethod &signalMetaMethod)
 {
-   if (! object) {
-      return QList<QObject *> {};
+   if (object == nullptr) {
+      return QList<QObject *>{};
    }
 
-   return object->receiverList(signal);
+   return object->receiverList(signalMetaMethod);
 }
 
 QList<QObject *> CSInternalSender::senderList(const QObject *object)

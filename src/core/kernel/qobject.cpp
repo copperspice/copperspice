@@ -907,29 +907,18 @@ QObject *QObject::parent() const
 }
 
 // used by QAccessibleWidget
-QList<QObject *> QObject::receiverList(const QString8 &signalMethod) const
+QList<QObject *> QObject::receiverList(const QMetaMethod &signalMetaMethod) const
 {
    QList<QObject *> retval;
 
-   if (! signalMethod.isEmpty()) {
-      QString8 signal_name = QMetaObject::normalizedSignature(signalMethod);
-      const QMetaObject *metaObj = this->metaObject();
-
-      int signal_index = metaObj->indexOfSignal(signal_name);
-
-      if (signal_index == -1)  {
-         return retval;
-      }
-
-      const QMetaMethod signalMetaMethod = metaObj->method(signal_index);
+   if (signalMetaMethod.isValid()) {
       const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
+      std::set<SlotBase *> tmpSet = CsSignal::SignalBase::internal_receiverList(*signalMethod_Bento);
 
-      std::set<SlotBase *> tempSet = CsSignal::SignalBase::internal_receiverList(*signalMethod_Bento);
-
-      for (auto item : tempSet)  {
+      for (auto item : tmpSet)  {
          QObject *obj = dynamic_cast<QObject *>(item);
 
-         if (obj) {
+         if (obj != nullptr) {
             retval.append(obj);
          }
       }

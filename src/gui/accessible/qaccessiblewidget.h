@@ -71,6 +71,7 @@ class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject, public QAccessi
    QObject *parentObject() const;
 
    void addControllingSignal(const QString &signal);
+   void addControllingSignal(const QMetaMethod &signal);
 
  private:
    QAccessibleWidgetPrivate *d;

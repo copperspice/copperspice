@@ -216,9 +216,17 @@ void QAccessibleAbstractSpinBox::replaceText(int startOffset, int endOffset, con
 QAccessibleSpinBox::QAccessibleSpinBox(QWidget *w)
    : QAccessibleAbstractSpinBox(w)
 {
-   Q_ASSERT(spinBox());
-   addControllingSignal("valueChanged(int)");
-   addControllingSignal("valueChanged(const QString &)");
+   Q_ASSERT(spinBox() != nullptr);
+
+   const QMetaObject &metaObj = QSpinBox::staticMetaObject();
+
+   int signalIndex1          = metaObj.indexOfSignal(cs_mp_cast<int>(&QSpinBox::valueChanged));
+   QMetaMethod signalMethod1 = metaObj.method(signalIndex1);
+   addControllingSignal(signalMethod1);
+
+   int signalIndex2          = metaObj.indexOfSignal(cs_mp_cast<const QString &>(&QSpinBox::valueChanged));
+   QMetaMethod signalMethod2 = metaObj.method(signalIndex2);
+   addControllingSignal(signalMethod2);
 }
 
 QSpinBox *QAccessibleSpinBox::spinBox() const
@@ -232,8 +240,16 @@ QAccessibleDoubleSpinBox::QAccessibleDoubleSpinBox(QWidget *widget)
    : QAccessibleAbstractSpinBox(widget)
 {
    Q_ASSERT(qobject_cast<QDoubleSpinBox *>(widget));
-   addControllingSignal("valueChanged(double)");
-   addControllingSignal("valueChanged(const QString &)");
+
+   const QMetaObject &metaObj = QDoubleSpinBox::staticMetaObject();
+
+   int signalIndex1          = metaObj.indexOfSignal(cs_mp_cast<double>(&QDoubleSpinBox::valueChanged));
+   QMetaMethod signalMethod1 = metaObj.method(signalIndex1);
+   addControllingSignal(signalMethod1);
+
+   int signalIndex2          = metaObj.indexOfSignal(cs_mp_cast<const QString &>(&QDoubleSpinBox::valueChanged));
+   QMetaMethod signalMethod2 = metaObj.method(signalIndex2);
+   addControllingSignal(signalMethod2);
 }
 
 /*!
@@ -261,7 +277,12 @@ QAccessibleScrollBar::QAccessibleScrollBar(QWidget *w)
    : QAccessibleAbstractSlider(w, QAccessible::ScrollBar)
 {
    Q_ASSERT(scrollBar());
-   addControllingSignal("valueChanged(int)");
+
+   const QMetaObject &metaObj = QScrollBar::staticMetaObject();
+
+   int signalIndex          = metaObj.indexOfSignal(&QScrollBar::valueChanged);
+   QMetaMethod signalMethod = metaObj.method(signalIndex);
+   addControllingSignal(signalMethod);
 }
 
 QScrollBar *QAccessibleScrollBar::scrollBar() const
@@ -287,7 +308,12 @@ QAccessibleSlider::QAccessibleSlider(QWidget *w)
    : QAccessibleAbstractSlider(w)
 {
    Q_ASSERT(slider());
-   addControllingSignal("valueChanged(int)");
+
+   const QMetaObject &metaObj = QSlider::staticMetaObject();
+
+   int signalIndex          = metaObj.indexOfSignal(&QSlider::valueChanged);
+   QMetaMethod signalMethod = metaObj.method(signalIndex);
+   addControllingSignal(signalMethod);
 }
 
 QSlider *QAccessibleSlider::slider() const
@@ -357,7 +383,12 @@ QAccessibleDial::QAccessibleDial(QWidget *widget)
    : QAccessibleAbstractSlider(widget, QAccessible::Dial)
 {
    Q_ASSERT(qobject_cast<QDial *>(widget));
-   addControllingSignal("valueChanged(int)");
+
+   const QMetaObject &metaObj = QDial::staticMetaObject();
+
+   int signalIndex          = metaObj.indexOfSignal(&QDial::valueChanged);
+   QMetaMethod signalMethod = metaObj.method(signalIndex);
+   addControllingSignal(signalMethod);
 }
 
 QString QAccessibleDial::text(QAccessible::Text textType) const

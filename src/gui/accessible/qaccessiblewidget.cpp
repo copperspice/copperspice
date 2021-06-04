@@ -157,7 +157,8 @@ class QAccessibleWidgetPrivate
 
    QAccessible::Role role;
    QString name;
-   QStringList primarySignals;
+
+   QList<QMetaMethod> primarySignals;
 };
 
 QAccessibleWidget::QAccessibleWidget(QWidget *w, QAccessible::Role role, const QString &name)
@@ -232,8 +233,8 @@ class QACConnectionObject : public QObject
       return CSInternalSender::isSender(this, receiver, signal);
    }
 
-   QObjectList receiverList(const QString &signal) const {
-      return CSInternalSender::receiverList(this, signal);
+   QObjectList receiverList(const QMetaMethod &signalMetaMethod) const {
+      return CSInternalSender::receiverList(this, signalMetaMethod);
    }
 
    QObjectList senderList() const {
@@ -243,14 +244,27 @@ class QACConnectionObject : public QObject
 
 void QAccessibleWidget::addControllingSignal(const QString &signal)
 {
-   QString s = QMetaObject::normalizedSignature(signal);
+   QString signalName = QMetaObject::normalizedSignature(signal);
+   int index = object()->metaObject()->indexOfSignal(signalName);
 
-   if (object()->metaObject()->indexOfSignal(s) < 0) {
-      qWarning("QAccessibleWidget::addControllingSignal(): Signal %s unknown in %s", csPrintable(s),
+   if (index < 0) {
+      qWarning("QAccessibleWidget::addControllingSignal(): Signal %s unknown in %s", csPrintable(signalName),
                   csPrintable(object()->metaObject()->className()));
-   }
 
-   d->primarySignals << s;
+   } else {
+      const QMetaMethod &signalMetaMethod = object()->metaObject()->method(index);
+
+      if (signalMetaMethod.isValid()) {
+         d->primarySignals.append(signalMetaMethod);
+      }
+   }
+}
+
+void QAccessibleWidget::addControllingSignal(const QMetaMethod &signalMetaMethod)
+{
+   if (signalMetaMethod.isValid()) {
+      d->primarySignals.append(signalMetaMethod);
+   }
 }
 
 static inline bool isAncestor(const QObject *obj, const QObject *child)
@@ -266,10 +280,10 @@ static inline bool isAncestor(const QObject *obj, const QObject *child)
    return false;
 }
 
-QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> QAccessibleWidget::relations(QAccessible::Relation
-      match /*= QAccessible::AllRelations*/) const
+QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> QAccessibleWidget::relations(QAccessible::Relation match ) const
 {
-   QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> rels;
+   QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> retval;
+
    if (match & QAccessible::Label) {
       const QAccessible::Relation rel = QAccessible::Label;
       if (QWidget *parent = widget()->parentWidget()) {
@@ -278,45 +292,56 @@ QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> QAccessibleWidget:
          // ideally we would go through all objects and check, but that
          // will be too expensive
          const QList<QWidget *> kids = childWidgets(parent);
-         for (int i = 0; i < kids.count(); ++i) {
-            if (QLabel *labelSibling = qobject_cast<QLabel *>(kids.at(i))) {
-               if (labelSibling->buddy() == widget()) {
-                  QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(labelSibling);
-                  rels.append(qMakePair(iface, rel));
-               }
+
+         for (auto item : kids) {
+            QLabel *labelSibling = qobject_cast<QLabel *>(item);
+
+            if (labelSibling != nullptr && labelSibling->buddy() == widget()) {
+               QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(labelSibling);
+               retval.append(qMakePair(iface, rel));
             }
          }
 #endif
+
 #ifndef QT_NO_GROUPBOX
          QGroupBox *groupbox = qobject_cast<QGroupBox *>(parent);
-         if (groupbox && !groupbox->title().isEmpty()) {
+
+         if (groupbox != nullptr && ! groupbox->title().isEmpty()) {
             QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(groupbox);
-            rels.append(qMakePair(iface, rel));
+            retval.append(qMakePair(iface, rel));
          }
 #endif
       }
    }
 
    if (match & QAccessible::Controlled) {
-      QObjectList allReceivers;
-      QACConnectionObject *connectionObject = (QACConnectionObject *)object();
-      for (int sig = 0; sig < d->primarySignals.count(); ++sig) {
-         const QObjectList receivers = connectionObject->receiverList(d->primarySignals.at(sig).toLatin1());
-         allReceivers += receivers;
+      QList<QObject *> allReceivers;
+
+      QACConnectionObject *connectionObject = dynamic_cast<QACConnectionObject *>(object());
+
+      if (connectionObject == nullptr) {
+         return retval;
       }
 
-      allReceivers.removeAll(object());  //### The object might connect to itself internally
+      for (const auto &item : d->primarySignals) {
+         const QList<QObject *> receivers = connectionObject->receiverList(item);
+         allReceivers.append(receivers);
+      }
 
-      for (int i = 0; i < allReceivers.count(); ++i) {
+      // object might connect to itself internally, ignore these
+      allReceivers.removeAll(object());
+
+      for (auto item : allReceivers) {
          const QAccessible::Relation rel = QAccessible::Controlled;
-         QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(allReceivers.at(i));
+         QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(item);
+
          if (iface) {
-            rels.append(qMakePair(iface, rel));
+            retval.append(qMakePair(iface, rel));
          }
       }
    }
 
-   return rels;
+   return retval;
 }
 
 QAccessibleInterface *QAccessibleWidget::parent() const
