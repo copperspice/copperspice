@@ -196,9 +196,10 @@ QString Driver::qtify(const QString &name)
    }
 
    int i = 0;
+
    while (i < qname.length()) {
 
-      if (qname.at(i).toLower() != qname.at(i)) {
+      if (! qname.at(i).isLower()) {
          qname.replace(i, 1,  qname.at(i).toLower());
 
       } else {

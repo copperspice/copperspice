@@ -50,7 +50,7 @@ QString AVFCameraDeviceControl::deviceName(int index) const
     if (index < 0 || index >= devices.count())
         return QString();
 
-    return QString::fromUtf8(devices.at(index).deviceId);
+    return devices.at(index).deviceId;
 }
 
 QString AVFCameraDeviceControl::deviceDescription(int index) const

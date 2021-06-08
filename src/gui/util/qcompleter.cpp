@@ -404,21 +404,16 @@ QMatchData QCompletionEngine::filterHistory()
       return QMatchData();
    }
 
+   bool isDirModel = false;
+   bool isFsModel  = false;
+
 #ifndef QT_NO_DIRMODEL
-   const bool isDirModel = (qobject_cast<QDirModel *>(source) != nullptr);
-#else
-   const bool isDirModel = false;
+   isDirModel = (qobject_cast<QDirModel *>(source) != nullptr);
 #endif
 
 #ifndef QT_NO_FILESYSTEMMODEL
-   const bool isFsModel = (qobject_cast<QFileSystemModel *>(source) != nullptr);
-#else
-   const bool isFsModel = false;
-#endif
+   isFsModel = (qobject_cast<QFileSystemModel *>(source) != nullptr);
 
-#if defined(Q_OS_WIN)
-   (void) isDirModel;
-   (void) isFsModel;
 #endif
 
    QVector<int> v;
@@ -427,13 +422,18 @@ QMatchData QCompletionEngine::filterHistory()
 
    for (int i = 0; i < source->rowCount(); i++) {
       QString str = source->index(i, m_completerPrivate->column).data().toString();
-      if (str.startsWith(m_completerPrivate->prefix, m_completerPrivate->cs)
 
-#if ! defined(Q_OS_WIN)
-         && ((! isFsModel && ! isDirModel) || QDir::toNativeSeparators(str) != QDir::separator())
+#if defined(Q_OS_WIN)
+      (void) isDirModel;
+      (void) isFsModel;
+
+      if (str.startsWith(m_completerPrivate->prefix, m_completerPrivate->cs)) {
+
+#else
+      if (str.startsWith(m_completerPrivate->prefix, m_completerPrivate->cs) &&
+            ((! isFsModel && ! isDirModel) || (QDir::toNativeSeparators(str) != QString(QDir::separator())))) {
 #endif
 
-      ) {
          m.indices.append(i);
       }
    }

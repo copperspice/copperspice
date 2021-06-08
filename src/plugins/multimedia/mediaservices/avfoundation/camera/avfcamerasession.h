@@ -42,7 +42,7 @@ struct AVFCameraInfo {
       : position(QCamera::UnspecifiedPosition), orientation(0) {
    }
 
-   QByteArray deviceId;
+   QString deviceId;
    QString description;
    QCamera::Position position;
    int orientation;

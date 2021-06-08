@@ -29,7 +29,7 @@
 
 class DSCameraSession;
 
-using DSVideoDeviceInfo = QPair<QByteArray, QString>;
+using DSVideoDeviceInfo = QPair<QString, QString>;
 
 class DSVideoDeviceControl : public QVideoDeviceSelectorControl
 {

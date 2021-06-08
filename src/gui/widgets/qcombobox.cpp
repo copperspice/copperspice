@@ -2150,11 +2150,10 @@ void QComboBox::showPopup()
    const bool usePopup = style->styleHint(QStyle::SH_ComboBox_Popup, &opt, this);
 
 #ifdef Q_OS_DARWIN
-   if (usePopup && (!d->container
-         || (view()->metaObject()->className() == QByteArray("QComboBoxListView")
-            && view()->itemDelegate()->metaObject()->className() == QByteArray("QComboMenuDelegate")))
-      && style->styleHint(QStyle::SH_ComboBox_UseNativePopup, &opt, this)
-      && d->showNativePopup()) {
+   if (usePopup && (! d->container ||
+         (view()->metaObject()->className() == "QComboBoxListView" &&
+          view()->itemDelegate()->metaObject()->className() == "QComboMenuDelegate"))
+         && style->styleHint(QStyle::SH_ComboBox_UseNativePopup, &opt, this) && d->showNativePopup()) {
       return;
    }
 #endif

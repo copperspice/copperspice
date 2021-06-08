@@ -1013,22 +1013,21 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
       QAction *firstAfterCurrent = nullptr;
 
       {
-         QChar c = e->text()[0].toUpper()[0];
+         QString char1 = e->text()[0].toUpper();
 
          for (int i = 0; i < d->actions.size(); ++i) {
             if (d->actionRects.at(i).isNull()) {
                continue;
-
             }
 
             QAction *act = d->actions.at(i);
-            QString s = act->text();
+            QString str  = act->text();
 
-            if (!s.isEmpty()) {
-               int ampersand = s.indexOf(QLatin1Char('&'));
+            if (! str.isEmpty()) {
+               int ampersand = str.indexOf('&');
 
                if (ampersand >= 0) {
-                  if (s[ampersand + 1].toUpper() == c) {
+                  if (str[ampersand + 1].toUpper() == char1) {
                      ++clashCount;
 
                      if (!first) {

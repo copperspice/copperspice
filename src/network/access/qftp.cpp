@@ -671,7 +671,7 @@ bool QFtpDTP::parseDir(const QByteArray &buffer, const QString &userName, QUrlIn
    QRegularExpression unixPattern("^([\\-dl])([a-zA-Z\\-]{9,9})\\s+\\d+\\s+(\\S*)\\s+(\\S*)\\s+(\\d+)\\s+(\\S+\\s+\\S+\\s+\\S+)\\s+(\\S.*)");
    QRegularExpressionMatch unixMatch = unixPattern.match(bufferStr);
 
-   if (unixMatch.capturedStart(0) == bufferStr.begin()) {
+   if (unixMatch.capturedStart(0) == bufferStr.cbegin()) {
       _q_parseUnixDir(unixMatch.capturedTexts(), userName, info);
       return true;
    }
@@ -680,7 +680,7 @@ bool QFtpDTP::parseDir(const QByteArray &buffer, const QString &userName, QUrlIn
    QRegularExpression dosPattern("^(\\d\\d-\\d\\d-\\d\\d\\ \\ \\d\\d:\\d\\d[AP]M)\\s+(<DIR>|\\d+)\\s+(\\S.*)$");
    QRegularExpressionMatch dosMatch = dosPattern.match(bufferStr);
 
-   if (dosMatch.capturedStart(0) == bufferStr.begin()) {
+   if (dosMatch.capturedStart(0) == bufferStr.cbegin()) {
       _q_parseDosDir(dosMatch.capturedTexts(), userName, info);
       return true;
    }

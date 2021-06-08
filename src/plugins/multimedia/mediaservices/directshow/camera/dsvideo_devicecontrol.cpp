@@ -148,7 +148,7 @@ void DSVideoDeviceControl::updateDevices()
                mallocInterface->Free(strName);
 
                DSVideoDeviceInfo devInfo;
-               devInfo.first = output.toUtf8();
+               devInfo.first = output;
 
                IPropertyBag *pPropBag;
                hr = pMoniker->BindToStorage(nullptr, nullptr, IID_IPropertyBag, (void **)(&pPropBag));

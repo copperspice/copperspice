@@ -197,7 +197,7 @@ void AVFCameraSession::updateCameraDevices()
             m_defaultCameraIndex = m_cameraDevices.count();
 
         AVFCameraInfo info;
-        info.deviceId = QByteArray([[device uniqueID] UTF8String]);
+        info.deviceId    = QString::fromNSString([device uniqueID]);
         info.description = QString::fromNSString([device localizedName]);
 
         // There is no API to get the camera sensor orientation, however, cameras are always

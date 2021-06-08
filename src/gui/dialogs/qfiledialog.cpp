@@ -1747,7 +1747,7 @@ QString QFSCompleter::pathFromIndex(const QModelIndex &index) const
 
    if (!currentLocation.isEmpty() && path.startsWith(currentLocation)) {
 #if defined(Q_OS_UNIX)
-      if (currentLocation == QDir::separator()) {
+      if (currentLocation == QString(QDir::separator())) {
          return path.mid(currentLocation.length());
       }
 #endif
