@@ -48,7 +48,7 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const QString 
 {
 
 #if defined QHOSTINFO_DEBUG
-   qDebug("QHostInfo::lookupHost(\"%s\", %p, %s)", name.toLatin1().constData(), receiver, member ? member + 1 : 0);
+   qDebug("QHostInfo::lookupHost(\"%s\", %p, %s)", csPrintable(name), receiver, csPrintable(member));
 #endif
 
    if (! QAbstractEventDispatcher::instance(QThread::currentThread())) {
