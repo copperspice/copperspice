@@ -208,11 +208,13 @@ QFrameInfo QMoviePrivate::infoForFrame(int frameNumber)
                if (reader->device()->isSequential()) {
                   return QFrameInfo();   // Invalid
                }
-               QString fileName = reader->fileName();
-               QByteArray format = reader->format();
+
+               QString fileName  = reader->fileName();
+               QString format    = reader->format();
                QIODevice *device = reader->device();
-               QColor bgColor = reader->backgroundColor();
-               QSize scaledSize = reader->scaledSize();
+               QColor bgColor    = reader->backgroundColor();
+               QSize scaledSize  = reader->scaledSize();
+
                delete reader;
                if (fileName.isEmpty()) {
                   reader = new QImageReader(device, format);
@@ -462,7 +464,7 @@ QMovie::QMovie(QObject *parent)
 
     The \a parent object is passed to QObject's constructor.
  */
-QMovie::QMovie(QIODevice *device, const QByteArray &format, QObject *parent)
+QMovie::QMovie(QIODevice *device, const QString &format, QObject *parent)
    : QObject(parent), d_ptr(new QMoviePrivate(this))
 {
    d_ptr->q_ptr = this;
@@ -481,7 +483,7 @@ QMovie::QMovie(QIODevice *device, const QByteArray &format, QObject *parent)
 
     The \a parent object is passed to QObject's constructor.
  */
-QMovie::QMovie(const QString &fileName, const QByteArray &format, QObject *parent)
+QMovie::QMovie(const QString &fileName, const QString &format, QObject *parent)
    : QObject(parent), d_ptr(new QMoviePrivate(this))
 {
    d_ptr->q_ptr = this;
@@ -566,7 +568,7 @@ QString QMovie::fileName() const
 
     \sa QImageReader::supportedImageFormats()
 */
-void QMovie::setFormat(const QByteArray &format)
+void QMovie::setFormat(const QString &format)
 {
    Q_D(QMovie);
    d->reader->setFormat(format);
@@ -578,7 +580,7 @@ void QMovie::setFormat(const QByteArray &format)
 
     \sa setFormat()
 */
-QByteArray QMovie::format() const
+QString QMovie::format() const
 {
    Q_D(const QMovie);
    return d->reader->format();
@@ -892,22 +894,27 @@ void QMovie::setScaledSize(const QSize &size)
    d->reader->setScaledSize(size);
 }
 
-
-QList<QByteArray> QMovie::supportedFormats()
+QList<QString> QMovie::supportedFormats()
 {
-   QList<QByteArray> list = QImageReader::supportedImageFormats();
-   QMutableListIterator<QByteArray> it(list);
+   QList<QString> list = QImageReader::supportedImageFormats();
+
    QBuffer buffer;
    buffer.open(QIODevice::ReadOnly);
-   while (it.hasNext()) {
-      QImageReader reader(&buffer, it.next());
-      if (!reader.supportsAnimation()) {
-         it.remove();
+
+   auto iter = list.begin();
+
+   while (iter != list.end()) {
+      QImageReader reader(&buffer, *iter);
+
+      if (! reader.supportsAnimation()) {
+         iter = list.erase(iter);
+      } else {
+         ++iter;
       }
    }
+
    return list;
 }
-
 
 QMovie::CacheMode QMovie::cacheMode() const
 {
@@ -926,8 +933,5 @@ void QMovie::_q_loadNextFrame()
    Q_D(QMovie);
    d->_q_loadNextFrame();
 }
-
-
-
 
 #endif // QT_NO_MOVIE

@@ -128,7 +128,7 @@ int ImageDecoderQt::repetitionCount() const
 
 String ImageDecoderQt::filenameExtension() const
 {
-    return String(m_format.constData(), m_format.length());
+    return m_format;
 };
 
 ImageFrame* ImageDecoderQt::frameBufferAtIndex(size_t index)

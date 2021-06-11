@@ -93,7 +93,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    QImage(const uchar *data, int width, int height, int bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = nullptr,
       void *cleanupInfo = nullptr);
 
-   explicit QImage(const QString &fileName, const char *format = nullptr);
+   explicit QImage(const QString &fileName, const QString &format = QString());
 
 #ifndef QT_NO_IMAGEFORMAT_XPM
    explicit QImage(const char *const xpm[]);
@@ -251,18 +251,20 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    void invertPixels(InvertMode = InvertRgb);
 
-   bool load(QIODevice *device, const char *format);
-   bool load(const QString &fileName, const char *format = nullptr);
-   bool loadFromData(const uchar *buf, int len, const char *format = nullptr);
-   inline bool loadFromData(const QByteArray &data, const char *aformat = nullptr) {
+   bool load(QIODevice *device, const QString &format);
+   bool load(const QString &fileName, const QString &format = QString());
+   bool loadFromData(const uchar *buf, int len, const QString &format = QString());
+
+   inline bool loadFromData(const QByteArray &data, const QString &aformat = QString()) {
       return loadFromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), aformat);
    }
 
-   bool save(const QString &fileName, const char *format = nullptr, int quality = -1) const;
-   bool save(QIODevice *device, const char *format = nullptr, int quality = -1) const;
+   bool save(const QString &fileName, const QString &format = QString(), int quality = -1) const;
+   bool save(QIODevice *device, const QString &format = QString(), int quality = -1) const;
 
-   static QImage fromData(const uchar *data, int size, const char *format = nullptr);
-   inline static QImage fromData(const QByteArray &data, const char *format = nullptr) {
+   static QImage fromData(const uchar *data, int size, const QString &format = QString());
+
+   inline static QImage fromData(const QByteArray &data, const QString &format = QString()) {
       return fromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format);
    }
 

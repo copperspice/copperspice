@@ -93,7 +93,7 @@ void QPlatformPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConver
    fromImage(image, flags);
 }
 
-bool QPlatformPixmap::fromFile(const QString &fileName, const char *format, Qt::ImageConversionFlags flags)
+bool QPlatformPixmap::fromFile(const QString &fileName, const QString &format, Qt::ImageConversionFlags flags)
 {
    QImage image = QImageReader(fileName, format).read();
    if (image.isNull()) {
@@ -104,7 +104,7 @@ bool QPlatformPixmap::fromFile(const QString &fileName, const char *format, Qt::
    return !isNull();
 }
 
-bool QPlatformPixmap::fromData(const uchar *buf, uint len, const char *format, Qt::ImageConversionFlags flags)
+bool QPlatformPixmap::fromData(const uchar *buf, uint len, const QString &format, Qt::ImageConversionFlags flags)
 {
    QByteArray a = QByteArray::fromRawData(reinterpret_cast<const char *>(buf), len);
    QBuffer b(&a);

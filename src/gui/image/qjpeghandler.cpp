@@ -1030,7 +1030,7 @@ QJpegHandler::~QJpegHandler()
    delete d;
 }
 
-bool QJpegHandler::canRead() const
+bool QJpegHandler::canRead()
 {
    if (d->state == QJpegHandlerPrivate::Ready && !canRead(device())) {
       return false;
@@ -1092,7 +1092,7 @@ bool QJpegHandler::supportsOption(ImageOption option) const
       || option == ImageTransformation;
 }
 
-QVariant QJpegHandler::option(ImageOption option) const
+QVariant QJpegHandler::option(ImageOption option)
 {
    switch (option) {
       case Quality:
@@ -1160,7 +1160,7 @@ void QJpegHandler::setOption(ImageOption option, const QVariant &value)
    }
 }
 
-QByteArray QJpegHandler::name() const
+QString QJpegHandler::name() const
 {
    return "jpeg";
 }

@@ -358,7 +358,7 @@ class ImageReader
  public:
    ImageReader(const QString &fileName) : m_reader(fileName), m_atEnd(false) {}
 
-   QByteArray format() const {
+   QString format() const {
       return m_reader.format();
    }
 
@@ -387,13 +387,17 @@ void QPixmapIconEngine::addFile(const QString &fileName, const QSize &size, QIco
    if (fileName.isEmpty()) {
       return;
    }
+
    const QString abs = fileName.startsWith(QLatin1Char(':')) ? fileName : QFileInfo(fileName).absoluteFilePath();
    const bool ignoreSize = !size.isValid();
    ImageReader imageReader(abs);
-   const QByteArray format = imageReader.format();
-   if (format.isEmpty()) { // Device failed to open or unsupported format.
+   const QString format = imageReader.format();
+
+   if (format.isEmpty()) {
+      // Device failed to open or unsupported format.
       return;
    }
+
    QImage image;
 
    if (format != "ico") {

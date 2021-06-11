@@ -96,7 +96,8 @@ static void initializeSupportedImageMIMETypes()
     supportedImageMIMETypes->remove("application/postscript");
 
 #elif PLATFORM(QT)
-    QList<QByteArray> formats = QImageReader::supportedImageFormats();
+    QList<QString> formats = QImageReader::supportedImageFormats();
+
     for (size_t i = 0; i < static_cast<size_t>(formats.size()); ++i) {
 #if ENABLE(SVG)
         /*
@@ -152,7 +153,7 @@ static void initializeSupportedImageMIMETypesForEncoding()
     supportedImageMIMETypesForEncoding->add("image/gif");
 #endif
 #elif PLATFORM(QT)
-    QList<QByteArray> formats = QImageWriter::supportedImageFormats();
+    QList<QString> formats = QImageWriter::supportedImageFormats();
     for (int i = 0; i < formats.size(); ++i) {
         String mimeType = MIMETypeRegistry::getMIMETypeForExtension(formats.at(i).constData());
         if (!mimeType.isEmpty())

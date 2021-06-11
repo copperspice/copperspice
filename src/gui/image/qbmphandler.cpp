@@ -729,7 +729,7 @@ QBmpHandler::QBmpHandler(InternalFormat fmt)
 {
 }
 
-QByteArray QBmpHandler::formatName() const
+QString QBmpHandler::formatName() const
 {
    return m_format == BmpFormat ? "bmp" : "dib";
 }
@@ -759,7 +759,7 @@ bool QBmpHandler::readHeader()
    return true;
 }
 
-bool QBmpHandler::canRead() const
+bool QBmpHandler::canRead()
 {
    if (m_format == BmpFormat && state == Ready && !canRead(device())) {
       return false;
@@ -891,7 +891,7 @@ bool QBmpHandler::supportsOption(ImageOption option) const
       || option == ImageFormat;
 }
 
-QVariant QBmpHandler::option(ImageOption option) const
+QVariant QBmpHandler::option(ImageOption option)
 {
    if (option == Size) {
       if (state == Error) {
@@ -933,11 +933,9 @@ void QBmpHandler::setOption(ImageOption option, const QVariant &value)
    (void) value;
 }
 
-QByteArray QBmpHandler::name() const
+QString QBmpHandler::name() const
 {
    return formatName();
 }
-
-
 
 #endif // QT_NO_IMAGEFORMAT_BMP

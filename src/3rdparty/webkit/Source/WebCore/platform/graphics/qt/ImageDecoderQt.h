@@ -67,7 +67,7 @@ private:
     void clearPointers();
 
 private:
-    QByteArray m_format;
+    QString m_format;
     OwnPtr<QBuffer> m_buffer;
     OwnPtr<QImageReader> m_reader;
     mutable int m_repetitionCount;

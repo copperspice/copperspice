@@ -138,11 +138,11 @@ Qt::DropAction QDragManager::drag(QDrag *objDrag)
 static QStringList imageReadMimeFormats()
 {
    QStringList formats;
-   QList<QByteArray> imageFormats = QImageReader::supportedImageFormats();
+   QList<QString> imageFormats = QImageReader::supportedImageFormats();
 
    for (int i = 0; i < imageFormats.size(); ++i) {
       QString format = "image/";
-      format += QString::fromLatin1(imageFormats.at(i).toLower());
+      format += imageFormats.at(i).toLower();
       formats.append(format);
    }
 
@@ -159,10 +159,11 @@ static QStringList imageReadMimeFormats()
 static QStringList imageWriteMimeFormats()
 {
    QStringList formats;
-   QList<QByteArray> imageFormats = QImageWriter::supportedImageFormats();
+   QList<QString> imageFormats = QImageWriter::supportedImageFormats();
+
    for (int i = 0; i < imageFormats.size(); ++i) {
-      QString format = QLatin1String("image/");
-      format += QString::fromLatin1(imageFormats.at(i).toLower());
+      QString format = "image/";
+      format += imageFormats.at(i).toLower();
       formats.append(format);
    }
 
@@ -342,7 +343,7 @@ QByteArray QInternalMimeData::renderDataHelper(const QString &mimeType, const QM
             QImage image = data->imageData().value<QImage>();
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
-            image.save(&buf, mimeType.mid(mimeType.indexOf('/') + 1).toLatin1().toUpper().constData());
+            image.save(&buf, mimeType.mid(mimeType.indexOf('/') + 1).toUpper());
          }
       }
    }

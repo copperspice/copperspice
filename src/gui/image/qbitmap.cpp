@@ -61,7 +61,7 @@ QBitmap::QBitmap(const QPixmap &pixmap)
 
 
 
-QBitmap::QBitmap(const QString &fileName, const char *format)
+QBitmap::QBitmap(const QString &fileName, const QString &format)
    : QPixmap(QSize(0, 0), QPlatformPixmap::BitmapType)
 {
    load(fileName, format, Qt::MonoOnly);

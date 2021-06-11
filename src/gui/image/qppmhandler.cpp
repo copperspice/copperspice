@@ -259,30 +259,33 @@ static bool read_pbm_body(QIODevice *device, char type, int w, int h, int mcc, Q
    return true;
 }
 
-static bool write_pbm_image(QIODevice *out, const QImage &sourceImage, const QByteArray &sourceFormat)
+static bool write_pbm_image(QIODevice *out, const QImage &sourceImage, const QString &sourceFormat)
 {
    QByteArray str;
    QImage image = sourceImage;
-   QByteArray format = sourceFormat;
+   QString format = sourceFormat;
 
    format = format.left(3);                        // ignore RAW part
    bool gray = format == "pgm";
 
    if (format == "pbm") {
       image = image.convertToFormat(QImage::Format_Mono);
+
    } else if (gray) {
       image = image.convertToFormat(QImage::Format_Grayscale8);
+
    } else {
       switch (image.format()) {
          case QImage::Format_Mono:
          case QImage::Format_MonoLSB:
             image = image.convertToFormat(QImage::Format_Indexed8);
             break;
+
          case QImage::Format_Indexed8:
          case QImage::Format_RGB32:
          case QImage::Format_ARGB32:
-
             break;
+
          default:
             if (image.hasAlphaChannel()) {
                image = image.convertToFormat(QImage::Format_ARGB32);
@@ -297,6 +300,7 @@ static bool write_pbm_image(QIODevice *out, const QImage &sourceImage, const QBy
       if (qGray(image.color(0)) < qGray(image.color(1))) {
          // 0=dark/black, 1=light/white - invert
          image.detach();
+
          for (int y = 0; y < image.height(); y++) {
             uchar *p = image.scanLine(y);
             uchar *end = p + image.bytesPerLine();
@@ -452,7 +456,7 @@ bool QPpmHandler::readHeader()
    return true;
 }
 
-bool QPpmHandler::canRead() const
+bool QPpmHandler::canRead()
 {
    if (state == Ready && !canRead(device(), &subType)) {
       return false;
@@ -532,7 +536,7 @@ bool QPpmHandler::supportsOption(ImageOption option) const
       || option == ImageFormat;
 }
 
-QVariant QPpmHandler::option(ImageOption option) const
+QVariant QPpmHandler::option(ImageOption option)
 {
    if (option == SubType) {
       return subType;
@@ -580,7 +584,7 @@ void QPpmHandler::setOption(ImageOption option, const QVariant &value)
    }
 }
 
-QByteArray QPpmHandler::name() const
+QString QPpmHandler::name() const
 {
    return subType.isEmpty() ? QByteArray("ppm") : subType;
 }

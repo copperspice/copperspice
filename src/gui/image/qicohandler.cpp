@@ -764,7 +764,7 @@ void QIcoHandler::setupReader() const
    m_ICOReader = new ICOReader(device());
 }
 
-QVariant QIcoHandler::option(ImageOption option) const
+QVariant QIcoHandler::option(ImageOption option)
 {
    if (option == Size) {
       QIODevice *device = QImageIOHandler::device();
@@ -793,18 +793,21 @@ bool QIcoHandler::supportsOption(ImageOption option) const
  * If the magic bytes were found, it is assumed that the QIcoHandler can read the file.
  *
  */
-bool QIcoHandler::canRead() const
+bool QIcoHandler::canRead()
 {
    bool bCanRead = false;
    QIODevice *device = QImageIOHandler::device();
+
    if (device) {
       bCanRead = ICOReader::canRead(device);
       if (bCanRead) {
          setFormat("ico");
       }
+
    } else {
       qWarning("QIcoHandler::canRead() called with no device");
    }
+
    return bCanRead;
 }
 
@@ -851,7 +854,7 @@ bool QIcoHandler::write(const QImage &image)
  * Return the common identifier of the format.
  * For ICO format this will return "ico".
  */
-QByteArray QIcoHandler::name() const
+QString QIcoHandler::name() const
 {
    return "ico";
 }
@@ -860,7 +863,7 @@ QByteArray QIcoHandler::name() const
 /*! \reimp
 
 */
-int QIcoHandler::imageCount() const
+int QIcoHandler::imageCount()
 {
    setupReader();
    return m_ICOReader->count();

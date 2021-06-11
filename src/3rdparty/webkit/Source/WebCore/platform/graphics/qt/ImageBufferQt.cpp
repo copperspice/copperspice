@@ -408,12 +408,12 @@ String ImageBuffer::toDataURL(const String& mimeType, const double* quality) con
     buffer.open(QBuffer::WriteOnly);
 
     if (quality && *quality >= 0.0 && *quality <= 1.0) {
-        if (!m_data.m_pixmap.save(&buffer, mimeType.substring(sizeof "image").utf8().data(), *quality * 100 + 0.5)) {
+        if (!m_data.m_pixmap.save(&buffer, mimeType.substring(sizeof "image"), *quality * 100 + 0.5)) {
             buffer.close();
             return "data:,";
         }
     } else {
-        if (!m_data.m_pixmap.save(&buffer, mimeType.substring(sizeof "image").utf8().data(), 100)) {
+        if (!m_data.m_pixmap.save(&buffer, mimeType.substring(sizeof "image"), 100)) {
             buffer.close();
             return "data:,";
         }

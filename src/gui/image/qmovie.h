@@ -28,11 +28,9 @@
 
 #ifndef QT_NO_MOVIE
 
-#include <qbytearray.h>
 #include <qlist.h>
 #include <qimagereader.h>
 
-class QByteArray;
 class QColor;
 class QIODevice;
 class QImage;
@@ -68,15 +66,15 @@ class Q_GUI_EXPORT QMovie : public QObject
    };
 
    explicit QMovie(QObject *parent = nullptr);
-   explicit QMovie(QIODevice *device, const QByteArray &format = QByteArray(), QObject *parent = nullptr);
-   explicit QMovie(const QString &fileName, const QByteArray &format = QByteArray(), QObject *parent = nullptr);
+   explicit QMovie(QIODevice *device, const QString &format = QString(), QObject *parent = nullptr);
+   explicit QMovie(const QString &fileName, const QString &format = QString(), QObject *parent = nullptr);
 
    QMovie(const QMovie &) = delete;
    QMovie &operator=(const QMovie &) = delete;
 
    ~QMovie();
 
-   static QList<QByteArray> supportedFormats();
+   static QList<QString> supportedFormats();
 
    void setDevice(QIODevice *device);
    QIODevice *device() const;
@@ -84,8 +82,8 @@ class Q_GUI_EXPORT QMovie : public QObject
    void setFileName(const QString &fileName);
    QString fileName() const;
 
-   void setFormat(const QByteArray &format);
-   QByteArray format() const;
+   void setFormat(const QString &format);
+   QString format() const;
 
    void setBackgroundColor(const QColor &color);
    QColor backgroundColor() const;

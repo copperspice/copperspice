@@ -279,7 +279,7 @@ bool QXbmHandler::readHeader()
    return true;
 }
 
-bool QXbmHandler::canRead() const
+bool QXbmHandler::canRead()
 {
    if (state == Ready && !canRead(device())) {
       return false;
@@ -341,7 +341,7 @@ bool QXbmHandler::supportsOption(ImageOption option) const
    return option == Name || option == Size || option == ImageFormat;
 }
 
-QVariant QXbmHandler::option(ImageOption option) const
+QVariant QXbmHandler::option(ImageOption option)
 {
    if (option == Name) {
       return fileName;
@@ -369,7 +369,7 @@ void QXbmHandler::setOption(ImageOption option, const QVariant &value)
    }
 }
 
-QByteArray QXbmHandler::name() const
+QString QXbmHandler::name() const
 {
    return "xbm";
 }

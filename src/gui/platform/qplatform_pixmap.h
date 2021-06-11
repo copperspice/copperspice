@@ -62,10 +62,8 @@ class Q_GUI_EXPORT QPlatformPixmap
 
    virtual void fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags);
 
-   virtual bool fromFile(const QString &filename, const char *format,
-      Qt::ImageConversionFlags flags);
-   virtual bool fromData(const uchar *buffer, uint len, const char *format,
-      Qt::ImageConversionFlags flags);
+   virtual bool fromFile(const QString &filename, const QString &format, Qt::ImageConversionFlags flags);
+   virtual bool fromData(const uchar *buffer, uint len, const QString &format, Qt::ImageConversionFlags flags);
 
    virtual void copy(const QPlatformPixmap *data, const QRect &rect);
    virtual bool scroll(int dx, int dy, const QRect &rect);

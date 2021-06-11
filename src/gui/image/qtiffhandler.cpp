@@ -91,6 +91,7 @@ inline void rotate_right_mirror_horizontal(QImage *const image)// rotate right->
    QImage generated(/* width = */ height, /* height = */ width, image->format());
    const uint32 *originalPixel = reinterpret_cast<const uint32 *>(image->bits());
    uint32 *const generatedPixels = reinterpret_cast<uint32 *>(generated.bits());
+
    for (int row = 0; row < height; ++row) {
       for (int col = 0; col < width; ++col) {
          int idx = col * height + row;
@@ -110,6 +111,7 @@ inline void rotate_right_mirror_vertical(QImage *const image) // rotate right->m
    const int lastRow = height - 1;
    const uint32 *pixel = reinterpret_cast<const uint32 *>(image->bits());
    uint32 *const generatedBits = reinterpret_cast<uint32 *>(generated.bits());
+
    for (int row = 0; row < height; ++row) {
       for (int col = 0; col < width; ++col) {
          int idx = (lastCol - col) * height + (lastRow - row);
@@ -125,18 +127,19 @@ QTiffHandler::QTiffHandler() : QImageIOHandler()
    compression = NoCompression;
 }
 
-bool QTiffHandler::canRead() const
+bool QTiffHandler::canRead()
 {
    if (canRead(device())) {
       setFormat("tiff");
       return true;
    }
+
    return false;
 }
 
 bool QTiffHandler::canRead(QIODevice *device)
 {
-   if (!device) {
+   if (! device) {
       qWarning("QTiffHandler::canRead() called with no device");
       return false;
    }
@@ -147,6 +150,7 @@ bool QTiffHandler::canRead(QIODevice *device)
    if (pos != 0) {
       device->seek(0);   // need the magic from the beginning
    }
+
    QByteArray header = device->peek(4);
    if (pos != 0) {
       device->seek(pos);   // put it back where we found it
@@ -596,12 +600,12 @@ bool QTiffHandler::write(const QImage &image)
    return true;
 }
 
-QByteArray QTiffHandler::name() const
+QString QTiffHandler::name() const
 {
    return "tiff";
 }
 
-QVariant QTiffHandler::option(ImageOption option) const
+QVariant QTiffHandler::option(ImageOption option)
 {
    if (option == Size && canRead()) {
       QSize imageSize;

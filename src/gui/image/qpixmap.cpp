@@ -124,7 +124,7 @@ QPixmap::QPixmap(QPlatformPixmap *d)
 {
 }
 
-QPixmap::QPixmap(const QString &fileName, const char *format, Qt::ImageConversionFlags flags)
+QPixmap::QPixmap(const QString &fileName, const QString &format, Qt::ImageConversionFlags flags)
    : QPaintDevice()
 {
    doInit(0, 0, QPlatformPixmap::PixmapType);
@@ -409,7 +409,7 @@ QBitmap QPixmap::createMaskFromColor(const QColor &maskColor, Qt::MaskMode mode)
    return QBitmap::fromImage(image.createMaskFromColor(maskColor.rgba(), mode));
 }
 
-bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConversionFlags flags)
+bool QPixmap::load(const QString &fileName, const QString &format, Qt::ImageConversionFlags flags)
 {
    if (! fileName.isEmpty()) {
       QFileInfo info(fileName);
@@ -452,7 +452,7 @@ bool QPixmap::load(const QString &fileName, const char *format, Qt::ImageConvers
    return false;
 }
 
-bool QPixmap::loadFromData(const uchar *buf, uint len, const char *format, Qt::ImageConversionFlags flags)
+bool QPixmap::loadFromData(const uchar *buf, uint len, const QString &format, Qt::ImageConversionFlags flags)
 {
    if (len == 0 || buf == nullptr) {
       data.reset();
@@ -470,7 +470,7 @@ bool QPixmap::loadFromData(const uchar *buf, uint len, const char *format, Qt::I
    return false;
 }
 
-bool QPixmap::save(const QString &fileName, const char *format, int quality) const
+bool QPixmap::save(const QString &fileName, const QString &format, int quality) const
 {
    if (isNull()) {
       return false;   // nothing to save
@@ -480,7 +480,7 @@ bool QPixmap::save(const QString &fileName, const char *format, int quality) con
    return doImageIO(&writer, quality);
 }
 
-bool QPixmap::save(QIODevice *device, const char *format, int quality) const
+bool QPixmap::save(QIODevice *device, const QString &format, int quality) const
 {
    if (isNull()) {
       return false;   // nothing to save

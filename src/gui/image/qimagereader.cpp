@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qimagereader.h>
-#include <qbytearray.h>
 
 #ifdef QIMAGEREADER_DEBUG
 #include <qdebug.h>
@@ -77,8 +76,8 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QImageIOHandlerInterface_ID, 
 struct cs_BuiltInFormatStruct {
    using TestDevice = QImageIOHandler * (*)(QIODevice *);
 
-   const char *extension;
-   const char *mimeType;
+   const QString extension;
+   const QString mimeType;
    TestDevice checkFormat;
 };
 
@@ -285,16 +284,16 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
 };
 
 static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
-   const QByteArray &format, bool autoDetectImageFormat, bool ignoresFormatAndExtension)
+   const QString &format, bool autoDetectImageFormat, bool ignoresFormatAndExtension)
 {
    if (! autoDetectImageFormat && format.isEmpty()) {
       return nullptr;
    }
 
-   QByteArray form = format.toLower();
+   QString form = format.toLower();
    QImageIOHandler *handler = nullptr;
 
-   QByteArray suffix;
+   QString suffix;
 
    static QMutex mutex;
    QMutexLocker locker(&mutex);
@@ -308,7 +307,7 @@ static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
    if (device && format.isEmpty() && autoDetectImageFormat && ! ignoresFormatAndExtension) {
 
       if (QFile *file = qobject_cast<QFile *>(device)) {
-         suffix = QFileInfo(file->fileName()).suffix().toLower().toLatin1();
+         suffix = QFileInfo(file->fileName()).suffix().toLower();
 
          if (! suffix.isEmpty()) {
             if (keySet.contains(suffix)) {
@@ -318,10 +317,10 @@ static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
       }
    }
 
-   QByteArray testFormat = ! form.isEmpty() ? form : suffix;
+   QString testFormat = ! form.isEmpty() ? form : suffix;
 
    if (ignoresFormatAndExtension) {
-      testFormat = QByteArray();
+      testFormat.clear();
    }
 
    if (found) {
@@ -381,7 +380,7 @@ static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
          if (item != suffix) {
             QImageIOPlugin *plugin = qobject_cast<QImageIOPlugin *>(pluginLoader->instance(item));
 
-            if (plugin && plugin->capabilities(device, QByteArray()) & QImageIOPlugin::CanRead) {
+            if (plugin && plugin->capabilities(device, QString()) & QImageIOPlugin::CanRead) {
                handler = plugin->create(device, testFormat);
 
                break;
@@ -455,7 +454,7 @@ class QImageReaderPrivate
    ~QImageReaderPrivate();
 
    // device
-   QByteArray format;
+   QString format;
    bool autoDetectImageFormat;
    bool ignoresFormatAndExtension;
    QIODevice *device;
@@ -526,7 +525,7 @@ bool QImageReaderPrivate::initHandler()
 
    // probe the file extension
    if (deleteDevice && !device->isOpen() && !device->open(QIODevice::ReadOnly) && autoDetectImageFormat) {
-      QList<QByteArray> extensions = QImageReader::supportedImageFormats();
+      QList<QString> extensions = QImageReader::supportedImageFormats();
 
       if (!format.isEmpty()) {
          // Try the most probable extension first
@@ -594,14 +593,14 @@ QImageReader::QImageReader()
 {
 }
 
-QImageReader::QImageReader(QIODevice *device, const QByteArray &format)
+QImageReader::QImageReader(QIODevice *device, const QString &format)
    : d(new QImageReaderPrivate(this))
 {
    d->device = device;
    d->format = format;
 }
 
-QImageReader::QImageReader(const QString &fileName, const QByteArray &format)
+QImageReader::QImageReader(const QString &fileName, const QString &format)
    : d(new QImageReaderPrivate(this))
 {
    QFile *file = new QFile(fileName);
@@ -615,18 +614,19 @@ QImageReader::~QImageReader()
    delete d;
 }
 
-void QImageReader::setFormat(const QByteArray &format)
+void QImageReader::setFormat(const QString &format)
 {
    d->format = format;
 }
 
-QByteArray QImageReader::format() const
+QString QImageReader::format() const
 {
    if (d->format.isEmpty()) {
       if (! d->initHandler()) {
-         return QByteArray();
+         return QString();
       }
-      return d->handler->canRead() ? d->handler->format() : QByteArray();
+
+      return d->handler->canRead() ? d->handler->format() : QString();
    }
 
    return d->format;
@@ -1092,20 +1092,20 @@ bool QImageReader::supportsOption(QImageIOHandler::ImageOption option) const
    return d->handler->supportsOption(option);
 }
 
-QByteArray QImageReader::imageFormat(const QString &fileName)
+QString QImageReader::imageFormat(const QString &fileName)
 {
    QFile file(fileName);
    if (!file.open(QFile::ReadOnly)) {
-      return QByteArray();
+      return QString();
    }
 
    return imageFormat(&file);
 }
 
-QByteArray QImageReader::imageFormat(QIODevice *device)
+QString QImageReader::imageFormat(QIODevice *device)
 {
-   QByteArray format;
-   QImageIOHandler *handler = createReadHandlerHelper(device, format, /* autoDetectImageFormat = */ true, false);
+   QString format;
+   QImageIOHandler *handler = createReadHandlerHelper(device, format, true, false);
 
    if (handler) {
       if (handler->canRead()) {
@@ -1116,12 +1116,12 @@ QByteArray QImageReader::imageFormat(QIODevice *device)
    return format;
 }
 
-void supportedImageHandlerFormats(QFactoryLoader *loader, QImageIOPlugin::Capability cap, QList<QByteArray> *result);
-void supportedImageHandlerMimeTypes(QFactoryLoader *loader, QImageIOPlugin::Capability cap, QList<QByteArray> *result);
+void supportedImageHandlerFormats(QFactoryLoader *loader, QImageIOPlugin::Capability cap, QList<QString> *result);
+void supportedImageHandlerMimeTypes(QFactoryLoader *loader, QImageIOPlugin::Capability cap, QList<QString> *result);
 
-QList<QByteArray> QImageReader::supportedImageFormats()
+QList<QString> QImageReader::supportedImageFormats()
 {
-   QList<QByteArray> formats;
+   QList<QString> formats;
 
    for (int i = 0; cs_BuiltInFormats[i].checkFormat != nullptr; ++i) {
       formats << cs_BuiltInFormats[i].extension;
@@ -1135,9 +1135,9 @@ QList<QByteArray> QImageReader::supportedImageFormats()
    return formats;
 }
 
-QList<QByteArray> QImageReader::supportedMimeTypes()
+QList<QString> QImageReader::supportedMimeTypes()
 {
-   QList<QByteArray> mimeTypes;
+   QList<QString> mimeTypes;
 
    for (int i = 0; cs_BuiltInFormats[i].checkFormat != nullptr; ++i) {
       mimeTypes << cs_BuiltInFormats[i].mimeType;
@@ -1147,5 +1147,6 @@ QList<QByteArray> QImageReader::supportedMimeTypes()
 
    std::sort(mimeTypes.begin(), mimeTypes.end());
    mimeTypes.erase(std::unique(mimeTypes.begin(), mimeTypes.end()), mimeTypes.end());
+
    return mimeTypes;
 }

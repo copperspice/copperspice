@@ -34,20 +34,20 @@ class QIcoHandler: public QImageIOHandler
    QIcoHandler();
    virtual ~QIcoHandler();
 
-   bool canRead() const override;
+   bool canRead() override;
    bool read(QImage *image) override;
    bool write(const QImage &image) override;
 
-   QByteArray name() const override;
+   QString name() const override;
 
-   int imageCount() const override;
+   int imageCount() override;
    bool jumpToImage(int imageNumber) override;
    bool jumpToNextImage() override;
 
    static bool canRead(QIODevice *device);
 
    bool supportsOption(ImageOption option) const override;
-   QVariant option(ImageOption option) const override;
+   QVariant option(ImageOption option) override;
 
  private:
    void setupReader() const;

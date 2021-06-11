@@ -369,7 +369,7 @@ QImage::QImage(const uchar *data, int width, int height, int bytesPerLine, Forma
    d = QImageData::create(const_cast<uchar *>(data), width, height, bytesPerLine, format, true, cleanupFunction, cleanupInfo);
 }
 
-QImage::QImage(const QString &fileName, const char *format)
+QImage::QImage(const QString &fileName, const QString &format)
    : QPaintDevice()
 {
    d = nullptr;
@@ -2156,7 +2156,7 @@ void QImage::rgbSwapped_inplace()
    }
 }
 
-bool QImage::load(const QString &fileName, const char *format)
+bool QImage::load(const QString &fileName, const QString &format)
 {
    QImage image = QImageReader(fileName, format).read();
 
@@ -2164,7 +2164,7 @@ bool QImage::load(const QString &fileName, const char *format)
    return !isNull();
 }
 
-bool QImage::load(QIODevice *device, const char *format)
+bool QImage::load(QIODevice *device, const QString &format)
 {
    QImage image = QImageReader(device, format).read();
 
@@ -2172,7 +2172,7 @@ bool QImage::load(QIODevice *device, const char *format)
    return !isNull();
 }
 
-bool QImage::loadFromData(const uchar *data, int len, const char *format)
+bool QImage::loadFromData(const uchar *data, int len, const QString &format)
 {
    QImage image = fromData(data, len, format);
 
@@ -2180,7 +2180,7 @@ bool QImage::loadFromData(const uchar *data, int len, const char *format)
    return !isNull();
 }
 
-QImage QImage::fromData(const uchar *data, int size, const char *format)
+QImage QImage::fromData(const uchar *data, int size, const QString &format)
 {
    QByteArray a = QByteArray::fromRawData(reinterpret_cast<const char *>(data), size);
    QBuffer b;
@@ -2189,7 +2189,7 @@ QImage QImage::fromData(const uchar *data, int size, const char *format)
    return QImageReader(&b, format).read();
 }
 
-bool QImage::save(const QString &fileName, const char *format, int quality) const
+bool QImage::save(const QString &fileName, const QString &format, int quality) const
 {
    if (isNull()) {
       return false;
@@ -2199,7 +2199,7 @@ bool QImage::save(const QString &fileName, const char *format, int quality) cons
    return d->doImageIO(this, &writer, quality);
 }
 
-bool QImage::save(QIODevice *device, const char *format, int quality) const
+bool QImage::save(QIODevice *device, const QString &format, int quality) const
 {
    if (isNull()) {
       return false;   // nothing to save
@@ -2242,12 +2242,13 @@ QDataStream &operator>>(QDataStream &s, QImage &image)
 {
    qint32 nullMarker;
    s >> nullMarker;
+
    if (!nullMarker) {
       image = QImage(); // null image
       return s;
    }
 
-   image = QImageReader(s.device(), nullptr).read();
+   image = QImageReader(s.device(), QString()).read();
    return s;
 }
 

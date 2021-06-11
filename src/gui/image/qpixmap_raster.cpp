@@ -103,7 +103,7 @@ void QRasterPlatformPixmap::resize(int width, int height)
    setSerialNumber(image.cacheKey() >> 32);
 }
 
-bool QRasterPlatformPixmap::fromData(const uchar *buffer, uint len, const char *format,
+bool QRasterPlatformPixmap::fromData(const uchar *buffer, uint len, const QString &format,
    Qt::ImageConversionFlags flags)
 {
    QByteArray a = QByteArray::fromRawData(reinterpret_cast<const char *>(buffer), len);

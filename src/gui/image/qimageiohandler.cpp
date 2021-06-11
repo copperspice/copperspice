@@ -23,7 +23,6 @@
 
 #include <qimageiohandler.h>
 
-#include <qbytearray.h>
 #include <qimage.h>
 #include <qvariant.h>
 
@@ -38,7 +37,7 @@ class QImageIOHandlerPrivate
    virtual ~QImageIOHandlerPrivate();
 
    QIODevice *device;
-   mutable QByteArray format;
+   QString format;
 
    QImageIOHandler *q_ptr;
 };
@@ -79,25 +78,19 @@ QIODevice *QImageIOHandler::device() const
    return d->device;
 }
 
-void QImageIOHandler::setFormat(const QByteArray &format)
+void QImageIOHandler::setFormat(const QString &format)
 {
    Q_D(QImageIOHandler);
    d->format = format;
 }
 
-void QImageIOHandler::setFormat(const QByteArray &format) const
-{
-   Q_D(const QImageIOHandler);
-   d->format = format;
-}
-
-QByteArray QImageIOHandler::format() const
+QString QImageIOHandler::format() const
 {
    Q_D(const QImageIOHandler);
    return d->format;
 }
 
-QByteArray QImageIOHandler::name() const
+QString QImageIOHandler::name() const
 {
    return format();
 }
@@ -114,7 +107,7 @@ void QImageIOHandler::setOption(ImageOption option, const QVariant &value)
    (void) value;
 }
 
-QVariant QImageIOHandler::option(ImageOption option) const
+QVariant QImageIOHandler::option(ImageOption option)
 {
    (void) option;
    return QVariant();
@@ -136,7 +129,7 @@ QRect QImageIOHandler::currentImageRect() const
    return QRect();
 }
 
-int QImageIOHandler::imageCount() const
+int QImageIOHandler::imageCount()
 {
    return canRead() ? 1 : 0;
 }

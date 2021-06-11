@@ -43,16 +43,16 @@ class Q_GUI_EXPORT QImageWriter
    };
 
    QImageWriter();
-   explicit QImageWriter(QIODevice *device, const QByteArray &format);
-   explicit QImageWriter(const QString &fileName, const QByteArray &format = QByteArray());
+   explicit QImageWriter(QIODevice *device, const QString &format);
+   explicit QImageWriter(const QString &fileName, const QString &format = QString());
 
    QImageWriter(const QImageWriter &) = delete;
    QImageWriter &operator=(const QImageWriter &) = delete;
 
    ~QImageWriter();
 
-   void setFormat(const QByteArray &format);
-   QByteArray format() const;
+   void setFormat(const QString &format);
+   QString format() const;
 
    void setDevice(QIODevice *device);
    QIODevice *device() const;
@@ -88,8 +88,8 @@ class Q_GUI_EXPORT QImageWriter
 
    bool supportsOption(QImageIOHandler::ImageOption option) const;
 
-   static QList<QByteArray> supportedImageFormats();
-   static QList<QByteArray> supportedMimeTypes();
+   static QList<QString> supportedImageFormats();
+   static QList<QString> supportedMimeTypes();
 
  private:
    Q_DECLARE_TR_FUNCTIONS(QImageWriter)

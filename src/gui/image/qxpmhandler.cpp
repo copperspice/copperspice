@@ -1251,7 +1251,7 @@ bool QXpmHandler::readImage(QImage *image)
    return true;
 }
 
-bool QXpmHandler::canRead() const
+bool QXpmHandler::canRead()
 {
    if (state == Ready && !canRead(device())) {
       return false;
@@ -1300,7 +1300,7 @@ bool QXpmHandler::supportsOption(ImageOption option) const
       || option == ImageFormat;
 }
 
-QVariant QXpmHandler::option(ImageOption option) const
+QVariant QXpmHandler::option(ImageOption option)
 {
    if (option == Name) {
       return fileName;
@@ -1340,7 +1340,7 @@ void QXpmHandler::setOption(ImageOption option, const QVariant &value)
    }
 }
 
-QByteArray QXpmHandler::name() const
+QString QXpmHandler::name() const
 {
    return "xpm";
 }

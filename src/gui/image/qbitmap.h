@@ -34,7 +34,7 @@ class Q_GUI_EXPORT QBitmap : public QPixmap
    QBitmap(const QPixmap &);
    QBitmap(int w, int h);
    explicit QBitmap(const QSize &);
-   explicit QBitmap(const QString &fileName, const char *format = nullptr);
+   explicit QBitmap(const QString &fileName, const QString &format = QString());
 
    ~QBitmap();
 

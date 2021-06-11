@@ -35,7 +35,6 @@
 #include <png.h>
 #include <pngconf.h>
 
-
 #if PNG_LIBPNG_VER >= 10400 && PNG_LIBPNG_VER <= 10502 \
         && defined(PNG_PEDANTIC_WARNINGS_SUPPORTED)
 /*
@@ -1087,7 +1086,7 @@ QPngHandler::~QPngHandler()
    delete d;
 }
 
-bool QPngHandler::canRead() const
+bool QPngHandler::canRead()
 {
    if (d->state == QPngHandlerPrivate::Ready && !canRead(device())) {
       return false;
@@ -1134,7 +1133,7 @@ bool QPngHandler::supportsOption(ImageOption option) const
       || option == ScaledSize;
 }
 
-QVariant QPngHandler::option(ImageOption option) const
+QVariant QPngHandler::option(ImageOption option)
 {
    if (d->state == QPngHandlerPrivate::Error) {
       return QVariant();
@@ -1174,10 +1173,9 @@ void QPngHandler::setOption(ImageOption option, const QVariant &value)
    }
 }
 
-QByteArray QPngHandler::name() const
+QString QPngHandler::name() const
 {
    return "png";
 }
-
 
 #endif

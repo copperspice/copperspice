@@ -51,7 +51,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    QPixmap(int w, int h);
    explicit QPixmap(const QSize &);
 
-   QPixmap(const QString &fileName, const char *format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor);
+   QPixmap(const QString &fileName, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
 
 #ifndef QT_NO_IMAGEFORMAT_XPM
    explicit QPixmap(const char *const xpm[]);
@@ -133,11 +133,11 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
       return fromImageInPlace(image, flags);
    }
 
-   bool load(const QString &fileName, const char *format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor);
-   bool loadFromData(const uchar *buf, uint len, const char *format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor);
-   inline bool loadFromData(const QByteArray &data, const char *format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor);
-   bool save(const QString &fileName, const char *format = nullptr, int quality = -1) const;
-   bool save(QIODevice *device, const char *format = nullptr, int quality = -1) const;
+   bool load(const QString &fileName, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
+   bool loadFromData(const uchar *buf, uint len, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
+   inline bool loadFromData(const QByteArray &data, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
+   bool save(const QString &fileName, const QString &format = QString(), int quality = -1) const;
+   bool save(QIODevice *device, const QString &format = QString(), int quality = -1) const;
 
    bool convertFromImage(const QImage &img, Qt::ImageConversionFlags flags = Qt::AutoColor);
 
@@ -203,7 +203,7 @@ inline void QPixmap::scroll(int dx, int dy, int ax, int ay, int awidth, int ahei
    scroll(dx, dy, QRect(ax, ay, awidth, aheight), exposed);
 }
 
-inline bool QPixmap::loadFromData(const QByteArray &buf, const char *format, Qt::ImageConversionFlags flags)
+inline bool QPixmap::loadFromData(const QByteArray &buf, const QString &format, Qt::ImageConversionFlags flags)
 {
    return loadFromData(reinterpret_cast<const uchar *>(buf.constData()), buf.size(), format, flags);
 }

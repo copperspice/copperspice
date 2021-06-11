@@ -48,16 +48,16 @@ class Q_GUI_EXPORT QImageReader
    };
 
    QImageReader();
-   explicit QImageReader(QIODevice *device, const QByteArray &format = QByteArray());
-   explicit QImageReader(const QString &fileName, const QByteArray &format = QByteArray());
+   explicit QImageReader(QIODevice *device, const QString &format = QString());
+   explicit QImageReader(const QString &fileName, const QString &format = QString());
 
    QImageReader(const QImageReader &) = delete;
    QImageReader &operator=(const QImageReader &) = delete;
 
    ~QImageReader();
 
-   void setFormat(const QByteArray &format);
-   QByteArray format() const;
+   void setFormat(const QString &format);
+   QString format() const;
 
    void setAutoDetectImageFormat(bool enabled);
    bool autoDetectImageFormat() const;
@@ -119,10 +119,10 @@ class Q_GUI_EXPORT QImageReader
 
    bool supportsOption(QImageIOHandler::ImageOption option) const;
 
-   static QByteArray imageFormat(const QString &fileName);
-   static QByteArray imageFormat(QIODevice *device);
-   static QList<QByteArray> supportedImageFormats();
-   static QList<QByteArray> supportedMimeTypes();
+   static QString imageFormat(const QString &fileName);
+   static QString imageFormat(QIODevice *device);
+   static QList<QString> supportedImageFormats();
+   static QList<QString> supportedMimeTypes();
 
  private:
    Q_DECLARE_TR_FUNCTIONS(QImageReader)

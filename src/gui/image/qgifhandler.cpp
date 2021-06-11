@@ -1123,7 +1123,7 @@ bool QGifHandler::imageIsComing() const
    return gifFormat->partialNewFrame;
 }
 
-bool QGifHandler::canRead() const
+bool QGifHandler::canRead()
 {
    if (canRead(device()) || imageIsComing()) {
       setFormat("gif");
@@ -1193,7 +1193,7 @@ bool QGifHandler::supportsOption(ImageOption option) const
          || option == Animation;
 }
 
-QVariant QGifHandler::option(ImageOption option) const
+QVariant QGifHandler::option(ImageOption option)
 {
    if (option == Size) {
       if (!scanIsCached) {
@@ -1227,7 +1227,7 @@ int QGifHandler::nextImageDelay() const
    return nextDelay;
 }
 
-int QGifHandler::imageCount() const
+int QGifHandler::imageCount()
 {
    if (!scanIsCached) {
       QGIFFormat::scan(device(), &imageSizes, &loopCnt);
@@ -1257,7 +1257,7 @@ int QGifHandler::currentImageNumber() const
    return frameNumber;
 }
 
-QByteArray QGifHandler::name() const
+QString QGifHandler::name() const
 {
    return "gif";
 }

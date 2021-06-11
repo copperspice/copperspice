@@ -84,18 +84,20 @@ static const int BMP_BITFIELDS = 3;
 
 static const char dibFormatC[] = "dib";
 
-static inline QByteArray msgConversionError(const char *func, const char *format)
+static inline QString msgConversionError(const QString &func, const QString &format)
 {
-   QByteArray msg = func;
-   msg += ": Unable to convert DIB image. The image converter plugin for '";
-   msg += format;
-   msg += "' is not available. Available formats: ";
+   QString retval = func;
 
-   for (const QByteArray &af : QImageReader::supportedImageFormats()) {
-      msg += af;
-      msg += ' ';
+   retval += ": Unable to convert DIB image. The image converter plugin for '";
+   retval += format;
+   retval += "' is not available. Available formats: ";
+
+   for (const QString &item : QImageReader::supportedImageFormats()) {
+      retval += item;
+      retval += ' ';
    }
-   return msg;
+
+   return retval;
 }
 
 static inline QImage readDib(QByteArray data)
@@ -104,10 +106,12 @@ static inline QImage readDib(QByteArray data)
    buffer.open(QIODevice::ReadOnly);
    QImageReader reader(&buffer, dibFormatC);
 
-   if (!reader.canRead()) {
-      qWarning("%s", msgConversionError(__FUNCTION__, dibFormatC).constData());
+   if (! reader.canRead()) {
+      qWarning("%s", csPrintable(msgConversionError("readDib", dibFormatC)));
+
       return QImage();
    }
+
    return reader.read();
 }
 
@@ -117,10 +121,12 @@ static QByteArray writeDib(const QImage &img)
    QBuffer buffer(&ba);
    buffer.open(QIODevice::ReadWrite);
    QImageWriter writer(&buffer, dibFormatC);
-   if (!writer.canWrite()) {
-      qWarning("%s", msgConversionError(__FUNCTION__, dibFormatC).constData());
+
+   if (! writer.canWrite()) {
+      qWarning("%s", csPrintable(msgConversionError("writeDib", dibFormatC)));
       return ba;
    }
+
    if (!writer.write(img)) {
       ba.clear();
    }
