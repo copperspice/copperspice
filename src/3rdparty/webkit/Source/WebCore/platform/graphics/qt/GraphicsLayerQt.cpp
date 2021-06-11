@@ -1174,8 +1174,10 @@ void GraphicsLayerQt::setDrawsContent(bool value)
 */
 void GraphicsLayerQt::setBackgroundColor(const Color& value)
 {
-    if (value == m_impl->m_pendingContent.backgroundColor)
+    if (QColor(value) == m_impl->m_pendingContent.backgroundColor) {
         return;
+    }
+
     m_impl->m_pendingContent.backgroundColor = value;
     GraphicsLayer::setBackgroundColor(value);
     m_impl->notifyChange(GraphicsLayerQtImpl::BackgroundColorChange);
