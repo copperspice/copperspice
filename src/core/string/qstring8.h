@@ -808,13 +808,13 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       // wrappers
       template <typename SP = QStringParser, typename ...Ts>
-      [[nodiscard]] QString8 formatArg(Ts&&... args) const
+      [[nodiscard]] QString8 formatArg(Ts &&... args) const
       {
          return SP::template formatArg<QString8>(*this, std::forward<Ts>(args)...);
       }
 
       template <typename SP = QStringParser, typename ...Ts>
-      [[nodiscard]] QString8 formatArgs(Ts&&... args) const
+      [[nodiscard]] QString8 formatArgs(Ts &&... args) const
       {
          return SP::template formatArgs<QString8>(*this, std::forward<Ts>(args)...);
       }

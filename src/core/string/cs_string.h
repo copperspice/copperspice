@@ -3242,8 +3242,7 @@ void CsBasicString<E, A>::swap(CsBasicString &str)
    m_string.swap(str.m_string);
 }
 
-
-// iterators
+// iterator methods
 template <typename E, typename A>
 typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::begin() const
 {
@@ -3334,6 +3333,8 @@ void swap(CsBasicString<E, A> &str1, CsBasicString<E, A> &str2)
 template <typename E1, typename A1, typename E2, typename A2>
 bool operator==(const CsBasicString<E1, A1> &str1, const CsBasicString<E2, A2> &str2)
 {
+   // E1 and E2 are different
+
    auto iter1 = str1.begin();
    auto iter2 = str2.begin();
 

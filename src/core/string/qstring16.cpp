@@ -1566,7 +1566,7 @@ QString16 QString16::toHtmlEscaped() const
       if (c == UCHAR('<'))         {
          retval.append("&lt;");
 
-      } else if (c== UCHAR('>'))  {
+      } else if (c == UCHAR('>'))  {
          retval.append("&gt;");
 
       } else if (c == UCHAR('&'))  {

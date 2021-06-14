@@ -799,13 +799,13 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       // wrappers
       template <typename SP = QStringParser, typename ...Ts>
-      [[nodiscard]] QString16 formatArg(Ts&&... args) const
+      [[nodiscard]] QString16 formatArg(Ts &&... args) const
       {
          return SP::template formatArg<QString16>(*this, std::forward<Ts>(args)...);
       }
 
       template <typename SP = QStringParser, typename ...Ts>
-      [[nodiscard]] QString16 formatArgs(Ts&&... args) const
+      [[nodiscard]] QString16 formatArgs(Ts &&... args) const
       {
          return SP::template formatArgs<QString16>(*this, std::forward<Ts>(args)...);
       }
