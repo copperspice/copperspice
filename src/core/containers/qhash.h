@@ -213,11 +213,11 @@ class QHash
 
       // free functions
       friend bool operator==(iterator iter1, const_iterator iter2) {
-         return (iter2 == iter1);
+         return iter2.operator==(iter1);
       }
 
       friend bool operator!=(iterator iter1, const_iterator iter2) {
-         return (iter2 != iter1);
+         return iter2.operator!=(iter1);
       }
 
     private:
