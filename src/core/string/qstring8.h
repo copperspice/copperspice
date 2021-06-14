@@ -223,9 +223,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       {
       }
 
-      QString8(const QString8 &other) = default;
-      QString8(QString8 &&other) = default;
-
       QString8(std::nullptr_t) = delete;
 
       QString8(QChar32 c);
@@ -293,6 +290,9 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       QString8(QStringView8 str)
          : CsString::CsString( str )
       { }
+
+      QString8(const QString8 &other) = default;
+      QString8(QString8 &&other) = default;
 
       ~QString8() = default;
 

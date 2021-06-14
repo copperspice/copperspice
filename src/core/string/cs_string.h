@@ -73,15 +73,6 @@ class CsBasicString
       {
       }
 
-      // copy
-      CsBasicString(const CsBasicString &str) = default;
-      CsBasicString(const CsBasicString &str, const A &a);
-
-      // move
-      CsBasicString(CsBasicString && str) = default;
-      CsBasicString(CsBasicString && str, const A &a);
-
-
       // for a const char * and char *
       template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
                   std::is_same<T, char *>::value>::type>
@@ -132,6 +123,14 @@ class CsBasicString
       CsBasicString(Iterator begin, Iterator end, const A &a = A());
 
       CsBasicString(const_iterator begin, const_iterator end, const A &a = A());
+
+      // copy constructor
+      CsBasicString(const CsBasicString &str) = default;
+      CsBasicString(const CsBasicString &str, const A &a);
+
+      // move constructor
+      CsBasicString(CsBasicString && str) = default;
+      CsBasicString(CsBasicString && str, const A &a);
 
       // ** operators
       CsBasicString &operator=(const CsBasicString &str) = default;
