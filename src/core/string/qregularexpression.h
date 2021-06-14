@@ -410,16 +410,6 @@ class Q_CORE_EXPORT QRegularExpression
       QRegularExpression &operator=(const QRegularExpression &other) = default;
       QRegularExpression &operator=(QRegularExpression &&other) = default;
 
-
-    // unsure if this methods is required
-//    bool operator==(const QRegularExpression &regExp) const {
-//    }
-
-      // unsure if this methods is required
-//    bool operator!=(const QRegularExpression &regExp) const {
-//       return !operator==(regExp);
-//    }
-
    private:
       S m_pattern;
       QPatternOptionFlags m_patternOptions = QPatternOption::NoPatternOption;
