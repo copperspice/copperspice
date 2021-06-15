@@ -74,6 +74,15 @@ class CsChar
       {
       }
 
+#ifdef __cpp_char8_t
+      // support new data type added in C++20
+
+      CsChar(char8_t c)
+         : m_char(c)
+      {
+      }
+#endif
+
       inline bool operator!=(const CsChar &other) const;
       inline bool operator==(const CsChar &other) const;
 

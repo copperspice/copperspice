@@ -296,6 +296,17 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       ~QString8() = default;
 
+
+#if defined(__cpp_char8_t)
+      // support new data type added in C++20
+
+      QString8(const char8_t *str);
+      QString8(const char8_t *str, size_type size);
+
+      static QString8 fromUtf8(const char8_t *str, size_type numOfChars = -1);
+#endif
+
+
       using CsString::CsString::append;          // internal
       using CsString::CsString::operator=;      // internal
       using CsString::CsString::operator+=;     // internal
@@ -1206,5 +1217,24 @@ inline void swap(QString8 &a, QString8 &b) {
 
 QString8 cs_internal_string_normalize(const QString8 &data, QString8::NormalizationForm mode,
                   QChar32::UnicodeVersion version, int from);
+
+#if defined(__cpp_char8_t)
+   // support new data type added in C++20
+
+   inline QString8::QString8(const char8_t *str)
+   {
+      *this = QString8::fromUtf8(str, -1);
+   }
+
+   inline QString8::QString8(const char8_t *str, size_type size)
+   {
+      *this = QString8::fromUtf8(str, size);
+   }
+
+   inline QString8 QString8::fromUtf8(const char8_t *str, size_type numOfChars)
+   {
+      return CsString::CsString::fromUtf8(str, numOfChars);
+   }
+#endif
 
 #endif

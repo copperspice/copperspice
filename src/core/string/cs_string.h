@@ -132,6 +132,17 @@ class CsBasicString
       CsBasicString(CsBasicString && str) = default;
       CsBasicString(CsBasicString && str, const A &a);
 
+
+#if defined(__cpp_char8_t)
+      // support new data type added in C++20
+
+      CsBasicString(const char8_t *str, const A &a = A());
+      CsBasicString(const char8_t *str, size_type size, const A &a = A());
+
+      static CsBasicString fromUtf8(const char8_t *str, size_type numOfChars = -1, const A &a = A());
+#endif
+
+
       // ** operators
       CsBasicString &operator=(const CsBasicString &str) = default;
       CsBasicString &operator=(CsBasicString &&str) = default;
@@ -2489,7 +2500,6 @@ CsBasicString<E,A> CsBasicString<E, A>::fromUtf8(const char *str, size_type numO
          }
 
          retval.append(UCHAR('\uFFFD'));
-
       }
    }
 
@@ -2500,6 +2510,112 @@ CsBasicString<E,A> CsBasicString<E, A>::fromUtf8(const char *str, size_type numO
 
    return retval;
 }
+
+#if defined(__cpp_char8_t)
+   // support new data type added in C++20
+
+template <typename E, typename A>
+CsBasicString<E,A> CsBasicString<E, A>::fromUtf8(const char8_t *str, size_type numOfChars, const A &a)
+{
+   CsBasicString retval(a);
+
+   if (str == nullptr) {
+      return retval;
+   }
+
+   if (numOfChars < 0) {
+      numOfChars = std::char_traits<char8_t>::length(str);
+   }
+
+   int multi_size = 0;
+   char32_t data  = 0;
+
+   for (int i = 0; i < numOfChars; ++i) {
+
+      if ((str[i] & 0x80) == 0) {
+
+         if (multi_size != 0) {
+            // multi byte sequence was too short
+            multi_size = 0;
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         retval.append(static_cast<char32_t>(str[i]));
+
+      } else if ((str[i] & 0xC0) == 0x80) {
+         // continuation char
+
+         data = (data << 6) | (static_cast<char32_t>(str[i]) & 0x3F);
+
+         if (multi_size == 2 && data >= 0x80 && data <= 0x7FF) {
+            multi_size = 0;
+            retval.append(data);
+
+         } else if (multi_size == 3 && data >= 0x800 && data <= 0xFFFF) {
+            multi_size = 0;
+            retval.append(data);
+
+         } else if (multi_size == 4 && data >= 0x10000 && data <= 0x10FFFF) {
+            multi_size = 0;
+            retval.append(data);
+
+         }
+
+      } else if ((str[i] & 0xE0) == 0xC0) {
+         // begin two byte sequence
+
+         if (multi_size != 0) {
+            // preceding multi byte sequence was too short
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         multi_size = 2;
+         data = static_cast<char32_t>(str[i]) & 0x1F;
+
+      } else if ((str[i] & 0xF0) == 0xE0) {
+         // begin three byte sequence
+
+         if (multi_size != 0) {
+            // preceding multi byte sequence was too short
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         multi_size = 3;
+         data = static_cast<char32_t>(str[i]) & 0x0F;
+
+      } else if ((str[i] & 0xF8) == 0xF0) {
+        // begin four byte sequence
+
+         if (multi_size != 0) {
+            // preceding multi byte sequence was too short
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         multi_size = 4;
+         data = static_cast<char32_t>(str[i]) & 0x07;
+
+      } else {
+         // invalid character
+
+         if (multi_size != 0) {
+            // preceding multi byte sequence was too short
+            multi_size = 0;
+            retval.append(UCHAR('\uFFFD'));
+         }
+
+         retval.append(UCHAR('\uFFFD'));
+      }
+   }
+
+   if (multi_size != 0) {
+      // invalid character at the end of the string
+      retval.append(UCHAR('\uFFFD'));
+   }
+
+   return retval;
+}
+
+#endif
 
 template <typename E, typename A>
 CsBasicString<E,A> CsBasicString<E, A>::fromUtf16(const char16_t *str, size_type numOfChars, const A &a)
@@ -3470,7 +3586,23 @@ bool operator>=(const CsBasicString<E1, A1> &str1, const CsBasicString<E2, A2> &
    return ! (str1 < str2);
 }
 
+#if defined(__cpp_char8_t)
+   // support new data type added in C++20
 
-}
+   template <typename E, typename A>
+   CsBasicString<E, A>::CsBasicString(const char8_t *str, const A &a)
+   {
+      *this = CsBasicString::fromUtf8(str, -1, a);
+   }
+
+   template <typename E, typename A>
+   CsBasicString<E, A>::CsBasicString(const char8_t *str, size_type size, const A &a)
+   {
+      *this = CsBasicString::fromUtf8(str, size, a);
+   }
+#endif
+
+
+}  // namespace
 
 #endif
