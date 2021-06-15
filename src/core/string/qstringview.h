@@ -947,6 +947,23 @@ typename QStringView<S>::value_type QStringView<S>::operator[](size_type n) cons
    return CsString::CsBasicStringView<S>::at(n);
 }
 
+template <typename S>
+inline bool operator==(QStringView<S> str1, QStringView<S> str2)
+{
+   return str1.compare(str2) == 0;
+}
+
+// remaining operator==() functions are located in qstring8.h and qstring16.h
+
+template <typename S>
+inline bool operator!=(QStringView<S> str1, QStringView<S> str2)
+{
+   return str1.compare(str2) != 0;
+}
+
+// remaining operator!=() functions are located in qstring8.h and qstring16.h
+
+
 #if ! defined (CS_DOXYPRESS)
 }  // cs namespace
 #endif
