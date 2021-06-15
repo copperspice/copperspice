@@ -43,6 +43,9 @@ class CsBasicStringView
       using const_reverse_iterator = typename S::const_reverse_iterator;
       using reverse_iterator       = typename S::const_reverse_iterator;
 
+      using const_storage_iterator         = typename S::const_storage_iterator;
+      using const_storage_reverse_iterator = typename S::const_storage_reverse_iterator;
+
       static constexpr const size_type npos = -1;
 
       CsBasicStringView() = default;
@@ -186,6 +189,24 @@ class CsBasicStringView
 
       const_reverse_iterator crend() const {
          return m_begin;
+      }
+
+      // storage iterators
+
+      const_storage_iterator storage_begin() const{
+         return m_begin.codePointBegin();
+      }
+
+      const_storage_iterator storage_end() const {
+         return m_end.codePointBegin();
+      }
+
+      const_storage_reverse_iterator storage_rbegin() const {
+         return std::make_reverse_iterator(m_end.codePointBegin());
+      }
+
+      const_storage_reverse_iterator storage_rend() const {
+         return std::make_reverse_iterator(m_begin.codePointBegin());
       }
 
    private:
