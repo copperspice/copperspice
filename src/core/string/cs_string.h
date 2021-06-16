@@ -3474,20 +3474,51 @@ bool operator==(const CsBasicString<E1, A1> &str1, const CsBasicString<E2, A2> &
    return false;
 }
 
-template <typename E, typename A, typename T, typename = typename std::enable_if<std::is_array<T>::value &&
-                  std::is_same<char, typename std::remove_extent<T>::type>::value>::type>
-bool operator==(const CsBasicString<E, A> &str1, const T &str2)
+template <typename E, typename A>
+bool operator==(const CsBasicString<E, A> &str1, const CsBasicString<E, A> &str2)
 {
-   // make this safe by treating str as utf8
-   return str1 == CsBasicString<E, A>(str2);
+   // E is the same
+
+   // are the vectors equal
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2.storage_begin(), str2.storage_end());
 }
 
-template <typename E, typename A, typename T, typename = typename std::enable_if<std::is_array<T>::value &&
-                  std::is_same<char, typename std::remove_extent<T>::type>::value>::type>
-bool operator==(const T &str1, const CsBasicString<E, A> &str2)
+inline bool operator==(const CsString_utf8 &str1, const CsString_utf8 &str2)
 {
-   // make this safe by treating str as utf8
-   return CsBasicString<E, A>(str1) == str2;
+   // are the vectors equal
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2.storage_begin(), str2.storage_end());
+}
+
+inline bool operator==(const CsString_utf16 &str1, const CsString_utf16 &str2)
+{
+   // are the vectors equal
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2.storage_begin(), str2.storage_end());
+}
+
+template <int N>
+inline bool operator==(const CsString_utf8 &str1, const char (& str2)[N])
+{
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1,
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
+}
+
+template <int N>
+inline bool operator==(const char (& str1)[N], const CsString_utf8 &str2)
+{
+   return std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end(),
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
+}
+
+template <int N>
+inline bool operator==(const CsString_utf16 &str1, const char16_t (& str2)[N])
+{
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1);
+}
+
+template <int N>
+inline bool operator==(const char16_t (& str1)[N], const CsString_utf16 &str2)
+{
+   return std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end());
 }
 
 template <typename E1, typename A1, typename E2, typename A2>
@@ -3496,16 +3527,18 @@ bool operator!=(const CsBasicString<E1, A1> &str1, const CsBasicString<E2, A2> &
    return ! (str1 == str2);
 }
 
-template <typename E, typename A, typename T, typename = typename std::enable_if<std::is_array<T>::value &&
-                  std::is_same<char, typename std::remove_extent<T>::type>::value>::type>
-bool operator!=(const CsBasicString<E, A> &str1, const T &str2)
+template <typename E, typename A>
+bool operator!=(const CsBasicString<E, A> &str1, const CsBasicString<E, A> &str2)
 {
    return ! (str1 == str2);
 }
 
-template <typename E, typename A, typename T, typename = typename std::enable_if<std::is_array<T>::value &&
-                  std::is_same<char, typename std::remove_extent<T>::type>::value>::type>
-bool operator!=(const T &str1, const CsBasicString<E, A> &str2)
+inline bool operator!=(const CsString_utf8 &str1, const CsString_utf8 &str2)
+{
+   return ! (str1 == str2);
+}
+
+inline bool operator!=(const CsString_utf16 &str1, const CsString_utf16 &str2)
 {
    return ! (str1 == str2);
 }

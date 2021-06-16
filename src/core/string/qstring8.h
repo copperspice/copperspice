@@ -1032,42 +1032,60 @@ Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString8 &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString8 &);
 
 // free functions, comparisons for string literals
-inline bool operator==(const QString8 &str1, const QString8 &str2)
-{
-   return (static_cast<CsString::CsString>(str1) == static_cast<CsString::CsString>(str2));
-}
-
-// for an array of chars
 template <int N>
-inline bool operator==(const char (&cStr)[N], const QString8 &str)
+inline bool operator==(QStringView8 str1, const char (&str2)[N])
 {
-   return (static_cast<CsString::CsString>(str) == cStr);
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1,
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
 }
 
-// for an array of chars
 template <int N>
-inline bool operator==(const QString8 &str, const char (&cStr)[N])
+inline bool operator==(const char (& str1)[N], QStringView8 str2)
 {
-   return (static_cast<CsString::CsString>(str) == cStr);
+   return std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end(),
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
 }
 
-inline bool operator!=(const QString8 &str1, const QString8 &str2)
-{
-   return ! (str1 == str2);
-}
-
-// for an array of chars
 template <int N>
-inline bool operator!=(const char (&cStr)[N], const QString8 &str)
+inline bool operator==(const QString8 &str1, const char (& str2)[N])
 {
-   return ! (str == cStr);
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1,
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
 }
 
-// for an array of chars
 template <int N>
-inline bool operator!=(const QString8 &str, const char (&cStr)[N])
+inline bool operator==(const char (& str1)[N], const QString8 &str2)
 {
-   return ! (str == cStr);
+   return std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end(),
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
+}
+
+template <int N>
+inline bool operator!=(QStringView8 str1, const char (&str2)[N])
+{
+   return ! std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1,
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
+}
+
+template <int N>
+inline bool operator!=(const char (& str1)[N], QStringView8 str2)
+{
+   return ! std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end(),
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
+}
+
+template <int N>
+inline bool operator!=(QString8 str1, const char (& str2)[N])
+{
+   return ! std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1,
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
+}
+
+template <int N>
+inline bool operator!=(const char (& str1)[N], QString8 str2)
+{
+   return ! std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end(),
+      [] (auto a, auto b) { return static_cast<uint8_t>(a) == static_cast<uint8_t>(b);} );
 }
 
 inline QString8 operator+(const QString8 &str1, const QString8 &str2)

@@ -1006,42 +1006,52 @@ Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString16 &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString16 &);
 
 // free functions, comparisons for string literals
-inline bool operator==(const QString16 &str1, const QString16 &str2)
-{
-   return (static_cast<CsString::CsString_utf16>(str1) == static_cast<CsString::CsString_utf16>(str2));
-}
-
-// for an array of chars
 template <int N>
-inline bool operator==(const char (&cStr)[N], const QString16 &str)
+inline bool operator==(QStringView16 str1, const char16_t (&str2)[N])
 {
-   return (static_cast<CsString::CsString_utf16>(str) == cStr);
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1);
 }
 
-// for an array of chars
 template <int N>
-inline bool operator==(const QString16 &str, const char (&cStr)[N])
+inline bool operator==(const char16_t (& str1)[N], QStringView16 str2)
 {
-   return (static_cast<CsString::CsString_utf16>(str) == cStr);
+   return std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end());
 }
 
-inline bool operator!=(const QString16 &str1, const QString16 &str2)
-{
-   return ! (str1 == str2);
-}
-
-// for an array of chars
 template <int N>
-inline bool operator!=(const char (&cStr)[N], const QString16 &str)
+inline bool operator==(QString16 str1, const char16_t (& str2)[N])
 {
-   return ! (str == cStr);
+   return std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1);
 }
 
-// for an array of chars
 template <int N>
-inline bool operator!=(const QString16 &str, const char (&cStr)[N])
+inline bool operator==(const char16_t (& str1)[N], QString16 str2)
 {
-   return ! (str == cStr);
+   return std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end());
+}
+
+template <int N>
+inline bool operator!=(QStringView16 str1, const char16_t (&str2)[N])
+{
+   return ! std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1);
+}
+
+template <int N>
+inline bool operator!=(const char16_t (& str1)[N], QStringView16 str2)
+{
+   return ! std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end());
+}
+
+template <int N>
+inline bool operator!=(QString16 str1, const char16_t (& str2)[N])
+{
+   return ! std::equal(str1.storage_begin(), str1.storage_end(), str2, str2+N-1);
+}
+
+template <int N>
+inline bool operator!=(const char16_t (& str1)[N], QString16 str2)
+{
+   return ! std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end());
 }
 
 inline QString16 operator+(const QString16 &str1, const QString16 &str2)

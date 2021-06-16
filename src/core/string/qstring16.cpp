@@ -1064,7 +1064,7 @@ QString16 &QString16::replace(const QRegularExpression16 &regExp, const QString1
    static QRegularExpression16 regSplit("(.*?)(\\\\[0-9])");
    bool noCapture = true;
 
-   auto iter = after.indexOfFast('\\');
+   auto iter = after.indexOfFast(u'\\');
 
    if (iter != after.end() && iter != after.end() - 1) {
       splitMatch = regSplit.match(after);
@@ -1121,34 +1121,34 @@ QString16 &QString16::replace(const QRegularExpression16 &regExp, const QString1
 
          for (const auto &item : list) {
 
-            if (item == "\\0") {
+            if (item == u"\\0") {
                iter = CsString::CsString_utf16::insert(iter, saveCapture[0]);
 
-            } else if (item == "\\1") {
+            } else if (item == u"\\1") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[1]);
 
-            } else if (item == "\\2") {
+            } else if (item == u"\\2") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[2]);
 
-            } else if (item == "\\3") {
+            } else if (item == u"\\3") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[3]);
 
-            } else if (item == "\\4") {
+            } else if (item == u"\\4") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[4]);
 
-            } else if (item == "\\5") {
+            } else if (item == u"\\5") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[5]);
 
-            } else if (item == "\\6") {
+            } else if (item == u"\\6") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[6]);
 
-            } else if (item == "\\7") {
+            } else if (item == u"\\7") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[7]);
 
-            } else if (item == "\\8") {
+            } else if (item == u"\\8") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[8]);
 
-            } else if (item == "\\9") {
+            } else if (item == u"\\9") {
                   iter = CsString::CsString_utf16::insert(iter, saveCapture[9]);
 
             } else {
