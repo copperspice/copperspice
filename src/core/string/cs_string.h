@@ -3543,6 +3543,20 @@ inline bool operator!=(const CsString_utf16 &str1, const CsString_utf16 &str2)
    return ! (str1 == str2);
 }
 
+inline CsString_utf8 operator+(CsString_utf8 str1, const CsString_utf8 &str2)
+{
+   str1.append(str2);
+
+   return str1;
+}
+
+inline CsString_utf16 operator+(CsString_utf16 str1, const CsString_utf16 &str2)
+{
+   str1.append(str2);
+
+   return str1;
+}
+
 template <typename E, typename A>
 CsBasicString<E, A> operator+(const CsBasicString<E, A> &str, CsChar c)
 {
