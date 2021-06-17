@@ -475,12 +475,12 @@ TEST_CASE("QString16 string_view", "[qstring16]")
 
    {
       QStringView16 view = str.leftView(20);
-      REQUIRE(view == "A wacky fox and size");
+      REQUIRE(view == u"A wacky fox and size");
    }
 
    {
       QStringView16 view = str.rightView(11);
-      REQUIRE(view == "a blue moon");
+      REQUIRE(view == u"a blue moon");
    }
 }
 

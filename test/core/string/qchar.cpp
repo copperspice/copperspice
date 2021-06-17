@@ -21,35 +21,77 @@
 
 #include <catch2/catch.hpp>
 
+TEST_CASE("QChar u8_constructor", "[qchar]")
+{
+   QChar ch = u8'b';
+
+   REQUIRE(ch.isNull() == false);
+
+   REQUIRE(ch.unicode() == char32_t(98));
+   REQUIRE(ch == u8'b');
+   REQUIRE(ch != u8'c');
+
+   REQUIRE(u8'b' == ch);
+   REQUIRE(u8'c' != ch);
+}
+
+TEST_CASE("QChar u_constructor", "[qchar]")
+{
+   QChar ch = u'b';
+
+   REQUIRE(ch.isNull() == false);
+
+   REQUIRE(ch.unicode() == char32_t(98));
+   REQUIRE(ch == u'b');
+   REQUIRE(ch != u'c');
+
+   REQUIRE(u'b' == ch);
+   REQUIRE(u'c' != ch);
+}
+
+TEST_CASE("QChar U_constructor", "[qchar]")
+{
+   QChar ch = U'b';
+
+   REQUIRE(ch.isNull() == false);
+
+   REQUIRE(ch.unicode() == char32_t(98));
+   REQUIRE(ch == U'b');
+   REQUIRE(ch != U'c');
+
+   REQUIRE(U'b' == ch);
+   REQUIRE(U'c' != ch);
+}
+
 TEST_CASE("QChar empty", "[qchar]")
 {
-   QChar str;
+   QChar ch;
 
-   REQUIRE(str.isNull());
+   REQUIRE(ch.isNull() == true);
 }
 
 TEST_CASE("QChar is_methods", "[qchar]")
 {
-   QChar str = 'B';
+   QChar ch = 'B';
 
-   REQUIRE(! str.isDigit());
-   REQUIRE(! str.isLower());
-   REQUIRE(! str.isNumber());
+   REQUIRE(! ch.isDigit());
+   REQUIRE(! ch.isLower());
+   REQUIRE(! ch.isNumber());
 
-   REQUIRE(str.isLetter());
-   REQUIRE(str.isLetterOrNumber());
-   REQUIRE(str.isPrint());
-   REQUIRE(str.isUpper());
+   REQUIRE(ch.isLetter());
+   REQUIRE(ch.isLetterOrNumber());
+   REQUIRE(ch.isPrint());
+   REQUIRE(ch.isUpper());
 
-   str = '7';
+   ch = '7';
 
-   REQUIRE(str.isDigit());
-   REQUIRE(! str.isLower());
-   REQUIRE(str.isNumber());
+   REQUIRE(ch.isDigit());
+   REQUIRE(! ch.isLower());
+   REQUIRE(ch.isNumber());
 
-   REQUIRE(! str.isLetter());
-   REQUIRE(str.isLetterOrNumber());
-   REQUIRE(str.isPrint());
-   REQUIRE(! str.isUpper());
+   REQUIRE(! ch.isLetter());
+   REQUIRE(ch.isLetterOrNumber());
+   REQUIRE(ch.isPrint());
+   REQUIRE(! ch.isUpper());
 }
 

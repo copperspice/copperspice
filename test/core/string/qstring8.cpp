@@ -703,3 +703,17 @@ TEST_CASE("QString8 u8_replace", "[qstring]")
 }
 
 
+// C++20 only
+
+TEST_CASE("QString8 char8_t_constructor", "[qstring]")
+{
+#if defined(__cpp_char8_t)
+   const char8_t *data = u8"A wacky fox and sizeable pig";
+
+   QString str = data;
+
+   REQUIRE(str == "A wacky fox and sizeable pig");
+#endif
+}
+
+

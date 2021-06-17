@@ -7,6 +7,22 @@ set_target_properties(CsCoreTest
    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/test"
 )
 
+if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0")
+   if (MSVC)
+      # CopperSpice must be compiled with C++20 in order to run the unit test for C++20
+
+   else()
+      set_target_properties(CsCoreTest
+         PROPERTIES
+
+         # only a request for C++20
+         CXX_STANDARD_REQUIRED OFF
+         CXX_STANDARD 20
+      )
+
+   endif()
+endif()
+
 file(WRITE ${CMAKE_BINARY_DIR}/bin/test/run_coretest.bat
    "@SET PATH=..;%PATH%\n@CsCoreTest\n"
 )
@@ -75,6 +91,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qweakpointer.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qreqularexpression.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.cpp
