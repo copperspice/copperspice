@@ -75,8 +75,8 @@ class Q_CORE_EXPORT QTextCodec
    using ConversionFlags = QFlags<ConversionFlag>;
 
    struct Q_CORE_EXPORT ConverterState {
-      ConverterState(ConversionFlags f = DefaultConversion)
-         : flags(f), remainingChars(0), invalidChars(0), d(nullptr)
+      ConverterState(ConversionFlags flags = DefaultConversion)
+         : m_flags(flags), remainingChars(0), invalidChars(0), m_data(nullptr)
       {
          state_data[0] = 0;
          state_data[1] = 0;
@@ -88,11 +88,11 @@ class Q_CORE_EXPORT QTextCodec
 
       ~ConverterState();
 
-      ConversionFlags flags;
+      ConversionFlags m_flags;
       int remainingChars;
       int invalidChars;
       uint state_data[3];
-      void *d;
+      void *m_data;
    };
 
    QString toUnicode(const QByteArray &) const;

@@ -38,7 +38,7 @@ QByteArray QUtf8::convertFromUnicode(QStringView str, QTextCodec::ConverterState
 {
    QByteArray retval;
 
-   if (state && ! (state->flags & QTextCodec::IgnoreHeader)) {
+   if (state && ! (state->m_flags & QTextCodec::IgnoreHeader)) {
       retval.append(0xEF);
       retval.append(0xBB);
       retval.append(0xBF);
@@ -48,7 +48,7 @@ QByteArray QUtf8::convertFromUnicode(QStringView str, QTextCodec::ConverterState
 
    if (state) {
       state->remainingChars = 0;
-      state->flags |= QTextCodec::IgnoreHeader;
+      state->m_flags |= QTextCodec::IgnoreHeader;
    }
 
    return retval;
@@ -69,11 +69,11 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
    const char *end = src + len;
 
    if (state) {
-      if (state->flags & QTextCodec::IgnoreHeader) {
+      if (state->m_flags & QTextCodec::IgnoreHeader) {
          headerDone = true;
       }
 
-      if (state->flags & QTextCodec::ConvertInvalidToNull) {
+      if (state->m_flags & QTextCodec::ConvertInvalidToNull) {
          replacement = QChar::Null;
       }
 
@@ -180,7 +180,7 @@ QString QUtf8::convertToUnicode(const char *chars, int len, QTextCodec::Converte
       state->invalidChars += invalid;
 
       if (headerDone) {
-         state->flags |= QTextCodec::IgnoreHeader;
+         state->m_flags |= QTextCodec::IgnoreHeader;
       }
 
       if (bytesLeft != 0) {
@@ -201,11 +201,11 @@ QByteArray QUtf16::convertFromUnicode(QStringView str, QTextCodec::ConverterStat
    QByteArray retval;
 
    DataEndianness endian = e;
-   if (! state || (! (state->flags & QTextCodec::IgnoreHeader))) {
+   if (! state || (! (state->m_flags & QTextCodec::IgnoreHeader))) {
       endian = (QSysInfo::ByteOrder == QSysInfo::BigEndian) ? BigEndianness : LittleEndianness;
    }
 
-   if (! state || ! (state->flags & QTextCodec::IgnoreHeader)) {
+   if (! state || ! (state->m_flags & QTextCodec::IgnoreHeader)) {
       if (endian == BigEndianness) {
          retval.append(0xFE);
          retval.append(0xFF);
@@ -237,7 +237,7 @@ QByteArray QUtf16::convertFromUnicode(QStringView str, QTextCodec::ConverterStat
 
    if (state) {
       state->remainingChars = 0;
-      state->flags |= QTextCodec::IgnoreHeader;
+      state->m_flags |= QTextCodec::IgnoreHeader;
    }
 
    return retval;
@@ -259,11 +259,11 @@ QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::Convert
    const char *end  = iter + len;
 
    if (state) {
-      if (state->flags & QTextCodec::IgnoreHeader) {
+      if (state->m_flags & QTextCodec::IgnoreHeader) {
          headerDone = true;
       }
 
-      if (state->flags & QTextCodec::ConvertInvalidToNull) {
+      if (state->m_flags & QTextCodec::ConvertInvalidToNull) {
          replacement = QChar::Null;
       }
 
@@ -372,7 +372,7 @@ QString QUtf16::convertToUnicode(const char *chars, int len, QTextCodec::Convert
       state->invalidChars += invalid;
 
       if (headerDone) {
-         state->flags |= QTextCodec::IgnoreHeader;
+         state->m_flags |= QTextCodec::IgnoreHeader;
       }
 
       state->state_data[Endian] = endian;
@@ -395,11 +395,11 @@ QByteArray QUtf32::convertFromUnicode(QStringView str, QTextCodec::ConverterStat
    QByteArray retval;
 
    DataEndianness endian = e;
-   if (! state || (! (state->flags & QTextCodec::IgnoreHeader))) {
+   if (! state || (! (state->m_flags & QTextCodec::IgnoreHeader))) {
       endian = (QSysInfo::ByteOrder == QSysInfo::BigEndian) ? BigEndianness : LittleEndianness;
    }
 
-   if (! state || ! (state->flags & QTextCodec::IgnoreHeader)) {
+   if (! state || ! (state->m_flags & QTextCodec::IgnoreHeader)) {
       if (endian == BigEndianness) {
          retval.append('\x00');
          retval.append('\x00');
@@ -432,7 +432,7 @@ QByteArray QUtf32::convertFromUnicode(QStringView str, QTextCodec::ConverterStat
 
    if (state) {
       state->remainingChars = 0;
-      state->flags |= QTextCodec::IgnoreHeader;
+      state->m_flags |= QTextCodec::IgnoreHeader;
    }
 
    return retval;
@@ -452,7 +452,7 @@ QString QUtf32::convertToUnicode(const char *chars, int len, QTextCodec::Convert
    const char *end  = iter + len;
 
    if (state) {
-      headerDone = state->flags & QTextCodec::IgnoreHeader;
+      headerDone = state->m_flags & QTextCodec::IgnoreHeader;
 
       if (endian == DetectEndianness) {
          endian = (DataEndianness)state->state_data[Endian];
@@ -519,7 +519,7 @@ QString QUtf32::convertToUnicode(const char *chars, int len, QTextCodec::Convert
 
    if (state) {
       if (headerDone) {
-         state->flags |= QTextCodec::IgnoreHeader;
+         state->m_flags |= QTextCodec::IgnoreHeader;
       }
 
       state->state_data[Endian] = endian;

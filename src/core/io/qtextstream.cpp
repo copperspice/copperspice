@@ -236,9 +236,9 @@ static void resetCodecConverterStateHelper(QTextCodec::ConverterState *state)
 static void copyConverterStateHelper(QTextCodec::ConverterState *dest, const QTextCodec::ConverterState *src)
 {
    // copies the structure manually.
-   Q_ASSERT(!src->d);
+   Q_ASSERT(! src->m_data);
 
-   dest->flags         = src->flags;
+   dest->m_flags       = src->m_flags;
    dest->invalidChars  = src->invalidChars;
    dest->state_data[0] = src->state_data[0];
    dest->state_data[1] = src->state_data[1];
@@ -302,7 +302,7 @@ void QTextStreamPrivate::reset()
    resetCodecConverterStateHelper(&writeConverterState);
    delete readConverterSavedState;
    readConverterSavedState = nullptr;
-   writeConverterState.flags |= QTextCodec::IgnoreHeader;
+   writeConverterState.m_flags |= QTextCodec::IgnoreHeader;
    autoDetectUnicode = true;
 #endif
 }
@@ -367,7 +367,7 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
 
       if (! codec) {
          codec = QTextCodec::codecForLocale();
-         writeConverterState.flags |= QTextCodec::IgnoreHeader;
+         writeConverterState.m_flags |= QTextCodec::IgnoreHeader;
       }
    }
 #endif
@@ -636,7 +636,7 @@ inline void QTextStreamPrivate::consume(int size)
 inline void QTextStreamPrivate::saveConverterState(qint64 newPos)
 {
 #ifndef QT_NO_TEXTCODEC
-   if (readConverterState.d) {
+   if (readConverterState.m_data) {
       // converter cannot be copied, so don't save anything
       // don't update readBufferStartDevicePos either
       return;
@@ -904,7 +904,7 @@ bool QTextStream::seek(qint64 pos)
       resetCodecConverterStateHelper(&d->writeConverterState);
       delete d->readConverterSavedState;
       d->readConverterSavedState = nullptr;
-      d->writeConverterState.flags |= QTextCodec::IgnoreHeader;
+      d->writeConverterState.m_flags |= QTextCodec::IgnoreHeader;
 #endif
       return true;
    }
@@ -2480,9 +2480,9 @@ void QTextStream::setGenerateByteOrderMark(bool generate)
 
    if (d->writeBuffer.isEmpty()) {
       if (generate) {
-         d->writeConverterState.flags &= ~QTextCodec::IgnoreHeader;
+         d->writeConverterState.m_flags &= ~QTextCodec::IgnoreHeader;
       } else {
-         d->writeConverterState.flags |= QTextCodec::IgnoreHeader;
+         d->writeConverterState.m_flags |= QTextCodec::IgnoreHeader;
       }
    }
 }
@@ -2490,7 +2490,7 @@ void QTextStream::setGenerateByteOrderMark(bool generate)
 bool QTextStream::generateByteOrderMark() const
 {
    Q_D(const QTextStream);
-   return (d->writeConverterState.flags & QTextCodec::IgnoreHeader) == 0;
+   return (d->writeConverterState.m_flags & QTextCodec::IgnoreHeader) == 0;
 }
 
 #endif

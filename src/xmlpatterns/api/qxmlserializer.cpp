@@ -69,7 +69,7 @@ QXmlSerializerPrivate::QXmlSerializerPrivate(const QXmlQuery &query,
    namespaces.push(defNss);
 
    /* If we don't set this flag, QTextCodec will generate a BOM. */
-   converterState.flags = QTextCodec::IgnoreHeader;
+   converterState.m_flags = QTextCodec::IgnoreHeader;
 }
 
 /*!

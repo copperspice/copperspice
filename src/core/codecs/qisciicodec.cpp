@@ -153,9 +153,10 @@ QByteArray QIsciiCodec::convertFromUnicode(QStringView str, ConverterState *stat
    bool halant      = false;
 
    if (state) {
-      if (state->flags & ConvertInvalidToNull) {
+      if (state->m_flags & ConvertInvalidToNull) {
          replacement = 0;
       }
+
       halant = state->state_data[0];
    }
 

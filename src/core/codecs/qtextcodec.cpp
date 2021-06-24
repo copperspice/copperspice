@@ -565,10 +565,11 @@ static void setup()
 
 QTextCodec::ConverterState::~ConverterState()
 {
-   if (flags & FreeFunction) {
+   if (m_flags & FreeFunction) {
       (QTextCodecUnalignedPointer::decode(state_data))(this);
-   } else if (d) {
-      free(d);
+
+   } else if (m_data != nullptr) {
+      free(m_data);
    }
 }
 
@@ -832,7 +833,7 @@ bool QTextCodec::canEncode(QChar ch) const
 {
    ConverterState state;
 
-   state.flags = ConvertInvalidToNull;
+   state.m_flags = ConvertInvalidToNull;
    convertFromUnicode(make_view(QString(ch)), &state);
 
    return (state.invalidChars == 0);
@@ -842,7 +843,7 @@ bool QTextCodec::canEncode(const QString &str) const
 {
    ConverterState state;
 
-   state.flags = ConvertInvalidToNull;
+   state.m_flags = ConvertInvalidToNull;
    convertFromUnicode(str, &state);
 
    return (state.invalidChars == 0);
@@ -857,7 +858,7 @@ QString QTextCodec::toUnicode(const char *chars) const
 QTextEncoder::QTextEncoder(const QTextCodec *codec, QTextCodec::ConversionFlags flags)
    : c(codec), state()
 {
-   state.flags = flags;
+   state.m_flags = flags;
 }
 
 QTextEncoder::~QTextEncoder()
@@ -878,7 +879,7 @@ QByteArray QTextEncoder::fromUnicode(const QString &str)
 QTextDecoder::QTextDecoder(const QTextCodec *codec, QTextCodec::ConversionFlags flags)
    : c(codec), state()
 {
-   state.flags = flags;
+   state.m_flags = flags;
 }
 
 QTextDecoder::~QTextDecoder()

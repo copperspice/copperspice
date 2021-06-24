@@ -782,7 +782,7 @@ QString QSimpleTextCodec::convertToUnicode(const char *chars, int len, Converter
 
 QByteArray QSimpleTextCodec::convertFromUnicode(QStringView str, ConverterState *state) const
 {
-   const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
+   const char replacement = (state && state->m_flags & ConvertInvalidToNull) ? 0 : '?';
    int invalid = 0;
 
    QByteArray *rmap = reverseMap.load();

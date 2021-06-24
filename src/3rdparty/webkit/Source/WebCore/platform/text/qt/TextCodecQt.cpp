@@ -122,7 +122,7 @@ String TextCodecQt::decode(const char* bytes, size_t length, bool flush, bool /*
     sawError = m_state.invalidChars != 0;
 
     if (flush) {
-        m_state.flags = QTextCodec::DefaultConversion;
+        m_state.m_flags = QTextCodec::DefaultConversion;
         m_state.remainingChars = 0;
         m_state.invalidChars = 0;
     }
@@ -133,7 +133,7 @@ String TextCodecQt::decode(const char* bytes, size_t length, bool flush, bool /*
 CString TextCodecQt::encode(const UChar* characters, size_t length, UnencodableHandling handling)
 {
     QTextCodec::ConverterState state;
-    state.flags = QTextCodec::ConversionFlags(QTextCodec::ConvertInvalidToNull | QTextCodec::IgnoreHeader);
+    state.m_flags = QTextCodec::ConversionFlags(QTextCodec::ConvertInvalidToNull | QTextCodec::IgnoreHeader);
 
     if (! length)
         return "";

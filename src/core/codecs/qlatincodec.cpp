@@ -41,7 +41,7 @@ QString QLatin1Codec::convertToUnicode(const char *chars, int len, ConverterStat
 
 QByteArray QLatin1Codec::convertFromUnicode(QStringView str, ConverterState *state) const
 {
-   const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
+   const char replacement = (state && state->m_flags & ConvertInvalidToNull) ? 0 : '?';
 
    QByteArray retval;
 
@@ -173,7 +173,7 @@ QString QLatin15Codec::convertToUnicode(const char *chars, int len, ConverterSta
 
 QByteArray QLatin15Codec::convertFromUnicode(QStringView str, ConverterState *state) const
 {
-   const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
+   const char replacement = (state && state->m_flags & ConvertInvalidToNull) ? 0 : '?';
 
    QByteArray retval;
    int invalid = 0;
