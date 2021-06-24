@@ -154,7 +154,7 @@ bool QObject::connect(const Sender *sender, void (SignalClass::*signalMethod)(Si
 // signal & slot method ptr
 template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
 bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                         const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...))
+            const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...))
 {
    static_assert(std::is_base_of<QObject, Sender>::value, "Sender must inherit from QObject");
 
@@ -177,10 +177,40 @@ bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)
    return retval;
 }
 
+template<class Sender, class SignalClass, class ...SignalArgs, class Receiver>
+bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
+            const Receiver *receiver, std::nullptr_t slotMethod)
+{
+   (void) slotMethod;
+
+   static_assert(std::is_base_of<QObject, Sender>::value, "Sender must inherit from QObject");
+
+   if (sender == nullptr) {
+      qWarning("QObject::disconnect() Unexpected null parameter");
+      return false;
+   }
+
+   const QMetaObject *senderMetaObject = sender->metaObject();
+   bool retval = false;
+
+   if (senderMetaObject) {
+      QMetaMethod signalMetaMethod = senderMetaObject->method(signalMethod);
+      const CSBentoAbstract *signalMethod_Bento = signalMetaMethod.getBentoBox();
+
+      retval = CsSignal::internal_disconnect(*sender, signalMethod_Bento, receiver, nullptr);
+
+      if (retval) {
+         const_cast<Sender *>(sender)->QObject::disconnectNotify(signalMetaMethod);
+      }
+   }
+
+   return retval;
+}
+
 // signal method ptr, slot lambda or function ptr
 template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class T>
 bool QObject::disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                         const Receiver *receiver, T slotMethod)
+             const Receiver *receiver, T slotMethod)
 {
    bool retval = CsSignal::disconnect(*sender, signalMethod, *receiver, slotMethod);
 

@@ -124,7 +124,8 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    static bool connect(const QObject *sender, const QMetaMethod &signalMethod,
                   const QObject *receiver, const QMetaMethod &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
-   bool disconnect(const QString &signalMethod = QString(), const QObject *receiver = nullptr, const QString &slotMethod = QString()) const;
+   bool disconnect(const QString &signalMethod = QString(), const QObject *receiver = nullptr,
+                  const QString &slotMethod = QString()) const;
 
    bool disconnect(const QString &signalMethod, const QString &location, const QObject *receiver = nullptr,
                    const QString &slotMethod = QString()) const;
@@ -184,10 +185,15 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    static bool connect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                        const Receiver *receiver, T slotLambda, Qt::ConnectionType type = Qt::AutoConnection);
 
-   // signal * slot method ptr
+   // signal & slot method ptr
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
    static bool disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
                           const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...));
+
+   // signal method ptr, nullptr slot
+   template<class Sender, class SignalClass, class ...SignalArgs, class Receiver>
+   static bool disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
+                          const Receiver *receiver, std::nullptr_t slotMethod = nullptr);
 
    // function ptr or lambda
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class T>
