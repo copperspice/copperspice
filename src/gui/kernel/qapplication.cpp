@@ -1859,8 +1859,8 @@ void QGuiApplicationPrivate::processActivatedEvent(QWindowSystemInterfacePrivate
 
       QFocusEvent focusOut(QEvent::FocusOut, r);
       QCoreApplication::sendSpontaneousEvent(previous, &focusOut);
-      QObject::disconnect(previous, SIGNAL(focusObjectChanged(QObject *)),
-         qApp, SLOT(_q_updateFocusObject(QObject *)));
+
+      QObject::disconnect(previous, &QWindow::focusObjectChanged, qApp, &QApplication::_q_updateFocusObject);
 
    } else if (!platformIntegration()->hasCapability(QPlatformIntegration::ApplicationState)) {
       setApplicationState(Qt::ApplicationActive);
@@ -1875,9 +1875,9 @@ void QGuiApplicationPrivate::processActivatedEvent(QWindowSystemInterfacePrivate
 
       QFocusEvent focusIn(QEvent::FocusIn, r);
       QCoreApplication::sendSpontaneousEvent(QGuiApplicationPrivate::focus_window, &focusIn);
-      QObject::connect(QGuiApplicationPrivate::focus_window, SIGNAL(focusObjectChanged(QObject *)),
-         qApp, SLOT(_q_updateFocusObject(QObject *)));
 
+      QObject::connect(QGuiApplicationPrivate::focus_window, &QWindow::focusObjectChanged,
+            qApp, &QApplication::_q_updateFocusObject);
    } else if (!platformIntegration()->hasCapability(QPlatformIntegration::ApplicationState)) {
       setApplicationState(Qt::ApplicationInactive);
    }

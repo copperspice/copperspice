@@ -557,19 +557,29 @@ ControlContainer::ControlContainer(QMdiSubWindow *mdiChild)
 {
    Q_ASSERT(mdiChild);
 
-   m_controllerWidget = new ControlElement<ControllerWidget>(mdiChild);
-   connect(m_controllerWidget, SIGNAL(_q_close()), mdiChild, SLOT(close()));
-   connect(m_controllerWidget, SIGNAL(_q_restore()), mdiChild, SLOT(showNormal()));
-   connect(m_controllerWidget, SIGNAL(_q_minimize()), mdiChild, SLOT(showMinimized()));
+   //
+   ControlElement<ControllerWidget> *tmpWidget;
+   tmpWidget = new ControlElement<ControllerWidget>(mdiChild);
 
-   m_menuLabel = new ControlElement<ControlLabel>(mdiChild);
+   m_controllerWidget = tmpWidget;
+
+   connect(tmpWidget, &ControlElement<ControllerWidget>::_q_close,    mdiChild, &QMdiSubWindow::close);
+   connect(tmpWidget, &ControlElement<ControllerWidget>::_q_restore,  mdiChild, &QMdiSubWindow::showNormal);
+   connect(tmpWidget, &ControlElement<ControllerWidget>::_q_minimize, mdiChild, &QMdiSubWindow::showMinimized);
+
+   //
+   ControlElement<ControlLabel> *tmpLabel;
+   tmpLabel = new ControlElement<ControlLabel>(mdiChild);
+
+   m_menuLabel = tmpLabel;
+
    m_menuLabel->setWindowIcon(mdiChild->windowIcon());
 
 #ifndef QT_NO_MENU
-   connect(m_menuLabel, SIGNAL(_q_clicked()), mdiChild, SLOT(showSystemMenu()));
+   connect(tmpLabel, &ControlElement<ControlLabel>::_q_clicked,       mdiChild, &QMdiSubWindow::showSystemMenu);
 #endif
 
-   connect(m_menuLabel, SIGNAL(_q_doubleClicked()), mdiChild, SLOT(close()));
+   connect(tmpLabel, &ControlElement<ControlLabel>::_q_doubleClicked, mdiChild, &QMdiSubWindow::close);
 }
 
 ControlContainer::~ControlContainer()
@@ -2228,8 +2238,7 @@ QMdiSubWindow::QMdiSubWindow(QWidget *parent, Qt::WindowFlags flags)
    }
 #endif
 
-   connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)),
-      this, SLOT(_q_processFocusChanged(QWidget *, QWidget *)));
+   connect(qApp, &QApplication::focusChanged, this, &QMdiSubWindow::_q_processFocusChanged);
 }
 
 QMdiSubWindow::~QMdiSubWindow()

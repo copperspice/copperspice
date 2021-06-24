@@ -445,7 +445,7 @@ QWhatsThisAction::QWhatsThisAction(QObject *parent) : QAction(tr("What's This?")
 #endif
 
    setCheckable(true);
-   connect(this, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+   connect(this, &QWhatsThisAction::triggered, this, &QWhatsThisAction::actionTriggered);
 
 #ifndef QT_NO_SHORTCUT
    setShortcut(Qt::ShiftModifier + Qt::Key_F1);
@@ -459,7 +459,6 @@ void QWhatsThisAction::actionTriggered()
       QWhatsThisPrivate::instance->action = this;
    }
 }
-
 
 void QWhatsThis::enterWhatsThisMode()
 {

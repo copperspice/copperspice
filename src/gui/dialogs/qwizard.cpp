@@ -1748,8 +1748,7 @@ bool QWizardPrivate::handleAeroStyleChange()
          vistaHelper->setTitleBarIconAndCaptionVisible(false);
       }
 
-      QObject::connect(
-         vistaHelper->backButton(), SIGNAL(clicked()), q, buttonSlots(QWizard::BackButton));
+      QObject::connect(vistaHelper->backButton(), SIGNAL(clicked()), q, buttonSlots(QWizard::BackButton));
       vistaHelper->backButton()->show();
 
    } else {
@@ -2028,7 +2027,7 @@ void QWizard::setPage(int theid, QWizardPage *page)
    }
    pendingFields.clear();
 
-   connect(page, SIGNAL(completeChanged()), this, SLOT(_q_updateButtonStates()));
+   connect(page, &QWizardPage::completeChanged, this, &QWizard::_q_updateButtonStates);
 
    d->pageMap.insert(theid, page);
    page->d_func()->wizard = this;
@@ -2885,7 +2884,7 @@ int QWizard::nextId() const
 QWizardPage::QWizardPage(QWidget *parent)
    : QWidget(*new QWizardPagePrivate, parent, Qt::EmptyFlag)
 {
-   connect(this, SIGNAL(completeChanged()), this, SLOT(_q_updateCachedCompleteState()));
+   connect(this, &QWizardPage::completeChanged, this, &QWizardPage::_q_updateCachedCompleteState);
 }
 
 QWizardPage::~QWizardPage()

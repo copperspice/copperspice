@@ -674,7 +674,7 @@ QScrollerPrivate::QScrollerPrivate(QScroller *q, QObject *_target)
 
    , q_ptr(q)
 {
-   connect(target, SIGNAL(destroyed(QObject *)), this, SLOT(targetDestroyed()));
+   connect(target, &QObject::destroyed, this, &QScrollerPrivate::targetDestroyed);
 }
 
 void QScrollerPrivate::init()

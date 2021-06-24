@@ -62,7 +62,7 @@ void QColumnViewPrivate::initialize()
    q->setTextElideMode(Qt::ElideMiddle);
 
 #ifndef QT_NO_ANIMATION
-   QObject::connect(&currentAnimation, SIGNAL(finished()), q, SLOT(_q_changeCurrentColumn()));
+   QObject::connect(&currentAnimation, &QPropertyAnimation::finished, q, &QColumnView::_q_changeCurrentColumn);
 
    currentAnimation.setDuration(ANIMATION_DURATION_MSEC);
    currentAnimation.setTargetObject(hbar);
@@ -104,7 +104,7 @@ void QColumnView::setResizeGripsVisible(bool visible)
       if (visible) {
          QColumnViewGrip *grip = new QColumnViewGrip(view);
          view->setCornerWidget(grip);
-         connect(grip, SIGNAL(gripMoved(int)), this, SLOT(_q_gripMoved(int)));
+         connect(grip, &QColumnViewGrip::gripMoved, this, &QColumnView::_q_gripMoved);
 
       } else {
          QWidget *widget = view->cornerWidget();
@@ -691,7 +691,7 @@ QAbstractItemView *QColumnViewPrivate::createColumn(const QModelIndex &index, bo
    if (showResizeGrips) {
       QColumnViewGrip *grip = new QColumnViewGrip(view);
       view->setCornerWidget(grip);
-      q->connect(grip, SIGNAL(gripMoved(int)), q, SLOT(_q_gripMoved(int)));
+      q->connect(grip, &QColumnViewGrip::gripMoved, q, &QColumnView::_q_gripMoved);
    }
 
    if (columnSizes.count() > columns.count()) {

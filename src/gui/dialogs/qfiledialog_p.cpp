@@ -988,28 +988,24 @@ void QFileDialogPrivate::createToolButtons()
    qFileDialogUi->backButton->setIcon(q->style()->standardIcon(QStyle::SP_ArrowBack, nullptr, q));
    qFileDialogUi->backButton->setAutoRaise(true);
    qFileDialogUi->backButton->setEnabled(false);
-   QObject::connect(qFileDialogUi->backButton, SIGNAL(clicked()), q, SLOT(_q_navigateBackward()));
 
    qFileDialogUi->forwardButton->setIcon(q->style()->standardIcon(QStyle::SP_ArrowForward, nullptr, q));
    qFileDialogUi->forwardButton->setAutoRaise(true);
    qFileDialogUi->forwardButton->setEnabled(false);
-   QObject::connect(qFileDialogUi->forwardButton, SIGNAL(clicked()), q, SLOT(_q_navigateForward()));
 
    qFileDialogUi->toParentButton->setIcon(q->style()->standardIcon(QStyle::SP_FileDialogToParent, nullptr, q));
    qFileDialogUi->toParentButton->setAutoRaise(true);
    qFileDialogUi->toParentButton->setEnabled(false);
-   QObject::connect(qFileDialogUi->toParentButton, SIGNAL(clicked()), q, SLOT(_q_navigateToParent()));
 
    qFileDialogUi->listModeButton->setIcon(q->style()->standardIcon(QStyle::SP_FileDialogListView, nullptr, q));
    qFileDialogUi->listModeButton->setAutoRaise(true);
    qFileDialogUi->listModeButton->setDown(true);
-   QObject::connect(qFileDialogUi->listModeButton, SIGNAL(clicked()), q, SLOT(_q_showListView()));
 
    qFileDialogUi->detailModeButton->setIcon(q->style()->standardIcon(QStyle::SP_FileDialogDetailedView, nullptr, q));
    qFileDialogUi->detailModeButton->setAutoRaise(true);
-   QObject::connect(qFileDialogUi->detailModeButton, SIGNAL(clicked()), q, SLOT(_q_showDetailsView()));
 
    QSize toolSize(qFileDialogUi->fileNameEdit->sizeHint().height(), qFileDialogUi->fileNameEdit->sizeHint().height());
+
    qFileDialogUi->backButton->setFixedSize(toolSize);
    qFileDialogUi->listModeButton->setFixedSize(toolSize);
    qFileDialogUi->detailModeButton->setFixedSize(toolSize);
@@ -1020,7 +1016,13 @@ void QFileDialogPrivate::createToolButtons()
    qFileDialogUi->newFolderButton->setFixedSize(toolSize);
    qFileDialogUi->newFolderButton->setAutoRaise(true);
    qFileDialogUi->newFolderButton->setEnabled(false);
-   QObject::connect(qFileDialogUi->newFolderButton, SIGNAL(clicked()), q, SLOT(_q_createDirectory()));
+
+   QObject::connect(qFileDialogUi->backButton,       &QToolButton::clicked, q, &QFileDialog::_q_navigateBackward);
+   QObject::connect(qFileDialogUi->forwardButton,    &QToolButton::clicked, q, &QFileDialog::_q_navigateForward);
+   QObject::connect(qFileDialogUi->toParentButton,   &QToolButton::clicked, q, &QFileDialog::_q_navigateToParent);
+   QObject::connect(qFileDialogUi->listModeButton,   &QToolButton::clicked, q, &QFileDialog::_q_showListView);
+   QObject::connect(qFileDialogUi->detailModeButton, &QToolButton::clicked, q, &QFileDialog::_q_showDetailsView);
+   QObject::connect(qFileDialogUi->newFolderButton,  &QToolButton::clicked, q, &QFileDialog::_q_createDirectory);
 }
 
 void QFileDialogPrivate::createMenuActions()
@@ -1033,7 +1035,7 @@ void QFileDialogPrivate::createMenuActions()
    goHomeAction->setShortcut(Qt::CTRL + Qt::Key_H + Qt::SHIFT);
 #endif
 
-   QObject::connect(goHomeAction, SIGNAL(triggered()), q, SLOT(_q_goHome()));
+   QObject::connect(goHomeAction, &QAction::triggered, q, &QFileDialog::_q_goHome);
    q->addAction(goHomeAction);
 
    // ### TODO add Desktop & Computer actions
@@ -1045,27 +1047,28 @@ void QFileDialogPrivate::createMenuActions()
    goToParent->setShortcut(Qt::CTRL + Qt::UpArrow);
 #endif
 
-   QObject::connect(goToParent, SIGNAL(triggered()), q, SLOT(_q_navigateToParent()));
+   QObject::connect(goToParent, &QAction::triggered, q, &QFileDialog::_q_navigateToParent);
    q->addAction(goToParent);
 
    renameAction = new QAction(q);
    renameAction->setEnabled(false);
    renameAction->setObjectName("qt_rename_action");
-   QObject::connect(renameAction, SIGNAL(triggered()), q, SLOT(_q_renameCurrent()));
 
    deleteAction = new QAction(q);
    deleteAction->setEnabled(false);
    deleteAction->setObjectName("qt_delete_action");
-   QObject::connect(deleteAction, SIGNAL(triggered()), q, SLOT(_q_deleteCurrent()));
 
    showHiddenAction = new QAction(q);
    showHiddenAction->setObjectName("qt_show_hidden_action");
    showHiddenAction->setCheckable(true);
-   QObject::connect(showHiddenAction, SIGNAL(triggered()), q, SLOT(_q_showHidden()));
 
    newFolderAction = new QAction(q);
    newFolderAction->setObjectName("qt_new_folder_action");
-   QObject::connect(newFolderAction, SIGNAL(triggered()), q, SLOT(_q_createDirectory()));
+
+   QObject::connect(renameAction,     &QAction::triggered, q, &QFileDialog::_q_renameCurrent);
+   QObject::connect(deleteAction,     &QAction::triggered, q, &QFileDialog::_q_deleteCurrent);
+   QObject::connect(showHiddenAction, &QAction::triggered, q, &QFileDialog::_q_showHidden);
+   QObject::connect(newFolderAction,  &QAction::triggered, q, &QFileDialog::_q_createDirectory);
 }
 
 void QFileDialogPrivate::_q_goHome()

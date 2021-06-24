@@ -1147,7 +1147,7 @@ QPlatformTextureListWatcher::QPlatformTextureListWatcher(QWidgetBackingStore *ba
 
 void QPlatformTextureListWatcher::watch(QPlatformTextureList *textureList)
 {
-   connect(textureList, SIGNAL(locked(bool)), SLOT(onLockStatusChanged(bool)));
+   connect(textureList, &QPlatformTextureList::locked, this, &QPlatformTextureListWatcher::onLockStatusChanged);
    m_locked[textureList] = textureList->isLocked();
 }
 
@@ -1158,6 +1158,7 @@ bool QPlatformTextureListWatcher::isLocked() const
          return true;
       }
    }
+
    return false;
 }
 

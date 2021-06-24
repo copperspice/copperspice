@@ -128,6 +128,10 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    // wrapper for static method
    inline QString cs_applicationDisplayName() const;
 
+   static QApplication *instance() {
+      return (static_cast<QApplication *>(QCoreApplication::instance()));
+   }
+
    static QWindowList allWindows();
    static QWindowList topLevelWindows();
 

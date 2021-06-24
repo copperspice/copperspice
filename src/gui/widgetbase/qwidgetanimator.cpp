@@ -96,7 +96,7 @@ void QWidgetAnimator::animate(QWidget *widget, const QRect &end_geometry, bool a
       anim->setEndValue(final_geometry);
       m_animation_map[widget] = anim;
 
-      connect(anim, SIGNAL(finished()), this, SLOT(animationFinished()));
+      connect(anim, &QPropertyAnimation::finished, this, &QWidgetAnimator::animationFinished);
 
       anim->start(QPropertyAnimation::DeleteWhenStopped);
 

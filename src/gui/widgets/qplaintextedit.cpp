@@ -744,22 +744,22 @@ void QPlainTextEditPrivate::init(const QString &txt)
 
    control->setPalette(q->palette());
 
-   QObject::connect(vbar, SIGNAL(actionTriggered(int)), q, SLOT(_q_verticalScrollbarActionTriggered(int)));
+   QObject::connect(vbar,    &QScrollBar::actionTriggered,  q, &QPlainTextEdit::_q_verticalScrollbarActionTriggered);
 
-   QObject::connect(control, &QPlainTextEditControl::microFocusChanged,    q, &QPlainTextEdit::updateMicroFocus);
-   QObject::connect(control, &QPlainTextEditControl::documentSizeChanged,  q, &QPlainTextEdit::_q_adjustScrollbars);
-   QObject::connect(control, &QPlainTextEditControl::blockCountChanged,    q, &QPlainTextEdit::blockCountChanged);
-   QObject::connect(control, &QPlainTextEditControl::updateRequest,        q, &QPlainTextEdit::_q_repaintContents);
-   QObject::connect(control, &QPlainTextEditControl::modificationChanged,  q, &QPlainTextEdit::modificationChanged);
+   QObject::connect(control, &QPlainTextEditControl::microFocusChanged,     q, &QPlainTextEdit::updateMicroFocus);
+   QObject::connect(control, &QPlainTextEditControl::documentSizeChanged,   q, &QPlainTextEdit::_q_adjustScrollbars);
+   QObject::connect(control, &QPlainTextEditControl::blockCountChanged,     q, &QPlainTextEdit::blockCountChanged);
+   QObject::connect(control, &QPlainTextEditControl::updateRequest,         q, &QPlainTextEdit::_q_repaintContents);
+   QObject::connect(control, &QPlainTextEditControl::modificationChanged,   q, &QPlainTextEdit::modificationChanged);
 
-   QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(textChanged()));
-   QObject::connect(control, SIGNAL(undoAvailable(bool)),     q, SLOT(undoAvailable(bool)));
-   QObject::connect(control, SIGNAL(redoAvailable(bool)),     q, SLOT(redoAvailable(bool)));
-   QObject::connect(control, SIGNAL(copyAvailable(bool)),     q, SLOT(copyAvailable(bool)));
-   QObject::connect(control, SIGNAL(selectionChanged()),      q, SLOT(selectionChanged()));
-   QObject::connect(control, SIGNAL(cursorPositionChanged()), q, SLOT(_q_cursorPositionChanged()));
+   QObject::connect(control, &QPlainTextEditControl::textChanged,           q, &QPlainTextEdit::textChanged);
+   QObject::connect(control, &QPlainTextEditControl::textChanged,           q, &QPlainTextEdit::updateMicroFocus);
 
-   QObject::connect(control, SIGNAL(textChanged()),           q, SLOT(updateMicroFocus()));
+   QObject::connect(control, &QPlainTextEditControl::undoAvailable,         q, &QPlainTextEdit::undoAvailable);
+   QObject::connect(control, &QPlainTextEditControl::redoAvailable,         q, &QPlainTextEdit::redoAvailable);
+   QObject::connect(control, &QPlainTextEditControl::copyAvailable,         q, &QPlainTextEdit::copyAvailable);
+   QObject::connect(control, &QPlainTextEditControl::selectionChanged,      q, &QPlainTextEdit::selectionChanged);
+   QObject::connect(control, &QPlainTextEditControl::cursorPositionChanged, q, &QPlainTextEdit::_q_cursorPositionChanged);
 
    // set a null page size initially to avoid any relayouting until the textedit is shown
    // relayoutDocument() will take care of setting the page size to the viewport dimensions later.

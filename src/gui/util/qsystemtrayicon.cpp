@@ -239,7 +239,7 @@ QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title
    : QWidget(nullptr, Qt::ToolTip), trayIcon(ti), timerId(-1), showArrow(true)
 {
    setAttribute(Qt::WA_DeleteOnClose);
-   QObject::connect(ti, SIGNAL(destroyed()), this, SLOT(close()));
+   QObject::connect(ti, &QSystemTrayIcon::destroyed, this, &QBalloonTip::close);
 
    QLabel *titleLabel = new QLabel;
    titleLabel->installEventFilter(this);
@@ -260,7 +260,8 @@ QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title
    closeButton->setIconSize(QSize(closeButtonSize, closeButtonSize));
    closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
    closeButton->setFixedSize(closeButtonSize, closeButtonSize);
-   QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+
+   QObject::connect(closeButton, &QPushButton::clicked, this, &QBalloonTip::close);
 
    QLabel *msgLabel = new QLabel;
 
@@ -458,10 +459,10 @@ void QBalloonTip::timerEvent(QTimerEvent *e)
 void QSystemTrayIconPrivate::install_sys_qpa()
 {
    qpa_sys->init();
-   QObject::connect(qpa_sys, SIGNAL(activated(QPlatformSystemTrayIcon::ActivationReason)),
-      q_func(), SLOT(_q_emitActivated(QPlatformSystemTrayIcon::ActivationReason)));
-   QObject::connect(qpa_sys, &QPlatformSystemTrayIcon::messageClicked,
-      q_func(), &QSystemTrayIcon::messageClicked);
+
+   QObject::connect(qpa_sys, &QPlatformSystemTrayIcon::activated,      q_func(), &QSystemTrayIcon::_q_emitActivated);
+   QObject::connect(qpa_sys, &QPlatformSystemTrayIcon::messageClicked, q_func(), &QSystemTrayIcon::messageClicked);
+
    updateMenu_sys();
    updateIcon_sys();
    updateToolTip_sys();
@@ -469,10 +470,9 @@ void QSystemTrayIconPrivate::install_sys_qpa()
 
 void QSystemTrayIconPrivate::remove_sys_qpa()
 {
-   QObject::disconnect(qpa_sys, SIGNAL(activated(QPlatformSystemTrayIcon::ActivationReason)),
-      q_func(), SLOT(_q_emitActivated(QPlatformSystemTrayIcon::ActivationReason)));
-   QObject::disconnect(qpa_sys, &QPlatformSystemTrayIcon::messageClicked,
-      q_func(), &QSystemTrayIcon::messageClicked);
+   QObject::disconnect(qpa_sys, &QPlatformSystemTrayIcon::activated,      q_func(), &QSystemTrayIcon::_q_emitActivated);
+   QObject::disconnect(qpa_sys, &QPlatformSystemTrayIcon::messageClicked, q_func(), &QSystemTrayIcon::messageClicked);
+
    qpa_sys->cleanup();
 }
 

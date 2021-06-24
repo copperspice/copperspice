@@ -772,9 +772,8 @@ void QMdiAreaPrivate::appendChild(QMdiSubWindow *child)
    }
    child->installEventFilter(q);
 
-   QObject::connect(child, SIGNAL(aboutToActivate()), q, SLOT(_q_deactivateAllWindows()));
-   QObject::connect(child, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)),
-      q, SLOT(_q_processWindowStateChanged(Qt::WindowStates, Qt::WindowStates)));
+   QObject::connect(child, &QMdiSubWindow::aboutToActivate,    q, &QMdiArea::_q_deactivateAllWindows);
+   QObject::connect(child, &QMdiSubWindow::windowStateChanged, q, &QMdiArea::_q_processWindowStateChanged);
 }
 
 /*!
@@ -1586,9 +1585,9 @@ void QMdiAreaPrivate::setViewMode(QMdiArea::ViewMode mode)
       }
       updateTabBarGeometry();
 
-      QObject::connect(tabBar, SIGNAL(currentChanged(int)), q, SLOT(_q_currentTabChanged(int)));
-      QObject::connect(tabBar, SIGNAL(tabCloseRequested(int)), q, SLOT(_q_closeTab(int)));
-      QObject::connect(tabBar, SIGNAL(tabMoved(int, int)), q, SLOT(_q_moveTab(int, int)));
+      QObject::connect(tabBar, &QMdiAreaTabBar::currentChanged,    q, &QMdiArea::_q_currentTabChanged);
+      QObject::connect(tabBar, &QMdiAreaTabBar::tabCloseRequested, q, &QMdiArea::_q_closeTab);
+      QObject::connect(tabBar, &QMdiAreaTabBar::tabMoved,          q, &QMdiArea::_q_moveTab);
 
    } else
 #endif // QT_NO_TABBAR

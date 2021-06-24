@@ -179,9 +179,9 @@ void QActionGroup::removeAction(QAction *action)
          d->current = nullptr;
       }
 
-      QObject::disconnect(action, SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
-      QObject::disconnect(action, SIGNAL(changed()), this, SLOT(_q_actionChanged()));
-      QObject::disconnect(action, SIGNAL(hovered()), this, SLOT(_q_actionHovered()));
+      QObject::disconnect(action, &QAction::triggered, this, &QActionGroup::_q_actionTriggered);
+      QObject::disconnect(action, &QAction::changed,   this, &QActionGroup::_q_actionChanged);
+      QObject::disconnect(action, &QAction::hovered,   this, &QActionGroup::_q_actionHovered);
       action->d_func()->group = nullptr;
    }
 }

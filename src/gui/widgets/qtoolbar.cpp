@@ -75,7 +75,8 @@ void QToolBarPrivate::init()
    toggleViewAction = new QAction(q);
    toggleViewAction->setCheckable(true);
    q->setMovable(q->style()->styleHint(QStyle::SH_ToolBar_Movable, nullptr, q ));
-   QObject::connect(toggleViewAction, SIGNAL(triggered(bool)), q, SLOT(_q_toggleView(bool)));
+
+   QObject::connect(toggleViewAction, &QAction::triggered, q, &QToolBar::_q_toggleView);
 }
 
 void QToolBarPrivate::_q_toggleView(bool b)

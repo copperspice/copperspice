@@ -605,22 +605,25 @@ void QDockWidgetPrivate::init()
    QDockWidgetLayout *layout = new QDockWidgetLayout(q);
    layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 
-   QAbstractButton *button = new QDockWidgetTitleButton(q);
-   button->setObjectName(QLatin1String("qt_dockwidget_floatbutton"));
-   QObject::connect(button, SIGNAL(clicked()), q, SLOT(_q_toggleTopLevel()));
-   layout->setWidgetForRole(QDockWidgetLayout::FloatButton, button);
+   QAbstractButton *button1 = new QDockWidgetTitleButton(q);
+   button1->setObjectName("qt_dockwidget_floatbutton");
+   layout->setWidgetForRole(QDockWidgetLayout::FloatButton, button1);
 
-   button = new QDockWidgetTitleButton(q);
-   button->setObjectName(QLatin1String("qt_dockwidget_closebutton"));
-   QObject::connect(button, SIGNAL(clicked()), q, SLOT(close()));
-   layout->setWidgetForRole(QDockWidgetLayout::CloseButton, button);
+   QAbstractButton *button2 = new QDockWidgetTitleButton(q);
+   button2->setObjectName("qt_dockwidget_closebutton");
+   layout->setWidgetForRole(QDockWidgetLayout::CloseButton, button2);
+
+   QObject::connect(button1, &QAbstractButton::clicked, q, &QDockWidget::_q_toggleTopLevel);
+   QObject::connect(button2, &QAbstractButton::clicked, q, &QDockWidget::close);
 
 #ifndef QT_NO_ACTION
    toggleViewAction = new QAction(q);
    toggleViewAction->setCheckable(true);
+
    fixedWindowTitle = qt_setWindowTitle_helperHelper(q->windowTitle(), q);
    toggleViewAction->setText(fixedWindowTitle);
-   QObject::connect(toggleViewAction, SIGNAL(triggered(bool)), q, SLOT(_q_toggleView(bool)));
+
+   QObject::connect(toggleViewAction, &QAction::triggered, q, &QDockWidget::_q_toggleView);
 #endif
 
    updateButtons();

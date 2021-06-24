@@ -191,8 +191,8 @@ void QMenuPrivate::setPlatformMenu(QPlatformMenu *menu)
    platformMenu = menu;
 
    if (!platformMenu.isNull()) {
-      QObject::connect(platformMenu, SIGNAL(aboutToShow()), q, SLOT(_q_platformMenuAboutToShow()));
-      QObject::connect(platformMenu, SIGNAL(aboutToHide()), q, SLOT(aboutToHide()));
+      QObject::connect(platformMenu.data(), &QPlatformMenu::aboutToShow, q, &QMenu::_q_platformMenuAboutToShow);
+      QObject::connect(platformMenu.data(), &QPlatformMenu::aboutToHide, q, &QMenu::aboutToHide);
    }
 }
 
@@ -215,8 +215,8 @@ void QMenuPrivate::syncPlatformMenu()
 
       menuItem->setTag(reinterpret_cast<quintptr>(action));
 
-      QObject::connect(menuItem, SIGNAL(activated()), action, SLOT(trigger()), Qt::QueuedConnection);
-      QObject::connect(menuItem, SIGNAL(hovered()), action,   SLOT(hovered()), Qt::QueuedConnection);
+      QObject::connect(menuItem, &QPlatformMenuItem::activated, action, &QAction::trigger, Qt::QueuedConnection);
+      QObject::connect(menuItem, &QPlatformMenuItem::hovered,   action, &QAction::hovered, Qt::QueuedConnection);
 
       copyActionToPlatformItem(action, menuItem, platformMenu.data());
       platformMenu->insertMenuItem(menuItem, beforeItem);
@@ -906,10 +906,12 @@ QAction *QMenuPrivate::actionAt(QPoint p) const
 void QMenuPrivate::setOverrideMenuAction(QAction *a)
 {
    Q_Q(QMenu);
-   QObject::disconnect(menuAction, SIGNAL(destroyed()), q, SLOT(_q_overrideMenuActionDestroyed()));
+
+   QObject::disconnect(menuAction, &QAction::destroyed, q, &QMenu::_q_overrideMenuActionDestroyed);
+
    if (a) {
       menuAction = a;
-      QObject::connect(a, SIGNAL(destroyed()), q, SLOT(_q_overrideMenuActionDestroyed()));
+      QObject::connect(a, &QAction::destroyed, q, &QMenu::_q_overrideMenuActionDestroyed);
    } else { //we revert back to the default action created by the QMenu itself
       menuAction = defaultMenuAction;
    }
@@ -3217,8 +3219,8 @@ void QMenu::actionEvent(QActionEvent *e)
 
    if (e->type() == QEvent::ActionAdded) {
       if (!d->tornoff) {
-         connect(e->action(), SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
-         connect(e->action(), SIGNAL(hovered()),   this, SLOT(_q_actionHovered()));
+         connect(e->action(), &QAction::triggered, this, &QMenu::_q_actionTriggered);
+         connect(e->action(), &QAction::hovered,   this, &QMenu::_q_actionHovered);
       }
 
       if (QWidgetAction *wa = qobject_cast<QWidgetAction *>(e->action())) {
@@ -3259,8 +3261,8 @@ void QMenu::actionEvent(QActionEvent *e)
          QPlatformMenuItem *menuItem = d->platformMenu->createMenuItem();
          menuItem->setTag(reinterpret_cast<quintptr>(e->action()));
 
-         QObject::connect(menuItem, SIGNAL(activated()), e->action(), SLOT(trigger()));
-         QObject::connect(menuItem, SIGNAL(hovered()),   e->action(), SLOT(hovered()));
+         QObject::connect(menuItem, &QPlatformMenuItem::activated, e->action(), &QAction::trigger);
+         QObject::connect(menuItem, &QPlatformMenuItem::hovered,   e->action(), &QAction::hovered);
 
          copyActionToPlatformItem(e->action(), menuItem, d->platformMenu);
          QPlatformMenuItem *beforeItem = d->platformMenu->menuItemForTag(reinterpret_cast<quintptr>(e->before()));

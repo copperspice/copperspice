@@ -1661,7 +1661,7 @@ QSortFilterProxyModel::QSortFilterProxyModel(QObject *parent)
    d->filter_role = Qt::DisplayRole;
    d->dynamic_sortfilter = true;
 
-   connect(this, SIGNAL(modelReset()), this, SLOT(_q_clearMapping()));
+   connect(this, &QSortFilterProxyModel::modelReset, this, &QSortFilterProxyModel::_q_clearMapping);
 }
 
 QSortFilterProxyModel::~QSortFilterProxyModel()

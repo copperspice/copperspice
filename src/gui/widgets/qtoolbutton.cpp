@@ -126,8 +126,8 @@ void QToolButtonPrivate::init()
          QSizePolicy::ToolButton));
 
 #ifndef QT_NO_MENU
-   QObject::connect(q, SIGNAL(pressed()), q, SLOT(_q_buttonPressed()));
-   QObject::connect(q, SIGNAL(released()), q, SLOT(_q_buttonReleased()));
+   QObject::connect(q, &QToolButton::pressed,  q, &QToolButton::_q_buttonPressed);
+   QObject::connect(q, &QToolButton::released, q, &QToolButton::_q_buttonReleased);
 #endif
 
    setLayoutItemMargins(QStyle::SE_ToolButtonLayoutItem);
@@ -359,7 +359,7 @@ void QToolButton::actionEvent(QActionEvent *event)
          break;
 
       case QEvent::ActionAdded:
-         connect(action, SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
+         connect(action, &QAction::triggered, this, &QToolButton::_q_actionTriggered);
          break;
 
       case QEvent::ActionRemoved:
@@ -701,10 +701,10 @@ void QToolButtonPrivate::popupTimerDone()
 
    if (! mustDeleteActualMenu) {
       // only if action are not in this widget
-      QObject::connect(actualMenu, SIGNAL(triggered(QAction *)), q, SLOT(_q_menuTriggered(QAction *)));
+      QObject::connect(actualMenu.data(), &QMenu::triggered, q, &QToolButton::_q_menuTriggered);
    }
 
-   QObject::connect(actualMenu, SIGNAL(aboutToHide()), q, SLOT(_q_updateButtonDown()));
+   QObject::connect(actualMenu.data(), &QMenu::aboutToHide, q, &QToolButton::_q_updateButtonDown);
    actualMenu->d_func()->causedPopup.widget = q;
    actualMenu->d_func()->causedPopup.action = defaultAction;
    actionsCopy = q->actions(); //(the list of action may be modified in slots)
@@ -713,12 +713,12 @@ void QToolButtonPrivate::popupTimerDone()
    if (!that) {
       return;
    }
-   QObject::disconnect(actualMenu, SIGNAL(aboutToHide()), q, SLOT(_q_updateButtonDown()));
+   QObject::disconnect(actualMenu.data(), &QMenu::aboutToHide, q, &QToolButton::_q_updateButtonDown);
 
    if (mustDeleteActualMenu) {
       delete actualMenu;
    } else {
-      QObject::disconnect(actualMenu, SIGNAL(triggered(QAction *)), q, SLOT(_q_menuTriggered(QAction *)));
+      QObject::disconnect(actualMenu.data(), &QMenu::triggered, q, &QToolButton::_q_menuTriggered);
    }
 
    actionsCopy.clear();

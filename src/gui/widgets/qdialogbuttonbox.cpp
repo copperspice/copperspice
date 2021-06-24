@@ -341,8 +341,8 @@ void QDialogButtonBoxPrivate::addButton(QAbstractButton *button, QDialogButtonBo
 {
    Q_Q(QDialogButtonBox);
 
-   QObject::connect(button, SIGNAL(clicked()),   q, SLOT(_q_handleButtonClicked()));
-   QObject::connect(button, SIGNAL(destroyed()), q, SLOT(_q_handleButtonDestroyed()));
+   QObject::connect(button, &QAbstractButton::clicked,   q, &QDialogButtonBox::_q_handleButtonClicked);
+   QObject::connect(button, &QAbstractButton::destroyed, q, &QDialogButtonBox::_q_handleButtonDestroyed);
    buttonLists[role].append(button);
 
    if (doLayout) {
@@ -435,7 +435,7 @@ void QDialogButtonBox::clear()
       QList<QAbstractButton *> &list = d->buttonLists[i];
       while (list.count()) {
          QAbstractButton *button = list.takeAt(0);
-         QObject::disconnect(button, SIGNAL(destroyed()), this, SLOT(_q_handleButtonDestroyed()));
+         QObject::disconnect(button, &QAbstractButton::destroyed, this, &QDialogButtonBox::_q_handleButtonDestroyed);
          delete button;
       }
    }
@@ -494,8 +494,8 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
          if (list.at(j) == button) {
             list.takeAt(j);
             if (!d->internalRemove) {
-               disconnect(button, SIGNAL(clicked()), this, SLOT(_q_handleButtonClicked()));
-               disconnect(button, SIGNAL(destroyed()), this, SLOT(_q_handleButtonDestroyed()));
+               disconnect(button, &QAbstractButton::clicked,   this, &QDialogButtonBox::_q_handleButtonClicked);
+               disconnect(button, &QAbstractButton::destroyed, this, &QDialogButtonBox::_q_handleButtonDestroyed);
             }
             break;
          }

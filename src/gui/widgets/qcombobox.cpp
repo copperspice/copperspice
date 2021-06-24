@@ -460,11 +460,11 @@ QComboBoxPrivateContainer::QComboBoxPrivateContainer(QAbstractItemView *itemView
 
    if (top) {
       layout->insertWidget(0, top);
-      connect(top, SIGNAL(doScroll(int)), this, SLOT(scrollItemView(int)));
+      connect(top, &QComboBoxPrivateScroller::doScroll, this, &QComboBoxPrivateContainer::scrollItemView);
    }
    if (bottom) {
       layout->addWidget(bottom);
-      connect(bottom, SIGNAL(doScroll(int)), this, SLOT(scrollItemView(int)));
+      connect(bottom, &QComboBoxPrivateScroller::doScroll, this, &QComboBoxPrivateContainer::scrollItemView);
    }
 
    // Some styles (Mac) have a margin at the top and bottom of the popup.
@@ -545,8 +545,8 @@ void QComboBoxPrivateContainer::setItemView(QAbstractItemView *itemView)
       view->viewport()->removeEventFilter(this);
 
 #ifndef QT_NO_SCROLLBAR
-      disconnect(view->verticalScrollBar(), SIGNAL(valueChanged(int)),      this, SLOT(updateScrollers()));
-      disconnect(view->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateScrollers()));
+      disconnect(view->verticalScrollBar(), &QScrollBar::valueChanged, this, &QComboBoxPrivateContainer::updateScrollers);
+      disconnect(view->verticalScrollBar(), &QScrollBar::rangeChanged, this, &QComboBoxPrivateContainer::updateScrollers);
 #endif
 
       disconnect(view, &QObject::destroyed, this, &QComboBoxPrivateContainer::viewDestroyed);
@@ -583,8 +583,8 @@ void QComboBoxPrivateContainer::setItemView(QAbstractItemView *itemView)
    view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 #ifndef QT_NO_SCROLLBAR
-   connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)),      this, SLOT(updateScrollers()));
-   connect(view->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(updateScrollers()));
+   connect(view->verticalScrollBar(), &QScrollBar::valueChanged, this, &QComboBoxPrivateContainer::updateScrollers);
+   connect(view->verticalScrollBar(), &QScrollBar::rangeChanged, this, &QComboBoxPrivateContainer::updateScrollers);
 #endif
 
    connect(view, &QObject::destroyed, this, &QComboBoxPrivateContainer::viewDestroyed);

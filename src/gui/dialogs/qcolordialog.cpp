@@ -127,8 +127,10 @@ class QColorDialogPrivate : public QDialogPrivate
    QLabel *lblBasicColors;
    QLabel *lblCustomColors;
    QLabel *lblScreenColorInfo;
-   QPushButton *ok;
-   QPushButton *cancel;
+
+   QPushButton *okButton;
+   QPushButton *cancelButton;
+
    QPushButton *addCusBt;
    QPushButton *screenColorPickerButton;
    QColor selectedQColor;
@@ -1378,15 +1380,15 @@ QColorShower::QColorShower(QColorDialog *parent)
    gl->addWidget(htEd, 5, 2, 1, /*colspan=*/ 3);
 #endif
 
-   connect(hEd,     SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
-   connect(sEd,     SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
-   connect(vEd,     SIGNAL(valueChanged(int)), this, SLOT(hsvEd()));
+   connect(hEd,     cs_mp_cast<int>(&QColSpinBox::valueChanged), this, &QColorShower::hsvEd);
+   connect(sEd,     cs_mp_cast<int>(&QColSpinBox::valueChanged), this, &QColorShower::hsvEd);
+   connect(vEd,     cs_mp_cast<int>(&QColSpinBox::valueChanged), this, &QColorShower::hsvEd);
+   connect(rEd,     cs_mp_cast<int>(&QColSpinBox::valueChanged), this, &QColorShower::rgbEd);
+   connect(gEd,     cs_mp_cast<int>(&QColSpinBox::valueChanged), this, &QColorShower::rgbEd);
+   connect(bEd,     cs_mp_cast<int>(&QColSpinBox::valueChanged), this, &QColorShower::rgbEd);
+   connect(alphaEd, cs_mp_cast<int>(&QColSpinBox::valueChanged), this, &QColorShower::rgbEd);
 
-   connect(rEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
-   connect(gEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
-   connect(bEd,     SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
-   connect(alphaEd, SIGNAL(valueChanged(int)), this, SLOT(rgbEd()));
-   connect(htEd,    &QLineEdit::textEdited,    this, &QColorShower::htmlEd);
+   connect(htEd,    &QLineEdit::textEdited,     this, &QColorShower::htmlEd);
 
    retranslateStrings();
 }
@@ -1799,7 +1801,7 @@ void QColorDialogPrivate::initWidgets()
       lblBasicColors->setBuddy(standard);
 #endif
 
-      q->connect(standard, SIGNAL(selected(int, int)), q, SLOT(_q_newStandard(int, int)));
+      q->connect(standard, &QColorWell::selected, q, &QColorDialog::_q_newStandard);
       leftLay->addWidget(lblBasicColors);
       leftLay->addWidget(standard);
 
@@ -1810,7 +1812,7 @@ void QColorDialogPrivate::initWidgets()
 
       lblScreenColorInfo = new QLabel("\n");
       leftLay->addWidget(lblScreenColorInfo);
-      q->connect(screenColorPickerButton, SIGNAL(clicked()), q, SLOT(_q_pickScreenColor()));
+      q->connect(screenColorPickerButton, &QPushButton::clicked, q, &QColorDialog::_q_pickScreenColor);
 #endif
 
       leftLay->addStretch();
@@ -1831,7 +1833,7 @@ void QColorDialogPrivate::initWidgets()
       leftLay->addWidget(custom);
 
       addCusBt = new QPushButton(q);
-      QObject::connect(addCusBt, SIGNAL(clicked()), q, SLOT(_q_addCustom()));
+      QObject::connect(addCusBt, &QPushButton::clicked, q, &QColorDialog::_q_addCustom);
       leftLay->addWidget(addCusBt);
 
    } else {
@@ -1910,17 +1912,17 @@ void QColorDialogPrivate::initWidgets()
    buttons = new QDialogButtonBox(q);
    mainLay->addWidget(buttons);
 
-   ok = buttons->addButton(QDialogButtonBox::Ok);
-   QObject::connect(ok, SIGNAL(clicked()),     q, SLOT(accept()));
+   okButton = buttons->addButton(QDialogButtonBox::Ok);
+   QObject::connect(okButton, &QPushButton::clicked,     q, &QColorDialog::accept);
 
-   ok->setDefault(true);
+   okButton->setDefault(true);
 
-   cancel = buttons->addButton(QDialogButtonBox::Cancel);
-   QObject::connect(cancel, SIGNAL(clicked()), q, SLOT(reject()));
+   cancelButton = buttons->addButton(QDialogButtonBox::Cancel);
+   QObject::connect(cancelButton, &QPushButton::clicked, q, &QColorDialog::reject);
 
 #ifdef Q_OS_WIN32
    updateTimer = new QTimer(q);
-   QObject::connect(updateTimer, SIGNAL(timeout()), q, SLOT(_q_updateColorPicking()));
+   QObject::connect(updateTimer, &QTimer::timeout, q, &QColorDialog::_q_updateColorPicking);
 #endif
 
    retranslateStrings();

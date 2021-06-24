@@ -2875,11 +2875,11 @@ void QStyleSheetStyle::polish(QWidget *w)
 
       if ((rule.hasBorder() && rule.border()->hasBorderImage())
          || (rule.hasBackground() && !rule.background()->pixmap.isNull())) {
+         QObject::connect(sa->horizontalScrollBar(), &QAbstractSlider::valueChanged, sa,
+               cs_mp_cast<>(&QAbstractScrollArea::update), Qt::UniqueConnection);
 
-         QObject::connect(sa->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            sa, SLOT(update()), Qt::UniqueConnection);
-         QObject::connect(sa->verticalScrollBar(), SIGNAL(valueChanged(int)),
-            sa, SLOT(update()), Qt::UniqueConnection);
+         QObject::connect(sa->verticalScrollBar(),   &QAbstractSlider::valueChanged, sa,
+               cs_mp_cast<>(&QAbstractScrollArea::update), Qt::UniqueConnection);
       }
    }
 #endif
@@ -2988,8 +2988,8 @@ void QStyleSheetStyle::unpolish(QWidget *w)
 
 #ifndef QT_NO_SCROLLAREA
    if (QAbstractScrollArea *sa = qobject_cast<QAbstractScrollArea *>(w)) {
-      QObject::disconnect(sa->horizontalScrollBar(), SIGNAL(valueChanged(int)), sa, SLOT(update()));
-      QObject::disconnect(sa->verticalScrollBar(),   SIGNAL(valueChanged(int)), sa, SLOT(update()));
+      QObject::disconnect(sa->horizontalScrollBar(), &QScrollBar::valueChanged, sa, cs_mp_cast<>(&QAbstractScrollArea::update));
+      QObject::disconnect(sa->verticalScrollBar(),   &QScrollBar::valueChanged, sa, cs_mp_cast<>(&QAbstractScrollArea::update));
    }
 #endif
 

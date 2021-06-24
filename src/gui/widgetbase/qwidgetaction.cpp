@@ -37,9 +37,8 @@ QWidgetAction::~QWidgetAction()
 {
    Q_D(QWidgetAction);
 
-   for (int i = 0; i < d->createdWidgets.count(); ++i) {
-      disconnect(d->createdWidgets.at(i), SIGNAL(destroyed(QObject *)),
-         this, SLOT(_q_widgetDestroyed(QObject *)));
+   for (auto &item : d->createdWidgets) {
+      disconnect(item, &QObject::destroyed, this, &QWidgetAction::_q_widgetDestroyed);
    }
 
    QList<QWidget *> widgetsToDelete = d->createdWidgets;
@@ -108,7 +107,7 @@ QWidget *QWidgetAction::requestWidget(QWidget *parent)
       return d->defaultWidget;
    }
 
-   connect(w, SIGNAL(destroyed(QObject *)), this, SLOT(_q_widgetDestroyed(QObject *)));
+   connect(w, &QWidget::destroyed, this, &QWidgetAction::_q_widgetDestroyed);
    d->createdWidgets.append(w);
 
    return w;
@@ -137,7 +136,7 @@ void QWidgetAction::releaseWidget(QWidget *widget)
       return;
    }
 
-   disconnect(widget, SIGNAL(destroyed(QObject *)), this, SLOT(_q_widgetDestroyed(QObject *)));
+   disconnect(widget, &QWidget::destroyed, this, &QWidgetAction::_q_widgetDestroyed);
    d->createdWidgets.removeAll(widget);
    deleteWidget(widget);
 }

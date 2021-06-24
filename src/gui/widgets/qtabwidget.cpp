@@ -83,7 +83,8 @@ void QTabWidgetPrivate::init()
    // hack so that QMacStyle::layoutSpacing() can detect tab widget pages
    stack->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, QSizePolicy::TabWidget));
 
-   QObject::connect(stack, SIGNAL(widgetRemoved(int)), q, SLOT(_q_removeTab(int)));
+   QObject::connect(stack, &QStackedWidget::widgetRemoved, q, &QTabWidget::_q_removeTab);
+
    QTabBar *tabBar = new QTabBar(q);
    tabBar->setObjectName(QLatin1String("qt_tabwidget_tabbar"));
    tabBar->setDrawBase(false);
@@ -357,14 +358,14 @@ void QTabWidget::setTabBar(QTabBar *tb)
    d->tabs = tb;
    setFocusProxy(d->tabs);
 
-   connect(d->tabs, SIGNAL(currentChanged(int)),      this, SLOT(_q_showTab(int)));
-   connect(d->tabs, SIGNAL(tabMoved(int, int)),       this, SLOT(_q_tabMoved(int, int)));
-   connect(d->tabs, SIGNAL(tabBarClicked(int)),       this, SLOT(tabBarClicked(int)));
-   connect(d->tabs, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(tabBarDoubleClicked(int)));
+   connect(d->tabs, &QTabBar::currentChanged,      this, &QTabWidget::_q_showTab);
+   connect(d->tabs, &QTabBar::tabMoved,            this, &QTabWidget::_q_tabMoved);
+   connect(d->tabs, &QTabBar::tabBarClicked,       this, &QTabWidget::tabBarClicked);
+   connect(d->tabs, &QTabBar::tabBarDoubleClicked, this, &QTabWidget::tabBarDoubleClicked);
 
 
    if (d->tabs->tabsClosable()) {
-      connect(d->tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
+      connect(d->tabs, &QTabBar::tabCloseRequested, this, &QTabWidget::tabCloseRequested);
    }
 
    tb->setExpanding(!documentMode());
@@ -625,9 +626,9 @@ void QTabWidget::setTabsClosable(bool closeable)
 
    tabBar()->setTabsClosable(closeable);
    if (closeable) {
-      connect(tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
+      connect(tabBar(), &QTabBar::tabCloseRequested,    this, &QTabWidget::tabCloseRequested);
    } else {
-      disconnect(tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
+      disconnect(tabBar(), &QTabBar::tabCloseRequested, this, &QTabWidget::tabCloseRequested);
    }
    setUpLayout();
 }

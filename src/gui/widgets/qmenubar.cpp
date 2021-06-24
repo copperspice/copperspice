@@ -1183,8 +1183,9 @@ void QMenuBar::actionEvent(QActionEvent *e)
    }
 
    if (e->type() == QEvent::ActionAdded) {
-      connect(e->action(), SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
-      connect(e->action(), SIGNAL(hovered()), this, SLOT(_q_actionHovered()));
+      connect(e->action(), &QAction::triggered, this, &QMenuBar::_q_actionTriggered);
+      connect(e->action(), &QAction::hovered,   this, &QMenuBar::_q_actionHovered);
+
    } else if (e->type() == QEvent::ActionRemoved) {
       e->action()->disconnect(this);
    }

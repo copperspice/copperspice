@@ -802,7 +802,7 @@ void QCompleterPrivate::init(QAbstractItemModel *obj)
 
    proxy = new QCompletionModel(this, q);
 
-   QObject::connect(proxy, SIGNAL(rowsAdded()), q, SLOT(_q_autoResizePopup()));
+   QObject::connect(proxy, &QCompletionModel::rowsAdded, q, &QCompleter::_q_autoResizePopup);
    q->setModel(obj);
 
 #ifdef QT_NO_LISTVIEW

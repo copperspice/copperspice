@@ -163,11 +163,11 @@ void QTreeView::setHeader(QHeaderView *header)
       }
    }
 
-   connect(d->header, SIGNAL(sectionResized(int, int, int)),   this, SLOT(columnResized(int, int, int)));
-   connect(d->header, SIGNAL(sectionMoved(int, int, int)),     this, SLOT(columnMoved()));
-   connect(d->header, SIGNAL(sectionCountChanged(int, int)),   this, SLOT(columnCountChanged(int, int)));
-   connect(d->header, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(resizeColumnToContents(int)));
-   connect(d->header, SIGNAL(geometriesChanged()),             this, SLOT(updateGeometries()));
+   connect(d->header, &QHeaderView::sectionResized,             this, &QTreeView::columnResized);
+   connect(d->header, &QHeaderView::sectionMoved,               this, &QTreeView::columnMoved);
+   connect(d->header, &QHeaderView::sectionCountChanged,        this, &QTreeView::columnCountChanged);
+   connect(d->header, &QHeaderView::sectionHandleDoubleClicked, this, &QTreeView::resizeColumnToContents);
+   connect(d->header, &QHeaderView::geometriesChanged,          this, &QTreeView::updateGeometries);
 
    setSortingEnabled(d->sortingEnabled);
    d->updateGeometry();
@@ -556,12 +556,10 @@ void QTreeView::setSortingEnabled(bool enable)
       // because otherwise it will not call sort on the model.
       sortByColumn(header()->sortIndicatorSection(), header()->sortIndicatorOrder());
 
-      connect(header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-         this, SLOT(_q_sortIndicatorChanged(int, Qt::SortOrder)), Qt::UniqueConnection);
+      connect(header(),    &QHeaderView::sortIndicatorChanged, this, &QTreeView::_q_sortIndicatorChanged, Qt::UniqueConnection);
 
    } else {
-      disconnect(header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-         this, SLOT(_q_sortIndicatorChanged(int, Qt::SortOrder)));
+      disconnect(header(), &QHeaderView::sortIndicatorChanged, this, &QTreeView::_q_sortIndicatorChanged);
    }
 
    d->sortingEnabled = enable;
@@ -2816,7 +2814,7 @@ void QTreeViewPrivate::initialize()
 
 #ifndef QT_NO_ANIMATION
    animationsEnabled = q->style()->styleHint(QStyle::SH_Widget_Animate, nullptr, q);
-   QObject::connect(&animatedOperation, SIGNAL(finished()), q, SLOT(_q_endAnimatedOperation()));
+   QObject::connect(&animatedOperation, &QVariantAnimation::finished, q, &QTreeView::_q_endAnimatedOperation);
 #endif
 
 }

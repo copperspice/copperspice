@@ -68,7 +68,7 @@ void QAbstractTextDocumentLayout::registerHandler(int objectType, QObject *compo
       return;   // ### print error message on terminal?
    }
 
-   connect(component, SIGNAL(destroyed(QObject *)), this, SLOT(_q_handlerDestroyed(QObject *)));
+   connect(component, &QObject::destroyed, this, &QAbstractTextDocumentLayout::_q_handlerDestroyed);
 
    QTextObjectHandler h;
    h.iface = iface;
@@ -81,10 +81,12 @@ void QAbstractTextDocumentLayout::unregisterHandler(int objectType, QObject *com
    Q_D(QAbstractTextDocumentLayout);
 
    HandlerHash::iterator it = d->handlers.find(objectType);
+
    if (it != d->handlers.end() && (!component || component == it->component)) {
       if (component) {
-         disconnect(component, SIGNAL(destroyed(QObject *)), this, SLOT(_q_handlerDestroyed(QObject *)));
+         disconnect(component, &QObject::destroyed, this, &QAbstractTextDocumentLayout::_q_handlerDestroyed);
       }
+
       d->handlers.erase(it);
    }
 }
@@ -109,6 +111,7 @@ void QAbstractTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int
    QTextCharFormat f = format.toCharFormat();
    Q_ASSERT(f.isValid());
    QTextObjectHandler handler = d->handlers.value(f.objectType());
+
    if (!handler.component) {
       return;
    }

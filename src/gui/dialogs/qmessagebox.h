@@ -25,6 +25,7 @@
 #define QMESSAGEBOX_H
 
 #include <qdialog.h>
+#include <qplatform_dialoghelper.h>
 
 #ifndef QT_NO_MESSAGEBOX
 
@@ -274,7 +275,10 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
  private:
    Q_DECLARE_PRIVATE(QMessageBox)
 
-   GUI_CS_SLOT_1(Private, void _q_buttonClicked(QAbstractButton *un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role))
+   GUI_CS_SLOT_2(_q_clicked)
+
+   GUI_CS_SLOT_1(Private, void _q_buttonClicked(QAbstractButton *button))
    GUI_CS_SLOT_2(_q_buttonClicked)
 };
 

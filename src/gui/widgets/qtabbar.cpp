@@ -248,11 +248,12 @@ void QTabBarPrivate::init()
    Q_Q(QTabBar);
    leftB = new QToolButton(q);
    leftB->setAutoRepeat(true);
-   QObject::connect(leftB, SIGNAL(clicked()), q, SLOT(_q_scrollTabs()));
+   QObject::connect(leftB, &QToolButton::clicked, q, &QTabBar::_q_scrollTabs);
    leftB->hide();
+
    rightB = new QToolButton(q);
    rightB->setAutoRepeat(true);
-   QObject::connect(rightB, SIGNAL(clicked()), q, SLOT(_q_scrollTabs()));
+   QObject::connect(rightB, &QToolButton::clicked, q, &QTabBar::_q_scrollTabs);
    rightB->hide();
 
 #ifdef QT_KEYPAD_NAVIGATION
@@ -808,7 +809,7 @@ int QTabBar::insertTab(int index, const QIcon &icon, const QString &text)
       ButtonPosition closeSide = (ButtonPosition)style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, nullptr, this);
 
       QAbstractButton *closeButton = new CloseButton(this);
-      connect(closeButton, SIGNAL(clicked()), this, SLOT(_q_closeTab()));
+      connect(closeButton, &QAbstractButton::clicked, this, &QTabBar::_q_closeTab);
       setTabButton(index, closeSide, closeButton);
    }
 
@@ -2197,7 +2198,7 @@ void QTabBar::setTabsClosable(bool closable)
 
          newButtons = true;
          QAbstractButton *closeButton = new CloseButton(this);
-         connect(closeButton, SIGNAL(clicked()), this, SLOT(_q_closeTab()));
+         connect(closeButton, &QAbstractButton::clicked, this, &QTabBar::_q_closeTab);
          setTabButton(i, closeSide, closeButton);
       }
       if (newButtons) {

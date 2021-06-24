@@ -258,8 +258,8 @@ void QInputDialogPrivate::ensureLayout()
    label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, q);
-   QObject::connect(buttonBox, SIGNAL(accepted()), q, SLOT(accept()));
-   QObject::connect(buttonBox, SIGNAL(rejected()), q, SLOT(reject()));
+   QObject::connect(buttonBox, &QDialogButtonBox::accepted, q, &QInputDialog::accept);
+   QObject::connect(buttonBox, &QDialogButtonBox::rejected, q, &QInputDialog::reject);
 
    mainLayout = new QVBoxLayout(q);
    mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
@@ -345,7 +345,8 @@ void QInputDialogPrivate::ensureIntSpinBox()
    if (!intSpinBox) {
       intSpinBox = new QInputDialogSpinBox(q);
       intSpinBox->hide();
-      QObject::connect(intSpinBox, SIGNAL(valueChanged(int)), q, SLOT(intValueChanged(int)));
+
+      QObject::connect(intSpinBox, cs_mp_cast<int>(&QSpinBox::valueChanged), q, &QInputDialog::intValueChanged);
    }
 }
 
@@ -355,15 +356,28 @@ void QInputDialogPrivate::ensureDoubleSpinBox()
    if (!doubleSpinBox) {
       doubleSpinBox = new QInputDialogDoubleSpinBox(q);
       doubleSpinBox->hide();
-      QObject::connect(doubleSpinBox, SIGNAL(valueChanged(double)), q, SLOT(doubleValueChanged(double)));
+
+      QObject::connect(doubleSpinBox, cs_mp_cast<double>(&QDoubleSpinBox::valueChanged), q, &QInputDialog::doubleValueChanged);
    }
 }
 
 void QInputDialogPrivate::ensureEnabledConnection(QAbstractSpinBox *spinBox)
 {
-   if (spinBox) {
+   if (spinBox != nullptr) {
       QAbstractButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
-      QObject::connect(spinBox, SIGNAL(textChanged(bool)), okButton, SLOT(setEnabled(bool)), Qt::UniqueConnection);
+
+      QInputDialogSpinBox *tmp1 = dynamic_cast<QInputDialogSpinBox *>(spinBox);
+
+      if (tmp1 != nullptr) {
+         QObject::connect(tmp1, &QInputDialogSpinBox::textChanged, okButton, &QAbstractButton::setEnabled, Qt::UniqueConnection);
+
+      } else {
+         QInputDialogDoubleSpinBox *tmp2 = dynamic_cast<QInputDialogDoubleSpinBox *>(spinBox);
+
+         if (tmp2 != nullptr) {
+            QObject::connect(tmp2, &QInputDialogDoubleSpinBox::textChanged, okButton, &QAbstractButton::setEnabled, Qt::UniqueConnection);
+         }
+      }
    }
 }
 
@@ -384,7 +398,19 @@ void QInputDialogPrivate::setInputWidget(QWidget *widget)
       // disconnect old input widget
       QAbstractButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
       if (QAbstractSpinBox *spinBox = qobject_cast<QAbstractSpinBox *>(inputWidget)) {
-         QObject::disconnect(spinBox, SIGNAL(textChanged(bool)), okButton, SLOT(setEnabled(bool)));
+
+         QInputDialogSpinBox *tmp1 = dynamic_cast<QInputDialogSpinBox *>(spinBox);
+
+         if (tmp1 != nullptr) {
+            QObject::disconnect(tmp1, &QInputDialogSpinBox::textChanged, okButton, &QAbstractButton::setEnabled);
+
+         } else {
+            QInputDialogDoubleSpinBox *tmp2 = dynamic_cast<QInputDialogDoubleSpinBox *>(spinBox);
+
+            if (tmp2 != nullptr) {
+               QObject::disconnect(tmp2, &QInputDialogDoubleSpinBox::textChanged, okButton, &QAbstractButton::setEnabled);
+            }
+         }
       }
 
       // connect new input widget and update enabled state of OK button
