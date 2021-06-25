@@ -187,10 +187,6 @@ class QWindowVideoWidgetBackend : public QVideoWidgetBackend
    void moveEvent(QMoveEvent *event) override;
    void paintEvent(QPaintEvent *event) override;
 
-#if defined(Q_WS_WIN)
-   bool winEvent(MSG *message, long *result);
-#endif
-
  private:
    QMediaService *m_service;
    QVideoWindowControl *m_windowControl;

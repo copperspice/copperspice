@@ -133,10 +133,6 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
 
    bool setMediaObject(QMediaObject *object) override;
 
-#if defined(Q_WS_WIN)
-   bool winEvent(MSG *message, long *result);
-#endif
-
    QVideoWidget(QVideoWidgetPrivate &dd, QWidget *parent);
    QVideoWidgetPrivate *d_ptr;
 
