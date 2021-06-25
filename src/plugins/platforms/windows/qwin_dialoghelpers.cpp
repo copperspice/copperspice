@@ -1933,11 +1933,7 @@ static int QT_WIN_CALLBACK xpFileDialogGetExistingDirCallbackProc(HWND hwnd, UIN
    return dialog->existingDirCallback(hwnd, uMsg, lParam);
 }
 
-#if defined(Q_CC_MINGW) && (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 3)
-typedef ITEMIDLIST *qt_LpItemIdList;
-#else
 typedef PIDLIST_ABSOLUTE qt_LpItemIdList;
-#endif
 
 int QWindowsXpNativeFileDialog::existingDirCallback(HWND hwnd, UINT uMsg, LPARAM lParam)
 {

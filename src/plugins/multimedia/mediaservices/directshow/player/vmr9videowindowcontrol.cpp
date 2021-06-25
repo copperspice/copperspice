@@ -66,13 +66,11 @@ void Vmr9VideoWindowControl::setWinId(WId id)
 {
    m_windowId = id;
 
-#ifndef QT_NO_WIDGETS
    if (QWidget *widget = QWidget::find(m_windowId)) {
       const QColor color = widget->palette().color(QPalette::Window);
 
       m_windowColor = RGB(color.red(), color.green(), color.blue());
    }
-#endif
 
    if (IVMRWindowlessControl9 *control = com_cast<IVMRWindowlessControl9>(m_filter, IID_IVMRWindowlessControl9)) {
       control->SetVideoClippingWindow(reinterpret_cast<HWND>(m_windowId));

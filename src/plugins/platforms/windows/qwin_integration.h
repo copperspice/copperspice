@@ -91,13 +91,14 @@ class QWindowsIntegration : public QPlatformIntegration
    inline void emitScreenAdded(QPlatformScreen *s, bool isPrimary = false) {
       screenAdded(s, isPrimary);
    }
+
    inline void emitDestroyScreen(QPlatformScreen *s) {
       destroyScreen(s);
    }
 
    unsigned options() const;
 
-#if !defined(Q_OS_WINCE) && !defined(QT_NO_SESSIONMANAGER)
+#if ! defined(QT_NO_SESSIONMANAGER)
    QPlatformSessionManager *createPlatformSessionManager(const QString &id, const QString &key) const override;
 #endif
 

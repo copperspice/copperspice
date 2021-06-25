@@ -82,7 +82,6 @@ QMediaControl *AVFMediaPlayerService::requestControl(const QString &name)
       return m_videoOutput;
    }
 
-#ifndef QT_NO_WIDGETS
    if (name == QVideoWidgetControl_iid) {
       if (!m_videoOutput) {
          m_videoOutput = new AVFVideoWidgetControl(this);
@@ -91,7 +90,6 @@ QMediaControl *AVFMediaPlayerService::requestControl(const QString &name)
       m_session->setVideoOutput(qobject_cast<AVFVideoOutput *>(m_videoOutput));
       return m_videoOutput;
    }
-#endif
 
    if (name == QVideoWindowControl_iid) {
       if (! m_videoOutput) {

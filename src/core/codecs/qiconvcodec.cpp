@@ -38,10 +38,7 @@
 #  include <langinfo.h>
 #endif
 
-#if defined(Q_OS_HPUX)
-#  define NO_BOM
-#  define UTF16 "ucs2"
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DARWIN)
+#if defined(Q_OS_FREEBSD) || defined(Q_OS_DARWIN)
 #  define NO_BOM
 #  if Q_BYTE_ORDER == Q_BIG_ENDIAN
 #    define UTF16 "UTF-16BE"

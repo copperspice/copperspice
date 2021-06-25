@@ -153,7 +153,7 @@ bool QWindowsLibGLESv2::init()
 {
 
    const char dllName[] = QT_STRINGIFY(LIBGLESV2_NAME)
-#if defined(QT_DEBUG) && !defined(Q_OS_WINCE)
+#if defined(QT_DEBUG)
       "d"
 #endif
       "";
