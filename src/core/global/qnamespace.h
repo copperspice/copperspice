@@ -1513,11 +1513,10 @@ class Q_CORE_EXPORT Qt
    };
 
    // internal
-   enum class Initialization {
-      Uninitialized
+   struct NoDataOverload {
    };
 
-   static constexpr Initialization Uninitialized = Initialization::Uninitialized;
+   static constexpr auto NoData = NoDataOverload();
 
    enum CoordinateSystem {
       DeviceCoordinates,

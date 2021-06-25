@@ -49,9 +49,11 @@ class Q_GUI_EXPORT QTransform
 
    QTransform();
 
-   inline explicit QTransform(Qt::Initialization)
-      : affine(Qt::Uninitialized)
-   {}
+   inline explicit QTransform(Qt::NoDataOverload dummy)
+      : affine(Qt::NoData)
+   {
+      (void) dummy;
+   }
 
    QTransform(qreal h11, qreal h12, qreal h13, qreal h21, qreal h22, qreal h23,
                   qreal h31, qreal h32, qreal h33 = 1.0);

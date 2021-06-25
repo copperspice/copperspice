@@ -46,6 +46,9 @@ class QSharedPointer;
 template <class T>
 class QEnableSharedFromThis;
 
+template <class T, class... Args>
+QSharedPointer<T> QMakeShared(Args &&...args);
+
 template <class X, class T>
 QSharedPointer<X> qSharedPointerCast(const QSharedPointer<T> &ptr);
 
@@ -140,8 +143,11 @@ struct ExternalRefCountData {
       weakref.store(1);
    }
 
-   ExternalRefCountData(Qt::Initialization)
+   ExternalRefCountData(int strong, int weak)
+      : destroyer(nullptr)
    {
+      strongref.store(strong);
+      weakref.store(weak);
    }
 
    ~ExternalRefCountData() {
@@ -463,31 +469,10 @@ template <class T> class QSharedPointer
 
    template <typename... Args>
    static QSharedPointer<T> create(Args  &&...arguments) {
-      typedef QtSharedPointer::ExternalRefCountWithContiguousData<T> Private;
-
-#ifdef QT_SHAREDPOINTER_TRACK_POINTERS
-      typename Private::DestroyerFn destroy = &Private::safetyCheckDeleter;
-#else
-      typename Private::DestroyerFn destroy = &Private::deleter;
-#endif
-
-      QSharedPointer<T> result(Qt::Uninitialized);
-      result.d = Private::create(&result.value, destroy);
-
-      // now initialize the data
-      new (result.data()) T(std::forward<Args>(arguments)...);
-      result.d->setQObjectShared(result.value, true);
-
-#ifdef QT_SHAREDPOINTER_TRACK_POINTERS
-      internalSafetyCheckAdd(result.d, result.value);
-
-#endif
-      return result;
+        return QMakeShared<T>(std::forward<Args>(arguments)...);
    }
 
  private:
-   explicit QSharedPointer(Qt::Initialization) {}
-
    template <class X>
    inline void enableSharedFromThis(const QEnableSharedFromThis<X> *ptr)
    {

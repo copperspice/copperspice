@@ -2594,7 +2594,8 @@ QTransform QGraphicsItem::itemTransform(const QGraphicsItem *other, bool *ok) co
    if (cousins) {
       bool good = false;
       QTransform thisToScene = itemTransform(commonAncestor, &good);
-      QTransform otherToScene(Qt::Uninitialized);
+      QTransform otherToScene(Qt::NoData);
+
       if (good) {
          otherToScene = other->itemTransform(commonAncestor, &good);
       }

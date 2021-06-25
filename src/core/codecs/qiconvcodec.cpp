@@ -235,7 +235,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
    }
 
    size_t outBytesLeft = len * 2 + 2;
-   QByteArray ba(outBytesLeft, Qt::Uninitialized);
+   QByteArray ba(outBytesLeft, Qt::NoData);
    char *outBytes = ba.data();
 
    do {
@@ -390,7 +390,7 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
 
 /*
    size_t outBytesLeft = len;
-   QByteArray ba(outBytesLeft, Qt::Uninitialized);
+   QByteArray ba(outBytesLeft, Qt::NoData);
    outBytes = ba.data();
 
    // now feed iconv() the real data

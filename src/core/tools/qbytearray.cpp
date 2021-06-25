@@ -568,8 +568,10 @@ QByteArray::QByteArray(int size, char ch)
    }
 }
 
-QByteArray::QByteArray(int size, Qt::Initialization)
+QByteArray::QByteArray(int size, Qt::NoDataOverload dummy)
 {
+   (void) dummy;
+
    d = Data::allocate(uint(size) + 1u);
    Q_CHECK_PTR(d);
    d->size = size;
@@ -826,7 +828,7 @@ QByteArray &QByteArray::remove(char c)
       return *this;
    }
 
-   QByteArray result(d->size, Qt::Uninitialized);
+   QByteArray result(d->size, Qt::NoData);
    const char *from    = d->data();
    const char *fromend = from + d->size;
 
@@ -1588,7 +1590,7 @@ QByteArray QByteArray::simplified() const
       return *this;
    }
 
-   QByteArray result(d->size, Qt::Uninitialized);
+   QByteArray result(d->size, Qt::NoData);
    const char *from = d->data();
    const char *fromend = from + d->size;
    int outc = 0;
@@ -1822,7 +1824,7 @@ QByteArray QByteArray::toBase64() const
    const char padchar = '=';
    int padlen = 0;
 
-   QByteArray tmp((d->size * 4) / 3 + 3, Qt::Uninitialized);
+   QByteArray tmp((d->size * 4) / 3 + 3, Qt::NoData);
 
    int i = 0;
    char *out = tmp.data();
@@ -2030,7 +2032,7 @@ QByteArray QByteArray::fromBase64(const QByteArray &base64)
 {
    unsigned int buf = 0;
    int nbits = 0;
-   QByteArray tmp((base64.size() * 3) / 4, Qt::Uninitialized);
+   QByteArray tmp((base64.size() * 3) / 4, Qt::NoData);
 
    int offset = 0;
    for (int i = 0; i < base64.size(); ++i) {
@@ -2069,7 +2071,7 @@ QByteArray QByteArray::fromBase64(const QByteArray &base64)
 
 QByteArray QByteArray::fromHex(const QByteArray &hexEncoded)
 {
-   QByteArray res((hexEncoded.size() + 1) / 2, Qt::Uninitialized);
+   QByteArray res((hexEncoded.size() + 1) / 2, Qt::NoData);
    uchar *result = (uchar *)res.data() + res.size();
 
    bool odd_digit = true;
@@ -2104,7 +2106,7 @@ QByteArray QByteArray::fromHex(const QByteArray &hexEncoded)
 
 QByteArray QByteArray::toHex() const
 {
-   QByteArray hex(d->size * 2, Qt::Uninitialized);
+   QByteArray hex(d->size * 2, Qt::NoData);
    char *hexData = hex.data();
    const uchar *data = (const uchar *)d->data();
 

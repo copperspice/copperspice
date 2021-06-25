@@ -157,7 +157,8 @@ class Q_CORE_EXPORT QByteArray
       other.d = Data::sharedNull();
    }
 
-   QByteArray(int size, Qt::Initialization);
+   // internal
+   QByteArray(int size, Qt::NoDataOverload dummy);
 
    // internal
    inline QByteArray(QByteArrayDataPtr dd)

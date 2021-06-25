@@ -244,7 +244,7 @@ QString QUuid::toString() const
 
 QByteArray QUuid::toByteArray() const
 {
-   QByteArray result(38, Qt::Uninitialized);
+   QByteArray result(38, Qt::NoData);
    char *data = result.data();
 
    _q_uuidToHex(data, data1, data2, data3, data4);
@@ -254,8 +254,8 @@ QByteArray QUuid::toByteArray() const
 
 QByteArray QUuid::toRfc4122() const
 {
-   // we know how many bytes a UUID has
-   QByteArray bytes(16, Qt::Uninitialized);
+   // a UUID has 16 btyes
+   QByteArray bytes(16, Qt::NoData);
    uchar *data = reinterpret_cast<uchar *>(bytes.data());
 
    qToBigEndian(data1, data);
@@ -281,8 +281,8 @@ QDataStream &operator<<(QDataStream &s, const QUuid &id)
    if (s.byteOrder() == QDataStream::BigEndian) {
       bytes = id.toRfc4122();
    } else {
-      // we know how many bytes a UUID has, I hope :)
-      bytes = QByteArray(16, Qt::Uninitialized);
+      // a UUID has 16 bytes
+      bytes = QByteArray(16, Qt::NoData);
       uchar *data = reinterpret_cast<uchar *>(bytes.data());
 
       qToLittleEndian(id.data1, data);
@@ -310,7 +310,7 @@ QDataStream &operator<<(QDataStream &s, const QUuid &id)
 */
 QDataStream &operator>>(QDataStream &s, QUuid &id)
 {
-   QByteArray bytes(16, Qt::Uninitialized);
+   QByteArray bytes(16, Qt::NoData);
    if (s.readRawData(bytes.data(), 16) != 16) {
       s.setStatus(QDataStream::ReadPastEnd);
       return s;

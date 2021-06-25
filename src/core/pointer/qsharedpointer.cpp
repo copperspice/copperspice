@@ -55,10 +55,8 @@ QtSharedPointer::ExternalRefCountData *QtSharedPointer::ExternalRefCountData::ge
       return that;
    }
 
-   // we can create the refcount data because it does not exist
-   ExternalRefCountData *x = new ExternalRefCountData(Qt::Uninitialized);
-   x->strongref.store(-1);
-   x->weakref.store(2);  		// the QWeakPointer that called us plus the QObject itself
+   // 2 = QWeakPointer that called us plus the QObject itself
+   ExternalRefCountData *x = new ExternalRefCountData(-1, 2);
 
    ExternalRefCountData *newPtr = nullptr;
 

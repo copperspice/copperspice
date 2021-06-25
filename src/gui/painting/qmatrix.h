@@ -37,7 +37,10 @@ class QVariant;
 class Q_GUI_EXPORT QMatrix // 2D transform matrix
 {
  public:
-   inline explicit QMatrix(Qt::Initialization) {}
+   inline explicit QMatrix(Qt::NoDataOverload dummy) {
+      (void) dummy;
+   }
+
    QMatrix();
    QMatrix(qreal m11, qreal m12, qreal m21, qreal m22,
       qreal dx, qreal dy);

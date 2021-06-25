@@ -3825,7 +3825,7 @@ void QGraphicsScenePrivate::drawSubtreeRecursive(QGraphicsItem *item, QPainter *
       return;
    }
 
-   QTransform transform(Qt::Uninitialized);
+   QTransform transform(Qt::NoData);
    QTransform *transformPtr = nullptr;
    bool translateOnlyTransform = false;
 
