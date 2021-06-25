@@ -34,7 +34,6 @@ class QAccessibleObjectPrivate
 {
  public:
    QPointer<QObject> object;
-
 };
 
 QAccessibleObject::QAccessibleObject(QObject *object)
@@ -43,20 +42,11 @@ QAccessibleObject::QAccessibleObject(QObject *object)
    d->object = object;
 }
 
-/*!
-    Destroys the QAccessibleObject.
-
-    This only happens when a call to release() decrements the internal
-    reference counter to zero.
-*/
 QAccessibleObject::~QAccessibleObject()
 {
    delete d;
 }
 
-/*!
-    \reimp
-*/
 QObject *QAccessibleObject::object() const
 {
    return d->object;
@@ -64,7 +54,7 @@ QObject *QAccessibleObject::object() const
 
 bool QAccessibleObject::isValid() const
 {
-   return !d->object.isNull();
+   return ! d->object.isNull();
 }
 
 QRect QAccessibleObject::rect() const
@@ -82,6 +72,7 @@ QAccessibleInterface *QAccessibleObject::childAt(int x, int y) const
 {
    for (int i = 0; i < childCount(); ++i) {
       QAccessibleInterface *childIface = child(i);
+
       Q_ASSERT(childIface);
       if (childIface->rect().contains(x, y)) {
          return childIface;
@@ -106,8 +97,10 @@ static QObjectList topLevelObjects()
 {
    QObjectList list;
    const QWindowList tlw(QGuiApplication::topLevelWindows());
+
    for (int i = 0; i < tlw.count(); ++i) {
       QWindow *w = tlw.at(i);
+
       if (w->type() != Qt::Popup && w->type() != Qt::Desktop) {
          if (QAccessibleInterface *root = w->accessibleRoot()) {
             if (root->object()) {

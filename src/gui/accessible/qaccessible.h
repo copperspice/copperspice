@@ -921,7 +921,6 @@ Q_GUI_EXPORT QString qAccessibleLocalizedActionDescription(const QString &action
 Q_GUI_EXPORT QDebug operator<<(QDebug d, const QAccessibleInterface *iface);
 Q_GUI_EXPORT QDebug operator<<(QDebug d, const QAccessibleEvent &ev);
 
-
 #endif  // QT_NO_ACCESSIBILITY
 
 #endif

@@ -267,12 +267,14 @@ QSpdyProtocolHandler::~QSpdyProtocolHandler()
 
 bool QSpdyProtocolHandler::sendRequest()
 {
-   Q_ASSERT(!m_reply);
+   Q_ASSERT(! m_reply);
 
    int maxPossibleRequests = m_maxConcurrentStreams - m_inFlightStreams.count();
    Q_ASSERT(maxPossibleRequests >= 0);
+
    if (maxPossibleRequests == 0) {
-      return true;   // return early if max concurrent requests are exceeded
+      // return early if max concurrent requests are exceeded
+      return true;
    }
 
    m_channel->state = QHttpNetworkConnectionChannel::WritingState;
@@ -599,8 +601,7 @@ void QSpdyProtocolHandler::sendControlFrame(FrameType type,
    Q_UNUSED(written); // silence -Wunused-variable
 }
 
-void QSpdyProtocolHandler::sendSYN_STREAM(HttpMessagePair messagePair,
-      qint32 streamID, qint32 associatedToStreamID)
+void QSpdyProtocolHandler::sendSYN_STREAM(HttpMessagePair messagePair, qint32 streamID, qint32 associatedToStreamID)
 {
    QHttpNetworkRequest request = messagePair.first;
    QHttpNetworkReply *reply = messagePair.second;

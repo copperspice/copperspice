@@ -1933,9 +1933,6 @@ static int QT_WIN_CALLBACK xpFileDialogGetExistingDirCallbackProc(HWND hwnd, UIN
    return dialog->existingDirCallback(hwnd, uMsg, lParam);
 }
 
-/* The correct declaration of the SHGetPathFromIDList symbol is
- * being used in mingw-w64 as of r6215, which is a v3 snapshot.  */
-
 #if defined(Q_CC_MINGW) && (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 3)
 typedef ITEMIDLIST *qt_LpItemIdList;
 #else

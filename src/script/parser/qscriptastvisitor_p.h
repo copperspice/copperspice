@@ -24,9 +24,7 @@
 #ifndef QSCRIPTASTVISITOR_P_H
 #define QSCRIPTASTVISITOR_P_H
 
-#include "qscriptastfwd_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qscriptastfwd_p.h>
 
 namespace QScript {
 namespace AST {
@@ -411,6 +409,4 @@ class Visitor
 }
 } // namespace AST
 
-QT_END_NAMESPACE
-
-#endif // QSCRIPTASTVISITOR_P_H
+#endif

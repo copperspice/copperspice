@@ -106,17 +106,21 @@ class Q_CORE_EXPORT QUuid
    // provide convenience operators to cast from and to this type.
    constexpr QUuid(const GUID &guid)
       : data1(guid.Data1), data2(guid.Data2), data3(guid.Data3),
-        data4{guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
-           guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]} {}
+            data4{guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
+            guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]}
+   {
+   }
 
    constexpr QUuid &operator=(const GUID &guid) {
       *this = QUuid(guid);
       return *this;
    }
 
-   // emerald - 'constexpr operator GUID()' constdoes not work in MSVC 19.15
+   // emerald - 'constexpr operator GUID()' const does not work in MSVC 19.15
    operator GUID() const {
-      GUID guid = { data1, data2, data3, { data4[0], data4[1], data4[2], data4[3], data4[4], data4[5], data4[6], data4[7] } };
+      GUID guid = { data1, data2, data3, { data4[0], data4[1], data4[2], data4[3],
+            data4[4], data4[5], data4[6], data4[7] } };
+
       return guid;
    }
 
@@ -140,6 +144,7 @@ class Q_CORE_EXPORT QUuid
    static inline QUuid createUuidV5(const QUuid &ns, const QString &baseData) {
       return QUuid::createUuidV5(ns, baseData.toUtf8());
    }
+
    QUuid::Variant variant() const;
    QUuid::Version version() const;
 

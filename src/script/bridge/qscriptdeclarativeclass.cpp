@@ -218,18 +218,20 @@ QScriptDeclarativeClass::Value QScriptDeclarativeClass::newObjectValue(QScriptEn
 QScriptDeclarativeClass *QScriptDeclarativeClass::scriptClass(const QScriptValue &v)
 {
    QScriptValuePrivate *d = QScriptValuePrivate::get(v);
-   if (!d || !d->isJSC()) {
+   if (! d || ! d->isJSC()) {
       return nullptr;
    }
+
    return QScriptEnginePrivate::declarativeClass(d->jscValue);
 }
 
 QScriptDeclarativeClass::Object *QScriptDeclarativeClass::object(const QScriptValue &v)
 {
    QScriptValuePrivate *d = QScriptValuePrivate::get(v);
-   if (!d || !d->isJSC()) {
+   if (! d || ! d->isJSC()) {
       return nullptr;
    }
+
    return QScriptEnginePrivate::declarativeObject(d->jscValue);
 }
 
@@ -237,7 +239,7 @@ QScriptValue QScriptDeclarativeClass::function(const QScriptValue &v, const Iden
 {
    QScriptValuePrivate *d = QScriptValuePrivate::get(v);
 
-   if (!d->isObject()) {
+   if (! d->isObject()) {
       return QScriptValue();
    }
 
@@ -536,6 +538,7 @@ QVariant QScriptDeclarativeClass::toVariant(Object *, bool *ok)
    if (ok) {
       *ok = false;
    }
+
    return QVariant();
 }
 

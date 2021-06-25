@@ -38,11 +38,9 @@ class QDial;
 class QAccessibleLineEdit;
 
 #ifndef QT_NO_SPINBOX
-class QAccessibleAbstractSpinBox:
-   public QAccessibleWidget,
-   public QAccessibleValueInterface,
-   public QAccessibleTextInterface,
-   public QAccessibleEditableTextInterface
+
+class QAccessibleAbstractSpinBox : public QAccessibleWidget, public QAccessibleValueInterface,
+            public QAccessibleTextInterface, public QAccessibleEditableTextInterface
 {
  public:
    explicit QAccessibleAbstractSpinBox(QWidget *w);
@@ -66,6 +64,7 @@ class QAccessibleAbstractSpinBox:
    int selectionCount() const override;
    int offsetAtPoint(const QPoint &point) const override;
    void selection(int selectionIndex, int *startOffset, int *endOffset) const override;
+
    QString text(int startOffset, int endOffset) const override;
    QString textBeforeOffset (int offset, QAccessible::TextBoundaryType boundaryType,
       int *endOffset, int *startOffset) const override;
@@ -87,6 +86,7 @@ class QAccessibleAbstractSpinBox:
  protected:
    QAbstractSpinBox *abstractSpinBox() const;
    QAccessibleInterface *lineEditIface() const;
+
  private:
    mutable QAccessibleLineEdit *lineEdit;
 };
@@ -108,6 +108,7 @@ class QAccessibleDoubleSpinBox : public QAccessibleAbstractSpinBox
    QString text(QAccessible::Text t) const override;
 
    using QAccessibleAbstractSpinBox::text;
+
  protected:
    QDoubleSpinBox *doubleSpinBox() const;
 };

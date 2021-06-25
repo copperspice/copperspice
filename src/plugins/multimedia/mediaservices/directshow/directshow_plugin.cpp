@@ -138,8 +138,8 @@ QList<QString> DSServicePlugin::devices(const QString &service) const
    if (service == Q_MEDIASERVICE_CAMERA) {
       const QList<DSVideoDeviceInfo> &devs = DSVideoDeviceControl::availableDevices();
 
-      for (const DSVideoDeviceInfo &info : devs) {
-         result.append(info.first);
+      for (const DSVideoDeviceInfo &item : devs) {
+         result.append(item.first);
       }
    }
 #else
@@ -155,9 +155,9 @@ QString DSServicePlugin::deviceDescription(const QString &service, const QString
    if (service == Q_MEDIASERVICE_CAMERA) {
       const QList<DSVideoDeviceInfo> &devs = DSVideoDeviceControl::availableDevices();
 
-      for (const DSVideoDeviceInfo &info : devs) {
-         if (info.first == device) {
-            return info.second;
+      for (const DSVideoDeviceInfo &item : devs) {
+         if (item.first == device) {
+            return item.second;
          }
       }
    }

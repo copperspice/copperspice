@@ -59,6 +59,7 @@ extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
 void QToolBarPrivate::init()
 {
    Q_Q(QToolBar);
+
    q->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
    q->setBackgroundRole(QPalette::Button);
    q->setAttribute(Qt::WA_Hover);
@@ -82,6 +83,7 @@ void QToolBarPrivate::init()
 void QToolBarPrivate::_q_toggleView(bool b)
 {
    Q_Q(QToolBar);
+
    if (b == q->isHidden()) {
       if (b) {
          q->show();
@@ -567,6 +569,7 @@ QAction *QToolBar::addAction(const QString &text, const QObject *receiver, const
    QAction *action = new QAction(text, this);
    QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
    addAction(action);
+
    return action;
 }
 
@@ -576,6 +579,7 @@ QAction *QToolBar::addAction(const QIcon &icon, const QString &text,
    QAction *action = new QAction(icon, text, this);
    QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
    addAction(action);
+
    return action;
 }
 

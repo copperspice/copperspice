@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qdialogbuttonbox.h"
+#include <qdialogbuttonbox.h>
 
 #include <qaction.h>
 #include <qhash.h>
@@ -336,8 +336,7 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
    return button;
 }
 
-void QDialogButtonBoxPrivate::addButton(QAbstractButton *button, QDialogButtonBox::ButtonRole role,
-   bool doLayout)
+void QDialogButtonBoxPrivate::addButton(QAbstractButton *button, QDialogButtonBox::ButtonRole role, bool doLayout)
 {
    Q_Q(QDialogButtonBox);
 
@@ -353,12 +352,14 @@ void QDialogButtonBoxPrivate::addButton(QAbstractButton *button, QDialogButtonBo
 void QDialogButtonBoxPrivate::createStandardButtons(QDialogButtonBox::StandardButtons buttons)
 {
    uint i = QDialogButtonBox::FirstButton;
+
    while (i <= QDialogButtonBox::LastButton) {
       if (i & buttons) {
          createButton(QDialogButtonBox::StandardButton(i), false);
       }
       i = i << 1;
    }
+
    layoutButtons();
 }
 
@@ -423,7 +424,6 @@ void QDialogButtonBox::setOrientation(Qt::Orientation orientation)
    d->resetLayout();
 }
 
-
 void QDialogButtonBox::clear()
 {
    Q_D(QDialogButtonBox);
@@ -431,8 +431,10 @@ void QDialogButtonBox::clear()
    // Remove the created standard buttons, they should be in the other lists, which will
    // do the deletion
    d->standardButtonHash.clear();
+
    for (int i = 0; i < NRoles; ++i) {
       QList<QAbstractButton *> &list = d->buttonLists[i];
+
       while (list.count()) {
          QAbstractButton *button = list.takeAt(0);
          QObject::disconnect(button, &QAbstractButton::destroyed, this, &QDialogButtonBox::_q_handleButtonDestroyed);
@@ -441,11 +443,11 @@ void QDialogButtonBox::clear()
    }
 }
 
-
 QList<QAbstractButton *> QDialogButtonBox::buttons() const
 {
    Q_D(const QDialogButtonBox);
    QList<QAbstractButton *> finalList;
+
    for (int i = 0; i < NRoles; ++i) {
       const QList<QAbstractButton *> &list = d->buttonLists[i];
       for (int j = 0; j < list.count(); ++j) {
@@ -455,17 +457,13 @@ QList<QAbstractButton *> QDialogButtonBox::buttons() const
    return finalList;
 }
 
-/*!
-    Returns the button role for the specified \a button. This function returns
-    \l InvalidRole if \a button is 0 or has not been added to the button box.
-
-    \sa buttons(), addButton()
-*/
 QDialogButtonBox::ButtonRole QDialogButtonBox::buttonRole(QAbstractButton *button) const
 {
    Q_D(const QDialogButtonBox);
+
    for (int i = 0; i < NRoles; ++i) {
       const QList<QAbstractButton *> &list = d->buttonLists[i];
+
       for (int j = 0; j < list.count(); ++j) {
          if (list.at(j) == button) {
             return ButtonRole(i);
@@ -474,7 +472,6 @@ QDialogButtonBox::ButtonRole QDialogButtonBox::buttonRole(QAbstractButton *butto
    }
    return InvalidRole;
 }
-
 
 void QDialogButtonBox::removeButton(QAbstractButton *button)
 {
@@ -490,10 +487,12 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
    }
    for (int i = 0; i < NRoles; ++i) {
       QList<QAbstractButton *> &list = d->buttonLists[i];
+
       for (int j = 0; j < list.count(); ++j) {
          if (list.at(j) == button) {
             list.takeAt(j);
-            if (!d->internalRemove) {
+
+            if (! d->internalRemove) {
                disconnect(button, &QAbstractButton::clicked,   this, &QDialogButtonBox::_q_handleButtonClicked);
                disconnect(button, &QAbstractButton::destroyed, this, &QDialogButtonBox::_q_handleButtonDestroyed);
             }
@@ -502,7 +501,7 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
       }
    }
 
-   if (!d->internalRemove) {
+   if (! d->internalRemove) {
       button->setParent(nullptr);
    }
 }
@@ -511,10 +510,12 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
 void QDialogButtonBox::addButton(QAbstractButton *button, ButtonRole role)
 {
    Q_D(QDialogButtonBox);
+
    if (role <= InvalidRole || role >= NRoles) {
       qWarning("QDialogButtonBox::addButton: Invalid ButtonRole, button not added");
       return;
    }
+
    removeButton(button);
    button->setParent(this);
    d->addButton(button, role);
@@ -523,6 +524,7 @@ void QDialogButtonBox::addButton(QAbstractButton *button, ButtonRole role)
 QPushButton *QDialogButtonBox::addButton(const QString &text, ButtonRole role)
 {
    Q_D(QDialogButtonBox);
+
    if (role <= InvalidRole || role >= NRoles) {
       qWarning("QDialogButtonBox::addButton: Invalid ButtonRole, button not added");
       return nullptr;
@@ -561,7 +563,6 @@ QDialogButtonBox::StandardButtons QDialogButtonBox::standardButtons() const
    }
    return standardButtons;
 }
-
 
 QPushButton *QDialogButtonBox::button(StandardButton which) const
 {
@@ -640,9 +641,6 @@ bool QDialogButtonBox::centerButtons() const
    return d->center;
 }
 
-/*!
-    \reimp
-*/
 void QDialogButtonBox::changeEvent(QEvent *event)
 {
    typedef QHash<QPushButton *, QDialogButtonBox::StandardButton> StandardButtonHash;
@@ -677,9 +675,6 @@ void QDialogButtonBox::changeEvent(QEvent *event)
    }
 }
 
-/*!
-    \reimp
-*/
 bool QDialogButtonBox::event(QEvent *event)
 {
    Q_D(QDialogButtonBox);
@@ -714,7 +709,6 @@ bool QDialogButtonBox::event(QEvent *event)
 
    return QWidget::event(event);
 }
-
 
 void QDialogButtonBox::_q_handleButtonClicked()
 {

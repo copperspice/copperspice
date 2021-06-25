@@ -26,8 +26,6 @@
 
 #include "JSVariableObject.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QScript {
 
 class QScriptActivationObject : public JSC::JSVariableObject
@@ -83,7 +81,5 @@ class QScriptActivationObject : public JSC::JSVariableObject
 };
 
 } // namespace QScript
-
-QT_END_NAMESPACE
 
 #endif

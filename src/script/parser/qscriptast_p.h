@@ -24,14 +24,13 @@
 #ifndef QSCRIPTAST_P_H
 #define QSCRIPTAST_P_H
 
-#include <QString>
-#include "qscriptastvisitor_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qstring.h>
+#include <qscriptastvisitor_p.h>
 
 class QScriptNameIdImpl;
 
-namespace QSOperator { // ### rename
+// consider renaming
+namespace QSOperator {
 
 enum Op {
    Add,
@@ -360,8 +359,9 @@ class ObjectLiteral: public ExpressionNode
       kind = Kind_ObjectLiteral;
    }
 
-   ObjectLiteral(PropertyNameAndValueList *plist):
-      properties (plist) {
+   ObjectLiteral(PropertyNameAndValueList *plist)
+      : properties (plist)
+   {
       kind = Kind_ObjectLiteral;
    }
 
@@ -376,13 +376,15 @@ class ObjectLiteral: public ExpressionNode
 class ElementList: public Node
 {
  public:
-   ElementList(Elision *e, ExpressionNode *expr):
-      elision (e), expression (expr), next (this) {
+   ElementList(Elision *e, ExpressionNode *expr)
+      : elision (e), expression (expr), next (this)
+   {
       kind = Kind_ElementList;
    }
 
-   ElementList(ElementList *previous, Elision *e, ExpressionNode *expr):
-      elision (e), expression (expr) {
+   ElementList(ElementList *previous, Elision *e, ExpressionNode *expr)
+      : elision (e), expression (expr)
+   {
       kind = Kind_ElementList;
       next = previous->next;
       previous->next = this;
@@ -964,6 +966,7 @@ class VariableDeclarationList: public Node
    inline VariableDeclarationList *finish (bool readOnly) {
       VariableDeclarationList *front = next;
       next = nullptr;
+
       if (readOnly) {
          VariableDeclarationList *vdl;
 
@@ -1028,8 +1031,9 @@ class IfStatement: public Statement
 class DoWhileStatement: public Statement
 {
  public:
-   DoWhileStatement(Statement *stmt, ExpressionNode *e):
-      statement (stmt), expression (e) {
+   DoWhileStatement(Statement *stmt, ExpressionNode *e)
+      : statement (stmt), expression (e)
+   {
       kind = Kind_DoWhileStatement;
    }
 
@@ -1332,8 +1336,9 @@ class ThrowStatement: public Statement
 class TryStatement: public Statement
 {
  public:
-   TryStatement(Statement *stmt, Catch *c, Finally *f):
-      statement (stmt), catchExpression (c), finallyExpression (f) {
+   TryStatement(Statement *stmt, Catch *c, Finally *f)
+      : statement (stmt), catchExpression (c), finallyExpression (f)
+   {
       kind = Kind_TryStatement;
    }
 
@@ -1569,7 +1574,5 @@ class DebuggerStatement: public Statement
 
 }
 } // namespace AST
-
-QT_END_NAMESPACE
 
 #endif

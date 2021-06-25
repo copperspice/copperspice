@@ -26,11 +26,10 @@
 #ifndef QSCRIPTPARSER_P_H
 #define QSCRIPTPARSER_P_H
 
-#include "qscriptgrammar_p.h"
-#include "qscriptastfwd_p.h"
 #include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
+#include <qscriptgrammar_p.h>
+#include <qscriptastfwd_p.h>
 
 class QScriptEnginePrivate;
 class QScriptNameIdImpl;
@@ -124,11 +123,7 @@ inline void QScriptParser::reallocateStack()
    location_stack = reinterpret_cast<Location *> (qRealloc(location_stack, stack_size * sizeof(Location)));
 }
 
-
 #define Q_SCRIPT_REGEXPLITERAL_RULE1 7
-
 #define Q_SCRIPT_REGEXPLITERAL_RULE2 8
-
-QT_END_NAMESPACE
 
 #endif // QSCRIPTPARSER_P_H

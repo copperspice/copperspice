@@ -190,7 +190,7 @@ bool QWindowsBackingStore::scroll(const QRegion &area, int dx, int dy)
 void QWindowsBackingStore::beginPaint(const QRegion &region)
 {
    if (QWindowsContext::verbose > 1) {
-      qDebug() << __FUNCTION__ << region;
+      qDebug() << "QWindowsBackingStore::beginPaint" << region;
    }
 
    if (m_alphaNeedsFill) {

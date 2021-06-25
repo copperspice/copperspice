@@ -767,7 +767,7 @@ void QMdiAreaPrivate::appendChild(QMdiSubWindow *child)
    }
 #endif
 
-   if (!(child->windowFlags() & Qt::SubWindow)) {
+   if (! (child->windowFlags() & Qt::SubWindow)) {
       child->setWindowFlags(Qt::SubWindow);
    }
    child->installEventFilter(q);
@@ -781,7 +781,7 @@ void QMdiAreaPrivate::appendChild(QMdiSubWindow *child)
 */
 void QMdiAreaPrivate::place(Placer *placer, QMdiSubWindow *child)
 {
-   if (!placer || !child) {
+   if (! placer || ! child) {
       return;
    }
 
@@ -1546,7 +1546,8 @@ void QMdiAreaPrivate::setViewMode(QMdiArea::ViewMode mode)
 
 #ifndef QT_NO_TABBAR
    if (mode == QMdiArea::TabbedView) {
-      Q_ASSERT(!tabBar);
+      Q_ASSERT(! tabBar);
+
       tabBar = new QMdiAreaTabBar(q);
       tabBar->setDocumentMode(documentMode);
       tabBar->setTabsClosable(tabsClosable);

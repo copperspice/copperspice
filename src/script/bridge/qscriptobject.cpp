@@ -29,8 +29,6 @@ ASSERT_CLASS_FITS_IN_CELL(QT_PREPEND_NAMESPACE(QScriptObject));
 ASSERT_CLASS_FITS_IN_CELL(QT_PREPEND_NAMESPACE(QScriptObjectPrototype));
 }
 
-QT_BEGIN_NAMESPACE
-
 // masquerading as JSC::JSObject
 const JSC::ClassInfo QScriptObject::info = { "Object", nullptr, nullptr, nullptr };
 
@@ -234,5 +232,3 @@ bool QScriptObjectDelegate::compareToObject(QScriptObject *object, JSC::ExecStat
 {
    return object->JSC::JSObject::compareToObject(exec, o);
 }
-
-QT_END_NAMESPACE

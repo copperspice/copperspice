@@ -42,8 +42,6 @@
 // Changes will be lost.
 //
 
-QT_BEGIN_NAMESPACE
-
 inline static bool automatic(QScriptEnginePrivate *driver, int token)
 {
    return token == QScriptGrammar::T_RBRACE
@@ -1380,5 +1378,3 @@ bool QScriptParser::parse(QScriptEnginePrivate *driver)
 
    return false;
 }
-
-QT_END_NAMESPACE

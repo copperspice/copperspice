@@ -159,8 +159,10 @@ bool QWindowsLibGLESv2::init()
       "";
 
    qDebug() << "Using OpenGL ES 2.0 from" << dllName;
+
 #if !defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
    m_lib = ::LoadLibraryW(reinterpret_cast<LPCWSTR>(QString::fromLatin1(dllName).utf16()));
+
    if (!m_lib) {
       qErrnoWarning(int(GetLastError()), "Failed to load %s", dllName);
       return false;

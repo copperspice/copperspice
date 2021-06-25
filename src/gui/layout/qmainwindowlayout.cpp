@@ -1646,7 +1646,9 @@ bool QMainWindowTabBar::event(QEvent *e)
    if (size.width() < hint.width()) {
       return QTabBar::event(e);
    }
+
    e->accept();
+
    return true;
 }
 
@@ -1654,8 +1656,9 @@ QTabBar *QMainWindowLayout::getTabBar()
 {
    QTabBar *result = nullptr;
 
-   if (!unusedTabBars.isEmpty()) {
+   if (! unusedTabBars.isEmpty()) {
       result = unusedTabBars.takeLast();
+
    } else {
       result = new QMainWindowTabBar(static_cast<QMainWindow *>(parentWidget()));
       result->setDrawBase(true);

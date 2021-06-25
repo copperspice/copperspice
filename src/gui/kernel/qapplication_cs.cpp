@@ -3025,7 +3025,6 @@ void QApplication::setKeypadNavigationEnabled(bool enable)
    }
 }
 
-
 bool QApplication::keypadNavigationEnabled()
 {
    return QApplicationPrivate::navigationMode == Qt::NavigationModeKeypadTabOrder ||
@@ -3033,28 +3032,6 @@ bool QApplication::keypadNavigationEnabled()
 }
 #endif
 
-/*!
-    \fn void QApplication::alert(QWidget *widget, int msec)
-    \since 4.3
-
-    Causes an alert to be shown for \a widget if the window is not the active
-    window. The alert is shown for \a msec miliseconds. If \a msec is zero (the
-    default), then the alert is shown indefinitely until the window becomes
-    active again.
-
-    Currently this function does nothing on Qt for Embedded Linux.
-
-    On \macos, this works more at the application level and will cause the
-    application icon to bounce in the dock.
-
-    On Windows, this causes the window's taskbar entry to flash for a time. If
-    \a msec is zero, the flashing will stop and the taskbar entry will turn a
-    different color (currently orange).
-
-    On X11, this will cause the window to be marked as "demands attention", the
-    window must not be hidden (i.e. not have hide() called on it, but be
-    visible in some sort of way) in order for this to work.
-*/
 void QApplication::alert(QWidget *widget, int duration)
 {
    if (widget) {
@@ -3071,24 +3048,6 @@ void QApplication::alert(QWidget *widget, int duration)
    }
 }
 
-/*!
-    \property QApplication::cursorFlashTime
-    \brief the text cursor's flash (blink) time in milliseconds
-
-    The flash time is the time required to display, invert and restore the
-    caret display. Usually the text cursor is displayed for half the cursor
-    flash time, then hidden for the same amount of time, but this may vary.
-
-    The default value on X11 is 1000 milliseconds. On Windows, the
-    \uicontrol{Control Panel} value is used and setting this property sets the cursor
-    flash time for all applications.
-
-    We recommend that widgets do not cache this value as it may change at any
-    time if the user changes the global desktop settings.
-
-    \note This property may hold a negative value, for instance if cursor
-    blinking is disabled.
-*/
 void QApplication::setCursorFlashTime(int msecs)
 {
    QGuiApplication::styleHints()->setCursorFlashTime(msecs);
@@ -3099,14 +3058,6 @@ int QApplication::cursorFlashTime()
    return QGuiApplication::styleHints()->cursorFlashTime();
 }
 
-/*!
-    \property QApplication::doubleClickInterval
-    \brief the time limit in milliseconds that distinguishes a double click
-    from two consecutive mouse clicks
-
-    The default value on X11 is 400 milliseconds. On Windows and Mac OS, the
-    operating system's value is used.
-*/
 void QApplication::setDoubleClickInterval(int ms)
 {
    QGuiApplication::styleHints()->setMouseDoubleClickInterval(ms);
@@ -3117,24 +3068,7 @@ int QApplication::doubleClickInterval()
    return QGuiApplication::styleHints()->mouseDoubleClickInterval();
 }
 
-/*!
-    \fn QApplication::keyboardInputDirection()
-    \since 4.2
-    \deprecated
 
-    Returns the current keyboard input direction. Replaced with QInputMethod::inputDirection()
-    \sa QInputMethod::inputDirection()
-*/
-
-/*!
-    \property QApplication::keyboardInputInterval
-    \brief the time limit in milliseconds that distinguishes a key press
-    from two consecutive key presses
-    \since 4.2
-
-    The default value on X11 is 400 milliseconds. On Windows and Mac OS, the
-    operating system's value is used.
-*/
 void QApplication::setKeyboardInputInterval(int ms)
 {
    QGuiApplication::styleHints()->setKeyboardInputInterval(ms);
@@ -3144,22 +3078,6 @@ int QApplication::keyboardInputInterval()
 {
    return QGuiApplication::styleHints()->keyboardInputInterval();
 }
-
-/*!
-    \property QApplication::wheelScrollLines
-    \brief the number of lines to scroll a widget, when the
-    mouse wheel is rotated.
-
-    If the value exceeds the widget's number of visible lines, the widget
-    should interpret the scroll operation as a single \e{page up} or
-    \e{page down}. If the widget is an \l{QAbstractItemView}{item view class},
-    then the result of scrolling one \e line depends on the setting of the
-    widget's \l{QAbstractItemView::verticalScrollMode()}{scroll mode}. Scroll
-    one \e line can mean \l{QAbstractItemView::ScrollPerItem}{scroll one item}
-    or \l{QAbstractItemView::ScrollPerPixel}{scroll one pixel}.
-
-    By default, this property has a value of 3.
-*/
 
 #ifndef QT_NO_WHEELEVENT
 int QApplication::wheelScrollLines()

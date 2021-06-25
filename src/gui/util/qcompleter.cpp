@@ -1196,13 +1196,14 @@ QAbstractItemView *QCompleter::popup() const
    Q_D(const QCompleter);
 
 #ifndef QT_NO_LISTVIEW
-   if (!d->popup && completionMode() != QCompleter::InlineCompletion) {
+   if (! d->popup && completionMode() != QCompleter::InlineCompletion) {
       QListView *listView = new QListView;
       listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
       listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       listView->setSelectionBehavior(QAbstractItemView::SelectRows);
       listView->setSelectionMode(QAbstractItemView::SingleSelection);
       listView->setModelColumn(d->column);
+
       QCompleter *that = const_cast<QCompleter *>(this);
       that->setPopup(listView);
    }
@@ -1211,9 +1212,6 @@ QAbstractItemView *QCompleter::popup() const
    return d->popup;
 }
 
-/*!
-  \reimp
-*/
 bool QCompleter::event(QEvent *ev)
 {
    return QObject::event(ev);

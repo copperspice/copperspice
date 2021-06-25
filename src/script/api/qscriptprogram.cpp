@@ -118,9 +118,6 @@ bool QScriptProgram::isNull() const
    return (d == nullptr);
 }
 
-/*!
-  Returns the source code of this program.
-*/
 QString QScriptProgram::sourceCode() const
 {
    Q_D(const QScriptProgram);

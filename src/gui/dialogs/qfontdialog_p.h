@@ -116,6 +116,7 @@ class QFontDialogPrivate : public QDialogPrivate
 
    bool canBeNativeDialog() const override;
    void _q_runNativeAppModalPanel();
+
  private:
    virtual void initHelper(QPlatformDialogHelper *) override;
    virtual void helperPrepareShow(QPlatformDialogHelper *) override;

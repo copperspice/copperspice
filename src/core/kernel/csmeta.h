@@ -547,6 +547,8 @@ CS_REGISTER_TEMPLATE(QSharedPointer)
 CS_REGISTER_TEMPLATE(QWeakPointer)
 CS_REGISTER_TEMPLATE(std::pair)
 
+#if ! defined (CS_DOXYPRESS)
+
 // next 8 function are specializations for containers to omit the Compare template when it is not specified
 template<class Key, class Value>
 class CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>
@@ -587,6 +589,8 @@ class CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
          return retval;
       }
 };
+
+#endif // doxypress
 
 // **
 template<class T>

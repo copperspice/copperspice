@@ -26,8 +26,6 @@
 
 #include "JSObject.h"
 
-QT_BEGIN_NAMESPACE
-
 class QScriptObjectDelegate;
 
 class QScriptObject : public JSC::JSObject
@@ -170,7 +168,5 @@ inline void QScriptObject::setDelegate(QScriptObjectDelegate *delegate)
    }
    d->delegate = delegate;
 }
-
-QT_END_NAMESPACE
 
 #endif

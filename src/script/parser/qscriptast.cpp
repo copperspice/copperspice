@@ -25,9 +25,8 @@
 
 #include "qscriptastvisitor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QScript {
+
 namespace AST {
 
 ExpressionNode *Node::expressionCast()
@@ -728,6 +727,7 @@ void SourceElements::accept0(Visitor *visitor)
 {
    if (visitor->visit(this)) {
       SourceElements *it = this;
+
       do {
          acceptChild(it->element, visitor);
          it = it->next;
@@ -764,6 +764,5 @@ void DebuggerStatement::accept0(Visitor *visitor)
 }
 
 }
-} // namespace QScript::AST
 
-QT_END_NAMESPACE
+} // namespace

@@ -301,7 +301,7 @@ void QLineEdit::setCompleter(QCompleter *c)
 
    d->control->setCompleter(c);
 
-   if (!c) {
+   if (! c) {
       return;
    }
 

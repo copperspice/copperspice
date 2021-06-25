@@ -2838,7 +2838,7 @@ void QStyleSheetStyle::polish(QWidget *w)
    baseStyle()->polish(w);
    RECURSION_GUARD(return)
 
-   if (!initObject(w)) {
+   if (! initObject(w)) {
       return;
    }
 
@@ -2849,6 +2849,7 @@ void QStyleSheetStyle::polish(QWidget *w)
       styleSheetCaches->hasStyleRuleCache.remove(w);
       styleSheetCaches->renderRulesCache.remove(w);
    }
+
    setGeometry(w);
    setProperties(w);
    unsetPalette(w);
@@ -2868,13 +2869,13 @@ void QStyleSheetStyle::polish(QWidget *w)
       }
    }
 
-
 #ifndef QT_NO_SCROLLAREA
    if (QAbstractScrollArea *sa = qobject_cast<QAbstractScrollArea *>(w)) {
       QRenderRule rule = renderRule(sa, PseudoElement_None, QCss::PseudoClass_Enabled);
 
-      if ((rule.hasBorder() && rule.border()->hasBorderImage())
-         || (rule.hasBackground() && !rule.background()->pixmap.isNull())) {
+      if ((rule.hasBorder() && rule.border()->hasBorderImage()) ||
+            (rule.hasBackground() && ! rule.background()->pixmap.isNull())) {
+
          QObject::connect(sa->horizontalScrollBar(), &QAbstractSlider::valueChanged, sa,
                cs_mp_cast<>(&QAbstractScrollArea::update), Qt::UniqueConnection);
 
@@ -2921,14 +2922,16 @@ void QStyleSheetStyle::polish(QWidget *w)
       if (ew->autoFillBackground()) {
          ew->setAutoFillBackground(false);
          styleSheetCaches->autoFillDisabledWidgets.insert(w);
-         if (ew != w) { //eg. viewport of a scrollarea
-            //(in order to draw the background anyway in case we don't.)
+
+         if (ew != w) {
+            // for example, viewport of a scrollarea
+            // (in order to draw the background anyway in case we don't)
             ew->setAttribute(Qt::WA_StyledBackground, true);
          }
       }
 
-      if (!rule.hasBackground() || rule.background()->isTransparent() || rule.hasBox()
-         || (!rule.hasNativeBorder() && !rule.border()->isOpaque())) {
+      if (! rule.hasBackground() || rule.background()->isTransparent() || rule.hasBox()
+         || (! rule.hasNativeBorder() && !rule.border()->isOpaque())) {
          w->setAttribute(Qt::WA_OpaquePaintEvent, false);
       }
    }
@@ -2968,7 +2971,7 @@ void QStyleSheetStyle::repolish(QApplication *app)
 
 void QStyleSheetStyle::unpolish(QWidget *w)
 {
-   if (!w || !w->testAttribute(Qt::WA_StyleSheet)) {
+   if (! w || !w->testAttribute(Qt::WA_StyleSheet)) {
       baseStyle()->unpolish(w);
       return;
    }

@@ -631,6 +631,7 @@ QVector<QPair<int, QVector<int >>> QSortFilterProxyModelPrivate::proxy_intervals
    int source_items_index = 0;
    QVector<int> source_items_in_interval;
    bool compare = (orient == Qt::Vertical && source_sort_column >= 0 && dynamic_sortfilter);
+
    while (source_items_index < source_items.size()) {
       source_items_in_interval.clear();
       int first_new_source_item = source_items.at(source_items_index);
@@ -1642,9 +1643,11 @@ void QSortFilterProxyModelPrivate::_q_sourceColumnsMoved(
 
    QList<QPersistentModelIndex> parents;
    parents << q->mapFromSource(sourceParent);
+
    if (sourceParent != destParent) {
       parents << q->mapFromSource(destParent);
    }
+
    emit q->layoutChanged(parents);
 }
 

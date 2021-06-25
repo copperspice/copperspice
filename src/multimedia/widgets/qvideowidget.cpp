@@ -262,6 +262,7 @@ void QRendererVideoWidgetBackend::updateRects()
    } else if (m_aspectRatioMode == Qt::IgnoreAspectRatio) {
       m_boundingRect = rect;
       m_sourceRect = QRectF(0, 0, 1, 1);
+
    } else if (m_aspectRatioMode == Qt::KeepAspectRatio) {
       QSize size = m_nativeSize;
       size.scale(rect.size(), Qt::KeepAspectRatio);
@@ -270,23 +271,21 @@ void QRendererVideoWidgetBackend::updateRects()
       m_boundingRect.moveCenter(rect.center());
 
       m_sourceRect = QRectF(0, 0, 1, 1);
+
    } else if (m_aspectRatioMode == Qt::KeepAspectRatioByExpanding) {
       m_boundingRect = rect;
 
       QSizeF size = rect.size();
       size.scale(m_nativeSize, Qt::KeepAspectRatio);
 
-      m_sourceRect = QRectF(
-            0, 0, size.width() / m_nativeSize.width(), size.height() / m_nativeSize.height());
+      m_sourceRect = QRectF(0, 0, size.width() / m_nativeSize.width(), size.height() / m_nativeSize.height());
       m_sourceRect.moveCenter(QPointF(0.5, 0.5));
    }
 }
 
 QWindowVideoWidgetBackend::QWindowVideoWidgetBackend(
    QMediaService *service, QVideoWindowControl *control, QWidget *widget)
-   : m_service(service)
-   , m_windowControl(control)
-   , m_widget(widget)
+   : m_service(service), m_windowControl(control), m_widget(widget)
 {
    connect(control, SIGNAL(brightnessChanged(int)),  m_widget, SLOT(_q_brightnessChanged(int)));
    connect(control, SIGNAL(contrastChanged(int)),    m_widget, SLOT(_q_contrastChanged(int)));

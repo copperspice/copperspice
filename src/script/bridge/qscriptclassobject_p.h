@@ -26,8 +26,6 @@
 
 #include "qscriptobject_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QScriptClass;
 
 namespace QScript {
@@ -84,7 +82,5 @@ inline void ClassObjectDelegate::setScriptClass(QScriptClass *scriptClass)
 }
 
 } // namespace QScript
-
-QT_END_NAMESPACE
 
 #endif

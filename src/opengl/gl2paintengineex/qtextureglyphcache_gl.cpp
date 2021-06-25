@@ -108,7 +108,7 @@ void QGLTextureGlyphCache::createTextureData(int width, int height)
     funcs->glGenTextures(1, &m_textureResource->m_texture);
     funcs->glBindTexture(GL_TEXTURE_2D, m_textureResource->m_texture);
 
-    m_textureResource->m_width = width;
+    m_textureResource->m_width  = width;
     m_textureResource->m_height = height;
 
     if (m_format == QFontEngine::Format_A32) {
@@ -189,8 +189,7 @@ void QGLTextureGlyphCache::resizeTextureData(int width, int height)
    m_filterMode = Nearest;
 
    funcs->glBindTexture(GL_TEXTURE_2D, 0);
-   funcs->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                  GL_TEXTURE_2D, tmp_texture, 0);
+   funcs->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tmp_texture, 0);
 
    funcs->glActiveTexture(GL_TEXTURE0 + QT_IMAGE_TEXTURE_UNIT);
    funcs->glBindTexture(GL_TEXTURE_2D, oldTexture);
@@ -261,13 +260,10 @@ void QGLTextureGlyphCache::resizeTextureData(int width, int height)
    blitProgram->setUniformValue("imageTexture", QT_IMAGE_TEXTURE_UNIT);
 
    funcs->glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-    funcs->glBindTexture(GL_TEXTURE_2D, m_textureResource->m_texture);
-
+   funcs->glBindTexture(GL_TEXTURE_2D, m_textureResource->m_texture);
    funcs->glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, oldWidth, oldHeight);
 
-   funcs->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                     GL_RENDERBUFFER, 0);
+   funcs->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, 0);
    funcs->glDeleteTextures(1, &tmp_texture);
    funcs->glDeleteTextures(1, &oldTexture);
 
@@ -287,6 +283,7 @@ void QGLTextureGlyphCache::fillTexture(const Coord &c, glyph_t glyph, QFixed sub
       qWarning("QGLTextureGlyphCache::fillTexture: Called with no context");
       return;
    }
+
    QOpenGLFunctions *funcs = ctx->contextHandle()->functions();
 
    if (!QGLFramebufferObject::hasOpenGLFramebufferObjects() || ctx->d_ptr->workaround_brokenFBOReadBack) {

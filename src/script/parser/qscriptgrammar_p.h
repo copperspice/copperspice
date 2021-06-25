@@ -28,8 +28,6 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 class QScriptGrammar
 {
  public:
@@ -137,7 +135,7 @@ class QScriptGrammar
 #ifndef QLALR_NO_QSCRIPTGRAMMAR_DEBUG_INFO
    static const int     rule_index [];
    static const int      rule_info [];
-#endif // QLALR_NO_QSCRIPTGRAMMAR_DEBUG_INFO
+#endif
 
    static const short    goto_default [];
    static const short  action_default [];
@@ -165,7 +163,5 @@ class QScriptGrammar
    }
 };
 
-
-QT_END_NAMESPACE
-#endif // QSCRIPTGRAMMAR_P_H
+#endif
 

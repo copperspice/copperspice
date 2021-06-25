@@ -226,16 +226,18 @@ void QBalloonTip::updateBalloonPosition(const QPoint &pos)
    if (!theSolitaryBalloonTip) {
       return;
    }
+
    theSolitaryBalloonTip->hide();
    theSolitaryBalloonTip->balloon(pos, 0, theSolitaryBalloonTip->showArrow);
 }
+
 bool QBalloonTip::isBalloonVisible()
 {
    return theSolitaryBalloonTip;
 }
 
 QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title,
-   const QString &message, QSystemTrayIcon *ti)
+            const QString &message, QSystemTrayIcon *ti)
    : QWidget(nullptr, Qt::ToolTip), trayIcon(ti), timerId(-1), showArrow(true)
 {
    setAttribute(Qt::WA_DeleteOnClose);
@@ -250,10 +252,8 @@ QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title
    titleLabel->setFont(f);
    titleLabel->setTextFormat(Qt::PlainText); // to maintain compat with windows
 
-
    const int iconSize = 18;
    const int closeButtonSize = 15;
-
 
    QPushButton *closeButton = new QPushButton;
    closeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
@@ -453,6 +453,7 @@ void QBalloonTip::timerEvent(QTimerEvent *e)
       }
       return;
    }
+
    QWidget::timerEvent(e);
 }
 

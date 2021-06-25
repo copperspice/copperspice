@@ -342,7 +342,7 @@ void QInputDialogPrivate::ensureIntSpinBox()
 {
    Q_Q(QInputDialog);
 
-   if (!intSpinBox) {
+   if (! intSpinBox) {
       intSpinBox = new QInputDialogSpinBox(q);
       intSpinBox->hide();
 
@@ -353,7 +353,8 @@ void QInputDialogPrivate::ensureIntSpinBox()
 void QInputDialogPrivate::ensureDoubleSpinBox()
 {
    Q_Q(QInputDialog);
-   if (!doubleSpinBox) {
+
+   if (! doubleSpinBox) {
       doubleSpinBox = new QInputDialogDoubleSpinBox(q);
       doubleSpinBox->hide();
 
@@ -384,6 +385,7 @@ void QInputDialogPrivate::ensureEnabledConnection(QAbstractSpinBox *spinBox)
 void QInputDialogPrivate::setInputWidget(QWidget *widget)
 {
    Q_ASSERT(widget);
+
    if (inputWidget == widget) {
       return;
    }
@@ -397,6 +399,7 @@ void QInputDialogPrivate::setInputWidget(QWidget *widget)
 
       // disconnect old input widget
       QAbstractButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+
       if (QAbstractSpinBox *spinBox = qobject_cast<QAbstractSpinBox *>(inputWidget)) {
 
          QInputDialogSpinBox *tmp1 = dynamic_cast<QInputDialogSpinBox *>(spinBox);
@@ -413,10 +416,11 @@ void QInputDialogPrivate::setInputWidget(QWidget *widget)
          }
       }
 
-      // connect new input widget and update enabled state of OK button
       QAbstractSpinBox *spinBox = qobject_cast<QAbstractSpinBox *>(widget);
+
+      // connect new input widget and update enabled state of OK button
       ensureEnabledConnection(spinBox);
-      okButton->setEnabled(!spinBox || spinBox->hasAcceptableInput());
+      okButton->setEnabled(! spinBox || spinBox->hasAcceptableInput());
    }
 
    inputWidget = widget;

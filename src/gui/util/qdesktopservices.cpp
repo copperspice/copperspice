@@ -76,6 +76,7 @@ bool QDesktopServices::openUrl(const QUrl &url)
 {
    QOpenUrlHandlerRegistry *registry = handlerRegistry();
    QMutexLocker locker(&registry->mutex);
+
    static bool insideOpenUrlHandler = false;
 
    if (! insideOpenUrlHandler) {
@@ -90,21 +91,23 @@ bool QDesktopServices::openUrl(const QUrl &url)
       }
    }
 
-   if (!url.isValid()) {
+   if (! url.isValid()) {
       return false;
    }
 
    QPlatformIntegration *platformIntegration = QGuiApplicationPrivate::platformIntegration();
-   if (!platformIntegration) {
+   if (! platformIntegration) {
       return false;
    }
 
    QPlatformServices *platformServices = platformIntegration->services();
-   if (!platformServices) {
-      qWarning("The platform plugin does not support services.");
+
+   if (! platformServices) {
+      qWarning("Platform plugin does not support services.");
       return false;
    }
-   return url.scheme() == QLatin1String("file") ?
+
+   return url.scheme() == "file" ?
       platformServices->openDocument(url) : platformServices->openUrl(url);
 }
 
@@ -112,10 +115,12 @@ void QDesktopServices::setUrlHandler(const QString &scheme, QObject *receiver, c
 {
    QOpenUrlHandlerRegistry *registry = handlerRegistry();
    QMutexLocker locker(&registry->mutex);
-   if (!receiver) {
+
+   if (! receiver) {
       registry->handlers.remove(scheme.toLower());
       return;
    }
+
    QOpenUrlHandlerRegistry::Handler h;
    h.receiver = receiver;
    h.name = method;

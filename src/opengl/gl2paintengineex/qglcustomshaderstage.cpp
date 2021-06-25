@@ -46,6 +46,7 @@ QGLCustomShaderStage::QGLCustomShaderStage()
 QGLCustomShaderStage::~QGLCustomShaderStage()
 {
    Q_D(QGLCustomShaderStage);
+
    if (d->m_manager) {
       d->m_manager->removeCustomStage();
       d->m_manager->sharedShaders->cleanupCustomStage(this);
@@ -58,7 +59,7 @@ void QGLCustomShaderStage::setUniformsDirty()
 {
    Q_D(QGLCustomShaderStage);
    if (d->m_manager) {
-      d->m_manager->setDirty();   // ### Probably a bit overkill
+      d->m_manager->setDirty();
    }
 }
 

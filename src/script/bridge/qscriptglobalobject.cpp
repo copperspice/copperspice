@@ -22,10 +22,10 @@
 ***********************************************************************/
 
 #include "config.h"
-#include "qscriptglobalobject_p.h"
+#include <qscriptglobalobject_p.h>
 
-#include "../api/qscriptengine.h"
-#include "../api/qscriptengine_p.h"
+#include <qscriptengine.h>
+#include <qscriptengine_p.h>
 
 namespace JSC {
 ASSERT_CLASS_FITS_IN_CELL(QScript::GlobalObject);

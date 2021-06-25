@@ -107,8 +107,9 @@ class QTornOffMenu : public QMenu
       setWindowTitle(p->windowTitle());
       setEnabled(p->isEnabled());
 
-      //QObject::connect(this, SIGNAL(triggered(QAction*)), this, SLOT(onTrigger(QAction*)));
-      //QObject::connect(this, SIGNAL(hovered(QAction*)), this, SLOT(onHovered(QAction*)));
+      // not used
+      // QObject::connect(this, SIGNAL(triggered(QAction*)), this, SLOT(onTrigger(QAction*)));
+      // QObject::connect(this, SIGNAL(hovered(QAction*)),   this, SLOT(onHovered(QAction*)));
 
       QList<QAction *> items = p->actions();
       for (int i = 0; i < items.count(); i++) {
@@ -118,11 +119,14 @@ class QTornOffMenu : public QMenu
 
    void syncWithMenu(QMenu *menu, QActionEvent *act) {
       Q_D(QTornOffMenu);
+
       if (menu != d->causedMenu) {
          return;
       }
+
       if (act->type() == QEvent::ActionAdded) {
          insertAction(act->before(), act->action());
+
       } else if (act->type() == QEvent::ActionRemoved) {
          removeAction(act->action());
       }
@@ -190,7 +194,7 @@ void QMenuPrivate::setPlatformMenu(QPlatformMenu *menu)
 
    platformMenu = menu;
 
-   if (!platformMenu.isNull()) {
+   if (! platformMenu.isNull()) {
       QObject::connect(platformMenu.data(), &QPlatformMenu::aboutToShow, q, &QMenu::_q_platformMenuAboutToShow);
       QObject::connect(platformMenu.data(), &QPlatformMenu::aboutToHide, q, &QMenu::aboutToHide);
    }
@@ -206,7 +210,7 @@ void QMenuPrivate::syncPlatformMenu()
       return;
    }
 
-   QPlatformMenuItem *beforeItem = nullptr;
+   QPlatformMenuItem *beforeItem  = nullptr;
    const QList<QAction *> actions = q->actions();
 
    for (QList<QAction *>::const_reverse_iterator it = actions.rbegin(), end = actions.rend(); it != end; ++it) {
@@ -912,7 +916,9 @@ void QMenuPrivate::setOverrideMenuAction(QAction *a)
    if (a) {
       menuAction = a;
       QObject::connect(a, &QAction::destroyed, q, &QMenu::_q_overrideMenuActionDestroyed);
-   } else { //we revert back to the default action created by the QMenu itself
+
+   } else {
+      // we revert back to the default action created by the QMenu itself
       menuAction = defaultMenuAction;
    }
 }
@@ -3210,6 +3216,7 @@ static void copyActionToPlatformItem(const QAction *action, QPlatformMenuItem *i
 void QMenu::actionEvent(QActionEvent *e)
 {
    Q_D(QMenu);
+
    d->itemsDirty = 1;
    setAttribute(Qt::WA_Resized, false);
 
@@ -3218,13 +3225,14 @@ void QMenu::actionEvent(QActionEvent *e)
    }
 
    if (e->type() == QEvent::ActionAdded) {
-      if (!d->tornoff) {
+      if (! d->tornoff) {
          connect(e->action(), &QAction::triggered, this, &QMenu::_q_actionTriggered);
          connect(e->action(), &QAction::hovered,   this, &QMenu::_q_actionHovered);
       }
 
       if (QWidgetAction *wa = qobject_cast<QWidgetAction *>(e->action())) {
          QWidget *widget = wa->requestWidget(this);
+
          if (widget) {
             d->widgetItems.insert(wa, widget);
          }

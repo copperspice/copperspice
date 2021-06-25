@@ -293,10 +293,12 @@ class Q_OPENGL_EXPORT QGLShareContextScope
       : m_oldContext(nullptr)
    {
       QGLContext *currentContext = const_cast<QGLContext *>(QGLContext::currentContext());
+
       if (currentContext != ctx && !QGLContext::areSharing(ctx, currentContext)) {
          m_oldContext = currentContext;
          m_ctx = const_cast<QGLContext *>(ctx);
          m_ctx->makeCurrent();
+
       } else {
          m_ctx = currentContext;
       }
@@ -358,10 +360,7 @@ class QGLTexture
  public:
    explicit QGLTexture(QGLContext *ctx = nullptr, GLuint tx_id = 0, GLenum tx_target = GL_TEXTURE_2D,
       QGLContext::BindOptions opt = QGLContext::DefaultBindOption)
-      : context(ctx),
-        id(tx_id),
-        target(tx_target),
-        options(opt)
+      : context(ctx), id(tx_id), target(tx_target), options(opt)
    {}
 
    ~QGLTexture() {

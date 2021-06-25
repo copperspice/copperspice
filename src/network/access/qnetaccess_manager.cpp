@@ -521,8 +521,7 @@ QNetworkReply *QNetworkAccessManager::sendCustomRequest(const QNetworkRequest &r
     The returned object must be in an open state.
 */
 QNetworkReply *QNetworkAccessManager::createRequest(QNetworkAccessManager::Operation op,
-      const QNetworkRequest &req,
-      QIODevice *outgoingData)
+            const QNetworkRequest &req, QIODevice *outgoingData)
 {
    Q_D(QNetworkAccessManager);
 

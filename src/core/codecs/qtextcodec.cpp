@@ -524,7 +524,8 @@ static void setup()
    (void)new QFontKsc5601Codec;
    (void)new QFontBig5hkscsCodec;
    (void)new QFontBig5Codec;
-#    endif // QT_NO_ICONV
+#endif
+
 #  endif // Q_WS_X11
 
 
@@ -917,13 +918,6 @@ void QTextDecoder::toUnicode(QString *target, const char *chars, int len)
    }
 }
 
-
-/*!
-    \overload
-
-    Converts the bytes in the byte array specified by \a ba to Unicode
-    and returns the result.
-*/
 QString QTextDecoder::toUnicode(const QByteArray &ba)
 {
    return c->toUnicode(ba.constData(), ba.length(), &state);
@@ -937,8 +931,9 @@ QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba, QTextCodec *defaultCo
 
    c = QTextCodec::codecForUtfText(ba, c);
 
-   if (!c) {
+   if (! c) {
       QByteArray header = ba.left(512).toLower();
+
       if ((pos = header.indexOf("http-equiv=")) != -1) {
          if ((pos = header.lastIndexOf("meta ", pos)) != -1) {
             pos = header.indexOf("charset=", pos) + int(strlen("charset="));

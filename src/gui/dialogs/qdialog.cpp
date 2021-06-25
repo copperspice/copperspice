@@ -80,14 +80,17 @@ QPlatformDialogHelper *QDialogPrivate::platformHelper() const
 {
    // Delayed creation of the platform, ensuring that
    // that qobject_cast<> on the dialog works in the plugin.
-   if (!m_platformHelperCreated) {
+
+   if (! m_platformHelperCreated) {
       m_platformHelperCreated = true;
       QDialogPrivate *ncThis = const_cast<QDialogPrivate *>(this);
       QDialog *dialog = ncThis->q_func();
       const int type = themeDialogType(dialog);
+
       if (type >= 0) {
          m_platformHelper = QGuiApplicationPrivate::platformTheme()
             ->createPlatformDialogHelper(static_cast<QPlatformTheme::DialogType>(type));
+
          if (m_platformHelper) {
             QObject::connect(m_platformHelper, &QPlatformDialogHelper::accept, dialog, &QDialog::accept);
             QObject::connect(m_platformHelper, &QPlatformDialogHelper::reject, dialog, &QDialog::reject);

@@ -172,7 +172,6 @@ void QScriptEngineAgent::scriptUnload(qint64 id)
    (void) id;
 }
 
-
 void QScriptEngineAgent::contextPush()
 {
 }
@@ -186,8 +185,7 @@ void QScriptEngineAgent::functionEntry(qint64 scriptId)
    (void) scriptId;
 }
 
-void QScriptEngineAgent::functionExit(qint64 scriptId,
-   const QScriptValue &returnValue)
+void QScriptEngineAgent::functionExit(qint64 scriptId, const QScriptValue &returnValue)
 {
    (void) scriptId;
    (void) returnValue;

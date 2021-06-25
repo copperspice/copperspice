@@ -74,9 +74,7 @@ int AVFCameraDeviceControl::selectedDevice() const
 
 void AVFCameraDeviceControl::setSelectedDevice(int index)
 {
-    if (index >= 0 &&
-            index < deviceCount() &&
-            index != m_selectedDevice) {
+    if (index >= 0 && index < deviceCount() && index != m_selectedDevice) {
         m_dirty = true;
         m_selectedDevice = index;
         Q_EMIT selectedDeviceChanged(index);
@@ -90,13 +88,14 @@ AVCaptureDevice *AVFCameraDeviceControl::createCaptureDevice()
     AVCaptureDevice *device = nullptr;
 
     QString deviceId = deviceName(m_selectedDevice);
-    if (!deviceId.isEmpty()) {
+
+    if (! deviceId.isEmpty()) {
         device = [AVCaptureDevice deviceWithUniqueID:
                     [NSString stringWithUTF8String:
                         deviceId.toUtf8().constData()]];
     }
 
-    if (!device)
+    if (! device)
         device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
 
     return device;

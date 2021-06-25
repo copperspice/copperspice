@@ -672,9 +672,6 @@ QMenuBar::QMenuBar(QWidget *parent) : QWidget(*new QMenuBarPrivate, parent, Qt::
    d->init();
 }
 
-/*!
-    Destroys the menu bar.
-*/
 QMenuBar::~QMenuBar()
 {
    Q_D(QMenuBar);
@@ -683,15 +680,6 @@ QMenuBar::~QMenuBar()
    d->platformMenuBar = nullptr;
 }
 
-/*!
-    \overload
-
-    This convenience function creates a new action with \a text.
-    The function adds the newly created action to the menu's
-    list of actions, and returns it.
-
-    \sa QWidget::addAction(), QWidget::actions()
-*/
 QAction *QMenuBar::addAction(const QString &text)
 {
    QAction *ret = new QAction(text, this);
@@ -699,16 +687,6 @@ QAction *QMenuBar::addAction(const QString &text)
    return ret;
 }
 
-/*!
-    \overload
-
-    This convenience function creates a new action with the given \a
-    text. The action's triggered() signal is connected to the \a
-    receiver's \a member slot. The function adds the newly created
-    action to the menu's list of actions and returns it.
-
-    \sa QWidget::addAction(), QWidget::actions()
-*/
 QAction *QMenuBar::addAction(const QString &text, const QObject *receiver, const QString &member)
 {
    QAction *ret = new QAction(text, this);
@@ -716,7 +694,6 @@ QAction *QMenuBar::addAction(const QString &text, const QObject *receiver, const
    addAction(ret);
    return ret;
 }
-
 
 QMenu *QMenuBar::addMenu(const QString &title)
 {
@@ -739,7 +716,6 @@ QAction *QMenuBar::addMenu(QMenu *menu)
    addAction(action);
    return action;
 }
-
 
 QAction *QMenuBar::addSeparator()
 {
@@ -1004,7 +980,7 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
    }
 
    if (!key_consumed && ( !e->modifiers() ||
-         (e->modifiers() & (Qt::MetaModifier | Qt::AltModifier))) && e->text().length() == 1 && !d ->popupState) {
+         (e->modifiers() & (Qt::MetaModifier | Qt::AltModifier))) && e->text().length() == 1 && ! d ->popupState) {
 
       int clashCount = 0;
       QAction *first = nullptr;
@@ -1030,14 +1006,14 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
                   if (str[ampersand + 1].toUpper() == char1) {
                      ++clashCount;
 
-                     if (!first) {
+                     if (! first) {
                         first = act;
                      }
 
                      if (act == d->currentAction) {
                         currentSelected = act;
 
-                     } else if (!firstAfterCurrent && currentSelected) {
+                     } else if (! firstAfterCurrent && currentSelected) {
                         firstAfterCurrent = act;
                      }
                   }
@@ -1110,9 +1086,6 @@ QPlatformMenu *getPlatformMenu(QAction *action)
    return action->menu()->platformMenu();
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::actionEvent(QActionEvent *e)
 {
    Q_D(QMenuBar);
@@ -1189,15 +1162,13 @@ void QMenuBar::actionEvent(QActionEvent *e)
    } else if (e->type() == QEvent::ActionRemoved) {
       e->action()->disconnect(this);
    }
+
    if (isVisible()) {
       d->updateGeometries();
       update();
    }
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::focusInEvent(QFocusEvent *)
 {
    Q_D(QMenuBar);
@@ -1206,9 +1177,6 @@ void QMenuBar::focusInEvent(QFocusEvent *)
    }
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::focusOutEvent(QFocusEvent *)
 {
    Q_D(QMenuBar);

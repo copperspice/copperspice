@@ -155,7 +155,7 @@ void QTreeView::setHeader(QHeaderView *header)
    d->header->setParent(this);
    d->header->d_func()->setAllowUserMoveOfSection0(false);
 
-   if (!d->header->model()) {
+   if (! d->header->model()) {
       d->header->setModel(d->model);
 
       if (d->selectionModel) {
@@ -549,10 +549,12 @@ void QTreeView::setExpanded(const QModelIndex &index, bool expanded)
 void QTreeView::setSortingEnabled(bool enable)
 {
    Q_D(QTreeView);
+
    header()->setSortIndicatorShown(enable);
    header()->setSectionsClickable(enable);
+
    if (enable) {
-      //sortByColumn has to be called before we connect or set the sortingEnabled flag
+      // sortByColumn has to be called before we connect or set the sortingEnabled flag
       // because otherwise it will not call sort on the model.
       sortByColumn(header()->sortIndicatorSection(), header()->sortIndicatorOrder());
 
@@ -2541,7 +2543,7 @@ void QTreeView::expandToDepth(int depth)
    bool someSignalEnabled = isSignalConnected(QMetaMethod::fromSignal(&QTreeView::collapsed));
    someSignalEnabled |= isSignalConnected(QMetaMethod::fromSignal(&QTreeView::expanded));
 
-   if (!signalsBlocked() && someSignalEnabled) {
+   if (! signalsBlocked() && someSignalEnabled) {
       // emit signals
       QSet<QPersistentModelIndex> collapsedIndexes = old_expandedIndexes - d->expandedIndexes;
       QSet<QPersistentModelIndex>::const_iterator i = collapsedIndexes.constBegin();
@@ -2798,6 +2800,7 @@ bool QTreeView::isIndexHidden(const QModelIndex &index) const
 void QTreeViewPrivate::initialize()
 {
    Q_Q(QTreeView);
+
    updateIndentationFromStyle();
    updateStyledFrameWidths();
 

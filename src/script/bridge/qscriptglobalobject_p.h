@@ -26,8 +26,6 @@
 
 #include "JSGlobalObject.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QScript {
 
 class GlobalObject : public JSC::JSGlobalObject
@@ -120,12 +118,11 @@ class OriginalGlobalObjectProxy : public JSC::JSObject
    virtual JSC::JSValue lookupSetter(JSC::ExecState *exec, const JSC::Identifier &propertyName) {
       return originalGlobalObject->JSC::JSGlobalObject::lookupSetter(exec, propertyName);
    }
+
  private:
    JSC::JSGlobalObject *originalGlobalObject;
 };
 
 } // namespace QScript
-
-QT_END_NAMESPACE
 
 #endif

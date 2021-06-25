@@ -26,8 +26,6 @@
 
 #include <qwidget.h>
 
-
-
 #ifndef QT_NO_MDIAREA
 
 class QMenu;

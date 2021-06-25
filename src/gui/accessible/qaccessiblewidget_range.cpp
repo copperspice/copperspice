@@ -29,7 +29,6 @@
 #include <qscrollbar.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qdebug.h>
 #include <qglobal.h>
 #include <QDoubleSpinBox>
 #include <QDial>
@@ -252,9 +251,6 @@ QAccessibleDoubleSpinBox::QAccessibleDoubleSpinBox(QWidget *widget)
    addControllingSignal(signalMethod2);
 }
 
-/*!
-    Returns the underlying QDoubleSpinBox.
-*/
 QDoubleSpinBox *QAccessibleDoubleSpinBox::doubleSpinBox() const
 {
    return static_cast<QDoubleSpinBox *>(object());
@@ -265,6 +261,7 @@ QString QAccessibleDoubleSpinBox::text(QAccessible::Text textType) const
    if (textType == QAccessible::Value) {
       return doubleSpinBox()->textFromValue(doubleSpinBox()->value());
    }
+
    return QAccessibleWidget::text(textType);
 }
 

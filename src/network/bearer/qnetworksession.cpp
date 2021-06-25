@@ -30,7 +30,6 @@
 #include <QTimer>
 #include <QThread>
 
-
 #ifdef interface
 #  undef interface
 #endif
@@ -252,20 +251,12 @@ void QNetworkSession::accept()
    }
 }
 
-/*!
-    The new access point is not suitable for the application. By calling this function the
-    session returns to the previous access point/configuration. This action may invalidate
-    any socket that has been created via the not desired access point.
-
-    \sa accept()
-*/
 void QNetworkSession::reject()
 {
    if (d) {
       d->reject();
    }
 }
-
 quint64 QNetworkSession::bytesWritten() const
 {
    return d ? d->bytesWritten() : Q_UINT64_C(0);
@@ -276,14 +267,10 @@ quint64 QNetworkSession::bytesReceived() const
    return d ? d->bytesReceived() : Q_UINT64_C(0);
 }
 
-/*!
-    Returns the number of seconds that the session has been active.
-*/
 quint64 QNetworkSession::activeTime() const
 {
    return d ? d->activeTime() : Q_UINT64_C(0);
 }
-
 
 QNetworkSession::UsagePolicies QNetworkSession::usagePolicies() const
 {
@@ -292,13 +279,13 @@ QNetworkSession::UsagePolicies QNetworkSession::usagePolicies() const
 
 void QNetworkSessionPrivate::setUsagePolicies(QNetworkSession &session, QNetworkSession::UsagePolicies policies)
 {
-   if (!session.d) {
+   if (! session.d) {
       return;
    }
    session.d->setUsagePolicies(policies);
 }
 
-
+// internal
 void QNetworkSession::connectNotify(const QMetaMethod &signal) const
 {
    QObject::connectNotify(signal);
@@ -318,14 +305,7 @@ void QNetworkSession::connectNotify(const QMetaMethod &signal) const
    }
 }
 
-/*!
-    \internal
-
-    This function is called when the client disconnects from the
-    preferredConfigurationChanged() signal.
-
-    \sa connectNotify()
-*/
+// internal
 void QNetworkSession::disconnectNotify(const QMetaMethod &signal) const
 {
    QObject::disconnectNotify(signal);

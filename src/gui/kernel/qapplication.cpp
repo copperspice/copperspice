@@ -1846,7 +1846,7 @@ void QGuiApplicationPrivate::processActivatedEvent(QWindowSystemInterfacePrivate
    }
 
    QGuiApplicationPrivate::focus_window = newFocus;
-   if (!qApp) {
+   if (! qApp) {
       return;
    }
 
@@ -1868,6 +1868,7 @@ void QGuiApplicationPrivate::processActivatedEvent(QWindowSystemInterfacePrivate
 
    if (QGuiApplicationPrivate::focus_window) {
       Qt::FocusReason r = e->reason;
+
       if ((r == Qt::OtherFocusReason || r == Qt::ActiveWindowFocusReason) &&
          previous && (previous->flags() & Qt::Popup) == Qt::Popup) {
          r = Qt::PopupFocusReason;
@@ -1878,7 +1879,8 @@ void QGuiApplicationPrivate::processActivatedEvent(QWindowSystemInterfacePrivate
 
       QObject::connect(QGuiApplicationPrivate::focus_window, &QWindow::focusObjectChanged,
             qApp, &QApplication::_q_updateFocusObject);
-   } else if (!platformIntegration()->hasCapability(QPlatformIntegration::ApplicationState)) {
+
+   } else if (! platformIntegration()->hasCapability(QPlatformIntegration::ApplicationState)) {
       setApplicationState(Qt::ApplicationInactive);
    }
 
@@ -2683,9 +2685,7 @@ QPlatformDropQtResponse QGuiApplicationPrivate::processDrop(QWindow *w, const QM
 #endif // QT_NO_DRAGANDDROP
 
 #ifndef QT_NO_CLIPBOARD
-/*!
-    Returns the object for interacting with the clipboard.
-*/
+
 QClipboard *QApplication::clipboard()
 {
    if (QGuiApplicationPrivate::qt_clipboard == nullptr) {

@@ -1629,7 +1629,8 @@ QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb
       QWindow *window = nullptr;
       if (mb) {
          window = mb->windowHandle();
-         if (!window) {
+
+         if (! window) {
             if (const QWidget *nativeParent = mb->nativeParentWidget()) {
                window = nativeParent->windowHandle();
             }
@@ -1655,27 +1656,34 @@ void QMessageBoxPrivate::initHelper(QPlatformDialogHelper *obj)
    }
 }
 
-static QMessageDialogOptions::Icon helperIcon(QMessageBox::Icon i)
+static QMessageDialogOptions::Icon helperIcon(QMessageBox::Icon icon)
 {
-   switch (i) {
+   switch (icon) {
       case QMessageBox::NoIcon:
          return QMessageDialogOptions::NoIcon;
+
       case QMessageBox::Information:
          return QMessageDialogOptions::Information;
+
       case QMessageBox::Warning:
          return QMessageDialogOptions::Warning;
+
       case QMessageBox::Critical:
          return QMessageDialogOptions::Critical;
+
       case QMessageBox::Question:
          return QMessageDialogOptions::Question;
    }
+
    return QMessageDialogOptions::NoIcon;
 }
+
 static QPlatformDialogHelper::StandardButtons helperStandardButtons(QMessageBox *q)
 {
    QPlatformDialogHelper::StandardButtons buttons(int(q->standardButtons()));
    return buttons;
 }
+
 void QMessageBoxPrivate::helperPrepareShow(QPlatformDialogHelper *)
 {
    Q_Q(QMessageBox);
@@ -1686,6 +1694,7 @@ void QMessageBoxPrivate::helperPrepareShow(QPlatformDialogHelper *)
    options->setIcon(helperIcon(q->icon()));
    options->setStandardButtons(helperStandardButtons(q));
 }
+
 void QMessageBoxPrivate::helperDone(QDialog::DialogCode code, QPlatformDialogHelper *)
 {
    Q_Q(QMessageBox);

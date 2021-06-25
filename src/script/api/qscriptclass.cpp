@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#include "qscriptclass.h"
-#include "qscriptstring.h"
-
+#include <qscriptclass.h>
+#include <qscriptstring.h>
 
 class QScriptClassPrivate
 {
    Q_DECLARE_PUBLIC(QScriptClass)
+
  public:
    QScriptClassPrivate() {}
    virtual ~QScriptClassPrivate() {}

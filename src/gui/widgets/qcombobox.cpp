@@ -222,6 +222,7 @@ void QComboBoxPrivate::_q_modelReset()
       lineEdit->setText(QString());
       updateLineEditGeometry();
    }
+
    if (currentIndex.row() != indexBeforeChange) {
       _q_emitCurrentIndexChanged(currentIndex);
    }
@@ -447,22 +448,25 @@ QComboBoxPrivateContainer::QComboBoxPrivateContainer(QAbstractItemView *itemView
    // add scroller arrows if style needs them
    QStyleOptionComboBox opt = comboStyleOption();
    const bool usePopup = combo->style()->styleHint(QStyle::SH_ComboBox_Popup, &opt, combo);
+
    if (usePopup) {
-      top = new QComboBoxPrivateScroller(QAbstractSlider::SliderSingleStepSub, this);
+      top    = new QComboBoxPrivateScroller(QAbstractSlider::SliderSingleStepSub, this);
       bottom = new QComboBoxPrivateScroller(QAbstractSlider::SliderSingleStepAdd, this);
       top->hide();
       bottom->hide();
+
    } else {
       setLineWidth(1);
    }
 
    setFrameStyle(combo->style()->styleHint(QStyle::SH_ComboBox_PopupFrameStyle, &opt, combo));
 
-   if (top) {
+   if (top != nullptr) {
       layout->insertWidget(0, top);
       connect(top, &QComboBoxPrivateScroller::doScroll, this, &QComboBoxPrivateContainer::scrollItemView);
    }
-   if (bottom) {
+
+   if (bottom != nullptr) {
       layout->addWidget(bottom);
       connect(bottom, &QComboBoxPrivateScroller::doScroll, this, &QComboBoxPrivateContainer::scrollItemView);
    }
@@ -482,13 +486,10 @@ void QComboBoxPrivateContainer::scrollItemView(int action)
 #endif
 }
 
-/*
-    Hides or shows the scrollers when we emulate a popupmenu
-*/
 void QComboBoxPrivateContainer::updateScrollers()
 {
 #ifndef QT_NO_SCROLLBAR
-   if (!top || !bottom) {
+   if (! top || ! bottom) {
       return;
    }
 
@@ -500,10 +501,8 @@ void QComboBoxPrivateContainer::updateScrollers()
    if (combo->style()->styleHint(QStyle::SH_ComboBox_Popup, &opt, combo) &&
       view->verticalScrollBar()->minimum() < view->verticalScrollBar()->maximum()) {
 
-      bool needTop = view->verticalScrollBar()->value()
-         > (view->verticalScrollBar()->minimum() + topMargin());
-      bool needBottom = view->verticalScrollBar()->value()
-         < (view->verticalScrollBar()->maximum() - bottomMargin() - topMargin());
+      bool needTop    = view->verticalScrollBar()->value() > (view->verticalScrollBar()->minimum() + topMargin());
+      bool needBottom = view->verticalScrollBar()->value() < (view->verticalScrollBar()->maximum() - bottomMargin() - topMargin());
 
       if (needTop) {
          top->show();
@@ -564,6 +563,7 @@ void QComboBoxPrivateContainer::setItemView(QAbstractItemView *itemView)
    view->installEventFilter(this);
    view->viewport()->installEventFilter(this);
    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
    QStyleOptionComboBox opt = comboStyleOption();
    const bool usePopup = combo->style()->styleHint(QStyle::SH_ComboBox_Popup, &opt, combo);
 
@@ -1301,7 +1301,7 @@ void QComboBox::setAutoCompletion(bool enable)
 
    d->autoCompletion = enable;
 
-   if (!d->lineEdit) {
+   if (! d->lineEdit) {
       return;
    }
 

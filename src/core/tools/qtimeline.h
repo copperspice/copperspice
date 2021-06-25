@@ -112,14 +112,19 @@ class Q_CORE_EXPORT QTimeLine : public QObject
 
    CORE_CS_SLOT_1(Public, void start())
    CORE_CS_SLOT_2(start)
+
    CORE_CS_SLOT_1(Public, void resume())
    CORE_CS_SLOT_2(resume)
+
    CORE_CS_SLOT_1(Public, void stop())
    CORE_CS_SLOT_2(stop)
+
    CORE_CS_SLOT_1(Public, void setPaused(bool paused))
    CORE_CS_SLOT_2(setPaused)
+
    CORE_CS_SLOT_1(Public, void setCurrentTime(int msec))
    CORE_CS_SLOT_2(setCurrentTime)
+
    CORE_CS_SLOT_1(Public, void toggleDirection())
    CORE_CS_SLOT_2(toggleDirection)
 
@@ -127,8 +132,10 @@ class Q_CORE_EXPORT QTimeLine : public QObject
    CORE_CS_SIGNAL_2(valueChanged, x)
    CORE_CS_SIGNAL_1(Public, void frameChanged(int un_named_arg1))
    CORE_CS_SIGNAL_2(frameChanged, un_named_arg1)
+
    CORE_CS_SIGNAL_1(Public, void stateChanged(QTimeLine::State newState))
    CORE_CS_SIGNAL_2(stateChanged, newState)
+
    CORE_CS_SIGNAL_1(Public, void finished())
    CORE_CS_SIGNAL_2(finished)
 

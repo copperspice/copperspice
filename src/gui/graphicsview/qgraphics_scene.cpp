@@ -282,7 +282,7 @@ void QGraphicsScenePrivate::_q_processDirtyItems()
       // No need for further processing (except resetting the dirty states).
       // The growingItemsBoundingRect is updated in _q_emitUpdated.
       for (int i = 0; i < topLevelItems.size(); ++i) {
-         resetDirtyItem(topLevelItems.at(i), /*recursive=*/true);
+         resetDirtyItem(topLevelItems.at(i),true);
       }
       return;
    }
@@ -2015,10 +2015,11 @@ void QGraphicsScene::addItem(QGraphicsItem *item)
 
    // QDeclarativeItems do not rely on initial itemChanged message, as the componentComplete
    // function allows far more opportunity for delayed-construction optimization.
-   if (!item->d_ptr->isDeclarativeItem) {
+   if (! item->d_ptr->isDeclarativeItem) {
       if (d->unpolishedItems.isEmpty()) {
          d->polishItemsMethod.invoke(this, Qt::QueuedConnection);
       }
+
       d->unpolishedItems.append(item);
       item->d_ptr->pendingPolish = true;
    }
@@ -2403,7 +2404,7 @@ void QGraphicsScene::update(const QRectF &rect)
       return;
    }
 
-   // Check if anyone's connected. If not, we can send updates directly to the views.
+   // Check if anyone's connected. If not send updates directly to the views.
    // Otherwise or if there are no views, use old behavior
 
    bool directUpdates = false;
@@ -4187,6 +4188,7 @@ void QGraphicsScenePrivate::markDirty(QGraphicsItem *item, const QRectF &rect, b
          rect.translate(viewPrivate->dirtyScrollOffset);
          viewPrivate->updateRect(rect);
       }
+
       return;
    }
 
@@ -4349,6 +4351,7 @@ void QGraphicsScenePrivate::processDirtyItemsRecursive(QGraphicsItem *item, bool
                q->update(rect);
             }
          }
+
       } else {
          QRectF dirtyRect;
          bool uninitializedDirtyRect = true;

@@ -23,7 +23,6 @@
 
 #include <qglcolormap.h>
 
-
 QGLColormap::QGLColormapData QGLColormap::shared_null = { 1, nullptr, nullptr };
 
 QGLColormap::QGLColormap()
@@ -31,7 +30,6 @@ QGLColormap::QGLColormap()
 {
    d->ref.ref();
 }
-
 
 QGLColormap::QGLColormap(const QGLColormap &map)
    : d(map.d)
@@ -50,15 +48,14 @@ void QGLColormap::cleanup(QGLColormap::QGLColormapData *x)
 {
    delete x->cells;
    x->cells = nullptr;
+
    delete x;
 }
 
-/*!
-    Assign a shallow copy of \a map to this QGLColormap.
-*/
 QGLColormap &QGLColormap::operator=(const QGLColormap &map)
 {
    map.d->ref.ref();
+
    if (!d->ref.deref()) {
       cleanup(d);
    }
@@ -66,35 +63,28 @@ QGLColormap &QGLColormap::operator=(const QGLColormap &map)
    return *this;
 }
 
-/*!
-    \fn void QGLColormap::detach()
-    \internal
-
-    Detaches this QGLColormap from the shared block.
-*/
-
 void QGLColormap::detach_helper()
 {
    QGLColormapData *x = new QGLColormapData;
    x->ref.store(1);
    x->cmapHandle = nullptr;
    x->cells = nullptr;
+
    if (d->cells) {
       x->cells = new QVector<QRgb>(256);
       *x->cells = *d->cells;
    }
+
    if (!d->ref.deref()) {
       cleanup(d);
    }
    d = x;
 }
 
-/*!
-    Set cell at index \a idx in the colormap to color \a color.
-*/
 void QGLColormap::setEntry(int idx, QRgb color)
 {
    detach();
+
    if (!d->cells) {
       d->cells = new QVector<QRgb>(256);
    }
@@ -133,19 +123,11 @@ QRgb QGLColormap::entryRgb(int idx) const
    }
 }
 
-/*!
-    \overload
-
-    Set the cell with index \a idx in the colormap to color \a color.
-*/
 void QGLColormap::setEntry(int idx, const QColor &color)
 {
    setEntry(idx, color.rgb());
 }
 
-/*!
-    Returns the QRgb value in the colorcell with index \a idx.
-*/
 QColor QGLColormap::entryColor(int idx) const
 {
    if (d == &shared_null || !d->cells) {
@@ -155,49 +137,25 @@ QColor QGLColormap::entryColor(int idx) const
    }
 }
 
-/*!
-    Returns true if the colormap is empty or it is not in use
-    by a QGLWidget; otherwise returns false.
-
-    A colormap with no color values set is considered to be empty.
-    For historical reasons, a colormap that has color values set
-    but which is not in use by a QGLWidget is also considered empty.
-
-    Compare size() with zero to determine if the colormap is empty
-    regardless of whether it is in use by a QGLWidget or not.
-
-    \sa size()
-*/
 bool QGLColormap::isEmpty() const
 {
    return d == &shared_null || d->cells == nullptr || d->cells->size() == 0 || d->cmapHandle == nullptr;
 }
 
-
-/*!
-    Returns the number of colorcells in the colormap.
-*/
 int QGLColormap::size() const
 {
    return d->cells ? d->cells->size() : 0;
 }
 
-/*!
-    Returns the index of the color \a color. If \a color is not in the
-    map, -1 is returned.
-*/
 int QGLColormap::find(QRgb color) const
 {
    if (d->cells) {
       return d->cells->indexOf(color);
    }
+
    return -1;
 }
 
-/*!
-    Returns the index of the color that is the closest match to color
-    \a color.
-*/
 int QGLColormap::findNearest(QRgb color) const
 {
    int idx = find(color);
@@ -210,6 +168,7 @@ int QGLColormap::findNearest(QRgb color) const
    int r = qRed(color);
    int g = qGreen(color);
    int b = qBlue(color);
+
    int rx, gx, bx, dist;
 
    for (int i = 0; i < mapSize; ++i) {
@@ -218,11 +177,14 @@ int QGLColormap::findNearest(QRgb color) const
       gx = g - qGreen(ci);
       bx = b - qBlue(ci);
       dist = rx * rx + gx * gx + bx * bx;        // calculate distance
-      if (dist < mindist) {                // minimal?
+
+      if (dist < mindist) {
+         // minimal?
          mindist = dist;
          idx = i;
       }
    }
+
    return idx;
 }
 

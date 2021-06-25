@@ -81,7 +81,6 @@ class QGraphicsShaderEffectPrivate : public QGraphicsEffectPrivate
 #endif
 };
 
-
 QGraphicsShaderEffect::QGraphicsShaderEffect(QObject *parent)
    : QGraphicsEffect(*new QGraphicsShaderEffectPrivate(), parent)
 {
@@ -95,26 +94,19 @@ QGraphicsShaderEffect::~QGraphicsShaderEffect()
 #endif
 }
 
-/*#
-    Returns the source code for the pixel shader fragment for
-    this shader effect.  The default is a shader that copies
-    its incoming pixmap directly to the output with no effect
-    applied.
-
-    \sa setPixelShaderFragment()
-*/
 QByteArray QGraphicsShaderEffect::pixelShaderFragment() const
 {
    Q_D(const QGraphicsShaderEffect);
    return d->pixelShaderFragment;
 }
 
-
 void QGraphicsShaderEffect::setPixelShaderFragment(const QByteArray &code)
 {
    Q_D(QGraphicsShaderEffect);
+
    if (d->pixelShaderFragment != code) {
       d->pixelShaderFragment = code;
+
 #ifdef QGL_HAVE_CUSTOM_SHADERS
       delete d->customShaderStage;
       d->customShaderStage = nullptr;
@@ -133,7 +125,7 @@ void QGraphicsShaderEffect::draw(QPainter *painter)
    // Set the custom shader on the paint engine.  The setOnPainter()
    // call may fail if the paint engine is not GL2.  In that case,
    // we fall through to drawing the pixmap normally.
-   if (!d->customShaderStage) {
+   if (! d->customShaderStage) {
       d->customShaderStage = new QGLCustomShaderEffectStage
       (this, d->pixelShaderFragment);
    }
@@ -162,7 +154,6 @@ void QGraphicsShaderEffect::draw(QPainter *painter)
 #endif
 }
 
-
 void QGraphicsShaderEffect::setUniformsDirty()
 {
 #ifdef QGL_HAVE_CUSTOM_SHADERS
@@ -173,16 +164,6 @@ void QGraphicsShaderEffect::setUniformsDirty()
 #endif
 }
 
-/*#
-    Sets custom uniform variables on the current GL context when
-    \a program is about to be used by the paint engine.
-
-    This function should be overridden if the shader set with
-    setPixelShaderFragment() has additional parameters beyond
-    those that the paint engine normally sets itself.
-
-    \sa setUniformsDirty()
-*/
 void QGraphicsShaderEffect::setUniforms(QGLShaderProgram *program)
 {
    (void) program;

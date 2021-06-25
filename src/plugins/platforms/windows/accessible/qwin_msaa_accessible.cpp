@@ -169,6 +169,9 @@ void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleIn
 {
 #if defined(CS_SHOW_DEBUG)
     qDebug() << iface << funcName;
+#else
+   (void) iface;
+   (void) funcName;
 #endif
 }
 #endif
@@ -1214,12 +1217,15 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetWindow(HWND *phwnd)
     *phwnd = nullptr;
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
-    if (!accessible)
+
+    if (! accessible) {
         return E_FAIL;
+    }
 
     QWindow *window = QWindowsAccessibility::windowHelper(accessible);
-    if (!window)
+    if (! window) {
         return E_FAIL;
+    }
 
     QPlatformNativeInterface *platform = QApplication::platformNativeInterface();
     Q_ASSERT(platform);
@@ -1227,7 +1233,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetWindow(HWND *phwnd)
     *phwnd = (HWND)platform->nativeResourceForWindow("handle", window);
 
 #if defined(CS_SHOW_DEBUG)
-       qDebug() << "QWindowsAccessible::GetWindow(): " << *phwnd;
+    qDebug() << "QWindowsAccessible::GetWindow(): " << *phwnd;
 #endif
 
     return S_OK;
@@ -1239,6 +1245,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::ContextSensitiveHelp(BOOL)
 }
 
 #define IF_EQUAL_RETURN_IIDSTRING(id, iid) if (id == iid) return QByteArray(#iid)
+
 QByteArray QWindowsMsaaAccessible::IIDToString(REFIID id)
 {
     IF_EQUAL_RETURN_IIDSTRING(id, IID_IUnknown);

@@ -107,21 +107,25 @@ QActionGroup::~QActionGroup()
 QAction *QActionGroup::addAction(QAction *a)
 {
    Q_D(QActionGroup);
-   if (!d->actions.contains(a)) {
+
+   if (! d->actions.contains(a)) {
       d->actions.append(a);
 
       QObject::connect(a, &QAction::triggered, this, &QActionGroup::_q_actionTriggered);
       QObject::connect(a, &QAction::changed,   this, &QActionGroup::_q_actionChanged);
       QObject::connect(a, &QAction::hovered,   this, &QActionGroup::_q_actionHovered);
    }
-   if (!a->d_func()->forceDisabled) {
+
+   if (! a->d_func()->forceDisabled) {
       a->setEnabled(d->enabled);
       a->d_func()->forceDisabled = false;
    }
+
    if (!a->d_func()->forceInvisible) {
       a->setVisible(d->visible);
       a->d_func()->forceInvisible = false;
    }
+
    if (a->isChecked()) {
       d->current = a;
    }
@@ -136,40 +140,16 @@ QAction *QActionGroup::addAction(QAction *a)
    return a;
 }
 
-/*!
-    Creates and returns an action with \a text.  The newly created
-    action is a child of this action group.
-
-    Normally an action is added to a group by creating it with the
-    group as parent, so this function is not usually used.
-
-    \sa QAction::setActionGroup()
-*/
 QAction *QActionGroup::addAction(const QString &text)
 {
    return new QAction(text, this);
 }
 
-/*!
-    Creates and returns an action with \a text and an \a icon. The
-    newly created action is a child of this action group.
-
-    Normally an action is added to a group by creating it with the
-    group as its parent, so this function is not usually used.
-
-    \sa QAction::setActionGroup()
-*/
 QAction *QActionGroup::addAction(const QIcon &icon, const QString &text)
 {
    return new QAction(icon, text, this);
 }
 
-/*!
-  Removes the \a action from this group. The action will have no
-  parent as a result.
-
-  \sa QAction::setActionGroup()
-*/
 void QActionGroup::removeAction(QAction *action)
 {
    Q_D(QActionGroup);
@@ -186,26 +166,12 @@ void QActionGroup::removeAction(QAction *action)
    }
 }
 
-/*!
-    Returns the list of this groups's actions. This may be empty.
-*/
 QList<QAction *> QActionGroup::actions() const
 {
    Q_D(const QActionGroup);
    return d->actions;
 }
 
-/*!
-    \property QActionGroup::exclusive
-    \brief whether the action group does exclusive checking
-
-    If exclusive is true, only one checkable action in the action group
-    can ever be active at any time. If the user chooses another
-    checkable action in the group, the one they chose becomes active and
-    the one that was active becomes inactive.
-
-    \sa QAction::checkable
-*/
 void QActionGroup::setExclusive(bool b)
 {
    Q_D(QActionGroup);
@@ -217,7 +183,6 @@ bool QActionGroup::isExclusive() const
    Q_D(const QActionGroup);
    return d->exclusive;
 }
-
 
 void QActionGroup::setEnabled(bool b)
 {
@@ -247,19 +212,11 @@ QAction *QActionGroup::checkedAction() const
    return d->current;
 }
 
-/*!
-    \property QActionGroup::visible
-    \brief whether the action group is visible
-
-    Each action in the action group will match the visible state of
-    this group unless it has been explicitly hidden.
-
-    \sa QAction::setEnabled()
-*/
 void QActionGroup::setVisible(bool b)
 {
    Q_D(QActionGroup);
    d->visible = b;
+
    for (QList<QAction *>::iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
       if (!(*it)->d_func()->forceInvisible) {
          (*it)->setVisible(b);

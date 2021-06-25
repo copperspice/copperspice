@@ -305,7 +305,7 @@ QFtpDTP::QFtpDTP(QFtpPI *p, QObject *parent)
    : QObject(parent), socket(nullptr), listener(this), pi(p), callWriteData(false)
 {
    clearData();
-   listener.setObjectName(QLatin1String("QFtpDTP active state server"));
+   listener.setObjectName("QFtpDTP active state server");
 
    connect(&listener, &QTcpServer::newConnection, this, &QFtpDTP::setupSocket);
 }
@@ -702,7 +702,7 @@ void QFtpDTP::socketConnected()
 
 void QFtpDTP::socketReadyRead()
 {
-   if (!socket) {
+   if (! socket) {
       return;
    }
 
@@ -727,11 +727,14 @@ void QFtpDTP::socketReadyRead()
       while (socket->canReadLine()) {
          QUrlInfo i;
          QByteArray line = socket->readLine();
+
 #if defined(QFTPDTP_DEBUG)
          qDebug("QFtpDTP read (list): '%s'", line.constData());
 #endif
+
          if (parseDir(line, QLatin1String(""), &i)) {
             emit listInfo(i);
+
          } else {
             // some FTP servers don't return a 550 if the file or directory
             // does not exist, but rather write a text to the data socket
@@ -1423,113 +1426,6 @@ int QFtpPrivate::addCommand(QFtpCommand *cmd)
    return cmd->id;
 }
 
-
-/*!
-    \class QFtp
-    \brief The QFtp class provides an implementation of the client side of FTP protocol.
-
-    \ingroup network
-    \inmodule QtNetwork
-
-
-    This class provides a direct interface to FTP that allows you to
-    have more control over the requests. However, for new
-    applications, it is recommended to use QNetworkAccessManager and
-    QNetworkReply, as those classes possess a simpler, yet more
-    powerful API.
-
-    The class works asynchronously, so there are no blocking
-    functions. If an operation cannot be executed immediately, the
-    function will still return straight away and the operation will be
-    scheduled for later execution. The results of scheduled operations
-    are reported via signals. This approach depends on the event loop
-    being in operation.
-
-    The operations that can be scheduled (they are called "commands"
-    in the rest of the documentation) are the following:
-    connectToHost(), login(), close(), list(), cd(), get(), put(),
-    remove(), mkdir(), rmdir(), rename() and rawCommand().
-
-    All of these commands return a unique identifier that allows you
-    to keep track of the command that is currently being executed.
-    When the execution of a command starts, the commandStarted()
-    signal with the command's identifier is emitted. When the command
-    is finished, the commandFinished() signal is emitted with the
-    command's identifier and a bool that indicates whether the command
-    finished with an error.
-
-    In some cases, you might want to execute a sequence of commands,
-    e.g. if you want to connect and login to a FTP server. This is
-    simply achieved:
-
-    \snippet doc/src/snippets/code/src_network_access_qftp.cpp 0
-
-    In this case two FTP commands have been scheduled. When the last
-    scheduled command has finished, a done() signal is emitted with
-    a bool argument that tells you whether the sequence finished with
-    an error.
-
-    If an error occurs during the execution of one of the commands in
-    a sequence of commands, all the pending commands (i.e. scheduled,
-    but not yet executed commands) are cleared and no signals are
-    emitted for them.
-
-    Some commands, e.g. list(), emit additional signals to report
-    their results.
-
-    Example: If you want to download the INSTALL file from the Qt
-    FTP server, you would write this:
-
-    \snippet doc/src/snippets/code/src_network_access_qftp.cpp 1
-
-    For this example the following sequence of signals is emitted
-    (with small variations, depending on network traffic, etc.):
-
-    \snippet doc/src/snippets/code/src_network_access_qftp.cpp 2
-
-    The dataTransferProgress() signal in the above example is useful
-    if you want to show a \link QProgressBar progress bar \endlink to
-    inform the user about the progress of the download. The
-    readyRead() signal tells you that there is data ready to be read.
-    The amount of data can be queried then with the bytesAvailable()
-    function and it can be read with the read() or readAll()
-    function.
-
-    If the login fails for the above example, the signals would look
-    like this:
-
-    \snippet doc/src/snippets/code/src_network_access_qftp.cpp 3
-
-    You can then get details about the error with the error() and
-    errorString() functions.
-
-    For file transfer, QFtp can use both active or passive mode, and
-    it uses passive file transfer mode by default; see the
-    documentation for setTransferMode() for more details about this.
-
-    Call setProxy() to make QFtp connect via an FTP proxy server.
-
-    The functions currentId() and currentCommand() provide more
-    information about the currently executing command.
-
-    The functions hasPendingCommands() and clearPendingCommands()
-    allow you to query and clear the list of pending commands.
-
-    If you are an experienced network programmer and want to have
-    complete control you can use rawCommand() to execute arbitrary FTP
-    commands.
-
-    \warning The current version of QFtp doesn't fully support
-    non-Unix FTP servers.
-
-    \sa QNetworkAccessManager, QNetworkRequest, QNetworkReply,
-        {FTP Example}
-*/
-
-
-/*!
-    Constructs a QFtp object with the given \a parent.
-*/
 QFtp::QFtp(QObject *parent)
    : QObject(parent), d_ptr(new QFtpPrivate)
 {
@@ -1561,24 +1457,6 @@ int QFtp::connectToHost(const QString &host, quint16 port)
    return id;
 }
 
-/*!
-    Logs in to the FTP server with the username \a user and the
-    password \a password.
-
-    The stateChanged() signal is emitted when the state of the
-    connecting process changes, e.g. to \c LoggedIn.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa commandStarted() commandFinished()
-*/
 int QFtp::login(const QString &user, const QString &password)
 {
    QStringList cmds;
@@ -1587,34 +1465,11 @@ int QFtp::login(const QString &user, const QString &password)
    return d_func()->addCommand(new QFtpCommand(Login, cmds));
 }
 
-/*!
-    Closes the connection to the FTP server.
-
-    The stateChanged() signal is emitted when the state of the
-    connecting process changes, e.g. to \c Closing, then \c
-    Unconnected.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa stateChanged() commandStarted() commandFinished()
-*/
 int QFtp::close()
 {
    return d_func()->addCommand(new QFtpCommand(Close, QStringList(QLatin1String("QUIT\r\n"))));
 }
 
-/*!
-    Sets the current FTP transfer mode to \a mode. The default is QFtp::Passive.
-
-    \sa QFtp::TransferMode
-*/
 int QFtp::setTransferMode(TransferMode mode)
 {
    int id = d_func()->addCommand(new QFtpCommand(SetTransferMode, QStringList()));
@@ -1623,13 +1478,6 @@ int QFtp::setTransferMode(TransferMode mode)
    return id;
 }
 
-/*!
-    Enables use of the FTP proxy on host \a host and port \a
-    port. Calling this function with \a host empty disables proxying.
-
-    QFtp does not support FTP-over-HTTP proxy servers. Use
-    QNetworkAccessManager for this.
-*/
 int QFtp::setProxy(const QString &host, quint16 port)
 {
    QStringList args;
@@ -1637,23 +1485,6 @@ int QFtp::setProxy(const QString &host, quint16 port)
    return d_func()->addCommand(new QFtpCommand(SetProxy, args));
 }
 
-/*!
-    Lists the contents of directory \a dir on the FTP server. If \a
-    dir is empty, it lists the contents of the current directory.
-
-    The listInfo() signal is emitted for each directory entry found.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa listInfo() commandStarted() commandFinished()
-*/
 int QFtp::list(const QString &dir)
 {
    QStringList cmds;
@@ -1667,65 +1498,11 @@ int QFtp::list(const QString &dir)
    return d_func()->addCommand(new QFtpCommand(List, cmds));
 }
 
-/*!
-    Changes the working directory of the server to \a dir.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa commandStarted() commandFinished()
-*/
 int QFtp::cd(const QString &dir)
 {
    return d_func()->addCommand(new QFtpCommand(Cd, QStringList(QLatin1String("CWD ") + dir + QLatin1String("\r\n"))));
 }
 
-/*!
-    Downloads the file \a file from the server.
-
-    If \a dev is 0, then the readyRead() signal is emitted when there
-    is data available to read. You can then read the data with the
-    read() or readAll() functions.
-
-    If \a dev is not 0, the data is written directly to the device \a
-    dev. Make sure that the \a dev pointer is valid for the duration
-    of the operation (it is safe to delete it when the
-    commandFinished() signal is emitted). In this case the readyRead()
-    signal is \e not emitted and you cannot read data with the
-    read() or readAll() functions.
-
-    If you don't read the data immediately it becomes available, i.e.
-    when the readyRead() signal is emitted, it is still available
-    until the next command is started.
-
-    For example, if you want to present the data to the user as soon
-    as there is something available, connect to the readyRead() signal
-    and read the data immediately. On the other hand, if you only want
-    to work with the complete data, you can connect to the
-    commandFinished() signal and read the data when the get() command
-    is finished.
-
-    The data is transferred as Binary or Ascii depending on the value
-    of \a type.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa readyRead() dataTransferProgress() commandStarted()
-    commandFinished()
-*/
 int QFtp::get(const QString &file, QIODevice *dev, TransferType type)
 {
    QStringList cmds;
@@ -1740,30 +1517,6 @@ int QFtp::get(const QString &file, QIODevice *dev, TransferType type)
    return d_func()->addCommand(new QFtpCommand(Get, cmds, dev));
 }
 
-/*!
-    \overload
-
-    Writes a copy of the given \a data to the file called \a file on
-    the server. The progress of the upload is reported by the
-    dataTransferProgress() signal.
-
-    The data is transferred as Binary or Ascii depending on the value
-    of \a type.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    Since this function takes a copy of the \a data, you can discard
-    your own copy when this function returns.
-
-    \sa dataTransferProgress() commandStarted() commandFinished()
-*/
 int QFtp::put(const QByteArray &data, const QString &file, TransferType type)
 {
    QStringList cmds;
@@ -1778,20 +1531,6 @@ int QFtp::put(const QByteArray &data, const QString &file, TransferType type)
    return d_func()->addCommand(new QFtpCommand(Put, cmds, data));
 }
 
-/*!
-    Reads the data from the IO device \a dev, and writes it to the
-    file called \a file on the server. The data is read in chunks from
-    the IO device, so this overload allows you to transmit large
-    amounts of data without the need to read all the data into memory
-    at once.
-
-    The data is transferred as Binary or Ascii depending on the value
-    of \a type.
-
-    Make sure that the \a dev pointer is valid for the duration of the
-    operation (it is safe to delete it when the commandFinished() is
-    emitted).
-*/
 int QFtp::put(QIODevice *dev, const QString &file, TransferType type)
 {
    QStringList cmds;
@@ -1808,77 +1547,21 @@ int QFtp::put(QIODevice *dev, const QString &file, TransferType type)
    return d_func()->addCommand(new QFtpCommand(Put, cmds, dev));
 }
 
-/*!
-    Deletes the file called \a file from the server.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa commandStarted() commandFinished()
-*/
 int QFtp::remove(const QString &file)
 {
    return d_func()->addCommand(new QFtpCommand(Remove, QStringList(QLatin1String("DELE ") + file + QLatin1String("\r\n"))));
 }
 
-/*!
-    Creates a directory called \a dir on the server.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa commandStarted() commandFinished()
-*/
 int QFtp::mkdir(const QString &dir)
 {
    return d_func()->addCommand(new QFtpCommand(Mkdir, QStringList(QLatin1String("MKD ") + dir + QLatin1String("\r\n"))));
 }
 
-/*!
-    Removes the directory called \a dir from the server.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa commandStarted() commandFinished()
-*/
 int QFtp::rmdir(const QString &dir)
 {
    return d_func()->addCommand(new QFtpCommand(Rmdir, QStringList(QLatin1String("RMD ") + dir + QLatin1String("\r\n"))));
 }
 
-/*!
-    Renames the file called \a oldname to \a newname on the server.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa commandStarted() commandFinished()
-*/
 int QFtp::rename(const QString &oldname, const QString &newname)
 {
    QStringList cmds;
@@ -1887,97 +1570,27 @@ int QFtp::rename(const QString &oldname, const QString &newname)
    return d_func()->addCommand(new QFtpCommand(Rename, cmds));
 }
 
-/*!
-    Sends the raw FTP command \a command to the FTP server. This is
-    useful for low-level FTP access. If the operation you wish to
-    perform has an equivalent QFtp function, we recommend using the
-    function instead of raw FTP commands since the functions are
-    easier and safer.
-
-    The function does not block and returns immediately. The command
-    is scheduled, and its execution is performed asynchronously. The
-    function returns a unique identifier which is passed by
-    commandStarted() and commandFinished().
-
-    When the command is started the commandStarted() signal is
-    emitted. When it is finished the commandFinished() signal is
-    emitted.
-
-    \sa rawCommandReply() commandStarted() commandFinished()
-*/
 int QFtp::rawCommand(const QString &command)
 {
    QString cmd = command.trimmed() + QLatin1String("\r\n");
    return d_func()->addCommand(new QFtpCommand(RawCommand, QStringList(cmd)));
 }
 
-/*!
-    Returns the number of bytes that can be read from the data socket
-    at the moment.
-
-    \sa get() readyRead() read() readAll()
-*/
 qint64 QFtp::bytesAvailable() const
 {
    return d_func()->pi.dtp.bytesAvailable();
 }
 
-/*! \fn qint64 QFtp::readBlock(char *data, quint64 maxlen)
-
-    Use read() instead.
-*/
-
-/*!
-    Reads \a maxlen bytes from the data socket into \a data and
-    returns the number of bytes read. Returns -1 if an error occurred.
-
-    \sa get() readyRead() bytesAvailable() readAll()
-*/
 qint64 QFtp::read(char *data, qint64 maxlen)
 {
    return d_func()->pi.dtp.read(data, maxlen);
 }
 
-/*!
-    Reads all the bytes available from the data socket and returns
-    them.
-
-    \sa get() readyRead() bytesAvailable() read()
-*/
 QByteArray QFtp::readAll()
 {
    return d_func()->pi.dtp.readAll();
 }
 
-/*!
-    Aborts the current command and deletes all scheduled commands.
-
-    If there is an unfinished command (i.e. a command for which the
-    commandStarted() signal has been emitted, but for which the
-    commandFinished() signal has not been emitted), this function
-    sends an \c ABORT command to the server. When the server replies
-    that the command is aborted, the commandFinished() signal with the
-    \c error argument set to \c true is emitted for the command. Due
-    to timing issues, it is possible that the command had already
-    finished before the abort request reached the server, in which
-    case, the commandFinished() signal is emitted with the \c error
-    argument set to \c false.
-
-    For all other commands that are affected by the abort(), no
-    signals are emitted.
-
-    If you don't start further FTP commands directly after the
-    abort(), there won't be any scheduled commands and the done()
-    signal is emitted.
-
-    \warning Some FTP servers, for example the BSD FTP daemon (version
-    0.3), wrongly return a positive reply even when an abort has
-    occurred. For these servers the commandFinished() signal has its
-    error flag set to \c false, even though the command did not
-    complete successfully.
-
-    \sa clearPendingCommands()
-*/
 void QFtp::abort()
 {
    if (d_func()->pending.isEmpty()) {
@@ -1988,12 +1601,6 @@ void QFtp::abort()
    d_func()->pi.abort();
 }
 
-/*!
-    Returns the identifier of the FTP command that is being executed
-    or 0 if there is no command being executed.
-
-    \sa currentCommand()
-*/
 int QFtp::currentId() const
 {
    if (d_func()->pending.isEmpty()) {
@@ -2129,10 +1736,12 @@ void QFtpPrivate::_q_startNextCommand()
                pi.dtp.setBytesTotal(c->data.dev->size());
             }
          }
+
       } else if (c->command == QFtp::Get) {
          if (!c->is_ba && c->data.dev) {
             pi.dtp.setDevice(c->data.dev);
          }
+
       } else if (c->command == QFtp::Close) {
          state = QFtp::Closing;
          emit q->stateChanged(state);

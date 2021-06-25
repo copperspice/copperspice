@@ -85,16 +85,14 @@ AVCaptureDevice *AVFAudioInputSelectorControl::createCaptureDevice()
     m_dirty = false;
     AVCaptureDevice *device = nullptr;
 
-    if (!m_activeInput.isEmpty()) {
+    if (! m_activeInput.isEmpty()) {
         device = [AVCaptureDevice deviceWithUniqueID:
                     [NSString stringWithUTF8String:
                         m_activeInput.toUtf8().constData()]];
     }
 
-    if (!device)
+    if (! device)
         device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
 
     return device;
 }
-
-

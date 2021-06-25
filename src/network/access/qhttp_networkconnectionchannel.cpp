@@ -87,18 +87,15 @@ void QHttpNetworkConnectionChannel::init()
 
    // We want all signals (except the interactive ones) be connected as QueuedConnection
    // because else we're falling into cases where we recurse back into the socket code
-   // and mess up the state. Always going to the event loop (and expecting that when reading/writing)
-   // is safer.
+   // and mess up the state. Always going to the event loop (and expecting that when reading/writing) is safer.
 
-   // The disconnected() and error() signals may already come
-   // while calling connectToHost().
-   // In case of a cached hostname or an IP this
-   // will then emit a signal to the user of QNetworkReply
-   // but cannot be caught because the user did not have a chance yet
-   // to connect to QNetworkReply's signals.
    QObject::connect(socket, &QTcpSocket::bytesWritten, this, &QHttpNetworkConnectionChannel::_q_bytesWritten, Qt::QueuedConnection);
    QObject::connect(socket, &QTcpSocket::connected,    this, &QHttpNetworkConnectionChannel::_q_connected,    Qt::QueuedConnection);
    QObject::connect(socket, &QTcpSocket::readyRead,    this, &QHttpNetworkConnectionChannel::_q_readyRead,    Qt::QueuedConnection);
+
+   // The disconnected() and error() signals may already come while calling connectToHost().
+   // In case of a cached hostname or an IP this will then emit a signal to the user of QNetworkReply
+   // but can not be caught because the user did not have a chance yet to connect to QNetworkReply's signals.
 
    QObject::connect(socket, &QTcpSocket::disconnected, this, &QHttpNetworkConnectionChannel::_q_disconnected, Qt::QueuedConnection);
    QObject::connect(socket, &QTcpSocket::error,        this, &QHttpNetworkConnectionChannel::_q_error, Qt::QueuedConnection);
@@ -112,7 +109,7 @@ void QHttpNetworkConnectionChannel::init()
    QSslSocket *sslSocket = dynamic_cast<QSslSocket *>(socket);
 
    if (sslSocket) {
-      // won't be a sslSocket if encrypt is false
+      // will not be a sslSocket if encrypt is false
       QObject::connect(sslSocket, &QSslSocket::encrypted, this, &QHttpNetworkConnectionChannel::_q_encrypted, Qt::QueuedConnection);
       QObject::connect(sslSocket, &QSslSocket::sslErrors, this, &QHttpNetworkConnectionChannel::_q_sslErrors, Qt::DirectConnection);
 

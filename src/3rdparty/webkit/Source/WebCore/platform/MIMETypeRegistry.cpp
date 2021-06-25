@@ -58,7 +58,7 @@ static HashSet<String>* supportedMediaMIMETypes;
 static HashSet<String>* unsupportedTextMIMETypes;
 
 typedef HashMap<String, Vector<String>*, CaseFoldingHash> MediaMIMETypeMap;
-    
+
 static void initializeSupportedImageMIMETypes()
 {
 #if USE(CG)
@@ -241,7 +241,7 @@ static MediaMIMETypeMap& mediaMIMETypeMap()
     // A table of common media MIME types and file extenstions used when a platform's
     // specific MIME type lookup doesn't have a match for a media file extension.
     static const TypeExtensionPair pairs[] = {
-    
+
         // Ogg
         { "application/ogg", "ogx" },
         { "audio/ogg", "ogg" },
@@ -288,7 +288,7 @@ static MediaMIMETypeMap& mediaMIMETypeMap()
         { "audio/x-m4b", "m4b" },
         { "audio/x-m4p", "m4p" },
         { "audio/mp4", "m4a" },
- 
+
         // MP3
         { "audio/mp3", "mp3" },
         { "audio/x-mp3", "mp3" },
@@ -303,8 +303,8 @@ static MediaMIMETypeMap& mediaMIMETypeMap()
         { "video/x-m2ts", "ts" },
 
         // 3GP/3GP2
-        { "audio/3gpp", "3gpp" }, 
-        { "audio/3gpp2", "3g2" }, 
+        { "audio/3gpp", "3gpp" },
+        { "audio/3gpp2", "3g2" },
         { "application/x-mpeg", "amc" },
 
         // AAC
@@ -363,10 +363,10 @@ String MIMETypeRegistry::getMediaMIMETypeForExtension(const String& ext)
     Vector<String>* typeList = mediaMIMETypeMap().get(ext);
     if (typeList)
         return (*typeList)[0];
-    
+
     return String();
 }
-    
+
 Vector<String> MIMETypeRegistry::getMediaMIMETypesForExtension(const String& ext)
 {
     Vector<String>* typeList = mediaMIMETypeMap().get(ext);
@@ -382,7 +382,7 @@ Vector<String> MIMETypeRegistry::getMediaMIMETypesForExtension(const String& ext
         typeList.append(type);
         return typeList;
     }
-    
+
     return Vector<String>();
 }
 

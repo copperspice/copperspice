@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Friedemann Kleint 
+ * Copyright (C) 2006 Friedemann Kleint
  * Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
  *
  * Redistribution and use in source and binary forms, with or without

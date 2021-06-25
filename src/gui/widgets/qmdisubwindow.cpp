@@ -638,11 +638,14 @@ void ControlContainer::showButtonsInMenuBar(QMenuBar *menuBar)
    }
 
    ControllerWidget *controllerWidget = qobject_cast<ControllerWidget *>(m_controllerWidget);
+
    if (controllerWidget && controllerWidget->hasVisibleControls()) {
       QWidget *currentRight = menuBar->cornerWidget(Qt::TopRightCorner);
+
       if (currentRight) {
          currentRight->hide();
       }
+
       if (currentRight != m_controllerWidget) {
          menuBar->setCornerWidget(m_controllerWidget, Qt::TopRightCorner);
          previousRight = currentRight;

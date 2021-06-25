@@ -696,15 +696,16 @@ void QHttpThreadDelegate::preSharedKeyAuthenticationRequiredSlot(QSslPreSharedKe
 
 void QHttpThreadDelegate::synchronousAuthenticationRequiredSlot(const QHttpNetworkRequest &request, QAuthenticator *a)
 {
+   (void) request;
+
    if (! httpReply) {
       return;
    }
 
-   Q_UNUSED(request);
-
    // Ask the credential cache
    QNetworkAuthenticationCredential credential = authenticationManager->fetchCachedCredentials(httpRequest.url(), a);
-   if (!credential.isNull()) {
+
+   if (! credential.isNull()) {
       a->setUser(credential.user);
       a->setPassword(credential.password);
    }
@@ -715,7 +716,7 @@ void QHttpThreadDelegate::synchronousAuthenticationRequiredSlot(const QHttpNetwo
 }
 
 #ifndef QT_NO_NETWORKPROXY
-void  QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &p, QAuthenticator *a)
+void QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &p, QAuthenticator *a)
 {
    if (! httpReply) {
       return;

@@ -345,7 +345,7 @@ void AVFMediaRecorderControl::setupSessionForCapture()
     // request on iOS, but it shoudn't do so until we actually try to record.
     AVCaptureSession *captureSession = m_session->captureSession();
 
-    if (!m_connected
+    if (! m_connected
             && m_cameraControl->captureMode().testFlag(QCamera::CaptureVideo)
             && m_session->state() != QCamera::UnloadedState) {
 
@@ -355,8 +355,10 @@ void AVFMediaRecorderControl::setupSessionForCapture()
         // Add audio input
         // Allow recording even if something wrong happens with the audio input initialization
         AVCaptureDevice *audioDevice = m_audioInputControl->createCaptureDevice();
-        if (!audioDevice) {
+
+        if (! audioDevice) {
             qWarning("No audio input device available");
+
         } else {
             NSError *error = nil;
             m_audioInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
@@ -364,7 +366,7 @@ void AVFMediaRecorderControl::setupSessionForCapture()
             if (!m_audioInput) {
                 qWarning() << "Failed to create audio device input";
             } else if (![captureSession canAddInput:m_audioInput]) {
-                qWarning() << "Could not connect the audio input";
+                qWarning() << "Unable to connect the audio input";
                 m_audioInput = nullptr;
             } else {
                 [m_audioInput retain];
@@ -377,7 +379,7 @@ void AVFMediaRecorderControl::setupSessionForCapture()
             m_connected = true;
         } else {
             Q_EMIT error(QMediaRecorder::ResourceError, tr("Could not connect the video recorder"));
-            qWarning() << "Could not connect the video recorder";
+            qWarning() << "Unable to  connect the video recorder";
         }
     } else if (m_connected
                && (!m_cameraControl->captureMode().testFlag(QCamera::CaptureVideo)

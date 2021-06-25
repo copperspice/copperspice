@@ -27,17 +27,8 @@
 #include "JSVariableObject.h"
 
 namespace JSC {
-ASSERT_CLASS_FITS_IN_CELL(QT_PREPEND_NAMESPACE(QScript::QScriptActivationObject));
+   ASSERT_CLASS_FITS_IN_CELL(QT_PREPEND_NAMESPACE(QScript::QScriptActivationObject));
 }
-
-QT_BEGIN_NAMESPACE
-
-/*!
-  \class QScript::QScriptActivationObject
-  \internal
-
-  Represent a scope for native function call.
-*/
 
 namespace QScript {
 
@@ -60,6 +51,7 @@ bool QScriptActivationObject::getOwnPropertySlot(JSC::ExecState *exec, const JSC
    if (d_ptr()->delegate != nullptr) {
       return d_ptr()->delegate->getOwnPropertySlot(exec, propertyName, slot);
    }
+
    return JSC::JSVariableObject::getOwnPropertySlot(exec, propertyName, slot);
 }
 
@@ -69,6 +61,7 @@ bool QScriptActivationObject::getOwnPropertyDescriptor(JSC::ExecState *exec, con
    if (d_ptr()->delegate != nullptr) {
       return d_ptr()->delegate->getOwnPropertyDescriptor(exec, propertyName, descriptor);
    }
+
    return JSC::JSVariableObject::getOwnPropertyDescriptor(exec, propertyName, descriptor);
 }
 
@@ -79,6 +72,7 @@ void QScriptActivationObject::getOwnPropertyNames(JSC::ExecState *exec, JSC::Pro
       d_ptr()->delegate->getOwnPropertyNames(exec, propertyNames, mode);
       return;
    }
+
    return JSC::JSVariableObject::getOwnPropertyNames(exec, propertyNames, mode);
 }
 
@@ -105,6 +99,7 @@ void QScriptActivationObject::put(JSC::ExecState *exec, const JSC::Identifier &p
       d_ptr()->delegate->put(exec, propertyName, value, slot);
       return;
    }
+
    JSC::JSVariableObject::put(exec, propertyName, value, slot);
 }
 
@@ -114,6 +109,7 @@ void QScriptActivationObject::put(JSC::ExecState *exec, unsigned propertyName, J
       d_ptr()->delegate->put(exec, propertyName, value);
       return;
    }
+
    JSC::JSVariableObject::put(exec, propertyName, value);
 }
 
@@ -122,6 +118,7 @@ bool QScriptActivationObject::deleteProperty(JSC::ExecState *exec, const JSC::Id
    if (d_ptr()->delegate != nullptr) {
       return d_ptr()->delegate->deleteProperty(exec, propertyName);
    }
+
    return JSC::JSVariableObject::deleteProperty(exec, propertyName);
 }
 
@@ -163,5 +160,4 @@ JSC::JSValue QScriptActivationObject::lookupSetter(JSC::ExecState *exec, const J
 
 } // namespace QScript
 
-QT_END_NAMESPACE
 

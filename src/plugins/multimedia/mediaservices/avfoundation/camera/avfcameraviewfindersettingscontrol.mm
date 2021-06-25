@@ -120,7 +120,7 @@ QCameraViewfinderSettings AVFCameraViewfinderSettingsControl2::viewfinderSetting
     QCameraViewfinderSettings settings = m_settings;
 
     AVCaptureDevice *captureDevice = m_service->session()->videoCaptureDevice();
-    if (!captureDevice) {
+    if (! captureDevice) {
         qDebugCamera() << Q_FUNC_INFO << "no capture device found";
         return settings;
     }
@@ -129,7 +129,6 @@ QCameraViewfinderSettings AVFCameraViewfinderSettingsControl2::viewfinderSetting
         m_service->session()->state() != QCamera::ActiveState) {
         return settings;
     }
-
 
      if (!captureDevice.activeFormat) {
          qDebugCamera() << Q_FUNC_INFO << "no active capture device format";

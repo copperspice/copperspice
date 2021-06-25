@@ -300,7 +300,9 @@ void QTextStreamPrivate::reset()
    codec = QTextCodec::codecForLocale();
    resetCodecConverterStateHelper(&readConverterState);
    resetCodecConverterStateHelper(&writeConverterState);
+
    delete readConverterSavedState;
+
    readConverterSavedState = nullptr;
    writeConverterState.m_flags |= QTextCodec::IgnoreHeader;
    autoDetectUnicode = true;
@@ -801,9 +803,6 @@ QTextStream::QTextStream(QString *str, QIODevice::OpenMode openMode)
 QTextStream::QTextStream(QByteArray *array, QIODevice::OpenMode openMode)
    : d_ptr(new QTextStreamPrivate(this))
 {
-
-
-
    Q_D(QTextStream);
    d->device = new QBuffer(array);
    d->device->open(openMode);
@@ -815,7 +814,6 @@ QTextStream::QTextStream(QByteArray *array, QIODevice::OpenMode openMode)
 QTextStream::QTextStream(const QByteArray &array, QIODevice::OpenMode openMode)
    : d_ptr(new QTextStreamPrivate(this))
 {
-
    QBuffer *buffer = new QBuffer;
    buffer->setData(array);
    buffer->open(openMode);
@@ -859,11 +857,6 @@ QTextStream::~QTextStream()
    }
 }
 
-/*!
-    Resets QTextStream's formatting options, bringing it back to its
-    original constructed state. The device, string and any buffered
-    data is left untouched.
-*/
 void QTextStream::reset()
 {
    Q_D(QTextStream);
@@ -877,13 +870,11 @@ void QTextStream::reset()
    d->numberFlags = Qt::EmptyFlag;
 }
 
-
 void QTextStream::flush()
 {
    Q_D(QTextStream);
    d->flushWriteBuffer();
 }
-
 
 bool QTextStream::seek(qint64 pos)
 {
@@ -914,26 +905,14 @@ bool QTextStream::seek(qint64 pos)
       d->stringOffset = int(pos);
       return true;
    }
+
    return false;
 }
 
-/*!
-    \since 4.2
-
-    Returns the device position corresponding to the current position of the
-    stream, or -1 if an error occurs (e.g., if there is no device or string,
-    or if there's a device error).
-
-    Because QTextStream is buffered, this function may have to
-    seek the device to reconstruct a valid device position. This
-    operation can be expensive, so you may want to avoid calling this
-    function in a tight loop.
-
-    \sa seek()
-*/
 qint64 QTextStream::pos() const
 {
    Q_D(const QTextStream);
+
    if (d->device) {
       // Cutoff
       if (d->readBuffer.isEmpty()) {

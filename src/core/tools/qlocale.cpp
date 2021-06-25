@@ -1277,12 +1277,12 @@ QString QLocale::dateFormat(FormatType format) const
 
    switch (format) {
       case LongFormat:
-         idx = d->m_data->m_long_date_format_idx;
+         idx  = d->m_data->m_long_date_format_idx;
          size = d->m_data->m_long_date_format_size;
          break;
 
       default:
-         idx = d->m_data->m_short_date_format_idx;
+         idx  = d->m_data->m_short_date_format_idx;
          size = d->m_data->m_short_date_format_size;
          break;
    }
@@ -1462,12 +1462,15 @@ QString QLocale::toString(double i, char f, int prec) const
       case 'f':
          form = QLocaleData::DFDecimal;
          break;
+
       case 'e':
          form = QLocaleData::DFExponent;
          break;
+
       case 'g':
          form = QLocaleData::DFSignificantDigits;
          break;
+
       default:
          break;
    }
@@ -1928,10 +1931,11 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
                      result.append(m_data->longLongToString(yr, -1, 10, len, QLocaleData::ZeroPadded));
                      break;
                   }
+
                   case 2:
-                     result.append(m_data->longLongToString(date.year() % 100, -1, 10, 2,
-                                                            QLocaleData::ZeroPadded));
+                     result.append(m_data->longLongToString(date.year() % 100, -1, 10, 2, QLocaleData::ZeroPadded));
                      break;
+
                   default:
                      repeat = 1;
                      result.append(c);
@@ -1942,16 +1946,20 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
             case 'M':
                used = true;
                repeat = qMin(repeat, 4);
+
                switch (repeat) {
                   case 1:
                      result.append(m_data->longLongToString(date.month()));
                      break;
+
                   case 2:
                      result.append(m_data->longLongToString(date.month(), -1, 10, 2, QLocaleData::ZeroPadded));
                      break;
+
                   case 3:
                      result.append(q->monthName(date.month(), QLocale::ShortFormat));
                      break;
+
                   case 4:
                      result.append(q->monthName(date.month(), QLocale::LongFormat));
                      break;
@@ -1965,12 +1973,15 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
                   case 1:
                      result.append(m_data->longLongToString(date.day()));
                      break;
+
                   case 2:
                      result.append(m_data->longLongToString(date.day(), -1, 10, 2, QLocaleData::ZeroPadded));
                      break;
+
                   case 3:
                      result.append(q->dayName(date.dayOfWeek(), QLocale::ShortFormat));
                      break;
+
                   case 4:
                      result.append(q->dayName(date.dayOfWeek(), QLocale::LongFormat));
                      break;
@@ -1981,12 +1992,13 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
                break;
          }
       }
-      if (!used && formatTime) {
+      if (! used && formatTime) {
          switch (c.unicode()) {
             case 'h': {
                used = true;
                repeat = qMin(repeat, 2);
                int hour = time.hour();
+
                if (timeFormatContainsAP(format)) {
                   if (hour > 12) {
                      hour -= 12;
@@ -1999,19 +2011,23 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
                   case 1:
                      result.append(m_data->longLongToString(hour));
                      break;
+
                   case 2:
                      result.append(m_data->longLongToString(hour, -1, 10, 2, QLocaleData::ZeroPadded));
                      break;
                }
                break;
             }
+
             case 'H':
                used = true;
                repeat = qMin(repeat, 2);
+
                switch (repeat) {
                   case 1:
                      result.append(m_data->longLongToString(time.hour()));
                      break;
+
                   case 2:
                      result.append(m_data->longLongToString(time.hour(), -1, 10, 2, QLocaleData::ZeroPadded));
                      break;
@@ -2021,10 +2037,12 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
             case 'm':
                used = true;
                repeat = qMin(repeat, 2);
+
                switch (repeat) {
                   case 1:
                      result.append(m_data->longLongToString(time.minute()));
                      break;
+
                   case 2:
                      result.append(m_data->longLongToString(time.minute(), -1, 10, 2, QLocaleData::ZeroPadded));
                      break;
@@ -2034,10 +2052,12 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
             case 's':
                used = true;
                repeat = qMin(repeat, 2);
+
                switch (repeat) {
                   case 1:
                      result.append(m_data->longLongToString(time.second()));
                      break;
+
                   case 2:
                      result.append(m_data->longLongToString(time.second(), -1, 10, 2, QLocaleData::ZeroPadded));
                      break;
@@ -2061,6 +2081,7 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
                } else {
                   repeat = 1;
                }
+
                result.append(time.hour() < 12 ? q->amText().toUpper() : q->pmText().toUpper());
                break;
 
@@ -2075,6 +2096,7 @@ QString QLocalePrivate::dateTimeToString(const QString &format, const QDateTime 
                   case 1:
                      result.append(m_data->longLongToString(time.msec()));
                      break;
+
                   case 3:
                      result.append(m_data->longLongToString(time.msec(), -1, 10, 3, QLocaleData::ZeroPadded));
                      break;
@@ -2837,7 +2859,8 @@ QString QLocale::currencySymbol(QLocale::CurrencySymbolFormat format) const
    }
 #endif
 
-   quint32 idx, size;
+   quint32 idx;
+   quint32 size;
 
    switch (format) {
       case CurrencySymbol:

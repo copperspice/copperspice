@@ -693,12 +693,16 @@ const char *QScrollerPrivate::stateName(QScroller::State state)
    switch (state) {
       case QScroller::Inactive:
          return "inactive";
+
       case QScroller::Pressed:
          return "pressed";
+
       case QScroller::Dragging:
          return "dragging";
+
       case QScroller::Scrolling:
          return "scrolling";
+
       default:
          return "(invalid)";
    }

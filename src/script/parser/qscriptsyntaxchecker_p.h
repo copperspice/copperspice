@@ -25,9 +25,7 @@
 #define QSCRIPTSYNTAXCHECKER_P_H
 
 #include <qstring.h>
-#include "qscriptgrammar_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qscriptgrammar_p.h>
 
 namespace QScript {
 
@@ -79,7 +77,5 @@ inline void SyntaxChecker::reallocateStack()
 }
 
 } // namespace QScript
-
-QT_END_NAMESPACE
 
 #endif

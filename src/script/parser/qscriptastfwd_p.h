@@ -26,8 +26,6 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QScript {
 namespace AST {
 
@@ -111,9 +109,8 @@ class FunctionSourceElement;
 class StatementSourceElement;
 class DebuggerStatement;
 
-}
-} // namespace AST
+} // namespace
 
-QT_END_NAMESPACE
+} // namespace
 
 #endif

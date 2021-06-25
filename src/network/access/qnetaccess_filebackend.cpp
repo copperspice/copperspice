@@ -137,11 +137,11 @@ void QNetworkAccessFileBackend::open()
 
          QObject::connect(uploadByteDevice, &QNonContiguousByteDevice::readyRead, this, &QNetworkAccessFileBackend::uploadReadyReadSlot);
          QMetaObject::invokeMethod(this, "uploadReadyReadSlot", Qt::QueuedConnection);
+
          break;
 
       default:
-         Q_ASSERT_X(false, "QNetworkAccessFileBackend::open",
-                    "Got a request operation I cannot handle!!");
+         Q_ASSERT_X(false, "QNetworkAccessFileBackend::open", "Received a request operation which can not be handled");
          return;
    }
 

@@ -28,8 +28,6 @@
 #include <qstring.h>
 #include <QScopedPointer>
 
-
-
 class QAction;
 class QUndoCommandPrivate;
 class QUndoStackPrivate;

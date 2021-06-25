@@ -32,7 +32,6 @@
 #include <qplaintextedit.h>
 #include <qtextboundaryfinder.h>
 #include <qscrollbar.h>
-#include <qdebug.h>
 #include <qapplication.h>
 #include <qstackedwidget.h>
 #include <qtoolbox.h>

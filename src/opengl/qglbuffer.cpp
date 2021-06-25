@@ -44,38 +44,16 @@ class QGLBufferPrivate
    QOpenGLExtensions *funcs;
 };
 
-/*!
-    Constructs a new buffer object of type QGLBuffer::VertexBuffer.
-
-    Note: this constructor just creates the QGLBuffer instance.  The actual
-    buffer object in the GL server is not created until create() is called.
-
-    \sa create()
-*/
 QGLBuffer::QGLBuffer()
    : d_ptr(new QGLBufferPrivate(QGLBuffer::VertexBuffer))
 {
 }
 
-/*!
-    Constructs a new buffer object of \a type.
-
-    Note: this constructor just creates the QGLBuffer instance.  The actual
-    buffer object in the GL server is not created until create() is called.
-
-    \sa create()
-*/
 QGLBuffer::QGLBuffer(QGLBuffer::Type type)
    : d_ptr(new QGLBufferPrivate(type))
 {
 }
 
-/*!
-    Constructs a shallow copy of \a other.
-
-    Note: QGLBuffer does not implement copy-on-write semantics,
-    so \a other will be affected whenever the copy is modified.
-*/
 QGLBuffer::QGLBuffer(const QGLBuffer &other)
    : d_ptr(other.d_ptr)
 {
@@ -84,10 +62,6 @@ QGLBuffer::QGLBuffer(const QGLBuffer &other)
 
 #define ctx QGLContext::currentContext();
 
-/*!
-    Destroys this buffer object, including the storage being
-    used in the GL server.
-*/
 QGLBuffer::~QGLBuffer()
 {
    if (!d_ptr->ref.deref()) {
@@ -96,12 +70,6 @@ QGLBuffer::~QGLBuffer()
    }
 }
 
-/*!
-    Assigns a shallow copy of \a other to this object.
-
-    Note: QGLBuffer does not implement copy-on-write semantics,
-    so \a other will be affected whenever the copy is modified.
-*/
 QGLBuffer &QGLBuffer::operator=(const QGLBuffer &other)
 {
    if (d_ptr != other.d_ptr) {
@@ -115,33 +83,18 @@ QGLBuffer &QGLBuffer::operator=(const QGLBuffer &other)
    return *this;
 }
 
-/*!
-    Returns the type of buffer represented by this object.
-*/
 QGLBuffer::Type QGLBuffer::type() const
 {
    Q_D(const QGLBuffer);
    return d->type;
 }
 
-/*!
-    Returns the usage pattern for this buffer object.
-    The default value is StaticDraw.
-
-    \sa setUsagePattern()
-*/
 QGLBuffer::UsagePattern QGLBuffer::usagePattern() const
 {
    Q_D(const QGLBuffer);
    return d->usagePattern;
 }
 
-/*!
-    Sets the usage pattern for this buffer object to \a value.
-    This function must be called before allocate() or write().
-
-    \sa usagePattern(), allocate(), write()
-*/
 void QGLBuffer::setUsagePattern(QGLBuffer::UsagePattern value)
 {
    Q_D(QGLBuffer);
@@ -202,11 +155,6 @@ bool QGLBuffer::isCreated() const
    return d->guard && d->guard->id();
 }
 
-/*!
-    Destroys this buffer object, including the storage being
-    used in the GL server.  All references to the buffer will
-    become invalid.
-*/
 void QGLBuffer::destroy()
 {
    Q_D(QGLBuffer);
@@ -216,16 +164,6 @@ void QGLBuffer::destroy()
    }
 }
 
-/*!
-    Reads the \a count bytes in this buffer starting at \a offset
-    into \a data.  Returns true on success; false if reading from
-    the buffer is not supported.  Buffer reading is not supported
-    under OpenGL/ES.
-
-    It is assumed that this buffer has been bound to the current context.
-
-    \sa write(), bind()
-*/
 bool QGLBuffer::read(int offset, void *data, int count)
 {
 #if ! defined(QT_OPENGL_ES)
@@ -245,16 +183,6 @@ bool QGLBuffer::read(int offset, void *data, int count)
 #endif
 }
 
-/*!
-    Replaces the \a count bytes of this buffer starting at \a offset
-    with the contents of \a data.  Any other bytes in the buffer
-    will be left unmodified.
-
-    It is assumed that create() has been called on this buffer and that
-    it has been bound to the current context.
-
-    \sa create(), read(), allocate()
-*/
 void QGLBuffer::write(int offset, const void *data, int count)
 {
 #ifndef QT_NO_DEBUG
@@ -268,7 +196,6 @@ void QGLBuffer::write(int offset, const void *data, int count)
       d->funcs->glBufferSubData(d->type, offset, count, data);
    }
 }
-
 
 void QGLBuffer::allocate(const void *data, int count)
 {
@@ -310,15 +237,6 @@ bool QGLBuffer::bind()
    }
 }
 
-/*!
-    Releases the buffer associated with this object from the
-    current GL context.
-
-    This function must be called with the same QGLContext current
-    as when bind() was called on the buffer.
-
-    \sa bind()
-*/
 void QGLBuffer::release()
 {
 #ifndef QT_NO_DEBUG
@@ -326,14 +244,15 @@ void QGLBuffer::release()
       qWarning("QGLBuffer::release(): buffer not created");
    }
 #endif
+
    Q_D(const QGLBuffer);
+
    if (d->guard && d->guard->id()) {
       d->funcs->glBindBuffer(d->type, 0);
    }
 }
 
 #undef ctx
-
 
 void QGLBuffer::release(QGLBuffer::Type type)
 {
@@ -344,12 +263,6 @@ void QGLBuffer::release(QGLBuffer::Type type)
 
 #define ctx QGLContext::currentContext()
 
-/*!
-    Returns the GL identifier associated with this buffer; zero if
-    the buffer has not been created.
-
-    \sa isCreated()
-*/
 GLuint QGLBuffer::bufferId() const
 {
    Q_D(const QGLBuffer);
@@ -360,19 +273,10 @@ GLuint QGLBuffer::bufferId() const
 #define GL_BUFFER_SIZE 0x8764
 #endif
 
-/*!
-    Returns the size of the data in this buffer, for reading operations.
-    Returns -1 if fetching the buffer size is not supported, or the
-    buffer has not been created.
-
-    It is assumed that this buffer has been bound to the current context.
-
-    \sa isCreated(), bind()
-*/
 int QGLBuffer::size() const
 {
    Q_D(const QGLBuffer);
-   if (!d->guard || !d->guard->id()) {
+   if (! d->guard || !d->guard->id()) {
       return -1;
    }
 
@@ -381,20 +285,6 @@ int QGLBuffer::size() const
    return value;
 }
 
-/*!
-    Maps the contents of this buffer into the application's memory
-    space and returns a pointer to it.  Returns null if memory
-    mapping is not possible.  The \a access parameter indicates the
-    type of access to be performed.
-
-    It is assumed that create() has been called on this buffer and that
-    it has been bound to the current context.
-
-    This function is only supported under OpenGL/ES if the
-    \c{GL_OES_mapbuffer} extension is present.
-
-    \sa unmap(), create(), bind()
-*/
 void *QGLBuffer::map(QGLBuffer::Access access)
 {
    Q_D(QGLBuffer);
@@ -413,31 +303,20 @@ void *QGLBuffer::map(QGLBuffer::Access access)
    return d->funcs->glMapBuffer(d->type, access);
 }
 
-/*!
-    Unmaps the buffer after it was mapped into the application's
-    memory space with a previous call to map().  Returns true if
-    the unmap succeeded; false otherwise.
-
-    It is assumed that this buffer has been bound to the current context,
-    and that it was previously mapped with map().
-
-    This function is only supported under OpenGL/ES if the
-    \c{GL_OES_mapbuffer} extension is present.
-
-    \sa map()
-*/
 bool QGLBuffer::unmap()
 {
    Q_D(QGLBuffer);
+
 #ifndef QT_NO_DEBUG
-   if (!isCreated()) {
+   if (! isCreated()) {
       qWarning("QGLBuffer::unmap(): buffer not created");
    }
 #endif
 
-   if (!d->guard || !d->guard->id()) {
+   if (! d->guard || !d->guard->id()) {
       return false;
    }
+
    return d->funcs->glUnmapBuffer(d->type) == GL_TRUE;
 }
 

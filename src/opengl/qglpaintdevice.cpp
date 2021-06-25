@@ -29,8 +29,6 @@
 #include <qglpixelbuffer_p.h>
 #include <qglframebufferobject_p.h>
 
-
-
 QGLPaintDevice::QGLPaintDevice()
    : m_thisFBO(0)
 {
@@ -45,16 +43,21 @@ int QGLPaintDevice::metric(QPaintDevice::PaintDeviceMetric metric) const
    switch (metric) {
       case PdmWidth:
          return size().width();
+
       case PdmHeight:
          return size().height();
+
       case PdmDepth: {
          const QGLFormat f = format();
          return f.redBufferSize() + f.greenBufferSize() + f.blueBufferSize() + f.alphaBufferSize();
       }
+
       case PdmDevicePixelRatio:
          return 1;
+
       case PdmDevicePixelRatioScaled:
          return 1 * QPaintDevice::devicePixelRatioFScale();
+
       default:
          qWarning("QGLPaintDevice::metric() - metric %d not known", metric);
          return 0;
@@ -156,7 +159,7 @@ void QGLWidgetGLPaintDevice::beginPaint()
    QGLPaintDevice::beginPaint();
    QOpenGLFunctions *funcs = QOpenGLContext::currentContext()->functions();
 
-   if (!glWidget->d_func()->disable_clear_on_painter_begin && glWidget->autoFillBackground()) {
+   if (! glWidget->d_func()->disable_clear_on_painter_begin && glWidget->autoFillBackground()) {
       if (glWidget->testAttribute(Qt::WA_TranslucentBackground)) {
          funcs->glClearColor(0.0, 0.0, 0.0, 0.0);
       } else {
@@ -164,6 +167,7 @@ void QGLWidgetGLPaintDevice::beginPaint()
          float alpha = c.alphaF();
          funcs->glClearColor(c.redF() * alpha, c.greenF() * alpha, c.blueF() * alpha, alpha);
       }
+
       if (context()->d_func()->workaround_needsFullClearOnEveryFrame) {
          funcs->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
       } else {
@@ -180,7 +184,6 @@ void QGLWidgetGLPaintDevice::endPaint()
 
    QGLPaintDevice::endPaint();
 }
-
 
 QSize QGLWidgetGLPaintDevice::size() const
 {
@@ -208,9 +211,11 @@ QGLPaintDevice *QGLPaintDevice::getDevice(QPaintDevice *pd)
          Q_ASSERT(qobject_cast<QGLWidget *>(static_cast<QWidget *>(pd)));
          glpd = &(static_cast<QGLWidget *>(pd)->d_func()->glDevice);
          break;
+
       case QInternal::Pbuffer:
          glpd = &(static_cast<QGLPixelBuffer *>(pd)->d_func()->glDevice);
          break;
+
       case QInternal::FramebufferObject:
          glpd = &(static_cast<QGLFramebufferObject *>(pd)->d_func()->glDevice);
          break;

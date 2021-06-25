@@ -74,8 +74,7 @@ void Vmr9VideoWindowControl::setWinId(WId id)
    }
 #endif
 
-   if (IVMRWindowlessControl9 *control = com_cast<IVMRWindowlessControl9>(
-            m_filter, IID_IVMRWindowlessControl9)) {
+   if (IVMRWindowlessControl9 *control = com_cast<IVMRWindowlessControl9>(m_filter, IID_IVMRWindowlessControl9)) {
       control->SetVideoClippingWindow(reinterpret_cast<HWND>(m_windowId));
       control->SetBorderColor(m_windowColor);
       control->Release();

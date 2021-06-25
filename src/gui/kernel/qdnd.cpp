@@ -147,14 +147,13 @@ static QStringList imageReadMimeFormats()
    }
 
    // put png at the front because it is best
-   int pngIndex = formats.indexOf(QLatin1String("image/png"));
+   int pngIndex = formats.indexOf("image/png");
    if (pngIndex != -1 && pngIndex != 0) {
       formats.move(pngIndex, 0);
    }
 
    return formats;
 }
-
 
 static QStringList imageWriteMimeFormats()
 {
@@ -168,7 +167,7 @@ static QStringList imageWriteMimeFormats()
    }
 
    //put png at the front because it is best
-   int pngIndex = formats.indexOf(QLatin1String("image/png"));
+   int pngIndex = formats.indexOf("image/png");
    if (pngIndex != -1 && pngIndex != 0) {
       formats.move(pngIndex, 0);
    }
@@ -271,42 +270,49 @@ bool QInternalMimeData::canReadData(const QString &mimeType)
 QStringList QInternalMimeData::formatsHelper(const QMimeData *data)
 {
    QStringList realFormats = data->formats();
-   if (realFormats.contains(QLatin1String("application/x-qt-image"))) {
+
+   if (realFormats.contains("application/x-qt-image")) {
       // add all supported image formats
       QStringList imageFormats = imageWriteMimeFormats();
+
       for (int i = 0; i < imageFormats.size(); ++i) {
          if (!realFormats.contains(imageFormats.at(i))) {
             realFormats.append(imageFormats.at(i));
          }
       }
    }
+
    return realFormats;
 }
 
 bool QInternalMimeData::hasFormatHelper(const QString &mimeType, const QMimeData *data)
 {
-
    bool foundFormat = data->hasFormat(mimeType);
+
    if (!foundFormat) {
-      if (mimeType == QLatin1String("application/x-qt-image")) {
+      if (mimeType == "application/x-qt-image") {
          // check all supported image formats
          QStringList imageFormats = imageWriteMimeFormats();
+
          for (int i = 0; i < imageFormats.size(); ++i) {
             if ((foundFormat = data->hasFormat(imageFormats.at(i)))) {
                break;
             }
+
          }
       } else if (mimeType.startsWith(QLatin1String("image/"))) {
          return data->hasImage() && imageWriteMimeFormats().contains(mimeType);
       }
    }
+
    return foundFormat;
 }
 
 QByteArray QInternalMimeData::renderDataHelper(const QString &mimeType, const QMimeData *data)
 {
    QByteArray ba;
-   if (mimeType == QLatin1String("application/x-color")) {
+
+   if (mimeType == "application/x-color") {
       /* QMimeData can only provide colors as QColor or the name
          of a color as a QByteArray or a QString. So we need to do
          the conversion to application/x-color here.
@@ -331,22 +337,25 @@ QByteArray QInternalMimeData::renderDataHelper(const QString &mimeType, const QM
    } else {
       ba = data->data(mimeType);
       if (ba.isEmpty()) {
-         if (mimeType == QLatin1String("application/x-qt-image") && data->hasImage()) {
+         if (mimeType == "application/x-qt-image" && data->hasImage()) {
             QImage image = data->imageData().value<QImage>();
 
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
+
             // would there not be PNG ??
             image.save(&buf, "PNG");
 
-         } else if (mimeType.startsWith(QLatin1String("image/")) && data->hasImage()) {
+         } else if (mimeType.startsWith("image/") && data->hasImage()) {
             QImage image = data->imageData().value<QImage>();
+
             QBuffer buf(&ba);
             buf.open(QBuffer::WriteOnly);
             image.save(&buf, mimeType.mid(mimeType.indexOf('/') + 1).toUpper());
          }
       }
    }
+
    return ba;
 }
 

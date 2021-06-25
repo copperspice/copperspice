@@ -39,8 +39,7 @@
 
 namespace QScript {
 
-DeclarativeObjectDelegate::DeclarativeObjectDelegate(QScriptDeclarativeClass *c,
-   QScriptDeclarativeClass::Object *o)
+DeclarativeObjectDelegate::DeclarativeObjectDelegate(QScriptDeclarativeClass *c, QScriptDeclarativeClass::Object *o)
    : m_class(c), m_object(o)
 {
 }

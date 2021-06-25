@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef Executable_h
@@ -50,7 +50,7 @@ namespace JSC {
     protected:
         static const int NUM_PARAMETERS_IS_HOST = 0;
         static const int NUM_PARAMETERS_NOT_COMPILED = -1;
-    
+
     public:
         ExecutableBase(JSGlobalData& globalData, Structure* structure, int numParameters)
             : JSCell(globalData, structure)
@@ -211,7 +211,7 @@ namespace JSC {
         JSObject* compile(ExecState* exec, ScopeChainNode* scopeChainNode)
         {
             ASSERT(exec->globalData().dynamicGlobalObject);
-            JSObject* error = 0;
+            JSObject* error = nullptr;
             if (!m_evalCodeBlock)
                 error = compileInternal(exec, scopeChainNode);
             ASSERT(!error == !!m_evalCodeBlock);
@@ -260,7 +260,7 @@ namespace JSC {
         JSObject* compile(ExecState* exec, ScopeChainNode* scopeChainNode)
         {
             ASSERT(exec->globalData().dynamicGlobalObject);
-            JSObject* error = 0;
+            JSObject* error = nullptr;
             if (!m_programCodeBlock)
                 error = compileInternal(exec, scopeChainNode);
             ASSERT(!error == !!m_programCodeBlock);
@@ -281,7 +281,7 @@ namespace JSC {
             return generatedJITCodeForCall();
         }
 #endif
-        
+
         static Structure* createStructure(JSGlobalData& globalData, JSValue proto)
         {
             return Structure::create(globalData, proto, TypeInfo(CompoundType, StructureFlags), AnonymousSlotCount, &s_info);
@@ -315,7 +315,7 @@ namespace JSC {
         {
             return new (exec) JSFunction(exec, this, scopeChain);
         }
-        
+
         // Returns either call or construct bytecode. This can be appropriate
         // for answering questions that that don't vary between call and construct --
         // for example, argumentsRegister().
@@ -330,7 +330,7 @@ namespace JSC {
         JSObject* compileForCall(ExecState* exec, ScopeChainNode* scopeChainNode)
         {
             ASSERT(exec->globalData().dynamicGlobalObject);
-            JSObject* error = 0;
+            JSObject* error = nullptr;
             if (!m_codeBlockForCall)
                 error = compileForCallInternal(exec, scopeChainNode);
             ASSERT(!error == !!m_codeBlockForCall);
@@ -351,7 +351,7 @@ namespace JSC {
         JSObject* compileForConstruct(ExecState* exec, ScopeChainNode* scopeChainNode)
         {
             ASSERT(exec->globalData().dynamicGlobalObject);
-            JSObject* error = 0;
+            JSObject* error = nullptr;
             if (!m_codeBlockForConstruct)
                 error = compileForConstructInternal(exec, scopeChainNode);
             ASSERT(!error == !!m_codeBlockForConstruct);
@@ -389,7 +389,7 @@ namespace JSC {
 
         JSObject* compileForCallInternal(ExecState*, ScopeChainNode*);
         JSObject* compileForConstructInternal(ExecState*, ScopeChainNode*);
-        
+
         static const unsigned StructureFlags = OverridesVisitChildren | ScriptExecutable::StructureFlags;
         static const ClassInfo s_info;
         unsigned m_numCapturedVariables : 31;

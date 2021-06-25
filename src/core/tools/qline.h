@@ -73,7 +73,8 @@ class Q_CORE_EXPORT QLine
    }
 
  private:
-   QPoint pt1, pt2;
+   QPoint pt1;
+   QPoint pt2;
 };
 
 inline bool QLine::isNull() const
@@ -323,6 +324,7 @@ inline void QLineF::setLength(qreal len)
    if (isNull()) {
       return;
    }
+
    QLineF v = unitVector();
    pt2 = QPointF(pt1.x() + v.dx() * len, pt1.y() + v.dy() * len);
 }

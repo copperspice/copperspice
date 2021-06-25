@@ -235,10 +235,10 @@ void QTabBar::initStyleOption(QStyleOptionTab *option, int tabIndex) const
          Qt::TextShowMnemonic);
 }
 
-
 int QTabBarPrivate::extraWidth() const
 {
    Q_Q(const QTabBar);
+
    return 2 * qMax(q->style()->pixelMetric(QStyle::PM_TabBarScrollButtonWidth, nullptr, q),
          QApplication::globalStrut().width());
 }
@@ -246,6 +246,7 @@ int QTabBarPrivate::extraWidth() const
 void QTabBarPrivate::init()
 {
    Q_Q(QTabBar);
+
    leftB = new QToolButton(q);
    leftB->setAutoRepeat(true);
    QObject::connect(leftB, &QToolButton::clicked, q, &QTabBar::_q_scrollTabs);
@@ -262,8 +263,10 @@ void QTabBarPrivate::init()
       rightB->setFocusPolicy(Qt::NoFocus);
       q->setFocusPolicy(Qt::NoFocus);
    } else
+
 #endif
       q->setFocusPolicy(Qt::TabFocus);
+
 #ifndef QT_NO_ACCESSIBILITY
    leftB->setAccessibleName(QTabBar::tr("Scroll Left"));
    rightB->setAccessibleName(QTabBar::tr("Scroll Right"));
@@ -825,12 +828,6 @@ int QTabBar::insertTab(int index, const QIcon &icon, const QString &text)
    return index;
 }
 
-
-/*!
-    Removes the tab at position \a index.
-
-    \sa SelectionBehavior
- */
 void QTabBar::removeTab(int index)
 {
    Q_D(QTabBar);
@@ -2170,6 +2167,7 @@ bool QTabBar::tabsClosable() const
 void QTabBar::setTabsClosable(bool closable)
 {
    Q_D(QTabBar);
+
    if (d->closeButtonOnTabs == closable) {
       return;
    }
@@ -2183,11 +2181,13 @@ void QTabBar::setTabsClosable(bool closable)
             d->tabList[i]->leftWidget->deleteLater();
             d->tabList[i]->leftWidget = nullptr;
          }
+
          if (closeSide == RightSide && d->tabList[i]->rightWidget) {
             d->tabList[i]->rightWidget->deleteLater();
             d->tabList[i]->rightWidget = nullptr;
          }
       }
+
    } else {
       bool newButtons = false;
 
@@ -2205,6 +2205,7 @@ void QTabBar::setTabsClosable(bool closable)
          d->layoutTabs();
       }
    }
+
    update();
 }
 

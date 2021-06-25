@@ -26,8 +26,6 @@
 
 #include "JSVariableObject.h"
 
-QT_BEGIN_NAMESPACE
-
 class QScriptStaticScopeObject : public JSC::JSVariableObject
 {
  public:
@@ -93,7 +91,5 @@ class QScriptStaticScopeObject : public JSC::JSVariableObject
    void addSymbolTableProperty(const JSC::Identifier &, JSC::JSValue, unsigned attributes);
    int growRegisterArray(int);
 };
-
-QT_END_NAMESPACE
 
 #endif

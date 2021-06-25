@@ -166,8 +166,9 @@ AVFCameraInfo AVFCameraSession::cameraDeviceInfo(const QString &device)
     updateCameraDevices();
 
     for (const AVFCameraInfo &info : m_cameraDevices) {
-        if (info.deviceId == device)
+        if (info.deviceId == device) {
             return info;
+        }
     }
 
     return AVFCameraInfo();

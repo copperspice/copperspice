@@ -29,7 +29,6 @@
 #include <qaccessibleobject.h>
 #include <qaccessiblebridge.h>
 #include <qclipboard.h>
-#include <qdebug.h>
 #include <qhash.h>
 #include <qmetaobject.h>
 #include <qtextcursor.h>
@@ -521,10 +520,12 @@ Q_GUI_EXPORT QDebug operator<<(QDebug d, const QAccessibleInterface *iface)
 
    if (iface->isValid()) {
       d << " name=" << iface->text(QAccessible::Name) << ' ';
-      d << "role=" << qAccessibleRoleString(iface->role()) << ' ';
+      d << "role="  << qAccessibleRoleString(iface->role()) << ' ';
+
       if (iface->childCount()) {
          d << "childc=" << iface->childCount() << ' ';
       }
+
       if (iface->object()) {
          d << "obj=" << iface->object();
       }
@@ -551,7 +552,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug d, const QAccessibleInterface *iface)
          d << stateStrings.join(QLatin1Char('|'));
       }
 
-      if (!st.invisible) {
+      if (! st.invisible) {
          d << "rect=" << iface->rect();
       }
 

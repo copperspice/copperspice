@@ -35,7 +35,6 @@ class QInputMethodQueryEvent;
 class Q_GUI_EXPORT QInputMethod : public QObject
 {
    GUI_CS_OBJECT(QInputMethod)
-   Q_DECLARE_PRIVATE(QInputMethod)
 
    GUI_CS_ENUM(Action)
 
@@ -114,6 +113,8 @@ class Q_GUI_EXPORT QInputMethod : public QObject
    GUI_CS_SIGNAL_2(inputDirectionChanged, newDirection)
 
  private:
+   Q_DECLARE_PRIVATE(QInputMethod)
+
    QInputMethod();
    ~QInputMethod();
 

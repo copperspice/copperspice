@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qglengineshadermanager_p.h"
-#include "qglengineshadersource_p.h"
-#include "qpaintengineex_opengl2_p.h"
-#include "qglshadercache_p.h"
+#include <qglengineshadermanager_p.h>
+#include <qglengineshadersource_p.h>
+#include <qpaintengineex_opengl2_p.h>
+#include <qglshadercache_p.h>
 
 #include <qalgorithms.h>
 #include <qmetaenum.h>
@@ -37,8 +37,8 @@ class QGLEngineSharedShadersResource : public QOpenGLSharedResource
 {
 public:
     QGLEngineSharedShadersResource(QOpenGLContext *ctx)
-        : QOpenGLSharedResource(ctx->shareGroup())
-        , m_shaders(new QGLEngineSharedShaders(QGLContext::fromOpenGLContext(ctx)))
+      : QOpenGLSharedResource(ctx->shareGroup()),
+        m_shaders(new QGLEngineSharedShaders(QGLContext::fromOpenGLContext(ctx)))
     {
     }
 
@@ -62,18 +62,18 @@ public:
 private:
     QGLEngineSharedShaders *m_shaders;
 };
+
 class QGLShaderStorage
 {
  public:
    QGLEngineSharedShaders *shadersForThread(const QGLContext *context) {
       QOpenGLMultiGroupSharedResource *&shaders = m_storage.localData();
 
-        if (!shaders) {
+        if (! shaders) {
             shaders = new QOpenGLMultiGroupSharedResource;
         }
 
-        QGLEngineSharedShadersResource *resource =
-            shaders->value<QGLEngineSharedShadersResource>(context->contextHandle());
+        QGLEngineSharedShadersResource *resource = shaders->value<QGLEngineSharedShadersResource>(context->contextHandle());
 
         return resource ? resource->shaders() : nullptr;
     }
@@ -281,6 +281,7 @@ QGLEngineSharedShaders::~QGLEngineSharedShaders()
 #ifdef QT_GL_SHARED_SHADER_DEBUG
    qDebug(" -> ~QGLEngineSharedShaders() %p for thread %p.", this, QThread::currentThread());
 #endif
+
    qDeleteAll(shaders);
    shaders.clear();
 
@@ -498,13 +499,12 @@ QGLEngineShaderManager::QGLEngineShaderManager(QGLContext *context)
 
 QGLEngineShaderManager::~QGLEngineShaderManager()
 {
-   //###
    removeCustomStage();
 }
 
 GLuint QGLEngineShaderManager::getUniformLocation(Uniform id)
 {
-   if (!currentShaderProg) {
+   if (! currentShaderProg) {
       return 0;
    }
 
@@ -671,6 +671,7 @@ bool QGLEngineShaderManager::useCorrectShaderProg()
    }
 
    bool useCustomSrc = (customSrcStage != nullptr);
+
    if (useCustomSrc && srcPixelType != QGLEngineShaderManager::ImageSrc && srcPixelType != Qt::TexturePattern) {
       useCustomSrc = false;
       qWarning("QGLEngineShaderManager - Ignoring custom shader stage for non image src");

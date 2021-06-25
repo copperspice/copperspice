@@ -2307,14 +2307,15 @@ JSC::JSObject *QMetaObjectWrapperObject::construct(JSC::ExecState *exec, JSC::JS
    JSC::JSValue result = self->execute(eng_p->currentFrame, args);
    eng_p->popContext();
    eng_p->currentFrame = previousFrame;
-   if (!result || !result.isObject()) {
+
+   if (! result || !result.isObject()) {
       return nullptr;
    }
+
    return JSC::asObject(result);
 }
 
-JSC::JSValue QMetaObjectWrapperObject::execute(JSC::ExecState *exec,
-   const JSC::ArgList &args)
+JSC::JSValue QMetaObjectWrapperObject::execute(JSC::ExecState *exec, const JSC::ArgList &args)
 {
    if (data->ctor) {
       QScriptEnginePrivate *eng_p = QScript::scriptEngineFromExec(exec);
@@ -2694,5 +2695,5 @@ void QObjectData::registerWrapper(QScriptObject *wrapper, QScriptEngine::ValueOw
 } // namespace QScript
 
 namespace JSC {
-ASSERT_CLASS_FITS_IN_CELL(QScript::QtFunction);
+   ASSERT_CLASS_FITS_IN_CELL(QScript::QtFunction);
 }

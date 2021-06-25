@@ -35,8 +35,6 @@
 #include <qpainter.h>
 #include <qdebug.h>
 
-
-
 #define ANIMATION_DURATION_MSEC 150
 
 QColumnView::QColumnView(QWidget *parent)
@@ -74,21 +72,10 @@ void QColumnViewPrivate::initialize()
    q->setItemDelegate(new QColumnViewDelegate(q));
 }
 
-/*!
-    Destroys the column view.
-*/
 QColumnView::~QColumnView()
 {
 }
 
-/*!
-    \property QColumnView::resizeGripsVisible
-    \brief the way to specify if the list views gets resize grips or not
-
-    By default, \c visible is set to true
-
-    \sa setRootIndex()
-*/
 void QColumnView::setResizeGripsVisible(bool visible)
 {
    Q_D(QColumnView);

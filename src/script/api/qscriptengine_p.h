@@ -61,12 +61,12 @@
 namespace JSC {
 class EvalExecutable;
 class ExecState;
+
 typedef ExecState CallFrame;
 class JSCell;
+
 class JSGlobalObject;
 }
-
-QT_BEGIN_NAMESPACE
 
 class QStringList;
 class QScriptContext;

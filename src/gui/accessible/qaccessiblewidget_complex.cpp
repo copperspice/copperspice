@@ -41,7 +41,6 @@
 #include <qabstractscrollarea.h>
 #include <qscrollarea.h>
 #include <qscrollbar.h>
-#include <qdebug.h>
 
 #include <qtabbar_p.h>
 
@@ -51,13 +50,6 @@ QString qt_accStripAmp(const QString &text);
 QString qt_accHotKey(const QString &text);
 
 #ifndef QT_NO_TABBAR
-/*!
-  \class QAccessibleTabBar
-  \brief The QAccessibleTabBar class implements the QAccessibleInterface for tab bars.
-  \internal
-
-  \ingroup accessibility
-*/
 
 class QAccessibleTabButton: public QAccessibleInterface, public QAccessibleActionInterface
 {

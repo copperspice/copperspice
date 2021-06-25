@@ -272,12 +272,13 @@ void QFontFamilyDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
 
 }
 
-QSize QFontFamilyDelegate::sizeHint(const QStyleOptionViewItem &option,
-   const QModelIndex &index) const
+QSize QFontFamilyDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
    QString text = index.data(Qt::DisplayRole).toString();
+
    QFont font(option.font);
-   //     font.setFamily(text);
+   // font.setFamily(text);
+
    font.setPointSize(QFontInfo(font).pointSize() * 3 / 2);
 
    QFontMetrics fontMetrics(font);
@@ -300,7 +301,6 @@ class QFontComboBoxPrivate : public QComboBoxPrivate
 
    Q_DECLARE_PUBLIC(QFontComboBox)
 };
-
 
 void QFontComboBoxPrivate::_q_updateModel()
 {
@@ -333,16 +333,20 @@ void QFontComboBoxPrivate::_q_updateModel()
             continue;
          }
       }
+
       if ((filters & spacingMask) && (filters & spacingMask) != spacingMask) {
          if (bool(filters & QFontComboBox::MonospacedFonts) != fdb.isFixedPitch(list.at(i))) {
             continue;
          }
       }
+
       result += list.at(i);
+
       if (list.at(i) == fi.family() || list.at(i).startsWith(fi.family() + QLatin1String(" ["))) {
          offset = result.count() - 1;
       }
    }
+
    list = result;
 
    // need to block the signals so that the model doesn't emit reset
@@ -393,7 +397,7 @@ QFontComboBox::QFontComboBox(QWidget *parent)
    }
    setWritingSystem(QFontDatabase::Any);
 
-   // broom - should be QFontComboBox, resolve ( not a major issue )
+   // broom - should be QFontComboBox ( not a major issue )
    connect(this, cs_mp_cast<const QString &>(&QComboBox::currentIndexChanged), this, &QFontComboBox::_q_currentChanged);
 
    connect(qApp, &QApplication::fontDatabaseChanged,  this, &QFontComboBox::_q_updateModel);

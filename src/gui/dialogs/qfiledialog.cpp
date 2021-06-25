@@ -358,17 +358,18 @@ void QFileDialog::setDirectory(const QString &directory)
    if (d->rootPath() == newDirectory) {
       return;
    }
+
    QModelIndex root = d->model->setRootPath(newDirectory);
 
-   if (!d->nativeDialogInUse) {
+   if (! d->nativeDialogInUse) {
       d->qFileDialogUi->newFolderButton->setEnabled(d->model->flags(root) & Qt::ItemIsDropEnabled);
       if (root != d->rootIndex()) {
 
 #ifndef QT_NO_FSCOMPLETER
-         if (directory.endsWith(QLatin1Char('/'))) {
+         if (directory.endsWith('/')) {
             d->completer->setCompletionPrefix(newDirectory);
          } else {
-            d->completer->setCompletionPrefix(newDirectory + QLatin1Char('/'));
+            d->completer->setCompletionPrefix(newDirectory + '/');
          }
 #endif
 
@@ -501,9 +502,11 @@ void QFileDialog::selectFile(const QString &filename)
 void QFileDialog::selectUrl(const QUrl &url)
 {
    Q_D(QFileDialog);
-   if (!url.isValid()) {
+
+   if (! url.isValid()) {
       return;
    }
+
    if (d->nativeDialogInUse) {
       d->selectFile_sys(url);
    } else if (url.isLocalFile()) {
@@ -519,14 +522,18 @@ QString qt_tildeExpansion(const QString &path, bool *expanded = nullptr)
    if (expanded != nullptr) {
       *expanded = false;
    }
-   if (!path.startsWith(QLatin1Char('~'))) {
+
+   if (! path.startsWith('~')) {
       return path;
    }
+
    QString ret = path;
 
    QStringList tokens = ret.split(QDir::separator());
-   if (tokens.first() == QLatin1String("~")) {
+
+   if (tokens.first() == "~") {
       ret.replace(0, 1, QDir::homePath());
+
    } else {
       QString userName = tokens.first();
       userName.remove(0, 1);
@@ -600,10 +607,7 @@ QList<QUrl> QFileDialog::selectedUrls() const
       return urls;
    }
 }
-/*
-    Makes a list of filters from ;;-separated text.
-    Used by the mac and windows implementations
-*/
+
 QStringList qt_make_filter_list(const QString &filter)
 {
    QString f(filter);
@@ -612,11 +616,12 @@ QStringList qt_make_filter_list(const QString &filter)
       return QStringList();
    }
 
-   QString sep(QLatin1String(";;"));
+   QString sep(";;");
    int i = f.indexOf(sep, 0);
+
    if (i == -1) {
-      if (f.indexOf(QLatin1Char('\n'), 0) != -1) {
-         sep = QLatin1Char('\n');
+      if (f.indexOf('\n', 0) != -1) {
+         sep = '\n';
          i = f.indexOf(sep, 0);
       }
    }
@@ -1338,7 +1343,7 @@ void QFileDialog::accept()
    // "hidden feature" type .. and then enter, and it will move up a dir
    // special case for ".."
 
-   if (lineEditText == QLatin1String("..")) {
+   if (lineEditText == "..") {
       d->_q_navigateToParent();
 
       bool wasBlocked = d->qFileDialogUi->fileNameEdit->blockSignals(true);
@@ -1359,16 +1364,17 @@ void QFileDialog::accept()
 
          if (!info.exists()) {
 #ifndef QT_NO_MESSAGEBOX
-            QString message = tr("%1\nDirectory not found.\nPlease verify the "
-                  "correct directory name was given.");
+            QString message = tr("%1\nDirectory not found");
             QMessageBox::warning(this, windowTitle(), message.formatArg(info.fileName()));
-#endif // QT_NO_MESSAGEBOX
+#endif
             return;
          }
+
          if (info.isDir()) {
             d->emitFilesSelected(files);
             QDialog::accept();
          }
+
          return;
       }
 
@@ -1391,13 +1397,15 @@ void QFileDialog::accept()
          if (!info.exists() || !confirmOverwrite() || acceptMode() == AcceptOpen) {
             d->emitFilesSelected(QStringList(fn));
             QDialog::accept();
+
 #ifndef QT_NO_MESSAGEBOX
          } else {
-            if (QMessageBox::warning(this, windowTitle(),
-                  tr("%1 already exists.\nDo you want to replace it?")
-                  .formatArg(info.fileName()),
-                  QMessageBox::Yes | QMessageBox::No, QMessageBox::No)
-               == QMessageBox::Yes) {
+
+            auto result = QMessageBox::warning(this, windowTitle(),
+                  tr("%1 already exists.\nDo you want to replace it?").formatArg(info.fileName()),
+                  QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+            if (result == QMessageBox::Yes) {
                d->emitFilesSelected(QStringList(fn));
                QDialog::accept();
             }
@@ -1410,17 +1418,18 @@ void QFileDialog::accept()
       case ExistingFiles:
          for (int i = 0; i < files.count(); ++i) {
             QFileInfo info(files.at(i));
-            if (!info.exists()) {
+            if (! info.exists()) {
                info = QFileInfo(d->getEnvironmentVariable(files.at(i)));
             }
+
             if (!info.exists()) {
 #ifndef QT_NO_MESSAGEBOX
-               QString message = tr("%1\nFile not found.\nPlease verify the "
-                     "correct file name was given.");
+               QString message = tr("%1\nFile not found.");
                QMessageBox::warning(this, windowTitle(), message.formatArg(info.fileName()));
-#endif // QT_NO_MESSAGEBOX
+#endif
                return;
             }
+
             if (info.isDir()) {
                setDirectory(info.absoluteFilePath());
                d->lineEdit()->clear();
@@ -1438,7 +1447,7 @@ void QFileDialog::setProxyModel(QAbstractProxyModel *proxyModel)
 {
    Q_D(QFileDialog);
 
-   if (!d->usingWidgets()) {
+   if (! d->usingWidgets()) {
       return;
    }
 
@@ -1745,18 +1754,21 @@ QString QFSCompleter::pathFromIndex(const QModelIndex &index) const
    QString currentLocation = dirModel->rootPath();
    QString path = index.data(QFileSystemModel::FilePathRole).toString();
 
-   if (!currentLocation.isEmpty() && path.startsWith(currentLocation)) {
+   if (! currentLocation.isEmpty() && path.startsWith(currentLocation)) {
+
 #if defined(Q_OS_UNIX)
       if (currentLocation == QString(QDir::separator())) {
          return path.mid(currentLocation.length());
       }
 #endif
-      if (currentLocation.endsWith(QLatin1Char('/'))) {
+
+      if (currentLocation.endsWith('/')) {
          return path.mid(currentLocation.length());
       } else {
          return path.mid(currentLocation.length() + 1);
       }
    }
+
    return index.data(QFileSystemModel::FilePathRole).toString();
 }
 
@@ -1770,7 +1782,7 @@ QStringList QFSCompleter::splitPath(const QString &path) const
    QString sep = QDir::separator();
 
 #if defined(Q_OS_WIN)
-   if (pathCopy == "\\" || pathCopy == QLatin1String("\\\\")) {
+   if (pathCopy == "\\" || pathCopy == "\\\\") {
       return QStringList(pathCopy);
    }
 
@@ -1800,12 +1812,15 @@ QStringList QFSCompleter::splitPath(const QString &path) const
 
 #if defined(Q_OS_WIN)
    QStringList parts = pathCopy.split(re, QStringParser::SkipEmptyParts);
-   if (!doubleSlash.isEmpty() && !parts.isEmpty()) {
+
+   if (! doubleSlash.isEmpty() && !parts.isEmpty()) {
       parts[0].prepend(doubleSlash);
    }
+
    if (pathCopy.endsWith(sep)) {
       parts.append(QString());
    }
+
 #else
    QStringList parts = pathCopy.split(re);
    if (pathCopy[0] == sep[0]) { // read the "/" at the beginning as the split removed it
@@ -1814,7 +1829,7 @@ QStringList QFSCompleter::splitPath(const QString &path) const
 #endif
 
 #if defined(Q_OS_WIN)
-   bool startsFromRoot = !parts.isEmpty() && parts[0].endsWith(QLatin1Char(':'));
+   bool startsFromRoot = ! parts.isEmpty() && parts[0].endsWith(':');
 #else
    bool startsFromRoot = pathCopy[0] == sep[0];
 #endif
@@ -1831,25 +1846,27 @@ QStringList QFSCompleter::splitPath(const QString &path) const
       QString currentLocation = QDir::toNativeSeparators(dirModel->rootPath());
 
 #if defined(Q_OS_WIN)
-      if (currentLocation.endsWith(QLatin1Char(':'))) {
+      if (currentLocation.endsWith(':')) {
          currentLocation.append(sep);
       }
 #endif
 
       if (currentLocation.contains(sep) && path != currentLocation) {
          QStringList currentLocationList = splitPath(currentLocation);
-         while (!currentLocationList.isEmpty()
-            && parts.count() > 0
-            && parts.at(0) == QLatin1String("..")) {
+
+         while (! currentLocationList.isEmpty() && parts.count() > 0 && parts.at(0) == "..") {
             parts.removeFirst();
             currentLocationList.removeLast();
          }
+
          if (!currentLocationList.isEmpty() && currentLocationList.last().isEmpty()) {
             currentLocationList.removeLast();
          }
+
          return currentLocationList + parts;
       }
    }
+
    return parts;
 }
 

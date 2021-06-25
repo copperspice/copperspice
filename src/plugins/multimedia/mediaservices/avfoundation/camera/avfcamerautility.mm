@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include "avfcamerautility.h"
-#include "avfcameradebug.h"
+#include <avfcamerautility.h>
+
+#include <avfcameradebug.h>
 #include <qvector.h>
 #include <qpair.h>
 
@@ -34,36 +35,31 @@
 
 AVFPSRange qt_connection_framerates(AVCaptureConnection *videoConnection)
 {
-    Q_ASSERT(videoConnection);
+   Q_ASSERT(videoConnection);
 
-    AVFPSRange newRange;
-    // "The value in the videoMinFrameDuration is equivalent to the reciprocal
-    // of the maximum framerate, the value in the videoMaxFrameDuration is equivalent
-    // to the reciprocal of the minimum framerate."
-    if (videoConnection.supportsVideoMinFrameDuration) {
-        const CMTime cmMin = videoConnection.videoMinFrameDuration;
-        if (CMTimeCompare(cmMin, kCMTimeInvalid)) { // Has some non-default value:
-            if (const Float64 minSeconds = CMTimeGetSeconds(cmMin))
-                newRange.second = 1. / minSeconds;
-        }
-    }
+   AVFPSRange newRange;
+   // "The value in the videoMinFrameDuration is equivalent to the reciprocal
+   // of the maximum framerate, the value in the videoMaxFrameDuration is equivalent
+   // to the reciprocal of the minimum framerate."
+   if (videoConnection.supportsVideoMinFrameDuration) {
+     const CMTime cmMin = videoConnection.videoMinFrameDuration;
+     if (CMTimeCompare(cmMin, kCMTimeInvalid)) { // Has some non-default value:
+         if (const Float64 minSeconds = CMTimeGetSeconds(cmMin))
+             newRange.second = 1. / minSeconds;
+     }
+   }
 
-
-
-  if (videoConnection.supportsVideoMaxFrameDuration) {
+   if (videoConnection.supportsVideoMaxFrameDuration) {
       const CMTime cmMax = videoConnection.videoMaxFrameDuration;
+
       if (CMTimeCompare(cmMax, kCMTimeInvalid)) {
           if (const Float64 maxSeconds = CMTimeGetSeconds(cmMax))
               newRange.first = 1. / maxSeconds;
       }
-  }
+   }
 
-
-
-    return newRange;
+   return newRange;
 }
-
-
 
 namespace {
 
@@ -218,14 +214,14 @@ QSize qt_device_format_pixel_aspect_ratio(AVCaptureDeviceFormat *format)
 }
 
 AVCaptureDeviceFormat *qt_find_best_resolution_match(AVCaptureDevice *captureDevice,
-                                                     const QSize &request,
-                                                     FourCharCode filter)
+            const QSize &request, FourCharCode filter)
 {
     Q_ASSERT(captureDevice);
-    Q_ASSERT(!request.isNull() && request.isValid());
+    Q_ASSERT(! request.isNull() && request.isValid());
 
-    if (!captureDevice.formats || !captureDevice.formats.count)
+    if (! captureDevice.formats || ! captureDevice.formats.count) {
         return nullptr;
+    }
 
     QVector<AVCaptureDeviceFormat *> formats(qt_unique_device_formats(captureDevice, filter));
 
@@ -238,8 +234,9 @@ AVCaptureDeviceFormat *qt_find_best_resolution_match(AVCaptureDevice *captureDev
             return format;
     }
 
-    if (!qt_area_sane(request))
+    if (! qt_area_sane(request)) {
         return nullptr;
+    }
 
     typedef QPair<QSize, AVCaptureDeviceFormat *> FormatPair;
 
@@ -249,15 +246,19 @@ AVCaptureDeviceFormat *qt_find_best_resolution_match(AVCaptureDevice *captureDev
     for (int i = 0; i < formats.size(); ++i) {
         AVCaptureDeviceFormat *format = formats[i];
         const QSize res(qt_device_format_resolution(format));
+
         if (!res.isNull() && res.isValid() && qt_area_sane(res))
             pairs << FormatPair(res, format);
+
         const QSize highRes(qt_device_format_high_resolution(format));
+
         if (!highRes.isNull() && highRes.isValid() && qt_area_sane(highRes))
             pairs << FormatPair(highRes, format);
     }
 
-    if (!pairs.size())
+    if (! pairs.size()) {
         return nullptr;
+    }
 
     AVCaptureDeviceFormat *best = pairs[0].second;
     QSize next(pairs[0].first);
@@ -265,6 +266,7 @@ AVCaptureDeviceFormat *qt_find_best_resolution_match(AVCaptureDevice *captureDev
     int hDiff = qAbs(request.height() - next.height());
     const int area = request.width() * request.height();
     int areaDiff = qAbs(area - next.width() * next.height());
+
     for (int i = 1; i < pairs.size(); ++i) {
         next = pairs[i].first;
         const int newWDiff = qAbs(next.width() - request.width());
@@ -284,8 +286,7 @@ AVCaptureDeviceFormat *qt_find_best_resolution_match(AVCaptureDevice *captureDev
 }
 
 AVCaptureDeviceFormat *qt_find_best_framerate_match(AVCaptureDevice *captureDevice,
-                                                    FourCharCode filter,
-                                                    Float64 fps)
+            FourCharCode filter, Float64 fps)
 {
     Q_ASSERT(captureDevice);
     Q_ASSERT(fps > 0.);

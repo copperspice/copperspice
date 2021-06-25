@@ -83,6 +83,7 @@ static QWidget *iWantTheFocus(QWidget *ancestor)
    const int MaxIterations = 100;
 
    QWidget *candidate = ancestor;
+
    for (int i = 0; i < MaxIterations; ++i) {
       candidate = candidate->nextInFocusChain();
       if (! candidate) {
@@ -95,6 +96,7 @@ static QWidget *iWantTheFocus(QWidget *ancestor)
          }
       }
    }
+
    return nullptr;
 }
 
@@ -407,6 +409,7 @@ void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
    int minColumnWidth0 = modern ? info.topLevelMarginLeft + info.topLevelMarginRight : 0;
    int minColumnWidth1 = modern ? info.topLevelMarginLeft + info.topLevelMarginRight + 1
       : info.topLevelMarginLeft + ClassicHMargin;
+
    layout->setColumnMinimumWidth(0, minColumnWidth0);
    layout->setColumnMinimumWidth(1, minColumnWidth1);
 
@@ -506,6 +509,7 @@ class QWatermarkLabel : public QLabel
    QWidget *sideWidget() const {
       return m_sideWidget;
    }
+
  private:
    QVBoxLayout *m_layout;
    QWidget *m_sideWidget;
@@ -575,7 +579,6 @@ class QWizardAntiFlickerWidget : public QWidget
    void paintEvent(QPaintEvent *);
 
 #else
-
  public:
    QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *)
       : QWidget(wizard)
@@ -711,8 +714,10 @@ class QWizardPrivate : public QDialogPrivate
          QAbstractButton *cancel;
          QAbstractButton *help;
       } btn;
+
       mutable QAbstractButton *btns[QWizard::NButtons];
    };
+
    QWizardAntiFlickerWidget *antiFlickerWidget;
    QWidget *placeholderWidget1;
    QWidget *placeholderWidget2;
@@ -930,10 +935,9 @@ void QWizardPrivate::switchToPage(int newId, Direction direction)
    _q_updateButtonStates();
    updateButtonTexts();
 
-   const QWizard::WizardButton nextOrCommit =
-      newPage && newPage->isCommitPage() ? QWizard::CommitButton : QWizard::NextButton;
-   QAbstractButton *nextOrFinishButton =
-      btns[canContinue ? nextOrCommit : QWizard::FinishButton];
+   const QWizard::WizardButton nextOrCommit = newPage && newPage->isCommitPage() ? QWizard::CommitButton : QWizard::NextButton;
+   QAbstractButton *nextOrFinishButton       = btns[canContinue ? nextOrCommit : QWizard::FinishButton];
+
    QWidget *candidate = nullptr;
 
    /*
@@ -948,6 +952,7 @@ void QWizardPrivate::switchToPage(int newId, Direction direction)
 
    if ((opts & QWizard::NoDefaultButton) && nextOrFinishButton->isEnabled()) {
       candidate = nextOrFinishButton;
+
    } else if (newPage) {
       candidate = iWantTheFocus(newPage);
    }
@@ -1527,7 +1532,7 @@ bool QWizardPrivate::ensureButton(QWizard::WizardButton which) const
       return false;
    }
 
-   if (!btns[which]) {
+   if (! btns[which]) {
       QPushButton *pushButton = new QPushButton(antiFlickerWidget);
       QStyle *style = q->style();
 
@@ -1582,6 +1587,7 @@ void QWizardPrivate::updateButtonTexts()
 
       }
    }
+
    if (btns[QWizard::NextButton]) {
       btns[QWizard::NextButton]->setShortcut(isVistaThemeEnabled() ? QKeySequence(Qt::ALT | Qt::Key_Right) : QKeySequence());
    }
@@ -1730,15 +1736,19 @@ bool QWizardPrivate::handleAeroStyleChange()
          q->setMouseTracking(true);
 
          antiFlickerWidget->move(0, vistaHelper->titleBarSize() + vistaHelper->topOffset());
-         vistaHelper->backButton()->move(
-            0, vistaHelper->topOffset() // ### should ideally work without the '+ 1'
-            - qMin(vistaHelper->topOffset(), vistaHelper->topPadding() + 1));
+
+         // ### should ideally work without the '+ 1'
+         vistaHelper->backButton()->move(0, vistaHelper->topOffset()
+               - qMin(vistaHelper->topOffset(), vistaHelper->topPadding() + 1));
+
          vistaMargins = true;
          vistaHelper->backButton()->show();
+
       } else {
          if (isWindow) {
             vistaHelper->setDWMTitleBar(QVistaHelper::NormalTitleBar);
          }
+
          q->setMouseTracking(true);
          antiFlickerWidget->move(0, vistaHelper->topOffset());
          vistaHelper->backButton()->move(0, -1); // ### should ideally work with (0, 0)
@@ -1753,9 +1763,11 @@ bool QWizardPrivate::handleAeroStyleChange()
 
    } else {
       q->setMouseTracking(true); // ### original value possibly different
+
 #ifndef QT_NO_CURSOR
-      q->unsetCursor(); // ### ditto
+      q->unsetCursor();
 #endif
+
       antiFlickerWidget->move(0, 0);
       vistaHelper->hideBackButton();
       if (isWindow) {
@@ -2004,7 +2016,7 @@ void QWizard::setPage(int theid, QWizardPage *page)
 {
    Q_D(QWizard);
 
-   if (!page) {
+   if (! page) {
       qWarning("QWizard::setPage: Cannot insert null page");
       return;
    }
@@ -2870,11 +2882,11 @@ bool QWizard::validateCurrentPage()
    return page->validatePage();
 }
 
-
 int QWizard::nextId() const
 {
    const QWizardPage *page = currentPage();
-   if (!page) {
+
+   if (! page) {
       return -1;
    }
 

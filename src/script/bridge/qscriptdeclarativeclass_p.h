@@ -27,8 +27,6 @@
 #include <qscriptvalue.h>
 #include <qscriptclass.h>
 
-QT_BEGIN_NAMESPACE
-
 class QScriptDeclarativeClassPrivate;
 class PersistentIdentifierPrivate;
 class QScriptContext;
@@ -83,9 +81,9 @@ class Q_SCRIPT_EXPORT QScriptDeclarativeClass
    static QScriptValue scopeChainValue(QScriptContext *, int index);
    static QScriptContext *pushCleanContext(QScriptEngine *);
 
-   static QScriptValue newStaticScopeObject(
-      QScriptEngine *, int propertyCount, const QString *names,
+   static QScriptValue newStaticScopeObject(QScriptEngine *, int propertyCount, const QString *names,
       const QScriptValue *values, const QScriptValue::PropertyFlags *flags);
+
    static QScriptValue newStaticScopeObject(QScriptEngine *);
 
    class Q_SCRIPT_EXPORT PersistentIdentifier
@@ -95,10 +93,12 @@ class Q_SCRIPT_EXPORT QScriptDeclarativeClass
 
       PersistentIdentifier();
       ~PersistentIdentifier();
+
       PersistentIdentifier(const PersistentIdentifier &other);
       PersistentIdentifier &operator=(const PersistentIdentifier &other);
 
       QString toString() const;
+
     private:
       friend class QScriptDeclarativeClass;
 
@@ -142,11 +142,10 @@ class Q_SCRIPT_EXPORT QScriptDeclarativeClass
    virtual QVariant toVariant(Object *, bool *ok = nullptr);
 
    QScriptContext *context() const;
+
  protected:
    friend class QScriptDeclarativeClassPrivate;
    QScopedPointer<QScriptDeclarativeClassPrivate> d_ptr;
 };
-
-QT_END_NAMESPACE
 
 #endif

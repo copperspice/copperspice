@@ -34,11 +34,9 @@ class QGLFramebufferObjectFormatPrivate
 {
  public:
    QGLFramebufferObjectFormatPrivate()
-      : ref(1),
-        samples(0),
-        attachment(QGLFramebufferObject::NoAttachment),
-        target(GL_TEXTURE_2D),
-        mipmap(false) {
+      : ref(1), samples(0), attachment(QGLFramebufferObject::NoAttachment),
+        target(GL_TEXTURE_2D), mipmap(false) {
+
 #ifndef QT_OPENGL_ES_2
       QOpenGLContext *ctx = QOpenGLContext::currentContext();
       const bool isES = ctx ? ctx->isOpenGLES() : QOpenGLContext::openGLModuleType() != QOpenGLContext::LibGL;
@@ -48,15 +46,11 @@ class QGLFramebufferObjectFormatPrivate
 #endif
    }
 
-   QGLFramebufferObjectFormatPrivate
-   (const QGLFramebufferObjectFormatPrivate *other)
-      : ref(1),
-        samples(other->samples),
-        attachment(other->attachment),
-        target(other->target),
-        internal_format(other->internal_format),
-        mipmap(other->mipmap) {
+   QGLFramebufferObjectFormatPrivate(const QGLFramebufferObjectFormatPrivate *other)
+      : ref(1), samples(other->samples), attachment(other->attachment), target(other->target),
+        internal_format(other->internal_format), mipmap(other->mipmap) {
    }
+
    bool equals(const QGLFramebufferObjectFormatPrivate *other) {
       return samples == other->samples &&
          attachment == other->attachment &&
@@ -112,7 +106,7 @@ class QGLFramebufferObjectPrivate
    {
    }
 
-   ~QGLFramebufferObjectPrivate() {}
+   ~QGLFramebufferObjectPrivate() { }
 
    void init(QGLFramebufferObject *q, const QSize &sz,
       QGLFramebufferObject::Attachment attachment,

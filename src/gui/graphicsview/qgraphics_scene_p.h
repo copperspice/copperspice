@@ -64,10 +64,9 @@ class QGraphicsScenePrivate
 
    QGraphicsScene::ItemIndexMethod indexMethod;
    QGraphicsSceneIndex *index;
+   QRectF sceneRect;
 
    int lastItemCount;
-
-   QRectF sceneRect;
 
    quint32 hasSceneRect : 1;
    quint32 dirtyGrowingItemsBoundingRect : 1;
@@ -129,8 +128,7 @@ class QGraphicsScenePrivate
    int activationRefCount;
    int childExplicitActivation;
    void setActivePanelHelper(QGraphicsItem *item, bool duringActivationEvent);
-   void setFocusItemHelper(QGraphicsItem *item, Qt::FocusReason focusReason,
-      bool emitFocusChanged = true);
+   void setFocusItemHelper(QGraphicsItem *item, Qt::FocusReason focusReason, bool emitFocusChanged = true);
 
    QList<QGraphicsWidget *> popupWidgets;
    void addPopup(QGraphicsWidget *widget);

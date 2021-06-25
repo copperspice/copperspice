@@ -73,32 +73,20 @@ void QWidgetAction::setDefaultWidget(QWidget *widget)
    }
 }
 
-/*!
-    Returns the default widget.
-*/
 QWidget *QWidgetAction::defaultWidget() const
 {
    Q_D(const QWidgetAction);
    return d->defaultWidget;
 }
 
-/*!
-    Returns a widget that represents the action, with the given \a
-    parent.
-
-    Container widgets that support actions can call this function to
-    request a widget as visual representation of the action.
-
-    \sa releaseWidget(), createWidget(), defaultWidget()
-*/
 QWidget *QWidgetAction::requestWidget(QWidget *parent)
 {
    Q_D(QWidgetAction);
 
    QWidget *w = createWidget(parent);
 
-   if (!w) {
-      if (d->defaultWidgetInUse || !d->defaultWidget) {
+   if (! w) {
+      if (d->defaultWidgetInUse || ! d->defaultWidget) {
          return nullptr;
       }
 
@@ -113,14 +101,6 @@ QWidget *QWidgetAction::requestWidget(QWidget *parent)
    return w;
 }
 
-/*!
-    Releases the specified \a widget.
-
-    Container widgets that support actions call this function when a widget
-    action is removed.
-
-    \sa requestWidget(), deleteWidget(), defaultWidget()
-*/
 void QWidgetAction::releaseWidget(QWidget *widget)
 {
    Q_D(QWidgetAction);
@@ -132,7 +112,7 @@ void QWidgetAction::releaseWidget(QWidget *widget)
       return;
    }
 
-   if (!d->createdWidgets.contains(widget)) {
+   if (! d->createdWidgets.contains(widget)) {
       return;
    }
 
@@ -141,9 +121,6 @@ void QWidgetAction::releaseWidget(QWidget *widget)
    deleteWidget(widget);
 }
 
-/*!
-    \reimp
-*/
 bool QWidgetAction::event(QEvent *event)
 {
    Q_D(QWidgetAction);
@@ -161,22 +138,11 @@ bool QWidgetAction::event(QEvent *event)
    return QAction::event(event);
 }
 
-/*!
-    \reimp
- */
 bool QWidgetAction::eventFilter(QObject *obj, QEvent *event)
 {
    return QAction::eventFilter(obj, event);
 }
 
-/*!
-    This function is called whenever the action is added to a container widget
-    that supports custom widgets. If you don't want a custom widget to be
-    used as representation of the action in the specified \a parent widget then
-    0 should be returned.
-
-    \sa deleteWidget()
-*/
 QWidget *QWidgetAction::createWidget(QWidget *parent)
 {
    (void) parent;
@@ -184,25 +150,12 @@ QWidget *QWidgetAction::createWidget(QWidget *parent)
    return nullptr;
 }
 
-/*!
-    This function is called whenever the action is removed from a
-    container widget that displays the action using a custom \a
-    widget previously created using createWidget(). The default
-    implementation hides the \a widget and schedules it for deletion
-    using QObject::deleteLater().
-
-    \sa createWidget()
-*/
 void QWidgetAction::deleteWidget(QWidget *widget)
 {
    widget->hide();
    widget->deleteLater();
 }
 
-/*!
-    Returns the list of widgets that have been using createWidget() and
-    are currently in use by widgets the action has been added to.
-*/
 QList<QWidget *> QWidgetAction::createdWidgets() const
 {
    Q_D(const QWidgetAction);

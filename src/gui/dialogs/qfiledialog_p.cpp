@@ -977,6 +977,7 @@ void QFileDialogPrivate::createWidgets()
 void QFileDialogPrivate::_q_showHeader(QAction *action)
 {
    Q_Q(QFileDialog);
+
    QActionGroup *actionGroup = qobject_cast<QActionGroup *>(q->sender());
    qFileDialogUi->treeView->header()->setSectionHidden(actionGroup->actions().indexOf(action) + 1, !action->isChecked());
 }
@@ -1040,8 +1041,8 @@ void QFileDialogPrivate::createMenuActions()
 
    // ### TODO add Desktop & Computer actions
 
-   QAction *goToParent =  new QAction(q);
-   goToParent->setObjectName(QLatin1String("qt_goto_parent_action"));
+   QAction *goToParent = new QAction(q);
+   goToParent->setObjectName("qt_goto_parent_action");
 
 #ifndef QT_NO_SHORTCUT
    goToParent->setShortcut(Qt::CTRL + Qt::UpArrow);
@@ -1080,6 +1081,7 @@ void QFileDialogPrivate::_q_goHome()
 void QFileDialogPrivate::_q_pathChanged(const QString &newPath)
 {
    Q_Q(QFileDialog);
+
    QDir dir(model->rootDirectory());
    qFileDialogUi->toParentButton->setEnabled(dir.exists());
    qFileDialogUi->sidebar->selectUrl(QUrl::fromLocalFile(newPath));
@@ -1092,6 +1094,7 @@ void QFileDialogPrivate::_q_pathChanged(const QString &newPath)
       currentHistory.append(QDir::toNativeSeparators(newPath));
       ++currentHistoryLocation;
    }
+
    qFileDialogUi->forwardButton->setEnabled(currentHistory.size() - currentHistoryLocation > 1);
    qFileDialogUi->backButton->setEnabled(currentHistoryLocation > 0);
 }
@@ -1099,7 +1102,8 @@ void QFileDialogPrivate::_q_pathChanged(const QString &newPath)
 void QFileDialogPrivate::_q_navigateBackward()
 {
    Q_Q(QFileDialog);
-   if (!currentHistory.isEmpty() && currentHistoryLocation > 0) {
+
+   if (! currentHistory.isEmpty() && currentHistoryLocation > 0) {
       --currentHistoryLocation;
       QString previousHistory = currentHistory.at(currentHistoryLocation);
       q->setDirectory(previousHistory);

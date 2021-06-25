@@ -32,11 +32,10 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qwidget.h>
-#include <qdebug.h>
 #include <qmath.h>
-#include <QRubberBand>
-#include <QFocusFrame>
-#include <QMenu>
+#include <qrubberband.h>
+#include <qfocusframe.h>
+#include <qmenu.h>
 
 #include <qwidget_p.h>
 
@@ -153,7 +152,8 @@ class QAccessibleWidgetPrivate
  public:
    QAccessibleWidgetPrivate()
       : role(QAccessible::Client)
-   {}
+   {
+   }
 
    QAccessible::Role role;
    QString name;
@@ -172,16 +172,19 @@ QAccessibleWidget::QAccessibleWidget(QWidget *w, QAccessible::Role role, const Q
 
 bool QAccessibleWidget::isValid() const
 {
-   if (!object() || static_cast<QWidget *>(object())->d_func()->data.in_destructor) {
+   if (! object() || static_cast<QWidget *>(object())->d_func()->data.in_destructor) {
       return false;
    }
    return QAccessibleObject::isValid();
 }
+
 QWindow *QAccessibleWidget::window() const
 {
    const QWidget *w = widget();
    Q_ASSERT(w);
+
    QWindow *result = w->windowHandle();
+
    if (!result) {
       if (const QWidget *nativeParent = w->nativeParentWidget()) {
          result = nativeParent->windowHandle();
@@ -190,18 +193,15 @@ QWindow *QAccessibleWidget::window() const
    return result;
 }
 
-
 QAccessibleWidget::~QAccessibleWidget()
 {
    delete d;
 }
 
-
 QWidget *QAccessibleWidget::widget() const
 {
    return qobject_cast<QWidget *>(object());
 }
-
 
 QObject *QAccessibleWidget::parentObject() const
 {
@@ -213,18 +213,16 @@ QObject *QAccessibleWidget::parentObject() const
    return w->parent();
 }
 
-
 QRect QAccessibleWidget::rect() const
 {
    QWidget *w = widget();
-   if (!w->isVisible()) {
+   if (! w->isVisible()) {
       return QRect();
    }
    QPoint wpos = w->mapToGlobal(QPoint(0, 0));
 
    return QRect(wpos.x(), wpos.y(), w->width(), w->height());
 }
-
 
 class QACConnectionObject : public QObject
 {
@@ -286,11 +284,13 @@ QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> QAccessibleWidget:
 
    if (match & QAccessible::Label) {
       const QAccessible::Relation rel = QAccessible::Label;
+
       if (QWidget *parent = widget()->parentWidget()) {
+
 #ifndef QT_NO_SHORTCUT
-         // first check for all siblings that are labels to us
-         // ideally we would go through all objects and check, but that
-         // will be too expensive
+         // first check for all siblings that are labels to us ideally
+         // we would go through all objects and check, but that will be too expensive
+
          const QList<QWidget *> kids = childWidgets(parent);
 
          for (auto item : kids) {

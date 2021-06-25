@@ -125,8 +125,8 @@ void QLineControl::paste(QClipboard::Mode clipboardMode)
 {
    QString clip = QApplication::clipboard()->text(clipboardMode);
 
-   if (!clip.isEmpty() || hasSelectedText()) {
-      separate(); //make it a separate undo/redo command
+   if (! clip.isEmpty() || hasSelectedText()) {
+      separate();    // make it a separate undo/redo command
       insert(clip);
       separate();
    }

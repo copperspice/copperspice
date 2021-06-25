@@ -21,9 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qscriptastvisitor_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qscriptastvisitor_p.h>
 
 namespace QScript {
 namespace AST {
@@ -36,7 +34,8 @@ Visitor::~Visitor()
 {
 }
 
-}
-} // namespace QScript::AST
+} // namespace
 
-QT_END_NAMESPACE
+} // namespace
+
+

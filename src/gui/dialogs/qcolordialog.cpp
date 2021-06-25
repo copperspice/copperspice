@@ -684,6 +684,7 @@ class QColorPicker : public QFrame
 
    GUI_CS_SLOT_1(Public, void setCol(int h, int s))
    GUI_CS_SLOT_OVERLOAD(setCol, (int, int))
+
  protected:
    QSize sizeHint() const override;
    void paintEvent(QPaintEvent *) override;
@@ -1241,7 +1242,7 @@ QColorShower::QColorShower(QColorDialog *parent)
 
    lblHue->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-#if !defined(QT_SMALL_COLORDIALOG)
+#if ! defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblHue, 0, 1);
    gl->addWidget(hEd, 0, 2);
 #else
@@ -1374,10 +1375,10 @@ QColorShower::QColorShower(QColorDialog *parent)
 
 #if defined(QT_SMALL_COLORDIALOG)
    gl->addWidget(lblHtml, 5, 0);
-   gl->addWidget(htEd, 5, 1, 1, /*colspan=*/ 2);
+   gl->addWidget(htEd, 5, 1, 1, 2);
 #else
    gl->addWidget(lblHtml, 5, 1);
-   gl->addWidget(htEd, 5, 2, 1, /*colspan=*/ 3);
+   gl->addWidget(htEd, 5, 2, 1, 3);
 #endif
 
    connect(hEd,     cs_mp_cast<int>(&QColSpinBox::valueChanged), this, &QColorShower::hsvEd);
@@ -1418,6 +1419,7 @@ QColor QColorDialogPrivate::currentQColor() const
    if (nativeDialogInUse) {
       return platformColorDialogHelper()->currentColor();
    }
+
    return cs->currentQColor();
 }
 

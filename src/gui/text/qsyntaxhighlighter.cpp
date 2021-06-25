@@ -229,21 +229,20 @@ QSyntaxHighlighter::~QSyntaxHighlighter()
    setDocument(nullptr);
 }
 
-/*!
-    Installs the syntax highlighter on the given QTextDocument \a doc.
-    A QSyntaxHighlighter can only be used with one document at a time.
-*/
 void QSyntaxHighlighter::setDocument(QTextDocument *doc)
 {
    Q_D(QSyntaxHighlighter);
+
    if (d->doc) {
       disconnect(d->doc.data(), &QTextDocument::contentsChange, this, &QSyntaxHighlighter::_q_reformatBlocks);
 
       QTextCursor cursor(d->doc);
       cursor.beginEditBlock();
+
       for (QTextBlock blk = d->doc->begin(); blk.isValid(); blk = blk.next()) {
          blk.layout()->clearFormats();
       }
+
       cursor.endEditBlock();
    }
 
@@ -255,10 +254,6 @@ void QSyntaxHighlighter::setDocument(QTextDocument *doc)
    }
 }
 
-/*!
-    Returns the QTextDocument on which this syntax highlighter is
-    installed.
-*/
 QTextDocument *QSyntaxHighlighter::document() const
 {
    Q_D(const QSyntaxHighlighter);

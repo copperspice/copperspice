@@ -71,7 +71,8 @@ QTabWidgetPrivate::QTabWidgetPrivate()
 { }
 
 QTabWidgetPrivate::~QTabWidgetPrivate()
-{ }
+{
+}
 
 void QTabWidgetPrivate::init()
 {
@@ -80,7 +81,8 @@ void QTabWidgetPrivate::init()
    stack = new QStackedWidget(q);
    stack->setObjectName(QLatin1String("qt_tabwidget_stackedwidget"));
    stack->setLineWidth(0);
-   // hack so that QMacStyle::layoutSpacing() can detect tab widget pages
+
+   // do this so QMacStyle::layoutSpacing() can detect tab widget pages
    stack->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, QSizePolicy::TabWidget));
 
    QObject::connect(stack, &QStackedWidget::widgetRemoved, q, &QTabWidget::_q_removeTab);
@@ -354,6 +356,7 @@ void QTabWidget::setTabBar(QTabBar *tb)
       tb->setParent(this);
       tb->show();
    }
+
    delete d->tabs;
    d->tabs = tb;
    setFocusProxy(d->tabs);
@@ -381,15 +384,18 @@ QTabBar *QTabWidget::tabBar() const
 void QTabWidgetPrivate::_q_showTab(int index)
 {
    Q_Q(QTabWidget);
+
    if (index < stack->count() && index >= 0) {
       stack->setCurrentIndex(index);
    }
+
    emit q->currentChanged(index);
 }
 
 void QTabWidgetPrivate::_q_removeTab(int index)
 {
    Q_Q(QTabWidget);
+
    tabs->removeTab(index);
    q->setUpLayout();
    q->tabRemoved(index);
@@ -600,15 +606,18 @@ void QTabWidgetPrivate::updateTabBarPosition()
 QTabWidget::TabPosition QTabWidget::tabPosition() const
 {
    Q_D(const QTabWidget);
+
    return d->pos;
 }
 
 void QTabWidget::setTabPosition(TabPosition pos)
 {
    Q_D(QTabWidget);
+
    if (d->pos == pos) {
       return;
    }
+
    d->pos = pos;
    d->updateTabBarPosition();
 }
@@ -625,11 +634,13 @@ void QTabWidget::setTabsClosable(bool closeable)
    }
 
    tabBar()->setTabsClosable(closeable);
+
    if (closeable) {
       connect(tabBar(), &QTabBar::tabCloseRequested,    this, &QTabWidget::tabCloseRequested);
    } else {
       disconnect(tabBar(), &QTabBar::tabCloseRequested, this, &QTabWidget::tabCloseRequested);
    }
+
    setUpLayout();
 }
 

@@ -1043,14 +1043,12 @@ void QTableView::doItemsLayout()
 
    QAbstractItemView::doItemsLayout();
    d->verticalHeader->d_func()->setScrollOffset(verticalScrollBar(), verticalScrollMode());
+
    if (!d->verticalHeader->updatesEnabled()) {
       d->verticalHeader->setUpdatesEnabled(true);
    }
 }
 
-/*!
-  \reimp
-*/
 void QTableView::setSelectionModel(QItemSelectionModel *selectionModel)
 {
    Q_D(QTableView);
@@ -1195,9 +1193,6 @@ void QTableView::scrollContentsBy(int dx, int dy)
    }
 }
 
-/*!
-  \reimp
-*/
 QStyleOptionViewItem QTableView::viewOptions() const
 {
    QStyleOptionViewItem option = QAbstractItemView::viewOptions();
@@ -1205,12 +1200,10 @@ QStyleOptionViewItem QTableView::viewOptions() const
    return option;
 }
 
-/*!
-    Paints the table on receipt of the given paint event \a event.
-*/
 void QTableView::paintEvent(QPaintEvent *event)
 {
    Q_D(QTableView);
+
    // setup temp variables for the painting
    QStyleOptionViewItem option = d->viewOptions();
    const QPoint offset = d->scrollDelayOffset;
@@ -2352,59 +2345,30 @@ int QTableView::columnViewportPosition(int column) const
    return d->horizontalHeader->sectionViewportPosition(column);
 }
 
-/*!
-    Returns the column in which the given x-coordinate, \a x, in contents
-    coordinates is located.
-
-    \note This function returns -1 if the given coordinate is not valid
-    (has no column).
-
-    \sa rowAt()
-*/
 int QTableView::columnAt(int x) const
 {
    Q_D(const QTableView);
    return d->horizontalHeader->logicalIndexAt(x);
 }
 
-/*!
-    \since 4.1
-
-    Sets the width of the given \a column to be \a width.
-*/
 void QTableView::setColumnWidth(int column, int width)
 {
    Q_D(const QTableView);
    d->horizontalHeader->resizeSection(column, width);
 }
 
-/*!
-    Returns the width of the given \a column.
-
-    \sa resizeColumnToContents(), rowHeight()
-*/
 int QTableView::columnWidth(int column) const
 {
    Q_D(const QTableView);
    return d->horizontalHeader->sectionSize(column);
 }
 
-/*!
-    Returns true if the given \a row is hidden; otherwise returns false.
-
-    \sa isColumnHidden()
-*/
 bool QTableView::isRowHidden(int row) const
 {
    Q_D(const QTableView);
    return d->verticalHeader->isSectionHidden(row);
 }
 
-/*!
-    If \a hide is true \a row will be hidden, otherwise it will be shown.
-
-    \sa setColumnHidden()
-*/
 void QTableView::setRowHidden(int row, bool hide)
 {
    Q_D(QTableView);
@@ -2414,36 +2378,27 @@ void QTableView::setRowHidden(int row, bool hide)
    d->verticalHeader->setSectionHidden(row, hide);
 }
 
-/*!
-    Returns true if the given \a column is hidden; otherwise returns false.
-
-    \sa isRowHidden()
-*/
 bool QTableView::isColumnHidden(int column) const
 {
    Q_D(const QTableView);
    return d->horizontalHeader->isSectionHidden(column);
 }
 
-/*!
-  If \a hide is true the given \a column will be hidden; otherwise it
-  will be shown.
-
-  \sa setRowHidden()
-*/
 void QTableView::setColumnHidden(int column, bool hide)
 {
    Q_D(QTableView);
+
    if (column < 0 || column >= d->horizontalHeader->count()) {
       return;
    }
+
    d->horizontalHeader->setSectionHidden(column, hide);
 }
-
 
 void QTableView::setSortingEnabled(bool enable)
 {
    Q_D(QTableView);
+
    d->sortingEnabled = enable;
    horizontalHeader()->setSortIndicatorShown(enable);
 
@@ -2469,13 +2424,6 @@ bool QTableView::isSortingEnabled() const
    return d->sortingEnabled;
 }
 
-/*!
-    \property QTableView::showGrid
-    \brief whether the grid is shown
-
-    If this property is true a grid is drawn for the table; if the
-    property is false, no grid is drawn. The default value is true.
-*/
 bool QTableView::showGrid() const
 {
    Q_D(const QTableView);
@@ -2491,12 +2439,6 @@ void QTableView::setShowGrid(bool show)
    }
 }
 
-/*!
-  \property QTableView::gridStyle
-  \brief  the pen style used to draw the grid.
-
-  This property holds the style used when drawing the grid (see \l{showGrid}).
-*/
 Qt::PenStyle QTableView::gridStyle() const
 {
    Q_D(const QTableView);

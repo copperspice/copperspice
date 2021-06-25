@@ -98,13 +98,6 @@ QDialog *QPushButtonPrivate::dialogParent() const
    return nullptr;
 }
 
-/*!
-    Initialize \a option with the values from this QPushButton. This method is useful
-    for subclasses when they need a QStyleOptionButton, but don't want to fill
-    in all the information themselves.
-
-    \sa QStyleOption::initFrom()
-*/
 void QPushButton::initStyleOption(QStyleOptionButton *option) const
 {
    if (!option) {
@@ -117,6 +110,7 @@ void QPushButton::initStyleOption(QStyleOptionButton *option) const
    if (d->flat) {
       option->features |= QStyleOptionButton::Flat;
    }
+
 #ifndef QT_NO_MENU
    if (d->menu) {
       option->features |= QStyleOptionButton::HasMenu;
@@ -197,9 +191,6 @@ bool QPushButton::isDefault() const
    return d->defaultButton;
 }
 
-/*!
-    \reimp
-*/
 QSize QPushButton::sizeHint() const
 {
    Q_D(const QPushButton);
@@ -253,9 +244,6 @@ QSize QPushButton::sizeHint() const
    return d->sizeHint;
 }
 
-/*!
-    \reimp
- */
 QSize QPushButton::minimumSizeHint() const
 {
    return sizeHint();
@@ -285,9 +273,6 @@ void QPushButton::keyPressEvent(QKeyEvent *e)
    }
 }
 
-/*!
-    \reimp
-*/
 void QPushButton::focusInEvent(QFocusEvent *e)
 {
    Q_D(QPushButton);
@@ -301,9 +286,6 @@ void QPushButton::focusInEvent(QFocusEvent *e)
    QAbstractButton::focusInEvent(e);
 }
 
-/*!
-    \reimp
-*/
 void QPushButton::focusOutEvent(QFocusEvent *e)
 {
    Q_D(QPushButton);
@@ -318,8 +300,10 @@ void QPushButton::focusOutEvent(QFocusEvent *e)
    }
 
    QAbstractButton::focusOutEvent(e);
+
 #ifndef QT_NO_MENU
-   if (d->menu && d->menu->isVisible()) {      // restore pressed status
+   if (d->menu && d->menu->isVisible()) {
+      // restore pressed status
       setDown(true);
    }
 #endif
@@ -334,12 +318,14 @@ void QPushButton::setMenu(QMenu *menu)
       return;
    }
 
-   if (menu && !d->menu) {
+   if (menu && ! d->menu) {
       connect(this, &QPushButton::pressed, this, &QPushButton::_q_popupPressed, Qt::UniqueConnection);
    }
+
    if (d->menu) {
       removeAction(d->menu->menuAction());
    }
+
    d->menu = menu;
    if (d->menu) {
       addAction(d->menu->menuAction());
@@ -351,23 +337,12 @@ void QPushButton::setMenu(QMenu *menu)
    updateGeometry();
 }
 
-/*!
-    Returns the button's associated popup menu or 0 if no popup menu
-    has been set.
-
-    \sa setMenu()
-*/
 QMenu *QPushButton::menu() const
 {
    Q_D(const QPushButton);
    return d->menu;
 }
 
-/*!
-    Shows (pops up) the associated popup menu. If there is no such
-    menu, this function does nothing. This function does not return
-    until the popup menu has been closed by the user.
-*/
 void QPushButton::showMenu()
 {
    Q_D(QPushButton);
@@ -503,4 +478,3 @@ void QPushButton::_q_popupPressed()
    Q_D(QPushButton);
    d->_q_popupPressed();
 }
-

@@ -636,20 +636,24 @@ void QToolButtonPrivate::popupTimerDone()
 
    if (menuAction) {
       actualMenu = menuAction->menu();
+
    } else if (defaultAction && defaultAction->menu()) {
       actualMenu = defaultAction->menu();
+
    } else {
       actualMenu = new QMenu(q);
       mustDeleteActualMenu = true;
+
       for (int i = 0; i < actions.size(); i++) {
          actualMenu->addAction(actions.at(i));
       }
    }
+
    repeat = q->autoRepeat();
    q->setAutoRepeat(false);
    bool horizontal = true;
 
-#if !defined(QT_NO_TOOLBAR)
+#if ! defined(QT_NO_TOOLBAR)
    QToolBar *tb = qobject_cast<QToolBar *>(q->parent());
    if (tb && tb->orientation() == Qt::Vertical) {
       horizontal = false;
@@ -670,6 +674,7 @@ void QToolButtonPrivate::popupTimerDone()
             p = q->mapToGlobal(rect.topRight() - QPoint(0, sh.height()));
          }
          p.rx() -= sh.width();
+
       } else {
          if (q->mapToGlobal(QPoint(0, rect.bottom())).y() + sh.height() <= screen.height()) {
             p = q->mapToGlobal(rect.bottomLeft());
@@ -677,6 +682,7 @@ void QToolButtonPrivate::popupTimerDone()
             p = q->mapToGlobal(rect.topLeft() - QPoint(0, sh.height()));
          }
       }
+
    } else {
       if (q->isRightToLeft()) {
          if (q->mapToGlobal(QPoint(rect.left(), 0)).x() - sh.width() <= screen.x()) {
@@ -705,12 +711,13 @@ void QToolButtonPrivate::popupTimerDone()
    }
 
    QObject::connect(actualMenu.data(), &QMenu::aboutToHide, q, &QToolButton::_q_updateButtonDown);
+
    actualMenu->d_func()->causedPopup.widget = q;
    actualMenu->d_func()->causedPopup.action = defaultAction;
-   actionsCopy = q->actions(); //(the list of action may be modified in slots)
+   actionsCopy = q->actions();  // the list of action may be modified in slots
    actualMenu->exec(p);
 
-   if (!that) {
+   if (! that) {
       return;
    }
    QObject::disconnect(actualMenu.data(), &QMenu::aboutToHide, q, &QToolButton::_q_updateButtonDown);

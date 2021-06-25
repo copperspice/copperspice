@@ -21,14 +21,16 @@
 *
 ***********************************************************************/
 
-#include "qwindowcontainer_p.h"
-#include "qwidget_p.h"
-#include <qwindow.h>
-#include <qguiapplication_p.h>
+#include <qwindowcontainer_p.h>
+
+#include <qabstractscrollarea.h>
+#include <qdebug.h>
+#include <qmdisubwindow.h>
 #include <qplatform_integration.h>
-#include <QDebug>
-#include <QMdiSubWindow>
-#include <QAbstractScrollArea>
+#include <qwindow.h>
+
+#include <qguiapplication_p.h>
+#include <qwidget_p.h>
 
 class QWindowContainerPrivate : public QWidgetPrivate
 {
@@ -123,90 +125,26 @@ class QWindowContainerPrivate : public QWidgetPrivate
    uint usesNativeWidgets : 1;
 };
 
-
-
-/*!
-    \fn QWidget *QWidget::createWindowContainer(QWindow *window, QWidget *parent, Qt::WindowFlags flags);
-
-    Creates a QWidget that makes it possible to embed \a window into
-    a QWidget-based application.
-
-    The window container is created as a child of \a parent and with
-    window flags \a flags.
-
-    Once the window has been embedded into the container, the
-    container will control the window's geometry and
-    visibility. Explicit calls to QWindow::setGeometry(),
-    QWindow::show() or QWindow::hide() on an embedded window is not
-    recommended.
-
-    The container takes over ownership of \a window. The window can
-    be removed from the window container with a call to
-    QWindow::setParent().
-
-    The window container is attached as a native child window to the
-    toplevel window it is a child of. When a window container is used
-    as a child of a QAbstractScrollArea or QMdiArea, it will
-    create a \l {Native Widgets vs Alien Widgets} {native window} for
-    every widget in its parent chain to allow for proper stacking and
-    clipping in this use case. Creating a native window for the window
-    container also allows for proper stacking and clipping. This must
-    be done before showing the window container. Applications with
-    many native child windows may suffer from performance issues.
-
-    The window container has a number of known limitations:
-
-    \list
-
-    \li Stacking order; The embedded window will stack on top of the
-    widget hierarchy as an opaque box. The stacking order of multiple
-    overlapping window container instances is undefined.
-
-    \li Rendering Integration; The window container does not interoperate
-    with QGraphicsProxyWidget, QWidget::render() or similar functionality.
-
-    \li Focus Handling; It is possible to let the window container
-    instance have any focus policy and it will delegate focus to the
-    window via a call to QWindow::requestActivate(). However,
-    returning to the normal focus chain from the QWindow instance will
-    be up to the QWindow instance implementation itself. For instance,
-    when entering a Qt Quick based window with tab focus, it is quite
-    likely that further tab presses will only cycle inside the QML
-    application. Also, whether QWindow::requestActivate() actually
-    gives the window focus, is platform dependent.
-
-    \li Using many window container instances in a QWidget-based
-    application can greatly hurt the overall performance of the
-    application.
-
-    \endlist
- */
-
 QWidget *QWidget::createWindowContainer(QWindow *window, QWidget *parent, Qt::WindowFlags flags)
 {
    return new QWindowContainer(window, parent, flags);
 }
 
-
-
-/*!
-    \internal
- */
-
 QWindowContainer::QWindowContainer(QWindow *embeddedWindow, QWidget *parent, Qt::WindowFlags flags)
    : QWidget(*new QWindowContainerPrivate, parent, flags)
 {
    Q_D(QWindowContainer);
-   if (!embeddedWindow) {
-      qWarning("QWindowContainer: embedded window cannot be null");
+
+   if (embeddedWindow == nullptr) {
+      qWarning("QWindowContainer: embedded window can not be a nullptr");
       return;
    }
 
    // The embedded QWindow must use the same logic as QWidget when it comes to the surface type.
    // Otherwise we may end up with BadMatch failures on X11.
    if (embeddedWindow->surfaceType() == QSurface::RasterSurface
-      && QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)
-      && !QApplication::testAttribute(Qt::AA_ForceRasterWidgets)) {
+            && QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)
+            && ! QApplication::testAttribute(Qt::AA_ForceRasterWidgets)) {
       embeddedWindow->setSurfaceType(QSurface::RasterGLSurface);
    }
 
@@ -223,21 +161,11 @@ QWindow *QWindowContainer::containedWindow() const
    return d->window;
 }
 
-/*!
-    \internal
- */
-
 QWindowContainer::~QWindowContainer()
 {
    Q_D(QWindowContainer);
    delete d->window;
 }
-
-
-
-/*!
-    \internal
- */
 
 void QWindowContainer::focusWindowChanged(QWindow *focusWindow)
 {
@@ -250,10 +178,6 @@ void QWindowContainer::focusWindowChanged(QWindow *focusWindow)
       }
    }
 }
-
-/*!
-    \internal
- */
 
 bool QWindowContainer::event(QEvent *e)
 {
@@ -414,4 +338,3 @@ void QWindowContainer::parentWasLowered(QWidget *parent)
 
    qwindowcontainer_traverse(parent, parentWasLowered);
 }
-

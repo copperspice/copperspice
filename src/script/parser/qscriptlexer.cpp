@@ -738,7 +738,9 @@ int QScript::Lexer::lex()
       // scan hex numbers
       dval = QScript::integerFromString(buffer8, pos8, 16);
       state = Number;
-   } else if (state == Octal) {   // scan octal number
+
+   } else if (state == Octal) {
+      // scan octal number
       dval = QScript::integerFromString(buffer8, pos8, 8);
       state = Number;
    }
@@ -749,16 +751,21 @@ int QScript::Lexer::lex()
    switch (parenthesesState) {
       case IgnoreParentheses:
          break;
+
       case CountParentheses:
          if (token == QScriptGrammar::T_RPAREN) {
             --parenthesesCount;
+
             if (parenthesesCount == 0) {
                parenthesesState = BalancedParentheses;
             }
+
          } else if (token == QScriptGrammar::T_LPAREN) {
             ++parenthesesCount;
          }
+
          break;
+
       case BalancedParentheses:
          parenthesesState = IgnoreParentheses;
          break;
@@ -767,11 +774,13 @@ int QScript::Lexer::lex()
    switch (state) {
       case Eof:
          return 0;
+
       case Other:
          if (token == QScriptGrammar::T_RBRACE || token == QScriptGrammar::T_SEMICOLON) {
             delimited = true;
          }
          return token;
+
       case Identifier:
          if ((token = findReservedWord(buffer16, pos16)) < 0) {
             /* TODO: close leak on parse error. same holds true for String */
@@ -783,17 +792,23 @@ int QScript::Lexer::lex()
             }
             return QScriptGrammar::T_IDENTIFIER;
          }
+
          if (token == QScriptGrammar::T_CONTINUE || token == QScriptGrammar::T_BREAK
                || token == QScriptGrammar::T_RETURN || token == QScriptGrammar::T_THROW) {
             restrKeyword = true;
+
          } else if (token == QScriptGrammar::T_IF || token == QScriptGrammar::T_FOR
                     || token == QScriptGrammar::T_WHILE || token == QScriptGrammar::T_WITH) {
             parenthesesState = CountParentheses;
+
             parenthesesCount = 0;
          } else if (token == QScriptGrammar::T_DO) {
             parenthesesState = BalancedParentheses;
+
          }
+
          return token;
+
       case String:
          if (driver) {
             Q_ASSERT_X(false, Q_FUNC_INFO, "not implemented");
@@ -803,11 +818,14 @@ int QScript::Lexer::lex()
             qsyylval.ustr = nullptr;
          }
          return QScriptGrammar::T_STRING_LITERAL;
+
       case Number:
          qsyylval.dval = dval;
          return QScriptGrammar::T_NUMERIC_LITERAL;
+
       case Bad:
          return -1;
+
       default:
          Q_ASSERT(!"unhandled numeration value in switch");
          return -1;
