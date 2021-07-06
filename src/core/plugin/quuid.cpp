@@ -278,8 +278,10 @@ QByteArray QUuid::toRfc4122() const
 QDataStream &operator<<(QDataStream &s, const QUuid &id)
 {
    QByteArray bytes;
+
    if (s.byteOrder() == QDataStream::BigEndian) {
       bytes = id.toRfc4122();
+
    } else {
       // a UUID has 16 bytes
       bytes = QByteArray(16, Qt::NoData);
@@ -304,13 +306,10 @@ QDataStream &operator<<(QDataStream &s, const QUuid &id)
    return s;
 }
 
-/*!
-    \relates QUuid
-    Reads a UUID from the stream \a s into \a id.
-*/
 QDataStream &operator>>(QDataStream &s, QUuid &id)
 {
    QByteArray bytes(16, Qt::NoData);
+
    if (s.readRawData(bytes.data(), 16) != 16) {
       s.setStatus(QDataStream::ReadPastEnd);
       return s;

@@ -33,7 +33,11 @@ class Q_CORE_EXPORT QBitArray
  public:
    inline QBitArray() {}
    explicit QBitArray(int size, bool val = false);
-   QBitArray(const QBitArray &other) : d(other.d) {}
+
+   QBitArray(const QBitArray &other)
+      : d(other.d)
+   {
+   }
 
    inline QBitArray &operator=(const QBitArray &other) {
       d = other.d;

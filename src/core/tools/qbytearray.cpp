@@ -554,14 +554,18 @@ QByteArray::QByteArray(const char *data, int size)
    }
 }
 
-
 QByteArray::QByteArray(int size, char ch)
 {
    if (size <= 0) {
       d = Data::allocate(0);
+
    } else {
       d = Data::allocate(uint(size) + 1u);
-      Q_CHECK_PTR(d);
+
+      if (d == nullptr) {
+         qBadAlloc();
+      }
+
       d->size = size;
       memset(d->data(), ch, size);
       d->data()[size] = '\0';
@@ -573,7 +577,11 @@ QByteArray::QByteArray(int size, Qt::NoDataOverload dummy)
    (void) dummy;
 
    d = Data::allocate(uint(size) + 1u);
-   Q_CHECK_PTR(d);
+
+   if (d == nullptr) {
+      qBadAlloc();
+   }
+
    d->size = size;
    d->data()[size] = '\0';
 }
@@ -589,12 +597,14 @@ void QByteArray::resize(int size)
       return;
    }
 
-   if (size == 0 && !d->capacityReserved) {
+   if (size == 0 && ! d->capacityReserved) {
       Data *x = Data::allocate(0);
       if (!d->ref.deref()) {
          Data::deallocate(d);
       }
+
       d = x;
+
    } else if (d->size == 0 && d->ref.isStatic()) {
       //
       // Optimize the idiom:

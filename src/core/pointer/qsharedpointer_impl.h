@@ -28,14 +28,14 @@
 #ifndef QSHAREDPOINTER_IMPL_H
 #define QSHAREDPOINTER_IMPL_H
 
-#include <new>
-#include <utility>
-
 #include <qatomic.h>
 #include <qhashfwd.h>
 
 class QVariant;
 class QObject;
+
+#include <new>
+#include <utility>
 
 template <class T>
 class QWeakPointer;
@@ -129,12 +129,7 @@ struct RemovePointer<QWeakPointer<T> > {
 // ExternalRefCountWithContiguousData
 
 struct ExternalRefCountData {
-   typedef void (*DestroyerFn)(ExternalRefCountData *);
-
-   QAtomicInt weakref;
-   QAtomicInt strongref;
-
-   DestroyerFn destroyer;
+   using DestroyerFn = void(*)(ExternalRefCountData *);
 
    ExternalRefCountData(DestroyerFn d)
       : destroyer(d)
@@ -178,7 +173,13 @@ struct ExternalRefCountData {
    void operator delete(void *, void *) {
       // no code
    }
+
+   QAtomicInt weakref;
+   QAtomicInt strongref;
+
+   DestroyerFn destroyer;
 };
+
 // sizeof(ExternalRefCountData) = 12 (32-bit) / 16 (64-bit)
 
 template <class T, typename Deleter>
@@ -225,6 +226,7 @@ struct CustomDeleter<T, NormalDeleter> {
 // the static function that deletes the object. The pointer and the
 // custom deleter are kept in the "extra" member so we can construct
 // and destruct it independently of the full structure.
+
 template <class T, typename Deleter>
 struct ExternalRefCountWithCustomDeleter : public ExternalRefCountData {
 
@@ -383,6 +385,7 @@ template <class T> class QSharedPointer
          ref();
       }
    }
+
    inline QSharedPointer<T> &operator=(const QSharedPointer<T> &other) {
       QSharedPointer copy(other);
       swap(copy);
@@ -396,7 +399,8 @@ template <class T> class QSharedPointer
 
    template <class X>
    inline QSharedPointer(const QSharedPointer<X> &other)
-      : value(other.value), d(other.d) {
+      : value(other.value), d(other.d)
+   {
       if (d) {
          ref();
       }
@@ -474,8 +478,7 @@ template <class T> class QSharedPointer
 
  private:
    template <class X>
-   inline void enableSharedFromThis(const QEnableSharedFromThis<X> *ptr)
-   {
+   inline void enableSharedFromThis(const QEnableSharedFromThis<X> *ptr) {
        ptr->initializeFromSharedPointer(*this);
    }
 
@@ -484,6 +487,7 @@ template <class T> class QSharedPointer
    inline void deref() {
       deref(d);
    }
+
    static inline void deref(Data *d) {
       if (!d) {
          return;

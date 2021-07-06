@@ -56,19 +56,22 @@
 #   include <sys/param.h>
 #   include <sys/sysctl.h>
 
-# if !defined(Q_OS_NETBSD)
+# if ! defined(Q_OS_NETBSD)
 #   include <sys/user.h>
 # endif
 
 #endif
 
-static QByteArray localHostName() // from QHostInfo::localHostName(), modified to return a QByteArray
+static QByteArray localHostName()
 {
    QByteArray hostName(512, Qt::NoData);
+
    if (gethostname(hostName.data(), hostName.size()) == -1) {
       return QByteArray();
    }
+
    hostName.truncate(strlen(hostName.data()));
+
    return hostName;
 }
 

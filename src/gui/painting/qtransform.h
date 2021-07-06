@@ -150,8 +150,8 @@ class Q_GUI_EXPORT QTransform
  private:
    inline QTransform(qreal h11, qreal h12, qreal h13, qreal h21, qreal h22, qreal h23,
                   qreal h31, qreal h32, qreal h33, bool)
-      : affine(h11, h12, h21, h22, h31, h32, true), m_13(h13), m_23(h23), m_33(h33)
-      , m_type(TxNone), m_dirty(TxProject), d(nullptr)
+      : affine(h11, h12, h21, h22, h31, h32, true), m_13(h13), m_23(h23), m_33(h33),
+        m_type(TxNone), m_dirty(TxProject), d(nullptr)
    { }
 
    inline QTransform(bool)
@@ -160,6 +160,7 @@ class Q_GUI_EXPORT QTransform
 
    inline TransformationType inline_type() const;
    QMatrix affine;
+
    qreal   m_13;
    qreal   m_23;
    qreal   m_33;

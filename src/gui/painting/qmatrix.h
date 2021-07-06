@@ -42,8 +42,7 @@ class Q_GUI_EXPORT QMatrix // 2D transform matrix
    }
 
    QMatrix();
-   QMatrix(qreal m11, qreal m12, qreal m21, qreal m22,
-      qreal dx, qreal dy);
+   QMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy);
    QMatrix(const QMatrix &matrix);
 
    void setMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy);

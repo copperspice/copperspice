@@ -268,7 +268,7 @@ void qErrnoWarning(const char *msg, ...)
 
 void qErrnoWarning(int code, const char *msg, ...)
 {
-   QByteArray buffer(1024, '\0');;
+   QByteArray buffer(1024, '\0');
 
    va_list ap;
    va_start(ap, msg);

@@ -502,7 +502,7 @@ class QMultiHash
    }
 
    inline const_iterator cbegin() const {
-      return m_data.begin();;
+      return m_data.begin();
    }
 
    inline const_iterator constBegin() const {

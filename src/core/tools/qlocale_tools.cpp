@@ -802,7 +802,7 @@ static Bigint *pow5mult(Bigint *b, int k)
       b = multadd(b, p05[i - 1], 0);
    }
 
-   if (!(k >>= 2)) {
+   if (! (k >>= 2)) {
       return b;
    }
 
@@ -812,21 +812,25 @@ static Bigint *pow5mult(Bigint *b, int k)
       p5 = p5s = i2b(625);
       p5->next = nullptr;
    }
-   for (;;) {
+
+   while (true) {
       if (k & 1) {
          b1 = mult(b, p5);
          Bfree(b);
          b = b1;
       }
+
       if (!(k >>= 1)) {
          break;
       }
+
       if (!(p51 = p5->next)) {
          p51 = p5->next = mult(p5, p5);
          p51->next = nullptr;
       }
       p5 = p51;
    }
+
    return b;
 }
 
@@ -910,7 +914,8 @@ static int cmp(Bigint *a, Bigint *b)
    xa = xa0 + j;
    xb0 = b->x;
    xb = xb0 + j;
-   for (;;) {
+
+   while (true) {
       if (*--xa != *--xb) {
          return *xa < *xb ? -1 : 1;
       }
@@ -918,6 +923,7 @@ static int cmp(Bigint *a, Bigint *b)
          break;
       }
    }
+
    return 0;
 }
 
@@ -1593,7 +1599,7 @@ dig_done:
 
    bd0 = s2b(s0, nd0, nd, y);
 
-   for (;;) {
+   while (true) {
       bd = Balloc(bd0->k);
       Bcopy(bd, bd0);
       bb = d2b(rv, &bbe, &bbbits);        /* rv = bb * 2^bbe */
@@ -1606,26 +1612,32 @@ dig_done:
          bb2 = bb5 = -e;
          bd2 = bd5 = 0;
       }
+
       if (bbe >= 0) {
          bb2 += bbe;
       } else {
          bd2 -= bbe;
       }
+
       bs2 = bb2;
+
 #ifdef Sudden_Underflow
 #ifdef IBM
       j = 1 + 4 * P - 3 - bbbits + ((bbe + bbbits - 1) & 3);
 #else
       j = P + 1 - bbbits;
 #endif
+
 #else
       i = bbe + bbbits - 1;        /* logb(rv) */
-      if (i < Emin) {      /* denormal */
+
+      if (i < Emin) {              /* denormal */
          j = bbe + (P - Emin);
       } else {
          j = P + 1 - bbbits;
       }
 #endif
+
       bb2 += j;
       bd2 += j;
       i = bb2 < bd2 ? bb2 : bd2;
@@ -2009,14 +2021,14 @@ static int quorem(Bigint *b, Bigint *S)
  *           calculation.
  */
 
-#if defined(Q_OS_WIN) && defined (Q_CC_GNU) && !defined(_clear87)
+#if defined(Q_OS_WIN) && defined (Q_CC_GNU) && ! defined(_clear87)
 extern "C" {
    __attribute__ ((dllimport)) unsigned int __cdecl __MINGW_NOTHROW _control87 (unsigned int unNew, unsigned int unMask);
    __attribute__ ((dllimport)) unsigned int __cdecl __MINGW_NOTHROW _clearfp (void); /* Clear the FPU status word */
 }
-#  define _clear87 _clearfp
-#endif
 
+#define _clear87 _clearfp
+#endif
 
 
 // sometimes returns a pointer to a string literal cast to a char*. Do NOT try to modify the return value
@@ -2054,6 +2066,7 @@ Q_CORE_EXPORT char *qdtoa( double d, int mode, int ndigits, int *decpt, int *sig
    _control87(oldbits, 0xFFFFF);
 
 #else
+
 #  ifndef _MCW_EM // Potentially missing on MinGW
 #    define _MCW_EM         0x0008001f
 #  endif
@@ -2063,9 +2076,11 @@ Q_CORE_EXPORT char *qdtoa( double d, int mode, int ndigits, int *decpt, int *sig
 #  ifndef _MCW_DN
 #    define _MCW_DN         0x03000000
 #  endif
+
    _control87(oldbits, _MCW_EM | _MCW_DN | _MCW_RC);
 
-#endif //_M_X64
+#endif
+
 #endif //Q_OS_WIN
 
 #if defined(Q_OS_LINUX) && ! defined(__UCLIBC__)
@@ -2351,50 +2366,61 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
       }
 
 #ifndef No_leftright
+
       if (leftright) {
-         /* Use Steele & White method of only
-          * generating digits needed.
-          */
+         // Use Steele & White method of only generating digits needed.
          eps = 0.5 / tens[ilim - 1] - eps;
-         for (i = 0;;) {
+         i   = 0;
+
+         while (true) {
             L = Long(d);
             d -= L;
             *s++ = '0' + int(L);
+
             if (d < eps) {
                goto ret1;
             }
+
             if (1. - d < eps) {
                goto bump_up;
             }
+
             if (++i >= ilim) {
                break;
             }
+
             eps *= 10.;
             d *= 10.;
          }
+
       } else {
+
 #endif
          /* Generate ilim digits, then fix them up. */
          eps *= tens[ilim - 1];
 
-         for (i = 1;; i++, d *= 10.) {
+         for (i = 1;  ; i++, d *= 10.0) {
             L = Long(d);
             d -= L;
             *s++ = '0' + int(L);
+
             if (i == ilim) {
                if (d > 0.5 + eps) {
                   goto bump_up;
+
                } else if (d < 0.5 - eps) {
                   while (*--s == '0') {}
                   s++;
                   goto ret1;
                }
+
                break;
             }
          }
 #ifndef No_leftright
       }
 #endif
+
    fast_failed:
       s = s0;
       d = d2;
@@ -2407,6 +2433,7 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
    if (be >= 0 && k <= Int_max) {
       /* Yes. */
       ds = tens[k];
+
       if (ndigits < 0 && ilim <= 0) {
          S = mhi = nullptr;
          if (ilim < 0 || d <= 5 * ds) {
@@ -2414,9 +2441,11 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
          }
          goto one_digit;
       }
-      for (i = 1;; i++) {
+
+      for (i = 1; ; i++) {
          L = Long(d / ds);
          d -= L * ds;
+
 #ifdef Check_FLT_ROUNDS
          /* If FLT_ROUNDS == 2, L will usually be high by 1 */
          if (d < 0) {
@@ -2424,7 +2453,9 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
             d += ds;
          }
 #endif
+
          *s++ = '0' + int(L);
+
          if (i == ilim) {
             d += d;
             if (d > ds || (d == ds && L & 1)) {
@@ -2588,63 +2619,77 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
        */
 
       mlo = mhi;
+
       if (spec_case) {
          mhi = Balloc(mhi->k);
          Bcopy(mhi, mlo);
          mhi = lshift(mhi, Log2P);
       }
 
-      for (i = 1;; i++) {
+      for (i = 1; ; i++) {
          dig = quorem(b, S) + '0';
-         /* Do we yet have the shortest decimal string
-          * that will round to d?
-          */
+
+         // Do we yet have the shortest decimal string that will round to d?
          j = cmp(b, mlo);
          delta = diff(S, mhi);
          j1 = delta->sign ? 1 : cmp(b, delta);
          Bfree(delta);
+
 #ifndef ROUND_BIASED
          if (j1 == 0 && !mode && !(getWord1(d) & 1)) {
             if (dig == '9') {
                goto round_9_up;
             }
+
             if (j > 0) {
                dig++;
             }
+
             *s++ = dig;
             goto ret;
          }
 #endif
-         if (j < 0 || (j == 0 && !mode
+
+
 #ifndef ROUND_BIASED
-                       && !(getWord1(d) & 1)
+         if (j < 0 || (j == 0 && ! mode && ! (getWord1(d) & 1) )) {
+#else
+         if (j < 0 || (j == 0 && ! mode)) {
 #endif
-                      )) {
+
             if (j1 > 0) {
                b = lshift(b, 1);
                j1 = cmp(b, S);
-               if ((j1 > 0 || (j1 == 0 && dig & 1))
-                     && dig++ == '9') {
+
+               if ((j1 > 0 || (j1 == 0 && dig & 1)) && dig++ == '9') {
                   goto round_9_up;
                }
             }
+
             *s++ = dig;
             goto ret;
          }
+
          if (j1 > 0) {
-            if (dig == '9') { /* possible if i == 1 */
-            round_9_up:
+            if (dig == '9') {
+               // possible if i == 1
+               round_9_up:
                *s++ = '9';
                goto roundoff;
             }
+
             *s++ = dig + 1;
             goto ret;
          }
+
          *s++ = dig;
+
          if (i == ilim) {
             break;
          }
+
          b = multadd(b, 10, 0);
+
          if (mlo == mhi) {
             mlo = mhi = multadd(mhi, 10, 0);
          } else {
@@ -2652,9 +2697,11 @@ char *_qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve,
             mhi = multadd(mhi, 10, 0);
          }
       }
+
    } else
-      for (i = 1;; i++) {
+      for (i = 1; ; i++) {
          *s++ = dig = quorem(b, S) + '0';
+
          if (i >= ilim) {
             break;
          }

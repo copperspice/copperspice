@@ -884,7 +884,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                      cursorPosition += missingZeroes;
                      ++(const_cast<QDateTimeParser *>(this)->sectionNodes[sectionIndex].zeroesAdded);
                   } else {
-                     state = Intermediate;;
+                     state = Intermediate;
                   }
                } else {
                   state = Acceptable;

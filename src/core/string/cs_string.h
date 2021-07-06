@@ -937,7 +937,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::operator+=(const T &str)
    // str is a const char * -or- an array of chars
 
    append(str);
-   return *this;;
+   return *this;
 }
 
 template <typename E, typename A>

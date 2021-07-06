@@ -212,7 +212,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
 
    IconvState *state = *pstate;
    size_t inBytesLeft = len;
-   // best case assumption, each byte is converted into one UTF-16 character, plus 2 bytes for the BOM
+
 #ifdef GNU_LIBICONV
    // GNU doesn't disagree with POSIX :/
    const char *inBytes = chars;
