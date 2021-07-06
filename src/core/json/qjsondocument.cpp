@@ -153,7 +153,7 @@ void QJsonDocument::setArray(const QJsonArray &array)
 
 bool QJsonDocument::operator==(const QJsonDocument &other) const
 {
-   if (m_data == other.m_data) {
+   if (*m_data == *other.m_data) {
       return true;
    }
 
