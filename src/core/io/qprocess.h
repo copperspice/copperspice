@@ -92,12 +92,12 @@ class Q_CORE_EXPORT QProcess : public QIODevice
 
    virtual ~QProcess();
 
-   void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);
+   void start(const QString &command, const QStringList &arguments, OpenMode mode = ReadWrite);
    void start(const QString &command, OpenMode mode = ReadWrite);
    void start(OpenMode mode = ReadWrite);
    bool open(OpenMode mode = ReadWrite) override;
    QString program() const;
-   void setProgram(const QString &program);
+   void setProgram(const QString &command);
    QStringList arguments() const;
    void setArguments(const QStringList & arguments);
 
@@ -160,13 +160,13 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    void close() override;
    bool atEnd() const override;
 
-   static int execute(const QString &program, const QStringList &arguments);
-   static int execute(const QString &program);
+   static int execute(const QString &command, const QStringList &arguments);
+   static int execute(const QString &command);
 
-   static bool startDetached(const QString &program, const QStringList &arguments,
+   static bool startDetached(const QString &command, const QStringList &arguments,
                   const QString &workingDirectory = QString(), qint64 *pid = nullptr);
 
-   static bool startDetached(const QString &program);
+   static bool startDetached(const QString &command);
 
    static QStringList systemEnvironment();
    static QString nullDevice();
@@ -189,8 +189,8 @@ class Q_CORE_EXPORT QProcess : public QIODevice
    CORE_CS_SIGNAL_1(Public, void errorOccurred(QProcess::ProcessError error))
    CORE_CS_SIGNAL_2(errorOccurred, error)
 
-   CORE_CS_SIGNAL_1(Public, void stateChanged(QProcess::ProcessState state))
-   CORE_CS_SIGNAL_2(stateChanged, state)
+   CORE_CS_SIGNAL_1(Public, void stateChanged(QProcess::ProcessState newState))
+   CORE_CS_SIGNAL_2(stateChanged, newState)
 
    CORE_CS_SIGNAL_1(Public, void readyReadStandardOutput())
    CORE_CS_SIGNAL_2(readyReadStandardOutput)

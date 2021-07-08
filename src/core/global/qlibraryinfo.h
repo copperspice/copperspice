@@ -44,7 +44,7 @@ class Q_CORE_EXPORT QLibraryInfo
       SettingsPath,
    };
 
-   static QString location(LibraryLocation);
+   static QString location(LibraryLocation location);
    static QStringList platformPluginArguments(const QString &platformName);
 
  private:

@@ -86,24 +86,24 @@ class QVarLengthArray
    }
 
    // methods
-   void append(const T *buf, int size);
+   void append(const T *buffer, int length);
 
-   void append(const T &t) {
+   void append(const T &value) {
       if (s == a) {
          realloc(s, s << 1);
       }
 
-      const int idx = s++;
+      const int index = s++;
 
       if constexpr (std::is_trivially_copy_assignable_v<T>) {
-         ptr[idx] = t;
+         ptr[index] = value;
       } else {
-         new (ptr + idx) T(t);
+         new (ptr + index) T(value);
       }
    }
 
-   const T &at(int idx) const {
-      return operator[](idx);
+   const T &at(int index) const {
+      return operator[](index);
    }
 
    T &back() {
@@ -186,16 +186,16 @@ class QVarLengthArray
       return *(end() - 1);
    }
 
-   int indexOf(const T &t, int from = 0) const;
-   int lastIndexOf(const T &t, int from = -1) const;
+   int indexOf(const T &value, int from = 0) const;
+   int lastIndexOf(const T &value, int from = -1) const;
 
-   void insert(int i, const T &t);
-   void insert(int i, int n, const T &t);
+   void insert(int index, const T &value);
+   void insert(int index, int count, const T &value);
 
-   iterator insert(const_iterator before, int n, const T &x);
+   iterator insert(const_iterator before, int count, const T &value);
 
-   iterator insert(const_iterator before, const T &x) {
-      return insert(before, 1, x);
+   iterator insert(const_iterator before, const T &value) {
+      return insert(before, 1, value);
    }
 
    bool isEmpty() const {
@@ -206,19 +206,20 @@ class QVarLengthArray
       return s;
    }
 
-   void prepend(const T &t);
+   void prepend(const T &value);
 
-   void push_back(const T &t) {
-      append(t);
+   void push_back(const T &value) {
+      append(value);
    }
 
    void pop_back() {
       removeLast();
    }
 
-   void replace(int i, const T &t);
-   void remove(int i);
-   void remove(int i, int n);
+   void replace(int index, const T &value);
+   void remove(int index);
+   void remove(int index, int count);
+
    void removeLast() {
       Q_ASSERT(s > 0);
       realloc(s - 1, a);
@@ -232,8 +233,8 @@ class QVarLengthArray
       return s;
    }
 
-   T value(int i) const;
-   T value(int i, const T &defaultValue) const;
+   T value(int index) const;
+   T value(int index, const T &defaultValue) const;
 
    // iterators
    iterator begin() {
@@ -310,23 +311,23 @@ class QVarLengthArray
    }
 
    // operators
-   T &operator[](int idx) {
-      Q_ASSERT(idx >= 0 && idx < s);
-      return ptr[idx];
+   T &operator[](int index) {
+      Q_ASSERT(index >= 0 && index < s);
+      return ptr[index];
    }
 
-   const T &operator[](int idx) const {
-      Q_ASSERT(idx >= 0 && idx < s);
-      return ptr[idx];
+   const T &operator[](int index) const {
+      Q_ASSERT(index >= 0 && index < s);
+      return ptr[index];
    }
 
-   QVarLengthArray<T, Prealloc> &operator<<(const T &t) {
-      append(t);
+   QVarLengthArray<T, Prealloc> &operator<<(const T &value) {
+      append(value);
       return *this;
    }
 
-   QVarLengthArray<T, Prealloc> &operator+=(const T &t) {
-      append(t);
+   QVarLengthArray<T, Prealloc> &operator+=(const T &value) {
+      append(value);
       return *this;
    }
 
@@ -346,8 +347,8 @@ class QVarLengthArray
 };
 
 template <class T, int Prealloc>
-QVarLengthArray<T, Prealloc>::QVarLengthArray(int asize)
-   : s(asize)
+QVarLengthArray<T, Prealloc>::QVarLengthArray(int size)
+   : s(size)
 {
    if (s > Prealloc) {
       ptr = reinterpret_cast<T *>(malloc(s * sizeof(T)));
@@ -369,7 +370,7 @@ QVarLengthArray<T, Prealloc>::QVarLengthArray(int asize)
 }
 
 template <class T, int Prealloc>
-int QVarLengthArray<T, Prealloc>::indexOf(const T &t, int from) const
+int QVarLengthArray<T, Prealloc>::indexOf(const T &value, int from) const
 {
    if (from < 0) {
       from = qMax(from + s, 0);
@@ -380,7 +381,7 @@ int QVarLengthArray<T, Prealloc>::indexOf(const T &t, int from) const
       T *e = ptr + s;
 
       while (++n != e) {
-         if (*n == t) {
+         if (*n == value) {
             return n - ptr;
          }
       }
@@ -390,7 +391,7 @@ int QVarLengthArray<T, Prealloc>::indexOf(const T &t, int from) const
 }
 
 template <class T, int Prealloc>
-int QVarLengthArray<T, Prealloc>::lastIndexOf(const T &t, int from) const
+int QVarLengthArray<T, Prealloc>::lastIndexOf(const T &value, int from) const
 {
     if (from < 0) {
         from += s;
@@ -404,7 +405,7 @@ int QVarLengthArray<T, Prealloc>::lastIndexOf(const T &t, int from) const
         T *n = ptr + from + 1;
 
         while (n != b) {
-            if (*--n == t) {
+            if (*--n == value) {
                 return n - b;
             }
         }
@@ -414,62 +415,64 @@ int QVarLengthArray<T, Prealloc>::lastIndexOf(const T &t, int from) const
 }
 
 template <class T, int Prealloc>
-void QVarLengthArray<T, Prealloc>::append(const T *abuf, int increment)
+void QVarLengthArray<T, Prealloc>::append(const T *buffer, int length)
 {
-   Q_ASSERT(abuf);
-   if (increment <= 0) {
+   Q_ASSERT(buffer);
+
+   if (length <= 0) {
       return;
    }
 
-   const int asize = s + increment;
+   const int asize = s + length;
 
    if (asize >= a) {
       realloc(s, qMax(s * 2, asize));
    }
 
    if constexpr (std::is_trivially_copy_constructible_v<T>) {
-      memcpy(&ptr[s], abuf, increment * sizeof(T));
+      memcpy(&ptr[s], buffer, length * sizeof(T));
       s = asize;
 
    } else {
       // call constructor for new objects (which can throw)
 
       while (s < asize) {
-         new (ptr + (s++)) T(*abuf++);
+         new (ptr + (s++)) T(*buffer++);
       }
    }
 }
 
 template <class T, int Prealloc>
-void QVarLengthArray<T, Prealloc>::resize(int asize)
+void QVarLengthArray<T, Prealloc>::resize(int size)
 {
-   realloc(asize, qMax(asize, a));
+   realloc(size, qMax(size, a));
 }
 
 template <class T, int Prealloc>
-void QVarLengthArray<T, Prealloc>::reserve(int asize)
+void QVarLengthArray<T, Prealloc>::reserve(int size)
 {
-   if (asize > a) {
-      realloc(s, asize);
+   if (size > a) {
+      realloc(s, size);
    }
 }
 
 template <class T, int Prealloc>
-void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
+void QVarLengthArray<T, Prealloc>::realloc(int size, int allocSize)
 {
-   Q_ASSERT(aalloc >= asize);
+   Q_ASSERT(allocSize >= size);
 
    T *oldPtr = ptr;
    int osize = s;
 
-   const int copySize = qMin(asize, osize);
-   if (aalloc != a) {
-      ptr = reinterpret_cast<T *>(malloc(aalloc * sizeof(T)));
+   const int copySize = qMin(size, osize);
+
+   if (allocSize != a) {
+      ptr = reinterpret_cast<T *>(malloc(allocSize * sizeof(T)));
       Q_CHECK_PTR(ptr);
 
       if (ptr) {
          s = 0;
-         a = aalloc;
+         a = allocSize;
 
          if constexpr (std::is_trivially_copy_constructible_v<T>) {
             memcpy(ptr, oldPtr, copySize * sizeof(T));
@@ -504,11 +507,12 @@ void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
          return;
       }
    }
+
    s = copySize;
 
    if constexpr (! std::is_trivially_destructible_v<T>) {
       // destroy remaining old objects
-      while (osize > asize) {
+      while (osize > size) {
          (oldPtr + (--osize))->~T();
       }
    }
@@ -518,11 +522,11 @@ void QVarLengthArray<T, Prealloc>::realloc(int asize, int aalloc)
    }
 
    if constexpr (std::is_trivially_constructible_v<T>) {
-      s = asize;
+      s = size;
 
    } else {
       // call default constructor for new objects (which can throw)
-      while (s < asize) {
+      while (s < size) {
          new (ptr + (s++)) T;
       }
    }
@@ -535,79 +539,80 @@ void QVarLengthArray<T, Prealloc>::squeeze()
 }
 
 template <class T, int Prealloc>
-T QVarLengthArray<T, Prealloc>::value(int i) const
+T QVarLengthArray<T, Prealloc>::value(int index) const
 {
-   if (i < 0 || i >= size()) {
+   if (index < 0 || index >= size()) {
       return T();
    }
 
-   return at(i);
+   return at(index);
 }
 
 template <class T, int Prealloc>
-T QVarLengthArray<T, Prealloc>::value(int i, const T &defaultValue) const
+T QVarLengthArray<T, Prealloc>::value(int index, const T &defaultValue) const
 {
-   return (i < 0 || i >= size()) ? defaultValue : at(i);
+   return (index < 0 || index >= size()) ? defaultValue : at(index);
 }
 
 template <class T, int Prealloc>
-inline void QVarLengthArray<T, Prealloc>::insert(int i, const T &t)
+inline void QVarLengthArray<T, Prealloc>::insert(int index, const T &value)
 {
-   Q_ASSERT_X(i >= 0 && i <= s, "QVarLengthArray::insert", "index out of range");
-   insert(begin() + i, 1, t);
+   Q_ASSERT_X(index >= 0 && index <= s, "QVarLengthArray::insert", "index out of range");
+   insert(begin() + index, 1, value);
 }
 
 template <class T, int Prealloc>
-inline void QVarLengthArray<T, Prealloc>::insert(int i, int n, const T &t)
+inline void QVarLengthArray<T, Prealloc>::insert(int index, int count, const T &value)
 {
-   Q_ASSERT_X(i >= 0 && i <= s, "QVarLengthArray::insert", "index out of range");
-   insert(begin() + i, n, t);
+   Q_ASSERT_X(index >= 0 && index <= s, "QVarLengthArray::insert", "index out of range");
+   insert(begin() + index, count, value);
 }
 
 template <class T, int Prealloc>
-inline void QVarLengthArray<T, Prealloc>::remove(int i, int n)
+inline void QVarLengthArray<T, Prealloc>::remove(int index, int count)
 {
-   Q_ASSERT_X(i >= 0 && n >= 0 && i + n <= s, "QVarLengthArray::remove", "index out of range");
-   erase(begin() + i, begin() + i + n);
+   Q_ASSERT_X(index >= 0 && count >= 0 && index + count <= s, "QVarLengthArray::remove", "index out of range");
+   erase(begin() + index, begin() + index + count);
 }
 
 template <class T, int Prealloc>
-inline void QVarLengthArray<T, Prealloc>::remove(int i)
+inline void QVarLengthArray<T, Prealloc>::remove(int index)
 {
-   Q_ASSERT_X(i >= 0 && i < s, "QVarLengthArray::remove", "index out of range");
-   erase(begin() + i, begin() + i + 1);
+   Q_ASSERT_X(index >= 0 && index < s, "QVarLengthArray::remove", "index out of range");
+   erase(begin() + index, begin() + index + 1);
 }
 
 template <class T, int Prealloc>
-inline void QVarLengthArray<T, Prealloc>::prepend(const T &t)
+inline void QVarLengthArray<T, Prealloc>::prepend(const T &value)
 {
-   insert(begin(), 1, t);
+   insert(begin(), 1, value);
 }
 
 template <class T, int Prealloc>
-inline void QVarLengthArray<T, Prealloc>::replace(int i, const T &t)
+inline void QVarLengthArray<T, Prealloc>::replace(int index, const T &value)
 {
-   Q_ASSERT_X(i >= 0 && i < s, "QVarLengthArray::replace", "index out of range");
+   Q_ASSERT_X(index >= 0 && index < s, "QVarLengthArray::replace", "index out of range");
 
-   const T copy(t);
-   data()[i] = copy;
+   const T copy(value);
+   data()[index] = copy;
 }
 
 template <class T, int Prealloc>
-typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::insert(const_iterator before, size_type n, const T &t)
+typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::insert(const_iterator before,
+            size_type count, const T &value)
 {
    int offset = int(before - ptr);
 
-   if (n != 0) {
-      resize(s + n);
-      const T copy(t);
+   if (count != 0) {
+      resize(s + count);
+      const T copy(value);
 
       if constexpr (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T> &&
                   std::is_trivially_copyable_v<T> ) {
 
          T *b = ptr + offset;
-         T *i = b + n;
-         memmove(i, b, (s - offset - n) * sizeof(T));
+         T *i = b + count;
+         memmove(i, b, (s - offset - count) * sizeof(T));
 
          while (i != b) {
             new (--i) T(copy);
@@ -617,13 +622,13 @@ typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::in
 
          T *b = ptr + offset;
          T *j = ptr + s;
-         T *i = j - n;
+         T *i = j - count;
 
          while (i != b) {
             *--j = *--i;
          }
 
-         i = b + n;
+         i = b + count;
 
          while (i != b) {
             *--i = copy;
@@ -635,10 +640,11 @@ typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::in
 }
 
 template <class T, int Prealloc>
-typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::erase(const_iterator abegin, const_iterator aend)
+typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::erase(const_iterator begin,
+            const_iterator end)
 {
-   int f = int(abegin - ptr);
-   int l = int(aend - ptr);
+   int f = int(begin - ptr);
+   int l = int(end - ptr);
    int n = l - f;
 
    if constexpr (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T> &&

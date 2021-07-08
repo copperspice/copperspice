@@ -1618,7 +1618,7 @@ class Q_CORE_EXPORT Qt
    // following enum and 3 methods declarations moved from gui/text/qtextdocument.h
    enum HitTestAccuracy { ExactHit, FuzzyHit };
 
-   static bool mightBeRichText(const QString &);
+   static bool mightBeRichText(const QString &text);
    static QString convertFromPlainText(const QString &plain, WhiteSpaceMode mode = WhiteSpacePre);
 
 #ifndef QT_NO_TEXTCODEC

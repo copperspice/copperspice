@@ -55,14 +55,14 @@ class Q_CORE_EXPORT QSize
    QSize scaled(int w, int h, Qt::AspectRatioMode mode) const;
    QSize scaled(const QSize &s, Qt::AspectRatioMode mode) const;
 
-   inline QSize expandedTo(const QSize &) const;
-   inline QSize boundedTo(const QSize &) const;
+   inline QSize expandedTo(const QSize &other) const;
+   inline QSize boundedTo(const QSize &other) const;
 
    inline int &rwidth();
    inline int &rheight();
 
-   inline QSize &operator+=(const QSize &);
-   inline QSize &operator-=(const QSize &);
+   inline QSize &operator+=(const QSize &size);
+   inline QSize &operator-=(const QSize &size);
    inline QSize &operator*=(qreal c);
    inline QSize &operator/=(qreal c);
 
@@ -158,17 +158,19 @@ inline int &QSize::rheight()
    return ht;
 }
 
-inline QSize &QSize::operator+=(const QSize &s)
+inline QSize &QSize::operator+=(const QSize &size)
 {
-   wd += s.wd;
-   ht += s.ht;
+   wd += size.wd;
+   ht += size.ht;
+
    return *this;
 }
 
-inline QSize &QSize::operator-=(const QSize &s)
+inline QSize &QSize::operator-=(const QSize &size)
 {
-   wd -= s.wd;
-   ht -= s.ht;
+   wd -= size.wd;
+   ht -= size.ht;
+
    return *this;
 }
 
@@ -223,14 +225,14 @@ inline const QSize operator/(const QSize &s, qreal c)
    return QSize(qRound(s.wd / c), qRound(s.ht / c));
 }
 
-inline QSize QSize::expandedTo(const QSize &otherSize) const
+inline QSize QSize::expandedTo(const QSize &other) const
 {
-   return QSize(qMax(wd, otherSize.wd), qMax(ht, otherSize.ht));
+   return QSize(qMax(wd, other.wd), qMax(ht, other.ht));
 }
 
-inline QSize QSize::boundedTo(const QSize &otherSize) const
+inline QSize QSize::boundedTo(const QSize &other) const
 {
-   return QSize(qMin(wd, otherSize.wd), qMin(ht, otherSize.ht));
+   return QSize(qMin(wd, other.wd), qMin(ht, other.ht));
 }
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QSize &);
@@ -239,7 +241,7 @@ class Q_CORE_EXPORT QSizeF
 {
  public:
    QSizeF();
-   QSizeF(const QSize &sz);
+   QSizeF(const QSize &size);
    QSizeF(qreal w, qreal h);
 
    inline bool isNull() const;
@@ -258,16 +260,16 @@ class Q_CORE_EXPORT QSizeF
    inline void scale(const QSizeF &s, Qt::AspectRatioMode mode);
 
    QSizeF scaled(qreal w, qreal h, Qt::AspectRatioMode mode) const;
-   QSizeF scaled(const QSizeF &s, Qt::AspectRatioMode mode) const;
+   QSizeF scaled(const QSizeF &sizeF, Qt::AspectRatioMode mode) const;
 
-   inline QSizeF expandedTo(const QSizeF &) const;
-   inline QSizeF boundedTo(const QSizeF &) const;
+   inline QSizeF expandedTo(const QSizeF &other) const;
+   inline QSizeF boundedTo(const QSizeF &other) const;
 
    inline qreal &rwidth();
    inline qreal &rheight();
 
-   inline QSizeF &operator+=(const QSizeF &);
-   inline QSizeF &operator-=(const QSizeF &);
+   inline QSizeF &operator+=(const QSizeF &sizeF);
+   inline QSizeF &operator-=(const QSizeF &sizeF);
    inline QSizeF &operator*=(qreal c);
    inline QSizeF &operator/=(qreal c);
 
@@ -294,8 +296,8 @@ inline QSizeF::QSizeF()
    wd = ht = -1.;
 }
 
-inline QSizeF::QSizeF(const QSize &sz)
-   : wd(sz.width()), ht(sz.height())
+inline QSizeF::QSizeF(const QSize &size)
+   : wd(size.width()), ht(size.height())
 {
 }
 
@@ -371,17 +373,17 @@ inline qreal &QSizeF::rheight()
    return ht;
 }
 
-inline QSizeF &QSizeF::operator+=(const QSizeF &s)
+inline QSizeF &QSizeF::operator+=(const QSizeF &sizeF)
 {
-   wd += s.wd;
-   ht += s.ht;
+   wd += sizeF.wd;
+   ht += sizeF.ht;
    return *this;
 }
 
-inline QSizeF &QSizeF::operator-=(const QSizeF &s)
+inline QSizeF &QSizeF::operator-=(const QSizeF &sizeF)
 {
-   wd -= s.wd;
-   ht -= s.ht;
+   wd -= sizeF.wd;
+   ht -= sizeF.ht;
    return *this;
 }
 
@@ -412,14 +414,14 @@ inline const QSizeF operator-(const QSizeF &s1, const QSizeF &s2)
    return QSizeF(s1.wd - s2.wd, s1.ht - s2.ht);
 }
 
-inline const QSizeF operator*(const QSizeF &s, qreal c)
+inline const QSizeF operator*(const QSizeF &sizeF, qreal c)
 {
-   return QSizeF(s.wd * c, s.ht * c);
+   return QSizeF(sizeF.wd * c, sizeF.ht * c);
 }
 
-inline const QSizeF operator*(qreal c, const QSizeF &s)
+inline const QSizeF operator*(qreal c, const QSizeF &sizeF)
 {
-   return QSizeF(s.wd * c, s.ht * c);
+   return QSizeF(sizeF.wd * c, sizeF.ht * c);
 }
 
 inline QSizeF &QSizeF::operator/=(qreal c)
@@ -436,14 +438,14 @@ inline const QSizeF operator/(const QSizeF &s, qreal c)
    return QSizeF(s.wd / c, s.ht / c);
 }
 
-inline QSizeF QSizeF::expandedTo(const QSizeF &otherSize) const
+inline QSizeF QSizeF::expandedTo(const QSizeF &other) const
 {
-   return QSizeF(qMax(wd, otherSize.wd), qMax(ht, otherSize.ht));
+   return QSizeF(qMax(wd, other.wd), qMax(ht, other.ht));
 }
 
-inline QSizeF QSizeF::boundedTo(const QSizeF &otherSize) const
+inline QSizeF QSizeF::boundedTo(const QSizeF &other) const
 {
-   return QSizeF(qMin(wd, otherSize.wd), qMin(ht, otherSize.ht));
+   return QSizeF(qMin(wd, other.wd), qMin(ht, other.ht));
 }
 
 inline QSize QSizeF::toSize() const

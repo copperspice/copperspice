@@ -95,12 +95,12 @@ class Q_CORE_EXPORT QAbstractFileEngine
 
    virtual ~QAbstractFileEngine();
 
-   virtual bool open(QIODevice::OpenMode openMode);
+   virtual bool open(QIODevice::OpenMode mode);
    virtual bool close();
    virtual bool flush();
    virtual qint64 size() const;
    virtual qint64 pos() const;
-   virtual bool seek(qint64 pos);
+   virtual bool seek(qint64 offset);
    virtual bool isSequential() const;
    virtual bool remove();
    virtual bool copy(const QString &newName);
@@ -117,14 +117,14 @@ class Q_CORE_EXPORT QAbstractFileEngine
    virtual FileFlags fileFlags(FileFlags type = FileInfoAll) const;
    virtual bool setPermissions(uint perms);
    virtual QString fileName(FileName file = DefaultName) const;
-   virtual uint ownerId(FileOwner) const;
-   virtual QString owner(FileOwner) const;
+   virtual uint ownerId(FileOwner owner) const;
+   virtual QString owner(FileOwner owner) const;
    virtual QDateTime fileTime(FileTime time) const;
    virtual void setFileName(const QString &file);
    virtual int handle() const;
    bool atEnd() const;
    uchar *map(qint64 offset, qint64 size, QFile::MemoryMapFlags flags);
-   bool unmap(uchar *ptr);
+   bool unmap(uchar *address);
 
    typedef QAbstractFileEngineIterator Iterator;
    virtual Iterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames);
@@ -177,7 +177,7 @@ class Q_CORE_EXPORT QAbstractFileEngine
    static QAbstractFileEngine *create(const QString &fileName);
 
  protected:
-   void setError(QFile::FileError error, const QString &str);
+   void setError(QFile::FileError error, const QString &errorString);
 
    QAbstractFileEngine();
    QAbstractFileEngine(QAbstractFileEnginePrivate &);

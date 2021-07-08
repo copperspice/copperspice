@@ -37,10 +37,12 @@ class Q_CORE_EXPORT QXmlStreamAttribute
 {
  public:
    QXmlStreamAttribute();
+
    QXmlStreamAttribute(const QString &qualifiedName, const QString &value);
    QXmlStreamAttribute(const QString &namespaceUri, const QString &name, const QString &value);
-   QXmlStreamAttribute(const QXmlStreamAttribute &);
-   QXmlStreamAttribute &operator=(const QXmlStreamAttribute &);
+
+   QXmlStreamAttribute(const QXmlStreamAttribute &other);
+   QXmlStreamAttribute &operator=(const QXmlStreamAttribute &other);
 
    ~QXmlStreamAttribute();
 
@@ -144,12 +146,11 @@ class Q_CORE_EXPORT QXmlStreamNamespaceDeclaration
 {
  public:
    QXmlStreamNamespaceDeclaration();
-   QXmlStreamNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &);
+
    QXmlStreamNamespaceDeclaration(const QString &prefix, const QString &namespaceUri);
+   QXmlStreamNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &other);
 
    ~QXmlStreamNamespaceDeclaration();
-
-   QXmlStreamNamespaceDeclaration &operator=(const QXmlStreamNamespaceDeclaration &);
 
    QStringView prefix() const {
       return m_prefix;
@@ -158,6 +159,8 @@ class Q_CORE_EXPORT QXmlStreamNamespaceDeclaration
    QStringView namespaceUri() const {
       return m_namespaceUri;
    }
+
+   QXmlStreamNamespaceDeclaration &operator=(const QXmlStreamNamespaceDeclaration &other);
 
    bool operator==(const QXmlStreamNamespaceDeclaration &other) const {
       return (prefix() == other.prefix() && namespaceUri() == other.namespaceUri());
@@ -180,8 +183,9 @@ class Q_CORE_EXPORT QXmlStreamNotationDeclaration
 {
  public:
    QXmlStreamNotationDeclaration();
-   QXmlStreamNotationDeclaration(const QXmlStreamNotationDeclaration &);
-   QXmlStreamNotationDeclaration &operator=(const QXmlStreamNotationDeclaration &);
+
+   QXmlStreamNotationDeclaration(const QXmlStreamNotationDeclaration &other);
+   QXmlStreamNotationDeclaration &operator=(const QXmlStreamNotationDeclaration &other);
 
    ~QXmlStreamNotationDeclaration();
 
@@ -220,8 +224,9 @@ class Q_CORE_EXPORT QXmlStreamEntityDeclaration
 {
  public:
    QXmlStreamEntityDeclaration();
-   QXmlStreamEntityDeclaration(const QXmlStreamEntityDeclaration &);
-   QXmlStreamEntityDeclaration &operator=(const QXmlStreamEntityDeclaration &);
+
+   QXmlStreamEntityDeclaration(const QXmlStreamEntityDeclaration &other);
+   QXmlStreamEntityDeclaration &operator=(const QXmlStreamEntityDeclaration &other);
 
    ~QXmlStreamEntityDeclaration();
 
@@ -389,7 +394,7 @@ class Q_CORE_EXPORT QXmlStreamReader
 
    QXmlStreamAttributes attributes() const;
 
-   QString readElementText(ReadElementTextBehaviour behaviour);
+   QString readElementText(ReadElementTextBehaviour behavior);
    QString readElementText();
 
    QStringView name() const;
@@ -448,7 +453,7 @@ class Q_CORE_EXPORT QXmlStreamWriter
    void setCodec(const char *codecName);
    QTextCodec *codec() const;
 
-   void setAutoFormatting(bool);
+   void setAutoFormatting(bool enable);
    bool autoFormatting() const;
 
    void setAutoFormattingIndent(int spacesOrTabs);

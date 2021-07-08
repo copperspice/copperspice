@@ -74,7 +74,7 @@ class Q_CORE_EXPORT QLibrary : public QObject
    void setFileName(const QString &fileName);
    QString fileName() const;
 
-   void setFileNameAndVersion(const QString &fileName, int verNum);
+   void setFileNameAndVersion(const QString &fileName, int versionNumber);
    void setFileNameAndVersion(const QString &fileName, const QString &version);
    QString errorString() const;
 

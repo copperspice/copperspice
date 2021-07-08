@@ -81,7 +81,7 @@ class Q_CORE_EXPORT QDir
 
    using SortFlags = QFlags<SortFlag>;
 
-   QDir(const QDir &);
+   QDir(const QDir &dir);
    QDir(const QString &path = QString());
    QDir(const QString &path, const QString &nameFilter,
         SortFlags sort = SortFlags(Name | IgnoreCase), Filters filter = AllEntries);
@@ -127,7 +127,7 @@ class Q_CORE_EXPORT QDir
    void setSorting(SortFlags sort);
 
    uint count() const;
-   QString operator[](int) const;
+   QString operator[](int pos) const;
 
    static QStringList nameFiltersFromString(const QString &nameFilter);
 

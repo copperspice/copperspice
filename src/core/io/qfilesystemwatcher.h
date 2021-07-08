@@ -38,13 +38,14 @@ class Q_CORE_EXPORT QFileSystemWatcher : public QObject
 
  public:
    QFileSystemWatcher(QObject *parent = nullptr);
-   QFileSystemWatcher(const QStringList &paths, QObject *parent = nullptr);
+   QFileSystemWatcher(const QStringList &pathList, QObject *parent = nullptr);
+
    ~QFileSystemWatcher();
 
-   void addPath(const QString &file);
-   void addPaths(const QStringList &files);
-   void removePath(const QString &file);
-   void removePaths(const QStringList &files);
+   void addPath(const QString &path);
+   void addPaths(const QStringList &pathList);
+   void removePath(const QString &path);
+   void removePaths(const QStringList &pathList);
 
    QStringList files() const;
    QStringList directories() const;

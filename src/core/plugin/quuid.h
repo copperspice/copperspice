@@ -68,34 +68,34 @@ class Q_CORE_EXPORT QUuid
       uchar b4, uchar b5, uchar b6, uchar b7, uchar b8)
       : data1(l), data2(w1), data3(w2), data4{b1, b2, b3, b4, b5, b6, b7, b8} {}
 
-   QUuid(const QString &);
+   QUuid(const QString &text);
    QUuid(const char *);
 
    QString toString() const;
 
-   QUuid(const QByteArray &);
+   QUuid(const QByteArray &text);
    QByteArray toByteArray() const;
 
    QByteArray toRfc4122() const;
-   static QUuid fromRfc4122(const QByteArray &);
+   static QUuid fromRfc4122(const QByteArray &bytes);
    bool isNull() const;
 
-   constexpr bool operator==(const QUuid &orig) const {
-      if (data1 != orig.data1 || data2 != orig.data2 ||
-         data3 != orig.data3) {
+   constexpr bool operator==(const QUuid &other) const {
+      if (data1 != other.data1 || data2 != other.data2 ||
+         data3 != other.data3) {
          return false;
       }
 
       for (uint i = 0; i < 8; i++)
-         if (data4[i] != orig.data4[i]) {
+         if (data4[i] != other.data4[i]) {
             return false;
          }
 
       return true;
    }
 
-   constexpr bool operator!=(const QUuid &orig) const {
-      return !(*this == orig);
+   constexpr bool operator!=(const QUuid &other) const {
+      return ! (*this == other);
    }
 
    bool operator<(const QUuid &other) const;

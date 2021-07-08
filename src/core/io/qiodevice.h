@@ -89,21 +89,22 @@ class Q_CORE_EXPORT QIODevice : public QObject
    virtual qint64 bytesAvailable() const;
    virtual qint64 bytesToWrite() const;
 
-   qint64 read(char *data, qint64 maxlen);
-   QByteArray read(qint64 maxlen);
+   qint64 read(char *data, qint64 maxSize);
+   QByteArray read(qint64 maxSize);
    QByteArray readAll();
-   qint64 readLine(char *data, qint64 maxlen);
-   QByteArray readLine(qint64 maxlen = 0);
+   qint64 readLine(char *data, qint64 maxSize);
+   QByteArray readLine(qint64 maxSize = 0);
    virtual bool canReadLine() const;
 
-   qint64 write(const char *data, qint64 len);
+   qint64 write(const char *data, qint64 maxSize);
    qint64 write(const char *data);
+
    inline qint64 write(const QByteArray &data) {
       return write(data.constData(), data.size());
    }
 
-   qint64 peek(char *data, qint64 maxlen);
-   QByteArray peek(qint64 maxlen);
+   qint64 peek(char *data, qint64 maxSize);
+   QByteArray peek(qint64 maxSize);
 
    virtual bool waitForReadyRead(int msecs);
    virtual bool waitForBytesWritten(int msecs);
@@ -128,7 +129,7 @@ class Q_CORE_EXPORT QIODevice : public QObject
 
    virtual qint64 readData(char *data, qint64 maxSize) = 0;
    virtual qint64 readLineData(char *data, qint64 maxSize);
-   virtual qint64 writeData(const char *data, qint64 size) = 0;
+   virtual qint64 writeData(const char *data, qint64 maxSize) = 0;
 
    void setOpenMode(OpenMode openMode);
 

@@ -433,14 +433,14 @@ template <class T> class QSharedPointer
       clear();
    }
 
-   inline void reset(T *t) {
-      QSharedPointer copy(t);
+   inline void reset(T *value) {
+      QSharedPointer copy(value);
       swap(copy);
-
    }
+
    template <typename Deleter>
-   inline void reset(T *t, Deleter deleter) {
-      QSharedPointer copy(t, deleter);
+   inline void reset(T *value, Deleter deleter) {
+      QSharedPointer copy(value, deleter);
       swap(copy);
    }
 

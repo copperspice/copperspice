@@ -65,8 +65,8 @@ class Q_CORE_EXPORT QTimer : public QObject
    }
 
    int remainingTime() const;
-   void setTimerType(Qt::TimerType atype) {
-      this->type = atype;
+   void setTimerType(Qt::TimerType timerType) {
+      this->type = timerType;
    }
 
    Qt::TimerType timerType() const {

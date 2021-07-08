@@ -53,7 +53,7 @@ class Q_CORE_EXPORT QEventLoop : public QObject
    using ProcessEventsFlags = QFlags<ProcessEventsFlag>;
 
    bool processEvents(ProcessEventsFlags flags = AllEvents);
-   void processEvents(ProcessEventsFlags flags, int maximumTime);
+   void processEvents(ProcessEventsFlags flags, int maxTime);
 
    int exec(ProcessEventsFlags flags = AllEvents);
    void exit(int returnCode = 0);

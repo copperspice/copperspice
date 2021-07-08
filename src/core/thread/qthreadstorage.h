@@ -133,8 +133,8 @@ class QThreadStorage
       return qThreadStorage_localData_const(d, static_cast<T *>(nullptr));
    }
 
-   inline void setLocalData(T t) {
-      qThreadStorage_setLocalData(d, &t);
+   inline void setLocalData(T data) {
+      qThreadStorage_setLocalData(d, &data);
    }
 };
 

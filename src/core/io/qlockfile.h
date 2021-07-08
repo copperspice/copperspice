@@ -54,7 +54,7 @@ class Q_CORE_EXPORT QLockFile
    bool tryLock(int timeout = 0);
    void unlock();
 
-   void setStaleLockTime(int);
+   void setStaleLockTime(int staleLockTime);
    int staleLockTime() const;
 
    bool isLocked() const;

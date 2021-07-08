@@ -32,7 +32,7 @@ class Q_CORE_EXPORT QBitArray
 {
  public:
    inline QBitArray() {}
-   explicit QBitArray(int size, bool val = false);
+   explicit QBitArray(int size, bool value = false);
 
    QBitArray(const QBitArray &other)
       : d(other.d)
@@ -98,21 +98,21 @@ class Q_CORE_EXPORT QBitArray
    QBitRef operator[](uint i);
    bool operator[](uint i) const;
 
-   QBitArray &operator&=(const QBitArray &);
-   QBitArray &operator|=(const QBitArray &);
-   QBitArray &operator^=(const QBitArray &);
+   QBitArray &operator&=(const QBitArray &other);
+   QBitArray &operator|=(const QBitArray &other);
+   QBitArray &operator^=(const QBitArray &other);
    QBitArray  operator~() const;
 
-   inline bool operator==(const QBitArray &a) const {
-      return d == a.d;
+   inline bool operator==(const QBitArray &other) const {
+      return d == other.d;
    }
 
-   inline bool operator!=(const QBitArray &a) const {
-      return d != a.d;
+   inline bool operator!=(const QBitArray &other) const {
+      return d != other.d;
    }
 
-   inline bool fill(bool val, int size = -1);
-   void fill(bool val, int first, int last);
+   inline bool fill(bool value, int size = -1);
+   void fill(bool value, int first, int last);
 
    inline void truncate(int pos) {
       if (pos < size()) {
@@ -134,9 +134,10 @@ class Q_CORE_EXPORT QBitArray
 
 };
 
-inline bool QBitArray::fill(bool aval, int asize)
+inline bool QBitArray::fill(bool value, int size)
 {
-   *this = QBitArray((asize < 0 ? this->size() : asize), aval);
+   *this = QBitArray((size < 0 ? this->size() : size), value);
+
    return true;
 }
 

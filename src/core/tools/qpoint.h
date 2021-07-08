@@ -33,14 +33,14 @@ class Q_CORE_EXPORT QPoint
 {
  public:
    QPoint();
-   QPoint(int xpos, int ypos);
+   QPoint(int xPos, int yPos);
 
    inline bool isNull() const;
 
    inline int x() const;
    inline int y() const;
-   inline void setX(int x);
-   inline void setY(int y);
+   inline void setX(int xPos);
+   inline void setY(int yPos);
 
    int manhattanLength() const;
 
@@ -84,10 +84,10 @@ inline QPoint::QPoint()
    yp = 0;
 }
 
-inline QPoint::QPoint(int xpos, int ypos)
+inline QPoint::QPoint(int xPos, int yPos)
 {
-   xp = xpos;
-   yp = ypos;
+   xp = xPos;
+   yp = yPos;
 }
 
 inline bool QPoint::isNull() const
@@ -105,14 +105,14 @@ inline int QPoint::y() const
    return yp;
 }
 
-inline void QPoint::setX(int xpos)
+inline void QPoint::setX(int xPos)
 {
-   xp = xpos;
+   xp = xPos;
 }
 
-inline void QPoint::setY(int ypos)
+inline void QPoint::setY(int yPos)
 {
-   yp = ypos;
+   yp = yPos;
 }
 
 inline int &QPoint::rx()
@@ -234,7 +234,7 @@ class Q_CORE_EXPORT QPointF
  public:
    QPointF();
    QPointF(const QPoint &p);
-   QPointF(qreal xpos, qreal ypos);
+   QPointF(qreal xPos, qreal yPos);
 
    qreal manhattanLength() const;
 
@@ -242,8 +242,8 @@ class Q_CORE_EXPORT QPointF
 
    inline qreal x() const;
    inline qreal y() const;
-   inline void setX(qreal x);
-   inline void setY(qreal y);
+   inline void setX(qreal xPos);
+   inline void setY(qreal yPos);
 
    inline qreal &rx();
    inline qreal &ry();
@@ -279,8 +279,8 @@ inline QPointF::QPointF()
    : xp(0), yp(0)
 { }
 
-inline QPointF::QPointF(qreal xpos, qreal ypos)
-   : xp(xpos), yp(ypos)
+inline QPointF::QPointF(qreal xPos, qreal yPos)
+   : xp(xPos), yp(yPos)
 { }
 
 inline QPointF::QPointF(const QPoint &p)
@@ -302,14 +302,14 @@ inline qreal QPointF::y() const
    return yp;
 }
 
-inline void QPointF::setX(qreal xpos)
+inline void QPointF::setX(qreal xPos)
 {
-   xp = xpos;
+   xp = xPos;
 }
 
-inline void QPointF::setY(qreal ypos)
+inline void QPointF::setY(qreal yPos)
 {
-   yp = ypos;
+   yp = yPos;
 }
 
 inline qreal &QPointF::rx()

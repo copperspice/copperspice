@@ -122,7 +122,7 @@ class Q_CORE_EXPORT QFileInfo
    void detach();
 
    bool caching() const;
-   void setCaching(bool on);
+   void setCaching(bool enable);
 
  protected:
    QSharedDataPointer<QFileInfoPrivate> d_ptr;

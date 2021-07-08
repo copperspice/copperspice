@@ -56,7 +56,7 @@ class Q_CORE_EXPORT QSaveFile : public QFileDevice
    QString fileName() const override;
    void setFileName(const QString &name);
 
-   bool open(OpenMode flags) override;
+   bool open(OpenMode mode) override;
    bool commit();
 
    void cancelWriting();

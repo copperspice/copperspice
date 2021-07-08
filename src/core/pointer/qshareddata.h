@@ -39,7 +39,11 @@ class Q_CORE_EXPORT QSharedData
    {
    }
 
-   inline QSharedData(const QSharedData &) : ref(0) { }
+   inline QSharedData(const QSharedData &other)
+      : ref(0)
+   {
+      (void) other;
+   }
 
  private:
    // using the assignment operator would lead to corruption in the ref-counting
@@ -108,47 +112,51 @@ template <class T> class QSharedDataPointer
    }
 
    explicit QSharedDataPointer(T *data);
-   inline QSharedDataPointer(const QSharedDataPointer<T> &o) : d(o.d) {
+
+   inline QSharedDataPointer(const QSharedDataPointer<T> &other)
+      : d(other.d)
+   {
       if (d) {
          d->ref.ref();
       }
    }
 
-   inline QSharedDataPointer<T> &operator=(const QSharedDataPointer<T> &o) {
-      if (o.d != d) {
-         if (o.d) {
-            o.d->ref.ref();
+   inline QSharedDataPointer<T> &operator=(const QSharedDataPointer<T> &other) {
+      if (other.d != d) {
+         if (other.d) {
+            other.d->ref.ref();
          }
 
          T *old = d;
-         d = o.d;
+         d = other.d;
 
          if (old && !old->ref.deref()) {
+            delete old;
+         }
+      }
+
+      return *this;
+   }
+
+   inline QSharedDataPointer &operator=(T *other) {
+      if (other != d) {
+         if (other) {
+            other->ref.ref();
+         }
+
+         T *old = d;
+         d = other;
+
+         if (old && ! old->ref.deref()) {
             delete old;
          }
       }
       return *this;
    }
 
-   inline QSharedDataPointer &operator=(T *o) {
-      if (o != d) {
-         if (o) {
-            o->ref.ref();
-         }
-
-         T *old = d;
-         d = o;
-
-         if (old && !old->ref.deref()) {
-            delete old;
-         }
-      }
-      return *this;
-   }
-
-   QSharedDataPointer(QSharedDataPointer && o)
-      : d(o.d) {
-      o.d = nullptr;
+   QSharedDataPointer(QSharedDataPointer && other)
+      : d(other.d) {
+      other.d = nullptr;
    }
 
    inline QSharedDataPointer<T> &operator=(QSharedDataPointer<T> && other) {
@@ -244,41 +252,34 @@ template <class T> class QExplicitlySharedDataPointer
    }
 
    explicit QExplicitlySharedDataPointer(T *data);
-   inline QExplicitlySharedDataPointer(const QExplicitlySharedDataPointer<T> &o) : d(o.d) {
+
+   inline QExplicitlySharedDataPointer(const QExplicitlySharedDataPointer<T> &other)
+      : d(other.d)
+   {
       if (d) {
          d->ref.ref();
       }
    }
 
    template<class X>
-   inline QExplicitlySharedDataPointer(const QExplicitlySharedDataPointer<X> &o) : d(static_cast<T *>(o.data())) {
+   inline QExplicitlySharedDataPointer(const QExplicitlySharedDataPointer<X> &other)
+      : d(static_cast<T *>(other.data()))
+   {
       if (d) {
          d->ref.ref();
       }
    }
 
-   inline QExplicitlySharedDataPointer<T> &operator=(const QExplicitlySharedDataPointer<T> &o) {
-      if (o.d != d) {
-         if (o.d) {
-            o.d->ref.ref();
+   inline QExplicitlySharedDataPointer<T> &operator=(const QExplicitlySharedDataPointer<T> &other) {
+      if (other.d != d) {
+         if (other.d) {
+            other.d->ref.ref();
          }
-         T *old = d;
-         d = o.d;
-         if (old && !old->ref.deref()) {
-            delete old;
-         }
-      }
 
-      return *this;
-   }
-   inline QExplicitlySharedDataPointer &operator=(T *o) {
-      if (o != d) {
-         if (o) {
-            o->ref.ref();
-         }
          T *old = d;
-         d = o;
-         if (old && !old->ref.deref()) {
+         d = other.d;
+
+         if (old && ! old->ref.deref()) {
             delete old;
          }
       }
@@ -286,10 +287,30 @@ template <class T> class QExplicitlySharedDataPointer
       return *this;
    }
 
-   inline QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&o) : d(o.d) {
-      o.d = nullptr;
+   inline QExplicitlySharedDataPointer &operator=(T *other) {
+      if (other != d) {
+         if (other) {
+            other->ref.ref();
+         }
+
+         T *old = d;
+         d = other;
+
+         if (old && ! old->ref.deref()) {
+            delete old;
+         }
+      }
+
+      return *this;
    }
-   inline QExplicitlySharedDataPointer<T> &operator=(QExplicitlySharedDataPointer<T> && other) {
+
+   inline QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&other)
+      : d(other.d)
+   {
+      other.d = nullptr;
+   }
+
+   inline QExplicitlySharedDataPointer<T> &operator=(QExplicitlySharedDataPointer<T> &&other) {
       qSwap(d, other.d);
       return *this;
    }
@@ -312,7 +333,8 @@ template <class T> class QExplicitlySharedDataPointer
 };
 
 template <class T>
-inline QSharedDataPointer<T>::QSharedDataPointer(T *adata) : d(adata)
+inline QSharedDataPointer<T>::QSharedDataPointer(T *data)
+   : d(data)
 {
    if (d) {
       d->ref.ref();
@@ -354,7 +376,8 @@ void QExplicitlySharedDataPointer<T>::detach_helper()
 }
 
 template <class T>
-inline QExplicitlySharedDataPointer<T>::QExplicitlySharedDataPointer(T *adata) : d(adata)
+inline QExplicitlySharedDataPointer<T>::QExplicitlySharedDataPointer(T *data)
+   : d(data)
 {
    if (d) {
       d->ref.ref();

@@ -113,7 +113,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static int exec();
    static void processEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents);
    static void processEvents(QEventLoop::ProcessEventsFlags flags, int maxtime);
-   static void exit(int retcode = 0);
+   static void exit(int returnCode = 0);
 
    static bool sendEvent(QObject *receiver, QEvent *event);
    static void postEvent(QObject *receiver, QEvent *event, int priority = Qt::NormalEventPriority);
@@ -123,7 +123,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static QAbstractEventDispatcher *eventDispatcher();
    static void setEventDispatcher(QAbstractEventDispatcher *eventDispatcher);
 
-   virtual bool notify(QObject *, QEvent *);
+   virtual bool notify(QObject *receiver, QEvent *event);
 
    static bool startingUp();
    static bool closingDown();
@@ -132,13 +132,13 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static QString applicationFilePath();
    static qint64 applicationPid();
 
-   static void setLibraryPaths(const QStringList &);
+   static void setLibraryPaths(const QStringList &paths);
    static QStringList libraryPaths();
-   static void addLibraryPath(const QString &);
-   static void removeLibraryPath(const QString &);
+   static void addLibraryPath(const QString &path);
+   static void removeLibraryPath(const QString &path);
 
-   static void installTranslator(QTranslator *messageFile);
-   static void removeTranslator(QTranslator *messageFile);
+   static void installTranslator(QTranslator *translationFile);
+   static void removeTranslator(QTranslator *translationFile);
 
    static QString translate(const char *context, const char *text, const char *comment = nullptr,
             std::optional<int> numArg = std::optional<int>());

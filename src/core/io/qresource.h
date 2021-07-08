@@ -53,8 +53,8 @@ class Q_CORE_EXPORT QResource
    static void addSearchPath(const QString &path);
    static QStringList searchPaths();
 
-   static bool registerResource(const QString &rccFilename, const QString &resourceRoot = QString());
-   static bool unregisterResource(const QString &rccFilename, const QString &resourceRoot = QString());
+   static bool registerResource(const QString &fileName, const QString &resourceRoot = QString());
+   static bool unregisterResource(const QString &fileName, const QString &resourceRoot = QString());
 
    static bool registerResource(const uchar *rccData, const QString &resourceRoot = QString());
    static bool unregisterResource(const uchar *rccData, const QString &resourceRoot = QString());
@@ -63,6 +63,7 @@ class Q_CORE_EXPORT QResource
    friend class QResourceFileEngine;
    friend class QResourceFileEngineIterator;
    bool isDir() const;
+
    inline bool isFile() const {
       return !isDir();
    }

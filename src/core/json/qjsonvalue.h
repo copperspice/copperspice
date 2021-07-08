@@ -45,7 +45,7 @@ class Q_CORE_EXPORT QJsonValue
       Undefined = 0x80
    };
 
-   QJsonValue(Type = Null);
+   QJsonValue(Type type = Null);
 
    QJsonValue(bool b);
    QJsonValue(double n);

@@ -100,7 +100,7 @@ class Q_CORE_EXPORT QJsonArray
    // operators
    QJsonArray &operator =(const QJsonArray &other);
 
-   QJsonValue &operator[](size_type i);
+   QJsonValue &operator[](size_type index);
    const QJsonValue &operator[](size_type index) const;
 
    bool operator==(const QJsonArray &other) const;

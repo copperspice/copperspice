@@ -73,7 +73,7 @@ class Q_CORE_EXPORT QThread : public QObject
    void setStackSize(uint stackSize);
    uint stackSize() const;
 
-   void exit(int retcode = 0);
+   void exit(int returnCode = 0);
 
    // default argument causes thread to block indefinately
    bool wait(unsigned long time = ULONG_MAX);
@@ -94,7 +94,7 @@ class Q_CORE_EXPORT QThread : public QObject
    CORE_CS_SIGNAL_1(Public, void finished())
    CORE_CS_SIGNAL_2(finished)
 
-   CORE_CS_SLOT_1(Public, void start(Priority un_named_arg1 = InheritPriority))
+   CORE_CS_SLOT_1(Public, void start(Priority priority = InheritPriority))
    CORE_CS_SLOT_2(start)
 
    CORE_CS_SLOT_1(Public, void terminate())

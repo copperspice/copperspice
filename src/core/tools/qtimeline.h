@@ -128,10 +128,11 @@ class Q_CORE_EXPORT QTimeLine : public QObject
    CORE_CS_SLOT_1(Public, void toggleDirection())
    CORE_CS_SLOT_2(toggleDirection)
 
-   CORE_CS_SIGNAL_1(Public, void valueChanged(qreal x))
-   CORE_CS_SIGNAL_2(valueChanged, x)
-   CORE_CS_SIGNAL_1(Public, void frameChanged(int un_named_arg1))
-   CORE_CS_SIGNAL_2(frameChanged, un_named_arg1)
+   CORE_CS_SIGNAL_1(Public, void valueChanged(qreal value))
+   CORE_CS_SIGNAL_2(valueChanged, value)
+
+   CORE_CS_SIGNAL_1(Public, void frameChanged(int frame))
+   CORE_CS_SIGNAL_2(frameChanged, frame)
 
    CORE_CS_SIGNAL_1(Public, void stateChanged(QTimeLine::State newState))
    CORE_CS_SIGNAL_2(stateChanged, newState)

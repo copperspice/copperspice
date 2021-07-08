@@ -54,17 +54,17 @@ class Q_CORE_EXPORT QSignalMapper : public QObject
    QObject *mapping(QWidget *widget) const;
    QObject *mapping(QObject *object) const;
 
-   CORE_CS_SIGNAL_1(Public, void mapped(int un_named_arg1))
-   CORE_CS_SIGNAL_OVERLOAD(mapped, (int), un_named_arg1)
+   CORE_CS_SIGNAL_1(Public, void mapped(int index))
+   CORE_CS_SIGNAL_OVERLOAD(mapped, (int), index)
 
-   CORE_CS_SIGNAL_1(Public, void mapped(const QString &un_named_arg1))
-   CORE_CS_SIGNAL_OVERLOAD(mapped, (const QString &), un_named_arg1)
+   CORE_CS_SIGNAL_1(Public, void mapped(const QString &text))
+   CORE_CS_SIGNAL_OVERLOAD(mapped, (const QString &), text)
 
-   CORE_CS_SIGNAL_1(Public, void mapped(QWidget *un_named_arg1))
-   CORE_CS_SIGNAL_OVERLOAD(mapped, (QWidget *), un_named_arg1)
+   CORE_CS_SIGNAL_1(Public, void mapped(QWidget *widget))
+   CORE_CS_SIGNAL_OVERLOAD(mapped, (QWidget *), widget)
 
-   CORE_CS_SIGNAL_1(Public, void mapped(QObject *un_named_arg1))
-   CORE_CS_SIGNAL_OVERLOAD(mapped, (QObject *), un_named_arg1)
+   CORE_CS_SIGNAL_1(Public, void mapped(QObject *object))
+   CORE_CS_SIGNAL_OVERLOAD(mapped, (QObject *), object)
 
    CORE_CS_SLOT_1(Public, void map())
    CORE_CS_SLOT_OVERLOAD(map, ())

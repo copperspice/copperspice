@@ -40,13 +40,13 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
    ~QFSFileEngine();
 
    bool open(QIODevice::OpenMode openMode) override;
-   bool open(QIODevice::OpenMode flags, FILE *fh);
+   bool open(QIODevice::OpenMode openMode, FILE *fh);
    bool close() override;
    bool flush() override;
    bool syncToDisk() override;
    qint64 size() const override;
    qint64 pos() const override;
-   bool seek(qint64) override;
+   bool seek(qint64 pos) override;
    bool isSequential() const override;
    bool remove() override;
    bool copy(const QString &newName) override;
@@ -56,6 +56,7 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
 
    bool mkdir(const QString &dirName, bool createParentDirectories) const override;
    bool rmdir(const QString &dirName, bool recurseParentDirectories) const override;
+
    bool setSize(qint64 size) override;
    bool caseSensitive() const override;
    bool isRelativePath() const override;
@@ -64,8 +65,8 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
    FileFlags fileFlags(FileFlags type) const override;
    bool setPermissions(uint perms) override;
    QString fileName(FileName file) const override;
-   uint ownerId(FileOwner) const override;
-   QString owner(FileOwner) const override;
+   uint ownerId(FileOwner own) const override;
+   QString owner(FileOwner own) const override;
    QDateTime fileTime(FileTime time) const override;
    void setFileName(const QString &file) override;
    int handle() const override;
@@ -82,10 +83,10 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
    bool extension(Extension extension, const ExtensionOption *option = nullptr, ExtensionReturn *output = nullptr) override;
    bool supportsExtension(Extension extension) const override;
 
-   //FS only!!
-   bool open(QIODevice::OpenMode flags, int fd);
-   bool open(QIODevice::OpenMode flags, int fd, QFile::FileHandleFlags handleFlags);
-   bool open(QIODevice::OpenMode flags, FILE *fh, QFile::FileHandleFlags handleFlags);
+   //FS only
+   bool open(QIODevice::OpenMode openMode, int fd);
+   bool open(QIODevice::OpenMode openMode, int fd, QFile::FileHandleFlags handleFlags);
+   bool open(QIODevice::OpenMode openMode, FILE *fh, QFile::FileHandleFlags handleFlags);
 
    static bool setCurrentPath(const QString &path);
    static QString currentPath(const QString &path = QString());

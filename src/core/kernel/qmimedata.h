@@ -63,17 +63,17 @@ class Q_CORE_EXPORT QMimeData : public QObject
    void setColorData(const QVariant &color);
    bool hasColor() const;
 
-   QByteArray data(const QString &mimetype) const;
-   void setData(const QString &mimetype, const QByteArray &data);
-   void removeFormat(const QString &mimetype);
+   QByteArray data(const QString &mimeType) const;
+   void setData(const QString &mimeType, const QByteArray &data);
+   void removeFormat(const QString &mimeType);
 
-   virtual bool hasFormat(const QString &mimetype) const;
+   virtual bool hasFormat(const QString &mimeType) const;
    virtual QStringList formats() const;
 
    void clear();
 
  protected:
-   virtual QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
+   virtual QVariant retrieveData(const QString &mimeType, QVariant::Type preferredType) const;
    QScopedPointer<QMimeDataPrivate> d_ptr;
 
  private:

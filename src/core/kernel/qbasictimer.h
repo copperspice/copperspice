@@ -49,8 +49,8 @@ class Q_CORE_EXPORT QBasicTimer
       return id;
    }
 
-   void start(int msec, QObject *obj);
-   void start(int msec, Qt::TimerType timerType, QObject *obj);
+   void start(int msec, QObject *object);
+   void start(int msec, Qt::TimerType timerType, QObject *object);
    void stop();
 
  private:

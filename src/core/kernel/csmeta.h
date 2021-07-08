@@ -187,15 +187,15 @@ class Q_CORE_EXPORT QMetaProperty
                STORED, USER, CONSTANT, FINAL
              };
 
-   QMetaProperty(const QString &name = QString(), QMetaObject *obj = nullptr);
+   QMetaProperty(const QString &name = QString(), QMetaObject *object = nullptr);
 
    bool isReadable() const;
    bool isWritable() const;
    bool isResettable() const;
-   bool isDesignable(const QObject *obj = nullptr) const;
-   bool isScriptable(const QObject *obj = nullptr) const;
-   bool isStored(const QObject *obj = nullptr) const;
-   bool isUser(const QObject *obj = nullptr) const;
+   bool isDesignable(const QObject *object = nullptr) const;
+   bool isScriptable(const QObject *object = nullptr) const;
+   bool isStored(const QObject *object = nullptr) const;
+   bool isUser(const QObject *object = nullptr) const;
    bool isConstant() const;
    bool isFinal() const;
    bool isValid() const;
@@ -234,7 +234,7 @@ class Q_CORE_EXPORT QMetaProperty
    const QString &typeName() const;
    QVariant::Type type() const;
    uint userType() const;
-   bool write(QObject *obj, const QVariant &value) const;
+   bool write(QObject *object, const QVariant &value) const;
 
    // properties
    void setReadMethod(const QString &typeName, JarReadAbstract *jarRead);

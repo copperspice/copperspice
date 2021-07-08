@@ -46,6 +46,7 @@ class Q_CORE_EXPORT QTextCodec
    static QTextCodec *codecForName(const char *name) {
       return codecForName(QString::fromUtf8(name));
    }
+
    static QTextCodec *codecForMib(int mib);
 
    static QStringList availableCodecs();
@@ -57,14 +58,14 @@ class Q_CORE_EXPORT QTextCodec
    static QTextCodec *codecForTr();
    static void setCodecForTr(QTextCodec *c);
 
-   static QTextCodec *codecForHtml(const QByteArray &ba);
-   static QTextCodec *codecForHtml(const QByteArray &ba, QTextCodec *defaultCodec);
+   static QTextCodec *codecForHtml(const QByteArray &data);
+   static QTextCodec *codecForHtml(const QByteArray &data, QTextCodec *defaultCodec);
 
-   static QTextCodec *codecForUtfText(const QByteArray &ba);
-   static QTextCodec *codecForUtfText(const QByteArray &ba, QTextCodec *defaultCodec);
+   static QTextCodec *codecForUtfText(const QByteArray &data);
+   static QTextCodec *codecForUtfText(const QByteArray &data, QTextCodec *defaultCodec);
 
-   bool canEncode(QChar) const;
-   bool canEncode(const QString &) const;
+   bool canEncode(QChar ch) const;
+   bool canEncode(const QString &str) const;
 
    enum ConversionFlag {
       DefaultConversion,
@@ -95,11 +96,11 @@ class Q_CORE_EXPORT QTextCodec
       void *m_data;
    };
 
-   QString toUnicode(const QByteArray &) const;
-   QString toUnicode(const char *chars) const;
+   QString toUnicode(const QByteArray &input) const;
+   QString toUnicode(const char *input) const;
 
-   QString toUnicode(const char *in, int len, ConverterState *state = nullptr) const {
-      return convertToUnicode(in, len, state);
+   QString toUnicode(const char *input, int len, ConverterState *state = nullptr) const {
+      return convertToUnicode(input, len, state);
    }
 
    QByteArray fromUnicode(const QString &str, ConverterState *state = nullptr) const {
@@ -118,7 +119,7 @@ class Q_CORE_EXPORT QTextCodec
    virtual int mibEnum() const = 0;
 
  protected:
-   virtual QString convertToUnicode(const char *in, int len, ConverterState *state) const = 0;
+   virtual QString convertToUnicode(const char *input, int len, ConverterState *state) const = 0;
    virtual QByteArray convertFromUnicode(QStringView str, ConverterState *state) const = 0;
 
    QTextCodec();
@@ -129,6 +130,7 @@ class Q_CORE_EXPORT QTextCodec
    static QTextCodec *cftr;
    static bool validCodecs();
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextCodec::ConversionFlags)
 
 inline QTextCodec *QTextCodec::codecForTr()

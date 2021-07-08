@@ -35,7 +35,7 @@ class Q_CORE_EXPORT QTemporaryDir
 {
  public:
    QTemporaryDir();
-   explicit QTemporaryDir(const QString &templateName);
+   explicit QTemporaryDir(const QString &tempPath);
 
    QTemporaryDir(const QTemporaryDir &) = delete;
    QTemporaryDir &operator=(const QTemporaryDir &) = delete;

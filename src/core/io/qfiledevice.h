@@ -81,13 +81,13 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    virtual QString fileName() const;
 
    qint64 pos() const override;
-   bool seek(qint64 offset) override;
+   bool seek(qint64 pos) override;
    bool atEnd() const override;
    bool flush();
 
    qint64 size() const override;
 
-   virtual bool resize(qint64 sz);
+   virtual bool resize(qint64 size);
    virtual Permissions permissions() const;
    virtual bool setPermissions(Permissions permissionSpec);
 
@@ -104,9 +104,9 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    explicit QFileDevice(QObject *parent);
    QFileDevice(QFileDevicePrivate &dd, QObject *parent = nullptr);
 
-   qint64 readData(char *data, qint64 maxlen) override;
-   qint64 writeData(const char *data, qint64 len) override;
-   qint64 readLineData(char *data, qint64 maxlen) override;
+   qint64 readData(char *data, qint64 maxSize) override;
+   qint64 writeData(const char *data, qint64 maxSize) override;
+   qint64 readLineData(char *data, qint64 maxSize) override;
 
  private:
    Q_DECLARE_PRIVATE(QFileDevice)
