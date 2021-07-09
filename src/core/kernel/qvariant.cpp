@@ -96,7 +96,8 @@ std::atomic<uint> &QVariant::currentUserType()
    //   uint & tmp = currentUserType();
    //   auto id = ++tmp;
 
-   static std::atomic<uint> retval = QVariant::UserType;
+   static std::atomic<uint> retval = QVariant::UserType + 1;
+
    return retval;
 }
 
@@ -118,6 +119,13 @@ static const QVariant::NamesAndTypes builtinTypes[] = {
    { "char",                   QVariant::Char,                 typeid(char *) },
    { "signed char",            QVariant::SChar,                typeid(signed char *) },
    { "unsigned char",          QVariant::UChar,                typeid(unsigned char *) },
+
+#if defined(__cpp_char8_t)
+   { "char8_t",                QVariant::Char8_t,              typeid(char8_t *) },
+#endif
+
+   { "char16_t",               QVariant::Char16_t,             typeid(char16_t *) },
+   { "char32_t",               QVariant::Char32_t,             typeid(char32_t *) },
 
    { "QByteArray",             QVariant::ByteArray,            typeid(QByteArray *) },
    { "QBitArray",              QVariant::BitArray,             typeid(QBitArray *) },
@@ -149,12 +157,11 @@ static const QVariant::NamesAndTypes builtinTypes[] = {
    { "QSize",                  QVariant::Size,                 typeid(QSize *) },
    { "QSizeF",                 QVariant::SizeF,                typeid(QSizeF *) },
 
-   { "QVariant",               QVariant::Variant,              typeid(QVariant *) },
    { "QVariantList",           QVariant::List,                 typeid(QVariantList *) },
-   { "QVariantMap",            QVariant::Map,                  typeid(QVariantMap *) },
-   { "QVariantMultiMap",       QVariant::MultiMap,             typeid(QVariantMultiMap *) },
    { "QVariantHash",           QVariant::Hash,                 typeid(QVariantHash *) },
+   { "QVariantMap",            QVariant::Map,                  typeid(QVariantMap *) },
    { "QVariantMultiHash",      QVariant::MultiHash,            typeid(QVariantMultiHash *) },
+   { "QVariantMultiMap",       QVariant::MultiMap,             typeid(QVariantMultiMap *) },
 
    { "void",                   QVariant::Void,                 typeid(void *) },
    { "void*",                  QVariant::VoidStar,             typeid(void **) },
@@ -191,8 +198,28 @@ static const QVariant::NamesAndTypes builtinTypes[] = {
    { "QVector2D",              QVariant::Vector2D,             typeid(QVector2D *) },
    { "QVector3D",              QVariant::Vector3D,             typeid(QVector3D *) },
    { "QVector4D",              QVariant::Vector4D,             typeid(QVector4D *) },
+
+   { "QVariant",               QVariant::Variant,              typeid(QVariant *) },
 };
 
+/*
+   // alias data types
+
+   { "qint8",                         QVariant::Char,              typeid(Q *) },
+   { "quint8",                        QVariant::UChar,             typeid(Q *) },
+   { "qint16",                        QVariant::Short,             typeid(Q *) },
+   { "quint16",                       QVariant::UShort,            typeid(Q *) },
+   { "qint32",                        QVariant::Int,               typeid(Q *) },
+   { "quint32",                       QVariant::UInt,              typeid(Q *) },
+   { "qint64",                        QVariant::LongLong,          typeid(Q *) },
+   { "quint64",                       QVariant::ULongLong,         typeid(Q *) },
+
+   { "QList<QVariant>",               QVariant::List,              typeid(Q *) },
+   { "QHash<QString,QVariant>",       QVariant::Hash,              typeid(Q *) },
+   { "QMap<QString,QVariant>",        QVariant::Map,               typeid(Q *) },
+   { "QMultiHash<QString,QVariant>",  QVariant::MultiHash,         typeid(Q *) },
+   { "QMultiMap<QString,QVariant>",   QVariant::MultiMap,          typeid(Q *) },
+*/
 
 // constructors
 
@@ -320,24 +347,34 @@ QVariant::QVariant(QList<QVariant> value)
    m_data = std::make_shared<CustomType_T<QList<QVariant>>>(std::move(value));
 }
 
-QVariant::QVariant(QMap<QString, QVariant> value)
-{
-   m_data = std::make_shared<CustomType_T<QMap<QString, QVariant>>>(std::move(value));
-}
-
-QVariant::QVariant(QMultiMap<QString, QVariant> value)
-{
-   m_data = std::make_shared<CustomType_T<QMultiMap<QString, QVariant>>>(std::move(value));;
-}
-
 QVariant::QVariant(QHash<QString, QVariant> value)
 {
    m_data = std::make_shared<CustomType_T<QHash<QString, QVariant>>>(std::move(value));
 }
 
+QVariant::QVariant(QMap<QString, QVariant> value)
+{
+   m_data = std::make_shared<CustomType_T<QMap<QString, QVariant>>>(std::move(value));
+}
+
 QVariant::QVariant(QMultiHash<QString, QVariant> value)
 {
    m_data = std::make_shared<CustomType_T<QMultiHash<QString, QVariant>>>(std::move(value));
+}
+
+QVariant::QVariant(QMultiMap<QString, QVariant> value)
+{
+   m_data = std::make_shared<CustomType_T<QMultiMap<QString, QVariant>>>(std::move(value));
+}
+
+QVariant::QVariant(QLine value)
+{
+   m_data = std::make_shared<CustomType_T<QLine>>(std::move(value));
+}
+
+QVariant::QVariant(QLineF value)
+{
+   m_data = std::make_shared<CustomType_T<QLineF>>(std::move(value));
 }
 
 QVariant::QVariant(QPoint value)
@@ -358,16 +395,6 @@ QVariant::QVariant(QRect value)
 QVariant::QVariant(QRectF value)
 {
    m_data = std::make_shared<CustomType_T<QRectF>>(std::move(value));
-}
-
-QVariant::QVariant(QLine value)
-{
-   m_data = std::make_shared<CustomType_T<QLine>>(std::move(value));
-}
-
-QVariant::QVariant(QLineF value)
-{
-   m_data = std::make_shared<CustomType_T<QLineF>>(std::move(value));
 }
 
 QVariant::QVariant(QSize value)
@@ -564,7 +591,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::String: {
 
                QString str = getData<QString>().toLower();
-               if (str == QString("0") || str == QString("false") || str.isEmpty()) {
+               if (str == "0" || str == "false" || str.isEmpty()) {
                   setValue(false);
                } else {
                   setValue(true);
@@ -576,7 +603,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::String16: {
 
                QString16 str = getData<QString16>().toLower();
-               if (str == QString16("0") || str == QString16("false") || str.isEmpty()) {
+               if (str == u"0" || str == u"false" || str.isEmpty()) {
                   setValue(false);
                } else {
                   setValue(true);
@@ -601,6 +628,23 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
                if (tmp.isBool())  {
                   setValue(tmp.toBool());
+
+               } else if (tmp.isDouble())  {
+
+                  if (tmp.toDouble() == 0) {
+                     setValue(false);
+                  } else {
+                     setValue(true);
+                  }
+
+               } else if (tmp.isString())  {
+                  QString str = tmp.toString().toLower();
+
+                  if (str == QString("0") || str == QString("false") || str.isEmpty()) {
+                     setValue(false);
+                  } else {
+                     setValue(true);
+                  }
 
                } else {
                   setValue(false);
@@ -712,7 +756,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
          break;
       }
 
-     case QVariant::Double: {
+      case QVariant::Double: {
 
          switch (current_userType) {
 
@@ -773,6 +817,10 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
                if (tmp.isDouble()) {
                   setValue(tmp.toDouble());
+
+               } else if (tmp.isString()) {
+                  double value = tmp.toString().toDouble();
+                  setValue(value);
 
                } else {
                   setValue(0.0);
@@ -852,6 +900,10 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                if (tmp.isDouble()) {
                   setValue<float>(tmp.toDouble());
 
+               } else if (tmp.isString()) {
+                  double value = tmp.toString().toDouble();
+                  setValue<float>(value);
+
                } else {
                   setValue<float>(0.0);
                   retval = false;
@@ -861,7 +913,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             }
 
             default:
-               setValue(0.0);
+               setValue<float>(0.0);
                retval = false;
          }
 
@@ -1054,10 +1106,6 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                setValue<QByteArray>(getData<QString16>().toUtf8());
                break;
 
-
-            // emerald: should these be added
-            // Date, Time, DateTime, StringList, JsonValue
-
             case QVariant::Url:
                setValue<QByteArray>(getData<QUrl>().toEncoded());
                break;
@@ -1185,10 +1233,23 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::JsonValue: {
                QJsonValue tmp = getData<QJsonValue>();
 
-               if (tmp.isString())  {
+               if (tmp.isBool())  {
+
+                  if (tmp.toBool()) {
+                     setValue<QString>("true");
+                  } else {
+                     setValue<QString>("false");
+                  }
+
+               } else if (tmp.isDouble())  {
+                  setValue<QString>(QString::number(tmp.toDouble()));
+
+               } else if (tmp.isString())  {
                   setValue<QString>(tmp.toString());
-               } else if (! tmp.isNull()) {
-                  retval = false;;
+
+               } else {
+                  retval = false;
+
                }
 
                break;
@@ -1217,9 +1278,9 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                bool tmp = getData<bool>();
 
                if (tmp) {
-                  setValue<QString16>("true");
+                  setValue<QString16>(u"true");
                } else {
-                  setValue<QString16>("false");
+                  setValue<QString16>(u"false");
                }
 
                break;
@@ -1281,7 +1342,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                auto tmp = getData<QChar32>();
 
                if (tmp.isNull()) {
-                  setValue<QString16>("");
+                  setValue<QString16>(u"");
                } else {
                   setValue<QString16>(tmp);
                }
@@ -1322,10 +1383,23 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::JsonValue: {
                QJsonValue tmp = getData<QJsonValue>();
 
-               if (tmp.isString())  {
+               if (tmp.isBool())  {
+
+                  if (tmp.toBool()) {
+                     setValue<QString16>(u"true");
+                  } else {
+                     setValue<QString16>(u"false");
+                  }
+
+               } else if (tmp.isDouble())  {
+                  setValue<QString16>(QString16::number(tmp.toDouble()));
+
+               } else if (tmp.isString())  {
                   setValue<QString16>(tmp.toString().toUtf16());
-               } else if (! tmp.isNull()) {
-                  retval = false;;
+
+               } else {
+                  retval = false;
+
                }
 
                break;
@@ -1395,6 +1469,8 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                tmp = QDate::fromString(QString::fromUtf16(getData<QString16>()), Qt::ISODate);
                break;
 
+            // from QVariant::Time is invalid
+
             default:
                retval = false;
          }
@@ -1407,6 +1483,8 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
          QTime tmp;
 
          switch (current_userType) {
+            // from QVariant::Date is invalid
+
             case QVariant::DateTime:
                tmp = getData<QDateTime>().time();
                break;
@@ -1444,6 +1522,8 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
                tmp = QDateTime::fromString(QString::fromUtf16(getData<QString16>()), Qt::ISODate);
                break;
 
+            // from QVariant::Time is invalid
+
             default:
                retval = false;
          }
@@ -1472,6 +1552,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
             if (! tmp.isArray()) {
                retval = false;
+               break;
             }
 
             setValue<QVariantList>(tmp.toArray().toVariantList());
@@ -1503,6 +1584,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
             if (! tmp.isObject()) {
                retval = false;
+               break;
             }
 
             setValue<QVariantMap>(tmp.toObject().toVariantMap());
@@ -1538,6 +1620,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
             if (! tmp.isObject()) {
                retval = false;
+               break;
             }
 
             setValue<QVariantHash>(tmp.toObject().toVariantHash());
@@ -1574,6 +1657,24 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
 
          break;
 
+      case QVariant::Point:
+         if (current_userType == QVariant::PointF) {
+            setValue<QPoint>(getData<QPointF>().toPoint());
+         } else {
+            retval = false;
+         }
+
+         break;
+
+      case QVariant::PointF:
+         if (current_userType == QVariant::Point) {
+            setValue<QPointF>(getData<QPoint>());
+         } else {
+            retval = false;
+         }
+
+         break;
+
       case QVariant::Rect:
          if (current_userType == QVariant::RectF) {
             setValue<QRect>(getData<QRectF>().toRect());
@@ -1604,24 +1705,6 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       case QVariant::SizeF:
          if (current_userType == QVariant::Size) {
             setValue<QSizeF>(getData<QSize>());
-         } else {
-            retval = false;
-         }
-
-         break;
-
-      case QVariant::Point:
-         if (current_userType == QVariant::PointF) {
-            setValue<QPoint>(getData<QPointF>().toPoint());
-         } else {
-            retval = false;
-         }
-
-         break;
-
-      case QVariant::PointF:
-         if (current_userType == QVariant::Point) {
-            setValue<QPointF>(getData<QPoint>());
          } else {
             retval = false;
          }
@@ -1798,7 +1881,7 @@ void QVariant::cs_internal_create(uint typeId, const void *other)
 
       case QVariant::String16:
          if (other == nullptr) {
-            setValue<QString16>("");
+            setValue<QString16>(u"");
          } else {
             setValue<QString16>(*static_cast<const QString16 *>(other) );
          }
@@ -2730,6 +2813,22 @@ bool QVariant::canConvert(uint newType) const
 
          break;
 
+      case QVariant::Point:
+
+         if (current_userType == QVariant::PointF) {
+            return true;
+         }
+
+         break;
+
+      case QVariant::PointF:
+
+         if (current_userType == QVariant::Point) {
+            return true;
+         }
+
+         break;
+
       case QVariant::Rect:
 
          if (current_userType == QVariant::RectF) {
@@ -2757,22 +2856,6 @@ bool QVariant::canConvert(uint newType) const
       case QVariant::SizeF:
 
          if (current_userType == QVariant::Size) {
-            return true;
-         }
-
-         break;
-
-      case QVariant::Point:
-
-         if (current_userType == QVariant::PointF) {
-            return true;
-         }
-
-         break;
-
-      case QVariant::PointF:
-
-         if (current_userType == QVariant::Point) {
             return true;
          }
 
@@ -3373,7 +3456,7 @@ bool QVariant::cs_internal_save(QDataStream &stream, uint type) const
          break;
 
       case QVariant::String16:
-         stream << static_cast<QString16>(getData<QString16>());;
+         stream << static_cast<QString16>(getData<QString16>());
          break;
 
       case QVariant::RegularExpression:
@@ -3829,6 +3912,16 @@ QJsonDocument QVariant::toJsonDocument() const
    return cs_internal_VariantToType<QJsonDocument>(QVariant::JsonDocument);
 }
 
+QLine QVariant::toLine() const
+{
+   return cs_internal_VariantToType<QLine>(QVariant::Line);
+}
+
+QLineF QVariant::toLineF() const
+{
+   return cs_internal_VariantToType<QLineF>(QVariant::LineF);
+}
+
 QPoint QVariant::toPoint() const
 {
    return cs_internal_VariantToType<QPoint>(QVariant::Point);
@@ -3857,16 +3950,6 @@ QSize QVariant::toSize() const
 QSizeF QVariant::toSizeF() const
 {
    return cs_internal_VariantToType<QSizeF>(QVariant::SizeF);
-}
-
-QLine QVariant::toLine() const
-{
-   return cs_internal_VariantToType<QLine>(QVariant::Line);
-}
-
-QLineF QVariant::toLineF() const
-{
-   return cs_internal_VariantToType<QLineF>(QVariant::LineF);
 }
 
 QEasingCurve QVariant::toEasingCurve() const

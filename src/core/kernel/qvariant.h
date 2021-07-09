@@ -271,10 +271,10 @@ class Q_CORE_EXPORT QVariant
    QVariant(QLocale value);
 
    QVariant(QList<QVariant> value);
-   QVariant(QMap<QString, QVariant> value);
    QVariant(QHash<QString, QVariant> value);
-   QVariant(QMultiMap<QString, QVariant> value);
+   QVariant(QMap<QString, QVariant> value);
    QVariant(QMultiHash<QString, QVariant> value);
+   QVariant(QMultiMap<QString, QVariant> value);
 
    QVariant(QJsonValue value);
    QVariant(QJsonObject value);
@@ -381,10 +381,10 @@ class Q_CORE_EXPORT QVariant
    QJsonDocument toJsonDocument() const;
 
    QList<QVariant> toList() const;
-   QMap<QString, QVariant> toMap() const;
    QHash<QString, QVariant> toHash() const;
-   QMultiMap<QString, QVariant> toMultiMap() const;
+   QMap<QString, QVariant> toMap() const;
    QMultiHash<QString, QVariant> toMultiHash() const;
+   QMultiMap<QString, QVariant> toMultiMap() const;
 
    QPoint toPoint() const;
    QPointF toPointF() const;
@@ -507,10 +507,10 @@ class Q_CORE_EXPORT QVariant
 };
 
 using QVariantList      = QList<QVariant>;
-using QVariantMap       = QMap<QString, QVariant>;
 using QVariantHash      = QHash<QString, QVariant>;
-using QVariantMultiMap  = QMultiMap<QString, QVariant>;
+using QVariantMap       = QMap<QString, QVariant>;
 using QVariantMultiHash = QMultiHash<QString, QVariant>;
+using QVariantMultiMap  = QMultiMap<QString, QVariant>;
 
 Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant &data);
 Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant::Type &typeId);
