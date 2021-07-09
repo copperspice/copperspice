@@ -52,10 +52,10 @@ class Q_GUI_EXPORT QActionGroup : public QObject
 
    ~QActionGroup();
 
-   QAction *addAction(QAction *a);
+   QAction *addAction(QAction *action);
    QAction *addAction(const QString &text);
    QAction *addAction(const QIcon &icon, const QString &text);
-   void removeAction(QAction *a);
+   void removeAction(QAction *action);
    QList<QAction *> actions() const;
 
    QAction *checkedAction() const;
@@ -63,23 +63,23 @@ class Q_GUI_EXPORT QActionGroup : public QObject
    bool isEnabled() const;
    bool isVisible() const;
 
-   GUI_CS_SLOT_1(Public, void setEnabled(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setEnabled(bool b))
    GUI_CS_SLOT_2(setEnabled)
 
-   GUI_CS_SLOT_1(Public, void setDisabled(bool b) { setEnabled(!b); })
+   GUI_CS_SLOT_1(Public, void setDisabled(bool b) { setEnabled(! b); })
    GUI_CS_SLOT_2(setDisabled)
 
-   GUI_CS_SLOT_1(Public, void setVisible(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setVisible(bool b))
    GUI_CS_SLOT_2(setVisible)
 
-   GUI_CS_SLOT_1(Public, void setExclusive(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setExclusive(bool b))
    GUI_CS_SLOT_2(setExclusive)
 
-   GUI_CS_SIGNAL_1(Public, void triggered(QAction *un_named_arg1))
-   GUI_CS_SIGNAL_2(triggered, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void triggered(QAction *action))
+   GUI_CS_SIGNAL_2(triggered, action)
 
-   GUI_CS_SIGNAL_1(Public, void hovered(QAction *un_named_arg1))
-   GUI_CS_SIGNAL_2(hovered, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void hovered(QAction *action))
+   GUI_CS_SIGNAL_2(hovered, action)
 
  protected:
    QScopedPointer<QActionGroupPrivate> d_ptr;

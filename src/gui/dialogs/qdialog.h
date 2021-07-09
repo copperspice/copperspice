@@ -69,7 +69,7 @@ class Q_GUI_EXPORT QDialog : public QWidget
    bool isSizeGripEnabled() const;
 
    void setModal(bool modal);
-   void setResult(int r);
+   void setResult(int result);
 
    GUI_CS_SIGNAL_1(Public, void finished(int result))
    GUI_CS_SIGNAL_2(finished, result)
@@ -86,7 +86,7 @@ class Q_GUI_EXPORT QDialog : public QWidget
    GUI_CS_SLOT_1(Public, virtual int exec())
    GUI_CS_SLOT_2(exec)
 
-   GUI_CS_SLOT_1(Public, virtual void done(int arg1))
+   GUI_CS_SLOT_1(Public, virtual void done(int result))
    GUI_CS_SLOT_2(done)
 
    GUI_CS_SLOT_1(Public, virtual void accept())
@@ -95,23 +95,23 @@ class Q_GUI_EXPORT QDialog : public QWidget
    GUI_CS_SLOT_1(Public, virtual void reject())
    GUI_CS_SLOT_2(reject)
 
-   GUI_CS_SLOT_1(Public, void showExtension(bool arg1))
+   GUI_CS_SLOT_1(Public, void showExtension(bool showExt))
    GUI_CS_SLOT_2(showExtension)
 
  protected:
    QDialog(QDialogPrivate &, QWidget *parent, Qt::WindowFlags f = Qt::WindowFlags());
 
-   void keyPressEvent(QKeyEvent *) override;
-   void closeEvent(QCloseEvent *) override;
-   void showEvent(QShowEvent *) override;
-   void resizeEvent(QResizeEvent *) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void closeEvent(QCloseEvent *event) override;
+   void showEvent(QShowEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *) override;
+   void contextMenuEvent(QContextMenuEvent *event) override;
 #endif
 
-   bool eventFilter(QObject *, QEvent *) override;
-   void adjustPosition(QWidget *);
+   bool eventFilter(QObject *object, QEvent *event) override;
+   void adjustPosition(QWidget *widget);
 
  private:
    Q_DECLARE_PRIVATE(QDialog)

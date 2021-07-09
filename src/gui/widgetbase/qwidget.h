@@ -304,7 +304,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    };
    using RenderFlags = QFlags<RenderFlag>;
 
-   explicit QWidget(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+   explicit QWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
    QWidget(const QWidget &) = delete;
    QWidget &operator=(const QWidget &) = delete;
@@ -324,7 +324,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 
    // GUI style setting
    QStyle *style() const;
-   void setStyle(QStyle *);
+   void setStyle(QStyle *style);
 
    // Widget types and states
    inline bool isTopLevel() const;
@@ -335,10 +335,10 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void setWindowModality(Qt::WindowModality windowModality);
 
    inline bool isEnabled() const;
-   bool isEnabledTo(const QWidget *) const;
+   bool isEnabledTo(const QWidget *parent) const;
    inline bool isEnabledToTLW() const;
 
-   GUI_CS_SLOT_1(Public, void setEnabled(bool enabled))
+   GUI_CS_SLOT_1(Public, void setEnabled(bool enable))
    GUI_CS_SLOT_2(setEnabled)
 
    GUI_CS_SLOT_1(Public, void setDisabled(bool disable))
@@ -370,13 +370,13 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    inline int maximumWidth() const;
    inline int maximumHeight() const;
 
-   inline void setMinimumSize(const QSize &);
+   inline void setMinimumSize(const QSize &size);
    void setMinimumSize(int minw, int minh);
 
    // wrapper for overloaded property
    inline void cs_setMinimumSize(const QSize &size);
 
-   inline void setMaximumSize(const QSize &);
+   inline void setMaximumSize(const QSize &size);
    void setMaximumSize(int maxw, int maxh);
 
    // wrapper for overloaded property
@@ -388,7 +388,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void setMaximumHeight(int maxh);
 
    QSize sizeIncrement() const;
-   inline void setSizeIncrement(const QSize &);
+   inline void setSizeIncrement(const QSize &size);
    void setSizeIncrement(int w, int h);
 
    // wrapper for overloaded property
@@ -401,18 +401,18 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    // wrapper for overloaded property
    inline void cs_setBaseSize(const QSize &un_named_arg1);
 
-   void setFixedSize(const QSize &);
+   void setFixedSize(const QSize &size);
    void setFixedSize(int w, int h);
    void setFixedWidth(int w);
    void setFixedHeight(int h);
 
    // Widget coordinate mapping
-   QPoint mapToGlobal(const QPoint &) const;
-   QPoint mapFromGlobal(const QPoint &) const;
-   QPoint mapToParent(const QPoint &) const;
-   QPoint mapFromParent(const QPoint &) const;
-   QPoint mapTo(const QWidget *, const QPoint &) const;
-   QPoint mapFrom(const QWidget *, const QPoint &) const;
+   QPoint mapToGlobal(const QPoint &pos) const;
+   QPoint mapFromGlobal(const QPoint &pos) const;
+   QPoint mapToParent(const QPoint &pos) const;
+   QPoint mapFromParent(const QPoint &pos) const;
+   QPoint mapTo(const QWidget *parent, const QPoint &pos) const;
+   QPoint mapFrom(const QWidget *parent, const QPoint &pos) const;
 
    QWidget *window() const;
    QWidget *nativeParentWidget() const;
@@ -423,22 +423,22 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 
    // Widget appearance functions
    const QPalette &palette() const;
-   void setPalette(const QPalette &);
+   void setPalette(const QPalette &palette);
 
-   void setBackgroundRole(QPalette::ColorRole);
+   void setBackgroundRole(QPalette::ColorRole role);
    QPalette::ColorRole backgroundRole() const;
 
-   void setForegroundRole(QPalette::ColorRole);
+   void setForegroundRole(QPalette::ColorRole role);
    QPalette::ColorRole foregroundRole() const;
 
    const QFont &font() const;
-   void setFont(const QFont &);
+   void setFont(const QFont &font);
    QFontMetrics fontMetrics() const;
    QFontInfo fontInfo() const;
 
 #ifndef QT_NO_CURSOR
    QCursor cursor() const;
-   void setCursor(const QCursor &);
+   void setCursor(const QCursor &cursor);
    void unsetCursor();
 #endif
 
@@ -446,8 +446,8 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    bool hasMouseTracking() const;
    bool underMouse() const;
 
-   void setMask(const QBitmap &);
-   void setMask(const QRegion &);
+   void setMask(const QBitmap &bitmap);
+   void setMask(const QRegion &region);
    QRegion mask() const;
    void clearMask();
 
@@ -460,14 +460,15 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
       RenderFlags renderFlags = RenderFlags(DrawWindowBackground | DrawChildren));
 
    QPixmap grab(const QRect &rectangle = QRect(QPoint(0, 0), QSize(-1, -1)));
+
 #ifndef QT_NO_GRAPHICSEFFECT
    QGraphicsEffect *graphicsEffect() const;
    void setGraphicsEffect(QGraphicsEffect *effect);
 #endif
 
 #ifndef QT_NO_GESTURES
-   void grabGesture(Qt::GestureType type, Qt::GestureFlags flags = Qt::GestureFlags());
-   void ungrabGesture(Qt::GestureType type);
+   void grabGesture(Qt::GestureType gestureType, Qt::GestureFlags flags = Qt::GestureFlags());
+   void ungrabGesture(Qt::GestureType gestureType);
 #endif
 
    GUI_CS_SLOT_1(Public, void setWindowTitle(const QString &title))
@@ -487,10 +488,10 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void setWindowIcon(const QIcon &icon);
    QIcon windowIcon() const;
 
-   void setWindowIconText(const QString &);
+   void setWindowIconText(const QString &icon);
    QString windowIconText() const;
 
-   void setWindowRole(const QString &);
+   void setWindowRole(const QString &role);
    QString windowRole() const;
 
    void setWindowFilePath(const QString &filePath);
@@ -555,10 +556,10 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    Qt::FocusPolicy focusPolicy() const;
    void setFocusPolicy(Qt::FocusPolicy policy);
 
-   void setFocusProxy(QWidget *);
+   void setFocusProxy(QWidget *widget);
    QWidget *focusProxy() const;
 
-   static void setTabOrder(QWidget *, QWidget *);
+   static void setTabOrder(QWidget *firstWidget, QWidget *secondWidget);
 
    Qt::ContextMenuPolicy contextMenuPolicy() const;
    void setContextMenuPolicy(Qt::ContextMenuPolicy policy);
@@ -599,12 +600,12 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    GUI_CS_SLOT_OVERLOAD(repaint, ())
 
    inline void update(int x, int y, int w, int h);
-   void update(const QRect &);
-   void update(const QRegion &);
+   void update(const QRect &rect);
+   void update(const QRegion &region);
 
    void repaint(int x, int y, int w, int h);
-   void repaint(const QRect &);
-   void repaint(const QRegion &);
+   void repaint(const QRect &rect);
+   void repaint(const QRegion &region);
 
    // Widget management functions
    GUI_CS_SLOT_1(Public, virtual void setVisible(bool visible))
@@ -640,22 +641,22 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    GUI_CS_SLOT_1(Public, void lower())
    GUI_CS_SLOT_2(lower)
 
-   void stackUnder(QWidget *);
+   void stackUnder(QWidget *widget);
 
    inline void move(int x, int y);
-   void move(const QPoint &);
+   void move(const QPoint &point);
 
    // wrapper for overloaded property
    inline void cs_move(const QPoint &point);
 
    inline void resize(int w, int h);
-   void resize(const QSize &);
+   void resize(const QSize &size);
 
    // wrapper for overloaded property
    inline void cs_resize(const QSize &size);
 
    inline void setGeometry(int x, int y, int w, int h);
-   void setGeometry(const QRect &);
+   void setGeometry(const QRect &rect);
 
    // wrapper for overloaded property
    inline void cs_setGeometry(const QRect &rect);
@@ -664,7 +665,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    bool restoreGeometry(const QByteArray &geometry);
    void adjustSize();
    inline bool isVisible() const;
-   bool isVisibleTo(const QWidget *) const;
+   bool isVisibleTo(const QWidget *parent) const;
 
    // ### Qt5/bool isVisibleTo(_const_ QWidget *) const
    inline bool isHidden() const;
@@ -674,20 +675,20 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    bool isFullScreen() const;
 
    Qt::WindowStates windowState() const;
-   void setWindowState(Qt::WindowStates state);
-   void overrideWindowState(Qt::WindowStates state);
+   void setWindowState(Qt::WindowStates windowState);
+   void overrideWindowState(Qt::WindowStates windowState);
 
    virtual QSize sizeHint() const;
    virtual QSize minimumSizeHint() const;
 
    QSizePolicy sizePolicy() const;
-   void setSizePolicy(QSizePolicy);
+   void setSizePolicy(QSizePolicy policy);
    inline void setSizePolicy(QSizePolicy::Policy horizontal, QSizePolicy::Policy vertical);
 
    // wrapper for overloaded property
-   inline void cs_setSizePolicy(const QSizePolicy un_named_arg1);
+   inline void cs_setSizePolicy(const QSizePolicy policy);
 
-   virtual int heightForWidth(int) const;
+   virtual int heightForWidth(int width) const;
    virtual bool hasHeightForWidth() const;
 
    QRegion visibleRegion() const;
@@ -704,7 +705,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void updateGeometry();
 
    void setParent(QWidget *parent);
-   void setParent(QWidget *parent, Qt::WindowFlags f);
+   void setParent(QWidget *parent, Qt::WindowFlags flags);
 
    void scroll(int dx, int dy);
    void scroll(int dx, int dy, const QRect &rect);
@@ -730,18 +731,18 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 
    inline QWidget *parentWidget() const;
 
-   void setWindowFlags(Qt::WindowFlags type);
+   void setWindowFlags(Qt::WindowFlags flags);
    inline Qt::WindowFlags windowFlags() const;
-   void overrideWindowFlags(Qt::WindowFlags type);
+   void overrideWindowFlags(Qt::WindowFlags flags);
 
    inline Qt::WindowType windowType() const;
 
-   static QWidget *find(WId);
+   static QWidget *find(WId id);
    inline QWidget *childAt(int x, int y) const;
-   QWidget *childAt(const QPoint &p) const;
+   QWidget *childAt(const QPoint &position) const;
 
-   void setAttribute(Qt::WidgetAttribute, bool on = true);
-   inline bool testAttribute(Qt::WidgetAttribute) const;
+   void setAttribute(Qt::WidgetAttribute attribute, bool enable = true);
+   inline bool testAttribute(Qt::WidgetAttribute attribute) const;
 
    QPaintEngine *paintEngine() const override;
 
@@ -751,11 +752,11 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 
 #ifdef QT_KEYPAD_NAVIGATION
    bool hasEditFocus() const;
-   void setEditFocus(bool on);
+   void setEditFocus(bool enable);
 #endif
 
    bool autoFillBackground() const;
-   void setAutoFillBackground(bool enabled);
+   void setAutoFillBackground(bool enable);
 
    QBackingStore *backingStore() const;
    QWindow *windowHandle() const;
@@ -773,7 +774,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    GUI_CS_SIGNAL_1(Public, void customContextMenuRequested(const QPoint &pos))
    GUI_CS_SIGNAL_2(customContextMenuRequested, pos)
 
-   virtual QVariant inputMethodQuery(Qt::InputMethodQuery) const;
+   virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
    Qt::InputMethodHints inputMethodHints() const;
    void setInputMethodHints(Qt::InputMethodHints hints);
 
@@ -823,17 +824,17 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    virtual void showEvent(QShowEvent *event);
    virtual void hideEvent(QHideEvent *event);
    virtual bool nativeEvent(const QByteArray &eventType, void *message, long *result);
-   virtual void changeEvent(QEvent *);
-   int metric(PaintDeviceMetric) const override;
+   virtual void changeEvent(QEvent *event);
+   int metric(PaintDeviceMetric metric) const override;
    void initPainter(QPainter *painter) const override;
    QPaintDevice *redirected(QPoint *offset) const override;
    QPainter *sharedPainter() const override;
-   virtual void inputMethodEvent(QInputMethodEvent *);
+   virtual void inputMethodEvent(QInputMethodEvent *event);
 
  protected:
    bool cs_isWidgetType() const override;
 
-   void create(WId = 0, bool initializeWindow = true, bool destroyOldWindow = true);
+   void create(WId window = 0, bool initializeWindow = true, bool destroyOldWindow = true);
    void destroy(bool destroyWindow = true, bool destroySubWindows = true);
 
    virtual bool focusNextPrevChild(bool next);
@@ -846,7 +847,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
       return focusNextPrevChild(false);
    }
 
-   QWidget(QWidgetPrivate &d, QWidget *parent, Qt::WindowFlags f);
+   QWidget(QWidgetPrivate &d, QWidget *parent, Qt::WindowFlags flags);
 
    GUI_CS_SLOT_1(Protected, void updateMicroFocus())
    GUI_CS_SLOT_2(updateMicroFocus)
@@ -997,24 +998,24 @@ inline int QWidget::maximumHeight() const
    return maximumSize().height();
 }
 
-inline void QWidget::setMinimumSize(const QSize &s)
+inline void QWidget::setMinimumSize(const QSize &size)
 {
-   setMinimumSize(s.width(), s.height());
+   setMinimumSize(size.width(), size.height());
 }
 
-inline void QWidget::setMaximumSize(const QSize &s)
+inline void QWidget::setMaximumSize(const QSize &size)
 {
-   setMaximumSize(s.width(), s.height());
+   setMaximumSize(size.width(), size.height());
 }
 
-inline void QWidget::setSizeIncrement(const QSize &s)
+inline void QWidget::setSizeIncrement(const QSize &size)
 {
-   setSizeIncrement(s.width(), s.height());
+   setSizeIncrement(size.width(), size.height());
 }
 
-inline void QWidget::setBaseSize(const QSize &s)
+inline void QWidget::setBaseSize(const QSize &size)
 {
-   setBaseSize(s.width(), s.height());
+   setBaseSize(size.width(), size.height());
 }
 
 inline const QFont &QWidget::font() const
@@ -1052,9 +1053,9 @@ inline bool QWidget::updatesEnabled() const
    return !testAttribute(Qt::WA_UpdatesDisabled);
 }
 
-inline void QWidget::update(int ax, int ay, int aw, int ah)
+inline void QWidget::update(int x, int y, int w, int h)
 {
-   update(QRect(ax, ay, aw, ah));
+   update(QRect(x, y, w, h));
 }
 
 inline bool QWidget::isVisible() const
@@ -1112,9 +1113,9 @@ inline QWidget *QWidget::parentWidget() const
    return static_cast<QWidget *>(QObject::parent());
 }
 
-inline void QWidget::setSizePolicy(QSizePolicy::Policy hor, QSizePolicy::Policy ver)
+inline void QWidget::setSizePolicy(QSizePolicy::Policy horizontal, QSizePolicy::Policy vertical)
 {
-   setSizePolicy(QSizePolicy(hor, ver));
+   setSizePolicy(QSizePolicy(horizontal, vertical));
 }
 
 inline bool QWidget::testAttribute(Qt::WidgetAttribute attribute) const

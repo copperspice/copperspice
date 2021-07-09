@@ -172,7 +172,7 @@ class Q_GUI_EXPORT QAction : public QObject
    QKeySequence shortcut() const;
 
    void setShortcuts(const QList<QKeySequence> &shortcuts);
-   void setShortcuts(QKeySequence::StandardKey);
+   void setShortcuts(QKeySequence::StandardKey key);
    QList<QKeySequence> shortcuts() const;
 
    void setShortcutContext(Qt::ShortcutContext context);
@@ -189,7 +189,7 @@ class Q_GUI_EXPORT QAction : public QObject
    bool isCheckable() const;
 
    QVariant data() const;
-   void setData(const QVariant &var);
+   void setData(const QVariant &data);
 
    bool isChecked() const;
    bool isEnabled() const;
@@ -219,19 +219,19 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_SLOT_1(Public, void hover())
    GUI_CS_SLOT_2(hover)
 
-   GUI_CS_SLOT_1(Public, void setChecked(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setChecked(bool b))
    GUI_CS_SLOT_2(setChecked)
 
    GUI_CS_SLOT_1(Public, void toggle())
    GUI_CS_SLOT_2(toggle)
 
-   GUI_CS_SLOT_1(Public, void setEnabled(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setEnabled(bool b))
    GUI_CS_SLOT_2(setEnabled)
 
    GUI_CS_SLOT_1(Public, void setDisabled(bool b))
    GUI_CS_SLOT_2(setDisabled)
 
-   GUI_CS_SLOT_1(Public, void setVisible(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setVisible(bool b))
    GUI_CS_SLOT_2(setVisible)
 
    GUI_CS_SIGNAL_1(Public, void changed())
@@ -243,11 +243,11 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_SIGNAL_1(Public, void hovered())
    GUI_CS_SIGNAL_2(hovered)
 
-   GUI_CS_SIGNAL_1(Public, void toggled(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(toggled, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void toggled(bool checked))
+   GUI_CS_SIGNAL_2(toggled, checked)
 
  protected:
-   bool event(QEvent *) override;
+   bool event(QEvent *event) override;
    QAction(QActionPrivate &dd, QObject *parent);
 
    QScopedPointer<QActionPrivate> d_ptr;

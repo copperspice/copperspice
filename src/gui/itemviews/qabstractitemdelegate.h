@@ -91,8 +91,8 @@ class Q_GUI_EXPORT QAbstractItemDelegate : public QObject
    GUI_CS_SIGNAL_1(Public, void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint = NoHint))
    GUI_CS_SIGNAL_2(closeEditor, editor, hint)
 
-   GUI_CS_SIGNAL_1(Public, void sizeHintChanged(const QModelIndex &un_named_arg1))
-   GUI_CS_SIGNAL_2(sizeHintChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void sizeHintChanged(const QModelIndex &index))
+   GUI_CS_SIGNAL_2(sizeHintChanged, index)
 
  protected:
    QAbstractItemDelegate(QAbstractItemDelegatePrivate &, QObject *parent = nullptr);

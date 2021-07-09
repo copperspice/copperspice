@@ -112,7 +112,7 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
  public:
    using FP_Void = void(*)();
 
-   QApplication(int &argc, char **argv, int = ApplicationFlags);
+   QApplication(int &argc, char **argv, int flags = ApplicationFlags);
 
    QApplication(const QApplication &) = delete;
    QApplication &operator=(const QApplication &) = delete;
@@ -157,29 +157,29 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    qreal devicePixelRatio() const;
 
    static QStyle *style();
-   static void setStyle(QStyle *);
-   static QStyle *setStyle(const QString &);
+   static void setStyle(QStyle *style);
+   static QStyle *setStyle(const QString &style);
 
    enum ColorSpec { NormalColor = 0, CustomColor = 1, ManyColor = 2 };
    static int colorSpec();
-   static void setColorSpec(int);
+   static void setColorSpec(int spec);
 
 #ifndef QT_NO_CURSOR
    static QCursor *overrideCursor();
-   static void setOverrideCursor(const QCursor &);
-   static void changeOverrideCursor(const QCursor &);
+   static void setOverrideCursor(const QCursor &cursor);
+   static void changeOverrideCursor(const QCursor &cursor);
    static void restoreOverrideCursor();
 #endif
 
    static QFont font();
-   static QFont font(const QWidget *);
+   static QFont font(const QWidget *widget);
    static QFont font(const QString &className);
-   static void setFont(const QFont &, const QString &className = QString());
+   static void setFont(const QFont &font, const QString &className = QString());
 
    static QPalette palette();
-   static QPalette palette(const QWidget *);
+   static QPalette palette(const QWidget *widget);
    static QPalette palette(const QString &className);
-   static void setPalette(const QPalette &pal, const QString &className = QString());
+   static void setPalette(const QPalette &palette, const QString &className = QString());
 
    static QFontMetrics fontMetrics();
 
@@ -208,9 +208,9 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static QWidget *focusWidget();
 
    static QWidget *activeWindow();
-   static void setActiveWindow(QWidget *act);
+   static void setActiveWindow(QWidget *active);
 
-   static QWidget *widgetAt(const QPoint &pos);
+   static QWidget *widgetAt(const QPoint &point);
 
    static inline QWidget *widgetAt(int x, int y) {
       return widgetAt(QPoint(x, y));
@@ -222,67 +222,67 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static Qt::KeyboardModifiers queryKeyboardModifiers();
    static Qt::MouseButtons mouseButtons();
 
-   static void setCursorFlashTime(int);
+   static void setCursorFlashTime(int duration);
    static int cursorFlashTime();
 
    // wrapper for static method
-   inline void cs_setCursorFlashTime(int un_named_arg1);
+   inline void cs_setCursorFlashTime(int duration);
 
    // wrapper for static method
    inline int cs_cursorFlashTime() const;
 
-   static void setDoubleClickInterval(int);
+   static void setDoubleClickInterval(int interval);
    static int doubleClickInterval();
 
    // wrapper for static method
-   inline void cs_setDoubleClickInterval(int un_named_arg1);
+   inline void cs_setDoubleClickInterval(int interval);
 
    // wrapper for static method
    inline int cs_doubleClickInterval() const;
 
-   static void setKeyboardInputInterval(int);
+   static void setKeyboardInputInterval(int interval);
    static int keyboardInputInterval();
 
    // wrapper for static method
-   inline void cs_setKeyboardInputInterval(int un_named_arg1);
+   inline void cs_setKeyboardInputInterval(int interval);
 
    // wrapper for static method
    inline int cs_keyboardInputInterval() const;
 
 #ifndef QT_NO_WHEELEVENT
-   static void setWheelScrollLines(int);
+   static void setWheelScrollLines(int lines);
    static int wheelScrollLines();
 
    // wrapper for overloaded property
-   inline void cs_setWheelScrollLines(int un_named_arg1);
+   inline void cs_setWheelScrollLines(int lines);
 
    // wrapper for overloaded property
    inline int cs_wheelScrollLines()  const;
 #endif
 
-   static void setGlobalStrut(const QSize &);
+   static void setGlobalStrut(const QSize &size);
    static QSize globalStrut();
 
    // wrapper for static method
-   inline void cs_setGlobalStrut(const QSize &un_named_arg1);
+   inline void cs_setGlobalStrut(const QSize &size);
 
    // wrapper for static method
    inline QSize cs_globalStrut() const;
 
-   static void setStartDragTime(int ms);
+   static void setStartDragTime(int time);
    static int startDragTime();
 
    // wrapper for static method
-   inline void cs_setStartDragTime(int ms);
+   inline void cs_setStartDragTime(int time);
 
    // wrapper for static method
    inline int cs_startDragTime() const;
 
-   static void setStartDragDistance(int l);
+   static void setStartDragDistance(int distance);
    static int startDragDistance();
 
    // wrapper for static method
-   inline void cs_setStartDragDistance(int l);
+   inline void cs_setStartDragDistance(int distance);
 
    // wrapper for static method
    inline int cs_startDragDistance() const;
@@ -317,10 +317,10 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static Qt::ApplicationState applicationState();
 
    static int exec();
-   bool notify(QObject *, QEvent *) override;
+   bool notify(QObject *receiver, QEvent *event) override;
 
-   static bool isEffectEnabled(Qt::UIEffect);
-   static void setEffectEnabled(Qt::UIEffect, bool enable = true);
+   static bool isEffectEnabled(Qt::UIEffect effect);
+   static void setEffectEnabled(Qt::UIEffect effect, bool enable = true);
 
 #ifndef QT_NO_SESSIONMANAGER
    // session management
@@ -330,7 +330,7 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    bool isSavingSession() const;
 
    static bool isFallbackSessionManagementEnabled();
-   static void setFallbackSessionManagementEnabled(bool);
+   static void setFallbackSessionManagementEnabled(bool enable);
 #endif
 
    static void setQuitOnLastWindowClosed(bool quit);
@@ -367,14 +367,14 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    GUI_CS_SIGNAL_1(Public, void layoutDirectionChanged(Qt::LayoutDirection direction))
    GUI_CS_SIGNAL_2(layoutDirectionChanged, direction)
 
-   GUI_CS_SIGNAL_1(Public, void paletteChanged(const QPalette &pal))
-   GUI_CS_SIGNAL_2(paletteChanged, pal)
+   GUI_CS_SIGNAL_1(Public, void paletteChanged(const QPalette &palette))
+   GUI_CS_SIGNAL_2(paletteChanged, palette)
 
    GUI_CS_SIGNAL_1(Public, void lastWindowClosed())
    GUI_CS_SIGNAL_2(lastWindowClosed)
 
-   GUI_CS_SIGNAL_1(Public, void focusChanged(QWidget *old, QWidget *now))
-   GUI_CS_SIGNAL_2(focusChanged, old, now)
+   GUI_CS_SIGNAL_1(Public, void focusChanged(QWidget *old, QWidget *current))
+   GUI_CS_SIGNAL_2(focusChanged, old, current)
 
    GUI_CS_SIGNAL_1(Public, void fontDatabaseChanged())
    GUI_CS_SIGNAL_2(fontDatabaseChanged)
@@ -412,8 +412,8 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    GUI_CS_SLOT_2(aboutQt)
 
  protected:
-   bool event(QEvent *) override;
-   bool compressEvent(QEvent *, QObject *receiver, QPostEventList *) override;
+   bool event(QEvent *event) override;
+   bool compressEvent(QEvent *event, QObject *receiver, QPostEventList *eventList) override;
 
    QApplication(QApplicationPrivate &p);
 
@@ -482,9 +482,9 @@ QIcon QApplication::cs_windowIcon() const
    return windowIcon();
 }
 
-void QApplication::cs_setCursorFlashTime(int un_named_arg1)
+void QApplication::cs_setCursorFlashTime(int duration)
 {
-   setCursorFlashTime(un_named_arg1);
+   setCursorFlashTime(duration);
 }
 
 int QApplication::cs_cursorFlashTime() const
@@ -492,9 +492,9 @@ int QApplication::cs_cursorFlashTime() const
    return cursorFlashTime();
 }
 
-void QApplication::cs_setDoubleClickInterval(int un_named_arg1)
+void QApplication::cs_setDoubleClickInterval(int interval)
 {
-   setDoubleClickInterval(un_named_arg1);
+   setDoubleClickInterval(interval);
 }
 
 int QApplication::cs_doubleClickInterval() const
@@ -502,9 +502,9 @@ int QApplication::cs_doubleClickInterval() const
    return doubleClickInterval();
 }
 
-void QApplication::cs_setKeyboardInputInterval(int un_named_arg1)
+void QApplication::cs_setKeyboardInputInterval(int interval)
 {
-   setKeyboardInputInterval(un_named_arg1);
+   setKeyboardInputInterval(interval);
 }
 
 int QApplication::cs_keyboardInputInterval() const
@@ -513,9 +513,9 @@ int QApplication::cs_keyboardInputInterval() const
 }
 
 #ifndef QT_NO_WHEELEVENT
-void QApplication::cs_setWheelScrollLines(int un_named_arg1)
+void QApplication::cs_setWheelScrollLines(int lines)
 {
-   setWheelScrollLines(un_named_arg1);
+   setWheelScrollLines(lines);
 }
 
 int QApplication::cs_wheelScrollLines()  const
@@ -524,9 +524,9 @@ int QApplication::cs_wheelScrollLines()  const
 }
 #endif
 
-void QApplication::cs_setGlobalStrut(const QSize &un_named_arg1)
+void QApplication::cs_setGlobalStrut(const QSize &size)
 {
-   setGlobalStrut(un_named_arg1);
+   setGlobalStrut(size);
 }
 
 QSize QApplication::cs_globalStrut() const
@@ -534,9 +534,9 @@ QSize QApplication::cs_globalStrut() const
    return globalStrut();
 }
 
-void QApplication::cs_setStartDragTime(int ms)
+void QApplication::cs_setStartDragTime(int time)
 {
-   setStartDragTime(ms);
+   setStartDragTime(time);
 }
 
 int QApplication::cs_startDragTime() const
@@ -544,9 +544,9 @@ int QApplication::cs_startDragTime() const
    return startDragTime();
 }
 
-void QApplication::cs_setStartDragDistance(int l)
+void QApplication::cs_setStartDragDistance(int distance)
 {
-   setStartDragDistance(l);
+   setStartDragDistance(distance);
 }
 
 int QApplication::cs_startDragDistance() const

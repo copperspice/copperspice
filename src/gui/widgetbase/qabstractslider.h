@@ -128,8 +128,8 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
    GUI_CS_SIGNAL_1(Public, void sliderPressed())
    GUI_CS_SIGNAL_2(sliderPressed)
 
-   GUI_CS_SIGNAL_1(Public, void sliderMoved(int position))
-   GUI_CS_SIGNAL_2(sliderMoved, position)
+   GUI_CS_SIGNAL_1(Public, void sliderMoved(int pos))
+   GUI_CS_SIGNAL_2(sliderMoved, pos)
 
    GUI_CS_SIGNAL_1(Public, void sliderReleased())
    GUI_CS_SIGNAL_2(sliderReleased)
@@ -148,21 +148,21 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
       SliderValueChange
    };
 
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
    void setRepeatAction(SliderAction action, int thresholdTime = 500, int repeatTime = 50);
    SliderAction repeatAction() const;
 
    virtual void sliderChange(SliderChange change);
 
-   void keyPressEvent(QKeyEvent *ev) override;
-   void timerEvent(QTimerEvent *) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void timerEvent(QTimerEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *e) override;
+   void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   void changeEvent(QEvent *e) override;
+   void changeEvent(QEvent *event) override;
 
    QAbstractSlider(QAbstractSliderPrivate &dd, QWidget *parent = nullptr);
 
