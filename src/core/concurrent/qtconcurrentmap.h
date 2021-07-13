@@ -136,7 +136,7 @@ ResultType blockingMappedReduced(Iterator begin, Iterator end, MapFunctor map, R
             QtConcurrent::SequentialReduce))
 {
    return QtConcurrent::startMappedReduced<typename QtPrivate::MapResultType<void, MapFunctor>::ResultType, ResultType>
-          (begin, end, QtPrivate::createFunctionWrapper(map), QtPrivate::createFunctionWrapper(reduce), reduceOptionss).startBlocking();
+          (begin, end, QtPrivate::createFunctionWrapper(map), QtPrivate::createFunctionWrapper(reduce), reduceOptions).startBlocking();
 }
 
 template <typename Iterator, typename MapFunctor, typename ReduceFunctor>
