@@ -96,6 +96,8 @@ list(APPEND GUI_INCLUDES
 )
 
 list(APPEND GUI_PRIVATE_INCLUDES
+   ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssscanner_p.cpp
+
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qabstracttextdocumentlayout_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssparser_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfont_p.h
@@ -125,7 +127,6 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttable_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qzipreader_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qzipwriter_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssscanner.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_gui_p.h
 )
 

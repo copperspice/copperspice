@@ -36,7 +36,7 @@
 
 #ifndef QT_NO_CSSPARSER
 
-#include <qcssscanner.cpp>
+#include <qcssscanner_p.cpp>
 
 using namespace QCss;
 
