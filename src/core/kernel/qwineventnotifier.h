@@ -50,7 +50,7 @@ class Q_CORE_EXPORT QWinEventNotifier : public QObject
    CORE_CS_SLOT_2(setEnabled)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
  private:
    HANDLE handleToEvent;

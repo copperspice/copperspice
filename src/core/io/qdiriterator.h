@@ -41,7 +41,7 @@ class Q_CORE_EXPORT QDirIterator
    QDirIterator(const QDir &dir, IteratorFlags flags = NoIteratorFlags);
    QDirIterator(const QString &path, IteratorFlags flags = NoIteratorFlags);
 
-   QDirIterator(const QString &path, QDir::Filters filter, IteratorFlags flags = NoIteratorFlags);
+   QDirIterator(const QString &path, QDir::Filters filters, IteratorFlags flags = NoIteratorFlags);
    QDirIterator(const QString &path, const QStringList &nameFilters, QDir::Filters filters = QDir::NoFilter, IteratorFlags flags = NoIteratorFlags);
 
    QDirIterator(const QDirIterator &) = delete;

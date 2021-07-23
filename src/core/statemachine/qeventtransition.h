@@ -60,7 +60,7 @@ class Q_CORE_EXPORT QEventTransition : public QAbstractTransition
    bool eventTest(QEvent *event) override;
    void onTransition(QEvent *event) override;
 
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
    QEventTransition(QEventTransitionPrivate &dd, QState *parent);
    QEventTransition(QEventTransitionPrivate &dd, QObject *object, QEvent::Type type, QState *parent);

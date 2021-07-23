@@ -72,8 +72,8 @@ inline QMargins::QMargins()
  :  m_left(0), m_top(0), m_right(0), m_bottom(0)
 { }
 
-inline QMargins::QMargins(int aleft, int atop, int aright, int abottom)
-   : m_left(aleft), m_top(atop), m_right(aright), m_bottom(abottom)
+inline QMargins::QMargins(int left, int top, int right, int bottom)
+   : m_left(left), m_top(top), m_right(right), m_bottom(bottom)
 { }
 
 inline bool QMargins::isNull() const
@@ -101,24 +101,24 @@ inline int QMargins::bottom() const
    return m_bottom;
 }
 
-inline void QMargins::setLeft(int aleft)
+inline void QMargins::setLeft(int left)
 {
-   m_left = aleft;
+   m_left = left;
 }
 
-inline void QMargins::setTop(int atop)
+inline void QMargins::setTop(int top)
 {
-   m_top = atop;
+   m_top = top;
 }
 
-inline void QMargins::setRight(int aright)
+inline void QMargins::setRight(int right)
 {
-   m_right = aright;
+   m_right = right;
 }
 
-inline void QMargins::setBottom(int abottom)
+inline void QMargins::setBottom(int bottom)
 {
-   m_bottom = abottom;
+   m_bottom = bottom;
 }
 
 inline bool operator==(const QMargins &m1, const QMargins &m2)
@@ -307,40 +307,64 @@ Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QMarginsF &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QMarginsF &);
 
 inline QMarginsF::QMarginsF()
-    : m_left(0), m_top(0), m_right(0), m_bottom(0) {}
+    : m_left(0), m_top(0), m_right(0), m_bottom(0)
+{
+}
 
-inline QMarginsF::QMarginsF(qreal aleft, qreal atop, qreal aright, qreal abottom)
-    : m_left(aleft), m_top(atop), m_right(aright), m_bottom(abottom) {}
+inline QMarginsF::QMarginsF(qreal left, qreal top, qreal right, qreal bottom)
+    : m_left(left), m_top(top), m_right(right), m_bottom(bottom)
+{
+}
 
 inline QMarginsF::QMarginsF(const QMargins &margins)
-    : m_left(margins.left()), m_top(margins.top()), m_right(margins.right()), m_bottom(margins.bottom()) {}
+    : m_left(margins.left()), m_top(margins.top()), m_right(margins.right()), m_bottom(margins.bottom())
+{
+}
 
 inline bool QMarginsF::isNull() const
-{ return qFuzzyIsNull(m_left) && qFuzzyIsNull(m_top) && qFuzzyIsNull(m_right) && qFuzzyIsNull(m_bottom); }
+{
+   return qFuzzyIsNull(m_left) && qFuzzyIsNull(m_top) && qFuzzyIsNull(m_right) && qFuzzyIsNull(m_bottom);
+}
 
 inline qreal QMarginsF::left() const
-{ return m_left; }
+{
+   return m_left;
+}
 
 inline qreal QMarginsF::top() const
-{ return m_top; }
+{
+   return m_top;
+}
 
 inline qreal QMarginsF::right() const
-{ return m_right; }
+{
+   return m_right;
+}
 
 inline qreal QMarginsF::bottom() const
-{ return m_bottom; }
+{
+   return m_bottom;
+}
 
-inline void QMarginsF::setLeft(qreal aleft)
-{ m_left = aleft; }
+inline void QMarginsF::setLeft(qreal left)
+{
+   m_left = left;
+}
 
- inline void QMarginsF::setTop(qreal atop)
-{ m_top = atop; }
+inline void QMarginsF::setTop(qreal top)
+{
+   m_top = top;
+}
 
- inline void QMarginsF::setRight(qreal aright)
-{ m_right = aright; }
+inline void QMarginsF::setRight(qreal right)
+{
+   m_right = right;
+}
 
- inline void QMarginsF::setBottom(qreal abottom)
-{ m_bottom = abottom; }
+ inline void QMarginsF::setBottom(qreal bottom)
+{
+   m_bottom = bottom;
+}
 
 inline bool operator==(const QMarginsF &lhs, const QMarginsF &rhs)
 {

@@ -209,11 +209,9 @@ class Q_CORE_EXPORT QAbstractItemModel : public QObject
    virtual ~QAbstractItemModel();
 
    bool hasIndex(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-   virtual QModelIndex index(int row, int column,
-                             const QModelIndex &parent = QModelIndex()) const = 0;
-   virtual QModelIndex parent(const QModelIndex &child) const = 0;
-
-   virtual QModelIndex sibling(int row, int column, const QModelIndex &idx) const;
+   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const = 0;
+   virtual QModelIndex parent(const QModelIndex &index) const = 0;
+   virtual QModelIndex sibling(int row, int column, const QModelIndex &index) const;
 
    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const = 0;
    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const = 0;
@@ -222,10 +220,8 @@ class Q_CORE_EXPORT QAbstractItemModel : public QObject
    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const = 0;
    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-   virtual QVariant headerData(int section, Qt::Orientation orientation,
-                               int role = Qt::DisplayRole) const;
-   virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
-                              int role = Qt::EditRole);
+   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+   virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 
    virtual QMap<int, QVariant> itemData(const QModelIndex &index) const;
    virtual bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
@@ -322,21 +318,21 @@ class Q_CORE_EXPORT QAbstractItemModel : public QObject
    CORE_CS_SIGNAL_1(Public, void modelReset())
    CORE_CS_SIGNAL_2(modelReset)
 
-   CORE_CS_SIGNAL_1(Public, void rowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart,
-                    int sourceEnd, const QModelIndex &destinationParent, int destinationRow))
+   CORE_CS_SIGNAL_1(Public, void rowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+            const QModelIndex &destinationParent, int destinationRow))
    CORE_CS_SIGNAL_2(rowsAboutToBeMoved, sourceParent, sourceStart, sourceEnd, destinationParent, destinationRow)
 
-   CORE_CS_SIGNAL_1(Public, void rowsMoved(const QModelIndex &parent, int start, int end, const QModelIndex &destination,
-                                           int row))
-   CORE_CS_SIGNAL_2(rowsMoved, parent, start, end, destination, row)
+   CORE_CS_SIGNAL_1(Public, void rowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+            const QModelIndex &destinationParent, int destinationRow))
+   CORE_CS_SIGNAL_2(rowsMoved, sourceParent, sourceStart, sourceEnd,destinationParent, destinationRow)
 
    CORE_CS_SIGNAL_1(Public, void columnsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
-                    const QModelIndex &destinationParent, int destinationColumn))
+            const QModelIndex &destinationParent, int destinationColumn))
    CORE_CS_SIGNAL_2(columnsAboutToBeMoved, sourceParent, sourceStart, sourceEnd, destinationParent, destinationColumn)
 
-   CORE_CS_SIGNAL_1(Public, void columnsMoved(const QModelIndex &parent, int start, int end,
-                    const QModelIndex &destination, int column))
-   CORE_CS_SIGNAL_2(columnsMoved, parent, start, end, destination, column)
+   CORE_CS_SIGNAL_1(Public, void columnsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+            const QModelIndex &destinationParent, int destinationColumn))
+   CORE_CS_SIGNAL_2(columnsMoved, sourceParent, sourceStart, sourceEnd, destinationParent, destinationColumn)
 
    //
    CORE_CS_SLOT_1(Public, virtual bool submit())
@@ -396,24 +392,24 @@ class Q_CORE_EXPORT QAbstractItemModel : public QObject
    friend class QIdentityProxyModel;
 };
 
-inline bool QAbstractItemModel::insertRow(int arow, const QModelIndex &aparent)
+inline bool QAbstractItemModel::insertRow(int row, const QModelIndex &parent)
 {
-   return insertRows(arow, 1, aparent);
+   return insertRows(row, 1, parent);
 }
 
-inline bool QAbstractItemModel::insertColumn(int acolumn, const QModelIndex &aparent)
+inline bool QAbstractItemModel::insertColumn(int column, const QModelIndex &parent)
 {
-   return insertColumns(acolumn, 1, aparent);
+   return insertColumns(column, 1, parent);
 }
 
-inline bool QAbstractItemModel::removeRow(int arow, const QModelIndex &aparent)
+inline bool QAbstractItemModel::removeRow(int row, const QModelIndex &parent)
 {
-   return removeRows(arow, 1, aparent);
+   return removeRows(row, 1, parent);
 }
 
-inline bool QAbstractItemModel::removeColumn(int acolumn, const QModelIndex &aparent)
+inline bool QAbstractItemModel::removeColumn(int column, const QModelIndex &parent)
 {
-   return removeColumns(acolumn, 1, aparent);
+   return removeColumns(column, 1, parent);
 }
 
 inline bool QAbstractItemModel::moveRow(const QModelIndex &sourceParent, int sourceRow,
@@ -428,14 +424,14 @@ inline bool QAbstractItemModel::moveColumn(const QModelIndex &sourceParent, int 
    return moveColumns(sourceParent, sourceColumn, 1, destinationParent, destinationChild);
 }
 
-inline QModelIndex QAbstractItemModel::createIndex(int arow, int acolumn, void *adata) const
+inline QModelIndex QAbstractItemModel::createIndex(int row, int column, void *data) const
 {
-   return QModelIndex(arow, acolumn, adata, this);
+   return QModelIndex(row, column, data, this);
 }
 
-inline QModelIndex QAbstractItemModel::createIndex(int arow, int acolumn, quintptr aid) const
+inline QModelIndex QAbstractItemModel::createIndex(int row, int column, quintptr id) const
 {
-   return QModelIndex(arow, acolumn, reinterpret_cast<void *>(aid), this);
+   return QModelIndex(row, column, reinterpret_cast<void *>(id), this);
 }
 
 class Q_CORE_EXPORT QAbstractTableModel : public QAbstractItemModel
@@ -451,7 +447,7 @@ class Q_CORE_EXPORT QAbstractTableModel : public QAbstractItemModel
     ~QAbstractTableModel();
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
+    QModelIndex sibling(int row, int column, const QModelIndex &index) const override;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
@@ -478,7 +474,7 @@ class Q_CORE_EXPORT QAbstractListModel : public QAbstractItemModel
     ~QAbstractListModel();
 
     QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
+    QModelIndex sibling(int row, int column, const QModelIndex &index) const override;
 
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
@@ -499,19 +495,19 @@ inline QModelIndex QModelIndex::parent() const
    return m ? m->parent(*this) : QModelIndex();
 }
 
-inline QModelIndex QModelIndex::sibling(int arow, int acolumn) const
+inline QModelIndex QModelIndex::sibling(int row, int column) const
 {
-   return m ? (r == arow && c == acolumn) ? *this : m->sibling(arow, acolumn, *this) : QModelIndex();
+   return m ? (r == row && c == column) ? *this : m->sibling(row, column, *this) : QModelIndex();
 }
 
-inline QModelIndex QModelIndex::child(int arow, int acolumn) const
+inline QModelIndex QModelIndex::child(int row, int column) const
 {
-   return m ? m->index(arow, acolumn, *this) : QModelIndex();
+   return m ? m->index(row, column, *this) : QModelIndex();
 }
 
-inline QVariant QModelIndex::data(int arole) const
+inline QVariant QModelIndex::data(int role) const
 {
-   return m ? m->data(*this, arole) : QVariant();
+   return m ? m->data(*this, role) : QVariant();
 }
 
 inline Qt::ItemFlags QModelIndex::flags() const

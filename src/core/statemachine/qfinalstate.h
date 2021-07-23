@@ -37,8 +37,8 @@ class Q_CORE_EXPORT QFinalState : public QAbstractState
  public:
    QFinalState(QState *parent = nullptr);
 
-   QFinalState(const QFinalState &) = delete;
-   QFinalState &operator=(const QFinalState &) = delete;
+   QFinalState(const QFinalState &other) = delete;
+   QFinalState &operator=(const QFinalState &other) = delete;
 
    ~QFinalState();
 
@@ -46,7 +46,7 @@ class Q_CORE_EXPORT QFinalState : public QAbstractState
    void onEntry(QEvent *event) override;
    void onExit(QEvent *event) override;
 
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QFinalState)

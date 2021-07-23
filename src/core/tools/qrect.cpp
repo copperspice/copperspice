@@ -28,63 +28,77 @@
 
 #include <qdebug_p.h>
 
-
 QRect QRect::normalized() const
 {
    QRect r;
-   if (x2 < x1 - 1) {                                // swap bad x values
-      r.x1 = x2;
-      r.x2 = x1;
+
+   if (m_x2 < m_x1 - 1) {                                // swap bad x values
+      r.m_x1 = m_x2;
+      r.m_x2 = m_x1;
+
    } else {
-      r.x1 = x1;
-      r.x2 = x2;
+      r.m_x1 = m_x1;
+      r.m_x2 = m_x2;
    }
-   if (y2 < y1 - 1) {                                // swap bad y values
-      r.y1 = y2;
-      r.y2 = y1;
+
+   if (m_y2 < m_y1 - 1) {                                // swap bad y values
+      r.m_y1 = m_y2;
+      r.m_y2 = m_y1;
+
    } else {
-      r.y1 = y1;
-      r.y2 = y2;
+      r.m_y1 = m_y1;
+      r.m_y2 = m_y2;
    }
+
    return r;
 }
 
 bool QRect::contains(const QPoint &p, bool proper) const
 {
-   int l, r;
-   if (x2 < x1 - 1) {
-      l = x2;
-      r = x1;
+   int l;
+   int r;
+
+   if (m_x2 < m_x1 - 1) {
+      l = m_x2;
+      r = m_x1;
    } else {
-      l = x1;
-      r = x2;
+      l = m_x1;
+      r = m_x2;
    }
+
    if (proper) {
       if (p.x() <= l || p.x() >= r) {
          return false;
       }
+
    } else {
       if (p.x() < l || p.x() > r) {
          return false;
       }
    }
-   int t, b;
-   if (y2 < y1 - 1) {
-      t = y2;
-      b = y1;
+
+   int t;
+   int b;
+
+   if (m_y2 < m_y1 - 1) {
+      t = m_y2;
+      b = m_y1;
    } else {
-      t = y1;
-      b = y2;
+      t = m_y1;
+      b = m_y2;
    }
+
    if (proper) {
       if (p.y() <= t || p.y() >= b) {
          return false;
       }
+
    } else {
       if (p.y() < t || p.y() > b) {
          return false;
       }
    }
+
    return true;
 }
 
@@ -94,20 +108,23 @@ bool QRect::contains(const QRect &r, bool proper) const
       return false;
    }
 
-   int l1 = x1;
-   int r1 = x1;
-   if (x2 - x1 + 1 < 0) {
-      l1 = x2;
+   int l1 = m_x1;
+   int r1 = m_x1;
+
+   if (m_x2 - m_x1 + 1 < 0) {
+      l1 = m_x2;
+
    } else {
-      r1 = x2;
+      r1 = m_x2;
    }
 
-   int l2 = r.x1;
-   int r2 = r.x1;
-   if (r.x2 - r.x1 + 1 < 0) {
-      l2 = r.x2;
+   int l2 = r.m_x1;
+   int r2 = r.m_x1;
+
+   if (r.m_x2 - r.m_x1 + 1 < 0) {
+      l2 = r.m_x2;
    } else {
-      r2 = r.x2;
+      r2 = r.m_x2;
    }
 
    if (proper) {
@@ -120,26 +137,29 @@ bool QRect::contains(const QRect &r, bool proper) const
       }
    }
 
-   int t1 = y1;
-   int b1 = y1;
-   if (y2 - y1 + 1 < 0) {
-      t1 = y2;
+   int t1 = m_y1;
+   int b1 = m_y1;
+
+   if (m_y2 - m_y1 + 1 < 0) {
+      t1 = m_y2;
    } else {
-      b1 = y2;
+      b1 = m_y2;
    }
 
-   int t2 = r.y1;
-   int b2 = r.y1;
-   if (r.y2 - r.y1 + 1 < 0) {
-      t2 = r.y2;
+   int t2 = r.m_y1;
+   int b2 = r.m_y1;
+
+   if (r.m_y2 - r.m_y1 + 1 < 0) {
+      t2 = r.m_y2;
    } else {
-      b2 = r.y2;
+      b2 = r.m_y2;
    }
 
    if (proper) {
       if (t2 <= t1 || b2 >= b1) {
          return false;
       }
+
    } else {
       if (t2 < t1 || b2 > b1) {
          return false;
@@ -158,43 +178,48 @@ QRect QRect::operator|(const QRect &r) const
       return *this;
    }
 
-   int l1 = x1;
-   int r1 = x1;
-   if (x2 - x1 + 1 < 0) {
-      l1 = x2;
+   int l1 = m_x1;
+   int r1 = m_x1;
+
+   if (m_x2 - m_x1 + 1 < 0) {
+      l1 = m_x2;
    } else {
-      r1 = x2;
+      r1 = m_x2;
    }
 
-   int l2 = r.x1;
-   int r2 = r.x1;
-   if (r.x2 - r.x1 + 1 < 0) {
-      l2 = r.x2;
+   int l2 = r.m_x1;
+   int r2 = r.m_x1;
+
+   if (r.m_x2 - r.m_x1 + 1 < 0) {
+      l2 = r.m_x2;
    } else {
-      r2 = r.x2;
+      r2 = r.m_x2;
    }
 
-   int t1 = y1;
-   int b1 = y1;
-   if (y2 - y1 + 1 < 0) {
-      t1 = y2;
+   int t1 = m_y1;
+   int b1 = m_y1;
+
+   if (m_y2 - m_y1 + 1 < 0) {
+      t1 = m_y2;
    } else {
-      b1 = y2;
+      b1 = m_y2;
    }
 
-   int t2 = r.y1;
-   int b2 = r.y1;
-   if (r.y2 - r.y1 + 1 < 0) {
-      t2 = r.y2;
+   int t2 = r.m_y1;
+   int b2 = r.m_y1;
+
+   if (r.m_y2 - r.m_y1 + 1 < 0) {
+      t2 = r.m_y2;
    } else {
-      b2 = r.y2;
+      b2 = r.m_y2;
    }
 
    QRect tmp;
-   tmp.x1 = qMin(l1, l2);
-   tmp.x2 = qMax(r1, r2);
-   tmp.y1 = qMin(t1, t2);
-   tmp.y2 = qMax(b1, b2);
+   tmp.m_x1 = qMin(l1, l2);
+   tmp.m_x2 = qMax(r1, r2);
+   tmp.m_y1 = qMin(t1, t2);
+   tmp.m_y2 = qMax(b1, b2);
+
    return tmp;
 }
 
@@ -204,40 +229,44 @@ QRect QRect::operator&(const QRect &r) const
       return QRect();
    }
 
-   int l1 = x1;
-   int r1 = x1;
-   if (x2 - x1 + 1 < 0) {
-      l1 = x2;
+   int l1 = m_x1;
+   int r1 = m_x1;
+
+   if (m_x2 - m_x1 + 1 < 0) {
+      l1 = m_x2;
    } else {
-      r1 = x2;
+      r1 = m_x2;
    }
 
-   int l2 = r.x1;
-   int r2 = r.x1;
-   if (r.x2 - r.x1 + 1 < 0) {
-      l2 = r.x2;
+   int l2 = r.m_x1;
+   int r2 = r.m_x1;
+
+   if (r.m_x2 - r.m_x1 + 1 < 0) {
+      l2 = r.m_x2;
    } else {
-      r2 = r.x2;
+      r2 = r.m_x2;
    }
 
    if (l1 > r2 || l2 > r1) {
       return QRect();
    }
 
-   int t1 = y1;
-   int b1 = y1;
-   if (y2 - y1 + 1 < 0) {
-      t1 = y2;
+   int t1 = m_y1;
+   int b1 = m_y1;
+
+   if (m_y2 - m_y1 + 1 < 0) {
+      t1 = m_y2;
    } else {
-      b1 = y2;
+      b1 = m_y2;
    }
 
-   int t2 = r.y1;
-   int b2 = r.y1;
-   if (r.y2 - r.y1 + 1 < 0) {
-      t2 = r.y2;
+   int t2 = r.m_y1;
+   int b2 = r.m_y1;
+
+   if (r.m_y2 - r.m_y1 + 1 < 0) {
+      t2 = r.m_y2;
    } else {
-      b2 = r.y2;
+      b2 = r.m_y2;
    }
 
    if (t1 > b2 || t2 > b1) {
@@ -245,14 +274,13 @@ QRect QRect::operator&(const QRect &r) const
    }
 
    QRect tmp;
-   tmp.x1 = qMax(l1, l2);
-   tmp.x2 = qMin(r1, r2);
-   tmp.y1 = qMax(t1, t2);
-   tmp.y2 = qMin(b1, b2);
+   tmp.m_x1 = qMax(l1, l2);
+   tmp.m_x2 = qMin(r1, r2);
+   tmp.m_y1 = qMax(t1, t2);
+   tmp.m_y2 = qMin(b1, b2);
+
    return tmp;
 }
-
-
 
 bool QRect::intersects(const QRect &r) const
 {
@@ -260,40 +288,44 @@ bool QRect::intersects(const QRect &r) const
       return false;
    }
 
-   int l1 = x1;
-   int r1 = x1;
-   if (x2 - x1 + 1 < 0) {
-      l1 = x2;
+   int l1 = m_x1;
+   int r1 = m_x1;
+
+   if (m_x2 - m_x1 + 1 < 0) {
+      l1 = m_x2;
    } else {
-      r1 = x2;
+      r1 = m_x2;
    }
 
-   int l2 = r.x1;
-   int r2 = r.x1;
-   if (r.x2 - r.x1 + 1 < 0) {
-      l2 = r.x2;
+   int l2 = r.m_x1;
+   int r2 = r.m_x1;
+
+   if (r.m_x2 - r.m_x1 + 1 < 0) {
+      l2 = r.m_x2;
    } else {
-      r2 = r.x2;
+      r2 = r.m_x2;
    }
 
    if (l1 > r2 || l2 > r1) {
       return false;
    }
 
-   int t1 = y1;
-   int b1 = y1;
-   if (y2 - y1 + 1 < 0) {
-      t1 = y2;
+   int t1 = m_y1;
+   int b1 = m_y1;
+
+   if (m_y2 - m_y1 + 1 < 0) {
+      t1 = m_y2;
    } else {
-      b1 = y2;
+      b1 = m_y2;
    }
 
-   int t2 = r.y1;
-   int b2 = r.y1;
-   if (r.y2 - r.y1 + 1 < 0) {
-      t2 = r.y2;
+   int t2 = r.m_y1;
+   int b2 = r.m_y1;
+
+   if (r.m_y2 - r.m_y1 + 1 < 0) {
+      t2 = r.m_y2;
    } else {
-      b2 = r.y2;
+      b2 = r.m_y2;
    }
 
    if (t1 > b2 || t2 > b1) {
@@ -305,7 +337,6 @@ bool QRect::intersects(const QRect &r) const
 
 QDataStream &operator<<(QDataStream &s, const QRect &r)
 {
-
    s << (qint32)r.left() << (qint32)r.top()
      << (qint32)r.right() << (qint32)r.bottom();
 
@@ -319,11 +350,11 @@ QDataStream &operator>>(QDataStream &s, QRect &r)
    s >> y1;
    s >> x2;
    s >> y2;
+
    r.setCoords(x1, y1, x2, y2);
 
    return s;
 }
-
 
 QDebug operator<<(QDebug dbg, const QRect &r)
 {
@@ -332,33 +363,38 @@ QDebug operator<<(QDebug dbg, const QRect &r)
     dbg << "QRect" << '(';
     QtDebugUtils::formatQRect(dbg, r);
     dbg << ')';
+
     return dbg;
 }
 
 QRectF QRectF::normalized() const
 {
    QRectF r = *this;
-   if (r.w < 0) {
-      r.xp += r.w;
-      r.w = -r.w;
+   if (r.m_w < 0) {
+      r.m_x += r.m_w;
+      r.m_w = -r.m_w;
    }
-   if (r.h < 0) {
-      r.yp += r.h;
-      r.h = -r.h;
+
+   if (r.m_h < 0) {
+      r.m_y += r.m_h;
+      r.m_h = -r.m_h;
    }
+
    return r;
 }
 
 bool QRectF::contains(const QPointF &p) const
 {
-   qreal l = xp;
-   qreal r = xp;
-   if (w < 0) {
-      l += w;
+   qreal l = m_x;
+   qreal r = m_x;
+
+   if (m_w < 0) {
+      l += m_w;
    } else {
-      r += w;
+      r += m_w;
    }
-   if (l == r) { // null rect
+   if (l == r) {
+      // null rect
       return false;
    }
 
@@ -366,14 +402,17 @@ bool QRectF::contains(const QPointF &p) const
       return false;
    }
 
-   qreal t = yp;
-   qreal b = yp;
-   if (h < 0) {
-      t += h;
+   qreal t = m_y;
+   qreal b = m_y;
+
+   if (m_h < 0) {
+      t += m_h;
    } else {
-      b += h;
+      b += m_h;
    }
-   if (t == b) { // null rect
+
+   if (t == b) {
+      // null rect
       return false;
    }
 
@@ -384,30 +423,33 @@ bool QRectF::contains(const QPointF &p) const
    return true;
 }
 
-
-
-
 bool QRectF::contains(const QRectF &r) const
 {
-   qreal l1 = xp;
-   qreal r1 = xp;
-   if (w < 0) {
-      l1 += w;
+   qreal l1 = m_x;
+   qreal r1 = m_x;
+
+   if (m_w < 0) {
+      l1 += m_w;
    } else {
-      r1 += w;
+      r1 += m_w;
    }
-   if (l1 == r1) { // null rect
+
+   if (l1 == r1) {
+      // null rect
       return false;
    }
 
-   qreal l2 = r.xp;
-   qreal r2 = r.xp;
-   if (r.w < 0) {
-      l2 += r.w;
+   qreal l2 = r.m_x;
+   qreal r2 = r.m_x;
+
+   if (r.m_w < 0) {
+      l2 += r.m_w;
    } else {
-      r2 += r.w;
+      r2 += r.m_w;
    }
-   if (l2 == r2) { // null rect
+
+   if (l2 == r2) {
+      // null rect
       return false;
    }
 
@@ -415,25 +457,31 @@ bool QRectF::contains(const QRectF &r) const
       return false;
    }
 
-   qreal t1 = yp;
-   qreal b1 = yp;
-   if (h < 0) {
-      t1 += h;
+   qreal t1 = m_y;
+   qreal b1 = m_y;
+
+   if (m_h < 0) {
+      t1 += m_h;
    } else {
-      b1 += h;
+      b1 += m_h;
    }
-   if (t1 == b1) { // null rect
+
+   if (t1 == b1) {
+      // null rect
       return false;
    }
 
-   qreal t2 = r.yp;
-   qreal b2 = r.yp;
-   if (r.h < 0) {
-      t2 += r.h;
+   qreal t2 = r.m_y;
+   qreal b2 = r.m_y;
+
+   if (r.m_h < 0) {
+      t2 += r.m_h;
    } else {
-      b2 += r.h;
+      b2 += r.m_h;
    }
-   if (t2 == b2) { // null rect
+
+   if (t2 == b2) {
+      // null rect
       return false;
    }
 
@@ -444,103 +492,80 @@ bool QRectF::contains(const QRectF &r) const
    return true;
 }
 
-
-
-
 QRectF QRectF::operator|(const QRectF &r) const
 {
    if (isNull()) {
       return r;
    }
+
    if (r.isNull()) {
       return *this;
    }
 
-   qreal left = xp;
-   qreal right = xp;
-   if (w < 0) {
-      left += w;
+   qreal left  = m_x;
+   qreal right = m_x;
+
+   if (m_w < 0) {
+      left += m_w;
    } else {
-      right += w;
+      right += m_w;
    }
 
-   if (r.w < 0) {
-      left = qMin(left, r.xp + r.w);
-      right = qMax(right, r.xp);
+   if (r.m_w < 0) {
+      left  = qMin(left, r.m_x + r.m_w);
+      right = qMax(right, r.m_x);
    } else {
-      left = qMin(left, r.xp);
-      right = qMax(right, r.xp + r.w);
+      left  = qMin(left, r.m_x);
+      right = qMax(right, r.m_x + r.m_w);
    }
 
-   qreal top = yp;
-   qreal bottom = yp;
-   if (h < 0) {
-      top += h;
+   qreal top    = m_y;
+   qreal bottom = m_y;
+
+   if (m_h < 0) {
+      top += m_h;
    } else {
-      bottom += h;
+      bottom += m_h;
    }
 
-   if (r.h < 0) {
-      top = qMin(top, r.yp + r.h);
-      bottom = qMax(bottom, r.yp);
+   if (r.m_h < 0) {
+      top = qMin(top, r.m_y + r.m_h);
+      bottom = qMax(bottom, r.m_y);
    } else {
-      top = qMin(top, r.yp);
-      bottom = qMax(bottom, r.yp + r.h);
+      top = qMin(top, r.m_y);
+      bottom = qMax(bottom, r.m_y + r.m_h);
    }
 
    return QRectF(left, top, right - left, bottom - top);
 }
 
-/*!
-    \fn QRectF QRectF::unite(const QRectF &rectangle) const
-    \obsolete
-
-    Use united(\a rectangle) instead.
-*/
-
-/*!
-    \fn QRectF QRectF::united(const QRectF &rectangle) const
-    \since 4.2
-
-    Returns the bounding rectangle of this rectangle and the given \a
-    rectangle.
-
-    \image qrect-unite.png
-
-    \sa intersected()
-*/
-
-
-/*!
-    \fn QRectF QRectF::operator &(const QRectF &rectangle) const
-
-    Returns the intersection of this rectangle and the given \a
-    rectangle. Returns an empty rectangle if there is no intersection.
-
-    \sa operator&=(), intersected()
-*/
-
 QRectF QRectF::operator&(const QRectF &r) const
 {
-   qreal l1 = xp;
-   qreal r1 = xp;
-   if (w < 0) {
-      l1 += w;
+   qreal l1 = m_x;
+   qreal r1 = m_x;
+
+   if (m_w < 0) {
+      l1 += m_w;
    } else {
-      r1 += w;
+      r1 += m_w;
    }
-   if (l1 == r1) { // null rect
+
+   if (l1 == r1) {
+      // null rect
       return QRectF();
    }
 
-   qreal l2 = r.xp;
-   qreal r2 = r.xp;
-   if (r.w < 0) {
-      l2 += r.w;
+   qreal l2 = r.m_x;
+   qreal r2 = r.m_x;
+
+   if (r.m_w < 0) {
+      l2 += r.m_w;
    } else {
-      r2 += r.w;
+      r2 += r.m_w;
    }
-   if (l2 == r2) { // null rect
+
+   if (l2 == r2) {
+      // null rect
       return QRectF();
    }
 
@@ -548,25 +573,31 @@ QRectF QRectF::operator&(const QRectF &r) const
       return QRectF();
    }
 
-   qreal t1 = yp;
-   qreal b1 = yp;
-   if (h < 0) {
-      t1 += h;
+   qreal t1 = m_y;
+   qreal b1 = m_y;
+
+   if (m_h < 0) {
+      t1 += m_h;
    } else {
-      b1 += h;
+      b1 += m_h;
    }
-   if (t1 == b1) { // null rect
+
+   if (t1 == b1) {
+      // null rect
       return QRectF();
    }
 
-   qreal t2 = r.yp;
-   qreal b2 = r.yp;
-   if (r.h < 0) {
-      t2 += r.h;
+   qreal t2 = r.m_y;
+   qreal b2 = r.m_y;
+
+   if (r.m_h < 0) {
+      t2 += r.m_h;
    } else {
-      b2 += r.h;
+      b2 += r.m_h;
    }
-   if (t2 == b2) { // null rect
+
+   if (t2 == b2) {
+      // null rect
       return QRectF();
    }
 
@@ -575,67 +606,41 @@ QRectF QRectF::operator&(const QRectF &r) const
    }
 
    QRectF tmp;
-   tmp.xp = qMax(l1, l2);
-   tmp.yp = qMax(t1, t2);
-   tmp.w = qMin(r1, r2) - tmp.xp;
-   tmp.h = qMin(b1, b2) - tmp.yp;
+   tmp.m_x = qMax(l1, l2);
+   tmp.m_y = qMax(t1, t2);
+   tmp.m_w = qMin(r1, r2) - tmp.m_x;
+   tmp.m_h = qMin(b1, b2) - tmp.m_y;
+
    return tmp;
 }
 
-/*!
-    \fn QRectF QRectF::intersect(const QRectF &rectangle) const
-    \obsolete
-
-    Use intersected(\a rectangle) instead.
-*/
-
-/*!
-    \fn QRectF QRectF::intersected(const QRectF &rectangle) const
-    \since 4.2
-
-    Returns the intersection of this rectangle and the given \a
-    rectangle. Note that \c {r.intersected(s)} is equivalent to \c
-    {r & s}.
-
-    \image qrect-intersect.png
-
-    \sa intersects(), united(), operator&=()
-*/
-
-/*!
-    \fn bool QRectF::intersects(const QRectF &rectangle) const
-
-    Returns true if this rectangle intersects with the given \a
-    rectangle (i.e. there is a non-empty area of overlap between
-    them), otherwise returns false.
-
-    The intersection rectangle can be retrieved using the intersected()
-    function.
-
-    \sa contains()
-*/
-
 bool QRectF::intersects(const QRectF &r) const
 {
-   qreal l1 = xp;
-   qreal r1 = xp;
-   if (w < 0) {
-      l1 += w;
+   qreal l1 = m_x;
+   qreal r1 = m_x;
+
+   if (m_w < 0) {
+      l1 += m_w;
    } else {
-      r1 += w;
+      r1 += m_w;
    }
-   if (l1 == r1) { // null rect
+
+   if (l1 == r1) {
+      // null rect
       return false;
    }
 
-   qreal l2 = r.xp;
-   qreal r2 = r.xp;
-   if (r.w < 0) {
-      l2 += r.w;
+   qreal l2 = r.m_x;
+   qreal r2 = r.m_x;
+
+   if (r.m_w < 0) {
+      l2 += r.m_w;
    } else {
-      r2 += r.w;
+      r2 += r.m_w;
    }
-   if (l2 == r2) { // null rect
+
+   if (l2 == r2) {
+      // null rect
       return false;
    }
 
@@ -643,25 +648,30 @@ bool QRectF::intersects(const QRectF &r) const
       return false;
    }
 
-   qreal t1 = yp;
-   qreal b1 = yp;
-   if (h < 0) {
-      t1 += h;
+   qreal t1 = m_y;
+   qreal b1 = m_y;
+
+   if (m_h < 0) {
+      t1 += m_h;
    } else {
-      b1 += h;
+      b1 += m_h;
    }
-   if (t1 == b1) { // null rect
+
+   if (t1 == b1) {
+      // null rect
       return false;
    }
 
-   qreal t2 = r.yp;
-   qreal b2 = r.yp;
-   if (r.h < 0) {
-      t2 += r.h;
+   qreal t2 = r.m_y;
+   qreal b2 = r.m_y;
+
+   if (r.m_h < 0) {
+      t2 += r.m_h;
    } else {
-      b2 += r.h;
+      b2 += r.m_h;
    }
-   if (t2 == b2) { // null rect
+   if (t2 == b2) {
+      // null rect
       return false;
    }
 
@@ -674,10 +684,11 @@ bool QRectF::intersects(const QRectF &r) const
 
 QRect QRectF::toAlignedRect() const
 {
-   int xmin = int(qFloor(xp));
-   int xmax = int(qCeil(xp + w));
-   int ymin = int(qFloor(yp));
-   int ymax = int(qCeil(yp + h));
+   int xmin = int(qFloor(m_x));
+   int xmax = int(qCeil(m_x + m_w));
+   int ymin = int(qFloor(m_y));
+   int ymax = int(qCeil(m_y + m_h));
+
    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
 }
 
@@ -695,6 +706,7 @@ QDataStream &operator>>(QDataStream &s, QRectF &r)
    s >> w;
    s >> h;
    r.setRect(qreal(x), qreal(y), qreal(w), qreal(h));
+
    return s;
 }
 
@@ -705,5 +717,6 @@ QDebug operator<<(QDebug dbg, const QRectF &r)
     dbg << "QRectF" << '(';
     QtDebugUtils::formatQRect(dbg, r);
     dbg << ')';
+
     return dbg;
 }

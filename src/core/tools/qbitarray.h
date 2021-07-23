@@ -112,7 +112,7 @@ class Q_CORE_EXPORT QBitArray
    }
 
    inline bool fill(bool value, int size = -1);
-   void fill(bool value, int first, int last);
+   void fill(bool value, int begin, int end);
 
    inline void truncate(int pos) {
       if (pos < size()) {

@@ -66,7 +66,7 @@ class Q_CORE_EXPORT QAbstractState : public QObject
    virtual void onEntry(QEvent *event) = 0;
    virtual void onExit(QEvent *event) = 0;
 
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    QAbstractState(QAbstractStatePrivate &dd, QState *parent);
 
    QScopedPointer<QAbstractStatePrivate> d_ptr;
