@@ -91,8 +91,8 @@ class QRawFontPrivate
       qreal pixelSize,
       QFont::HintingPreference hintingPreference);
 
-   static QRawFontPrivate *get(const QRawFont &font) {
-      return font.d.get();
+   static std::shared_ptr<QRawFontPrivate> get(const QRawFont &font) {
+      return font.m_fontPrivate;
    }
 
    QFontEngine *fontEngine;

@@ -3709,7 +3709,7 @@ void QPainter::drawGlyphRun(const QPointF &position, const QGlyphRun &glyphRun)
    int count = qMin(glyphRun_d->glyphIndexDataSize, glyphRun_d->glyphPositionDataSize);
    QVarLengthArray<QFixedPoint, 128> fixedPointPositions(count);
 
-   QRawFontPrivate *fontD = QRawFontPrivate::get(font);
+   std::shared_ptr<QRawFontPrivate> fontD = QRawFontPrivate::get(font);
 
    bool engineRequiresPretransformedGlyphPositions = d->extended
       ? d->extended->requiresPretransformedGlyphPositions(fontD->fontEngine, d->state->matrix)

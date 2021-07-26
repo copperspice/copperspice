@@ -2179,7 +2179,8 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
          engine = feCache.prevFontEngine;
 
       } else {
-         engine = QFontEngineMulti::createMultiFontEngine(rawFont.d->fontEngine, script);
+         engine = QFontEngineMulti::createMultiFontEngine(rawFont.m_fontPrivate->fontEngine, script);
+
          feCache.prevFontEngine = engine;
          feCache.prevScript = script;
          engine->m_refCount.ref();
@@ -2194,7 +2195,8 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
          if (feCache.prevScaledFontEngine) {
             scaledEngine = feCache.prevScaledFontEngine;
          } else {
-            QFontEngine *scEngine = rawFont.d->fontEngine->cloneWithSize(smallCapsFraction * rawFont.pixelSize());
+            QFontEngine *scEngine = rawFont.m_fontPrivate->fontEngine->cloneWithSize(smallCapsFraction * rawFont.pixelSize());
+
             scEngine->m_refCount.ref();
             scaledEngine = QFontEngineMulti::createMultiFontEngine(scEngine, script);
             scaledEngine->m_refCount.ref();

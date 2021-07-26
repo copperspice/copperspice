@@ -117,7 +117,7 @@ class Q_GUI_EXPORT QRawFont
    void loadFromData(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference);
 
    void swap(QRawFont &other) {
-      qSwap(d, other.d);
+      qSwap(m_fontPrivate, other.m_fontPrivate);
    }
 
    bool supportsCharacter(quint32 ucs4) const;
@@ -133,7 +133,7 @@ class Q_GUI_EXPORT QRawFont
    friend class QTextLayout;
    friend class QTextEngine;
 
-   std::shared_ptr<QRawFontPrivate> d;
+   std::shared_ptr<QRawFontPrivate> m_fontPrivate;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QRawFont::LayoutFlags)

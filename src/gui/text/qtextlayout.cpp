@@ -581,7 +581,8 @@ QList<QGlyphRun> QTextLayout::glyphRuns(int from, int length) const
             const QGlyphRun &glyphRun = glyphRuns.at(j);
             QRawFont rawFont = glyphRun.rawFont();
 
-            QFontEngine *fontEngine = rawFont.d->fontEngine;
+            QFontEngine *fontEngine = rawFont.m_fontPrivate->fontEngine;
+
             QGlyphRun::GlyphRunFlags flags = glyphRun.flags();
             QPair<QFontEngine *, int> key(fontEngine, int(flags));
 
@@ -1572,7 +1573,7 @@ static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &g
 
    // Make a font for this particular engine
    QRawFont font;
-   QRawFontPrivate *fontD = QRawFontPrivate::get(font);
+   std::shared_ptr<QRawFontPrivate> fontD = QRawFontPrivate::get(font);
    fontD->setFontEngine(fontEngine);
 
    QVarLengthArray<glyph_t> glyphsArray;
