@@ -854,20 +854,17 @@ QLocale::QLocale(Language language, Script script, Country country)
 {
 }
 
-QLocale::QLocale(const QLocale &other)
-{
-   d = other.d;
-}
-
 QLocale::~QLocale()
 {
 }
 
-QLocale &QLocale::operator=(const QLocale &other)
-{
-   d = other.d;
-   return *this;
-}
+QLocale::QLocale(const QLocale &other) = default;
+
+QLocale::QLocale(QLocale &&other) = default;
+
+QLocale &QLocale::operator=(const QLocale &other) = default;
+
+QLocale &QLocale::operator=(QLocale &&other) = default;
 
 bool QLocale::operator==(const QLocale &other) const
 {

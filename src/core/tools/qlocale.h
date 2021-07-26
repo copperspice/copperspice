@@ -834,13 +834,16 @@ class Q_CORE_EXPORT QLocale
 
    QLocale();
    QLocale(const QString &name);
-   QLocale(Language language, Country country = AnyCountry);
-   QLocale(Language language, Script script, Country country);
+   QLocale(Language language, Country country);
+   QLocale(Language language, Script script = Script::AnyScript, Country country = Country::AnyCountry);
+
    QLocale(const QLocale &other);
+   QLocale(QLocale &&other);
 
    ~QLocale();
 
    QLocale &operator=(const QLocale &other);
+   QLocale &operator=(QLocale &&other);
 
    Language language() const;
    Script script() const;
