@@ -268,7 +268,6 @@ class Q_GUI_EXPORT QFontEngine
    // harfbuzz
    void *harfbuzzFace() const;
 
-   QAtomicInt ref;
    QFontDef fontDef;
 
    // harfbuzz
@@ -283,6 +282,7 @@ class Q_GUI_EXPORT QFontEngine
       qt_get_font_table_func_ptr  font_table_func_ptr;
    } faceData;
 
+   QAtomicInt m_refCount;
    uint cache_cost;       // amount of mem used in kb by the font
 
    uint fsType : 16;

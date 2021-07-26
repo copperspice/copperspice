@@ -133,7 +133,7 @@ class Q_GUI_EXPORT QRawFont
    friend class QTextLayout;
    friend class QTextEngine;
 
-   QExplicitlySharedDataPointer<QRawFontPrivate> d;
+   std::shared_ptr<QRawFontPrivate> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QRawFont::LayoutFlags)

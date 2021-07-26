@@ -944,7 +944,7 @@ static QFontEngine *loadSingleEngine(int script, const QFontDef &request,
          if (! engine->supportsScript(QChar::Script(script))) {
             qWarning("  OpenType support missing for script %d", script);
 
-            if (engine->ref.load() == 0) {
+            if (engine->m_refCount.load() == 0) {
                delete engine;
             }
 
@@ -2625,7 +2625,7 @@ void QFontDatabase::load(const QFontPrivate *font, int script)
          font->engineData = new QFontEngineData;
          fontCache->insertEngineData(req, font->engineData);
       }
-      font->engineData->ref.ref();
+      font->engineData->m_refCount.ref();
    }
 
    // cached engineData could have already loaded the engine we want
@@ -2667,7 +2667,7 @@ void QFontDatabase::load(const QFontPrivate *font, int script)
 
       if (fontEngine) {
          if (fontEngine->type() == QFontEngine::Box && ! req.family.isEmpty()) {
-            if (fontEngine->ref.load() == 0) {
+            if (fontEngine->m_refCount.load() == 0) {
                delete fontEngine;
             }
 
@@ -2690,13 +2690,13 @@ void QFontDatabase::load(const QFontPrivate *font, int script)
       for (int i = 0; i < QChar::ScriptCount; ++i) {
          if (! font->engineData->engines[i]) {
             font->engineData->engines[i] = fontEngine;
-            fontEngine->ref.ref();
+            fontEngine->m_refCount.ref();
          }
       }
 
    } else {
       font->engineData->engines[script] = fontEngine;
-      fontEngine->ref.ref();
+      fontEngine->m_refCount.ref();
    }
 }
 

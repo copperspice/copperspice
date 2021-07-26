@@ -182,7 +182,7 @@ QFontPrivate::QFontPrivate(const QFontPrivate &other)
 
 QFontPrivate::~QFontPrivate()
 {
-   if (engineData && !engineData->ref.deref()) {
+   if (engineData && ! engineData->m_refCount.deref()) {
       delete engineData;
    }
 
@@ -207,7 +207,7 @@ QFontEngine *QFontPrivate::engineForScript(int script) const
 
    if (engineData && engineData->fontCacheId != QFontCache::instance()->id()) {
       // throw out engineData that came from a different thread
-      if (! engineData->ref.deref()) {
+      if (! engineData->m_refCount.deref()) {
          delete engineData;
       }
       engineData = nullptr;
@@ -341,18 +341,18 @@ void QFontPrivate::resolve(uint mask, const QFontPrivate *other)
 }
 
 QFontEngineData::QFontEngineData()
-   : ref(0), fontCacheId(QFontCache::instance()->id())
+   : m_refCount(0), fontCacheId(QFontCache::instance()->id())
 {
    memset(engines, 0, QChar::ScriptCount * sizeof(QFontEngine *));
 }
 
 QFontEngineData::~QFontEngineData()
 {
-   Q_ASSERT(ref.load() == 0);
+   Q_ASSERT(m_refCount.load() == 0);
 
    for (int i = 0; i < QChar::ScriptCount; ++i) {
       if (engines[i]) {
-         if (!engines[i]->ref.deref()) {
+         if (! engines[i]->m_refCount.deref()) {
             delete engines[i];
          }
 
@@ -392,7 +392,7 @@ QFont::QFont(QFontPrivate *data)
 void QFont::detach()
 {
    if (d->ref.load() == 1) {
-      if (d->engineData && !d->engineData->ref.deref()) {
+      if (d->engineData && !d->engineData->m_refCount.deref()) {
          delete d->engineData;
       }
 
@@ -423,7 +423,7 @@ void QFontPrivate::detachButKeepEngineData(QFont *font)
 
    QFontEngineData *engineData = font->d->engineData;
    if (engineData) {
-      engineData->ref.ref();
+      engineData->m_refCount.ref();
    }
    font->d.detach();
    font->d->engineData = engineData;
@@ -1649,7 +1649,7 @@ void QFontCache::clear()
 
          for (int i = 0; i < QChar::ScriptCount; ++i) {
             if (data->engines[i]) {
-               if (! data->engines[i]->ref.deref()) {
+               if (! data->engines[i]->m_refCount.deref()) {
                   Q_ASSERT(engineCacheCount.value(data->engines[i]) == 0);
                   delete data->engines[i];
                }
@@ -1658,8 +1658,7 @@ void QFontCache::clear()
             }
          }
 
-
-         if (! data->ref.deref()) {
+         if (! data->m_refCount.deref()) {
             delete data;
          }
 
@@ -1681,14 +1680,14 @@ void QFontCache::clear()
             const int cacheCount = --engineCacheCount[engine];
             Q_ASSERT(cacheCount >= 0);
 
-            if (!engine->ref.deref()) {
+            if (! engine->m_refCount.deref()) {
                Q_ASSERT(cacheCount == 0);
 
                mightHaveEnginesLeftForCleanup = engine->type() == QFontEngine::Multi;
                delete engine;
 
             } else if (cacheCount == 0) {
-               FC_DEBUG("QFontCache::clear: engine %p still has refcount %d", engine, engine->ref.load());
+               FC_DEBUG("QFontCache::clear: engine %p still has refcount %d", engine, engine->m_refCount.load());
             }
             it.value().data = nullptr;
          }
@@ -1718,7 +1717,7 @@ void QFontCache::insertEngineData(const QFontDef &def, QFontEngineData *engineDa
 {
    Q_ASSERT(!engineDataCache.contains(def));
 
-   engineData->ref.ref();
+   engineData->m_refCount.ref();
    // Decrease now rather than waiting
 
    if (total_cost > min_cost * 2 && engineDataCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
@@ -1759,7 +1758,7 @@ void QFontCache::insertEngine(const Key &key, QFontEngine *engine, bool insertMu
    Q_ASSERT(key.multi == (engine->type() == QFontEngine::Multi));
 
    FC_DEBUG("QFontCache: inserting new engine %p", engine);
-   engine->ref.ref();
+   engine->m_refCount.ref();
 
    // Decrease now rather than waiting
    if (total_cost > min_cost * 2 && engineCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
@@ -1852,7 +1851,7 @@ void QFontCache::decreaseCache()
 
       for (; it != end; ++it) {
 
-         if (it.value()->ref.load() != 1) {
+         if (it.value()->m_refCount.load() != 1) {
             in_use_cost += engine_data_cost;
          }
       }
@@ -1861,15 +1860,9 @@ void QFontCache::decreaseCache()
    {
       FC_DEBUG("  SWEEP engine:");
 
-      EngineCache::const_iterator it  = engineCache.constBegin();
-      EngineCache::const_iterator end = engineCache.constEnd();
-
-      for (; it != end; ++it) {
-
-
-
-         if (it.value().data->ref.load() != 0) {
-            in_use_cost += it.value().data->cache_cost / engineCacheCount.value(it.value().data);
+      for (const auto &item : engineCache) {
+         if (item.data->m_refCount.load() != 0) {
+            in_use_cost += item.data->cache_cost / engineCacheCount.value(item.data);
          }
       }
 
@@ -1920,10 +1913,10 @@ void QFontCache::decreaseCache()
       EngineDataCache::iterator end = engineDataCache.end();
 
       while (it != end) {
-         if (it.value()->ref.load() == 1) {
+         if (it.value()->m_refCount.load() == 1) {
             decreaseCost(sizeof(QFontEngineData));
 
-            it.value()->ref.deref();
+            it.value()->m_refCount.deref();
             delete it.value();
             it = engineDataCache.erase(it);
 
@@ -1949,7 +1942,7 @@ void QFontCache::decreaseCache()
 
       EngineCache::iterator jt = end;
       for (; it != end; ++it) {
-         if (it.value().data->ref.load() != engineCacheCount.value(it.value().data)) {
+         if (it.value().data->m_refCount.load() != engineCacheCount.value(it.value().data)) {
             continue;
          }
 
@@ -1969,14 +1962,14 @@ void QFontCache::decreaseCache()
          it = engineCache.begin();
          while (it != engineCache.end()) {
             if (it.value().data == fontEngine) {
-               fontEngine->ref.deref();
+               fontEngine->m_refCount.deref();
                it = engineCache.erase(it);
             } else {
                ++it;
             }
          }
          // and delete the last occurrence
-         Q_ASSERT(fontEngine->ref.load() == 0);
+         Q_ASSERT(fontEngine->m_refCount.load() == 0);
          decreaseCost(fontEngine->cache_cost);
          delete fontEngine;
          engineCacheCount.remove(fontEngine);

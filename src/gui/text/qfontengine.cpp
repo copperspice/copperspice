@@ -91,7 +91,7 @@ static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, 
 #define kBearingNotInitialized std::numeric_limits<qreal>::max()
 
 QFontEngine::QFontEngine(Type type)
-   : ref(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr),
+   : m_refCount(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr),
      face_destroy_func_ptr(nullptr), m_type(type), m_minLeftBearing(kBearingNotInitialized),
      m_minRightBearing(kBearingNotInitialized)
 {
@@ -1721,7 +1721,7 @@ QFontEngineMulti::QFontEngineMulti(QFontEngine *engine, int script, const QStrin
 
    m_engines.resize(m_fallbackFamilies.size() + 1);
 
-   engine->ref.ref();
+   engine->m_refCount.ref();
    m_engines[0] = engine;
 
    fontDef = engine->fontDef;
@@ -1733,7 +1733,7 @@ QFontEngineMulti::~QFontEngineMulti()
    for (int i = 0; i < m_engines.size(); ++i) {
       QFontEngine *fontEngine = m_engines.at(i);
 
-      if (fontEngine && ! fontEngine->ref.deref()) {
+      if (fontEngine && ! fontEngine->m_refCount.deref()) {
          delete fontEngine;
       }
    }
@@ -1764,7 +1764,7 @@ void QFontEngineMulti::setFallbackFamiliesList(const QStringList &fallbackFamili
       Q_ASSERT(m_engines.size() == 2); // see c-tor for details
 
       QFontEngine *engine = m_engines.at(0);
-      engine->ref.ref();
+      engine->m_refCount.ref();
       m_engines[1] = engine;
       m_fallbackFamilies << fontDef.family;
 
@@ -1792,7 +1792,7 @@ void QFontEngineMulti::ensureEngineAt(int at)
 
       Q_ASSERT(engine && engine->type() != QFontEngine::Multi);
 
-      engine->ref.ref();
+      engine->m_refCount.ref();
       m_engines[at] = engine;
    }
 }

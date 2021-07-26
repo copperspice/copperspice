@@ -1584,7 +1584,7 @@ void QTextEngine::shape(int item) const
 
 static inline void releaseCachedFontEngine(QFontEngine *fontEngine)
 {
-   if (fontEngine && ! fontEngine->ref.deref()) {
+   if (fontEngine && ! fontEngine->m_refCount.deref()) {
       delete fontEngine;
    }
 }
@@ -2182,7 +2182,7 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
          engine = QFontEngineMulti::createMultiFontEngine(rawFont.d->fontEngine, script);
          feCache.prevFontEngine = engine;
          feCache.prevScript = script;
-         engine->ref.ref();
+         engine->m_refCount.ref();
 
          if (feCache.prevScaledFontEngine) {
             releaseCachedFontEngine(feCache.prevScaledFontEngine);
@@ -2195,13 +2195,13 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
             scaledEngine = feCache.prevScaledFontEngine;
          } else {
             QFontEngine *scEngine = rawFont.d->fontEngine->cloneWithSize(smallCapsFraction * rawFont.pixelSize());
-            scEngine->ref.ref();
+            scEngine->m_refCount.ref();
             scaledEngine = QFontEngineMulti::createMultiFontEngine(scEngine, script);
-            scaledEngine->ref.ref();
+            scaledEngine->m_refCount.ref();
             feCache.prevScaledFontEngine = scaledEngine;
 
             // If scEngine is not ref'ed by scaledEngine, make sure it is deallocated and not leaked.
-            if (!scEngine->ref.deref()) {
+            if (! scEngine->m_refCount.deref()) {
                delete scEngine;
             }
 
@@ -2232,7 +2232,7 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
             engine = font.d->engineForScript(script);
 
             if (engine) {
-               engine->ref.ref();
+               engine->m_refCount.ref();
             }
 
             QTextCharFormat::VerticalAlignment valign = f.verticalAlignment();
@@ -2245,7 +2245,7 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
                scaledEngine = font.d->engineForScript(script);
             }
             if (scaledEngine) {
-               scaledEngine->ref.ref();
+               scaledEngine->m_refCount.ref();
             }
             if (feCache.prevFontEngine) {
                releaseCachedFontEngine(feCache.prevFontEngine);
@@ -2269,7 +2269,7 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
          } else {
             engine = font.d->engineForScript(script);
             if (engine) {
-               engine->ref.ref();
+               engine->m_refCount.ref();
             }
 
             if (feCache.prevFontEngine) {

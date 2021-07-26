@@ -538,13 +538,14 @@ void QStaticTextItem::setFontEngine(QFontEngine *fe)
       return;
    }
 
-   if (m_fontEngine != nullptr && !m_fontEngine->ref.deref()) {
+   if (m_fontEngine != nullptr && ! m_fontEngine->m_refCount.deref()) {
       delete m_fontEngine;
    }
 
    m_fontEngine = fe;
+
    if (m_fontEngine != nullptr) {
-      m_fontEngine->ref.ref();
+      m_fontEngine->m_refCount.ref();
    }
 }
 

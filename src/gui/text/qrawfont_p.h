@@ -44,12 +44,11 @@ class QRawFontPrivate
       : fontEngine(other.fontEngine), hintingPreference(other.hintingPreference), thread(other.thread)
    {
       if (fontEngine != nullptr) {
-         fontEngine->ref.ref();
+         fontEngine->m_refCount.ref();
       }
    }
 
    ~QRawFontPrivate() {
-      Q_ASSERT(ref.load() == 0);
       cleanUp();
    }
 
@@ -70,7 +69,7 @@ class QRawFontPrivate
       }
 
       if (fontEngine != nullptr) {
-         if (!fontEngine->ref.deref()) {
+         if (! fontEngine->m_refCount.deref()) {
             delete fontEngine;
          }
 
@@ -80,7 +79,7 @@ class QRawFontPrivate
       fontEngine = engine;
 
       if (fontEngine != nullptr) {
-         fontEngine->ref.ref();
+         fontEngine->m_refCount.ref();
 
          thread = QThread::currentThread();
          Q_ASSERT(thread);
@@ -93,13 +92,11 @@ class QRawFontPrivate
       QFont::HintingPreference hintingPreference);
 
    static QRawFontPrivate *get(const QRawFont &font) {
-      return font.d.data();
+      return font.d.get();
    }
 
    QFontEngine *fontEngine;
    QFont::HintingPreference hintingPreference;
-
-   QAtomicInt ref;
 
  private:
    QThread *thread;

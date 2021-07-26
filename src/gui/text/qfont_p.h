@@ -154,7 +154,7 @@ class QFontEngineData
 
    ~QFontEngineData();
 
-   QAtomicInt ref;
+   QAtomicInt m_refCount;
    const int fontCacheId;
 
    QFontEngine *engines[QChar::ScriptCount];

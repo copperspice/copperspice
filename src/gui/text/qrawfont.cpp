@@ -80,7 +80,10 @@ void QRawFont::loadFromFile(const QString &fileName, qreal pixelSize,
 
 void QRawFont::loadFromData(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference)
 {
-   d.detach();
+   if (d.use_count() > 1) {
+      // make a copy
+      d = std::make_shared<QRawFontPrivate>(*d);
+   }
    d->cleanUp();
    d->hintingPreference = hintingPreference;
    d->loadFromData(fontData, pixelSize, hintingPreference);
@@ -340,8 +343,8 @@ QRawFont QRawFont::fromFont(const QFont &font, QFontDatabase::WritingSystem writ
    }
 
    if (fe != nullptr) {
-      rawFont.d.data()->setFontEngine(fe);
-      rawFont.d.data()->hintingPreference = font.hintingPreference();
+      rawFont.d->setFontEngine(fe);
+      rawFont.d->hintingPreference = font.hintingPreference();
    }
 
    return rawFont;
@@ -353,7 +356,10 @@ void QRawFont::setPixelSize(qreal pixelSize)
       return;
    }
 
-   d.detach();
+   if (d.use_count() > 1) {
+      // make a copy
+      d = std::make_shared<QRawFontPrivate>(*d);
+   }
 
    d->setFontEngine(d->fontEngine->cloneWithSize(pixelSize));
 }
