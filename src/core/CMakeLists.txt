@@ -37,6 +37,7 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/guarded
    ${CMAKE_CURRENT_SOURCE_DIR}/io
    ${CMAKE_CURRENT_SOURCE_DIR}/json
+   ${CMAKE_CURRENT_SOURCE_DIR}/locale
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer
@@ -56,6 +57,7 @@ include(global/global.cmake)
 include(guarded/guarded.cmake)
 include(io/io.cmake)
 include(json/json.cmake)
+include(locale/locale.cmake)
 include(kernel/kernel.cmake)
 include(plugin/plugin.cmake)
 include(pointer/pointer.cmake)

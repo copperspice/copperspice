@@ -25,7 +25,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QElapsedTimer
    QLine
    QLineF
-   QLocale
    QMargins
    QMarginsF
    QMessageAuthenticationCode
@@ -36,10 +35,8 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QRectF
    QSize
    QSizeF
-   QSystemLocale
    QTextBoundaryFinder
    QTimeLine
-   QTimeZone
    QVarLengthArray
    QVersionNumber
 )
@@ -58,7 +55,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qline.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinef.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmargins.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmarginsf.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmessageauthenticationcode.h
@@ -70,7 +66,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrefcount.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsizef.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsystemlocale.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvarlengtharray.h
@@ -81,15 +76,10 @@ list(APPEND CORE_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytedata_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qfreelist_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz_core_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_data_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_tools_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qpodlist_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qringbuffer_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsimd_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtools_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetables_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetools_p.h
 )
 
 target_sources(CsCore
@@ -103,8 +93,6 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qfreelist.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qharfbuzz_core.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qline.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_tools.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qpoint.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmargins.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmessageauthenticationcode.cpp
@@ -116,7 +104,6 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qunicodetools.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qversionnumber.cpp
 
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/fonts/resource_harfbuzz.cpp
@@ -177,21 +164,18 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
       PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray_mac.mm
       ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_mac.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_mac.mm
     )
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
    target_sources(CsCore
       PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_unix.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_unix.cpp
    )
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
    target_sources(CsCore
       PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer_win.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale_win.cpp
    )
 
 endif()

@@ -27,7 +27,7 @@
 #include <qdatastream.h>
 #include <qunicodetables_p.h>
 
-#include "../tools/qunicodetables.cpp"      // do not change to < >
+#include "../locale/qunicodetables.cpp"      // do not change to < >
 
 #define FLAG(x) (1 << (x))
 
