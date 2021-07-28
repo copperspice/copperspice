@@ -1,6 +1,5 @@
 /*
- * Copyright © 2009  Red Hat, Inc.
- * Copyright © 2011  Google, Inc.
+ * Copyright © 2018  Ebrahim Byagowi
  *
  *  This is part of HarfBuzz, a text shaping library.
  *
@@ -21,36 +20,16 @@
  * FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
  * ON AN "AS IS" BASIS, AND THE COPYRIGHT HOLDER HAS NO OBLIGATION TO
  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- * Red Hat Author(s): Behdad Esfahbod
- * Google Author(s): Behdad Esfahbod
  */
 
-#ifndef HB_GLIB_H
-#define HB_GLIB_H
+#ifndef HB_OT_METRICS_HH
+#define HB_OT_METRICS_HH
 
-#include "hb.h"
+#include "hb.hh"
 
-#include <glib.h>
+HB_INTERNAL bool
+_hb_ot_metrics_get_position_common (hb_font_t           *font,
+				    hb_ot_metrics_tag_t  metrics_tag,
+				    hb_position_t       *position     /* OUT.  May be NULL. */);
 
-HB_BEGIN_DECLS
-
-
-HB_EXTERN hb_script_t
-hb_glib_script_to_script (GUnicodeScript script);
-
-HB_EXTERN GUnicodeScript
-hb_glib_script_from_script (hb_script_t script);
-
-
-HB_EXTERN hb_unicode_funcs_t *
-hb_glib_get_unicode_funcs (void);
-
-#if GLIB_CHECK_VERSION(2,31,10)
-HB_EXTERN hb_blob_t *
-hb_glib_blob_create (GBytes *gbytes);
-#endif
-
-HB_END_DECLS
-
-#endif /* HB_GLIB_H */
+#endif /* HB_OT_METRICS_HH */

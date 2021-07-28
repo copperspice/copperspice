@@ -62,7 +62,7 @@ struct hb_lockable_set_t
 	old.fini ();
       }
       else {
-        item = nullptr;
+	item = nullptr;
 	l.unlock ();
       }
     } else {
@@ -140,9 +140,7 @@ struct hb_lockable_set_t
  * Reference-count.
  */
 
-#define HB_REFERENCE_COUNT_INERT_VALUE 0
-#define HB_REFERENCE_COUNT_POISON_VALUE -0x0000DEAD
-#define HB_REFERENCE_COUNT_INIT {HB_ATOMIC_INT_INIT (HB_REFERENCE_COUNT_INERT_VALUE)}
+#define HB_REFERENCE_COUNT_INIT {0}
 
 struct hb_reference_count_t
 {
@@ -152,9 +150,9 @@ struct hb_reference_count_t
   int get_relaxed () const { return ref_count.get_relaxed (); }
   int inc () const { return ref_count.inc (); }
   int dec () const { return ref_count.dec (); }
-  void fini () { ref_count.set_relaxed (HB_REFERENCE_COUNT_POISON_VALUE); }
+  void fini () { ref_count.set_relaxed (-0x0000DEAD); }
 
-  bool is_inert () const { return ref_count.get_relaxed () == HB_REFERENCE_COUNT_INERT_VALUE; }
+  bool is_inert () const { return !ref_count.get_relaxed (); }
   bool is_valid () const { return ref_count.get_relaxed () > 0; }
 };
 
@@ -168,8 +166,8 @@ struct hb_user_data_array_t
     void *data;
     hb_destroy_func_t destroy;
 
-    bool operator == (hb_user_data_key_t *other_key) const { return key == other_key; }
-    bool operator == (hb_user_data_item_t &other) const { return key == other.key; }
+    bool operator == (const hb_user_data_key_t *other_key) const { return key == other_key; }
+    bool operator == (const hb_user_data_item_t &other) const { return key == other.key; }
 
     void fini () { if (destroy) destroy (data); }
   };
@@ -197,15 +195,10 @@ struct hb_user_data_array_t
 struct hb_object_header_t
 {
   hb_reference_count_t ref_count;
-  mutable hb_atomic_int_t writable;
+  mutable hb_atomic_int_t writable = 0;
   hb_atomic_ptr_t<hb_user_data_array_t> user_data;
 };
-#define HB_OBJECT_HEADER_STATIC \
-	{ \
-	  HB_REFERENCE_COUNT_INIT, \
-	  HB_ATOMIC_INT_INIT (false), \
-	  HB_ATOMIC_PTR_INIT (nullptr) \
-	}
+#define HB_OBJECT_HEADER_STATIC {}
 
 
 /*
@@ -224,7 +217,7 @@ static inline void hb_object_trace (const Type *obj, const char *function)
 template <typename Type>
 static inline Type *hb_object_create ()
 {
-  Type *obj = (Type *) calloc (1, sizeof (Type));
+  Type *obj = (Type *) hb_calloc (1, sizeof (Type));
 
   if (unlikely (!obj))
     return obj;
@@ -291,7 +284,7 @@ static inline void hb_object_fini (Type *obj)
   if (user_data)
   {
     user_data->fini ();
-    free (user_data);
+    hb_free (user_data);
     user_data = nullptr;
   }
 }
@@ -310,14 +303,14 @@ retry:
   hb_user_data_array_t *user_data = obj->header.user_data.get ();
   if (unlikely (!user_data))
   {
-    user_data = (hb_user_data_array_t *) calloc (sizeof (hb_user_data_array_t), 1);
+    user_data = (hb_user_data_array_t *) hb_calloc (sizeof (hb_user_data_array_t), 1);
     if (unlikely (!user_data))
       return false;
     user_data->init ();
     if (unlikely (!obj->header.user_data.cmpexch (nullptr, user_data)))
     {
       user_data->fini ();
-      free (user_data);
+      hb_free (user_data);
       goto retry;
     }
   }

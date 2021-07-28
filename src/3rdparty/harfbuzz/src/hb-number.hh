@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012  Mozilla Foundation.
+ * Copyright © 2019  Ebrahim Byagowi
  *
  *  This is part of HarfBuzz, a text shaping library.
  *
@@ -21,44 +21,21 @@
  * ON AN "AS IS" BASIS, AND THE COPYRIGHT HOLDER HAS NO OBLIGATION TO
  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  *
- * Mozilla Author(s): Jonathan Kew
  */
 
-#ifndef HB_CORETEXT_H
-#define HB_CORETEXT_H
+#ifndef HB_NUMBER_HH
+#define HB_NUMBER_HH
 
-#include "hb.h"
+HB_INTERNAL bool
+hb_parse_int (const char **pp, const char *end, int *pv,
+	      bool whole_buffer = false);
 
-#include <TargetConditionals.h>
-#if TARGET_OS_IPHONE
-#  include <CoreText/CoreText.h>
-#  include <CoreGraphics/CoreGraphics.h>
-#else
-#  include <ApplicationServices/ApplicationServices.h>
-#endif
+HB_INTERNAL bool
+hb_parse_uint (const char **pp, const char *end, unsigned int *pv,
+	       bool whole_buffer = false, int base = 10);
 
-HB_BEGIN_DECLS
+HB_INTERNAL bool
+hb_parse_double (const char **pp, const char *end, double *pv,
+		 bool whole_buffer = false);
 
-
-#define HB_CORETEXT_TAG_MORT HB_TAG('m','o','r','t')
-#define HB_CORETEXT_TAG_MORX HB_TAG('m','o','r','x')
-#define HB_CORETEXT_TAG_KERX HB_TAG('k','e','r','x')
-
-
-HB_EXTERN hb_face_t *
-hb_coretext_face_create (CGFontRef cg_font);
-
-HB_EXTERN hb_font_t *
-hb_coretext_font_create (CTFontRef ct_font);
-
-
-HB_EXTERN CGFontRef
-hb_coretext_face_get_cg_font (hb_face_t *face);
-
-HB_EXTERN CTFontRef
-hb_coretext_font_get_ct_font (hb_font_t *font);
-
-
-HB_END_DECLS
-
-#endif /* HB_CORETEXT_H */
+#endif /* HB_NUMBER_HH */

@@ -1,7 +1,7 @@
 /*
- * Copyright © 2016 Elie Roux <elie.roux@telecom-bretagne.eu>
+ * Copyright © 2016  Elie Roux <elie.roux@telecom-bretagne.eu>
  * Copyright © 2018  Google, Inc.
- * Copyright © 2018  Ebrahim Byagowi
+ * Copyright © 2018-2019  Ebrahim Byagowi
  *
  *  This is part of HarfBuzz, a text shaping library.
  *
@@ -31,9 +31,6 @@
 
 #include "hb-open-type.hh"
 #include "hb-ot-layout-common.hh"
-
-/* To be removed */
-typedef hb_tag_t hb_ot_layout_baseline_t;
 
 namespace OT {
 
@@ -76,7 +73,7 @@ struct BaseCoordFormat2
   protected:
   HBUINT16	format;		/* Format identifier--format = 2 */
   FWORD		coordinate;	/* X or Y value, in design units */
-  GlyphID	referenceGlyph;	/* Glyph ID of control glyph */
+  HBGlyphID	referenceGlyph;	/* Glyph ID of control glyph */
   HBUINT16	coordPoint;	/* Index of contour point on the
 				 * reference glyph */
   public:
@@ -106,7 +103,7 @@ struct BaseCoordFormat3
   protected:
   HBUINT16	format;		/* Format identifier--format = 3 */
   FWORD		coordinate;	/* X or Y value, in design units */
-  OffsetTo<Device>
+  Offset16To<Device>
 		deviceTable;	/* Offset to Device table for X or
 				 * Y value, from beginning of
 				 * BaseCoord table (may be NULL). */
@@ -116,9 +113,11 @@ struct BaseCoordFormat3
 
 struct BaseCoord
 {
-  hb_position_t get_coord (hb_font_t *font,
+  bool has_data () const { return u.format; }
+
+  hb_position_t get_coord (hb_font_t            *font,
 			   const VariationStore &var_store,
-			   hb_direction_t direction) const
+			   hb_direction_t        direction) const
   {
     switch (u.format) {
     case 1: return u.format1.get_coord ();
@@ -142,10 +141,10 @@ struct BaseCoord
 
   protected:
   union {
-    HBUINT16		format;
-    BaseCoordFormat1	format1;
-    BaseCoordFormat2	format2;
-    BaseCoordFormat3	format3;
+  HBUINT16		format;
+  BaseCoordFormat1	format1;
+  BaseCoordFormat2	format2;
+  BaseCoordFormat3	format3;
   } u;
   public:
   DEFINE_SIZE_UNION (2, format);
@@ -153,14 +152,9 @@ struct BaseCoord
 
 struct FeatMinMaxRecord
 {
-  static int cmp (const void *key_, const void *entry_)
-  {
-    hb_tag_t key = * (hb_tag_t *) key_;
-    const FeatMinMaxRecord &entry = * (const FeatMinMaxRecord *) entry_;
-    return key < (unsigned int) entry.tag ? -1 :
-	   key > (unsigned int) entry.tag ? 1 :
-	   0;
-  }
+  int cmp (hb_tag_t key) const { return tag.cmp (key); }
+
+  bool has_data () const { return tag; }
 
   void get_min_max (const BaseCoord **min, const BaseCoord **max) const
   {
@@ -179,11 +173,11 @@ struct FeatMinMaxRecord
   protected:
   Tag		tag;		/* 4-byte feature identification tag--must
 				 * match feature tag in FeatureList */
-  OffsetTo<BaseCoord>
+  Offset16To<BaseCoord>
 		minCoord;	/* Offset to BaseCoord table that defines
 				 * the minimum extent value, from beginning
 				 * of MinMax table (may be NULL) */
-  OffsetTo<BaseCoord>
+  Offset16To<BaseCoord>
 		maxCoord;	/* Offset to BaseCoord table that defines
 				 * the maximum extent value, from beginning
 				 * of MinMax table (may be NULL) */
@@ -195,17 +189,12 @@ struct FeatMinMaxRecord
 struct MinMax
 {
   void get_min_max (hb_tag_t          feature_tag,
-			   const BaseCoord **min,
-			   const BaseCoord **max) const
+		    const BaseCoord **min,
+		    const BaseCoord **max) const
   {
-    /* TODO Replace hb_bsearch() with .bsearch(). */
-    const FeatMinMaxRecord *minMaxCoord = (const FeatMinMaxRecord *)
-					  hb_bsearch (&feature_tag, featMinMaxRecords.arrayZ,
-						      featMinMaxRecords.len,
-						      FeatMinMaxRecord::static_size,
-						      FeatMinMaxRecord::cmp);
-    if (minMaxCoord)
-      minMaxCoord->get_min_max (min, max);
+    const FeatMinMaxRecord &minMaxCoord = featMinMaxRecords.bsearch (feature_tag);
+    if (minMaxCoord.has_data ())
+      minMaxCoord.get_min_max (min, max);
     else
     {
       if (likely (min)) *min = &(this+minCoord);
@@ -223,15 +212,15 @@ struct MinMax
   }
 
   protected:
-  OffsetTo<BaseCoord>
+  Offset16To<BaseCoord>
 		minCoord;	/* Offset to BaseCoord table that defines
 				 * minimum extent value, from the beginning
 				 * of MinMax table (may be NULL) */
-  OffsetTo<BaseCoord>
+  Offset16To<BaseCoord>
 		maxCoord;	/* Offset to BaseCoord table that defines
 				 * maximum extent value, from the beginning
 				 * of MinMax table (may be NULL) */
-  SortedArrayOf<FeatMinMaxRecord>
+  SortedArray16Of<FeatMinMaxRecord>
 		featMinMaxRecords;
 				/* Array of FeatMinMaxRecords, in alphabetical
 				 * order by featureTableTag */
@@ -258,7 +247,7 @@ struct BaseValues
   Index		defaultIndex;	/* Index number of default baseline for this
 				 * script — equals index position of baseline tag
 				 * in baselineTags array of the BaseTagList */
-  OffsetArrayOf<BaseCoord>
+  Array16OfOffset16To<BaseCoord>
 		baseCoords;	/* Number of BaseCoord tables defined — should equal
 				 * baseTagCount in the BaseTagList
 				 *
@@ -271,17 +260,11 @@ struct BaseValues
 
 struct BaseLangSysRecord
 {
-  static int cmp (const void *key_, const void *entry_)
-  {
-    hb_tag_t key = * (hb_tag_t *) key_;
-    const BaseLangSysRecord &entry = * (const BaseLangSysRecord *) entry_;
-    return key < (unsigned int) entry.baseLangSysTag ? -1 :
-	   key > (unsigned int) entry.baseLangSysTag ? 1 :
-	   0;
-  }
+  int cmp (hb_tag_t key) const { return baseLangSysTag.cmp (key); }
 
-  const MinMax &get_min_max () const
-  { return this+minMax; }
+  bool has_data () const { return baseLangSysTag; }
+
+  const MinMax &get_min_max () const { return this+minMax; }
 
   bool sanitize (hb_sanitize_context_t *c, const void *base) const
   {
@@ -292,7 +275,7 @@ struct BaseLangSysRecord
 
   protected:
   Tag		baseLangSysTag;	/* 4-byte language system identification tag */
-  OffsetTo<MinMax>
+  Offset16To<MinMax>
 		minMax;		/* Offset to MinMax table, from beginning
 				 * of BaseScript table */
   public:
@@ -303,19 +286,14 @@ struct BaseScript
 {
   const MinMax &get_min_max (hb_tag_t language_tag) const
   {
-    /* TODO Replace hb_bsearch() with .bsearch(). */
-    const BaseLangSysRecord* record = (const BaseLangSysRecord *)
-				      hb_bsearch (&language_tag, baseLangSysRecords.arrayZ,
-						  baseLangSysRecords.len,
-						  BaseLangSysRecord::static_size,
-						  BaseLangSysRecord::cmp);
-    return record ? record->get_min_max () : this+defaultMinMax;
+    const BaseLangSysRecord& record = baseLangSysRecords.bsearch (language_tag);
+    return record.has_data () ? record.get_min_max () : this+defaultMinMax;
   }
 
   const BaseCoord &get_base_coord (int baseline_tag_index) const
   { return (this+baseValues).get_base_coord (baseline_tag_index); }
 
-  bool is_empty () const { return !baseValues; }
+  bool has_data () const { return baseValues; }
 
   bool sanitize (hb_sanitize_context_t *c) const
   {
@@ -327,13 +305,13 @@ struct BaseScript
   }
 
   protected:
-  OffsetTo<BaseValues>
+  Offset16To<BaseValues>
 		baseValues;	/* Offset to BaseValues table, from beginning
 				 * of BaseScript table (may be NULL) */
-  OffsetTo<MinMax>
+  Offset16To<MinMax>
 		defaultMinMax;	/* Offset to MinMax table, from beginning of
 				 * BaseScript table (may be NULL) */
-  SortedArrayOf<BaseLangSysRecord>
+  SortedArray16Of<BaseLangSysRecord>
 		baseLangSysRecords;
 				/* Number of BaseLangSysRecords
 				 * defined — may be zero (0) */
@@ -345,14 +323,9 @@ struct BaseScript
 struct BaseScriptList;
 struct BaseScriptRecord
 {
-  static int cmp (const void *key_, const void *entry_)
-  {
-    hb_tag_t key = * (hb_tag_t *) key_;
-    const BaseScriptRecord &entry = * (const BaseScriptRecord *) entry_;
-    return key < (unsigned int) entry.baseScriptTag ? -1 :
-	   key > (unsigned int) entry.baseScriptTag ? 1 :
-	   0;
-  }
+  int cmp (hb_tag_t key) const { return baseScriptTag.cmp (key); }
+
+  bool has_data () const { return baseScriptTag; }
 
   const BaseScript &get_base_script (const BaseScriptList *list) const
   { return list+baseScript; }
@@ -366,7 +339,7 @@ struct BaseScriptRecord
 
   protected:
   Tag		baseScriptTag;	/* 4-byte script identification tag */
-  OffsetTo<BaseScript>
+  Offset16To<BaseScript>
 		baseScript;	/* Offset to BaseScript table, from beginning
 				 * of BaseScriptList */
 
@@ -376,22 +349,11 @@ struct BaseScriptRecord
 
 struct BaseScriptList
 {
-  const BaseScriptRecord *find_record (hb_tag_t script) const
-  {
-    /* TODO Replace hb_bsearch() with .bsearch(). */
-    return (const BaseScriptRecord *) hb_bsearch (&script, baseScriptRecords.arrayZ,
-						  baseScriptRecords.len,
-						  BaseScriptRecord::static_size,
-						  BaseScriptRecord::cmp);
-  }
-
-  /* TODO: Or client should handle fallback? */
   const BaseScript &get_base_script (hb_tag_t script) const
   {
-    const BaseScriptRecord *record = find_record (script);
-    if (!record) record = find_record ((hb_script_t) HB_TAG ('D','F','L','T'));
-
-    return record ? record->get_base_script (this) : Null (BaseScript);
+    const BaseScriptRecord *record = &baseScriptRecords.bsearch (script);
+    if (!record->has_data ()) record = &baseScriptRecords.bsearch (HB_TAG ('D','F','L','T'));
+    return record->has_data () ? record->get_base_script (this) : Null (BaseScript);
   }
 
   bool sanitize (hb_sanitize_context_t *c) const
@@ -402,7 +364,7 @@ struct BaseScriptList
   }
 
   protected:
-  SortedArrayOf<BaseScriptRecord>
+  SortedArray16Of<BaseScriptRecord>
 			baseScriptRecords;
 
   public:
@@ -411,15 +373,28 @@ struct BaseScriptList
 
 struct Axis
 {
-  bool get_baseline (hb_ot_layout_baseline_t   baseline,
-			    hb_tag_t                  script_tag,
-			    hb_tag_t                  language_tag,
-			    const BaseCoord         **coord) const
+  bool get_baseline (hb_tag_t          baseline_tag,
+		     hb_tag_t          script_tag,
+		     hb_tag_t          language_tag,
+		     const BaseCoord **coord) const
   {
     const BaseScript &base_script = (this+baseScriptList).get_base_script (script_tag);
-    if (base_script.is_empty ()) return false;
+    if (!base_script.has_data ())
+    {
+      *coord = nullptr;
+      return false;
+    }
 
-    if (likely (coord)) *coord = &base_script.get_base_coord ((this+baseTagList).bsearch (baseline));
+    if (likely (coord))
+    {
+      unsigned int tag_index = 0;
+      if (!(this+baseTagList).bfind (baseline_tag, &tag_index))
+      {
+        *coord = nullptr;
+        return false;
+      }
+      *coord = &base_script.get_base_coord (tag_index);
+    }
 
     return true;
   }
@@ -431,7 +406,11 @@ struct Axis
 		    const BaseCoord **max_coord) const
   {
     const BaseScript &base_script = (this+baseScriptList).get_base_script (script_tag);
-    if (base_script.is_empty ()) return false;
+    if (!base_script.has_data ())
+    {
+      *min_coord = *max_coord = nullptr;
+      return false;
+    }
 
     base_script.get_min_max (language_tag).get_min_max (feature_tag, min_coord, max_coord);
 
@@ -447,12 +426,12 @@ struct Axis
   }
 
   protected:
-  OffsetTo<SortedArrayOf<Tag> >
+  Offset16To<SortedArray16Of<Tag>>
 		baseTagList;	/* Offset to BaseTagList table, from beginning
 				 * of Axis table (may be NULL)
 				 * Array of 4-byte baseline identification tags — must
 				 * be in alphabetical order */
-  OffsetTo<BaseScriptList>
+  Offset16To<BaseScriptList>
 		baseScriptList;	/* Offset to BaseScriptList table, from beginning
 				 * of Axis table
 				 * Array of BaseScriptRecords, in alphabetical order
@@ -472,20 +451,21 @@ struct BASE
   const VariationStore &get_var_store () const
   { return version.to_int () < 0x00010001u ? Null (VariationStore) : this+varStore; }
 
-  bool get_baseline (hb_font_t               *font,
-		     hb_ot_layout_baseline_t  baseline,
-		     hb_direction_t           direction,
-		     hb_tag_t                 script_tag,
-		     hb_tag_t                 language_tag,
-		     hb_position_t           *base) const
+  bool get_baseline (hb_font_t      *font,
+		     hb_tag_t        baseline_tag,
+		     hb_direction_t  direction,
+		     hb_tag_t        script_tag,
+		     hb_tag_t        language_tag,
+		     hb_position_t  *base) const
   {
-    const BaseCoord *base_coord;
-    if (!get_axis (direction).get_baseline (baseline, script_tag, language_tag, &base_coord))
+    const BaseCoord *base_coord = nullptr;
+    if (unlikely (!get_axis (direction).get_baseline (baseline_tag, script_tag, language_tag, &base_coord) ||
+		  !base_coord || !base_coord->has_data ()))
       return false;
 
-    if (likely (base && base_coord)) *base = base_coord->get_coord (font,
-								    get_var_store (),
-								    direction);
+    if (likely (base))
+      *base = base_coord->get_coord (font, get_var_store (), direction);
+
     return true;
   }
 
@@ -521,11 +501,11 @@ struct BASE
 
   protected:
   FixedVersion<>version;	/* Version of the BASE table */
-  OffsetTo<Axis>hAxis;		/* Offset to horizontal Axis table, from beginning
+  Offset16To<Axis>hAxis;		/* Offset to horizontal Axis table, from beginning
 				 * of BASE table (may be NULL) */
-  OffsetTo<Axis>vAxis;		/* Offset to vertical Axis table, from beginning
+  Offset16To<Axis>vAxis;		/* Offset to vertical Axis table, from beginning
 				 * of BASE table (may be NULL) */
-  LOffsetTo<VariationStore>
+  Offset32To<VariationStore>
 		varStore;	/* Offset to the table of Item Variation
 				 * Store--from beginning of BASE
 				 * header (may be NULL).  Introduced

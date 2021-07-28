@@ -24,7 +24,7 @@
  * Google Author(s): Behdad Esfahbod
  */
 
-#ifndef HB_H_IN
+#if !defined(HB_H_IN) && !defined(HB_NO_SINGLE_HEADER_ERROR)
 #error "Include <hb.h> instead."
 #endif
 
@@ -36,11 +36,24 @@
 HB_BEGIN_DECLS
 
 
-/*
+/**
+ * HB_SET_VALUE_INVALID:
+ *
+ * Unset #hb_set_t value.
+ *
  * Since: 0.9.21
  */
 #define HB_SET_VALUE_INVALID ((hb_codepoint_t) -1)
 
+/**
+ * hb_set_t:
+ *
+ * Data type for holding a set of integers. #hb_set_t's are
+ * used to gather and contain glyph IDs, Unicode code
+ * points, and various other collections of discrete 
+ * values.
+ *
+ **/
 typedef struct hb_set_t hb_set_t;
 
 
@@ -71,6 +84,9 @@ hb_set_get_user_data (hb_set_t           *set,
 /* Returns false if allocation has failed before */
 HB_EXTERN hb_bool_t
 hb_set_allocation_successful (const hb_set_t *set);
+
+HB_EXTERN hb_set_t *
+hb_set_copy (const hb_set_t *set);
 
 HB_EXTERN void
 hb_set_clear (hb_set_t *set);

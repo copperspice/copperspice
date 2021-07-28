@@ -59,7 +59,7 @@ static struct hb_shaper_list_lazy_loader_t : hb_lazy_loader_t<const char *,
 {
   static const char ** create ()
   {
-    const char **shaper_list = (const char **) calloc (1 + HB_SHAPERS_COUNT, sizeof (const char *));
+    const char **shaper_list = (const char **) hb_calloc (1 + HB_SHAPERS_COUNT, sizeof (const char *));
     if (unlikely (!shaper_list))
       return nullptr;
 
@@ -76,7 +76,7 @@ static struct hb_shaper_list_lazy_loader_t : hb_lazy_loader_t<const char *,
     return shaper_list;
   }
   static void destroy (const char **l)
-  { free (l); }
+  { hb_free (l); }
   static const char ** get_null ()
   { return nil_shaper_list; }
 } static_shaper_list;
@@ -111,10 +111,10 @@ hb_shape_list_shapers ()
  * hb_shape_full:
  * @font: an #hb_font_t to use for shaping
  * @buffer: an #hb_buffer_t to shape
- * @features: (array length=num_features) (allow-none): an array of user
+ * @features: (array length=num_features) (nullable): an array of user
  *    specified #hb_feature_t or %NULL
  * @num_features: the length of @features array
- * @shaper_list: (array zero-terminated=1) (allow-none): a %NULL-terminated
+ * @shaper_list: (array zero-terminated=1) (nullable): a %NULL-terminated
  *    array of shapers to use or %NULL
  *
  * See hb_shape() for details. If @shaper_list is not %NULL, the specified
@@ -139,8 +139,6 @@ hb_shape_full (hb_font_t          *font,
   hb_bool_t res = hb_shape_plan_execute (shape_plan, font, buffer, features, num_features);
   hb_shape_plan_destroy (shape_plan);
 
-  if (res)
-    buffer->content_type = HB_BUFFER_CONTENT_TYPE_GLYPHS;
   return res;
 }
 
@@ -148,13 +146,15 @@ hb_shape_full (hb_font_t          *font,
  * hb_shape:
  * @font: an #hb_font_t to use for shaping
  * @buffer: an #hb_buffer_t to shape
- * @features: (array length=num_features) (allow-none): an array of user
+ * @features: (array length=num_features) (nullable): an array of user
  *    specified #hb_feature_t or %NULL
  * @num_features: the length of @features array
  *
  * Shapes @buffer using @font turning its Unicode characters content to
  * positioned glyphs. If @features is not %NULL, it will be used to control the
- * features applied during shaping.
+ * features applied during shaping. If two @features have the same tag but
+ * overlapping ranges the value of the feature with the higher index takes
+ * precedence.
  *
  * Since: 0.9.2
  **/

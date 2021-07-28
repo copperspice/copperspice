@@ -77,9 +77,11 @@ struct MVAR
 		 const int *coords, unsigned int coord_count) const
   {
     const VariationValueRecord *record;
-    record = (VariationValueRecord *) bsearch (&tag, valuesZ.arrayZ,
-					       valueRecordCount, valueRecordSize,
-					       tag_compare);
+    record = (VariationValueRecord *) hb_bsearch (tag,
+						  (const VariationValueRecord *)
+						    (const HBUINT8 *) valuesZ,
+						  valueRecordCount, valueRecordSize,
+						  tag_compare);
     if (!record)
       return 0.;
 
@@ -101,7 +103,7 @@ protected:
   HBUINT16	valueRecordSize;/* The size in bytes of each value record —
 				 * must be greater than zero. */
   HBUINT16	valueRecordCount;/* The number of value records — may be zero. */
-  OffsetTo<VariationStore>
+  Offset16To<VariationStore>
 		varStore;	/* Offset to item variation store table. */
   UnsizedArrayOf<HBUINT8>
 		valuesZ;	/* Array of value records. The records must be
