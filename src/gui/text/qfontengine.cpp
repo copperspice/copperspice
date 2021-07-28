@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qfontengine_p.h>
-#include <qharfbuzz_gui_p.h>
 
 #include <qbitmap.h>
 #include <qdebug.h>

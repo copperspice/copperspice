@@ -37,7 +37,7 @@
 #include <qthreadstorage.h>
 #include <qmath.h>
 
-#include <qharfbuzz_gui_p.h>
+#include <qharfbuzz_p.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

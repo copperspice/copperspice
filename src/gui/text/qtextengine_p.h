@@ -46,7 +46,8 @@
 #include <qunicodetools_p.h>
 
 #if ! defined(CS_BUILDING_CUPS)
-#include <qharfbuzz_gui_p.h>
+// Harfbuzz used in qtextengine.cpp and qfontengine.cpp
+#include <qharfbuzz_p.h>
 #endif
 
 #include <stdlib.h>
