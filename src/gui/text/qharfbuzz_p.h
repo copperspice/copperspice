@@ -21,24 +21,29 @@
 *
 ***********************************************************************/
 
-#ifndef QHARFBUZZ_GUI_P_H
-#define QHARFBUZZ_GUI_P_H
+#ifndef QHARFBUZZ_P_H
+#define QHARFBUZZ_P_H
 
-#include <qharfbuzz_core_p.h>
+#include <qchar.h>
 
 #include <hb.h>
 #include <hb-ot.h>
 
 class QFontEngine;
 
-using qt_destroy_func_ptr        = void (*)(void *);
-using qt_get_font_table_func_ptr = bool (*)(void *, uint, uchar *, uint *);
+using glyph_t  = uint32_t;
+using HB_Bool  = hb_bool_t;
+using HB_Glyph = hb_codepoint_t;
+
+using cs_fontTable_func_ptr = bool (*)(void *, uint, uchar *, uint *);
+
+// script
+hb_script_t cs_script_to_hb_script(QChar::Script script);
+hb_unicode_funcs_t *cs_get_unicode_funcs();
 
 // font
-Q_GUI_EXPORT hb_font_funcs_t *cs_get_font_funcs();
-
-Q_GUI_EXPORT hb_face_t *cs_face_get_for_engine(QFontEngine *fe);
-Q_GUI_EXPORT hb_font_t *cs_font_get_for_engine(QFontEngine *fe);
+Q_GUI_EXPORT std::shared_ptr<hb_face_t> cs_face_get_for_engine(QFontEngine *fe);
+Q_GUI_EXPORT std::shared_ptr<hb_font_t> cs_font_get_for_engine(QFontEngine *fe);
 
 Q_GUI_EXPORT void cs_font_set_use_design_metrics(hb_font_t *font, uint value);
 Q_GUI_EXPORT uint cs_font_get_use_design_metrics(hb_font_t *font);

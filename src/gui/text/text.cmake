@@ -109,6 +109,7 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset_agl_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfragmentmap_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun_p.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qinputcontrol_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext_p.h
@@ -127,7 +128,6 @@ list(APPEND GUI_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qtexttable_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qzipreader_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qzipwriter_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_gui_p.h
 )
 
 target_sources(CsGui
@@ -140,8 +140,9 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontsubset.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontmetrics.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qfontdatabase.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_gui.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qglyphrun.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_script.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/text/qharfbuzz_font.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qinputcontrol.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qrawfont.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qstatictext.cpp
