@@ -24,11 +24,7 @@
 #include <qunicodetools_p.h>
 #include <qunicodetables_p.h>
 
-#include <qharfbuzz_core_p.h>
 #include <qfile.h>
-
-// #define HB_NO_PRAGMA_GCC_DIAGNOSTIC_ERROR
-#include <hb.h>
 
 #define FLAG(x) (1 << (x))
 

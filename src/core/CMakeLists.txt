@@ -45,7 +45,6 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/thread
    ${CMAKE_CURRENT_SOURCE_DIR}/tools
    ${CMAKE_CURRENT_SOURCE_DIR}/xml
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
 include(animation/animation.cmake)
