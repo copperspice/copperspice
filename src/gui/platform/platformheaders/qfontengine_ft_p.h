@@ -93,8 +93,8 @@ class QFreetypeFace
    QMutex _lock;
    QByteArray fontData;
 
-   void *hbFace;
-   qt_destroy_func_ptr hbFace_destroy_func;
+   // harfbuzz
+   std::shared_ptr<hb_face_t> m_hb_FTFace;
 
    friend class QFontEngineFT;
    friend class QtFreetypeData;

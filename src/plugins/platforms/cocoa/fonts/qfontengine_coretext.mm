@@ -273,10 +273,9 @@ void QCoreTextFontEngine::init()
    // possible issue: hb_coretext requires both CTFont and CGFont but user_data is only void*
    Q_ASSERT((void *)(&ctfont + 1) == (void *)&cgFont);
 
-
    // faceData is a data member in QFontEngine
    faceData.user_data           = &ctfont;
-   faceData.font_table_func_ptr = ct_getSfntTable;
+   faceData.m_fontTable_funcPtr = ct_getSfntTable;      // harfbuzz
 }
 
 glyph_t QCoreTextFontEngine::glyphIndex(char32_t ch) const

@@ -266,24 +266,20 @@ class Q_GUI_EXPORT QFontEngine
    }
 
    // harfbuzz
-   void *harfbuzzFace() const;
+   std::shared_ptr<hb_face_t> harfbuzzFace() const;
 
-   QFontDef fontDef;
-
-   // harfbuzz
-   mutable void *m_hb_font;
-   mutable qt_destroy_func_ptr  font_destroy_func_ptr;
-
-   mutable void *m_hb_face;
-   mutable qt_destroy_func_ptr  face_destroy_func_ptr;
+   mutable std::shared_ptr<hb_font_t> m_hb_font;
+   mutable std::shared_ptr<hb_face_t> m_hb_face;
 
    struct FaceData {
       void *user_data;
-      qt_get_font_table_func_ptr  font_table_func_ptr;
+      cs_fontTable_func_ptr  m_fontTable_funcPtr;
    } faceData;
 
    QAtomicInt m_refCount;
-   uint cache_cost;       // amount of mem used in kb by the font
+   QFontDef fontDef;
+
+   uint cache_cost;       // amount of memory used in kb by the font
 
    uint fsType : 16;
    bool symbol;

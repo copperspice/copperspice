@@ -1219,8 +1219,10 @@ void QTextEngine::shapeText(int item) const
 }
 
 int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, QFontEngine *fontEngine,
-   const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const
+            const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const
 {
+   // harfbuzz
+
    uint glyphs_shaped = 0;
    auto strLength     = str.size();
 
@@ -1237,7 +1239,8 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
    props.direction = si.analysis.bidiLevel % 2 ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
 
    QChar::Script script = QChar::Script(si.analysis.script);
-   props.script = cs_script_to_hb_script(script);
+   props.script         = cs_script_to_hb_script(script);
+   props.language       = hb_language_get_default();
 
    uint current_cluster  = 0;
    uint expected_cluster = 0;
@@ -1279,10 +1282,10 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
 
       // shape
       {
-         hb_font_t *hb_font = cs_font_get_for_engine(actualFontEngine);
+         std::shared_ptr<hb_font_t> hb_font = cs_font_get_for_engine(actualFontEngine);
          Q_ASSERT(hb_font);
 
-         cs_font_set_use_design_metrics(hb_font, option.useDesignMetrics() ? uint(QFontEngine::DesignMetrics) : 0);
+         cs_font_set_use_design_metrics(hb_font.get(), option.useDesignMetrics() ? uint(QFontEngine::DesignMetrics) : 0);
 
          // ligatures are incompatible with custom letter spacing, so when a letter spacing is set
          // disable them for writing systems where they are purely cosmetic
@@ -1294,10 +1297,10 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
 
          const hb_feature_t features[5] = {
             { HB_TAG('k', 'e', 'r', 'n'), !! kerningEnabled, 0, uint(-1) },
-            { HB_TAG('l', 'i', 'g', 'a'), ! dontLigate, 0, uint(-1) },
-            { HB_TAG('c', 'l', 'i', 'g'), ! dontLigate, 0, uint(-1) },
-            { HB_TAG('d', 'l', 'i', 'g'), ! dontLigate, 0, uint(-1) },
-            { HB_TAG('h', 'l', 'i', 'g'), ! dontLigate, 0, uint(-1) }
+            { HB_TAG('l', 'i', 'g', 'a'), !  dontLigate,     0, uint(-1) },
+            { HB_TAG('c', 'l', 'i', 'g'), !  dontLigate,     0, uint(-1) },
+            { HB_TAG('d', 'l', 'i', 'g'), !  dontLigate,     0, uint(-1) },
+            { HB_TAG('h', 'l', 'i', 'g'), !  dontLigate,     0, uint(-1) }
          };
 
          const int num_features = dontLigate ? 5 : 1;
@@ -1310,17 +1313,20 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
          // from non-CoreText engine. The other shapers work with that engine just fine.
 
          if (actualFontEngine->type() != QFontEngine::Mac) {
+
             static const char *s_shaper_list_without_coretext[] = {
                "graphite2",
                "ot",
                "fallback",
                nullptr
             };
+
             shaper_list = s_shaper_list_without_coretext;
          }
 #endif
 
-         bool shapedOk = hb_shape_full(hb_font, buffer, features, num_features, shaper_list);
+         bool shapedOk = hb_shape_full(hb_font.get(), buffer, features, num_features, shaper_list);
+
          if (! shapedOk) {
             hb_buffer_destroy(buffer);
             return 0;

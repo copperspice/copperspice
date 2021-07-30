@@ -254,10 +254,7 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id, const 
          return nullptr;
       }
 
-      newFreetype->face = face;
-
-      newFreetype->hbFace       = nullptr;
-      newFreetype->hbFace_destroy_func = nullptr;
+      newFreetype->face        = face;
       newFreetype->ref         = 1;
       newFreetype->xsize       = 0;
       newFreetype->ysize       = 0;
@@ -319,10 +316,7 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id, const 
 
 void QFreetypeFace::cleanup()
 {
-   if (hbFace && hbFace_destroy_func) {
-      hbFace_destroy_func(hbFace);
-      hbFace = nullptr;
-   }
+   m_hb_FTFace.reset();
 
    FT_Done_Face(face);
    face = nullptr;
@@ -846,23 +840,19 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format, QFre
       }
    }
 
-
    fontDef.styleName = QString::fromUtf8(face->style_name);
 
-   if (! freetype->hbFace) {
+   if (! freetype->m_hb_FTFace) {
       faceData.user_data = face;
-      faceData.font_table_func_ptr = ft_getSfntTable;
+      faceData.m_fontTable_funcPtr = ft_getSfntTable;
 
-      freetype->hbFace = harfbuzzFace();
-      freetype->hbFace_destroy_func = face_destroy_func_ptr;
+      freetype->m_hb_FTFace = harfbuzzFace();
 
    } else {
       Q_ASSERT(! m_hb_face);
-      m_hb_face = freetype->hbFace;
+      m_hb_face = freetype->m_hb_FTFace;
    }
 
-   // we share the HB face in QFreeTypeFace, so do not let ~QFontEngine() destroy it
-   face_destroy_func_ptr = nullptr;
    unlockFace();
 
    fsType = freetype->fsType();

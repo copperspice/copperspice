@@ -952,14 +952,14 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
             qWarning("%s: Failed to load font, using fallback instead: %s",
                __FUNCTION__, csPrintable(fontEngine->fontDef.family));
 
-            if (fontEngine->ref.load() == 0) {
+            if (fontEngine->m_refCount.load() == 0) {
                delete fontEngine;
             }
 
             fontEngine = nullptr;
 
          } else {
-            Q_ASSERT(fontEngine->ref.load() == 0);
+            Q_ASSERT(fontEngine->m_refCount.load() == 0);
 
             // Override the generated font name
             static_cast<QWindowsFontEngine *>(fontEngine)->setUniqueFamilyName(uniqueFamilyName);

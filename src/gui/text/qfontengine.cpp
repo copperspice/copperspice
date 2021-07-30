@@ -81,7 +81,7 @@ int QFontEngine::getPointInOutline(glyph_t glyph, int flags, quint32 point, QFix
    return -1;
 }
 
-static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, uint *length)
+static bool cs_get_fontTable(void *user_data, uint tag, uchar *buffer, uint *length)
 {
    QFontEngine *fe = (QFontEngine *)user_data;
    return fe->getSfntTableData(tag, buffer, length);
@@ -90,12 +90,10 @@ static bool qt_get_font_table_default(void *user_data, uint tag, uchar *buffer, 
 #define kBearingNotInitialized std::numeric_limits<qreal>::max()
 
 QFontEngine::QFontEngine(Type type)
-   : m_refCount(0), m_hb_font(nullptr), font_destroy_func_ptr(nullptr), m_hb_face(nullptr),
-     face_destroy_func_ptr(nullptr), m_type(type), m_minLeftBearing(kBearingNotInitialized),
-     m_minRightBearing(kBearingNotInitialized)
+   : m_refCount(0), m_type(type), m_minLeftBearing(kBearingNotInitialized), m_minRightBearing(kBearingNotInitialized)
 {
    faceData.user_data = this;
-   faceData.font_table_func_ptr = qt_get_font_table_default;
+   faceData.m_fontTable_funcPtr = cs_get_fontTable;
 
    cache_cost = 0;
    fsType     = 0;
@@ -109,16 +107,6 @@ QFontEngine::QFontEngine(Type type)
 QFontEngine::~QFontEngine()
 {
    m_glyphCaches.clear();
-
-   if (m_hb_font && font_destroy_func_ptr) {
-      font_destroy_func_ptr(m_hb_font);
-      m_hb_font = nullptr;
-   }
-
-   if (m_hb_face && face_destroy_func_ptr) {
-      face_destroy_func_ptr(m_hb_face);
-      m_hb_face = nullptr;
-   }
 }
 
 QFixed QFontEngine::lineThickness() const
@@ -144,9 +132,9 @@ QFixed QFontEngine::underlinePosition() const
    return ((lineThickness() * 2) + 3) / 6;
 }
 
-// harbuzz method
-void *QFontEngine::harfbuzzFace() const
+std::shared_ptr<hb_face_t> QFontEngine::harfbuzzFace() const
 {
+   // harfbuzz
    Q_ASSERT(type() != QFontEngine::Multi);
    return cs_face_get_for_engine(const_cast<QFontEngine *>(this));
 }
@@ -157,7 +145,7 @@ bool QFontEngine::supportsScript(QChar::Script script) const
       return true;
    }
 
-   // only works for scripts that require OpenType. More generally
+   // only works for scripts that require OpenType, more generally
    // for scripts that do not require OpenType we should just look at the list of
    // supported writing systems in the font's OS/2 table.
 
@@ -166,37 +154,24 @@ bool QFontEngine::supportsScript(QChar::Script script) const
       return true;
    }
 
-#if defined(Q_OS_DARWIN)
-   // in AAT fonts, 'gsub' table is effectively replaced by 'mort'/'morx' table
+   // for AAT fonts the 'gsub' table is effectively replaced by 'mort' or 'morx' table
    uint len;
 
    if (getSfntTableData(MAKE_TAG('m', 'o', 'r', 't'), nullptr, &len) || getSfntTableData(MAKE_TAG('m', 'o', 'r', 'x'), nullptr, &len)) {
       return true;
    }
-#endif
 
    bool retval = false;
 
-   if (hb_face_t *face = cs_face_get_for_engine(const_cast<QFontEngine *>(this))) {
+   // harfbuzz
+   std::shared_ptr<hb_face_t> face = cs_face_get_for_engine(const_cast<QFontEngine *>(this));
 
-      uint script_count = 2;
-      hb_tag_t script_tag[2];
+   if (face != nullptr) {
+      uint script_count = HB_OT_MAX_TAGS_PER_SCRIPT;
+      hb_tag_t script_tag[HB_OT_MAX_TAGS_PER_SCRIPT];
 
       hb_ot_tags_from_script_and_language(cs_script_to_hb_script(script), HB_LANGUAGE_INVALID, &script_count, script_tag, nullptr, nullptr);
-
-      unsigned int script_index;
-
-      if (script_count > 0)  {
-         retval = hb_ot_layout_table_find_script(face, HB_OT_TAG_GSUB, script_tag[0], &script_index);
-      }
-
-      if (! retval && script_count > 1) {
-         retval = hb_ot_layout_table_find_script(face, HB_OT_TAG_GSUB, script_tag[1], &script_index);
-
-         if (! retval && script_tag[1] != HB_OT_TAG_DEFAULT_SCRIPT) {
-            retval = hb_ot_layout_table_find_script(face, HB_OT_TAG_GSUB, HB_OT_TAG_DEFAULT_SCRIPT, &script_index);
-         }
-      }
+      retval = hb_ot_layout_table_select_script(face.get(), HB_OT_TAG_GSUB, script_count, script_tag, nullptr, nullptr);
    }
 
    return retval;
@@ -2305,13 +2280,11 @@ QFontEngine *QFontEngineMulti::createMultiFontEngine(QFontEngine *fe, int script
    QFontCache::Key key(fe->fontDef, script, /*multi = */true);
    QFontCache *fc = QFontCache::instance();
 
-   //  We can't rely on the fontDef (and hence the cache Key)
-   //  alone to distinguish webfonts, since these should not be
-   //  accidentally shared, even if the resulting fontcache key
-   //  is strictly identical. See:
-   //   http://www.w3.org/TR/css3-fonts/#font-face-rule
+   // can not  rely on the fontDef (and hence the cache Key) alone to distinguish webfonts, since these should not be
+   // accidentally shared, even if the resulting fontcache key is strictly identical.
+   // http://www.w3.org/TR/css3-fonts/#font-face-rule
 
-   const bool faceIsLocal = !fe->faceId().filename.isEmpty();
+   const bool faceIsLocal = ! fe->faceId().filename.isEmpty();
    QFontCache::EngineCache::iterator it  = fc->engineCache.find(key);
    QFontCache::EngineCache::iterator end = fc->engineCache.end();
 
@@ -2331,7 +2304,7 @@ QFontEngine *QFontEngineMulti::createMultiFontEngine(QFontEngine *fe, int script
 
    if (! engine) {
       engine = QApplicationPrivate::instance()->platformIntegration()->fontDatabase()->fontEngineMulti(fe, QChar::Script(script));
-      fc->insertEngine(key, engine, /* insertMulti */ ! faceIsLocal);
+      fc->insertEngine(key, engine, ! faceIsLocal);
    }
 
    Q_ASSERT(engine);

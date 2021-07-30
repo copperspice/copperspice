@@ -157,11 +157,12 @@ struct QGlyphAttributes {
 static_assert(sizeof(QGlyphAttributes) == 1, "Type mismatch");
 
 #if defined(CS_BUILDING_CUPS)
+   struct hb_face_t;
+   struct hb_font_t;
+
    using glyph_t = uint32_t;
 
-   using qt_destroy_func_ptr        = void *;
-   using qt_get_font_table_func_ptr = void *;
-
+   using cs_fontTable_func_ptr = bool (*)(void *, uint, uchar *, uint *);
 #endif
 
 struct QGlyphLayout {
