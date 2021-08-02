@@ -1,0 +1,819 @@
+
+   <tr><td><tt>QLocale::AnyCountry</tt></td>
+       <td>0</td></tr>
+
+   <tr><td><tt>QLocale::Afghanistan</tt></td>
+       <td>1</td></tr>
+
+   <tr><td><tt>QLocale::AlandIslands</tt></td>
+       <td>2</td></tr>
+
+   <tr><td><tt>QLocale::Albania</tt></td>
+       <td>3</td></tr>
+
+   <tr><td><tt>QLocale::Algeria</tt></td>
+       <td>4</td></tr>
+
+   <tr><td><tt>QLocale::AmericanSamoa</tt></td>
+       <td>5</td></tr>
+
+   <tr><td><tt>QLocale::Andorra</tt></td>
+       <td>6</td></tr>
+
+   <tr><td><tt>QLocale::Angola</tt></td>
+       <td>7</td></tr>
+
+   <tr><td><tt>QLocale::Anguilla</tt></td>
+       <td>8</td></tr>
+
+   <tr><td><tt>QLocale::Antarctica</tt></td>
+       <td>9</td></tr>
+
+   <tr><td><tt>QLocale::AntiguaAndBarbuda</tt></td>
+       <td>10</td></tr>
+
+   <tr><td><tt>QLocale::Argentina</tt></td>
+       <td>11</td></tr>
+
+   <tr><td><tt>QLocale::Armenia</tt></td>
+       <td>12</td></tr>
+
+   <tr><td><tt>QLocale::Aruba</tt></td>
+       <td>13</td></tr>
+
+   <tr><td><tt>QLocale::AscensionIsland</tt></td>
+       <td>14</td></tr>
+
+   <tr><td><tt>QLocale::Australia</tt></td>
+       <td>15</td></tr>
+
+   <tr><td><tt>QLocale::Austria</tt></td>
+       <td>16</td></tr>
+
+   <tr><td><tt>QLocale::Azerbaijan</tt></td>
+       <td>17</td></tr>
+
+   <tr><td><tt>QLocale::Bahamas</tt></td>
+       <td>18</td></tr>
+
+   <tr><td><tt>QLocale::Bahrain</tt></td>
+       <td>19</td></tr>
+
+   <tr><td><tt>QLocale::Bangladesh</tt></td>
+       <td>20</td></tr>
+
+   <tr><td><tt>QLocale::Barbados</tt></td>
+       <td>21</td></tr>
+
+   <tr><td><tt>QLocale::Belarus</tt></td>
+       <td>22</td></tr>
+
+   <tr><td><tt>QLocale::Belgium</tt></td>
+       <td>23</td></tr>
+
+   <tr><td><tt>QLocale::Belize</tt></td>
+       <td>24</td></tr>
+
+   <tr><td><tt>QLocale::Benin</tt></td>
+       <td>25</td></tr>
+
+   <tr><td><tt>QLocale::Bermuda</tt></td>
+       <td>26</td></tr>
+
+   <tr><td><tt>QLocale::Bhutan</tt></td>
+       <td>27</td></tr>
+
+   <tr><td><tt>QLocale::Bolivia</tt></td>
+       <td>28</td></tr>
+
+   <tr><td><tt>QLocale::Bonaire</tt></td>
+       <td>Use CaribbeanNetherlands</td></tr>
+
+   <tr><td><tt>QLocale::BosniaAndHerzegowina</tt></td>
+       <td>29</td></tr>
+
+   <tr><td><tt>QLocale::Botswana</tt></td>
+       <td>30</td></tr>
+
+   <tr><td><tt>QLocale::BouvetIsland</tt></td>
+       <td>31</td></tr>
+
+   <tr><td><tt>QLocale::Brazil</tt></td>
+       <td>32</td></tr>
+
+   <tr><td><tt>QLocale::BritishIndianOceanTerritory</tt></td>
+       <td>33</td></tr>
+
+   <tr><td><tt>QLocale::BritishVirginIslands</tt></td>
+       <td>34</td></tr>
+
+   <tr><td><tt>QLocale::Brunei</tt></td>
+       <td>35</td></tr>
+
+   <tr><td><tt>QLocale::Bulgaria</tt></td>
+       <td>36</td></tr>
+
+   <tr><td><tt>QLocale::BurkinaFaso</tt></td>
+       <td>37</td></tr>
+
+   <tr><td><tt>QLocale::Burundi</tt></td>
+       <td>38</td></tr>
+
+   <tr><td><tt>QLocale::Cambodia</tt></td>
+       <td>39</td></tr>
+
+   <tr><td><tt>QLocale::Cameroon</tt></td>
+       <td>40</td></tr>
+
+   <tr><td><tt>QLocale::Canada</tt></td>
+       <td>41</td></tr>
+
+   <tr><td><tt>QLocale::CanaryIslands</tt></td>
+       <td>42</td></tr>
+
+   <tr><td><tt>QLocale::CapeVerde</tt></td>
+       <td>43</td></tr>
+
+   <tr><td><tt>QLocale::CaribbeanNetherlands</tt></td>
+       <td>44</td></tr>
+
+   <tr><td><tt>QLocale::CaymanIslands</tt></td>
+       <td>45</td></tr>
+
+   <tr><td><tt>QLocale::CentralAfricanRepublic</tt></td>
+       <td>46</td></tr>
+
+   <tr><td><tt>QLocale::CeutaAndMelilla</tt></td>
+       <td>47</td></tr>
+
+   <tr><td><tt>QLocale::Chad</tt></td>
+       <td>48</td></tr>
+
+   <tr><td><tt>QLocale::Chile</tt></td>
+       <td>49</td></tr>
+
+   <tr><td><tt>QLocale::China</tt></td>
+       <td>50</td></tr>
+
+   <tr><td><tt>QLocale::ChristmasIsland</tt></td>
+       <td>51</td></tr>
+
+   <tr><td><tt>QLocale::ClippertonIsland</tt></td>
+       <td>52</td></tr>
+
+   <tr><td><tt>QLocale::CocosIslands</tt></td>
+       <td>53</td></tr>
+
+   <tr><td><tt>QLocale::Colombia</tt></td>
+       <td>54</td></tr>
+
+   <tr><td><tt>QLocale::Comoros</tt></td>
+       <td>55</td></tr>
+
+   <tr><td><tt>QLocale::CongoBrazzaville</tt></td>
+       <td>56</td></tr>
+
+   <tr><td><tt>QLocale::CongoKinshasa</tt></td>
+       <td>57</td></tr>
+
+   <tr><td><tt>QLocale::CookIslands</tt></td>
+       <td>58</td></tr>
+
+   <tr><td><tt>QLocale::CostaRica</tt></td>
+       <td>59</td></tr>
+
+   <tr><td><tt>QLocale::Croatia</tt></td>
+       <td>60</td></tr>
+
+   <tr><td><tt>QLocale::Cuba</tt></td>
+       <td>61</td></tr>
+
+   <tr><td><tt>QLocale::CuraSao</tt></td>
+       <td>Use Curacao</td></tr>
+
+   <tr><td><tt>QLocale::Curacao</tt></td>
+       <td>62</td></tr>
+
+   <tr><td><tt>QLocale::Cyprus</tt></td>
+       <td>63</td></tr>
+
+   <tr><td><tt>QLocale::CzechRepublic</tt></td>
+       <td>Use Czechia</td></tr>
+
+   <tr><td><tt>QLocale::Czechia</tt></td>
+       <td>64</td></tr>
+
+   <tr><td><tt>QLocale::DemocraticRepublicOfCongo</tt></td>
+       <td>Use CongoKinshasa</td></tr>
+
+   <tr><td><tt>QLocale::DemocraticRepublicOfKorea</tt></td>
+       <td>Use NorthKorea</td></tr>
+
+   <tr><td><tt>QLocale::Denmark</tt></td>
+       <td>65</td></tr>
+
+   <tr><td><tt>QLocale::DiegoGarcia</tt></td>
+       <td>66</td></tr>
+
+   <tr><td><tt>QLocale::Djibouti</tt></td>
+       <td>67</td></tr>
+
+   <tr><td><tt>QLocale::Dominica</tt></td>
+       <td>68</td></tr>
+
+   <tr><td><tt>QLocale::DominicanRepublic</tt></td>
+       <td>69</td></tr>
+
+   <tr><td><tt>QLocale::EastTimor</tt></td>
+       <td>Use TimorLeste</td></tr>
+
+   <tr><td><tt>QLocale::Ecuador</tt></td>
+       <td>70</td></tr>
+
+   <tr><td><tt>QLocale::Egypt</tt></td>
+       <td>71</td></tr>
+
+   <tr><td><tt>QLocale::ElSalvador</tt></td>
+       <td>72</td></tr>
+
+   <tr><td><tt>QLocale::EquatorialGuinea</tt></td>
+       <td>73</td></tr>
+
+   <tr><td><tt>QLocale::Eritrea</tt></td>
+       <td>74</td></tr>
+
+   <tr><td><tt>QLocale::Estonia</tt></td>
+       <td>75</td></tr>
+
+   <tr><td><tt>QLocale::Eswatini</tt></td>
+       <td>76</td></tr>
+
+   <tr><td><tt>QLocale::Ethiopia</tt></td>
+       <td>77</td></tr>
+
+   <tr><td><tt>QLocale::FalklandIslands</tt></td>
+       <td>78</td></tr>
+
+   <tr><td><tt>QLocale::FaroeIslands</tt></td>
+       <td>79</td></tr>
+
+   <tr><td><tt>QLocale::Fiji</tt></td>
+       <td>80</td></tr>
+
+   <tr><td><tt>QLocale::Finland</tt></td>
+       <td>81</td></tr>
+
+   <tr><td><tt>QLocale::France</tt></td>
+       <td>82</td></tr>
+
+   <tr><td><tt>QLocale::FrenchGuiana</tt></td>
+       <td>83</td></tr>
+
+   <tr><td><tt>QLocale::FrenchPolynesia</tt></td>
+       <td>84</td></tr>
+
+   <tr><td><tt>QLocale::FrenchSouthernTerritories</tt></td>
+       <td>85</td></tr>
+
+   <tr><td><tt>QLocale::Gabon</tt></td>
+       <td>86</td></tr>
+
+   <tr><td><tt>QLocale::Gambia</tt></td>
+       <td>87</td></tr>
+
+   <tr><td><tt>QLocale::Georgia</tt></td>
+       <td>88</td></tr>
+
+   <tr><td><tt>QLocale::Germany</tt></td>
+       <td>89</td></tr>
+
+   <tr><td><tt>QLocale::Ghana</tt></td>
+       <td>90</td></tr>
+
+   <tr><td><tt>QLocale::Gibraltar</tt></td>
+       <td>91</td></tr>
+
+   <tr><td><tt>QLocale::Greece</tt></td>
+       <td>92</td></tr>
+
+   <tr><td><tt>QLocale::Greenland</tt></td>
+       <td>93</td></tr>
+
+   <tr><td><tt>QLocale::Grenada</tt></td>
+       <td>94</td></tr>
+
+   <tr><td><tt>QLocale::Guadeloupe</tt></td>
+       <td>95</td></tr>
+
+   <tr><td><tt>QLocale::Guam</tt></td>
+       <td>96</td></tr>
+
+   <tr><td><tt>QLocale::Guatemala</tt></td>
+       <td>97</td></tr>
+
+   <tr><td><tt>QLocale::Guernsey</tt></td>
+       <td>98</td></tr>
+
+   <tr><td><tt>QLocale::Guinea</tt></td>
+       <td>99</td></tr>
+
+   <tr><td><tt>QLocale::GuineaBissau</tt></td>
+       <td>100</td></tr>
+
+   <tr><td><tt>QLocale::Guyana</tt></td>
+       <td>101</td></tr>
+
+   <tr><td><tt>QLocale::Haiti</tt></td>
+       <td>102</td></tr>
+
+   <tr><td><tt>QLocale::HeardAndMcDonaldIslands</tt></td>
+       <td>103</td></tr>
+
+   <tr><td><tt>QLocale::Honduras</tt></td>
+       <td>104</td></tr>
+
+   <tr><td><tt>QLocale::HongKong</tt></td>
+       <td>105</td></tr>
+
+   <tr><td><tt>QLocale::Hungary</tt></td>
+       <td>106</td></tr>
+
+   <tr><td><tt>QLocale::Iceland</tt></td>
+       <td>107</td></tr>
+
+   <tr><td><tt>QLocale::India</tt></td>
+       <td>108</td></tr>
+
+   <tr><td><tt>QLocale::Indonesia</tt></td>
+       <td>109</td></tr>
+
+   <tr><td><tt>QLocale::Iran</tt></td>
+       <td>110</td></tr>
+
+   <tr><td><tt>QLocale::Iraq</tt></td>
+       <td>111</td></tr>
+
+   <tr><td><tt>QLocale::Ireland</tt></td>
+       <td>112</td></tr>
+
+   <tr><td><tt>QLocale::IsleOfMan</tt></td>
+       <td>113</td></tr>
+
+   <tr><td><tt>QLocale::Israel</tt></td>
+       <td>114</td></tr>
+
+   <tr><td><tt>QLocale::Italy</tt></td>
+       <td>115</td></tr>
+
+   <tr><td><tt>QLocale::IvoryCoast</tt></td>
+       <td>116</td></tr>
+
+   <tr><td><tt>QLocale::Jamaica</tt></td>
+       <td>117</td></tr>
+
+   <tr><td><tt>QLocale::Japan</tt></td>
+       <td>118</td></tr>
+
+   <tr><td><tt>QLocale::Jersey</tt></td>
+       <td>119</td></tr>
+
+   <tr><td><tt>QLocale::Jordan</tt></td>
+       <td>120</td></tr>
+
+   <tr><td><tt>QLocale::Kazakhstan</tt></td>
+       <td>121</td></tr>
+
+   <tr><td><tt>QLocale::Kenya</tt></td>
+       <td>122</td></tr>
+
+   <tr><td><tt>QLocale::Kiribati</tt></td>
+       <td>123</td></tr>
+
+   <tr><td><tt>QLocale::Kosovo</tt></td>
+       <td>124</td></tr>
+
+   <tr><td><tt>QLocale::Kuwait</tt></td>
+       <td>125</td></tr>
+
+   <tr><td><tt>QLocale::Kyrgyzstan</tt></td>
+       <td>126</td></tr>
+
+   <tr><td><tt>QLocale::Laos</tt></td>
+       <td>127</td></tr>
+
+   <tr><td><tt>QLocale::Latvia</tt></td>
+       <td>128</td></tr>
+
+   <tr><td><tt>QLocale::Lebanon</tt></td>
+       <td>129</td></tr>
+
+   <tr><td><tt>QLocale::Lesotho</tt></td>
+       <td>130</td></tr>
+
+   <tr><td><tt>QLocale::Liberia</tt></td>
+       <td>131</td></tr>
+
+   <tr><td><tt>QLocale::Libya</tt></td>
+       <td>132</td></tr>
+
+   <tr><td><tt>QLocale::Liechtenstein</tt></td>
+       <td>133</td></tr>
+
+   <tr><td><tt>QLocale::Lithuania</tt></td>
+       <td>134</td></tr>
+
+   <tr><td><tt>QLocale::Luxembourg</tt></td>
+       <td>135</td></tr>
+
+   <tr><td><tt>QLocale::Macao</tt></td>
+       <td>136</td></tr>
+
+   <tr><td><tt>QLocale::Macau</tt></td>
+       <td>Use Macao</td></tr>
+
+   <tr><td><tt>QLocale::Macedonia</tt></td>
+       <td>Use NorthMacedonia</td></tr>
+
+   <tr><td><tt>QLocale::Madagascar</tt></td>
+       <td>137</td></tr>
+
+   <tr><td><tt>QLocale::Malawi</tt></td>
+       <td>138</td></tr>
+
+   <tr><td><tt>QLocale::Malaysia</tt></td>
+       <td>139</td></tr>
+
+   <tr><td><tt>QLocale::Maldives</tt></td>
+       <td>140</td></tr>
+
+   <tr><td><tt>QLocale::Mali</tt></td>
+       <td>141</td></tr>
+
+   <tr><td><tt>QLocale::Malta</tt></td>
+       <td>142</td></tr>
+
+   <tr><td><tt>QLocale::MarshallIslands</tt></td>
+       <td>143</td></tr>
+
+   <tr><td><tt>QLocale::Martinique</tt></td>
+       <td>144</td></tr>
+
+   <tr><td><tt>QLocale::Mauritania</tt></td>
+       <td>145</td></tr>
+
+   <tr><td><tt>QLocale::Mauritius</tt></td>
+       <td>146</td></tr>
+
+   <tr><td><tt>QLocale::Mayotte</tt></td>
+       <td>147</td></tr>
+
+   <tr><td><tt>QLocale::Mexico</tt></td>
+       <td>148</td></tr>
+
+   <tr><td><tt>QLocale::Micronesia</tt></td>
+       <td>149</td></tr>
+
+   <tr><td><tt>QLocale::Moldova</tt></td>
+       <td>150</td></tr>
+
+   <tr><td><tt>QLocale::Monaco</tt></td>
+       <td>151</td></tr>
+
+   <tr><td><tt>QLocale::Mongolia</tt></td>
+       <td>152</td></tr>
+
+   <tr><td><tt>QLocale::Montenegro</tt></td>
+       <td>153</td></tr>
+
+   <tr><td><tt>QLocale::Montserrat</tt></td>
+       <td>154</td></tr>
+
+   <tr><td><tt>QLocale::Morocco</tt></td>
+       <td>155</td></tr>
+
+   <tr><td><tt>QLocale::Mozambique</tt></td>
+       <td>156</td></tr>
+
+   <tr><td><tt>QLocale::Myanmar</tt></td>
+       <td>157</td></tr>
+
+   <tr><td><tt>QLocale::Namibia</tt></td>
+       <td>158</td></tr>
+
+   <tr><td><tt>QLocale::Nauru</tt></td>
+       <td>159</td></tr>
+
+   <tr><td><tt>QLocale::Nepal</tt></td>
+       <td>160</td></tr>
+
+   <tr><td><tt>QLocale::Netherlands</tt></td>
+       <td>161</td></tr>
+
+   <tr><td><tt>QLocale::NewCaledonia</tt></td>
+       <td>162</td></tr>
+
+   <tr><td><tt>QLocale::NewZealand</tt></td>
+       <td>163</td></tr>
+
+   <tr><td><tt>QLocale::Nicaragua</tt></td>
+       <td>164</td></tr>
+
+   <tr><td><tt>QLocale::Niger</tt></td>
+       <td>165</td></tr>
+
+   <tr><td><tt>QLocale::Nigeria</tt></td>
+       <td>166</td></tr>
+
+   <tr><td><tt>QLocale::Niue</tt></td>
+       <td>167</td></tr>
+
+   <tr><td><tt>QLocale::NorfolkIsland</tt></td>
+       <td>168</td></tr>
+
+   <tr><td><tt>QLocale::NorthKorea</tt></td>
+       <td>169</td></tr>
+
+   <tr><td><tt>QLocale::NorthMacedonia</tt></td>
+       <td>170</td></tr>
+
+   <tr><td><tt>QLocale::NorthernMarianaIslands</tt></td>
+       <td>171</td></tr>
+
+   <tr><td><tt>QLocale::Norway</tt></td>
+       <td>172</td></tr>
+
+   <tr><td><tt>QLocale::Oman</tt></td>
+       <td>173</td></tr>
+
+   <tr><td><tt>QLocale::Pakistan</tt></td>
+       <td>174</td></tr>
+
+   <tr><td><tt>QLocale::Palau</tt></td>
+       <td>175</td></tr>
+
+   <tr><td><tt>QLocale::PalestinianTerritories</tt></td>
+       <td>176</td></tr>
+
+   <tr><td><tt>QLocale::Panama</tt></td>
+       <td>177</td></tr>
+
+   <tr><td><tt>QLocale::PapuaNewGuinea</tt></td>
+       <td>178</td></tr>
+
+   <tr><td><tt>QLocale::Paraguay</tt></td>
+       <td>179</td></tr>
+
+   <tr><td><tt>QLocale::PeoplesRepublicOfCongo</tt></td>
+       <td>Use CongoBrazzaville</td></tr>
+
+   <tr><td><tt>QLocale::Peru</tt></td>
+       <td>180</td></tr>
+
+   <tr><td><tt>QLocale::Philippines</tt></td>
+       <td>181</td></tr>
+
+   <tr><td><tt>QLocale::Pitcairn</tt></td>
+       <td>182</td></tr>
+
+   <tr><td><tt>QLocale::Poland</tt></td>
+       <td>183</td></tr>
+
+   <tr><td><tt>QLocale::Portugal</tt></td>
+       <td>184</td></tr>
+
+   <tr><td><tt>QLocale::PuertoRico</tt></td>
+       <td>185</td></tr>
+
+   <tr><td><tt>QLocale::Qatar</tt></td>
+       <td>186</td></tr>
+
+   <tr><td><tt>QLocale::RepublicOfKorea</tt></td>
+       <td>Use SouthKorea</td></tr>
+
+   <tr><td><tt>QLocale::Reunion</tt></td>
+       <td>187</td></tr>
+
+   <tr><td><tt>QLocale::Romania</tt></td>
+       <td>188</td></tr>
+
+   <tr><td><tt>QLocale::Russia</tt></td>
+       <td>189</td></tr>
+
+   <tr><td><tt>QLocale::RussianFederation</tt></td>
+       <td>Use Russia</td></tr>
+
+   <tr><td><tt>QLocale::Rwanda</tt></td>
+       <td>190</td></tr>
+
+   <tr><td><tt>QLocale::Samoa</tt></td>
+       <td>191</td></tr>
+
+   <tr><td><tt>QLocale::SanMarino</tt></td>
+       <td>192</td></tr>
+
+   <tr><td><tt>QLocale::SaoTomeAndPrincipe</tt></td>
+       <td>193</td></tr>
+
+   <tr><td><tt>QLocale::SaudiArabia</tt></td>
+       <td>194</td></tr>
+
+   <tr><td><tt>QLocale::Senegal</tt></td>
+       <td>195</td></tr>
+
+   <tr><td><tt>QLocale::Serbia</tt></td>
+       <td>196</td></tr>
+
+   <tr><td><tt>QLocale::Seychelles</tt></td>
+       <td>197</td></tr>
+
+   <tr><td><tt>QLocale::SierraLeone</tt></td>
+       <td>198</td></tr>
+
+   <tr><td><tt>QLocale::Singapore</tt></td>
+       <td>199</td></tr>
+
+   <tr><td><tt>QLocale::SintMaarten</tt></td>
+       <td>200</td></tr>
+
+   <tr><td><tt>QLocale::Slovakia</tt></td>
+       <td>201</td></tr>
+
+   <tr><td><tt>QLocale::Slovenia</tt></td>
+       <td>202</td></tr>
+
+   <tr><td><tt>QLocale::SolomonIslands</tt></td>
+       <td>203</td></tr>
+
+   <tr><td><tt>QLocale::Somalia</tt></td>
+       <td>204</td></tr>
+
+   <tr><td><tt>QLocale::SouthAfrica</tt></td>
+       <td>205</td></tr>
+
+   <tr><td><tt>QLocale::SouthGeorgiaAndSouthSandwichIslands</tt></td>
+       <td>206</td></tr>
+
+   <tr><td><tt>QLocale::SouthKorea</tt></td>
+       <td>207</td></tr>
+
+   <tr><td><tt>QLocale::SouthSudan</tt></td>
+       <td>208</td></tr>
+
+   <tr><td><tt>QLocale::Spain</tt></td>
+       <td>209</td></tr>
+
+   <tr><td><tt>QLocale::SriLanka</tt></td>
+       <td>210</td></tr>
+
+   <tr><td><tt>QLocale::SaintBarthelemy</tt></td>
+       <td>211</td></tr>
+
+   <tr><td><tt>QLocale::SaintHelena</tt></td>
+       <td>212</td></tr>
+
+   <tr><td><tt>QLocale::SaintKittsAndNevis</tt></td>
+       <td>213</td></tr>
+
+   <tr><td><tt>QLocale::SaintLucia</tt></td>
+       <td>214</td></tr>
+
+   <tr><td><tt>QLocale::SaintMartin</tt></td>
+       <td>215</td></tr>
+
+   <tr><td><tt>QLocale::SaintPierreAndMiquelon</tt></td>
+       <td>216</td></tr>
+
+   <tr><td><tt>QLocale::SaintVincentAndGrenadines</tt></td>
+       <td>217</td></tr>
+
+   <tr><td><tt>QLocale::Sudan</tt></td>
+       <td>218</td></tr>
+
+   <tr><td><tt>QLocale::Suriname</tt></td>
+       <td>219</td></tr>
+
+   <tr><td><tt>QLocale::SvalbardAndJanMayen</tt></td>
+       <td>220</td></tr>
+
+   <tr><td><tt>QLocale::Swaziland</tt></td>
+       <td>Use Eswatini</td></tr>
+
+   <tr><td><tt>QLocale::Sweden</tt></td>
+       <td>221</td></tr>
+
+   <tr><td><tt>QLocale::Switzerland</tt></td>
+       <td>222</td></tr>
+
+   <tr><td><tt>QLocale::Syria</tt></td>
+       <td>223</td></tr>
+
+   <tr><td><tt>QLocale::SyrianArabRepublic</tt></td>
+       <td>Use Syria</td></tr>
+
+   <tr><td><tt>QLocale::Taiwan</tt></td>
+       <td>224</td></tr>
+
+   <tr><td><tt>QLocale::Tajikistan</tt></td>
+       <td>225</td></tr>
+
+   <tr><td><tt>QLocale::Tanzania</tt></td>
+       <td>226</td></tr>
+
+   <tr><td><tt>QLocale::Thailand</tt></td>
+       <td>227</td></tr>
+
+   <tr><td><tt>QLocale::TimorLeste</tt></td>
+       <td>228</td></tr>
+
+   <tr><td><tt>QLocale::Togo</tt></td>
+       <td>229</td></tr>
+
+   <tr><td><tt>QLocale::Tokelau</tt></td>
+       <td>230</td></tr>
+
+   <tr><td><tt>QLocale::Tonga</tt></td>
+       <td>231</td></tr>
+
+   <tr><td><tt>QLocale::TrinidadAndTobago</tt></td>
+       <td>232</td></tr>
+
+   <tr><td><tt>QLocale::TristanDaCunha</tt></td>
+       <td>233</td></tr>
+
+   <tr><td><tt>QLocale::Tunisia</tt></td>
+       <td>234</td></tr>
+
+   <tr><td><tt>QLocale::Turkey</tt></td>
+       <td>235</td></tr>
+
+   <tr><td><tt>QLocale::Turkmenistan</tt></td>
+       <td>236</td></tr>
+
+   <tr><td><tt>QLocale::TurksAndCaicosIslands</tt></td>
+       <td>237</td></tr>
+
+   <tr><td><tt>QLocale::Tuvalu</tt></td>
+       <td>238</td></tr>
+
+   <tr><td><tt>QLocale::Uganda</tt></td>
+       <td>239</td></tr>
+
+   <tr><td><tt>QLocale::Ukraine</tt></td>
+       <td>240</td></tr>
+
+   <tr><td><tt>QLocale::UnitedArabEmirates</tt></td>
+       <td>241</td></tr>
+
+   <tr><td><tt>QLocale::UnitedKingdom</tt></td>
+       <td>242</td></tr>
+
+   <tr><td><tt>QLocale::UnitedStates</tt></td>
+       <td>243</td></tr>
+
+   <tr><td><tt>QLocale::UnitedStatesMinorOutlyingIslands</tt></td>
+       <td>Use UnitedStatesOutlyingIslands</td></tr>
+
+   <tr><td><tt>QLocale::UnitedStatesOutlyingIslands</tt></td>
+       <td>244</td></tr>
+
+   <tr><td><tt>QLocale::UnitedStatesVirginIslands</tt></td>
+       <td>245</td></tr>
+
+   <tr><td><tt>QLocale::Uruguay</tt></td>
+       <td>246</td></tr>
+
+   <tr><td><tt>QLocale::Uzbekistan</tt></td>
+       <td>247</td></tr>
+
+   <tr><td><tt>QLocale::Vanuatu</tt></td>
+       <td>248</td></tr>
+
+   <tr><td><tt>QLocale::VaticanCity</tt></td>
+       <td>249</td></tr>
+
+   <tr><td><tt>QLocale::VaticanCityState</tt></td>
+       <td>Use VaticanCity</td></tr>
+
+   <tr><td><tt>QLocale::Venezuela</tt></td>
+       <td>250</td></tr>
+
+   <tr><td><tt>QLocale::Vietnam</tt></td>
+       <td>251</td></tr>
+
+   <tr><td><tt>QLocale::WallisAndFutuna</tt></td>
+       <td>252</td></tr>
+
+   <tr><td><tt>QLocale::WallisAndFutunaIslands</tt></td>
+       <td>Use WallisAndFutuna</td></tr>
+
+   <tr><td><tt>QLocale::WesternSahara</tt></td>
+       <td>253</td></tr>
+
+   <tr><td><tt>QLocale::Yemen</tt></td>
+       <td>254</td></tr>
+
+   <tr><td><tt>QLocale::Zambia</tt></td>
+       <td>255</td></tr>
+
+   <tr><td><tt>QLocale::Zimbabwe</tt></td>
+       <td>256</td></tr>

@@ -1,0 +1,408 @@
+
+   <tr><td><tt>QLocale::AnyScript</tt></td>
+       <td>0</td></tr>
+
+   <tr><td><tt>QLocale::AdlamScript</tt></td>
+       <td>1</td></tr>
+
+   <tr><td><tt>QLocale::ArabicScript</tt></td>
+       <td>2</td></tr>
+
+   <tr><td><tt>QLocale::ArmenianScript</tt></td>
+       <td>3</td></tr>
+
+   <tr><td><tt>QLocale::AvestanScript</tt></td>
+       <td>4</td></tr>
+
+   <tr><td><tt>QLocale::BalineseScript</tt></td>
+       <td>5</td></tr>
+
+   <tr><td><tt>QLocale::BamumScript</tt></td>
+       <td>6</td></tr>
+
+   <tr><td><tt>QLocale::BanglaScript</tt></td>
+       <td>7</td></tr>
+
+   <tr><td><tt>QLocale::BassaVahScript</tt></td>
+       <td>8</td></tr>
+
+   <tr><td><tt>QLocale::BatakScript</tt></td>
+       <td>9</td></tr>
+
+   <tr><td><tt>QLocale::BengaliScript</tt></td>
+       <td>Use BanglaScript</td></tr>
+
+   <tr><td><tt>QLocale::BhaiksukiScript</tt></td>
+       <td>10</td></tr>
+
+   <tr><td><tt>QLocale::BopomofoScript</tt></td>
+       <td>11</td></tr>
+
+   <tr><td><tt>QLocale::BrahmiScript</tt></td>
+       <td>12</td></tr>
+
+   <tr><td><tt>QLocale::BrailleScript</tt></td>
+       <td>13</td></tr>
+
+   <tr><td><tt>QLocale::BugineseScript</tt></td>
+       <td>14</td></tr>
+
+   <tr><td><tt>QLocale::BuhidScript</tt></td>
+       <td>15</td></tr>
+
+   <tr><td><tt>QLocale::CanadianAboriginalScript</tt></td>
+       <td>16</td></tr>
+
+   <tr><td><tt>QLocale::CarianScript</tt></td>
+       <td>17</td></tr>
+
+   <tr><td><tt>QLocale::CaucasianAlbanianScript</tt></td>
+       <td>18</td></tr>
+
+   <tr><td><tt>QLocale::ChakmaScript</tt></td>
+       <td>19</td></tr>
+
+   <tr><td><tt>QLocale::ChamScript</tt></td>
+       <td>20</td></tr>
+
+   <tr><td><tt>QLocale::CherokeeScript</tt></td>
+       <td>21</td></tr>
+
+   <tr><td><tt>QLocale::CopticScript</tt></td>
+       <td>22</td></tr>
+
+   <tr><td><tt>QLocale::CuneiformScript</tt></td>
+       <td>23</td></tr>
+
+   <tr><td><tt>QLocale::CypriotScript</tt></td>
+       <td>24</td></tr>
+
+   <tr><td><tt>QLocale::CyrillicScript</tt></td>
+       <td>25</td></tr>
+
+   <tr><td><tt>QLocale::DeseretScript</tt></td>
+       <td>26</td></tr>
+
+   <tr><td><tt>QLocale::DevanagariScript</tt></td>
+       <td>27</td></tr>
+
+   <tr><td><tt>QLocale::DuployanScript</tt></td>
+       <td>28</td></tr>
+
+   <tr><td><tt>QLocale::EgyptianHieroglyphsScript</tt></td>
+       <td>29</td></tr>
+
+   <tr><td><tt>QLocale::ElbasanScript</tt></td>
+       <td>30</td></tr>
+
+   <tr><td><tt>QLocale::EthiopicScript</tt></td>
+       <td>31</td></tr>
+
+   <tr><td><tt>QLocale::FraserScript</tt></td>
+       <td>32</td></tr>
+
+   <tr><td><tt>QLocale::GeorgianScript</tt></td>
+       <td>33</td></tr>
+
+   <tr><td><tt>QLocale::GlagoliticScript</tt></td>
+       <td>34</td></tr>
+
+   <tr><td><tt>QLocale::GothicScript</tt></td>
+       <td>35</td></tr>
+
+   <tr><td><tt>QLocale::GranthaScript</tt></td>
+       <td>36</td></tr>
+
+   <tr><td><tt>QLocale::GreekScript</tt></td>
+       <td>37</td></tr>
+
+   <tr><td><tt>QLocale::GujaratiScript</tt></td>
+       <td>38</td></tr>
+
+   <tr><td><tt>QLocale::GurmukhiScript</tt></td>
+       <td>39</td></tr>
+
+   <tr><td><tt>QLocale::HanScript</tt></td>
+       <td>40</td></tr>
+
+   <tr><td><tt>QLocale::HangulScript</tt></td>
+       <td>41</td></tr>
+
+   <tr><td><tt>QLocale::HanunooScript</tt></td>
+       <td>42</td></tr>
+
+   <tr><td><tt>QLocale::HebrewScript</tt></td>
+       <td>43</td></tr>
+
+   <tr><td><tt>QLocale::HiraganaScript</tt></td>
+       <td>44</td></tr>
+
+   <tr><td><tt>QLocale::ImperialAramaicScript</tt></td>
+       <td>45</td></tr>
+
+   <tr><td><tt>QLocale::InscriptionalPahlaviScript</tt></td>
+       <td>46</td></tr>
+
+   <tr><td><tt>QLocale::InscriptionalParthianScript</tt></td>
+       <td>47</td></tr>
+
+   <tr><td><tt>QLocale::JapaneseScript</tt></td>
+       <td>48</td></tr>
+
+   <tr><td><tt>QLocale::JavaneseScript</tt></td>
+       <td>49</td></tr>
+
+   <tr><td><tt>QLocale::KaithiScript</tt></td>
+       <td>50</td></tr>
+
+   <tr><td><tt>QLocale::KannadaScript</tt></td>
+       <td>51</td></tr>
+
+   <tr><td><tt>QLocale::KatakanaScript</tt></td>
+       <td>52</td></tr>
+
+   <tr><td><tt>QLocale::KayahLiScript</tt></td>
+       <td>53</td></tr>
+
+   <tr><td><tt>QLocale::KharoshthiScript</tt></td>
+       <td>54</td></tr>
+
+   <tr><td><tt>QLocale::KhmerScript</tt></td>
+       <td>55</td></tr>
+
+   <tr><td><tt>QLocale::KhojkiScript</tt></td>
+       <td>56</td></tr>
+
+   <tr><td><tt>QLocale::KhudawadiScript</tt></td>
+       <td>57</td></tr>
+
+   <tr><td><tt>QLocale::KoreanScript</tt></td>
+       <td>58</td></tr>
+
+   <tr><td><tt>QLocale::LannaScript</tt></td>
+       <td>59</td></tr>
+
+   <tr><td><tt>QLocale::LaoScript</tt></td>
+       <td>60</td></tr>
+
+   <tr><td><tt>QLocale::LatinScript</tt></td>
+       <td>61</td></tr>
+
+   <tr><td><tt>QLocale::LepchaScript</tt></td>
+       <td>62</td></tr>
+
+   <tr><td><tt>QLocale::LimbuScript</tt></td>
+       <td>63</td></tr>
+
+   <tr><td><tt>QLocale::LinearAScript</tt></td>
+       <td>64</td></tr>
+
+   <tr><td><tt>QLocale::LinearBScript</tt></td>
+       <td>65</td></tr>
+
+   <tr><td><tt>QLocale::LycianScript</tt></td>
+       <td>66</td></tr>
+
+   <tr><td><tt>QLocale::LydianScript</tt></td>
+       <td>67</td></tr>
+
+   <tr><td><tt>QLocale::MahajaniScript</tt></td>
+       <td>68</td></tr>
+
+   <tr><td><tt>QLocale::MalayalamScript</tt></td>
+       <td>69</td></tr>
+
+   <tr><td><tt>QLocale::MandaeanScript</tt></td>
+       <td>70</td></tr>
+
+   <tr><td><tt>QLocale::ManichaeanScript</tt></td>
+       <td>71</td></tr>
+
+   <tr><td><tt>QLocale::MeiteiMayekScript</tt></td>
+       <td>72</td></tr>
+
+   <tr><td><tt>QLocale::MendeScript</tt></td>
+       <td>73</td></tr>
+
+   <tr><td><tt>QLocale::MendeKikakuiScript</tt></td>
+       <td>Use MendeScript</td></tr>
+
+   <tr><td><tt>QLocale::MeroiticScript</tt></td>
+       <td>75</td></tr>
+
+   <tr><td><tt>QLocale::MeroiticCursiveScript</tt></td>
+       <td>74</td></tr>
+
+   <tr><td><tt>QLocale::ModiScript</tt></td>
+       <td>76</td></tr>
+
+   <tr><td><tt>QLocale::MongolianScript</tt></td>
+       <td>77</td></tr>
+
+   <tr><td><tt>QLocale::MroScript</tt></td>
+       <td>78</td></tr>
+
+   <tr><td><tt>QLocale::MyanmarScript</tt></td>
+       <td>79</td></tr>
+
+   <tr><td><tt>QLocale::NabataeanScript</tt></td>
+       <td>80</td></tr>
+
+   <tr><td><tt>QLocale::NewTaiLueScript</tt></td>
+       <td>81</td></tr>
+
+   <tr><td><tt>QLocale::NkoScript</tt></td>
+       <td>82</td></tr>
+
+   <tr><td><tt>QLocale::OdiaScript</tt></td>
+       <td>83</td></tr>
+
+   <tr><td><tt>QLocale::OghamScript</tt></td>
+       <td>84</td></tr>
+
+   <tr><td><tt>QLocale::OlChikiScript</tt></td>
+       <td>85</td></tr>
+
+   <tr><td><tt>QLocale::OldItalicScript</tt></td>
+       <td>86</td></tr>
+
+   <tr><td><tt>QLocale::OldNorthArabianScript</tt></td>
+       <td>87</td></tr>
+
+   <tr><td><tt>QLocale::OldPermicScript</tt></td>
+       <td>88</td></tr>
+
+   <tr><td><tt>QLocale::OldPersianScript</tt></td>
+       <td>89</td></tr>
+
+   <tr><td><tt>QLocale::OldSouthArabianScript</tt></td>
+       <td>90</td></tr>
+
+   <tr><td><tt>QLocale::OriyaScript</tt></td>
+       <td>Use OdiaScript</td></tr>
+
+   <tr><td><tt>QLocale::OrkhonScript</tt></td>
+       <td>91</td></tr>
+
+   <tr><td><tt>QLocale::OsageScript</tt></td>
+       <td>92</td></tr>
+
+   <tr><td><tt>QLocale::OsmanyaScript</tt></td>
+       <td>93</td></tr>
+
+   <tr><td><tt>QLocale::PahawhHmongScript</tt></td>
+       <td>94</td></tr>
+
+   <tr><td><tt>QLocale::PalmyreneScript</tt></td>
+       <td>95</td></tr>
+
+   <tr><td><tt>QLocale::PauCinHauScript</tt></td>
+       <td>96</td></tr>
+
+   <tr><td><tt>QLocale::PhagsPaScript</tt></td>
+       <td>97</td></tr>
+
+   <tr><td><tt>QLocale::PhoenicianScript</tt></td>
+       <td>98</td></tr>
+
+   <tr><td><tt>QLocale::PollardPhoneticScript</tt></td>
+       <td>99</td></tr>
+
+   <tr><td><tt>QLocale::PsalterPahlaviScript</tt></td>
+       <td>100</td></tr>
+
+   <tr><td><tt>QLocale::RejangScript</tt></td>
+       <td>101</td></tr>
+
+   <tr><td><tt>QLocale::RunicScript</tt></td>
+       <td>102</td></tr>
+
+   <tr><td><tt>QLocale::SamaritanScript</tt></td>
+       <td>103</td></tr>
+
+   <tr><td><tt>QLocale::SaurashtraScript</tt></td>
+       <td>104</td></tr>
+
+   <tr><td><tt>QLocale::SharadaScript</tt></td>
+       <td>105</td></tr>
+
+   <tr><td><tt>QLocale::ShavianScript</tt></td>
+       <td>106</td></tr>
+
+   <tr><td><tt>QLocale::SiddhamScript</tt></td>
+       <td>107</td></tr>
+
+   <tr><td><tt>QLocale::SimplifiedHanScript</tt></td>
+       <td>108</td></tr>
+
+   <tr><td><tt>QLocale::SimplifiedChineseScript</tt></td>
+       <td>Use SimplifiedHanScript</td></tr>
+
+   <tr><td><tt>QLocale::SinhalaScript</tt></td>
+       <td>109</td></tr>
+
+   <tr><td><tt>QLocale::SoraSompengScript</tt></td>
+       <td>110</td></tr>
+
+   <tr><td><tt>QLocale::SundaneseScript</tt></td>
+       <td>111</td></tr>
+
+   <tr><td><tt>QLocale::SylotiNagriScript</tt></td>
+       <td>112</td></tr>
+
+   <tr><td><tt>QLocale::SyriacScript</tt></td>
+       <td>113</td></tr>
+
+   <tr><td><tt>QLocale::TagalogScript</tt></td>
+       <td>114</td></tr>
+
+   <tr><td><tt>QLocale::TagbanwaScript</tt></td>
+       <td>115</td></tr>
+
+   <tr><td><tt>QLocale::TaiLeScript</tt></td>
+       <td>116</td></tr>
+
+   <tr><td><tt>QLocale::TaiVietScript</tt></td>
+       <td>117</td></tr>
+
+   <tr><td><tt>QLocale::TakriScript</tt></td>
+       <td>118</td></tr>
+
+   <tr><td><tt>QLocale::TamilScript</tt></td>
+       <td>119</td></tr>
+
+   <tr><td><tt>QLocale::TeluguScript</tt></td>
+       <td>120</td></tr>
+
+   <tr><td><tt>QLocale::ThaanaScript</tt></td>
+       <td>121</td></tr>
+
+   <tr><td><tt>QLocale::ThaiScript</tt></td>
+       <td>122</td></tr>
+
+   <tr><td><tt>QLocale::TibetanScript</tt></td>
+       <td>123</td></tr>
+
+   <tr><td><tt>QLocale::TifinaghScript</tt></td>
+       <td>124</td></tr>
+
+   <tr><td><tt>QLocale::TirhutaScript</tt></td>
+       <td>125</td></tr>
+
+   <tr><td><tt>QLocale::TraditionalHanScript</tt></td>
+       <td>126</td></tr>
+
+   <tr><td><tt>QLocale::TraditionalChineseScript</tt></td>
+       <td>Use TraditionalHanScript</td></tr>
+
+   <tr><td><tt>QLocale::UgariticScript</tt></td>
+       <td>127</td></tr>
+
+   <tr><td><tt>QLocale::VaiScript</tt></td>
+       <td>128</td></tr>
+
+   <tr><td><tt>QLocale::VarangKshitiScript</tt></td>
+       <td>129</td></tr>
+
+   <tr><td><tt>QLocale::YiScript</tt></td>
+       <td>130</td></tr>

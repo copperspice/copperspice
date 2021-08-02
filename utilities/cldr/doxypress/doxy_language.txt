@@ -1,0 +1,1488 @@
+
+   <tr><td><tt>QLocale::AnyLanguage</tt></td>
+       <td><tt>0</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::C</tt></td>
+       <td><tt>0</tt></td>
+       <td>"C" locale is identical in behavior to English/UnitedStates.</td></tr>
+
+   <tr><td><tt>QLocale::Abaza</tt></td>
+       <td><tt>2</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Abkhazian</tt></td>
+       <td><tt>3</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Afan</tt></td>
+       <td><tt>Same as Oromo</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Afar</tt></td>
+       <td><tt>4</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Afrikaans</tt></td>
+       <td><tt>5</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Aghem</tt></td>
+       <td><tt>6</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Akan</tt></td>
+       <td><tt>7</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Akkadian</tt></td>
+       <td><tt>8</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Akoose</tt></td>
+       <td><tt>9</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Albanian</tt></td>
+       <td><tt>10</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::AmericanSignLanguage</tt></td>
+       <td><tt>11</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Amharic</tt></td>
+       <td><tt>12</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::AncientNorthArabian</tt></td>
+       <td><tt>13</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::AncientEgyptian</tt></td>
+       <td><tt>14</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::AncientGreek</tt></td>
+       <td><tt>15</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Arabic</tt></td>
+       <td><tt>16</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Aragonese</tt></td>
+       <td><tt>17</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Aramaic</tt></td>
+       <td><tt>18</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Armenian</tt></td>
+       <td><tt>19</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Assamese</tt></td>
+       <td><tt>20</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Asturian</tt></td>
+       <td><tt>21</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Asu</tt></td>
+       <td><tt>22</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Atsam</tt></td>
+       <td><tt>23</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Avaric</tt></td>
+       <td><tt>24</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Avestan</tt></td>
+       <td><tt>25</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Aymara</tt></td>
+       <td><tt>26</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Azerbaijani</tt></td>
+       <td><tt>27</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bafia</tt></td>
+       <td><tt>28</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Balinese</tt></td>
+       <td><tt>29</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bambara</tt></td>
+       <td><tt>30</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bamun</tt></td>
+       <td><tt>31</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bangla</tt></td>
+       <td><tt>32</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Basaa</tt></td>
+       <td><tt>33</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bashkir</tt></td>
+       <td><tt>34</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Basque</tt></td>
+       <td><tt>35</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::BatakToba</tt></td>
+       <td><tt>36</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Belarusian</tt></td>
+       <td><tt>37</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bemba</tt></td>
+       <td><tt>38</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bena</tt></td>
+       <td><tt>39</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bengali</tt></td>
+       <td><tt>Same as Bangla</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bhojpuri</tt></td>
+       <td><tt>40</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bhutani</tt></td>
+       <td><tt>Same as Dzongkha</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bislama</tt></td>
+       <td><tt>41</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Blin</tt></td>
+       <td><tt>42</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bodo</tt></td>
+       <td><tt>43</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bosnian</tt></td>
+       <td><tt>44</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Breton</tt></td>
+       <td><tt>45</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Buginese</tt></td>
+       <td><tt>46</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Buhid</tt></td>
+       <td><tt>47</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Bulgarian</tt></td>
+       <td><tt>48</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Burmese</tt></td>
+       <td><tt>49</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Byelorussian</tt></td>
+       <td><tt>Same as Belarusian</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Cambodian</tt></td>
+       <td><tt>Same as Khmer</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Cantonese</tt></td>
+       <td><tt>50</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Carian</tt></td>
+       <td><tt>51</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Catalan</tt></td>
+       <td><tt>52</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Cebuano</tt></td>
+       <td><tt>53</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::CentralAtlasTamazight</tt></td>
+       <td><tt>54</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::CentralKurdish</tt></td>
+       <td><tt>55</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Chakma</tt></td>
+       <td><tt>56</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Chamorro</tt></td>
+       <td><tt>57</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Chechen</tt></td>
+       <td><tt>58</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Cherokee</tt></td>
+       <td><tt>59</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Chewa</tt></td>
+       <td><tt>Same as Nyanja</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Chickasaw</tt></td>
+       <td><tt>60</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Chiga</tt></td>
+       <td><tt>61</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Chinese</tt></td>
+       <td><tt>62</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Church</tt></td>
+       <td><tt>63</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Chuvash</tt></td>
+       <td><tt>64</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::ClassicalMandaic</tt></td>
+       <td><tt>65</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Colognian</tt></td>
+       <td><tt>66</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Coptic</tt></td>
+       <td><tt>67</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Cornish</tt></td>
+       <td><tt>68</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Corsican</tt></td>
+       <td><tt>69</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Cree</tt></td>
+       <td><tt>70</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Croatian</tt></td>
+       <td><tt>71</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Czech</tt></td>
+       <td><tt>72</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Danish</tt></td>
+       <td><tt>73</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Divehi</tt></td>
+       <td><tt>74</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Dogri</tt></td>
+       <td><tt>75</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Duala</tt></td>
+       <td><tt>76</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Dutch</tt></td>
+       <td><tt>77</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Dzongkha</tt></td>
+       <td><tt>78</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::EasternCham</tt></td>
+       <td><tt>79</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::EasternKayah</tt></td>
+       <td><tt>80</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Embu</tt></td>
+       <td><tt>81</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::English</tt></td>
+       <td><tt>82</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Erzya</tt></td>
+       <td><tt>83</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Esperanto</tt></td>
+       <td><tt>84</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Estonian</tt></td>
+       <td><tt>85</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Etruscan</tt></td>
+       <td><tt>86</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ewe</tt></td>
+       <td><tt>87</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ewondo</tt></td>
+       <td><tt>88</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Faroese</tt></td>
+       <td><tt>89</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Fijian</tt></td>
+       <td><tt>90</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Filipino</tt></td>
+       <td><tt>91</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Finnish</tt></td>
+       <td><tt>92</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::French</tt></td>
+       <td><tt>93</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Frisian</tt></td>
+       <td><tt>Same as WesternFrisian</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Friulian</tt></td>
+       <td><tt>94</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Fulah</tt></td>
+       <td><tt>95</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ga</tt></td>
+       <td><tt>96</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Gaelic</tt></td>
+       <td><tt>97</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Galician</tt></td>
+       <td><tt>98</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ganda</tt></td>
+       <td><tt>99</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Geez</tt></td>
+       <td><tt>100</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Georgian</tt></td>
+       <td><tt>101</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::German</tt></td>
+       <td><tt>102</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Gothic</tt></td>
+       <td><tt>103</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Greek</tt></td>
+       <td><tt>104</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Greenlandic</tt></td>
+       <td><tt>Same as Kalaallisut</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Guarani</tt></td>
+       <td><tt>105</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Gujarati</tt></td>
+       <td><tt>106</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Gusii</tt></td>
+       <td><tt>107</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Haitian</tt></td>
+       <td><tt>108</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Hanunoo</tt></td>
+       <td><tt>109</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Hausa</tt></td>
+       <td><tt>110</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Hawaiian</tt></td>
+       <td><tt>111</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Hebrew</tt></td>
+       <td><tt>112</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Herero</tt></td>
+       <td><tt>113</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Hindi</tt></td>
+       <td><tt>114</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::HiriMotu</tt></td>
+       <td><tt>115</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::HmongNjua</tt></td>
+       <td><tt>116</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ho</tt></td>
+       <td><tt>117</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Hungarian</tt></td>
+       <td><tt>118</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Icelandic</tt></td>
+       <td><tt>119</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Igbo</tt></td>
+       <td><tt>120</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::InariSami</tt></td>
+       <td><tt>121</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Indonesian</tt></td>
+       <td><tt>122</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ingush</tt></td>
+       <td><tt>123</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Interlingua</tt></td>
+       <td><tt>124</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Interlingue</tt></td>
+       <td><tt>125</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Inuktitut</tt></td>
+       <td><tt>126</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Inupiak</tt></td>
+       <td><tt>Same as Inupiaq</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Inupiaq</tt></td>
+       <td><tt>127</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Irish</tt></td>
+       <td><tt>128</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Italian</tt></td>
+       <td><tt>129</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Japanese</tt></td>
+       <td><tt>130</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Javanese</tt></td>
+       <td><tt>131</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Jju</tt></td>
+       <td><tt>132</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::JolaFonyi</tt></td>
+       <td><tt>133</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kabuverdianu</tt></td>
+       <td><tt>134</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kabyle</tt></td>
+       <td><tt>135</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kako</tt></td>
+       <td><tt>136</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kalaallisut</tt></td>
+       <td><tt>137</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kalenjin</tt></td>
+       <td><tt>138</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kamba</tt></td>
+       <td><tt>139</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kannada</tt></td>
+       <td><tt>140</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kanuri</tt></td>
+       <td><tt>141</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kashmiri</tt></td>
+       <td><tt>142</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kazakh</tt></td>
+       <td><tt>143</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kenyang</tt></td>
+       <td><tt>144</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Khmer</tt></td>
+       <td><tt>145</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kiche</tt></td>
+       <td><tt>146</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kikuyu</tt></td>
+       <td><tt>147</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kinyarwanda</tt></td>
+       <td><tt>148</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Komi</tt></td>
+       <td><tt>149</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kongo</tt></td>
+       <td><tt>150</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Konkani</tt></td>
+       <td><tt>151</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Korean</tt></td>
+       <td><tt>152</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Koro</tt></td>
+       <td><tt>153</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::KoyraChiini</tt></td>
+       <td><tt>154</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::KoyraboroSenni</tt></td>
+       <td><tt>155</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kpelle</tt></td>
+       <td><tt>156</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kuanyama</tt></td>
+       <td><tt>157</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kurdish</tt></td>
+       <td><tt>158</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kurundi</tt></td>
+       <td><tt>Same as Rundi</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kwasio</tt></td>
+       <td><tt>159</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Kyrgyz</tt></td>
+       <td><tt>160</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lakota</tt></td>
+       <td><tt>161</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Langi</tt></td>
+       <td><tt>162</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lao</tt></td>
+       <td><tt>163</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::LargeFloweryMiao</tt></td>
+       <td><tt>164</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Latin</tt></td>
+       <td><tt>165</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Latvian</tt></td>
+       <td><tt>166</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lepcha</tt></td>
+       <td><tt>167</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lezghian</tt></td>
+       <td><tt>168</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Limbu</tt></td>
+       <td><tt>169</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Limburgish</tt></td>
+       <td><tt>170</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::LinearA</tt></td>
+       <td><tt>171</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lingala</tt></td>
+       <td><tt>172</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lisu</tt></td>
+       <td><tt>173</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::LiteraryChinese</tt></td>
+       <td><tt>174</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lithuanian</tt></td>
+       <td><tt>175</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::LowGerman</tt></td>
+       <td><tt>176</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::LowerSorbian</tt></td>
+       <td><tt>177</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lu</tt></td>
+       <td><tt>178</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::LubaKatanga</tt></td>
+       <td><tt>179</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::LuleSami</tt></td>
+       <td><tt>180</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Luo</tt></td>
+       <td><tt>181</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Luxembourgish</tt></td>
+       <td><tt>182</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Luyia</tt></td>
+       <td><tt>183</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lycian</tt></td>
+       <td><tt>184</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Lydian</tt></td>
+       <td><tt>185</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Macedonian</tt></td>
+       <td><tt>186</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Machame</tt></td>
+       <td><tt>187</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Maithili</tt></td>
+       <td><tt>188</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::MakhuwaMeetto</tt></td>
+       <td><tt>189</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Makonde</tt></td>
+       <td><tt>190</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Malagasy</tt></td>
+       <td><tt>191</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Malay</tt></td>
+       <td><tt>192</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Malayalam</tt></td>
+       <td><tt>193</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Maltese</tt></td>
+       <td><tt>194</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Mandingo</tt></td>
+       <td><tt>195</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::ManichaeanMiddlePersian</tt></td>
+       <td><tt>196</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Manipuri</tt></td>
+       <td><tt>197</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Manx</tt></td>
+       <td><tt>198</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Maori</tt></td>
+       <td><tt>199</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Mapuche</tt></td>
+       <td><tt>200</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Marathi</tt></td>
+       <td><tt>201</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Marshallese</tt></td>
+       <td><tt>202</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Masai</tt></td>
+       <td><tt>203</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Mazanderani</tt></td>
+       <td><tt>204</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Mende</tt></td>
+       <td><tt>205</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Meroitic</tt></td>
+       <td><tt>206</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Meru</tt></td>
+       <td><tt>207</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Meta</tt></td>
+       <td><tt>208</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Mohawk</tt></td>
+       <td><tt>209</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Mongolian</tt></td>
+       <td><tt>210</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Morisyen</tt></td>
+       <td><tt>211</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Mundang</tt></td>
+       <td><tt>212</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Muscogee</tt></td>
+       <td><tt>213</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Nama</tt></td>
+       <td><tt>214</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Nauru</tt></td>
+       <td><tt>215</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Navaho</tt></td>
+       <td><tt>Same as Navajo</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Navajo</tt></td>
+       <td><tt>216</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ndonga</tt></td>
+       <td><tt>217</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Nepali</tt></td>
+       <td><tt>218</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Newari</tt></td>
+       <td><tt>219</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ngiemboon</tt></td>
+       <td><tt>220</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ngomba</tt></td>
+       <td><tt>221</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::NigerianPidgin</tt></td>
+       <td><tt>222</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Nko</tt></td>
+       <td><tt>223</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::NorthNdebele</tt></td>
+       <td><tt>224</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::NorthernLuri</tt></td>
+       <td><tt>225</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::NorthernSami</tt></td>
+       <td><tt>226</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::NorthernSotho</tt></td>
+       <td><tt>227</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::NorthernThai</tt></td>
+       <td><tt>228</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::NorwegianBokmal</tt></td>
+       <td><tt>229</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::NorwegianNynorsk</tt></td>
+       <td><tt>230</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Nuer</tt></td>
+       <td><tt>231</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Nyanja</tt></td>
+       <td><tt>232</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Nyankole</tt></td>
+       <td><tt>233</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Occitan</tt></td>
+       <td><tt>234</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Odia</tt></td>
+       <td><tt>235</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ojibwa</tt></td>
+       <td><tt>236</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::OldIrish</tt></td>
+       <td><tt>237</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::OldNorse</tt></td>
+       <td><tt>238</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::OldPersian</tt></td>
+       <td><tt>239</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::OldTurkish</tt></td>
+       <td><tt>240</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Oromo</tt></td>
+       <td><tt>241</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Osage</tt></td>
+       <td><tt>242</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ossetic</tt></td>
+       <td><tt>243</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Pahlavi</tt></td>
+       <td><tt>244</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Palauan</tt></td>
+       <td><tt>245</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Pali</tt></td>
+       <td><tt>246</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Papiamento</tt></td>
+       <td><tt>247</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Parthian</tt></td>
+       <td><tt>248</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Pashto</tt></td>
+       <td><tt>249</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Persian</tt></td>
+       <td><tt>250</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Phoenician</tt></td>
+       <td><tt>251</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Polish</tt></td>
+       <td><tt>252</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Portuguese</tt></td>
+       <td><tt>253</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Prussian</tt></td>
+       <td><tt>254</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Punjabi</tt></td>
+       <td><tt>255</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Quechua</tt></td>
+       <td><tt>256</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Rejang</tt></td>
+       <td><tt>257</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::RhaetoRomance</tt></td>
+       <td><tt>Same as Romansh</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Romanian</tt></td>
+       <td><tt>258</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Romansh</tt></td>
+       <td><tt>259</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Rombo</tt></td>
+       <td><tt>260</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Rundi</tt></td>
+       <td><tt>261</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Russian</tt></td>
+       <td><tt>262</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Rwa</tt></td>
+       <td><tt>263</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sabaean</tt></td>
+       <td><tt>264</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Saho</tt></td>
+       <td><tt>265</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sakha</tt></td>
+       <td><tt>266</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Samaritan</tt></td>
+       <td><tt>267</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Samburu</tt></td>
+       <td><tt>268</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Samoan</tt></td>
+       <td><tt>269</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sango</tt></td>
+       <td><tt>270</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sangu</tt></td>
+       <td><tt>271</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sanskrit</tt></td>
+       <td><tt>272</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Santali</tt></td>
+       <td><tt>273</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sardinian</tt></td>
+       <td><tt>274</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Saurashtra</tt></td>
+       <td><tt>275</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sena</tt></td>
+       <td><tt>276</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Serbian</tt></td>
+       <td><tt>277</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Shambala</tt></td>
+       <td><tt>278</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Shona</tt></td>
+       <td><tt>279</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::SichuanYi</tt></td>
+       <td><tt>280</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sicilian</tt></td>
+       <td><tt>281</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sidamo</tt></td>
+       <td><tt>282</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Silesian</tt></td>
+       <td><tt>283</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sindhi</tt></td>
+       <td><tt>284</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sinhala</tt></td>
+       <td><tt>285</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::SkoltSami</tt></td>
+       <td><tt>286</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Slovak</tt></td>
+       <td><tt>287</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Slovenian</tt></td>
+       <td><tt>288</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Soga</tt></td>
+       <td><tt>289</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Somali</tt></td>
+       <td><tt>290</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sora</tt></td>
+       <td><tt>291</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::SouthNdebele</tt></td>
+       <td><tt>292</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::SouthernKurdish</tt></td>
+       <td><tt>293</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::SouthernSami</tt></td>
+       <td><tt>294</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::SouthernSotho</tt></td>
+       <td><tt>295</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Spanish</tt></td>
+       <td><tt>296</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::StandardMoroccanTamazight</tt></td>
+       <td><tt>297</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sundanese</tt></td>
+       <td><tt>298</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Swahili</tt></td>
+       <td><tt>299</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Swati</tt></td>
+       <td><tt>300</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Swedish</tt></td>
+       <td><tt>301</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::SwissGerman</tt></td>
+       <td><tt>302</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Sylheti</tt></td>
+       <td><tt>303</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Syriac</tt></td>
+       <td><tt>304</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tachelhit</tt></td>
+       <td><tt>305</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tagbanwa</tt></td>
+       <td><tt>306</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tahitian</tt></td>
+       <td><tt>307</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::TaiDam</tt></td>
+       <td><tt>308</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::TaiNua</tt></td>
+       <td><tt>309</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Taita</tt></td>
+       <td><tt>310</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tajik</tt></td>
+       <td><tt>311</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tamil</tt></td>
+       <td><tt>312</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Taroko</tt></td>
+       <td><tt>313</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tasawaq</tt></td>
+       <td><tt>314</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tatar</tt></td>
+       <td><tt>315</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::TedimChin</tt></td>
+       <td><tt>316</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Telugu</tt></td>
+       <td><tt>317</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Teso</tt></td>
+       <td><tt>318</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Thai</tt></td>
+       <td><tt>319</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tibetan</tt></td>
+       <td><tt>320</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tigre</tt></td>
+       <td><tt>321</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tigrinya</tt></td>
+       <td><tt>322</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::TokPisin</tt></td>
+       <td><tt>323</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tokelau</tt></td>
+       <td><tt>324</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tongan</tt></td>
+       <td><tt>325</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tsonga</tt></td>
+       <td><tt>326</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tswana</tt></td>
+       <td><tt>327</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Turkish</tt></td>
+       <td><tt>328</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Turkmen</tt></td>
+       <td><tt>329</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tuvalu</tt></td>
+       <td><tt>330</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Tyap</tt></td>
+       <td><tt>331</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ugaritic</tt></td>
+       <td><tt>332</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Uighur</tt></td>
+       <td><tt>Same as Uyghur</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Uigur</tt></td>
+       <td><tt>Same as Uyghur</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Ukrainian</tt></td>
+       <td><tt>333</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::UpperSorbian</tt></td>
+       <td><tt>334</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Urdu</tt></td>
+       <td><tt>335</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Uyghur</tt></td>
+       <td><tt>336</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Uzbek</tt></td>
+       <td><tt>337</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Vai</tt></td>
+       <td><tt>338</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Venda</tt></td>
+       <td><tt>339</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Vietnamese</tt></td>
+       <td><tt>340</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Volapuk</tt></td>
+       <td><tt>341</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Vunjo</tt></td>
+       <td><tt>342</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Walloon</tt></td>
+       <td><tt>343</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Walser</tt></td>
+       <td><tt>344</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Warlpiri</tt></td>
+       <td><tt>345</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Welsh</tt></td>
+       <td><tt>346</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::WesternBalochi</tt></td>
+       <td><tt>347</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::WesternFrisian</tt></td>
+       <td><tt>348</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Wolaytta</tt></td>
+       <td><tt>349</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Wolof</tt></td>
+       <td><tt>350</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Xhosa</tt></td>
+       <td><tt>351</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Yangben</tt></td>
+       <td><tt>352</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Yiddish</tt></td>
+       <td><tt>353</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Yoruba</tt></td>
+       <td><tt>354</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Zarma</tt></td>
+       <td><tt>355</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Zhuang</tt></td>
+       <td><tt>356</tt></td>
+       <td>&nbsp</td></tr>
+
+   <tr><td><tt>QLocale::Zulu</tt></td>
+       <td><tt>357</tt></td>
+       <td>&nbsp</td></tr>
