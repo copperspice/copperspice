@@ -94,27 +94,6 @@ QLocale::Language QLocalePrivate::codeToLanguage(const QString &code)
       }
    }
 
-   // legacy codes
-   if (uc1 == 'n' && uc2 == 'o' && uc3 == 0) { // no -> nb
-      static_assert(QLocale::Norwegian == QLocale::NorwegianBokmal, "");
-      return QLocale::Norwegian;
-   }
-
-   if (uc1 == 't' && uc2 == 'l' && uc3 == 0) { // tl -> fil
-      static_assert(QLocale::Tagalog == QLocale::Filipino, "");
-      return QLocale::Tagalog;
-   }
-
-   if (uc1 == 's' && uc2 == 'h' && uc3 == 0) { // sh -> sr[_Latn]
-      static_assert(QLocale::SerboCroatian == QLocale::Serbian, "");
-      return QLocale::SerboCroatian;
-   }
-
-   if (uc1 == 'm' && uc2 == 'o' && uc3 == 0) { // mo -> ro
-      static_assert(QLocale::Moldavian == QLocale::Romanian, "");
-      return QLocale::Moldavian;
-   }
-
    // Android uses the following deprecated codes
    if (uc1 == 'i' && uc2 == 'w' && uc3 == 0) {
       // iw -> he

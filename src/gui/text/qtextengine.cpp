@@ -991,7 +991,7 @@ static inline void qt_getJustificationOpportunities(QStringView str, const QScri
       case QChar::Script_Mongolian:
       case QChar::Script_PhagsPa:
       case QChar::Script_Manichaean:
-      case QChar::Script_PsalterPahlavi:
+      case QChar::Script_Psalter_Pahlavi:
          // same as default but inter character justification takes precedence
          spaceAs = Justification_Arabic_Space;
          break;

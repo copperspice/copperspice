@@ -214,7 +214,7 @@ static const std::variant<CountGuide, int> arabicRules[] = {
    11
 };
 
-static const std::variant<CountGuide, int> tagalogRules[] = {
+static const std::variant<CountGuide, int> filipinoRules[] = {
    CountGuide::LessThanEqual,
    1,
    CountGuide::LastEntry,
@@ -249,11 +249,10 @@ static const char *const welshForms[]         = { "Nullar", "Singular", "Dual", 
 static const char *const arabicForms[]        =
       { "Nullar", "Singular", "Dual", "Minority Plural", "Plural", "Plural (100-102, ...)", nullptr };
 
-static const char *const tagalogForms[] =
+static const char *const filipinoForms[] =
       { "Singular", "Plural (consonant-ended)", "Plural (vowel-ended)", nullptr };
 
 static const QLocale::Language japaneseStyleLanguages[] = {
-   QLocale::Armenian,
    QLocale::Bislama,
    QLocale::Burmese,
    QLocale::Chinese,
@@ -291,7 +290,6 @@ static const QLocale::Language englishStyleLanguages[] = {
    QLocale::Bashkir,
    QLocale::Basque,
    QLocale::Bengali,
-   QLocale::Bihari,
    QLocale::Bulgarian,
    QLocale::Catalan,
    QLocale::Cornish,
@@ -304,7 +302,6 @@ static const QLocale::Language englishStyleLanguages[] = {
    QLocale::Faroese,
    QLocale::Finnish,
    QLocale::Friulian,
-   QLocale::WesternFrisian,
    QLocale::Galician,
    QLocale::Georgian,
    QLocale::German,
@@ -322,7 +319,7 @@ static const QLocale::Language englishStyleLanguages[] = {
    QLocale::Kazakh,
    QLocale::Khmer,
    QLocale::Kinyarwanda,
-   QLocale::Kirghiz,
+   QLocale::Kyrgyz,
    QLocale::Kurdish,
    QLocale::Lao,
    QLocale::Latin,
@@ -332,13 +329,12 @@ static const QLocale::Language englishStyleLanguages[] = {
    QLocale::Malayalam,
    QLocale::Marathi,
    QLocale::Mongolian,
-   // Missing: Nahuatl,
    QLocale::Nepali,
    QLocale::NorthernSotho,
-   QLocale::NorwegianBokmal,       // same as Norwegian
+   QLocale::NorwegianBokmal,
    QLocale::NorwegianNynorsk,
    QLocale::Occitan,
-   QLocale::Oriya,
+   QLocale::Odia,
    QLocale::Pashto,
    QLocale::Portuguese,
    QLocale::Punjabi,
@@ -362,11 +358,11 @@ static const QLocale::Language englishStyleLanguages[] = {
    QLocale::Tsonga,
    QLocale::Tswana,
    QLocale::Turkmen,
-   // QLocale::Twi,          // mapped to Akan
-   QLocale::Uigur,
+   QLocale::Uyghur,
    QLocale::Urdu,
    QLocale::Uzbek,
    QLocale::Volapuk,
+   QLocale::WesternFrisian,
    QLocale::Wolof,
    QLocale::Xhosa,
    QLocale::Yiddish,
@@ -376,6 +372,7 @@ static const QLocale::Language englishStyleLanguages[] = {
 
 static const QLocale::Language frenchStyleLanguages[] = {
    // keep synchronized with frenchStyleCountries
+   QLocale::Armenian,
    QLocale::Breton,
    QLocale::French,
    QLocale::Portuguese,
@@ -401,10 +398,26 @@ static const QLocale::Language irishStyleLanguages[] = {
    QLocale::C
 };
 
-static const QLocale::Language gaelicStyleLanguages[]  = { QLocale::Gaelic, QLocale::C };
-static const QLocale::Language slovakStyleLanguages[]  = { QLocale::Slovak, QLocale::Czech, QLocale::C };
-static const QLocale::Language macedonianLanguage[]    = { QLocale::Macedonian, QLocale::C };
-static const QLocale::Language lithuanianLanguage[]    = { QLocale::Lithuanian, QLocale::C };
+static const QLocale::Language gaelicStyleLanguages[] = {
+   QLocale::Gaelic,
+   QLocale::C
+};
+
+static const QLocale::Language slovakStyleLanguages[] = {
+   QLocale::Slovak,
+   QLocale::Czech,
+   QLocale::C
+};
+
+static const QLocale::Language macedonianLanguage[] = {
+   QLocale::Macedonian,
+   QLocale::C
+};
+
+static const QLocale::Language lithuanianLanguage[] = {
+   QLocale::Lithuanian,
+   QLocale::C
+};
 
 static const QLocale::Language russianStyleLanguages[] = {
    QLocale::Bosnian,
@@ -416,7 +429,10 @@ static const QLocale::Language russianStyleLanguages[] = {
    QLocale::C
 };
 
-static const QLocale::Language polishLanguage[]    = { QLocale::Polish, QLocale::C };
+static const QLocale::Language polishLanguage[] = {
+   QLocale::Polish, QLocale::C
+};
+
 static const QLocale::Language romanianLanguages[] = {
    QLocale::Romanian,
    QLocale::C
@@ -426,10 +442,11 @@ static const QLocale::Language slovenianLanguage[] = { QLocale::Slovenian, QLoca
 static const QLocale::Language malteseLanguage[]   = { QLocale::Maltese,   QLocale::C };
 static const QLocale::Language welshLanguage[]     = { QLocale::Welsh,     QLocale::C };
 static const QLocale::Language arabicLanguage[]    = { QLocale::Arabic,    QLocale::C };
-static const QLocale::Language tagalogLanguage[]   = { QLocale::Tagalog,   QLocale::C };
+static const QLocale::Language filipinoLanguage[]  = { QLocale::Filipino,  QLocale::C };
 
 static const QLocale::Country frenchStyleCountries[] = {
    // keep synchronized with frenchStyleLanguages
+   QLocale::AnyCountry,
    QLocale::AnyCountry,
    QLocale::AnyCountry,
    QLocale::Brazil,
@@ -532,7 +549,7 @@ static const CountTableEntry countTable[] = {
    },
 
    {
-      tagalogRules, std::size(tagalogRules), tagalogForms, tagalogLanguage, nullptr,
+      filipinoRules, std::size(filipinoRules), filipinoForms, filipinoLanguage, nullptr,
       "nplurals=3; plural=(n==1 ? 0 : (n%10==4 || n%10==6 || n%10== 9) ? 1 : 2);"
    },
 };

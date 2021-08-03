@@ -202,9 +202,6 @@ static const hb_script_t cs_internal_scriptTable[] = {
    HB_SCRIPT_OLD_SOGDIAN,
    HB_SCRIPT_SOGDIAN,
 
-/*
-   Remove until QChar scripts are updated
-
    // Unicode 12.0
    HB_SCRIPT_ELYMAIC,
    HB_SCRIPT_NANDINAGARI,
@@ -216,7 +213,6 @@ static const hb_script_t cs_internal_scriptTable[] = {
    HB_SCRIPT_DIVES_AKURU,
    HB_SCRIPT_KHITAN_SMALL_SCRIPT,
    HB_SCRIPT_YEZIDI,
-*/
 
    // Unicode 14.0
    //   HB_SCRIPT_CYPRO_MINOAN,

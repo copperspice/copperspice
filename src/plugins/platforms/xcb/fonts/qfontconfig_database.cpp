@@ -126,132 +126,132 @@ static const char specialLanguages[][6] = {
    "",        // Inherited
    "",        // Common
 
-   "en", // Latin
-   "el", // Greek
-   "ru", // Cyrillic
-   "hy", // Armenian
-   "he", // Hebrew
-   "ar", // Arabic
-   "syr", // Syriac
-   "dv", // Thaana
-   "hi", // Devanagari
-   "bn", // Bengali
-   "pa", // Gurmukhi
-   "gu", // Gujarati
-   "or", // Oriya
-   "ta", // Tamil
-   "te", // Telugu
-   "kn", // Kannada
-   "ml", // Malayalam
-   "si", // Sinhala
-   "th", // Thai
-   "lo", // Lao
-   "bo", // Tibetan
-   "my", // Myanmar
-   "ka", // Georgian
-   "ko", // Hangul
-   "am", // Ethiopic
-   "chr", // Cherokee
-   "cr", // CanadianAboriginal
+   "en",      // Latin
+   "el",      // Greek
+   "ru",      // Cyrillic
+   "hy",      // Armenian
+   "he",      // Hebrew
+   "ar",      // Arabic
+   "syr",     // Syriac
+   "dv",      // Thaana
+   "hi",      // Devanagari
+   "bn",      // Bengali
+   "pa",      // Gurmukhi
+   "gu",      // Gujarati
+   "or",      // Oriya
+   "ta",      // Tamil
+   "te",      // Telugu
+   "kn",      // Kannada
+   "ml",      // Malayalam
+   "si",      // Sinhala
+   "th",      // Thai
+   "lo",      // Lao
+   "bo",      // Tibetan
+   "my",      // Myanmar
+   "ka",      // Georgian
+   "ko",      // Hangul
+   "am",      // Ethiopic
+   "chr",     // Cherokee
+   "cr",      // CanadianAboriginal
 
-   "sga", // Ogham
-   "non", // Runic
-   "km", // Khmer
-   "mn", // Mongolian
-   "ja", // Hiragana
-   "ja", // Katakana
-   "zh-TW", // Bopomofo
-   "", // Han
-   "ii", // Yi
-   "ett", // OldItalic
-   "got", // Gothic
-   "en", // Deseret
-   "fil", // Tagalog
-   "hnn", // Hanunoo
-   "bku", // Buhid
-   "tbw", // Tagbanwa
-   "cop", // Coptic
+   "sga",     // Ogham
+   "non",     // Runic
+   "km",      // Khmer
+   "mn",      // Mongolian
+   "ja",      // Hiragana
+   "ja",      // Katakana
+   "zh-TW",   // Bopomofo
+   "",        // Han
+   "ii",      // Yi
+   "ett",     // OldItalic
+   "got",     // Gothic
+   "en",      // Deseret
+   "fil",     // Tagalog
+   "hnn",     // Hanunoo
+   "bku",     // Buhid
+   "tbw",     // Tagbanwa
+   "cop",     // Coptic
 
-   "lif", // Limbu
-   "tdd", // TaiLe
-   "grc", // LinearB
-   "uga", // Ugaritic
-   "en", // Shavian
-   "so", // Osmanya
-   "grc", // Cypriot
-   "", // Braille
+   "lif",     // Limbu
+   "tdd",     // TaiLe
+   "grc",     // LinearB
+   "uga",     // Ugaritic
+   "en",      // Shavian
+   "so",      // Osmanya
+   "grc",     // Cypriot
+   "",        // Braille
 
-   "bug", // Buginese
-   "khb", // NewTaiLue
-   "cu", // Glagolitic
-   "shi", // Tifinagh
-   "syl", // SylotiNagri
-   "peo", // OldPersian
-   "pra", // Kharoshthi
+   "bug",     // Buginese
+   "khb",     // NewTaiLue
+   "cu",      // Glagolitic
+   "shi",     // Tifinagh
+   "syl",     // SylotiNagri
+   "peo",     // OldPersian
+   "pra",     // Kharoshthi
 
-   "ban", // Balinese
-   "akk", // Cuneiform
-   "phn", // Phoenician
-   "lzh", // PhagsPa
-   "man", // Nko
+   "ban",     // Balinese
+   "akk",     // Cuneiform
+   "phn",     // Phoenician
+   "lzh",     // PhagsPa
+   "man",     // Nko
 
-   "su", // Sundanese
-   "lep", // Lepcha
-   "sat", // OlChiki
-   "vai", // Vai
-   "saz", // Saurashtra
-   "eky", // KayahLi
-   "rej", // Rejang
-   "xlc", // Lycian
-   "xcr", // Carian
-   "xld", // Lydian
-   "cjm", // Cham
+   "su",      // Sundanese
+   "lep",     // Lepcha
+   "sat",     // OlChiki
+   "vai",     // Vai
+   "saz",     // Saurashtra
+   "eky",     // KayahLi
+   "rej",     // Rejang
+   "xlc",     // Lycian
+   "xcr",     // Carian
+   "xld",     // Lydian
+   "cjm",     // Cham
 
-   "nod", // TaiTham
-   "blt", // TaiViet
-   "ae", // Avestan
-   "egy", // EgyptianHieroglyphs
-   "smp", // Samaritan
-   "lis", // Lisu
-   "bax", // Bamum
-   "jv", // Javanese
-   "mni", // MeeteiMayek
-   "arc", // ImperialAramaic
-   "xsa", // OldSouthArabian
-   "xpr", // InscriptionalParthian
-   "pal", // InscriptionalPahlavi
-   "otk", // OldTurkic
-   "bh", // Kaithi
+   "nod",     // TaiTham
+   "blt",     // TaiViet
+   "ae",      // Avestan
+   "egy",     // EgyptianHieroglyphs
+   "smp",     // Samaritan
+   "lis",     // Lisu
+   "bax",     // Bamum
+   "jv",      // Javanese
+   "mni",     // MeeteiMayek
+   "arc",     // ImperialAramaic
+   "xsa",     // OldSouthArabian
+   "xpr",     // InscriptionalParthian
+   "pal",     // InscriptionalPahlavi
+   "otk",     // OldTurkic
+   "bh",      // Kaithi
 
-   "bbc", // Batak
-   "pra", // Brahmi
-   "myz", // Mandaic
+   "bbc",     // Batak
+   "pra",     // Brahmi
+   "myz",     // Mandaic
 
-   "ccp", // Chakma
-   "xmr", // MeroiticCursive
-   "xmr", // MeroiticHieroglyphs
-   "hmd", // Miao
-   "sa", // Sharada
-   "srb", // SoraSompeng
-   "doi", // Takri
+   "ccp",     // Chakma
+   "xmr",     // MeroiticCursive
+   "xmr",     // MeroiticHieroglyphs
+   "hmd",     // Miao
+   "sa",      // Sharada
+   "srb",     // SoraSompeng
+   "doi",     // Takri
 
-   "lez", // CaucasianAlbanian
-   "bsq", // BassaVah
-   "fr", // Duployan
-   "sq", // Elbasan
-   "sa", // Grantha
-   "hnj", // PahawhHmong
-   "sd", // Khojki
-   "lab", // LinearA
-   "hi", // Mahajani
-   "xmn", // Manichaean
-   "men", // MendeKikakui
-   "mr", // Modi
-   "mru", // Mro
-   "xna", // OldNorthArabian
-   "arc", // Nabataean
-   "arc", // Palmyrene
-   "ctd", // PauCinHau
+   "lez",     // CaucasianAlbanian
+   "bsq",     // BassaVah
+   "fr",      // Duployan
+   "sq",      // Elbasan
+   "sa",      // Grantha
+   "hnj",     // PahawhHmong
+   "sd",      // Khojki
+   "lab",     // LinearA
+   "hi",      // Mahajani
+   "xmn",     // Manichaean
+   "men",     // MendeKikakui
+   "mr",      // Modi
+   "mru",     // Mro
+   "xna",     // OldNorthArabian
+   "arc",     // Nabataean
+   "arc",     // Palmyrene
+   "ctd",     // PauCinHau
    "kv",      // OldPermic
    "pal",     // PsalterPahlavi
    "sa",      // Siddham
@@ -259,68 +259,85 @@ static const char specialLanguages[][6] = {
    "mai",     // Tirhuta
    "hoc",     // WarangCiti
 
-   "",        // Ahom
-   "",        // AnatolianHieroglyphs
-   "",        // Hatran
-   "",        // Multani
-   "",        // OldHungarian
-   "",        // SignWriting
+   "",        // unicode 8.0
+   "",
+   "",
+   "",
+   "",
+   "",
 
    "",        // unicode 9.0
-   "",        // unicode 9.0
-   "",        // unicode 9.0
-   "",        // unicode 9.0
-   "",        // unicode 9.0
-   "",        // unicode 9.0
+   "",
+   "",
+   "",
+   "",
+   "",
 
-   "",        // unicode 10.0
-   "",        // unicode 10.0
-   "",        // unicode 10.0
-   "",        // unicode 10.0
+   "",       // unicode 10.0
+   "",
+   "",
+   "",
 
    "",        // unicode 11.0
-   "",        // unicode 11.0
-   "",        // unicode 11.0
-   "",        // unicode 11.0
-   "",        // unicode 11.0
-   "",        // unicode 11.0
-   "",        // unicode 11.0
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+
+   "",       // unicode 12.0
+   "",
+   "",
+   "",
+
+   "",       // unicode 13.0
+   "",
+   "",
+   "",
+
+// "",       // unicode 14.0
+// "",
+// "",
+// "",
+// "",
+
 };
 static_assert(sizeof(specialLanguages) / sizeof(* specialLanguages) == QChar::ScriptCount, "");
 
 // could become a list of all languages used for each writing
 // system, instead of using the single most common language.
 static const char languageForWritingSystem[][6] = {
-   "",     // Any
-   "en",  // Latin
-   "el",  // Greek
-   "ru",  // Cyrillic
-   "hy",  // Armenian
-   "he",  // Hebrew
-   "ar",  // Arabic
-   "syr", // Syriac
-   "div", // Thaana
-   "hi",  // Devanagari
-   "bn",  // Bengali
-   "pa",  // Gurmukhi
-   "gu",  // Gujarati
-   "or",  // Oriya
-   "ta",  // Tamil
-   "te",  // Telugu
-   "kn",  // Kannada
-   "ml",  // Malayalam
-   "si",  // Sinhala
-   "th",  // Thai
-   "lo",  // Lao
-   "bo",  // Tibetan
-   "my",  // Myanmar
-   "ka",  // Georgian
-   "km",  // Khmer
-   "zh-cn", // SimplifiedChinese
-   "zh-tw", // TraditionalChinese
-   "ja",  // Japanese
-   "ko",  // Korean
-   "vi",  // Vietnamese
+   "",        // Any
+   "en",      // Latin
+   "el",      // Greek
+   "ru",      // Cyrillic
+   "hy",      // Armenian
+   "he",      // Hebrew
+   "ar",      // Arabic
+   "syr",     // Syriac
+   "div",     // Thaana
+   "hi",      // Devanagari
+   "bn",      // Bengali
+   "pa",      // Gurmukhi
+   "gu",      // Gujarati
+   "or",      // Oriya
+   "ta",      // Tamil
+   "te",      // Telugu
+   "kn",      // Kannada
+   "ml",      // Malayalam
+   "si",      // Sinhala
+   "th",      // Thai
+   "lo",      // Lao
+   "bo",      // Tibetan
+   "my",      // Myanmar
+   "ka",      // Georgian
+   "km",      // Khmer
+   "zh-cn",   // SimplifiedChinese
+   "zh-tw",   // TraditionalChinese
+   "ja",      // Japanese
+   "ko",      // Korean
+   "vi",      // Vietnamese
    "",        // Symbol
    "sga",     // Ogham
    "non",     // Runic
@@ -329,9 +346,11 @@ static const char languageForWritingSystem[][6] = {
 static_assert(sizeof(languageForWritingSystem) / sizeof(* languageForWritingSystem) == QFontDatabase::WritingSystemsCount, "");
 
 #if FC_VERSION >= 20297
-// Newer FontConfig let's us sort out fonts that report certain scripts support,
+
+// Using newer FontConfig, sort out fonts which report support for certain scripts,
 // but no open type tables for handling them correctly.
 // Check the reported script presence in the FC_CAPABILITY's "otlayout:" section.
+
 static const char capabilityForWritingSystem[][5] = {
    "",        // Any
    "",        // Latin
