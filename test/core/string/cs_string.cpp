@@ -294,7 +294,7 @@ TEST_CASE("CsString_utf8 char8_t_constructor", "[cs_string]")
    REQUIRE(str == "A wacky fox and sizeable pig");
 
 #else
-   printf("\nCsString C++20 char8_t checks omitted\n");
+   printf("\nC++20 mode not enabled, char8_t checks omitted\n");
 #endif
 }
 

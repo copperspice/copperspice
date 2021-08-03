@@ -17,6 +17,7 @@
 *
 ***********************************************************************/
 
+#include <qbytearray.h>
 #include <qdate.h>
 #include <qlocale.h>
 #include <qmargins.h>
@@ -29,6 +30,13 @@
 #include <catch2/catch.hpp>
 
 namespace Catch {
+
+   template <>
+   struct StringMaker<QByteArray> {
+      static std::string convert(const QByteArray &value) {
+         return value.constData();
+      }
+   };
 
    template <>
    struct StringMaker<QDate> {

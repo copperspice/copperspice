@@ -21,28 +21,326 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QLocale constructor", "[qlocale]")
+TEST_CASE("QLocale constructor_enum", "[qlocale]")
 {
-   QLocale data1 = QLocale(QLocale::English, QLocale::UnitedStates);
-   QLocale data2 = QLocale(QLocale::French,  QLocale::France);
-   QLocale data3 = QLocale(QLocale::German,  QLocale::Germany);
-   QLocale data4 = QLocale(QLocale::Dutch,  QLocale::Netherlands);
-   QLocale data5 = QLocale(QLocale::English, QLocale::UnitedKingdom);
+   QLocale data  = QLocale(QLocale::English, QLocale::UnitedStates);
 
-   REQUIRE(data1.name() == "en_US");
-   REQUIRE(data1.nativeCountryName() == "United States");
+   REQUIRE(data.name() == "en_US");
+   REQUIRE(data.nativeCountryName() == "United States");
+   REQUIRE(data.nativeLanguageName() == "American English");
+   REQUIRE(data.country()  == QLocale::UnitedStates);
+   REQUIRE(data.language() == QLocale::English);
 
-   REQUIRE(data2.name() == "fr_FR");
-   REQUIRE(data2.nativeCountryName() == "France");
+   //
+   data = QLocale(QLocale::French, QLocale::France);
 
-   REQUIRE(data3.name() == "de_DE");
-   REQUIRE(data3.nativeCountryName() == "Deutschland");
+   REQUIRE(data.name() == "fr_FR");
+   REQUIRE(data.nativeCountryName() == "France");
+   REQUIRE(data.nativeLanguageName() == "français");
+   REQUIRE(data.country()  == QLocale::France);
+   REQUIRE(data.language() == QLocale::French);
 
-   REQUIRE(data4.name() == "nl_NL");
-   REQUIRE(data4.nativeCountryName() == "Nederland");
+   //
+   data = QLocale(QLocale::German, QLocale::Germany);
 
-   REQUIRE(data5.name() == "en_GB");
-   REQUIRE(data5.nativeCountryName() == "United Kingdom");
+   REQUIRE(data.name() == "de_DE");
+   REQUIRE(data.nativeCountryName() == "Deutschland");
+   REQUIRE(data.nativeLanguageName() == "Deutsch");
+   REQUIRE(data.country()  == QLocale::Germany);
+   REQUIRE(data.language() == QLocale::German);
+
+   //
+   data = QLocale(QLocale::Dutch, QLocale::Netherlands);
+
+   REQUIRE(data.name() == "nl_NL");
+   REQUIRE(data.nativeCountryName() == "Nederland");
+   REQUIRE(data.nativeLanguageName() == "Nederlands");
+   REQUIRE(data.country()  == QLocale::Netherlands);
+   REQUIRE(data.language() == QLocale::Dutch);
+
+   //
+   data  = QLocale(QLocale::English, QLocale::UnitedKingdom);
+
+   REQUIRE(data.name() == "en_GB");
+   REQUIRE(data.nativeCountryName() == "United Kingdom");
+   REQUIRE(data.nativeLanguageName() == "British English");
+   REQUIRE(data.country()  == QLocale::UnitedKingdom);
+   REQUIRE(data.language() == QLocale::English);
+
+   //
+   data = QLocale(QLocale::Swedish, QLocale::Sweden);
+
+   REQUIRE(data.name() == "sv_SE");
+   REQUIRE(data.nativeCountryName() == "Sverige");
+   REQUIRE(data.nativeLanguageName() == "svenska");
+   REQUIRE(data.country()  == QLocale::Sweden);
+   REQUIRE(data.language() == QLocale::Swedish);
+
+   //
+   data = QLocale(QLocale::Italian, QLocale::Switzerland);
+
+   REQUIRE(data.name() == "it_CH");
+   REQUIRE(data.nativeCountryName() == "Svizzera");
+   REQUIRE(data.nativeLanguageName() == "italiano");
+   REQUIRE(data.country()  == QLocale::Switzerland);
+   REQUIRE(data.language() == QLocale::Italian);
+
+   data = QLocale(QLocale::French, QLocale::Switzerland);
+
+   REQUIRE(data.name() == "fr_CH");
+   REQUIRE(data.nativeCountryName() == "Suisse");
+   REQUIRE(data.nativeLanguageName() == "français suisse");
+   REQUIRE(data.country()  == QLocale::Switzerland);
+   REQUIRE(data.language() == QLocale::French);
+
+   data = QLocale(QLocale::German, QLocale::Switzerland);
+
+   REQUIRE(data.name() == "de_CH");
+   REQUIRE(data.nativeCountryName() == "Schweiz");
+   REQUIRE(data.nativeLanguageName() == "Schweizer Hochdeutsch");
+   REQUIRE(data.country()  == QLocale::Switzerland);
+   REQUIRE(data.language() == QLocale::German);
+
+   //
+   data = QLocale(QLocale::Indonesian, QLocale::Indonesia);
+
+   REQUIRE(data.name() == "id_ID");
+   REQUIRE(data.nativeCountryName() == "Indonesia");
+   REQUIRE(data.nativeLanguageName() == "Indonesia");
+   REQUIRE(data.country()  == QLocale::Indonesia);
+   REQUIRE(data.language() == QLocale::Indonesian);
+
+   //
+   data = QLocale(QLocale::Turkish, QLocale::Turkey);
+
+   REQUIRE(data.name() == "tr_TR");
+   REQUIRE(data.nativeCountryName() == "Türkiye");
+   REQUIRE(data.nativeLanguageName() == "Türkçe");
+   REQUIRE(data.country()  == QLocale::Turkey);
+   REQUIRE(data.language() == QLocale::Turkish);
+
+   //
+   data  = QLocale(QLocale::Portuguese, QLocale::Brazil);
+
+   REQUIRE(data.name() == "pt_BR");
+   REQUIRE(data.nativeCountryName() == "Brasil");
+   REQUIRE(data.nativeLanguageName() == "português");
+   REQUIRE(data.country()  == QLocale::Brazil);
+   REQUIRE(data.language() == QLocale::Portuguese);
+
+   //
+   data = QLocale(QLocale::Vietnamese, QLocale::Vietnam);
+
+   REQUIRE(data.name() == "vi_VN");
+   REQUIRE(data.nativeCountryName() == "Việt Nam");
+   REQUIRE(data.country()  == QLocale::Vietnam);
+   REQUIRE(data.language() == QLocale::Vietnamese);
+
+   //   CHECK(data.nativeLanguageName() == "Việt");         BROOM, jelly bean
+}
+
+TEST_CASE("QLocale constructor_str", "[qlocale]")
+{
+   QLocale data = QLocale("en_US");
+
+   REQUIRE(data.name() == "en_US");
+   REQUIRE(data.nativeCountryName()  == "United States");
+   REQUIRE(data.nativeLanguageName() == "American English");
+   REQUIRE(data.country()  == QLocale::UnitedStates);
+   REQUIRE(data.language() == QLocale::English);
+
+   //
+   data  = QLocale("fr_FR");
+
+   REQUIRE(data.name() == "fr_FR");
+   REQUIRE(data.nativeCountryName() == "France");
+   REQUIRE(data.nativeLanguageName() == "français");
+   REQUIRE(data.country()  == QLocale::France);
+   REQUIRE(data.language() == QLocale::French);
+
+   //
+   data = QLocale("de_DE");
+
+   REQUIRE(data.name() == "de_DE");
+   REQUIRE(data.nativeCountryName() == "Deutschland");
+   REQUIRE(data.nativeLanguageName() == "Deutsch");
+   REQUIRE(data.country()  == QLocale::Germany);
+   REQUIRE(data.language() == QLocale::German);
+
+   //
+   data = QLocale("nl_NL");
+
+   REQUIRE(data.name() == "nl_NL");
+   REQUIRE(data.nativeCountryName() == "Nederland");
+   REQUIRE(data.nativeLanguageName() == "Nederlands");
+   REQUIRE(data.country()  == QLocale::Netherlands);
+   REQUIRE(data.language() == QLocale::Dutch);
+
+   //
+   data  = QLocale("en_GB");
+
+   REQUIRE(data.name() == "en_GB");
+   REQUIRE(data.nativeCountryName() == "United Kingdom");
+   REQUIRE(data.nativeLanguageName() == "British English");
+   REQUIRE(data.country()  == QLocale::UnitedKingdom);
+   REQUIRE(data.language() == QLocale::English);
+
+   //
+   data = QLocale("sv_SE");
+
+   REQUIRE(data.name() == "sv_SE");
+   REQUIRE(data.nativeCountryName() == "Sverige");
+   REQUIRE(data.nativeLanguageName() == "svenska");
+   REQUIRE(data.country()  == QLocale::Sweden);
+   REQUIRE(data.language() == QLocale::Swedish);
+
+   //
+   data = QLocale("it_CH");
+
+   REQUIRE(data.name() == "it_CH");
+   REQUIRE(data.nativeCountryName() == "Svizzera");
+   REQUIRE(data.nativeLanguageName() == "italiano");
+   REQUIRE(data.country()  == QLocale::Switzerland);
+   REQUIRE(data.language() == QLocale::Italian);
+
+   data = QLocale("fr_CH");
+
+   REQUIRE(data.name() == "fr_CH");
+   REQUIRE(data.nativeCountryName() == "Suisse");
+   REQUIRE(data.nativeLanguageName() == "français suisse");
+   REQUIRE(data.country()  == QLocale::Switzerland);
+   REQUIRE(data.language() == QLocale::French);
+
+   data = QLocale("de_CH");
+
+   REQUIRE(data.name() == "de_CH");
+   REQUIRE(data.nativeCountryName() == "Schweiz");
+   REQUIRE(data.nativeLanguageName() == "Schweizer Hochdeutsch");
+   REQUIRE(data.country()  == QLocale::Switzerland);
+   REQUIRE(data.language() == QLocale::German);
+
+   //
+   data = QLocale("id_ID");
+
+   REQUIRE(data.name() == "id_ID");
+   REQUIRE(data.nativeCountryName() == "Indonesia");
+   REQUIRE(data.nativeLanguageName() == "Indonesia");
+   REQUIRE(data.country()  == QLocale::Indonesia);
+   REQUIRE(data.language() == QLocale::Indonesian);
+
+   //
+   data = QLocale("tr_TR");
+
+   REQUIRE(data.name() == "tr_TR");
+   REQUIRE(data.nativeCountryName() == "Türkiye");
+   REQUIRE(data.nativeLanguageName() == "Türkçe");
+   REQUIRE(data.country()  == QLocale::Turkey);
+   REQUIRE(data.language() == QLocale::Turkish);
+
+   //
+   data  = QLocale("pt_BR");
+
+   REQUIRE(data.name() == "pt_BR");
+   REQUIRE(data.nativeCountryName() == "Brasil");
+   REQUIRE(data.nativeLanguageName() == "português");
+   REQUIRE(data.country()  == QLocale::Brazil);
+   REQUIRE(data.language() == QLocale::Portuguese);
+
+   //
+   data = QLocale("vi_VN");
+
+   REQUIRE(data.name() == "vi_VN");
+   REQUIRE(data.nativeCountryName() == "Việt Nam");
+   REQUIRE(data.country()  == QLocale::Vietnam);
+   REQUIRE(data.language() == QLocale::Vietnamese);
+
+   //   CHECK(data.nativeLanguageName() == "Việt");         BROOM, jelly bean
+
+/*
+   data = QLocale("nv_US");
+
+   REQUIRE(data.name() == "nv_US");
+   REQUIRE(data.nativeCountryName()  == "United States");
+   REQUIRE(data.nativeLanguageName() == "Navaho");
+   REQUIRE(data.country()  == QLocale::UnitedStates);
+   REQUIRE(data.language() == QLocale::Navaho);
+*/
+
+}
+
+TEST_CASE("QLocale constructor_any_country", "[qlocale]")
+{
+   QLocale data = QLocale(QLocale::Arabic, QLocale::AnyCountry);
+
+   REQUIRE(data.country()  == QLocale::Egypt);
+   REQUIRE(data.language() == QLocale::Arabic);
+
+   //
+   data = QLocale(QLocale::Dutch, QLocale::AnyCountry);
+
+   REQUIRE(data.country()  == QLocale::Netherlands);
+   REQUIRE(data.language() == QLocale::Dutch);
+
+   //
+   data = QLocale(QLocale::German, QLocale::AnyCountry);
+
+   REQUIRE(data.country()  == QLocale::Germany);
+   REQUIRE(data.language() == QLocale::German);
+
+   //
+   data = QLocale(QLocale::Swedish, QLocale::AnyCountry);
+
+   REQUIRE(data.country()  == QLocale::Sweden);
+   REQUIRE(data.language() == QLocale::Swedish);
+
+   //
+   data = QLocale(QLocale::Spanish, QLocale::AnyCountry);
+
+   REQUIRE(data.country()  == QLocale::Spain);
+   REQUIRE(data.language() == QLocale::Spanish);
+
+   //
+   data = QLocale(QLocale::Uzbek, QLocale::AnyCountry);
+
+   REQUIRE(data.country()  == QLocale::Uzbekistan);
+   REQUIRE(data.language() == QLocale::Uzbek);
+}
+
+TEST_CASE("QLocale constructor_english", "[qlocale]")
+{
+   QList<QLocale> list_locale = QLocale::matchingLocales(QLocale::English, QLocale::AnyScript, QLocale::AnyCountry);
+
+   QList<QLocale::Country> list_countries;
+   for (auto item : list_locale) {
+      list_countries.append(item.country());
+   }
+
+   REQUIRE(list_countries.contains(QLocale::Australia) == true);
+   REQUIRE(list_countries.contains(QLocale::Belize) == true);
+   REQUIRE(list_countries.contains(QLocale::Guam) == true);
+   REQUIRE(list_countries.contains(QLocale::Fiji) == true);
+   REQUIRE(list_countries.contains(QLocale::Jamaica) == true);
+   REQUIRE(list_countries.contains(QLocale::UnitedKingdom) == true);
+   REQUIRE(list_countries.contains(QLocale::UnitedStates) == true);
+   REQUIRE(list_countries.contains(QLocale::UnitedStatesVirginIslands) == true);
+
+   REQUIRE(list_countries.contains(QLocale::France) == false);
+   REQUIRE(list_countries.contains(QLocale::Poland) == false);
+   REQUIRE(list_countries.contains(QLocale::Russia) == false);
+
+   //
+   list_locale = QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::Switzerland);
+
+   QList<QLocale::Language> list_lang;
+   for (auto item : list_locale) {
+      list_lang.append(item.language());
+   }
+
+   REQUIRE(list_lang.contains(QLocale::French) == true);
+   REQUIRE(list_lang.contains(QLocale::German) == true);
+   REQUIRE(list_lang.contains(QLocale::Italian) == true);
+
+   REQUIRE(list_lang.contains(QLocale::Russian) == false);
 }
 
 TEST_CASE("QLocale empty", "[qlocale]")
@@ -219,18 +517,108 @@ TEST_CASE("QLocale format_time", "[qlocale]")
    }
 }
 
-TEST_CASE("QLocale names", "[qlocale]")
+TEST_CASE("QLocale ampm", "[qlocale]")
+{
+   QLocale data  = QLocale(QLocale::C);
+
+   REQUIRE(data.amText() == "AM");
+   REQUIRE(data.pmText() == "PM");
+
+   // german
+   data = QLocale("de_DE");
+
+   REQUIRE(data.amText() == "AM");
+   REQUIRE(data.pmText() == "PM");
+
+   // indonesia
+   data  = QLocale("id_ID");
+
+   REQUIRE(data.amText() == "AM");
+   REQUIRE(data.pmText() == "PM");
+
+   // sweden
+   data  = QLocale("sv_SE");
+
+   REQUIRE(data.amText() == "fm");
+   REQUIRE(data.pmText() == "em");
+
+   // netherlands
+   data  = QLocale("nl_NL");
+
+   REQUIRE(data.amText() == "a.m.");
+   REQUIRE(data.pmText() == "p.m.");
+
+   // sri lanka
+   data = QLocale("ta_LK");
+   REQUIRE(data.amText() == "முற்பகல்");
+   REQUIRE(data.pmText() == "பிற்பகல்");
+}
+
+TEST_CASE("QLocale month_name", "[qlocale]")
 {
    QLocale data(QLocale::C);
 
    REQUIRE(data.monthName(1)  == "January");
    REQUIRE(data.monthName(12) == "December");
 
+   data = QLocale(QLocale::German, QLocale::Germany);
+   REQUIRE(data.monthName(1)  == "Januar");
+   REQUIRE(data.monthName(12) == "Dezember");
+}
+
+TEST_CASE("QLocale day_name", "[qlocale]")
+{
+   QLocale data(QLocale::C);
+
    REQUIRE(data.dayName(1) == "Monday");
    REQUIRE(data.dayName(6) == "Saturday");
 
-   REQUIRE(data.weekdays().contains(Qt::Tuesday)  == true);
-   REQUIRE(data.weekdays().contains(Qt::Saturday) == false);
+   data = QLocale(QLocale::English, QLocale::UnitedStates);
+   REQUIRE(data.dayName(1) == "Monday");
+   REQUIRE(data.dayName(6) == "Saturday");
+
+   data = QLocale(QLocale::German, QLocale::Germany);
+   REQUIRE(data.dayName(1) == "Montag");
+   REQUIRE(data.dayName(6) == "Samstag");
 }
 
+TEST_CASE("QLocale first_day_of_week", "[qlocale]")
+{
+   QLocale data(QLocale::C);
 
+   REQUIRE(data.firstDayOfWeek() == Qt::Monday);
+
+   data = QLocale(QLocale::English, QLocale::UnitedStates);
+   REQUIRE(data.firstDayOfWeek() == Qt::Sunday);
+
+   data = QLocale(QLocale::German, QLocale::Germany);
+   REQUIRE(data.firstDayOfWeek() == Qt::Monday);
+
+   data = QLocale(QLocale::Hebrew, QLocale::Israel);
+   REQUIRE(data.firstDayOfWeek() == Qt::Sunday);
+}
+
+TEST_CASE("QLocale weekdays", "[qlocale]")
+{
+   QLocale data(QLocale::C);
+
+   REQUIRE(data.weekdays().contains(Qt::Tuesday)  == true);
+   REQUIRE(data.weekdays().contains(Qt::Saturday) == false);
+   REQUIRE(data.weekdays().contains(Qt::Sunday)   == false);
+
+   data = QLocale(QLocale::English, QLocale::UnitedStates);
+   REQUIRE(data.weekdays().contains(Qt::Tuesday)  == true);
+   REQUIRE(data.weekdays().contains(Qt::Saturday) == false);
+   REQUIRE(data.weekdays().contains(Qt::Sunday)   == false);
+
+   data = QLocale(QLocale::German, QLocale::Germany);
+   REQUIRE(data.weekdays().contains(Qt::Tuesday)  == true);
+   REQUIRE(data.weekdays().contains(Qt::Saturday) == false);
+   REQUIRE(data.weekdays().contains(Qt::Sunday)   == false);
+
+   data = QLocale(QLocale::Hebrew, QLocale::Israel);
+   REQUIRE(data.weekdays().contains(Qt::Tuesday)  == true);
+   REQUIRE(data.weekdays().contains(Qt::Friday)   == false);
+   REQUIRE(data.weekdays().contains(Qt::Saturday) == false);
+   REQUIRE(data.weekdays().contains(Qt::Sunday)   == true);
+}

@@ -72,14 +72,45 @@ TEST_CASE("QTimeZone id_by_country", "[qtimezone]")
 {
    QList<QByteArray> list = QTimeZone::availableTimeZoneIds(QLocale::UnitedStates);
 
+   REQUIRE(list.size() > 5);
+
    REQUIRE(list.contains("America/Boise") == true);
+   REQUIRE(list.contains("America/Chicago") == true);
    REQUIRE(list.contains("America/Denver") == true);
+   REQUIRE(list.contains("America/Indiana/Petersburg") == true);
+   REQUIRE(list.contains("America/Indiana/Winamac") == true);
+
    REQUIRE(list.contains("America/TeddyBear") == false);
 
+   //
    list = QTimeZone::availableTimeZoneIds(QLocale::Canada);
-   REQUIRE(list.contains("America/Toronto") == true);
-   REQUIRE(list.contains("America/Vancouver") == true);
-   REQUIRE(list.contains("America/Denver") == false);
-}
 
+   REQUIRE(list.size() > 5);
+
+   REQUIRE(list.contains("America/Toronto") == true);
+   REQUIRE(list.contains("America/Halifax") == true);
+   REQUIRE(list.contains("America/Vancouver") == true);
+
+   REQUIRE(list.contains("America/Denver") == false);
+
+   //
+   list = QTimeZone::availableTimeZoneIds(QLocale::Germany);
+
+   CHECK(list.size() == 2);
+
+   REQUIRE(list.contains("Europe/Berlin")   == true);
+   REQUIRE(list.contains("Europe/Busingen") == true);
+
+   //
+   list = QTimeZone::availableTimeZoneIds(QLocale::Netherlands);
+
+   REQUIRE(list.size() == 1);
+   REQUIRE(list.contains("Europe/Amsterdam") == true);
+
+   //
+   list = QTimeZone::availableTimeZoneIds(QLocale::Sweden);
+
+   REQUIRE(list.size() == 1);
+   REQUIRE(list.contains("Europe/Stockholm") == true);
+}
 
