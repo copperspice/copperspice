@@ -1492,30 +1492,6 @@ QList<QLocale> QLocale::matchingLocales(QLocale::Language language, QLocale::Scr
    return result;
 }
 
-QList<QLocale::Country> QLocale::countriesForLanguage(Language language)
-{
-   QList<Country> result;
-
-   if (language == C) {
-      result << AnyCountry;
-      return result;
-   }
-
-   unsigned language_id = language;
-
-   const QLocaleData *data = locale_data + locale_index[language_id];
-
-   while (data->m_language_id == language_id) {
-      const QLocale::Country country = static_cast<Country>(data->m_country_id);
-      if (!result.contains(country)) {
-         result.append(country);
-      }
-      ++data;
-   }
-
-   return result;
-}
-
 QString QLocale::monthName(int month, FormatType type) const
 {
    if (month < 1 || month > 12) {

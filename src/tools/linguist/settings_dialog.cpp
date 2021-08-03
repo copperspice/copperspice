@@ -66,15 +66,19 @@ void SettingsDialog::setPhraseBook(PhraseBook *phraseBook)
    setWindowTitle(tr("Settings for %1").formatArg(fname));
 }
 
-static void fillCountryCombo(const QVariant &lng, QComboBox *combo)
+static void fillCountryCombo(const QVariant &data, QComboBox *combo)
 {
    combo->clear();
-   QLocale::Language lang = QLocale::Language(lng.toInt());
+   QLocale::Language lang = QLocale::Language(data.toInt());
 
    if (lang != QLocale::C) {
-      for (QLocale::Country cntr : QLocale::countriesForLanguage(lang)) {
-         QString country = QLocale::countryToString(cntr);
-         combo->addItem(country, QVariant(cntr));
+      QList<QLocale> list_locale = QLocale::matchingLocales(lang, QLocale::AnyScript, QLocale::AnyCountry);
+
+      for (QLocale item : list_locale) {
+         auto countryId = item.country();
+
+         QString countryName = QLocale::countryToString(countryId );
+         combo->addItem(countryName, QVariant(countryId ));
       }
 
       combo->model()->sort(0, Qt::AscendingOrder);

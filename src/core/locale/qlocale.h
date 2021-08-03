@@ -979,7 +979,6 @@ class Q_CORE_EXPORT QLocale
 
    static QLocale system();
    static QList<QLocale> matchingLocales(QLocale::Language language, QLocale::Script script, QLocale::Country country);
-   static QList<Country> countriesForLanguage(Language language);
 
    void setNumberOptions(NumberOptions options);
    NumberOptions numberOptions() const;
