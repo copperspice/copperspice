@@ -1,27 +1,26 @@
-/***************************************************************************/
-/*                                                                         */
-/*  tttags.h                                                               */
-/*                                                                         */
-/*    Tags for TrueType and OpenType tables (specification only).          */
-/*                                                                         */
-/*  Copyright 1996-2001, 2004, 2005, 2007, 2008, 2013 by                   */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * tttags.h
+ *
+ *   Tags for TrueType and OpenType tables (specification only).
+ *
+ * Copyright (C) 1996-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __TTAGS_H__
-#define __TTAGS_H__
+#ifndef TTAGS_H_
+#define TTAGS_H_
 
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <freetype/freetype.h>
 
 #ifdef FREETYPE_H
 #error "freetype.h of FreeType 1 has been loaded!"
@@ -43,8 +42,11 @@ FT_BEGIN_HEADER
 #define TTAG_CBDT  FT_MAKE_TAG( 'C', 'B', 'D', 'T' )
 #define TTAG_CBLC  FT_MAKE_TAG( 'C', 'B', 'L', 'C' )
 #define TTAG_CFF   FT_MAKE_TAG( 'C', 'F', 'F', ' ' )
+#define TTAG_CFF2  FT_MAKE_TAG( 'C', 'F', 'F', '2' )
 #define TTAG_CID   FT_MAKE_TAG( 'C', 'I', 'D', ' ' )
 #define TTAG_cmap  FT_MAKE_TAG( 'c', 'm', 'a', 'p' )
+#define TTAG_COLR  FT_MAKE_TAG( 'C', 'O', 'L', 'R' )
+#define TTAG_CPAL  FT_MAKE_TAG( 'C', 'P', 'A', 'L' )
 #define TTAG_cvar  FT_MAKE_TAG( 'c', 'v', 'a', 'r' )
 #define TTAG_cvt   FT_MAKE_TAG( 'c', 'v', 't', ' ' )
 #define TTAG_DSIG  FT_MAKE_TAG( 'D', 'S', 'I', 'G' )
@@ -61,6 +63,7 @@ FT_BEGIN_HEADER
 #define TTAG_GPOS  FT_MAKE_TAG( 'G', 'P', 'O', 'S' )
 #define TTAG_GSUB  FT_MAKE_TAG( 'G', 'S', 'U', 'B' )
 #define TTAG_gvar  FT_MAKE_TAG( 'g', 'v', 'a', 'r' )
+#define TTAG_HVAR  FT_MAKE_TAG( 'H', 'V', 'A', 'R' )
 #define TTAG_hdmx  FT_MAKE_TAG( 'h', 'd', 'm', 'x' )
 #define TTAG_head  FT_MAKE_TAG( 'h', 'e', 'a', 'd' )
 #define TTAG_hhea  FT_MAKE_TAG( 'h', 'h', 'e', 'a' )
@@ -79,6 +82,7 @@ FT_BEGIN_HEADER
 #define TTAG_MMSD  FT_MAKE_TAG( 'M', 'M', 'S', 'D' )
 #define TTAG_mort  FT_MAKE_TAG( 'm', 'o', 'r', 't' )
 #define TTAG_morx  FT_MAKE_TAG( 'm', 'o', 'r', 'x' )
+#define TTAG_MVAR  FT_MAKE_TAG( 'M', 'V', 'A', 'R' )
 #define TTAG_name  FT_MAKE_TAG( 'n', 'a', 'm', 'e' )
 #define TTAG_opbd  FT_MAKE_TAG( 'o', 'p', 'b', 'd' )
 #define TTAG_OS2   FT_MAKE_TAG( 'O', 'S', '/', '2' )
@@ -100,12 +104,20 @@ FT_BEGIN_HEADER
 #define TTAG_VDMX  FT_MAKE_TAG( 'V', 'D', 'M', 'X' )
 #define TTAG_vhea  FT_MAKE_TAG( 'v', 'h', 'e', 'a' )
 #define TTAG_vmtx  FT_MAKE_TAG( 'v', 'm', 't', 'x' )
+#define TTAG_VVAR  FT_MAKE_TAG( 'V', 'V', 'A', 'R' )
 #define TTAG_wOFF  FT_MAKE_TAG( 'w', 'O', 'F', 'F' )
+#define TTAG_wOF2  FT_MAKE_TAG( 'w', 'O', 'F', '2' )
+
+/* used by "Keyboard.dfont" on legacy Mac OS X */
+#define TTAG_0xA5kbd  FT_MAKE_TAG( 0xA5, 'k', 'b', 'd' )
+
+/* used by "LastResort.dfont" on legacy Mac OS X */
+#define TTAG_0xA5lst  FT_MAKE_TAG( 0xA5, 'l', 's', 't' )
 
 
 FT_END_HEADER
 
-#endif /* __TTAGS_H__ */
+#endif /* TTAGS_H_ */
 
 
 /* END */

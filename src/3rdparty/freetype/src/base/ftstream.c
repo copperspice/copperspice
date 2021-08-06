@@ -1,34 +1,33 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftstream.c                                                             */
-/*                                                                         */
-/*    I/O stream support (body).                                           */
-/*                                                                         */
-/*  Copyright 2000-2002, 2004-2006, 2008-2011, 2013 by                     */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftstream.c
+ *
+ *   I/O stream support (body).
+ *
+ * Copyright (C) 2000-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#include <ft2build.h>
-#include FT_INTERNAL_STREAM_H
-#include FT_INTERNAL_DEBUG_H
+#include <freetype/internal/ftstream.h>
+#include <freetype/internal/ftdebug.h>
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_stream
+#define FT_COMPONENT  stream
 
 
   FT_BASE_DEF( void )
@@ -39,9 +38,9 @@
     stream->base   = (FT_Byte*) base;
     stream->size   = size;
     stream->pos    = 0;
-    stream->cursor = 0;
-    stream->read   = 0;
-    stream->close  = 0;
+    stream->cursor = NULL;
+    stream->read   = NULL;
+    stream->close  = NULL;
   }
 
 
@@ -95,11 +94,11 @@
     if ( distance < 0 )
       return FT_THROW( Invalid_Stream_Operation );
 
-    return FT_Stream_Seek( stream, (FT_ULong)( stream->pos + distance ) );
+    return FT_Stream_Seek( stream, stream->pos + (FT_ULong)distance );
   }
 
 
-  FT_BASE_DEF( FT_Long )
+  FT_BASE_DEF( FT_ULong )
   FT_Stream_Pos( FT_Stream  stream )
   {
     return stream->pos;
@@ -203,8 +202,8 @@
       *pbytes = (FT_Byte*)stream->cursor;
 
       /* equivalent to FT_Stream_ExitFrame(), with no memory block release */
-      stream->cursor = 0;
-      stream->limit  = 0;
+      stream->cursor = NULL;
+      stream->limit  = NULL;
     }
 
     return error;
@@ -219,14 +218,15 @@
     {
       FT_Memory  memory = stream->memory;
 
+
 #ifdef FT_DEBUG_MEMORY
       ft_mem_free( memory, *pbytes );
-      *pbytes = NULL;
 #else
       FT_FREE( *pbytes );
 #endif
     }
-    *pbytes = 0;
+
+    *pbytes = NULL;
   }
 
 
@@ -237,6 +237,8 @@
     FT_Error  error = FT_Err_Ok;
     FT_ULong  read_bytes;
 
+
+    FT_TRACE7(( "FT_Stream_EnterFrame: %ld bytes\n", count ));
 
     /* check for nested frame access */
     FT_ASSERT( stream && stream->cursor == 0 );
@@ -260,7 +262,9 @@
 
 #ifdef FT_DEBUG_MEMORY
       /* assume _ft_debug_file and _ft_debug_lineno are already set */
-      stream->base = (unsigned char*)ft_mem_qalloc( memory, count, &error );
+      stream->base = (unsigned char*)ft_mem_qalloc( memory,
+                                                    (FT_Long)count,
+                                                    &error );
       if ( error )
         goto Exit;
 #else
@@ -279,8 +283,9 @@
         FT_FREE( stream->base );
         error = FT_THROW( Invalid_Stream_Operation );
       }
+
       stream->cursor = stream->base;
-      stream->limit  = stream->cursor + count;
+      stream->limit  = FT_OFFSET( stream->cursor, count );
       stream->pos   += read_bytes;
     }
     else
@@ -319,12 +324,15 @@
     /*  In this case, the loader code handles the 0-length table          */
     /*  gracefully; however, stream.cursor is really set to 0 by the      */
     /*  FT_Stream_EnterFrame() call, and this is not an error.            */
-    /*                                                                    */
+
+    FT_TRACE7(( "FT_Stream_ExitFrame\n" ));
+
     FT_ASSERT( stream );
 
     if ( stream->read )
     {
       FT_Memory  memory = stream->memory;
+
 
 #ifdef FT_DEBUG_MEMORY
       ft_mem_free( memory, stream->base );
@@ -333,8 +341,9 @@
       FT_FREE( stream->base );
 #endif
     }
-    stream->cursor = 0;
-    stream->limit  = 0;
+
+    stream->cursor = NULL;
+    stream->limit  = NULL;
   }
 
 
@@ -348,7 +357,7 @@
 
     result = 0;
     if ( stream->cursor < stream->limit )
-      result = *stream->cursor++;
+      result = (FT_Char)*stream->cursor++;
 
     return result;
   }
@@ -357,8 +366,8 @@
   FT_BASE_DEF( FT_UShort )
   FT_Stream_GetUShort( FT_Stream  stream )
   {
-    FT_Byte*  p;
-    FT_Short  result;
+    FT_Byte*   p;
+    FT_UShort  result;
 
 
     FT_ASSERT( stream && stream->cursor );
@@ -376,8 +385,8 @@
   FT_BASE_DEF( FT_UShort )
   FT_Stream_GetUShortLE( FT_Stream  stream )
   {
-    FT_Byte*  p;
-    FT_Short  result;
+    FT_Byte*   p;
+    FT_UShort  result;
 
 
     FT_ASSERT( stream && stream->cursor );
@@ -396,7 +405,7 @@
   FT_Stream_GetUOffset( FT_Stream  stream )
   {
     FT_Byte*  p;
-    FT_Long   result;
+    FT_ULong  result;
 
 
     FT_ASSERT( stream && stream->cursor );
@@ -414,7 +423,7 @@
   FT_Stream_GetULong( FT_Stream  stream )
   {
     FT_Byte*  p;
-    FT_Long   result;
+    FT_ULong  result;
 
 
     FT_ASSERT( stream && stream->cursor );
@@ -432,7 +441,7 @@
   FT_Stream_GetULongLE( FT_Stream  stream )
   {
     FT_Byte*  p;
-    FT_Long   result;
+    FT_ULong  result;
 
 
     FT_ASSERT( stream && stream->cursor );
@@ -471,7 +480,7 @@
     }
     stream->pos++;
 
-    return result;
+    return (FT_Char)result;
 
   Fail:
     *error = FT_THROW( Invalid_Stream_Operation );
@@ -485,11 +494,11 @@
 
   FT_BASE_DEF( FT_UShort )
   FT_Stream_ReadUShort( FT_Stream  stream,
-                       FT_Error*  error )
+                        FT_Error*  error )
   {
-    FT_Byte   reads[2];
-    FT_Byte*  p = 0;
-    FT_Short  result = 0;
+    FT_Byte    reads[2];
+    FT_Byte*   p      = 0;
+    FT_UShort  result = 0;
 
 
     FT_ASSERT( stream );
@@ -506,9 +515,7 @@
         p = reads;
       }
       else
-      {
         p = stream->base + stream->pos;
-      }
 
       if ( p )
         result = FT_NEXT_USHORT( p );
@@ -532,11 +539,11 @@
 
   FT_BASE_DEF( FT_UShort )
   FT_Stream_ReadUShortLE( FT_Stream  stream,
-                         FT_Error*  error )
+                          FT_Error*  error )
   {
-    FT_Byte   reads[2];
-    FT_Byte*  p = 0;
-    FT_Short  result = 0;
+    FT_Byte    reads[2];
+    FT_Byte*   p      = 0;
+    FT_UShort  result = 0;
 
 
     FT_ASSERT( stream );
@@ -553,9 +560,7 @@
         p = reads;
       }
       else
-      {
         p = stream->base + stream->pos;
-      }
 
       if ( p )
         result = FT_NEXT_USHORT_LE( p );
@@ -579,11 +584,11 @@
 
   FT_BASE_DEF( FT_ULong )
   FT_Stream_ReadUOffset( FT_Stream  stream,
-                        FT_Error*  error )
+                         FT_Error*  error )
   {
     FT_Byte   reads[3];
-    FT_Byte*  p = 0;
-    FT_Long   result = 0;
+    FT_Byte*  p      = 0;
+    FT_ULong  result = 0;
 
 
     FT_ASSERT( stream );
@@ -600,9 +605,7 @@
         p = reads;
       }
       else
-      {
         p = stream->base + stream->pos;
-      }
 
       if ( p )
         result = FT_NEXT_UOFF3( p );
@@ -626,11 +629,11 @@
 
   FT_BASE_DEF( FT_ULong )
   FT_Stream_ReadULong( FT_Stream  stream,
-                      FT_Error*  error )
+                       FT_Error*  error )
   {
     FT_Byte   reads[4];
-    FT_Byte*  p = 0;
-    FT_Long   result = 0;
+    FT_Byte*  p      = 0;
+    FT_ULong  result = 0;
 
 
     FT_ASSERT( stream );
@@ -647,9 +650,7 @@
         p = reads;
       }
       else
-      {
         p = stream->base + stream->pos;
-      }
 
       if ( p )
         result = FT_NEXT_ULONG( p );
@@ -673,11 +674,11 @@
 
   FT_BASE_DEF( FT_ULong )
   FT_Stream_ReadULongLE( FT_Stream  stream,
-                        FT_Error*  error )
+                         FT_Error*  error )
   {
     FT_Byte   reads[4];
-    FT_Byte*  p = 0;
-    FT_Long   result = 0;
+    FT_Byte*  p      = 0;
+    FT_ULong  result = 0;
 
 
     FT_ASSERT( stream );
@@ -694,9 +695,7 @@
         p = reads;
       }
       else
-      {
         p = stream->base + stream->pos;
-      }
 
       if ( p )
         result = FT_NEXT_ULONG_LE( p );
@@ -728,8 +727,11 @@
     FT_Byte*  cursor;
 
 
-    if ( !fields || !stream )
+    if ( !fields )
       return FT_THROW( Invalid_Argument );
+
+    if ( !stream )
+      return FT_THROW( Invalid_Stream_Handle );
 
     cursor = stream->cursor;
 
@@ -783,7 +785,7 @@
 
       case ft_frame_short_be:
       case ft_frame_ushort_be:  /* read a 2-byte big-endian short */
-        value = FT_NEXT_USHORT( cursor) ;
+        value = FT_NEXT_USHORT( cursor );
         sign_shift = 16;
         break;
 

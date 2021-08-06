@@ -25,13 +25,12 @@ THE SOFTWARE.
 */
 
 
-#ifndef __PCF_H__
-#define __PCF_H__
+#ifndef PCF_H_
+#define PCF_H_
 
 
-#include <ft2build.h>
-#include FT_INTERNAL_DRIVER_H
-#include FT_INTERNAL_STREAM_H
+#include <freetype/internal/ftdrv.h>
+#include <freetype/internal/ftstream.h>
 
 
 FT_BEGIN_HEADER
@@ -99,9 +98,23 @@ FT_BEGIN_HEADER
     FT_Short  ascent;
     FT_Short  descent;
     FT_Short  attributes;
-    FT_ULong  bits;
+
+    FT_ULong  bits;  /* offset into the PCF_BITMAPS table */
 
   } PCF_MetricRec, *PCF_Metric;
+
+
+  typedef struct  PCF_EncRec_
+  {
+    FT_UShort   firstCol;
+    FT_UShort   lastCol;
+    FT_UShort   firstRow;
+    FT_UShort   lastRow;
+    FT_UShort   defaultChar;
+
+    FT_UShort*  offset;
+
+  } PCF_EncRec, *PCF_Enc;
 
 
   typedef struct  PCF_AccelRec_
@@ -124,43 +137,43 @@ FT_BEGIN_HEADER
   } PCF_AccelRec, *PCF_Accel;
 
 
-  typedef struct  PCF_EncodingRec_
-  {
-    FT_Long    enc;
-    FT_UShort  glyph;
-
-  } PCF_EncodingRec, *PCF_Encoding;
-
-
+  /*
+   * This file uses X11 terminology for PCF data; an `encoding' in X11 speak
+   * is the same as a `character code' in FreeType speak.
+   */
   typedef struct  PCF_FaceRec_
   {
-    FT_FaceRec     root;
+    FT_FaceRec    root;
 
-    FT_StreamRec   comp_stream;
-    FT_Stream      comp_source;
+    FT_StreamRec  comp_stream;
+    FT_Stream     comp_source;
 
-    char*          charset_encoding;
-    char*          charset_registry;
+    char*         charset_encoding;
+    char*         charset_registry;
 
-    PCF_TocRec     toc;
-    PCF_AccelRec   accel;
+    PCF_TocRec    toc;
+    PCF_AccelRec  accel;
 
-    int            nprops;
-    PCF_Property   properties;
+    int           nprops;
+    PCF_Property  properties;
 
-    FT_Long        nmetrics;
-    PCF_Metric     metrics;
-    FT_Long        nencodings;
-    PCF_Encoding   encodings;
+    FT_ULong      nmetrics;
+    PCF_Metric    metrics;
 
-    FT_Short       defaultChar;
+    PCF_EncRec    enc;
 
-    FT_ULong       bitmapsFormat;
-
-    FT_CharMap     charmap_handle;
-    FT_CharMapRec  charmap;  /* a single charmap per face */
+    FT_ULong      bitmapsFormat;
 
   } PCF_FaceRec, *PCF_Face;
+
+
+  typedef struct  PCF_DriverRec_
+  {
+    FT_DriverRec  root;
+
+    FT_Bool  no_long_family_names;
+
+  } PCF_DriverRec, *PCF_Driver;
 
 
   /* macros for pcf font format */
@@ -226,12 +239,13 @@ FT_BEGIN_HEADER
 #define GLYPHPADOPTIONS  4 /* I'm not sure about this */
 
   FT_LOCAL( FT_Error )
-  pcf_load_font( FT_Stream,
-                 PCF_Face );
+  pcf_load_font( FT_Stream  stream,
+                 PCF_Face   face,
+                 FT_Long    face_index );
 
 FT_END_HEADER
 
-#endif /* __PCF_H__ */
+#endif /* PCF_H_ */
 
 
 /* END */

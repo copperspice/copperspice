@@ -1,23 +1,23 @@
-/***************************************************************************/
-/*                                                                         */
-/*  pfrobjs.h                                                              */
-/*                                                                         */
-/*    FreeType PFR object methods (specification).                         */
-/*                                                                         */
-/*  Copyright 2002, 2003, 2004 by                                          */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * pfrobjs.h
+ *
+ *   FreeType PFR object methods (specification).
+ *
+ * Copyright (C) 2002-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __PFROBJS_H__
-#define __PFROBJS_H__
+#ifndef PFROBJS_H_
+#define PFROBJS_H_
 
 #include "pfrtypes.h"
 
@@ -90,7 +90,7 @@ FT_BEGIN_HEADER
 
 FT_END_HEADER
 
-#endif /* __PFROBJS_H__ */
+#endif /* PFROBJS_H_ */
 
 
 /* END */

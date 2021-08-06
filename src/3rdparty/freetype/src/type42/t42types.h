@@ -1,29 +1,29 @@
-/***************************************************************************/
-/*                                                                         */
-/*  t42types.h                                                             */
-/*                                                                         */
-/*    Type 42 font data types (specification only).                        */
-/*                                                                         */
-/*  Copyright 2002, 2003, 2006, 2008 by Roberto Alameda.                   */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * t42types.h
+ *
+ *   Type 42 font data types (specification only).
+ *
+ * Copyright (C) 2002-2021 by
+ * Roberto Alameda.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __T42TYPES_H__
-#define __T42TYPES_H__
+#ifndef T42TYPES_H_
+#define T42TYPES_H_
 
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_TYPE1_TABLES_H
-#include FT_INTERNAL_TYPE1_TYPES_H
-#include FT_INTERNAL_POSTSCRIPT_HINTS_H
+#include <freetype/freetype.h>
+#include <freetype/t1tables.h>
+#include <freetype/internal/t1types.h>
+#include <freetype/internal/pshints.h>
 
 
 FT_BEGIN_HEADER
@@ -39,7 +39,7 @@ FT_BEGIN_HEADER
     const void*     afm_data;
 #endif
     FT_Byte*        ttf_data;
-    FT_ULong        ttf_size;
+    FT_Long         ttf_size;
     FT_Face         ttf_face;
     FT_CharMapRec   charmaprecs[2];
     FT_CharMap      charmaps[2];
@@ -50,7 +50,7 @@ FT_BEGIN_HEADER
 
 FT_END_HEADER
 
-#endif /* __T42TYPES_H__ */
+#endif /* T42TYPES_H_ */
 
 
 /* END */

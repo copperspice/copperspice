@@ -3,7 +3,7 @@
 #
 
 
-# Copyright 1996-2000, 2002-2007, 2009, 2011, 2013 by
+# Copyright (C) 1996-2021 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -20,22 +20,29 @@ SFNT_DIR := $(SRC_DIR)/sfnt
 
 # compilation flags for the driver
 #
-SFNT_COMPILE := $(FT_COMPILE) $I$(subst /,$(COMPILER_SEP),$(SFNT_DIR))
+SFNT_COMPILE := $(CC) $(ANSIFLAGS)                             \
+                      $I$(subst /,$(COMPILER_SEP),$(SFNT_DIR)) \
+                      $(INCLUDE_FLAGS)                         \
+                      $(FT_CFLAGS)
 
 
 # SFNT driver sources (i.e., C files)
 #
-SFNT_DRV_SRC := $(SFNT_DIR)/ttload.c   \
-                $(SFNT_DIR)/ttmtx.c    \
-                $(SFNT_DIR)/ttcmap.c   \
-                $(SFNT_DIR)/ttsbit.c   \
-                $(SFNT_DIR)/ttpost.c   \
-                $(SFNT_DIR)/ttkern.c   \
-                $(SFNT_DIR)/ttbdf.c    \
-                $(SFNT_DIR)/sfobjs.c   \
-                $(SFNT_DIR)/sfdriver.c \
-                $(SFNT_DIR)/sfntpic.c  \
-                $(SFNT_DIR)/pngshim.c
+SFNT_DRV_SRC := $(SFNT_DIR)/pngshim.c   \
+                $(SFNT_DIR)/sfdriver.c  \
+                $(SFNT_DIR)/sfobjs.c    \
+                $(SFNT_DIR)/sfwoff.c    \
+                $(SFNT_DIR)/sfwoff2.c   \
+                $(SFNT_DIR)/ttbdf.c     \
+                $(SFNT_DIR)/ttcmap.c    \
+                $(SFNT_DIR)/ttcolr.c    \
+                $(SFNT_DIR)/ttcpal.c    \
+                $(SFNT_DIR)/ttkern.c    \
+                $(SFNT_DIR)/ttload.c    \
+                $(SFNT_DIR)/ttmtx.c     \
+                $(SFNT_DIR)/ttpost.c    \
+                $(SFNT_DIR)/ttsbit.c    \
+                $(SFNT_DIR)/woff2tags.c
 
 # SFNT driver headers
 #

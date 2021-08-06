@@ -1,50 +1,49 @@
-/***************************************************************************/
-/*                                                                         */
-/*  gxvmod.c                                                               */
-/*                                                                         */
-/*    FreeType's TrueTypeGX/AAT validation module implementation (body).   */
-/*                                                                         */
-/*  Copyright 2004-2006, 2013                                              */
-/*  by suzuki toshiya, Masatake YAMATO, Red Hat K.K.,                      */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvmod.c
+ *
+ *   FreeType's TrueTypeGX/AAT validation module implementation (body).
+ *
+ * Copyright (C) 2004-2021 by
+ * suzuki toshiya, Masatake YAMATO, Red Hat K.K.,
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
-/***************************************************************************/
-/*                                                                         */
-/* gxvalid is derived from both gxlayout module and otvalid module.        */
-/* Development of gxlayout is supported by the Information-technology      */
-/* Promotion Agency(IPA), Japan.                                           */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvalid is derived from both gxlayout module and otvalid module.
+ * Development of gxlayout is supported by the Information-technology
+ * Promotion Agency(IPA), Japan.
+ *
+ */
 
 
-#include <ft2build.h>
-#include FT_TRUETYPE_TABLES_H
-#include FT_TRUETYPE_TAGS_H
-#include FT_GX_VALIDATE_H
-#include FT_INTERNAL_OBJECTS_H
-#include FT_SERVICE_GX_VALIDATE_H
+#include <freetype/tttables.h>
+#include <freetype/tttags.h>
+#include <freetype/ftgxval.h>
+#include <freetype/internal/ftobjs.h>
+#include <freetype/internal/services/svgxval.h>
 
 #include "gxvmod.h"
 #include "gxvalid.h"
 #include "gxvcommn.h"
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_gxvmodule
+#define FT_COMPONENT  gxvmodule
 
 
   static FT_Error
@@ -63,7 +62,7 @@
     if ( error )
       goto Exit;
 
-    if ( FT_ALLOC( *table, *table_len ) )
+    if ( FT_QALLOC( *table, *table_len ) )
       goto Exit;
 
     error = FT_Load_Sfnt_Table( face, tag, 0, *table, table_len );
@@ -235,14 +234,14 @@
   static
   const FT_Service_GXvalidateRec  gxvalid_interface =
   {
-    gxv_validate
+    gxv_validate              /* validate */
   };
 
 
   static
   const FT_Service_CKERNvalidateRec  ckernvalid_interface =
   {
-    classic_kern_validate
+    classic_kern_validate     /* validate */
   };
 
 
@@ -274,11 +273,11 @@
     0x10000L,
     0x20000L,
 
-    0,              /* module-specific interface */
+    NULL,              /* module-specific interface */
 
-    (FT_Module_Constructor)0,
-    (FT_Module_Destructor) 0,
-    (FT_Module_Requester)  gxvalid_get_service
+    (FT_Module_Constructor)NULL,                /* module_init   */
+    (FT_Module_Destructor) NULL,                /* module_done   */
+    (FT_Module_Requester)  gxvalid_get_service  /* get_interface */
   };
 
 

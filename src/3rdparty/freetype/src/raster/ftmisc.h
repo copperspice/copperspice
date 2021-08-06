@@ -1,31 +1,31 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftmisc.h                                                               */
-/*                                                                         */
-/*    Miscellaneous macros for stand-alone rasterizer (specification       */
-/*    only).                                                               */
-/*                                                                         */
-/*  Copyright 2005, 2009, 2010 by                                          */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used        */
-/*  modified and distributed under the terms of the FreeType project       */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftmisc.h
+ *
+ *   Miscellaneous macros for stand-alone rasterizer (specification
+ *   only).
+ *
+ * Copyright (C) 2005-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used
+ * modified and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-  /***************************************************/
-  /*                                                 */
-  /* This file is *not* portable!  You have to adapt */
-  /* its definitions to your platform.               */
-  /*                                                 */
-  /***************************************************/
+  /****************************************************
+   *
+   * This file is *not* portable!  You have to adapt
+   * its definitions to your platform.
+   *
+   */
 
-#ifndef __FTMISC_H__
-#define __FTMISC_H__
+#ifndef FTMISC_H_
+#define FTMISC_H_
 
 
   /* memset */
@@ -37,7 +37,7 @@
 #define FT_LOCAL_DEF( x )   static x
 
 
-  /* from include/freetype2/fttypes.h */
+  /* from include/freetype/fttypes.h */
 
   typedef unsigned char  FT_Byte;
   typedef signed int     FT_Int;
@@ -54,7 +54,7 @@
               (FT_ULong)_x4         )
 
 
-  /* from include/freetype2/ftsystem.h */
+  /* from include/freetype/ftsystem.h */
 
   typedef struct FT_MemoryRec_*  FT_Memory;
 
@@ -136,7 +136,7 @@
     return ( s > 0 ) ? d : -d;
   }
 
-#endif /* __FTMISC_H__ */
+#endif /* FTMISC_H_ */
 
 
 /* END */

@@ -1,35 +1,34 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftgxval.c                                                              */
-/*                                                                         */
-/*    FreeType API for validating TrueTyepGX/AAT tables (body).            */
-/*                                                                         */
-/*  Copyright 2004-2006, 2010, 2013 by                                     */
-/*  Masatake YAMATO, Redhat K.K,                                           */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftgxval.c
+ *
+ *   FreeType API for validating TrueTypeGX/AAT tables (body).
+ *
+ * Copyright (C) 2004-2021 by
+ * Masatake YAMATO, Redhat K.K,
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
-/***************************************************************************/
-/*                                                                         */
-/* gxvalid is derived from both gxlayout module and otvalid module.        */
-/* Development of gxlayout is supported by the Information-technology      */
-/* Promotion Agency(IPA), Japan.                                           */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvalid is derived from both gxlayout module and otvalid module.
+ * Development of gxlayout is supported by the Information-technology
+ * Promotion Agency(IPA), Japan.
+ *
+ */
 
 
-#include <ft2build.h>
-#include FT_INTERNAL_DEBUG_H
+#include <freetype/internal/ftdebug.h>
 
-#include FT_INTERNAL_OBJECTS_H
-#include FT_SERVICE_GX_VALIDATE_H
+#include <freetype/internal/ftobjs.h>
+#include <freetype/internal/services/svgxval.h>
 
 
   /* documentation is in ftgxval.h */
@@ -50,7 +49,7 @@
       goto Exit;
     }
 
-    if ( tables == NULL )
+    if ( !tables )
     {
       error = FT_THROW( Invalid_Argument );
       goto Exit;
@@ -102,7 +101,7 @@
       goto Exit;
     }
 
-    if ( ckern_table == NULL )
+    if ( !ckern_table )
     {
       error = FT_THROW( Invalid_Argument );
       goto Exit;

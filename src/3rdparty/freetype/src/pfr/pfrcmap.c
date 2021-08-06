@@ -1,23 +1,22 @@
-/***************************************************************************/
-/*                                                                         */
-/*  pfrcmap.c                                                              */
-/*                                                                         */
-/*    FreeType PFR cmap handling (body).                                   */
-/*                                                                         */
-/*  Copyright 2002, 2007, 2009, 2013 by                                    */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * pfrcmap.c
+ *
+ *   FreeType PFR cmap handling (body).
+ *
+ * Copyright (C) 2002-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#include <ft2build.h>
-#include FT_INTERNAL_DEBUG_H
+#include <freetype/internal/ftdebug.h>
 #include "pfrcmap.h"
 #include "pfrobjs.h"
 
@@ -25,10 +24,13 @@
 
 
   FT_CALLBACK_DEF( FT_Error )
-  pfr_cmap_init( PFR_CMap  cmap )
+  pfr_cmap_init( PFR_CMap    cmap,
+                 FT_Pointer  pointer )
   {
     FT_Error  error = FT_Err_Ok;
     PFR_Face  face  = (PFR_Face)FT_CMAP_FACE( cmap );
+
+    FT_UNUSED( pointer );
 
 
     cmap->num_chars = face->phy_font.num_chars;
@@ -127,7 +129,7 @@
         }
 
         if ( gchar->char_code < char_code )
-          min = mid+1;
+          min = mid + 1;
         else
           max = mid;
       }
@@ -158,12 +160,16 @@
   {
     sizeof ( PFR_CMapRec ),
 
-    (FT_CMap_InitFunc)     pfr_cmap_init,
-    (FT_CMap_DoneFunc)     pfr_cmap_done,
-    (FT_CMap_CharIndexFunc)pfr_cmap_char_index,
-    (FT_CMap_CharNextFunc) pfr_cmap_char_next,
+    (FT_CMap_InitFunc)     pfr_cmap_init,        /* init       */
+    (FT_CMap_DoneFunc)     pfr_cmap_done,        /* done       */
+    (FT_CMap_CharIndexFunc)pfr_cmap_char_index,  /* char_index */
+    (FT_CMap_CharNextFunc) pfr_cmap_char_next,   /* char_next  */
 
-    NULL, NULL, NULL, NULL, NULL
+    (FT_CMap_CharVarIndexFunc)    NULL,  /* char_var_index   */
+    (FT_CMap_CharVarIsDefaultFunc)NULL,  /* char_var_default */
+    (FT_CMap_VariantListFunc)     NULL,  /* variant_list     */
+    (FT_CMap_CharVariantListFunc) NULL,  /* charvariant_list */
+    (FT_CMap_VariantCharListFunc) NULL   /* variantchar_list */
   };
 
 

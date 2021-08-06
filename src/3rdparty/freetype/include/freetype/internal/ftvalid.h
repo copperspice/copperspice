@@ -1,27 +1,28 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftvalid.h                                                              */
-/*                                                                         */
-/*    FreeType validation support (specification).                         */
-/*                                                                         */
-/*  Copyright 2004, 2013 by                                                */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftvalid.h
+ *
+ *   FreeType validation support (specification).
+ *
+ * Copyright (C) 2004-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __FTVALID_H__
-#define __FTVALID_H__
+#ifndef FTVALID_H_
+#define FTVALID_H_
 
 #include <ft2build.h>
-#include FT_CONFIG_STANDARD_LIBRARY_H   /* for ft_setjmp and ft_longjmp */
+#include FT_CONFIG_STANDARD_LIBRARY_H   /* for ft_jmpbuf */
 
+#include "compiler-macros.h"
 
 FT_BEGIN_HEADER
 
@@ -42,31 +43,31 @@ FT_BEGIN_HEADER
   typedef struct FT_ValidatorRec_ volatile*  FT_Validator;
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* There are three distinct validation levels defined here:              */
-  /*                                                                       */
-  /* FT_VALIDATE_DEFAULT ::                                                */
-  /*   A table that passes this validation level can be used reliably by   */
-  /*   FreeType.  It generally means that all offsets have been checked to */
-  /*   prevent out-of-bound reads, that array counts are correct, etc.     */
-  /*                                                                       */
-  /* FT_VALIDATE_TIGHT ::                                                  */
-  /*   A table that passes this validation level can be used reliably and  */
-  /*   doesn't contain invalid data.  For example, a charmap table that    */
-  /*   returns invalid glyph indices will not pass, even though it can     */
-  /*   be used with FreeType in default mode (the library will simply      */
-  /*   return an error later when trying to load the glyph).               */
-  /*                                                                       */
-  /*   It also checks that fields which must be a multiple of 2, 4, or 8,  */
-  /*   don't have incorrect values, etc.                                   */
-  /*                                                                       */
-  /* FT_VALIDATE_PARANOID ::                                               */
-  /*   Only for font debugging.  Checks that a table follows the           */
-  /*   specification by 100%.  Very few fonts will be able to pass this    */
-  /*   level anyway but it can be useful for certain tools like font       */
-  /*   editors/converters.                                                 */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * There are three distinct validation levels defined here:
+   *
+   * FT_VALIDATE_DEFAULT ::
+   *   A table that passes this validation level can be used reliably by
+   *   FreeType.  It generally means that all offsets have been checked to
+   *   prevent out-of-bound reads, that array counts are correct, etc.
+   *
+   * FT_VALIDATE_TIGHT ::
+   *   A table that passes this validation level can be used reliably and
+   *   doesn't contain invalid data.  For example, a charmap table that
+   *   returns invalid glyph indices will not pass, even though it can be
+   *   used with FreeType in default mode (the library will simply return an
+   *   error later when trying to load the glyph).
+   *
+   *   It also checks that fields which must be a multiple of 2, 4, or 8,
+   *   don't have incorrect values, etc.
+   *
+   * FT_VALIDATE_PARANOID ::
+   *   Only for font debugging.  Checks that a table follows the
+   *   specification by 100%.  Very few fonts will be able to pass this level
+   *   anyway but it can be useful for certain tools like font
+   *   editors/converters.
+   */
   typedef enum  FT_ValidationLevel_
   {
     FT_VALIDATE_DEFAULT = 0,
@@ -87,12 +88,12 @@ FT_BEGIN_HEADER
   /* validator structure */
   typedef struct  FT_ValidatorRec_
   {
+    ft_jmp_buf          jump_buffer; /* used for exception handling      */
+
     const FT_Byte*      base;        /* address of table in memory       */
     const FT_Byte*      limit;       /* `base' + sizeof(table) in memory */
     FT_ValidationLevel  level;       /* validation level                 */
     FT_Error            error;       /* error returned. 0 means success  */
-
-    ft_jmp_buf          jump_buffer; /* used for exception handling      */
 
   } FT_ValidatorRec;
 
@@ -126,36 +127,34 @@ FT_BEGIN_HEADER
   /* Calls ft_validate_error.  Assumes that the `valid' local variable */
   /* holds a pointer to the current validator object.                  */
   /*                                                                   */
-  /* Use preprocessor prescan to pass FT_ERR_PREFIX.                   */
-  /*                                                                   */
-#define FT_INVALID( _prefix, _error )  FT_INVALID_( _prefix, _error )
-#define FT_INVALID_( _prefix, _error ) \
-          ft_validator_error( valid, _prefix ## _error )
+#define FT_INVALID( _error )  FT_INVALID_( _error )
+#define FT_INVALID_( _error ) \
+          ft_validator_error( valid, FT_THROW( _error ) )
 
   /* called when a broken table is detected */
 #define FT_INVALID_TOO_SHORT \
-          FT_INVALID( FT_ERR_PREFIX, Invalid_Table )
+          FT_INVALID( Invalid_Table )
 
   /* called when an invalid offset is detected */
 #define FT_INVALID_OFFSET \
-          FT_INVALID( FT_ERR_PREFIX, Invalid_Offset )
+          FT_INVALID( Invalid_Offset )
 
   /* called when an invalid format/value is detected */
 #define FT_INVALID_FORMAT \
-          FT_INVALID( FT_ERR_PREFIX, Invalid_Table )
+          FT_INVALID( Invalid_Table )
 
   /* called when an invalid glyph index is detected */
 #define FT_INVALID_GLYPH_ID \
-          FT_INVALID( FT_ERR_PREFIX, Invalid_Glyph_Index )
+          FT_INVALID( Invalid_Glyph_Index )
 
   /* called when an invalid field value is detected */
 #define FT_INVALID_DATA \
-          FT_INVALID( FT_ERR_PREFIX, Invalid_Table )
+          FT_INVALID( Invalid_Table )
 
 
 FT_END_HEADER
 
-#endif /* __FTVALID_H__ */
+#endif /* FTVALID_H_ */
 
 
 /* END */

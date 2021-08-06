@@ -1,70 +1,70 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ttsubpix.c                                                             */
-/*                                                                         */
-/*    TrueType Subpixel Hinting.                                           */
-/*                                                                         */
-/*  Copyright 2010-2013 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ttsubpix.c
+ *
+ *   TrueType Subpixel Hinting.
+ *
+ * Copyright (C) 2010-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
-#include <ft2build.h>
-#include FT_INTERNAL_DEBUG_H
-#include FT_INTERNAL_CALC_H
-#include FT_INTERNAL_STREAM_H
-#include FT_INTERNAL_SFNT_H
-#include FT_TRUETYPE_TAGS_H
-#include FT_OUTLINE_H
-#include FT_TRUETYPE_DRIVER_H
+#include <freetype/internal/ftdebug.h>
+#include <freetype/internal/ftcalc.h>
+#include <freetype/internal/ftstream.h>
+#include <freetype/internal/sfnt.h>
+#include <freetype/tttags.h>
+#include <freetype/ftoutln.h>
+#include <freetype/ftdriver.h>
 
 #include "ttsubpix.h"
 
 
-#ifdef TT_CONFIG_OPTION_SUBPIXEL_HINTING
+#if defined( TT_USE_BYTECODE_INTERPRETER )            && \
+    defined( TT_SUPPORT_SUBPIXEL_HINTING_INFINALITY )
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* These rules affect how the TT Interpreter does hinting, with the      */
-  /* goal of doing subpixel hinting by (in general) ignoring x moves.      */
-  /* Some of these rules are fixes that go above and beyond the            */
-  /* stated techniques in the MS whitepaper on Cleartype, due to           */
-  /* artifacts in many glyphs.  So, these rules make some glyphs render    */
-  /* better than they do in the MS rasterizer.                             */
-  /*                                                                       */
-  /* "" string or 0 int/char indicates to apply to all glyphs.             */
-  /* "-" used as dummy placeholders, but any non-matching string works.    */
-  /*                                                                       */
-  /* Some of this could arguably be implemented in fontconfig, however:    */
-  /*                                                                       */
-  /*  - Fontconfig can't set things on a glyph-by-glyph basis.             */
-  /*  - The tweaks that happen here are very low-level, from an average    */
-  /*    user's point of view and are best implemented in the hinter.       */
-  /*                                                                       */
-  /* The goal is to make the subpixel hinting techniques as generalized    */
-  /* as possible across all fonts to prevent the need for extra rules such */
-  /* as these.                                                             */
-  /*                                                                       */
-  /* The rule structure is designed so that entirely new rules can easily  */
-  /* be added when a new compatibility feature is discovered.              */
-  /*                                                                       */
-  /* The rule structures could also use some enhancement to handle ranges. */
-  /*                                                                       */
-  /*     ****************** WORK IN PROGRESS *******************           */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * These rules affect how the TT Interpreter does hinting, with the
+   * goal of doing subpixel hinting by (in general) ignoring x moves.
+   * Some of these rules are fixes that go above and beyond the
+   * stated techniques in the MS whitepaper on Cleartype, due to
+   * artifacts in many glyphs.  So, these rules make some glyphs render
+   * better than they do in the MS rasterizer.
+   *
+   * "" string or 0 int/char indicates to apply to all glyphs.
+   * "-" used as dummy placeholders, but any non-matching string works.
+   *
+   * Some of this could arguably be implemented in fontconfig, however:
+   *
+   * - Fontconfig can't set things on a glyph-by-glyph basis.
+   * - The tweaks that happen here are very low-level, from an average
+   *   user's point of view and are best implemented in the hinter.
+   *
+   * The goal is to make the subpixel hinting techniques as generalized
+   * as possible across all fonts to prevent the need for extra rules such
+   * as these.
+   *
+   * The rule structure is designed so that entirely new rules can easily
+   * be added when a new compatibility feature is discovered.
+   *
+   * The rule structures could also use some enhancement to handle ranges.
+   *
+   *     ****************** WORK IN PROGRESS *******************
+   */
 
   /* These are `classes' of fonts that can be grouped together and used in */
   /* rules below.  A blank entry "" is required at the end of these!       */
 #define FAMILY_CLASS_RULES_SIZE  7
 
-  static const SPH_Font_Class FAMILY_CLASS_Rules
-                              [FAMILY_CLASS_RULES_SIZE] =
+  static const SPH_Font_Class  FAMILY_CLASS_Rules
+                               [FAMILY_CLASS_RULES_SIZE] =
   {
     { "MS Legacy Fonts",
       { "Aharoni",
@@ -223,8 +223,8 @@
   /* rules below.  A blank entry "" is required at the end of these!       */
 #define STYLE_CLASS_RULES_SIZE  5
 
-  const SPH_Font_Class STYLE_CLASS_Rules
-                       [STYLE_CLASS_RULES_SIZE] =
+  static const SPH_Font_Class  STYLE_CLASS_Rules
+                               [STYLE_CLASS_RULES_SIZE] =
   {
     { "Regular Class",
       { "Regular",
@@ -279,18 +279,18 @@
   /* Force special legacy fixes for fonts.                                 */
 #define COMPATIBILITY_MODE_RULES_SIZE  1
 
-  const SPH_TweakRule  COMPATIBILITY_MODE_Rules
-                       [COMPATIBILITY_MODE_RULES_SIZE] =
+  static const SPH_TweakRule  COMPATIBILITY_MODE_Rules
+                              [COMPATIBILITY_MODE_RULES_SIZE] =
   {
-    { "-", 0, "", 0 },
+    { "Verdana Clones", 0, "", 0 },
   };
 
 
   /* Don't do subpixel (ignore_x_mode) hinting; do normal hinting.         */
 #define PIXEL_HINTING_RULES_SIZE  2
 
-  const SPH_TweakRule  PIXEL_HINTING_Rules
-                       [PIXEL_HINTING_RULES_SIZE] =
+  static const SPH_TweakRule  PIXEL_HINTING_Rules
+                              [PIXEL_HINTING_RULES_SIZE] =
   {
     /* these characters are almost always safe */
     { "Courier New", 12, "Italic", 'z' },
@@ -301,8 +301,8 @@
   /* Subpixel hinting ignores SHPIX rules on X.  Force SHPIX for these.    */
 #define DO_SHPIX_RULES_SIZE  1
 
-  const SPH_TweakRule  DO_SHPIX_Rules
-                       [DO_SHPIX_RULES_SIZE] =
+  static const SPH_TweakRule  DO_SHPIX_Rules
+                              [DO_SHPIX_RULES_SIZE] =
   {
     { "-", 0, "", 0 },
   };
@@ -312,8 +312,8 @@
   /* boundary and don't move that point to a Y pixel boundary.             */
 #define SKIP_NONPIXEL_Y_MOVES_RULES_SIZE  4
 
-  const SPH_TweakRule  SKIP_NONPIXEL_Y_MOVES_Rules
-                       [SKIP_NONPIXEL_Y_MOVES_RULES_SIZE] =
+  static const SPH_TweakRule  SKIP_NONPIXEL_Y_MOVES_Rules
+                              [SKIP_NONPIXEL_Y_MOVES_RULES_SIZE] =
   {
     /* fix vwxyz thinness*/
     { "Consolas", 0, "", 0 },
@@ -328,8 +328,8 @@
 
 #define SKIP_NONPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE  1
 
-  const SPH_TweakRule  SKIP_NONPIXEL_Y_MOVES_Rules_Exceptions
-                       [SKIP_NONPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE] =
+  static const SPH_TweakRule  SKIP_NONPIXEL_Y_MOVES_Rules_Exceptions
+                              [SKIP_NONPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE] =
   {
     /* Fixes < and > */
     { "Courier New", 0, "Regular", 0 },
@@ -340,8 +340,8 @@
   /* boundary and don't move that point to a Y pixel boundary.             */
 #define SKIP_NONPIXEL_Y_MOVES_DELTAP_RULES_SIZE  2
 
-  const SPH_TweakRule  SKIP_NONPIXEL_Y_MOVES_DELTAP_Rules
-                       [SKIP_NONPIXEL_Y_MOVES_DELTAP_RULES_SIZE] =
+  static const SPH_TweakRule  SKIP_NONPIXEL_Y_MOVES_DELTAP_Rules
+                              [SKIP_NONPIXEL_Y_MOVES_DELTAP_RULES_SIZE] =
   {
     /* Maintain thickness of diagonal in 'N' */
     { "Times New Roman", 0, "Regular/Bold Class", 'N' },
@@ -352,8 +352,8 @@
   /* Skip Y moves that move a point off a Y pixel boundary.                */
 #define SKIP_OFFPIXEL_Y_MOVES_RULES_SIZE  1
 
-  const SPH_TweakRule  SKIP_OFFPIXEL_Y_MOVES_Rules
-                       [SKIP_OFFPIXEL_Y_MOVES_RULES_SIZE] =
+  static const SPH_TweakRule  SKIP_OFFPIXEL_Y_MOVES_Rules
+                              [SKIP_OFFPIXEL_Y_MOVES_RULES_SIZE] =
   {
     { "-", 0, "", 0 },
   };
@@ -361,8 +361,8 @@
 
 #define SKIP_OFFPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE  1
 
-  const SPH_TweakRule  SKIP_OFFPIXEL_Y_MOVES_Rules_Exceptions
-                       [SKIP_OFFPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE] =
+  static const SPH_TweakRule  SKIP_OFFPIXEL_Y_MOVES_Rules_Exceptions
+                              [SKIP_OFFPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE] =
   {
     { "-", 0, "", 0 },
   };
@@ -371,8 +371,8 @@
   /* Round moves that don't move a point to a Y pixel boundary.            */
 #define ROUND_NONPIXEL_Y_MOVES_RULES_SIZE  2
 
-  const SPH_TweakRule  ROUND_NONPIXEL_Y_MOVES_Rules
-                       [ROUND_NONPIXEL_Y_MOVES_RULES_SIZE] =
+  static const SPH_TweakRule  ROUND_NONPIXEL_Y_MOVES_Rules
+                              [ROUND_NONPIXEL_Y_MOVES_RULES_SIZE] =
   {
     /* Droid font instructions don't snap Y to pixels */
     { "Droid Sans", 0, "Regular/Italic Class", 0 },
@@ -382,8 +382,8 @@
 
 #define ROUND_NONPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE  1
 
-  const SPH_TweakRule  ROUND_NONPIXEL_Y_MOVES_Rules_Exceptions
-                       [ROUND_NONPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE] =
+  static const SPH_TweakRule  ROUND_NONPIXEL_Y_MOVES_Rules_Exceptions
+                              [ROUND_NONPIXEL_Y_MOVES_RULES_EXCEPTIONS_SIZE] =
   {
     { "-", 0, "", 0 },
   };
@@ -392,8 +392,8 @@
   /* Allow a Direct_Move along X freedom vector if matched.                */
 #define ALLOW_X_DMOVE_RULES_SIZE  1
 
-  const SPH_TweakRule  ALLOW_X_DMOVE_Rules
-                       [ALLOW_X_DMOVE_RULES_SIZE] =
+  static const SPH_TweakRule  ALLOW_X_DMOVE_Rules
+                              [ALLOW_X_DMOVE_RULES_SIZE] =
   {
     /* Fixes vanishing diagonal in 4 */
     { "Verdana", 0, "Regular", '4' },
@@ -403,8 +403,8 @@
   /* Return MS rasterizer version 35 if matched.                           */
 #define RASTERIZER_35_RULES_SIZE  8
 
-  const SPH_TweakRule  RASTERIZER_35_Rules
-                       [RASTERIZER_35_RULES_SIZE] =
+  static const SPH_TweakRule  RASTERIZER_35_Rules
+                              [RASTERIZER_35_RULES_SIZE] =
   {
     /* This seems to be the only way to make these look good */
     { "Times New Roman", 0, "Regular", 'i' },
@@ -421,8 +421,8 @@
   /* Don't round to the subpixel grid.  Round to pixel grid.               */
 #define NORMAL_ROUND_RULES_SIZE  1
 
-  const SPH_TweakRule  NORMAL_ROUND_Rules
-                       [NORMAL_ROUND_RULES_SIZE] =
+  static const SPH_TweakRule  NORMAL_ROUND_Rules
+                              [NORMAL_ROUND_RULES_SIZE] =
   {
     /* Fix serif thickness for certain ppems */
     /* Can probably be generalized somehow   */
@@ -433,8 +433,8 @@
   /* Skip IUP instructions if matched.                                     */
 #define SKIP_IUP_RULES_SIZE  1
 
-  const SPH_TweakRule  SKIP_IUP_Rules
-                       [SKIP_IUP_RULES_SIZE] =
+  static const SPH_TweakRule  SKIP_IUP_Rules
+                              [SKIP_IUP_RULES_SIZE] =
   {
     { "Arial", 13, "Regular", 'a' },
   };
@@ -443,8 +443,8 @@
   /* Skip MIAP Twilight hack if matched.                                   */
 #define MIAP_HACK_RULES_SIZE  1
 
-  const SPH_TweakRule  MIAP_HACK_Rules
-                       [MIAP_HACK_RULES_SIZE] =
+  static const SPH_TweakRule  MIAP_HACK_Rules
+                              [MIAP_HACK_RULES_SIZE] =
   {
     { "Geneva", 12, "", 0 },
   };
@@ -453,8 +453,8 @@
   /* Skip DELTAP instructions if matched.                                  */
 #define ALWAYS_SKIP_DELTAP_RULES_SIZE  23
 
-  const SPH_TweakRule  ALWAYS_SKIP_DELTAP_Rules
-                       [ALWAYS_SKIP_DELTAP_RULES_SIZE] =
+  static const SPH_TweakRule  ALWAYS_SKIP_DELTAP_Rules
+                              [ALWAYS_SKIP_DELTAP_RULES_SIZE] =
   {
     { "Georgia", 0, "Regular", 'k' },
     /* fix various problems with e in different versions */
@@ -489,8 +489,8 @@
   /* Always do DELTAP instructions if matched.                             */
 #define ALWAYS_DO_DELTAP_RULES_SIZE  1
 
-  const SPH_TweakRule  ALWAYS_DO_DELTAP_Rules
-                       [ALWAYS_DO_DELTAP_RULES_SIZE] =
+  static const SPH_TweakRule  ALWAYS_DO_DELTAP_Rules
+                              [ALWAYS_DO_DELTAP_RULES_SIZE] =
   {
     { "-", 0, "", 0 },
   };
@@ -744,7 +744,7 @@
 #endif /* FORCE_NATURAL_WIDTHS */
 
 
-  FT_LOCAL_DEF( FT_Bool )
+  static FT_Bool
   is_member_of_family_class( const FT_String*  detected_font_name,
                              const FT_String*  rule_font_name )
   {
@@ -752,24 +752,24 @@
 
 
     /* Does font name match rule family? */
-    if ( strcmp( detected_font_name, rule_font_name ) == 0 )
+    if ( ft_strcmp( detected_font_name, rule_font_name ) == 0 )
       return TRUE;
 
     /* Is font name a wildcard ""? */
-    if ( strcmp( rule_font_name, "" ) == 0 )
+    if ( ft_strcmp( rule_font_name, "" ) == 0 )
       return TRUE;
 
     /* Is font name contained in a class list? */
     for ( i = 0; i < FAMILY_CLASS_RULES_SIZE; i++ )
     {
-      if ( strcmp( FAMILY_CLASS_Rules[i].name, rule_font_name ) == 0 )
+      if ( ft_strcmp( FAMILY_CLASS_Rules[i].name, rule_font_name ) == 0 )
       {
         for ( j = 0; j < SPH_MAX_CLASS_MEMBERS; j++ )
         {
-          if ( strcmp( FAMILY_CLASS_Rules[i].member[j], "" ) == 0 )
+          if ( ft_strcmp( FAMILY_CLASS_Rules[i].member[j], "" ) == 0 )
             continue;
-          if ( strcmp( FAMILY_CLASS_Rules[i].member[j],
-                       detected_font_name ) == 0 )
+          if ( ft_strcmp( FAMILY_CLASS_Rules[i].member[j],
+                          detected_font_name ) == 0 )
             return TRUE;
         }
       }
@@ -779,7 +779,7 @@
   }
 
 
-  FT_LOCAL_DEF( FT_Bool )
+  static FT_Bool
   is_member_of_style_class( const FT_String*  detected_font_style,
                             const FT_String*  rule_font_style )
   {
@@ -787,24 +787,24 @@
 
 
     /* Does font style match rule style? */
-    if ( strcmp( detected_font_style, rule_font_style ) == 0 )
+    if ( ft_strcmp( detected_font_style, rule_font_style ) == 0 )
       return TRUE;
 
     /* Is font style a wildcard ""? */
-    if ( strcmp( rule_font_style, "" ) == 0 )
+    if ( ft_strcmp( rule_font_style, "" ) == 0 )
       return TRUE;
 
     /* Is font style contained in a class list? */
     for ( i = 0; i < STYLE_CLASS_RULES_SIZE; i++ )
     {
-      if ( strcmp( STYLE_CLASS_Rules[i].name, rule_font_style ) == 0 )
+      if ( ft_strcmp( STYLE_CLASS_Rules[i].name, rule_font_style ) == 0 )
       {
         for ( j = 0; j < SPH_MAX_CLASS_MEMBERS; j++ )
         {
-          if ( strcmp( STYLE_CLASS_Rules[i].member[j], "" ) == 0 )
+          if ( ft_strcmp( STYLE_CLASS_Rules[i].member[j], "" ) == 0 )
             continue;
-          if ( strcmp( STYLE_CLASS_Rules[i].member[j],
-                       detected_font_style ) == 0 )
+          if ( ft_strcmp( STYLE_CLASS_Rules[i].member[j],
+                          detected_font_style ) == 0 )
             return TRUE;
         }
       }
@@ -891,21 +891,21 @@
 #define TWEAK_RULES( x )                                       \
   if ( sph_test_tweak( face, family, ppem, style, glyph_index, \
                        x##_Rules, x##_RULES_SIZE ) )           \
-    loader->exec->sph_tweak_flags |= SPH_TWEAK_##x;
+    loader->exec->sph_tweak_flags |= SPH_TWEAK_##x
 
 #define TWEAK_RULES_EXCEPTIONS( x )                                        \
   if ( sph_test_tweak( face, family, ppem, style, glyph_index,             \
                        x##_Rules_Exceptions, x##_RULES_EXCEPTIONS_SIZE ) ) \
-    loader->exec->sph_tweak_flags &= ~SPH_TWEAK_##x;
+    loader->exec->sph_tweak_flags &= ~SPH_TWEAK_##x
 
 
   FT_LOCAL_DEF( void )
   sph_set_tweaks( TT_Loader  loader,
                   FT_UInt    glyph_index )
   {
-    TT_Face     face   = (TT_Face)loader->face;
+    TT_Face     face   = loader->face;
     FT_String*  family = face->root.family_name;
-    int         ppem   = loader->size->metrics.x_ppem;
+    FT_UInt     ppem   = loader->size->metrics->x_ppem;
     FT_String*  style  = face->root.style_name;
 
 
@@ -956,7 +956,7 @@
       if ( loader->exec->rasterizer_version != TT_INTERPRETER_VERSION_35 )
       {
         loader->exec->rasterizer_version = TT_INTERPRETER_VERSION_35;
-        loader->exec->size->cvt_ready    = FALSE;
+        loader->exec->size->cvt_ready    = -1;
 
         tt_size_ready_bytecode(
           loader->exec->size,
@@ -971,7 +971,7 @@
            SPH_OPTION_SET_RASTERIZER_VERSION )
       {
         loader->exec->rasterizer_version = SPH_OPTION_SET_RASTERIZER_VERSION;
-        loader->exec->size->cvt_ready    = FALSE;
+        loader->exec->size->cvt_ready    = -1;
 
         tt_size_ready_bytecode(
           loader->exec->size,
@@ -1000,12 +1000,14 @@
     }
   }
 
-#else /* !TT_CONFIG_OPTION_SUBPIXEL_HINTING */
+#else /* !(TT_USE_BYTECODE_INTERPRETER &&          */
+      /*   TT_SUPPORT_SUBPIXEL_HINTING_INFINALITY) */
 
   /* ANSI C doesn't like empty source files */
   typedef int  _tt_subpix_dummy;
 
-#endif /* !TT_CONFIG_OPTION_SUBPIXEL_HINTING */
+#endif /* !(TT_USE_BYTECODE_INTERPRETER &&          */
+       /*   TT_SUPPORT_SUBPIXEL_HINTING_INFINALITY) */
 
 
 /* END */

@@ -1,47 +1,47 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftcmanag.h                                                             */
-/*                                                                         */
-/*    FreeType Cache Manager (specification).                              */
-/*                                                                         */
-/*  Copyright 2000-2001, 2003, 2004, 2006, 2010, 2013 by                   */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftcmanag.h
+ *
+ *   FreeType Cache Manager (specification).
+ *
+ * Copyright (C) 2000-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* A cache manager is in charge of the following:                        */
-  /*                                                                       */
-  /*  - Maintain a mapping between generic FTC_FaceIDs and live FT_Face    */
-  /*    objects.  The mapping itself is performed through a user-provided  */
-  /*    callback.  However, the manager maintains a small cache of FT_Face */
-  /*    and FT_Size objects in order to speed up things considerably.      */
-  /*                                                                       */
-  /*  - Manage one or more cache objects.  Each cache is in charge of      */
-  /*    holding a varying number of `cache nodes'.  Each cache node        */
-  /*    represents a minimal amount of individually accessible cached      */
-  /*    data.  For example, a cache node can be an FT_Glyph image          */
-  /*    containing a vector outline, or some glyph metrics, or anything    */
-  /*    else.                                                              */
-  /*                                                                       */
-  /*    Each cache node has a certain size in bytes that is added to the   */
-  /*    total amount of `cache memory' within the manager.                 */
-  /*                                                                       */
-  /*    All cache nodes are located in a global LRU list, where the oldest */
-  /*    node is at the tail of the list.                                   */
-  /*                                                                       */
-  /*    Each node belongs to a single cache, and includes a reference      */
-  /*    count to avoid destroying it (due to caching).                     */
-  /*                                                                       */
-  /*************************************************************************/
+  /**************************************************************************
+   *
+   * A cache manager is in charge of the following:
+   *
+   * - Maintain a mapping between generic FTC_FaceIDs and live FT_Face
+   *   objects.  The mapping itself is performed through a user-provided
+   *   callback.  However, the manager maintains a small cache of FT_Face
+   *   and FT_Size objects in order to speed up things considerably.
+   *
+   * - Manage one or more cache objects.  Each cache is in charge of
+   *   holding a varying number of `cache nodes'.  Each cache node
+   *   represents a minimal amount of individually accessible cached
+   *   data.  For example, a cache node can be an FT_Glyph image
+   *   containing a vector outline, or some glyph metrics, or anything
+   *   else.
+   *
+   *   Each cache node has a certain size in bytes that is added to the
+   *   total amount of `cache memory' within the manager.
+   *
+   *   All cache nodes are located in a global LRU list, where the oldest
+   *   node is at the tail of the list.
+   *
+   *   Each node belongs to a single cache, and includes a reference
+   *   count to avoid destroying it (due to caching).
+   *
+   */
 
 
   /*************************************************************************/
@@ -59,12 +59,11 @@
   /*************************************************************************/
 
 
-#ifndef __FTCMANAG_H__
-#define __FTCMANAG_H__
+#ifndef FTCMANAG_H_
+#define FTCMANAG_H_
 
 
-#include <ft2build.h>
-#include FT_CACHE_H
+#include <freetype/ftcache.h>
 #include "ftcmru.h"
 #include "ftccache.h"
 
@@ -72,12 +71,12 @@
 FT_BEGIN_HEADER
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Section>                                                             */
-  /*    cache_subsystem                                                    */
-  /*                                                                       */
-  /*************************************************************************/
+  /**************************************************************************
+   *
+   * @Section:
+   *   cache_subsystem
+   *
+   */
 
 
 #define FTC_MAX_FACES_DEFAULT  2
@@ -110,27 +109,28 @@ FT_BEGIN_HEADER
   } FTC_ManagerRec;
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    FTC_Manager_Compress                                               */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    This function is used to check the state of the cache manager if   */
-  /*    its `num_bytes' field is greater than its `max_bytes' field.  It   */
-  /*    will flush as many old cache nodes as possible (ignoring cache     */
-  /*    nodes with a non-zero reference count).                            */
-  /*                                                                       */
-  /* <InOut>                                                               */
-  /*    manager :: A handle to the cache manager.                          */
-  /*                                                                       */
-  /* <Note>                                                                */
-  /*    Client applications should not call this function directly.  It is */
-  /*    normally invoked by specific cache implementations.                */
-  /*                                                                       */
-  /*    The reason this function is exported is to allow client-specific   */
-  /*    cache classes.                                                     */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   FTC_Manager_Compress
+   *
+   * @Description:
+   *   This function is used to check the state of the cache manager if
+   *   its `num_bytes' field is greater than its `max_bytes' field.  It
+   *   will flush as many old cache nodes as possible (ignoring cache
+   *   nodes with a non-zero reference count).
+   *
+   * @InOut:
+   *   manager ::
+   *     A handle to the cache manager.
+   *
+   * @Note:
+   *   Client applications should not call this function directly.  It is
+   *   normally invoked by specific cache implementations.
+   *
+   *   The reason this function is exported is to allow client-specific
+   *   cache classes.
+   */
   FT_LOCAL( void )
   FTC_Manager_Compress( FTC_Manager  manager );
 
@@ -161,7 +161,7 @@ FT_BEGIN_HEADER
           (a)->y_res == (b)->y_res ) ) )
 
 #define FTC_SCALER_HASH( q )                                 \
-    ( _FTC_FACE_ID_HASH( (q)->face_id ) +                     \
+    ( FTC_FACE_ID_HASH( (q)->face_id ) +                     \
       (q)->width + (q)->height*7 +                           \
       ( (q)->pixel ? 0 : ( (q)->x_res*33 ^ (q)->y_res*61 ) ) )
 
@@ -169,7 +169,7 @@ FT_BEGIN_HEADER
 
 FT_END_HEADER
 
-#endif /* __FTCMANAG_H__ */
+#endif /* FTCMANAG_H_ */
 
 
 /* END */

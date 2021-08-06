@@ -1,6 +1,5 @@
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_TRIGONOMETRY_H
+#include <freetype/freetype.h>
+#include <freetype/fttrigon.h>
 
 #include <math.h>
 #include <stdio.h>
@@ -20,7 +19,7 @@
     int  i;
 
 
-    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000 )
+    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000L )
     {
       FT_Fixed  f1, f2;
       double    d2;
@@ -46,7 +45,7 @@
     int  i;
 
 
-    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000 )
+    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000L )
     {
       FT_Fixed  f1, f2;
       double    d2;
@@ -72,7 +71,7 @@
     int  i;
 
 
-    for ( i = 0; i < FT_ANGLE_PI2-0x2000000; i += 0x10000 )
+    for ( i = 0; i < FT_ANGLE_PI2 - 0x2000000L; i += 0x10000L )
     {
       FT_Fixed  f1, f2;
       double    d2;
@@ -98,7 +97,7 @@
     int  i;
 
 
-    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000 )
+    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000L )
     {
       FT_Fixed  c2, s2;
       double    l, a, c1, s1;
@@ -133,7 +132,7 @@
     int  i;
 
 
-    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000 )
+    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000L )
     {
       FT_Vector  v;
       double     a, c1, s1;
@@ -166,7 +165,7 @@
     int  i;
 
 
-    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000 )
+    for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000L )
     {
       FT_Vector  v;
       FT_Fixed   l, l2;
@@ -193,7 +192,7 @@
     int  rotate;
 
 
-    for ( rotate = 0; rotate < FT_ANGLE_2PI; rotate += 0x10000 )
+    for ( rotate = 0; rotate < FT_ANGLE_2PI; rotate += 0x10000L )
     {
       double  ra, cra, sra;
       int     i;
@@ -203,7 +202,7 @@
       cra = cos( ra );
       sra = sin( ra );
 
-      for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000 )
+      for ( i = 0; i < FT_ANGLE_2PI; i += 0x10000L )
       {
         FT_Fixed   c2, s2, c4, s4;
         FT_Vector  v;

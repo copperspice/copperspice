@@ -18,7 +18,6 @@ else()
    )
 endif()
 
-
 list(APPEND GUI_PUBLIC_INCLUDES
    QAbstractTextDocumentLayout
    QAbstractGraphicsShapeItem
@@ -180,41 +179,25 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qzip.cpp
 
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/autofit/autofit.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftapi.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbase.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbbox.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbdf.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbitmap.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftcid.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftdebug.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftfstype.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftgasp.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftglyph.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftgxval.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftinit.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftlcdfil.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftmm.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftotval.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftpatent.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftpfr.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftstroke.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftsynth.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftsystem.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/fttype1.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftwinfnt.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftxf86.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/md5.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/bdf/bdf.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/bzip2/ftbzip2.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftccache.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftcmanag.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftcmru.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cff/cff.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cid/type1cid.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/gxvalid/gxvalid.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/gzip/ftgzip.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/lzw/ftlzw.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/otvalid/otvalid.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/otvalid/otvbase.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/otvalid/otvcommn.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pcf/pcf.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrcmap.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrdrivr.c
@@ -226,6 +209,10 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pshinter/pshinter.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/psnames/psnames.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/raster/raster.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftbsdf.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdf.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfrend.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfcommon.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sfnt/sfnt.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/smooth/smooth.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/truetype/truetype.c
@@ -287,10 +274,25 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
 )
 
-if(GTK2_FOUND)
+if (GTK2_FOUND)
    target_sources(CsGui
       PRIVATE
       ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-glib.cc
       ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-gobject-structs.cc
+   )
+endif()
+
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+   target_sources(CsGui
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftsystem.c
+   )
+else()
+   target_sources(CsGui
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/builds/unix/ftsystem.c
+   )
+   add_definitions(
+      -DHAVE_FCNTL_H
    )
 endif()

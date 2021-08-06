@@ -1,26 +1,26 @@
-/***************************************************************************/
-/*                                                                         */
-/*  svkern.h                                                               */
-/*                                                                         */
-/*    The FreeType Kerning service (specification).                        */
-/*                                                                         */
-/*  Copyright 2006 by                                                      */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * svkern.h
+ *
+ *   The FreeType Kerning service (specification).
+ *
+ * Copyright (C) 2006-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __SVKERN_H__
-#define __SVKERN_H__
+#ifndef SVKERN_H_
+#define SVKERN_H_
 
-#include FT_INTERNAL_SERVICE_H
-#include FT_TRUETYPE_TABLES_H
+#include <freetype/internal/ftserv.h>
+#include <freetype/tttables.h>
 
 
 FT_BEGIN_HEADER
@@ -45,7 +45,7 @@ FT_BEGIN_HEADER
 FT_END_HEADER
 
 
-#endif /* __SVKERN_H__ */
+#endif /* SVKERN_H_ */
 
 
 /* END */

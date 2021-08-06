@@ -1,57 +1,50 @@
-/***************************************************************************/
-/*                                                                         */
-/*  afcjk.c                                                                */
-/*                                                                         */
-/*    Auto-fitter hinting routines for CJK writing system (body).          */
-/*                                                                         */
-/*  Copyright 2006-2013 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * afcjk.c
+ *
+ *   Auto-fitter hinting routines for CJK writing system (body).
+ *
+ * Copyright (C) 2006-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
   /*
-   *  The algorithm is based on akito's autohint patch, available here:
+   * The algorithm is based on akito's autohint patch, archived at
    *
-   *  http://www.kde.gr.jp/~akito/patch/freetype2/
+   * https://web.archive.org/web/20051219160454/http://www.kde.gr.jp:80/~akito/patch/freetype2/2.1.7/
    *
    */
 
-#include <ft2build.h>
-#include FT_ADVANCES_H
-#include FT_INTERNAL_DEBUG_H
+#include <freetype/ftadvanc.h>
+#include <freetype/internal/ftdebug.h>
 
 #include "afglobal.h"
-#include "afpic.h"
 #include "aflatin.h"
+#include "afcjk.h"
 
 
 #ifdef AF_CONFIG_OPTION_CJK
 
 #undef AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT
 
-#include "afcjk.h"
 #include "aferrors.h"
 
 
-#ifdef AF_CONFIG_OPTION_USE_WARPER
-#include "afwarp.h"
-#endif
-
-
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_afcjk
+#define FT_COMPONENT  afcjk
 
 
   /*************************************************************************/
@@ -74,11 +67,11 @@
     AF_GlyphHintsRec  hints[1];
 
 
-    FT_TRACE5(( "\n"
-                "cjk standard widths computation (style `%s')\n"
-                "===================================================\n"
-                "\n",
+    FT_TRACE5(( "\n" ));
+    FT_TRACE5(( "cjk standard widths computation (style `%s')\n",
                 af_style_names[metrics->root.style_class->style] ));
+    FT_TRACE5(( "===================================================\n" ));
+    FT_TRACE5(( "\n" ));
 
     af_glyph_hints_init( hints, face->memory );
 
@@ -88,58 +81,79 @@
     {
       FT_Error          error;
       FT_ULong          glyph_index;
-      FT_Long           y_offset;
       int               dim;
       AF_CJKMetricsRec  dummy[1];
       AF_Scaler         scaler = &dummy->root.scaler;
 
-#ifdef FT_CONFIG_OPTION_PIC
-      AF_FaceGlobals  globals = metrics->root.globals;
+      AF_StyleClass   style_class  = metrics->root.style_class;
+      AF_ScriptClass  script_class = af_script_classes[style_class->script];
+
+      /* If HarfBuzz is not available, we need a pointer to a single */
+      /* unsigned long value.                                        */
+#ifdef FT_CONFIG_OPTION_USE_HARFBUZZ
+      void*     shaper_buf;
+#else
+      FT_ULong  shaper_buf_;
+      void*     shaper_buf = &shaper_buf_;
 #endif
 
-      AF_StyleClass   style_class  = metrics->root.style_class;
-      AF_ScriptClass  script_class = AF_SCRIPT_CLASSES_GET
-                                       [style_class->script];
+      const char*  p;
 
-      FT_UInt32  standard_char;
+#ifdef FT_DEBUG_LEVEL_TRACE
+      FT_ULong  ch = 0;
+#endif
 
+      p = script_class->standard_charstring;
 
-      standard_char = script_class->standard_char1;
-      af_get_char_index( &metrics->root,
-                         standard_char,
-                         &glyph_index,
-                         &y_offset );
-      if ( !glyph_index )
+#ifdef FT_CONFIG_OPTION_USE_HARFBUZZ
+      shaper_buf = af_shaper_buf_create( face );
+#endif
+
+      /* We check a list of standard characters.  The first match wins. */
+
+      glyph_index = 0;
+      while ( *p )
       {
-        if ( script_class->standard_char2 )
-        {
-          standard_char = script_class->standard_char2;
-          af_get_char_index( &metrics->root,
-                             standard_char,
-                             &glyph_index,
-                             &y_offset );
-          if ( !glyph_index )
-          {
-            if ( script_class->standard_char3 )
-            {
-              standard_char = script_class->standard_char3;
-              af_get_char_index( &metrics->root,
-                                 standard_char,
-                                 &glyph_index,
-                                 &y_offset );
-              if ( !glyph_index )
-                goto Exit;
-            }
-            else
-              goto Exit;
-          }
-        }
-        else
-          goto Exit;
+        unsigned int  num_idx;
+
+#ifdef FT_DEBUG_LEVEL_TRACE
+        const char*  p_old;
+#endif
+
+
+        while ( *p == ' ' )
+          p++;
+
+#ifdef FT_DEBUG_LEVEL_TRACE
+        p_old = p;
+        GET_UTF8_CHAR( ch, p_old );
+#endif
+
+        /* reject input that maps to more than a single glyph */
+        p = af_shaper_get_cluster( p, &metrics->root, shaper_buf, &num_idx );
+        if ( num_idx > 1 )
+          continue;
+
+        /* otherwise exit loop if we have a result */
+        glyph_index = af_shaper_get_elem( &metrics->root,
+                                          shaper_buf,
+                                          0,
+                                          NULL,
+                                          NULL );
+        if ( glyph_index )
+          break;
       }
 
-      FT_TRACE5(( "standard character: U+%04lX (glyph index %d)\n",
-                  standard_char, glyph_index ));
+      af_shaper_buf_destroy( face, shaper_buf );
+
+      if ( !glyph_index )
+        goto Exit;
+
+      if ( !glyph_index )
+        goto Exit;
+
+      FT_TRACE5(( "standard character: U+%04lX (glyph index %ld)\n",
+                  ch, glyph_index ));
 
       error = FT_Load_Glyph( face, glyph_index, FT_LOAD_NO_SCALE );
       if ( error || face->glyph->outline.n_points <= 0 )
@@ -177,7 +191,15 @@
         if ( error )
           goto Exit;
 
+        /*
+         * We assume that the glyphs selected for the stem width
+         * computation are `featureless' enough so that the linking
+         * algorithm works fine without adjustments of its scoring
+         * function.
+         */
         af_latin_hints_link_segments( hints,
+                                      0,
+                                      NULL,
                                       (AF_Dimension)dim );
 
         seg   = axhints->segments;
@@ -233,9 +255,9 @@
                       dim == AF_DIMENSION_VERT ? "horizontal"
                                                : "vertical" ));
 
-          FT_TRACE5(( "  %d (standard)", axis->standard_width ));
+          FT_TRACE5(( "  %ld (standard)", axis->standard_width ));
           for ( i = 1; i < axis->width_count; i++ )
-            FT_TRACE5(( " %d", axis->widths[i].org ));
+            FT_TRACE5(( " %ld", axis->widths[i].org ));
 
           FT_TRACE5(( "\n" ));
         }
@@ -258,8 +280,10 @@
     FT_Pos      fills[AF_BLUE_STRING_MAX_LEN];
     FT_Pos      flats[AF_BLUE_STRING_MAX_LEN];
 
-    FT_Int      num_fills;
-    FT_Int      num_flats;
+    FT_UInt     num_fills;
+    FT_UInt     num_flats;
+
+    FT_Bool     fill;
 
     AF_CJKBlue  blue;
     FT_Error    error;
@@ -271,20 +295,13 @@
     AF_Blue_Stringset         bss = sc->blue_stringset;
     const AF_Blue_StringRec*  bs  = &af_blue_stringsets[bss];
 
-#ifdef FT_DEBUG_LEVEL_TRACE
-    FT_String*  cjk_blue_name[4] =
-    {
-      (FT_String*)"bottom",    /* --   , --  */
-      (FT_String*)"top",       /* --   , TOP */
-      (FT_String*)"left",      /* HORIZ, --  */
-      (FT_String*)"right"      /* HORIZ, TOP */
-    };
-
-    FT_String*  cjk_blue_type_name[2] =
-    {
-      (FT_String*)"unfilled",  /* --   */
-      (FT_String*)"filled"     /* FILL */
-    };
+    /* If HarfBuzz is not available, we need a pointer to a single */
+    /* unsigned long value.                                        */
+#ifdef FT_CONFIG_OPTION_USE_HARFBUZZ
+    void*     shaper_buf;
+#else
+    FT_ULong  shaper_buf_;
+    void*     shaper_buf = &shaper_buf_;
 #endif
 
 
@@ -292,9 +309,13 @@
     /* style's entry in the `af_blue_stringset' array, computing its */
     /* extremum points (depending on the string properties)          */
 
-    FT_TRACE5(( "cjk blue zones computation\n"
-                "==========================\n"
-                "\n" ));
+    FT_TRACE5(( "cjk blue zones computation\n" ));
+    FT_TRACE5(( "==========================\n" ));
+    FT_TRACE5(( "\n" ));
+
+#ifdef FT_CONFIG_OPTION_USE_HARFBUZZ
+    shaper_buf = af_shaper_buf_create( face );
+#endif
 
     for ( ; bs->string != AF_BLUE_STRING_MAX; bs++ )
     {
@@ -308,30 +329,73 @@
       else
         axis = &metrics->axis[AF_DIMENSION_VERT];
 
-      FT_TRACE5(( "blue zone %d:\n", axis->blue_count ));
+#ifdef FT_DEBUG_LEVEL_TRACE
+      {
+        FT_String*  cjk_blue_name[4] =
+        {
+          (FT_String*)"bottom",    /* --   , --  */
+          (FT_String*)"top",       /* --   , TOP */
+          (FT_String*)"left",      /* HORIZ, --  */
+          (FT_String*)"right"      /* HORIZ, TOP */
+        };
+
+
+        FT_TRACE5(( "blue zone %d (%s):\n",
+                    axis->blue_count,
+                    cjk_blue_name[AF_CJK_IS_HORIZ_BLUE( bs ) |
+                                  AF_CJK_IS_TOP_BLUE( bs )   ] ));
+      }
+#endif /* FT_DEBUG_LEVEL_TRACE */
 
       num_fills = 0;
       num_flats = 0;
 
-      FT_TRACE5(( "  cjk blue %s/%s\n",
-                  cjk_blue_name[AF_CJK_IS_HORIZ_BLUE( bs ) |
-                                AF_CJK_IS_TOP_BLUE( bs )   ],
-                  cjk_blue_type_name[!!AF_CJK_IS_FILLED_BLUE( bs )] ));
+      fill = 1;  /* start with characters that define fill values */
+      FT_TRACE5(( "  [overshoot values]\n" ));
 
       while ( *p )
       {
-        FT_ULong    ch;
         FT_ULong    glyph_index;
-        FT_Long     y_offset;
         FT_Pos      best_pos;       /* same as points.y or points.x, resp. */
         FT_Int      best_point;
         FT_Vector*  points;
 
+        unsigned int  num_idx;
 
-        GET_UTF8_CHAR( ch, p );
+#ifdef FT_DEBUG_LEVEL_TRACE
+        const char*  p_old;
+        FT_ULong     ch;
+#endif
+
+
+        while ( *p == ' ' )
+          p++;
+
+#ifdef FT_DEBUG_LEVEL_TRACE
+        p_old = p;
+        GET_UTF8_CHAR( ch, p_old );
+#endif
+
+        /* switch to characters that define flat values */
+        if ( *p == '|' )
+        {
+          fill = 0;
+          FT_TRACE5(( "  [reference values]\n" ));
+          p++;
+          continue;
+        }
+
+        /* reject input that maps to more than a single glyph */
+        p = af_shaper_get_cluster( p, &metrics->root, shaper_buf, &num_idx );
+        if ( num_idx > 1 )
+          continue;
 
         /* load the character in the face -- skip unknown or empty ones */
-        af_get_char_index( &metrics->root, ch, &glyph_index, &y_offset );
+        glyph_index = af_shaper_get_elem( &metrics->root,
+                                          shaper_buf,
+                                          0,
+                                          NULL,
+                                          NULL );
         if ( glyph_index == 0 )
         {
           FT_TRACE5(( "  U+%04lX unavailable\n", ch ));
@@ -340,9 +404,9 @@
 
         error   = FT_Load_Glyph( face, glyph_index, FT_LOAD_NO_SCALE );
         outline = face->glyph->outline;
-        if ( error || outline.n_points <= 0 )
+        if ( error || outline.n_points <= 2 )
         {
-          FT_TRACE5(( "  U+%04lX contains no outlines\n", ch ));
+          FT_TRACE5(( "  U+%04lX contains no (usable) outlines\n", ch ));
           continue;
         }
 
@@ -417,27 +481,28 @@
           FT_TRACE5(( "  U+%04lX: best_pos = %5ld\n", ch, best_pos ));
         }
 
-        if ( AF_CJK_IS_FILLED_BLUE( bs ) )
+        if ( fill )
           fills[num_fills++] = best_pos;
         else
           flats[num_flats++] = best_pos;
-      }
+
+      } /* end while loop */
 
       if ( num_flats == 0 && num_fills == 0 )
       {
         /*
-         *  we couldn't find a single glyph to compute this blue zone,
-         *  we will simply ignore it then
+         * we couldn't find a single glyph to compute this blue zone,
+         * we will simply ignore it then
          */
-        FT_TRACE5(( "    empty\n" ));
+        FT_TRACE5(( "  empty\n" ));
         continue;
       }
 
-      /* we have computed the contents of the `fill' and `flats' tables, */
-      /* now determine the reference position of the blue zone --        */
-      /* we simply take the median value after a simple sort             */
-      af_sort_pos( num_flats, flats );
+      /* we have computed the contents of the `fill' and `flats' tables,   */
+      /* now determine the reference and overshoot position of the blue -- */
+      /* we simply take the median value after a simple sort               */
       af_sort_pos( num_fills, fills );
+      af_sort_pos( num_flats, flats );
 
       blue       = &axis->blues[axis->blue_count];
       blue_ref   = &blue->ref.org;
@@ -476,7 +541,7 @@
           *blue_ref   =
           *blue_shoot = ( shoot + ref ) / 2;
 
-          FT_TRACE5(( "  [overshoot smaller than reference,"
+          FT_TRACE5(( "  [reference smaller than overshoot,"
                       " taking mean value]\n" ));
         }
       }
@@ -485,10 +550,12 @@
       if ( AF_CJK_IS_TOP_BLUE( bs ) )
         blue->flags |= AF_CJK_BLUE_TOP;
 
-      FT_TRACE5(( "    -> reference = %ld\n"
-                  "       overshoot = %ld\n",
-                  *blue_ref, *blue_shoot ));
-    }
+      FT_TRACE5(( "    -> reference = %ld\n", *blue_ref ));
+      FT_TRACE5(( "       overshoot = %ld\n", *blue_shoot ));
+
+    } /* end for loop */
+
+    af_shaper_buf_destroy( face, shaper_buf );
 
     FT_TRACE5(( "\n" ));
 
@@ -502,27 +569,46 @@
   af_cjk_metrics_check_digits( AF_CJKMetrics  metrics,
                                FT_Face        face )
   {
-    FT_UInt   i;
     FT_Bool   started = 0, same_width = 1;
-    FT_Fixed  advance, old_advance = 0;
+    FT_Fixed  advance = 0, old_advance = 0;
+
+    /* If HarfBuzz is not available, we need a pointer to a single */
+    /* unsigned long value.                                        */
+#ifdef FT_CONFIG_OPTION_USE_HARFBUZZ
+    void*     shaper_buf;
+#else
+    FT_ULong  shaper_buf_;
+    void*     shaper_buf = &shaper_buf_;
+#endif
+
+    /* in all supported charmaps, digits have character codes 0x30-0x39 */
+    const char   digits[] = "0 1 2 3 4 5 6 7 8 9";
+    const char*  p;
 
 
-    /* digit `0' is 0x30 in all supported charmaps */
-    for ( i = 0x30; i <= 0x39; i++ )
+    p = digits;
+
+#ifdef FT_CONFIG_OPTION_USE_HARFBUZZ
+    shaper_buf = af_shaper_buf_create( face );
+#endif
+
+    while ( *p )
     {
-      FT_ULong  glyph_index;
-      FT_Long   y_offset;
+      FT_ULong      glyph_index;
+      unsigned int  num_idx;
 
 
-      af_get_char_index( &metrics->root, i, &glyph_index, &y_offset );
-      if ( glyph_index == 0 )
+      /* reject input that maps to more than a single glyph */
+      p = af_shaper_get_cluster( p, &metrics->root, shaper_buf, &num_idx );
+      if ( num_idx > 1 )
         continue;
 
-      if ( FT_Get_Advance( face, glyph_index,
-                           FT_LOAD_NO_SCALE         |
-                           FT_LOAD_NO_HINTING       |
-                           FT_LOAD_IGNORE_TRANSFORM,
-                           &advance ) )
+      glyph_index = af_shaper_get_elem( &metrics->root,
+                                        shaper_buf,
+                                        0,
+                                        &advance,
+                                        NULL );
+      if ( !glyph_index )
         continue;
 
       if ( started )
@@ -539,6 +625,8 @@
         started     = 1;
       }
     }
+
+    af_shaper_buf_destroy( face, shaper_buf );
 
     metrics->root.digits_have_same_width = same_width;
   }
@@ -633,7 +721,7 @@
 
         delta2 = FT_MulFix( delta2, scale );
 
-        FT_TRACE5(( "delta: %d", delta1 ));
+        FT_TRACE5(( "delta: %ld", delta1 ));
         if ( delta2 < 32 )
           delta2 = 0;
 #if 0
@@ -642,19 +730,19 @@
 #endif
         else
           delta2 = FT_PIX_ROUND( delta2 );
-        FT_TRACE5(( "/%d\n", delta2 ));
+        FT_TRACE5(( "/%ld\n", delta2 ));
 
         if ( delta1 < 0 )
           delta2 = -delta2;
 
         blue->shoot.fit = blue->ref.fit - delta2;
 
-        FT_TRACE5(( ">> active cjk blue zone %c%d[%ld/%ld]:\n"
-                    "     ref:   cur=%.2f fit=%.2f\n"
-                    "     shoot: cur=%.2f fit=%.2f\n",
+        FT_TRACE5(( ">> active cjk blue zone %c%d[%ld/%ld]:\n",
                     ( dim == AF_DIMENSION_HORZ ) ? 'H' : 'V',
-                    nn, blue->ref.org, blue->shoot.org,
-                    blue->ref.cur / 64.0, blue->ref.fit / 64.0,
+                    nn, blue->ref.org, blue->shoot.org ));
+        FT_TRACE5(( "     ref:   cur=%.2f fit=%.2f\n",
+                    blue->ref.cur / 64.0, blue->ref.fit / 64.0 ));
+        FT_TRACE5(( "     shoot: cur=%.2f fit=%.2f\n",
                     blue->shoot.cur / 64.0, blue->shoot.fit / 64.0 ));
 
         blue->flags |= AF_CJK_BLUE_ACTIVE;
@@ -678,6 +766,22 @@
   }
 
 
+  /* Extract standard_width from writing system/script specific */
+  /* metrics class.                                             */
+
+  FT_LOCAL_DEF( void )
+  af_cjk_get_standard_widths( AF_CJKMetrics  metrics,
+                              FT_Pos*        stdHW,
+                              FT_Pos*        stdVW )
+  {
+    if ( stdHW )
+      *stdHW = metrics->axis[AF_DIMENSION_VERT].standard_width;
+
+    if ( stdVW )
+      *stdVW = metrics->axis[AF_DIMENSION_HORZ].standard_width;
+  }
+
+
   /*************************************************************************/
   /*************************************************************************/
   /*****                                                               *****/
@@ -695,7 +799,7 @@
   {
     AF_AxisHints  axis          = &hints->axis[dim];
     AF_Segment    segments      = axis->segments;
-    AF_Segment    segment_limit = segments + axis->num_segments;
+    AF_Segment    segment_limit = FT_OFFSET( segments, axis->num_segments );
     FT_Error      error;
     AF_Segment    seg;
 
@@ -710,8 +814,8 @@
     {
       AF_Point  pt   = seg->first;
       AF_Point  last = seg->last;
-      AF_Flags  f0   = (AF_Flags)( pt->flags & AF_FLAG_CONTROL );
-      AF_Flags  f1;
+      FT_UInt   f0   = pt->flags & AF_FLAG_CONTROL;
+      FT_UInt   f1;
 
 
       seg->flags &= ~AF_EDGE_ROUND;
@@ -719,7 +823,7 @@
       for ( ; pt != last; f0 = f1 )
       {
         pt = pt->next;
-        f1 = (AF_Flags)( pt->flags & AF_FLAG_CONTROL );
+        f1 = pt->flags & AF_FLAG_CONTROL;
 
         if ( !f0 && !f1 )
           break;
@@ -755,10 +859,6 @@
     /* now compare each segment to the others */
     for ( seg1 = segments; seg1 < segment_limit; seg1++ )
     {
-      /* the fake segments are for metrics hinting only */
-      if ( seg1->first == seg1->last )
-        continue;
-
       if ( seg1->dir != major_dir )
         continue;
 
@@ -807,11 +907,11 @@
     }
 
     /*
-     *  now compute the `serif' segments
+     * now compute the `serif' segments
      *
-     *  In Hanzi, some strokes are wider on one or both of the ends.
-     *  We either identify the stems on the ends as serifs or remove
-     *  the linkage, depending on the length of the stems.
+     * In Hanzi, some strokes are wider on one or both of the ends.
+     * We either identify the stems on the ends as serifs or remove
+     * the linkage, depending on the length of the stems.
      *
      */
 
@@ -857,19 +957,19 @@
 
               if ( link == seg2 )
               {
-                seg->link  = 0;
+                seg->link  = NULL;
                 seg->serif = link1;
               }
               else if ( link == link2 )
               {
-                seg->link  = 0;
+                seg->link  = NULL;
                 seg->serif = seg1;
               }
             }
           }
           else
           {
-            seg1->link = link1->link = 0;
+            seg1->link = link1->link = NULL;
 
             break;
           }
@@ -883,15 +983,12 @@
 
       if ( seg2 )
       {
-        seg2->num_linked++;
         if ( seg2->link != seg1 )
         {
-          seg1->link = 0;
+          seg1->link = NULL;
 
           if ( seg2->score < dist_threshold || seg1->score < seg2->score * 4 )
             seg1->serif = seg2->link;
-          else
-            seg2->num_linked--;
         }
       }
     }
@@ -920,21 +1017,21 @@
     scale = ( dim == AF_DIMENSION_HORZ ) ? hints->x_scale
                                          : hints->y_scale;
 
-    /*********************************************************************/
-    /*                                                                   */
-    /* We begin by generating a sorted table of edges for the current    */
-    /* direction.  To do so, we simply scan each segment and try to find */
-    /* an edge in our table that corresponds to its position.            */
-    /*                                                                   */
-    /* If no edge is found, we create and insert a new edge in the       */
-    /* sorted table.  Otherwise, we simply add the segment to the edge's */
-    /* list which is then processed in the second step to compute the    */
-    /* edge's properties.                                                */
-    /*                                                                   */
-    /* Note that the edges table is sorted along the segment/edge        */
-    /* position.                                                         */
-    /*                                                                   */
-    /*********************************************************************/
+    /**********************************************************************
+     *
+     * We begin by generating a sorted table of edges for the current
+     * direction.  To do so, we simply scan each segment and try to find
+     * an edge in our table that corresponds to its position.
+     *
+     * If no edge is found, we create and insert a new edge in the
+     * sorted table.  Otherwise, we simply add the segment to the edge's
+     * list which is then processed in the second step to compute the
+     * edge's properties.
+     *
+     * Note that the edges table is sorted along the segment/edge
+     * position.
+     *
+     */
 
     edge_distance_threshold = FT_MulFix( laxis->edge_distance_threshold,
                                          scale );
@@ -1008,7 +1105,7 @@
         /* insert a new edge in the list and */
         /* sort according to the position    */
         error = af_axis_hints_new_edge( axis, seg->pos,
-                                        (AF_Direction)seg->dir,
+                                        (AF_Direction)seg->dir, 0,
                                         memory, &edge );
         if ( error )
           goto Exit;
@@ -1018,10 +1115,11 @@
 
         edge->first    = seg;
         edge->last     = seg;
-        edge->fpos     = seg->pos;
-        edge->opos     = edge->pos = FT_MulFix( seg->pos, scale );
-        seg->edge_next = seg;
         edge->dir      = seg->dir;
+        edge->fpos     = seg->pos;
+        edge->opos     = FT_MulFix( seg->pos, scale );
+        edge->pos      = edge->opos;
+        seg->edge_next = seg;
       }
       else
       {
@@ -1033,17 +1131,17 @@
       }
     }
 
-    /******************************************************************/
-    /*                                                                */
-    /* Good, we now compute each edge's properties according to the   */
-    /* segments found on its position.  Basically, these are          */
-    /*                                                                */
-    /*  - the edge's main direction                                   */
-    /*  - stem edge, serif edge or both (which defaults to stem then) */
-    /*  - rounded edge, straight or both (which defaults to straight) */
-    /*  - link for edge                                               */
-    /*                                                                */
-    /******************************************************************/
+    /*******************************************************************
+     *
+     * Good, we now compute each edge's properties according to the
+     * segments found on its position.  Basically, these are
+     *
+     * - the edge's main direction
+     * - stem edge, serif edge or both (which defaults to stem then)
+     * - rounded edge, straight or both (which defaults to straight)
+     * - link for edge
+     *
+     */
 
     /* first of all, set the `edge' field in each segment -- this is */
     /* required in order to compute edge links                       */
@@ -1079,6 +1177,8 @@
 
 
         seg = edge->first;
+        if ( !seg )
+          goto Skip_Loop;
 
         do
         {
@@ -1093,7 +1193,7 @@
 
           /* check for links -- if seg->serif is set, then seg->link must */
           /* be ignored                                                   */
-          is_serif = (FT_Bool)( seg->serif && seg->serif->edge != edge );
+          is_serif = FT_BOOL( seg->serif && seg->serif->edge != edge );
 
           if ( seg->link || is_serif )
           {
@@ -1134,13 +1234,14 @@
               edge2->flags |= AF_EDGE_SERIF;
             }
             else
-              edge->link  = edge2;
+              edge->link = edge2;
           }
 
           seg = seg->edge_next;
 
         } while ( seg != edge->first );
 
+      Skip_Loop:
         /* set the round/straight flags */
         edge->flags = AF_EDGE_NORMAL;
 
@@ -1152,7 +1253,7 @@
         /*      Example: the `c' in cour.pfa at size 13     */
 
         if ( edge->serif && edge->link )
-          edge->serif = 0;
+          edge->serif = NULL;
       }
     }
 
@@ -1183,7 +1284,7 @@
 
   /* Compute all edges which lie within blue zones. */
 
-  FT_LOCAL_DEF( void )
+  static void
   af_cjk_hints_compute_blue_edges( AF_GlyphHints  hints,
                                    AF_CJKMetrics  metrics,
                                    AF_Dimension   dim )
@@ -1230,8 +1331,10 @@
         /* zone, check for left edges                                      */
         /*                                                                 */
         /* of course, that's for TrueType                                  */
-        is_top_right_blue = FT_BOOL( blue->flags & AF_CJK_BLUE_TOP );
-        is_major_dir      = FT_BOOL( edge->dir == axis->major_dir );
+        is_top_right_blue =
+          (FT_Byte)( ( blue->flags & AF_CJK_BLUE_TOP ) != 0 );
+        is_major_dir =
+          FT_BOOL( edge->dir == axis->major_dir );
 
         /* if it is a top zone, the edge must be against the major    */
         /* direction; if it is a bottom zone, it must be in the major */
@@ -1281,8 +1384,8 @@
     af_glyph_hints_rescale( hints, (AF_StyleMetrics)metrics );
 
     /*
-     *  correct x_scale and y_scale when needed, since they may have
-     *  been modified af_cjk_scale_dim above
+     * correct x_scale and y_scale when needed, since they may have
+     * been modified af_cjk_scale_dim above
      */
     hints->x_scale = metrics->axis[AF_DIMENSION_HORZ].scale;
     hints->x_delta = metrics->axis[AF_DIMENSION_HORZ].delta;
@@ -1292,32 +1395,27 @@
     /* compute flags depending on render mode, etc. */
     mode = metrics->root.scaler.render_mode;
 
-#ifdef AF_CONFIG_OPTION_USE_WARPER
-    if ( mode == FT_RENDER_MODE_LCD || mode == FT_RENDER_MODE_LCD_V )
-      metrics->root.scaler.render_mode = mode = FT_RENDER_MODE_NORMAL;
-#endif
-
     scaler_flags = hints->scaler_flags;
     other_flags  = 0;
 
     /*
-     *  We snap the width of vertical stems for the monochrome and
-     *  horizontal LCD rendering targets only.
+     * We snap the width of vertical stems for the monochrome and
+     * horizontal LCD rendering targets only.
      */
     if ( mode == FT_RENDER_MODE_MONO || mode == FT_RENDER_MODE_LCD )
       other_flags |= AF_LATIN_HINTS_HORZ_SNAP;
 
     /*
-     *  We snap the width of horizontal stems for the monochrome and
-     *  vertical LCD rendering targets only.
+     * We snap the width of horizontal stems for the monochrome and
+     * vertical LCD rendering targets only.
      */
     if ( mode == FT_RENDER_MODE_MONO || mode == FT_RENDER_MODE_LCD_V )
       other_flags |= AF_LATIN_HINTS_VERT_SNAP;
 
     /*
-     *  We adjust stems to full pixels only if we don't use the `light' mode.
+     * We adjust stems to full pixels unless in `light' or `lcd' mode.
      */
-    if ( mode != FT_RENDER_MODE_LIGHT )
+    if ( mode != FT_RENDER_MODE_LIGHT && mode != FT_RENDER_MODE_LCD )
       other_flags |= AF_LATIN_HINTS_STEM_ADJUST;
 
     if ( mode == FT_RENDER_MODE_MONO )
@@ -1345,13 +1443,13 @@
 
   static FT_Pos
   af_cjk_snap_width( AF_Width  widths,
-                     FT_Int    count,
+                     FT_UInt   count,
                      FT_Pos    width )
   {
-    int     n;
-    FT_Pos  best      = 64 + 32 + 2;
-    FT_Pos  reference = width;
-    FT_Pos  scaled;
+    FT_UInt  n;
+    FT_Pos   best      = 64 + 32 + 2;
+    FT_Pos   reference = width;
+    FT_Pos   scaled;
 
 
     for ( n = 0; n < count; n++ )
@@ -1396,8 +1494,8 @@
   af_cjk_compute_stem_width( AF_GlyphHints  hints,
                              AF_Dimension   dim,
                              FT_Pos         width,
-                             AF_Edge_Flags  base_flags,
-                             AF_Edge_Flags  stem_flags )
+                             FT_UInt        base_flags,
+                             FT_UInt        stem_flags )
   {
     AF_CJKMetrics  metrics  = (AF_CJKMetrics)hints->metrics;
     AF_CJKAxis     axis     = &metrics->axis[dim];
@@ -1436,7 +1534,7 @@
       }
 
       if ( dist < 54 )
-        dist += ( 54 - dist ) / 2 ;
+        dist += ( 54 - dist ) / 2;
       else if ( dist < 3 * 64 )
       {
         FT_Pos  delta;
@@ -1521,13 +1619,18 @@
   {
     FT_Pos  dist = stem_edge->opos - base_edge->opos;
 
-    FT_Pos  fitted_width = af_cjk_compute_stem_width(
-                             hints, dim, dist,
-                             (AF_Edge_Flags)base_edge->flags,
-                             (AF_Edge_Flags)stem_edge->flags );
+    FT_Pos  fitted_width = af_cjk_compute_stem_width( hints, dim, dist,
+                                                      base_edge->flags,
+                                                      stem_edge->flags );
 
 
     stem_edge->pos = base_edge->pos + fitted_width;
+
+    FT_TRACE5(( "  CJKLINK: edge %ld @%d (opos=%.2f) linked to %.2f,"
+                " dist was %.2f, now %.2f\n",
+                stem_edge - hints->axis[dim].edges, stem_edge->fpos,
+                stem_edge->opos / 64.0, stem_edge->pos / 64.0,
+                dist / 64.0, fitted_width / 64.0 ));
   }
 
 
@@ -1596,8 +1699,8 @@
 
     org_len    = edge2->opos - edge->opos;
     cur_len    = af_cjk_compute_stem_width( hints, dim, org_len,
-                                            (AF_Edge_Flags)edge->flags,
-                                            (AF_Edge_Flags)edge2->flags );
+                                            edge->flags,
+                                            edge2->flags );
 
     org_center = ( edge->opos + edge2->opos ) / 2 + anchor;
     cur_pos1   = org_center - cur_len / 2;
@@ -1698,7 +1801,7 @@
     AF_Edge       edge_limit = edges + axis->num_edges;
     FT_PtrDist    n_edges;
     AF_Edge       edge;
-    AF_Edge       anchor   = 0;
+    AF_Edge       anchor   = NULL;
     FT_Pos        delta    = 0;
     FT_Int        skipped  = 0;
     FT_Bool       has_last_stem = FALSE;
@@ -1745,7 +1848,7 @@
           continue;
 
 #ifdef FT_DEBUG_LEVEL_TRACE
-        FT_TRACE5(( "  CJKBLUE: edge %d @%d (opos=%.2f) snapped to %.2f,"
+        FT_TRACE5(( "  CJKBLUE: edge %ld @%d (opos=%.2f) snapped to %.2f,"
                     " was %.2f\n",
                     edge1 - edges, edge1->fpos, edge1->opos / 64.0,
                     blue->fit / 64.0, edge1->pos / 64.0 ));
@@ -1809,7 +1912,7 @@
       /* this should not happen, but it's better to be safe */
       if ( edge2->blue_edge )
       {
-        FT_TRACE5(( "ASSERTION FAILED for edge %d\n", edge2-edges ));
+        FT_TRACE5(( "ASSERTION FAILED for edge %ld\n", edge2-edges ));
 
         af_cjk_align_linked_edge( hints, dim, edge2, edge );
         edge->flags |= AF_EDGE_DONE;
@@ -2000,8 +2103,8 @@
       goto Exit;
 
     /*
-     *  now hint the remaining edges (serifs and single) in order
-     *  to complete our processing
+     * now hint the remaining edges (serifs and single) in order
+     * to complete our processing
      */
     for ( edge = edges; edge < edge_limit; edge++ )
     {
@@ -2161,7 +2264,8 @@
   /* Apply the complete hinting algorithm to a CJK glyph. */
 
   FT_LOCAL_DEF( FT_Error )
-  af_cjk_hints_apply( AF_GlyphHints  hints,
+  af_cjk_hints_apply( FT_UInt        glyph_index,
+                      AF_GlyphHints  hints,
                       FT_Outline*    outline,
                       AF_CJKMetrics  metrics )
   {
@@ -2169,6 +2273,7 @@
     int       dim;
 
     FT_UNUSED( metrics );
+    FT_UNUSED( glyph_index );
 
 
     error = af_glyph_hints_reload( hints, outline );
@@ -2200,36 +2305,12 @@
       if ( ( dim == AF_DIMENSION_HORZ && AF_HINTS_DO_HORIZONTAL( hints ) ) ||
            ( dim == AF_DIMENSION_VERT && AF_HINTS_DO_VERTICAL( hints ) )   )
       {
-
-#ifdef AF_CONFIG_OPTION_USE_WARPER
-        if ( dim == AF_DIMENSION_HORZ                                  &&
-             metrics->root.scaler.render_mode == FT_RENDER_MODE_NORMAL )
-        {
-          AF_WarperRec  warper;
-          FT_Fixed      scale;
-          FT_Pos        delta;
-
-
-          af_warper_compute( &warper, hints, (AF_Dimension)dim,
-                             &scale, &delta );
-          af_glyph_hints_scale_dim( hints, (AF_Dimension)dim,
-                                    scale, delta );
-          continue;
-        }
-#endif /* AF_CONFIG_OPTION_USE_WARPER */
-
         af_cjk_hint_edges( hints, (AF_Dimension)dim );
         af_cjk_align_edge_points( hints, (AF_Dimension)dim );
         af_glyph_hints_align_strong_points( hints, (AF_Dimension)dim );
         af_glyph_hints_align_weak_points( hints, (AF_Dimension)dim );
       }
     }
-
-#if 0
-    af_glyph_hints_dump_points( hints );
-    af_glyph_hints_dump_segments( hints );
-    af_glyph_hints_dump_edges( hints );
-#endif
 
     af_glyph_hints_save( hints, outline );
 
@@ -2254,12 +2335,13 @@
 
     sizeof ( AF_CJKMetricsRec ),
 
-    (AF_WritingSystem_InitMetricsFunc) af_cjk_metrics_init,
-    (AF_WritingSystem_ScaleMetricsFunc)af_cjk_metrics_scale,
-    (AF_WritingSystem_DoneMetricsFunc) NULL,
+    (AF_WritingSystem_InitMetricsFunc) af_cjk_metrics_init,        /* style_metrics_init    */
+    (AF_WritingSystem_ScaleMetricsFunc)af_cjk_metrics_scale,       /* style_metrics_scale   */
+    (AF_WritingSystem_DoneMetricsFunc) NULL,                       /* style_metrics_done    */
+    (AF_WritingSystem_GetStdWidthsFunc)af_cjk_get_standard_widths, /* style_metrics_getstdw */
 
-    (AF_WritingSystem_InitHintsFunc)   af_cjk_hints_init,
-    (AF_WritingSystem_ApplyHintsFunc)  af_cjk_hints_apply
+    (AF_WritingSystem_InitHintsFunc)   af_cjk_hints_init,          /* style_hints_init      */
+    (AF_WritingSystem_ApplyHintsFunc)  af_cjk_hints_apply          /* style_hints_apply     */
   )
 
 
@@ -2273,12 +2355,13 @@
 
     sizeof ( AF_CJKMetricsRec ),
 
-    (AF_WritingSystem_InitMetricsFunc) NULL,
-    (AF_WritingSystem_ScaleMetricsFunc)NULL,
-    (AF_WritingSystem_DoneMetricsFunc) NULL,
+    (AF_WritingSystem_InitMetricsFunc) NULL, /* style_metrics_init    */
+    (AF_WritingSystem_ScaleMetricsFunc)NULL, /* style_metrics_scale   */
+    (AF_WritingSystem_DoneMetricsFunc) NULL, /* style_metrics_done    */
+    (AF_WritingSystem_GetStdWidthsFunc)NULL, /* style_metrics_getstdw */
 
-    (AF_WritingSystem_InitHintsFunc)   NULL,
-    (AF_WritingSystem_ApplyHintsFunc)  NULL
+    (AF_WritingSystem_InitHintsFunc)   NULL, /* style_hints_init      */
+    (AF_WritingSystem_ApplyHintsFunc)  NULL  /* style_hints_apply     */
   )
 
 

@@ -1,43 +1,42 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftcimage.h                                                             */
-/*                                                                         */
-/*    FreeType Generic Image cache (specification)                         */
-/*                                                                         */
-/*  Copyright 2000-2001, 2002, 2003, 2006 by                               */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftcimage.h
+ *
+ *   FreeType Generic Image cache (specification)
+ *
+ * Copyright (C) 2000-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
  /*
-  *  FTC_ICache is an _abstract_ cache used to store a single FT_Glyph
-  *  image per cache node.
+  * FTC_ICache is an _abstract_ cache used to store a single FT_Glyph
+  * image per cache node.
   *
-  *  FTC_ICache extends FTC_GCache.  For an implementation example,
-  *  see FTC_ImageCache in `src/cache/ftbasic.c'.
+  * FTC_ICache extends FTC_GCache.  For an implementation example,
+  * see FTC_ImageCache in `src/cache/ftbasic.c'.
   */
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* Each image cache really manages FT_Glyph objects.                     */
-  /*                                                                       */
-  /*************************************************************************/
+  /**************************************************************************
+   *
+   * Each image cache really manages FT_Glyph objects.
+   *
+   */
 
 
-#ifndef __FTCIMAGE_H__
-#define __FTCIMAGE_H__
+#ifndef FTCIMAGE_H_
+#define FTCIMAGE_H_
 
 
-#include <ft2build.h>
-#include FT_CACHE_H
+#include <freetype/ftcache.h>
 #include "ftcglyph.h"
 
 FT_BEGIN_HEADER
@@ -72,8 +71,8 @@ FT_BEGIN_HEADER
 
 #define FTC_IFAMILY_CLASS( x )  ((FTC_IFamilyClass)(x))
 
-#define FTC_CACHE__IFAMILY_CLASS( x ) \
-          FTC_IFAMILY_CLASS( FTC_CACHE__GCACHE_CLASS(x)->family_class )
+#define FTC_CACHE_IFAMILY_CLASS( x ) \
+          FTC_IFAMILY_CLASS( FTC_CACHE_GCACHE_CLASS(x)->family_class )
 
 
   /* can be used as a @FTC_Node_FreeFunc */
@@ -101,7 +100,7 @@ FT_BEGIN_HEADER
 
 FT_END_HEADER
 
-#endif /* __FTCIMAGE_H__ */
+#endif /* FTCIMAGE_H_ */
 
 
 /* END */

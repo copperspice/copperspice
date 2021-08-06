@@ -1,27 +1,26 @@
-/***************************************************************************/
-/*                                                                         */
-/*  cidload.h                                                              */
-/*                                                                         */
-/*    CID-keyed Type1 font loader (specification).                         */
-/*                                                                         */
-/*  Copyright 1996-2001, 2002, 2003, 2004 by                               */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * cidload.h
+ *
+ *   CID-keyed Type1 font loader (specification).
+ *
+ * Copyright (C) 1996-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __CIDLOAD_H__
-#define __CIDLOAD_H__
+#ifndef CIDLOAD_H_
+#define CIDLOAD_H_
 
 
-#include <ft2build.h>
-#include FT_INTERNAL_STREAM_H
+#include <freetype/internal/ftstream.h>
 #include "cidparse.h"
 
 
@@ -36,7 +35,7 @@ FT_BEGIN_HEADER
   } CID_Loader;
 
 
-  FT_LOCAL( FT_Long )
+  FT_LOCAL( FT_ULong )
   cid_get_offset( FT_Byte**  start,
                   FT_Byte    offsize );
 
@@ -47,7 +46,7 @@ FT_BEGIN_HEADER
 
 FT_END_HEADER
 
-#endif /* __CIDLOAD_H__ */
+#endif /* CIDLOAD_H_ */
 
 
 /* END */

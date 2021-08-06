@@ -1,32 +1,32 @@
-/***************************************************************************/
-/*                                                                         */
-/*  t42objs.h                                                              */
-/*                                                                         */
-/*    Type 42 objects manager (specification).                             */
-/*                                                                         */
-/*  Copyright 2002, 2003, 2006, 2007, 2011 by Roberto Alameda.             */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * t42objs.h
+ *
+ *   Type 42 objects manager (specification).
+ *
+ * Copyright (C) 2002-2021 by
+ * Roberto Alameda.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __T42OBJS_H__
-#define __T42OBJS_H__
+#ifndef T42OBJS_H_
+#define T42OBJS_H_
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_TYPE1_TABLES_H
-#include FT_INTERNAL_TYPE1_TYPES_H
+#include <freetype/freetype.h>
+#include <freetype/t1tables.h>
+#include <freetype/internal/t1types.h>
 #include "t42types.h"
-#include FT_INTERNAL_OBJECTS_H
-#include FT_INTERNAL_DRIVER_H
-#include FT_SERVICE_POSTSCRIPT_CMAPS_H
-#include FT_INTERNAL_POSTSCRIPT_HINTS_H
+#include <freetype/internal/ftobjs.h>
+#include <freetype/internal/ftdrv.h>
+#include <freetype/internal/services/svpscmap.h>
+#include <freetype/internal/pshints.h>
 
 
 FT_BEGIN_HEADER
@@ -55,7 +55,6 @@ FT_BEGIN_HEADER
   {
     FT_DriverRec     root;
     FT_Driver_Class  ttclazz;
-    void*            extension_component;
 
   } T42_DriverRec, *T42_Driver;
 
@@ -118,7 +117,7 @@ FT_BEGIN_HEADER
 FT_END_HEADER
 
 
-#endif /* __T42OBJS_H__ */
+#endif /* T42OBJS_H_ */
 
 
 /* END */

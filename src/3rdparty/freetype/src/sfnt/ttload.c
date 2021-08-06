@@ -1,57 +1,58 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ttload.c                                                               */
-/*                                                                         */
-/*    Load the basic TrueType tables, i.e., tables that can be either in   */
-/*    TTF or OTF fonts (body).                                             */
-/*                                                                         */
-/*  Copyright 1996-2010, 2012, 2013 by                                     */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ttload.c
+ *
+ *   Load the basic TrueType tables, i.e., tables that can be either in
+ *   TTF or OTF fonts (body).
+ *
+ * Copyright (C) 1996-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#include <ft2build.h>
-#include FT_INTERNAL_DEBUG_H
-#include FT_INTERNAL_STREAM_H
-#include FT_TRUETYPE_TAGS_H
+#include <freetype/internal/ftdebug.h>
+#include <freetype/internal/ftstream.h>
+#include <freetype/tttags.h>
 #include "ttload.h"
 
 #include "sferrors.h"
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_ttload
+#define FT_COMPONENT  ttload
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_lookup_table                                               */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Looks for a TrueType table by name.                                */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face :: A face object handle.                                      */
-  /*                                                                       */
-  /*    tag  :: The searched tag.                                          */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    A pointer to the table directory entry.  0 if not found.           */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_lookup_table
+   *
+   * @Description:
+   *   Looks for a TrueType table by name.
+   *
+   * @Input:
+   *   face ::
+   *     A face object handle.
+   *
+   *   tag ::
+   *     The searched tag.
+   *
+   * @Return:
+   *   A pointer to the table directory entry.  0 if not found.
+   */
   FT_LOCAL_DEF( TT_Table  )
   tt_face_lookup_table( TT_Face   face,
                         FT_ULong  tag  )
@@ -63,8 +64,8 @@
 #endif
 
 
-    FT_TRACE4(( "tt_face_lookup_table: %08p, `%c%c%c%c' -- ",
-                face,
+    FT_TRACE4(( "tt_face_lookup_table: %p, `%c%c%c%c' -- ",
+                (void *)face,
                 (FT_Char)( tag >> 24 ),
                 (FT_Char)( tag >> 16 ),
                 (FT_Char)( tag >> 8  ),
@@ -101,27 +102,31 @@
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_goto_table                                                 */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Looks for a TrueType table by name, then seek a stream to it.      */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A face object handle.                                    */
-  /*                                                                       */
-  /*    tag    :: The searched tag.                                        */
-  /*                                                                       */
-  /*    stream :: The stream to seek when the table is found.              */
-  /*                                                                       */
-  /* <Output>                                                              */
-  /*    length :: The length of the table if found, undefined otherwise.   */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_goto_table
+   *
+   * @Description:
+   *   Looks for a TrueType table by name, then seek a stream to it.
+   *
+   * @Input:
+   *   face ::
+   *     A face object handle.
+   *
+   *   tag ::
+   *     The searched tag.
+   *
+   *   stream ::
+   *     The stream to seek when the table is found.
+   *
+   * @Output:
+   *   length ::
+   *     The length of the table if found, undefined otherwise.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_goto_table( TT_Face    face,
                       FT_ULong   tag,
@@ -151,7 +156,8 @@
 
   /* Here, we                                                         */
   /*                                                                  */
-  /* - check that `num_tables' is valid (and adjust it if necessary)  */
+  /* - check that `num_tables' is valid (and adjust it if necessary); */
+  /*   also return the number of valid table entries                  */
   /*                                                                  */
   /* - look for a `head' table, check its size, and parse it to check */
   /*   whether its `magic' field is correctly set                     */
@@ -167,7 +173,8 @@
   /*                                                                  */
   static FT_Error
   check_table_dir( SFNT_Header  sfnt,
-                   FT_Stream    stream )
+                   FT_Stream    stream,
+                   FT_UShort*   valid )
   {
     FT_Error   error;
     FT_UShort  nn, valid_entries = 0;
@@ -207,10 +214,27 @@
       }
 
       /* we ignore invalid tables */
-      if ( table.Offset + table.Length > stream->size )
+
+      if ( table.Offset > stream->size )
       {
         FT_TRACE2(( "check_table_dir: table entry %d invalid\n", nn ));
         continue;
+      }
+      else if ( table.Length > stream->size - table.Offset )
+      {
+        /* Some tables have such a simple structure that clipping its     */
+        /* contents is harmless.  This also makes FreeType less sensitive */
+        /* to invalid table lengths (which programs like Acroread seem to */
+        /* ignore in general).                                            */
+
+        if ( table.Tag == TTAG_hmtx ||
+             table.Tag == TTAG_vmtx )
+          valid_entries++;
+        else
+        {
+          FT_TRACE2(( "check_table_dir: table entry %d invalid\n", nn ));
+          continue;
+        }
       }
       else
         valid_entries++;
@@ -259,11 +283,11 @@
         has_meta = 1;
     }
 
-    sfnt->num_tables = valid_entries;
+    *valid = valid_entries;
 
-    if ( sfnt->num_tables == 0 )
+    if ( !valid_entries )
     {
-      FT_TRACE2(( "check_table_dir: no tables found\n" ));
+      FT_TRACE2(( "check_table_dir: no valid tables found\n" ));
       error = FT_THROW( Unknown_File_Format );
       goto Exit;
     }
@@ -290,28 +314,31 @@
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_font_dir                                              */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the header of a SFNT font file.                              */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face       :: A handle to the target face object.                  */
-  /*                                                                       */
-  /*    stream     :: The input stream.                                    */
-  /*                                                                       */
-  /* <Output>                                                              */
-  /*    sfnt       :: The SFNT header.                                     */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
-  /* <Note>                                                                */
-  /*    The stream cursor must be at the beginning of the font directory.  */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_font_dir
+   *
+   * @Description:
+   *   Loads the header of a SFNT font file.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     The input stream.
+   *
+   * @Output:
+   *   sfnt ::
+   *     The SFNT header.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   *
+   * @Note:
+   *   The stream cursor must be at the beginning of the font directory.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_font_dir( TT_Face    face,
                          FT_Stream  stream )
@@ -319,8 +346,7 @@
     SFNT_HeaderRec  sfnt;
     FT_Error        error;
     FT_Memory       memory = stream->memory;
-    TT_TableRec*    entry;
-    FT_Int          nn;
+    FT_UShort       nn, valid_entries = 0;
 
     static const FT_Frame_Field  offset_table_fields[] =
     {
@@ -336,7 +362,7 @@
     };
 
 
-    FT_TRACE2(( "tt_face_load_font_dir: %08p\n", face ));
+    FT_TRACE2(( "tt_face_load_font_dir: %p\n", (void *)face ));
 
     /* read the offset table */
 
@@ -361,105 +387,177 @@
     if ( sfnt.format_tag != TTAG_OTTO )
     {
       /* check first */
-      error = check_table_dir( &sfnt, stream );
+      error = check_table_dir( &sfnt, stream, &valid_entries );
       if ( error )
       {
         FT_TRACE2(( "tt_face_load_font_dir:"
                     " invalid table directory for TrueType\n" ));
-
+        goto Exit;
+      }
+    }
+    else
+    {
+      valid_entries = sfnt.num_tables;
+      if ( !valid_entries )
+      {
+        FT_TRACE2(( "tt_face_load_font_dir: no valid tables found\n" ));
+        error = FT_THROW( Unknown_File_Format );
         goto Exit;
       }
     }
 
-    face->num_tables = sfnt.num_tables;
+    face->num_tables = valid_entries;
     face->format_tag = sfnt.format_tag;
 
     if ( FT_QNEW_ARRAY( face->dir_tables, face->num_tables ) )
       goto Exit;
 
-    if ( FT_STREAM_SEEK( sfnt.offset + 12 )       ||
-         FT_FRAME_ENTER( face->num_tables * 16L ) )
+    if ( FT_STREAM_SEEK( sfnt.offset + 12 )      ||
+         FT_FRAME_ENTER( sfnt.num_tables * 16L ) )
       goto Exit;
 
-    entry = face->dir_tables;
+    FT_TRACE2(( "\n" ));
+    FT_TRACE2(( "  tag    offset    length   checksum\n" ));
+    FT_TRACE2(( "  ----------------------------------\n" ));
 
-    FT_TRACE2(( "\n"
-                "  tag    offset    length   checksum\n"
-                "  ----------------------------------\n" ));
-
+    valid_entries = 0;
     for ( nn = 0; nn < sfnt.num_tables; nn++ )
     {
-      entry->Tag      = FT_GET_TAG4();
-      entry->CheckSum = FT_GET_ULONG();
-      entry->Offset   = FT_GET_ULONG();
-      entry->Length   = FT_GET_ULONG();
+      TT_TableRec  entry;
+      FT_UShort    i;
+      FT_Bool      duplicate;
 
-      /* ignore invalid tables */
-      if ( entry->Offset + entry->Length > stream->size )
+
+      entry.Tag      = FT_GET_TAG4();
+      entry.CheckSum = FT_GET_ULONG();
+      entry.Offset   = FT_GET_ULONG();
+      entry.Length   = FT_GET_ULONG();
+
+      /* ignore invalid tables that can't be sanitized */
+
+      if ( entry.Offset > stream->size )
         continue;
+      else if ( entry.Length > stream->size - entry.Offset )
+      {
+        if ( entry.Tag == TTAG_hmtx ||
+             entry.Tag == TTAG_vmtx )
+        {
+#ifdef FT_DEBUG_LEVEL_TRACE
+          FT_ULong  old_length = entry.Length;
+#endif
+
+
+          /* make metrics table length a multiple of 4 */
+          entry.Length = ( stream->size - entry.Offset ) & ~3U;
+
+          FT_TRACE2(( "  %c%c%c%c  %08lx  %08lx  %08lx"
+                      " (sanitized; original length %08lx)",
+                      (FT_Char)( entry.Tag >> 24 ),
+                      (FT_Char)( entry.Tag >> 16 ),
+                      (FT_Char)( entry.Tag >> 8  ),
+                      (FT_Char)( entry.Tag       ),
+                      entry.Offset,
+                      entry.Length,
+                      entry.CheckSum,
+                      old_length ));
+        }
+        else
+          continue;
+      }
+#ifdef FT_DEBUG_LEVEL_TRACE
+      else
+        FT_TRACE2(( "  %c%c%c%c  %08lx  %08lx  %08lx",
+                    (FT_Char)( entry.Tag >> 24 ),
+                    (FT_Char)( entry.Tag >> 16 ),
+                    (FT_Char)( entry.Tag >> 8  ),
+                    (FT_Char)( entry.Tag       ),
+                    entry.Offset,
+                    entry.Length,
+                    entry.CheckSum ));
+#endif
+
+      /* ignore duplicate tables – the first one wins */
+      duplicate = 0;
+      for ( i = 0; i < valid_entries; i++ )
+      {
+        if ( face->dir_tables[i].Tag == entry.Tag )
+        {
+          duplicate = 1;
+          break;
+        }
+      }
+      if ( duplicate )
+      {
+        FT_TRACE2(( "  (duplicate, ignored)\n" ));
+        continue;
+      }
       else
       {
-        FT_TRACE2(( "  %c%c%c%c  %08lx  %08lx  %08lx\n",
-                    (FT_Char)( entry->Tag >> 24 ),
-                    (FT_Char)( entry->Tag >> 16 ),
-                    (FT_Char)( entry->Tag >> 8  ),
-                    (FT_Char)( entry->Tag       ),
-                    entry->Offset,
-                    entry->Length,
-                    entry->CheckSum ));
-        entry++;
+        FT_TRACE2(( "\n" ));
+
+        /* we finally have a valid entry */
+        face->dir_tables[valid_entries++] = entry;
       }
     }
 
+    /* final adjustment to number of tables */
+    face->num_tables = valid_entries;
+
     FT_FRAME_EXIT();
 
-    FT_TRACE2(( "table directory loaded\n\n" ));
+    FT_TRACE2(( "table directory loaded\n" ));
+    FT_TRACE2(( "\n" ));
 
   Exit:
     return error;
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_any                                                   */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads any font table into client memory.                           */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: The face object to look for.                             */
-  /*                                                                       */
-  /*    tag    :: The tag of table to load.  Use the value 0 if you want   */
-  /*              to access the whole font file, else set this parameter   */
-  /*              to a valid TrueType table tag that you can forge with    */
-  /*              the MAKE_TT_TAG macro.                                   */
-  /*                                                                       */
-  /*    offset :: The starting offset in the table (or the file if         */
-  /*              tag == 0).                                               */
-  /*                                                                       */
-  /*    length :: The address of the decision variable:                    */
-  /*                                                                       */
-  /*                If length == NULL:                                     */
-  /*                  Loads the whole table.  Returns an error if          */
-  /*                  `offset' == 0!                                       */
-  /*                                                                       */
-  /*                If *length == 0:                                       */
-  /*                  Exits immediately; returning the length of the given */
-  /*                  table or of the font file, depending on the value of */
-  /*                  `tag'.                                               */
-  /*                                                                       */
-  /*                If *length != 0:                                       */
-  /*                  Loads the next `length' bytes of table or font,      */
-  /*                  starting at offset `offset' (in table or font too).  */
-  /*                                                                       */
-  /* <Output>                                                              */
-  /*    buffer :: The address of target buffer.                            */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_any
+   *
+   * @Description:
+   *   Loads any font table into client memory.
+   *
+   * @Input:
+   *   face ::
+   *     The face object to look for.
+   *
+   *   tag ::
+   *     The tag of table to load.  Use the value 0 if you want
+   *     to access the whole font file, else set this parameter
+   *     to a valid TrueType table tag that you can forge with
+   *     the MAKE_TT_TAG macro.
+   *
+   *   offset ::
+   *     The starting offset in the table (or the file if
+   *     tag == 0).
+   *
+   *   length ::
+   *     The address of the decision variable:
+   *
+   *     If length == NULL:
+   *       Loads the whole table.  Returns an error if
+   *       `offset' == 0!
+   *
+   *     If *length == 0:
+   *       Exits immediately; returning the length of the given
+   *       table or of the font file, depending on the value of
+   *       `tag'.
+   *
+   *     If *length != 0:
+   *       Loads the next `length' bytes of table or font,
+   *       starting at offset `offset' (in table or font too).
+   *
+   * @Output:
+   *   buffer ::
+   *     The address of target buffer.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_any( TT_Face    face,
                     FT_ULong   tag,
@@ -510,22 +608,24 @@
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_generic_header                                        */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the TrueType table `head' or `bhed'.                         */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A handle to the target face object.                      */
-  /*                                                                       */
-  /*    stream :: The input stream.                                        */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_generic_header
+   *
+   * @Description:
+   *   Loads the TrueType table `head' or `bhed'.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     The input stream.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   static FT_Error
   tt_face_load_generic_header( TT_Face    face,
                                FT_Stream  stream,
@@ -546,10 +646,10 @@
         FT_FRAME_LONG  ( Magic_Number ),
         FT_FRAME_USHORT( Flags ),
         FT_FRAME_USHORT( Units_Per_EM ),
-        FT_FRAME_LONG  ( Created[0] ),
-        FT_FRAME_LONG  ( Created[1] ),
-        FT_FRAME_LONG  ( Modified[0] ),
-        FT_FRAME_LONG  ( Modified[1] ),
+        FT_FRAME_ULONG ( Created[0] ),
+        FT_FRAME_ULONG ( Created[1] ),
+        FT_FRAME_ULONG ( Modified[0] ),
+        FT_FRAME_ULONG ( Modified[1] ),
         FT_FRAME_SHORT ( xMin ),
         FT_FRAME_SHORT ( yMin ),
         FT_FRAME_SHORT ( xMax ),
@@ -600,22 +700,24 @@
 #endif /* TT_CONFIG_OPTION_EMBEDDED_BITMAPS */
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_max_profile                                           */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the maximum profile into a face object.                      */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A handle to the target face object.                      */
-  /*                                                                       */
-  /*    stream :: The input stream.                                        */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_maxp
+   *
+   * @Description:
+   *   Loads the maximum profile into a face object.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     The input stream.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_maxp( TT_Face    face,
                      FT_Stream  stream )
@@ -693,20 +795,11 @@
       if ( maxProfile->maxTwilightPoints > ( 0xFFFFU - 4 ) )
       {
         FT_TRACE0(( "tt_face_load_maxp:"
-                    " too much twilight points in `maxp' table;\n"
-                    "                  "
+                    " too much twilight points in `maxp' table;\n" ));
+        FT_TRACE0(( "                  "
                     " some glyphs might be rendered incorrectly\n" ));
 
         maxProfile->maxTwilightPoints = 0xFFFFU - 4;
-      }
-
-      /* we arbitrarily limit recursion to avoid stack exhaustion */
-      if ( maxProfile->maxComponentDepth > 100 )
-      {
-        FT_TRACE0(( "tt_face_load_maxp:"
-                    " abnormally large component depth (%d) set to 100\n",
-                    maxProfile->maxComponentDepth ));
-        maxProfile->maxComponentDepth = 100;
       }
     }
 
@@ -717,22 +810,24 @@
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_name                                                  */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the name records.                                            */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A handle to the target face object.                      */
-  /*                                                                       */
-  /*    stream :: The input stream.                                        */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_name
+   *
+   * @Description:
+   *   Loads the name records.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     The input stream.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_name( TT_Face    face,
                      FT_Stream  stream )
@@ -741,7 +836,6 @@
     FT_Memory     memory = stream->memory;
     FT_ULong      table_pos, table_len;
     FT_ULong      storage_start, storage_limit;
-    FT_UInt       count;
     TT_NameTable  table;
 
     static const FT_Frame_Field  name_table_fields[] =
@@ -759,13 +853,24 @@
     static const FT_Frame_Field  name_record_fields[] =
     {
 #undef  FT_STRUCTURE
-#define FT_STRUCTURE  TT_NameEntryRec
+#define FT_STRUCTURE  TT_NameRec
 
       /* no FT_FRAME_START */
         FT_FRAME_USHORT( platformID ),
         FT_FRAME_USHORT( encodingID ),
         FT_FRAME_USHORT( languageID ),
         FT_FRAME_USHORT( nameID ),
+        FT_FRAME_USHORT( stringLength ),
+        FT_FRAME_USHORT( stringOffset ),
+      FT_FRAME_END
+    };
+
+    static const FT_Frame_Field  langTag_record_fields[] =
+    {
+#undef  FT_STRUCTURE
+#define FT_STRUCTURE  TT_LangTagRec
+
+      /* no FT_FRAME_START */
         FT_FRAME_USHORT( stringLength ),
         FT_FRAME_USHORT( stringOffset ),
       FT_FRAME_END
@@ -781,18 +886,17 @@
 
     table_pos = FT_STREAM_POS();
 
-
     if ( FT_STREAM_READ_FIELDS( name_table_fields, table ) )
       goto Exit;
 
-    /* Some popular Asian fonts have an invalid `storageOffset' value   */
-    /* (it should be at least "6 + 12*num_names").  However, the string */
-    /* offsets, computed as "storageOffset + entry->stringOffset", are  */
-    /* valid pointers within the name table...                          */
-    /*                                                                  */
-    /* We thus can't check `storageOffset' right now.                   */
-    /*                                                                  */
-    storage_start = table_pos + 6 + 12*table->numNameRecords;
+    /* Some popular Asian fonts have an invalid `storageOffset' value (it */
+    /* should be at least `6 + 12*numNameRecords').  However, the string  */
+    /* offsets, computed as `storageOffset + entry->stringOffset', are    */
+    /* valid pointers within the name table...                            */
+    /*                                                                    */
+    /* We thus can't check `storageOffset' right now.                     */
+    /*                                                                    */
+    storage_start = table_pos + 6 + 12 * table->numNameRecords;
     storage_limit = table_pos + table_len;
 
     if ( storage_start > storage_limit )
@@ -802,18 +906,56 @@
       goto Exit;
     }
 
-    /* Allocate the array of name records. */
-    count                 = table->numNameRecords;
-    table->numNameRecords = 0;
+    /* `name' format 1 contains additional language tag records, */
+    /* which we load first                                       */
+    if ( table->format == 1 )
+    {
+      if ( FT_STREAM_SEEK( storage_start )            ||
+           FT_READ_USHORT( table->numLangTagRecords ) )
+        goto Exit;
 
-    if ( FT_NEW_ARRAY( table->names, count ) ||
-         FT_FRAME_ENTER( count * 12 )        )
+      storage_start += 2 + 4 * table->numLangTagRecords;
+
+      /* allocate language tag records array */
+      if ( FT_QNEW_ARRAY( table->langTags, table->numLangTagRecords ) ||
+           FT_FRAME_ENTER( table->numLangTagRecords * 4 )             )
+        goto Exit;
+
+      /* load language tags */
+      {
+        TT_LangTag  entry = table->langTags;
+        TT_LangTag  limit = FT_OFFSET( entry, table->numLangTagRecords );
+
+
+        for ( ; entry < limit; entry++ )
+        {
+          (void)FT_STREAM_READ_FIELDS( langTag_record_fields, entry );
+
+          /* check that the langTag string is within the table */
+          entry->stringOffset += table_pos + table->storageOffset;
+          if ( entry->stringOffset                       < storage_start ||
+               entry->stringOffset + entry->stringLength > storage_limit )
+          {
+            /* invalid entry; ignore it */
+            entry->stringLength = 0;
+          }
+        }
+      }
+
+      FT_FRAME_EXIT();
+
+      (void)FT_STREAM_SEEK( table_pos + 6 );
+    }
+
+    /* allocate name records array */
+    if ( FT_QNEW_ARRAY( table->names, table->numNameRecords ) ||
+         FT_FRAME_ENTER( table->numNameRecords * 12 )         )
       goto Exit;
 
-    /* Load the name records and determine how much storage is needed */
-    /* to hold the strings themselves.                                */
+    /* load name records */
     {
-      TT_NameEntryRec*  entry = table->names;
+      TT_Name  entry = table->names;
+      FT_UInt  count = table->numNameRecords;
 
 
       for ( ; count > 0; count-- )
@@ -830,83 +972,112 @@
         if ( entry->stringOffset                       < storage_start ||
              entry->stringOffset + entry->stringLength > storage_limit )
         {
-          /* invalid entry - ignore it */
-          entry->stringOffset = 0;
-          entry->stringLength = 0;
+          /* invalid entry; ignore it */
           continue;
+        }
+
+        /* assure that we have a valid language tag ID, and   */
+        /* that the corresponding langTag entry is valid, too */
+        if ( table->format == 1 && entry->languageID >= 0x8000U )
+        {
+          if ( entry->languageID - 0x8000U >= table->numLangTagRecords    ||
+               !table->langTags[entry->languageID - 0x8000U].stringLength )
+          {
+            /* invalid entry; ignore it */
+            continue;
+          }
         }
 
         entry++;
       }
 
-      table->numNameRecords = (FT_UInt)( entry - table->names );
+      /* reduce array size to the actually used elements */
+      count = (FT_UInt)( entry - table->names );
+      (void)FT_QRENEW_ARRAY( table->names,
+                             table->numNameRecords,
+                             count );
+      table->numNameRecords = count;
     }
 
     FT_FRAME_EXIT();
 
     /* everything went well, update face->num_names */
-    face->num_names = (FT_UShort) table->numNameRecords;
+    face->num_names = (FT_UShort)table->numNameRecords;
 
   Exit:
     return error;
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_free_names                                                 */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Frees the name records.                                            */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face :: A handle to the target face object.                        */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_free_name
+   *
+   * @Description:
+   *   Frees the name records.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   */
   FT_LOCAL_DEF( void )
   tt_face_free_name( TT_Face  face )
   {
     FT_Memory     memory = face->root.driver->root.memory;
     TT_NameTable  table  = &face->name_table;
-    TT_NameEntry  entry  = table->names;
-    FT_UInt       count  = table->numNameRecords;
 
 
     if ( table->names )
     {
-      for ( ; count > 0; count--, entry++ )
-      {
-        FT_FREE( entry->string );
-        entry->stringLength = 0;
-      }
+      TT_Name  entry = table->names;
+      TT_Name  limit = entry + table->numNameRecords;
 
-      /* free strings table */
+
+      for ( ; entry < limit; entry++ )
+        FT_FREE( entry->string );
+
       FT_FREE( table->names );
     }
 
-    table->numNameRecords = 0;
-    table->format         = 0;
-    table->storageOffset  = 0;
+    if ( table->langTags )
+    {
+      TT_LangTag  entry = table->langTags;
+      TT_LangTag  limit = entry + table->numLangTagRecords;
+
+
+      for ( ; entry < limit; entry++ )
+        FT_FREE( entry->string );
+
+      FT_FREE( table->langTags );
+    }
+
+    table->numNameRecords    = 0;
+    table->numLangTagRecords = 0;
+    table->format            = 0;
+    table->storageOffset     = 0;
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_cmap                                                  */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the cmap directory in a face object.  The cmaps themselves   */
-  /*    are loaded on demand in the `ttcmap.c' module.                     */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A handle to the target face object.                      */
-  /*                                                                       */
-  /*    stream :: A handle to the input stream.                            */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_cmap
+   *
+   * @Description:
+   *   Loads the cmap directory in a face object.  The cmaps themselves
+   *   are loaded on demand in the `ttcmap.c' module.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     A handle to the input stream.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
 
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_cmap( TT_Face    face,
@@ -928,22 +1099,24 @@
 
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_os2                                                   */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the OS2 table.                                               */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A handle to the target face object.                      */
-  /*                                                                       */
-  /*    stream :: A handle to the input stream.                            */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_os2
+   *
+   * @Description:
+   *   Loads the OS2 table.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     A handle to the input stream.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_os2( TT_Face    face,
                     FT_Stream  stream )
@@ -1088,22 +1261,24 @@
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_postscript                                            */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the Postscript table.                                        */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A handle to the target face object.                      */
-  /*                                                                       */
-  /*    stream :: A handle to the input stream.                            */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_postscript
+   *
+   * @Description:
+   *   Loads the Postscript table.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     A handle to the input stream.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_post( TT_Face    face,
                      FT_Stream  stream )
@@ -1117,8 +1292,8 @@
 #define FT_STRUCTURE  TT_Postscript
 
       FT_FRAME_START( 32 ),
-        FT_FRAME_ULONG( FormatType ),
-        FT_FRAME_ULONG( italicAngle ),
+        FT_FRAME_LONG ( FormatType ),
+        FT_FRAME_LONG ( italicAngle ),
         FT_FRAME_SHORT( underlinePosition ),
         FT_FRAME_SHORT( underlineThickness ),
         FT_FRAME_ULONG( isFixedPitch ),
@@ -1137,10 +1312,16 @@
     if ( FT_STREAM_READ_FIELDS( post_fields, post ) )
       return error;
 
+    if ( post->FormatType != 0x00030000L &&
+         post->FormatType != 0x00025000L &&
+         post->FormatType != 0x00020000L &&
+         post->FormatType != 0x00010000L )
+      return FT_THROW( Invalid_Post_Table_Format );
+
     /* we don't load the glyph names, we do that in another */
     /* module (ttpost).                                     */
 
-    FT_TRACE3(( "FormatType:   0x%x\n", post->FormatType ));
+    FT_TRACE3(( "FormatType:   0x%lx\n", post->FormatType ));
     FT_TRACE3(( "isFixedPitch:   %s\n", post->isFixedPitch
                                         ? "  yes" : "   no" ));
 
@@ -1148,22 +1329,24 @@
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_pclt                                                  */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the PCL 5 Table.                                             */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A handle to the target face object.                      */
-  /*                                                                       */
-  /*    stream :: A handle to the input stream.                            */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_pclt
+   *
+   * @Description:
+   *   Loads the PCL 5 Table.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     A handle to the input stream.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_pclt( TT_Face    face,
                      FT_Stream  stream )
@@ -1209,22 +1392,24 @@
   }
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* <Function>                                                            */
-  /*    tt_face_load_gasp                                                  */
-  /*                                                                       */
-  /* <Description>                                                         */
-  /*    Loads the `gasp' table into a face object.                         */
-  /*                                                                       */
-  /* <Input>                                                               */
-  /*    face   :: A handle to the target face object.                      */
-  /*                                                                       */
-  /*    stream :: The input stream.                                        */
-  /*                                                                       */
-  /* <Return>                                                              */
-  /*    FreeType error code.  0 means success.                             */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @Function:
+   *   tt_face_load_gasp
+   *
+   * @Description:
+   *   Loads the `gasp' table into a face object.
+   *
+   * @Input:
+   *   face ::
+   *     A handle to the target face object.
+   *
+   *   stream ::
+   *     The input stream.
+   *
+   * @Return:
+   *   FreeType error code.  0 means success.
+   */
   FT_LOCAL_DEF( FT_Error )
   tt_face_load_gasp( TT_Face    face,
                      FT_Stream  stream )

@@ -1,26 +1,27 @@
-/***************************************************************************/
-/*                                                                         */
-/*  t42parse.h                                                             */
-/*                                                                         */
-/*    Type 42 font parser (specification).                                 */
-/*                                                                         */
-/*  Copyright 2002, 2003 by Roberto Alameda.                               */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * t42parse.h
+ *
+ *   Type 42 font parser (specification).
+ *
+ * Copyright (C) 2002-2021 by
+ * Roberto Alameda.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __T42PARSE_H__
-#define __T42PARSE_H__
+#ifndef T42PARSE_H_
+#define T42PARSE_H_
 
 
 #include "t42objs.h"
-#include FT_INTERNAL_POSTSCRIPT_AUX_H
+#include <freetype/internal/psaux.h>
 
 
 FT_BEGIN_HEADER
@@ -42,11 +43,11 @@ FT_BEGIN_HEADER
   {
     T42_ParserRec  parser;          /* parser used to read the stream */
 
-    FT_UInt        num_chars;       /* number of characters in encoding */
+    FT_Int         num_chars;       /* number of characters in encoding */
     PS_TableRec    encoding_table;  /* PS_Table used to store the       */
                                     /* encoding character names         */
 
-    FT_UInt        num_glyphs;
+    FT_Int         num_glyphs;
     PS_TableRec    glyph_names;
     PS_TableRec    charstrings;
     PS_TableRec    swap_table;      /* For moving .notdef glyph to index 0. */
@@ -84,7 +85,7 @@ FT_BEGIN_HEADER
 FT_END_HEADER
 
 
-#endif /* __T42PARSE_H__ */
+#endif /* T42PARSE_H_ */
 
 
 /* END */

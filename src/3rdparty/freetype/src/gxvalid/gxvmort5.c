@@ -1,41 +1,42 @@
-/***************************************************************************/
-/*                                                                         */
-/*  gxvmort5.c                                                             */
-/*                                                                         */
-/*    TrueTypeGX/AAT mort table validation                                 */
-/*    body for type5 (Contextual Glyph Insertion) subtable.                */
-/*                                                                         */
-/*  Copyright 2005 by suzuki toshiya, Masatake YAMATO, Red Hat K.K.,       */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvmort5.c
+ *
+ *   TrueTypeGX/AAT mort table validation
+ *   body for type5 (Contextual Glyph Insertion) subtable.
+ *
+ * Copyright (C) 2005-2021 by
+ * suzuki toshiya, Masatake YAMATO, Red Hat K.K.,
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
-/***************************************************************************/
-/*                                                                         */
-/* gxvalid is derived from both gxlayout module and otvalid module.        */
-/* Development of gxlayout is supported by the Information-technology      */
-/* Promotion Agency(IPA), Japan.                                           */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvalid is derived from both gxlayout module and otvalid module.
+ * Development of gxlayout is supported by the Information-technology
+ * Promotion Agency(IPA), Japan.
+ *
+ */
 
 
 #include "gxvmort.h"
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_gxvmort
+#define FT_COMPONENT  gxvmort
 
 
   /*
@@ -70,10 +71,10 @@
                                           FT_UShort*     classTable_length_p,
                                           FT_UShort*     stateArray_length_p,
                                           FT_UShort*     entryTable_length_p,
-                                          GXV_Validator  valid )
+                                          GXV_Validator  gxvalid )
   {
     GXV_mort_subtable_type5_StateOptRecData  optdata =
-      (GXV_mort_subtable_type5_StateOptRecData)valid->statetable.optdata;
+      (GXV_mort_subtable_type5_StateOptRecData)gxvalid->statetable.optdata;
 
 
     gxv_StateTable_subtable_setup( table_size,
@@ -83,7 +84,7 @@
                                    classTable_length_p,
                                    stateArray_length_p,
                                    entryTable_length_p,
-                                   valid );
+                                   gxvalid );
 
     optdata->classTable = classTable;
     optdata->stateArray = stateArray;
@@ -100,7 +101,7 @@
                                                FT_UShort      count,
                                                FT_Bytes       table,
                                                FT_Bytes       limit,
-                                               GXV_Validator  valid )
+                                               GXV_Validator  gxvalid )
   {
     /*
      * We don't know the range of insertion-glyph-list.
@@ -109,7 +110,7 @@
     FT_Bytes  p = table + offset;
 
     GXV_mort_subtable_type5_StateOptRecData  optdata =
-      (GXV_mort_subtable_type5_StateOptRecData)valid->statetable.optdata;
+      (GXV_mort_subtable_type5_StateOptRecData)gxvalid->statetable.optdata;
 
     if ( optdata->classTable < offset                                   &&
          offset < optdata->classTable + *(optdata->classTable_length_p) )
@@ -145,7 +146,7 @@
     GXV_StateTable_GlyphOffsetCPtr  glyphOffset,
     FT_Bytes                        table,
     FT_Bytes                        limit,
-    GXV_Validator                   valid )
+    GXV_Validator                   gxvalid )
   {
 #ifdef GXV_LOAD_UNUSED_VARS
     FT_Bool    setMark;
@@ -184,7 +185,7 @@
                                                    currentInsertCount,
                                                    table,
                                                    limit,
-                                                   valid );
+                                                   gxvalid );
     }
 
     if ( 0 != markedInsertList && 0 != markedInsertCount )
@@ -193,7 +194,7 @@
                                                    markedInsertCount,
                                                    table,
                                                    limit,
-                                                   valid );
+                                                   gxvalid );
     }
   }
 
@@ -201,7 +202,7 @@
   FT_LOCAL_DEF( void )
   gxv_mort_subtable_type5_validate( FT_Bytes       table,
                                     FT_Bytes       limit,
-                                    GXV_Validator  valid )
+                                    GXV_Validator  gxvalid )
   {
     FT_Bytes  p = table;
 
@@ -213,18 +214,18 @@
 
     GXV_LIMIT_CHECK( GXV_MORT_SUBTABLE_TYPE5_HEADER_SIZE );
 
-    valid->statetable.optdata =
+    gxvalid->statetable.optdata =
       et;
-    valid->statetable.optdata_load_func =
+    gxvalid->statetable.optdata_load_func =
       NULL;
-    valid->statetable.subtable_setup_func =
+    gxvalid->statetable.subtable_setup_func =
       gxv_mort_subtable_type5_subtable_setup;
-    valid->statetable.entry_glyphoffset_fmt =
+    gxvalid->statetable.entry_glyphoffset_fmt =
       GXV_GLYPHOFFSET_ULONG;
-    valid->statetable.entry_validate_func =
+    gxvalid->statetable.entry_validate_func =
       gxv_mort_subtable_type5_entry_validate;
 
-    gxv_StateTable_validate( p, limit, valid );
+    gxv_StateTable_validate( p, limit, gxvalid );
 
     GXV_EXIT;
   }

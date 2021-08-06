@@ -3,7 +3,7 @@
 #
 
 
-# Copyright 1996-2001, 2003-2004, 2011-2012 by
+# Copyright (C) 1996-2021 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -20,7 +20,10 @@ TT_DIR := $(SRC_DIR)/truetype
 
 # compilation flags for the driver
 #
-TT_COMPILE := $(FT_COMPILE) $I$(subst /,$(COMPILER_SEP),$(TT_DIR))
+TT_COMPILE := $(CC) $(ANSIFLAGS)                           \
+                    $I$(subst /,$(COMPILER_SEP),$(TT_DIR)) \
+                    $(INCLUDE_FLAGS)                       \
+                    $(FT_CFLAGS)
 
 
 # TrueType driver sources (i.e., C files)
@@ -30,7 +33,6 @@ TT_DRV_SRC := $(TT_DIR)/ttdriver.c \
               $(TT_DIR)/ttgxvar.c  \
               $(TT_DIR)/ttinterp.c \
               $(TT_DIR)/ttobjs.c   \
-              $(TT_DIR)/ttpic.c    \
               $(TT_DIR)/ttpload.c  \
               $(TT_DIR)/ttsubpix.c
 

@@ -1,27 +1,27 @@
-/***************************************************************************/
-/*                                                                         */
-/*  pshglob.h                                                              */
-/*                                                                         */
-/*    PostScript hinter global hinting management.                         */
-/*                                                                         */
-/*  Copyright 2001, 2002, 2003 by                                          */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * pshglob.h
+ *
+ *   PostScript hinter global hinting management.
+ *
+ * Copyright (C) 2001-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#ifndef __PSHGLOB_H__
-#define __PSHGLOB_H__
+#ifndef PSHGLOB_H_
+#define PSHGLOB_H_
 
 
-#include FT_FREETYPE_H
-#include FT_INTERNAL_POSTSCRIPT_HINTS_H
+#include <freetype/freetype.h>
+#include <freetype/internal/pshints.h>
 
 
 FT_BEGIN_HEADER
@@ -36,27 +36,27 @@ FT_BEGIN_HEADER
   /*************************************************************************/
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* @constant:                                                            */
-  /*    PS_GLOBALS_MAX_BLUE_ZONES                                          */
-  /*                                                                       */
-  /* @description:                                                         */
-  /*    The maximum number of blue zones in a font global hints structure. */
-  /*    See @PS_Globals_BluesRec.                                          */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @constant:
+   *   PS_GLOBALS_MAX_BLUE_ZONES
+   *
+   * @description:
+   *   The maximum number of blue zones in a font global hints structure.
+   *   See @PS_Globals_BluesRec.
+   */
 #define PS_GLOBALS_MAX_BLUE_ZONES  16
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* @constant:                                                            */
-  /*    PS_GLOBALS_MAX_STD_WIDTHS                                          */
-  /*                                                                       */
-  /* @description:                                                         */
-  /*    The maximum number of standard and snap widths in either the       */
-  /*    horizontal or vertical direction.  See @PS_Globals_WidthsRec.      */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * @constant:
+   *   PS_GLOBALS_MAX_STD_WIDTHS
+   *
+   * @description:
+   *   The maximum number of standard and snap widths in either the
+   *   horizontal or vertical direction.  See @PS_Globals_WidthsRec.
+   */
 #define PS_GLOBALS_MAX_STD_WIDTHS  16
 
 
@@ -167,7 +167,7 @@ FT_BEGIN_HEADER
                             FT_Int         org_width );
 #endif
 
-  FT_LOCAL( FT_Error )
+  FT_LOCAL( void )
   psh_globals_set_scale( PSH_Globals  globals,
                          FT_Fixed     x_scale,
                          FT_Fixed     y_scale,
@@ -190,7 +190,7 @@ FT_BEGIN_HEADER
 FT_END_HEADER
 
 
-#endif /* __PSHGLOB_H__ */
+#endif /* PSHGLOB_H_ */
 
 
 /* END */

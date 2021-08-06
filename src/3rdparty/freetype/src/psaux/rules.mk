@@ -3,7 +3,7 @@
 #
 
 
-# Copyright 1996-2000, 2002, 2003, 2006 by
+# Copyright (C) 1996-2021 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -20,7 +20,10 @@ PSAUX_DIR := $(SRC_DIR)/psaux
 
 # compilation flags for the driver
 #
-PSAUX_COMPILE := $(FT_COMPILE) $I$(subst /,$(COMPILER_SEP),$(PSAUX_DIR))
+PSAUX_COMPILE := $(CC) $(ANSIFLAGS)                              \
+                       $I$(subst /,$(COMPILER_SEP),$(PSAUX_DIR)) \
+                       $(INCLUDE_FLAGS)                          \
+                       $(FT_CFLAGS)
 
 
 # PSAUX driver sources (i.e., C files)
@@ -30,12 +33,25 @@ PSAUX_DRV_SRC := $(PSAUX_DIR)/psobjs.c   \
                  $(PSAUX_DIR)/t1cmap.c   \
                  $(PSAUX_DIR)/afmparse.c \
                  $(PSAUX_DIR)/psconv.c   \
-                 $(PSAUX_DIR)/psauxmod.c
+                 $(PSAUX_DIR)/psauxmod.c \
+                 $(PSAUX_DIR)/psarrst.c \
+                 $(PSAUX_DIR)/psblues.c \
+                 $(PSAUX_DIR)/pserror.c \
+                 $(PSAUX_DIR)/psfont.c  \
+                 $(PSAUX_DIR)/psft.c    \
+                 $(PSAUX_DIR)/pshints.c \
+                 $(PSAUX_DIR)/psintrp.c \
+                 $(PSAUX_DIR)/psread.c  \
+                 $(PSAUX_DIR)/psstack.c \
+                 $(PSAUX_DIR)/cffdecode.c
 
 # PSAUX driver headers
 #
 PSAUX_DRV_H := $(PSAUX_DRV_SRC:%c=%h)  \
-               $(PSAUX_DIR)/psauxerr.h
+               $(PSAUX_DIR)/psauxerr.h \
+               $(PSAUX_DIR)/psfixed.h \
+               $(PSAUX_DIR)/psglue.h  \
+               $(PSAUX_DIR)/pstypes.h
 
 
 # PSAUX driver object(s)

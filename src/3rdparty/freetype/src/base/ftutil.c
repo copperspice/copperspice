@@ -1,36 +1,35 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftutil.c                                                               */
-/*                                                                         */
-/*    FreeType utility file for memory and list management (body).         */
-/*                                                                         */
-/*  Copyright 2002, 2004-2007, 2013 by                                     */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftutil.c
+ *
+ *   FreeType utility file for memory and list management (body).
+ *
+ * Copyright (C) 2002-2021 by
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
 
-#include <ft2build.h>
-#include FT_INTERNAL_DEBUG_H
-#include FT_INTERNAL_MEMORY_H
-#include FT_INTERNAL_OBJECTS_H
-#include FT_LIST_H
+#include <freetype/internal/ftdebug.h>
+#include <freetype/internal/ftmemory.h>
+#include <freetype/internal/ftobjs.h>
+#include <freetype/ftlist.h>
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* The macro FT_COMPONENT is used in trace mode.  It is an implicit      */
-  /* parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log  */
-  /* messages during execution.                                            */
-  /*                                                                       */
+  /**************************************************************************
+   *
+   * The macro FT_COMPONENT is used in trace mode.  It is an implicit
+   * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
+   * messages during execution.
+   */
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_memory
+#define FT_COMPONENT  memory
 
 
   /*************************************************************************/
@@ -54,7 +53,7 @@
     FT_Error    error;
     FT_Pointer  block = ft_mem_qalloc( memory, size, &error );
 
-    if ( !error && size > 0 )
+    if ( !error && block && size > 0 )
       FT_MEM_ZERO( block, size );
 
     *p_error = error;
@@ -74,7 +73,7 @@
     if ( size > 0 )
     {
       block = memory->alloc( memory, size );
-      if ( block == NULL )
+      if ( !block )
         error = FT_THROW( Out_Of_Memory );
     }
     else if ( size < 0 )
@@ -101,7 +100,7 @@
 
     block = ft_mem_qrealloc( memory, item_size,
                              cur_count, new_count, block, &error );
-    if ( !error && new_count > cur_count )
+    if ( !error && block && new_count > cur_count )
       FT_MEM_ZERO( (char*)block + cur_count * item_size,
                    ( new_count - cur_count ) * item_size );
 
@@ -135,25 +134,27 @@
       ft_mem_free( memory, block );
       block = NULL;
     }
-    else if ( new_count > FT_INT_MAX/item_size )
+    else if ( new_count > FT_INT_MAX / item_size )
     {
       error = FT_THROW( Array_Too_Large );
     }
     else if ( cur_count == 0 )
     {
-      FT_ASSERT( block == NULL );
+      FT_ASSERT( !block );
 
-      block = ft_mem_alloc( memory, new_count*item_size, &error );
+      block = memory->alloc( memory, new_count * item_size );
+      if ( block == NULL )
+        error = FT_THROW( Out_Of_Memory );
     }
     else
     {
       FT_Pointer  block2;
-      FT_Long     cur_size = cur_count*item_size;
-      FT_Long     new_size = new_count*item_size;
+      FT_Long     cur_size = cur_count * item_size;
+      FT_Long     new_size = new_count * item_size;
 
 
       block2 = memory->realloc( memory, cur_size, new_size, block );
-      if ( block2 == NULL )
+      if ( !block2 )
         error = FT_THROW( Out_Of_Memory );
       else
         block = block2;
@@ -180,10 +181,10 @@
               FT_Error    *p_error )
   {
     FT_Error    error;
-    FT_Pointer  p = ft_mem_qalloc( memory, size, &error );
+    FT_Pointer  p = ft_mem_qalloc( memory, (FT_Long)size, &error );
 
 
-    if ( !error && address )
+    if ( !error && address && size > 0 )
       ft_memcpy( p, address, size );
 
     *p_error = error;
@@ -234,7 +235,7 @@
   /*************************************************************************/
 
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_list
+#define FT_COMPONENT  list
 
   /* documentation is in ftlist.h */
 
@@ -245,6 +246,9 @@
     FT_ListNode  cur;
 
 
+    if ( !list )
+      return NULL;
+
     cur = list->head;
     while ( cur )
     {
@@ -254,7 +258,7 @@
       cur = cur->next;
     }
 
-    return (FT_ListNode)0;
+    return NULL;
   }
 
 
@@ -264,10 +268,15 @@
   FT_List_Add( FT_List      list,
                FT_ListNode  node )
   {
-    FT_ListNode  before = list->tail;
+    FT_ListNode  before;
 
 
-    node->next = 0;
+    if ( !list || !node )
+      return;
+
+    before = list->tail;
+
+    node->next = NULL;
     node->prev = before;
 
     if ( before )
@@ -285,11 +294,16 @@
   FT_List_Insert( FT_List      list,
                   FT_ListNode  node )
   {
-    FT_ListNode  after = list->head;
+    FT_ListNode  after;
 
+
+    if ( !list || !node )
+      return;
+
+    after = list->head;
 
     node->next = after;
-    node->prev = 0;
+    node->prev = NULL;
 
     if ( !after )
       list->tail = node;
@@ -308,6 +322,9 @@
   {
     FT_ListNode  before, after;
 
+
+    if ( !list || !node )
+      return;
 
     before = node->prev;
     after  = node->next;
@@ -333,6 +350,9 @@
     FT_ListNode  before, after;
 
 
+    if ( !list || !node )
+      return;
+
     before = node->prev;
     after  = node->next;
 
@@ -347,7 +367,7 @@
     else
       list->tail = before;
 
-    node->prev       = 0;
+    node->prev       = NULL;
     node->next       = list->head;
     list->head->prev = node;
     list->head       = node;
@@ -357,13 +377,18 @@
   /* documentation is in ftlist.h */
 
   FT_EXPORT_DEF( FT_Error )
-  FT_List_Iterate( FT_List            list,
-                   FT_List_Iterator   iterator,
-                   void*              user )
+  FT_List_Iterate( FT_List           list,
+                   FT_List_Iterator  iterator,
+                   void*             user )
   {
-    FT_ListNode  cur   = list->head;
+    FT_ListNode  cur;
     FT_Error     error = FT_Err_Ok;
 
+
+    if ( !list || !iterator )
+      return FT_THROW( Invalid_Argument );
+
+    cur = list->head;
 
     while ( cur )
     {
@@ -392,6 +417,9 @@
     FT_ListNode  cur;
 
 
+    if ( !list || !memory )
+      return;
+
     cur = list->head;
     while ( cur )
     {
@@ -406,30 +434,8 @@
       cur = next;
     }
 
-    list->head = 0;
-    list->tail = 0;
-  }
-
-
-  FT_BASE_DEF( FT_UInt32 )
-  ft_highpow2( FT_UInt32  value )
-  {
-    FT_UInt32  value2;
-
-
-    /*
-     *  We simply clear the lowest bit in each iteration.  When
-     *  we reach 0, we know that the previous value was our result.
-     */
-    for ( ;; )
-    {
-      value2 = value & (value - 1);  /* clear lowest bit */
-      if ( value2 == 0 )
-        break;
-
-      value = value2;
-    }
-    return value;
+    list->head = NULL;
+    list->tail = NULL;
   }
 
 

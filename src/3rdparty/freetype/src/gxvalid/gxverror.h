@@ -1,51 +1,51 @@
-/***************************************************************************/
-/*                                                                         */
-/*  gxverror.h                                                             */
-/*                                                                         */
-/*    TrueTypeGX/AAT validation module error codes (specification only).   */
-/*                                                                         */
-/*  Copyright 2004, 2005, 2012-2013                                        */
-/*    by suzuki toshiya, Masatake YAMATO, Red Hat K.K.,                    */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxverror.h
+ *
+ *   TrueTypeGX/AAT validation module error codes (specification only).
+ *
+ * Copyright (C) 2004-2021 by
+ * suzuki toshiya, Masatake YAMATO, Red Hat K.K.,
+ * David Turner, Robert Wilhelm, and Werner Lemberg.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
-/***************************************************************************/
-/*                                                                         */
-/* gxvalid is derived from both gxlayout module and otvalid module.        */
-/* Development of gxlayout is supported by the Information-technology      */
-/* Promotion Agency(IPA), Japan.                                           */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * gxvalid is derived from both gxlayout module and otvalid module.
+ * Development of gxlayout is supported by the Information-technology
+ * Promotion Agency(IPA), Japan.
+ *
+ */
 
 
-  /*************************************************************************/
-  /*                                                                       */
-  /* This file is used to define the OpenType validation module error      */
-  /* enumeration constants.                                                */
-  /*                                                                       */
-  /*************************************************************************/
+  /**************************************************************************
+   *
+   * This file is used to define the OpenType validation module error
+   * enumeration constants.
+   *
+   */
 
-#ifndef __GXVERROR_H__
-#define __GXVERROR_H__
+#ifndef GXVERROR_H_
+#define GXVERROR_H_
 
-#include FT_MODULE_ERRORS_H
+#include <freetype/ftmoderr.h>
 
-#undef __FTERRORS_H__
+#undef FTERRORS_H_
 
 #undef  FT_ERR_PREFIX
 #define FT_ERR_PREFIX  GXV_Err_
 #define FT_ERR_BASE    FT_Mod_Err_GXvalid
 
-#include FT_ERRORS_H
+#include <freetype/fterrors.h>
 
-#endif /* __GXVERROR_H__ */
+#endif /* GXVERROR_H_ */
 
 
 /* END */

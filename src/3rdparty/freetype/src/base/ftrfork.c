@@ -1,38 +1,37 @@
-/***************************************************************************/
-/*                                                                         */
-/*  ftrfork.c                                                              */
-/*                                                                         */
-/*    Embedded resource forks accessor (body).                             */
-/*                                                                         */
-/*  Copyright 2004-2010, 2013, 2014 by                                     */
-/*  Masatake YAMATO and Redhat K.K.                                        */
-/*                                                                         */
-/*  FT_Raccess_Get_HeaderInfo() and raccess_guess_darwin_hfsplus() are     */
-/*  derived from ftobjs.c.                                                 */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+/****************************************************************************
+ *
+ * ftrfork.c
+ *
+ *   Embedded resource forks accessor (body).
+ *
+ * Copyright (C) 2004-2021 by
+ * Masatake YAMATO and Redhat K.K.
+ *
+ * FT_Raccess_Get_HeaderInfo() and raccess_guess_darwin_hfsplus() are
+ * derived from ftobjs.c.
+ *
+ * This file is part of the FreeType project, and may only be used,
+ * modified, and distributed under the terms of the FreeType project
+ * license, LICENSE.TXT.  By continuing to use, modify, or distribute
+ * this file you indicate that you have read the license and
+ * understand and accept it fully.
+ *
+ */
 
-/***************************************************************************/
-/* Development of the code in this file is support of                      */
-/* Information-technology Promotion Agency, Japan.                         */
-/***************************************************************************/
+/****************************************************************************
+ * Development of the code in this file is support of
+ * Information-technology Promotion Agency, Japan.
+ */
 
 
-#include <ft2build.h>
-#include FT_INTERNAL_DEBUG_H
-#include FT_INTERNAL_STREAM_H
-#include FT_INTERNAL_RFORK_H
-#include "basepic.h"
+#include <freetype/internal/ftdebug.h>
+#include <freetype/internal/ftstream.h>
+#include <freetype/internal/ftrfork.h>
+
 #include "ftbase.h"
 
 #undef  FT_COMPONENT
-#define FT_COMPONENT  trace_raccess
+#define FT_COMPONENT  raccess
 
 
   /*************************************************************************/
@@ -56,40 +55,76 @@
   {
     FT_Error       error;
     unsigned char  head[16], head2[16];
-    FT_Long        map_pos, rdata_len;
+    FT_Long        map_pos, map_len, rdata_len;
     int            allzeros, allmatch, i;
     FT_Long        type_list;
 
     FT_UNUSED( library );
 
 
-    error = FT_Stream_Seek( stream, rfork_offset );
+    error = FT_Stream_Seek( stream, (FT_ULong)rfork_offset );
     if ( error )
       return error;
 
-    error = FT_Stream_Read( stream, (FT_Byte *)head, 16 );
+    error = FT_Stream_Read( stream, (FT_Byte*)head, 16 );
     if ( error )
       return error;
 
-    *rdata_pos = rfork_offset + ( ( head[0] << 24 ) |
-                                  ( head[1] << 16 ) |
-                                  ( head[2] <<  8 ) |
-                                    head[3]         );
-    map_pos    = rfork_offset + ( ( head[4] << 24 ) |
-                                  ( head[5] << 16 ) |
-                                  ( head[6] <<  8 ) |
-                                    head[7]         );
-    rdata_len = ( head[ 8] << 24 ) |
-                ( head[ 9] << 16 ) |
-                ( head[10] <<  8 ) |
-                  head[11];
-
-    /* map_len = head[12] .. head[15] */
-
-    if ( *rdata_pos + rdata_len != map_pos || map_pos == rfork_offset )
+    /* ensure positive values */
+    if ( head[0]  >= 0x80 ||
+         head[4]  >= 0x80 ||
+         head[8]  >= 0x80 ||
+         head[12] >= 0x80 )
       return FT_THROW( Unknown_File_Format );
 
-    error = FT_Stream_Seek( stream, map_pos );
+    *rdata_pos = ( head[ 0] << 24 ) |
+                 ( head[ 1] << 16 ) |
+                 ( head[ 2] <<  8 ) |
+                   head[ 3];
+    map_pos    = ( head[ 4] << 24 ) |
+                 ( head[ 5] << 16 ) |
+                 ( head[ 6] <<  8 ) |
+                   head[ 7];
+    rdata_len  = ( head[ 8] << 24 ) |
+                 ( head[ 9] << 16 ) |
+                 ( head[10] <<  8 ) |
+                   head[11];
+    map_len    = ( head[12] << 24 ) |
+                 ( head[13] << 16 ) |
+                 ( head[14] <<  8 ) |
+                   head[15];
+
+    /* the map must not be empty */
+    if ( !map_pos )
+      return FT_THROW( Unknown_File_Format );
+
+    /* check whether rdata and map overlap */
+    if ( *rdata_pos < map_pos )
+    {
+      if ( *rdata_pos > map_pos - rdata_len )
+        return FT_THROW( Unknown_File_Format );
+    }
+    else
+    {
+      if ( map_pos > *rdata_pos - map_len )
+        return FT_THROW( Unknown_File_Format );
+    }
+
+    /* check whether end of rdata or map exceeds stream size */
+    if ( FT_LONG_MAX - rdata_len < *rdata_pos                               ||
+         FT_LONG_MAX - map_len < map_pos                                    ||
+
+         FT_LONG_MAX - ( *rdata_pos + rdata_len ) < rfork_offset            ||
+         FT_LONG_MAX - ( map_pos + map_len ) < rfork_offset                 ||
+
+         (FT_ULong)( rfork_offset + *rdata_pos + rdata_len ) > stream->size ||
+         (FT_ULong)( rfork_offset + map_pos + map_len ) > stream->size      )
+      return FT_THROW( Unknown_File_Format );
+
+    *rdata_pos += rfork_offset;
+    map_pos    += rfork_offset;
+
+    error = FT_Stream_Seek( stream, (FT_ULong)map_pos );
     if ( error )
       return error;
 
@@ -101,7 +136,7 @@
 
     allzeros = 1;
     allmatch = 1;
-    for ( i = 0; i < 16; ++i )
+    for ( i = 0; i < 16; i++ )
     {
       if ( head2[i] != 0 )
         allzeros = 0;
@@ -113,18 +148,17 @@
 
     /* If we have reached this point then it is probably a mac resource */
     /* file.  Now, does it contain any interesting resources?           */
-    /* Skip handle to next resource map, the file resource number, and  */
-    /* attributes.                                                      */
+
     (void)FT_STREAM_SKIP( 4        /* skip handle to next resource map */
                           + 2      /* skip file resource number */
                           + 2 );   /* skip attributes */
 
-    if ( FT_READ_USHORT( type_list ) )
+    if ( FT_READ_SHORT( type_list ) )
       return error;
-    if ( type_list == -1 )
+    if ( type_list < 0 )
       return FT_THROW( Unknown_File_Format );
 
-    error = FT_Stream_Seek( stream, map_pos + type_list );
+    error = FT_Stream_Seek( stream, (FT_ULong)( map_pos + type_list ) );
     if ( error )
       return error;
 
@@ -133,16 +167,11 @@
   }
 
 
-  static int
-  ft_raccess_sort_ref_by_id( FT_RFork_Ref*  a,
-                             FT_RFork_Ref*  b )
+  FT_COMPARE_DEF( int )
+  ft_raccess_sort_ref_by_id( const void*  a,
+                             const void*  b )
   {
-    if ( a->res_id < b->res_id )
-      return -1;
-    else if ( a->res_id > b->res_id )
-      return 1;
-    else
-      return 0;
+    return  ( (FT_RFork_Ref*)a )->res_id - ( (FT_RFork_Ref*)b )->res_id;
   }
 
 
@@ -166,27 +195,46 @@
 
 
     FT_TRACE3(( "\n" ));
-    error = FT_Stream_Seek( stream, map_offset );
+    error = FT_Stream_Seek( stream, (FT_ULong)map_offset );
     if ( error )
       return error;
 
-    if ( FT_READ_USHORT( cnt ) )
+    if ( FT_READ_SHORT( cnt ) )
       return error;
     cnt++;
 
-    for ( i = 0; i < cnt; ++i )
+    /* `rpos' is a signed 16bit integer offset to resource records; the    */
+    /* size of a resource record is 12 bytes.  The map header is 28 bytes, */
+    /* and a type list needs 10 bytes or more.  If we assume that the name */
+    /* list is empty and we have only a single entry in the type list,     */
+    /* there can be at most                                                */
+    /*                                                                     */
+    /*   (32768 - 28 - 10) / 12 = 2727                                     */
+    /*                                                                     */
+    /* resources.                                                          */
+    /*                                                                     */
+    /* A type list starts with a two-byte counter, followed by 10-byte     */
+    /* type records.  Assuming that there are no resources, the number of  */
+    /* type records can be at most                                         */
+    /*                                                                     */
+    /*   (32768 - 28 - 2) / 8 = 4079                                       */
+    /*                                                                     */
+    if ( cnt > 4079 )
+      return FT_THROW( Invalid_Table );
+
+    for ( i = 0; i < cnt; i++ )
     {
       if ( FT_READ_LONG( tag_internal ) ||
-           FT_READ_USHORT( subcnt )     ||
-           FT_READ_USHORT( rpos )       )
+           FT_READ_SHORT( subcnt )      ||
+           FT_READ_SHORT( rpos )        )
         return error;
 
       FT_TRACE2(( "Resource tags: %c%c%c%c\n",
-                  (char)( 0xff & ( tag_internal >> 24 ) ),
-                  (char)( 0xff & ( tag_internal >> 16 ) ),
-                  (char)( 0xff & ( tag_internal >>  8 ) ),
-                  (char)( 0xff & ( tag_internal >>  0 ) ) ));
-      FT_TRACE3(( "             : subcount=%d, suboffset=0x%04x\n",
+                  (char)( 0xFF & ( tag_internal >> 24 ) ),
+                  (char)( 0xFF & ( tag_internal >> 16 ) ),
+                  (char)( 0xFF & ( tag_internal >>  8 ) ),
+                  (char)( 0xFF & ( tag_internal >>  0 ) ) ));
+      FT_TRACE3(( "             : subcount=%d, suboffset=0x%04lx\n",
                   subcnt, rpos ));
 
       if ( tag_internal == tag )
@@ -194,52 +242,71 @@
         *count = subcnt + 1;
         rpos  += map_offset;
 
-        error = FT_Stream_Seek( stream, rpos );
+        /* a zero count might be valid in the resource specification, */
+        /* however, it is completely useless to us                    */
+        if ( *count < 1 || *count > 2727 )
+          return FT_THROW( Invalid_Table );
+
+        error = FT_Stream_Seek( stream, (FT_ULong)rpos );
         if ( error )
           return error;
 
-        if ( FT_NEW_ARRAY( ref, *count ) )
+        if ( FT_QNEW_ARRAY( ref, *count ) )
           return error;
 
-        for ( j = 0; j < *count; ++j )
+        for ( j = 0; j < *count; j++ )
         {
-          if ( FT_READ_USHORT( ref[j].res_id ) )
+          if ( FT_READ_SHORT( ref[j].res_id ) )
             goto Exit;
-          if ( FT_STREAM_SKIP( 2 ) ) /* resource name */
+          if ( FT_STREAM_SKIP( 2 ) )  /* resource name offset */
             goto Exit;
-          if ( FT_READ_LONG( temp ) )
+          if ( FT_READ_LONG( temp ) ) /* attributes (8bit), offset (24bit) */
             goto Exit;
-          if ( FT_STREAM_SKIP( 4 ) ) /* mbz */
+          if ( FT_STREAM_SKIP( 4 ) )  /* mbz */
             goto Exit;
+
+          /*
+           * According to Inside Macintosh: More Macintosh Toolbox,
+           * "Resource IDs" (1-46), there are some reserved IDs.
+           * However, FreeType2 is not a font synthesizer, no need
+           * to check the acceptable resource ID.
+           */
+          if ( temp < 0 )
+          {
+            error = FT_THROW( Invalid_Table );
+            goto Exit;
+          }
 
           ref[j].offset = temp & 0xFFFFFFL;
+
           FT_TRACE3(( "             [%d]:"
-                      " resource_id=0x%04x, offset=0x%08x\n",
-                      j, ref[j].res_id, ref[j].offset ));
+                      " resource_id=0x%04x, offset=0x%08lx\n",
+                      j, (FT_UShort)ref[j].res_id, ref[j].offset ));
         }
 
-        if (sort_by_res_id)
+        if ( sort_by_res_id )
         {
-          ft_qsort( ref, *count, sizeof ( FT_RFork_Ref ),
-                    ( int(*)(const void*, const void*) )
+          ft_qsort( ref,
+                    (size_t)*count,
+                    sizeof ( FT_RFork_Ref ),
                     ft_raccess_sort_ref_by_id );
 
           FT_TRACE3(( "             -- sort resources by their ids --\n" ));
-          for ( j = 0; j < *count; ++ j ) {
+
+          for ( j = 0; j < *count; j++ )
             FT_TRACE3(( "             [%d]:"
-                        " resource_id=0x%04x, offset=0x%08x\n",
+                        " resource_id=0x%04x, offset=0x%08lx\n",
                         j, ref[j].res_id, ref[j].offset ));
-          }
         }
 
-        if ( FT_NEW_ARRAY( offsets_internal, *count ) )
+        if ( FT_QNEW_ARRAY( offsets_internal, *count ) )
           goto Exit;
 
         /* XXX: duplicated reference ID,
          *      gap between reference IDs are acceptable?
          *      further investigation on Apple implementation is needed.
          */
-        for ( j = 0; j < *count; ++j )
+        for ( j = 0; j < *count; j++ )
           offsets_internal[j] = rdata_pos + ref[j].offset;
 
         *offsets = offsets_internal;
@@ -364,7 +431,7 @@
 
   static FT_Error
   raccess_guess_linux_double_from_file_name( FT_Library  library,
-                                             char *      file_name,
+                                             char*       file_name,
                                              FT_Long    *result_offset );
 
   static char *
@@ -392,19 +459,19 @@
         errors[i] = FT_Err_Ok;
 
       if ( errors[i] )
-        continue ;
+        continue;
 
-      errors[i] = (FT_RACCESS_GUESS_TABLE_GET[i].func)( library,
-                                                 stream, base_name,
-                                                 &(new_names[i]),
-                                                 &(offsets[i]) );
+      errors[i] = ft_raccess_guess_table[i].func( library,
+                                                  stream, base_name,
+                                                  &(new_names[i]),
+                                                  &(offsets[i]) );
     }
 
     return;
   }
 
 
-#ifndef FT_MACINTOSH
+#if defined( FT_CONFIG_OPTION_MAC_FONTS ) && !defined( FT_MACINTOSH )
   static FT_RFork_Rule
   raccess_get_rule_type_from_rule_index( FT_Library  library,
                                          FT_UInt     rule_index )
@@ -414,7 +481,7 @@
     if ( rule_index >= FT_RACCESS_N_RULES )
       return FT_RFork_Rule_invalid;
 
-    return FT_RACCESS_GUESS_TABLE_GET[rule_index].type;
+    return ft_raccess_guess_table[rule_index].type;
   }
 
 
@@ -535,7 +602,7 @@
     if ( base_file_len + 6 > FT_INT_MAX )
       return FT_THROW( Array_Too_Large );
 
-    if ( FT_ALLOC( newpath, base_file_len + 6 ) )
+    if ( FT_QALLOC( newpath, base_file_len + 6 ) )
       return error;
 
     FT_MEM_COPY( newpath, base_file_name, base_file_len );
@@ -571,7 +638,7 @@
     if ( base_file_len + 18 > FT_INT_MAX )
       return FT_THROW( Array_Too_Large );
 
-    if ( FT_ALLOC( newpath, base_file_len + 18 ) )
+    if ( FT_QALLOC( newpath, base_file_len + 18 ) )
       return error;
 
     FT_MEM_COPY( newpath, base_file_name, base_file_len );
@@ -713,9 +780,9 @@
     FT_UShort  n_of_entries;
 
     int        i;
-    FT_UInt32  entry_id, entry_offset, entry_length = 0;
+    FT_Int32   entry_id, entry_offset, entry_length = 0;
 
-    const FT_UInt32  resource_fork_entry_id = 0x2;
+    const FT_Int32  resource_fork_entry_id = 0x2;
 
     FT_UNUSED( library );
     FT_UNUSED( base_file_name );
@@ -773,7 +840,7 @@
   {
     FT_Open_Args  args2;
     FT_Stream     stream2;
-    char *        nouse = NULL;
+    char*         nouse = NULL;
     FT_Error      error;
 
 
@@ -807,13 +874,15 @@
 
 
     new_length = ft_strlen( original_name ) + ft_strlen( insertion );
-    if ( FT_ALLOC( new_name, new_length + 1 ) )
+    if ( FT_QALLOC( new_name, new_length + 1 ) )
       return NULL;
 
     tmp = ft_strrchr( original_name, '/' );
     if ( tmp )
     {
-      ft_strncpy( new_name, original_name, tmp - original_name + 1 );
+      ft_strncpy( new_name,
+                  original_name,
+                  (size_t)( tmp - original_name + 1 ) );
       new_name[tmp - original_name + 1] = '\0';
       slash = tmp + 1;
     }
@@ -833,9 +902,9 @@
 #else   /* !FT_CONFIG_OPTION_GUESSING_EMBEDDED_RFORK */
 
 
-  /*************************************************************************/
-  /*                  Dummy function; just sets errors                     */
-  /*************************************************************************/
+  /**************************************************************************
+   *                 Dummy function; just sets errors
+   */
 
   FT_BASE_DEF( void )
   FT_Raccess_Guess( FT_Library  library,
