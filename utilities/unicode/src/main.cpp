@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2019 Barbara Geller
-* Copyright (c) 2012-2019 Ansel Sermersheim
+* Copyright (c) 2012-2021 Barbara Geller
+* Copyright (c) 2012-2021 Ansel Sermersheim
 *
 * Copyright (C) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
@@ -34,6 +34,8 @@
 
 #define DATA_VERSION_S "11.0"
 #define DATA_VERSION_STR "QChar::Unicode_11_0"
+
+const QString UnicodeDataPrefix = "../data/";
 
 enum Direction          : int;
 enum JoiningType        : int;
@@ -1255,7 +1257,7 @@ static void readUnicodeData()
 
    qDebug("\nReading UnicodeData.txt");
 
-   QFile f("data/UnicodeData.txt");
+   QFile f(UnicodeDataPrefix + "UnicodeData.txt");
    if (! f.exists()) {
       qFatal("Could not find UnicodeData.txt");
    }
@@ -1388,7 +1390,7 @@ static void readBidiMirroring()
 {
    qDebug("\nReading BidiMirroring.txt");
 
-   QFile f("data/BidiMirroring.txt");
+   QFile f(UnicodeDataPrefix + "BidiMirroring.txt");
    if (!f.exists()) {
       qFatal("Could not find BidiMirroring.txt");
    }
@@ -1449,7 +1451,7 @@ static void readArabicShaping()
          }
       }
    }
-   QFile f("data/ArabicShaping.txt");
+   QFile f(UnicodeDataPrefix + "ArabicShaping.txt");
    if (! f.exists()) {
       qFatal("Could not find ArabicShaping.txt");
    }
@@ -1505,7 +1507,7 @@ static void readDerivedAge()
 {
    qDebug("\nReading DerivedAge.txt");
 
-   QFile f("data/DerivedAge.txt");
+   QFile f(UnicodeDataPrefix + "DerivedAge.txt");
    if (!f.exists()) {
       qFatal("Could not find DerivedAge.txt");
    }
@@ -1562,7 +1564,8 @@ static void readDerivedNormalizationProps()
 {
    qDebug("\nReading DerivedNormalizationProps.txt");
 
-   QFile f("data/DerivedNormalizationProps.txt");
+   QFile f(UnicodeDataPrefix + "DerivedNormalizationProps.txt");
+
    if (! f.exists()) {
       qFatal("Could not find DerivedNormalizationProps.txt");
    }
@@ -1680,7 +1683,7 @@ static std::pair<QByteArray, QByteArray> createNormalizationCorrections()
 {
    qDebug("\nReading NormalizationCorrections.txt");
 
-   QFile f("data/NormalizationCorrections.txt");
+   QFile f(UnicodeDataPrefix + "NormalizationCorrections.txt");
    if (! f.exists()) {
       qFatal("Could not find NormalizationCorrections.txt");
    }
@@ -1777,7 +1780,7 @@ static void readLineBreak()
 {
    qDebug("\nReading LineBreak.txt");
 
-   QFile f("data/LineBreak.txt");
+   QFile f(UnicodeDataPrefix + "LineBreak.txt");
    if (! f.exists()) {
       qFatal("Could not find LineBreak.txt");
    }
@@ -1832,7 +1835,7 @@ static void readSpecialCasing()
 {
    qDebug("\nReading SpecialCasing.txt");
 
-   QFile f("data/SpecialCasing.txt");
+   QFile f(UnicodeDataPrefix + "SpecialCasing.txt");
    if (! f.exists())  {
       qFatal("Could not find SpecialCasing.txt");
    }
@@ -1933,7 +1936,7 @@ static void readCaseFolding()
 {
    qDebug("\nReading CaseFolding.txt");
 
-   QFile f("data/CaseFolding.txt");
+   QFile f(UnicodeDataPrefix + "CaseFolding.txt");
    if (! f.exists()) {
       qFatal("Could not find CaseFolding.txt");
    }
@@ -1994,7 +1997,7 @@ static void readGraphemeBreak()
 {
    qDebug("\nReading GraphemeBreakProperty.txt");
 
-   QFile f("data/GraphemeBreakProperty.txt");
+   QFile f(UnicodeDataPrefix + "GraphemeBreakProperty.txt");
    if (! f.exists()) {
       qFatal("Could not find GraphemeBreakProperty.txt");
    }
@@ -2049,7 +2052,7 @@ static void readWordBreak()
 {
    qDebug("\nReading WordBreakProperty.txt");
 
-   QFile f("data/WordBreakProperty.txt");
+   QFile f(UnicodeDataPrefix + "WordBreakProperty.txt");
    if (!f.exists()) {
       qFatal("Could not find WordBreakProperty.txt");
    }
@@ -2117,7 +2120,7 @@ static void readSentenceBreak()
 {
    qDebug("\nReading SentenceBreakProperty.txt");
 
-   QFile f("data/SentenceBreakProperty.txt");
+   QFile f(UnicodeDataPrefix + "SentenceBreakProperty.txt");
    if (! f.exists()) {
       qFatal("Could not find SentenceBreakProperty.txt");
    }
@@ -2182,7 +2185,7 @@ static void readBlocks()
 {
    qDebug("\nReading Blocks.txt");
 
-   QFile f("data/Blocks.txt");
+   QFile f(UnicodeDataPrefix + "Blocks.txt");
    if (! f.exists()) {
       qFatal("Could not find Blocks.txt");
    }
@@ -2239,7 +2242,7 @@ static void readScripts()
 {
    qDebug("\nReading Scripts.txt");
 
-   QFile f("data/Scripts.txt");
+   QFile f(UnicodeDataPrefix + "Scripts.txt");
    if (! f.exists()) {
       qFatal("Could not find Scripts.txt");
    }
