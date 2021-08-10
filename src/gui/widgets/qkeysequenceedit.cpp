@@ -152,9 +152,6 @@ QKeySequenceEdit::QKeySequenceEdit(QKeySequenceEditPrivate &dd, QWidget *parent,
    d->init();
 }
 
-/*!
-    Destroys the QKeySequenceEdit object.
-*/
 QKeySequenceEdit::~QKeySequenceEdit()
 {
 }

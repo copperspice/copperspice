@@ -26,8 +26,6 @@
 
 #include <qaction.h>
 
-
-
 #ifndef QT_NO_ACTION
 
 class QWidgetActionPrivate;

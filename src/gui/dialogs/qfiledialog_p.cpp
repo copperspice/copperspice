@@ -155,6 +155,7 @@ void QFileDialogPrivate::updateFileNameLabel()
          case QFileDialog::Directory:
             setLabelTextControl(QFileDialog::FileName, QFileDialog::tr("Directory:"));
             break;
+
          default:
             setLabelTextControl(QFileDialog::FileName, QFileDialog::tr("File &name:"));
             break;
@@ -187,6 +188,7 @@ void QFileDialogPrivate::updateOkButtonText(bool saveAsOnFolder)
          case QFileDialog::Directory:
             setLabelTextControl(QFileDialog::Accept, QFileDialog::tr("&Choose"));
             break;
+
          default:
             setLabelTextControl(QFileDialog::Accept,
                q->acceptMode() == QFileDialog::AcceptOpen ?
@@ -203,15 +205,17 @@ void QFileDialogPrivate::updateCancelButtonText()
       setLabelTextControl(QFileDialog::Reject, options->labelText(QFileDialogOptions::Reject));
    }
 }
+
 void QFileDialogPrivate::retranslateStrings()
 {
    Q_Q(QFileDialog);
-   /* WIDGETS */
+
+   // widgets
    if (defaultFileTypes) {
       q->setNameFilter(QFileDialog::tr("All Files (*)"));
    }
 
-   if (!usingWidgets()) {
+   if (! usingWidgets()) {
       return;
    }
 
@@ -254,7 +258,7 @@ void QFileDialogPrivate::emitFilesSelected(const QStringList &files)
 
 bool QFileDialogPrivate::canBeNativeDialog() const
 {
-   // do not use Q_Q here This function is called from ~QDialog,
+   // do not use Q_Q, this method is called from ~QDialog
    const QDialog *const q = static_cast<const QDialog *>(q_ptr);
 
    if (nativeDialogInUse) {
@@ -277,7 +281,7 @@ bool QFileDialogPrivate::canBeNativeDialog() const
 
 bool QFileDialogPrivate::usingWidgets() const
 {
-   return ! nativeDialogInUse && qFileDialogUi;
+   return ! nativeDialogInUse && qFileDialogUi != nullptr;
 }
 
 void QFileDialogPrivate::_q_goToUrl(const QUrl &url)
@@ -760,13 +764,13 @@ void QFileDialogPrivate::init(const QUrl &directory, const QString &nameFilter, 
    q->setAcceptMode(QFileDialog::AcceptOpen);
    nativeDialogInUse = (canBeNativeDialog() && platformFileDialogHelper() != nullptr);
 
-   if (!nativeDialogInUse) {
+   if (! nativeDialogInUse) {
       createWidgets();
    }
 
    q->setFileMode(QFileDialog::AnyFile);
 
-   if (!nameFilter.isEmpty()) {
+   if (! nameFilter.isEmpty()) {
       q->setNameFilter(nameFilter);
    }
 
@@ -927,8 +931,8 @@ void QFileDialogPrivate::createWidgets()
    createMenuActions();
 
 #ifndef QT_NO_SETTINGS
-   // Try to restore from the FileDialog settings group; if it fails, fall back
-   // to the older QByteArray serialized settings
+   // Try to restore from the FileDialog settings group,
+   // if it fails, fall back to the older QByteArray serialized settings
    if (! restoreFromSettings()) {
       const QSettings settings(QSettings::UserScope, "CsProject");
       q->restoreState(settings.value("CS/filedialog").toByteArray());
@@ -941,24 +945,31 @@ void QFileDialogPrivate::createWidgets()
    q->setViewMode(static_cast<QFileDialog::ViewMode>(options->viewMode()));
    q->setOptions(static_cast<QFileDialog::Options>(static_cast<int>(options->options())));
 
-   if (!options->sidebarUrls().isEmpty()) {
+   if (! options->sidebarUrls().isEmpty()) {
       q->setSidebarUrls(options->sidebarUrls());
    }
 
    q->setDirectoryUrl(options->initialDirectory());
 
 #ifndef QT_NO_MIMETYPE
-   if (!options->mimeTypeFilters().isEmpty()) {
+   if (! options->mimeTypeFilters().isEmpty()) {
       q->setMimeTypeFilters(options->mimeTypeFilters());
-   } else
+
+   } else {
 #endif
 
-      if (!options->nameFilters().isEmpty()) {
+      if (! options->nameFilters().isEmpty()) {
          q->setNameFilters(options->nameFilters());
       }
+
+#ifndef QT_NO_MIMETYPE
+   }
+#endif
+
    q->selectNameFilter(options->initiallySelectedNameFilter());
    q->setDefaultSuffix(options->defaultSuffix());
    q->setHistory(options->history());
+
    if (options->initiallySelectedFiles().count() == 1) {
       q->selectFile(options->initiallySelectedFiles().first().fileName());
    }

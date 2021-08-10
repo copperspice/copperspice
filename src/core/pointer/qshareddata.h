@@ -32,8 +32,6 @@ template <class T> class QSharedDataPointer;
 class Q_CORE_EXPORT QSharedData
 {
  public:
-   mutable QAtomicInt ref;
-
    inline QSharedData()
       : ref(0)
    {
@@ -45,12 +43,15 @@ class Q_CORE_EXPORT QSharedData
       (void) other;
    }
 
+   mutable QAtomicInt ref;
+
  private:
    // using the assignment operator would lead to corruption in the ref-counting
    QSharedData &operator=(const QSharedData &);
 };
 
-template <class T> class QSharedDataPointer
+template <class T>
+class QSharedDataPointer
 {
  public:
    typedef T Type;
@@ -61,34 +62,43 @@ template <class T> class QSharedDataPointer
          detach_helper();
       }
    }
+
    inline T &operator*() {
       detach();
       return *d;
    }
+
    inline const T &operator*() const {
       return *d;
    }
+
    inline T *operator->() {
       detach();
       return d;
    }
+
    inline const T *operator->() const {
       return d;
    }
+
    inline operator T *() {
       detach();
       return d;
    }
+
    inline operator const T *() const {
       return d;
    }
+
    inline T *data() {
       detach();
       return d;
    }
+
    inline const T *data() const {
       return d;
    }
+
    inline const T *constData() const {
       return d;
    }
@@ -181,7 +191,8 @@ template <class T> class QSharedDataPointer
    T *d;
 };
 
-template <class T> class QExplicitlySharedDataPointer
+template <class T>
+class QExplicitlySharedDataPointer
 {
  public:
    typedef T Type;

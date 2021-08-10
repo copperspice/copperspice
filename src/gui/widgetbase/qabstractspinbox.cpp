@@ -111,7 +111,6 @@ void QAbstractSpinBox::setSpecialValueText(const QString &specialValueText)
    d->updateEdit();
 }
 
-
 bool QAbstractSpinBox::wrapping() const
 {
    Q_D(const QAbstractSpinBox);
@@ -159,7 +158,6 @@ bool QAbstractSpinBox::hasFrame() const
    return d->frame;
 }
 
-
 void QAbstractSpinBox::setFrame(bool enable)
 {
    Q_D(QAbstractSpinBox);
@@ -174,6 +172,7 @@ void QAbstractSpinBox::setAccelerated(bool accelerate)
    d->accelerate = accelerate;
 
 }
+
 bool QAbstractSpinBox::isAccelerated() const
 {
    Q_D(const QAbstractSpinBox);
@@ -185,6 +184,7 @@ bool QAbstractSpinBox::isGroupSeparatorShown() const
    Q_D(const QAbstractSpinBox);
    return d->showGroupSeparator;
 }
+
 void QAbstractSpinBox::setGroupSeparatorShown(bool shown)
 {
    Q_D(QAbstractSpinBox);
@@ -195,6 +195,7 @@ void QAbstractSpinBox::setGroupSeparatorShown(bool shown)
    d->setValue(d->value, EmitIfChanged);
    updateGeometry();
 }
+
 void QAbstractSpinBox::setCorrectionMode(CorrectionMode correctionMode)
 {
    Q_D(QAbstractSpinBox);
@@ -206,7 +207,6 @@ QAbstractSpinBox::CorrectionMode QAbstractSpinBox::correctionMode() const
    Q_D(const QAbstractSpinBox);
    return d->correctionMode;
 }
-
 
 bool QAbstractSpinBox::hasAcceptableInput() const
 {
@@ -250,7 +250,6 @@ void QAbstractSpinBox::clear()
    d->cleared = true;
 }
 
-
 QAbstractSpinBox::StepEnabled QAbstractSpinBox::stepEnabled() const
 {
    Q_D(const QAbstractSpinBox);
@@ -270,7 +269,6 @@ QAbstractSpinBox::StepEnabled QAbstractSpinBox::stepEnabled() const
    return ret;
 }
 
-
 QValidator::State QAbstractSpinBox::validate(QString & /* input */, int & /* pos */) const
 {
    return QValidator::Acceptable;
@@ -279,7 +277,6 @@ QValidator::State QAbstractSpinBox::validate(QString & /* input */, int & /* pos
 void QAbstractSpinBox::fixup(QString & /* input */) const
 {
 }
-
 
 void QAbstractSpinBox::stepUp()
 {
@@ -290,7 +287,6 @@ void QAbstractSpinBox::stepDown()
 {
    stepBy(-1);
 }
-
 
 void QAbstractSpinBox::stepBy(int steps)
 {
@@ -318,10 +314,6 @@ void QAbstractSpinBox::stepBy(int steps)
    selectAll();
 }
 
-/*!
-    This function returns a pointer to the line edit of the spin box.
-*/
-
 QLineEdit *QAbstractSpinBox::lineEdit() const
 {
    Q_D(const QAbstractSpinBox);
@@ -333,7 +325,7 @@ void QAbstractSpinBox::setLineEdit(QLineEdit *lineEdit)
 {
    Q_D(QAbstractSpinBox);
 
-   if (!lineEdit) {
+   if (! lineEdit) {
       Q_ASSERT(lineEdit);
       return;
    }
@@ -376,12 +368,6 @@ void QAbstractSpinBox::interpretText()
    d->interpret(EmitIfChanged);
 }
 
-/*
-    Reimplemented in 4.6, so be careful.
- */
-/*!
-    \reimp
-*/
 QVariant QAbstractSpinBox::inputMethodQuery(Qt::InputMethodQuery query) const
 {
    Q_D(const QAbstractSpinBox);
@@ -398,10 +384,6 @@ QVariant QAbstractSpinBox::inputMethodQuery(Qt::InputMethodQuery query) const
    return lineEditValue;
 }
 
-/*!
-    \reimp
-*/
-
 bool QAbstractSpinBox::event(QEvent *event)
 {
    Q_D(QAbstractSpinBox);
@@ -414,6 +396,7 @@ bool QAbstractSpinBox::event(QEvent *event)
       case QEvent::LayoutDirectionChange:
          d->updateEditFieldGeometry();
          break;
+
       case QEvent::HoverEnter:
       case QEvent::HoverLeave:
       case QEvent::HoverMove:
@@ -443,15 +426,12 @@ bool QAbstractSpinBox::event(QEvent *event)
 #endif
       case QEvent::InputMethod:
          return d->edit->event(event);
+
       default:
          break;
    }
    return QWidget::event(event);
 }
-
-/*!
-    \reimp
-*/
 
 void QAbstractSpinBox::showEvent(QShowEvent *)
 {
@@ -464,10 +444,6 @@ void QAbstractSpinBox::showEvent(QShowEvent *)
       d->updateEdit();
    }
 }
-
-/*!
-    \reimp
-*/
 
 void QAbstractSpinBox::changeEvent(QEvent *event)
 {
@@ -504,10 +480,6 @@ void QAbstractSpinBox::changeEvent(QEvent *event)
 
    QWidget::changeEvent(event);
 }
-
-/*!
-    \reimp
-*/
 
 void QAbstractSpinBox::resizeEvent(QResizeEvent *event)
 {
@@ -601,10 +573,6 @@ QSize QAbstractSpinBox::minimumSizeHint() const
    return d->cachedMinimumSizeHint;
 }
 
-/*!
-    \reimp
-*/
-
 void QAbstractSpinBox::paintEvent(QPaintEvent *)
 {
    QStyleOptionSpinBox opt;
@@ -613,7 +581,6 @@ void QAbstractSpinBox::paintEvent(QPaintEvent *)
    QStylePainter p(this);
    p.drawComplexControl(QStyle::CC_SpinBox, opt);
 }
-
 
 void QAbstractSpinBox::keyPressEvent(QKeyEvent *event)
 {
@@ -803,10 +770,6 @@ void QAbstractSpinBox::wheelEvent(QWheelEvent *event)
 }
 #endif
 
-
-/*!
-    \reimp
-*/
 void QAbstractSpinBox::focusInEvent(QFocusEvent *event)
 {
    Q_D(QAbstractSpinBox);
@@ -817,10 +780,6 @@ void QAbstractSpinBox::focusInEvent(QFocusEvent *event)
    }
    QWidget::focusInEvent(event);
 }
-
-/*!
-    \reimp
-*/
 
 void QAbstractSpinBox::focusOutEvent(QFocusEvent *event)
 {
@@ -857,10 +816,6 @@ void QAbstractSpinBox::closeEvent(QCloseEvent *event)
    QWidget::closeEvent(event);
 }
 
-/*!
-    \reimp
-*/
-
 void QAbstractSpinBox::hideEvent(QHideEvent *event)
 {
    Q_D(QAbstractSpinBox);
@@ -870,12 +825,6 @@ void QAbstractSpinBox::hideEvent(QHideEvent *event)
    }
    QWidget::hideEvent(event);
 }
-
-
-
-/*!
-    \reimp
-*/
 
 void QAbstractSpinBox::timerEvent(QTimerEvent *event)
 {
@@ -922,10 +871,6 @@ void QAbstractSpinBox::timerEvent(QTimerEvent *event)
    return;
 }
 
-/*!
-    \reimp
-*/
-
 void QAbstractSpinBox::contextMenuEvent(QContextMenuEvent *event)
 {
 #ifdef QT_NO_CONTEXTMENU
@@ -970,10 +915,6 @@ void QAbstractSpinBox::contextMenuEvent(QContextMenuEvent *event)
 #endif // QT_NO_CONTEXTMENU
 }
 
-/*!
-    \reimp
-*/
-
 void QAbstractSpinBox::mouseMoveEvent(QMouseEvent *event)
 {
    Q_D(QAbstractSpinBox);
@@ -993,10 +934,6 @@ void QAbstractSpinBox::mouseMoveEvent(QMouseEvent *event)
       event->accept();
    }
 }
-
-/*!
-    \reimp
-*/
 
 void QAbstractSpinBox::mousePressEvent(QMouseEvent *event)
 {
@@ -1019,9 +956,6 @@ void QAbstractSpinBox::mousePressEvent(QMouseEvent *event)
    }
 }
 
-/*!
-    \reimp
-*/
 void QAbstractSpinBox::mouseReleaseEvent(QMouseEvent *event)
 {
    Q_D(QAbstractSpinBox);
@@ -1103,8 +1037,8 @@ QString QAbstractSpinBoxPrivate::stripped(const QString &t, int *pos) const
    if (pos) {
       (*pos) -= (s - text.size());
    }
-   return text;
 
+   return text;
 }
 
 void QAbstractSpinBoxPrivate::updateEditFieldGeometry()
@@ -1116,7 +1050,6 @@ void QAbstractSpinBoxPrivate::updateEditFieldGeometry()
    edit->setGeometry(q->style()->subControlRect(QStyle::CC_SpinBox, &opt,
          QStyle::SC_SpinBoxEditField, q));
 }
-
 
 bool QAbstractSpinBoxPrivate::specialValue() const
 {
@@ -1210,13 +1143,6 @@ void QAbstractSpinBoxPrivate::init()
    q->setAttribute(Qt::WA_MacShowFocusRect);
 }
 
-/*!
-    \internal
-
-    Resets the state of the spinbox. E.g. the state is set to
-    (Keyboard|Up) if Key up is currently pressed.
-*/
-
 void QAbstractSpinBoxPrivate::reset()
 {
    Q_Q(QAbstractSpinBox);
@@ -1234,12 +1160,6 @@ void QAbstractSpinBoxPrivate::reset()
       q->update();
    }
 }
-
-/*!
-    \internal
-
-    Updates the state of the spinbox.
-*/
 
 void QAbstractSpinBoxPrivate::updateState(bool up, bool fromKeyboard /* = false */)
 {
@@ -1260,14 +1180,6 @@ void QAbstractSpinBoxPrivate::updateState(bool up, bool fromKeyboard /* = false 
    }
 }
 
-
-/*!
-    Initialize \a option with the values from this QSpinBox. This method
-    is useful for subclasses when they need a QStyleOptionSpinBox, but don't want
-    to fill in all the information themselves.
-
-    \sa QStyleOption::initFrom()
-*/
 void QAbstractSpinBox::initStyleOption(QStyleOptionSpinBox *option) const
 {
    if (!option) {
@@ -1300,14 +1212,6 @@ void QAbstractSpinBox::initStyleOption(QStyleOptionSpinBox *option) const
 
    option->frame = d->frame;
 }
-
-/*!
-    \internal
-
-    Bounds \a val to be within minimum and maximum. Also tries to be
-    clever about setting it at min and max depending on what it was
-    and what direction it was changed etc.
-*/
 
 QVariant QAbstractSpinBoxPrivate::bound(const QVariant &val, const QVariant &old, int steps) const
 {
@@ -1343,13 +1247,6 @@ QVariant QAbstractSpinBoxPrivate::bound(const QVariant &val, const QVariant &old
    return v;
 }
 
-/*!
-    \internal
-
-    Sets the value of the spin box to \a val. Depending on the value
-    of \a ep it will also emit signals.
-*/
-
 void QAbstractSpinBoxPrivate::setValue(const QVariant &val, EmitPolicy ep, bool doUpdate)
 {
    Q_Q(QAbstractSpinBox);
@@ -1368,12 +1265,6 @@ void QAbstractSpinBoxPrivate::setValue(const QVariant &val, EmitPolicy ep, bool 
       emitSignals(ep, old);
    }
 }
-
-/*!
-    \internal
-
-    Updates the line edit to reflect the current value of the spin box.
-*/
 
 void QAbstractSpinBoxPrivate::updateEdit()
 {
@@ -1407,12 +1298,6 @@ void QAbstractSpinBoxPrivate::updateEdit()
    edit->blockSignals(sb);
 }
 
-/*!
-    \internal
-
-    Convenience function to set min/max values.
-*/
-
 void QAbstractSpinBoxPrivate::setRange(const QVariant &min, const QVariant &max)
 {
    Q_Q(QAbstractSpinBox);
@@ -1433,12 +1318,6 @@ void QAbstractSpinBoxPrivate::setRange(const QVariant &min, const QVariant &max)
    q->updateGeometry();
 }
 
-/*!
-    \internal
-
-    Convenience function to get a variant of the right type.
-*/
-
 QVariant QAbstractSpinBoxPrivate::getZeroVariant() const
 {
    QVariant ret;
@@ -1457,43 +1336,15 @@ QVariant QAbstractSpinBoxPrivate::getZeroVariant() const
    return ret;
 }
 
-/*!
-    \internal
-
-    Virtual method called that calls the public textFromValue()
-    functions in the subclasses. Needed to change signature from
-    QVariant to int/double/QDateTime etc. Used when needing to display
-    a value textually.
-
-    This method is reimeplemented in the various subclasses.
-*/
-
 QString QAbstractSpinBoxPrivate::textFromValue(const QVariant &) const
 {
    return QString();
 }
 
-/*!
-    \internal
-
-    Virtual method called that calls the public valueFromText()
-    functions in the subclasses. Needed to change signature from
-    QVariant to int/double/QDateTime etc. Used when needing to
-    interpret a string as another type.
-
-    This method is reimeplemented in the various subclasses.
-*/
-
 QVariant QAbstractSpinBoxPrivate::valueFromText(const QString &) const
 {
    return QVariant();
 }
-/*!
-    \internal
-
-    Interprets text and emits signals. Called when the spinbox needs
-    to interpret the text on the lineedit.
-*/
 
 void QAbstractSpinBoxPrivate::interpret(EmitPolicy ep)
 {
@@ -1542,23 +1393,11 @@ void QAbstractSpinBoxPrivate::clearCache() const
 
 // --- QSpinBoxValidator ---
 
-/*!
-    \internal
-    Constructs a QSpinBoxValidator object
-*/
-
 QSpinBoxValidator::QSpinBoxValidator(QAbstractSpinBox *qp, QAbstractSpinBoxPrivate *dp)
    : QValidator(qp), qptr(qp), dptr(dp)
 {
    setObjectName(QLatin1String("qt_spinboxvalidator"));
 }
-
-/*!
-    \internal
-
-    Checks for specialValueText, prefix, suffix and calls
-    the virtual QAbstractSpinBox::validate function.
-*/
 
 QValidator::State QSpinBoxValidator::validate(QString &input, int &pos) const
 {
@@ -1577,22 +1416,11 @@ QValidator::State QSpinBoxValidator::validate(QString &input, int &pos) const
 
    return qptr->validate(input, pos);
 }
-/*!
-    \internal
-    Calls the virtual QAbstractSpinBox::fixup function.
-*/
 
 void QSpinBoxValidator::fixup(QString &input) const
 {
    qptr->fixup(input);
 }
-
-// --- global ---
-
-/*!
-    \internal
-    Adds two variants together and returns the result.
-*/
 
 QVariant operator+(const QVariant &arg1, const QVariant &arg2)
 {
@@ -1642,12 +1470,6 @@ QVariant operator+(const QVariant &arg1, const QVariant &arg2)
    return ret;
 }
 
-
-/*!
-    \internal
-    Subtracts two variants and returns the result.
-*/
-
 QVariant operator-(const QVariant &arg1, const QVariant &arg2)
 {
    QVariant ret;
@@ -1693,11 +1515,6 @@ QVariant operator-(const QVariant &arg1, const QVariant &arg2)
    return ret;
 }
 
-/*!
-    \internal
-    Multiplies \a arg1 by \a multiplier and returns the result.
-*/
-
 QVariant operator*(const QVariant &arg1, double multiplier)
 {
    QVariant ret;
@@ -1728,8 +1545,6 @@ QVariant operator*(const QVariant &arg1, double multiplier)
 
    return ret;
 }
-
-
 
 double operator/(const QVariant &arg1, const QVariant &arg2)
 {

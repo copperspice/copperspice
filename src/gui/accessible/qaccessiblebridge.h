@@ -35,7 +35,9 @@ class QAccessibleEvent;
 class QAccessibleBridge
 {
  public:
-   virtual ~QAccessibleBridge() {}
+   virtual ~QAccessibleBridge()
+   {
+   }
    virtual void setRootObject(QAccessibleInterface *) = 0;
    virtual void notifyAccessibilityUpdate(QAccessibleEvent *event) = 0;
 };

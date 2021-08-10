@@ -2176,6 +2176,7 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
 {
    QFontEngine *engine = nullptr;
    QFontEngine *scaledEngine = nullptr;
+
    int script = si.analysis.script;
 
    QFont font = fnt;
@@ -2200,6 +2201,7 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
       if (si.analysis.flags == QScriptAnalysis::SmallCaps) {
          if (feCache.prevScaledFontEngine) {
             scaledEngine = feCache.prevScaledFontEngine;
+
          } else {
             QFontEngine *scEngine = rawFont.m_fontPrivate->fontEngine->cloneWithSize(smallCapsFraction * rawFont.pixelSize());
 
@@ -2252,9 +2254,11 @@ QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFix
                }
                scaledEngine = font.d->engineForScript(script);
             }
+
             if (scaledEngine) {
                scaledEngine->m_refCount.ref();
             }
+
             if (feCache.prevFontEngine) {
                releaseCachedFontEngine(feCache.prevFontEngine);
             }

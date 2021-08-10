@@ -1081,9 +1081,10 @@ void QGraphicsWidget::setWindowFlags(Qt::WindowFlags wFlags)
    setFlag(ItemIsPanel, d->windowFlags & Qt::Window);
 
    bool isPopup = (d->windowFlags & Qt::WindowType_Mask) == Qt::Popup;
+
    if (d->scene && isVisible() && wasPopup != isPopup) {
       // Popup state changed; update implicit mouse grab.
-      if (!isPopup) {
+      if (! isPopup) {
          d->scene->d_func()->removePopup(this);
       } else {
          d->scene->d_func()->addPopup(this);

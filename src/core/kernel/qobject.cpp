@@ -102,7 +102,7 @@ QObject::~QObject()
 
       if (sharedRefCount->strongref.load() > 0) {
          // continue deleting, unclear what else to do
-         qWarning("QObject:~QObject()  Shared QObject was deleted directly, application may crash.");
+         qWarning("QObject:~QObject() Shared QObject was deleted directly, application may crash.");
       }
 
       // indicate to all QWeakPointers QObject has now been deleted

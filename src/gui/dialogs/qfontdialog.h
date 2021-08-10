@@ -28,8 +28,6 @@
 #include <qdialog.h>
 #include <qfont.h>
 
-
-
 #ifndef QT_NO_FONTDIALOG
 
 class QFontDialogPrivate;
@@ -57,7 +55,6 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
       MonospacedFonts     = 0x00000010,
       ProportionalFonts   = 0x00000020
    };
-
    using FontDialogOptions = QFlags<FontDialogOption>;
 
    explicit QFontDialog(QWidget *parent = nullptr);

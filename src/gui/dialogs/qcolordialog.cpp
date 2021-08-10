@@ -1699,6 +1699,7 @@ void QColorDialogPrivate::_q_pickScreenColor()
    q->installEventFilter(colorPickingEventFilter);
    // If user pushes Escape, the last color before picking will be restored.
    beforeScreenColorPicking = cs->currentColor();
+
 #ifndef QT_NO_CURSOR
    q->grabMouse(Qt::CrossCursor);
 #else
@@ -1708,6 +1709,7 @@ void QColorDialogPrivate::_q_pickScreenColor()
    updateTimer->start(30);
    dummyTransparentWindow.show();
 #endif
+
    q->grabKeyboard();
    q->setMouseTracking(true);
    addCusBt->setDisabled(true);
@@ -1992,10 +1994,10 @@ bool QColorDialogPrivate::canBeNativeDialog() const
 
    return (staticName == dynamicName);
 }
+
 static const Qt::WindowFlags DefaultWindowFlags =
    Qt::Dialog | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint
    | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint;
-
 
 QColorDialog::QColorDialog(QWidget *parent)
    : QDialog(*new QColorDialogPrivate, parent, DefaultWindowFlags)
@@ -2163,20 +2165,25 @@ void QColorDialogPrivate::_q_updateColorPicking()
 {
 #ifndef QT_NO_CURSOR
    Q_Q(QColorDialog);
+
    static QPoint lastGlobalPos;
    QPoint newGlobalPos = QCursor::pos();
+
    if (lastGlobalPos == newGlobalPos) {
       return;
    }
+
    lastGlobalPos = newGlobalPos;
-   if (!q->rect().contains(q->mapFromGlobal(
-            newGlobalPos))) { // Inside the dialog mouse tracking works, handleColorPickingMouseMove will be called
+
+   if (! q->rect().contains(q->mapFromGlobal(newGlobalPos))) {
+      // Inside the dialog mouse tracking works, handleColorPickingMouseMove will be called
       updateColorPicking(newGlobalPos);
 #ifdef Q_OS_WIN32
       dummyTransparentWindow.setPosition(newGlobalPos);
 #endif
    }
-#endif // ! QT_NO_CURSOR
+
+#endif
 
 }
 void QColorDialogPrivate::updateColorPicking(const QPoint &globalPos)
@@ -2200,9 +2207,6 @@ bool QColorDialogPrivate::handleColorPickingMouseButtonRelease(QMouseEvent *e)
    return true;
 }
 
-/*!
-    \reimp
-*/
 bool QColorDialogPrivate::handleColorPickingKeyPress(QKeyEvent *e)
 {
    Q_Q(QColorDialog);

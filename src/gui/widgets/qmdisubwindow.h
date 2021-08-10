@@ -49,8 +49,8 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
 
  public:
    enum SubWindowOption {
-      AllowOutsideAreaHorizontally = 0x1, // internal
-      AllowOutsideAreaVertically = 0x2, // internal
+      AllowOutsideAreaHorizontally = 0x1,    // internal
+      AllowOutsideAreaVertically = 0x2,      // internal
       RubberBandResize = 0x4,
       RubberBandMove = 0x8
    };

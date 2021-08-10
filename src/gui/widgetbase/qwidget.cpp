@@ -570,7 +570,8 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
       QWidgetPrivate::maxInstances = QWidgetPrivate::instanceCounter;
    }
 
-   if (QApplicationPrivate::testAttribute(Qt::AA_ImmediateWidgetCreation)) { // ### fixme: Qt 6: Remove AA_ImmediateWidgetCreation.
+   if (QApplicationPrivate::testAttribute(Qt::AA_ImmediateWidgetCreation)) {
+      // ### fixme: Qt 6: Remove AA_ImmediateWidgetCreation.
       q->create();
    }
 
@@ -736,7 +737,6 @@ void q_createNativeChildrenAndSetParent(const QWidget *parentWidget)
          }
       }
    }
-
 }
 
 void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyOldWindow)
@@ -7590,6 +7590,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    if (f & Qt::Window) { // Frame geometry likely changes, refresh.
       d->data.fstrut_dirty = true;
    }
+
    QWidget *desktopWidget = nullptr;
 
    if (parent && parent->windowType() == Qt::Desktop) {
@@ -7606,7 +7607,6 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
          setAttribute(Qt::WA_NativeWindow);
       }
    }
-
 
    if (wasCreated) {
       if (! testAttribute(Qt::WA_WState_Hidden)) {
@@ -7681,6 +7681,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
 #if defined(QT_OPENGL_ES)
       || (f & Qt::MSWindowsOwnDC)
 #endif
+
    ) {
       // propagate enabled updates enabled state to non-windows
       if (! isWindow()) {
@@ -7704,7 +7705,6 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
 
       //### already hidden above, may want to so something different on mac
       // q->setAttribute(Qt::WA_WState_Hidden);
-
 
       sendChildEvents = CSInternalEvents::get_m_sendChildEvents(this);
 

@@ -37,8 +37,11 @@ class QMutexData
 {
  public:
    bool recursive;
+
    QMutexData(QMutex::RecursionMode mode = QMutex::NonRecursive)
-      : recursive(mode == QMutex::Recursive) {}
+      : recursive(mode == QMutex::Recursive)
+   {
+   }
 };
 
 #if ! defined(Q_OS_LINUX)

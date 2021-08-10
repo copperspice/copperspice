@@ -73,9 +73,7 @@ qreal QGraphicsWidgetPrivate::titleBarHeight(const QStyleOptionTitleBar &options
    return (qreal)height;
 }
 
-/*!
-    \internal
-*/
+// internal
 QGraphicsWidgetPrivate::~QGraphicsWidgetPrivate()
 {
    // Remove any lazily allocated data
@@ -333,35 +331,44 @@ void QGraphicsWidgetPrivate::adjustWindowFlags(Qt::WindowFlags *flags)
             | Qt::WindowContextHelpButtonHint));
 
    uint type = (*flags & Qt::WindowType_Mask);
-   if (customize)
-      ;
-   else if (type == Qt::Dialog || type == Qt::Sheet) {
+
+   if (customize) {
+      // do nothing
+
+   } else if (type == Qt::Dialog || type == Qt::Sheet) {
       *flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowContextHelpButtonHint;
+
    } else if (type == Qt::Tool) {
       *flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint;
-   } else if (type == Qt::Window || type == Qt::SubWindow)
-      *flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint
-         | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint;
+
+   } else if (type == Qt::Window || type == Qt::SubWindow) {
+      *flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint;
+   }
 }
 
 void QGraphicsWidgetPrivate::windowFrameMouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
    Q_Q(QGraphicsWidget);
    ensureWindowData();
+
    if (windowData->grabbedSection != Qt::NoSection) {
       if (windowData->grabbedSection == Qt::TitleBarArea) {
          windowData->buttonSunken = false;
          QStyleOptionTitleBar bar;
          initStyleOptionTitleBar(&bar);
+
          // make sure that the coordinates (rect and pos) we send to the style are positive.
          bar.rect = q->windowFrameRect().toRect();
          bar.rect.moveTo(0, 0);
          bar.rect.setHeight(q->style()->pixelMetric(QStyle::PM_TitleBarHeight, &bar));
+
          QPointF pos = event->pos();
+
          if (windowFrameMargins) {
             pos.rx() += windowFrameMargins[Left];
             pos.ry() += windowFrameMargins[Top];
          }
+
          bar.subControls = QStyle::SC_TitleBarCloseButton;
          if (q->style()->subControlRect(QStyle::CC_TitleBar, &bar,
                QStyle::SC_TitleBarCloseButton,
@@ -369,6 +376,7 @@ void QGraphicsWidgetPrivate::windowFrameMouseReleaseEvent(QGraphicsSceneMouseEve
             q->close();
          }
       }
+
       if (!(static_cast<QGraphicsSceneMouseEvent *>(event)->buttons())) {
          windowData->grabbedSection = Qt::NoSection;
       }

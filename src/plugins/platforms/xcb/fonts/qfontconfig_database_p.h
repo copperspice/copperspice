@@ -31,17 +31,20 @@ class QFontEngineFT;
 
 class QFontconfigDatabase : public QBasicFontDatabase
 {
-public:
+ public:
     void populateFontDatabase() override;
     QFontEngineMulti *fontEngineMulti(QFontEngine *fontEngine, QChar::Script script) override;
     QFontEngine *fontEngine(const QFontDef &fontDef, void *handle) override;
     QFontEngine *fontEngine(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference) override;
-    QStringList fallbacksForFamily(const QString &family, QFont::Style style, QFont::StyleHint styleHint, QChar::Script script) const override;
+
+    QStringList fallbacksForFamily(const QString &family, QFont::Style style, QFont::StyleHint styleHint,
+            QChar::Script script) const override;
+
     QStringList addApplicationFont(const QByteArray &fontData, const QString &fileName) override;
     QString resolveFontFamilyAlias(const QString &family) const override;
     QFont defaultFont() const override;
 
-private:
+ private:
     void setupFontEngine(QFontEngineFT *engine, const QFontDef &fontDef) const;
 };
 

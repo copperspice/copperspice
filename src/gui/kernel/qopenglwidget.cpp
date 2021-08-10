@@ -441,13 +441,11 @@ void QOpenGLWidgetPrivate::resizeViewportFramebuffer()
    }
 }
 
-/*!
-  Constructs a widget which is a child of \a parent, with widget flags set to \a f.
- */
 QOpenGLWidget::QOpenGLWidget(QWidget *parent, Qt::WindowFlags f)
    : QWidget(*(new QOpenGLWidgetPrivate), parent, f)
 {
    Q_D(QOpenGLWidget);
+
    if (QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)) {
       d->setRenderToTexture();
    } else {

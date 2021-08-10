@@ -21,16 +21,15 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
+#include <qrawfont_p.h>
 
+#include <qglobal.h>
 #include <qendian.h>
 #include <qrawfont.h>
 #include <qplatform_fontdatabase.h>
-
-#include <qapplication_p.h>
 #include <qplatform_integration.h>
 
-#include <qrawfont_p.h>
+#include <qapplication_p.h>
 
 QRawFont::QRawFont()
    : m_fontPrivate(std::make_shared<QRawFontPrivate>())
@@ -69,8 +68,7 @@ bool QRawFont::isValid() const
    return m_fontPrivate->isValid();
 }
 
-void QRawFont::loadFromFile(const QString &fileName, qreal pixelSize,
-   QFont::HintingPreference hintingPreference)
+void QRawFont::loadFromFile(const QString &fileName, qreal pixelSize, QFont::HintingPreference hintingPreference)
 {
    QFile file(fileName);
    if (file.open(QIODevice::ReadOnly)) {
@@ -258,7 +256,6 @@ bool QRawFont::advancesForGlyphIndexes(const quint32 *glyphIndexes, QPointF *adv
    return true;
 }
 
-
 bool QRawFont::advancesForGlyphIndexes(const quint32 *glyphIndexes, QPointF *advances, int numGlyphs) const
 {
    return QRawFont::advancesForGlyphIndexes(glyphIndexes, advances, numGlyphs, SeparateAdvances);
@@ -335,6 +332,7 @@ QRawFont QRawFont::fromFont(const QFont &font, QFontDatabase::WritingSystem writ
 
    QFontPrivate *font_d = QFontPrivate::get(font);
    int script = qt_script_for_writing_system(writingSystem);
+
    QFontEngine *fe = font_d->engineForScript(script);
 
    if (fe != nullptr && fe->type() == QFontEngine::Multi) {

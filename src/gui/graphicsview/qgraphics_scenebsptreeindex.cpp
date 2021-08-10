@@ -488,9 +488,11 @@ int QGraphicsSceneBspTreeIndex::bspTreeDepth() const
 void QGraphicsSceneBspTreeIndex::setBspTreeDepth(int depth)
 {
    Q_D(QGraphicsSceneBspTreeIndex);
+
    if (d->bspTreeDepth == depth) {
       return;
    }
+
    d->bspTreeDepth = depth;
    d->resetIndex();
 }
@@ -506,6 +508,7 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
    const void *const value)
 {
    Q_D(QGraphicsSceneBspTreeIndex);
+
    switch (change) {
       case QGraphicsItem::ItemFlagsChange: {
          // Handle ItemIgnoresTransformations
@@ -516,6 +519,7 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
             || item->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape;
          bool willClipChildren = newFlags & QGraphicsItem::ItemClipsChildrenToShape
             || newFlags & QGraphicsItem::ItemContainsChildrenInShape;
+
          if ((ignoredTransform != willIgnoreTransform) || (clipsChildren != willClipChildren)) {
             QGraphicsItem *thatItem = const_cast<QGraphicsItem *>(item);
             // Remove item and its descendants from the index and append
@@ -526,11 +530,14 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
          }
          break;
       }
+
       case QGraphicsItem::ItemZValueChange:
          d->invalidateSortCache();
          break;
+
       case QGraphicsItem::ItemParentChange: {
          d->invalidateSortCache();
+
          // Handle ItemIgnoresTransformations
          const QGraphicsItem *newParent = static_cast<const QGraphicsItem *>(value);
          bool ignoredTransform = item->d_ptr->itemIsUntransformable();
@@ -543,6 +550,7 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
                   || newParent->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape)
                || (newParent->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
                   || newParent->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorContainsChildren));
+
          if ((ignoredTransform != willIgnoreTransform) || (ancestorClippedChildren != ancestorWillClipChildren)) {
             QGraphicsItem *thatItem = const_cast<QGraphicsItem *>(item);
             // Remove item and its descendants from the index and append
@@ -553,6 +561,7 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
          }
          break;
       }
+
       default:
          break;
    }

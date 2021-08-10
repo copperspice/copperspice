@@ -335,7 +335,8 @@ static QTextCodec *ru_RU_hack(const char *i)
 static QTextCodec *checkForCodec(const QByteArray &name)
 {
    QTextCodec *c = QTextCodec::codecForName(name);
-   if (!c) {
+
+   if (! c) {
       const int index = name.indexOf('@');
 
       if (index != -1) {
@@ -379,7 +380,7 @@ static void setupLocaleMapper()
       // definitely knows it, but since we cannot fully trust it, get ready
       // to fall back to environment variables.
 
-#if !defined(QT_NO_SETLOCALE)
+#if ! defined(QT_NO_SETLOCALE)
       const QByteArray ctype = setlocale(LC_CTYPE, nullptr);
 #else
       const QByteArray ctype;
@@ -482,7 +483,6 @@ static void setupLocaleMapper()
 #endif
 
 }
-
 
 Q_GLOBAL_STATIC_WITH_ARGS(QMutex, textCodecsMutex, (QMutex::Recursive));
 

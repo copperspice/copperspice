@@ -70,7 +70,6 @@ void QPlatformCursor::setPos(const QPoint &pos)
 // End of display and pointer event handling code
 // Beginning of built-in cursor graphics
 
-
 static QPlatformCursorImage *systemCursorTable[Qt::LastCursor + 1];
 static bool systemCursorTableInit = false;
 
@@ -495,6 +494,7 @@ void QPlatformCursorImage::createSystemCursor(int id)
          systemCursorTable[Qt::WhatsThisCursor] =
             new QPlatformCursorImage(whatsthis_bits, whatsthism_bits, 32, 32, 0, 0);
          break;
+
       case Qt::BusyCursor:
          systemCursorTable[Qt::BusyCursor] =
             new QPlatformCursorImage(busy_bits, busym_bits, 32, 32, 0, 0);
@@ -504,42 +504,35 @@ void QPlatformCursorImage::createSystemCursor(int id)
          systemCursorTable[Qt::OpenHandCursor] =
             new QPlatformCursorImage(openhand_bits, openhandm_bits, 16, 16, 8, 8);
          break;
+
       case Qt::ClosedHandCursor:
          systemCursorTable[Qt::ClosedHandCursor] =
             new QPlatformCursorImage(closedhand_bits, closedhandm_bits, 16, 16, 8, 8);
          break;
+
       default:
          qWarning("Unknown system cursor %d", id);
    }
 }
 
-/*!
-    \fn void QPlatformCursorImage::set(Qt::CursorShape id)
-
-    \brief Calling this method sets the cursor image to the specified shape
-
-    \a id is one of the defined Qt::CursorShape values.
-
-    If id is invalid, Qt::BitmapCursor, or unknown by the implementation,
-    Qt::ArrowCursor is used instead.
-*/
-
 void QPlatformCursorImage::set(Qt::CursorShape id)
 {
    QPlatformCursorImage *cursor = nullptr;
+
    if (id >= 0 && id <= Qt::LastCursor) {
-      if (!systemCursorTable[id]) {
+      if (! systemCursorTable[id]) {
          createSystemCursor(id);
       }
       cursor = systemCursorTable[id];
    }
 
    if (cursor == nullptr) {
-      if (!systemCursorTable[Qt::ArrowCursor]) {
+      if (! systemCursorTable[Qt::ArrowCursor]) {
          createSystemCursor(Qt::ArrowCursor);
       }
       cursor = systemCursorTable[Qt::ArrowCursor];
    }
+
    cursorImage = cursor->cursorImage;
    hot = cursor->hot;
 }
@@ -560,7 +553,7 @@ void QPlatformCursorImage::set(const uchar *data, const uchar *mask,
 
    cursorImage = QImage(width, height, QImage::Format_Indexed8);
 
-   if (!width || !height || !data || !mask || cursorImage.isNull()) {
+   if (! width || ! height || ! data || ! mask || cursorImage.isNull()) {
       return;
    }
 
@@ -571,17 +564,21 @@ void QPlatformCursorImage::set(const uchar *data, const uchar *mask,
 
    int bytesPerLine = (width + 7) / 8;
    int p = 0;
-   int d, m;
+   int d;
+   int m;
 
-   int x = -1, w = 0;
+   int x = -1;
+   int w = 0;
 
    uchar *cursor_data = cursorImage.bits();
    int bpl = cursorImage.bytesPerLine();
+
    for (int i = 0; i < height; i++) {
       for (int j = 0; j < bytesPerLine; j++, data++, mask++) {
          for (int b = 0; b < 8 && j * 8 + b < width; b++) {
             d = *data & (1 << b);
             m = *mask & (1 << b);
+
             if (d && m) {
                p = 0;
 
@@ -605,15 +602,13 @@ void QPlatformCursorImage::set(const uchar *data, const uchar *mask,
             }
          }
       }
+
       if (x >= 0) {
          x = -1;
          w = 0;
       }
+
       cursor_data += bpl;
    }
 
 }
-
-
-
-

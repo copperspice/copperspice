@@ -238,6 +238,7 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
    const qreal opacity = item->d_ptr->combineOpacityFromParent(parentOpacity);
    const bool itemIsFullyTransparent = QGraphicsItemPrivate::isOpacityNull(opacity);
    const bool itemHasChildren = !item->d_ptr->children.isEmpty();
+
    if (itemIsFullyTransparent && (!itemHasChildren || item->d_ptr->childrenCombineOpacity())) {
       return;
    }
@@ -245,6 +246,7 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
    // Update the item's scene transform if dirty.
    const bool itemIsUntransformable = item->d_ptr->itemIsUntransformable();
    const bool wasDirtyParentSceneTransform = item->d_ptr->dirtySceneTransform && !itemIsUntransformable;
+
    if (wasDirtyParentSceneTransform) {
       item->d_ptr->updateSceneTransformFromParent();
       Q_ASSERT(!item->d_ptr->dirtySceneTransform);
@@ -252,7 +254,9 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
 
    const bool itemClipsChildrenToShape = (item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape
          || item->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape);
+
    bool processItem = !itemIsFullyTransparent;
+
    if (processItem) {
       processItem = intersect(item, exposeRect, mode, viewTransform, intersectData);
       if (!processItem && (!itemHasChildren || itemClipsChildrenToShape)) {
@@ -289,6 +293,7 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
          if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity)) {
             continue;
          }
+
          recursive_items_helper(child, exposeRect, intersect, items, viewTransform,
             mode, opacity, intersectData);
       }

@@ -38,7 +38,8 @@ class QRawFontPrivate
  public:
    QRawFontPrivate()
       : fontEngine(nullptr), hintingPreference(QFont::PreferDefaultHinting), thread(nullptr)
-   {}
+   {
+   }
 
    QRawFontPrivate(const QRawFontPrivate &other)
       : fontEngine(other.fontEngine), hintingPreference(other.hintingPreference), thread(other.thread)
@@ -56,6 +57,7 @@ class QRawFontPrivate
       setFontEngine(nullptr);
       hintingPreference = QFont::PreferDefaultHinting;
    }
+
    inline bool isValid() const {
       Q_ASSERT(fontEngine == nullptr || thread == QThread::currentThread());
       return fontEngine != nullptr;
@@ -83,13 +85,10 @@ class QRawFontPrivate
 
          thread = QThread::currentThread();
          Q_ASSERT(thread);
-
       }
    }
 
-   void loadFromData(const QByteArray &fontData,
-      qreal pixelSize,
-      QFont::HintingPreference hintingPreference);
+   void loadFromData(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference);
 
    static std::shared_ptr<QRawFontPrivate> get(const QRawFont &font) {
       return font.m_fontPrivate;

@@ -20,23 +20,23 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
 
 #if ENABLE(NETSCAPE_PLUGIN_API)
 
-#include "IdentifierRep.h"
-#include "npruntime_internal.h"
-#include "npruntime_impl.h"
-#include "npruntime_priv.h"
-
-#include "c_utility.h"
 #include <runtime/Identifier.h>
 #include <runtime/JSLock.h>
 #include <wtf/Assertions.h>
 #include <wtf/HashMap.h>
+
+#include "IdentifierRep.h"
+#include "npruntime_internal.h"
+#include "npruntime_impl.h"
+#include "npruntime_priv.h"
+#include "c_utility.h"
 
 using namespace JSC::Bindings;
 using namespace WebCore;
@@ -50,7 +50,7 @@ void _NPN_GetStringIdentifiers(const NPUTF8** names, int32_t nameCount, NPIdenti
 {
     ASSERT(names);
     ASSERT(identifiers);
-    
+
     if (names && identifiers) {
         for (int i = 0; i < nameCount; i++)
             identifiers[i] = _NPN_GetStringIdentifier(names[i]);
@@ -72,7 +72,7 @@ NPUTF8 *_NPN_UTF8FromIdentifier(NPIdentifier identifier)
     const char* string = static_cast<IdentifierRep*>(identifier)->string();
     if (!string)
         return 0;
-    
+
     return strdup(string);
 }
 

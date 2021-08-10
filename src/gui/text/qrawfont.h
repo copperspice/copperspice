@@ -37,7 +37,6 @@ class QRawFontPrivate;
 
 class Q_GUI_EXPORT QRawFont
 {
-
  public:
    enum AntialiasingType {
       PixelAntialiasing,
@@ -46,17 +45,20 @@ class Q_GUI_EXPORT QRawFont
 
    enum LayoutFlag {
       SeparateAdvances = 0,
-      KernedAdvances = 1,
+      KernedAdvances   = 1,
       UseDesignMetrics = 2
    };
 
    using LayoutFlags = QFlags<LayoutFlag>;
 
    QRawFont();
+
    QRawFont(const QString &fileName, qreal pixelSize,
       QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
+
    QRawFont(const QByteArray &fontData, qreal pixelSize,
       QFont::HintingPreference hintingPreference = QFont::PreferDefaultHinting);
+
    QRawFont(const QRawFont &other);
 
    ~QRawFont();
@@ -72,7 +74,7 @@ class Q_GUI_EXPORT QRawFont
 
    bool operator==(const QRawFont &other) const;
    inline bool operator!=(const QRawFont &other) const {
-      return !operator==(other);
+      return ! operator==(other);
    }
 
    QString familyName() const;
@@ -113,7 +115,6 @@ class Q_GUI_EXPORT QRawFont
    qreal unitsPerEm() const;
 
    void loadFromFile(const QString &fileName, qreal pixelSize, QFont::HintingPreference hintingPreference);
-
    void loadFromData(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference);
 
    void swap(QRawFont &other) {
@@ -146,6 +147,7 @@ inline QVector<QPointF> QRawFont::advancesForGlyphIndexes(const QVector<quint32>
    if (advancesForGlyphIndexes(glyphIndexes.constData(), advances.data(), glyphIndexes.size(), layoutFlags)) {
       return advances;
    }
+
    return QVector<QPointF>();
 }
 

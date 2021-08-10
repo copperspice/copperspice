@@ -224,7 +224,7 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QS
    QString trailingSeparator;
 
 #if defined(Q_OS_WIN)
-   if (absolutePath.startsWith(QString("//"))) {
+   if (absolutePath.startsWith("//")) {
 
       // UNC path
       QString host = QString("\\\\") + pathElements.first();
@@ -233,8 +233,8 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QS
          absolutePath.append(QChar('/'));
       }
 
-      if (longPath.endsWith(QChar('/')) && ! absolutePath.endsWith(QChar('/'))) {
-         absolutePath.append(QChar('/'));
+      if (longPath.endsWith('/') && ! absolutePath.endsWith('/')) {
+         absolutePath.append('/');
       }
 
       if (absolutePath.endsWith('/')) {
@@ -245,7 +245,7 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QS
       QFileSystemModelPrivate::QFileSystemNode *rootNode = const_cast<QFileSystemModelPrivate::QFileSystemNode *>(&root);
 
       if (! root.children.contains(host.toLower())) {
-         if (pathElements.count() == 1 && ! absolutePath.endsWith(QChar('/'))) {
+         if (pathElements.count() == 1 && ! absolutePath.endsWith('/')) {
             return rootNode;
          }
 

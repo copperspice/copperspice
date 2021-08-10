@@ -142,8 +142,7 @@ inline uint qHash(const QFontDef &fd, uint seed = 0)
       ^  qHash(fd.fixedPitch)
       ^  qHash(fd.family, seed)
       ^  qHash(fd.styleName)
-      ^  qHash(fd.hintingPreference)
-      ;
+      ^  qHash(fd.hintingPreference);
 }
 
 class QFontEngineData

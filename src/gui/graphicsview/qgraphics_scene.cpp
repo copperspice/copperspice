@@ -1265,8 +1265,9 @@ void QGraphicsScenePrivate::mousePressEventHandler(QGraphicsSceneMouseEvent *mou
       }
    }
 
-   // Check for scene modality.
+   // Check for scene modality
    bool sceneModality = false;
+
    for (int i = 0; i < modalPanels.size(); ++i) {
       if (modalPanels.at(i)->panelModality() == QGraphicsItem::SceneModal) {
          sceneModality = true;
@@ -2140,13 +2141,14 @@ void QGraphicsScene::addItem(QGraphicsItem *item)
          autoActivate = false;
       }
       d->childExplicitActivation = 0;
+
    } else if (!item->d_ptr->parent) {
       d->childExplicitActivation = 0;
    }
 
    // Auto-activate this item's panel if nothing else has been activated
    if (autoActivate) {
-      if (!d->lastActivePanel && !d->activePanel && item->isPanel()) {
+      if (! d->lastActivePanel && !d->activePanel && item->isPanel()) {
          if (isActive()) {
             setActivePanel(item);
          } else {
@@ -3790,22 +3792,24 @@ void QGraphicsScenePrivate::drawItems(QPainter *painter, const QTransform *const
 
    updateAll = false;
    QRectF exposedSceneRect;
+
    if (exposedRegion && indexMethod != QGraphicsScene::NoIndex) {
       exposedSceneRect = exposedRegion->boundingRect().adjusted(-1, -1, 1, 1);
+
       if (viewTransform) {
          exposedSceneRect = viewTransform->inverted().mapRect(exposedSceneRect);
       }
    }
+
    const QList<QGraphicsItem *> tli = index->estimateTopLevelItems(exposedSceneRect, Qt::AscendingOrder);
+
    for (int i = 0; i < tli.size(); ++i) {
       drawSubtreeRecursive(tli.at(i), painter, viewTransform, exposedRegion, widget);
    }
 }
 
-void QGraphicsScenePrivate::drawSubtreeRecursive(QGraphicsItem *item, QPainter *painter,
-   const QTransform *const viewTransform,
-   QRegion *exposedRegion, QWidget *widget,
-   qreal parentOpacity, const QTransform *const effectTransform)
+void QGraphicsScenePrivate::drawSubtreeRecursive(QGraphicsItem *item, QPainter *painter, const QTransform *const viewTransform,
+   QRegion *exposedRegion, QWidget *widget, qreal parentOpacity, const QTransform *const effectTransform)
 {
    Q_ASSERT(item);
 
@@ -3815,7 +3819,8 @@ void QGraphicsScenePrivate::drawSubtreeRecursive(QGraphicsItem *item, QPainter *
 
    const bool itemHasContents = !(item->d_ptr->flags & QGraphicsItem::ItemHasNoContents);
    const bool itemHasChildren = !item->d_ptr->children.isEmpty();
-   if (!itemHasContents && !itemHasChildren) {
+
+   if (! itemHasContents && ! itemHasChildren) {
       return;   // Item has neither contents nor children!(?)
    }
 
@@ -3850,6 +3855,7 @@ void QGraphicsScenePrivate::drawSubtreeRecursive(QGraphicsItem *item, QPainter *
    if (itemIsUntransformable) {
       transform = item->deviceTransform(viewTransform ? *viewTransform : QTransform());
       transformPtr = &transform;
+
    } else if (item->d_ptr->dirtySceneTransform) {
       item->d_ptr->updateSceneTransformFromParent();
       Q_ASSERT(!item->d_ptr->dirtySceneTransform);
@@ -4012,6 +4018,7 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
          // Draw children behind
          for (i = 0; i < item->d_ptr->children.size(); ++i) {
             QGraphicsItem *child = item->d_ptr->children.at(i);
+
             if (wasDirtyParentSceneTransform) {
                child->d_ptr->dirtySceneTransform = 1;
             }
@@ -4037,12 +4044,13 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
       const bool itemClipsToShape = item->d_ptr->flags & QGraphicsItem::ItemClipsToShape;
       bool restorePainterClip = false;
 
-      if (!itemHasChildren || !itemClipsChildrenToShape) {
+      if (! itemHasChildren || !itemClipsChildrenToShape) {
          // Item does not have children or clip children to shape.
          setWorldTransform(painter, transformPtr, effectTransform);
          if ((restorePainterClip = itemClipsToShape)) {
             setClip(painter, item);
          }
+
       } else if (itemHasChildrenStackedBehind) {
          // Item clips children to shape and has children stacked behind, which means
          // the painter is already clipped to the item's shape.
@@ -4286,6 +4294,7 @@ void QGraphicsScenePrivate::processDirtyItemsRecursive(QGraphicsItem *item, bool
 
    bool itemHasContents = !(item->d_ptr->flags & QGraphicsItem::ItemHasNoContents);
    const bool itemHasChildren = !item->d_ptr->children.isEmpty();
+
    if (!itemHasContents) {
       if (!itemHasChildren) {
          resetDirtyItem(item);
@@ -4984,6 +4993,7 @@ bool QGraphicsScenePrivate::sendTouchBeginEvent(QGraphicsItem *origin, QTouchEve
             break;
          }
       }
+
       if (item->isPanel()) {
          break;
       }

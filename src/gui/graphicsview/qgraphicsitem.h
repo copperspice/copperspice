@@ -100,7 +100,8 @@ class Q_GUI_EXPORT QGraphicsItem
       ItemStopsClickFocusPropagation = 0x20000,
       ItemStopsFocusHandling = 0x40000,
       ItemContainsChildrenInShape = 0x80000
-         // NB! Don't forget to increase the d_ptr->flags bit field by 1 when adding a new flag.
+
+      // Note:: Do not forget to increase the d_ptr->itemFlags bit field by 1 when adding a new flag
    };
    using GraphicsItemFlags = QFlags<GraphicsItemFlag>;
 

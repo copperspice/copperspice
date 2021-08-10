@@ -107,9 +107,11 @@ bool QDialogPrivate::canBeNativeDialog() const
    QDialogPrivate *ncThis = const_cast<QDialogPrivate *>(this);
    QDialog *dialog = ncThis->q_func();
    const int type = themeDialogType(dialog);
-   if (type >= 0)
-      return QGuiApplicationPrivate::platformTheme()
-         ->usePlatformNativeDialog(static_cast<QPlatformTheme::DialogType>(type));
+
+   if (type >= 0) {
+      return QGuiApplicationPrivate::platformTheme()->usePlatformNativeDialog(static_cast<QPlatformTheme::DialogType>(type));
+   }
+
    return false;
 }
 
@@ -155,11 +157,6 @@ QDialog::QDialog(QWidget *parent, Qt::WindowFlags f)
 {
 }
 
-
-/*!
-  \overload
-  \internal
-*/
 QDialog::QDialog(QDialogPrivate &dd, QWidget *parent, Qt::WindowFlags f)
    : QWidget(dd, parent, f | ((f & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
 {
@@ -168,12 +165,11 @@ QDialog::QDialog(QDialogPrivate &dd, QWidget *parent, Qt::WindowFlags f)
 QDialog::~QDialog()
 {
    try {
-      // Need to hide() here, as our (to-be) overridden hide()
-      // will not be called in ~QWidget.
+      // must call hide() as the overridden hide() will not be called in ~QWidget
       hide();
 
    } catch (...) {
-      // we're in the destructor - just swallow the exception
+      // do nothing
    }
 }
 
@@ -187,10 +183,13 @@ QDialog::~QDialog()
 void QDialogPrivate::setDefault(QPushButton *pushButton)
 {
    Q_Q(QDialog);
+
    bool hasMain = false;
    QList<QPushButton *> list = q->findChildren<QPushButton *>();
+
    for (int i = 0; i < list.size(); ++i) {
       QPushButton *pb = list.at(i);
+
       if (pb->window() == q) {
          if (pb == mainDef) {
             hasMain = true;
@@ -463,27 +462,22 @@ void QDialog::closeEvent(QCloseEvent *e)
    }
 }
 
-/*****************************************************************************
-  Geometry management.
- *****************************************************************************/
-
-/*! \reimp
-*/
-
 void QDialog::setVisible(bool visible)
 {
    Q_D(QDialog);
-   if (!testAttribute(Qt::WA_DontShowOnScreen) && d->canBeNativeDialog() && d->setNativeDialogVisible(visible)) {
+
+   if (! testAttribute(Qt::WA_DontShowOnScreen) && d->canBeNativeDialog() && d->setNativeDialogVisible(visible)) {
       return;
    }
+
    if (visible) {
-      if (testAttribute(Qt::WA_WState_ExplicitShowHide) && !testAttribute(Qt::WA_WState_Hidden)) {
+      if (testAttribute(Qt::WA_WState_ExplicitShowHide) && ! testAttribute(Qt::WA_WState_Hidden)) {
          return;
       }
 
-
       QWidget::setVisible(visible);
       showExtension(d->doShowExtension);
+
       QWidget *fw = window()->focusWidget();
       if (!fw) {
          fw = this;

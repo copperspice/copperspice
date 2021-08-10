@@ -72,15 +72,13 @@ class QAlphaWidget: public QWidget, private QEffects
 
 static QAlphaWidget *q_blend = nullptr;
 
-/*
-  Constructs a QAlphaWidget.
-*/
 QAlphaWidget::QAlphaWidget(QWidget *w, Qt::WindowFlags f)
    : QWidget(QApplication::desktop()->screen(QApplication::desktop()->screenNumber(w)), f)
 {
 #ifndef Q_OS_WIN
    setEnabled(false);
 #endif
+
    setAttribute(Qt::WA_NoSystemBackground, true);
    widget = w;
    alpha = 0;
@@ -362,9 +360,6 @@ class QRollEffect : public QWidget, private QEffects
 
 static QRollEffect *q_roll = nullptr;
 
-/*
-  Construct a QRollEffect widget.
-*/
 QRollEffect::QRollEffect(QWidget *w, Qt::WindowFlags f, DirFlags orient)
    : QWidget(nullptr, f), orientation(orient)
 {
@@ -391,6 +386,7 @@ QRollEffect::QRollEffect(QWidget *w, Qt::WindowFlags f, DirFlags orient)
    if (orientation & (RightScroll | LeftScroll)) {
       currentWidth = 0;
    }
+
    if (orientation & (DownScroll | UpScroll)) {
       currentHeight = 0;
    }

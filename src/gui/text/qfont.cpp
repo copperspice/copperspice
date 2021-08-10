@@ -251,13 +251,13 @@ QFontPrivate *QFontPrivate::smallCapsFontPrivate() const
    } else {
       font.setPixelSize((font.pixelSize() * 7 + 5) / 10);
    }
+
    scFont = font.d.data();
    if (scFont != this) {
       scFont->ref.ref();
    }
    return scFont;
 }
-
 
 void QFontPrivate::resolve(uint mask, const QFontPrivate *other)
 {
@@ -378,17 +378,13 @@ QFont::QFont(const QFont &font, QPaintDevice *pd)
    }
 }
 
-/*!
-  \internal
-*/
+// internal
 QFont::QFont(QFontPrivate *data)
    : d(data), resolve_mask(QFont::AllPropertiesResolved)
 {
 }
 
-/*! \internal
-    Detaches the font object from common font data.
-*/
+// internal
 void QFont::detach()
 {
    if (d->ref.load() == 1) {
@@ -425,10 +421,10 @@ void QFontPrivate::detachButKeepEngineData(QFont *font)
    if (engineData) {
       engineData->m_refCount.ref();
    }
+
    font->d.detach();
    font->d->engineData = engineData;
 }
-
 
 QFont::QFont()
    : d(QGuiApplicationPrivate::instance() ? QGuiApplication::font().d.data()
@@ -481,12 +477,10 @@ QFont &QFont::operator=(const QFont &font)
    return *this;
 }
 
-
 QString QFont::family() const
 {
    return d->request.family;
 }
-
 
 void QFont::setFamily(const QString &family)
 {
@@ -510,18 +504,13 @@ void QFont::setStyleName(const QString &styleName)
    if ((resolve_mask & QFont::StyleNameResolved) && d->request.styleName == styleName) {
       return;
    }
+
    detach();
 
    d->request.styleName = styleName;
    resolve_mask |= QFont::StyleNameResolved;
 }
 
-/*!
-    Returns the point size of the font. Returns -1 if the font size
-    was specified in pixels.
-
-    \sa setPointSize() pointSizeF()
-*/
 int QFont::pointSize() const
 {
    return qRound(d->request.pointSize);
@@ -1662,7 +1651,6 @@ void QFontCache::clear()
             delete data;
          }
 
-
          ++it;
       }
    }
@@ -1692,6 +1680,7 @@ void QFontCache::clear()
             it.value().data = nullptr;
          }
       }
+
    } while (mightHaveEnginesLeftForCleanup);
 
    engineCache.clear();
@@ -1718,6 +1707,7 @@ void QFontCache::insertEngineData(const QFontDef &def, QFontEngineData *engineDa
    Q_ASSERT(!engineDataCache.contains(def));
 
    engineData->m_refCount.ref();
+
    // Decrease now rather than waiting
 
    if (total_cost > min_cost * 2 && engineDataCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
@@ -1766,7 +1756,9 @@ void QFontCache::insertEngine(const Key &key, QFontEngine *engine, bool insertMu
    }
 
    Engine data(engine);
-   data.timestamp = ++current_timestamp;
+
+   ++current_timestamp;
+   data.timestamp = current_timestamp;
 
    if (insertMulti) {
       engineCache.insertMulti(key, data);
@@ -1918,6 +1910,7 @@ void QFontCache::decreaseCache()
 
             it.value()->m_refCount.deref();
             delete it.value();
+
             it = engineDataCache.erase(it);
 
          } else {
@@ -1958,24 +1951,31 @@ void QFontCache::decreaseCache()
       if (it != end) {
 
          QFontEngine *fontEngine = it.value().data;
+
          // get rid of all occurrences
          it = engineCache.begin();
+
          while (it != engineCache.end()) {
             if (it.value().data == fontEngine) {
                fontEngine->m_refCount.deref();
+
                it = engineCache.erase(it);
+
             } else {
                ++it;
             }
          }
+
          // and delete the last occurrence
          Q_ASSERT(fontEngine->m_refCount.load() == 0);
          decreaseCost(fontEngine->cache_cost);
          delete fontEngine;
+
          engineCacheCount.remove(fontEngine);
 
          cost_decreased = true;
       }
+
    } while (cost_decreased && total_cost > max_cost);
 }
 
@@ -1983,5 +1983,3 @@ QDebug operator<<(QDebug stream, const QFont &font)
 {
    return stream << "QFont(" << font.toString() << ')';
 }
-
-

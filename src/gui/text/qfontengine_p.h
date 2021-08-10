@@ -259,7 +259,8 @@ class Q_GUI_EXPORT QFontEngine
 
    virtual bool hasUnreliableGlyphOutline() const;
 
-   virtual void setDefaultHintStyle(HintStyle) { }
+   virtual void setDefaultHintStyle(HintStyle) {
+   }
 
    inline QVariant userData() const {
       return m_userData;

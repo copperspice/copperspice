@@ -24,9 +24,6 @@
 #ifndef QPLATFORM_INTEGRATION_H
 #define QPLATFORM_INTEGRATION_H
 
-
-
-
 #include <qopenglcontext.h>
 #include <qsurfaceformat.h>
 #include <qwindowdefs.h>
@@ -132,7 +129,6 @@ class Q_GUI_EXPORT QPlatformIntegration
       ItemViewActivateItemOnSingleClick
    };
 
-
    virtual QVariant styleHint(StyleHint hint) const;
 
    virtual Qt::WindowState defaultWindowState(Qt::WindowFlags) const;
@@ -146,6 +142,7 @@ class Q_GUI_EXPORT QPlatformIntegration
    virtual QPlatformTheme *createPlatformTheme(const QString &name) const;
 
    virtual QPlatformOffscreenSurface *createPlatformOffscreenSurface(QOffscreenSurface *surface) const;
+
 #ifndef QT_NO_SESSIONMANAGER
    virtual QPlatformSessionManager *createPlatformSessionManager(const QString &id, const QString &key) const;
 #endif

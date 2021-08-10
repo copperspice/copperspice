@@ -171,7 +171,8 @@ struct QGlyphLayout {
 
    inline QGlyphLayout()
       : numGlyphs(0)
-   {}
+   {
+   }
 
    inline explicit QGlyphLayout(char *address, int totalGlyphs) {
       offsets    = reinterpret_cast<QFixedPoint *>(address);
@@ -658,9 +659,8 @@ class Q_GUI_EXPORT QTextEngine
    void shapeText(int item) const;
 
 #if ! defined(CS_BUILDING_CUPS)
-   int shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str,
-      QFontEngine *fontEngine, const QVector<uint> &itemBoundaries,
-      bool kerningEnabled,  bool hasLetterSpacing) const;
+   int shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, QFontEngine *fontEngine,
+            const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const;
 #endif
 
    int endOfLine(int lineNum);

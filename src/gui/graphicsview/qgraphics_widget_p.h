@@ -48,6 +48,7 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
         focusPolicy(Qt::NoFocus), focusNext(nullptr), focusPrev(nullptr), windowFlags(Qt::EmptyFlag), windowData(nullptr),
         setWindowFrameMargins(false), windowFrameMargins(nullptr) {
    }
+
    virtual ~QGraphicsWidgetPrivate();
 
    void init(QGraphicsItem *parentItem, Qt::WindowFlags wFlags);
@@ -55,6 +56,7 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 
    // Margins
    enum {Left, Top, Right, Bottom};
+
    mutable qreal *margins;
    void ensureMargins() const;
 
@@ -72,8 +74,10 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    void setPalette_helper(const QPalette &palette);
    void resolvePalette(uint inheritedMask) override;
    void updatePalette(const QPalette &palette);
+
    QPalette naturalWidgetPalette() const;
    QFont font;
+
    uint inheritedFontResolveMask;
    void setFont_helper(const QFont &font);
    void resolveFont(uint inheritedMask) override;
@@ -83,6 +87,7 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    // Window specific
    void initStyleOptionTitleBar(QStyleOptionTitleBar *option);
    void adjustWindowFlags(Qt::WindowFlags *wFlags);
+
    void windowFrameMouseReleaseEvent(QGraphicsSceneMouseEvent *event);
    void windowFrameMousePressEvent(QGraphicsSceneMouseEvent *event);
    void windowFrameMouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -139,20 +144,25 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
       }
       return bit;
    }
+
    inline void setAttribute(Qt::WidgetAttribute att, bool value) {
       int bit = attributeToBitIndex(att);
+
       if (bit == -1) {
          qWarning("QGraphicsWidget::setAttribute: unsupported attribute %d", int(att));
          return;
       }
+
       if (value) {
          attributes |= (1 << bit);
       } else {
          attributes &= ~(1 << bit);
       }
    }
+
    inline bool testAttribute(Qt::WidgetAttribute att) const {
       int bit = attributeToBitIndex(att);
+
       if (bit == -1) {
          return false;
       }
@@ -172,6 +182,7 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 
    // Windows
    Qt::WindowFlags windowFlags;
+
    struct WindowData {
       QString windowTitle;
       QStyle::SubControl hoveredSubControl;
@@ -180,12 +191,11 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
       uint buttonSunken : 1;
       QRectF startGeometry;
       QRect buttonRect;
+
       WindowData()
-         : hoveredSubControl(QStyle::SC_None)
-         , grabbedSection(Qt::NoSection)
-         , buttonMouseOver(false)
-         , buttonSunken(false) {
+         : hoveredSubControl(QStyle::SC_None), grabbedSection(Qt::NoSection), buttonMouseOver(false), buttonSunken(false) {
       }
+
    } *windowData;
 
    void ensureWindowData();
@@ -200,7 +210,6 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 };
 
 #endif
-
 
 #endif
 

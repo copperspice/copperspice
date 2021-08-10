@@ -57,12 +57,14 @@ class QDialogButtonBoxPrivate : public QWidgetPrivate
    void layoutButtons();
    void initLayout();
    void resetLayout();
+
    QPushButton *createButton(QDialogButtonBox::StandardButton button, bool doLayout = true);
    void addButton(QAbstractButton *button, QDialogButtonBox::ButtonRole role, bool doLayout = true);
-   void _q_handleButtonDestroyed();
-   void _q_handleButtonClicked();
    void addButtonsToLayout(const QList<QAbstractButton *> &buttonList, bool reverse);
    void retranslateStrings();
+
+   void _q_handleButtonDestroyed();
+   void _q_handleButtonClicked();
 };
 
 QDialogButtonBoxPrivate::QDialogButtonBoxPrivate(Qt::Orientation orient)
@@ -106,7 +108,7 @@ void QDialogButtonBoxPrivate::initLayout()
 
 void QDialogButtonBoxPrivate::resetLayout()
 {
-   //delete buttonLayout;
+   // delete buttonLayout
    initLayout();
    layoutButtons();
 }
@@ -115,8 +117,8 @@ void QDialogButtonBoxPrivate::addButtonsToLayout(const QList<QAbstractButton *> 
    bool reverse)
 {
    int start = reverse ? buttonList.count() - 1 : 0;
-   int end = reverse ? -1 : buttonList.count();
-   int step = reverse ? -1 : 1;
+   int end   = reverse ? -1 : buttonList.count();
+   int step  = reverse ? -1 : 1;
 
    for (int i = start; i != end; i += step) {
       QAbstractButton *button = buttonList.at(i);
@@ -132,31 +134,41 @@ void QDialogButtonBoxPrivate::layoutButtons()
 
    for (int i = buttonLayout->count() - 1; i >= 0; --i) {
       QLayoutItem *item = buttonLayout->takeAt(i);
+
       if (QWidget *widget = item->widget()) {
          widget->hide();
       }
+
       delete item;
    }
 
    int tmpPolicy = layoutPolicy;
 
-   static const int M = 5;
-   static const int ModalRoles[M] = { QPlatformDialogHelper::AcceptRole, QPlatformDialogHelper::RejectRole,
-         QPlatformDialogHelper::DestructiveRole, QPlatformDialogHelper::YesRole, QPlatformDialogHelper::NoRole
-      };
+   static constexpr const int MaxRoleCount = 5;
+
+   static const int ModalRoles[MaxRoleCount] = {
+      QPlatformDialogHelper::AcceptRole,
+      QPlatformDialogHelper::RejectRole,
+      QPlatformDialogHelper::DestructiveRole,
+      QPlatformDialogHelper::YesRole,
+      QPlatformDialogHelper::NoRole
+   };
 
    if (tmpPolicy == QDialogButtonBox::MacLayout) {
       bool hasModalButton = false;
-      for (int i = 0; i < M; ++i) {
-         if (!buttonLists[ModalRoles[i]].isEmpty()) {
+
+      for (int i = 0; i < MaxRoleCount; ++i) {
+         if (! buttonLists[ModalRoles[i]].isEmpty()) {
             hasModalButton = true;
             break;
          }
       }
+
       if (! hasModalButton) {
          tmpPolicy = 4;   // Mac modeless
       }
    }
+
    const int *currentLayout = QPlatformDialogHelper::buttonLayout(
          orientation, static_cast<QPlatformDialogHelper::ButtonLayout>(tmpPolicy));
 
@@ -172,11 +184,12 @@ void QDialogButtonBoxPrivate::layoutButtons()
 
       switch (role) {
          case QPlatformDialogHelper::Stretch:
-            if (!center) {
+            if (! center) {
                buttonLayout->addStretch();
             }
 
             break;
+
          case QPlatformDialogHelper::AcceptRole: {
             if (acceptRoleList.isEmpty()) {
                break;
@@ -184,19 +197,23 @@ void QDialogButtonBoxPrivate::layoutButtons()
 
             // Only the first one
             QAbstractButton *button = acceptRoleList.first();
+
             buttonLayout->addWidget(button);
             button->show();
          }
          break;
+
          case QPlatformDialogHelper::AlternateRole: {
             if (acceptRoleList.size() < 2) {
                break;
             }
+
             QList<QAbstractButton *> list = acceptRoleList;
             list.removeFirst();
             addButtonsToLayout(list, reverse);
          }
          break;
+
          case QPlatformDialogHelper::DestructiveRole: {
             const QList<QAbstractButton *> &list = buttonLists[role];
 
@@ -215,10 +232,9 @@ void QDialogButtonBoxPrivate::layoutButtons()
 
             addButtonsToLayout(list, reverse);
 
-            /*
-                Insert a gap between the destructive buttons and the
-                accept and reject buttons.
-            */
+            // Insert a gap between the destructive buttons and the
+            // accept and reject buttons.
+
             if (tmpPolicy == QDialogButtonBox::MacLayout && !list.isEmpty()) {
                buttonLayout->addSpacing(MacGap);
             }
@@ -234,6 +250,7 @@ void QDialogButtonBoxPrivate::layoutButtons()
          case QPlatformDialogHelper::ResetRole:
             addButtonsToLayout(buttonLists[role], reverse);
       }
+
       ++currentLayout;
    }
 
@@ -242,12 +259,14 @@ void QDialogButtonBoxPrivate::layoutButtons()
 
    for (int i = 0; i < buttonLayout->count(); ++i) {
       QLayoutItem *item = buttonLayout->itemAt(i);
+
       if (QWidget *widget = item->widget()) {
          if (lastWidget) {
             QWidget::setTabOrder(lastWidget, widget);
          } else {
             q->setFocusProxy(widget);
          }
+
          lastWidget = widget;
       }
    }
@@ -257,8 +276,7 @@ void QDialogButtonBoxPrivate::layoutButtons()
    }
 }
 
-QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardButton sbutton,
-   bool doLayout)
+QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardButton sbutton, bool doLayout)
 {
    Q_Q(QDialogButtonBox);
 
@@ -268,33 +286,43 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
       case QDialogButtonBox::Ok:
          icon = QStyle::SP_DialogOkButton;
          break;
+
       case QDialogButtonBox::Save:
          icon = QStyle::SP_DialogSaveButton;
          break;
+
       case QDialogButtonBox::Open:
          icon = QStyle::SP_DialogOpenButton;
          break;
+
       case QDialogButtonBox::Cancel:
          icon = QStyle::SP_DialogCancelButton;
          break;
+
       case QDialogButtonBox::Close:
          icon = QStyle::SP_DialogCloseButton;
          break;
+
       case QDialogButtonBox::Apply:
          icon = QStyle::SP_DialogApplyButton;
          break;
+
       case QDialogButtonBox::Reset:
          icon = QStyle::SP_DialogResetButton;
          break;
+
       case QDialogButtonBox::Help:
          icon = QStyle::SP_DialogHelpButton;
          break;
+
       case QDialogButtonBox::Discard:
          icon = QStyle::SP_DialogDiscardButton;
          break;
+
       case QDialogButtonBox::Yes:
          icon = QStyle::SP_DialogYesButton;
          break;
+
       case QDialogButtonBox::No:
          icon = QStyle::SP_DialogNoButton;
          break;
@@ -357,6 +385,7 @@ void QDialogButtonBoxPrivate::createStandardButtons(QDialogButtonBox::StandardBu
       if (i & buttons) {
          createButton(QDialogButtonBox::StandardButton(i), false);
       }
+
       i = i << 1;
    }
 
@@ -428,8 +457,7 @@ void QDialogButtonBox::clear()
 {
    Q_D(QDialogButtonBox);
 
-   // Remove the created standard buttons, they should be in the other lists, which will
-   // do the deletion
+   // Remove the created standard buttons, they should be in the other lists, which will do the deletion
    d->standardButtonHash.clear();
 
    for (int i = 0; i < NRoles; ++i) {
@@ -450,10 +478,12 @@ QList<QAbstractButton *> QDialogButtonBox::buttons() const
 
    for (int i = 0; i < NRoles; ++i) {
       const QList<QAbstractButton *> &list = d->buttonLists[i];
+
       for (int j = 0; j < list.count(); ++j) {
          finalList.append(list.at(j));
       }
    }
+
    return finalList;
 }
 
@@ -470,6 +500,7 @@ QDialogButtonBox::ButtonRole QDialogButtonBox::buttonRole(QAbstractButton *butto
          }
       }
    }
+
    return InvalidRole;
 }
 
@@ -477,7 +508,7 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
 {
    Q_D(QDialogButtonBox);
 
-   if (!button) {
+   if (! button) {
       return;
    }
 
@@ -485,6 +516,7 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
    if (QPushButton *pushButton = qobject_cast<QPushButton *>(button)) {
       d->standardButtonHash.remove(pushButton);
    }
+
    for (int i = 0; i < NRoles; ++i) {
       QList<QAbstractButton *> &list = d->buttonLists[i];
 
@@ -505,7 +537,6 @@ void QDialogButtonBox::removeButton(QAbstractButton *button)
       button->setParent(nullptr);
    }
 }
-
 
 void QDialogButtonBox::addButton(QAbstractButton *button, ButtonRole role)
 {
@@ -532,6 +563,7 @@ QPushButton *QDialogButtonBox::addButton(const QString &text, ButtonRole role)
 
    QPushButton *button = new QPushButton(text, this);
    d->addButton(button, role);
+
    return button;
 }
 
@@ -545,7 +577,7 @@ void QDialogButtonBox::setStandardButtons(StandardButtons buttons)
 {
    Q_D(QDialogButtonBox);
 
-   // Clear out all the old standard buttons, then recreate them.
+   // clear the old standard buttons, then recreate them
    qDeleteAll(d->standardButtonHash.keys());
    d->standardButtonHash.clear();
 
@@ -629,6 +661,7 @@ void QDialogButtonBoxPrivate::_q_handleButtonDestroyed()
 void QDialogButtonBox::setCenterButtons(bool center)
 {
    Q_D(QDialogButtonBox);
+
    if (d->center != center) {
       d->center = center;
       d->resetLayout();
@@ -651,7 +684,7 @@ void QDialogButtonBox::changeEvent(QEvent *event)
       case QEvent::StyleChange:
          // Propagate style
 
-         if (!d->standardButtonHash.empty()) {
+         if (! d->standardButtonHash.empty()) {
             QStyle *newStyle = style();
             const StandardButtonHash::iterator end = d->standardButtonHash.end();
 
@@ -683,6 +716,7 @@ bool QDialogButtonBox::event(QEvent *event)
       QList<QAbstractButton *> acceptRoleList = d->buttonLists[AcceptRole];
       QPushButton *firstAcceptButton = acceptRoleList.isEmpty() ? nullptr : qobject_cast<QPushButton *>(acceptRoleList.at(0));
       bool hasDefault = false;
+
       QWidget *dialog = nullptr;
       QWidget *p = this;
 
@@ -699,7 +733,8 @@ bool QDialogButtonBox::event(QEvent *event)
             break;
          }
       }
-      if (!hasDefault && firstAcceptButton) {
+
+      if (! hasDefault && firstAcceptButton) {
          firstAcceptButton->setDefault(true);
       }
 

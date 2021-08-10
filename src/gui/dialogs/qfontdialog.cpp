@@ -94,8 +94,7 @@ static const Qt::WindowFlags DefaultWindowFlags =
    Qt::Dialog | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint;
 
 QFontDialogPrivate::QFontDialogPrivate()
-   : writingSystem(QFontDatabase::Any),
-     options(QSharedPointer<QFontDialogOptions>::create())
+   : writingSystem(QFontDatabase::Any), options(QSharedPointer<QFontDialogOptions>::create())
 {
 }
 
@@ -761,13 +760,6 @@ void QFontDialog::setCurrentFont(const QFont &font)
 
 }
 
-/*!
-    \since 4.5
-
-    Returns the current font.
-
-    \sa selectedFont()
-*/
 QFont QFontDialog::currentFont() const
 {
    Q_D(const QFontDialog);
@@ -776,18 +768,15 @@ QFont QFontDialog::currentFont() const
          return helper->currentFont();
       }
    }
+
    return d->sampleEdit->font();
 }
-
 
 QFont QFontDialog::selectedFont() const
 {
    Q_D(const QFontDialog);
    return d->selectedFont;
 }
-
-
-
 
 void QFontDialog::setOption(FontDialogOption option, bool on)
 {

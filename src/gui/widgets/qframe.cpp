@@ -63,7 +63,7 @@ QFrame::QFrame(QFramePrivate &dd, QWidget *parent, Qt::WindowFlags f)
 
 void QFrame::initStyleOption(QStyleOptionFrame *option) const
 {
-   if (!option) {
+   if (! option) {
       return;
    }
 

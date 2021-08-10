@@ -1543,7 +1543,6 @@ static void setPenAndDrawBackground(QPainter *p, const QPen &defaultPen, const Q
    if (c.style() != Qt::NoBrush) {
       p->setPen(QPen(c, 0));
    }
-
 }
 
 static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &glyphLayout, const QPointF &pos,
@@ -1569,7 +1568,7 @@ static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &g
    }
 
    d->textRangeStart = rangeStart;
-   d->textRangeEnd = rangeEnd;
+   d->textRangeEnd   = rangeEnd;
 
    // Make a font for this particular engine
    QRawFont font;
@@ -1596,8 +1595,7 @@ static QGlyphRun glyphRunWithInfo(QFontEngine *fontEngine, const QGlyphLayout &g
       renderFlags |= QTextItem::RightToLeft;
    }
 
-   fontEngine->getGlyphPositions(glyphLayout, QTransform(), renderFlags, glyphsArray,
-      positionsArray);
+   fontEngine->getGlyphPositions(glyphLayout, QTransform(), renderFlags, glyphsArray, positionsArray);
    Q_ASSERT(glyphsArray.size() == positionsArray.size());
 
    qreal fontHeight = font.ascent() + font.descent();

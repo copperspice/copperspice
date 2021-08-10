@@ -65,7 +65,6 @@ static const Qt::WindowFlags CustomizeWindowFlags =
    | Qt::WindowMaximizeButtonHint
    | Qt::WindowMinMaxButtonsHint;
 
-
 static const int BoundaryMargin = 5;
 
 static inline int getMoveDeltaComponent(uint cflags, uint moveFlag, uint resizeFlag,
@@ -1925,6 +1924,7 @@ QPalette QMdiSubWindowPrivate::desktopPalette() const
 void QMdiSubWindowPrivate::updateActions()
 {
    Qt::WindowFlags windowFlags = q_func()->windowFlags();
+
    // Hide all
    for (int i = 0; i < NumWindowStateActions; ++i) {
       setVisible(WindowStateAction(i), false);

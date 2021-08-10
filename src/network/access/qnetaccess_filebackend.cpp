@@ -126,6 +126,7 @@ void QNetworkAccessFileBackend::open()
    }
 
    QIODevice::OpenMode mode;
+
    switch (operation()) {
       case QNetworkAccessManager::GetOperation:
          mode = QIODevice::ReadOnly;

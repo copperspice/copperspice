@@ -27,9 +27,7 @@
 #include <qfontengine_p.h>
 #include <qcore_mac_p.h>
 
-
 #include <ApplicationServices/ApplicationServices.h>
-
 
 class QCoreTextFontEngine : public QFontEngine
 {

@@ -231,7 +231,7 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id, const 
                newFreetype->fontData = QByteArray();
             }
 
-         } else if (!QFileInfo(fileName).isNativePath()) {
+         } else if (! QFileInfo(fileName).isNativePath()) {
             QFile file(fileName);
 
             if (! file.open(QIODevice::ReadOnly)) {
@@ -866,12 +866,15 @@ void QFontEngineFT::setQtDefaultHintStyle(QFont::HintingPreference hintingPrefer
       case QFont::PreferNoHinting:
          setDefaultHintStyle(HintNone);
          break;
+
       case QFont::PreferFullHinting:
          setDefaultHintStyle(HintFull);
          break;
+
       case QFont::PreferVerticalHinting:
          setDefaultHintStyle(HintLight);
          break;
+
       case QFont::PreferDefaultHinting:
          setDefaultHintStyle(ftInitialDefaultHintStyle);
          break;
@@ -1409,6 +1412,7 @@ QFixed QFontEngineFT::xHeight() const
 
    if (os2 && os2->sxHeight) {
       lockFace();
+
       QFixed answer = QFixed(os2->sxHeight * freetype->face->size->metrics.y_ppem) / emSquareSize();
       unlockFace();
       return answer;
@@ -1423,6 +1427,7 @@ QFixed QFontEngineFT::averageCharWidth() const
 
    if (os2 && os2->xAvgCharWidth) {
       lockFace();
+
       QFixed answer = QFixed(os2->xAvgCharWidth * freetype->face->size->metrics.x_ppem) / emSquareSize();
       unlockFace();
       return answer;
@@ -1448,7 +1453,7 @@ QFixed QFontEngineFT::underlinePosition() const
 
 void QFontEngineFT::doKerning(QGlyphLayout *g, QFontEngine::ShaperFlags flags) const
 {
-   if (!kerning_pairs_loaded) {
+   if (! kerning_pairs_loaded) {
       kerning_pairs_loaded = true;
       lockFace();
 
@@ -1460,6 +1465,7 @@ void QFontEngineFT::doKerning(QGlyphLayout *g, QFontEngine::ShaperFlags flags) c
          unlockFace();
       }
    }
+
    if (shouldUseDesignMetrics(flags) && !(fontDef.styleStrategy & QFont::ForceIntegerMetrics)) {
       flags |= DesignMetrics;
    } else {
@@ -2041,13 +2047,13 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyphFor(glyph_t g,
 {
    QGlyphSet *glyphSet = loadGlyphSet(t);
 
-   if (glyphSet != nullptr && glyphSet->outline_drawing && !fetchBoundingBox) {
+   if (glyphSet != nullptr && glyphSet->outline_drawing && ! fetchBoundingBox) {
       return nullptr;
    }
 
    Glyph *glyph = glyphSet != nullptr ? glyphSet->getGlyph(g, subPixelPosition) : nullptr;
 
-   if (!glyph || glyph->format != format || (!fetchBoundingBox && !glyph->data)) {
+   if (!glyph || glyph->format != format || (! fetchBoundingBox && !glyph->data)) {
       QScopedValueRollback<HintStyle> saved_default_hint_style(default_hint_style);
 
       if (t.type() >= QTransform::TxScale && ! is2dRotation(t)) {
@@ -2070,6 +2076,7 @@ QImage QFontEngineFT::alphaMapForGlyph(glyph_t g, QFixed subPixelPosition)
 {
    return alphaMapForGlyph(g, subPixelPosition, QTransform());
 }
+
 QImage QFontEngineFT::alphaMapForGlyph(glyph_t g, QFixed subPixelPosition, const QTransform &t)
 {
    const GlyphFormat neededFormat = antialias ? QFontEngine::Format_A8 : QFontEngine::Format_Mono;
@@ -2122,6 +2129,7 @@ int QFontEngineFT::glyphCount() const
 {
    int count = 0;
    FT_Face face = lockFace();
+
    if (face) {
       count = face->num_glyphs;
       unlockFace();
@@ -2133,6 +2141,7 @@ FT_Face QFontEngineFT::lockFace(Scaling scale) const
 {
    freetype->lock();
    FT_Face face = freetype->face;
+
    if (scale == Unscaled) {
       FT_Set_Char_Size(face, face->units_per_EM << 6, face->units_per_EM << 6, 0, 0);
       freetype->xsize = face->units_per_EM << 6;

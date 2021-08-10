@@ -38,25 +38,15 @@ QColumnViewGrip::QColumnViewGrip(QWidget *parent)
 #endif
 }
 
-/*!
-  \internal
-*/
 QColumnViewGrip::QColumnViewGrip(QColumnViewGripPrivate &dd, QWidget *parent, Qt::WindowFlags f)
    :  QWidget(dd, parent, f)
 {
 }
 
-/*!
-  Destroys the view.
-*/
 QColumnViewGrip::~QColumnViewGrip()
 {
 }
 
-/*!
-    Attempt to resize the parent object by \a offset
-    returns the amount of offset that it was actually able to resized
-*/
 int QColumnViewGrip::moveGrip(int offset)
 {
    QWidget *parentWidget = (QWidget *)parent();
@@ -64,6 +54,7 @@ int QColumnViewGrip::moveGrip(int offset)
    // first resize the parent
    int oldWidth = parentWidget->width();
    int newWidth = oldWidth;
+
    if (isRightToLeft()) {
       newWidth -= offset;
    } else {
@@ -78,15 +69,14 @@ int QColumnViewGrip::moveGrip(int offset)
    if (realOffset != 0) {
       emit gripMoved(realOffset);
    }
+
    if (isRightToLeft()) {
       realOffset = -1 * (oldX - parentWidget->x());
    }
+
    return realOffset;
 }
 
-/*!
-    \reimp
-*/
 void QColumnViewGrip::paintEvent(QPaintEvent *event)
 {
    QPainter painter(this);
