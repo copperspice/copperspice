@@ -1,33 +1,11 @@
-/utilitiesities/unicode/bin
 
-/utilities/unicode/autom4te.cache
-/utilities/unicode/autotools/aclocal.m4
-/utilities/unicode/autotools/m4/libtool.m4
-/utilities/unicode/autotools/m4/ltoptions.m4
-/utilities/unicode/autotools/m4/ltsugar.m4
-/utilities/unicode/autotools/m4/ltversion.m4
-/utilities/unicode/autotools/m4/lt~obsolete.m4
-/utilities/unicode/autotools/m4/pkg.m4
-/utilities/unicode/autotools/build-aux/compile
-/utilities/unicode/autotools/build-aux/config.guess
-/utilities/unicode/autotools/build-aux/config.sub
-/utilities/unicode/autotools/build-aux/depcomp
-/utilities/unicode/autotools/build-aux/install-sh
-/utilities/unicode/autotools/build-aux/ltmain.sh
-/utilities/unicode/autotools/build-aux/missing
 
-/utilities/unicode/aclocal.m4
-/utilities/unicode/do_build
-/utilities/unicode/configure
-/utilities/unicode/configure.cache
-/utilities/unicode/config.status
-/utilities/unicode/config.log
-/utilities/unicode/error.log
-/utilities/unicode/libtool
-/utilities/unicode/qunicodetables*
-/utilities/unicode/result
 
-/utilities/unicode/*.o
-/utilities/unicode/**/*.Po
+/utilities/cldr/__pycache__/*
+/utilities/cldr/data
+/utilities/cldr/output
 
-/utilities/harfbuzz_fonts/generate_qrc.sh
+/utilities/cldr/doxypress/__pycache__/*
+
+/utilities/unicode/build
+/utilities/unicode/deploy
