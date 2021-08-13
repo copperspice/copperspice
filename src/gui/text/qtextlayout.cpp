@@ -1119,27 +1119,33 @@ inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
 static void addNextCluster(int &pos, int end, QScriptLine &line, int &glyphCount,
    const QScriptItem &current, const QGlyphLayout &glyphs, const ushort *logClusters)
 {
-   int x_index = logClusters[pos];
+   int currentCluster = logClusters[pos];
 
    do {
       // at the first next cluster
       ++pos;
       ++line.length;
-
-   } while (pos < end && logClusters[pos] == x_index);
+   } while (pos < end && currentCluster == logClusters[pos]);
 
    do {
       // calculate the textWidth for the rest of the current cluster
 
-      if (! glyphs.attributes[x_index].dontPrint) {
-         line.textWidth += glyphs.advances[x_index];
+      if (! glyphs.attributes[currentCluster].dontPrint) {
+         line.textWidth += glyphs.advances[currentCluster];
       }
 
-      ++x_index;
+      ++currentCluster;
 
-   } while (x_index < current.num_glyphs && ! glyphs.attributes[x_index].clusterStart);
+   } while (currentCluster < current.num_glyphs && ! glyphs.attributes[currentCluster].clusterStart);
 
-   Q_ASSERT((pos == end && x_index == current.num_glyphs) || logClusters[pos] == x_index);
+   if (pos == end) {
+      // extra unprocessed glyphs
+      Q_ASSERT(currentCluster == current.num_glyphs);
+
+   } else {
+      // out of sync (example: on cluster 2 and glyph 3 )
+      Q_ASSERT(currentCluster == logClusters[pos]);
+   }
 
    ++glyphCount;
 }
@@ -2184,10 +2190,18 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
       int end     = qMin(lineEnd, si->position + max) - si->position;
 
       if (reverse) {
-         int glyph_end = end == max ? si->num_glyphs : logClusters[end];
+         int glyph_end;
+
+         if (end == max) {
+             glyph_end  = si->num_glyphs;
+         } else {
+            glyph_end = logClusters[end];
+         }
+
          int glyph_start = glyph_pos;
+
          if (visual && ! rtl && ! (lastLine && itm == (visualOrder[nItems - 1] + firstItem))) {
-            glyph_start++;
+            ++glyph_start;
          }
 
          for (int i = glyph_end - 1; i >= glyph_start; i--) {
@@ -2195,17 +2209,19 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
          }
 
       } else {
-         int start = qMax(line.from - si->position, 0);
+         int start       = qMax(line.from - si->position, 0);
          int glyph_start = logClusters[start];
-         int glyph_end = glyph_pos;
+         int glyph_end   = glyph_pos;
+
          if (! visual || ! rtl || (lastLine && itm == visualOrder[0] + firstItem)) {
-            glyph_end--;
+            --glyph_end;
          }
 
          for (int i = glyph_start; i <= glyph_end; i++) {
             x += glyphs.effectiveAdvance(i);
          }
       }
+
       x += m_textEngine->offsetInLigature(si, pos, end, glyph_pos);
    }
 

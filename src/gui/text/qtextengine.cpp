@@ -1426,11 +1426,6 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
             ++infos_position;
          }
 
-         if (infos_position == num_glyphs)  {
-            // ran out of glyphs, all done
-            break;
-         }
-
          if (ch < 0x80) {
             expected_cluster += 1;
 
@@ -1445,6 +1440,11 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
          } else {
             expected_cluster += 4;
             delta += 3;
+         }
+
+         if (infos_position == num_glyphs)  {
+            // ran out of glyphs, all done
+            break;
          }
       }
 
@@ -2585,8 +2585,9 @@ void QScriptLine::setDefaultHeight(QTextEngine *eng)
    QFixed other_ascent = e->ascent();
    QFixed other_descent = e->descent();
    QFixed other_leading = e->leading();
+
    leading = qMax(leading + ascent, other_leading + other_ascent) - qMax(ascent, other_ascent);
-   ascent = qMax(ascent, other_ascent);
+   ascent  = qMax(ascent, other_ascent);
    descent = qMax(descent, other_descent);
 }
 
@@ -2661,13 +2662,13 @@ bool QTextEngine::LayoutData::reallocate(int totalGlyphs)
    int strSize = string.size();
 
    int space_charAttributes = sizeof(QCharAttributes) * strSize / sizeof(void *) + 1;
-   int space_logClusters    = sizeof(unsigned short)    * strSize / sizeof(void *) + 1;
+   int space_logClusters    = sizeof(unsigned short)  * strSize / sizeof(void *) + 1;
    int space_glyphs         = (totalGlyphs * QGlyphLayout::SpaceRequired) / sizeof(void *) + 2;;
 
    int newAllocated = space_charAttributes + space_glyphs + space_logClusters;
 
    // These values can be negative if the length of string/glyphs causes overflow,
-   // we can't layout such a long string all at once, so return false here to
+   // can not layout such a long string all at once, return false here to
    // indicate there is a failure
 
    if (space_charAttributes < 0 || space_logClusters < 0 || space_glyphs < 0 || newAllocated < allocated) {
@@ -2678,7 +2679,7 @@ bool QTextEngine::LayoutData::reallocate(int totalGlyphs)
    void **newMem = memory;
    newMem = (void **)::realloc(memory_on_stack ? nullptr : memory, newAllocated * sizeof(void *));
 
-   if (!newMem) {
+   if (! newMem) {
       layoutState = LayoutFailed;
       return false;
    }
@@ -2702,6 +2703,7 @@ bool QTextEngine::LayoutData::reallocate(int totalGlyphs)
    glyphLayout.grow(reinterpret_cast<char *>(m), totalGlyphs);
 
    allocated = newAllocated;
+
    return true;
 }
 
