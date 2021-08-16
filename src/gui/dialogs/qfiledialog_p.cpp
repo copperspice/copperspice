@@ -51,9 +51,8 @@ QFileDialogPrivate::QFileDialogPrivate()
 #ifndef QT_NO_PROXYMODEL
      proxyModel(nullptr),
 #endif
-
      model(nullptr), currentHistoryLocation(-1), renameAction(nullptr), deleteAction(nullptr), showHiddenAction(nullptr),
-     useDefaultCaption(true), defaultFileTypes(true), qFileDialogUi(nullptr), options(new QFileDialogOptions)
+     useDefaultCaption(true), defaultFileTypes(true), qFileDialogUi(nullptr), options(new QPlatformFileDialogOptions)
 {
 }
 
@@ -140,15 +139,16 @@ void QFileDialogPrivate::setLastVisitedDirectory(const QUrl &dir)
 
 void QFileDialogPrivate::updateLookInLabel()
 {
-   if (options->isLabelExplicitlySet(QFileDialogOptions::LookIn)) {
-      setLabelTextControl(QFileDialog::LookIn, options->labelText(QFileDialogOptions::LookIn));
+   if (options->isLabelExplicitlySet(QPlatformFileDialogOptions::LookIn)) {
+      setLabelTextControl(QFileDialog::LookIn, options->labelText(QPlatformFileDialogOptions::LookIn));
    }
 }
 
 void QFileDialogPrivate::updateFileNameLabel()
 {
-   if (options->isLabelExplicitlySet(QFileDialogOptions::FileName)) {
-      setLabelTextControl(QFileDialog::FileName, options->labelText(QFileDialogOptions::FileName));
+   if (options->isLabelExplicitlySet(QPlatformFileDialogOptions::FileName)) {
+      setLabelTextControl(QFileDialog::FileName, options->labelText(QPlatformFileDialogOptions::FileName));
+
    } else {
       switch (q_func()->fileMode()) {
          case QFileDialog::DirectoryOnly:
@@ -165,8 +165,8 @@ void QFileDialogPrivate::updateFileNameLabel()
 
 void QFileDialogPrivate::updateFileTypeLabel()
 {
-   if (options->isLabelExplicitlySet(QFileDialogOptions::FileType)) {
-      setLabelTextControl(QFileDialog::FileType, options->labelText(QFileDialogOptions::FileType));
+   if (options->isLabelExplicitlySet(QPlatformFileDialogOptions::FileType)) {
+      setLabelTextControl(QFileDialog::FileType, options->labelText(QPlatformFileDialogOptions::FileType));
    }
 }
 
@@ -178,8 +178,9 @@ void QFileDialogPrivate::updateOkButtonText(bool saveAsOnFolder)
 
    if (saveAsOnFolder) {
       setLabelTextControl(QFileDialog::Accept, QFileDialog::tr("&Open"));
-   } else if (options->isLabelExplicitlySet(QFileDialogOptions::Accept)) {
-      setLabelTextControl(QFileDialog::Accept, options->labelText(QFileDialogOptions::Accept));
+
+   } else if (options->isLabelExplicitlySet(QPlatformFileDialogOptions::Accept)) {
+      setLabelTextControl(QFileDialog::Accept, options->labelText(QPlatformFileDialogOptions::Accept));
       return;
 
    } else {
@@ -201,8 +202,8 @@ void QFileDialogPrivate::updateOkButtonText(bool saveAsOnFolder)
 
 void QFileDialogPrivate::updateCancelButtonText()
 {
-   if (options->isLabelExplicitlySet(QFileDialogOptions::Reject)) {
-      setLabelTextControl(QFileDialog::Reject, options->labelText(QFileDialogOptions::Reject));
+   if (options->isLabelExplicitlySet(QPlatformFileDialogOptions::Reject)) {
+      setLabelTextControl(QFileDialog::Reject, options->labelText(QPlatformFileDialogOptions::Reject));
    }
 }
 
@@ -943,7 +944,7 @@ void QFileDialogPrivate::createWidgets()
    q->setFileMode(static_cast<QFileDialog::FileMode>(options->fileMode()));
    q->setAcceptMode(static_cast<QFileDialog::AcceptMode>(options->acceptMode()));
    q->setViewMode(static_cast<QFileDialog::ViewMode>(options->viewMode()));
-   q->setOptions(static_cast<QFileDialog::Options>(static_cast<int>(options->options())));
+   q->setOptions(static_cast<QFileDialog::FileDialogOptions>(static_cast<int>(options->options())));
 
    if (! options->sidebarUrls().isEmpty()) {
       q->setSidebarUrls(options->sidebarUrls());

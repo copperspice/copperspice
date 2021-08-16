@@ -433,23 +433,23 @@ void QPlatformColorDialogHelper::setOptions(const QSharedPointer<QColorDialogOpt
 
 // File dialog
 
-class QFileDialogOptionsPrivate : public QSharedData
+class QPlatformFileDialogOptionsPrivate : public QSharedData
 {
  public:
-   QFileDialogOptionsPrivate()
-      : options(Qt::EmptyFlag), viewMode(QFileDialogOptions::Detail),
-        fileMode(QFileDialogOptions::AnyFile), acceptMode(QFileDialogOptions::AcceptOpen),
+   QPlatformFileDialogOptionsPrivate()
+      : options(Qt::EmptyFlag), viewMode(QPlatformFileDialogOptions::Detail),
+        fileMode(QPlatformFileDialogOptions::AnyFile), acceptMode(QPlatformFileDialogOptions::AcceptOpen),
         filters(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::AllDirs)
    {
    }
 
-   QFileDialogOptions::FileDialogOptions options;
+   QFileDialog::FileDialogOptions options;
    QString windowTitle;
 
-   QFileDialogOptions::ViewMode viewMode;
-   QFileDialogOptions::FileMode fileMode;
-   QFileDialogOptions::AcceptMode acceptMode;
-   QString labels[QFileDialogOptions::DialogLabelCount];
+   QPlatformFileDialogOptions::ViewMode viewMode;
+   QPlatformFileDialogOptions::FileMode fileMode;
+   QPlatformFileDialogOptions::AcceptMode acceptMode;
+   QString labels[QPlatformFileDialogOptions::DialogLabelCount];
    QDir::Filters filters;
    QList<QUrl> sidebarUrls;
    QStringList nameFilters;
@@ -462,207 +462,211 @@ class QFileDialogOptionsPrivate : public QSharedData
    QStringList supportedSchemes;
 };
 
-QFileDialogOptions::QFileDialogOptions() : d(new QFileDialogOptionsPrivate)
+QPlatformFileDialogOptions::QPlatformFileDialogOptions()
+   : d(new QPlatformFileDialogOptionsPrivate)
 {
 }
 
-QFileDialogOptions::QFileDialogOptions(const QFileDialogOptions &rhs) : d(rhs.d)
+QPlatformFileDialogOptions::QPlatformFileDialogOptions(const QPlatformFileDialogOptions &other)
+   : d(other.d)
 {
 }
 
-QFileDialogOptions &QFileDialogOptions::operator=(const QFileDialogOptions &rhs)
+QPlatformFileDialogOptions &QPlatformFileDialogOptions::operator=(const QPlatformFileDialogOptions &other)
 {
-   if (this != &rhs) {
-      d = rhs.d;
+   if (this != &other) {
+      d = other.d;
    }
+
    return *this;
 }
 
-QFileDialogOptions::~QFileDialogOptions()
+QPlatformFileDialogOptions::~QPlatformFileDialogOptions()
 {
 }
 
-QString QFileDialogOptions::windowTitle() const
+QString QPlatformFileDialogOptions::windowTitle() const
 {
    return d->windowTitle;
 }
 
-void QFileDialogOptions::setWindowTitle(const QString &title)
+void QPlatformFileDialogOptions::setWindowTitle(const QString &title)
 {
    d->windowTitle = title;
 }
 
-void QFileDialogOptions::setOption(QFileDialogOptions::FileDialogOption option, bool on)
+void QPlatformFileDialogOptions::setOption(QFileDialog::FileDialogOption option, bool on)
 {
-   if (!(d->options & option) != !on) {
+   if (! (d->options & option) != !on) {
       setOptions(d->options ^ option);
    }
 }
 
-bool QFileDialogOptions::testOption(QFileDialogOptions::FileDialogOption option) const
+bool QPlatformFileDialogOptions::testOption(QFileDialog::FileDialogOption option) const
 {
    return d->options & option;
 }
 
-void QFileDialogOptions::setOptions(FileDialogOptions options)
+void QPlatformFileDialogOptions::setOptions(QFileDialog::FileDialogOptions options)
 {
    if (options != d->options) {
       d->options = options;
    }
 }
 
-QFileDialogOptions::FileDialogOptions QFileDialogOptions::options() const
+QFileDialog::FileDialogOptions QPlatformFileDialogOptions::options() const
 {
    return d->options;
 }
 
-QDir::Filters QFileDialogOptions::filter() const
+QDir::Filters QPlatformFileDialogOptions::filter() const
 {
    return d->filters;
 }
 
-void QFileDialogOptions::setFilter(QDir::Filters filters)
+void QPlatformFileDialogOptions::setFilter(QDir::Filters filters)
 {
    d->filters  = filters;
 }
 
-void QFileDialogOptions::setViewMode(QFileDialogOptions::ViewMode mode)
+void QPlatformFileDialogOptions::setViewMode(QPlatformFileDialogOptions::ViewMode mode)
 {
    d->viewMode = mode;
 }
 
-QFileDialogOptions::ViewMode QFileDialogOptions::viewMode() const
+QPlatformFileDialogOptions::ViewMode QPlatformFileDialogOptions::viewMode() const
 {
    return d->viewMode;
 }
 
-void QFileDialogOptions::setFileMode(QFileDialogOptions::FileMode mode)
+void QPlatformFileDialogOptions::setFileMode(QPlatformFileDialogOptions::FileMode mode)
 {
    d->fileMode = mode;
 }
 
-QFileDialogOptions::FileMode QFileDialogOptions::fileMode() const
+QPlatformFileDialogOptions::FileMode QPlatformFileDialogOptions::fileMode() const
 {
    return d->fileMode;
 }
 
-void QFileDialogOptions::setAcceptMode(QFileDialogOptions::AcceptMode mode)
+void QPlatformFileDialogOptions::setAcceptMode(QPlatformFileDialogOptions::AcceptMode mode)
 {
    d->acceptMode = mode;
 }
 
-QFileDialogOptions::AcceptMode QFileDialogOptions::acceptMode() const
+QPlatformFileDialogOptions::AcceptMode QPlatformFileDialogOptions::acceptMode() const
 {
    return d->acceptMode;
 }
 
-void QFileDialogOptions::setSidebarUrls(const QList<QUrl> &urls)
+void QPlatformFileDialogOptions::setSidebarUrls(const QList<QUrl> &urls)
 {
    d->sidebarUrls = urls;
 }
 
-QList<QUrl> QFileDialogOptions::sidebarUrls() const
+QList<QUrl> QPlatformFileDialogOptions::sidebarUrls() const
 {
    return d->sidebarUrls;
 }
 
-void QFileDialogOptions::setNameFilters(const QStringList &filters)
+void QPlatformFileDialogOptions::setNameFilters(const QStringList &filters)
 {
    d->nameFilters = filters;
 }
 
-QStringList QFileDialogOptions::nameFilters() const
+QStringList QPlatformFileDialogOptions::nameFilters() const
 {
    return d->nameFilters;
 }
 
-void QFileDialogOptions::setMimeTypeFilters(const QStringList &filters)
+void QPlatformFileDialogOptions::setMimeTypeFilters(const QStringList &filters)
 {
    d->mimeTypeFilters = filters;
 }
 
-QStringList QFileDialogOptions::mimeTypeFilters() const
+QStringList QPlatformFileDialogOptions::mimeTypeFilters() const
 {
    return d->mimeTypeFilters;
 }
 
-void QFileDialogOptions::setDefaultSuffix(const QString &suffix)
+void QPlatformFileDialogOptions::setDefaultSuffix(const QString &suffix)
 {
    d->defaultSuffix = suffix;
+
    if (d->defaultSuffix.size() > 1 && d->defaultSuffix.startsWith(QLatin1Char('.'))) {
       d->defaultSuffix.remove(0, 1);   // Silently change ".txt" -> "txt".
    }
 }
 
-QString QFileDialogOptions::defaultSuffix() const
+QString QPlatformFileDialogOptions::defaultSuffix() const
 {
    return d->defaultSuffix;
 }
 
-void QFileDialogOptions::setHistory(const QStringList &paths)
+void QPlatformFileDialogOptions::setHistory(const QStringList &paths)
 {
    d->history = paths;
 }
 
-QStringList QFileDialogOptions::history() const
+QStringList QPlatformFileDialogOptions::history() const
 {
    return d->history;
 }
 
-void QFileDialogOptions::setLabelText(QFileDialogOptions::DialogLabel label, const QString &text)
+void QPlatformFileDialogOptions::setLabelText(QPlatformFileDialogOptions::DialogLabel label, const QString &text)
 {
    if (label >= 0 && label < DialogLabelCount) {
       d->labels[label] = text;
    }
 }
 
-QString QFileDialogOptions::labelText(QFileDialogOptions::DialogLabel label) const
+QString QPlatformFileDialogOptions::labelText(QPlatformFileDialogOptions::DialogLabel label) const
 {
    return (label >= 0 && label < DialogLabelCount) ? d->labels[label] : QString();
 }
 
-bool QFileDialogOptions::isLabelExplicitlySet(DialogLabel label)
+bool QPlatformFileDialogOptions::isLabelExplicitlySet(DialogLabel label)
 {
-   return label >= 0 && label < DialogLabelCount && !d->labels[label].isEmpty();
+   return label >= 0 && label < DialogLabelCount && ! d->labels[label].isEmpty();
 }
 
-QUrl QFileDialogOptions::initialDirectory() const
+QUrl QPlatformFileDialogOptions::initialDirectory() const
 {
    return d->initialDirectory;
 }
 
-void QFileDialogOptions::setInitialDirectory(const QUrl &directory)
+void QPlatformFileDialogOptions::setInitialDirectory(const QUrl &directory)
 {
    d->initialDirectory = directory;
 }
 
-QString QFileDialogOptions::initiallySelectedNameFilter() const
+QString QPlatformFileDialogOptions::initiallySelectedNameFilter() const
 {
    return d->initiallySelectedNameFilter;
 }
 
-void QFileDialogOptions::setInitiallySelectedNameFilter(const QString &filter)
+void QPlatformFileDialogOptions::setInitiallySelectedNameFilter(const QString &filter)
 {
    d->initiallySelectedNameFilter = filter;
 }
 
-QList<QUrl> QFileDialogOptions::initiallySelectedFiles() const
+QList<QUrl> QPlatformFileDialogOptions::initiallySelectedFiles() const
 {
    return d->initiallySelectedFiles;
 }
 
-void QFileDialogOptions::setInitiallySelectedFiles(const QList<QUrl> &files)
+void QPlatformFileDialogOptions::setInitiallySelectedFiles(const QList<QUrl> &files)
 {
    d->initiallySelectedFiles = files;
 }
 
 // Schemes supported by the application
-void QFileDialogOptions::setSupportedSchemes(const QStringList &schemes)
+void QPlatformFileDialogOptions::setSupportedSchemes(const QStringList &schemes)
 {
    d->supportedSchemes = schemes;
 }
 
-QStringList QFileDialogOptions::supportedSchemes() const
+QStringList QPlatformFileDialogOptions::supportedSchemes() const
 {
    return d->supportedSchemes;
 }
@@ -673,21 +677,12 @@ bool QPlatformFileDialogHelper::isSupportedUrl(const QUrl &url) const
    return url.isLocalFile();
 }
 
-/*!
-    \class QPlatformFileDialogHelper
-    \since 5.0
-    \internal
-    \ingroup qpa
-
-    \brief The QPlatformFileDialogHelper class allows for platform-specific customization of file dialogs.
-
-*/
-const QSharedPointer<QFileDialogOptions> &QPlatformFileDialogHelper::options() const
+const QSharedPointer<QPlatformFileDialogOptions> &QPlatformFileDialogHelper::options() const
 {
    return m_options;
 }
 
-void QPlatformFileDialogHelper::setOptions(const QSharedPointer<QFileDialogOptions> &options)
+void QPlatformFileDialogHelper::setOptions(const QSharedPointer<QPlatformFileDialogOptions> &options)
 {
    m_options = options;
 }

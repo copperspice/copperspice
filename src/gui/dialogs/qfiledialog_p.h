@@ -74,7 +74,7 @@ struct QFileDialogArgs {
    QString selection;
    QString filter;
    QFileDialog::FileMode mode;
-   QFileDialog::Options options;
+   QFileDialog::FileDialogOptions options;
 };
 
 #define UrlRole (Qt::UserRole + 1)
@@ -258,7 +258,7 @@ class QFileDialogPrivate : public QDialogPrivate
    QString memberToDisconnectOnClose;
    QString signalToDisconnectOnClose;
 
-   QSharedPointer<QFileDialogOptions> options;
+   QSharedPointer<QPlatformFileDialogOptions> options;
 
    // Memory of what was read from QSettings in restoreState() in case widgets are not used
    QByteArray splitterState;

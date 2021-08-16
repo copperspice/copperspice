@@ -187,52 +187,53 @@ void QFileDialog::changeEvent(QEvent *e)
 }
 
 
-void QFileDialog::setOption(Option option, bool on)
+void QFileDialog::setOption(FileDialogOption option, bool on)
 {
-   const QFileDialog::Options previousOptions = options();
+   const QFileDialog::FileDialogOptions previousOptions = options();
    if (!(previousOptions & option) != !on) {
       setOptions(previousOptions ^ option);
    }
 }
 
-bool QFileDialog::testOption(Option option) const
+bool QFileDialog::testOption(FileDialogOption option) const
 {
    Q_D(const QFileDialog);
-   return d->options->testOption(static_cast<QFileDialogOptions::FileDialogOption>(option));
+   return d->options->testOption(option);
 }
 
-void QFileDialog::setOptions(Options options)
+void QFileDialog::setOptions(FileDialogOptions options)
 {
    Q_D(QFileDialog);
 
-   Options changed = (options ^ QFileDialog::options());
+   FileDialogOptions changed = (options ^ QFileDialog::options());
 
    if (! changed) {
       return;
    }
-   d->options->setOptions(QFileDialogOptions::FileDialogOptions(int(options)));
 
-   if ((options & DontUseNativeDialog) && !d->usingWidgets()) {
+   d->options->setOptions(options);
+
+   if ((options & FileDialogOption::DontUseNativeDialog) && ! d->usingWidgets()) {
       d->createWidgets();
    }
 
    if (d->usingWidgets()) {
-      if (changed & DontResolveSymlinks) {
-         d->model->setResolveSymlinks(!(options & DontResolveSymlinks));
+      if (changed & FileDialogOption::DontResolveSymlinks) {
+         d->model->setResolveSymlinks(! (options & FileDialogOption::DontResolveSymlinks));
       }
 
-      if (changed & ReadOnly) {
-         bool ro = (options & ReadOnly);
+      if (changed & FileDialogOption::ReadOnly) {
+         bool ro = (options & FileDialogOption::ReadOnly);
          d->model->setReadOnly(ro);
          d->qFileDialogUi->newFolderButton->setEnabled(!ro);
          d->renameAction->setEnabled(!ro);
          d->deleteAction->setEnabled(!ro);
       }
 
-      if (changed & DontUseCustomDirectoryIcons) {
+      if (changed & FileDialogOption::DontUseCustomDirectoryIcons) {
          QFileIconProvider::Options providerOptions = iconProvider()->options();
 
-         if (options & DontUseCustomDirectoryIcons) {
+         if (options & FileDialogOption::DontUseCustomDirectoryIcons) {
             providerOptions |= QFileIconProvider::DontUseCustomDirectoryIcons;
          } else {
             providerOptions &= ~QFileIconProvider::DontUseCustomDirectoryIcons;
@@ -242,20 +243,19 @@ void QFileDialog::setOptions(Options options)
       }
    }
 
-   if (changed & HideNameFilterDetails) {
+   if (changed & FileDialogOption::HideNameFilterDetails) {
       setNameFilters(d->options->nameFilters());
    }
 
-   if (changed & ShowDirsOnly) {
-      setFilter((options & ShowDirsOnly) ? filter() & ~QDir::Files : filter() | QDir::Files);
+   if (changed & FileDialogOption::ShowDirsOnly) {
+      setFilter((options & FileDialogOption::ShowDirsOnly) ? (filter() & ~QDir::Files) : (filter() | QDir::Files));
    }
-
 }
 
-QFileDialog::Options QFileDialog::options() const
+QFileDialog::FileDialogOptions QFileDialog::options() const
 {
    Q_D(const QFileDialog);
-   return QFileDialog::Options(int(d->options->options()));
+   return QFileDialog::FileDialogOptions(int(d->options->options()));
 }
 
 void QFileDialog::open(QObject *receiver, const QString &slot)
@@ -636,12 +636,12 @@ void QFileDialog::setNameFilter(const QString &filter)
 
 void QFileDialog::setNameFilterDetailsVisible(bool enabled)
 {
-   setOption(HideNameFilterDetails, !enabled);
+   setOption(FileDialogOption::HideNameFilterDetails, ! enabled);
 }
 
 bool QFileDialog::isNameFilterDetailsVisible() const
 {
-   return ! testOption(HideNameFilterDetails);
+   return ! testOption(FileDialogOption::HideNameFilterDetails);
 }
 
 QStringList qt_strip_filters(const QStringList &filters)
@@ -687,7 +687,7 @@ void QFileDialog::setNameFilters(const QStringList &filters)
       return;
    }
 
-   if (testOption(HideNameFilterDetails)) {
+   if (testOption(FileDialogOption::HideNameFilterDetails)) {
       d->qFileDialogUi->fileTypeCombo->addItems(qt_strip_filters(cleanedFilters));
    } else {
       d->qFileDialogUi->fileTypeCombo->addItems(cleanedFilters);
@@ -713,7 +713,7 @@ void QFileDialog::selectNameFilter(const QString &filter)
    }
 
    int i = -1;
-   if (testOption(HideNameFilterDetails)) {
+   if (testOption(FileDialogOption::HideNameFilterDetails)) {
       const QStringList filters = qt_strip_filters(qt_make_filter_list(filter));
 
       if (! filters.isEmpty()) {
@@ -827,7 +827,7 @@ void QFileDialog::setViewMode(QFileDialog::ViewMode mode)
 {
    Q_D(QFileDialog);
 
-   d->options->setViewMode(static_cast<QFileDialogOptions::ViewMode>(mode));
+   d->options->setViewMode(static_cast<QPlatformFileDialogOptions::ViewMode>(mode));
    if (!d->usingWidgets()) {
       return;
    }
@@ -853,11 +853,11 @@ QFileDialog::ViewMode QFileDialog::viewMode() const
 void QFileDialog::setFileMode(QFileDialog::FileMode mode)
 {
    Q_D(QFileDialog);
-   d->options->setFileMode(static_cast<QFileDialogOptions::FileMode>(mode));
+   d->options->setFileMode(static_cast<QPlatformFileDialogOptions::FileMode>(mode));
 
 
    // keep ShowDirsOnly option in sync with fileMode (BTW, DirectoryOnly is obsolete)
-   setOption(ShowDirsOnly, mode == DirectoryOnly);
+   setOption(FileDialogOption::ShowDirsOnly, mode == FileMode::DirectoryOnly);
 
    if (! d->usingWidgets()) {
       return;
@@ -889,7 +889,7 @@ void QFileDialog::setFileMode(QFileDialog::FileMode mode)
    d->updateFileNameLabel();
    d->updateOkButtonText();
 
-   d->qFileDialogUi->fileTypeCombo->setEnabled(!testOption(ShowDirsOnly));
+   d->qFileDialogUi->fileTypeCombo->setEnabled(!testOption(FileDialogOption::ShowDirsOnly));
    d->_q_updateOkButton();
 }
 
@@ -903,7 +903,7 @@ QFileDialog::FileMode QFileDialog::fileMode() const
 void QFileDialog::setAcceptMode(QFileDialog::AcceptMode mode)
 {
    Q_D(QFileDialog);
-   d->options->setAcceptMode(static_cast<QFileDialogOptions::AcceptMode>(mode));
+   d->options->setAcceptMode(static_cast<QPlatformFileDialogOptions::AcceptMode>(mode));
 
    // clear WA_DontShowOnScreen so that d->canBeNativeDialog() doesn't return false incorrectly
    setAttribute(Qt::WA_DontShowOnScreen, false);
@@ -943,33 +943,33 @@ QFileDialog::AcceptMode QFileDialog::acceptMode() const
 
 void QFileDialog::setReadOnly(bool enabled)
 {
-   setOption(ReadOnly, enabled);
+   setOption(FileDialogOption::ReadOnly, enabled);
 }
 
 bool QFileDialog::isReadOnly() const
 {
-   return testOption(ReadOnly);
+   return testOption(FileDialogOption::ReadOnly);
 }
 
 
 void QFileDialog::setResolveSymlinks(bool enabled)
 {
-   setOption(DontResolveSymlinks, !enabled);
+   setOption(FileDialogOption::DontResolveSymlinks, ! enabled);
 }
 
 bool QFileDialog::resolveSymlinks() const
 {
-   return !testOption(DontResolveSymlinks);
+   return !testOption(FileDialogOption::DontResolveSymlinks);
 }
 
 void QFileDialog::setConfirmOverwrite(bool enabled)
 {
-   setOption(DontConfirmOverwrite, !enabled);
+   setOption(FileDialogOption::DontConfirmOverwrite, !enabled);
 }
 
 bool QFileDialog::confirmOverwrite() const
 {
-   return !testOption(DontConfirmOverwrite);
+   return !testOption(FileDialogOption::DontConfirmOverwrite);
 }
 
 void QFileDialog::setDefaultSuffix(const QString &suffix)
@@ -1092,7 +1092,7 @@ QString QFileDialog::labelText(DialogLabel label) const
    Q_D(const QFileDialog);
 
    if (!d->usingWidgets()) {
-      return d->options->labelText(static_cast<QFileDialogOptions::DialogLabel>(label));
+      return d->options->labelText(static_cast<QPlatformFileDialogOptions::DialogLabel>(label));
    }
 
    QPushButton *button;
@@ -1132,12 +1132,8 @@ QString QFileDialog::labelText(DialogLabel label) const
    return QString();
 }
 
-QString QFileDialog::getOpenFileName(QWidget *parent,
-   const QString &caption,
-   const QString &dir,
-   const QString &filter,
-   QString *selectedFilter,
-   Options options)
+QString QFileDialog::getOpenFileName(QWidget *parent, const QString &caption, const QString &dir,
+            const QString &filter, QString *selectedFilter, FileDialogOptions options)
 {
    const QStringList schemes = QStringList("file");
    const QUrl selectedUrl = getOpenFileUrl(parent, caption, QUrl::fromLocalFile(dir), filter, selectedFilter,
@@ -1146,8 +1142,9 @@ QString QFileDialog::getOpenFileName(QWidget *parent,
    return selectedUrl.toLocalFile();
 }
 
-QUrl QFileDialog::getOpenFileUrl(QWidget *parent, const QString &caption, const QUrl &dir, const QString &filter, QString *selectedFilter,
-                  Options options, const QStringList &supportedSchemes)
+QUrl QFileDialog::getOpenFileUrl(QWidget *parent, const QString &caption, const QUrl &dir,
+      const QString &filter, QString *selectedFilter, FileDialogOptions options, const
+      QStringList &supportedSchemes)
 {
    QFileDialogArgs args;
    args.parent    = parent;
@@ -1177,12 +1174,8 @@ QUrl QFileDialog::getOpenFileUrl(QWidget *parent, const QString &caption, const 
    return QUrl();
 }
 
-QStringList QFileDialog::getOpenFileNames(QWidget *parent,
-   const QString &caption,
-   const QString &dir,
-   const QString &filter,
-   QString *selectedFilter,
-   Options options)
+QStringList QFileDialog::getOpenFileNames(QWidget *parent, const QString &caption, const QString &dir,
+            const QString &filter, QString *selectedFilter, FileDialogOptions options)
 {
    const QStringList schemes = QStringList("file");
    const QList<QUrl> selectedUrls = getOpenFileUrls(parent, caption, QUrl::fromLocalFile(dir), filter, selectedFilter, options, schemes);
@@ -1197,8 +1190,8 @@ QStringList QFileDialog::getOpenFileNames(QWidget *parent,
 }
 
 
-QList<QUrl> QFileDialog::getOpenFileUrls(QWidget *parent, const QString &caption, const QUrl &dir, const QString &filter, QString *selectedFilter,
-                  Options options, const QStringList &supportedSchemes)
+QList<QUrl> QFileDialog::getOpenFileUrls(QWidget *parent, const QString &caption, const QUrl &dir,
+            const QString &filter, QString *selectedFilter, FileDialogOptions options, const QStringList &supportedSchemes)
 {
    QFileDialogArgs args;
    args.parent    = parent;
@@ -1228,16 +1221,16 @@ QList<QUrl> QFileDialog::getOpenFileUrls(QWidget *parent, const QString &caption
    return QList<QUrl>();
 }
 
-QString QFileDialog::getSaveFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter,
-                  QString *selectedFilter, Options options)
+QString QFileDialog::getSaveFileName(QWidget *parent, const QString &caption, const QString &dir,
+            const QString &filter, QString *selectedFilter, FileDialogOptions options)
 {
    const QStringList schemes = QStringList("file");
    const QUrl selectedUrl = getSaveFileUrl(parent, caption, QUrl::fromLocalFile(dir), filter, selectedFilter, options, schemes);
    return selectedUrl.toLocalFile();
 }
 
-QUrl QFileDialog::getSaveFileUrl(QWidget *parent, const QString &caption, const QUrl &dir, const QString &filter, QString *selectedFilter,
-                  Options options, const QStringList &supportedSchemes)
+QUrl QFileDialog::getSaveFileUrl(QWidget *parent, const QString &caption, const QUrl &dir,
+            const QString &filter, QString *selectedFilter, FileDialogOptions options, const QStringList &supportedSchemes)
 {
    QFileDialogArgs args;
    args.parent    = parent;
@@ -1267,21 +1260,21 @@ QUrl QFileDialog::getSaveFileUrl(QWidget *parent, const QString &caption, const 
    return QUrl();
 }
 
-QString QFileDialog::getExistingDirectory(QWidget *parent, const QString &caption, const QString &dir, Options options)
+QString QFileDialog::getExistingDirectory(QWidget *parent, const QString &caption, const QString &dir, FileDialogOptions options)
 {
    const QStringList schemes = QStringList("file");
    const QUrl selectedUrl    = getExistingDirectoryUrl(parent, caption, QUrl::fromLocalFile(dir), options, schemes);
    return selectedUrl.toLocalFile();
 }
 
-QUrl QFileDialog::getExistingDirectoryUrl(QWidget *parent,  const QString &caption, const QUrl &dir, Options options,
-                  const QStringList &supportedSchemes)
+QUrl QFileDialog::getExistingDirectoryUrl(QWidget *parent,  const QString &caption, const QUrl &dir,
+            FileDialogOptions options, const QStringList &supportedSchemes)
 {
    QFileDialogArgs args;
    args.parent     = parent;
    args.caption    = caption;
    args.directory  = QFileDialogPrivate::workingDirectory(dir);
-   args.mode = (options & ShowDirsOnly ? DirectoryOnly : Directory);
+   args.mode       = (options & FileDialogOption::ShowDirsOnly ? FileMode::DirectoryOnly : FileMode::Directory);
    args.options    = options;
 
    QFileDialog dialog(args);
