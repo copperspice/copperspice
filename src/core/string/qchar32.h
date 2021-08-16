@@ -255,7 +255,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       Script_Mende_Kikakui,
       Script_Modi,
       Script_Mro,
-      Script_Old_NorthA_rabian,
+      Script_Old_North_Arabian,
       Script_Nabataean,
       Script_Palmyrene,
       Script_PauCinHau,
