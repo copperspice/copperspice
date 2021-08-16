@@ -74,7 +74,7 @@ class QDrag;
 extern QClipboard *qt_clipboard;
 #endif
 
-#if defined (Q_OS_WIN32)
+#if defined (Q_OS_WIN)
 extern QSysInfo::WinVersion qt_winver;
 
 #elif defined (Q_OS_DARWIN)

@@ -83,17 +83,21 @@ class ColorOutputPrivate
     Returns true if it's suitable to send colored output to \c stderr.
     */
    inline bool isColoringPossible() const {
-#           if defined(Q_OS_WIN32)
-      /* Windows doesn't at all support ANSI escape codes, unless
-       * the user install a "device driver". See the Wikipedia links in the
-       * class documentation for details. */
+
+#if defined(Q_OS_WIN)
+      // Windows does not at all support ANSI escape codes, unless
+      // the user install a "device driver".
+
       return false;
-#           else
-      /* We use QFile::handle() to get the file descriptor. It's a bit unsure
+
+#else
+      /* Use QFile::handle() to get the file descriptor. It's a bit unsure
        * whether it's 2 on all platforms and in all cases, so hopefully this layer
        * of abstraction helps handle such cases. */
+
       return isatty(m_out.handle());
-#           endif
+#endif
+
    }
 };
 }

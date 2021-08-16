@@ -38,7 +38,7 @@ using namespace WTF;
 
 namespace WebCore {
 
-#if PLATFORM(QT) && defined(Q_OS_WIN32)
+#if PLATFORM(QT) && defined(Q_OS_WIN)
 
 // Replacement for gmtime_r() which is not available on MinGW.
 // We use this on Win32 Qt platform for portability.

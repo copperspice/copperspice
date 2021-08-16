@@ -131,7 +131,8 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QM
    return indexNode;
 }
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
+
 static QString qt_GetLongPathName(const QString &strShortPath)
 {
    if (strShortPath.isEmpty() || strShortPath == "." || strShortPath == "..") {
@@ -191,7 +192,7 @@ QFileSystemModelPrivate::QFileSystemNode *QFileSystemModelPrivate::node(const QS
    // Construct the nodes up to the new root path if they need to be built
    QString absolutePath;
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
    QString longPath = qt_GetLongPathName(path);
 #else
    QString longPath = path;
@@ -1370,7 +1371,7 @@ QModelIndex QFileSystemModel::setRootPath(const QString &newPath)
 {
    Q_D(QFileSystemModel);
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
    QString longNewPath = qt_GetLongPathName(newPath);
 
 #else

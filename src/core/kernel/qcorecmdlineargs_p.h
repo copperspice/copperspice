@@ -28,11 +28,9 @@
 #include <qstringlist.h>
 #include <qvector.h>
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
 
-# if defined(Q_OS_WIN32)
-#  include <qt_windows.h>
-# endif
+#include <qt_windows.h>
 
 // template implementation of the parsing algorithm
 // used from qcoreapplication_win.cpp and the tools (rcc, uic...)
@@ -112,8 +110,6 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
    return argv;
 }
 
-#if defined(Q_OS_WIN32)
-
 static inline QStringList qCmdLineArgs(int t1, char *t2[])
 {
    (void) t1;
@@ -131,7 +127,6 @@ static inline QStringList qCmdLineArgs(int t1, char *t2[])
 
    return args;
 }
-#endif
 
 #else
    // not windows

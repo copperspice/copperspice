@@ -29,7 +29,7 @@
 #include <qregularexpression.h>
 #include <qunicodetables_p.h>
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
 #include <qt_windows.h>
 #endif
 
@@ -727,7 +727,7 @@ int QString8::localeAwareCompare(QStringView8 str1, QStringView8 str2)
       return 1;
    }
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
    QString16 tmp1(str1.cbegin(), str1.cend());
    QString16 tmp2(str2.cbegin(), str2.cend());
 

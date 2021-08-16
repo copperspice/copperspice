@@ -567,7 +567,7 @@ QFileInfoList QFSFileEngine::drives()
 {
    QFileInfoList retval;
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
     const UINT oldErrorMode = ::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
     quint32 driveBits = (quint32) GetLogicalDrives() & 0x3ffffff;
     ::SetErrorMode(oldErrorMode);

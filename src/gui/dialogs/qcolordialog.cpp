@@ -73,7 +73,7 @@ class QColorDialogPrivate : public QDialogPrivate
    };
 
    QColorDialogPrivate() : options(new QColorDialogOptions)
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
       , updateTimer(nullptr)
 #endif
    {}
@@ -144,7 +144,7 @@ class QColorDialogPrivate : public QDialogPrivate
    QPointer<QObject> receiverToDisconnectOnClose;
    QString memberToDisconnectOnClose;
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
    QTimer *updateTimer;
    QWindow dummyTransparentWindow;
 #endif
@@ -1705,7 +1705,10 @@ void QColorDialogPrivate::_q_pickScreenColor()
 #else
    q->grabMouse();
 #endif
-#ifdef Q_OS_WIN32 // excludes WinRT
+
+#ifdef Q_OS_WIN
+   // excludes WinRT
+
    updateTimer->start(30);
    dummyTransparentWindow.show();
 #endif
@@ -1733,7 +1736,7 @@ void QColorDialogPrivate::releaseColorPicking()
    q->removeEventFilter(colorPickingEventFilter);
    q->releaseMouse();
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
    updateTimer->stop();
    dummyTransparentWindow.setVisible(false);
 #endif
@@ -1760,7 +1763,7 @@ void QColorDialogPrivate::init(const QColor &initial)
       initWidgets();
    }
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
    dummyTransparentWindow.resize(1, 1);
    dummyTransparentWindow.setFlags(Qt::Tool | Qt::FramelessWindowHint);
 #endif
@@ -1924,7 +1927,7 @@ void QColorDialogPrivate::initWidgets()
    cancelButton = buttons->addButton(QDialogButtonBox::Cancel);
    QObject::connect(cancelButton, &QPushButton::clicked, q, &QColorDialog::reject);
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
    updateTimer = new QTimer(q);
    QObject::connect(updateTimer, &QTimer::timeout, q, &QColorDialog::_q_updateColorPicking);
 #endif
@@ -2178,7 +2181,8 @@ void QColorDialogPrivate::_q_updateColorPicking()
    if (! q->rect().contains(q->mapFromGlobal(newGlobalPos))) {
       // Inside the dialog mouse tracking works, handleColorPickingMouseMove will be called
       updateColorPicking(newGlobalPos);
-#ifdef Q_OS_WIN32
+
+#ifdef Q_OS_WIN
       dummyTransparentWindow.setPosition(newGlobalPos);
 #endif
    }

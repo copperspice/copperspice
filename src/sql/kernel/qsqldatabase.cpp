@@ -26,7 +26,7 @@
 #include <qalgorithms.h>
 #include <qsqlquery.h>
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 // Conflicting declarations of LPCBYTE in sqlfront.h and winscard.h
 #define _WINSCARD_H_
 #endif
@@ -49,6 +49,7 @@
 
 #ifdef QT_SQL_TDS
 // conflicting RETCODE typedef between odbc and freetds
+
 #define RETCODE DBRETCODE
 #include "./../plugins/sqldrivers/tds/qsql_tds.h"
 #undef RETCODE

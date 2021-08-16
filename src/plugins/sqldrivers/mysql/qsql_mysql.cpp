@@ -42,7 +42,7 @@
 
 #include <any>
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 // comment the next line out to use MySQL/embedded on Win32 systems
 // linking will fail unless you statically link to the mysql/e library
 # define Q_NO_MYSQL_EMBEDDED

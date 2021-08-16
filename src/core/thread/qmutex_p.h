@@ -102,7 +102,7 @@ class QMutexPrivate : public QMutexData
    pthread_mutex_t mutex;
    pthread_cond_t cond;
 
-#elif defined(Q_OS_WIN32)
+#elif defined(Q_OS_WIN)
    HANDLE event;
 #endif
 

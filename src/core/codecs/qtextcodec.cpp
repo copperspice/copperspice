@@ -205,9 +205,8 @@ bool QTextCodec::validCodecs()
    return true;
 }
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
    // no code here
-
 
 #else
 
@@ -331,7 +330,7 @@ static QTextCodec *ru_RU_hack(const char *i)
 
 #endif
 
-#if ! defined(Q_OS_WIN32)
+#if ! defined(Q_OS_WIN)
 static QTextCodec *checkForCodec(const QByteArray &name)
 {
    QTextCodec *c = QTextCodec::codecForName(name);
@@ -347,16 +346,12 @@ static QTextCodec *checkForCodec(const QByteArray &name)
 }
 #endif
 
-
 //
 static void setupLocaleMapper()
 {
-
-#if defined(Q_OS_WIN32)
    localeMapper = QTextCodec::codecForName("UTF-8");
 
-#else
-   localeMapper = QTextCodec::codecForName("UTF-8");
+#if ! defined(Q_OS_WIN)
 
 #if defined (_XOPEN_UNIX)
    if (! localeMapper) {

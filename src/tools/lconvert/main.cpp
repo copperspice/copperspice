@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 {
    QCoreApplication app(argc, argv);
 
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
    QTranslator translator;
    QTranslator qtTranslator;
    QString sysLocale   = QLocale::system().name();

@@ -3056,7 +3056,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
 #endif
       }
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
       if (key_consumed && (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift || e->key() == Qt::Key_Meta)) {
          QApplication::beep();
       }

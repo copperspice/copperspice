@@ -42,7 +42,8 @@
 #if PLATFORM(QT)
 #include <QFile>
 #include <QLibrary>
-#if defined(Q_OS_WIN32)
+
+#if defined(Q_OS_WIN)
 #include <windows.h>
 #endif
 #endif

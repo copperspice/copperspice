@@ -109,7 +109,7 @@
 #include "SecurityOrigin.h"
 #include "Settings.h"
 
-#if defined Q_OS_WIN32
+#if defined Q_OS_WIN
 #include "SystemInfo.h"
 #endif
 
@@ -3780,8 +3780,8 @@ QString QWebPage::userAgentForUrl(const QUrl&) const
    firstPartTemp += QString::fromLatin1("N; ");
 #endif
 
-        // Operating system
-#if defined Q_OS_WIN32
+
+#if defined Q_OS_WIN
         firstPartTemp += windowsVersionForUAString();
 #elif defined Q_OS_DARWIN
 #if CPU(X86) || CPU(X86_64)

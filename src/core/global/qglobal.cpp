@@ -80,9 +80,8 @@ static QSysInfo::MacVersion macVersion()
 
 const QSysInfo::MacVersion QSysInfo::MacintoshVersion = macVersion();
 
-
 // ** Windows
-#elif defined(Q_OS_WIN32)
+#elif defined(Q_OS_WIN)
 
 #include <qt_windows.h>
 

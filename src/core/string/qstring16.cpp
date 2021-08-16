@@ -28,7 +28,7 @@
 #include <qregularexpression.h>
 #include <qunicodetables_p.h>
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
 #include <qt_windows.h>
 #endif
 
@@ -728,7 +728,7 @@ int QString16::localeAwareCompare(QStringView16 str1, QStringView16 str2)
       return 1;
    }
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
    int retval = CompareString(GetUserDefaultLCID(), 0, (wchar_t *)str1.charData(), str1.size_storage(),
         (wchar_t *)str2.charData(), str2.size_storage());
 

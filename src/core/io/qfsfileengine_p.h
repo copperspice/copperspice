@@ -125,7 +125,7 @@ class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
 
    bool isSymlink() const;
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN)
    int sysOpen(const QString &, int flags);
 #endif
 

@@ -28,13 +28,13 @@
 #include <qgenericplugin.h>
 #include <qdebug.h>
 
-#if ! defined(Q_OS_WIN32) || defined(QT_SHARED)
+#if ! defined(Q_OS_WIN) || defined(QT_SHARED)
    Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QGenericPluginInterface_ID, "/generic", Qt::CaseInsensitive))
 #endif
 
 QObject *QGenericPluginFactory::create(const QString &key, const QString &specification)
 {
-#if (! defined(Q_OS_WIN32) || defined(QT_SHARED))
+#if (! defined(Q_OS_WIN) || defined(QT_SHARED))
    const QString driver = key.toLower();
 
    if (QObject *object = cs_load_plugin<QObject, QGenericPlugin>(loader(), driver, specification)) {
@@ -49,7 +49,7 @@ QStringList QGenericPluginFactory::keys()
 {
    QStringList list;
 
-#if ! defined(Q_OS_WIN32) || defined(QT_SHARED)
+#if ! defined(Q_OS_WIN) || defined(QT_SHARED)
    auto keySet = loader()->keySet();
    list.append(keySet.toList());
 #endif

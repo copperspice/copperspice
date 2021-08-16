@@ -27,7 +27,7 @@
 #include <qsqldriver.h>
 #include <qsqlresult.h>
 
-#if defined (Q_OS_WIN32)
+#if defined (Q_OS_WIN)
 #include <qt_windows.h>
 #endif
 
