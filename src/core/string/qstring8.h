@@ -1129,27 +1129,27 @@ inline QString8 operator+(QString8 &&str, QChar32 c)
 
 // for an array of chars
 template <int N>
-inline const QString8 operator+(const char (&cStr)[N], const QString8 &str)
+inline const QString8 operator+(const char (&cString)[N], const QString8 &str)
 {
    QString8 t(str);
-   t.prepend(cStr);
+   t.prepend(cString);
    return t;
 }
 
 // for an array of chars
 template <int N>
-inline const QString8 operator+(const QString8 &str, const char (&cStr)[N])
+inline const QString8 operator+(const QString8 &str, const char (&cString)[N])
 {
    QString8 t(str);
-   t += cStr;
+   t += cString;
    return t;
 }
 
 // for an array of chars
 template <int N>
-inline QString8 operator+(QString8 &&str, const char (&cStr)[N])
+inline QString8 operator+(QString8 &&str, const char (&cString)[N])
 {
-   str += cStr;
+   str += cString;
    return std::move(str);
 }
 
@@ -1160,16 +1160,16 @@ inline bool operator<(const QString8 &str1, const QString8 &str2)
 
 // for an array of chars
 template <int N>
-inline bool operator<(const char (&cStr)[N], const QString8 &str)
+inline bool operator<(const char (&cString)[N], const QString8 &str)
 {
-   return (QString8(cStr) < str);
+   return (QString8(cString) < str);
 }
 
 // for an array of chars
 template <int N>
-inline bool operator<(const QString8 &str, const char (&cStr)[N])
+inline bool operator<(const QString8 &str, const char (&cString)[N])
 {
-   return (str < QString8(cStr));
+   return (str < QString8(cString));
 }
 
 inline bool operator<=(const QString8 &str1, const QString8 &str2)
@@ -1179,16 +1179,16 @@ inline bool operator<=(const QString8 &str1, const QString8 &str2)
 
 // for an array of chars
 template <int N>
-inline bool operator<=(const char (&cStr)[N], const QString8 &str)
+inline bool operator<=(const char (&cString)[N], const QString8 &str)
 {
-   return (QString8(cStr) <= str);
+   return (QString8(cString) <= str);
 }
 
 // for an array of chars
 template <int N>
-inline bool operator<=(const QString8 &str, const char (&cStr)[N])
+inline bool operator<=(const QString8 &str, const char (&cString)[N])
 {
-   return (str <= QString8(cStr));
+   return (str <= QString8(cString));
 }
 
 inline bool operator>(const QString8 &str1, const QString8 &str2)
@@ -1198,16 +1198,16 @@ inline bool operator>(const QString8 &str1, const QString8 &str2)
 
 // for an array of chars
 template <int N>
-inline bool operator>(const char (&cStr)[N], const QString8 &str)
+inline bool operator>(const char (&cString)[N], const QString8 &str)
 {
-   return (QString8(cStr) > str);
+   return (QString8(cString) > str);
 }
 
 // for an array of chars
 template <int N>
-inline bool operator>(const QString8 &str, const char (&cStr)[N])
+inline bool operator>(const QString8 &str, const char (&cString)[N])
 {
-   return (str > QString8(cStr));
+   return (str > QString8(cString));
 }
 
 inline bool operator>=(const QString8 &str1, const QString8 &str2)
@@ -1217,16 +1217,16 @@ inline bool operator>=(const QString8 &str1, const QString8 &str2)
 
 // for an array of chars
 template <int N>
-inline bool operator>=(const char (&cStr)[N], const QString8 &str)
+inline bool operator>=(const char (&cString)[N], const QString8 &str)
 {
-   return (QString8(cStr) >= str);
+   return (QString8(cString) >= str);
 }
 
 // for an array of chars
 template <int N>
-inline bool operator>=(const QString8 &str, const char (&cStr)[N])
+inline bool operator>=(const QString8 &str, const char (&cString)[N])
 {
-   return (str >= QString8(cStr));
+   return (str >= QString8(cString));
 }
 
 inline void swap(QString8 &a, QString8 &b) {
