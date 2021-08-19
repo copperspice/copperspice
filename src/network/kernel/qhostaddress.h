@@ -74,14 +74,16 @@ class Q_NETWORK_EXPORT QHostAddress
    explicit QHostAddress(const sockaddr *address);
    explicit QHostAddress(const QString &address);
 
-   QHostAddress(const QHostAddress &other);
    QHostAddress(SpecialAddress address);
+
+   QHostAddress(const QHostAddress &other);
+
    ~QHostAddress();
 
    void setAddress(quint32 ip4Addr);
    void setAddress(const quint8 *ip6Addr);
    void setAddress(const Q_IPV6ADDR &ip6Addr);
-   void setAddress(const sockaddr *address);
+   void setAddress(const sockaddr *sockAddr);
    bool setAddress(const QString &address);
 
    QAbstractSocket::NetworkLayerProtocol protocol() const;
@@ -94,18 +96,21 @@ class Q_NETWORK_EXPORT QHostAddress
    void setScopeId(const QString &id);
 
    QHostAddress &operator=(const QHostAddress &other);
-   QHostAddress &operator=(const QString &address);
 
    QHostAddress &operator=(QHostAddress &&other) {
       swap(other);
       return *this;
    }
 
-   bool operator ==(const QHostAddress &address) const;
-   bool operator ==(SpecialAddress address) const;
-   inline bool operator !=(const QHostAddress &address) const {
-      return !operator==(address);
+   QHostAddress &operator=(const QString &address);
+
+   bool operator ==(const QHostAddress &other) const;
+
+   inline bool operator !=(const QHostAddress &other) const {
+      return !operator==(other);
    }
+
+   bool operator ==(SpecialAddress address) const;
 
    inline bool operator !=(SpecialAddress address) const {
       return !operator==(address);

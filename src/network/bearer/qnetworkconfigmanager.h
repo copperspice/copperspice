@@ -54,7 +54,10 @@ class Q_NETWORK_EXPORT QNetworkConfigurationManager : public QObject
    QNetworkConfigurationManager::Capabilities capabilities() const;
 
    QNetworkConfiguration defaultConfiguration() const;
-   QList<QNetworkConfiguration> allConfigurations(QNetworkConfiguration::StateFlags flags = QNetworkConfiguration::StateFlags()) const;
+
+   QList<QNetworkConfiguration> allConfigurations(QNetworkConfiguration::StateFlags flags =
+            QNetworkConfiguration::StateFlags()) const;
+
    QNetworkConfiguration configurationFromIdentifier(const QString &identifier) const;
 
    bool isOnline() const;

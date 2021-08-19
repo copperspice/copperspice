@@ -86,7 +86,7 @@ class Q_NETWORK_EXPORT QTcpServer : public QObject
  protected:
    QTcpServer(QTcpServerPrivate &dd, QObject *parent = nullptr);
 
-   virtual void incomingConnection(qintptr handle);
+   virtual void incomingConnection(qintptr socketDescriptor);
    void addPendingConnection(QTcpSocket *socket);
 
    QScopedPointer<QTcpServerPrivate> d_ptr;

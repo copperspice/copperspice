@@ -96,10 +96,12 @@ public:
    QByteArray version() const;
    QByteArray serialNumber() const;
    QByteArray digest(QCryptographicHash::Algorithm algorithm = QCryptographicHash::Md5) const;
+
    QStringList issuerInfo(SubjectInfo info) const;
    QStringList issuerInfo(const QByteArray &attribute) const;
-   QStringList subjectInfo(SubjectInfo info) const;
+   QStringList subjectInfo(SubjectInfo subject) const;
    QStringList subjectInfo(const QByteArray &attribute) const;
+
    QList<QByteArray> subjectInfoAttributes() const;
    QList<QByteArray> issuerInfoAttributes() const;
 
@@ -121,7 +123,7 @@ public:
    static QList<QSslCertificate> fromData(const QByteArray &data, QSsl::EncodingFormat format = QSsl::Pem);
 
    static QList<QSslError> verify(const QList<QSslCertificate> &certificateChain, const QString &hostName = QString());
-   static bool importPkcs12(QIODevice *device, QSslKey *key, QSslCertificate *cert,
+   static bool importPkcs12(QIODevice *device, QSslKey *key, QSslCertificate *certificate,
                   QList<QSslCertificate> *caCertificates = nullptr, const QByteArray &passPhrase = QByteArray());
 
    Qt::HANDLE handle() const;

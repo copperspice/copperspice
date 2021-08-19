@@ -119,7 +119,7 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
 
    // SSL configuration
    QSslConfiguration sslConfiguration() const;
-   void setSslConfiguration(const QSslConfiguration &config);
+   void setSslConfiguration(const QSslConfiguration &configuration);
 
    // Certificate & cipher accessors.
    void setLocalCertificateChain(const QList<QSslCertificate> &localChain);

@@ -69,7 +69,7 @@ class Q_NETWORK_EXPORT QNetworkSession : public QObject
    };
    using UsagePolicies = QFlags<UsagePolicy>;
 
-   explicit QNetworkSession(const QNetworkConfiguration &connConfig, QObject *parent = nullptr);
+   explicit QNetworkSession(const QNetworkConfiguration &configuration, QObject *parent = nullptr);
    virtual ~QNetworkSession();
 
    bool isOpen() const;
@@ -114,8 +114,8 @@ class Q_NETWORK_EXPORT QNetworkSession : public QObject
    NET_CS_SLOT_1(Public, void reject())
    NET_CS_SLOT_2(reject)
 
-   NET_CS_SIGNAL_1(Public, void stateChanged(QNetworkSession::State un_named_arg1))
-   NET_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void stateChanged(QNetworkSession::State state))
+   NET_CS_SIGNAL_2(stateChanged, state)
 
    NET_CS_SIGNAL_1(Public, void opened())
    NET_CS_SIGNAL_2(opened)
@@ -123,8 +123,8 @@ class Q_NETWORK_EXPORT QNetworkSession : public QObject
    NET_CS_SIGNAL_1(Public, void closed())
    NET_CS_SIGNAL_2(closed)
 
-   NET_CS_SIGNAL_1(Public, void error(QNetworkSession::SessionError un_named_arg1))
-   NET_CS_SIGNAL_OVERLOAD(error, (QNetworkSession::SessionError), un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void error(QNetworkSession::SessionError error))
+   NET_CS_SIGNAL_OVERLOAD(error, (QNetworkSession::SessionError), error)
 
    NET_CS_SIGNAL_1(Public, void preferredConfigurationChanged(const QNetworkConfiguration &config, bool isSeamless))
    NET_CS_SIGNAL_2(preferredConfigurationChanged, config, isSeamless)

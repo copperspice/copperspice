@@ -128,8 +128,8 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
 
    QAbstractSocket(SocketType socketType, QObject *parent);
 
-   QAbstractSocket(const QAbstractSocket &) = delete;
-   QAbstractSocket &operator=(const QAbstractSocket &) = delete;
+   QAbstractSocket(const QAbstractSocket &other) = delete;
+   QAbstractSocket &operator=(const QAbstractSocket &other) = delete;
 
    virtual ~QAbstractSocket();
 
@@ -140,9 +140,9 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
    bool bind(const QHostAddress &address, quint16 port = 0, BindMode mode = DefaultForPlatform);
    bool bind(quint16 port = 0, BindMode mode = DefaultForPlatform);
 
-   virtual void connectToHost(const QString &hostName, quint16 port, OpenMode mode = ReadWrite,
+   virtual void connectToHost(const QString &hostName, quint16 port, OpenMode openMode = ReadWrite,
                   NetworkLayerProtocol protocol = AnyIPProtocol);
-   virtual void connectToHost(const QHostAddress &address, quint16 port, OpenMode mode = ReadWrite);
+   virtual void connectToHost(const QHostAddress &address, quint16 port, OpenMode openMode = ReadWrite);
    virtual void disconnectFromHost();
 
    bool isValid() const;
@@ -164,7 +164,7 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
    void abort();
 
    virtual qintptr socketDescriptor() const;
-   virtual bool setSocketDescriptor(qintptr socketDescriptor, SocketState state = ConnectedState,
+   virtual bool setSocketDescriptor(qintptr socketDescriptor, SocketState socketState = ConnectedState,
                   OpenMode openMode = ReadWrite);
 
    virtual void setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value);
@@ -200,11 +200,11 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
    NET_CS_SIGNAL_1(Public, void disconnected())
    NET_CS_SIGNAL_2(disconnected)
 
-   NET_CS_SIGNAL_1(Public, void stateChanged(QAbstractSocket::SocketState un_named_arg1))
-   NET_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void stateChanged(QAbstractSocket::SocketState socketState))
+   NET_CS_SIGNAL_2(stateChanged, socketState)
 
-   NET_CS_SIGNAL_1(Public, void error(QAbstractSocket::SocketError un_named_arg1))
-   NET_CS_SIGNAL_OVERLOAD(error, (QAbstractSocket::SocketError), un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void error(QAbstractSocket::SocketError socketError))
+   NET_CS_SIGNAL_OVERLOAD(error, (QAbstractSocket::SocketError), socketError)
 
 #ifndef QT_NO_NETWORKPROXY
    NET_CS_SIGNAL_1(Public, void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator))

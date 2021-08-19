@@ -41,13 +41,15 @@ class Q_NETWORK_EXPORT QHostInfo
       UnknownError
    };
 
-   explicit QHostInfo(int lookupId = -1);
-   QHostInfo(const QHostInfo &d);
-   QHostInfo &operator=(const QHostInfo &d);
+   explicit QHostInfo(int id = -1);
+
+   QHostInfo(const QHostInfo &other);
+   QHostInfo &operator=(const QHostInfo &other);
+
    ~QHostInfo();
 
    QString hostName() const;
-   void setHostName(const QString &name);
+   void setHostName(const QString &hostName);
 
    QList<QHostAddress> addresses() const;
    void setAddresses(const QList<QHostAddress> &addresses);
@@ -56,13 +58,13 @@ class Q_NETWORK_EXPORT QHostInfo
    void setError(HostInfoError error);
 
    QString errorString() const;
-   void setErrorString(const QString &errorString);
+   void setErrorString(const QString &errorStr);
 
    void setLookupId(int id);
    int lookupId() const;
 
    static int lookupHost(const QString &name, QObject *receiver, const  QString &member);
-   static void abortHostLookup(int lookupId);
+   static void abortHostLookup(int id);
 
    static QHostInfo fromName(const QString &name);
    static QString localHostName();

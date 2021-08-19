@@ -28,7 +28,6 @@
 #include <qstring.h>
 #include <qiodevice.h>
 
-
 #ifndef QT_NO_FTP
 class QUrl;
 class QUrlInfoPrivate;
@@ -43,16 +42,21 @@ class Q_NETWORK_EXPORT QUrlInfo
    };
 
    QUrlInfo();
-   QUrlInfo(const QUrlInfo &ui);
+
    QUrlInfo(const QString &name, int permissions, const QString &owner,
             const QString &group, qint64 size, const QDateTime &lastModified,
             const QDateTime &lastRead, bool isDir, bool isFile, bool isSymLink,
             bool isWritable, bool isReadable, bool isExecutable);
+
    QUrlInfo(const QUrl &url, int permissions, const QString &owner,
             const QString &group, qint64 size, const QDateTime &lastModified,
             const QDateTime &lastRead, bool isDir, bool isFile, bool isSymLink,
             bool isWritable, bool isReadable, bool isExecutable);
-   QUrlInfo &operator=(const QUrlInfo &ui);
+
+   QUrlInfo(const QUrlInfo &other);
+
+   QUrlInfo &operator=(const QUrlInfo &other);
+
    virtual ~QUrlInfo();
 
    virtual void setName(const QString &name);
@@ -88,9 +92,10 @@ class Q_NETWORK_EXPORT QUrlInfo
    static bool lessThan(const QUrlInfo &i1, const QUrlInfo &i2, int sortBy);
    static bool equal(const QUrlInfo &i1, const QUrlInfo &i2,int sortBy);
 
-   bool operator==(const QUrlInfo &i) const;
-   inline bool operator!=(const QUrlInfo &i) const {
-      return !operator==(i);
+   bool operator==(const QUrlInfo &other) const;
+
+   inline bool operator!=(const QUrlInfo &other) const {
+      return ! operator==(other);
    }
 
  private:

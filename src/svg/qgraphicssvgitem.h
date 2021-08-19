@@ -45,8 +45,8 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
    SVG_CS_PROPERTY_WRITE(maximumCacheSize, setMaximumCacheSize)
 
  public:
-   QGraphicsSvgItem(QGraphicsItem *parentItem = nullptr);
-   QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parentItem = nullptr);
+   QGraphicsSvgItem(QGraphicsItem *parent = nullptr);
+   QGraphicsSvgItem(const QString &fileName, QGraphicsItem *parent = nullptr);
 
    QGraphicsSvgItem(const QGraphicsSvgItem &) = delete;
    QGraphicsSvgItem &operator=(const QGraphicsSvgItem &) = delete;
@@ -57,7 +57,7 @@ class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
    void setElementId(const QString &id);
    QString elementId() const;
 
-   void setCachingEnabled(bool);
+   void setCachingEnabled(bool caching);
    bool isCachingEnabled() const;
 
    void setMaximumCacheSize(const QSize &size);

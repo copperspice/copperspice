@@ -124,23 +124,29 @@ class Q_NETWORK_EXPORT QFtp : public QObject
    NET_CS_SLOT_1(Public, void abort())
    NET_CS_SLOT_2(abort)
 
-   NET_CS_SIGNAL_1(Public, void stateChanged(int un_named_arg1))
-   NET_CS_SIGNAL_2(stateChanged, un_named_arg1)
-   NET_CS_SIGNAL_1(Public, void listInfo(const QUrlInfo &un_named_arg1))
-   NET_CS_SIGNAL_2(listInfo, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void stateChanged(int state))
+   NET_CS_SIGNAL_2(stateChanged, state)
+
+   NET_CS_SIGNAL_1(Public, void listInfo(const QUrlInfo &urlInfo))
+   NET_CS_SIGNAL_2(listInfo, urlInfo)
+
    NET_CS_SIGNAL_1(Public, void readyRead())
    NET_CS_SIGNAL_2(readyRead)
-   NET_CS_SIGNAL_1(Public, void dataTransferProgress(qint64 un_named_arg1, qint64 un_named_arg2))
-   NET_CS_SIGNAL_2(dataTransferProgress, un_named_arg1, un_named_arg2)
-   NET_CS_SIGNAL_1(Public, void rawCommandReply(int un_named_arg1, const QString &un_named_arg2))
-   NET_CS_SIGNAL_2(rawCommandReply, un_named_arg1, un_named_arg2)
 
-   NET_CS_SIGNAL_1(Public, void commandStarted(int un_named_arg1))
-   NET_CS_SIGNAL_2(commandStarted, un_named_arg1)
-   NET_CS_SIGNAL_1(Public, void commandFinished(int un_named_arg1, bool un_named_arg2))
-   NET_CS_SIGNAL_2(commandFinished, un_named_arg1, un_named_arg2)
-   NET_CS_SIGNAL_1(Public, void done(bool un_named_arg1))
-   NET_CS_SIGNAL_2(done, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void dataTransferProgress(qint64 done, qint64 total))
+   NET_CS_SIGNAL_2(dataTransferProgress, done, total)
+
+   NET_CS_SIGNAL_1(Public, void rawCommandReply(int replyCode, const QString &detail))
+   NET_CS_SIGNAL_2(rawCommandReply, replyCode, detail )
+
+   NET_CS_SIGNAL_1(Public, void commandStarted(int id))
+   NET_CS_SIGNAL_2(commandStarted, id)
+
+   NET_CS_SIGNAL_1(Public, void commandFinished(int id, bool error))
+   NET_CS_SIGNAL_2(commandFinished, id, error)
+
+   NET_CS_SIGNAL_1(Public, void done(bool error))
+   NET_CS_SIGNAL_2(done, error)
 
  protected:
    QScopedPointer<QFtpPrivate> d_ptr;

@@ -67,7 +67,7 @@ class Q_NETWORK_EXPORT QNetworkCacheMetaData
    void setUrl(const QUrl &url);
 
    RawHeaderList rawHeaders() const;
-   void setRawHeaders(const RawHeaderList &headers);
+   void setRawHeaders(const RawHeaderList &list);
 
    QDateTime lastModified() const;
    void setLastModified(const QDateTime &dateTime);

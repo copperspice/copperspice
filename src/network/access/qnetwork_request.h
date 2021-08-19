@@ -124,7 +124,7 @@ class Q_NETWORK_EXPORT QNetworkRequest
    bool hasRawHeader(const QByteArray &headerName) const;
    QList<QByteArray> rawHeaderList() const;
    QByteArray rawHeader(const QByteArray &headerName) const;
-   void setRawHeader(const QByteArray &headerName, const QByteArray &value);
+   void setRawHeader(const QByteArray &headerName, const QByteArray &headerValue);
 
    // attributes
    QVariant attribute(Attribute code, const QVariant &defaultValue = QVariant()) const;
@@ -143,7 +143,7 @@ class Q_NETWORK_EXPORT QNetworkRequest
 
    // HTTP redirect related
    int maximumRedirectsAllowed() const;
-   void setMaximumRedirectsAllowed(int maximumRedirectsAllowed);
+   void setMaximumRedirectsAllowed(int maxRedirectsAllowed);
 
  private:
    QSharedDataPointer<QNetworkRequestPrivate> d;

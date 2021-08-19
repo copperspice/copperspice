@@ -113,8 +113,8 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    NET_CS_SIGNAL_2(stateChanged, socketState)
 
  protected:
-   qint64 readData(char *, qint64) override;
-   qint64 writeData(const char *, qint64) override;
+   qint64 readData(char * data, qint64 ch) override;
+   qint64 writeData(const char * data, qint64 ch) override;
 
  private:
 #if defined(QT_LOCALSOCKET_TCP)

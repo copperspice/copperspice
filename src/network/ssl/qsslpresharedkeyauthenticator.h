@@ -34,9 +34,12 @@ class QSslPreSharedKeyAuthenticator
 {
  public:
     Q_NETWORK_EXPORT QSslPreSharedKeyAuthenticator();
+
+    Q_NETWORK_EXPORT QSslPreSharedKeyAuthenticator(const QSslPreSharedKeyAuthenticator &other);
+
     Q_NETWORK_EXPORT ~QSslPreSharedKeyAuthenticator();
-    Q_NETWORK_EXPORT QSslPreSharedKeyAuthenticator(const QSslPreSharedKeyAuthenticator &authenticator);
-    Q_NETWORK_EXPORT QSslPreSharedKeyAuthenticator &operator=(const QSslPreSharedKeyAuthenticator &authenticator);
+
+    Q_NETWORK_EXPORT QSslPreSharedKeyAuthenticator &operator=(const QSslPreSharedKeyAuthenticator &other);
 
     QSslPreSharedKeyAuthenticator &operator=(QSslPreSharedKeyAuthenticator &&other)  {
       swap(other); return *this;

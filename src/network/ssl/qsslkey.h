@@ -75,9 +75,9 @@ class Q_NETWORK_EXPORT QSslKey
       qSwap(d, other.d);
    }
 
-   bool operator==(const QSslKey &key) const;
-   inline bool operator!=(const QSslKey &key) const {
-      return !operator==(key);
+   bool operator==(const QSslKey &other) const;
+   inline bool operator!=(const QSslKey &other) const {
+      return ! operator==(other);
    }
 
  private:

@@ -159,7 +159,7 @@ class Q_NETWORK_EXPORT QNetworkProxy
    void setType(QNetworkProxy::ProxyType type);
    QNetworkProxy::ProxyType type() const;
 
-   void setCapabilities(Capabilities capab);
+   void setCapabilities(Capabilities capabilities);
    Capabilities capabilities() const;
    bool isCachingProxy() const;
    bool isTransparentProxy() const;
@@ -187,11 +187,11 @@ class Q_NETWORK_EXPORT QNetworkProxy
    QVariant header(QNetworkRequest::KnownHeaders header) const;
    void setHeader(QNetworkRequest::KnownHeaders header, const QVariant &value);
 
-   // raw headers:
+   // raw headers
    bool hasRawHeader(const QByteArray &headerName) const;
    QList<QByteArray> rawHeaderList() const;
    QByteArray rawHeader(const QByteArray &headerName) const;
-   void setRawHeader(const QByteArray &headerName, const QByteArray &value);
+   void setRawHeader(const QByteArray &headerName, const QByteArray &headerValue);
 
  private:
    QSharedDataPointer<QNetworkProxyPrivate> d;

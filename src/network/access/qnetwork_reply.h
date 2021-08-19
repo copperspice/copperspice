@@ -139,8 +139,8 @@ class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
    NET_CS_SIGNAL_1(Public, void finished())
    NET_CS_SIGNAL_2(finished)
 
-   NET_CS_SIGNAL_1(Public, void error(QNetworkReply::NetworkError un_named_arg1))
-   NET_CS_SIGNAL_OVERLOAD(error, (QNetworkReply::NetworkError), un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void error(QNetworkReply::NetworkError code))
+   NET_CS_SIGNAL_OVERLOAD(error, (QNetworkReply::NetworkError), code)
 
 #ifdef QT_SSL
    NET_CS_SIGNAL_1(Public, void encrypted())
@@ -170,13 +170,13 @@ class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
    void setOperation(QNetworkAccessManager::Operation operation);
    void setRequest(const QNetworkRequest &request);
    void setError(NetworkError errorCode, const QString &errorString);
-   void setFinished(bool);
+   void setFinished(bool finished);
    void setUrl(const QUrl &url);
    void setHeader(QNetworkRequest::KnownHeaders header, const QVariant &value);
    void setRawHeader(const QByteArray &headerName, const QByteArray &value);
    void setAttribute(QNetworkRequest::Attribute code, const QVariant &value);
 
-   virtual void sslConfigurationImplementation(QSslConfiguration &) const;
+   virtual void sslConfigurationImplementation(QSslConfiguration &configuration) const;
    virtual void setSslConfigurationImplementation(const QSslConfiguration &configuration);
    virtual void ignoreSslErrorsImplementation(const QList<QSslError> &errors);
 
