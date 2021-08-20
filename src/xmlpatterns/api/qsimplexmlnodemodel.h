@@ -39,7 +39,7 @@ class Q_XMLPATTERNS_EXPORT QSimpleXmlNodeModel : public QAbstractXmlNodeModel
 
    QUrl baseUri(const QXmlNodeModelIndex &node) const override;
    QXmlNamePool &namePool() const;
-   QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &) const override;
+   QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &node) const override;
    QString stringValue(const QXmlNodeModelIndex &node) const override;
    QXmlNodeModelIndex elementById(const QXmlName &id) const override;
    QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &idref) const override;

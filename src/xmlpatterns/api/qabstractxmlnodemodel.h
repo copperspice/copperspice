@@ -246,33 +246,34 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
    QAbstractXmlNodeModel();
    virtual ~QAbstractXmlNodeModel();
 
-   virtual QUrl baseUri(const QXmlNodeModelIndex &ni) const = 0;
-   virtual QUrl documentUri(const QXmlNodeModelIndex &ni) const = 0;
-   virtual QXmlNodeModelIndex::NodeKind kind(const QXmlNodeModelIndex &ni) const = 0;
-   virtual QXmlNodeModelIndex::DocumentOrder compareOrder(const QXmlNodeModelIndex &ni1,
-         const QXmlNodeModelIndex &ni2) const = 0;
-   virtual QXmlNodeModelIndex root(const QXmlNodeModelIndex &n) const = 0;
-   virtual QXmlName name(const QXmlNodeModelIndex &ni) const = 0;
-   virtual QString stringValue(const QXmlNodeModelIndex &n) const = 0;
-   virtual QVariant typedValue(const QXmlNodeModelIndex &n) const = 0;
+   virtual QUrl baseUri(const QXmlNodeModelIndex &index) const = 0;
+   virtual QUrl documentUri(const QXmlNodeModelIndex &index) const = 0;
+   virtual QXmlNodeModelIndex::NodeKind kind(const QXmlNodeModelIndex &index) const = 0;
+   virtual QXmlNodeModelIndex::DocumentOrder compareOrder(const QXmlNodeModelIndex &index1,
+            const QXmlNodeModelIndex &index2) const = 0;
+
+   virtual QXmlNodeModelIndex root(const QXmlNodeModelIndex &index) const = 0;
+   virtual QXmlName name(const QXmlNodeModelIndex &index) const = 0;
+   virtual QString stringValue(const QXmlNodeModelIndex &index) const = 0;
+   virtual QVariant typedValue(const QXmlNodeModelIndex &index) const = 0;
 
    /* The members below are internal, not part of the public API, and
     * unsupported. Using them leads to undefined behavior. */
    virtual QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > iterate(
-      const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const;
+            const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const;
 
-   virtual QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &ni) const;
-   virtual QExplicitlySharedDataPointer<QPatternist::ItemType> type(const QXmlNodeModelIndex &ni) const;
+   virtual QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &index) const;
+   virtual QExplicitlySharedDataPointer<QPatternist::ItemType> type(const QXmlNodeModelIndex &index) const;
 
-   virtual QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni,
-                  const QXmlName::PrefixCode prefix) const;
+   virtual QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &index,
+            const QXmlName::PrefixCode prefix) const;
 
-   virtual bool isDeepEqual(const QXmlNodeModelIndex &ni1, const QXmlNodeModelIndex &ni2) const;
-   virtual void sendNamespaces(const QXmlNodeModelIndex &n, QAbstractXmlReceiver *const receiver) const;
-   virtual QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &n) const = 0;
+   virtual bool isDeepEqual(const QXmlNodeModelIndex &index1, const QXmlNodeModelIndex &index2) const;
+   virtual void sendNamespaces(const QXmlNodeModelIndex &index, QAbstractXmlReceiver *const receiver) const;
+   virtual QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &index) const = 0;
 
-   virtual QXmlNodeModelIndex elementById(const QXmlName &NCName) const = 0;
-   virtual QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &NCName) const = 0;
+   virtual QXmlNodeModelIndex elementById(const QXmlName &id) const = 0;
+   virtual QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &id) const = 0;
 
    enum NodeCopySetting {
       InheritNamespaces   = 0x1,

@@ -33,7 +33,7 @@ class Q_XMLPATTERNS_EXPORT QSourceLocation
  public:
    QSourceLocation();
    QSourceLocation(const QSourceLocation &other);
-   QSourceLocation(const QUrl &uri, int line = -1, int column = -1);
+   QSourceLocation(const QUrl &url, int line = -1, int column = -1);
    ~QSourceLocation();
    QSourceLocation &operator=(const QSourceLocation &other);
    bool operator==(const QSourceLocation &other) const;

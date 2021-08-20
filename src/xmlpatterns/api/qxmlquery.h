@@ -72,7 +72,7 @@ class Q_XMLPATTERNS_EXPORT QXmlQuery
    ~QXmlQuery();
    QXmlQuery &operator=(const QXmlQuery &other);
 
-   void setMessageHandler(QAbstractMessageHandler *messageHandler);
+   void setMessageHandler(QAbstractMessageHandler *msgHandler);
    QAbstractMessageHandler *messageHandler() const;
 
    void setQuery(const QString &sourceCode, const QUrl &documentURI = QUrl());
@@ -84,8 +84,8 @@ class Q_XMLPATTERNS_EXPORT QXmlQuery
    void bindVariable(const QXmlName &name, const QXmlItem &value);
    void bindVariable(const QString &localName, const QXmlItem &value);
 
-   void bindVariable(const QXmlName &name, QIODevice *);
-   void bindVariable(const QString &localName, QIODevice *);
+   void bindVariable(const QXmlName &name, QIODevice *device);
+   void bindVariable(const QString &localName, QIODevice *device);
    void bindVariable(const QXmlName &name, const QXmlQuery &query);
    void bindVariable(const QString &localName, const QXmlQuery &query);
 
@@ -103,7 +103,7 @@ class Q_XMLPATTERNS_EXPORT QXmlQuery
    void setFocus(const QXmlItem &item);
    bool setFocus(const QUrl &documentURI);
    bool setFocus(QIODevice *document);
-   bool setFocus(const QString &focus);
+   bool setFocus(const QString &focusText);
 
    void setInitialTemplateName(const QXmlName &name);
    void setInitialTemplateName(const QString &name);

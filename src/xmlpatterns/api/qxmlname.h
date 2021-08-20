@@ -65,10 +65,11 @@ class Q_XMLPATTERNS_EXPORT QXmlName
             const QString &namespaceURI = QString(),
             const QString &prefix = QString());
 
-   QString namespaceUri(const QXmlNamePool &query) const;
-   QString prefix(const QXmlNamePool &query) const;
-   QString localName(const QXmlNamePool &query) const;
-   QString toClarkName(const QXmlNamePool &query) const;
+   QString namespaceUri(const QXmlNamePool &namePool) const;
+   QString prefix(const QXmlNamePool &namePool) const;
+   QString localName(const QXmlNamePool &namePool) const;
+   QString toClarkName(const QXmlNamePool &namePool) const;
+
    bool operator==(const QXmlName &other) const;
    bool operator!=(const QXmlName &other) const;
    QXmlName &operator=(const QXmlName &other);

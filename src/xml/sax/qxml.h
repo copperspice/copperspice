@@ -71,14 +71,15 @@ class Q_XML_EXPORT QXmlNamespaceSupport
 
    ~QXmlNamespaceSupport();
 
-   void setPrefix(const QString &, const QString &);
+   void setPrefix(const QString &prefix, const QString &uri);
 
-   QString prefix(const QString &) const;
-   QString uri(const QString &) const;
-   void splitName(const QString &, QString &, QString &) const;
-   void processName(const QString &, bool, QString &, QString &) const;
+   QString prefix(const QString &uri) const;
+   QString uri(const QString &prefix) const;
+
+   void splitName(const QString &qname, QString &prefix, QString &localname) const;
+   void processName(const QString &qname, bool isAttribute, QString &nsuri, QString &localname) const;
    QStringList prefixes() const;
-   QStringList prefixes(const QString &) const;
+   QStringList prefixes(const QString &uri) const;
 
    void pushContext();
    void popContext();
@@ -136,11 +137,11 @@ class Q_XML_EXPORT QXmlInputSource
 {
  public:
    QXmlInputSource();
-   QXmlInputSource(QIODevice *dev);
+   QXmlInputSource(QIODevice *device);
    virtual ~QXmlInputSource();
 
-   virtual void setData(const QString &dat);
-   virtual void setData(const QByteArray &dat);
+   virtual void setData(const QString &data);
+   virtual void setData(const QByteArray &data);
    virtual void fetchData();
    virtual QString data() const;
    virtual QChar next();
@@ -221,7 +222,7 @@ class Q_XML_EXPORT QXmlSimpleReader : public QXmlReader
    virtual ~QXmlSimpleReader();
 
    bool feature(const QString &name, bool *ok = nullptr) const override;
-   void setFeature(const QString &name, bool value) override;
+   void setFeature(const QString &name, bool enable) override;
    bool hasFeature(const QString &name) const override;
 
    void *property(const QString &name, bool *ok = nullptr) const override;
@@ -316,7 +317,7 @@ class Q_XML_EXPORT QXmlEntityResolver
 {
  public:
    virtual ~QXmlEntityResolver() {}
-   virtual bool resolveEntity(const QString &publicId, const QString &systemId, QXmlInputSource *&ret) = 0;
+   virtual bool resolveEntity(const QString &publicId, const QString &systemId, QXmlInputSource *&inputSource) = 0;
    virtual QString errorString() const = 0;
 };
 
@@ -383,7 +384,7 @@ class Q_XML_EXPORT QXmlDefaultHandler : public QXmlContentHandler, public QXmlEr
    bool unparsedEntityDecl(const QString &name, const QString &publicId, const QString &systemId,
                            const QString &notationName) override;
 
-   bool resolveEntity(const QString &publicId, const QString &systemId, QXmlInputSource *&ret) override;
+   bool resolveEntity(const QString &publicId, const QString &systemId, QXmlInputSource *&inputSource) override;
 
    bool startDTD(const QString &name, const QString &publicId, const QString &systemId) override;
    bool endDTD() override;

@@ -58,7 +58,7 @@ class Q_XMLPATTERNS_EXPORT QXmlSchemaValidator
    void setUriResolver(const QAbstractUriResolver *resolver);
    const QAbstractUriResolver *uriResolver() const;
 
-   void setNetworkAccessManager(QNetworkAccessManager *networkmanager);
+   void setNetworkAccessManager(QNetworkAccessManager *manager);
    QNetworkAccessManager *networkAccessManager() const;
 
  private:

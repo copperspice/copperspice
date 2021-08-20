@@ -598,9 +598,11 @@ class QDomDocumentPrivate : public QDomNodePrivate
    QDomElementPrivate *createElement(const QString &tagName);
    QDomElementPrivate        *createElementNS(const QString &nsURI, const QString &qName);
    QDomDocumentFragmentPrivate *createDocumentFragment();
-   QDomTextPrivate *createTextNode(const QString &data);
-   QDomCommentPrivate *createComment(const QString &data);
-   QDomCDATASectionPrivate *createCDATASection(const QString &data);
+
+   QDomTextPrivate *createTextNode(const QString &text);
+   QDomCommentPrivate *createComment(const QString &text);
+   QDomCDATASectionPrivate *createCDATASection(const QString &text);
+
    QDomProcessingInstructionPrivate *createProcessingInstruction(const QString &target, const QString &data);
    QDomAttrPrivate *createAttribute(const QString &name);
    QDomAttrPrivate *createAttributeNS(const QString &nsURI, const QString &qName);
