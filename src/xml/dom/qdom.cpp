@@ -627,7 +627,7 @@ class QDomDocumentPrivate : public QDomNodePrivate
    QExplicitlySharedDataPointer<QDomImplementationPrivate> impl;
    QExplicitlySharedDataPointer<QDomDocumentTypePrivate> type;
 
-   void saveDocument(QTextStream &stream, const int indent, QDomNode::EncodingPolicy encUsed) const;
+   void saveDocument(QTextStream &stream, const int indent, QDomNode::EncodingPolicy policy) const;
 
    long nodeListTime;
 };
@@ -2501,21 +2501,16 @@ QDomNode QDomNode::namedItem(const QString &name) const
    return QDomNode(impl->namedItem(name));
 }
 
-void QDomNode::save(QTextStream &str, int indent) const
+void QDomNode::save(QTextStream &stream, int indent, EncodingPolicy policy) const
 {
-   save(str, indent, QDomNode::EncodingFromDocument);
-}
-
-void QDomNode::save(QTextStream &str, int indent, EncodingPolicy encodingPolicy) const
-{
-   if (!impl) {
+   if (! impl) {
       return;
    }
 
    if (isDocument()) {
-      static_cast<const QDomDocumentPrivate *>(impl)->saveDocument(str, indent, encodingPolicy);
+      static_cast<const QDomDocumentPrivate *>(impl)->saveDocument(stream, indent, policy);
    } else {
-      IMPL->save(str, 1, indent);
+      IMPL->save(stream, 1, indent);
    }
 }
 

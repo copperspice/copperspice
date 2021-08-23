@@ -208,8 +208,7 @@ class Q_XML_EXPORT QDomNode
    QDomCharacterData toCharacterData() const;
    QDomComment toComment() const;
 
-   void save(QTextStream &, int) const;
-   void save(QTextStream &, int, EncodingPolicy) const; // ### Qt5/Merge overload(if we at all keep this)
+   void save(QTextStream &stream, int indent, QDomNode::EncodingPolicy policy = QDomNode::EncodingFromDocument) const;
 
    QDomElement firstChildElement(const QString &tagName = QString()) const;
    QDomElement lastChildElement(const QString &tagName = QString()) const;
