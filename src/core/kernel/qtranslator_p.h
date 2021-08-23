@@ -35,14 +35,11 @@ enum class TranslatorCategory {
 
 enum class TranslatorTag {
    End           = 1,
-   SourceText16  = 2,
-   Translation   = 3,
-   Context16     = 4,
-   Obsolete1     = 5,
-   SourceText    = 6,
-   Context       = 7,
-   Comment       = 8,
-   Obsolete2     = 9
+   Obsolete1     = 2,
+   SourceText    = 3,
+   Context       = 4,
+   Comment       = 5,
+   Translation   = 6,
 };
 
 enum class CountGuide  {

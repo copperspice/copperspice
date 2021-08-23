@@ -75,7 +75,7 @@ class ByteTranslatorMessage
 {
  public:
    ByteTranslatorMessage(const QByteArray &context, const QByteArray &sourceText, const QByteArray &comment,
-                         const QStringList &translations)
+            const QStringList &translations)
       : m_context(context), m_sourcetext(sourceText), m_comment(comment), m_translations(translations) {
    }
 
@@ -178,7 +178,6 @@ class Releaser
    QByteArray m_dependencyArray;
 
    QVector<std::variant<CountGuide, int>> m_countRules;
-
 };
 
 QByteArray Releaser::originalBytes(const QString &str) const
@@ -218,7 +217,7 @@ TranslatorPrefix Releaser::commonPrefix(const ByteTranslatorMessage &m1, const B
 }
 
 void Releaser::writeMessage(const ByteTranslatorMessage &msg, QDataStream &stream,
-                            TranslatorMessage::SaveMode mode, TranslatorPrefix prefix) const
+            TranslatorMessage::SaveMode mode, TranslatorPrefix prefix) const
 {
    for (int i = 0; i < msg.translations().count(); ++i) {
       stream << quint8(TranslatorTag::Translation) << msg.translations().at(i);
@@ -288,7 +287,7 @@ bool Releaser::save(QIODevice *iod)
       for (auto item : m_countRules) {
          quint8 which = item.index();
 
-         // indicator for what the data will be
+         // indicator what the data will be
          s << static_cast<quint8>(which);
 
          switch (which) {
@@ -465,7 +464,7 @@ void Releaser::squeeze(TranslatorMessage::SaveMode mode)
 void Releaser::insert(const TranslatorMessage &message, const QStringList &tlns, bool forceComment)
 {
    ByteTranslatorMessage bmsg(originalBytes(message.context()), originalBytes(message.sourceText()),
-                              originalBytes(message.comment()), tlns);
+            originalBytes(message.comment()), tlns);
 
    if (! forceComment) {
       ByteTranslatorMessage bmsg2( bmsg.context(), bmsg.sourceText(), QByteArray(), bmsg.translations());
@@ -481,7 +480,7 @@ void Releaser::insert(const TranslatorMessage &message, const QStringList &tlns,
 
 void Releaser::insertIdBased(const TranslatorMessage &message, const QStringList &tlns)
 {
-   ByteTranslatorMessage bmsg("", originalBytes(message.id()), "", tlns);
+   ByteTranslatorMessage bmsg(QByteArray(), originalBytes(message.id()), QByteArray(), tlns);
    m_messages.insert(bmsg, nullptr);
 }
 
@@ -502,6 +501,7 @@ static quint8 read8(const uchar *data)
 
 static quint32 read32(const uchar *data)
 {
+   // reading a big endian 32 bit integer
    return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | (data[3]);
 }
 
@@ -613,15 +613,18 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                done = true;
                break;
 
-            case TranslatorTag::Translation: {
-               int len = read32(m);
-
-               if (len % 1) {
-                  cd.appendError("QM format error");
-                  return false;
-               }
-
+            case TranslatorTag::Obsolete1:
                m += 4;
+               break;
+
+            case TranslatorTag::Translation: {
+               quint32 len = read32(m);
+               m += 4;
+
+               if (len == 0xffffffff) {
+                  // indicates QByteArray was null
+                  len = 0;
+               }
 
                QString str = QString::fromUtf8((const char *)m, len);
                translations << str;
@@ -631,13 +634,14 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                break;
             }
 
-            case TranslatorTag::Obsolete1:
-               m += 4;
-               break;
-
             case TranslatorTag::SourceText: {
                quint32 len = read32(m);
                m += 4;
+
+               if (len == 0xffffffff) {
+                  // indicates QByteArray was null
+                  len = 0;
+               }
 
                fromBytes((const char *)m, len, &sourcetext, &utf8Fail);
 
@@ -649,6 +653,11 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                quint32 len = read32(m);
                m += 4;
 
+               if (len == 0xffffffff) {
+                  // indicates QByteArray was null
+                  len = 0;
+               }
+
                fromBytes((const char *)m, len, &context, &utf8Fail);
 
                m += len;
@@ -658,6 +667,12 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
             case TranslatorTag::Comment: {
                quint32 len = read32(m);
                m += 4;
+
+               if (len == 0xffffffff) {
+                  // indicates QByteArray was null
+                  len = 0;
+               }
+
                fromBytes((const char *)m, len, &comment, &utf8Fail);
 
                m += len;

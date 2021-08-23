@@ -71,7 +71,7 @@ static const uchar magic[MagicLength] = {
    0xcd, 0x21, 0x1c, 0xbf, 0x60, 0xa1, 0xbd, 0xdd
 };
 
-static bool match(const uchar *found, uint foundLen, const char *target, uint targetLen)
+static bool match(const uchar *found, quint32 foundLen, const char *target, uint targetLen)
 {
    // catch the case if found has a zero-terminating symbol and len includes it.
    // (normalize it to be without the zero-terminating symbol)
@@ -86,7 +86,6 @@ static void elfHash_start(const char *name, uint &h)
 {
    const uchar *k;
    uint g;
-
 
    k = (const uchar *) name;
 
@@ -668,12 +667,14 @@ static quint8 read8(const uchar *data)
 
 static quint16 read16(const uchar *data)
 {
-   return qFromBigEndian<quint16>(data);
+   // reading a big endian 16 bit integer
+   return (data[0] << 8) | data[1];
 }
 
 static quint32 read32(const uchar *data)
 {
-   return qFromBigEndian<quint32>(data);
+   // reading a big endian 32 bit integer
+   return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | (data[3]);
 }
 
 bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &directory)
@@ -819,8 +820,9 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
          case TranslatorTag::Translation: {
             int len = read32(data);
 
-            if (len % 1) {
-               return retval;
+            if (len == 0xffffffff) {
+               // indicates QByteArray was null
+               len = 0;
             }
 
             data += 4;
@@ -844,6 +846,11 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
             quint32 len = read32(data);
             data += 4;
 
+            if (len == 0xffffffff) {
+               // indicates QByteArray was null
+               len = 0;
+            }
+
             if (! match(data, len, text, sourceTextLen)) {
                return retval;
             }
@@ -856,6 +863,11 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
             quint32 len = read32(data);
             data += 4;
 
+            if (len == 0xffffffff) {
+               // indicates QByteArray was null
+               len = 0;
+            }
+
             if (! match(data, len, context, contextLen)) {
                return retval;
             }
@@ -867,6 +879,11 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
          case TranslatorTag::Comment: {
             quint32 len = read32(data);
             data += 4;
+
+            if (len == 0xffffffff) {
+               // indicates QByteArray was null
+               len = 0;
+            }
 
             if (*data != 0 && ! match(data, len, comment, commentLen)) {
                return retval;
@@ -1007,7 +1024,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *text, 
          }
       }
 
-      if (! comment[0]) {
+      if (comment[0] == '\0') {
          break;
       }
 
