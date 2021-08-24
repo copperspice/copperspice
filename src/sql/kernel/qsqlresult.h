@@ -62,37 +62,40 @@ class Q_SQL_EXPORT QSqlResult
    bool isSelect() const;
    bool isForwardOnly() const;
    const QSqlDriver *driver() const;
-   virtual void setAt(int at);
-   virtual void setActive(bool a);
-   virtual void setLastError(const QSqlError &e);
+
+   virtual void setAt(int index);
+   virtual void setActive(bool active);
+   virtual void setLastError(const QSqlError &error);
    virtual void setQuery(const QString &query);
-   virtual void setSelect(bool s);
+   virtual void setSelect(bool select);
    virtual void setForwardOnly(bool forward);
 
    // prepared query support
    virtual bool exec();
    virtual bool prepare(const QString &query);
-   virtual bool savePrepare(const QString &sqlquery);
-   virtual void bindValue(int pos, const QVariant &val, QSql::ParamType type);
-   virtual void bindValue(const QString &placeholder, const QVariant &val, QSql::ParamType type);
-   void addBindValue(const QVariant &val, QSql::ParamType type);
+   virtual bool savePrepare(const QString &query);
+   virtual void bindValue(int index, const QVariant &value, QSql::ParamType type);
+   virtual void bindValue(const QString &placeholder, const QVariant &value, QSql::ParamType type);
+
+   void addBindValue(const QVariant &value, QSql::ParamType type);
    QVariant boundValue(const QString &placeholder) const;
-   QVariant boundValue(int pos) const;
+   QVariant boundValue(int index) const;
+
    QSql::ParamType bindValueType(const QString &placeholder) const;
-   QSql::ParamType bindValueType(int pos) const;
+   QSql::ParamType bindValueType(int index) const;
    int boundValueCount() const;
    QVector<QVariant> &boundValues() const;
    QString executedQuery() const;
-   QString boundValueName(int pos) const;
+   QString boundValueName(int index) const;
    void clear();
    bool hasOutValues() const;
 
    BindingSyntax bindingSyntax() const;
 
-   virtual QVariant data(int i) = 0;
-   virtual bool isNull(int i) = 0;
-   virtual bool reset(const QString &sqlquery) = 0;
-   virtual bool fetch(int i) = 0;
+   virtual QVariant data(int index) = 0;
+   virtual bool isNull(int index) = 0;
+   virtual bool reset(const QString &query) = 0;
+   virtual bool fetch(int index) = 0;
    virtual bool fetchNext();
    virtual bool fetchPrevious();
    virtual bool fetchFirst() = 0;

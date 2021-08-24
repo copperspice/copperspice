@@ -41,8 +41,8 @@ class Q_SQL_EXPORT QSqlQueryModel: public QAbstractTableModel
    explicit QSqlQueryModel(QObject *parent = nullptr);
    virtual ~QSqlQueryModel();
 
-   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+   int rowCount(const QModelIndex &index = QModelIndex()) const override;
+   int columnCount(const QModelIndex &index = QModelIndex()) const override;
    QSqlRecord record(int row) const;
    QSqlRecord record() const;
 

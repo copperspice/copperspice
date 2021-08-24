@@ -33,14 +33,14 @@ class QSqlRelationalDelegate: public QItemDelegate
 {
  public:
 
-   explicit QSqlRelationalDelegate(QObject *aParent = nullptr)
-      : QItemDelegate(aParent) {
+   explicit QSqlRelationalDelegate(QObject *parent = nullptr)
+      : QItemDelegate(parent) {
    }
 
    ~QSqlRelationalDelegate() {
    }
 
-   QWidget *createEditor(QWidget *aParent, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const {
 
       const QSqlRelationalTableModel *sqlModel = dynamic_cast<const QSqlRelationalTableModel *>(index.model());
 
@@ -51,7 +51,7 @@ class QSqlRelationalDelegate: public QItemDelegate
       }
 
       if (childModel) {
-         QComboBox *combo = new QComboBox(aParent);
+         QComboBox *combo = new QComboBox(Parent);
          combo->setModel(childModel);
          combo->setModelColumn(childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn()));
          combo->installEventFilter(const_cast<QSqlRelationalDelegate *>(this));
@@ -59,7 +59,7 @@ class QSqlRelationalDelegate: public QItemDelegate
          return combo;
 
       } else {
-         return QItemDelegate::createEditor(aParent, option, index);
+         return QItemDelegate::createEditor(parent, option, index);
 
       }
    }

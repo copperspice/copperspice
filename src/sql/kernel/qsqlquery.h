@@ -42,7 +42,7 @@ class Q_SQL_EXPORT QSqlQuery
 {
 
  public:
-   explicit QSqlQuery(QSqlResult *r);
+   explicit QSqlQuery(QSqlResult *result);
    explicit QSqlQuery(const QString &query = QString(), QSqlDatabase db = QSqlDatabase());
    explicit QSqlQuery(QSqlDatabase db);
    QSqlQuery(const QSqlQuery &other);
@@ -66,13 +66,13 @@ class Q_SQL_EXPORT QSqlQuery
 
    void setForwardOnly(bool forward);
    bool exec(const QString &query);
-   QVariant value(int i) const;
+   QVariant value(int index) const;
    QVariant value(const QString &name) const;
 
    void setNumericalPrecisionPolicy(QSql::NumericalPrecisionPolicy precisionPolicy);
    QSql::NumericalPrecisionPolicy numericalPrecisionPolicy() const;
 
-   bool seek(int i, bool relative = false);
+   bool seek(int index, bool relative = false);
    bool next();
    bool previous();
    bool first();

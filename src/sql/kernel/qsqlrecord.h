@@ -45,26 +45,26 @@ class Q_SQL_EXPORT QSqlRecord
       return !operator==(other);
    }
 
-   QVariant value(int i) const;
+   QVariant value(int index) const;
    QVariant value(const QString &name) const;
-   void setValue(int i, const QVariant &val);
+   void setValue(int index, const QVariant &val);
    void setValue(const QString &name, const QVariant &val);
 
-   void setNull(int i);
+   void setNull(int index);
    void setNull(const QString &name);
-   bool isNull(int i) const;
+   bool isNull(int index) const;
    bool isNull(const QString &name) const;
 
    int indexOf(const QString &name) const;
-   QString fieldName(int i) const;
+   QString fieldName(int index) const;
 
-   QSqlField field(int i) const;
+   QSqlField field(int index) const;
    QSqlField field(const QString &name) const;
 
-   bool isGenerated(int i) const;
+   bool isGenerated(int index) const;
    bool isGenerated(const QString &name) const;
    void setGenerated(const QString &name, bool generated);
-   void setGenerated(int i, bool generated);
+   void setGenerated(int index, bool generated);
 
    void append(const QSqlField &field);
    void replace(int pos, const QSqlField &field);

@@ -80,7 +80,7 @@ class Q_SQL_EXPORT QSqlDatabase
    void setUserName(const QString &name);
    void setPassword(const QString &password);
    void setHostName(const QString &host);
-   void setPort(int p);
+   void setPort(int port);
    void setConnectOptions(const QString &options = QString());
    QString databaseName() const;
    QString userName() const;

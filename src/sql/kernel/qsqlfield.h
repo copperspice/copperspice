@@ -61,8 +61,8 @@ class Q_SQL_EXPORT QSqlField
 
    void setType(QVariant::Type type);
    void setRequiredStatus(RequiredStatus status);
-   inline void setRequired(bool required) {
-      setRequiredStatus(required ? Required : Optional);
+   inline void setRequired(bool status) {
+      setRequiredStatus(status ? Required : Optional);
    }
    void setLength(int fieldLength);
    void setPrecision(int precision);

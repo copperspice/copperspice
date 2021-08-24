@@ -96,16 +96,12 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
    QSqlError lastError() const;
 
    virtual QVariant handle() const;
-   virtual bool hasFeature(DriverFeature f) const = 0;
+   virtual bool hasFeature(DriverFeature feature) const = 0;
    virtual void close() = 0;
    virtual QSqlResult *createResult() const = 0;
 
-   virtual bool open(const QString &db,
-      const QString &user = QString(),
-      const QString &password = QString(),
-      const QString &host = QString(),
-      int port = -1,
-      const QString &connOpts = QString()) = 0;
+   virtual bool open(const QString &db, const QString &user = QString(), const QString &password = QString(),
+            const QString &host = QString(), int port = -1, const QString &options = QString()) = 0;
 
    virtual bool subscribeToNotification(const QString &name);
    virtual bool unsubscribeFromNotification(const QString &name);
@@ -127,9 +123,9 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
  protected:
    QSqlDriver(QSqlDriverPrivate &dd, QObject *parent = nullptr);
 
-   virtual void setOpen(bool o);
-   virtual void setOpenError(bool e);
-   virtual void setLastError(const QSqlError &e);
+   virtual void setOpen(bool open);
+   virtual void setOpenError(bool error);
+   virtual void setLastError(const QSqlError &error);
 
    QScopedPointer<QSqlDriverPrivate> d_ptr;
 
