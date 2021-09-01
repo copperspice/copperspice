@@ -96,7 +96,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
         acceptsHover(0), acceptDrops(0), isMemberOfGroup(0), handlesChildEvents(0), itemDiscovered(0),
         hasCursor(0), ancestorFlags(0), cacheMode(0), hasBoundingRegionGranularity(0), isWidget(0), dirty(0),
         dirtyChildren(0), localCollisionHack(0), inSetPosHelper(0), needSortChildren(0), allChildrenDirty(0),
-        fullUpdatePending(0), flags(0), paintedViewBoundingRectsNeedRepaint(0), dirtySceneTransform(1),
+        fullUpdatePending(0), itemFlags(0), paintedViewBoundingRectsNeedRepaint(0), dirtySceneTransform(1),
         geometryChanged(1), inDestructor(0), isObject(0), ignoreVisible(0), ignoreOpacity(0),
         acceptTouchEvents(0), acceptedTouchBeginEvent(0), filtersDescendantEvents(0), sceneTransformTranslateOnly(0),
         notifyBoundingRectChanged(0), notifyInvalidated(0), mouseSetsFocus(1), explicitActivate(0),
@@ -126,8 +126,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    QPointF genericMapFromScene(const QPointF &pos, const QWidget *viewport) const;
 
    inline bool itemIsUntransformable() const {
-      return (flags & QGraphicsItem::ItemIgnoresTransformations)
-         || (ancestorFlags & AncestorIgnoresTransformations);
+      return (itemFlags & QGraphicsItem::ItemIgnoresTransformations) || (ancestorFlags & AncestorIgnoresTransformations);
    }
 
    void combineTransformToParent(QTransform *x, const QTransform *viewTransform = nullptr) const;
@@ -263,16 +262,18 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    inline qreal calcEffectiveOpacity() const {
       qreal o = opacity;
+      int myFlags  = itemFlags;
+
       QGraphicsItem *p = parent;
-      int myFlags = flags;
+
       while (p) {
-         int parentFlags = p->d_ptr->flags;
+         int parentFlags = p->d_ptr->itemFlags;
 
          // If I have a parent, and I don't ignore my parent's opacity, and my
          // parent propagates to me, then combine my local opacity with my parent's
          // effective opacity into my effective opacity.
          if ((myFlags & QGraphicsItem::ItemIgnoresParentOpacity)
-            || (parentFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
+               || (parentFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
             break;
          }
 
@@ -311,8 +312,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    inline qreal combineOpacityFromParent(qreal parentOpacity) const {
-      if (parent && !(flags & QGraphicsItem::ItemIgnoresParentOpacity)
-         && !(parent->d_ptr->flags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
+      if (parent && ! (itemFlags & QGraphicsItem::ItemIgnoresParentOpacity)
+            && ! (parent->d_ptr->itemFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
          return parentOpacity * opacity;
       }
       return opacity;
@@ -322,12 +323,13 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       if (!children.size()) {
          return true;
       }
-      if (flags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren) {
+
+      if (itemFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren) {
          return false;
       }
 
       for (int i = 0; i < children.size(); ++i) {
-         if (children.at(i)->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity) {
+         if (children.at(i)->d_ptr->itemFlags & QGraphicsItem::ItemIgnoresParentOpacity) {
             return false;
          }
       }
@@ -335,7 +337,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    inline bool childrenClippedToShape() const {
-      return (flags & QGraphicsItem::ItemClipsChildrenToShape) || children.isEmpty();
+      return (itemFlags & QGraphicsItem::ItemClipsChildrenToShape) || children.isEmpty();
    }
 
    inline bool isInvisible() const {
@@ -428,7 +430,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    quint32 fullUpdatePending : 1;
 
    // Packed 32 bits
-   quint32 flags : 20;
+   quint32 itemFlags : 20;
    quint32 paintedViewBoundingRectsNeedRepaint : 1;
    quint32 dirtySceneTransform : 1;
    quint32 geometryChanged : 1;
@@ -561,10 +563,8 @@ class QGraphicsItemEffectSourcePrivate : public QGraphicsEffectSourcePrivate
    }
 
    bool isPixmap() const override {
-      return item->type() == QGraphicsPixmapItem::Type
-         && !(item->flags() & QGraphicsItem::ItemIsSelectable)
-         && item->d_ptr->children.size() == 0;
-      //|| (item->d_ptr->isObject && qobject_cast<QDeclarativeImage *>(q_func()));
+      return item->type() == QGraphicsPixmapItem::Type && ! (item->flags() & QGraphicsItem::ItemIsSelectable)
+            && item->d_ptr->children.size() == 0;
    }
 
    const QStyleOption *styleOption() const override {
@@ -612,7 +612,7 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
    while (item1Depth > item2Depth && (p = p->d_ptr->parent)) {
       if (p == item2) {
          // item2 is one of item1's ancestors; item1 is on top
-         return !(t1->d_ptr->flags & QGraphicsItem::ItemStacksBehindParent);
+         return !(t1->d_ptr->itemFlags & QGraphicsItem::ItemStacksBehindParent);
       }
       t1 = p;
       --item1Depth;
@@ -622,7 +622,7 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
    while (item2Depth > item1Depth && (p = p->d_ptr->parent)) {
       if (p == item1) {
          // item1 is one of item2's ancestors; item1 is not on top
-         return (t2->d_ptr->flags & QGraphicsItem::ItemStacksBehindParent);
+         return (t2->d_ptr->itemFlags & QGraphicsItem::ItemStacksBehindParent);
       }
       t2 = p;
       --item2Depth;
@@ -653,8 +653,10 @@ inline bool qt_closestLeaf(const QGraphicsItem *item1, const QGraphicsItem *item
    // Return true if sibling item1 is on top of item2.
    const QGraphicsItemPrivate *d1 = item1->d_ptr.data();
    const QGraphicsItemPrivate *d2 = item2->d_ptr.data();
-   bool f1 = d1->flags & QGraphicsItem::ItemStacksBehindParent;
-   bool f2 = d2->flags & QGraphicsItem::ItemStacksBehindParent;
+
+   bool f1 = d1->itemFlags & QGraphicsItem::ItemStacksBehindParent;
+   bool f2 = d2->itemFlags & QGraphicsItem::ItemStacksBehindParent;
+
    if (f1 != f2) {
       return f2;
    }

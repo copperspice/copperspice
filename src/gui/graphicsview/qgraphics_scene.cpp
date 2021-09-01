@@ -1242,8 +1242,7 @@ void QGraphicsScenePrivate::mousePressEventHandler(QGraphicsSceneMouseEvent *mou
    bool setFocus = false;
 
    for (QGraphicsItem *item : cachedItemsUnderMouse) {
-      if (item->isBlockedByModalPanel()
-         || (item->d_ptr->flags & QGraphicsItem::ItemStopsFocusHandling)) {
+      if (item->isBlockedByModalPanel() || (item->d_ptr->itemFlags & QGraphicsItem::ItemStopsFocusHandling)) {
          // Make sure we don't clear focus.
          setFocus = true;
          break;
@@ -1260,7 +1259,8 @@ void QGraphicsScenePrivate::mousePressEventHandler(QGraphicsSceneMouseEvent *mou
       if (item->isPanel()) {
          break;
       }
-      if (item->d_ptr->flags & QGraphicsItem::ItemStopsClickFocusPropagation) {
+
+      if (item->d_ptr->itemFlags & QGraphicsItem::ItemStopsClickFocusPropagation) {
          break;
       }
    }
@@ -2157,7 +2157,7 @@ void QGraphicsScene::addItem(QGraphicsItem *item)
       }
    }
 
-   if (item->d_ptr->flags & QGraphicsItem::ItemSendsScenePositionChanges) {
+   if (item->d_ptr->itemFlags & QGraphicsItem::ItemSendsScenePositionChanges) {
       d->registerScenePosItem(item);
    }
 
@@ -3817,7 +3817,7 @@ void QGraphicsScenePrivate::drawSubtreeRecursive(QGraphicsItem *item, QPainter *
       return;
    }
 
-   const bool itemHasContents = !(item->d_ptr->flags & QGraphicsItem::ItemHasNoContents);
+   const bool itemHasContents = !(item->d_ptr->itemFlags & QGraphicsItem::ItemHasNoContents);
    const bool itemHasChildren = !item->d_ptr->children.isEmpty();
 
    if (! itemHasContents && ! itemHasChildren) {
@@ -3862,8 +3862,8 @@ void QGraphicsScenePrivate::drawSubtreeRecursive(QGraphicsItem *item, QPainter *
       wasDirtyParentSceneTransform = true;
    }
 
-   const bool itemClipsChildrenToShape = (item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape
-         || item->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape);
+   const bool itemClipsChildrenToShape = (item->d_ptr->itemFlags & QGraphicsItem::ItemClipsChildrenToShape
+         || item->d_ptr->itemFlags & QGraphicsItem::ItemContainsChildrenInShape);
 
    bool drawItem = itemHasContents && !itemIsFullyTransparent;
 
@@ -3992,8 +3992,9 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
    bool wasDirtyParentSceneTransform, bool drawItem)
 {
    const bool itemIsFullyTransparent = QGraphicsItemPrivate::isOpacityNull(opacity);
-   const bool itemClipsChildrenToShape = (item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape);
+   const bool itemClipsChildrenToShape = (item->d_ptr->itemFlags & QGraphicsItem::ItemClipsChildrenToShape);
    const bool itemHasChildren = !item->d_ptr->children.isEmpty();
+
    bool setChildClip = itemClipsChildrenToShape;
    bool itemHasChildrenStackedBehind = false;
 
@@ -4006,7 +4007,7 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
       item->d_ptr->ensureSortedChildren();
       // Items with the 'ItemStacksBehindParent' flag are put in front of the list
       // so all we have to do is to check the first item.
-      itemHasChildrenStackedBehind = (item->d_ptr->children.at(0)->d_ptr->flags
+      itemHasChildrenStackedBehind = (item->d_ptr->children.at(0)->d_ptr->itemFlags
             & QGraphicsItem::ItemStacksBehindParent);
 
       if (itemHasChildrenStackedBehind) {
@@ -4022,10 +4023,12 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
             if (wasDirtyParentSceneTransform) {
                child->d_ptr->dirtySceneTransform = 1;
             }
-            if (!(child->d_ptr->flags & QGraphicsItem::ItemStacksBehindParent)) {
+
+            if (!(child->d_ptr->itemFlags & QGraphicsItem::ItemStacksBehindParent)) {
                break;
             }
-            if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity)) {
+
+            if (itemIsFullyTransparent && !(child->d_ptr->itemFlags & QGraphicsItem::ItemIgnoresParentOpacity)) {
                continue;
             }
             drawSubtreeRecursive(child, painter, viewTransform, exposedRegion, widget, opacity, effectTransform);
@@ -4036,12 +4039,13 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
    // Draw item
    if (drawItem) {
       Q_ASSERT(!itemIsFullyTransparent);
-      Q_ASSERT(!(item->d_ptr->flags & QGraphicsItem::ItemHasNoContents));
+      Q_ASSERT(!(item->d_ptr->itemFlags & QGraphicsItem::ItemHasNoContents));
       Q_ASSERT(transformPtr);
+
       item->d_ptr->initStyleOption(&styleOptionTmp, *transformPtr, exposedRegion
          ? *exposedRegion : QRegion(), exposedRegion == nullptr);
 
-      const bool itemClipsToShape = item->d_ptr->flags & QGraphicsItem::ItemClipsToShape;
+      const bool itemClipsToShape = item->d_ptr->itemFlags & QGraphicsItem::ItemClipsToShape;
       bool restorePainterClip = false;
 
       if (! itemHasChildren || !itemClipsChildrenToShape) {
@@ -4111,7 +4115,7 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
          if (wasDirtyParentSceneTransform) {
             child->d_ptr->dirtySceneTransform = 1;
          }
-         if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity)) {
+         if (itemIsFullyTransparent && !(child->d_ptr->itemFlags & QGraphicsItem::ItemIgnoresParentOpacity)) {
             continue;
          }
          drawSubtreeRecursive(child, painter, viewTransform, exposedRegion, widget, opacity, effectTransform);
@@ -4200,7 +4204,7 @@ void QGraphicsScenePrivate::markDirty(QGraphicsItem *item, const QRectF &rect, b
       return;
    }
 
-   bool hasNoContents = item->d_ptr->flags & QGraphicsItem::ItemHasNoContents;
+   bool hasNoContents = item->d_ptr->itemFlags & QGraphicsItem::ItemHasNoContents;
    if (!hasNoContents) {
       item->d_ptr->dirty = 1;
       if (fullItemUpdate) {
@@ -4292,7 +4296,7 @@ void QGraphicsScenePrivate::processDirtyItemsRecursive(QGraphicsItem *item, bool
       return;
    }
 
-   bool itemHasContents = !(item->d_ptr->flags & QGraphicsItem::ItemHasNoContents);
+   bool itemHasContents = !(item->d_ptr->itemFlags & QGraphicsItem::ItemHasNoContents);
    const bool itemHasChildren = !item->d_ptr->children.isEmpty();
 
    if (!itemHasContents) {
@@ -4421,8 +4425,8 @@ void QGraphicsScenePrivate::processDirtyItemsRecursive(QGraphicsItem *item, bool
 
    // Process children.
    if (itemHasChildren && item->d_ptr->dirtyChildren) {
-      const bool itemClipsChildrenToShape = item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape
-         || item->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape;
+      const bool itemClipsChildrenToShape = item->d_ptr->itemFlags & QGraphicsItem::ItemClipsChildrenToShape
+         || item->d_ptr->itemFlags & QGraphicsItem::ItemContainsChildrenInShape;
 
       // Items with no content are threated as 'dummy' items which means they are never drawn and
       // 'processed', so the painted view bounding rect is never up-to-date. This means that whenever
@@ -4997,10 +5001,11 @@ bool QGraphicsScenePrivate::sendTouchBeginEvent(QGraphicsItem *origin, QTouchEve
       if (item->isPanel()) {
          break;
       }
-      if (item->d_ptr->flags & QGraphicsItem::ItemStopsClickFocusPropagation) {
+
+      if (item->d_ptr->itemFlags & QGraphicsItem::ItemStopsClickFocusPropagation) {
          break;
       }
-      if (item->d_ptr->flags & QGraphicsItem::ItemStopsFocusHandling) {
+      if (item->d_ptr->itemFlags & QGraphicsItem::ItemStopsFocusHandling) {
          // Make sure we don't clear focus.
          setFocus = true;
          break;

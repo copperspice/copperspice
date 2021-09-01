@@ -513,10 +513,13 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
       case QGraphicsItem::ItemFlagsChange: {
          // Handle ItemIgnoresTransformations
          QGraphicsItem::GraphicsItemFlags newFlags = *static_cast<const QGraphicsItem::GraphicsItemFlags *>(value);
-         bool ignoredTransform = item->d_ptr->flags & QGraphicsItem::ItemIgnoresTransformations;
+
+         bool ignoredTransform = item->d_ptr->itemFlags & QGraphicsItem::ItemIgnoresTransformations;
          bool willIgnoreTransform = newFlags & QGraphicsItem::ItemIgnoresTransformations;
-         bool clipsChildren = item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape
-            || item->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape;
+
+         bool clipsChildren = item->d_ptr->itemFlags & QGraphicsItem::ItemClipsChildrenToShape
+            || item->d_ptr->itemFlags & QGraphicsItem::ItemContainsChildrenInShape;
+
          bool willClipChildren = newFlags & QGraphicsItem::ItemClipsChildrenToShape
             || newFlags & QGraphicsItem::ItemContainsChildrenInShape;
 
@@ -540,14 +543,18 @@ void QGraphicsSceneBspTreeIndex::itemChange(const QGraphicsItem *item, QGraphics
 
          // Handle ItemIgnoresTransformations
          const QGraphicsItem *newParent = static_cast<const QGraphicsItem *>(value);
+
          bool ignoredTransform = item->d_ptr->itemIsUntransformable();
-         bool willIgnoreTransform = (item->d_ptr->flags & QGraphicsItem::ItemIgnoresTransformations)
+
+         bool willIgnoreTransform = (item->d_ptr->itemFlags & QGraphicsItem::ItemIgnoresTransformations)
             || (newParent && newParent->d_ptr->itemIsUntransformable());
+
          bool ancestorClippedChildren = item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
             || item->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorContainsChildren;
+
          bool ancestorWillClipChildren = newParent
-            && ((newParent->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape
-                  || newParent->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape)
+            && ((newParent->d_ptr->itemFlags & QGraphicsItem::ItemClipsChildrenToShape
+                  || newParent->d_ptr->itemFlags & QGraphicsItem::ItemContainsChildrenInShape)
                || (newParent->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
                   || newParent->d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorContainsChildren));
 

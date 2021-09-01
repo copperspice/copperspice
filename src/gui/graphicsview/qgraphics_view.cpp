@@ -897,7 +897,7 @@ void QGraphicsViewPrivate::updateInputMethodSensitivity()
    QGraphicsItem *focusItem = nullptr;
 
    bool enabled = scene && (focusItem = scene->focusItem())
-      && (focusItem->d_ptr->flags & QGraphicsItem::ItemAcceptsInputMethod);
+      && (focusItem->d_ptr->itemFlags & QGraphicsItem::ItemAcceptsInputMethod);
 
    q->setAttribute(Qt::WA_InputMethodEnabled, enabled);
    q->viewport()->setAttribute(Qt::WA_InputMethodEnabled, enabled);

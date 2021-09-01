@@ -252,8 +252,8 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
       Q_ASSERT(!item->d_ptr->dirtySceneTransform);
    }
 
-   const bool itemClipsChildrenToShape = (item->d_ptr->flags & QGraphicsItem::ItemClipsChildrenToShape
-         || item->d_ptr->flags & QGraphicsItem::ItemContainsChildrenInShape);
+   const bool itemClipsChildrenToShape = (item->d_ptr->itemFlags & QGraphicsItem::ItemClipsChildrenToShape
+         || item->d_ptr->itemFlags & QGraphicsItem::ItemContainsChildrenInShape);
 
    bool processItem = !itemIsFullyTransparent;
 
@@ -287,10 +287,12 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
          if (wasDirtyParentSceneTransform) {
             child->d_ptr->dirtySceneTransform = 1;
          }
-         if (!(child->d_ptr->flags & QGraphicsItem::ItemStacksBehindParent)) {
+
+         if (!(child->d_ptr->itemFlags & QGraphicsItem::ItemStacksBehindParent)) {
             break;
          }
-         if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity)) {
+
+         if (itemIsFullyTransparent && ! (child->d_ptr->itemFlags & QGraphicsItem::ItemIgnoresParentOpacity)) {
             continue;
          }
 
@@ -313,7 +315,7 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
             child->d_ptr->dirtySceneTransform = 1;
          }
 
-         if (itemIsFullyTransparent && !(child->d_ptr->flags & QGraphicsItem::ItemIgnoresParentOpacity)) {
+         if (itemIsFullyTransparent && !(child->d_ptr->itemFlags & QGraphicsItem::ItemIgnoresParentOpacity)) {
             continue;
          }
 
