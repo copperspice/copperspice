@@ -51,7 +51,7 @@ class QSqlRelationalDelegate: public QItemDelegate
       }
 
       if (childModel) {
-         QComboBox *combo = new QComboBox(Parent);
+         QComboBox *combo = new QComboBox(parent);
          combo->setModel(childModel);
          combo->setModelColumn(childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn()));
          combo->installEventFilter(const_cast<QSqlRelationalDelegate *>(this));
