@@ -1077,15 +1077,12 @@ QFileIconProvider *QFileDialog::iconProvider() const
    return d->model->iconProvider();
 }
 
-/*!
 void QFileDialog::setLabelText(DialogLabel label, const QString &text)
 {
     Q_D(QFileDialog);
-    d->options->setLabelText(static_cast<QFileDialogOptions::DialogLabel>(label), text);
+    d->options->setLabelText(static_cast<QPlatformFileDialogOptions::DialogLabel>(label), text);
     d->setLabelTextControl(label, text);
 }
-    Returns the text shown in the filedialog in the specified \a label.
-*/
 
 QString QFileDialog::labelText(DialogLabel label) const
 {
