@@ -133,10 +133,9 @@ TEST_CASE("QLocale constructor_enum", "[qlocale]")
 
    REQUIRE(data.name() == "vi_VN");
    REQUIRE(data.nativeCountryName() == "Việt Nam");
+   REQUIRE(data.nativeLanguageName() == "Tiếng Việt");
    REQUIRE(data.country()  == QLocale::Vietnam);
    REQUIRE(data.language() == QLocale::Vietnamese);
-
-   //   CHECK(data.nativeLanguageName() == "Việt");         BROOM, jelly bean
 }
 
 TEST_CASE("QLocale constructor_str", "[qlocale]")
@@ -251,10 +250,9 @@ TEST_CASE("QLocale constructor_str", "[qlocale]")
 
    REQUIRE(data.name() == "vi_VN");
    REQUIRE(data.nativeCountryName() == "Việt Nam");
+   REQUIRE(data.nativeLanguageName() == "Tiếng Việt");
    REQUIRE(data.country()  == QLocale::Vietnam);
    REQUIRE(data.language() == QLocale::Vietnamese);
-
-   //   CHECK(data.nativeLanguageName() == "Việt");         BROOM, jelly bean
 
 /*
    data = QLocale("nv_US");
