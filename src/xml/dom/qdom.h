@@ -74,6 +74,8 @@ class QDomCharacterData;
 class Q_XML_EXPORT QDomImplementation
 {
  public:
+   enum InvalidDataPolicy { AcceptInvalidChars = 0, DropInvalidChars, ReturnNullNode };
+
    QDomImplementation();
 
    QDomImplementation(const QDomImplementation &other);
@@ -89,11 +91,9 @@ class Q_XML_EXPORT QDomImplementation
    QDomDocumentType createDocumentType(const QString &qName, const QString &publicId, const QString &systemId);
    QDomDocument createDocument(const QString &nsURI, const QString &qName, const QDomDocumentType &doctype);
 
-   enum InvalidDataPolicy { AcceptInvalidChars = 0, DropInvalidChars, ReturnNullNode };
    static InvalidDataPolicy invalidDataPolicy();
    static void setInvalidDataPolicy(InvalidDataPolicy policy);
 
-   // Qt extension
    bool isNull();
 
  private:
@@ -170,7 +170,7 @@ class Q_XML_EXPORT QDomNode
    QString prefix() const;
    void setPrefix(const QString &prefix);
 
-   // Qt extensions
+   // extensions
    bool isAttr() const;
    bool isCDATASection() const;
    bool isDocumentFragment() const;
@@ -185,10 +185,7 @@ class Q_XML_EXPORT QDomNode
    bool isCharacterData() const;
    bool isComment() const;
 
-   /**
-    * Shortcut to avoid dealing with QDomNodeList
-    * all the time.
-    */
+   // Shortcut to avoid dealing with QDomNodeList all the time
    QDomNode namedItem(const QString &name) const;
 
    bool isNull() const;
@@ -341,7 +338,7 @@ class Q_XML_EXPORT QDomDocument : public QDomNode
       return DocumentNode;
    }
 
-   // Qt extensions
+   // extensions
    bool setContent(const QByteArray &text, bool namespaceProcessing, QString *errorMsg = nullptr,
                int *errorLine = nullptr, int *errorColumn = nullptr);
 
@@ -365,7 +362,7 @@ class Q_XML_EXPORT QDomDocument : public QDomNode
    bool setContent(QXmlInputSource *source, QXmlReader *reader, QString *errorMsg = nullptr, int *errorLine = nullptr,
                int *errorColumn = nullptr );
 
-   // Qt extensions
+   // extensions
    QString toString(int indent = 1) const;
    QByteArray toByteArray(int indent = 1) const;
 
@@ -401,15 +398,15 @@ class Q_XML_EXPORT QDomNamedNodeMap
    int length() const;
 
    int count() const {
-      return length();         // Qt API consitancy
+      return length();
    }
 
    int size() const {
-      return length();         // Qt API consistency
+      return length();
    }
 
    bool isEmpty() const {
-      return length() == 0;   // Qt API consistency
+      return length() == 0;
    }
 
    bool contains(const QString &name) const;

@@ -910,16 +910,14 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
    GUID guid;
    CoCreateGuid(&guid);
 
-   QString uniqueFamilyName = 'f'
-      + QString::number(guid.Data1, 36) + '-'
-      + QString::number(guid.Data2, 36) + '-'
-      + QString::number(guid.Data3, 36) + '-'
+   QString uniqueFamilyName = 'f' + QString::number(guid.Data1, 36) + '-'
+      + QString::number(guid.Data2, 36) + '-' + QString::number(guid.Data3, 36) + '-'
       + QString::number(*reinterpret_cast<quint64 *>(guid.Data4), 36);
 
    QString actualFontName = font.changeFamilyName(uniqueFamilyName);
 
    if (actualFontName.isEmpty()) {
-      qWarning("%s: Unable to change family name of font", __FUNCTION__);
+      qWarning("QWindowsFontDatabase::fontEngine: Unable to change family name of font");
       return nullptr;
    }
 
@@ -935,7 +933,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
    }
 
    if (fontHandle == nullptr) {
-      qWarning("%s: AddFontMemResourceEx failed", __FUNCTION__);
+      qWarning("QWindowsFontDatabase::fontEngine: AddFontMemResourceEx failed");
 
    } else {
       QFontDef request;
@@ -944,13 +942,12 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
       request.styleStrategy = QFont::PreferMatch;
       request.hintingPreference = hintingPreference;
 
-      fontEngine = QWindowsFontDatabase::createEngine(request,
-            QWindowsContext::instance()->defaultDPI(), sharedFontData());
+      fontEngine = QWindowsFontDatabase::createEngine(request, QWindowsContext::instance()->defaultDPI(), sharedFontData());
 
       if (fontEngine) {
          if (request.family != fontEngine->fontDef.family) {
-            qWarning("%s: Failed to load font, using fallback instead: %s",
-               __FUNCTION__, csPrintable(fontEngine->fontDef.family));
+            qWarning("QWindowsFontDatabase::fontEngine: Failed to load font, using fallback instead: %s ",
+               csPrintable(fontEngine->fontDef.family));
 
             if (fontEngine->m_refCount.load() == 0) {
                delete fontEngine;
@@ -1000,7 +997,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
    }
 
 #if defined(CS_SHOW_DEBUG)
-   qDebug() << __FUNCTION__ << "Fontdata =" << fontData << pixelSize << hintingPreference << fontEngine;
+   qDebug() << "QWindowsFontDatabase::fontEngine Fontdata =" << fontData << pixelSize << hintingPreference << fontEngine;
 #endif
 
    return fontEngine;

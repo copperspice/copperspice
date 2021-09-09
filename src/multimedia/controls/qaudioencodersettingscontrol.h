@@ -52,7 +52,7 @@ protected:
     explicit QAudioEncoderSettingsControl(QObject *parent = nullptr);
 };
 
-#define QAudioEncoderSettingsControl_iid "com.copperpsice.CS.audioEncoderSettingsControl/1.0"
+#define QAudioEncoderSettingsControl_iid "com.copperspice.CS.audioEncoderSettingsControl/1.0"
 CS_DECLARE_INTERFACE(QAudioEncoderSettingsControl, QAudioEncoderSettingsControl_iid)
 
 #endif

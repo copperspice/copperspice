@@ -35,14 +35,10 @@
 #include <qquerytransformparser_p.h>
 #include <qvalidate_p.h>
 
-QT_BEGIN_NAMESPACE
-
 template<typename T> class QQueue;
 
 namespace QPatternist {
-/**
- * @short A union of all the enums the parser uses.
- */
+
 union EnumUnion {
    AtomicComparator::Operator              valueOperator;
    AtomicMathematician::Operator           mathOperator;
@@ -67,8 +63,7 @@ class TokenSource : public QSharedData
 {
  public:
    /**
-    * typedef for the enum Bison generates that contains
-    * the token symbols.
+    * typedef for the enum Bison generates that contains the token symbols.
     */
    typedef yytokentype TokenType;
 
@@ -79,8 +74,7 @@ class TokenSource : public QSharedData
    {
     public:
       /**
-       * Constructs an invalid Token. This default constructor
-       * is need in Qt's container classes.
+       * Constructs an invalid Token. This default constructor is need in the container classes.
        */
       inline Token() {}
       inline Token(const TokenType t) : type(t) {}
@@ -98,17 +92,12 @@ class TokenSource : public QSharedData
    typedef QQueue<Ptr> Queue;
 
    /**
-    * The C++ compiler cannot synthesize it when we use the
-    * Q_DISABLE_COPY() macro.
+    * The C++ compiler cannot synthesize it when we use the Q_DISABLE_COPY() macro.
     */
    inline TokenSource() {
    }
 
    virtual ~TokenSource();
-
-   /**
-    * @returns the next token.
-    */
 
    virtual Token nextToken(YYLTYPE *const sourceLocator) = 0;
 
@@ -116,7 +105,5 @@ class TokenSource : public QSharedData
    Q_DISABLE_COPY(TokenSource)
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

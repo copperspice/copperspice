@@ -24,7 +24,7 @@
 #ifndef QCOCOAFILEDIALOGHELPER_H
 #define QCOCOAFILEDIALOGHELPER_H
 
-#include <QObject>
+#include <qobject.h>
 #include <qplatform_dialoghelper.h>
 
 #ifdef __OBJC__

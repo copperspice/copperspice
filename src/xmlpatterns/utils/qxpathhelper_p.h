@@ -30,8 +30,6 @@
 #include <qreportcontext_p.h>
 #include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class XPathHelper
 {
@@ -125,7 +123,5 @@ class XPathHelper
    Q_DISABLE_COPY(XPathHelper)
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

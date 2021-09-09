@@ -818,7 +818,8 @@ class QWindowsNativeFileDialogBase : public QWindowsNativeDialogBase
 
    ~QWindowsNativeFileDialogBase();
 
-   inline static QWindowsNativeFileDialogBase *create(QPlatformFileDialogOptions::AcceptMode am, const QWindowsFileDialogSharedData &data);
+   inline static QWindowsNativeFileDialogBase *create(QPlatformFileDialogOptions::AcceptMode am,
+            const QWindowsFileDialogSharedData &data);
 
    void setWindowTitle(const QString &title) override;
    inline void setMode(QPlatformFileDialogOptions::FileMode mode, QPlatformFileDialogOptions::AcceptMode acceptMode,

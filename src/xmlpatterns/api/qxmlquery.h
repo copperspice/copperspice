@@ -29,8 +29,6 @@
 #include <QAbstractXmlReceiver>
 #include <QXmlNamePool>
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractMessageHandler;
 class QAbstractUriResolver;
 class QIODevice;
@@ -113,6 +111,7 @@ class Q_XMLPATTERNS_EXPORT QXmlQuery
    QNetworkAccessManager *networkAccessManager() const;
 
    QueryLanguage queryLanguage() const;
+
  private:
    friend class QXmlName;
    friend class QXmlSerializer;
@@ -120,11 +119,9 @@ class Q_XMLPATTERNS_EXPORT QXmlQuery
    friend class QPatternist::XsdSchemaParser;
    friend class QPatternist::XsdValidatingInstanceReader;
    friend class QPatternist::VariableLoader;
-   template<typename TInputType> friend bool setFocusHelper(QXmlQuery *const queryInstance,
-         const TInputType &focusValue);
+
+   template<typename TInputType> friend bool setFocusHelper(QXmlQuery *const queryInstance, const TInputType &focusValue);
    QXmlQueryPrivate *d;
 };
-
-QT_END_NAMESPACE
 
 #endif

@@ -64,7 +64,7 @@ class Q_MULTIMEDIA_EXPORT QCameraImageProcessingControl : public QMediaControl
    explicit QCameraImageProcessingControl(QObject *parent = nullptr);
 };
 
-#define QCameraImageProcessingControl_iid "com.copperspice.CS.cameraImageProcessingcontrol/1.0"
+#define QCameraImageProcessingControl_iid "com.copperspice.CS.cameraImageProcessingControl/1.0"
 CS_DECLARE_INTERFACE(QCameraImageProcessingControl, QCameraImageProcessingControl_iid)
 
 #endif

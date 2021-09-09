@@ -30,7 +30,6 @@ class QSqlRelationalTableModelPrivate;
 
 class Q_SQL_EXPORT QSqlRelation
 {
-
  public:
    QSqlRelation() {}
    QSqlRelation(const QString &tableName, const QString &indexColumn, const QString &displayColumn)
@@ -53,8 +52,9 @@ class Q_SQL_EXPORT QSqlRelation
    }
 
  private:
-   QString tName, iColumn, dColumn;
-
+   QString tName;
+   QString iColumn;
+   QString dColumn;
 };
 
 class Q_SQL_EXPORT QSqlRelationalTableModel: public QSqlTableModel
@@ -95,7 +95,5 @@ class Q_SQL_EXPORT QSqlRelationalTableModel: public QSqlTableModel
  private:
    Q_DECLARE_PRIVATE(QSqlRelationalTableModel)
 };
-
-
 
 #endif // QSQLRELATIONALTABLEMODEL_H

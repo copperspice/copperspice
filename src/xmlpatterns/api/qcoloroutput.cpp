@@ -31,10 +31,6 @@
 // TODO: Use a smart pointer for managing ColorOutputPrivate *d;
 // TODO: break out the C++ example into a snippet file
 
-/* This include must appear here, because if it appears at the beginning of the file for
- * instance, it breaks build -- "qglobal.h:628: error: template with
- * C linkage" -- on Mac OS X 10.4. */
-
 #ifndef Q_OS_WIN
 #include <unistd.h>
 #endif
@@ -42,23 +38,24 @@
 using namespace QPatternist;
 
 namespace QPatternist {
+
 class ColorOutputPrivate
 {
  public:
    ColorOutputPrivate() : currentColorID(-1)
 
    {
-      /* - QIODevice::Unbuffered because we want it to appear when the user actually calls, performance
-       *   is considered of lower priority.
-       */
+      // QIODevice::Unbuffered because we want it to appear when the user actually calls, performance
+      //  is considered of lower priority.
+
       m_out.open(stderr, QIODevice::WriteOnly | QIODevice::Unbuffered);
 
       coloringEnabled = isColoringPossible();
    }
 
    ColorOutput::ColorMapping  colorMapping;
-   int                        currentColorID;
-   bool                       coloringEnabled;
+   int  currentColorID;
+   bool coloringEnabled;
 
    static const char *const foregrounds[];
    static const char *const backgrounds[];
@@ -79,9 +76,8 @@ class ColorOutputPrivate
  private:
    QFile m_out;
 
-   /*!
-    Returns true if it's suitable to send colored output to \c stderr.
-    */
+   // returns true if it's suitable to send colored output to \c stderr
+
    inline bool isColoringPossible() const {
 
 #if defined(Q_OS_WIN)
@@ -100,6 +96,7 @@ class ColorOutputPrivate
 
    }
 };
+
 }
 
 const char *const ColorOutputPrivate::foregrounds[] = {

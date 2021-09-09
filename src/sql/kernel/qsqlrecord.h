@@ -36,8 +36,10 @@ class Q_SQL_EXPORT QSqlRecord
 {
  public:
    QSqlRecord();
+
    QSqlRecord(const QSqlRecord &other);
    QSqlRecord &operator=(const QSqlRecord &other);
+
    ~QSqlRecord();
 
    bool operator==(const QSqlRecord &other) const;

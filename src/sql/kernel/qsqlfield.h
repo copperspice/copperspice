@@ -41,15 +41,18 @@ class Q_SQL_EXPORT QSqlField
    QSqlField(const QSqlField &other);
    QSqlField &operator=(const QSqlField &other);
    bool operator==(const QSqlField &other) const;
+
    inline bool operator!=(const QSqlField &other) const {
       return !operator==(other);
    }
+
    ~QSqlField();
 
    void setValue(const QVariant &value);
    inline QVariant value() const {
       return val;
    }
+
    void setName(const QString &name);
    QString name() const;
    bool isNull() const;
@@ -60,10 +63,12 @@ class Q_SQL_EXPORT QSqlField
    bool isAutoValue() const;
 
    void setType(QVariant::Type type);
+
    void setRequiredStatus(RequiredStatus status);
    inline void setRequired(bool status) {
       setRequiredStatus(status ? Required : Optional);
    }
+
    void setLength(int fieldLength);
    void setPrecision(int precision);
    void setDefaultValue(const QVariant &value);

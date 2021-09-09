@@ -29,8 +29,6 @@
 #include <qstring.h>
 #include <qcontainerfwd.h>
 
-
-
 class QVariant;
 class QSqlDriver;
 class QSqlError;
@@ -45,8 +43,10 @@ class Q_SQL_EXPORT QSqlQuery
    explicit QSqlQuery(QSqlResult *result);
    explicit QSqlQuery(const QString &query = QString(), QSqlDatabase db = QSqlDatabase());
    explicit QSqlQuery(QSqlDatabase db);
+
    QSqlQuery(const QSqlQuery &other);
    QSqlQuery &operator=(const QSqlQuery &other);
+
    ~QSqlQuery();
 
    bool isValid() const;
@@ -85,10 +85,10 @@ class Q_SQL_EXPORT QSqlQuery
    enum BatchExecutionMode { ValuesAsRows, ValuesAsColumns };
    bool execBatch(BatchExecutionMode mode = ValuesAsRows);
    bool prepare(const QString &query);
-   void bindValue(const QString &placeholder, const QVariant &val,
-      QSql::ParamType type = QSql::In);
+   void bindValue(const QString &placeholder, const QVariant &val, QSql::ParamType type = QSql::In);
    void bindValue(int pos, const QVariant &val, QSql::ParamType type = QSql::In);
    void addBindValue(const QVariant &val, QSql::ParamType type = QSql::In);
+
    QVariant boundValue(const QString &placeholder) const;
    QVariant boundValue(int pos) const;
    QMap<QString, QVariant> boundValues() const;
@@ -100,7 +100,5 @@ class Q_SQL_EXPORT QSqlQuery
  private:
    QSqlQueryPrivate *d;
 };
-
-
 
 #endif // QSQLQUERY_H

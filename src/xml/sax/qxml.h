@@ -129,10 +129,6 @@ class Q_XML_EXPORT QXmlAttributes
    QXmlAttributesPrivate *d;
 };
 
-//
-// SAX Input Source
-//
-
 class Q_XML_EXPORT QXmlInputSource
 {
  public:
@@ -158,10 +154,6 @@ class Q_XML_EXPORT QXmlInputSource
    QXmlInputSourcePrivate *d;
 };
 
-//
-// SAX Exception Classes
-//
-
 class Q_XML_EXPORT QXmlParseException
 {
  public:
@@ -179,11 +171,6 @@ class Q_XML_EXPORT QXmlParseException
  private:
    QScopedPointer<QXmlParseExceptionPrivate> d;
 };
-
-
-//
-// XML Reader
-//
 
 class Q_XML_EXPORT QXmlReader
 {
@@ -341,9 +328,11 @@ class Q_XML_EXPORT QXmlDeclHandler
    virtual ~QXmlDeclHandler() {}
    virtual bool attributeDecl(const QString &eName, const QString &aName, const QString &type, const QString &valueDefault,
                               const QString &value) = 0;
+
    virtual bool internalEntityDecl(const QString &name, const QString &value) = 0;
    virtual bool externalEntityDecl(const QString &name, const QString &publicId, const QString &systemId) = 0;
    virtual QString errorString() const = 0;
+
    // ### Qt5/Conform to SAX by adding elementDecl
 };
 

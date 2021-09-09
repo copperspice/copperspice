@@ -281,14 +281,12 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
    };
 
    typedef QFlags<NodeCopySetting> NodeCopySettings;
-   virtual void copyNodeTo(const QXmlNodeModelIndex &node,
-                           QAbstractXmlReceiver *const receiver,
-                           const NodeCopySettings &) const;
+   virtual void copyNodeTo(const QXmlNodeModelIndex &node, QAbstractXmlReceiver *const receiver,
+            const NodeCopySettings &) const;
 
    QSourceLocation sourceLocation(const QXmlNodeModelIndex &index) const;
 
  protected:
-
    virtual QXmlNodeModelIndex nextFromSimpleAxis(SimpleAxis axis, const QXmlNodeModelIndex &origin) const = 0;
    virtual QVector<QXmlNodeModelIndex> attributes(const QXmlNodeModelIndex &element) const = 0;
 
@@ -298,22 +296,23 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
       return QXmlNodeModelIndex::create(data, this);
    }
 
-   inline QXmlNodeModelIndex createIndex(void *pointer,
-                                         qint64 additionalData = 0) const {
+   inline QXmlNodeModelIndex createIndex(void *pointer, qint64 additionalData = 0) const {
       return QXmlNodeModelIndex::create(qptrdiff(pointer), this, additionalData);
    }
 
-   inline QXmlNodeModelIndex createIndex(qint64 data,
-                                         qint64 additionalData) const {
+   inline QXmlNodeModelIndex createIndex(qint64 data, qint64 additionalData) const {
       return QXmlNodeModelIndex::create(data, this, additionalData);
    }
 
    QScopedPointer<QAbstractXmlNodeModelPrivate> d_ptr;
+
  private:
-   friend class
-      QPatternist::ItemMappingIterator<QXmlNodeModelIndex, QXmlNodeModelIndex, const QAbstractXmlNodeModel *, QExplicitlySharedDataPointer<QPatternist::DynamicContext> >;
-   friend class
-      QPatternist::SequenceMappingIterator<QXmlNodeModelIndex, QXmlNodeModelIndex, const QAbstractXmlNodeModel *>;
+   friend class QPatternist::ItemMappingIterator<QXmlNodeModelIndex, QXmlNodeModelIndex,
+            const QAbstractXmlNodeModel *, QExplicitlySharedDataPointer<QPatternist::DynamicContext> >;
+
+   friend class QPatternist::SequenceMappingIterator<QXmlNodeModelIndex, QXmlNodeModelIndex,
+            const QAbstractXmlNodeModel *>;
+
    friend class QPatternist::XsdValidatedXmlNodeModel;
 
    inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > mapToSequence(
@@ -348,6 +347,7 @@ class Q_XMLPATTERNS_EXPORT QXmlItem
    QXmlItem(const QXmlNodeModelIndex &node);
    QXmlItem(const QVariant &atomicValue);
    ~QXmlItem();
+
    QXmlItem &operator=(const QXmlItem &other);
 
    bool isNull() const;
