@@ -174,7 +174,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 
    QRectF sceneRect() const;
    void setSceneRect(const QRectF &rect);
-   inline void setSceneRect(qreal x, qreal y, qreal w, qreal h);
+   inline void setSceneRect(qreal x, qreal y, qreal width, qreal height);
 
    // wrapper for overloaded method
    inline void cs_setSceneRect(const QRectF &rect);
@@ -197,12 +197,12 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    void centerOn(const QGraphicsItem *item);
 
    void ensureVisible(const QRectF &rect, int xmargin = 50, int ymargin = 50);
-   inline void ensureVisible(qreal x, qreal y, qreal w, qreal h, int xmargin = 50, int ymargin = 50);
+   inline void ensureVisible(qreal x, qreal y, qreal width, qreal height, int xmargin = 50, int ymargin = 50);
    void ensureVisible(const QGraphicsItem *item, int xmargin = 50, int ymargin = 50);
 
    void fitInView(const QRectF &rect, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
 
-   inline void fitInView(qreal x, qreal y, qreal w, qreal h, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
+   inline void fitInView(qreal x, qreal y, qreal width, qreal height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
    void fitInView(const QGraphicsItem *item, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
 
    void render(QPainter *painter, const QRectF &target = QRectF(), const QRect &source = QRect(),
@@ -212,9 +212,9 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    QList<QGraphicsItem *> items(const QPoint &pos) const;
    inline QList<QGraphicsItem *> items(int x, int y) const;
    QList<QGraphicsItem *> items(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
-   inline QList<QGraphicsItem *> items(int x, int y, int w, int h,
-      Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
+   inline QList<QGraphicsItem *> items(int x, int y, int width, int height, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    QList<QGraphicsItem *> items(const QPolygon &polygon, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
+
    QList<QGraphicsItem *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const;
    QGraphicsItem *itemAt(const QPoint &pos) const;
    inline QGraphicsItem *itemAt(int x, int y) const;
@@ -228,9 +228,9 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    QPolygon mapFromScene(const QPolygonF &polygon) const;
    QPainterPath mapFromScene(const QPainterPath &path) const;
    inline QPointF mapToScene(int x, int y) const;
-   inline QPolygonF mapToScene(int x, int y, int w, int h) const;
+   inline QPolygonF mapToScene(int x, int y, int width, int height) const;
    inline QPoint mapFromScene(qreal x, qreal y) const;
-   inline QPolygon mapFromScene(qreal x, qreal y, qreal w, qreal h) const;
+   inline QPolygon mapFromScene(qreal x, qreal y, qreal width, qreal height) const;
 
    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
@@ -321,59 +321,59 @@ inline void QGraphicsView::cs_setSceneRect(const QRectF &rect)
    setSceneRect(rect);
 }
 
-inline void QGraphicsView::setSceneRect(qreal ax, qreal ay, qreal aw, qreal ah)
+inline void QGraphicsView::setSceneRect(qreal x, qreal y, qreal width, qreal height)
 {
-   setSceneRect(QRectF(ax, ay, aw, ah));
+   setSceneRect(QRectF(x, y, width, height));
 }
 
-inline void QGraphicsView::centerOn(qreal ax, qreal ay)
+inline void QGraphicsView::centerOn(qreal x, qreal y)
 {
-   centerOn(QPointF(ax, ay));
+   centerOn(QPointF(x, y));
 }
 
-inline void QGraphicsView::ensureVisible(qreal ax, qreal ay, qreal aw, qreal ah, int xmargin, int ymargin)
+inline void QGraphicsView::ensureVisible(qreal x, qreal y, qreal width, qreal height, int xmargin, int ymargin)
 {
-   ensureVisible(QRectF(ax, ay, aw, ah), xmargin, ymargin);
+   ensureVisible(QRectF(x, y, width, height), xmargin, ymargin);
 }
 
-inline void QGraphicsView::fitInView(qreal ax, qreal ay, qreal w, qreal h, Qt::AspectRatioMode mode)
+inline void QGraphicsView::fitInView(qreal x, qreal y, qreal width, qreal height, Qt::AspectRatioMode mode)
 {
-   fitInView(QRectF(ax, ay, w, h), mode);
+   fitInView(QRectF(x, y, width, height), mode);
 }
 
-inline QList<QGraphicsItem *> QGraphicsView::items(int ax, int ay) const
+inline QList<QGraphicsItem *> QGraphicsView::items(int x, int y) const
 {
-   return items(QPoint(ax, ay));
+   return items(QPoint(x, y));
 }
 
-inline QList<QGraphicsItem *> QGraphicsView::items(int ax, int ay, int w, int h, Qt::ItemSelectionMode mode) const
+inline QList<QGraphicsItem *> QGraphicsView::items(int x, int y, int width, int height, Qt::ItemSelectionMode mode) const
 {
-   return items(QRect(ax, ay, w, h), mode);
+   return items(QRect(x, y, width, height), mode);
 }
 
-inline QGraphicsItem *QGraphicsView::itemAt(int ax, int ay) const
+inline QGraphicsItem *QGraphicsView::itemAt(int x, int y) const
 {
-   return itemAt(QPoint(ax, ay));
+   return itemAt(QPoint(x, y));
 }
 
-inline QPointF QGraphicsView::mapToScene(int ax, int ay) const
+inline QPointF QGraphicsView::mapToScene(int x, int y) const
 {
-   return mapToScene(QPoint(ax, ay));
+   return mapToScene(QPoint(x, y));
 }
 
-inline QPolygonF QGraphicsView::mapToScene(int ax, int ay, int w, int h) const
+inline QPolygonF QGraphicsView::mapToScene(int x, int y, int width, int height) const
 {
-   return mapToScene(QRect(ax, ay, w, h));
+   return mapToScene(QRect(x, y, width, height));
 }
 
-inline QPoint QGraphicsView::mapFromScene(qreal ax, qreal ay) const
+inline QPoint QGraphicsView::mapFromScene(qreal x, qreal y) const
 {
-   return mapFromScene(QPointF(ax, ay));
+   return mapFromScene(QPointF(x, y));
 }
 
-inline QPolygon QGraphicsView::mapFromScene(qreal ax, qreal ay, qreal w, qreal h) const
+inline QPolygon QGraphicsView::mapFromScene(qreal x, qreal y, qreal width, qreal height) const
 {
-   return mapFromScene(QRectF(ax, ay, w, h));
+   return mapFromScene(QRectF(x, y, width, height));
 }
 
 #endif // QT_NO_GRAPHICSVIEW

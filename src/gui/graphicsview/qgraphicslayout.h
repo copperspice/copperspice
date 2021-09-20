@@ -50,7 +50,7 @@ class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
    virtual void invalidate();
    void updateGeometry() override;
 
-   virtual void widgetEvent(QEvent *e);
+   virtual void widgetEvent(QEvent *event);
 
    virtual int count() const = 0;
    virtual QGraphicsLayoutItem *itemAt(int i) const = 0;

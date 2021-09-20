@@ -111,7 +111,7 @@ class QSidebar : public QListView
    void selectUrl(const QUrl &url);
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    void focusInEvent(QFocusEvent *event) override;
 
 #ifndef QT_NO_DRAGANDDROP

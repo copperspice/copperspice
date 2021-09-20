@@ -38,7 +38,8 @@ class QAccessibleBridge
    virtual ~QAccessibleBridge()
    {
    }
-   virtual void setRootObject(QAccessibleInterface *) = 0;
+
+   virtual void setRootObject(QAccessibleInterface *object) = 0;
    virtual void notifyAccessibilityUpdate(QAccessibleEvent *event) = 0;
 };
 

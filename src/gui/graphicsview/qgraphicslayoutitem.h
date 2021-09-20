@@ -88,7 +88,7 @@ class Q_GUI_EXPORT QGraphicsLayoutItem
 
  protected:
    void setGraphicsItem(QGraphicsItem *item);
-   void setOwnedByLayout(bool ownedByLayout);
+   void setOwnedByLayout(bool owner);
    QGraphicsLayoutItem(QGraphicsLayoutItemPrivate &dd);
 
    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const = 0;
@@ -103,19 +103,19 @@ class Q_GUI_EXPORT QGraphicsLayoutItem
 
 CS_DECLARE_INTERFACE(QGraphicsLayoutItem, "com.copperspice.QGraphicsLayoutItem")
 
-inline void QGraphicsLayoutItem::setMinimumSize(qreal aw, qreal ah)
+inline void QGraphicsLayoutItem::setMinimumSize(qreal w, qreal h)
 {
-   setMinimumSize(QSizeF(aw, ah));
+   setMinimumSize(QSizeF(w, h));
 }
 
-inline void QGraphicsLayoutItem::setPreferredSize(qreal aw, qreal ah)
+inline void QGraphicsLayoutItem::setPreferredSize(qreal w, qreal h)
 {
-   setPreferredSize(QSizeF(aw, ah));
+   setPreferredSize(QSizeF(w, h));
 }
 
-inline void QGraphicsLayoutItem::setMaximumSize(qreal aw, qreal ah)
+inline void QGraphicsLayoutItem::setMaximumSize(qreal w, qreal h)
 {
-   setMaximumSize(QSizeF(aw, ah));
+   setMaximumSize(QSizeF(w, h));
 }
 
 inline qreal QGraphicsLayoutItem::minimumWidth() const

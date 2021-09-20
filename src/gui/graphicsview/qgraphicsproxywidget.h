@@ -35,7 +35,7 @@ class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
    GUI_CS_OBJECT(QGraphicsProxyWidget)
 
  public:
-   QGraphicsProxyWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = Qt::EmptyFlag);
+   QGraphicsProxyWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QGraphicsProxyWidget(const QGraphicsProxyWidget &) = delete;
    QGraphicsProxyWidget &operator=(const QGraphicsProxyWidget &) = delete;
@@ -104,7 +104,7 @@ class Q_GUI_EXPORT QGraphicsProxyWidget : public QGraphicsWidget
    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
    void resizeEvent(QGraphicsSceneResizeEvent *event) override;
 
-   GUI_CS_SLOT_1(Protected, QGraphicsProxyWidget *newProxyWidget(const QWidget *un_named_arg1))
+   GUI_CS_SLOT_1(Protected, QGraphicsProxyWidget *newProxyWidget(const QWidget *child))
    GUI_CS_SLOT_2(newProxyWidget)
 
  private:

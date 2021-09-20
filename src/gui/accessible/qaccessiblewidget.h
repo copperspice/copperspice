@@ -33,7 +33,7 @@ class QAccessibleWidgetPrivate;
 class Q_GUI_EXPORT QAccessibleWidget : public QAccessibleObject, public QAccessibleActionInterface
 {
  public:
-   explicit QAccessibleWidget(QWidget *widget, QAccessible::Role r = QAccessible::Client, const QString &name = QString());
+   explicit QAccessibleWidget(QWidget *widget, QAccessible::Role role = QAccessible::Client, const QString &name = QString());
 
    QAccessibleWidget(const QAccessibleWidget &) = delete;
    QAccessibleWidget &operator=(const QAccessibleWidget &) = delete;

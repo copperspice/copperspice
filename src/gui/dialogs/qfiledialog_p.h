@@ -283,7 +283,7 @@ class QFileDialogLineEdit : public QLineEdit
       d_ptr = d_pointer;
    }
 
-   void keyPressEvent(QKeyEvent *e) override;
+   void keyPressEvent(QKeyEvent *event) override;
    bool hideOnEsc;
 
  private:
@@ -306,7 +306,7 @@ class QFileDialogComboBox : public QComboBox
       return m_history;
    }
 
-   void paintEvent(QPaintEvent *) override;
+   void paintEvent(QPaintEvent *event) override;
 
  private:
    QUrlModel *urlModel;
@@ -322,7 +322,7 @@ class QFileDialogListView : public QListView
    QSize sizeHint() const override;
 
  protected:
-   void keyPressEvent(QKeyEvent *e) override;
+   void keyPressEvent(QKeyEvent *event) override;
 
  private:
    QFileDialogPrivate *d_ptr;
@@ -336,7 +336,7 @@ class QFileDialogTreeView : public QTreeView
    QSize sizeHint() const override;
 
  protected:
-   void keyPressEvent(QKeyEvent *e) override;
+   void keyPressEvent(QKeyEvent *event) override;
 
  private:
    QFileDialogPrivate *d_ptr;

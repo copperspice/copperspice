@@ -55,7 +55,7 @@ class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
 
    QPointF posAt(qreal step) const;
    QList<QPair<qreal, QPointF>> posList() const;
-   void setPosAt(qreal step, const QPointF &pos);
+   void setPosAt(qreal step, const QPointF &point);
 
    QMatrix matrixAt(qreal step) const;
 
@@ -80,7 +80,7 @@ class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject
 
    void clear();
 
-   GUI_CS_SLOT_1(Public, void setStep(qreal x))
+   GUI_CS_SLOT_1(Public, void setStep(qreal step))
    GUI_CS_SLOT_2(setStep)
 
    GUI_CS_SLOT_1(Public, void reset())

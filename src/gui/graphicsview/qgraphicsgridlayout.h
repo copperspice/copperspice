@@ -109,9 +109,9 @@ class Q_GUI_EXPORT QGraphicsGridLayout : public QGraphicsLayout
    Q_DECLARE_PRIVATE(QGraphicsGridLayout)
 };
 
-inline void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *aitem, int arow, int acolumn, Qt::Alignment aalignment)
+inline void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column, Qt::Alignment alignment)
 {
-   addItem(aitem, arow, acolumn, 1, 1, aalignment);
+   addItem(item, row, column, 1, 1, alignment);
 }
 
 #endif

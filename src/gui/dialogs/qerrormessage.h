@@ -52,8 +52,8 @@ class Q_GUI_EXPORT QErrorMessage: public QDialog
    GUI_CS_SLOT_OVERLOAD(showMessage, (const QString &, const QString &))
 
  protected:
-   void done(int) override;
-   void changeEvent(QEvent *e) override;
+   void done(int status) override;
+   void changeEvent(QEvent *event) override;
 };
 
 #endif // QT_NO_ERRORMESSAGE

@@ -196,9 +196,8 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    static void aboutQt(QWidget *parent, const QString &title = QString());
 
    QMessageBox(const QString &title, const QString &text, Icon icon,
-      int button0, int button1, int button2,
-      QWidget *parent = nullptr,
-      Qt::WindowFlags f = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+      int button0, int button1, int button2, QWidget *parent = nullptr,
+      Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
    // the following functions are obsolete
    static int information(QWidget *parent, const QString &title, const QString &text,
@@ -265,7 +264,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    GUI_CS_SIGNAL_2(buttonClicked, button)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    void resizeEvent(QResizeEvent *event) override;
    void showEvent(QShowEvent *event) override;
    void closeEvent(QCloseEvent *event) override;

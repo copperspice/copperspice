@@ -73,7 +73,7 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 
    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
    QModelIndex index(const QString &path, int column = 0) const;
-   QModelIndex parent(const QModelIndex &child) const override;
+   QModelIndex parent(const QModelIndex &index) const override;
 
    using QObject::parent;
 
@@ -102,7 +102,7 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 
    Qt::DropActions supportedDropActions() const override;
 
-   QModelIndex setRootPath(const QString &path);
+   QModelIndex setRootPath(const QString &newPath);
    QString rootPath() const;
    QDir rootDirectory() const;
 
@@ -163,14 +163,14 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    friend class QFileDialogPrivate;
 };
 
-inline QString QFileSystemModel::fileName(const QModelIndex &aindex) const
+inline QString QFileSystemModel::fileName(const QModelIndex &index) const
 {
-   return aindex.data(Qt::DisplayRole).toString();
+   return index.data(Qt::DisplayRole).toString();
 }
 
-inline QIcon QFileSystemModel::fileIcon(const QModelIndex &aindex) const
+inline QIcon QFileSystemModel::fileIcon(const QModelIndex &index) const
 {
-   return (aindex.data(Qt::DecorationRole)).value<QIcon>();
+   return (index.data(Qt::DecorationRole)).value<QIcon>();
 }
 
 #endif // QT_NO_FILESYSTEMMODEL

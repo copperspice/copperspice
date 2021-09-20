@@ -95,7 +95,7 @@ class Q_GUI_EXPORT QGraphicsAnchorLayout : public QGraphicsLayout
    qreal verticalSpacing() const;
 
    void removeAt(int index) override;
-   void setGeometry(const QRectF &rect) override;
+   void setGeometry(const QRectF &rectF) override;
    int count() const override;
    QGraphicsLayoutItem *itemAt(int index) const override;
 

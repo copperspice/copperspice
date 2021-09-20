@@ -76,7 +76,7 @@ class Q_GUI_EXPORT QGraphicsEffect : public QObject
 
    virtual ~QGraphicsEffect();
 
-   virtual QRectF boundingRectFor(const QRectF &sourceRect) const;
+   virtual QRectF boundingRectFor(const QRectF &rectF) const;
    QRectF boundingRect() const;
 
    bool isEnabled() const;

@@ -40,7 +40,7 @@ class Q_GUI_EXPORT QDialog : public QWidget
    GUI_CS_PROPERTY_WRITE(modal, setModal)
 
  public:
-   explicit QDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+   explicit QDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QDialog(const QDialog &) = delete;
    QDialog &operator=(const QDialog &) = delete;
@@ -99,7 +99,7 @@ class Q_GUI_EXPORT QDialog : public QWidget
    GUI_CS_SLOT_2(showExtension)
 
  protected:
-   QDialog(QDialogPrivate &, QWidget *parent, Qt::WindowFlags f = Qt::WindowFlags());
+   QDialog(QDialogPrivate &, QWidget *parent, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    void keyPressEvent(QKeyEvent *event) override;
    void closeEvent(QCloseEvent *event) override;

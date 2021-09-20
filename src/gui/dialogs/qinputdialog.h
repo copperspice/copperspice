@@ -161,9 +161,9 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
 
    void setVisible(bool visible) override;
 
-   static QString getText(QWidget *parent, const QString &title, const QString &label, QLineEdit::EchoMode echo = QLineEdit::Normal,
-      const QString &text = QString(), bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags(),
-      Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
+   static QString getText(QWidget *parent, const QString &title, const QString &label,
+      QLineEdit::EchoMode echoMode = QLineEdit::Normal, const QString &text = QString(), bool *ok = nullptr,
+      Qt::WindowFlags flags = Qt::EmptyFlag, Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
 
    static QString getMultiLineText(QWidget *parent, const QString &title, const QString &label,
       const QString &text = QString(), bool *ok = nullptr,

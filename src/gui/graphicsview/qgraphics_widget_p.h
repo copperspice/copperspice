@@ -51,7 +51,7 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 
    virtual ~QGraphicsWidgetPrivate();
 
-   void init(QGraphicsItem *parentItem, Qt::WindowFlags wFlags);
+   void init(QGraphicsItem *parentItem, Qt::WindowFlags flags);
    qreal titleBarHeight(const QStyleOptionTitleBar &options) const;
 
    // Margins
@@ -86,7 +86,7 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 
    // Window specific
    void initStyleOptionTitleBar(QStyleOptionTitleBar *option);
-   void adjustWindowFlags(Qt::WindowFlags *wFlags);
+   void adjustWindowFlags(Qt::WindowFlags *flags);
 
    void windowFrameMouseReleaseEvent(QGraphicsSceneMouseEvent *event);
    void windowFrameMousePressEvent(QGraphicsSceneMouseEvent *event);

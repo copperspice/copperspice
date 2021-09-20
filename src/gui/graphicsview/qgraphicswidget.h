@@ -94,7 +94,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    GUI_CS_PROPERTY_NOTIFY(layout, layoutChanged)
 
  public:
-   QGraphicsWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags wFlags = Qt::WindowFlags());
+   QGraphicsWidget(QGraphicsItem *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QGraphicsWidget(const QGraphicsWidget &) = delete;
    QGraphicsWidget &operator=(const QGraphicsWidget &) = delete;
@@ -122,8 +122,8 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    void setAutoFillBackground(bool enabled);
 
    void resize(const QSizeF &size);
-   void resize(qreal w, qreal h) {
-      resize(QSizeF(w, h));
+   void resize(qreal width, qreal height) {
+      resize(QSizeF(width, height));
    }
 
    QSizeF size() const;
@@ -132,7 +132,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    inline void cs_resize(const QSizeF &size);
 
    void setGeometry(const QRectF &rect) override;
-   inline void setGeometry(qreal x, qreal y, qreal w, qreal h);
+   inline void setGeometry(qreal x, qreal y, qreal width, qreal height);
 
    QRectF rect() const {
       return QRectF(QPointF(), size());
@@ -165,7 +165,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    // Window handling
    Qt::WindowFlags windowFlags() const;
    Qt::WindowType windowType() const;
-   void setWindowFlags(Qt::WindowFlags wFlags);
+   void setWindowFlags(Qt::WindowFlags flags);
    bool isActiveWindow() const;
    void setWindowTitle(const QString &title);
    QString windowTitle() const;
@@ -216,7 +216,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    GUI_CS_SLOT_2(close)
 
  protected:
-   QGraphicsWidget(QGraphicsWidgetPrivate &, QGraphicsItem *parent, Qt::WindowFlags wFlags = Qt::WindowFlags());
+   QGraphicsWidget(QGraphicsWidgetPrivate &, QGraphicsItem *parent, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    virtual void initStyleOption(QStyleOption *option) const;
 
@@ -229,7 +229,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
 
    // Scene events
    bool sceneEvent(QEvent *event) override;
-   virtual bool windowFrameEvent(QEvent *e);
+   virtual bool windowFrameEvent(QEvent *event);
    virtual Qt::WindowFrameSection windowFrameSectionAt(const QPointF &pos) const;
 
    // Base event handlers
@@ -283,9 +283,9 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    friend class QApplication;
 };
 
-inline void QGraphicsWidget::setGeometry(qreal ax, qreal ay, qreal aw, qreal ah)
+inline void QGraphicsWidget::setGeometry(qreal x, qreal y, qreal width, qreal height)
 {
-   setGeometry(QRectF(ax, ay, aw, ah));
+   setGeometry(QRectF(x, y, width, height));
 }
 
 inline void QGraphicsWidget::cs_resize(const QSizeF &size)

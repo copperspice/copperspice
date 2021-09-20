@@ -208,7 +208,7 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    QGraphicsRectItem *addRect(const QRectF &rect, const QPen &pen = QPen(), const QBrush &brush = QBrush());
    QGraphicsTextItem *addText(const QString &text, const QFont &font = QFont());
    QGraphicsSimpleTextItem *addSimpleText(const QString &text, const QFont &font = QFont());
-   QGraphicsProxyWidget *addWidget(QWidget *widget, Qt::WindowFlags wFlags = Qt::WindowFlags());
+   QGraphicsProxyWidget *addWidget(QWidget *widget, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QGraphicsEllipseItem *addEllipse(qreal x, qreal y, qreal w, qreal h, const QPen &pen = QPen(), const QBrush &brush = QBrush()) {
       return addEllipse(QRectF(x, y, w, h), pen, brush);

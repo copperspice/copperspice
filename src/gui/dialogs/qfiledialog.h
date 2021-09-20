@@ -108,7 +108,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    using Option  [[deprecated]] = FileDialogOption;
    using Options [[deprecated]] = FileDialogOptions;
 
-   QFileDialog(QWidget *parent, Qt::WindowFlags f);
+   QFileDialog(QWidget *parent, Qt::WindowFlags flags);
 
    explicit QFileDialog(QWidget *parent = nullptr,
       const QString &caption = QString(),
@@ -271,7 +271,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    QFileDialog(const QFileDialogArgs &args);
    void done(int result) override;
    void accept() override;
-   void changeEvent(QEvent *e) override;
+   void changeEvent(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QFileDialog)
@@ -360,9 +360,9 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    friend class QPlatformDialogHelper;
 };
 
-inline void QFileDialog::setDirectory(const QDir &adirectory)
+inline void QFileDialog::setDirectory(const QDir &directory)
 {
-   setDirectory(adirectory.absolutePath());
+   setDirectory(directory.absolutePath());
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFileDialog::FileDialogOptions)
