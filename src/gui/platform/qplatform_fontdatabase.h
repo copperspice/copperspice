@@ -45,8 +45,8 @@ class Q_GUI_EXPORT QSupportedWritingSystems
    QSupportedWritingSystems &operator=(const QSupportedWritingSystems &other);
    ~QSupportedWritingSystems();
 
-   void setSupported(QFontDatabase::WritingSystem, bool supported = true);
-   bool supported(QFontDatabase::WritingSystem) const;
+   void setSupported(QFontDatabase::WritingSystem writingSystem, bool supported = true);
+   bool supported(QFontDatabase::WritingSystem writingSystem) const;
 
  private:
    void detach();

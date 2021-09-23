@@ -67,7 +67,7 @@ class Q_GUI_EXPORT QPlatformMenuItem : public QObject
    virtual void setFont(const QFont &font) = 0;
    virtual void setRole(MenuRole role) = 0;
    virtual void setCheckable(bool checkable) = 0;
-   virtual void setChecked(bool isChecked) = 0;
+   virtual void setChecked(bool checked) = 0;
    virtual void setShortcut(const QKeySequence &shortcut) = 0;
    virtual void setEnabled(bool enabled) = 0;
    virtual void setIconSize(int size) = 0;

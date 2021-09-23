@@ -57,7 +57,7 @@ class QScrollerPrivate : public QObject
    QScrollerPrivate(QScroller *q, QObject *target);
    void init();
 
-   void sendEvent(QObject *o, QEvent *e);
+   void sendEvent(QObject *object, QEvent *event);
 
    void setState(QScroller::State s);
 

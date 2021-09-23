@@ -84,7 +84,7 @@ class Q_GUI_EXPORT QCompleter : public QObject
    QCompleter(QAbstractItemModel *model, QObject *parent = nullptr);
 
 #ifndef QT_NO_STRINGLISTMODEL
-   QCompleter(const QStringList &completions, QObject *parent = nullptr);
+   QCompleter(const QStringList &list, QObject *parent = nullptr);
 #endif
 
    QCompleter(const QCompleter &) = delete;
@@ -95,7 +95,7 @@ class Q_GUI_EXPORT QCompleter : public QObject
    void setWidget(QWidget *widget);
    QWidget *widget() const;
 
-   void setModel(QAbstractItemModel *c);
+   void setModel(QAbstractItemModel *model);
    QAbstractItemModel *model() const;
 
    void setCompletionMode(CompletionMode mode);
@@ -159,8 +159,8 @@ class Q_GUI_EXPORT QCompleter : public QObject
    GUI_CS_SIGNAL_OVERLOAD(highlighted, (const QModelIndex &), index)
 
  protected:
-   bool eventFilter(QObject *o, QEvent *e) override;
-   bool event(QEvent *) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
+   bool event(QEvent *event) override;
    QScopedPointer<QCompleterPrivate> d_ptr;
 
  private:

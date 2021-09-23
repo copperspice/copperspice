@@ -64,10 +64,10 @@ class Q_GUI_EXPORT QPlatformWindow : public QPlatformSurface
    virtual void setWindowFlags(Qt::WindowFlags flags);
    virtual void setWindowState(Qt::WindowState state);
    virtual WId winId() const;
-   virtual void setParent(const QPlatformWindow *window);
+   virtual void setParent(const QPlatformWindow *parent);
 
    virtual void setWindowTitle(const QString &title);
-   virtual void setWindowFilePath(const QString &title);
+   virtual void setWindowFilePath(const QString &filePath);
    virtual void setWindowIcon(const QIcon &icon);
    virtual void raise();
    virtual void lower();
@@ -103,8 +103,7 @@ class Q_GUI_EXPORT QPlatformWindow : public QPlatformSurface
 
    virtual void invalidateSurface();
 
-   static QRect initialGeometry(const QWindow *w,
-      const QRect &initialGeometry, int defaultWidth, int defaultHeight);
+   static QRect initialGeometry(const QWindow *window, const QRect &initialGeometry, int defaultWidth, int defaultHeight);
 
    virtual void requestUpdate();
 
@@ -116,7 +115,7 @@ class Q_GUI_EXPORT QPlatformWindow : public QPlatformSurface
    QRect windowGeometry() const;
    QRect windowFrameGeometry() const;
    QRectF windowClosestAcceptableGeometry(const QRectF &nativeRect) const;
-   static QRectF closestAcceptableGeometry(const QWindow *w, const QRectF &nativeRect);
+   static QRectF closestAcceptableGeometry(const QWindow *window, const QRectF &nativeRect);
 
  protected:
    static QString formatWindowTitle(const QString &title, const QString &separator);

@@ -36,10 +36,9 @@ class QPlatformCursor;
 
 class Q_GUI_EXPORT QPlatformCursorImage
 {
-
  public:
-   QPlatformCursorImage(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY) {
-      set(data, mask, width, height, hotX, hotY);
+   QPlatformCursorImage(const uchar *data, const uchar *mask, int width, int height, int hotSpot_x, int hotSpot_y) {
+      set(data, mask, width, height, hotSpot_x, hotSpot_y);
    }
 
    QImage *image() {
@@ -50,9 +49,9 @@ class Q_GUI_EXPORT QPlatformCursorImage
       return hot;
    }
 
-   void set(const uchar *data, const uchar *mask, int width, int height, int hotX, int hotY);
-   void set(const QImage &image, int hx, int hy);
-   void set(Qt::CursorShape);
+   void set(const uchar *data, const uchar *mask, int width, int height, int hotSpot_x, int hotSpot_y);
+   void set(const QImage &image, int hotSpot_x, int hotSpot_y);
+   void set(Qt::CursorShape cursorId);
 
  private:
    static void createSystemCursor(int id);

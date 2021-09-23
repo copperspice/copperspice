@@ -130,13 +130,9 @@ class Q_GUI_EXPORT QPlatformIntegration
    };
 
    virtual QVariant styleHint(StyleHint hint) const;
-
-   virtual Qt::WindowState defaultWindowState(Qt::WindowFlags) const;
-
-
+   virtual Qt::WindowState defaultWindowState(Qt::WindowFlags flags) const;
    virtual Qt::KeyboardModifiers queryKeyboardModifiers() const;
-   virtual QList<int> possibleKeys(const QKeyEvent *) const;
-
+   virtual QList<int> possibleKeys(const QKeyEvent *event) const;
 
    virtual QStringList themeNames() const;
    virtual QPlatformTheme *createPlatformTheme(const QString &name) const;

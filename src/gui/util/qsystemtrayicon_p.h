@@ -102,10 +102,10 @@ class QBalloonTip : public QWidget
    void balloon(const QPoint &, int, bool);
 
  protected:
-   void paintEvent(QPaintEvent *) override;
-   void resizeEvent(QResizeEvent *) override;
-   void mousePressEvent(QMouseEvent *e) override;
-   void timerEvent(QTimerEvent *e) override;
+   void paintEvent(QPaintEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void timerEvent(QTimerEvent *event) override;
 
  private:
    QSystemTrayIcon *trayIcon;
@@ -113,7 +113,6 @@ class QBalloonTip : public QWidget
    int timerId;
 
    bool showArrow;
-
 };
 
 #endif // QT_NO_SYSTEMTRAYICON
