@@ -938,9 +938,9 @@ inline const QWidget *qobject_cast<const QWidget *>(const QObject *o)
    return static_cast<const QWidget *>(o);
 }
 
-inline QWidget *QWidget::childAt(int ax, int ay) const
+inline QWidget *QWidget::childAt(int x, int y) const
 {
-   return childAt(QPoint(ax, ay));
+   return childAt(QPoint(x, y));
 }
 
 inline Qt::WindowType QWidget::windowType() const
@@ -1068,9 +1068,9 @@ inline bool QWidget::isHidden() const
    return testAttribute(Qt::WA_WState_Hidden);
 }
 
-inline void QWidget::move(int ax, int ay)
+inline void QWidget::move(int x, int y)
 {
-   move(QPoint(ax, ay));
+   move(QPoint(x, y));
 }
 
 inline void QWidget::resize(int w, int h)
@@ -1078,9 +1078,9 @@ inline void QWidget::resize(int w, int h)
    resize(QSize(w, h));
 }
 
-inline void QWidget::setGeometry(int ax, int ay, int aw, int ah)
+inline void QWidget::setGeometry(int x, int y, int w, int h)
 {
-   setGeometry(QRect(ax, ay, aw, ah));
+   setGeometry(QRect(x, y, w, h));
 }
 
 inline QRect QWidget::rect() const

@@ -43,15 +43,15 @@ class Q_GUI_EXPORT QWidgetAction : public QAction
 
    virtual ~QWidgetAction();
 
-   void setDefaultWidget(QWidget *w);
+   void setDefaultWidget(QWidget *widget);
    QWidget *defaultWidget() const;
 
    QWidget *requestWidget(QWidget *parent);
    void releaseWidget(QWidget *widget);
 
  protected:
-   virtual bool event(QEvent *) override;
-   virtual bool eventFilter(QObject *, QEvent *) override;
+   virtual bool event(QEvent *event) override;
+   virtual bool eventFilter(QObject *object, QEvent *event) override;
    virtual QWidget *createWidget(QWidget *parent);
    virtual void deleteWidget(QWidget *widget);
    QList<QWidget *> createdWidgets() const;

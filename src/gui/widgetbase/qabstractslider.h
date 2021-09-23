@@ -112,10 +112,10 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
 
    void triggerAction(SliderAction action);
 
-   GUI_CS_SLOT_1(Public, void setValue(int un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setValue(int value))
    GUI_CS_SLOT_2(setValue)
 
-   GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation orientation))
    GUI_CS_SLOT_2(setOrientation)
 
    GUI_CS_SLOT_1(Public, void setRange(int min, int max))

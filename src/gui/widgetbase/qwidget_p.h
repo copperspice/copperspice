@@ -259,7 +259,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    void setSharedPainter(QPainter *painter);
    QWidgetBackingStore *maybeBackingStore() const;
 
-   void init(QWidget *desktopWidget, Qt::WindowFlags f);
+   void init(QWidget *desktopWidget, Qt::WindowFlags flags);
    void create_sys(WId window, bool initializeWindow, bool destroyOldWindow);
    void createRecursively();
    void createWinId();
@@ -376,7 +376,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    void setWinId(WId);
    void showChildren(bool spontaneous);
    void hideChildren(bool spontaneous);
-   void setParent_sys(QWidget *parent, Qt::WindowFlags);
+   void setParent_sys(QWidget *parent, Qt::WindowFlags flags);
    void scroll_sys(int dx, int dy);
    void scroll_sys(int dx, int dy, const QRect &r);
    void deactivateWidgetCleanup();

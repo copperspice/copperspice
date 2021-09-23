@@ -182,7 +182,7 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    void initStyleOption(QStyleOptionSpinBox *option) const;
 
    QLineEdit *lineEdit() const;
-   void setLineEdit(QLineEdit *edit);
+   void setLineEdit(QLineEdit *lineEdit);
 
    virtual StepEnabled stepEnabled() const;
 
