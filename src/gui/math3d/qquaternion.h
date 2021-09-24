@@ -122,8 +122,8 @@ inline QQuaternion::QQuaternion()
 {
 }
 
-inline QQuaternion::QQuaternion(qreal aScalar, qreal xpos, qreal ypos, qreal zpos)
-   : wp(aScalar), xp(xpos), yp(ypos), zp(zpos)
+inline QQuaternion::QQuaternion(qreal scalar, qreal xpos, qreal ypos, qreal zpos)
+   : wp(scalar), xp(xpos), yp(ypos), zp(zpos)
 {
 }
 
@@ -152,26 +152,30 @@ inline qreal QQuaternion::z() const
    return qreal(zp);
 
 }
+
 inline qreal QQuaternion::scalar() const
 {
    return qreal(wp);
 }
 
-inline void QQuaternion::setX(qreal aX)
+inline void QQuaternion::setX(qreal x)
 {
-   xp = aX;
+   xp = x;
 }
-inline void QQuaternion::setY(qreal aY)
+
+inline void QQuaternion::setY(qreal y)
 {
-   yp = aY;
+   yp = y;
 }
-inline void QQuaternion::setZ(qreal aZ)
+
+inline void QQuaternion::setZ(qreal z)
 {
-   zp = aZ;
+   zp = z;
 }
-inline void QQuaternion::setScalar(qreal aScalar)
+
+inline void QQuaternion::setScalar(qreal scalar)
 {
-   wp = aScalar;
+   wp = scalar;
 }
 
 inline QQuaternion QQuaternion::conjugate() const
@@ -287,14 +291,14 @@ inline bool qFuzzyCompare(const QQuaternion &q1, const QQuaternion &q2)
 
 #ifndef QT_NO_VECTOR3D
 
-inline QQuaternion::QQuaternion(qreal aScalar, const QVector3D &aVector)
-   : wp(aScalar), xp(aVector.x()), yp(aVector.y()), zp(aVector.z()) {}
+inline QQuaternion::QQuaternion(qreal scalar, const QVector3D &vector)
+   : wp(scalar), xp(vector.x()), yp(vector.y()), zp(vector.z()) {}
 
-inline void QQuaternion::setVector(const QVector3D &aVector)
+inline void QQuaternion::setVector(const QVector3D &vector)
 {
-   xp = aVector.x();
-   yp = aVector.y();
-   zp = aVector.z();
+   xp = vector.x();
+   yp = vector.y();
+   zp = vector.z();
 }
 
 inline QVector3D QQuaternion::vector() const
@@ -304,17 +308,19 @@ inline QVector3D QQuaternion::vector() const
 
 #endif
 
-inline void QQuaternion::setVector(qreal aX, qreal aY, qreal aZ)
+inline void QQuaternion::setVector(qreal x, qreal y, qreal z)
 {
-   xp = aX;
-   yp = aY;
-   zp = aZ;
+   xp = x;
+   yp = y;
+   zp = z;
 }
 
 #ifndef QT_NO_VECTOR4D
 
-inline QQuaternion::QQuaternion(const QVector4D &aVector)
-   : wp(aVector.w()), xp(aVector.x()), yp(aVector.y()), zp(aVector.z()) {}
+inline QQuaternion::QQuaternion(const QVector4D &vector)
+   : wp(vector.w()), xp(vector.x()), yp(vector.y()), zp(vector.z())
+{
+}
 
 inline QVector4D QQuaternion::toVector4D() const
 {

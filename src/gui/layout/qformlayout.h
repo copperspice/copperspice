@@ -97,7 +97,7 @@ class Q_GUI_EXPORT QFormLayout : public QLayout
    int verticalSpacing() const;
 
    int spacing() const;
-   void setSpacing(int);
+   void setSpacing(int spacing);
 
    void addRow(QWidget *label, QWidget *field);
    void addRow(QWidget *label, QLayout *field);

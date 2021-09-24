@@ -60,14 +60,14 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
 
    ~QStackedLayout();
 
-   int addWidget(QWidget *w);
-   int insertWidget(int index, QWidget *w);
+   int addWidget(QWidget *widget);
+   int insertWidget(int index, QWidget *widget);
 
    QWidget *currentWidget() const;
    int currentIndex() const;
 
    using QLayout::widget;
-   QWidget *widget(int) const;
+   QWidget *widget(int index) const;
    int count() const override;
 
    StackingMode stackingMode() const;
@@ -77,8 +77,8 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
    void addItem(QLayoutItem *item) override;
    QSize sizeHint() const override;
    QSize minimumSize() const override;
-   QLayoutItem *itemAt(int) const override;
-   QLayoutItem *takeAt(int) override;
+   QLayoutItem *itemAt(int index) const override;
+   QLayoutItem *takeAt(int index) override;
    void setGeometry(const QRect &rect) override;
    bool hasHeightForWidth() const override;
    int heightForWidth(int width) const override;
@@ -92,7 +92,7 @@ class Q_GUI_EXPORT QStackedLayout : public QLayout
    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
    GUI_CS_SLOT_2(setCurrentIndex)
 
-   GUI_CS_SLOT_1(Public, void setCurrentWidget(QWidget *w))
+   GUI_CS_SLOT_1(Public, void setCurrentWidget(QWidget *widget))
    GUI_CS_SLOT_2(setCurrentWidget)
 
  private:

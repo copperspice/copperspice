@@ -101,21 +101,21 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    void setOutputFormat(OutputFormat format);
    OutputFormat outputFormat() const;
 
-   void setPrinterName(const QString &);
+   void setPrinterName(const QString &name);
    QString printerName() const;
 
    bool isValid() const;
 
-   void setOutputFileName(const QString &);
+   void setOutputFileName(const QString &fileName);
    QString outputFileName()const;
 
-   void setPrintProgram(const QString &);
+   void setPrintProgram(const QString &command);
    QString printProgram() const;
 
-   void setDocName(const QString &);
+   void setDocName(const QString &name);
    QString docName() const;
 
-   void setCreator(const QString &);
+   void setCreator(const QString &creator);
    QString creator() const;
 
    void setMargins(const QMarginsF &margins) override;
@@ -125,7 +125,7 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    QPageLayout pageLayout() const override;
 
    bool setPageOrientation(QPageLayout::Orientation orientation) override;
-   void setOrientation(Orientation);
+   void setOrientation(Orientation orientation);
    Orientation orientation() const;
 
    bool setPageMargins(const QMarginsF &margins, QPageSize::Unit units) override;
@@ -137,7 +137,7 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
 
    void setPageSizeMM(const QSizeF &size) override;
 
-   void setPaperSize(QPageSize::PageSizeId sizeId);
+   void setPaperSize(QPageSize::PageSizeId paperSize);
    void setPaperSize(const QSizeF &paperSize, Unit unit);
    QPageSize::PageSizeId paperSize() const;
    QSizeF paperSize(Unit unit) const;
@@ -148,34 +148,34 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    void setPrintRange(PrintRange range);
    PrintRange printRange() const;
 
-   void setPageOrder(PageOrder);
+   void setPageOrder(PageOrder pageOrder);
    PageOrder pageOrder() const;
 
-   void setResolution(int);
+   void setResolution(int dpi);
    int resolution() const;
 
-   void setColorMode(ColorMode);
+   void setColorMode(ColorMode colorMode);
    ColorMode colorMode() const;
 
    void setCollateCopies(bool collate);
    bool collateCopies() const;
 
-   void setFullPage(bool);
+   void setFullPage(bool fullPage);
    bool fullPage() const;
 
-   void setNumCopies(int);
+   void setNumCopies(int numCopies);
    int numCopies() const;
 
    int actualNumCopies() const;
 
-   void setCopyCount(int);
+   void setCopyCount(int count);
    int copyCount() const;
    bool supportsMultipleCopies() const;
 
-   void setPaperSource(PaperSource);
+   void setPaperSource(PaperSource source);
    PaperSource paperSource() const;
 
-   void setDuplex(DuplexMode duplex);
+   void setDuplex(DuplexMode enable);
    DuplexMode duplex() const;
 
    QList<int> supportedResolutions() const;
@@ -190,16 +190,16 @@ class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
    void setDoubleSidedPrinting(bool enable);
    bool doubleSidedPrinting() const;
 
-   void setWinPageSize(int winPageSize);
+   void setWinPageSize(int pageSize);
    int winPageSize() const;
 
    QRect paperRect() const;
    QRect pageRect() const;
-   QRectF paperRect(Unit) const;
-   QRectF pageRect(Unit) const;
+   QRectF paperRect(Unit unit) const;
+   QRectF pageRect(Unit unit) const;
 
    QString printerSelectionOption() const;
-   void setPrinterSelectionOption(const QString &);
+   void setPrinterSelectionOption(const QString &option);
 
    bool newPage() override;
    bool abort();

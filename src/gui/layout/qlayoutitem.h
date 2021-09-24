@@ -46,12 +46,12 @@ class Q_GUI_EXPORT QLayoutItem
    virtual QSize minimumSize() const = 0;
    virtual QSize maximumSize() const = 0;
    virtual Qt::Orientations expandingDirections() const = 0;
-   virtual void setGeometry(const QRect &) = 0;
+   virtual void setGeometry(const QRect &rect) = 0;
    virtual QRect geometry() const = 0;
    virtual bool isEmpty() const = 0;
    virtual bool hasHeightForWidth() const;
-   virtual int heightForWidth(int) const;
-   virtual int minimumHeightForWidth(int) const;
+   virtual int heightForWidth(int width) const;
+   virtual int minimumHeightForWidth(int width) const;
    virtual void invalidate();
 
    virtual QWidget *widget();
@@ -62,15 +62,15 @@ class Q_GUI_EXPORT QLayoutItem
       return align;
    }
 
-   void setAlignment(Qt::Alignment a);
+   void setAlignment(Qt::Alignment alignment);
    virtual QSizePolicy::ControlTypes controlTypes() const;
 
  protected:
    Qt::Alignment align;
 };
 
-inline QLayoutItem::QLayoutItem(Qt::Alignment aalignment)
-   : align(aalignment)
+inline QLayoutItem::QLayoutItem(Qt::Alignment alignment)
+   : align(alignment)
 {
 }
 
@@ -78,21 +78,23 @@ class Q_GUI_EXPORT QSpacerItem : public QLayoutItem
 {
 
  public:
-   QSpacerItem(int w, int h, QSizePolicy::Policy hData = QSizePolicy::Minimum,
-      QSizePolicy::Policy vData = QSizePolicy::Minimum)
-      : width(w), height(h), sizeP(hData, vData) { }
+   QSpacerItem(int w, int h, QSizePolicy::Policy hPolicy = QSizePolicy::Minimum,
+      QSizePolicy::Policy vPolicy = QSizePolicy::Minimum)
+      : width(w), height(h), sizeP(hPolicy, vPolicy)
+   {
+   }
 
    ~QSpacerItem();
 
-   void changeSize(int w, int h, QSizePolicy::Policy hData = QSizePolicy::Minimum,
-      QSizePolicy::Policy vData = QSizePolicy::Minimum);
+   void changeSize(int w, int h, QSizePolicy::Policy hPolicy = QSizePolicy::Minimum,
+      QSizePolicy::Policy vPolicy = QSizePolicy::Minimum);
 
    QSize sizeHint() const override;
    QSize minimumSize() const override;
    QSize maximumSize() const override;
    Qt::Orientations expandingDirections() const override;
    bool isEmpty() const override;
-   void setGeometry(const QRect &) override;
+   void setGeometry(const QRect &rect) override;
    QRect geometry() const override;
    QSpacerItem *spacerItem() override;
 
@@ -110,8 +112,8 @@ class Q_GUI_EXPORT QSpacerItem : public QLayoutItem
 class Q_GUI_EXPORT QWidgetItem : public QLayoutItem
 {
  public:
-   explicit QWidgetItem(QWidget *w)
-      : wid(w) {
+   explicit QWidgetItem(QWidget *widget)
+      : wid(widget) {
    }
 
    QWidgetItem(const QWidgetItem &) = delete;
@@ -124,12 +126,12 @@ class Q_GUI_EXPORT QWidgetItem : public QLayoutItem
    QSize maximumSize() const override;
    Qt::Orientations expandingDirections() const override;
    bool isEmpty() const override;
-   void setGeometry(const QRect &) override;
+   void setGeometry(const QRect &rect) override;
    QRect geometry() const override;
    virtual QWidget *widget() override;
 
    bool hasHeightForWidth() const override;
-   int heightForWidth(int) const override;
+   int heightForWidth(int width) const override;
 
    QSizePolicy::ControlTypes controlTypes() const override;
 

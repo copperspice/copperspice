@@ -73,8 +73,8 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    int margin() const;
    int spacing() const;
 
-   void setMargin(int);
-   void setSpacing(int);
+   void setMargin(int margin);
+   void setSpacing(int spacing);
 
    void setContentsMargins(int left, int top, int right, int bottom);
    void setContentsMargins(const QMargins &margins);
@@ -82,15 +82,15 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    QMargins contentsMargins() const;
    QRect contentsRect() const;
 
-   bool setAlignment(QWidget *w, Qt::Alignment alignment);
-   bool setAlignment(QLayout *l, Qt::Alignment alignment);
+   bool setAlignment(QWidget *widget, Qt::Alignment alignment);
+   bool setAlignment(QLayout *layout, Qt::Alignment alignment);
 
    using QLayoutItem::setAlignment;
 
-   void setSizeConstraint(SizeConstraint);
+   void setSizeConstraint(SizeConstraint constraint);
    SizeConstraint sizeConstraint() const;
 
-   void setMenuBar(QWidget *w);
+   void setMenuBar(QWidget *widget);
    QWidget *menuBar() const;
 
    QWidget *parentWidget() const;
@@ -101,45 +101,47 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    void update();
 
    void addWidget(QWidget *w);
-   virtual void addItem(QLayoutItem *) = 0;
+   virtual void addItem(QLayoutItem *item) = 0;
 
-   void removeWidget(QWidget *w);
-   void removeItem(QLayoutItem *);
+   void removeWidget(QWidget *widget);
+   void removeItem(QLayoutItem *item);
 
    Qt::Orientations expandingDirections() const override;
    QSize minimumSize() const override;
    QSize maximumSize() const override;
-   void setGeometry(const QRect &) override;
+   void setGeometry(const QRect &rect) override;
 
    virtual QLayoutItem *itemAt(int index) const = 0;
    virtual QLayoutItem *takeAt(int index) = 0;
-   virtual int indexOf(QWidget *) const;
+   virtual int indexOf(QWidget *widget) const;
    virtual int count() const = 0;
 
    bool isEmpty() const override;
    QSizePolicy::ControlTypes controlTypes() const override;
 
-   virtual QLayoutItem *replaceWidget(QWidget *from, QWidget *to, Qt::FindChildOptions options = Qt::FindChildrenRecursively);
-   int totalHeightForWidth(int w) const;
+   virtual QLayoutItem *replaceWidget(QWidget *from, QWidget *to,
+      Qt::FindChildOptions options = Qt::FindChildrenRecursively);
+
+   int totalHeightForWidth(int width) const;
    QSize totalMinimumSize() const;
    QSize totalMaximumSize() const;
    QSize totalSizeHint() const;
    QLayout *layout() override;
 
-   void setEnabled(bool);
+   void setEnabled(bool enable);
    bool isEnabled() const;
 
-   static QSize closestAcceptableSize(const QWidget *w, const QSize &s);
+   static QSize closestAcceptableSize(const QWidget *widget, const QSize &size);
 
  protected:
-   void widgetEvent(QEvent *);
-   void childEvent(QChildEvent *e) override;
-   void addChildLayout(QLayout *l);
-   void addChildWidget(QWidget *w);
+   void widgetEvent(QEvent *event);
+   void childEvent(QChildEvent *event) override;
+   void addChildLayout(QLayout *layout);
+   void addChildWidget(QWidget *widget);
    bool adoptLayout(QLayout *layout);
 
-   QRect alignmentRect(const QRect &) const;
-   QLayout(QLayoutPrivate &d, QLayout *, QWidget *);
+   QRect alignmentRect(const QRect &rect) const;
+   QLayout(QLayoutPrivate &d, QLayout *layout, QWidget *widget);
 
    QScopedPointer<QLayoutPrivate> d_ptr;
 

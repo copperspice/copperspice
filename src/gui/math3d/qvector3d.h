@@ -151,19 +151,19 @@ inline qreal QVector3D::z() const
    return qreal(zp);
 }
 
-inline void QVector3D::setX(qreal aX)
+inline void QVector3D::setX(qreal x)
 {
-   xp = aX;
+   xp = x;
 }
 
-inline void QVector3D::setY(qreal aY)
+inline void QVector3D::setY(qreal y)
 {
-   yp = aY;
+   yp = y;
 }
 
-inline void QVector3D::setZ(qreal aZ)
+inline void QVector3D::setZ(qreal z)
 {
-   zp = aZ;
+   zp = z;
 }
 
 inline QVector3D &QVector3D::operator+=(const QVector3D &vector)

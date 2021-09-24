@@ -124,18 +124,20 @@ inline qreal QVector2D::x() const
 {
    return qreal(xp);
 }
+
 inline qreal QVector2D::y() const
 {
    return qreal(yp);
 }
 
-inline void QVector2D::setX(qreal aX)
+inline void QVector2D::setX(qreal x)
 {
-   xp = aX;
+   xp = x;
 }
-inline void QVector2D::setY(qreal aY)
+
+inline void QVector2D::setY(qreal y)
 {
-   yp = aY;
+   yp = y;
 }
 
 inline QVector2D &QVector2D::operator+=(const QVector2D &vector)

@@ -66,13 +66,13 @@ class Q_GUI_EXPORT QPrintPreviewWidget : public QWidget
    GUI_CS_SLOT_1(Public, void print())
    GUI_CS_SLOT_2(print)
 
-   GUI_CS_SLOT_1(Public, void zoomIn(qreal zoom = 1.1))
+   GUI_CS_SLOT_1(Public, void zoomIn(qreal factor = 1.1))
    GUI_CS_SLOT_2(zoomIn)
 
-   GUI_CS_SLOT_1(Public, void zoomOut(qreal zoom = 1.1))
+   GUI_CS_SLOT_1(Public, void zoomOut(qreal factor = 1.1))
    GUI_CS_SLOT_2(zoomOut)
 
-   GUI_CS_SLOT_1(Public, void setZoomFactor(qreal zoomFactor))
+   GUI_CS_SLOT_1(Public, void setZoomFactor(qreal factor))
    GUI_CS_SLOT_2(setZoomFactor)
 
    GUI_CS_SLOT_1(Public, void setOrientation(QPrinter::Orientation orientation))

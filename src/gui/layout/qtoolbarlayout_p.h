@@ -61,7 +61,7 @@ class QToolBarLayout : public QLayout
    void invalidate() override;
    Qt::Orientations expandingDirections() const override;
 
-   void setGeometry(const QRect &r) override;
+   void setGeometry(const QRect &rect) override;
    QSize minimumSize() const override;
    QSize sizeHint() const override;
 

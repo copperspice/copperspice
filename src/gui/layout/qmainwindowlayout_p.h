@@ -47,8 +47,8 @@ class QDockWidgetGroupWindow : public QWidget
    GUI_CS_OBJECT(QDockWidgetGroupWindow)
 
  public:
-   explicit QDockWidgetGroupWindow(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::EmptyFlag)
-      : QWidget(parent, f)
+   explicit QDockWidgetGroupWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag)
+      : QWidget(parent, flags)
    {}
 
    QDockAreaLayoutInfo *layoutInfo() const;
@@ -251,7 +251,7 @@ class QMainWindowLayout : public QLayout
 
    // QLayout interface
    void addItem(QLayoutItem *item) override;
-   void setGeometry(const QRect &r) override;
+   void setGeometry(const QRect &rect) override;
    QLayoutItem *itemAt(int index) const override;
    QLayoutItem *takeAt(int index) override;
    int count() const override;

@@ -79,7 +79,7 @@ class Q_GUI_EXPORT QPrintEngine
    virtual bool newPage() = 0;
    virtual bool abort() = 0;
 
-   virtual int metric(QPaintDevice::PaintDeviceMetric) const = 0;
+   virtual int metric(QPaintDevice::PaintDeviceMetric id) const = 0;
 
    virtual QPrinter::PrinterState printerState() const = 0;
 

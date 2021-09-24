@@ -37,8 +37,8 @@ class Q_GUI_EXPORT QLayoutPrivate
 
  public:
    typedef QWidgetItem *(*QWidgetItemFactoryMethod)(const QLayout *layout, QWidget *widget);
-   typedef QSpacerItem *(*QSpacerItemFactoryMethod)(const QLayout *layout, int w, int h, QSizePolicy::Policy hPolicy,
-      QSizePolicy::Policy);
+   typedef QSpacerItem *(*QSpacerItemFactoryMethod)(const QLayout *layout, int w, int h,
+      QSizePolicy::Policy hPolicy, QSizePolicy::Policy);
 
    QLayoutPrivate();
    virtual ~QLayoutPrivate() {}

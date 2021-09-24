@@ -75,37 +75,38 @@ class Q_GUI_EXPORT QGridLayout : public QLayout
    QRect cellRect(int row, int column) const;
 
    bool hasHeightForWidth() const override;
-   int heightForWidth(int) const override;
-   int minimumHeightForWidth(int) const override;
+   int heightForWidth(int width) const override;
+   int minimumHeightForWidth(int width) const override;
 
    Qt::Orientations expandingDirections() const override;
    void invalidate() override;
 
-   void addWidget(QWidget *w) {
-      QLayout::addWidget(w);
+   void addItem(QLayoutItem *item, int row, int column, int rowSpan = 1, int columnSpan = 1, Qt::Alignment alignment = Qt::Alignment());
+
+   void addWidget(QWidget *widget) {
+      QLayout::addWidget(widget);
    }
 
-   void addWidget(QWidget *, int row, int column, Qt::Alignment = Qt::Alignment());
-   void addWidget(QWidget *, int row, int column, int rowSpan, int columnSpan, Qt::Alignment = Qt::Alignment());
-   void addLayout(QLayout *, int row, int column, Qt::Alignment = Qt::Alignment());
-   void addLayout(QLayout *, int row, int column, int rowSpan, int columnSpan, Qt::Alignment = Qt::Alignment());
+   void addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment());
+   void addWidget(QWidget *widget, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = Qt::Alignment());
 
-   void setOriginCorner(Qt::Corner);
+   void addLayout(QLayout *layout, int row, int column, Qt::Alignment alignment = Qt::Alignment());
+   void addLayout(QLayout *layout, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = Qt::Alignment());
+
+   void setOriginCorner(Qt::Corner corner);
    Qt::Corner originCorner() const;
 
    QLayoutItem *itemAt(int index) const override;
    QLayoutItem *itemAtPosition(int row, int column) const;
    QLayoutItem *takeAt(int index) override;
    int count() const override;
-   void setGeometry(const QRect &) override;
-
-   void addItem(QLayoutItem *item, int row, int column, int rowSpan = 1, int columnSpan = 1, Qt::Alignment = Qt::Alignment());
+   void setGeometry(const QRect &rect) override;
 
    void setDefaultPositioning(int index, Qt::Orientation orient);
    void getItemPosition(int index, int *row, int *column, int *rowSpan, int *columnSpan) const;
 
  protected:
-   void addItem(QLayoutItem *) override;
+   void addItem(QLayoutItem *item) override;
 
  private:
    Q_DECLARE_PRIVATE(QGridLayout)
