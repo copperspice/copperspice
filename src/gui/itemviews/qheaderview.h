@@ -228,13 +228,13 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    void initializeSections(int start, int end);
    void currentChanged(const QModelIndex &current, const QModelIndex &old) override;
 
-   bool event(QEvent *e) override;
-   void paintEvent(QPaintEvent *e) override;
-   void mousePressEvent(QMouseEvent *e) override;
-   void mouseMoveEvent(QMouseEvent *e) override;
-   void mouseReleaseEvent(QMouseEvent *e) override;
-   void mouseDoubleClickEvent(QMouseEvent *e) override;
-   bool viewportEvent(QEvent *e) override;
+   bool event(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void mouseDoubleClickEvent(QMouseEvent *event) override;
+   bool viewportEvent(QEvent *event) override;
 
    virtual void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const;
    virtual QSize sectionSizeFromContents(int logicalIndex) const;
@@ -271,24 +271,24 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    GUI_CS_SLOT_2(_q_layoutAboutToBeChanged)
 };
 
-inline int QHeaderView::logicalIndexAt(int ax, int ay) const
+inline int QHeaderView::logicalIndexAt(int x, int y) const
 {
-   return orientation() == Qt::Horizontal ? logicalIndexAt(ax) : logicalIndexAt(ay);
+   return orientation() == Qt::Horizontal ? logicalIndexAt(x) : logicalIndexAt(y);
 }
 
-inline int QHeaderView::logicalIndexAt(const QPoint &apos) const
+inline int QHeaderView::logicalIndexAt(const QPoint &pos) const
 {
-   return logicalIndexAt(apos.x(), apos.y());
+   return logicalIndexAt(pos.x(), pos.y());
 }
 
-inline void QHeaderView::hideSection(int alogicalIndex)
+inline void QHeaderView::hideSection(int logicalIndex)
 {
-   setSectionHidden(alogicalIndex, true);
+   setSectionHidden(logicalIndex, true);
 }
 
-inline void QHeaderView::showSection(int alogicalIndex)
+inline void QHeaderView::showSection(int logicalIndex)
 {
-   setSectionHidden(alogicalIndex, false);
+   setSectionHidden(logicalIndex, false);
 }
 
 #endif // QT_NO_ITEMVIEWS

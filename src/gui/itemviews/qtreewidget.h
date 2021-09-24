@@ -50,15 +50,17 @@ class Q_GUI_EXPORT QTreeWidgetItem
 
    explicit QTreeWidgetItem(int type = Type);
    explicit QTreeWidgetItem(const QStringList &strings, int type = Type);
-   explicit QTreeWidgetItem(QTreeWidget *view, int type = Type);
 
+   explicit QTreeWidgetItem(QTreeWidget *view, int type = Type);
    QTreeWidgetItem(QTreeWidget *view, const QStringList &strings, int type = Type);
-   QTreeWidgetItem(QTreeWidget *view, QTreeWidgetItem *after, int type = Type);
+   QTreeWidgetItem(QTreeWidget *view, QTreeWidgetItem *previous , int type = Type);
 
    explicit QTreeWidgetItem(QTreeWidgetItem *parent, int type = Type);
    QTreeWidgetItem(QTreeWidgetItem *parent, const QStringList &strings, int type = Type);
-   QTreeWidgetItem(QTreeWidgetItem *parent, QTreeWidgetItem *after, int type = Type);
+   QTreeWidgetItem(QTreeWidgetItem *parent, QTreeWidgetItem *previous , int type = Type);
+
    QTreeWidgetItem(const QTreeWidgetItem &other);
+
    virtual ~QTreeWidgetItem();
 
    virtual QTreeWidgetItem *clone() const;
@@ -250,46 +252,46 @@ class Q_GUI_EXPORT QTreeWidgetItem
    Qt::ItemFlags itemFlags;
 };
 
-inline void QTreeWidgetItem::setText(int column, const QString &atext)
+inline void QTreeWidgetItem::setText(int column, const QString &text)
 {
-   setData(column, Qt::DisplayRole, atext);
+   setData(column, Qt::DisplayRole, text);
 }
 
-inline void QTreeWidgetItem::setIcon(int column, const QIcon &aicon)
+inline void QTreeWidgetItem::setIcon(int column, const QIcon &icon)
 {
-   setData(column, Qt::DecorationRole, aicon);
+   setData(column, Qt::DecorationRole, icon);
 }
 
 #ifndef QT_NO_STATUSTIP
-inline void QTreeWidgetItem::setStatusTip(int column, const QString &astatusTip)
+inline void QTreeWidgetItem::setStatusTip(int column, const QString &statusTip)
 {
-   setData(column, Qt::StatusTipRole, astatusTip);
+   setData(column, Qt::StatusTipRole, statusTip);
 }
 #endif
 
 #ifndef QT_NO_TOOLTIP
-inline void QTreeWidgetItem::setToolTip(int column, const QString &atoolTip)
+inline void QTreeWidgetItem::setToolTip(int column, const QString &toolTip)
 {
-   setData(column, Qt::ToolTipRole, atoolTip);
+   setData(column, Qt::ToolTipRole, toolTip);
 }
 #endif
 
 #ifndef QT_NO_WHATSTHIS
-inline void QTreeWidgetItem::setWhatsThis(int column, const QString &awhatsThis)
+inline void QTreeWidgetItem::setWhatsThis(int column, const QString &whatsThis)
 {
-   setData(column, Qt::WhatsThisRole, awhatsThis);
+   setData(column, Qt::WhatsThisRole, whatsThis);
 }
 #endif
 
-inline void QTreeWidgetItem::setFont(int column, const QFont &afont)
+inline void QTreeWidgetItem::setFont(int column, const QFont &font)
 {
-   setData(column, Qt::FontRole, afont);
+   setData(column, Qt::FontRole, font);
 }
 
-inline int QTreeWidgetItem::indexOfChild(QTreeWidgetItem *achild) const
+inline int QTreeWidgetItem::indexOfChild(QTreeWidgetItem *child) const
 {
    executePendingSort();
-   return children.indexOf(achild);
+   return children.indexOf(child);
 }
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QTreeWidgetItem &item);
@@ -416,7 +418,7 @@ class Q_GUI_EXPORT QTreeWidget : public QTreeView
    GUI_CS_SIGNAL_2(itemSelectionChanged)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    virtual QStringList mimeTypes() const;
    virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> &items) const;
    virtual bool dropMimeData(QTreeWidgetItem *parent, int index,
@@ -479,20 +481,20 @@ inline void QTreeWidget::removeItemWidget(QTreeWidgetItem *item, int column)
    setItemWidget(item, column, nullptr);
 }
 
-inline QTreeWidgetItem *QTreeWidget::itemAt(int ax, int ay) const
+inline QTreeWidgetItem *QTreeWidget::itemAt(int x, int y) const
 {
-   return itemAt(QPoint(ax, ay));
+   return itemAt(QPoint(x, y));
 }
 
-inline void QTreeWidget::setHeaderLabel(const QString &alabel)
+inline void QTreeWidget::setHeaderLabel(const QString &label)
 {
-   setHeaderLabels(QStringList(alabel));
+   setHeaderLabels(QStringList(label));
 }
 
-inline void QTreeWidgetItem::setSelected(bool aselect)
+inline void QTreeWidgetItem::setSelected(bool select)
 {
    if (view) {
-      view->setItemSelected(this, aselect);
+      view->setItemSelected(this, select);
    }
 }
 
@@ -501,10 +503,10 @@ inline bool QTreeWidgetItem::isSelected() const
    return (view ? view->isItemSelected(this) : false);
 }
 
-inline void QTreeWidgetItem::setHidden(bool ahide)
+inline void QTreeWidgetItem::setHidden(bool hide)
 {
    if (view) {
-      view->setItemHidden(this, ahide);
+      view->setItemHidden(this, hide);
    }
 }
 
@@ -513,10 +515,10 @@ inline bool QTreeWidgetItem::isHidden() const
    return (view ? view->isItemHidden(this) : false);
 }
 
-inline void QTreeWidgetItem::setExpanded(bool aexpand)
+inline void QTreeWidgetItem::setExpanded(bool expand)
 {
    if (view) {
-      view->setItemExpanded(this, aexpand);
+      view->setItemExpanded(this, expand);
    }
 }
 
@@ -525,10 +527,10 @@ inline bool QTreeWidgetItem::isExpanded() const
    return (view ? view->isItemExpanded(this) : false);
 }
 
-inline void QTreeWidgetItem::setFirstColumnSpanned(bool aspan)
+inline void QTreeWidgetItem::setFirstColumnSpanned(bool span)
 {
    if (view) {
-      view->setFirstItemColumnSpanned(this, aspan);
+      view->setFirstItemColumnSpanned(this, span);
    }
 }
 

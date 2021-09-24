@@ -38,8 +38,10 @@ class Q_GUI_EXPORT QDirModel : public QAbstractItemModel
 
    GUI_CS_PROPERTY_READ(resolveSymlinks, resolveSymlinks)
    GUI_CS_PROPERTY_WRITE(resolveSymlinks, setResolveSymlinks)
+
    GUI_CS_PROPERTY_READ(readOnly, isReadOnly)
    GUI_CS_PROPERTY_WRITE(readOnly, setReadOnly)
+
    GUI_CS_PROPERTY_READ(lazyChildCount, lazyChildCount)
    GUI_CS_PROPERTY_WRITE(lazyChildCount, setLazyChildCount)
 
@@ -70,15 +72,17 @@ class Q_GUI_EXPORT QDirModel : public QAbstractItemModel
 
    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-   bool hasChildren(const QModelIndex &index = QModelIndex()) const override;
+   bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
    QStringList mimeTypes() const override;
    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+
    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
       int row, int column, const QModelIndex &parent) override;
+
    Qt::DropActions supportedDropActions() const override;
 
    // QDirModel specific API

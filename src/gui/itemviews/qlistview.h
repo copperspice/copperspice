@@ -151,7 +151,7 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
  protected:
    QListView(QListViewPrivate &, QWidget *parent = nullptr);
 
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
    void scrollContentsBy(int dx, int dy) override;
 
@@ -162,26 +162,26 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    void rowsInserted(const QModelIndex &parent, int start, int end) override;
    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
 
-   void mouseMoveEvent(QMouseEvent *e) override;
-   void mouseReleaseEvent(QMouseEvent *e) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *e) override;
+   void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   void timerEvent(QTimerEvent *e) override;
-   void resizeEvent(QResizeEvent *e) override;
+   void timerEvent(QTimerEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
 
 #ifndef QT_NO_DRAGANDDROP
-   void dragMoveEvent(QDragMoveEvent *e) override;
-   void dragLeaveEvent(QDragLeaveEvent *e) override;
-   void dropEvent(QDropEvent *e) override;
+   void dragMoveEvent(QDragMoveEvent *event) override;
+   void dragLeaveEvent(QDragLeaveEvent *event) override;
+   void dropEvent(QDropEvent *event) override;
 
    void startDrag(Qt::DropActions supportedActions) override;
 #endif
 
    QStyleOptionViewItem viewOptions() const override;
-   void paintEvent(QPaintEvent *e) override;
+   void paintEvent(QPaintEvent *event) override;
 
    int horizontalOffset() const override;
    int verticalOffset() const override;
@@ -189,7 +189,7 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    QRect rectForIndex(const QModelIndex &index) const;
    void setPositionForIndex(const QPoint &position, const QModelIndex &index);
 
-   void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command) override;
+   void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags flags) override;
    QRegion visualRegionForSelection(const QItemSelection &selection) const override;
    QModelIndexList selectedIndexes() const override;
 

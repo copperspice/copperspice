@@ -37,7 +37,7 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
 {
  public:
    explicit QPicture(int formatVersion = -1);
-   QPicture(const QPicture &);
+   QPicture(const QPicture &other);
 
    ~QPicture();
 
@@ -49,7 +49,7 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
    const char *data() const;
    virtual void setData(const char *data, uint size);
 
-   bool play(QPainter *p);
+   bool play(QPainter *painter);
 
    bool load(QIODevice *dev, const QString &format = QString());
    bool load(const QString &fileName, const QString &format = QString());
@@ -57,9 +57,9 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
    bool save(const QString &fileName, const QString &format = QString());
 
    QRect boundingRect() const;
-   void setBoundingRect(const QRect &r);
+   void setBoundingRect(const QRect &rect);
 
-   QPicture &operator=(const QPicture &p);
+   QPicture &operator=(const QPicture &other);
 
    QPicture &operator=(QPicture &&other) {
       qSwap(d_ptr, other.d_ptr);
@@ -138,26 +138,26 @@ class Q_GUI_EXPORT QPictureIO
    const char *parameters() const;
    float gamma() const;
 
-   void setPicture(const QPicture &);
-   void setStatus(int);
-   void setFormat(const QString &);
-   void setIODevice(QIODevice *);
-   void setFileName(const QString &);
-   void setQuality(int);
-   void setDescription(const QString &);
-   void setParameters(const char *);
-   void setGamma(float);
+   void setPicture(const QPicture &picture);
+   void setStatus(int status);
+   void setFormat(const QString &format);
+   void setIODevice(QIODevice *ioDevice);
+   void setFileName(const QString &fileName);
+   void setQuality(int q);
+   void setDescription(const QString &description);
+   void setParameters(const char *parameters);
+   void setGamma(float gamma);
 
    bool read();
    bool write();
 
    static QString pictureFormat(const QString &fileName);
-   static QString pictureFormat(QIODevice *);
+   static QString pictureFormat(QIODevice *ioDevice);
    static QStringList inputFormats();
    static QStringList outputFormats();
 
    static void defineIOHandler(const QString &format, const QString &header, const char *flags,
-      picture_io_handler read_picture, picture_io_handler write_picture);
+      picture_io_handler readPicture, picture_io_handler writePicture);
 
  private:
    void init();

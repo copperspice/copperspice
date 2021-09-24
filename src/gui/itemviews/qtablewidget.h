@@ -213,43 +213,42 @@ class Q_GUI_EXPORT QTableWidgetItem
    Qt::ItemFlags itemFlags;
 };
 
-inline void QTableWidgetItem::setText(const QString &atext)
+inline void QTableWidgetItem::setText(const QString &text)
 {
-   setData(Qt::DisplayRole, atext);
+   setData(Qt::DisplayRole, text);
 }
 
-inline void QTableWidgetItem::setIcon(const QIcon &aicon)
+inline void QTableWidgetItem::setIcon(const QIcon &icon)
 {
-   setData(Qt::DecorationRole, aicon);
+   setData(Qt::DecorationRole, icon);
 }
 
-inline void QTableWidgetItem::setStatusTip(const QString &astatusTip)
+inline void QTableWidgetItem::setStatusTip(const QString &statusTip)
 {
-   setData(Qt::StatusTipRole, astatusTip);
+   setData(Qt::StatusTipRole, statusTip);
 }
 
 #ifndef QT_NO_TOOLTIP
-inline void QTableWidgetItem::setToolTip(const QString &atoolTip)
+inline void QTableWidgetItem::setToolTip(const QString &toolTip)
 {
-   setData(Qt::ToolTipRole, atoolTip);
+   setData(Qt::ToolTipRole, toolTip);
 }
 #endif
 
 #ifndef QT_NO_WHATSTHIS
-inline void QTableWidgetItem::setWhatsThis(const QString &awhatsThis)
+inline void QTableWidgetItem::setWhatsThis(const QString &whatsThis)
 {
-   setData(Qt::WhatsThisRole, awhatsThis);
+   setData(Qt::WhatsThisRole, whatsThis);
 }
 #endif
 
-inline void QTableWidgetItem::setFont(const QFont &afont)
+inline void QTableWidgetItem::setFont(const QFont &font)
 {
-   setData(Qt::FontRole, afont);
+   setData(Qt::FontRole, font);
 }
 
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QTableWidgetItem &item);
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QTableWidgetItem &item);
-
 
 class QTableWidgetPrivate;
 
@@ -328,7 +327,7 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
    int visualRow(int logicalRow) const;
    int visualColumn(int logicalColumn) const;
 
-   QTableWidgetItem *itemAt(const QPoint &p) const;
+   QTableWidgetItem *itemAt(const QPoint &point) const;
    inline QTableWidgetItem *itemAt(int x, int y) const;
    QRect visualItemRect(const QTableWidgetItem *item) const;
 
@@ -396,7 +395,7 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
    GUI_CS_SIGNAL_2(currentCellChanged, currentRow, currentColumn, previousRow, previousColumn)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    virtual QStringList mimeTypes() const;
    virtual QMimeData *mimeData(const QList<QTableWidgetItem *> &items) const;
 
@@ -441,14 +440,14 @@ class Q_GUI_EXPORT QTableWidget : public QTableView
    GUI_CS_SLOT_2(_q_dataChanged)
 };
 
-inline void QTableWidget::removeCellWidget(int arow, int acolumn)
+inline void QTableWidget::removeCellWidget(int row, int column)
 {
-   setCellWidget(arow, acolumn, nullptr);
+   setCellWidget(row, column, nullptr);
 }
 
-inline QTableWidgetItem *QTableWidget::itemAt(int ax, int ay) const
+inline QTableWidgetItem *QTableWidget::itemAt(int x, int y) const
 {
-   return itemAt(QPoint(ax, ay));
+   return itemAt(QPoint(x, y));
 }
 
 inline int QTableWidgetItem::row() const
@@ -461,10 +460,10 @@ inline int QTableWidgetItem::column() const
    return (view ? view->column(this) : -1);
 }
 
-inline void QTableWidgetItem::setSelected(bool aselect)
+inline void QTableWidgetItem::setSelected(bool select)
 {
    if (view) {
-      view->setItemSelected(this, aselect);
+      view->setItemSelected(this, select);
    }
 }
 
@@ -474,7 +473,5 @@ inline bool QTableWidgetItem::isSelected() const
 }
 
 #endif // QT_NO_TABLEWIDGET
-
-
 
 #endif // QTABLEWIDGET_H

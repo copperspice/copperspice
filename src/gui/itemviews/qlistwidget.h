@@ -49,7 +49,9 @@ class Q_GUI_EXPORT QListWidgetItem
    explicit QListWidgetItem(QListWidget *view = nullptr, int type = Type);
    explicit QListWidgetItem(const QString &text, QListWidget *view = nullptr, int type = Type);
    explicit QListWidgetItem(const QIcon &icon, const QString &text, QListWidget *view = nullptr, int type = Type);
+
    QListWidgetItem(const QListWidgetItem &other);
+
    virtual ~QListWidgetItem();
 
    virtual QListWidgetItem *clone() const;
@@ -181,45 +183,42 @@ class Q_GUI_EXPORT QListWidgetItem
    Qt::ItemFlags itemFlags;
 };
 
-inline void QListWidgetItem::setText(const QString &atext)
+inline void QListWidgetItem::setText(const QString &text)
 {
-   setData(Qt::DisplayRole, atext);
+   setData(Qt::DisplayRole, text);
 }
 
-inline void QListWidgetItem::setIcon(const QIcon &aicon)
+inline void QListWidgetItem::setIcon(const QIcon &icon)
 {
-   setData(Qt::DecorationRole, aicon);
+   setData(Qt::DecorationRole, icon);
 }
 
-inline void QListWidgetItem::setStatusTip(const QString &astatusTip)
+inline void QListWidgetItem::setStatusTip(const QString &statusTip)
 {
-   setData(Qt::StatusTipRole, astatusTip);
+   setData(Qt::StatusTipRole, statusTip);
 }
 
 #ifndef QT_NO_TOOLTIP
-inline void QListWidgetItem::setToolTip(const QString &atoolTip)
+inline void QListWidgetItem::setToolTip(const QString &toolTip)
 {
-   setData(Qt::ToolTipRole, atoolTip);
+   setData(Qt::ToolTipRole, toolTip);
 }
 #endif
 
 #ifndef QT_NO_WHATSTHIS
-inline void QListWidgetItem::setWhatsThis(const QString &awhatsThis)
+inline void QListWidgetItem::setWhatsThis(const QString &whatsThis)
 {
-   setData(Qt::WhatsThisRole, awhatsThis);
+   setData(Qt::WhatsThisRole, whatsThis);
 }
 #endif
 
-inline void QListWidgetItem::setFont(const QFont &afont)
+inline void QListWidgetItem::setFont(const QFont &font)
 {
-   setData(Qt::FontRole, afont);
+   setData(Qt::FontRole, font);
 }
-
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QListWidgetItem &item);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QListWidgetItem &item);
-
-
 
 class Q_GUI_EXPORT QListWidget : public QListView
 {
@@ -338,7 +337,7 @@ class Q_GUI_EXPORT QListWidget : public QListView
    GUI_CS_SIGNAL_2(itemSelectionChanged)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    virtual QStringList mimeTypes() const;
    virtual QMimeData *mimeData(const QList<QListWidgetItem *> &items) const;
 
@@ -391,25 +390,25 @@ void QListWidget::cs_setCurrentRow(int row)
    setCurrentRow(row);
 }
 
-void QListWidget::removeItemWidget(QListWidgetItem *aItem)
+void QListWidget::removeItemWidget(QListWidgetItem *item)
 {
-   setItemWidget(aItem, nullptr);
+   setItemWidget(item, nullptr);
 }
 
-void QListWidget::addItem(QListWidgetItem *aitem)
+void QListWidget::addItem(QListWidgetItem *item)
 {
-   insertItem(count(), aitem);
+   insertItem(count(), item);
 }
 
-QListWidgetItem *QListWidget::itemAt(int ax, int ay) const
+QListWidgetItem *QListWidget::itemAt(int x, int y) const
 {
-   return itemAt(QPoint(ax, ay));
+   return itemAt(QPoint(x, y));
 }
 
-void QListWidgetItem::setSelected(bool aselect)
+void QListWidgetItem::setSelected(bool select)
 {
    if (view) {
-      view->setItemSelected(this, aselect);
+      view->setItemSelected(this, select);
    }
 }
 
@@ -418,10 +417,10 @@ bool QListWidgetItem::isSelected() const
    return (view ? view->isItemSelected(this) : false);
 }
 
-void QListWidgetItem::setHidden(bool ahide)
+void QListWidgetItem::setHidden(bool hide)
 {
    if (view) {
-      view->setItemHidden(this, ahide);
+      view->setItemHidden(this, hide);
    }
 }
 
@@ -429,7 +428,6 @@ bool QListWidgetItem::isHidden() const
 {
    return (view ? view->isItemHidden(this) : false);
 }
-
 
 #endif // QT_NO_LISTWIDGET
 

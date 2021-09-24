@@ -106,10 +106,10 @@ class Q_GUI_EXPORT QIcon
    static bool hasThemeIcon(const QString &name);
 
    static QStringList themeSearchPaths();
-   static void setThemeSearchPaths(const QStringList &searchpath);
+   static void setThemeSearchPaths(const QStringList &paths);
 
    static QString themeName();
-   static void setThemeName(const QString &path);
+   static void setThemeName(const QString &theme);
 
    typedef QIconPrivate *DataPtr;
    inline DataPtr &data_ptr() {

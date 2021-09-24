@@ -112,7 +112,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    void setFirstColumnSpanned(int row, const QModelIndex &parent, bool span);
 
    bool isExpanded(const QModelIndex &index) const;
-   void setExpanded(const QModelIndex &index, bool expand);
+   void setExpanded(const QModelIndex &index, bool expanded);
 
    void setSortingEnabled(bool enable);
    bool isSortingEnabled() const;
@@ -132,7 +132,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 
    QRect visualRect(const QModelIndex &index) const override;
    void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible) override;
-   QModelIndex indexAt(const QPoint &p) const override;
+   QModelIndex indexAt(const QPoint &point) const override;
    QModelIndex indexAbove(const QModelIndex &index) const;
    QModelIndex indexBelow(const QModelIndex &index) const;
 
@@ -195,7 +195,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    void paintEvent(QPaintEvent *event) override;
 
    void drawTree(QPainter *painter, const QRegion &region) const;
-   virtual void drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const;
+   virtual void drawRow(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
    virtual void drawBranches(QPainter *painter, const QRect &rect, const QModelIndex &index) const;
 
    void mousePressEvent(QMouseEvent *event) override;
@@ -236,7 +236,7 @@ class Q_GUI_EXPORT QTreeView : public QAbstractItemView
    GUI_CS_SLOT_1(Protected, void reexpand())
    GUI_CS_SLOT_2(reexpand)
 
-   GUI_CS_SLOT_1(Protected, void rowsRemoved(const QModelIndex &parent, int first, int last))
+   GUI_CS_SLOT_1(Protected, void rowsRemoved(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(rowsRemoved)
 
  private:

@@ -75,7 +75,7 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
    bool isIndexHidden(const QModelIndex &index) const override;
    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
    void resizeEvent(QResizeEvent *event) override;
-   void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command) override;
+   void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags flags) override;
 
    QRegion visualRegionForSelection(const QItemSelection &selection) const override;
    int horizontalOffset() const override;
@@ -85,7 +85,7 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
 
    // QColumnView functions
    void scrollContentsBy(int dx, int dy) override;
-   virtual QAbstractItemView *createColumn(const QModelIndex &rootIndex);
+   virtual QAbstractItemView *createColumn(const QModelIndex &index);
    void initializeColumn(QAbstractItemView *column) const;
 
  private:

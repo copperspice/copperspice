@@ -48,8 +48,8 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
  public:
    QPixmap();
    explicit QPixmap(QPlatformPixmap *data);
-   QPixmap(int w, int h);
-   explicit QPixmap(const QSize &);
+   QPixmap(int width, int height);
+   explicit QPixmap(const QSize &size);
 
    QPixmap(const QString &fileName, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
 
@@ -57,10 +57,10 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    explicit QPixmap(const char *const xpm[]);
 #endif
 
-   QPixmap(const QPixmap &);
+   QPixmap(const QPixmap &pixmap);
    ~QPixmap();
 
-   QPixmap &operator=(const QPixmap &);
+   QPixmap &operator=(const QPixmap &pixmap);
 
    inline QPixmap &operator=(QPixmap &&other) {
       qSwap(data, other.data);
@@ -85,14 +85,14 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    static int defaultDepth();
 
    void fill(const QColor &fillColor = Qt::white);
-   void fill(const QPaintDevice *device, const QPoint &ofs);
+   void fill(const QPaintDevice *device, const QPoint &offset);
 
-   inline void fill(const QPaintDevice *device, int xofs, int yofs) {
-      fill(device, QPoint(xofs, yofs));
+   inline void fill(const QPaintDevice *device, int xOffset, int yOffset) {
+      fill(device, QPoint(xOffset, yOffset));
    }
 
    QBitmap mask() const;
-   void setMask(const QBitmap &);
+   void setMask(const QBitmap &mask);
    qreal devicePixelRatio() const;
    void setDevicePixelRatio(qreal scaleFactor);
 
@@ -105,25 +105,27 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
 
    QBitmap createMaskFromColor(const QColor &maskColor, Qt::MaskMode mode = Qt::MaskInColor) const;
 
-   static QPixmap grabWindow(WId, int x = 0, int y = 0, int w = -1, int h = -1);
+   static QPixmap grabWindow(WId window, int x = 0, int y = 0, int width = -1, int height = -1);
    static QPixmap grabWidget(QObject *widget, const QRect &rect);
-   static inline QPixmap grabWidget(QObject *widget, int x = 0, int y = 0, int w = -1, int h = -1) {
-      return grabWidget(widget, QRect(x, y, w, h));
+
+   static inline QPixmap grabWidget(QObject *widget, int x = 0, int y = 0, int width = -1, int height = -1) {
+      return grabWidget(widget, QRect(x, y, width, height));
    }
 
-   inline QPixmap scaled(int w, int h, Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio,
-      Qt::TransformationMode mode = Qt::FastTransformation) const {
-      return scaled(QSize(w, h), aspectMode, mode);
+   inline QPixmap scaled(int width, int height, Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio,
+      Qt::TransformationMode transformMode = Qt::FastTransformation) const {
+      return scaled(QSize(width, height), aspectMode, transformMode);
    }
 
-   QPixmap scaled(const QSize &s, Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio,
-      Qt::TransformationMode mode = Qt::FastTransformation) const;
-   QPixmap scaledToWidth(int w, Qt::TransformationMode mode = Qt::FastTransformation) const;
-   QPixmap scaledToHeight(int h, Qt::TransformationMode mode = Qt::FastTransformation) const;
-   QPixmap transformed(const QMatrix &, Qt::TransformationMode mode = Qt::FastTransformation) const;
-   static QMatrix trueMatrix(const QMatrix &m, int w, int h);
-   QPixmap transformed(const QTransform &, Qt::TransformationMode mode = Qt::FastTransformation) const;
-   static QTransform trueMatrix(const QTransform &m, int w, int h);
+   QPixmap scaled(const QSize &size, Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio,
+      Qt::TransformationMode transformMode = Qt::FastTransformation) const;
+
+   QPixmap scaledToWidth(int width, Qt::TransformationMode transformMode = Qt::FastTransformation) const;
+   QPixmap scaledToHeight(int height, Qt::TransformationMode transformMode = Qt::FastTransformation) const;
+   QPixmap transformed(const QMatrix &matrix, Qt::TransformationMode transformMode = Qt::FastTransformation) const;
+   static QMatrix trueMatrix(const QMatrix &matrix, int width, int height);
+   QPixmap transformed(const QTransform &transform, Qt::TransformationMode transformMode = Qt::FastTransformation) const;
+   static QTransform trueMatrix(const QTransform &transform, int width, int height);
 
    QImage toImage() const;
    static QPixmap fromImage(const QImage &image, Qt::ImageConversionFlags flags = Qt::AutoColor);
@@ -134,12 +136,15 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    }
 
    bool load(const QString &fileName, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
-   bool loadFromData(const uchar *buf, uint len, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
-   inline bool loadFromData(const QByteArray &data, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
+   bool loadFromData(const uchar *data, uint len, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
+
+   inline bool loadFromData(const QByteArray &data, const QString &format = QString(),
+         Qt::ImageConversionFlags flags = Qt::AutoColor);
+
    bool save(const QString &fileName, const QString &format = QString(), int quality = -1) const;
    bool save(QIODevice *device, const QString &format = QString(), int quality = -1) const;
 
-   bool convertFromImage(const QImage &img, Qt::ImageConversionFlags flags = Qt::AutoColor);
+   bool convertFromImage(const QImage &image, Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    inline QPixmap copy(int x, int y, int width, int height) const;
    QPixmap copy(const QRect &rect = QRect()) const;
@@ -193,19 +198,19 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPixmap &);
 };
 
-inline QPixmap QPixmap::copy(int ax, int ay, int awidth, int aheight) const
+inline QPixmap QPixmap::copy(int x, int y, int width, int height) const
 {
-   return copy(QRect(ax, ay, awidth, aheight));
+   return copy(QRect(x, y, width, height));
 }
 
-inline void QPixmap::scroll(int dx, int dy, int ax, int ay, int awidth, int aheight, QRegion *exposed)
+inline void QPixmap::scroll(int dx, int dy, int x, int y, int width, int height, QRegion *exposed)
 {
-   scroll(dx, dy, QRect(ax, ay, awidth, aheight), exposed);
+   scroll(dx, dy, QRect(x, y, width, height), exposed);
 }
 
-inline bool QPixmap::loadFromData(const QByteArray &buf, const QString &format, Qt::ImageConversionFlags flags)
+inline bool QPixmap::loadFromData(const QByteArray &data, const QString &format, Qt::ImageConversionFlags flags)
 {
-   return loadFromData(reinterpret_cast<const uchar *>(buf.constData()), buf.size(), format, flags);
+   return loadFromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format, flags);
 }
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPixmap &);

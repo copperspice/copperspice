@@ -53,15 +53,15 @@ class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
    virtual QModelIndex mapToSource(const QModelIndex &proxyIndex) const = 0;
    virtual QModelIndex mapFromSource(const QModelIndex &sourceIndex) const = 0;
 
-   virtual QItemSelection mapSelectionToSource(const QItemSelection &selection) const;
-   virtual QItemSelection mapSelectionFromSource(const QItemSelection &selection) const;
+   virtual QItemSelection mapSelectionToSource(const QItemSelection &proxySelection) const;
+   virtual QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection) const;
 
    bool submit() override;
    void revert() override;
 
    QVariant data(const QModelIndex &proxyIndex, int role = Qt::DisplayRole) const override;
    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-   QMap<int, QVariant> itemData(const QModelIndex &index) const override;
+   QMap<int, QVariant> itemData(const QModelIndex &proxyIndex) const override;
    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;

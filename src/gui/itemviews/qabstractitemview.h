@@ -359,7 +359,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 
    virtual bool isIndexHidden(const QModelIndex &index) const = 0;
 
-   virtual void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command) = 0;
+   virtual void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags flags) = 0;
    virtual QRegion visualRegionForSelection(const QItemSelection &selection) const = 0;
    virtual QModelIndexList selectedIndexes() const;
 

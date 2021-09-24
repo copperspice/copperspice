@@ -44,12 +44,11 @@ class Q_GUI_EXPORT QPictureFormatPlugin : public QObject
    explicit QPictureFormatPlugin(QObject *parent = nullptr);
    ~QPictureFormatPlugin();
 
-   virtual bool loadPicture(const QString &format, const QString &filename, QPicture *pic);
-   virtual bool savePicture(const QString &format, const QString &filename, const QPicture &pic);
+   virtual bool loadPicture(const QString &format, const QString &fileName, QPicture *picture);
+   virtual bool savePicture(const QString &format, const QString &fileName, const QPicture &picture);
    virtual bool installIOHandler(const QString &format) = 0;
 };
 
 #endif
-
 
 #endif

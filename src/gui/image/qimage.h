@@ -123,32 +123,33 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    int devType() const override;
 
-   bool operator==(const QImage &) const;
-   bool operator!=(const QImage &) const;
+   bool operator==(const QImage &other) const;
+   bool operator!=(const QImage &other) const;
+
    operator QVariant() const;
    void detach();
    bool isDetached() const;
 
    QImage copy(const QRect &rect = QRect()) const;
-   inline QImage copy(int x, int y, int w, int h) const {
-      return copy(QRect(x, y, w, h));
+   inline QImage copy(int x, int y, int width, int height) const {
+      return copy(QRect(x, y, width, height));
    }
 
    Format format() const;
 
-   QImage convertToFormat(Format f, Qt::ImageConversionFlags flags = Qt::AutoColor) const & {
-      return convertToFormat_helper(f, flags);
+   QImage convertToFormat(Format format, Qt::ImageConversionFlags flags = Qt::AutoColor) const & {
+      return convertToFormat_helper(format, flags);
    }
 
-   QImage convertToFormat(Format f, Qt::ImageConversionFlags flags = Qt::AutoColor) && {
-      if (convertToFormat_inplace(f, flags)) {
+   QImage convertToFormat(Format format, Qt::ImageConversionFlags flags = Qt::AutoColor) && {
+      if (convertToFormat_inplace(format, flags)) {
          return std::move(*this);
       } else {
-         return convertToFormat_helper(f, flags);
+         return convertToFormat_helper(format, flags);
       }
    }
 
-   QImage convertToFormat(Format f, const QVector<QRgb> &colorTable,
+   QImage convertToFormat(Format format, const QVector<QRgb> &colorTable,
       Qt::ImageConversionFlags flags = Qt::AutoColor) const;
 
    int width() const;
@@ -161,10 +162,10 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    int colorCount() const;
    int bitPlaneCount() const;
 
-   QRgb color(int i) const;
-   void setColor(int i, QRgb c);
+   QRgb color(int index) const;
+   void setColor(int index, QRgb colorValue);
 
-   void setColorCount(int);
+   void setColorCount(int colorCount);
 
    bool allGray() const;
    bool isGrayscale() const;
@@ -175,9 +176,9 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    int byteCount() const;
 
-   uchar *scanLine(int);
-   const uchar *scanLine(int) const;
-   const uchar *constScanLine(int) const;
+   uchar *scanLine(int index);
+   const uchar *scanLine(int index) const;
+   const uchar *constScanLine(int index) const;
    int bytesPerLine() const;
 
    bool valid(int x, int y) const;
@@ -203,7 +204,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    qreal devicePixelRatio() const;
    void setDevicePixelRatio(qreal scaleFactor);
 
-   void fill(uint pixel);
+   void fill(uint pixelValue);
    void fill(const QColor &color);
    void fill(Qt::GlobalColor color);
 
@@ -218,25 +219,27 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    QImage createMaskFromColor(QRgb color, Qt::MaskMode mode = Qt::MaskInColor) const;
 
-   inline QImage scaled(int w, int h, Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio,
+   inline QImage scaled(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio,
       Qt::TransformationMode mode = Qt::FastTransformation) const {
-      return scaled(QSize(w, h), aspectMode, mode);
+      return scaled(QSize(width, height), aspectRatioMode, mode);
    }
 
-   QImage scaled(const QSize &s, Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio,
+   QImage scaled(const QSize &size, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio,
       Qt::TransformationMode mode = Qt::FastTransformation) const;
-   QImage scaledToWidth(int w, Qt::TransformationMode mode = Qt::FastTransformation) const;
-   QImage scaledToHeight(int h, Qt::TransformationMode mode = Qt::FastTransformation) const;
+
+   QImage scaledToWidth(int width, Qt::TransformationMode mode = Qt::FastTransformation) const;
+   QImage scaledToHeight(int height, Qt::TransformationMode mode = Qt::FastTransformation) const;
    QImage transformed(const QMatrix &matrix, Qt::TransformationMode mode = Qt::FastTransformation) const;
-   static QMatrix trueMatrix(const QMatrix &, int w, int h);
+   static QMatrix trueMatrix(const QMatrix &matrix, int width, int height);
    QImage transformed(const QTransform &matrix, Qt::TransformationMode mode = Qt::FastTransformation) const;
-   static QTransform trueMatrix(const QTransform &, int w, int h);
-   QImage mirrored(bool horizontally = false, bool vertically = true) const & {
-      return mirrored_helper(horizontally, vertically);
+   static QTransform trueMatrix(const QTransform &matrix, int width, int height);
+
+   QImage mirrored(bool horizontal = false, bool vertical = true) const & {
+      return mirrored_helper(horizontal, vertical);
    }
 
-   QImage &&mirrored(bool horizontally = false, bool vertically = true) && {
-      mirrored_inplace(horizontally, vertically);
+   QImage &&mirrored(bool horizontal = false, bool vertical = true) && {
+      mirrored_inplace(horizontal, vertical);
       return std::move(*this);
    }
 
@@ -249,14 +252,14 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
       return std::move(*this);
    }
 
-   void invertPixels(InvertMode = InvertRgb);
+   void invertPixels(InvertMode mode = InvertRgb);
 
    bool load(QIODevice *device, const QString &format);
    bool load(const QString &fileName, const QString &format = QString());
-   bool loadFromData(const uchar *buf, int len, const QString &format = QString());
+   bool loadFromData(const uchar *buffer, int len, const QString &format = QString());
 
-   inline bool loadFromData(const QByteArray &data, const QString &aformat = QString()) {
-      return loadFromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), aformat);
+   inline bool loadFromData(const QByteArray &data, const QString &format = QString()) {
+      return loadFromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format);
    }
 
    bool save(const QString &fileName, const QString &format = QString(), int quality = -1) const;
@@ -278,15 +281,15 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    // Auxiliary data
    int dotsPerMeterX() const;
    int dotsPerMeterY() const;
-   void setDotsPerMeterX(int);
-   void setDotsPerMeterY(int);
-   QPoint offset() const;
-   void setOffset(const QPoint &);
+   void setDotsPerMeterX(int x);
+   void setDotsPerMeterY(int y);
 
+   QPoint offset() const;
+   void setOffset(const QPoint &offset);
 
    QStringList textKeys() const;
    QString text(const QString &key = QString()) const;
-   void setText(const QString &key, const QString &value);
+   void setText(const QString &key, const QString &text);
 
    QPixelFormat pixelFormat() const;
    static QPixelFormat toPixelFormat(QImage::Format format);
@@ -306,7 +309,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    void rgbSwapped_inplace();
    QImage convertToFormat_helper(Format format, Qt::ImageConversionFlags flags) const;
    bool convertToFormat_inplace(Format format, Qt::ImageConversionFlags flags);
-   QImage smoothScaled(int w, int h) const;
+   QImage smoothScaled(int width, int height) const;
 
  private:
    QImageData *d;
@@ -345,9 +348,9 @@ inline QColor QImage::pixelColor(const QPoint &pt) const
    return pixelColor(pt.x(), pt.y());
 }
 
-inline void QImage::setPixelColor(const QPoint &pt, const QColor &c)
+inline void QImage::setPixelColor(const QPoint &pt, const QColor &color)
 {
-   setPixelColor(pt.x(), pt.y(), c);
+   setPixelColor(pt.x(), pt.y(), color);
 }
 
 

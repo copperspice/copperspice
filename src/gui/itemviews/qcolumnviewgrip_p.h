@@ -47,7 +47,8 @@ class QColumnViewGrip : public QWidget
    GUI_CS_SIGNAL_2(gripMoved, offset)
 
  protected:
-   QColumnViewGrip(QColumnViewGripPrivate &, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::EmptyFlag);
+   QColumnViewGrip(QColumnViewGripPrivate &, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
+
    void paintEvent(QPaintEvent *event) override;
    void mouseDoubleClickEvent(QMouseEvent *event) override;
    void mouseMoveEvent(QMouseEvent *event) override;

@@ -29,8 +29,6 @@
 #include <qhash.h>
 #include <qvariant.h>
 
-
-
 #ifndef QT_NO_ITEMVIEWS
 
 class QWidget;
@@ -83,8 +81,10 @@ class QStandardItemEditorCreator: public QItemEditorCreatorBase
 };
 
 
-template <class T> QItemEditorCreator<T>::QItemEditorCreator(const QString &avaluePropertyName)
-   : propertyName(avaluePropertyName) {}
+template <class T> QItemEditorCreator<T>::QItemEditorCreator(const QString &valuePropertyName)
+   : propertyName(valuePropertyName)
+{
+}
 
 class Q_GUI_EXPORT QItemEditorFactory
 {

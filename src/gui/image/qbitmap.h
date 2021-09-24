@@ -31,14 +31,15 @@ class Q_GUI_EXPORT QBitmap : public QPixmap
 {
  public:
    QBitmap();
-   QBitmap(const QPixmap &);
-   QBitmap(int w, int h);
-   explicit QBitmap(const QSize &);
+   QBitmap(const QPixmap &pixmap);
+   QBitmap(int width, int height);
+   explicit QBitmap(const QSize &size);
    explicit QBitmap(const QString &fileName, const QString &format = QString());
 
    ~QBitmap();
 
-   QBitmap &operator=(const QPixmap &);
+   QBitmap &operator=(const QPixmap &pixmap);
+
    inline void swap(QBitmap &other) {
       QPixmap::swap(other);   // prevent QBitmap<->QPixmap swaps
    }
@@ -53,7 +54,7 @@ class Q_GUI_EXPORT QBitmap : public QPixmap
    static QBitmap fromData(const QSize &size, const uchar *bits,
       QImage::Format monoFormat = QImage::Format_MonoLSB);
 
-   QBitmap transformed(const QMatrix &) const;
+   QBitmap transformed(const QMatrix &matrix) const;
    QBitmap transformed(const QTransform &matrix) const;
 
    using DataPtr = QExplicitlySharedDataPointer<QPlatformPixmap>;
