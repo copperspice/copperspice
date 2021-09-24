@@ -55,7 +55,7 @@ class Q_GUI_EXPORT QShortcutMap
 
    QKeySequence::SequenceMatch state();
 
-   bool tryShortcut(QKeyEvent *e);
+   bool tryShortcut(QKeyEvent *event);
    bool hasShortcutForKeySequence(const QKeySequence &seq) const;
 
  private:

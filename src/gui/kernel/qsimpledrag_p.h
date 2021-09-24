@@ -45,7 +45,7 @@ class Q_GUI_EXPORT QBasicDrag : public QPlatformDrag, public QObject
 
    virtual Qt::DropAction drag(QDrag *drag) override;
 
-   virtual bool eventFilter(QObject *o, QEvent *e) override;
+   virtual bool eventFilter(QObject *object, QEvent *event) override;
 
  protected:
    QBasicDrag();

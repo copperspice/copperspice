@@ -532,8 +532,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    static WindowSystemEvent *getNonUserInputWindowSystemEvent();
    static WindowSystemEvent *peekWindowSystemEvent(EventType t);
    static void removeWindowSystemEvent(WindowSystemEvent *event);
-   static void postWindowSystemEvent(WindowSystemEvent *ev);
-   static bool handleWindowSystemEvent(WindowSystemEvent *ev);
+   static void postWindowSystemEvent(WindowSystemEvent *event);
+   static bool handleWindowSystemEvent(WindowSystemEvent *event);
 
    static QElapsedTimer eventTime;
    static bool synchronousWindowSystemEvents;

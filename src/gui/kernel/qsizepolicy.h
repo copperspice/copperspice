@@ -91,12 +91,12 @@ class Q_GUI_EXPORT QSizePolicy
    }
    ControlType controlType() const;
 
-   void setHorizontalPolicy(Policy d) {
-      bits.horPolicy = d;
+   void setHorizontalPolicy(Policy policy) {
+      bits.horPolicy = policy;
    }
 
-   void setVerticalPolicy(Policy d) {
-      bits.verPolicy = d;
+   void setVerticalPolicy(Policy policy) {
+      bits.verPolicy = policy;
    }
    void setControlType(ControlType type);
 
@@ -105,26 +105,27 @@ class Q_GUI_EXPORT QSizePolicy
          | ( (horizontalPolicy() & ExpandFlag) ? Qt::Horizontal : Qt::Orientations() ) ;
    }
 
-   void setHeightForWidth(bool b) {
-      bits.hfw = b;
+   void setHeightForWidth(bool isHeightForWidth) {
+      bits.hfw = isHeightForWidth;
    }
 
    bool hasHeightForWidth() const {
       return bits.hfw;
    }
-   void setWidthForHeight(bool b) {
-      bits.wfh = b;
+   void setWidthForHeight(bool isWidthForHeight) {
+      bits.wfh = isWidthForHeight;
    }
 
    bool hasWidthForHeight() const {
       return bits.wfh;
    }
 
-   bool operator==(const QSizePolicy &s) const {
-      return data == s.data;
+   bool operator==(const QSizePolicy &other) const {
+      return data == other.data;
    }
-   bool operator!=(const QSizePolicy &s) const {
-      return data != s.data;
+
+   bool operator!=(const QSizePolicy &other) const {
+      return data != other.data;
    }
 
    operator QVariant() const;
@@ -132,7 +133,6 @@ class Q_GUI_EXPORT QSizePolicy
    friend uint qHash(QSizePolicy key, uint seed) {
       return qHash(key.data, seed);
    }
-
 
    int horizontalStretch() const {
       return static_cast<int>(bits.horStretch);

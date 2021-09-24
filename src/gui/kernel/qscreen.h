@@ -160,7 +160,7 @@ class Q_GUI_EXPORT QScreen : public QObject
    bool isPortrait(Qt::ScreenOrientation orientation) const;
    bool isLandscape(Qt::ScreenOrientation orientation) const;
 
-   QPixmap grabWindow(WId window, int x = 0, int y = 0, int w = -1, int h = -1);
+   QPixmap grabWindow(WId window, int x = 0, int y = 0, int width = -1, int height = -1);
 
    qreal refreshRate() const;
 

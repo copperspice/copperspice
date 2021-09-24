@@ -293,7 +293,7 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
 
 #ifndef QT_NO_CURSOR
    QCursor cursor() const;
-   void setCursor(const QCursor &);
+   void setCursor(const QCursor &cursor);
    void unsetCursor();
 #endif
 
@@ -340,13 +340,13 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    GUI_CS_SLOT_1(Public, void setHeight(int arg))
    GUI_CS_SLOT_2(setHeight)
 
-   GUI_CS_SLOT_1(Public, void setMinimumWidth(int w))
+   GUI_CS_SLOT_1(Public, void setMinimumWidth(int width))
    GUI_CS_SLOT_2(setMinimumWidth)
-   GUI_CS_SLOT_1(Public, void setMinimumHeight(int h))
+   GUI_CS_SLOT_1(Public, void setMinimumHeight(int height))
    GUI_CS_SLOT_2(setMinimumHeight)
-   GUI_CS_SLOT_1(Public, void setMaximumWidth(int w))
+   GUI_CS_SLOT_1(Public, void setMaximumWidth(int width))
    GUI_CS_SLOT_2(setMaximumWidth)
-   GUI_CS_SLOT_1(Public, void setMaximumHeight(int h))
+   GUI_CS_SLOT_1(Public, void setMaximumHeight(int height))
    GUI_CS_SLOT_2(setMaximumHeight)
 
    GUI_CS_SLOT_1(Public, void alert(int msec))
@@ -410,7 +410,7 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
 
    // emerald  add closeEvent virtual handler
 
-   bool event(QEvent *) override;
+   bool event(QEvent *event) override;
    bool cs_isWindowType() const override;
 
    virtual void keyPressEvent(QKeyEvent *event);

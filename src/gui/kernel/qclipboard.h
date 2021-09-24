@@ -54,15 +54,15 @@ class Q_GUI_EXPORT QClipboard : public QObject
 
    QString text(Mode mode = Clipboard) const;
    QString text(QString &subtype, Mode mode = Clipboard) const;
-   void setText(const QString &, Mode mode = Clipboard);
+   void setText(const QString &text, Mode mode = Clipboard);
 
    const QMimeData *mimeData(Mode mode = Clipboard ) const;
    void setMimeData(QMimeData *data, Mode mode = Clipboard);
 
    QImage image(Mode mode = Clipboard) const;
    QPixmap pixmap(Mode mode = Clipboard) const;
-   void setImage(const QImage &, Mode mode  = Clipboard);
-   void setPixmap(const QPixmap &, Mode mode  = Clipboard);
+   void setImage(const QImage &image, Mode mode  = Clipboard);
+   void setPixmap(const QPixmap &pixmap, Mode mode  = Clipboard);
 
    GUI_CS_SIGNAL_1(Public, void changed(QClipboard::Mode mode))
    GUI_CS_SIGNAL_2(changed, mode)

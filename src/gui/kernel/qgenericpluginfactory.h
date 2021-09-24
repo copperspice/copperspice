@@ -32,8 +32,7 @@ class Q_GUI_EXPORT QGenericPluginFactory
 {
  public:
    static QStringList keys();
-   static QObject *create(const QString &, const QString &);
+   static QObject *create(const QString &key, const QString &spec);
 };
-
 
 #endif

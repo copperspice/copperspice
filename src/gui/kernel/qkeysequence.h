@@ -127,9 +127,12 @@ class Q_GUI_EXPORT QKeySequence
    QKeySequence();
    QKeySequence(const QString &key, SequenceFormat format  = NativeText);
    QKeySequence(int k1, int k2 = 0, int k3 = 0, int k4 = 0);
-   QKeySequence(const QKeySequence &ks);
    QKeySequence(StandardKey key);
+
+   QKeySequence(const QKeySequence &other);
+
    ~QKeySequence();
+
 
    int count() const;
    bool isEmpty() const;
@@ -152,7 +155,8 @@ class Q_GUI_EXPORT QKeySequence
 
    operator QVariant() const;
 
-   int operator[](uint i) const;
+   int operator[](uint index) const;
+
    QKeySequence &operator=(const QKeySequence &other);
 
    inline QKeySequence &operator=(QKeySequence &&other) {
@@ -169,7 +173,8 @@ class Q_GUI_EXPORT QKeySequence
       return !(*this == other);
    }
 
-   bool operator< (const QKeySequence &ks) const;
+   bool operator< (const QKeySequence &other) const;
+
    inline bool operator> (const QKeySequence &other) const {
       return other < *this;
    }

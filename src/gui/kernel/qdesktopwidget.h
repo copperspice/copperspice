@@ -55,7 +55,7 @@ class Q_GUI_EXPORT QDesktopWidget : public QWidget
    int primaryScreen() const;
 
    int screenNumber(const QWidget *widget = nullptr) const;
-   int screenNumber(const QPoint &) const;
+   int screenNumber(const QPoint &point) const;
 
    QWidget *screen(int screen = -1);
 
@@ -73,20 +73,20 @@ class Q_GUI_EXPORT QDesktopWidget : public QWidget
       return availableGeometry(screenNumber(point));
    }
 
-   GUI_CS_SIGNAL_1(Public, void resized(int un_named_arg1))
-   GUI_CS_SIGNAL_2(resized, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void resized(int screen))
+   GUI_CS_SIGNAL_2(resized, screen)
 
-   GUI_CS_SIGNAL_1(Public, void workAreaResized(int un_named_arg1))
-   GUI_CS_SIGNAL_2(workAreaResized, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void workAreaResized(int screen))
+   GUI_CS_SIGNAL_2(workAreaResized, screen)
 
-   GUI_CS_SIGNAL_1(Public, void screenCountChanged(int un_named_arg1))
-   GUI_CS_SIGNAL_2(screenCountChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void screenCountChanged(int newCount))
+   GUI_CS_SIGNAL_2(screenCountChanged, newCount)
 
    GUI_CS_SIGNAL_1(Public, void primaryScreenChanged())
    GUI_CS_SIGNAL_2(primaryScreenChanged)
 
  protected:
-   void resizeEvent(QResizeEvent *e) override;
+   void resizeEvent(QResizeEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QDesktopWidget)

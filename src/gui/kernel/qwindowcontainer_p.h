@@ -34,7 +34,7 @@ class Q_GUI_EXPORT QWindowContainer : public QWidget
    Q_DECLARE_PRIVATE(QWindowContainer)
 
  public:
-   explicit QWindowContainer(QWindow *embeddedWindow, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::EmptyFlag);
+   explicit QWindowContainer(QWindow *embeddedWindow, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
    ~QWindowContainer();
    QWindow *containedWindow() const;
 
@@ -45,7 +45,7 @@ class Q_GUI_EXPORT QWindowContainer : public QWidget
    static void parentWasLowered(QWidget *parent);
 
  protected:
-   bool event(QEvent *ev) override;
+   bool event(QEvent *event) override;
 
  private :
    GUI_CS_SLOT_1(Private, void focusWindowChanged(QWindow *focusWindow))

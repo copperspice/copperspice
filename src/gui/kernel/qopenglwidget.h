@@ -44,7 +44,7 @@ class Q_GUI_EXPORT QOpenGLWidget : public QWidget
         PartialUpdate
     };
 
-    explicit QOpenGLWidget(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit QOpenGLWidget(QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
     QOpenGLWidget(const QOpenGLWidget &) = delete;
     QOpenGLWidget &operator=(const QOpenGLWidget &) = delete;
@@ -84,12 +84,12 @@ class Q_GUI_EXPORT QOpenGLWidget : public QWidget
     virtual void resizeGL(int w, int h);
     virtual void paintGL();
 
-    void paintEvent(QPaintEvent *e) override;
-    void resizeEvent(QResizeEvent *e) override;
-    bool event(QEvent *e) override;
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    bool event(QEvent *event) override;
 
     int metric(QPaintDevice::PaintDeviceMetric metric) const override;
-    QPaintDevice *redirected(QPoint *p) const override;
+    QPaintDevice *redirected(QPoint *point) const override;
     QPaintEngine *paintEngine() const override;
 
  private:

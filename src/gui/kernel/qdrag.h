@@ -50,7 +50,7 @@ class Q_GUI_EXPORT QDrag : public QObject
    void setMimeData(QMimeData *data);
    QMimeData *mimeData() const;
 
-   void setPixmap(const QPixmap &);
+   void setPixmap(const QPixmap &pixmap);
    QPixmap pixmap() const;
 
    void setHotSpot(const QPoint &hotspot);

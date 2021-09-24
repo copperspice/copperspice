@@ -52,7 +52,7 @@ class Q_GUI_EXPORT QPaintDeviceWindow : public QWindow, public QPaintDevice
    virtual void paintEvent(QPaintEvent *event);
 
    int metric(PaintDeviceMetric metric) const override;
-   void exposeEvent(QExposeEvent *) override;
+   void exposeEvent(QExposeEvent *event) override;
    bool event(QEvent *event) override;
 
    QPaintDeviceWindow(QPaintDeviceWindowPrivate &dd, QWindow *parent);

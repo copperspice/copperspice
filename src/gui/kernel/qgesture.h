@@ -300,7 +300,7 @@ class Q_GUI_EXPORT QGestureEvent : public QEvent
    ~QGestureEvent();
 
    QList<QGesture *> gestures() const;
-   QGesture *gesture(Qt::GestureType type) const;
+   QGesture *gesture(Qt::GestureType gestureType) const;
 
    QList<QGesture *> activeGestures() const;
    QList<QGesture *> canceledGestures() const;
@@ -310,15 +310,15 @@ class Q_GUI_EXPORT QGestureEvent : public QEvent
    using QEvent::accept;
    using QEvent::ignore;
 
-   void setAccepted(QGesture *, bool);
-   void accept(QGesture *);
-   void ignore(QGesture *);
-   bool isAccepted(QGesture *) const;
+   void setAccepted(QGesture *gesture, bool isAccepted);
+   void accept(QGesture *gesture);
+   void ignore(QGesture *gesture);
+   bool isAccepted(QGesture *gesture) const;
 
-   void setAccepted(Qt::GestureType, bool);
-   void accept(Qt::GestureType);
-   void ignore(Qt::GestureType);
-   bool isAccepted(Qt::GestureType) const;
+   void setAccepted(Qt::GestureType gestureType, bool isAccepted);
+   void accept(Qt::GestureType gestureType);
+   void ignore(Qt::GestureType gestureType);
+   bool isAccepted(Qt::GestureType gestureType) const;
 
    void setWidget(QWidget *widget);
    QWidget *widget() const;
@@ -338,7 +338,7 @@ class Q_GUI_EXPORT QGestureEvent : public QEvent
 };
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QGesture *);
-Q_GUI_EXPORT QDebug operator<<(QDebug, const QGestureEvent *);
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QGestureEvent *event);
 
 #endif // QT_NO_GESTURES
 

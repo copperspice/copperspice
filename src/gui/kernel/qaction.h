@@ -219,7 +219,7 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_SLOT_1(Public, void hover())
    GUI_CS_SLOT_2(hover)
 
-   GUI_CS_SLOT_1(Public, void setChecked(bool b))
+   GUI_CS_SLOT_1(Public, void setChecked(bool checked))
    GUI_CS_SLOT_2(setChecked)
 
    GUI_CS_SLOT_1(Public, void toggle())

@@ -325,7 +325,7 @@ class Q_GUI_EXPORT QTabletEvent : public QInputEvent
       qreal tangentialPressure, qreal rotation, int z,
       Qt::KeyboardModifiers keyState, qint64 uniqueID);
 
-   QTabletEvent(Type t, const QPointF &pos, const QPointF &globalPosition,
+   QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos,
       int device, int pointerType, qreal pressure, int xTilt, int yTilt,
       qreal tangentialPressure, qreal rotation, int z,
       Qt::KeyboardModifiers keyState, qint64 uniqueID,
@@ -427,7 +427,8 @@ class Q_GUI_EXPORT QNativeGestureEvent : public QInputEvent
 {
  public:
    QNativeGestureEvent(Qt::NativeGestureType type, const QPointF &localPos, const QPointF &windowPos,
-      const QPointF &screenPos, qreal value, ulong sequenceId, quint64 intArgument);
+      const QPointF &screenPos, qreal realValue, ulong sequenceId, quint64 intValue);
+
    Qt::NativeGestureType gestureType() const {
       return mGestureType;
    }
@@ -669,10 +670,10 @@ class Q_GUI_EXPORT QContextMenuEvent : public QInputEvent
  public:
    enum Reason { Mouse, Keyboard, Other };
 
-   QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPosition,
+   QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos,
       Qt::KeyboardModifiers modifiers);
 
-   QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPosition);
+   QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos);
    QContextMenuEvent(Reason reason, const QPoint &pos);
 
    ~QContextMenuEvent();
@@ -723,9 +724,12 @@ class Q_GUI_EXPORT QInputMethodEvent : public QEvent
    class Attribute
    {
     public:
-      Attribute(AttributeType typ, int s, int l, QVariant val) : type(typ), start(s), length(l), value(std::move(val)) {}
-      AttributeType type;
+      Attribute(AttributeType xType, int xStart, int xLength, QVariant xValue)
+         : type(xType), start(xStart), length(xLength), value(std::move(xValue))
+      {
+      }
 
+      AttributeType type;
       int start;
       int length;
       QVariant value;
@@ -865,13 +869,14 @@ class Q_GUI_EXPORT QDragMoveEvent : public QDropEvent
       QDropEvent::ignore();
    }
 
-   inline void accept(const QRect &r) {
+   inline void accept(const QRect &xRect) {
       accept();
-      rect = r;
+      rect = xRect;
    }
-   inline void ignore(const QRect &r) {
+
+   inline void ignore(const QRect &xRect) {
       ignore();
-      rect = r;
+      rect = xRect;
    }
 
  protected:
@@ -882,8 +887,9 @@ class Q_GUI_EXPORT QDragMoveEvent : public QDropEvent
 class Q_GUI_EXPORT QDragEnterEvent : public QDragMoveEvent
 {
  public:
-   QDragEnterEvent(const QPoint &pos, Qt::DropActions actions, const QMimeData *data,
+   QDragEnterEvent(const QPoint &point, Qt::DropActions actions, const QMimeData *data,
       Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers);
+
    ~QDragEnterEvent();
 };
 
@@ -900,7 +906,7 @@ class Q_GUI_EXPORT QDragLeaveEvent : public QEvent
 class Q_GUI_EXPORT QHelpEvent : public QEvent
 {
  public:
-   QHelpEvent(Type type, const QPoint &pos, const QPoint &globalPosition);
+   QHelpEvent(Type type, const QPoint &pos, const QPoint &globalPos);
    ~QHelpEvent();
 
    inline int x() const {
@@ -1055,16 +1061,17 @@ class Q_GUI_EXPORT QWindowStateChangeEvent: public QEvent
    bool m_override;
 };
 
-Q_GUI_EXPORT QDebug operator<<(QDebug, const QEvent *);
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QEvent *event);
 
 #ifndef QT_NO_SHORTCUT
 inline bool operator==(QKeyEvent *e, QKeySequence::StandardKey key)
 {
    return (e ? e->matches(key) : false);
 }
-inline bool operator==(QKeySequence::StandardKey key, QKeyEvent *e)
+
+inline bool operator==(QKeySequence::StandardKey key, QKeyEvent *event)
 {
-   return (e ? e->matches(key) : false);
+   return (event != nullptr ? event->matches(key) : false);
 }
 #endif
 
@@ -1265,7 +1272,7 @@ class Q_GUI_EXPORT QScrollEvent : public QEvent
       ScrollFinished
    };
 
-   QScrollEvent(const QPointF &contentPos, const QPointF &overshoot, ScrollState scrollState);
+   QScrollEvent(const QPointF &contentPos, const QPointF &overshootDistance, ScrollState scrollState);
    ~QScrollEvent();
 
    QPointF contentPos() const;

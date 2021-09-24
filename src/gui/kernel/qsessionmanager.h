@@ -59,12 +59,13 @@ class Q_GUI_EXPORT QSessionManager : public QObject
       RestartImmediately,
       RestartNever
    };
-   void setRestartHint(RestartHint);
+
+   void setRestartHint(RestartHint hint);
    RestartHint restartHint() const;
 
-   void setRestartCommand(const QStringList &);
+   void setRestartCommand(const QStringList &list);
    QStringList restartCommand() const;
-   void setDiscardCommand(const QStringList &);
+   void setDiscardCommand(const QStringList &list);
    QStringList discardCommand() const;
 
    void setManagerProperty(const QString &name, const QString &value);
@@ -79,7 +80,6 @@ class Q_GUI_EXPORT QSessionManager : public QObject
  private:
    friend class QApplication;
    friend class QApplicationPrivate;
-
 };
 
 #endif // QT_NO_SESSIONMANAGER
