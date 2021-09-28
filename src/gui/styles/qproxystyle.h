@@ -35,7 +35,7 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    GUI_CS_OBJECT(QProxyStyle)
 
  public:
-   QProxyStyle(QStyle *baseStyle = nullptr);
+   QProxyStyle(QStyle *style = nullptr);
    QProxyStyle(const QString &key);
 
    QProxyStyle(const QProxyStyle &) = delete;
@@ -60,7 +60,7 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    QSize sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget) const override;
 
    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const override;
-   QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc, const QWidget *widget) const override;
+   QRect subControlRect(ComplexControl control, const QStyleOptionComplex *option, SubControl sc, const QWidget *widget) const override;
    QRect itemTextRect(const QFontMetrics &fm, const QRect &r, int flags, bool enabled, const QString &text) const override;
    QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const override;
 
@@ -68,16 +68,20 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
       const QWidget *widget = nullptr) const override;
 
    int styleHint(StyleHint hint, const QStyleOption *option = nullptr, const QWidget *widget = nullptr,
-      QStyleHintReturn *returnData = nullptr) const override;
+      QStyleHintReturn *styleHintReturn = nullptr) const override;
 
    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
    int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
       Qt::Orientation orientation, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
-   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
-   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
-   QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *opt) const override;
+   QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
+         const QWidget *widget = nullptr) const override;
+
+   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *option,
+         const QWidget *widget = nullptr) const override;
+
+   QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override;
    QPalette standardPalette() const override;
 
    void polish(QWidget *widget) override;
@@ -88,7 +92,7 @@ class Q_GUI_EXPORT QProxyStyle : public QCommonStyle
    void unpolish(QApplication *app) override;
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QProxyStyle)

@@ -733,67 +733,67 @@ class Q_GUI_EXPORT QStyle : public QObject
    virtual void polish(QWidget *widget);
    virtual void unpolish(QWidget *widget);
 
-   virtual void polish(QApplication *app);
-   virtual void unpolish(QApplication *app);
+   virtual void polish(QApplication *application);
+   virtual void unpolish(QApplication *application);
 
    virtual void polish(QPalette &palette);
 
-   virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r, int flags, bool enabled, const QString &text) const;
-   virtual QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const;
+   virtual QRect itemTextRect(const QFontMetrics &metrics, const QRect &rect, int alignment, bool enabled, const QString &text) const;
+   virtual QRect itemPixmapRect(const QRect &rect, int alignment, const QPixmap &pixmap) const;
 
-   virtual void drawItemText(QPainter *painter, const QRect &rect, int flags, const QPalette &pal, bool enabled,
+   virtual void drawItemText(QPainter *painter, const QRect &rect, int alignment, const QPalette &palette, bool enabled,
       const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const;
 
    virtual void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment, const QPixmap &pixmap) const;
 
    virtual QPalette standardPalette() const;
 
-   virtual void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const = 0;
-   virtual void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const = 0;
+   virtual void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter,
+         const QWidget *widget = nullptr) const = 0;
+   virtual void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter,
+         const QWidget *widget = nullptr) const = 0;
    virtual QRect subElementRect(SubElement subElement, const QStyleOption *option, const QWidget *widget = nullptr) const = 0;
 
-   virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
+   virtual void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter,
       const QWidget *widget = nullptr) const = 0;
 
-   virtual SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-      const QPoint &pt, const QWidget *widget = nullptr) const = 0;
+   virtual SubControl hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option,
+      const QPoint &position, const QWidget *widget = nullptr) const = 0;
 
-   virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
+   virtual QRect subControlRect(ComplexControl control, const QStyleOptionComplex *option, SubControl subControl,
       const QWidget *widget = nullptr) const = 0;
 
    virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const = 0;
 
-   virtual QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
-      const QSize &contentsSize, const QWidget *w = nullptr) const = 0;
+   virtual QSize sizeFromContents(ContentsType type, const QStyleOption *option,
+      const QSize &contentsSize, const QWidget *widget = nullptr) const = 0;
 
-   virtual int styleHint(StyleHint stylehint, const QStyleOption *opt = nullptr,
-      const QWidget *widget = nullptr, QStyleHintReturn *returnData = nullptr) const = 0;
+   virtual int styleHint(StyleHint styleHint, const QStyleOption *option = nullptr,
+      const QWidget *widget = nullptr, QStyleHintReturn *styleHintReturn = nullptr) const = 0;
 
-   virtual QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt = nullptr,
+   virtual QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *option = nullptr,
       const QWidget *widget = nullptr) const = 0;
 
    virtual QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
       const QWidget *widget = nullptr) const = 0;
 
    virtual QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
-      const QStyleOption *opt) const = 0;
+      const QStyleOption *option) const = 0;
 
    static QRect visualRect(Qt::LayoutDirection direction, const QRect &boundingRect, const QRect &logicalRect);
-   static QPoint visualPos(Qt::LayoutDirection direction, const QRect &boundingRect, const QPoint &logicalPos);
+   static QPoint visualPos(Qt::LayoutDirection direction, const QRect &boundingRect, const QPoint &logicalPosition);
 
-   static int sliderPositionFromValue(int min, int max, int val, int space, bool upsideDown = false);
-   static int sliderValueFromPosition(int min, int max, int pos, int space, bool upsideDown = false);
+   static int sliderPositionFromValue(int min, int max, int logicalValue, int span, bool upsideDown = false);
+   static int sliderValueFromPosition(int min, int max, int position, int span, bool upsideDown = false);
    static Qt::Alignment visualAlignment(Qt::LayoutDirection direction, Qt::Alignment alignment);
 
-   static QRect alignedRect(Qt::LayoutDirection direction, Qt::Alignment alignment, const QSize &size, const QRect &rectangle);
+   static QRect alignedRect(Qt::LayoutDirection direction, Qt::Alignment alignment, const QSize &size, const QRect &rect);
 
-   virtual int layoutSpacing(QSizePolicy::ControlType control1,
-      QSizePolicy::ControlType control2, Qt::Orientation orientation,
-      const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const = 0;
+   virtual int layoutSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
+      Qt::Orientation orientation, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const = 0;
 
-   int combinedLayoutSpacing(QSizePolicy::ControlTypes controls1,
-      QSizePolicy::ControlTypes controls2, Qt::Orientation orientation,
-      QStyleOption *option = nullptr, QWidget *widget = nullptr) const;
+   int combinedLayoutSpacing(QSizePolicy::ControlTypes controls1, QSizePolicy::ControlTypes controls2,
+      Qt::Orientation orientation, QStyleOption *option = nullptr, QWidget *widget = nullptr) const;
 
    const QStyle *proxy() const;
 

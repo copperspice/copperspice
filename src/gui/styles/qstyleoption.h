@@ -64,7 +64,7 @@ class Q_GUI_EXPORT QStyleOption
    QStyleOption(const QStyleOption &other);
    ~QStyleOption();
 
-   void initFrom(const QWidget *w);
+   void initFrom(const QWidget *widget);
 
    QStyleOption &operator=(const QStyleOption &other);
 
@@ -756,30 +756,28 @@ class Q_GUI_EXPORT QStyleOptionGraphicsItem : public QStyleOption
 };
 
 template <typename T>
-T qstyleoption_cast(const QStyleOption *opt)
+T qstyleoption_cast(const QStyleOption *option)
 {
    typedef typename std::remove_cv<typename std::remove_pointer<T>::type>::type Opt;
 
-   if (opt && opt->version >= Opt::Version && (opt->type == Opt::Type
-         || int(Opt::Type) == QStyleOption::SO_Default
-         || (int(Opt::Type) == QStyleOption::SO_Complex
-            && opt->type > QStyleOption::SO_Complex))) {
-      return static_cast<T>(opt);
+   if (option && option->version >= Opt::Version && (option->type == Opt::Type
+         || int(Opt::Type) == QStyleOption::SO_Default || (int(Opt::Type) == QStyleOption::SO_Complex
+         && option->type > QStyleOption::SO_Complex))) {
+      return static_cast<T>(option);
    }
 
    return nullptr;
 }
 
 template <typename T>
-T qstyleoption_cast(QStyleOption *opt)
+T qstyleoption_cast(QStyleOption *option)
 {
    typedef typename std::remove_cv<typename std::remove_pointer<T>::type>::type Opt;
 
-   if (opt && opt->version >= Opt::Version && (opt->type == Opt::Type
-         || int(Opt::Type) == QStyleOption::SO_Default
-         || (int(Opt::Type) == QStyleOption::SO_Complex
-            && opt->type > QStyleOption::SO_Complex))) {
-      return static_cast<T>(opt);
+   if (option && option->version >= Opt::Version && (option->type == Opt::Type
+         || int(Opt::Type) == QStyleOption::SO_Default || (int(Opt::Type) == QStyleOption::SO_Complex
+         && option->type > QStyleOption::SO_Complex))) {
+      return static_cast<T>(option);
    }
 
    return nullptr;

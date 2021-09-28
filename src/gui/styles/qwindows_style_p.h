@@ -46,41 +46,44 @@ class QWindowsStyle : public QCommonStyle
 
    ~QWindowsStyle();
 
-   void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const override;
-   void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *widget = nullptr) const override;
-   QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
-
-   void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
+   void drawPrimitive(PrimitiveElement pe, const QStyleOption *option, QPainter *painter,
       const QWidget *widget = nullptr) const override;
 
-   QSize sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &contentsSize,
+   void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter,
+      const QWidget *widget = nullptr) const override;
+
+   QRect subElementRect(SubElement subElement, const QStyleOption *option, const QWidget *widget = nullptr) const override;
+
+   void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter,
+      const QWidget *widget = nullptr) const override;
+
+   QSize sizeFromContents(ContentsType ct, const QStyleOption *option, const QSize &contentsSize,
       const QWidget *widget = nullptr) const override;
 
    int pixelMetric(PixelMetric pm, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
-   int styleHint(StyleHint hint, const QStyleOption *opt = nullptr, const QWidget *widget = nullptr,
-      QStyleHintReturn *returnData = nullptr) const override;
+   int styleHint(StyleHint hint, const QStyleOption *option = nullptr, const QWidget *widget = nullptr,
+      QStyleHintReturn *styleHintReturn = nullptr) const override;
 
-   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget = nullptr) const override;
+   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *option, const QWidget *widget = nullptr) const override;
 
    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
       const QWidget *widget = nullptr) const override;
 
 
-   void polish(QApplication *) override;
-   void polish(QWidget *) override;
-   void polish(QPalette &) override;
+   void polish(QApplication *app) override;
+   void polish(QWidget *widget) override;
+   void polish(QPalette &palette) override;
 
-   void unpolish(QApplication *) override;
-   void unpolish(QWidget *) override;
+   void unpolish(QApplication *app) override;
+   void unpolish(QWidget *widget) override;
 
  protected:
-   bool eventFilter(QObject *o, QEvent *e) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
    QWindowsStyle(QWindowsStylePrivate &dd);
 
  private:
    Q_DECLARE_PRIVATE(QWindowsStyle)
-
 };
 
 class QWindowsStylePrivate : public QCommonStylePrivate

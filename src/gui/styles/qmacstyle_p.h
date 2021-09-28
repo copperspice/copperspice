@@ -160,7 +160,7 @@ class QMacStylePrivate : public QCommonStylePrivate
    }
 
    // Utility functions
-   void drawColorlessButton(const HIRect &macRect, HIThemeButtonDrawInfo *bdi, QPainter *p, const QStyleOption *opt) const;
+   void drawColorlessButton(const HIRect &macRect, HIThemeButtonDrawInfo *bdi, QPainter *painter, const QStyleOption *option) const;
 
    QSize pushButtonSizeFromContents(const QStyleOptionButton *btn) const;
 

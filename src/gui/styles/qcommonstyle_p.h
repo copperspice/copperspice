@@ -57,8 +57,8 @@ class QCommonStylePrivate : public QStylePrivate
    }
 
 #ifndef QT_NO_ITEMVIEWS
-   void viewItemDrawText(QPainter *p, const QStyleOptionViewItem *option, const QRect &rect) const;
-   void viewItemLayout(const QStyleOptionViewItem *opt,  QRect *checkRect,
+   void viewItemDrawText(QPainter *painter, const QStyleOptionViewItem *option, const QRect &rect) const;
+   void viewItemLayout(const QStyleOptionViewItem *option,  QRect *checkRect,
       QRect *pixmapRect, QRect *textRect, bool sizehint) const;
 
    QSize viewItemSize(const QStyleOptionViewItem *option, int role) const;
@@ -86,8 +86,9 @@ class QCommonStylePrivate : public QStylePrivate
    mutable QIcon tabBarcloseButtonIcon;
 
 #ifndef QT_NO_TABBAR
-   void tabLayout(const QStyleOptionTab *opt, const QWidget *widget, QRect *textRect, QRect *pixmapRect) const;
+   void tabLayout(const QStyleOptionTab *option, const QWidget *widget, QRect *textRect, QRect *pixmapRect) const;
 #endif
+
    int animationFps;
 
 #ifndef QT_NO_ANIMATION

@@ -32,7 +32,7 @@ class Q_GUI_EXPORT QStyleFactory
 {
  public:
    static QStringList keys();
-   static QStyle *create(const QString &);
+   static QStyle *create(const QString &key);
 };
 
 #endif

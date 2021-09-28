@@ -65,7 +65,7 @@ class QGtkStyle : public QCommonStyle
    void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter,
       const QWidget *widget) const override;
 
-   void drawControl(ControlElement control, const QStyleOption *option, QPainter *painter,
+   void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter,
       const QWidget *widget) const override;
 
    void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter,
@@ -73,28 +73,29 @@ class QGtkStyle : public QCommonStyle
 
    void drawItemPixmap(QPainter *painter, const QRect &rect, int alignment, const QPixmap &pixmap) const override;
 
-   void drawItemText(QPainter *painter, const QRect &rect, int alignment, const QPalette &pal, bool enabled, const QString &text,
-      QPalette::ColorRole textRole) const override;
+   void drawItemText(QPainter *painter, const QRect &rect, int alignment, const QPalette &palette,
+      bool enabled, const QString &text, QPalette::ColorRole textRole) const override;
 
    int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const override;
 
-   int styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const override;
+   int styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget,
+      QStyleHintReturn *styleHintReturn) const override;
 
-   QStyle::SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-      const QPoint &pt, const QWidget *w) const override;
+   QStyle::SubControl hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option,
+      const QPoint &point, const QWidget *widget) const override;
 
    QRect subControlRect(ComplexControl control, const QStyleOptionComplex *option, SubControl subControl,
       const QWidget *widget) const override;
 
-   QRect subElementRect(SubElement sr, const QStyleOption *opt, const QWidget *w) const override;
-   QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const override;
+   QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const override;
+   QRect itemPixmapRect(const QRect &rect, int flags, const QPixmap &pixmap) const override;
 
    QSize sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget) const override;
    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
       const QWidget *widget = nullptr) const override;
 
-   QPixmap standardPixmap(StandardPixmap sp, const QStyleOption *option, const QWidget *widget) const override;
-   QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *opt) const override;
+   QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *option, const QWidget *widget) const override;
+   QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override;
 
    void polish(QWidget *widget) override;
    void polish(QApplication *app) override;
@@ -280,7 +281,7 @@ class QGtkStyleFilter : public QObject
    { }
  private:
    QGtkStylePrivate *stylePrivate;
-   bool eventFilter(QObject *obj, QEvent *e) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
 };
 
 typedef enum {
