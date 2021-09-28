@@ -114,15 +114,15 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame
    GUI_CS_SLOT_1(Public, void setBinMode())
    GUI_CS_SLOT_2(setBinMode)
 
-   GUI_CS_SLOT_1(Public, void setSmallDecimalPoint(bool un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setSmallDecimalPoint(bool smallDecimalPoint))
    GUI_CS_SLOT_2(setSmallDecimalPoint)
 
    GUI_CS_SIGNAL_1(Public, void overflow())
    GUI_CS_SIGNAL_2(overflow)
 
  protected:
-   bool event(QEvent *e) override;
-   void paintEvent(QPaintEvent *) override;
+   bool event(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QLCDNumber)

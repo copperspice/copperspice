@@ -68,8 +68,8 @@ class Q_GUI_EXPORT QLabel : public QFrame
    GUI_CS_PROPERTY_READ(selectedText, selectedText)
 
  public:
-   explicit QLabel(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-   explicit QLabel(const QString &text, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+   explicit QLabel(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
+   explicit QLabel(const QString &text, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QLabel(const QLabel &) = delete;
    QLabel &operator=(const QLabel &) = delete;
@@ -108,11 +108,11 @@ class Q_GUI_EXPORT QLabel : public QFrame
    QSize minimumSizeHint() const override;
 
 #ifndef QT_NO_SHORTCUT
-   void setBuddy(QWidget *);
+   void setBuddy(QWidget *buddy);
    QWidget *buddy() const;
 #endif
 
-   int heightForWidth(int) const override;
+   int heightForWidth(int width) const override;
 
    bool openExternalLinks() const;
    void setOpenExternalLinks(bool open);
@@ -120,19 +120,19 @@ class Q_GUI_EXPORT QLabel : public QFrame
    void setTextInteractionFlags(Qt::TextInteractionFlags flags);
    Qt::TextInteractionFlags textInteractionFlags() const;
 
-   void setSelection(int, int);
+   void setSelection(int start, int length);
    bool hasSelectedText() const;
    QString selectedText() const;
    int selectionStart() const;
 
-   GUI_CS_SLOT_1(Public, void setText(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setText(const QString &text))
    GUI_CS_SLOT_2(setText)
 
-   GUI_CS_SLOT_1(Public, void setPixmap(const QPixmap &un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setPixmap(const QPixmap &pixmap))
    GUI_CS_SLOT_2(setPixmap)
 
 #ifndef QT_NO_PICTURE
-   GUI_CS_SLOT_1(Public, void setPicture(const QPicture &un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setPicture(const QPicture &picture))
    GUI_CS_SLOT_2(setPicture)
 #endif
 
@@ -141,10 +141,10 @@ class Q_GUI_EXPORT QLabel : public QFrame
    GUI_CS_SLOT_2(setMovie)
 #endif
 
-   GUI_CS_SLOT_1(Public, void setNum(int un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setNum(int num))
    GUI_CS_SLOT_OVERLOAD(setNum, (int))
 
-   GUI_CS_SLOT_1(Public, void setNum(double un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setNum(double num))
    GUI_CS_SLOT_OVERLOAD(setNum, (double))
 
    GUI_CS_SLOT_1(Public, void clear())
@@ -157,16 +157,16 @@ class Q_GUI_EXPORT QLabel : public QFrame
    GUI_CS_SIGNAL_2(linkHovered, link)
 
  protected:
-   bool event(QEvent *e) override;
-   void keyPressEvent(QKeyEvent *ev) override;
-   void paintEvent(QPaintEvent *) override;
-   void changeEvent(QEvent *) override;
-   void mousePressEvent(QMouseEvent *ev) override;
-   void mouseMoveEvent(QMouseEvent *ev) override;
-   void mouseReleaseEvent(QMouseEvent *ev) override;
-   void contextMenuEvent(QContextMenuEvent *ev) override;
-   void focusInEvent(QFocusEvent *ev) override;
-   void focusOutEvent(QFocusEvent *ev) override;
+   bool event(QEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void changeEvent(QEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void contextMenuEvent(QContextMenuEvent *event) override;
+   void focusInEvent(QFocusEvent *event) override;
+   void focusOutEvent(QFocusEvent *event) override;
    bool focusNextPrevChild(bool next) override;
 
  private:

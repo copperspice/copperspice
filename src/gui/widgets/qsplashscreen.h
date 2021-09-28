@@ -35,8 +35,8 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
    GUI_CS_OBJECT(QSplashScreen)
 
  public:
-   explicit QSplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = Qt::EmptyFlag);
-   QSplashScreen(QWidget *parent, const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = Qt::EmptyFlag);
+   explicit QSplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags flags = Qt::EmptyFlag);
+   QSplashScreen(QWidget *parent, const QPixmap &pixmap = QPixmap(), Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QSplashScreen(const QSplashScreen &) = delete;
    QSplashScreen &operator=(const QSplashScreen &) = delete;
@@ -45,7 +45,7 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
 
    void setPixmap(const QPixmap &pixmap);
    const QPixmap pixmap() const;
-   void finish(QWidget *w);
+   void finish(QWidget *widget);
    void repaint();
    QString message() const;
 
@@ -60,9 +60,9 @@ class Q_GUI_EXPORT QSplashScreen : public QWidget
    GUI_CS_SIGNAL_2(messageChanged, message)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    virtual void drawContents(QPainter *painter);
-   void mousePressEvent(QMouseEvent *) override;
+   void mousePressEvent(QMouseEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QSplashScreen)

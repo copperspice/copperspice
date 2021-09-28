@@ -116,7 +116,7 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    void moveTab(int from, int to);
 
    bool isTabEnabled(int index) const;
-   void setTabEnabled(int index, bool);
+   void setTabEnabled(int index, bool enabled);
 
    QString tabText(int index) const;
    void setTabText(int index, const QString &text);
@@ -162,7 +162,7 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    void setUsesScrollButtons(bool useButtons);
 
    bool tabsClosable() const;
-   void setTabsClosable(bool closable);
+   void setTabsClosable(bool closeable);
 
    void setTabButton(int index, ButtonPosition position, QWidget *widget);
    QWidget *tabButton(int index, ButtonPosition position) const;
@@ -209,21 +209,21 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    virtual void tabRemoved(int index);
    virtual void tabLayoutChange();
 
-   bool event(QEvent *) override;
-   void resizeEvent(QResizeEvent *) override;
-   void showEvent(QShowEvent *) override;
-   void hideEvent(QHideEvent *) override;
-   void paintEvent(QPaintEvent *) override;
-   void mousePressEvent (QMouseEvent *) override;
-   void mouseMoveEvent (QMouseEvent *) override;
-   void mouseReleaseEvent (QMouseEvent *) override;
+   bool event(QEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void showEvent(QShowEvent *event) override;
+   void hideEvent(QHideEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void mousePressEvent (QMouseEvent *event) override;
+   void mouseMoveEvent (QMouseEvent *event) override;
+   void mouseReleaseEvent (QMouseEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
    void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   void keyPressEvent(QKeyEvent *) override;
-   void changeEvent(QEvent *) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void changeEvent(QEvent *event) override;
    void timerEvent(QTimerEvent *event) override;
    void initStyleOption(QStyleOptionTab *option, int tabIndex) const;
 

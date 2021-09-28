@@ -73,14 +73,14 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
    QFont currentFont() const;
    QSize sizeHint() const override;
 
-   GUI_CS_SLOT_1(Public, void setCurrentFont(const QFont &f))
+   GUI_CS_SLOT_1(Public, void setCurrentFont(const QFont &font))
    GUI_CS_SLOT_2(setCurrentFont)
 
-   GUI_CS_SIGNAL_1(Public, void currentFontChanged(const QFont &f))
-   GUI_CS_SIGNAL_2(currentFontChanged, f)
+   GUI_CS_SIGNAL_1(Public, void currentFontChanged(const QFont &font))
+   GUI_CS_SIGNAL_2(currentFontChanged, font)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QFontComboBox)

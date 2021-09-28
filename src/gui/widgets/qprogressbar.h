@@ -122,15 +122,15 @@ class Q_GUI_EXPORT QProgressBar : public QWidget
    GUI_CS_SLOT_1(Public, void setValue(int value))
    GUI_CS_SLOT_2(setValue)
 
-   GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation orientation))
    GUI_CS_SLOT_2(setOrientation)
 
    GUI_CS_SIGNAL_1(Public, void valueChanged(int value))
    GUI_CS_SIGNAL_2(valueChanged, value)
 
  protected:
-   bool event(QEvent *e) override;
-   void paintEvent(QPaintEvent *) override;
+   bool event(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
    void initStyleOption(QStyleOptionProgressBar *option) const;
 
  private:

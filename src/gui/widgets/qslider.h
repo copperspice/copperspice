@@ -73,10 +73,10 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
    bool event(QEvent *event) override;
 
  protected:
-   void paintEvent(QPaintEvent *ev) override;
-   void mousePressEvent(QMouseEvent *ev) override;
-   void mouseReleaseEvent(QMouseEvent *ev) override;
-   void mouseMoveEvent(QMouseEvent *ev) override;
+   void paintEvent(QPaintEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
    void initStyleOption(QStyleOptionSlider *option) const;
 
  private:

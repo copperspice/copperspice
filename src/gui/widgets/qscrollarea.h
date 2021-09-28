@@ -66,9 +66,9 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
 
  protected:
    QScrollArea(QScrollAreaPrivate &dd, QWidget *parent = nullptr);
-   bool event(QEvent *) override;
-   bool eventFilter(QObject *, QEvent *) override;
-   void resizeEvent(QResizeEvent *) override;
+   bool event(QEvent *event) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
    void scrollContentsBy(int dx, int dy) override;
 
    QSize viewportSizeHint() const override;

@@ -149,11 +149,11 @@ class Q_GUI_EXPORT QMenu : public QWidget
 
    QAction *addSection(const QString &text);
    QAction *addSection(const QIcon &icon, const QString &text);
-   QAction *insertMenu(QAction *before, QMenu *menu);
-   QAction *insertSeparator(QAction *before);
+   QAction *insertMenu(QAction *action, QMenu *menu);
+   QAction *insertSeparator(QAction *action);
 
-   QAction *insertSection(QAction *before, const QString &text);
-   QAction *insertSection(QAction *before, const QIcon &icon, const QString &text);
+   QAction *insertSection(QAction *action, const QString &text);
+   QAction *insertSection(QAction *action, const QIcon &icon, const QString &text);
 
    bool isEmpty() const;
    void clear();
@@ -164,22 +164,22 @@ class Q_GUI_EXPORT QMenu : public QWidget
    bool isTearOffMenuVisible() const;
    void hideTearOffMenu();
 
-   void setDefaultAction(QAction *);
+   void setDefaultAction(QAction *action);
    QAction *defaultAction() const;
 
-   void setActiveAction(QAction *act);
+   void setActiveAction(QAction *action);
    QAction *activeAction() const;
 
-   void popup(const QPoint &pos, QAction *at = nullptr);
+   void popup(const QPoint &point, QAction *action = nullptr);
 
    QAction *exec();
-   QAction *exec(const QPoint &pos, QAction *at = nullptr);
-   static QAction *exec(const QList<QAction *> &actions, const QPoint &pos, QAction *at = nullptr, QWidget *parent = nullptr);
+   QAction *exec(const QPoint &point, QAction *action = nullptr);
+   static QAction *exec(const QList<QAction *> &actionList, const QPoint &point, QAction *action = nullptr, QWidget *parent = nullptr);
 
    QSize sizeHint() const override;
 
-   QRect actionGeometry(QAction *) const;
-   QAction *actionAt(const QPoint &) const;
+   QRect actionGeometry(QAction *action) const;
+   QAction *actionAt(const QPoint &point) const;
 
    QAction *menuAction() const;
 
@@ -219,23 +219,23 @@ class Q_GUI_EXPORT QMenu : public QWidget
  protected:
    int columnCount() const;
 
-   void changeEvent(QEvent *) override;
-   void keyPressEvent(QKeyEvent *) override;
-   void mouseReleaseEvent(QMouseEvent *) override;
-   void mousePressEvent(QMouseEvent *) override;
-   void mouseMoveEvent(QMouseEvent *) override;
+   void changeEvent(QEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *) override;
+   void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   void enterEvent(QEvent *) override;
-   void leaveEvent(QEvent *) override;
-   void hideEvent(QHideEvent *) override;
-   void paintEvent(QPaintEvent *) override;
-   void actionEvent(QActionEvent *) override;
-   void timerEvent(QTimerEvent *) override;
-   bool event(QEvent *) override;
+   void enterEvent(QEvent *event) override;
+   void leaveEvent(QEvent *event) override;
+   void hideEvent(QHideEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void actionEvent(QActionEvent *event) override;
+   void timerEvent(QTimerEvent *event) override;
+   bool event(QEvent *event) override;
    bool focusNextPrevChild(bool next) override;
    void initStyleOption(QStyleOptionMenuItem *option, const QAction *action) const;
 

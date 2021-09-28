@@ -118,7 +118,7 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
 
    void addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget);
    void addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget, Qt::Orientation orientation);
-   void splitDockWidget(QDockWidget *after, QDockWidget *dockwidget, Qt::Orientation orientation);
+   void splitDockWidget(QDockWidget *first, QDockWidget *second, Qt::Orientation orientation);
    void tabifyDockWidget(QDockWidget *first, QDockWidget *second);
 
    QList<QDockWidget *> tabifiedDockWidgets(QDockWidget *dockwidget) const;
@@ -155,10 +155,10 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
 
 #ifndef QT_NO_MENUBAR
    QMenuBar *menuBar() const;
-   void setMenuBar(QMenuBar *menubar);
+   void setMenuBar(QMenuBar *menuBar);
 
    QWidget  *menuWidget() const;
-   void setMenuWidget(QWidget *menubar);
+   void setMenuWidget(QWidget *menuBar);
 #endif
 
 #ifndef QT_NO_STATUSBAR

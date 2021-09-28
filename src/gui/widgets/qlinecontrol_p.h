@@ -456,7 +456,7 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
 
    void processInputMethodEvent(QInputMethodEvent *event);
 
-   void processKeyEvent(QKeyEvent *ev);
+   void processKeyEvent(QKeyEvent *event);
 
    int cursorBlinkPeriod() const {
       return m_blinkPeriod;

@@ -63,7 +63,7 @@ class Q_GUI_EXPORT QFrame : public QWidget
    ~QFrame();
 
    int frameStyle() const;
-   void setFrameStyle(int);
+   void setFrameStyle(int style);
 
    int frameWidth() const;
 
@@ -105,12 +105,12 @@ class Q_GUI_EXPORT QFrame : public QWidget
    void setFrameRect(const QRect &);
 
  protected:
-   bool event(QEvent *e) override;
-   void paintEvent(QPaintEvent *) override;
-   void changeEvent(QEvent *) override;
+   bool event(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void changeEvent(QEvent *event) override;
    void drawFrame(QPainter *);
 
-   QFrame(QFramePrivate &dd, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+   QFrame(QFramePrivate &dd, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
    void initStyleOption(QStyleOptionFrame *option) const;
 
  private:

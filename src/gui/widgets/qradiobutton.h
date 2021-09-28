@@ -46,10 +46,10 @@ class Q_GUI_EXPORT QRadioButton : public QAbstractButton
    QSize minimumSizeHint() const override;
 
  protected:
-   bool event(QEvent *e) override;
-   bool hitButton(const QPoint &) const override;
-   void paintEvent(QPaintEvent *) override;
-   void mouseMoveEvent(QMouseEvent *) override;
+   bool event(QEvent *event) override;
+   bool hitButton(const QPoint &point) const override;
+   void paintEvent(QPaintEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
    void initStyleOption(QStyleOptionButton *button) const;
 
  private:

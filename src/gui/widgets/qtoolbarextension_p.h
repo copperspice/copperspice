@@ -38,7 +38,7 @@ class QToolBarExtension : public QToolButton
  public:
    explicit QToolBarExtension(QWidget *parent);
 
-   void paintEvent(QPaintEvent *) override;
+   void paintEvent(QPaintEvent *event) override;
    QSize sizeHint() const override;
 
    GUI_CS_SLOT_1(Public, void setOrientation(Qt::Orientation o))

@@ -48,31 +48,31 @@ class Q_GUI_EXPORT QStackedWidget : public QFrame
 
    ~QStackedWidget();
 
-   int addWidget(QWidget *w);
-   int insertWidget(int index, QWidget *w);
-   void removeWidget(QWidget *w);
+   int addWidget(QWidget *widget);
+   int insertWidget(int index, QWidget *widget);
+   void removeWidget(QWidget *widget);
 
    QWidget *currentWidget() const;
    int currentIndex() const;
 
-   int indexOf(QWidget *) const;
-   QWidget *widget(int) const;
+   int indexOf(QWidget *widget) const;
+   QWidget *widget(int index) const;
    int count() const;
 
    GUI_CS_SLOT_1(Public, void setCurrentIndex(int index))
    GUI_CS_SLOT_2(setCurrentIndex)
 
-   GUI_CS_SLOT_1(Public, void setCurrentWidget(QWidget *w))
+   GUI_CS_SLOT_1(Public, void setCurrentWidget(QWidget *widget))
    GUI_CS_SLOT_2(setCurrentWidget)
 
-   GUI_CS_SIGNAL_1(Public, void currentChanged(int un_named_arg1))
-   GUI_CS_SIGNAL_2(currentChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void currentChanged(int index))
+   GUI_CS_SIGNAL_2(currentChanged, index)
 
    GUI_CS_SIGNAL_1(Public, void widgetRemoved(int index))
    GUI_CS_SIGNAL_2(widgetRemoved, index)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QStackedWidget)

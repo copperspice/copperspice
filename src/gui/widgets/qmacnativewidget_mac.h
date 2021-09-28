@@ -46,7 +46,7 @@ class Q_GUI_EXPORT QMacNativeWidget : public QWidget
    NSView *nativeView() const;
 
  protected:
-   bool event(QEvent *ev) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QMacNativeWidget)

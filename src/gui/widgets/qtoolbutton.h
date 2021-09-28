@@ -97,25 +97,25 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
    GUI_CS_SLOT_1(Public, void setToolButtonStyle(Qt::ToolButtonStyle style))
    GUI_CS_SLOT_2(setToolButtonStyle)
 
-   GUI_CS_SLOT_1(Public, void setDefaultAction(QAction *un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setDefaultAction(QAction *action))
    GUI_CS_SLOT_2(setDefaultAction)
 
-   GUI_CS_SIGNAL_1(Public, void triggered(QAction *un_named_arg1))
-   GUI_CS_SIGNAL_2(triggered, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void triggered(QAction *action))
+   GUI_CS_SIGNAL_2(triggered, action)
 
  protected:
    QToolButton(QToolButtonPrivate &, QWidget *parent);
 
-   bool event(QEvent *e) override;
-   void mousePressEvent(QMouseEvent *) override;
-   void mouseReleaseEvent(QMouseEvent *) override;
-   void paintEvent(QPaintEvent *) override;
-   void actionEvent(QActionEvent *) override;
+   bool event(QEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void actionEvent(QActionEvent *event) override;
 
-   void enterEvent(QEvent *) override;
-   void leaveEvent(QEvent *) override;
-   void timerEvent(QTimerEvent *) override;
-   void changeEvent(QEvent *) override;
+   void enterEvent(QEvent *event) override;
+   void leaveEvent(QEvent *event) override;
+   void timerEvent(QTimerEvent *event) override;
+   void changeEvent(QEvent *event) override;
 
    bool hitButton(const QPoint &pos) const override;
    void nextCheckState() override;

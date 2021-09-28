@@ -109,7 +109,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    enum EchoMode { Normal, NoEcho, Password, PasswordEchoOnEdit };
 
    explicit QLineEdit(QWidget *parent = nullptr);
-   explicit QLineEdit(const QString &, QWidget *parent = nullptr);
+   explicit QLineEdit(const QString &contents, QWidget *parent = nullptr);
 
    QLineEdit(const QLineEdit &) = delete;
    QLineEdit &operator=(const QLineEdit &) = delete;
@@ -139,7 +139,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    void setReadOnly(bool);
 
 #ifndef QT_NO_VALIDATOR
-   void setValidator(const QValidator *);
+   void setValidator(const QValidator *validator);
    const QValidator *validator() const;
 #endif
 
@@ -170,7 +170,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    bool isModified() const;
    void setModified(bool);
 
-   void setSelection(int, int);
+   void setSelection(int start, int length);
    bool hasSelectedText() const;
    QString selectedText() const;
    int selectionStart() const;
@@ -198,7 +198,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    QAction *addAction(const QIcon &icon, ActionPosition position);
 
    void deselect();
-   void insert(const QString &);
+   void insert(const QString &newText);
 
 #ifndef QT_NO_CONTEXTMENU
    QMenu *createStandardContextMenu();
@@ -252,29 +252,29 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    bool event(QEvent *event) override;
 
  protected:
-   void mousePressEvent(QMouseEvent *) override;
-   void mouseMoveEvent(QMouseEvent *) override;
-   void mouseReleaseEvent(QMouseEvent *) override;
-   void mouseDoubleClickEvent(QMouseEvent *) override;
-   void keyPressEvent(QKeyEvent *) override;
-   void focusInEvent(QFocusEvent *) override;
-   void focusOutEvent(QFocusEvent *) override;
-   void paintEvent(QPaintEvent *) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void mouseDoubleClickEvent(QMouseEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void focusInEvent(QFocusEvent *event) override;
+   void focusOutEvent(QFocusEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 
 #ifndef QT_NO_DRAGANDDROP
-   void dragEnterEvent(QDragEnterEvent *) override;
-   void dragMoveEvent(QDragMoveEvent *e) override;
-   void dragLeaveEvent(QDragLeaveEvent *e) override;
-   void dropEvent(QDropEvent *) override;
+   void dragEnterEvent(QDragEnterEvent *event) override;
+   void dragMoveEvent(QDragMoveEvent *event) override;
+   void dragLeaveEvent(QDragLeaveEvent *event) override;
+   void dropEvent(QDropEvent *event) override;
 #endif
 
-   void changeEvent(QEvent *) override;
+   void changeEvent(QEvent *event) override;
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *) override;
+   void contextMenuEvent(QContextMenuEvent *event) override;
 #endif
 
-   void inputMethodEvent(QInputMethodEvent *) override;
+   void inputMethodEvent(QInputMethodEvent *event) override;
    void initStyleOption(QStyleOptionFrame *option) const;
 
  protected:

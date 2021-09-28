@@ -210,9 +210,9 @@ class Q_GUI_EXPORT QToolBar : public QWidget
    friend class QToolBarAreaLayout;
 };
 
-QAction *QToolBar::actionAt(int ax, int ay) const
+QAction *QToolBar::actionAt(int x, int y) const
 {
-   return actionAt(QPoint(ax, ay));
+   return actionAt(QPoint(x, y));
 }
 
 #endif // QT_NO_TOOLBAR

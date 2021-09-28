@@ -53,10 +53,10 @@ class Q_GUI_EXPORT QCommandLinkButton: public QPushButton
 
  protected:
    QSize sizeHint() const override;
-   int heightForWidth(int) const override;
+   int heightForWidth(int width) const override;
    QSize minimumSizeHint() const override;
-   bool event(QEvent *e) override;
-   void paintEvent(QPaintEvent *) override;
+   bool event(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QCommandLinkButton)

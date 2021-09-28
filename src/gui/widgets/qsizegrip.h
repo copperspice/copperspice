@@ -43,19 +43,19 @@ class Q_GUI_EXPORT QSizeGrip : public QWidget
    ~QSizeGrip();
 
    QSize sizeHint() const override;
-   void setVisible(bool) override;
+   void setVisible(bool visible) override;
 
  protected:
-   void paintEvent(QPaintEvent *) override;
-   void mousePressEvent(QMouseEvent *) override;
-   void mouseMoveEvent(QMouseEvent *) override;
-   void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
-   void moveEvent(QMoveEvent *moveEvent) override;
-   void showEvent(QShowEvent *showEvent) override;
-   void hideEvent(QHideEvent *hideEvent) override;
-   bool eventFilter(QObject *, QEvent *) override;
+   void paintEvent(QPaintEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void moveEvent(QMoveEvent *event) override;
+   void showEvent(QShowEvent *event) override;
+   void hideEvent(QHideEvent *event) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
 
-   bool event(QEvent *) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QSizeGrip)

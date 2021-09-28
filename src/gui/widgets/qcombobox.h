@@ -160,12 +160,12 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    QLineEdit *lineEdit() const;
 
 #ifndef QT_NO_VALIDATOR
-   void setValidator(const QValidator *v);
+   void setValidator(const QValidator *validator);
    const QValidator *validator() const;
 #endif
 
 #ifndef QT_NO_COMPLETER
-   void setCompleter(QCompleter *c);
+   void setCompleter(QCompleter *completer);
    QCompleter *completer() const;
 #endif
 
@@ -202,7 +202,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    void insertItem(int index, const QIcon &icon, const QString &text,
       const QVariant &userData = QVariant());
 
-   void insertItems(int index, const QStringList &texts);
+   void insertItems(int index, const QStringList &list);
    void insertSeparator(int index);
 
    void removeItem(int index);
@@ -221,7 +221,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    virtual void hidePopup();
 
    bool event(QEvent *event) override;
-   QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
+   QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
    GUI_CS_SLOT_1(Public, void clear())
    GUI_CS_SLOT_2(clear)
@@ -238,26 +238,26 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_SLOT_1(Public, void setCurrentText(const QString &text))
    GUI_CS_SLOT_2(setCurrentText)
 
-   GUI_CS_SIGNAL_1(Public, void editTextChanged(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_2(editTextChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void editTextChanged(const QString &text))
+   GUI_CS_SIGNAL_2(editTextChanged, text)
 
    GUI_CS_SIGNAL_1(Public, void activated(int index))
    GUI_CS_SIGNAL_OVERLOAD(activated, (int), index)
 
-   GUI_CS_SIGNAL_1(Public, void activated(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_OVERLOAD(activated, (const QString &), un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void activated(const QString &text))
+   GUI_CS_SIGNAL_OVERLOAD(activated, (const QString &), text)
 
    GUI_CS_SIGNAL_1(Public, void highlighted(int index))
    GUI_CS_SIGNAL_OVERLOAD(highlighted, (int), index)
 
-   GUI_CS_SIGNAL_1(Public, void highlighted(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_OVERLOAD(highlighted, (const QString &), un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void highlighted(const QString &text))
+   GUI_CS_SIGNAL_OVERLOAD(highlighted, (const QString &), text)
 
    GUI_CS_SIGNAL_1(Public, void currentIndexChanged(int index))
    GUI_CS_SIGNAL_OVERLOAD(currentIndexChanged, (int), index)
 
-   GUI_CS_SIGNAL_1(Public, void currentIndexChanged(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_OVERLOAD(currentIndexChanged, (const QString &), un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void currentIndexChanged(const QString &text))
+   GUI_CS_SIGNAL_OVERLOAD(currentIndexChanged, (const QString &), text)
 
    GUI_CS_SIGNAL_1(Public, void cs_currentIndexChanged(int index))
    GUI_CS_SIGNAL_2(cs_currentIndexChanged, index)
@@ -266,27 +266,27 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_SIGNAL_2(currentTextChanged, str)
 
  protected:
-   void focusInEvent(QFocusEvent *e) override;
-   void focusOutEvent(QFocusEvent *e) override;
-   void changeEvent(QEvent *e) override;
-   void resizeEvent(QResizeEvent *e) override;
-   void paintEvent(QPaintEvent *e) override;
-   void showEvent(QShowEvent *e) override;
-   void hideEvent(QHideEvent *e) override;
-   void mousePressEvent(QMouseEvent *e) override;
-   void mouseReleaseEvent(QMouseEvent *e) override;
-   void keyPressEvent(QKeyEvent *e) override;
-   void keyReleaseEvent(QKeyEvent *e) override;
+   void focusInEvent(QFocusEvent *event) override;
+   void focusOutEvent(QFocusEvent *event) override;
+   void changeEvent(QEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void showEvent(QShowEvent *event) override;
+   void hideEvent(QHideEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void keyReleaseEvent(QKeyEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *e) override;
+   void wheelEvent(QWheelEvent *event) override;
 #endif
 
-   void contextMenuEvent(QContextMenuEvent *e) override;
-   void inputMethodEvent(QInputMethodEvent *) override;
+   void contextMenuEvent(QContextMenuEvent *event) override;
+   void inputMethodEvent(QInputMethodEvent *event) override;
    void initStyleOption(QStyleOptionComboBox *option) const;
 
-   QComboBox(QComboBoxPrivate &, QWidget *);
+   QComboBox(QComboBoxPrivate &, QWidget *widget);
 
  private:
    Q_DECLARE_PRIVATE(QComboBox)
@@ -334,19 +334,19 @@ class Q_GUI_EXPORT QComboBox : public QWidget
 
 };
 
-inline void QComboBox::addItem(const QString &atext, const QVariant &auserData)
+inline void QComboBox::addItem(const QString &text, const QVariant &userData)
 {
-   insertItem(count(), atext, auserData);
+   insertItem(count(), text, userData);
 }
 
-inline void QComboBox::addItem(const QIcon &aicon, const QString &atext, const QVariant &auserData)
+inline void QComboBox::addItem(const QIcon &icon, const QString &text, const QVariant &userData)
 {
-   insertItem(count(), aicon, atext, auserData);
+   insertItem(count(), icon, text, userData);
 }
 
-inline void QComboBox::insertItem(int aindex, const QString &atext, const QVariant &auserData)
+inline void QComboBox::insertItem(int index, const QString &text, const QVariant &userData)
 {
-   insertItem(aindex, QIcon(), atext, auserData);
+   insertItem(index, QIcon(), text, userData);
 }
 
 #endif // QT_NO_COMBOBOX

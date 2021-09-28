@@ -42,20 +42,21 @@ QFramePrivate::QFramePrivate()
 QFramePrivate::~QFramePrivate()
 {
 }
+
 inline void QFramePrivate::init()
 {
    setLayoutItemMargins(QStyle::SE_FrameLayoutItem);
 }
 
-QFrame::QFrame(QWidget *parent, Qt::WindowFlags f)
-   : QWidget(*new QFramePrivate, parent, f)
+QFrame::QFrame(QWidget *parent, Qt::WindowFlags flags)
+   : QWidget(*new QFramePrivate, parent, flags)
 {
    Q_D(QFrame);
    d->init();
 }
 
-QFrame::QFrame(QFramePrivate &dd, QWidget *parent, Qt::WindowFlags f)
-   : QWidget(dd, parent, f)
+QFrame::QFrame(QFramePrivate &dd, QWidget *parent, Qt::WindowFlags flags)
+   : QWidget(dd, parent, flags)
 {
    Q_D(QFrame);
    d->init();

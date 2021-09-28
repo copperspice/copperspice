@@ -57,8 +57,8 @@ class Q_GUI_EXPORT QValidator : public QObject
    void setLocale(const QLocale &locale);
    QLocale locale() const;
 
-   virtual State validate(QString &, int &) const = 0;
-   virtual void fixup(QString &) const;
+   virtual State validate(QString &input, int &pos) const = 0;
+   virtual void fixup(QString &input) const;
 
    GUI_CS_SIGNAL_1(Public, void changed())
    GUI_CS_SIGNAL_2(changed)
@@ -85,27 +85,28 @@ class Q_GUI_EXPORT QIntValidator : public QValidator
 
  public:
    explicit QIntValidator(QObject *parent = nullptr);
-   QIntValidator(int bottom, int top, QObject *parent = nullptr);
+   QIntValidator(int minimum, int maximum, QObject *parent = nullptr);
 
    QIntValidator(const QIntValidator &) = delete;
    QIntValidator &operator=(const QIntValidator &) = delete;
 
    ~QIntValidator();
 
-   QValidator::State validate(QString &, int &) const override;
+   QValidator::State validate(QString &input, int &pos) const override;
    void fixup(QString &input) const override;
 
-   void setBottom(int);
-   void setTop(int);
-   virtual void setRange(int bottom, int top);
+   void setBottom(int newValue);
+   void setTop(int newValue);
+   virtual void setRange(int minimum, int maximum);
 
    inline int bottom() const;
    inline int top() const;
 
-   GUI_CS_SIGNAL_1(Public, void bottomChanged(int bottom))
-   GUI_CS_SIGNAL_2(bottomChanged, bottom)
-   GUI_CS_SIGNAL_1(Public, void topChanged(int top))
-   GUI_CS_SIGNAL_2(topChanged, top)
+   GUI_CS_SIGNAL_1(Public, void bottomChanged(int newValue))
+   GUI_CS_SIGNAL_2(bottomChanged, newValue)
+
+   GUI_CS_SIGNAL_1(Public, void topChanged(int newValue))
+   GUI_CS_SIGNAL_2(topChanged, newValue)
 
  private:
    int b;
@@ -144,38 +145,41 @@ class Q_GUI_EXPORT QDoubleValidator : public QValidator
    GUI_CS_PROPERTY_NOTIFY(notation, notationChanged)
 
  public:
+   enum Notation {
+      StandardNotation,
+      ScientificNotation
+   };
+
    explicit QDoubleValidator(QObject *parent = nullptr);
-   QDoubleValidator(double bottom, double top, int decimals, QObject *parent = nullptr);
+   QDoubleValidator(double minimum, double maximum, int decimals, QObject *parent = nullptr);
 
    QDoubleValidator(const QDoubleValidator &) = delete;
    QDoubleValidator &operator=(const QDoubleValidator &) = delete;
 
    ~QDoubleValidator();
 
-   enum Notation {
-      StandardNotation,
-      ScientificNotation
-   };
+   QValidator::State validate(QString &input, int &pos) const override;
+   virtual void setRange(double minimum, double maximum, int decimals = 0);
 
-   QValidator::State validate(QString &, int &) const override;
-   virtual void setRange(double bottom, double top, int decimals = 0);
-
-   void setBottom(double);
-   void setTop(double);
-   void setDecimals(int);
-   void setNotation(Notation);
+   void setBottom(double newValue);
+   void setTop(double newValue);
+   void setDecimals(int decimals);
+   void setNotation(Notation notation);
 
    inline double bottom() const;
    inline double top() const;
    inline int decimals() const;
    Notation notation() const;
 
-   GUI_CS_SIGNAL_1(Public, void bottomChanged(double bottom))
-   GUI_CS_SIGNAL_2(bottomChanged, bottom)
-   GUI_CS_SIGNAL_1(Public, void topChanged(double top))
-   GUI_CS_SIGNAL_2(topChanged, top)
+   GUI_CS_SIGNAL_1(Public, void bottomChanged(double newValue))
+   GUI_CS_SIGNAL_2(bottomChanged, newValue)
+
+   GUI_CS_SIGNAL_1(Public, void topChanged(double newValue))
+   GUI_CS_SIGNAL_2(topChanged, newValue)
+
    GUI_CS_SIGNAL_1(Public, void decimalsChanged(int decimals))
    GUI_CS_SIGNAL_2(decimalsChanged, decimals)
+
    GUI_CS_SIGNAL_1(Public, void notationChanged(QDoubleValidator::Notation notation))
    GUI_CS_SIGNAL_2(notationChanged, notation)
 

@@ -66,7 +66,7 @@ class QLabelPrivate : public QFramePrivate
    void ensureTextPopulated() const;
    void ensureTextLayouted() const;
    void ensureTextControl() const;
-   void sendControlEvent(QEvent *e);
+   void sendControlEvent(QEvent *event);
 
    void _q_linkHovered(const QString &link);
 

@@ -106,7 +106,7 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    void setActivationOrder(WindowOrder order);
 
    void setOption(AreaOption option, bool on = true);
-   bool testOption(AreaOption opton) const;
+   bool testOption(AreaOption option) const;
 
    void setViewMode(ViewMode mode);
    ViewMode viewMode() const;
@@ -115,7 +115,7 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    bool documentMode() const;
    void setDocumentMode(bool enabled);
 
-   void setTabsClosable(bool closable);
+   void setTabsClosable(bool closeable);
    bool tabsClosable() const;
 
    void setTabsMovable(bool movable);
@@ -130,8 +130,8 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    QTabWidget::TabPosition tabPosition() const;
 #endif
 
-   GUI_CS_SIGNAL_1(Public, void subWindowActivated(QMdiSubWindow *un_named_arg1))
-   GUI_CS_SIGNAL_2(subWindowActivated, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void subWindowActivated(QMdiSubWindow *window))
+   GUI_CS_SIGNAL_2(subWindowActivated, window)
 
    GUI_CS_SLOT_1(Public, void setActiveSubWindow(QMdiSubWindow *window))
    GUI_CS_SLOT_2(setActiveSubWindow)

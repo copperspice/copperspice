@@ -38,10 +38,10 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
 
  public:
    explicit QScrollBar(QWidget *parent = nullptr);
-   explicit QScrollBar(Qt::Orientation, QWidget *parent = nullptr);
+   explicit QScrollBar(Qt::Orientation orientation, QWidget *parent = nullptr);
 
-   QScrollBar(const QScrollBar &) = delete;
-   QScrollBar &operator=(const QScrollBar &) = delete;
+   QScrollBar(const QScrollBar &other) = delete;
+   QScrollBar &operator=(const QScrollBar &other) = delete;
 
    ~QScrollBar();
 
@@ -49,19 +49,19 @@ class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
    bool event(QEvent *event) override;
 
  protected:
-   void paintEvent(QPaintEvent *) override;
-   void mousePressEvent(QMouseEvent *) override;
-   void mouseReleaseEvent(QMouseEvent *) override;
-   void mouseMoveEvent(QMouseEvent *) override;
-   void hideEvent(QHideEvent *) override;
+   void paintEvent(QPaintEvent *event) override;
+   void mousePressEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
+   void hideEvent(QHideEvent *event) override;
    void sliderChange(SliderChange change) override;
 
 #ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *) override;
+   void contextMenuEvent(QContextMenuEvent *event) override;
 #endif
 
 #ifndef QT_NO_WHEELEVENT
-   void wheelEvent(QWheelEvent *) override;
+   void wheelEvent(QWheelEvent *event) override;
 #endif
 
    void initStyleOption(QStyleOptionSlider *option) const;

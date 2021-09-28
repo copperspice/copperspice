@@ -45,10 +45,10 @@ class Q_GUI_EXPORT QFocusFrame : public QWidget
    QWidget *widget() const;
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
-   bool eventFilter(QObject *, QEvent *) override;
-   void paintEvent(QPaintEvent *) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
    void initStyleOption(QStyleOption *option) const;
 
  private:

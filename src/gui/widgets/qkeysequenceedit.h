@@ -61,12 +61,12 @@ class Q_GUI_EXPORT QKeySequenceEdit : public QWidget
    GUI_CS_SIGNAL_2(keySequenceChanged, keySequence)
 
  protected:
-   QKeySequenceEdit(QKeySequenceEditPrivate &d, QWidget *parent, Qt::WindowFlags f);
+   QKeySequenceEdit(QKeySequenceEditPrivate &d, QWidget *parent, Qt::WindowFlags flags);
 
-   bool event(QEvent *) override;
-   void keyPressEvent(QKeyEvent *) override;
-   void keyReleaseEvent(QKeyEvent *) override;
-   void timerEvent(QTimerEvent *) override;
+   bool event(QEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void keyReleaseEvent(QKeyEvent *event) override;
+   void timerEvent(QTimerEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QKeySequenceEdit)

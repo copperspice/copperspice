@@ -26,8 +26,6 @@
 
 #include <qwidget.h>
 
-
-
 #ifndef QT_NO_RUBBERBAND
 
 class QRubberBandPrivate;
@@ -39,53 +37,53 @@ class Q_GUI_EXPORT QRubberBand : public QWidget
 
  public:
    enum Shape { Line, Rectangle };
-   explicit QRubberBand(Shape, QWidget * = nullptr);
+
+   explicit QRubberBand(Shape shape, QWidget *parent = nullptr);
+
    ~QRubberBand();
 
    Shape shape() const;
 
-   void setGeometry(const QRect &r);
+   void setGeometry(const QRect &rect);
 
    inline void setGeometry(int x, int y, int w, int h);
    inline void move(int x, int y);
 
-   inline void move(const QPoint &p) {
-      move(p.x(), p.y());
+   inline void move(const QPoint &point) {
+      move(point.x(), point.y());
    }
 
-   inline void resize(int w, int h) {
-      setGeometry(geometry().x(), geometry().y(), w, h);
+   inline void resize(int width, int height) {
+      setGeometry(geometry().x(), geometry().y(), width, height);
    }
 
-   inline void resize(const QSize &s) {
-      resize(s.width(), s.height());
+   inline void resize(const QSize &size) {
+      resize(size.width(), size.height());
    }
 
  protected:
-   bool event(QEvent *e) override;
-   void paintEvent(QPaintEvent *) override;
-   void changeEvent(QEvent *) override;
-   void showEvent(QShowEvent *) override;
-   void resizeEvent(QResizeEvent *) override;
-   void moveEvent(QMoveEvent *) override;
+   bool event(QEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
+   void changeEvent(QEvent *event) override;
+   void showEvent(QShowEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void moveEvent(QMoveEvent *event) override;
    void initStyleOption(QStyleOptionRubberBand *option) const;
 
  private:
    Q_DECLARE_PRIVATE(QRubberBand)
 };
 
-void QRubberBand::setGeometry(int ax, int ay, int aw, int ah)
+void QRubberBand::setGeometry(int x, int y, int w, int h)
 {
-   setGeometry(QRect(ax, ay, aw, ah));
+   setGeometry(QRect(x, y, w, h));
 }
 
-void QRubberBand::move(int ax, int ay)
+void QRubberBand::move(int x, int y)
 {
-   setGeometry(ax, ay, width(), height());
+   setGeometry(x, y, width(), height());
 }
 
 #endif // QT_NO_RUBBERBAND
-
-
 
 #endif // QRUBBERBAND_H

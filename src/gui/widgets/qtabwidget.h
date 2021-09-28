@@ -80,19 +80,19 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
 
    ~QTabWidget();
 
-   int addTab(QWidget *widget, const QString &);
+   int addTab(QWidget *widget, const QString &label);
    int addTab(QWidget *widget, const QIcon &icon, const QString &label);
 
-   int insertTab(int index, QWidget *widget, const QString &);
+   int insertTab(int index, QWidget *widget, const QString &label);
    int insertTab(int index, QWidget *widget, const QIcon &icon, const QString &label);
 
    void removeTab(int index);
 
    bool isTabEnabled(int index) const;
-   void setTabEnabled(int index, bool);
+   void setTabEnabled(int index, bool enable);
 
    QString tabText(int index) const;
-   void setTabText(int index, const QString &);
+   void setTabText(int index, const QString &label);
 
    QIcon tabIcon(int index) const;
    void setTabIcon(int index, const QIcon &icon);
@@ -130,7 +130,7 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    int heightForWidth(int width) const override;
    bool hasHeightForWidth() const override;
 
-   void setCornerWidget(QWidget *w, Qt::Corner corner = Qt::TopRightCorner);
+   void setCornerWidget(QWidget *widget, Qt::Corner corner = Qt::TopRightCorner);
    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
 
    Qt::TextElideMode elideMode() const;
@@ -172,14 +172,15 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    virtual void tabInserted(int index);
    virtual void tabRemoved(int index);
 
-   void showEvent(QShowEvent *) override;
-   void resizeEvent(QResizeEvent *) override;
-   void keyPressEvent(QKeyEvent *) override;
-   void paintEvent(QPaintEvent *) override;
-   void setTabBar(QTabBar *);
+   void showEvent(QShowEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void paintEvent(QPaintEvent *event) override;
 
-   void changeEvent(QEvent *) override;
-   bool event(QEvent *) override;
+   void setTabBar(QTabBar *tabBar);
+
+   void changeEvent(QEvent *event) override;
+   bool event(QEvent *event) override;
    void initStyleOption(QStyleOptionTabWidgetFrame *option) const;
 
  private:

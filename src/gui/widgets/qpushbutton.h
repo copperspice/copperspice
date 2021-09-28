@@ -72,12 +72,12 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
 #endif
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
-   void paintEvent(QPaintEvent *) override;
-   void keyPressEvent(QKeyEvent *) override;
-   void focusInEvent(QFocusEvent *) override;
-   void focusOutEvent(QFocusEvent *) override;
+   void paintEvent(QPaintEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
+   void focusInEvent(QFocusEvent *event) override;
+   void focusOutEvent(QFocusEvent *event) override;
    void initStyleOption(QStyleOptionButton *option) const;
    QPushButton(QPushButtonPrivate &dd, QWidget *parent = nullptr);
 

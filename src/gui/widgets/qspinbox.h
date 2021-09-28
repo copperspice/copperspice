@@ -167,10 +167,10 @@ class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
    void setSingleStep(double val);
 
    double minimum() const;
-   void setMinimum(double minimum);
+   void setMinimum(double min);
 
    double maximum() const;
-   void setMaximum(double maximum);
+   void setMaximum(double max);
 
    void setRange(double min, double max);
 

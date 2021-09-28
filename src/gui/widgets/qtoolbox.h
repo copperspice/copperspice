@@ -43,7 +43,7 @@ class Q_GUI_EXPORT QToolBox : public QFrame
    GUI_CS_PROPERTY_READ(count, count)
 
  public:
-   explicit QToolBox(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+   explicit QToolBox(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QToolBox(const QToolBox &) = delete;
    QToolBox &operator=(const QToolBox &) = delete;
@@ -87,13 +87,13 @@ class Q_GUI_EXPORT QToolBox : public QFrame
    GUI_CS_SIGNAL_2(currentChanged, index)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
    virtual void itemInserted(int index);
    virtual void itemRemoved(int index);
 
-   void showEvent(QShowEvent *e) override;
-   void changeEvent(QEvent *) override;
+   void showEvent(QShowEvent *event) override;
+   void changeEvent(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QToolBox)
@@ -105,19 +105,19 @@ class Q_GUI_EXPORT QToolBox : public QFrame
    GUI_CS_SLOT_2(_q_widgetDestroyed)
 };
 
-inline int QToolBox::addItem(QWidget *item, const QString &text)
+inline int QToolBox::addItem(QWidget *widget, const QString &text)
 {
-   return insertItem(-1, item, QIcon(), text);
+   return insertItem(-1, widget, QIcon(), text);
 }
 
-inline int QToolBox::addItem(QWidget *item, const QIcon &iconSet, const QString &text)
+inline int QToolBox::addItem(QWidget *widget, const QIcon &icon, const QString &text)
 {
-   return insertItem(-1, item, iconSet, text);
+   return insertItem(-1, widget, icon, text);
 }
 
-inline int QToolBox::insertItem(int index, QWidget *item, const QString &text)
+inline int QToolBox::insertItem(int index, QWidget *widget, const QString &text)
 {
-   return insertItem(index, item, QIcon(), text);
+   return insertItem(index, widget, QIcon(), text);
 }
 
 #endif // QT_NO_TOOLBOX

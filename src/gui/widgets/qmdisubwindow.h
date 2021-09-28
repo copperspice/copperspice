@@ -75,7 +75,7 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
    bool isShaded() const;
 
    void setOption(SubWindowOption option, bool on = true);
-   bool testOption(SubWindowOption) const;
+   bool testOption(SubWindowOption option) const;
 
    void setKeyboardSingleStep(int step);
    int keyboardSingleStep() const;

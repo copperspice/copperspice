@@ -100,9 +100,9 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    using Sections = QFlags<Section>;
 
    explicit QDateTimeEdit(QWidget *parent = nullptr);
-   explicit QDateTimeEdit(const QDateTime &dt, QWidget *parent = nullptr);
-   explicit QDateTimeEdit(const QDate &d, QWidget *parent = nullptr);
-   explicit QDateTimeEdit(const QTime &t, QWidget *parent = nullptr);
+   explicit QDateTimeEdit(const QDateTime &datetime, QWidget *parent = nullptr);
+   explicit QDateTimeEdit(const QDate &date, QWidget *parent = nullptr);
+   explicit QDateTimeEdit(const QTime &time, QWidget *parent = nullptr);
 
    QDateTimeEdit(const QDateTimeEdit &) = delete;
    QDateTimeEdit &operator=(const QDateTimeEdit &) = delete;
@@ -176,19 +176,21 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 
    bool event(QEvent *event) override;
 
-   GUI_CS_SIGNAL_1(Public, void dateTimeChanged(const QDateTime &date))
-   GUI_CS_SIGNAL_2(dateTimeChanged, date)
+   GUI_CS_SIGNAL_1(Public, void dateTimeChanged(const QDateTime &datetime))
+   GUI_CS_SIGNAL_2(dateTimeChanged, datetime)
 
-   GUI_CS_SIGNAL_1(Public, void timeChanged(const QTime &date))
-   GUI_CS_SIGNAL_2(timeChanged, date)
+   GUI_CS_SIGNAL_1(Public, void timeChanged(const QTime &time))
+   GUI_CS_SIGNAL_2(timeChanged, time)
 
    GUI_CS_SIGNAL_1(Public, void dateChanged(const QDate &date))
    GUI_CS_SIGNAL_2(dateChanged, date)
 
-   GUI_CS_SLOT_1(Public, void setDateTime(const QDateTime &dateTime))
+   GUI_CS_SLOT_1(Public, void setDateTime(const QDateTime &datetime))
    GUI_CS_SLOT_2(setDateTime)
+
    GUI_CS_SLOT_1(Public, void setDate(const QDate &date))
    GUI_CS_SLOT_2(setDate)
+
    GUI_CS_SLOT_1(Public, void setTime(const QTime &time))
    GUI_CS_SLOT_2(setTime)
 
@@ -205,7 +207,7 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    void fixup(QString &input) const override;
 
    virtual QDateTime dateTimeFromText(const QString &text) const;
-   virtual QString textFromDateTime(const QDateTime &dt) const;
+   virtual QString textFromDateTime(const QDateTime &datetime) const;
 
    StepEnabled stepEnabled() const override;
    void mousePressEvent(QMouseEvent *event) override;

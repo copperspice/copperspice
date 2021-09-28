@@ -40,30 +40,30 @@ class Q_GUI_EXPORT QCheckBox : public QAbstractButton
    explicit QCheckBox(QWidget *parent = nullptr);
    explicit QCheckBox(const QString &text, QWidget *parent = nullptr);
 
-   QCheckBox(const QCheckBox &) = delete;
-   QCheckBox &operator=(const QCheckBox &) = delete;
+   QCheckBox(const QCheckBox &other) = delete;
+   QCheckBox &operator=(const QCheckBox &other) = delete;
 
    ~QCheckBox();
 
    QSize sizeHint() const override;
    QSize minimumSizeHint() const override;
 
-   void setTristate(bool y = true);
+   void setTristate(bool enabled = true);
    bool isTristate() const;
 
    Qt::CheckState checkState() const;
    void setCheckState(Qt::CheckState state);
 
-   GUI_CS_SIGNAL_1(Public, void stateChanged(int un_named_arg1))
-   GUI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void stateChanged(int state))
+   GUI_CS_SIGNAL_2(stateChanged, state)
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    bool hitButton(const QPoint &pos) const override;
    void checkStateSet() override;
    void nextCheckState() override;
-   void paintEvent(QPaintEvent *) override;
-   void mouseMoveEvent(QMouseEvent *) override;
+   void paintEvent(QPaintEvent *event) override;
+   void mouseMoveEvent(QMouseEvent *event) override;
    void initStyleOption(QStyleOptionButton *option) const;
 
  private:
