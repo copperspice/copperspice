@@ -318,55 +318,29 @@ void QWindowSystemInterface::handleWheelEvent(QWindow *w, const QPointF &local, 
 }
 
 void QWindowSystemInterface::handleWheelEvent(QWindow *tlw, ulong timestamp, const QPointF &local, const QPointF &global,
-   QPoint pixelDelta, QPoint angleDelta, Qt::KeyboardModifiers mods, Qt::ScrollPhase phase, Qt::MouseEventSource source)
+      QPoint pixelDelta, QPoint angleDelta, Qt::KeyboardModifiers mods, Qt::ScrollPhase phase, Qt::MouseEventSource source)
 {
-   if (!QGuiApplicationPrivate::scrollNoPhaseAllowed && phase == Qt::NoScrollPhase) {
+   if (! QGuiApplicationPrivate::scrollNoPhaseAllowed && phase == Qt::NoScrollPhase) {
       phase = Qt::ScrollUpdate;
    }
 
-   // Qt 4 sends two separate wheel events for horizontal and vertical
-   // deltas. For Qt 5 we want to send the deltas in one event, but at the
-   // same time preserve source and behavior compatibility with Qt 4.
-   //
+   // older version sends two separate wheel events for horizontal and vertical deltas
+   // send the deltas in one event, and preserve source and behavior compatibility
+
    // In addition high-resolution pixel-based deltas are also supported.
    // Platforms that does not support these may pass a null point here.
    // Angle deltas must always be sent in addition to pixel deltas.
-   QWindowSystemInterfacePrivate::WheelEvent *e;
+   QWindowSystemInterfacePrivate::WheelEvent *event;
 
-   // Pass Qt::ScrollBegin and Qt::ScrollEnd through
-   // even if the wheel delta is null.
+   // Pass Qt::ScrollBegin and Qt::ScrollEnd through, even if the wheel delta is null
    if (angleDelta.isNull() && phase == Qt::ScrollUpdate) {
       return;
    }
 
-   // Simple case: vertical deltas only:
-   if (angleDelta.y() != 0 && angleDelta.x() == 0) {
-      e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, QHighDpi::fromNativeLocalPosition(local, tlw),
-         QHighDpi::fromNativePixels(global, tlw), pixelDelta, angleDelta, angleDelta.y(), Qt::Vertical, mods, phase, source);
-      QWindowSystemInterfacePrivate::handleWindowSystemEvent(e);
-      return;
-   }
+   event = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, QHighDpi::fromNativeLocalPosition(local, tlw),
+      QHighDpi::fromNativePixels(global, tlw), pixelDelta, angleDelta, mods, phase, source);
 
-   // Simple case: horizontal deltas only:
-   if (angleDelta.y() == 0 && angleDelta.x() != 0) {
-      e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, QHighDpi::fromNativeLocalPosition(local, tlw),
-         QHighDpi::fromNativePixels(global, tlw), pixelDelta, angleDelta, angleDelta.x(), Qt::Horizontal, mods, phase, source);
-      QWindowSystemInterfacePrivate::handleWindowSystemEvent(e);
-      return;
-   }
-
-   // Both horizontal and vertical deltas: Send two wheel events.
-   // The first event contains the Qt 5 pixel and angle delta as points,
-   // and in addition the Qt 4 compatibility vertical angle delta.
-   e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, QHighDpi::fromNativeLocalPosition(local, tlw),
-      QHighDpi::fromNativePixels(global, tlw), pixelDelta, angleDelta, angleDelta.y(), Qt::Vertical, mods, phase, source);
-   QWindowSystemInterfacePrivate::handleWindowSystemEvent(e);
-
-   // The second event contains null pixel and angle points and the
-   // Qt 4 compatibility horizontal angle delta.
-   e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, QHighDpi::fromNativeLocalPosition(local, tlw),
-      QHighDpi::fromNativePixels(global, tlw), QPoint(), QPoint(), angleDelta.x(), Qt::Horizontal, mods, phase, source);
-   QWindowSystemInterfacePrivate::handleWindowSystemEvent(e);
+   QWindowSystemInterfacePrivate::handleWindowSystemEvent(event);
 }
 
 
@@ -961,11 +935,9 @@ bool QWindowSystemEventHandler::sendEvent(QWindowSystemInterfacePrivate::WindowS
 }
 
 QWindowSystemInterfacePrivate::WheelEvent::WheelEvent(QWindow *w, ulong time, const QPointF &local, const QPointF &global,
-   QPoint pixelD,
-   QPoint angleD, int qt4D, Qt::Orientation qt4O, Qt::KeyboardModifiers mods, Qt::ScrollPhase phase, Qt::MouseEventSource src)
-   : InputEvent(w, time, Wheel, mods), pixelDelta(pixelD), angleDelta(angleD), qt4Delta(qt4D),
-     qt4Orientation(qt4O), localPos(local), globalPos(global),
-     phase(!QGuiApplicationPrivate::scrollNoPhaseAllowed && phase == Qt::NoScrollPhase ? Qt::ScrollUpdate : phase),
+      QPoint pixelD, QPoint angleD, Qt::KeyboardModifiers mods, Qt::ScrollPhase phase, Qt::MouseEventSource src)
+   : InputEvent(w, time, Wheel, mods), pixelDelta(pixelD), angleDelta(angleD), localPos(local), globalPos(global),
+     phase(! QGuiApplicationPrivate::scrollNoPhaseAllowed && phase == Qt::NoScrollPhase ? Qt::ScrollUpdate : phase),
      source(src)
 {
 }

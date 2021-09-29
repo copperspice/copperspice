@@ -233,13 +233,12 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class WheelEvent : public InputEvent
    {
     public:
-      WheelEvent(QWindow *w, ulong time, const QPointF &local, const QPointF &global, QPoint pixelD, QPoint angleD, int qt4D,
-         Qt::Orientation qt4O,
-         Qt::KeyboardModifiers mods, Qt::ScrollPhase phase = Qt::NoScrollPhase, Qt::MouseEventSource src = Qt::MouseEventNotSynthesized);
+      WheelEvent(QWindow *w, ulong time, const QPointF &local, const QPointF &global, QPoint pixelD, QPoint angleD,
+         Qt::KeyboardModifiers mods, Qt::ScrollPhase phase = Qt::NoScrollPhase,
+         Qt::MouseEventSource src = Qt::MouseEventNotSynthesized);
+
       QPoint pixelDelta;
       QPoint angleDelta;
-      int qt4Delta;
-      Qt::Orientation qt4Orientation;
       QPointF localPos;
       QPointF globalPos;
       Qt::ScrollPhase phase;

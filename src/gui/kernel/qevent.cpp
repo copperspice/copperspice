@@ -114,9 +114,8 @@ QHoverEvent::~QHoverEvent()
 #ifndef QT_NO_WHEELEVENT
 
 QWheelEvent::QWheelEvent(const QPointF &pos, int delta,
-   Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::Orientation orient)
-   : QInputEvent(Wheel, modifiers), p(pos), qt4D(delta), qt4O(orient), mouseState(buttons),
-     ph(Qt::NoScrollPhase), src(Qt::MouseEventNotSynthesized)
+      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::Orientation orientation)
+   : QInputEvent(Wheel, modifiers), p(pos), mouseState(buttons), ph(Qt::NoScrollPhase), src(Qt::MouseEventNotSynthesized)
 {
    if (! QGuiApplicationPrivate::scrollNoPhaseAllowed) {
       ph = Qt::ScrollUpdate;
@@ -124,7 +123,7 @@ QWheelEvent::QWheelEvent(const QPointF &pos, int delta,
 
    g = QCursor::pos();
 
-   if (orient == Qt::Vertical) {
+   if (orientation == Qt::Vertical) {
       angleD = QPoint(0, delta);
    } else {
       angleD = QPoint(delta, 0);
@@ -137,47 +136,30 @@ QWheelEvent::QWheelEvent(const QPointF &pos, int delta,
 QWheelEvent::~QWheelEvent()
 {}
 
-QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF &globalPos, int delta,
-   Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::Orientation orient)
-   : QInputEvent(Wheel, modifiers), p(pos), g(globalPos), qt4D(delta), qt4O(orient), mouseState(buttons),
+QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF &globalPosition, int delta,
+      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::Orientation orientation)
+   : QInputEvent(Wheel, modifiers), p(pos), g(globalPosition), mouseState(buttons),
      ph(Qt::NoScrollPhase), src(Qt::MouseEventNotSynthesized)
 {
-   if (!QGuiApplicationPrivate::scrollNoPhaseAllowed) {
+   if (! QGuiApplicationPrivate::scrollNoPhaseAllowed) {
       ph = Qt::ScrollUpdate;
    }
 
-   if (orient == Qt::Vertical) {
+   if (orientation == Qt::Vertical) {
       angleD = QPoint(0, delta);
    } else {
       angleD = QPoint(delta, 0);
    }
 }
-QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF &globalPos,
-   QPoint pixelDelta, QPoint angleDelta, int qt4Delta, Qt::Orientation qt4Orientation,
-   Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
-   : QInputEvent(Wheel, modifiers), p(pos), g(globalPos), pixelD(pixelDelta),
-     angleD(angleDelta), qt4D(qt4Delta), qt4O(qt4Orientation), mouseState(buttons), ph(Qt::NoScrollPhase),
-     src(Qt::MouseEventNotSynthesized)
+
+QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF &globalPosition, QPoint pixelDelta, QPoint angleDelta,
+      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase, Qt::MouseEventSource source )
+   : QInputEvent(Wheel, modifiers), p(pos), g(globalPosition), pixelD(pixelDelta), angleD(angleDelta),
+     mouseState(buttons), ph(phase), src(source)
 {
-   if (!QGuiApplicationPrivate::scrollNoPhaseAllowed) {
-      ph = Qt::ScrollUpdate;
-   }
 }
 
-QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF &globalPos,
-   QPoint pixelDelta, QPoint angleDelta, int qt4Delta, Qt::Orientation qt4Orientation,
-   Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase)
-   : QInputEvent(Wheel, modifiers), p(pos), g(globalPos), pixelD(pixelDelta),
-     angleD(angleDelta), qt4D(qt4Delta), qt4O(qt4Orientation), mouseState(buttons), ph(phase),
-     src(Qt::MouseEventNotSynthesized)
-{}
 
-QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF &globalPos,
-   QPoint pixelDelta, QPoint angleDelta, int qt4Delta, Qt::Orientation qt4Orientation,
-   Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase, Qt::MouseEventSource source)
-   : QInputEvent(Wheel, modifiers), p(pos), g(globalPos), pixelD(pixelDelta),
-     angleD(angleDelta), qt4D(qt4Delta), qt4O(qt4Orientation), mouseState(buttons), ph(phase), src(source)
-{}
 #endif // QT_NO_WHEELEVENT
 
 QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, const QString &text,
@@ -1446,9 +1428,8 @@ void QTouchEvent::TouchPoint::setFlags(InfoFlags flags)
 }
 
 QScrollPrepareEvent::QScrollPrepareEvent(const QPointF &startPos)
-   : QEvent(QEvent::ScrollPrepare), m_target(nullptr), m_startPos(startPos)
+   : QEvent(QEvent::ScrollPrepare), m_startPos(startPos)
 {
-   Q_UNUSED(m_target);
 }
 
 QScrollPrepareEvent::~QScrollPrepareEvent()

@@ -878,8 +878,9 @@ void QWidgetWindow::handleWheelEvent(QWheelEvent *event)
 
    QPoint mapped = widget->mapFrom(rootWidget, pos);
 
-   QWheelEvent translated(mapped, event->globalPos(), event->pixelDelta(), event->angleDelta(), event->delta(), event->orientation(),
+   QWheelEvent translated(mapped, event->globalPos(), event->pixelDelta(), event->angleDelta(),
       event->buttons(), event->modifiers(), event->phase(), event->source());
+
    QGuiApplication::sendSpontaneousEvent(widget, &translated);
 }
 

@@ -1721,8 +1721,8 @@ void QGuiApplicationPrivate::processWheelEvent(QWindowSystemInterfacePrivate::Wh
       return;
    }
 
-   QWheelEvent ev(localPoint, globalPoint, e->pixelDelta, e->angleDelta, e->qt4Delta,
-      e->qt4Orientation, buttons, e->modifiers, e->phase, e->source);
+   QWheelEvent ev(localPoint, globalPoint, e->pixelDelta, e->angleDelta, buttons, e->modifiers, e->phase, e->source);
+
    ev.setTimestamp(e->timestamp);
    QGuiApplication::sendSpontaneousEvent(window, &ev);
 

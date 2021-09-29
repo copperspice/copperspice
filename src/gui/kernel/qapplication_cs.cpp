@@ -2390,8 +2390,8 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                   QApplicationPrivate::giveFocusAccordingToFocusPolicy(w, e, relpos);
                }
 
-               QWheelEvent we(relpos, wheel->globalPos(), wheel->pixelDelta(), wheel->angleDelta(), wheel->delta(),
-                  wheel->orientation(), wheel->buttons(), wheel->modifiers(), phase, wheel->source());
+               QWheelEvent we(relpos, wheel->globalPos(), wheel->pixelDelta(), wheel->angleDelta(),
+                  wheel->buttons(), wheel->modifiers(), phase, wheel->source());
 
                bool eventAccepted;
                while (w) {
@@ -2431,9 +2431,10 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                // sending those events until we get a ScrollEnd, which signifies
                // the end of the natural scrolling sequence.
                const QPoint &relpos = QApplicationPrivate::wheel_widget->mapFromGlobal(wheel->globalPos());
-               QWheelEvent we(relpos, wheel->globalPos(), wheel->pixelDelta(), wheel->angleDelta(), wheel->delta(), wheel->orientation(),
-                  wheel->buttons(),
-                  wheel->modifiers(), wheel->phase(), wheel->source());
+
+               QWheelEvent we(relpos, wheel->globalPos(), wheel->pixelDelta(), wheel->angleDelta(),
+                  wheel->buttons(), wheel->modifiers(), wheel->phase(), wheel->source());
+
                we.spont = true;
                we.ignore();
                d->notify_helper(QApplicationPrivate::wheel_widget, &we);

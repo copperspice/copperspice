@@ -219,20 +219,11 @@ class Q_GUI_EXPORT QWheelEvent : public QInputEvent
       Qt::Orientation orient = Qt::Vertical);
 
    QWheelEvent(const QPointF &pos, const QPointF &globalPosition, int delta,
-      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
-      Qt::Orientation orient = Qt::Vertical);
-
-   QWheelEvent(const QPointF &pos, const QPointF &globalPosition,
-      QPoint pixelDelta, QPoint angleDelta, int qt4Delta, Qt::Orientation qt4Orientation,
-      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers);
-
-   QWheelEvent(const QPointF &pos, const QPointF &globalPosition,
-      QPoint pixelDelta, QPoint angleDelta, int qt4Delta, Qt::Orientation qt4Orientation,
-      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase);
+      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::Orientation orientation = Qt::Vertical);
 
    QWheelEvent(const QPointF &pos, const QPointF &globalPosition, QPoint pixelDelta, QPoint angleDelta,
-      int qt4Delta, Qt::Orientation qt4Orientation, Qt::MouseButtons buttons,
-      Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase, Qt::MouseEventSource source);
+      Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase,
+      Qt::MouseEventSource source = Qt::MouseEventNotSynthesized);
 
    ~QWheelEvent();
 
@@ -245,10 +236,19 @@ class Q_GUI_EXPORT QWheelEvent : public QInputEvent
    }
 
    inline int delta() const  {
-      return qt4D;
+      if (orientation() == Qt::Vertical)  {
+         return angleD.y();
+      }
+
+      return angleD.x();
    }
+
    inline Qt::Orientation orientation() const {
-      return qt4O;
+      if (std::abs(angleD.y()) > std::abs(angleD.x()) ) {
+         return Qt::Vertical;
+      }
+
+      return Qt::Horizontal;
    }
 
 #ifndef QT_NO_INTEGER_EVENT_COORDINATES
@@ -295,8 +295,7 @@ class Q_GUI_EXPORT QWheelEvent : public QInputEvent
    QPointF g;
    QPoint pixelD;
    QPoint angleD;
-   int qt4D;
-   Qt::Orientation qt4O;
+
    Qt::MouseButtons mouseState;
    uint ph : 2;
    uint src: 2;
@@ -1257,7 +1256,6 @@ class Q_GUI_EXPORT QScrollPrepareEvent : public QEvent
    void setContentPos(const QPointF &pos);
 
  private:
-   QObject *m_target; // Qt 6 remove.
    QPointF m_startPos;
    QSizeF m_viewportSize;
    QRectF m_contentPosRange;
