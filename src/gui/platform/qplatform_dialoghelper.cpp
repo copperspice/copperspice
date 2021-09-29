@@ -615,19 +615,19 @@ QStringList QPlatformFileDialogOptions::history() const
 
 void QPlatformFileDialogOptions::setLabelText(QPlatformFileDialogOptions::DialogLabel label, const QString &text)
 {
-   if (label >= 0 && label < DialogLabelCount) {
+   if (label >= 0 && label < QPlatformFileDialogOptions::DialogLabelCount) {
       d->labels[label] = text;
    }
 }
 
 QString QPlatformFileDialogOptions::labelText(QPlatformFileDialogOptions::DialogLabel label) const
 {
-   return (label >= 0 && label < DialogLabelCount) ? d->labels[label] : QString();
+   return (label >= 0 && label < QPlatformFileDialogOptions::DialogLabelCount) ? d->labels[label] : QString();
 }
 
 bool QPlatformFileDialogOptions::isLabelExplicitlySet(DialogLabel label)
 {
-   return label >= 0 && label < DialogLabelCount && ! d->labels[label].isEmpty();
+   return label >= 0 && label < QPlatformFileDialogOptions::DialogLabelCount && ! d->labels[label].isEmpty();
 }
 
 QUrl QPlatformFileDialogOptions::initialDirectory() const

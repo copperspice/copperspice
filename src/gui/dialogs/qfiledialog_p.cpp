@@ -577,6 +577,10 @@ void QFileDialogPrivate::setLabelTextControl(QFileDialog::DialogLabel label, con
             button->setText(text);
          }
          break;
+
+      case QFileDialog::DialogLabelCount:
+         // do nothing
+         break;
    }
 }
 

@@ -1124,6 +1124,10 @@ QString QFileDialog::labelText(DialogLabel label) const
          }
 
          break;
+
+      case DialogLabelCount:
+         // do nothing
+         break;
    }
 
    return QString();
