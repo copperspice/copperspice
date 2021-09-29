@@ -68,8 +68,8 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
    };
    using DockWidgetFeatures = QFlags<DockWidgetFeature>;
 
-   explicit QDockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
-   explicit QDockWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+   explicit QDockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
+   explicit QDockWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QDockWidget(const QDockWidget &) = delete;
    QDockWidget &operator=(const QDockWidget &) = delete;

@@ -304,7 +304,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    };
    using RenderFlags = QFlags<RenderFlag>;
 
-   explicit QWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+   explicit QWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QWidget(const QWidget &) = delete;
    QWidget &operator=(const QWidget &) = delete;
@@ -761,7 +761,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    QBackingStore *backingStore() const;
    QWindow *windowHandle() const;
 
-   static QWidget *createWindowContainer(QWindow *window, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+   static QWidget *createWindowContainer(QWindow *window, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
    GUI_CS_SIGNAL_1(Public, void windowTitleChanged(const QString &title))
    GUI_CS_SIGNAL_2(windowTitleChanged, title)
 

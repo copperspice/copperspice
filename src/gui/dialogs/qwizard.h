@@ -115,7 +115,7 @@ class Q_GUI_EXPORT QWizard : public QDialog
 
    using WizardOptions = QFlags<WizardOption>;
 
-   explicit QWizard(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+   explicit QWizard(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QWizard(const QWizard &) = delete;
    QWizard &operator=(const QWizard &) = delete;

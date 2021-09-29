@@ -96,7 +96,7 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    QMdiSubWindow *activeSubWindow() const;
    QList<QMdiSubWindow *> subWindowList(WindowOrder order = CreationOrder) const;
 
-   QMdiSubWindow *addSubWindow(QWidget *widget, Qt::WindowFlags flags = Qt::WindowFlags());
+   QMdiSubWindow *addSubWindow(QWidget *widget, Qt::WindowFlags flags = Qt::EmptyFlag);
    void removeSubWindow(QWidget *widget);
 
    QBrush background() const;

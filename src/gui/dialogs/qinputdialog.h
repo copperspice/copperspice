@@ -89,7 +89,7 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
       DoubleInput
    };
 
-   QInputDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+   QInputDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QInputDialog(const QInputDialog &) = delete;
    QInputDialog &operator=(const QInputDialog &) = delete;
@@ -167,21 +167,19 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
 
    static QString getMultiLineText(QWidget *parent, const QString &title, const QString &label,
       const QString &text = QString(), bool *ok = nullptr,
-      Qt::WindowFlags flags = Qt::WindowFlags(),
-      Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
+      Qt::WindowFlags flags = Qt::EmptyFlag, Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
 
    static QString getItem(QWidget *parent, const QString &title, const QString &label,
-      const QStringList &items,
-      int current = 0, bool editable = true, bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags(),
-      Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
+      const QStringList &items, int current = 0, bool editable = true, bool *ok = nullptr,
+      Qt::WindowFlags flags = Qt::EmptyFlag, Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
 
    static int getInt(QWidget *parent, const QString &title, const QString &label, int value = 0,
-      int minValue = -2147483647, int maxValue = 2147483647,
-      int step = 1, bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+      int minValue = -2147483647, int maxValue = 2147483647, int step = 1, bool *ok = nullptr,
+      Qt::WindowFlags flags = Qt::EmptyFlag);
 
    static double getDouble(QWidget *parent, const QString &title, const QString &label, double value = 0,
       double minValue = -2147483647, double maxValue = 2147483647, int decimals = 1,
-      bool *ok = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+      bool *ok = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    GUI_CS_SIGNAL_1(Public, void textValueChanged(const QString &text))
    GUI_CS_SIGNAL_2(textValueChanged, text)

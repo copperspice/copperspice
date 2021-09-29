@@ -56,7 +56,7 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
    };
    using SubWindowOptions = QFlags<SubWindowOption>;
 
-   QMdiSubWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+   QMdiSubWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QMdiSubWindow(const  QMdiSubWindow &) = delete;
    QMdiSubWindow &operator=(const  QMdiSubWindow &) = delete;
