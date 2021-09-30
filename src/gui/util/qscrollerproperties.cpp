@@ -52,11 +52,7 @@ QScrollerPropertiesPrivate *QScrollerPropertiesPrivate::defaults()
       spp.overshootDragDistanceFactor = qreal(1);
       spp.overshootScrollDistanceFactor = qreal(0.5);
       spp.overshootScrollTime = qreal(0.7);
-#  ifdef Q_DEAD_CODE_FROM_QT4_WIN
-      if (QLibrary::resolve(QLatin1String("UxTheme"), "BeginPanningFeedback")) {
-         spp.overshootScrollTime = qreal(0.35);
-      }
-#  endif
+
       spp.hOvershootPolicy = QScrollerProperties::OvershootWhenScrollable;
       spp.vOvershootPolicy = QScrollerProperties::OvershootWhenScrollable;
       spp.frameRate = QScrollerProperties::Standard;
