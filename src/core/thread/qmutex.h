@@ -163,4 +163,43 @@ class Q_CORE_EXPORT QMutexLocker
    quintptr val;
 };
 
-#endif // QMUTEX_H
+class Q_CORE_EXPORT QRecursiveMutexLocker
+{
+ public:
+   explicit QRecursiveMutexLocker(QRecursiveMutex *mutex)
+   {
+      if (mutex == nullptr) {
+         // nothing
+
+      } else {
+         m_data = std::unique_lock<QRecursiveMutex>(*mutex);
+
+      }
+   }
+
+   QRecursiveMutexLocker(const QRecursiveMutexLocker &) = delete;
+   QRecursiveMutexLocker &operator=(const QRecursiveMutexLocker &) = delete;
+
+   ~QRecursiveMutexLocker() = default;
+
+   void lock() {
+      m_data.lock();
+   }
+
+   QRecursiveMutex * mutex() {
+      return m_data.mutex();
+   }
+
+   void relock() {
+      m_data.lock();
+   }
+
+   void unlock() {
+      m_data.unlock();
+   }
+
+ private:
+   std::unique_lock<QRecursiveMutex> m_data;
+};
+
+#endif
