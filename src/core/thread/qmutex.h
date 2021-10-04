@@ -28,6 +28,7 @@
 #include <qassert.h>
 #include <qatomic.h>
 
+#include <mutex>
 #include <new>
 
 class QMutexData;
@@ -88,6 +89,34 @@ class Q_CORE_EXPORT QMutex : public QBasicMutex
    ~QMutex();
 };
 
+class Q_CORE_EXPORT QRecursiveMutex
+{
+ public:
+   QRecursiveMutex() = default;
+
+   QRecursiveMutex(const QRecursiveMutex &) = delete;
+   QRecursiveMutex(QRecursiveMutex &&) = delete;
+
+   QRecursiveMutex &operator=(const QRecursiveMutex &) = delete;
+   QRecursiveMutex &operator=(QRecursiveMutex &&) = delete;
+
+   ~QRecursiveMutex() = default;
+
+   void lock() {
+      m_data.lock();
+   }
+
+   bool tryLock(int timeout = 0) {
+      return m_data.try_lock_for(std::chrono::milliseconds(timeout));
+   }
+
+   void unlock() {
+      m_data.unlock();
+   }
+
+ private:
+   std::recursive_timed_mutex m_data;
+};
 class Q_CORE_EXPORT QMutexLocker
 {
  public:
