@@ -57,8 +57,11 @@
 
 static QSystemLocale *_systemLocale = nullptr;
 
-static QSystemLocale *QSystemLocale_globalSystemLocale();
-Q_GLOBAL_STATIC_WITH_ARGS(QSystemLocale, QSystemLocale_globalSystemLocale, (QSystemLocale::cs_internal_private_tag()) )
+static QSystemLocale *QSystemLocale_globalSystemLocale()
+{
+   static QSystemLocale retval = QSystemLocale::cs_internal_private_tag();
+   return &retval;
+}
 
 static QLocaleData *system_data = nullptr;
 Q_GLOBAL_STATIC(QLocaleData, globalLocaleData)
@@ -72,8 +75,11 @@ static const int locale_data_size      = sizeof(locale_data) / sizeof(QLocaleDat
 static const QLocaleData *default_data = nullptr;
 static const QLocaleData *const c_data = locale_data;
 
-Q_GLOBAL_STATIC_WITH_ARGS(QSharedDataPointer<QLocalePrivate>, defaultLocalePrivate,
-                  (QLocalePrivate::create(defaultData(), default_number_options)))
+static QSharedDataPointer<QLocalePrivate> *defaultLocalePrivate()
+{
+   static QSharedDataPointer<QLocalePrivate> retval(QLocalePrivate::create(defaultData(), default_number_options));
+   return &retval;
+}
 
 QLocale::Language QLocalePrivate::codeToLanguage(const QString &code)
 {

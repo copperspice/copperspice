@@ -194,13 +194,14 @@ QFontPrivate::~QFontPrivate()
    scFont = nullptr;
 }
 
-extern QMutex *qt_fontdatabase_mutex();
+extern QRecursiveMutex *qt_fontdatabase_mutex();
 
 #define QT_FONT_ENGINE_FROM_DATA(data, script) data->engines[script]
 
 QFontEngine *QFontPrivate::engineForScript(int script) const
 {
-   QMutexLocker locker(qt_fontdatabase_mutex());
+   QRecursiveMutexLocker locker(qt_fontdatabase_mutex());
+
    if (script <= QChar::Script_Latin) {
       script = QChar::Script_Common;
    }

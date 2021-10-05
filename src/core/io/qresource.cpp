@@ -126,7 +126,11 @@ static QString cleanPath(const QString &_path)
    return path;
 }
 
-Q_GLOBAL_STATIC_WITH_ARGS(QMutex, resourceMutex, (QMutex::Recursive))
+static QRecursiveMutex *resourceMutex()
+{
+   static QRecursiveMutex retval;
+   return &retval;
+}
 
 using ResourceList = QList<QResourceRoot *>;
 
@@ -188,7 +192,7 @@ bool QResourcePrivate::load(const QString &file)
 {
    related.clear();
 
-   QMutexLocker lock(resourceMutex());
+   QRecursiveMutexLocker lock(resourceMutex());
    const ResourceList *list = resourceList();
 
    QString cleaned = cleanPath(file);
@@ -257,7 +261,7 @@ void QResourcePrivate::ensureInitialized() const
       that->load(path);
 
    } else {
-      QMutexLocker lock(resourceMutex());
+      QRecursiveMutexLocker lock(resourceMutex());
       QStringList searchPaths = *resourceSearchPaths();
       searchPaths << QLatin1String("");
 
@@ -438,14 +442,14 @@ void QResource::addSearchPath(const QString &path)
       return;
    }
 
-   QMutexLocker lock(resourceMutex());
+   QRecursiveMutexLocker lock(resourceMutex());
    resourceSearchPaths()->prepend(path);
 }
 
 // obsolete
 QStringList QResource::searchPaths()
 {
-   QMutexLocker lock(resourceMutex());
+   QRecursiveMutexLocker lock(resourceMutex());
    return *resourceSearchPaths();
 }
 
@@ -725,7 +729,7 @@ bool QResourceRoot::mappingRootSubdir(const QString &path, QString *match) const
 Q_CORE_EXPORT bool qRegisterResourceData(int version, const unsigned char *tree,
       const unsigned char *name, const unsigned char *data)
 {
-   QMutexLocker lock(resourceMutex());
+   QRecursiveMutexLocker lock(resourceMutex());
    if (version == 0x01 && resourceList()) {
       bool found = false;
       QResourceRoot res(tree, name, data);
@@ -749,7 +753,7 @@ Q_CORE_EXPORT bool qRegisterResourceData(int version, const unsigned char *tree,
 Q_CORE_EXPORT bool qUnregisterResourceData(int version, const unsigned char *tree,
       const unsigned char *name, const unsigned char *data)
 {
-   QMutexLocker lock(resourceMutex());
+   QRecursiveMutexLocker lock(resourceMutex());
    if (version == 0x01 && resourceList()) {
       QResourceRoot res(tree, name, data);
       for (int i = 0; i < resourceList()->size(); ) {
@@ -975,7 +979,8 @@ bool QResource::registerResource(const QString &rccFilename, const QString &reso
 
    if (root->registerSelf(rccFilename)) {
       root->ref.ref();
-      QMutexLocker lock(resourceMutex());
+
+      QRecursiveMutexLocker lock(resourceMutex());
       resourceList()->append(root);
       return true;
    }
@@ -989,7 +994,7 @@ bool QResource::unregisterResource(const QString &rccFilename, const QString &re
 {
    QString r = qt_resource_fixResourceRoot(resourceRoot);
 
-   QMutexLocker lock(resourceMutex());
+   QRecursiveMutexLocker lock(resourceMutex());
    ResourceList *list = resourceList();
 
    for (int i = 0; i < list->size(); ++i) {
@@ -1023,7 +1028,7 @@ bool QResource::registerResource(const uchar *rccData, const QString &resourceRo
    QDynamicBufferResourceRoot *root = new QDynamicBufferResourceRoot(r);
    if (root->registerSelf(rccData)) {
       root->ref.ref();
-      QMutexLocker lock(resourceMutex());
+      QRecursiveMutexLocker lock(resourceMutex());
       resourceList()->append(root);
       return true;
    }
@@ -1035,7 +1040,7 @@ bool QResource::unregisterResource(const uchar *rccData, const QString &resource
 {
    QString r = qt_resource_fixResourceRoot(resourceRoot);
 
-   QMutexLocker lock(resourceMutex());
+   QRecursiveMutexLocker lock(resourceMutex());
    ResourceList *list = resourceList();
 
    for (int i = 0; i < list->size(); ++i) {

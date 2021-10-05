@@ -38,9 +38,9 @@ QList<QFactoryLoader *> *qt_factory_loaders()
    return &retval;
 }
 
-QMutex *qt_factoryloader_mutex()
+QRecursiveMutex *qt_factoryloader_mutex()
 {
-   static QMutex retval(QMutex::Recursive);
+   static QRecursiveMutex retval;
    return &retval;
 }
 
@@ -89,7 +89,7 @@ QFactoryLoader::QFactoryLoader(const QString &iid, const QString &pluginDir, Qt:
    d->cs     = cs;
    d->suffix = pluginDir;
 
-   QMutexLocker locker(qt_factoryloader_mutex());
+   QRecursiveMutexLocker locker(qt_factoryloader_mutex());
    setup();
 
    qt_factory_loaders()->append(this);
@@ -249,7 +249,7 @@ void QFactoryLoader::setup()
 
 QFactoryLoader::~QFactoryLoader()
 {
-   QMutexLocker locker(qt_factoryloader_mutex());
+   QRecursiveMutexLocker locker(qt_factoryloader_mutex());
    qt_factory_loaders()->removeAll(this);
 }
 
@@ -351,7 +351,7 @@ QLibraryHandle *QFactoryLoader::library(const QString &key) const
 
 void QFactoryLoader::refreshAll()
 {
-   QMutexLocker locker(qt_factoryloader_mutex());
+   QRecursiveMutexLocker locker(qt_factoryloader_mutex());
    QList<QFactoryLoader *> *loaders = qt_factory_loaders();
 
    for (auto item : *loaders) {

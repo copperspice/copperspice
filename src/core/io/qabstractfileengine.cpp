@@ -41,7 +41,13 @@ static bool qt_file_engine_handlers_in_use = false;
     All application-wide handlers are stored in this list. The mutex must be
     acquired to ensure thread safety.
  */
-Q_GLOBAL_STATIC_WITH_ARGS(QReadWriteLock, fileEngineHandlerMutex, (QReadWriteLock::Recursive))
+
+static QReadWriteLock *fileEngineHandlerMutex()
+{
+   static QReadWriteLock retval(QReadWriteLock::Recursive);
+   return &retval;
+}
+
 static bool qt_abstractfileenginehandlerlist_shutDown = false;
 
 class QAbstractFileEngineHandlerList : public QList<QAbstractFileEngineHandler *>

@@ -291,12 +291,16 @@ bool QCoreApplicationPrivate::is_app_closing = false;
 // initialized in qcoreapplication and in qtextstream autotest when setlocale is called.
 Q_CORE_EXPORT bool qt_locale_initialized = false;
 
-//  Create an instance of cs.conf. Ensures the settings will not be thrown out of QSetting's cache for unused settings.
-Q_GLOBAL_STATIC_WITH_ARGS(QSettings, static_CopperSpiceConf, (QSettings::UserScope, QString("CopperSpice")))
+//  Create an instance of cs.conf. Ensures settings will not be thrown out of QSetting's cache for unused settings
+static QSettings *internal_csConf()
+{
+   static QSettings retval(QSettings::UserScope, "CopperSpice");
+   return &retval;
+}
 
 QSettings *QCoreApplicationPrivate::copperspiceConf()
 {
-   return static_CopperSpiceConf();
+   return internal_csConf();
 }
 
 Q_CORE_EXPORT uint qGlobalPostedEventsCount()
@@ -1599,11 +1603,15 @@ QString QCoreApplication::applicationVersion()
    return coreappdata()->applicationVersion;
 }
 
-Q_GLOBAL_STATIC_WITH_ARGS(QMutex, libraryPathMutex, (QMutex::Recursive))
+static QRecursiveMutex *libraryPathMutex()
+{
+   static QRecursiveMutex retval;
+   return &retval;
+}
 
 QStringList QCoreApplication::libraryPaths()
 {
-   QMutexLocker locker(libraryPathMutex());
+   QRecursiveMutexLocker locker(libraryPathMutex());
 
    if (! coreappdata()->app_libpaths) {
       QStringList *app_libpaths   = new QStringList;
@@ -1653,7 +1661,7 @@ QStringList QCoreApplication::libraryPaths()
 
 void QCoreApplication::setLibraryPaths(const QStringList &paths)
 {
-   QMutexLocker locker(libraryPathMutex());
+   QRecursiveMutexLocker locker(libraryPathMutex());
 
    if (! coreappdata()->app_libpaths) {
       coreappdata()->app_libpaths = new QStringList;
@@ -1671,7 +1679,7 @@ void QCoreApplication::addLibraryPath(const QString &path)
       return;
    }
 
-   QMutexLocker locker(libraryPathMutex());
+   QRecursiveMutexLocker locker(libraryPathMutex());
 
    // make sure that library paths is initialized
    libraryPaths();
@@ -1692,7 +1700,7 @@ void QCoreApplication::removeLibraryPath(const QString &path)
       return;
    }
 
-   QMutexLocker locker(libraryPathMutex());
+   QRecursiveMutexLocker locker(libraryPathMutex());
 
    // make sure that library paths is initialized
    libraryPaths();

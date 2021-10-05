@@ -255,8 +255,11 @@ void QSecureTransportContext::reset(SSLContextRef newContext)
    context = newContext;
 }
 
-Q_GLOBAL_STATIC_WITH_ARGS(QMutex, qt_securetransport_mutex, (QMutex::Recursive))
-
+static QRecursiveMutex *qt_securetransport_mutex()
+{
+   static QRecursiveMutex retval;
+   return &retval;
+}
 
 bool QSslSocketPrivate::s_libraryLoaded = false;
 bool QSslSocketPrivate::s_loadedCiphersAndCerts = false;
@@ -319,7 +322,7 @@ static OSStatus _q_SSLWrite(QTcpSocket *plainSocket, const char *data, size_t *d
 
 void QSslSocketPrivate::ensureInitialized()
 {
-   const QMutexLocker locker(qt_securetransport_mutex());
+   const QRecursiveMutexLocker locker(qt_securetransport_mutex());
 
    if (s_loadedCiphersAndCerts) {
       return;

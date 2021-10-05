@@ -479,7 +479,11 @@ static void setupLocaleMapper()
 
 }
 
-Q_GLOBAL_STATIC_WITH_ARGS(QMutex, textCodecsMutex, (QMutex::Recursive));
+static QRecursiveMutex *textCodecsMutex()
+{
+   static QRecursiveMutex retval;
+   return &retval;
+}
 
 // textCodecsMutex need to be locked to enter this function
 static void setup()
@@ -571,7 +575,7 @@ QTextCodec::ConverterState::~ConverterState()
 
 QTextCodec::QTextCodec()
 {
-   QMutexLocker locker(textCodecsMutex());
+   QRecursiveMutexLocker locker(textCodecsMutex());
 
    setup();
    all->prepend(this);
@@ -580,7 +584,7 @@ QTextCodec::QTextCodec()
 QTextCodec::~QTextCodec()
 {
    if (all) {
-      QMutexLocker locker(textCodecsMutex());
+      QRecursiveMutexLocker locker(textCodecsMutex());
 
       all->removeAll(this);
       QTextCodecCache *cache = qTextCodecCache();
@@ -597,7 +601,7 @@ QTextCodec *QTextCodec::codecForName(const QString &name)
       return nullptr;
    }
 
-   QMutexLocker locker(textCodecsMutex());
+   QRecursiveMutexLocker locker(textCodecsMutex());
    setup();
 
    if (! validCodecs()) {
@@ -653,7 +657,7 @@ QTextCodec *QTextCodec::codecForName(const QString &name)
 */
 QTextCodec *QTextCodec::codecForMib(int mib)
 {
-   QMutexLocker locker(textCodecsMutex());
+   QRecursiveMutexLocker locker(textCodecsMutex());
 
    setup();
 
@@ -703,7 +707,7 @@ QStringList QTextCodec::availableCodecs()
 {
    QStringList codecs;
 
-   QMutexLocker locker(textCodecsMutex());
+   QRecursiveMutexLocker locker(textCodecsMutex());
    setup();
 
    if (! validCodecs()) {
@@ -738,7 +742,7 @@ QList<int> QTextCodec::availableMibs()
 {
    QList<int> codecs;
 
-   QMutexLocker locker(textCodecsMutex());
+   QRecursiveMutexLocker locker(textCodecsMutex());
    setup();
 
    if (! validCodecs()) {
@@ -772,7 +776,7 @@ QList<int> QTextCodec::availableMibs()
 
 void QTextCodec::setCodecForLocale(QTextCodec *c)
 {
-   QMutexLocker locker(textCodecsMutex());
+   QRecursiveMutexLocker locker(textCodecsMutex());
 
    localeMapper = c;
    if (! localeMapper) {
@@ -799,7 +803,7 @@ QTextCodec *QTextCodec::codecForLocale()
       return localeMapper;
    }
 
-   QMutexLocker locker(textCodecsMutex());
+   QRecursiveMutexLocker locker(textCodecsMutex());
    setup();
 
    return localeMapper;
