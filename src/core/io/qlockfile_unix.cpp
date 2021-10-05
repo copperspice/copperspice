@@ -138,12 +138,11 @@ int QLockFilePrivate::checkFcntlWorksAfterFlock(const QString &fn)
 
 static QCache<QString, bool> *fcntlOK()
 {
-
    static QCache<QString, bool> retval(10);
    return &retval;
 }
 
-static QBasicMutex fcntlLock;
+static QMutex fcntlLock;
 
 /*!
   \internal

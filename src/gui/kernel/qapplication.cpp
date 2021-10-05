@@ -185,7 +185,7 @@ static bool force_reverse                = false;
 static unsigned applicationResourceFlags = 0;
 static qreal fontSmoothingGamma          = 1.7;
 
-static QBasicMutex applicationFontMutex;
+static QMutex applicationFontMutex;
 static Qt::LayoutDirection layout_direction = Qt::LayoutDirectionAuto;
 
 void qt_init(QApplicationPrivate *priv, int type);

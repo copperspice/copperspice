@@ -203,7 +203,7 @@ Q_GLOBAL_STATIC(QStartUpFuncList, preRList)
 using QVFuncList = QList<QtCleanUpFunction>;
 Q_GLOBAL_STATIC(QVFuncList, postRList)
 
-static QBasicMutex globalPreRoutinesMutex;
+static QMutex globalPreRoutinesMutex;
 
 void qAddPreRoutine(QtStartUpFunction p)
 {

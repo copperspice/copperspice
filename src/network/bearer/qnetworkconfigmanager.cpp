@@ -68,8 +68,9 @@ QNetworkConfigurationManagerPrivate *qNetworkConfigurationManagerPrivate()
    QNetworkConfigurationManagerPrivate *ptr = connManager_ptr.loadAcquire();
    int shutdown = appShutdown.loadAcquire();
 
-   if (!ptr && !shutdown) {
-      static QBasicMutex connManager_mutex;
+   if (! ptr && !shutdown) {
+      static QMutex connManager_mutex;
+
       QMutexLocker locker(&connManager_mutex);
 
       if (! (ptr = connManager_ptr.loadAcquire())) {

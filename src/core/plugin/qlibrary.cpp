@@ -55,7 +55,7 @@
 #  define QT_NO_DEBUG_PLUGIN_CHECK
 #endif
 
-static QBasicMutex qt_library_mutex;
+static QMutex qt_library_mutex;
 static QLibraryStore *qt_library_data = nullptr;
 static bool qt_library_data_once;
 
