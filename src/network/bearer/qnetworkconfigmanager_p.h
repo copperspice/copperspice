@@ -101,7 +101,7 @@ class Q_NETWORK_EXPORT QNetworkConfigurationManagerPrivate : public QObject
    QTimer *pollTimer;
    QThread *bearerThread;
 
-   mutable QMutex mutex;
+   mutable QRecursiveMutex mutex;
 
    QList<QBearerEngine *> sessionEngines;
 

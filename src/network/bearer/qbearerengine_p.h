@@ -81,7 +81,7 @@ class Q_NETWORK_EXPORT QBearerEngine : public QObject
    QHash<QString, QNetworkConfigurationPrivatePointer> snapConfigurations;
    QHash<QString, QNetworkConfigurationPrivatePointer> userChoiceConfigurations;
 
-   mutable QMutex mutex;
+   mutable QRecursiveMutex mutex;
 };
 
 #endif // QT_NO_BEARERMANAGEMENT

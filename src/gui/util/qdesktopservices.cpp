@@ -42,9 +42,11 @@ class QOpenUrlHandlerRegistry : public QObject
    GUI_CS_OBJECT(QOpenUrlHandlerRegistry)
 
  public:
-   inline QOpenUrlHandlerRegistry() : mutex(QMutex::Recursive) {}
+   QOpenUrlHandlerRegistry()
+   {
+   }
 
-   QMutex mutex;
+   QRecursiveMutex mutex;
 
    struct Handler {
       QObject *receiver;
@@ -75,7 +77,7 @@ void QOpenUrlHandlerRegistry::handlerDestroyed(QObject *handler)
 bool QDesktopServices::openUrl(const QUrl &url)
 {
    QOpenUrlHandlerRegistry *registry = handlerRegistry();
-   QMutexLocker locker(&registry->mutex);
+   QRecursiveMutexLocker locker(&registry->mutex);
 
    static bool insideOpenUrlHandler = false;
 
@@ -114,7 +116,7 @@ bool QDesktopServices::openUrl(const QUrl &url)
 void QDesktopServices::setUrlHandler(const QString &scheme, QObject *receiver, const char *method)
 {
    QOpenUrlHandlerRegistry *registry = handlerRegistry();
-   QMutexLocker locker(&registry->mutex);
+   QRecursiveMutexLocker locker(&registry->mutex);
 
    if (! receiver) {
       registry->handlers.remove(scheme.toLower());

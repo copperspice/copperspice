@@ -91,16 +91,18 @@ int QSslSocketBackendPrivate::s_indexForSSLExtraData = -1;
 class QOpenSslLocks
 {
  public:
-   inline QOpenSslLocks()
-      : initLocker(QMutex::Recursive),
-        locksLocker(QMutex::Recursive) {
-      QMutexLocker locker(&locksLocker);
+   QOpenSslLocks()
+   {
+      QRecursiveMutexLocker locker(&locksLocker);
       int numLocks = q_CRYPTO_num_locks();
-      locks = new QMutex *[numLocks];
-      memset(locks, 0, numLocks * sizeof(QMutex *));
+
+      locks = new QRecursiveMutex *[numLocks];
+      std::fill(locks, locks + numLocks, nullptr);
    }
-   inline ~QOpenSslLocks() {
-      QMutexLocker locker(&locksLocker);
+
+   ~QOpenSslLocks() {
+      QRecursiveMutexLocker locker(&locksLocker);
+
       for (int i = 0; i < q_CRYPTO_num_locks(); ++i) {
          delete locks[i];
       }
@@ -109,29 +111,33 @@ class QOpenSslLocks
       QSslSocketPrivate::deinitialize();
    }
 
-   inline QMutex *lock(int num) {
-      QMutexLocker locker(&locksLocker);
-      QMutex *tmp = locks[num];
+   QRecursiveMutex *lock(int num) {
+      QRecursiveMutexLocker locker(&locksLocker);
+      QRecursiveMutex *retval = locks[num];
 
-      if (!tmp) {
-         tmp = locks[num] = new QMutex(QMutex::Recursive);
+      if (retval == nullptr) {
+         retval = new QRecursiveMutex();
+         locks[num] = retval;
       }
-      return tmp;
+
+      return retval;
    }
 
-   QMutex *globalLock() {
+   QRecursiveMutex *globalLock() {
       return &locksLocker;
    }
 
-   QMutex *initLock() {
+   QRecursiveMutex *initLock() {
       return &initLocker;
    }
 
  private:
-   QMutex initLocker;
-   QMutex locksLocker;
-   QMutex **locks;
+   QRecursiveMutex initLocker;
+   QRecursiveMutex locksLocker;
+
+   QRecursiveMutex **locks;
 };
+
 Q_GLOBAL_STATIC(QOpenSslLocks, openssl_locks)
 #endif
 
@@ -155,7 +161,7 @@ extern "C" {
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
    static void locking_function(int mode, int lockNumber, const char *, int)
    {
-      QMutex *mutex = openssl_locks()->lock(lockNumber);
+      QRecursiveMutex *mutex = openssl_locks()->lock(lockNumber);
 
       // Lock or unlock it
       if (mode & CRYPTO_LOCK) {
@@ -481,7 +487,7 @@ bool QSslSocketPrivate::ensureLibraryLoaded()
 
    // Check if the library itself needs to be initialized.
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
-   QMutexLocker locker(openssl_locks()->initLock());
+   QRecursiveMutexLocker locker(openssl_locks()->initLock());
 #endif
 
    if (!s_libraryLoaded) {
@@ -527,7 +533,7 @@ bool QSslSocketPrivate::ensureLibraryLoaded()
 void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
 {
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
-   QMutexLocker locker(openssl_locks()->initLock());
+   QRecursiveMutexLocker locker(openssl_locks()->initLock());
 #endif
    if (s_loadedCiphersAndCerts) {
       return;

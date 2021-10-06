@@ -105,7 +105,7 @@ class Q_GUI_EXPORT QOpenGLContextGroupPrivate
 
  public:
    QOpenGLContextGroupPrivate()
-      : m_context(nullptr), m_mutex(QMutex::Recursive), m_refs(0)
+      : m_context(nullptr), m_refs(0)
    {
    }
 
@@ -119,7 +119,7 @@ class Q_GUI_EXPORT QOpenGLContextGroupPrivate
    QOpenGLContext *m_context;
 
    QList<QOpenGLContext *> m_shares;
-   QMutex m_mutex;
+   QRecursiveMutex m_mutex;
 
    QHash<QOpenGLMultiGroupSharedResource *, QOpenGLSharedResource *> m_resources;
    QAtomicInt m_refs;
@@ -150,7 +150,7 @@ class Q_GUI_EXPORT QOpenGLMultiGroupSharedResource
 
       // Have to use our own mutex here, not the group's, since
       // m_groups has to be protected too against any concurrent access.
-      QMutexLocker locker(&m_mutex);
+      QRecursiveMutexLocker locker(&m_mutex);
       T *resource = static_cast<T *>(group->d_func()->m_resources.value(this, nullptr));
 
       if (!resource) {
@@ -163,7 +163,7 @@ class Q_GUI_EXPORT QOpenGLMultiGroupSharedResource
  private:
    QAtomicInt active;
    QList<QOpenGLContextGroup *> m_groups;
-   QMutex m_mutex;
+   QRecursiveMutex m_mutex;
 };
 
 class Q_GUI_EXPORT QOpenGLContextPrivate

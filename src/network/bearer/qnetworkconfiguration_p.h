@@ -34,12 +34,10 @@ using QNetworkConfigurationPrivatePointer = QExplicitlySharedDataPointer<QNetwor
 class QNetworkConfigurationPrivate : public QSharedData
 {
  public:
-   QNetworkConfigurationPrivate() :
-      mutex(QMutex::Recursive),
-      type(QNetworkConfiguration::Invalid),
-      purpose(QNetworkConfiguration::UnknownPurpose),
-      bearerType(QNetworkConfiguration::BearerUnknown),
-      isValid(false), roamingSupported(false) {
+   QNetworkConfigurationPrivate()
+      : type(QNetworkConfiguration::Invalid), purpose(QNetworkConfiguration::UnknownPurpose),
+      bearerType(QNetworkConfiguration::BearerUnknown), isValid(false), roamingSupported(false)
+   {
    }
 
    QNetworkConfigurationPrivate(const QNetworkConfigurationPrivate &) = delete;
@@ -52,7 +50,7 @@ class QNetworkConfigurationPrivate : public QSharedData
 
    QMap<unsigned int, QNetworkConfigurationPrivatePointer> serviceNetworkMembers;
 
-   mutable QMutex mutex;
+   mutable QRecursiveMutex mutex;
 
    QString name;
    QString id;

@@ -914,20 +914,21 @@ bool operator!=(const QGLFormat &a, const QGLFormat &b)
 
 struct QGLContextGroupList {
    QGLContextGroupList()
-      : m_mutex(QMutex::Recursive) {
+   {
    }
+
    void append(QGLContextGroup *group) {
-      QMutexLocker locker(&m_mutex);
+      QRecursiveMutexLocker locker(&m_mutex);
       m_list.append(group);
    }
 
    void remove(QGLContextGroup *group) {
-      QMutexLocker locker(&m_mutex);
+      QRecursiveMutexLocker locker(&m_mutex);
       m_list.removeOne(group);
    }
 
    QList<QGLContextGroup *> m_list;
-   QMutex m_mutex;
+   QRecursiveMutex m_mutex;
 };
 
 Q_GLOBAL_STATIC(QGLContextGroupList, qt_context_groups)
@@ -1178,7 +1179,8 @@ void QGLTextureCache::insert(QGLContext *ctx, qint64 key, QGLTexture *texture, i
 void QGLTextureCache::remove(qint64 key)
 {
    QWriteLocker locker(&m_lock);
-   QMutexLocker groupLocker(&qt_context_groups()->m_mutex);
+
+   QRecursiveMutexLocker groupLocker(&qt_context_groups()->m_mutex);
    QList<QGLContextGroup *>::const_iterator it = qt_context_groups()->m_list.constBegin();
    while (it != qt_context_groups()->m_list.constEnd()) {
       const QGLTextureCacheKey cacheKey = {key, *it};

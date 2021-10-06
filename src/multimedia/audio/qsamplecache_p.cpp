@@ -33,8 +33,7 @@
 
 
 QSampleCache::QSampleCache(QObject *parent)
-   : QObject(parent), m_networkAccessManager(nullptr), m_mutex(QMutex::Recursive),
-     m_capacity(0), m_usage(0), m_loadingRefCount(0)
+   : QObject(parent), m_networkAccessManager(nullptr), m_capacity(0), m_usage(0), m_loadingRefCount(0)
 {
    m_loadingThread.setObjectName("QSampleCache::LoadingThread");
 
@@ -53,7 +52,7 @@ QNetworkAccessManager &QSampleCache::networkAccessManager()
 
 QSampleCache::~QSampleCache()
 {
-   QMutexLocker m(&m_mutex);
+   QRecursiveMutexLocker m(&m_mutex);
 
    m_loadingThread.quit();
    m_loadingThread.wait();
@@ -91,7 +90,7 @@ bool QSampleCache::isLoading() const
 
 bool QSampleCache::isCached(const QUrl &url) const
 {
-   QMutexLocker locker(&m_mutex);
+   QRecursiveMutexLocker locker(&m_mutex);
    return m_samples.contains(url);
 }
 
@@ -110,7 +109,8 @@ QSample *QSampleCache::requestSample(const QUrl &url)
    qDebug() << "QSampleCache: request sample [" << url << "]";
 #endif
 
-   QMutexLocker locker(&m_mutex);
+   QRecursiveMutexLocker locker(&m_mutex);
+
    QMap<QUrl, QSample *>::iterator it = m_samples.find(url);
    QSample *sample;
 
@@ -131,7 +131,8 @@ QSample *QSampleCache::requestSample(const QUrl &url)
 
 void QSampleCache::setCapacity(qint64 capacity)
 {
-   QMutexLocker locker(&m_mutex);
+   QRecursiveMutexLocker locker(&m_mutex);
+
    if (m_capacity == capacity) {
       return;
    }
@@ -167,7 +168,7 @@ void QSampleCache::unloadSample(QSample *sample)
 // called from any thread
 void QSampleCache::refresh(qint64 usageChange)
 {
-   QMutexLocker locker(&m_mutex);
+   QRecursiveMutexLocker locker(&m_mutex);
    m_usage += usageChange;
 
    if (m_capacity <= 0 || m_usage <= m_capacity) {
@@ -211,7 +212,7 @@ void QSampleCache::refresh(qint64 usageChange)
 // called from any thread
 void QSampleCache::removeUnreferencedSample(QSample *sample)
 {
-   QMutexLocker m(&m_mutex);
+   QRecursiveMutexLocker m(&m_mutex);
    m_staleSamples.remove(sample);
 }
 
@@ -248,7 +249,7 @@ void QSample::loadIfNecessary()
 // called from any thread
 bool QSampleCache::notifyUnreferencedSample(QSample *sample)
 {
-   QMutexLocker locker(&m_mutex);
+   QRecursiveMutexLocker locker(&m_mutex);
    if (m_capacity > 0) {
       return false;
    }

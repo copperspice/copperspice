@@ -135,7 +135,8 @@ class Q_MULTIMEDIA_EXPORT QSampleCache : public QObject
    QMap<QUrl, QSample *> m_samples;
    QSet<QSample *> m_staleSamples;
    QNetworkAccessManager *m_networkAccessManager;
-   mutable QMutex m_mutex;
+
+   mutable QRecursiveMutex m_mutex;
    qint64 m_capacity;
    qint64 m_usage;
    QThread m_loadingThread;
@@ -148,6 +149,7 @@ class Q_MULTIMEDIA_EXPORT QSampleCache : public QObject
 
    void loadingRelease();
    int m_loadingRefCount;
+
    QMutex m_loadingMutex;
 
    friend class QSample;

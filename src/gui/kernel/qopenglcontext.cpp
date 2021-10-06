@@ -837,7 +837,7 @@ QOpenGLContextGroup *QOpenGLContextGroup::currentContextGroup()
 
 void QOpenGLContextGroupPrivate::addContext(QOpenGLContext *ctx)
 {
-   QMutexLocker locker(&m_mutex);
+   QRecursiveMutexLocker locker(&m_mutex);
    m_refs.ref();
    m_shares << ctx;
 }
@@ -849,7 +849,7 @@ void QOpenGLContextGroupPrivate::removeContext(QOpenGLContext *ctx)
    bool deleteObject = false;
 
    {
-      QMutexLocker locker(&m_mutex);
+      QRecursiveMutexLocker locker(&m_mutex);
       m_shares.removeOne(ctx);
 
       if (ctx == m_context && !m_shares.isEmpty()) {
@@ -900,7 +900,7 @@ void QOpenGLContextGroupPrivate::cleanup()
 
 void QOpenGLContextGroupPrivate::deletePendingResources(QOpenGLContext *ctx)
 {
-   QMutexLocker locker(&m_mutex);
+   QRecursiveMutexLocker locker(&m_mutex);
 
    const QList<QOpenGLSharedResource *> pending = m_pendingDeletion;
    m_pendingDeletion.clear();
@@ -917,7 +917,7 @@ void QOpenGLContextGroupPrivate::deletePendingResources(QOpenGLContext *ctx)
 QOpenGLSharedResource::QOpenGLSharedResource(QOpenGLContextGroup *group)
    : m_group(group)
 {
-   QMutexLocker locker(&m_group->d_func()->m_mutex);
+   QRecursiveMutexLocker locker(&m_group->d_func()->m_mutex);
    m_group->d_func()->m_sharedResources << this;
 }
 
@@ -933,7 +933,7 @@ void QOpenGLSharedResource::free()
       return;
    }
 
-   QMutexLocker locker(&m_group->d_func()->m_mutex);
+   QRecursiveMutexLocker locker(&m_group->d_func()->m_mutex);
    m_group->d_func()->m_sharedResources.removeOne(this);
    m_group->d_func()->m_pendingDeletion << this;
 
@@ -956,8 +956,7 @@ void QOpenGLSharedResourceGuard::freeResource(QOpenGLContext *context)
 
 // internal
 QOpenGLMultiGroupSharedResource::QOpenGLMultiGroupSharedResource()
-   : active(0),
-     m_mutex(QMutex::Recursive)
+   : active(0)
 {
 #ifdef QT_GL_CONTEXT_RESOURCE_DEBUG
    qDebug("Creating context group resource object %p.", this);

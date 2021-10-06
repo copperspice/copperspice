@@ -54,13 +54,13 @@ class QFreetypeFace
    static QFreetypeFace *getFace(const QFontEngine::FaceId &face_id, const QByteArray &fontData = QByteArray());
    void release(const QFontEngine::FaceId &face_id);
 
-   // locks the struct for usage. Any read/write operations require locking.
+   // locks the struct for usage, any read/write operations require locking.
    void lock() {
-      _lock.lock();
+      m_lock.lock();
    }
 
    void unlock() {
-      _lock.unlock();
+      m_lock.unlock();
    }
 
    FT_Face face;
@@ -84,13 +84,18 @@ class QFreetypeFace
    static void addBitmapToPath(FT_GlyphSlot slot, const QFixedPoint &point, QPainterPath *path);
 
  private:
-   QFreetypeFace() : _lock(QMutex::Recursive) {}
-   ~QFreetypeFace() {}
+   QFreetypeFace()
+   {
+   }
+
+   ~QFreetypeFace()
+   {
+   }
 
    void cleanup();
 
    QAtomicInt ref;
-   QMutex _lock;
+   QRecursiveMutex m_lock;
    QByteArray fontData;
 
    // harfbuzz

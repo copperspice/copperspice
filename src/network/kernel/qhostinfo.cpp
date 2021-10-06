@@ -276,7 +276,7 @@ void QHostInfoRunnable::run()
 
    // now also iterate through the postponed ones
    {
-      QMutexLocker locker(&manager->mutex);
+      QRecursiveMutexLocker locker(&manager->mutex);
       QMutableListIterator<QHostInfoRunnable *> iterator(manager->postponedLookups);
       while (iterator.hasNext()) {
          QHostInfoRunnable *postponed = iterator.next();
@@ -295,7 +295,8 @@ void QHostInfoRunnable::run()
    // thread goes back to QThreadPool
 }
 
-QHostInfoLookupManager::QHostInfoLookupManager() : mutex(QMutex::Recursive), wasDeleted(false)
+QHostInfoLookupManager::QHostInfoLookupManager()
+   : wasDeleted(false)
 {
    moveToThread(QCoreApplicationPrivate::mainThread());
 
@@ -316,7 +317,8 @@ QHostInfoLookupManager::~QHostInfoLookupManager()
 void QHostInfoLookupManager::clear()
 {
    {
-      QMutexLocker locker(&mutex);
+      QRecursiveMutexLocker locker(&mutex);
+
       qDeleteAll(postponedLookups);
       qDeleteAll(scheduledLookups);
       qDeleteAll(finishedLookups);
@@ -339,7 +341,7 @@ void QHostInfoLookupManager::work()
    //  - launch new lookups via the thread pool
    //  - make sure only one lookup per host/IP is in progress
 
-   QMutexLocker locker(&mutex);
+   QRecursiveMutexLocker locker(&mutex);
 
    if (!finishedLookups.isEmpty()) {
       // remove ID from aborted if it is in there
@@ -408,7 +410,7 @@ void QHostInfoLookupManager::scheduleLookup(QHostInfoRunnable *r)
       return;
    }
 
-   QMutexLocker locker(&this->mutex);
+   QRecursiveMutexLocker locker(&this->mutex);
    scheduledLookups.enqueue(r);
    work();
 }
@@ -420,7 +422,7 @@ void QHostInfoLookupManager::abortLookup(int id)
       return;
    }
 
-   QMutexLocker locker(&this->mutex);
+   QRecursiveMutexLocker locker(&this->mutex);
 
    // is postponed? delete and return
    for (int i = 0; i < postponedLookups.length(); i++) {
@@ -450,7 +452,7 @@ bool QHostInfoLookupManager::wasAborted(int id)
       return true;
    }
 
-   QMutexLocker locker(&this->mutex);
+   QRecursiveMutexLocker locker(&this->mutex);
    return abortedLookups.contains(id);
 }
 
@@ -461,7 +463,7 @@ void QHostInfoLookupManager::lookupFinished(QHostInfoRunnable *r)
       return;
    }
 
-   QMutexLocker locker(&this->mutex);
+   QRecursiveMutexLocker locker(&this->mutex);
    currentLookups.removeOne(r);
    finishedLookups.append(r);
    work();

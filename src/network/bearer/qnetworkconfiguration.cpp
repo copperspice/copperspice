@@ -69,7 +69,8 @@ QString QNetworkConfiguration::name() const
       return QString();
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
+
    return d->name;
 }
 
@@ -83,7 +84,8 @@ QString QNetworkConfiguration::identifier() const
       return QString();
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
+
    return d->id;
 }
 
@@ -101,7 +103,8 @@ QNetworkConfiguration::Type QNetworkConfiguration::type() const
       return QNetworkConfiguration::Invalid;
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
+
    return d->type;
 }
 
@@ -121,7 +124,8 @@ bool QNetworkConfiguration::isValid() const
       return false;
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
+
    return d->isValid;
 }
 
@@ -134,7 +138,8 @@ QNetworkConfiguration::StateFlags QNetworkConfiguration::state() const
       return QNetworkConfiguration::Undefined;
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
+
    return d->state;
 }
 
@@ -151,7 +156,7 @@ QNetworkConfiguration::Purpose QNetworkConfiguration::purpose() const
       return QNetworkConfiguration::UnknownPurpose;
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
    return d->purpose;
 }
 
@@ -164,7 +169,7 @@ bool QNetworkConfiguration::isRoamingAvailable() const
       return false;
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
    return d->roamingSupported;
 }
 
@@ -183,7 +188,7 @@ QList<QNetworkConfiguration> QNetworkConfiguration::children() const
       return results;
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
 
    if (d->type != QNetworkConfiguration::ServiceNetwork || !d->isValid) {
       return results;
@@ -197,7 +202,7 @@ QList<QNetworkConfiguration> QNetworkConfiguration::children() const
 
       //if we have an invalid member get rid of it -> was deleted earlier on
       {
-         QMutexLocker childLocker(&p->mutex);
+         QRecursiveMutexLocker childLocker(&p->mutex);
 
          if (!p->isValid) {
             i.remove();
@@ -219,7 +224,7 @@ QNetworkConfiguration::BearerType QNetworkConfiguration::bearerType() const
       return BearerUnknown;
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
 
    return d->bearerType;
 }
@@ -259,7 +264,7 @@ QString QNetworkConfiguration::bearerTypeName() const
       return QString();
    }
 
-   QMutexLocker locker(&d->mutex);
+   QRecursiveMutexLocker locker(&d->mutex);
 
    if (d->type == QNetworkConfiguration::ServiceNetwork || d->type == QNetworkConfiguration::UserChoice) {
       return QString();

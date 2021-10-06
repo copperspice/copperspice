@@ -328,7 +328,7 @@ class QSocks5BindStore : public QObject
  protected:
    void timerEvent(QTimerEvent *event) override;
 
-   QMutex mutex;
+   QRecursiveMutex mutex;
    int sweepTimerId;
    //socket descriptor, data, timestamp
    QHash<int, QSocks5BindData *> store;
@@ -337,8 +337,7 @@ class QSocks5BindStore : public QObject
 Q_GLOBAL_STATIC(QSocks5BindStore, socks5BindStore)
 
 QSocks5BindStore::QSocks5BindStore()
-   : mutex(QMutex::Recursive)
-   , sweepTimerId(-1)
+   : sweepTimerId(-1)
 {
    QCoreApplication *app = QCoreApplication::instance();
    if (app && app->thread() != thread()) {
@@ -352,7 +351,7 @@ QSocks5BindStore::~QSocks5BindStore()
 
 void QSocks5BindStore::add(qintptr socketDescriptor, QSocks5BindData *bindData)
 {
-   QMutexLocker lock(&mutex);
+   QRecursiveMutexLocker lock(&mutex);
    if (store.contains(socketDescriptor)) {
       // qDebug() << "delete it";
    }
@@ -366,13 +365,13 @@ void QSocks5BindStore::add(qintptr socketDescriptor, QSocks5BindData *bindData)
 
 bool QSocks5BindStore::contains(qintptr socketDescriptor)
 {
-   QMutexLocker lock(&mutex);
+   QRecursiveMutexLocker lock(&mutex);
    return store.contains(socketDescriptor);
 }
 
 QSocks5BindData *QSocks5BindStore::retrieve(qintptr socketDescriptor)
 {
-   QMutexLocker lock(&mutex);
+   QRecursiveMutexLocker lock(&mutex);
    if (! store.contains(socketDescriptor)) {
       return nullptr;
    }
@@ -396,7 +395,8 @@ QSocks5BindData *QSocks5BindStore::retrieve(qintptr socketDescriptor)
 
 void QSocks5BindStore::timerEvent(QTimerEvent *event)
 {
-   QMutexLocker lock(&mutex);
+   QRecursiveMutexLocker lock(&mutex);
+
    if (event->timerId() == sweepTimerId) {
       QSOCKS5_DEBUG << "QSocks5BindStore performing sweep";
       QMutableHashIterator<int, QSocks5BindData *> it(store);

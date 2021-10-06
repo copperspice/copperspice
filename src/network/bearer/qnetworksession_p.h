@@ -37,8 +37,8 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    friend class QNetworkSession;
 
  public:
-   QNetworkSessionPrivate() : QObject(),
-      state(QNetworkSession::Invalid), isOpen(false), mutex(QMutex::Recursive) {
+   QNetworkSessionPrivate()
+      : state(QNetworkSession::Invalid), isOpen(false) {
    }
 
    virtual ~QNetworkSessionPrivate() {
@@ -127,7 +127,7 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    QNetworkSession::State state;
    bool isOpen;
 
-   QMutex mutex;
+   QRecursiveMutex mutex;
 };
 
 #endif // QT_NO_BEARERMANAGEMENT

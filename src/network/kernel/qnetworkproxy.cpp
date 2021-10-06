@@ -47,7 +47,7 @@ class QGlobalNetworkProxy
 {
  public:
    QGlobalNetworkProxy()
-      : mutex(QMutex::Recursive), applicationLevelProxy(nullptr), applicationLevelProxyFactory(nullptr),
+      : applicationLevelProxy(nullptr), applicationLevelProxyFactory(nullptr),
         socks5SocketEngineHandler(nullptr), httpSocketEngineHandler(nullptr)
    {
 #ifdef QT_USE_SYSTEM_PROXIES
@@ -66,8 +66,9 @@ class QGlobalNetworkProxy
    }
 
    void setApplicationProxy(const QNetworkProxy &proxy) {
-      QMutexLocker lock(&mutex);
-      if (!applicationLevelProxy) {
+      QRecursiveMutexLocker lock(&mutex);
+
+      if (! applicationLevelProxy) {
          applicationLevelProxy = new QNetworkProxy;
       }
 
@@ -77,7 +78,7 @@ class QGlobalNetworkProxy
    }
 
    void setApplicationProxyFactory(QNetworkProxyFactory *factory) {
-      QMutexLocker lock(&mutex);
+      QRecursiveMutexLocker lock(&mutex);
 
       if (factory == applicationLevelProxyFactory) {
          return;
@@ -98,7 +99,7 @@ class QGlobalNetworkProxy
    QList<QNetworkProxy> proxyForQuery(const QNetworkProxyQuery &query);
 
  private:
-   QMutex mutex;
+   QRecursiveMutex mutex;
    QNetworkProxy *applicationLevelProxy;
    QNetworkProxyFactory *applicationLevelProxyFactory;
    QSocks5SocketEngineHandler *socks5SocketEngineHandler;
@@ -107,7 +108,7 @@ class QGlobalNetworkProxy
 
 QList<QNetworkProxy> QGlobalNetworkProxy::proxyForQuery(const QNetworkProxyQuery &query)
 {
-   QMutexLocker locker(&mutex);
+   QRecursiveMutexLocker locker(&mutex);
 
    QList<QNetworkProxy> result;
 

@@ -183,7 +183,7 @@ class QHostInfoLookupManager : public QAbstractHostInfoLookupManager
 
    QThreadPool threadPool;
 
-   QMutex mutex;
+   QRecursiveMutex mutex;
 
    bool wasDeleted;
 

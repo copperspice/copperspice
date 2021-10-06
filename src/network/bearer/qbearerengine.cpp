@@ -26,7 +26,7 @@
 #ifndef QT_NO_BEARERMANAGEMENT
 
 QBearerEngine::QBearerEngine(QObject *parent)
-   : QObject(parent), mutex(QMutex::Recursive)
+   : QObject(parent)
 {
 }
 
@@ -72,7 +72,7 @@ bool QBearerEngine::configurationsInUse() const
    QHash<QString, QNetworkConfigurationPrivatePointer>::const_iterator it;
    QHash<QString, QNetworkConfigurationPrivatePointer>::const_iterator end;
 
-   QMutexLocker locker(&mutex);
+   QRecursiveMutexLocker locker(&mutex);
 
    for (it = accessPointConfigurations.constBegin(),
          end = accessPointConfigurations.constEnd(); it != end; ++it) {
