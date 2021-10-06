@@ -22,64 +22,56 @@
 ***********************************************************************/
 
 #include <qatomic.h>
+
 #include <qmutexpool_p.h>
 
 QMutexPool *globalMutexPool()
 {
-   static QMutexPool retval(QMutex::Recursive);
+   static QMutexPool retval;
+
    return &retval;
 }
 
-QMutexPool::QMutexPool(QMutex::RecursionMode recursionMode, int size)
-   : mutexes(size), recursionMode(recursionMode)
+QMutexPool::QMutexPool(int size)
+   : m_mutexArray(size)
 {
-   for (int index = 0; index < mutexes.count(); ++index) {
-      mutexes[index].store(nullptr);
+   for (int index = 0; index < m_mutexArray.count(); ++index) {
+      m_mutexArray[index].store(nullptr);
    }
 }
 
 QMutexPool::~QMutexPool()
 {
-   for (int index = 0; index < mutexes.count(); ++index) {
-      delete mutexes[index].load();
+   for (int index = 0; index < m_mutexArray.count(); ++index) {
+      delete m_mutexArray[index].load();
    }
 }
 
-/*!
-    Returns the global QMutexPool instance.
-*/
 QMutexPool *QMutexPool::instance()
 {
    return globalMutexPool();
 }
 
-/*! \internal
-  create the mutex for the given index
- */
-QMutex *QMutexPool::createMutex(int index)
+QRecursiveMutex *QMutexPool::createMutex(int index)
 {
-   // mutex not created, create one
-   QMutex *newMutex = new QMutex(recursionMode);
+   QRecursiveMutex *newMutex = new QRecursiveMutex();
+   QRecursiveMutex *expected = nullptr;
 
-    QMutex *expected = nullptr;
-
-   if (! mutexes[index].compareExchange(expected, newMutex, std::memory_order_release)) {
+   if (! m_mutexArray[index].compareExchange(expected, newMutex, std::memory_order_release)) {
       delete newMutex;
    }
 
-   return mutexes[index].load();
+   return m_mutexArray[index].load();
 }
 
-/*!
-    Returns a QMutex from the global mutex pool.
-*/
-QMutex *QMutexPool::globalInstanceGet(const void *address)
+QRecursiveMutex *QMutexPool::globalInstanceGet(const void *address)
 {
    QMutexPool *const globalInstance = globalMutexPool();
+
    if (globalInstance == nullptr) {
       return nullptr;
    }
+
    return globalInstance->get(address);
 }
-
 

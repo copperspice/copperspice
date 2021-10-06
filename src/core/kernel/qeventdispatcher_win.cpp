@@ -90,8 +90,8 @@ static void resolveTimerAPI()
    static bool triedResolve = false;
 
    if (!triedResolve) {
+      QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
 
-      QMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
 
       if (triedResolve)
             return;

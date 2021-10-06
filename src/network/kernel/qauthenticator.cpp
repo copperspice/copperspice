@@ -1352,7 +1352,8 @@ static PSecurityFunctionTable pSecurityFunctionTable = nullptr;
 
 static bool q_NTLM_SSPI_library_load()
 {
-   QMutexLocker locker(QMutexPool::globalInstanceGet((void *)&pSecurityFunctionTable));
+   QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet((void *) &pSecurityFunctionTable));
+
    if (pSecurityFunctionTable == nullptr) {
       securityDLLHandle = LoadLibrary(L"secur32.dll");
 

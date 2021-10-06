@@ -86,7 +86,8 @@ bool QSslCertificate::isSelfSigned() const
 
 QByteArray QSslCertificate::version() const
 {
-   QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+   QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+
    if (d->versionString.isEmpty() && d->x509) {
       int64_t version;
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
@@ -102,7 +103,7 @@ QByteArray QSslCertificate::version() const
 
 QByteArray QSslCertificate::serialNumber() const
 {
-   QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+   QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
 
    if (d->serialNumberString.isEmpty() && d->x509) {
       ASN1_INTEGER *serialNumber;
@@ -129,7 +130,7 @@ QByteArray QSslCertificate::serialNumber() const
 
 QStringList QSslCertificate::issuerInfo(SubjectInfo info) const
 {
-   QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+   QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
 
    // lazy init
    if (d->issuerInfo.isEmpty() && d->x509) {
@@ -141,7 +142,7 @@ QStringList QSslCertificate::issuerInfo(SubjectInfo info) const
 
 QStringList QSslCertificate::issuerInfo(const QByteArray &attribute) const
 {
-   QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+   QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
 
    // lazy init
    if (d->issuerInfo.isEmpty() && d->x509) {
@@ -153,7 +154,8 @@ QStringList QSslCertificate::issuerInfo(const QByteArray &attribute) const
 
 QStringList QSslCertificate::subjectInfo(SubjectInfo info) const
 {
-   QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+   QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+
    // lazy init
    if (d->subjectInfo.isEmpty() && d->x509)
       d->subjectInfo =
@@ -164,7 +166,8 @@ QStringList QSslCertificate::subjectInfo(SubjectInfo info) const
 
 QStringList QSslCertificate::subjectInfo(const QByteArray &attribute) const
 {
-   QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+   QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+
    // lazy init
    if (d->subjectInfo.isEmpty() && d->x509)
       d->subjectInfo =
@@ -175,7 +178,8 @@ QStringList QSslCertificate::subjectInfo(const QByteArray &attribute) const
 
 QList<QByteArray> QSslCertificate::subjectInfoAttributes() const
 {
-   QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+   QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+
    // lazy init
    if (d->subjectInfo.isEmpty() && d->x509)
       d->subjectInfo =
@@ -186,7 +190,8 @@ QList<QByteArray> QSslCertificate::subjectInfoAttributes() const
 
 QList<QByteArray> QSslCertificate::issuerInfoAttributes() const
 {
-   QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+   QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
+
    // lazy init
    if (d->issuerInfo.isEmpty() && d->x509)
       d->issuerInfo =

@@ -189,7 +189,7 @@ static void resolveLibs()
 
       // protect initialization
 
-      QMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
+      QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
       // check triedResolve again, since another thread may have already
       // done the initialization
       if (triedResolve) {
@@ -283,8 +283,8 @@ static bool resolveUNCLibs()
 {
    static bool triedResolve = false;
    if (!triedResolve) {
+      QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
 
-      QMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
       if (triedResolve) {
          return ptrNetShareEnum && ptrNetApiBufferFree;
       }

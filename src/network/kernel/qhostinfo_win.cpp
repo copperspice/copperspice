@@ -78,6 +78,7 @@ static void translateWSAError(int error, QHostInfo *results)
          results->setError(QHostInfo::HostNotFound);
          results->setErrorString(QHostInfoAgent::tr("Host not found"));
          return;
+
       default:
          results->setError(QHostInfo::UnknownError);
          results->setErrorString(QHostInfoAgent::tr("Unknown error (%1)").formatArg(error));
@@ -93,7 +94,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    static std::atomic<bool> triedResolve(false);
 
    if (! triedResolve.load()) {
-      QMutexLocker locker(QMutexPool::globalInstanceGet(&local_getaddrinfo));
+      QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&local_getaddrinfo));
 
       if (! triedResolve.load()) {
          resolveLibraryInternal();

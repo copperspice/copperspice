@@ -31,25 +31,29 @@
 class Q_CORE_EXPORT QMutexPool
 {
  public:
-   explicit QMutexPool(QMutex::RecursionMode recursionMode = QMutex::NonRecursive, int size = 131);
+   explicit QMutexPool(int size = DEFAULT_SIZE);
+
    ~QMutexPool();
 
-   inline QMutex *get(const void *address) {
-      int index = uint(quintptr(address)) % mutexes.count();
-      QMutex *m = mutexes[index].load();
-      if (m) {
-         return m;
+   QRecursiveMutex *get(const void *address) {
+      int index = uint(quintptr(address)) % m_mutexArray.count();
+      QRecursiveMutex *mutex = m_mutexArray[index].load();
+
+      if (mutex != nullptr) {
+         return mutex;
       } else {
          return createMutex(index);
       }
    }
+
    static QMutexPool *instance();
-   static QMutex *globalInstanceGet(const void *address);
+   static QRecursiveMutex *globalInstanceGet(const void *address);
+
+   static constexpr const int DEFAULT_SIZE = 131;
 
  private:
-   QMutex *createMutex(int index);
-   QVarLengthArray<QAtomicPointer<QMutex>, 131> mutexes;
-   QMutex::RecursionMode recursionMode;
+   QRecursiveMutex *createMutex(int index);
+   QVarLengthArray<QAtomicPointer<QRecursiveMutex>, DEFAULT_SIZE> m_mutexArray;
 };
 
 extern Q_CORE_EXPORT QMutexPool *qt_global_mutexpool;

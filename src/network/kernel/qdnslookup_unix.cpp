@@ -111,7 +111,8 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
    static std::atomic<bool> triedResolve(false);
 
    if (! triedResolve.load()) {
-      QMutexLocker locker(QMutexPool::globalInstanceGet(&local_res_ninit));
+      QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&local_res_ninit));
+
       if (!triedResolve.load()) {
          resolveLibraryInternal();
          triedResolve.store(true);

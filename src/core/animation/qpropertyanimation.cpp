@@ -161,7 +161,7 @@ void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstra
    QPropertyAnimation *animToStop = nullptr;
 
    {
-      QMutexLocker locker(QMutexPool::globalInstanceGet( &staticMetaObject() ));
+      QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet( &staticMetaObject() ));
 
       using QPropertyAnimationPair = QPair<QObject *, QString>;
       using QPropertyAnimationHash = QHash<QPropertyAnimationPair, QPropertyAnimation *>;

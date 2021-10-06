@@ -118,7 +118,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    static std::atomic<bool> triedResolve(false);
 
    if (! triedResolve.load()) {
-      QMutexLocker locker(QMutexPool::globalInstanceGet(&local_res_init));
+      QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&local_res_init));
 
       if (! triedResolve.load()) {
          resolveLibraryInternal();

@@ -848,7 +848,7 @@ bool q_resolveOpenSslSymbols()
    static bool triedToResolveSymbols = false;
 #ifndef QT_NO_THREAD
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
-   QMutexLocker locker(QMutexPool::globalInstanceGet((void *)&q_SSL_library_init));
+   QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet((void *)&q_SSL_library_init));
 #endif
 #endif
    if (symbolsResolved) {
