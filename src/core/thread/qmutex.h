@@ -200,7 +200,7 @@ class Q_CORE_EXPORT QRecursiveMutexLocker
       m_data.lock();
    }
 
-   QRecursiveMutex * mutex() {
+   QRecursiveMutex * mutex() const {
       return m_data.mutex();
    }
 
