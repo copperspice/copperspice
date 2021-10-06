@@ -110,6 +110,20 @@ class Q_CORE_EXPORT QRecursiveMutex
       return m_data.try_lock_for(std::chrono::milliseconds(timeout));
    }
 
+   bool try_lock() {
+      return m_data.try_lock();
+   }
+
+   template <typename T1, typename T2>
+   bool try_lock_for(std::chrono::duration<T1, T2> duration) {
+      return m_data.try_lock_for(duration);
+   }
+
+   template <typename T1, typename T2>
+   bool try_lock_until(std::chrono::time_point<T1, T2> timePoint) {
+      return m_data.try_lock_until(timePoint);
+   }
+
    void unlock() {
       m_data.unlock();
    }
