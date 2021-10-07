@@ -26,67 +26,63 @@
 
 #include <qglobal.h>
 #include <qassert.h>
-#include <qatomic.h>
 
 #include <mutex>
-#include <new>
 
-class QMutexData;
-
-class Q_CORE_EXPORT QBasicMutex
+class Q_CORE_EXPORT QMutex
 {
  public:
-   void lock() {
-      if (! fastTryLock()) {
-         lockInternal();
-      }
+   QMutex() = default;
+
+   template <typename T>
+   explicit QMutex(T)
+   {
+      static_assert(! std::is_same_v<T, T>, "Use QRecursiveMutex for recursive mutex operations");
    }
 
-   void unlock() {
-      Q_ASSERT(d_ptr.load()); //mutex must be locked
+   QMutex(const QMutex &) = delete;
+   QMutex(QMutex &&) = delete;
 
-      QMutexData *expected = dummyLocked();
+   QMutex &operator=(const QMutex &) = delete;
+   QMutex &operator=(QMutex &&) = delete;
 
-      if (! d_ptr.compareExchange(expected, nullptr, std::memory_order_release)) {
-         unlockInternal();
-      }
+   ~QMutex() = default;
+
+   void lock() {
+      m_data.lock();
    }
 
    bool tryLock(int timeout = 0) {
-      return fastTryLock() || lockInternal(timeout);
+      return m_data.try_lock_for(std::chrono::milliseconds(timeout));
    }
 
-   bool isRecursive();
+   bool try_lock() {
+      return m_data.try_lock();
+   }
+
+   template <typename T1, typename T2>
+   bool try_lock_for(std::chrono::duration<T1, T2> duration) {
+      return m_data.try_lock_for(duration);
+   }
+
+   template <typename T1, typename T2>
+   bool try_lock_until(std::chrono::time_point<T1, T2> timePoint) {
+      return m_data.try_lock_until(timePoint);
+   }
+
+   void unlock() {
+      m_data.unlock();
+   }
+
+   // produces a clean compile error when obsolete enum values are used
+   class RemovedEnum {
+   };
+
+   static constexpr RemovedEnum NonRecursive = RemovedEnum();
+   static constexpr RemovedEnum Recursive    = RemovedEnum();
 
  private:
-   bool fastTryLock() {
-      QMutexData *expected = nullptr;
-      return d_ptr.compareExchange(expected, dummyLocked(), std::memory_order_acquire);
-   }
-
-   bool lockInternal(int timeout = -1);
-   void unlockInternal();
-
-   QAtomicPointer<QMutexData> d_ptr;
-
-   static inline QMutexData *dummyLocked() {
-      return reinterpret_cast<QMutexData *>(quintptr(1));
-   }
-
-   friend class QMutex;
-   friend class QMutexData;
-};
-
-class Q_CORE_EXPORT QMutex : public QBasicMutex
-{
- public:
-   enum RecursionMode { NonRecursive, Recursive };
-   explicit QMutex(RecursionMode mode = NonRecursive);
-
-   QMutex(const QMutex &) = delete;
-   QMutex &operator=(const QMutex &) = delete;
-
-   ~QMutex();
+   std::timed_mutex m_data;
 };
 
 class Q_CORE_EXPORT QRecursiveMutex
