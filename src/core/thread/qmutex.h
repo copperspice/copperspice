@@ -131,50 +131,44 @@ class Q_CORE_EXPORT QRecursiveMutex
  private:
    std::recursive_timed_mutex m_data;
 };
+
 class Q_CORE_EXPORT QMutexLocker
 {
  public:
-   explicit QMutexLocker(QBasicMutex *mutex) {
-      Q_ASSERT_X((reinterpret_cast<quintptr>(mutex) & quintptr(1u)) == quintptr(0),
-                 "QMutexLocker", "QMutex pointer is misaligned");
+   explicit QMutexLocker(QMutex *mutex)
+   {
+      if (mutex == nullptr) {
+         // nothing
 
-      if (mutex) {
-         mutex->lock();
-         val = reinterpret_cast<quintptr>(mutex) | quintptr(1u);
       } else {
-         val = 0;
+         m_data = std::unique_lock<QMutex>(*mutex);
+
       }
    }
 
    QMutexLocker(const QMutexLocker &) = delete;
    QMutexLocker &operator=(const QMutexLocker &) = delete;
 
-   ~QMutexLocker() {
-      unlock();
+   ~QMutexLocker() = default;
+
+   void lock() {
+      m_data.lock();
    }
 
-   void unlock() {
-      if ((val & quintptr(1u)) == quintptr(1u)) {
-         val &= ~quintptr(1u);
-         mutex()->unlock();
-      }
+   QMutex * mutex() const {
+      return m_data.mutex();
    }
 
    void relock() {
-      if (val) {
-         if ((val & quintptr(1u)) == quintptr(0u)) {
-            mutex()->lock();
-            val |= quintptr(1u);
-         }
-      }
+      m_data.lock();
    }
 
-   QMutex *mutex() const {
-      return reinterpret_cast<QMutex *>(val & ~quintptr(1u));
+   void unlock() {
+      m_data.unlock();
    }
 
  private:
-   quintptr val;
+   std::unique_lock<QMutex> m_data;
 };
 
 class Q_CORE_EXPORT QRecursiveMutexLocker
