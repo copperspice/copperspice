@@ -29,10 +29,7 @@
 #include <qalgorithms.h>
 #include <qt_windows.h>
 
-#include <qmutex_p.h>
 #include <qreadwritelock_p.h>
-
-// QWaitConditionPrivate
 
 class QWaitConditionEvent
 {
@@ -144,11 +141,7 @@ QWaitCondition::~QWaitCondition()
 
 bool QWaitCondition::wait(QMutex *mutex, unsigned long time)
 {
-   if (!mutex) {
-      return false;
-   }
-   if (mutex->isRecursive()) {
-      qWarning("QWaitCondition::wait: Cannot wait on recursive mutexes");
+   if (! mutex) {
       return false;
    }
 
