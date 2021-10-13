@@ -27,6 +27,20 @@
 // http://www.unicode.org/reports/tr29/#Word_Boundaries
 // http://www.unicode.org/reports/tr29/#Sentence_Boundaries
 
+TEST_CASE("QTextBoundaryFinder traits", "[qtextboundaryfinder]")
+{
+   REQUIRE(std::is_copy_constructible_v<QTextBoundaryFinder> == true);
+   REQUIRE(std::is_move_constructible_v<QTextBoundaryFinder> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QTextBoundaryFinder> == true);
+   REQUIRE(std::is_move_assignable_v<QTextBoundaryFinder> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QTextBoundaryFinder> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QTextBoundaryFinder> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QTextBoundaryFinder> == false);
+}
+
 TEST_CASE("QTextBoundaryFinder constructor", "[qtextboundaryfinder]")
 {
    QTextBoundaryFinder finder(QTextBoundaryFinder::Word, "test");

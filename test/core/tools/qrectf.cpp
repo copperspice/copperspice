@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QRectF traits", "[QRectF]")
+{
+   REQUIRE(std::is_copy_constructible_v<QRectF> == true);
+   REQUIRE(std::is_move_constructible_v<QRectF> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QRectF> == true);
+   REQUIRE(std::is_move_assignable_v<QRectF> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QRectF> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QRectF> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QRectF> == false);
+}
+
 TEST_CASE("QRectF constructor", "[qrectf]")
 {
    QRectF data(5, 10, 100, 200);

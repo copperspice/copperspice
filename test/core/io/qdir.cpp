@@ -23,6 +23,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QDir traits", "[qdir]")
+{
+   REQUIRE(std::is_copy_constructible_v<QDir> == true);
+   REQUIRE(std::is_move_constructible_v<QDir> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QDir> == true);
+   REQUIRE(std::is_move_assignable_v<QDir> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QDir> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QDir> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QDir> == false);
+}
+
 TEST_CASE("QDir absolute_path", "[qdir]")
 {
 

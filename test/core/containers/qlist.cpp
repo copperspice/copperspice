@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QList traits", "[qlist]")
+{
+   REQUIRE(std::is_copy_constructible_v<QList<int>> == true);
+   REQUIRE(std::is_move_constructible_v<QList<int>> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QList<int>> == true);
+   REQUIRE(std::is_move_assignable_v<QList<int>> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QList<int>> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QList<int>> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QList<int>> == false);
+}
+
 TEST_CASE("QList append", "[qlist]")
 {
    QList<QString> v = { "watermelon", "apple", "pear", "grapefruit" };

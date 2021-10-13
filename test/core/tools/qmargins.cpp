@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QMargins traits", "[qmargins]")
+{
+   REQUIRE(std::is_copy_constructible_v<QMargins> == true);
+   REQUIRE(std::is_move_constructible_v<QMargins> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QMargins> == true);
+   REQUIRE(std::is_move_assignable_v<QMargins> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QMargins> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QMargins> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QMargins> == false);
+}
+
 TEST_CASE("QMargins constructor", "[qmargins]")
 {
    QMargins data(5, 10, 100, 200);

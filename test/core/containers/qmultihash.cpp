@@ -22,6 +22,25 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QMultiHash traits", "[qmultihash]")
+{
+   REQUIRE(std::is_copy_constructible_v<QMultiHash<int, int>> == true);
+   REQUIRE(std::is_move_constructible_v<QMultiHash<int, int>> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QMultiHash<int, int>> == true);
+   REQUIRE(std::is_move_assignable_v<QMultiHash<int, int>> == true);
+
+#ifdef Q_CC_MSVC
+   // msvc compiler does not support these operations
+
+#else
+   REQUIRE(std::is_nothrow_move_constructible_v<QMultiHash<int, int>> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QMultiHash<int, int>> == true);
+#endif
+
+   REQUIRE(std::has_virtual_destructor_v<QMultiHash<int, int>> == false);
+}
+
 TEST_CASE("QMultiHash clear", "[qmultihash]")
 {
    QMultiHash<int, QString> hash = { { 1, "watermelon"},

@@ -26,6 +26,20 @@
 
 FILE *handle = nullptr;
 
+TEST_CASE("QDebug traits", "[qdebug]")
+{
+   REQUIRE(std::is_copy_constructible_v<QDebug> == true);
+   REQUIRE(std::is_move_constructible_v<QDebug> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QDebug> == true);
+   REQUIRE(std::is_move_assignable_v<QDebug> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QDebug> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QDebug> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QDebug> == false);
+}
+
 void myMessageTest(QtMsgType type, QStringView msg) {
    switch (type) {
       case QtDebugMsg:

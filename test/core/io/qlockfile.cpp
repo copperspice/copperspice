@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QLockFile traits", "[qlockfile]")
+{
+   REQUIRE(std::is_copy_constructible_v<QLockFile> == false);
+   REQUIRE(std::is_move_constructible_v<QLockFile> == false);
+
+   REQUIRE(std::is_copy_assignable_v<QLockFile> == false);
+   REQUIRE(std::is_move_assignable_v<QLockFile> == false);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QLockFile> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QLockFile> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QLockFile> == false);
+}
+
 TEST_CASE("QLockFile basic", "[qlockfile]")
 {
   QLockFile f("testfile");

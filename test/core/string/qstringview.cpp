@@ -22,6 +22,20 @@
 
 #include <catch2/catch.hpp>
 
+TEST_CASE("QStringView8 traits", "[qstringview8]")
+{
+   REQUIRE(std::is_copy_constructible_v<QStringView8> == true);
+   REQUIRE(std::is_move_constructible_v<QStringView8> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QStringView8> == true);
+   REQUIRE(std::is_move_assignable_v<QStringView8> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QStringView8> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QStringView8> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QStringView8> == false);
+}
+
 TEST_CASE("QStringView8 contains", "[qstringview]")
 {
    QString8 str      = "A wacky fox and sizeable pig jumped halfway over a blue moon";

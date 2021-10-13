@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QLineF traits", "[qlinef]")
+{
+   REQUIRE(std::is_copy_constructible_v<QLineF> == true);
+   REQUIRE(std::is_move_constructible_v<QLineF> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QLineF> == true);
+   REQUIRE(std::is_move_assignable_v<QLineF> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QLineF> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QLineF> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QLineF> == false);
+}
+
 TEST_CASE("QLineF constructor", "[qlinef]")
 {
    QLineF data(5, 10, 100, 200);

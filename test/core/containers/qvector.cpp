@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QVector traits", "[qvector]")
+{
+   REQUIRE(std::is_copy_constructible_v<QVector<int>> == true);
+   REQUIRE(std::is_move_constructible_v<QVector<int>> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QVector<int>> == true);
+   REQUIRE(std::is_move_assignable_v<QVector<int>> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QVector<int>> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QVector<int>> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QVector<int>> == false);
+}
+
 TEST_CASE("QVector append", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };

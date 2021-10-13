@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QCache traits", "[qcache]")
+{
+   REQUIRE(std::is_copy_constructible_v<QCache<int, int>> == false);
+   REQUIRE(std::is_move_constructible_v<QCache<int, int>> == false);
+
+   REQUIRE(std::is_copy_assignable_v<QCache<int, int>> == false);
+   REQUIRE(std::is_move_assignable_v<QCache<int, int>> == false);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QCache<int, int>> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QCache<int, int>> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QCache<int, int>> == false);
+}
+
 TEST_CASE("QCache empty", "[qcache]")
 {
    QCache<QString, int> cache;

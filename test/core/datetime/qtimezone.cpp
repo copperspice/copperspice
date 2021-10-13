@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QTimeZone traits", "[qtimezone]")
+{
+   REQUIRE(std::is_copy_constructible_v<QTimeZone> == true);
+   REQUIRE(std::is_move_constructible_v<QTimeZone> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QTimeZone> == true);
+   REQUIRE(std::is_move_assignable_v<QTimeZone> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QTimeZone> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QTimeZone> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QTimeZone> == false);
+}
+
 TEST_CASE("QTimeZone equality", "[qtimezone]")
 {
    QTimeZone data1("America/Denver");

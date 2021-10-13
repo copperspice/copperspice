@@ -24,6 +24,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QMetaMethod traits", "[qmetamethod]")
+{
+   REQUIRE(std::is_copy_constructible_v<QMetaMethod> == true);
+   REQUIRE(std::is_move_constructible_v<QMetaMethod> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QMetaMethod> == true);
+   REQUIRE(std::is_move_assignable_v<QMetaMethod> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QMetaMethod> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QMetaMethod> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QMetaMethod> == false);
+}
+
 class Ginger_MM : public QObject
 {
    CS_OBJECT(Ginger_MM)

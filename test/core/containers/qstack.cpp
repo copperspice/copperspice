@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QStack traits", "[qstack]")
+{
+   REQUIRE(std::is_copy_constructible_v<QStack<int>> == true);
+   REQUIRE(std::is_move_constructible_v<QStack<int>> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QStack<int>> == true);
+   REQUIRE(std::is_move_assignable_v<QStack<int>> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QStack<int>> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QStack<int>> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QStack<int>> == false);
+}
+
 TEST_CASE("QStack empty", "[qstack]")
 {
    QStack<QString> stack;

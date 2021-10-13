@@ -28,6 +28,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QDataStream traits", "[qdatastream]")
+{
+   REQUIRE(std::is_copy_constructible_v<QDataStream> == false);
+   REQUIRE(std::is_move_constructible_v<QDataStream> == false);
+
+   REQUIRE(std::is_copy_assignable_v<QDataStream> == false);
+   REQUIRE(std::is_move_assignable_v<QDataStream> == false);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QDataStream> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QDataStream> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QDataStream> == true);
+}
+
 TEST_CASE("QDataStream string", "[qdatastream]")
 {
    // write

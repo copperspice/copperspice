@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QSize traits", "[qsize]")
+{
+   REQUIRE(std::is_copy_constructible_v<QSize> == true);
+   REQUIRE(std::is_move_constructible_v<QSize> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QSize> == true);
+   REQUIRE(std::is_move_assignable_v<QSize> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QSize> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QSize> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QSize> == false);
+}
+
 TEST_CASE("QSize constructor", "[qsize]")
 {
    QSize data(50, 125);

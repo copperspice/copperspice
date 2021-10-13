@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QAtomicPointer traits", "[qatomicpointer]")
+{
+   REQUIRE(std::is_copy_constructible_v<QAtomicPointer<int>> == true);
+   REQUIRE(std::is_move_constructible_v<QAtomicPointer<int>> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QAtomicPointer<int>> == true);
+   REQUIRE(std::is_move_assignable_v<QAtomicPointer<int>> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QAtomicPointer<int>> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QAtomicPointer<int>> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QAtomicPointer<int>> == false);
+}
+
 TEST_CASE("QAtomicPointer assignment", "[qatomic_pointer]")
 {
    QAtomicPointer<int> atomic1(new int(17));

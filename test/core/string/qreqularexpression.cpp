@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QRegularExpression traits", "[qregularexpression]")
+{
+   REQUIRE(std::is_copy_constructible_v<QRegularExpression> == true);
+   REQUIRE(std::is_move_constructible_v<QRegularExpression> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QRegularExpression> == true);
+   REQUIRE(std::is_move_assignable_v<QRegularExpression> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QRegularExpression> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QRegularExpression> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QRegularExpression> == false);
+}
+
 TEST_CASE("QRegularExpression empty", "[qregularexpression]")
 {
    QRegularExpression regExp;

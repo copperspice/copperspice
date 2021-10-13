@@ -23,6 +23,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QMetaObject traits", "[qmetaobject]")
+{
+   REQUIRE(std::is_copy_constructible_v<QMetaObject> == false);
+   REQUIRE(std::is_move_constructible_v<QMetaObject> == false);
+
+   REQUIRE(std::is_copy_assignable_v<QMetaObject> == true);
+   REQUIRE(std::is_move_assignable_v<QMetaObject> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QMetaObject> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QMetaObject> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QMetaObject> == true);
+}
+
 namespace metaObjTest {
 
 class Ginger : public QObject

@@ -22,6 +22,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QString16 traits", "[qstring16]")
+{
+   REQUIRE(std::is_copy_constructible_v<QString16> == true);
+   REQUIRE(std::is_move_constructible_v<QString16> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QString16> == true);
+   REQUIRE(std::is_move_assignable_v<QString16> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QString16> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QString16> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QString16> == false);
+}
+
 TEST_CASE("QString16 append", "[qstring16]")
 {
    QString16 str = "A wacky fox and sizeable pig";

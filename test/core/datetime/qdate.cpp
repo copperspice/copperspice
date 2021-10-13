@@ -22,6 +22,19 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QDate traits", "[qdate]")
+{
+   REQUIRE(std::is_copy_constructible_v<QDate> == true);
+   REQUIRE(std::is_move_constructible_v<QDate> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QDate> == true);
+   REQUIRE(std::is_move_assignable_v<QDate> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QDate> == true);
+   REQUIRE(std::is_nothrow_move_assignable_v<QDate> == true);
+
+   REQUIRE(std::has_virtual_destructor_v<QDate> == false);
+}
 
 TEST_CASE("QDate add_days", "[qdate]")
 {

@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QUrl traits", "[qurl]")
+{
+   REQUIRE(std::is_copy_constructible_v<QUrl> == true);
+   REQUIRE(std::is_move_constructible_v<QUrl> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QUrl> == true);
+   REQUIRE(std::is_move_assignable_v<QUrl> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QUrl> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QUrl> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QUrl> == false);
+}
+
 TEST_CASE("QUrl to_encoded", "[qurl]")
 {
    QString str("http://www.example.com/List of Holidays.xml");
