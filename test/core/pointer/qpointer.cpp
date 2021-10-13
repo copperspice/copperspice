@@ -22,6 +22,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QPointer traits", "[qpointer]")
+{
+   REQUIRE(std::is_copy_constructible_v<QPointer<int>> == true);
+   REQUIRE(std::is_move_constructible_v<QPointer<int>> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QPointer<int>> == true);
+   REQUIRE(std::is_move_assignable_v<QPointer<int>> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QPointer<int>> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QPointer<int>> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QPointer<int>> == false);
+}
+
 TEST_CASE("QPointer constructor", "[qpointer]")
 {
    QObject obj;

@@ -75,19 +75,27 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfileinfo.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qlockfile.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/io/qresource.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporaryfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl.cpp
 
-   ${CMAKE_CURRENT_SOURCE_DIR}/json/qjson.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/json/qjsonarray.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/json/qjsondocument.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/json/qjsonobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/json/qjsonvalue.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetamethod.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobject.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qobject.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/locale/qlocale.cpp
+
+   ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qpointer.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qscopedarraypointer.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qscopedpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qweakpointer.cpp
 
@@ -102,6 +110,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qatomicint.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qatomicpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/thread/qreadwritelock.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitarray.cpp
@@ -111,7 +120,6 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qline.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinef.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlocale.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmargins.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qmarginsf.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qpair.cpp

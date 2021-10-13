@@ -21,6 +21,20 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QLocale traits", "[qlocale]")
+{
+   REQUIRE(std::is_copy_constructible_v<QLocale> == true);
+   REQUIRE(std::is_move_constructible_v<QLocale> == true);
+
+   REQUIRE(std::is_copy_assignable_v<QLocale> == true);
+   REQUIRE(std::is_move_assignable_v<QLocale> == true);
+
+   REQUIRE(std::is_nothrow_move_constructible_v<QLocale> == false);
+   REQUIRE(std::is_nothrow_move_assignable_v<QLocale> == false);
+
+   REQUIRE(std::has_virtual_destructor_v<QLocale> == false);
+}
+
 TEST_CASE("QLocale constructor_enum", "[qlocale]")
 {
    QLocale data  = QLocale(QLocale::English, QLocale::UnitedStates);
