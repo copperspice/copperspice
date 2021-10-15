@@ -61,15 +61,17 @@ class Q_GUI_EXPORT QStyle : public QObject
       State_DownArrow =           0x00000040,
       State_Horizontal =          0x00000080,
       State_HasFocus =            0x00000100,
-      State_Top =                 0x00000200,
-      State_Bottom =              0x00000400,
+
+//    State_Top =                 0x00000200,         // unused, undocumented
+//    State_Bottom =              0x00000400,         // unused, undocumented
       State_FocusAtBorder =       0x00000800,
+
       State_AutoRaise =           0x00001000,
       State_MouseOver =           0x00002000,
       State_UpArrow =             0x00004000,
       State_Selected =            0x00008000,
       State_Active =              0x00010000,
-      State_Window =              0x00020000,
+      State_Window =              0x00020000,         // undocumented
       State_Open =                0x00040000,
       State_Children =            0x00080000,
       State_Item =                0x00100000,
@@ -93,30 +95,32 @@ class Q_GUI_EXPORT QStyle : public QObject
       PE_FrameGroupBox,
       PE_FrameLineEdit,
       PE_FrameMenu,
-      PE_FrameStatusBar, // obsolete
-      PE_FrameStatusBarItem = PE_FrameStatusBar,
+
+      PE_FrameStatusBarItem,                // 7
       PE_FrameTabWidget,
       PE_FrameWindow,
       PE_FrameButtonBevel,
       PE_FrameButtonTool,
       PE_FrameTabBarBase,
 
-      PE_PanelButtonCommand,
+      PE_PanelButtonCommand,                // 13
       PE_PanelButtonBevel,
       PE_PanelButtonTool,
       PE_PanelMenuBar,
       PE_PanelToolBar,
       PE_PanelLineEdit,
 
-      PE_IndicatorArrowDown,
+      PE_IndicatorArrowDown,                // 19
       PE_IndicatorArrowLeft,
       PE_IndicatorArrowRight,
       PE_IndicatorArrowUp,
       PE_IndicatorBranch,
       PE_IndicatorButtonDropDown,
-      PE_IndicatorViewItemCheck,
+
+      PE_IndicatorViewItemCheck,            // obsolete
       PE_IndicatorItemViewItemCheck = PE_IndicatorViewItemCheck,
-      PE_IndicatorCheckBox,
+
+      PE_IndicatorCheckBox,                 // 26
       PE_IndicatorDockWidgetResizeHandle,
       PE_IndicatorHeaderArrow,
       PE_IndicatorMenuCheckMark,
@@ -125,7 +129,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PE_IndicatorSpinDown,
       PE_IndicatorSpinMinus,
       PE_IndicatorSpinPlus,
-      PE_IndicatorSpinUp,
+      PE_IndicatorSpinUp,                   // 35
       PE_IndicatorToolBarHandle,
       PE_IndicatorToolBarSeparator,
       PE_PanelTipLabel,
@@ -134,7 +138,7 @@ class Q_GUI_EXPORT QStyle : public QObject
 
       PE_Widget,
 
-      PE_IndicatorColumnViewArrow,
+      PE_IndicatorColumnViewArrow,          // 42
       PE_IndicatorItemViewItemDrop,
 
       PE_PanelItemViewItem,
@@ -142,75 +146,78 @@ class Q_GUI_EXPORT QStyle : public QObject
       PE_PanelStatusBar,
 
       PE_IndicatorTabClose,
-      PE_PanelMenu,
+      PE_PanelMenu,                         // 48
 
       // do not add any values below/greater this
       PE_CustomBase = 0xf000000
    };
 
    enum ControlElement {
-      CE_PushButton,
-      CE_PushButtonBevel,
-      CE_PushButtonLabel,
-
       CE_CheckBox,
       CE_CheckBoxLabel,
 
-      CE_RadioButton,
-      CE_RadioButtonLabel,
+      CE_ColumnViewGrip,
 
-      CE_TabBarTab,
-      CE_TabBarTabShape,
-      CE_TabBarTabLabel,
+      CE_ComboBoxLabel,
 
-      CE_ProgressBar,
-      CE_ProgressBarGroove,
-      CE_ProgressBarContents,
-      CE_ProgressBarLabel,
+      CE_DockWidgetTitle,
 
-      CE_MenuItem,
-      CE_MenuScroller,
-      CE_MenuVMargin,
-      CE_MenuHMargin,
-      CE_MenuTearoff,
-      CE_MenuEmptyArea,
+      CE_FocusFrame,
+
+      CE_Header,
+      CE_HeaderEmptyArea,
+      CE_HeaderLabel,
+      CE_HeaderSection,
+
+      CE_ItemViewItem,                      // 10
 
       CE_MenuBarItem,
       CE_MenuBarEmptyArea,
 
-      CE_ToolButtonLabel,
+      CE_MenuEmptyArea,
+      CE_MenuHMargin,
+      CE_MenuItem,
+      CE_MenuTearoff,
+      CE_MenuScroller,
+      CE_MenuVMargin,
 
-      CE_Header,
-      CE_HeaderSection,
-      CE_HeaderLabel,
+      CE_ProgressBar,                       // 19
+      CE_ProgressBarGroove,
+      CE_ProgressBarContents,
+      CE_ProgressBarLabel,
 
-      CE_ToolBoxTab,
-      CE_SizeGrip,
-      CE_Splitter,
+      CE_PushButton,
+      CE_PushButtonBevel,
+      CE_PushButtonLabel,
+
+      CE_RadioButton,
+      CE_RadioButtonLabel,
+
       CE_RubberBand,
-      CE_DockWidgetTitle,
 
-      CE_ScrollBarAddLine,
-      CE_ScrollBarSubLine,
+      CE_ScrollBarAddLine,                  // 29
       CE_ScrollBarAddPage,
-      CE_ScrollBarSubPage,
-      CE_ScrollBarSlider,
       CE_ScrollBarFirst,
       CE_ScrollBarLast,
-
-      CE_FocusFrame,
-      CE_ComboBoxLabel,
-
-      CE_ToolBar,
-      CE_ToolBoxTabShape,
-      CE_ToolBoxTabLabel,
-      CE_HeaderEmptyArea,
-
-      CE_ColumnViewGrip,
-
-      CE_ItemViewItem,
+      CE_ScrollBarSlider,
+      CE_ScrollBarSubLine,
+      CE_ScrollBarSubPage,
 
       CE_ShapedFrame,
+      CE_SizeGrip,
+      CE_Splitter,
+
+      CE_TabBarTab,                         // 39
+      CE_TabBarTabShape,
+      CE_TabBarTabLabel,
+
+      CE_ToolBar,
+
+      CE_ToolBoxTab,                        // 43
+      CE_ToolBoxTabShape,
+      CE_ToolBoxTabLabel,
+
+      CE_ToolButtonLabel,
 
       // do not add any values below/greater than this
       CE_CustomBase = 0xf0000000
@@ -240,7 +247,7 @@ class Q_GUI_EXPORT QStyle : public QObject
 
       SE_ToolBoxTabContents,
 
-      SE_HeaderLabel,
+      SE_HeaderLabel,                       // 17
       SE_HeaderArrow,
 
       SE_TabWidgetTabBar,
@@ -249,8 +256,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SE_TabWidgetLeftCorner,
       SE_TabWidgetRightCorner,
 
-      SE_ViewItemCheckIndicator,
-      SE_ItemViewItemCheckIndicator = SE_ViewItemCheckIndicator,
+      SE_ItemViewItemCheckIndicator,
 
       SE_TabBarTearIndicator,
 
@@ -259,7 +265,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SE_LineEditContents,
       SE_FrameContents,
 
-      SE_DockWidgetCloseButton,
+      SE_DockWidgetCloseButton,             // 28
       SE_DockWidgetFloatButton,
       SE_DockWidgetTitleBarText,
       SE_DockWidgetIcon,
@@ -275,7 +281,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SE_SpinBoxLayoutItem,
       SE_ToolButtonLayoutItem,
 
-      SE_FrameLayoutItem,
+      SE_FrameLayoutItem,                   // 42
       SE_GroupBoxLayoutItem,
       SE_TabWidgetLayoutItem,
 
@@ -374,7 +380,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_ButtonShiftHorizontal,
       PM_ButtonShiftVertical,
 
-      PM_DefaultFrameWidth,
+      PM_DefaultFrameWidth,                 // 5
       PM_SpinBoxFrameWidth,
       PM_ComboBoxFrameWidth,
 
@@ -383,13 +389,13 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_ScrollBarExtent,
       PM_ScrollBarSliderMin,
 
-      PM_SliderThickness,             // total slider thickness
-      PM_SliderControlThickness,      // thickness of the business part
-      PM_SliderLength,                // total length of slider
-      PM_SliderTickmarkOffset,        //
-      PM_SliderSpaceAvailable,        // available space for slider to move
+      PM_SliderThickness,                   // total slider thickness
+      PM_SliderControlThickness,            // thickness of the business part
+      PM_SliderLength,                      // total length of slider
+      PM_SliderTickmarkOffset,
+      PM_SliderSpaceAvailable,              // available space for slider to move
 
-      PM_DockWidgetSeparatorExtent,
+      PM_DockWidgetSeparatorExtent,         // 16
       PM_DockWidgetHandleExtent,
       PM_DockWidgetFrameWidth,
 
@@ -399,7 +405,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_TabBarBaseHeight,
       PM_TabBarBaseOverlap,
 
-      PM_ProgressBarChunkWidth,
+      PM_ProgressBarChunkWidth,             // 24
 
       PM_SplitterWidth,
       PM_TitleBarHeight,
@@ -419,36 +425,37 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_IndicatorWidth,
       PM_IndicatorHeight,
       PM_ExclusiveIndicatorWidth,
-      PM_ExclusiveIndicatorHeight,
+      PM_ExclusiveIndicatorHeight,          // 40
 
       PM_DialogButtonsSeparator,
       PM_DialogButtonsButtonWidth,
       PM_DialogButtonsButtonHeight,
 
       PM_MdiSubWindowFrameWidth,
-      PM_MDIFrameWidth = PM_MdiSubWindowFrameWidth,            //obsolete
-      PM_MdiSubWindowMinimizedWidth,
-      PM_MDIMinimizedWidth = PM_MdiSubWindowMinimizedWidth,    //obsolete
+      PM_MdiSubWindowMinimizedWidth,        // 45
 
-      PM_HeaderMargin,
+      PM_MDIFrameWidth     = PM_MdiSubWindowFrameWidth,        // obsolete, 44
+      PM_MDIMinimizedWidth = PM_MdiSubWindowMinimizedWidth,    // obsolete, 45
+
+      PM_HeaderMargin,                      // 46
       PM_HeaderMarkSize,
       PM_HeaderGripMargin,
       PM_TabBarTabShiftHorizontal,
       PM_TabBarTabShiftVertical,
       PM_TabBarScrollButtonWidth,
 
-      PM_ToolBarFrameWidth,
+      PM_ToolBarFrameWidth,                 // 52
       PM_ToolBarHandleExtent,
       PM_ToolBarItemSpacing,
       PM_ToolBarItemMargin,
       PM_ToolBarSeparatorExtent,
       PM_ToolBarExtensionExtent,
 
-      PM_SpinBoxSliderHeight,
+      PM_SpinBoxSliderHeight,               // 58
 
-      PM_DefaultTopLevelMargin,
-      PM_DefaultChildMargin,
-      PM_DefaultLayoutSpacing,
+      PM_DefaultTopLevelMargin,             // obsolete
+      PM_DefaultChildMargin,                // obsolete
+      PM_DefaultLayoutSpacing,              // obsolete
 
       PM_ToolBarIconSize,
       PM_ListViewIconSize,
@@ -467,7 +474,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_MessageBoxIconSize,
       PM_ButtonIconSize,
 
-      PM_DockWidgetTitleBarButtonMargin,
+      PM_DockWidgetTitleBarButtonMargin,    // 76
 
       PM_RadioButtonLabelSpacing,
       PM_LayoutLeftMargin,
@@ -481,7 +488,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_TextCursorWidth,
 
       PM_TabCloseIndicatorWidth,
-      PM_TabCloseIndicatorHeight,
+      PM_TabCloseIndicatorHeight,           // 87
 
       PM_ScrollView_ScrollBarSpacing,
       PM_ScrollView_ScrollBarOverlap,
@@ -489,35 +496,36 @@ class Q_GUI_EXPORT QStyle : public QObject
       PM_TreeViewIndentation,
 
       PM_HeaderDefaultSectionSizeHorizontal,
-      PM_HeaderDefaultSectionSizeVertical,
+      PM_HeaderDefaultSectionSizeVertical,  // 93
+
       // do not add any values below/greater than this
       PM_CustomBase = 0xf0000000
    };
 
    enum ContentsType {
-      CT_PushButton,
       CT_CheckBox,
-      CT_RadioButton,
-      CT_ToolButton,
       CT_ComboBox,
-      CT_Splitter,
-      CT_ProgressBar,
-      CT_MenuItem,
-      CT_MenuBarItem,
-      CT_MenuBar,
-      CT_Menu,
-      CT_TabBarTab,
-      CT_Slider,
-      CT_ScrollBar,
-      CT_LineEdit,
-      CT_SpinBox,
-      CT_SizeGrip,
-      CT_TabWidget,
-      CT_DialogButtons,
-      CT_HeaderSection,
       CT_GroupBox,
-      CT_MdiControls,
+      CT_HeaderSection,
       CT_ItemViewItem,
+      CT_LineEdit,
+      CT_MdiControls,
+      CT_Menu,
+      CT_MenuBar,
+      CT_MenuBarItem,
+      CT_MenuItem,
+      CT_ProgressBar,
+      CT_PushButton,
+      CT_RadioButton,
+      CT_ScrollBar,
+      CT_SizeGrip,
+      CT_Slider,
+      CT_SpinBox,
+      CT_Splitter,
+      CT_TabBarTab,
+      CT_TabWidget,
+      CT_ToolButton,
+
       // do not add any values below/greater than this
       CT_CustomBase = 0xf0000000
    };
@@ -548,18 +556,21 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_ScrollView_FrameOnlyAroundContents,
       SH_MenuBar_AltKeyNavigation,
       SH_ComboBox_ListMouseTracking,
-      SH_Menu_MouseTracking,
+
+      SH_Menu_MouseTracking,                          // 20
       SH_MenuBar_MouseTracking,
       SH_ItemView_ChangeHighlightOnFocus,
       SH_Widget_ShareActivation,
       SH_Workspace_FillSpaceOnMaximize,
       SH_ComboBox_Popup,
       SH_TitleBar_NoBorder,
+
       SH_Slider_StopMouseOverSlider,
       SH_ScrollBar_StopMouseOverSlider = SH_Slider_StopMouseOverSlider, // obsolete
+
       SH_BlinkCursorWhenTextSelected,
       SH_RichText_FullWidthSelection,
-      SH_Menu_Scrollable,
+      SH_Menu_Scrollable,                             // 30
       SH_GroupBox_TextLabelVerticalAlignment,
       SH_GroupBox_TextLabelColor,
       SH_Menu_SloppySubMenus,
@@ -580,7 +591,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_TitleBar_ModifyNotification,
       SH_Button_FocusPolicy,
 
-      SH_MessageBox_UseBorderForButtonSpacing,
+      SH_MessageBox_UseBorderForButtonSpacing,        // 50
       SH_TitleBar_AutoRaise,
       SH_ToolButton_PopupDelay,
       SH_FocusFrame_Mask,
@@ -590,9 +601,10 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_Dial_BackgroundRole,
       SH_ComboBox_LayoutDirection,
       SH_ItemView_EllipsisLocation,
+
       SH_ItemView_ShowDecorationSelected,
       SH_ItemView_ActivateItemOnSingleClick,
-      SH_ScrollBar_ContextMenu,
+      SH_ScrollBar_ContextMenu,                       // 62
       SH_ScrollBar_RollBetweenButtons,
       SH_Slider_AbsoluteSetButtons,
       SH_Slider_PageSetButtons,
@@ -600,7 +612,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_TabBar_ElideMode,
       SH_DialogButtonLayout,
       SH_ComboBox_PopupFrameStyle,
-      SH_MessageBox_TextInteractionFlags,
+      SH_MessageBox_TextInteractionFlags,             // 70
       SH_DialogButtonBox_ButtonsHaveIcons,
       SH_SpellCheckUnderlineStyle,
       SH_MessageBox_CenterButtons,
@@ -620,7 +632,7 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_TabWidget_DefaultTabPosition,
       SH_ToolBar_Movable,
       SH_FormLayoutFieldGrowthPolicy,
-      SH_FormLayoutFormAlignment,
+      SH_FormLayoutFormAlignment,                     // 90
       SH_FormLayoutLabelAlignment,
       SH_ItemView_DrawDelegateFrame,
       SH_TabBar_CloseButtonPosition,
@@ -633,9 +645,9 @@ class Q_GUI_EXPORT QStyle : public QObject
       SH_ToolTip_FallAsleepDelay,
       SH_Widget_Animate,
       SH_Splitter_OpaqueResize,
-      // Whether we should use a native popup.
-      // Only supported for non-editable combo boxes on Mac OS X so far.
-      SH_ComboBox_UseNativePopup,
+
+      // Should use a native popup, only supported for non-editable combo boxes on Mac OS X
+      SH_ComboBox_UseNativePopup,                     // 103
       SH_LineEdit_PasswordMaskDelay,
       SH_TabBar_ChangeCurrentDelay,
       SH_Menu_SubMenuUniDirection,
@@ -648,8 +660,8 @@ class Q_GUI_EXPORT QStyle : public QObject
    };
 
   enum StandardPixmap {
-      SP_TitleBarMenuButton,
       SP_TitleBarMinButton,
+      SP_TitleBarMenuButton,
       SP_TitleBarMaxButton,
       SP_TitleBarCloseButton,
       SP_TitleBarNormalButton,
@@ -668,7 +680,8 @@ class Q_GUI_EXPORT QStyle : public QObject
       SP_DriveHDIcon,
       SP_DriveCDIcon,
       SP_DriveDVDIcon,
-      SP_DriveNetIcon,
+
+      SP_DriveNetIcon,                      // 20
       SP_DirOpenIcon,
       SP_DirClosedIcon,
       SP_DirLinkIcon,

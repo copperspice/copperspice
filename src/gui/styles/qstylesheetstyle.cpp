@@ -4419,7 +4419,7 @@ void QStyleSheetStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *op
 
    switch (pe) {
 
-      case PE_FrameStatusBar: {
+      case PE_FrameStatusBarItem: {
          QRenderRule subRule = renderRule(w ? w->parentWidget() : nullptr, opt, PseudoElement_Item);
          if (subRule.hasDrawable()) {
             subRule.drawRule(p, opt->rect);
@@ -6192,7 +6192,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
          return ParentStyle::subElementRect(se, opt, w);
 
 #ifndef QT_NO_ITEMVIEWS
-      case SE_ViewItemCheckIndicator:
+      case SE_ItemViewItemCheckIndicator:
          if (!qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             return subElementRect(SE_CheckBoxIndicator, opt, w);
          }
