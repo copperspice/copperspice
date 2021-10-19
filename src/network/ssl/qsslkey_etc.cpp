@@ -80,7 +80,12 @@ static OidLengthMap createOidMap()
    oids.insert(oids.cend(), QByteArrayLiteral("1.3.36.3.3.2.8.1.1.7"), 256); // brainpoolP256r1
    return oids;
 }
-Q_GLOBAL_STATIC_WITH_ARGS(OidLengthMap, oidLengthMap, (createOidMap()))
+
+static OidLengthMap *oidLengthMap()
+{
+    static OidLengthMap retval(createOidMap());
+    return &retval;
+}
 
 static int curveBits(const QByteArray &oid)
 {

@@ -63,11 +63,17 @@ class QPenDataHolder
    }
 };
 
+static QPenDataHolder *defaultPenInstance()
+{
+   static QPenDataHolder retval(Qt::black, 1, Qt::SolidLine, qpen_default_cap, qpen_default_join);
+   return &retval;
+}
 
-Q_GLOBAL_STATIC_WITH_ARGS(QPenDataHolder, defaultPenInstance,
-   (Qt::black, 1, Qt::SolidLine, qpen_default_cap, qpen_default_join))
-Q_GLOBAL_STATIC_WITH_ARGS(QPenDataHolder, nullPenInstance,
-   (Qt::black, 1, Qt::NoPen, qpen_default_cap, qpen_default_join))
+static QPenDataHolder *nullPenInstance()
+{
+   static QPenDataHolder retval(Qt::black, 1, Qt::NoPen, qpen_default_cap, qpen_default_join);
+   return &retval;
+}
 
 /*!
     Constructs a default black solid line pen with 0 width.

@@ -48,7 +48,11 @@
 #include <qmacstyle.h>
 #endif
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QStyleInterface_ID, "/styles", Qt::CaseInsensitive))
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QStyleInterface_ID, "/styles", Qt::CaseInsensitive);
+   return &retval;
+}
 
 QStyle *QStyleFactory::create(const QString &key)
 {

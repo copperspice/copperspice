@@ -35,7 +35,11 @@
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QBearerEngineInterface_ID, "/bearer"))
+static QFactoryLoader *loader()
+{
+    static QFactoryLoader retval(QBearerEngineInterface_ID, "/bearer");
+    return &retval;
+}
 
 QNetworkConfigurationManagerPrivate::QNetworkConfigurationManagerPrivate()
    : QObject(), pollTimer(nullptr), bearerThread(nullptr), forcedPolling(0), firstUpdate(true)

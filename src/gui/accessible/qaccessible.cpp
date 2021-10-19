@@ -47,7 +47,11 @@ QAccessibleInterface::~QAccessibleInterface()
 
 using QAccessiblePluginsHash = QHash<QString, QAccessiblePlugin *>;
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QAccessibleInterface_ID, "/accessible"))
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QAccessibleInterface_ID, "/accessible");
+   return &retval;
+}
 
 Q_GLOBAL_STATIC(QAccessiblePluginsHash, qAccessiblePlugins)
 Q_GLOBAL_STATIC(QList<QAccessible::InterfaceFactory>, qAccessibleFactories)

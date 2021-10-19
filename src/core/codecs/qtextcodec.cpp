@@ -78,7 +78,11 @@
 #endif
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
-   Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QTextCodecInterface_ID, "/codecs"))
+   static QFactoryLoader *loader()
+   {
+      static QFactoryLoader retval(QTextCodecInterface_ID, "/codecs");
+      return &retval;
+   }
 #endif
 
 // Cache for QTextCodec::codecForName and codecForMib.

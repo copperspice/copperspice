@@ -71,7 +71,11 @@
 
 #include <algorithm>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QImageIOHandlerInterface_ID, "/imageformats"))
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QImageIOHandlerInterface_ID, "/imageformats");
+   return &retval;
+}
 
 struct cs_BuiltInFormatStruct {
    using TestDevice = QImageIOHandler * (*)(QIODevice *);

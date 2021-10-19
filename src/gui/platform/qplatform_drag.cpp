@@ -146,7 +146,11 @@ static const char *const default_pm[] = {
    "X X X X X X X",
 };
 
-Q_GLOBAL_STATIC_WITH_ARGS(QPixmap, qt_drag_default_pixmap, (default_pm))
+static QPixmap *qt_drag_default_pixmap()
+{
+   static QPixmap retval(default_pm);
+   return &retval;
+}
 
 QPixmap QPlatformDrag::defaultPixmap()
 {
