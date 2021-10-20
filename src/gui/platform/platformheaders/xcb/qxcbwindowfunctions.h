@@ -48,8 +48,7 @@ public:
         Dnd          = 0x002000,
         KdeOverride  = 0x004000
     };
-
-    Q_DECLARE_FLAGS(WmWindowTypes, WmWindowType)
+    using WmWindowTypes = QFlags<WmWindowType>;
 
     typedef void (*SetWmWindowType)(QWindow *window, QXcbWindowFunctions::WmWindowTypes windowType);
     static const QByteArray setWmWindowTypeIdentifier() { return QByteArray("XcbSetWmWindowType"); }

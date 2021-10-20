@@ -44,7 +44,6 @@
 #define QDATETIMEEDIT_DATETIME_MAX QDateTime(QDATETIMEEDIT_DATE_MAX, QDATETIMEEDIT_TIME_MAX)
 #define QDATETIMEEDIT_DATE_INITIAL QDate(2000, 1, 1)
 
-
 class Q_CORE_EXPORT QDateTimeParser
 {
    Q_DECLARE_TR_FUNCTIONS(QDateTimeParser)
@@ -108,8 +107,9 @@ class Q_CORE_EXPORT QDateTimeParser
       FirstSectionIndex  = -2,
       LastSectionIndex   = -3,
       CalendarPopupIndex = -4
-   }; // extending qdatetimeedit.h equivalent
-   Q_DECLARE_FLAGS(Sections, Section)
+   };
+
+   using Sections = QFlags<Section>;
 
    struct Q_CORE_EXPORT SectionNode {
       Section type;
@@ -160,7 +160,7 @@ class Q_CORE_EXPORT QDateTimeParser
       AllowPartial = 0x04,
       Fraction     = 0x08
    };
-   Q_DECLARE_FLAGS(FieldInfo, FieldInfoFlag)
+   using FieldInfo = QFlags<FieldInfoFlag>;
 
    FieldInfo fieldInfo(int index) const;
 

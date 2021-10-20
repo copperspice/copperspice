@@ -39,7 +39,7 @@ class Q_GUI_EXPORT QSurfaceFormat
       DeprecatedFunctions      = 0x0004,
       ResetNotification        = 0x0008
    };
-   Q_DECLARE_FLAGS(FormatOptions, FormatOption)
+   using FormatOptions = QFlags<FormatOption>;
 
    enum SwapBehavior {
       DefaultSwapBehavior,

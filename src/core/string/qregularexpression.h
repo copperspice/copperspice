@@ -48,7 +48,7 @@ enum class QPatternOption {
    WildcardUnixOption            = 0x0080,
    FixedStringOption             = 0x0100,
 };
-Q_DECLARE_FLAGS(QPatternOptionFlags, QPatternOption)
+using QPatternOptionFlags = QFlags<QPatternOption>;
 
 enum class QMatchType {
    NormalMatch = 0,
@@ -60,7 +60,8 @@ enum class QMatchOption {
    NoMatchOption                 = 0x0000,
    AnchoredMatchOption           = 0x0001
 };
-Q_DECLARE_FLAGS(QMatchOptionFlags, QMatchOption)
+using QMatchOptionFlags = QFlags<QMatchOption>;
+
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPatternOptionFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMatchOptionFlags)

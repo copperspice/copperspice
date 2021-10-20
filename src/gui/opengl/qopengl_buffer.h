@@ -81,7 +81,7 @@ public:
         RangeFlushExplicit    = 0x0010, // GL_MAP_FLUSH_EXPLICIT_BIT
         RangeUnsynchronized   = 0x0020  // GL_MAP_UNSYNCHRONIZED_BIT
     };
-    Q_DECLARE_FLAGS(RangeAccessFlags, RangeAccessFlag)
+    using RangeAccessFlags = QFlags<RangeAccessFlag>;
 
     QOpenGLBuffer::Type type() const;
 

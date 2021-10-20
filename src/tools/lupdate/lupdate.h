@@ -47,7 +47,8 @@ enum UpdateOption {
    NoUiLines = 2048
 };
 
-Q_DECLARE_FLAGS(UpdateOptions, UpdateOption)
+using UpdateOptions = QFlags<UpdateOption>;
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(UpdateOptions)
 
 Translator merge(const Translator &tor, const Translator &virginTor, const QList<Translator> &aliens,

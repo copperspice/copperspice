@@ -258,7 +258,7 @@ public:
         DiscardFramebuffer      = 0x00400000,
         Sized16Formats          = 0x00800000
     };
-    Q_DECLARE_FLAGS(OpenGLExtensions, OpenGLExtension)
+    using OpenGLExtensions = QFlags<OpenGLExtension>;
 
     OpenGLExtensions openGLExtensions();
     bool hasOpenGLExtension(QOpenGLExtensions::OpenGLExtension extension) const;

@@ -38,7 +38,7 @@ public:
         WantPalmTouch = 0x00000002
     };
 
-    Q_DECLARE_FLAGS(TouchWindowTouchTypes, TouchWindowTouchType)
+    using TouchWindowTouchTypes = QFlags<TouchWindowTouchType>;
 
     typedef void (*SetTouchWindowTouchType)(QWindow *window, QWindowsWindowFunctions::TouchWindowTouchTypes touchType);
     static const QByteArray setTouchWindowTouchTypeIdentifier() { return QByteArray("WindowsSetTouchWindowTouchType"); }
