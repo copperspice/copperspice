@@ -105,6 +105,8 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    QPolygon united(const QPolygon &rectangle) const;
    QPolygon intersected(const QPolygon &rectangle) const;
    QPolygon subtracted(const QPolygon &rectangle) const;
+
+   bool intersects(const QPolygon &rectangle) const;
 };
 
 inline QPolygon::QPolygon(int asize) : QVector<QPoint>(asize) {}
@@ -204,6 +206,8 @@ class Q_GUI_EXPORT QPolygonF : public QVector<QPointF>
    QPolygonF united(const QPolygonF &rectangle) const;
    QPolygonF intersected(const QPolygonF &rectangle) const;
    QPolygonF subtracted(const QPolygonF &rectangle) const;
+
+   bool intersects(const QPolygonF &rectangle) const;
 };
 
 inline QPolygonF::QPolygonF(int asize) : QVector<QPointF>(asize) {}
