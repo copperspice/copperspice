@@ -468,6 +468,16 @@ QPolygon QPolygon::subtracted(const QPolygon &rectangle) const
    return subject.subtracted(clip).toFillPolygon().toPolygon();
 }
 
+bool QPolygon::intersects(const QPolygon& rectangle) const
+{
+    QPainterPath subject;
+    subject.addPolygon(*this);
+
+    QPainterPath clip;
+    clip.addPolygon(rectangle);
+    return subject.intersects(clip);
+}
+
 QPolygonF QPolygonF::united(const QPolygonF &rectangle) const
 {
    QPainterPath subject;
@@ -498,6 +508,16 @@ QPolygonF QPolygonF::subtracted(const QPolygonF &rectangle) const
    QPainterPath clip;
    clip.addPolygon(rectangle);
    return subject.subtracted(clip).toFillPolygon();
+}
+
+bool QPolygonF::intersects(const QPolygonF &rectangle) const
+{
+    QPainterPath subject; 
+    subject.addPolygon(*this);
+
+    QPainterPath clip; 
+    clip.addPolygon(rectangle);
+    return subject.intersects(clip);
 }
 
 QPolygonF::operator QVariant() const
