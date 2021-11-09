@@ -662,32 +662,33 @@ void QBlitterPaintEngine::fillRect(const QRectF &rect, const QBrush &brush)
       d->pmData->markRasterOverlay(rect);
       QRasterPaintEngine::fillRect(rect, brush);
    }
-
 }
 
-void QBlitterPaintEngine::drawRects(const QRect *rects, int rectCount)
+void QBlitterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 {
    Q_D(QBlitterPaintEngine);
+
    if (d->caps.canBlitterDrawRectMask()) {
       for (int i = 0; i < rectCount; ++i) {
-         d->fillRect(rects[i], qbrush_color(state()->brush), false);
+         d->fillRect(rectPtr[i], qbrush_color(state()->brush), false);
       }
+
    } else {
-      d->pmData->markRasterOverlay(rects, rectCount);
-      QRasterPaintEngine::drawRects(rects, rectCount);
+      d->pmData->markRasterOverlay(rectPtr, rectCount);
+      QRasterPaintEngine::drawRects(rectPtr, rectCount);
    }
 }
 
-void QBlitterPaintEngine::drawRects(const QRectF *rects, int rectCount)
+void QBlitterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
    Q_D(QBlitterPaintEngine);
    if (d->caps.canBlitterDrawRectMask()) {
       for (int i = 0; i < rectCount; ++i) {
-         d->fillRect(rects[i], qbrush_color(state()->brush), false);
+         d->fillRect(rectPtr[i], qbrush_color(state()->brush), false);
       }
    } else {
-      d->pmData->markRasterOverlay(rects, rectCount);
-      QRasterPaintEngine::drawRects(rects, rectCount);
+      d->pmData->markRasterOverlay(rectPtr, rectCount);
+      QRasterPaintEngine::drawRects(rectPtr, rectCount);
    }
 }
 
@@ -731,20 +732,20 @@ void QBlitterPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm, const Q
 }
 
 // Overriden methods to lock the graphics memory
-void QBlitterPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
+void QBlitterPaintEngine::drawPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode)
 {
    Q_D(QBlitterPaintEngine);
    d->lock();
-   d->pmData->markRasterOverlay(points, pointCount);
-   QRasterPaintEngine::drawPolygon(points, pointCount, mode);
+   d->pmData->markRasterOverlay(pointPtr, pointCount);
+   QRasterPaintEngine::drawPolygon(pointPtr, pointCount, mode);
 }
 
-void QBlitterPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode)
+void QBlitterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, PolygonDrawMode mode)
 {
    Q_D(QBlitterPaintEngine);
    d->lock();
-   d->pmData->markRasterOverlay(points, pointCount);
-   QRasterPaintEngine::drawPolygon(points, pointCount, mode);
+   d->pmData->markRasterOverlay(pointPtr, pointCount);
+   QRasterPaintEngine::drawPolygon(pointPtr, pointCount, mode);
 }
 
 void QBlitterPaintEngine::fillPath(const QPainterPath &path, QSpanData *fillData)
@@ -755,12 +756,12 @@ void QBlitterPaintEngine::fillPath(const QPainterPath &path, QSpanData *fillData
    QRasterPaintEngine::fillPath(path, fillData);
 }
 
-void QBlitterPaintEngine::fillPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
+void QBlitterPaintEngine::fillPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode)
 {
    Q_D(QBlitterPaintEngine);
    d->lock();
-   d->pmData->markRasterOverlay(points, pointCount);
-   QRasterPaintEngine::fillPolygon(points, pointCount, mode);
+   d->pmData->markRasterOverlay(pointPtr, pointCount);
+   QRasterPaintEngine::fillPolygon(pointPtr, pointCount, mode);
 }
 
 void QBlitterPaintEngine::drawEllipse(const QRectF &r)
@@ -801,20 +802,20 @@ void QBlitterPaintEngine::drawTextItem(const QPointF &pos, const QTextItem &ti)
    QRasterPaintEngine::drawTextItem(pos, ti);
 }
 
-void QBlitterPaintEngine::drawPoints(const QPointF *points, int pointCount)
+void QBlitterPaintEngine::drawPoints(const QPointF *pointPtr, int pointCount)
 {
    Q_D(QBlitterPaintEngine);
    d->lock();
-   d->pmData->markRasterOverlay(points, pointCount);
-   QRasterPaintEngine::drawPoints(points, pointCount);
+   d->pmData->markRasterOverlay(pointPtr, pointCount);
+   QRasterPaintEngine::drawPoints(pointPtr, pointCount);
 }
 
-void QBlitterPaintEngine::drawPoints(const QPoint *points, int pointCount)
+void QBlitterPaintEngine::drawPoints(const QPoint *pointPtr, int pointCount)
 {
    Q_D(QBlitterPaintEngine);
    d->lock();
-   d->pmData->markRasterOverlay(points, pointCount);
-   QRasterPaintEngine::drawPoints(points, pointCount);
+   d->pmData->markRasterOverlay(pointPtr, pointCount);
+   QRasterPaintEngine::drawPoints(pointPtr, pointCount);
 }
 
 void QBlitterPaintEngine::stroke(const QVectorPath &path, const QPen &pen)

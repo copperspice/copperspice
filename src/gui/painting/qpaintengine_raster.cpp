@@ -1315,7 +1315,7 @@ static void fillRect_normalized(const QRect &r, QSpanData *data, QRasterPaintEng
 /*!
     \reimp
 */
-void QRasterPaintEngine::drawRects(const QRect *rects, int rectCount)
+void QRasterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 {
 #ifdef QT_DEBUG_DRAW
    qDebug(" - QRasterPaintEngine::drawRect(), rectCount=%d", rectCount);
@@ -1329,8 +1329,8 @@ void QRasterPaintEngine::drawRects(const QRect *rects, int rectCount)
    ensureBrush();
    if (s->brushData.blend) {
       if (!s->flags.antialiased && s->matrix.type() <= QTransform::TxTranslate) {
-         const QRect *r = rects;
-         const QRect *lastRect = rects + rectCount;
+         const QRect *r = rectPtr;
+         const QRect *lastRect = rectPtr + rectCount;
 
          int offset_x = int(s->matrix.dx());
          int offset_y = int(s->matrix.dy());
@@ -1343,7 +1343,7 @@ void QRasterPaintEngine::drawRects(const QRect *rects, int rectCount)
       } else {
          QRectVectorPath path;
          for (int i = 0; i < rectCount; ++i) {
-            path.set(rects[i]);
+            path.set(rectPtr[i]);
             fill(path, s->brush);
          }
       }
@@ -1357,12 +1357,12 @@ void QRasterPaintEngine::drawRects(const QRect *rects, int rectCount)
          stroker.setLegacyRoundingEnabled(s->flags.legacy_rounding);
 
          for (int i = 0; i < rectCount; ++i) {
-            path.set(rects[i]);
+            path.set(rectPtr[i]);
             stroker.drawPath(path);
          }
       } else {
          for (int i = 0; i < rectCount; ++i) {
-            path.set(rects[i]);
+            path.set(rectPtr[i]);
             stroke(path, s->pen);
          }
       }
@@ -1372,7 +1372,7 @@ void QRasterPaintEngine::drawRects(const QRect *rects, int rectCount)
 /*!
     \reimp
 */
-void QRasterPaintEngine::drawRects(const QRectF *rects, int rectCount)
+void QRasterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
 #ifdef QT_DEBUG_DRAW
    qDebug(" - QRasterPaintEngine::drawRect(QRectF*), rectCount=%d", rectCount);
@@ -1388,7 +1388,7 @@ void QRasterPaintEngine::drawRects(const QRectF *rects, int rectCount)
       if (s->brushData.blend) {
          d->initializeRasterizer(&s->brushData);
          for (int i = 0; i < rectCount; ++i) {
-            const QRectF &rect = rects[i].normalized();
+            const QRectF &rect = rectPtr[i].normalized();
             if (rect.isEmpty()) {
                continue;
             }
@@ -1406,12 +1406,13 @@ void QRasterPaintEngine::drawRects(const QRectF *rects, int rectCount)
             stroker.setLegacyRoundingEnabled(s->flags.legacy_rounding);
 
             for (int i = 0; i < rectCount; ++i) {
-               path.set(rects[i]);
+               path.set(rectPtr[i]);
                stroker.drawPath(path);
             }
+
          } else {
             for (int i = 0; i < rectCount; ++i) {
-               path.set(rects[i]);
+               path.set(rectPtr[i]);
                QPaintEngineEx::stroke(path, s->lastPen);
             }
          }
@@ -1421,7 +1422,7 @@ void QRasterPaintEngine::drawRects(const QRectF *rects, int rectCount)
    }
 #endif // QT_FAST_SPANS
 
-   QPaintEngineEx::drawRects(rects, rectCount);
+   QPaintEngineEx::drawRects(rectPtr, rectCount);
 }
 
 
@@ -1818,7 +1819,7 @@ void QRasterPaintEngine::drawPolygon(const QPointF *points, int pointCount, Poly
 /*!
     \reimp
 */
-void QRasterPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode)
+void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, PolygonDrawMode mode)
 {
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
@@ -1826,14 +1827,14 @@ void QRasterPaintEngine::drawPolygon(const QPoint *points, int pointCount, Polyg
 #ifdef QT_DEBUG_DRAW
    qDebug(" - QRasterPaintEngine::drawPolygon(I), pointCount=%d", pointCount);
    for (int i = 0; i < pointCount; ++i) {
-      qDebug() << "   - " << points[i];
+      qDebug() << "   - " << pointPtr[i];
    }
 #endif
 
    Q_ASSERT(pointCount >= 2);
 
-   if (mode != PolylineMode && QVectorPath::isRect((const int *) points, pointCount)) {
-      QRect r(points[0].x(), points[0].y(), points[2].x() - points[0].x(), points[2].y() - points[0].y());
+   if (mode != PolylineMode && QVectorPath::isRect((const int *) pointPtr, pointCount)) {
+      QRect r(pointPtr[0].x(), pointPtr[0].y(), pointPtr[2].x() - pointPtr[0].x(), pointPtr[2].y() - pointPtr[0].y());
       drawRects(&r, 1);
 
       return;
@@ -1849,10 +1850,10 @@ void QRasterPaintEngine::drawPolygon(const QPoint *points, int pointCount, Polyg
          ensureOutlineMapper();
 
          d->outlineMapper->beginOutline(mode == WindingMode ? Qt::WindingFill : Qt::OddEvenFill);
-         d->outlineMapper->moveTo(*points);
+         d->outlineMapper->moveTo(*pointPtr);
 
-         const QPoint *p = points;
-         const QPoint *ep = points + pointCount - 1;
+         const QPoint *p  = pointPtr;
+         const QPoint *ep = pointPtr + pointCount - 1;
 
          do {
             d->outlineMapper->lineTo(*(++p));
@@ -1873,7 +1874,7 @@ void QRasterPaintEngine::drawPolygon(const QPoint *points, int pointCount, Polyg
       QVarLengthArray<qreal> fpoints(count);
 
       for (int i = 0; i < count; ++i) {
-         fpoints[i] = ((const int *) points)[i];
+         fpoints[i] = ((const int *) pointPtr)[i];
       }
 
       QVectorPath vp((qreal *) fpoints.data(), pointCount, nullptr, QVectorPath::polygonFlags(mode));
@@ -3042,7 +3043,7 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
 /*!
     \reimp
 */
-void QRasterPaintEngine::drawPoints(const QPointF *points, int pointCount)
+void QRasterPaintEngine::drawPoints(const QPointF *pointPtr, int pointCount)
 {
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
@@ -3053,17 +3054,16 @@ void QRasterPaintEngine::drawPoints(const QPointF *points, int pointCount)
    }
 
    if (! s->flags.fast_pen) {
-      QPaintEngineEx::drawPoints(points, pointCount);
+      QPaintEngineEx::drawPoints(pointPtr, pointCount);
       return;
    }
 
    QCosmeticStroker stroker(s, d->deviceRect, d->deviceRectUnclipped);
    stroker.setLegacyRoundingEnabled(s->flags.legacy_rounding);
-   stroker.drawPoints(points, pointCount);
+   stroker.drawPoints(pointPtr, pointCount);
 }
 
-
-void QRasterPaintEngine::drawPoints(const QPoint *points, int pointCount)
+void QRasterPaintEngine::drawPoints(const QPoint *pointPtr, int pointCount)
 {
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
@@ -3074,13 +3074,13 @@ void QRasterPaintEngine::drawPoints(const QPoint *points, int pointCount)
    }
 
    if (!s->flags.fast_pen) {
-      QPaintEngineEx::drawPoints(points, pointCount);
+      QPaintEngineEx::drawPoints(pointPtr, pointCount);
       return;
    }
 
    QCosmeticStroker stroker(s, d->deviceRect, d->deviceRectUnclipped);
    stroker.setLegacyRoundingEnabled(s->flags.legacy_rounding);
-   stroker.drawPoints(points, pointCount);
+   stroker.drawPoints(pointPtr, pointCount);
 }
 
 /*!

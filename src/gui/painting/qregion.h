@@ -44,13 +44,14 @@ class Q_GUI_EXPORT QRegion
 
    QRegion();
    QRegion(int x, int y, int w, int h, RegionType t = Rectangle);
-   QRegion(const QRect &r, RegionType t = Rectangle);
-   QRegion(const QPolygon &pa, Qt::FillRule fillRule = Qt::OddEvenFill);
+   QRegion(const QRect &rect, RegionType t = Rectangle);
+   QRegion(const QPolygon &polygon, Qt::FillRule fillRule = Qt::OddEvenFill);
 
-   QRegion(const QRegion &region);
+   QRegion(const QRegion &other);
    QRegion(const QBitmap &bitmap);
    ~QRegion();
-   QRegion &operator=(const QRegion &);
+
+   QRegion &operator=(const QRegion &other);
 
    inline QRegion &operator=(QRegion &&other) {
       qSwap(d, other.d);
@@ -64,57 +65,58 @@ class Q_GUI_EXPORT QRegion
    bool isEmpty() const;
    bool isNull() const;
 
-   bool contains(const QPoint &p) const;
-   bool contains(const QRect &r) const;
+   bool contains(const QPoint &point) const;
+   bool contains(const QRect &rect) const;
 
    void translate(int dx, int dy);
-   inline void translate(const QPoint &p) {
-      translate(p.x(), p.y());
+   inline void translate(const QPoint &point) {
+      translate(point.x(), point.y());
    }
 
    QRegion translated(int dx, int dy) const;
 
-   inline QRegion translated(const QPoint &p) const {
-      return translated(p.x(), p.y());
+   inline QRegion translated(const QPoint &point) const {
+      return translated(point.x(), point.y());
    }
 
-   QRegion united(const QRegion &r) const;
-   QRegion united(const QRect &r) const;
-   QRegion intersected(const QRegion &r) const;
-   QRegion intersected(const QRect &r) const;
+   QRegion united(const QRegion &region) const;
+   QRegion united(const QRect &rect) const;
+   QRegion intersected(const QRegion &region) const;
+   QRegion intersected(const QRect &rect) const;
 
-   QRegion subtracted(const QRegion &r) const;
-   QRegion xored(const QRegion &r) const;
+   QRegion subtracted(const QRegion &region) const;
+   QRegion xored(const QRegion &region) const;
 
 
-   bool intersects(const QRegion &r) const;
-   bool intersects(const QRect &r) const;
+   bool intersects(const QRegion &region) const;
+   bool intersects(const QRect &rect) const;
 
    QRect boundingRect() const;
    QVector<QRect> rects() const;
 
-   void setRects(const QRect *rect, int num);
+   void setRects(const QRect *rectPtr, int rectCount);
    int rectCount() const;
 
-   QRegion operator|(const QRegion &r) const;
-   QRegion operator+(const QRegion &r) const;
-   QRegion operator+(const QRect &r) const;
-   QRegion operator&(const QRegion &r) const;
-   QRegion operator&(const QRect &r) const;
-   QRegion operator-(const QRegion &r) const;
-   QRegion operator^(const QRegion &r) const;
+   QRegion operator|(const QRegion &other) const;
+   QRegion operator+(const QRegion &other) const;
+   QRegion operator+(const QRect &rect) const;
+   QRegion operator&(const QRegion &other) const;
+   QRegion operator&(const QRect &rect) const;
+   QRegion operator-(const QRegion &other) const;
+   QRegion operator^(const QRegion &other) const;
 
-   QRegion &operator|=(const QRegion &r);
-   QRegion &operator+=(const QRegion &r);
-   QRegion &operator+=(const QRect &r);
-   QRegion &operator&=(const QRegion &r);
-   QRegion &operator&=(const QRect &r);
-   QRegion &operator-=(const QRegion &r);
-   QRegion &operator^=(const QRegion &r);
+   QRegion &operator|=(const QRegion &other);
+   QRegion &operator+=(const QRegion &other);
+   QRegion &operator+=(const QRect &rect);
+   QRegion &operator&=(const QRegion &other);
+   QRegion &operator&=(const QRect &rect);
+   QRegion &operator-=(const QRegion &other);
+   QRegion &operator^=(const QRegion &other);
 
-   bool operator==(const QRegion &r) const;
-   inline bool operator!=(const QRegion &r) const {
-      return !(operator==(r));
+   bool operator==(const QRegion &other) const;
+
+   inline bool operator!=(const QRegion &other) const {
+      return !(operator==(other));
    }
    operator QVariant() const;
 
@@ -124,7 +126,6 @@ class Q_GUI_EXPORT QRegion
  private:
    QRegion copy() const;   // helper of detach
    void detach();
-
 
    void exec(const QByteArray &ba, int ver = 0, QDataStream::ByteOrder byteOrder = QDataStream::BigEndian);
 
@@ -143,13 +144,9 @@ class Q_GUI_EXPORT QRegion
 
 };
 
-
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QRegion &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QRegion &);
 
-
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QRegion &);
-
-
 
 #endif // QREGION_H

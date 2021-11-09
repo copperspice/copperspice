@@ -173,13 +173,13 @@ class Q_GUI_EXPORT QColor
    static QColor fromHsl(int h, int s, int l, int a = 255);
    static QColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 
-   QColor light(int f = 150) const;
-   QColor lighter(int f = 150) const;
-   QColor dark(int f = 200) const;
-   QColor darker(int f = 200) const;
+   QColor light(int factor = 150) const;
+   QColor lighter(int factor = 150) const;
+   QColor dark(int factor = 200) const;
+   QColor darker(int factor = 200) const;
 
-   bool operator==(const QColor &c) const;
-   bool operator!=(const QColor &c) const;
+   bool operator==(const QColor &color) const;
+   bool operator!=(const QColor &color) const;
 
    operator QVariant() const;
    static bool isValidColor(const QString &name);
@@ -242,14 +242,14 @@ inline QColor::QColor(int r, int g, int b, int a)
    setRgb(r, g, b, a);
 }
 
-inline QColor::QColor(const char *aname)
+inline QColor::QColor(const char *name)
 {
-   setNamedColor(QString::fromLatin1(aname));
+   setNamedColor(QString::fromLatin1(name));
 }
 
-inline QColor::QColor(const QString &aname)
+inline QColor::QColor(const QString &name)
 {
-   setNamedColor(aname);
+   setNamedColor(name);
 }
 
 inline bool QColor::isValid() const
@@ -257,14 +257,14 @@ inline bool QColor::isValid() const
    return cspec != Invalid;
 }
 
-inline QColor QColor::lighter(int f) const
+inline QColor QColor::lighter(int factor) const
 {
-   return light(f);
+   return light(factor);
 }
 
-inline QColor QColor::darker(int f) const
+inline QColor QColor::darker(int factor) const
 {
-   return dark(f);
+   return dark(factor);
 }
 
 #endif

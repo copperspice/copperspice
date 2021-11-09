@@ -465,8 +465,8 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
                   break;
                case QPainterPath::CurveToElement:
                   d->activeStroker->cubicTo(points[0], points[1],
-                     points[2], points[3],
-                     points[4], points[5]);
+                     points[2], points[3], points[4], points[5]);
+
                   points += 6;
                   types += 3;
                   flags |= QVectorPath::CurvedShapeMask;
@@ -711,10 +711,10 @@ void QPaintEngineEx::fillRect(const QRectF &r, const QColor &color)
    fillRect(r, QBrush(color));
 }
 
-void QPaintEngineEx::drawRects(const QRect *rects, int rectCount)
+void QPaintEngineEx::drawRects(const QRect *rectPtr, int rectCount)
 {
    for (int i = 0; i < rectCount; ++i) {
-      const QRect &r = rects[i];
+      const QRect &r = rectPtr[i];
 
       // ### Is there a one off here?
       qreal right = r.x() + r.width();
@@ -728,10 +728,10 @@ void QPaintEngineEx::drawRects(const QRect *rects, int rectCount)
    }
 }
 
-void QPaintEngineEx::drawRects(const QRectF *rects, int rectCount)
+void QPaintEngineEx::drawRects(const QRectF *rectPtr, int rectCount)
 {
    for (int i = 0; i < rectCount; ++i) {
-      const QRectF &r = rects[i];
+      const QRectF &r = rectPtr[i];
       qreal right = r.x() + r.width();
       qreal bottom = r.y() + r.height();
 
@@ -783,7 +783,7 @@ void QPaintEngineEx::drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yR
    draw(path);
 }
 
-void QPaintEngineEx::drawLines(const QLine *lines, int lineCount)
+void QPaintEngineEx::drawLines(const QLine *linePtr, int lineCount)
 {
    int elementCount = lineCount << 1;
    while (elementCount > 0) {
@@ -793,29 +793,28 @@ void QPaintEngineEx::drawLines(const QLine *lines, int lineCount)
       int count2 = count << 1;
 
       for (int i = 0; i < count2; ++i) {
-         pts[i] = ((const int *) lines)[i];
+         pts[i] = ((const int *) linePtr)[i];
       }
 
       QVectorPath path(pts, count, qpaintengineex_line_types_16, QVectorPath::LinesHint);
       stroke(path, state()->pen);
 
       elementCount -= 32;
-      lines += 16;
+      linePtr += 16;
    }
 }
 
-void QPaintEngineEx::drawLines(const QLineF *lines, int lineCount)
+void QPaintEngineEx::drawLines(const QLineF *linePtr, int lineCount)
 {
    int elementCount = lineCount << 1;
    while (elementCount > 0) {
       int count = qMin(elementCount, 32);
 
-      QVectorPath path((const qreal *) lines, count, qpaintengineex_line_types_16,
-         QVectorPath::LinesHint);
+      QVectorPath path((const qreal *) linePtr, count, qpaintengineex_line_types_16, QVectorPath::LinesHint);
       stroke(path, state()->pen);
 
       elementCount -= 32;
-      lines += 16;
+      linePtr += 16;
    }
 }
 
@@ -851,7 +850,7 @@ void QPaintEngineEx::drawPath(const QPainterPath &path)
    }
 }
 
-void QPaintEngineEx::drawPoints(const QPointF *points, int pointCount)
+void QPaintEngineEx::drawPoints(const QPointF *pointPtr, int pointCount)
 {
    QPen pen = state()->pen;
    if (pen.capStyle() == Qt::FlatCap) {
@@ -864,28 +863,28 @@ void QPaintEngineEx::drawPoints(const QPointF *points, int pointCount)
          qreal pts[64];
          int oset = -1;
          for (int i = 0; i < count; ++i) {
-            pts[++oset] = points[i].x();
-            pts[++oset] = points[i].y();
-            pts[++oset] = points[i].x() + 1 / 63.;
-            pts[++oset] = points[i].y();
+            pts[++oset] = pointPtr[i].x();
+            pts[++oset] = pointPtr[i].y();
+            pts[++oset] = pointPtr[i].x() + 1 / 63.;
+            pts[++oset] = pointPtr[i].y();
          }
 
          QVectorPath path(pts, count * 2, qpaintengineex_line_types_16, QVectorPath::LinesHint);
          stroke(path, pen);
          pointCount -= 16;
-         points += 16;
+         pointPtr += 16;
       }
 
    } else {
       for (int i = 0; i < pointCount; ++i) {
-         qreal pts[] = { points[i].x(), points[i].y(), points[i].x() + qreal(1 / 63.), points[i].y() };
+         qreal pts[] = { pointPtr[i].x(), pointPtr[i].y(), pointPtr[i].x() + qreal(1 / 63.), pointPtr[i].y() };
          QVectorPath path(pts, 2, nullptr);
          stroke(path, pen);
       }
    }
 }
 
-void QPaintEngineEx::drawPoints(const QPoint *points, int pointCount)
+void QPaintEngineEx::drawPoints(const QPoint *pointPtr, int pointCount)
 {
    QPen pen = state()->pen;
    if (pen.capStyle() == Qt::FlatCap) {
@@ -899,22 +898,22 @@ void QPaintEngineEx::drawPoints(const QPoint *points, int pointCount)
          int oset = -1;
 
          for (int i = 0; i < count; ++i) {
-            pts[++oset] = points[i].x();
-            pts[++oset] = points[i].y();
-            pts[++oset] = points[i].x() + 1 / 63.;
-            pts[++oset] = points[i].y();
+            pts[++oset] = pointPtr[i].x();
+            pts[++oset] = pointPtr[i].y();
+            pts[++oset] = pointPtr[i].x() + 1 / 63.;
+            pts[++oset] = pointPtr[i].y();
          }
 
          QVectorPath path(pts, count * 2, qpaintengineex_line_types_16, QVectorPath::LinesHint);
          stroke(path, pen);
          pointCount -= 16;
-         points += 16;
+         pointPtr   += 16;
       }
 
    } else {
       for (int i = 0; i < pointCount; ++i) {
-         qreal pts[] = { qreal(points[i].x()), qreal(points[i].y()),
-               qreal(points[i].x() + 1 / 63.), qreal(points[i].y())};
+         qreal pts[] = { qreal(pointPtr[i].x()), qreal(pointPtr[i].y()),
+               qreal(pointPtr[i].x() + 1 / 63.), qreal(pointPtr[i].y())};
 
          QVectorPath path(pts, 2, nullptr);
          stroke(path, pen);
@@ -922,9 +921,9 @@ void QPaintEngineEx::drawPoints(const QPoint *points, int pointCount)
    }
 }
 
-void QPaintEngineEx::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
+void QPaintEngineEx::drawPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode)
 {
-   QVectorPath path((const qreal *) points, pointCount, nullptr, QVectorPath::polygonFlags(mode));
+   QVectorPath path((const qreal *) pointPtr, pointCount, nullptr, QVectorPath::polygonFlags(mode));
 
    if (mode == PolylineMode) {
       stroke(path, state()->pen);
@@ -933,13 +932,13 @@ void QPaintEngineEx::drawPolygon(const QPointF *points, int pointCount, PolygonD
    }
 }
 
-void QPaintEngineEx::drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode)
+void QPaintEngineEx::drawPolygon(const QPoint *pointPtr, int pointCount, PolygonDrawMode mode)
 {
    int count = pointCount << 1;
    QVarLengthArray<qreal> pts(count);
 
    for (int i = 0; i < count; ++i) {
-      pts[i] = ((const int *) points)[i];
+      pts[i] = ((const int *) pointPtr)[i];
    }
 
    QVectorPath path(pts.data(), pointCount, nullptr, QVectorPath::polygonFlags(mode));

@@ -32,73 +32,75 @@ class QStylePainter : public QPainter
 {
  public:
    QStylePainter()
-      : QPainter(), widget(nullptr), wstyle(nullptr)
+      : QPainter(), m_widget(nullptr), m_wstyle(nullptr)
    {
    }
 
-   explicit QStylePainter(QWidget *w) {
-      begin(w, w);
+   explicit QStylePainter(QWidget *widget) {
+      begin(widget, widget);
    }
 
-   QStylePainter(QPaintDevice *pd, QWidget *w) {
-      begin(pd, w);
+   QStylePainter(QPaintDevice *device, QWidget *widget) {
+      begin(device, widget);
    }
 
    QStylePainter(const QStylePainter &) = delete;
    QStylePainter &operator=(const QStylePainter &) = delete;
 
-   bool begin(QWidget *w) {
-      return begin(w, w);
+   bool begin(QWidget *widget) {
+      return begin(widget, widget);
    }
 
-   bool begin(QPaintDevice *pd, QWidget *w) {
-      Q_ASSERT_X(w, "QStylePainter::QStylePainter", "Widget must be non-zero");
-      widget = w;
-      wstyle = w->style();
-      return QPainter::begin(pd);
+   bool begin(QPaintDevice *device, QWidget *widget) {
+      Q_ASSERT_X(widget, "QStylePainter::QStylePainter", "Widget must be non-zero");
+
+      m_widget = widget;
+      m_wstyle = widget->style();
+
+      return QPainter::begin(device);
    };
 
-   inline void drawPrimitive(QStyle::PrimitiveElement pe, const QStyleOption &opt);
-   inline void drawControl(QStyle::ControlElement ce, const QStyleOption &opt);
-   inline void drawComplexControl(QStyle::ComplexControl cc, const QStyleOptionComplex &opt);
-   inline void drawItemText(const QRect &r, int flags, const QPalette &pal, bool enabled,
+   inline void drawPrimitive(QStyle::PrimitiveElement pe, const QStyleOption &option);
+   inline void drawControl(QStyle::ControlElement ce, const QStyleOption &option);
+   inline void drawComplexControl(QStyle::ComplexControl cc, const QStyleOptionComplex &option);
+   inline void drawItemText(const QRect &rect, int flags, const QPalette &pal, bool enabled,
       const QString &text, QPalette::ColorRole textRole = QPalette::NoRole);
-   inline void drawItemPixmap(const QRect &r, int flags, const QPixmap &pixmap);
+
+   inline void drawItemPixmap(const QRect &rect, int flags, const QPixmap &pixmap);
 
    QStyle *style() const {
-      return wstyle;
+      return m_wstyle;
    }
 
  private:
-   QWidget *widget;
-   QStyle *wstyle;
+   QWidget *m_widget;
+   QStyle  *m_wstyle;
 };
 
-void QStylePainter::drawPrimitive(QStyle::PrimitiveElement pe, const QStyleOption &opt)
+void QStylePainter::drawPrimitive(QStyle::PrimitiveElement pe, const QStyleOption &option)
 {
-   wstyle->drawPrimitive(pe, &opt, this, widget);
+   m_wstyle->drawPrimitive(pe, &option, this, m_widget);
 }
 
-void QStylePainter::drawControl(QStyle::ControlElement ce, const QStyleOption &opt)
+void QStylePainter::drawControl(QStyle::ControlElement ce, const QStyleOption &option)
 {
-   wstyle->drawControl(ce, &opt, this, widget);
+   m_wstyle->drawControl(ce, &option, this, m_widget);
 }
 
-void QStylePainter::drawComplexControl(QStyle::ComplexControl cc, const QStyleOptionComplex &opt)
+void QStylePainter::drawComplexControl(QStyle::ComplexControl cc, const QStyleOptionComplex &option)
 {
-   wstyle->drawComplexControl(cc, &opt, this, widget);
+   m_wstyle->drawComplexControl(cc, &option, this, m_widget);
 }
 
-void QStylePainter::drawItemText(const QRect &r, int flags, const QPalette &pal, bool enabled,
-   const QString &text, QPalette::ColorRole textRole)
+void QStylePainter::drawItemText(const QRect &rect, int flags, const QPalette &pal, bool enabled,
+            const QString &text, QPalette::ColorRole textRole)
 {
-   wstyle->drawItemText(this, r, flags, pal, enabled, text, textRole);
+   m_wstyle->drawItemText(this, rect, flags, pal, enabled, text, textRole);
 }
 
-void QStylePainter::drawItemPixmap(const QRect &r, int flags, const QPixmap &pixmap)
+void QStylePainter::drawItemPixmap(const QRect &rect, int flags, const QPixmap &pixmap)
 {
-   wstyle->drawItemPixmap(this, r, flags, pixmap);
+   m_wstyle->drawItemPixmap(this, rect, flags, pixmap);
 }
-
 
 #endif // QSTYLEPAINTER_H

@@ -390,26 +390,28 @@ void QCosmeticStroker::drawLine(const QPointF &p1, const QPointF &p2)
    current_span = 0;
 }
 
-void QCosmeticStroker::drawPoints(const QPoint *points, int num)
+void QCosmeticStroker::drawPoints(const QPoint *pointPtr, int pointCount)
 {
-   const QPoint *end = points + num;
-   while (points < end) {
-      QPointF p = QPointF(*points) * state->matrix;
+   const QPoint *end = pointPtr + pointCount;
+
+   while (pointPtr < end) {
+      QPointF p = QPointF(*pointPtr) * state->matrix;
       drawPixel(this, qRound(p.x()), qRound(p.y()), 255);
-      ++points;
+      ++pointPtr;
    }
 
    blend(current_span, spans, &state->penData);
    current_span = 0;
 }
 
-void QCosmeticStroker::drawPoints(const QPointF *points, int num)
+void QCosmeticStroker::drawPoints(const QPointF *pointPtr, int pointCount)
 {
-   const QPointF *end = points + num;
-   while (points < end) {
-      QPointF p = (*points) * state->matrix;
+   const QPointF *end = pointPtr + pointCount;
+
+   while (pointPtr < end) {
+      QPointF p = (*pointPtr) * state->matrix;
       drawPixel(this, qRound(p.x()), qRound(p.y()), 255);
-      ++points;
+      ++pointPtr;
    }
 
    blend(current_span, spans, &state->penData);

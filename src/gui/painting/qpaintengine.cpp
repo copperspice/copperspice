@@ -89,7 +89,7 @@ struct QT_Point {
    int y;
 };
 
-void QPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
+void QPaintEngine::drawPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode)
 {
    Q_ASSERT_X(qt_polygon_recursion != this, "QPaintEngine::drawPolygon",
       "At least one drawPolygon function must be implemented");
@@ -99,8 +99,8 @@ void QPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDra
    QVarLengthArray<QT_Point> p(pointCount);
 
    for (int i = 0; i < pointCount; ++i) {
-      p[i].x = qRound(points[i].x());
-      p[i].y = qRound(points[i].y());
+      p[i].x = qRound(pointPtr[i].x());
+      p[i].y = qRound(pointPtr[i].y());
    }
 
    drawPolygon((QPoint *)p.data(), pointCount, mode);
@@ -112,7 +112,7 @@ struct QT_PointF {
    qreal y;
 };
 
-void QPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode)
+void QPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, PolygonDrawMode mode)
 {
    Q_ASSERT_X(qt_polygon_recursion != this, "QPaintEngine::drawPolygon",
       "At least one drawPolygon function must be implemented");
@@ -123,15 +123,15 @@ void QPaintEngine::drawPolygon(const QPoint *points, int pointCount, PolygonDraw
    QVarLengthArray<QT_PointF> p(pointCount);
 
    for (int i = 0; i < pointCount; ++i) {
-      p[i].x = points[i].x();
-      p[i].y = points[i].y();
+      p[i].x = pointPtr[i].x();
+      p[i].y = pointPtr[i].y();
    }
 
    drawPolygon((QPointF *)p.data(), pointCount, mode);
    qt_polygon_recursion = nullptr;
 }
 
-void QPaintEngine::drawPoints(const QPointF *points, int pointCount)
+void QPaintEngine::drawPoints(const QPointF *pointPtr, int pointCount)
 {
    QPainter *p = painter();
    if (! p) {
@@ -158,7 +158,7 @@ void QPaintEngine::drawPoints(const QPointF *points, int pointCount)
    p->setPen(Qt::NoPen);
 
    for (int i = 0; i < pointCount; ++i) {
-      QPointF pos = transform.map(points[i]);
+      QPointF pos = transform.map(pointPtr[i]);
       QRectF rect(pos.x() - penWidth / 2, pos.y() - penWidth / 2, penWidth, penWidth);
 
       if (ellipses) {
@@ -171,19 +171,19 @@ void QPaintEngine::drawPoints(const QPointF *points, int pointCount)
    p->restore();
 }
 
-void QPaintEngine::drawPoints(const QPoint *points, int pointCount)
+void QPaintEngine::drawPoints(const QPoint *pointPtr, int pointCount)
 {
    Q_ASSERT(sizeof(QT_PointF) == sizeof(QPointF));
    QT_PointF fp[256];
    while (pointCount) {
       int i = 0;
       while (i < pointCount && i < 256) {
-         fp[i].x = points[i].x();
-         fp[i].y = points[i].y();
+         fp[i].x = pointPtr[i].x();
+         fp[i].y = pointPtr[i].y();
          ++i;
       }
       drawPoints((QPointF *)(void *)fp, i);
-      points += i;
+      pointPtr   += i;
       pointCount -= i;
    }
 }
@@ -360,10 +360,10 @@ void QPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
     into \a lineCount separate calls to drawPath() or drawPolygon()
     depending on the feature set of the paint engine.
 */
-void QPaintEngine::drawLines(const QLineF *lines, int lineCount)
+void QPaintEngine::drawLines(const QLineF *linePtr, int lineCount)
 {
    for (int i = 0; i < lineCount; ++i) {
-      QPointF pts[2] = { lines[i].p1(), lines[i].p2() };
+      QPointF pts[2] = { linePtr[i].p1(), linePtr[i].p2() };
 
       if (pts[0] == pts[1]) {
          if (state->pen().capStyle() != Qt::FlatCap) {
@@ -376,7 +376,7 @@ void QPaintEngine::drawLines(const QLineF *lines, int lineCount)
    }
 }
 
-void QPaintEngine::drawLines(const QLine *lines, int lineCount)
+void QPaintEngine::drawLines(const QLine *linePtr, int lineCount)
 {
    struct PointF {
       qreal x;
@@ -392,19 +392,19 @@ void QPaintEngine::drawLines(const QLine *lines, int lineCount)
    while (lineCount) {
       int i = 0;
       while (i < lineCount && i < 256) {
-         fl[i].p1.x = lines[i].x1();
-         fl[i].p1.y = lines[i].y1();
-         fl[i].p2.x = lines[i].x2();
-         fl[i].p2.y = lines[i].y2();
+         fl[i].p1.x = linePtr[i].x1();
+         fl[i].p1.y = linePtr[i].y1();
+         fl[i].p2.x = linePtr[i].x2();
+         fl[i].p2.y = linePtr[i].y2();
          ++i;
       }
       drawLines((QLineF *)(void *)fl, i);
-      lines += i;
+      linePtr   += i;
       lineCount -= i;
    }
 }
 
-void QPaintEngine::drawRects(const QRect *rects, int rectCount)
+void QPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 {
    struct RectF {
       qreal x;
@@ -417,14 +417,15 @@ void QPaintEngine::drawRects(const QRect *rects, int rectCount)
    while (rectCount) {
       int i = 0;
       while (i < rectCount && i < 256) {
-         fr[i].x = rects[i].x();
-         fr[i].y = rects[i].y();
-         fr[i].w = rects[i].width();
-         fr[i].h = rects[i].height();
+         fr[i].x = rectPtr[i].x();
+         fr[i].y = rectPtr[i].y();
+         fr[i].w = rectPtr[i].width();
+         fr[i].h = rectPtr[i].height();
          ++i;
       }
+
       drawRects((QRectF *)(void *)fr, i);
-      rects += i;
+      rectPtr   += i;
       rectCount -= i;
    }
 }
@@ -434,14 +435,14 @@ void QPaintEngine::drawRects(const QRect *rects, int rectCount)
     rects. The default implementation of this function calls drawPath()
     or drawPolygon() depending on the feature set of the paint engine.
 */
-void QPaintEngine::drawRects(const QRectF *rects, int rectCount)
+void QPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
    if (hasFeature(PainterPaths) &&
       !state->penNeedsResolving() &&
       !state->brushNeedsResolving()) {
       for (int i = 0; i < rectCount; ++i) {
          QPainterPath path;
-         path.addRect(rects[i]);
+         path.addRect(rectPtr[i]);
          if (path.isEmpty()) {
             continue;
          }
@@ -449,7 +450,8 @@ void QPaintEngine::drawRects(const QRectF *rects, int rectCount)
       }
    } else {
       for (int i = 0; i < rectCount; ++i) {
-         QRectF rf = rects[i];
+         QRectF rf = rectPtr[i];
+
          QPointF pts[4] = { QPointF(rf.x(), rf.y()),
                QPointF(rf.x() + rf.width(), rf.y()),
                QPointF(rf.x() + rf.width(), rf.y() + rf.height()),

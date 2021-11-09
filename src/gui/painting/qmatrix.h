@@ -43,7 +43,7 @@ class Q_GUI_EXPORT QMatrix // 2D transform matrix
 
    QMatrix();
    QMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy);
-   QMatrix(const QMatrix &matrix);
+   QMatrix(const QMatrix &other);
 
    void setMatrix(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy);
 
@@ -68,18 +68,19 @@ class Q_GUI_EXPORT QMatrix // 2D transform matrix
 
    void map(int x, int y, int *tx, int *ty) const;
    void map(qreal x, qreal y, qreal *tx, qreal *ty) const;
-   QRect mapRect(const QRect &) const;
-   QRectF mapRect(const QRectF &) const;
 
-   QPoint map(const QPoint &p) const;
-   QPointF map(const QPointF &p) const;
-   QLine map(const QLine &l) const;
-   QLineF map(const QLineF &l) const;
-   QPolygonF map(const QPolygonF &a) const;
-   QPolygon map(const QPolygon &a) const;
-   QRegion map(const QRegion &r) const;
-   QPainterPath map(const QPainterPath &p) const;
-   QPolygon mapToPolygon(const QRect &r) const;
+   QRect mapRect(const QRect &rect) const;
+   QRectF mapRect(const QRectF &rect) const;
+
+   QPoint map(const QPoint &point) const;
+   QPointF map(const QPointF &point) const;
+   QLine map(const QLine &line) const;
+   QLineF map(const QLineF &line) const;
+   QPolygonF map(const QPolygonF &polygon) const;
+   QPolygon map(const QPolygon &polygon) const;
+   QRegion map(const QRegion &region) const;
+   QPainterPath map(const QPainterPath &path) const;
+   QPolygon mapToPolygon(const QRect &rect) const;
 
    void reset();
    inline bool isIdentity() const;
@@ -87,7 +88,7 @@ class Q_GUI_EXPORT QMatrix // 2D transform matrix
    QMatrix &translate(qreal dx, qreal dy);
    QMatrix &scale(qreal sx, qreal sy);
    QMatrix &shear(qreal sh, qreal sv);
-   QMatrix &rotate(qreal a);
+   QMatrix &rotate(qreal  degrees);
 
    bool isInvertible() const {
       return !qFuzzyIsNull(_m11 * _m22 - _m12 * _m21);
@@ -99,13 +100,13 @@ class Q_GUI_EXPORT QMatrix // 2D transform matrix
 
    QMatrix inverted(bool *invertible = nullptr) const;
 
-   bool operator==(const QMatrix &) const;
-   bool operator!=(const QMatrix &) const;
+   bool operator==(const QMatrix &matrix) const;
+   bool operator!=(const QMatrix &matrix) const;
 
-   QMatrix &operator*=(const QMatrix &);
-   QMatrix operator*(const QMatrix &o) const;
+   QMatrix &operator*=(const QMatrix &matrix);
+   QMatrix operator*(const QMatrix &matrix) const;
 
-   QMatrix &operator=(const QMatrix &);
+   QMatrix &operator=(const QMatrix &other);
 
    operator QVariant() const;
 

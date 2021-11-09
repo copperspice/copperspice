@@ -101,17 +101,20 @@ class QRgba64
       return quint16(rgba >> AlphaShift);
    }
 
-   void setRed(quint16 _red)     {
-      rgba = (rgba & ~(Q_UINT64_C(0xffff) << RedShift))   | (quint64(_red) << RedShift);
+   void setRed(quint16 red)     {
+      rgba = (rgba & ~(Q_UINT64_C(0xffff) << RedShift))   | (quint64(red) << RedShift);
    }
-   void setGreen(quint16 _green) {
-      rgba = (rgba & ~(Q_UINT64_C(0xffff) << GreenShift)) | (quint64(_green) << GreenShift);
+
+   void setGreen(quint16 green) {
+      rgba = (rgba & ~(Q_UINT64_C(0xffff) << GreenShift)) | (quint64(green) << GreenShift);
    }
-   void setBlue(quint16 _blue)   {
-      rgba = (rgba & ~(Q_UINT64_C(0xffff) << BlueShift))  | (quint64(_blue) << BlueShift);
+
+   void setBlue(quint16 blue)   {
+      rgba = (rgba & ~(Q_UINT64_C(0xffff) << BlueShift))  | (quint64(blue) << BlueShift);
    }
-   void setAlpha(quint16 _alpha) {
-      rgba = (rgba & ~(Q_UINT64_C(0xffff) << AlphaShift)) | (quint64(_alpha) << AlphaShift);
+
+   void setAlpha(quint16 alpha) {
+      rgba = (rgba & ~(Q_UINT64_C(0xffff) << AlphaShift)) | (quint64(alpha) << AlphaShift);
    }
 
    constexpr quint8 red8()   const {
