@@ -656,8 +656,8 @@ QPrintPreviewDialog::QPrintPreviewDialog(QPrinter *printer, QWidget *parent, Qt:
    d->init(printer);
 }
 
-QPrintPreviewDialog::QPrintPreviewDialog(QWidget *parent, Qt::WindowFlags f)
-   : QDialog(*new QPrintPreviewDialogPrivate, parent, f)
+QPrintPreviewDialog::QPrintPreviewDialog(QWidget *parent, Qt::WindowFlags flags)
+   : QDialog(*new QPrintPreviewDialogPrivate, parent, flags)
 {
    Q_D(QPrintPreviewDialog);
    d->init();

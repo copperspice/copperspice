@@ -333,13 +333,13 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
 
  public:
    explicit QGLWidget(QWidget *parent = nullptr,
-      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    explicit QGLWidget(QGLContext *context, QWidget *parent = nullptr,
-      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    explicit QGLWidget(const QGLFormat &format, QWidget *parent = nullptr,
-      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
    QGLWidget(const QGLWidget &) = delete;
    QGLWidget &operator=(const QGLWidget &) = delete;
@@ -424,7 +424,7 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    virtual void glDraw();
 
    QGLWidget(QGLWidgetPrivate &dd, const QGLFormat &format = QGLFormat(), QWidget *parent = nullptr,
-      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+      const QGLWidget *shareWidget = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
 
  private:
    Q_DECLARE_PRIVATE(QGLWidget)

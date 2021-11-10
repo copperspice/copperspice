@@ -2030,40 +2030,41 @@ bool QMdiSubWindowPrivate::restoreFocus()
     \internal
     ### Please add QEvent::WindowFlagsChange event
 */
-void QMdiSubWindowPrivate::setWindowFlags(Qt::WindowFlags windowFlags)
+void QMdiSubWindowPrivate::setWindowFlags(Qt::WindowFlags flags)
 {
    Q_Q(QMdiSubWindow);
 
    if (! q->parent()) {
-      QWidgetPrivate::setWindowFlags(windowFlags);
+      QWidgetPrivate::setWindowFlags(flags);
       return;
    }
 
-   Qt::WindowFlags windowType = windowFlags & Qt::WindowType_Mask;
-   if (windowType == Qt::Dialog || windowFlags & Qt::MSWindowsFixedSizeDialogHint) {
-      windowFlags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint;
+   Qt::WindowFlags windowType = flags & Qt::WindowType_Mask;
+
+   if (windowType == Qt::Dialog || flags & Qt::MSWindowsFixedSizeDialogHint) {
+      flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint;
    }
 
    // Set standard flags if none of the customize flags are set
-   if (!(windowFlags & CustomizeWindowFlags)) {
-      windowFlags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint |
+   if (! (flags & CustomizeWindowFlags)) {
+      flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint |
          Qt::WindowCloseButtonHint;
 
-   } else if (windowFlags & Qt::FramelessWindowHint && windowFlags & Qt::WindowStaysOnTopHint) {
-      windowFlags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint;
+   } else if (flags & Qt::FramelessWindowHint && flags & Qt::WindowStaysOnTopHint) {
+     flags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint;
 
-   } else if (windowFlags & Qt::FramelessWindowHint) {
-      windowFlags = Qt::FramelessWindowHint;
+   } else if (flags & Qt::FramelessWindowHint) {
+      flags = Qt::FramelessWindowHint;
 
    }
 
-   windowFlags &= ~windowType;
-   windowFlags &= ~Qt::WindowFullscreenButtonHint;
-   windowFlags |= Qt::SubWindow;
+   flags &= ~windowType;
+   flags &= ~Qt::WindowFullscreenButtonHint;
+   flags |= Qt::SubWindow;
 
 #ifndef QT_NO_ACTION
    if (QAction *stayOnTopAction = actions[QMdiSubWindowPrivate::StayOnTopAction]) {
-      if (windowFlags & Qt::WindowStaysOnTopHint) {
+      if (flags & Qt::WindowStaysOnTopHint) {
          stayOnTopAction->setChecked(true);
       } else {
          stayOnTopAction->setChecked(false);
@@ -2072,12 +2073,12 @@ void QMdiSubWindowPrivate::setWindowFlags(Qt::WindowFlags windowFlags)
 #endif
 
 #ifndef QT_NO_SIZEGRIP
-   if ((windowFlags & Qt::FramelessWindowHint) && sizeGrip) {
+   if ((flags & Qt::FramelessWindowHint) && sizeGrip) {
       delete sizeGrip;
    }
 #endif
 
-   QWidgetPrivate::setWindowFlags(windowFlags);
+   QWidgetPrivate::setWindowFlags(flags);
    updateGeometryConstraints();
    updateActions();
 

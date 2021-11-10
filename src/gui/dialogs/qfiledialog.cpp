@@ -50,8 +50,8 @@ QUrl *cs_internal_lastVisitedDir() {
 
 static const qint32 QFileDialogMagic = 0xbe;
 
-QFileDialog::QFileDialog(QWidget *parent, Qt::WindowFlags f)
-   : QDialog(*new QFileDialogPrivate, parent, f)
+QFileDialog::QFileDialog(QWidget *parent, Qt::WindowFlags flags)
+   : QDialog(*new QFileDialogPrivate, parent, flags)
 {
    Q_D(QFileDialog);
    d->init();

@@ -259,8 +259,8 @@ void QToolBoxButton::paintEvent(QPaintEvent *)
    style()->drawControl(QStyle::CE_ToolBoxTab, &opt, p, parentWidget());
 }
 
-QToolBox::QToolBox(QWidget *parent, Qt::WindowFlags f)
-   :  QFrame(*new QToolBoxPrivate, parent, f)
+QToolBox::QToolBox(QWidget *parent, Qt::WindowFlags flags)
+   :  QFrame(*new QToolBoxPrivate, parent, flags)
 {
    Q_D(QToolBox);
    d->layout = new QVBoxLayout(this);

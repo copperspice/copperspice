@@ -53,16 +53,16 @@ static const int LABEL_INDEX         = 0;
 static const int PROGRESS_BAR_INDEX  = 1;
 static const int CANCEL_BUTTON_INDEX = 2;
 
-QProgressDialog::QProgressDialog(QWidget *parent, Qt::WindowFlags f)
-   : QDialog(parent, f)
+QProgressDialog::QProgressDialog(QWidget *parent, Qt::WindowFlags flags)
+   : QDialog(parent, flags)
 {
    useDefaultCancelText = true;
    init(QString(), QString(), 0, 100);
 }
 
 QProgressDialog::QProgressDialog(const QString &labelText, const QString &cancelButtonText,
-   int minimum, int maximum, QWidget *parent, Qt::WindowFlags f)
-   : QDialog(parent, f)
+   int minimum, int maximum, QWidget *parent, Qt::WindowFlags flags)
+   : QDialog(parent, flags)
 {
    useDefaultCancelText = false;
    init(labelText, cancelButtonText, minimum, maximum);

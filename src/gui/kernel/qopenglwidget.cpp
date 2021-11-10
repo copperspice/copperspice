@@ -441,8 +441,8 @@ void QOpenGLWidgetPrivate::resizeViewportFramebuffer()
    }
 }
 
-QOpenGLWidget::QOpenGLWidget(QWidget *parent, Qt::WindowFlags f)
-   : QWidget(*(new QOpenGLWidgetPrivate), parent, f)
+QOpenGLWidget::QOpenGLWidget(QWidget *parent, Qt::WindowFlags flags)
+   : QWidget(*(new QOpenGLWidgetPrivate), parent, flags)
 {
    Q_D(QOpenGLWidget);
 

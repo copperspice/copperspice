@@ -577,9 +577,9 @@ QMessageBox::QMessageBox(QWidget *parent)
 }
 
 QMessageBox::QMessageBox(Icon icon, const QString &title, const QString &text, StandardButtons buttons,
-   QWidget *parent, Qt::WindowFlags f)
+   QWidget *parent, Qt::WindowFlags flags)
 
-   : QDialog(*new QMessageBoxPrivate, parent, f | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowTitleHint |
+   : QDialog(*new QMessageBoxPrivate, parent, flags | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowTitleHint |
         Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 {
    Q_D(QMessageBox);
@@ -1420,10 +1420,9 @@ void QMessageBoxPrivate::retranslateStrings()
 }
 
 QMessageBox::QMessageBox(const QString &title, const QString &text, Icon icon,
-                         int button0, int button1, int button2, QWidget *parent,
-                         Qt::WindowFlags f)
-    : QDialog(*new QMessageBoxPrivate, parent,
-              f /*| Qt::MSWindowsFixedSizeDialogHint #### */| Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
+            int button0, int button1, int button2, QWidget *parent, Qt::WindowFlags flags)
+    : QDialog(*new QMessageBoxPrivate, parent, flags
+              | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 {
     Q_D(QMessageBox);
     d->init(title, text);

@@ -367,14 +367,14 @@ struct QWidgetExceptionCleaner {
    }
 };
 
-QWidget::QWidget(QWidget *parent, Qt::WindowFlags f)
+QWidget::QWidget(QWidget *parent, Qt::WindowFlags flags)
    : QObject(nullptr), QPaintDevice(), d_ptr(new QWidgetPrivate)
 {
    d_ptr->q_ptr = this;
    Q_D(QWidget);
 
    try {
-      d->init(parent, f);
+      d->init(parent, flags);
 
    } catch(...) {
       QWidgetExceptionCleaner::cleanup(this, d_func());
@@ -383,14 +383,14 @@ QWidget::QWidget(QWidget *parent, Qt::WindowFlags f)
 }
 
 // internal
-QWidget::QWidget(QWidgetPrivate &dd, QWidget *parent, Qt::WindowFlags f)
+QWidget::QWidget(QWidgetPrivate &dd, QWidget *parent, Qt::WindowFlags flags)
    : QObject(nullptr), QPaintDevice(), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
    Q_D(QWidget);
 
    try {
-      d->init(parent, f);
+      d->init(parent, flags);
 
    } catch(...) {
       QWidgetExceptionCleaner::cleanup(this, d_func());
@@ -478,7 +478,7 @@ void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
    }
 }
 
-void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
+void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
 {
    Q_Q(QWidget);
 
@@ -516,7 +516,7 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
 
    data.winid = 0;
    data.widget_attributes = 0;
-   data.window_flags = f;
+   data.window_flags = flags;
    data.window_state = 0;
    data.focus_policy = 0;
    data.context_menu_policy = Qt::DefaultContextMenu;
@@ -529,7 +529,7 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
    data.in_destructor = false;
 
    // Widgets with Qt::MSWindowsOwnDC (typically QGLWidget) must have a window handle.
-   if (f & Qt::MSWindowsOwnDC)  {
+   if (flags & Qt::MSWindowsOwnDC)  {
       mustHaveWindowHandle = 1;
       q->setAttribute(Qt::WA_NativeWindow);
    }
@@ -544,7 +544,7 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags f)
 
    focus_next = focus_prev = q;
 
-   if ((f & Qt::WindowType_Mask) == Qt::Desktop) {
+   if ((flags & Qt::WindowType_Mask) == Qt::Desktop) {
       q->create();
    }
 
@@ -7579,7 +7579,7 @@ static void sendWindowChangeToTextureChildrenRecursively(QWidget *widget)
 }
 #endif
 
-void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
+void QWidget::setParent(QWidget *parent, Qt::WindowFlags flags)
 {
    Q_D(QWidget);
 
@@ -7587,7 +7587,8 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    bool wasCreated = testAttribute(Qt::WA_WState_Created);
 
    QWidget *oldtlw = window();
-   if (f & Qt::Window) { // Frame geometry likely changes, refresh.
+   if (flags & Qt::Window) {
+      // Frame geometry likely changes, refresh.
       d->data.fstrut_dirty = true;
    }
 
@@ -7627,7 +7628,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    QTLWExtra *oldTopExtra = window()->d_func()->maybeTopData();
    QWidgetBackingStoreTracker *oldBsTracker = oldTopExtra ? &oldTopExtra->backingStoreTracker : nullptr;
 
-   d->setParent_sys(parent, f);
+   d->setParent_sys(parent, flags);
 
    QTLWExtra *topExtra = window()->d_func()->maybeTopData();
    QWidgetBackingStoreTracker *bsTracker = topExtra ? &topExtra->backingStoreTracker : nullptr;
@@ -7679,7 +7680,7 @@ void QWidget::setParent(QWidget *parent, Qt::WindowFlags f)
    if (newParent
 
 #if defined(QT_OPENGL_ES)
-      || (f & Qt::MSWindowsOwnDC)
+      || (flags & Qt::MSWindowsOwnDC)
 #endif
 
    ) {

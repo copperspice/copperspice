@@ -1899,7 +1899,7 @@ void QMdiArea::activatePreviousSubWindow()
    }
 }
 
-QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFlags)
+QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags flags)
 {
    if (! widget) {
       qWarning("QMdiArea::addSubWindow(): Widget was a null pointer to widget");
@@ -1919,11 +1919,11 @@ QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags windowFla
          return child;
       }
 
-      child->setParent(viewport(), windowFlags ? windowFlags : child->windowFlags());
+      child->setParent(viewport(), flags ? flags : child->windowFlags());
       // Create a QMdiSubWindow
 
    } else {
-      child = new QMdiSubWindow(viewport(), windowFlags);
+      child = new QMdiSubWindow(viewport(), flags);
       child->setAttribute(Qt::WA_DeleteOnClose);
       child->setWidget(widget);
 
