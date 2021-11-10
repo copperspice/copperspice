@@ -1612,7 +1612,8 @@ bool QODBCResult::exec()
                      ind);
                break;
             }
-         // fall through
+            [[fallthrough]];
+
          default: {
             QByteArray &ba = tmpStorage[i];
             if (*ind != SQL_NULL_DATA) {
@@ -1709,7 +1710,8 @@ bool QODBCResult::exec()
                }
                break;
             }
-         // fall through
+            [[fallthrough]];
+
          default: {
             if (bindValueType(i) & QSql::Out) {
                values[i] = tmpStorage.at(i);

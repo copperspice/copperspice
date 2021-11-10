@@ -529,8 +529,10 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_word_end()
          return false;   // next character is a word character
       }
    }
+
    pstate = pstate->next.p;
-   return true;      // if we fall through to here then we've succeeded
+
+   return true;      // getting here means we have succeeded
 }
 
 template <class BidiIterator, class Allocator, class traits>

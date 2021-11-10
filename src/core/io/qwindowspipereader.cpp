@@ -183,7 +183,8 @@ void QWindowsPipeReader::notified(DWORD errorCode, DWORD numberOfBytesRead)
          if (stopped) {
             break;
          }
-      // fall through
+         [[fallthrough]];
+
       default:
          emit winError(errorCode, QLatin1String("QWindowsPipeReader::notified"));
          pipeBroken = true;

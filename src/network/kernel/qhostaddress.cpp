@@ -264,7 +264,6 @@ bool QNetmaskAddress::setAddress(const QHostAddress &address)
             d->clear();
             return false;       // invalid IP-style netmask
 
-         // the rest always falls through
          case 254:
             ++netmask;
             [[fallthrough]];
@@ -428,6 +427,7 @@ QHostAddress::QHostAddress(SpecialAddress address)
    switch (address) {
       case Null:
          return;
+
       case Broadcast:
          ip4 = INADDR_BROADCAST;
          break;
@@ -441,14 +441,17 @@ QHostAddress::QHostAddress(SpecialAddress address)
 
       case LocalHostIPv6:
          ip6[15] = 1;
-      // fall through
+         [[fallthrough]];
+
       case AnyIPv6:
          d->setAddress(ip6);
          return;
+
       case Any:
          d->protocol = QAbstractSocket::AnyIPProtocol;
          return;
    }
+
    // common IPv4 part
    d->setAddress(ip4);
 }

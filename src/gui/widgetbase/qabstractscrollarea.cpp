@@ -796,8 +796,7 @@ bool QAbstractScrollArea::event(QEvent *e)
       case QEvent::ApplicationLayoutDirectionChange:
       case QEvent::LayoutRequest:
          d->layoutChildren();
-
-      // fall through
+         [[fallthrough]];
 
       default:
          return QFrame::event(e);

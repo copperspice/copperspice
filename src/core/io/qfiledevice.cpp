@@ -200,8 +200,7 @@ bool QFileDevice::atEnd() const
       return d->fileEngine->atEnd();
    }
 
-   // if it looks like we are at the end, or if size is not cached,
-   // fall through to bytesAvailable() to make sure.
+   // if it looks like we are at the end or if size is not cached, use bytesAvailable()
    if (pos() < d->cachedSize) {
       return false;
    }

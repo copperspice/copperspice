@@ -471,24 +471,28 @@ void QTimerInfoList::registerTimer(int timerId, int interval, Qt::TimerType time
          break;
 
       case Qt::CoarseTimer:
-         // this timer has up to 5% coarseness
-         // so our boundaries are 20 ms and 20 s
+         // this timer has up to 5% coarseness so the boundaries are 20 ms and 20 s
          // below 20 ms, 5% inaccuracy is below 1 ms, so we convert to high precision
          // above 20 s, 5% inaccuracy is above 1 s, so we convert to VeryCoarseTimer
+
          if (interval >= 20000) {
             t->timerType = Qt::VeryCoarseTimer;
-            // fall through
+            // do nothing
+
          } else {
             t->timeout = expected;
+
             if (interval <= 20) {
                t->timerType = Qt::PreciseTimer;
                // no adjustment is necessary
+
             } else if (interval <= 20000) {
                calculateCoarseTimerTimeout(t, currentTime);
             }
             break;
          }
-      // fall through
+         [[fallthrough]];
+
       case Qt::VeryCoarseTimer:
          // the very coarse timer is based on full second precision,
          // so we keep the interval in seconds (round to closest second)

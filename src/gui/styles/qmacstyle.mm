@@ -681,7 +681,7 @@ static CGColorSpaceRef qt_mac_displayColorSpace(const QWidget *widget)
       CGDisplayCount throwAway;
       CGDisplayErr dErr = CGGetDisplaysWithRect(rect, 1, &displayID, &throwAway);
       if (dErr != kCGErrorSuccess)
-          return macDisplayColorSpace(0); // fall back on main display
+          return macDisplayColorSpace(0); // use main display
       */
    }
    if ((colorSpace = m_displayColorSpaceHash.value(displayID))) {
@@ -766,7 +766,9 @@ inline bool qt_mac_is_metal(const QWidget *w)
       if (w->testAttribute(Qt::WA_MacBrushedMetal)) {
          return true;
       }
-      if (w->isWindow() && w->testAttribute(Qt::WA_WState_Created)) {  // If not created will fall through to the opaque check and be fine anyway.
+
+      if (w->isWindow() && w->testAttribute(Qt::WA_WState_Created)) {
+         // if created is not set, use the opaque check
          return qt_macWindowIsTextured(w);
       }
       if (w->d_func()->isOpaque) {

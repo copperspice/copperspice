@@ -414,17 +414,21 @@ static QDateTime parseDateString(const QString &dateString)
          switch (end - 1) {
             case 4:
                minutes = atoi(dateString.mid(at + 3, 2).constData());
-            // fall through
+               [[fallthrough]];
+
             case 2:
                hours = atoi(dateString.mid(at + 1, 2).constData());
                break;
+
             case 1:
                hours = atoi(dateString.mid(at + 1, 1).constData());
                break;
+
             default:
                at += end;
                continue;
          }
+
          if (end != 1) {
             int sign = dateString[at] == '-' ? -1 : 1;
             zoneOffset = sign * ((minutes * 60) + (hours * 60 * 60));

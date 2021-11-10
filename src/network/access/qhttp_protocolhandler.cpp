@@ -447,8 +447,9 @@ bool QHttpProtocolHandler::sendRequest()
       }
 
       case QHttpNetworkConnectionChannel::ReadingState:
-      // ignore _q_bytesWritten in these states
-      // fall through
+         // ignore _q_bytesWritten in these states
+         [[fallthrough]];
+
       default:
          break;
    }

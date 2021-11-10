@@ -1012,7 +1012,9 @@ void QGtkStyle::drawPrimitive(PrimitiveElement element,
          }
          break;
 
-      case PE_FrameDefaultButton: // fall through
+      case PE_FrameDefaultButton:
+         [[fallthrough]];
+
       case PE_FrameFocusRect: {
          QRect frameRect = option->rect.adjusted(1, 1, -2, -2); // ### this mess should move to subcontrolrect
          if (qobject_cast<const QAbstractItemView *>(widget)) {
@@ -1056,15 +1058,19 @@ void QGtkStyle::drawPrimitive(PrimitiveElement element,
          // The reason for this is that a lot of code that relies on custom item delegates will look odd having
          // a gradient on the branch but a flat shaded color on the item itself.
          QCommonStyle::drawPrimitive(element, option, painter, widget);
+
          if (!option->state & State_Selected) {
             break;
+
          } else {
             if (const QAbstractItemView *view = qobject_cast<const QAbstractItemView *>(widget)) {
                if (!qobject_cast<QStyledItemDelegate *>(view->itemDelegate())) {
                   break;
                }
             }
-         } // fall through
+
+         }
+         [[fallthrough]];
 
       case PE_PanelItemViewItem:
          if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(option)) {
@@ -2929,7 +2935,9 @@ void QGtkStyle::drawControl(ControlElement element,
          }
          break;
 
-      case CE_RadioButton: // Fall through
+      case CE_RadioButton:
+         [[fallthrough]];
+
       case CE_CheckBox:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(option)) {
             bool isRadio = (element == CE_RadioButton);
@@ -4321,7 +4329,9 @@ QPixmap QGtkStyle::standardPixmap(StandardPixmap sp, const QStyleOption *option,
       }
       break;
 
-      case SP_TitleBarCloseButton: // Fall through
+      case SP_TitleBarCloseButton:
+         [[fallthrough]];
+
       case SP_DockWidgetCloseButton: {
 
          QImage closeButton(dock_widget_close_xpm);

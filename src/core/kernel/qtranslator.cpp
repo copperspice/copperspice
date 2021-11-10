@@ -187,7 +187,7 @@ static bool isValidCountRules(const QVector<std::variant<CountGuide, int>> &data
       }
 
    } catch (std::bad_variant_access e) {
-      // fall through
+      // ignore exception
 
    }
 

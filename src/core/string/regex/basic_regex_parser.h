@@ -1992,12 +1992,14 @@ charT basic_regex_parser<charT, traits>::unescape_character()
                return s[0];
             }
          }
-         // fall through is a failure:
-         // Rewind to start of escape:
+
+         // failure, rewind to start of escape
          --m_position;
+
          while (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_escape) {
             --m_position;
          }
+
          fail(regex_constants::error_escape, m_position - m_base);
          return false;
       }

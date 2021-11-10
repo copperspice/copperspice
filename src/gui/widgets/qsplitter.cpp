@@ -1150,14 +1150,15 @@ bool QSplitter::event(QEvent *e)
             break;
          }
          d->firstShow = false;
-      // fall through
+         [[fallthrough]];
+
       case QEvent::HideToParent:
       case QEvent::ShowToParent:
       case QEvent::LayoutRequest:
          d->recalc(isVisible());
          break;
       default:
-         ;
+         break;
    }
    return QWidget::event(e);
 }

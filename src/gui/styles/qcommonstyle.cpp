@@ -4614,7 +4614,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                }
 
                offset += buttonWidth + 2;
-            // fall through
+               [[fallthrough]];
 
             case SC_MdiNormalButton:
                // No offset needed if
@@ -5237,8 +5237,9 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
       case CT_Slider:
       case CT_ProgressBar:
       case CT_TabBarTab:
-      // just return the contentsSize for now
-      // fall through intended
+         // return the contentsSize for now
+         [[fallthrough]];
+
       default:
          break;
    }

@@ -6551,7 +6551,7 @@ bool QWidget::event(QEvent *event)
 
       case QEvent::KeyRelease:
          keyReleaseEvent((QKeyEvent *)event);
-      // fall through
+         [[fallthrough]];
 
       case QEvent::ShortcutOverride:
          break;
@@ -8288,15 +8288,15 @@ void QWidget::setAttribute(Qt::WidgetAttribute attribute, bool on)
 
       case Qt::WA_PaintOnScreen:
          d->updateIsOpaque();
+         [[fallthrough]];
 
-      // fall through
       case Qt::WA_OpaquePaintEvent:
          d->updateIsOpaque();
          break;
 
       case Qt::WA_NoSystemBackground:
          d->updateIsOpaque();
-      // fall through...
+         [[fallthrough]];
 
       case Qt::WA_UpdatesDisabled:
          d->updateSystemBackground();

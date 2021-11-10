@@ -976,7 +976,7 @@ void QAbstractButton::keyPressEvent(QKeyEvent *e)
          break;
       case Qt::Key_Up:
          next = false;
-      // fall through
+         [[fallthrough]];
 
       case Qt::Key_Left:
       case Qt::Key_Right:

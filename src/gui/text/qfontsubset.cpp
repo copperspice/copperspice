@@ -784,10 +784,12 @@ static void convertPath(const QPainterPath &path, QVector<TTF_POINT> *points, QV
                }
                endPoints->append(points->size() - 1);
             }
-         // fall through
+            [[fallthrough]];
+
          case QPainterPath::LineToElement:
             p.flags = OnCurve;
             break;
+
          case QPainterPath::CurveToElement: {
             // cubic bezier curve, we need to reduce to a list of quadratic curves
             TTF_POINT list[3 * 16 + 4]; // we need max 16 subdivisions

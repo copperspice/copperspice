@@ -338,7 +338,9 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
             }
             break;
          }
-      } // fall through for OUT values
+      }
+      [[fallthrough]];
+
       default: {
          const QString s = val.toString();
          // create a deep-copy
@@ -1752,7 +1754,8 @@ void QOCICols::getValues(QVector<QVariant> &v, int index)
                   break;
                }
             }
-         // else fall through
+            [[fallthrough]];
+
          case QVariant::String:
             v[index + i] = QString(reinterpret_cast<const QChar *>(fld.data));
             break;
@@ -1862,7 +1865,8 @@ bool QOCIResult::gotoNext(QSqlCachedResult::ValueCache &values, int index)
             r = OCI_SUCCESS; /* ignore it */
             break;
          }
-      // fall through
+         [[fallthrough]];
+
       default:
          qOraWarning("QOCIResult::gotoNext: ", d->err);
          setLastError(qMakeError(QCoreApplication::translate("QOCIResult",

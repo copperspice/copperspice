@@ -1041,7 +1041,8 @@ bool QXmlStreamReaderPrivate::parse()
          dtdPublicId.clear();
          dtdSystemId.clear();
 
-      // fall through
+         [[fallthrough]];
+
       case QXmlStreamReader::Comment:
       case QXmlStreamReader::Characters:
          isCDATA = false;
@@ -1076,7 +1077,8 @@ bool QXmlStreamReaderPrivate::parse()
             return false;
          }
 
-      // fall through
+         [[fallthrough]];
+
       default:
          clearTextBuffer();
    }
@@ -1360,7 +1362,7 @@ bool QXmlStreamReaderPrivate::parse()
             case 18:
                dtdName = symString(3);
 
-            // fall through
+               [[fallthrough]];
 
             case 19:
             case 20:
@@ -1529,7 +1531,7 @@ bool QXmlStreamReaderPrivate::parse()
                   raiseWellFormedError(QXmlStream::tr("NDATA in parameter entity declaration."));
                }
             }
-            //fall through
+            [[fallthrough]];
 
             case 94:
             case 95: {
@@ -1661,7 +1663,7 @@ bool QXmlStreamReaderPrivate::parse()
 
             case 129:
                isWhitespace = false;
-            // fall through
+               [[fallthrough]];
 
             case 130:
                sym(1).len += fastScanContentCharList();
@@ -1859,7 +1861,7 @@ bool QXmlStreamReaderPrivate::parse()
 
             case 236:
                isEmptyElement = true;
-            // fall through
+               [[fallthrough]];
 
             case 237:
                setType(QXmlStreamReader::StartElement);

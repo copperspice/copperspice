@@ -626,7 +626,8 @@ void QSocks5SocketEnginePrivate::setErrorState(Socks5State state, const QString 
                                  QSocks5SocketEngine::tr("Connection to proxy timed out"));
                      break;
                   }
-               /* fall through */
+                  [[fallthrough]];
+
                default:
                   q->setError(controlSocketError, data->controlSocket->errorString());
                   break;
@@ -1222,8 +1223,8 @@ void QSocks5SocketEnginePrivate::_q_controlSocketReadNotification()
             parseRequestMethodReply();
             break;
          }
+         [[fallthrough]];
 
-      // fall through
       default:
          qWarning("QSocks5SocketEnginePrivate::_q_controlSocketReadNotification: "
                   "Unexpectedly received data while in state=%d and mode=%d",

@@ -689,11 +689,12 @@ bool QComboBoxPrivateContainer::eventFilter(QObject *o, QEvent *e)
                   break;
                }
 
+               [[fallthrough]];
 
-            // fall through
             case Qt::Key_F4:
                combo->hidePopup();
                return true;
+
             default:
                if (keyEvent->matches(QKeySequence::Cancel)) {
                   combo->hidePopup();

@@ -122,7 +122,8 @@ QString QSystemError::toString()
 #if defined (Q_OS_WIN)
          return windowsErrorString(errorCode);
 #else
-         // unix: fall through as native and standard library are the same
+         // unix: native and standard library are the same
+         [[fallthrough]];
 #endif
 
       case StandardLibraryError:

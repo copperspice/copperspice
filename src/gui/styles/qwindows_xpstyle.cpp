@@ -3971,14 +3971,16 @@ QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionCompl
                   if (tb->titleBarFlags & Qt::WindowContextHelpButtonHint) {
                      offset += delta;
                   }
-               //fall through
+                  [[fallthrough]];
+
                case SC_TitleBarMinButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
                      offset += delta;
                   } else if (subControl == SC_TitleBarMinButton) {
                      break;
                   }
-               //fall through
+                  [[fallthrough]];
+
                case SC_TitleBarNormalButton:
                   if (isMinimized && (tb->titleBarFlags & Qt::WindowMinimizeButtonHint)) {
                      offset += delta;
@@ -3987,28 +3989,32 @@ QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionCompl
                   } else if (subControl == SC_TitleBarNormalButton) {
                      break;
                   }
-               //fall through
+                  [[fallthrough]];
+
                case SC_TitleBarMaxButton:
                   if (!isMaximized && (tb->titleBarFlags & Qt::WindowMaximizeButtonHint)) {
                      offset += delta;
                   } else if (subControl == SC_TitleBarMaxButton) {
                      break;
                   }
-               //fall through
+                  [[fallthrough]];
+
                case SC_TitleBarShadeButton:
                   if (!isMinimized && (tb->titleBarFlags & Qt::WindowShadeButtonHint)) {
                      offset += delta;
                   } else if (subControl == SC_TitleBarShadeButton) {
                      break;
                   }
-               //fall through
+                  [[fallthrough]];
+
                case SC_TitleBarUnshadeButton:
                   if (isMinimized && (tb->titleBarFlags & Qt::WindowShadeButtonHint)) {
                      offset += delta;
                   } else if (subControl == SC_TitleBarUnshadeButton) {
                      break;
                   }
-               //fall through
+                  [[fallthrough]];
+
                case SC_TitleBarCloseButton:
                   if (tb->titleBarFlags & Qt::WindowSystemMenuHint) {
                      offset += delta;
@@ -4033,6 +4039,7 @@ QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionCompl
                   rect = QRect(frameWidth + hPad, controlTop + vPad, iconSize.width(), iconSize.height());
                }
                break;
+
                default:
                   break;
             }

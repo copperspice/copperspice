@@ -313,7 +313,7 @@ QString QAccessibleComboBox::text(QAccessible::Text t) const
    switch (t) {
       case QAccessible::Name:
 #ifdef Q_OS_UNIX
-         // on Linux we use relations for this, name is text (fall through to Value)
+         // on Linux we use relations, name is the text
         [[fallthrough]];
 #else
          str = QAccessibleWidget::text(t);

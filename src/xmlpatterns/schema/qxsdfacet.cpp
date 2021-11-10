@@ -124,7 +124,10 @@ QString XsdFacet::typeName(Type type)
       case Assertion:
          return QLatin1String("assertion");
          break;
-      case None: // fall through
+
+      case None:
+         [[fallthrough]];
+
       default:
          return QLatin1String("none");
          break;
