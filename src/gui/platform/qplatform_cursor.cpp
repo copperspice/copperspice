@@ -534,22 +534,21 @@ void QPlatformCursorImage::set(Qt::CursorShape id)
    }
 
    cursorImage = cursor->cursorImage;
-   hot = cursor->hot;
+   m_hotSpot = cursor->m_hotSpot;
 }
 
-void QPlatformCursorImage::set(const QImage &image, int hx, int hy)
+void QPlatformCursorImage::set(const QImage &image, int hotSpot_x, int hotSpot_y)
 {
-   hot.setX(hx);
-   hot.setY(hy);
+   m_hotSpot.setX(hotSpot_x);
+   m_hotSpot.setY(hotSpot_y);
    cursorImage = image;
 }
 
-
 void QPlatformCursorImage::set(const uchar *data, const uchar *mask,
-   int width, int height, int hx, int hy)
+            int width, int height, int hotSpot_x, int hotSpot_y)
 {
-   hot.setX(hx);
-   hot.setY(hy);
+   m_hotSpot.setX(hotSpot_x);
+   m_hotSpot.setY(hotSpot_y);
 
    cursorImage = QImage(width, height, QImage::Format_Indexed8);
 
