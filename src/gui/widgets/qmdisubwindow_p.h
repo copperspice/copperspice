@@ -263,7 +263,7 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
    bool restoreFocus();
    void storeFocusWidget();
 
-   void setWindowFlags(Qt::WindowFlags windowFlags) override;
+   void setWindowFlags(Qt::WindowFlags flags) override;
    void setVisible(WindowStateAction, bool visible = true);
 
 #ifndef QT_NO_ACTION

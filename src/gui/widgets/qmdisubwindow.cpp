@@ -1685,8 +1685,9 @@ void QMdiSubWindowPrivate::sizeParameters(int *margin, int *minWidth) const
 {
    Q_Q(const QMdiSubWindow);
 
-   Qt::WindowFlags flags = q->windowFlags();
-   if (! q->parent() || flags & Qt::FramelessWindowHint) {
+   Qt::WindowFlags window_flags = q->windowFlags();
+
+   if (! q->parent() || window_flags & Qt::FramelessWindowHint) {
       *margin   = 0;
       *minWidth = 0;
       return;
@@ -1923,14 +1924,14 @@ QPalette QMdiSubWindowPrivate::desktopPalette() const
 
 void QMdiSubWindowPrivate::updateActions()
 {
-   Qt::WindowFlags windowFlags = q_func()->windowFlags();
+   Qt::WindowFlags window_flags = q_func()->windowFlags();
 
    // Hide all
    for (int i = 0; i < NumWindowStateActions; ++i) {
       setVisible(WindowStateAction(i), false);
    }
 
-   if (windowFlags & Qt::FramelessWindowHint) {
+   if (window_flags & Qt::FramelessWindowHint) {
       return;
    }
 
@@ -1939,22 +1940,22 @@ void QMdiSubWindowPrivate::updateActions()
    setVisible(ResizeAction, resizeEnabled);
 
    // CloseAction
-   if (windowFlags & Qt::WindowSystemMenuHint) {
+   if (window_flags & Qt::WindowSystemMenuHint) {
       setVisible(CloseAction, true);
    }
 
    // RestoreAction
-   if (windowFlags & (Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint)) {
+   if (window_flags & (Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint)) {
       setVisible(RestoreAction, true);
    }
 
    // MinimizeAction
-   if (windowFlags & Qt::WindowMinimizeButtonHint) {
+   if (window_flags & Qt::WindowMinimizeButtonHint) {
       setVisible(MinimizeAction, true);
    }
 
    // MaximizeAction
-   if (windowFlags & Qt::WindowMaximizeButtonHint) {
+   if (window_flags & Qt::WindowMaximizeButtonHint) {
       setVisible(MaximizeAction, true);
    }
 }
@@ -2039,9 +2040,9 @@ void QMdiSubWindowPrivate::setWindowFlags(Qt::WindowFlags flags)
       return;
    }
 
-   Qt::WindowFlags windowType = flags & Qt::WindowType_Mask;
+   Qt::WindowFlags window_flags = flags & Qt::WindowType_Mask;
 
-   if (windowType == Qt::Dialog || flags & Qt::MSWindowsFixedSizeDialogHint) {
+   if (window_flags == Qt::Dialog || flags & Qt::MSWindowsFixedSizeDialogHint) {
       flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint;
    }
 
@@ -2058,7 +2059,7 @@ void QMdiSubWindowPrivate::setWindowFlags(Qt::WindowFlags flags)
 
    }
 
-   flags &= ~windowType;
+   flags &= ~window_flags;
    flags &= ~Qt::WindowFullscreenButtonHint;
    flags |= Qt::SubWindow;
 
@@ -3242,25 +3243,26 @@ void QMdiSubWindow::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
       return;
    }
 
-   Qt::WindowFlags flags = windowFlags();
+   Qt::WindowFlags window_flags = windowFlags();
+
    if (isMinimized()) {
-      if ((isShaded() && (flags & Qt::WindowShadeButtonHint))
-         || (flags & Qt::WindowMinimizeButtonHint)) {
+      if ((isShaded() && (window_flags & Qt::WindowShadeButtonHint)) || (window_flags & Qt::WindowMinimizeButtonHint)) {
          showNormal();
       }
       return;
    }
 
    if (isMaximized()) {
-      if (flags & Qt::WindowMaximizeButtonHint) {
+      if (window_flags & Qt::WindowMaximizeButtonHint) {
          showNormal();
       }
       return;
    }
 
-   if (flags & Qt::WindowShadeButtonHint) {
+   if (window_flags & Qt::WindowShadeButtonHint) {
       showShaded();
-   } else if (flags & Qt::WindowMaximizeButtonHint) {
+
+   } else if (window_flags & Qt::WindowMaximizeButtonHint) {
       showMaximized();
    }
 }

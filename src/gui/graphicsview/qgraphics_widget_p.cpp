@@ -38,7 +38,7 @@
 #include <qgraphics_scene_p.h>
 #include <qgraphics_widget_p.h>
 
-void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags wFlags)
+void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags flags)
 {
    Q_Q(QGraphicsWidget);
 
@@ -47,9 +47,9 @@ void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags wFl
    focusNext = focusPrev = q;
    focusPolicy = Qt::NoFocus;
 
-   adjustWindowFlags(&wFlags);
-   windowFlags = wFlags;
 
+   adjustWindowFlags(&flags);
+   windowFlags = flags;
 
    q->setParentItem(parentItem);
 

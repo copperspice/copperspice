@@ -129,7 +129,7 @@ class Q_GUI_EXPORT QPlatformDialogHelper : public QObject
    virtual QVariant styleHint(StyleHint hint) const;
 
    virtual void exec() = 0;
-   virtual bool show(Qt::WindowFlags windowFlags, Qt::WindowModality windowModality, QWindow *parent) = 0;
+   virtual bool show(Qt::WindowFlags flags, Qt::WindowModality windowModality, QWindow *parent) = 0;
    virtual void hide() = 0;
 
    static QVariant defaultStyleHint(QPlatformDialogHelper::StyleHint hint);

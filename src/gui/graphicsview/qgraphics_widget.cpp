@@ -50,11 +50,11 @@
 #include <qshortcutmap_p.h>
 #endif
 
-QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags flags)
    : QGraphicsObject(*new QGraphicsWidgetPrivate, nullptr), QGraphicsLayoutItem(nullptr, false)
 {
    Q_D(QGraphicsWidget);
-   d->init(parent, wFlags);
+   d->init(parent, flags);
 }
 
 // internal
@@ -1064,17 +1064,19 @@ Qt::WindowFlags QGraphicsWidget::windowFlags() const
    return d->windowFlags;
 }
 
-void QGraphicsWidget::setWindowFlags(Qt::WindowFlags wFlags)
+void QGraphicsWidget::setWindowFlags(Qt::WindowFlags flags)
 {
    Q_D(QGraphicsWidget);
-   if (d->windowFlags == wFlags) {
+
+   if (d->windowFlags == flags) {
       return;
    }
    bool wasPopup = (d->windowFlags & Qt::WindowType_Mask) == Qt::Popup;
 
-   d->adjustWindowFlags(&wFlags);
-   d->windowFlags = wFlags;
-   if (!d->setWindowFrameMargins) {
+   d->adjustWindowFlags(&flags);
+   d->windowFlags = flags;
+
+   if (! d->setWindowFrameMargins) {
       unsetWindowFrameMargins();
    }
 

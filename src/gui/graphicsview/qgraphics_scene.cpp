@@ -2238,9 +2238,9 @@ QGraphicsSimpleTextItem *QGraphicsScene::addSimpleText(const QString &text, cons
    return item;
 }
 
-QGraphicsProxyWidget *QGraphicsScene::addWidget(QWidget *widget, Qt::WindowFlags wFlags)
+QGraphicsProxyWidget *QGraphicsScene::addWidget(QWidget *widget, Qt::WindowFlags flags)
 {
-   QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget(nullptr, wFlags);
+   QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget(nullptr, flags);
    proxy->setWidget(widget);
    addItem(proxy);
    return proxy;
