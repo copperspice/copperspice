@@ -82,7 +82,7 @@ class QWidgetData
  public:
    WId winid;
    uint widget_attributes;
-   Qt::WindowFlags window_flags;
+   Qt::WindowFlags m_flags;
    uint window_state : 4;
    uint focus_policy : 4;
    uint sizehint_forced : 1;
@@ -945,12 +945,12 @@ inline QWidget *QWidget::childAt(int x, int y) const
 
 inline Qt::WindowType QWidget::windowType() const
 {
-   return static_cast<Qt::WindowType>(int(data->window_flags & Qt::WindowType_Mask));
+   return static_cast<Qt::WindowType>(int(data->m_flags & Qt::WindowType_Mask));
 }
 
 inline Qt::WindowFlags QWidget::windowFlags() const
 {
-   return data->window_flags;
+   return data->m_flags;
 }
 
 inline bool QWidget::isTopLevel() const

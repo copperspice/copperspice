@@ -49,7 +49,7 @@ void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags fla
 
 
    adjustWindowFlags(&flags);
-   windowFlags = flags;
+   m_flags = flags;
 
    q->setParentItem(parentItem);
 
@@ -62,7 +62,7 @@ void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags fla
    itemFlags |= QGraphicsItem::ItemUsesExtendedStyleOption;
    itemFlags |= QGraphicsItem::ItemSendsGeometryChanges;
 
-   if (windowFlags & Qt::Window) {
+   if (m_flags & Qt::Window) {
       itemFlags |= QGraphicsItem::ItemIsPanel;
    }
 }
@@ -302,7 +302,7 @@ void QGraphicsWidgetPrivate::initStyleOptionTitleBar(QStyleOptionTitleBar *optio
    ensureWindowData();
    q->initStyleOption(option);
    option->rect.setHeight(titleBarHeight(*option));
-   option->titleBarFlags = windowFlags;
+   option->titleBarFlags = m_flags;
    option->subControls = QStyle::SC_TitleBarCloseButton | QStyle::SC_TitleBarLabel | QStyle::SC_TitleBarSysMenu;
    option->activeSubControls = windowData->hoveredSubControl;
    bool isActive = q->isActiveWindow();
@@ -764,7 +764,7 @@ void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent
 
 bool QGraphicsWidgetPrivate::hasDecoration() const
 {
-   return (windowFlags & Qt::Window) && (windowFlags & Qt::WindowTitleHint);
+   return (m_flags & Qt::Window) && (m_flags & Qt::WindowTitleHint);
 }
 
 /**

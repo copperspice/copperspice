@@ -516,7 +516,7 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
 
    data.winid = 0;
    data.widget_attributes = 0;
-   data.window_flags = flags;
+   data.m_flags = flags;
    data.window_state = 0;
    data.focus_policy = 0;
    data.context_menu_policy = Qt::DefaultContextMenu;
@@ -549,11 +549,11 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
    }
 
    else if (parentWidget) {
-      q->setParent(parentWidget, data.window_flags);
+      q->setParent(parentWidget, data.m_flags);
    }
 
    else {
-      adjustFlags(data.window_flags, q);
+      adjustFlags(data.m_flags, q);
       resolveLayoutDirection();
 
       // opaque system background?
@@ -614,7 +614,7 @@ void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
    }
 
    Qt::WindowType type = windowType();
-   Qt::WindowFlags &flags = data->window_flags;
+   Qt::WindowFlags &flags = data->m_flags;
 
    if ((type == Qt::Widget || type == Qt::SubWindow) && ! parentWidget()) {
       type = Qt::Window;
@@ -747,7 +747,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
 
    Q_Q(QWidget);
 
-   Qt::WindowFlags flags = data.window_flags;
+   Qt::WindowFlags flags = data.m_flags;
 
    if (!q->testAttribute(Qt::WA_NativeWindow) && !q->isWindow()) {
       return;   // we only care about real toplevels
@@ -776,7 +776,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
    }
 
    setNetWmWindowTypes(true); // do nothing if none of WA_X11NetWmWindowType* is set
-   win->setFlags(data.window_flags);
+   win->setFlags(data.m_flags);
    fixPosIncludesFrame();
    if (q->testAttribute(Qt::WA_Moved)
       || !QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::WindowManagement)) {
@@ -823,7 +823,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
       }
    }
 
-   data.window_flags = win->flags();
+   data.m_flags = win->flags();
 
    if (! topData()->role.isEmpty()) {
       QXcbWindowFunctions::setWmWindowRole(win, topData()->role.toUtf8());
@@ -5649,7 +5649,8 @@ void QWidget::setUpdatesEnabled(bool enable)
 
 void QWidget::show()
 {
-   Qt::WindowState defaultState = QGuiApplicationPrivate::platformIntegration()->defaultWindowState(data->window_flags);
+   Qt::WindowState defaultState = QGuiApplicationPrivate::platformIntegration()->defaultWindowState(data->m_flags);
+
    if (defaultState == Qt::WindowFullScreen) {
       showFullScreen();
    } else if (defaultState == Qt::WindowMaximized) {
@@ -7516,16 +7517,16 @@ void QWidgetPrivate::setWindowFlags(Qt::WindowFlags flags)
 {
    Q_Q(QWidget);
 
-   if (q->data->window_flags == flags) {
+   if (q->data->m_flags == flags) {
       return;
    }
 
-   if ((q->data->window_flags | flags) & Qt::Window) {
+   if ((q->data->m_flags | flags) & Qt::Window) {
       // the old type was a window and/or the new type is a window
       QPoint oldPos = q->pos();
       bool visible = q->isVisible();
 
-      const bool windowFlagChanged = (q->data->window_flags ^ flags) & Qt::Window;
+      const bool windowFlagChanged = (q->data->m_flags ^ flags) & Qt::Window;
 
       q->setParent(q->parentWidget(), flags);
 
@@ -7540,14 +7541,14 @@ void QWidgetPrivate::setWindowFlags(Qt::WindowFlags flags)
       adjustQuitOnCloseAttribute();
 
    } else {
-      q->data->window_flags = flags;
+      q->data->m_flags = flags;
 
    }
 }
 
 void QWidget::overrideWindowFlags(Qt::WindowFlags flags)
 {
-   data->window_flags = flags;
+   data->m_flags = flags;
 }
 
 void QWidget::setParent(QWidget *parent)
@@ -7760,7 +7761,7 @@ void QWidgetPrivate::setParent_sys(QWidget *newparent, Qt::WindowFlags flags)
 {
    Q_Q(QWidget);
 
-   Qt::WindowFlags oldFlags = data.window_flags;
+   Qt::WindowFlags oldFlags = data.m_flags;
    bool wasCreated = q->testAttribute(Qt::WA_WState_Created);
 
    int targetScreen = -1;
@@ -7843,7 +7844,7 @@ void QWidgetPrivate::setParent_sys(QWidget *newparent, Qt::WindowFlags flags)
    }
 
    adjustFlags(flags, q);
-   data.window_flags = flags;
+   data.m_flags = flags;
 
    q->setAttribute(Qt::WA_WState_Created, false);
    q->setAttribute(Qt::WA_WState_Visible, false);

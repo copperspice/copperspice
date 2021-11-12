@@ -43,10 +43,11 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 
  public:
    QGraphicsWidgetPrivate()
-      : margins(nullptr), layout(nullptr), inheritedPaletteResolveMask(0), inheritedFontResolveMask(0),
-        inSetGeometry(0), polished(0), inSetPos(0), autoFillBackground(0),
-        focusPolicy(Qt::NoFocus), focusNext(nullptr), focusPrev(nullptr), windowFlags(Qt::EmptyFlag), windowData(nullptr),
-        setWindowFrameMargins(false), windowFrameMargins(nullptr) {
+      : windowData(nullptr), margins(nullptr), setWindowFrameMargins(false), windowFrameMargins(nullptr),
+        layout(nullptr), inheritedPaletteResolveMask(0), inheritedFontResolveMask(0),
+        m_flags(Qt::EmptyFlag), inSetGeometry(0), polished(0), inSetPos(0), autoFillBackground(0),
+        focusPolicy(Qt::NoFocus), focusNext(nullptr), focusPrev(nullptr)
+   {
    }
 
    virtual ~QGraphicsWidgetPrivate();
@@ -57,28 +58,22 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    // Margins
    enum {Left, Top, Right, Bottom};
 
-   mutable qreal *margins;
    void ensureMargins() const;
 
    void fixFocusChainBeforeReparenting(QGraphicsWidget *newParent, QGraphicsScene *oldScene, QGraphicsScene *newScene = nullptr);
    void setLayout_helper(QGraphicsLayout *l);
 
    // Layouts
-   QGraphicsLayout *layout;
    void setLayoutDirection_helper(Qt::LayoutDirection direction);
    void resolveLayoutDirection();
 
    // Style
-   QPalette palette;
-   uint inheritedPaletteResolveMask;
    void setPalette_helper(const QPalette &palette);
    void resolvePalette(uint inheritedMask) override;
    void updatePalette(const QPalette &palette);
 
    QPalette naturalWidgetPalette() const;
-   QFont font;
 
-   uint inheritedFontResolveMask;
    void setFont_helper(const QFont &font);
    void resolveFont(uint inheritedMask) override;
    void updateFont(const QFont &font);
@@ -168,20 +163,9 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
       }
       return (attributes & (1 << bit)) != 0;
    }
-   // 32 bits
-   quint32 attributes : 10;
-   quint32 inSetGeometry : 1;
-   quint32 polished: 1;
-   quint32 inSetPos : 1;
-   quint32 autoFillBackground : 1;
 
-   // Focus
-   Qt::FocusPolicy focusPolicy;
-   QGraphicsWidget *focusNext;
-   QGraphicsWidget *focusPrev;
-
-   // Windows
-   Qt::WindowFlags windowFlags;
+   void ensureWindowData();
+   void ensureWindowFrameMargins() const;
 
    struct WindowData {
       QString windowTitle;
@@ -195,18 +179,39 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
       WindowData()
          : hoveredSubControl(QStyle::SC_None), grabbedSection(Qt::NoSection), buttonMouseOver(false), buttonSunken(false) {
       }
+   };
 
-   } *windowData;
+   WindowData *windowData;
 
-   void ensureWindowData();
-
+   mutable qreal *margins;
    bool setWindowFrameMargins;
    mutable qreal *windowFrameMargins;
-   void ensureWindowFrameMargins() const;
+
+   QGraphicsLayout *layout;
+   QPalette palette;
+   QFont font;
+
+   uint inheritedPaletteResolveMask;
+   uint inheritedFontResolveMask;
+
+   // Windows
+   Qt::WindowFlags m_flags;
 
 #ifndef QT_NO_ACTION
    QList<QAction *> actions;
 #endif
+
+   // 32 bits
+   quint32 attributes : 10;
+   quint32 inSetGeometry : 1;
+   quint32 polished: 1;
+   quint32 inSetPos : 1;
+   quint32 autoFillBackground : 1;
+
+   // Focus
+   Qt::FocusPolicy focusPolicy;
+   QGraphicsWidget *focusNext;
+   QGraphicsWidget *focusPrev;
 };
 
 #endif
