@@ -87,6 +87,8 @@
 #endif
 
 #if defined(XP_UNIX)
+#include <qevent.h>         // must be included before any x11 headers
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdio.h>
