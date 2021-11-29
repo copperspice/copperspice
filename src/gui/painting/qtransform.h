@@ -156,8 +156,9 @@ class Q_GUI_EXPORT QTransform
    }
 
    inline QTransform(bool)
-      : affine(true), m_13(0), m_23(0), m_33(1), m_type(TxNone), m_dirty(TxNone), d(nullptr)
-   { }
+      : affine(true), m_13(0), m_23(0), m_33(1), m_type(TxNone), m_dirty(TxNone)
+   {
+   }
 
    inline TransformationType inline_type() const;
    QMatrix affine;
@@ -168,9 +169,6 @@ class Q_GUI_EXPORT QTransform
 
    mutable uint m_type  : 5;
    mutable uint m_dirty : 5;
-
-   class Private;
-   Private *d;
 };
 
 Q_GUI_EXPORT uint qHash(const QTransform &key, uint seed = 0);

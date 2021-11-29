@@ -72,11 +72,9 @@
     } while (false)
 
 QTransform::QTransform()
-   : affine(true)
-   , m_13(0), m_23(0), m_33(1)
-   , m_type(TxNone)
-   , m_dirty(TxNone)
-   , d(nullptr)
+   : affine(true),
+     m_13(0), m_23(0), m_33(1), m_type(TxNone), m_dirty(TxNone)
+
 {
 }
 
@@ -88,14 +86,10 @@ QTransform::QTransform()
 
     \sa setMatrix()
 */
-QTransform::QTransform(qreal h11, qreal h12, qreal h13,
-   qreal h21, qreal h22, qreal h23,
-   qreal h31, qreal h32, qreal h33)
-   : affine(h11, h12, h21, h22, h31, h32, true)
-   , m_13(h13), m_23(h23), m_33(h33)
-   , m_type(TxNone)
-   , m_dirty(TxProject)
-   , d(nullptr)
+QTransform::QTransform(qreal m11, qreal m12, qreal m13,
+            qreal m21, qreal m22, qreal m23, qreal m31, qreal m32, qreal m33)
+   : affine(m11, m12, m21, m22, m31, m32, true),
+     m_13(m13), m_23(m23), m_33(m33), m_type(TxNone), m_dirty(TxProject)
 {
 }
 
@@ -106,13 +100,9 @@ QTransform::QTransform(qreal h11, qreal h12, qreal h13,
 
     \sa setMatrix()
 */
-QTransform::QTransform(qreal h11, qreal h12, qreal h21,
-   qreal h22, qreal dx, qreal dy)
-   : affine(h11, h12, h21, h22, dx, dy, true)
-   , m_13(0), m_23(0), m_33(1)
-   , m_type(TxNone)
-   , m_dirty(TxShear)
-   , d(nullptr)
+QTransform::QTransform(qreal m11, qreal m12, qreal m21, qreal m22, qreal dx, qreal dy)
+   : affine(m11, m12, m21, m22, dx, dy, true),
+     m_13(0), m_23(0), m_33(1), m_type(TxNone), m_dirty(TxShear)
 {
 }
 
@@ -125,10 +115,7 @@ QTransform::QTransform(qreal h11, qreal h12, qreal h21,
  */
 QTransform::QTransform(const QMatrix &mtx)
    : affine(mtx._m11, mtx._m12, mtx._m21, mtx._m22, mtx._dx, mtx._dy, true),
-     m_13(0), m_23(0), m_33(1)
-   , m_type(TxNone)
-   , m_dirty(TxShear)
-   , d(nullptr)
+     m_13(0), m_23(0), m_33(1), m_type(TxNone), m_dirty(TxShear)
 {
 }
 
