@@ -618,13 +618,14 @@ void QWindow::setFlags(Qt::WindowFlags flags)
    if (d->platformWindow) {
       d->platformWindow->setWindowFlags(flags);
    }
-   d->windowFlags = flags;
+
+   d->m_flags = flags;
 }
 
 Qt::WindowFlags QWindow::flags() const
 {
    Q_D(const QWindow);
-   return d->windowFlags;
+   return d->m_flags;
 }
 
 /*!
@@ -638,7 +639,7 @@ Qt::WindowFlags QWindow::flags() const
 Qt::WindowType QWindow::type() const
 {
    Q_D(const QWindow);
-   return static_cast<Qt::WindowType>(int(d->windowFlags & Qt::WindowType_Mask));
+   return static_cast<Qt::WindowType>(int(d->m_flags & Qt::WindowType_Mask));
 }
 
 /*!
@@ -1722,7 +1723,8 @@ QObject *QWindow::focusObject() const
 */
 void QWindow::show()
 {
-   Qt::WindowState defaultState = QGuiApplicationPrivate::platformIntegration()->defaultWindowState(d_func()->windowFlags);
+   Qt::WindowState defaultState = QGuiApplicationPrivate::platformIntegration()->defaultWindowState(d_func()->m_flags);
+
    if (defaultState == Qt::WindowFullScreen) {
       showFullScreen();
    } else if (defaultState == Qt::WindowMaximized) {
