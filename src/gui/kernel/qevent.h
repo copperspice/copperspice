@@ -319,16 +319,12 @@ class Q_GUI_EXPORT QTabletEvent : public QInputEvent
    };
 
    enum PointerType { UnknownPointer, Pen, Cursor, Eraser };
-   QTabletEvent(Type t, const QPointF &pos, const QPointF &globalPosition,
-      int device, int pointerType, qreal pressure, int xTilt, int yTilt,
-      qreal tangentialPressure, qreal rotation, int z,
-      Qt::KeyboardModifiers keyState, qint64 uniqueID);
 
-   QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos,
-      int device, int pointerType, qreal pressure, int xTilt, int yTilt,
-      qreal tangentialPressure, qreal rotation, int z,
-      Qt::KeyboardModifiers keyState, qint64 uniqueID,
-      Qt::MouseButton button, Qt::MouseButtons buttons);
+   QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos, int device, int pointerType,
+         qreal pressure, int xTilt, int yTilt, qreal tangentialPressure, qreal rotation, int z,
+         Qt::KeyboardModifiers keyState, qint64 uniqueID,
+         Qt::MouseButton button = Qt::NoButton, Qt::MouseButtons buttons = Qt::NoButton);
+
    ~QTabletEvent();
 
    inline QPoint pos() const {

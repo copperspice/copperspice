@@ -385,23 +385,15 @@ QVariant QInputMethodQueryEvent::value(Qt::InputMethodQuery query) const
 
 #ifndef QT_NO_TABLETEVENT
 
-QTabletEvent::QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos,
-   int device, int pointerType, qreal pressure, int xTilt, int yTilt, qreal tangentialPressure,
-   qreal rotation, int z, Qt::KeyboardModifiers keyState, qint64 uniqueID,
-   Qt::MouseButton button, Qt::MouseButtons buttons)
+QTabletEvent::QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos, int device, int pointerType,
+      qreal pressure, int xTilt, int yTilt, qreal tangentialPressure, qreal rotation, int z,
+      Qt::KeyboardModifiers keyState, qint64 uniqueID, Qt::MouseButton button, Qt::MouseButtons buttons)
+
    : QInputEvent(type, keyState), mPos(pos), mGPos(globalPos), mDev(device), mPointerType(pointerType),
      mXT(xTilt), mYT(yTilt), mZ(z), mPress(pressure), mTangential(tangentialPressure), mRot(rotation),
      mUnique(uniqueID), mExtra(new QTabletEventPrivate(button, buttons))
-{}
-
-QTabletEvent::QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos,
-   int device, int pointerType,
-   qreal pressure, int xTilt, int yTilt, qreal tangentialPressure,
-   qreal rotation, int z, Qt::KeyboardModifiers keyState, qint64 uniqueID)
-   : QInputEvent(type, keyState), mPos(pos), mGPos(globalPos), mDev(device), mPointerType(pointerType),
-     mXT(xTilt), mYT(yTilt), mZ(z), mPress(pressure), mTangential(tangentialPressure), mRot(rotation),
-     mUnique(uniqueID), mExtra(new QTabletEventPrivate(Qt::NoButton, Qt::NoButton))
-{}
+{
+}
 
 // internal
 QTabletEvent::~QTabletEvent()
