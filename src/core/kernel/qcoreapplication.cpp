@@ -32,6 +32,7 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qglobal.h>
 #include <qhash.h>
 #include <qmutex.h>
 #include <qtextcodec.h>
@@ -48,7 +49,6 @@
 #include <qprocess_p.h>
 #include <qthread_p.h>
 #include <qfactoryloader_p.h>
-#include <qfunctions_p.h>
 #include <qlocale_p.h>
 
 #if defined(Q_OS_UNIX)

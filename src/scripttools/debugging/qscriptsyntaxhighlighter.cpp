@@ -22,9 +22,9 @@
 ***********************************************************************/
 
 #include <algorithm>
+#include <qglobal.h>
 
 #include "qscriptsyntaxhighlighter_p.h"
-#include "qfunctions_p.h"
 
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
 

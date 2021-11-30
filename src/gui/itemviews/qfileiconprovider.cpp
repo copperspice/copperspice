@@ -25,8 +25,8 @@
 #include <qfileiconprovider_p.h>
 
 #include <qdir.h>
+#include <qglobal.h>
 #include <qpixmapcache.h>
-#include <qfunctions_p.h>
 #include <qguiapplication_p.h>
 #include <qicon_p.h>
 #include <qplatform_integration.h>

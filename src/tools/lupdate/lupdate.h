@@ -58,9 +58,4 @@ void loadCPP(Translator &translator, const QStringList &filenames, ConversionDat
 bool loadJava(Translator &translator, const QString &filename, ConversionData &cd);
 bool loadUI(Translator &translator, const QString &filename, ConversionData &cd);
 
-#ifdef QT_QML
-bool loadQScript(Translator &translator, const QString &filename, ConversionData &cd);
-bool loadQml(Translator &translator, const QString &filename, ConversionData &cd);
-#endif
-
 #endif
