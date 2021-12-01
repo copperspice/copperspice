@@ -263,10 +263,10 @@ class Q_OPENGL_EXPORT QGLContext
    GLuint bindTexture(const QPixmap &pixmap, GLenum target = GL_TEXTURE_2D, GLint format = GL_RGBA);
    GLuint bindTexture(const QString &fileName);
 
-   void deleteTexture(GLuint tx_id);
+   void deleteTexture(GLuint texture_id);
 
-   void drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
-   void drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
+   void drawTexture(const QRectF &target, GLuint texture_id, GLenum textureTarget = GL_TEXTURE_2D);
+   void drawTexture(const QPointF &point, GLuint texture_id, GLenum textureTarget = GL_TEXTURE_2D);
 
    static void setTextureCacheLimit(int size);
    static int textureCacheLimit();
@@ -376,27 +376,23 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    const QGLColormap &colormap() const;
    void  setColormap(const QGLColormap &map);
 
-   void renderText(int x, int y, const QString &str, const QFont &fnt = QFont());
-   void renderText(double x, double y, double z, const QString &str, const QFont &fnt = QFont());
+   void renderText(int x, int y, const QString &str, const QFont &font = QFont());
+   void renderText(double x, double y, double z, const QString &str, const QFont &font = QFont());
 
    QPaintEngine *paintEngine() const override;
 
-   GLuint bindTexture(const QImage &image, GLenum target, GLint format,
-      QGLContext::BindOptions options);
-   GLuint bindTexture(const QPixmap &pixmap, GLenum target, GLint format,
-      QGLContext::BindOptions options);
+   GLuint bindTexture(const QImage &image, GLenum target, GLint format, QGLContext::BindOptions options);
+   GLuint bindTexture(const QPixmap &pixmap, GLenum target, GLint format, QGLContext::BindOptions options);
 
-   GLuint bindTexture(const QImage &image, GLenum target = GL_TEXTURE_2D,
-      GLint format = GL_RGBA);
-   GLuint bindTexture(const QPixmap &pixmap, GLenum target = GL_TEXTURE_2D,
-      GLint format = GL_RGBA);
+   GLuint bindTexture(const QImage &image, GLenum target = GL_TEXTURE_2D, GLint format = GL_RGBA);
+   GLuint bindTexture(const QPixmap &pixmap, GLenum target = GL_TEXTURE_2D, GLint format = GL_RGBA);
 
    GLuint bindTexture(const QString &fileName);
 
-   void deleteTexture(GLuint tx_id);
+   void deleteTexture(GLuint texture_id);
 
-   void drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
-   void drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
+   void drawTexture(const QRectF &target, GLuint texture_id, GLenum textureTarget = GL_TEXTURE_2D);
+   void drawTexture(const QPointF &point, GLuint texture_id, GLenum textureTarget = GL_TEXTURE_2D);
 
    OPENGL_CS_SLOT_1(Public, virtual void updateGL())
    OPENGL_CS_SLOT_2(updateGL)
@@ -405,20 +401,20 @@ class Q_OPENGL_EXPORT QGLWidget : public QWidget
    OPENGL_CS_SLOT_2(updateOverlayGL)
 
  protected:
-   bool event(QEvent *) override;
+   bool event(QEvent *event) override;
    virtual void initializeGL();
-   virtual void resizeGL(int w, int h);
+   virtual void resizeGL(int width, int height);
    virtual void paintGL();
 
    virtual void initializeOverlayGL();
-   virtual void resizeOverlayGL(int w, int h);
+   virtual void resizeOverlayGL(int width, int height);
    virtual void paintOverlayGL();
 
    void setAutoBufferSwap(bool on);
    bool autoBufferSwap() const;
 
-   void paintEvent(QPaintEvent *) override;
-   void resizeEvent(QResizeEvent *) override;
+   void paintEvent(QPaintEvent *event) override;
+   void resizeEvent(QResizeEvent *event) override;
 
    virtual void glInit();
    virtual void glDraw();
@@ -493,6 +489,5 @@ inline bool QGLFormat::sampleBuffers() const
 {
    return testOption(QGL::SampleBuffers);
 }
-
 
 #endif

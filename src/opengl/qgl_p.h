@@ -326,17 +326,17 @@ class Q_OPENGL_EXPORT QGLShareContextScope
 class Q_OPENGL_EXPORT QGLTextureDestroyer
 {
  public:
-   void emitFreeTexture(QGLContext *context, QPlatformPixmap *boundPixmap, GLuint id) {
+   void emitFreeTexture(QGLContext *context, QPlatformPixmap *boundPixmap, GLuint texture_id) {
       (void) boundPixmap;
 
       if (context->contextHandle()) {
-         (new QOpenGLSharedResourceGuard(context->contextHandle(), id, freeTextureFunc))->free();
+         (new QOpenGLSharedResourceGuard(context->contextHandle(), texture_id, freeTextureFunc))->free();
       }
    }
 
  private:
-   static void freeTextureFunc(QOpenGLFunctions *, GLuint id) {
-      QOpenGLContext::currentContext()->functions()->glDeleteTextures(1, &id);
+   static void freeTextureFunc(QOpenGLFunctions *, GLuint texture_id) {
+      QOpenGLContext::currentContext()->functions()->glDeleteTextures(1, &texture_id);
    }
 };
 
@@ -358,9 +358,9 @@ class Q_OPENGL_EXPORT QGLSignalProxy : public QObject
 class QGLTexture
 {
  public:
-   explicit QGLTexture(QGLContext *ctx = nullptr, GLuint tx_id = 0, GLenum tx_target = GL_TEXTURE_2D,
+   explicit QGLTexture(QGLContext *ctx = nullptr, GLuint texture_id = 0, GLenum tx_target = GL_TEXTURE_2D,
       QGLContext::BindOptions opt = QGLContext::DefaultBindOption)
-      : context(ctx), id(tx_id), target(tx_target), options(opt)
+      : context(ctx), id(texture_id), target(tx_target), options(opt)
    {}
 
    ~QGLTexture() {
@@ -417,7 +417,7 @@ class QGLTextureCache
    inline int maxCost();
    inline QGLTexture *getTexture(QGLContext *ctx, qint64 key);
 
-   bool remove(QGLContext *ctx, GLuint textureId);
+   bool remove(QGLContext *ctx, GLuint texture_id);
    void removeContextTextures(QGLContext *ctx);
    static QGLTextureCache *instance();
    static void cleanupTexturesForCacheKey(qint64 cacheKey);

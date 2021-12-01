@@ -49,7 +49,7 @@ class Q_OPENGL_EXPORT QGLPixelBuffer : public QPaintDevice
    QGLContext *context() const;
 
    GLuint generateDynamicTexture() const;
-   bool bindToDynamicTexture(GLuint texture);
+   bool bindToDynamicTexture(GLuint texture_id);
    void releaseFromDynamicTexture();
    void updateDynamicTexture(GLuint texture_id) const;
 
@@ -58,8 +58,8 @@ class Q_OPENGL_EXPORT QGLPixelBuffer : public QPaintDevice
    GLuint bindTexture(const QString &fileName);
    void deleteTexture(GLuint texture_id);
 
-   void drawTexture(const QRectF &target, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
-   void drawTexture(const QPointF &point, GLuint textureId, GLenum textureTarget = GL_TEXTURE_2D);
+   void drawTexture(const QRectF &target, GLuint texture_id, GLenum textureTarget = GL_TEXTURE_2D);
+   void drawTexture(const QPointF &point, GLuint texture_id, GLenum textureTarget = GL_TEXTURE_2D);
 
    QSize size() const;
    Qt::HANDLE handle() const;
