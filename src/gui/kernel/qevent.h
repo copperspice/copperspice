@@ -58,16 +58,16 @@ class Q_GUI_EXPORT QInputEvent : public QEvent
       return modState;
    }
 
-   inline void setModifiers(Qt::KeyboardModifiers amodifiers) {
-      modState = amodifiers;
+   void setModifiers(Qt::KeyboardModifiers modifiers) {
+      modState = modifiers;
    }
 
    inline ulong timestamp() const {
       return ts;
    }
 
-   inline void setTimestamp(ulong atimestamp) {
-      ts = atimestamp;
+   void setTimestamp(ulong timestamp) {
+      ts = timestamp;
    }
 
  protected:
@@ -864,12 +864,12 @@ class Q_GUI_EXPORT QDragMoveEvent : public QDropEvent
       QDropEvent::ignore();
    }
 
-   inline void accept(const QRect &xRect) {
+   void accept(const QRect &xRect) {
       accept();
       rect = xRect;
    }
 
-   inline void ignore(const QRect &xRect) {
+   void ignore(const QRect &xRect) {
       ignore();
       rect = xRect;
    }
@@ -1043,7 +1043,7 @@ class Q_GUI_EXPORT QShortcutEvent : public QEvent
 class Q_GUI_EXPORT QWindowStateChangeEvent: public QEvent
 {
  public:
-   explicit QWindowStateChangeEvent(Qt::WindowStates aOldState, bool isOverride = false);
+   explicit QWindowStateChangeEvent(Qt::WindowStates oldState, bool isOverride = false);
    ~QWindowStateChangeEvent();
 
    inline Qt::WindowStates oldState() const {
@@ -1199,25 +1199,25 @@ class Q_GUI_EXPORT QTouchEvent : public QInputEvent
    }
 
    // internal
-   inline void setWindow(QWindow *awindow) {
-      _window = awindow;
-   }
-   inline void setTarget(QObject *atarget) {
-      _target = atarget;
+   void setWindow(QWindow *xWindow) {
+      _window = xWindow;
    }
 
-   inline void setTouchPointStates(Qt::TouchPointStates aTouchPointStates) {
-      _touchPointStates = aTouchPointStates;
+   void setTarget(QObject *xTarget) {
+      _target = xTarget;
    }
 
-   inline void setTouchPoints(const QList<QTouchEvent::TouchPoint> &atouchPoints) {
-      _touchPoints = atouchPoints;
+   void setTouchPointStates(Qt::TouchPointStates touchPoint) {
+      _touchPointStates = touchPoint;
    }
 
-   inline void setDevice(QTouchDevice *adevice) {
-      _device = adevice;
+   void setTouchPoints(const QList<QTouchEvent::TouchPoint> &touchPointList) {
+      _touchPoints = touchPointList;
    }
 
+   void setDevice(QTouchDevice *xDevice) {
+      _device = xDevice;
+   }
 
  protected:
    QWindow *_window;

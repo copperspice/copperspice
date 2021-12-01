@@ -68,7 +68,7 @@ class Q_GUI_EXPORT QPlatformTextureList : public QObject
    void lock(bool on);
    bool isLocked() const;
 
-   void appendTexture(void *source, GLuint textureId, const QRect &geometry,
+   void appendTexture(void *source, GLuint texture_id, const QRect &geometry,
       const QRect &clipRect = QRect(), Flags flags = Qt::EmptyFlag);
    void clear();
 

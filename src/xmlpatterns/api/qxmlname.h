@@ -93,7 +93,7 @@ class Q_XMLPATTERNS_EXPORT QXmlName
    inline void setLocalName(const LocalNameCode c);
    inline Code code() const;
 
-   friend Q_XMLPATTERNS_EXPORT uint qHash(const QXmlName &);
+   friend Q_XMLPATTERNS_EXPORT uint qHash(const QXmlName &name);
 
  private:
    inline QXmlName(const int c)

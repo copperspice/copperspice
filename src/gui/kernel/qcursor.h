@@ -67,7 +67,7 @@ class Q_GUI_EXPORT QCursor
    QCursor(Qt::CursorShape shape);
    QCursor(const QBitmap &bitmap, const QBitmap &mask, int hotX = -1, int hotY = -1);
    QCursor(const QPixmap &pixmap, int hotX = -1, int hotY = -1);
-   QCursor(const QCursor &cursor);
+   QCursor(const QCursor &other);
 
    QCursor(QCursor &&other) : d(other.d) {
       other.d = nullptr;

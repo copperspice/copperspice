@@ -98,19 +98,19 @@ class Q_GUI_EXPORT QOpenGL2PaintEngineEx : public QPaintEngineEx
     virtual void renderHintsChanged() override;
     virtual void transformChanged() override;
 
-    virtual void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
+    virtual void drawPixmap(const QRectF &rect, const QPixmap &pm, const QRectF &srcRect) override;
     virtual void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
-                                     QPainter::PixmapFragmentHints hints) override;
-    virtual void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                           Qt::ImageConversionFlags flags = Qt::AutoColor) override;
-    virtual void drawTextItem(const QPointF &p, const QTextItem &textItem) override;
+               QPainter::PixmapFragmentHints hints) override;
+    virtual void drawImage(const QRectF &rect, const QImage &pm, const QRectF &srcRect,
+               Qt::ImageConversionFlags flags = Qt::AutoColor) override;
+    virtual void drawTextItem(const QPointF &point, const QTextItem &textItem) override;
     virtual void fill(const QVectorPath &path, const QBrush &brush) override;
     virtual void stroke(const QVectorPath &path, const QPen &pen) override;
     virtual void clip(const QVectorPath &path, Qt::ClipOperation op) override;
 
     virtual void drawStaticTextItem(QStaticTextItem *textItem) override;
 
-    bool drawTexture(const QRectF &r, GLuint textureId, const QSize &size, const QRectF &sr);
+    bool drawTexture(const QRectF &rect, GLuint texture_id, const QSize &size, const QRectF &srcRect);
 
     Type type() const override { return OpenGL2; }
 

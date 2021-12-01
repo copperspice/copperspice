@@ -112,7 +112,7 @@ class Q_OPENGL_EXPORT QGL2PaintEngineEx : public QPaintEngineEx
 
    void drawStaticTextItem(QStaticTextItem *textItem) override;
 
-   bool drawTexture(const QRectF &r, GLuint textureId, const QSize &size, const QRectF &sr);
+   bool drawTexture(const QRectF &r, GLuint texture_id, const QSize &size, const QRectF &sr);
 
    Type type() const override {
       return OpenGL2;
@@ -167,7 +167,7 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
    void updateBrushUniforms();
    void updateMatrix();
    void updateCompositionMode();
-   void updateTextureFilter(GLenum target, GLenum wrapMode, bool smoothPixmapTransform, GLuint id = GLuint(-1));
+   void updateTextureFilter(GLenum target, GLenum wrapMode, bool smoothPixmapTransform, GLuint texture_id = GLuint(-1));
 
    void resetGLState();
    bool resetOpenGLContextActiveEngine();

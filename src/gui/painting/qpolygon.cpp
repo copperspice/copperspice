@@ -89,9 +89,9 @@ QPolygon::QPolygon(const QRect &rectangle, bool closed)
     Equivalent to setPoints(nPoints, points)
 */
 
-QPolygon::QPolygon(int nPoints, const int *points)
+QPolygon::QPolygon(int pointCount, const int *pointPtr)
 {
-   setPoints(nPoints, points);
+   setPoints(pointCount, pointPtr);
 }
 
 void QPolygon::translate(int dx, int dy)
@@ -114,6 +114,7 @@ QPolygon QPolygon::translated(int dx, int dy) const
 {
    QPolygon copy(*this);
    copy.translate(dx, dy);
+
    return copy;
 }
 
@@ -123,18 +124,22 @@ void QPolygon::point(int index, int *x, int *y) const
    if (x) {
       *x = (int)p.x();
    }
+
    if (y) {
       *y = (int)p.y();
    }
 }
 
-void QPolygon::setPoints(int nPoints, const int *points)
+void QPolygon::setPoints(int pointCount, const int *pointPtr)
 {
-   resize(nPoints);
+   resize(pointCount);
    int i = 0;
-   while (nPoints--) {
-      setPoint(i++, *points, *(points + 1));
-      points += 2;
+
+   while (pointCount--) {
+      setPoint(i, *pointPtr, *(pointPtr + 1));
+      ++i;
+
+      pointPtr += 2;
    }
 }
 

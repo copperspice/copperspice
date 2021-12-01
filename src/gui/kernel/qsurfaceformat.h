@@ -124,14 +124,14 @@ class Q_GUI_EXPORT QSurfaceFormat
 
    void detach();
 
-   friend Q_GUI_EXPORT bool operator==(const QSurfaceFormat &, const QSurfaceFormat &);
-   friend Q_GUI_EXPORT bool operator!=(const QSurfaceFormat &, const QSurfaceFormat &);
+   friend Q_GUI_EXPORT bool operator==(const QSurfaceFormat &a, const QSurfaceFormat &b);
+   friend Q_GUI_EXPORT bool operator!=(const QSurfaceFormat &a, const QSurfaceFormat &b);
 
    friend Q_GUI_EXPORT QDebug operator<<(QDebug, const QSurfaceFormat &);
 };
 
-Q_GUI_EXPORT bool operator==(const QSurfaceFormat &, const QSurfaceFormat &);
-Q_GUI_EXPORT bool operator!=(const QSurfaceFormat &, const QSurfaceFormat &);
+Q_GUI_EXPORT bool operator==(const QSurfaceFormat &a, const QSurfaceFormat &b);
+Q_GUI_EXPORT bool operator!=(const QSurfaceFormat &a, const QSurfaceFormat &b);
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QSurfaceFormat &);
 

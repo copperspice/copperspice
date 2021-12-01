@@ -60,7 +60,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    QPixmap(const QPixmap &pixmap);
    ~QPixmap();
 
-   QPixmap &operator=(const QPixmap &pixmap);
+   QPixmap &operator=(const QPixmap &other);
 
    inline QPixmap &operator=(QPixmap &&other) {
       qSwap(data, other.data);

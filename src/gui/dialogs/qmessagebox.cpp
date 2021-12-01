@@ -174,9 +174,7 @@ class QMessageBoxDetailsText : public QWidget
    }
 
  private:
-   GUI_CS_SLOT_1(Private, void textCopyAvailable(bool available) {
-      copyAvailable = available;
-   }  )
+   GUI_CS_SLOT_1(Private, void textCopyAvailable(bool status) { copyAvailable = status; } )
    GUI_CS_SLOT_2(textCopyAvailable)
 
    bool copyAvailable;

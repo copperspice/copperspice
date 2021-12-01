@@ -34,17 +34,6 @@ class QScrollerPropertiesPrivate;
 class Q_GUI_EXPORT QScrollerProperties
 {
  public:
-   QScrollerProperties();
-   QScrollerProperties(const QScrollerProperties &sp);
-   QScrollerProperties &operator=(const QScrollerProperties &sp);
-   virtual ~QScrollerProperties();
-
-   bool operator==(const QScrollerProperties &sp) const;
-   bool operator!=(const QScrollerProperties &sp) const;
-
-   static void setDefaultScrollerProperties(const QScrollerProperties &sp);
-   static void unsetDefaultScrollerProperties();
-
    enum OvershootPolicy {
       OvershootWhenScrollable,
       OvershootAlwaysOff,
@@ -88,6 +77,19 @@ class Q_GUI_EXPORT QScrollerProperties
 
       ScrollMetricCount
    };
+
+   QScrollerProperties();
+   QScrollerProperties(const QScrollerProperties &sp);
+
+   virtual ~QScrollerProperties();
+
+   QScrollerProperties &operator=(const QScrollerProperties &other);
+
+   bool operator==(const QScrollerProperties &other) const;
+   bool operator!=(const QScrollerProperties &other) const;
+
+   static void setDefaultScrollerProperties(const QScrollerProperties &sp);
+   static void unsetDefaultScrollerProperties();
 
    QVariant scrollMetric(ScrollMetric metric) const;
    void setScrollMetric(ScrollMetric metric, const QVariant &value);
