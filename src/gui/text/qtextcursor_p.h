@@ -35,7 +35,7 @@ class QTextCursorPrivate : public QSharedData
 {
  public:
    QTextCursorPrivate(QTextDocumentPrivate *p);
-   QTextCursorPrivate(const QTextCursorPrivate &rhs);
+   QTextCursorPrivate(const QTextCursorPrivate &other);
    ~QTextCursorPrivate();
 
    enum AdjustResult { CursorMoved, CursorUnchanged };

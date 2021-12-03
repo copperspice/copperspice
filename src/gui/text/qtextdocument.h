@@ -151,7 +151,8 @@ class Q_GUI_EXPORT QTextDocument : public QObject
       DocumentTitle,
       DocumentUrl
    };
-   void setMetaInformation(MetaInformation info, const QString &);
+
+   void setMetaInformation(MetaInformation info, const QString &text);
    QString metaInformation(MetaInformation info) const;
 
 #ifndef QT_NO_TEXTHTMLPARSER
@@ -171,17 +172,17 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    };
    using FindFlags = QFlags<FindFlag>;
 
-   QTextCursor find(const QString &subString, int from = 0, FindFlags options = FindFlags()) const;
-   QTextCursor find(const QString &subString, const QTextCursor &from, FindFlags options = FindFlags()) const;
+   QTextCursor find(const QString &subString, int position = 0, FindFlags options = FindFlags()) const;
+   QTextCursor find(const QString &subString, const QTextCursor &cursor, FindFlags options = FindFlags()) const;
 
-   QTextCursor find(const QRegularExpression &expr, int from = 0, FindFlags options = FindFlags()) const;
-   QTextCursor find(const QRegularExpression &expr, const QTextCursor &from, FindFlags options = FindFlags()) const;
+   QTextCursor find(const QRegularExpression &expr, int position = 0, FindFlags options = FindFlags()) const;
+   QTextCursor find(const QRegularExpression &expr, const QTextCursor &cursor, FindFlags options = FindFlags()) const;
 
    QTextFrame *frameAt(int pos) const;
    QTextFrame *rootFrame() const;
 
    QTextObject *object(int objectIndex) const;
-   QTextObject *objectForFormat(const QTextFormat &) const;
+   QTextObject *objectForFormat(const QTextFormat &format) const;
 
    QTextBlock findBlock(int pos) const;
    QTextBlock findBlockByNumber(int blockNumber) const;
@@ -217,7 +218,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
 
    QVector<QTextFormat> allFormats() const;
 
-   void markContentsDirty(int from, int length);
+   void markContentsDirty(int position, int length);
 
    void setUseDesignMetrics(bool b);
    bool useDesignMetrics() const;
@@ -255,7 +256,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
       RedoStack = 0x02,
       UndoAndRedoStacks = UndoStack | RedoStack
    };
-   void clearUndoRedoStacks(Stacks historyToClear = UndoAndRedoStacks);
+   void clearUndoRedoStacks(Stacks selection = UndoAndRedoStacks);
 
    int maximumBlockCount() const;
    void setMaximumBlockCount(int maximum);
@@ -268,8 +269,8 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    Qt::CursorMoveStyle defaultCursorMoveStyle() const;
    void setDefaultCursorMoveStyle(Qt::CursorMoveStyle style);
 
-   GUI_CS_SIGNAL_1(Public, void contentsChange(int from, int charsRemoved, int charsAdded))
-   GUI_CS_SIGNAL_2(contentsChange, from, charsRemoved, charsAdded)
+   GUI_CS_SIGNAL_1(Public, void contentsChange(int position, int charsRemoved, int charsAdded))
+   GUI_CS_SIGNAL_2(contentsChange, position, charsRemoved, charsAdded)
 
    GUI_CS_SIGNAL_1(Public, void contentsChanged())
    GUI_CS_SIGNAL_2(contentsChanged)
@@ -307,13 +308,13 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    GUI_CS_SLOT_1(Public, void appendUndoItem(QAbstractUndoItem *item))
    GUI_CS_SLOT_2(appendUndoItem)
 
-   GUI_CS_SLOT_1(Public, void setModified(bool m = true))
+   GUI_CS_SLOT_1(Public, void setModified(bool status = true))
    GUI_CS_SLOT_2(setModified)
 
    QTextDocumentPrivate * docHandle() const;
 
  protected:
-   virtual QTextObject *createObject(const QTextFormat &f);
+   virtual QTextObject *createObject(const QTextFormat &format);
    virtual QVariant loadResource(int type, const QUrl &name);
 
    QTextDocument(QTextDocumentPrivate &dd, QObject *parent);

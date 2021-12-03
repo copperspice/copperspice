@@ -54,7 +54,7 @@ class Q_GUI_EXPORT QTextCursor
    explicit QTextCursor(QTextFrame *frame);
    explicit QTextCursor(const QTextBlock &block);
    explicit QTextCursor(QTextCursorPrivate *d);
-   QTextCursor(const QTextCursor &cursor);
+   QTextCursor(const QTextCursor &other);
 
    ~QTextCursor();
 
@@ -116,7 +116,7 @@ class Q_GUI_EXPORT QTextCursor
       PreviousRow
    };
 
-   bool movePosition(MoveOperation op, MoveMode = MoveAnchor, int n = 1);
+   bool movePosition(MoveOperation operation, MoveMode mode = MoveAnchor, int n = 1);
 
    bool visualNavigation() const;
    void setVisualNavigation(bool b);
@@ -201,12 +201,12 @@ class Q_GUI_EXPORT QTextCursor
    void joinPreviousEditBlock();
    void endEditBlock();
 
-   bool operator!=(const QTextCursor &rhs) const;
-   bool operator<(const QTextCursor &rhs) const;
-   bool operator<=(const QTextCursor &rhs) const;
-   bool operator==(const QTextCursor &rhs) const;
-   bool operator>=(const QTextCursor &rhs) const;
-   bool operator>(const QTextCursor &rhs) const;
+   bool operator!=(const QTextCursor &other) const;
+   bool operator<(const QTextCursor &other)  const;
+   bool operator<=(const QTextCursor &other) const;
+   bool operator==(const QTextCursor &other) const;
+   bool operator>=(const QTextCursor &other) const;
+   bool operator>(const QTextCursor &other)  const;
 
    bool isCopyOf(const QTextCursor &other) const;
 

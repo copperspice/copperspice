@@ -33,15 +33,14 @@ class QRect;
 
 class Q_GUI_EXPORT QFontMetrics
 {
-
  public:
-   explicit QFontMetrics(const QFont &);
-   QFontMetrics(const QFont &, QPaintDevice *pd);
-   QFontMetrics(const QFontMetrics &);
+   explicit QFontMetrics(const QFont &font);
+   QFontMetrics(const QFont &font, QPaintDevice *paintDevice);
+   QFontMetrics(const QFontMetrics &other);
 
    ~QFontMetrics();
 
-   QFontMetrics &operator=(const QFontMetrics &);
+   QFontMetrics &operator=(const QFontMetrics &other);
 
    inline QFontMetrics &operator=(QFontMetrics &&other) {
       qSwap(d, other.d);
@@ -64,27 +63,29 @@ class Q_GUI_EXPORT QFontMetrics
    int xHeight() const;
    int averageCharWidth() const;
 
-   bool inFont(QChar) const;
+   bool inFont(QChar ch) const;
    bool inFontUcs4(char32_t ch) const;
 
-   int leftBearing(QChar) const;
-   int rightBearing(QChar) const;
-   int width(const QString &, int len = -1) const;
-   int width(const QString &, int len, int flags) const;
+   int leftBearing(QChar ch) const;
+   int rightBearing(QChar ch) const;
+   int width(const QString &text, int len = -1) const;
+   int width(const QString &text, int len, int flags) const;
 
-   int width(QChar) const;
+   int width(QChar ch) const;
 
-   QRect boundingRect(QChar) const;
+   QRect boundingRect(QChar ch) const;
 
    QRect boundingRect(const QString &text) const;
-   QRect boundingRect(const QRect &r, int flags, const QString &text, int tabstops = 0, int *tabarray = nullptr) const;
+   QRect boundingRect(const QRect &rect, int flags, const QString &text, int tabStops = 0,
+         int *tabArray = nullptr) const;
 
-   inline QRect boundingRect(int x, int y, int w, int h, int flags, const QString &text, int tabstops = 0,
-      int *tabarray = nullptr) const {
-      return boundingRect(QRect(x, y, w, h), flags, text, tabstops, tabarray);
+   QRect boundingRect(int x, int y, int width, int height, int flags, const QString &text, int tabStops = 0,
+         int *tabArray = nullptr) const
+   {
+      return boundingRect(QRect(x, y, width, height), flags, text, tabStops, tabArray);
    }
 
-   QSize size(int flags, const QString &str, int tabstops = 0, int *tabarray = nullptr) const;
+   QSize size(int flags, const QString &text, int tabStops = 0, int *tabArray = nullptr) const;
 
    QRect tightBoundingRect(const QString &text) const;
 
@@ -111,14 +112,15 @@ class Q_GUI_EXPORT QFontMetrics
 class Q_GUI_EXPORT QFontMetricsF
 {
  public:
-   QFontMetricsF(const QFont &);
-   QFontMetricsF(const QFont &, QPaintDevice *pd);
-   QFontMetricsF(const QFontMetrics &);
-   QFontMetricsF(const QFontMetricsF &);
+   QFontMetricsF(const QFont &font);
+   QFontMetricsF(const QFont &font, QPaintDevice *paintDevice);
+   QFontMetricsF(const QFontMetrics &fontMetrics);
+   QFontMetricsF(const QFontMetricsF &other);
+
    ~QFontMetricsF();
 
-   QFontMetricsF &operator=(const QFontMetricsF &);
-   QFontMetricsF &operator=(const QFontMetrics &);
+   QFontMetricsF &operator=(const QFontMetrics &fontMetrics);
+   QFontMetricsF &operator=(const QFontMetricsF &other);
 
    inline QFontMetricsF &operator=(QFontMetricsF &&other) {
       qSwap(d, other.d);
@@ -141,19 +143,19 @@ class Q_GUI_EXPORT QFontMetricsF
    qreal xHeight() const;
    qreal averageCharWidth() const;
 
-   bool inFont(QChar) const;
+   bool inFont(QChar ch) const;
    bool inFontUcs4(char32_t ch) const;
 
-   qreal leftBearing(QChar) const;
-   qreal rightBearing(QChar) const;
-   qreal width(const QString &string) const;
+   qreal leftBearing(QChar ch) const;
+   qreal rightBearing(QChar ch) const;
+   qreal width(const QString &text) const;
 
-   qreal width(QChar) const;
+   qreal width(QChar ch) const;
 
-   QRectF boundingRect(const QString &string) const;
-   QRectF boundingRect(QChar) const;
-   QRectF boundingRect(const QRectF &r, int flags, const QString &string, int tabstops = 0, int *tabarray = nullptr) const;
-   QSizeF size(int flags, const QString &str, int tabstops = 0, int *tabarray = nullptr) const;
+   QRectF boundingRect(const QString &text) const;
+   QRectF boundingRect(QChar ch) const;
+   QRectF boundingRect(const QRectF &rect, int flags, const QString &text, int tabStops = 0, int *tabArray = nullptr) const;
+   QSizeF size(int flags, const QString &text, int tabStops = 0, int *tabArray = nullptr) const;
 
    QRectF tightBoundingRect(const QString &text) const;
 

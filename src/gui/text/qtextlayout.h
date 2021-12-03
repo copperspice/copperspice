@@ -52,8 +52,12 @@ class Q_GUI_EXPORT QTextInlineObject
 {
 
  public:
-   QTextInlineObject(int i, QTextEngine *e) : itm(i), eng(e) {}
    inline QTextInlineObject() : itm(0), eng(nullptr) {}
+   QTextInlineObject(int index, QTextEngine *engine)
+      : itm(index), eng(engine)
+   {
+   }
+
 
    bool isValid() const {
       return eng;
@@ -101,7 +105,7 @@ class Q_GUI_EXPORT QTextLayout
 
    ~QTextLayout();
 
-   void setFont(const QFont &f);
+   void setFont(const QFont &font);
    QFont font() const;
 
    void setText(const QString &string);
@@ -130,7 +134,7 @@ class Q_GUI_EXPORT QTextLayout
       }
    };
 
-   void setFormats(const QVector<FormatRange> &overrides);
+   void setFormats(const QVector<FormatRange> &formats);
    QVector<FormatRange> formats() const;
    void clearFormats();
 
@@ -156,13 +160,13 @@ class Q_GUI_EXPORT QTextLayout
    int leftCursorPosition(int oldPos) const;
    int rightCursorPosition(int oldPos) const;
 
-   void draw(QPainter *p, const QPointF &pos, const QVector<FormatRange> &selections = QVector<FormatRange>(),
+   void draw(QPainter *painter, const QPointF &point, const QVector<FormatRange> &selections = QVector<FormatRange>(),
       const QRectF &clip = QRectF()) const;
    void drawCursor(QPainter *p, const QPointF &pos, int cursorPosition) const;
    void drawCursor(QPainter *p, const QPointF &pos, int cursorPosition, int width) const;
 
    QPointF position() const;
-   void setPosition(const QPointF &p);
+   void setPosition(const QPointF &point);
 
    QRectF boundingRect() const;
 
@@ -178,8 +182,8 @@ class Q_GUI_EXPORT QTextLayout
    void setFlags(int flags);
 
  private:
-   QTextLayout(QTextEngine *e)
-      : d(e)
+   QTextLayout(QTextEngine *engine)
+      : d(engine)
    {
    }
 
@@ -239,13 +243,13 @@ class Q_GUI_EXPORT QTextLine
       return cursorToX(&cursorPos, edge);
    }
 
-   int xToCursor(qreal x, CursorPosition = CursorBetweenCharacters) const;
+   int xToCursor(qreal x, CursorPosition cursorPos = CursorBetweenCharacters) const;
 
    void setLineWidth(qreal width);
    void setNumColumns(int columns);
    void setNumColumns(int columns, qreal alignmentWidth);
 
-   void setPosition(const QPointF &pos);
+   void setPosition(const QPointF &point);
    QPointF position() const;
 
    int textStart() const;
@@ -255,12 +259,16 @@ class Q_GUI_EXPORT QTextLine
       return index;
    }
 
-   void draw(QPainter *p, const QPointF &point, const QTextLayout::FormatRange *selection = nullptr) const;
+   void draw(QPainter *painter, const QPointF &point, const QTextLayout::FormatRange *selection = nullptr) const;
 
    QList<QGlyphRun> glyphRuns(int from = -1, int length = -1) const;
 
  private:
-   QTextLine(int line, QTextEngine *e) : index(line), m_textEngine(e) {}
+   QTextLine(int line, QTextEngine *engine)
+      : index(line), m_textEngine(engine)
+   {
+   }
+
    void layout_helper(int numGlyphs);
 
    int index;

@@ -69,8 +69,8 @@ class Q_GUI_EXPORT QTextOption
    QTextOption(Qt::Alignment alignment);
    ~QTextOption();
 
-   QTextOption(const QTextOption &o);
-   QTextOption &operator=(const QTextOption &o);
+   QTextOption(const QTextOption &other);
+   QTextOption &operator=(const QTextOption &other);
 
    inline void setAlignment(Qt::Alignment alignment);
 
@@ -78,8 +78,8 @@ class Q_GUI_EXPORT QTextOption
       return Qt::Alignment(align);
    }
 
-   void setTextDirection(Qt::LayoutDirection aDirection) {
-      this->direction = aDirection;
+   void setTextDirection(Qt::LayoutDirection layoutDirection) {
+      this->direction = layoutDirection;
    }
 
    Qt::LayoutDirection textDirection() const {
@@ -94,8 +94,8 @@ class Q_GUI_EXPORT QTextOption
       WrapAtWordBoundaryOrAnywhere
    };
 
-   void setWrapMode(WrapMode wrap) {
-      wordWrap = wrap;
+   void setWrapMode(WrapMode mode) {
+      wordWrap = mode;
    }
 
    WrapMode wrapMode() const {
@@ -128,8 +128,8 @@ class Q_GUI_EXPORT QTextOption
    void setTabs(const QList<Tab> &tabStops);
    QList<Tab> tabs() const;
 
-   void setUseDesignMetrics(bool b) {
-      design = b;
+   void setUseDesignMetrics(bool enable) {
+      design = enable;
    }
 
    bool useDesignMetrics() const {
@@ -150,19 +150,19 @@ class Q_GUI_EXPORT QTextOption
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextOption::Flags)
 
-inline void QTextOption::setAlignment(Qt::Alignment aalignment)
+inline void QTextOption::setAlignment(Qt::Alignment alignment)
 {
-   align = aalignment;
+   align = alignment;
 }
 
-inline void QTextOption::setFlags(Flags aflags)
+inline void QTextOption::setFlags(Flags flags)
 {
-   f = aflags;
+   f = flags;
 }
 
-inline void QTextOption::setTabStop(qreal atabStop)
+inline void QTextOption::setTabStop(qreal tabStop)
 {
-   tab = atabStop;
+   tab = tabStop;
 }
 
 CS_DECLARE_METATYPE(QTextOption)

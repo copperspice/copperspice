@@ -45,14 +45,15 @@ class Q_GUI_EXPORT QTextTableCell
    {
    }
 
-   QTextTableCell(const QTextTableCell &o)
-      : table(o.table), fragment(o.fragment)
+   QTextTableCell(const QTextTableCell &other)
+      : table(other.table), fragment(other.fragment)
    {
    }
 
-   QTextTableCell &operator=(const QTextTableCell &o) {
-      table    = o.table;
-      fragment = o.fragment;
+   QTextTableCell &operator=(const QTextTableCell &other) {
+      table    = other.table;
+      fragment = other.fragment;
+
       return *this;
    }
 
@@ -107,27 +108,27 @@ class Q_GUI_EXPORT QTextTable : public QTextFrame
 
    ~QTextTable();
 
-   void resize(int rows, int cols);
-   void insertRows(int pos, int num);
-   void insertColumns(int pos, int num);
+   void resize(int rows, int columns);
+   void insertRows(int index, int numRows);
+   void insertColumns(int index, int numColumns);
    void appendRows(int count);
    void appendColumns(int count);
-   void removeRows(int pos, int num);
-   void removeColumns(int pos, int num);
+   void removeRows(int index, int numRows);
+   void removeColumns(int index, int numColumns);
 
-   void mergeCells(int row, int col, int numRows, int numCols);
+   void mergeCells(int row, int column, int numRows, int numColumns);
    void mergeCells(const QTextCursor &cursor);
-   void splitCell(int row, int col, int numRows, int numCols);
+   void splitCell(int row, int column, int numRows, int numColumns);
 
    int rows() const;
    int columns() const;
 
-   QTextTableCell cellAt(int row, int col) const;
+   QTextTableCell cellAt(int row, int column) const;
    QTextTableCell cellAt(int position) const;
-   QTextTableCell cellAt(const QTextCursor &c) const;
+   QTextTableCell cellAt(const QTextCursor &cursor) const;
 
-   QTextCursor rowStart(const QTextCursor &c) const;
-   QTextCursor rowEnd(const QTextCursor &c) const;
+   QTextCursor rowStart(const QTextCursor &cursor) const;
+   QTextCursor rowEnd(const QTextCursor &cursor) const;
 
    void setFormat(const QTextTableFormat &format);
    QTextTableFormat format() const {

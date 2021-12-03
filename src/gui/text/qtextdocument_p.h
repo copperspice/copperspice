@@ -184,8 +184,8 @@ class QTextDocumentPrivate
    void setBlockFormat(const QTextBlock &from, const QTextBlock &to,
       const QTextBlockFormat &newFormat, FormatChangeMode mode = SetFormat);
 
-   void emitUndoAvailable(bool available);
-   void emitRedoAvailable(bool available);
+   void emitUndoAvailable(bool status);
+   void emitRedoAvailable(bool status);
 
    int undoRedo(bool undo);
 

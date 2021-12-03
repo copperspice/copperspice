@@ -1217,21 +1217,21 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
    }
 }
 
-void QTextDocumentPrivate::emitUndoAvailable(bool available)
+void QTextDocumentPrivate::emitUndoAvailable(bool status)
 {
-   if (available != wasUndoAvailable) {
+   if (status != wasUndoAvailable) {
       Q_Q(QTextDocument);
-      emit q->undoAvailable(available);
-      wasUndoAvailable = available;
+      emit q->undoAvailable(status);
+      wasUndoAvailable = status;
    }
 }
 
-void QTextDocumentPrivate::emitRedoAvailable(bool available)
+void QTextDocumentPrivate::emitRedoAvailable(bool status)
 {
-   if (available != wasRedoAvailable) {
+   if (status != wasRedoAvailable) {
       Q_Q(QTextDocument);
-      emit q->redoAvailable(available);
-      wasRedoAvailable = available;
+      emit q->redoAvailable(status);
+      wasRedoAvailable = status;
    }
 }
 

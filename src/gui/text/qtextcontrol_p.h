@@ -225,17 +225,17 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    GUI_CS_SIGNAL_1(Public, void textChanged())
    GUI_CS_SIGNAL_2(textChanged)
 
-   GUI_CS_SIGNAL_1(Public, void undoAvailable(bool b))
-   GUI_CS_SIGNAL_2(undoAvailable, b)
+   GUI_CS_SIGNAL_1(Public, void undoAvailable(bool status))
+   GUI_CS_SIGNAL_2(undoAvailable, status)
 
-   GUI_CS_SIGNAL_1(Public, void redoAvailable(bool b))
-   GUI_CS_SIGNAL_2(redoAvailable, b)
+   GUI_CS_SIGNAL_1(Public, void redoAvailable(bool status))
+   GUI_CS_SIGNAL_2(redoAvailable, status)
 
    GUI_CS_SIGNAL_1(Public, void currentCharFormatChanged(const QTextCharFormat &format))
    GUI_CS_SIGNAL_2(currentCharFormatChanged, format)
 
-   GUI_CS_SIGNAL_1(Public, void copyAvailable(bool b))
-   GUI_CS_SIGNAL_2(copyAvailable, b)
+   GUI_CS_SIGNAL_1(Public, void copyAvailable(bool status))
+   GUI_CS_SIGNAL_2(copyAvailable, status)
 
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
