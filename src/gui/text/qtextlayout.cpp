@@ -797,13 +797,7 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
    }
 }
 
-void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition) const
-{
-   drawCursor(p, pos, cursorPosition, 1);
-}
-
-
-void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition, int width) const
+void QTextLayout::drawCursor(QPainter *painter, const QPointF &pos, int cursorPosition, int width) const
 {
    if (d->lines.isEmpty()) {
       return;
@@ -859,23 +853,23 @@ void QTextLayout::drawCursor(QPainter *p, const QPointF &pos, int cursorPosition
    }
 
    qreal y = position.y() + (sl.y + sl.base() - base).toReal();
-   bool toggleAntialiasing = !(p->renderHints() & QPainter::Antialiasing)
-      && (p->transform().type() > QTransform::TxTranslate);
+   bool toggleAntialiasing = ! (painter->renderHints() & QPainter::Antialiasing)
+         && (painter->transform().type() > QTransform::TxTranslate);
 
    if (toggleAntialiasing) {
-      p->setRenderHint(QPainter::Antialiasing);
+      painter->setRenderHint(QPainter::Antialiasing);
    }
 
-   p->fillRect(QRectF(x, y, qreal(width), (base + descent).toReal()), p->pen().brush());
+   painter->fillRect(QRectF(x, y, qreal(width), (base + descent).toReal()), painter->pen().brush());
    if (toggleAntialiasing) {
-      p->setRenderHint(QPainter::Antialiasing, false);
+      painter->setRenderHint(QPainter::Antialiasing, false);
    }
 
    if (d->layoutData->hasBidi) {
       const int arrow_extent = 4;
       int sign = rightToLeft ? -1 : 1;
-      p->drawLine(QLineF(x, y, x + (sign * arrow_extent / 2), y + arrow_extent / 2));
-      p->drawLine(QLineF(x, y + arrow_extent, x + (sign * arrow_extent / 2), y + arrow_extent / 2));
+      painter->drawLine(QLineF(x, y, x + (sign * arrow_extent / 2), y + arrow_extent / 2));
+      painter->drawLine(QLineF(x, y + arrow_extent, x + (sign * arrow_extent / 2), y + arrow_extent / 2));
    }
 
    return;
@@ -983,21 +977,18 @@ void QTextLine::setLineWidth(qreal width)
    layout_helper(INT_MAX);
 }
 
-void QTextLine::setNumColumns(int numColumns)
+void QTextLine::setNumColumns(int numColumns, std::optional<qreal> alignmentWidth)
 {
    QScriptLine &line = m_textEngine->lines[index];
-   line.width        = QFIXED_MAX;
+
+   if (alignmentWidth.has_value()) {
+      line.width        = QFixed::fromReal(alignmentWidth.value());
+   } else {
+      line.width        = QFIXED_MAX;
+   }
+
    line.length       = 0;
    line.textWidth    = 0;
-   layout_helper(numColumns);
-}
-
-void QTextLine::setNumColumns(int numColumns, qreal alignmentWidth)
-{
-   QScriptLine &line = m_textEngine->lines[index];
-   line.width     = QFixed::fromReal(alignmentWidth);
-   line.length    = 0;
-   line.textWidth = 0;
    layout_helper(numColumns);
 }
 

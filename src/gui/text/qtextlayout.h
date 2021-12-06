@@ -162,8 +162,8 @@ class Q_GUI_EXPORT QTextLayout
 
    void draw(QPainter *painter, const QPointF &point, const QVector<FormatRange> &selections = QVector<FormatRange>(),
       const QRectF &clip = QRectF()) const;
-   void drawCursor(QPainter *p, const QPointF &pos, int cursorPosition) const;
-   void drawCursor(QPainter *p, const QPointF &pos, int cursorPosition, int width) const;
+
+   void drawCursor(QPainter *painter, const QPointF &point, int cursorPosition, int width = 1) const;
 
    QPointF position() const;
    void setPosition(const QPointF &point);
@@ -246,8 +246,7 @@ class Q_GUI_EXPORT QTextLine
    int xToCursor(qreal x, CursorPosition cursorPos = CursorBetweenCharacters) const;
 
    void setLineWidth(qreal width);
-   void setNumColumns(int columns);
-   void setNumColumns(int columns, qreal alignmentWidth);
+   void setNumColumns(int columns, std::optional<qreal> alignmentWidth = std::optional<qreal>());
 
    void setPosition(const QPointF &point);
    QPointF position() const;
