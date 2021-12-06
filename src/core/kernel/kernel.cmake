@@ -112,7 +112,6 @@ list(APPEND CORE_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_glib_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_unix_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventdispatcher_win_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qfunctions_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsharedmemory_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemerror_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsystemsemaphore_p.h

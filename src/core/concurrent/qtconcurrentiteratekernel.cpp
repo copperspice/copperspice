@@ -37,7 +37,7 @@
 
 #endif
 
-#include <qfunctions_p.h>
+#include <qglobal.h>
 
 enum {
    TargetRatio = 100,
