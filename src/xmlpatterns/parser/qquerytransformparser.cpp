@@ -3086,7 +3086,8 @@ yytnamerr (char *yyres, const char *yystr)
                if (*++yyp != '\\') {
                   goto do_not_strip_quotes;
                }
-            /* Fall through.  */
+               [[fallthrough]];
+
             default:
                if (yyres) {
                   yyres[yyn] = *yyp;
@@ -3100,6 +3101,7 @@ yytnamerr (char *yyres, const char *yystr)
                }
                return yyn;
          }
+
    do_not_strip_quotes:
       ;
    }
@@ -7824,7 +7826,7 @@ yyabortlab:
 yyexhaustedlab:
    yyerror (&yylloc, parseInfo, YY_("memory exhausted"));
    yyresult = 2;
-   /* Fall through.  */
+   // fall through
 #endif
 
 yyreturn:

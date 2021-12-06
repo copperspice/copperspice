@@ -4105,7 +4105,8 @@ QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionCompl
                   break;
                }
                offset += buttonWidth;
-            //FALL THROUGH
+               [[fallthrough]];
+
             case SC_MdiNormalButton:
                // No offset needed if
                // 1) There's only one sub control

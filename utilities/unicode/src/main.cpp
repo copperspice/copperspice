@@ -1495,8 +1495,8 @@ static void readArabicShaping()
                qFatal("%x: joining type '%s' was met, the current implementation needs to be revised",
                       codepoint, l[2].constData());
             }
+            [[fallthrough]];
 
-         // fall through
          default:
             rowData.pFlags.joining = QChar::JoiningType(joining);
             break;
