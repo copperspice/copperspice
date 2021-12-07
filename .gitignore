@@ -1,11 +1,22 @@
 
+/test/gui/
+/test/network/
 
+/translations/generate_ts_files
+/translations/hold_1
+/translations/hold_2
 
 /utilities/cldr/__pycache__/*
 /utilities/cldr/data
 /utilities/cldr/output
+/utilities/cldr/build-*
 
 /utilities/cldr/doxypress/__pycache__/*
+/utilities/cldr/doxypress/build-*
 
 /utilities/unicode/build
 /utilities/unicode/deploy
+/utilities/unicode/unicode_11
+/utilities/unicode/unused
+/utilities/unicode/do-*
+/utilities/unicode/error.log

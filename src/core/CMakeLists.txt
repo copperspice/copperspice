@@ -152,6 +152,12 @@ target_sources(CsCore
    ${CORE_REGEX_INCLUDES}
 )
 
+target_include_directories(CsCore
+   PUBLIC
+   $<INSTALL_INTERFACE:include>
+   $<INSTALL_INTERFACE:include/QtCore>
+)
+
 if(MSVC)
    target_compile_options(CsCore
       PUBLIC
@@ -170,12 +176,6 @@ if(MSVC)
 
    endif()
 endif()
-
-target_include_directories(CsCore
-   PUBLIC
-   $<INSTALL_INTERFACE:include>
-   $<INSTALL_INTERFACE:include/QtCore>
-)
 
 set_target_properties(CsCore
    PROPERTIES
