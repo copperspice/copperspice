@@ -52,7 +52,7 @@ bool QNetworkConfiguration::operator==(const QNetworkConfiguration &other) const
 
 QString QNetworkConfiguration::name() const
 {
-   if (!d) {
+   if (! d) {
       return QString();
    }
 
@@ -63,7 +63,7 @@ QString QNetworkConfiguration::name() const
 
 QString QNetworkConfiguration::identifier() const
 {
-   if (!d) {
+   if (! d) {
       return QString();
    }
 
@@ -74,7 +74,7 @@ QString QNetworkConfiguration::identifier() const
 
 QNetworkConfiguration::Type QNetworkConfiguration::type() const
 {
-   if (!d) {
+   if (! d) {
       return QNetworkConfiguration::Invalid;
    }
 
@@ -85,7 +85,7 @@ QNetworkConfiguration::Type QNetworkConfiguration::type() const
 
 bool QNetworkConfiguration::isValid() const
 {
-   if (!d) {
+   if (! d) {
       return false;
    }
 
@@ -96,7 +96,7 @@ bool QNetworkConfiguration::isValid() const
 
 QNetworkConfiguration::StateFlags QNetworkConfiguration::state() const
 {
-   if (!d) {
+   if (! d) {
       return QNetworkConfiguration::Undefined;
    }
 
@@ -117,7 +117,7 @@ QNetworkConfiguration::Purpose QNetworkConfiguration::purpose() const
 
 bool QNetworkConfiguration::isRoamingAvailable() const
 {
-   if (!d) {
+   if (! d) {
       return false;
    }
 
@@ -129,13 +129,13 @@ QList<QNetworkConfiguration> QNetworkConfiguration::children() const
 {
    QList<QNetworkConfiguration> results;
 
-   if (!d) {
+   if (! d) {
       return results;
    }
 
    QRecursiveMutexLocker locker(&d->mutex);
 
-   if (d->type != QNetworkConfiguration::ServiceNetwork || !d->isValid) {
+   if (d->type != QNetworkConfiguration::ServiceNetwork || ! d->isValid) {
       return results;
    }
 
@@ -149,7 +149,7 @@ QList<QNetworkConfiguration> QNetworkConfiguration::children() const
       {
          QRecursiveMutexLocker childLocker(&p->mutex);
 
-         if (!p->isValid) {
+         if (! p->isValid) {
             i.remove();
             continue;
          }
@@ -165,7 +165,7 @@ QList<QNetworkConfiguration> QNetworkConfiguration::children() const
 
 QNetworkConfiguration::BearerType QNetworkConfiguration::bearerType() const
 {
-   if (!isValid()) {
+   if (! isValid()) {
       return BearerUnknown;
    }
 
@@ -203,6 +203,7 @@ QNetworkConfiguration::BearerType QNetworkConfiguration::bearerTypeFamily() cons
          return QNetworkConfiguration::BearerUnknown;
    }
 }
+
 QString QNetworkConfiguration::bearerTypeName() const
 {
    if (! isValid()) {

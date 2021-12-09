@@ -34,10 +34,7 @@
 #include <qtimerinfo_unix_p.h>
 
 #include <sys/time.h>
-
-#if (!defined(Q_OS_HPUX) || defined(__ia64)) && !defined(Q_OS_NACL)
-#  include <sys/select.h>
-#endif
+#include <sys/select.h>
 
 struct QSockNot {
    QSocketNotifier *obj;

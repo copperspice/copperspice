@@ -71,6 +71,7 @@ int QSslSocketBackendPrivate::s_indexForSSLExtraData = -1;
 #endif
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
+
 class QOpenSslLocks
 {
  public:
@@ -89,7 +90,7 @@ class QOpenSslLocks
       for (int i = 0; i < q_CRYPTO_num_locks(); ++i) {
          delete locks[i];
       }
-      delete [] locks;
+      delete[] locks;
 
       QSslSocketPrivate::deinitialize();
    }
@@ -161,10 +162,8 @@ extern "C" {
 #endif
 
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L && !defined(OPENSSL_NO_PSK)
-   static unsigned int q_ssl_psk_client_callback(SSL *ssl,
-         const char *hint,
-         char *identity, unsigned int max_identity_len,
-         unsigned char *psk, unsigned int max_psk_len)
+   static unsigned int q_ssl_psk_client_callback(SSL *ssl, const char *hint,
+         char *identity, unsigned int max_identity_len, unsigned char *psk, unsigned int max_psk_len)
    {
       QSslSocketBackendPrivate *d = reinterpret_cast<QSslSocketBackendPrivate *>(
                q_SSL_get_ex_data(ssl, QSslSocketBackendPrivate::s_indexForSSLExtraData));
@@ -518,9 +517,11 @@ void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
    QRecursiveMutexLocker locker(openssl_locks()->initLock());
 #endif
+
    if (s_loadedCiphersAndCerts) {
       return;
    }
+
    s_loadedCiphersAndCerts = true;
 
    resetDefaultCiphers();

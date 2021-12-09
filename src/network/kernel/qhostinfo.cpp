@@ -278,8 +278,10 @@ void QHostInfoRunnable::run()
    {
       QRecursiveMutexLocker locker(&manager->mutex);
       QMutableListIterator<QHostInfoRunnable *> iterator(manager->postponedLookups);
+
       while (iterator.hasNext()) {
          QHostInfoRunnable *postponed = iterator.next();
+
          if (toBeLookedUp == postponed->toBeLookedUp) {
             // we can now emit
             iterator.remove();
@@ -322,6 +324,7 @@ void QHostInfoLookupManager::clear()
       qDeleteAll(postponedLookups);
       qDeleteAll(scheduledLookups);
       qDeleteAll(finishedLookups);
+
       postponedLookups.clear();
       scheduledLookups.clear();
       finishedLookups.clear();

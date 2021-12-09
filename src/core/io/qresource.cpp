@@ -140,11 +140,13 @@ Q_GLOBAL_STATIC(QStringList,  resourceSearchPaths)
 class QResourcePrivate
 {
  public:
-   inline QResourcePrivate(QResource *_q) : q_ptr(_q) {
+   QResourcePrivate(QResource *q)
+      : q_ptr(q)
+   {
       clear();
    }
 
-   inline ~QResourcePrivate() {
+   ~QResourcePrivate() {
       clear();
    }
 
@@ -243,13 +245,14 @@ void QResourcePrivate::ensureInitialized() const
    }
 
    QResourcePrivate *that = const_cast<QResourcePrivate *>(this);
+
    if (fileName == ":") {
       that->fileName += '/';
    }
 
    that->absoluteFilePath = fileName;
-   if (!that->absoluteFilePath.startsWith(QLatin1Char(':'))) {
-      that->absoluteFilePath.prepend(QLatin1Char(':'));
+   if (! that->absoluteFilePath.startsWith(QChar(':'))) {
+      that->absoluteFilePath.prepend(QChar(':'));
    }
 
    QString path = fileName;
@@ -262,14 +265,15 @@ void QResourcePrivate::ensureInitialized() const
 
    } else {
       QRecursiveMutexLocker lock(resourceMutex());
+
       QStringList searchPaths = *resourceSearchPaths();
-      searchPaths << QLatin1String("");
+      searchPaths << QString("");
 
       for (int i = 0; i < searchPaths.size(); ++i) {
-         const QString searchPath(searchPaths.at(i) + QLatin1Char('/') + path);
+         const QString searchPath(searchPaths.at(i) + QChar('/') + path);
 
          if (that->load(searchPath)) {
-            that->absoluteFilePath = QLatin1Char(':') + searchPath;
+            that->absoluteFilePath = QChar(':') + searchPath;
             break;
          }
       }
@@ -279,12 +283,12 @@ void QResourcePrivate::ensureInitialized() const
 void QResourcePrivate::ensureChildren() const
 {
    ensureInitialized();
-   if (! children.isEmpty() || !container || related.isEmpty()) {
+   if (! children.isEmpty() || ! container || related.isEmpty()) {
       return;
    }
 
    QString path = absoluteFilePath, k;
-   if (path.startsWith(QLatin1Char(':'))) {
+   if (path.startsWith(QChar(':'))) {
       path = path.mid(1);
    }
 
@@ -294,7 +298,7 @@ void QResourcePrivate::ensureChildren() const
    for (int i = 0; i < related.size(); ++i) {
       QResourceRoot *res = related.at(i);
 
-      if (res->mappingRootSubdir(path, &k) && !k.isEmpty()) {
+      if (res->mappingRootSubdir(path, &k) && ! k.isEmpty()) {
          if (!kids.contains(k)) {
             children += k;
             kids.insert(k);
@@ -436,9 +440,9 @@ QStringList QResource::children() const
 // obsolete
 void QResource::addSearchPath(const QString &path)
 {
-   if (!path.startsWith(QLatin1Char('/'))) {
+   if (! path.startsWith(QChar('/'))) {
       qWarning("QResource::addResourceSearchPath: Search paths must be absolute (start with /) [%s]",
-                  path.toUtf8().constData());
+            path.toUtf8().constData());
       return;
    }
 
@@ -730,6 +734,7 @@ Q_CORE_EXPORT bool qRegisterResourceData(int version, const unsigned char *tree,
       const unsigned char *name, const unsigned char *data)
 {
    QRecursiveMutexLocker lock(resourceMutex());
+
    if (version == 0x01 && resourceList()) {
       bool found = false;
       QResourceRoot res(tree, name, data);
@@ -754,6 +759,7 @@ Q_CORE_EXPORT bool qUnregisterResourceData(int version, const unsigned char *tre
       const unsigned char *name, const unsigned char *data)
 {
    QRecursiveMutexLocker lock(resourceMutex());
+
    if (version == 0x01 && resourceList()) {
       QResourceRoot res(tree, name, data);
       for (int i = 0; i < resourceList()->size(); ) {
@@ -775,6 +781,7 @@ Q_CORE_EXPORT bool qUnregisterResourceData(int version, const unsigned char *tre
 
 class QDynamicBufferResourceRoot: public QResourceRoot
 {
+ private:
    QString root;
    const uchar *buffer;
 
@@ -989,7 +996,6 @@ bool QResource::registerResource(const QString &rccFilename, const QString &reso
    return false;
 }
 
-
 bool QResource::unregisterResource(const QString &rccFilename, const QString &resourceRoot)
 {
    QString r = qt_resource_fixResourceRoot(resourceRoot);
@@ -1019,6 +1025,7 @@ bool QResource::unregisterResource(const QString &rccFilename, const QString &re
 bool QResource::registerResource(const uchar *rccData, const QString &resourceRoot)
 {
    QString r = qt_resource_fixResourceRoot(resourceRoot);
+
    if (!r.isEmpty() && r[0] != QLatin1Char('/')) {
       qWarning("QDir::registerResource: Registering a resource [%p] must be rooted in an absolute path (start with /) [%s]",
                rccData, resourceRoot.toUtf8().data());
@@ -1026,12 +1033,14 @@ bool QResource::registerResource(const uchar *rccData, const QString &resourceRo
    }
 
    QDynamicBufferResourceRoot *root = new QDynamicBufferResourceRoot(r);
+
    if (root->registerSelf(rccData)) {
       root->ref.ref();
       QRecursiveMutexLocker lock(resourceMutex());
       resourceList()->append(root);
       return true;
    }
+
    delete root;
    return false;
 }
@@ -1045,8 +1054,10 @@ bool QResource::unregisterResource(const uchar *rccData, const QString &resource
 
    for (int i = 0; i < list->size(); ++i) {
       QResourceRoot *res = list->at(i);
+
       if (res->type() == QResourceRoot::Resource_Buffer) {
          QDynamicBufferResourceRoot *root = reinterpret_cast<QDynamicBufferResourceRoot *>(res);
+
          if (root->mappingBuffer() == rccData && root->mappingRoot() == r) {
             resourceList()->removeAt(i);
             if (!root->ref.deref()) {

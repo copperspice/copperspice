@@ -663,8 +663,8 @@ void QVideoWidget::setFullScreen(bool fullScreen)
 
       showFullScreen();
    } else {
-      flags &= ~(Qt::Window | Qt::SubWindow); //clear the flags...
-      flags |= d->nonFullScreenFlags; //then we reset the flags (window and subwindow)
+      flags &= ~(Qt::Window | Qt::SubWindow);    //clear the flags
+      flags |= d->nonFullScreenFlags;            //then we reset the flags (window and subwindow)
       setWindowFlags(flags);
 
       showNormal();

@@ -791,8 +791,8 @@ void QSettingsPrivate::iniEscapedStringList(const QStringList &strs, QByteArray 
 bool QSettingsPrivate::iniUnescapedStringList(const QByteArray &str, int from, int to,
                   QString &stringResult, QStringList &stringListResult, QTextCodec *codec)
 {
-#ifdef QT_NO_TEXTCODE
-   Q_UNUSED(codec);
+#ifdef QT_NO_TEXTCODEC
+   (void) codec;
 #endif
 
    static const char escapeCodes[][2] = {

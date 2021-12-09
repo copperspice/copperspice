@@ -156,8 +156,9 @@ QNetworkConfiguration QNetworkConfigurationManagerPrivate::defaultConfiguration(
          QNetworkConfiguration::BearerType bearerType = ptr->bearerType;
 
          if ((ptr->state & QNetworkConfiguration::Discovered) == QNetworkConfiguration::Discovered) {
-            if (!defaultConfiguration) {
+            if (! defaultConfiguration) {
                defaultConfiguration = ptr;
+
             } else {
                QRecursiveMutexLocker defaultConfigLocker(&defaultConfiguration->mutex);
 
@@ -166,10 +167,12 @@ QNetworkConfiguration QNetworkConfigurationManagerPrivate::defaultConfiguration(
                      case QNetworkConfiguration::BearerEthernet:
                         // do nothing
                         break;
+
                      case QNetworkConfiguration::BearerWLAN:
                         // Ethernet beats WLAN
                         defaultConfiguration = ptr;
                         break;
+
                      default:
                         // Ethernet and WLAN beats other
                         if (bearerType == QNetworkConfiguration::BearerEthernet ||
@@ -177,10 +180,10 @@ QNetworkConfiguration QNetworkConfigurationManagerPrivate::defaultConfiguration(
                            defaultConfiguration = ptr;
                         }
                   }
+
                } else {
                   // active beats discovered
-                  if ((defaultConfiguration->state & QNetworkConfiguration::Active) !=
-                        QNetworkConfiguration::Active) {
+                  if ((defaultConfiguration->state & QNetworkConfiguration::Active) != QNetworkConfiguration::Active) {
                      defaultConfiguration = ptr;
                   }
                }
@@ -254,10 +257,13 @@ QNetworkConfiguration QNetworkConfigurationManagerPrivate::configurationFromIden
 
       if (engine->accessPointConfigurations.contains(identifier)) {
          item.d = engine->accessPointConfigurations[identifier];
+
       } else if (engine->snapConfigurations.contains(identifier)) {
          item.d = engine->snapConfigurations[identifier];
+
       } else if (engine->userChoiceConfigurations.contains(identifier)) {
          item.d = engine->userChoiceConfigurations[identifier];
+
       } else {
          continue;
       }
@@ -292,7 +298,7 @@ void QNetworkConfigurationManagerPrivate::configurationAdded(QNetworkConfigurati
 {
    QRecursiveMutexLocker locker(&mutex);
 
-   if (!firstUpdate) {
+   if (! firstUpdate) {
       QNetworkConfiguration item;
       item.d = ptr;
       emit configurationAdded(item);
@@ -527,6 +533,5 @@ void QNetworkConfigurationManagerPrivate::disablePolling()
 
    --forcedPolling;
 }
-
 
 #endif // QT_NO_BEARERMANAGEMENT

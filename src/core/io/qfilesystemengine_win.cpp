@@ -283,7 +283,8 @@ typedef struct _SHARE_INFO_1 {
 static bool resolveUNCLibs()
 {
    static bool triedResolve = false;
-   if (!triedResolve) {
+
+   if (! triedResolve) {
       QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
 
       if (triedResolve) {
@@ -298,6 +299,7 @@ static bool resolveUNCLibs()
 
       triedResolve = true;
    }
+
    return ptrNetShareEnum && ptrNetApiBufferFree;
 }
 

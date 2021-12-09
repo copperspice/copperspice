@@ -232,8 +232,6 @@ class QGLContextPrivate
    void refreshCurrentFbo();
    void setCurrentFbo(GLuint fbo);
 
-
-
    QGLFormat glFormat;
    QGLFormat reqFormat;
    GLuint fbo;
@@ -471,8 +469,8 @@ class QGLSharedResourceGuardBase : public QOpenGLSharedResource
 {
  public:
    QGLSharedResourceGuardBase(QGLContext *context, GLuint id)
-      : QOpenGLSharedResource(context->contextHandle()->shareGroup())
-      , m_id(id) {
+      : QOpenGLSharedResource(context->contextHandle()->shareGroup()), m_id(id)
+   {
    }
 
    GLuint id() const {
@@ -491,6 +489,7 @@ class QGLSharedResourceGuardBase : public QOpenGLSharedResource
    }
 
    virtual void freeResource(QGLContext *ctx, GLuint id) = 0;
+
  private:
    GLuint m_id;
 };
@@ -500,8 +499,7 @@ class QGLSharedResourceGuard : public QGLSharedResourceGuardBase
 {
  public:
    QGLSharedResourceGuard(QGLContext *context, GLuint id, Func func)
-      : QGLSharedResourceGuardBase(context, id)
-      , m_func(func) {
+      : QGLSharedResourceGuardBase(context, id), m_func(func) {
    }
 
  protected:

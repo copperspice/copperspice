@@ -72,7 +72,7 @@ QAbstractFileEngineHandler::~QAbstractFileEngineHandler()
    QWriteLocker locker(fileEngineHandlerMutex());
 
    // Remove this handler from the handler list only if the list is valid.
-   if (!qt_abstractfileenginehandlerlist_shutDown) {
+   if (! qt_abstractfileenginehandlerlist_shutDown) {
       QAbstractFileEngineHandlerList *handlers = fileEngineHandlers();
       handlers->removeOne(this);
       if (handlers->isEmpty()) {

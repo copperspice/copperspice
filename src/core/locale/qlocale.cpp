@@ -56,6 +56,7 @@
 #ifndef QT_NO_SYSTEMLOCALE
 
 static QSystemLocale *_systemLocale = nullptr;
+static QLocaleData *system_data     = nullptr;
 
 static QSystemLocale *QSystemLocale_globalSystemLocale()
 {
@@ -63,7 +64,6 @@ static QSystemLocale *QSystemLocale_globalSystemLocale()
    return &retval;
 }
 
-static QLocaleData *system_data = nullptr;
 Q_GLOBAL_STATIC(QLocaleData, globalLocaleData)
 
 #endif
@@ -71,7 +71,8 @@ Q_GLOBAL_STATIC(QLocaleData, globalLocaleData)
 static const QLocaleData *defaultData();
 static uint default_number_options = 0;
 
-static const int locale_data_size      = sizeof(locale_data) / sizeof(QLocaleData) - 1;
+static constexpr const int locale_data_size = sizeof(locale_data) / sizeof(QLocaleData) - 1;
+
 static const QLocaleData *default_data = nullptr;
 static const QLocaleData *const c_data = locale_data;
 

@@ -1182,6 +1182,7 @@ void QGLTextureCache::remove(qint64 key)
 
    QRecursiveMutexLocker groupLocker(&qt_context_groups()->m_mutex);
    QList<QGLContextGroup *>::const_iterator it = qt_context_groups()->m_list.constBegin();
+
    while (it != qt_context_groups()->m_list.constEnd()) {
       const QGLTextureCacheKey cacheKey = {key, *it};
       m_cache.remove(cacheKey);
@@ -1193,8 +1194,10 @@ bool QGLTextureCache::remove(QGLContext *ctx, GLuint textureId)
 {
    QWriteLocker locker(&m_lock);
    QList<QGLTextureCacheKey> keys = m_cache.keys();
+
    for (int i = 0; i < keys.size(); ++i) {
       QGLTexture *tex = m_cache.object(keys.at(i));
+
       if (tex->id == textureId && tex->context == ctx) {
          tex->options |= QGLContext::MemoryManagedBindOption; // forces a glDeleteTextures() call
          m_cache.remove(keys.at(i));
@@ -1221,7 +1224,6 @@ void QGLTextureCache::cleanupTexturesForCacheKey(qint64 cacheKey)
 {
    qt_gl_texture_cache()->remove(cacheKey);
 }
-
 
 void QGLTextureCache::cleanupTexturesForPixampData(QPlatformPixmap *pmd)
 {

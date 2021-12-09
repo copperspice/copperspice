@@ -330,6 +330,7 @@ class QSocks5BindStore : public QObject
 
    QRecursiveMutex mutex;
    int sweepTimerId;
+
    //socket descriptor, data, timestamp
    QHash<int, QSocks5BindData *> store;
 };
@@ -340,6 +341,7 @@ QSocks5BindStore::QSocks5BindStore()
    : sweepTimerId(-1)
 {
    QCoreApplication *app = QCoreApplication::instance();
+
    if (app && app->thread() != thread()) {
       moveToThread(app->thread());
    }
@@ -352,11 +354,15 @@ QSocks5BindStore::~QSocks5BindStore()
 void QSocks5BindStore::add(qintptr socketDescriptor, QSocks5BindData *bindData)
 {
    QRecursiveMutexLocker lock(&mutex);
+
    if (store.contains(socketDescriptor)) {
       // qDebug() << "delete it";
    }
+
    bindData->timeStamp.start();
+
    store.insert(socketDescriptor, bindData);
+
    // start sweep timer if not started
    if (sweepTimerId == -1) {
       sweepTimerId = startTimer(60000);
@@ -385,6 +391,7 @@ QSocks5BindData *QSocks5BindStore::retrieve(qintptr socketDescriptor)
    } else {
       QSOCKS5_DEBUG << "__ERROR__ binddata == 0";
    }
+
    // stop the sweep timer if not needed
    if (store.isEmpty()) {
       killTimer(sweepTimerId);
@@ -612,14 +619,17 @@ void QSocks5SocketEnginePrivate::setErrorState(Socks5State state, const QString 
                   q->setError(QAbstractSocket::ProxyConnectionRefusedError,
                               QSocks5SocketEngine::tr("Connection to proxy refused"));
                   break;
+
                case QAbstractSocket::RemoteHostClosedError:
                   q->setError(QAbstractSocket::ProxyConnectionClosedError,
                               QSocks5SocketEngine::tr("Connection to proxy closed prematurely"));
                   break;
+
                case QAbstractSocket::HostNotFoundError:
                   q->setError(QAbstractSocket::ProxyNotFoundError,
                               QSocks5SocketEngine::tr("Proxy host not found"));
                   break;
+
                case QAbstractSocket::SocketTimeoutError:
                   if (state == ConnectError) {
                      q->setError(QAbstractSocket::ProxyConnectionTimeoutError,
