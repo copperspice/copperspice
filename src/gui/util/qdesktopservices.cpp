@@ -169,4 +169,4 @@ QString QDesktopServices::storageLocationImpl(QStandardPaths::StandardLocation t
 
    return QStandardPaths::writableLocation(type);
 }
-#endif // QT_NO_DESKTOPSERVICES
+#endif

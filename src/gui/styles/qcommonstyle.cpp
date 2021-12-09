@@ -2425,8 +2425,9 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                   }
                   break;
                case QFrame::StyledPanel:
-                  //keep the compatibility with Qt 4.4 if there is a proxy style.
-                  //be sure to call drawPrimitive(QStyle::PE_Frame) on the proxy style
+                  // keep backwards compatibility if there is a proxy style.
+                  // be sure to call drawPrimitive(QStyle::PE_Frame) on the proxy style
+
                   if (widget) {
                      widget->style()->drawPrimitive(QStyle::PE_Frame, opt, p, widget);
                   } else {
@@ -3051,8 +3052,8 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                   break;
 
                case QFrame::StyledPanel:
-                  //keep the compatibility with Qt 4.4 if there is a proxy style.
-                  //be sure to call drawPrimitive(QStyle::SE_FrameContents) on the proxy style
+                  // keep backwards compatibility if there is a proxy style.
+                  // be sure to call drawPrimitive(QStyle::SE_FrameContents) on the proxy style
 
                   if (widget) {
                      return widget->style()->subElementRect(QStyle::SE_FrameContents, opt, widget);

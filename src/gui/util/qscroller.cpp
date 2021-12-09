@@ -439,7 +439,8 @@ QPointF QScroller::pixelPerMeter() const
          ppm.ry() /= QLineF(p0, py).length();
       }
    }
-#endif // QT_NO_GRAPHICSVIEW
+#endif
+
    return ppm;
 }
 
@@ -757,18 +758,6 @@ void QScrollerPrivate::timerTick()
 #endif
 }
 
-/*!
-    This function is used by gesture recognizers to inform the scroller about a new input event.
-    The scroller changes its internal state() according to the input event and its attached
-    scroller properties. The scroller doesn't distinguish between the kind of input device the
-    event came from. Therefore the event needs to be split into the \a input type, a \a position and a
-    milli-second \a timestamp.  The \a position needs to be in the target's coordinate system.
-
-    The return value is \c true if the event should be consumed by the calling filter or \c false
-    if the event should be forwarded to the control.
-
-    \note Using grabGesture() should be sufficient for most use cases.
-*/
 bool QScroller::handleInput(Input input, const QPointF &position, qint64 timestamp)
 {
    Q_D(QScroller);
@@ -804,38 +793,22 @@ bool QScroller::handleInput(Input input, const QPointF &position, qint64 timesta
 
 
 
-/*! \internal
-    Returns the resolution of the used screen.
-*/
 QPointF QScrollerPrivate::dpi() const
 {
    return pixelPerMeter * qreal(0.0254);
 }
 
-/*! \internal
-    Sets the resolution used for scrolling.
-    This resolution is only used by the kinetic scroller. If you change this
-    then the scroller will behave quite different as a lot of the values are
-    given in physical distances (millimeter).
-*/
 void QScrollerPrivate::setDpi(const QPointF &dpi)
 {
    pixelPerMeter = dpi / qreal(0.0254);
 }
 
-/*! \internal
-    Sets the dpi used for scrolling to the value of the widget.
-*/
 void QScrollerPrivate::setDpiFromWidget(QWidget *widget)
 {
    const QScreen *tmp = QApplication::screens().at(QApplication::desktop()->screenNumber(widget));
    setDpi(QPointF(tmp->physicalDotsPerInchX(), tmp->physicalDotsPerInchY()));
 }
 
-/*! \internal
-    Updates the velocity during dragging.
-    Sets releaseVelocity.
-*/
 void QScrollerPrivate::updateVelocity(const QPointF &deltaPixelRaw, qint64 deltaTime)
 {
    if (deltaTime <= 0) {

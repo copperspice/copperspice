@@ -58,7 +58,8 @@ QLayoutPolicy::ControlType QLayoutPolicy::controlType() const
 
 QDataStream &operator<<(QDataStream &stream, const QLayoutPolicy &policy)
 {
-   // The order here is for historical reasons. (compatibility with Qt4)
+   // order here is for historical reasons
+
    quint32 data = (policy.bits.horPolicy |         // [0, 3]
          policy.bits.verPolicy << 4 |    // [4, 7]
          policy.bits.hfw << 8 |          // [8]

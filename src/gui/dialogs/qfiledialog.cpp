@@ -173,9 +173,6 @@ bool QFileDialog::restoreState(const QByteArray &state)
    return d->restoreWidgetState(history, -1);
 }
 
-/*!
-    \reimp
-*/
 void QFileDialog::changeEvent(QEvent *e)
 {
    Q_D(QFileDialog);
@@ -1656,7 +1653,7 @@ void QFileDialogListView::keyPressEvent(QKeyEvent *e)
       QListView::keyPressEvent(e);
       return;
    }
-#endif // QT_KEYPAD_NAVIGATION
+#endif
 
    if (! d_ptr->itemViewKeyboardEvent(e)) {
       QListView::keyPressEvent(e);

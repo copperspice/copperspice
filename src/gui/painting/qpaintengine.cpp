@@ -355,11 +355,6 @@ void QPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
    }
 }
 
-/*!
-    The default implementation splits the list of lines in \a lines
-    into \a lineCount separate calls to drawPath() or drawPolygon()
-    depending on the feature set of the paint engine.
-*/
 void QPaintEngine::drawLines(const QLineF *linePtr, int lineCount)
 {
    for (int i = 0; i < lineCount; ++i) {
@@ -430,11 +425,6 @@ void QPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
    }
 }
 
-/*!
-    Draws the first \a rectCount rectangles in the buffer \a
-    rects. The default implementation of this function calls drawPath()
-    or drawPolygon() depending on the feature set of the paint engine.
-*/
 void QPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
    if (hasFeature(PainterPaths) &&

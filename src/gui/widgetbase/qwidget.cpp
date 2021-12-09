@@ -5663,8 +5663,6 @@ void QWidgetPrivate::show_recursive()
 {
    Q_Q(QWidget);
 
-   // polish if necessary
-
    if (! q->testAttribute(Qt::WA_WState_Created)) {
       createRecursively();
    }

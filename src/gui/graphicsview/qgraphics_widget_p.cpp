@@ -739,7 +739,7 @@ void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent
 
    Q_Q(QGraphicsWidget);
    if (hasDecoration()) {
-      // ### restore the cursor, don't override it
+      // ### restore the cursor, do not override it
 #ifndef QT_NO_CURSOR
       q->unsetCursor();
 #endif
@@ -767,9 +767,6 @@ bool QGraphicsWidgetPrivate::hasDecoration() const
    return (m_flags & Qt::Window) && (m_flags & Qt::WindowTitleHint);
 }
 
-/**
- * is called after a reparent has taken place to fix up the focus chain(s)
- */
 void QGraphicsWidgetPrivate::fixFocusChainBeforeReparenting(QGraphicsWidget *newParent, QGraphicsScene *oldScene,
    QGraphicsScene *newScene)
 {

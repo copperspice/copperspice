@@ -50,7 +50,7 @@
 #endif
 
 #if defined(Q_OS_UNIX)
-// We don not use separate debug and release libs on UNIX, so we want
+// We do not use separate debug and release libs on UNIX,
 // to allow loading plugins, regardless of how they were built
 #  define QT_NO_DEBUG_PLUGIN_CHECK
 #endif

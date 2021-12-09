@@ -38,9 +38,9 @@
 static bool qt_file_engine_handlers_in_use = false;
 
 /*
-    All application-wide handlers are stored in this list. The mutex must be
+    All application wide handlers are stored in this list. The mutex must be
     acquired to ensure thread safety.
- */
+*/
 
 static QReadWriteLock *fileEngineHandlerMutex()
 {
@@ -81,11 +81,6 @@ QAbstractFileEngineHandler::~QAbstractFileEngineHandler()
    }
 }
 
-/*
-   \ìnternal
-
-   Handles calls to custom file engine handlers.
-*/
 QAbstractFileEngine *qt_custom_file_engine_handler_create(const QString &path)
 {
    QAbstractFileEngine *engine = nullptr;

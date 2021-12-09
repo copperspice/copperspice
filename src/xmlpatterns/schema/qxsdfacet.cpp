@@ -23,8 +23,6 @@
 
 #include "qxsdfacet_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdFacet::XsdFacet()
@@ -134,4 +132,3 @@ QString XsdFacet::typeName(Type type)
    }
 }
 
-QT_END_NAMESPACE

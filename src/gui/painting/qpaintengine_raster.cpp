@@ -1369,9 +1369,6 @@ void QRasterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
    }
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
 #ifdef QT_DEBUG_DRAW
@@ -1816,9 +1813,6 @@ void QRasterPaintEngine::drawPolygon(const QPointF *points, int pointCount, Poly
    }
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, PolygonDrawMode mode)
 {
    Q_D(QRasterPaintEngine);
@@ -2438,7 +2432,7 @@ void QRasterPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap,
    }
 }
 
-//QWS hack
+// QWS
 static inline bool monoVal(const uchar *s, int x)
 {
    return  (s[x >> 3] << (x & 7)) & 0x80;
@@ -3040,9 +3034,6 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
    }
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawPoints(const QPointF *pointPtr, int pointCount)
 {
    Q_D(QRasterPaintEngine);

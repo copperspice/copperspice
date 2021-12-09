@@ -1726,7 +1726,7 @@ void QGuiApplicationPrivate::processWheelEvent(QWindowSystemInterfacePrivate::Wh
    ev.setTimestamp(e->timestamp);
    QGuiApplication::sendSpontaneousEvent(window, &ev);
 
-#endif /* ifndef QT_NO_WHEELEVENT */
+#endif
 }
 
 

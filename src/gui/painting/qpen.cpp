@@ -75,21 +75,11 @@ static QPenDataHolder *nullPenInstance()
    return &retval;
 }
 
-/*!
-    Constructs a default black solid line pen with 0 width.
-*/
-
 QPen::QPen()
 {
    d = defaultPenInstance()->pen;
    d->ref.ref();
 }
-
-/*!
-    Constructs a black pen with 0 width and the given \a style.
-
-    \sa setStyle()
-*/
 
 QPen::QPen(Qt::PenStyle style)
 {

@@ -145,7 +145,7 @@ QDebug operator<<(QDebug debug, const QMainWindowLayout *layout)
    debug << layout->layoutState.dockAreaLayout;
    return debug;
 }
-#endif // !defined(QT_NO_DOCKWIDGET)
+#endif
 
 #ifndef QT_NO_DOCKWIDGET
 class QDockWidgetGroupLayout : public QLayout

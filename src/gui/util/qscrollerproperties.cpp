@@ -62,67 +62,31 @@ QScrollerPropertiesPrivate *QScrollerPropertiesPrivate::defaults()
    return new QScrollerPropertiesPrivate(userDefaults ? *userDefaults : *systemDefaults);
 }
 
-/*!
-    \class QScrollerProperties
-    \brief The QScrollerProperties class stores the settings for a QScroller.
-    \since 4.8
-
-    \inmodule QtWidgets
-
-    The QScrollerProperties class stores the parameters used by QScroller.
-
-    The default settings are platform dependent so that Qt emulates the
-    platform behaviour for kinetic scrolling.
-
-    As a convention the QScrollerProperties are in physical units (meter,
-    seconds) and are converted by QScroller using the current DPI.
-
-    \sa QScroller
-*/
-
-/*!
-    Constructs new scroller properties.
-*/
 QScrollerProperties::QScrollerProperties()
    : d(QScrollerPropertiesPrivate::defaults())
 {
 }
 
-/*!
-    Constructs a copy of \a sp.
-*/
 QScrollerProperties::QScrollerProperties(const QScrollerProperties &sp)
    : d(new QScrollerPropertiesPrivate(*sp.d))
 {
 }
 
-/*!
-    Assigns \a sp to these scroller properties and returns a reference to these scroller properties.
-*/
 QScrollerProperties &QScrollerProperties::operator=(const QScrollerProperties &sp)
 {
    *d.data() = *sp.d.data();
    return *this;
 }
 
-/*!
-    Destroys the scroller properties.
-*/
 QScrollerProperties::~QScrollerProperties()
 {
 }
 
-/*!
-    Returns \c true if these scroller properties are equal to \a sp; otherwise returns \c false.
-*/
 bool QScrollerProperties::operator==(const QScrollerProperties &sp) const
 {
    return *d.data() == *sp.d.data();
 }
 
-/*!
-    Returns \c true if these scroller properties are different from \a sp; otherwise returns \c false.
-*/
 bool QScrollerProperties::operator!=(const QScrollerProperties &sp) const
 {
    return !(*d.data() == *sp.d.data());

@@ -415,7 +415,7 @@ class Q_GUI_EXPORT QTabletEvent : public QInputEvent
 
    void *mExtra;
 };
-#endif // QT_NO_TABLETEVENT
+#endif
 
 #ifndef QT_NO_GESTURES
 class Q_GUI_EXPORT QNativeGestureEvent : public QInputEvent
@@ -702,7 +702,7 @@ class Q_GUI_EXPORT QContextMenuEvent : public QInputEvent
    QPoint gp;
    uint reas : 8;
 };
-#endif // QT_NO_CONTEXTMENU
+#endif
 
 #ifndef QT_NO_INPUTMETHOD
 class Q_GUI_EXPORT QInputMethodEvent : public QEvent

@@ -54,10 +54,6 @@ QDateTimeEdit::QDateTimeEdit(QWidget *parent)
    d->init(QDateTime(QDATETIMEEDIT_DATE_INITIAL, QDATETIMEEDIT_TIME_MIN));
 }
 
-/*!
-  Constructs an empty date time editor with a \a parent. The value
-  is set to \a datetime.
-*/
 
 QDateTimeEdit::QDateTimeEdit(const QDateTime &datetime, QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
@@ -305,14 +301,6 @@ void QDateTimeEdit::setTimeRange(const QTime &min, const QTime &max)
    }
 }
 
-/*!
-  \property QDateTimeEdit::displayedSections
-
-  \brief the currently displayed fields of the date time edit
-
-  Returns a bit set of the displayed sections for this format.
-  \a setDisplayFormat(), displayFormat()
-*/
 
 QDateTimeEdit::Sections QDateTimeEdit::displayedSections() const
 {
@@ -320,12 +308,6 @@ QDateTimeEdit::Sections QDateTimeEdit::displayedSections() const
    return d->sections;
 }
 
-/*!
-  \property QDateTimeEdit::currentSection
-
-  \brief the current section of the spinbox
-  \a setCurrentSection()
-*/
 
 QDateTimeEdit::Section QDateTimeEdit::currentSection() const
 {
@@ -361,15 +343,6 @@ void QDateTimeEdit::setCurrentSection(Section section)
    }
 }
 
-/*!
-  \since 4.3
-
-  Returns the Section at \a index.
-
-  If the format is 'yyyy/MM/dd', sectionAt(0) returns YearSection,
-  sectionAt(1) returns MonthSection, and sectionAt(2) returns
-  YearSection,
-*/
 
 QDateTimeEdit::Section QDateTimeEdit::sectionAt(int index) const
 {
@@ -380,14 +353,6 @@ QDateTimeEdit::Section QDateTimeEdit::sectionAt(int index) const
    return d->convertToPublic(d->sectionType(index));
 }
 
-/*!
-  \since 4.3
-
-  \property QDateTimeEdit::sectionCount
-
-  \brief the number of sections displayed.
-  If the format is 'yyyy/yy/yyyy', sectionCount returns 3
-*/
 
 int QDateTimeEdit::sectionCount() const
 {
@@ -410,14 +375,6 @@ void QDateTimeEdit::setCurrentSectionIndex(int index)
    d->edit->setCursorPosition(d->sectionPos(index));
 }
 
-/*!
-  \since 4.4
-
-  \brief Returns the calendar widget for the editor if calendarPopup is
-  set to true and (sections() & DateSections_Mask) != 0.
-
-  This function creates and returns a calendar widget if none has been set.
-*/
 
 
 QCalendarWidget *QDateTimeEdit::calendarWidget() const
@@ -432,15 +389,6 @@ QCalendarWidget *QDateTimeEdit::calendarWidget() const
    return d->monthCalendar->calendarWidget();
 }
 
-/*!
-  \since 4.4
-
-  Sets the given \a calendarWidget as the widget to be used for the calendar
-  pop-up. The editor does not automatically take ownership of the calendar widget.
-
-  \note calendarPopup must be set to true before setting the calendar widget.
-  \sa calendarPopup
-*/
 void QDateTimeEdit::setCalendarWidget(QCalendarWidget *calendarWidget)
 {
    Q_D(QDateTimeEdit);
@@ -461,19 +409,6 @@ void QDateTimeEdit::setCalendarWidget(QCalendarWidget *calendarWidget)
    d->initCalendarPopup(calendarWidget);
 }
 
-
-/*!
-  \since 4.2
-
-  Selects \a section. If \a section doesn't exist in the currently
-  displayed sections this function does nothing. If \a section is
-  NoSection this function will unselect all text in the editor.
-  Otherwise this function will move the cursor and the current section
-  to the selected section.
-
-  \sa currentSection()
-*/
-
 void QDateTimeEdit::setSelectedSection(Section section)
 {
    Q_D(QDateTimeEdit);
@@ -489,13 +424,6 @@ void QDateTimeEdit::setSelectedSection(Section section)
 
 
 
-/*!
-  \fn QString QDateTimeEdit::sectionText(Section section) const
-
-  Returns the text from the given \a section.
-
-  \sa currentSection()
-*/
 
 QString QDateTimeEdit::sectionText(Section section) const
 {
@@ -509,31 +437,6 @@ QString QDateTimeEdit::sectionText(Section section) const
    return d->sectionText(sectionIndex);
 }
 
-/*!
-  \property QDateTimeEdit::displayFormat
-
-  \brief the format used to display the time/date of the date time edit
-
-  This format is the same as the one used described in QDateTime::toString()
-  and QDateTime::fromString()
-
-  Example format strings (assuming that the date is 2nd of July 1969):
-
-  \table
-  \header \i Format \i Result
-  \row \i dd.MM.yyyy \i 02.07.1969
-  \row \i MMM d yy \i Jul 2 69
-  \row \i MMMM d yy \i July 2 69
-  \endtable
-
-  Note that if you specify a two digit year, it will be interpreted
-  to be in the century in which the date time edit was initialized.
-  The default century is the 21 (2000-2099).
-
-  If you specify an invalid format the format will not be set.
-
-  \sa QDateTime::toString(), displayedSections()
-*/
 
 QString QDateTimeEdit::displayFormat() const
 {
@@ -594,16 +497,6 @@ void QDateTimeEdit::setDisplayFormat(const QString &format)
    }
 }
 
-/*!
-    \property QDateTimeEdit::calendarPopup
-    \brief the current calendar pop-up showing mode.
-    \since 4.2
-
-    The calendar pop-up will be shown upon clicking the arrow button.
-    This property is valid only if there is a valid date display format.
-
-    \sa setDisplayFormat()
-*/
 
 bool QDateTimeEdit::calendarPopup() const
 {
@@ -629,12 +522,6 @@ void QDateTimeEdit::setCalendarPopup(bool enable)
    update();
 }
 
-/*!
-    \property QDateTimeEdit::timeSpec
-    \brief the current timespec used by the date time edit.
-    \since 4.4
-*/
-
 Qt::TimeSpec QDateTimeEdit::timeSpec() const
 {
    Q_D(const QDateTimeEdit);
@@ -650,9 +537,6 @@ void QDateTimeEdit::setTimeSpec(Qt::TimeSpec spec)
    }
 }
 
-/*!
-  \reimp
-*/
 
 QSize QDateTimeEdit::sizeHint() const
 {
@@ -1039,8 +923,8 @@ void QDateTimeEdit::stepBy(int steps)
       return;
    }
 #endif
-   // don't optimize away steps == 0. This is the only way to select
-   // the currentSection in Qt 4.1.x
+   // do not optimize away steps == 0, this is the only way to select the currentSection
+
    if (d->specialValue() && displayedSections() != AmPmSection) {
       for (int i = 0; i < d->sectionNodes.size(); ++i) {
          if (d->sectionType(i) != QDateTimeParser::AmPmSection) {
@@ -1056,29 +940,12 @@ void QDateTimeEdit::stepBy(int steps)
    d->updateTimeSpec();
 }
 
-/*!
-  This virtual function is used by the date time edit whenever it
-  needs to display \a dateTime.
-
-  If you reimplement this, you may also need to reimplement validate().
-
-  \sa dateTimeFromText(), validate()
-*/
 QString QDateTimeEdit::textFromDateTime(const QDateTime &dateTime) const
 {
    Q_D(const QDateTimeEdit);
    return locale().toString(dateTime, d->displayFormat);
 }
 
-
-/*!
-  Returns an appropriate datetime for the given \a text.
-
-  This virtual function is used by the datetime edit whenever it
-  needs to interpret text entered by the user as a value.
-
-  \sa textFromDateTime(), validate()
-*/
 QDateTime QDateTimeEdit::dateTimeFromText(const QString &text) const
 {
    Q_D(const QDateTimeEdit);
@@ -1088,10 +955,6 @@ QDateTime QDateTimeEdit::dateTimeFromText(const QString &text) const
    return d->validateAndInterpret(copy, pos, state);
 }
 
-/*!
-  \reimp
-*/
-
 QValidator::State QDateTimeEdit::validate(QString &text, int &pos) const
 {
    Q_D(const QDateTimeEdit);
@@ -1100,9 +963,6 @@ QValidator::State QDateTimeEdit::validate(QString &text, int &pos) const
    return state;
 }
 
-/*!
-  \reimp
-*/
 
 
 void QDateTimeEdit::fixup(QString &input) const
@@ -1114,10 +974,6 @@ void QDateTimeEdit::fixup(QString &input) const
    d->validateAndInterpret(input, copy, state, true);
 }
 
-
-/*!
-  \reimp
-*/
 
 QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
 {

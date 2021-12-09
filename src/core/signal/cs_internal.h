@@ -209,7 +209,7 @@ CSVoidReturn cs_unpack_method_args(const MethodClass *obj, void (MethodClass::*m
 template <class T1, class T2>
 class prePend
 {
-   // required class to utilze a specialization
+   // required class to utilize a specialization
 };
 
 template <class T, class ...Ts>
@@ -503,7 +503,7 @@ bool Bento<T>::operator ==(const BentoAbstract &) const
 template<class T>
 void Bento<T>::invoke(SlotBase *, const TeaCupAbstract *dataPack) const
 {
-   // T must be a class or it will be a compiler erroe
+   // T must be a class or it will be a compiler error
    auto methodPtr = &T::operator();
 
    this->invoke_internal(dataPack, methodPtr);

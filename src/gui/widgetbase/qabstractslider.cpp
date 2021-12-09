@@ -329,11 +329,6 @@ void QAbstractSlider::triggerAction(SliderAction action)
    setValue(d->position);
 }
 
-/*!  Sets action \a action to be triggered repetitively in intervals
-of \a repeatTime, after an initial delay of \a thresholdTime.
-
-\sa triggerAction() repeatAction()
- */
 void QAbstractSlider::setRepeatAction(SliderAction action, int thresholdTime, int repeatTime)
 {
    Q_D(QAbstractSlider);
@@ -345,18 +340,12 @@ void QAbstractSlider::setRepeatAction(SliderAction action, int thresholdTime, in
    }
 }
 
-/*!
-  Returns the current repeat action.
-  \sa setRepeatAction()
- */
 QAbstractSlider::SliderAction QAbstractSlider::repeatAction() const
 {
    Q_D(const QAbstractSlider);
    return d->repeatAction;
 }
 
-/*!\reimp
- */
 void QAbstractSlider::timerEvent(QTimerEvent *e)
 {
    Q_D(QAbstractSlider);
@@ -375,13 +364,6 @@ void QAbstractSlider::timerEvent(QTimerEvent *e)
    }
 }
 
-/*!
-    Reimplement this virtual function to track slider changes such as
-    \l SliderRangeChange, \l SliderOrientationChange, \l
-    SliderStepsChange, or \l SliderValueChange. The default
-    implementation only updates the display and ignores the \a change
-    parameter.
- */
 void QAbstractSlider::sliderChange(SliderChange)
 {
    update();
@@ -453,9 +435,6 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
    return true;
 }
 
-/*!
-    \reimp
-*/
 #ifndef QT_NO_WHEELEVENT
 void QAbstractSlider::wheelEvent(QWheelEvent *e)
 {
@@ -469,9 +448,6 @@ void QAbstractSlider::wheelEvent(QWheelEvent *e)
 
 #endif
 
-/*!
-    \reimp
-*/
 void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
 {
    Q_D(QAbstractSlider);
@@ -619,9 +595,6 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
    }
 }
 
-/*!
-    \reimp
-*/
 void QAbstractSlider::changeEvent(QEvent *ev)
 {
    Q_D(QAbstractSlider);
@@ -638,9 +611,6 @@ void QAbstractSlider::changeEvent(QEvent *ev)
    }
 }
 
-/*!
-    \reimp
-*/
 bool QAbstractSlider::event(QEvent *e)
 {
 #ifdef QT_KEYPAD_NAVIGATION

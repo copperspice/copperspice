@@ -55,9 +55,6 @@ QFontMetrics::QFontMetrics(const QFont &font, QPaintDevice *paintdevice)
 
 }
 
-/*!
-    Constructs a copy of \a fm.
-*/
 QFontMetrics::QFontMetrics(const QFontMetrics &other)
    : d(other.d.data())
 {

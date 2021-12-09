@@ -1407,32 +1407,18 @@ bool QMenuBar::eventFilter(QObject *object, QEvent *event)
    return false;
 }
 
-/*!
-  Returns the QAction at \a pt. Returns 0 if there is no action at \a pt or if
-the location has a separator.
-
-    \sa addAction(), addSeparator()
-*/
 QAction *QMenuBar::actionAt(const QPoint &pt) const
 {
    Q_D(const QMenuBar);
    return d->actionAt(pt);
 }
 
-/*!
-  Returns the geometry of action \a act as a QRect.
-
-    \sa actionAt()
-*/
 QRect QMenuBar::actionGeometry(QAction *act) const
 {
    Q_D(const QMenuBar);
    return d->actionRect(act);
 }
 
-/*!
-  \reimp
-*/
 QSize QMenuBar::minimumSizeHint() const
 {
    Q_D(const QMenuBar);

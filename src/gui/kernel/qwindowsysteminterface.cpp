@@ -43,26 +43,13 @@ QMutex QWindowSystemInterfacePrivate::flushEventMutex;
 QAtomicInt QWindowSystemInterfacePrivate::eventAccepted;
 QWindowSystemEventHandler *QWindowSystemInterfacePrivate::eventHandler;
 
-//------------------------------------------------------------
 //
-// Callback functions for plugins:
+// Callback functions for plugins
 //
 
 QWindowSystemInterfacePrivate::WindowSystemEventList QWindowSystemInterfacePrivate::windowSystemEventQueue;
 
 extern QPointer<QWindow> qt_last_mouse_receiver;
-
-/*!
-    \class QWindowSystemInterface
-    \since 5.0
-    \internal
-    \preliminary
-    \ingroup qpa
-    \brief The QWindowSystemInterface provides an event queue for the QPA platform.
-
-    The platform plugins call the various functions to notify about events. The events are queued
-    until sendWindowSystemEvents() is called by the event dispatcher.
-*/
 
 void QWindowSystemInterface::handleEnterEvent(QWindow *tlw, const QPointF &local, const QPointF &global)
 {
@@ -80,13 +67,6 @@ void QWindowSystemInterface::handleLeaveEvent(QWindow *tlw)
    QWindowSystemInterfacePrivate::handleWindowSystemEvent(e);
 }
 
-/*!
-    This method can be used to ensure leave and enter events are both in queue when moving from
-    one QWindow to another. This allows QWindow subclasses to check for a queued enter event
-    when handling the leave event (\c QWindowSystemInterfacePrivate::peekWindowSystemEvent) to
-    determine where mouse went and act accordingly. E.g. QWidgetWindow needs to know if mouse
-    cursor moves between windows in same window hierarchy.
-*/
 void QWindowSystemInterface::handleEnterLeaveEvent(QWindow *enter, QWindow *leave, const QPointF &local, const QPointF &global)
 {
    bool wasSynchronous = QWindowSystemInterfacePrivate::synchronousWindowSystemEvents;
@@ -130,9 +110,6 @@ void QWindowSystemInterface::handleApplicationStateChanged(Qt::ApplicationState 
    QWindowSystemInterfacePrivate::handleWindowSystemEvent(e);
 }
 
-/*!
-  If \a oldRect is null, Qt will use the previously reported geometry instead.
- */
 void QWindowSystemInterface::handleGeometryChange(QWindow *tlw, const QRect &newRect, const QRect &oldRect)
 {
    QWindowSystemInterfacePrivate::GeometryChangeEvent *e = new QWindowSystemInterfacePrivate::GeometryChangeEvent(tlw,
@@ -149,11 +126,7 @@ void QWindowSystemInterface::handleCloseEvent(QWindow *tlw, bool *accepted)
    }
 }
 
-/*!
-
-\a w == 0 means that the event is in global coords only, \a local will be ignored in this case
-
-*/
+// w == 0 means that the event is in global coords only, local will be ignored in this case
 void QWindowSystemInterface::handleMouseEvent(QWindow *w, const QPointF &local, const QPointF &global, Qt::MouseButtons b,
    Qt::KeyboardModifiers mods, Qt::MouseEventSource source)
 {
@@ -203,8 +176,7 @@ bool QWindowSystemInterface::handleShortcutEvent(QWindow *window, ulong timestam
       // Check if the shortcut is overridden by some object in the event delivery path (typically the focus object).
       // If so, we should not look up the shortcut in the shortcut map, but instead deliver the event as a regular
       // key event, so that the target that accepted the shortcut override event can handle it. Note that we only
-      // do this if the shortcut map hasn't found a partial shortcut match yet. If it has, the shortcut can not be
-      // overridden.
+      // do this if the shortcut map hasn't found a partial shortcut match yet. If it has, the shortcut can not be overridden
       QWindowSystemInterfacePrivate::KeyEvent *shortcutOverrideEvent = new QWindowSystemInterfacePrivate::KeyEvent(window, timestamp,
          QEvent::ShortcutOverride, keyCode, modifiers, nativeScanCode, nativeVirtualKey, nativeModifiers, text, autorepeat, count);
 
@@ -586,10 +558,6 @@ void QWindowSystemInterface::deferredFlushWindowSystemEvents(QEventLoop::Process
    QWindowSystemInterfacePrivate::eventsFlushed.wakeOne();
 }
 
-/*!
-    Make Qt Gui process all events on the event queue immediately. Return the
-    accepted state for the last event on the queue.
-*/
 bool QWindowSystemInterface::flushWindowSystemEvents(QEventLoop::ProcessEventsFlags flags)
 {
    const int count = QWindowSystemInterfacePrivate::windowSystemEventQueue.count();
@@ -687,14 +655,7 @@ QPlatformDropQtResponse QWindowSystemInterface::handleDrop(QWindow *w, const QMi
 {
    return QGuiApplicationPrivate::processDrop(w, dropData, QHighDpi::fromNativeLocalPosition(p, w), supportedActions);
 }
-#endif // QT_NO_DRAGANDDROP
-
-/*!
-    \fn static QWindowSystemInterface::handleNativeEvent(QWindow *window, const QByteArray &eventType, void *message, long *result)
-    \brief Passes a native event identified by \a eventType to the \a window.
-
-    \note This function can only be called from the GUI thread.
-*/
+#endif
 
 bool QWindowSystemInterface::handleNativeEvent(QWindow *window, const QByteArray &eventType, void *message, long *result)
 {

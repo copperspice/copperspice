@@ -3001,13 +3001,6 @@ void QPainter::drawLines(const QLineF *lines, int lineCount)
    d->engine->drawLines(lines, lineCount);
 }
 
-/*!
-    \fn void QPainter::drawLines(const QLine *lines, int lineCount)
-    \overload
-
-    Draws the first \a lineCount lines in the array \a lines
-    using the current pen.
-*/
 void QPainter::drawLines(const QLine *lines, int lineCount)
 {
 #ifdef QT_DEBUG_DRAW

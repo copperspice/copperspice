@@ -1123,7 +1123,7 @@ void QMessageBox::showEvent(QShowEvent *e)
 static QMessageBox::StandardButton showNewMessageBox(QWidget *parent, QMessageBox::Icon icon, const QString &title,
    const QString &text, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton)
 {
-   // necessary for source compatibility with Qt 4.0 and 4.1
+   // necessary for backwards compatibility
    // handles (Yes, No) and (Yes|Default, No)
 
    if (defaultButton && !(buttons & defaultButton)) {

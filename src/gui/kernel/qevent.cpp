@@ -45,16 +45,10 @@ QEnterEvent::QEnterEvent(const QPointF &localPos, const QPointF &windowPos, cons
 QEnterEvent::~QEnterEvent()
 {}
 
-/*!
-  \internal
-*/
 QInputEvent::QInputEvent(Type type, Qt::KeyboardModifiers modifiers)
    : QEvent(type), modState(modifiers), ts(0)
 { }
 
-/*!
-  \internal
-*/
 QInputEvent::~QInputEvent()
 { }
 
@@ -104,9 +98,6 @@ QHoverEvent::QHoverEvent(Type type, const QPointF &pos, const QPointF &oldPos, Q
    : QInputEvent(type, modifiers), p(pos), op(oldPos)
 {}
 
-/*!
-    \internal
-*/
 QHoverEvent::~QHoverEvent()
 {
 }
@@ -130,9 +121,6 @@ QWheelEvent::QWheelEvent(const QPointF &pos, int delta,
    }
 }
 
-/*!
-  \internal
-*/
 QWheelEvent::~QWheelEvent()
 {}
 
@@ -224,9 +212,7 @@ QFocusEvent::QFocusEvent(Type type, Qt::FocusReason reason)
    : QEvent(type), m_reason(reason)
 {}
 
-/*!
-    \internal
-*/
+// internal
 QFocusEvent::~QFocusEvent()
 { }
 
@@ -243,9 +229,7 @@ QPaintEvent::QPaintEvent(const QRect &paintRect)
    : QEvent(Paint), m_rect(paintRect), m_region(paintRect), m_erased(false)
 {}
 
-/*!
-  \internal
-*/
+// internal
 QPaintEvent::~QPaintEvent()
 { }
 
@@ -253,9 +237,7 @@ QMoveEvent::QMoveEvent(const QPoint &pos, const QPoint &oldPos)
    : QEvent(Move), p(pos), oldp(oldPos)
 {}
 
-/*!
-  \internal
-*/
+// internal
 QMoveEvent::~QMoveEvent()
 { }
 
@@ -263,9 +245,6 @@ QExposeEvent::QExposeEvent(const QRegion &exposeRegion)
    : QEvent(Expose), rgn(exposeRegion)
 { }
 
-/*!
-  \internal
-*/
 QExposeEvent::~QExposeEvent()
 {
 }
@@ -274,7 +253,6 @@ QPlatformSurfaceEvent::QPlatformSurfaceEvent(SurfaceEventType surfaceEventType)
    , m_surfaceEventType(surfaceEventType)
 { }
 
-// internal
 QPlatformSurfaceEvent::~QPlatformSurfaceEvent()
 { }
 
@@ -282,7 +260,6 @@ QResizeEvent::QResizeEvent(const QSize &size, const QSize &oldSize)
    : QEvent(Resize), s(size), olds(oldSize)
 {}
 
-// internal
 QResizeEvent::~QResizeEvent()
 {}
 
@@ -290,7 +267,6 @@ QCloseEvent::QCloseEvent()
    : QEvent(Close)
 {}
 
-// internal
 QCloseEvent::~QCloseEvent()
 { }
 
@@ -300,7 +276,6 @@ QIconDragEvent::QIconDragEvent()
    ignore();
 }
 
-// internal
 QIconDragEvent::~QIconDragEvent()
 { }
 
@@ -314,7 +289,6 @@ QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPo
    : QInputEvent(ContextMenu, modifiers), p(pos), gp(globalPos), reas(reason)
 {}
 
-// internal
 QContextMenuEvent::~QContextMenuEvent()
 {}
 
@@ -395,7 +369,6 @@ QTabletEvent::QTabletEvent(Type type, const QPointF &pos, const QPointF &globalP
 {
 }
 
-// internal
 QTabletEvent::~QTabletEvent()
 {}
 

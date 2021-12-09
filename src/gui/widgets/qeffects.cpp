@@ -315,13 +315,6 @@ void QAlphaWidget::alphaBlend()
    }
 }
 
-/*
-  Internal class QRollEffect
-
-  The QRollEffect widget is shown while the animation lasts
-  and displays a scrolling pixmap.
-*/
-
 class QRollEffect : public QWidget, private QEffects
 {
    GUI_CS_OBJECT(QRollEffect)

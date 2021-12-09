@@ -538,10 +538,6 @@ int QSplitterPrivate::findWidgetJustBeforeOrJustAfter(int index, int delta, int 
    return -1;
 }
 
-/*
-  For the splitter handle with index \a index, \a min and \a max give the range without collapsing any widgets,
-  and \a farMin and farMax give the range with collapsing included.
-*/
 void QSplitterPrivate::getRange(int index, int *farMin, int *min, int *max, int *farMax) const
 {
    Q_Q(const QSplitter);

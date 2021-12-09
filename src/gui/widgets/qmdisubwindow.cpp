@@ -614,9 +614,7 @@ QMenuBar *QMdiSubWindowPrivate::menuBar() const
 #endif
 }
 
-/*
-    \internal
-*/
+// internal
 void ControlContainer::showButtonsInMenuBar(QMenuBar *menuBar)
 {
    if (!menuBar || !mdiChild || mdiChild->windowFlags() & Qt::FramelessWindowHint) {
@@ -1678,9 +1676,6 @@ int QMdiSubWindowPrivate::titleBarHeight(const QStyleOptionTitleBar &options) co
    return height;
 }
 
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::sizeParameters(int *margin, int *minWidth) const
 {
    Q_Q(const QMdiSubWindow);
@@ -2130,9 +2125,6 @@ void QMdiSubWindowPrivate::addToSystemMenu(WindowStateAction action, const QStri
 #endif
 #endif // QT_NO_ACTION
 
-/*!
-    \internal
-*/
 QSize QMdiSubWindowPrivate::iconSize() const
 {
    Q_Q(const QMdiSubWindow);
@@ -3267,9 +3259,6 @@ void QMdiSubWindow::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
    }
 }
 
-/*!
-    \reimp
-*/
 void QMdiSubWindow::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
    if (!parent()) {

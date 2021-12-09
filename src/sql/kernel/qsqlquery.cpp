@@ -70,9 +70,6 @@ QSqlQueryPrivate *QSqlQueryPrivate::shared_null()
    return null;
 }
 
-/*!
-\internal
-*/
 QSqlQueryPrivate::QSqlQueryPrivate(QSqlResult *result)
    : ref(1), sqlResult(result)
 {

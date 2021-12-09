@@ -282,17 +282,15 @@ Qt::Orientations QWidgetItem::expandingDirections() const
 
    Qt::Orientations e = wid->sizePolicy().expandingDirections();
 
-   /*
-     ### Qt 4.0:
-     If the layout is expanding, we make the widget expanding, even if
-     its own size policy isn't expanding. This behavior should be reconsidered.
-   */
+   //  If the layout is expanding then make the widget expanding, even if
+   //  its own size policy isn't expanding. This behavior should be reconsidered.
 
    if (wid->layout()) {
       if (wid->sizePolicy().horizontalPolicy() & QSizePolicy::GrowFlag
          && (wid->layout()->expandingDirections() & Qt::Horizontal)) {
          e |= Qt::Horizontal;
       }
+
       if (wid->sizePolicy().verticalPolicy() & QSizePolicy::GrowFlag
          && (wid->layout()->expandingDirections() & Qt::Vertical)) {
          e |= Qt::Vertical;

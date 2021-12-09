@@ -158,6 +158,7 @@ QDialog::QDialog(QWidget *parent, Qt::WindowFlags flags)
 {
 }
 
+// internal
 QDialog::QDialog(QDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags)
    : QWidget(dd, parent, flags | ((flags & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
 {

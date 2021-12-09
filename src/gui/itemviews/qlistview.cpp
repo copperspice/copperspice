@@ -564,11 +564,8 @@ void QListView::wheelEvent(QWheelEvent *e)
       QApplication::sendEvent(d->hbar, e);
    }
 }
-#endif // QT_NO_WHEELEVENT
+#endif
 
-/*!
-  \reimp
-*/
 void QListView::timerEvent(QTimerEvent *e)
 {
    Q_D(QListView);

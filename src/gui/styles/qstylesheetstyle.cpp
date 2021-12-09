@@ -6225,7 +6225,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
             }
          }
          break;
-#endif // QT_NO_ITEMVIEWS
+#endif
 
       case SE_HeaderArrow: {
          QRenderRule subRule = renderRule(w, opt, PseudoElement_HeaderViewUpArrow);

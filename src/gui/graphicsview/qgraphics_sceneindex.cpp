@@ -189,12 +189,6 @@ QGraphicsSceneIndexPrivate::~QGraphicsSceneIndexPrivate()
 {
 }
 
-/*!
-    \internal
-
-    Checks if item collides with the path and mode, but also checks that if it
-    doesn't collide, maybe its frame rect will.
-*/
 bool QGraphicsSceneIndexPrivate::itemCollidesWithPath(const QGraphicsItem *item,
    const QPainterPath &path,
    Qt::ItemSelectionMode mode)
@@ -219,10 +213,6 @@ bool QGraphicsSceneIndexPrivate::itemCollidesWithPath(const QGraphicsItem *item,
    return false;
 }
 
-/*!
-    \internal
-    This function returns the items in ascending order.
-*/
 void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRectF exposeRect,
    QGraphicsSceneIndexIntersector intersect,
    QList<QGraphicsItem *> *items,

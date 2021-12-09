@@ -269,7 +269,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       while (p) {
          int parentFlags = p->d_ptr->itemFlags;
 
-         // If I have a parent, and I don't ignore my parent's opacity, and my
+         // If I have a parent and I don't ignore my parent's opacity, and my
          // parent propagates to me, then combine my local opacity with my parent's
          // effective opacity into my effective opacity.
          if ((myFlags & QGraphicsItem::ItemIgnoresParentOpacity)
@@ -603,8 +603,7 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
       return qt_closestLeaf(item1, item2);
    }
 
-   // Find common ancestor, and each item's ancestor closest to the common
-   // ancestor.
+   // Find common ancestor, and each item's ancestor closest to the common ancestor
    int item1Depth = d1->depth();
    int item2Depth = d2->depth();
    const QGraphicsItem *p = item1;

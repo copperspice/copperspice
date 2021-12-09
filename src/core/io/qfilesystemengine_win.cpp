@@ -190,11 +190,12 @@ static void resolveLibs()
       // protect initialization
 
       QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
-      // check triedResolve again, since another thread may have already
-      // done the initialization
+
+      // check triedResolve again, since another thread may have already done the initialization
+
       if (triedResolve) {
          // another thread did initialize the security function pointers,
-         // so we shouldn't do it again.
+         // so we shouldn't do it again
          return;
       }
 

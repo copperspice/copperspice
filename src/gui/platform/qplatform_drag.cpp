@@ -117,13 +117,10 @@ Qt::DropAction QPlatformDrag::defaultAction(Qt::DropActions possibleActions, Qt:
    return default_action;
 }
 
-/*!
-    \brief Called to notify QDrag about changes of the current action.
- */
-
 void QPlatformDrag::updateAction(Qt::DropAction action)
 {
    Q_D(QPlatformDrag);
+
    if (d->cursor_drop_action != action) {
       d->cursor_drop_action = action;
       emit currentDrag()->actionChanged(action);
@@ -162,6 +159,6 @@ bool QPlatformDrag::ownsDragObject() const
    return false;
 }
 
-#endif // QT_NO_DRAGANDDROP
+#endif
 
 

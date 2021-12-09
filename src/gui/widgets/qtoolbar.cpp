@@ -656,9 +656,8 @@ void QToolBar::actionEvent(QActionEvent *event)
             "QToolBar", "Widgets can not be inserted multiple times");
 
          // reparent the action to this toolbar if it has been created
-         // using the addAction(text) etc. convenience functions, to
-         // preserve Qt 4.1.x behavior. The widget is already
-         // reparented to us due to the createWidget call inside createItem()
+         // using the addAction(text) etc. convenience functions to preserve backwards compatibility
+         // The widget is already reparented to us due to the createWidget call inside createItem()
 
          if (widgetAction != nullptr && widgetAction->d_func()->autoCreated) {
             widgetAction->setParent(this);
