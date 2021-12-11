@@ -641,13 +641,13 @@ QString QFileDialogPrivate::initialSelection(const QUrl &url)
 void QFileDialogPrivate::saveSettings()
 {
    Q_Q(QFileDialog);
-   QSettings settings(QSettings::UserScope, QLatin1String("CsProject"));
-   settings.beginGroup(QLatin1String("FileDialog"));
+   QSettings settings(QSettings::UserScope, "CsProject");
+   settings.beginGroup("FileDialog");
 
    if (usingWidgets()) {
-      settings.setValue(QLatin1String("sidebarWidth"), qFileDialogUi->splitter->sizes().first());
-      settings.setValue(QLatin1String("shortcuts"), QUrl::toStringList(qFileDialogUi->sidebar->urls()));
-      settings.setValue(QLatin1String("treeViewHeader"), qFileDialogUi->treeView->header()->saveState());
+      settings.setValue("sidebarWidth", qFileDialogUi->splitter->sizes().first());
+      settings.setValue("shortcuts", QUrl::toStringList(qFileDialogUi->sidebar->urls()));
+      settings.setValue("treeViewHeader", qFileDialogUi->treeView->header()->saveState());
    }
 
    QStringList historyUrls;
@@ -699,7 +699,7 @@ bool QFileDialogPrivate::restoreFromSettings()
       }
    }
 
-   return restoreWidgetState(history, settings.value(QLatin1String("sidebarWidth"), -1).toInt());
+   return restoreWidgetState(history, settings.value("sidebarWidth", -1).toInt());
 }
 #endif // QT_NO_SETTINGS
 
@@ -1320,7 +1320,7 @@ void QFileDialogPrivate::_q_deleteCurrent()
 
 void QFileDialogPrivate::_q_autoCompleteFileName(const QString &text)
 {
-   if (text.startsWith(QLatin1String("//")) || text.startsWith(QLatin1Char('\\'))) {
+   if (text.startsWith("//") || text.startsWith('\\')) {
       qFileDialogUi->listView->selectionModel()->clearSelection();
       return;
    }
@@ -1368,7 +1368,7 @@ void QFileDialogPrivate::_q_updateOkButton()
    QStringList files = q->selectedFiles();
    QString lineEditText = lineEdit()->text();
 
-   if (lineEditText.startsWith(QLatin1String("//")) || lineEditText.startsWith(QLatin1Char('\\'))) {
+   if (lineEditText.startsWith("//") || lineEditText.startsWith('\\')) {
       button->setEnabled(true);
       updateOkButtonText();
       return;
@@ -1376,8 +1376,10 @@ void QFileDialogPrivate::_q_updateOkButton()
 
    if (files.isEmpty()) {
       enableButton = false;
-   } else if (lineEditText == QLatin1String("..")) {
+
+   } else if (lineEditText == "..") {
       isOpenDirectory = true;
+
    } else {
       switch (fileMode) {
          case QFileDialog::DirectoryOnly:
@@ -1392,19 +1394,23 @@ void QFileDialogPrivate::_q_updateOkButton()
             }
             break;
          }
+
          case QFileDialog::AnyFile: {
             QString fn = files.first();
             QFileInfo info(fn);
             QModelIndex idx = model->index(fn);
+
             QString fileDir;
             QString fileName;
+
             if (info.isDir()) {
                fileDir = info.canonicalFilePath();
             } else {
-               fileDir = fn.mid(0, fn.lastIndexOf(QLatin1Char('/')));
+               fileDir = fn.mid(0, fn.lastIndexOf('/'));
                fileName = fn.mid(fileDir.length() + 1);
             }
-            if (lineEditText.contains(QLatin1String(".."))) {
+
+            if (lineEditText.contains("..")) {
                fileDir = info.canonicalFilePath();
                fileName = info.fileName();
             }
@@ -1569,11 +1575,13 @@ void QFileDialogPrivate::_q_selectionChanged()
       if (stripDirs && model->isDir(mapToSource(indexes.at(i)))) {
          continue;
       }
+
       allFiles.append(indexes.at(i).data().toString());
    }
+
    if (allFiles.count() > 1)
       for (int i = 0; i < allFiles.count(); ++i) {
-         allFiles.replace(i, QString(QLatin1Char('"') + allFiles.at(i) + QLatin1Char('"')));
+         allFiles.replace(i, QString('"' + allFiles.at(i) + '"'));
       }
 
    QString finalFiles = allFiles.join(" ");

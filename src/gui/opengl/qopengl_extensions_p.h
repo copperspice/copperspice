@@ -228,10 +228,6 @@ class Q_GUI_EXPORT QOpenGLExtensions : public QOpenGLExtraFunctions
     Q_DECLARE_PRIVATE(QOpenGLExtensions)
 
 public:
-    QOpenGLExtensions();
-    QOpenGLExtensions(QOpenGLContext *context);
-    ~QOpenGLExtensions() {}
-
     enum OpenGLExtension {
         TextureRectangle        = 0x00000001,
         GenerateMipmap          = 0x00000002,
@@ -260,6 +256,13 @@ public:
     };
     using OpenGLExtensions = QFlags<OpenGLExtension>;
 
+    QOpenGLExtensions();
+    QOpenGLExtensions(QOpenGLContext *context);
+
+    ~QOpenGLExtensions()
+    {
+    }
+
     OpenGLExtensions openGLExtensions();
     bool hasOpenGLExtension(QOpenGLExtensions::OpenGLExtension extension) const;
 
@@ -272,7 +275,9 @@ public:
     void flushShared();
 
 private:
-    static bool isInitialized(const QOpenGLFunctionsPrivate *d) { return d != nullptr; }
+    static bool isInitialized(const QOpenGLFunctionsPrivate *d) {
+      return d != nullptr;
+    }
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QOpenGLExtensions::OpenGLExtensions)
@@ -294,8 +299,10 @@ inline GLvoid *QOpenGLExtensions::glMapBuffer(GLenum target, GLenum access)
 {
     Q_D(QOpenGLExtensions);
     Q_ASSERT(QOpenGLExtensions::isInitialized(d));
+
     GLvoid *result = d->MapBuffer(target, access);
     Q_OPENGL_FUNCTIONS_DEBUG
+
     return result;
 }
 

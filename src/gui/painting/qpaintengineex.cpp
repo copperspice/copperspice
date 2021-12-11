@@ -63,11 +63,13 @@ QRectF QVectorPath::controlPointRect() const
       m_hints |= ControlPointRect;
       return QRectF(QPointF(m_cp_rect.x1, m_cp_rect.y1), QPointF(m_cp_rect.x2, m_cp_rect.y2));
    }
+
    Q_ASSERT(m_points && m_count > 0);
 
    const qreal *pts = m_points;
    m_cp_rect.x1 = m_cp_rect.x2 = *pts;
    ++pts;
+
    m_cp_rect.y1 = m_cp_rect.y2 = *pts;
    ++pts;
 
@@ -450,6 +452,7 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
       // later, so they are also covered here..
       d->activeStroker->setCurveThresholdFromTransform(state()->matrix);
       d->activeStroker->begin(d->strokeHandler);
+
       if (types) {
          while (points < lastPoint) {
             switch (*types) {
@@ -458,11 +461,13 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
                   points += 2;
                   ++types;
                   break;
+
                case QPainterPath::LineToElement:
                   d->activeStroker->lineTo(points[0], points[1]);
                   points += 2;
                   ++types;
                   break;
+
                case QPainterPath::CurveToElement:
                   d->activeStroker->cubicTo(points[0], points[1],
                      points[2], points[3], points[4], points[5]);
@@ -471,6 +476,7 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
                   types += 3;
                   flags |= QVectorPath::CurvedShapeMask;
                   break;
+
                default:
                   break;
             }
@@ -732,7 +738,8 @@ void QPaintEngineEx::drawRects(const QRectF *rectPtr, int rectCount)
 {
    for (int i = 0; i < rectCount; ++i) {
       const QRectF &r = rectPtr[i];
-      qreal right = r.x() + r.width();
+
+      qreal right  = r.x() + r.width();
       qreal bottom = r.y() + r.height();
 
       qreal pts[] = { r.x(), r.y(), right, r.y(), right, bottom,
@@ -786,6 +793,7 @@ void QPaintEngineEx::drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yR
 void QPaintEngineEx::drawLines(const QLine *linePtr, int lineCount)
 {
    int elementCount = lineCount << 1;
+
    while (elementCount > 0) {
       int count = qMin(elementCount, 32);
 
@@ -807,6 +815,7 @@ void QPaintEngineEx::drawLines(const QLine *linePtr, int lineCount)
 void QPaintEngineEx::drawLines(const QLineF *linePtr, int lineCount)
 {
    int elementCount = lineCount << 1;
+
    while (elementCount > 0) {
       int count = qMin(elementCount, 32);
 
@@ -862,6 +871,7 @@ void QPaintEngineEx::drawPoints(const QPointF *pointPtr, int pointCount)
          int count = qMin(pointCount, 16);
          qreal pts[64];
          int oset = -1;
+
          for (int i = 0; i < count; ++i) {
             pts[++oset] = pointPtr[i].x();
             pts[++oset] = pointPtr[i].y();
@@ -1021,18 +1031,22 @@ Q_GUI_EXPORT QPainterPath qt_painterPathFromVectorPath(const QVectorPath &path)
    const QPainterPath::ElementType *types = path.elements();
 
    QPainterPath p;
+
    if (types) {
       int id = 0;
+
       for (int i = 0; i < path.elementCount(); ++i) {
          switch (types[i]) {
             case QPainterPath::MoveToElement:
                p.moveTo(QPointF(points[id], points[id + 1]));
                id += 2;
                break;
+
             case QPainterPath::LineToElement:
                p.lineTo(QPointF(points[id], points[id + 1]));
                id += 2;
                break;
+
             case QPainterPath::CurveToElement: {
                QPointF p1(points[id], points[id + 1]);
                QPointF p2(points[id + 2], points[id + 3]);
@@ -1041,11 +1055,13 @@ Q_GUI_EXPORT QPainterPath qt_painterPathFromVectorPath(const QVectorPath &path)
                id += 6;
                break;
             }
+
             case QPainterPath::CurveToDataElement:
                ;
                break;
          }
       }
+
    } else {
       p.moveTo(QPointF(points[0], points[1]));
       int id = 2;

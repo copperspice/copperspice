@@ -1389,14 +1389,17 @@ bool QMenuBar::eventFilter(QObject *object, QEvent *event)
                d->altPressed = false;
                qApp->removeEventFilter(this);
                break;
+
             default:
                break;
          }
+
       } else if (isVisible()) {
          if (event->type() == QEvent::ShortcutOverride) {
             QKeyEvent *kev = static_cast<QKeyEvent *>(event);
+
             if ((kev->key() == Qt::Key_Alt || kev->key() == Qt::Key_Meta)
-               && kev->modifiers() == Qt::AltModifier) {
+                  && kev->modifiers() == Qt::AltModifier) {
                d->altPressed = true;
                qApp->installEventFilter(this);
             }

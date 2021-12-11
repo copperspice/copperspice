@@ -304,7 +304,7 @@ bool QPlatformFontDatabase::isPrivateFontFamily(const QString &family) const
 
 QFont QPlatformFontDatabase::defaultFont() const
 {
-   return QFont(QLatin1String("Helvetica"));
+   return QFont("Helvetica");
 }
 
 QString qt_resolveFontFamilyAlias(const QString &alias);

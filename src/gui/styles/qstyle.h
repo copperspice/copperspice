@@ -776,7 +776,8 @@ class Q_GUI_EXPORT QStyle : public QObject
    virtual QRect subControlRect(ComplexControl control, const QStyleOptionComplex *option, SubControl subControl,
       const QWidget *widget = nullptr) const = 0;
 
-   virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr, const QWidget *widget = nullptr) const = 0;
+   virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = nullptr,
+      const QWidget *widget = nullptr) const = 0;
 
    virtual QSize sizeFromContents(ContentsType type, const QStyleOption *option,
       const QSize &contentsSize, const QWidget *widget = nullptr) const = 0;

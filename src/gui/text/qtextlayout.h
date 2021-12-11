@@ -52,12 +52,15 @@ class Q_GUI_EXPORT QTextInlineObject
 {
 
  public:
-   inline QTextInlineObject() : itm(0), eng(nullptr) {}
    QTextInlineObject(int index, QTextEngine *engine)
       : itm(index), eng(engine)
    {
    }
 
+   inline QTextInlineObject()
+      : itm(0), eng(nullptr)
+   {
+   }
 
    bool isValid() const {
       return eng;

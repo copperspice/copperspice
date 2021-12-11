@@ -329,18 +329,23 @@ void QGraphicsWidget::setWindowFrameMargins(qreal left, qreal top, qreal right, 
 void QGraphicsWidget::getWindowFrameMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const
 {
    Q_D(const QGraphicsWidget);
+
    if (left || top || right || bottom) {
       d->ensureWindowFrameMargins();
    }
+
    if (left) {
       *left = d->windowFrameMargins[d->Left];
    }
+
    if (top) {
       *top = d->windowFrameMargins[d->Top];
    }
+
    if (right) {
       *right = d->windowFrameMargins[d->Right];
    }
+
    if (bottom) {
       *bottom = d->windowFrameMargins[d->Bottom];
    }
@@ -354,13 +359,16 @@ void QGraphicsWidget::unsetWindowFrameMargins()
          (d->m_flags & Qt::WindowType_Mask) != Qt::ToolTip && ! (d->m_flags & Qt::FramelessWindowHint)) {
       QStyleOptionTitleBar bar;
       d->initStyleOptionTitleBar(&bar);
+
       QStyle *style = this->style();
       qreal margin = style->pixelMetric(QStyle::PM_MdiSubWindowFrameWidth);
       qreal titleBarHeight  = d->titleBarHeight(bar);
       setWindowFrameMargins(margin, titleBarHeight, margin, margin);
+
    } else {
       setWindowFrameMargins(0, 0, 0, 0);
    }
+
    d->setWindowFrameMargins = false;
 }
 

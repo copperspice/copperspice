@@ -39,6 +39,7 @@ QGraphicsLayoutStyleInfo::QGraphicsLayoutStyleInfo(const QGraphicsLayoutPrivate 
    if (m_widget) {
       m_styleOption.initFrom(m_widget);
    }
+
    m_isWindow = m_styleOption.state & QStyle::State_Window;
 }
 

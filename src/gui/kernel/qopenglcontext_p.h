@@ -153,7 +153,7 @@ class Q_GUI_EXPORT QOpenGLMultiGroupSharedResource
       QRecursiveMutexLocker locker(&m_mutex);
       T *resource = static_cast<T *>(group->d_func()->m_resources.value(this, nullptr));
 
-      if (!resource) {
+      if (! resource) {
          resource = new T(context);
          insert(context, resource);
       }

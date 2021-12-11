@@ -426,10 +426,13 @@ QList<QGesture *> QGestureEvent::activeGestures() const
 QList<QGesture *> QGestureEvent::canceledGestures() const
 {
     QList<QGesture *> gestures;
+
     for (QGesture *gesture : m_gestures) {
-        if (gesture->state() == Qt::GestureCanceled)
-            gestures.append(gesture);
+        if (gesture->state() == Qt::GestureCanceled) {
+           gestures.append(gesture);
+        }
     }
+
     return gestures;
 }
 
@@ -442,14 +445,16 @@ void QGestureEvent::setAccepted(QGesture *gesture, bool isAccepted)
 
 void QGestureEvent::accept(QGesture *gesture)
 {
-    if (gesture)
-        setAccepted(gesture->gestureType(), true);
+   if (gesture) {
+      setAccepted(gesture->gestureType(), true);
+   }
 }
 
 void QGestureEvent::ignore(QGesture *gesture)
 {
-    if (gesture)
-        setAccepted(gesture->gestureType(), false);
+   if (gesture) {
+      setAccepted(gesture->gestureType(), false);
+   }
 }
 
 bool QGestureEvent::isAccepted(QGesture *gesture) const
@@ -462,6 +467,7 @@ void QGestureEvent::setAccepted(Qt::GestureType gestureType, bool isAccepted)
     setAccepted(false);
     m_accepted[gestureType] = isAccepted;
 }
+
 void QGestureEvent::accept(Qt::GestureType gestureType)
 {
     setAccepted(gestureType, true);

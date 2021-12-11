@@ -45,7 +45,6 @@ class QTextBlock;
 
 class Q_GUI_EXPORT QTextCursor
 {
-
  public:
    QTextCursor();
 

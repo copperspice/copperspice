@@ -1377,6 +1377,7 @@ void QRasterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 
 #ifdef QT_FAST_SPANS
    Q_D(QRasterPaintEngine);
+
    ensureRasterState();
    QRasterPaintEngineState *s = state();
 
@@ -1389,6 +1390,7 @@ void QRasterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
             if (rect.isEmpty()) {
                continue;
             }
+
             const QPointF a = s->matrix.map((rect.topLeft() + rect.bottomLeft()) * 0.5f);
             const QPointF b = s->matrix.map((rect.topRight() + rect.bottomRight()) * 0.5f);
             d->rasterizer->rasterizeLine(a, b, rect.height() / rect.width());
@@ -1398,6 +1400,7 @@ void QRasterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
       ensurePen();
       if (s->penData.blend) {
          QRectVectorPath path;
+
          if (s->flags.fast_pen) {
             QCosmeticStroker stroker(s, d->deviceRect, d->deviceRectUnclipped);
             stroker.setLegacyRoundingEnabled(s->flags.legacy_rounding);
@@ -1820,6 +1823,7 @@ void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, Pol
 
 #ifdef QT_DEBUG_DRAW
    qDebug(" - QRasterPaintEngine::drawPolygon(I), pointCount=%d", pointCount);
+
    for (int i = 0; i < pointCount; ++i) {
       qDebug() << "   - " << pointPtr[i];
    }
@@ -1856,8 +1860,7 @@ void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, Pol
          d->outlineMapper->endOutline();
 
          // scanconvert.
-         ProcessSpans brushBlend = d->getBrushFunc(d->outlineMapper->controlPointRect,
-               &s->brushData);
+         ProcessSpans brushBlend = d->getBrushFunc(d->outlineMapper->controlPointRect, &s->brushData);
          d->rasterize(d->outlineMapper->outline(), brushBlend, &s->brushData, d->rasterBuffer.data());
       }
    }
@@ -4797,6 +4800,7 @@ static void drawEllipse_midpoint_i(const QRect &rect, const QRect &clip,
       if (d < 0) { // select E
          d += b * b * (2 * x + 3);
          ++x;
+
       } else {     // select SE
          d += b * b * (2 * x + 3) + a * a * (-2 * y + 2);
          drawEllipsePoints(startx, y, x - startx + 1, rect, clip,
@@ -4805,8 +4809,8 @@ static void drawEllipse_midpoint_i(const QRect &rect, const QRect &clip,
          --y;
       }
    }
-   drawEllipsePoints(startx, y, x - startx + 1, rect, clip,
-      pen_func, brush_func, pen_data, brush_data);
+
+   drawEllipsePoints(startx, y, x - startx + 1, rect, clip, pen_func, brush_func, pen_data, brush_data);
 
    // region 2
    d = b * b * (x + 0.5) * (x + 0.5) + a * a * ((y - 1) * (y - 1) - b * b);

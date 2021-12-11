@@ -26,8 +26,6 @@
 
 #include <qstring.h>
 
-
-
 class QTextStream;
 class QTextDocument;
 class QTextDocumentFragmentPrivate;
@@ -35,7 +33,6 @@ class QTextCursor;
 
 class Q_GUI_EXPORT QTextDocumentFragment
 {
-
  public:
    QTextDocumentFragment();
    explicit QTextDocumentFragment(const QTextDocument *document);
@@ -52,6 +49,7 @@ class Q_GUI_EXPORT QTextDocumentFragment
 #ifndef QT_NO_TEXTHTMLPARSER
    QString toHtml(const QByteArray &encoding = QByteArray()) const;
 #endif
+
    static QTextDocumentFragment fromPlainText(const QString &plainText);
 
 #ifndef QT_NO_TEXTHTMLPARSER

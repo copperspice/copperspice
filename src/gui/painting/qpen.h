@@ -27,8 +27,6 @@
 #include <qcolor.h>
 #include <qbrush.h>
 
-
-
 class QVariant;
 class QPenPrivate;
 class QBrush;
@@ -36,7 +34,6 @@ class QPen;
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
-
 
 class Q_GUI_EXPORT QPen
 {
@@ -109,6 +106,7 @@ class Q_GUI_EXPORT QPen
    bool operator!=(const QPen &other) const {
       return !(operator==(other));
    }
+
    operator QVariant() const;
 
    bool isDetached();

@@ -96,11 +96,12 @@ void QDialogButtonBoxPrivate::initLayout()
    getLayoutItemMargins(&left, &top, &right, &bottom);
    buttonLayout->setContentsMargins(-left, -top, -right, -bottom);
 
-   if (!q->testAttribute(Qt::WA_WState_OwnSizePolicy)) {
+   if (! q->testAttribute(Qt::WA_WState_OwnSizePolicy)) {
       QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Fixed, QSizePolicy::ButtonBox);
       if (orientation == Qt::Vertical) {
          sp.transpose();
       }
+
       q->setSizePolicy(sp);
       q->setAttribute(Qt::WA_WState_OwnSizePolicy, false);
    }
@@ -588,11 +589,11 @@ QDialogButtonBox::StandardButtons QDialogButtonBox::standardButtons() const
 {
    Q_D(const QDialogButtonBox);
    StandardButtons standardButtons = NoButton;
-   QHash<QPushButton *, StandardButton>::const_iterator it = d->standardButtonHash.constBegin();
-   while (it != d->standardButtonHash.constEnd()) {
-      standardButtons |= it.value();
-      ++it;
+
+   for (auto item : d->standardButtonHash) {
+      standardButtons |= item;
    }
+
    return standardButtons;
 }
 

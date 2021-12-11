@@ -79,10 +79,15 @@ Q_GUI_EXPORT void qDrawPlainRect(QPainter *painter, const QRect &rect, const QCo
 
 struct QTileRules {
    inline QTileRules(Qt::TileRule horizontalRule, Qt::TileRule verticalRule)
-      : horizontal(horizontalRule), vertical(verticalRule) {}
+      : horizontal(horizontalRule), vertical(verticalRule)
+   {
+   }
 
    inline QTileRules(Qt::TileRule rule = Qt::StretchTile)
-      : horizontal(rule), vertical(rule) {}
+      : horizontal(rule), vertical(rule)
+   {
+   }
+
    Qt::TileRule horizontal;
    Qt::TileRule vertical;
 };
@@ -92,19 +97,19 @@ struct QTileRules {
 namespace QDrawBorderPixmap {
 
 enum DrawingHint {
-   OpaqueTopLeft = 0x0001,
-   OpaqueTop = 0x0002,
-   OpaqueTopRight = 0x0004,
-   OpaqueLeft = 0x0008,
-   OpaqueCenter = 0x0010,
-   OpaqueRight = 0x0020,
-   OpaqueBottomLeft = 0x0040,
-   OpaqueBottom = 0x0080,
+   OpaqueTopLeft     = 0x0001,
+   OpaqueTop         = 0x0002,
+   OpaqueTopRight    = 0x0004,
+   OpaqueLeft        = 0x0008,
+   OpaqueCenter      = 0x0010,
+   OpaqueRight       = 0x0020,
+   OpaqueBottomLeft  = 0x0040,
+   OpaqueBottom      = 0x0080,
    OpaqueBottomRight = 0x0100,
-   OpaqueCorners = OpaqueTopLeft | OpaqueTopRight | OpaqueBottomLeft | OpaqueBottomRight,
-   OpaqueEdges = OpaqueTop | OpaqueLeft | OpaqueRight | OpaqueBottom,
-   OpaqueFrame = OpaqueCorners | OpaqueEdges,
-   OpaqueAll = OpaqueCenter | OpaqueFrame
+   OpaqueCorners     = OpaqueTopLeft | OpaqueTopRight | OpaqueBottomLeft | OpaqueBottomRight,
+   OpaqueEdges       = OpaqueTop | OpaqueLeft | OpaqueRight | OpaqueBottom,
+   OpaqueFrame       = OpaqueCorners | OpaqueEdges,
+   OpaqueAll         = OpaqueCenter | OpaqueFrame
 };
 
 using DrawingHints = QFlags<DrawingHint>;

@@ -163,9 +163,9 @@ class Q_GUI_EXPORT QTransform
    inline TransformationType inline_type() const;
    QMatrix affine;
 
-   qreal   m_13;
-   qreal   m_23;
-   qreal   m_33;
+   qreal m_13;
+   qreal m_23;
+   qreal m_33;
 
    mutable uint m_type  : 5;
    mutable uint m_dirty : 5;
@@ -201,6 +201,7 @@ inline bool QTransform::isScaling() const
 {
    return type() >= TxScale;
 }
+
 inline bool QTransform::isRotating() const
 {
    return inline_type() >= TxRotate;
@@ -294,6 +295,7 @@ inline QTransform &QTransform::operator*=(qreal factor)
    if (m_dirty < TxScale) {
       m_dirty = TxScale;
    }
+
    return *this;
 }
 
@@ -325,6 +327,7 @@ inline QTransform &QTransform::operator+=(qreal delta)
    m_33        += delta;
 
    m_dirty     = TxProject;
+
    return *this;
 }
 
@@ -345,20 +348,21 @@ inline QTransform &QTransform::operator-=(qreal delta)
    m_33        -= delta;
 
    m_dirty     = TxProject;
+
    return *this;
 }
 
 inline bool qFuzzyCompare(const QTransform &t1, const QTransform &t2)
 {
    return qFuzzyCompare(t1.m11(), t2.m11())
-      && qFuzzyCompare(t1.m12(), t2.m12())
-      && qFuzzyCompare(t1.m13(), t2.m13())
-      && qFuzzyCompare(t1.m21(), t2.m21())
-      && qFuzzyCompare(t1.m22(), t2.m22())
-      && qFuzzyCompare(t1.m23(), t2.m23())
-      && qFuzzyCompare(t1.m31(), t2.m31())
-      && qFuzzyCompare(t1.m32(), t2.m32())
-      && qFuzzyCompare(t1.m33(), t2.m33());
+         && qFuzzyCompare(t1.m12(), t2.m12())
+         && qFuzzyCompare(t1.m13(), t2.m13())
+         && qFuzzyCompare(t1.m21(), t2.m21())
+         && qFuzzyCompare(t1.m22(), t2.m22())
+         && qFuzzyCompare(t1.m23(), t2.m23())
+         && qFuzzyCompare(t1.m31(), t2.m31())
+         && qFuzzyCompare(t1.m32(), t2.m32())
+         && qFuzzyCompare(t1.m33(), t2.m33());
 }
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTransform &);

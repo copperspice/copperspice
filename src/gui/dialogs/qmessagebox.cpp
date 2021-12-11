@@ -302,11 +302,11 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
    label->setOpenExternalLinks(true);
 
    iconLabel = new QLabel(q);
-   iconLabel->setObjectName(QLatin1String("qt_msgboxex_icon_label"));
+   iconLabel->setObjectName("qt_msgboxex_icon_label");
    iconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
    buttonBox = new QDialogButtonBox;
-   buttonBox->setObjectName(QLatin1String("qt_msgbox_buttonbox"));
+   buttonBox->setObjectName("qt_msgbox_buttonbox");
    buttonBox->setCenterButtons(q->style()->styleHint(QStyle::SH_MessageBox_CenterButtons, nullptr, q));
 
    QObject::connect(buttonBox, &QDialogButtonBox::clicked, q, &QMessageBox::_q_buttonClicked);
@@ -1011,7 +1011,8 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
    if (e == QKeySequence::Copy) {
       QString separator = QString::fromLatin1("---------------------------\n");
       QString textToCopy = separator;
-      separator.prepend(QLatin1Char('\n'));
+
+      separator.prepend('\n');
       textToCopy += windowTitle() + separator; // title
       textToCopy += d->label->text() + separator; // text
 
@@ -1021,8 +1022,9 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 
       QString buttonTexts;
       QList<QAbstractButton *> buttons = d->buttonBox->buttons();
+
       for (int i = 0; i < buttons.count(); i++) {
-         buttonTexts += buttons[i]->text() + QLatin1String("   ");
+         buttonTexts += buttons[i]->text() + "   ";
       }
       textToCopy += buttonTexts + separator;
 
@@ -1559,7 +1561,7 @@ void QMessageBox::setInformativeText(const QString &text)
    } else {
       if (!d->informativeLabel) {
          QLabel *label = new QLabel;
-         label->setObjectName(QLatin1String("qt_msgbox_informativelabel"));
+         label->setObjectName("qt_msgbox_informativelabel");
          label->setTextInteractionFlags(Qt::TextInteractionFlags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this)));
          label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
          label->setOpenExternalLinks(true);

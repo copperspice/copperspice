@@ -477,6 +477,7 @@ QSurfaceFormat QWindow::format() const
 void QWindow::setFlags(Qt::WindowFlags flags)
 {
    Q_D(QWindow);
+
    if (d->platformWindow) {
       d->platformWindow->setWindowFlags(flags);
    }
@@ -625,14 +626,14 @@ bool QWindow::isExposed() const
 bool QWindow::isActive() const
 {
    Q_D(const QWindow);
-   if (!d->platformWindow) {
+   if (! d->platformWindow) {
       return false;
    }
 
    QWindow *focus = QGuiApplication::focusWindow();
 
    // Means the whole application lost the focus
-   if (!focus) {
+   if (! focus) {
       return false;
    }
 
@@ -640,7 +641,7 @@ bool QWindow::isActive() const
       return true;
    }
 
-   if (!parent() && !transientParent()) {
+   if (! parent() && ! transientParent()) {
       return isAncestorOf(focus);
    } else {
       return (parent() && parent()->isActive()) || (transientParent() && transientParent()->isActive());

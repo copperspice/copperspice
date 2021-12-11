@@ -93,10 +93,9 @@ class Q_GUI_EXPORT QPlatformFontDatabase
 
    //callback
    static void registerQPF2Font(const QByteArray &dataArray, void *handle);
-   static void registerFont(const QString &familyname, const QString &stylename,
-                  const QString &foundryname, QFont::Weight weight, QFont::Style style, QFont::Stretch stretch,
-                  bool antialiased, bool scalable, int pixelSize, bool fixedPitch,
-                  const QSupportedWritingSystems &writingSystems,  void *handle);
+   static void registerFont(const QString &familyName, const QString &styleName, const QString &foundryName,
+            QFont::Weight weight, QFont::Style style, QFont::Stretch stretch, bool antialiased, bool scalable,
+            int pixelSize, bool fixedPitch, const QSupportedWritingSystems &writingSystems, void *handle);
 
    static void registerFontFamily(const QString &familyName);
    static void registerAliasToFontFamily(const QString &familyName, const QString &alias);

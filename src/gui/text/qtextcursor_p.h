@@ -30,7 +30,6 @@
 #include <qtextformat_p.h>
 #include <qtextobject.h>
 
-
 class QTextCursorPrivate : public QSharedData
 {
  public:

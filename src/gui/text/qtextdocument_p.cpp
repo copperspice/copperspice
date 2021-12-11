@@ -1169,6 +1169,7 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
 {
    bool undoCommandsAvailable = undoState != 0;
    bool redoCommandsAvailable = undoState != undoStack.size();
+
    if (stacksToClear == QTextDocument::UndoStack && undoCommandsAvailable) {
       for (int i = 0; i < undoState; ++i) {
          QTextUndoCommand c = undoStack[undoState];
@@ -1176,6 +1177,7 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
             delete c.custom;
          }
       }
+
       undoStack.remove(0, undoState);
       undoStack.resize(undoStack.size() - undoState);
       undoState = 0;

@@ -42,11 +42,12 @@ void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags fla
 {
    Q_Q(QGraphicsWidget);
 
-   attributes = 0;
-   isWidget = 1; // QGraphicsItem::isWidget() returns true.
-   focusNext = focusPrev = q;
-   focusPolicy = Qt::NoFocus;
+   attributes  = 0;
+   isWidget    = 1;       // QGraphicsItem::isWidget() returns true
 
+   focusNext   = q;
+   focusPrev   = q;
+   focusPolicy = Qt::NoFocus;
 
    adjustWindowFlags(&flags);
    m_flags = flags;
@@ -215,7 +216,6 @@ void QGraphicsWidgetPrivate::resolveLayoutDirection()
       setLayoutDirection_helper(QApplication::layoutDirection());
    }
 }
-
 
 QPalette QGraphicsWidgetPrivate::naturalWidgetPalette() const
 {
@@ -738,6 +738,7 @@ void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent
    (void) event;
 
    Q_Q(QGraphicsWidget);
+
    if (hasDecoration()) {
       // ### restore the cursor, do not override it
 #ifndef QT_NO_CURSOR
@@ -754,7 +755,8 @@ void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent
 
       // update the hover state (of buttons etc...)
       windowData->hoveredSubControl = QStyle::SC_None;
-      windowData->buttonMouseOver = false;
+      windowData->buttonMouseOver   = false;
+
       windowData->buttonRect = QRect();
       if (needsUpdate) {
          q->update(windowData->buttonRect);
@@ -894,11 +896,12 @@ void QGraphicsWidgetPrivate::setGeometryFromSetPos()
    }
    Q_Q(QGraphicsWidget);
    inSetPos = 1;
+
    // Ensure setGeometry is called (avoid recursion when setPos is
    // called from within setGeometry).
+
    q->setGeometry(QRectF(pos, q->size()));
    inSetPos = 0 ;
 }
-
 
 #endif //QT_NO_GRAPHICSVIEW

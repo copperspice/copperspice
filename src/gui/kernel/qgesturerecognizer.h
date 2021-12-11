@@ -38,15 +38,13 @@ class Q_GUI_EXPORT QGestureRecognizer
  public:
    enum ResultFlag {
       Ignore           = 0x0001,
-
       MayBeGesture     = 0x0002,
       TriggerGesture   = 0x0004,
       FinishGesture    = 0x0008,
       CancelGesture    = 0x0010,
-
       ResultState_Mask = 0x00ff,
 
-      ConsumeEventHint        = 0x0100,
+      ConsumeEventHint           = 0x0100,
       // StoreEventHint          = 0x0200,
       // ReplayStoredEventsHint  = 0x0400,
       // DiscardStoredEventsHint = 0x0800,

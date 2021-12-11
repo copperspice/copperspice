@@ -70,8 +70,7 @@ QFontMetrics &QFontMetrics::operator=(const QFontMetrics &other)
    return *this;
 }
 
-
-bool QFontMetrics::operator ==(const QFontMetrics &other) const
+bool QFontMetrics::operator==(const QFontMetrics &other) const
 {
    return d == other.d;
 }

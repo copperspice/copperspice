@@ -54,7 +54,6 @@ QDateTimeEdit::QDateTimeEdit(QWidget *parent)
    d->init(QDateTime(QDATETIMEEDIT_DATE_INITIAL, QDATETIMEEDIT_TIME_MIN));
 }
 
-
 QDateTimeEdit::QDateTimeEdit(const QDateTime &datetime, QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
 {
@@ -167,8 +166,6 @@ void QDateTimeEdit::setMinimumDateTime(const QDateTime &dt)
    }
 }
 
-
-
 QDateTime QDateTimeEdit::maximumDateTime() const
 {
    Q_D(const QDateTimeEdit);
@@ -189,8 +186,6 @@ void QDateTimeEdit::setMaximumDateTime(const QDateTime &dt)
       d->setRange((min < m ? min : m), m);
    }
 }
-
-
 
 void QDateTimeEdit::setDateTimeRange(const QDateTime &min, const QDateTime &max)
 {
@@ -301,17 +296,16 @@ void QDateTimeEdit::setTimeRange(const QTime &min, const QTime &max)
    }
 }
 
-
 QDateTimeEdit::Sections QDateTimeEdit::displayedSections() const
 {
    Q_D(const QDateTimeEdit);
    return d->sections;
 }
 
-
 QDateTimeEdit::Section QDateTimeEdit::currentSection() const
 {
    Q_D(const QDateTimeEdit);
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (QApplication::keypadNavigationEnabled() && d->focusOnButton) {
       return NoSection;
@@ -330,6 +324,7 @@ void QDateTimeEdit::setCurrentSection(Section section)
    d->updateCache(d->value, d->displayText());
    const int size = d->sectionNodes.size();
    int index = d->currentSectionIndex + 1;
+
    for (int i = 0; i < 2; ++i) {
       while (index < size) {
          if (d->convertToPublic(d->sectionType(index)) == section) {
@@ -343,7 +338,6 @@ void QDateTimeEdit::setCurrentSection(Section section)
    }
 }
 
-
 QDateTimeEdit::Section QDateTimeEdit::sectionAt(int index) const
 {
    Q_D(const QDateTimeEdit);
@@ -352,7 +346,6 @@ QDateTimeEdit::Section QDateTimeEdit::sectionAt(int index) const
    }
    return d->convertToPublic(d->sectionType(index));
 }
-
 
 int QDateTimeEdit::sectionCount() const
 {
@@ -374,8 +367,6 @@ void QDateTimeEdit::setCurrentSectionIndex(int index)
    }
    d->edit->setCursorPosition(d->sectionPos(index));
 }
-
-
 
 QCalendarWidget *QDateTimeEdit::calendarWidget() const
 {
@@ -408,7 +399,6 @@ void QDateTimeEdit::setCalendarWidget(QCalendarWidget *calendarWidget)
    }
    d->initCalendarPopup(calendarWidget);
 }
-
 void QDateTimeEdit::setSelectedSection(Section section)
 {
    Q_D(QDateTimeEdit);
@@ -422,9 +412,6 @@ void QDateTimeEdit::setSelectedSection(Section section)
    }
 }
 
-
-
-
 QString QDateTimeEdit::sectionText(Section section) const
 {
    Q_D(const QDateTimeEdit);
@@ -436,7 +423,6 @@ QString QDateTimeEdit::sectionText(Section section) const
    const int sectionIndex = d->absoluteIndex(section, 0);
    return d->sectionText(sectionIndex);
 }
-
 
 QString QDateTimeEdit::displayFormat() const
 {
@@ -497,7 +483,6 @@ void QDateTimeEdit::setDisplayFormat(const QString &format)
    }
 }
 
-
 bool QDateTimeEdit::calendarPopup() const
 {
    Q_D(const QDateTimeEdit);
@@ -536,7 +521,6 @@ void QDateTimeEdit::setTimeSpec(Qt::TimeSpec spec)
       d->updateTimeSpec();
    }
 }
-
 
 QSize QDateTimeEdit::sizeHint() const
 {
@@ -933,6 +917,7 @@ void QDateTimeEdit::stepBy(int steps)
          }
       }
    }
+
    d->setValue(d->stepBy(d->currentSectionIndex, steps, false), EmitIfChanged);
    d->updateCache(d->value, d->displayText());
 
@@ -963,8 +948,6 @@ QValidator::State QDateTimeEdit::validate(QString &text, int &pos) const
    return state;
 }
 
-
-
 void QDateTimeEdit::fixup(QString &input) const
 {
    Q_D(const QDateTimeEdit);
@@ -973,7 +956,6 @@ void QDateTimeEdit::fixup(QString &input) const
 
    d->validateAndInterpret(input, copy, state, true);
 }
-
 
 QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
 {

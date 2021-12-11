@@ -62,7 +62,8 @@ class Q_GUI_EXPORT QTextLength
 
    QTextLength()
       : lengthType(VariableLength), fixedValueOrPercentage(0)
-   {}
+   {
+   }
 
    explicit QTextLength(Type type, qreal value);
 

@@ -291,6 +291,7 @@ class Q_GUI_EXPORT QPlatformFileDialogOptions
 
    QPlatformFileDialogOptions(const QPlatformFileDialogOptions &other);
    QPlatformFileDialogOptions &operator=(const QPlatformFileDialogOptions &other);
+
    ~QPlatformFileDialogOptions();
 
    void swap(QPlatformFileDialogOptions &other) {

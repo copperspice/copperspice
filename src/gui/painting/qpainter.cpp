@@ -2289,7 +2289,7 @@ void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
 #endif
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::drawRects: Painter not active");
       return;
    }
@@ -2311,13 +2311,15 @@ void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
    }
 
    if (d->state->emulationSpecifier == QPaintEngine::PrimitiveTransform
-      && d->state->matrix.type() == QTransform::TxTranslate) {
+         && d->state->matrix.type() == QTransform::TxTranslate) {
+
       for (int i = 0; i < rectCount; ++i) {
          QRectF r(rectPtr[i].x() + d->state->matrix.dx(), rectPtr[i].y() + d->state->matrix.dy(),
                rectPtr[i].width(), rectPtr[i].height());
 
          d->engine->drawRects(&r, 1);
       }
+
    } else {
       if (d->state->brushNeedsResolving() || d->state->penNeedsResolving()) {
          for (int i = 0; i < rectCount; ++i) {
@@ -2325,11 +2327,13 @@ void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
             rectPath.addRect(rectPtr[i]);
             d->draw_helper(rectPath, QPainterPrivate::StrokeAndFillDraw);
          }
+
       } else {
          QPainterPath rectPath;
          for (int i = 0; i < rectCount; ++i) {
             rectPath.addRect(rectPtr[i]);
          }
+
          d->draw_helper(rectPath, QPainterPrivate::StrokeAndFillDraw);
       }
    }
@@ -2342,9 +2346,10 @@ void QPainter::drawRects(const QRect *rectPtr, int rectCount)
       printf("QPainter::drawRects(), count=%d\n", rectCount);
    }
 #endif
+
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::drawRects: Painter not active");
       return;
    }
@@ -2360,13 +2365,14 @@ void QPainter::drawRects(const QRect *rectPtr, int rectCount)
 
    d->updateState(d->state);
 
-   if (!d->state->emulationSpecifier) {
+   if (! d->state->emulationSpecifier) {
       d->engine->drawRects(rectPtr, rectCount);
       return;
    }
 
    if (d->state->emulationSpecifier == QPaintEngine::PrimitiveTransform
-      && d->state->matrix.type() == QTransform::TxTranslate) {
+         && d->state->matrix.type() == QTransform::TxTranslate) {
+
       for (int i = 0; i < rectCount; ++i) {
          QRectF rTmp(rectPtr[i].x() + d->state->matrix.dx(), rectPtr[i].y() + d->state->matrix.dy(),
             rectPtr[i].width(), rectPtr[i].height());
@@ -2399,9 +2405,10 @@ void QPainter::drawPoints(const QPointF *pointPtr, int pointCount)
       printf("QPainter::drawPoints(), count=%d\n", pointCount);
    }
 #endif
+
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::drawPoints: Painter not active");
       return;
    }
@@ -2417,18 +2424,20 @@ void QPainter::drawPoints(const QPointF *pointPtr, int pointCount)
 
    d->updateState(d->state);
 
-   if (!d->state->emulationSpecifier) {
+   if (! d->state->emulationSpecifier) {
       d->engine->drawPoints(pointPtr, pointCount);
       return;
    }
 
    if (d->state->emulationSpecifier == QPaintEngine::PrimitiveTransform
-      && d->state->matrix.type() == QTransform::TxTranslate) {
+         && d->state->matrix.type() == QTransform::TxTranslate) {
+
       // ### use drawPoints function
       for (int i = 0; i < pointCount; ++i) {
          QPointF pt(pointPtr[i].x() + d->state->matrix.dx(), pointPtr[i].y() + d->state->matrix.dy());
          d->engine->drawPoints(&pt, 1);
       }
+
    } else {
       QPen pen = d->state->pen;
       bool flat_pen = pen.capStyle() == Qt::FlatCap;
@@ -2437,12 +2446,15 @@ void QPainter::drawPoints(const QPointF *pointPtr, int pointCount)
          pen.setCapStyle(Qt::SquareCap);
          setPen(pen);
       }
+
       QPainterPath path;
       for (int i = 0; i < pointCount; ++i) {
          path.moveTo(pointPtr[i].x(), pointPtr[i].y());
          path.lineTo(pointPtr[i].x() + 0.0001, pointPtr[i].y());
       }
+
       d->draw_helper(path, QPainterPrivate::StrokeDraw);
+
       if (flat_pen) {
          restore();
       }
@@ -2456,9 +2468,10 @@ void QPainter::drawPoints(const QPoint *pointPtr, int pointCount)
       printf("QPainter::drawPoints(), count=%d\n", pointCount);
    }
 #endif
+
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::drawPoints: Painter not active");
       return;
    }
@@ -2474,18 +2487,20 @@ void QPainter::drawPoints(const QPoint *pointPtr, int pointCount)
 
    d->updateState(d->state);
 
-   if (!d->state->emulationSpecifier) {
+   if (! d->state->emulationSpecifier) {
       d->engine->drawPoints(pointPtr, pointCount);
       return;
    }
 
    if (d->state->emulationSpecifier == QPaintEngine::PrimitiveTransform
-      && d->state->matrix.type() == QTransform::TxTranslate) {
+         && d->state->matrix.type() == QTransform::TxTranslate) {
+
       // ### use drawPoints function
       for (int i = 0; i < pointCount; ++i) {
          QPointF pt(pointPtr[i].x() + d->state->matrix.dx(), pointPtr[i].y() + d->state->matrix.dy());
          d->engine->drawPoints(&pt, 1);
       }
+
    } else {
       QPen pen = d->state->pen;
       bool flat_pen = (pen.capStyle() == Qt::FlatCap);
@@ -2499,6 +2514,7 @@ void QPainter::drawPoints(const QPoint *pointPtr, int pointCount)
          path.moveTo(pointPtr[i].x(), pointPtr[i].y());
          path.lineTo(pointPtr[i].x() + 0.0001, pointPtr[i].y());
       }
+
       d->draw_helper(path, QPainterPrivate::StrokeDraw);
       if (flat_pen) {
          restore();
@@ -2748,7 +2764,7 @@ void QPainter::setFont(const QFont &font)
    }
 
    d->state->font = QFont(font.resolve(d->state->deviceFont), device());
-   if (!d->extended) {
+   if (! d->extended) {
       d->state->dirtyFlags |= QPaintEngine::DirtyFont;
    }
 }
@@ -3068,7 +3084,7 @@ void QPainter::drawPolyline(const QPointF *pointPtr, int pointCount)
 #endif
    Q_D(QPainter);
 
-   if (!d->engine || pointCount < 2) {
+   if (! d->engine || pointCount < 2) {
       return;
    }
 
@@ -3082,17 +3098,20 @@ void QPainter::drawPolyline(const QPointF *pointPtr, int pointCount)
    uint lineEmulation = line_emulation(d->state->emulationSpecifier);
 
    if (lineEmulation) {
-      // ###
+
       //         if (lineEmulation == QPaintEngine::PrimitiveTransform
-      //             && d->state->matrix.type() == QTransform::TxTranslate) {
+      //              && d->state->matrix.type() == QTransform::TxTranslate) {
       //         } else {
 
       QPainterPath polylinePath(pointPtr[0]);
       for (int i = 1; i < pointCount; ++i) {
          polylinePath.lineTo(pointPtr[i]);
       }
+
       d->draw_helper(polylinePath, QPainterPrivate::StrokeDraw);
+
       //         }
+
    } else {
       d->engine->drawPolygon(pointPtr, pointCount, QPaintEngine::PolylineMode);
    }
@@ -3105,9 +3124,10 @@ void QPainter::drawPolyline(const QPoint *pointPtr, int pointCount)
       printf("QPainter::drawPolyline(), count=%d\n", pointCount);
    }
 #endif
+
    Q_D(QPainter);
 
-   if (!d->engine || pointCount < 2) {
+   if (! d->engine || pointCount < 2) {
       return;
    }
 
@@ -3130,8 +3150,11 @@ void QPainter::drawPolyline(const QPoint *pointPtr, int pointCount)
       for (int i = 1; i < pointCount; ++i) {
          polylinePath.lineTo(pointPtr[i]);
       }
+
       d->draw_helper(polylinePath, QPainterPrivate::StrokeDraw);
+
       //         }
+
    } else {
       d->engine->drawPolygon(pointPtr, pointCount, QPaintEngine::PolylineMode);
    }
@@ -3165,8 +3188,10 @@ void QPainter::drawPolygon(const QPointF *pointPtr, int pointCount, Qt::FillRule
       for (int i = 1; i < pointCount; ++i) {
          polygonPath.lineTo(pointPtr[i]);
       }
+
       polygonPath.closeSubpath();
       polygonPath.setFillRule(fillRule);
+
       d->draw_helper(polygonPath);
       return;
    }
@@ -3184,7 +3209,7 @@ void QPainter::drawPolygon(const QPoint *pointPtr, int pointCount, Qt::FillRule 
 
    Q_D(QPainter);
 
-   if (!d->engine || pointCount < 2) {
+   if (! d->engine || pointCount < 2) {
       return;
    }
 
@@ -3204,8 +3229,10 @@ void QPainter::drawPolygon(const QPoint *pointPtr, int pointCount, Qt::FillRule 
          polygonPath.lineTo(pointPtr[i]);
       }
       polygonPath.closeSubpath();
+
       polygonPath.setFillRule(fillRule);
       d->draw_helper(polygonPath);
+
       return;
    }
 
@@ -3222,7 +3249,7 @@ void QPainter::drawConvexPolygon(const QPoint *pointPtr, int pointCount)
 
    Q_D(QPainter);
 
-   if (!d->engine || pointCount < 2) {
+   if (! d->engine || pointCount < 2) {
       return;
    }
 
@@ -3241,9 +3268,12 @@ void QPainter::drawConvexPolygon(const QPoint *pointPtr, int pointCount)
       for (int i = 1; i < pointCount; ++i) {
          polygonPath.lineTo(pointPtr[i]);
       }
+
       polygonPath.closeSubpath();
       polygonPath.setFillRule(Qt::WindingFill);
+
       d->draw_helper(polygonPath);
+
       return;
    }
 
@@ -3260,7 +3290,7 @@ void QPainter::drawConvexPolygon(const QPointF *pointPtr, int pointCount)
 
    Q_D(QPainter);
 
-   if (!d->engine || pointCount < 2) {
+   if (! d->engine || pointCount < 2) {
       return;
    }
 
@@ -3279,9 +3309,11 @@ void QPainter::drawConvexPolygon(const QPointF *pointPtr, int pointCount)
       for (int i = 1; i < pointCount; ++i) {
          polygonPath.lineTo(pointPtr[i]);
       }
+
       polygonPath.closeSubpath();
       polygonPath.setFillRule(Qt::WindingFill);
       d->draw_helper(polygonPath);
+
       return;
    }
 
@@ -3304,7 +3336,7 @@ void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
 
    Q_D(QPainter);
 
-   if (!d->engine || pm.isNull()) {
+   if (! d->engine || pm.isNull()) {
       return;
    }
 

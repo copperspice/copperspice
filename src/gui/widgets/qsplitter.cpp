@@ -1134,6 +1134,7 @@ void QSplitter::setRubberBand(int pos)
 bool QSplitter::event(QEvent *e)
 {
    Q_D(QSplitter);
+
    switch (e->type()) {
       case QEvent::Hide:
          // Reset firstShow to false here since things can be done to the splitter in between
@@ -1141,6 +1142,7 @@ bool QSplitter::event(QEvent *e)
             d->firstShow = true;
          }
          break;
+
       case QEvent::Show:
          if (!d->firstShow) {
             break;
@@ -1153,9 +1155,11 @@ bool QSplitter::event(QEvent *e)
       case QEvent::LayoutRequest:
          d->recalc(isVisible());
          break;
+
       default:
          break;
    }
+
    return QWidget::event(e);
 }
 
@@ -1174,6 +1178,7 @@ void QSplitter::moveSplitter(int pos, int index)
 
    pos = d->adjustPos(pos, index, &farMin, &min, &max, &farMax);
    int oldP = d->pick(s->rect.topLeft());
+
 #ifdef QSPLITTER_DEBUG
    qDebug() << "QSplitter::moveSplitter" << debugp << index << "adjusted" << pos << "oldP" << oldP;
 #endif
@@ -1194,6 +1199,7 @@ void QSplitter::moveSplitter(int pos, int index)
       wid = count - 1;
       delta = -1;
    }
+
    for (; wid >= 0 && wid < count; wid += delta) {
       QSplitterLayoutStruct *sls = d->list.at( wid );
       if (!sls->widget->isHidden()) {

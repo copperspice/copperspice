@@ -175,7 +175,7 @@ void QFontDialogPrivate::init()
    // Note that the sample text is *not* translated with tr(), as the
    // characters used depend on the charset encoding.
 
-   sampleEdit->setText(QLatin1String("AaBbYyZz"));
+   sampleEdit->setText("AaBbYyZz");
    hbox->addWidget(sampleEdit);
 
    writingSystemCombo = new QComboBox(q);
@@ -275,7 +275,7 @@ void QFontDialogPrivate::init()
 
    familyList->setFocus();
    retranslateStrings();
-   sampleEdit->setObjectName(QLatin1String("qt_fontDialog_sampleEdit"));
+   sampleEdit->setObjectName("qt_fontDialog_sampleEdit");
 }
 
 /*!
@@ -509,16 +509,18 @@ void QFontDialogPrivate::updateStyles()
             }
          }
          if (!found && first) {
-            if (cstyle.contains(QLatin1String("Italic"))) {
-               cstyle.replace(QLatin1String("Italic"), QLatin1String("Oblique"));
+            if (cstyle.contains("Italic")) {
+               cstyle.replace("Italic", "Oblique");
                first = false;
                goto redo;
-            } else if (cstyle.contains(QLatin1String("Oblique"))) {
-               cstyle.replace(QLatin1String("Oblique"), QLatin1String("Italic"));
+
+            } else if (cstyle.contains("Oblique")) {
+               cstyle.replace("Oblique", "Italic");
                first = false;
                goto redo;
             }
          }
+
          if (!found) {
             styleList->setCurrentItem(0);
          }

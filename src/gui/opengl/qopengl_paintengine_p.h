@@ -116,9 +116,11 @@ class Q_GUI_EXPORT QOpenGL2PaintEngineEx : public QPaintEngineEx
 
     virtual void setState(QPainterState *s) override;
     virtual QPainterState *createState(QPainterState *orig) const override;
+
     inline QOpenGL2PaintEngineState *state() {
         return static_cast<QOpenGL2PaintEngineState *>(QPaintEngineEx::state());
     }
+
     inline const QOpenGL2PaintEngineState *state() const {
         return static_cast<const QOpenGL2PaintEngineState *>(QPaintEngineEx::state());
     }

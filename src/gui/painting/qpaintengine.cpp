@@ -134,6 +134,7 @@ void QPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, PolygonDr
 void QPaintEngine::drawPoints(const QPointF *pointPtr, int pointCount)
 {
    QPainter *p = painter();
+
    if (! p) {
       return;
    }
@@ -175,13 +176,16 @@ void QPaintEngine::drawPoints(const QPoint *pointPtr, int pointCount)
 {
    Q_ASSERT(sizeof(QT_PointF) == sizeof(QPointF));
    QT_PointF fp[256];
+
    while (pointCount) {
       int i = 0;
+
       while (i < pointCount && i < 256) {
          fp[i].x = pointPtr[i].x();
          fp[i].y = pointPtr[i].y();
          ++i;
       }
+
       drawPoints((QPointF *)(void *)fp, i);
       pointPtr   += i;
       pointCount -= i;
@@ -377,13 +381,17 @@ void QPaintEngine::drawLines(const QLine *linePtr, int lineCount)
       qreal x;
       qreal y;
    };
+
    struct LineF {
       PointF p1;
       PointF p2;
    };
+
    Q_ASSERT(sizeof(PointF) == sizeof(QPointF));
-   Q_ASSERT(sizeof(LineF) == sizeof(QLineF));
+   Q_ASSERT(sizeof(LineF)  == sizeof(QLineF));
+
    LineF fl[256];
+
    while (lineCount) {
       int i = 0;
       while (i < lineCount && i < 256) {
@@ -393,6 +401,7 @@ void QPaintEngine::drawLines(const QLine *linePtr, int lineCount)
          fl[i].p2.y = linePtr[i].y2();
          ++i;
       }
+
       drawLines((QLineF *)(void *)fl, i);
       linePtr   += i;
       lineCount -= i;
@@ -408,9 +417,11 @@ void QPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
       qreal h;
    };
    Q_ASSERT(sizeof(RectF) == sizeof(QRectF));
+
    RectF fr[256];
    while (rectCount) {
       int i = 0;
+
       while (i < rectCount && i < 256) {
          fr[i].x = rectPtr[i].x();
          fr[i].y = rectPtr[i].y();
@@ -427,17 +438,18 @@ void QPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 
 void QPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
-   if (hasFeature(PainterPaths) &&
-      !state->penNeedsResolving() &&
-      !state->brushNeedsResolving()) {
+   if (hasFeature(PainterPaths) && ! state->penNeedsResolving() && ! state->brushNeedsResolving()) {
       for (int i = 0; i < rectCount; ++i) {
          QPainterPath path;
          path.addRect(rectPtr[i]);
+
          if (path.isEmpty()) {
             continue;
          }
+
          drawPath(path);
       }
+
    } else {
       for (int i = 0; i < rectCount; ++i) {
          QRectF rf = rectPtr[i];

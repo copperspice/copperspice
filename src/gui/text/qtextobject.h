@@ -48,14 +48,13 @@ class Q_GUI_EXPORT QTextObject : public QObject
    QTextObject(const QTextObject &) = delete;
    QTextObject &operator=(const QTextObject &) = delete;
 
+   QTextDocument *document() const;
+   QTextDocumentPrivate *docHandle() const;
+
    QTextFormat format() const;
    int formatIndex() const;
 
-   QTextDocument *document() const;
-
    int objectIndex() const;
-
-   QTextDocumentPrivate *docHandle() const;
 
  protected:
    explicit QTextObject(QTextDocument *document);
@@ -135,17 +134,6 @@ class Q_GUI_EXPORT QTextFrame : public QTextObject
 
    class Q_GUI_EXPORT iterator
    {
-      QTextFrame *f;
-      int b;
-      int e;
-      QTextFrame *cf;
-      int cb;
-
-      friend class QTextFrame;
-      friend class QTextTableCell;
-      friend class QTextDocumentLayoutPrivate;
-      iterator(QTextFrame *frame, int block, int begin, int end);
-
     public:
       iterator();
       iterator(const iterator &other);
@@ -183,6 +171,18 @@ class Q_GUI_EXPORT QTextFrame : public QTextObject
          operator--();
          return tmp;
       }
+
+    private:
+      QTextFrame *f;
+      int b;
+      int e;
+      QTextFrame *cf;
+      int cb;
+
+      friend class QTextFrame;
+      friend class QTextTableCell;
+      friend class QTextDocumentLayoutPrivate;
+      iterator(QTextFrame *frame, int block, int begin, int end);
    };
 
    friend class iterator;
@@ -327,8 +327,9 @@ class Q_GUI_EXPORT QTextBlock
       int n;
 
       iterator(const QTextDocumentPrivate *priv, int begin, int end, int f)
-         : p(priv), b(begin), e(end), n(f) {}
-
+         : p(priv), b(begin), e(end), n(f)
+      {
+      }
    };
 
    iterator begin() const;
@@ -357,11 +358,15 @@ class Q_GUI_EXPORT QTextBlock
 class Q_GUI_EXPORT QTextFragment
 {
  public:
-   QTextFragment(const QTextDocumentPrivate *priv, int f, int fe) : p(priv), n(f), ne(fe)
-   {}
+   QTextFragment(const QTextDocumentPrivate *priv, int f, int fe)
+      : p(priv), n(f), ne(fe)
+   {
+   }
 
-   QTextFragment() : p(nullptr), n(0), ne(0)
-   {}
+   QTextFragment()
+      : p(nullptr), n(0), ne(0)
+   {
+   }
 
    QTextFragment(const QTextFragment &other)
       : p(other.p), n(other.n), ne(other.ne)

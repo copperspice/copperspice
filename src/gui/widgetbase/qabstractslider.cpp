@@ -296,7 +296,6 @@ void QAbstractSlider::setInvertedControls(bool invert)
    d->invertedControls = invert;
 }
 
-
 void QAbstractSlider::triggerAction(SliderAction action)
 {
    Q_D(QAbstractSlider);
@@ -305,25 +304,32 @@ void QAbstractSlider::triggerAction(SliderAction action)
       case SliderSingleStepAdd:
          setSliderPosition(d->overflowSafeAdd(d->effectiveSingleStep()));
          break;
+
       case SliderSingleStepSub:
          setSliderPosition(d->overflowSafeAdd(-d->effectiveSingleStep()));
          break;
+
       case SliderPageStepAdd:
          setSliderPosition(d->overflowSafeAdd(d->pageStep));
          break;
+
       case SliderPageStepSub:
          setSliderPosition(d->overflowSafeAdd(-d->pageStep));
          break;
+
       case SliderToMinimum:
          setSliderPosition(d->minimum);
          break;
+
       case SliderToMaximum:
          setSliderPosition(d->maximum);
          break;
+
       case SliderMove:
       case SliderNoAction:
          break;
    };
+
    emit actionTriggered(action);
    d->blocktracking = false;
    setValue(d->position);
@@ -332,6 +338,7 @@ void QAbstractSlider::triggerAction(SliderAction action)
 void QAbstractSlider::setRepeatAction(SliderAction action, int thresholdTime, int repeatTime)
 {
    Q_D(QAbstractSlider);
+
    if ((d->repeatAction = action) == SliderNoAction) {
       d->repeatActionTimer.stop();
    } else {
@@ -384,22 +391,24 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
       // Scroll one page regardless of delta:
       stepsToScroll = qBound(-pageStep, int(offset * pageStep), pageStep);
       offset_accumulated = 0;
+
    } else {
       // Calculate how many lines to scroll. Depending on what delta is (and
       // offset), we might end up with a fraction (e.g. scroll 1.3 lines). We can
       // only scroll whole lines, so we keep the reminder until next event.
-      qreal stepsToScrollF =
+
+      qreal stepsToScrollF = offset * effectiveSingleStep();
+
 #ifndef QT_NO_WHEELEVENT
-         QApplication::wheelScrollLines() *
+         stepsToScrollF *= QApplication::wheelScrollLines();
 #endif
-         offset * effectiveSingleStep();
+
       // Check if wheel changed direction since last event:
       if (offset_accumulated != 0 && (offset / offset_accumulated) < 0) {
          offset_accumulated = 0;
       }
 
       offset_accumulated += stepsToScrollF;
-
 
       // Don't scroll more than one page in any case:
       stepsToScroll = qBound(-pageStep, int(offset_accumulated), pageStep);
@@ -412,9 +421,11 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
          if (effective_offset > 0.f && value < maximum) {
             return true;
          }
+
          if (effective_offset < 0.f && value > minimum) {
             return true;
          }
+
          offset_accumulated = 0;
          return false;
       }
@@ -451,7 +462,9 @@ void QAbstractSlider::wheelEvent(QWheelEvent *e)
 void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
 {
    Q_D(QAbstractSlider);
+
    SliderAction action = SliderNoAction;
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (ev->isAutoRepeat()) {
       if (!d->firstRepeat.isValid()) {
@@ -492,6 +505,7 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
             ev->ignore();
          }
          break;
+
       case Qt::Key_Back:
          if (QApplication::keypadNavigationEnabled() && hasEditFocus()) {
             setValue(d->origValue);
@@ -504,18 +518,21 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
 
       // It seems we need to use invertedAppearance for Left and right, otherwise, things look weird.
       case Qt::Key_Left:
+
 #ifdef QT_KEYPAD_NAVIGATION
          // In QApplication::KeypadNavigationDirectional, we want to change the slider
          // value if there is no left/right navigation possible and if this slider is not
          // inside a tab widget.
+
          if (QApplication::keypadNavigationEnabled()
-            && (!hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
-               || d->orientation == Qt::Vertical
-               || !hasEditFocus()
+               && (! hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               || d->orientation == Qt::Vertical || ! hasEditFocus()
                && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
+
             ev->ignore();
             return;
          }
+
          if (QApplication::keypadNavigationEnabled() && d->orientation == Qt::Vertical) {
             action = d->invertedControls ? SliderSingleStepSub : SliderSingleStepAdd;
          } else
@@ -526,17 +543,19 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
                action = !d->invertedAppearance ? SliderSingleStepSub : SliderSingleStepAdd;
             }
          break;
+
       case Qt::Key_Right:
 #ifdef QT_KEYPAD_NAVIGATION
          // Same logic as in Qt::Key_Left
          if (QApplication::keypadNavigationEnabled()
-            && (!hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
-               || d->orientation == Qt::Vertical
-               || !hasEditFocus()
+               && (!hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               || d->orientation == Qt::Vertical || !hasEditFocus()
                && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
+
             ev->ignore();
             return;
          }
+
          if (QApplication::keypadNavigationEnabled() && d->orientation == Qt::Vertical) {
             action = d->invertedControls ? SliderSingleStepAdd : SliderSingleStepSub;
          } else
@@ -547,14 +566,15 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
                action = !d->invertedAppearance ? SliderSingleStepAdd : SliderSingleStepSub;
             }
          break;
+
       case Qt::Key_Up:
 #ifdef QT_KEYPAD_NAVIGATION
          // In QApplication::KeypadNavigationDirectional, we want to change the slider
          // value if there is no up/down navigation possible.
          if (QApplication::keypadNavigationEnabled()
-            && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
                || d->orientation == Qt::Horizontal
-               || !hasEditFocus() && QWidgetPrivate::canKeypadNavigate(Qt::Vertical))) {
+               || ! hasEditFocus() && QWidgetPrivate::canKeypadNavigate(Qt::Vertical))) {
             ev->ignore();
             break;
          }
@@ -565,31 +585,37 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
 #ifdef QT_KEYPAD_NAVIGATION
          // Same logic as in Qt::Key_Up
          if (QApplication::keypadNavigationEnabled()
-            && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
                || d->orientation == Qt::Horizontal
-               || !hasEditFocus() && QWidgetPrivate::canKeypadNavigate(Qt::Vertical))) {
+               || ! hasEditFocus() && QWidgetPrivate::canKeypadNavigate(Qt::Vertical))) {
             ev->ignore();
             break;
          }
 #endif
          action = d->invertedControls ? SliderSingleStepAdd : SliderSingleStepSub;
          break;
+
       case Qt::Key_PageUp:
          action = d->invertedControls ? SliderPageStepSub : SliderPageStepAdd;
          break;
+
       case Qt::Key_PageDown:
          action = d->invertedControls ? SliderPageStepAdd : SliderPageStepSub;
          break;
+
       case Qt::Key_Home:
          action = SliderToMinimum;
          break;
+
       case Qt::Key_End:
          action = SliderToMaximum;
          break;
+
       default:
          ev->ignore();
          break;
    }
+
    if (action) {
       triggerAction(action);
    }
@@ -619,6 +645,7 @@ bool QAbstractSlider::event(QEvent *e)
       case QEvent::FocusIn:
          d->origValue = d->value;
          break;
+
       default:
          break;
    }

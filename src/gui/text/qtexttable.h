@@ -34,7 +34,6 @@ class QTextTablePrivate;
 
 class Q_GUI_EXPORT QTextTableCell
 {
-
  public:
    QTextTableCell()
       : table(nullptr)

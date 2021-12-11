@@ -482,7 +482,7 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
 {
    Q_Q(QWidget);
 
-   if (!qobject_cast<QApplication *>(QCoreApplication::instance())) {
+   if (! qobject_cast<QApplication *>(QCoreApplication::instance())) {
       qFatal("QWidget: Can not create a QWidget without QApplication");
    }
 
@@ -775,18 +775,22 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
       win->setProperty("_q_macAlwaysShowToolWindow", QVariant::fromValue(QVariant(true)));
    }
 
-   setNetWmWindowTypes(true); // do nothing if none of WA_X11NetWmWindowType* is set
+   setNetWmWindowTypes(true);          // do nothing if none of WA_X11NetWmWindowType* is set
    win->setFlags(data.m_flags);
    fixPosIncludesFrame();
+
    if (q->testAttribute(Qt::WA_Moved)
       || !QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::WindowManagement)) {
       win->setGeometry(q->geometry());
+
    } else {
       win->resize(q->size());
    }
+
    if (win->isTopLevel()) {
       int screenNumber = topData()->initialScreenIndex;
       topData()->initialScreenIndex = -1;
+
       if (screenNumber < 0) {
          screenNumber = q->windowType() != Qt::Desktop
             ? QApplication::desktop()->screenNumber(q) : 0;
@@ -796,7 +800,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
 
    QSurfaceFormat format = win->requestedFormat();
    if ((flags & Qt::Window) && win->surfaceType() != QSurface::OpenGLSurface
-      && q->testAttribute(Qt::WA_TranslucentBackground)) {
+         && q->testAttribute(Qt::WA_TranslucentBackground)) {
       format.setAlphaBufferSize(8);
    }
    win->setFormat(format);
@@ -815,7 +819,9 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
 
    qt_window_private(win)->positionPolicy = topData()->posIncludesFrame ?
       QWindowPrivate::WindowFrameInclusive : QWindowPrivate::WindowFrameExclusive;
+
    win->create();
+
    // Enable nonclient-area events for QDockWidget and other NonClientArea-mouse event processing.
    if ((flags & Qt::Desktop) == Qt::Window) {
       if (QPlatformWindow *platformWindow = win->handle()) {
@@ -831,7 +837,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
 
    QBackingStore *store = q->backingStore();
 
-   if (!store) {
+   if (! store) {
       if (win && q->windowType() != Qt::Desktop) {
          if (q->isTopLevel()) {
             q->setBackingStore(new QBackingStore(win));
@@ -843,6 +849,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
 
    setWindowModified_helper();
    WId id = win->winId();
+
    // See the QPlatformWindow::winId() documentation
    Q_ASSERT(id != WId(0));
    setWinId(id);
@@ -869,17 +876,22 @@ static const char activeXNativeParentHandleProperty[] = "_q_embedded_native_pare
 void QWidgetPrivate::createTLSysExtra()
 {
    Q_Q(QWidget);
+
    if (!extra->topextra->window && (q->testAttribute(Qt::WA_NativeWindow) || q->isWindow())) {
       extra->topextra->window = new QWidgetWindow(q);
+
       if (extra->minw || extra->minh) {
          extra->topextra->window->setMinimumSize(QSize(extra->minw, extra->minh));
       }
+
       if (extra->maxw != QWIDGETSIZE_MAX || extra->maxh != QWIDGETSIZE_MAX) {
          extra->topextra->window->setMaximumSize(QSize(extra->maxw, extra->maxh));
       }
+
       if (extra->topextra->opacity != 255 && q->isWindow()) {
          extra->topextra->window->setOpacity(qreal(extra->topextra->opacity) / qreal(255));
       }
+
 #ifdef Q_OS_WIN
       // Pass on native parent handle for Widget embedded into Active X.
       const QVariant activeXNativeParentHandle = q->property(activeXNativeParentHandleProperty);
@@ -891,7 +903,6 @@ void QWidgetPrivate::createTLSysExtra()
       }
 #endif
    }
-
 }
 
 QWidget::~QWidget()
@@ -946,8 +957,8 @@ QWidget::~QWidget()
    try {
 #ifndef QT_NO_GRAPHICSVIEW
       const QWidget *w = this;
-      while (w->d_func()->extra && w->d_func()->extra->focus_proxy)
-      {
+
+      while (w->d_func()->extra && w->d_func()->extra->focus_proxy) {
          w = w->d_func()->extra->focus_proxy;
       }
 
@@ -3920,6 +3931,7 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
             // punch a hole in the backingstore, so the texture will be visible.
             if (!q->testAttribute(Qt::WA_AlwaysStackOnTop)) {
                beginBackingStorePainting();
+
                if (backingStore) {
                   QPainter p(q);
                   p.setCompositionMode(QPainter::CompositionMode_Source);
@@ -4351,7 +4363,7 @@ QString QWidget::windowTitle() const
       }
 
       if (!d->extra->topextra->filePath.isEmpty()) {
-         return QFileInfo(d->extra->topextra->filePath).fileName() + QLatin1String("[*]");
+         return QFileInfo(d->extra->topextra->filePath).fileName() + "[*]";
       }
    }
 
@@ -5669,7 +5681,7 @@ void QWidgetPrivate::show_recursive()
 
    q->ensurePolished();
 
-   if (! q->isWindow() && q->parentWidget()->d_func()->layout && !q->parentWidget()->data->in_show) {
+   if (! q->isWindow() && q->parentWidget()->d_func()->layout && ! q->parentWidget()->data->in_show) {
       q->parentWidget()->d_func()->layout->activate();
    }
 
@@ -6566,10 +6578,12 @@ bool QWidget::event(QEvent *event)
 
             for (uint i = 0; i < 32; ++i) {
                Qt::InputMethodQuery q = (Qt::InputMethodQuery)(int)(queries & (1 << i));
+
                if (q) {
                   QVariant v = inputMethodQuery(q);
+
                   if (q == Qt::ImEnabled && !v.isValid() && isEnabled()) {
-                     v = QVariant(true);   // special case for Qt4 compatibility
+                     v = QVariant(true);   // special case for backward compatibility
                   }
                   query->setValue(q, v);
                }
@@ -7530,7 +7544,7 @@ void QWidgetPrivate::setWindowFlags(Qt::WindowFlags flags)
 
       // if both types are windows or neither of them are, we restore
       // the old position
-      if (!windowFlagChanged && (visible || q->testAttribute(Qt::WA_Moved))) {
+      if (! windowFlagChanged && (visible || q->testAttribute(Qt::WA_Moved))) {
          q->move(oldPos);
       }
 
@@ -8456,18 +8470,22 @@ void QWidgetPrivate::setWindowModified_helper()
 {
    Q_Q(QWidget);
    QWindow *window = q->windowHandle();
-   if (!window) {
+
+   if (! window) {
       return;
    }
+
    QPlatformWindow *platformWindow = window->handle();
-   if (!platformWindow) {
+   if (! platformWindow) {
       return;
    }
    bool on = q->testAttribute(Qt::WA_WindowModified);
-   if (!platformWindow->setWindowModified(on)) {
-      if (!q->windowTitle().contains(QLatin1String("[*]")) && on) {
+   if (! platformWindow->setWindowModified(on)) {
+
+      if (! q->windowTitle().contains("[*]") && on) {
          qWarning("QWidget::setWindowModified: The window title does not contain a '[*]' placeholder");
       }
+
       setWindowTitle_helper(q->windowTitle());
       setWindowIconText_helper(q->windowIconText());
    }

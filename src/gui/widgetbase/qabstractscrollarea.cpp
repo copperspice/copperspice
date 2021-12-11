@@ -191,7 +191,7 @@ void QAbstractScrollAreaPrivate::init()
    viewport->setAutoFillBackground(true);
 
    scrollBarContainers[Qt::Horizontal] = new QAbstractScrollAreaScrollBarContainer(Qt::Horizontal, q);
-   scrollBarContainers[Qt::Horizontal]->setObjectName(QLatin1String("qt_scrollarea_hcontainer"));
+   scrollBarContainers[Qt::Horizontal]->setObjectName("qt_scrollarea_hcontainer");
    hbar = scrollBarContainers[Qt::Horizontal]->scrollBar;
    hbar->setRange(0, 0);
 
@@ -202,7 +202,7 @@ void QAbstractScrollAreaPrivate::init()
    QObject::connect(hbar, &QScrollBar::rangeChanged, q, &QAbstractScrollArea::_q_showOrHideScrollBars, Qt::QueuedConnection);
 
    scrollBarContainers[Qt::Vertical] = new QAbstractScrollAreaScrollBarContainer(Qt::Vertical, q);
-   scrollBarContainers[Qt::Vertical]->setObjectName(QLatin1String("qt_scrollarea_vcontainer"));
+   scrollBarContainers[Qt::Vertical]->setObjectName("qt_scrollarea_vcontainer");
    vbar = scrollBarContainers[Qt::Vertical]->scrollBar;
    vbar->setRange(0, 0);
 

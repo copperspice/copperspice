@@ -78,17 +78,23 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       enum {
-         Synthetic = 0x1,
+         Synthetic  = 0x1,
          NullWindow = 0x2
       };
 
       explicit WindowSystemEvent(EventType t)
-         : type(t), flags(0), eventAccepted(true) { }
-      virtual ~WindowSystemEvent() { }
+         : type(t), flags(0), eventAccepted(true)
+      {
+      }
+
+      virtual ~WindowSystemEvent()
+      {
+      }
 
       bool synthetic() const  {
          return flags & Synthetic;
       }
+
       bool nullWindow() const {
          return flags & NullWindow;
       }
@@ -103,7 +109,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       explicit CloseEvent(QWindow *w, bool *a = nullptr)
          : WindowSystemEvent(Close), window(w), accepted(a)
-      { }
+      {
+      }
+
       QPointer<QWindow> window;
       bool *accepted;
    };
@@ -113,7 +121,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       GeometryChangeEvent(QWindow *tlw, const QRect &newGeometry, const QRect &oldGeometry)
          : WindowSystemEvent(GeometryChange), tlw(tlw), newGeometry(newGeometry), oldGeometry(oldGeometry)
-      { }
+      {
+      }
+
       QPointer<QWindow> tlw;
       QRect newGeometry;
       QRect oldGeometry;
@@ -124,7 +134,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       explicit EnterEvent(QWindow *enter, const QPointF &local, const QPointF &global)
          : WindowSystemEvent(Enter), enter(enter), localPos(local), globalPos(global)
-      { }
+      {
+      }
+
       QPointer<QWindow> enter;
       const QPointF localPos;
       const QPointF globalPos;
@@ -135,7 +147,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       explicit LeaveEvent(QWindow *leave)
          : WindowSystemEvent(Leave), leave(leave)
-      { }
+      {
+      }
+
       QPointer<QWindow> leave;
    };
 
@@ -144,7 +158,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       explicit ActivatedWindowEvent(QWindow *activatedWindow, Qt::FocusReason r)
          : WindowSystemEvent(ActivatedWindow), activated(activatedWindow), reason(r)
-      { }
+      {
+      }
+
       QPointer<QWindow> activated;
       Qt::FocusReason reason;
    };
@@ -154,7 +170,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       WindowStateChangedEvent(QWindow *_window, Qt::WindowState _newState)
          : WindowSystemEvent(WindowStateChanged), window(_window), newState(_newState)
-      { }
+      {
+      }
 
       QPointer<QWindow> window;
       Qt::WindowState newState;
@@ -165,7 +182,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       WindowScreenChangedEvent(QWindow *w, QScreen *s)
          : WindowSystemEvent(WindowScreenChanged), window(w), screen(s)
-      { }
+      {
+      }
 
       QPointer<QWindow> window;
       QPointer<QScreen> screen;
@@ -176,7 +194,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       ApplicationStateChangedEvent(Qt::ApplicationState newState, bool forcePropagate = false)
          : WindowSystemEvent(ApplicationStateChanged), newState(newState), forcePropagate(forcePropagate)
-      { }
+      {
+      }
 
       Qt::ApplicationState newState;
       bool forcePropagate;
@@ -186,9 +205,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       FlushEventsEvent(QEventLoop::ProcessEventsFlags f = QEventLoop::AllEvents)
-         : WindowSystemEvent(FlushEvents)
-         , flags(f)
-      { }
+         : WindowSystemEvent(FlushEvents), flags(f)
+      {
+      }
+
       QEventLoop::ProcessEventsFlags flags;
    };
 
@@ -196,11 +216,13 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       UserEvent(QWindow *w, ulong time, EventType t)
-         : WindowSystemEvent(t), window(w), timestamp(time) {
-         if (!w) {
+         : WindowSystemEvent(t), window(w), timestamp(time)
+      {
+         if (! w) {
             flags |= NullWindow;
          }
       }
+
       QPointer<QWindow> window;
       unsigned long timestamp;
    };
@@ -209,7 +231,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       InputEvent(QWindow *w, ulong time, EventType t, Qt::KeyboardModifiers mods)
-         : UserEvent(w, time, t), modifiers(mods) {}
+         : UserEvent(w, time, t), modifiers(mods)
+      {
+      }
+
       Qt::KeyboardModifiers modifiers;
    };
 
@@ -219,11 +244,17 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
       MouseEvent(QWindow *w, ulong time, const QPointF &local, const QPointF &global,
          Qt::MouseButtons b, Qt::KeyboardModifiers mods,
          Qt::MouseEventSource src = Qt::MouseEventNotSynthesized)
-         : InputEvent(w, time, Mouse, mods), localPos(local), globalPos(global), buttons(b), source(src) { }
+         : InputEvent(w, time, Mouse, mods), localPos(local), globalPos(global), buttons(b), source(src)
+      {
+      }
+
       MouseEvent(QWindow *w, ulong time, EventType t, const QPointF &local, const QPointF &global,
          Qt::MouseButtons b, Qt::KeyboardModifiers mods,
          Qt::MouseEventSource src = Qt::MouseEventNotSynthesized)
-         : InputEvent(w, time, t, mods), localPos(local), globalPos(global), buttons(b), source(src) { }
+         : InputEvent(w, time, t, mods), localPos(local), globalPos(global), buttons(b), source(src)
+      {
+      }
+
       QPointF localPos;
       QPointF globalPos;
       Qt::MouseButtons buttons;
@@ -251,14 +282,19 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
       KeyEvent(QWindow *w, ulong time, QEvent::Type t, int k, Qt::KeyboardModifiers mods, const QString &text = QString(),
          bool autorep = false, ushort count = 1)
          : InputEvent(w, time, Key, mods), key(k), unicode(text), repeat(autorep),
-           repeatCount(count), keyType(t),
-           nativeScanCode(0), nativeVirtualKey(0), nativeModifiers(0) { }
+           repeatCount(count), keyType(t), nativeScanCode(0), nativeVirtualKey(0), nativeModifiers(0)
+      {
+      }
+
       KeyEvent(QWindow *w, ulong time, QEvent::Type t, int k, Qt::KeyboardModifiers mods,
          quint32 nativeSC, quint32 nativeVK, quint32 nativeMods,
          const QString &text = QString(), bool autorep = false, ushort count = 1)
          : InputEvent(w, time, Key, mods), key(k), unicode(text), repeat(autorep),
-           repeatCount(count), keyType(t),
-           nativeScanCode(nativeSC), nativeVirtualKey(nativeVK), nativeModifiers(nativeMods) { }
+           repeatCount(count), keyType(t), nativeScanCode(nativeSC), nativeVirtualKey(nativeVK),
+           nativeModifiers(nativeMods)
+      {
+      }
+
       int key;
       QString unicode;
       bool repeat;
@@ -274,7 +310,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       TouchEvent(QWindow *w, ulong time, QEvent::Type t, QTouchDevice *dev,
          const QList<QTouchEvent::TouchPoint> &p, Qt::KeyboardModifiers mods)
-         : InputEvent(w, time, Touch, mods), device(dev), points(p), touchType(t) { }
+         : InputEvent(w, time, Touch, mods), device(dev), points(p), touchType(t)
+      {
+      }
+
       QTouchDevice *device;
       QList<QTouchEvent::TouchPoint> points;
       QEvent::Type touchType;
@@ -284,7 +323,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       ScreenOrientationEvent(QScreen *s, Qt::ScreenOrientation o)
-         : WindowSystemEvent(ScreenOrientation), screen(s), orientation(o) { }
+         : WindowSystemEvent(ScreenOrientation), screen(s), orientation(o)
+      {
+      }
+
       QPointer<QScreen> screen;
       Qt::ScreenOrientation orientation;
    };
@@ -293,7 +335,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       ScreenGeometryEvent(QScreen *s, const QRect &g, const QRect &ag)
-         : WindowSystemEvent(ScreenGeometry), screen(s), geometry(g), availableGeometry(ag) { }
+         : WindowSystemEvent(ScreenGeometry), screen(s), geometry(g), availableGeometry(ag)
+      {
+      }
+
       QPointer<QScreen> screen;
       QRect geometry;
       QRect availableGeometry;
@@ -303,7 +348,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       ScreenLogicalDotsPerInchEvent(QScreen *s, qreal dx, qreal dy)
-         : WindowSystemEvent(ScreenLogicalDotsPerInch), screen(s), dpiX(dx), dpiY(dy) { }
+         : WindowSystemEvent(ScreenLogicalDotsPerInch), screen(s), dpiX(dx), dpiY(dy)
+      {
+      }
+
       QPointer<QScreen> screen;
       qreal dpiX;
       qreal dpiY;
@@ -313,7 +361,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       ScreenRefreshRateEvent(QScreen *s, qreal r)
-         : WindowSystemEvent(ScreenRefreshRate), screen(s), rate(r) { }
+         : WindowSystemEvent(ScreenRefreshRate), screen(s), rate(r)
+      {
+      }
+
       QPointer<QScreen> screen;
       qreal rate;
    };
@@ -340,10 +391,14 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       FileOpenEvent(const QString &fileName)
          : WindowSystemEvent(FileOpen), url(QUrl::fromLocalFile(fileName))
-      { }
+      {
+      }
+
       FileOpenEvent(const QUrl &url)
          : WindowSystemEvent(FileOpen), url(url)
-      { }
+      {
+      }
+
       QUrl url;
    };
 
@@ -361,7 +416,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
          : InputEvent(w, time, Tablet, mods),
            buttons(b), local(local), global(global), device(device), pointerType(pointerType),
            pressure(pressure), xTilt(xTilt), yTilt(yTilt), tangentialPressure(tpressure),
-           rotation(rotation), z(z), uid(uid) { }
+           rotation(rotation), z(z), uid(uid)
+      {
+      }
+
       Qt::MouseButtons buttons;
       QPointF local;
       QPointF global;
@@ -408,7 +466,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       explicit PlatformPanelEvent(QWindow *w)
-         : WindowSystemEvent(PlatformPanel), window(w) { }
+         : WindowSystemEvent(PlatformPanel), window(w)
+      {
+      }
+
       QPointer<QWindow> window;
    };
 
@@ -419,7 +480,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
       explicit ContextMenuEvent(QWindow *w, bool mouseTriggered, const QPoint &pos,
          const QPoint &globalPos, Qt::KeyboardModifiers modifiers)
          : WindowSystemEvent(ContextMenu), window(w), mouseTriggered(mouseTriggered), pos(pos),
-           globalPos(globalPos), modifiers(modifiers) { }
+           globalPos(globalPos), modifiers(modifiers)
+      {
+      }
+
       QPointer<QWindow> window;
       bool mouseTriggered;
       QPoint pos;       // Only valid if triggered by mouse
@@ -434,12 +498,17 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
     public:
       GestureEvent(QWindow *window, ulong time, Qt::NativeGestureType type, QPointF pos, QPointF globalPos)
          : InputEvent(window, time, Gesture, Qt::NoModifier), type(type), pos(pos), globalPos(globalPos),
-           realValue(0), sequenceId(0), intValue(0) { }
+           realValue(0), sequenceId(0), intValue(0)
+      {
+      }
+
       Qt::NativeGestureType type;
       QPointF pos;
       QPointF globalPos;
+
       // Mac
       qreal realValue;
+
       // Windows
       ulong sequenceId;
       quint64 intValue;

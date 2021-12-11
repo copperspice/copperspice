@@ -355,12 +355,14 @@ bool QGraphicsProxyWidgetPrivate::isProxyWidget() const
 QPointF QGraphicsProxyWidgetPrivate::mapToReceiver(const QPointF &pos, const QWidget *receiver) const
 {
    QPointF p = pos;
+
    // Map event position from us to the receiver, preserving its
    // precision (don't use QWidget::mapFrom here).
    while (receiver && receiver != widget) {
       p -= QPointF(receiver->pos());
       receiver = receiver->parentWidget();
    }
+
    return p;
 }
 

@@ -30,8 +30,6 @@
 
 #include <math.h>
 
-
-
 #define toF26Dot6(x) ((int)((x)*64.))
 
 static inline uint sourceOver(uint d, uint color)
@@ -511,8 +509,7 @@ void QCosmeticStroker::calculateLastPoint(qreal rx1, qreal ry1, qreal rx2, qreal
 }
 
 static inline const QPainterPath::ElementType *subPath(const QPainterPath::ElementType *t,
-   const QPainterPath::ElementType *end,
-   const qreal *points, bool *closed)
+      const QPainterPath::ElementType *end, const qreal *points, bool *closed)
 {
    const QPainterPath::ElementType *start = t;
    ++t;
@@ -604,9 +601,12 @@ void QCosmeticStroker::drawPath(const QVectorPath &path)
             caps = NoCaps;
          }
       }
-   } else { // !type, simple polygon
+
+   } else {
+      // !type, simple polygon
       QPointF p = QPointF(points[0], points[1]) * state->matrix;
       QPointF movedTo = p;
+
       patternOffset = state->lastPen.dashOffset() * 64;
       lastPixel.x = INT_MIN;
       lastPixel.y = INT_MIN;
@@ -616,6 +616,7 @@ void QCosmeticStroker::drawPath(const QVectorPath &path)
       // handle closed path case
       bool closed = path.hasImplicitClose() || (points[0] == end[-2] && points[1] == end[-1]);
       int caps = (!closed & drawCaps) ? CapBegin : NoCaps;
+
       if (closed) {
          QPointF p2 = QPointF(end[-2], end[-1]) * state->matrix;
          calculateLastPoint(p2.x(), p2.y(), p.x(), p.y());

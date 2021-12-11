@@ -42,7 +42,7 @@ class Q_GUI_EXPORT QFontMetrics
 
    QFontMetrics &operator=(const QFontMetrics &other);
 
-   inline QFontMetrics &operator=(QFontMetrics &&other) {
+   QFontMetrics &operator=(QFontMetrics &&other) {
       qSwap(d, other.d);
       return *this;
    }
@@ -98,7 +98,7 @@ class Q_GUI_EXPORT QFontMetrics
 
    bool operator==(const QFontMetrics &other) const;
 
-   inline bool operator !=(const QFontMetrics &other) const {
+   bool operator !=(const QFontMetrics &other) const {
       return !operator==(other);
    }
 
@@ -122,7 +122,7 @@ class Q_GUI_EXPORT QFontMetricsF
    QFontMetricsF &operator=(const QFontMetrics &fontMetrics);
    QFontMetricsF &operator=(const QFontMetricsF &other);
 
-   inline QFontMetricsF &operator=(QFontMetricsF &&other) {
+   QFontMetricsF &operator=(QFontMetricsF &&other) {
       qSwap(d, other.d);
       return *this;
    }
@@ -168,13 +168,12 @@ class Q_GUI_EXPORT QFontMetricsF
 
    bool operator==(const QFontMetricsF &other) const;
 
-   inline bool operator !=(const QFontMetricsF &other) const {
+   bool operator !=(const QFontMetricsF &other) const {
       return !operator==(other);
    }
 
  private:
    QExplicitlySharedDataPointer<QFontPrivate> d;
 };
-
 
 #endif // QFONTMETRICS_H

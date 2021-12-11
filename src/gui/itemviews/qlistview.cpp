@@ -543,9 +543,9 @@ void QListView::wheelEvent(QWheelEvent *e)
    Q_D(QListView);
 
    if (e->orientation() == Qt::Vertical) {
-      if (e->angleDelta().x() == 0
-         && ((d->flow == TopToBottom && d->wrap) || (d->flow == LeftToRight && !d->wrap))
-         && d->vbar->minimum() == 0 && d->vbar->maximum() == 0) {
+      if (e->angleDelta().x() == 0 && ((d->flow == TopToBottom && d->wrap) || (d->flow == LeftToRight && ! d->wrap))
+            && d->vbar->minimum() == 0 && d->vbar->maximum() == 0)  {
+
          QPoint pixelDelta(e->pixelDelta().y(), e->pixelDelta().x());
          QPoint angleDelta(e->angleDelta().y(), e->angleDelta().x());
 
@@ -556,10 +556,13 @@ void QListView::wheelEvent(QWheelEvent *e)
          } else {
             QApplication::sendEvent(d->hbar, &hwe);
          }
+
          e->setAccepted(hwe.isAccepted());
+
       } else {
          QApplication::sendEvent(d->vbar, e);
       }
+
    } else {
       QApplication::sendEvent(d->hbar, e);
    }
@@ -571,12 +574,15 @@ void QListView::timerEvent(QTimerEvent *e)
    Q_D(QListView);
 
    if (e->timerId() == d->batchLayoutTimer.timerId()) {
-      if (d->doItemsLayout(d->batchSize)) { // layout is done
+
+      if (d->doItemsLayout(d->batchSize)) {
+         // layout is done
          d->batchLayoutTimer.stop();
          updateGeometries();
          d->viewport->update();
       }
    }
+
    QAbstractItemView::timerEvent(e);
 }
 

@@ -52,8 +52,6 @@ class Q_GUI_EXPORT QColor
    QColor(const char *name);
    QColor(Spec spec);
 
-
-
    QColor &operator=(Qt::GlobalColor color);
 
    bool isValid() const;
@@ -185,7 +183,6 @@ class Q_GUI_EXPORT QColor
    static bool isValidColor(const QString &name);
 
  private:
-
    void invalidate();
    bool setColorFromString(const QString &name);
 
@@ -201,6 +198,7 @@ class Q_GUI_EXPORT QColor
          ushort blue;
          ushort pad;
       } argb;
+
       struct {
          ushort alpha;
          ushort hue;
@@ -208,6 +206,7 @@ class Q_GUI_EXPORT QColor
          ushort value;
          ushort pad;
       } ahsv;
+
       struct {
          ushort alpha;
          ushort cyan;
@@ -215,6 +214,7 @@ class Q_GUI_EXPORT QColor
          ushort yellow;
          ushort black;
       } acmyk;
+
       struct {
          ushort alpha;
          ushort hue;
@@ -222,6 +222,7 @@ class Q_GUI_EXPORT QColor
          ushort lightness;
          ushort pad;
       } ahsl;
+
       ushort array[5];
    } ct;
 #endif

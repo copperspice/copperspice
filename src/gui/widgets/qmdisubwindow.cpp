@@ -768,6 +768,7 @@ void QMdiSubWindowPrivate::_q_updateStaysOnTopHint()
       if (senderAction->isChecked()) {
          q->setWindowFlags(q->windowFlags() | Qt::WindowStaysOnTopHint);
          q->raise();
+
       } else {
          q->setWindowFlags(q->windowFlags() & ~Qt::WindowStaysOnTopHint);
          q->lower();
@@ -1001,12 +1002,15 @@ void QMdiSubWindowPrivate::updateGeometryConstraints()
 
    internalMinimumSize = (!q->isMinimized() && !q->minimumSize().isNull())
       ? q->minimumSize() : q->minimumSizeHint();
+
    int margin, minWidth;
    sizeParameters(&margin, &minWidth);
    q->setContentsMargins(margin, titleBarHeight(), margin, margin);
+
    if (q->isMaximized() || (q->isMinimized() && !q->isShaded())) {
       moveEnabled = false;
       resizeEnabled = false;
+
    } else {
       moveEnabled = true;
       if ((q->windowFlags() & Qt::MSWindowsFixedSizeDialogHint) || q->isShaded()) {
@@ -1688,7 +1692,7 @@ void QMdiSubWindowPrivate::sizeParameters(int *margin, int *minWidth) const
       return;
    }
 
-   if (q->isMaximized() && !drawTitleBarWhenMaximized()) {
+   if (q->isMaximized() && ! drawTitleBarWhenMaximized()) {
       *margin = 0;
    } else {
       *margin = q->style()->pixelMetric(QStyle::PM_MdiSubWindowFrameWidth, nullptr, q);
@@ -1704,9 +1708,10 @@ void QMdiSubWindowPrivate::sizeParameters(int *margin, int *minWidth) const
       }
 
       QRect rect = q->style()->subControlRect(QStyle::CC_TitleBar, &opt, SubControls[i], q);
-      if (!rect.isValid()) {
+      if (! rect.isValid()) {
          continue;
       }
+
       tempWidth += rect.width();
    }
 
@@ -1900,16 +1905,19 @@ QPalette QMdiSubWindowPrivate::desktopPalette() const
 
    bool colorsInitialized = false;
 
-
    if (!colorsInitialized) {
       newPalette.setColor(QPalette::Active, QPalette::Highlight,
          newPalette.color(QPalette::Active, QPalette::Highlight));
+
       newPalette.setColor(QPalette::Active, QPalette::Base,
          newPalette.color(QPalette::Active, QPalette::Highlight));
+
       newPalette.setColor(QPalette::Inactive, QPalette::Highlight,
          newPalette.color(QPalette::Inactive, QPalette::Dark));
+
       newPalette.setColor(QPalette::Inactive, QPalette::Base,
          newPalette.color(QPalette::Inactive, QPalette::Dark));
+
       newPalette.setColor(QPalette::Inactive, QPalette::HighlightedText,
          newPalette.color(QPalette::Inactive, QPalette::Window));
    }
@@ -2165,10 +2173,12 @@ void QMdiSubWindowPrivate::setSizeGrip(QSizeGrip *newSizeGrip)
    if (putSizeGripInLayout) {
       layout->addWidget(newSizeGrip);
       layout->setAlignment(newSizeGrip, Qt::AlignBottom | Qt::AlignRight);
+
    } else {
       newSizeGrip->setParent(q);
       newSizeGrip->move(q->isLeftToRight() ? q->width() - newSizeGrip->width() : 0,
          q->height() - newSizeGrip->height());
+
       sizeGrip = newSizeGrip;
    }
 
@@ -3226,7 +3236,8 @@ void QMdiSubWindow::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
    }
 
    Q_D(QMdiSubWindow);
-   if (!d->isMoveOperation()) {
+
+   if (! d->isMoveOperation()) {
 #ifndef QT_NO_MENU
       if (d->hoveredSubControl == QStyle::SC_TitleBarSysMenu) {
          close();
@@ -3272,6 +3283,7 @@ void QMdiSubWindow::mouseReleaseEvent(QMouseEvent *mouseEvent)
    }
 
    Q_D(QMdiSubWindow);
+
    if (d->currentOperation != QMdiSubWindowPrivate::None) {
 #ifndef QT_NO_RUBBERBAND
       if (d->isInRubberBandMode && !d->isInInteractiveMode) {

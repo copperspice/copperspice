@@ -39,36 +39,37 @@
 #ifdef MAP
 #  undef MAP
 #endif
+
 #define MAP(x, y, nx, ny) \
     do { \
-        qreal FX_ = x; \
-        qreal FY_ = y; \
-        switch(t) {   \
-        case TxNone:  \
+        qreal FX_ = x;  \
+        qreal FY_ = y;  \
+        switch(t) {     \
+        case TxNone:    \
             nx = FX_;   \
             ny = FY_;   \
-            break;    \
-        case TxTranslate:    \
+            break;      \
+        case TxTranslate:                         \
             nx = FX_ + affine._dx;                \
             ny = FY_ + affine._dy;                \
-            break;                              \
-        case TxScale:                           \
+            break;                                \
+        case TxScale:                             \
             nx = affine._m11 * FX_ + affine._dx;  \
             ny = affine._m22 * FY_ + affine._dy;  \
-            break;                              \
-        case TxRotate:                          \
-        case TxShear:                           \
-        case TxProject:                                      \
-            nx = affine._m11 * FX_ + affine._m21 * FY_ + affine._dx;        \
-            ny = affine._m12 * FX_ + affine._m22 * FY_ + affine._dy;        \
-            if (t == TxProject) {                                       \
-                qreal w = (m_13 * FX_ + m_23 * FY_ + m_33);              \
-                if (w < qreal(Q_NEAR_CLIP)) w = qreal(Q_NEAR_CLIP);     \
-                w = 1./w;                                               \
-                nx *= w;                                                \
-                ny *= w;                                                \
-            }                                                           \
-        }                                                               \
+            break;                                \
+        case TxRotate:                            \
+        case TxShear:                             \
+        case TxProject:                                               \
+            nx = affine._m11 * FX_ + affine._m21 * FY_ + affine._dx;  \
+            ny = affine._m12 * FX_ + affine._m22 * FY_ + affine._dy;  \
+            if (t == TxProject) {                                     \
+                qreal w = (m_13 * FX_ + m_23 * FY_ + m_33);           \
+                if (w < qreal(Q_NEAR_CLIP)) w = qreal(Q_NEAR_CLIP);   \
+                w = 1./w;                                             \
+                nx *= w;                                              \
+                ny *= w;                                              \
+            }                                                         \
+        }                                                             \
     } while (false)
 
 QTransform::QTransform()
@@ -99,31 +100,27 @@ QTransform::QTransform(const QMatrix &mtx)
 
 QTransform QTransform::adjoint() const
 {
-   qreal h11, h12, h13,
-         h21, h22, h23,
-         h31, h32, h33;
-   h11 = affine._m22 * m_33 - m_23 * affine._dy;
-   h21 = m_23 * affine._dx - affine._m21 * m_33;
-   h31 = affine._m21 * affine._dy - affine._m22 * affine._dx;
-   h12 = m_13 * affine._dy - affine._m12 * m_33;
-   h22 = affine._m11 * m_33 - m_13 * affine._dx;
-   h32 = affine._m12 * affine._dx - affine._m11 * affine._dy;
-   h13 = affine._m12 * m_23 - m_13 * affine._m22;
-   h23 = m_13 * affine._m21 - affine._m11 * m_23;
-   h33 = affine._m11 * affine._m22 - affine._m12 * affine._m21;
+   qreal m11, m12, m13, m21, m22, m23, m31, m32, m33;
+   m11 = affine._m22 * m_33 - m_23 * affine._dy;
+   m21 = m_23 * affine._dx - affine._m21 * m_33;
+   m31 = affine._m21 * affine._dy - affine._m22 * affine._dx;
+   m12 = m_13 * affine._dy - affine._m12 * m_33;
+   m22 = affine._m11 * m_33 - m_13 * affine._dx;
+   m32 = affine._m12 * affine._dx - affine._m11 * affine._dy;
+   m13 = affine._m12 * m_23 - m_13 * affine._m22;
+   m23 = m_13 * affine._m21 - affine._m11 * m_23;
+   m33 = affine._m11 * affine._m22 - affine._m12 * affine._m21;
 
-   return QTransform(h11, h12, h13,
-         h21, h22, h23,
-         h31, h32, h33, true);
+   return QTransform(m11, m12, m13, m21, m22, m23, m31, m32, m33, true);
 }
 
 QTransform QTransform::transposed() const
 {
-   QTransform t(affine._m11, affine._m21, affine._dx,
-      affine._m12, affine._m22, affine._dy,
-      m_13, m_23, m_33, true);
+   QTransform t(affine._m11, affine._m21, affine._dx, affine._m12, affine._m22, affine._dy,
+            m_13, m_23, m_33, true);
    t.m_type = m_type;
    t.m_dirty = m_dirty;
+
    return t;
 }
 
@@ -135,13 +132,16 @@ QTransform QTransform::inverted(bool *invertible) const
    switch (inline_type()) {
       case TxNone:
          break;
+
       case TxTranslate:
          invert.affine._dx = -affine._dx;
          invert.affine._dy = -affine._dy;
          break;
+
       case TxScale:
          inv = !qFuzzyIsNull(affine._m11);
          inv &= !qFuzzyIsNull(affine._m22);
+
          if (inv) {
             invert.affine._m11 = 1. / affine._m11;
             invert.affine._m22 = 1. / affine._m22;
@@ -149,10 +149,12 @@ QTransform QTransform::inverted(bool *invertible) const
             invert.affine._dy = -affine._dy * invert.affine._m22;
          }
          break;
+
       case TxRotate:
       case TxShear:
          invert.affine = affine.inverted(&inv);
          break;
+
       default:
          // general case
          qreal det = determinant();
@@ -181,6 +183,7 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
    if (dx == 0 && dy == 0) {
       return *this;
    }
+
 #ifndef QT_NO_DEBUG
    if (qIsNaN(dx) | qIsNaN(dy)) {
       qWarning() << "QTransform::translate with NaN called";
@@ -193,14 +196,17 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
          affine._dx = dx;
          affine._dy = dy;
          break;
+
       case TxTranslate:
          affine._dx += dx;
          affine._dy += dy;
          break;
+
       case TxScale:
          affine._dx += dx * affine._m11;
          affine._dy += dy * affine._m22;
          break;
+
       case TxProject:
          m_33 += dx * m_13 + dy * m_23;
          [[fallthrough]];
@@ -211,6 +217,7 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
          affine._dy += dy * affine._m22 + dx * affine._m12;
          break;
    }
+
    if (m_dirty < TxTranslate) {
       m_dirty = TxTranslate;
    }
@@ -225,13 +232,17 @@ QTransform QTransform::fromTranslate(qreal dx, qreal dy)
       return QTransform();
    }
 #endif
+
    QTransform transform(1, 0, 0, 0, 1, 0, dx, dy, 1, true);
+
    if (dx == 0 && dy == 0) {
       transform.m_type = TxNone;
    } else {
       transform.m_type = TxTranslate;
    }
+
    transform.m_dirty = TxNone;
+
    return transform;
 }
 
@@ -254,6 +265,7 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
          affine._m11 = sx;
          affine._m22 = sy;
          break;
+
       case TxProject:
          m_13 *= sx;
          m_23 *= sy;
@@ -270,9 +282,11 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
          affine._m22 *= sy;
          break;
    }
+
    if (m_dirty < TxScale) {
       m_dirty = TxScale;
    }
+
    return *this;
 }
 
@@ -284,13 +298,17 @@ QTransform QTransform::fromScale(qreal sx, qreal sy)
       return QTransform();
    }
 #endif
+
    QTransform transform(sx, 0, 0, 0, sy, 0, 0, 0, 1, true);
+
    if (sx == 1. && sy == 1.) {
       transform.m_type = TxNone;
    } else {
       transform.m_type = TxScale;
    }
+
    transform.m_dirty = TxNone;
+
    return transform;
 }
 
@@ -299,6 +317,7 @@ QTransform &QTransform::shear(qreal sh, qreal sv)
    if (sh == 0 && sv == 0) {
       return *this;
    }
+
 #ifndef QT_NO_DEBUG
    if (qIsNaN(sh) | qIsNaN(sv)) {
       qWarning() << "QTransform::shear with NaN called";
@@ -312,10 +331,12 @@ QTransform &QTransform::shear(qreal sh, qreal sv)
          affine._m12 = sv;
          affine._m21 = sh;
          break;
+
       case TxScale:
          affine._m12 = sv * affine._m22;
          affine._m21 = sh * affine._m11;
          break;
+
       case TxProject: {
          qreal tm13 = sv * m_23;
          qreal tm23 = sh * m_13;
@@ -337,9 +358,11 @@ QTransform &QTransform::shear(qreal sh, qreal sv)
          break;
       }
    }
+
    if (m_dirty < TxShear) {
       m_dirty = TxShear;
    }
+
    return *this;
 }
 
@@ -451,6 +474,7 @@ QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
       return *this;
    }
 #endif
+
    qreal sina = qSin(a);
    qreal cosa = qCos(a);
 
@@ -514,6 +538,7 @@ QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
       result.m_type = TxProject;
       *this = result **this;
    }
+
    return *this;
 }
 
@@ -566,10 +591,12 @@ QTransform &QTransform::operator*=(const QTransform &o)
    switch (t) {
       case TxNone:
          break;
+
       case TxTranslate:
          affine._dx += o.affine._dx;
          affine._dy += o.affine._dy;
          break;
+
       case TxScale: {
          qreal m11 = affine._m11 * o.affine._m11;
          qreal m22 = affine._m22 * o.affine._m22;
@@ -583,6 +610,7 @@ QTransform &QTransform::operator*=(const QTransform &o)
          affine._dy = m32;
          break;
       }
+
       case TxRotate:
       case TxShear: {
          qreal m11 = affine._m11 * o.affine._m11 + affine._m12 * o.affine._m21;
@@ -602,6 +630,7 @@ QTransform &QTransform::operator*=(const QTransform &o)
          affine._dy = m32;
          break;
       }
+
       case TxProject: {
          qreal m11 = affine._m11 * o.affine._m11 + affine._m12 * o.affine._m21 + m_13 * o.affine._dx;
          qreal m12 = affine._m11 * o.affine._m12 + affine._m12 * o.affine._m22 + m_13 * o.affine._dy;
@@ -646,13 +675,16 @@ QTransform QTransform::operator*(const QTransform &m) const
 
    QTransform t(true);
    TransformationType type = qMax(thisType, otherType);
+
    switch (type) {
       case TxNone:
          break;
+
       case TxTranslate:
          t.affine._dx = affine._dx + m.affine._dx;
          t.affine._dy += affine._dy + m.affine._dy;
          break;
+
       case TxScale: {
          qreal m11 = affine._m11 * m.affine._m11;
          qreal m22 = affine._m22 * m.affine._m22;
@@ -666,6 +698,7 @@ QTransform QTransform::operator*(const QTransform &m) const
          t.affine._dy = m32;
          break;
       }
+
       case TxRotate:
       case TxShear: {
          qreal m11 = affine._m11 * m.affine._m11 + affine._m12 * m.affine._m21;
@@ -685,6 +718,7 @@ QTransform QTransform::operator*(const QTransform &m) const
          t.affine._dy = m32;
          break;
       }
+
       case TxProject: {
          qreal m11 = affine._m11 * m.affine._m11 + affine._m12 * m.affine._m21 + m_13 * m.affine._dx;
          qreal m12 = affine._m11 * m.affine._m12 + affine._m12 * m.affine._m22 + m_13 * m.affine._dy;
@@ -752,14 +786,13 @@ QDataStream &operator<<(QDataStream &s, const QTransform &m)
       << double(m.m31())
       << double(m.m32())
       << double(m.m33());
+
    return s;
 }
 
 QDataStream &operator>>(QDataStream &s, QTransform &t)
 {
-   double m11, m12, m13,
-          m21, m22, m23,
-          m31, m32, m33;
+   double m11, m12, m13, m21, m22, m23, m31, m32, m33;
 
    s >> m11;
    s >> m12;
@@ -771,9 +804,7 @@ QDataStream &operator>>(QDataStream &s, QTransform &t)
    s >> m32;
    s >> m33;
 
-   t.setMatrix(m11, m12, m13,
-               m21, m22, m23,
-               m31, m32, m33);
+   t.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 
    return s;
 }
@@ -817,19 +848,23 @@ QPoint QTransform::map(const QPoint &p) const
    qreal x = 0, y = 0;
 
    TransformationType t = inline_type();
+
    switch (t) {
       case TxNone:
          x = fx;
          y = fy;
          break;
+
       case TxTranslate:
          x = fx + affine._dx;
          y = fy + affine._dy;
          break;
+
       case TxScale:
          x = affine._m11 * fx + affine._dx;
          y = affine._m22 * fy + affine._dy;
          break;
+
       case TxRotate:
       case TxShear:
       case TxProject:
@@ -841,6 +876,7 @@ QPoint QTransform::map(const QPoint &p) const
             y *= w;
          }
    }
+
    return QPoint(qRound(x), qRound(y));
 }
 
@@ -859,19 +895,23 @@ QPointF QTransform::map(const QPointF &p) const
          x = fx;
          y = fy;
          break;
+
       case TxTranslate:
          x = fx + affine._dx;
          y = fy + affine._dy;
          break;
+
       case TxScale:
          x = affine._m11 * fx + affine._dx;
          y = affine._m22 * fy + affine._dy;
          break;
+
       case TxRotate:
       case TxShear:
       case TxProject:
          x = affine._m11 * fx + affine._m21 * fy + affine._dx;
          y = affine._m12 * fx + affine._m22 * fy + affine._dy;
+
          if (t == TxProject) {
             qreal w = 1. / (m_13 * fx + m_23 * fy + m_33);
             x *= w;
@@ -898,18 +938,21 @@ QLine QTransform::map(const QLine &l) const
          x2 = fx2;
          y2 = fy2;
          break;
+
       case TxTranslate:
          x1 = fx1 + affine._dx;
          y1 = fy1 + affine._dy;
          x2 = fx2 + affine._dx;
          y2 = fy2 + affine._dy;
          break;
+
       case TxScale:
          x1 = affine._m11 * fx1 + affine._dx;
          y1 = affine._m22 * fy1 + affine._dy;
          x2 = affine._m11 * fx2 + affine._dx;
          y2 = affine._m22 * fy2 + affine._dy;
          break;
+
       case TxRotate:
       case TxShear:
       case TxProject:
@@ -926,6 +969,7 @@ QLine QTransform::map(const QLine &l) const
             y2 *= w;
          }
    }
+
    return QLine(qRound(x1), qRound(y1), qRound(x2), qRound(y2));
 }
 
@@ -946,18 +990,21 @@ QLineF QTransform::map(const QLineF &l) const
          x2 = fx2;
          y2 = fy2;
          break;
+
       case TxTranslate:
          x1 = fx1 + affine._dx;
          y1 = fy1 + affine._dy;
          x2 = fx2 + affine._dx;
          y2 = fy2 + affine._dy;
          break;
+
       case TxScale:
          x1 = affine._m11 * fx1 + affine._dx;
          y1 = affine._m22 * fy1 + affine._dy;
          x2 = affine._m11 * fx2 + affine._dx;
          y2 = affine._m22 * fy2 + affine._dy;
          break;
+
       case TxRotate:
       case TxShear:
       case TxProject:
@@ -974,6 +1021,7 @@ QLineF QTransform::map(const QLineF &l) const
             y2 *= w;
          }
    }
+
    return QLineF(x1, y1, x2, y2);
 }
 
@@ -1002,8 +1050,6 @@ static QPolygonF mapProjective(const QTransform &transform, const QPolygonF &pol
 
    return result;
 }
-
-
 
 QPolygonF QTransform::map(const QPolygonF &a) const
 {
@@ -1051,6 +1097,7 @@ QPolygon QTransform::map(const QPolygon &a) const
       dp[i].xp = qRound(nx);
       dp[i].yp = qRound(ny);
    }
+
    return p;
 }
 
@@ -1142,6 +1189,7 @@ static inline bool lineTo_clipped(QPainterPath &path, const QTransform &transfor
 
    return true;
 }
+
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
 
 static inline bool cubicTo_clipped(QPainterPath &path, const QTransform &transform, const QPointF &a, const QPointF &b,
@@ -1172,6 +1220,7 @@ static QPainterPath mapProjective(const QTransform &transform, const QPainterPat
    QPointF last;
    QPointF lastMoveTo;
    bool needsMoveTo = true;
+
    for (int i = 0; i < path.elementCount(); ++i) {
       switch (path.elementAt(i).type) {
          case QPainterPath::MoveToElement:
@@ -1183,12 +1232,14 @@ static QPainterPath mapProjective(const QTransform &transform, const QPainterPat
             last = path.elementAt(i);
             needsMoveTo = true;
             break;
+
          case QPainterPath::LineToElement:
             if (lineTo_clipped(result, transform, last, path.elementAt(i), needsMoveTo)) {
                needsMoveTo = false;
             }
             last = path.elementAt(i);
             break;
+
          case QPainterPath::CurveToElement:
             if (cubicTo_clipped(result, transform, last, path.elementAt(i), path.elementAt(i + 1), path.elementAt(i + 2),
                   needsMoveTo)) {
@@ -1197,6 +1248,7 @@ static QPainterPath mapProjective(const QTransform &transform, const QPainterPat
             i += 2;
             last = path.elementAt(i);
             break;
+
          default:
             Q_ASSERT(false);
       }
@@ -1262,6 +1314,7 @@ QPolygon QTransform::mapToPolygon(const QRect &rect) const
       y[1] = y[0];
       y[2] = y[0] + h;
       y[3] = y[2];
+
    } else {
       qreal right = rect.x() + rect.width();
       qreal bottom = rect.y() + rect.height();
@@ -1303,6 +1356,7 @@ bool QTransform::squareToQuad(const QPolygonF &quad, QTransform &trans)
       trans.setMatrix(dx1 - dx0, dy1 - dy0,  0,
          dx2 - dx1, dy2 - dy1,  0,
          dx0,       dy0,  1);
+
    } else {
       double ax1 = dx1 - dx2;
       double ax2 = dx3 - dx2;
@@ -1350,25 +1404,25 @@ bool QTransform::quadToSquare(const QPolygonF &quad, QTransform &trans)
    return invertible;
 }
 
-bool QTransform::quadToQuad(const QPolygonF &one,
-   const QPolygonF &two,
-   QTransform &trans)
+bool QTransform::quadToQuad(const QPolygonF &one, const QPolygonF &two, QTransform &trans)
 {
    QTransform stq;
    if (!quadToSquare(one, trans)) {
       return false;
    }
+
    if (!squareToQuad(two, stq)) {
       return false;
    }
+
    trans *= stq;
+
    //qDebug()<<"Final = "<<trans;
    return true;
 }
 
 void QTransform::setMatrix(qreal m11, qreal m12, qreal m13,
-   qreal m21, qreal m22, qreal m23,
-   qreal m31, qreal m32, qreal m33)
+   qreal m21, qreal m22, qreal m23, qreal m31, qreal m32, qreal m33)
 {
    affine._m11 = m11;
    affine._m12 = m12;
@@ -1410,11 +1464,14 @@ QRect QTransform::mapRect(const QRect &rect) const
          w = -w;
          x -= w;
       }
+
       if (h < 0) {
          h = -h;
          y -= h;
       }
+
       return QRect(x, y, w, h);
+
    } else if (t < TxProject || !needsPerspectiveClipping(rect, *this)) {
       // see mapToPolygon for explanations of the algorithm.
       qreal x = 0, y = 0;
@@ -1423,22 +1480,27 @@ QRect QTransform::mapRect(const QRect &rect) const
       qreal ymin = y;
       qreal xmax = x;
       qreal ymax = y;
+
       MAP(rect.right() + 1, rect.top(), x, y);
       xmin = qMin(xmin, x);
       ymin = qMin(ymin, y);
       xmax = qMax(xmax, x);
       ymax = qMax(ymax, y);
+
       MAP(rect.right() + 1, rect.bottom() + 1, x, y);
       xmin = qMin(xmin, x);
       ymin = qMin(ymin, y);
       xmax = qMax(xmax, x);
       ymax = qMax(ymax, y);
+
       MAP(rect.left(), rect.bottom() + 1, x, y);
       xmin = qMin(xmin, x);
       ymin = qMin(ymin, y);
       xmax = qMax(xmax, x);
       ymax = qMax(ymax, y);
+
       return QRect(qRound(xmin), qRound(ymin), qRound(xmax) - qRound(xmin), qRound(ymax) - qRound(ymin));
+
    } else {
       QPainterPath path;
       path.addRect(rect);
@@ -1449,6 +1511,7 @@ QRect QTransform::mapRect(const QRect &rect) const
 QRectF QTransform::mapRect(const QRectF &rect) const
 {
    TransformationType t = inline_type();
+
    if (t <= TxTranslate) {
       return rect.translated(affine._dx, affine._dy);
    }
@@ -1475,16 +1538,19 @@ QRectF QTransform::mapRect(const QRectF &rect) const
       qreal ymin = y;
       qreal xmax = x;
       qreal ymax = y;
+
       MAP(rect.x() + rect.width(), rect.y(), x, y);
       xmin = qMin(xmin, x);
       ymin = qMin(ymin, y);
       xmax = qMax(xmax, x);
       ymax = qMax(ymax, y);
+
       MAP(rect.x() + rect.width(), rect.y() + rect.height(), x, y);
       xmin = qMin(xmin, x);
       ymin = qMin(ymin, y);
       xmax = qMax(xmax, x);
       ymax = qMax(ymax, y);
+
       MAP(rect.x(), rect.y() + rect.height(), x, y);
       xmin = qMin(xmin, x);
       ymin = qMin(ymin, y);
@@ -1600,12 +1666,14 @@ Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale
    // rotate then scale: compare columns
    const qreal xScale1 = transform.m11() * transform.m11()
       + transform.m21() * transform.m21();
+
    const qreal yScale1 = transform.m12() * transform.m12()
       + transform.m22() * transform.m22();
 
    // scale then rotate: compare rows
    const qreal xScale2 = transform.m11() * transform.m11()
       + transform.m12() * transform.m12();
+
    const qreal yScale2 = transform.m21() * transform.m21()
       + transform.m22() * transform.m22();
 
@@ -1616,6 +1684,7 @@ Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale
       }
 
       return type == QTransform::TxRotate && qFuzzyCompare(xScale1, yScale1);
+
    } else {
       if (scale) {
          *scale = qSqrt(qMax(xScale2, yScale2));

@@ -987,7 +987,7 @@ void QGraphicsItem::setFlags(GraphicsItemFlags flags)
 
    bool fullUpdate = (quint32(flags) & geomChangeFlagsMask) != (d_ptr->itemFlags & geomChangeFlagsMask);
    if (fullUpdate) {
-      d_ptr->updatePaintedViewBoundingRects(/*children=*/true);
+      d_ptr->updatePaintedViewBoundingRects(true);
    }
 
    // Keep the old flags to compare the diff.

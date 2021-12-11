@@ -426,10 +426,12 @@ QPointF QScroller::pixelPerMeter() const
 #ifndef QT_NO_GRAPHICSVIEW
    if (QGraphicsObject *go = qobject_cast<QGraphicsObject *>(d->target)) {
       QTransform viewtr;
+
       //TODO: the first view isn't really correct - maybe use an additional field in the prepare event?
       if (go->scene() && !go->scene()->views().isEmpty()) {
          viewtr = go->scene()->views().first()->viewportTransform();
       }
+
       QTransform tr = go->deviceTransform(viewtr);
       if (tr.isScaling()) {
          QPointF p0 = tr.map(QPointF(0, 0));
@@ -452,6 +454,7 @@ QPointF QScroller::velocity() const
    switch (state()) {
       case Dragging:
          return d->releaseVelocity;
+
       case Scrolling: {
          QPointF vel;
          qint64 now = d->monotonicTimer.elapsed();
@@ -459,20 +462,24 @@ QPointF QScroller::velocity() const
          if (!d->xSegments.isEmpty()) {
             const QScrollerPrivate::ScrollSegment &s = d->xSegments.head();
             qreal progress = qreal(now - s.startTime) / qreal(s.deltaTime);
-            qreal v = qSign(s.deltaPos) * qreal(s.deltaTime) / qreal(1000) * sp->decelerationFactor * qreal(0.5) * differentialForProgress(s.curve,
-                  progress);
+            qreal v = qSign(s.deltaPos) * qreal(s.deltaTime) / qreal(1000) * sp->decelerationFactor
+                  * qreal(0.5) * differentialForProgress(s.curve, progress);
             vel.setX(v);
          }
 
          if (!d->ySegments.isEmpty()) {
             const QScrollerPrivate::ScrollSegment &s = d->ySegments.head();
             qreal progress = qreal(now - s.startTime) / qreal(s.deltaTime);
-            qreal v = qSign(s.deltaPos) * qreal(s.deltaTime) / qreal(1000) * sp->decelerationFactor * qreal(0.5) * differentialForProgress(s.curve,
-                  progress);
+
+            qreal v = qSign(s.deltaPos) * qreal(s.deltaTime) / qreal(1000) * sp->decelerationFactor
+                  * qreal(0.5) * differentialForProgress(s.curve, progress);
+
             vel.setY(v);
          }
+
          return vel;
       }
+
       default:
          return QPointF(0, 0);
    }
@@ -481,8 +488,8 @@ QPointF QScroller::velocity() const
 QPointF QScroller::finalPosition() const
 {
    Q_D(const QScroller);
-   return QPointF(d->scrollingSegmentsEndPos(Qt::Horizontal),
-         d->scrollingSegmentsEndPos(Qt::Vertical));
+
+   return QPointF(d->scrollingSegmentsEndPos(Qt::Horizontal), d->scrollingSegmentsEndPos(Qt::Vertical));
 }
 
 void QScroller::scrollTo(const QPointF &pos)
@@ -762,8 +769,9 @@ bool QScroller::handleInput(Input input, const QPointF &position, qint64 timesta
 {
    Q_D(QScroller);
 
-   qScrollerDebug() << "QScroller::handleInput(" << input << ", " << d->stateName(d->state) << ", " << position << ", " << timestamp <<
-      ')';
+   qScrollerDebug() << "QScroller::handleInput(" << input << ", " << d->stateName(d->state) << ", "
+                    << position << ", " << timestamp << ')';
+
    struct statechange {
       State state;
       Input input;
@@ -787,11 +795,9 @@ bool QScroller::handleInput(Input input, const QPointF &position, qint64 timesta
          return (d->*sc->handler)(position - d->overshootPosition, timestamp);
       }
    }
+
    return false;
 }
-
-
-
 
 QPointF QScrollerPrivate::dpi() const
 {
@@ -816,7 +822,9 @@ void QScrollerPrivate::updateVelocity(const QPointF &deltaPixelRaw, qint64 delta
    }
 
    Q_Q(QScroller);
+
    QPointF ppm = q->pixelPerMeter();
+
    const QScrollerPropertiesPrivate *sp = properties.d.data();
    QPointF deltaPixel = deltaPixelRaw;
 

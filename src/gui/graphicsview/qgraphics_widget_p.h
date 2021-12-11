@@ -39,9 +39,10 @@ class QStyleOptionTitleBar;
 
 class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 {
-   Q_DECLARE_PUBLIC(QGraphicsWidget)
-
  public:
+   // Margins
+   enum {Left, Top, Right, Bottom};
+
    QGraphicsWidgetPrivate()
       : windowData(nullptr), margins(nullptr), setWindowFrameMargins(false), windowFrameMargins(nullptr),
         layout(nullptr), inheritedPaletteResolveMask(0), inheritedFontResolveMask(0),
@@ -55,12 +56,11 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    void init(QGraphicsItem *parentItem, Qt::WindowFlags flags);
    qreal titleBarHeight(const QStyleOptionTitleBar &options) const;
 
-   // Margins
-   enum {Left, Top, Right, Bottom};
-
    void ensureMargins() const;
 
-   void fixFocusChainBeforeReparenting(QGraphicsWidget *newParent, QGraphicsScene *oldScene, QGraphicsScene *newScene = nullptr);
+   void fixFocusChainBeforeReparenting(QGraphicsWidget *newParent, QGraphicsScene *oldScene,
+         QGraphicsScene *newScene = nullptr);
+
    void setLayout_helper(QGraphicsLayout *l);
 
    // Layouts
@@ -101,46 +101,58 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    void setGeometryFromSetPos();
 
    // State
-   inline int attributeToBitIndex(Qt::WidgetAttribute att) const {
+   int attributeToBitIndex(Qt::WidgetAttribute att) const {
       int bit = -1;
+
       switch (att) {
          case Qt::WA_SetLayoutDirection:
             bit = 0;
             break;
+
          case Qt::WA_RightToLeft:
             bit = 1;
             break;
+
          case Qt::WA_SetStyle:
             bit = 2;
             break;
+
          case Qt::WA_Resized:
             bit = 3;
             break;
+
          case Qt::WA_DeleteOnClose:
             bit = 4;
             break;
+
          case Qt::WA_NoSystemBackground:
             bit = 5;
             break;
+
          case Qt::WA_OpaquePaintEvent:
             bit = 6;
             break;
+
          case Qt::WA_SetPalette:
             bit = 7;
             break;
+
          case Qt::WA_SetFont:
             bit = 8;
             break;
+
          case Qt::WA_WindowPropagation:
             bit = 9;
             break;
+
          default:
             break;
       }
+
       return bit;
    }
 
-   inline void setAttribute(Qt::WidgetAttribute att, bool value) {
+   void setAttribute(Qt::WidgetAttribute att, bool value) {
       int bit = attributeToBitIndex(att);
 
       if (bit == -1) {
@@ -155,12 +167,13 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
       }
    }
 
-   inline bool testAttribute(Qt::WidgetAttribute att) const {
+   bool testAttribute(Qt::WidgetAttribute att) const {
       int bit = attributeToBitIndex(att);
 
       if (bit == -1) {
          return false;
       }
+
       return (attributes & (1 << bit)) != 0;
    }
 
@@ -212,6 +225,9 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    Qt::FocusPolicy focusPolicy;
    QGraphicsWidget *focusNext;
    QGraphicsWidget *focusPrev;
+
+ private:
+   Q_DECLARE_PUBLIC(QGraphicsWidget)
 };
 
 #endif

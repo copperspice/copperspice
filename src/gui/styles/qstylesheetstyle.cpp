@@ -4794,6 +4794,7 @@ QStyle::SubControl QStyleSheetStyle::hitTestComplexControl(ComplexControl cc, co
       case CC_Slider:
       case CC_ToolButton:
          return QWindowsStyle::hitTestComplexControl(cc, opt, pt, w);
+
       default:
          break;
    }
@@ -6194,7 +6195,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
 
 #ifndef QT_NO_ITEMVIEWS
       case SE_ItemViewItemCheckIndicator:
-         if (!qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
+         if (! qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             return subElementRect(SE_CheckBoxIndicator, opt, w);
          }
          [[fallthrough]];

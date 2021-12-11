@@ -54,7 +54,8 @@ public:
     static const QByteArray setWmWindowTypeIdentifier() { return QByteArray("XcbSetWmWindowType"); }
     static void setWmWindowType(QWindow *window, WmWindowType type)
     {
-        return QPlatformHeaderHelper::callPlatformFunction<void, SetWmWindowType, QWindow *, WmWindowType>(setWmWindowTypeIdentifier(), window, type);
+        return QPlatformHeaderHelper::callPlatformFunction<void, SetWmWindowType, QWindow *,
+            WmWindowType>(setWmWindowTypeIdentifier(), window, type);
     }
 
     typedef void (*SetWmWindowRole)(QWindow *window, const QByteArray &role);

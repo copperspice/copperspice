@@ -117,11 +117,10 @@ void QFileInfoGatherer::fetchExtendedInformation(const QString &path, const QStr
    this->files.push(files);
 
    condition.wakeAll();
+
 #ifndef QT_NO_FILESYSTEMWATCHER
-   if (files.isEmpty()
-      && !path.isEmpty()
-      && !path.startsWith(QLatin1String("//")) /*don't watch UNC path*/) {
-      if (!watcher->directories().contains(path)) {
+   if (files.isEmpty() && ! path.isEmpty() && ! path.startsWith("//") ) {
+      if (! watcher->directories().contains(path)) {
          watcher->addPath(path);
       }
    }
@@ -226,12 +225,12 @@ static QString translateDriveName(const QFileInfo &drive)
    QString driveName = drive.absoluteFilePath();
 
 #if defined(Q_OS_WIN)
-   if (driveName.startsWith(QLatin1Char('/'))) {
+   if (driveName.startsWith('/')) {
       // UNC host
       return drive.fileName();
    }
 
-   if (driveName.endsWith(QLatin1Char('/'))) {
+   if (driveName.endsWith('/')) {
       driveName.chop(1);
    }
 #endif

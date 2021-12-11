@@ -702,9 +702,10 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
                }
                cell = table->cellAt(row, column);
                // note we also continue while we have not reached a cell thats not merged with one above us
+
             } while (cell.isValid()
-               && ((op == QTextCursor::NextRow && currentRow == cell.row())
-                  || cell.row() < row));
+               && ((op == QTextCursor::NextRow && currentRow == cell.row()) || cell.row() < row));
+
          } else if (op == QTextCursor::PreviousCell || op == QTextCursor::PreviousRow) {
             do {
                --column;
@@ -714,10 +715,12 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
                }
                cell = table->cellAt(row, column);
                // note we also continue while we have not reached a cell thats not merged with one above us
+
             } while (cell.isValid()
                && ((op == QTextCursor::PreviousRow && currentRow == cell.row())
                   || cell.row() < row));
          }
+
          if (cell.isValid()) {
             newPosition = cell.firstPosition();
          }

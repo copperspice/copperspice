@@ -60,6 +60,7 @@ class Q_GUI_EXPORT QPlatformTextureList : public QObject
    bool isEmpty() const {
       return count() == 0;
    }
+
    GLuint textureId(int index) const;
    QRect geometry(int index) const;
    QRect clipRect(int index) const;
@@ -70,6 +71,7 @@ class Q_GUI_EXPORT QPlatformTextureList : public QObject
 
    void appendTexture(void *source, GLuint texture_id, const QRect &geometry,
       const QRect &clipRect = QRect(), Flags flags = Qt::EmptyFlag);
+
    void clear();
 
    GUI_CS_SIGNAL_1(Public, void locked(bool un_named_arg1))
@@ -79,7 +81,9 @@ class Q_GUI_EXPORT QPlatformTextureList : public QObject
    QScopedPointer<QPlatformTextureListPrivate> d_ptr;
 
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPlatformTextureList::Flags)
+
 #endif
 
 class Q_GUI_EXPORT QPlatformBackingStore

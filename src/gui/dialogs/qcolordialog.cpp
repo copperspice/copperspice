@@ -1743,7 +1743,7 @@ void QColorDialogPrivate::releaseColorPicking()
 
    q->releaseKeyboard();
    q->setMouseTracking(false);
-   lblScreenColorInfo->setText(QLatin1String("\n"));
+   lblScreenColorInfo->setText(QString("\n"));
    addCusBt->setDisabled(false);
    buttons->setDisabled(false);
    screenColorPickerButton->setDisabled(false);

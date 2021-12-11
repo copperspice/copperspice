@@ -52,7 +52,7 @@ class Q_GUI_EXPORT QSurfaceFormat
       DefaultRenderableType = 0x0,
       OpenGL                = 0x1,
       OpenGLES              = 0x2,
-      OpenVG                = 0x4
+      OpenVG                = 0x4      // not documented
    };
 
    enum OpenGLContextProfile {

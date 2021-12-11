@@ -221,7 +221,7 @@ class Q_GUI_EXPORT QFont
    bool operator!=(const QFont &other) const;
    bool operator<(const QFont &other) const;
 
-   inline QFont &operator=(QFont &&other) {
+   QFont &operator=(QFont &&other) {
       qSwap(d, other.d);
       qSwap(resolve_mask, other.resolve_mask);
       return *this;
@@ -268,7 +268,6 @@ class Q_GUI_EXPORT QFont
 
    void detach();
 
-
    friend class QFontPrivate;
    friend class QFontDialogPrivate;
    friend class QFontMetrics;
@@ -304,6 +303,7 @@ class Q_GUI_EXPORT QFont
 };
 
 Q_GUI_EXPORT uint qHash(const QFont &font, uint seed = 0);
+
 inline bool QFont::bold() const
 {
    return weight() > Normal;

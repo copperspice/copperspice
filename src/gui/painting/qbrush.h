@@ -102,6 +102,7 @@ class Q_GUI_EXPORT QBrush
    }
 
    inline bool isDetached() const;
+
    typedef QScopedPointer<QBrushData, QBrushDataPointerDeleter> DataPtr;
    inline DataPtr &data_ptr() {
       return d;
@@ -141,18 +142,22 @@ inline Qt::BrushStyle QBrush::style() const
 {
    return d->style;
 }
+
 inline const QColor &QBrush::color() const
 {
    return d->color;
 }
+
 inline const QMatrix &QBrush::matrix() const
 {
    return d->transform.toAffine();
 }
+
 inline QTransform QBrush::transform() const
 {
    return d->transform;
 }
+
 inline bool QBrush::isDetached() const
 {
    return d->ref.load() == 1;
@@ -233,17 +238,22 @@ class Q_GUI_EXPORT QGradient
    Type m_type;
    Spread m_spread;
    QGradientStops m_stops;
+
    union {
       struct {
          qreal x1, y1, x2, y2;
       } linear;
+
       struct {
          qreal cx, cy, fx, fy, cradius;
       } radial;
+
       struct {
          qreal cx, cy, angle;
       } conical;
+
    } m_data;
+
    void *dummy;
 };
 
@@ -271,7 +281,6 @@ class Q_GUI_EXPORT QLinearGradient : public QGradient
       setFinalStop(QPointF(x, y));
    }
 };
-
 
 class Q_GUI_EXPORT QRadialGradient : public QGradient
 {
@@ -307,7 +316,6 @@ class Q_GUI_EXPORT QRadialGradient : public QGradient
    qreal focalRadius() const;
    void setFocalRadius(qreal radius);
 };
-
 
 class Q_GUI_EXPORT QConicalGradient : public QGradient
 {

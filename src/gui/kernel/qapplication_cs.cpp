@@ -2394,6 +2394,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                   wheel->buttons(), wheel->modifiers(), phase, wheel->source());
 
                bool eventAccepted;
+
                while (w) {
                   we.spont = spontaneous && w == receiver;
                   we.ignore();
@@ -2418,6 +2419,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                   w = w->parentWidget();
                }
                wheel->setAccepted(eventAccepted);
+
             } else if (!spontaneous) {
                // wheel_widget may forward the wheel event to a delegate widget,
                // either directly or indirectly (e.g. QAbstractScrollArea will
@@ -2425,6 +2427,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                // case, the event will not be spontaneous but synthesized, so
                // we can send it straight to the receiver.
                d->notify_helper(w, wheel);
+
             } else {
                // The phase is either ScrollUpdate or ScrollEnd, and wheel_widget
                // is set. Since it accepted the wheel event previously, we continue
@@ -2439,6 +2442,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                we.ignore();
                d->notify_helper(QApplicationPrivate::wheel_widget, &we);
                wheel->setAccepted(we.isAccepted());
+
                if (phase == Qt::ScrollEnd) {
                   QApplicationPrivate::wheel_widget = nullptr;
                }
@@ -2446,12 +2450,14 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
          }
          break;
 #endif
+
 #ifndef QT_NO_CONTEXTMENU
          case QEvent::ContextMenu: {
             QWidget *w = static_cast<QWidget *>(receiver);
             QContextMenuEvent *context = static_cast<QContextMenuEvent *>(e);
             QPoint relpos = context->pos();
             bool eventAccepted = context->isAccepted();
+
             while (w) {
                QContextMenuEvent ce(context->reason(), relpos, context->globalPos(), context->modifiers());
                ce.spont = e->spontaneous();
@@ -3391,9 +3397,9 @@ bool QApplicationPrivate::translateRawTouchEvent(QWidget *window, QTouchDevice *
 
 #ifdef Q_OS_DARWIN
       // Single-touch events are normally not sent unless WA_TouchPadAcceptSingleTouchEvents is set
-      if (touchPoints.count() == 1
-         && device->type() == QTouchDevice::TouchPad
-         && !targetWidget->testAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents)) {
+
+      if (touchPoints.count() == 1 && device->type() == QTouchDevice::TouchPad
+            && ! targetWidget->testAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents)) {
          continue;
       }
 #endif

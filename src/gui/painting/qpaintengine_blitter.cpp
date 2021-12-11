@@ -350,6 +350,7 @@ void QBlitterPaintEnginePrivate::updateClipState(QPainterState *)
 void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &color, bool alpha)
 {
    Q_Q(QBlitterPaintEngine);
+
    pmData->unmarkRasterOverlay(rect);
    QRectF targetRect = rect;
 
@@ -367,11 +368,14 @@ void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &colo
          } else {
             pmData->blittable()->fillRect(targetRect & clipData->clipRect, color);
          }
+
       } else if (clipData->hasRegionClip) {
          QVector<QRect> rects = clipData->clipRegion.rects();
+
          for (int i = 0; i < rects.size(); ++i) {
             QRect intersectRect = rects.at(i).intersected(targetRect.toRect());
-            if (!intersectRect.isEmpty()) {
+
+            if (! intersectRect.isEmpty()) {
                unlock();
                if (alpha) {
                   pmData->blittable()->alphaFillRect(intersectRect, color, q->state()->compositionMode());
@@ -682,10 +686,12 @@ void QBlitterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 void QBlitterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
    Q_D(QBlitterPaintEngine);
+
    if (d->caps.canBlitterDrawRectMask()) {
       for (int i = 0; i < rectCount; ++i) {
          d->fillRect(rectPtr[i], qbrush_color(state()->brush), false);
       }
+
    } else {
       d->pmData->markRasterOverlay(rectPtr, rectCount);
       QRasterPaintEngine::drawRects(rectPtr, rectCount);

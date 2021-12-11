@@ -3821,7 +3821,6 @@ int QRegion::rectCount() const
    return (d->qt_rgn ? d->qt_rgn->numRects : 0);
 }
 
-
 bool QRegion::operator==(const QRegion &r) const
 {
    if (! d->qt_rgn) {

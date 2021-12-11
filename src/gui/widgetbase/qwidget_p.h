@@ -333,8 +333,7 @@ class Q_GUI_EXPORT QWidgetPrivate
 
    void setSystemClip(QPaintDevice *paintDevice, const QRegion &region);
    void subtractOpaqueChildren(QRegion &rgn, const QRect &clipRect) const;
-   void subtractOpaqueSiblings(QRegion &source, bool *hasDirtySiblingsAbove = nullptr,
-      bool alsoNonOpaque = false) const;
+   void subtractOpaqueSiblings(QRegion &source, bool *hasDirtySiblingsAbove = nullptr, bool alsoNonOpaque = false) const;
 
    void clipToEffectiveMask(QRegion &region) const;
    void updateIsOpaque();
@@ -364,9 +363,11 @@ class Q_GUI_EXPORT QWidgetPrivate
    // merge into a template function ( emerald )
    void invalidateBuffer(const QRegion &);
    void invalidateBuffer(const QRect &);
+
    bool isOverlapped(const QRect &) const;
    void syncBackingStore();
    void syncBackingStore(const QRegion &region);
+
    // tells the input method about the widgets transform
    void updateWidgetTransform(QEvent *event);
 

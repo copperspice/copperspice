@@ -2424,6 +2424,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                      qDrawShadeRect(p, f->rect, f->palette, frameShadow == QFrame::Sunken, lw, mlw);
                   }
                   break;
+
                case QFrame::StyledPanel:
                   // keep backwards compatibility if there is a proxy style.
                   // be sure to call drawPrimitive(QStyle::PE_Frame) on the proxy style
@@ -3044,6 +3045,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                      case QFrame::Plain:
                         frameWidth = f->lineWidth;
                         break;
+
                      case QFrame::Raised:
                      case QFrame::Sunken:
                         frameWidth = (short)(f->lineWidth * 2 + f->midLineWidth);
@@ -3210,8 +3212,10 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 
             if (sr == SE_ItemViewItemCheckIndicator) {
                r = d->checkRect;
+
             } else if (sr == SE_ItemViewItemDecoration) {
                r = d->decorationRect;
+
             } else if (sr == SE_ItemViewItemText || sr == SE_ItemViewItemFocusRect) {
                r = d->displayRect;
             }
@@ -4624,10 +4628,12 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                if (numSubControls == 1 || (numSubControls == 2 && !(opt->subControls & SC_MdiMinButton))) {
                   break;
                }
+
                if (opt->subControls & SC_MdiNormalButton) {
                   offset += buttonWidth;
                }
                break;
+
             default:
                break;
          }

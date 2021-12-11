@@ -78,7 +78,6 @@ class QDebug;
 
 class QWidgetData
 {
-
  public:
    WId winid;
    uint widget_attributes;
@@ -965,7 +964,7 @@ inline bool QWidget::isWindow() const
 
 inline bool QWidget::isEnabled() const
 {
-   return !testAttribute(Qt::WA_Disabled);
+   return ! testAttribute(Qt::WA_Disabled);
 }
 
 inline bool QWidget::isModal() const
