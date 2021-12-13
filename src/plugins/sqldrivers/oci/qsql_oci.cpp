@@ -428,8 +428,7 @@ static void qOraOutValue(QVariant &value, QList<QByteArray> &storage, OCIError *
          break;
 
       case QVariant::String:
-         value = QString(
-               reinterpret_cast<const QChar *>(storage.takeFirst().constData()));
+         value = QString::fromUtf16(reinterpret_cast<const char16_t *>(storage.takeFirst().constData()));
          break;
 
       default:
