@@ -649,13 +649,25 @@ void QDialogButtonBoxPrivate::_q_handleButtonDestroyed()
 {
    Q_Q(QDialogButtonBox);
 
-   if (QObject *object = q->sender()) {
-      bool tmp = internalRemove;
+   QObject *object = q->sender();
 
-      internalRemove = true;
-      q->removeButton(static_cast<QAbstractButton *>(object));
+   if (object != nullptr) {
+      // remove from the standard button hash first and then from the roles
+      for (auto iter = standardButtonHash.cbegin(); iter != standardButtonHash.cend(); ++iter) {
+         if (iter.key() == object) {
+            standardButtonHash.erase(iter);
+            break;
+         }
+      }
 
-      internalRemove = tmp;
+      for (QList<QAbstractButton *> &list : buttonLists) {
+         for (auto iter = list.cbegin(); iter != list.cend(); ++iter) {
+            if (*iter == object) {
+               list.erase(iter);
+               break;
+            }
+         }
+      }
    }
 }
 
