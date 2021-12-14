@@ -736,18 +736,34 @@ static bool tryToLoadOpenSslWin32Library(QString ssleay32LibName, QString libeay
 
 static QPair<QSystemLibrary *, QSystemLibrary *> loadOpenSslWin32()
 {
-   QPair<QSystemLibrary *, QSystemLibrary *> pair;
-   pair.first  = nullptr;
-   pair.second = nullptr;
+   QPair<QSystemLibrary *, QSystemLibrary *> retval;
 
-      if (!tryToLoadOpenSslWin32Library(QLatin1String("libssl-10"), QLatin1String("libcrypto-10"), pair)) {
-         if (!tryToLoadOpenSslWin32Library(QLatin1String("libssl-8"), QLatin1String("libcrypto-8"), pair)) {
-            tryToLoadOpenSslWin32Library(QLatin1String("libssl-7"), QLatin1String("libcrypto-7"), pair);
-         }
+   retval.first  = nullptr;
+   retval.second = nullptr;
+
+   QList<QPair<QString, QString>> fileNames =
+      {
+//       not enabled at this time
+//       {"libssl-3-x64",   "libcrypto-3-x64"},      // version 3, 64 bit
+//       {"libssl-3",       "libcrypto-3"},          // version 3, 32 bit
+
+         {"libssl-1_1-x64", "libcrypto-1_1-x64"},    // version 1.1, 64 bit
+         {"libssl-1_1",     "libcrypto-1_1"},        // version 1.1, 32 bit
+
+         {"ssleay32",   "libeay32"},                 // version 1.0.x
+         {"libssl-10",  "libcrypto-10"},
+         {"libssl-8",   "libcrypto-8"},
+         {"libssl-7",   "libcrypto-7"}
+      };
+
+   for (auto item : fileNames) {
+      if (tryToLoadOpenSslWin32Library(item.first, item.second, retval)) {
+         // dll loaded
+         break;
       }
    }
 
-   return pair;
+   return retval;
 }
 
 #else
