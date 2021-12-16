@@ -359,6 +359,11 @@ TEST_CASE("QString8 remove", "[qstring]")
       str = str.remove(QChar32('a'));
       REQUIRE(str == "A wcky fox nd sizeble pig jumped hlfwy over  blue moon");
    }
+
+   SECTION ("remove e") {
+      str = str.remove(QRegularExpression("[aeiou]."));
+      REQUIRE(str == "A wky f d sblp jp hfw  bl mn");
+   }
 }
 
 TEST_CASE("QString8 repeated", "[qstring]")
