@@ -80,7 +80,13 @@ static QTzTimeZoneHash loadTzTimeZones()
 }
 
 // Hash of available system tz files as loaded by loadTzTimeZones()
-Q_GLOBAL_STATIC_WITH_ARGS(const QTzTimeZoneHash, tzZones, (loadTzTimeZones()));
+
+static QTzTimeZoneHash *tzZones()
+{
+   static QTzTimeZoneHash retval(loadTzTimeZones());
+   return &retval;
+}
+
 
 /*
     The following is copied and modified from tzfile.h which is in the public domain.

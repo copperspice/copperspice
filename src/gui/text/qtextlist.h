@@ -50,11 +50,11 @@ class Q_GUI_EXPORT QTextList : public QTextBlockGroup
 
    QTextBlock item(int i) const;
 
-   int itemNumber(const QTextBlock &) const;
-   QString itemText(const QTextBlock &) const;
+   int itemNumber(const QTextBlock &block) const;
+   QString itemText(const QTextBlock &block) const;
 
    void removeItem(int i);
-   void remove(const QTextBlock &);
+   void remove(const QTextBlock &block);
 
    void add(const QTextBlock &block);
 
@@ -68,9 +68,9 @@ class Q_GUI_EXPORT QTextList : public QTextBlockGroup
    Q_DECLARE_PRIVATE(QTextList)
 };
 
-inline void QTextList::setFormat(const QTextListFormat &aformat)
+inline void QTextList::setFormat(const QTextListFormat &format)
 {
-   QTextObject::setFormat(aformat);
+   QTextObject::setFormat(format);
 }
 
 #endif // QTEXTLIST_H

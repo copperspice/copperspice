@@ -42,7 +42,7 @@ class QAlphaWidget: public QWidget, private QEffects
    GUI_CS_OBJECT(QAlphaWidget)
 
  public:
-   QAlphaWidget(QWidget *w, Qt::WindowFlags f = Qt::EmptyFlag);
+   QAlphaWidget(QWidget *w, Qt::WindowFlags flags = Qt::EmptyFlag);
    ~QAlphaWidget();
 
    void run(int time);
@@ -72,8 +72,8 @@ class QAlphaWidget: public QWidget, private QEffects
 
 static QAlphaWidget *q_blend = nullptr;
 
-QAlphaWidget::QAlphaWidget(QWidget *w, Qt::WindowFlags f)
-   : QWidget(QApplication::desktop()->screen(QApplication::desktop()->screenNumber(w)), f)
+QAlphaWidget::QAlphaWidget(QWidget *w, Qt::WindowFlags flags)
+   : QWidget(QApplication::desktop()->screen(QApplication::desktop()->screenNumber(w)), flags)
 {
 #ifndef Q_OS_WIN
    setEnabled(false);
@@ -315,19 +315,12 @@ void QAlphaWidget::alphaBlend()
    }
 }
 
-/*
-  Internal class QRollEffect
-
-  The QRollEffect widget is shown while the animation lasts
-  and displays a scrolling pixmap.
-*/
-
 class QRollEffect : public QWidget, private QEffects
 {
    GUI_CS_OBJECT(QRollEffect)
 
  public:
-   QRollEffect(QWidget *w, Qt::WindowFlags f, DirFlags orient);
+   QRollEffect(QWidget *w, Qt::WindowFlags flags, DirFlags orient);
 
    void run(int time);
 
@@ -360,8 +353,8 @@ class QRollEffect : public QWidget, private QEffects
 
 static QRollEffect *q_roll = nullptr;
 
-QRollEffect::QRollEffect(QWidget *w, Qt::WindowFlags f, DirFlags orient)
-   : QWidget(nullptr, f), orientation(orient)
+QRollEffect::QRollEffect(QWidget *w, Qt::WindowFlags flags, DirFlags orient)
+   : QWidget(nullptr, flags), orientation(orient)
 {
 #ifndef Q_OS_WIN
    setEnabled(false);

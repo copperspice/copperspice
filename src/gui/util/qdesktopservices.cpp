@@ -30,12 +30,13 @@
 #include <qhash.h>
 #include <qobject.h>
 #include <qcoreapplication.h>
-#include <qguiapplication_p.h>
 #include <qurl.h>
 #include <qmutex.h>
 #include <qplatform_services.h>
 #include <qplatform_integration.h>
 #include <qdir.h>
+
+#include <qguiapplication_p.h>
 
 class QOpenUrlHandlerRegistry : public QObject
 {
@@ -65,6 +66,7 @@ Q_GLOBAL_STATIC(QOpenUrlHandlerRegistry, handlerRegistry)
 void QOpenUrlHandlerRegistry::handlerDestroyed(QObject *handler)
 {
    HandlerHash::iterator it = handlers.begin();
+
    while (it != handlers.end()) {
       if (it->receiver == handler) {
          it = handlers.erase(it);
@@ -150,23 +152,21 @@ QString QDesktopServices::storageLocationImpl(QStandardPaths::StandardLocation t
 
 #if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
       QString result = baseDir;
-      if (!QCoreApplication::organizationName().isEmpty()) {
-         result += QLatin1Char('/') + QCoreApplication::organizationName();
+      if (! QCoreApplication::organizationName().isEmpty()) {
+         result += '/' + QCoreApplication::organizationName();
       }
 
-      if (!compatAppName.isEmpty()) {
-         result += QLatin1Char('/') + compatAppName;
+      if (! compatAppName.isEmpty()) {
+         result += '/' + compatAppName;
       }
 
       return result;
 
 #elif defined(Q_OS_UNIX)
-      return baseDir + QLatin1String("/data/")
-         + QCoreApplication::organizationName() + QLatin1Char('/')
-         + compatAppName;
+      return baseDir + "/data/" + QCoreApplication::organizationName() + '/' + compatAppName;
 #endif
    }
 
    return QStandardPaths::writableLocation(type);
 }
-#endif // QT_NO_DESKTOPSERVICES
+#endif

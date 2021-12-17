@@ -61,12 +61,6 @@ bool QBearerEngine::requiresPolling() const
    return false;
 }
 
-/*
-    Returns true if configurations are in use; otherwise returns false.
-
-    If configurations are in use and requiresPolling() returns true, polling will be enabled for
-    this engine.
-*/
 bool QBearerEngine::configurationsInUse() const
 {
    QHash<QString, QNetworkConfigurationPrivatePointer>::const_iterator it;

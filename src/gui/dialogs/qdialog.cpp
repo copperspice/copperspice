@@ -152,13 +152,15 @@ void QDialogPrivate::deletePlatformHelper()
    m_platformHelperCreated = false;
    nativeDialogInUse = false;
 }
-QDialog::QDialog(QWidget *parent, Qt::WindowFlags f)
-   : QWidget(*new QDialogPrivate, parent, f | ((f & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
+
+QDialog::QDialog(QWidget *parent, Qt::WindowFlags flags)
+   : QWidget(*new QDialogPrivate, parent, flags | ((flags & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
 {
 }
 
-QDialog::QDialog(QDialogPrivate &dd, QWidget *parent, Qt::WindowFlags f)
-   : QWidget(dd, parent, f | ((f & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
+// internal
+QDialog::QDialog(QDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags)
+   : QWidget(dd, parent, flags | ((flags & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
 {
 }
 

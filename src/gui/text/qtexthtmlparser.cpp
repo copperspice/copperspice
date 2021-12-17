@@ -21,6 +21,7 @@
 *
 ***********************************************************************/
 
+#include <qglobal.h>
 #include <qtexthtmlparser_p.h>
 #include <qbytearray.h>
 #include <qtextcodec.h>
@@ -34,7 +35,6 @@
 #include <qtextdocument_p.h>
 #include <qtextcursor.h>
 #include <qfont_p.h>
-#include <qfunctions_p.h>
 
 #include <algorithm>
 

@@ -1247,9 +1247,11 @@ void QGraphicsScenePrivate::mousePressEventHandler(QGraphicsSceneMouseEvent *mou
          setFocus = true;
          break;
       }
+
       if (item->isEnabled() && ((item->flags() & QGraphicsItem::ItemIsFocusable))) {
-         if (!item->isWidget() || ((QGraphicsWidget *)item)->focusPolicy() & Qt::ClickFocus) {
+         if (! item->isWidget() || ((QGraphicsWidget *)item)->focusPolicy() & Qt::ClickFocus) {
             setFocus = true;
+
             if (item != q->focusItem() && item->d_ptr->mouseSetsFocus) {
                q->setFocusItem(item, Qt::MouseFocusReason);
             }
@@ -2238,9 +2240,9 @@ QGraphicsSimpleTextItem *QGraphicsScene::addSimpleText(const QString &text, cons
    return item;
 }
 
-QGraphicsProxyWidget *QGraphicsScene::addWidget(QWidget *widget, Qt::WindowFlags wFlags)
+QGraphicsProxyWidget *QGraphicsScene::addWidget(QWidget *widget, Qt::WindowFlags flags)
 {
-   QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget(nullptr, wFlags);
+   QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget(nullptr, flags);
    proxy->setWidget(widget);
    addItem(proxy);
    return proxy;
@@ -4483,37 +4485,6 @@ void QGraphicsScenePrivate::processDirtyItemsRecursive(QGraphicsItem *item, bool
    resetDirtyItem(item);
 }
 
-/*!
-    \obsolete
-
-    Paints the given \a items using the provided \a painter, after the
-    background has been drawn, and before the foreground has been
-    drawn.  All painting is done in \e scene coordinates. Before
-    drawing each item, the painter must be transformed using
-    QGraphicsItem::sceneTransform().
-
-    The \a options parameter is the list of style option objects for
-    each item in \a items. The \a numItems parameter is the number of
-    items in \a items and options in \a options. The \a widget
-    parameter is optional; if specified, it should point to the widget
-    that is being painted on.
-
-    The default implementation prepares the painter matrix, and calls
-    QGraphicsItem::paint() on all items. Reimplement this function to
-    provide custom painting of all items for the scene; gaining
-    complete control over how each item is drawn. In some cases this
-    can increase drawing performance significantly.
-
-    Example:
-
-    \snippet doc/src/snippets/graphicssceneadditemsnippet.cpp 0
-
-    Since Qt 4.6, this function is not called anymore unless
-    the QGraphicsView::IndirectPainting flag is given as an Optimization
-    flag.
-
-    \sa drawBackground(), drawForeground()
-*/
 void QGraphicsScene::drawItems(QPainter *painter, int numItems,
             QGraphicsItem *items[], const QStyleOptionGraphicsItem options[], QWidget *widget)
 {

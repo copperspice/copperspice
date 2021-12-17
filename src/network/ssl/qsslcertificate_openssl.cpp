@@ -90,11 +90,13 @@ QByteArray QSslCertificate::version() const
 
    if (d->versionString.isEmpty() && d->x509) {
       int64_t version;
+
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
       version = q_X509_get_version(d->x509);
 #else
       version = q_ASN1_INTEGER_get(d->x509->cert_info->version);
 #endif
+
       d->versionString = QByteArray::number(qint64(version) + 1);
    }
 
@@ -107,6 +109,7 @@ QByteArray QSslCertificate::serialNumber() const
 
    if (d->serialNumberString.isEmpty() && d->x509) {
       ASN1_INTEGER *serialNumber;
+
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
       serialNumber = q_X509_get_serialNumber(d->x509);
 #else
@@ -157,9 +160,9 @@ QStringList QSslCertificate::subjectInfo(SubjectInfo info) const
    QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
 
    // lazy init
-   if (d->subjectInfo.isEmpty() && d->x509)
-      d->subjectInfo =
-         _q_mapFromX509Name(q_X509_get_subject_name(d->x509));
+   if (d->subjectInfo.isEmpty() && d->x509) {
+      d->subjectInfo = _q_mapFromX509Name(q_X509_get_subject_name(d->x509));
+   }
 
    return d->subjectInfo.values(d->subjectInfoToString(info));
 }
@@ -169,9 +172,9 @@ QStringList QSslCertificate::subjectInfo(const QByteArray &attribute) const
    QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
 
    // lazy init
-   if (d->subjectInfo.isEmpty() && d->x509)
-      d->subjectInfo =
-         _q_mapFromX509Name(q_X509_get_subject_name(d->x509));
+   if (d->subjectInfo.isEmpty() && d->x509) {
+      d->subjectInfo = _q_mapFromX509Name(q_X509_get_subject_name(d->x509));
+   }
 
    return d->subjectInfo.values(attribute);
 }
@@ -181,9 +184,9 @@ QList<QByteArray> QSslCertificate::subjectInfoAttributes() const
    QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
 
    // lazy init
-   if (d->subjectInfo.isEmpty() && d->x509)
-      d->subjectInfo =
-         _q_mapFromX509Name(q_X509_get_subject_name(d->x509));
+   if (d->subjectInfo.isEmpty() && d->x509) {
+      d->subjectInfo = _q_mapFromX509Name(q_X509_get_subject_name(d->x509));
+   }
 
    return d->subjectInfo.uniqueKeys();
 }
@@ -193,9 +196,9 @@ QList<QByteArray> QSslCertificate::issuerInfoAttributes() const
    QRecursiveMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
 
    // lazy init
-   if (d->issuerInfo.isEmpty() && d->x509)
-      d->issuerInfo =
-         _q_mapFromX509Name(q_X509_get_issuer_name(d->x509));
+   if (d->issuerInfo.isEmpty() && d->x509) {
+      d->issuerInfo = _q_mapFromX509Name(q_X509_get_issuer_name(d->x509));
+   }
 
    return d->issuerInfo.uniqueKeys();
 }

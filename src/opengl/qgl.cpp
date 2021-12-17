@@ -1182,6 +1182,7 @@ void QGLTextureCache::remove(qint64 key)
 
    QRecursiveMutexLocker groupLocker(&qt_context_groups()->m_mutex);
    QList<QGLContextGroup *>::const_iterator it = qt_context_groups()->m_list.constBegin();
+
    while (it != qt_context_groups()->m_list.constEnd()) {
       const QGLTextureCacheKey cacheKey = {key, *it};
       m_cache.remove(cacheKey);
@@ -1193,8 +1194,10 @@ bool QGLTextureCache::remove(QGLContext *ctx, GLuint textureId)
 {
    QWriteLocker locker(&m_lock);
    QList<QGLTextureCacheKey> keys = m_cache.keys();
+
    for (int i = 0; i < keys.size(); ++i) {
       QGLTexture *tex = m_cache.object(keys.at(i));
+
       if (tex->id == textureId && tex->context == ctx) {
          tex->options |= QGLContext::MemoryManagedBindOption; // forces a glDeleteTextures() call
          m_cache.remove(keys.at(i));
@@ -1221,7 +1224,6 @@ void QGLTextureCache::cleanupTexturesForCacheKey(qint64 cacheKey)
 {
    qt_gl_texture_cache()->remove(cacheKey);
 }
-
 
 void QGLTextureCache::cleanupTexturesForPixampData(QPlatformPixmap *pmd)
 {
@@ -2478,8 +2480,8 @@ void QGLContext::doneCurrent()
    d->guiGlContext->doneCurrent();
 }
 
-QGLWidget::QGLWidget(QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags f)
-   : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
+QGLWidget::QGLWidget(QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags flags)
+   : QWidget(*(new QGLWidgetPrivate), parent, flags | Qt::MSWindowsOwnDC)
 {
    Q_D(QGLWidget);
    setAttribute(Qt::WA_PaintOnScreen);
@@ -2488,8 +2490,8 @@ QGLWidget::QGLWidget(QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFl
    d->init(new QGLContext(QGLFormat::defaultFormat(), this), shareWidget);
 }
 
-QGLWidget::QGLWidget(QGLWidgetPrivate &dd, const QGLFormat &format, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags f)
-   : QWidget(dd, parent, f | Qt::MSWindowsOwnDC)
+QGLWidget::QGLWidget(QGLWidgetPrivate &dd, const QGLFormat &format, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags flags)
+   : QWidget(dd, parent, flags| Qt::MSWindowsOwnDC)
 {
    Q_D(QGLWidget);
    setAttribute(Qt::WA_PaintOnScreen);
@@ -2498,8 +2500,8 @@ QGLWidget::QGLWidget(QGLWidgetPrivate &dd, const QGLFormat &format, QWidget *par
    d->init(new QGLContext(format, this), shareWidget);
 }
 
-QGLWidget::QGLWidget(const QGLFormat &format, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags f)
-   : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
+QGLWidget::QGLWidget(const QGLFormat &format, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags flags)
+   : QWidget(*(new QGLWidgetPrivate), parent, flags | Qt::MSWindowsOwnDC)
 {
    Q_D(QGLWidget);
    setAttribute(Qt::WA_PaintOnScreen);
@@ -2508,8 +2510,8 @@ QGLWidget::QGLWidget(const QGLFormat &format, QWidget *parent, const QGLWidget *
    d->init(new QGLContext(format, this), shareWidget);
 }
 
-QGLWidget::QGLWidget(QGLContext *context, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags f)
-   : QWidget(*(new QGLWidgetPrivate), parent, f | Qt::MSWindowsOwnDC)
+QGLWidget::QGLWidget(QGLContext *context, QWidget *parent, const QGLWidget *shareWidget, Qt::WindowFlags flags)
+   : QWidget(*(new QGLWidgetPrivate), parent, flags | Qt::MSWindowsOwnDC)
 {
    Q_D(QGLWidget);
    setAttribute(Qt::WA_PaintOnScreen);

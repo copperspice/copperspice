@@ -702,37 +702,6 @@ class QGlobalStaticDeleter
       return staticVar.pointer.load();                                           \
    }                                                                             \
 
-#define Q_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                              \
-   static TYPE *NAME()                                                           \
-   {                                                                             \
-      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(nullptr), false }; \
-      if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
-         TYPE *x = new TYPE ARGS;                                                \
-         TYPE * expected = nullptr;                                              \
-         if (! staticVar.pointer.compareExchange(expected, x))                   \
-            delete x;                                                            \
-         else                                                                    \
-            static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
-      }                                                                          \
-      return staticVar.pointer.load();                                           \
-   }
-
-#define Q_GLOBAL_STATIC_WITH_INITIALIZER(TYPE, NAME, INITIALIZER)                \
-   static TYPE *NAME()                                                           \
-   {                                                                             \
-      static QGlobalStatic<TYPE> staticVar = { QAtomicPointer<TYPE>(nullptr), false }; \
-      if (! staticVar.pointer.load() && ! staticVar.destroyed) {                 \
-         QScopedPointer<TYPE > x(new TYPE);                                      \
-         INITIALIZER;                                                            \
-         TYPE *expected = nullptr;                                               \
-         if (staticVar.pointer.compareExchange(expected, x.data())) {            \
-            static QGlobalStaticDeleter<TYPE > cleanup(staticVar);               \
-            x.take();                                                            \
-         }                                                                       \
-      }                                                                          \
-      return staticVar.pointer.load();                                           \
-   }
-
 constexpr inline bool qFuzzyCompare(double p1, double p2)
 {
    return (qAbs(p1 - p2) <= 0.000000000001 * qMin(qAbs(p1), qAbs(p2)));
@@ -979,11 +948,6 @@ class QFlags
       int_type i;
 };
 
-
-#define Q_DECLARE_FLAGS(Flags, Enum) \
-typedef QFlags<Enum> Flags;
-
-
 #define Q_DECLARE_INCOMPATIBLE_FLAGS(Flags) \
 inline QIncompatibleFlag operator|(Flags::enum_type f1, int f2) \
    { return QIncompatibleFlag(int(f1) | f2); }
@@ -998,8 +962,6 @@ constexpr inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, QFlags<
 #else
 // Q_NO_TYPESAFE_FLAGS
 
-#define Q_DECLARE_FLAGS(Flags, Enum) \
-typedef uint Flags;
 #define Q_DECLARE_OPERATORS_FOR_FLAGS(Flags)
 
 #endif

@@ -122,12 +122,11 @@ void QGraphicsShaderEffect::draw(QPainter *painter)
    Q_D(QGraphicsShaderEffect);
 
 #ifdef QGL_HAVE_CUSTOM_SHADERS
-   // Set the custom shader on the paint engine.  The setOnPainter()
-   // call may fail if the paint engine is not GL2.  In that case,
-   // we fall through to drawing the pixmap normally.
+   // Set the custom shader on the paint engine. The setOnPainter() call may fail
+   // if the paint engine is not GL2. Then draw the pixmap normally.
+
    if (! d->customShaderStage) {
-      d->customShaderStage = new QGLCustomShaderEffectStage
-      (this, d->pixelShaderFragment);
+      d->customShaderStage = new QGLCustomShaderEffectStage(this, d->pixelShaderFragment);
    }
    bool usingShader = d->customShaderStage->setOnPainter(painter);
 

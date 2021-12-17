@@ -99,15 +99,15 @@ const QPicture *QLabel::picture() const
 
 #endif
 
-QLabel::QLabel(QWidget *parent, Qt::WindowFlags f)
-   : QFrame(*new QLabelPrivate(), parent, f)
+QLabel::QLabel(QWidget *parent, Qt::WindowFlags flags)
+   : QFrame(*new QLabelPrivate(), parent, flags)
 {
    Q_D(QLabel);
    d->init();
 }
 
-QLabel::QLabel(const QString &text, QWidget *parent, Qt::WindowFlags f)
-   : QFrame(*new QLabelPrivate(), parent, f)
+QLabel::QLabel(const QString &text, QWidget *parent, Qt::WindowFlags flags)
+   : QFrame(*new QLabelPrivate(), parent, flags)
 {
    Q_D(QLabel);
    d->init();

@@ -223,14 +223,15 @@ qint64 QHttpSocketEngine::read(char *data, qint64 maxlen)
 
    if (bytesRead == -1) {
       // If nothing has been read so far, and the direct socket read
-      // failed, return the socket's error. Otherwise, fall through and
-      // return as much as we read so far.
+      // failed, return the socket's error. Otherwise, return what has been read
       close();
-      setError(QAbstractSocket::RemoteHostClosedError,
-               QLatin1String("Remote host closed"));
+
+      setError(QAbstractSocket::RemoteHostClosedError, QLatin1String("Remote host closed"));
       setState(QAbstractSocket::UnconnectedState);
+
       return -1;
    }
+
    return bytesRead;
 }
 

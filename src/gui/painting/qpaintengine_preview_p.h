@@ -45,11 +45,11 @@ class QPreviewPaintEngine : public QPaintEngine, public QPrintEngine
    void updateState(const QPaintEngineState &state) override;
 
    void drawPath(const QPainterPath &path) override;
-   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
-   void drawTextItem(const QPointF &p, const QTextItem &textItem) override;
+   void drawPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode) override;
+   void drawTextItem(const QPointF &point, const QTextItem &textItem) override;
 
-   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
-   void drawTiledPixmap(const QRectF &r, const QPixmap &pm, const QPointF &p) override;
+   void drawPixmap(const QRectF &rect, const QPixmap &pm, const QRectF &srcRect) override;
+   void drawTiledPixmap(const QRectF &rect, const QPixmap &pixmap, const QPointF &point) override;
 
    QList<const QPicture *> pages();
 

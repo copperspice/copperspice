@@ -21,9 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qxsdfacet_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qxsdfacet_p.h>
 
 using namespace QPatternist;
 
@@ -86,49 +84,62 @@ QString XsdFacet::typeName(Type type)
 {
    switch (type) {
       case Length:
-         return QLatin1String("length");
+         return QString("length");
          break;
+
       case MinimumLength:
-         return QLatin1String("minLength");
+         return QString("minLength");
          break;
+
       case MaximumLength:
-         return QLatin1String("maxLength");
+         return QString("maxLength");
          break;
+
       case Pattern:
-         return QLatin1String("pattern");
+         return QString("pattern");
          break;
+
       case WhiteSpace:
-         return QLatin1String("whiteSpace");
+         return QString("whiteSpace");
          break;
+
       case MaximumInclusive:
-         return QLatin1String("maxInclusive");
+         return QString("maxInclusive");
          break;
+
       case MaximumExclusive:
-         return QLatin1String("maxExclusive");
+         return QString("maxExclusive");
          break;
+
       case MinimumInclusive:
-         return QLatin1String("minInclusive");
+         return QString("minInclusive");
          break;
+
       case MinimumExclusive:
-         return QLatin1String("minExclusive");
+         return QString("minExclusive");
          break;
+
       case TotalDigits:
-         return QLatin1String("totalDigits");
+         return QString("totalDigits");
          break;
+
       case FractionDigits:
-         return QLatin1String("fractionDigits");
+         return QString("fractionDigits");
          break;
+
       case Enumeration:
-         return QLatin1String("enumeration");
+         return QString("enumeration");
          break;
       case Assertion:
-         return QLatin1String("assertion");
+         return QString("assertion");
          break;
-      case None: // fall through
+
+      case None:
+         [[fallthrough]];
+
       default:
-         return QLatin1String("none");
+         return QString("none");
          break;
    }
 }
 
-QT_END_NAMESPACE

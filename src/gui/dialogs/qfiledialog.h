@@ -111,9 +111,9 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    QFileDialog(QWidget *parent, Qt::WindowFlags flags);
 
    explicit QFileDialog(QWidget *parent = nullptr,
-      const QString &caption = QString(),
+      const QString &caption   = QString(),
       const QString &directory = QString(),
-      const QString &filter = QString());
+      const QString &filter    = QString());
 
    QFileDialog(const QFileDialog &) = delete;
    QFileDialog &operator=(const QFileDialog &) = delete;
@@ -368,6 +368,5 @@ inline void QFileDialog::setDirectory(const QDir &directory)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QFileDialog::FileDialogOptions)
 
 #endif // QT_NO_FILEDIALOG
-
 
 #endif

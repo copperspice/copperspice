@@ -960,11 +960,13 @@ void QAbstractButton::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QAbstractButton);
    bool next = true;
+
    switch (e->key()) {
       case Qt::Key_Enter:
       case Qt::Key_Return:
          e->ignore();
          break;
+
       case Qt::Key_Select:
       case Qt::Key_Space:
          if (!e->isAutoRepeat()) {
@@ -974,18 +976,18 @@ void QAbstractButton::keyPressEvent(QKeyEvent *e)
             d->emitPressed();
          }
          break;
+
       case Qt::Key_Up:
          next = false;
-      // fall through
+         [[fallthrough]];
 
       case Qt::Key_Left:
       case Qt::Key_Right:
       case Qt::Key_Down: {
 
 #ifdef QT_KEYPAD_NAVIGATION
-         if ((QApplication::keypadNavigationEnabled()
-               && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right))
-            || (!QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional
+         if ((QApplication::keypadNavigationEnabled() && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right))
+               || (!QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional
                || (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down))) {
             e->ignore();
             return;
@@ -1025,6 +1027,7 @@ void QAbstractButton::keyPressEvent(QKeyEvent *e)
 
          break;
       }
+
       default:
          if (e->matches(QKeySequence::Cancel) && d->down) {
             setDown(false);

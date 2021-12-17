@@ -47,7 +47,7 @@ public:
       PremultipliedAlphaBindOption  = 0x0001,
       UseRedFor8BitBindOption       = 0x0002,
    };
-   Q_DECLARE_FLAGS(BindOptions, BindOption)
+   using BindOptions = QFlags<BindOption>;
 
    GLuint bindTexture(QOpenGLContext *context, const QPixmap &pixmap,
                QOpenGLTextureCache::BindOptions options = PremultipliedAlphaBindOption);

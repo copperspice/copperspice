@@ -33,7 +33,11 @@
 #include <stdlib.h>
 
 #if ! defined(QT_NO_SETTINGS)
-   Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformInputContextInterface_ID, "/platforminputcontexts", Qt::CaseInsensitive))
+   static QFactoryLoader *loader()
+   {
+      static QFactoryLoader retval(QPlatformInputContextInterface_ID, "/platforminputcontexts", Qt::CaseInsensitive);
+      return &retval;
+   }
 #endif
 
 QStringList QPlatformInputContextFactory::keys()

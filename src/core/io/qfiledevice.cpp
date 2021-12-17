@@ -30,8 +30,7 @@ static const int QFILE_WRITEBUFFER_SIZE = 16384;
 
 QFileDevicePrivate::QFileDevicePrivate()
    : fileEngine(nullptr), lastWasWrite(false),
-     writeBuffer(QFILE_WRITEBUFFER_SIZE), error(QFile::NoError),
-     cachedSize(0)
+     writeBuffer(QFILE_WRITEBUFFER_SIZE), error(QFile::NoError), cachedSize(0)
 {
 }
 
@@ -200,8 +199,7 @@ bool QFileDevice::atEnd() const
       return d->fileEngine->atEnd();
    }
 
-   // if it looks like we are at the end, or if size is not cached,
-   // fall through to bytesAvailable() to make sure.
+   // if it looks like we are at the end or if size is not cached, use bytesAvailable()
    if (pos() < d->cachedSize) {
       return false;
    }
@@ -213,6 +211,7 @@ bool QFileDevice::atEnd() const
 bool QFileDevice::seek(qint64 off)
 {
    Q_D(QFileDevice);
+
    if (!isOpen()) {
       qWarning("QFileDevice::seek: IODevice is not open");
       return false;
@@ -224,13 +223,17 @@ bool QFileDevice::seek(qint64 off)
 
    if (!d->fileEngine->seek(off) || !QIODevice::seek(off)) {
       QFileDevice::FileError err = d->fileEngine->error();
+
       if (err == QFileDevice::UnspecifiedError) {
          err = QFileDevice::PositionError;
       }
+
       d->setError(err, d->fileEngine->errorString());
       return false;
    }
+
    unsetError();
+
    return true;
 }
 

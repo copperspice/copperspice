@@ -22,15 +22,26 @@
 ***********************************************************************/
 
 #include <qplatform_themefactory_p.h>
+
 #include <qplatform_themeplugin.h>
 #include <qdir.h>
-#include <qfactoryloader_p.h>
 #include <qmutex.h>
 #include <qguiapplication.h>
 #include <qdebug.h>
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QPlatformThemeInterface_ID, "/platformthemes", Qt::CaseInsensitive))
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader, (QPlatformThemeInterface_ID, "", Qt::CaseInsensitive))
+#include <qfactoryloader_p.h>
+
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QPlatformThemeInterface_ID, "/platformthemes", Qt::CaseInsensitive);
+   return &retval;
+}
+
+static QFactoryLoader *directLoader()
+{
+   static QFactoryLoader retval(QPlatformThemeInterface_ID, "", Qt::CaseInsensitive);
+   return &retval;
+}
 
 QPlatformTheme *QPlatformThemeFactory::create(const QString &key, const QString &platformPluginPath)
 {

@@ -117,13 +117,10 @@ Qt::DropAction QPlatformDrag::defaultAction(Qt::DropActions possibleActions, Qt:
    return default_action;
 }
 
-/*!
-    \brief Called to notify QDrag about changes of the current action.
- */
-
 void QPlatformDrag::updateAction(Qt::DropAction action)
 {
    Q_D(QPlatformDrag);
+
    if (d->cursor_drop_action != action) {
       d->cursor_drop_action = action;
       emit currentDrag()->actionChanged(action);
@@ -146,7 +143,11 @@ static const char *const default_pm[] = {
    "X X X X X X X",
 };
 
-Q_GLOBAL_STATIC_WITH_ARGS(QPixmap, qt_drag_default_pixmap, (default_pm))
+static QPixmap *qt_drag_default_pixmap()
+{
+   static QPixmap retval(default_pm);
+   return &retval;
+}
 
 QPixmap QPlatformDrag::defaultPixmap()
 {
@@ -158,6 +159,6 @@ bool QPlatformDrag::ownsDragObject() const
    return false;
 }
 
-#endif // QT_NO_DRAGANDDROP
+#endif
 
 

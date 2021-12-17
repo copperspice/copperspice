@@ -81,8 +81,8 @@ class QCosmeticStroker
 
    void drawLine(const QPointF &p1, const QPointF &p2);
    void drawPath(const QVectorPath &path);
-   void drawPoints(const QPoint *points, int num);
-   void drawPoints(const QPointF *points, int num);
+   void drawPoints(const QPoint *pointPtr, int pointCount);
+   void drawPoints(const QPointF *pointPtr, int pointCount);
 
    QRasterPaintEngineState *state;
    QRect deviceRect;

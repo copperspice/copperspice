@@ -340,7 +340,7 @@ public:
         MaxFeatureFlag              = 0x00010000
 #endif
     };
-    Q_DECLARE_FLAGS(Features, Feature)
+    using Features = QFlags<Feature>;
 
     enum DepthStencilMode {
         DepthMode   = 0x1902,   // GL_DEPTH_COMPONENT

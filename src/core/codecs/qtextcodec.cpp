@@ -78,7 +78,11 @@
 #endif
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
-   Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QTextCodecInterface_ID, "/codecs"))
+   static QFactoryLoader *loader()
+   {
+      static QFactoryLoader retval(QTextCodecInterface_ID, "/codecs");
+      return &retval;
+   }
 #endif
 
 // Cache for QTextCodec::codecForName and codecForMib.
@@ -610,6 +614,7 @@ QTextCodec *QTextCodec::codecForName(const QString &name)
 
    QTextCodecCache *cache = qTextCodecCache();
    QTextCodec *codec;
+
    if (cache) {
       codec = cache->value(name);
 
@@ -650,11 +655,6 @@ QTextCodec *QTextCodec::codecForName(const QString &name)
    return codec;
 }
 
-
-/*!
-    Returns the QTextCodec which matches the \link
-    QTextCodec::mibEnum() MIBenum\endlink \a mib.
-*/
 QTextCodec *QTextCodec::codecForMib(int mib)
 {
    QRecursiveMutexLocker locker(textCodecsMutex());
@@ -783,15 +783,6 @@ void QTextCodec::setCodecForLocale(QTextCodec *c)
       setupLocaleMapper();
    }
 }
-
-/*!
-    Returns a pointer to the codec most suitable for this locale.
-
-    On Windows, the codec will be based on a system locale. On Unix
-    systems, starting with Qt 4.2, the codec will be using the \e
-    iconv library. Note that in both cases the codec's name will be
-    "System".
-*/
 
 QTextCodec *QTextCodec::codecForLocale()
 {

@@ -261,7 +261,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    inline qreal calcEffectiveOpacity() const {
-      qreal o = opacity;
+      qreal retval = opacity;
       int myFlags  = itemFlags;
 
       QGraphicsItem *p = parent;
@@ -269,19 +269,22 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       while (p) {
          int parentFlags = p->d_ptr->itemFlags;
 
-         // If I have a parent, and I don't ignore my parent's opacity, and my
+         // If I have a parent and I don't ignore my parent's opacity, and my
          // parent propagates to me, then combine my local opacity with my parent's
          // effective opacity into my effective opacity.
+
          if ((myFlags & QGraphicsItem::ItemIgnoresParentOpacity)
                || (parentFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
             break;
          }
 
-         o *= p->d_ptr->opacity;
-         p = p->d_ptr->parent;
+         retval *= p->d_ptr->opacity;
+         p       = p->d_ptr->parent;
+
          myFlags = parentFlags;
       }
-      return o;
+
+      return retval;
    }
 
    inline bool isOpacityNull() const {
@@ -304,7 +307,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    inline qreal effectiveOpacity() const {
-      if (!parent || !opacity) {
+      if (! parent || ! opacity) {
          return opacity;
       }
 
@@ -320,7 +323,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    inline bool childrenCombineOpacity() const {
-      if (!children.size()) {
+      if (! children.size()) {
          return true;
       }
 
@@ -603,12 +606,12 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
       return qt_closestLeaf(item1, item2);
    }
 
-   // Find common ancestor, and each item's ancestor closest to the common
-   // ancestor.
+   // Find common ancestor, and each item's ancestor closest to the common ancestor
    int item1Depth = d1->depth();
    int item2Depth = d2->depth();
    const QGraphicsItem *p = item1;
    const QGraphicsItem *t1 = item1;
+
    while (item1Depth > item2Depth && (p = p->d_ptr->parent)) {
       if (p == item2) {
          // item2 is one of item1's ancestors; item1 is on top
@@ -617,8 +620,10 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
       t1 = p;
       --item1Depth;
    }
+
    p = item2;
    const QGraphicsItem *t2 = item2;
+
    while (item2Depth > item1Depth && (p = p->d_ptr->parent)) {
       if (p == item1) {
          // item1 is one of item2's ancestors; item1 is not on top
@@ -660,12 +665,13 @@ inline bool qt_closestLeaf(const QGraphicsItem *item1, const QGraphicsItem *item
    if (f1 != f2) {
       return f2;
    }
+
    if (d1->z != d2->z) {
       return d1->z > d2->z;
    }
+
    return d1->siblingIndex > d2->siblingIndex;
 }
-
 
 inline bool qt_notclosestLeaf(const QGraphicsItem *item1, const QGraphicsItem *item2)
 {

@@ -187,7 +187,7 @@ static bool isValidCountRules(const QVector<std::variant<CountGuide, int>> &data
       }
 
    } catch (std::bad_variant_access e) {
-      // fall through
+      // ignore exception
 
    }
 
@@ -818,7 +818,7 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
             break;
 
          case TranslatorTag::Translation: {
-            int len = read32(data);
+            quint32 len = read32(data);
 
             if (len == 0xffffffff) {
                // indicates QByteArray was null

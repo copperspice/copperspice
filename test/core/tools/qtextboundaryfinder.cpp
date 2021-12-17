@@ -55,10 +55,10 @@ TEST_CASE("QTextBoundaryFinder empty_string", "[qtextboundaryfinder]")
 
    REQUIRE(finder.position() == 0);
 
-   finder.toStart();   
+   finder.toStart();
    REQUIRE(finder.position() == 0);
 
-   finder.toEnd();   
+   finder.toEnd();
    REQUIRE(finder.position() == 0);
 }
 
@@ -103,23 +103,23 @@ TEST_CASE("QTextBoundaryFinder to_next_boundary_a", "[qtextboundaryfinder]")
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 5);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::StartOfItem) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 7  );
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::EndOfItem) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 8);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::StartOfItem) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 9);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::EndOfItem) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 10);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::StartOfItem) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 14);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::EndOfItem) == finder.boundaryReasons());
@@ -128,7 +128,7 @@ TEST_CASE("QTextBoundaryFinder to_next_boundary_a", "[qtextboundaryfinder]")
    REQUIRE(finder.toNextBoundary() == -1);
    REQUIRE(finder.position() == 14);
    REQUIRE(QTextBoundaryFinder::NotAtBoundary == finder.boundaryReasons());
-   
+
    // REQUIRE if moving past the last boundary again still returns -1
    REQUIRE(finder.toNextBoundary() == -1);
    REQUIRE(finder.position() == 14);
@@ -161,11 +161,11 @@ TEST_CASE("QTextBoundaryFinder to_next_boundary_b", "[qtextboundaryfinder]")
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 2);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::StartOfItem )== finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 3);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::EndOfItem) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 4);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::StartOfItem )== finder.boundaryReasons());
@@ -189,11 +189,11 @@ TEST_CASE("QTextBoundaryFinder hiragana_boundary", "[qtextboundaryfinder]")
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 2);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 3);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(finder.position() == 4);
    REQUIRE((QTextBoundaryFinder::BreakOpportunity) == finder.boundaryReasons());
@@ -241,11 +241,11 @@ TEST_CASE("QTextBoundaryFinder kanji_katakana_hiragana_boundary", "[qtextboundar
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(2 == finder.position());
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::StartOfItem) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(4 == finder.position());
    REQUIRE((QTextBoundaryFinder::BreakOpportunity | QTextBoundaryFinder::EndOfItem) == finder.boundaryReasons());
-   
+
    REQUIRE(finder.toNextBoundary() != -1);
    REQUIRE(5 == finder.position());
    REQUIRE((QTextBoundaryFinder::BreakOpportunity) == finder.boundaryReasons());

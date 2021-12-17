@@ -72,10 +72,10 @@ class Q_GUI_EXPORT QStaticText
    void setPerformanceHint(PerformanceHint performanceHint);
    PerformanceHint performanceHint() const;
 
-   bool operator==(const QStaticText &) const;
-   bool operator!=(const QStaticText &) const;
+   bool operator==(const QStaticText &other) const;
+   bool operator!=(const QStaticText &other) const;
 
-   QStaticText &operator=(const QStaticText &);
+   QStaticText &operator=(const QStaticText &other);
 
    QStaticText &operator=(QStaticText &&other) {
       swap(other);

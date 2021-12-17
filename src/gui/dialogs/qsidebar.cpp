@@ -58,7 +58,7 @@ QUrlModel::QUrlModel(QObject *parent)
 */
 QStringList QUrlModel::mimeTypes() const
 {
-   return QStringList(QLatin1String("text/uri-list"));
+   return QStringList("text/uri-list");
 }
 
 /*!
@@ -241,7 +241,7 @@ void QUrlModel::addUrls(const QList<QUrl> &list, int row, bool move)
    row = qMin(row, rowCount());
    for (int i = list.count() - 1; i >= 0; --i) {
       QUrl url = list.at(i);
-      if (!url.isValid() || url.scheme() != QLatin1String("file")) {
+      if (! url.isValid() || url.scheme() != "file") {
          continue;
       }
 

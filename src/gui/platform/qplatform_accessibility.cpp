@@ -34,8 +34,17 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, bridgeloader, (QAccessibleBridgeInterface_ID, "/accessiblebridge"))
-Q_GLOBAL_STATIC(QVector<QAccessibleBridge *>, bridges)
+static QFactoryLoader *bridgeloader()
+{
+   static QFactoryLoader retval(QAccessibleBridgeInterface_ID, "/accessiblebridge");
+   return &retval;
+}
+
+static QVector<QAccessibleBridge *> *bridges()
+{
+   static QVector<QAccessibleBridge *> retval;
+   return &retval;
+}
 
 QPlatformAccessibility::QPlatformAccessibility()
    : m_active(false)

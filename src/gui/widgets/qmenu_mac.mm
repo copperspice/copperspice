@@ -110,8 +110,9 @@ void QMenuPrivate::moveWidgetToPlatformItem(QWidget *widget, QPlatformMenuItem* 
 
     NSView *containerView = container->nativeView();
     QWindow *containerWindow = container->windowHandle();
-    Qt::WindowFlags wf = containerWindow->flags();
-    containerWindow->setFlags(wf | Qt::SubWindow);
+
+    Qt::WindowFlags flags = containerWindow->flags();
+    containerWindow->setFlags(flags | Qt::SubWindow);
     [(NSView *)widget->winId() setAutoresizingMask:NSViewWidthSizable];
 
     item->setNativeContents((WId)containerView);

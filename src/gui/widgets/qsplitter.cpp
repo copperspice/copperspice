@@ -538,10 +538,6 @@ int QSplitterPrivate::findWidgetJustBeforeOrJustAfter(int index, int delta, int 
    return -1;
 }
 
-/*
-  For the splitter handle with index \a index, \a min and \a max give the range without collapsing any widgets,
-  and \a farMin and farMax give the range with collapsing included.
-*/
 void QSplitterPrivate::getRange(int index, int *farMin, int *min, int *max, int *farMax) const
 {
    Q_Q(const QSplitter);
@@ -1138,6 +1134,7 @@ void QSplitter::setRubberBand(int pos)
 bool QSplitter::event(QEvent *e)
 {
    Q_D(QSplitter);
+
    switch (e->type()) {
       case QEvent::Hide:
          // Reset firstShow to false here since things can be done to the splitter in between
@@ -1145,20 +1142,24 @@ bool QSplitter::event(QEvent *e)
             d->firstShow = true;
          }
          break;
+
       case QEvent::Show:
          if (!d->firstShow) {
             break;
          }
          d->firstShow = false;
-      // fall through
+         [[fallthrough]];
+
       case QEvent::HideToParent:
       case QEvent::ShowToParent:
       case QEvent::LayoutRequest:
          d->recalc(isVisible());
          break;
+
       default:
-         ;
+         break;
    }
+
    return QWidget::event(e);
 }
 
@@ -1177,6 +1178,7 @@ void QSplitter::moveSplitter(int pos, int index)
 
    pos = d->adjustPos(pos, index, &farMin, &min, &max, &farMax);
    int oldP = d->pick(s->rect.topLeft());
+
 #ifdef QSPLITTER_DEBUG
    qDebug() << "QSplitter::moveSplitter" << debugp << index << "adjusted" << pos << "oldP" << oldP;
 #endif
@@ -1197,6 +1199,7 @@ void QSplitter::moveSplitter(int pos, int index)
       wid = count - 1;
       delta = -1;
    }
+
    for (; wid >= 0 && wid < count; wid += delta) {
       QSplitterLayoutStruct *sls = d->list.at( wid );
       if (!sls->widget->isHidden()) {

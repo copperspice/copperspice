@@ -878,9 +878,11 @@ void QTriangulator<T>::initialize(const QVectorPath &path, const QTransform &mat
         for (int i = 0; i < path.elementCount(); ++i, ++e, p += 2) {
             switch (*e) {
             case QPainterPath::MoveToElement:
-                if (!m_indices.isEmpty())
+                if (!m_indices.isEmpty()) {
                     m_indices.push_back(T(-1)); // Q_TRIANGULATE_END_OF_POLYGON
-                // Fall through.
+                }
+                [[fallthrough]];
+
             case QPainterPath::LineToElement:
                 m_indices.push_back(T(m_vertices.size()));
                 m_vertices.resize(m_vertices.size() + 1);
@@ -889,15 +891,21 @@ void QTriangulator<T>::initialize(const QVectorPath &path, const QTransform &mat
                 m_vertices.last().x = qRound(x * Q_FIXED_POINT_SCALE);
                 m_vertices.last().y = qRound(y * Q_FIXED_POINT_SCALE);
                 break;
+
             case QPainterPath::CurveToElement:
                 {
                     qreal pts[8];
                     for (int i = 0; i < 4; ++i)
                         matrix.map(p[2 * i - 2], p[2 * i - 1], &pts[2 * i + 0], &pts[2 * i + 1]);
+
                     for (int i = 0; i < 8; ++i)
                         pts[i] *= lod;
-                    QBezier bezier = QBezier::fromPoints(QPointF(pts[0], pts[1]), QPointF(pts[2], pts[3]), QPointF(pts[4], pts[5]), QPointF(pts[6], pts[7]));
+
+                    QBezier bezier = QBezier::fromPoints(QPointF(pts[0], pts[1]), QPointF(pts[2], pts[3]),
+                          QPointF(pts[4], pts[5]), QPointF(pts[6], pts[7]));
+
                     QPolygonF poly = bezier.toPolygon();
+
                     // Skip first point, it already exists in 'm_vertices'.
                     for (int j = 1; j < poly.size(); ++j) {
                         m_indices.push_back(T(m_vertices.size()));
@@ -910,11 +918,13 @@ void QTriangulator<T>::initialize(const QVectorPath &path, const QTransform &mat
                 e += 2;
                 p += 4;
                 break;
+
             default:
                 Q_ASSERT_X(0, "QTriangulator::triangulate", "Unexpected element type.");
                 break;
             }
         }
+
     } else {
         for (int i = 0; i < path.elementCount(); ++i, p += 2) {
             m_indices.push_back(T(m_vertices.size()));
@@ -2105,6 +2115,7 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
                 } else {
                     qWarning("Inconsistent polygon. (#1)");
                 }
+
             } else {
                 leftEdgeNode = searchEdgeLeftOfPoint(m_edges[i].from);
                 if (leftEdgeNode) {
@@ -2116,6 +2127,7 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
                 }
             }
             break;
+
         case SplitVertex:
             leftEdgeNode = searchEdgeLeftOfPoint(m_edges.at(i).from);
             if (leftEdgeNode) {
@@ -2124,7 +2136,8 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
             } else {
                 qWarning("Inconsistent polygon. (#3)");
             }
-            // Fall through.
+            [[fallthrough]];
+
         case StartVertex:
             if (m_clockwiseOrder) {
                 leftEdgeNode = searchEdgeLeftOfEdge(j);
@@ -2144,6 +2157,7 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
                 Q_ASSERT(m_edgeList.validate());
             }
             break;
+
         case MergeVertex:
             leftEdgeNode = searchEdgeLeftOfPoint(m_edges.at(i).from);
             if (leftEdgeNode) {
@@ -2153,7 +2167,8 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
             } else {
                 qWarning("Inconsistent polygon. (#4)");
             }
-            // Fall through.
+            [[fallthrough]];
+
         case EndVertex:
             if (m_clockwiseOrder) {
                 if (m_edges.at(m_edges[i].helper).type == MergeVertex)
@@ -2178,15 +2193,18 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
         }
     }
 
-    for (int i = 0; i < diagonals.size(); ++i)
+    for (int i = 0; i < diagonals.size(); ++i) {
         createDiagonal(diagonals[i].first, diagonals[i].second);
+    }
 }
 
 template <typename T>
 bool QTriangulator<T>::SimpleToMonotone::CompareVertices::operator () (int i, int j) const
 {
-    if (m_parent->m_edges.at(i).from == m_parent->m_edges.at(j).from)
+    if (m_parent->m_edges.at(i).from == m_parent->m_edges.at(j).from) {
         return m_parent->m_edges.at(i).type > m_parent->m_edges.at(j).type;
+    }
+
     return m_parent->m_parent->m_vertices.at(m_parent->m_edges.at(i).from) >
         m_parent->m_parent->m_vertices.at(m_parent->m_edges.at(j).from);
 }

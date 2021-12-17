@@ -547,7 +547,7 @@ QSize QAbstractSpinBox::minimumSizeHint() const
       int w = 0;
 
       QString s;
-      QString fixedContent =  d->prefix + QLatin1Char(' ');
+      QString fixedContent = d->prefix + ' ';
       s = d->textFromValue(d->minimum);
       s.truncate(18);
       s += fixedContent;
@@ -1128,7 +1128,7 @@ void QAbstractSpinBoxPrivate::init()
    Q_Q(QAbstractSpinBox);
 
    q->setLineEdit(new QLineEdit(q));
-   edit->setObjectName(QLatin1String("qt_spinbox_lineedit"));
+   edit->setObjectName("qt_spinbox_lineedit");
    validator = new QSpinBoxValidator(q, this);
    edit->setValidator(validator);
 
@@ -1390,13 +1390,12 @@ void QAbstractSpinBoxPrivate::clearCache() const
    cachedState = QValidator::Acceptable;
 }
 
-
 // --- QSpinBoxValidator ---
 
 QSpinBoxValidator::QSpinBoxValidator(QAbstractSpinBox *qp, QAbstractSpinBoxPrivate *dp)
    : QValidator(qp), qptr(qp), dptr(dp)
 {
-   setObjectName(QLatin1String("qt_spinboxvalidator"));
+   setObjectName("qt_spinboxvalidator");
 }
 
 QValidator::State QSpinBoxValidator::validate(QString &input, int &pos) const

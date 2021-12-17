@@ -27,15 +27,15 @@
 #include <qcolor.h>
 #include <qvector.h>
 
-
 class Q_OPENGL_EXPORT QGLColormap
 {
  public:
    QGLColormap();
-   QGLColormap(const QGLColormap &);
+   QGLColormap(const QGLColormap &other);
+
    ~QGLColormap();
 
-   QGLColormap &operator=(const QGLColormap &);
+   QGLColormap &operator=(const QGLColormap &other);
 
    bool   isEmpty() const;
    int    size() const;

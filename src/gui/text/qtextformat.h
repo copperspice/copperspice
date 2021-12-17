@@ -62,7 +62,8 @@ class Q_GUI_EXPORT QTextLength
 
    QTextLength()
       : lengthType(VariableLength), fixedValueOrPercentage(0)
-   {}
+   {
+   }
 
    explicit QTextLength(Type type, qreal value);
 
@@ -108,8 +109,10 @@ class Q_GUI_EXPORT QTextLength
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
 };
 
-inline QTextLength::QTextLength(Type atype, qreal avalue)
-   : lengthType(atype), fixedValueOrPercentage(avalue) {}
+inline QTextLength::QTextLength(Type type, qreal value)
+   : lengthType(type), fixedValueOrPercentage(value)
+{
+}
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextFormat &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
@@ -277,8 +280,8 @@ class Q_GUI_EXPORT QTextFormat
 
    explicit QTextFormat(int type);
 
-   QTextFormat(const QTextFormat &rhs);
-   QTextFormat &operator=(const QTextFormat &rhs);
+   QTextFormat(const QTextFormat &other);
+   QTextFormat &operator=(const QTextFormat &other);
    ~QTextFormat();
 
    void merge(const QTextFormat &other);
@@ -294,14 +297,14 @@ class Q_GUI_EXPORT QTextFormat
    int type() const;
 
    int objectIndex() const;
-   void setObjectIndex(int object);
+   void setObjectIndex(int index);
 
    void clearProperty(int propertyId);
    bool hasProperty(int propertyId) const;
 
    QVariant property(int propertyId) const;
    void setProperty(int propertyId, const QVariant &value);
-   void setProperty(int propertyId, const QVector<QTextLength> &lengths);
+   void setProperty(int propertyId, const QVector<QTextLength> &value);
 
    bool boolProperty(int propertyId) const;
    int intProperty(int propertyId) const;
@@ -357,10 +360,10 @@ class Q_GUI_EXPORT QTextFormat
    QTextImageFormat toImageFormat() const;
    QTextTableCellFormat toTableCellFormat() const;
 
-   bool operator==(const QTextFormat &rhs) const;
+   bool operator==(const QTextFormat &other) const;
 
-   bool operator!=(const QTextFormat &rhs) const {
-      return !operator==(rhs);
+   bool operator!=(const QTextFormat &other) const {
+      return !operator==(other);
    }
    operator QVariant() const;
 
@@ -406,9 +409,9 @@ class Q_GUI_EXPORT QTextFormat
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
 };
 
-inline void QTextFormat::setObjectType(int atype)
+inline void QTextFormat::setObjectType(int type)
 {
-   setProperty(ObjectType, atype);
+   setProperty(ObjectType, type);
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextFormat::PageBreakFlags)
@@ -618,8 +621,8 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
       return penProperty(TextOutline);
    }
 
-   inline void setToolTip(const QString &tip) {
-      setProperty(TextToolTip, tip);
+   inline void setToolTip(const QString &text) {
+      setProperty(TextToolTip, text);
    }
 
    inline QString toolTip() const {
@@ -652,7 +655,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
 
    QStringList anchorNames() const;
 
-   inline void setTableCellRowSpan(int tableCellRowSpan);
+   inline void setTableCellRowSpan(int cellRowSpan);
    inline int tableCellRowSpan() const {
       int s = intProperty(TableCellRowSpan);
       if (s == 0) {
@@ -661,7 +664,7 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
       return s;
    }
 
-   inline void setTableCellColumnSpan(int tableCellColumnSpan);
+   inline void setTableCellColumnSpan(int cellRowSpan);
    inline int tableCellColumnSpan() const {
       int s = intProperty(TableCellColumnSpan);
       if (s == 0) {
@@ -675,21 +678,21 @@ class Q_GUI_EXPORT QTextCharFormat : public QTextFormat
    friend class QTextFormat;
 };
 
-inline void QTextCharFormat::setTableCellRowSpan(int _tableCellRowSpan)
+inline void QTextCharFormat::setTableCellRowSpan(int cellRowSpan)
 {
-   if (_tableCellRowSpan <= 1) {
+   if (cellRowSpan <= 1) {
       clearProperty(TableCellRowSpan);   // the getter will return 1 here.
    } else {
-      setProperty(TableCellRowSpan, _tableCellRowSpan);
+      setProperty(TableCellRowSpan, cellRowSpan);
    }
 }
 
-inline void QTextCharFormat::setTableCellColumnSpan(int _tableCellColumnSpan)
+inline void QTextCharFormat::setTableCellColumnSpan(int cellRowSpan)
 {
-   if (_tableCellColumnSpan <= 1) {
+   if (cellRowSpan <= 1) {
       clearProperty(TableCellColumnSpan);   // the getter will return 1 here.
    } else {
-      setProperty(TableCellColumnSpan, _tableCellColumnSpan);
+      setProperty(TableCellColumnSpan, cellRowSpan);
    }
 }
 
@@ -747,8 +750,8 @@ class Q_GUI_EXPORT QTextBlockFormat : public QTextFormat
       return doubleProperty(BlockRightMargin);
    }
 
-   inline void setTextIndent(qreal aindent) {
-      setProperty(TextIndent, aindent);
+   inline void setTextIndent(qreal indent) {
+      setProperty(TextIndent, indent);
    }
    inline qreal textIndent() const {
       return doubleProperty(TextIndent);
@@ -779,8 +782,8 @@ class Q_GUI_EXPORT QTextBlockFormat : public QTextFormat
       return boolProperty(BlockNonBreakableLines);
    }
 
-   inline void setPageBreakPolicy(PageBreakFlags flags) {
-      setProperty(PageBreakPolicy, int(flags));
+   inline void setPageBreakPolicy(PageBreakFlags policy) {
+      setProperty(PageBreakPolicy, int(policy));
    }
    inline PageBreakFlags pageBreakPolicy() const {
       return PageBreakFlags(intProperty(PageBreakPolicy));
@@ -794,14 +797,14 @@ class Q_GUI_EXPORT QTextBlockFormat : public QTextFormat
    friend class QTextFormat;
 };
 
-inline void QTextBlockFormat::setAlignment(Qt::Alignment aalignment)
+inline void QTextBlockFormat::setAlignment(Qt::Alignment alignment)
 {
-   setProperty(BlockAlignment, int(aalignment));
+   setProperty(BlockAlignment, int(alignment));
 }
 
-inline void QTextBlockFormat::setIndent(int aindent)
+inline void QTextBlockFormat::setIndent(int indent)
 {
-   setProperty(BlockIndent, aindent);
+   setProperty(BlockIndent, indent);
 }
 
 inline qreal QTextBlockFormat::lineHeight(qreal scriptLineHeight, qreal scaling = 1.0) const
@@ -852,12 +855,12 @@ class Q_GUI_EXPORT QTextListFormat : public QTextFormat
       return intProperty(ListIndent);
    }
 
-   inline void setNumberPrefix(const QString &numberPrefix);
+   inline void setNumberPrefix(const QString &prefix);
    inline QString numberPrefix() const {
       return stringProperty(ListNumberPrefix);
    }
 
-   inline void setNumberSuffix(const QString &numberSuffix);
+   inline void setNumberSuffix(const QString &suffix);
    inline QString numberSuffix() const {
       return stringProperty(ListNumberSuffix);
    }
@@ -867,24 +870,24 @@ class Q_GUI_EXPORT QTextListFormat : public QTextFormat
    friend class QTextFormat;
 };
 
-inline void QTextListFormat::setStyle(Style astyle)
+inline void QTextListFormat::setStyle(Style style)
 {
-   setProperty(ListStyle, astyle);
+   setProperty(ListStyle, style);
 }
 
-inline void QTextListFormat::setIndent(int aindent)
+inline void QTextListFormat::setIndent(int indent)
 {
-   setProperty(ListIndent, aindent);
+   setProperty(ListIndent, indent);
 }
 
-inline void QTextListFormat::setNumberPrefix(const QString &np)
+inline void QTextListFormat::setNumberPrefix(const QString &prefix)
 {
-   setProperty(ListNumberPrefix, np);
+   setProperty(ListNumberPrefix, prefix);
 }
 
-inline void QTextListFormat::setNumberSuffix(const QString &ns)
+inline void QTextListFormat::setNumberSuffix(const QString &suffix)
 {
-   setProperty(ListNumberSuffix, ns);
+   setProperty(ListNumberSuffix, suffix);
 }
 
 class Q_GUI_EXPORT QTextImageFormat : public QTextCharFormat
@@ -916,19 +919,19 @@ class Q_GUI_EXPORT QTextImageFormat : public QTextCharFormat
    friend class QTextFormat;
 };
 
-inline void QTextImageFormat::setName(const QString &aname)
+inline void QTextImageFormat::setName(const QString &name)
 {
-   setProperty(ImageName, aname);
+   setProperty(ImageName, name);
 }
 
-inline void QTextImageFormat::setWidth(qreal awidth)
+inline void QTextImageFormat::setWidth(qreal width)
 {
-   setProperty(ImageWidth, awidth);
+   setProperty(ImageWidth, width);
 }
 
-inline void QTextImageFormat::setHeight(qreal aheight)
+inline void QTextImageFormat::setHeight(qreal height)
 {
-   setProperty(ImageHeight, aheight);
+   setProperty(ImageHeight, height);
 }
 
 class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
@@ -962,8 +965,8 @@ class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
       BorderStyle_Outset
    };
 
-   inline void setPosition(Position f) {
-      setProperty(CssFloat, f);
+   inline void setPosition(Position policy) {
+      setProperty(CssFloat, policy);
    }
    inline Position position() const {
       return static_cast<Position>(intProperty(CssFloat));
@@ -1011,8 +1014,8 @@ class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
    }
 
    inline void setWidth(qreal width);
-   inline void setWidth(const QTextLength &length) {
-      setProperty(FrameWidth, length);
+   inline void setWidth(const QTextLength &width) {
+      setProperty(FrameWidth, width);
    }
    inline QTextLength width() const {
       return lengthProperty(FrameWidth);
@@ -1024,8 +1027,8 @@ class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
       return lengthProperty(FrameHeight);
    }
 
-   inline void setPageBreakPolicy(PageBreakFlags flags) {
-      setProperty(PageBreakPolicy, int(flags));
+   inline void setPageBreakPolicy(PageBreakFlags policy) {
+      setProperty(PageBreakPolicy, int(policy));
    }
    inline PageBreakFlags pageBreakPolicy() const {
       return PageBreakFlags(intProperty(PageBreakPolicy));
@@ -1036,48 +1039,49 @@ class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
    friend class QTextFormat;
 };
 
-inline void QTextFrameFormat::setBorder(qreal aborder)
+inline void QTextFrameFormat::setBorder(qreal border)
 {
-   setProperty(FrameBorder, aborder);
+   setProperty(FrameBorder, border);
 }
 
-inline void QTextFrameFormat::setPadding(qreal apadding)
+inline void QTextFrameFormat::setPadding(qreal padding)
 {
-   setProperty(FramePadding, apadding);
+   setProperty(FramePadding, padding);
 }
 
-inline void QTextFrameFormat::setWidth(qreal awidth)
+inline void QTextFrameFormat::setWidth(qreal width)
 {
-   setProperty(FrameWidth, QTextLength(QTextLength::FixedLength, awidth));
+   setProperty(FrameWidth, QTextLength(QTextLength::FixedLength, width));
 }
 
-inline void QTextFrameFormat::setHeight(qreal aheight)
+inline void QTextFrameFormat::setHeight(qreal height)
 {
-   setProperty(FrameHeight, QTextLength(QTextLength::FixedLength, aheight));
-}
-inline void QTextFrameFormat::setHeight(const QTextLength &aheight)
-{
-   setProperty(FrameHeight, aheight);
+   setProperty(FrameHeight, QTextLength(QTextLength::FixedLength, height));
 }
 
-inline void QTextFrameFormat::setTopMargin(qreal amargin)
+inline void QTextFrameFormat::setHeight(const QTextLength &height)
 {
-   setProperty(FrameTopMargin, amargin);
+   setProperty(FrameHeight, height);
 }
 
-inline void QTextFrameFormat::setBottomMargin(qreal amargin)
+inline void QTextFrameFormat::setTopMargin(qreal margin)
 {
-   setProperty(FrameBottomMargin, amargin);
+   setProperty(FrameTopMargin, margin);
 }
 
-inline void QTextFrameFormat::setLeftMargin(qreal amargin)
+inline void QTextFrameFormat::setBottomMargin(qreal margin)
 {
-   setProperty(FrameLeftMargin, amargin);
+   setProperty(FrameBottomMargin, margin);
 }
 
-inline void QTextFrameFormat::setRightMargin(qreal amargin)
+inline void QTextFrameFormat::setLeftMargin(qreal margin)
 {
-   setProperty(FrameRightMargin, amargin);
+   setProperty(FrameLeftMargin, margin);
+}
+
+inline void QTextFrameFormat::setRightMargin(qreal margin)
+{
+   setProperty(FrameRightMargin, margin);
 }
 
 class Q_GUI_EXPORT QTextTableFormat : public QTextFrameFormat
@@ -1139,22 +1143,23 @@ class Q_GUI_EXPORT QTextTableFormat : public QTextFrameFormat
    friend class QTextFormat;
 };
 
-inline void QTextTableFormat::setColumns(int acolumns)
+inline void QTextTableFormat::setColumns(int columns)
 {
-   if (acolumns == 1) {
-      acolumns = 0;
+   if (columns == 1) {
+      columns = 0;
    }
-   setProperty(TableColumns, acolumns);
+
+   setProperty(TableColumns, columns);
 }
 
-inline void QTextTableFormat::setCellPadding(qreal apadding)
+inline void QTextTableFormat::setCellPadding(qreal padding)
 {
-   setProperty(TableCellPadding, apadding);
+   setProperty(TableCellPadding, padding);
 }
 
-inline void QTextTableFormat::setAlignment(Qt::Alignment aalignment)
+inline void QTextTableFormat::setAlignment(Qt::Alignment alignment)
 {
-   setProperty(BlockAlignment, int(aalignment));
+   setProperty(BlockAlignment, int(alignment));
 }
 
 class Q_GUI_EXPORT QTextTableCellFormat : public QTextCharFormat

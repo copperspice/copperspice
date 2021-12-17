@@ -80,12 +80,13 @@ class Q_SCRIPT_EXPORT QScriptValue
  public:
    QScriptValue();
    QScriptValue(const QScriptValue &other);
-   QScriptValue(QScriptEngine *engine, SpecialValue val);
-   QScriptValue(QScriptEngine *engine, bool val);
-   QScriptValue(QScriptEngine *engine, int val);
-   QScriptValue(QScriptEngine *engine, uint val);
-   QScriptValue(QScriptEngine *engine, qsreal val);
-   QScriptValue(QScriptEngine *engine, const QString &val);
+
+   QScriptValue(QScriptEngine *engine, SpecialValue value);
+   QScriptValue(QScriptEngine *engine, bool value);
+   QScriptValue(QScriptEngine *engine, int value);
+   QScriptValue(QScriptEngine *engine, uint value);
+   QScriptValue(QScriptEngine *engine, qsreal value);
+   QScriptValue(QScriptEngine *engine, const QString &value);
 
    QScriptValue(SpecialValue value);
    QScriptValue(bool value);

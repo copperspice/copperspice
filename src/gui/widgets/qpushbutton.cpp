@@ -260,6 +260,7 @@ void QPushButton::paintEvent(QPaintEvent *)
 void QPushButton::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QPushButton);
+
    switch (e->key()) {
       case Qt::Key_Enter:
       case Qt::Key_Return:
@@ -267,7 +268,8 @@ void QPushButton::keyPressEvent(QKeyEvent *e)
             click();
             break;
          }
-      // fall through
+         [[fallthrough]];
+
       default:
          QAbstractButton::keyPressEvent(e);
    }

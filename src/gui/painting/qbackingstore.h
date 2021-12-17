@@ -54,7 +54,7 @@ class Q_GUI_EXPORT QBackingStore
 
    bool scroll(const QRegion &area, int dx, int dy);
 
-   void beginPaint(const QRegion &);
+   void beginPaint(const QRegion &region);
    void endPaint();
 
    void setStaticContents(const QRegion &region);

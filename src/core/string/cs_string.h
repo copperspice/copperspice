@@ -2063,7 +2063,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(c
       }
 
       if (pattern_iter == str_end) {
-         // current charactor in m_string did not match the pattern
+         // current character in m_string did not match the pattern
          return retval;
       }
 
@@ -2230,7 +2230,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(co
       }
 
       if (pattern_iter == str_end) {
-         // current charactor in m_string did not match the pattern
+         // current character in m_string did not match the pattern
          return retval;
       }
    }

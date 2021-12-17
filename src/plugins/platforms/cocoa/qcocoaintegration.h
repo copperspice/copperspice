@@ -110,7 +110,8 @@ class QCocoaIntegration : public QPlatformIntegration
    enum Option {
       UseFreeTypeFontEngine = 0x1
    };
-   Q_DECLARE_FLAGS(Options, Option)
+
+   using Options = QFlags<Option>;
 
    QCocoaIntegration(const QStringList &paramList);
    ~QCocoaIntegration();

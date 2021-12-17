@@ -23,6 +23,7 @@
 
 #include <qtextdocumentlayout_p.h>
 
+#include <qglobal.h>
 #include <qtexttable.h>
 #include <qtextlist.h>
 #include <qpainter.h>
@@ -40,7 +41,6 @@
 #include <qcssutil_p.h>
 #include <qabstracttextdocumentlayout_p.h>
 #include <qcssparser_p.h>
-#include <qfunctions_p.h>
 
 #include <algorithm>
 #include <limits.h>

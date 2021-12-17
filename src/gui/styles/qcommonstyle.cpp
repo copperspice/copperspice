@@ -2424,9 +2424,11 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                      qDrawShadeRect(p, f->rect, f->palette, frameShadow == QFrame::Sunken, lw, mlw);
                   }
                   break;
+
                case QFrame::StyledPanel:
-                  //keep the compatibility with Qt 4.4 if there is a proxy style.
-                  //be sure to call drawPrimitive(QStyle::PE_Frame) on the proxy style
+                  // keep backwards compatibility if there is a proxy style.
+                  // be sure to call drawPrimitive(QStyle::PE_Frame) on the proxy style
+
                   if (widget) {
                      widget->style()->drawPrimitive(QStyle::PE_Frame, opt, p, widget);
                   } else {
@@ -3043,6 +3045,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                      case QFrame::Plain:
                         frameWidth = f->lineWidth;
                         break;
+
                      case QFrame::Raised:
                      case QFrame::Sunken:
                         frameWidth = (short)(f->lineWidth * 2 + f->midLineWidth);
@@ -3051,8 +3054,8 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                   break;
 
                case QFrame::StyledPanel:
-                  //keep the compatibility with Qt 4.4 if there is a proxy style.
-                  //be sure to call drawPrimitive(QStyle::SE_FrameContents) on the proxy style
+                  // keep backwards compatibility if there is a proxy style.
+                  // be sure to call drawPrimitive(QStyle::SE_FrameContents) on the proxy style
 
                   if (widget) {
                      return widget->style()->subElementRect(QStyle::SE_FrameContents, opt, widget);
@@ -3209,8 +3212,10 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
 
             if (sr == SE_ItemViewItemCheckIndicator) {
                r = d->checkRect;
+
             } else if (sr == SE_ItemViewItemDecoration) {
                r = d->decorationRect;
+
             } else if (sr == SE_ItemViewItemText || sr == SE_ItemViewItemFocusRect) {
                r = d->displayRect;
             }
@@ -4614,7 +4619,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                }
 
                offset += buttonWidth + 2;
-            // fall through
+               [[fallthrough]];
 
             case SC_MdiNormalButton:
                // No offset needed if
@@ -4623,10 +4628,12 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
                if (numSubControls == 1 || (numSubControls == 2 && !(opt->subControls & SC_MdiMinButton))) {
                   break;
                }
+
                if (opt->subControls & SC_MdiNormalButton) {
                   offset += buttonWidth;
                }
                break;
+
             default:
                break;
          }
@@ -5237,8 +5244,9 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
       case CT_Slider:
       case CT_ProgressBar:
       case CT_TabBarTab:
-      // just return the contentsSize for now
-      // fall through intended
+         // return the contentsSize for now
+         [[fallthrough]];
+
       default:
          break;
    }

@@ -50,22 +50,9 @@ bool QNetworkConfiguration::operator==(const QNetworkConfiguration &other) const
    return (d == other.d);
 }
 
-/*!
-    \fn bool QNetworkConfiguration::operator!=(const QNetworkConfiguration &other) const
-
-    Returns true if this configuration is not the same as the \a other
-    configuration given; otherwise returns false.
-*/
-
-/*!
-    Returns the user visible name of this configuration.
-
-    The name may either be the name of the underlying access point or the
-    name for service network that this configuration represents.
-*/
 QString QNetworkConfiguration::name() const
 {
-   if (!d) {
+   if (! d) {
       return QString();
    }
 
@@ -74,13 +61,9 @@ QString QNetworkConfiguration::name() const
    return d->name;
 }
 
-/*!
-    Returns the unique and platform specific identifier for this network configuration;
-    otherwise an empty string.
-*/
 QString QNetworkConfiguration::identifier() const
 {
-   if (!d) {
+   if (! d) {
       return QString();
    }
 
@@ -89,17 +72,9 @@ QString QNetworkConfiguration::identifier() const
    return d->id;
 }
 
-/*!
-    Returns the type of the configuration.
-
-    A configuration can represent a single access point configuration or
-    a set of access point configurations. Such a set is called service network.
-    A configuration that is based on a service network can potentially support
-    roaming of network sessions.
-*/
 QNetworkConfiguration::Type QNetworkConfiguration::type() const
 {
-   if (!d) {
+   if (! d) {
       return QNetworkConfiguration::Invalid;
    }
 
@@ -108,19 +83,9 @@ QNetworkConfiguration::Type QNetworkConfiguration::type() const
    return d->type;
 }
 
-/*!
-    Returns true if this QNetworkConfiguration object is valid.
-    A configuration may become invalid if the user deletes the configuration or
-    the configuration was default-constructed.
-
-    The addition and removal of configurations can be monitored via the
-    QNetworkConfigurationManager.
-
-    \sa QNetworkConfigurationManager
-*/
 bool QNetworkConfiguration::isValid() const
 {
-   if (!d) {
+   if (! d) {
       return false;
    }
 
@@ -129,12 +94,9 @@ bool QNetworkConfiguration::isValid() const
    return d->isValid;
 }
 
-/*!
-    Returns the current state of the configuration.
-*/
 QNetworkConfiguration::StateFlags QNetworkConfiguration::state() const
 {
-   if (!d) {
+   if (! d) {
       return QNetworkConfiguration::Undefined;
    }
 
@@ -143,13 +105,6 @@ QNetworkConfiguration::StateFlags QNetworkConfiguration::state() const
    return d->state;
 }
 
-/*!
-    Returns the purpose of this configuration.
-
-    The purpose field may be used to programmatically determine the
-    purpose of a configuration. Such information is usually part of the
-    access point or service network meta data.
-*/
 QNetworkConfiguration::Purpose QNetworkConfiguration::purpose() const
 {
    if (!d) {
@@ -160,12 +115,9 @@ QNetworkConfiguration::Purpose QNetworkConfiguration::purpose() const
    return d->purpose;
 }
 
-/*!
-    Returns true if this configuration supports roaming; otherwise false.
-*/
 bool QNetworkConfiguration::isRoamingAvailable() const
 {
-   if (!d) {
+   if (! d) {
       return false;
    }
 
@@ -173,24 +125,17 @@ bool QNetworkConfiguration::isRoamingAvailable() const
    return d->roamingSupported;
 }
 
-/*!
-    Returns all sub configurations of this network configuration in priority order. The first sub
-    configuration in the list has the highest priority.
-
-    Only network configurations of type \l ServiceNetwork can have children. Otherwise this
-    function returns an empty list.
-*/
 QList<QNetworkConfiguration> QNetworkConfiguration::children() const
 {
    QList<QNetworkConfiguration> results;
 
-   if (!d) {
+   if (! d) {
       return results;
    }
 
    QRecursiveMutexLocker locker(&d->mutex);
 
-   if (d->type != QNetworkConfiguration::ServiceNetwork || !d->isValid) {
+   if (d->type != QNetworkConfiguration::ServiceNetwork || ! d->isValid) {
       return results;
    }
 
@@ -204,7 +149,7 @@ QList<QNetworkConfiguration> QNetworkConfiguration::children() const
       {
          QRecursiveMutexLocker childLocker(&p->mutex);
 
-         if (!p->isValid) {
+         if (! p->isValid) {
             i.remove();
             continue;
          }
@@ -220,7 +165,7 @@ QList<QNetworkConfiguration> QNetworkConfiguration::children() const
 
 QNetworkConfiguration::BearerType QNetworkConfiguration::bearerType() const
 {
-   if (!isValid()) {
+   if (! isValid()) {
       return BearerUnknown;
    }
 
@@ -258,6 +203,7 @@ QNetworkConfiguration::BearerType QNetworkConfiguration::bearerTypeFamily() cons
          return QNetworkConfiguration::BearerUnknown;
    }
 }
+
 QString QNetworkConfiguration::bearerTypeName() const
 {
    if (! isValid()) {

@@ -48,14 +48,14 @@ public:
         Dnd          = 0x002000,
         KdeOverride  = 0x004000
     };
-
-    Q_DECLARE_FLAGS(WmWindowTypes, WmWindowType)
+    using WmWindowTypes = QFlags<WmWindowType>;
 
     typedef void (*SetWmWindowType)(QWindow *window, QXcbWindowFunctions::WmWindowTypes windowType);
     static const QByteArray setWmWindowTypeIdentifier() { return QByteArray("XcbSetWmWindowType"); }
     static void setWmWindowType(QWindow *window, WmWindowType type)
     {
-        return QPlatformHeaderHelper::callPlatformFunction<void, SetWmWindowType, QWindow *, WmWindowType>(setWmWindowTypeIdentifier(), window, type);
+        return QPlatformHeaderHelper::callPlatformFunction<void, SetWmWindowType, QWindow *,
+            WmWindowType>(setWmWindowTypeIdentifier(), window, type);
     }
 
     typedef void (*SetWmWindowRole)(QWindow *window, const QByteArray &role);

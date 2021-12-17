@@ -593,12 +593,13 @@ void WindowCreationData::fromWindow(const QWindow *w, const Qt::WindowFlags flag
             if (flags & Qt::WindowContextHelpButtonHint) {
                exStyle |= WS_EX_CONTEXTHELP;
             }
+
          } else {
             exStyle |= WS_EX_TOOLWINDOW;
          }
 
-         // make mouse events fall through this window
-         // NOTE: WS_EX_TRANSPARENT flag can make mouse inputs fall through a layered window
+         // mouse events should ignore this window
+         // NOTE: WS_EX_TRANSPARENT flag can make mouse inputs ignore a layered window
          if (flagsIn & Qt::WindowTransparentForInput) {
             exStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
          }

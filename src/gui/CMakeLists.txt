@@ -45,14 +45,13 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/widgetbase
    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
 
-
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include/freetype
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/zlib
 )
 
 if (${JPEG_FOUND})

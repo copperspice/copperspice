@@ -2604,9 +2604,11 @@ void QGraphicsView::wheelEvent(QWheelEvent *event)
    wheelEvent.setDelta(event->delta());
    wheelEvent.setOrientation(event->orientation());
    wheelEvent.setAccepted(false);
+
    QApplication::sendEvent(d->scene, &wheelEvent);
    event->setAccepted(wheelEvent.isAccepted());
-   if (!event->isAccepted()) {
+
+   if (! event->isAccepted()) {
       QAbstractScrollArea::wheelEvent(event);
    }
 }

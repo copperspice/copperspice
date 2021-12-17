@@ -175,15 +175,18 @@ void QWindowsPipeReader::notified(DWORD errorCode, DWORD numberOfBytesRead)
          // pipe and the message didn't fit into the pipe's system
          // buffer. We will read the remaining data in the next call.
          break;
+
       case ERROR_BROKEN_PIPE:
       case ERROR_PIPE_NOT_CONNECTED:
          pipeBroken = true;
          break;
+
       case ERROR_OPERATION_ABORTED:
          if (stopped) {
             break;
          }
-      // fall through
+         [[fallthrough]];
+
       default:
          emit winError(errorCode, QLatin1String("QWindowsPipeReader::notified"));
          pipeBroken = true;

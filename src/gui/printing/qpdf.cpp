@@ -2100,7 +2100,8 @@ int QPdfEnginePrivate::generateLinearGradientShader(const QLinearGradient *gradi
         break;
     case QGradient::ReflectSpread:
         reflect = true;
-        // fall through
+        [[fallthrough]];
+
     case QGradient::RepeatSpread: {
         // calculate required bounds
         QRectF pageRect = m_pageLayout.fullRectPixels(resolution);
@@ -2161,9 +2162,11 @@ int QPdfEnginePrivate::generateRadialGradientShader(const QRadialGradient *gradi
     switch (gradient->spread()) {
     case QGradient::PadSpread:
         break;
+
     case QGradient::ReflectSpread:
         reflect = true;
-        // fall through
+        [[fallthrough]];
+
     case QGradient::RepeatSpread: {
         Q_ASSERT(qFuzzyIsNull(r0)); // QPainter emulates if this is not 0
 

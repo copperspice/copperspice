@@ -65,7 +65,8 @@ class QWindowsOpenGLTester
       RendererMask            = 0x00FF,
       DisableRotationFlag     = 0x0100
    };
-   Q_DECLARE_FLAGS(Renderers, Renderer)
+
+   using Renderers = QFlags<Renderer>;
 
    static Renderer requestedGlesRenderer();
    static Renderer requestedRenderer();

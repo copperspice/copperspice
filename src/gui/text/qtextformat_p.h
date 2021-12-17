@@ -34,8 +34,8 @@ class Q_GUI_EXPORT QTextFormatCollection
    QTextFormatCollection() {}
    ~QTextFormatCollection();
 
-   QTextFormatCollection(const QTextFormatCollection &rhs);
-   QTextFormatCollection &operator=(const QTextFormatCollection &rhs);
+   QTextFormatCollection(const QTextFormatCollection &other);
+   QTextFormatCollection &operator=(const QTextFormatCollection &other);
 
    QTextFormat objectFormat(int objectIndex) const {
       return format(objectFormatIndex(objectIndex));

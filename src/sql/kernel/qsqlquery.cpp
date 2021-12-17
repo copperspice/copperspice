@@ -45,9 +45,23 @@ class QSqlQueryPrivate
    static QSqlQueryPrivate *shared_null();
 };
 
-Q_GLOBAL_STATIC_WITH_ARGS(QSqlQueryPrivate, nullQueryPrivate, (nullptr))
-Q_GLOBAL_STATIC(QSqlNullDriver, nullDriver)
-Q_GLOBAL_STATIC_WITH_ARGS(QSqlNullResult, nullResult, (nullDriver()))
+static QSqlQueryPrivate *nullQueryPrivate()
+{
+   static QSqlQueryPrivate retval(nullptr);
+   return &retval;
+}
+
+static QSqlNullDriver *nullDriver()
+{
+   static QSqlNullDriver retval;
+   return &retval;
+}
+
+static QSqlNullResult *nullResult()
+{
+   static QSqlNullResult retval(nullDriver());
+   return &retval;
+}
 
 QSqlQueryPrivate *QSqlQueryPrivate::shared_null()
 {
@@ -56,9 +70,6 @@ QSqlQueryPrivate *QSqlQueryPrivate::shared_null()
    return null;
 }
 
-/*!
-\internal
-*/
 QSqlQueryPrivate::QSqlQueryPrivate(QSqlResult *result)
    : ref(1), sqlResult(result)
 {

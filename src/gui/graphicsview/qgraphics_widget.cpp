@@ -50,11 +50,11 @@
 #include <qshortcutmap_p.h>
 #endif
 
-QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags flags)
    : QGraphicsObject(*new QGraphicsWidgetPrivate, nullptr), QGraphicsLayoutItem(nullptr, false)
 {
    Q_D(QGraphicsWidget);
-   d->init(parent, wFlags);
+   d->init(parent, flags);
 }
 
 // internal
@@ -329,18 +329,23 @@ void QGraphicsWidget::setWindowFrameMargins(qreal left, qreal top, qreal right, 
 void QGraphicsWidget::getWindowFrameMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const
 {
    Q_D(const QGraphicsWidget);
+
    if (left || top || right || bottom) {
       d->ensureWindowFrameMargins();
    }
+
    if (left) {
       *left = d->windowFrameMargins[d->Left];
    }
+
    if (top) {
       *top = d->windowFrameMargins[d->Top];
    }
+
    if (right) {
       *right = d->windowFrameMargins[d->Right];
    }
+
    if (bottom) {
       *bottom = d->windowFrameMargins[d->Bottom];
    }
@@ -349,17 +354,21 @@ void QGraphicsWidget::getWindowFrameMargins(qreal *left, qreal *top, qreal *righ
 void QGraphicsWidget::unsetWindowFrameMargins()
 {
    Q_D(QGraphicsWidget);
-   if ((d->windowFlags & Qt::Window) && (d->windowFlags & Qt::WindowType_Mask) != Qt::Popup &&
-      (d->windowFlags & Qt::WindowType_Mask) != Qt::ToolTip && !(d->windowFlags & Qt::FramelessWindowHint)) {
+
+   if ((d->m_flags & Qt::Window) && (d->m_flags & Qt::WindowType_Mask) != Qt::Popup &&
+         (d->m_flags & Qt::WindowType_Mask) != Qt::ToolTip && ! (d->m_flags & Qt::FramelessWindowHint)) {
       QStyleOptionTitleBar bar;
       d->initStyleOptionTitleBar(&bar);
+
       QStyle *style = this->style();
       qreal margin = style->pixelMetric(QStyle::PM_MdiSubWindowFrameWidth);
       qreal titleBarHeight  = d->titleBarHeight(bar);
       setWindowFrameMargins(margin, titleBarHeight, margin, margin);
+
    } else {
       setWindowFrameMargins(0, 0, 0, 0);
    }
+
    d->setWindowFrameMargins = false;
 }
 
@@ -1061,26 +1070,28 @@ Qt::WindowType QGraphicsWidget::windowType() const
 Qt::WindowFlags QGraphicsWidget::windowFlags() const
 {
    Q_D(const QGraphicsWidget);
-   return d->windowFlags;
+   return d->m_flags;
 }
 
-void QGraphicsWidget::setWindowFlags(Qt::WindowFlags wFlags)
+void QGraphicsWidget::setWindowFlags(Qt::WindowFlags flags)
 {
    Q_D(QGraphicsWidget);
-   if (d->windowFlags == wFlags) {
+
+   if (d->m_flags == flags) {
       return;
    }
-   bool wasPopup = (d->windowFlags & Qt::WindowType_Mask) == Qt::Popup;
+   bool wasPopup = (d->m_flags & Qt::WindowType_Mask) == Qt::Popup;
 
-   d->adjustWindowFlags(&wFlags);
-   d->windowFlags = wFlags;
-   if (!d->setWindowFrameMargins) {
+   d->adjustWindowFlags(&flags);
+   d->m_flags = flags;
+
+   if (! d->setWindowFrameMargins) {
       unsetWindowFrameMargins();
    }
 
-   setFlag(ItemIsPanel, d->windowFlags & Qt::Window);
+   setFlag(ItemIsPanel, d->m_flags & Qt::Window);
 
-   bool isPopup = (d->windowFlags & Qt::WindowType_Mask) == Qt::Popup;
+   bool isPopup = (d->m_flags & Qt::WindowType_Mask) == Qt::Popup;
 
    if (d->scene && isVisible() && wasPopup != isPopup) {
       // Popup state changed; update implicit mouse grab.

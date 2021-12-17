@@ -1359,19 +1359,21 @@ static bool q_NTLM_SSPI_library_load()
 
       if (securityDLLHandle != nullptr) {
          INIT_SECURITY_INTERFACE pInitSecurityInterface =
-            (INIT_SECURITY_INTERFACE)GetProcAddress(securityDLLHandle,
-                  "InitSecurityInterfaceW");
+            (INIT_SECURITY_INTERFACE)GetProcAddress(securityDLLHandle, "InitSecurityInterfaceW");
 
          if (pInitSecurityInterface != nullptr) {
             pSecurityFunctionTable = pInitSecurityInterface();
          }
       }
    }
+
    if (pSecurityFunctionTable == nullptr) {
       return false;
    }
+
    return true;
 }
+
 // Phase 1:
 static QByteArray qNtlmPhase1_SSPI(QAuthenticatorPrivate *ctx)
 {

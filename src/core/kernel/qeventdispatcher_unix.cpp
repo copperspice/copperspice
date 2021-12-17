@@ -58,10 +58,12 @@ QEventDispatcherUNIXPrivate::QEventDispatcherUNIXPrivate()
 #else
 
 #ifdef HAVE_SYS_EVENTFD_H
-    thread_pipe[0] = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
-    if (thread_pipe[0] != -1)
-        thread_pipe[1] = -1;
-    else // fall through the next "if"
+   thread_pipe[0] = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+
+   if (thread_pipe[0] != -1) {
+      thread_pipe[1] = -1;
+   } else
+      // continue
 #endif
 
    if (qt_safe_pipe(thread_pipe, O_NONBLOCK) == -1) {

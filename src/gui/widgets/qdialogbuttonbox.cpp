@@ -96,11 +96,12 @@ void QDialogButtonBoxPrivate::initLayout()
    getLayoutItemMargins(&left, &top, &right, &bottom);
    buttonLayout->setContentsMargins(-left, -top, -right, -bottom);
 
-   if (!q->testAttribute(Qt::WA_WState_OwnSizePolicy)) {
+   if (! q->testAttribute(Qt::WA_WState_OwnSizePolicy)) {
       QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Fixed, QSizePolicy::ButtonBox);
       if (orientation == Qt::Vertical) {
          sp.transpose();
       }
+
       q->setSizePolicy(sp);
       q->setAttribute(Qt::WA_WState_OwnSizePolicy, false);
    }
@@ -588,11 +589,11 @@ QDialogButtonBox::StandardButtons QDialogButtonBox::standardButtons() const
 {
    Q_D(const QDialogButtonBox);
    StandardButtons standardButtons = NoButton;
-   QHash<QPushButton *, StandardButton>::const_iterator it = d->standardButtonHash.constBegin();
-   while (it != d->standardButtonHash.constEnd()) {
-      standardButtons |= it.value();
-      ++it;
+
+   for (auto item : d->standardButtonHash) {
+      standardButtons |= item;
    }
+
    return standardButtons;
 }
 
@@ -648,13 +649,25 @@ void QDialogButtonBoxPrivate::_q_handleButtonDestroyed()
 {
    Q_Q(QDialogButtonBox);
 
-   if (QObject *object = q->sender()) {
-      bool tmp = internalRemove;
+   QObject *object = q->sender();
 
-      internalRemove = true;
-      q->removeButton(static_cast<QAbstractButton *>(object));
+   if (object != nullptr) {
+      // remove from the standard button hash first and then from the roles
+      for (auto iter = standardButtonHash.cbegin(); iter != standardButtonHash.cend(); ++iter) {
+         if (iter.key() == object) {
+            standardButtonHash.erase(iter);
+            break;
+         }
+      }
 
-      internalRemove = tmp;
+      for (QList<QAbstractButton *> &list : buttonLists) {
+         for (auto iter = list.cbegin(); iter != list.cend(); ++iter) {
+            if (*iter == object) {
+               list.erase(iter);
+               break;
+            }
+         }
+      }
    }
 }
 

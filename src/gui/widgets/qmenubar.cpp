@@ -1378,7 +1378,8 @@ bool QMenuBar::eventFilter(QObject *object, QEvent *event)
                   d->setKeyboardMode(!d->keyboardState);
                }
             }
-            // fall through
+            [[fallthrough]];
+
             case QEvent::MouseButtonPress:
             case QEvent::MouseButtonRelease:
             case QEvent::MouseMove:
@@ -1388,14 +1389,17 @@ bool QMenuBar::eventFilter(QObject *object, QEvent *event)
                d->altPressed = false;
                qApp->removeEventFilter(this);
                break;
+
             default:
                break;
          }
+
       } else if (isVisible()) {
          if (event->type() == QEvent::ShortcutOverride) {
             QKeyEvent *kev = static_cast<QKeyEvent *>(event);
+
             if ((kev->key() == Qt::Key_Alt || kev->key() == Qt::Key_Meta)
-               && kev->modifiers() == Qt::AltModifier) {
+                  && kev->modifiers() == Qt::AltModifier) {
                d->altPressed = true;
                qApp->installEventFilter(this);
             }
@@ -1406,32 +1410,18 @@ bool QMenuBar::eventFilter(QObject *object, QEvent *event)
    return false;
 }
 
-/*!
-  Returns the QAction at \a pt. Returns 0 if there is no action at \a pt or if
-the location has a separator.
-
-    \sa addAction(), addSeparator()
-*/
 QAction *QMenuBar::actionAt(const QPoint &pt) const
 {
    Q_D(const QMenuBar);
    return d->actionAt(pt);
 }
 
-/*!
-  Returns the geometry of action \a act as a QRect.
-
-    \sa actionAt()
-*/
 QRect QMenuBar::actionGeometry(QAction *act) const
 {
    Q_D(const QMenuBar);
    return d->actionRect(act);
 }
 
-/*!
-  \reimp
-*/
 QSize QMenuBar::minimumSizeHint() const
 {
    Q_D(const QMenuBar);

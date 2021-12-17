@@ -3776,11 +3776,11 @@ QVector<QRect> QRegion::rects() const
    }
 }
 
-void QRegion::setRects(const QRect *rects, int num)
+void QRegion::setRects(const QRect *rectPtr, int num)
 {
    *this = QRegion();
 
-   if (! rects || num == 0 || (num == 1 && rects->isEmpty())) {
+   if (! rectPtr || num == 0 || (num == 1 && rectPtr->isEmpty())) {
       return;
    }
 
@@ -3789,8 +3789,8 @@ void QRegion::setRects(const QRect *rects, int num)
    d->qt_rgn->numRects = num;
 
    if (num == 1) {
-      d->qt_rgn->extents   = *rects;
-      d->qt_rgn->innerRect = *rects;
+      d->qt_rgn->extents   = *rectPtr;
+      d->qt_rgn->innerRect = *rectPtr;
 
    } else {
       d->qt_rgn->rects.resize(num);
@@ -3801,8 +3801,9 @@ void QRegion::setRects(const QRect *rects, int num)
           bottom = INT_MIN;
 
       for (int i = 0; i < num; ++i) {
-         const QRect &rect = rects[i];
+         const QRect &rect  = rectPtr[i];
          d->qt_rgn->rects[i] = rect;
+
          left   = qMin(rect.left(), left);
          right  = qMax(rect.right(), right);
          top    = qMin(rect.top(), top);
@@ -3819,7 +3820,6 @@ int QRegion::rectCount() const
 {
    return (d->qt_rgn ? d->qt_rgn->numRects : 0);
 }
-
 
 bool QRegion::operator==(const QRegion &r) const
 {

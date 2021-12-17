@@ -89,7 +89,7 @@ class Q_GUI_EXPORT QGlyphRun
    void setStrikeOut(bool strikeOut);
    bool strikeOut() const;
 
-   void setRightToLeft(bool on);
+   void setRightToLeft(bool rightToLeft);
    bool isRightToLeft() const;
 
    void setFlag(GlyphRunFlag flag, bool enabled = true);

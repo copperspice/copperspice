@@ -68,7 +68,7 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
    void setFormat(int start, int count, const QTextCharFormat &format);
    void setFormat(int start, int count, const QColor &color);
    void setFormat(int start, int count, const QFont &font);
-   QTextCharFormat format(int pos) const;
+   QTextCharFormat format(int position) const;
 
    int previousBlockState() const;
    int currentBlockState() const;

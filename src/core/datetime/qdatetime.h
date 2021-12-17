@@ -255,8 +255,8 @@ class Q_CORE_EXPORT QTime
    friend class QDateTime;
    friend class QDateTimePrivate;
 
-   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &);
-   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &);
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QTime &data);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QTime &data);
 };
 
 class Q_CORE_EXPORT QDateTime
@@ -379,20 +379,20 @@ class Q_CORE_EXPORT QDateTime
    // emerald - for performance move the qdatetimePrivate members to here
    QSharedDataPointer<QDateTimePrivate> d;
 
-   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &);
-   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &);
-   friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &);
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QDateTime &data);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QDateTime &data);
+   friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &data);
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QDate &value);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QDate &value);
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QTime &value);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QTime &value);
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QDateTime &value);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QDateTime &value);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QDate &data);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QDate &data);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QTime &data);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QTime &data);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QDateTime &data);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QDateTime &data);
 
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QDate &value);
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QTime &value);
+Q_CORE_EXPORT QDebug operator<<(QDebug, const QDate &data);
+Q_CORE_EXPORT QDebug operator<<(QDebug, const QTime &data);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QDateTime &value);
 
 Q_CORE_EXPORT uint qHash(const QDateTime &key, uint seed = 0);

@@ -333,8 +333,7 @@ class Q_GUI_EXPORT QWidgetPrivate
 
    void setSystemClip(QPaintDevice *paintDevice, const QRegion &region);
    void subtractOpaqueChildren(QRegion &rgn, const QRect &clipRect) const;
-   void subtractOpaqueSiblings(QRegion &source, bool *hasDirtySiblingsAbove = nullptr,
-      bool alsoNonOpaque = false) const;
+   void subtractOpaqueSiblings(QRegion &source, bool *hasDirtySiblingsAbove = nullptr, bool alsoNonOpaque = false) const;
 
    void clipToEffectiveMask(QRegion &region) const;
    void updateIsOpaque();
@@ -360,12 +359,15 @@ class Q_GUI_EXPORT QWidgetPrivate
    void moveRect(const QRect &, int dx, int dy);
    void scrollRect(const QRect &, int dx, int dy);
    void invalidateBuffer_resizeHelper(const QPoint &oldPos, const QSize &oldSize);
-   // ### Qt 4.6: Merge into a template function (after MSVC isn't supported anymore).
+
+   // merge into a template function ( emerald )
    void invalidateBuffer(const QRegion &);
    void invalidateBuffer(const QRect &);
+
    bool isOverlapped(const QRect &) const;
    void syncBackingStore();
    void syncBackingStore(const QRegion &region);
+
    // tells the input method about the widgets transform
    void updateWidgetTransform(QEvent *event);
 
@@ -418,7 +420,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    void setWindowTitle_helper(const QString &cap);
    void setWindowFilePath_helper(const QString &filePath);
    void setWindowModified_helper();
-   virtual void setWindowFlags(Qt::WindowFlags windowFlags);
+   virtual void setWindowFlags(Qt::WindowFlags flags);
 
    bool setMinimumSize_helper(int &minw, int &minh);
    bool setMaximumSize_helper(int &maxw, int &maxh);

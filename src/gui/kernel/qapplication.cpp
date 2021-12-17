@@ -1424,24 +1424,31 @@ void QGuiApplicationPrivate::processWindowSystemEvent(QWindowSystemInterfacePriv
       case QWindowSystemInterfacePrivate::Mouse:
          QGuiApplicationPrivate::processMouseEvent(static_cast<QWindowSystemInterfacePrivate::MouseEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::Wheel:
          QGuiApplicationPrivate::processWheelEvent(static_cast<QWindowSystemInterfacePrivate::WheelEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::Key:
          QGuiApplicationPrivate::processKeyEvent(static_cast<QWindowSystemInterfacePrivate::KeyEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::Touch:
          QGuiApplicationPrivate::processTouchEvent(static_cast<QWindowSystemInterfacePrivate::TouchEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::GeometryChange:
          QGuiApplicationPrivate::processGeometryChangeEvent(static_cast<QWindowSystemInterfacePrivate::GeometryChangeEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::Enter:
          QGuiApplicationPrivate::processEnterEvent(static_cast<QWindowSystemInterfacePrivate::EnterEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::Leave:
          QGuiApplicationPrivate::processLeaveEvent(static_cast<QWindowSystemInterfacePrivate::LeaveEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::ActivatedWindow:
          QGuiApplicationPrivate::processActivatedEvent(static_cast<QWindowSystemInterfacePrivate::ActivatedWindowEvent *>(e));
          break;
@@ -1457,11 +1464,13 @@ void QGuiApplicationPrivate::processWindowSystemEvent(QWindowSystemInterfacePriv
          QGuiApplicationPrivate::setApplicationState(changeEvent->newState, changeEvent->forcePropagate);
       }
       break;
+
       case QWindowSystemInterfacePrivate::FlushEvents: {
          QWindowSystemInterfacePrivate::FlushEventsEvent *flushEventsEvent = static_cast<QWindowSystemInterfacePrivate::FlushEventsEvent *>(e);
          QWindowSystemInterface::deferredFlushWindowSystemEvents(flushEventsEvent->flags);
       }
       break;
+
       case QWindowSystemInterfacePrivate::Close:
          QGuiApplicationPrivate::processCloseEvent(
             static_cast<QWindowSystemInterfacePrivate::CloseEvent *>(e));
@@ -1470,14 +1479,17 @@ void QGuiApplicationPrivate::processWindowSystemEvent(QWindowSystemInterfacePriv
          QGuiApplicationPrivate::reportScreenOrientationChange(
             static_cast<QWindowSystemInterfacePrivate::ScreenOrientationEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::ScreenGeometry:
          QGuiApplicationPrivate::reportGeometryChange(
             static_cast<QWindowSystemInterfacePrivate::ScreenGeometryEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::ScreenLogicalDotsPerInch:
          QGuiApplicationPrivate::reportLogicalDotsPerInchChange(
             static_cast<QWindowSystemInterfacePrivate::ScreenLogicalDotsPerInchEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::ScreenRefreshRate:
          QGuiApplicationPrivate::reportRefreshRateChange(
             static_cast<QWindowSystemInterfacePrivate::ScreenRefreshRateEvent *>(e));
@@ -1489,28 +1501,34 @@ void QGuiApplicationPrivate::processWindowSystemEvent(QWindowSystemInterfacePriv
       case QWindowSystemInterfacePrivate::Expose:
          QGuiApplicationPrivate::processExposeEvent(static_cast<QWindowSystemInterfacePrivate::ExposeEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::Tablet:
          QGuiApplicationPrivate::processTabletEvent(
             static_cast<QWindowSystemInterfacePrivate::TabletEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::TabletEnterProximity:
          QGuiApplicationPrivate::processTabletEnterProximityEvent(
             static_cast<QWindowSystemInterfacePrivate::TabletEnterProximityEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::TabletLeaveProximity:
          QGuiApplicationPrivate::processTabletLeaveProximityEvent(
             static_cast<QWindowSystemInterfacePrivate::TabletLeaveProximityEvent *>(e));
          break;
+
 #ifndef QT_NO_GESTURES
       case QWindowSystemInterfacePrivate::Gesture:
          QGuiApplicationPrivate::processGestureEvent(
             static_cast<QWindowSystemInterfacePrivate::GestureEvent *>(e));
          break;
 #endif
+
       case QWindowSystemInterfacePrivate::PlatformPanel:
          QGuiApplicationPrivate::processPlatformPanelEvent(
             static_cast<QWindowSystemInterfacePrivate::PlatformPanelEvent *>(e));
          break;
+
       case QWindowSystemInterfacePrivate::FileOpen:
          QGuiApplicationPrivate::processFileOpenEvent(
             static_cast<QWindowSystemInterfacePrivate::FileOpenEvent *>(e));
@@ -1524,6 +1542,7 @@ void QGuiApplicationPrivate::processWindowSystemEvent(QWindowSystemInterfacePriv
       case QWindowSystemInterfacePrivate::EnterWhatsThisMode:
          QGuiApplication::postEvent(QGuiApplication::instance(), new QEvent(QEvent::EnterWhatsThisMode));
          break;
+
       default:
          qWarning() << "Unknown user input event type:" << e->type;
          break;
@@ -1682,12 +1701,16 @@ void QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mo
       fake.flags |= QWindowSystemInterfacePrivate::WindowSystemEvent::Synthetic;
       processTouchEvent(&fake);
    }
+
    if (doubleClick) {
       mousePressButton = Qt::NoButton;
+
       if (!e->window.isNull() || e->nullWindow()) { // QTBUG-36364, check if window closed in response to press
          const QEvent::Type doubleClickType = frameStrut ? QEvent::NonClientAreaMouseButtonDblClick : QEvent::MouseButtonDblClick;
+
          QMouseEvent dblClickEvent(doubleClickType, localPoint, localPoint, globalPoint,
             button, buttons, e->modifiers, e->source);
+
          dblClickEvent.setTimestamp(e->timestamp);
          QGuiApplication::sendSpontaneousEvent(window, &dblClickEvent);
       }
@@ -1703,13 +1726,14 @@ void QGuiApplicationPrivate::processWheelEvent(QWindowSystemInterfacePrivate::Wh
 
    if (e->nullWindow()) {
       window = QGuiApplication::topLevelWindowAt(globalPoint.toPoint());
+
       if (window) {
          QPointF delta = globalPoint - globalPoint.toPoint();
          localPoint = window->mapFromGlobal(globalPoint.toPoint()) + delta;
       }
    }
 
-   if (!window) {
+   if (! window) {
       return;
    }
 
@@ -1726,10 +1750,8 @@ void QGuiApplicationPrivate::processWheelEvent(QWindowSystemInterfacePrivate::Wh
    ev.setTimestamp(e->timestamp);
    QGuiApplication::sendSpontaneousEvent(window, &ev);
 
-#endif /* ifndef QT_NO_WHEELEVENT */
+#endif
 }
-
-
 
 void QGuiApplicationPrivate::processKeyEvent(QWindowSystemInterfacePrivate::KeyEvent *e)
 {

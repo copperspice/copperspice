@@ -190,11 +190,12 @@ static void resolveLibs()
       // protect initialization
 
       QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
-      // check triedResolve again, since another thread may have already
-      // done the initialization
+
+      // check triedResolve again, since another thread may have already done the initialization
+
       if (triedResolve) {
          // another thread did initialize the security function pointers,
-         // so we shouldn't do it again.
+         // so we shouldn't do it again
          return;
       }
 
@@ -282,7 +283,8 @@ typedef struct _SHARE_INFO_1 {
 static bool resolveUNCLibs()
 {
    static bool triedResolve = false;
-   if (!triedResolve) {
+
+   if (! triedResolve) {
       QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
 
       if (triedResolve) {
@@ -297,6 +299,7 @@ static bool resolveUNCLibs()
 
       triedResolve = true;
    }
+
    return ptrNetShareEnum && ptrNetApiBufferFree;
 }
 

@@ -250,7 +250,7 @@ auto CsStringIterator<E,A>::codePointEnd() const -> v_iter
    return m_iter + E::walk(1, m_iter);
 }
 
-// reverse iterator defreference needs to return by value
+// reverse iterator dereference needs to return by value
 template <typename T>
 class CsStringReverseIterator : public std::reverse_iterator<T>
 {

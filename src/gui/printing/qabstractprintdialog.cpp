@@ -47,9 +47,6 @@ QAbstractPrintDialog::QAbstractPrintDialog(QPrinter *printer, QWidget *parent)
    d->maxPage = to > 0 ? to : INT_MAX;
 }
 
-/*!
-     \internal
-*/
 QAbstractPrintDialog::QAbstractPrintDialog(QAbstractPrintDialogPrivate &ptr, QPrinter *printer, QWidget *parent)
    : QDialog(ptr, parent)
 {
@@ -58,9 +55,6 @@ QAbstractPrintDialog::QAbstractPrintDialog(QAbstractPrintDialogPrivate &ptr, QPr
    d->setPrinter(printer);
 }
 
-/*!
-    \internal
-*/
 QAbstractPrintDialog::~QAbstractPrintDialog()
 {
    Q_D(QAbstractPrintDialog);
@@ -69,12 +63,6 @@ QAbstractPrintDialog::~QAbstractPrintDialog()
    }
 }
 
-/*!
-    Sets the given \a option to be enabled if \a on is true;
-    otherwise, clears the given \a option.
-
-    \sa options, testOption()
-*/
 void QPrintDialog::setOption(PrintDialogOption option, bool on)
 {
    Q_D(QPrintDialog);
@@ -83,12 +71,6 @@ void QPrintDialog::setOption(PrintDialogOption option, bool on)
    }
 }
 
-/*!
-    Returns true if the given \a option is enabled; otherwise, returns
-    false.
-
-    \sa options, setOption()
-*/
 bool QPrintDialog::testOption(PrintDialogOption option) const
 {
    Q_D(const QPrintDialog);
@@ -113,72 +95,42 @@ QPrintDialog::PrintDialogOptions QPrintDialog::options() const
    return d->options;
 }
 
-/*!
-    \obsolete
-
-    Use QPrintDialog::setOptions() instead.
-*/
 void QAbstractPrintDialog::setEnabledOptions(PrintDialogOptions options)
 {
    Q_D(QAbstractPrintDialog);
    d->options = options;
 }
 
-/*!
-    \obsolete
-
-    Use QPrintDialog::setOption(\a option, true) instead.
-*/
 void QAbstractPrintDialog::addEnabledOption(PrintDialogOption option)
 {
    Q_D(QAbstractPrintDialog);
    d->options |= option;
 }
 
-/*!
-    \obsolete
-
-    Use QPrintDialog::options() instead.
-*/
 QAbstractPrintDialog::PrintDialogOptions QAbstractPrintDialog::enabledOptions() const
 {
    Q_D(const QAbstractPrintDialog);
    return d->options;
 }
 
-/*!
-    \obsolete
-
-    Use QPrintDialog::testOption(\a option) instead.
-*/
 bool QAbstractPrintDialog::isOptionEnabled(PrintDialogOption option) const
 {
    Q_D(const QAbstractPrintDialog);
    return d->options & option;
 }
 
-/*!
-    Sets the print range option in to be \a range.
- */
 void QAbstractPrintDialog::setPrintRange(PrintRange range)
 {
    Q_D(QAbstractPrintDialog);
    d->printer->setPrintRange(QPrinter::PrintRange(range));
 }
 
-/*!
-    Returns the print range.
-*/
 QAbstractPrintDialog::PrintRange QAbstractPrintDialog::printRange() const
 {
    Q_D(const QAbstractPrintDialog);
    return QAbstractPrintDialog::PrintRange(d->pd->printRange);
 }
 
-/*!
-    Sets the page range in this dialog to be from \a min to \a max. This also
-    enables the PrintPageRange option.
-*/
 void QAbstractPrintDialog::setMinMax(int min, int max)
 {
    Q_D(QAbstractPrintDialog);
@@ -190,30 +142,18 @@ void QAbstractPrintDialog::setMinMax(int min, int max)
    d->options |= PrintPageRange;
 }
 
-/*!
-    Returns the minimum page in the page range.
-    By default, this value is set to 1.
-*/
 int QAbstractPrintDialog::minPage() const
 {
    Q_D(const QAbstractPrintDialog);
    return d->minPage;
 }
 
-/*!
-    Returns the maximum page in the page range. As of Qt 4.4, this
-    function returns INT_MAX by default. Previous versions returned 1
-    by default.
-*/
 int QAbstractPrintDialog::maxPage() const
 {
    Q_D(const QAbstractPrintDialog);
    return d->maxPage;
 }
 
-/*!
-    Sets the range in the print dialog to be from \a from to \a to.
-*/
 void QAbstractPrintDialog::setFromTo(int from, int to)
 {
    Q_D(QAbstractPrintDialog);
@@ -237,21 +177,12 @@ int QAbstractPrintDialog::fromPage() const
    return d->printer->fromPage();
 }
 
-/*!
-    Returns the last page to be printed.
-    By default, this value is set to 0.
-*/
 int QAbstractPrintDialog::toPage() const
 {
    Q_D(const QAbstractPrintDialog);
    return d->printer->toPage();
 }
 
-
-/*!
-    Returns the printer that this printer dialog operates
-    on.
-*/
 QPrinter *QAbstractPrintDialog::printer() const
 {
    Q_D(const QAbstractPrintDialog);
@@ -309,4 +240,4 @@ void QPrintDialog::open(QObject *receiver, const QString &member)
    QDialog::open();
 }
 
-#endif // QT_NO_PRINTDIALOG
+#endif

@@ -1436,7 +1436,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
 
             if (dockWidget && dockWidget->isFloating()) {
                QWindowsXPStyle::drawControl(element, option, painter, widget);
-               break; //otherwise fall through
+               break;
             }
 
             const bool verticalTitleBar = dwOpt->verticalTitleBar;

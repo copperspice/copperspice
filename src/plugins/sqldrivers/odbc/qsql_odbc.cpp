@@ -1612,7 +1612,8 @@ bool QODBCResult::exec()
                      ind);
                break;
             }
-         // fall through
+            [[fallthrough]];
+
          default: {
             QByteArray &ba = tmpStorage[i];
             if (*ind != SQL_NULL_DATA) {
@@ -1690,6 +1691,7 @@ bool QODBCResult::exec()
                      QTime(dt.hour, dt.minute, dt.second, dt.fraction / 1000000)));
             break;
          }
+
          case QVariant::Bool:
          case QVariant::Int:
          case QVariant::UInt:
@@ -1699,6 +1701,7 @@ bool QODBCResult::exec()
          case QVariant::ULongLong:
             //nothing to do
             break;
+
          case QVariant::String:
             if (d->unicode) {
                if (bindValueType(i) & QSql::Out) {
@@ -1709,7 +1712,8 @@ bool QODBCResult::exec()
                }
                break;
             }
-         // fall through
+            [[fallthrough]];
+
          default: {
             if (bindValueType(i) & QSql::Out) {
                values[i] = tmpStorage.at(i);
@@ -1717,10 +1721,12 @@ bool QODBCResult::exec()
             break;
          }
       }
+
       if (indicators[i] == SQL_NULL_DATA) {
          values[i] = QVariant(values[i].type());
       }
    }
+
    return true;
 }
 

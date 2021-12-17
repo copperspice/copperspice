@@ -140,8 +140,10 @@ class Q_GUI_EXPORT QFont
 
    QFont();
    QFont(const QString &family, int pointSize = -1, int weight = -1, bool italic = false);
-   QFont(const QFont &, QPaintDevice *pd);
-   QFont(const QFont &);
+   QFont(const QFont &font, QPaintDevice *pd);
+
+   QFont(const QFont &other);
+
    ~QFont();
 
    void swap(QFont &other) {
@@ -150,53 +152,53 @@ class Q_GUI_EXPORT QFont
    }
 
    QString family() const;
-   void setFamily(const QString &);
+   void setFamily(const QString &family);
 
    QString styleName() const;
-   void setStyleName(const QString &);
+   void setStyleName(const QString &styleName);
 
    int pointSize() const;
-   void setPointSize(int);
+   void setPointSize(int size);
    qreal pointSizeF() const;
-   void setPointSizeF(qreal);
+   void setPointSizeF(qreal size);
 
    int pixelSize() const;
-   void setPixelSize(int);
+   void setPixelSize(int size);
 
    int weight() const;
-   void setWeight(int);
+   void setWeight(int weight);
 
    inline bool bold() const;
-   inline void setBold(bool);
+   inline void setBold(bool bold);
 
-   void setStyle(Style style);
    Style style() const;
+   void setStyle(Style style);
 
    inline bool italic() const;
-   inline void setItalic(bool b);
+   inline void setItalic(bool italic);
 
    bool underline() const;
-   void setUnderline(bool);
+   void setUnderline(bool underline);
 
    bool overline() const;
-   void setOverline(bool);
+   void setOverline(bool overline);
 
    bool strikeOut() const;
-   void setStrikeOut(bool);
+   void setStrikeOut(bool strikeout);
 
    bool fixedPitch() const;
-   void setFixedPitch(bool);
+   void setFixedPitch(bool fixedPitch);
 
    bool kerning() const;
-   void setKerning(bool);
+   void setKerning(bool kerning);
 
    StyleHint styleHint() const;
    StyleStrategy styleStrategy() const;
-   void setStyleHint(StyleHint, StyleStrategy = PreferDefault);
-   void setStyleStrategy(StyleStrategy s);
+   void setStyleHint(StyleHint hint, StyleStrategy strategy = PreferDefault);
+   void setStyleStrategy(StyleStrategy strategy);
 
    int stretch() const;
-   void setStretch(int);
+   void setStretch(int factor);
 
    qreal letterSpacing() const;
    SpacingType letterSpacingType() const;
@@ -205,41 +207,43 @@ class Q_GUI_EXPORT QFont
    qreal wordSpacing() const;
    void setWordSpacing(qreal spacing);
 
-   void setCapitalization(Capitalization);
+   void setCapitalization(Capitalization caps);
    Capitalization capitalization() const;
 
    void setHintingPreference(HintingPreference hintingPreference);
    HintingPreference hintingPreference() const;
 
-
    // dupicated from QFontInfo
    bool exactMatch() const;
 
-   QFont &operator=(const QFont &);
-   bool operator==(const QFont &) const;
-   bool operator!=(const QFont &) const;
-   bool operator<(const QFont &) const;
-   operator QVariant() const;
-   bool isCopyOf(const QFont &font) const;
+   QFont &operator=(const QFont &other);
+   bool operator==(const QFont &other) const;
+   bool operator!=(const QFont &other) const;
+   bool operator<(const QFont &other) const;
 
-   inline QFont &operator=(QFont &&other) {
+   QFont &operator=(QFont &&other) {
       qSwap(d, other.d);
       qSwap(resolve_mask, other.resolve_mask);
       return *this;
    }
 
+   operator QVariant() const;
+
+   bool isCopyOf(const QFont &font) const;
 
    QString key() const;
 
    QString toString() const;
-   bool fromString(const QString &);
+   bool fromString(const QString &description);
 
-   static QString substitute(const QString &);
-   static QStringList substitutes(const QString &);
+   static QString substitute(const QString &familyName);
+   static QStringList substitutes(const QString &familyName);
    static QStringList substitutions();
-   static void insertSubstitution(const QString &, const QString &);
-   static void insertSubstitutions(const QString &, const QStringList &);
-   static void removeSubstitutions(const QString &);
+
+   static void insertSubstitution(const QString &familyName, const QString &newName);
+   static void insertSubstitutions(const QString &familyName, const QStringList &newNameList);
+   static void removeSubstitutions(const QString &familyName);
+
    static void initialize();
    static void cleanup();
 
@@ -249,7 +253,8 @@ class Q_GUI_EXPORT QFont
    QString lastResortFamily() const;
    QString lastResortFont() const;
 
-   QFont resolve(const QFont &other) const;
+   QFont resolve(const QFont &font) const;
+
    uint resolve() const {
       return resolve_mask;
    }
@@ -262,7 +267,6 @@ class Q_GUI_EXPORT QFont
    explicit QFont(QFontPrivate *);
 
    void detach();
-
 
    friend class QFontPrivate;
    friend class QFontDialogPrivate;
@@ -299,14 +303,15 @@ class Q_GUI_EXPORT QFont
 };
 
 Q_GUI_EXPORT uint qHash(const QFont &font, uint seed = 0);
+
 inline bool QFont::bold() const
 {
    return weight() > Normal;
 }
 
-inline void QFont::setBold(bool enable)
+inline void QFont::setBold(bool bold)
 {
-   setWeight(enable ? Bold : Normal);
+   setWeight(bold ? Bold : Normal);
 }
 
 inline bool QFont::italic() const
@@ -314,9 +319,9 @@ inline bool QFont::italic() const
    return (style() != StyleNormal);
 }
 
-inline void QFont::setItalic(bool b)
+inline void QFont::setItalic(bool italic)
 {
-   setStyle(b ? StyleItalic : StyleNormal);
+   setStyle(italic ? StyleItalic : StyleNormal);
 }
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QFont &);

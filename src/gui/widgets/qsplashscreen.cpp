@@ -54,14 +54,14 @@ class QSplashScreenPrivate : public QWidgetPrivate
    inline QSplashScreenPrivate();
 };
 
-QSplashScreen::QSplashScreen(const QPixmap &pixmap, Qt::WindowFlags f)
-   : QWidget(*(new QSplashScreenPrivate()), nullptr, Qt::SplashScreen | Qt::FramelessWindowHint | f)
+QSplashScreen::QSplashScreen(const QPixmap &pixmap, Qt::WindowFlags flags)
+   : QWidget(*(new QSplashScreenPrivate()), nullptr, Qt::SplashScreen | Qt::FramelessWindowHint | flags)
 {
    setPixmap(pixmap);  // Does an implicit repaint
 }
 
-QSplashScreen::QSplashScreen(QWidget *parent, const QPixmap &pixmap, Qt::WindowFlags f)
-   : QWidget(*new QSplashScreenPrivate, parent, Qt::SplashScreen | f)
+QSplashScreen::QSplashScreen(QWidget *parent, const QPixmap &pixmap, Qt::WindowFlags flags)
+   : QWidget(*new QSplashScreenPrivate, parent, Qt::SplashScreen | flags)
 {
    d_func()->pixmap = pixmap;
    setPixmap(d_func()->pixmap);  // Does an implicit repaint

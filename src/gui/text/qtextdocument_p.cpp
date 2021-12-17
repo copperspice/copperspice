@@ -1169,6 +1169,7 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
 {
    bool undoCommandsAvailable = undoState != 0;
    bool redoCommandsAvailable = undoState != undoStack.size();
+
    if (stacksToClear == QTextDocument::UndoStack && undoCommandsAvailable) {
       for (int i = 0; i < undoState; ++i) {
          QTextUndoCommand c = undoStack[undoState];
@@ -1176,6 +1177,7 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
             delete c.custom;
          }
       }
+
       undoStack.remove(0, undoState);
       undoStack.resize(undoStack.size() - undoState);
       undoState = 0;
@@ -1217,21 +1219,21 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
    }
 }
 
-void QTextDocumentPrivate::emitUndoAvailable(bool available)
+void QTextDocumentPrivate::emitUndoAvailable(bool status)
 {
-   if (available != wasUndoAvailable) {
+   if (status != wasUndoAvailable) {
       Q_Q(QTextDocument);
-      emit q->undoAvailable(available);
-      wasUndoAvailable = available;
+      emit q->undoAvailable(status);
+      wasUndoAvailable = status;
    }
 }
 
-void QTextDocumentPrivate::emitRedoAvailable(bool available)
+void QTextDocumentPrivate::emitRedoAvailable(bool status)
 {
-   if (available != wasRedoAvailable) {
+   if (status != wasRedoAvailable) {
       Q_Q(QTextDocument);
-      emit q->redoAvailable(available);
-      wasRedoAvailable = available;
+      emit q->redoAvailable(status);
+      wasRedoAvailable = status;
    }
 }
 

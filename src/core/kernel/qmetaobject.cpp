@@ -1004,7 +1004,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
 
             // D
             if (found_funcPtrVar) {
-               // fall thru
+               // do nothing
 
             } else if (word == "=" || word == ")" || word == ",")  {
                // default name

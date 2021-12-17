@@ -152,7 +152,7 @@ void activate(Sender &sender, void (SignalClass::*signal)(SignalArgTypes...), Ts
 
    Internal::Bento<void (SignalClass::*)(SignalArgTypes...)> signal_Bento(signal);
 
-   // save the addresss of sender
+   // save the address of sender
    const SignalBase *senderPtr = &sender;
 
    // store the signal data, false indicates the data will not be copied
@@ -287,7 +287,7 @@ bool connect(const Sender &sender, void (SignalClass::*signalMethod)(SignalArgs.
    static_assert( std::is_base_of<SlotClass, Receiver>::value,
                   "connect():  Slot was not a child class of Receiver");
 
-   // compare signal and slot paramerter list
+   // compare signal and slot parameter list
    static_assert( Internal::cs_check_connect_args<void (*)(SignalArgs...), void (*)(SlotArgs...) >::value,
                   "connect():  Incompatible signal/slot arguments");
 
@@ -342,7 +342,7 @@ bool connect(const Sender &sender, void (SignalClass::*signalMethod)(SignalArgs.
    // Sender must be the same class as SignalClass and Sender is a child of SignalClass
    Internal::cs_testConnect_SenderSignal<Sender, SignalClass>();
 
-   // compare signal and slot paramerter list
+   // compare signal and slot parameter list
    Internal::cs_testConnect_SignalSlotArgs_1<T, SignalArgs...>();
 
    if (signalMethod == nullptr) {
@@ -505,7 +505,7 @@ bool internal_disconnect(const Sender &sender, const Internal::BentoAbstract *si
          auto receiverListHandle = temp.receiver->m_possibleSenders.lock_write();
          receiverListHandle->erase(find(receiverListHandle->begin(), receiverListHandle->end(), &sender));
 
-         // delete conneciton in sender
+         // delete connection in sender
          senderListHandle->erase(iter);
       }
    }

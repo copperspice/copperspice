@@ -32,6 +32,7 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qglobal.h>
 #include <qhash.h>
 #include <qmutex.h>
 #include <qtextcodec.h>
@@ -48,7 +49,6 @@
 #include <qprocess_p.h>
 #include <qthread_p.h>
 #include <qfactoryloader_p.h>
-#include <qfunctions_p.h>
 #include <qlocale_p.h>
 
 #if defined(Q_OS_UNIX)
@@ -213,7 +213,7 @@ void qAddPreRoutine(QtStartUpFunction p)
      return;
    }
 
-   // C++11 added parallel dynamic initialization, this can be called from multiple threads
+   // this can be called from multiple threads
    QMutexLocker locker(&globalPreRoutinesMutex);
 
    if (QCoreApplication::instance()) {
@@ -1587,7 +1587,7 @@ QString QCoreApplication::applicationName()
    return coreappdata()->application;
 }
 
-// Exported for QDesktopServices (Qt4 behavior compatibility)
+// Exported for QDesktopServices (backward compatibility)
 Q_CORE_EXPORT QString qt_applicationName_noFallback()
 {
    return coreappdata()->applicationNameSet ? coreappdata()->application : QString();

@@ -89,15 +89,15 @@ static void resolveTimerAPI()
 {
    static bool triedResolve = false;
 
-   if (!triedResolve) {
+   if (! triedResolve) {
       QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
 
+      if (triedResolve) {
+         return;
+      }
 
-      if (triedResolve)
-            return;
-
-      triedResolve = true;
-      qtimeSetEvent = (ptimeSetEvent)QSystemLibrary::resolve(QLatin1String("winmm"), "timeSetEvent");
+      triedResolve   = true;
+      qtimeSetEvent  = (ptimeSetEvent)QSystemLibrary::resolve(QLatin1String("winmm"), "timeSetEvent");
       qtimeKillEvent = (ptimeKillEvent)QSystemLibrary::resolve(QLatin1String("winmm"), "timeKillEvent");
    }
 }

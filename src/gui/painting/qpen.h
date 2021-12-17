@@ -27,8 +27,6 @@
 #include <qcolor.h>
 #include <qbrush.h>
 
-
-
 class QVariant;
 class QPenPrivate;
 class QBrush;
@@ -37,26 +35,27 @@ class QPen;
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
 
-
 class Q_GUI_EXPORT QPen
 {
  public:
    QPen();
-   QPen(Qt::PenStyle);
+   QPen(Qt::PenStyle style);
    QPen(const QColor &color);
-   QPen(const QBrush &brush, qreal width, Qt::PenStyle s = Qt::SolidLine,
-      Qt::PenCapStyle c = Qt::SquareCap, Qt::PenJoinStyle j = Qt::BevelJoin);
 
+   QPen(const QBrush &brush, qreal width, Qt::PenStyle style = Qt::SolidLine,
+      Qt::PenCapStyle capStyle = Qt::SquareCap, Qt::PenJoinStyle joinStyle = Qt::BevelJoin);
 
-   QPen(const QPen &pen);
+   QPen(const QPen &other);
 
-   QPen(QPen &&other) : d(other.d) {
+   QPen(QPen &&other)
+      : d(other.d)
+   {
       other.d = nullptr;
    }
 
    ~QPen();
 
-   QPen &operator=(const QPen &pen);
+   QPen &operator=(const QPen &other);
 
    QPen &operator=(QPen &&other) {
       qSwap(d, other.d);
@@ -68,13 +67,13 @@ class Q_GUI_EXPORT QPen
    }
 
    Qt::PenStyle style() const;
-   void setStyle(Qt::PenStyle);
+   void setStyle(Qt::PenStyle style);
 
    QVector<qreal> dashPattern() const;
    void setDashPattern(const QVector<qreal> &pattern);
 
    qreal dashOffset() const;
-   void setDashOffset(qreal doffset);
+   void setDashOffset(qreal offset);
 
    qreal miterLimit() const;
    void setMiterLimit(qreal limit);
@@ -94,19 +93,20 @@ class Q_GUI_EXPORT QPen
    bool isSolid() const;
 
    Qt::PenCapStyle capStyle() const;
-   void setCapStyle(Qt::PenCapStyle pcs);
+   void setCapStyle(Qt::PenCapStyle capStyle);
 
    Qt::PenJoinStyle joinStyle() const;
-   void setJoinStyle(Qt::PenJoinStyle pcs);
+   void setJoinStyle(Qt::PenJoinStyle joinStyle);
 
    bool isCosmetic() const;
    void setCosmetic(bool cosmetic);
 
-   bool operator==(const QPen &p) const;
+   bool operator==(const QPen &other) const;
 
-   bool operator!=(const QPen &p) const {
-      return !(operator==(p));
+   bool operator!=(const QPen &other) const {
+      return !(operator==(other));
    }
+
    operator QVariant() const;
 
    bool isDetached();

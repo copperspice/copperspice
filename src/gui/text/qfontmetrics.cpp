@@ -55,11 +55,8 @@ QFontMetrics::QFontMetrics(const QFont &font, QPaintDevice *paintdevice)
 
 }
 
-/*!
-    Constructs a copy of \a fm.
-*/
-QFontMetrics::QFontMetrics(const QFontMetrics &fm)
-   : d(fm.d.data())
+QFontMetrics::QFontMetrics(const QFontMetrics &other)
+   : d(other.d.data())
 {
 }
 
@@ -67,14 +64,13 @@ QFontMetrics::~QFontMetrics()
 {
 }
 
-QFontMetrics &QFontMetrics::operator=(const QFontMetrics &fm)
+QFontMetrics &QFontMetrics::operator=(const QFontMetrics &other)
 {
-   d = fm.d.data();
+   d = other.d.data();
    return *this;
 }
 
-
-bool QFontMetrics::operator ==(const QFontMetrics &other) const
+bool QFontMetrics::operator==(const QFontMetrics &other) const
 {
    return d == other.d;
 }

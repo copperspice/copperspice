@@ -209,10 +209,6 @@ struct QOpenGLFunctionsPrivate;
 class Q_GUI_EXPORT QOpenGLFunctions
 {
 public:
-    QOpenGLFunctions();
-    explicit QOpenGLFunctions(QOpenGLContext *context);
-    ~QOpenGLFunctions() {}
-
     enum OpenGLFeature
     {
         Multitexture          = 0x0001,
@@ -233,7 +229,14 @@ public:
         TextureRGFormats      = 0x8000,
         MultipleRenderTargets = 0x10000
     };
-    Q_DECLARE_FLAGS(OpenGLFeatures, OpenGLFeature)
+    using OpenGLFeatures = QFlags<OpenGLFeature>;
+
+    QOpenGLFunctions();
+    explicit QOpenGLFunctions(QOpenGLContext *context);
+
+    ~QOpenGLFunctions()
+    {
+    }
 
     QOpenGLFunctions::OpenGLFeatures openGLFeatures() const;
     bool hasOpenGLFeature(QOpenGLFunctions::OpenGLFeature feature) const;

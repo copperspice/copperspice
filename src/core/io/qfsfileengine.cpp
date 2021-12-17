@@ -369,12 +369,13 @@ bool QFSFileEnginePrivate::closeFdFh()
       closed = (ret == 0);
    }
 
-   // Report errors.
-   if (!flushed || !closed) {
+   // Report errors
+   if (! flushed || !closed) {
       if (flushed) {
-         // If not flushed, we want the flush error to fall through.
+         // if not flushed, flush all errors
          q->setError(QFile::UnspecifiedError, qt_error_string(errno));
       }
+
       return false;
    }
 

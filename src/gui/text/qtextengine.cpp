@@ -571,7 +571,8 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                   if (eor >= 0) {
                      appendItems(analysis, sor, eor, control, dir);
                   }
-               // fall through
+                  [[fallthrough]];
+
                case QChar::DirR:
                case QChar::DirAL:
                   dir = QChar::DirR;
@@ -637,7 +638,8 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                         status.eor = QChar::DirON;
                         dir = QChar::DirAN;
                      }
-                  // fall through
+                     [[fallthrough]];
+
                   case QChar::DirEN:
                   case QChar::DirL:
                      eor = current;
@@ -857,7 +859,7 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
                status.last = QChar::DirL;
                break;
             }
-         // fall through
+            [[fallthrough]];
 
          default:
             status.last = dirCurrent;
@@ -1731,8 +1733,8 @@ void QTextEngine::itemize() const
                analysis->bidiLevel = control.baseLevel();
                break;
             }
+            [[fallthrough]];
 
-         // fall through
          default:
             analysis->flags  = QScriptAnalysis::None;
             break;
@@ -2446,7 +2448,7 @@ void QTextEngine::justify(const QScriptLine &line)
                break;
 
             case Justification_Space:
-            // fall through
+               [[fallthrough]];
 
             case Justification_Arabic_Space:
                if (kashida_pos >= 0) {
@@ -2458,9 +2460,11 @@ void QTextEngine::justify(const QScriptLine &line)
                      ++nPoints;
                   }
                }
+
                kashida_pos = -1;
                kashida_type = Justification_Arabic_Normal;
-            // fall through
+
+               [[fallthrough]];
 
             case Justification_Character:
                set(&justificationPoints[nPoints++], justification, g.mid(i), fontEngine(si));
@@ -3268,10 +3272,10 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
                switch (tabSpec.type) {
                   case QTextOption::CenterTab:
                      length /= 2;
-                  // fall through
+                     [[fallthrough]];
 
                   case QTextOption::DelimiterTab:
-                  // fall through
+                     [[fallthrough]];
 
                   case QTextOption::RightTab:
                      tab = QFixed::fromReal(tabSpec.position) * dpiScale - length;

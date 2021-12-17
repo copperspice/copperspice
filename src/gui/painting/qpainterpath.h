@@ -76,13 +76,12 @@ class Q_GUI_EXPORT QPainterPath
          return QPointF(x, y);
       }
 
-      bool operator==(const Element &e) const {
-         return qFuzzyCompare(x, e.x)
-            && qFuzzyCompare(y, e.y) && type == e.type;
+      bool operator==(const Element &other) const {
+         return qFuzzyCompare(x, other.x) && qFuzzyCompare(y, other.y) && type == other.type;
       }
 
-      bool operator!=(const Element &e) const {
-         return !operator==(e);
+      bool operator!=(const Element &other) const {
+         return !operator==(other);
       }
    };
 
@@ -104,22 +103,23 @@ class Q_GUI_EXPORT QPainterPath
 
    void closeSubpath();
 
-   void moveTo(const QPointF &p);
+   void moveTo(const QPointF &point);
    inline void moveTo(qreal x, qreal y);
 
-   void lineTo(const QPointF &p);
+   void lineTo(const QPointF &endPoint);
    inline void lineTo(qreal x, qreal y);
 
    void arcMoveTo(const QRectF &rect, qreal angle);
-   inline void arcMoveTo(qreal x, qreal y, qreal w, qreal h, qreal angle);
+   inline void arcMoveTo(qreal x, qreal y, qreal width, qreal height, qreal angle);
 
    void arcTo(const QRectF &rect, qreal startAngle, qreal arcLength);
-   inline void arcTo(qreal x, qreal y, qreal w, qreal h, qreal startAngle, qreal arcLength);
+   inline void arcTo(qreal x, qreal y, qreal width, qreal height, qreal startAngle, qreal arcLength);
 
-   void cubicTo(const QPointF &ctrlPt1, const QPointF &ctrlPt2, const QPointF &endPt);
-   inline void cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y, qreal endPtx, qreal endPty);
-   void quadTo(const QPointF &ctrlPt, const QPointF &endPt);
-   inline void quadTo(qreal ctrlPtx, qreal ctrlPty, qreal endPtx, qreal endPty);
+   void cubicTo(const QPointF &point1, const QPointF &point2, const QPointF &point3);
+   inline void cubicTo(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3);
+
+   void quadTo(const QPointF &point1, const QPointF &point2);
+   inline void quadTo(qreal x1, qreal y1, qreal x2, qreal y2);
 
    QPointF currentPosition() const;
 
@@ -129,22 +129,23 @@ class Q_GUI_EXPORT QPainterPath
    inline void addEllipse(qreal x, qreal y, qreal w, qreal h);
    inline void addEllipse(const QPointF &center, qreal rx, qreal ry);
    void addPolygon(const QPolygonF &polygon);
-   void addText(const QPointF &point, const QFont &f, const QString &text);
-   inline void addText(qreal x, qreal y, const QFont &f, const QString &text);
+   void addText(const QPointF &point, const QFont &font, const QString &text);
+   inline void addText(qreal x, qreal y, const QFont &font, const QString &text);
    void addPath(const QPainterPath &path);
    void addRegion(const QRegion &region);
 
    void addRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
-   inline void addRoundedRect(qreal x, qreal y, qreal w, qreal h,  qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
+   inline void addRoundedRect(qreal x, qreal y, qreal w, qreal h,  qreal xRadius,
+         qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
 
    void addRoundRect(const QRectF &rect, int xRnd, int yRnd);
-   inline void addRoundRect(qreal x, qreal y, qreal w, qreal h, int xRnd, int yRnd);
+   inline void addRoundRect(qreal x, qreal y, qreal width, qreal height, int xRnd, int yRnd);
    inline void addRoundRect(const QRectF &rect, int roundness);
-   inline void addRoundRect(qreal x, qreal y, qreal w, qreal h, int roundness);
+   inline void addRoundRect(qreal x, qreal y, qreal width, qreal height, int roundness);
 
    void connectPath(const QPainterPath &path);
 
-   bool contains(const QPointF &pt) const;
+   bool contains(const QPointF &point) const;
    bool contains(const QRectF &rect) const;
    bool intersects(const QRectF &rect) const;
 
@@ -171,21 +172,21 @@ class Q_GUI_EXPORT QPainterPath
    QPolygonF toFillPolygon(const QTransform &matrix) const;
 
    int elementCount() const;
-   QPainterPath::Element elementAt(int i) const;
-   void setElementPositionAt(int i, qreal x, qreal y);
+   QPainterPath::Element elementAt(int index) const;
+   void setElementPositionAt(int index, qreal x, qreal y);
 
    qreal length() const;
-   qreal percentAtLength(qreal t) const;
+   qreal percentAtLength(qreal len) const;
    QPointF pointAtPercent(qreal t) const;
    qreal angleAtPercent(qreal t) const;
    qreal slopeAtPercent(qreal t) const;
 
-   bool intersects(const QPainterPath &p) const;
-   bool contains(const QPainterPath &p) const;
-   QPainterPath united(const QPainterPath &r) const;
-   QPainterPath intersected(const QPainterPath &r) const;
-   QPainterPath subtracted(const QPainterPath &r) const;
-   QPainterPath subtractedInverted(const QPainterPath &r) const;
+   bool intersects(const QPainterPath &other) const;
+   bool contains(const QPainterPath &other) const;
+   QPainterPath united(const QPainterPath &other) const;
+   QPainterPath intersected(const QPainterPath &other) const;
+   QPainterPath subtracted(const QPainterPath &other) const;
+   QPainterPath subtractedInverted(const QPainterPath &other) const;
 
    QPainterPath simplified() const;
 
@@ -257,13 +258,13 @@ class Q_GUI_EXPORT QPainterPathStroker
    void setJoinStyle(Qt::PenJoinStyle style);
    Qt::PenJoinStyle joinStyle() const;
 
-   void setMiterLimit(qreal length);
+   void setMiterLimit(qreal limit);
    qreal miterLimit() const;
 
    void setCurveThreshold(qreal threshold);
    qreal curveThreshold() const;
 
-   void setDashPattern(Qt::PenStyle);
+   void setDashPattern(Qt::PenStyle style);
    void setDashPattern(const QVector<qreal> &dashPattern);
    QVector<qreal> dashPattern() const;
 
@@ -290,24 +291,24 @@ inline void QPainterPath::lineTo(qreal x, qreal y)
    lineTo(QPointF(x, y));
 }
 
-inline void QPainterPath::arcTo(qreal x, qreal y, qreal w, qreal h, qreal startAngle, qreal arcLength)
+inline void QPainterPath::arcTo(qreal x, qreal y, qreal width, qreal height, qreal startAngle, qreal arcLength)
 {
-   arcTo(QRectF(x, y, w, h), startAngle, arcLength);
+   arcTo(QRectF(x, y, width, height), startAngle, arcLength);
 }
 
-inline void QPainterPath::arcMoveTo(qreal x, qreal y, qreal w, qreal h, qreal angle)
+inline void QPainterPath::arcMoveTo(qreal x, qreal y, qreal width, qreal height, qreal angle)
 {
-   arcMoveTo(QRectF(x, y, w, h), angle);
+   arcMoveTo(QRectF(x, y, width, height), angle);
 }
 
-inline void QPainterPath::cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y, qreal endPtx, qreal endPty)
+inline void QPainterPath::cubicTo(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3)
 {
-   cubicTo(QPointF(ctrlPt1x, ctrlPt1y), QPointF(ctrlPt2x, ctrlPt2y), QPointF(endPtx, endPty));
+   cubicTo(QPointF(x1, y1), QPointF(x2, y2), QPointF(x3, y3));
 }
 
-inline void QPainterPath::quadTo(qreal ctrlPtx, qreal ctrlPty, qreal endPtx, qreal endPty)
+inline void QPainterPath::quadTo(qreal x1, qreal y1, qreal x2, qreal y2)
 {
-   quadTo(QPointF(ctrlPtx, ctrlPty), QPointF(endPtx, endPty));
+   quadTo(QPointF(x1, y1), QPointF(x2, y2));
 }
 
 inline void QPainterPath::addEllipse(qreal x, qreal y, qreal w, qreal h)
@@ -331,9 +332,9 @@ inline void QPainterPath::addRoundedRect(qreal x, qreal y, qreal w, qreal h,
    addRoundedRect(QRectF(x, y, w, h), xRadius, yRadius, mode);
 }
 
-inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal w, qreal h, int xRnd, int yRnd)
+inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal width, qreal height, int xRnd, int yRnd)
 {
-   addRoundRect(QRectF(x, y, w, h), xRnd, yRnd);
+   addRoundRect(QRectF(x, y, width, height), xRnd, yRnd);
 }
 
 inline void QPainterPath::addRoundRect(const QRectF &rect, int roundness)
@@ -350,14 +351,14 @@ inline void QPainterPath::addRoundRect(const QRectF &rect, int roundness)
    addRoundRect(rect, xRnd, yRnd);
 }
 
-inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal w, qreal h, int roundness)
+inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal width, qreal height, int roundness)
 {
-   addRoundRect(QRectF(x, y, w, h), roundness);
+   addRoundRect(QRectF(x, y, width, height), roundness);
 }
 
-inline void QPainterPath::addText(qreal x, qreal y, const QFont &f, const QString &text)
+inline void QPainterPath::addText(qreal x, qreal y, const QFont &font, const QString &text)
 {
-   addText(QPointF(x, y), f, text);
+   addText(QPointF(x, y), font, text);
 }
 
 inline void QPainterPath::translate(const QPointF &offset)

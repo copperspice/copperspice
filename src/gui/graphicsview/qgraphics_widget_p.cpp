@@ -38,18 +38,19 @@
 #include <qgraphics_scene_p.h>
 #include <qgraphics_widget_p.h>
 
-void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags wFlags)
+void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags flags)
 {
    Q_Q(QGraphicsWidget);
 
-   attributes = 0;
-   isWidget = 1; // QGraphicsItem::isWidget() returns true.
-   focusNext = focusPrev = q;
+   attributes  = 0;
+   isWidget    = 1;       // QGraphicsItem::isWidget() returns true
+
+   focusNext   = q;
+   focusPrev   = q;
    focusPolicy = Qt::NoFocus;
 
-   adjustWindowFlags(&wFlags);
-   windowFlags = wFlags;
-
+   adjustWindowFlags(&flags);
+   m_flags = flags;
 
    q->setParentItem(parentItem);
 
@@ -62,7 +63,7 @@ void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags wFl
    itemFlags |= QGraphicsItem::ItemUsesExtendedStyleOption;
    itemFlags |= QGraphicsItem::ItemSendsGeometryChanges;
 
-   if (windowFlags & Qt::Window) {
+   if (m_flags & Qt::Window) {
       itemFlags |= QGraphicsItem::ItemIsPanel;
    }
 }
@@ -216,7 +217,6 @@ void QGraphicsWidgetPrivate::resolveLayoutDirection()
    }
 }
 
-
 QPalette QGraphicsWidgetPrivate::naturalWidgetPalette() const
 {
    Q_Q(const QGraphicsWidget);
@@ -302,7 +302,7 @@ void QGraphicsWidgetPrivate::initStyleOptionTitleBar(QStyleOptionTitleBar *optio
    ensureWindowData();
    q->initStyleOption(option);
    option->rect.setHeight(titleBarHeight(*option));
-   option->titleBarFlags = windowFlags;
+   option->titleBarFlags = m_flags;
    option->subControls = QStyle::SC_TitleBarCloseButton | QStyle::SC_TitleBarLabel | QStyle::SC_TitleBarSysMenu;
    option->activeSubControls = windowData->hoveredSubControl;
    bool isActive = q->isActiveWindow();
@@ -738,8 +738,9 @@ void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent
    (void) event;
 
    Q_Q(QGraphicsWidget);
+
    if (hasDecoration()) {
-      // ### restore the cursor, don't override it
+      // ### restore the cursor, do not override it
 #ifndef QT_NO_CURSOR
       q->unsetCursor();
 #endif
@@ -754,7 +755,8 @@ void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent
 
       // update the hover state (of buttons etc...)
       windowData->hoveredSubControl = QStyle::SC_None;
-      windowData->buttonMouseOver = false;
+      windowData->buttonMouseOver   = false;
+
       windowData->buttonRect = QRect();
       if (needsUpdate) {
          q->update(windowData->buttonRect);
@@ -764,12 +766,9 @@ void QGraphicsWidgetPrivate::windowFrameHoverLeaveEvent(QGraphicsSceneHoverEvent
 
 bool QGraphicsWidgetPrivate::hasDecoration() const
 {
-   return (windowFlags & Qt::Window) && (windowFlags & Qt::WindowTitleHint);
+   return (m_flags & Qt::Window) && (m_flags & Qt::WindowTitleHint);
 }
 
-/**
- * is called after a reparent has taken place to fix up the focus chain(s)
- */
 void QGraphicsWidgetPrivate::fixFocusChainBeforeReparenting(QGraphicsWidget *newParent, QGraphicsScene *oldScene,
    QGraphicsScene *newScene)
 {
@@ -897,11 +896,12 @@ void QGraphicsWidgetPrivate::setGeometryFromSetPos()
    }
    Q_Q(QGraphicsWidget);
    inSetPos = 1;
+
    // Ensure setGeometry is called (avoid recursion when setPos is
    // called from within setGeometry).
+
    q->setGeometry(QRectF(pos, q->size()));
    inSetPos = 0 ;
 }
-
 
 #endif //QT_NO_GRAPHICSVIEW

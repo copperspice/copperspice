@@ -46,7 +46,7 @@ class Q_GUI_EXPORT QPlatformCursorImage
    }
 
    QPoint hotspot() const {
-      return hot;
+      return m_hotSpot;
    }
 
    void set(const uchar *data, const uchar *mask, int width, int height, int hotSpot_x, int hotSpot_y);
@@ -56,7 +56,7 @@ class Q_GUI_EXPORT QPlatformCursorImage
  private:
    static void createSystemCursor(int id);
    QImage cursorImage;
-   QPoint hot;
+   QPoint m_hotSpot;
 };
 
 class QPlatformCursorPrivate
@@ -67,7 +67,6 @@ class QPlatformCursorPrivate
 
 class Q_GUI_EXPORT QPlatformCursor : public QObject
 {
-
  public:
    QPlatformCursor();
 

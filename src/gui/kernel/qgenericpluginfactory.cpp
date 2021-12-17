@@ -29,7 +29,12 @@
 #include <qdebug.h>
 
 #if ! defined(Q_OS_WIN) || defined(QT_SHARED)
-   Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QGenericPluginInterface_ID, "/generic", Qt::CaseInsensitive))
+   static QFactoryLoader *loader()
+   {
+      static QFactoryLoader retval(QGenericPluginInterface_ID, "/generic", Qt::CaseInsensitive);
+      return &retval;
+   }
+
 #endif
 
 QObject *QGenericPluginFactory::create(const QString &key, const QString &specification)

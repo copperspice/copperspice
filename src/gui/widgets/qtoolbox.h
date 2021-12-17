@@ -27,7 +27,6 @@
 #include <qframe.h>
 #include <qicon.h>
 
-
 #ifndef QT_NO_TOOLBOX
 
 class QToolBoxPrivate;

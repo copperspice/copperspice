@@ -38,7 +38,8 @@ TEST_CASE("QCommandLineParser traits", "[qcommandlineparser]")
    REQUIRE(std::has_virtual_destructor_v<QCommandLineParser> == false);
 }
 
-std::unique_ptr<QCommandLineParser> GetQCommandLineParser(const QStringList &arguments, QList<QCommandLineOption> options)
+std::unique_ptr<QCommandLineParser> GetQCommandLineParser(const QStringList &arguments,
+      QList<QCommandLineOption> options)
 {
    std::unique_ptr<QCommandLineParser> parser = std::make_unique<QCommandLineParser>();
 

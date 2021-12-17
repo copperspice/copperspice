@@ -43,7 +43,7 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderHint
       StreamPlayback = 0x04,
       VideoSurface = 0x08
    };
-   Q_DECLARE_FLAGS(Features, Feature)
+   using Features = QFlags<Feature>;
 
    QMediaServiceProviderHint();
    QMediaServiceProviderHint(const QString &mimeType, const QStringList &codecs);

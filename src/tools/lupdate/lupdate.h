@@ -47,7 +47,8 @@ enum UpdateOption {
    NoUiLines = 2048
 };
 
-Q_DECLARE_FLAGS(UpdateOptions, UpdateOption)
+using UpdateOptions = QFlags<UpdateOption>;
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(UpdateOptions)
 
 Translator merge(const Translator &tor, const Translator &virginTor, const QList<Translator> &aliens,
@@ -56,10 +57,5 @@ Translator merge(const Translator &tor, const Translator &virginTor, const QList
 void loadCPP(Translator &translator, const QStringList &filenames, ConversionData &cd);
 bool loadJava(Translator &translator, const QString &filename, ConversionData &cd);
 bool loadUI(Translator &translator, const QString &filename, ConversionData &cd);
-
-#ifdef QT_QML
-bool loadQScript(Translator &translator, const QString &filename, ConversionData &cd);
-bool loadQml(Translator &translator, const QString &filename, ConversionData &cd);
-#endif
 
 #endif

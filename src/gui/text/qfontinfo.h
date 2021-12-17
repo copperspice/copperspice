@@ -30,11 +30,11 @@
 class Q_GUI_EXPORT QFontInfo
 {
  public:
-   QFontInfo(const QFont &);
-   QFontInfo(const QFontInfo &);
+   QFontInfo(const QFont &font);
+   QFontInfo(const QFontInfo &fi);
    ~QFontInfo();
 
-   QFontInfo &operator=(const QFontInfo &);
+   QFontInfo &operator=(const QFontInfo &other);
 
    void swap(QFontInfo &other) {
       qSwap(d, other.d);

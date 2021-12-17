@@ -71,23 +71,7 @@ int QSslSocketBackendPrivate::s_indexForSSLExtraData = -1;
 #endif
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
-/* \internal
 
-    From OpenSSL's thread(3) manual page:
-
-    OpenSSL can safely be used in multi-threaded applications provided that at
-    least two callback functions are set.
-
-    locking_function(int mode, int n, const char *file, int line) is needed to
-    perform locking on shared data structures.  (Note that OpenSSL uses a
-    number of global data structures that will be implicitly shared
-    whenever multiple threads use OpenSSL.)  Multi-threaded
-    applications will crash at random if it is not set.  ...
-    ...
-    id_function(void) is a function that returns a thread ID. It is not
-    needed on Windows nor on platforms where getpid() returns a different
-    ID for each thread (most notably Linux)
-*/
 class QOpenSslLocks
 {
  public:
@@ -106,7 +90,7 @@ class QOpenSslLocks
       for (int i = 0; i < q_CRYPTO_num_locks(); ++i) {
          delete locks[i];
       }
-      delete [] locks;
+      delete[] locks;
 
       QSslSocketPrivate::deinitialize();
    }
@@ -178,10 +162,8 @@ extern "C" {
 #endif
 
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L && !defined(OPENSSL_NO_PSK)
-   static unsigned int q_ssl_psk_client_callback(SSL *ssl,
-         const char *hint,
-         char *identity, unsigned int max_identity_len,
-         unsigned char *psk, unsigned int max_psk_len)
+   static unsigned int q_ssl_psk_client_callback(SSL *ssl, const char *hint,
+         char *identity, unsigned int max_identity_len, unsigned char *psk, unsigned int max_psk_len)
    {
       QSslSocketBackendPrivate *d = reinterpret_cast<QSslSocketBackendPrivate *>(
                q_SSL_get_ex_data(ssl, QSslSocketBackendPrivate::s_indexForSSLExtraData));
@@ -535,9 +517,11 @@ void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
    QRecursiveMutexLocker locker(openssl_locks()->initLock());
 #endif
+
    if (s_loadedCiphersAndCerts) {
       return;
    }
+
    s_loadedCiphersAndCerts = true;
 
    resetDefaultCiphers();

@@ -40,23 +40,20 @@
 
 QEnterEvent::QEnterEvent(const QPointF &localPos, const QPointF &windowPos, const QPointF &screenPos)
    : QEvent(QEvent::Enter), l(localPos), w(windowPos), s(screenPos)
-{}
+{
+}
 
 QEnterEvent::~QEnterEvent()
-{}
+{
+}
 
-/*!
-  \internal
-*/
 QInputEvent::QInputEvent(Type type, Qt::KeyboardModifiers modifiers)
    : QEvent(type), modState(modifiers), ts(0)
 { }
 
-/*!
-  \internal
-*/
 QInputEvent::~QInputEvent()
-{ }
+{
+}
 
 QMouseEvent::QMouseEvent(Type type, const QPointF &localPos, Qt::MouseButton button,
    Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
@@ -68,16 +65,17 @@ QMouseEvent::QMouseEvent(Type type, const QPointF &localPos, Qt::MouseButton but
 }
 
 QMouseEvent::QMouseEvent(Type type, const QPointF &localPos, const QPointF &screenPos,
-   Qt::MouseButton button, Qt::MouseButtons buttons,
-   Qt::KeyboardModifiers modifiers)
+   Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
    : QInputEvent(type, modifiers), l(localPos), w(localPos), s(screenPos), b(button), mouseState(buttons), caps(0)
-{}
+{
+}
 
 QMouseEvent::QMouseEvent(Type type, const QPointF &localPos, const QPointF &windowPos, const QPointF &screenPos,
    Qt::MouseButton button, Qt::MouseButtons buttons,
    Qt::KeyboardModifiers modifiers)
    : QInputEvent(type, modifiers), l(localPos), w(windowPos), s(screenPos), b(button), mouseState(buttons), caps(0)
-{}
+{
+}
 
 QMouseEvent::QMouseEvent(QEvent::Type type, const QPointF &localPos, const QPointF &windowPos, const QPointF &screenPos,
    Qt::MouseButton button, Qt::MouseButtons buttons,
@@ -88,7 +86,8 @@ QMouseEvent::QMouseEvent(QEvent::Type type, const QPointF &localPos, const QPoin
 }
 
 QMouseEvent::~QMouseEvent()
-{}
+{
+}
 
 Qt::MouseEventSource QMouseEvent::source() const
 {
@@ -102,11 +101,9 @@ Qt::MouseEventFlags QMouseEvent::flags() const
 
 QHoverEvent::QHoverEvent(Type type, const QPointF &pos, const QPointF &oldPos, Qt::KeyboardModifiers modifiers)
    : QInputEvent(type, modifiers), p(pos), op(oldPos)
-{}
+{
+}
 
-/*!
-    \internal
-*/
 QHoverEvent::~QHoverEvent()
 {
 }
@@ -129,12 +126,6 @@ QWheelEvent::QWheelEvent(const QPointF &pos, int delta,
       angleD = QPoint(delta, 0);
    }
 }
-
-/*!
-  \internal
-*/
-QWheelEvent::~QWheelEvent()
-{}
 
 QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF &globalPosition, int delta,
       Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::Orientation orientation)
@@ -159,22 +150,22 @@ QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF &globalPosition, QPoi
 {
 }
 
+QWheelEvent::~QWheelEvent()
+{
+}
 
 #endif // QT_NO_WHEELEVENT
 
-QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, const QString &text,
-   bool autorep, ushort count)
-   : QInputEvent(type, modifiers), txt(text), k(key),
-     nScanCode(0), nVirtualKey(0), nModifiers(0), c(count), autor(autorep)
+QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, const QString &text, bool autorep, ushort count)
+   : QInputEvent(type, modifiers), txt(text), k(key), nScanCode(0), nVirtualKey(0), nModifiers(0), c(count), autor(autorep)
 {
    if (type == QEvent::ShortcutOverride) {
       ignore();
    }
 }
 
-QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers,
-   quint32 nativeScanCode, quint32 nativeVirtualKey, quint32 nativeModifiers,
-   const QString &text, bool autorep, ushort count)
+QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, quint32 nativeScanCode,
+      quint32 nativeVirtualKey, quint32 nativeModifiers, const QString &text, bool autorep, ushort count)
    : QInputEvent(type, modifiers), txt(text), k(key),
      nScanCode(nativeScanCode), nVirtualKey(nativeVirtualKey), nModifiers(nativeModifiers),
      c(count), autor(autorep)
@@ -185,25 +176,31 @@ QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers,
 }
 
 QKeyEvent::~QKeyEvent()
-{ }
+{
+}
 
 Qt::KeyboardModifiers QKeyEvent::modifiers() const
 {
    if (key() == Qt::Key_Shift) {
       return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::ShiftModifier);
    }
+
    if (key() == Qt::Key_Control) {
       return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::ControlModifier);
    }
+
    if (key() == Qt::Key_Alt) {
       return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::AltModifier);
    }
+
    if (key() == Qt::Key_Meta) {
       return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::MetaModifier);
    }
+
    if (key() == Qt::Key_AltGr) {
       return Qt::KeyboardModifiers(QInputEvent::modifiers()^Qt::GroupSwitchModifier);
    }
+
    return QInputEvent::modifiers();
 }
 
@@ -222,13 +219,13 @@ bool QKeyEvent::matches(QKeySequence::StandardKey matchKey) const
 
 QFocusEvent::QFocusEvent(Type type, Qt::FocusReason reason)
    : QEvent(type), m_reason(reason)
-{}
+{
+}
 
-/*!
-    \internal
-*/
+// internal
 QFocusEvent::~QFocusEvent()
-{ }
+{
+}
 
 Qt::FocusReason QFocusEvent::reason() const
 {
@@ -237,15 +234,15 @@ Qt::FocusReason QFocusEvent::reason() const
 
 QPaintEvent::QPaintEvent(const QRegion &paintRegion)
    : QEvent(Paint), m_rect(paintRegion.boundingRect()), m_region(paintRegion), m_erased(false)
-{}
+{
+}
 
 QPaintEvent::QPaintEvent(const QRect &paintRect)
    : QEvent(Paint), m_rect(paintRect), m_region(paintRect), m_erased(false)
-{}
+{
+}
 
-/*!
-  \internal
-*/
+// internal
 QPaintEvent::~QPaintEvent()
 { }
 
@@ -253,9 +250,7 @@ QMoveEvent::QMoveEvent(const QPoint &pos, const QPoint &oldPos)
    : QEvent(Move), p(pos), oldp(oldPos)
 {}
 
-/*!
-  \internal
-*/
+// internal
 QMoveEvent::~QMoveEvent()
 { }
 
@@ -263,36 +258,36 @@ QExposeEvent::QExposeEvent(const QRegion &exposeRegion)
    : QEvent(Expose), rgn(exposeRegion)
 { }
 
-/*!
-  \internal
-*/
 QExposeEvent::~QExposeEvent()
 {
 }
-QPlatformSurfaceEvent::QPlatformSurfaceEvent(SurfaceEventType surfaceEventType)
-   : QEvent(PlatformSurface)
-   , m_surfaceEventType(surfaceEventType)
-{ }
 
-// internal
+QPlatformSurfaceEvent::QPlatformSurfaceEvent(SurfaceEventType surfaceEventType)
+   : QEvent(PlatformSurface), m_surfaceEventType(surfaceEventType)
+{
+}
+
 QPlatformSurfaceEvent::~QPlatformSurfaceEvent()
-{ }
+{
+}
 
 QResizeEvent::QResizeEvent(const QSize &size, const QSize &oldSize)
    : QEvent(Resize), s(size), olds(oldSize)
-{}
+{
+}
 
-// internal
 QResizeEvent::~QResizeEvent()
-{}
+{
+}
 
 QCloseEvent::QCloseEvent()
    : QEvent(Close)
-{}
+{
+}
 
-// internal
 QCloseEvent::~QCloseEvent()
-{ }
+{
+}
 
 QIconDragEvent::QIconDragEvent()
    : QEvent(IconDrag)
@@ -300,23 +295,25 @@ QIconDragEvent::QIconDragEvent()
    ignore();
 }
 
-// internal
 QIconDragEvent::~QIconDragEvent()
-{ }
+{
+}
 
 #ifndef QT_NO_CONTEXTMENU
 QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos)
    : QInputEvent(ContextMenu), p(pos), gp(globalPos), reas(reason)
-{}
+{
+}
 
 QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos, const QPoint &globalPos,
    Qt::KeyboardModifiers modifiers)
    : QInputEvent(ContextMenu, modifiers), p(pos), gp(globalPos), reas(reason)
-{}
+{
+}
 
-// internal
 QContextMenuEvent::~QContextMenuEvent()
-{}
+{
+}
 
 QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint &pos)
    : QInputEvent(ContextMenu), p(pos), reas(reason)
@@ -335,15 +332,18 @@ QInputMethodEvent::QInputMethodEvent()
 QInputMethodEvent::QInputMethodEvent(const QString &preeditText, const QList<Attribute> &attributes)
    : QEvent(QEvent::InputMethod), preedit(preeditText), attrs(attributes),
      replace_from(0), replace_length(0)
-{}
+{
+}
 
 QInputMethodEvent::QInputMethodEvent(const QInputMethodEvent &other)
    : QEvent(QEvent::InputMethod), preedit(other.preedit), attrs(other.attrs),
      commit(other.commit), replace_from(other.replace_from), replace_length(other.replace_length)
-{}
+{
+}
 
 QInputMethodEvent::~QInputMethodEvent()
-{}
+{
+}
 
 void QInputMethodEvent::setCommitString(const QString &commitString, int replaceFrom, int replaceLength)
 {
@@ -354,10 +354,12 @@ void QInputMethodEvent::setCommitString(const QString &commitString, int replace
 
 QInputMethodQueryEvent::QInputMethodQueryEvent(Qt::InputMethodQueries queries)
    : QEvent(InputMethodQuery),m_queries(queries)
-{}
+{
+}
 
 QInputMethodQueryEvent::~QInputMethodQueryEvent()
-{}
+{
+}
 
 void QInputMethodQueryEvent::setValue(Qt::InputMethodQuery query, const QVariant &value)
 {
@@ -385,27 +387,19 @@ QVariant QInputMethodQueryEvent::value(Qt::InputMethodQuery query) const
 
 #ifndef QT_NO_TABLETEVENT
 
-QTabletEvent::QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos,
-   int device, int pointerType, qreal pressure, int xTilt, int yTilt, qreal tangentialPressure,
-   qreal rotation, int z, Qt::KeyboardModifiers keyState, qint64 uniqueID,
-   Qt::MouseButton button, Qt::MouseButtons buttons)
+QTabletEvent::QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos, int device, int pointerType,
+      qreal pressure, int xTilt, int yTilt, qreal tangentialPressure, qreal rotation, int z,
+      Qt::KeyboardModifiers keyState, qint64 uniqueID, Qt::MouseButton button, Qt::MouseButtons buttons)
+
    : QInputEvent(type, keyState), mPos(pos), mGPos(globalPos), mDev(device), mPointerType(pointerType),
      mXT(xTilt), mYT(yTilt), mZ(z), mPress(pressure), mTangential(tangentialPressure), mRot(rotation),
      mUnique(uniqueID), mExtra(new QTabletEventPrivate(button, buttons))
-{}
+{
+}
 
-QTabletEvent::QTabletEvent(Type type, const QPointF &pos, const QPointF &globalPos,
-   int device, int pointerType,
-   qreal pressure, int xTilt, int yTilt, qreal tangentialPressure,
-   qreal rotation, int z, Qt::KeyboardModifiers keyState, qint64 uniqueID)
-   : QInputEvent(type, keyState), mPos(pos), mGPos(globalPos), mDev(device), mPointerType(pointerType),
-     mXT(xTilt), mYT(yTilt), mZ(z), mPress(pressure), mTangential(tangentialPressure), mRot(rotation),
-     mUnique(uniqueID), mExtra(new QTabletEventPrivate(Qt::NoButton, Qt::NoButton))
-{}
-
-// internal
 QTabletEvent::~QTabletEvent()
-{}
+{
+}
 
 Qt::MouseButton QTabletEvent::button() const
 {
@@ -425,17 +419,20 @@ QNativeGestureEvent::QNativeGestureEvent(Qt::NativeGestureType type, const QPoin
    : QInputEvent(QEvent::NativeGesture), mGestureType(type),
      mLocalPos(localPos), mWindowPos(windowPos), mScreenPos(screenPos), mRealValue(realValue),
      mSequenceId(sequenceId), mIntValue(intValue)
-{ }
+{
+}
 #endif
 
 #ifndef QT_NO_DRAGANDDROP
 QDragMoveEvent::QDragMoveEvent(const QPoint &pos, Qt::DropActions actions, const QMimeData *data,
    Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type)
    : QDropEvent(pos, actions, data, buttons, modifiers, type), rect(pos, QSize(1, 1))
-{}
+{
+}
 
 QDragMoveEvent::~QDragMoveEvent()
-{}
+{
+}
 
 QDropEvent::QDropEvent(const QPointF &pos, Qt::DropActions actions, const QMimeData *data,
    Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type)
@@ -1408,6 +1405,7 @@ void QTouchEvent::TouchPoint::setVelocity(const QVector2D &v)
    if (d->ref.load() != 1) {
       d = d->detach();
    }
+
    d->velocity = v;
 }
 
@@ -1416,6 +1414,7 @@ void QTouchEvent::TouchPoint::setRawScreenPositions(const QVector<QPointF> &posi
    if (d->ref.load() != 1) {
       d = d->detach();
    }
+
    d->rawScreenPositions = positions;
 }
 
@@ -1424,6 +1423,7 @@ void QTouchEvent::TouchPoint::setFlags(InfoFlags flags)
    if (d->ref.load() != 1) {
       d = d->detach();
    }
+
    d->flags = flags;
 }
 
@@ -1433,7 +1433,8 @@ QScrollPrepareEvent::QScrollPrepareEvent(const QPointF &startPos)
 }
 
 QScrollPrepareEvent::~QScrollPrepareEvent()
-{}
+{
+}
 
 QPointF QScrollPrepareEvent::startPos() const
 {
@@ -1471,10 +1472,12 @@ void QScrollPrepareEvent::setContentPos(const QPointF &pos)
 
 QScrollEvent::QScrollEvent(const QPointF &contentPos, const QPointF &overshootDistance, ScrollState scrollState)
    : QEvent(QEvent::Scroll), m_contentPos(contentPos), m_overshoot(overshootDistance), m_state(scrollState)
-{}
+{
+}
 
 QScrollEvent::~QScrollEvent()
-{}
+{
+}
 
 QPointF QScrollEvent::contentPos() const
 {
@@ -1493,10 +1496,12 @@ QScrollEvent::ScrollState QScrollEvent::scrollState() const
 
 QScreenOrientationChangeEvent::QScreenOrientationChangeEvent(QScreen *screen, Qt::ScreenOrientation screenOrientation)
    : QEvent(QEvent::OrientationChange), m_screen(screen), m_orientation(screenOrientation)
-{}
+{
+}
 
 QScreenOrientationChangeEvent::~QScreenOrientationChangeEvent()
-{}
+{
+}
 
 QScreen *QScreenOrientationChangeEvent::screen() const
 {
@@ -1510,10 +1515,10 @@ Qt::ScreenOrientation QScreenOrientationChangeEvent::orientation() const
 
 QApplicationStateChangeEvent::QApplicationStateChangeEvent(Qt::ApplicationState applicationState)
    : QEvent(QEvent::ApplicationStateChange), m_applicationState(applicationState)
-{}
+{
+}
 
 Qt::ApplicationState QApplicationStateChangeEvent::applicationState() const
 {
    return m_applicationState;
 }
-

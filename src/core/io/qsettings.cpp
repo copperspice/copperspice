@@ -770,16 +770,12 @@ inline static void iniChopTrailingSpaces(QString &str)
 void QSettingsPrivate::iniEscapedStringList(const QStringList &strs, QByteArray &result, QTextCodec *codec)
 {
    if (strs.isEmpty()) {
-      /*
-          We need to distinguish between empty lists and one-item
-          lists that contain an empty string. Ideally, we'd have a
-          @EmptyList() symbol but that would break compatibility
-          with Qt 4.0. @Invalid() stands for QVariant(), and
-          QVariant().toStringList() returns an empty QStringList,
-          so we're in good shape.
 
-          ### Qt5: Use a nicer syntax, e.g. @List, for variant lists
-      */
+      //  need to distinguish between empty lists and one-item lists that contain an empty string.
+      //  nice to have  @EmptyList() symbol but that would break compatibility
+      //  @Invalid() stands for QVariant() and QVariant().toStringList() returns an empty QStringList
+      //  use a nicer syntax like @List, for variant lists
+
       result += "@Invalid()";
 
    } else {
@@ -795,8 +791,8 @@ void QSettingsPrivate::iniEscapedStringList(const QStringList &strs, QByteArray 
 bool QSettingsPrivate::iniUnescapedStringList(const QByteArray &str, int from, int to,
                   QString &stringResult, QStringList &stringListResult, QTextCodec *codec)
 {
-#ifdef QT_NO_TEXTCODE
-   Q_UNUSED(codec);
+#ifdef QT_NO_TEXTCODEC
+   (void) codec;
 #endif
 
    static const char escapeCodes[][2] = {
@@ -2208,7 +2204,7 @@ QTextCodec *QSettings::iniCodec() const
    return d->iniCodec;
 }
 
-#endif // QT_NO_TEXTCODEC
+#endif
 
 QSettings::Status QSettings::status() const
 {

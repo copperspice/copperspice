@@ -92,7 +92,7 @@ class QExtendedInformation
       if (ignoreNtfsSymLinks) {
 
 #ifdef Q_OS_WIN
-         return !mFileInfo.suffix().compare(QLatin1String("lnk"), Qt::CaseInsensitive);
+         return !mFileInfo.suffix().compare("lnk", Qt::CaseInsensitive);
 #endif
       }
       return mFileInfo.isSymLink();

@@ -50,8 +50,8 @@ QUrl *cs_internal_lastVisitedDir() {
 
 static const qint32 QFileDialogMagic = 0xbe;
 
-QFileDialog::QFileDialog(QWidget *parent, Qt::WindowFlags f)
-   : QDialog(*new QFileDialogPrivate, parent, f)
+QFileDialog::QFileDialog(QWidget *parent, Qt::WindowFlags flags)
+   : QDialog(*new QFileDialogPrivate, parent, flags)
 {
    Q_D(QFileDialog);
    d->init();
@@ -173,24 +173,23 @@ bool QFileDialog::restoreState(const QByteArray &state)
    return d->restoreWidgetState(history, -1);
 }
 
-/*!
-    \reimp
-*/
 void QFileDialog::changeEvent(QEvent *e)
 {
    Q_D(QFileDialog);
+
    if (e->type() == QEvent::LanguageChange) {
       d->retranslateWindowTitle();
       d->retranslateStrings();
    }
+
    QDialog::changeEvent(e);
 }
-
 
 void QFileDialog::setOption(FileDialogOption option, bool on)
 {
    const QFileDialog::FileDialogOptions previousOptions = options();
-   if (!(previousOptions & option) != !on) {
+
+   if (! (previousOptions & option) != !on) {
       setOptions(previousOptions ^ option);
    }
 }
@@ -395,7 +394,7 @@ void QFileDialog::setDirectoryUrl(const QUrl &directory)
 {
    Q_D(QFileDialog);
 
-   if (!directory.isValid()) {
+   if (! directory.isValid()) {
       return;
    }
 
@@ -828,7 +827,7 @@ void QFileDialog::setViewMode(QFileDialog::ViewMode mode)
    Q_D(QFileDialog);
 
    d->options->setViewMode(static_cast<QPlatformFileDialogOptions::ViewMode>(mode));
-   if (!d->usingWidgets()) {
+   if (! d->usingWidgets()) {
       return;
    }
 
@@ -899,7 +898,6 @@ QFileDialog::FileMode QFileDialog::fileMode() const
    return static_cast<FileMode>(d->options->fileMode());
 }
 
-
 void QFileDialog::setAcceptMode(QFileDialog::AcceptMode mode)
 {
    Q_D(QFileDialog);
@@ -922,7 +920,6 @@ void QFileDialog::setAcceptMode(QFileDialog::AcceptMode mode)
 
    d->retranslateWindowTitle();
 }
-
 
 void QFileDialog::setSupportedSchemes(const QStringList &schemes)
 {
@@ -950,7 +947,6 @@ bool QFileDialog::isReadOnly() const
 {
    return testOption(FileDialogOption::ReadOnly);
 }
-
 
 void QFileDialog::setResolveSymlinks(bool enabled)
 {
@@ -1088,7 +1084,7 @@ QString QFileDialog::labelText(DialogLabel label) const
 {
    Q_D(const QFileDialog);
 
-   if (!d->usingWidgets()) {
+   if (! d->usingWidgets()) {
       return d->options->labelText(static_cast<QPlatformFileDialogOptions::DialogLabel>(label));
    }
 
@@ -1189,7 +1185,6 @@ QStringList QFileDialog::getOpenFileNames(QWidget *parent, const QString &captio
 
    return fileNames;
 }
-
 
 QList<QUrl> QFileDialog::getOpenFileUrls(QWidget *parent, const QString &caption, const QUrl &dir,
             const QString &filter, QString *selectedFilter, FileDialogOptions options, const QStringList &supportedSchemes)
@@ -1503,7 +1498,6 @@ QAbstractProxyModel *QFileDialog::proxyModel() const
 
 bool QFileDialogPrivate::itemViewKeyboardEvent(QKeyEvent *event)
 {
-
    Q_Q(QFileDialog);
    if (event->matches(QKeySequence::Cancel)) {
       q->reject();
@@ -1520,6 +1514,7 @@ bool QFileDialogPrivate::itemViewKeyboardEvent(QKeyEvent *event)
             return false;
          }
 #endif
+
       case Qt::Key_Left:
          if (event->key() == Qt::Key_Back || event->modifiers() == Qt::AltModifier) {
             _q_navigateBackward();
@@ -1566,6 +1561,7 @@ void QFileDialogComboBox::showPopup()
    urlModel->setUrls(QList<QUrl>());
    QList<QUrl> list;
    QModelIndex idx = d_ptr->model->index(d_ptr->rootPath());
+
    while (idx.isValid()) {
       QUrl url = QUrl::fromLocalFile(idx.data(QFileSystemModel::FilePathRole).toString());
       if (url.isValid()) {
@@ -1638,6 +1634,7 @@ void QFileDialogListView::setFileDialogPrivate(QFileDialogPrivate *d_pointer)
    setResizeMode(QListView::Adjust);
    setEditTriggers(QAbstractItemView::EditKeyPressed);
    setContextMenuPolicy(Qt::CustomContextMenu);
+
 #ifndef QT_NO_DRAGANDDROP
    setDragDropMode(QAbstractItemView::InternalMove);
 #endif
@@ -1656,7 +1653,7 @@ void QFileDialogListView::keyPressEvent(QKeyEvent *e)
       QListView::keyPressEvent(e);
       return;
    }
-#endif // QT_KEYPAD_NAVIGATION
+#endif
 
    if (! d_ptr->itemViewKeyboardEvent(e)) {
       QListView::keyPressEvent(e);
@@ -1680,6 +1677,7 @@ void QFileDialogTreeView::setFileDialogPrivate(QFileDialogPrivate *d_pointer)
    setTextElideMode(Qt::ElideMiddle);
    setEditTriggers(QAbstractItemView::EditKeyPressed);
    setContextMenuPolicy(Qt::CustomContextMenu);
+
 #ifndef QT_NO_DRAGANDDROP
    setDragDropMode(QAbstractItemView::InternalMove);
 #endif
@@ -2024,5 +2022,3 @@ void QFileDialog::_q_fileRenamed(const QString &path, const QString &oldName, co
 }
 
 #endif // QT_NO_FILEDIALOG
-
-

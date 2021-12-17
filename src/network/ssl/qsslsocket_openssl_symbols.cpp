@@ -679,6 +679,7 @@ static QStringList findAllLibs(QLatin1String filter)
 {
    QStringList paths = libraryPathList();
    QStringList found;
+
    const QStringList filters((QString(filter)));
 
    for (const QString &path : paths) {
@@ -701,18 +702,21 @@ static QStringList findAllLibSsl()
 
 static QStringList findAllLibCrypto()
 {
-   return findAllLibs(QLatin1String("libcrypto.*"));
+   return findAllLibs(QString("libcrypto.*"));
 }
-# endif
+
+#endif
 
 #ifdef Q_OS_WIN
-static bool tryToLoadOpenSslWin32Library(QLatin1String ssleay32LibName, QLatin1String libeay32LibName, QPair<QSystemLibrary *, QSystemLibrary *> &pair)
+
+static bool tryToLoadOpenSslWin32Library(QString ssleay32LibName, QString libeay32LibName,
+      QPair<QSystemLibrary *, QSystemLibrary *> &pair)
 {
    pair.first  = nullptr;
    pair.second = nullptr;
 
    QSystemLibrary *ssleay32 = new QSystemLibrary(ssleay32LibName);
-   if (!ssleay32->load(false)) {
+   if (! ssleay32->load(false)) {
       delete ssleay32;
       return FALSE;
    }
@@ -724,40 +728,56 @@ static bool tryToLoadOpenSslWin32Library(QLatin1String ssleay32LibName, QLatin1S
       return FALSE;
    }
 
-   pair.first = ssleay32;
+   pair.first  = ssleay32;
    pair.second = libeay32;
-   return TRUE;
+
+   return true;
 }
 
 static QPair<QSystemLibrary *, QSystemLibrary *> loadOpenSslWin32()
 {
-   QPair<QSystemLibrary *, QSystemLibrary *> pair;
-   pair.first  = nullptr;
-   pair.second = nullptr;
+   QPair<QSystemLibrary *, QSystemLibrary *> retval;
 
-   // When OpenSSL is built using MSVC then the libraries are named 'ssleay32.dll' and 'libeay32'dll'.
-   // When OpenSSL is built using GCC then different library names are used (depending on the OpenSSL version)
-   // The oldest version of a GCC-based OpenSSL which can be detected by the code below is 0.9.8g (released in 2007)
-   if (!tryToLoadOpenSslWin32Library(QLatin1String("ssleay32"), QLatin1String("libeay32"), pair)) {
-      if (!tryToLoadOpenSslWin32Library(QLatin1String("libssl-10"), QLatin1String("libcrypto-10"), pair)) {
-         if (!tryToLoadOpenSslWin32Library(QLatin1String("libssl-8"), QLatin1String("libcrypto-8"), pair)) {
-            tryToLoadOpenSslWin32Library(QLatin1String("libssl-7"), QLatin1String("libcrypto-7"), pair);
-         }
+   retval.first  = nullptr;
+   retval.second = nullptr;
+
+   QList<QPair<QString, QString>> fileNames =
+      {
+//       not enabled at this time
+//       {"libssl-3-x64",   "libcrypto-3-x64"},      // version 3, 64 bit
+//       {"libssl-3",       "libcrypto-3"},          // version 3, 32 bit
+
+         {"libssl-1_1-x64", "libcrypto-1_1-x64"},    // version 1.1, 64 bit
+         {"libssl-1_1",     "libcrypto-1_1"},        // version 1.1, 32 bit
+
+         {"ssleay32",   "libeay32"},                 // version 1.0.x
+         {"libssl-10",  "libcrypto-10"},
+         {"libssl-8",   "libcrypto-8"},
+         {"libssl-7",   "libcrypto-7"}
+      };
+
+   for (auto item : fileNames) {
+      if (tryToLoadOpenSslWin32Library(item.first, item.second, retval)) {
+         // dll loaded
+         break;
       }
    }
 
-   return pair;
+   return retval;
 }
+
 #else
+   // not windows or msvc
 
 static QPair<QLibrary *, QLibrary *> loadOpenSsl()
 {
    QPair<QLibrary *, QLibrary *> pair;
 
-# if defined(Q_OS_UNIX)
-   QLibrary *&libssl = pair.first;
+#if defined(Q_OS_UNIX)
+   QLibrary *&libssl    = pair.first;
    QLibrary *&libcrypto = pair.second;
-   libssl = new QLibrary;
+
+   libssl    = new QLibrary;
    libcrypto = new QLibrary;
 
    // find the libssl library on the system.
@@ -766,14 +786,16 @@ static QPair<QLibrary *, QLibrary *> loadOpenSsl()
    libcrypto->setLoadHints(QLibrary::ExportExternalSymbolsHint);
 #endif
 
-#if defined(SHLIB_VERSION_NUMBER) && !defined(Q_OS_QNX) // on QNX, the libs are always libssl.so and libcrypto.so
+#if defined(SHLIB_VERSION_NUMBER)
    // first attempt: the canonical name is libssl.so.<SHLIB_VERSION_NUMBER>
-   libssl->setFileNameAndVersion(QLatin1String("ssl"), QLatin1String(SHLIB_VERSION_NUMBER));
-   libcrypto->setFileNameAndVersion(QLatin1String("crypto"), QLatin1String(SHLIB_VERSION_NUMBER));
+
+   libssl->setFileNameAndVersion(QLatin1String("ssl"), QString(SHLIB_VERSION_NUMBER));
+   libcrypto->setFileNameAndVersion(QLatin1String("crypto"), QString(SHLIB_VERSION_NUMBER));
 
    if (libcrypto->load() && libssl->load()) {
       // libssl.so.<SHLIB_VERSION_NUMBER> and libcrypto.so.<SHLIB_VERSION_NUMBER> found
       return pair;
+
    } else {
       libssl->unload();
       libcrypto->unload();
@@ -787,11 +809,14 @@ static QPair<QLibrary *, QLibrary *> loadOpenSsl()
    //  OS X's /usr/lib/libssl.dylib, /usr/lib/libcrypto.dylib will be picked up in the third
    //    attempt, _after_ <bundle>/Contents/Frameworks has been searched.
    //  iOS does not ship a system libssl.dylib, libcrypto.dylib in the first place.
-   libssl->setFileNameAndVersion(QLatin1String("ssl"), -1);
-   libcrypto->setFileNameAndVersion(QLatin1String("crypto"), -1);
+
+   libssl->setFileNameAndVersion(QString("ssl"), -1);
+   libcrypto->setFileNameAndVersion(QString("crypto"), -1);
+
    if (libcrypto->load() && libssl->load()) {
       // libssl.so.0 and libcrypto.so.0 found
       return pair;
+
    } else {
       libssl->unload();
       libcrypto->unload();
@@ -799,7 +824,7 @@ static QPair<QLibrary *, QLibrary *> loadOpenSsl()
 #endif
 
    // third attempt: loop on the most common library paths and find libssl
-   QStringList sslList = findAllLibSsl();
+   QStringList sslList    = findAllLibSsl();
    QStringList cryptoList = findAllLibCrypto();
 
    for (const QString &crypto : cryptoList) {
@@ -810,7 +835,7 @@ static QPair<QLibrary *, QLibrary *> loadOpenSsl()
          QString version = fi.completeSuffix();
 
          for (const QString &ssl : sslList) {
-            if (!ssl.endsWith(version)) {
+            if (! ssl.endsWith(version)) {
                continue;
             }
 
@@ -819,37 +844,45 @@ static QPair<QLibrary *, QLibrary *> loadOpenSsl()
             if (libssl->load()) {
                // libssl.so.x and libcrypto.so.x found
                return pair;
+
             } else {
                libssl->unload();
             }
          }
       }
+
       libcrypto->unload();
    }
 
    // failed to load anything
    delete libssl;
    delete libcrypto;
+
    libssl    = nullptr;
    libcrypto = nullptr;
 
    return pair;
 
-# else
-   // not implemented for this platform yet
+#else
+   // not unix
    return pair;
-# endif
+
+#endif
+
 }
 #endif
 
 bool q_resolveOpenSslSymbols()
 {
-   static bool symbolsResolved = false;
+   static bool symbolsResolved       = false;
    static bool triedToResolveSymbols = false;
+
 #ifndef QT_NO_THREAD
+
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
    QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet((void *)&q_SSL_library_init));
 #endif
+
 #endif
    if (symbolsResolved) {
       return true;
@@ -864,6 +897,7 @@ bool q_resolveOpenSslSymbols()
 #else
    QPair<QLibrary *, QLibrary *> libs = loadOpenSsl();
 #endif
+
    if (!libs.first || !libs.second)
       // failed to load them
    {

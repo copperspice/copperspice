@@ -39,60 +39,55 @@ class QRect;
 
 // Standard shade drawing
 
-Q_GUI_EXPORT void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2,
-   const QPalette &pal, bool sunken = true,
-   int lineWidth = 1, int midLineWidth = 0);
+Q_GUI_EXPORT void qDrawShadeLine(QPainter *painter, int x1, int y1, int x2, int y2,
+   const QPalette &palette, bool sunken = true, int lineWidth = 1, int midLineWidth = 0);
 
-Q_GUI_EXPORT void qDrawShadeLine(QPainter *p, const QPoint &p1, const QPoint &p2,
-   const QPalette &pal, bool sunken = true,
-   int lineWidth = 1, int midLineWidth = 0);
+Q_GUI_EXPORT void qDrawShadeLine(QPainter *painter, const QPoint &p1, const QPoint &p2,
+   const QPalette &palette, bool sunken = true, int lineWidth = 1, int midLineWidth = 0);
 
-Q_GUI_EXPORT void qDrawShadeRect(QPainter *p, int x, int y, int w, int h,
-   const QPalette &pal, bool sunken = false,
-   int lineWidth = 1, int midLineWidth = 0,
+Q_GUI_EXPORT void qDrawShadeRect(QPainter *painter, int x, int y, int width, int height,
+   const QPalette &palette, bool sunken = false, int lineWidth = 1, int midLineWidth = 0,
    const QBrush *fill = nullptr);
 
-Q_GUI_EXPORT void qDrawShadeRect(QPainter *p, const QRect &r,
-   const QPalette &pal, bool sunken = false,
-   int lineWidth = 1, int midLineWidth = 0,
+Q_GUI_EXPORT void qDrawShadeRect(QPainter *painter, const QRect &rect,
+   const QPalette &palette, bool sunken = false, int lineWidth = 1, int midLineWidth = 0,
    const QBrush *fill = nullptr);
 
-Q_GUI_EXPORT void qDrawShadePanel(QPainter *p, int x, int y, int w, int h,
-   const QPalette &pal, bool sunken = false,
+Q_GUI_EXPORT void qDrawShadePanel(QPainter *painter, int x, int y, int width, int height,
+   const QPalette &palette, bool sunken = false, int lineWidth = 1, const QBrush *fill = nullptr);
+
+Q_GUI_EXPORT void qDrawShadePanel(QPainter *painter, const QRect &rect,
+   const QPalette &palette, bool sunken = false, int lineWidth = 1, const QBrush *fill = nullptr);
+
+Q_GUI_EXPORT void qDrawWinButton(QPainter *painter, int x, int y, int width, int height,
+   const QPalette &palette, bool sunken = false, const QBrush *fill = nullptr);
+
+Q_GUI_EXPORT void qDrawWinButton(QPainter *painter, const QRect &rect,
+   const QPalette &palette, bool sunken = false, const QBrush *fill = nullptr);
+
+Q_GUI_EXPORT void qDrawWinPanel(QPainter *painter, int x, int y, int width, int height,
+   const QPalette &palette, bool sunken = false, const QBrush *fill = nullptr);
+
+Q_GUI_EXPORT void qDrawWinPanel(QPainter *painter, const QRect &rect,
+   const QPalette &palette, bool sunken = false, const QBrush *fill = nullptr);
+
+Q_GUI_EXPORT void qDrawPlainRect(QPainter *painter, int x, int y, int width, int height, const QColor &color,
    int lineWidth = 1, const QBrush *fill = nullptr);
 
-Q_GUI_EXPORT void qDrawShadePanel(QPainter *p, const QRect &r,
-   const QPalette &pal, bool sunken = false,
-   int lineWidth = 1, const QBrush *fill = nullptr);
-
-Q_GUI_EXPORT void qDrawWinButton(QPainter *p, int x, int y, int w, int h,
-   const QPalette &pal, bool sunken = false,
-   const QBrush *fill = nullptr);
-
-Q_GUI_EXPORT void qDrawWinButton(QPainter *p, const QRect &r,
-   const QPalette &pal, bool sunken = false,
-   const QBrush *fill = nullptr);
-
-Q_GUI_EXPORT void qDrawWinPanel(QPainter *p, int x, int y, int w, int h,
-   const QPalette &pal, bool sunken = false,
-   const QBrush *fill = nullptr);
-
-Q_GUI_EXPORT void qDrawWinPanel(QPainter *p, const QRect &r,
-   const QPalette &pal, bool sunken = false,
-   const QBrush *fill = nullptr);
-
-Q_GUI_EXPORT void qDrawPlainRect(QPainter *p, int x, int y, int w, int h, const QColor &,
-   int lineWidth = 1, const QBrush *fill = nullptr);
-
-Q_GUI_EXPORT void qDrawPlainRect(QPainter *p, const QRect &r, const QColor &,
+Q_GUI_EXPORT void qDrawPlainRect(QPainter *painter, const QRect &rect, const QColor &color,
    int lineWidth = 1, const QBrush *fill = nullptr);
 
 struct QTileRules {
    inline QTileRules(Qt::TileRule horizontalRule, Qt::TileRule verticalRule)
-      : horizontal(horizontalRule), vertical(verticalRule) {}
+      : horizontal(horizontalRule), vertical(verticalRule)
+   {
+   }
 
    inline QTileRules(Qt::TileRule rule = Qt::StretchTile)
-      : horizontal(rule), vertical(rule) {}
+      : horizontal(rule), vertical(rule)
+   {
+   }
+
    Qt::TileRule horizontal;
    Qt::TileRule vertical;
 };
@@ -102,19 +97,19 @@ struct QTileRules {
 namespace QDrawBorderPixmap {
 
 enum DrawingHint {
-   OpaqueTopLeft = 0x0001,
-   OpaqueTop = 0x0002,
-   OpaqueTopRight = 0x0004,
-   OpaqueLeft = 0x0008,
-   OpaqueCenter = 0x0010,
-   OpaqueRight = 0x0020,
-   OpaqueBottomLeft = 0x0040,
-   OpaqueBottom = 0x0080,
+   OpaqueTopLeft     = 0x0001,
+   OpaqueTop         = 0x0002,
+   OpaqueTopRight    = 0x0004,
+   OpaqueLeft        = 0x0008,
+   OpaqueCenter      = 0x0010,
+   OpaqueRight       = 0x0020,
+   OpaqueBottomLeft  = 0x0040,
+   OpaqueBottom      = 0x0080,
    OpaqueBottomRight = 0x0100,
-   OpaqueCorners = OpaqueTopLeft | OpaqueTopRight | OpaqueBottomLeft | OpaqueBottomRight,
-   OpaqueEdges = OpaqueTop | OpaqueLeft | OpaqueRight | OpaqueBottom,
-   OpaqueFrame = OpaqueCorners | OpaqueEdges,
-   OpaqueAll = OpaqueCenter | OpaqueFrame
+   OpaqueCorners     = OpaqueTopLeft | OpaqueTopRight | OpaqueBottomLeft | OpaqueBottomRight,
+   OpaqueEdges       = OpaqueTop | OpaqueLeft | OpaqueRight | OpaqueBottom,
+   OpaqueFrame       = OpaqueCorners | OpaqueEdges,
+   OpaqueAll         = OpaqueCenter | OpaqueFrame
 };
 
 using DrawingHints = QFlags<DrawingHint>;

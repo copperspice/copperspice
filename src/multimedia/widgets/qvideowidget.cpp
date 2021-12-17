@@ -649,11 +649,6 @@ void QVideoWidget::setAspectRatioMode(Qt::AspectRatioMode mode)
    }
 }
 
-/*!
-    \property QVideoWidget::fullScreen
-    \brief whether video display is confined to a window or is fullScreen.
-*/
-
 void QVideoWidget::setFullScreen(bool fullScreen)
 {
    Q_D(QVideoWidget);
@@ -668,28 +663,13 @@ void QVideoWidget::setFullScreen(bool fullScreen)
 
       showFullScreen();
    } else {
-      flags &= ~(Qt::Window | Qt::SubWindow); //clear the flags...
-      flags |= d->nonFullScreenFlags; //then we reset the flags (window and subwindow)
+      flags &= ~(Qt::Window | Qt::SubWindow);    //clear the flags
+      flags |= d->nonFullScreenFlags;            //then we reset the flags (window and subwindow)
       setWindowFlags(flags);
 
       showNormal();
    }
 }
-
-/*!
-    \fn QVideoWidget::fullScreenChanged(bool fullScreen)
-
-    Signals that the \a fullScreen mode of a video widget has changed.
-
-    \sa isFullScreen()
-*/
-
-/*!
-    \property QVideoWidget::brightness
-    \brief an adjustment to the brightness of displayed video.
-
-    Valid brightness values range between -100 and 100, the default is 0.
-*/
 
 int QVideoWidget::brightness() const
 {
@@ -709,22 +689,6 @@ void QVideoWidget::setBrightness(int brightness)
    }
 }
 
-/*!
-    \fn QVideoWidget::brightnessChanged(int brightness)
-
-    Signals that a video widgets's \a brightness adjustment has changed.
-
-    \sa brightness()
-*/
-
-/*!
-    \property QVideoWidget::contrast
-    \brief an adjustment to the contrast of displayed video.
-
-    Valid contrast values range between -100 and 100, the default is 0.
-
-*/
-
 int QVideoWidget::contrast() const
 {
    return d_func()->contrast;
@@ -743,21 +707,6 @@ void QVideoWidget::setContrast(int contrast)
    }
 }
 
-/*!
-    \fn QVideoWidget::contrastChanged(int contrast)
-
-    Signals that a video widgets's \a contrast adjustment has changed.
-
-    \sa contrast()
-*/
-
-/*!
-    \property QVideoWidget::hue
-    \brief an adjustment to the hue of displayed video.
-
-    Valid hue values range between -100 and 100, the default is 0.
-*/
-
 int QVideoWidget::hue() const
 {
    return d_func()->hue;
@@ -775,21 +724,6 @@ void QVideoWidget::setHue(int hue)
       emit hueChanged(d->hue = boundedHue);
    }
 }
-
-/*!
-    \fn QVideoWidget::hueChanged(int hue)
-
-    Signals that a video widgets's \a hue has changed.
-
-    \sa hue()
-*/
-
-/*!
-    \property QVideoWidget::saturation
-    \brief an adjustment to the saturation of displayed video.
-
-    Valid saturation values range between -100 and 100, the default is 0.
-*/
 
 int QVideoWidget::saturation() const
 {
@@ -810,18 +744,6 @@ void QVideoWidget::setSaturation(int saturation)
 
 }
 
-/*!
-    \fn QVideoWidget::saturationChanged(int saturation)
-
-    Signals that a video widgets's \a saturation has changed.
-
-    \sa saturation()
-*/
-
-/*!
-  Returns the size hint for the current back end,
-  if there is one, or else the size hint from QWidget.
- */
 QSize QVideoWidget::sizeHint() const
 {
    Q_D(const QVideoWidget);
@@ -835,11 +757,6 @@ QSize QVideoWidget::sizeHint() const
 
 }
 
-/*!
-  \reimp
-  Current event \a event.
-  Returns the value of the baseclass QWidget::event(QEvent *event) function.
-*/
 bool QVideoWidget::event(QEvent *event)
 {
    Q_D(QVideoWidget);

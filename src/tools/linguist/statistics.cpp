@@ -23,8 +23,8 @@
 
 #include <statistics.h>
 
-Statistics::Statistics(QWidget *parent, Qt::WindowFlags fl)
-   : QDialog(parent, fl)
+Statistics::Statistics(QWidget *parent, Qt::WindowFlags flags)
+   : QDialog(parent, flags)
 {
    setupUi(this);
 }

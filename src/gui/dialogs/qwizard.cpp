@@ -418,7 +418,8 @@ void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
    logoLabel->setPixmap(logo);
 
    subTitleLabel->setTextFormat(subTitleFormat);
-   subTitleLabel->setText(QLatin1String("Pq\nPq"));
+   subTitleLabel->setText("Pq\nPq");
+
    int desiredSubTitleHeight = subTitleLabel->sizeHint().height();
    subTitleLabel->setText(subTitle);
 
@@ -1170,7 +1171,7 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
 
       if (aero) {
          // ### hardcoded for now:
-         titleFont = QFont(QLatin1String("Segoe UI"), 12);
+         titleFont = QFont("Segoe UI", 12);
          QPalette pal(titleLabel->palette());
          pal.setColor(QPalette::Text, "#003399");
          titleLabel->setPalette(pal);
@@ -1481,6 +1482,7 @@ void QWizardPrivate::updateMinMaxSizes(const QWizardLayoutInfo &info)
 void QWizardPrivate::updateCurrentPage()
 {
    Q_Q(QWizard);
+
    if (q->currentPage()) {
       canContinue = (q->nextId() != -1);
       canFinish = q->currentPage()->isFinalPage();
@@ -1488,6 +1490,7 @@ void QWizardPrivate::updateCurrentPage()
       canContinue = false;
       canFinish = false;
    }
+
    _q_updateButtonStates();
    updateButtonTexts();
 }
@@ -1496,13 +1499,13 @@ static QString object_name_for_button(QWizard::WizardButton which)
 {
    switch (which) {
       case QWizard::CommitButton:
-         return QLatin1String("qt_wizard_") + QLatin1String("commit");
+         return QString("qt_wizard_commit");
 
       case QWizard::FinishButton:
-         return QLatin1String("qt_wizard_") + QLatin1String("finish");
+         return QString("qt_wizard_finish");
 
       case QWizard::CancelButton:
-         return QLatin1String("qt_wizard_") + QLatin1String("cancel");
+         return QString("qt_wizard_cancel");
 
       case QWizard::BackButton:
       case QWizard::NextButton:
@@ -1511,13 +1514,13 @@ static QString object_name_for_button(QWizard::WizardButton which)
       case QWizard::CustomButton2:
       case QWizard::CustomButton3:
          // Make navigation buttons detectable as passive interactor in designer
-         return QLatin1String("__qt__passive_wizardbutton") + QString::number(which);
+         return QString("__qt__passive_wizardbutton") + QString::number(which);
 
       case QWizard::Stretch:
       case QWizard::NoButton:
-         //case QWizard::NStandardButtons:
-         //case QWizard::NButtons:
-         ;
+//    case QWizard::NStandardButtons:
+//    case QWizard::NButtons:
+         break;
    }
 
    // error, may want to throw

@@ -907,6 +907,7 @@ void QOpenGLContextGroupPrivate::deletePendingResources(QOpenGLContext *ctx)
 
    QList<QOpenGLSharedResource *>::const_iterator it = pending.begin();
    QList<QOpenGLSharedResource *>::const_iterator end = pending.end();
+
    while (it != end) {
       (*it)->freeResource(ctx);
       delete *it;
@@ -928,7 +929,7 @@ QOpenGLSharedResource::~QOpenGLSharedResource()
 // schedule the resource for deletion at an appropriate time
 void QOpenGLSharedResource::free()
 {
-   if (!m_group) {
+   if (! m_group) {
       delete this;
       return;
    }
@@ -973,6 +974,7 @@ QOpenGLMultiGroupSharedResource::~QOpenGLMultiGroupSharedResource()
       if (!m_groups.at(i)->shares().isEmpty()) {
          QOpenGLContext *context = m_groups.at(i)->shares().first();
          QOpenGLSharedResource *resource = value(context);
+
          if (resource) {
             resource->free();
          }
@@ -995,6 +997,7 @@ void QOpenGLMultiGroupSharedResource::insert(QOpenGLContext *context, QOpenGLSha
 #ifdef QT_GL_CONTEXT_RESOURCE_DEBUG
    qDebug("Inserting context group resource %p for context %p, managed by %p.", value, context, this);
 #endif
+
    QOpenGLContextGroup *group = context->shareGroup();
    Q_ASSERT(!group->d_func()->m_resources.contains(this));
    group->d_func()->m_resources.insert(this, value);

@@ -1678,7 +1678,7 @@ void QFtpPrivate::_q_startNextCommand()
    }
    emit q->commandStarted(c->id);
 
-   // Proxy support, replace the Login argument in place, then fall through
+   // Proxy support, replace the Login argument in place
    if (c->command == QFtp::Login && ! proxyHost.isEmpty()) {
       QString loginString = c->rawCmds.first().trimmed();
       loginString += QChar('@') + host;

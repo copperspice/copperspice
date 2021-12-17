@@ -195,8 +195,8 @@ int QMacPrintEngine::metric(QPaintDevice::PaintDeviceMetric m) const
             val = (int)resolution.vRes;
             break;
          }
-         //otherwise fall through
       }
+      [[fallthrough]];
 
       case QPaintDevice::PdmDpiY:
          val = (int)d->resolution.vRes;

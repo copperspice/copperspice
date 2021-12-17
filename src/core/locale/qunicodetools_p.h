@@ -58,7 +58,7 @@ enum CharAttributeOption {
 
    DontClearAttributes = 0x1000
 };
-Q_DECLARE_FLAGS(CharAttributeOptions, CharAttributeOption)
+using CharAttributeOptions = QFlags<CharAttributeOption>;
 
 // attributes buffer has to have a length of string length + 1
 Q_CORE_EXPORT void initCharAttributes(const QString &str, QVector<QUnicodeTools::ScriptItem> &scriptItems,

@@ -79,7 +79,9 @@ class Q_GUI_EXPORT QPalette
 
    QPalette(const QPalette &other);
 
-   QPalette(QPalette &&other) : d(other.d) {
+   QPalette(QPalette &&other)
+      : d(other.d)
+   {
       resolve_mask  = other.resolve_mask;
       current_group = other.current_group;
       other.d = nullptr;

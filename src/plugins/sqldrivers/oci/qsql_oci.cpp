@@ -238,6 +238,7 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
                reinterpret_cast<QByteArray *>(data)->size(),
                SQLT_BIN, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
          break;
+
       case QVariant::Time:
       case QVariant::Date:
       case QVariant::DateTime: {
@@ -250,6 +251,7 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
          tmpStorage.append(ba);
          break;
       }
+
       case QVariant::Int:
          r = OCIBindByPos(sql, hbnd, err,
                pos + 1,
@@ -268,6 +270,7 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
                sizeof(uint),
                SQLT_UIN, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
          break;
+
       case QVariant::LongLong: {
          QByteArray ba = qMakeOCINumber(val.toLongLong(), err);
          r = OCIBindByPos(sql, hbnd, err,
@@ -278,6 +281,7 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
          tmpStorage.append(ba);
          break;
       }
+
       case QVariant::ULongLong: {
          QByteArray ba = qMakeOCINumber(val.toULongLong(), err);
          r = OCIBindByPos(sql, hbnd, err,
@@ -288,6 +292,7 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
          tmpStorage.append(ba);
          break;
       }
+
       case QVariant::Double:
          r = OCIBindByPos(sql, hbnd, err,
                pos + 1,
@@ -319,26 +324,28 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
       case QVariant::String: {
          const QString s = val.toString();
          if (isBinaryValue(pos)) {
-            r = OCIBindByPos(sql, hbnd, err,
-                  pos + 1,
+            r = OCIBindByPos(sql, hbnd, err, pos + 1,
                   const_cast<ushort *>(s.utf16()),
                   s.length() * sizeof(QChar),
                   SQLT_LNG, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
             break;
+
          } else if (!isOutValue(pos)) {
             // don't detach the string
-            r = OCIBindByPos(sql, hbnd, err,
-                  pos + 1,
+            r = OCIBindByPos(sql, hbnd, err, pos + 1,
                   // safe since oracle doesn't touch OUT values
                   const_cast<ushort *>(s.utf16()),
                   (s.length() + 1) * sizeof(QChar),
                   SQLT_STR, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
+
             if (r == OCI_SUCCESS) {
                setCharset(*hbnd, OCI_HTYPE_BIND);
             }
             break;
          }
-      } // fall through for OUT values
+      }
+      [[fallthrough]];
+
       default: {
          const QString s = val.toString();
          // create a deep-copy
@@ -351,6 +358,7 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
                   ba.data(),
                   ba.capacity(),
                   SQLT_STR, indPtr, tmpSize, 0, 0, 0, OCI_DEFAULT);
+
          } else {
             r = OCIBindByPos(sql, hbnd, err,
                   pos + 1,
@@ -358,13 +366,17 @@ int QOCIResultPrivate::bindValue(OCIStmt *sql, OCIBind **hbnd, OCIError *err, in
                   ba.size(),
                   SQLT_STR, indPtr, 0, 0, 0, 0, OCI_DEFAULT);
          }
+
          if (r == OCI_SUCCESS) {
             setCharset(*hbnd, OCI_HTYPE_BIND);
          }
+
          tmpStorage.append(ba);
          break;
-      } // default case
-   } // switch
+
+      }
+   }
+
    if (r != OCI_SUCCESS) {
       qOraWarning("QOCIResultPrivate::bindValue:", err);
    }
@@ -387,6 +399,7 @@ int QOCIResultPrivate::bindValues(QVector<QVariant> &values, IndicatorArray &ind
 
       bindValue(sql, &hbnd, err, i, val, indPtr, &tmpSizes[i], tmpStorage);
    }
+
    return r;
 }
 
@@ -397,22 +410,27 @@ static void qOraOutValue(QVariant &value, QList<QByteArray> &storage, OCIError *
       case QVariant::Time:
          value = qMakeDate(storage.takeFirst()).time();
          break;
+
       case QVariant::Date:
          value = qMakeDate(storage.takeFirst()).date();
          break;
+
       case QVariant::DateTime:
          value = qMakeDate(storage.takeFirst());
          break;
+
       case QVariant::LongLong:
          value = qMakeLongLong(storage.takeFirst(), err);
          break;
+
       case QVariant::ULongLong:
          value = qMakeULongLong(storage.takeFirst(), err);
          break;
+
       case QVariant::String:
-         value = QString(
-               reinterpret_cast<const QChar *>(storage.takeFirst().constData()));
+         value = QString::fromUtf16(reinterpret_cast<const char16_t *>(storage.takeFirst().constData()));
          break;
+
       default:
          break; //nothing
    }
@@ -423,7 +441,7 @@ void QOCIResultPrivate::outValues(QVector<QVariant> &values, IndicatorArray &ind
 {
    for (int i = 0; i < values.count(); ++i) {
 
-      if (!isOutValue(i)) {
+      if (! isOutValue(i)) {
          continue;
       }
 
@@ -437,7 +455,6 @@ void QOCIResultPrivate::outValues(QVector<QVariant> &values, IndicatorArray &ind
       }
    }
 }
-
 
 struct QOCIDriverPrivate {
    QOCIDriverPrivate();
@@ -543,6 +560,7 @@ QVariant::Type qDecodeOCIType(const QString &ocitype, QSql::NumericalPrecisionPo
       || ocitype == QLatin1String("CHAR") || ocitype == QLatin1String("NVARCHAR2")
       || ocitype == QLatin1String("NCHAR")) {
       type = QVariant::String;
+
    } else if (ocitype == QLatin1String("NUMBER")
       || ocitype == QLatin1String("FLOAT")
       || ocitype == QLatin1String("BINARY_FLOAT")
@@ -551,12 +569,15 @@ QVariant::Type qDecodeOCIType(const QString &ocitype, QSql::NumericalPrecisionPo
          case QSql::LowPrecisionInt32:
             type = QVariant::Int;
             break;
+
          case QSql::LowPrecisionInt64:
             type = QVariant::LongLong;
             break;
+
          case QSql::LowPrecisionDouble:
             type = QVariant::Double;
             break;
+
          case QSql::HighPrecision:
          default:
             type = QVariant::String;
@@ -565,15 +586,19 @@ QVariant::Type qDecodeOCIType(const QString &ocitype, QSql::NumericalPrecisionPo
    } else if (ocitype == QLatin1String("LONG") || ocitype == QLatin1String("NCLOB")
       || ocitype == QLatin1String("CLOB")) {
       type = QVariant::ByteArray;
+
    } else if (ocitype == QLatin1String("RAW") || ocitype == QLatin1String("LONG RAW")
       || ocitype == QLatin1String("ROWID") || ocitype == QLatin1String("BLOB")
       || ocitype == QLatin1String("CFILE") || ocitype == QLatin1String("BFILE")) {
       type = QVariant::ByteArray;
+
    } else if (ocitype == QLatin1String("DATE") ||  ocitype.startsWith(QLatin1String("TIME"))) {
       type = QVariant::DateTime;
+
    } else if (ocitype == QLatin1String("UNDEFINED")) {
       type = QVariant::Invalid;
    }
+
    if (type == QVariant::Invalid) {
       qWarning("qDecodeOCIType: unknown type: %s", ocitype.toLocal8Bit().constData());
    }
@@ -600,9 +625,11 @@ QVariant::Type qDecodeOCIType(int ocitype, QSql::NumericalPrecisionPolicy precis
 #endif
          type = QVariant::String;
          break;
+
       case SQLT_INT:
          type = QVariant::Int;
          break;
+
       case SQLT_FLT:
       case SQLT_NUM:
       case SQLT_VNU:
@@ -623,6 +650,7 @@ QVariant::Type qDecodeOCIType(int ocitype, QSql::NumericalPrecisionPolicy precis
                break;
          }
          break;
+
       case SQLT_VBI:
       case SQLT_BIN:
       case SQLT_LBI:
@@ -636,6 +664,7 @@ QVariant::Type qDecodeOCIType(int ocitype, QSql::NumericalPrecisionPolicy precis
       case SQLT_RID:
          type = QVariant::ByteArray;
          break;
+
       case SQLT_DAT:
       case SQLT_ODT:
 #ifdef SQLT_TIMESTAMP
@@ -645,6 +674,7 @@ QVariant::Type qDecodeOCIType(int ocitype, QSql::NumericalPrecisionPolicy precis
 #endif
          type = QVariant::DateTime;
          break;
+
       default:
          type = QVariant::Invalid;
          qWarning("qDecodeOCIType: unknown OCI datatype: %d", ocitype);
@@ -666,6 +696,7 @@ static QSqlField qFromOraInf(const OraFieldInfo &ofi)
 
    f.setPrecision(ofi.oraScale);
    f.setSqlType(int(ofi.oraType));
+
    return f;
 }
 
@@ -687,6 +718,7 @@ QByteArray qMakeOraDate(const QDateTime &dt)
    ba[4] = dt.time().hour() + 1;
    ba[5] = dt.time().minute() + 1;
    ba[6] = dt.time().second() + 1;
+
    return ba;
 }
 
@@ -855,6 +887,7 @@ QOCICols::QOCICols(int size, QOCIResultPrivate *dp)
                   &(fieldInf[idx].ind),
                   0, 0, OCI_DEFAULT);
             break;
+
          case QVariant::Double:
             r = OCIDefineByPos(d->sql,
                   &dfn,
@@ -866,6 +899,7 @@ QOCICols::QOCICols(int size, QOCIResultPrivate *dp)
                   &(fieldInf[idx].ind),
                   0, 0, OCI_DEFAULT);
             break;
+
          case QVariant::Int:
             r = OCIDefineByPos(d->sql,
                   &dfn,
@@ -888,6 +922,7 @@ QOCICols::QOCICols(int size, QOCIResultPrivate *dp)
                   &(fieldInf[idx].ind),
                   0, 0, OCI_DEFAULT);
             break;
+
          case QVariant::ByteArray:
             // RAW and LONG RAW fields can't be bound to LOB locators
             if (ofi.oraType == SQLT_BIN) {
@@ -1752,10 +1787,12 @@ void QOCICols::getValues(QVector<QVariant> &v, int index)
                   break;
                }
             }
-         // else fall through
+            [[fallthrough]];
+
          case QVariant::String:
             v[index + i] = QString(reinterpret_cast<const QChar *>(fld.data));
             break;
+
          case QVariant::ByteArray:
             if (fld.len > 0) {
                v[index + i] = QByteArray(fld.data, fld.len);
@@ -1763,6 +1800,7 @@ void QOCICols::getValues(QVector<QVariant> &v, int index)
                v[index + i] = QVariant(QVariant::ByteArray);
             }
             break;
+
          default:
             qWarning("QOCICols::value: unknown data type");
             break;
@@ -1845,24 +1883,29 @@ bool QOCIResult::gotoNext(QSqlCachedResult::ValueCache &values, int index)
    switch (r) {
       case OCI_SUCCESS:
          break;
+
       case OCI_SUCCESS_WITH_INFO:
          qOraWarning("QOCIResult::gotoNext: SuccessWithInfo: ", d->err);
          r = OCI_SUCCESS; //ignore it
          break;
+
       case OCI_NO_DATA:
          // end of rowset
          return false;
+
       case OCI_NEED_DATA:
          piecewise = true;
          r = OCI_SUCCESS;
          break;
+
       case OCI_ERROR:
          if (qOraErrorNumber(d->err) == 1406) {
             qWarning("QOCI Warning: data truncated for %s", lastQuery().toLocal8Bit().constData());
             r = OCI_SUCCESS; /* ignore it */
             break;
          }
-      // fall through
+         [[fallthrough]];
+
       default:
          qOraWarning("QOCIResult::gotoNext: ", d->err);
          setLastError(qMakeError(QCoreApplication::translate("QOCIResult",
@@ -2177,16 +2220,19 @@ static void qParseOpts(const QString &options, QOCIDriverPrivate *d)
       const QString opt = tmp.left(idx);
       const QString val = tmp.mid(idx + 1).simplified();
       bool ok;
+
       if (opt == QLatin1String("OCI_ATTR_PREFETCH_ROWS")) {
          d->prefetchRows = val.toInt(&ok);
          if (!ok) {
             d->prefetchRows = -1;
          }
+
       } else if (opt == QLatin1String("OCI_ATTR_PREFETCH_MEMORY")) {
          d->prefetchMem = val.toInt(&ok);
          if (!ok) {
             d->prefetchMem = -1;
          }
+
       } else {
          qWarning ("QOCIDriver::parseArgs: Invalid parameter: '%s'",
             opt.toLocal8Bit().constData());

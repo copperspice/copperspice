@@ -180,7 +180,6 @@ static bool intersect_path(const QGraphicsItem *item, const QRectF &exposeRect, 
 
 } // namespace QtPrivate
 
-
 QGraphicsSceneIndexPrivate::QGraphicsSceneIndexPrivate(QGraphicsScene *scene) : scene(scene)
 {
 }
@@ -189,19 +188,13 @@ QGraphicsSceneIndexPrivate::~QGraphicsSceneIndexPrivate()
 {
 }
 
-/*!
-    \internal
-
-    Checks if item collides with the path and mode, but also checks that if it
-    doesn't collide, maybe its frame rect will.
-*/
 bool QGraphicsSceneIndexPrivate::itemCollidesWithPath(const QGraphicsItem *item,
-   const QPainterPath &path,
-   Qt::ItemSelectionMode mode)
+   const QPainterPath &path, Qt::ItemSelectionMode mode)
 {
    if (item->collidesWithPath(path, mode)) {
       return true;
    }
+
    if (item->isWidget()) {
       // Check if this is a window, and if its frame rect collides.
       const QGraphicsWidget *widget = static_cast<const QGraphicsWidget *>(item);
@@ -216,21 +209,17 @@ bool QGraphicsSceneIndexPrivate::itemCollidesWithPath(const QGraphicsItem *item,
          return !intersects && path.contains(frameRect.topLeft());
       }
    }
+
    return false;
 }
 
-/*!
-    \internal
-    This function returns the items in ascending order.
-*/
 void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRectF exposeRect,
-   QGraphicsSceneIndexIntersector intersect,
-   QList<QGraphicsItem *> *items,
-   const QTransform &viewTransform,
-   Qt::ItemSelectionMode mode,
+   QGraphicsSceneIndexIntersector intersect, QList<QGraphicsItem *> *items,
+   const QTransform &viewTransform, Qt::ItemSelectionMode mode,
    qreal parentOpacity, const void *intersectData) const
 {
    Q_ASSERT(item);
+
    if (!item->d_ptr->visible) {
       return;
    }
