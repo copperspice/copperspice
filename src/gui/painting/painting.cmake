@@ -145,6 +145,14 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qwidgetbackingstore.cpp
 )
 
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+   target_sources(CsGui
+      PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_neon.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_neon_asm.S
+   )
+endif()
+
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
    list(APPEND EXTRA_GUI_LIBS
       PRIVATE

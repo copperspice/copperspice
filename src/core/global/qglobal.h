@@ -86,8 +86,38 @@
 
 #  endif
 
+#elif defined(__aarch64__)
+// arm64
+
+#   define Q_PROCESSOR_ARM_64
+
+#   define Q_PROCESSOR_ARM         8
+#   define Q_PROCESSOR_ARM_V8
+
+#elif defined(__arm__)
+// arm32
+
+#   define Q_PROCESSOR_ARM_32
+
+#   if defined(__ARM_ARCH_7__)
+#      define Q_PROCESSOR_ARM      7
+#      define Q_PROCESSOR_ARM_V7
+
+#   elif defined(__ARM_ARCH_6__)
+#      define Q_PROCESSOR_ARM      6
+#      define Q_PROCESSOR_ARM_V8
+
+#   elif defined(__ARM_ARCH_5__)
+#      define Q_PROCESSOR_ARM      5
+#      define Q_PROCESSOR_ARM_V5
+
+#   else
+#     error Unsupported system architecture, CopperSpice requires V5 or newer
+
+#   endif
+
 #else
-#error Unable to detect system architecture, contact CopperSpice development
+#   error Unable to detect system architecture, contact CopperSpice development
 
 #endif
 

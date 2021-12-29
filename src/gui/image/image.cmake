@@ -224,6 +224,17 @@ if (NOT ${JPEG_FOUND})
    )
 endif()
 
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+   target_sources(CsGui
+      PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage_neon.cpp
+
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/arm/arm_init.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/arm/filter_neon.S
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/arm/filter_neon_intrinsics.c
+   )
+endif()
+
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
    target_sources(CsGui
       PRIVATE

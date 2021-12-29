@@ -136,7 +136,6 @@
 /src/3rdparty/libmng/makefiles/
 /src/3rdparty/libmng/unmaintained
 /src/3rdparty/libpng/INSTALL
-/src/3rdparty/libpng/arm
 /src/3rdparty/libpng/example.c
 /src/3rdparty/libpng/libpng-manual.txt
 /src/3rdparty/libpng/pnglibconf.c

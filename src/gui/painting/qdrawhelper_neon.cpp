@@ -1120,5 +1120,5 @@ const uint *QT_FASTCALL qt_fetch_radial_gradient_neon(uint *buffer, const Operat
    return qt_fetch_radial_gradient_template<QRadialFetchSimd<QSimdNeon>, uint>(buffer, op, data, y, x, length);
 }
 
-#endif // QT_HAVE_NEON
+#endif
 

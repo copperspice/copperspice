@@ -26,7 +26,7 @@
 
 #include <qdrawhelper_p.h>
 
-#ifdef QT_HAVE_NEON
+#ifdef __ARM_NEON__
 
 void qt_blend_argb32_on_argb32_neon(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
    int w, int h, int const_alpha);
@@ -74,7 +74,7 @@ void QT_FASTCALL qt_destStoreRGB16_neon(QRasterBuffer *rasterBuffer, int x, int 
 void QT_FASTCALL comp_func_solid_SourceOver_neon(uint *destPixels, int length, uint color, uint const_alpha);
 void QT_FASTCALL comp_func_Plus_neon(uint *dst, const uint *src, int length, uint const_alpha);
 
-#endif // QT_HAVE_NEON
+#endif
 
 
-#endif // QDRAWHELPER_NEON_P_H
+#endif
