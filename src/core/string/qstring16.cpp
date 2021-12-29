@@ -626,7 +626,7 @@ QString16 QString16::fromStdWString(const std::wstring &str, size_type numOfChar
             break;
          }
 
-         retval.push_back(ch);
+         retval.push_back(static_cast<char32_t>(ch));
          --numOfChars;
       }
    }

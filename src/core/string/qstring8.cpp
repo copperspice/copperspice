@@ -625,7 +625,7 @@ QString8 QString8::fromStdWString(const std::wstring &str, size_type numOfChars)
             break;
          }
 
-         retval.push_back(ch);
+         retval.push_back(static_cast<char32_t>(ch));
          --numOfChars;
       }
    }
