@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 
-cmake_policy(VERSION 3.8..3.20)
+cmake_policy(VERSION 3.16..3.21)
 
-# support using rpath on Mac OS X
-cmake_policy(SET CMP0042 NEW)
+if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.20.0")
+   # enable RTTI on MSVC
+   cmake_policy(SET CMP0117 OLD)
+endif()
 
 project(Generate_Tables)
 
