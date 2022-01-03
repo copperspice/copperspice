@@ -28,10 +28,12 @@ The libraries avaiable in CopperSpice include:
 There are also several open source BSD licensed libraries which are used by CopperSpice and available as stand
 alone libraries for anyone developing C++ applications.
 
+ * CsCrypto
+ * CsLibGuarded
  * CsPrint
  * CsSignal
  * CsString
- * CsLibGuarded
+
 
 
 ### System Requirements
@@ -39,7 +41,7 @@ alone libraries for anyone developing C++ applications.
 To use the CopperSpice libraries a C++17 compiler and a C++17 standard library are required.
 
 CopperSpice CMake build files are provided with the source distribution. We recommend your projects should also use
-CMake for the build system.
+CMake and Ninja for the build system.
 
 For additional information about building from source, refer to our CopperSpice Overview Documentation or the
 KitchenSink demo application for sample CMake project files.
@@ -58,7 +60,7 @@ The CopperSpice Overview documentation includes information on building CopperSp
 files, package requirements, setting up an application which links with CopperSpice, migrating to CopperSpice, and
 general configuration information.
 
-www.copperspice.com/docs/cs_overview/index.html
+https://www.copperspice.com/docs/cs_overview/index.html
 
 
 ###### API
@@ -91,6 +93,8 @@ Enhanced Functionality
  * New platform independent plugin system based on C++
  * High DPI Support
 
+ * Integration of CsLibGuarded
+   * Used to manage shared data
  * Integration of CsSignal
    * Improved thread aware Signal/Slot delivery
    * Increased efficiency while maintaining the full Signal/Slot API
@@ -99,8 +103,6 @@ Enhanced Functionality
    * Improved storage to properly represent Unicode strings
    * QString8 (UTF-8) and QString16 (UTF-16) classes
    * Added QStringView and QStringParser
- * Integration of CsLibGuarded
-   * Used to manage shared data
 
 Using the Libraries
  * Any C++ application using CopperSpice can be built with CMake or any build system which imports CMake files
