@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2021 Barbara Geller
-* Copyright (c) 2012-2021 Ansel Sermersheim
+* Copyright (c) 2012-2022 Barbara Geller
+* Copyright (c) 2012-2022 Ansel Sermersheim
 *
 * Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
@@ -1262,7 +1262,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    msg2->setFont(font);
 
    QLabel *msg3 = new QLabel;
-   msg3->setText("Copyright (C) 2012-2021 Ansel Sermersheim & Barbara Geller\n"
+   msg3->setText("Copyright (C) 2012-2022 Ansel Sermersheim & Barbara Geller\n"
          "\n"
          "Copyright (c) 2015 The Qt Company Ltd\n"
          "Copyright (C) 2012-2016 Digia Plc and/or its subsidiary(-ies)\n"
