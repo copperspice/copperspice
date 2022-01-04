@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2021 Barbara Geller
-* Copyright (c) 2012-2021 Ansel Sermersheim
+* Copyright (c) 2012-2022 Barbara Geller
+* Copyright (c) 2012-2022 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
@@ -3410,11 +3410,12 @@ int main(int, char **)
    QByteArray header =
       "/***********************************************************************\n"
       "*\n"
-      "* Copyright (c) 2012-2018 Barbara Geller\n"
-      "* Copyright (c) 2012-2018 Ansel Sermersheim\n"
+      "* Copyright (c) 2012-2022 Barbara Geller\n"
+      "* Copyright (c) 2012-2022 Ansel Sermersheim\n"
+      "*\n"
+      "* Copyright (c) 2015 The Qt Company Ltd.\n"
       "* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).\n"
       "* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).\n"
-      "* All rights reserved.\n"
       "*\n"
       "* This file is part of CopperSpice.\n"
       "*\n"
@@ -3426,7 +3427,7 @@ int main(int, char **)
       "* but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
       "* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
       "*\n"
-      "* <http://www.gnu.org/licenses/>.\n"
+      "* http://www.gnu.org/licenses/\n"
       "*\n"
       "***********************************************************************/\n\n";
 
