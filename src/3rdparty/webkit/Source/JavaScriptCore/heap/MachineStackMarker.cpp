@@ -321,16 +321,25 @@ typedef unsigned long usword_t; // word size, assumed to be either 32 or 64 bit
 
 #if CPU(X86)
 typedef i386_thread_state_t PlatformThreadRegisters;
+
 #elif CPU(X86_64)
 typedef x86_thread_state64_t PlatformThreadRegisters;
+
 #elif CPU(PPC)
 typedef ppc_thread_state_t PlatformThreadRegisters;
+
 #elif CPU(PPC64)
 typedef ppc_thread_state64_t PlatformThreadRegisters;
+
+#elif CPU(ARM64)
+typedef arm_thread_state64_t PlatformThreadRegisters;
+
 #elif CPU(ARM)
 typedef arm_thread_state_t PlatformThreadRegisters;
+
 #else
 #error Unknown Architecture
+
 #endif
 
 #elif OS(WINDOWS)
@@ -348,18 +357,27 @@ static size_t getPlatformThreadRegisters(const PlatformThread& platformThread, P
 #if CPU(X86)
     unsigned user_count = sizeof(regs)/sizeof(int);
     thread_state_flavor_t flavor = i386_THREAD_STATE;
+
 #elif CPU(X86_64)
     unsigned user_count = x86_THREAD_STATE64_COUNT;
     thread_state_flavor_t flavor = x86_THREAD_STATE64;
-#elif CPU(PPC) 
+
+#elif CPU(PPC)
     unsigned user_count = PPC_THREAD_STATE_COUNT;
     thread_state_flavor_t flavor = PPC_THREAD_STATE;
+
 #elif CPU(PPC64)
     unsigned user_count = PPC_THREAD_STATE64_COUNT;
     thread_state_flavor_t flavor = PPC_THREAD_STATE64;
+
+#elif CPU(ARM64)
+    unsigned user_count = ARM_THREAD_STATE64_COUNT;
+    thread_state_flavor_t flavor = ARM_THREAD_STATE64;
+
 #elif CPU(ARM)
     unsigned user_count = ARM_THREAD_STATE_COUNT;
     thread_state_flavor_t flavor = ARM_THREAD_STATE;
+
 #else
 #error Unknown Architecture
 #endif
@@ -400,14 +418,22 @@ static inline void* otherThreadStackPointer(const PlatformThreadRegisters& regs)
 
 #if CPU(X86)
     return reinterpret_cast<void*>(regs.__esp);
+
 #elif CPU(X86_64)
     return reinterpret_cast<void*>(regs.__rsp);
+
 #elif CPU(PPC) || CPU(PPC64)
     return reinterpret_cast<void*>(regs.__r1);
+
+#elif CPU(ARM64)
+    return reinterpret_cast<void*>(regs.__sp);
+
 #elif CPU(ARM)
     return reinterpret_cast<void*>(regs.__sp);
+
 #else
 #error Unknown Architecture
+
 #endif
 
 #else // !__DARWIN_UNIX03

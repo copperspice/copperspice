@@ -882,14 +882,22 @@ typedef unsigned long usword_t; // word size, assumed to be either 32 or 64 bit
 
 #if CPU(X86)
 typedef i386_thread_state_t PlatformThreadRegisters;
+
 #elif CPU(X86_64)
 typedef x86_thread_state64_t PlatformThreadRegisters;
+
 #elif CPU(PPC)
 typedef ppc_thread_state_t PlatformThreadRegisters;
+
 #elif CPU(PPC64)
 typedef ppc_thread_state64_t PlatformThreadRegisters;
+
+#elif CPU(ARM64)
+typedef arm_thread_state64_t PlatformThreadRegisters;
+
 #elif CPU(ARM)
 typedef arm_thread_state_t PlatformThreadRegisters;
+
 #else
 #error Unknown Architecture
 #endif

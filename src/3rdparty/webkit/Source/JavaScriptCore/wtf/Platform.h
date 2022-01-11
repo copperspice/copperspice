@@ -228,12 +228,16 @@
 #define WTF_CPU_X86_64 1
 #endif
 
-/* CPU(ARM) - ARM, any version*/
-#if   defined(arm) \
-    || defined(__arm__) \
-    || defined(ARM) \
-    || defined(_ARM_)
+
+/* CPU (ARM 64) */
+#if defined(__aarch64__)
+#define WTF_CPU_ARM64 1
+#endif
+
+/* CPU (ARM) - ARM, 64 and 32 */
+#if defined(arm) || defined(__arm__) || defined(ARM) || defined(_ARM_)
 #define WTF_CPU_ARM 1
+
 
 #if defined(__ARMEB__) || (COMPILER(RVCT) && defined(__BIG_ENDIAN))
 #define WTF_CPU_BIG_ENDIAN 1
@@ -243,6 +247,7 @@
     && !defined(__VFP_FP__) \
     && !defined(_WIN32_WCE) \
     && !defined(ANDROID)
+
 #define WTF_CPU_MIDDLE_ENDIAN 1
 
 #endif
@@ -993,19 +998,20 @@
 #define ENABLE_FULLSCREEN_API 0
 #endif
 
-#if !defined(WTF_USE_JSVALUE64) && !defined(WTF_USE_JSVALUE32_64)
+#if ! defined(WTF_USE_JSVALUE64) && ! defined(WTF_USE_JSVALUE32_64)
+
 #if (CPU(X86_64) && (OS(UNIX) || OS(WINDOWS))) \
-    || (CPU(IA64) && !CPU(IA64_32)) \
-    || CPU(ALPHA) \
-    || CPU(SPARC64) \
-    || CPU(S390X) \
-    || CPU(PPC64) \
-    || CPU(MIPS64)
+    || (CPU(IA64) && ! CPU(IA64_32)) \
+    || CPU(ALPHA)   || CPU(ARM64)   \
+    || CPU(SPARC64) || CPU(S390X) || CPU(PPC64) || CPU(MIPS64)
 #define WTF_USE_JSVALUE64 1
+
 #else
 #define WTF_USE_JSVALUE32_64 1
+
 #endif
-#endif /* !defined(WTF_USE_JSVALUE64) && !defined(WTF_USE_JSVALUE32_64) */
+
+#endif
 
 #if !defined(ENABLE_REPAINT_THROTTLING)
 #define ENABLE_REPAINT_THROTTLING 0
