@@ -32,7 +32,12 @@ TEST_CASE("QMetaMethod traits", "[qmetamethod]")
    REQUIRE(std::is_copy_assignable_v<QMetaMethod> == true);
    REQUIRE(std::is_move_assignable_v<QMetaMethod> == true);
 
+#if defined(Q_OS_DARWIN)
+   REQUIRE(std::is_nothrow_move_constructible_v<QMetaMethod> == true);
+#else
    REQUIRE(std::is_nothrow_move_constructible_v<QMetaMethod> == false);
+#endif
+
    REQUIRE(std::is_nothrow_move_assignable_v<QMetaMethod> == true);
 
    REQUIRE(std::has_virtual_destructor_v<QMetaMethod> == false);

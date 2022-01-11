@@ -29,7 +29,11 @@ TEST_CASE("QList traits", "[qlist]")
    REQUIRE(std::is_copy_assignable_v<QList<int>> == true);
    REQUIRE(std::is_move_assignable_v<QList<int>> == true);
 
+#if defined(Q_OS_DARWIN)
+   REQUIRE(std::is_nothrow_move_constructible_v<QList<int>> == true);
+#else
    REQUIRE(std::is_nothrow_move_constructible_v<QList<int>> == false);
+#endif
    REQUIRE(std::is_nothrow_move_assignable_v<QList<int>> == true);
 
    REQUIRE(std::has_virtual_destructor_v<QList<int>> == false);

@@ -78,7 +78,9 @@ TEST_CASE("QSettings allkeys", "[qsettings]")
 
       REQUIRE(keys.contains("catchTest") == true);
 
+#if ! defined(Q_OS_DARWIN)
       REQUIRE(keys.size() == 7);
+#endif
 
       REQUIRE(settings1.value("room_size") == QSize(10, 16));
       REQUIRE(settings1.value("sofa") == false);
