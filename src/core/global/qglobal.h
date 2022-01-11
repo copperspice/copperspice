@@ -59,6 +59,7 @@
 // ** detect target architecture
 #if defined(__x86_64__) || defined(_M_AMD64)
 // 64-bit x86
+
 #  define QT_ARCH_X86_64
 #  define Q_PROCESSOR_X86_64
 
@@ -66,6 +67,7 @@
 
 #elif defined(__i386__) || defined(_M_IX86)
 // 32-bit x86
+
 #  define QT_ARCH_I386
 #  define Q_PROCESSOR_X86_32
 
@@ -641,12 +643,17 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_13 = 0x000F,
       MV_10_14 = 0x0010,
       MV_10_15 = 0x0011,
+      MV_11    = 0x0012,
+      MV_12    = 0x0013,
 
-      MV_EL_CAPITAN   = MV_10_11,                // supported from here
+      MV_EL_CAPITAN   = MV_10_11,                // current mimimum version
       MV_SIERRA       = MV_10_12,
       MV_HIGH_SIERRA  = MV_10_13,
       MV_MOJAVE       = MV_10_14,
       MV_CATALINA     = MV_10_15,
+
+      MV_BIGSUR       = MV_11,
+      MV_MONTEREY     = MV_12,
 
       MV_IOS       = 1 << 8,                     // unknown version
       MV_IOS_9_0   = MV_IOS | 9  << 4 | 0,       // 9.0
