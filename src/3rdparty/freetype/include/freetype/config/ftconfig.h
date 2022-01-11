@@ -37,6 +37,9 @@
 #ifndef FTCONFIG_H_
 #define FTCONFIG_H_
 
+// sets have_unistd_h
+#include <cs-config.h>
+
 #include <ft2build.h>
 #include FT_CONFIG_OPTIONS_H
 #include FT_CONFIG_STANDARD_LIBRARY_H
