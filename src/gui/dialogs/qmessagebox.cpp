@@ -881,19 +881,18 @@ void QMessageBox::setTextFormat(Qt::TextFormat format)
    d->updateSize();
 }
 
-/*!
 Qt::TextInteractionFlags QMessageBox::textInteractionFlags() const
 {
     Q_D(const QMessageBox);
     return d->label->textInteractionFlags();
 }
+
 void QMessageBox::setTextInteractionFlags(Qt::TextInteractionFlags flags)
 {
     Q_D(QMessageBox);
     d->label->setTextInteractionFlags(flags);
 }
-    \reimp
-*/
+
 bool QMessageBox::event(QEvent *e)
 {
    bool result = QDialog::event(e);
