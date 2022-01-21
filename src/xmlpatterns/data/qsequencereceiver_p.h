@@ -143,7 +143,9 @@ class QAbstractXmlReceiver : public QSharedData
     */
    template<const QXmlNodeModelIndex::Axis axis>
    inline void sendFromAxis(const QXmlNodeModelIndex &node);
-   Q_DISABLE_COPY(QAbstractXmlReceiver)
+
+   QAbstractXmlReceiver(const QAbstractXmlReceiver &) = delete;
+   QAbstractXmlReceiver &operator=(const QAbstractXmlReceiver &) = delete;
 };
 }
 

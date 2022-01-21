@@ -62,9 +62,10 @@ class Q_XMLPATTERNS_EXPORT QXmlSchemaValidator
    QNetworkAccessManager *networkAccessManager() const;
 
  private:
-   QXmlSchemaValidatorPrivate *const d;
+   QXmlSchemaValidator(const QXmlSchemaValidator &) = delete;
+   QXmlSchemaValidator &operator=(const QXmlSchemaValidator &) = delete;
 
-   Q_DISABLE_COPY(QXmlSchemaValidator)
+   QXmlSchemaValidatorPrivate *const d;
 };
 
 #endif

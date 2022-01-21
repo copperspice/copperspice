@@ -113,8 +113,10 @@ class VariableDeclaration : public QSharedData
    bool canSourceRewrite;
 
  private:
-   Expression::Ptr                 m_expression;
-   Q_DISABLE_COPY(VariableDeclaration)
+   Expression::Ptr m_expression;
+
+   VariableDeclaration(const VariableDeclaration &) = delete;
+   VariableDeclaration &operator=(const VariableDeclaration &) = delete;
 };
 
 /**

@@ -135,7 +135,8 @@ class TypeChecker
     */
    inline TypeChecker();
 
-   Q_DISABLE_COPY(TypeChecker)
+   TypeChecker(const TypeChecker &) = delete;
+   TypeChecker &operator=(const TypeChecker &) = delete;
 };
 }
 

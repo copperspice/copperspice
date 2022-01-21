@@ -85,7 +85,9 @@ class CastingPlatform
                        const Item &sourceValue,
                        const ReportContext::Ptr &context) const;
 
-   Q_DISABLE_COPY(CastingPlatform)
+   CastingPlatform(const CastingPlatform &) = delete;
+   CastingPlatform &operator=(const CastingPlatform &) = delete;
+
    AtomicCaster::Ptr m_caster;
    const ReportContext::ErrorCode m_errorCode;
 };

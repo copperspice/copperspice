@@ -118,7 +118,9 @@ class CompressedWhitespace
     * @short This class can only be used via its static members.
     */
    inline CompressedWhitespace();
-   Q_DISABLE_COPY(CompressedWhitespace)
+
+   CompressedWhitespace(const CompressedWhitespace &) = delete;
+   CompressedWhitespace &operator=(const CompressedWhitespace &) = delete;
 };
 }
 

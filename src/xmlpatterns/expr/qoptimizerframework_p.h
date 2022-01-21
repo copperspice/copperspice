@@ -48,7 +48,8 @@ class ExpressionCreator : public QSharedData
                                   const SourceLocationReflection *const) const = 0;
 
  private:
-   Q_DISABLE_COPY(ExpressionCreator)
+   ExpressionCreator(const ExpressionCreator &) = delete;
+   ExpressionCreator &operator=(const ExpressionCreator &) = delete;
 };
 
 class ExpressionIdentifier : public QSharedData
@@ -67,7 +68,8 @@ class ExpressionIdentifier : public QSharedData
    virtual bool matches(const Expression::Ptr &expr) const = 0;
 
  private:
-   Q_DISABLE_COPY(ExpressionIdentifier)
+   ExpressionIdentifier(const ExpressionIdentifier &) = delete;
+   ExpressionIdentifier &operator=(const ExpressionIdentifier &) = delete;
 };
 
 class OptimizationPass : public QSharedData
@@ -96,8 +98,10 @@ class OptimizationPass : public QSharedData
 
    const ExpressionCreator::Ptr resultCreator;
    const OperandsMatchMethod operandsMatchMethod;
+
  private:
-   Q_DISABLE_COPY(OptimizationPass)
+   OptimizationPass(const OptimizationPass &) = delete;
+   OptimizationPass &operator=(const OptimizationPass &) = delete;
 };
 }
 

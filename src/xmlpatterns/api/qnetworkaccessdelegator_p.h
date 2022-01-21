@@ -48,7 +48,8 @@ class NetworkAccessDelegator : public QObject, public QSharedData
    QPointer<QNetworkAccessManager> m_variableURIManager;
 
  private:
-   Q_DISABLE_COPY(NetworkAccessDelegator)
+   NetworkAccessDelegator(const NetworkAccessDelegator &) = delete;
+   NetworkAccessDelegator &operator=(const NetworkAccessDelegator &) = delete;
 };
 }
 

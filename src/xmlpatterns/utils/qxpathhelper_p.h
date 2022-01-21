@@ -120,7 +120,8 @@ class XPathHelper
     */
    inline XPathHelper();
 
-   Q_DISABLE_COPY(XPathHelper)
+   XPathHelper(const XPathHelper &) = delete;
+   XPathHelper &operator=(const XPathHelper &) = delete;
 };
 }
 

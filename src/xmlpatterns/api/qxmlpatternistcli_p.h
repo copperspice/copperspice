@@ -35,7 +35,9 @@ class QXmlPatternistCLI
 
  private:
    inline QXmlPatternistCLI();
-   Q_DISABLE_COPY(QXmlPatternistCLI)
+
+   QXmlPatternistCLI(const QXmlPatternistCLI &) = delete;
+   QXmlPatternistCLI &operator=(const QXmlPatternistCLI &) = delete;
 };
 
 QT_END_NAMESPACE

@@ -102,7 +102,8 @@ class TokenSource : public QSharedData
    virtual Token nextToken(YYLTYPE *const sourceLocator) = 0;
 
  private:
-   Q_DISABLE_COPY(TokenSource)
+   TokenSource(const TokenSource &) = delete;
+   TokenSource &operator=(const TokenSource &) = delete;
 };
 }
 

@@ -41,7 +41,8 @@ class ValueFactory
                                        const SourceLocationReflection *const sourceLocationReflection);
 
  private:
-   Q_DISABLE_COPY(ValueFactory)
+   ValueFactory(const ValueFactory &) = delete;
+   ValueFactory &operator=(const ValueFactory &) = delete;
 };
 }
 

@@ -366,7 +366,8 @@ class CommonSequenceTypes
     */
    inline CommonSequenceTypes();
 
-   Q_DISABLE_COPY(CommonSequenceTypes)
+   CommonSequenceTypes(const CommonSequenceTypes &) = delete;
+   CommonSequenceTypes &operator=(const CommonSequenceTypes &) = delete;
 };
 }
 

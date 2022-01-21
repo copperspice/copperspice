@@ -54,7 +54,9 @@ class StaticBaseUriContainer : public FunctionCall
    }
 
  private:
-   Q_DISABLE_COPY(StaticBaseUriContainer)
+   StaticBaseUriContainer(const StaticBaseUriContainer &) = delete;
+   StaticBaseUriContainer &operator=(const StaticBaseUriContainer &) = delete;
+
    QUrl m_staticBaseURI;
 };
 }

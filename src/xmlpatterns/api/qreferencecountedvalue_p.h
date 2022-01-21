@@ -47,7 +47,8 @@ class ReferenceCountedValue : public QSharedData
    // Disabled, no implementation provided
    inline ReferenceCountedValue();
 
-   Q_DISABLE_COPY(ReferenceCountedValue)
+   ReferenceCountedValue(const ReferenceCountedValue &) = delete;
+   ReferenceCountedValue &operator=(const ReferenceCountedValue &) = delete;
 };
 }
 

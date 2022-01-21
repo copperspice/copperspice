@@ -130,7 +130,8 @@ class OperandsIterator
    }
 
  private:
-   Q_DISABLE_COPY(OperandsIterator)
+   OperandsIterator(const OperandsIterator &) = delete;
+   OperandsIterator &operator=(const OperandsIterator &) = delete;
 
    QStack<Level> m_exprs;
 };

@@ -44,7 +44,9 @@ class FunctionArgument : public QSharedData
    SequenceType::Ptr type() const;
 
  private:
-   Q_DISABLE_COPY(FunctionArgument)
+   FunctionArgument(const FunctionArgument &) = delete;
+   FunctionArgument &operator=(const FunctionArgument &) = delete;
+
    const QXmlName m_name;
    const SequenceType::Ptr m_type;
 };

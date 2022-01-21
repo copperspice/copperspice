@@ -115,7 +115,8 @@ class PatternPlatform : public FunctionCall
 
    inline QRegularExpression parsePattern(const QString &pattern, QPatternOptionFlags flags, const ReportContext::Ptr &context) const;
 
-   Q_DISABLE_COPY(PatternPlatform)
+   PatternPlatform(const PatternPlatform &) = delete;
+   PatternPlatform &operator=(const PatternPlatform &) = delete;
 
    Flags parseFlags(const QString &flags, const DynamicContext::Ptr &context) const;
 

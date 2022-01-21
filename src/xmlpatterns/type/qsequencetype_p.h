@@ -77,8 +77,10 @@ class SequenceType : public virtual QSharedData
    bool matches(const SequenceType::Ptr other) const;
 
    bool is(const SequenceType::Ptr &other) const;
+
  private:
-   Q_DISABLE_COPY(SequenceType)
+   SequenceType(const SequenceType &) = delete;
+   SequenceType &operator=(const SequenceType &) = delete;
 };
 }
 

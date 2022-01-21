@@ -61,7 +61,9 @@ class CallSite : public UnlimitedContainer
    CallSite(const QXmlName &name = QXmlName());
 
  private:
-   Q_DISABLE_COPY(CallSite)
+   CallSite(const CallSite &) = delete;
+   CallSite &operator=(const CallSite &) = delete;
+
    bool            m_isRecursive;
    const QXmlName  m_name;
 };

@@ -67,7 +67,9 @@ class AbstractXmlPullProvider
    virtual QHash<QXmlName, QXmlItem> attributeItems() = 0;
 
  private:
-   Q_DISABLE_COPY(AbstractXmlPullProvider)
+   AbstractXmlPullProvider(const AbstractXmlPullProvider &) = delete;
+   AbstractXmlPullProvider &operator=(const AbstractXmlPullProvider &) = delete;
+
    AbstractXmlPullProviderPrivate *d;
 };
 }

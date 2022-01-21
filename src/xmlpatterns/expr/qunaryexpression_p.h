@@ -39,7 +39,8 @@ class UnaryExpression : public ArithmeticExpression
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
  private:
-   Q_DISABLE_COPY(UnaryExpression)
+   UnaryExpression(const UnaryExpression &) = delete;
+   UnaryExpression &operator=(const UnaryExpression &) = delete;
 };
 }
 

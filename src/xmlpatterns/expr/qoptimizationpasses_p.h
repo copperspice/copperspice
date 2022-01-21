@@ -45,7 +45,9 @@ class Coordinator
    static void init();
 
  private:
-   Q_DISABLE_COPY(Coordinator)
+   Coordinator(const Coordinator &) = delete;
+   Coordinator &operator=(const Coordinator &) = delete;
+
    inline Coordinator();
 };
 }

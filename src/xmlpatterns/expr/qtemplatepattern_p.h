@@ -67,7 +67,9 @@ class TemplatePattern : public QSharedData
    PatternPriority m_priority;
    ID              m_id;
    Template::Ptr   m_templateTarget;
-   Q_DISABLE_COPY(TemplatePattern)
+
+   TemplatePattern(const TemplatePattern &) = delete;
+   TemplatePattern &operator=(const TemplatePattern &) = delete;
 };
 
 TemplatePattern::TemplatePattern(const Expression::Ptr &matchPattern,

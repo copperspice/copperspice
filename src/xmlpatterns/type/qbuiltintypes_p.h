@@ -124,7 +124,9 @@ class BuiltinTypes
     * but should only be used via its static const members.
     */
    BuiltinTypes();
-   Q_DISABLE_COPY(BuiltinTypes)
+
+   BuiltinTypes(const BuiltinTypes &) = delete;
+   BuiltinTypes &operator=(const BuiltinTypes &) = delete;
 };
 }
 

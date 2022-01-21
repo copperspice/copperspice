@@ -98,7 +98,8 @@ class AbstractDateTime : public AtomicValue
       const qint8 yearSign;
 
     private:
-      Q_DISABLE_COPY(CaptureTable)
+      CaptureTable(const CaptureTable &) = delete;
+      CaptureTable &operator=(const CaptureTable &) = delete;
    };
 
    /**

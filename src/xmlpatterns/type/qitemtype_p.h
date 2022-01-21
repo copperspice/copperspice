@@ -179,7 +179,8 @@ class ItemType : public virtual QSharedData
    }
 
  private:
-   Q_DISABLE_COPY(ItemType)
+   ItemType(const ItemType &) = delete;
+   ItemType &operator=(const ItemType &) = delete;
 };
 
 /**

@@ -71,7 +71,8 @@ class ComparisonFactory
                                    const SourceLocationReflection *const sourceLocationReflection);
 
  private:
-   Q_DISABLE_COPY(ComparisonFactory)
+   ComparisonFactory(const ComparisonFactory &) = delete;
+   ComparisonFactory &operator=(const ComparisonFactory &) = delete;
 };
 }
 

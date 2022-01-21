@@ -84,8 +84,10 @@ class ColorOutput
    QString colorify(const QString &message, int color = -1) const;
 
  private:
+   ColorOutput(const ColorOutput &) = delete;
+   ColorOutput &operator=(const ColorOutput &) = delete;
+
    ColorOutputPrivate *d;
-   Q_DISABLE_COPY(ColorOutput)
 };
 }
 

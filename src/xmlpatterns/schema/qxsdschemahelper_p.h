@@ -169,7 +169,8 @@ class XsdSchemaHelper
          QString &errorMsg);
 
  private:
-   Q_DISABLE_COPY(XsdSchemaHelper)
+   XsdSchemaHelper(const XsdSchemaHelper &) = delete;
+   XsdSchemaHelper &operator=(const XsdSchemaHelper &) = delete;
 };
 }
 

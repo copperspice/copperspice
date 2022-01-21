@@ -77,7 +77,8 @@ class MaintainingReader : public QXmlStreamReader, protected TokenLookupClass
    QStack<bool> m_stripWhitespace;
 
  private:
-   Q_DISABLE_COPY(MaintainingReader)
+   MaintainingReader(const MaintainingReader &) = delete;
+   MaintainingReader &operator=(const MaintainingReader &) = delete;
 
    inline QSourceLocation currentLocation() const;
 

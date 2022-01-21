@@ -165,7 +165,8 @@ class NamePool : public QSharedData
    QXmlName::LocalNameCode unlockedAllocateLocalName(const QString &ln);
    QXmlName::PrefixCode unlockedAllocatePrefix(const QString &prefix);
 
-   Q_DISABLE_COPY(NamePool)
+   NamePool(const NamePool &) = delete;
+   NamePool &operator=(const NamePool &) = delete;
 
    const QString &displayPrefix(const QXmlName::NamespaceCode nc) const;
 

@@ -68,10 +68,13 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlReceiver
    QScopedPointer<QAbstractXmlReceiverPrivate> d_ptr;
 
    void sendAsNode(const QPatternist::Item &outputItem);
+
  private:
    template<const QXmlNodeModelIndex::Axis axis>
    void sendFromAxis(const QXmlNodeModelIndex &node);
-   Q_DISABLE_COPY(QAbstractXmlReceiver)
+
+   QAbstractXmlReceiver(const QAbstractXmlReceiver &) = delete;
+   QAbstractXmlReceiver &operator=(const QAbstractXmlReceiver &) = delete;
 };
 
 #endif

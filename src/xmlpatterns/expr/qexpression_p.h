@@ -723,7 +723,8 @@ class Expression : public QSharedData, public CppCastingHelper<Expression>, publ
     */
    Expression::Ptr constantPropagate(const StaticContext::Ptr &context) const;
 
-   Q_DISABLE_COPY(Expression)
+   Expression(const Expression &) = delete;
+   Expression &operator=(const Expression &) = delete;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Expression::Properties)

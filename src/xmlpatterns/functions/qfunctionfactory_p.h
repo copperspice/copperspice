@@ -89,7 +89,8 @@ class FunctionFactory : public QSharedData
    virtual FunctionSignature::Ptr retrieveFunctionSignature(const NamePool::Ptr &np, const QXmlName name) = 0;
 
  private:
-   Q_DISABLE_COPY(FunctionFactory)
+   FunctionFactory(const FunctionFactory &) = delete;
+   FunctionFactory &operator=(const FunctionFactory &) = delete;
 };
 }
 

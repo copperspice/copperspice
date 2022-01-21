@@ -47,7 +47,9 @@ class QtXmlPatterns
     * instantiated.
     */
    inline QtXmlPatterns();
-   Q_DISABLE_COPY(QtXmlPatterns)
+
+   QtXmlPatterns(const QtXmlPatterns &) = delete;
+   QtXmlPatterns &operator=(const QtXmlPatterns &) = delete;
 };
 
 // don't make this function static, otherwise xlC 7 cannot find it

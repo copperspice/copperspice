@@ -151,7 +151,9 @@ class Tokenizer : public TokenSource
    static QString tokenToString(const Token &token);
 
  private:
-   Q_DISABLE_COPY(Tokenizer)
+   Tokenizer(const Tokenizer &) = delete;
+   Tokenizer &operator=(const Tokenizer &) = delete;
+
    const QUrl m_queryURI;
 };
 

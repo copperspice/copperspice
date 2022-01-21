@@ -52,9 +52,9 @@ class Q_XMLPATTERNS_EXPORT QAbstractMessageHandler : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QAbstractMessageHandler)
-   Q_DISABLE_COPY(QAbstractMessageHandler)
 
-
+   QAbstractMessageHandler(const QAbstractMessageHandler &) = delete;
+   QAbstractMessageHandler &operator=(const QAbstractMessageHandler &) = delete;
 };
 
 #endif

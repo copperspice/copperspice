@@ -52,7 +52,9 @@ class Validate
                                  const StaticContext::Ptr &context);
  private:
    Validate();
-   Q_DISABLE_COPY(Validate)
+
+   Validate(const Validate &) = delete;
+   Validate &operator=(const Validate &) = delete;
 };
 }
 

@@ -49,7 +49,9 @@ class TemplateMode : public QSharedData
 
  private:
    const QXmlName m_modeName;
-   Q_DISABLE_COPY(TemplateMode)
+
+   TemplateMode(const TemplateMode &) = delete;
+   TemplateMode &operator=(const TemplateMode &) = delete;
 
    /**
     * Operator for std::sort()

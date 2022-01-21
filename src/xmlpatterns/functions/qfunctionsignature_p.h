@@ -127,7 +127,8 @@ class FunctionSignature : public CallTargetDescription
    Expression::ID id() const;
 
  private:
-   Q_DISABLE_COPY(FunctionSignature)
+   FunctionSignature(const FunctionSignature &) = delete;
+   FunctionSignature &operator=(const FunctionSignature &) = delete;
 
    const Arity                     m_minArgs;
    const Arity                     m_maxArgs;

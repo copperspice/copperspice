@@ -133,7 +133,8 @@ class ExpressionFactory : public QSharedData
                                     const QUrl &queryURI,
                                     const QXmlName &initialTemplateName);
  private:
-   Q_DISABLE_COPY(ExpressionFactory)
+   ExpressionFactory(const ExpressionFactory &) = delete;
+   ExpressionFactory &operator=(const ExpressionFactory &) = delete;
 };
 }
 

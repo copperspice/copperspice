@@ -35,7 +35,8 @@ class SchemaComponent : public virtual QSharedData
    virtual ~SchemaComponent();
 
  private:
-   Q_DISABLE_COPY(SchemaComponent)
+   SchemaComponent(const SchemaComponent &) = delete;
+   SchemaComponent &operator=(const SchemaComponent &) = delete;
 };
 }
 

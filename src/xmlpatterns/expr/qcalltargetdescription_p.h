@@ -64,7 +64,9 @@ class CallTargetDescription : public QSharedData
    static void checkArgumentsCircularity(CallTargetDescription::List &signList,
                                          const Expression::Ptr callsite);
 
-   Q_DISABLE_COPY(CallTargetDescription)
+   CallTargetDescription(const CallTargetDescription &) = delete;
+   CallTargetDescription &operator=(const CallTargetDescription &) = delete;
+
    const QXmlName m_name;
 };
 }

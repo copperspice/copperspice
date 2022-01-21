@@ -2356,7 +2356,8 @@ class ReportContext : public QSharedData
    static inline QString finalizeDescription(const QString &desc);
    QSourceLocation lookupSourceLocation(const SourceLocationReflection *const ref) const;
 
-   Q_DISABLE_COPY(ReportContext)
+   ReportContext(const ReportContext &) = delete;
+   ReportContext &operator=(const ReportContext &) = delete;
 };
 
 /**

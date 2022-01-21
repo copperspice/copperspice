@@ -85,7 +85,8 @@ class MergeIterator
    }
 
  private:
-   Q_DISABLE_COPY(MergeIterator)
+   MergeIterator(const MergeIterator &) = delete;
+   MergeIterator &operator=(const MergeIterator &) = delete;
 };
 
 static const MergeIterator mergeIterator;

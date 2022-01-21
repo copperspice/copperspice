@@ -54,7 +54,8 @@ class SchemaTypeFactory : public QSharedData
    virtual SchemaType::Hash types() const = 0;
 
  private:
-   Q_DISABLE_COPY(SchemaTypeFactory)
+   SchemaTypeFactory(const SchemaTypeFactory &) = delete;
+   SchemaTypeFactory &operator=(const SchemaTypeFactory &) = delete;
 };
 }
 

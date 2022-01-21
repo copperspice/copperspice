@@ -320,7 +320,8 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
       const QExplicitlySharedDataPointer<QPatternist::DynamicContext> &) const;
 
    static inline bool isIgnorableInDeepEqual(const QXmlNodeModelIndex &n);
-   Q_DISABLE_COPY(QAbstractXmlNodeModel)
+   QAbstractXmlNodeModel(const QAbstractXmlNodeModel &) = delete;
+   QAbstractXmlNodeModel &operator=(const QAbstractXmlNodeModel &) = delete;
 };
 
 template<typename T>

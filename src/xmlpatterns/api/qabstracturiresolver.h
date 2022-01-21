@@ -39,7 +39,8 @@ class Q_XMLPATTERNS_EXPORT QAbstractUriResolver : public QObject
    virtual QUrl resolve(const QUrl &relative, const QUrl &baseURI) const = 0;
 
  private:
-   Q_DISABLE_COPY(QAbstractUriResolver)
+   QAbstractUriResolver(const QAbstractUriResolver &) = delete;
+   QAbstractUriResolver &operator=(const QAbstractUriResolver &) = delete;
 };
 
 #endif

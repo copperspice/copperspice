@@ -51,7 +51,8 @@ class SourceLocationReflection
    virtual QSourceLocation sourceLocation() const;
 
  private:
-   Q_DISABLE_COPY(SourceLocationReflection)
+   SourceLocationReflection(const SourceLocationReflection &) = delete;
+   SourceLocationReflection &operator=(const SourceLocationReflection &) = delete;
 };
 
 class DelegatingSourceLocationReflection : public SourceLocationReflection

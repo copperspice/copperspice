@@ -44,7 +44,8 @@ class TemplateInvoker : public CallSite
    TemplateInvoker(const WithParam::Hash &withParams, const QXmlName &name = QXmlName());
 
  private:
-   Q_DISABLE_COPY(TemplateInvoker)
+   TemplateInvoker(const TemplateInvoker &) = delete;
+   TemplateInvoker &operator=(const TemplateInvoker &) = delete;
 };
 
 const WithParam::Hash &TemplateInvoker::withParams() const

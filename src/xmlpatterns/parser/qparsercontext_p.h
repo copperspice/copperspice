@@ -317,7 +317,9 @@ class ParserContext : public QSharedData
    TemplatePattern::ID                 m_currentTemplateID;
 
    QStack<bool>                        m_isParsingWithParam;
-   Q_DISABLE_COPY(ParserContext)
+
+   ParserContext(const ParserContext &) = delete;
+   ParserContext &operator=(const ParserContext &) = delete;
 };
 }
 

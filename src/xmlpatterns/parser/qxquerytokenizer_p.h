@@ -266,7 +266,8 @@ class XQueryTokenizer : public Tokenizer
    QHash<QString, QChar>   m_charRefs;
    bool                    m_scanOnly;
 
-   Q_DISABLE_COPY(XQueryTokenizer)
+   XQueryTokenizer(const XQueryTokenizer &) = delete;
+   XQueryTokenizer &operator=(const XQueryTokenizer &) = delete;
 };
 }
 

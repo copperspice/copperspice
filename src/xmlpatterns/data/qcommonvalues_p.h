@@ -179,7 +179,8 @@ class CommonValues
     */
    inline CommonValues();
 
-   Q_DISABLE_COPY(CommonValues)
+   CommonValues(const CommonValues &) = delete;
+   CommonValues &operator=(const CommonValues &) = delete;
 };
 }
 

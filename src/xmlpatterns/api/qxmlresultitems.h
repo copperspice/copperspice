@@ -46,8 +46,11 @@ class Q_XMLPATTERNS_EXPORT QXmlResultItems
  private:
    friend class QXmlQuery;
    Q_DECLARE_PRIVATE(QXmlResultItems)
+
+   QXmlResultItems(const QXmlResultItems &) = delete;
+   QXmlResultItems &operator=(const QXmlResultItems &) = delete;
+
    QScopedPointer<QXmlResultItemsPrivate> d_ptr;
-   Q_DISABLE_COPY(QXmlResultItems)
 };
 
 QT_END_NAMESPACE

@@ -79,7 +79,8 @@ class XsdTypeChecker
    bool valuesAreEqual(const QString &value, const QString &otherValue, const AnySimpleType::Ptr &type) const;
 
  private:
-   Q_DISABLE_COPY(XsdTypeChecker)
+   XsdTypeChecker(const XsdTypeChecker &) = delete;
+   XsdTypeChecker &operator=(const XsdTypeChecker &) = delete;
 
    bool checkConstrainingFacets(const AtomicValue::Ptr &value, const QString &lexicalValue,
                                 const AnySimpleType::Ptr &type, QString &errorMsg) const;
