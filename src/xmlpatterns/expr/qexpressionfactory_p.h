@@ -40,12 +40,7 @@ class ExpressionFactory : public QSharedData
  public:
    typedef QExplicitlySharedDataPointer<ExpressionFactory> Ptr;
 
-   /**
-    * @short This constructor cannot be synthesized since we
-    * use the Q_DISABLE_COPY macro.
-    */
-   inline ExpressionFactory() {
-   }
+   ExpressionFactory() = default;
 
    virtual ~ExpressionFactory() {
    }

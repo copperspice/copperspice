@@ -91,11 +91,7 @@ class TokenSource : public QSharedData
    typedef QExplicitlySharedDataPointer<TokenSource> Ptr;
    typedef QQueue<Ptr> Queue;
 
-   /**
-    * The C++ compiler cannot synthesize it when we use the Q_DISABLE_COPY() macro.
-    */
-   inline TokenSource() {
-   }
+   TokenSource() = default;
 
    virtual ~TokenSource();
 
