@@ -1253,23 +1253,19 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    msg1->setFont(font);
 
    QLabel *msg2 = new QLabel;
-   msg2->setText(tr("CopperSpice is a set of C++ libraries for cross platform applications on X11, Windows, and Mac OS X\n"
-         "CopperSpice is licensed under the GNU LGPL version 2.1"));
+   msg2->setText(tr("CopperSpice is a set of C++ libraries for developing cross platform applications on X11, <br>"
+                     "Windows, and Mac OS X\n"));
 
    font = msg2->font();
    font.setPointSize(10);
    msg2->setFont(font);
 
    QLabel *msg3 = new QLabel;
-   msg3->setText("Copyright (C) 2012-2022 Ansel Sermersheim & Barbara Geller\n"
+   msg3->setText("Copyright (c) 2012-2022 BG Consulting, released under the terms of the GNU LGPL version 2.1\n"
          "\n"
          "Copyright (c) 2015 The Qt Company Ltd\n"
-         "Copyright (C) 2012-2016 Digia Plc and/or its subsidiary(-ies)\n"
-         "Copyright (C) 2008-2012 Nokia Corporation and/or its subsidiary(-ies)");
-
-   font = msg3->font();
-   font.setPointSize(10);
-   msg3->setFont(font);
+         "Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies)\n"
+         "Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies)");
 
    QLabel *csImage = nullptr;
    QPixmap pm(":/copperspice/dialogs/images/cslogo-64.png");
@@ -1280,14 +1276,17 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    }
 
    QGridLayout *layout = new QGridLayout;
+
    if (csImage)  {
-      layout->addWidget(csImage, 0, 0, 3, 1);
+      layout->addWidget(csImage, 0, 0, 2, 1);
    }
+
    layout->addWidget(msg1, 0, 1);
    layout->addWidget(msg2, 1, 1);
-   layout->addWidget(msg3, 2, 1);
+   layout->addWidget(msg3, 2, 0, 1, 2);
+
    layout->setSpacing(15);
-   layout->setContentsMargins(9, 9, 15, 20);
+   layout->setContentsMargins(15, 9, 15, 20);
    layout->setSizeConstraint(QLayout::SetFixedSize);
 
    aboutBox->setLayout(layout);
