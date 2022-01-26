@@ -33,7 +33,6 @@ class QErrorMessagePrivate;
 class Q_GUI_EXPORT QErrorMessage: public QDialog
 {
    GUI_CS_OBJECT(QErrorMessage)
-   Q_DECLARE_PRIVATE(QErrorMessage)
 
  public:
    explicit QErrorMessage(QWidget *parent = nullptr);
@@ -42,8 +41,6 @@ class Q_GUI_EXPORT QErrorMessage: public QDialog
    QErrorMessage &operator=(const QErrorMessage &) = delete;
 
    ~QErrorMessage();
-
-   static QErrorMessage *qtHandler();
 
    GUI_CS_SLOT_1(Public, void showMessage(const QString &message))
    GUI_CS_SLOT_OVERLOAD(showMessage, (const QString &))
@@ -54,6 +51,9 @@ class Q_GUI_EXPORT QErrorMessage: public QDialog
  protected:
    void done(int status) override;
    void changeEvent(QEvent *event) override;
+
+ private:
+   Q_DECLARE_PRIVATE(QErrorMessage)
 };
 
 #endif // QT_NO_ERRORMESSAGE

@@ -69,7 +69,8 @@ class QErrorMessageTextView : public QTextEdit
 {
  public:
    QErrorMessageTextView(QWidget *parent)
-      : QTextEdit(parent) {
+      : QTextEdit(parent)
+   {
       setReadOnly(true);
    }
 
@@ -86,64 +87,6 @@ QSize QErrorMessageTextView::sizeHint() const
 {
    return QSize(250, 75);
 }
-
-static QErrorMessage *qtMessageHandler = nullptr;
-
-static void deleteStaticcQErrorMessage() // post-routine
-{
-   if (qtMessageHandler) {
-      delete qtMessageHandler;
-      qtMessageHandler = nullptr;
-   }
-}
-
-static bool metFatal = false;
-
-static void jump(QtMsgType t, QStringView msg)
-{
-   if (! qtMessageHandler) {
-      return;
-   }
-
-   QString rich;
-
-   switch (t) {
-      case QtDebugMsg:
-      default:
-         rich = QErrorMessage::tr("Debug Message:");
-         break;
-
-      case QtWarningMsg:
-         rich = QErrorMessage::tr("Warning:");
-         break;
-
-      case QtFatalMsg:
-         rich = QErrorMessage::tr("Fatal Error:");
-   }
-
-   rich  = QString("<p><b>%1</b></p>").formatArg(rich);
-   rich += Qt::convertFromPlainText(msg, Qt::WhiteSpaceNormal);
-
-   // ### work around text engine quirk
-   if (rich.endsWith("</p>")) {
-      rich.chop(4);
-   }
-
-   if (! metFatal) {
-      if (QThread::currentThread() == qApp->thread()) {
-         qtMessageHandler->showMessage(rich);
-      } else {
-         QMetaObject::invokeMethod(qtMessageHandler, "showMessage", Qt::QueuedConnection, Q_ARG(const QString &, rich));
-      }
-
-      metFatal = (t == QtFatalMsg);
-   }
-}
-
-
-/*!
-    Constructs and installs an error handler window with the given parent.
-*/
 
 QErrorMessage::QErrorMessage(QWidget *parent)
    : QDialog(*new QErrorMessagePrivate, parent)
@@ -177,15 +120,6 @@ QErrorMessage::QErrorMessage(QWidget *parent)
 
 QErrorMessage::~QErrorMessage()
 {
-   if (this == qtMessageHandler) {
-      qtMessageHandler = nullptr;
-      QtMsgHandler tmp = qInstallMsgHandler(nullptr);
-
-      // in case someone else has later stuck in another...
-      if (tmp != jump) {
-         qInstallMsgHandler(tmp);
-      }
-   }
 }
 
 void QErrorMessage::done(int a)
@@ -194,9 +128,11 @@ void QErrorMessage::done(int a)
 
    if (! d->again->isChecked())  {
       if (d->currentType.isEmpty()) {
-         if (!d->currentMessage.isEmpty()) {
+
+         if (! d->currentMessage.isEmpty()) {
             d->doNotShow.insert(d->currentMessage);
          }
+
       } else {
          d->doNotShowType.insert(d->currentType);
       }
@@ -205,33 +141,34 @@ void QErrorMessage::done(int a)
    d->currentMessage.clear();
    d->currentType.clear();
 
-   if (!d->nextPending()) {
+   if (! d->nextPending()) {
       QDialog::done(a);
-      if (this == qtMessageHandler && metFatal) {
-         exit(1);
-      }
    }
 }
-
-QErrorMessage *QErrorMessage::qtHandler()
-{
-   if (!qtMessageHandler) {
-      qtMessageHandler = new QErrorMessage(nullptr);
-      qAddPostRoutine(deleteStaticcQErrorMessage); // clean up
-      qtMessageHandler->setWindowTitle(QApplication::applicationName());
-      qInstallMsgHandler(jump);
-   }
-   return qtMessageHandler;
-}
-
-
-/*! \internal */
 
 bool QErrorMessagePrivate::isMessageToBeShown(const QString &message, const QString &type) const
 {
-   return !message.isEmpty()
-      && (type.isEmpty() ? !doNotShow.contains(message) : !doNotShowType.contains(type));
+   if (message.isEmpty()) {
+      // nothing to show
+      return false;
+   }
+
+   if (type.isEmpty()) {
+
+      if (doNotShow.contains(message)) {
+         return false;
+      }
+
+   } else {
+
+      if (doNotShowType.contains(type)) {
+         return false;
+      }
+   }
+
+   return true;
 }
+
 bool QErrorMessagePrivate::nextPending()
 {
    while (! pending.empty()) {
@@ -258,7 +195,6 @@ bool QErrorMessagePrivate::nextPending()
    return false;
 }
 
-
 void QErrorMessage::showMessage(const QString &message)
 {
    showMessage(message, QString());
@@ -279,15 +215,14 @@ void QErrorMessage::showMessage(const QString &message, const QString &type)
    }
 }
 
-/*!
-    \reimp
-*/
 void QErrorMessage::changeEvent(QEvent *e)
 {
    Q_D(QErrorMessage);
+
    if (e->type() == QEvent::LanguageChange) {
       d->retranslateStrings();
    }
+
    QDialog::changeEvent(e);
 }
 
