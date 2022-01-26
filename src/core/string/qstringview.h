@@ -33,6 +33,8 @@
 #include <qchar32.h>
 #include <qstringfwd.h>
 
+class QStringParser;
+
 Q_CORE_EXPORT std::pair<char32_t, const char32_t *> cs_internal_convertCaseTrait(int trait, char32_t value);
 
 #if ! defined (CS_DOXYPRESS)
@@ -84,6 +86,10 @@ class QStringView : public CsString::CsBasicStringView<S>
       }
 
       void chop(size_type numOfChars);
+
+      int compare(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
+         return S::compare(*this, str, cs);
+      }
 
       size_type count() const {
          return CsString::CsBasicStringView<S>::size();
@@ -235,6 +241,24 @@ class QStringView : public CsString::CsBasicStringView<S>
       }
 
       bool startsWith(QStringView<S> str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+
+      template <typename R, typename SP = QStringParser>
+      R toInteger(bool *ok = nullptr, int base = 10) const
+      {
+         return SP::template toInteger<R>(*this, ok, base);
+      }
+
+      template <typename SP = QStringParser>
+      double toDouble(bool *ok = nullptr) const
+      {
+         return SP::toDouble(*this, ok);
+      }
+
+      template <typename SP = QStringParser>
+      float toFloat(bool *ok = nullptr) const
+      {
+         return SP::toFloat(*this, ok);
+      }
 
       [[nodiscard]] S toCaseFolded() const;
       [[nodiscard]] S toLower() const;
