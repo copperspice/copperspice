@@ -172,10 +172,8 @@ class QToolBarAreaLayoutInfo
 class QToolBarAreaLayout
 {
  public:
-   enum { // sentinel values used to validate state data
-      ToolBarStateMarker = 0xfe,
-      ToolBarStateMarkerEx = 0xfc
-   };
+   static constexpr const uchar ToolBarStateMarker   = 0xfe;
+   static constexpr const uchar ToolBarStateMarkerEx = 0xfc;
 
    QRect rect;
    const QMainWindow *mainWindow;

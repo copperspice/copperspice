@@ -242,10 +242,8 @@ class QMainWindowLayout : public QLayout
 #endif // QT_NO_DOCKWIDGET
 
    // save/restore
+   static constexpr const int VersionMarker = 0xff;
 
-   enum { // sentinel values used to validate state data
-      VersionMarker = 0xff
-   };
    void saveState(QDataStream &stream) const;
    bool restoreState(QDataStream &stream);
 

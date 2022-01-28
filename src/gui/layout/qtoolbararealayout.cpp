@@ -1294,7 +1294,6 @@ static void packRect(uint *geom0, uint *geom1, const QRect &rect, bool floating)
    *geom0 |= 1;
 }
 
-
 void QToolBarAreaLayout::saveState(QDataStream &stream) const
 {
    // save toolbar state
@@ -1313,7 +1312,8 @@ void QToolBarAreaLayout::saveState(QDataStream &stream) const
       for (int j = 0; j < dock.lines.count(); ++j) {
          const QToolBarAreaLayoutLine &line = dock.lines.at(j);
 
-         stream << i << line.toolBarItems.count();
+         stream << i
+                << line.toolBarItems.count();
 
          for (int k = 0; k < line.toolBarItems.count(); ++k) {
             const QToolBarAreaLayoutItem &item = line.toolBarItems.at(k);
@@ -1327,18 +1327,23 @@ void QToolBarAreaLayout::saveState(QDataStream &stream) const
             }
 
             stream << objectName;
+
             // we store information as:
             // 1st bit: 1 if shown
             // 2nd bit: 1 if orientation is vertical (default is horizontal)
+
             uchar shownOrientation = (uchar)!widget->isHidden();
+
             if (QToolBar *tb = qobject_cast<QToolBar *>(widget)) {
                if (tb->orientation() == Qt::Vertical) {
                   shownOrientation |= 2;
                }
             }
+
             stream << shownOrientation;
             stream << item.pos;
-            //we store the preferred size. If the use rdidn't resize the toolbars it will be -1
+
+            // store preferred size. If the use rdidn't resize the toolbars it will be -1
             stream << item.preferredSize;
 
             uint geom0, geom1;
@@ -1360,21 +1365,24 @@ static inline int getInt(QDataStream &stream)
 bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar *> &_toolBars, uchar tmarker, bool testing)
 {
    QList<QToolBar *> toolBars = _toolBars;
-   int lines;
-   stream >> lines;
 
+   int lineCount;
+   stream >> lineCount;
 
-   for (int j = 0; j < lines; ++j) {
+   for (int j = 0; j < lineCount; ++j) {
       int pos;
       stream >> pos;
+
       if (pos < 0 || pos >= QInternal::DockCount) {
          return false;
       }
-      int cnt;
+
+      decltype(QToolBarAreaLayoutLine::toolBarItems)::size_type cnt;
       stream >> cnt;
 
       QToolBarAreaLayoutInfo &dock = docks[pos];
-      const bool applyingLayout = !testing;
+      const bool applyingLayout  = !testing;
+
       QToolBarAreaLayoutLine line(dock.o);
 
       for (int k = 0; k < cnt; ++k) {
@@ -1382,14 +1390,16 @@ bool QToolBarAreaLayout::restoreState(QDataStream &stream, const QList<QToolBar 
 
          QString objectName;
          stream >> objectName;
+
          uchar shown;
          stream >> shown;
-         item.pos = getInt(stream);
-         item.size = getInt(stream);
 
+         item.pos  = getInt(stream);
+         item.size = getInt(stream);
 
          QRect rect;
          bool floating = false;
+
          uint geom0, geom1;
          geom0 = getInt(stream);
 

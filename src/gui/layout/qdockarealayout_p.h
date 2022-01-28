@@ -119,11 +119,10 @@ class QDockAreaLayoutInfo
    QDockAreaLayoutInfo *info(const QList<int> &path);
    QDockAreaLayoutInfo *info(QWidget *widget);
 
-   enum { // sentinel values used to validate state data
-      SequenceMarker = 0xfc,
-      TabMarker = 0xfa,
-      WidgetMarker = 0xfb
-   };
+   static constexpr const uchar SequenceMarker = 0xfc;
+   static constexpr const uchar TabMarker      = 0xfa;
+   static constexpr const uchar WidgetMarker   = 0xfb;
+
    void saveState(QDataStream &stream) const;
    bool restoreState(QDataStream &stream, QList<QDockWidget *> &widgets, bool testing);
 
@@ -196,9 +195,12 @@ class QDockAreaLayout
  public:
    enum { EmptyDropAreaSize = 80 }; // when a dock area is empty, how "wide" is it?
 
-   enum { DockWidgetStateMarker = 0xfd, FloatingDockWidgetTabMarker = 0xf9 };
+   enum {
+      DockWidgetStateMarker = 0xfd,
+      FloatingDockWidgetTabMarker = 0xf9
+   };
 
-   Qt::DockWidgetArea corners[4]; // use a Qt::Corner for indexing
+   Qt::DockWidgetArea corners[4];    // use a Qt::Corner for indexing
    QRect rect;
    QLayoutItem *centralWidgetItem;
    QMainWindow *mainWindow;
