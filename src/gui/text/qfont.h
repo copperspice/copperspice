@@ -253,7 +253,7 @@ class Q_GUI_EXPORT QFont
    QString lastResortFamily() const;
    QString lastResortFont() const;
 
-   QFont resolve(const QFont &font) const;
+   QFont resolve(const QFont &other) const;
 
    uint resolve() const {
       return resolve_mask;

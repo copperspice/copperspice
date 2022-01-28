@@ -133,7 +133,7 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    QTextCharFormat currentCharFormat() const;
 
    bool tabChangesFocus() const;
-   void setTabChangesFocus(bool b);
+   void setTabChangesFocus(bool enable);
 
    inline void setDocumentTitle(const QString &title);
    inline QString documentTitle() const;
@@ -153,7 +153,7 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    void setBackgroundVisible(bool visible);
    bool backgroundVisible() const;
 
-   void setCenterOnScroll(bool enabled);
+   void setCenterOnScroll(bool enable);
    bool centerOnScroll() const;
 
    bool find(const QString &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags());

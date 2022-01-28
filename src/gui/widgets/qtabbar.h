@@ -26,8 +26,6 @@
 
 #include <qwidget.h>
 
-
-
 #ifndef QT_NO_TABBAR
 
 class QIcon;
@@ -116,7 +114,7 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    void moveTab(int from, int to);
 
    bool isTabEnabled(int index) const;
-   void setTabEnabled(int index, bool enabled);
+   void setTabEnabled(int index, bool enable);
 
    QString tabText(int index) const;
    void setTabText(int index, const QString &text);
@@ -128,7 +126,7 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    void setTabIcon(int index, const QIcon &icon);
 
    Qt::TextElideMode elideMode() const;
-   void setElideMode(Qt::TextElideMode);
+   void setElideMode(Qt::TextElideMode value);
 
 #ifndef QT_NO_TOOLTIP
    void setTabToolTip(int index, const QString &tip);
@@ -171,7 +169,7 @@ class Q_GUI_EXPORT QTabBar: public QWidget
    void setSelectionBehaviorOnRemove(SelectionBehavior behavior);
 
    bool expanding() const;
-   void setExpanding(bool enabled);
+   void setExpanding(bool enable);
 
    bool isMovable() const;
    void setMovable(bool movable);

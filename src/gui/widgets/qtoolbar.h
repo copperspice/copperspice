@@ -116,18 +116,18 @@ class Q_GUI_EXPORT QToolBar : public QWidget
    // addAction(QString): Connect to a QObject slot / functor or function pointer (with context)
    template<class Obj, typename Func1>
    typename std::enable_if < ! std::is_same<const char *, Func1>::value &&
-   std::is_base_of<QObject, Obj>::value, QAction * >::type addAction(const QIcon &actionIcon, const QString &text, const Obj *object,
+   std::is_base_of<QObject, Obj>::value, QAction * >::type addAction(const QIcon &icon, const QString &text, const Obj *object,
       Func1 slot) {
 
-      QAction *result = addAction(actionIcon, text);
+      QAction *result = addAction(icon, text);
       connect(result, &QAction::triggered, object, slot);
       return result;
    }
 
    // addAction(QIcon, QString): Connect to a functor or function pointer (without context)
    template <typename Func1>
-   QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot) {
-      QAction *result = addAction(actionIcon, text);
+   QAction *addAction(const QIcon &icon, const QString &text, Func1 slot) {
+      QAction *result = addAction(icon, text);
       connect(result, &QAction::triggered, slot);
       return result;
    }

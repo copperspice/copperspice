@@ -48,7 +48,7 @@ class Q_GUI_EXPORT QCheckBox : public QAbstractButton
    QSize sizeHint() const override;
    QSize minimumSizeHint() const override;
 
-   void setTristate(bool enabled = true);
+   void setTristate(bool enable = true);
    bool isTristate() const;
 
    Qt::CheckState checkState() const;

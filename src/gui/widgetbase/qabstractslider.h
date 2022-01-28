@@ -26,7 +26,6 @@
 
 #include <qwidget.h>
 
-
 class QAbstractSliderPrivate;
 
 class Q_GUI_EXPORT QAbstractSlider : public QWidget
@@ -81,31 +80,31 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
 
    Qt::Orientation orientation() const;
 
-   void setMinimum(int);
+   void setMinimum(int value);
    int minimum() const;
 
-   void setMaximum(int);
+   void setMaximum(int value);
    int maximum() const;
 
-   void setSingleStep(int);
+   void setSingleStep(int value);
    int singleStep() const;
 
-   void setPageStep(int);
+   void setPageStep(int value);
    int pageStep() const;
 
    void setTracking(bool enable);
    bool hasTracking() const;
 
-   void setSliderDown(bool);
+   void setSliderDown(bool enable);
    bool isSliderDown() const;
 
-   void setSliderPosition(int);
+   void setSliderPosition(int value);
    int sliderPosition() const;
 
-   void setInvertedAppearance(bool);
+   void setInvertedAppearance(bool enable);
    bool invertedAppearance() const;
 
-   void setInvertedControls(bool);
+   void setInvertedControls(bool enable);
    bool invertedControls() const;
 
    int value() const;

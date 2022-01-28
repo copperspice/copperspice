@@ -114,7 +114,7 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    int count() const;
 
    TabPosition tabPosition() const;
-   void setTabPosition(TabPosition);
+   void setTabPosition(TabPosition value);
 
    bool tabsClosable() const;
    void setTabsClosable(bool closeable);
@@ -134,7 +134,7 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
 
    Qt::TextElideMode elideMode() const;
-   void setElideMode(Qt::TextElideMode);
+   void setElideMode(Qt::TextElideMode value);
 
    QSize iconSize() const;
    void setIconSize(const QSize &size);
@@ -146,7 +146,7 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    void setDocumentMode(bool set);
 
    bool tabBarAutoHide() const;
-   void setTabBarAutoHide(bool enabled);
+   void setTabBarAutoHide(bool enable);
    void clear();
 
    QTabBar *tabBar() const;

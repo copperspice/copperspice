@@ -113,7 +113,7 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
 
 #ifndef QT_NO_TABBAR
    bool documentMode() const;
-   void setDocumentMode(bool enabled);
+   void setDocumentMode(bool enable);
 
    void setTabsClosable(bool closeable);
    bool tabsClosable() const;

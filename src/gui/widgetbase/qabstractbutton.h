@@ -94,24 +94,24 @@ class Q_GUI_EXPORT QAbstractButton : public QWidget
    QKeySequence shortcut() const;
 #endif
 
-   void setCheckable(bool);
+   void setCheckable(bool enable);
    bool isCheckable() const;
 
    bool isChecked() const;
 
-   void setDown(bool);
+   void setDown(bool enable);
    bool isDown() const;
 
-   void setAutoRepeat(bool);
+   void setAutoRepeat(bool enable);
    bool autoRepeat() const;
 
-   void setAutoRepeatDelay(int);
+   void setAutoRepeatDelay(int delay);
    int autoRepeatDelay() const;
 
-   void setAutoRepeatInterval(int);
+   void setAutoRepeatInterval(int interval);
    int autoRepeatInterval() const;
 
-   void setAutoExclusive(bool);
+   void setAutoExclusive(bool enable);
    bool autoExclusive() const;
 
 #ifndef QT_NO_BUTTONGROUP

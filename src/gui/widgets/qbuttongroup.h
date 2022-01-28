@@ -48,7 +48,7 @@ class Q_GUI_EXPORT QButtonGroup : public QObject
 
    ~QButtonGroup();
 
-   void setExclusive(bool);
+   void setExclusive(bool enable);
    bool exclusive() const;
 
    void addButton(QAbstractButton *button, int id = -1);
@@ -82,11 +82,11 @@ class Q_GUI_EXPORT QButtonGroup : public QObject
    GUI_CS_SIGNAL_1(Public, void buttonReleased(int id))
    GUI_CS_SIGNAL_OVERLOAD(buttonReleased, (int), id)
 
-   GUI_CS_SIGNAL_1(Public, void buttonToggled(QAbstractButton *button, bool enabled))
-   GUI_CS_SIGNAL_OVERLOAD(buttonToggled, (QAbstractButton *, bool), button, enabled)
+   GUI_CS_SIGNAL_1(Public, void buttonToggled(QAbstractButton *button, bool enable))
+   GUI_CS_SIGNAL_OVERLOAD(buttonToggled, (QAbstractButton *, bool), button, enable)
 
-   GUI_CS_SIGNAL_1(Public, void buttonToggled(int id, bool enabled))
-   GUI_CS_SIGNAL_OVERLOAD(buttonToggled, (int, bool), id, enabled)
+   GUI_CS_SIGNAL_1(Public, void buttonToggled(int id, bool enable))
+   GUI_CS_SIGNAL_OVERLOAD(buttonToggled, (int, bool), id, enable)
 
  protected:
    QScopedPointer<QButtonGroupPrivate> d_ptr;

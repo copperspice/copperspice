@@ -133,7 +133,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    bool duplicatesEnabled() const;
    void setDuplicatesEnabled(bool enable);
 
-   void setFrame(bool);
+   void setFrame(bool enable);
    bool hasFrame() const;
 
    int findText(const QString &text,
