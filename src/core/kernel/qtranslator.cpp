@@ -1130,6 +1130,12 @@ QString QTranslator::translate(const char *context, const char *text, const char
    return retval;
 }
 
+QString QTranslator::translate(const QString &context, const QString &text, const QString &comment,
+      std::optional<int> numArg) const
+{
+   return translate(context.constData(), text.constData(), comment.constData(), numArg);
+}
+
 bool QTranslator::isEmpty() const
 {
    Q_D(const QTranslator);

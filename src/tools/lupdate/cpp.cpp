@@ -72,6 +72,7 @@ static const QString text_QT_TRANSLATE_NOOP3     = "QT_TRANSLATE_NOOP3";
 static const QString text_QT_TRID_NOOP           = "QT_TRID_NOOP";
 
 static const QString text_cs_mark_tr             = "cs_mark_tr";
+static const QString text_cs_mark_string_tr      = "cs_mark_string_tr";
 static const QString text_cs_mark_tr_id          = "cs_mark_tr_id";
 static const QString text_qtTrId                 = "qtTrId";
 
@@ -2393,7 +2394,7 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
                if (yyWord == text_Q_DECLARE_TR_FUNCTIONS) {
                   handleDeclareTrFunctions();
 
-               } else if (yyWord == text_cs_mark_tr) {
+               } else if (yyWord == text_cs_mark_tr || yyWord == text_cs_mark_string_tr) {
 
                   if (m_translator != nullptr) {
                      handleCsMarkTr(Group::CsMarkTr, prefix);

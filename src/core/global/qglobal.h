@@ -1066,6 +1066,12 @@ constexpr const char * cs_mark_tr(const char *context, const char *text) {
    return text;
 }
 
+template <typename S = QString>
+S cs_mark_string_tr(const char *context, const char *text) {
+   (void) context;
+   return S::fromUtf8(text);
+}
+
 constexpr std::pair<const char *, const char *> cs_mark_tr(const char *context, const char *text, const char *comment) {
    (void) context;
    return {text, comment};

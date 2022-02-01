@@ -465,6 +465,11 @@ QString QMetaObject::tr(const char *text, const char *comment, std::optional<int
    return QCoreApplication::translate(context, text, comment, numArg);
 }
 
+QString QMetaObject::tr(const QString &text, const QString &comment, std::optional<int> numArg) const
+{
+   return QCoreApplication::translate(className(), text, comment, numArg);
+}
+
 QMetaProperty QMetaObject::userProperty() const
 {
    QMetaProperty retval = QMetaProperty();

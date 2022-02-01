@@ -46,6 +46,9 @@ class Q_CORE_EXPORT QTranslator : public QObject
    virtual QString translate(const char *context, const char *text, const char *comment = nullptr,
          std::optional<int> numArg = std::optional<int>()) const;
 
+   virtual QString translate(const QString &context, const QString &text, const QString &comment = QString(),
+         std::optional<int> numArg = std::optional<int>()) const;
+
    virtual bool isEmpty() const;
 
    static QString replacePercentN(QString text, int numArg);

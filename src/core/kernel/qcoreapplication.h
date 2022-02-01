@@ -143,6 +143,9 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static QString translate(const char *context, const char *text, const char *comment = nullptr,
             std::optional<int> numArg = std::optional<int>());
 
+   static QString translate(const QString &context, const QString &text, const QString &comment = QString(),
+            std::optional<int> numArg = std::optional<int>());
+
    static void flush();
    void installNativeEventFilter(QAbstractNativeEventFilter *filterObj);
    void removeNativeEventFilter(QAbstractNativeEventFilter *filterObj);

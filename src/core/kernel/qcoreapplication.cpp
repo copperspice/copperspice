@@ -1388,6 +1388,37 @@ QString QCoreApplication::translate(const char *context, const char *text, const
    return retval;
 }
 
+QString QCoreApplication::translate(const QString &context, const QString &text, const QString &comment,
+            std::optional<int> numArg)
+{
+   QString retval;
+
+   if (text.isEmpty()) {
+      return retval;
+   }
+
+   if (self != nullptr) {
+
+      for (auto item : self->d_func()->translators) {
+         retval = item->translate(context, text, comment, numArg);
+
+         if (! retval.isEmpty()) {
+            break;
+         }
+      }
+   }
+
+   if (retval.isEmpty()) {
+      retval = text;
+
+      if (numArg.has_value()) {
+         retval = QTranslator::replacePercentN(retval, numArg.value());
+      }
+   }
+
+   return retval;
+}
+
 // Declared in qglobal.h
 QString qtTrId(const char *id, std::optional<int> n)
 {
