@@ -92,10 +92,11 @@ class Q_CORE_EXPORT QTimer : public QObject
    template <typename Receiver, typename SlotClass, typename SlotReturn>
    static typename std::enable_if<std::is_base_of<SlotClass, Receiver>::value>::type
             singleShot(int msec, Qt::TimerType timerType, Receiver *receiver, SlotReturn (SlotClass::*slotMethod)()) {
+
       std::unique_ptr<CSBento< SlotReturn (SlotClass::*)() >> slotBento =
             std::make_unique<CSBento< SlotReturn(SlotClass::*)() >>(std::move(slotMethod));
 
-      singleShot_internal(msec, timerType, receiver, slotBento);
+      singleShot_internal(msec, timerType, receiver, std::move(slotBento));
    }
 
    // ** B  slot is a function pointer (without receiver)
@@ -126,9 +127,10 @@ class Q_CORE_EXPORT QTimer : public QObject
    static typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
             ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
             singleShot(int msec, Qt::TimerType timerType, QObject *receiver, T slotMethod) {
+
       std::unique_ptr<CSBento<T>> slotBento = std::make_unique<CSBento<T>>(std::move(slotMethod));
 
-      singleShot_internal(msec, timerType, receiver, slotBento);
+      singleShot_internal(msec, timerType, receiver, std::move(slotBento));
    }
 
    CORE_CS_SLOT_1(Public, void start(int msec))
