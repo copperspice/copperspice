@@ -229,17 +229,30 @@ class cs_number<0>
          return cs_number<0>{};  \
       } \
       friend QMetaObject_T<classNameX>; \
-      static const QMetaObject_T<classNameX> & staticMetaObject() \
+      [[gnu::used]] Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> & staticMetaObject() \
       { \
-         QMap<std::type_index, QMetaObject *> &temp = CSGadget_Fake_Parent::m_metaObjectsAll(); \
+         static std::atomic<bool> isCreated(false);                             \
+         static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);   \
+         if (isCreated) {               \
+            return *createdObj;         \
+         } \
+         std::lock_guard<std::recursive_mutex> lock(QObject::m_metaObjectMutex()); \
+         if (createdObj != nullptr) {   \
+            return *createdObj;         \
+         } \
+         QMap<std::type_index, QMetaObject *> &temp = QObject::m_metaObjectsAll(); \
          auto index = temp.find(typeid(cs_class));       \
+         QMetaObject_T<classNameX> *newMeta;             \
          if (index == temp.end()) {                      \
-            QMetaObject_T<classNameX> *xx = new QMetaObject_T<classNameX>;  \
-            temp.insert(typeid(cs_class), xx);           \
-            xx->postConstruct();                         \
-            return *xx;                                  \
+            newMeta = new QMetaObject_T<classNameX>;     \
+            temp.insert(typeid(cs_class), newMeta);      \
+            newMeta->postConstruct();                    \
+            return *newMeta;                             \
          } else {                                        \
-            return *dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
+            newMeta = dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
+            createdObj.store(newMeta);  \
+            isCreated = true;           \
+            return *newMeta;            \
          } \
       } \
       CS_TR_FUNCTIONS \

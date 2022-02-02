@@ -212,6 +212,9 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    template<class T = QVariant>
    T property(const QString &name) const;
 
+   static QMap<std::type_index, QMetaObject *> &m_metaObjectsAll();
+   static std::recursive_mutex &m_metaObjectMutex();
+
    CORE_CS_SIGNAL_1(Public, void destroyed(QObject *obj = nullptr))
    CORE_CS_SIGNAL_2(destroyed, obj)
 
@@ -240,9 +243,6 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    QObject *sender() const;
    int senderSignalIndex() const;
-
-   static QMap<std::type_index, QMetaObject *> &m_metaObjectsAll();
-   static std::recursive_mutex &m_metaObjectMutex();
 
  private:
    QObject *m_parent;
@@ -489,8 +489,6 @@ class Q_CORE_EXPORT CSGadget_Fake_Parent
 {
  public:
    static const QMetaObject &staticMetaObject();
-   static QMap<std::type_index, QMetaObject *> &m_metaObjectsAll();
-   static std::recursive_mutex &m_metaObjectMutex();
 };
 
 

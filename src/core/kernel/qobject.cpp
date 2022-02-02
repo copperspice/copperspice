@@ -1279,16 +1279,3 @@ const QMetaObject &CSGadget_Fake_Parent::staticMetaObject()
    const QMetaObject *retval = nullptr;
    return *retval;
 }
-
-QMap<std::type_index, QMetaObject *> &CSGadget_Fake_Parent::m_metaObjectsAll()
-{
-   static QMap<std::type_index, QMetaObject *> metaObjects;
-   return metaObjects;
-}
-
-std::recursive_mutex &CSGadget_Fake_Parent::m_metaObjectMutex()
-{
-   static std::recursive_mutex metaObjectMutex;
-   return metaObjectMutex;
-}
-
