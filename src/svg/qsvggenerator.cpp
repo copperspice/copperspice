@@ -242,7 +242,7 @@ class QSvgPaintEngine : public QPaintEngine
    }
 
    void saveGradientStops(QTextStream &str, const QGradient *g) {
-      QGradientStops stops = g->stops();
+      QVector<QPair<qreal, QColor>> stops = g->stops();
 
       if (g->interpolationMode() == QGradient::ColorInterpolation) {
          bool constantAlpha = true;
@@ -253,7 +253,7 @@ class QSvgPaintEngine : public QPaintEngine
 
          if (!constantAlpha) {
             const qreal spacing = qreal(0.02);
-            QGradientStops newStops;
+            QVector<QPair<qreal, QColor>> newStops;
             QRgb fromColor = qPremultiply(stops.at(0).second.rgba());
             QRgb toColor;
 
@@ -266,7 +266,7 @@ class QSvgPaintEngine : public QPaintEngine
                   qreal step = (stops.at(i + 1).first - stops.at(i).first) / parts;
                   for (int j = 1; j < parts; ++j) {
                      QRgb color = qUnpremultiply(INTERPOLATE_PIXEL_256(fromColor, 256 - 256 * j / parts, toColor, 256 * j / parts));
-                     newStops.append(QGradientStop(stops.at(i).first + j * step, QColor::fromRgba(color)));
+                     newStops.append(QPair<qreal, QColor>(stops.at(i).first + j * step, QColor::fromRgba(color)));
                   }
                }
                fromColor = toColor;
@@ -277,7 +277,7 @@ class QSvgPaintEngine : public QPaintEngine
          }
       }
 
-      for (QGradientStop stop : stops) {
+      for (auto stop : stops) {
          QString color =
             QString("#%1%2%3")
             .formatArg(stop.second.red(), 2, 16,   QLatin1Char('0'))

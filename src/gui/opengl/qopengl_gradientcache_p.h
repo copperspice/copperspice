@@ -38,11 +38,11 @@ class QOpenGL2GradientCache : public QOpenGLSharedResource
 {
     struct CacheInfo
     {
-        inline CacheInfo(QGradientStops s, qreal op, QGradient::InterpolationMode mode) :
+        inline CacheInfo(QVector<QPair<qreal, QColor>> s, qreal op, QGradient::InterpolationMode mode) :
             stops(std::move(s)), opacity(op), interpolationMode(mode) {}
 
         GLuint texId;
-        QGradientStops stops;
+        QVector<QPair<qreal, QColor>> stops;
         qreal opacity;
         QGradient::InterpolationMode interpolationMode;
     };

@@ -211,26 +211,30 @@ static void qt_mac_color_gradient_function(void *info, const CGFloat *in, CGFloa
    QBrush *brush = static_cast<QBrush *>(info);
    Q_ASSERT(brush && brush->gradient());
 
-   const QGradientStops stops = brush->gradient()->stops();
+   const QVector<QPair<qreal, QColor>> stops = brush->gradient()->stops();
    const int n = stops.count();
    Q_ASSERT(n >= 1);
-   const QGradientStop *begin = stops.constBegin();
-   const QGradientStop *end = begin + n;
+
+   const QPair<qreal, QColor> *begin = stops.constBegin();
+   const QPair<qreal, QColor> *end = begin + n;
 
    qreal p = in[0];
-   const QGradientStop *i = begin;
+   const QPair<qreal, QColor> *i = begin;
    while (i != end && i->first < p) {
       ++i;
    }
 
    QRgb c;
+
    if (i == begin) {
       c = begin->second.rgba();
+
    } else if (i == end) {
       c = (end - 1)->second.rgba();
+
    } else {
-      const QGradientStop &s1 = *(i - 1);
-      const QGradientStop &s2 = *i;
+      const QPair<qreal, QColor> &s1 = *(i - 1);
+      const QPair<qreal, QColor> &s2 = *i;
       qreal p1 = s1.first;
       qreal p2 = s2.first;
       QRgb c1 = s1.second.rgba();

@@ -93,7 +93,7 @@ GLuint QOpenGL2GradientCache::getBuffer(const QGradient &gradient, qreal opacity
 {
     quint64 hash_val = 0;
 
-    QGradientStops stops = gradient.stops();
+    QVector<QPair<qreal, QColor>> stops = gradient.stops();
     for (int i = 0; i < stops.size() && i <= 2; i++)
         hash_val += stops[i].second.rgba();
 
@@ -155,7 +155,7 @@ GLuint QOpenGL2GradientCache::addCacheElement(quint64 hash_val, const QGradient 
 void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient, QRgba64 *colorTable, int size, qreal opacity) const
 {
     int pos = 0;
-    QGradientStops s = gradient.stops();
+    QVector<QPair<qreal, QColor>> s = gradient.stops();
     QVector<QRgba64> colors(s.size());
 
     for (int i = 0; i < s.size(); ++i)
@@ -210,7 +210,7 @@ void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient
 void QOpenGL2GradientCache::generateGradientColorTable(const QGradient& gradient, uint *colorTable, int size, qreal opacity) const
 {
     int pos = 0;
-    QGradientStops s = gradient.stops();
+    QVector<QPair<qreal, QColor>> s = gradient.stops();
     QVector<uint> colors(s.size());
 
     for (int i = 0; i < s.size(); ++i)

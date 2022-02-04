@@ -691,7 +691,7 @@ bool QBrush::isOpaque() const
    if (d->style == Qt::LinearGradientPattern
       || d->style == Qt::RadialGradientPattern
       || d->style == Qt::ConicalGradientPattern) {
-      QGradientStops stops = gradient()->stops();
+      QVector<QPair<qreal, QColor>> stops = gradient()->stops();
       for (int i = 0; i < stops.size(); ++i)
          if (stops.at(i).second.alpha() != 255) {
             return false;
@@ -864,11 +864,12 @@ QDataStream &operator<<(QDataStream &s, const QBrush &b)
          // ensure that we write doubles here instead of streaming the stops
          // directly; otherwise, platforms that redefine qreal might generate
          // data that cannot be read on other platforms.
-         QVector<QGradientStop> stops = gradient->stops();
+
+         QVector<QPair<qreal, QColor>> stops = gradient->stops();
          s << quint32(stops.size());
 
          for (int i = 0; i < stops.size(); ++i) {
-            const QGradientStop &stop = stops.at(i);
+            const QPair<qreal, QColor> &stop = stops.at(i);
             s << QPair<double, QColor>(double(stop.first), stop.second);
          }
       }
@@ -911,7 +912,7 @@ QDataStream &operator>>(QDataStream &s, QBrush &b)
 
       int type_as_int;
       QGradient::Type type;
-      QGradientStops stops;
+      QVector<QPair<qreal, QColor>> stops;
       QGradient::CoordinateMode cmode = QGradient::LogicalMode;
       QGradient::Spread spread = QGradient::PadSpread;
       QGradient::InterpolationMode imode = QGradient::ColorInterpolation;
@@ -1014,11 +1015,11 @@ void QGradient::setColorAt(qreal pos, const QColor &color)
    if (index < m_stops.size() && m_stops.at(index).first == pos) {
       m_stops[index].second = color;
    } else {
-      m_stops.insert(index, QGradientStop(pos, color));
+      m_stops.insert(index, QPair<qreal, QColor>(pos, color));
    }
 }
 
-void QGradient::setStops(const QGradientStops &stops)
+void QGradient::setStops(const QVector<QPair<qreal, QColor>> &stops)
 {
    m_stops.clear();
    for (int i = 0; i < stops.size(); ++i) {
@@ -1026,11 +1027,12 @@ void QGradient::setStops(const QGradientStops &stops)
    }
 }
 
-QGradientStops QGradient::stops() const
+QVector<QPair<qreal, QColor>> QGradient::stops() const
 {
    if (m_stops.isEmpty()) {
-      QGradientStops tmp;
-      tmp << QGradientStop(0, Qt::black) << QGradientStop(1, Qt::white);
+      QVector<QPair<qreal, QColor>> tmp;
+      tmp << QPair<qreal, QColor>(0, Qt::black) << QPair<qreal, QColor>(1, Qt::white);
+
       return tmp;
    }
 

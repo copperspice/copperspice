@@ -4153,13 +4153,13 @@ class QGradientCache
 {
  public:
    struct CacheInfo : QSpanData::Pinnable {
-      inline CacheInfo(QGradientStops s, int op, QGradient::InterpolationMode mode) :
+      inline CacheInfo(QVector<QPair<qreal, QColor>> s, int op, QGradient::InterpolationMode mode) :
          stops(std::move(s)), opacity(op), interpolationMode(mode) {}
 
       QRgba64 buffer64[GRADIENT_STOPTABLE_SIZE];
       QRgb buffer32[GRADIENT_STOPTABLE_SIZE];
 
-      QGradientStops stops;
+      QVector<QPair<qreal, QColor>> stops;
       int opacity;
       QGradient::InterpolationMode interpolationMode;
    };
@@ -4169,7 +4169,7 @@ class QGradientCache
    inline QSharedPointer<const CacheInfo> getBuffer(const QGradient &gradient, int opacity) {
       quint64 hash_val = 0;
 
-      const QGradientStops stops = gradient.stops();
+      const QVector<QPair<qreal, QColor>> stops = gradient.stops();
       for (int i = 0; i < stops.size() && i <= 2; i++) {
          hash_val += stops[i].second.rgba64();
       }
@@ -4230,7 +4230,7 @@ class QGradientCache
 
 void QGradientCache::generateGradientColorTable(const QGradient &gradient, QRgba64  *colorTable, int size, int opacity) const
 {
-   const QGradientStops stops = gradient.stops();
+   const QVector<QPair<qreal, QColor>> stops = gradient.stops();
    int stopCount = stops.count();
    Q_ASSERT(stopCount > 0);
 

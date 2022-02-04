@@ -390,7 +390,7 @@ QBrush QSvgGradientStyle::brush(QPainter *, QSvgExtraStates &)
 
    // If the gradient is marked as empty, insert transparent black
    if (!m_gradientStopsSet) {
-      m_gradient->setStops(QGradientStops() << QGradientStop(0.0, QColor(0, 0, 0, 0)));
+      m_gradient->setStops(QVector<QPair<qreal, QColor>>() << QPair<qreal, QColor>(0.0, QColor(0, 0, 0, 0)));
       m_gradientStopsSet = true;
    }
 

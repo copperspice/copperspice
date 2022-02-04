@@ -1989,15 +1989,16 @@ struct QGradientBound {
 
 int QPdfEnginePrivate::createShadingFunction(const QGradient *gradient, int from, int to, bool reflect, bool alpha)
 {
-    QGradientStops stops = gradient->stops();
+    QVector<QPair<qreal, QColor>> stops = gradient->stops();
     if (stops.isEmpty()) {
-        stops << QGradientStop(0, Qt::black);
-        stops << QGradientStop(1, Qt::white);
+        stops << QPair<qreal, QColor>(0, Qt::black);
+        stops << QPair<qreal, QColor>(1, Qt::white);
     }
     if (stops.at(0).first > 0)
-        stops.prepend(QGradientStop(0, stops.at(0).second));
+        stops.prepend(QPair<qreal, QColor>(0, stops.at(0).second));
+
     if (stops.at(stops.size() - 1).first < 1)
-        stops.append(QGradientStop(1, stops.at(stops.size() - 1).second));
+        stops.append(QPair<qreal, QColor>(1, stops.at(stops.size() - 1).second));
 
     QVector<int> functions;
     const int numStops = stops.size();
@@ -2266,7 +2267,7 @@ int QPdfEnginePrivate::gradientBrush(const QBrush &b, const QTransform &matrix, 
 
     if (!b.isOpaque()) {
         bool ca = true;
-        QGradientStops stops = gradient->stops();
+        QVector<QPair<qreal, QColor>> stops = gradient->stops();
         int a = stops.at(0).second.alpha();
         for (int i = 1; i < stops.size(); ++i) {
             if (stops.at(i).second.alpha() != a) {

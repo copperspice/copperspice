@@ -951,7 +951,7 @@ static BrushData parseBrushValue(const QCss::Value &v, const QPalette &pal)
    }
 
    QHash<QString, qreal> vars;
-   QVector<QGradientStop> stops;
+   QVector<QPair<qreal, QColor>> stops;
 
    int spread = -1;
    QStringList spreads;
@@ -988,7 +988,8 @@ static BrushData parseBrushValue(const QCss::Value &v, const QPalette &pal)
             dependsOnThePalette = true;
          }
 
-         stops.append(QGradientStop(stop.variant.toReal(), colorFromData(cd, pal)));
+         stops.append(QPair<qreal, QColor>(stop.variant.toReal(), colorFromData(cd, pal)));
+
       } else {
          parser.next();
          QCss::Value value;

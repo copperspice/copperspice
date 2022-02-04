@@ -3451,7 +3451,7 @@ static bool parseStopNode(QSvgStyleProperty *parent, const QXmlStreamAttributes 
    QGradient *grad = style->qgradient();
 
    offset = qMin(qreal(1), qMax(qreal(0), offset)); // Clamp to range [0, 1]
-   QGradientStops stops;
+   QVector<QPair<qreal, QColor>> stops;
 
    if (style->gradientStopsSet()) {
       stops = grad->stops();

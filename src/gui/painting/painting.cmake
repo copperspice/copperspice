@@ -6,8 +6,6 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QColormap
    QConicalGradient
    QGradient
-   QGradientStop
-   QGradientStops
    QLinearGradient
    QMatrix
    QPaintDevice
@@ -38,8 +36,6 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qconicalgradient.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawutil.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgradient.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgradientstop.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/painting/qgradientstops.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qlineargradient.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qmatrix.h
    ${CMAKE_CURRENT_SOURCE_DIR}/painting/qpaintdevice.h

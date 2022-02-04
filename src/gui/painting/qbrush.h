@@ -165,9 +165,6 @@ inline bool QBrush::isDetached() const
 
 class QGradientPrivate;
 
-typedef QPair<qreal, QColor> QGradientStop;
-typedef QVector<QGradientStop> QGradientStops;
-
 class Q_GUI_EXPORT QGradient
 {
    GUI_CS_GADGET(QGradient)
@@ -214,8 +211,8 @@ class Q_GUI_EXPORT QGradient
 
    void setColorAt(qreal position, const QColor &color);
 
-   void setStops(const QGradientStops &stops);
-   QGradientStops stops() const;
+   void setStops(const QVector<QPair<qreal, QColor>> &stops);
+   QVector<QPair<qreal, QColor>> stops() const;
 
    CoordinateMode coordinateMode() const;
    void setCoordinateMode(CoordinateMode mode);
@@ -237,7 +234,7 @@ class Q_GUI_EXPORT QGradient
 
    Type m_type;
    Spread m_spread;
-   QGradientStops m_stops;
+   QVector<QPair<qreal, QColor>> m_stops;
 
    union {
       struct {
