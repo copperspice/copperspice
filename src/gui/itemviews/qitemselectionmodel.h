@@ -33,6 +33,7 @@
 #ifndef QT_NO_ITEMVIEWS
 
 class QItemSelection;
+class QItemSelectionModel;
 class QItemSelectionModelPrivate;
 
 CS_DECLARE_METATYPE(QItemSelection)
@@ -129,6 +130,7 @@ class Q_GUI_EXPORT QItemSelectionRange
    bool operator<(const QItemSelectionRange &other) const {
       // Comparing parents will compare the models, but if two equivalent ranges
       // in two different models have invalid parents, they would appear the same
+
       if (other.tl.model() == tl.model()) {
          // parent has to be calculated, so we only do so once.
          const QModelIndex topLeftParent = tl.parent();
@@ -166,11 +168,38 @@ class Q_GUI_EXPORT QItemSelectionRange
    QPersistentModelIndex tl, br;
 };
 
+class Q_GUI_EXPORT QItemSelection : public QList<QItemSelectionRange>
+{
+ public:
+   QItemSelection()
+      : QList<QItemSelectionRange>()
+   {
+   }
+
+   QItemSelection(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+
+   void select(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+   bool contains(const QModelIndex &index) const;
+   QModelIndexList indexes() const;
+
+#if defined (CS_DOXYPRESS)
+   void merge(const QItemSelection &other, QItemSelectionModel::SelectionFlags command);
+
+#else
+   template <typename T = QItemSelectionModel>
+   void merge(const QItemSelection &other, typename T::SelectionFlags command);
+
+#endif
+
+   static void split(const QItemSelectionRange &range, const QItemSelectionRange &other, QItemSelection *result);
+
+ private:
+   void cs_internal_merge(const QItemSelection &other, uint command);
+};
+
 class Q_GUI_EXPORT QItemSelectionModel : public QObject
 {
    GUI_CS_OBJECT(QItemSelectionModel)
-
-   GUI_CS_FLAG(SelectionFlag, SelectionFlags)
 
    GUI_CS_PROPERTY_READ(model, model)
    GUI_CS_PROPERTY_WRITE(model, setModel)
@@ -196,8 +225,10 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
    GUI_CS_PROPERTY_STORED(selectedIndexes, false)
    GUI_CS_PROPERTY_DESIGNABLE(selectedIndexes, false)
 
+   GUI_CS_FLAG(SelectionFlag, SelectionFlags)
+
  public:
-   enum SelectionFlag {
+   enum SelectionFlag : uint {
       NoUpdate       = 0x0000,
       Clear          = 0x0001,
       Select         = 0x0002,
@@ -208,7 +239,7 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
       Columns        = 0x0040,
       SelectCurrent  = Select | Current,
       ToggleCurrent  = Toggle | Current,
-      ClearAndSelect = Clear | Select
+      ClearAndSelect = Clear  | Select
    };
 
    using SelectionFlags = QFlags<SelectionFlag>;
@@ -235,6 +266,7 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
    QModelIndexList selectedIndexes() const;
    QModelIndexList selectedRows(int column = 0) const;
    QModelIndexList selectedColumns(int row = 0) const;
+
    QItemSelection selection() const;
 
    const QAbstractItemModel *model() const;
@@ -260,7 +292,6 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
 
    GUI_CS_SLOT_1(Public, void clearCurrentIndex())
    GUI_CS_SLOT_2(clearCurrentIndex)
-
 
    GUI_CS_SIGNAL_1(Public, void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected))
    GUI_CS_SIGNAL_2(selectionChanged, selected, deselected)
@@ -311,21 +342,16 @@ inline uint qHash(const QItemSelectionRange &)
    return 0;
 }
 
-class Q_GUI_EXPORT QItemSelection : public QList<QItemSelectionRange>
+#if ! defined (CS_DOXYPRESS)
+
+// must be at the end of the file
+template <typename T>
+void QItemSelection::merge(const QItemSelection &other, typename T::SelectionFlags command)
 {
- public:
-   QItemSelection()
-      : QList<QItemSelectionRange>()
-   {}
+   cs_internal_merge(other, command);
+}
 
-   QItemSelection(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-
-   void select(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-   bool contains(const QModelIndex &index) const;
-   QModelIndexList indexes() const;
-   void merge(const QItemSelection &other, QItemSelectionModel::SelectionFlags command);
-   static void split(const QItemSelectionRange &range, const QItemSelectionRange &other, QItemSelection *result);
-};
+#endif
 
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QItemSelectionRange &);
 

@@ -276,24 +276,29 @@ static QVector<QPair<QPersistentModelIndex, uint>> qSelectionPersistentRowLength
 
     \sa split()
 */
-void QItemSelection::merge(const QItemSelection &other, QItemSelectionModel::SelectionFlags command)
+void QItemSelection::cs_internal_merge(const QItemSelection &other, uint commandInt)
 {
+   QItemSelectionModel::SelectionFlags command = static_cast<QItemSelectionModel::SelectionFlags>(commandInt);
+
    if (other.isEmpty() ||
-      !(command & QItemSelectionModel::Select ||
+      ! (command & QItemSelectionModel::Select ||
          command & QItemSelectionModel::Deselect ||
          command & QItemSelectionModel::Toggle)) {
       return;
    }
 
    QItemSelection newSelection = other;
+
    // Collect intersections
    QItemSelection intersections;
    QItemSelection::iterator it = newSelection.begin();
+
    while (it != newSelection.end()) {
       if (!(*it).isValid()) {
          it = newSelection.erase(it);
          continue;
       }
+
       for (int t = 0; t < count(); ++t) {
          if ((*it).intersects(at(t))) {
             intersections.append(at(t).intersected(*it));
@@ -312,6 +317,7 @@ void QItemSelection::merge(const QItemSelection &other, QItemSelectionModel::Sel
             ++t;
          }
       }
+
       // only split newSelection if Toggle is specified
       for (int n = 0; (command & QItemSelectionModel::Toggle) && n < newSelection.count();) {
          if (newSelection.at(n).intersects(intersections.at(i))) {
@@ -322,6 +328,7 @@ void QItemSelection::merge(const QItemSelection &other, QItemSelectionModel::Sel
          }
       }
    }
+
    // do not add newSelection for Deselect
    if (!(command & QItemSelectionModel::Deselect)) {
       operator+=(newSelection);
