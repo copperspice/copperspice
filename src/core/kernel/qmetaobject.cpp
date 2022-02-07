@@ -199,6 +199,26 @@ int QMetaObject::enumeratorOffset() const
    return retval;
 }
 
+QMetaEnum QMetaObject::findEnum(std::type_index id)
+{
+   QMetaEnum retval;
+
+   // look up the enum data type
+   auto iter = m_enumsAll().find(id);
+
+   if (iter == m_enumsAll().end()) {
+      // no QMetaEnum for T
+
+   } else  {
+      auto [metaObject, enumName] = iter.value();
+
+      int index = metaObject->indexOfEnumerator(enumName);
+      retval    = metaObject->enumerator(index);
+   }
+
+   return retval;
+}
+
 int QMetaObject::indexOfClassInfo(const QString &name) const
 {
    int retval = -1;

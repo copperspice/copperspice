@@ -108,6 +108,8 @@ class Q_CORE_EXPORT QMetaObject
    template<class T>
    static QMetaEnum findEnum();
 
+   static QMetaEnum findEnum(std::type_index id);
+
    template<class R, class ...Ts>
    static bool invokeMethod(QObject *object, const QString &member, Qt::ConnectionType type, CSReturnArgument<R> retval,
                             CSArgument<Ts>... Vs);
@@ -190,26 +192,8 @@ int QMetaObject::indexOfMethod(MethodReturn (MethodClass::*methodPtr)(MethodArgs
 template<class T>
 QMetaEnum QMetaObject::findEnum()
 {
-   QMetaEnum data;
-   std::pair<QMetaObject *, QString> enumData;
-
-   // look up the enum type
-   auto iter_enum = m_enumsAll().find(typeid(T));
-
-   if (iter_enum == m_enumsAll().end()) {
-      // no QMetaEnum for T
-
-   } else  {
-      enumData = iter_enum.value();
-
-      QMetaObject *metaObj = enumData.first;
-      QString name        = enumData.second;
-
-      int index = metaObj->indexOfEnumerator(name);
-      data = metaObj->enumerator(index);
-   }
-
-   return data;
+   // call non template version
+   return findEnum(typeid(T));
 }
 
 template<class MethodClass, class... MethodArgs, class MethodReturn>
