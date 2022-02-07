@@ -298,7 +298,7 @@ template<class T>
 class QMetaObject_T : public QMetaObject_X
 {
    public:
-      QMetaObject_T();
+      QMetaObject_T() = default;
 
       void postConstruct();
 
@@ -326,11 +326,6 @@ class QMetaObject_T : public QMetaObject_X
       template<class U>
       void register_property_reset(const QString &name, U method);
 };
-
-template<class T>
-QMetaObject_T<T>::QMetaObject_T()
-{
-}
 
 template<class T>
 void QMetaObject_T<T>::postConstruct()
