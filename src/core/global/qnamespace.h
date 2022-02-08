@@ -38,12 +38,13 @@ class QMetaObject_T;
 class Q_CORE_EXPORT Qt
 {
    public:
+      // simulate cs_gadget to avoid circular dependencies
+
       using cs_parent = CSGadget_Fake_Parent;
       using cs_class  = Qt;
 
       static const char *cs_className();
       static const QMetaObject_T<Qt> &staticMetaObject();
-      virtual const QMetaObject *metaObject() const;
 
       template<int N>
       static void cs_regTrigger(cs_number<N>)

@@ -100,7 +100,7 @@ static bool lookupElement_X(const QString &element)
 
 }
 
-// **
+// ** simulate cs_gadget
 const char *Qt::cs_className()
 {
    static const char *retval("Qt");
@@ -109,13 +109,36 @@ const char *Qt::cs_className()
 
 const QMetaObject_T<Qt> &Qt::staticMetaObject()
 {
-   static const QMetaObject_T<Qt> metaInfo = QMetaObject_T<Qt>();
-   return metaInfo;
-}
+   static std::atomic<bool> isCreated(false);
+   static std::atomic<QMetaObject_T<Qt> *> createdObj(nullptr);
 
-const QMetaObject *Qt::metaObject() const
-{
-   return &staticMetaObject();
+   if (isCreated) {
+      return *createdObj;
+   }
+
+   std::lock_guard<std::recursive_mutex> lock(QObject::m_metaObjectMutex());
+
+   if (createdObj != nullptr) {
+      return *createdObj;
+   }
+
+   QMap<std::type_index, QMetaObject *> &map = QObject::m_metaObjectsAll();
+   auto index = map.find(typeid(Qt));
+
+   QMetaObject_T<Qt> *metaInfo;
+
+   if (index == map.end()) {
+      metaInfo = new QMetaObject_T<Qt>;
+      map.insert(typeid(Qt), metaInfo);
+      metaInfo->postConstruct();
+      return *metaInfo;
+
+   } else {                                        \
+      metaInfo = dynamic_cast<QMetaObject_T<Qt> *> (index.value());
+      createdObj.store(metaInfo);
+      isCreated = true;
+      return *metaInfo;
+   }
 }
 
 // internal
