@@ -839,7 +839,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
                   int index = k + 1;
 
 #if defined(CS_INTERNAL_DEBUG)
-                  qDebug("Debug (bigArg):  Passed full name %s",    fullName );
+                  qDebug("Debug (bigArg):  Passed full name %s",  csPrintable(fullName) );
 #endif
 
                   while (k < tokenMax)  {
@@ -1041,10 +1041,11 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
                ++k;
             }
 
-            // E next token could be equal, close paren, comma, left square bracket(array)
+
+            // E next token could be equal, close paren, comma, left square bracket(array), or Zero
             int parenLevel_2 = 0;
 
-            while (true) {
+            while (k < tokens.size())  {
                word = tokens[k];
 
                if (word == "=") {
@@ -1095,10 +1096,19 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
                sigList.push_back(std::move(tmp));
             }
 
-            signature += typeArg;
+            // do not add the '=" for pure virtual
+            if (typeArg == "=" && parenLevel == 0)  {
+               // drop the "= 0"
+
+            } else {
+               signature += typeArg;
+            }
          }
 
-         signature += tokens[k];
+
+         if (k < tokens.size()) {
+            signature += tokens[k];
+         }
 
          if (all_done) {
             break;
@@ -1107,7 +1117,8 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
 
 #if defined(CS_INTERNAL_DEBUG)
       const char *space = "                      ";
-      qDebug("QObject:getSignature()  Passed name: %s\n %s Signature: %s \n", fullName, space, csPrintable(signature));
+      qDebug("\nQMetaObject:getSignature()  Passed name: %s\n %s Signature: %s \n",
+            csPrintable(fullName), space, csPrintable(signature));
 #endif
 
       // add sig to the vector
@@ -1117,7 +1128,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
 
    } catch (std::exception &e) {
       // rethrow
-      std::string msg = "QObject::getSignature() Exception when processing " + std::string(csPrintable(fullName));
+      std::string msg = "QMetaObject::getSignature() Exception when processing " + std::string(csPrintable(fullName));
       std::throw_with_nested(std::logic_error(msg));
 
    }
