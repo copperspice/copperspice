@@ -836,20 +836,21 @@ class Q_CORE_EXPORT QFlag
     int i;
 };
 
-class Q_CORE_EXPORT QIncompatibleFlag
+template <typename T>
+class QIncompatibleFlag
 {
  public:
-    explicit QIncompatibleFlag(int value)
+    explicit QIncompatibleFlag(T value)
        : i(value)
     {
     }
 
-    operator int() const {
+    operator T() const {
        return i;
     }
 
  private:
-    int i;
+    T i;
 };
 
 #ifndef Q_NO_TYPESAFE_FLAGS
@@ -986,15 +987,17 @@ class QFlags
 };
 
 #define Q_DECLARE_INCOMPATIBLE_FLAGS(Flags) \
-inline QIncompatibleFlag operator|(Flags::enum_type f1, int f2) \
-   { return QIncompatibleFlag(int(f1) | f2); }
+template <typename T>  \
+inline QIncompatibleFlag<Flags::int_type> operator|(Flags::enum_type f1, T f2) \
+   { return QIncompatibleFlag<Flags::int_type>(Flags::int_type(f1) | f2); }
 
 
 #define Q_DECLARE_OPERATORS_FOR_FLAGS(Flags) \
 constexpr inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, Flags::enum_type f2) \
    { return QFlags<Flags::enum_type>(f1) | f2; } \
 constexpr inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, QFlags<Flags::enum_type> f2) \
-   { return f2 | f1; } Q_DECLARE_INCOMPATIBLE_FLAGS(Flags)
+   { return f2 | f1; } \
+Q_DECLARE_INCOMPATIBLE_FLAGS(Flags)
 
 #else
 // Q_NO_TYPESAFE_FLAGS
