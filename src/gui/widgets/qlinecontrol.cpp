@@ -1711,7 +1711,7 @@ void QLineControl::processKeyEvent(QKeyEvent *event)
          QClipboard::Mode mode = QClipboard::Clipboard;
 
          if (m_keyboardScheme == QPlatformTheme::X11KeyboardScheme
-            && event->modifiers() == (Qt::CTRL | Qt::SHIFT)
+            && event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)
             && event->key() == Qt::Key_Insert) {
             mode = QClipboard::Selection;
          }

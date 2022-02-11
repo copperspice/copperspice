@@ -1352,7 +1352,7 @@ void QTextControlPrivate::keyPressEvent(QKeyEvent *e)
       QClipboard::Mode mode = QClipboard::Clipboard;
 
       if (QGuiApplication::clipboard()->supportsSelection()) {
-         if (e->modifiers() == (Qt::CTRL | Qt::SHIFT) && e->key() == Qt::Key_Insert) {
+         if (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && e->key() == Qt::Key_Insert) {
             mode = QClipboard::Selection;
          }
       }

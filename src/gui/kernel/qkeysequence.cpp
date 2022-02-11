@@ -545,7 +545,7 @@ QKeySequence QKeySequence::mnemonic(const QString &text)
 
             if (! found) {
                c   = c.toUpper()[0];
-               ret = QKeySequence(c.unicode() + Qt::ALT);
+               ret = QKeySequence(c.unicode() + Qt::AltModifier);
 
                found = true;
 
@@ -628,7 +628,8 @@ int QKeySequence::decodeString(const QString &str)
 int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::SequenceFormat format)
 {
    int ret = 0;
-   QString accel = str.toLower();
+
+   QString accel   = str.toLower();
    bool nativeText = (format == QKeySequence::NativeText);
 
    QVector<QModifKeyName> *gmodifs;
@@ -642,37 +643,38 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
          const bool dontSwap = qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta);
 
          if (dontSwap) {
-            *gmodifs << QModifKeyName(Qt::META, kCommandUnicode);
+            *gmodifs << QModifKeyName(Qt::MetaModifier, kCommandUnicode);
          } else {
-            *gmodifs << QModifKeyName(Qt::CTRL, kCommandUnicode);
+            *gmodifs << QModifKeyName(Qt::ControlModifier, kCommandUnicode);
          }
 
-         *gmodifs << QModifKeyName(Qt::ALT, kOptionUnicode);
+         *gmodifs << QModifKeyName(Qt::AltModifier, kOptionUnicode);
 
          if (dontSwap) {
-            *gmodifs << QModifKeyName(Qt::CTRL, kControlUnicode);
+            *gmodifs << QModifKeyName(Qt::ControlModifier, kControlUnicode);
          } else {
-            *gmodifs << QModifKeyName(Qt::META, kControlUnicode);
+            *gmodifs << QModifKeyName(Qt::MetaModifier, kControlUnicode);
          }
 
-         *gmodifs << QModifKeyName(Qt::SHIFT, kShiftUnicode);
+         *gmodifs << QModifKeyName(Qt::ShiftModifier, kShiftUnicode);
 #endif
-         *gmodifs << QModifKeyName(Qt::CTRL,           "ctrl+")
-                  << QModifKeyName(Qt::SHIFT,          "shift+")
-                  << QModifKeyName(Qt::ALT,            "alt+")
-                  << QModifKeyName(Qt::META,           "meta+")
-                  << QModifKeyName(Qt::KeypadModifier, "num+");
+
+         *gmodifs << QModifKeyName(Qt::ControlModifier, "ctrl+")
+                  << QModifKeyName(Qt::ShiftModifier,   "shift+")
+                  << QModifKeyName(Qt::AltModifier,     "alt+")
+                  << QModifKeyName(Qt::MetaModifier,    "meta+")
+                  << QModifKeyName(Qt::KeypadModifier,  "num+");
       }
 
    } else {
       gmodifs = globalPortableModifs();
 
       if (gmodifs->isEmpty()) {
-         *gmodifs << QModifKeyName(Qt::CTRL,           "ctrl+")
-                  << QModifKeyName(Qt::SHIFT,          "shift+")
-                  << QModifKeyName(Qt::ALT,            "alt+")
-                  << QModifKeyName(Qt::META,           "meta+")
-                  << QModifKeyName(Qt::KeypadModifier, "num+");
+         *gmodifs << QModifKeyName(Qt::ControlModifier,  "ctrl+")
+                  << QModifKeyName(Qt::ShiftModifier,    "shift+")
+                  << QModifKeyName(Qt::AltModifier,      "alt+")
+                  << QModifKeyName(Qt::MetaModifier,     "meta+")
+                  << QModifKeyName(Qt::KeypadModifier,   "num+");
       }
    }
 
@@ -682,11 +684,11 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
 
    QVector<QModifKeyName> modifs;
    if (nativeText) {
-      modifs << QModifKeyName(Qt::CTRL,  QCoreApplication::translate("QShortcut", "Ctrl").toLower().append(QChar('+')))
-             << QModifKeyName(Qt::SHIFT, QCoreApplication::translate("QShortcut", "Shift").toLower().append(QChar('+')))
-             << QModifKeyName(Qt::ALT,   QCoreApplication::translate("QShortcut", "Alt").toLower().append(QChar('+')))
-             << QModifKeyName(Qt::META,  QCoreApplication::translate("QShortcut", "Meta").toLower().append(QChar('+')))
-             << QModifKeyName(Qt::KeypadModifier, QCoreApplication::translate("QShortcut", "Num").toLower().append(QChar('+')));
+      modifs << QModifKeyName(Qt::ControlModifier, QCoreApplication::translate("QShortcut", "Ctrl").toLower().append(QChar('+')))
+             << QModifKeyName(Qt::ShiftModifier,   QCoreApplication::translate("QShortcut", "Shift").toLower().append(QChar('+')))
+             << QModifKeyName(Qt::AltModifier,     QCoreApplication::translate("QShortcut", "Alt").toLower().append(QChar('+')))
+             << QModifKeyName(Qt::MetaModifier,    QCoreApplication::translate("QShortcut", "Meta").toLower().append(QChar('+')))
+             << QModifKeyName(Qt::KeypadModifier,  QCoreApplication::translate("QShortcut", "Num").toLower().append(QChar('+')));
    }
    modifs += *gmodifs; // Test non-translated ones last
 
@@ -843,10 +845,10 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
       // The upshot is a lot more infrastructure to keep the number of
       // if tests down and the code relatively clean.
 
-      static const int ModifierOrder[] = { Qt::META, Qt::ALT, Qt::SHIFT, Qt::CTRL, 0 };
-      static const int QtKeyOrder[] = { Qt::Key_Meta, Qt::Key_Alt, Qt::Key_Shift, Qt::Key_Control, 0 };
-      static const int DontSwapModifierOrder[] = { Qt::CTRL, Qt::ALT, Qt::SHIFT, Qt::META, 0 };
-      static const int DontSwapQtKeyOrder[] = { Qt::Key_Control, Qt::Key_Alt, Qt::Key_Shift, Qt::Key_Meta, 0 };
+      static const int ModifierOrder[]         = { Qt::MetaModifier, Qt::AltModifier, Qt::ShiftModifier, Qt::ControlModifier, 0 };
+      static const int QtKeyOrder[]            = { Qt::Key_Meta, Qt::Key_Alt, Qt::Key_Shift, Qt::Key_Control, 0 };
+      static const int DontSwapModifierOrder[] = { Qt::ControlModifier, Qt::AltModifier, Qt::ShiftModifier, Qt::MetaModifier, 0 };
+      static const int DontSwapQtKeyOrder[]    = { Qt::Key_Control, Qt::Key_Alt, Qt::Key_Shift, Qt::Key_Meta, 0 };
 
       const int *modifierOrder;
       const int *qtkeyOrder;
@@ -871,22 +873,21 @@ QString QKeySequencePrivate::encodeString(int key, QKeySequence::SequenceFormat 
 
    {
       // On other systems the order is Meta, Control, Alt, Shift
-      if ((key & Qt::META) == Qt::META) {
+      if ((key & Qt::MetaModifier) == Qt::MetaModifier) {
          s = nativeText ? QCoreApplication::translate("QShortcut", "Meta") : QString::fromLatin1("Meta");
       }
 
-      if ((key & Qt::CTRL) == Qt::CTRL) {
+      if ((key & Qt::ControlModifier) == Qt::ControlModifier) {
          addKey(s, nativeText ? QCoreApplication::translate("QShortcut", "Ctrl") : QString::fromLatin1("Ctrl"), format);
       }
 
-      if ((key & Qt::ALT) == Qt::ALT) {
+      if ((key & Qt::AltModifier) == Qt::AltModifier) {
          addKey(s, nativeText ? QCoreApplication::translate("QShortcut", "Alt") : QString::fromLatin1("Alt"), format);
       }
 
-      if ((key & Qt::SHIFT) == Qt::SHIFT) {
+      if ((key & Qt::ShiftModifier) == Qt::ShiftModifier) {
          addKey(s, nativeText ? QCoreApplication::translate("QShortcut", "Shift") : QString::fromLatin1("Shift"), format);
       }
-
    }
 
    if ((key & Qt::KeypadModifier) == Qt::KeypadModifier) {

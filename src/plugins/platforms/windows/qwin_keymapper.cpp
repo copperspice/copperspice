@@ -869,7 +869,7 @@ bool QWindowsKeyMapper::translateMultimediaKeyEventInternal(QWindow *window, con
    sendExtendedPressRelease(receiver, qtKey, Qt::KeyboardModifier(state), 0, 0, 0);
 
    // make sure to return false if CS does not handle the key
-   const QKeySequence sequence(Qt::Modifier(state) + qtKey);
+   const QKeySequence sequence(Qt::KeyboardModifier(state) + qtKey);
 
    return QApplicationPrivate::instance()->shortcutMap.hasShortcutForKeySequence(sequence);
 
@@ -1228,8 +1228,8 @@ bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &ms
 #ifndef QT_NO_SHORTCUT
          // are we  interested in the context menu key?
 
-         if (modifiers == Qt::SHIFT && code == Qt::Key_F10
-                  && ! QApplicationPrivate::instance()->shortcutMap.hasShortcutForKeySequence(QKeySequence(Qt::SHIFT + Qt::Key_F10))) {
+         if (modifiers == Qt::ShiftModifier && code == Qt::Key_F10
+                  && ! QApplicationPrivate::instance()->shortcutMap.hasShortcutForKeySequence(QKeySequence(Qt::ShiftModifier + Qt::Key_F10))) {
             return false;
          }
 #endif
@@ -1241,7 +1241,7 @@ bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &ms
          result     = true;
          bool store = true;
 
-         // Alt+<alphanumerical> go to the Win32 menu system if unhandled by Qt
+         // Alt+<alphanumerical> go to the Win32 menu system if unhandled by CS
          if (msgType == WM_SYSKEYDOWN && !result && asciiValue) {
             HWND parent = GetParent(QWindowsWindow::handleOf(receiver));
 

@@ -1592,7 +1592,7 @@ void QWizardPrivate::updateButtonTexts()
    }
 
    if (btns[QWizard::NextButton]) {
-      btns[QWizard::NextButton]->setShortcut(isVistaThemeEnabled() ? QKeySequence(Qt::ALT | Qt::Key_Right) : QKeySequence());
+      btns[QWizard::NextButton]->setShortcut(isVistaThemeEnabled() ? QKeySequence(Qt::AltModifier | Qt::Key_Right) : QKeySequence());
    }
 }
 

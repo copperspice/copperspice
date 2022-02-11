@@ -88,24 +88,11 @@ class Q_CORE_EXPORT Qt
          MetaModifier         = 0x10000000,
          KeypadModifier       = 0x20000000,
          GroupSwitchModifier  = 0x40000000,
+
          // Do not extend the mask to include 0x01000000
          KeyboardModifierMask = 0xfe000000
       };
       using KeyboardModifiers = QFlags<KeyboardModifier>;
-
-   // shorter names for shortcuts
-   // The use of all-caps identifiers has the potential for clashing with
-   // user-defined or third-party macros. More so when the identifiers are not
-   // "namespace"-prefixed. This is considered bad practice and is why
-   // KeypadModifier was not added to the Modifier enum.
-   enum Modifier {
-      META          = Qt::MetaModifier,
-      SHIFT         = Qt::ShiftModifier,
-      CTRL          = Qt::ControlModifier,
-      ALT           = Qt::AltModifier,
-      MODIFIER_MASK = KeyboardModifierMask,
-      UNICODE_ACCEL = 0x00000000
-   };
 
    enum MouseButton {
       NoButton         = 0x00000000,

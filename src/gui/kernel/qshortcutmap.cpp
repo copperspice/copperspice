@@ -600,16 +600,16 @@ int QShortcutMap::translateModifiers(Qt::KeyboardModifiers modifiers)
 {
    int result = 0;
    if (modifiers & Qt::ShiftModifier) {
-      result |= Qt::SHIFT;
+      result |= Qt::ShiftModifier;
    }
    if (modifiers & Qt::ControlModifier) {
-      result |= Qt::CTRL;
+      result |= Qt::ControlModifier;
    }
    if (modifiers & Qt::MetaModifier) {
-      result |= Qt::META;
+      result |= Qt::MetaModifier;
    }
    if (modifiers & Qt::AltModifier) {
-      result |= Qt::ALT;
+      result |= Qt::AltModifier;
    }
    return result;
 }

@@ -1049,7 +1049,7 @@ void QFileDialogPrivate::createMenuActions()
    QAction *goHomeAction = new QAction(q);
 
 #ifndef QT_NO_SHORTCUT
-   goHomeAction->setShortcut(Qt::CTRL + Qt::Key_H + Qt::SHIFT);
+   goHomeAction->setShortcut(Qt::ControlModifier + Qt::Key_H + Qt::ShiftModifier);
 #endif
 
    QObject::connect(goHomeAction, &QAction::triggered, q, &QFileDialog::_q_goHome);
@@ -1061,7 +1061,7 @@ void QFileDialogPrivate::createMenuActions()
    goToParent->setObjectName("qt_goto_parent_action");
 
 #ifndef QT_NO_SHORTCUT
-   goToParent->setShortcut(Qt::CTRL + Qt::UpArrow);
+   goToParent->setShortcut(Qt::ControlModifier + Qt::UpArrow);
 #endif
 
    QObject::connect(goToParent, &QAction::triggered, q, &QFileDialog::_q_navigateToParent);
@@ -1492,7 +1492,7 @@ void QFileDialogPrivate::_q_enterDirectory(const QModelIndex &index)
    } else {
       // Do not accept when shift-clicking to multi-select a file in environments with single-click-activation (KDE)
       if (!q->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, nullptr, qFileDialogUi->treeView)
-         || q->fileMode() != QFileDialog::ExistingFiles || !(QGuiApplication::keyboardModifiers() & Qt::CTRL)) {
+         || q->fileMode() != QFileDialog::ExistingFiles || !(QGuiApplication::keyboardModifiers() & Qt::ControlModifier)) {
          q->accept();
       }
    }

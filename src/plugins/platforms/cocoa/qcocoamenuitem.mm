@@ -43,19 +43,19 @@ static quint32 constructModifierMask(quint32 accel_key)
    quint32 ret = 0;
    const bool dontSwap = qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta);
 
-   if ((accel_key & Qt::CTRL) == Qt::CTRL) {
+   if ((accel_key & Qt::ControlModifier) == Qt::ControlModifier) {
       ret |= (dontSwap ? NSEventModifierFlagControl : NSEventModifierFlagCommand);
    }
 
-   if ((accel_key & Qt::META) == Qt::META) {
+   if ((accel_key & Qt::MetaModifier) == Qt::MetaModifier) {
       ret |= (dontSwap ? NSEventModifierFlagCommand : NSEventModifierFlagControl);
    }
 
-   if ((accel_key & Qt::ALT) == Qt::ALT) {
+   if ((accel_key & Qt::AltModifier) == Qt::AltModifier) {
       ret |= NSEventModifierFlagOption;
    }
 
-   if ((accel_key & Qt::SHIFT) == Qt::SHIFT) {
+   if ((accel_key & Qt::ShiftModifier) == Qt::ShiftModifier) {
       ret |= NSEventModifierFlagShift;
    }
 
@@ -65,7 +65,7 @@ static quint32 constructModifierMask(quint32 accel_key)
 // return an autoreleased string given a QKeySequence (currently only looks at the first one).
 NSString *keySequenceToKeyEqivalent(const QKeySequence &accel)
 {
-   quint32 accel_key = (accel[0] & ~(Qt::MODIFIER_MASK | Qt::UNICODE_ACCEL));
+   quint32 accel_key = (accel[0] & ~(Qt::KeyboardModifierMask));
    QChar cocoa_key   = qt_mac_qtKey2CocoaKey(Qt::Key(accel_key));
 
    if (cocoa_key.isNull()) {

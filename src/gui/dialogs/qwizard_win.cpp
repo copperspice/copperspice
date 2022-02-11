@@ -175,7 +175,7 @@ QVistaBackButton::QVistaBackButton(QWidget *widget)
    setFocusPolicy(Qt::NoFocus);
 
    // Native dialogs use ALT-Left even in RTL mode, even if it might be counter-intuitive
-   setShortcut(QKeySequence(Qt::ALT | Qt::Key_Left));
+   setShortcut(QKeySequence(Qt::AltModifier | Qt::Key_Left));
 }
 
 QSize QVistaBackButton::sizeHint() const

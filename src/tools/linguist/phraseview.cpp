@@ -61,7 +61,7 @@ PhraseView::PhraseView(MultiDataModel *model, QList<QHash<QString, QList<Phrase 
 
    for (int id = 0; id < 10; ++id) {
       // user pressed ctrl + n, apply that translation
-      QShortcut *hotKey = new QShortcut( Qt::CTRL + (Qt::Key_1 + id), this);
+      QShortcut *hotKey = new QShortcut( Qt::ControlModifier + (Qt::Key_1 + id), this);
       connect(hotKey, &QShortcut::activated, this, [this, id] () { guessShortcut(id); });
    }
 
@@ -231,7 +231,7 @@ void PhraseView::setSourceText(int model, const QString &sourceText)
          QString def;
 
          if (n < 9) {
-            def = tr("Guess (%1)").formatArg( QKeySequence(Qt::CTRL | (Qt::Key_0 + (n + 1))).toString() );
+            def = tr("Guess (%1)").formatArg( QKeySequence(Qt::ControlModifier | (Qt::Key_0 + (n + 1))).toString() );
          } else {
             def = tr("Guess");
          }

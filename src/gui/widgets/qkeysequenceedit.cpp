@@ -65,21 +65,20 @@ int QKeySequenceEditPrivate::translateModifiers(Qt::KeyboardModifiers state, con
    int result = 0;
    // The shift modifier only counts when it is not used to type a symbol
    // that is only reachable using the shift key anyway
-   if ((state & Qt::ShiftModifier) && (text.isEmpty() ||
-         !text.at(0).isPrint() ||
-         text.at(0).isLetterOrNumber() ||
-         text.at(0).isSpace())) {
-      result |= Qt::SHIFT;
+
+   if ((state & Qt::ShiftModifier) && (text.isEmpty() || ! text.at(0).isPrint() ||
+         text.at(0).isLetterOrNumber() || text.at(0).isSpace())) {
+      result |= Qt::ShiftModifier;
    }
 
    if (state & Qt::ControlModifier) {
-      result |= Qt::CTRL;
+      result |= Qt::ControlModifier;
    }
    if (state & Qt::MetaModifier) {
-      result |= Qt::META;
+      result |= Qt::MetaModifier;
    }
    if (state & Qt::AltModifier) {
-      result |= Qt::ALT;
+      result |= Qt::AltModifier;
    }
    return result;
 }
@@ -92,6 +91,7 @@ void QKeySequenceEditPrivate::resetState()
       q->killTimer(releaseTimer);
       releaseTimer = 0;
    }
+
    prevKey = -1;
    lineEdit->setText(keySequence.toString(QKeySequence::NativeText));
    lineEdit->setPlaceholderText(QKeySequenceEdit::tr("Press shortcut"));

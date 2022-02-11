@@ -1041,7 +1041,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 #endif // !QT_NO_CLIPBOARD && !QT_NO_SHORTCUT
 #ifndef QT_NO_SHORTCUT
    if (!(e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::MetaModifier))) {
-      int key = e->key() & ~Qt::MODIFIER_MASK;
+      int key = e->key() & ~Qt::KeyboardModifierMask;
 
       if (key) {
          const QList<QAbstractButton *> buttons = d->buttonBox->buttons();
@@ -1050,7 +1050,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
             QAbstractButton *pb   = buttons.at(i);
             QKeySequence shortcut = pb->shortcut();
 
-            if (!shortcut.isEmpty() && key == int(shortcut[0] & ~Qt::MODIFIER_MASK)) {
+            if (!shortcut.isEmpty() && key == int(shortcut[0] & ~Qt::KeyboardModifierMask)) {
                pb->animateClick();
                return;
             }
