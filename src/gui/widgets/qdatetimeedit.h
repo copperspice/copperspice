@@ -245,8 +245,8 @@ class Q_GUI_EXPORT QDateEdit : public QDateTimeEdit
 {
    GUI_CS_OBJECT(QDateEdit)
 
-   GUI_CS_PROPERTY_READ(data, date)
-   GUI_CS_PROPERTY_WRITE(data, setDate)
+   GUI_CS_PROPERTY_READ(date, date)
+   GUI_CS_PROPERTY_WRITE(date, setDate)
    GUI_CS_PROPERTY_NOTIFY(date, userDateChanged)
    GUI_CS_PROPERTY_USER(date, true)
 
