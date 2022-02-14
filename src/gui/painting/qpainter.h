@@ -60,6 +60,7 @@ class Q_GUI_EXPORT QPainter
 {
    GUI_CS_GADGET(QPainter)
 
+   GUI_CS_ENUM(RenderHint)
    GUI_CS_FLAG(RenderHint, RenderHints)
 
  public:

@@ -34,6 +34,7 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
 {
    GUI_CS_OBJECT(QDialogButtonBox)
 
+   GUI_CS_ENUM(StandardButton)
    GUI_CS_FLAG(StandardButton, StandardButtons)
 
    GUI_CS_PROPERTY_READ(orientation, orientation)

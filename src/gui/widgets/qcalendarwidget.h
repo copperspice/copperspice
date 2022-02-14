@@ -37,7 +37,6 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
 {
    GUI_CS_OBJECT(QCalendarWidget)
 
-   GUI_CS_ENUM(Qt::DayOfWeek)
    GUI_CS_ENUM(HorizontalHeaderFormat)
    GUI_CS_ENUM(VerticalHeaderFormat)
    GUI_CS_ENUM(SelectionMode)

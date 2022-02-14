@@ -36,8 +36,6 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
 {
    GUI_CS_OBJECT(QToolButton)
 
-   GUI_CS_ENUM(Qt::ToolButtonStyle)
-   GUI_CS_ENUM(Qt::ArrowType)
    GUI_CS_ENUM(ToolButtonPopupMode)
 
 #ifndef QT_NO_MENU

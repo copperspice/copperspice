@@ -46,7 +46,6 @@ class QPlainTextDocumentLayoutPrivate;
 class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
 {
    GUI_CS_OBJECT(QPlainTextEdit)
-   Q_DECLARE_PRIVATE(QPlainTextEdit)
 
    GUI_CS_ENUM(LineWrapMode)
 
@@ -324,6 +323,8 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    void zoomInF(float range);
 
  private:
+   Q_DECLARE_PRIVATE(QPlainTextEdit)
+
    GUI_CS_SLOT_1(Private, void _q_repaintContents(const QRectF &r))
    GUI_CS_SLOT_2(_q_repaintContents)
 

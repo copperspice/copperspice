@@ -33,6 +33,10 @@ struct QTextOptionPrivate;
 
 class Q_GUI_EXPORT QTextOption
 {
+   GUI_CS_GADGET(QTextOption)
+
+   GUI_CS_ENUM(WrapMode)
+
  public:
    enum TabType {
       LeftTab,

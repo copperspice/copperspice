@@ -42,9 +42,10 @@ class QPagedPaintDevice;
 class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 {
    GUI_CS_OBJECT(QTextEdit)
-   Q_DECLARE_PRIVATE(QTextEdit)
 
+   GUI_CS_ENUM(AutoFormattingFlag)
    GUI_CS_FLAG(AutoFormattingFlag, AutoFormatting)
+
    GUI_CS_ENUM(LineWrapMode)
 
    GUI_CS_PROPERTY_READ(autoFormatting, autoFormatting)
@@ -390,6 +391,8 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 
    GUI_CS_SLOT_1(Private, void _q_cursorPositionChanged())
    GUI_CS_SLOT_2(_q_cursorPositionChanged)
+
+   Q_DECLARE_PRIVATE(QTextEdit)
 
    friend class QTextEditControl;
    friend class QTextDocument;

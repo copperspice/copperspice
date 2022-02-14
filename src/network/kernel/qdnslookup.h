@@ -183,6 +183,9 @@ class Q_NETWORK_EXPORT QDnsLookup : public QObject
 {
     NET_CS_OBJECT(QDnsLookup)
 
+    NET_CS_ENUM(Error)
+    NET_CS_ENUM(Type)
+
     NET_CS_PROPERTY_READ(error, error)
     NET_CS_PROPERTY_NOTIFY(error, finished)
 

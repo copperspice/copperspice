@@ -40,12 +40,14 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
 {
    GUI_CS_OBJECT(QGraphicsView)
 
+   GUI_CS_ENUM(DragMode)
+   GUI_CS_ENUM(ViewportAnchor)
+   GUI_CS_ENUM(ViewportUpdateMode)
+   GUI_CS_ENUM(OptimizationFlag)
+   GUI_CS_ENUM(CacheModeFlag)
+
    GUI_CS_FLAG(OptimizationFlag, OptimizationFlags)
    GUI_CS_FLAG(CacheModeFlag, CacheMode)
-
-   GUI_CS_ENUM(ViewportAnchor)
-   GUI_CS_ENUM(DragMode)
-   GUI_CS_ENUM(ViewportUpdateMode)
 
    GUI_CS_PROPERTY_READ(backgroundBrush, backgroundBrush)
    GUI_CS_PROPERTY_WRITE(backgroundBrush, setBackgroundBrush)

@@ -35,6 +35,7 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
 {
    GUI_CS_OBJECT(QFontComboBox)
 
+   GUI_CS_ENUM(FontFilter)
    GUI_CS_FLAG(FontFilter, FontFilters)
 
    GUI_CS_PROPERTY_READ(writingSystem, writingSystem)
