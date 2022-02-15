@@ -25,10 +25,10 @@
 #define QINPUTMETHOD_H
 
 #include <qobject.h>
+#include <qrectf.h>
 
 class QInputMethodPrivate;
 class QWindow;
-class QRectF;
 class QTransform;
 class QInputMethodQueryEvent;
 
@@ -57,6 +57,11 @@ class Q_GUI_EXPORT QInputMethod : public QObject
    GUI_CS_PROPERTY_NOTIFY(inputDirection, inputDirectionChanged)
 
  public:
+   enum Action {
+      Click,
+      ContextMenu
+   };
+
    QTransform inputItemTransform() const;
    void setInputItemTransform(const QTransform &transform);
 
@@ -68,11 +73,6 @@ class Q_GUI_EXPORT QInputMethod : public QObject
 
    // keyboard geometry in window coords
    QRectF keyboardRectangle() const;
-
-   enum Action {
-      Click,
-      ContextMenu
-   };
 
    bool isVisible() const;
    void setVisible(bool visible);
