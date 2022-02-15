@@ -25,18 +25,18 @@
 #define QGRAPHICSSCENE_H
 
 #include <qobject.h>
+#include <qbrush.h>
+#include <qcontainerfwd.h>
+#include <qfont.h>
+#include <qmatrix.h>
+#include <qpalette.h>
+#include <qpen.h>
 #include <qpoint.h>
 #include <qrect.h>
-#include <qbrush.h>
-#include <qfont.h>
-#include <qtransform.h>
-#include <qmatrix.h>
-#include <qpen.h>
 #include <qscopedpointer.h>
+#include <qtransform.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
-
-#include <qcontainerfwd.h>
 
 class QFocusEvent;
 class QFont;
