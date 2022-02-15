@@ -315,7 +315,7 @@ bool QMetaMethod::invoke(QObject *object, Ts &&...Vs) const
 
 // **
 template <class T, class = void>
-class Q_CORE_EXPORT CS_ReturnType
+class CS_ReturnType
 {
    public:
       static const QString &getName() {
