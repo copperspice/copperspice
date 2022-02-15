@@ -98,9 +98,9 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
 
    QDialogButtonBox(QWidget *parent = nullptr);
    QDialogButtonBox(Qt::Orientation orientation, QWidget *parent = nullptr);
+   QDialogButtonBox(StandardButtons buttons, Qt::Orientation orientation, QWidget *parent = nullptr);
+
    explicit QDialogButtonBox(StandardButtons buttons, QWidget *parent = nullptr);
-   QDialogButtonBox(StandardButtons buttons, Qt::Orientation orientation = Qt::Horizontal,
-      QWidget *parent = nullptr);
 
    QDialogButtonBox(const QDialogButtonBox &) = delete;
    QDialogButtonBox &operator=(const QDialogButtonBox &) = delete;
