@@ -541,7 +541,11 @@ static qint64 cs_internal_convertToNumber(const QVariant &data, bool *ok)
       }
 
       default:
-        break;
+         if (data.isEnum()) {
+            return data.enumToInteger();
+         }
+
+         break;
    }
 
    *ok = false;
@@ -2239,6 +2243,11 @@ bool QVariant::canConvert(uint newType) const
          } else if (current_userType == QVariant::JsonValue) {
             return true;
 
+         } else {
+
+            if (isEnum()) {
+               return true;
+            }
          }
 
          break;
@@ -2894,7 +2903,7 @@ bool QVariant::canConvert(uint newType) const
          break;
 
       default:
-         return false;
+        return false;
    }
 
    return false;
@@ -3744,6 +3753,36 @@ QString QVariant::getTypeName(uint typeId)
    }
 
    return retval;
+}
+
+bool QVariant::isEnum()  const {
+
+   // get a ptr to the requested alternative
+   auto ptr = std::get_if<std::shared_ptr<CustomType>>(&(m_data));
+
+   if (ptr == nullptr) {
+      // simple type
+      return false;
+
+   } else {
+      // custom type
+      return (*ptr)->isEnum();
+   }
+}
+
+quint64 QVariant::enumToInteger() const {
+
+   // get a ptr to the requested alternative
+   auto ptr = std::get_if<std::shared_ptr<CustomType>>(&(m_data));
+
+   if (ptr == nullptr) {
+      // simple type
+      return false;
+
+   } else {
+      // custom type
+      return (*ptr)->enumToInteger();
+   }
 }
 
 uint QVariant::nameToType(const QString &name)

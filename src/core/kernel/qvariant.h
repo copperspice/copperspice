@@ -241,7 +241,7 @@ class Q_CORE_EXPORT QVariant
    QVariant(Qt::PenStyle)    = delete;
    QVariant(Qt::CursorShape) = delete;
 
-   [[deprecated]] QVariant(Type type);
+   QVariant(Type type);                      // used in CsDesigner
    QVariant(uint typeId, const void *copy);
 
    QVariant(const QVariant &other);
@@ -337,6 +337,9 @@ class Q_CORE_EXPORT QVariant
    bool isValid() const {
       return ! std::holds_alternative<std::monostate>(m_data);
    }
+
+   bool isEnum() const;
+   quint64 enumToInteger() const;
 
    std::optional<QVariant> maybeConvert(uint requested_type) const;
 
@@ -452,6 +455,8 @@ class Q_CORE_EXPORT QVariant
 
          virtual std::shared_ptr<CustomType> clone() const = 0;
          virtual bool compare(const CustomType &other) const = 0;
+         virtual bool isEnum() const = 0;
+         virtual quint64 enumToInteger() const = 0;
 
          virtual void loadFromStream() = 0;
          virtual void saveToStream()   = 0;
@@ -519,6 +524,19 @@ Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant &d
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant::Type typeId);
 
 //
+template <class T>
+struct cs_is_flag : public std::integral_constant<bool, false> {
+};
+
+template <class T>
+struct cs_is_flag<QFlags<T>>
+   : public std::integral_constant<bool, true> {
+};
+
+template <class T>
+constexpr const bool cs_is_flag_v = cs_is_flag<T>::value;
+
+//
 template <typename T>
 class CustomType_T : public QVariant::CustomType
 {
@@ -533,12 +551,12 @@ class CustomType_T : public QVariant::CustomType
    {
    }
 
-   std::shared_ptr<CustomType> clone() const override {
-      return std::make_shared<CustomType_T<T>>(m_value);
-   }
-
    const T &get() const {
       return m_value;
+   }
+
+   std::shared_ptr<CustomType> clone() const override {
+      return std::make_shared<CustomType_T<T>>(m_value);
    }
 
    bool compare(const CustomType &other) const override {
@@ -552,6 +570,23 @@ class CustomType_T : public QVariant::CustomType
       }
 
       return false;
+   }
+
+   bool isEnum() const override {
+      return std::is_enum_v<T> || cs_is_flag_v<T>;
+   }
+
+   quint64 enumToInteger() const override {
+      if constexpr (std::is_enum_v<T>) {
+         return static_cast<quint64>(m_value);
+
+      } else if constexpr (cs_is_flag_v<T>) {
+         return static_cast<quint64>(m_value);
+
+      } else {
+         return 0;
+
+      }
    }
 
    void loadFromStream() override {
