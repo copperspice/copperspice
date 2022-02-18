@@ -80,11 +80,21 @@ bool QMetaProperty::isDesignable(const QObject *object) const
 {
    bool retval;
 
-   if (! m_designJar) {
-      return false;
-   }
+   if (m_designJar == nullptr) {
+      retval = true;
 
-   retval = m_designJar->run<bool>(object);
+   } else if (object == nullptr) {
+
+      if (m_designJar->isStatic()) {
+         retval = m_designJar->run<bool>(object);
+      } else {
+         // might be designable so default to yes
+         retval = true;
+      }
+
+   } else {
+      retval = m_designJar->run<bool>(object);
+   }
 
    return retval;
 }
@@ -132,11 +142,21 @@ bool QMetaProperty::isScriptable(const QObject *object) const
 {
    bool retval = m_scriptJar;
 
-   if (! m_scriptJar) {
-      return false;
-   }
+   if (m_scriptJar == nullptr) {
+retval = true;
 
-   retval = m_scriptJar->run<bool>(object);
+   } else if (object == nullptr) {
+
+      if (m_scriptJar->isStatic()) {
+         retval = m_scriptJar->run<bool>(object);
+      } else {
+         // might be scriptable so default to yes
+         retval = true;
+      }
+
+   } else {
+      retval = m_scriptJar->run<bool>(object);
+   }
 
    return retval;
 }
@@ -145,11 +165,21 @@ bool QMetaProperty::isStored(const QObject *object) const
 {
    bool retval = m_storedJar;
 
-   if (! m_storedJar) {
-      return false;
-   }
+   if (m_storedJar == nullptr) {
+     retval = true;
 
-   retval = m_storedJar->run<bool>(object);
+   } else if (object == nullptr) {
+
+      if (m_storedJar->isStatic()) {
+         retval = m_storedJar->run<bool>(object);
+      } else {
+         // might be storable so default to yes
+         retval = true;
+      }
+
+   } else{
+      retval = m_storedJar->run<bool>(object);
+   }
 
    return retval;
 }
@@ -158,11 +188,21 @@ bool QMetaProperty::isUser(const QObject *object) const
 {
    bool retval = false;
 
-   if (! m_userJar) {
-      return false;
-   }
+   if (m_userJar == nullptr) {
+      retval = true;
 
-   retval = m_userJar->run<bool>(object);
+   } else if (object == nullptr) {
+
+      if (m_userJar->isStatic()) {
+         retval = m_userJar->run<bool>(object);
+      } else {
+         // might be useable so default to yes
+         retval = true;
+      }
+
+   } else {
+      retval = m_userJar->run<bool>(object);
+   }
 
    return retval;
 }

@@ -198,6 +198,10 @@ class JarReadAbstract
 
    template<class R>
    R run(const QObject *) const;
+
+   virtual bool isStatic() const {
+      return false;
+   }
 };
 
 template<class R>
@@ -231,6 +235,10 @@ class SpiceJarRead : public JarRead<R>
 
    QVariant runV(const QObject *) const override;
    R call(const QObject *) const override;
+
+   bool isStatic() const override {
+      return m_func != nullptr;
+   }
 
  private:
    R (T::*m_method)() const;
@@ -289,7 +297,6 @@ R SpiceJarRead<T, R>::call(const QObject *obj) const
       return ((testObj)->*(m_method))();
    }
 }
-
 
 
 // ** WRITE
