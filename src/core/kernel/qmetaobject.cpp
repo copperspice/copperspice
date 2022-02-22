@@ -1847,35 +1847,32 @@ void QMetaObject_X::register_enum_data(const QString &args)
    }
 
 
-   // 3 look up enumName to test, is a flag?
-   std::vector<QString> tempName(0);
+   // 3 look up enumName to test if it has a flag
+   std::vector<QString> tmpName;
+   tmpName.push_back(enumName);
 
    auto iter_flag = m_flag.find(enumName);
 
-   if (iter_flag == m_flag.end()) {
-      // save the enumName in the QVector
-      tempName.push_back(enumName);
-
-   } else {
-      while (iter_flag != m_flag.end() && iter_flag.key() == enumName) {
-         tempName.push_back(iter_flag.value());
-         ++iter_flag;
-      }
+   while (iter_flag != m_flag.end() && iter_flag.key() == enumName) {
+      // value is the name of a flag
+      tmpName.push_back(iter_flag.value());
+      ++iter_flag;
    }
 
-   // save enum data in QMap
-   for (uint i = 0; i < tempName.size(); ++i) {
-      auto iter_enum = m_enums.find(tempName.at(i));
+
+   // for each enum name, update value of 'enum value name'/'enum value' in m_enums
+   for (const auto &item : tmpName) {
+      auto iter_enum = m_enums.find(item);
 
       if (iter_enum == m_enums.end()) {
-         throw std::logic_error("Unable to register enum data, verify enum macros");
+         throw std::logic_error("Unable to register enum data, verify enum has been registered");
 
       } else  {
-         QMetaEnum enumObj = iter_enum.value();
-         enumObj.setData(valueMap);
+         // get a reference to the current QMetaEnum
+         QMetaEnum &enumObj = iter_enum.value();
 
-         // update QMetaEnum
-         m_enums.insert( tempName.at(i), enumObj);
+         // update the QMetaEnum value in m_enums
+         enumObj.setData(valueMap);
       }
    }
 }
