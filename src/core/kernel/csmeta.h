@@ -357,9 +357,9 @@ class CS_ReturnType
 
 #endif // doxypress
 
-// methods for these 2 class, located in csmeta_internal2.h around line 117
+// methods for these 2 class, located in csmeta_internal2.h around line 113
 template<class E>
-class CS_ReturnType<E, typename std::enable_if<std::is_enum<E>::value>::type>
+class CS_ReturnType<E, typename std::enable_if<std::is_enum_v<E>>::type>
 {
  public:
    static const QString &getName();

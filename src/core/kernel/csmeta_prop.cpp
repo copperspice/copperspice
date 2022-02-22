@@ -67,7 +67,7 @@ bool QMetaProperty::hasNotifySignal() const
 
 bool QMetaProperty::hasStdCppSet() const
 {
-   //  internal & undocumented, used to bypass issues
+   // internal & undocumented, used to bypass issues
    return false;
 }
 

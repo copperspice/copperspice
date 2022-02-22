@@ -98,7 +98,9 @@ static inline bool determineWinOsVersionPost8(OSVERSIONINFO *result)
      return false;
    }
 
-   PtrGetFileVersionInfoSizeW getFileVersionInfoSizeW = (PtrGetFileVersionInfoSizeW)versionLib.resolve("GetFileVersionInfoSizeW");
+   PtrGetFileVersionInfoSizeW getFileVersionInfoSizeW =
+         (PtrGetFileVersionInfoSizeW)versionLib.resolve("GetFileVersionInfoSizeW");
+
    PtrVerQueryValueW verQueryValueW = (PtrVerQueryValueW)versionLib.resolve("VerQueryValueW");
    PtrGetFileVersionInfoW getFileVersionInfoW = (PtrGetFileVersionInfoW)versionLib.resolve("GetFileVersionInfoW");
 

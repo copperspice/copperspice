@@ -197,20 +197,20 @@ class Q_CORE_EXPORT Qt
    using Alignment = QFlags<AlignmentFlag>;
 
    enum TextFlag {
-      TextSingleLine = 0x0100,
-      TextDontClip = 0x0200,
-      TextExpandTabs = 0x0400,
-      TextShowMnemonic = 0x0800,
-      TextWordWrap = 0x1000,
-      TextWrapAnywhere = 0x2000,
-      TextDontPrint = 0x4000,
+      TextSingleLine            = 0x0100,
+      TextDontClip              = 0x0200,
+      TextExpandTabs            = 0x0400,
+      TextShowMnemonic          = 0x0800,
+      TextWordWrap              = 0x1000,
+      TextWrapAnywhere          = 0x2000,
+      TextDontPrint             = 0x4000,
       TextIncludeTrailingSpaces = 0x08000000,
-      TextHideMnemonic = 0x8000,
-      TextJustificationForced = 0x10000,
-      TextForceLeftToRight = 0x20000,
-      TextForceRightToLeft = 0x40000,
-      TextLongestVariant = 0x80000,
-      TextBypassShaping = 0x100000
+      TextHideMnemonic          = 0x8000,
+      TextJustificationForced   = 0x10000,
+      TextForceLeftToRight      = 0x20000,
+      TextForceRightToLeft      = 0x40000,
+      TextLongestVariant        = 0x80000,
+      TextBypassShaping         = 0x100000
    };
 
    enum TextElideMode {
@@ -220,7 +220,7 @@ class Q_CORE_EXPORT Qt
       ElideNone
    };
 
-    enum WhiteSpaceMode {
+   enum WhiteSpaceMode {
       WhiteSpaceNormal,
       WhiteSpacePre,
       WhiteSpaceNoWrap,
@@ -285,10 +285,10 @@ class Q_CORE_EXPORT Qt
    using WindowStates = QFlags<WindowState>;
 
     enum ApplicationState {
-       ApplicationSuspended    = 0x00000000,
-       ApplicationHidden       = 0x00000001,
-       ApplicationInactive     = 0x00000002,
-       ApplicationActive       = 0x00000004
+       ApplicationSuspended  = 0x00000000,
+       ApplicationHidden     = 0x00000001,
+       ApplicationInactive   = 0x00000002,
+       ApplicationActive     = 0x00000004
     };
 
    using ApplicationStates = QFlags<ApplicationState>;
@@ -358,18 +358,18 @@ class Q_CORE_EXPORT Qt
       WA_WState_OwnSizePolicy = 68,
       WA_WState_ExplicitShowHide = 69,
 
-      WA_ShowModal = 70,            // ## deprecated
+      WA_ShowModal = 70,                // ## deprecated
       WA_MouseNoMask = 71,
-      WA_GroupLeader = 72,          // ## deprecated
-      WA_NoMousePropagation = 73,   // ## for now, might go away.
+      WA_GroupLeader = 72,              // ## deprecated
+      WA_NoMousePropagation = 73,       // ## might go away
       WA_Hover = 74,
-      WA_InputMethodTransparent = 75, // Don't reset IM when user clicks on this (for virtual keyboards on embedded)
+      WA_InputMethodTransparent = 75,   // do not reset IM when user clicks on this (for virtual keyboards on embedded)
       WA_QuitOnClose = 76,
 
       WA_KeyboardFocusChange = 77,
 
       WA_AcceptDrops = 78,
-      WA_DropSiteRegistered = 79,   // internal
+      WA_DropSiteRegistered = 79,       // internal
 
       WA_WindowPropagation = 80,
 
@@ -1374,6 +1374,7 @@ class Q_CORE_EXPORT Qt
       FindDirectChildrenOnly  = 0x0,
       FindChildrenRecursively = 0x1
    };
+
    using FindChildOptions = QFlags<FindChildOption>;
 
    enum DropAction {
@@ -1725,7 +1726,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::TouchPointStates)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::MouseEventFlags)
 
 #ifndef QT_NO_GESTURES
-Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::GestureFlags)
+   Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::GestureFlags)
 #endif
 
 typedef bool (*qInternalCallback)(void **);

@@ -108,14 +108,16 @@ std::pair<T, bool> convertFromQVariant(QVariant data)
    }
 }
 
-// classes for these 2 methods, located in csmeta.h around line 405
-template<class E>
-const QString &CS_ReturnType<E, typename std::enable_if<std::is_enum<E>::value>::type>::getName()
-{
-   static QMetaEnum obj = QMetaObject::findEnum<E>();
+#if ! defined (CS_DOXYPRESS)
 
-   if (obj.isValid()) {
-      static QString tmp = obj.scope() + "::" + obj.name();
+// classes for these 2 methods, located in csmeta.h around line 360
+template<class E>
+const QString &CS_ReturnType<E, typename std::enable_if<std::is_enum_v<E>>::type>::getName()
+{
+   static QMetaEnum enumObject = QMetaObject::findEnum<E>();
+
+   if (enumObject.isValid()) {
+      static QString tmp = enumObject.scope() + "::" + enumObject.name();
       return tmp;
 
    } else {
@@ -125,17 +127,19 @@ const QString &CS_ReturnType<E, typename std::enable_if<std::is_enum<E>::value>:
    }
 }
 
+#endif // doxypress
+
 template<class E>
 const QString &CS_ReturnType<QFlags<E> >::getName()
 {
-   static QMetaEnum obj = QMetaObject::findEnum<QFlags<E>>();
+   static QMetaEnum enumObject = QMetaObject::findEnum<QFlags<E>>();
 
-   if (obj.isValid()) {
-      static QString tmp = obj.scope() + "::" + obj.name();
+   if (enumObject.isValid()) {
+      static QString tmp = enumObject.scope() + "::" + enumObject.name();
       return tmp;
 
    } else {
-      static QString retval("Unknown_Enum");
+      static QString retval("Unknown_Flag");
       return retval;
    }
 }

@@ -287,7 +287,7 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
  protected:
    QMap<QString, QMetaClassInfo> m_classInfo;
    QMap<QString, QMetaMethod>    m_constructor;         // constructor
-   QMap<QString, QMetaMethod>    m_methods;             // methds, signals, slots
+   QMap<QString, QMetaMethod>    m_methods;             // methods, signals, slots
    QMap<QString, QMetaEnum>      m_enums;
    QMap<QString, QMetaProperty>  m_properties;
    QMultiMap<QString, QString>   m_flag;
@@ -317,7 +317,7 @@ class QMetaObject_T : public QMetaObject_X
       // slots, invokables
       template<class U>
       void register_method(const QString &name, U method, QMetaMethod::MethodType kind,
-                  const QString &va_args, QMetaMethod::Access access);
+            const QString &va_args, QMetaMethod::Access access);
 
       // properties
       template<class U>
@@ -330,7 +330,7 @@ class QMetaObject_T : public QMetaObject_X
 template<class T>
 void QMetaObject_T<T>::postConstruct()
 {
-   // calls the overloaded version to ensure the other overloads are processed
+   // calls the first "overload" to ensure the other overloads are processed
    T::cs_regTrigger(cs_number<0>());
 }
 
