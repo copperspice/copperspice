@@ -29,10 +29,13 @@
 // ** enum
 template<class T>
 void cs_namespace_register_enum(const char *name, std::type_index id, const char *scope);
-  
+
+template<class T>
+void cs_namespace_register_enum_data(const char *data);
+
 // ** flags
 template<class T>
 void cs_namespace_register_flag(const char *enumName, const char *scope, const char *flagName, std::type_index id);
- 
+
 
 #endif

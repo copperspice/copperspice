@@ -329,7 +329,7 @@ class cs_number<0>
             cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);   \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
       {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_enum_data(#__VA_ARGS__);  \
+         cs_namespace_register_enum_data<cs_class>(#__VA_ARGS__);  \
          \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }
