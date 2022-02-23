@@ -51,17 +51,7 @@ QMetaProperty::QMetaProperty(const QString &name, QMetaObject *obj)
 
 QMetaEnum QMetaProperty::enumerator() const
 {
-   QMetaEnum enumObj;
-
-   if (m_metaObject != nullptr) {
-      int index = m_metaObject->indexOfEnumerator(m_typeName);
-
-      if (index >= 0) {
-         enumObj = m_metaObject->enumerator(index);
-      }
-   }
-
-   return enumObj;
+   return QMetaObject::findEnum(m_returnTypeId);
 }
 
 bool QMetaProperty::hasNotifySignal() const
