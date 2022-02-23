@@ -256,6 +256,9 @@ class Q_CORE_EXPORT QMetaProperty
    QString m_name;
    QString m_typeName;
 
+   std::type_index m_returnTypeId;
+   QString (*m_returnTypeFuncPtr)();
+
    bool m_read_able;
    bool m_write_able;
    bool m_reset_able;

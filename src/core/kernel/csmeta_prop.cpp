@@ -26,7 +26,8 @@
 #include <qmetaobject.h>
 
 QMetaProperty::QMetaProperty(const QString &name, QMetaObject *obj)
-   :  m_metaObject(obj), m_name(name)
+   :  m_metaObject(obj), m_name(name),
+      m_returnTypeId(typeid(void)), m_returnTypeFuncPtr(nullptr)
 {
    m_typeName     = QString();
 
@@ -43,6 +44,9 @@ QMetaProperty::QMetaProperty(const QString &name, QMetaObject *obj)
    m_scriptJar    = nullptr;
    m_storedJar    = nullptr;
    m_userJar      = nullptr;
+
+   // register enums
+   Qt::staticMetaObject();
 }
 
 QMetaEnum QMetaProperty::enumerator() const
