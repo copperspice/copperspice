@@ -252,6 +252,8 @@ class Q_CORE_EXPORT QMetaProperty
    void setUser(JarReadAbstract *method);
 
  private:
+   void loadTypeName() const;
+
    QMetaObject *m_metaObject;
    QString m_name;
    QString m_typeName;

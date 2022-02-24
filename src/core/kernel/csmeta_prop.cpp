@@ -216,6 +216,17 @@ const QString &QMetaProperty::name() const
    return m_name;
 }
 
+void QMetaProperty::loadTypeName() const
+{
+   if (m_typeName.isEmpty()) {
+      // populate m_typeName with a String denoting the return type of the property
+
+      if (m_returnTypeFuncPtr != nullptr) {
+         const_cast<QMetaProperty *>(this)->m_typeName = m_returnTypeFuncPtr();
+      }
+   }
+}
+
 QMetaMethod QMetaProperty::notifySignal() const
 {
    static const QString str;
@@ -321,6 +332,8 @@ QVariant::Type QMetaProperty::type() const
    QVariant::Type retval = QVariant::Invalid;
    QMetaEnum enumObj     = this->enumerator();
 
+   loadTypeName();
+
    if (enumObj.isValid()) {
       // process enum
       QString enumName    = enumObj.scope() + "::" + enumObj.name();
@@ -343,6 +356,8 @@ QVariant::Type QMetaProperty::type() const
 
 const QString &QMetaProperty::typeName() const
 {
+   loadTypeName();
+
    return m_typeName;
 }
 
@@ -350,6 +365,8 @@ uint QMetaProperty::userType() const
 {
    uint retval = QVariant::Invalid;
    QMetaEnum enumObj = this->enumerator();
+
+   loadTypeName();
 
    if (enumObj.isValid()) {
       // process enum
