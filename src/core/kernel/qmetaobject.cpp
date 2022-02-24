@@ -2019,7 +2019,8 @@ void QMetaObject_X::register_tag(const QString &name, const QString &method)
 }
 
 // ** internal properties
-void QMetaObject_X::register_property_read(const QString &name, const QString &dataType, JarReadAbstract *readJar)
+void QMetaObject_X::register_property_read(const QString &name, std::type_index returnTypeId,
+         QString (*returnTypeFuncPtr)(), JarReadAbstract *readJar)
 {
    if (name.isEmpty() ) {
       return;
@@ -2031,13 +2032,13 @@ void QMetaObject_X::register_property_read(const QString &name, const QString &d
       // entry not found, construct new obj then add to container
 
       QMetaProperty data = QMetaProperty{name, this};
-      data.setReadMethod(dataType, readJar);
+      data.setReadMethod(returnTypeId, returnTypeFuncPtr, readJar);
 
       m_properties.insert(name, std::move(data));
 
    } else {
       // update QMetaProperty in the container
-      iter->setReadMethod(dataType, readJar);
+      iter->setReadMethod(returnTypeId, returnTypeFuncPtr, readJar);
 
    }
 }

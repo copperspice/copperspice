@@ -237,7 +237,7 @@ class Q_CORE_EXPORT QMetaProperty
    bool write(QObject *object, const QVariant &value) const;
 
    // properties
-   void setReadMethod(const QString &typeName, JarReadAbstract *jarRead);
+   void setReadMethod(std::type_index returnTypeId, QString (*returnTypeFuncPtr)(), JarReadAbstract *jarRead);
    void setWriteMethod(JarWriteAbstract *method);
 
    template<class T>

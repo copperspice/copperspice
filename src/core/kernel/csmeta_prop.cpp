@@ -373,14 +373,15 @@ bool QMetaProperty::write(QObject *object, const QVariant &value) const
 }
 
 // ** internal
-void QMetaProperty::setReadMethod(const QString &typeName, JarReadAbstract *jarRead)
+void QMetaProperty::setReadMethod(std::type_index returnTypeId,
+         QString (*returnTypeFuncPtr)(), JarReadAbstract *jarRead)
 {
    if (! jarRead) {
       return;
    }
 
-   // typeName is the return type
-   this->setTypeName(typeName);
+   m_returnTypeId      = returnTypeId;
+   m_returnTypeFuncPtr = returnTypeFuncPtr;
 
    // method is a ptr to the property READ method, store in a SpiceJarRead
    m_readJar    = jarRead;

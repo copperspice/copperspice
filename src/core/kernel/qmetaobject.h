@@ -278,7 +278,9 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    void register_method_s2_part2(QString className, const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind);
 
    // properties
-   void register_property_read(const QString &name, const QString &dataType, JarReadAbstract *readJar);
+   void register_property_read(const QString &name, std::type_index returnTypeId,
+         QString (*returnTypeFuncPtr)(), JarReadAbstract *readJar);
+
    void register_property_write(const QString &name, JarWriteAbstract *method);
    void register_property_bool(const QString &name, JarReadAbstract *method, QMetaProperty::Kind kind);
 

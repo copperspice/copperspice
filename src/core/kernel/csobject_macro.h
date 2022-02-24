@@ -585,7 +585,8 @@ class cs_number<0>
          using T = decltype(&cs_class::method);                                       \
          using R = cs_returnType<T>::type;                                            \
          const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
-            .register_property_read(#name, cs_typeToName<R>(),                        \
+            .register_property_read(#name, typeid(R),                                 \
+            [] () { return cs_typeToName<R>(); },                                      \
             new SpiceJarRead<cs_class, R>(&cs_class::method));                        \
          cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
       }
