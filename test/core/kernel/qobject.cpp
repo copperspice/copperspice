@@ -221,4 +221,3 @@ TEST_CASE("QObject method_overload", "[qobject]")
    obj.cargo();
    REQUIRE(obj.m_bags == -1);
 }
-

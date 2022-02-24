@@ -17,9 +17,10 @@
 *
 ***********************************************************************/
 
+// must be first
 #include <qobject.h>
+
 #include <qmetaobject.h>
-#include <qstring.h>
 
 #include <cs_catch2.h>
 
@@ -52,7 +53,8 @@ class Ginger : public QObject
    CS_PROPERTY_NOTIFY(title,      titleChanged)
    CS_PROPERTY_REVISION(title,    31415)
    CS_PROPERTY_DESIGNABLE(title,  true)
-   CS_PROPERTY_SCRIPTABLE(title,  isScriptTitle()   )
+   CS_PROPERTY_SCRIPTABLE(title,  isScriptTitle())
+   CS_PROPERTY_STORED(title,      false)
    CS_PROPERTY_USER(title,        100 > 10)
    CS_PROPERTY_CONSTANT(title)
    CS_PROPERTY_FINAL(title)
@@ -148,6 +150,7 @@ TEST_CASE("QMetaObject is_as", "[qmetaobject]")
       REQUIRE(metaProp.revision() == 31415);
       REQUIRE(metaProp.isDesignable() == true);
       REQUIRE(metaProp.isScriptable() == true);
+      REQUIRE(metaProp.isStored() == false);
       REQUIRE(metaProp.isUser() == true);
       REQUIRE(metaProp.isConstant() == true);
       REQUIRE(metaProp.isFinal() == true);
@@ -161,9 +164,10 @@ TEST_CASE("QMetaObject is_as", "[qmetaobject]")
       REQUIRE(metaProp.isResettable() == false);
       REQUIRE(metaProp.hasNotifySignal() == false);
       REQUIRE(metaProp.revision() == 0);
-      REQUIRE(metaProp.isDesignable() == false);
-      REQUIRE(metaProp.isScriptable() == false);
-      REQUIRE(metaProp.isUser() == false);
+      REQUIRE(metaProp.isDesignable() == true);
+      REQUIRE(metaProp.isScriptable() == true);
+      REQUIRE(metaProp.isStored() == true);
+      REQUIRE(metaProp.isUser() == true);
       REQUIRE(metaProp.isConstant() == false);
       REQUIRE(metaProp.isFinal() == false);
    }
@@ -196,6 +200,7 @@ TEST_CASE("QMetaObject property", "[qmetaobject]")
 
       REQUIRE(metaProp.type() == QVariant::Invalid);
       REQUIRE(metaProp.userType() == QVariant::Invalid);
+
       REQUIRE(metaProp.typeName() == "");
    }
 
@@ -213,8 +218,18 @@ TEST_CASE("QMetaObject property", "[qmetaobject]")
 
 TEST_CASE("QMetaObject signature", "[qmetaobject]")
 {
-   QString data = "mySlot(int const &) const";
+   {
+      QString data = "mySlot(int const &) const";
+      REQUIRE(QMetaObject::normalizedSignature(data) == "mySlot(int&)");
+   }
 
-   // emerald, the & may need to be removed
-   REQUIRE(QMetaObject::normalizedSignature(data) == "mySlot(int&)");
+  {
+      QString data = "clearSelection(bool display_A = true)";
+      REQUIRE(QMetaObject::normalizedSignature(data) == "clearSelection(bool)");
+   }
+
+   {
+      QString data = "clearSelection(bool display_B = true)=0";
+      REQUIRE(QMetaObject::normalizedSignature(data) == "clearSelection(bool)");
+   }
 }
