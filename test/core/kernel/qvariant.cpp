@@ -1135,6 +1135,53 @@ TEST_CASE("QVariant name_to_type", "[qvariant]")
    REQUIRE(QVariant::nameToType("QVariant") == QVariant::Variant);
 }
 
+TEST_CASE("QVariant enum_to_variant", "[qvariant]")
+{
+   // register enums
+   Qt::staticMetaObject();
+
+   QVariant data = QVariant::fromValue(Qt::WheelFocus);
+
+   REQUIRE(data.isValid());
+   REQUIRE(data.type() == QVariant::UserType);
+
+   REQUIRE(data.value<Qt::FocusPolicy>() == Qt::WheelFocus);
+   REQUIRE(data.value<int>() == Qt::WheelFocus);
+   REQUIRE(data.toInt() == Qt::WheelFocus);
+
+   REQUIRE(data.toInt() != Qt::StrongFocus);
+
+   REQUIRE(data.typeName() == "Qt::FocusPolicy");      // name of the enum
+
+   {
+      QVariant data = QVariant::fromValue(Qt::NoFocus);
+
+      REQUIRE(data.value<Qt::FocusPolicy>() == Qt::NoFocus);
+      REQUIRE(data.value<int>() == Qt::NoFocus);
+      REQUIRE(data.toInt() == Qt::Qt::NoFocus);
+
+      REQUIRE(data.toInt() != Qt::StrongFocus);
+
+      REQUIRE(data.typeName() == "Qt::FocusPolicy");   // name of the enum
+   }
+}
+
+TEST_CASE("QVariant flag_to_variant", "[qvariant]")
+{
+   Qt::staticMetaObject();
+
+   QVariant data = QVariant::fromValue(Qt::AlignLeft | Qt::AlignTop);
+
+   REQUIRE(data.isValid());
+   REQUIRE(data.type() == QVariant::UserType);
+
+   REQUIRE(data.value<Qt::Alignment>() == Qt::Alignment(Qt::AlignLeft | Qt::AlignTop));
+   REQUIRE(data.value<int>() == int(Qt::AlignLeft | Qt::AlignTop));
+   REQUIRE(data.toInt() == int(Qt::AlignLeft | Qt::AlignTop));
+
+   REQUIRE(data.typeName() == "Qt::Alignment");      // name of the flag
+}
+
 TEST_CASE("QVariant type_char8_t", "[qvariant] [!mayfail]")
 {
 #if defined(__cpp_char8_t)
