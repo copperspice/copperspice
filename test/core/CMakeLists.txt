@@ -85,8 +85,10 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/json/qjsonobject.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/json/qjsonvalue.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaenum.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetamethod.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobject.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaproperty.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qobject.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qtranslator.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.cpp
