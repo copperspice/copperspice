@@ -80,11 +80,41 @@ class Q_GUI_EXPORT QListView : public QAbstractItemView
    GUI_CS_PROPERTY_WRITE(selectionRectVisible, setSelectionRectVisible)
 
  public:
-   enum Movement { Static, Free, Snap };
-   enum Flow { LeftToRight, TopToBottom };
-   enum ResizeMode { Fixed, Adjust };
-   enum LayoutMode { SinglePass, Batched };
-   enum ViewMode { ListMode, IconMode };
+   GUI_CS_REGISTER_ENUM(
+      enum Movement {
+         Static,
+         Free,
+         Snap
+      };
+   )
+
+   GUI_CS_REGISTER_ENUM(
+      enum Flow {
+         LeftToRight,
+         TopToBottom
+      };
+   )
+
+   GUI_CS_REGISTER_ENUM(
+      enum ResizeMode {
+         Fixed,
+         Adjust
+      };
+   )
+
+   GUI_CS_REGISTER_ENUM(
+      enum LayoutMode {
+         SinglePass,
+         Batched
+      };
+   )
+
+   GUI_CS_REGISTER_ENUM(
+      enum ViewMode {
+         ListMode,
+         IconMode
+      };
+   )
 
    explicit QListView(QWidget *parent = nullptr);
 

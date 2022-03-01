@@ -86,10 +86,34 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    GUI_CS_PROPERTY_WRITE(supportedSchemes, setSupportedSchemes)
 
  public:
-   enum ViewMode { Detail, List };
-   enum FileMode { AnyFile, ExistingFile, Directory, ExistingFiles, DirectoryOnly };
-   enum AcceptMode { AcceptOpen, AcceptSave };
-   enum DialogLabel { LookIn, FileName, FileType, Accept, Reject, DialogLabelCount };
+   GUI_CS_REGISTER_ENUM(
+      enum ViewMode {
+         Detail,
+         List
+      };
+   )
+
+   enum FileMode {
+      AnyFile,
+      ExistingFile,
+      Directory,
+      ExistingFiles,
+      DirectoryOnly
+   };
+
+   enum AcceptMode {
+      AcceptOpen,
+      AcceptSave
+   };
+
+   enum DialogLabel {
+      LookIn,
+      FileName,
+      FileType,
+      Accept,
+      Reject,
+      DialogLabelCount
+   };
 
    enum FileDialogOption {
       ShowDirsOnly          = 0x00000001,

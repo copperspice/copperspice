@@ -48,11 +48,13 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    GUI_CS_PROPERTY_WRITE(sizeAdjustPolicy, setSizeAdjustPolicy)
 
  public:
-   enum SizeAdjustPolicy {
-      AdjustIgnored,
-      AdjustToContentsOnFirstShow,
-      AdjustToContents
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum SizeAdjustPolicy {
+         AdjustIgnored,
+         AdjustToContentsOnFirstShow,
+         AdjustToContents
+      };
+   )
 
    explicit QAbstractScrollArea(QWidget *parent = nullptr);
 

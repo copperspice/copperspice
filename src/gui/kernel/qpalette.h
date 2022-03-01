@@ -40,29 +40,45 @@ class Q_GUI_EXPORT QPalette
 
  public:
    // order dependent, serialization format depends on it
-   enum ColorGroup { Active,
-                     Disabled,
-                     Inactive,
-                     NColorGroups,
-                     Current,
-                     All,
-                     Normal = Active };
-
-   enum ColorRole { WindowText, Button, Light, Midlight, Dark, Mid,
-      Text, BrightText, ButtonText, Base, Window, Shadow,
-      Highlight,
-      HighlightedText,
-      Link,
-      LinkVisited,
-      AlternateBase,
-      NoRole,
-      ToolTipBase,
-      ToolTipText,
-      PlaceholderText = Text,
-      NColorRoles     = ToolTipText + 1,
-      Foreground      = WindowText,
-      Background      = Window
+   enum ColorGroup {
+      Active,
+      Disabled,
+      Inactive,
+      NColorGroups,
+      Current,
+      All,
+      Normal = Active
    };
+
+   GUI_CS_REGISTER_ENUM(
+      enum ColorRole {
+         WindowText,
+         Button,
+         Light,
+         Midlight,
+         Dark,
+         Mid,
+         Text,
+         BrightText,
+         ButtonText,
+         Base,
+         Window,
+         Shadow,
+         Highlight,
+         HighlightedText,
+         Link,
+         LinkVisited,
+         AlternateBase,
+         NoRole,
+         ToolTipBase,
+         ToolTipText,
+         NColorRoles     = ToolTipText + 1,   // must be the last unique value
+
+         PlaceholderText = Text,
+         Foreground      = WindowText,
+         Background      = Window
+      };
+   )
 
    QPalette();
 

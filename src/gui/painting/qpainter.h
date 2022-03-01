@@ -64,13 +64,15 @@ class Q_GUI_EXPORT QPainter
    GUI_CS_FLAG(RenderHint, RenderHints)
 
  public:
-   enum RenderHint {
-      Antialiasing = 0x01,
-      TextAntialiasing = 0x02,
-      SmoothPixmapTransform = 0x04,
-      HighQualityAntialiasing = 0x08,
-      NonCosmeticDefaultPen = 0x10
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum RenderHint {
+         Antialiasing            = 0x01,
+         TextAntialiasing        = 0x02,
+         SmoothPixmapTransform   = 0x04,
+         HighQualityAntialiasing = 0x08,
+         NonCosmeticDefaultPen   = 0x10
+      };
+   )
    using RenderHints = QFlags<RenderHint>;
 
    enum CompositionMode {

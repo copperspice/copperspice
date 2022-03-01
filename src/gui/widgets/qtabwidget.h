@@ -69,9 +69,21 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
    GUI_CS_PROPERTY_WRITE(tabBarAutoHide, setTabBarAutoHide)
 
  public:
-   enum TabPosition { North, South, West, East };
+   GUI_CS_REGISTER_ENUM(
+      enum TabPosition {
+         North,
+         South,
+         West,
+         East
+      };
+   )
 
-   enum TabShape { Rounded, Triangular };
+   GUI_CS_REGISTER_ENUM(
+      enum TabShape {
+         Rounded,
+         Triangular
+      };
+   )
 
    explicit QTabWidget(QWidget *parent = nullptr);
 

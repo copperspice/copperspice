@@ -35,25 +35,28 @@ inline uint qHash(QSizePolicy key, uint seed = 0);
 class Q_GUI_EXPORT QSizePolicy
 {
    GUI_CS_GADGET(QSizePolicy)
+
    GUI_CS_ENUM(Policy)
 
  public:
    enum PolicyFlag {
-      GrowFlag = 1,
-      ExpandFlag = 2,
-      ShrinkFlag = 4,
-      IgnoreFlag = 8
+      GrowFlag   = 0x1,
+      ExpandFlag = 0x2,
+      ShrinkFlag = 0x4,
+      IgnoreFlag = 0x8,
    };
 
-   enum Policy {
-      Fixed = 0,
-      Minimum = GrowFlag,
-      Maximum = ShrinkFlag,
-      Preferred = GrowFlag | ShrinkFlag,
-      MinimumExpanding = GrowFlag | ExpandFlag,
-      Expanding = GrowFlag | ShrinkFlag | ExpandFlag,
-      Ignored = ShrinkFlag | GrowFlag | IgnoreFlag
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum Policy {
+         Fixed            = 0x0,
+         Minimum          = 0x1,
+         Maximum          = 0x4,
+         Preferred        = 0x5,
+         MinimumExpanding = 0x3,
+         Expanding        = 0x7,
+         Ignored          = 0xD
+      };
+   )
 
    enum ControlType {
       DefaultType      = 0x00000001,

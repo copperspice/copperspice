@@ -106,7 +106,14 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
       TrailingPosition
    };
 
-   enum EchoMode { Normal, NoEcho, Password, PasswordEchoOnEdit };
+   GUI_CS_REGISTER_ENUM(
+      enum EchoMode {
+         Normal,
+         NoEcho,
+         Password,
+         PasswordEchoOnEdit
+      };
+   )
 
    explicit QLineEdit(QWidget *parent = nullptr);
    explicit QLineEdit(const QString &contents, QWidget *parent = nullptr);

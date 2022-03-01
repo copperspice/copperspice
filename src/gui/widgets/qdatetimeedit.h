@@ -45,57 +45,74 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    GUI_CS_PROPERTY_WRITE(dateTime, setDateTime)
    GUI_CS_PROPERTY_NOTIFY(dateTime, dateTimeChanged)
    GUI_CS_PROPERTY_USER(dateTime, true)
+
    GUI_CS_PROPERTY_READ(date, date)
    GUI_CS_PROPERTY_WRITE(date, setDate)
    GUI_CS_PROPERTY_NOTIFY(date, dateChanged)
+
    GUI_CS_PROPERTY_READ(time, time)
    GUI_CS_PROPERTY_WRITE(time, setTime)
    GUI_CS_PROPERTY_NOTIFY(time, timeChanged)
+
    GUI_CS_PROPERTY_READ(maximumDateTime, maximumDateTime)
    GUI_CS_PROPERTY_WRITE(maximumDateTime, setMaximumDateTime)
    GUI_CS_PROPERTY_RESET(maximumDateTime, clearMaximumDateTime)
+
    GUI_CS_PROPERTY_READ(minimumDateTime, minimumDateTime)
    GUI_CS_PROPERTY_WRITE(minimumDateTime, setMinimumDateTime)
    GUI_CS_PROPERTY_RESET(minimumDateTime, clearMinimumDateTime)
+
    GUI_CS_PROPERTY_READ(maximumDate, maximumDate)
    GUI_CS_PROPERTY_WRITE(maximumDate, setMaximumDate)
    GUI_CS_PROPERTY_RESET(maximumDate, clearMaximumDate)
+
    GUI_CS_PROPERTY_READ(minimumDate, minimumDate)
    GUI_CS_PROPERTY_WRITE(minimumDate, setMinimumDate)
    GUI_CS_PROPERTY_RESET(minimumDate, clearMinimumDate)
+
    GUI_CS_PROPERTY_READ(maximumTime, maximumTime)
    GUI_CS_PROPERTY_WRITE(maximumTime, setMaximumTime)
    GUI_CS_PROPERTY_RESET(maximumTime, clearMaximumTime)
+
    GUI_CS_PROPERTY_READ(minimumTime, minimumTime)
    GUI_CS_PROPERTY_WRITE(minimumTime, setMinimumTime)
    GUI_CS_PROPERTY_RESET(minimumTime, clearMinimumTime)
+
    GUI_CS_PROPERTY_READ(currentSection, currentSection)
    GUI_CS_PROPERTY_WRITE(currentSection, setCurrentSection)
+
    GUI_CS_PROPERTY_READ(displayedSections, displayedSections)
+
    GUI_CS_PROPERTY_READ(displayFormat, displayFormat)
    GUI_CS_PROPERTY_WRITE(displayFormat, setDisplayFormat)
+
    GUI_CS_PROPERTY_READ(calendarPopup, calendarPopup)
    GUI_CS_PROPERTY_WRITE(calendarPopup, setCalendarPopup)
+
    GUI_CS_PROPERTY_READ(currentSectionIndex, currentSectionIndex)
    GUI_CS_PROPERTY_WRITE(currentSectionIndex, setCurrentSectionIndex)
+
    GUI_CS_PROPERTY_READ(sectionCount, sectionCount)
+
    GUI_CS_PROPERTY_READ(timeSpec, timeSpec)
    GUI_CS_PROPERTY_WRITE(timeSpec, setTimeSpec)
 
  public:
-   enum Section {
-      NoSection     = 0x0000,
-      AmPmSection   = 0x0001,
-      MSecSection   = 0x0002,
-      SecondSection = 0x0004,
-      MinuteSection = 0x0008,
-      HourSection   = 0x0010,
-      DaySection    = 0x0100,
-      MonthSection  = 0x0200,
-      YearSection   = 0x0400,
-      TimeSections_Mask = AmPmSection | MSecSection | SecondSection | MinuteSection | HourSection,
-      DateSections_Mask = DaySection | MonthSection | YearSection
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum Section {
+         NoSection     = 0x0000,
+         AmPmSection   = 0x0001,
+         MSecSection   = 0x0002,
+         SecondSection = 0x0004,
+         MinuteSection = 0x0008,
+         HourSection   = 0x0010,
+         DaySection    = 0x0100,
+         MonthSection  = 0x0200,
+         YearSection   = 0x0400,
+         TimeSections_Mask = AmPmSection | MSecSection | SecondSection | MinuteSection | HourSection,
+         DateSections_Mask = DaySection | MonthSection | YearSection
+      };
+   )
 
    using Sections = QFlags<Section>;
 
@@ -254,6 +271,7 @@ class Q_GUI_EXPORT QDateEdit : public QDateTimeEdit
    explicit QDateEdit(QWidget *parent = nullptr);
    explicit QDateEdit(const QDate &date, QWidget *parent = nullptr);
    ~QDateEdit();
+
    GUI_CS_SIGNAL_1(Public, void userDateChanged(const QDate &date))
    GUI_CS_SIGNAL_2(userDateChanged, date)
 };
@@ -262,6 +280,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QDateTimeEdit::Sections)
 
 #endif // QT_NO_DATETIMEEDIT
 
-
-
-#endif // QDATETIMEEDIT_H
+#endif

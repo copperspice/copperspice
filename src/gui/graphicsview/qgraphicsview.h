@@ -91,11 +91,13 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    GUI_CS_PROPERTY_WRITE(optimizationFlags, setOptimizationFlags)
 
  public:
-   enum ViewportAnchor {
-      NoAnchor,
-      AnchorViewCenter,
-      AnchorUnderMouse
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum ViewportAnchor {
+         NoAnchor,
+         AnchorViewCenter,
+         AnchorUnderMouse
+      };
+   )
 
    enum CacheModeFlag {
       CacheNone = 0x0,
@@ -103,19 +105,23 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    };
    using CacheMode = QFlags<CacheModeFlag>;
 
-   enum DragMode {
-      NoDrag,
-      ScrollHandDrag,
-      RubberBandDrag
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum DragMode {
+         NoDrag,
+         ScrollHandDrag,
+         RubberBandDrag
+      };
+   )
 
-   enum ViewportUpdateMode {
-      FullViewportUpdate,
-      MinimalViewportUpdate,
-      SmartViewportUpdate,
-      NoViewportUpdate,
-      BoundingRectViewportUpdate
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum ViewportUpdateMode {
+         FullViewportUpdate,
+         MinimalViewportUpdate,
+         SmartViewportUpdate,
+         NoViewportUpdate,
+         BoundingRectViewportUpdate
+      };
+   )
 
    enum OptimizationFlag {
       DontClipPainter = 0x1, // obsolete

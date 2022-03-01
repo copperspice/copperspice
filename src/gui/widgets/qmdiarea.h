@@ -71,16 +71,20 @@ class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea
    };
    using AreaOptions = QFlags<AreaOption>;
 
-   enum WindowOrder {
-      CreationOrder,
-      StackingOrder,
-      ActivationHistoryOrder
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum WindowOrder {
+         CreationOrder,
+         StackingOrder,
+         ActivationHistoryOrder
+      };
+   )
 
-   enum ViewMode {
-      SubWindowView,
-      TabbedView
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum ViewMode {
+         SubWindowView,
+         TabbedView
+      };
+   )
 
    QMdiArea(QWidget *parent = nullptr);
 

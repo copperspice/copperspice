@@ -99,19 +99,23 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_PROPERTY_WRITE(horizontalScrollMode, setHorizontalScrollMode)
 
  public:
-   enum SelectionMode {
-      NoSelection,
-      SingleSelection,
-      MultiSelection,
-      ExtendedSelection,
-      ContiguousSelection
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum SelectionMode {
+         NoSelection,
+         SingleSelection,
+         MultiSelection,
+         ExtendedSelection,
+         ContiguousSelection
+      };
+   )
 
-   enum SelectionBehavior {
-      SelectItems,
-      SelectRows,
-      SelectColumns
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum SelectionBehavior {
+         SelectItems,
+         SelectRows,
+         SelectColumns
+      };
+   )
 
    enum ScrollHint {
       EnsureVisible,
@@ -132,10 +136,12 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 
    using EditTriggers = QFlags<EditTrigger>;
 
-   enum ScrollMode {
-      ScrollPerItem,
-      ScrollPerPixel
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum ScrollMode {
+         ScrollPerItem,
+         ScrollPerPixel
+      };
+   )
 
    explicit QAbstractItemView(QWidget *parent = nullptr);
 
@@ -190,13 +196,15 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    void setDragDropOverwriteMode(bool overwrite);
    bool dragDropOverwriteMode() const;
 
-   enum DragDropMode {
-      NoDragDrop,
-      DragOnly,
-      DropOnly,
-      DragDrop,
-      InternalMove
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum DragDropMode {
+         NoDragDrop,
+         DragOnly,
+         DropOnly,
+         DragDrop,
+         InternalMove
+      };
+   )
 
    void setDragDropMode(DragDropMode behavior);
    DragDropMode dragDropMode() const;

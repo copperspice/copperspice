@@ -63,14 +63,15 @@ class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
    GUI_CS_ENUM(ResizeMode)
 
  public:
-
-   enum ResizeMode {
-      Interactive,
-      Stretch,
-      Fixed,
-      ResizeToContents,
-      Custom = Fixed
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum ResizeMode {
+         Interactive,
+         Stretch,
+         Fixed,
+         ResizeToContents,
+         Custom = Fixed
+      };
+   )
 
    explicit QHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
 

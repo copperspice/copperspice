@@ -44,14 +44,16 @@ class Q_GUI_EXPORT QSlider : public QAbstractSlider
    GUI_CS_PROPERTY_WRITE(tickInterval, setTickInterval)
 
  public:
-   enum TickPosition {
-      NoTicks = 0,
-      TicksAbove = 1,
-      TicksLeft = TicksAbove,
-      TicksBelow = 2,
-      TicksRight = TicksBelow,
-      TicksBothSides = 3
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum TickPosition {
+         NoTicks = 0,
+         TicksAbove = 1,
+         TicksLeft = TicksAbove,
+         TicksBelow = 2,
+         TicksRight = TicksBelow,
+         TicksBothSides = 3
+      };
+   )
 
    explicit QSlider(QWidget *parent = nullptr);
    explicit QSlider(Qt::Orientation orientation, QWidget *parent = nullptr);

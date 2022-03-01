@@ -81,16 +81,20 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    };
    using StepEnabled = QFlags<StepEnabledFlag>;
 
-   enum ButtonSymbols  {
-      UpDownArrows,
-      PlusMinus,
-      NoButtons
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum ButtonSymbols  {
+         UpDownArrows,
+         PlusMinus,
+         NoButtons
+      };
+   )
 
-   enum CorrectionMode {
-      CorrectToPreviousValue,
-      CorrectToNearestValue
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum CorrectionMode {
+         CorrectToPreviousValue,
+         CorrectToNearestValue
+      };
+   )
 
    explicit QAbstractSpinBox(QWidget *parent = nullptr);
 

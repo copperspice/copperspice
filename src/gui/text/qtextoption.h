@@ -45,6 +45,26 @@ class Q_GUI_EXPORT QTextOption
       DelimiterTab
    };
 
+   GUI_CS_REGISTER_ENUM(
+      enum WrapMode {
+         NoWrap,
+         WordWrap,
+         ManualWrap,
+         WrapAnywhere,
+         WrapAtWordBoundaryOrAnywhere
+      };
+   )
+
+   enum Flag {
+      ShowTabsAndSpaces = 0x1,
+      ShowLineAndParagraphSeparators = 0x2,
+      AddSpaceForLineAndParagraphSeparators = 0x4,
+      SuppressColors = 0x8,
+      IncludeTrailingSpaces = 0x80000000
+   };
+   using Flags = QFlags<Flag>;
+
+
    struct Q_GUI_EXPORT Tab {
       inline Tab()
          : position(80), type(QTextOption::LeftTab)
@@ -90,14 +110,6 @@ class Q_GUI_EXPORT QTextOption
       return Qt::LayoutDirection(direction);
    }
 
-   enum WrapMode {
-      NoWrap,
-      WordWrap,
-      ManualWrap,
-      WrapAnywhere,
-      WrapAtWordBoundaryOrAnywhere
-   };
-
    void setWrapMode(WrapMode mode) {
       wordWrap = mode;
    }
@@ -105,15 +117,6 @@ class Q_GUI_EXPORT QTextOption
    WrapMode wrapMode() const {
       return static_cast<WrapMode>(wordWrap);
    }
-
-   enum Flag {
-      ShowTabsAndSpaces = 0x1,
-      ShowLineAndParagraphSeparators = 0x2,
-      AddSpaceForLineAndParagraphSeparators = 0x4,
-      SuppressColors = 0x8,
-      IncludeTrailingSpaces = 0x80000000
-   };
-   using Flags = QFlags<Flag>;
 
    inline void setFlags(Flags flags);
 

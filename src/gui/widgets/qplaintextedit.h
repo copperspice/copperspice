@@ -100,10 +100,12 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    GUI_CS_PROPERTY_WRITE(placeholderText, setPlaceholderText)
 
  public:
-   enum LineWrapMode {
-      NoWrap,
-      WidgetWidth
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum LineWrapMode {
+         NoWrap,
+         WidgetWidth
+      };
+   )
 
    explicit QPlainTextEdit(QWidget *parent = nullptr);
    explicit QPlainTextEdit(const QString &text, QWidget *parent = nullptr);

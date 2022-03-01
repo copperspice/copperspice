@@ -69,7 +69,7 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    GUI_CS_PROPERTY_READ(readOnly, isReadOnly)
    GUI_CS_PROPERTY_WRITE(readOnly, setReadOnly)
 
-   // following 2 were qdoc_property 1/5/2014
+   // following 2 were qdoc_property
    GUI_CS_PROPERTY_READ(wordWrapMode, wordWrapMode)
    GUI_CS_PROPERTY_WRITE(wordWrapMode, setWordWrapMode)
 
@@ -107,12 +107,14 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    GUI_CS_PROPERTY_WRITE(placeholderText, setPlaceholderText)
 
  public:
-   enum LineWrapMode {
-      NoWrap,
-      WidgetWidth,
-      FixedPixelWidth,
-      FixedColumnWidth
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum LineWrapMode {
+         NoWrap,
+         WidgetWidth,
+         FixedPixelWidth,
+         FixedColumnWidth
+      };
+   )
 
    enum AutoFormattingFlag {
       AutoNone = 0,

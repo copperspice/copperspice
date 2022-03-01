@@ -53,14 +53,21 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
    GUI_CS_PROPERTY_WRITE(sizeConstraint, setSizeConstraint)
 
  public:
-   enum SizeConstraint {
-      SetDefaultConstraint,
-      SetNoConstraint,
-      SetMinimumSize,
-      SetFixedSize,
-      SetMaximumSize,
-      SetMinAndMaxSize
-   };
+   using QWidgetItemFactory = QWidgetItem * (*)(const QLayout *layout, QWidget *widget);
+
+   using QSpacerItemFactory = QSpacerItem * (*)(const QLayout *layout, int w, int h,
+         QSizePolicy::Policy hPolicy, QSizePolicy::Policy);
+
+   GUI_CS_REGISTER_ENUM(
+      enum SizeConstraint {
+         SetDefaultConstraint,
+         SetNoConstraint,
+         SetMinimumSize,
+         SetFixedSize,
+         SetMaximumSize,
+         SetMinAndMaxSize
+      };
+   )
 
    QLayout(QWidget *parent);
    QLayout();

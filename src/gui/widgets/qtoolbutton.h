@@ -53,11 +53,13 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
    GUI_CS_PROPERTY_WRITE(arrowType, setArrowType)
 
  public:
-   enum ToolButtonPopupMode {
-      DelayedPopup,
-      MenuButtonPopup,
-      InstantPopup
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum ToolButtonPopupMode {
+         DelayedPopup,
+         MenuButtonPopup,
+         InstantPopup
+      };
+   )
 
    explicit QToolButton(QWidget *parent = nullptr);
 

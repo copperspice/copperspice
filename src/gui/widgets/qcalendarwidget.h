@@ -75,22 +75,28 @@ class Q_GUI_EXPORT QCalendarWidget : public QWidget
    GUI_CS_PROPERTY_WRITE(dateEditAcceptDelay, setDateEditAcceptDelay)
 
  public:
-   enum HorizontalHeaderFormat {
-      NoHorizontalHeader,
-      SingleLetterDayNames,
-      ShortDayNames,
-      LongDayNames
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum HorizontalHeaderFormat {
+         NoHorizontalHeader,
+         SingleLetterDayNames,
+         ShortDayNames,
+         LongDayNames
+      };
+   )
 
-   enum VerticalHeaderFormat {
-      NoVerticalHeader,
-      ISOWeekNumbers
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum VerticalHeaderFormat {
+         NoVerticalHeader,
+         ISOWeekNumbers
+      };
+   )
 
-   enum SelectionMode {
-      NoSelection,
-      SingleSelection
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum SelectionMode {
+         NoSelection,
+         SingleSelection
+      };
+   )
 
    explicit QCalendarWidget(QWidget *parent = nullptr);
 

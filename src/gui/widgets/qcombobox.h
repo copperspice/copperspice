@@ -92,21 +92,25 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_PROPERTY_WRITE(modelColumn, setModelColumn)
 
  public:
-   enum InsertPolicy {
-      NoInsert,
-      InsertAtTop,
-      InsertAtCurrent,
-      InsertAtBottom,
-      InsertAfterCurrent,
-      InsertBeforeCurrent,
-      InsertAlphabetically
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum InsertPolicy {
+         NoInsert,
+         InsertAtTop,
+         InsertAtCurrent,
+         InsertAtBottom,
+         InsertAfterCurrent,
+         InsertBeforeCurrent,
+         InsertAlphabetically
+      };
+   )
 
-   enum SizeAdjustPolicy {
-      AdjustToContents,
-      AdjustToContentsOnFirstShow,
-      AdjustToMinimumContentsLengthWithIcon
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum SizeAdjustPolicy {
+         AdjustToContents,
+         AdjustToContentsOnFirstShow,
+         AdjustToMinimumContentsLengthWithIcon
+      };
+   )
 
    explicit QComboBox(QWidget *parent = nullptr);
 

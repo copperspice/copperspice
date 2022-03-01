@@ -43,49 +43,51 @@ class Q_GUI_EXPORT QFontDatabase
    GUI_CS_ENUM(SystemFont)
 
  public:
-   // do not re-order or delete entries from this enum without updating the QPF2 format and makeqpf!!
-   enum WritingSystem {
-      Any,
+   // do not re-order or delete entries from this enum without updating the QPF2 format and makeqpf
 
-      Latin,
-      Greek,
-      Cyrillic,
-      Armenian,
-      Hebrew,
-      Arabic,
-      Syriac,
-      Thaana,
-      Devanagari,
-      Bengali,
-      Gurmukhi,
-      Gujarati,
-      Oriya,
-      Tamil,
-      Telugu,
-      Kannada,
-      Malayalam,
-      Sinhala,
-      Thai,
-      Lao,
-      Tibetan,
-      Myanmar,
-      Georgian,
-      Khmer,
-      SimplifiedChinese,
-      TraditionalChinese,
-      Japanese,
-      Korean,
-      Vietnamese,
+   GUI_CS_REGISTER_ENUM(
+      enum WritingSystem {
+         Any,
+         Latin,
+         Greek,
+         Cyrillic,
+         Armenian,
+         Hebrew,
+         Arabic,
+         Syriac,
+         Thaana,
+         Devanagari,
+         Bengali,
+         Gurmukhi,
+         Gujarati,
+         Oriya,
+         Tamil,
+         Telugu,
+         Kannada,
+         Malayalam,
+         Sinhala,
+         Thai,
+         Lao,
+         Tibetan,
+         Myanmar,
+         Georgian,
+         Khmer,
+         SimplifiedChinese,
+         TraditionalChinese,
+         Japanese,
+         Korean,
+         Vietnamese,
 
-      Symbol,
-      Other = Symbol,
+         Symbol,
+         Other = Symbol,
 
-      Ogham,
-      Runic,
-      Nko,
+         Ogham,
+         Runic,
+         Nko,
 
-      WritingSystemsCount
-   };
+         WritingSystemsCount
+      };
+   )
 
    enum SystemFont {
       GeneralFont,
