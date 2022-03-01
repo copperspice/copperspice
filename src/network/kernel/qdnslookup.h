@@ -205,8 +205,8 @@ class Q_NETWORK_EXPORT QDnsLookup : public QObject
     NET_CS_PROPERTY_NOTIFY(nameserver, nameserverChanged)
 
  public:
-    NET_CS_REGISTER_ENUM(enum Error
-       {
+    NET_CS_REGISTER_ENUM(
+       enum Error {
            NoError = 0,
            ResolverError,
            OperationCancelledError,
@@ -218,8 +218,8 @@ class Q_NETWORK_EXPORT QDnsLookup : public QObject
        };
     )
 
-    NET_CS_REGISTER_ENUM( enum Type
-       {
+    NET_CS_REGISTER_ENUM(
+      enum Type {
            A = 1,
            AAAA = 28,
            ANY = 255,
