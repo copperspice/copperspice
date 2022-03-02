@@ -132,15 +132,25 @@ void QLayoutPrivate::getMargin(int *result, int userMargin, QStyle::PixelMetric 
    }
 }
 
-// Static item factory functions that allow for hooking things in Designer
+// Static item factory functions that allow for hooking things in CS Designer
 
-QLayoutPrivate::QWidgetItemFactoryMethod QLayoutPrivate::widgetItemFactoryMethod = nullptr;
-QLayoutPrivate::QSpacerItemFactoryMethod QLayoutPrivate::spacerItemFactoryMethod = nullptr;
+QLayout::QWidgetItemFactory QLayoutPrivate::widgetItemFactory = nullptr;
+QLayout::QSpacerItemFactory QLayoutPrivate::spacerItemFactory = nullptr;
+
+void QLayout::setWidgetItemFactory(QWidgetItemFactory factory)
+{
+   QLayoutPrivate::widgetItemFactory = factory;
+}
+
+QLayout::QWidgetItemFactory QLayout::getWidgetItemFactory()
+{
+   return QLayoutPrivate::widgetItemFactory;
+}
 
 QWidgetItem *QLayoutPrivate::createWidgetItem(const QLayout *layout, QWidget *widget)
 {
-   if (widgetItemFactoryMethod) {
-      if (QWidgetItem *wi = (*widgetItemFactoryMethod)(layout, widget)) {
+   if (widgetItemFactory != nullptr) {
+      if (QWidgetItem *wi = (*widgetItemFactory)(layout, widget)) {
          return wi;
       }
    }
@@ -151,8 +161,8 @@ QWidgetItem *QLayoutPrivate::createWidgetItem(const QLayout *layout, QWidget *wi
 QSpacerItem *QLayoutPrivate::createSpacerItem(const QLayout *layout, int w, int h, QSizePolicy::Policy hPolicy,
    QSizePolicy::Policy vPolicy)
 {
-   if (spacerItemFactoryMethod) {
-      if (QSpacerItem *si = (*spacerItemFactoryMethod)(layout, w, h, hPolicy, vPolicy)) {
+   if (spacerItemFactory != nullptr) {
+      if (QSpacerItem *si = (*spacerItemFactory)(layout, w, h, hPolicy, vPolicy)) {
          return si;
       }
    }

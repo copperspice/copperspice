@@ -140,6 +140,9 @@ class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem
 
    static QSize closestAcceptableSize(const QWidget *widget, const QSize &size);
 
+   static void setWidgetItemFactory(QWidgetItemFactory factory);
+   static QWidgetItemFactory getWidgetItemFactory();
+
  protected:
    void widgetEvent(QEvent *event);
    void childEvent(QChildEvent *event) override;

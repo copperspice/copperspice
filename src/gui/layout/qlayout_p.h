@@ -36,12 +36,11 @@ class Q_GUI_EXPORT QLayoutPrivate
    Q_DECLARE_PUBLIC(QLayout)
 
  public:
-   typedef QWidgetItem *(*QWidgetItemFactoryMethod)(const QLayout *layout, QWidget *widget);
-   typedef QSpacerItem *(*QSpacerItemFactoryMethod)(const QLayout *layout, int w, int h,
-      QSizePolicy::Policy hPolicy, QSizePolicy::Policy);
-
    QLayoutPrivate();
-   virtual ~QLayoutPrivate() {}
+
+   virtual ~QLayoutPrivate()
+   {
+   }
 
    void getMargin(int *result, int userMargin, QStyle::PixelMetric pm) const;
    void doResize(const QSize &);
@@ -61,8 +60,8 @@ class Q_GUI_EXPORT QLayoutPrivate
       return nullptr;
    }
 
-   static QWidgetItemFactoryMethod widgetItemFactoryMethod;
-   static QSpacerItemFactoryMethod spacerItemFactoryMethod;
+   static QLayout::QWidgetItemFactory widgetItemFactory;
+   static QLayout::QSpacerItemFactory spacerItemFactory;
 
    int insideSpacing;
    int userLeftMargin;
