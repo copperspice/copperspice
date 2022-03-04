@@ -183,15 +183,15 @@ bool QMetaProperty::isUser(const QObject *object) const
    bool retval = false;
 
    if (m_userJar == nullptr) {
-      retval = true;
+      retval = false;
 
    } else if (object == nullptr) {
 
       if (m_userJar->isStatic()) {
          retval = m_userJar->run<bool>(object);
       } else {
-         // might be useable so default to yes
-         retval = true;
+         // default value
+         retval = false;
       }
 
    } else {
