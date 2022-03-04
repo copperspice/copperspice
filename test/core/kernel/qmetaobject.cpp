@@ -167,7 +167,7 @@ TEST_CASE("QMetaObject is_as", "[qmetaobject]")
       REQUIRE(metaProp.isDesignable() == true);
       REQUIRE(metaProp.isScriptable() == true);
       REQUIRE(metaProp.isStored() == true);
-      REQUIRE(metaProp.isUser() == true);
+      REQUIRE(metaProp.isUser() == false);
       REQUIRE(metaProp.isConstant() == false);
       REQUIRE(metaProp.isFinal() == false);
    }
