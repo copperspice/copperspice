@@ -27,7 +27,6 @@
 #include <qframe.h>
 #include <qpicture.h>
 
-
 class QLabelPrivate;
 
 class Q_GUI_EXPORT QLabel : public QFrame

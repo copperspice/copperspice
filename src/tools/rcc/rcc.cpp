@@ -24,7 +24,6 @@
 #include <rcc.h>
 
 #include <qalgorithms.h>
-#include <qmultihash.h>
 #include <qbytearray.h>
 #include <qdatetime.h>
 #include <qdebug.h>
@@ -33,13 +32,14 @@
 #include <qdomdocument.h>
 #include <qfile.h>
 #include <qiodevice.h>
+#include <qmultihash.h>
 #include <qlocale.h>
 #include <qstack.h>
 
 #include <algorithm>
 
-static constexpr int CONSTANT_COMPRESSLEVEL_DEFAULT     = -1;
-static constexpr int CONSTANT_COMPRESSTHRESHOLD_DEFAULT = 70;
+constexpr const int CONSTANT_COMPRESSLEVEL_DEFAULT     = -1;
+constexpr const int CONSTANT_COMPRESSTHRESHOLD_DEFAULT = 70;
 
 #define writeString(s) write(s, sizeof(s))
 
@@ -675,8 +675,8 @@ QStringList RCCResourceLibrary::dataFiles() const
 }
 
 // Determine map of resource identifier (':/newPrefix/images/p1.png') to file via recursion
-static void resourceDataFileMapRecursion(const RCCFileInfo *m_root, const QString &path,
-            RCCResourceLibrary::ResourceDataFileMap &m)
+static void resourceFile_Recursion(const RCCFileInfo *m_root, const QString &path,
+            RCCResourceLibrary::ResourceFile &m)
 {
    const QChar slash = '/';
 
@@ -687,19 +687,19 @@ static void resourceDataFileMapRecursion(const RCCFileInfo *m_root, const QStrin
       childName += child->m_name;
 
       if (child->m_flags & RCCFileInfo::Directory) {
-         resourceDataFileMapRecursion(child, childName, m);
+         resourceFile_Recursion(child, childName, m);
       } else {
          m.insert(childName, child->m_fileInfo.filePath());
       }
    }
 }
 
-RCCResourceLibrary::ResourceDataFileMap RCCResourceLibrary::resourceDataFileMap() const
+RCCResourceLibrary::ResourceFile RCCResourceLibrary::resourceFile() const
 {
-   ResourceDataFileMap rc;
+   ResourceFile rc;
 
    if (m_root) {
-      resourceDataFileMapRecursion(m_root, QString(':'),  rc);
+      resourceFile_Recursion(m_root, ":",  rc);
    }
 
    return rc;

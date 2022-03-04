@@ -232,15 +232,15 @@ QWidget *QStyledItemDelegate::createEditor(QWidget *parent,
 
 void QStyledItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-   QVariant v = index.data(Qt::EditRole);
-   QString n  = editor->metaObject()->userProperty().name();
+   QVariant data    = index.data(Qt::EditRole);
+   QString propName = editor->metaObject()->userProperty().name();
 
-   if (! n.isEmpty()) {
-      if (! v.isValid()) {
-         v = QVariant(editor->property(n).userType(), (const void *)nullptr);
+   if (! propName.isEmpty()) {
+      if (! data.isValid()) {
+         data = QVariant(editor->property(propName).userType(), nullptr);
       }
 
-      editor->setProperty(n, v);
+      editor->setProperty(propName, data);
    }
 }
 

@@ -128,7 +128,7 @@ static void pthreadSignalHandlerSuspendResume(int signo)
 
 class MachineThreads::Thread {
 public:
-    Thread(pthread_t pthread, const PlatformThread& platThread, void* base) 
+    Thread(pthread_t pthread, const PlatformThread& platThread, void* base)
         : posixThread(pthread)
         , platformThread(platThread)
         , stackBase(base)
@@ -384,7 +384,7 @@ static size_t getPlatformThreadRegisters(const PlatformThread& platformThread, P
 
     kern_return_t result = thread_get_state(platformThread, flavor, (thread_state_t)&regs, &user_count);
     if (result != KERN_SUCCESS) {
-        WTFReportFatalError(__FILE__, __LINE__, WTF_PRETTY_FUNCTION, 
+        WTFReportFatalError(__FILE__, __LINE__, WTF_PRETTY_FUNCTION,
                             "JavaScript garbage collection failed because thread_get_state returned an error (%d). This is probably the result of running inside Rosetta, which is not supported.", result);
         CRASH();
     }

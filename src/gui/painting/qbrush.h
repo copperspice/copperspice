@@ -34,12 +34,14 @@
 #include <qimage.h>
 #include <qpixmap.h>
 
-struct QBrushData;
-struct QBrushDataPointerDeleter;
-
 class QPixmap;
 class QGradient;
 class QVariant;
+
+class QGradientPrivate;
+
+struct QBrushData;
+struct QBrushDataPointerDeleter;
 
 class Q_GUI_EXPORT QBrush
 {
@@ -163,8 +165,6 @@ inline bool QBrush::isDetached() const
    return d->ref.load() == 1;
 }
 
-class QGradientPrivate;
-
 class Q_GUI_EXPORT QGradient
 {
    GUI_CS_GADGET(QGradient)
@@ -222,7 +222,7 @@ class Q_GUI_EXPORT QGradient
 
    bool operator==(const QGradient &gradient) const;
 
-   inline bool operator!=(const QGradient &gradient) const {
+   bool operator!=(const QGradient &gradient) const {
       return ! operator==(gradient);
    }
 

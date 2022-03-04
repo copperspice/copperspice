@@ -5422,7 +5422,8 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
    quint16 majorVersion = 0;
    quint16 minorVersion = 0;
 
-   stream >> majorVersion >> minorVersion;
+   stream >> majorVersion
+          >> minorVersion;
 
    if (majorVersion > currentMajorVersion) {
       return false;
@@ -5432,16 +5433,17 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
 
    QRect restoredFrameGeometry;
    QRect restoredNormalGeometry;
+
    qint32 restoredScreenNumber;
    quint8 maximized;
    quint8 fullScreen;
    qint32 restoredScreenWidth = 0;
 
    stream >> restoredFrameGeometry
-      >> restoredNormalGeometry
-      >> restoredScreenNumber
-      >> maximized
-      >> fullScreen;
+          >> restoredNormalGeometry
+          >> restoredScreenNumber
+          >> maximized
+          >> fullScreen;
 
    if (majorVersion > 1) {
       stream >> restoredScreenWidth;
@@ -5459,16 +5461,17 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
    // high DPI scaling or different levels of DPI awareness.
    if (restoredScreenWidth) {
       const qreal factor = qreal(restoredScreenWidth) / screenWidthF;
+
       if (factor < 0.8 || factor > 1.25) {
          return false;
       }
+
    } else {
-      // Saved by Qt 5.3 and earlier, try to prevent too large windows
-      // unless the size will be adapted by maximized or fullscreen.
-      if (!maximized && !fullScreen && qreal(restoredFrameGeometry.width()) / screenWidthF > 1.5) {
+      if (! maximized && ! fullScreen && qreal(restoredFrameGeometry.width()) / screenWidthF > 1.5) {
          return false;
       }
    }
+
    const int frameHeight = 20;
    if (!restoredFrameGeometry.isValid()) {
       restoredFrameGeometry = QRect(QPoint(0, 0), sizeHint());
@@ -5477,11 +5480,11 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
    if (!restoredNormalGeometry.isValid()) {
       restoredNormalGeometry = QRect(QPoint(0, frameHeight), sizeHint());
    }
+
    if (!restoredNormalGeometry.isValid()) {
       // use the widget's adjustedSize if the sizeHint() doesn't help
       restoredNormalGeometry.setSize(restoredNormalGeometry
-         .size()
-         .expandedTo(d_func()->adjustedSize()));
+         .size().expandedTo(d_func()->adjustedSize()));
    }
 
    const QRect availableGeometry = desktop->availableGeometry(restoredScreenNumber);
@@ -5527,6 +5530,7 @@ bool QWidget::restoreGeometry(const QByteArray &geometry)
             setWindowState(Qt::WindowNoState);
             setGeometry(restoredNormalGeometry);
          }
+
       } else {
          setGeometry(restoredNormalGeometry);
       }

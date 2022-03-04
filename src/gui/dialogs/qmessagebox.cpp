@@ -910,17 +910,12 @@ bool QMessageBox::event(QEvent *e)
    return result;
 }
 
-/*!
-    \reimp
-*/
 void QMessageBox::resizeEvent(QResizeEvent *event)
 {
    QDialog::resizeEvent(event);
 }
 
-/*!
-    \reimp
-*/
+
 void QMessageBox::closeEvent(QCloseEvent *e)
 {
    Q_D(QMessageBox);
@@ -935,9 +930,6 @@ void QMessageBox::closeEvent(QCloseEvent *e)
    setResult(d->execReturnCode(d->detectedEscapeButton));
 }
 
-/*!
-    \reimp
-*/
 void QMessageBox::changeEvent(QEvent *ev)
 {
    Q_D(QMessageBox);
@@ -972,9 +964,7 @@ void QMessageBox::changeEvent(QEvent *ev)
    QDialog::changeEvent(ev);
 }
 
-/*!
-    \reimp
-*/
+
 void QMessageBox::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QMessageBox);
@@ -1586,7 +1576,6 @@ void QMessageBox::setWindowTitle(const QString &title)
 #endif
 }
 
-
 void QMessageBox::setWindowModality(Qt::WindowModality windowModality)
 {
    QDialog::setWindowModality(windowModality);
@@ -1697,6 +1686,7 @@ void QMessageBoxPrivate::helperDone(QDialog::DialogCode code, QPlatformDialogHel
    Q_Q(QMessageBox);
    clickedButton = q->button(QMessageBox::StandardButton(code));
 }
+
 // obsolete
 QPixmap QMessageBox::standardIcon(Icon icon)
 {

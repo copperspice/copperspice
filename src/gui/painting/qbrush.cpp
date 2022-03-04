@@ -31,8 +31,9 @@
 #include <qline.h>
 #include <qdebug.h>
 #include <qcoreapplication.h>
-#include <qhexstring_p.h>
 #include <qnumeric.h>
+
+#include <qhexstring_p.h>
 
 static void qt_cleanup_brush_pattern_image_cache();
 
@@ -663,18 +664,6 @@ Q_GUI_EXPORT bool qt_isExtendedRadialGradient(const QBrush &brush)
    return false;
 }
 
-/*!
-    Returns true if the brush is fully opaque otherwise false. A brush
-    is considered opaque if:
-
-    \list
-    \i The alpha component of the color() is 255.
-    \i Its texture() does not have an alpha channel and is not a QBitmap.
-    \i The colors in the gradient() all have an alpha component that is 255.
-    \i It is an extended radial gradient.
-    \endlist
-*/
-
 bool QBrush::isOpaque() const
 {
    bool opaqueColor = d->color.alpha() == 255;
@@ -688,15 +677,15 @@ bool QBrush::isOpaque() const
       return false;
    }
 
-   if (d->style == Qt::LinearGradientPattern
-      || d->style == Qt::RadialGradientPattern
-      || d->style == Qt::ConicalGradientPattern) {
+   if (d->style == Qt::LinearGradientPattern || d->style == Qt::RadialGradientPattern || d->style == Qt::ConicalGradientPattern) {
+
       QVector<QPair<qreal, QColor>> stops = gradient()->stops();
       for (int i = 0; i < stops.size(); ++i)
          if (stops.at(i).second.alpha() != 255) {
             return false;
          }
       return true;
+
    } else if (d->style == Qt::TexturePattern) {
       return qHasPixmapTexture(*this)
          ? !texture().hasAlphaChannel() && !texture().isQBitmap()
@@ -706,30 +695,11 @@ bool QBrush::isOpaque() const
    return false;
 }
 
-
-/*!
-    \since 4.2
-
-    Sets \a matrix as an explicit transformation matrix on the
-    current brush. The brush transformation matrix is merged with
-    QPainter transformation matrix to produce the final result.
-
-    \sa matrix()
-*/
 void QBrush::setMatrix(const QMatrix &matrix)
 {
    setTransform(QTransform(matrix));
 }
 
-/*!
-    \since 4.3
-
-    Sets \a matrix as an explicit transformation matrix on the
-    current brush. The brush transformation matrix is merged with
-    QPainter transformation matrix to produce the final result.
-
-    \sa transform()
-*/
 void QBrush::setTransform(const QTransform &matrix)
 {
    detach(d->style);

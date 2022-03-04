@@ -63,10 +63,10 @@ class Q_GUI_EXPORT QSplitter : public QFrame
    void addWidget(QWidget *widget);
    void insertWidget(int index, QWidget *widget);
 
-   void setOrientation(Qt::Orientation);
+   void setOrientation(Qt::Orientation value);
    Qt::Orientation orientation() const;
 
-   void setChildrenCollapsible(bool);
+   void setChildrenCollapsible(bool value);
    bool childrenCollapsible() const;
 
    void setCollapsible(int index, bool collapse);
@@ -85,7 +85,7 @@ class Q_GUI_EXPORT QSplitter : public QFrame
    bool restoreState(const QByteArray &state);
 
    int handleWidth() const;
-   void setHandleWidth(int);
+   void setHandleWidth(int width);
 
    int indexOf(QWidget *widget) const;
    QWidget *widget(int index) const;

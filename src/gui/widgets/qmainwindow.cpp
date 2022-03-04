@@ -737,9 +737,12 @@ QByteArray QMainWindow::saveState(int version) const
 {
    QByteArray data;
    QDataStream stream(&data, QIODevice::WriteOnly);
+
    stream << QMainWindowLayout::VersionMarker;
    stream << version;
+
    d_func()->layout->saveState(stream);
+
    return data;
 }
 
@@ -756,10 +759,13 @@ bool QMainWindow::restoreState(const QByteArray &state, int version)
 
    stream >> marker;
    stream >> v;
+
    if (stream.status() != QDataStream::Ok || marker != QMainWindowLayout::VersionMarker || v != version) {
       return false;
    }
+
    bool restored = d_func()->layout->restoreState(stream);
+
    return restored;
 }
 

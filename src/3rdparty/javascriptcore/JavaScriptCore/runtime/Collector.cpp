@@ -115,7 +115,7 @@ typedef HANDLE PlatformThread;
 
 class Heap::Thread {
 public:
-    Thread(pthread_t pthread, const PlatformThread& platThread, void* base) 
+    Thread(pthread_t pthread, const PlatformThread& platThread, void* base)
         : posixThread(pthread)
         , platformThread(platThread)
         , stackBase(base)
@@ -161,7 +161,7 @@ void Heap::destroy()
 
     ASSERT(!m_globalData->dynamicGlobalObject);
     ASSERT(!isBusy());
-    
+
     // The global object is not GC protected at this point, so sweeping may delete it
     // (and thus the global data) before other objects that may use the global data.
     RefPtr<JSGlobalData> protect(m_globalData);
@@ -193,7 +193,7 @@ NEVER_INLINE CollectorBlock* Heap::allocateBlock()
     vm_address_t address = 0;
     vm_map(current_task(), &address, BLOCK_SIZE, BLOCK_OFFSET_MASK, VM_FLAGS_ANYWHERE | VM_TAG_FOR_COLLECTOR_MEMORY, MEMORY_OBJECT_NULL, 0, FALSE, VM_PROT_DEFAULT, VM_PROT_DEFAULT, VM_INHERIT_DEFAULT);
 #elif OS(SYMBIAN)
-    void* address = m_blockallocator.alloc();  
+    void* address = m_blockallocator.alloc();
     if (!address)
         CRASH();
 #elif OS(WINCE)
@@ -244,7 +244,7 @@ NEVER_INLINE CollectorBlock* Heap::allocateBlock()
     Structure* dummyMarkableCellStructure = m_globalData->dummyMarkableCellStructure.get();
     for (size_t i = 0; i < HeapConstants::cellsPerBlock; ++i)
         new (block->cells + i) JSCell(dummyMarkableCellStructure);
-    
+
     // Add block to blocks vector.
 
     size_t numBlocks = m_heap.numBlocks;
@@ -276,14 +276,14 @@ NEVER_INLINE void Heap::freeBlock(size_t block)
     m_heap.usedBlocks--;
 
     if (m_heap.numBlocks > MIN_ARRAY_SIZE && m_heap.usedBlocks < m_heap.numBlocks / LOW_WATER_FACTOR) {
-        m_heap.numBlocks = m_heap.numBlocks / GROWTH_FACTOR; 
+        m_heap.numBlocks = m_heap.numBlocks / GROWTH_FACTOR;
         m_heap.blocks = static_cast<CollectorBlock**>(fastRealloc(m_heap.blocks, m_heap.numBlocks * sizeof(CollectorBlock*)));
     }
 }
 
 NEVER_INLINE void Heap::freeBlockPtr(CollectorBlock* block)
 {
-#if OS(DARWIN)    
+#if OS(DARWIN)
     vm_deallocate(current_task(), reinterpret_cast<vm_address_t>(block), BLOCK_SIZE);
 #elif OS(SYMBIAN)
     m_blockallocator.free(reinterpret_cast<void*>(block));
@@ -360,7 +360,7 @@ void* Heap::allocate(size_t s)
 {
     typedef HeapConstants::Block Block;
     typedef HeapConstants::Cell Cell;
-    
+
     ASSERT(JSLock::lockCount() > 0);
     ASSERT(JSLock::currentThreadIsHoldingLock());
     ASSERT_UNUSED(s, s <= HeapConstants::cellSize);
@@ -429,7 +429,7 @@ void Heap::growBlocks(size_t neededBlocks)
 void Heap::shrinkBlocks(size_t neededBlocks)
 {
     ASSERT(m_heap.usedBlocks > neededBlocks);
-    
+
     // Clear the always-on last bit, so isEmpty() isn't fooled by it.
     for (size_t i = 0; i < m_heap.usedBlocks; ++i)
         m_heap.blocks[i]->marked.clear(HeapConstants::cellsPerBlock - 1);
@@ -918,7 +918,7 @@ static size_t getPlatformThreadRegisters(const PlatformThread& platformThread, P
 #elif CPU(X86_64)
     unsigned user_count = x86_THREAD_STATE64_COUNT;
     thread_state_flavor_t flavor = x86_THREAD_STATE64;
-#elif CPU(PPC) 
+#elif CPU(PPC)
     unsigned user_count = PPC_THREAD_STATE_COUNT;
     thread_state_flavor_t flavor = PPC_THREAD_STATE;
 #elif CPU(PPC64)
@@ -933,7 +933,7 @@ static size_t getPlatformThreadRegisters(const PlatformThread& platformThread, P
 
     kern_return_t result = thread_get_state(platformThread, flavor, (thread_state_t)&regs, &user_count);
     if (result != KERN_SUCCESS) {
-        WTFReportFatalError(__FILE__, __LINE__, WTF_PRETTY_FUNCTION, 
+        WTFReportFatalError(__FILE__, __LINE__, WTF_PRETTY_FUNCTION,
                             "JavaScript garbage collection failed because thread_get_state returned an error (%d). This is probably the result of running inside Rosetta, which is not supported.", result);
         CRASH();
     }
@@ -1018,8 +1018,8 @@ void Heap::markStackObjectsConservatively(MarkStack& markStack)
         MutexLocker lock(m_registeredThreadsMutex);
 
 #ifndef NDEBUG
-        // Forbid malloc during the mark phase. Marking a thread suspends it, so 
-        // a malloc inside markChildren() would risk a deadlock with a thread that had been 
+        // Forbid malloc during the mark phase. Marking a thread suspends it, so
+        // a malloc inside markChildren() would risk a deadlock with a thread that had been
         // suspended while holding the malloc lock.
         fastMallocForbid();
 #endif
@@ -1102,7 +1102,7 @@ void Heap::sweep()
     if (m_heap.operationInProgress != NoOperation)
         CRASH();
     m_heap.operationInProgress = Collection;
-    
+
 #if !ENABLE(JSC_ZOMBIES)
     Structure* dummyMarkableCellStructure = m_globalData->dummyMarkableCellStructure.get();
 #endif

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef JSValueInlineMethods_h
@@ -93,7 +93,7 @@ namespace JSC {
             v = false;
             return true;
         }
-        
+
         return false;
     }
 
@@ -196,19 +196,19 @@ namespace JSC {
         u.asBits.tag = NullTag;
         u.asBits.payload = 0;
     }
-    
+
     inline JSValue::JSValue(JSUndefinedTag)
     {
         u.asBits.tag = UndefinedTag;
         u.asBits.payload = 0;
     }
-    
+
     inline JSValue::JSValue(JSTrueTag)
     {
         u.asBits.tag = BooleanTag;
         u.asBits.payload = 1;
     }
-    
+
     inline JSValue::JSValue(JSFalseTag)
     {
         u.asBits.tag = BooleanTag;
@@ -227,7 +227,9 @@ namespace JSC {
             u.asBits.tag = CellTag;
         else
             u.asBits.tag = EmptyValueTag;
+
         u.asBits.payload = reinterpret_cast<int32_t>(ptr);
+
 #if ENABLE(JSC_ZOMBIES)
         ASSERT(!isZombie());
 #endif
@@ -239,7 +241,9 @@ namespace JSC {
             u.asBits.tag = CellTag;
         else
             u.asBits.tag = EmptyValueTag;
+
         u.asBits.payload = reinterpret_cast<int32_t>(const_cast<JSCell*>(ptr));
+
 #if ENABLE(JSC_ZOMBIES)
         ASSERT(!isZombie());
 #endif
@@ -305,24 +309,24 @@ namespace JSC {
     {
         return u.asBits.tag;
     }
-    
+
     inline int32_t JSValue::payload() const
     {
         return u.asBits.payload;
     }
-    
+
     inline int32_t JSValue::asInt32() const
     {
         ASSERT(isInt32());
         return u.asBits.payload;
     }
-    
+
     inline double JSValue::asDouble() const
     {
         ASSERT(isDouble());
         return u.asDouble;
     }
-    
+
     ALWAYS_INLINE JSCell* JSValue::asCell() const
     {
         ASSERT(isCell());
@@ -453,7 +457,7 @@ namespace JSC {
     {
         u.asInt64 = ValueNull;
     }
-    
+
     inline JSValue::JSValue(JSUndefinedTag)
     {
         u.asInt64 = ValueUndefined;

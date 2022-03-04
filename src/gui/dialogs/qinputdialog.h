@@ -42,25 +42,34 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
    GUI_CS_PROPERTY_WRITE(labelText, setLabelText)
    GUI_CS_PROPERTY_READ(options, options)
    GUI_CS_PROPERTY_WRITE(options, setOptions)
+
    GUI_CS_PROPERTY_READ(textValue, textValue)
    GUI_CS_PROPERTY_WRITE(textValue, setTextValue)
    GUI_CS_PROPERTY_NOTIFY(textValue, textValueChanged)
+
    GUI_CS_PROPERTY_READ(intValue, intValue)
    GUI_CS_PROPERTY_WRITE(intValue, setIntValue)
    GUI_CS_PROPERTY_NOTIFY(intValue, intValueChanged)
+
    GUI_CS_PROPERTY_READ(doubleValue, doubleValue)
    GUI_CS_PROPERTY_WRITE(doubleValue, setDoubleValue)
    GUI_CS_PROPERTY_NOTIFY(doubleValue, doubleValueChanged)
+
    GUI_CS_PROPERTY_READ(textEchoMode, textEchoMode)
    GUI_CS_PROPERTY_WRITE(textEchoMode, setTextEchoMode)
+
    GUI_CS_PROPERTY_READ(comboBoxEditable, isComboBoxEditable)
    GUI_CS_PROPERTY_WRITE(comboBoxEditable, setComboBoxEditable)
+
    GUI_CS_PROPERTY_READ(comboBoxItems, comboBoxItems)
    GUI_CS_PROPERTY_WRITE(comboBoxItems, setComboBoxItems)
+
    GUI_CS_PROPERTY_READ(intMinimum, intMinimum)
    GUI_CS_PROPERTY_WRITE(intMinimum, setIntMinimum)
+
    GUI_CS_PROPERTY_READ(intMaximum, intMaximum)
    GUI_CS_PROPERTY_WRITE(intMaximum, setIntMaximum)
+
    GUI_CS_PROPERTY_READ(intStep, intStep)
    GUI_CS_PROPERTY_WRITE(intStep, setIntStep)
    GUI_CS_PROPERTY_READ(doubleMinimum, doubleMinimum)

@@ -1357,40 +1357,32 @@ void QSplitter::changeEvent(QEvent *ev)
 
 static const qint32 SplitterMagic = 0xff;
 
-/*!
-    Saves the state of the splitter's layout.
-
-    Typically this is used in conjunction with QSettings to remember the size
-    for a future session. A version number is stored as part of the data.
-    Here is an example:
-
-    \snippet doc/src/snippets/splitter/splitter.cpp 1
-
-    \sa restoreState()
-*/
 QByteArray QSplitter::saveState() const
 {
    Q_D(const QSplitter);
+
    int version = 1;
    QByteArray data;
    QDataStream stream(&data, QIODevice::WriteOnly);
 
    stream << qint32(SplitterMagic);
    stream << qint32(version);
+
    QList<int> list;
    for (int i = 0; i < d->list.size(); ++i) {
       QSplitterLayoutStruct *s = d->list.at(i);
       list.append(s->sizer);
    }
+
    stream << list;
    stream << childrenCollapsible();
    stream << qint32(handleWidth());
    stream << opaqueResize();
    stream << qint32(orientation());
    stream << d->opaqueResizeSet;
+
    return data;
 }
-
 
 bool QSplitter::restoreState(const QByteArray &state)
 {

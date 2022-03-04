@@ -28,9 +28,10 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-class RCCFileInfo;
 class QIODevice;
 class QTextStream;
+
+class RCCFileInfo;
 
 class RCCResourceLibrary
 {
@@ -38,13 +39,18 @@ class RCCResourceLibrary
    RCCResourceLibrary &operator=(const RCCResourceLibrary &);
 
  public:
+   using ResourceFile = QHash<QString, QString>;
+
    RCCResourceLibrary();
    ~RCCResourceLibrary();
 
    bool output(QIODevice &out, QIODevice &errorDevice);
    bool readFiles(bool ignoreErrors, QIODevice &errorDevice);
 
-   enum Format { Binary, C_Code };
+   enum Format {
+      Binary,
+      C_Code
+   };
    void setFormat(Format f) {
       m_format = f;
    }
@@ -63,9 +69,8 @@ class RCCResourceLibrary
 
    QStringList dataFiles() const;
 
-   // Return a map of resource identifier (':/newPrefix/images/p1.png') to file.
-   typedef QHash<QString, QString> ResourceDataFileMap;
-   ResourceDataFileMap resourceDataFileMap() const;
+   // Return a container of resource identifier (':/newPrefix/images/p1.png') to file
+   ResourceFile resourceFile() const;
 
    void setVerbose(bool b) {
       m_verbose = b;
@@ -131,7 +136,7 @@ class RCCResourceLibrary
    bool addFile(const QString &alias, const RCCFileInfo &file);
 
    bool interpretResourceFile(QIODevice *inputDevice, const QString &file,
-            QString currentPath = QString(), bool ignoreErrors = false);
+         QString currentPath = QString(), bool ignoreErrors = false);
 
    bool writeHeader();
    bool writeDataBlobs();
@@ -153,9 +158,11 @@ class RCCResourceLibrary
 
    const Strings m_strings;
    RCCFileInfo *m_root;
+
    QStringList m_fileNames;
    QString m_resourceRoot;
    QString m_initName;
+
    Format m_format;
    bool m_verbose;
 

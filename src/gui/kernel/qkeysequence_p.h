@@ -26,9 +26,8 @@
 
 #include <qkeysequence.h>
 
-
-
 #ifndef QT_NO_SHORTCUT
+
 struct QKeyBinding {
    QKeySequence::StandardKey standardKey;
    uchar priority;
@@ -40,16 +39,19 @@ class QKeySequencePrivate
 {
  public:
    static constexpr int MaxKeyCount = 4;
-   inline QKeySequencePrivate()  : ref(1) {
 
+   QKeySequencePrivate()
+      : ref(1)
+   {
       key[0] = 0;
       key[1] = 0;
       key[2] = 0;
       key[3] = 0;
    }
 
-   inline QKeySequencePrivate(const QKeySequencePrivate &copy)  : ref(1) {
-
+   QKeySequencePrivate(const QKeySequencePrivate &copy)
+      : ref(1)
+   {
       key[0] = copy.key[0];
       key[1] = copy.key[1];
       key[2] = copy.key[2];
@@ -65,6 +67,7 @@ class QKeySequencePrivate
 
    static int decodeString(const QString &keyStr, QKeySequence::SequenceFormat format);
 };
+
 #endif // QT_NO_SHORTCUT
 
 

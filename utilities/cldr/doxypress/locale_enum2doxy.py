@@ -117,11 +117,11 @@ def print_block(block_list, extra_map, print_function, output):
 def parse_string(data):
     return dict(re.findall('(\w+)\s*=\s*(\w+)', data))
 
-      
+
 def main():
 
     language_file = open("doxy_language.txt", "w")
-    
+
     print_block(cs_enumdata.language_list, parse_string(cs_extra_enums.extra_language_string), print_language, language_file)
 
     country_file = open("doxy_country.txt", "w")

@@ -60,6 +60,7 @@ class QDockWidgetGroupWindow : public QWidget
    bool event(QEvent *) override;
    void paintEvent(QPaintEvent *) override;
 };
+
 // This item will be used in the layout for the gap item. We cannot use QWidgetItem directly
 // because QWidgetItem functions return an empty size for widgets that are are floating.
 class QDockWidgetGroupWindowItem : public QWidgetItem
@@ -90,7 +91,6 @@ class QDockWidgetGroupWindowItem : public QWidgetItem
 
 class QMainWindowLayoutState
 {
-
  public:
    QRect rect;
    QMainWindow *mainWindow;
@@ -239,7 +239,7 @@ class QMainWindowLayout : public QLayout
    bool separatorMove(const QPoint &pos);
    bool endSeparatorMove(const QPoint &pos);
    void keepSize(QDockWidget *w);
-#endif // QT_NO_DOCKWIDGET
+#endif
 
    // save/restore
    static constexpr const int VersionMarker = 0xff;

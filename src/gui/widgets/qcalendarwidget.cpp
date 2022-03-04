@@ -60,7 +60,6 @@ static QString formatNumber(int number, int fieldWidth)
 class QCalendarDateSectionValidator
 {
  public:
-
    enum Section {
       NextSection,
       ThisSection,

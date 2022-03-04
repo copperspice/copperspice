@@ -129,8 +129,8 @@ class Q_GUI_EXPORT QMenu : public QWidget
 
    // addAction(QIcon, QString): Connect to a functor or function pointer (without context)
    template <typename Func1>
-   QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot, const QKeySequence &shortcut = QKeySequence()) {
-      QAction *result = addAction(actionIcon, text);
+   QAction *addAction(const QIcon &icon, const QString &text, Func1 slot, const QKeySequence &shortcut = QKeySequence()) {
+      QAction *result = addAction(icon, text);
 
 #ifndef QT_NO_SHORTCUT
 

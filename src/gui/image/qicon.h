@@ -35,7 +35,6 @@ class QIconEngine;
 
 class Q_GUI_EXPORT QIcon
 {
-
  public:
    enum Mode { Normal, Disabled, Active, Selected };
    enum State { On, Off };
@@ -43,6 +42,7 @@ class Q_GUI_EXPORT QIcon
    QIcon();
    QIcon(const QPixmap &pixmap);
    QIcon(const QIcon &other);
+
    QIcon(QIcon &&other) : d(other.d) {
       other.d = nullptr;
    }
@@ -54,23 +54,23 @@ class Q_GUI_EXPORT QIcon
 
    QIcon &operator=(const QIcon &other);
 
-   inline QIcon &operator=(QIcon &&other) {
+   QIcon &operator=(QIcon &&other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QIcon &other) {
+   void swap(QIcon &other) {
       qSwap(d, other.d);
    }
 
    operator QVariant() const;
 
    QPixmap pixmap(const QSize &size, Mode mode = Normal, State state = Off) const;
-   inline QPixmap pixmap(int w, int h, Mode mode = Normal, State state = Off) const {
+   QPixmap pixmap(int w, int h, Mode mode = Normal, State state = Off) const {
       return pixmap(QSize(w, h), mode, state);
    }
 
-   inline QPixmap pixmap(int extent, Mode mode = Normal, State state = Off) const {
+   QPixmap pixmap(int extent, Mode mode = Normal, State state = Off) const {
       return pixmap(QSize(extent, extent), mode, state);
    }
 
@@ -112,7 +112,7 @@ class Q_GUI_EXPORT QIcon
    static void setThemeName(const QString &theme);
 
    typedef QIconPrivate *DataPtr;
-   inline DataPtr &data_ptr() {
+   DataPtr &data_ptr() {
       return d;
    }
 
@@ -121,8 +121,6 @@ class Q_GUI_EXPORT QIcon
 
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QIcon &);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QIcon &);
-
-
 };
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QIcon &);
@@ -133,7 +131,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QIcon &);
 Q_GUI_EXPORT QString qt_findAtNxFile(const QString &baseFileName, qreal targetDevicePixelRatio,
    qreal *sourceDevicePixelRatio = nullptr);
 
-template<>
+template <>
 inline bool CustomType_T<QIcon>::compare(const CustomType &other) const {
 
    auto ptr = dynamic_cast<const CustomType_T<QIcon>*>(&other);

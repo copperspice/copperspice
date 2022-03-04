@@ -124,10 +124,10 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    )
 
    enum OptimizationFlag {
-      DontClipPainter = 0x1, // obsolete
-      DontSavePainterState = 0x2,
+      DontClipPainter           = 0x1, // obsolete
+      DontSavePainterState      = 0x2,
       DontAdjustForAntialiasing = 0x4,
-      IndirectPainting = 0x8
+      IndirectPainting          = 0x8
    };
    using OptimizationFlags = QFlags<OptimizationFlag>;
 

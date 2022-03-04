@@ -1099,27 +1099,33 @@ bool QHeaderView::sectionsHidden() const
 QByteArray QHeaderView::saveState() const
 {
    Q_D(const QHeaderView);
+
    QByteArray data;
+
    QDataStream stream(&data, QIODevice::WriteOnly);
    stream << QHeaderViewPrivate::VersionMarker;
-   stream << 0; // current version is 0
+   stream << 0;          // current version is 0
    d->write(stream);
+
    return data;
 }
-
 
 bool QHeaderView::restoreState(const QByteArray &state)
 {
    Q_D(QHeaderView);
+
    if (state.isEmpty()) {
       return false;
    }
+
    QByteArray data = state;
+
    QDataStream stream(&data, QIODevice::ReadOnly);
    int marker;
    int ver;
    stream >> marker;
    stream >> ver;
+
    if (stream.status() != QDataStream::Ok || marker != QHeaderViewPrivate::VersionMarker || ver != 0) {
 
       return false;
@@ -1133,10 +1139,6 @@ bool QHeaderView::restoreState(const QByteArray &state)
    return false;
 }
 
-
-/*!
-  \reimp
-*/
 void QHeaderView::reset()
 {
    QAbstractItemView::reset();

@@ -66,11 +66,11 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
  public:
    enum Icon {
-      NoIcon   = 0,
+      NoIcon      = 0,
       Information = 1,
-      Warning  = 2,
-      Critical = 3,
-      Question = 4
+      Warning     = 2,
+      Critical    = 3,
+      Question    = 4
    };
 
    enum ButtonRole {
@@ -178,6 +178,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
    void setCheckBox(QCheckBox *cb);
    QCheckBox *checkBox() const;
+
    static StandardButton information(QWidget *parent, const QString &title,
       const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
 
@@ -199,7 +200,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
       int button0, int button1, int button2, QWidget *parent = nullptr,
       Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
-   // the following functions are obsolete
+   // following are obsolete
    static int information(QWidget *parent, const QString &title, const QString &text,
       int button0, int button1 = 0, int button2 = 0);
 

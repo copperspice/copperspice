@@ -147,12 +147,15 @@ bool QFileDialog::restoreState(const QByteArray &state)
    qint32 viewMode;
    stream >> marker;
    stream >> v;
+
    if (marker != QFileDialogMagic || (v != 3 && v != 4)) {
       return false;
    }
+
    stream >> d->splitterState
       >> d->sidebarUrls
       >> history;
+
    if (v == 3) {
       QString currentDirectoryString;
       stream >> currentDirectoryString;
