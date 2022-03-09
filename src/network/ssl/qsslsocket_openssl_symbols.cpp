@@ -942,9 +942,14 @@ bool q_resolveOpenSslSymbols()
 
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
    RESOLVEFUNC(EVP_sha1)
-   RESOLVEFUNC(EVP_PKEY_base_id)
    RESOLVEFUNC(EVP_CIPHER_CTX_new)
    RESOLVEFUNC(EVP_CIPHER_CTX_reset)
+#endif
+
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+   RESOLVE_RENAMED_FUNC(EVP_PKEY_base_id, EVP_PKEY_get_base_id)
+#else
+   RESOLVEFUNC(EVP_PKEY_base_id)
 #endif
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
@@ -1063,8 +1068,13 @@ bool q_resolveOpenSslSymbols()
    RESOLVEFUNC(SSL_version)
    RESOLVEFUNC(SSL_get_error)
    RESOLVEFUNC(SSL_get_peer_cert_chain)
-   RESOLVEFUNC(SSL_get_peer_certificate)
    RESOLVEFUNC(SSL_get_verify_result)
+
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+   RESOLVE_RENAMED_FUNC(SSL_get_peer_certificate, SSL_get1_peer_certificate)
+#else
+   RESOLVEFUNC(SSL_get_peer_certificate)
+#endif
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
    RESOLVEFUNC(SSL_library_init)
