@@ -127,81 +127,83 @@ struct QTzType {
 
 // TZ File parsing
 
-static QTzHeader parseTzHeader(QDataStream &ds, bool *ok)
+static QTzHeader parseTzHeader(QDataStream &stream, bool *ok)
 {
    QTzHeader hdr;
    quint8 ch;
    *ok = false;
 
    // Parse Magic, 4 bytes
-   ds.readRawData(hdr.tzh_magic, 4);
+   stream.readRawData(hdr.tzh_magic, 4);
 
-   if (memcmp(hdr.tzh_magic, TZ_MAGIC, 4) != 0 || ds.status() != QDataStream::Ok) {
+   if (memcmp(hdr.tzh_magic, TZ_MAGIC, 4) != 0 || stream.status() != QDataStream::Ok) {
       return hdr;
    }
 
    // Parse Version, 1 byte, before 2005 was '\0', since 2005 a '2', since 2013 a '3'
-   ds >> ch;
+   stream >> ch;
    hdr.tzh_version = ch;
-   if (ds.status() != QDataStream::Ok
+   if (stream.status() != QDataStream::Ok
       || (hdr.tzh_version != '2' && hdr.tzh_version != '\0' && hdr.tzh_version != '3')) {
       return hdr;
    }
 
    // Parse reserved space, 15 bytes
-   ds.readRawData(hdr.tzh_reserved, 15);
-   if (ds.status() != QDataStream::Ok) {
+   stream.readRawData(hdr.tzh_reserved, 15);
+   if (stream.status() != QDataStream::Ok) {
       return hdr;
    }
 
    // Parse rest of header, 6 x 4-byte transition counts
-   ds >> hdr.tzh_ttisgmtcnt >> hdr.tzh_ttisstdcnt >> hdr.tzh_leapcnt >> hdr.tzh_timecnt
+   stream >> hdr.tzh_ttisgmtcnt >> hdr.tzh_ttisstdcnt >> hdr.tzh_leapcnt >> hdr.tzh_timecnt
       >> hdr.tzh_typecnt >> hdr.tzh_charcnt;
 
    // Check defined maximums
-   if (ds.status() != QDataStream::Ok
+   if (stream.status() != QDataStream::Ok
       || hdr.tzh_timecnt > TZ_MAX_TIMES
       || hdr.tzh_typecnt > TZ_MAX_TYPES
       || hdr.tzh_charcnt > TZ_MAX_CHARS
       || hdr.tzh_leapcnt > TZ_MAX_LEAPS
       || hdr.tzh_ttisgmtcnt > hdr.tzh_typecnt
       || hdr.tzh_ttisstdcnt > hdr.tzh_typecnt) {
+
       return hdr;
    }
 
    *ok = true;
+
    return hdr;
 }
 
-static QVector<QTzTransition> parseTzTransitions(QDataStream &ds, int tzh_timecnt, bool longTran)
+static QVector<QTzTransition> parseTzTransitions(QDataStream &stream, int tzh_timecnt, bool longTran)
 {
    QVector<QTzTransition> transitions(tzh_timecnt);
 
    if (longTran) {
       // Parse tzh_timecnt x 8-byte transition times
-      for (int i = 0; i < tzh_timecnt && ds.status() == QDataStream::Ok; ++i) {
-         ds >> transitions[i].tz_time;
-         if (ds.status() != QDataStream::Ok) {
+      for (int i = 0; i < tzh_timecnt && stream.status() == QDataStream::Ok; ++i) {
+         stream >> transitions[i].tz_time;
+         if (stream.status() != QDataStream::Ok) {
             transitions.resize(i);
          }
       }
    } else {
       // Parse tzh_timecnt x 4-byte transition times
       int val;
-      for (int i = 0; i < tzh_timecnt && ds.status() == QDataStream::Ok; ++i) {
-         ds >> val;
+      for (int i = 0; i < tzh_timecnt && stream.status() == QDataStream::Ok; ++i) {
+         stream >> val;
          transitions[i].tz_time = val;
-         if (ds.status() != QDataStream::Ok) {
+         if (stream.status() != QDataStream::Ok) {
             transitions.resize(i);
          }
       }
    }
 
    // Parse tzh_timecnt x 1-byte transition type index
-   for (int i = 0; i < tzh_timecnt && ds.status() == QDataStream::Ok; ++i) {
+   for (int i = 0; i < tzh_timecnt && stream.status() == QDataStream::Ok; ++i) {
       quint8 typeind;
-      ds >> typeind;
-      if (ds.status() == QDataStream::Ok) {
+      stream >> typeind;
+      if (stream.status() == QDataStream::Ok) {
          transitions[i].tz_typeind = typeind;
       }
    }
@@ -209,27 +211,31 @@ static QVector<QTzTransition> parseTzTransitions(QDataStream &ds, int tzh_timecn
    return transitions;
 }
 
-static QVector<QTzType> parseTzTypes(QDataStream &ds, int tzh_typecnt)
+static QVector<QTzType> parseTzTypes(QDataStream &stream, int tzh_typecnt)
 {
    QVector<QTzType> types(tzh_typecnt);
 
    // Parse tzh_typecnt x transition types
-   for (int i = 0; i < tzh_typecnt && ds.status() == QDataStream::Ok; ++i) {
+   for (int i = 0; i < tzh_typecnt && stream.status() == QDataStream::Ok; ++i) {
       QTzType &type = types[i];
       // Parse UTC Offset, 4 bytes
-      ds >> type.tz_gmtoff;
+      stream >> type.tz_gmtoff;
+
       // Parse Is DST flag, 1 byte
-      if (ds.status() == QDataStream::Ok) {
-         ds >> type.tz_isdst;
+      if (stream.status() == QDataStream::Ok) {
+         stream >> type.tz_isdst;
       }
+
       // Parse Abbreviation Array Index, 1 byte
-      if (ds.status() == QDataStream::Ok) {
-         ds >> type.tz_abbrind;
+      if (stream.status() == QDataStream::Ok) {
+         stream >> type.tz_abbrind;
       }
+
       // Set defaults in case not populated later
       type.tz_ttisgmt = false;
       type.tz_ttisstd = false;
-      if (ds.status() != QDataStream::Ok) {
+
+      if (stream.status() != QDataStream::Ok) {
          types.resize(i);
       }
    }
@@ -237,7 +243,7 @@ static QVector<QTzType> parseTzTypes(QDataStream &ds, int tzh_typecnt)
    return types;
 }
 
-static QMap<int, QByteArray> parseTzAbbreviations(QDataStream &ds, int tzh_charcnt, const QVector<QTzType> &types)
+static QMap<int, QByteArray> parseTzAbbreviations(QDataStream &stream, int tzh_charcnt, const QVector<QTzType> &types)
 {
    // Parse the abbreviation list which is tzh_charcnt long with '\0' separated strings. The
    // QTzType.tz_abbrind index points to the first char of the abbreviation in the array, not the
@@ -247,71 +253,81 @@ static QMap<int, QByteArray> parseTzAbbreviations(QDataStream &ds, int tzh_charc
    QMap<int, QByteArray> map;
    quint8 ch;
    QByteArray input;
+
    // First parse the full abbrev string
-   for (int i = 0; i < tzh_charcnt && ds.status() == QDataStream::Ok; ++i) {
-      ds >> ch;
-      if (ds.status() == QDataStream::Ok) {
+   for (int i = 0; i < tzh_charcnt && stream.status() == QDataStream::Ok; ++i) {
+      stream >> ch;
+
+      if (stream.status() == QDataStream::Ok) {
          input.append(char(ch));
       } else {
          return map;
       }
    }
+
    // Then extract all the substrings pointed to by types
    for (const QTzType &type : types) {
       QByteArray abbrev;
+
       for (int i = type.tz_abbrind; input.at(i) != '\0'; ++i) {
          abbrev.append(input.at(i));
       }
       // Have reached end of an abbreviation, so add to map
       map[type.tz_abbrind] = abbrev;
    }
+
    return map;
 }
 
-static void parseTzLeapSeconds(QDataStream &ds, int tzh_leapcnt, bool longTran)
+static void parseTzLeapSeconds(QDataStream &stream, int tzh_leapcnt, bool longTran)
 {
    // Parse tzh_leapcnt x pairs of leap seconds
    // We don't use leap seconds, so only read and don't store
    qint64 val;
+
    if (longTran) {
       qint64 time;
-      for (int i = 0; i < tzh_leapcnt && ds.status() == QDataStream::Ok; ++i) {
+
+      for (int i = 0; i < tzh_leapcnt && stream.status() == QDataStream::Ok; ++i) {
          // Parse Leap Occurrence Time, 8 bytes
-         ds >> time;
+         stream >> time;
+
          // Parse Leap Seconds To Apply, 4 bytes
-         if (ds.status() == QDataStream::Ok) {
-            ds >> val;
+         if (stream.status() == QDataStream::Ok) {
+            stream >> val;
          }
       }
+
    } else {
-      for (int i = 0; i < tzh_leapcnt && ds.status() == QDataStream::Ok; ++i) {
+      for (int i = 0; i < tzh_leapcnt && stream.status() == QDataStream::Ok; ++i) {
          // Parse Leap Occurrence Time, 4 bytes
-         ds >> val;
+         stream >> val;
+
          // Parse Leap Seconds To Apply, 4 bytes
-         if (ds.status() == QDataStream::Ok) {
-            ds >> val;
+         if (stream.status() == QDataStream::Ok) {
+            stream >> val;
          }
       }
    }
 }
 
-static QVector<QTzType> parseTzIndicators(QDataStream &ds, const QVector<QTzType> &types, int tzh_ttisstdcnt, int tzh_ttisgmtcnt)
+static QVector<QTzType> parseTzIndicators(QDataStream &stream, const QVector<QTzType> &types, int tzh_ttisstdcnt, int tzh_ttisgmtcnt)
 {
    QVector<QTzType> result = types;
    bool temp;
 
    // Parse tzh_ttisstdcnt x 1-byte standard/wall indicators
-   for (int i = 0; i < tzh_ttisstdcnt && ds.status() == QDataStream::Ok; ++i) {
-      ds >> temp;
-      if (ds.status() == QDataStream::Ok) {
+   for (int i = 0; i < tzh_ttisstdcnt && stream.status() == QDataStream::Ok; ++i) {
+      stream >> temp;
+      if (stream.status() == QDataStream::Ok) {
          result[i].tz_ttisstd = temp;
       }
    }
 
    // Parse tzh_ttisgmtcnt x 1-byte UTC/local indicators
-   for (int i = 0; i < tzh_ttisgmtcnt && ds.status() == QDataStream::Ok; ++i) {
-      ds >> temp;
-      if (ds.status() == QDataStream::Ok) {
+   for (int i = 0; i < tzh_ttisgmtcnt && stream.status() == QDataStream::Ok; ++i) {
+      stream >> temp;
+      if (stream.status() == QDataStream::Ok) {
          result[i].tz_ttisgmt = temp;
       }
    }
@@ -319,20 +335,22 @@ static QVector<QTzType> parseTzIndicators(QDataStream &ds, const QVector<QTzType
    return result;
 }
 
-static QByteArray parseTzPosixRule(QDataStream &ds)
+static QByteArray parseTzPosixRule(QDataStream &stream)
 {
    // Parse POSIX rule, variable length '\n' enclosed
    QByteArray rule;
 
    quint8 ch;
-   ds >> ch;
-   if (ch != '\n' || ds.status() != QDataStream::Ok) {
+   stream >> ch;
+
+   if (ch != '\n' || stream.status() != QDataStream::Ok) {
       return rule;
    }
-   ds >> ch;
-   while (ch != '\n' && ds.status() == QDataStream::Ok) {
+
+   stream >> ch;
+   while (ch != '\n' && stream.status() == QDataStream::Ok) {
       rule.append((char)ch);
-      ds >> ch;
+      stream >> ch;
    }
 
    return rule;

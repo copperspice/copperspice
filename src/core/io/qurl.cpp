@@ -2418,22 +2418,25 @@ bool QUrl::isParentOf(const QUrl &childUrl) const
                    && childPath.length() > ourPath.length() && childPath.at(ourPath.length()) == QLatin1Char('/'))));
 }
 
-QDataStream &operator<<(QDataStream &out, const QUrl &url)
+QDataStream &operator<<(QDataStream &stream, const QUrl &url)
 {
    QByteArray u;
+
    if (url.isValid()) {
       u = url.toEncoded();
    }
-   out << u;
-   return out;
+
+   stream << u;
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &in, QUrl &url)
+QDataStream &operator>>(QDataStream &stream, QUrl &url)
 {
    QByteArray u;
-   in >> u;
+   stream >> u;
    url.setUrl(QString::fromLatin1(u));
-   return in;
+
+   return stream;
 }
 
 static QString errorMessage(QUrlPrivate::ErrorCode errorCode, const QString &errorSource, int errorPosition)

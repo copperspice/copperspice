@@ -486,8 +486,8 @@ class Q_CORE_EXPORT QVariant
    void cs_internal_create(uint typeId, const void *other);
    bool cs_internal_compare(const QVariant &other) const;
 
-   void load(QDataStream &streamIn);
-   void save(QDataStream &streamOut) const;
+   void load(QDataStream &stream);
+   void save(QDataStream &stream) const;
 
    bool cs_internal_load(QDataStream &stream, uint type);
    bool cs_internal_save(QDataStream &stream, uint type) const;
@@ -507,8 +507,8 @@ class Q_CORE_EXPORT QVariant
    std::variant <std::monostate, bool, char, int, uint, qint64, quint64, double, float,
                  QChar32, QString, QObject *, void *, std::shared_ptr<CustomType> > m_data;
 
-   friend Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant &data);
-   friend Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant &data);
+   friend Q_CORE_EXPORT QDataStream &operator>> (QDataStream &stream, QVariant &data);
+   friend Q_CORE_EXPORT QDataStream &operator<< (QDataStream &stream, const QVariant &data);
 };
 
 using QVariantList      = QList<QVariant>;
@@ -517,11 +517,11 @@ using QVariantMap       = QMap<QString, QVariant>;
 using QVariantMultiHash = QMultiHash<QString, QVariant>;
 using QVariantMultiMap  = QMultiMap<QString, QVariant>;
 
-Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant &data);
-Q_CORE_EXPORT QDataStream &operator>> (QDataStream &streamIn, QVariant::Type &typeId);
+Q_CORE_EXPORT QDataStream &operator>> (QDataStream &stream, QVariant &data);
+Q_CORE_EXPORT QDataStream &operator>> (QDataStream &stream, QVariant::Type &typeId);
 
-Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant &data);
-Q_CORE_EXPORT QDataStream &operator<< (QDataStream &streamOut, const QVariant::Type typeId);
+Q_CORE_EXPORT QDataStream &operator<< (QDataStream &stream, const QVariant &data);
+Q_CORE_EXPORT QDataStream &operator<< (QDataStream &stream, const QVariant::Type typeId);
 
 //
 template <class T>

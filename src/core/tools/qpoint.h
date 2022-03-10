@@ -75,8 +75,8 @@ class Q_CORE_EXPORT QPoint
    friend class QTransform;
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPoint &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPoint &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QPoint &point);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QPoint &point);
 
 inline QPoint::QPoint()
 {
@@ -272,8 +272,8 @@ class Q_CORE_EXPORT QPointF
    friend class QTransform;
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPointF &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPointF &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QPointF &pointF);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QPointF &pointF);
 
 inline QPointF::QPointF()
    : xp(0), yp(0)

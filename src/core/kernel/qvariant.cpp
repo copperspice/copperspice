@@ -241,9 +241,9 @@ QVariant::QVariant(const QVariant &other)
    }
 }
 
-QVariant::QVariant(QDataStream &s)
+QVariant::QVariant(QDataStream &stream)
 {
-   s >> *this;
+   stream >> *this;
 }
 
 QVariant::QVariant(QVariant::Type type)
@@ -2958,21 +2958,21 @@ bool QVariant::compareValues(const QVariant &a, const QVariant &b)
 }
 
 // private
-void QVariant::load(QDataStream &s)
+void QVariant::load(QDataStream &stream)
 {
    clear();
 
    quint32 inputType;
-   s >> inputType;
+   stream >> inputType;
 
    if (inputType == static_cast<quint32>(QVariant::UserType)) {
       QString name;
-      s >> name;
+      stream >> name;
 
       inputType = static_cast<quint32>(QVariant::nameToType(name));
 
       if (inputType == 0) {
-         s.setStatus(QDataStream::ReadCorruptData);
+         stream.setStatus(QDataStream::ReadCorruptData);
          return;
       }
    }
@@ -2983,28 +2983,28 @@ void QVariant::load(QDataStream &s)
       return;
    }
 
-   if (! cs_internal_load(s, userType()) ) {
-      s.setStatus(QDataStream::ReadCorruptData);
+   if (! cs_internal_load(stream, userType()) ) {
+      stream.setStatus(QDataStream::ReadCorruptData);
       qWarning("QVariant::load(): Unable to load Variant::Type %d from stream", userType());
    }
 }
 
 // private
-void QVariant::save(QDataStream &s) const
+void QVariant::save(QDataStream &stream) const
 {
    QVariant::Type current_type = type();
 
-   s << static_cast<quint32>(current_type);
+   stream << static_cast<quint32>(current_type);
 
    if (current_type == QVariant::UserType) {
-      s << QVariant::typeToName(userType());
+      stream << QVariant::typeToName(userType());
    }
 
    if (! isValid()) {
       return;
    }
 
-   if (! cs_internal_save(s, userType()) ) {
+   if (! cs_internal_save(stream, userType()) ) {
       qWarning("QVariant::save(): Unable to save Variant::Type %d to data stream", userType());
    }
 }
@@ -4175,33 +4175,33 @@ QVariant &QVariant::operator=(const QVariant &other)
    return *this;
 }
 
-QDataStream &operator>>(QDataStream &streamIn, QVariant &data)
+QDataStream &operator>>(QDataStream &stream, QVariant &data)
 {
-   data.load(streamIn);
-   return streamIn;
+   data.load(stream);
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &streamIn, QVariant::Type &typeId)
+QDataStream &operator>>(QDataStream &stream, QVariant::Type &typeId)
 {
    quint32 tmp;
 
    // load an enum value
-   streamIn >> tmp;
+   stream >> tmp;
    typeId = static_cast<QVariant::Type>(tmp);
 
-   return streamIn;
+   return stream;
 }
 
-QDataStream &operator<<(QDataStream &streamOut, const QVariant &data)
+QDataStream &operator<<(QDataStream &stream, const QVariant &data)
 {
-   data.save(streamOut);
-   return streamOut;
+   data.save(stream);
+   return stream;
 }
 
-QDataStream &operator<<(QDataStream &streamOut, const QVariant::Type typeId)
+QDataStream &operator<<(QDataStream &stream, const QVariant::Type typeId)
 {
    // save an enum value
-   streamOut << static_cast<quint32>(typeId);
+   stream << static_cast<quint32>(typeId);
 
-   return streamOut;
+   return stream;
 }

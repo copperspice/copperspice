@@ -412,16 +412,16 @@ QList<QByteArray> QTimeZone::windowsIdToIanaIds(const QByteArray &windowsId, QLo
    return QTimeZonePrivate::windowsIdToIanaIds(windowsId, country);
 }
 
-QDataStream &operator<<(QDataStream &ds, const QTimeZone &tz)
+QDataStream &operator<<(QDataStream &stream, const QTimeZone &tz)
 {
-   tz.d->serialize(ds);
-   return ds;
+   tz.d->serialize(stream);
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &ds, QTimeZone &tz)
+QDataStream &operator>>(QDataStream &stream, QTimeZone &tz)
 {
    QByteArray ianaId;            // must be a QByteArray
-   ds >> ianaId;
+   stream >> ianaId;
 
    if (ianaId == "OffsetFromUtc") {
       int utcOffset;
@@ -430,7 +430,7 @@ QDataStream &operator>>(QDataStream &ds, QTimeZone &tz)
       int country;               // QLocale::Country
       QString comment;
 
-      ds >> ianaId >> utcOffset >> name >> abbreviation >> country >> comment;
+      stream >> ianaId >> utcOffset >> name >> abbreviation >> country >> comment;
       tz = QTimeZone(ianaId, utcOffset, name, abbreviation,
                   static_cast<QLocale::Country>(country), comment);
 
@@ -438,7 +438,7 @@ QDataStream &operator>>(QDataStream &ds, QTimeZone &tz)
       tz = QTimeZone(ianaId);
    }
 
-   return ds;
+   return stream;
 }
 
 QDebug operator<<(QDebug dbg, const QTimeZone &tz)

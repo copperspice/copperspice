@@ -82,14 +82,14 @@ class Q_CORE_EXPORT QEasingCurve
  private:
    QEasingCurvePrivate *d_ptr;
 
-   friend Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &item);
-   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QEasingCurve &);
-   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QEasingCurve &);
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QEasingCurve &easing);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QEasingCurve &easing);
+   friend Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &easing);
 };
 
-Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &item);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QEasingCurve &easing);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QEasingCurve &easing);
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QEasingCurve &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QEasingCurve &);
+Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &easing);
 
 #endif

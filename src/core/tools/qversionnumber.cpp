@@ -184,19 +184,19 @@ void QVersionNumber::SegmentStorage::setVector(int len, int maj, int min, int mi
    }
 }
 
-QDataStream &operator<<(QDataStream &out, const QVersionNumber &version)
+QDataStream &operator<<(QDataStream &stream, const QVersionNumber &version)
 {
-   out << version.segments();
-   return out;
+   stream << version.segments();
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &in, QVersionNumber &version)
+QDataStream &operator>>(QDataStream &stream, QVersionNumber &version)
 {
 
    version.m_segments.pointer_segments.clear();
-   in >> version.m_segments.pointer_segments;
+   stream >> version.m_segments.pointer_segments;
 
-   return in;
+   return stream;
 }
 
 QDebug operator<<(QDebug debug, const QVersionNumber &version)

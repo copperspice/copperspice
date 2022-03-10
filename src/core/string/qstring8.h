@@ -1028,8 +1028,8 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString8 &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString8 &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QString8 &str);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QString8 &str);
 
 // free functions, comparisons for string literals
 template <int N>

@@ -38,17 +38,17 @@ QPair<T1, T2> qMakePair(const T1 &x, const T2 &y)
 }
 
 template <class T1, class T2>
-inline QDataStream &operator>>(QDataStream &s, QPair<T1, T2> &p)
+inline QDataStream &operator>>(QDataStream &stream, QPair<T1, T2> &pair)
 {
-   s >> p.first >> p.second;
-   return s;
+   stream >> pair.first >> pair.second;
+   return stream;
 }
 
 template <class T1, class T2>
-inline QDataStream &operator<<(QDataStream &s, const QPair<T1, T2> &p)
+inline QDataStream &operator<<(QDataStream &stream, const QPair<T1, T2> &pair)
 {
-   s << p.first << p.second;
-   return s;
+   stream << pair.first << pair.second;
+   return stream;
 }
 
 #endif

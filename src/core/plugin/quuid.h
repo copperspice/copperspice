@@ -154,8 +154,8 @@ class Q_CORE_EXPORT QUuid
    uchar   data4[8];
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QUuid &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QUuid &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QUuid &uuid);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QUuid &uuid);
 
 Q_CORE_EXPORT uint qHash(const QUuid &uuid, uint seed = 0);
 

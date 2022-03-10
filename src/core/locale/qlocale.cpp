@@ -772,19 +772,20 @@ static QString getLocaleListData(const ushort *data, int size, int index)
    return getLocaleData(data, end - data);
 }
 
-QDataStream &operator<<(QDataStream &ds, const QLocale &l)
+QDataStream &operator<<(QDataStream &stream, const QLocale &locale)
 {
-   ds << l.name();
-   return ds;
+   stream << locale.name();
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &ds, QLocale &l)
+QDataStream &operator>>(QDataStream &stream, QLocale &locale)
 {
-   QString s;
-   ds >> s;
-   l = QLocale(s);
+   QString str;
+   stream >> str;
 
-   return ds;
+   locale = QLocale(str);
+
+   return stream;
 }
 
 static QLocalePrivate *localePrivateByName(const QString &name)

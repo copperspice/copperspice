@@ -275,11 +275,11 @@ QByteArray QUuid::toRfc4122() const
    return bytes;
 }
 
-QDataStream &operator<<(QDataStream &s, const QUuid &id)
+QDataStream &operator<<(QDataStream &stream, const QUuid &id)
 {
    QByteArray bytes;
 
-   if (s.byteOrder() == QDataStream::BigEndian) {
+   if (stream.byteOrder() == QDataStream::BigEndian) {
       bytes = id.toRfc4122();
 
    } else {
@@ -300,22 +300,23 @@ QDataStream &operator<<(QDataStream &s, const QUuid &id)
       }
    }
 
-   if (s.writeRawData(bytes.data(), 16) != 16) {
-      s.setStatus(QDataStream::WriteFailed);
+   if (stream.writeRawData(bytes.data(), 16) != 16) {
+      stream.setStatus(QDataStream::WriteFailed);
    }
-   return s;
+
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &s, QUuid &id)
+QDataStream &operator>>(QDataStream &stream, QUuid &id)
 {
    QByteArray bytes(16, Qt::NoData);
 
-   if (s.readRawData(bytes.data(), 16) != 16) {
-      s.setStatus(QDataStream::ReadPastEnd);
-      return s;
+   if (stream.readRawData(bytes.data(), 16) != 16) {
+      stream.setStatus(QDataStream::ReadPastEnd);
+      return stream;
    }
 
-   if (s.byteOrder() == QDataStream::BigEndian) {
+   if (stream.byteOrder() == QDataStream::BigEndian) {
       id = QUuid::fromRfc4122(bytes);
    } else {
       const uchar *data = reinterpret_cast<const uchar *>(bytes.constData());
@@ -333,7 +334,7 @@ QDataStream &operator>>(QDataStream &s, QUuid &id)
       }
    }
 
-   return s;
+   return stream;
 }
 
 /*!

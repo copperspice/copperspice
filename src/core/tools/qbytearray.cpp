@@ -1553,25 +1553,25 @@ void QByteArray::clear()
    d = Data::sharedNull();
 }
 
-QDataStream &operator<<(QDataStream &out, const QByteArray &ba)
+QDataStream &operator<<(QDataStream &stream, const QByteArray &byteArray)
 {
-   if (ba.isNull()) {
-      out << (quint32)0xffffffff;
-      return out;
+   if (byteArray.isNull()) {
+      stream << (quint32)0xffffffff;
+      return stream;
    }
 
-   return out.writeBytes(ba.constData(), ba.size());
+   return stream.writeBytes(byteArray.constData(), byteArray.size());
 }
 
-QDataStream &operator>>(QDataStream &in, QByteArray &ba)
+QDataStream &operator>>(QDataStream &stream, QByteArray &byteArray)
 {
-   ba.clear();
+   byteArray.clear();
 
    quint32 len;
-   in >> len;
+   stream >> len;
 
    if (len == 0xffffffff) {
-      return in;
+      return stream;
    }
 
    const quint32 Step = 1024 * 1024;
@@ -1579,19 +1579,20 @@ QDataStream &operator>>(QDataStream &in, QByteArray &ba)
 
    do {
       int blockSize = qMin(Step, len - allocated);
-      ba.resize(allocated + blockSize);
+      byteArray.resize(allocated + blockSize);
 
-      if (in.readRawData(ba.data() + allocated, blockSize) != blockSize) {
-         ba.clear();
-         in.setStatus(QDataStream::ReadPastEnd);
-         return in;
+      if (stream.readRawData(byteArray.data() + allocated, blockSize) != blockSize) {
+         byteArray.clear();
+         stream.setStatus(QDataStream::ReadPastEnd);
+
+         return stream;
       }
 
       allocated += blockSize;
 
    } while (allocated < len);
 
-   return in;
+   return stream;
 }
 
 QByteArray QByteArray::simplified() const

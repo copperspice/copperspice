@@ -102,7 +102,7 @@ class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
    virtual QList<QByteArray> availableTimeZoneIds(QLocale::Country country) const;
    virtual QList<QByteArray> availableTimeZoneIds(int utcOffset) const;
 
-   virtual void serialize(QDataStream &ds) const;
+   virtual void serialize(QDataStream &stream) const;
 
    // Static Utility Methods
    static inline qint64 maxMSecs() {
@@ -187,7 +187,7 @@ class  QUtcTimeZonePrivate final : public QTimeZonePrivate
    QList<QByteArray> availableTimeZoneIds(QLocale::Country country) const override;
    QList<QByteArray> availableTimeZoneIds(int utcOffset) const override;
 
-   void serialize(QDataStream &ds) const override;
+   void serialize(QDataStream &stream) const override;
 
  private:
    void init(const QByteArray &zoneId);

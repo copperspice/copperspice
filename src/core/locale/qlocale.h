@@ -1055,7 +1055,7 @@ inline QString QLocale::toCurrencyString(float value, const QString &symbol) con
    return toCurrencyString(double(value), symbol);
 }
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QLocale &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLocale &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QLocale &locale);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QLocale &locale);
 
 #endif // QLOCALE_H

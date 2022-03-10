@@ -1005,8 +1005,8 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       }
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString16 &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString16 &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QString16 &str);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QString16 &str);
 
 // free functions, comparisons for string literals
 template <int N>

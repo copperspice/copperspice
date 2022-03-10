@@ -32,8 +32,8 @@ class QVersionNumber;
 
 Q_CORE_EXPORT uint qHash(const QVersionNumber &key, uint seed = 0);
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QVersionNumber &version);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QVersionNumber &version);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QVersionNumber &version);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QVersionNumber &version);
 
 class QVersionNumber
 {
@@ -145,7 +145,7 @@ class QVersionNumber
    Q_CORE_EXPORT static QVersionNumber fromString(const QString &string, int *suffixIndex = nullptr);
 
  private:
-   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QVersionNumber &version);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QVersionNumber &version);
    friend Q_CORE_EXPORT uint qHash(const QVersionNumber &key, uint seed);
 };
 

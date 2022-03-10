@@ -831,8 +831,8 @@ inline QByteArray &QByteArray::setNum(float n, char f, int prec)
    return setNum(double(n), f, prec);
 }
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &value);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QByteArray &value);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QByteArray &byteArray);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QByteArray &byteArray);
 
 Q_CORE_EXPORT QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel = -1);
 Q_CORE_EXPORT QByteArray qUncompress(const uchar *data, int nbytes);

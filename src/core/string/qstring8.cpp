@@ -1656,22 +1656,22 @@ void QString8::truncate(size_type length)
 }
 
 // data stream
-QDataStream &operator>>(QDataStream &in, QString8 &str)
+QDataStream &operator>>(QDataStream &stream, QString8 &str)
 {
    char *tmp;
    uint len;
 
-   in.readBytes(tmp, len);
+   stream.readBytes(tmp, len);
    str = QString8::fromUtf8(tmp, len);
    delete [] tmp;
 
-   return in;
+   return stream;
 }
 
-QDataStream &operator<<(QDataStream &out, const QString8 &str)
+QDataStream &operator<<(QDataStream &stream, const QString8 &str)
 {
-   out.writeBytes(str.constData(), str.size_storage());
-   return out;
+   stream.writeBytes(str.constData(), str.size_storage());
+   return stream;
 }
 
 // normalization functions

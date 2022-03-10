@@ -56,22 +56,23 @@ QSize QSize::scaled(const QSize &s, Qt::AspectRatioMode mode) const
    }
 }
 
-QDataStream &operator<<(QDataStream &s, const QSize &sz)
+QDataStream &operator<<(QDataStream &stream, const QSize &size)
 {
-   s << (qint32)sz.width() << (qint32)sz.height();
+   stream << (qint32)size.width() << (qint32)size.height();
 
-   return s;
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &s, QSize &sz)
+QDataStream &operator>>(QDataStream &stream, QSize &size)
 {
    qint32 w, h;
-   s >> w;
-   sz.rwidth() = w;
-   s >> h;
-   sz.rheight() = h;
+   stream >> w;
+   size.rwidth() = w;
 
-   return s;
+   stream >> h;
+   size.rheight() = h;
+
+   return stream;
 }
 
 QDebug operator<<(QDebug dbg, const QSize &s)
@@ -112,29 +113,34 @@ QSizeF QSizeF::scaled(const QSizeF &s, Qt::AspectRatioMode mode) const
    }
 }
 
-QDataStream &operator<<(QDataStream &s, const QSizeF &sz)
+QDataStream &operator<<(QDataStream &stream, const QSizeF &sizeF)
 {
-   s << double(sz.width()) << double(sz.height());
-   return s;
+   stream << double(sizeF.width()) << double(sizeF.height());
+
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &s, QSizeF &sz)
+QDataStream &operator>>(QDataStream &stream, QSizeF &sizeF)
 {
    double w, h;
-   s >> w;
-   s >> h;
-   sz.setWidth(qreal(w));
-   sz.setHeight(qreal(h));
-   return s;
+   stream >> w;
+   stream >> h;
+
+   sizeF.setWidth(qreal(w));
+   sizeF.setHeight(qreal(h));
+
+   return stream;
 }
 
-QDebug operator<<(QDebug dbg, const QSizeF &s)
+QDebug operator<<(QDebug dbg, const QSizeF &size)
 {
     QDebugStateSaver saver(dbg);
     dbg.nospace();
     dbg << "QSizeF(";
-    QtDebugUtils::formatQSize(dbg, s);
+
+    QtDebugUtils::formatQSize(dbg, size);
     dbg << ')';
+
     return dbg;
 }
 

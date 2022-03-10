@@ -32,10 +32,13 @@ QBitArray::QBitArray(int size, bool value)
       d.resize(0);
       return;
    }
+
    d.resize(1 + (size + 7) / 8);
    uchar *c = reinterpret_cast<uchar *>(d.data());
    memset(c, value ? 0xff : 0, d.size());
+
    *c = d.size() * 8 - size;
+
    if (value && size && size % 8) {
       *(c + 1 + size / 8) &= (1 << (size % 8)) - 1;
    }
@@ -175,63 +178,72 @@ QBitArray operator&(const QBitArray &a1, const QBitArray &a2)
    return tmp;
 }
 
-QBitArray operator|(const QBitArray &a1, const QBitArray &a2)
+QBitArray operator|(const QBitArray &bitArray_1, const QBitArray &bitArray_2)
 {
-   QBitArray tmp = a1;
-   tmp |= a2;
+   QBitArray tmp = bitArray_1;
+   tmp |= bitArray_2;
+
    return tmp;
 }
 
-QBitArray operator^(const QBitArray &a1, const QBitArray &a2)
+QBitArray operator^(const QBitArray &bitArray_1, const QBitArray &bitArray_2)
 {
-   QBitArray tmp = a1;
-   tmp ^= a2;
+   QBitArray tmp = bitArray_1;
+   tmp ^= bitArray_2;
+
    return tmp;
 }
 
-QDataStream &operator<<(QDataStream &out, const QBitArray &ba)
+QDataStream &operator<<(QDataStream &stream, const QBitArray &bitArray)
 {
-   quint32 len = ba.size();
-   out << len;
+   quint32 len = bitArray.size();
+   stream << len;
+
    if (len > 0) {
-      out.writeRawData(ba.d.constData() + 1, ba.d.size() - 1);
+      stream.writeRawData(bitArray.d.constData() + 1, bitArray.d.size() - 1);
    }
-   return out;
+
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &in, QBitArray &ba)
+QDataStream &operator>>(QDataStream &stream, QBitArray &bitArray)
 {
-   ba.clear();
+   bitArray.clear();
    quint32 len;
-   in >> len;
+
+   stream >> len;
+
    if (len == 0) {
-      ba.clear();
-      return in;
+      bitArray.clear();
+      return stream;
    }
 
    const quint32 Step = 8 * 1024 * 1024;
    quint32 totalBytes = (len + 7) / 8;
-   quint32 allocated = 0;
+   quint32 allocated  = 0;
 
    while (allocated < totalBytes) {
       int blockSize = qMin(Step, totalBytes - allocated);
-      ba.d.resize(allocated + blockSize + 1);
-      if (in.readRawData(ba.d.data() + 1 + allocated, blockSize) != blockSize) {
-         ba.clear();
-         in.setStatus(QDataStream::ReadPastEnd);
-         return in;
+      bitArray.d.resize(allocated + blockSize + 1);
+
+      if (stream.readRawData(bitArray.d.data() + 1 + allocated, blockSize) != blockSize) {
+         bitArray.clear();
+         stream.setStatus(QDataStream::ReadPastEnd);
+         return stream;
       }
+
       allocated += blockSize;
    }
 
    int paddingMask = ~((0x1 << (len & 0x7)) - 1);
-   if (paddingMask != ~0x0 && (ba.d.constData()[ba.d.size() - 1] & paddingMask)) {
-      ba.clear();
-      in.setStatus(QDataStream::ReadCorruptData);
-      return in;
+
+   if (paddingMask != ~0x0 && (bitArray.d.constData()[bitArray.d.size() - 1] & paddingMask)) {
+      bitArray.clear();
+      stream.setStatus(QDataStream::ReadCorruptData);
+      return stream;
    }
 
-   *ba.d.data() = ba.d.size() * 8 - len;
-   return in;
-}
+   *bitArray.d.data() = bitArray.d.size() * 8 - len;
 
+   return stream;
+}

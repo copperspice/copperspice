@@ -79,8 +79,8 @@ class Q_CORE_EXPORT QSize
    friend inline const QSize operator/(const QSize &, qreal);
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSize &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSize &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QSize &size);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QSize &size);
 
 constexpr inline QSize::QSize()
    : wd(-1), ht(-1)
@@ -288,8 +288,8 @@ class Q_CORE_EXPORT QSizeF
    friend inline const QSizeF operator/(const QSizeF &, qreal);
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QSizeF &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSizeF &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QSizeF &sizeF);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QSizeF &sizeF);
 
 inline QSizeF::QSizeF()
 {

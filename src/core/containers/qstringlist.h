@@ -102,7 +102,7 @@ class QStringList : public QList<QString>
    using QList<QString>::lastIndexOf;
 };
 
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &in, QStringList &list);
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QStringList &list);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QStringList &list);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QStringList &list);
 
 #endif

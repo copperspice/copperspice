@@ -25,51 +25,56 @@
 #include <qdebug.h>
 #include <qmargins.h>
 
-QDataStream &operator<<(QDataStream &s, const QMargins &m)
+QDataStream &operator<<(QDataStream &stream, const QMargins &margin)
 {
-    s << m.left() << m.top() << m.right() << m.bottom();
+    stream << margin.left() << margin.top() << margin.right() << margin.bottom();
 
-    return s;
+    return stream;
 }
 
-QDataStream &operator>>(QDataStream &s, QMargins &m)
+QDataStream &operator>>(QDataStream &stream, QMargins &margin)
 {
-    int left, top, right, bottom;
+   int left, top, right, bottom;
 
-    s >> left; m.setLeft(left);
-    s >> top; m.setTop(top);
-    s >> right; m.setRight(right);
-    s >> bottom; m.setBottom(bottom);
+   stream >> left;
+   margin.setLeft(left);
 
-    return s;
+   stream >> top;
+   margin.setTop(top);
+
+   stream >> right;
+   margin.setRight(right);
+
+   stream >> bottom;
+   margin.setBottom(bottom);
+
+   return stream;
 }
 
-QDataStream &operator<<(QDataStream &s, const QMarginsF &m)
+QDataStream &operator<<(QDataStream &stream, const QMarginsF &marginF)
 {
-    s << double(m.left()) << double(m.top()) << double(m.right()) << double(m.bottom());
+   stream << double(marginF.left()) << double(marginF.top()) << double(marginF.right()) << double(marginF.bottom());
 
-    return s;
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &s, QMarginsF &m)
+QDataStream &operator>>(QDataStream &stream, QMarginsF &marginF)
 {
     double left, top, right, bottom;
-    s >> left;
-    s >> top;
-    s >> right;
-    s >> bottom;
+    stream >> left;
+    stream >> top;
+    stream >> right;
+    stream >> bottom;
 
-    m = QMarginsF(qreal(left), qreal(top), qreal(right), qreal(bottom));
+    marginF = QMarginsF(qreal(left), qreal(top), qreal(right), qreal(bottom));
 
-    return s;
+    return stream;
 }
 
 QDebug operator<<(QDebug dbg, const QMargins &m)
 {
-
    dbg.nospace() << "QMargins(" << m.left() << ", "
                  << m.top() << ", " << m.right() << ", " << m.bottom() << ')';
 
    return dbg.space();
 }
-

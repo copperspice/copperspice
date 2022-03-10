@@ -128,10 +128,9 @@ class Q_CORE_EXPORT QBitArray
  private:
    QByteArray d;
 
-   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &);
-   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QBitArray &);
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QBitArray &bitArray);
+   friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QBitArray &bitArray);
    friend Q_CORE_EXPORT uint qHash(const QBitArray &key, uint seed);
-
 };
 
 inline bool QBitArray::fill(bool value, int size)
@@ -241,8 +240,8 @@ inline QBitRef QBitArray::operator[](uint i)
    return QBitRef(*this, i);
 }
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QBitArray &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QBitArray &bitArray);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QBitArray &bitArray);
 
 Q_DECLARE_SHARED(QBitArray)
 

@@ -2638,81 +2638,81 @@ QDateTime QDateTime::fromString(const QString &string, const QString &format)
    return QDateTime(QDate(), QTime(-1, -1, -1));
 }
 
-QDataStream &operator<<(QDataStream &out, const QDate &date)
+QDataStream &operator<<(QDataStream &stream, const QDate &date)
 {
-
-   return out << qint64(date.jd);
+   return stream << qint64(date.jd);
 }
 
-QDataStream &operator>>(QDataStream &in, QDate &date)
+QDataStream &operator>>(QDataStream &stream, QDate &date)
 {
    qint64 jd;
-   in >> jd;
+   stream >> jd;
    date.jd = jd;
 
-   return in;
+   return stream;
 }
 
-QDataStream &operator<<(QDataStream &out, const QTime &time)
+QDataStream &operator<<(QDataStream &stream, const QTime &time)
 {
-   return out << quint32(time.mds);
+   return stream << quint32(time.mds);
 }
 
-QDataStream &operator>>(QDataStream &in, QTime &time)
+QDataStream &operator>>(QDataStream &stream, QTime &time)
 {
    quint32 ds;
-   in >> ds;
+   stream >> ds;
 
    time.mds = int(ds);
 
-   return in;
+   return stream;
 }
 
-QDataStream &operator<<(QDataStream &out, const QDateTime &dateTime)
+QDataStream &operator<<(QDataStream &stream, const QDateTime &dateTime)
 {
    QPair<QDate, QTime> dateAndTime;
    // switched to using Qt::TimeSpec and added offset support
 
    dateAndTime = dateTime.d->getDateTime();
-   out << dateAndTime << qint8(dateTime.timeSpec());
+   stream << dateAndTime << qint8(dateTime.timeSpec());
 
    if (dateTime.timeSpec() == Qt::OffsetFromUTC) {
-      out << qint32(dateTime.offsetFromUtc());
+      stream << qint32(dateTime.offsetFromUtc());
 
    } else if (dateTime.timeSpec() == Qt::TimeZone) {
-      out << dateTime.timeZone();
+      stream << dateTime.timeZone();
    }
 
-   return out;
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &in, QDateTime &dateTime)
+QDataStream &operator>>(QDataStream &stream, QDateTime &dateTime)
 {
    QDate dt;
    QTime tm;
    qint8 ts = 0;
+
    Qt::TimeSpec spec = Qt::LocalTime;
    qint32 offset = 0;
 
    QTimeZone tz;
 
    // switched to using Qt::TimeSpec and added offset support
-   in >> dt >> tm >> ts;
+   stream >> dt >> tm >> ts;
    spec = static_cast<Qt::TimeSpec>(ts);
 
    if (spec == Qt::OffsetFromUTC) {
-      in >> offset;
+      stream >> offset;
       dateTime = QDateTime(dt, tm, spec, offset);
 
    } else if (spec == Qt::TimeZone) {
-      in >> tz;
+      stream >> tz;
       dateTime = QDateTime(dt, tm, tz);
 
    } else {
       dateTime = QDateTime(dt, tm, spec);
    }
 
-   return in;
+   return stream;
 }
 
 QDebug operator<<(QDebug dbg, const QDate &date)

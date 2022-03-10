@@ -37,14 +37,14 @@
 class QDataStream;
 class QDataStreamPrivate;
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QString &str);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QString &str);
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QString16 &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString16 &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QString16 &str);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QString16 &str);
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QChar32 &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QChar32 &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QChar32 &ch);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QChar32 &ch);
 
 class Q_CORE_EXPORT QDataStream
 {
@@ -250,339 +250,350 @@ inline QDataStream &QDataStream::operator<<(quint64 i)
 }
 
 template <typename T>
-QDataStream &operator>>(QDataStream &s, QList<T> &list)
+QDataStream &operator>>(QDataStream &stream, QList<T> &list)
 {
    list.clear();
 
    quint32 c;
-   s >> c;
+   stream >> c;
 
    for (quint32 i = 0; i < c; ++i) {
       T t;
-      s >> t;
+      stream >> t;
 
       list.append(t);
 
-      if (s.atEnd()) {
+      if (stream.atEnd()) {
          break;
       }
    }
 
-   return s;
+   return stream;
 }
 
 template <typename T>
-QDataStream &operator<<(QDataStream &s, const QList<T> &l)
+QDataStream &operator<<(QDataStream &stream, const QList<T> &list)
 {
-   s << quint32(l.size());
-   for (int i = 0; i < l.size(); ++i) {
-      s << l.at(i);
+   stream << quint32(list.size());
+
+   for (int i = 0; i < list.size(); ++i) {
+      stream << list.at(i);
    }
 
-   return s;
+   return stream;
 }
 
 template <typename T>
-QDataStream &operator>>(QDataStream &s, QLinkedList<T> &l)
+QDataStream &operator>>(QDataStream &stream, QLinkedList<T> &list)
 {
-   l.clear();
+   list.clear();
    quint32 c;
 
-   s >> c;
+   stream >> c;
 
    for (quint32 i = 0; i < c; ++i) {
       T t;
-      s >> t;
-      l.append(t);
-      if (s.atEnd()) {
+      stream >> t;
+      list.append(t);
+
+      if (stream.atEnd()) {
          break;
       }
    }
-   return s;
+
+   return stream;
 }
 
 template <typename T>
-QDataStream &operator<<(QDataStream &s, const QLinkedList<T> &l)
+QDataStream &operator<<(QDataStream &stream, const QLinkedList<T> &list)
 {
-   s << quint32(l.size());
-   typename QLinkedList<T>::const_itterator it = l.constBegin();
+   stream << quint32(list.size());
+   typename QLinkedList<T>::const_itterator it = list.constBegin();
 
-   for (; it != l.constEnd(); ++it) {
-      s << *it;
+   for (; it != list.constEnd(); ++it) {
+      stream << *it;
    }
-   return s;
+
+   return stream;
 }
 
 template<typename T>
-QDataStream &operator>>(QDataStream &s, QVector<T> &v)
+QDataStream &operator>>(QDataStream &stream, QVector<T> &vector)
 {
-   v.clear();
+   vector.clear();
    quint32 c;
 
-   s >> c;
-   v.resize(c);
+   stream >> c;
+   vector.resize(c);
 
    for (quint32 i = 0; i < c; ++i) {
       T t;
-      s >> t;
-      v[i] = t;
+      stream >> t;
+      vector[i] = t;
    }
-   return s;
+
+   return stream;
 }
 
 template<typename T>
-QDataStream &operator<<(QDataStream &s, const QVector<T> &v)
+QDataStream &operator<<(QDataStream &stream, const QVector<T> &vector)
 {
-   s << quint32(v.size());
-   for (typename QVector<T>::const_iterator it = v.begin(); it != v.end(); ++it) {
-      s << *it;
+   stream << quint32(vector.size());
+   for (typename QVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it) {
+      stream << *it;
    }
-   return s;
+
+   return stream;
 }
 
 template <typename T>
-QDataStream &operator>>(QDataStream &in, QSet<T> &set)
+QDataStream &operator>>(QDataStream &stream, QSet<T> &set)
 {
    set.clear();
    quint32 c;
-   in >> c;
+   stream >> c;
+
    for (quint32 i = 0; i < c; ++i) {
       T t;
-      in >> t;
+      stream >> t;
       set << t;
-      if (in.atEnd()) {
+
+      if (stream.atEnd()) {
          break;
       }
    }
-   return in;
+
+   return stream;
 }
 
 template <typename T>
-QDataStream &operator<<(QDataStream &out, const QSet<T> &set)
+QDataStream &operator<<(QDataStream &stream, const QSet<T> &set)
 {
-   out << quint32(set.size());
+   stream << quint32(set.size());
    typename QSet<T>::const_iterator i = set.constBegin();
 
    while (i != set.constEnd()) {
-      out << *i;
+      stream << *i;
       ++i;
    }
-   return out;
+
+   return stream;
 }
 
 template <class Key, class T>
-QDataStream &operator>>(QDataStream &in, QHash<Key, T> &hash)
+QDataStream &operator>>(QDataStream &stream, QHash<Key, T> &hash)
 {
-   QDataStream::Status oldStatus = in.status();
-   in.resetStatus();
+   QDataStream::Status oldStatus = stream.status();
+   stream.resetStatus();
 
    hash.clear();
 
    quint32 n;
-   in >> n;
+   stream >> n;
 
    for (quint32 i = 0; i < n; ++i) {
-      if (in.status() != QDataStream::Ok) {
+      if (stream.status() != QDataStream::Ok) {
          break;
       }
 
       Key k;
       T t;
-      in >> k >> t;
+      stream >> k >> t;
       hash.insert(k, t);
    }
 
-   if (in.status() != QDataStream::Ok) {
+   if (stream.status() != QDataStream::Ok) {
       hash.clear();
    }
 
    if (oldStatus != QDataStream::Ok) {
-      in.setStatus(oldStatus);
+      stream.setStatus(oldStatus);
    }
 
-   return in;
+   return stream;
 }
 
 template <class Key, class T>
-QDataStream &operator<<(QDataStream &out, const QHash<Key, T> &hash)
+QDataStream &operator<<(QDataStream &stream, const QHash<Key, T> &hash)
 {
-   out << quint32(hash.size());
+   stream << quint32(hash.size());
 
    typename QHash<Key, T>::const_iterator iter = hash.begin();
    typename QHash<Key, T>::const_iterator end  = hash.end();
 
    while (iter != end) {
-      out << iter.key() << iter.value();
+      stream << iter.key() << iter.value();
       ++iter;
    }
 
-   return out;
+   return stream;
 }
 
 template <class Key, class T>
-QDataStream &operator>>(QDataStream &in, QMultiHash<Key, T> &hash)
+QDataStream &operator>>(QDataStream &stream, QMultiHash<Key, T> &hash)
 {
-   QDataStream::Status oldStatus = in.status();
-   in.resetStatus();
+   QDataStream::Status oldStatus = stream.status();
+   stream.resetStatus();
 
    hash.clear();
 
    quint32 n;
-   in >> n;
+   stream >> n;
 
    for (quint32 i = 0; i < n; ++i) {
-      if (in.status() != QDataStream::Ok) {
+      if (stream.status() != QDataStream::Ok) {
          break;
       }
 
       Key k;
       T t;
-      in >> k >> t;
+      stream >> k >> t;
       hash.insertMulti(k, t);
    }
 
-   if (in.status() != QDataStream::Ok) {
+   if (stream.status() != QDataStream::Ok) {
       hash.clear();
    }
 
    if (oldStatus != QDataStream::Ok) {
-      in.setStatus(oldStatus);
+      stream.setStatus(oldStatus);
    }
 
-   return in;
+   return stream;
 }
 
 template <class Key, class T>
-QDataStream &operator<<(QDataStream &out, const QMultiHash<Key, T> &hash)
+QDataStream &operator<<(QDataStream &stream, const QMultiHash<Key, T> &hash)
 {
-   out << quint32(hash.size());
+   stream << quint32(hash.size());
 
    typename QMultiHash<Key, T>::const_iterator iter = hash.begin();
    typename QMultiHash<Key, T>::const_iterator end  = hash.end();
 
    while (iter != end) {
-      out << iter.key() << iter.value();
+      stream << iter.key() << iter.value();
       ++iter;
    }
 
-   return out;
+   return stream;
 }
 
 template <class aKey, class aT>
-QDataStream &operator>>(QDataStream &in, QMap<aKey, aT> &map)
+QDataStream &operator>>(QDataStream &stream, QMap<aKey, aT> &map)
 {
-   QDataStream::Status oldStatus = in.status();
-   in.resetStatus();
+   QDataStream::Status oldStatus = stream.status();
+   stream.resetStatus();
 
    map.clear();
 
    quint32 n;
-   in >> n;
+   stream >> n;
 
    for (quint32 i = 0; i < n; ++i) {
-      if (in.status() != QDataStream::Ok) {
+      if (stream.status() != QDataStream::Ok) {
          break;
       }
 
       aKey key;
       aT value;
-      in >> key >> value;
+      stream >> key >> value;
       map.insert(key, value);
    }
 
-   if (in.status() != QDataStream::Ok) {
+   if (stream.status() != QDataStream::Ok) {
       map.clear();
    }
 
    if (oldStatus != QDataStream::Ok) {
-      in.setStatus(oldStatus);
+      stream.setStatus(oldStatus);
    }
 
-   return in;
+   return stream;
 }
 
 template <class Key, class Val, class C>
-QDataStream &operator<<(QDataStream &out, const QMap<Key, Val, C> &map)
+QDataStream &operator<<(QDataStream &stream, const QMap<Key, Val, C> &map)
 {
-   out << quint32(map.size());
+   stream << quint32(map.size());
+
    typename QMap<Key, Val, C>::const_iterator it = map.end();
    typename QMap<Key, Val, C>::const_iterator begin = map.begin();
 
    while (it != begin) {
       --it;
-      out << it.key() << it.value();
+      stream << it.key() << it.value();
    }
 
-   return out;
+   return stream;
 }
 
 template <class aKey, class aT>
-QDataStream &operator>>(QDataStream &in, QMultiMap<aKey, aT> &map)
+QDataStream &operator>>(QDataStream &stream, QMultiMap<aKey, aT> &map)
 {
-   QDataStream::Status oldStatus = in.status();
-   in.resetStatus();
+   QDataStream::Status oldStatus = stream.status();
+   stream.resetStatus();
 
    map.clear();
 
    quint32 n;
-   in >> n;
+   stream >> n;
 
    for (quint32 i = 0; i < n; ++i) {
-      if (in.status() != QDataStream::Ok) {
+      if (stream.status() != QDataStream::Ok) {
          break;
       }
 
       aKey key;
       aT value;
-      in >> key >> value;
+      stream >> key >> value;
       map.insertMulti(key, value);
    }
 
-   if (in.status() != QDataStream::Ok) {
+   if (stream.status() != QDataStream::Ok) {
       map.clear();
    }
 
    if (oldStatus != QDataStream::Ok) {
-      in.setStatus(oldStatus);
+      stream.setStatus(oldStatus);
    }
 
-   return in;
+   return stream;
 }
 
 template <class Key, class Val, class C>
-QDataStream &operator<<(QDataStream &out, const QMultiMap<Key, Val, C> &map)
+QDataStream &operator<<(QDataStream &stream, const QMultiMap<Key, Val, C> &map)
 {
-   out << quint32(map.size());
+   stream << quint32(map.size());
 
    typename QMultiMap<Key, Val, C>::const_iterator it    = map.end();
    typename QMultiMap<Key, Val, C>::const_iterator begin = map.begin();
 
    while (it != begin) {
       --it;
-      out << it.key() << it.value();
+      stream << it.key() << it.value();
    }
 
-   return out;
+   return stream;
 }
 
 template <typename S>
-QDataStream &operator<<(QDataStream &out, const Cs::QRegularExpression<S> &regExp)
+QDataStream &operator<<(QDataStream &stream, const Cs::QRegularExpression<S> &regExp)
 {
-   out << regExp.pattern() << quint32(regExp.patternOptions());
-   return out;
+   stream << regExp.pattern() << quint32(regExp.patternOptions());
+   return stream;
 }
 
 template <typename S>
-QDataStream &operator>>(QDataStream &in, Cs::QRegularExpression<S> &regExp)
+QDataStream &operator>>(QDataStream &stream, Cs::QRegularExpression<S> &regExp)
 {
    S pattern;
    quint32 patternOptions;
 
-   in >> pattern >> patternOptions;
+   stream >> pattern >> patternOptions;
    regExp.setPattern(pattern);
    regExp.setPatternOptions(QPatternOptionFlags(patternOptions));
 
-   return in;
+   return stream;
 }
 
 #endif

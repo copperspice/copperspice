@@ -180,12 +180,12 @@ int QStringList::removeDuplicates()
    return n - j;
 }
 
-QDataStream &operator>>(QDataStream &in, QStringList &list)
+QDataStream &operator>>(QDataStream &stream, QStringList &list)
 {
-   return operator>>(in, static_cast<QList<QString> &>(list));
+   return operator>>(stream, static_cast<QList<QString> &>(list));
 }
 
-QDataStream &operator<<(QDataStream &out, const QStringList &list)
+QDataStream &operator<<(QDataStream &stream, const QStringList &list)
 {
-   return operator<<(out, static_cast<const QList<QString> &>(list));
+   return operator<<(stream, static_cast<const QList<QString> &>(list));
 }

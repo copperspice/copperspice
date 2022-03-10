@@ -313,7 +313,7 @@ class Q_CORE_EXPORT QUrl
 Q_DECLARE_SHARED(QUrl)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::FormattingOptions)
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QUrl &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QUrl &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QUrl &url);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QUrl &url);
 
 #endif

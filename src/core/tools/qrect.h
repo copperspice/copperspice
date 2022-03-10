@@ -148,8 +148,8 @@ class Q_CORE_EXPORT QRect
 inline bool operator==(const QRect &, const QRect &);
 inline bool operator!=(const QRect &, const QRect &);
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QRect &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QRect &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QRect &rect);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QRect &rect);
 
 inline QRect::QRect(int left, int top, int width, int height)
 {
@@ -703,8 +703,8 @@ class Q_CORE_EXPORT QRectF
 inline bool operator==(const QRectF &, const QRectF &);
 inline bool operator!=(const QRectF &, const QRectF &);
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QRectF &);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QRectF &);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QRectF &rectF);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QRectF &rectF);
 
 inline QRectF::QRectF(qreal left, qreal top, qreal width, qreal height)
    : m_x(left), m_y(top), m_w(width), m_h(height)

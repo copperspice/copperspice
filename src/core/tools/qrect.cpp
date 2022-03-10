@@ -335,25 +335,25 @@ bool QRect::intersects(const QRect &r) const
    return true;
 }
 
-QDataStream &operator<<(QDataStream &s, const QRect &r)
+QDataStream &operator<<(QDataStream &stream, const QRect &rect)
 {
-   s << (qint32)r.left() << (qint32)r.top()
-     << (qint32)r.right() << (qint32)r.bottom();
+   stream << (qint32)rect.left()  << (qint32)rect.top()
+          << (qint32)rect.right() << (qint32)rect.bottom();
 
-   return s;
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &s, QRect &r)
+QDataStream &operator>>(QDataStream &stream, QRect &rect)
 {
    qint32 x1, y1, x2, y2;
-   s >> x1;
-   s >> y1;
-   s >> x2;
-   s >> y2;
+   stream >> x1;
+   stream >> y1;
+   stream >> x2;
+   stream >> y2;
 
-   r.setCoords(x1, y1, x2, y2);
+   rect.setCoords(x1, y1, x2, y2);
 
-   return s;
+   return stream;
 }
 
 QDebug operator<<(QDebug dbg, const QRect &r)
@@ -692,22 +692,24 @@ QRect QRectF::toAlignedRect() const
    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
 }
 
-QDataStream &operator<<(QDataStream &s, const QRectF &r)
+QDataStream &operator<<(QDataStream &stream, const QRectF &rectF)
 {
-   s << double(r.x()) << double(r.y()) << double(r.width()) << double(r.height());
-   return s;
+   stream << double(rectF.x()) << double(rectF.y()) << double(rectF.width()) << double(rectF.height());
+
+   return stream;
 }
 
-QDataStream &operator>>(QDataStream &s, QRectF &r)
+QDataStream &operator>>(QDataStream &stream, QRectF &rectF)
 {
    double x, y, w, h;
-   s >> x;
-   s >> y;
-   s >> w;
-   s >> h;
-   r.setRect(qreal(x), qreal(y), qreal(w), qreal(h));
+   stream >> x;
+   stream >> y;
+   stream >> w;
+   stream >> h;
 
-   return s;
+   rectF.setRect(qreal(x), qreal(y), qreal(w), qreal(h));
+
+   return stream;
 }
 
 QDebug operator<<(QDebug dbg, const QRectF &r)

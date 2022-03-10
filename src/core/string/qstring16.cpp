@@ -1650,24 +1650,24 @@ void QString16::truncate(size_type length)
 }
 
 // data stream
-QDataStream &operator>>(QDataStream &in, QString16 &str)
+QDataStream &operator>>(QDataStream &stream, QString16 &str)
 {
    char *tmp;
    uint len;
 
-   in.readBytes(tmp, len);
+   stream.readBytes(tmp, len);
    str = QString16::fromUtf16(reinterpret_cast<const char16_t *>(tmp), len/2);
    delete [] tmp;
 
-   return in;
+   return stream;
 }
 
-QDataStream &operator<<(QDataStream &out, const QString16 &str)
+QDataStream &operator<<(QDataStream &stream, const QString16 &str)
 {
    const char *tmp = reinterpret_cast<const char *>(str.constData());
 
-   out.writeBytes(tmp, str.size_storage() * 2);
-   return out;
+   stream.writeBytes(tmp, str.size_storage() * 2);
+   return stream;
 }
 
 // normalization functions

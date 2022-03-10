@@ -125,7 +125,7 @@ class Q_CORE_EXPORT QTimeZone
  private:
    QTimeZone(QTimeZonePrivate &dd);
 
-   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QTimeZone &value);
+   friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QTimeZone &tz);
    friend class QTimeZonePrivate;
    friend class QDateTime;
    friend class QDateTimePrivate;
@@ -133,8 +133,8 @@ class Q_CORE_EXPORT QTimeZone
    QSharedDataPointer<QTimeZonePrivate> d;
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &ds, const QTimeZone &tz);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &ds, QTimeZone &tz);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QTimeZone &tz);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QTimeZone &tz);
 
 Q_CORE_EXPORT QDebug operator<<(QDebug dbg, const QTimeZone &tz);
 
