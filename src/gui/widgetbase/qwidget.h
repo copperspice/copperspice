@@ -280,6 +280,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    // following 2 were qdoc_property 1/5/2014
    GUI_CS_PROPERTY_READ(windowFlags, windowFlags)
    GUI_CS_PROPERTY_WRITE(windowFlags, setWindowFlags)
+   GUI_CS_PROPERTY_DESIGNABLE(windowFlags, false)
 
    GUI_CS_PROPERTY_READ(autoFillBackground, autoFillBackground)
    GUI_CS_PROPERTY_WRITE(autoFillBackground, setAutoFillBackground)
