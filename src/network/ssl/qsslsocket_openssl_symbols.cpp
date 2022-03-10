@@ -944,12 +944,13 @@ bool q_resolveOpenSslSymbols()
    RESOLVEFUNC(EVP_sha1)
    RESOLVEFUNC(EVP_CIPHER_CTX_new)
    RESOLVEFUNC(EVP_CIPHER_CTX_reset)
-#endif
 
 #if OPENSSL_VERSION_NUMBER >= 0x30000000L
    RESOLVE_RENAMED_FUNC(EVP_PKEY_base_id, EVP_PKEY_get_base_id)
 #else
    RESOLVEFUNC(EVP_PKEY_base_id)
+#endif
+
 #endif
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
