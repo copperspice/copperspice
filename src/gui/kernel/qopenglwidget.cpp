@@ -266,8 +266,13 @@ void QOpenGLWidgetPrivate::initialize()
    // texture usable by the underlying window's backingstore.
    QWidget *tlw = q->window();
    QOpenGLContext *shareContext = get(tlw)->shareContext();
-   if (!shareContext) {
-      qWarning("QOpenGLWidget: Cannot be used without a context shared with the toplevel.");
+
+   if (! shareContext) {
+
+#if defined(CS_SHOW_DEBUG)
+      qWarning("QOpenGLWidget:initialize() Unable to use QOpenGLWidget without a context.");
+#endif
+
       return;
    }
 

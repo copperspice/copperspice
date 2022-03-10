@@ -9036,8 +9036,12 @@ QOpenGLContext *QWidgetPrivate::shareContext() const
    return nullptr;
 
 #else
-   if (!extra || !extra->topextra || !extra->topextra->window) {
-      qWarning("Asking for share context for widget that does not have a window handle");
+   if (! extra || ! extra->topextra || ! extra->topextra->window) {
+
+#if defined(CS_SHOW_DEBUG)
+      qWarning("shareContext(): Requested a share context for a widget which does not have a window handle");
+#endif
+
       return nullptr;
    }
 
