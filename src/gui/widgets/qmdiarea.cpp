@@ -156,11 +156,13 @@ static inline QString tabTextFor(QMdiSubWindow *subWindow)
    }
 
    QString title = subWindow->windowTitle();
+
    if (subWindow->isWindowModified()) {
       title.replace(QLatin1String("[*]"), QLatin1String("*"));
+
    } else {
-      extern QString qt_setWindowTitle_helperHelper(const QString &, const QWidget *);
-      title = qt_setWindowTitle_helperHelper(title, subWindow);
+      extern QString cs_internal_parseWindowTitle(const QString &, const QWidget *);
+      title = cs_internal_parseWindowTitle(title, subWindow);
    }
 
    return title.isEmpty() ? QMdiArea::tr("(Untitled)") : title;

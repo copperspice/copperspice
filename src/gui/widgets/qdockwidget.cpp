@@ -44,7 +44,7 @@
 #include <qdockwidget_p.h>
 #include <qmainwindowlayout_p.h>
 
-extern QString qt_setWindowTitle_helperHelper(const QString &, const QWidget *); // qwidget.cpp
+extern QString cs_internal_parseWindowTitle(const QString &, const QWidget *); // qwidget.cpp
 
 // qmainwindow.cpp
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
@@ -620,7 +620,7 @@ void QDockWidgetPrivate::init()
    toggleViewAction = new QAction(q);
    toggleViewAction->setCheckable(true);
 
-   fixedWindowTitle = qt_setWindowTitle_helperHelper(q->windowTitle(), q);
+   fixedWindowTitle = cs_internal_parseWindowTitle(q->windowTitle(), q);
    toggleViewAction->setText(fixedWindowTitle);
 
    QObject::connect(toggleViewAction, &QAction::triggered, q, &QDockWidget::_q_toggleView);
@@ -1293,7 +1293,7 @@ void QDockWidget::changeEvent(QEvent *event)
          update(layout->titleArea());
 
 #ifndef QT_NO_ACTION
-         d->fixedWindowTitle = qt_setWindowTitle_helperHelper(windowTitle(), this);
+         d->fixedWindowTitle = cs_internal_parseWindowTitle(windowTitle(), this);
          d->toggleViewAction->setText(d->fixedWindowTitle);
 #endif
 

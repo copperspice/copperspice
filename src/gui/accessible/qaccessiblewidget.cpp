@@ -395,7 +395,7 @@ int QAccessibleWidget::indexOfChild(const QAccessibleInterface *child) const
 }
 
 // from qwidget.cpp
-extern QString qt_setWindowTitle_helperHelper(const QString &, const QWidget *);
+extern QString cs_internal_parseWindowTitle(const QString &, const QWidget *);
 
 QString QAccessibleWidget::text(QAccessible::Text t) const
 {
@@ -405,14 +405,17 @@ QString QAccessibleWidget::text(QAccessible::Text t) const
       case QAccessible::Name:
          if (!d->name.isEmpty()) {
             str = d->name;
+
          } else if (!widget()->accessibleName().isEmpty()) {
             str = widget()->accessibleName();
+
          } else if (widget()->isWindow()) {
             if (widget()->isMinimized()) {
-               str = qt_setWindowTitle_helperHelper(widget()->windowIconText(), widget());
+               str = cs_internal_parseWindowTitle(widget()->windowIconText(), widget());
             } else {
-               str = qt_setWindowTitle_helperHelper(widget()->windowTitle(), widget());
+               str = cs_internal_parseWindowTitle(widget()->windowTitle(), widget());
             }
+
          } else {
             str = qt_accStripAmp(buddyString(widget()));
          }

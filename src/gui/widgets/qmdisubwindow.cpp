@@ -1560,7 +1560,7 @@ QMdiSubWindowPrivate::Operation QMdiSubWindowPrivate::getOperation(const QPoint 
    return None;
 }
 
-extern QString qt_setWindowTitle_helperHelper(const QString &, const QWidget *);
+extern QString cs_internal_parseWindowTitle(const QString &, const QWidget *);
 
 /*!
     \internal
@@ -2205,7 +2205,7 @@ void QMdiSubWindowPrivate::updateInternalWindowTitle()
       windowTitle = q->windowTitle();
       windowTitle.replace(QLatin1String("[*]"), QLatin1String("*"));
    } else {
-      windowTitle = qt_setWindowTitle_helperHelper(q->windowTitle(), q);
+      windowTitle = cs_internal_parseWindowTitle(q->windowTitle(), q);
    }
    q->update(0, 0, q->width(), titleBarHeight());
 }

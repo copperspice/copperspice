@@ -4370,7 +4370,7 @@ QString QWidget::windowTitle() const
    return QString();
 }
 
-QString qt_setWindowTitle_helperHelper(const QString &title, const QWidget *widget)
+QString cs_internal_parseWindowTitle(const QString &title, const QWidget *widget)
 {
    Q_ASSERT(widget);
 
@@ -4416,7 +4416,7 @@ void QWidgetPrivate::setWindowTitle_helper(const QString &title)
    Q_Q(QWidget);
 
    if (q->testAttribute(Qt::WA_WState_Created)) {
-      setWindowTitle_sys(qt_setWindowTitle_helperHelper(title, q));
+      setWindowTitle_sys(cs_internal_parseWindowTitle(title, q));
    }
 }
 
@@ -4438,7 +4438,7 @@ void QWidgetPrivate::setWindowIconText_helper(const QString &title)
    Q_Q(QWidget);
 
    if (q->testAttribute(Qt::WA_WState_Created)) {
-      setWindowIconText_sys(qt_setWindowTitle_helperHelper(title, q));
+      setWindowIconText_sys(cs_internal_parseWindowTitle(title, q));
    }
 }
 
