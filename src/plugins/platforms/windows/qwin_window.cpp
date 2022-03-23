@@ -1388,6 +1388,27 @@ QRect QWindowsWindow::normalGeometry() const
    return frame.isValid() ? frame.marginsRemoved(margins) : frame;
 }
 
+static bool relaxedEqual(const QRect &a, const QRect &b)
+{
+   if (std::abs(a.left() - b.left()) > 2) {
+      return false;
+   }
+
+   if (std::abs(a.right() - b.right()) > 2) {
+      return false;
+   }
+
+   if (std::abs(a.top() - b.top()) > 2) {
+      return false;
+   }
+
+   if (std::abs(a.bottom() - b.bottom()) > 2) {
+      return false;
+   }
+
+   return true;
+}
+
 void QWindowsWindow::setGeometry(const QRect &rectIn)
 {
    QRect rect = rectIn;
@@ -1407,10 +1428,11 @@ void QWindowsWindow::setGeometry(const QRect &rectIn)
       // (for example, window title minimal constraint) notify and warn
       setGeometry_sys(rect);
 
-      if (m_data.geometry != rect) {
+      if (! relaxedEqual(m_data.geometry, rect)) {
+
          qWarning("QWindowsWindow::setGeometry(): Unable to set geometry %dx%d+%d+%d in %s\n"
             "Resulting geometry = %dx%d+%d+%d, Frame = %d, %d, %d, %d \n"
-            "Custom margin = %d, %d, %d, %d, Minimum size = %dx%d, Maximum size = %dx%d)\n",
+            "Custom margin = %d, %d, %d, %d, Minimum size = %dx%d, Maximum size = %dx%d\n",
             rect.width(), rect.height(), rect.x(), rect.y(),
             csPrintable(window()->objectName()),
             m_data.geometry.width(), m_data.geometry.height(),
