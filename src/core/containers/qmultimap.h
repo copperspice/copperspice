@@ -389,7 +389,7 @@ class QMultiMap
    }
 
    iterator insert(const_iterator hint, const Key &key, const Val &value) {
-      auto iter = m_data.emplace_hint(hint, key, value);
+      auto iter = m_data.emplace_hint(hint.m_iter, key, value);
       return iter;
    }
 
@@ -400,7 +400,7 @@ class QMultiMap
    }
 
    iterator insertMulti(const_iterator hint, const Key &key, const Val &value) {
-      auto iter = m_data.emplace_hint(hint, key, value);
+      auto iter = m_data.emplace_hint(hint.m_iter, key, value);
       return iter;
    }
 
