@@ -157,6 +157,29 @@ TEST_CASE("QFlatMap insert", "[qflatmap]")
    REQUIRE(map.size() == 5);
 }
 
+TEST_CASE("QFlatMap insert_hint", "[qflatmap]")
+{
+   QFlatMap<int, QString> map = { { 1, "watermelon"},
+                                  { 2, "apple"},
+                                  { 3, "pear"},
+                                  { 5, "quince"},
+                                  { 6, "grapefruit"} };
+
+   auto iter = map.upperBound(4);
+   map.insert( iter, 4, "mango" );
+
+   REQUIRE(map.size() == 6);
+
+   REQUIRE(map[4] == "mango");
+   REQUIRE(map[5] == "quince");
+
+   //
+   iter = map.upperBound(4);
+   map.insert( iter, 4, "peach" );
+
+   REQUIRE(map[4] == "peach");
+}
+
 TEST_CASE("QFlatMap last", "[qflatmap]")
 {
    QFlatMap<int, QString> map = { { 1, "watermelon"},

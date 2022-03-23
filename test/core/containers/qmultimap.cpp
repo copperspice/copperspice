@@ -170,6 +170,29 @@ TEST_CASE("QMultiMap insert", "[qmultimap]")
    REQUIRE(map.size() == 6);
 }
 
+TEST_CASE("QMultiMap insert_hint", "[qmultimap]")
+{
+   QMultiMap<int, QString> map = { { 1, "watermelon"},
+                                   { 3, "apple"},
+                                   { 3, "pear"},
+                                   { 3, "quince"},
+                                   { 5, "grapefruit"} };
+
+   auto iter = map.upperBound(3);
+   map.insert( iter, 3, "mango" );
+
+   REQUIRE(map.size() == 6);
+
+   //
+   QList<QString> values = map.values(3);
+   REQUIRE(values.size() == 4);
+
+   REQUIRE(values[0] == "apple");
+   REQUIRE(values[1] == "pear");
+   REQUIRE(values[2] == "quince");
+   REQUIRE(values[3] == "mango");
+}
+
 TEST_CASE("QMultiMap last", "[qmultimap]")
 {
    QMultiMap<int, QString> map = { { 1, "watermelon"},
