@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 
 cmake_policy(VERSION 3.16..3.21)
 
+if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.19.0")
+   # allows spaces in ctest names
+   cmake_policy(SET CMP0110 NEW)
+endif()
+
 if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.20.0")
    # enable RTTI on MSVC
    cmake_policy(SET CMP0117 OLD)
@@ -533,20 +538,20 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1)
 
 # check components dependencies
-if (WITH_MULTIMEDIA AND NOT WITH_GUI)
-   message(SEND_ERROR "Multimedia component requires Gui component")
+if (WITH_MULTIMEDIA AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_OPENGL))
+   message(SEND_ERROR "CsMultimedia component requires CsGui, CsNetwork, and CsOpenGL components")
 
 elseif (WITH_OPENGL AND NOT WITH_GUI)
-   message(SEND_ERROR "OpenGL component requires Gui component")
+   message(SEND_ERROR "CsOpenGL component requires CsGui component")
 
 elseif (WITH_SVG AND NOT WITH_GUI)
-   message(SEND_ERROR "Svg component requires Gui component")
+   message(SEND_ERROR "CsSvg component requires CsGui component")
 
 elseif (WITH_XMLPATTERNS AND NOT WITH_NETWORK)
-   message(SEND_ERROR "XmlPatterns component requires Network component")
+   message(SEND_ERROR "CsXmlPatterns component requires CsNetwork component")
 
 elseif (WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
-   message(SEND_ERROR "WebKit component requires Gui, Network, and Script components")
+   message(SEND_ERROR "CsWebKit component requires CsGui, CsNetwork, and CsScript components")
 
 endif()
 
@@ -634,16 +639,19 @@ install(
 )
 
 install(
-   EXPORT CopperSpiceBinaryTargets
-   NAMESPACE CopperSpice::
-   FILE CopperSpiceBinaryTargets.cmake
-   DESTINATION ${PKG_PREFIX}
-)
+   # generate cmake files containing rules about linking with CS libs
 
-install(
    EXPORT CopperSpiceLibraryTargets
    NAMESPACE CopperSpice::
    FILE CopperSpiceLibraryTargets.cmake
+   DESTINATION ${PKG_PREFIX}
+)
+
+# generate cmake files containing rules about running CS binary tools
+install(
+   EXPORT CopperSpiceBinaryTargets
+   NAMESPACE CopperSpice::
+   FILE CopperSpiceBinaryTargets.cmake
    DESTINATION ${PKG_PREFIX}
 )
 
