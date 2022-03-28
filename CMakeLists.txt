@@ -57,10 +57,10 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
 endif()
 
 # required library
-set(BUILD_COMPONENTS "Core")
+set(BUILD_COMPONENTS Core Xml)
 
 # unused at this time: DBus, Declarative, and ScriptTools
-set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg WebKit Xml XmlPatterns)
+set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg WebKit XmlPatterns)
 
 set(PACKAGE           "copperspice")
 set(PACKAGE_NAME      "CopperSpice")
@@ -551,6 +551,8 @@ elseif (WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
 endif()
 
 add_subdirectory(src/core)
+add_subdirectory(src/xml)
+
 foreach(component ${CS_OPTIONAL_COMPONENTS})
    string(TOUPPER ${component} uppercomp)
 
@@ -561,16 +563,15 @@ foreach(component ${CS_OPTIONAL_COMPONENTS})
    endif()
 endforeach()
 
-if (WITH_XML)
-   add_subdirectory(src/tools/shared)
-   add_subdirectory(src/tools/lconvert)
-   add_subdirectory(src/tools/lrelease)
-   add_subdirectory(src/tools/lupdate)
-endif()
+add_subdirectory(src/tools/shared)
+add_subdirectory(src/tools/lconvert)
+add_subdirectory(src/tools/lrelease)
+add_subdirectory(src/tools/lupdate)
 
-if (WITH_XML AND WITH_GUI)
-   add_subdirectory(src/tools/rcc)
-   add_subdirectory(src/tools/uic)
+add_subdirectory(src/tools/rcc)
+add_subdirectory(src/tools/uic)
+
+if (WITH_GUI)
    add_subdirectory(src/tools/linguist)
 endif()
 
