@@ -11,7 +11,7 @@ Our motivation for developing CopperSpice was to change the fundamental design a
 framework into a set of libraries for C++ developers. We are accomplishing this by leveraging modern C++
 functionality, new technology, and modern tooling. CopperSpice currently requires C++17 or newer.
 
-The libraries avaiable in CopperSpice include:
+The libraries available in CopperSpice include:
 
  * CsCore
  * CsGui
@@ -87,11 +87,13 @@ Reflection
 
 Enhanced Functionality
  * CopperSpice makes extensive use of modern C++ features
-   * constexpr, variadic templates, SFINAE, lambda expressions, tuple, move semantics, and type traits
+   * constexpr, lambda expressions, templates, variadic templates, template variables
+   * move semantics, structured bindings, tuple,  decltype, SFINAE, and type traits
  * Redesigned all container classes to use the C++ standard library containers, iterators, and algorithms
+ * Refactored all Mutex and Lock classes
  * CopperSpice includes a majority of the Qt 5 classes
- * New platform independent plugin system based on C++
- * High DPI Support
+ * Platform independent plugin system based on standard C++
+ * High DPI Rendering Support
 
  * Integration of CsLibGuarded
    * Used to manage shared data
@@ -102,7 +104,7 @@ Enhanced Functionality
  * Integration of CsString
    * Improved storage to properly represent Unicode strings
    * QString8 (UTF-8) and QString16 (UTF-16) classes
-   * Added QStringView and QStringParser
+   * Added QStringView, QStringParser, and QRegularExpression
 
 Using the Libraries
  * Any C++ application using CopperSpice can be built with CMake or any build system which imports CMake files
@@ -130,14 +132,15 @@ www.copperspice.com/presentations.html
 * **Barbara Geller**
 * **Jan Wilmans**
 * **Tim van Deurzen**
+* **Paul Bendixen**
 * **Peter Bindels**
-* **Jeff Cohen**
 * **Mortaro Marcello**
 * **Adam Mensel**
 * **Robin Mills**
 * **Ivailo Monev**
 * **Adam Mensel**
 * **Matan Nassaw**
+* **Jeff Cohen**
 * **Daniel Pfeifer**
 * **Zbigniew Skowron**
 
@@ -151,8 +154,13 @@ this project.
 
 ### References
 
-* Website: www.copperspice.com
-* Twitter: https://twitter.com/copperspice_cpp
-* Github:  https://github.com/copperspice
-* Email:   info@copperspice.com
+* Website:  https://www.copperspice.com
+* Twitter:  https://twitter.com/copperspice_cpp
+* Email:    info@copperspice.com
+
+* Github:   https://github.com/copperspice
+
+* Forum:    https://forum.copperspice.com
+* Journal:  https://journal.copperspice.com
+
 
