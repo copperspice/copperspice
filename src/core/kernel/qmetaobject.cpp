@@ -718,8 +718,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
          ++index;
       }
 
-      // convert return type to "char *" data type
-      returnType = strdup(csPrintable(typeReturn));
+      returnType = typeReturn;
 
 
       // part 3 parse method name
