@@ -73,24 +73,33 @@ QList<QAbstractButton *>QAbstractButtonPrivate::queryButtonList() const
    }
 #endif
 
-   QList<QAbstractButton *>candidates = q->parent()->findChildren<QAbstractButton *>();
+   QList<QAbstractButton *> retval;
+   auto parent = q->parent();
+
+   if (parent == nullptr) {
+      return retval;
+   }
+
+   retval = parent->findChildren<QAbstractButton *>();
 
    if (autoExclusive) {
-      for (int i = candidates.count() - 1; i >= 0; --i) {
-         QAbstractButton *candidate = candidates.at(i);
 
-         if (!candidate->autoExclusive()
+      for (int i = retval.count() - 1; i >= 0; --i) {
+         QAbstractButton *candidate = retval.at(i);
 
 #ifndef QT_NO_BUTTONGROUP
-            || candidate->group()
+         if (! candidate->autoExclusive() || candidate->group()) {
+
+#else
+         if (! candidate->autoExclusive()) {
+
 #endif
-         ) {
-            candidates.removeAt(i);
+            retval.removeAt(i);
          }
       }
    }
 
-   return candidates;
+   return retval;
 }
 
 QAbstractButton *QAbstractButtonPrivate::queryCheckedButton() const
