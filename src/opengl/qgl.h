@@ -132,14 +132,14 @@ class Q_OPENGL_EXPORT QGLFormat
    int plane() const;
    void setPlane(int plane);
 
-   void setOption(QGL::FormatOptions opt);
-   bool testOption(QGL::FormatOptions opt) const;
+   void setOption(QGL::FormatOptions options);
+   bool testOption(QGL::FormatOptions options) const;
 
    static QGLFormat defaultFormat();
-   static void setDefaultFormat(const QGLFormat &f);
+   static void setDefaultFormat(const QGLFormat &format);
 
    static QGLFormat defaultOverlayFormat();
-   static void setDefaultOverlayFormat(const QGLFormat &f);
+   static void setDefaultOverlayFormat(const QGLFormat &format);
 
    static bool hasOpenGL();
    static bool hasOpenGLOverlays();
@@ -192,17 +192,16 @@ class Q_OPENGL_EXPORT QGLFormat
 
    void detach();
 
-   friend Q_OPENGL_EXPORT bool operator==(const QGLFormat &, const QGLFormat &);
-   friend Q_OPENGL_EXPORT bool operator!=(const QGLFormat &, const QGLFormat &);
-   friend Q_OPENGL_EXPORT QDebug operator<<(QDebug, const QGLFormat &);
-
+   friend Q_OPENGL_EXPORT bool operator==(const QGLFormat &value_1, const QGLFormat &value_2);
+   friend Q_OPENGL_EXPORT bool operator!=(const QGLFormat &value_1, const QGLFormat &value_2);
+   friend Q_OPENGL_EXPORT QDebug operator<<(QDebug, const QGLFormat &value);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QGLFormat::OpenGLVersionFlags)
 
-Q_OPENGL_EXPORT bool operator==(const QGLFormat &, const QGLFormat &);
-Q_OPENGL_EXPORT bool operator!=(const QGLFormat &, const QGLFormat &);
-Q_OPENGL_EXPORT QDebug operator<<(QDebug, const QGLFormat &);
+Q_OPENGL_EXPORT bool operator==(const QGLFormat &value_1, const QGLFormat &value_2);
+Q_OPENGL_EXPORT bool operator!=(const QGLFormat &value_1, const QGLFormat &value_2);
+Q_OPENGL_EXPORT QDebug operator<<(QDebug, const QGLFormat &value);
 
 class Q_OPENGL_EXPORT QGLContext
 {
