@@ -73,8 +73,8 @@ class Q_GUI_EXPORT QPicture : public QPaintDevice
    void detach();
    bool isDetached() const;
 
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QPicture &p);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QPicture &p);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPicture &picture);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPicture &picture);
 
    static QString pictureFormat(const QString &fileName);
 
@@ -167,8 +167,8 @@ class Q_GUI_EXPORT QPictureIO
 
 #endif // QT_NO_PICTUREIO
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPicture &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPicture &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPicture &picture);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPicture &picture);
 
 #endif // QT_NO_PICTURE
 

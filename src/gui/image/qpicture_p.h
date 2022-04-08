@@ -43,8 +43,8 @@ extern const char  *qt_mfhdr_tag;
 class QPicturePrivate
 {
    friend class QPicturePaintEngine;
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &s, const QPicture &r);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &s, QPicture &r);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPicture &picture);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPicture &picture);
 
  public:
    enum PaintCommand {

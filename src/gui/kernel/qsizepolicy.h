@@ -158,8 +158,8 @@ class Q_GUI_EXPORT QSizePolicy
    void transpose();
 
  private:
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QSizePolicy &policy);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QSizePolicy &policy);
 
    QSizePolicy(int i) : data(i) { }
 
@@ -182,10 +182,10 @@ class Q_GUI_EXPORT QSizePolicy
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QSizePolicy::ControlTypes)
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QSizePolicy &policy);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QSizePolicy &policy);
 
-Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QSizePolicy &);
+Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QSizePolicy &policy);
 
 inline void QSizePolicy::transpose()
 {

@@ -287,7 +287,7 @@ class Q_GUI_EXPORT QPalette
    uint current_group;
    uint resolve_mask;
 
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &s, const QPalette &palette);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPalette &palette);
 };
 
 inline void QPalette::setColor(ColorGroup group, ColorRole role, const QColor &color)
@@ -305,8 +305,8 @@ inline void QPalette::setBrush(ColorRole role, const QBrush &brush)
    setBrush(All, role, brush);
 }
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &ds, const QPalette &p);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &ds, QPalette &p);
-Q_GUI_EXPORT QDebug operator<<(QDebug, const QPalette &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPalette &palette);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPalette &palette);
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QPalette &palette);
 
 #endif

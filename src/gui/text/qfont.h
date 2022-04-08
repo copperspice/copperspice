@@ -295,8 +295,8 @@ class Q_GUI_EXPORT QFont
    friend class QCommandLinkButtonPrivate;
    friend class QFontEngine;
 
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QFont &);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QFont &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QFont &font);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QFont &font);
 
    QExplicitlySharedDataPointer<QFontPrivate> d;
    uint resolve_mask;

@@ -195,7 +195,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    friend class QRasterBuffer;
    friend class QWidgetPrivate;
 
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPixmap &);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPixmap &pixmap);
 };
 
 inline QPixmap QPixmap::copy(int x, int y, int width, int height) const
@@ -213,8 +213,8 @@ inline bool QPixmap::loadFromData(const QByteArray &data, const QString &format,
    return loadFromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format, flags);
 }
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPixmap &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPixmap &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPixmap &pixmap);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPixmap &pixmap);
 
 template<>
 inline bool CustomType_T<QPixmap>::compare(const CustomType &other) const {

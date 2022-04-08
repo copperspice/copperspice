@@ -119,14 +119,14 @@ class Q_GUI_EXPORT QIcon
  private:
    QIconPrivate *d;
 
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QIcon &);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QIcon &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QIcon &icon);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QIcon &icon);
 };
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QIcon &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QIcon &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QIcon &icon);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QIcon &icon);
 
-Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QIcon &);
+Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QIcon &icon);
 
 Q_GUI_EXPORT QString qt_findAtNxFile(const QString &baseFileName, qreal targetDevicePixelRatio,
    qreal *sourceDevicePixelRatio = nullptr);

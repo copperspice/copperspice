@@ -31,8 +31,8 @@
 #ifndef QT_NO_SHORTCUT
 
 class QKeySequence;
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &out, QKeySequence &ks);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QKeySequence &ks);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QKeySequence &ks);
 
 class QVariant;
 class QKeySequencePrivate;
@@ -198,8 +198,8 @@ class Q_GUI_EXPORT QKeySequence
 
    QKeySequencePrivate *d;
 
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QKeySequence &ks);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QKeySequence &ks);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QKeySequence &ks);
    friend Q_GUI_EXPORT uint qHash(const QKeySequence &key, uint seed);
    friend class QShortcutMap;
    friend class QShortcut;

@@ -120,8 +120,8 @@ class Q_GUI_EXPORT QRegion
    }
    operator QVariant() const;
 
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QRegion &);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QRegion &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QRegion &region);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QRegion &region);
 
  private:
    QRegion copy() const;   // helper of detach
@@ -144,9 +144,9 @@ class Q_GUI_EXPORT QRegion
 
 };
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QRegion &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QRegion &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QRegion &region);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QRegion &region);
 
-Q_GUI_EXPORT QDebug operator<<(QDebug, const QRegion &);
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QRegion &region);
 
-#endif // QREGION_H
+#endif

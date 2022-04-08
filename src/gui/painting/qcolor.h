@@ -228,8 +228,8 @@ class Q_GUI_EXPORT QColor
 #endif
 
    friend class QColormap;
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QColor &color);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QColor &color);
 
 };
 

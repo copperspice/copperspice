@@ -32,8 +32,8 @@ class QPenPrivate;
 class QBrush;
 class QPen;
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPen &pen);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPen &pen);
 
 class Q_GUI_EXPORT QPen
 {
@@ -118,14 +118,13 @@ class Q_GUI_EXPORT QPen
    }
 
  private:
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPen &pen);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPen &pen);
 
    void detach();
    class QPenPrivate *d;
 };
 
-
-Q_GUI_EXPORT QDebug operator<<(QDebug, const QPen &);
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QPen &pen);
 
 #endif

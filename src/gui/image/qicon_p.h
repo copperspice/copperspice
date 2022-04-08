@@ -108,7 +108,7 @@ class Q_GUI_EXPORT QPixmapIconEngine : public QIconEngine
    QPixmapIconEngineEntry *tryMatch(const QSize &size, QIcon::Mode mode, QIcon::State state);
    QVector<QPixmapIconEngineEntry> pixmaps;
 
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &s, const QIcon &icon);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QIcon &icon);
    friend class QIconThemeEngine;
 };
 

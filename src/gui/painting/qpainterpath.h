@@ -230,13 +230,13 @@ class Q_GUI_EXPORT QPainterPath
    friend class QVectorPath;
    friend Q_GUI_EXPORT const QVectorPath &qtVectorPathForPath(const QPainterPath &);
 
-   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
-   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
+   friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPainterPath &path);
+   friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPainterPath &path);
 
 };
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPainterPath &path);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPainterPath &path);
 
 class Q_GUI_EXPORT QPainterPathStroker
 {

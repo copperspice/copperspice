@@ -354,9 +354,9 @@ inline void QImage::setPixelColor(const QPoint &pt, const QColor &color)
 }
 
 
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QImage &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QImage &);
+Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QImage &image);
+Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QImage &image);
 
-Q_GUI_EXPORT QDebug operator<<(QDebug, const QImage &);
+Q_GUI_EXPORT QDebug operator<<(QDebug, const QImage &image);
 
 #endif
