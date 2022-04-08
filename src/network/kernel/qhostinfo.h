@@ -33,7 +33,6 @@ class QHostInfoPrivate;
 
 class Q_NETWORK_EXPORT QHostInfo
 {
-
  public:
    enum HostInfoError {
       NoError,
@@ -44,9 +43,12 @@ class Q_NETWORK_EXPORT QHostInfo
    explicit QHostInfo(int id = -1);
 
    QHostInfo(const QHostInfo &other);
-   QHostInfo &operator=(const QHostInfo &other);
+   QHostInfo(QHostInfo &&other);
 
    ~QHostInfo();
+
+   QHostInfo &operator=(const QHostInfo &other);
+   QHostInfo &operator=(QHostInfo &&other);
 
    QString hostName() const;
    void setHostName(const QString &hostName);
@@ -74,4 +76,4 @@ class Q_NETWORK_EXPORT QHostInfo
    QScopedPointer<QHostInfoPrivate> d;
 };
 
-#endif // QHOSTINFO_H
+#endif

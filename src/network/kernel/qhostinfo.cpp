@@ -161,9 +161,21 @@ QHostInfo::QHostInfo(const QHostInfo &other)
 {
 }
 
+QHostInfo::QHostInfo(QHostInfo &&other)
+   : d(nullptr)
+{
+   swap(d, other.d);
+}
+
 QHostInfo &QHostInfo::operator=(const QHostInfo &other)
 {
    *d.data() = *other.d.data();
+   return *this;
+}
+
+QHostInfo &QHostInfo::operator=(QHostInfo &&other)
+{
+   swap(d, other.d);
    return *this;
 }
 
