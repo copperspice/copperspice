@@ -31,8 +31,17 @@
 
 #include <algorithm>
 
-Q_GLOBAL_STATIC(QDnsLookupThreadPool, theDnsLookupThreadPool);
-Q_GLOBAL_STATIC(QThreadStorage<bool *>, theDnsLookupSeedStorage);
+QDnsLookupThreadPool *cs_DnsLookupThreadPool()
+{
+   static QDnsLookupThreadPool retval;
+   return &retval;
+}
+
+QThreadStorage<bool *> *cs_DnsLookupSeedStorage()
+{
+   static QThreadStorage<bool *> retval;
+   return &retval;
+}
 
 static bool qt_qdnsmailexchangerecord_less_than(const QDnsMailExchangeRecord &r1,
       const QDnsMailExchangeRecord &r2)
@@ -342,10 +351,11 @@ void QDnsLookup::lookup()
    d->isFinished = false;
    d->reply = QDnsLookupReply();
    d->runnable = new QDnsLookupRunnable(d->type, QUrl::toAce(d->name), d->nameserver);
+
    connect(d->runnable, SIGNAL(finished(QDnsLookupReply)),
-           this, SLOT(_q_lookupFinished(QDnsLookupReply)),
-           Qt::BlockingQueuedConnection);
-   theDnsLookupThreadPool()->start(d->runnable);
+         this, SLOT(_q_lookupFinished(QDnsLookupReply)), Qt::BlockingQueuedConnection);
+
+   cs_DnsLookupThreadPool()->start(d->runnable);
 }
 
 /*!
@@ -852,10 +862,11 @@ void QDnsLookupRunnable::run()
    query(requestType, requestName, nameserver, &reply);
 
    // Sort results.
-   if (!theDnsLookupSeedStorage()->hasLocalData()) {
+   if (! cs_DnsLookupSeedStorage()->hasLocalData()) {
       qsrand(QTime(0, 0, 0).msecsTo(QTime::currentTime()) ^ reinterpret_cast<quintptr>(this));
-      theDnsLookupSeedStorage()->setLocalData(new bool(true));
+      cs_DnsLookupSeedStorage()->setLocalData(new bool(true));
    }
+
    qt_qdnsmailexchangerecord_sort(reply.mailExchangeRecords);
    qt_qdnsservicerecord_sort(reply.serviceRecords);
 

@@ -50,14 +50,18 @@
 #include <qnetwork_reply_p.h>
 #include <qhttp_multipart_p.h>
 
-Q_GLOBAL_STATIC(QNetworkAccessFileBackendFactory, fileBackend)
+QNetworkAccessFileBackendFactory *cs_FileBackend()
+{
+   static QNetworkAccessFileBackendFactory retval;
+   return &retval;
+}
 
 #ifndef QT_NO_FTP
-Q_GLOBAL_STATIC(QNetworkAccessFtpBackendFactory, ftpBackend)
-#endif
-
-#ifdef QT_BUILD_INTERNAL
-Q_GLOBAL_STATIC(QNetworkAccessDebugPipeBackendFactory, debugpipeBackend)
+QNetworkAccessFtpBackendFactory *cs_FtpBackend()
+{
+   static QNetworkAccessFtpBackendFactory retval;
+   return &retval;
+}
 #endif
 
 #if defined(Q_OS_DARWIN)
@@ -120,11 +124,11 @@ static void ensureInitialized()
 {
 
 #ifndef QT_NO_FTP
-   (void) ftpBackend();
+   (void) cs_FtpBackend();
 #endif
 
    // leave this one last since it will query the special QAbstractFileEngines
-   (void) fileBackend();
+   (void) cs_FileBackend();
 }
 
 QNetworkAccessManager::QNetworkAccessManager(QObject *parent)

@@ -106,6 +106,12 @@ class QGlobalNetworkProxy
    QHttpSocketEngineHandler *httpSocketEngineHandler;
 };
 
+QGlobalNetworkProxy *cs_GlobalNetworkProxy()
+{
+   static QGlobalNetworkProxy retval;
+   return &retval;
+}
+
 QList<QNetworkProxy> QGlobalNetworkProxy::proxyForQuery(const QNetworkProxyQuery &query)
 {
    QRecursiveMutexLocker locker(&mutex);
@@ -141,11 +147,11 @@ QList<QNetworkProxy> QGlobalNetworkProxy::proxyForQuery(const QNetworkProxyQuery
    return result;
 }
 
-Q_GLOBAL_STATIC(QGlobalNetworkProxy, globalNetworkProxy)
-
 namespace {
 
-template<bool> struct StaticAssertTest;
+template<bool>
+struct StaticAssertTest;
+
 template<> struct StaticAssertTest<true> {
    enum { Value = 1 };
 };
@@ -240,7 +246,8 @@ QNetworkProxy::QNetworkProxy()
    // make sure we have QGlobalNetworkProxy singleton created, otherwise
    // you don't have any socket engine handler created when directly setting
    // a proxy to the socket
-   globalNetworkProxy();
+
+   cs_GlobalNetworkProxy();
 }
 
 QNetworkProxy::QNetworkProxy(ProxyType type, const QString &hostName, quint16 port,
@@ -249,7 +256,8 @@ QNetworkProxy::QNetworkProxy(ProxyType type, const QString &hostName, quint16 po
 {
    // make sure we have QGlobalNetworkProxy singleton created, otherwise you don't have
    // any socket engine handler created when directly setting a proxy to a socket
-   globalNetworkProxy();
+
+   cs_GlobalNetworkProxy();
 }
 
 QNetworkProxy::QNetworkProxy(const QNetworkProxy &other)
@@ -349,22 +357,22 @@ quint16 QNetworkProxy::port() const
 
 void QNetworkProxy::setApplicationProxy(const QNetworkProxy &networkProxy)
 {
-   if (globalNetworkProxy()) {
-      // don't accept setting the proxy to DefaultProxy
-      if (networkProxy.type() == DefaultProxy) {
-         globalNetworkProxy()->setApplicationProxy(QNetworkProxy::NoProxy);
-      } else {
-         globalNetworkProxy()->setApplicationProxy(networkProxy);
-      }
+   QGlobalNetworkProxy *obj = cs_GlobalNetworkProxy();
+
+   // do not allow setting the proxy to DefaultProxy
+
+   if (networkProxy.type() == DefaultProxy) {
+      obj->setApplicationProxy(QNetworkProxy::NoProxy);
+   } else {
+      obj->setApplicationProxy(networkProxy);
    }
 }
 
 QNetworkProxy QNetworkProxy::applicationProxy()
 {
-   if (globalNetworkProxy()) {
-      return globalNetworkProxy()->applicationProxy();
-   }
-   return QNetworkProxy();
+   QGlobalNetworkProxy *obj = cs_GlobalNetworkProxy();
+
+   return obj->applicationProxy();
 }
 
 QVariant QNetworkProxy::header(QNetworkRequest::KnownHeaders header) const
@@ -605,7 +613,6 @@ void QNetworkProxyQuery::setNetworkConfiguration(const QNetworkConfiguration &ne
 }
 #endif
 
-
 QNetworkProxyFactory::QNetworkProxyFactory()
 {
 }
@@ -625,17 +632,14 @@ void QNetworkProxyFactory::setUseSystemConfiguration(bool enable)
 
 void QNetworkProxyFactory::setApplicationProxyFactory(QNetworkProxyFactory *factory)
 {
-   if (globalNetworkProxy()) {
-      globalNetworkProxy()->setApplicationProxyFactory(factory);
-   }
+   QGlobalNetworkProxy *obj = cs_GlobalNetworkProxy();
+   obj->setApplicationProxyFactory(factory);
 }
 
 QList<QNetworkProxy> QNetworkProxyFactory::proxyForQuery(const QNetworkProxyQuery &query)
 {
-   if (!globalNetworkProxy()) {
-      return QList<QNetworkProxy>() << QNetworkProxy(QNetworkProxy::NoProxy);
-   }
-   return globalNetworkProxy()->proxyForQuery(query);
+   QGlobalNetworkProxy *obj = cs_GlobalNetworkProxy();
+   return obj->proxyForQuery(query);
 }
 
 QDebug operator<<(QDebug debug, const QNetworkProxy &proxy)

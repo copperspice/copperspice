@@ -28,6 +28,12 @@
 
 #ifndef QT_NO_NETWORKINTERFACE
 
+QNetworkInterfaceManager *cs_Manager()
+{
+   static QNetworkInterfaceManager retval;
+   return &retval;
+}
+
 static QList<QNetworkInterfacePrivate *> postProcess(QList<QNetworkInterfacePrivate *> list)
 {
    // Some platforms report a netmask but don't report a broadcast address
@@ -60,8 +66,6 @@ static QList<QNetworkInterfacePrivate *> postProcess(QList<QNetworkInterfacePriv
 
    return list;
 }
-
-Q_GLOBAL_STATIC(QNetworkInterfaceManager, manager)
 
 QNetworkInterfaceManager::QNetworkInterfaceManager()
 {
@@ -493,7 +497,8 @@ QList<QNetworkAddressEntry> QNetworkInterface::addressEntries() const
 QNetworkInterface QNetworkInterface::interfaceFromName(const QString &name)
 {
    QNetworkInterface result;
-   result.d = manager()->interfaceFromName(name);
+   result.d = cs_Manager()->interfaceFromName(name);
+
    return result;
 }
 
@@ -510,7 +515,8 @@ QNetworkInterface QNetworkInterface::interfaceFromName(const QString &name)
 QNetworkInterface QNetworkInterface::interfaceFromIndex(int index)
 {
    QNetworkInterface result;
-   result.d = manager()->interfaceFromIndex(index);
+   result.d = cs_Manager()->interfaceFromIndex(index);
+
    return result;
 }
 
@@ -520,7 +526,7 @@ QNetworkInterface QNetworkInterface::interfaceFromIndex(int index)
 */
 QList<QNetworkInterface> QNetworkInterface::allInterfaces()
 {
-   QList<QSharedDataPointer<QNetworkInterfacePrivate> > privs = manager()->allInterfaces();
+   QList<QSharedDataPointer<QNetworkInterfacePrivate> > privs = cs_Manager()->allInterfaces();
    QList<QNetworkInterface> result;
 
    for (const QSharedDataPointer<QNetworkInterfacePrivate> &p : privs) {
@@ -540,11 +546,11 @@ QList<QNetworkInterface> QNetworkInterface::allInterfaces()
 */
 QList<QHostAddress> QNetworkInterface::allAddresses()
 {
-   QList<QSharedDataPointer<QNetworkInterfacePrivate> > privs = manager()->allInterfaces();
+   QList<QSharedDataPointer<QNetworkInterfacePrivate> > privs = cs_Manager()->allInterfaces();
    QList<QHostAddress> result;
 
    for (const QSharedDataPointer<QNetworkInterfacePrivate> &p : privs) {
-      for  (const QNetworkAddressEntry &entry : p->addressEntries) {
+      for (const QNetworkAddressEntry &entry : p->addressEntries) {
          result += entry.ip();
       }
    }
