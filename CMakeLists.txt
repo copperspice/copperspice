@@ -22,7 +22,7 @@ set(BUILD_MICRO "3")
 
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
-# catch2 set up
+# enable catch2 unit tests in config
 option(BUILD_TESTS "Enables building the Catch2 Unit Tests" OFF)
 
 include(CheckCXXCompilerFlag)
@@ -598,7 +598,7 @@ if (WITH_GUI)
    add_subdirectory(src/plugins/printerdrivers)
 endif()
 
-# catch2 set up
+# catch2
 if (BUILD_TESTS)
    enable_testing()
    add_subdirectory(test/core)

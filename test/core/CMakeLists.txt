@@ -1,4 +1,3 @@
-include(Load_Catch2)
 include(CTest)
 
 add_executable(CsCoreTest "")
@@ -30,7 +29,6 @@ file(WRITE ${CMAKE_BINARY_DIR}/bin/test/run_coretest.bat
 target_link_libraries(CsCoreTest
    PUBLIC
    CsCore
-   Catch2::Catch2
 )
 
 include_directories(
@@ -46,6 +44,7 @@ include_directories(
 
 target_sources(CsCoreTest
    PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/../catch2/catch.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/../cs_catch2.h
 
    ${CMAKE_CURRENT_SOURCE_DIR}/test_main.cpp
