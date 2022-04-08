@@ -159,17 +159,11 @@ inline void qSwap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, Cleanup> &p2
    p1.swap(p2);
 }
 
-namespace std {
-
 template <class T, class Cleanup>
-inline void swap(QT_PREPEND_NAMESPACE(QScopedPointer)<T, Cleanup> &p1,
-                            QT_PREPEND_NAMESPACE(QScopedPointer)<T, Cleanup> &p2)
+inline void swap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, Cleanup> &p2)
 {
    p1.swap(p2);
 }
-
-} // namespce
-
 
 namespace QtPrivate {
 

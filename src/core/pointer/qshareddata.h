@@ -407,19 +407,17 @@ inline void qSwap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySharedDataPoin
    p1.swap(p2);
 }
 
-namespace std {
 template <class T>
-inline void swap(QT_PREPEND_NAMESPACE(QSharedDataPointer)<T> &p1,
-                            QT_PREPEND_NAMESPACE(QSharedDataPointer)<T> &p2)
+inline void swap(QSharedDataPointer<T> &p1, QSharedDataPointer<T> &p2)
 {
    p1.swap(p2);
 }
 
 template <class T>
-inline void swap(QT_PREPEND_NAMESPACE(QExplicitlySharedDataPointer)<T> &p1,
-                            QT_PREPEND_NAMESPACE(QExplicitlySharedDataPointer)<T> &p2)
+inline void swap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySharedDataPointer<T> &p2)
 {
    p1.swap(p2);
 }
-}
+
+
 #endif
