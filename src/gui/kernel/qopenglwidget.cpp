@@ -240,11 +240,13 @@ void QOpenGLWidgetPrivate::recreateFbo()
 void QOpenGLWidgetPrivate::beginCompose()
 {
    Q_Q(QOpenGLWidget);
+
    if (flushPending) {
       flushPending = false;
       q->makeCurrent();
       static_cast<QOpenGLExtensions *>(context->functions())->flushShared();
    }
+
    hasBeenComposed = true;
    emit q->aboutToCompose();
 }
@@ -258,6 +260,7 @@ void QOpenGLWidgetPrivate::endCompose()
 void QOpenGLWidgetPrivate::initialize()
 {
    Q_Q(QOpenGLWidget);
+
    if (initialized) {
       return;
    }
@@ -287,19 +290,22 @@ void QOpenGLWidgetPrivate::initialize()
    ctx->setShareContext(shareContext);
    ctx->setFormat(requestedFormat);
    ctx->setScreen(shareContext->screen());
-   if (!ctx->create()) {
+
+   if (! ctx->create()) {
       qWarning("QOpenGLWidget: Failed to create context");
       return;
    }
 
    // Propagate settings that make sense only for the tlw.
    QSurfaceFormat tlwFormat = tlw->windowHandle()->format();
+
    if (requestedFormat.swapInterval() != tlwFormat.swapInterval()) {
       // Most platforms will pick up the changed swap interval on the next
       // makeCurrent or swapBuffers.
       tlwFormat.setSwapInterval(requestedFormat.swapInterval());
       tlw->windowHandle()->setFormat(tlwFormat);
    }
+
    if (requestedFormat.swapBehavior() != tlwFormat.swapBehavior()) {
       tlwFormat.setSwapBehavior(requestedFormat.swapBehavior());
       tlw->windowHandle()->setFormat(tlwFormat);
@@ -331,6 +337,7 @@ void QOpenGLWidgetPrivate::initialize()
 void QOpenGLWidgetPrivate::resolveSamples()
 {
    Q_Q(QOpenGLWidget);
+
    if (resolvedFbo) {
       q->makeCurrent();
       QRect rect(QPoint(0, 0), fbo->size());
@@ -383,10 +390,13 @@ void QOpenGLWidgetPrivate::invalidateFbo()
       const int gl_color_attachment0 = 0x8CE0;  // GL_COLOR_ATTACHMENT0
       const int gl_depth_attachment = 0x8D00;   // GL_DEPTH_ATTACHMENT
       const int gl_stencil_attachment = 0x8D20; // GL_STENCIL_ATTACHMENT
+
       const GLenum attachments[] = {
          gl_color_attachment0, gl_depth_attachment, gl_stencil_attachment
       };
+
       f->glDiscardFramebufferEXT(GL_FRAMEBUFFER, sizeof attachments / sizeof * attachments, attachments);
+
    } else {
       f->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
    }

@@ -31,8 +31,6 @@
 #include <qevent.h>
 #include <qabstractbutton_p.h>
 
-
-
 class QRadioButtonPrivate : public QAbstractButtonPrivate
 {
    Q_DECLARE_PUBLIC(QRadioButton)
@@ -43,9 +41,6 @@ class QRadioButtonPrivate : public QAbstractButtonPrivate
    uint hovering : 1;
 };
 
-/*
-    Initializes the radio button.
-*/
 void QRadioButtonPrivate::init()
 {
    Q_Q(QRadioButton);
@@ -55,7 +50,6 @@ void QRadioButtonPrivate::init()
    q->setForegroundRole(QPalette::WindowText);
    setLayoutItemMargins(QStyle::SE_RadioButtonLayoutItem);
 }
-
 
 QRadioButton::QRadioButton(QWidget *parent)
    : QAbstractButton(*new QRadioButtonPrivate, parent)
@@ -75,21 +69,24 @@ QRadioButton::QRadioButton(const QString &text, QWidget *parent)
    setText(text);
 }
 
-
 void QRadioButton::initStyleOption(QStyleOptionButton *option) const
 {
-   if (!option) {
+   if (! option) {
       return;
    }
+
    Q_D(const QRadioButton);
    option->initFrom(this);
    option->text = d->text;
    option->icon = d->icon;
    option->iconSize = iconSize();
+
    if (d->down) {
       option->state |= QStyle::State_Sunken;
    }
+
    option->state |= (d->checked) ? QStyle::State_On : QStyle::State_Off;
+
    if (testAttribute(Qt::WA_Hover) && underMouse()) {
       if (d->hovering) {
          option->state |= QStyle::State_MouseOver;
@@ -99,20 +96,20 @@ void QRadioButton::initStyleOption(QStyleOptionButton *option) const
    }
 }
 
-/*!
-    \reimp
-*/
 QSize QRadioButton::sizeHint() const
 {
    Q_D(const QRadioButton);
+
    if (d->sizeHint.isValid()) {
       return d->sizeHint;
    }
+
    ensurePolished();
    QStyleOptionButton opt;
    initStyleOption(&opt);
-   QSize sz = style()->itemTextRect(fontMetrics(), QRect(), Qt::TextShowMnemonic,
-         false, text()).size();
+
+   QSize sz = style()->itemTextRect(fontMetrics(), QRect(), Qt::TextShowMnemonic, false, text()).size();
+
    if (!opt.icon.isNull()) {
       sz = QSize(sz.width() + opt.iconSize.width() + 4, qMax(sz.height(), opt.iconSize.height()));
    }
@@ -121,18 +118,11 @@ QSize QRadioButton::sizeHint() const
    return d->sizeHint;
 }
 
-/*!
-    \reimp
-    \since 4.8
-*/
 QSize QRadioButton::minimumSizeHint() const
 {
    return sizeHint();
 }
 
-/*!
-    \reimp
-*/
 bool QRadioButton::hitButton(const QPoint &pos) const
 {
    QStyleOptionButton opt;
@@ -140,9 +130,6 @@ bool QRadioButton::hitButton(const QPoint &pos) const
    return style()->subElementRect(QStyle::SE_RadioButtonClickRect, &opt, this).contains(pos);
 }
 
-/*!
-    \reimp
-*/
 void QRadioButton::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QRadioButton);
@@ -161,8 +148,6 @@ void QRadioButton::mouseMoveEvent(QMouseEvent *e)
    QAbstractButton::mouseMoveEvent(e);
 }
 
-/*!\reimp
- */
 void QRadioButton::paintEvent(QPaintEvent *)
 {
    QStylePainter p(this);
@@ -171,7 +156,6 @@ void QRadioButton::paintEvent(QPaintEvent *)
    p.drawControl(QStyle::CE_RadioButton, opt);
 }
 
-/*! \reimp */
 bool QRadioButton::event(QEvent *e)
 {
    Q_D(QRadioButton);

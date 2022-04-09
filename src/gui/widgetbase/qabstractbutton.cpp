@@ -113,7 +113,7 @@ QAbstractButton *QAbstractButtonPrivate::queryCheckedButton() const
    Q_Q(const QAbstractButton);
    QList<QAbstractButton *> buttonList = queryButtonList();
 
-   if (!autoExclusive || buttonList.count() == 1) {
+   if (! autoExclusive || buttonList.count() == 1) {
       // no group
       return nullptr;
    }
@@ -124,6 +124,7 @@ QAbstractButton *QAbstractButtonPrivate::queryCheckedButton() const
          return b;
       }
    }
+
    return checked  ? const_cast<QAbstractButton *>(q) : nullptr;
 }
 
@@ -139,6 +140,7 @@ void QAbstractButtonPrivate::notifyChecked()
       }
    } else
 #endif
+
       if (autoExclusive) {
          if (QAbstractButton *b = queryCheckedButton()) {
             b->setChecked(false);
@@ -495,14 +497,6 @@ QKeySequence QAbstractButton::shortcut() const
 }
 #endif // QT_NO_SHORTCUT
 
-/*!
-\property QAbstractButton::checkable
-\brief whether the button is checkable
-
-By default, the button is not checkable.
-
-\sa checked
-*/
 void QAbstractButton::setCheckable(bool checkable)
 {
    Q_D(QAbstractButton);
@@ -520,30 +514,26 @@ bool QAbstractButton::isCheckable() const
    return d->checkable;
 }
 
-/*!
-\property QAbstractButton::checked
-\brief whether the button is checked
-
-Only checkable buttons can be checked. By default, the button is unchecked.
-
-\sa checkable
-*/
 void QAbstractButton::setChecked(bool checked)
 {
    Q_D(QAbstractButton);
-   if (!d->checkable || d->checked == checked) {
-      if (!d->blockRefresh) {
+
+   if (! d->checkable || d->checked == checked) {
+      if (! d->blockRefresh) {
          checkStateSet();
       }
+
       return;
    }
 
    if (!checked && d->queryCheckedButton() == this) {
-      // the checked button of an exclusive or autoexclusive group cannot be  unchecked
+      // the checked button of an exclusive or autoexclusive group can not be  unchecked
+
 #ifndef QT_NO_BUTTONGROUP
       if (d->group ? d->group->d_func()->exclusive : d->autoExclusive) {
          return;
       }
+
       if (d->group) {
          d->group->d_func()->detectCheckedButton();
       }
@@ -569,6 +559,7 @@ void QAbstractButton::setChecked(bool checked)
    if (guard) {
       d->emitToggled(checked);
    }
+
 #ifndef QT_NO_ACCESSIBILITY
    QAccessible::State s;
    s.checked = true;
@@ -582,15 +573,6 @@ bool QAbstractButton::isChecked() const
    Q_D(const QAbstractButton);
    return d->checked;
 }
-
-/*!
-  \property QAbstractButton::down
-  \brief whether the button is pressed down
-
-  If this property is true, the button is pressed down. The signals
-  pressed() and clicked() are not emitted if you set this property
-  to true. The default is false.
-*/
 
 void QAbstractButton::setDown(bool down)
 {
@@ -613,27 +595,16 @@ bool QAbstractButton::isDown() const
    return d->down;
 }
 
-/*!
-\property QAbstractButton::autoRepeat
-\brief whether autoRepeat is enabled
-
-If autoRepeat is enabled, then the pressed(), released(), and clicked() signals are emitted at
-regular intervals when the button is down. autoRepeat is off by default.
-The initial delay and the repetition interval are defined in milliseconds by \l
-autoRepeatDelay and \l autoRepeatInterval.
-
-Note: If a button is pressed down by a shortcut key, then auto-repeat is enabled and timed by the
-system and not by this class. The pressed(), released(), and clicked() signals will be emitted
-like in the normal case.
-*/
-
 void QAbstractButton::setAutoRepeat(bool autoRepeat)
 {
    Q_D(QAbstractButton);
+
    if (d->autoRepeat == autoRepeat) {
       return;
    }
+
    d->autoRepeat = autoRepeat;
+
    if (d->autoRepeat && d->down) {
       d->repeatTimer.start(d->autoRepeatDelay, this);
    } else {
@@ -659,17 +630,6 @@ int QAbstractButton::autoRepeatDelay() const
    return d->autoRepeatDelay;
 }
 
-/*!
-    \property QAbstractButton::autoRepeatInterval
-    \brief the interval of auto-repetition
-    \since 4.2
-
-    If \l autoRepeat is enabled, then autoRepeatInterval defines the
-    length of the auto-repetition interval in millisecons.
-
-    \sa autoRepeat, autoRepeatDelay
-*/
-
 void QAbstractButton::setAutoRepeatInterval(int autoRepeatInterval)
 {
    Q_D(QAbstractButton);
@@ -682,25 +642,6 @@ int QAbstractButton::autoRepeatInterval() const
    return d->autoRepeatInterval;
 }
 
-
-
-/*!
-\property QAbstractButton::autoExclusive
-\brief whether auto-exclusivity is enabled
-
-If auto-exclusivity is enabled, checkable buttons that belong to the
-same parent widget behave as if they were part of the same
-exclusive button group. In an exclusive button group, only one button
-can be checked at any time; checking another button automatically
-unchecks the previously checked one.
-
-The property has no effect on buttons that belong to a button
-group.
-
-autoExclusive is off by default, except for radio buttons.
-
-\sa QRadioButton
-*/
 void QAbstractButton::setAutoExclusive(bool autoExclusive)
 {
    Q_D(QAbstractButton);
@@ -714,35 +655,14 @@ bool QAbstractButton::autoExclusive() const
 }
 
 #ifndef QT_NO_BUTTONGROUP
-/*!
-  Returns the group that this button belongs to.
 
-  If the button is not a member of any QButtonGroup, this function
-  returns 0.
-
-  \sa QButtonGroup
-*/
 QButtonGroup *QAbstractButton::group() const
 {
    Q_D(const QAbstractButton);
    return d->group;
 }
-#endif // QT_NO_BUTTONGROUP
+#endif
 
-/*!
-Performs an animated click: the button is pressed immediately, and
-released \a msec milliseconds later (the default is 100 ms).
-
-Calling this function again before the button was released will reset
-the release timer.
-
-All signals associated with a click are emitted as appropriate.
-
-This function does nothing if the button is \link setEnabled()
-disabled. \endlink
-
-\sa click()
-*/
 void QAbstractButton::animateClick(int msec)
 {
    if (!isEnabled()) {
@@ -761,27 +681,17 @@ void QAbstractButton::animateClick(int msec)
    d->animateTimer.start(msec, this);
 }
 
-/*!
-Performs a click.
-
-All the usual signals associated with a click are emitted as
-appropriate. If the button is checkable, the state of the button is
-toggled.
-
-This function does nothing if the button is \link setEnabled()
-disabled. \endlink
-
-\sa animateClick()
- */
 void QAbstractButton::click()
 {
    if (!isEnabled()) {
       return;
    }
+
    Q_D(QAbstractButton);
    QPointer<QAbstractButton> guard(this);
    d->down = true;
    d->emitPressed();
+
    if (guard) {
       d->down = false;
       nextCheckState();
@@ -794,36 +704,16 @@ void QAbstractButton::click()
    }
 }
 
-/*! \fn void QAbstractButton::toggle()
-
-    Toggles the state of a checkable button.
-
-     \sa checked
-*/
 void QAbstractButton::toggle()
 {
    Q_D(QAbstractButton);
    setChecked(!d->checked);
 }
 
-
-/*! This virtual handler is called when setChecked() was called,
-unless it was called from within nextCheckState(). It allows
-subclasses to reset their intermediate button states.
-
-\sa nextCheckState()
- */
 void QAbstractButton::checkStateSet()
 {
 }
 
-/*! This virtual handler is called when a button is clicked. The
-default implementation calls setChecked(!isChecked()) if the button
-isCheckable().  It allows subclasses to implement intermediate button
-states.
-
-\sa checkStateSet()
-*/
 void QAbstractButton::nextCheckState()
 {
    if (isCheckable()) {
@@ -831,14 +721,6 @@ void QAbstractButton::nextCheckState()
    }
 }
 
-/*!
-Returns true if \a pos is inside the clickable button rectangle;
-otherwise returns false.
-
-By default, the clickable area is the entire widget. Subclasses
-may reimplement this function to provide support for clickable
-areas of different shapes and sizes.
-*/
 bool QAbstractButton::hitButton(const QPoint &pos) const
 {
    return rect().contains(pos);
@@ -894,7 +776,6 @@ bool QAbstractButton::event(QEvent *e)
    return QWidget::event(e);
 }
 
-/*! \reimp */
 void QAbstractButton::mousePressEvent(QMouseEvent *e)
 {
    Q_D(QAbstractButton);
@@ -914,7 +795,6 @@ void QAbstractButton::mousePressEvent(QMouseEvent *e)
    }
 }
 
-/*! \reimp */
 void QAbstractButton::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QAbstractButton);
@@ -940,7 +820,6 @@ void QAbstractButton::mouseReleaseEvent(QMouseEvent *e)
    }
 }
 
-/*! \reimp */
 void QAbstractButton::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QAbstractButton);
@@ -964,7 +843,6 @@ void QAbstractButton::mouseMoveEvent(QMouseEvent *e)
    }
 }
 
-/*! \reimp */
 void QAbstractButton::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QAbstractButton);
@@ -1013,10 +891,7 @@ void QAbstractButton::keyPressEvent(QKeyEvent *e)
             || (pw && qobject_cast<QAbstractItemView *>(pw->parentWidget()))
 #endif
          ) {
-            // ### Using qobject_cast to check if the parent is a viewport of
-            // QAbstractItemView is a crude hack, and should be revisited and
-            // cleaned up when fixing task 194373. It's here to ensure that we
-            // keep compatibility outside QAbstractItemView.
+
             d->moveFocus(e->key());
 
             if (hasFocus()) {
@@ -1027,8 +902,8 @@ void QAbstractButton::keyPressEvent(QKeyEvent *e)
          } else {
             QWidget *w = pw ? pw : this;
             bool reverse = (w->layoutDirection() == Qt::RightToLeft);
-            if ((e->key() == Qt::Key_Left && !reverse)
-               || (e->key() == Qt::Key_Right && reverse)) {
+
+            if ((e->key() == Qt::Key_Left && !reverse) || (e->key() == Qt::Key_Right && reverse)) {
                next = false;
             }
             focusNextPrevChild(next);
@@ -1049,12 +924,11 @@ void QAbstractButton::keyPressEvent(QKeyEvent *e)
    }
 }
 
-/*! \reimp */
 void QAbstractButton::keyReleaseEvent(QKeyEvent *e)
 {
    Q_D(QAbstractButton);
 
-   if (!e->isAutoRepeat()) {
+   if (! e->isAutoRepeat()) {
       d->repeatTimer.stop();
    }
 
@@ -1065,74 +939,87 @@ void QAbstractButton::keyReleaseEvent(QKeyEvent *e)
             d->click();
          }
          break;
+
       default:
          e->ignore();
    }
 }
 
-/*!\reimp
- */
 void QAbstractButton::timerEvent(QTimerEvent *e)
 {
    Q_D(QAbstractButton);
+
    if (e->timerId() == d->repeatTimer.timerId()) {
       d->repeatTimer.start(d->autoRepeatInterval, this);
+
       if (d->down) {
          QPointer<QAbstractButton> guard(this);
          nextCheckState();
+
          if (guard) {
             d->emitReleased();
          }
+
          if (guard) {
             d->emitClicked();
          }
+
          if (guard) {
             d->emitPressed();
          }
       }
+
    } else if (e->timerId() == d->animateTimer.timerId()) {
       d->animateTimer.stop();
       d->click();
    }
 }
 
-/*! \reimp */
 void QAbstractButton::focusInEvent(QFocusEvent *e)
 {
    Q_D(QAbstractButton);
+
 #ifdef QT_KEYPAD_NAVIGATION
-   if (!QApplication::keypadNavigationEnabled())
-#endif
+
+   if (! QApplication::keypadNavigationEnabled()) {
       d->fixFocusPolicy();
+   }
+#else
+   d->fixFocusPolicy();
+#endif
+
    QWidget::focusInEvent(e);
 }
 
-/*! \reimp */
 void QAbstractButton::focusOutEvent(QFocusEvent *e)
 {
    Q_D(QAbstractButton);
+
    if (e->reason() != Qt::PopupFocusReason && d->down) {
       d->down = false;
       d->emitReleased();
    }
+
    QWidget::focusOutEvent(e);
 }
 
-/*! \reimp */
 void QAbstractButton::changeEvent(QEvent *e)
 {
    Q_D(QAbstractButton);
+
    switch (e->type()) {
       case QEvent::EnabledChange:
-         if (!isEnabled() && d->down) {
+         if (! isEnabled() && d->down) {
             d->down = false;
             d->emitReleased();
          }
          break;
+
       default:
          d->sizeHint = QSize();
          break;
    }
+
    QWidget::changeEvent(e);
 }
 
@@ -1152,6 +1039,7 @@ QSize QAbstractButton::iconSize() const
 void QAbstractButton::setIconSize(const QSize &size)
 {
    Q_D(QAbstractButton);
+
    if (d->iconSize == size) {
       return;
    }
@@ -1159,8 +1047,8 @@ void QAbstractButton::setIconSize(const QSize &size)
    d->iconSize = size;
    d->sizeHint = QSize();
    updateGeometry();
+
    if (isVisible()) {
       update();
    }
 }
-

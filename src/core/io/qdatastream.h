@@ -164,11 +164,6 @@ class Q_CORE_EXPORT QDataStream
    Status q_status;
 };
 
-
-/*****************************************************************************
-  QDataStream inline functions
- *****************************************************************************/
-
 inline QIODevice *QDataStream::device() const
 {
    return dev;

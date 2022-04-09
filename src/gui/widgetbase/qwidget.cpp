@@ -214,9 +214,6 @@ QWidgetPrivate::~QWidgetPrivate()
 #endif
 }
 
-/*!
-    \internal
-*/
 void QWidgetPrivate::scrollChildren(int dx, int dy)
 {
    Q_Q(QWidget);
@@ -4362,7 +4359,7 @@ QString QWidget::windowTitle() const
          return d->extra->topextra->caption;
       }
 
-      if (!d->extra->topextra->filePath.isEmpty()) {
+      if (! d->extra->topextra->filePath.isEmpty()) {
          return QFileInfo(d->extra->topextra->filePath).fileName() + "[*]";
       }
    }
@@ -9047,7 +9044,7 @@ QOpenGLContext *QWidgetPrivate::shareContext() const
 
    QWidgetPrivate *that = const_cast<QWidgetPrivate *>(this);
 
-   if (!extra->topextra->shareContext) {
+   if (! extra->topextra->shareContext) {
       QOpenGLContext *ctx = new QOpenGLContext;
       ctx->setShareContext(qt_gl_global_share_context());
       ctx->setFormat(extra->topextra->window->format());
@@ -9083,7 +9080,7 @@ void QWidgetPrivate::sendComposeStatus(QWidget *widget, bool end)
       }
    }
 }
-#endif // QT_NO_OPENGL
+#endif
 
 Q_GUI_EXPORT QWidgetData *qt_qwidget_data(QWidget *widget)
 {
@@ -9094,7 +9091,6 @@ Q_GUI_EXPORT QWidgetPrivate *qt_widget_private(QWidget *widget)
 {
    return widget->d_func();
 }
-
 
 #ifndef QT_NO_GRAPHICSVIEW
 

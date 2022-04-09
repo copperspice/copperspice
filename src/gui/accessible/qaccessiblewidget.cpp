@@ -420,8 +420,10 @@ QString QAccessibleWidget::text(QAccessible::Text t) const
             str = qt_accStripAmp(buddyString(widget()));
          }
          break;
+
       case QAccessible::Description:
          str = widget()->accessibleDescription();
+
 #ifndef QT_NO_TOOLTIP
          if (str.isEmpty()) {
             str = widget()->toolTip();
@@ -433,11 +435,14 @@ QString QAccessibleWidget::text(QAccessible::Text t) const
          str = widget()->whatsThis();
 #endif
          break;
+
       case QAccessible::Accelerator:
          str = qt_accHotKey(buddyString(widget()));
          break;
+
       case QAccessible::Value:
          break;
+
       default:
          break;
    }
@@ -452,6 +457,7 @@ QStringList QAccessibleWidget::actionNames() const
          names << setFocusAction();
       }
    }
+
    return names;
 }
 

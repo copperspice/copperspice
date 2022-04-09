@@ -868,6 +868,7 @@ bool QToolBar::event(QEvent *event)
          }
 
          break;
+
       case QEvent::Leave:
          if (d->state != nullptr && d->state->dragging) {
 
@@ -900,14 +901,6 @@ bool QToolBar::event(QEvent *event)
    return QWidget::event(event);
 }
 
-/*!
-    Returns a checkable action that can be used to show or hide this
-    toolbar.
-
-    The action's text is set to the toolbar's window title.
-
-    \sa QAction::text QWidget::windowTitle
-*/
 QAction *QToolBar::toggleViewAction() const
 {
    Q_D(const QToolBar);

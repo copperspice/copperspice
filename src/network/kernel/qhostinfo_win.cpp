@@ -72,9 +72,9 @@ static void resolveLibraryInternal()
 static void translateWSAError(int error, QHostInfo *results)
 {
    switch (error) {
-      case WSAHOST_NOT_FOUND: //authoritative not found
-      case WSATRY_AGAIN: //non authoritative not found
-      case WSANO_DATA: //valid name, no associated address
+      case WSAHOST_NOT_FOUND: // authoritative not found
+      case WSATRY_AGAIN:      // non authoritative not found
+      case WSANO_DATA:        // valid name, no associated address
          results->setError(QHostInfo::HostNotFound);
          results->setErrorString(QHostInfoAgent::tr("Host not found"));
          return;
@@ -257,7 +257,6 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       qDebug("QHostInfoAgent::run(): found %i entries: {%s}",
              addresses.count(), tmp.toLatin1().constData());
    }
-
 #endif
 
    return results;

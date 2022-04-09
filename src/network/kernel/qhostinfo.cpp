@@ -144,16 +144,12 @@ QHostInfo QHostInfoPrivate::fromName(const QString &name, QSharedPointer<QNetwor
    manager->cache.put(name, hostInfo);
    return hostInfo;
 }
-#endif
 
-
-#ifndef QT_NO_BEARERMANAGEMENT
 QHostInfo QHostInfoAgent::fromName(const QString &hostName, QSharedPointer<QNetworkSession>)
 {
    return QHostInfoAgent::fromName(hostName);
 }
 #endif
-
 
 QHostInfo::QHostInfo(int id)
    : d(new QHostInfoPrivate)
@@ -329,7 +325,7 @@ QHostInfoLookupManager::~QHostInfoLookupManager()
 {
    wasDeleted = true;
 
-   // don't qDeleteAll currentLookups, the QThreadPool has ownership
+   // do not qDeleteAll currentLookups, the QThreadPool has ownership
    clear();
 }
 

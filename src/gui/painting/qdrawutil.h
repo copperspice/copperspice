@@ -25,7 +25,6 @@
 #define QDRAWUTIL_H
 
 #include <qnamespace.h>
-#include <qstring.h>       // char*->QString conversion
 #include <qmargins.h>
 #include <qpixmap.h>
 

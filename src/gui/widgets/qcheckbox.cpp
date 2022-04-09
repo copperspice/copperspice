@@ -31,15 +31,16 @@
 #include <qevent.h>
 #include <qabstractbutton_p.h>
 
-
-
 class QCheckBoxPrivate : public QAbstractButtonPrivate
 {
    Q_DECLARE_PUBLIC(QCheckBox)
+
  public:
    QCheckBoxPrivate()
       : QAbstractButtonPrivate(QSizePolicy::CheckBox), tristate(false), noChange(false),
-        hovering(true), publishedState(Qt::Unchecked) {}
+        hovering(true), publishedState(Qt::Unchecked)
+   {
+   }
 
    uint tristate : 1;
    uint noChange : 1;
@@ -49,33 +50,36 @@ class QCheckBoxPrivate : public QAbstractButtonPrivate
    void init();
 };
 
-
-
 void QCheckBoxPrivate::init()
 {
    Q_Q(QCheckBox);
+
    q->setCheckable(true);
    q->setMouseTracking(true);
    q->setForegroundRole(QPalette::WindowText);
    setLayoutItemMargins(QStyle::SE_CheckBoxLayoutItem);
 }
 
-
 void QCheckBox::initStyleOption(QStyleOptionButton *option) const
 {
-   if (!option) {
+   if (! option) {
       return;
    }
+
    Q_D(const QCheckBox);
+
    option->initFrom(this);
+
    if (d->down) {
       option->state |= QStyle::State_Sunken;
    }
+
    if (d->tristate && d->noChange) {
       option->state |= QStyle::State_NoChange;
    } else {
       option->state |= d->checked ? QStyle::State_On : QStyle::State_Off;
    }
+
    if (testAttribute(Qt::WA_Hover) && underMouse()) {
       if (d->hovering) {
          option->state |= QStyle::State_MouseOver;
@@ -83,16 +87,11 @@ void QCheckBox::initStyleOption(QStyleOptionButton *option) const
          option->state &= ~QStyle::State_MouseOver;
       }
    }
+
    option->text = d->text;
    option->icon = d->icon;
    option->iconSize = iconSize();
 }
-
-/*!
-    Constructs a checkbox with the given \a parent, but with no text.
-
-    \a parent is passed on to the QAbstractButton constructor.
-*/
 
 QCheckBox::QCheckBox(QWidget *parent)
    : QAbstractButton (*new QCheckBoxPrivate, parent)
@@ -101,16 +100,11 @@ QCheckBox::QCheckBox(QWidget *parent)
    d->init();
 }
 
-/*!
-    Constructs a checkbox with the given \a parent and \a text.
-
-    \a parent is passed on to the QAbstractButton constructor.
-*/
-
 QCheckBox::QCheckBox(const QString &text, QWidget *parent)
    : QAbstractButton (*new QCheckBoxPrivate, parent)
 {
    Q_D(QCheckBox);
+
    d->init();
    setText(text);
 }
@@ -118,6 +112,7 @@ QCheckBox::QCheckBox(const QString &text, QWidget *parent)
 QCheckBox::~QCheckBox()
 {
 }
+
 void QCheckBox::setTristate(bool y)
 {
    Q_D(QCheckBox);
@@ -130,13 +125,6 @@ bool QCheckBox::isTristate() const
    return d->tristate;
 }
 
-
-/*!
-    Returns the check box's check state. If you do not need tristate support,
-    you can also  use \l QAbstractButton::isChecked() which returns a boolean.
-
-    \sa setCheckState() Qt::CheckState
-*/
 Qt::CheckState QCheckBox::checkState() const
 {
    Q_D(const QCheckBox);
@@ -146,80 +134,71 @@ Qt::CheckState QCheckBox::checkState() const
    return d->checked ? Qt::Checked : Qt::Unchecked;
 }
 
-/*!
-    Sets the check box's check state to \a state. If you do not need tristate
-    support, you can also use \l QAbstractButton::setChecked() which takes a
-    boolean.
-
-    \sa checkState() Qt::CheckState
-*/
 void QCheckBox::setCheckState(Qt::CheckState state)
 {
    Q_D(QCheckBox);
+
    if (state == Qt::PartiallyChecked) {
       d->tristate = true;
       d->noChange = true;
    } else {
       d->noChange = false;
    }
+
    d->blockRefresh = true;
    setChecked(state != Qt::Unchecked);
    d->blockRefresh = false;
    d->refresh();
+
    if ((uint)state != d->publishedState) {
       d->publishedState = state;
       emit stateChanged(state);
    }
 }
 
-
-/*!
-    \reimp
-*/
 QSize QCheckBox::sizeHint() const
 {
    Q_D(const QCheckBox);
+
    if (d->sizeHint.isValid()) {
       return d->sizeHint;
    }
+
    ensurePolished();
    QFontMetrics fm = fontMetrics();
    QStyleOptionButton opt;
    initStyleOption(&opt);
-   QSize sz = style()->itemTextRect(fm, QRect(), Qt::TextShowMnemonic, false,
-         text()).size();
-   if (!opt.icon.isNull()) {
+
+   QSize sz = style()->itemTextRect(fm, QRect(), Qt::TextShowMnemonic, false, text()).size();
+
+   if (! opt.icon.isNull()) {
       sz = QSize(sz.width() + opt.iconSize.width() + 4, qMax(sz.height(), opt.iconSize.height()));
    }
+
    d->sizeHint = (style()->sizeFromContents(QStyle::CT_CheckBox, &opt, sz, this)
          .expandedTo(QApplication::globalStrut()));
+
    return d->sizeHint;
 }
-
-
 
 QSize QCheckBox::minimumSizeHint() const
 {
    return sizeHint();
 }
 
-/*!
-    \reimp
-*/
 void QCheckBox::paintEvent(QPaintEvent *)
 {
    QStylePainter p(this);
    QStyleOptionButton opt;
+
    initStyleOption(&opt);
    p.drawControl(QStyle::CE_CheckBox, opt);
 }
 
-/*!
-    \reimp
-*/
 void QCheckBox::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QCheckBox);
+
    if (testAttribute(Qt::WA_Hover)) {
       bool hit = false;
       if (underMouse()) {
@@ -236,36 +215,31 @@ void QCheckBox::mouseMoveEvent(QMouseEvent *e)
 }
 
 
-/*!
-    \reimp
-*/
 bool QCheckBox::hitButton(const QPoint &pos) const
 {
    QStyleOptionButton opt;
    initStyleOption(&opt);
+
    return style()->subElementRect(QStyle::SE_CheckBoxClickRect, &opt, this).contains(pos);
 }
 
-/*!
-    \reimp
-*/
 void QCheckBox::checkStateSet()
 {
    Q_D(QCheckBox);
    d->noChange = false;
+
    Qt::CheckState state = checkState();
+
    if ((uint)state != d->publishedState) {
       d->publishedState = state;
       emit stateChanged(state);
    }
 }
 
-/*!
-    \reimp
-*/
 void QCheckBox::nextCheckState()
 {
    Q_D(QCheckBox);
+
    if (d->tristate) {
       setCheckState((Qt::CheckState)((checkState() + 1) % 3));
    } else {
@@ -274,9 +248,6 @@ void QCheckBox::nextCheckState()
    }
 }
 
-/*!
-    \reimp
-*/
 bool QCheckBox::event(QEvent *e)
 {
    Q_D(QCheckBox);
@@ -285,10 +256,11 @@ bool QCheckBox::event(QEvent *e)
 #ifdef Q_OS_DARWIN
       || e->type() == QEvent::MacSizeChange
 #endif
+
    ) {
       d->setLayoutItemMargins(QStyle::SE_CheckBoxLayoutItem);
    }
+
    return QAbstractButton::event(e);
 }
-
 

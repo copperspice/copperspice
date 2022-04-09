@@ -1069,7 +1069,6 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
 {
    GUI_CS_OBJECT(QGraphicsTextItem)
 
-   // following 4 were qdoc_property 1/5/2014
    GUI_CS_PROPERTY_READ(openExternalLinks, openExternalLinks)
    GUI_CS_PROPERTY_WRITE(openExternalLinks, setOpenExternalLinks)
 

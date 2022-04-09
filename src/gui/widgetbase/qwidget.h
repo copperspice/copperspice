@@ -277,7 +277,6 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    GUI_CS_PROPERTY_WRITE(layoutDirection, setLayoutDirection)
    GUI_CS_PROPERTY_RESET(layoutDirection, unsetLayoutDirection)
 
-   // following 2 were qdoc_property 1/5/2014
    GUI_CS_PROPERTY_READ(windowFlags, windowFlags)
    GUI_CS_PROPERTY_WRITE(windowFlags, setWindowFlags)
    GUI_CS_PROPERTY_DESIGNABLE(windowFlags, false)
